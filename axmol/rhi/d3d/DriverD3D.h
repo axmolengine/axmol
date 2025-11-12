@@ -46,20 +46,6 @@ namespace ax::rhi::d3d
 class DriverImpl : public DriverBase
 {
 public:
-    /* The max vertex attribs, it's not how many device supports which may be lower. */
-    static constexpr uint32_t MAX_VERTEX_ATTRIBS = 16;
-
-    /* The vertex data buffers binding index start, the axslcc(SPIRV-Cross), default UBO binding index is 0,
-    scope is per stage in MSL
-     */
-    static constexpr uint32_t VBO_BINDING_INDEX_START = 0;
-
-    /* The vertex instancing buffer binding index */
-    static constexpr uint32_t VBO_INSTANCING_BINDING_INDEX = VBO_BINDING_INDEX_START + 1;
-
-    /* The default attribs binding index */
-    static constexpr uint32_t DEFAULT_ATTRIBS_BINDING_INDEX = VBO_BINDING_INDEX_START + MAX_VERTEX_ATTRIBS;
-
     static constexpr D3D_FEATURE_LEVEL DEFAULT_REATURE_LEVELS[2] = {
         D3D_FEATURE_LEVEL_11_1,
         D3D_FEATURE_LEVEL_11_0,
@@ -73,10 +59,10 @@ public:
 
     /// @name Setters & Getters
     /**
-     * Create a CommandBuffer object.
-     * @return A CommandBuffer object.
+     * Create a RenderContext object.
+     * @return A RenderContext object.
      */
-    CommandBuffer* createCommandBuffer(void* surfaceContext) override;
+    RenderContext* createRenderContext(void* surfaceContext) override;
 
     /**
      * Create a Buffer object.
@@ -87,7 +73,7 @@ public:
      * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      * @return A Buffer object.
      */
-    Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage) override;
+    Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial) override;
 
     /**
      * Create a Texture object.

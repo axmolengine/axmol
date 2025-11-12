@@ -26,7 +26,7 @@ layout(location = SPOTLIGHT) out vec3 v_vertexToSpotLightDirection[MAX_SPOT_LIGH
 layout(location = NORMAL) out vec3 v_normal;
 #endif
 
-layout(std140) uniform vs_ub {
+layout(std140, set = 0, binding = 0) uniform vs_ub {
 #if (MAX_POINT_LIGHT_NUM > 0)
     vvec3_def(u_PointLightSourcePosition, MAX_POINT_LIGHT_NUM);
 #endif

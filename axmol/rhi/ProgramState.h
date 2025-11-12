@@ -326,13 +326,12 @@ public:
 protected:
     /**
      * Set the vertex uniform data.
-     * @param location Specifies the uniform location.
      * @param data Specifies the new values to be used for the specified uniform variable.
      * @param size Specifies the uniform data size.
      * @param offset Specifies the offset of the uniform in bytes.
      * @param start Specifies the start offset of the uniform in bytes.
      */
-    void setUniform(int location, const void* data, std::size_t size, int offset, int start);
+    void setUniform(const void* data, std::size_t size, int offset, int start);
 
     /**
      * Reset uniform informations when EGL context lost

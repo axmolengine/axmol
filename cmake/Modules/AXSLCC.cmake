@@ -156,6 +156,13 @@ function(ax_add_shader_target target_name)
       set(OUT_LANG "MSL")
       set(SC_DEFINES "AXSLC_TARGET_MSL")
       list(APPEND SC_FLAGS "--lang=msl")
+    elseif(AX_RENDER_API STREQUAL "vk")
+      set(OUT_LANG "SPIRV")
+      set(SC_DEFINES "AXSLC_TARGET_SPIRV")
+      set(SC_PROFILE "130")
+      list(APPEND SC_FLAGS "--lang=spirv" "--profile=${SC_PROFILE}")
+    else()
+      message(FATAL_ERROR "Unsupported AX_RENDER_API=${AX_RENDER_API}")
     endif()
 
     # no-suffix since 1.18.1 released by axmolengine
@@ -194,7 +201,7 @@ function(ax_add_shader_target target_name)
     endif()
 
     # sgs, because Apple Metal lack of shader uniform reflect and d3d reflect only support semantic name, so use --sgs --refelect
-    if(AX_RENDER_API STREQUAL "mtl" OR AX_RENDER_API STREQUAL "d3d")
+    if(AX_RENDER_API STREQUAL "mtl" OR AX_RENDER_API STREQUAL "d3d" OR AX_RENDER_API STREQUAL "vk")
       list(APPEND SC_FLAGS "--sgs" "--reflect")
     endif()
 

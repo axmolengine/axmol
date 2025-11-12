@@ -50,7 +50,7 @@ public:
      * @param usage Specifies the expected usage pattern of the data store. The symbolic constant must be
      * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      */
-    BufferImpl(std::size_t size, BufferType type, BufferUsage usage);
+    BufferImpl(std::size_t size, BufferType type, BufferUsage usage, const void* initial);
     ~BufferImpl();
 
     /**

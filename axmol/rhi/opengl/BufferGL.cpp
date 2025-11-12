@@ -49,9 +49,13 @@ GLenum toGLUsage(const BufferUsage& usage)
 }
 }  // namespace
 
-BufferImpl::BufferImpl(std::size_t size, BufferType type, BufferUsage usage) : Buffer(size, type, usage)
+BufferImpl::BufferImpl(std::size_t size, BufferType type, BufferUsage usage, const void* initial)
+    : Buffer(size, type, usage)
 {
     glGenBuffers(1, &_buffer);
+
+    if (initial)
+        updateData(initial, size);
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _backToForegroundListener =

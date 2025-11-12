@@ -98,10 +98,10 @@ public:
 
     /// @name Setters & Getters
     /**
-     * New a CommandBuffer object.
-     * @return A CommandBuffer object.
+     * New a RenderContext object.
+     * @return A RenderContext object.
      */
-    CommandBuffer* createCommandBuffer(void*) override;
+    RenderContext* createRenderContext(void*) override;
 
     /**
      * New a Buffer object.
@@ -112,7 +112,7 @@ public:
      * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      * @return A Buffer object.
      */
-    Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage) override;
+    Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial) override;
 
     /**
      * New a Texture object.

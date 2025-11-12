@@ -29,7 +29,7 @@
 #include "axmol/rhi/RenderPipeline.h"
 #include "axmol/rhi/DriverBase.h"
 #include "axmol/rhi/RHITypes.h"
-#include "axmol/rhi/CommandBuffer.h"
+#include "axmol/rhi/RenderContext.h"
 #include "axmol/rhi/Buffer.h"
 #include "axmol/rhi/VertexLayout.h"
 #include "axmol/rhi/Texture.h"

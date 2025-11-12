@@ -30,9 +30,9 @@ layout(location = NORMAL) in vec3 v_normal;
 
 #endif
 
-layout(binding = 0) uniform sampler2D u_sampler0;
+layout(set = 1, binding = 0) uniform sampler2D u_sampler0;
 
-layout(std140) uniform fs_ub {
+layout(std140, set = 0, binding = 1) uniform fs_ub {
 #if (MAX_DIRECTIONAL_LIGHT_NUM > 0)
     vvec3_def(u_DirLightSourceColor, MAX_DIRECTIONAL_LIGHT_NUM);
     vvec3_def(u_DirLightSourceDirection, MAX_DIRECTIONAL_LIGHT_NUM);

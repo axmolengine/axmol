@@ -144,6 +144,8 @@ function(use_ax_compile_define target)
     target_compile_definitions(${target} PUBLIC AX_RENDER_API=2)
   elseif(AX_RENDER_API STREQUAL "d3d")
     target_compile_definitions(${target} PUBLIC AX_RENDER_API=3)
+  elseif(AX_RENDER_API STREQUAL "vk")
+    target_compile_definitions(${target} PUBLIC AX_RENDER_API=4)
   endif()
 endfunction()
 

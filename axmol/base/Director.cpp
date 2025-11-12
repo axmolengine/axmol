@@ -1011,6 +1011,8 @@ void Director::restart()
 
 void Director::reset()
 {
+    axdrv->waitIdle();
+
 #if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
 #endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS

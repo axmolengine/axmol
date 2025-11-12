@@ -6,10 +6,10 @@ precision highp int;
 
 layout(location = TEXCOORD0) in vec2 v_texCoord;
 layout(location = NORMAL) in vec3 v_normal;
-layout(binding = 0) uniform sampler2D u_details[4]; // will take slot 0~3
-layout(binding = 4) uniform sampler2D u_alphaMap;
-layout(binding = 5) uniform sampler2D u_lightMap;
-layout(std140) uniform fs_ub {
+layout(set = 1, binding = 0) uniform sampler2D u_details[4]; // will take slot 0~3
+layout(set = 1, binding = 4) uniform sampler2D u_alphaMap;
+layout(set = 1, binding = 5) uniform sampler2D u_lightMap;
+layout(std140, set = 0, binding = 1) uniform fs_ub {
     int u_has_alpha;
     int u_has_light_map;
     vfloat_def(u_detailSize, 4);

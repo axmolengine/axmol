@@ -5,7 +5,7 @@ layout(location = NORMAL) in vec3 a_normal;
 layout(location = TEXCOORD0) out vec3 v_reflect;
 //uniforms
 
-layout(std140) uniform vs_ub {
+layout(std140, set = 0, binding = 0) uniform vs_ub {
     mat4 u_MVPMatrix;
     mat4 u_MVMatrix;
     mat3 u_NormalMatrix;

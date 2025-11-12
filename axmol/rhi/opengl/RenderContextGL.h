@@ -26,7 +26,7 @@
 #pragma once
 
 #include "axmol/rhi/RHITypes.h"
-#include "axmol/rhi/CommandBuffer.h"
+#include "axmol/rhi/RenderContext.h"
 #include "axmol/base/EventListenerCustom.h"
 #include "axmol/platform/GL.h"
 
@@ -51,11 +51,11 @@ class DepthStencilStateImpl;
  * @brief Store encoded commands for the GPU to execute.
  * A command buffer stores encoded commands until the buffer is committed for execution by the GPU
  */
-class CommandBufferImpl : public CommandBuffer
+class RenderContextImpl : public RenderContext
 {
 public:
-    CommandBufferImpl();
-    ~CommandBufferImpl();
+    RenderContextImpl();
+    ~RenderContextImpl();
     /**
      * Set depthStencil status once
      * @param depthStencilState Specifies the depth and stencil status
@@ -199,22 +199,17 @@ public:
      */
     void setScissorRect(bool isEnabled, float x, float y, float width, float height) override;
 
-    /**
-     * Get a screen snapshot
-     * @param callback A callback to deal with screen snapshot image.
-     */
-    void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback) override;
+    void readPixels(RenderTarget* rt,
+                    bool preserveAxisHint,
+                    std::function<void(const PixelBufferDesc&)> callback) override;
 
-    /**
-     * For internal use only
-     */
     void readPixels(RenderTarget* rt,
                     int x,
                     int y,
                     uint32_t width,
                     uint32_t height,
                     uint32_t bytesPerRow,
-                    bool eglCacheHint,
+                    bool preserveAxisHint,
                     PixelBufferDesc& pbd);
 
 protected:

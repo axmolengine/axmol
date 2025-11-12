@@ -31,6 +31,9 @@ THE SOFTWARE.
 #include "axmol/platform/Common.h"
 #include "axmol/platform/RenderView.h"
 #include "axmol/base/EventMouse.h"
+#if AX_RENDER_API == AX_RENDER_API_VK
+#    include "glad/vulkan.h"
+#endif
 #include "GLFW/glfw3.h"
 #if defined(__EMSCRIPTEN__)
 #    include "axmol/tlx/pod_vector.hpp"
@@ -188,6 +191,9 @@ protected:
 
     GLFWwindow* _mainWindow;
     GLFWmonitor* _monitor;
+#if AX_RENDER_API == AX_RENDER_API_VK
+    VkSurfaceKHR _vkSurface{nullptr};
+#endif
 
     std::string _glfwError;
 

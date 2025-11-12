@@ -129,6 +129,7 @@ THE SOFTWARE.
 #define AX_RENDER_API_GL  1
 #define AX_RENDER_API_MTL 2
 #define AX_RENDER_API_D3D 3
+#define AX_RENDER_API_VK  4
 
 #ifndef AX_RENDER_API
 #    if defined(__APPLE__)

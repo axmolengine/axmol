@@ -54,7 +54,7 @@ public:
      * @param usage Specifies the expected usage pattern of the data store. The symbolic constant must be
      * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      */
-    BufferImpl(id<MTLDevice> mtlDevice, std::size_t size, BufferType type, BufferUsage usage);
+    BufferImpl(id<MTLDevice> mtlDevice, std::size_t size, BufferType type, BufferUsage usage, const void* inital);
     ~BufferImpl();
 
     /// @name Update Buffer

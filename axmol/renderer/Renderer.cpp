@@ -190,7 +190,7 @@ Renderer::~Renderer()
     free(_triBatchesToDraw);
 
     AX_SAFE_RELEASE(_depthStencilState);
-    AX_SAFE_RELEASE(_commandBuffer);
+    AX_SAFE_RELEASE(_context);
     AX_SAFE_RELEASE(_renderPipeline);
     AX_SAFE_RELEASE(_defaultRT);
     AX_SAFE_RELEASE(_offscreenRT);
@@ -205,16 +205,16 @@ void Renderer::init()
 
     auto driver        = axdrv;
     auto nativeDisplay = Director::getInstance()->getRenderView()->getNativeDisplay();
-    _commandBuffer     = driver->createCommandBuffer(nativeDisplay);
+    _context           = driver->createRenderContext(nativeDisplay);
     _dsDesc.flags      = DepthStencilFlags::ALL;
     _currentRT = _defaultRT = driver->createDefaultRenderTarget();
-    _commandBuffer->setScreenRenderTarget(_defaultRT);
+    _context->setScreenRenderTarget(_defaultRT);
 
     _renderPipeline = driver->createRenderPipeline();
-    _commandBuffer->setRenderPipeline(_renderPipeline);
+    _context->setRenderPipeline(_renderPipeline);
 
     _depthStencilState = driver->createDepthStencilState();
-    _commandBuffer->setDepthStencilState(_depthStencilState);
+    _context->setDepthStencilState(_depthStencilState);
 }
 
 rhi::RenderTarget* Renderer::getOffscreenRenderTarget()
@@ -316,7 +316,7 @@ void Renderer::processRenderCommand(RenderCommand* command)
             drawBatchedTriangles();
 
             _queuedTotalIndexCount = _queuedTotalVertexCount = 0;
-#if AX_RENDER_API == AX_RENDER_API_MTL
+#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_VK
             _queuedIndexCount = _queuedVertexCount = 0;
             _triangleCommandBufferManager.prepareNextBuffer();
             _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
@@ -326,7 +326,7 @@ void Renderer::processRenderCommand(RenderCommand* command)
 
         // queue it
         _queuedTriangleCommands.emplace_back(cmd);
-#if AX_RENDER_API == AX_RENDER_API_MTL
+#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_VK
         _queuedIndexCount += cmd->getIndexCount();
         _queuedVertexCount += cmd->getVertexCount();
 #endif
@@ -428,14 +428,14 @@ void Renderer::render()
 
 bool Renderer::beginFrame()
 {
-    return _commandBuffer->beginFrame();
+    return _context->beginFrame();
 }
 
 void Renderer::endFrame()
 {
-    _commandBuffer->endFrame();
+    _context->endFrame();
 
-#if AX_RENDER_API == AX_RENDER_API_MTL
+#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_VK
     _triangleCommandBufferManager.putbackAllBuffers();
     _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
     _indexBuffer  = _triangleCommandBufferManager.getIndexBuffer();
@@ -610,7 +610,7 @@ void Renderer::drawBatchedTriangles()
         return;
 
     /************** 1: Setup up vertices/indices *************/
-#if AX_RENDER_API == AX_RENDER_API_MTL
+#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_VK
     unsigned int vertexBufferFillOffset = _queuedTotalVertexCount - _queuedVertexCount;
     unsigned int indexBufferFillOffset  = _queuedTotalIndexCount - _queuedIndexCount;
 #else
@@ -674,7 +674,7 @@ void Renderer::drawBatchedTriangles()
         firstCommand   = false;
     }
     batchesTotal++;
-#if AX_RENDER_API == AX_RENDER_API_MTL
+#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_VK
     _vertexBuffer->updateSubData(_verts, vertexBufferFillOffset * sizeof(_verts[0]), _filledVertex * sizeof(_verts[0]));
     _indexBuffer->updateSubData(_indices, indexBufferFillOffset * sizeof(_indices[0]),
                                 _filledIndex * sizeof(_indices[0]));
@@ -686,15 +686,15 @@ void Renderer::drawBatchedTriangles()
     /************** 2: Draw *************/
     beginRenderPass();
 
-    _commandBuffer->setVertexBuffer(_vertexBuffer);
-    _commandBuffer->setIndexBuffer(_indexBuffer);
+    _context->setVertexBuffer(_vertexBuffer);
+    _context->setIndexBuffer(_indexBuffer);
 
     for (int i = 0; i < batchesTotal; ++i)
     {
         auto& drawInfo = _triBatchesToDraw[i];
-        _commandBuffer->updatePipelineState(_currentRT, drawInfo.cmd->getPipelineDesc());
-        _commandBuffer->drawElements(rhi::PrimitiveType::TRIANGLE, rhi::IndexFormat::U_SHORT, drawInfo.indicesToDraw,
-                                     drawInfo.offset * sizeof(_indices[0]));
+        _context->updatePipelineState(_currentRT, drawInfo.cmd->getPipelineDesc());
+        _context->drawElements(rhi::PrimitiveType::TRIANGLE, rhi::IndexFormat::U_SHORT, drawInfo.indicesToDraw,
+                               drawInfo.offset * sizeof(_indices[0]));
 
         _drawnBatches++;
         _drawnVertices += _triBatchesToDraw[i].indicesToDraw;
@@ -705,7 +705,7 @@ void Renderer::drawBatchedTriangles()
     /************** 3: Cleanup *************/
     _queuedTriangleCommands.clear();
 
-#if AX_RENDER_API == AX_RENDER_API_MTL
+#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_VK
     _queuedIndexCount  = 0;
     _queuedVertexCount = 0;
 #endif
@@ -719,35 +719,35 @@ void Renderer::drawCustomCommand(RenderCommand* command)
         cmd->getBeforeCallback()();
 
     beginRenderPass();
-    _commandBuffer->setVertexBuffer(cmd->getVertexBuffer());
+    _context->setVertexBuffer(cmd->getVertexBuffer());
 
-    _commandBuffer->updatePipelineState(_currentRT, cmd->getPipelineDesc());
+    _context->updatePipelineState(_currentRT, cmd->getPipelineDesc());
 
     auto drawType = cmd->getDrawType();
     switch (drawType)
     {
     case CustomCommand::DrawType::ELEMENT:
-        _commandBuffer->setIndexBuffer(cmd->getIndexBuffer());
-        _commandBuffer->drawElements(cmd->getPrimitiveType(), cmd->getIndexFormat(), cmd->getIndexDrawCount(),
-                                     cmd->getIndexDrawOffset(), cmd->isWireframe());
+        _context->setIndexBuffer(cmd->getIndexBuffer());
+        _context->drawElements(cmd->getPrimitiveType(), cmd->getIndexFormat(), cmd->getIndexDrawCount(),
+                               cmd->getIndexDrawOffset(), cmd->isWireframe());
         _drawnVertices += cmd->getIndexDrawCount();
         break;
     case CustomCommand::DrawType::ELEMENT_INSTANCED:
-        _commandBuffer->setIndexBuffer(cmd->getIndexBuffer());
-        _commandBuffer->setInstanceBuffer(cmd->getInstanceBuffer());
-        _commandBuffer->drawElementsInstanced(cmd->getPrimitiveType(), cmd->getIndexFormat(), cmd->getIndexDrawCount(),
-                                              cmd->getIndexDrawOffset(), cmd->getInstanceCount(), cmd->isWireframe());
+        _context->setIndexBuffer(cmd->getIndexBuffer());
+        _context->setInstanceBuffer(cmd->getInstanceBuffer());
+        _context->drawElementsInstanced(cmd->getPrimitiveType(), cmd->getIndexFormat(), cmd->getIndexDrawCount(),
+                                        cmd->getIndexDrawOffset(), cmd->getInstanceCount(), cmd->isWireframe());
         _drawnVertices += cmd->getIndexDrawCount() * cmd->getInstanceCount();
         break;
     case CustomCommand::DrawType::ARRAY:
-        _commandBuffer->drawArrays(cmd->getPrimitiveType(), cmd->getVertexDrawStart(), cmd->getVertexDrawCount(),
-                                   cmd->isWireframe());
+        _context->drawArrays(cmd->getPrimitiveType(), cmd->getVertexDrawStart(), cmd->getVertexDrawCount(),
+                             cmd->isWireframe());
         _drawnVertices += cmd->getVertexDrawCount();
         break;
     case CustomCommand::DrawType::ARRAY_INSTANCED:
-        _commandBuffer->setInstanceBuffer(cmd->getInstanceBuffer());
-        _commandBuffer->drawArraysInstanced(cmd->getPrimitiveType(), cmd->getVertexDrawStart(),
-                                            cmd->getVertexDrawCount(), cmd->getInstanceCount(), cmd->isWireframe());
+        _context->setInstanceBuffer(cmd->getInstanceBuffer());
+        _context->drawArraysInstanced(cmd->getPrimitiveType(), cmd->getVertexDrawStart(), cmd->getVertexDrawCount(),
+                                      cmd->getInstanceCount(), cmd->isWireframe());
         _drawnVertices += cmd->getVertexDrawCount() * cmd->getInstanceCount();
         break;
     default:;
@@ -822,25 +822,27 @@ bool Renderer::checkVisibility(const Mat4& transform, const Vec2& size)
     return ret;
 }
 
-void Renderer::readPixels(rhi::RenderTarget* rt, std::function<void(const rhi::PixelBufferDesc&)> callback)
+void Renderer::readPixels(rhi::RenderTarget* rt,
+                          bool preserveAxisHint,
+                          std::function<void(const rhi::PixelBufferDesc&)> callback)
 {
     assert(!!rt);
     // read pixels from screen, metal renderer backend: screen texture must not be a framebufferOnly
     if (rt == _defaultRT)
-        _commandBuffer->setFrameBufferOnly(false);
+        _context->setFrameBufferOnly(false);
 
-    _commandBuffer->readPixels(rt, std::move(callback));
+    _context->readPixels(rt, preserveAxisHint, std::move(callback));
 }
 
 void Renderer::resizeSwapchain(uint32_t width, uint32_t height)
 {
-    if (_commandBuffer)
-        _commandBuffer->resizeSwapchain(width, height);
+    if (_context)
+        _context->resizeSwapchain(width, height);
 }
 
 void Renderer::beginRenderPass()
 {
-    _commandBuffer->beginRenderPass(_currentRT, _renderPassDesc);
+    _context->beginRenderPass(_currentRT, _renderPassDesc);
 
     // Disable depth/stencil access if render target has no relevant attachments.
     auto depthStencil = _dsDesc;
@@ -851,19 +853,19 @@ void Renderer::beginRenderPass()
                                     DepthStencilFlags::STENCIL_TEST);
     }
 
-    _commandBuffer->updateDepthStencilState(depthStencil);
-    _commandBuffer->setStencilReferenceValue(_stencilRef);
+    _context->setStencilReferenceValue(_stencilRef);
+    _context->updateDepthStencilState(depthStencil);
 
-    _commandBuffer->setViewport(_viewport.x, _viewport.y, _viewport.width, _viewport.height);
-    _commandBuffer->setCullMode(_cullMode);
-    _commandBuffer->setWinding(_winding);
-    _commandBuffer->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y,
-                                   _scissorState.rect.width, _scissorState.rect.height);
+    _context->setViewport(_viewport.x, _viewport.y, _viewport.width, _viewport.height);
+    _context->setCullMode(_cullMode);
+    _context->setWinding(_winding);
+    _context->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y,
+                             _scissorState.rect.width, _scissorState.rect.height);
 }
 
 void Renderer::endRenderPass()
 {
-    _commandBuffer->endRenderPass();
+    _context->endRenderPass();
 }
 
 void Renderer::clear(ClearFlag flags, const Color& color, float depth, unsigned int stencil, float globalOrder)
@@ -888,10 +890,10 @@ void Renderer::clear(ClearFlag flags, const Color& color, float depth, unsigned 
         if (bitmask::any(flags, ClearFlag::STENCIL))
             descriptor.clearStencilValue = stencil;
 
-        _commandBuffer->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y,
-                                       _scissorState.rect.width, _scissorState.rect.height);
-        _commandBuffer->beginRenderPass(_currentRT, descriptor);
-        _commandBuffer->endRenderPass();
+        _context->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y,
+                                 _scissorState.rect.width, _scissorState.rect.height);
+        _context->beginRenderPass(_currentRT, descriptor);
+        _context->endRenderPass();
     };
     addCommand(command);
 }

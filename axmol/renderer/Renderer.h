@@ -49,7 +49,7 @@ using Winding  = rhi::Winding;
 namespace rhi
 {
 class Buffer;
-class CommandBuffer;
+class RenderContext;
 class RenderPipeline;
 class RenderPass;
 class Texture;
@@ -406,13 +406,19 @@ public:
     bool getScissorTest() const;                ///< Get whether scissor test is enabled or not.
     const ScissorRect& getScissorRect() const;  ///< Get scissor rectangle.
 
-    rhi::CommandBuffer* getCommandBuffer() const { return _commandBuffer; }
+    rhi::RenderContext* getContext() const { return _context; }
 
     /** returns whether or not a rectangle is visible or not */
     bool checkVisibility(const Mat4& transform, const Vec2& size);
 
     /** read pixels from RenderTarget or screen framebuffer */
-    void readPixels(rhi::RenderTarget* rt, std::function<void(const rhi::PixelBufferDesc&)> callback);
+    void readPixels(rhi::RenderTarget* rt, std::function<void(const rhi::PixelBufferDesc&)> callback)
+    {
+        readPixels(rt, false, std::move(callback));
+    }
+    void readPixels(rhi::RenderTarget* rt,
+                    bool preserveAxisHint,
+                    std::function<void(const rhi::PixelBufferDesc&)> callback);
 
     void beginRenderPass();  /// Begin a render pass.
     void endRenderPass();
@@ -516,7 +522,7 @@ protected:
     rhi::Buffer* _indexBuffer  = nullptr;
     TriangleCommandBufferManager _triangleCommandBufferManager;
 
-    rhi::CommandBuffer* _commandBuffer = nullptr;
+    rhi::RenderContext* _context = nullptr;
     rhi::RenderPassDesc _renderPassDesc;
 
     rhi::DepthStencilState* _depthStencilState = nullptr;

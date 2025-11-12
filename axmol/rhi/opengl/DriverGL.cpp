@@ -27,7 +27,7 @@
 #include "axmol/rhi/opengl/RenderPipelineGL.h"
 #include "axmol/rhi/opengl/BufferGL.h"
 #include "axmol/rhi/opengl/ShaderModuleGL.h"
-#include "axmol/rhi/opengl/CommandBufferGL.h"
+#include "axmol/rhi/opengl/RenderContextGL.h"
 #include "axmol/rhi/opengl/TextureGL.h"
 #include "axmol/rhi/opengl/DepthStencilStateGL.h"
 #include "axmol/rhi/opengl/ProgramGL.h"
@@ -132,9 +132,9 @@ DriverImpl::DriverImpl()
     }
 
     // caps
-    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &_maxAttributes);
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &_maxTextureSize);
-    glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &_maxTextureUnits);
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &_caps.maxAttributes);
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &_caps.maxTextureSize);
+    glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &_caps.maxTextureUnits);
 
     // exts
     GL_EnumAllExtensions([this](const std::string_view& ext) {
@@ -191,14 +191,14 @@ GLint DriverImpl::getDefaultFBO() const
     return _defaultFBO;
 }
 
-CommandBuffer* DriverImpl::createCommandBuffer(void*)
+RenderContext* DriverImpl::createRenderContext(void*)
 {
-    return new CommandBufferImpl();
+    return new RenderContextImpl();
 }
 
-Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage)
+Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial)
 {
-    return new BufferImpl(size, type, usage);
+    return new BufferImpl(size, type, usage, initial);
 }
 
 Texture* DriverImpl::createTexture(const TextureDesc& desc)

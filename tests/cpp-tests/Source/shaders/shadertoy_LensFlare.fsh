@@ -5,7 +5,7 @@ precision highp int;
 //uniform float     iChannelTime[4];       // channel playback time (in seconds)
 //uniform vec3      iChannelResolution[4]; // channel resolution (in pixels)
 //vec4      iMouse = vec4(0,0,0,0);                // mouse pixel coords. xy: current (if MLB down), zw: click
-//layout(binding = 0) uniform sampler2D iChannel0;          // input channel. XX = 2D/Cube
+//layout(set = 1, binding = 0) uniform sampler2D iChannel0;          // input channel. XX = 2D/Cube
 
 /*by musk License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
 
@@ -17,7 +17,7 @@ precision highp int;
  muuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuusk!*/
 
 
-layout(std140) uniform fs_ub {
+layout(std140, set = 0, binding = 1) uniform fs_ub {
     vec2 center;
     vec2 resolution;
     vec2 u_screenSize;

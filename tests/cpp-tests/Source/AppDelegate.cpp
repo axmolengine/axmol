@@ -54,7 +54,7 @@ void AppDelegate::initContextAttrs()
 {
     // set app context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
     // powerPreference only affect when RHI backend is D3D
-    ContextAttrs contextAttrs = {.powerPreference = PowerPreference::HighPerformance};
+    ContextAttrs contextAttrs = {.debugLayerEnabled = true, .powerPreference = PowerPreference::HighPerformance};
 
     // V-Sync is enabled by default since axmol 2.2.
     // Uncomment to disable V-Sync and unlock FPS.
@@ -90,11 +90,12 @@ bool AppDelegate::applicationDidFinishLaunching()
     {
         std::string title = "Cpp Tests";
 #ifndef NDEBUG
-        title += " *Debug*",
+        title += " *Debug*";
 #endif
+        title += fmt::format("({})", axdrv->getVersion());
 #ifdef AX_PLATFORM_PC
-            renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height),
-                                                        1.0F, true);
+        renderView =
+            RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height), 1.0F, true);
 #else
         renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height));
 #endif

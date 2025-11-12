@@ -29,6 +29,7 @@
 
 #include "axmol/rhi/Buffer.h"
 #include "axmol/platform/win32/ComPtr.h"
+#include "axmol/tlx/byte_buffer.hpp"
 
 namespace ax::rhi::d3d
 {
@@ -58,7 +59,7 @@ public:
                std::size_t size,
                BufferType type,
                BufferUsage usage,
-               const void* initial = nullptr);
+               const void* initial);
 
     void updateData(const void* data, std::size_t size) override;
     void updateSubData(const void* data, std::size_t offset, std::size_t size) override;
@@ -72,8 +73,8 @@ private:
 
     size_t _capacity{0};
 
-    std::vector<uint8_t> _defaultData;
-    bool _needDefaultStoredData = true;
+    axstd::byte_buffer _defaultData;
+    bool _needDefaultStoredData = false;
 
     ID3D11Device* _device;          // weak ref
     ID3D11DeviceContext* _context;  // weak ref

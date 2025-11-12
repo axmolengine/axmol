@@ -2,7 +2,7 @@
 precision highp float;
 precision highp int;
 
-layout(std140) uniform fs_ub {
+layout(std140, set = 0, binding = 1) uniform fs_ub {
     vec4 u_color;
 };
 

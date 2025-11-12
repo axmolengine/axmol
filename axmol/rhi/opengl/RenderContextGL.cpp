@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/rhi/opengl/CommandBufferGL.h"
+#include "axmol/rhi/opengl/RenderContextGL.h"
 #include "axmol/rhi/opengl/BufferGL.h"
 #include "axmol/rhi/opengl/RenderPipelineGL.h"
 #include "axmol/rhi/opengl/TextureGL.h"
@@ -49,19 +49,19 @@ namespace ax::rhi::gl
 #    define AX_HAVE_MAP_BUFFER_RANGE 0
 #endif
 
-CommandBufferImpl::CommandBufferImpl() {}
+RenderContextImpl::RenderContextImpl() {}
 
-CommandBufferImpl::~CommandBufferImpl()
+RenderContextImpl::~RenderContextImpl()
 {
     cleanResources();
 }
 
-bool CommandBufferImpl::beginFrame()
+bool RenderContextImpl::beginFrame()
 {
     return true;
 }
 
-void CommandBufferImpl::beginRenderPass(const RenderTarget* rt, const RenderPassDesc& descriptor)
+void RenderContextImpl::beginRenderPass(const RenderTarget* rt, const RenderPassDesc& descriptor)
 {
     auto rtGL = static_cast<const RenderTargetImpl*>(rt);
 
@@ -127,12 +127,12 @@ void CommandBufferImpl::beginRenderPass(const RenderTarget* rt, const RenderPass
     CHECK_GL_ERROR_DEBUG();
 }
 
-void CommandBufferImpl::setDepthStencilState(DepthStencilState* depthStencilState)
+void RenderContextImpl::setDepthStencilState(DepthStencilState* depthStencilState)
 {
     _depthStencilStateImpl = static_cast<DepthStencilStateImpl*>(depthStencilState);
 }
 
-void CommandBufferImpl::setRenderPipeline(RenderPipeline* renderPipeline)
+void RenderContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
 {
     _renderPipeline = static_cast<RenderPipelineImpl*>(renderPipeline);
 }
@@ -141,7 +141,7 @@ void CommandBufferImpl::setRenderPipeline(RenderPipeline* renderPipeline)
  * Update depthStencil status, improvment: for metal backend cache it
  * @param depthStencilState Specifies the depth and stencil status
  */
-void CommandBufferImpl::updateDepthStencilState(const DepthStencilDesc& desc)
+void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 {
     _depthStencilStateImpl->update(desc);
 }
@@ -150,29 +150,29 @@ void CommandBufferImpl::updateDepthStencilState(const DepthStencilDesc& desc)
  * Update render pipeline status
  * @param depthStencilState Specifies the depth and stencil status
  */
-void CommandBufferImpl::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc)
+void RenderContextImpl::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc)
 {
-    CommandBuffer::updatePipelineState(rt, desc);
+    RenderContext::updatePipelineState(rt, desc);
 
     _renderPipeline->update(rt, desc);
 }
 
-void CommandBufferImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
+void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
 {
     __state->viewport(_viewport.set(x, y, w, h));
 }
 
-void CommandBufferImpl::setCullMode(CullMode mode)
+void RenderContextImpl::setCullMode(CullMode mode)
 {
     _cullMode = mode;
 }
 
-void CommandBufferImpl::setWinding(Winding winding)
+void RenderContextImpl::setWinding(Winding winding)
 {
     __state->winding(UtilsGL::toGLFrontFace(winding));
 }
 
-void CommandBufferImpl::setVertexBuffer(Buffer* buffer)
+void RenderContextImpl::setVertexBuffer(Buffer* buffer)
 {
     assert(buffer != nullptr);
     if (buffer == nullptr || _vertexBuffer == buffer)
@@ -183,7 +183,7 @@ void CommandBufferImpl::setVertexBuffer(Buffer* buffer)
     _vertexBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void CommandBufferImpl::setIndexBuffer(Buffer* buffer)
+void RenderContextImpl::setIndexBuffer(Buffer* buffer)
 {
     assert(buffer != nullptr);
     if (buffer == nullptr || _indexBuffer == buffer)
@@ -194,7 +194,7 @@ void CommandBufferImpl::setIndexBuffer(Buffer* buffer)
     _indexBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void CommandBufferImpl::setInstanceBuffer(Buffer* buffer)
+void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
 {
     assert(buffer != nullptr);
     if (buffer == nullptr || _instanceBuffer == buffer)
@@ -205,7 +205,7 @@ void CommandBufferImpl::setInstanceBuffer(Buffer* buffer)
     _instanceBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void CommandBufferImpl::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe)
+void RenderContextImpl::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -223,7 +223,7 @@ void CommandBufferImpl::drawArrays(PrimitiveType primitiveType, std::size_t star
     cleanResources();
 }
 
-void CommandBufferImpl::drawArraysInstanced(PrimitiveType primitiveType,
+void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
                                             std::size_t start,
                                             std::size_t count,
                                             int instanceCount,
@@ -245,7 +245,7 @@ void CommandBufferImpl::drawArraysInstanced(PrimitiveType primitiveType,
     cleanResources();
 }
 
-void CommandBufferImpl::drawElements(PrimitiveType primitiveType,
+void RenderContextImpl::drawElements(PrimitiveType primitiveType,
                                      IndexFormat indexType,
                                      std::size_t count,
                                      std::size_t offset,
@@ -270,7 +270,7 @@ void CommandBufferImpl::drawElements(PrimitiveType primitiveType,
     cleanResources();
 }
 
-void CommandBufferImpl::drawElementsInstanced(PrimitiveType primitiveType,
+void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
                                               IndexFormat indexType,
                                               std::size_t count,
                                               std::size_t offset,
@@ -296,16 +296,16 @@ void CommandBufferImpl::drawElementsInstanced(PrimitiveType primitiveType,
     cleanResources();
 }
 
-void CommandBufferImpl::endRenderPass()
+void RenderContextImpl::endRenderPass()
 {
     AX_SAFE_RELEASE_NULL(_indexBuffer);
     AX_SAFE_RELEASE_NULL(_vertexBuffer);
     AX_SAFE_RELEASE_NULL(_instanceBuffer);
 }
 
-void CommandBufferImpl::endFrame() {}
+void RenderContextImpl::endFrame() {}
 
-void CommandBufferImpl::prepareDrawing() const
+void RenderContextImpl::prepareDrawing() const
 {
     const auto& program = _renderPipeline->getProgram();
     __state->useProgram(program->internalHandle());
@@ -330,7 +330,7 @@ void CommandBufferImpl::prepareDrawing() const
         __state->disableCullFace();
 }
 
-void CommandBufferImpl::bindVertexBuffer(uint32_t& usedBits) const
+void RenderContextImpl::bindVertexBuffer(uint32_t& usedBits) const
 {
     assert(_vertexLayout);
 
@@ -338,7 +338,7 @@ void CommandBufferImpl::bindVertexBuffer(uint32_t& usedBits) const
     vl->apply(_vertexBuffer, _instanceBuffer, usedBits);
 }
 
-void CommandBufferImpl::bindUniforms(ProgramImpl* program) const
+void RenderContextImpl::bindUniforms(ProgramImpl* program) const
 {
     if (_programState)
     {
@@ -379,13 +379,13 @@ void CommandBufferImpl::bindUniforms(ProgramImpl* program) const
     }
 }
 
-void CommandBufferImpl::cleanResources()
+void RenderContextImpl::cleanResources()
 {
     _programState = nullptr;
     _vertexLayout = nullptr;
 }
 
-void CommandBufferImpl::setScissorRect(bool isEnabled, float x, float y, float width, float height)
+void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float width, float height)
 {
     if (isEnabled)
         __state->enableScissor(x, y, width, height);
@@ -393,12 +393,15 @@ void CommandBufferImpl::setScissorRect(bool isEnabled, float x, float y, float w
         __state->disableScissor();
 }
 
-void CommandBufferImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
+void RenderContextImpl::readPixels(RenderTarget* rt,
+                                   bool preserveAxisHint,
+                                   std::function<void(const PixelBufferDesc&)> callback)
 {
     PixelBufferDesc pbd;
     if (rt->isDefaultRenderTarget())
     {  // read pixels from screen
-        readPixels(rt, _viewport.x, _viewport.y, _viewport.width, _viewport.height, _viewport.width * 4, false, pbd);
+        readPixels(rt, _viewport.x, _viewport.y, _viewport.width, _viewport.height, _viewport.width * 4,
+                   preserveAxisHint, pbd);
     }
     else
     {
@@ -407,19 +410,19 @@ void CommandBufferImpl::readPixels(RenderTarget* rt, std::function<void(const Pi
         if (colorAttachment)
         {
             readPixels(rt, 0, 0, colorAttachment->getWidth(), colorAttachment->getHeight(),
-                       colorAttachment->getWidth() * 4, false, pbd);
+                       colorAttachment->getWidth() * 4, preserveAxisHint, pbd);
         }
     }
     callback(pbd);
 }
 
-void CommandBufferImpl::readPixels(RenderTarget* rt,
+void RenderContextImpl::readPixels(RenderTarget* rt,
                                    int x,
                                    int y,
                                    uint32_t width,
                                    uint32_t height,
                                    uint32_t bytesPerRow,
-                                   bool eglCacheHint,
+                                   bool preserveAxisHint,
                                    PixelBufferDesc& pbd)
 {
     auto rtGL = static_cast<RenderTargetImpl*>(rt);
@@ -444,7 +447,7 @@ void CommandBufferImpl::readPixels(RenderTarget* rt,
 
     if (buffer_ptr)
     {
-        if (!eglCacheHint)
+        if (!preserveAxisHint)
         {
             // we need to flip the buffer vertically to match our API
             uint8_t* wptr = pbd._data.resize(bufferSize);

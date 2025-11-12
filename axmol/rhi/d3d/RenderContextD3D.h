@@ -23,7 +23,7 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/rhi/CommandBuffer.h"
+#include "axmol/rhi/RenderContext.h"
 #include "axmol/rhi/d3d/DriverD3D.h"
 #include "axmol/platform/win32/ComPtr.h"
 
@@ -55,19 +55,37 @@ struct RasterStateDesc
 };
 
 /**
- * @brief A D3D11-based CommandBuffer implementation
+ * @brief A D3D11-based RenderContext implementation
  *
  */
-class CommandBufferImpl : public CommandBuffer
+class RenderContextImpl : public RenderContext
 {
 public:
+    /* The max vertex attribs, it's not how many device supports which may be lower. */
+    static constexpr uint32_t MAX_VERTEX_ATTRIBS = 16;
+
+    /* The vertex data buffers binding index start, the axslcc(SPIRV-Cross), default UBO binding index is 0,
+    scope is per stage in MSL
+     */
+    static constexpr uint32_t VBO_BINDING_INDEX_START = 0;
+
+    /* The vertex instancing buffer binding index */
+    static constexpr uint32_t VBO_INSTANCING_BINDING_INDEX = VBO_BINDING_INDEX_START + 1;
+
+    /* The default attribs binding index */
+    static constexpr uint32_t DEFAULT_ATTRIBS_BINDING_INDEX = VBO_BINDING_INDEX_START + MAX_VERTEX_ATTRIBS;
+
+    // match axmol shaders
+    static constexpr uint32_t VS_UBO_BINDING_INDEX = 0;
+    static constexpr uint32_t FS_UBO_BINDING_INDEX = 1;
+
     /// @name Constructor, Destructor and Initializers
     /**
      * @param driver The device for which d3d::DriverImpl object was created.
      * @param surfaceContext hwnd or IUnkown*(SwapChainPanel)
      */
-    CommandBufferImpl(DriverImpl* driver, void* surfaceContext);
-    ~CommandBufferImpl() override;
+    RenderContextImpl(DriverImpl* driver, void* surfaceContext);
+    ~RenderContextImpl() override;
 
     bool resizeSwapchain(uint32_t width, uint32_t height) override;
 
@@ -209,11 +227,9 @@ public:
      */
     void setScissorRect(bool isEnabled, float x, float y, float width, float height) override;
 
-    /**
-     * Read pixels from RenderTarget
-     * @param callback A callback to deal with pixel data read.
-     */
-    void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback) override;
+    void readPixels(RenderTarget* rt,
+                    bool preserveAxisHint,
+                    std::function<void(const PixelBufferDesc&)> callback) override;
 
 protected:
     void readPixels(RenderTarget* rt, UINT x, UINT y, UINT width, UINT height, PixelBufferDesc& pbd);

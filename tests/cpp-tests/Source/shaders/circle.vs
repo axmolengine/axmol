@@ -12,7 +12,7 @@ layout(location = 0) out vec2 v_position;
 layout(location = 1) out vec4 v_color;
 layout(location = 2) out float v_thickness;
 
-layout(std140) uniform vs_ub {
+layout(std140, set = 0, binding = 0) uniform vs_ub {
     float u_pixelScale;
     mat4 u_MVPMatrix;
 };

@@ -5,7 +5,7 @@ precision highp int;
 // layout(location = COLOR0) in vec4 v_color;
 // layout(location = TEXCOORD0) in vec2 v_texCoord;
 
-// layout(binding = 0) uniform sampler2D u_tex0;
+// layout(set = 1, binding = 0) uniform sampler2D u_tex0;
 
 /*by musk License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
  
@@ -16,7 +16,7 @@ precision highp int;
  
  muuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuusk!*/
 
-layout(std140) uniform fs_ub {
+layout(std140, set = 0, binding = 1) uniform fs_ub {
     vec2 resolution;
     // vec2 textureResolution;
     vec4 u_Time;

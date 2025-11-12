@@ -36,7 +36,7 @@ layout(location = SPOTLIGHT_NORM) out vec3 v_spotLightDirection[MAX_SPOT_LIGHT_N
 layout(location = NORMAL) out vec3 v_normal;
 #endif
 
-layout(std140) uniform vs_ub {
+layout(std140, set = 0, binding = 0) uniform vs_ub {
 #ifdef USE_NORMAL_MAPPING
     vvec3_def(u_DirLightSourceDirection, MAX_DIRECTIONAL_LIGHT_NUM);
     vvec3_def(u_SpotLightSourceDirection, MAX_SPOT_LIGHT_NUM);

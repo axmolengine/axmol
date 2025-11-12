@@ -4,7 +4,11 @@ set(target_name ${lib_name})
 
 project(${target_name})
 
-set(target_src_files "include/glad/gl.h" src/gl.c)
+if(AX_RENDER_API STREQUAL "gl")
+  set(target_src_files "include/glad/gl.h" src/gl.c)
+elseif(AX_RENDER_API STREQUAL "vk")
+  set(target_src_files "include/glad/vulkan.h" src/vulkan.c)
+endif()
 
 add_library(${target_name} ${target_src_files})
 

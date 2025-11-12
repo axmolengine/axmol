@@ -29,7 +29,11 @@
 namespace ax::rhi::mtl
 {
 
-BufferImpl::BufferImpl(id<MTLDevice> mtlDevice, std::size_t size, BufferType type, BufferUsage usage)
+BufferImpl::BufferImpl(id<MTLDevice> mtlDevice,
+                       std::size_t size,
+                       BufferType type,
+                       BufferUsage usage,
+                       const void* initial)
     : Buffer(size, type, usage)
 {
     if (BufferUsage::DYNAMIC == usage)
@@ -50,6 +54,9 @@ BufferImpl::BufferImpl(id<MTLDevice> mtlDevice, std::size_t size, BufferType typ
     {
         _mtlBuffer = [mtlDevice newBufferWithLength:size options:MTLResourceStorageModeShared];
     }
+
+    if (initial)
+        updateData(initial, size);
 }
 
 BufferImpl::~BufferImpl()

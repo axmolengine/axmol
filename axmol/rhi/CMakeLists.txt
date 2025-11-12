@@ -3,7 +3,7 @@ set(_AX_RHI_HEADER
   rhi/axmol-rhi.h
   rhi/RHITypes.h
   rhi/Buffer.h
-  rhi/CommandBuffer.h
+  rhi/RenderContext.h
   rhi/DepthStencilState.h
   rhi/DriverBase.h
   rhi/PixelBufferDesc.h
@@ -22,7 +22,7 @@ set(_AX_RHI_HEADER
 )
 
 set(_AX_RHI_SRC
-  rhi/CommandBuffer.cpp
+  rhi/RenderContext.cpp
   rhi/DepthStencilState.cpp
   rhi/DriverBase.cpp
   rhi/ShaderModule.cpp
@@ -41,7 +41,7 @@ if(AX_RENDER_API STREQUAL "gl")
   list(APPEND _AX_RHI_HEADER
     rhi/opengl/OpenGLState.h
     rhi/opengl/BufferGL.h
-    rhi/opengl/CommandBufferGL.h
+    rhi/opengl/RenderContextGL.h
     rhi/opengl/DepthStencilStateGL.h
     rhi/opengl/DriverGL.h
     rhi/opengl/MacrosGL.h
@@ -57,7 +57,7 @@ if(AX_RENDER_API STREQUAL "gl")
   list(APPEND _AX_RHI_SRC
     rhi/opengl/OpenGLState.cpp
     rhi/opengl/BufferGL.cpp
-    rhi/opengl/CommandBufferGL.cpp
+    rhi/opengl/RenderContextGL.cpp
     rhi/opengl/DepthStencilStateGL.cpp
     rhi/opengl/DriverGL.cpp
     rhi/opengl/ProgramGL.cpp
@@ -72,7 +72,7 @@ elseif(AX_RENDER_API STREQUAL "mtl")
   list(APPEND _AX_RHI_HEADER
     rhi/metal/BufferMTL.h
     rhi/metal/BufferManager.h
-    rhi/metal/CommandBufferMTL.h
+    rhi/metal/RenderContextMTL.h
     rhi/metal/RenderTargetMTL.h
     rhi/metal/DepthStencilStateMTL.h
     rhi/metal/DriverMTL.h
@@ -86,7 +86,7 @@ elseif(AX_RENDER_API STREQUAL "mtl")
   list(APPEND _AX_RHI_SRC
     rhi/metal/BufferMTL.mm
     rhi/metal/BufferManager.mm
-    rhi/metal/CommandBufferMTL.mm
+    rhi/metal/RenderContextMTL.mm
     rhi/metal/RenderTargetMTL.mm
     rhi/metal/DepthStencilStateMTL.mm
     rhi/metal/DriverMTL.mm
@@ -99,7 +99,7 @@ elseif(AX_RENDER_API STREQUAL "mtl")
 elseif(AX_RENDER_API STREQUAL "d3d")
     list(APPEND _AX_RHI_HEADER
     rhi/d3d/BufferD3D.h
-    rhi/d3d/CommandBufferD3D.h
+    rhi/d3d/RenderContextD3D.h
     rhi/d3d/RenderTargetD3D.h
     rhi/d3d/DepthStencilStateD3D.h
     rhi/d3d/DriverD3D.h
@@ -113,7 +113,7 @@ elseif(AX_RENDER_API STREQUAL "d3d")
 
   list(APPEND _AX_RHI_SRC
     rhi/d3d/BufferD3D.cpp
-    rhi/d3d/CommandBufferD3D.cpp
+    rhi/d3d/RenderContextD3D.cpp
     rhi/d3d/RenderTargetD3D.cpp
     rhi/d3d/DepthStencilStateD3D.cpp
     rhi/d3d/DriverD3D.cpp
@@ -123,5 +123,35 @@ elseif(AX_RENDER_API STREQUAL "d3d")
     rhi/d3d/UtilsD3D.cpp
     rhi/d3d/ProgramD3D.cpp
     rhi/d3d/VertexLayoutD3D.cpp
+  )
+elseif(AX_RENDER_API STREQUAL "vk")
+    list(APPEND _AX_RHI_HEADER
+    rhi/vulkan/BufferVK.h
+    rhi/vulkan/RenderContextVK.h
+    rhi/vulkan/RenderTargetVK.h
+    rhi/vulkan/DepthStencilStateVK.h
+    rhi/vulkan/DriverVK.h
+    rhi/vulkan/RenderPipelineVK.h
+    rhi/vulkan/ShaderModuleVK.h
+    rhi/vulkan/TextureVK.h
+    rhi/vulkan/UtilsVK.h
+    rhi/vulkan/ProgramVK.h
+    rhi/vulkan/VertexLayoutVK.h
+    rhi/vulkan/SemaphorePoolVK.h
+  )
+
+  list(APPEND _AX_RHI_SRC
+    rhi/vulkan/BufferVK.cpp
+    rhi/vulkan/RenderContextVK.cpp
+    rhi/vulkan/RenderTargetVK.cpp
+    rhi/vulkan/DepthStencilStateVK.cpp
+    rhi/vulkan/DriverVK.cpp
+    rhi/vulkan/RenderPipelineVK.cpp
+    rhi/vulkan/ShaderModuleVK.cpp
+    rhi/vulkan/TextureVK.cpp
+    rhi/vulkan/UtilsVK.cpp
+    rhi/vulkan/ProgramVK.cpp
+    rhi/vulkan/VertexLayoutVK.cpp
+    rhi/vulkan/SemaphorePoolVK.cpp
   )
 endif()

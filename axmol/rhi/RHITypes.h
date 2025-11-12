@@ -413,8 +413,8 @@ struct BlendDesc
 
 struct UniformInfo
 {
-    int count    = 0;  // element count
-    int location = -1;
+    int count    = 0;   // element count
+    int location = -1;  // see also @StageUniformLocation
 
     // in opengl, type means uniform data type, i.e. GL_FLOAT_VEC2, while in metal type means data basic type, i.e.
     // float
@@ -425,6 +425,12 @@ struct UniformInfo
 
 struct StageUniformLocation
 {
+    /*
+     * gl: base_offset
+     * d3d: semantic_index
+     * metal: binding_index
+     * vulkan: binding_index
+     */
     int location = -1;
     int offset   = -1;
 
@@ -470,7 +476,11 @@ struct UniformLocation
 struct VertexInputDesc
 {
     std::string semantic;
-    int location = -1;  // gl: location, d3d: semantic_index, metal: index
+    // gl: location,
+    // d3d: semantic_index
+    // metal: binding_index
+    // vulkan: binding_index
+    int location = -1;
     int count    = 0;
     int format   = 0;
 };

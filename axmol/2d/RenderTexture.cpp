@@ -41,7 +41,7 @@ THE SOFTWARE.
 #include "axmol/rhi/Texture.h"
 #include "axmol/rhi/RenderTarget.h"
 #if AX_RENDER_API == AX_RENDER_API_GL
-#    include "axmol/rhi/opengl/CommandBufferGL.h"
+#    include "axmol/rhi/opengl/RenderContextGL.h"
 #endif
 
 namespace ax
@@ -570,24 +570,7 @@ void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, b
         else
             imageCallback(nullptr);
     };
-#if AX_RENDER_API == AX_RENDER_API_GL
-    if (eglCacheHint)
-    {
-        auto colorAttachment = _renderTarget->_color[0].texture;
-        if (colorAttachment)
-        {
-            rhi::PixelBufferDesc pbd;
-            static_cast<rhi::gl::CommandBufferImpl*>(_director->getRenderer()->getCommandBuffer())
-                ->readPixels(_renderTarget, 0, 0, colorAttachment->getWidth(), colorAttachment->getHeight(),
-                             colorAttachment->getWidth() * 4, true, pbd);
-            callback(pbd);
-        }
-    }
-    else
-        _director->getRenderer()->readPixels(_renderTarget, callback);
-#else
-    _director->getRenderer()->readPixels(_renderTarget, callback);
-#endif
+    _director->getRenderer()->readPixels(_renderTarget, eglCacheHint, callback);
 }
 
 void RenderTexture::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)

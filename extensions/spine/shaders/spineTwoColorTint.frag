@@ -2,7 +2,7 @@
 
 precision highp float;
 
-layout(binding = 0) uniform sampler2D u_tex0;
+layout(set = 1, binding = 0) uniform sampler2D u_tex0;
 
 layout(location = COLOR0) in vec4 v_light;
 layout(location = COLOR1) in vec4 v_dark;

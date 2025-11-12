@@ -4,10 +4,10 @@ precision highp int;
 // Shader from here: http://www.iquilezles.org/
 
 
-layout(binding = 0) uniform sampler2D tex0;
-layout(binding = 1) uniform sampler2D tex1;
+layout(set = 1, binding = 0) uniform sampler2D tex0;
+layout(set = 1, binding = 1) uniform sampler2D tex1;
 
-layout(std140) uniform fs_ub {
+layout(std140, set = 0, binding = 1) uniform fs_ub {
     vec2 resolution;
     vec2 u_screenSize;
     vec4 u_Time;

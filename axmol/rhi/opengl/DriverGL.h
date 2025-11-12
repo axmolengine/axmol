@@ -64,10 +64,10 @@ public:
     GLuint getSharedVAO() const { return _sharedVAO; }
 
     /**
-     * Create a CommandBuffer object, not auto released.
-     * @return A CommandBuffer object.
+     * Create a RenderContext object, not auto released.
+     * @return A RenderContext object.
      */
-    CommandBuffer* createCommandBuffer(void*) override;
+    RenderContext* createRenderContext(void*) override;
 
     /**
      * New a Buffer object, not auto released.
@@ -78,7 +78,7 @@ public:
      * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      * @return A Buffer object.
      */
-    Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage) override;
+    Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial) override;
 
     /**
      * New a Texture object, not auto released.

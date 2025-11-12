@@ -4,7 +4,7 @@ precision highp int;
 
 layout(location = TEXCOORD0) in vec2 v_texCoord;
 layout(location = TEXCOORD1) in float v_vignette;
-layout(binding = 0) uniform sampler2D u_tex0;
+layout(set = 1, binding = 0) uniform sampler2D u_tex0;
 
 layout(location = SV_Target0) out vec4 FragColor;
 

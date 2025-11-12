@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "axmol/rhi/metal/DriverMTL.h"
-#include "axmol/rhi/metal/CommandBufferMTL.h"
+#include "axmol/rhi/metal/RenderContextMTL.h"
 #include "axmol/rhi/metal/BufferMTL.h"
 #include "axmol/rhi/metal/RenderPipelineMTL.h"
 #include "axmol/rhi/metal/ShaderModuleMTL.h"
@@ -429,22 +429,22 @@ DriverImpl::DriverImpl()
 
     UtilsMTL::initGPUTextureFormats();
 
-    _maxAttributes     = getMaxVertexAttributes(_featureSet);
-    _maxSamplesAllowed = getMaxSamplerEntries(_featureSet);
-    _maxTextureUnits   = getMaxTextureEntries(_featureSet);
-    _maxTextureSize    = getMaxTextureWidthHeight(_featureSet);
+    _caps.maxAttributes     = getMaxVertexAttributes(_featureSet);
+    _caps.maxSamplesAllowed = getMaxSamplerEntries(_featureSet);
+    _caps.maxTextureUnits   = getMaxTextureEntries(_featureSet);
+    _caps.maxTextureSize    = getMaxTextureWidthHeight(_featureSet);
 }
 
 DriverImpl::~DriverImpl() {}
 
-CommandBuffer* DriverImpl::createCommandBuffer(void* surfaceContext)
+RenderContext* DriverImpl::createRenderContext(void* surfaceContext)
 {
-    return new CommandBufferImpl(this, surfaceContext);
+    return new RenderContextImpl(this, surfaceContext);
 }
 
-Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage)
+Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial)
 {
-    return new BufferImpl(_mtlDevice, size, type, usage);
+    return new BufferImpl(_mtlDevice, size, type, usage, initial);
 }
 
 Texture* DriverImpl::createTexture(const TextureDesc& descriptor)

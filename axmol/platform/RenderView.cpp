@@ -176,9 +176,6 @@ const Vec2& RenderView::getDesignResolutionSize() const
 
 void RenderView::updateRenderSurface(float width, float height, uint8_t updateFlag)
 {
-    if (width == 0 || height == 0)
-        return;
-
     Vec2 value{width, height};
 
     if (updateFlag & SurfaceUpdateFlag::WindowSizeChanged)

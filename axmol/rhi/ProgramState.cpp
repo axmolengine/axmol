@@ -268,19 +268,26 @@ void ProgramState::setCallbackUniform(const rhi::UniformLocation& uniformLocatio
 void ProgramState::setUniform(const rhi::UniformLocation& uniformLocation, const void* data, std::size_t size)
 {
     if (uniformLocation.stages[0])
-        setUniform(uniformLocation.stages[0].location, data, size, uniformLocation.stages[0].offset, 0);
+    {
+#if AX_RENDER_API == AX_RENDER_API_GL
+        auto& info                = uniformLocation.stages[0];
+        const auto resolvedOffset = info.location + info.offset;
+#else
+        const auto resolvedOffset = uniformLocation.stages[0].offset;
+#endif
+        setUniform(data, size, resolvedOffset, 0);
+    }
 #if AX_RENDER_API != AX_RENDER_API_GL
     if (uniformLocation.stages[1])
-        setUniform(uniformLocation.stages[1].location, data, size, uniformLocation.stages[1].offset,
-                   _vertexUniformBufferStart);
+        setUniform(data, size, uniformLocation.stages[1].offset, _vertexUniformBufferStart);
 #endif
 }
 
-void ProgramState::setUniform(int location, const void* data, std::size_t size, int offset, int start)
+void ProgramState::setUniform(const void* data, std::size_t size, int offset, int start)
 {
     assert(offset >= 0);
-    assert(start + location + offset + size <= _uniformBuffer.size());
-    memcpy(_uniformBuffer.data() + start + location + offset, data, size);
+    assert(start + offset + size <= _uniformBuffer.size());
+    memcpy(_uniformBuffer.data() + start + offset, data, size);
 }
 
 void ProgramState::setTexture(rhi::Texture* texture)

@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "axmol/rhi/d3d/CommandBufferD3D.h"
+#include "axmol/rhi/d3d/RenderContextD3D.h"
 #include "axmol/rhi/d3d/RenderTargetD3D.h"
 #include "axmol/rhi/d3d/RenderPipelineD3D.h"
 #include "axmol/rhi/d3d/DepthStencilStateD3D.h"
@@ -194,7 +194,7 @@ static HRESULT runOnUIThread(const ComPtr<ICoreDispatcher>& dispatcher, _Fty&& f
 
 static constexpr DXGI_FORMAT _AX_SWAPCHAIN_FORMAT = DXGI_FORMAT_R8G8B8A8_UNORM;
 
-CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
+RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
 {
     _driverImpl = driver;
 
@@ -402,7 +402,7 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
     _nullSRVs.reserve(8);
 }
 
-CommandBufferImpl::~CommandBufferImpl()
+RenderContextImpl::~RenderContextImpl()
 {
     // cleanup GPU resources
     UtilsD3D::updateDefaultRenderTargetAttachments(nullptr, nullptr);
@@ -414,7 +414,7 @@ CommandBufferImpl::~CommandBufferImpl()
         _rasterState.Reset();
 }
 
-bool CommandBufferImpl::resizeSwapchain(uint32_t width, uint32_t height)
+bool RenderContextImpl::resizeSwapchain(uint32_t width, uint32_t height)
 {
     if (!_swapChain || !_driverImpl || !_screenRT)
         return false;
@@ -445,22 +445,22 @@ bool CommandBufferImpl::resizeSwapchain(uint32_t width, uint32_t height)
     return true;
 }
 
-void CommandBufferImpl::setDepthStencilState(DepthStencilState* depthStencilState)
+void RenderContextImpl::setDepthStencilState(DepthStencilState* depthStencilState)
 {
     _depthStencilState = static_cast<DepthStencilStateImpl*>(depthStencilState);
 }
 
-void CommandBufferImpl::setRenderPipeline(RenderPipeline* renderPipeline)
+void RenderContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
 {
     _renderPipeline = static_cast<RenderPipelineImpl*>(renderPipeline);
 }
 
-bool CommandBufferImpl::beginFrame()
+bool RenderContextImpl::beginFrame()
 {
     return true;
 }
 
-void CommandBufferImpl::beginRenderPass(const RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc)
+void RenderContextImpl::beginRenderPass(const RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc)
 {
     auto context = _driverImpl->getContext();
 
@@ -496,18 +496,18 @@ void CommandBufferImpl::beginRenderPass(const RenderTarget* renderTarget, const 
                                        static_cast<UINT8>(renderPassDesc.clearStencilValue));
 }
 
-void CommandBufferImpl::updateDepthStencilState(const DepthStencilDesc& desc)
+void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 {
     _depthStencilState->update(desc);
 }
 
-void CommandBufferImpl::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc)
+void RenderContextImpl::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc)
 {
-    CommandBuffer::updatePipelineState(rt, desc);
+    RenderContext::updatePipelineState(rt, desc);
     _renderPipeline->update(rt, desc);
 }
 
-void CommandBufferImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
+void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
 {
     D3D11_VIEWPORT viewport = {};
     viewport.TopLeftX       = static_cast<FLOAT>(x);
@@ -520,7 +520,7 @@ void CommandBufferImpl::setViewport(int x, int y, unsigned int w, unsigned int h
     _driverImpl->getContext()->RSSetViewports(1, &viewport);
 }
 
-void CommandBufferImpl::setCullMode(CullMode mode)
+void RenderContextImpl::setCullMode(CullMode mode)
 {
     if (_rasterDesc.cullMode != mode)
     {
@@ -529,7 +529,7 @@ void CommandBufferImpl::setCullMode(CullMode mode)
     }
 }
 
-void CommandBufferImpl::setWinding(Winding winding)
+void RenderContextImpl::setWinding(Winding winding)
 {
     if (_rasterDesc.winding != winding)
     {
@@ -538,7 +538,7 @@ void CommandBufferImpl::setWinding(Winding winding)
     }
 }
 
-void CommandBufferImpl::setScissorRect(bool isEnabled, float x, float y, float width, float height)
+void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float width, float height)
 {
     D3D11_RECT rect{};
 
@@ -580,7 +580,7 @@ void CommandBufferImpl::setScissorRect(bool isEnabled, float x, float y, float w
     _driverImpl->getContext()->RSSetScissorRects(1, &rect);
 }
 
-void CommandBufferImpl::updateRasterizerState()
+void RenderContextImpl::updateRasterizerState()
 {
     if (!_rasterDesc.dirtyFlags && _rasterState)
         return;
@@ -616,7 +616,7 @@ void CommandBufferImpl::updateRasterizerState()
     _rasterDesc.dirtyFlags = 0;
 }
 
-void CommandBufferImpl::setVertexBuffer(Buffer* buffer)
+void RenderContextImpl::setVertexBuffer(Buffer* buffer)
 {
     assert(buffer != nullptr);
     if (buffer == nullptr || _vertexBuffer == buffer)
@@ -627,7 +627,7 @@ void CommandBufferImpl::setVertexBuffer(Buffer* buffer)
     _vertexBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void CommandBufferImpl::setIndexBuffer(Buffer* buffer)
+void RenderContextImpl::setIndexBuffer(Buffer* buffer)
 {
     assert(buffer != nullptr);
     if (buffer == nullptr || _indexBuffer == buffer)
@@ -638,7 +638,7 @@ void CommandBufferImpl::setIndexBuffer(Buffer* buffer)
     _indexBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void CommandBufferImpl::setInstanceBuffer(Buffer* buffer)
+void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
 {
     assert(buffer != nullptr);
     if (buffer == nullptr || _instanceBuffer == buffer)
@@ -649,7 +649,7 @@ void CommandBufferImpl::setInstanceBuffer(Buffer* buffer)
     _instanceBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void CommandBufferImpl::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe)
+void RenderContextImpl::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe)
 {
     prepareDrawing();
     auto context = _driverImpl->getContext();
@@ -657,7 +657,7 @@ void CommandBufferImpl::drawArrays(PrimitiveType primitiveType, std::size_t star
     context->Draw(static_cast<UINT>(count), static_cast<UINT>(start));
 }
 
-void CommandBufferImpl::drawArraysInstanced(PrimitiveType primitiveType,
+void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
                                             std::size_t start,
                                             std::size_t count,
                                             int instanceCount,
@@ -669,7 +669,7 @@ void CommandBufferImpl::drawArraysInstanced(PrimitiveType primitiveType,
     context->DrawInstanced(static_cast<UINT>(count), static_cast<UINT>(instanceCount), static_cast<UINT>(start), 0);
 }
 
-void CommandBufferImpl::drawElements(PrimitiveType primitiveType,
+void RenderContextImpl::drawElements(PrimitiveType primitiveType,
                                      IndexFormat indexType,
                                      std::size_t count,
                                      std::size_t offset,
@@ -694,7 +694,7 @@ void CommandBufferImpl::drawElements(PrimitiveType primitiveType,
     context->DrawIndexed(indexCount, startIndex, 0);
 }
 
-void CommandBufferImpl::drawElementsInstanced(PrimitiveType primitiveType,
+void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
                                               IndexFormat indexType,
                                               std::size_t count,
                                               std::size_t offset,
@@ -718,7 +718,7 @@ void CommandBufferImpl::drawElementsInstanced(PrimitiveType primitiveType,
     context->DrawIndexedInstanced(static_cast<UINT>(count), static_cast<UINT>(instanceCount), startIndex, 0, 0);
 }
 
-void CommandBufferImpl::endRenderPass()
+void RenderContextImpl::endRenderPass()
 {
     _programState = nullptr;
     _vertexLayout = nullptr;
@@ -736,7 +736,7 @@ void CommandBufferImpl::endRenderPass()
     }
 }
 
-void CommandBufferImpl::prepareDrawing()
+void RenderContextImpl::prepareDrawing()
 {
     assert(_programState);
     updateRasterizerState();
@@ -775,20 +775,15 @@ void CommandBufferImpl::prepareDrawing()
         context->IASetVertexBuffers(0, 2, vbs, strides, offsets);
     }
 
-    // bind uniform buffer: glsl-optimizer is bound to index 1, axslcc: bound to 0
-    constexpr int bindingIndex = DriverImpl::VBO_BINDING_INDEX_START;
-    auto vertUB                = _programState->getVertexUniformBuffer();
+    // bind vertex uniform buffer
+    auto vertUB = _programState->getVertexUniformBuffer();
     if (!vertUB.empty())
-    {
-        program->bindVertexUniformBuffer(context, vertUB.data(), vertUB.size(), bindingIndex);
-    }
+        program->bindVertexUniformBuffer(context, vertUB.data(), vertUB.size(), VS_UBO_BINDING_INDEX);
 
-    // bind fragmentBuffer
+    // bind fragment uniform Buffer
     auto fragUB = _programState->getFragmentUniformBuffer();
     if (!fragUB.empty())
-    {
-        program->bindFragmentUniformBuffer(context, fragUB.data(), fragUB.size(), bindingIndex);
-    }
+        program->bindFragmentUniformBuffer(context, fragUB.data(), fragUB.size(), FS_UBO_BINDING_INDEX);
 
     // bind texture
     _textureBounds = 0;
@@ -811,7 +806,7 @@ void CommandBufferImpl::prepareDrawing()
     _depthStencilState->apply(context, _stencilReferenceValue);
 }
 
-void CommandBufferImpl::endFrame()
+void RenderContextImpl::endFrame()
 {
     HRESULT hr = _swapChain->Present(_syncInterval, _presentFlags);
 #ifdef NDEBUG
@@ -832,7 +827,9 @@ void CommandBufferImpl::endFrame()
 #endif
 }
 
-void CommandBufferImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
+void RenderContextImpl::readPixels(RenderTarget* rt,
+                                   bool /*preserveAxisHint*/,
+                                   std::function<void(const PixelBufferDesc&)> callback)
 {
     PixelBufferDesc pbd;
 
@@ -863,7 +860,7 @@ void CommandBufferImpl::readPixels(RenderTarget* rt, std::function<void(const Pi
     callback(pbd);
 }
 
-void CommandBufferImpl::readPixels(RenderTarget* rt, UINT x, UINT y, UINT width, UINT height, PixelBufferDesc& pbd)
+void RenderContextImpl::readPixels(RenderTarget* rt, UINT x, UINT y, UINT width, UINT height, PixelBufferDesc& pbd)
 {
     auto tex = static_cast<RenderTargetImpl*>(rt)->getColorAttachment(0).texure;
     assert(tex);

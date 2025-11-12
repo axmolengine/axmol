@@ -1,5 +1,4 @@
 /****************************************************************************
- Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
@@ -22,31 +21,25 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
+#pragma once
 
-#include "axmol/rhi/CommandBuffer.h"
+#include "glad/vulkan.h"
+#include "axmol/tlx/pod_vector.hpp"
 
-namespace ax::rhi
+namespace ax::rhi::vk
 {
-
-void CommandBuffer::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc)
+class SemaphorePool
 {
-    _programState = desc.programState;
-    _vertexLayout = desc.vertexLayout;
+    static constexpr int INITIAL_POOL_SIZE = 45;
 
-    assert(_programState);
-    assert(_vertexLayout);
-}
+public:
+    SemaphorePool(VkDevice device);
+    ~SemaphorePool();
+    VkSemaphore acquire();
+    void recycle(VkSemaphore semaphore);
 
-void CommandBuffer::setStencilReferenceValue(uint32_t value)
-{
-    _stencilReferenceValue = value;
-}
-
-bool CommandBuffer::resizeSwapchain(uint32_t /*width*/, uint32_t /*height*/)
-{
-    return true;
-}
-
-void CommandBuffer::setFrameBufferOnly(bool /*frameBufferOnly*/) {}
-
-}  // namespace ax::rhi
+protected:
+    VkDevice _device{VK_NULL_HANDLE};
+    axstd::pod_vector<VkSemaphore> _pool;
+};
+}  // namespace ax::rhi::vk

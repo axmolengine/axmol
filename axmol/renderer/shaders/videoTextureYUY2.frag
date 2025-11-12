@@ -7,10 +7,10 @@ precision highp int;
 layout(location = COLOR0) in vec4 v_color;
 layout(location = TEXCOORD0) in vec2 v_texCoord;
 
-layout(binding = 0) uniform sampler2D u_tex0; // Y sample
-layout(binding = 1) uniform sampler2D u_tex1; // UV sample
+layout(set = 1, binding = 0) uniform sampler2D u_tex0; // Y sample
+layout(set = 1, binding = 1) uniform sampler2D u_tex1; // UV sample
 
-layout(std140) uniform fs_ub {
+layout(std140, set = 0, binding = 1) uniform fs_ub {
     mat4 colorTransform;
 };
 

@@ -58,8 +58,8 @@ public:
     void applicationWillEnterForeground() override;
 
     /**
-        @brief Called when application will quit
+    @brief Called when application will quit
     @since axmol-2.10.0
-        */
+    */
     void applicationWillQuit() override;
 };

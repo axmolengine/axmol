@@ -3,11 +3,11 @@ precision highp float;
 
 layout(location = TEXCOORD0) in vec2 v_texCoord;
 
-layout(std140) uniform fs_ub {
+layout(std140, set = 0, binding = 1) uniform fs_ub {
     vec4 u_color;
 };
 
-layout(binding = 0) uniform sampler2D u_tex0;
+layout(set = 1, binding = 0) uniform sampler2D u_tex0;
 
 layout(location = SV_Target0) out vec4 FragColor;
 

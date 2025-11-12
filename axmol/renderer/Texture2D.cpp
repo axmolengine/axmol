@@ -362,7 +362,7 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
     default:
         break;
     }
-#elif AX_RENDER_API == AX_RENDER_API_D3D
+#elif AX_RENDER_API == AX_RENDER_API_D3D || AX_RENDER_API == AX_RENDER_API_VK
     switch (renderFormat)
     {
     case PixelFormat::RGB8:

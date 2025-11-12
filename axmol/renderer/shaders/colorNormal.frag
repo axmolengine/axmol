@@ -9,7 +9,7 @@ layout(location = TEXCOORD0) in vec2 v_texCoord;
 layout(location = POINTLIGHT) in vec3 v_vertexToPointLightDirection[MAX_POINT_LIGHT_NUM];
 layout(location = SPOTLIGHT) in vec3 v_vertexToSpotLightDirection[MAX_SPOT_LIGHT_NUM];
 
-layout(std140) uniform fs_ub {
+layout(std140, set = 0, binding = 1) uniform fs_ub {
     vvec3_def(u_DirLightSourceColor, MAX_DIRECTIONAL_LIGHT_NUM);
     vvec3_def(u_DirLightSourceDirection, MAX_DIRECTIONAL_LIGHT_NUM);
     vvec3_def(u_PointLightSourceColor, MAX_POINT_LIGHT_NUM);

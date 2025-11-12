@@ -36,7 +36,7 @@
 namespace ax::rhi
 {
 
-class CommandBuffer;
+class RenderContext;
 class Buffer;
 class ShaderModule;
 class RenderPipeline;
@@ -72,12 +72,22 @@ enum class FeatureType : uint32_t
  * @{
  */
 
+struct DriverCaps
+{
+    int maxAttributes     = 0;  ///< Maximum attribute count.
+    int maxTextureSize    = 0;  ///< Maximum texture size.
+    int maxTextureUnits   = 0;  ///< Maximum texture unit.
+    int maxSamplesAllowed = 0;  ///< Maximum sampler count.
+};
+
 /**
  * New or create resources from DriverBase.
  */
 class AX_DLL DriverBase
 {
 public:
+    struct Caps
+    {};
     friend class ShaderCache;
     friend class SamplerCache;
 
@@ -90,11 +100,11 @@ public:
     virtual ~DriverBase() = default;
 
     /**
-     * New a CommandBuffer object, not auto released.
+     * New a Render Context object, not auto released.
      * @param surfaceContext, current is win32 HWND or IUnkown*(swapChainPanel)
-     * @return A CommandBuffer object.
+     * @return A RenderContext object.
      */
-    virtual CommandBuffer* createCommandBuffer(void* surfaceContext) = 0;
+    virtual RenderContext* createRenderContext(void* surfaceContext) = 0;
 
     /**
      * New a Buffer object, not auto released.
@@ -105,7 +115,7 @@ public:
      * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      * @return A Buffer object.
      */
-    virtual Buffer* createBuffer(size_t size, BufferType type, BufferUsage usage) = 0;
+    virtual Buffer* createBuffer(size_t size, BufferType type, BufferUsage usage, const void* inital = nullptr) = 0;
 
     /**
      * New a Texture object, not auto released.
@@ -182,25 +192,27 @@ public:
      * Get maximum texture size.
      * @return Maximum texture size.
      */
-    inline int getMaxTextureSize() const { return _maxTextureSize; }
+    inline int getMaxTextureSize() const { return _caps.maxTextureSize; }
 
     /**
      * Get maximum attribute counts.
      * @return Maximum attribute counts.
      */
-    inline int getMaxAttributes() const { return _maxAttributes; }
+    inline int getMaxAttributes() const { return _caps.maxAttributes; }
 
     /**
      * Get maximum texture unit.
      * @return Maximum texture unit.
      */
-    inline int getMaxTextureUnits() const { return _maxTextureUnits; }
+    inline int getMaxTextureUnits() const { return _caps.maxTextureUnits; }
 
     /**
      * Get maximum sampler count.
      * @return Maximum sampler count.
      */
-    inline int getMaxSamplesAllowed() const { return _maxSamplesAllowed; }
+    inline int getMaxSamplesAllowed() const { return _caps.maxSamplesAllowed; }
+
+    virtual void waitIdle() {}
 
 protected:
     /**
@@ -214,11 +226,7 @@ protected:
     virtual SamplerHandle createSampler(const SamplerDesc& desc) = 0;
     virtual void destroySampler(SamplerHandle&)                  = 0;
 
-    // TODO: driverCaps
-    int _maxAttributes     = 0;  ///< Maximum attribute count.
-    int _maxTextureSize    = 0;  ///< Maximum texture size.
-    int _maxTextureUnits   = 0;  ///< Maximum texture unit.
-    int _maxSamplesAllowed = 0;  ///< Maximum sampler count.
+    DriverCaps _caps;
 
 private:
     static DriverBase* _instance;

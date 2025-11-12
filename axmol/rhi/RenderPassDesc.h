@@ -44,19 +44,21 @@ struct RenderPassFlags
      * bitmask indicating which buffers to clear at the beginning of a render pass.
      * This implies discard.
      */
-    TargetBufferFlags clear;
+    TargetBufferFlags clear{TargetBufferFlags::NONE};
 
     /**
      * bitmask indicating which buffers to discard at the beginning of a render pass.
      * Discarded buffers have uninitialized content, they must be entirely drawn over or cleared.
      */
-    TargetBufferFlags discardStart;
+    TargetBufferFlags discardStart{TargetBufferFlags::NONE};
 
     /**
      * bitmask indicating which buffers to discard at the end of a render pass.
      * Discarded buffers' content becomes invalid, they must not be read from again.
      */
-    TargetBufferFlags discardEnd;
+    TargetBufferFlags discardEnd{TargetBufferFlags::NONE};
+
+    uint8_t padding{0};
 };
 
 /**

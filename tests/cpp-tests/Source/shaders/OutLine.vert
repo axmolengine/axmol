@@ -5,7 +5,7 @@
 layout(location = POSITION) in vec4 a_position;
 layout(location = NORMAL) in vec3 a_normal;
 
-layout(std140) uniform vs_ub {
+layout(std140, set = 0, binding = 0) uniform vs_ub {
     float OutlineWidth;
     mat4 u_MVPMatrix;
 };

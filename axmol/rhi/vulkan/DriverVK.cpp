@@ -1,0 +1,670 @@
+/****************************************************************************
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmol.dev/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+#include "axmol/rhi/vulkan/DriverVK.h"
+#include "axmol/rhi/vulkan/RenderContextVK.h"
+#include "axmol/rhi/vulkan/BufferVK.h"
+#include "axmol/rhi/vulkan/TextureVK.h"
+#include "axmol/rhi/vulkan/ProgramVK.h"
+#include "axmol/rhi/vulkan/ShaderModuleVK.h"
+#include "axmol/rhi/vulkan/RenderTargetVK.h"
+#include "axmol/rhi/vulkan/RenderPipelineVK.h"
+#include "axmol/rhi/vulkan/DepthStencilStateVK.h"
+#include "axmol/rhi/vulkan/VertexLayoutVK.h"
+#include "axmol/rhi/RHITypes.h"
+
+#include "axmol/base/Logging.h"
+
+#include <vector>
+#include <cstring>
+#include <algorithm>
+
+namespace ax::rhi
+{
+DriverBase* DriverBase::getInstance()
+{
+    if (!_instance)
+    {
+        _instance = new vk::DriverImpl();
+        static_cast<vk::DriverImpl*>(_instance)->init();
+    }
+
+    return _instance;
+}
+
+void DriverBase::destroyInstance()
+{
+    AX_SAFE_DELETE(_instance);
+}
+}  // namespace ax::rhi
+
+namespace ax::rhi::vk
+{
+
+namespace
+{
+static std::string vendorToString(uint32_t vendorId)
+{
+    // Common PCI vendor IDs; Vulkan doesn't standardize vendor strings
+    switch (vendorId)
+    {
+    case 0x10DE:
+        return "NVIDIA";
+    case 0x8086:
+        return "Intel";
+    case 0x1002:
+        return "AMD";
+    case 0x13B5:
+        return "ARM";
+    case 0x5143:
+        return "Qualcomm";
+    case 0x106B:
+        return "Apple";
+    case 0x144D:
+        return "Samsung";
+    case 0x15AD:
+        return "VMware";
+    case 0x1AE0:
+        return "Google";
+    case 0x14E4:
+        return "Broadcom";
+    default:
+        return "Unknown";
+    }
+}
+
+static bool isValidationLayerAvailable(const char* layerName)
+{
+    uint32_t layerCount = 0;
+    vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+
+    std::vector<VkLayerProperties> availableLayers(layerCount);
+    vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
+
+    for (const auto& layer : availableLayers)
+    {
+        if (strcmp(layer.layerName, layerName) == 0)
+            return true;
+    }
+    return false;
+}
+
+static VKAPI_ATTR VkBool32 VKAPI_CALL vkDebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+                                                      VkDebugUtilsMessageTypeFlagsEXT messageType,
+                                                      const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+                                                      void* pUserData)
+{
+    const char* subTag = "vulkan";
+
+    if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT)
+    {
+        AXLOGD("[{}] {}", subTag, pCallbackData->pMessage);
+    }
+    else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT)
+    {
+        AXLOGI("[{}] {}", subTag, pCallbackData->pMessage);
+    }
+    else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
+    {
+        AXLOGW("[{}] {}", subTag, pCallbackData->pMessage);
+    }
+    else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
+    {
+        AXLOGE("[{}] {}", subTag, pCallbackData->pMessage);
+    }
+    return VK_FALSE;
+}
+
+}  // namespace
+
+DriverImpl::DriverImpl() {}
+DriverImpl::~DriverImpl()
+{
+    if (_transientCommandPool)
+    {
+        vkDestroyCommandPool(_device, _transientCommandPool, nullptr);
+        _transientCommandPool = VK_NULL_HANDLE;
+    }
+
+    if (_surface)
+        vkDestroySurfaceKHR(_vkInstance, _surface, nullptr);
+    if (_debugMessenger)
+        vkDestroyDebugUtilsMessengerEXT(_vkInstance, _debugMessenger, nullptr);
+    if (_device)
+        vkDestroyDevice(_device, nullptr);
+    if (_vkInstance)
+        vkDestroyInstance(_vkInstance, nullptr);
+}
+
+void DriverImpl::init()
+{
+    // Load basic Vulkan functions without instance/device
+    gladLoaderLoadVulkan(nullptr, nullptr, nullptr);
+
+    initializeInstance();
+    initializeDevice();
+
+    // Load remaining Vulkan functions with instance/device
+    gladLoaderLoadVulkan(_vkInstance, _physical, _device);
+
+    if (_debugCreateInfo.sType == VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT)
+    {
+        if (vkCreateDebugUtilsMessengerEXT(_vkInstance, &_debugCreateInfo, nullptr, &_debugMessenger) != VK_SUCCESS)
+        {
+            AXLOGW("Vulkan validation layer not available!");
+        }
+    }
+
+    // Query device properties and capabilities
+    VkPhysicalDeviceProperties props{};
+    vkGetPhysicalDeviceProperties(_physical, &props);
+
+    _vendor   = vendorToString(props.vendorID);
+    _renderer = props.deviceName;
+    _version  = fmt::format("Vulkan-{}.{}.{}", VK_VERSION_MAJOR(props.apiVersion), VK_VERSION_MINOR(props.apiVersion),
+                            VK_VERSION_PATCH(props.apiVersion));
+    _shaderVersion = "SPIR-V 1.x";
+
+    _caps.maxAttributes     = static_cast<int32_t>(MAX_VERTEX_ATTRIBS);  // pipeline-defined
+    _caps.maxTextureUnits   = 32;  // conservative default; descriptor count varies per layout
+    _caps.maxTextureSize    = static_cast<int32_t>(props.limits.maxImageDimension2D);
+    _caps.maxSamplesAllowed = static_cast<int32_t>(props.limits.framebufferColorSampleCounts);
+}
+
+void DriverImpl::initializeInstance()
+{
+    auto& contextAttrs = Application::getContextAttrs();
+
+    VkApplicationInfo appInfo{};
+    appInfo.sType              = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+    appInfo.pApplicationName   = "Axmol";
+    appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
+    appInfo.pEngineName        = "Axmol3";
+    appInfo.engineVersion      = VK_MAKE_VERSION(1, 0, 0);
+    appInfo.apiVersion         = VK_API_VERSION_1_2;
+
+    // Collect required extensions
+    axstd::pod_vector<const char*> extensions;
+    extensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
+
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+    extensions.push_back("VK_KHR_win32_surface");
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+    extensions.push_back("VK_KHR_android_surface");
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+    auto platform = glfwGetPlatform();
+    if (platform == GLFW_PLATFORM_WAYLAND)
+        extensions.push_back("VK_KHR_wayland_surface");
+    else if (platform == GLFW_PLATFORM_X11)
+        extensions.push_back("VK_KHR_xlib_surface");
+#endif
+
+    const auto shouldCreateDebugLayer =
+        contextAttrs.debugLayerEnabled && isValidationLayerAvailable("VK_LAYER_KHRONOS_validation");
+
+    if (shouldCreateDebugLayer)
+        extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+
+    VkInstanceCreateInfo createInfo{};
+    createInfo.sType                   = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    createInfo.pApplicationInfo        = &appInfo;
+    createInfo.enabledExtensionCount   = static_cast<uint32_t>(extensions.size());
+    createInfo.ppEnabledExtensionNames = extensions.data();
+
+    if (shouldCreateDebugLayer)
+    {
+        _debugCreateInfo.sType           = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+        _debugCreateInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
+                                           VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+                                           VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+        _debugCreateInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
+                                       VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+                                       VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+        _debugCreateInfo.pfnUserCallback = vkDebugCallback;
+
+        const std::array<const char*, 1> validationLayers = {"VK_LAYER_KHRONOS_validation"};
+        createInfo.enabledLayerCount                      = static_cast<uint32_t>(validationLayers.size());
+        createInfo.ppEnabledLayerNames                    = validationLayers.data();
+        createInfo.pNext                                  = (VkDebugUtilsMessengerCreateInfoEXT*)&_debugCreateInfo;
+    }
+    else
+    {
+        createInfo.enabledLayerCount = 0;
+        createInfo.pNext             = nullptr;
+    }
+
+    // Instance layers/extensions are platform-dependent; keep minimal for core init
+    VkResult vr = vkCreateInstance(&createInfo, nullptr, &_vkInstance);
+    AXASSERT(vr == VK_SUCCESS && _vkInstance != VK_NULL_HANDLE, "vkCreateInstance failed");
+
+    // Select a physical device
+    uint32_t count = 0;
+    vkEnumeratePhysicalDevices(_vkInstance, &count, nullptr);
+    AXASSERT(count > 0, "No Vulkan physical devices found");
+
+    std::vector<VkPhysicalDevice> devices(count);
+    vkEnumeratePhysicalDevices(_vkInstance, &count, devices.data());
+
+    // Simple selection: first device with graphics queue
+    _physical = VK_NULL_HANDLE;
+    for (auto pd : devices)
+    {
+        uint32_t qCount = 0;
+        vkGetPhysicalDeviceQueueFamilyProperties(pd, &qCount, nullptr);
+        std::vector<VkQueueFamilyProperties> qprops(qCount);
+        vkGetPhysicalDeviceQueueFamilyProperties(pd, &qCount, qprops.data());
+        if (std::any_of(qprops.begin(), qprops.end(),
+                        [](const VkQueueFamilyProperties& p) { return (p.queueFlags & VK_QUEUE_GRAPHICS_BIT) != 0; }))
+        {
+            _physical = pd;
+            break;
+        }
+    }
+    if (_physical == VK_NULL_HANDLE)
+        _physical = devices[0];
+}
+
+void DriverImpl::initializeDevice()
+{
+    // find graphics queue family
+    uint32_t queueCount = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(_physical, &queueCount, nullptr);
+    std::vector<VkQueueFamilyProperties> qprops(queueCount);
+    vkGetPhysicalDeviceQueueFamilyProperties(_physical, &queueCount, qprops.data());
+
+    _graphicsQueueFamily = UINT32_MAX;
+    for (uint32_t i = 0; i < queueCount; ++i)
+    {
+        if (qprops[i].queueCount > 0 && (qprops[i].queueFlags & VK_QUEUE_GRAPHICS_BIT))
+        {
+            _graphicsQueueFamily = i;
+            break;
+        }
+    }
+
+    AXASSERT(_graphicsQueueFamily != UINT32_MAX, "No graphics queue family found");
+
+    VkPhysicalDeviceExtendedDynamicStateFeaturesEXT extDynState{};
+    extDynState.sType                = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_FEATURES_EXT;
+    extDynState.extendedDynamicState = VK_TRUE;
+
+    float priority = 1.0f;
+    VkDeviceQueueCreateInfo qinfo{};
+    qinfo.sType            = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+    qinfo.queueFamilyIndex = _graphicsQueueFamily;
+    qinfo.queueCount       = 1;
+    qinfo.pQueuePriorities = &priority;
+
+    const std::array<const char*, 2> deviceExtensions = {VK_KHR_SWAPCHAIN_EXTENSION_NAME,
+                                                         VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME};
+
+    VkDeviceCreateInfo dinfo{};
+    dinfo.sType                   = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+    dinfo.queueCreateInfoCount    = 1;
+    dinfo.pQueueCreateInfos       = &qinfo;
+    dinfo.pNext                   = &extDynState;
+    dinfo.enabledExtensionCount   = deviceExtensions.size();
+    dinfo.ppEnabledExtensionNames = deviceExtensions.data();
+
+    VkResult vr = vkCreateDevice(_physical, &dinfo, nullptr, &_device);
+    AXASSERT(vr == VK_SUCCESS && _device != VK_NULL_HANDLE, "vkCreateDevice failed");
+
+    vkGetDeviceQueue(_device, _graphicsQueueFamily, 0, &_graphicsQueue);
+    AXASSERT(_graphicsQueue != VK_NULL_HANDLE, "vkGetDeviceQueue graphics failed");
+
+    // create _transientCommandPool
+    VkCommandPoolCreateInfo poolInfo{};
+    poolInfo.sType            = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    poolInfo.queueFamilyIndex = _graphicsQueueFamily;
+    poolInfo.flags            = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT | VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+
+    vr = vkCreateCommandPool(_device, &poolInfo, nullptr, &_transientCommandPool);
+    AXASSERT(vr == VK_SUCCESS && _transientCommandPool != VK_NULL_HANDLE,
+             "vkCreateCommandPool failed for transient pool");
+}
+
+bool DriverImpl::setupSurface(void* window, CreateSurfaceFunc func)
+{
+    auto result = func(_vkInstance, window, &_surface);
+    if (result != VK_SUCCESS)
+        return false;
+
+    uint32_t queueCount = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(_physical, &queueCount, nullptr);
+    std::vector<VkQueueFamilyProperties> qprops(queueCount);
+    vkGetPhysicalDeviceQueueFamilyProperties(_physical, &queueCount, qprops.data());
+
+    _presentQueueFamily = UINT32_MAX;
+    for (uint32_t i = 0; i < queueCount; ++i)
+    {
+        VkBool32 presentSupport = VK_FALSE;
+        vkGetPhysicalDeviceSurfaceSupportKHR(_physical, i, _surface, &presentSupport);
+        if (qprops[i].queueCount > 0 && presentSupport == VK_TRUE)
+        {
+            _presentQueueFamily = i;
+            break;
+        }
+    }
+
+    AXASSERT(_presentQueueFamily != UINT32_MAX, "No present queue family found");
+
+    if (_presentQueueFamily == _graphicsQueueFamily)
+    {
+        _presentQueue = _graphicsQueue;
+    }
+    else
+    {
+        vkGetDeviceQueue(_device, _presentQueueFamily, 0, &_presentQueue);
+        AXASSERT(_presentQueue != VK_NULL_HANDLE, "vkGetDeviceQueue present failed");
+    }
+
+    return true;
+}
+
+RenderContext* DriverImpl::createRenderContext(void* surfaceContext)
+{
+    // Swapchain management is out-of-scope here; pass VK_NULL_HANDLE for now
+    return new RenderContextImpl(this, static_cast<VkSurfaceKHR>(surfaceContext));
+}
+
+Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial)
+{
+    return new BufferImpl(this, size, type, usage, initial);
+}
+
+Texture* DriverImpl::createTexture(const TextureDesc& descriptor)
+{
+    return new TextureImpl(this, descriptor);
+}
+
+RenderTarget* DriverImpl::createDefaultRenderTarget()
+{
+    // Default RT: will use swapchain image wrapped externally; here return an empty target
+    return new RenderTargetImpl(_device, true);
+}
+
+RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
+{
+    auto rt = new RenderTargetImpl(_device, false);
+    RenderTarget::ColorAttachment colors{{colorAttachment, 0}};
+    rt->setColorAttachment(colors);
+    rt->setDepthStencilAttachment(depthStencilAttachment);
+    return rt;
+}
+
+DepthStencilState* DriverImpl::createDepthStencilState()
+{
+    return new DepthStencilStateImpl(_device);
+}
+
+RenderPipeline* DriverImpl::createRenderPipeline()
+{
+    return new RenderPipelineImpl(_device);
+}
+
+Program* DriverImpl::createProgram(std::string_view vertexShader, std::string_view fragmentShader)
+{
+    return new ProgramImpl(vertexShader, fragmentShader);
+}
+
+ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, std::string_view source)
+{
+    return new ShaderModuleImpl(_device, stage, source);
+}
+
+SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
+{
+    VkSamplerCreateInfo info{};
+    info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+
+    // Filter mapping
+    const bool minLinear = ((int)desc.minFilter & (int)SamplerFilter::MIN_LINEAR) != 0;
+    const bool magLinear = ((int)desc.magFilter & (int)SamplerFilter::MAG_LINEAR) != 0;
+    const bool mipLinear = ((int)desc.mipFilter & (int)SamplerFilter::MIP_LINEAR) != 0;
+
+    info.magFilter  = magLinear ? VK_FILTER_LINEAR : VK_FILTER_NEAREST;
+    info.minFilter  = minLinear ? VK_FILTER_LINEAR : VK_FILTER_NEAREST;
+    info.mipmapMode = mipLinear ? VK_SAMPLER_MIPMAP_MODE_LINEAR : VK_SAMPLER_MIPMAP_MODE_NEAREST;
+
+    // Address mode mapping
+    auto addrModeOf = [](SamplerAddressMode m) -> VkSamplerAddressMode {
+        switch (m)
+        {
+        case SamplerAddressMode::REPEAT:
+            return VK_SAMPLER_ADDRESS_MODE_REPEAT;
+        case SamplerAddressMode::MIRROR:
+            return VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT;
+        case SamplerAddressMode::CLAMP:
+            return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        case SamplerAddressMode::BORDER:
+            return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
+        default:
+            return VK_SAMPLER_ADDRESS_MODE_REPEAT;
+        }
+    };
+    info.addressModeU = addrModeOf(desc.sAddressMode);
+    info.addressModeV = addrModeOf(desc.tAddressMode);
+    info.addressModeW = addrModeOf(desc.wAddressMode);
+
+    // Compare func (used for shadow samplers)
+    info.compareEnable = (desc.compareFunc != CompareFunc::ALWAYS && desc.compareFunc != CompareFunc::NEVER);
+    auto cmpOf         = [](CompareFunc f) -> VkCompareOp {
+        switch (f)
+        {
+        case CompareFunc::NEVER:
+            return VK_COMPARE_OP_NEVER;
+        case CompareFunc::LESS:
+            return VK_COMPARE_OP_LESS;
+        case CompareFunc::LESS_EQUAL:
+            return VK_COMPARE_OP_LESS_OR_EQUAL;
+        case CompareFunc::GREATER:
+            return VK_COMPARE_OP_GREATER;
+        case CompareFunc::GREATER_EQUAL:
+            return VK_COMPARE_OP_GREATER_OR_EQUAL;
+        case CompareFunc::EQUAL:
+            return VK_COMPARE_OP_EQUAL;
+        case CompareFunc::NOT_EQUAL:
+            return VK_COMPARE_OP_NOT_EQUAL;
+        case CompareFunc::ALWAYS:
+            return VK_COMPARE_OP_ALWAYS;
+        default:
+            return VK_COMPARE_OP_ALWAYS;
+        }
+    };
+    info.compareOp = cmpOf(desc.compareFunc);
+
+    // Anisotropy
+    info.anisotropyEnable = (desc.minFilter == SamplerFilter::MIN_ANISOTROPIC) ? VK_TRUE : VK_FALSE;
+    info.maxAnisotropy    = (desc.anisotropy > 0 ? static_cast<float>(desc.anisotropy) : 1.0f);
+
+    info.borderColor             = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+    info.unnormalizedCoordinates = VK_FALSE;
+    info.minLod                  = 0.0f;
+    info.maxLod                  = VK_LOD_CLAMP_NONE;
+    info.mipLodBias              = 0.0f;
+
+    VkSampler sampler{};
+    VkResult vr = vkCreateSampler(_device, &info, nullptr, &sampler);
+    AXASSERT(vr == VK_SUCCESS, "vkCreateSampler failed");
+    return sampler;
+}
+
+void DriverImpl::destroySampler(SamplerHandle& h)
+{
+    if (h)
+    {
+        vkDestroySampler(_device, reinterpret_cast<VkSampler>(h), nullptr);
+        h = VK_NULL_HANDLE;
+    }
+}
+
+VertexLayout* DriverImpl::createVertexLayout(VertexLayoutDesc&& desc)
+{
+    return new VertexLayoutImpl(std::move(desc));
+}
+
+std::string DriverImpl::getVendor() const
+{
+    return _vendor;
+}
+std::string DriverImpl::getRenderer() const
+{
+    return _renderer;
+}
+std::string DriverImpl::getVersion() const
+{
+    return _version;
+}
+std::string DriverImpl::getShaderVersion() const
+{
+    return _shaderVersion;
+}
+
+bool DriverImpl::checkForFeatureSupported(FeatureType feature)
+{
+    // Basic, conservative feature checks; consider querying format properties for stricter checks
+    switch (feature)
+    {
+    case FeatureType::VAO:
+    case FeatureType::VERTEX_ATTRIB_BINDING:
+        return true;  // Vulkan pipelines handle vertex input layouts
+
+    case FeatureType::DEPTH24:
+    {
+        VkFormatProperties fp{};
+        vkGetPhysicalDeviceFormatProperties(_physical, VK_FORMAT_X8_D24_UNORM_PACK32, &fp);
+        return (fp.optimalTilingFeatures & VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT) != 0;
+    }
+
+    case FeatureType::PACKED_DEPTH_STENCIL:
+    {
+        VkFormatProperties fp{};
+        vkGetPhysicalDeviceFormatProperties(_physical, VK_FORMAT_D24_UNORM_S8_UINT, &fp);
+        return (fp.optimalTilingFeatures & VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT) != 0;
+    }
+
+    case FeatureType::IMG_FORMAT_BGRA8888:
+    {
+        VkFormatProperties fp{};
+        vkGetPhysicalDeviceFormatProperties(_physical, VK_FORMAT_B8G8R8A8_UNORM, &fp);
+        return (fp.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT) != 0;
+    }
+
+    case FeatureType::S3TC:
+    {
+        VkFormatProperties fp{};
+        vkGetPhysicalDeviceFormatProperties(_physical, VK_FORMAT_BC3_UNORM_BLOCK, &fp);
+        return (fp.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT) != 0;
+    }
+
+    case FeatureType::ASTC:
+    {
+        VkFormatProperties fp{};
+        vkGetPhysicalDeviceFormatProperties(_physical, VK_FORMAT_ASTC_4x4_UNORM_BLOCK, &fp);
+        return (fp.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT) != 0;
+    }
+
+    default:
+        return false;
+    }
+}
+
+uint32_t DriverImpl::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) const
+{
+    VkPhysicalDeviceMemoryProperties memProperties;
+    vkGetPhysicalDeviceMemoryProperties(_physical, &memProperties);
+
+    for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++)
+    {
+        if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties)
+            return i;
+    }
+    AXASSERT(false, "failed to find suitable memory type!");
+    return 0;
+}
+
+VkCommandBuffer DriverImpl::beginIsolateCommands()
+{
+    // allocate one primary command buffer from transient pool
+    std::lock_guard<std::mutex> lk(_transientPoolMutex);
+
+    VkCommandBufferAllocateInfo allocInfo{};
+    allocInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    allocInfo.commandPool        = _transientCommandPool;
+    allocInfo.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    allocInfo.commandBufferCount = 1;
+
+    VkCommandBuffer cmd = VK_NULL_HANDLE;
+    VkResult res        = vkAllocateCommandBuffers(_device, &allocInfo, &cmd);
+    AXASSERT(res == VK_SUCCESS && cmd != VK_NULL_HANDLE, "vkAllocateCommandBuffers failed");
+
+    VkCommandBufferBeginInfo beginInfo{};
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+    res = vkBeginCommandBuffer(cmd, &beginInfo);
+    AXASSERT(res == VK_SUCCESS, "vkBeginCommandBuffer failed");
+
+    return cmd;
+}
+
+void DriverImpl::endIsolateCommands(VkCommandBuffer cmd)
+{
+    AXASSERT(cmd != VK_NULL_HANDLE, "endSingleTimeCommands called with null cmd");
+
+    VkResult res = vkEndCommandBuffer(cmd);
+    AXASSERT(res == VK_SUCCESS, "vkEndCommandBuffer failed");
+
+    VkSubmitInfo submitInfo{};
+    submitInfo.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers    = &cmd;
+
+    // use a fence to wait for completion of this submission only
+    VkFenceCreateInfo fenceInfo{};
+    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+    VkFence fence   = VK_NULL_HANDLE;
+    res             = vkCreateFence(_device, &fenceInfo, nullptr, &fence);
+    AXASSERT(res == VK_SUCCESS && fence != VK_NULL_HANDLE, "vkCreateFence failed");
+
+    res = vkQueueSubmit(_graphicsQueue, 1, &submitInfo, fence);
+    AXASSERT(res == VK_SUCCESS, "vkQueueSubmit failed");
+
+    // wait for this fence (only this submission)
+    res = vkWaitForFences(_device, 1, &fence, VK_TRUE, UINT64_MAX);
+    AXASSERT(res == VK_SUCCESS, "vkWaitForFences failed");
+
+    vkDestroyFence(_device, fence, nullptr);
+
+    // free the command buffer back to the transient pool
+    std::lock_guard<std::mutex> lk(_transientPoolMutex);
+    vkFreeCommandBuffers(_device, _transientCommandPool, 1, &cmd);
+}
+
+void DriverImpl::waitIdle()
+{
+    if (_device)
+        vkDeviceWaitIdle(_device);
+}
+
+}  // namespace ax::rhi::vk

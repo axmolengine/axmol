@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "axmol/rhi/d3d/DriverD3D.h"
-#include "axmol/rhi/d3d/CommandBufferD3D.h"
+#include "axmol/rhi/d3d/RenderContextD3D.h"
 #include "axmol/rhi/d3d/BufferD3D.h"
 #include "axmol/rhi/d3d/TextureD3D.h"
 #include "axmol/rhi/d3d/ProgramD3D.h"
@@ -197,18 +197,13 @@ void DriverImpl::init()
     }
     _dxgiAdapter->GetDesc(&_adapterDesc);
 
-    // _maxAttributes = D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT;
-    // _maxTextureSize    = 16384;
-    // _maxTextureUnits = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
-    // _maxSamplesAllowed = 1;
+    _caps.maxAttributes = D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT;  // 16
 
-    _maxAttributes = D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT;  // 16
+    _caps.maxTextureUnits = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;  // 128
 
-    _maxTextureUnits = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;  // 128
+    _caps.maxTextureSize = EstimateMaxTexSize(_device->GetFeatureLevel());
 
-    _maxTextureSize = EstimateMaxTexSize(_device->GetFeatureLevel());
-
-    _maxSamplesAllowed = static_cast<int32_t>(FindMaxMsaaSamples(_device, DXGI_FORMAT_R8G8B8A8_UNORM));
+    _caps.maxSamplesAllowed = static_cast<int32_t>(FindMaxMsaaSamples(_device, DXGI_FORMAT_R8G8B8A8_UNORM));
 }
 
 DriverImpl::~DriverImpl()
@@ -339,14 +334,14 @@ HRESULT DriverImpl::createD3DDevice(int requestDriverType, int createFlags)
                                &_context);
 }
 
-CommandBuffer* DriverImpl::createCommandBuffer(void* surfaceContext)
+RenderContext* DriverImpl::createRenderContext(void* surfaceContext)
 {
-    return new CommandBufferImpl(this, surfaceContext);
+    return new RenderContextImpl(this, surfaceContext);
 }
 
-Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage)
+Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial)
 {
-    return new BufferImpl(_device, _context, size, type, usage);
+    return new BufferImpl(_device, _context, size, type, usage, initial);
 }
 
 /**

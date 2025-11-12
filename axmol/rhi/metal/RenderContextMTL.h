@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "axmol/rhi/CommandBuffer.h"
+#include "axmol/rhi/RenderContext.h"
 #include "axmol/rhi/metal/DriverMTL.h"
 #include <unordered_map>
 
@@ -44,15 +44,15 @@ class DepthStencilStateImpl;
  * @brief Store encoded commands for the GPU to execute.
  * A command buffer stores encoded commands until the buffer is committed for execution by the GPU
  */
-class CommandBufferImpl : public CommandBuffer
+class RenderContextImpl : public RenderContext
 {
 public:
     /// @name Constructor, Destructor and Initializers
     /**
      * @param driver The device for which MTLCommandQueue object was created.
      */
-    CommandBufferImpl(DriverImpl* driver, void* surfaceContext);
-    ~CommandBufferImpl();
+    RenderContextImpl(DriverImpl* driver, void* surfaceContext);
+    ~RenderContextImpl();
 
     /**
      * @brief Resize metal swapchain when window size changed
@@ -204,11 +204,9 @@ public:
      */
     void setScissorRect(bool isEnabled, float x, float y, float width, float height) override;
 
-    /**
-     * Read pixels from RenderTarget
-     * @param callback A callback to deal with pixel data read.
-     */
-    void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback) override;
+    void readPixels(RenderTarget* rt,
+                    bool preserveAxisHint,
+                    std::function<void(const PixelBufferDesc&)> callback) override;
 
     id<MTLRenderCommandEncoder> getRenderCommandEncoder() const { return _mtlRenderEncoder; }
 

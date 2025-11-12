@@ -4,7 +4,7 @@ layout(location = TEXCOORD0) in vec2 a_texCoord;
 layout(location = TEXCOORD0) out vec2 v_texCoord;
 layout(location = TEXCOORD1) out float v_fogFactor;              //weight for fog TEXCOORD1~TEXCOORD7 safe to use when this shader prog not use thems
 
-layout(std140) uniform vs_ub {
+layout(std140, set = 0, binding = 0) uniform vs_ub {
     float u_fogDensity;// For exp and exp2 equation
     float u_fogStart; // This is only for linear fog
     float u_fogEnd; // This is only for linear fog

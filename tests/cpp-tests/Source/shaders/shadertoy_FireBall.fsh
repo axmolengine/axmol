@@ -10,7 +10,7 @@ precision highp int;
 
 
 
-layout(std140) uniform fs_ub {
+layout(std140, set = 0, binding = 1) uniform fs_ub {
     vec2 center;
     vec2 resolution;
     vec2 u_screenSize;

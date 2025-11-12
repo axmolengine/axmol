@@ -4,7 +4,7 @@ precision highp int;
 
 layout(location = POSITION) in vec4 v_position;
 
-layout(std140) uniform fs_ub {
+layout(std140, set = 0, binding = 1) uniform fs_ub {
     vec4 u_startColor;
     vec4 u_endColor;
     vec2 u_center;

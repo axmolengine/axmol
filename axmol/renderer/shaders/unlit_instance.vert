@@ -5,7 +5,7 @@ layout (location = TEXCOORD0) in vec2 a_texCoord;
 layout (location = TEXCOORD1) in mat4 a_instance;
 layout (location = TEXCOORD0) out vec2 v_texCoord;
 
-layout(std140, binding = 0) uniform vs_ub {
+layout(std140, binding = 0, set = 0, binding = 0) uniform vs_ub {
     mat4 u_MVPMatrix;
 };
 

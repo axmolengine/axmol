@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/rhi/metal/CommandBufferMTL.h"
+#include "axmol/rhi/metal/RenderContextMTL.h"
 #include "axmol/rhi/metal/BufferMTL.h"
 #include "axmol/rhi/metal/DriverMTL.h"
 #include "axmol/rhi/metal/RenderPipelineMTL.h"
@@ -45,6 +45,10 @@ namespace ax::rhi::mtl
 
 namespace
 {
+
+// match with axmol 3.1 shader
+static constexpr int VS_UBO_BINDING_INDEX = 0;
+static constexpr int FS_UBO_BINDING_INDEX = 1;
 
 #define byte(n) ((n) * 8)
 #define bit(n)  (n)
@@ -144,10 +148,10 @@ static MTLRenderPassDescriptor* toMTLRenderPassDesc(const RenderTarget* rt, cons
 
 }  // namespace
 
-CAMetalLayer* CommandBufferImpl::_mtlLayer              = nil;
-id<CAMetalDrawable> CommandBufferImpl::_currentDrawable = nil;
+CAMetalLayer* RenderContextImpl::_mtlLayer              = nil;
+id<CAMetalDrawable> RenderContextImpl::_currentDrawable = nil;
 
-CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
+RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
 {
     _frameBoundarySemaphore = dispatch_semaphore_create(MAX_INFLIGHT_BUFFER);
     auto mtlDevice          = driver->getMTLDevice();
@@ -188,7 +192,7 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
     UtilsMTL::updateDefaultDepthStencilAttachment(_mtlLayer);
 }
 
-CommandBufferImpl::~CommandBufferImpl()
+RenderContextImpl::~RenderContextImpl()
 {
     // Wait for all frames to finish by submitting and waiting on a dummy command buffer.
     flush();
@@ -200,24 +204,24 @@ CommandBufferImpl::~CommandBufferImpl()
     dispatch_semaphore_signal(_frameBoundarySemaphore);
 }
 
-bool CommandBufferImpl::resizeSwapchain(uint32_t width, uint32_t height)
+bool RenderContextImpl::resizeSwapchain(uint32_t width, uint32_t height)
 {
     [_mtlLayer setDrawableSize:CGSizeMake(width, height)];
     UtilsMTL::updateDefaultDepthStencilAttachment(_mtlLayer);
     return true;
 }
 
-void CommandBufferImpl::setDepthStencilState(DepthStencilState* depthStencilState)
+void RenderContextImpl::setDepthStencilState(DepthStencilState* depthStencilState)
 {
     _depthStencilStateImpl = static_cast<DepthStencilStateImpl*>(depthStencilState);
 }
 
-void CommandBufferImpl::setRenderPipeline(RenderPipeline* renderPipeline)
+void RenderContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
 {
     _renderPipelineImpl = static_cast<RenderPipelineImpl*>(renderPipeline);
 }
 
-bool CommandBufferImpl::beginFrame()
+bool RenderContextImpl::beginFrame()
 {
     _autoReleasePool = [[NSAutoreleasePool alloc] init];
     dispatch_semaphore_wait(_frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
@@ -231,7 +235,7 @@ bool CommandBufferImpl::beginFrame()
     return true;
 }
 
-void CommandBufferImpl::updateRenderCommandEncoder(const RenderTarget* renderTarget,
+void RenderContextImpl::updateRenderCommandEncoder(const RenderTarget* renderTarget,
                                                    const RenderPassDesc& renderPassDesc)
 {
     if (_mtlRenderEncoder != nil && _currentRenderPassDesc == renderPassDesc && _currentRenderTarget == renderTarget &&
@@ -257,25 +261,25 @@ void CommandBufferImpl::updateRenderCommandEncoder(const RenderTarget* renderTar
     [_mtlRenderEncoder retain];
 }
 
-void CommandBufferImpl::beginRenderPass(const RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc)
+void RenderContextImpl::beginRenderPass(const RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc)
 {
     updateRenderCommandEncoder(renderTarget, renderPassDesc);
     //    [_mtlRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
 }
 
-void CommandBufferImpl::updateDepthStencilState(const DepthStencilDesc& desc)
+void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 {
     _depthStencilStateImpl->update(desc);
 }
 
-void CommandBufferImpl::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc)
+void RenderContextImpl::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc)
 {
-    CommandBuffer::updatePipelineState(rt, desc);
+    RenderContext::updatePipelineState(rt, desc);
     _renderPipelineImpl->update(rt, desc);
     [_mtlRenderEncoder setRenderPipelineState:_renderPipelineImpl->getMTLRenderPipelineState()];
 }
 
-void CommandBufferImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
+void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
 {
     MTLViewport viewport;
     viewport.originX = x;
@@ -287,17 +291,17 @@ void CommandBufferImpl::setViewport(int x, int y, unsigned int w, unsigned int h
     [_mtlRenderEncoder setViewport:viewport];
 }
 
-void CommandBufferImpl::setCullMode(CullMode mode)
+void RenderContextImpl::setCullMode(CullMode mode)
 {
     [_mtlRenderEncoder setCullMode:toMTLCullMode(mode)];
 }
 
-void CommandBufferImpl::setWinding(Winding winding)
+void RenderContextImpl::setWinding(Winding winding)
 {
     [_mtlRenderEncoder setFrontFacingWinding:toMTLWinding(winding)];
 }
 
-void CommandBufferImpl::setVertexBuffer(Buffer* buffer)
+void RenderContextImpl::setVertexBuffer(Buffer* buffer)
 {
     // Vertex buffer is bound in index DEFAULT_ATTRIBS_BINDING_INDEX.
     [_mtlRenderEncoder setVertexBuffer:static_cast<BufferImpl*>(buffer)->getMTLBuffer()
@@ -305,7 +309,7 @@ void CommandBufferImpl::setVertexBuffer(Buffer* buffer)
                                atIndex:DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX];
 }
 
-void CommandBufferImpl::setInstanceBuffer(Buffer* buffer)
+void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
 {
     // Vertex instancing transform buffer is bound in index VBO_INSTANCING_BINDING_INDEX.
     // TODO: sync device binding macros to AXSLCC
@@ -314,7 +318,7 @@ void CommandBufferImpl::setInstanceBuffer(Buffer* buffer)
                                atIndex:DriverImpl::VBO_INSTANCING_BINDING_INDEX];
 }
 
-void CommandBufferImpl::setIndexBuffer(Buffer* buffer)
+void RenderContextImpl::setIndexBuffer(Buffer* buffer)
 {
     assert(buffer != nullptr);
     if (!buffer)
@@ -324,7 +328,7 @@ void CommandBufferImpl::setIndexBuffer(Buffer* buffer)
     [_mtlIndexBuffer retain];
 }
 
-void CommandBufferImpl::drawArrays(PrimitiveType primitiveType,
+void RenderContextImpl::drawArrays(PrimitiveType primitiveType,
                                    std::size_t start,
                                    std::size_t count,
                                    bool wireframe /* unused */)
@@ -333,7 +337,7 @@ void CommandBufferImpl::drawArrays(PrimitiveType primitiveType,
     [_mtlRenderEncoder drawPrimitives:toMTLPrimitive(primitiveType) vertexStart:start vertexCount:count];
 }
 
-void CommandBufferImpl::drawArraysInstanced(PrimitiveType primitiveType,
+void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
                                             std::size_t start,
                                             std::size_t count,
                                             int instanceCount,
@@ -346,7 +350,7 @@ void CommandBufferImpl::drawArraysInstanced(PrimitiveType primitiveType,
                         instanceCount:instanceCount];
 }
 
-void CommandBufferImpl::drawElements(PrimitiveType primitiveType,
+void RenderContextImpl::drawElements(PrimitiveType primitiveType,
                                      IndexFormat indexType,
                                      std::size_t count,
                                      std::size_t offset,
@@ -360,7 +364,7 @@ void CommandBufferImpl::drawElements(PrimitiveType primitiveType,
                            indexBufferOffset:offset];
 }
 
-void CommandBufferImpl::drawElementsInstanced(PrimitiveType primitiveType,
+void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
                                               IndexFormat indexType,
                                               std::size_t count,
                                               std::size_t offset,
@@ -376,12 +380,14 @@ void CommandBufferImpl::drawElementsInstanced(PrimitiveType primitiveType,
                                instanceCount:instanceCount];
 }
 
-void CommandBufferImpl::endRenderPass()
+void RenderContextImpl::endRenderPass()
 {
     afterDraw();
 }
 
-void CommandBufferImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
+void RenderContextImpl::readPixels(RenderTarget* rt,
+                                   bool /*preserveAxisHint*/,
+                                   std::function<void(const PixelBufferDesc&)> callback)
 {
     auto rtMTL = static_cast<RenderTargetImpl*>(rt);
 
@@ -392,7 +398,7 @@ void CommandBufferImpl::readPixels(RenderTarget* rt, std::function<void(const Pi
     _captureCallbacks.emplace_back(texture, std::move(callback));
 }
 
-void CommandBufferImpl::endFrame()
+void RenderContextImpl::endFrame()
 {
     [_mtlRenderEncoder endEncoding];
     [_mtlRenderEncoder release];
@@ -413,7 +419,7 @@ void CommandBufferImpl::endFrame()
     [_autoReleasePool drain];
 }
 
-void CommandBufferImpl::endEncoding()
+void RenderContextImpl::endEncoding()
 {
     if (_mtlRenderEncoder)
     {
@@ -423,7 +429,7 @@ void CommandBufferImpl::endEncoding()
     _mtlRenderEncoder = nil;
 }
 
-void CommandBufferImpl::flush()
+void RenderContextImpl::flush()
 {
     if (_currentCmdBuffer)
     {
@@ -437,7 +443,7 @@ void CommandBufferImpl::flush()
     }
 }
 
-void CommandBufferImpl::flushCaptureCommands()
+void RenderContextImpl::flushCaptureCommands()
 {
     if (!_captureCallbacks.empty())
     {
@@ -476,7 +482,7 @@ void CommandBufferImpl::flushCaptureCommands()
     }
 }
 
-void CommandBufferImpl::afterDraw()
+void RenderContextImpl::afterDraw()
 {
     if (_mtlIndexBuffer)
     {
@@ -488,7 +494,7 @@ void CommandBufferImpl::afterDraw()
     _vertexLayout = nullptr;
 }
 
-void CommandBufferImpl::prepareDrawing() const
+void RenderContextImpl::prepareDrawing() const
 {
     setUniformBuffer();
     setTextures();
@@ -502,7 +508,7 @@ void CommandBufferImpl::prepareDrawing() const
     }
 }
 
-void CommandBufferImpl::setTextures() const
+void RenderContextImpl::setTextures() const
 {
     for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
     {
@@ -518,7 +524,7 @@ void CommandBufferImpl::setTextures() const
     }
 }
 
-void CommandBufferImpl::setUniformBuffer() const
+void RenderContextImpl::setUniformBuffer() const
 {
     if (_programState)
     {
@@ -526,24 +532,21 @@ void CommandBufferImpl::setUniformBuffer() const
         for (auto& cb : callbackUniforms)
             cb.second(_programState, cb.first);
 
-        // axslcc spec, bound to 0
-        constexpr int bindingIndex = DriverImpl::VBO_BINDING_INDEX_START;
-
         auto vertexUB = _programState->getVertexUniformBuffer();
         if (!vertexUB.empty())
         {
-            [_mtlRenderEncoder setVertexBytes:vertexUB.data() length:vertexUB.size() atIndex:bindingIndex];
+            [_mtlRenderEncoder setVertexBytes:vertexUB.data() length:vertexUB.size() atIndex:VS_UBO_BINDING_INDEX];
         }
 
         auto fragUB = _programState->getFragmentUniformBuffer();
         if (!fragUB.empty())
         {
-            [_mtlRenderEncoder setFragmentBytes:fragUB.data() length:fragUB.size() atIndex:bindingIndex];
+            [_mtlRenderEncoder setFragmentBytes:fragUB.data() length:fragUB.size() atIndex:FS_UBO_BINDING_INDEX];
         }
     }
 }
 
-void CommandBufferImpl::setScissorRect(bool isEnabled, float x, float y, float width, float height)
+void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float width, float height)
 {
     MTLScissorRect scissorRect;
     if (isEnabled)
@@ -573,7 +576,7 @@ void CommandBufferImpl::setScissorRect(bool isEnabled, float x, float y, float w
     [_mtlRenderEncoder setScissorRect:scissorRect];
 }
 
-void CommandBufferImpl::readPixels(id<MTLTexture> texture,
+void RenderContextImpl::readPixels(id<MTLTexture> texture,
                                    std::size_t origX,
                                    std::size_t origY,
                                    std::size_t rectWidth,
@@ -627,12 +630,12 @@ void CommandBufferImpl::readPixels(id<MTLTexture> texture,
     [oneOffBuffer waitUntilCompleted];
 }
 
-void CommandBufferImpl::setFrameBufferOnly(bool frameBufferOnly)
+void RenderContextImpl::setFrameBufferOnly(bool frameBufferOnly)
 {
     [_mtlLayer setFramebufferOnly:frameBufferOnly];
 }
 
-id<CAMetalDrawable> CommandBufferImpl::getCurrentDrawable()
+id<CAMetalDrawable> RenderContextImpl::getCurrentDrawable()
 {
     if (!_currentDrawable)
         _currentDrawable = [_mtlLayer nextDrawable];
@@ -640,7 +643,7 @@ id<CAMetalDrawable> CommandBufferImpl::getCurrentDrawable()
     return _currentDrawable;
 }
 
-void CommandBufferImpl::resetCurrentDrawable()
+void RenderContextImpl::resetCurrentDrawable()
 {
     _currentDrawable = nil;
 }
