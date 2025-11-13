@@ -123,15 +123,15 @@ jobs:
 
     - name: Build
       shell: pwsh
-      run: ./tools/cmdline/axmol -p osx && ./tools/cmdline/axmol run -p osx -t unit-tests
+      run: ./tools/cmdline/axmol -p osx -a arm64 && ./tools/cmdline/axmol run -p osx -a arm64 -t unit-tests
   osx-x64:
-    runs-on: macos-13
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v5
 
     - name: Build
       shell: pwsh
-      run: ./tools/cmdline/axmol -p osx && ./tools/cmdline/axmol run -p osx -t unit-tests
+      run: ./tools/cmdline/axmol -p osx -a x64
   android:
     runs-on: ubuntu-latest
     strategy:
@@ -158,7 +158,7 @@ jobs:
           templates/**/*.apk
           tests/**/*.apk
   ios:
-    runs-on: macos-14
+    runs-on: macos-latest
     strategy:
       matrix:
         target_os:
