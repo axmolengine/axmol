@@ -47,6 +47,8 @@ struct PixelFormatInfo
 
 inline namespace UtilsVK
 {
+VkFormat toVKFormat(PixelFormat pf);
+
 const PixelFormatInfo* toVKFormatInfo(PixelFormat pf);
 
 void rebuildSwapchainAttachments(DriverImpl*,

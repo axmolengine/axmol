@@ -92,7 +92,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 #ifndef NDEBUG
         title += " *Debug*";
 #endif
-        title += fmt::format("({})", axdrv->getVersion());
+        title += fmt::format("({}@{})", axdrv->getVersion(), axdrv->getRenderer());
 #ifdef AX_PLATFORM_PC
         renderView =
             RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height), 1.0F, true);

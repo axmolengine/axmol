@@ -88,7 +88,6 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface)
     _graphicsQueue = driver->getGraphicsQueue();
     _presentQueue  = driver->getPresentQueue();
     _device        = driver->getDevice();
-    auto physical  = driver->getPhysicalDevice();
 
     // Create a command pool for allocating command buffers
     VkCommandPoolCreateInfo poolInfo{};
@@ -177,12 +176,12 @@ RenderContextImpl::~RenderContextImpl()
 // Create per-frame uniform ring buffers with persistent mapping
 void RenderContextImpl::createUniformRingBuffers(std::size_t capacityBytes)
 {
-    auto physical = _driver->getPhysicalDevice();
-    auto device   = _device;
-
     // Query minUniformBufferOffsetAlignment from physical device limits
+
+    auto device = _driver->getDevice();
+
     VkPhysicalDeviceProperties props{};
-    vkGetPhysicalDeviceProperties(physical, &props);
+    vkGetPhysicalDeviceProperties(_driver->getPhysical(), &props);
     std::size_t devAlign = std::max<std::size_t>(1, props.limits.minUniformBufferOffsetAlignment);
 
     for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
@@ -330,7 +329,7 @@ bool RenderContextImpl::resizeSwapchain(uint32_t width, uint32_t height)
 
 void RenderContextImpl::rebuildSwapchain()
 {
-    auto physical = _driver->getPhysicalDevice();
+    auto physical = _driver->getPhysical();
 
     // Query supported surface formats
     uint32_t formatCount;
@@ -921,14 +920,11 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
                                    bool /*preserveAxisHint*/,
                                    std::function<void(const PixelBufferDesc&)> callback)
 {
-    // Basic implementation: copy color attachment to a host-visible buffer and read back.
-    // In a production engine, this should be handled by a staging image/buffer and proper synchronization.
-
     PixelBufferDesc pbd{};
     auto rtImpl = static_cast<RenderTargetImpl*>(rt);
 
     auto colorAttachment = rtImpl->getColorAttachment(0);
-    if (!colorAttachment.view)
+    if (!colorAttachment.tex || !colorAttachment.tex.image)
     {
         callback(pbd);
         return;
@@ -936,13 +932,132 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
 
     const uint32_t width  = colorAttachment.desc.width;
     const uint32_t height = colorAttachment.desc.height;
+    const VkFormat format = UtilsVK::toVKFormat(colorAttachment.desc.pixelFormat);  // assume RGBA8_UNORM
 
-    // NOTE: Implement a staging readback path here using vkCmdCopyImageToBuffer and vkMapMemory.
-    // For brevity, we return an empty buffer. Integrate with your driver’s readback utilities.
+    // Compute stride from format; keep it simple for RGBA8
+    uint32_t pixelStride    = 4;  // VK_FORMAT_R8G8B8A8_UNORM
+    VkDeviceSize bufferSize = static_cast<VkDeviceSize>(width) * static_cast<VkDeviceSize>(height) * pixelStride;
+
+    // Create staging buffer (HOST_VISIBLE | COHERENT)
+    VkBuffer stagingBuf       = VK_NULL_HANDLE;
+    VkDeviceMemory stagingMem = VK_NULL_HANDLE;
+
+    VkBufferCreateInfo bufInfo{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
+    bufInfo.size        = bufferSize;
+    bufInfo.usage       = VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+    bufInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    AXASSERT(vkCreateBuffer(_device, &bufInfo, nullptr, &stagingBuf) == VK_SUCCESS, "vkCreateBuffer failed");
+
+    VkMemoryRequirements memReq{};
+    vkGetBufferMemoryRequirements(_device, stagingBuf, &memReq);
+
+    uint32_t typeIndex = _driver->findMemoryType(
+        memReq.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+    VkMemoryAllocateInfo allocInfo{VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO};
+    allocInfo.allocationSize  = memReq.size;
+    allocInfo.memoryTypeIndex = typeIndex;
+    AXASSERT(vkAllocateMemory(_device, &allocInfo, nullptr, &stagingMem) == VK_SUCCESS, "vkAllocateMemory failed");
+    AXASSERT(vkBindBufferMemory(_device, stagingBuf, stagingMem, 0) == VK_SUCCESS, "vkBindBufferMemory failed");
+
+    // Record copy commands in an isolated command buffer and wait for completion inside endIsolateCommands
+    VkCommandBuffer cmd = _driver->beginIsolateCommands();
+
+    const VkImage srcImage           = colorAttachment.tex.image;
+    const bool isSwapchainBackbuffer = rtImpl->isDefaultRenderTarget();  // provide this helper in RenderTargetImpl
+    const VkImageLayout originalLayout =
+        isSwapchainBackbuffer ? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+    // Transition to TRANSFER_SRC_OPTIMAL
+    VkImageMemoryBarrier toTransfer{VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER};
+    toTransfer.image                           = srcImage;
+    toTransfer.subresourceRange.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    toTransfer.subresourceRange.baseMipLevel   = 0;
+    toTransfer.subresourceRange.levelCount     = 1;
+    toTransfer.subresourceRange.baseArrayLayer = 0;
+    toTransfer.subresourceRange.layerCount     = 1;
+    toTransfer.oldLayout                       = originalLayout;
+    toTransfer.newLayout                       = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+
+    VkPipelineStageFlags srcStageForToTransfer;
+    VkPipelineStageFlags dstStageForToTransfer = VK_PIPELINE_STAGE_TRANSFER_BIT;
+
+    if (originalLayout == VK_IMAGE_LAYOUT_PRESENT_SRC_KHR)
+    {
+        // From PRESENT: no valid src access mask; use BOTTOM_OF_PIPE
+        toTransfer.srcAccessMask = 0;
+        toTransfer.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+        srcStageForToTransfer    = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+    }
+    else
+    {
+        // From COLOR_ATTACHMENT
+        toTransfer.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        toTransfer.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+        srcStageForToTransfer    = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    }
+
+    vkCmdPipelineBarrier(cmd, srcStageForToTransfer, dstStageForToTransfer, 0, 0, nullptr, 0, nullptr, 1, &toTransfer);
+
+    // Copy image to buffer
+    VkBufferImageCopy copyRegion{};
+    copyRegion.bufferOffset                    = 0;
+    copyRegion.bufferRowLength                 = 0;  // tightly packed
+    copyRegion.bufferImageHeight               = 0;
+    copyRegion.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    copyRegion.imageSubresource.mipLevel       = 0;
+    copyRegion.imageSubresource.baseArrayLayer = 0;
+    copyRegion.imageSubresource.layerCount     = 1;
+    copyRegion.imageOffset                     = {0, 0, 0};
+    copyRegion.imageExtent                     = {width, height, 1};
+
+    vkCmdCopyImageToBuffer(cmd, srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, stagingBuf, 1, &copyRegion);
+
+    // Restore to original layout
+    VkImageMemoryBarrier toOriginal{VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER};
+    toOriginal.image                           = srcImage;
+    toOriginal.subresourceRange.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    toOriginal.subresourceRange.baseMipLevel   = 0;
+    toOriginal.subresourceRange.levelCount     = 1;
+    toOriginal.subresourceRange.baseArrayLayer = 0;
+    toOriginal.subresourceRange.layerCount     = 1;
+    toOriginal.oldLayout                       = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+    toOriginal.newLayout                       = originalLayout;
+
+    VkPipelineStageFlags srcStageForToOriginal = VK_PIPELINE_STAGE_TRANSFER_BIT;
+    VkPipelineStageFlags dstStageForToOriginal;
+
+    if (originalLayout == VK_IMAGE_LAYOUT_PRESENT_SRC_KHR)
+    {
+        toOriginal.srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+        toOriginal.dstAccessMask = 0;
+        dstStageForToOriginal    = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+    }
+    else
+    {
+        toOriginal.srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+        toOriginal.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        dstStageForToOriginal    = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    }
+
+    vkCmdPipelineBarrier(cmd, srcStageForToOriginal, dstStageForToOriginal, 0, 0, nullptr, 0, nullptr, 1, &toOriginal);
+
+    _driver->endIsolateCommands(cmd);  // must wait for completion before mapping
+
+    // Map staging buffer and copy out
+    void* mapped = nullptr;
+    AXASSERT(vkMapMemory(_device, stagingMem, 0, bufferSize, 0, &mapped) == VK_SUCCESS, "vkMapMemory failed");
 
     pbd._width  = width;
     pbd._height = height;
-    pbd._data.clear();
+    pbd._data.resize(static_cast<size_t>(bufferSize));
+    std::memcpy(pbd._data.data(), mapped, static_cast<size_t>(bufferSize));
+
+    vkUnmapMemory(_device, stagingMem);
+
+    // Cleanup
+    vkDestroyBuffer(_device, stagingBuf, nullptr);
+    vkFreeMemory(_device, stagingMem, nullptr);
 
     callback(pbd);
 }

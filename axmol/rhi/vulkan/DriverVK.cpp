@@ -135,6 +135,84 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL vkDebugCallback(VkDebugUtilsMessageSeverit
     return VK_FALSE;
 }
 
+static std::pair<VkPhysicalDevice, uint32_t> resolveAdapter(const axstd::pod_vector<VkPhysicalDevice>& devices,
+                                                            VkInstance instance,
+                                                            PowerPreference pref)
+{
+    VkPhysicalDevice bestDevice  = VK_NULL_HANDLE;
+    uint32_t graphicsQueueFamily = UINT32_MAX;
+    int bestScore                = -1;
+
+    for (auto pd : devices)
+    {
+        VkPhysicalDeviceProperties props{};
+        vkGetPhysicalDeviceProperties(pd, &props);
+
+        uint32_t qCount = 0;
+        vkGetPhysicalDeviceQueueFamilyProperties(pd, &qCount, nullptr);
+        std::vector<VkQueueFamilyProperties> qprops(qCount);
+        vkGetPhysicalDeviceQueueFamilyProperties(pd, &qCount, qprops.data());
+
+        bool hasGraphicsQueue = false;
+        for (uint32_t i = 0; i < qCount; ++i)
+        {
+            if (qprops[i].queueCount > 0 && (qprops[i].queueFlags & VK_QUEUE_GRAPHICS_BIT))
+            {
+                hasGraphicsQueue    = true;
+                graphicsQueueFamily = i;
+                break;
+            }
+        }
+        if (!hasGraphicsQueue)
+            continue;  // skip devices without graphics queue
+
+        // --- Score device ---
+        int score = 0;
+
+        // Power preference
+        switch (pref)
+        {
+        case PowerPreference::HighPerformance:
+            if (props.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
+                score += 100;
+            break;
+        case PowerPreference::LowPower:
+            if (props.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU)
+                score += 100;
+            break;
+        case PowerPreference::Auto:
+            if (props.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
+                score += 50;
+            else if (props.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU)
+                score += 25;
+            break;
+        }
+
+        // Prefer newer Vulkan versions
+        score += static_cast<int>(props.apiVersion);
+
+        // Prefer larger VRAM (optional)
+        VkPhysicalDeviceMemoryProperties memProps{};
+        vkGetPhysicalDeviceMemoryProperties(pd, &memProps);
+        VkDeviceSize vram = 0;
+        for (uint32_t i = 0; i < memProps.memoryHeapCount; ++i)
+        {
+            if (memProps.memoryHeaps[i].flags & VK_MEMORY_HEAP_DEVICE_LOCAL_BIT)
+                vram += memProps.memoryHeaps[i].size;
+        }
+        score += static_cast<int>(vram / (1024 * 1024 * 256));  // add points per 256MB
+
+        // --- Select best ---
+        if (score > bestScore)
+        {
+            bestScore  = score;
+            bestDevice = pd;
+        }
+    }
+
+    return {bestDevice, graphicsQueueFamily};
+}
+
 }  // namespace
 
 DriverImpl::DriverImpl() {}
@@ -147,13 +225,13 @@ DriverImpl::~DriverImpl()
     }
 
     if (_surface)
-        vkDestroySurfaceKHR(_vkInstance, _surface, nullptr);
+        vkDestroySurfaceKHR(_factory, _surface, nullptr);
     if (_debugMessenger)
-        vkDestroyDebugUtilsMessengerEXT(_vkInstance, _debugMessenger, nullptr);
+        vkDestroyDebugUtilsMessengerEXT(_factory, _debugMessenger, nullptr);
     if (_device)
         vkDestroyDevice(_device, nullptr);
-    if (_vkInstance)
-        vkDestroyInstance(_vkInstance, nullptr);
+    if (_factory)
+        vkDestroyInstance(_factory, nullptr);
 }
 
 void DriverImpl::init()
@@ -161,15 +239,15 @@ void DriverImpl::init()
     // Load basic Vulkan functions without instance/device
     gladLoaderLoadVulkan(nullptr, nullptr, nullptr);
 
-    initializeInstance();
+    initializeFactory();
     initializeDevice();
 
     // Load remaining Vulkan functions with instance/device
-    gladLoaderLoadVulkan(_vkInstance, _physical, _device);
+    gladLoaderLoadVulkan(_factory, _physical, _device);
 
     if (_debugCreateInfo.sType == VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT)
     {
-        if (vkCreateDebugUtilsMessengerEXT(_vkInstance, &_debugCreateInfo, nullptr, &_debugMessenger) != VK_SUCCESS)
+        if (vkCreateDebugUtilsMessengerEXT(_factory, &_debugCreateInfo, nullptr, &_debugMessenger) != VK_SUCCESS)
         {
             AXLOGW("Vulkan validation layer not available!");
         }
@@ -191,7 +269,7 @@ void DriverImpl::init()
     _caps.maxSamplesAllowed = static_cast<int32_t>(props.limits.framebufferColorSampleCounts);
 }
 
-void DriverImpl::initializeInstance()
+void DriverImpl::initializeFactory()
 {
     auto& contextAttrs = Application::getContextAttrs();
 
@@ -254,55 +332,26 @@ void DriverImpl::initializeInstance()
     }
 
     // Instance layers/extensions are platform-dependent; keep minimal for core init
-    VkResult vr = vkCreateInstance(&createInfo, nullptr, &_vkInstance);
-    AXASSERT(vr == VK_SUCCESS && _vkInstance != VK_NULL_HANDLE, "vkCreateInstance failed");
-
-    // Select a physical device
-    uint32_t count = 0;
-    vkEnumeratePhysicalDevices(_vkInstance, &count, nullptr);
-    AXASSERT(count > 0, "No Vulkan physical devices found");
-
-    std::vector<VkPhysicalDevice> devices(count);
-    vkEnumeratePhysicalDevices(_vkInstance, &count, devices.data());
-
-    // Simple selection: first device with graphics queue
-    _physical = VK_NULL_HANDLE;
-    for (auto pd : devices)
-    {
-        uint32_t qCount = 0;
-        vkGetPhysicalDeviceQueueFamilyProperties(pd, &qCount, nullptr);
-        std::vector<VkQueueFamilyProperties> qprops(qCount);
-        vkGetPhysicalDeviceQueueFamilyProperties(pd, &qCount, qprops.data());
-        if (std::any_of(qprops.begin(), qprops.end(),
-                        [](const VkQueueFamilyProperties& p) { return (p.queueFlags & VK_QUEUE_GRAPHICS_BIT) != 0; }))
-        {
-            _physical = pd;
-            break;
-        }
-    }
-    if (_physical == VK_NULL_HANDLE)
-        _physical = devices[0];
+    VkResult vr = vkCreateInstance(&createInfo, nullptr, &_factory);
+    AXASSERT(vr == VK_SUCCESS && _factory != VK_NULL_HANDLE, "vkCreateInstance failed");
 }
 
 void DriverImpl::initializeDevice()
 {
-    // find graphics queue family
-    uint32_t queueCount = 0;
-    vkGetPhysicalDeviceQueueFamilyProperties(_physical, &queueCount, nullptr);
-    std::vector<VkQueueFamilyProperties> qprops(queueCount);
-    vkGetPhysicalDeviceQueueFamilyProperties(_physical, &queueCount, qprops.data());
+    auto& contextAttrs = Application::getContextAttrs();
 
-    _graphicsQueueFamily = UINT32_MAX;
-    for (uint32_t i = 0; i < queueCount; ++i)
-    {
-        if (qprops[i].queueCount > 0 && (qprops[i].queueFlags & VK_QUEUE_GRAPHICS_BIT))
-        {
-            _graphicsQueueFamily = i;
-            break;
-        }
-    }
+    // Select a physical device
+    uint32_t count = 0;
+    vkEnumeratePhysicalDevices(_factory, &count, nullptr);
+    AXASSERT(count > 0, "No Vulkan physical devices found");
 
-    AXASSERT(_graphicsQueueFamily != UINT32_MAX, "No graphics queue family found");
+    axstd::pod_vector<VkPhysicalDevice> devices(count);
+    vkEnumeratePhysicalDevices(_factory, &count, devices.data());
+
+    auto [physical, graphicsQueueFamily] = resolveAdapter(devices, _factory, contextAttrs.powerPreference);
+    AXASSERT(physical != VK_NULL_HANDLE && graphicsQueueFamily != UINT32_MAX, "No available GPU");
+    _physical            = physical;
+    _graphicsQueueFamily = graphicsQueueFamily;
 
     VkPhysicalDeviceExtendedDynamicStateFeaturesEXT extDynState{};
     extDynState.sType                = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_FEATURES_EXT;
@@ -345,7 +394,7 @@ void DriverImpl::initializeDevice()
 
 bool DriverImpl::setupSurface(void* window, CreateSurfaceFunc func)
 {
-    auto result = func(_vkInstance, window, &_surface);
+    auto result = func(_factory, window, &_surface);
     if (result != VK_SUCCESS)
         return false;
 

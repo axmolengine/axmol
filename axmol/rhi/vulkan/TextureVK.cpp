@@ -111,11 +111,6 @@ static void transitionImageLayout(VkCommandBuffer cmd,
     vkCmdPipelineBarrier(cmd, srcStage, dstStage, 0, 0, nullptr, 0, nullptr, 1, &barrier);
 }
 
-// Track which VkImage handles have been initialized (uploaded at least once).
-// This avoids adding a new member to the header; it's a per-process tracker keyed by VkImage.
-static std::unordered_set<VkImage> s_initializedImages;
-static std::mutex s_initMutex;
-
 // ------------------------------------------------------------
 // ctor / dtor
 // ------------------------------------------------------------
@@ -130,13 +125,6 @@ TextureImpl::TextureImpl(DriverImpl* driver, VkImage existingImage, VkImageView 
     _nativeTexture.image = existingImage;
     _nativeTexture.view  = existingImageView;
     // Note: existingImage is owned externally (e.g., swapchain), we only wrap it.
-
-    // Mark externally provided image as initialized so we don't transition from UNDEFINED later.
-    {
-        std::lock_guard<std::mutex> lk(s_initMutex);
-        if (_nativeTexture.image != VK_NULL_HANDLE)
-            s_initializedImages.insert(_nativeTexture.image);
-    }
 }
 
 TextureImpl::~TextureImpl()
@@ -146,13 +134,6 @@ TextureImpl::~TextureImpl()
         auto device = _driver->getDevice();
         _sampler    = VK_NULL_HANDLE;  // SamplerCache handles sampler destruction
         _nativeTexture.destroy(device);
-    }
-
-    // Remove from initialized set if present
-    {
-        std::lock_guard<std::mutex> lk(s_initMutex);
-        if (_nativeTexture.image != VK_NULL_HANDLE)
-            s_initializedImages.erase(_nativeTexture.image);
     }
 }
 
@@ -370,12 +351,14 @@ void TextureImpl::ensureNativeTexture()
             imageInfo.usage |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
         else
             imageInfo.usage |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+
+        // Optional: if future plan to use as input attachment in subpasses
+        // imageInfo.usage |= VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
     }
     imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
     imageInfo.samples     = VK_SAMPLE_COUNT_1_BIT;
 
     auto device   = _driver->getDevice();
-    auto physical = _driver->getPhysicalDevice();
 
     VkResult res = vkCreateImage(device, &imageInfo, nullptr, &_nativeTexture.image);
     assert(res == VK_SUCCESS && "vkCreateImage failed");

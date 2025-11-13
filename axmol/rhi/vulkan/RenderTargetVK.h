@@ -37,9 +37,10 @@ public:
     {
         DepthViewIndex = MAX_COLOR_ATTCHMENT,
     };
+
     struct Attachment
     {
-        VkImageView view{VK_NULL_HANDLE};
+        TextureHandle tex{};
         TextureDesc desc{};
     };
 

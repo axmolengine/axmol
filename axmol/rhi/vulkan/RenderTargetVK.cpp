@@ -272,7 +272,7 @@ VkRenderPass RenderTargetImpl::ensureRenderPass(const RenderPassDesc& desc) cons
                     discardEnd ? VK_ATTACHMENT_STORE_OP_DONT_CARE : VK_ATTACHMENT_STORE_OP_STORE;
 
                 VkAttachmentDescription ad{};
-                ad.format         = UtilsVK::toVKFormatInfo(attDesc.pixelFormat)->format;
+                ad.format         = UtilsVK::toVKFormat(attDesc.pixelFormat);
                 ad.samples        = VK_SAMPLE_COUNT_1_BIT;
                 ad.loadOp         = loadOp;
                 ad.storeOp        = storeOp;
@@ -329,7 +329,7 @@ VkRenderPass RenderTargetImpl::ensureRenderPass(const RenderPassDesc& desc) cons
                 discardS1 ? VK_ATTACHMENT_STORE_OP_DONT_CARE : VK_ATTACHMENT_STORE_OP_STORE;
 
             VkAttachmentDescription ad{};
-            ad.format         = UtilsVK::toVKFormatInfo(dsDesc.pixelFormat)->format;
+            ad.format         = UtilsVK::toVKFormat(dsDesc.pixelFormat);
             ad.samples        = VK_SAMPLE_COUNT_1_BIT;
             ad.loadOp         = depthLoad;
             ad.storeOp        = depthStore;
@@ -390,14 +390,14 @@ RenderTargetImpl::Attachment RenderTargetImpl::getColorAttachment(int index) con
 {
     TextureImpl* texImpl = _defaultRenderTarget ? UtilsVK::getSwapchainColorAttachment()
                                                 : static_cast<TextureImpl*>(_color[index].texture);
-    return texImpl ? Attachment{texImpl->internalHandle().view, texImpl->getDesc()} : Attachment{};
+    return texImpl ? Attachment{texImpl->internalHandle(), texImpl->getDesc()} : Attachment{};
 }
 
 RenderTargetImpl::Attachment RenderTargetImpl::getDepthStencilAttachment() const
 {
     TextureImpl* texImpl = _defaultRenderTarget ? UtilsVK::getSwapchainDepthStencilAttachment()
                                                 : static_cast<TextureImpl*>(_depthStencil.texture);
-    return texImpl ? Attachment{texImpl->internalHandle().view, texImpl->getDesc()} : Attachment{};
+    return texImpl ? Attachment{texImpl->internalHandle(), texImpl->getDesc()} : Attachment{};
 }
 
 }  // namespace ax::rhi::vk

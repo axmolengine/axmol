@@ -127,6 +127,12 @@ inline namespace UtilsVK
 // -------------------------------------------------------------------------------------------------
 // Public API
 // -------------------------------------------------------------------------------------------------
+VkFormat toVKFormat(PixelFormat pf)
+{
+    auto fmtInfo = toVKFormatInfo(pf);
+    return fmtInfo ? fmtInfo->format : VK_FORMAT_UNDEFINED;
+}
+
 const PixelFormatInfo* toVKFormatInfo(PixelFormat pf)
 {
     if (pf < PixelFormat::COUNT) [[likely]]
@@ -164,9 +170,6 @@ void rebuildSwapchainAttachments(DriverImpl* driver,
 
     if (!driver || images.empty() || imageViews.empty())
         return;
-
-    VkDevice device           = driver->getDevice();
-    VkPhysicalDevice physical = driver->getPhysicalDevice();
 
     TextureDesc colorDesc{};
     colorDesc.textureType  = TextureType::TEXTURE_2D;

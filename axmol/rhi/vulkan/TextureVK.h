@@ -35,6 +35,7 @@ namespace ax::rhi::vk
  */
 
 class DriverImpl;
+class TextureImpl;
 
 /**
  * @brief A TextureHandle holds Vulkan VkImage & VkImageView
@@ -42,8 +43,13 @@ class DriverImpl;
  */
 struct TextureHandle
 {
-    explicit operator bool() const { return image != VK_NULL_HANDLE; }
+    friend class TextureImpl;
+    VkImage image{VK_NULL_HANDLE};
+    VkImageView view{VK_NULL_HANDLE};
+    VkDeviceMemory memory{VK_NULL_HANDLE};
 
+    explicit operator bool() const { return image != VK_NULL_HANDLE; }
+private:
     void destroy(VkDevice device)
     {
         if (view != VK_NULL_HANDLE)
@@ -71,10 +77,6 @@ struct TextureHandle
         memory   = VK_NULL_HANDLE;
         return ret;
     }
-
-    VkImage image{VK_NULL_HANDLE};
-    VkImageView view{VK_NULL_HANDLE};
-    VkDeviceMemory memory{VK_NULL_HANDLE};
 };
 
 /**

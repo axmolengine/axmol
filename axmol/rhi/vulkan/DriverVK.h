@@ -68,8 +68,7 @@ public:
 
     void waitIdle() override;
 
-    VkInstance getVkInstance() const { return _vkInstance; }
-    VkPhysicalDevice getPhysicalDevice() const { return _physical; }
+    VkPhysicalDevice getPhysical() const { return _physical; }
     VkDevice getDevice() const { return _device; }
 
     VkQueue getGraphicsQueue() const { return _graphicsQueue; }
@@ -90,13 +89,13 @@ protected:
     void destroySampler(SamplerHandle& h) override;
 
 private:
-    void initializeInstance();
+    void initializeFactory();
     void initializeDevice();
 
     VkDebugUtilsMessengerCreateInfoEXT _debugCreateInfo{};
     VkDebugUtilsMessengerEXT _debugMessenger{VK_NULL_HANDLE};
 
-    VkInstance _vkInstance{VK_NULL_HANDLE};
+    VkInstance _factory{VK_NULL_HANDLE};
     VkPhysicalDevice _physical{VK_NULL_HANDLE};
     VkDevice _device{VK_NULL_HANDLE};
     VkSurfaceKHR _surface{VK_NULL_HANDLE};
