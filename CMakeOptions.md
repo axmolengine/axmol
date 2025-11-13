@@ -16,9 +16,6 @@
   - AX_ENABLE_CONSOLE: whether to enable debug tool console support, default: `TRUE`
   - AX_ENABLE_OPUS: whether to enable audio engine play .opus files support, default: `TRUE`
 - AX_USE_XXX:
-  - AX_USE_ALSOFT: whether use openal-soft for all platforms
-    - Apple platform: Use openal-soft instead system deprecated: `OpenAL.framework`
-    - Other platforms: Always use openal-soft even this option not enabled
   - AX_USE_LUAJIT: whether use luajit, default: `FALSE`, use plainlua
 - AX_ENABLE_EXT_XXX for extensions
   - AX_ENABLE_EXT_GUI: the traditional GUI extension, default: `TRUE`
