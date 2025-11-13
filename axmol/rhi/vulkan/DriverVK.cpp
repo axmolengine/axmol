@@ -139,12 +139,13 @@ static std::pair<VkPhysicalDevice, uint32_t> resolveAdapter(const axstd::pod_vec
                                                             VkInstance instance,
                                                             PowerPreference pref)
 {
-    VkPhysicalDevice bestDevice  = VK_NULL_HANDLE;
-    uint32_t graphicsQueueFamily = UINT32_MAX;
-    int bestScore                = -1;
+    VkPhysicalDevice bestDevice      = VK_NULL_HANDLE;
+    uint32_t bestGraphicsQueueFamily = UINT32_MAX;
+    int bestScore                    = -1;
 
-    for (auto pd : devices)
+    for (auto index = 0; index < devices.size(); ++index)
     {
+        auto pd = devices[index];
         VkPhysicalDeviceProperties props{};
         vkGetPhysicalDeviceProperties(pd, &props);
 
@@ -153,7 +154,8 @@ static std::pair<VkPhysicalDevice, uint32_t> resolveAdapter(const axstd::pod_vec
         std::vector<VkQueueFamilyProperties> qprops(qCount);
         vkGetPhysicalDeviceQueueFamilyProperties(pd, &qCount, qprops.data());
 
-        bool hasGraphicsQueue = false;
+        bool hasGraphicsQueue        = false;
+        uint32_t graphicsQueueFamily = UINT32_MAX;
         for (uint32_t i = 0; i < qCount; ++i)
         {
             if (qprops[i].queueCount > 0 && (qprops[i].queueFlags & VK_QUEUE_GRAPHICS_BIT))
@@ -174,43 +176,42 @@ static std::pair<VkPhysicalDevice, uint32_t> resolveAdapter(const axstd::pod_vec
         {
         case PowerPreference::HighPerformance:
             if (props.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
+            {
                 score += 100;
+                // Prefer newer Vulkan versions
+                score += static_cast<int>(props.apiVersion);
+
+                // Prefer larger VRAM (optional)
+                VkPhysicalDeviceMemoryProperties memProps{};
+                vkGetPhysicalDeviceMemoryProperties(pd, &memProps);
+                VkDeviceSize vram = 0;
+                for (uint32_t i = 0; i < memProps.memoryHeapCount; ++i)
+                {
+                    if (memProps.memoryHeaps[i].flags & VK_MEMORY_HEAP_DEVICE_LOCAL_BIT)
+                        vram += memProps.memoryHeaps[i].size;
+                }
+                score += static_cast<int>(vram / (1024 * 1024 * 256));  // add points per 256MB
+            }
             break;
         case PowerPreference::LowPower:
             if (props.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU)
                 score += 100;
             break;
         case PowerPreference::Auto:
-            if (props.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
-                score += 50;
-            else if (props.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU)
-                score += 25;
+            score += (100 - index);
             break;
         }
-
-        // Prefer newer Vulkan versions
-        score += static_cast<int>(props.apiVersion);
-
-        // Prefer larger VRAM (optional)
-        VkPhysicalDeviceMemoryProperties memProps{};
-        vkGetPhysicalDeviceMemoryProperties(pd, &memProps);
-        VkDeviceSize vram = 0;
-        for (uint32_t i = 0; i < memProps.memoryHeapCount; ++i)
-        {
-            if (memProps.memoryHeaps[i].flags & VK_MEMORY_HEAP_DEVICE_LOCAL_BIT)
-                vram += memProps.memoryHeaps[i].size;
-        }
-        score += static_cast<int>(vram / (1024 * 1024 * 256));  // add points per 256MB
 
         // --- Select best ---
         if (score > bestScore)
         {
-            bestScore  = score;
-            bestDevice = pd;
+            bestScore               = score;
+            bestDevice              = pd;
+            bestGraphicsQueueFamily = graphicsQueueFamily;
         }
     }
 
-    return {bestDevice, graphicsQueueFamily};
+    return {bestDevice, bestGraphicsQueueFamily};
 }
 
 }  // namespace
