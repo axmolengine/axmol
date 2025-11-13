@@ -142,8 +142,12 @@ TestList::~TestList()
 void TestList::deatchTableView()
 {
     if (_tableView)
+    {
         _tableView->setDataSource(nullptr);
-    AX_SAFE_RELEASE_NULL(_tableView);
+        _tableView->removeFromParentAndCleanup(true);
+        _tableView->release();
+        _tableView = nullptr;
+    }
 }
 
 void TestList::addTest(std::string_view testName, std::function<TestBase*()> callback)
@@ -179,6 +183,7 @@ void TestList::runThisTest()
     auto origin      = director->getVisibleOrigin();
     deatchTableView();
     _tableView = TestCustomTableView::create(this, Size(400, visibleSize.height));
+    _tableView->retain(); // retain for we can safe detach
     _tableView->setPosition(origin.x + (visibleSize.width - 400) / 2, origin.y);
     _tableView->setDirection(ScrollView::Direction::VERTICAL);
     _tableView->setVerticalFillOrder(TableView::VerticalFillOrder::TOP_DOWN);

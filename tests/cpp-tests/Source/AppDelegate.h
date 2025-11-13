@@ -48,19 +48,23 @@ public:
     @return true    Initialize success, app continue.
     @return false   Initialize failed, app terminate.
     */
-    virtual bool applicationDidFinishLaunching();
+    bool applicationDidFinishLaunching() override;
 
     /**
     @brief  Called when the application moves to the background
-    @param  the pointer of the application
     */
-    virtual void applicationDidEnterBackground();
+    void applicationDidEnterBackground() override;
 
     /**
     @brief  Called when the application reenters the foreground
-    @param  the pointer of the application
     */
-    virtual void applicationWillEnterForeground();
+    void applicationWillEnterForeground() override;
+
+    /**
+    @brief Called when application will quit
+    @since axmol-2.10.0
+    */
+    void applicationWillQuit() override;
 
 private:
     TestController* _testController;
