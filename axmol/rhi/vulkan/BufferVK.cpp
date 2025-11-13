@@ -99,15 +99,10 @@ BufferImpl::BufferImpl(DriverImpl* driver, std::size_t size, BufferType type, Bu
 
 BufferImpl::~BufferImpl()
 {
-    // TODO: OPTIMIZE: create ResourceManagerVK and add vk resource to gclist of ResourceManagerVK
-    // perform gc at endFrame
-    _driver->waitIdle();
-    auto device = _driver->getDevice();
-
     if (_buffer != VK_NULL_HANDLE)
-        vkDestroyBuffer(device, _buffer, nullptr);
+        _driver->queueDisposal(_buffer);
     if (_memory != VK_NULL_HANDLE)
-        vkFreeMemory(device, _memory, nullptr);
+        _driver->queueDisposal(_memory);
 }
 
 /* -------------------------------------------------- createNativeBuffer */

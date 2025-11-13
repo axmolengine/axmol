@@ -219,6 +219,8 @@ static std::pair<VkPhysicalDevice, uint32_t> resolveAdapter(const axstd::pod_vec
 DriverImpl::DriverImpl() {}
 DriverImpl::~DriverImpl()
 {
+    cleanPendingResources();
+
     if (_transientCommandPool)
     {
         vkDestroyCommandPool(_device, _transientCommandPool, nullptr);
@@ -563,7 +565,7 @@ void DriverImpl::destroySampler(SamplerHandle& h)
 {
     if (h)
     {
-        vkDestroySampler(_device, reinterpret_cast<VkSampler>(h), nullptr);
+        queueDisposal(static_cast<VkSampler>(h));
         h = VK_NULL_HANDLE;
     }
 }
@@ -711,10 +713,63 @@ void DriverImpl::endIsolateCommands(VkCommandBuffer cmd)
     vkFreeCommandBuffers(_device, _transientCommandPool, 1, &cmd);
 }
 
-void DriverImpl::waitIdle()
+void DriverImpl::queueDisposal(VkSampler sampler)
 {
-    if (_device)
+    _disposalQueue.push_back({DisposableResource::Type::Sampler, {.sampler = sampler}});
+}
+void DriverImpl::queueDisposal(VkImage image)
+{
+    _disposalQueue.push_back({DisposableResource::Type::Image, {.image = image}});
+}
+void DriverImpl::queueDisposal(VkImageView view)
+{
+    _disposalQueue.push_back({DisposableResource::Type::ImageView, {.view = view}});
+}
+void DriverImpl::queueDisposal(VkBuffer buffer)
+{
+    _disposalQueue.push_back({DisposableResource::Type::Buffer, {.buffer = buffer}});
+}
+void DriverImpl::queueDisposal(VkDeviceMemory memory)
+{
+    _disposalQueue.push_back({DisposableResource::Type::Memory, {.memory = memory}});
+}
+
+void DriverImpl::drainDisposalQueue()
+{
+    if (!_disposalQueue.empty())
+    {
+        for (auto& res : _disposalQueue)
+        {
+            switch (res.type)
+            {
+            case DisposableResource::Type::Image:
+                vkDestroyImage(_device, res.image, nullptr);
+                break;
+            case DisposableResource::Type::ImageView:
+                vkDestroyImageView(_device, res.view, nullptr);
+                break;
+            case DisposableResource::Type::Buffer:
+                vkDestroyBuffer(_device, res.buffer, nullptr);
+                break;
+            case DisposableResource::Type::Memory:
+                vkFreeMemory(_device, res.memory, nullptr);
+                break;
+            case DisposableResource::Type::Sampler:
+                vkDestroySampler(_device, res.sampler, nullptr);
+                break;
+            }
+        }
+        _disposalQueue.clear();
+    }
+}
+
+void DriverImpl::cleanPendingResources()
+{
+    if (!_disposalQueue.empty())
+    {
         vkDeviceWaitIdle(_device);
+        drainDisposalQueue();
+    }
 }
 
 }  // namespace ax::rhi::vk

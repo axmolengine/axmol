@@ -28,13 +28,39 @@
 #include <optional>
 #include <string>
 #include <mutex>
+#include <deque>
 
 namespace ax::rhi::vk
 {
 
+class RenderContextImpl;
+
+struct DisposableResource
+{
+    enum class Type
+    {
+        Sampler,
+        Image,
+        ImageView,
+        Buffer,
+        Memory
+    };
+    Type type;
+    union
+    {
+        VkSampler sampler;
+        VkImage image;
+        VkImageView view;
+        VkBuffer buffer;
+        VkDeviceMemory memory;
+    };
+};
+
 using CreateSurfaceFunc = std::function<VkResult(VkInstance, void* window, VkSurfaceKHR* surface)>;
 class DriverImpl : public DriverBase
 {
+    friend class RenderContextImpl;
+
 public:
     static constexpr uint32_t MAX_VERTEX_ATTRIBS            = 16;
     static constexpr uint32_t VBO_BINDING_INDEX_START       = 0;
@@ -66,7 +92,7 @@ public:
 
     bool checkForFeatureSupported(FeatureType feature) override;
 
-    void waitIdle() override;
+    void cleanPendingResources() override;
 
     VkPhysicalDevice getPhysical() const { return _physical; }
     VkDevice getDevice() const { return _device; }
@@ -82,6 +108,14 @@ public:
 
     VkCommandBuffer beginIsolateCommands();
     void endIsolateCommands(VkCommandBuffer cmd);
+
+    void queueDisposal(VkImage image);
+    void queueDisposal(VkImageView view);
+    void queueDisposal(VkBuffer buffer);
+    void queueDisposal(VkDeviceMemory memory);
+    void queueDisposal(VkSampler sampler);
+
+    void drainDisposalQueue();
 
 protected:
     ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
@@ -107,6 +141,8 @@ private:
     VkCommandPool _transientCommandPool{VK_NULL_HANDLE};
     // protect transient pool allocation/free in multithreaded contexts
     std::mutex _transientPoolMutex;
+
+    std::deque<DisposableResource> _disposalQueue;
 
     uint32_t _graphicsQueueFamily{0};
     uint32_t _presentQueueFamily{0};

@@ -212,7 +212,7 @@ public:
      */
     inline int getMaxSamplesAllowed() const { return _caps.maxSamplesAllowed; }
 
-    virtual void waitIdle() {}
+    virtual void cleanPendingResources() {}
 
 protected:
     /**

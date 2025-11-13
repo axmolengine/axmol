@@ -518,7 +518,7 @@ void TestCase::onExit()
 #if AX_ENABLE_EXT_IMGUI
 #    if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
     if (_enableInspector)
-        extension::Inspector::getInstance()->close();
+        extension::Inspector::destroyInstance();
 #    endif
 #endif
     Scene::onExit();

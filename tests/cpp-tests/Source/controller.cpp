@@ -28,6 +28,9 @@
 #include <chrono>
 #include "BaseTest.h"
 #include "tests.h"
+#if AX_ENABLE_EXT_IMGUI
+#    include "ImGuiPresenter.h"
+#endif
 
 using namespace ax;
 
@@ -425,6 +428,9 @@ TestController* TestController::getInstance()
 
 void TestController::destroyInstance()
 {
+#if AX_ENABLE_EXT_IMGUI
+    extension::ImGuiPresenter::destroyInstance();
+#endif
     if (s_testController)
     {
         s_testController->stopAutoTest();

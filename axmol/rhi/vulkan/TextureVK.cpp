@@ -111,6 +111,25 @@ static void transitionImageLayout(VkCommandBuffer cmd,
     vkCmdPipelineBarrier(cmd, srcStage, dstStage, 0, 0, nullptr, 0, nullptr, 1, &barrier);
 }
 
+void TextureHandle::destroy(DriverImpl* driver)
+{
+    if (view != VK_NULL_HANDLE)
+    {
+        driver->queueDisposal(view);
+        view = VK_NULL_HANDLE;
+    }
+    if (image != VK_NULL_HANDLE)
+    {
+        driver->queueDisposal(image);
+        image = VK_NULL_HANDLE;
+    }
+    if (memory != VK_NULL_HANDLE)
+    {
+        driver->queueDisposal(memory);
+        memory = VK_NULL_HANDLE;
+    }
+}
+
 // ------------------------------------------------------------
 // ctor / dtor
 // ------------------------------------------------------------
@@ -131,9 +150,8 @@ TextureImpl::~TextureImpl()
 {
     if (_ownResources)
     {
-        auto device = _driver->getDevice();
-        _sampler    = VK_NULL_HANDLE;  // SamplerCache handles sampler destruction
-        _nativeTexture.destroy(device);
+        _sampler = VK_NULL_HANDLE;  // SamplerCache handles sampler destruction
+        _nativeTexture.destroy(_driver);
     }
 }
 
@@ -358,7 +376,7 @@ void TextureImpl::ensureNativeTexture()
     imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
     imageInfo.samples     = VK_SAMPLE_COUNT_1_BIT;
 
-    auto device   = _driver->getDevice();
+    auto device = _driver->getDevice();
 
     VkResult res = vkCreateImage(device, &imageInfo, nullptr, &_nativeTexture.image);
     assert(res == VK_SUCCESS && "vkCreateImage failed");

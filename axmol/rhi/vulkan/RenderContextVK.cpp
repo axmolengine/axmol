@@ -130,7 +130,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface)
 
 RenderContextImpl::~RenderContextImpl()
 {
-    _driver->waitIdle();
+    vkDeviceWaitIdle(_device);
 
     destroyUniformRingBuffers();
 
@@ -471,7 +471,7 @@ bool RenderContextImpl::beginFrame()
 {
     if (_swapchainDirty) [[unlikely]]
     {
-        _driver->waitIdle();
+        vkDeviceWaitIdle(_device);
         rebuildSwapchain();
         _swapchainDirty = false;
     }
@@ -481,6 +481,8 @@ bool RenderContextImpl::beginFrame()
 
     // Reset uniform ring write head for this frame
     resetUniformRingForCurrentFrame();
+
+    _driver->drainDisposalQueue();
 
     VkResult result = vkAcquireNextImageKHR(_device, _swapchain, UINT64_MAX, _presentCompleteSemaphores[_currentFrame],
                                             VK_NULL_HANDLE, &_currentImageIndex);

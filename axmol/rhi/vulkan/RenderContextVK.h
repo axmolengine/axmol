@@ -36,6 +36,7 @@ class SemaphorePool;
 
 class RenderContextImpl : public RenderContext
 {
+public:
     // Maximum number of VkCommandBuffer handles managed simultaneously by VulkanCommands.
     //
     // This includes the "current" command buffer that is being written into, as well as any command
@@ -47,7 +48,8 @@ class RenderContextImpl : public RenderContext
     static constexpr int FVK_MAX_COMMAND_BUFFERS     = 3 * 15;
     static constexpr int IMAGE_READY_SEMAPHORE_COUNT = FVK_MAX_COMMAND_BUFFERS;
 
-public:
+    static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
+
     RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface);
     ~RenderContextImpl() override;
 
@@ -117,7 +119,6 @@ private:
     axstd::pod_vector<VkImage> _swapchainImages;
     axstd::pod_vector<VkImageView> _swapchainImageViews;
 
-    static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
     uint32_t _currentFrame{0};
     std::array<VkCommandBuffer, MAX_FRAMES_IN_FLIGHT> _commandBuffers;
     std::array<VkSemaphore, MAX_FRAMES_IN_FLIGHT> _presentCompleteSemaphores;
