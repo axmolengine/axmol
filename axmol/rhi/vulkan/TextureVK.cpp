@@ -36,9 +36,18 @@
 namespace ax::rhi::vk
 {
 
+static constexpr uint32_t LEVEL_INITIAL_CAPS = 16;
+static constexpr uint32_t LAYER_INITIAL_CAPS = 8;
+
 // ------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------
+
+// Check if offset is block-aligned (required by spec for compressed subresource updates).
+static inline bool isBlockAligned(uint32_t x, uint32_t y, uint32_t blockW, uint32_t blockH)
+{
+    return (x % blockW == 0) && (y % blockH == 0);
+}
 
 // Map PixelFormat to VkFormat via UtilsVK table
 static inline VkFormat getVkFormat(PixelFormat pf)
@@ -133,13 +142,14 @@ void TextureHandle::destroy(DriverImpl* driver)
 // ------------------------------------------------------------
 // ctor / dtor
 // ------------------------------------------------------------
-TextureImpl::TextureImpl(DriverImpl* driver, const TextureDesc& desc) : _driver(driver), _ownResources(true)
+TextureImpl::TextureImpl(DriverImpl* driver, const TextureDesc& desc)
+    : _driver(driver), _ownResources(true), _layoutTracker(LEVEL_INITIAL_CAPS, LAYER_INITIAL_CAPS)
 {
     updateTextureDesc(desc);
 }
 
 TextureImpl::TextureImpl(DriverImpl* driver, VkImage existingImage, VkImageView existingImageView)
-    : _driver(driver), _ownResources(false)
+    : _driver(driver), _ownResources(false), _layoutTracker(LEVEL_INITIAL_CAPS, LAYER_INITIAL_CAPS)
 {
     _nativeTexture.image = existingImage;
     _nativeTexture.view  = existingImageView;
@@ -177,21 +187,10 @@ void TextureImpl::updateTextureDesc(const TextureDesc& desc)
 }
 
 // ------------------------------------------------------------
-// updateData / updateCompressedData
+// updateData
 // ------------------------------------------------------------
 void TextureImpl::updateData(const void* data, int width, int height, int level, int layerIndex)
 {
-    updateSubData(0, 0, width, height, level, data, layerIndex);
-}
-
-void TextureImpl::updateCompressedData(const void* data,
-                                       int width,
-                                       int height,
-                                       std::size_t dataSize,
-                                       int level,
-                                       int layerIndex)
-{
-    // For simplicity, treat compressed data similarly; for BC/ASTC use block-aware copy if needed.
     updateSubData(0, 0, width, height, level, data, layerIndex);
 }
 
@@ -251,8 +250,6 @@ void TextureImpl::updateSubData(int xoffset,
     vkUnmapMemory(device, stagingMemory);
 
     // Record transfer commands
-    VkCommandPool pool{};
-    VkQueue queue{};
     VkCommandBuffer cmd = _driver->beginIsolateCommands();
 
     // Transition destination subresource to TRANSFER_DST
@@ -265,16 +262,9 @@ void TextureImpl::updateSubData(int xoffset,
     range.baseArrayLayer = static_cast<uint32_t>(layerIndex);
     range.layerCount     = 1;
 
-    // Determine old layout: if we've uploaded before, assume SHADER_READ_ONLY, else UNDEFINED
-    // if (!_initialized)
-    //{
-    //    transitionImageLayout(cmd, _nativeTexture.image, VK_IMAGE_LAYOUT_UNDEFINED,
-    //                          VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, range);
-    //    _initialized = true;
-    //}
+    const auto oldLayout = _layoutTracker.getLayout(level, layerIndex);
 
-    transitionImageLayout(cmd, _nativeTexture.image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                          range);
+    transitionImageLayout(cmd, _nativeTexture.image, oldLayout, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, range);
 
     // Copy staging to image
     VkBufferImageCopy region{};
@@ -296,12 +286,111 @@ void TextureImpl::updateSubData(int xoffset,
     transitionImageLayout(cmd, _nativeTexture.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                           VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, range);
 
+    _layoutTracker.setLayout(level, layerIndex, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+    if (shouldGenMipmaps(_desc.textureType == TextureType::TEXTURE_2D ? level : 0))
+        generateMipmaps(cmd);
+
     _driver->endIsolateCommands(cmd);
 
     vkDestroyBuffer(device, stagingBuffer, nullptr);
     vkFreeMemory(device, stagingMemory, nullptr);
+}
 
-    // Optional: generate mipmaps here with a persistent cmd buffer; skipped in this one-time path.
+// ------------------------------------------------------------
+// generateMipmaps
+// ------------------------------------------------------------
+void TextureImpl::generateMipmaps(VkCommandBuffer cmd)
+{
+    if (_desc.pixelFormat == PixelFormat::D24S8)
+        return;  // not for depth-stencil
+
+    const uint32_t mipLevels =
+        (_desc.mipLevels != 0) ? _desc.mipLevels : ax::rhi::RHIUtils::computeMipLevels(_desc.width, _desc.height);
+    if (mipLevels <= 1)
+        return;
+
+    int32_t mipWidth  = _desc.width;
+    int32_t mipHeight = _desc.height;
+    const uint32_t layerCount =
+        (_desc.textureType == TextureType::TEXTURE_CUBE) ? 6u : static_cast<uint32_t>(_desc.arraySize);
+
+    for (uint32_t i = 1; i < mipLevels; ++i)
+    {
+        // Transition src level (i-1) to TRANSFER_SRC_OPTIMAL
+        VkImageSubresourceRange srcRange{};
+        srcRange.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+        srcRange.baseMipLevel   = i - 1;
+        srcRange.levelCount     = 1;
+        srcRange.baseArrayLayer = 0;
+        srcRange.layerCount     = layerCount;
+
+        transitionImageLayout(cmd, _nativeTexture.image, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                              VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, srcRange);
+
+        // Transition dest level (i) to TRANSFER_DST_OPTIMAL
+        VkImageSubresourceRange dstRange{};
+        dstRange.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+        dstRange.baseMipLevel   = i;
+        dstRange.levelCount     = 1;
+        dstRange.baseArrayLayer = 0;
+        dstRange.layerCount     = layerCount;
+
+        transitionImageLayout(cmd, _nativeTexture.image,
+                              VK_IMAGE_LAYOUT_UNDEFINED,  // first time write
+                              VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, dstRange);
+
+        // Setup blit region
+        VkImageBlit blit{};
+        blit.srcOffsets[0]                 = {0, 0, 0};
+        blit.srcOffsets[1]                 = {mipWidth, mipHeight, 1};
+        blit.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+        blit.srcSubresource.mipLevel       = i - 1;
+        blit.srcSubresource.baseArrayLayer = 0;
+        blit.srcSubresource.layerCount     = layerCount;
+
+        blit.dstOffsets[0]                 = {0, 0, 0};
+        blit.dstOffsets[1]                 = {std::max(1, mipWidth / 2), std::max(1, mipHeight / 2), 1};
+        blit.dstSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+        blit.dstSubresource.mipLevel       = i;
+        blit.dstSubresource.baseArrayLayer = 0;
+        blit.dstSubresource.layerCount     = layerCount;
+
+        // Perform blit
+        vkCmdBlitImage(cmd, _nativeTexture.image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, _nativeTexture.image,
+                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit, VK_FILTER_LINEAR);
+
+        // Transition dest level to SHADER_READ_ONLY_OPTIMAL
+        transitionImageLayout(cmd, _nativeTexture.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                              VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstRange);
+
+        // Transition src level back to SHADER_READ_ONLY_OPTIMAL
+        transitionImageLayout(cmd, _nativeTexture.image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                              VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, srcRange);
+
+        // Update dimensions for next mip level
+        mipWidth  = std::max(1, mipWidth / 2);
+        mipHeight = std::max(1, mipHeight / 2);
+    }
+
+    _overrideMipLevels = mipLevels;
+}
+
+// ------------------------------------------------------------
+// updateCompressedData
+// ------------------------------------------------------------
+void TextureImpl::updateCompressedData(const void* data,
+                                       int width,
+                                       int height,
+                                       std::size_t dataSize,
+                                       int level,
+                                       int layerIndex)
+{
+    ensureNativeTexture();
+    if (!data || width <= 0 || height <= 0)
+        return;
+
+    updateCompressedSubData(/*xoffset*/ 0, /*yoffset*/ 0, width, height, dataSize, level, data, layerIndex);
 }
 
 // ------------------------------------------------------------
@@ -316,8 +405,113 @@ void TextureImpl::updateCompressedSubData(int xoffset,
                                           const void* data,
                                           int layerIndex)
 {
-    // This simplified path treats compressed like raw; for block-compressed, upload by blocks if needed.
-    updateSubData(xoffset, yoffset, width, height, level, data, layerIndex);
+    ensureNativeTexture();
+    if (!data || width <= 0 || height <= 0)
+        return;
+
+    // Query block geometry and bytes for the compressed format.
+    const auto& info = ax::rhi::RHIUtils::getFormatDesc(_desc.pixelFormat);
+    assert(info.blockSize > 0 && "Unsupported compressed format");
+
+    // Check block alignment
+    assert(xoffset % info.blockWidth == 0 && "xoffset must be block aligned");
+    assert(yoffset % info.blockHeight == 0 && "yoffset must be block aligned");
+
+    // Compute expected size
+    uint32_t blocksX      = (width + info.blockWidth - 1) / info.blockWidth;
+    uint32_t blocksY      = (height + info.blockHeight - 1) / info.blockHeight;
+    uint32_t expectedSize = blocksX * blocksY * info.blockSize;
+    assert(expectedSize == dataSize && "Compressed data size mismatch");
+
+    // Vulkan requires offsets to be aligned to block dimensions for compressed updates.
+    // The width/height need not be multiples of the block-size; the last partial block is allowed.
+    assert(isBlockAligned(static_cast<uint32_t>(xoffset), static_cast<uint32_t>(yoffset), info.blockWidth,
+                          info.blockHeight) &&
+           "Compressed upload offsets must be block-aligned");
+
+    // Create staging buffer sized to the compressed region.
+    VkBuffer stagingBuffer       = VK_NULL_HANDLE;
+    VkDeviceMemory stagingMemory = VK_NULL_HANDLE;
+
+    VkBufferCreateInfo bufInfo{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
+    bufInfo.size        = expectedSize;
+    bufInfo.usage       = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+    bufInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+    VkDevice device = _driver->getDevice();
+    VkResult res    = vkCreateBuffer(device, &bufInfo, nullptr, &stagingBuffer);
+    assert(res == VK_SUCCESS && "vkCreateBuffer (staging) failed");
+
+    VkMemoryRequirements memReq{};
+    vkGetBufferMemoryRequirements(device, stagingBuffer, &memReq);
+
+    VkMemoryAllocateInfo allocInfo{VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO};
+    allocInfo.allocationSize  = memReq.size;
+    allocInfo.memoryTypeIndex = _driver->findMemoryType(
+        memReq.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+    res = vkAllocateMemory(device, &allocInfo, nullptr, &stagingMemory);
+    assert(res == VK_SUCCESS && "vkAllocateMemory (staging) failed");
+
+    vkBindBufferMemory(device, stagingBuffer, stagingMemory, 0);
+
+    // Upload compressed bytes into staging memory as tightly packed.
+    void* mapped = nullptr;
+    res          = vkMapMemory(device, stagingMemory, 0, expectedSize, 0, &mapped);
+    assert(res == VK_SUCCESS && "vkMapMemory failed");
+    std::memcpy(mapped, data, static_cast<size_t>(expectedSize));
+    vkUnmapMemory(device, stagingMemory);
+
+    // Record commands: transition destination subresource to TRANSFER_DST_OPTIMAL, copy, then to
+    // SHADER_READ_ONLY_OPTIMAL.
+    VkCommandBuffer cmd = _driver->beginIsolateCommands();
+
+    VkImageSubresourceRange range{};
+    range.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    range.baseMipLevel   = static_cast<uint32_t>(level);
+    range.levelCount     = 1;
+    range.baseArrayLayer = static_cast<uint32_t>(layerIndex);
+    range.layerCount     = 1;
+
+    const auto oldLayout = _layoutTracker.getLayout(level, layerIndex);
+
+    transitionImageLayout(cmd, _nativeTexture.image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                          range);
+
+    // For compressed formats, bufferRowLength and bufferImageHeight are specified in texels (not bytes).
+    // Setting them to 0 means tightly packed rows according to format rules.
+    VkBufferImageCopy region{};
+    region.bufferOffset                    = 0;
+    region.bufferRowLength                 = 0;  // tight packing in texel units
+    region.bufferImageHeight               = 0;  // tight packing in texel units
+    region.imageSubresource.aspectMask     = range.aspectMask;
+    region.imageSubresource.mipLevel       = range.baseMipLevel;
+    region.imageSubresource.baseArrayLayer = range.baseArrayLayer;
+    region.imageSubresource.layerCount     = range.layerCount;
+    region.imageOffset                     = {xoffset, yoffset, 0};
+    region.imageExtent                     = {static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1};
+
+    vkCmdCopyBufferToImage(cmd, stagingBuffer, _nativeTexture.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
+
+    // !!!Vulkan requires baked mipmaps data
+    if (shouldGenMipmaps())
+    {
+        AXLOGW(
+            "Warning: Compressed textures do not support runtime mipmap generation. "
+            "Please upload precomputed mip levels instead.");
+    }
+
+    // If you will generate mipmaps next, do not transition to SHADER_READ_ONLY here. Let generateMipmaps() handle
+    // transitions.
+    transitionImageLayout(cmd, _nativeTexture.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                          VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, range);
+
+    _layoutTracker.setLayout(level, layerIndex, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+    _driver->endIsolateCommands(cmd);
+
+    vkDestroyBuffer(device, stagingBuffer, nullptr);
+    vkFreeMemory(device, stagingMemory, nullptr);
 }
 
 // ------------------------------------------------------------
@@ -424,64 +618,6 @@ void TextureImpl::ensureNativeTexture()
 
     res = vkCreateImageView(device, &viewInfo, nullptr, &_nativeTexture.view);
     assert(res == VK_SUCCESS && "vkCreateImageView failed");
-}
-
-// ------------------------------------------------------------
-// generateMipmaps
-// ------------------------------------------------------------
-void TextureImpl::generateMipmaps(VkCommandBuffer cmd)
-{
-    if (_desc.pixelFormat == PixelFormat::D24S8)
-        return;  // not for depth-stencil
-    const uint32_t mipLevels =
-        (_desc.mipLevels != 0) ? _desc.mipLevels : ax::rhi::RHIUtils::computeMipLevels(_desc.width, _desc.height);
-    if (mipLevels <= 1)
-        return;
-
-    int32_t mipWidth  = _desc.width;
-    int32_t mipHeight = _desc.height;
-    const uint32_t layerCount =
-        (_desc.textureType == TextureType::TEXTURE_CUBE) ? 6u : static_cast<uint32_t>(_desc.arraySize);
-
-    for (uint32_t i = 1; i < mipLevels; ++i)
-    {
-        // Transition dest level to TRANSFER_DST
-        VkImageSubresourceRange dstRange{};
-        dstRange.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
-        dstRange.baseMipLevel   = i;
-        dstRange.levelCount     = 1;
-        dstRange.baseArrayLayer = 0;
-        dstRange.layerCount     = layerCount;
-
-        transitionImageLayout(cmd, _nativeTexture.image,
-                              VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,  // if previously sampled
-                              VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, dstRange);
-
-        VkImageBlit blit{};
-        blit.srcOffsets[0]                 = {0, 0, 0};
-        blit.srcOffsets[1]                 = {mipWidth, mipHeight, 1};
-        blit.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
-        blit.srcSubresource.mipLevel       = i - 1;
-        blit.srcSubresource.baseArrayLayer = 0;
-        blit.srcSubresource.layerCount     = layerCount;
-
-        blit.dstOffsets[0]                 = {0, 0, 0};
-        blit.dstOffsets[1]                 = {std::max(1, mipWidth / 2), std::max(1, mipHeight / 2), 1};
-        blit.dstSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
-        blit.dstSubresource.mipLevel       = i;
-        blit.dstSubresource.baseArrayLayer = 0;
-        blit.dstSubresource.layerCount     = layerCount;
-
-        vkCmdBlitImage(cmd, _nativeTexture.image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, _nativeTexture.image,
-                       VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit, VK_FILTER_LINEAR);
-
-        // Transition dest level to SHADER_READ
-        transitionImageLayout(cmd, _nativeTexture.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                              VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, dstRange);
-
-        mipWidth  = std::max(1, mipWidth / 2);
-        mipHeight = std::max(1, mipHeight / 2);
-    }
 }
 
 }  // namespace ax::rhi::vk

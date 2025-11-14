@@ -27,6 +27,9 @@
 #include "axmol/base/EventListenerCustom.h"
 #include <glad/vulkan.h>
 
+#include <vector>
+#include "axmol/tlx/pod_vector.hpp"
+
 namespace ax::rhi::vk
 {
 /**
@@ -61,6 +64,42 @@ private:
         memory   = VK_NULL_HANDLE;
         return ret;
     }
+};
+
+class ImageLayoutTracker
+{
+public:
+    ImageLayoutTracker(size_t levelCap, size_t layerCap)
+    {
+        _layouts.resize(levelCap);
+        for (auto& v : _layouts)
+        {
+            v.resize(layerCap, VK_IMAGE_LAYOUT_UNDEFINED);
+        }
+    }
+
+    VkImageLayout getLayout(uint32_t level, uint32_t layer) const
+    {
+        if (level < _layouts.size() && layer < _layouts[level].size())
+            return _layouts[level][layer];
+        return VK_IMAGE_LAYOUT_UNDEFINED;  // default if not yet set
+    }
+
+    void setLayout(uint32_t level, uint32_t layer, VkImageLayout layout)
+    {
+        // Expand outer vector if needed
+        if (level >= _layouts.size())
+            _layouts.resize(level + 1);
+
+        // Expand inner vector if needed
+        if (layer >= _layouts[level].size())
+            _layouts[level].resize(layer + 1, VK_IMAGE_LAYOUT_UNDEFINED);
+
+        _layouts[level][layer] = layout;
+    }
+
+private:
+    std::vector<axstd::pod_vector<VkImageLayout>> _layouts;
 };
 
 /**
@@ -110,12 +149,12 @@ private:
     void generateMipmaps(VkCommandBuffer cmd);
 
     DriverImpl* _driver{nullptr};  // weak pointer
+    ImageLayoutTracker _layoutTracker;
     TextureHandle _nativeTexture{};
     VkSampler _sampler{VK_NULL_HANDLE};
     TextureDesc _desc{};
 
     bool _ownResources{false};
-    std::atomic<bool> _initialized{false};
 };
 
 /** @} */
