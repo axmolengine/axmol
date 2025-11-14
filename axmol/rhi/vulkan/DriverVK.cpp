@@ -282,7 +282,7 @@ void DriverImpl::initializeFactory()
     appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
     appInfo.pEngineName        = "Axmol3";
     appInfo.engineVersion      = VK_MAKE_VERSION(1, 0, 0);
-    appInfo.apiVersion         = VK_API_VERSION_1_3; // axmol requires vulkan-1.3
+    appInfo.apiVersion         = VK_API_VERSION_1_3;  // axmol requires vulkan-1.3
 
     // Collect required extensions
     axstd::pod_vector<const char*> extensions;
@@ -362,10 +362,41 @@ void DriverImpl::initializeDevice()
     _physical            = physical;
     _graphicsQueueFamily = graphicsQueueFamily;
 
-    VkPhysicalDeviceExtendedDynamicStateFeaturesEXT extDynState{};
-    extDynState.sType                = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_FEATURES_EXT;
-    extDynState.extendedDynamicState = VK_TRUE;
+    // validate dynamicPrimitiveTopologyUnrestricted supported
+    // FIXME: if dynamicPrimitiveTopologyUnrestricted, fallback to baked InputAssemblyState?
+    VkPhysicalDeviceExtendedDynamicState3PropertiesEXT dynState3Props{
+        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_3_PROPERTIES_EXT};
 
+    VkPhysicalDeviceProperties2 props2{.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2,
+                                       .pNext = &dynState3Props};
+
+    vkGetPhysicalDeviceProperties2(_physical, &props2);
+    assert(dynState3Props.dynamicPrimitiveTopologyUnrestricted);
+
+    /*
+     * https://vulkan.lunarg.com/doc/view/1.4.328.1/windows/antora/spec/latest/chapters/drawing.html#VUID-vkCmdDraw-dynamicPrimitiveTopologyUnrestricted-07500
+     */
+    const char* deviceExtensions[] = {VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME,
+                                      VK_EXT_EXTENDED_DYNAMIC_STATE_2_EXTENSION_NAME,
+                                      VK_EXT_EXTENDED_DYNAMIC_STATE_3_EXTENSION_NAME};
+
+    // enable extended dynamic state
+    VkPhysicalDeviceExtendedDynamicStateFeaturesEXT extDynState{
+        .sType                = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_FEATURES_EXT,
+        .extendedDynamicState = VK_TRUE};
+
+    VkPhysicalDeviceExtendedDynamicState2FeaturesEXT extDynState2{
+        .sType                 = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT,
+        .extendedDynamicState2 = VK_TRUE};
+
+    VkPhysicalDeviceExtendedDynamicState3FeaturesEXT extDynState3{
+        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_3_FEATURES_EXT};
+
+    // Chain features
+    extDynState.pNext  = &extDynState2;
+    extDynState2.pNext = &extDynState3;
+
+    // queue create info
     float priority = 1.0f;
     VkDeviceQueueCreateInfo qinfo{};
     qinfo.sType            = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
@@ -373,16 +404,13 @@ void DriverImpl::initializeDevice()
     qinfo.queueCount       = 1;
     qinfo.pQueuePriorities = &priority;
 
-    const std::array<const char*, 2> deviceExtensions = {VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-                                                         VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME};
-
     VkDeviceCreateInfo dinfo{};
     dinfo.sType                   = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     dinfo.queueCreateInfoCount    = 1;
     dinfo.pQueueCreateInfos       = &qinfo;
     dinfo.pNext                   = &extDynState;
-    dinfo.enabledExtensionCount   = deviceExtensions.size();
-    dinfo.ppEnabledExtensionNames = deviceExtensions.data();
+    dinfo.enabledExtensionCount   = std::size(deviceExtensions);
+    dinfo.ppEnabledExtensionNames = deviceExtensions;
 
     VkResult vr = vkCreateDevice(_physical, &dinfo, nullptr, &_device);
     AXASSERT(vr == VK_SUCCESS && _device != VK_NULL_HANDLE, "vkCreateDevice failed");

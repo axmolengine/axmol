@@ -34,3 +34,29 @@
 #  define RG8_CHANNEL xy
 
 #  define FWIDTH(dist) 0.4
+
+
+// ============================================================================
+// Axmol Shader Binding Conventions
+// ============================================================================
+//
+// To ensure consistent resource binding across all shaders in Axmol:
+//
+// - Uniform blocks are bound to set = 0
+// - Samplers/textures are bound to set = 1
+// - Vertex shader uniform block uses binding = 0
+// - Fragment shader uniform block uses binding = 1
+//
+// These conventions minimize confusion and make pipeline layout predictable.
+// If future changes are needed (e.g., adding more sets or bindings),
+// update this header and notify contributors.
+//
+// ============================================================================
+
+// Descriptor set indices
+#define UNIFORM_SET   0
+#define SAMPLER_SET   1
+
+// Binding indices within uniform set
+#define VS_UB_BINDING 0   // Vertex shader uniform block
+#define FS_UB_BINDING 1   // Fragment shader uniform block
