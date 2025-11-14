@@ -267,7 +267,8 @@ void RenderPipelineImpl::updateDescriptorSetLayouts(ProgramImpl* program)
     auto it = _descriptorSetLayoutCache.find(progKey);
     if (it != _descriptorSetLayoutCache.end())
     {
-        _activeDescriptorSetLayouts = it->second;
+        _activeDescriptorSetLayouts     = it->second;
+        _activeDescriptorSetLayoutCount = _activeDescriptorSetLayouts[1] ? 2 : 1;
         return;
     }
 
@@ -302,7 +303,7 @@ void RenderPipelineImpl::updateDescriptorSetLayouts(ProgramImpl* program)
     for (auto& smp : fs->getActiveSamplerInfos())
     {
         VkDescriptorSetLayoutBinding& b = samplerBindings.emplace_back();
-        b.binding                       = smp->location;
+        b.binding                       = smp.location;
         b.descriptorType                = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
         b.descriptorCount               = 1;
         b.stageFlags                    = VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -316,12 +317,19 @@ void RenderPipelineImpl::updateDescriptorSetLayouts(ProgramImpl* program)
     dsl0.pBindings    = ubBindings.data();
     vkCreateDescriptorSetLayout(_device, &dsl0, nullptr, &_activeDescriptorSetLayouts[0]);
 
-    // Create DescriptorSetLayout for samplers (set=1)
-    VkDescriptorSetLayoutCreateInfo dsl1{};
-    dsl1.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-    dsl1.bindingCount = static_cast<uint32_t>(samplerBindings.size());
-    dsl1.pBindings    = samplerBindings.data();
-    vkCreateDescriptorSetLayout(_device, &dsl1, nullptr, &_activeDescriptorSetLayouts[1]);
+    _activeDescriptorSetLayoutCount = 1;
+
+    if (!samplerBindings.empty())
+    {
+        // Create DescriptorSetLayout for samplers (set=1)
+        VkDescriptorSetLayoutCreateInfo dsl1{};
+        dsl1.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+        dsl1.bindingCount = static_cast<uint32_t>(samplerBindings.size());
+        dsl1.pBindings    = samplerBindings.data();
+        auto vr           = vkCreateDescriptorSetLayout(_device, &dsl1, nullptr, &_activeDescriptorSetLayouts[1]);
+        assert(vr == VK_SUCCESS);
+        ++_activeDescriptorSetLayoutCount;
+    }
 
     _descriptorSetLayoutCache.emplace(progKey, _activeDescriptorSetLayouts);
 }
@@ -339,7 +347,7 @@ void RenderPipelineImpl::updatePipelineLayout(ProgramImpl* program)
     VkPipelineLayout pipelineLayout{VK_NULL_HANDLE};
     VkPipelineLayoutCreateInfo plc{};
     plc.sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    plc.setLayoutCount         = static_cast<uint32_t>(_activeDescriptorSetLayouts.size());
+    plc.setLayoutCount         = _activeDescriptorSetLayoutCount;
     plc.pSetLayouts            = _activeDescriptorSetLayouts.data();
     plc.pushConstantRangeCount = 0;
     plc.pPushConstantRanges    = nullptr;

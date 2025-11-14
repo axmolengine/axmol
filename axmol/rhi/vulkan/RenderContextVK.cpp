@@ -805,7 +805,7 @@ void RenderContextImpl::prepareDrawing()
     allocInfo.descriptorPool         = _descriptorPools[_currentFrame];
     VkDescriptorSetLayout layouts[2] = {_renderPipeline->getDescriptorSetLayout(0),
                                         _renderPipeline->getDescriptorSetLayout(1)};
-    allocInfo.descriptorSetCount     = 2;
+    allocInfo.descriptorSetCount     = _renderPipeline->getDescriptorSetLayoutCount();
     allocInfo.pSetLayouts            = layouts;
 
     VkDescriptorSet descriptorSets[2];

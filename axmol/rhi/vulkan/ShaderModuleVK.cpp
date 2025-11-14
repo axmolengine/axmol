@@ -84,6 +84,8 @@ void ShaderModuleImpl::compileShader(VkDevice device, ShaderStage stage, std::st
     for (int i = 0; i < UNIFORM_COUNT; ++i)
         _builtinUniforms[i] = {};
 
+    _samplerCount = 0;
+    _activeVertexInputs.clear();
     _activeUniformInfos.clear();
     _activeUniformBlockInfos.clear();
     _activeSamplerInfos.clear();
@@ -305,8 +307,10 @@ void ShaderModuleImpl::reflectUniforms(SLCReflectContext* context)
 
 void ShaderModuleImpl::reflectSamplers(SLCReflectContext* context)
 {
-    auto ibs = context->ibs;
-    for (int i = 0; i < context->refl->num_textures; ++i)
+    auto ibs                = context->ibs;
+    const auto samplerCount = context->refl->num_textures;
+    _activeSamplerInfos.reserve(samplerCount);
+    for (int i = 0; i < samplerCount; ++i)
     {
         std::string_view name = _sc_read_name(ibs);
         auto binding          = ibs->read<int32_t>();  // descriptor binding
@@ -319,7 +323,7 @@ void ShaderModuleImpl::reflectSamplers(SLCReflectContext* context)
         auto ret             = _activeUniformInfos.emplace(name, uniform);
         assert(ret.second);
 
-        _activeSamplerInfos.push_back(&ret.first.value());
+        _activeSamplerInfos.push_back(uniform);
     }
 }
 

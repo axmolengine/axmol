@@ -96,7 +96,7 @@ public:
     inline const axstd::string_map<UniformInfo>& getActiveUniformInfos() const { return _activeUniformInfos; }
 
     inline const std::vector<UniformBlockInfo>& getActiveUniformBlockInfos() const { return _activeUniformBlockInfos; }
-    inline const std::vector<UniformInfo*>& getActiveSamplerInfos() const { return _activeSamplerInfos; }
+    inline const std::vector<UniformInfo>& getActiveSamplerInfos() const { return _activeSamplerInfos; }
 
     /**
      * Get maximum uniform location.
@@ -126,7 +126,8 @@ private:
     axstd::string_map<UniformInfo> _activeUniformInfos;
 
     std::vector<UniformBlockInfo> _activeUniformBlockInfos;
-    std::vector<UniformInfo*> _activeSamplerInfos;
+    std::vector<UniformInfo> _activeSamplerInfos;
+    int _samplerCount{0};
 
     const VertexInputDesc* _builtinVertexInputs[VIK_COUNT];
 

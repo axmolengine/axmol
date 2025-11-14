@@ -269,7 +269,7 @@ void Director::setRenderDefaults()
 // Draw the Scene
 void Director::drawScene()
 {
-    if(!_renderer->beginFrame()) [[unlikely]]
+    if (!_renderer->beginFrame()) [[unlikely]]
         return;
 
     // calculate "global" dt

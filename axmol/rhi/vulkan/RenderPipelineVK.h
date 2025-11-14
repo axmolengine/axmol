@@ -60,6 +60,7 @@ public:
     VkPipeline getVkPipeline() const { return _activePipeline; }
     VkPipelineLayout getVkPipelineLayout() const { return _activePipelineLayout; }
     VkDescriptorSetLayout getDescriptorSetLayout(int index) { return _activeDescriptorSetLayouts[index]; }
+    uint32_t getDescriptorSetLayoutCount() const { return _activeDescriptorSetLayoutCount; }
 
     /**
      * @brief Updates input assembly state for dynamic primitive type handling
@@ -102,11 +103,12 @@ private:
 
     VkPipelineLayout _activePipelineLayout{nullptr};
     VkDescriptorSetLayoutArray _activeDescriptorSetLayouts{};
+    uint32_t _activeDescriptorSetLayoutCount{};
 
     VkPipeline _activePipeline{nullptr};
 
     axstd::hash_map<uintptr_t, VkPipelineLayout> _pipelineLayoutCache;
     axstd::hash_map<uintptr_t, VkDescriptorSetLayoutArray> _descriptorSetLayoutCache;
-    axstd::hash_map<uintptr_t, VkPipeline> _pipelineCache; // PSO cache
+    axstd::hash_map<uintptr_t, VkPipeline> _pipelineCache;  // PSO cache
 };
 }  // namespace ax::rhi::vk
