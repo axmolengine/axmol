@@ -123,6 +123,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface)
 
     // reserve descriptor sets
     _descriptorWritesPerFrame.reserve(16);
+    _descriptorImageInfosPerFrame.reserve(16);
 
     // Create per-frame uniform ring buffers (capacity can be tuned)
     createUniformRingBuffers(1 * 1024 * 1024);  // 1 MB per frame
@@ -198,6 +199,8 @@ void RenderContextImpl::createUniformRingBuffers(std::size_t capacityBytes)
         bci.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
         VkResult br     = vkCreateBuffer(device, &bci, nullptr, &ring.buffer);
         AXASSERT(br == VK_SUCCESS, "vkCreateBuffer (uniform ring) failed");
+
+        AXLOGI("UniformRing: VkBuffer: {}", fmt::ptr(ring.buffer));
 
         // Allocate memory (HOST_VISIBLE | prefer COHERENT)
         VkMemoryRequirements memReq{};
@@ -787,6 +790,8 @@ void RenderContextImpl::prepareDrawing()
     auto& writes = _descriptorWritesPerFrame;
     writes.clear();
 
+    VkDescriptorBufferInfo bufferInfos[2] = {};
+
     // --- Vertex UBO (set=0, binding=0) ---
     auto vertUB = _programState->getVertexUniformBuffer();
     if (!vertUB.empty())
@@ -795,20 +800,20 @@ void RenderContextImpl::prepareDrawing()
         UniformSlice s = allocateUniformSlice(vertUB.size());
         std::memcpy(s.cpuPtr, vertUB.data(), vertUB.size());
 
+        VkWriteDescriptorSet& write        = writes.emplace_back();
+        VkDescriptorBufferInfo& bufferInfo = bufferInfos[0];
+
         // Bind slice via descriptor write (UNIFORM_BUFFER with offset/range)
-        VkDescriptorBufferInfo bufferInfo{};
         bufferInfo.buffer = _uniformRings[_currentFrame].buffer;
         bufferInfo.offset = static_cast<VkDeviceSize>(s.offset);
         bufferInfo.range  = static_cast<VkDeviceSize>(vertUB.size());
 
-        VkWriteDescriptorSet write{};
         write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         write.dstSet          = descriptorSets[0];
         write.dstBinding      = RenderPipelineImpl::VS_UBO_BINDING_INDEX;
         write.descriptorType  = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         write.descriptorCount = 1;
         write.pBufferInfo     = &bufferInfo;
-        writes.push_back(write);
     }
 
     // --- Fragment UBO (set=0, binding=1) ---
@@ -818,41 +823,43 @@ void RenderContextImpl::prepareDrawing()
         UniformSlice s = allocateUniformSlice(fragUB.size());
         std::memcpy(s.cpuPtr, fragUB.data(), fragUB.size());
 
-        VkDescriptorBufferInfo bufferInfo{};
+        VkWriteDescriptorSet& write        = writes.emplace_back();
+        VkDescriptorBufferInfo& bufferInfo = bufferInfos[1];
+
         bufferInfo.buffer = _uniformRings[_currentFrame].buffer;
         bufferInfo.offset = static_cast<VkDeviceSize>(s.offset);
         bufferInfo.range  = static_cast<VkDeviceSize>(fragUB.size());
 
-        VkWriteDescriptorSet write{};
         write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         write.dstSet          = descriptorSets[0];
         write.dstBinding      = RenderPipelineImpl::FS_UBO_BINDING_INDEX;
         write.descriptorType  = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         write.descriptorCount = 1;
         write.pBufferInfo     = &bufferInfo;
-        writes.push_back(write);
     }
 
     // --- Samplers (set=1, binding=N) ---
+    auto& imageInfos = _descriptorImageInfosPerFrame;
+    imageInfos.clear();
     for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
     {
         auto& texs = bindingSet.texs;
         for (uint32_t k = 0; k < texs.size(); ++k)
         {
             auto textureImpl = static_cast<TextureImpl*>(texs[k]);
-            VkDescriptorImageInfo imageInfo{};
+
+            auto& imageInfo       = imageInfos.emplace_back();
             imageInfo.sampler     = textureImpl->getSampler();
             imageInfo.imageView   = textureImpl->internalHandle().view;
             imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
-            VkWriteDescriptorSet write{};
+            VkWriteDescriptorSet& write = writes.emplace_back();
             write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
             write.dstSet          = descriptorSets[1];
             write.dstBinding      = bindingIndex + k;  // preserve shader binding order
             write.descriptorType  = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
             write.descriptorCount = 1;
             write.pImageInfo      = &imageInfo;
-            writes.push_back(write);
         }
     }
 

@@ -124,8 +124,10 @@ private:
     std::array<VkSemaphore, MAX_FRAMES_IN_FLIGHT> _presentCompleteSemaphores;
     std::array<VkFence, MAX_FRAMES_IN_FLIGHT> _inFlightFences{};
     std::array<VkDescriptorPool, MAX_FRAMES_IN_FLIGHT> _descriptorPools{};
-    axstd::pod_vector<VkWriteDescriptorSet> _descriptorWritesPerFrame;
     axstd::pod_vector<VkSemaphore> _renderFinishedSemaphores;
+
+    axstd::pod_vector<VkWriteDescriptorSet> _descriptorWritesPerFrame;
+    axstd::pod_vector<VkDescriptorImageInfo> _descriptorImageInfosPerFrame;
 
     VkCommandBuffer _currentCmdBuffer{VK_NULL_HANDLE};  // weak pointer
 
