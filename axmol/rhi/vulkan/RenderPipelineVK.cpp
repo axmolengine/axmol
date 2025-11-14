@@ -409,9 +409,6 @@ void RenderPipelineImpl::update(const RenderTarget* rt, const PipelineDesc& desc
             AXLOGE("vkCreateGraphicsPipelines fail: {}", (int)res);
         }
     }
-
-    // After this, the current pipeline for the key is cached.
-    // The caller can fetch/bind it via your higher-level RenderPipeline interface.
 }
 
 }  // namespace ax::rhi::vk

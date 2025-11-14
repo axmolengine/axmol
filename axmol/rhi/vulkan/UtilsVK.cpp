@@ -163,7 +163,8 @@ static TextureImpl* createDepthStencilAttachment(DriverImpl* driver, const VkExt
 void rebuildSwapchainAttachments(DriverImpl* driver,
                                  const axstd::pod_vector<VkImage>& images,
                                  const axstd::pod_vector<VkImageView>& imageViews,
-                                 const VkExtent2D& extent)
+                                 const VkExtent2D& extent,
+                                 PixelFormat imagePF)
 {
     // Destroy previous attachments
     destroySwapchainAttachments();
@@ -177,7 +178,7 @@ void rebuildSwapchainAttachments(DriverImpl* driver,
     colorDesc.height       = static_cast<uint16_t>(extent.height);
     colorDesc.arraySize    = 1;
     colorDesc.mipLevels    = 1;
-    colorDesc.pixelFormat  = PixelFormat::RGBA8;
+    colorDesc.pixelFormat  = imagePF;
     colorDesc.textureUsage = TextureUsage::RENDER_TARGET;
 
     for (auto i = 0; i < images.size(); ++i)

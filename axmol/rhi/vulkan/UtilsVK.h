@@ -54,7 +54,8 @@ const PixelFormatInfo* toVKFormatInfo(PixelFormat pf);
 void rebuildSwapchainAttachments(DriverImpl*,
                                  const axstd::pod_vector<VkImage>& images,
                                  const axstd::pod_vector<VkImageView>&,
-                                 const VkExtent2D&);
+                                 const VkExtent2D&,
+                                 PixelFormat imagePF);
 
 void destroySwapchainAttachments();
 

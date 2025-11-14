@@ -293,11 +293,19 @@ void DriverImpl::initializeFactory()
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
     extensions.push_back("VK_KHR_android_surface");
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+    glfwInit();
     auto platform = glfwGetPlatform();
     if (platform == GLFW_PLATFORM_WAYLAND)
         extensions.push_back("VK_KHR_wayland_surface");
     else if (platform == GLFW_PLATFORM_X11)
+    {
+        extensions.push_back("VK_KHR_xcb_surface");  // glfw preferred xcb
         extensions.push_back("VK_KHR_xlib_surface");
+    }
+    else {
+        AXLOGE("Unsupported window platform: {}", (int)platform);
+        assert(false);
+    }
 #endif
 
     const auto shouldCreateDebugLayer =
