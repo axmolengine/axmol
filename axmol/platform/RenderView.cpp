@@ -217,10 +217,11 @@ void RenderView::maybeDispatchResizeEvent(uint8_t updateFlag)
 
     const bool readyToDispatch = (_surfaceUpdateFlags == requiredFlags);
 
-    if (readyToDispatch && !silentUpdate)
+    if (readyToDispatch)
     {
         _surfaceUpdateFlags = 0;
-        onSurfaceResized();
+        if (!silentUpdate)
+            onSurfaceResized();
     }
 }
 

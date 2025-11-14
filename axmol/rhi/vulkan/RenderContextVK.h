@@ -184,5 +184,7 @@ private:
 
     bool _swapchainDirty{false};
     bool _suboptimal{false};
+
+    bool _inFrame{false};
 };
 }  // namespace ax::rhi::vk

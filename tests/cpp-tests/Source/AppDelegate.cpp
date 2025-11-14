@@ -107,7 +107,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     director->setAnimationInterval(1.0f / Device::getDisplayRefreshRate());
 
-    auto screenSize = renderView->getWindowSize();
+    auto screenSize = renderView->getRenderSize();
 
     AXLOGI("AppDelegate::applicationDidFinishLaunching - Screen size: {} x {}", screenSize.width, screenSize.height);
 

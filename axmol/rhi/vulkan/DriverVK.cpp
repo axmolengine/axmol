@@ -407,7 +407,7 @@ bool DriverImpl::setupSurface(const SurfaceCreateInfo& info)
     if (result != VK_SUCCESS)
         return false;
 
-    _surfaceInitalExtent.width = info.width;
+    _surfaceInitalExtent.width  = info.width;
     _surfaceInitalExtent.height = info.height;
 
     uint32_t queueCount = 0;

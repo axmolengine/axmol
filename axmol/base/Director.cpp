@@ -269,7 +269,8 @@ void Director::setRenderDefaults()
 // Draw the Scene
 void Director::drawScene()
 {
-    _renderer->beginFrame();
+    if(!_renderer->beginFrame()) [[unlikely]]
+        return;
 
     // calculate "global" dt
     calculateDeltaTime();

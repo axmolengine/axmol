@@ -204,8 +204,6 @@ void RenderContextImpl::createUniformRingBuffers(std::size_t capacityBytes)
         VkResult br     = vkCreateBuffer(device, &bci, nullptr, &ring.buffer);
         AXASSERT(br == VK_SUCCESS, "vkCreateBuffer (uniform ring) failed");
 
-        AXLOGI("UniformRing: VkBuffer: {}", fmt::ptr(ring.buffer));
-
         // Allocate memory (HOST_VISIBLE | prefer COHERENT)
         VkMemoryRequirements memReq{};
         vkGetBufferMemoryRequirements(device, ring.buffer, &memReq);
@@ -324,9 +322,8 @@ void RenderContextImpl::createDescriptorPool()
 
 bool RenderContextImpl::resizeSwapchain(uint32_t width, uint32_t height)
 {
-    // In Vulkan, swapchain recreation is handled by the driver. Here we just cache the new size.
     if (width == _screenWidth && height == _screenHeight)
-        return true;
+       return true;
 
     _screenWidth    = width;
     _screenHeight   = height;
@@ -409,7 +406,7 @@ void RenderContextImpl::rebuildSwapchain()
     }
     if (extent.width == 0 || extent.height == 0)
     {
-         AXLOGE("axmol: Failed to create swapchain: extent width/height is 0");
+        AXLOGE("axmol: Failed to create swapchain: extent width/height is 0");
     }
 
     uint32_t imageCount = caps.minImageCount + 1;
@@ -525,7 +522,7 @@ bool RenderContextImpl::beginFrame()
     if (result == VK_ERROR_OUT_OF_DATE_KHR)
     {
         // Signal upper layer to recreate swapchain
-        // _needRecreateSwapchain = true;
+        AXLOGW("axmol: swapchain is out of date (frame {}), need to recreate", _currentFrame);
         return false;
     }
     if (result == VK_SUBOPTIMAL_KHR && !_suboptimal)
@@ -535,6 +532,8 @@ bool RenderContextImpl::beginFrame()
     }
     AXASSERT(result == VK_SUCCESS || result == VK_SUBOPTIMAL_KHR || result == VK_TIMEOUT,
              "vkAcquireNextImageKHR failed");
+
+    _inFrame = true;
 
     vkResetFences(_device, 1, &_inFlightFences[_currentFrame]);
 
@@ -552,11 +551,13 @@ bool RenderContextImpl::beginFrame()
 
     auto descriptorPool = _descriptorPools[_currentFrame];
     vkResetDescriptorPool(_device, descriptorPool, 0);  // safe: only reset current frame pool
+
     return true;
 }
 
 void RenderContextImpl::beginRenderPass(const RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc)
 {
+    assert(_inFrame);
     auto rtImpl = static_cast<const RenderTargetImpl*>(renderTarget);
 
     // Cache target size from first color attachment
@@ -641,7 +642,7 @@ void RenderContextImpl::endFrame()
         }
         break;
     case VK_ERROR_OUT_OF_DATE_KHR:
-        AXLOGD("axmol: Swapchain out of date");
+        AXLOGI("axmol: swapchain out of date");
         break;
     default:
         AXASSERT(vr && false, "vkQueuePresentKHR failed");
@@ -650,6 +651,8 @@ void RenderContextImpl::endFrame()
 
     // Advance frame index for multi-frame-in-flight
     _currentFrame = (_currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+
+    _inFrame = false;
 }
 
 void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
