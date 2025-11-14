@@ -102,15 +102,38 @@ static inline VkColorComponentFlags toVkColorMask(ColorWriteMask mask)
     return flags;
 }
 
-// Generate a combined ID for pipeline caching.
-// You can swap to your axstd::hash_bytes if already available.
-// Generate a combined ID for pipeline caching using axstd::hash_bytes
-static inline uintptr_t make_pipeline_key(const PipelineDesc& desc)
+// Generate a unique key for pipeline caching.
+//
+// Notes:
+// - _activePipelineLayout and _activeDescriptorSetLayouts are derived from the active program,
+//   so they do not need to be hashed separately.
+// - The pipeline cache key only needs to include states that directly affect pipeline creation:
+//   blendDesc (fixed-function blend state), program (shader combination), vertexLayout,
+//   and renderPass (framebuffer attachment formats).
+//
+// Important:
+// - Axmol currently does not use dynamic rendering, so renderPass must be included in the hash
+//   to ensure pipelines are correctly distinguished by their attachment formats.
+// - If Axmol adopts VK_KHR_dynamic_rendering in the future, renderPass will no longer need to be
+//   part of the key. In that case, attachment formats (color/depth/stencil) should be hashed instead.
+//
+// This design minimizes redundant PSOs while ensuring that any change in these critical states
+// correctly triggers pipeline re-creation.
+static inline uintptr_t makePipelineKey(const rhi::BlendDesc& blendDesc,
+                                        void* program,
+                                        void* vertexLayout,
+                                        void* renderPass)
 {
-    uintptr_t h1 = axstd::hash_bytes(&desc.blendDesc, sizeof(desc.blendDesc), 0);
-    uintptr_t h2 = axstd::hash_bytes(&desc.programState, sizeof(desc.programState), h1);
-    uintptr_t h3 = axstd::hash_bytes(&desc.vertexLayout, sizeof(desc.vertexLayout), h2);
-    return h3;
+    struct HashMe
+    {
+        rhi::BlendDesc blend{};
+        void* prog;
+        void* vl;
+        void* pass;
+    };
+    HashMe hashMe{.blend = blendDesc, .prog = program, .vl = vertexLayout, .pass = renderPass};
+
+    return axstd::hash_bytes(&hashMe, sizeof(hashMe), 0);
 }
 
 // Build the VkPipelineColorBlendAttachmentState from BlendDesc
@@ -126,6 +149,11 @@ static inline VkPipelineColorBlendAttachmentState makeVkBlendAttachment(const Bl
     att.dstAlphaBlendFactor = toVkBlendFactor(desc.destinationAlphaBlendFactor);
     att.alphaBlendOp        = toVkBlendOp(desc.alphaBlendOp);
     return att;
+}
+
+RenderPipelineImpl::RenderPipelineImpl(VkDevice device) : _device(device)
+{
+    initializePipelineDefaults();
 }
 
 RenderPipelineImpl::~RenderPipelineImpl()
@@ -156,15 +184,53 @@ RenderPipelineImpl::~RenderPipelineImpl()
     _pipelineCache.clear();
 }
 
-// --- Core: RenderPipelineImpl::update --------------------------------------
+void RenderPipelineImpl::initializePipelineDefaults()
+{
+    // Input Assembly
+    _iaState                        = {};
+    _iaState.sType                  = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+    _iaState.topology               = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+    _iaState.primitiveRestartEnable = VK_FALSE;
+
+    // Viewport/Scissor
+    _vpState               = {};
+    _vpState.sType         = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+    _vpState.viewportCount = 1;
+    _vpState.scissorCount  = 1;
+
+    // Rasterizer
+    _rasterState                         = {};
+    _rasterState.sType                   = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+    _rasterState.depthClampEnable        = VK_FALSE;
+    _rasterState.rasterizerDiscardEnable = VK_FALSE;
+    _rasterState.polygonMode             = VK_POLYGON_MODE_FILL;
+    _rasterState.cullMode                = VK_CULL_MODE_BACK_BIT;
+    _rasterState.frontFace               = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+    _rasterState.lineWidth               = 1.0f;
+
+    // Multisample
+    _msState                      = {};
+    _msState.sType                = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+    _msState.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+    _msState.sampleShadingEnable  = VK_FALSE;
+
+    // Dynamic States
+    static VkDynamicState dynamics[] = {VK_DYNAMIC_STATE_VIEWPORT,          VK_DYNAMIC_STATE_SCISSOR,
+                                        VK_DYNAMIC_STATE_STENCIL_REFERENCE, VK_DYNAMIC_STATE_BLEND_CONSTANTS,
+                                        VK_DYNAMIC_STATE_DEPTH_BIAS,        VK_DYNAMIC_STATE_CULL_MODE_EXT,
+                                        VK_DYNAMIC_STATE_FRONT_FACE_EXT,    VK_DYNAMIC_STATE_PRIMITIVE_TOPOLOGY_EXT};
+    _dynState                        = {};
+    _dynState.sType                  = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+    _dynState.dynamicStateCount      = static_cast<uint32_t>(std::size(dynamics));
+    _dynState.pDynamicStates         = dynamics;
+}
 
 void RenderPipelineImpl::update(const RenderTarget* rt, const PipelineDesc& desc)
 {
     // Validate inputs
     if (!rt || !desc.programState || !desc.vertexLayout)
     {
-        // In Axmol, prefer a centralized error/assert macro
-        // AXASSERT(false, "RenderPipelineImpl::update: invalid inputs");
+        AXASSERT(false, "RenderPipelineImpl::update: invalid inputs");
         return;
     }
 
@@ -174,241 +240,226 @@ void RenderPipelineImpl::update(const RenderTarget* rt, const PipelineDesc& desc
     auto* vkRT              = static_cast<const RenderTargetImpl*>(rt);
     VkRenderPass renderPass = vkRT->getVkRenderPass();  // provided by RenderTargetImpl
 
-    auto programState = desc.programState;
-    auto program      = static_cast<ProgramImpl*>(programState->getProgram());
+    auto program = static_cast<ProgramImpl*>(desc.programState->getProgram());
 
-    // 2) Build lightweight pipeline states (rebuild inline; no caching needed)
+    updateBlendState(desc.blendDesc);
+    updateDescriptorSetLayouts(program);
+    updatePipelineLayout(program);
+    updateGraphicsPipeline(desc, renderPass, program);
+}
 
-    // 2.1 Color blend state (single attachment typical; extend for MRT)
-    _activeAttachment = makeVkBlendAttachment(desc.blendDesc);
-
+void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc)
+{
+    _activeAttachment                 = makeVkBlendAttachment(blendDesc);
     _activeBlendState                 = {};
     _activeBlendState.sType           = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     _activeBlendState.logicOpEnable   = VK_FALSE;
     _activeBlendState.attachmentCount = 1;
     _activeBlendState.pAttachments    = &_activeAttachment;
-    // Write fixed blend constants (same as D3D11 blendColor = {0,0,0,0})
-    _activeBlendState.blendConstants[0] = 0.0f;  // R
-    _activeBlendState.blendConstants[1] = 0.0f;  // G
-    _activeBlendState.blendConstants[2] = 0.0f;  // B
-    _activeBlendState.blendConstants[3] = 0.0f;  // A
+    std::fill(std::begin(_activeBlendState.blendConstants), std::end(_activeBlendState.blendConstants), 0.0f);
+}
 
-    // 2.2 Rasterizer state (default; extend with your RasterizerDesc)
-    VkPipelineRasterizationStateCreateInfo raster{};
-    raster.sType                   = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-    raster.depthClampEnable        = VK_FALSE;
-    raster.rasterizerDiscardEnable = VK_FALSE;
-    raster.polygonMode             = VK_POLYGON_MODE_FILL;
-    raster.cullMode                = VK_CULL_MODE_BACK_BIT;
-    raster.frontFace               = VK_FRONT_FACE_COUNTER_CLOCKWISE;  // depends on your coordinate system
-    raster.depthBiasEnable         = VK_FALSE;
-    raster.lineWidth               = 1.0f;
-
-    raster.depthBiasEnable         = VK_FALSE;
-    raster.depthBiasConstantFactor = 0.0f;
-    raster.depthBiasClamp          = 0.0f;
-    raster.depthBiasSlopeFactor    = 0.0f;
-
-    // 2.3 Multisample state (default; adjust from RenderTarget if MSAA enabled)
-    VkPipelineMultisampleStateCreateInfo ms{};
-    ms.sType                = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-    ms.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-    ms.sampleShadingEnable  = VK_FALSE;
-
-    // 2.4 Depth-stencil state (default off; enable if your pipeline needs it)
-    auto& ds = _dsState->getVkDepthStencilState();
-
-    // 2.5 Input assembly (topology; may come from VertexLayout or draw command)
-    VkPipelineInputAssemblyStateCreateInfo ia{};
-    ia.sType                  = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-    ia.topology               = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-    ia.primitiveRestartEnable = VK_FALSE;
-
-    // 2.6 Viewport/scissor (use dynamic states to avoid baking surface size)
-    VkPipelineViewportStateCreateInfo vp{};
-    vp.sType         = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-    vp.viewportCount = 1;
-    vp.scissorCount  = 1;
-
-    // 2.7 Dynamic states (viewport/scissor recommended)
-    VkDynamicState dynamics[] = {VK_DYNAMIC_STATE_VIEWPORT,          VK_DYNAMIC_STATE_SCISSOR,
-                                 VK_DYNAMIC_STATE_STENCIL_REFERENCE, VK_DYNAMIC_STATE_BLEND_CONSTANTS,
-                                 VK_DYNAMIC_STATE_DEPTH_BIAS,        VK_DYNAMIC_STATE_CULL_MODE_EXT,
-                                 VK_DYNAMIC_STATE_FRONT_FACE_EXT};
-    VkPipelineDynamicStateCreateInfo dyn{};
-    dyn.sType             = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-    dyn.dynamicStateCount = static_cast<uint32_t>(std::size(dynamics));
-    dyn.pDynamicStates    = dynamics;
-
-    // 2.8 Vertex input (translate from rhi::VertexLayout)
-    auto& vi = _vertexLayout->getVkCreateInfo();
-
-    // 3) Shader stages and pipeline layout (heavyweight; use caches)
-    // Assumes ProgramState can provide VkShaderModule and reflection to build descriptor set layouts.
-    // Replace the placeholders below with your actual adapter.
+void RenderPipelineImpl::updateDescriptorSetLayouts(ProgramImpl* program)
+{
     uintptr_t progKey = (uintptr_t)program;
-
-    // 3.1 Descriptor set layout (per program)
     std::fill(_activeDescriptorSetLayouts.begin(), _activeDescriptorSetLayouts.end(), VK_NULL_HANDLE);
+
+    auto it = _descriptorSetLayoutCache.find(progKey);
+    if (it != _descriptorSetLayoutCache.end())
     {
-        auto it = _descriptorSetLayoutCache.find(progKey);
-        if (it != _descriptorSetLayoutCache.end())
-        {
-            _activeDescriptorSetLayouts = it->second;
-        }
-        else
-        {
-            axstd::pod_vector<VkDescriptorSetLayoutBinding> ubBindings;
-            axstd::pod_vector<VkDescriptorSetLayoutBinding> samplerBindings;
-
-            // VS uniform blocks set=0, binding=0
-            auto vs = program->getVertexShader();
-            for (auto& ub : vs->getActiveUniformBlockInfos())
-            {
-                VkDescriptorSetLayoutBinding b{};
-                b.binding            = ub.binding;  // Fixed binding for VS UBO
-                b.descriptorType     = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-                b.descriptorCount    = 1;
-                b.stageFlags         = VK_SHADER_STAGE_VERTEX_BIT;
-                b.pImmutableSamplers = nullptr;
-                ubBindings.push_back(b);
-            }
-
-            // FS uniform blocks -> set=0, binding=1
-            auto fs = program->getFragmentShader();
-            for (auto& ub : fs->getActiveUniformBlockInfos())
-            {
-                VkDescriptorSetLayoutBinding b{};
-                b.binding            = ub.binding;  // Fixed binding for FS UBO
-                b.descriptorType     = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-                b.descriptorCount    = 1;
-                b.stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT;
-                b.pImmutableSamplers = nullptr;
-                ubBindings.push_back(b);
-            }
-
-            // FS samplers -> set=1, binding = keep source binding
-            for (auto& smp : fs->getActiveSamplerInfos())
-            {
-                VkDescriptorSetLayoutBinding b{};
-                b.binding            = smp->location;  // Keep binding from shader source
-                b.descriptorType     = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                b.descriptorCount    = 1;
-                b.stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT;
-                b.pImmutableSamplers = nullptr;
-                samplerBindings.push_back(b);
-            }
-
-            // Create DescriptorSetLayout for UBOs (set=0)
-            VkDescriptorSetLayoutCreateInfo dsl0{};
-            dsl0.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-            dsl0.bindingCount = static_cast<uint32_t>(ubBindings.size());
-            dsl0.pBindings    = ubBindings.data();
-            vkCreateDescriptorSetLayout(_device, &dsl0, nullptr, &_activeDescriptorSetLayouts[0]);
-
-            // Create DescriptorSetLayout for samplers (set=1)
-            VkDescriptorSetLayoutCreateInfo dsl1{};
-            dsl1.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-            dsl1.bindingCount = static_cast<uint32_t>(samplerBindings.size());
-            dsl1.pBindings    = samplerBindings.data();
-            vkCreateDescriptorSetLayout(_device, &dsl1, nullptr, &_activeDescriptorSetLayouts[1]);
-
-            // Cache pipeline layout for this program
-            _descriptorSetLayoutCache.emplace(progKey, _activeDescriptorSetLayouts);
-        }
+        _activeDescriptorSetLayouts = it->second;
+        return;
     }
 
-    // 3.2 Pipeline layout (per program)
-    {
-        auto it = _pipelineLayoutCache.find(progKey);
-        if (it != _pipelineLayoutCache.end())
-        {
-            _activePipelineLayout = it->second;
-        }
-        else
-        {
-            VkPipelineLayout pipelineLayout{VK_NULL_HANDLE};
-            VkPipelineLayoutCreateInfo plc{};
-            plc.sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-            plc.setLayoutCount         = 2;
-            plc.pSetLayouts            = &_activeDescriptorSetLayouts[0];
-            plc.pushConstantRangeCount = 0;
-            plc.pPushConstantRanges    = nullptr;
-            auto result                = vkCreatePipelineLayout(_device, &plc, nullptr, &pipelineLayout);
-            if (result != VK_SUCCESS)
-                AXLOGE("vkCreatePipelineLayout fail: {}", (int)result);
-            _pipelineLayoutCache.emplace(progKey, pipelineLayout);
+    axstd::pod_vector<VkDescriptorSetLayoutBinding> ubBindings;
+    axstd::pod_vector<VkDescriptorSetLayoutBinding> samplerBindings;
 
-            _activePipelineLayout = pipelineLayout;
-        }
+    // VS uniform blocks -> set=0
+    auto vs = program->getVertexShader();
+    for (auto& ub : vs->getActiveUniformBlockInfos())
+    {
+        VkDescriptorSetLayoutBinding& b = ubBindings.emplace_back();
+        b.binding                       = ub.binding;
+        b.descriptorType                = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        b.descriptorCount               = 1;
+        b.stageFlags                    = VK_SHADER_STAGE_VERTEX_BIT;
+        b.pImmutableSamplers            = nullptr;
     }
 
-    // 4) Final pipeline cache (combine program + vertex layout + blend, etc.)
-    const uintptr_t pipelineKey = make_pipeline_key(desc);
+    // FS uniform blocks -> set=0
+    auto fs = program->getFragmentShader();
+    for (auto& ub : fs->getActiveUniformBlockInfos())
     {
-        auto it = _pipelineCache.find(pipelineKey);
-        if (it != _pipelineCache.end())
-        {
-            // Already created — nothing else to do for pipeline creation.
-            _activePipeline = it->second;
-            return;
-        }
+        VkDescriptorSetLayoutBinding& b = ubBindings.emplace_back();
+        b.binding                       = ub.binding;
+        b.descriptorType                = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        b.descriptorCount               = 1;
+        b.stageFlags                    = VK_SHADER_STAGE_FRAGMENT_BIT;
+        b.pImmutableSamplers            = nullptr;
+    }
 
-        // 4.1 Shader stages (fill from program)
-        // Replace with your own getters; below is illustrative.
-        std::vector<VkPipelineShaderStageCreateInfo> stages;
-        {
-            if (auto vs = program->getVSModule())
-            {
-                VkPipelineShaderStageCreateInfo s{};
-                s.sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-                s.stage  = VK_SHADER_STAGE_VERTEX_BIT;
-                s.module = vs;
-                s.pName  = "main";  // entry point
-                stages.push_back(s);
-            }
-            // Example: fragment stage
-            if (auto fs = program->getFSModule())
-            {
-                VkPipelineShaderStageCreateInfo s{};
-                s.sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-                s.stage  = VK_SHADER_STAGE_FRAGMENT_BIT;
-                s.module = fs;
-                s.pName  = "main";
-                stages.push_back(s);
-            }
-            // Add more stages as needed (geometry, tessellation).
-        }
+    // FS samplers -> set=1
+    for (auto& smp : fs->getActiveSamplerInfos())
+    {
+        VkDescriptorSetLayoutBinding& b = samplerBindings.emplace_back();
+        b.binding                       = smp->location;
+        b.descriptorType                = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        b.descriptorCount               = 1;
+        b.stageFlags                    = VK_SHADER_STAGE_FRAGMENT_BIT;
+        b.pImmutableSamplers            = nullptr;
+    }
 
-        // 4.2 Create graphics pipeline
-        VkGraphicsPipelineCreateInfo gp{};
-        gp.sType               = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-        gp.stageCount          = static_cast<uint32_t>(stages.size());
-        gp.pStages             = stages.data();
-        gp.pVertexInputState   = &vi;
-        gp.pInputAssemblyState = &ia;
-        gp.pViewportState      = &vp;
-        gp.pRasterizationState = &raster;
-        gp.pMultisampleState   = &ms;
-        gp.pDepthStencilState  = &ds;
-        gp.pColorBlendState    = &_activeBlendState;
-        gp.pDynamicState       = &dyn;
-        gp.layout              = _activePipelineLayout;
-        gp.renderPass          = renderPass;
-        gp.subpass             = 0;  // first subpass
+    // Create DescriptorSetLayout for UBOs (set=0)
+    VkDescriptorSetLayoutCreateInfo dsl0{};
+    dsl0.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+    dsl0.bindingCount = static_cast<uint32_t>(ubBindings.size());
+    dsl0.pBindings    = ubBindings.data();
+    vkCreateDescriptorSetLayout(_device, &dsl0, nullptr, &_activeDescriptorSetLayouts[0]);
 
-        VkPipeline pipeline = VK_NULL_HANDLE;
-        VkResult res        = vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &gp, nullptr, &pipeline);
-        if (res == VK_SUCCESS)
-        {
-            _activePipeline = pipeline;
-            _pipelineCache.emplace(pipelineKey, pipeline);
-        }
-        else
-        {
-            AXLOGE("vkCreateGraphicsPipelines fail: {}", (int)res);
-        }
+    // Create DescriptorSetLayout for samplers (set=1)
+    VkDescriptorSetLayoutCreateInfo dsl1{};
+    dsl1.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+    dsl1.bindingCount = static_cast<uint32_t>(samplerBindings.size());
+    dsl1.pBindings    = samplerBindings.data();
+    vkCreateDescriptorSetLayout(_device, &dsl1, nullptr, &_activeDescriptorSetLayouts[1]);
+
+    _descriptorSetLayoutCache.emplace(progKey, _activeDescriptorSetLayouts);
+}
+
+void RenderPipelineImpl::updatePipelineLayout(ProgramImpl* program)
+{
+    uintptr_t progKey = (uintptr_t)program;
+    auto it           = _pipelineLayoutCache.find(progKey);
+    if (it != _pipelineLayoutCache.end())
+    {
+        _activePipelineLayout = it->second;
+        return;
+    }
+
+    VkPipelineLayout pipelineLayout{VK_NULL_HANDLE};
+    VkPipelineLayoutCreateInfo plc{};
+    plc.sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    plc.setLayoutCount         = static_cast<uint32_t>(_activeDescriptorSetLayouts.size());
+    plc.pSetLayouts            = _activeDescriptorSetLayouts.data();
+    plc.pushConstantRangeCount = 0;
+    plc.pPushConstantRanges    = nullptr;
+
+    VkResult result = vkCreatePipelineLayout(_device, &plc, nullptr, &pipelineLayout);
+    if (result == VK_SUCCESS)
+    {
+        _pipelineLayoutCache.emplace(progKey, pipelineLayout);
+        _activePipelineLayout = pipelineLayout;
+    }
+    else
+    {
+        AXLOGE("vkCreatePipelineLayout fail: {}", (int)result);
     }
 }
+
+void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, VkRenderPass renderPass, ProgramImpl* program)
+{
+    const uintptr_t pipelineKey = makePipelineKey(desc.blendDesc, program, desc.vertexLayout, renderPass);
+    auto it                     = _pipelineCache.find(pipelineKey);
+    if (it != _pipelineCache.end())
+    {
+        _activePipeline = it->second;
+        return;
+    }
+
+    // Shader stages
+    axstd::pod_vector<VkPipelineShaderStageCreateInfo> stages;
+    if (auto vs = program->getVSModule())
+    {
+        VkPipelineShaderStageCreateInfo& s = stages.emplace_back();
+        s.sType                            = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+        s.stage                            = VK_SHADER_STAGE_VERTEX_BIT;
+        s.module                           = vs;
+        s.pName                            = "main";
+    }
+    if (auto fs = program->getFSModule())
+    {
+        VkPipelineShaderStageCreateInfo& s = stages.emplace_back();
+        s.sType                            = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+        s.stage                            = VK_SHADER_STAGE_FRAGMENT_BIT;
+        s.module                           = fs;
+        s.pName                            = "main";
+    }
+
+    auto& viState = static_cast<VertexLayoutImpl*>(desc.vertexLayout)->getVkCreateInfo();
+    VkGraphicsPipelineCreateInfo gp{};
+    gp.sType               = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    gp.stageCount          = static_cast<uint32_t>(stages.size());
+    gp.pStages             = stages.data();
+    gp.pVertexInputState   = &viState;
+    gp.pInputAssemblyState = &_iaState;
+    gp.pViewportState      = &_vpState;
+    gp.pRasterizationState = &_rasterState;
+    gp.pMultisampleState   = &_msState;
+    gp.pDepthStencilState  = &_dsState->getVkDepthStencilState();
+    gp.pColorBlendState    = &_activeBlendState;
+    gp.pDynamicState       = &_dynState;
+    gp.layout              = _activePipelineLayout;
+    gp.renderPass          = renderPass;
+    gp.subpass             = 0;
+
+    VkPipeline pipeline = VK_NULL_HANDLE;
+    VkResult res        = vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &gp, nullptr, &pipeline);
+    if (res == VK_SUCCESS)
+    {
+        _activePipeline = pipeline;
+        _pipelineCache.emplace(pipelineKey, pipeline);
+    }
+    else
+    {
+        AXLOGE("vkCreateGraphicsPipelines fail: {}", (int)res);
+    }
+}
+
+/**
+ * @brief Updates input assembly state for dynamic primitive type handling
+ * Axmol engine uses dynamic primitive types which provides flexibility for most rendering scenarios.
+ * Current limitation: LINE_LOOP primitive type is not supported in the dynamic implementation.
+ * This implementation covers the majority of use cases efficiently. If LINE_LOOP support is required
+ * in the future:
+ * Uncomment and implement this function
+ * Call it at appropriate locations in the rendering pipeline
+ * Include primitive type in pipeline key generation to ensure proper state management
+ * The dynamic approach balances performance and flexibility while maintaining compatibility
+ * with modern graphics APIs.
+ */
+// void RenderPipelineImpl::updateInputAssemblyState(PrimitiveType primType)
+//{
+//     switch (primType)
+//     {
+//     case PrimitiveType::POINT:
+//         _iaState.topology               = VK_PRIMITIVE_TOPOLOGY_POINT_LIST;
+//         _iaState.primitiveRestartEnable = VK_FALSE;
+//         break;
+//     case PrimitiveType::LINE:
+//         _iaState.topology               = VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
+//         _iaState.primitiveRestartEnable = VK_FALSE;
+//         break;
+//     case PrimitiveType::LINE_LOOP:
+//         _iaState.topology               = VK_PRIMITIVE_TOPOLOGY_LINE_STRIP;
+//         _iaState.primitiveRestartEnable = VK_TRUE;  // simulate restart index loop
+//         break;
+//     case PrimitiveType::LINE_STRIP:
+//         _iaState.topology               = VK_PRIMITIVE_TOPOLOGY_LINE_STRIP;
+//         _iaState.primitiveRestartEnable = VK_FALSE;
+//         break;
+//     case PrimitiveType::TRIANGLE:
+//         _iaState.topology               = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+//         _iaState.primitiveRestartEnable = VK_FALSE;
+//         break;
+//     case PrimitiveType::TRIANGLE_STRIP:
+//         _iaState.topology               = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP;
+//         _iaState.primitiveRestartEnable = VK_FALSE;
+//         break;
+//     default:
+//         _iaState.topology               = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+//         _iaState.primitiveRestartEnable = VK_FALSE;
+//         break;
+//     }
+// }
 
 }  // namespace ax::rhi::vk

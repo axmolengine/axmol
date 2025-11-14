@@ -42,8 +42,23 @@
 namespace ax::rhi::vk
 {
 
-// Helper: map PrimitiveType to VkPrimitiveTopology
-static VkPrimitiveTopology toVkPrimitiveTopology(PrimitiveType type, bool /*wireframe*/)
+/*
+ * Helper: map PrimitiveType to VkPrimitiveTopology
+ *
+ * In the current Axmol Vulkan backend, LINE_LOOP is not supported in order
+ * to reduce the number of PSOs (Pipeline State Objects). Vulkan does not
+ * provide a native LINE_LOOP topology; it must be emulated using LINE_STRIP
+ * with primitiveRestartEnable, which requires additional pipeline variants.
+ *
+ * If future contributors need LINE_LOOP support, they can:
+ *   1. Extend this mapping to include LINE_LOOP → LINE_STRIP,
+ *   2. Create additional pipelines with primitiveRestart enabled,
+ *   3. Or contact the Axmol maintainers to discuss adding official support.
+ *
+ * By default, Axmol relies on TRIANGLE_LIST and other common topologies,
+ * which cover the majority of rendering scenarios.
+ */
+static VkPrimitiveTopology toVkPrimitiveTopology(PrimitiveType type)
 {
     switch (type)
     {
@@ -52,6 +67,7 @@ static VkPrimitiveTopology toVkPrimitiveTopology(PrimitiveType type, bool /*wire
     case PrimitiveType::LINE:
         return VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
     case PrimitiveType::LINE_LOOP:
+        AXLOGE("axmol-vulkan RHI doesn't support LINE_LOOP");
         return VK_PRIMITIVE_TOPOLOGY_LINE_STRIP;  // Vulkan has no LINE_LOOP
     case PrimitiveType::LINE_STRIP:
         return VK_PRIMITIVE_TOPOLOGY_LINE_STRIP;
@@ -323,7 +339,7 @@ void RenderContextImpl::createDescriptorPool()
 bool RenderContextImpl::resizeSwapchain(uint32_t width, uint32_t height)
 {
     if (width == _screenWidth && height == _screenHeight)
-       return true;
+        return true;
 
     _screenWidth    = width;
     _screenHeight   = height;
@@ -665,7 +681,7 @@ void RenderContextImpl::updatePipelineState(const RenderTarget* rt, const Pipeli
 {
     RenderContext::updatePipelineState(rt, desc);
     AXASSERT(_renderPipeline, "RenderPipelineImpl not set");
-    _renderPipeline->prepareUpdate(_depthStencilState, static_cast<VertexLayoutImpl*>(_vertexLayout));
+    _renderPipeline->prepareUpdate(_depthStencilState);
     _renderPipeline->update(rt, desc);
 }
 
@@ -819,7 +835,7 @@ void RenderContextImpl::prepareDrawing()
 
         write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         write.dstSet          = descriptorSets[0];
-        write.dstBinding      = RenderPipelineImpl::VS_UBO_BINDING_INDEX;
+        write.dstBinding      = VS_UBO_BINDING_INDEX;
         write.descriptorType  = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         write.descriptorCount = 1;
         write.pBufferInfo     = &bufferInfo;
@@ -841,7 +857,7 @@ void RenderContextImpl::prepareDrawing()
 
         write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         write.dstSet          = descriptorSets[0];
-        write.dstBinding      = RenderPipelineImpl::FS_UBO_BINDING_INDEX;
+        write.dstBinding      = FS_UBO_BINDING_INDEX;
         write.descriptorType  = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         write.descriptorCount = 1;
         write.pBufferInfo     = &bufferInfo;
@@ -908,11 +924,13 @@ void RenderContextImpl::prepareDrawing()
     // --------- end dynamic states ----------
 }
 
-void RenderContextImpl::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe)
+void RenderContextImpl::drawArrays(PrimitiveType primitiveType,
+                                   std::size_t start,
+                                   std::size_t count,
+                                   bool /*wireframe*/)
 {
     prepareDrawing();
-    // Topology is part of pipeline in Vulkan; if you need dynamic topology, rebuild pipeline or use dynamic state
-    // extension.
+    vkCmdSetPrimitiveTopology(_currentCmdBuffer, toVkPrimitiveTopology(primitiveType));
     vkCmdDraw(_currentCmdBuffer, static_cast<uint32_t>(count), 1, static_cast<uint32_t>(start), 0);
 }
 
@@ -920,9 +938,10 @@ void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
                                             std::size_t start,
                                             std::size_t count,
                                             int instanceCount,
-                                            bool wireframe)
+                                            bool /*wireframe*/)
 {
     prepareDrawing();
+    vkCmdSetPrimitiveTopology(_currentCmdBuffer, toVkPrimitiveTopology(primitiveType));
     vkCmdDraw(_currentCmdBuffer, static_cast<uint32_t>(count), static_cast<uint32_t>(instanceCount),
               static_cast<uint32_t>(start), 0);
 }
@@ -931,15 +950,15 @@ void RenderContextImpl::drawElements(PrimitiveType primitiveType,
                                      IndexFormat indexType,
                                      std::size_t count,
                                      std::size_t offset,
-                                     bool wireframe)
+                                     bool /*wireframe*/)
 {
     prepareDrawing();
 
-    // Bind index buffer with appropriate type
     AXASSERT(_indexBuffer, "Index buffer must be set for drawElements");
     VkIndexType vkIndexType = toVkIndexType(indexType);
     vkCmdBindIndexBuffer(_currentCmdBuffer, _indexBuffer->internalHandle(), 0, vkIndexType);
 
+    vkCmdSetPrimitiveTopology(_currentCmdBuffer, toVkPrimitiveTopology(primitiveType));
     vkCmdDrawIndexed(_currentCmdBuffer, static_cast<uint32_t>(count), 1,
                      static_cast<uint32_t>(offset / (indexType == IndexFormat::U_SHORT ? 2u : 4u)), 0, 0);
 }
@@ -949,7 +968,7 @@ void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
                                               std::size_t count,
                                               std::size_t offset,
                                               int instanceCount,
-                                              bool wireframe)
+                                              bool /*wireframe*/)
 {
     prepareDrawing();
 
@@ -957,6 +976,7 @@ void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
     VkIndexType vkIndexType = toVkIndexType(indexType);
     vkCmdBindIndexBuffer(_currentCmdBuffer, _indexBuffer->internalHandle(), 0, vkIndexType);
 
+    vkCmdSetPrimitiveTopology(_currentCmdBuffer, toVkPrimitiveTopology(primitiveType));
     vkCmdDrawIndexed(_currentCmdBuffer, static_cast<uint32_t>(count), static_cast<uint32_t>(instanceCount),
                      static_cast<uint32_t>(offset / (indexType == IndexFormat::U_SHORT ? 2u : 4u)), 0, 0);
 }

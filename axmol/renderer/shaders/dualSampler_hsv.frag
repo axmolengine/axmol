@@ -8,7 +8,7 @@ precision highp sampler2DArray;
 layout(location = TEXCOORD0) in vec2 v_texCoord;
 layout(location = COLOR0) in vec4 v_color;
 
-layout(binding = 0) uniform sampler2DArray u_tex0;
+layout(set = 1, binding = 0) uniform sampler2DArray u_tex0;
 
 layout(std140, set = 0, binding = 1) uniform fs_ub {
     vec3 u_hsv;

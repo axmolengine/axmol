@@ -31,6 +31,7 @@ namespace ax::rhi::vk
 {
 class DepthStencilStateImpl;
 class VertexLayoutImpl;
+class ProgramImpl;
 
 /**
  * @brief Vulkan-based RenderPipeline implementation
@@ -43,60 +44,69 @@ class VertexLayoutImpl;
 class RenderPipelineImpl : public RenderPipeline
 {
 public:
-    // match with axslcc-1.5.1
     static constexpr int MAX_DESCRIPTOR_SET_COUNT = 2;
     static constexpr int DESCRIPTOR_SET_UBO       = 0;
     static constexpr int DESCRIPTOR_SET_SAMPLER   = 1;
-    static constexpr int VS_UBO_BINDING_INDEX     = 0;
-    static constexpr int FS_UBO_BINDING_INDEX     = 1;
 
     using VkDescriptorSetLayoutArray = std::array<VkDescriptorSetLayout, MAX_DESCRIPTOR_SET_COUNT>;
 
-    explicit RenderPipelineImpl(VkDevice device) : _device(device) {}
+    explicit RenderPipelineImpl(VkDevice device);
     ~RenderPipelineImpl();
 
-    void prepareUpdate(DepthStencilStateImpl* ds, VertexLayoutImpl* vl)
-    {
-        _dsState      = ds;
-        _vertexLayout = vl;
-    }
+    void prepareUpdate(DepthStencilStateImpl* ds) { _dsState = ds; }
 
-    /**
-     * @brief Update pipeline state based on the given description.
-     *
-     * This function checks caches for existing states and pipelines.
-     * If not found, it creates new Vulkan objects and stores them.
-     */
     void update(const RenderTarget*, const PipelineDesc& desc) override;
 
     VkPipeline getVkPipeline() const { return _activePipeline; }
-
     VkPipelineLayout getVkPipelineLayout() const { return _activePipelineLayout; }
-
     VkDescriptorSetLayout getDescriptorSetLayout(int index) { return _activeDescriptorSetLayouts[index]; }
+
+    /**
+     * @brief Updates input assembly state for dynamic primitive type handling
+     * Axmol engine uses dynamic primitive types which provides flexibility for most rendering scenarios.
+     * Current limitation: LINE_LOOP primitive type is not supported in the dynamic implementation.
+     * This implementation covers the majority of use cases efficiently. If LINE_LOOP support is required
+     * in the future:
+     * Uncomment and implement this function
+     * Call it at appropriate locations in the rendering pipeline
+     * Include primitive type in pipeline key generation to ensure proper state management
+     * The dynamic approach balances performance and flexibility while maintaining compatibility
+     * with modern graphics APIs.
+     */
+    // void updateInputAssemblyState(PrimitiveType primitiveType);
+
+private:
+    void initializePipelineDefaults();
+
+    void updateBlendState(const BlendDesc& blendDesc);
+    void updateDescriptorSetLayouts(ProgramImpl* program);
+    void updatePipelineLayout(ProgramImpl* program);
+    void updateGraphicsPipeline(const PipelineDesc& desc, VkRenderPass renderPass, ProgramImpl* program);
 
 private:
     VkDevice _device{VK_NULL_HANDLE};
 
-    // Active blend attachment and state used in the current pipeline
-    DepthStencilStateImpl* _dsState{nullptr};
-    VertexLayoutImpl* _vertexLayout{nullptr};
+    const DepthStencilStateImpl* _dsState{nullptr};
+
+    VkPipelineInputAssemblyStateCreateInfo _iaState{};
+
+#pragma region pipeline constant states
+    VkPipelineViewportStateCreateInfo _vpState{};
+    VkPipelineRasterizationStateCreateInfo _rasterState{};
+    VkPipelineMultisampleStateCreateInfo _msState{};
+    VkPipelineDynamicStateCreateInfo _dynState{};
+#pragma endregion
+
     VkPipelineColorBlendAttachmentState _activeAttachment{};
     VkPipelineColorBlendStateCreateInfo _activeBlendState{};
 
-    VkPipeline _activePipeline{nullptr};
     VkPipelineLayout _activePipelineLayout{nullptr};
     VkDescriptorSetLayoutArray _activeDescriptorSetLayouts{};
 
-    // === Cache layers ===
+    VkPipeline _activePipeline{nullptr};
 
-    /// Pipeline layout cache: ProgramState hash -> VkPipelineLayout
     axstd::hash_map<uintptr_t, VkPipelineLayout> _pipelineLayoutCache;
-
-    /// Descriptor set layout cache: ProgramState hash -> VkDescriptorSetLayout
     axstd::hash_map<uintptr_t, VkDescriptorSetLayoutArray> _descriptorSetLayoutCache;
-
-    /// Final pipeline cache: combined PipelineDesc hash -> VkPipeline
-    axstd::hash_map<uintptr_t, VkPipeline> _pipelineCache;
+    axstd::hash_map<uintptr_t, VkPipeline> _pipelineCache; // PSO cache
 };
 }  // namespace ax::rhi::vk

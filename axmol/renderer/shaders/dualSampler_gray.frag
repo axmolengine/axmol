@@ -6,7 +6,7 @@ precision highp sampler2DArray;
 layout(location = COLOR0) in vec4 v_color;
 layout(location = TEXCOORD0) in vec2 v_texCoord;
 
-layout(binding = 0) uniform sampler2DArray u_tex0;
+layout(set = 1, binding = 0) uniform sampler2DArray u_tex0;
 
 layout(location = SV_Target0) out vec4 FragColor;
 

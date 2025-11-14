@@ -48,6 +48,9 @@ public:
     static constexpr int FVK_MAX_COMMAND_BUFFERS     = 3 * 15;
     static constexpr int IMAGE_READY_SEMAPHORE_COUNT = FVK_MAX_COMMAND_BUFFERS;
 
+    static constexpr int VS_UBO_BINDING_INDEX = 0;
+    static constexpr int FS_UBO_BINDING_INDEX = 1;
+
     static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
 
     RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface);

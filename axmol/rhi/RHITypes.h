@@ -400,8 +400,6 @@ struct BlendDesc
 {
     ColorWriteMask writeMask = ColorWriteMask::ALL;
 
-    bool blendEnabled = false;
-
     BlendOp rgbBlendOp   = BlendOp::ADD;
     BlendOp alphaBlendOp = BlendOp::ADD;
 
@@ -409,6 +407,9 @@ struct BlendDesc
     BlendFactor destinationRGBBlendFactor   = BlendFactor::ZERO;
     BlendFactor sourceAlphaBlendFactor      = BlendFactor::ONE;
     BlendFactor destinationAlphaBlendFactor = BlendFactor::ZERO;
+
+    bool blendEnabled = false;
+    char padding[3]   = {};
 };
 
 struct UniformInfo

@@ -282,7 +282,7 @@ void DriverImpl::initializeFactory()
     appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
     appInfo.pEngineName        = "Axmol3";
     appInfo.engineVersion      = VK_MAKE_VERSION(1, 0, 0);
-    appInfo.apiVersion         = VK_API_VERSION_1_2;
+    appInfo.apiVersion         = VK_API_VERSION_1_3; // axmol requires vulkan-1.3
 
     // Collect required extensions
     axstd::pod_vector<const char*> extensions;
