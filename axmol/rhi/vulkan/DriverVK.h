@@ -57,6 +57,14 @@ struct DisposableResource
 };
 
 using CreateSurfaceFunc = std::function<VkResult(VkInstance, void* window, VkSurfaceKHR* surface)>;
+struct SurfaceCreateInfo
+{
+    void* window{};
+    int width{0};
+    int height{0};
+    CreateSurfaceFunc createFunc{};
+};
+
 class DriverImpl : public DriverBase
 {
     friend class RenderContextImpl;
@@ -72,8 +80,10 @@ public:
 
     void init();
 
-    bool setupSurface(void* window, CreateSurfaceFunc);
+    bool setupSurface(const SurfaceCreateInfo& info);
     VkSurfaceKHR getSurface() const { return _surface; }
+
+    const VkExtent2D& getInitialSurfaceExtent() const { return _surfaceInitalExtent; }
 
     RenderContext* createRenderContext(void* surfaceContext) override;
     Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial) override;
@@ -133,6 +143,7 @@ private:
     VkPhysicalDevice _physical{VK_NULL_HANDLE};
     VkDevice _device{VK_NULL_HANDLE};
     VkSurfaceKHR _surface{VK_NULL_HANDLE};
+    VkExtent2D _surfaceInitalExtent{};
 
     VkQueue _graphicsQueue{VK_NULL_HANDLE};
     VkQueue _presentQueue{VK_NULL_HANDLE};

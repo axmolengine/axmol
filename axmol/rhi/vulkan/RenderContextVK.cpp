@@ -97,6 +97,10 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface)
     VkResult vr               = vkCreateCommandPool(_device, &poolInfo, nullptr, &_commandPool);
     AXASSERT(vr == VK_SUCCESS, "vkCreateCommandPool failed");
 
+    auto& extent  = driver->getInitialSurfaceExtent();
+    _screenWidth  = extent.width;
+    _screenHeight = extent.height;
+
     createCommandBuffers();
     createDescriptorPool();
     rebuildSwapchain();
@@ -404,7 +408,9 @@ void RenderContextImpl::rebuildSwapchain()
         extent.height = _screenHeight;
     }
     if (extent.width == 0 || extent.height == 0)
-        return;
+    {
+         AXLOGE("axmol: Failed to create swapchain: extent width/height is 0");
+    }
 
     uint32_t imageCount = caps.minImageCount + 1;
     if (caps.maxImageCount > 0 && imageCount > caps.maxImageCount)
@@ -525,7 +531,7 @@ bool RenderContextImpl::beginFrame()
     if (result == VK_SUBOPTIMAL_KHR && !_suboptimal)
     {
         _suboptimal = true;
-        AXLOGW("Vulkan Driver: Suboptimal swap chain.");
+        AXLOGW("axmol: Suboptimal swap chain.");
     }
     AXASSERT(result == VK_SUCCESS || result == VK_SUBOPTIMAL_KHR || result == VK_TIMEOUT,
              "vkAcquireNextImageKHR failed");
@@ -630,12 +636,12 @@ void RenderContextImpl::endFrame()
     case VK_SUBOPTIMAL_KHR:
         if (!_suboptimal)
         {
-            AXLOGW("Vulkan Driver: Suboptimal swap chain.");
+            AXLOGW("axmol: Suboptimal swap chain.");
             _suboptimal = true;
         }
         break;
     case VK_ERROR_OUT_OF_DATE_KHR:
-        AXLOGD("Vulkan Driver: swapchain out of date");
+        AXLOGD("axmol: Swapchain out of date");
         break;
     default:
         AXASSERT(vr && false, "vkQueuePresentKHR failed");
@@ -854,12 +860,12 @@ void RenderContextImpl::prepareDrawing()
             imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
             VkWriteDescriptorSet& write = writes.emplace_back();
-            write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            write.dstSet          = descriptorSets[1];
-            write.dstBinding      = bindingIndex + k;  // preserve shader binding order
-            write.descriptorType  = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-            write.descriptorCount = 1;
-            write.pImageInfo      = &imageInfo;
+            write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            write.dstSet                = descriptorSets[1];
+            write.dstBinding            = bindingIndex + k;  // preserve shader binding order
+            write.descriptorType        = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            write.descriptorCount       = 1;
+            write.pImageInfo            = &imageInfo;
         }
     }
 

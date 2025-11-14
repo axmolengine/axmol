@@ -637,17 +637,6 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     // Init driver after load GL
     axdrv;
     glfwSetWindowUserPointer(_mainWindow, rhi::gl::__state);
-#elif AX_RENDER_API == AX_RENDER_API_VK
-    auto driver = static_cast<ax::rhi::vk::DriverImpl*>(axdrv);
-    bool ok     = driver->setupSurface(_mainWindow, [](VkInstance inst, void* window, VkSurfaceKHR* surface) {
-        return glfwCreateWindowSurface(inst, static_cast<GLFWwindow*>(window), nullptr, surface);
-    });
-    if (!ok)
-    {
-        AXLOGE("Failed to create Vulkan window surface.");
-        return false;
-    }
-    _vkSurface = driver->getSurface();
 #endif
 
     /*
@@ -664,6 +653,22 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     int fbWidth, fbHeight;
     glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
     updateRenderSurface(fbWidth, fbHeight, SurfaceUpdateFlag::RenderSizeChanged | SurfaceUpdateFlag::SilentUpdate);
+
+#if AX_RENDER_API == AX_RENDER_API_VK
+    auto _createSurface = [](VkInstance inst, void* window, VkSurfaceKHR* surface) {
+        return glfwCreateWindowSurface(inst, static_cast<GLFWwindow*>(window), nullptr, surface);
+    };
+    auto driver = static_cast<ax::rhi::vk::DriverImpl*>(axdrv);
+    const rhi::vk::SurfaceCreateInfo createInfo{
+        .window = _mainWindow, .width = fbWidth, .height = fbHeight, .createFunc = _createSurface};
+    bool ok = driver->setupSurface(createInfo);
+    if (!ok)
+    {
+        AXLOGE("Failed to create Vulkan window surface.");
+        return false;
+    }
+    _vkSurface = driver->getSurface();
+#endif
 
     int w, h;
     glfwGetWindowSize(_mainWindow, &w, &h);

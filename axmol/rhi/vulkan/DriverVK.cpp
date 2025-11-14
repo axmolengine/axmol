@@ -293,17 +293,15 @@ void DriverImpl::initializeFactory()
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
     extensions.push_back("VK_KHR_android_surface");
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
-    glfwInit();
-    auto platform = glfwGetPlatform();
-    if (platform == GLFW_PLATFORM_WAYLAND)
+    const char* waylandDisplay = getenv("WAYLAND_DISPLAY");
+    const char* x11Display     = getenv("DISPLAY");
+    if (waylandDisplay)
         extensions.push_back("VK_KHR_wayland_surface");
-    else if (platform == GLFW_PLATFORM_X11)
+    else if (x11Display)
+        extensions.push_back("VK_KHR_xcb_surface");
+    else
     {
-        extensions.push_back("VK_KHR_xcb_surface");  // glfw preferred xcb
-        extensions.push_back("VK_KHR_xlib_surface");
-    }
-    else {
-        AXLOGE("Unsupported window platform: {}", (int)platform);
+        AXLOGE("Unsupported window platform: neither WAYLAND_DISPLAY nor DISPLAY found");
         assert(false);
     }
 #endif
@@ -403,11 +401,14 @@ void DriverImpl::initializeDevice()
              "vkCreateCommandPool failed for transient pool");
 }
 
-bool DriverImpl::setupSurface(void* window, CreateSurfaceFunc func)
+bool DriverImpl::setupSurface(const SurfaceCreateInfo& info)
 {
-    auto result = func(_factory, window, &_surface);
+    auto result = info.createFunc(_factory, info.window, &_surface);
     if (result != VK_SUCCESS)
         return false;
+
+    _surfaceInitalExtent.width = info.width;
+    _surfaceInitalExtent.height = info.height;
 
     uint32_t queueCount = 0;
     vkGetPhysicalDeviceQueueFamilyProperties(_physical, &queueCount, nullptr);
