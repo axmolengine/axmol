@@ -38,11 +38,7 @@ public:
         DepthViewIndex = MAX_COLOR_ATTCHMENT,
     };
 
-    struct Attachment
-    {
-        TextureHandle tex{};
-        TextureDesc desc{};
-    };
+    using Attachment = TextureImpl*;
 
     RenderTargetImpl(VkDevice device, bool defaultRenderTarget);
     ~RenderTargetImpl();
@@ -51,7 +47,10 @@ public:
     void invalidate();
 
     // Begin a render pass using this target
-    void beginRenderPass(VkCommandBuffer cmd, const RenderPassDesc& desc, uint32_t width, uint32_t height) const;
+    void beginRenderPass(VkCommandBuffer cmd, const RenderPassDesc& desc, uint32_t width, uint32_t height);
+
+    void endRenderPass(VkCommandBuffer cmd);
+
     Attachment getColorAttachment(int index) const;
     Attachment getDepthStencilAttachment() const;
 
@@ -60,25 +59,29 @@ public:
     VkRenderPass getVkRenderPass() const { return _renderPass; }
 
 private:
-    VkFramebuffer ensureFramebuffer(VkRenderPass rp) const;
-    VkRenderPass ensureRenderPass(const RenderPassDesc& desc) const;
+    VkFramebuffer ensureFramebuffer(VkCommandBuffer cmd, VkRenderPass rp);
+    VkRenderPass ensureRenderPass(const RenderPassDesc& desc);
+
+    void prepareAttachmentsForRendering(VkCommandBuffer cmd);
+    void prepareAttachmentsForSampling(VkCommandBuffer cmd);
 
     VkDevice _device{VK_NULL_HANDLE};
 
     // Current attachment views for building renderpass/framebuffer
-    mutable std::array<VkImageView, MAX_COLOR_ATTCHMENT + 1> _attachmentViews{};
-    mutable uint64_t _attachmentViewsHash{0};
+    std::array<VkImageView, MAX_COLOR_ATTCHMENT + 1> _attachmentViews{};
+    std::array<TextureImpl*, MAX_COLOR_ATTCHMENT + 1> _attachmentTexPtrs;
+    uint64_t _attachmentViewsHash{0};
 
-    mutable axstd::pod_vector<VkClearValue> _clearValues;
+    axstd::pod_vector<VkClearValue> _clearValues;
 
-    mutable VkRenderPass _renderPass{VK_NULL_HANDLE};
-    mutable VkFramebuffer _framebuffer{VK_NULL_HANDLE};
+    VkRenderPass _renderPass{VK_NULL_HANDLE};
+    VkFramebuffer _framebuffer{VK_NULL_HANDLE};
 
     // Caches keyed by (desc hash, attachment views hash)
-    mutable axstd::hash_map<uint64_t, VkRenderPass> _renderPassCache;
-    mutable axstd::hash_map<uint64_t, VkFramebuffer> _framebufferCache;
+    axstd::hash_map<uintptr_t, VkRenderPass> _renderPassCache;
+    axstd::hash_map<uintptr_t, VkFramebuffer> _framebufferCache;
 
-    mutable bool _attachmentsDirty{true};
+    bool _attachmentsDirty{true};
 };
 
 }  // namespace ax::rhi::vk

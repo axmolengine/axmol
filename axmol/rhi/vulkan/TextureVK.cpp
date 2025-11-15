@@ -56,15 +56,14 @@ static inline VkFormat getVkFormat(PixelFormat pf)
     return info ? info->format : VK_FORMAT_UNDEFINED;
 }
 
-// Transition an image subresource range between layouts
+// Transition an image subresource range between layouts (auto src/dst inference)
 static void transitionImageLayout(VkCommandBuffer cmd,
                                   VkImage image,
                                   VkImageLayout oldLayout,
                                   VkImageLayout newLayout,
                                   const VkImageSubresourceRange& range)
 {
-    VkImageMemoryBarrier barrier{};
-    barrier.sType               = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    VkImageMemoryBarrier barrier{VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER};
     barrier.oldLayout           = oldLayout;
     barrier.newLayout           = newLayout;
     barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
@@ -93,8 +92,17 @@ static void transitionImageLayout(VkCommandBuffer cmd,
         barrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
         srcStage              = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
         break;
+    case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
+        barrier.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        srcStage              = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
+        barrier.srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+        srcStage              = VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+        break;
     default:
-        srcStage = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+        barrier.srcAccessMask = 0;
+        srcStage              = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
         break;
     }
 
@@ -112,8 +120,17 @@ static void transitionImageLayout(VkCommandBuffer cmd,
         barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
         dstStage              = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
         break;
+    case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
+        barrier.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        dstStage              = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
+        barrier.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+        dstStage              = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+        break;
     default:
-        dstStage = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+        barrier.dstAccessMask = 0;
+        dstStage              = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
         break;
     }
 
@@ -163,6 +180,31 @@ TextureImpl::~TextureImpl()
         _sampler = VK_NULL_HANDLE;  // SamplerCache handles sampler destruction
         _nativeTexture.destroy(_driver);
     }
+}
+
+void TextureImpl::transitionLayout(VkCommandBuffer cmd, VkImageLayout newLayout)
+{
+    ensureNativeTexture();
+
+    const VkImageLayout oldLayout = _layoutTracker.getLayout(0, 0);
+
+    VkImageSubresourceRange range{};
+    range.aspectMask     = (_desc.pixelFormat == PixelFormat::D24S8)
+                               ? (VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT)
+                               : VK_IMAGE_ASPECT_COLOR_BIT;
+    range.baseMipLevel   = 0;
+    range.levelCount     = _desc.mipLevels ? _desc.mipLevels : 1;
+    range.baseArrayLayer = 0;
+    range.layerCount     = _desc.arraySize ? _desc.arraySize : 1;
+
+    transitionImageLayout(cmd, _nativeTexture.image, oldLayout, newLayout, range);
+
+    _layoutTracker.setLayout(0, 0, newLayout);
+}
+
+VkImageLayout TextureImpl::getCurrentLayout() const
+{
+    return _layoutTracker.getLayout(0, 0);
 }
 
 // ------------------------------------------------------------
@@ -250,7 +292,7 @@ void TextureImpl::updateSubData(int xoffset,
     vkUnmapMemory(device, stagingMemory);
 
     // Record transfer commands
-    VkCommandBuffer cmd = _driver->beginIsolateCommands();
+    auto submission = _driver->startIsolateSubmission();
 
     // Transition destination subresource to TRANSFER_DST
     VkImageSubresourceRange range{};
@@ -264,7 +306,7 @@ void TextureImpl::updateSubData(int xoffset,
 
     const auto oldLayout = _layoutTracker.getLayout(level, layerIndex);
 
-    transitionImageLayout(cmd, _nativeTexture.image, oldLayout, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, range);
+    transitionImageLayout(submission, _nativeTexture.image, oldLayout, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, range);
 
     // Copy staging to image
     VkBufferImageCopy region{};
@@ -280,18 +322,19 @@ void TextureImpl::updateSubData(int xoffset,
     region.imageOffset                     = {xoffset, yoffset, 0};
     region.imageExtent                     = {static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1};
 
-    vkCmdCopyBufferToImage(cmd, stagingBuffer, _nativeTexture.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
+    vkCmdCopyBufferToImage(submission, stagingBuffer, _nativeTexture.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1,
+                           &region);
 
     // Transition to SHADER_READ_ONLY for sampling
-    transitionImageLayout(cmd, _nativeTexture.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+    transitionImageLayout(submission, _nativeTexture.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                           VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, range);
 
     _layoutTracker.setLayout(level, layerIndex, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
     if (shouldGenMipmaps(_desc.textureType == TextureType::TEXTURE_2D ? level : 0))
-        generateMipmaps(cmd);
+        generateMipmaps(submission);
 
-    _driver->endIsolateCommands(cmd);
+    _driver->finishIsolateSubmission(submission);
 
     vkDestroyBuffer(device, stagingBuffer, nullptr);
     vkFreeMemory(device, stagingMemory, nullptr);
@@ -302,8 +345,8 @@ void TextureImpl::updateSubData(int xoffset,
 // ------------------------------------------------------------
 void TextureImpl::generateMipmaps(VkCommandBuffer cmd)
 {
-    if (_desc.pixelFormat == PixelFormat::D24S8)
-        return;  // not for depth-stencil
+    if (TextureUsage::RENDER_TARGET == _desc.textureUsage)
+        return;  // not for render target
 
     const uint32_t mipLevels =
         (_desc.mipLevels != 0) ? _desc.mipLevels : ax::rhi::RHIUtils::computeMipLevels(_desc.width, _desc.height);
@@ -371,6 +414,8 @@ void TextureImpl::generateMipmaps(VkCommandBuffer cmd)
         // Update dimensions for next mip level
         mipWidth  = std::max(1, mipWidth / 2);
         mipHeight = std::max(1, mipHeight / 2);
+
+        _layoutTracker.setLayout(i, 0, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     }
 
     _overrideMipLevels = mipLevels;
@@ -464,7 +509,7 @@ void TextureImpl::updateCompressedSubData(int xoffset,
 
     // Record commands: transition destination subresource to TRANSFER_DST_OPTIMAL, copy, then to
     // SHADER_READ_ONLY_OPTIMAL.
-    VkCommandBuffer cmd = _driver->beginIsolateCommands();
+    auto cmd = _driver->startIsolateSubmission();
 
     VkImageSubresourceRange range{};
     range.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -475,8 +520,7 @@ void TextureImpl::updateCompressedSubData(int xoffset,
 
     const auto oldLayout = _layoutTracker.getLayout(level, layerIndex);
 
-    transitionImageLayout(cmd, _nativeTexture.image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                          range);
+    transitionImageLayout(cmd, _nativeTexture.image, oldLayout, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, range);
 
     // For compressed formats, bufferRowLength and bufferImageHeight are specified in texels (not bytes).
     // Setting them to 0 means tightly packed rows according to format rules.
@@ -508,7 +552,7 @@ void TextureImpl::updateCompressedSubData(int xoffset,
 
     _layoutTracker.setLayout(level, layerIndex, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-    _driver->endIsolateCommands(cmd);
+    _driver->finishIsolateSubmission(cmd);
 
     vkDestroyBuffer(device, stagingBuffer, nullptr);
     vkFreeMemory(device, stagingMemory, nullptr);

@@ -262,7 +262,7 @@ void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc)
 void RenderPipelineImpl::updateDescriptorSetLayouts(ProgramImpl* program)
 {
     uintptr_t progKey = (uintptr_t)program;
-    std::fill(_activeDescriptorSetLayouts.begin(), _activeDescriptorSetLayouts.end(), VK_NULL_HANDLE);
+    _activeDescriptorSetLayouts.fill(VK_NULL_HANDLE);
 
     auto it = _descriptorSetLayoutCache.find(progKey);
     if (it != _descriptorSetLayoutCache.end())

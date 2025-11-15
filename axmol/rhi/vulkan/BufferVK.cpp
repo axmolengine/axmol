@@ -195,13 +195,13 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
         vkUnmapMemory(device, stagingMem);
 
         // Record copy command
-        VkCommandBuffer cmd = _driver->beginIsolateCommands();
+        auto submission = _driver->startIsolateSubmission();
         VkBufferCopy copyRegion{};
         copyRegion.srcOffset = 0;
         copyRegion.dstOffset = offset;
         copyRegion.size      = size;
-        vkCmdCopyBuffer(cmd, stagingBuf, _buffer, 1, &copyRegion);
-        _driver->endIsolateCommands(cmd);
+        vkCmdCopyBuffer(submission.cmd, stagingBuf, _buffer, 1, &copyRegion);
+        _driver->finishIsolateSubmission(submission);
 
         // Destroy staging resources
         vkDestroyBuffer(device, stagingBuf, nullptr);

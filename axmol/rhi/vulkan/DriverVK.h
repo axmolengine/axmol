@@ -34,6 +34,7 @@ namespace ax::rhi::vk
 {
 
 class RenderContextImpl;
+class DriverImpl;
 
 struct DisposableResource
 {
@@ -54,6 +55,14 @@ struct DisposableResource
         VkBuffer buffer;
         VkDeviceMemory memory;
     };
+};
+
+struct IsolateSubmission
+{
+    VkCommandBuffer cmd{VK_NULL_HANDLE};
+    VkFence fence{VK_NULL_HANDLE};
+
+    operator VkCommandBuffer() { return cmd; }
 };
 
 using CreateSurfaceFunc = std::function<VkResult(VkInstance, void* window, VkSurfaceKHR* surface)>;
@@ -116,8 +125,27 @@ public:
     // Find suitable memory type index
     uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) const;
 
-    VkCommandBuffer beginIsolateCommands();
-    void endIsolateCommands(VkCommandBuffer cmd);
+    VkResult allocateCommandBuffers(VkCommandBuffer* cmds, uint32_t count);
+    void freeCommandBuffers(VkCommandBuffer* cmds, uint32_t count);
+
+    IsolateSubmission startIsolateSubmission()
+    {
+        auto submission = allocateIsolateSubmission();
+        beginRecordingIsolateSubmission(submission);
+        return submission;
+    }
+
+    void finishIsolateSubmission(IsolateSubmission& submission)
+    {
+        commitIsolateSubmission(submission);
+        freeIsolateSubmission(submission);
+    }
+
+    IsolateSubmission allocateIsolateSubmission();
+    void freeIsolateSubmission(IsolateSubmission& submission);
+
+    void beginRecordingIsolateSubmission(const IsolateSubmission& submission);
+    void commitIsolateSubmission(const IsolateSubmission& submission);
 
     void queueDisposal(VkImage image);
     void queueDisposal(VkImageView view);
@@ -125,7 +153,7 @@ public:
     void queueDisposal(VkDeviceMemory memory);
     void queueDisposal(VkSampler sampler);
 
-    void drainDisposalQueue();
+    void releaseDisposalResources();
 
 protected:
     ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
@@ -148,10 +176,9 @@ private:
     VkQueue _graphicsQueue{VK_NULL_HANDLE};
     VkQueue _presentQueue{VK_NULL_HANDLE};
 
-    // transient command pool for one-time commands
-    VkCommandPool _transientCommandPool{VK_NULL_HANDLE};
-    // protect transient pool allocation/free in multithreaded contexts
-    std::mutex _transientPoolMutex;
+    // command pool
+    VkCommandPool _commandPool{VK_NULL_HANDLE};
+    std::mutex _commandPoolMutex;
 
     std::deque<DisposableResource> _disposalQueue;
 

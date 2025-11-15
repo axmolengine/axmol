@@ -115,6 +115,12 @@ public:
     TextureImpl(DriverImpl*, VkImage existingImage, VkImageView existingImageView);
     ~TextureImpl();
 
+    // only operate level=0, layer=0
+    void transitionLayout(VkCommandBuffer cmd, VkImageLayout newLayout);
+
+    // Gets layout of level=0, layer=0
+    VkImageLayout getCurrentLayout() const;
+
     void updateData(const void* data, int width, int height, int level, int layerIndex = 0) override;
     void updateCompressedData(const void* data,
                               int width,

@@ -221,10 +221,10 @@ DriverImpl::~DriverImpl()
 {
     cleanPendingResources();
 
-    if (_transientCommandPool)
+    if (_commandPool)
     {
-        vkDestroyCommandPool(_device, _transientCommandPool, nullptr);
-        _transientCommandPool = VK_NULL_HANDLE;
+        vkDestroyCommandPool(_device, _commandPool, nullptr);
+        _commandPool = VK_NULL_HANDLE;
     }
 
     if (_surface)
@@ -424,8 +424,8 @@ void DriverImpl::initializeDevice()
     poolInfo.queueFamilyIndex = _graphicsQueueFamily;
     poolInfo.flags            = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT | VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
-    vr = vkCreateCommandPool(_device, &poolInfo, nullptr, &_transientCommandPool);
-    AXASSERT(vr == VK_SUCCESS && _transientCommandPool != VK_NULL_HANDLE,
+    vr = vkCreateCommandPool(_device, &poolInfo, nullptr, &_commandPool);
+    AXASSERT(vr == VK_SUCCESS && _commandPool != VK_NULL_HANDLE,
              "vkCreateCommandPool failed for transient pool");
 }
 
@@ -692,62 +692,87 @@ uint32_t DriverImpl::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags p
     return 0;
 }
 
-VkCommandBuffer DriverImpl::beginIsolateCommands()
-{
-    // allocate one primary command buffer from transient pool
-    std::lock_guard<std::mutex> lk(_transientPoolMutex);
+VkResult DriverImpl::allocateCommandBuffers(VkCommandBuffer* cmds, uint32_t count)
+{  // allocate one primary command buffer from transient pool
+    std::lock_guard<std::mutex> lk(_commandPoolMutex);
 
     VkCommandBufferAllocateInfo allocInfo{};
     allocInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    allocInfo.commandPool        = _transientCommandPool;
+    allocInfo.commandPool        = _commandPool;
     allocInfo.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    allocInfo.commandBufferCount = 1;
+    allocInfo.commandBufferCount = count;
 
-    VkCommandBuffer cmd = VK_NULL_HANDLE;
-    VkResult res        = vkAllocateCommandBuffers(_device, &allocInfo, &cmd);
-    AXASSERT(res == VK_SUCCESS && cmd != VK_NULL_HANDLE, "vkAllocateCommandBuffers failed");
+    VkResult res        = vkAllocateCommandBuffers(_device, &allocInfo, cmds);
+    AXASSERT(res == VK_SUCCESS && *cmds != VK_NULL_HANDLE, "vkAllocateCommandBuffers failed");
+    return res;
+}
 
+void DriverImpl::freeCommandBuffers(VkCommandBuffer* cmds, uint32_t count)
+{
+    std::lock_guard<std::mutex> lk(_commandPoolMutex);
+    vkFreeCommandBuffers(_device, _commandPool, count, cmds);
+}
+
+IsolateSubmission DriverImpl::allocateIsolateSubmission()
+{
+    VkCommandBuffer cmd{nullptr};
+    VkFence fence{nullptr};
+
+    allocateCommandBuffers(&cmd, 1);
+
+    constexpr VkFenceCreateInfo fenceInfo{.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
+                                          .flags = VK_FENCE_CREATE_SIGNALED_BIT};
+
+    auto res = vkCreateFence(_device, &fenceInfo, nullptr, &fence);
+    AXASSERT(res == VK_SUCCESS && cmd != VK_NULL_HANDLE, "vkCreateFence failed");
+
+    return IsolateSubmission{cmd, fence};
+}
+
+void DriverImpl::freeIsolateSubmission(IsolateSubmission& submission)
+{
+    freeCommandBuffers(&submission.cmd, 1);
+    if (submission.fence)
+        vkDestroyFence(_device, submission.fence, nullptr);
+
+    submission.cmd   = VK_NULL_HANDLE;
+    submission.fence = VK_NULL_HANDLE;
+}
+
+void DriverImpl::beginRecordingIsolateSubmission(const IsolateSubmission& submission)
+{
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
-    res = vkBeginCommandBuffer(cmd, &beginInfo);
-    AXASSERT(res == VK_SUCCESS, "vkBeginCommandBuffer failed");
+    if (submission.fence)
+        vkResetFences(_device, 1, &submission.fence);
 
-    return cmd;
+    auto res = vkBeginCommandBuffer(submission.cmd, &beginInfo);
+    AXASSERT(res == VK_SUCCESS, "vkBeginCommandBuffer failed");
 }
 
-void DriverImpl::endIsolateCommands(VkCommandBuffer cmd)
+void DriverImpl::commitIsolateSubmission(const IsolateSubmission& submission)
 {
-    AXASSERT(cmd != VK_NULL_HANDLE, "endSingleTimeCommands called with null cmd");
+    AXASSERT(submission.cmd != VK_NULL_HANDLE, "endSingleTimeCommands called with null cmd");
 
-    VkResult res = vkEndCommandBuffer(cmd);
+    VkResult res = vkEndCommandBuffer(submission.cmd);
     AXASSERT(res == VK_SUCCESS, "vkEndCommandBuffer failed");
 
     VkSubmitInfo submitInfo{};
     submitInfo.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers    = &cmd;
+    submitInfo.pCommandBuffers    = &submission.cmd;
 
-    // use a fence to wait for completion of this submission only
-    VkFenceCreateInfo fenceInfo{};
-    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-    VkFence fence   = VK_NULL_HANDLE;
-    res             = vkCreateFence(_device, &fenceInfo, nullptr, &fence);
-    AXASSERT(res == VK_SUCCESS && fence != VK_NULL_HANDLE, "vkCreateFence failed");
-
-    res = vkQueueSubmit(_graphicsQueue, 1, &submitInfo, fence);
+    res = vkQueueSubmit(_graphicsQueue, 1, &submitInfo, submission.fence);
     AXASSERT(res == VK_SUCCESS, "vkQueueSubmit failed");
 
     // wait for this fence (only this submission)
-    res = vkWaitForFences(_device, 1, &fence, VK_TRUE, UINT64_MAX);
-    AXASSERT(res == VK_SUCCESS, "vkWaitForFences failed");
-
-    vkDestroyFence(_device, fence, nullptr);
-
-    // free the command buffer back to the transient pool
-    std::lock_guard<std::mutex> lk(_transientPoolMutex);
-    vkFreeCommandBuffers(_device, _transientCommandPool, 1, &cmd);
+    if (submission.fence)
+    {
+        res = vkWaitForFences(_device, 1, &submission.fence, VK_TRUE, UINT64_MAX);
+        AXASSERT(res == VK_SUCCESS, "vkWaitForFences failed");
+    }
 }
 
 void DriverImpl::queueDisposal(VkSampler sampler)
@@ -771,10 +796,11 @@ void DriverImpl::queueDisposal(VkDeviceMemory memory)
     _disposalQueue.push_back({DisposableResource::Type::Memory, {.memory = memory}});
 }
 
-void DriverImpl::drainDisposalQueue()
+void DriverImpl::releaseDisposalResources()
 {
     if (!_disposalQueue.empty())
     {
+        vkDeviceWaitIdle(_device);
         for (auto& res : _disposalQueue)
         {
             switch (res.type)
@@ -804,8 +830,7 @@ void DriverImpl::cleanPendingResources()
 {
     if (!_disposalQueue.empty())
     {
-        vkDeviceWaitIdle(_device);
-        drainDisposalQueue();
+        releaseDisposalResources();
     }
 }
 

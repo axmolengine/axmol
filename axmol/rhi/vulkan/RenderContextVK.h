@@ -62,7 +62,7 @@ public:
     void setRenderPipeline(RenderPipeline* renderPipeline) override;
 
     bool beginFrame() override;
-    void beginRenderPass(const RenderTarget* renderTarget, const RenderPassDesc& descriptor) override;
+    void beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& descriptor) override;
     void updateDepthStencilState(const DepthStencilDesc& descriptor) override;
     void updatePipelineState(const RenderTarget* rt, const PipelineDesc& descriptor) override;
 
@@ -106,6 +106,8 @@ private:
     void rebuildSwapchain();
     void createCommandBuffers();
     void createDescriptorPool();
+
+    void readPixelsImpl(RenderTarget* rt, bool preserveAxisHint, std::function<void(const PixelBufferDesc&)>& callback);
 
     DriverImpl* _driver{nullptr};
     VkSurfaceKHR _surface{VK_NULL_HANDLE};
@@ -172,6 +174,8 @@ private:
 
     UniformSlice allocateUniformSlice(std::size_t size);
 #pragma endregion
+
+    std::vector<std::function<void()>> _postFrameOps;
 
     uint32_t _renderTargetWidth{0};
     uint32_t _renderTargetHeight{0};

@@ -8,6 +8,9 @@
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
+ furnished to deal in the Software without restriction, including the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
 
  The above copyright notice and this permission notice shall be included in
@@ -24,145 +27,216 @@
 #include "RenderTargetVK.h"
 #include "UtilsVK.h"
 #include "axmol/base/Logging.h"
-#include "xxhash/xxhash.h"
+#include "axmol/tlx/hash.hpp"
 
 namespace ax::rhi::vk
 {
+
+// Build a robust framebuffer cache key including:
+// - RenderPass handle (value)
+// - Ordered image view handles (contiguous color attachments, optional depth)
+// - Attachment count
+// - Framebuffer width/height
+static uintptr_t makeFramebufferKeyHash(VkRenderPass rp,
+                                        const axstd::pod_vector<VkImageView>& views,
+                                        uint32_t width,
+                                        uint32_t height)
+{
+    // Pack a small POD blob to hash deterministically.
+    struct Header
+    {
+        uintptr_t rp;
+        uint32_t count;
+        uint32_t width;
+        uint32_t height;
+    } hdr{reinterpret_cast<uintptr_t>(rp), static_cast<uint32_t>(views.size()), width, height};
+
+    // Hash header first, then hash the views array in order.
+    uintptr_t h = axstd::hash_bytes(&hdr, sizeof(hdr), 0);
+    if (!views.empty())
+        h = axstd::hash_bytes(views.data(), views.size_bytes(), h);
+    return h;
+}
+
+// Build a robust render pass cache key including, per attachment:
+// - Format, load/store ops
+// - Initial/final layouts
+// Note: We assume contiguous color attachments starting at index 0.
+static uintptr_t makeRenderPassKeyHash(const RenderPassDesc& desc,
+                                       const axstd::pod_vector<VkAttachmentDescription>& atts,
+                                       bool hasDepth)
+{
+    // Hash the user-provided RenderPassDesc as a starting seed.
+    uintptr_t h = axstd::hash_bytes(&desc, sizeof(RenderPassDesc), 0);
+
+    // Hash the number of attachments and depth presence.
+    struct Meta
+    {
+        uintptr_t attCount;
+        uintptr_t hasDepth;
+    } meta{static_cast<uintptr_t>(atts.size()), hasDepth ? 1u : 0u};
+    h = axstd::hash_bytes(&meta, sizeof(meta), h);
+
+    // Hash each VkAttachmentDescription in order.
+    if (!atts.empty())
+        h = axstd::hash_bytes(atts.data(), atts.size_bytes(), h);
+
+    return h;
+}
 
 RenderTargetImpl::RenderTargetImpl(VkDevice device, bool defaultRenderTarget)
     : RenderTarget(defaultRenderTarget), _device(device)
 {
     if (_defaultRenderTarget)
         _dirtyFlags = TargetBufferFlags::ALL;
+    _attachmentTexPtrs.fill(nullptr);
 }
 
 RenderTargetImpl::~RenderTargetImpl()
 {
     invalidate();
-
-    // Note: we do not destroy cached renderpasses/framebuffers here to allow reuse across RT instances
-    // If needed, an explicit shutdown phase can walk caches and destroy them.
+    // We do not destroy cached renderpasses/framebuffers here to allow reuse across RT instances
 }
 
 void RenderTargetImpl::invalidate()
 {
+    // Conservative: wait idle before destroying caches to avoid "in use" errors.
+    vkDeviceWaitIdle(_device);
+
     for (auto& [_, pass] : _renderPassCache)
         vkDestroyRenderPass(_device, pass, nullptr);
     for (auto& [_, fb] : _framebufferCache)
         vkDestroyFramebuffer(_device, fb, nullptr);
     _renderPassCache.clear();
     _framebufferCache.clear();
-    _renderPass  = nullptr;
-    _framebuffer = nullptr;
+    _renderPass  = VK_NULL_HANDLE;
+    _framebuffer = VK_NULL_HANDLE;
 
     for (auto& v : _attachmentViews)
         v = VK_NULL_HANDLE;
+    _attachmentTexPtrs.fill(nullptr);
 
     _attachmentViewsHash = 0;
     _attachmentsDirty    = true;
 
-    // Mark all buffers dirty so next beginRenderPass re-collects attachments
     _dirtyFlags = TargetBufferFlags::ALL;
 }
 
 void RenderTargetImpl::beginRenderPass(VkCommandBuffer cmd,
                                        const RenderPassDesc& renderPassDesc,
                                        uint32_t width,
-                                       uint32_t height) const
+                                       uint32_t height)
 {
-    // 1) Collect attachments for the current target
-    do
+    // 1) Collect attachment views and impl pointers
+    if (_defaultRenderTarget)
     {
-        if (_defaultRenderTarget)
-        {
-            // Default RT (swapchain): pull current image & depth from UtilsVK
-            const auto colorTex = UtilsVK::getSwapchainColorAttachment();
-            const auto depthTex = UtilsVK::getSwapchainDepthStencilAttachment();
-            _attachmentViews.fill(VK_NULL_HANDLE);
-            if (colorTex)
-                _attachmentViews[0] = colorTex->internalHandle().view;
-            if (depthTex)
-                _attachmentViews[DepthViewIndex] = depthTex->internalHandle().view;
+        const auto colorTex = UtilsVK::getSwapchainColorAttachment();
+        const auto depthTex = UtilsVK::getSwapchainDepthStencilAttachment();
 
-            // Update attachment hash based on current views
-            _attachmentViewsHash = XXH64(&_attachmentViews[0], sizeof(_attachmentViews), 0);
-            _attachmentsDirty    = true;  // views updated → may need FB/RP match
+        _attachmentViews.fill(VK_NULL_HANDLE);
+        _attachmentTexPtrs.fill(nullptr);
+
+        if (colorTex)
+        {
+            _attachmentViews[0]   = colorTex->internalHandle().view;
+            _attachmentTexPtrs[0] = colorTex;
+        }
+        if (depthTex)
+        {
+            _attachmentViews[DepthViewIndex]   = depthTex->internalHandle().view;
+            _attachmentTexPtrs[DepthViewIndex] = depthTex;
+        }
+
+        _attachmentViewsHash = XXH64(&_attachmentViews[0], sizeof(_attachmentViews), 0);
+        _attachmentsDirty    = true;
+    }
+    else
+    {
+        // Unconditionally collect attachments for contiguous MRT from index 0
+        for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+        {
+            if (_color[i].texture)
+            {
+                auto* texImpl         = static_cast<TextureImpl*>(_color[i].texture);
+                _attachmentViews[i]   = texImpl->internalHandle().view;
+                _attachmentTexPtrs[i] = texImpl;
+            }
+            else
+            {
+                _attachmentViews[i]   = VK_NULL_HANDLE;
+                _attachmentTexPtrs[i] = nullptr;
+            }
+        }
+
+        if (_depthStencil.texture)
+        {
+            auto* texImpl                      = static_cast<TextureImpl*>(_depthStencil.texture);
+            _attachmentViews[DepthViewIndex]   = texImpl->internalHandle().view;
+            _attachmentTexPtrs[DepthViewIndex] = texImpl;
         }
         else
         {
-            // Offscreen RT: only recompute attachments when marked dirty
-            if (!_dirtyFlags)
-                break;
-
-            // Collect color attachments
-            for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
-            {
-                if (bitmask::any(_dirtyFlags, getMRTColorFlag(i)))
-                {
-                    if (_color[i].texture)
-                    {
-                        auto* texImpl       = static_cast<TextureImpl*>(_color[i].texture);
-                        _attachmentViews[i] = texImpl->internalHandle().view;
-                    }
-                    else
-                        _attachmentViews[i] = VK_NULL_HANDLE;
-                }
-            }
-
-            // Collect depth/stencil attachment
-            if (bitmask::any(_dirtyFlags, TargetBufferFlags::DEPTH_AND_STENCIL))
-            {
-                if (_depthStencil.texture)
-                {
-                    auto* texImpl                    = static_cast<TextureImpl*>(_depthStencil.texture);
-                    _attachmentViews[DepthViewIndex] = texImpl->internalHandle().view;
-                }
-                else
-                    _attachmentViews[DepthViewIndex] = VK_NULL_HANDLE;
-            }
-
-            _attachmentsDirty    = true;
-            _dirtyFlags          = TargetBufferFlags::NONE;
-            _attachmentViewsHash = XXH64(&_attachmentViews[0], sizeof(_attachmentViews), 0);
+            _attachmentViews[DepthViewIndex]   = VK_NULL_HANDLE;
+            _attachmentTexPtrs[DepthViewIndex] = nullptr;
         }
-    } while (false);
 
-    // 2) Lookup or create a compatible VkRenderPass based on desc + attachments
+        _attachmentsDirty    = true;
+        _dirtyFlags          = TargetBufferFlags::NONE;
+        _attachmentViewsHash = XXH64(&_attachmentViews[0], sizeof(_attachmentViews), 0);
+    }
+
+    // 2) Ensure render pass
     VkRenderPass rp = ensureRenderPass(renderPassDesc);
 
-    // 3) Lookup or create a framebuffer compatible with this render pass
-    VkFramebuffer fb = ensureFramebuffer(rp);
+    // 3) Ensure framebuffer
+    VkFramebuffer fb = ensureFramebuffer(cmd, rp);
 
-    // 4) Build clear values according to flags and attachment order
+    // 4) Clear values
     _clearValues.clear();
 
-    // Push color clears in the same order as colorRefs
     for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
     {
         if (_attachmentViews[i] != VK_NULL_HANDLE)
         {
-            const auto flag = getMRTColorFlag(i);
-            if (bitmask::any(renderPassDesc.flags.clear, flag))
+            VkClearValue cv{};
+            if (bitmask::any(renderPassDesc.flags.clear, getMRTColorFlag(i)))
             {
-                VkClearValue cv{};
                 cv.color = {renderPassDesc.clearColorValue[0], renderPassDesc.clearColorValue[1],
                             renderPassDesc.clearColorValue[2], renderPassDesc.clearColorValue[3]};
-                _clearValues.push_back(cv);
             }
+            else
+            {
+                cv.color = {{0.f, 0.f, 0.f, 0.f}};
+            }
+            _clearValues.push_back(cv);
+        }
+        else
+        {
+            break;  // contiguous color attachments assumption
         }
     }
 
-    // Depth/stencil clear value (if any)
-    if (_attachmentViews[DepthViewIndex] != VK_NULL_HANDLE &&
-        bitmask::any(renderPassDesc.flags.clear, TargetBufferFlags::DEPTH_AND_STENCIL))
+    if (_attachmentViews[DepthViewIndex] != VK_NULL_HANDLE)
     {
         VkClearValue dsv{};
-        dsv.depthStencil.depth   = renderPassDesc.clearDepthValue;
-        dsv.depthStencil.stencil = static_cast<uint32_t>(renderPassDesc.clearStencilValue);
+        if (bitmask::any(renderPassDesc.flags.clear, TargetBufferFlags::DEPTH_AND_STENCIL))
+        {
+            dsv.depthStencil.depth   = renderPassDesc.clearDepthValue;
+            dsv.depthStencil.stencil = static_cast<uint32_t>(renderPassDesc.clearStencilValue);
+        }
+        else
+        {
+            dsv.depthStencil.depth   = 1.0f;
+            dsv.depthStencil.stencil = 0u;
+        }
         _clearValues.push_back(dsv);
     }
 
-    // 5) Begin render pass
+    // 5) Transition to render layouts (non-default RT only)
+    if (!_defaultRenderTarget)
+        prepareAttachmentsForRendering(cmd);
+
+    // 6) Begin render pass
     VkRenderPassBeginInfo rpBegin{};
     rpBegin.sType             = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     rpBegin.renderPass        = rp;
@@ -175,14 +249,45 @@ void RenderTargetImpl::beginRenderPass(VkCommandBuffer cmd,
     vkCmdBeginRenderPass(cmd, &rpBegin, VK_SUBPASS_CONTENTS_INLINE);
 }
 
-VkFramebuffer RenderTargetImpl::ensureFramebuffer(VkRenderPass rp) const
+void RenderTargetImpl::endRenderPass(VkCommandBuffer cmd)
 {
-    // If framebuffer is valid and attachments are not dirty, reuse it
+    vkCmdEndRenderPass(cmd);
+
+    if (!_defaultRenderTarget)
+        prepareAttachmentsForSampling(cmd);
+}
+
+VkFramebuffer RenderTargetImpl::ensureFramebuffer(VkCommandBuffer /*cmd*/, VkRenderPass rp)
+{
     if (_framebuffer != VK_NULL_HANDLE && !_attachmentsDirty)
         return _framebuffer;
 
-    // Key: combine renderpass handle and attachment views hash
-    const uint64_t key = XXH64(&rp, sizeof(rp), _attachmentViewsHash);
+    // Build ordered views vector (contiguous colors + optional depth)
+    axstd::pod_vector<VkImageView> views;
+    views.reserve(MAX_COLOR_ATTCHMENT + 1);
+    for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+    {
+        if (_attachmentViews[i] != VK_NULL_HANDLE)
+            views.push_back(_attachmentViews[i]);
+        else
+            break;  // contiguous color attachments assumption
+    }
+    if (_attachmentViews[DepthViewIndex] != VK_NULL_HANDLE)
+        views.push_back(_attachmentViews[DepthViewIndex]);
+
+    // Derive framebuffer extent from color0 or depth if color0 absent (depth-only)
+    const auto color0 = getColorAttachment(0);
+    auto& colorDesc   = color0->getDesc();
+    uint32_t fbWidth  = colorDesc.width;
+    uint32_t fbHeight = colorDesc.height;
+    if ((fbWidth == 0 || fbHeight == 0) && _attachmentViews[DepthViewIndex] != VK_NULL_HANDLE)
+    {
+        const auto& dsDesc = getDepthStencilAttachment()->getDesc();
+        fbWidth            = dsDesc.width;
+        fbHeight           = dsDesc.height;
+    }
+
+    const uint64_t key = makeFramebufferKeyHash(rp, views, fbWidth, fbHeight);
 
     if (auto it = _framebufferCache.find(key); it != _framebufferCache.end())
     {
@@ -190,29 +295,6 @@ VkFramebuffer RenderTargetImpl::ensureFramebuffer(VkRenderPass rp) const
     }
     else
     {
-        // Collect current attachments in declared order (color0..MAX_COLOR-1, then depth)
-        axstd::pod_vector<VkImageView> views;
-        views.reserve(MAX_COLOR_ATTCHMENT + 1);
-        for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
-        {
-            if (_attachmentViews[i] != VK_NULL_HANDLE)
-                views.push_back(_attachmentViews[i]);
-        }
-        if (_attachmentViews[DepthViewIndex] != VK_NULL_HANDLE)
-            views.push_back(_attachmentViews[DepthViewIndex]);
-
-        // Determine size from color0 or depth (fallback)
-        const auto color0 = getColorAttachment(0);
-        uint32_t fbWidth  = color0.desc.width;
-        uint32_t fbHeight = color0.desc.height;
-
-        if ((fbWidth == 0 || fbHeight == 0) && _attachmentViews[DepthViewIndex] != VK_NULL_HANDLE)
-        {
-            const auto depthAtt = getDepthStencilAttachment();
-            fbWidth             = depthAtt.desc.width;
-            fbHeight            = depthAtt.desc.height;
-        }
-
         VkFramebufferCreateInfo fbci{};
         fbci.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
         fbci.renderPass      = rp;
@@ -232,13 +314,141 @@ VkFramebuffer RenderTargetImpl::ensureFramebuffer(VkRenderPass rp) const
     return _framebuffer;
 }
 
-VkRenderPass RenderTargetImpl::ensureRenderPass(const RenderPassDesc& desc) const
+VkRenderPass RenderTargetImpl::ensureRenderPass(const RenderPassDesc& desc)
 {
-    // Reuse if valid and attachments unchanged
     if (_renderPass != VK_NULL_HANDLE && !_attachmentsDirty)
         return _renderPass;
 
-    const uint64_t key = XXH64(&desc, sizeof(RenderPassDesc), _attachmentViewsHash);
+    // Build attachment descriptions deterministically (contiguous colors + optional depth)
+    axstd::pod_vector<VkAttachmentDescription> attachments;
+    axstd::pod_vector<VkAttachmentReference> colorRefs;
+    VkAttachmentReference depthRef{};
+    attachments.reserve(MAX_COLOR_ATTCHMENT + 1);
+    colorRefs.reserve(MAX_COLOR_ATTCHMENT);
+
+    const bool isDefaultRT = _defaultRenderTarget;
+
+    // Color attachments
+    for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+    {
+        if (_attachmentViews[i] == VK_NULL_HANDLE)
+            break;
+
+        auto attachment     = getColorAttachment(static_cast<int>(i));
+        const auto& attDesc = attachment->getDesc();
+
+        const bool clearColor   = bitmask::any(desc.flags.clear, getMRTColorFlag(i));
+        const bool discardStart = bitmask::any(desc.flags.discardStart, getMRTColorFlag(i));
+        const bool discardEnd   = bitmask::any(desc.flags.discardEnd, getMRTColorFlag(i));
+
+        const VkAttachmentLoadOp loadOp =
+            clearColor ? VK_ATTACHMENT_LOAD_OP_CLEAR
+                       : (discardStart ? VK_ATTACHMENT_LOAD_OP_DONT_CARE : VK_ATTACHMENT_LOAD_OP_LOAD);
+        const VkAttachmentStoreOp storeOp =
+            discardEnd ? VK_ATTACHMENT_STORE_OP_DONT_CARE : VK_ATTACHMENT_STORE_OP_STORE;
+
+        VkAttachmentDescription ad{};
+        ad.format         = UtilsVK::toVKFormat(attDesc.pixelFormat);
+        ad.samples        = VK_SAMPLE_COUNT_1_BIT;
+        ad.loadOp         = loadOp;
+        ad.storeOp        = storeOp;
+        ad.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        ad.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+
+        // Use UNDEFINED when not loading to minimize mismatch risk
+        ad.initialLayout =
+            (loadOp == VK_ATTACHMENT_LOAD_OP_LOAD)
+                ? (isDefaultRT ? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL)
+                : VK_IMAGE_LAYOUT_UNDEFINED;
+
+        ad.finalLayout = isDefaultRT ? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+        attachments.push_back(ad);
+
+        VkAttachmentReference ref{};
+        ref.attachment = static_cast<uint32_t>(colorRefs.size());
+        ref.layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+        colorRefs.push_back(ref);
+    }
+
+    // Depth/stencil attachment
+    const bool hasDepth = (_attachmentViews[DepthViewIndex] != VK_NULL_HANDLE);
+    if (hasDepth)
+    {
+        auto attachment    = getDepthStencilAttachment();
+        const auto& dsDesc = attachment->getDesc();
+
+        const bool clearDepth   = bitmask::any(desc.flags.clear, TargetBufferFlags::DEPTH);
+        const bool discardD0    = bitmask::any(desc.flags.discardStart, TargetBufferFlags::DEPTH);
+        const bool discardD1    = bitmask::any(desc.flags.discardEnd, TargetBufferFlags::DEPTH);
+        const bool clearStencil = bitmask::any(desc.flags.clear, TargetBufferFlags::STENCIL);
+        const bool discardS0    = bitmask::any(desc.flags.discardStart, TargetBufferFlags::STENCIL);
+        const bool discardS1    = bitmask::any(desc.flags.discardEnd, TargetBufferFlags::STENCIL);
+
+        const VkAttachmentLoadOp depthLoad =
+            clearDepth ? VK_ATTACHMENT_LOAD_OP_CLEAR
+                       : (discardD0 ? VK_ATTACHMENT_LOAD_OP_DONT_CARE : VK_ATTACHMENT_LOAD_OP_LOAD);
+        const VkAttachmentStoreOp depthStore =
+            discardD1 ? VK_ATTACHMENT_STORE_OP_DONT_CARE : VK_ATTACHMENT_STORE_OP_STORE;
+
+        const VkAttachmentLoadOp stencilLoad =
+            clearStencil ? VK_ATTACHMENT_LOAD_OP_CLEAR
+                         : (discardS0 ? VK_ATTACHMENT_LOAD_OP_DONT_CARE : VK_ATTACHMENT_LOAD_OP_LOAD);
+        const VkAttachmentStoreOp stencilStore =
+            discardS1 ? VK_ATTACHMENT_STORE_OP_DONT_CARE : VK_ATTACHMENT_STORE_OP_STORE;
+
+        VkAttachmentDescription ad{};
+        ad.format         = UtilsVK::toVKFormat(dsDesc.pixelFormat);
+        ad.samples        = VK_SAMPLE_COUNT_1_BIT;
+        ad.loadOp         = depthLoad;
+        ad.storeOp        = depthStore;
+        ad.stencilLoadOp  = stencilLoad;
+        ad.stencilStoreOp = stencilStore;
+
+        const bool needLoadInitial =
+            (depthLoad == VK_ATTACHMENT_LOAD_OP_LOAD) || (stencilLoad == VK_ATTACHMENT_LOAD_OP_LOAD);
+
+        ad.initialLayout =
+            needLoadInitial ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED;
+
+        ad.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+        attachments.push_back(ad);
+
+        depthRef.attachment = static_cast<uint32_t>(attachments.size() - 1);
+        depthRef.layout     = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    }
+
+    // Subpass
+    VkSubpassDescription subpass{};
+    subpass.pipelineBindPoint       = VK_PIPELINE_BIND_POINT_GRAPHICS;
+    subpass.colorAttachmentCount    = static_cast<uint32_t>(colorRefs.size());
+    subpass.pColorAttachments       = colorRefs.data();
+    subpass.pDepthStencilAttachment = hasDepth ? &depthRef : nullptr;
+
+    // Dependencies
+    VkSubpassDependency deps[2]{};
+    deps[0].srcSubpass    = VK_SUBPASS_EXTERNAL;
+    deps[0].dstSubpass    = 0;
+    deps[0].srcStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    deps[0].dstStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    deps[0].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    deps[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+
+    uint32_t depCount = 1;
+    if (hasDepth)
+    {
+        deps[1].srcSubpass    = VK_SUBPASS_EXTERNAL;
+        deps[1].dstSubpass    = 0;
+        deps[1].srcStageMask  = VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+        deps[1].dstStageMask  = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+        deps[1].srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+        deps[1].dstAccessMask =
+            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+        depCount = 2;
+    }
+
+    const uint64_t key = makeRenderPassKeyHash(desc, attachments, hasDepth);
 
     if (auto it = _renderPassCache.find(key); it != _renderPassCache.end())
     {
@@ -246,136 +456,14 @@ VkRenderPass RenderTargetImpl::ensureRenderPass(const RenderPassDesc& desc) cons
     }
     else
     {
-        axstd::pod_vector<VkAttachmentDescription> attachments;
-        axstd::pod_vector<VkAttachmentReference> colorRefs;
-        VkAttachmentReference depthRef{};
-        attachments.reserve(MAX_COLOR_ATTCHMENT + 1);
-        colorRefs.reserve(MAX_COLOR_ATTCHMENT);
-
-        const bool isDefaultRT = _defaultRenderTarget;
-
-        // Build color attachment descriptions and references
-        for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
-        {
-            if (_attachmentViews[i] != VK_NULL_HANDLE)
-            {
-                const auto&& attDesc = getColorAttachment(static_cast<int>(i)).desc;
-
-                const bool clearColor   = bitmask::any(desc.flags.clear, getMRTColorFlag(i));
-                const bool discardStart = bitmask::any(desc.flags.discardStart, getMRTColorFlag(i));
-                const bool discardEnd   = bitmask::any(desc.flags.discardEnd, getMRTColorFlag(i));
-
-                const VkAttachmentLoadOp loadOp =
-                    clearColor ? VK_ATTACHMENT_LOAD_OP_CLEAR
-                               : (discardStart ? VK_ATTACHMENT_LOAD_OP_DONT_CARE : VK_ATTACHMENT_LOAD_OP_LOAD);
-                const VkAttachmentStoreOp storeOp =
-                    discardEnd ? VK_ATTACHMENT_STORE_OP_DONT_CARE : VK_ATTACHMENT_STORE_OP_STORE;
-
-                VkAttachmentDescription ad{};
-                ad.format         = UtilsVK::toVKFormat(attDesc.pixelFormat);
-                ad.samples        = VK_SAMPLE_COUNT_1_BIT;
-                ad.loadOp         = loadOp;
-                ad.storeOp        = storeOp;
-                ad.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-                ad.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-
-                // initialLayout must NOT be UNDEFINED if loadOp == LOAD
-                if (loadOp == VK_ATTACHMENT_LOAD_OP_LOAD)
-                {
-                    ad.initialLayout =
-                        isDefaultRT ? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-                }
-                else
-                {
-                    ad.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-                }
-
-                ad.finalLayout =
-                    isDefaultRT ? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-                attachments.push_back(ad);
-
-                VkAttachmentReference ref{};
-                ref.attachment = static_cast<uint32_t>(colorRefs.size());
-                ref.layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-                colorRefs.push_back(ref);
-            }
-        }
-
-        // Depth/stencil attachment
-        const bool hasDepth = (_attachmentViews[DepthViewIndex] != VK_NULL_HANDLE);
-        if (hasDepth)
-        {
-            const auto&& dsDesc = getDepthStencilAttachment().desc;
-
-            const bool clearDepth = bitmask::any(desc.flags.clear, TargetBufferFlags::DEPTH);
-            const bool discardD0  = bitmask::any(desc.flags.discardStart, TargetBufferFlags::DEPTH);
-            const bool discardD1  = bitmask::any(desc.flags.discardEnd, TargetBufferFlags::DEPTH);
-
-            const bool clearStencil = bitmask::any(desc.flags.clear, TargetBufferFlags::STENCIL);
-            const bool discardS0    = bitmask::any(desc.flags.discardStart, TargetBufferFlags::STENCIL);
-            const bool discardS1    = bitmask::any(desc.flags.discardEnd, TargetBufferFlags::STENCIL);
-
-            const VkAttachmentLoadOp depthLoad =
-                clearDepth ? VK_ATTACHMENT_LOAD_OP_CLEAR
-                           : (discardD0 ? VK_ATTACHMENT_LOAD_OP_DONT_CARE : VK_ATTACHMENT_LOAD_OP_LOAD);
-            const VkAttachmentStoreOp depthStore =
-                discardD1 ? VK_ATTACHMENT_STORE_OP_DONT_CARE : VK_ATTACHMENT_STORE_OP_STORE;
-
-            const VkAttachmentLoadOp stencilLoad =
-                clearStencil ? VK_ATTACHMENT_LOAD_OP_CLEAR
-                             : (discardS0 ? VK_ATTACHMENT_LOAD_OP_DONT_CARE : VK_ATTACHMENT_LOAD_OP_LOAD);
-            const VkAttachmentStoreOp stencilStore =
-                discardS1 ? VK_ATTACHMENT_STORE_OP_DONT_CARE : VK_ATTACHMENT_STORE_OP_STORE;
-
-            VkAttachmentDescription ad{};
-            ad.format         = UtilsVK::toVKFormat(dsDesc.pixelFormat);
-            ad.samples        = VK_SAMPLE_COUNT_1_BIT;
-            ad.loadOp         = depthLoad;
-            ad.storeOp        = depthStore;
-            ad.stencilLoadOp  = stencilLoad;
-            ad.stencilStoreOp = stencilStore;
-
-            // If either depthLoad or stencilLoad is LOAD, initialLayout must NOT be UNDEFINED
-            const bool needLoadInitial =
-                (depthLoad == VK_ATTACHMENT_LOAD_OP_LOAD) || (stencilLoad == VK_ATTACHMENT_LOAD_OP_LOAD);
-
-            ad.initialLayout =
-                needLoadInitial ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED;
-
-            ad.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
-            attachments.push_back(ad);
-
-            depthRef.attachment = static_cast<uint32_t>(attachments.size() - 1);
-            depthRef.layout     = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-        }
-
-        // Subpass description
-        VkSubpassDescription subpass{};
-        subpass.pipelineBindPoint       = VK_PIPELINE_BIND_POINT_GRAPHICS;
-        subpass.colorAttachmentCount    = static_cast<uint32_t>(colorRefs.size());
-        subpass.pColorAttachments       = colorRefs.data();
-        subpass.pDepthStencilAttachment = hasDepth ? &depthRef : nullptr;
-
-        // Subpass dependency:
-        // For LOAD cases, it's safer to include READ|WRITE on dst to ensure visibility.
-        VkSubpassDependency dep{};
-        dep.srcSubpass    = VK_SUBPASS_EXTERNAL;
-        dep.dstSubpass    = 0;
-        dep.srcStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-        dep.dstStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-        dep.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;  // previous frame writes
-        dep.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-
         VkRenderPassCreateInfo rpci{};
         rpci.sType           = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
         rpci.attachmentCount = static_cast<uint32_t>(attachments.size());
         rpci.pAttachments    = attachments.data();
         rpci.subpassCount    = 1;
         rpci.pSubpasses      = &subpass;
-        rpci.dependencyCount = 1;
-        rpci.pDependencies   = &dep;
+        rpci.dependencyCount = depCount;
+        rpci.pDependencies   = deps;
 
         VkResult vr = vkCreateRenderPass(_device, &rpci, nullptr, &_renderPass);
         AXASSERT(vr == VK_SUCCESS, "Failed to create VkRenderPass");
@@ -386,18 +474,62 @@ VkRenderPass RenderTargetImpl::ensureRenderPass(const RenderPassDesc& desc) cons
     return _renderPass;
 }
 
+void RenderTargetImpl::prepareAttachmentsForRendering(VkCommandBuffer cmd)
+{
+    if (_defaultRenderTarget)
+        return;
+
+    // Color -> ATTACHMENT_OPTIMAL (contiguous indices starting at 0)
+    for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+    {
+        TextureImpl* texImpl = _attachmentTexPtrs[i];
+        if (!texImpl)
+            break;
+        texImpl->transitionLayout(cmd, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+    }
+
+    // Depth -> ATTACHMENT_OPTIMAL
+    if (_attachmentViews[DepthViewIndex] != VK_NULL_HANDLE)
+    {
+        TextureImpl* texImpl = _attachmentTexPtrs[DepthViewIndex];
+        if (texImpl)
+            texImpl->transitionLayout(cmd, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+    }
+}
+
+void RenderTargetImpl::prepareAttachmentsForSampling(VkCommandBuffer cmd)
+{
+    if (_defaultRenderTarget)
+        return;
+
+    // Color -> SHADER_READ_ONLY_OPTIMAL (contiguous indices starting at 0)
+    for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+    {
+        TextureImpl* texImpl = _attachmentTexPtrs[i];
+        if (!texImpl)
+            break;
+        texImpl->transitionLayout(cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    }
+
+    // Depth -> SHADER_READ_ONLY_OPTIMAL (only if sampling is needed)
+    if (_attachmentViews[DepthViewIndex] != VK_NULL_HANDLE)
+    {
+        TextureImpl* texImpl = _attachmentTexPtrs[DepthViewIndex];
+        if (texImpl)
+            texImpl->transitionLayout(cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    }
+}
+
 RenderTargetImpl::Attachment RenderTargetImpl::getColorAttachment(int index) const
 {
-    TextureImpl* texImpl = _defaultRenderTarget ? UtilsVK::getSwapchainColorAttachment()
-                                                : static_cast<TextureImpl*>(_color[index].texture);
-    return texImpl ? Attachment{texImpl->internalHandle(), texImpl->getDesc()} : Attachment{};
+    return _defaultRenderTarget ? UtilsVK::getSwapchainColorAttachment()
+                                : static_cast<TextureImpl*>(_color[index].texture);
 }
 
 RenderTargetImpl::Attachment RenderTargetImpl::getDepthStencilAttachment() const
 {
-    TextureImpl* texImpl = _defaultRenderTarget ? UtilsVK::getSwapchainDepthStencilAttachment()
-                                                : static_cast<TextureImpl*>(_depthStencil.texture);
-    return texImpl ? Attachment{texImpl->internalHandle(), texImpl->getDesc()} : Attachment{};
+    return _defaultRenderTarget ? UtilsVK::getSwapchainDepthStencilAttachment()
+                                : static_cast<TextureImpl*>(_depthStencil.texture);
 }
 
 }  // namespace ax::rhi::vk

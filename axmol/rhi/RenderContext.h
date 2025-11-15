@@ -108,7 +108,7 @@ public:
      * Begin a render pass, initial color, depth and stencil attachment.
      * @param desc Specifies a group of render targets that hold the results of a render pass.
      */
-    virtual void beginRenderPass(const RenderTarget* renderTarget, const RenderPassDesc& desc) = 0;
+    virtual void beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& desc) = 0;
 
     /**
      * Update depthStencil status, improvment: for metal backend cache it
@@ -266,8 +266,8 @@ public:
 protected:
     virtual ~RenderContext() = default;
 
-    const RenderTarget* _screenRT{nullptr};   // weak ref (managed by Renderer)
-    const RenderTarget* _currentRT{nullptr};  // weak ref (managed by Renderer)
+    RenderTarget* _screenRT{nullptr};   // weak ref (managed by Renderer)
+    RenderTarget* _currentRT{nullptr};  // weak ref (managed by Renderer)
     ProgramState* _programState{nullptr};     // weak ref
     VertexLayout* _vertexLayout{nullptr};     // weak ref
     unsigned int _stencilReferenceValue = 0;  ///< front stencil reference value
