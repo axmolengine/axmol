@@ -457,6 +457,16 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
 
         while (!_isDestroyed)
         {
+
+#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS && !AX_USE_ALSOFT
+            if (alcGetCurrentContext() == nullptr)
+            {
+                std::unique_lock<std::mutex> lk(_sleepMutex);
+                _sleepCondition.wait_for(lk, std::chrono::milliseconds(rotateSleepTime));
+                continue;
+            }
+#endif
+
             alGetSourcei(_alSource, AL_SOURCE_STATE, &sourceState);
             if (sourceState == AL_PLAYING)
             {
