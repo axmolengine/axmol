@@ -425,8 +425,7 @@ void DriverImpl::initializeDevice()
     poolInfo.flags            = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT | VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
     vr = vkCreateCommandPool(_device, &poolInfo, nullptr, &_commandPool);
-    AXASSERT(vr == VK_SUCCESS && _commandPool != VK_NULL_HANDLE,
-             "vkCreateCommandPool failed for transient pool");
+    AXASSERT(vr == VK_SUCCESS && _commandPool != VK_NULL_HANDLE, "vkCreateCommandPool failed for transient pool");
 }
 
 bool DriverImpl::setupSurface(const SurfaceCreateInfo& info)
@@ -702,7 +701,7 @@ VkResult DriverImpl::allocateCommandBuffers(VkCommandBuffer* cmds, uint32_t coun
     allocInfo.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
     allocInfo.commandBufferCount = count;
 
-    VkResult res        = vkAllocateCommandBuffers(_device, &allocInfo, cmds);
+    VkResult res = vkAllocateCommandBuffers(_device, &allocInfo, cmds);
     AXASSERT(res == VK_SUCCESS && *cmds != VK_NULL_HANDLE, "vkAllocateCommandBuffers failed");
     return res;
 }

@@ -913,12 +913,12 @@ void RenderContextImpl::prepareDrawing()
 
         // Create one write descriptor covering the whole array
         VkWriteDescriptorSet& write = writes.emplace_back();
-        write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        write.dstSet          = descriptorSets[1];
-        write.dstBinding      = bindingIndex;  // binding index stays the same
-        write.descriptorType  = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        write.descriptorCount = static_cast<uint32_t>(texs.size());  // number of array elements
-        write.pImageInfo      = imageInfos.data() + offset;          // pointer into stable vector storage
+        write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        write.dstSet                = descriptorSets[1];
+        write.dstBinding            = bindingIndex;  // binding index stays the same
+        write.descriptorType        = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        write.descriptorCount       = static_cast<uint32_t>(texs.size());  // number of array elements
+        write.pImageInfo            = imageInfos.data() + offset;          // pointer into stable vector storage
     }
 
     // Commit descriptor writes

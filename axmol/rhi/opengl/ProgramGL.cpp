@@ -312,7 +312,7 @@ void ProgramImpl::reflectUniformInfos()
         {  // must be samper: sampler2D, sampler2DArray, samplerCube
             assert(uniform.type == GL_SAMPLER_2D || uniform.type == GL_SAMPLER_CUBE ||
                    uniform.type == GL_SAMPLER_2D_ARRAY);
-            uniform.location     = glGetUniformLocation(_program, uniformName.data());
+            uniform.location = glGetUniformLocation(_program, uniformName.data());
         }
 
         _activeUniformInfos[uniformName] = uniform;

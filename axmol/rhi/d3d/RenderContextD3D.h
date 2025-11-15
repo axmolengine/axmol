@@ -64,7 +64,7 @@ public:
     /* The max vertex attribs, it's not how many device supports which may be lower. */
     static constexpr uint32_t MAX_VERTEX_ATTRIBS = 16;
 
-    static constexpr uint32_t VI_BINDING_INDEX = 0;
+    static constexpr uint32_t VI_BINDING_INDEX            = 0;
     static constexpr uint32_t VI_INSTANCING_BINDING_INDEX = 1;
 
     // match axmol shaders
