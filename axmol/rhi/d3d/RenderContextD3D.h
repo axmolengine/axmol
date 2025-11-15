@@ -64,16 +64,8 @@ public:
     /* The max vertex attribs, it's not how many device supports which may be lower. */
     static constexpr uint32_t MAX_VERTEX_ATTRIBS = 16;
 
-    /* The vertex data buffers binding index start, the axslcc(SPIRV-Cross), default UBO binding index is 0,
-    scope is per stage in MSL
-     */
-    static constexpr uint32_t VBO_BINDING_INDEX_START = 0;
-
-    /* The vertex instancing buffer binding index */
-    static constexpr uint32_t VBO_INSTANCING_BINDING_INDEX = VBO_BINDING_INDEX_START + 1;
-
-    /* The default attribs binding index */
-    static constexpr uint32_t DEFAULT_ATTRIBS_BINDING_INDEX = VBO_BINDING_INDEX_START + MAX_VERTEX_ATTRIBS;
+    static constexpr uint32_t VI_BINDING_INDEX = 0;
+    static constexpr uint32_t VI_INSTANCING_BINDING_INDEX = 1;
 
     // match axmol shaders
     static constexpr uint32_t VS_UBO_BINDING_INDEX = 0;
@@ -116,7 +108,7 @@ public:
      * MTLRenderCommandEncoder is cached if current RenderPassDesc is identical to previous one.
      * @param descriptor Specifies a group of render targets that hold the results of a render pass.
      */
-    void beginRenderPass(const RenderTarget* renderTarget, const RenderPassDesc& descriptor) override;
+    void beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& descriptor) override;
 
     /**
      * Update depthStencil status, improvment: for metal backend cache it

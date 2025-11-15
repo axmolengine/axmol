@@ -460,11 +460,11 @@ bool RenderContextImpl::beginFrame()
     return true;
 }
 
-void RenderContextImpl::beginRenderPass(const RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc)
+void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc)
 {
     auto context = _driverImpl->getContext();
 
-    auto activeRT = static_cast<const RenderTargetImpl*>(renderTarget);
+    auto activeRT = static_cast<RenderTargetImpl*>(renderTarget);
     if (_renderPassDesc == renderPassDesc && _currentRT == activeRT && !activeRT->isDirty())
     {
         ;

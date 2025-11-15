@@ -904,15 +904,17 @@ void RenderContextImpl::prepareDrawing()
                             allocInfo.descriptorSetCount, descriptorSets, 0, nullptr);
 
     // === Bind vertex buffers ===
-    VkBuffer vb            = _vertexBuffer->internalHandle();
-    VkDeviceSize offsets[] = {0};
-    vkCmdBindVertexBuffers(_currentCmdBuffer, 0, 1, &vb, offsets);
-
-    if (_instanceBuffer)
+    if (!_instanceBuffer)
     {
-        VkBuffer ib            = _instanceBuffer->internalHandle();
+        VkBuffer buffers[]     = {_vertexBuffer->internalHandle()};
         VkDeviceSize offsets[] = {0};
-        vkCmdBindVertexBuffers(_currentCmdBuffer, 1, 1, &ib, offsets);
+        vkCmdBindVertexBuffers(_currentCmdBuffer, 0, 1, buffers, offsets);
+    }
+    else
+    {
+        VkBuffer buffers[]     = {_vertexBuffer->internalHandle(), _instanceBuffer->internalHandle()};
+        VkDeviceSize offsets[] = {0, 0};
+        vkCmdBindVertexBuffers(_currentCmdBuffer, 0, 2, buffers, offsets);
     }
 
     // ---------- VkPipeline dynamic states -----------

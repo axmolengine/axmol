@@ -24,6 +24,7 @@
 #include "axmol/rhi/d3d/VertexLayoutD3D.h"
 #include "axmol/rhi/d3d/ProgramD3D.h"
 #include "axmol/rhi/d3d/DriverD3D.h"
+#include "axmol/rhi/d3d/RenderContextD3D.h"
 
 namespace ax::rhi::d3d
 {
@@ -86,7 +87,8 @@ void VertexLayoutImpl::apply(ID3D11DeviceContext* context, Program* program) con
         inputElements.reserve(bindings.size());
 
         auto appendElement = [&inputElements](const InputBindingDesc& inputDesc) {
-            const auto inputSlot = inputDesc.instanceStepRate ? 1 : 0;
+            const auto inputSlot = inputDesc.instanceStepRate ? RenderContextImpl::VI_INSTANCING_BINDING_INDEX
+                                                              : RenderContextImpl::VI_BINDING_INDEX;
             const auto inputSlotClass =
                 inputDesc.instanceStepRate ? D3D11_INPUT_PER_INSTANCE_DATA : D3D11_INPUT_PER_VERTEX_DATA;
             if (inputDesc.format != VertexFormat::MAT4)

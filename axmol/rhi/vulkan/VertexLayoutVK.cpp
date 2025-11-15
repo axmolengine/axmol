@@ -21,7 +21,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "VertexLayoutVK.h"
+#include "axmol/rhi/vulkan/VertexLayoutVK.h"
+#include "axmol/rhi/vulkan/RenderContextVK.h"
 #include "axmol/base/Logging.h"
 
 namespace ax::rhi::vk
@@ -69,22 +70,29 @@ static VkFormat toVkFormat(VertexFormat format, bool unorm)
 VertexLayoutImpl::VertexLayoutImpl(VertexLayoutDesc&& desc) : VertexLayout(std::move(desc))
 {
     auto& bindingsDesc = getBindings();
+    _bindings.clear();
+    _attributes.clear();
 
-    // Binding description: one binding per vertex buffer
-    VkVertexInputBindingDescription binding{};
-    binding.binding   = 0;
-    binding.stride    = static_cast<uint32_t>(getStride());
-    binding.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-    _bindings.push_back(binding);
-
-    // Attribute descriptions
     for (auto& inputDesc : bindingsDesc)
     {
+        VkVertexInputBindingDescription binding{};
+        binding.binding   = inputDesc.instanceStepRate ? RenderContextImpl::VI_INSTANCING_BINDING_INDEX
+                                                       : RenderContextImpl::VI_BINDING_INDEX;
+        binding.stride    = inputDesc.instanceStepRate ? static_cast<uint32_t>(getInstanceStride())
+                                                       : static_cast<uint32_t>(getStride());
+        binding.inputRate = inputDesc.instanceStepRate ? VK_VERTEX_INPUT_RATE_INSTANCE : VK_VERTEX_INPUT_RATE_VERTEX;
+
+        auto it = std::find_if(_bindings.begin(), _bindings.end(),
+                               [&](const VkVertexInputBindingDescription& b) { return b.binding == binding.binding; });
+        if (it == _bindings.end())
+            _bindings.push_back(binding);
+
+        // Attribute descriptions
         if (inputDesc.format != VertexFormat::MAT4)
         {
             VkVertexInputAttributeDescription attr{};
             attr.location = inputDesc.index;
-            attr.binding  = 0;
+            attr.binding  = binding.binding;
             attr.format   = toVkFormat(inputDesc.format, inputDesc.needToBeNormallized);
             attr.offset   = inputDesc.offset;
             _attributes.push_back(attr);
@@ -96,7 +104,7 @@ VertexLayoutImpl::VertexLayoutImpl(VertexLayoutDesc&& desc) : VertexLayout(std::
             {
                 VkVertexInputAttributeDescription attr{};
                 attr.location = inputDesc.index + i;
-                attr.binding  = 0;
+                attr.binding  = binding.binding;
                 attr.format   = VK_FORMAT_R32G32B32A32_SFLOAT;
                 attr.offset   = inputDesc.offset + sizeof(float) * 4 * i;
                 _attributes.push_back(attr);
