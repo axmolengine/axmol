@@ -250,7 +250,6 @@ private:
     void afterDraw();
     void flush();
     void flushCaptureCommands();
-    void updateRenderCommandEncoder(const RenderTarget* renderTarget, const RenderPassDesc& renderPassParams);
 
     static CAMetalLayer* _mtlLayer;
     static id<CAMetalDrawable> _currentDrawable;

@@ -235,7 +235,7 @@ bool RenderContextImpl::beginFrame()
     return true;
 }
 
-void RenderContextImpl::updateRenderCommandEncoder(RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc)
+void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc)
 {
     if (_mtlRenderEncoder != nil && _currentRenderPassDesc == renderPassDesc && _currentRT == renderTarget &&
         !renderTarget->isDirty())
@@ -258,11 +258,6 @@ void RenderContextImpl::updateRenderCommandEncoder(RenderTarget* renderTarget, c
     _renderTargetHeight = (unsigned int)mtlDesc.colorAttachments[0].texture.height;
     _mtlRenderEncoder   = [_currentCmdBuffer renderCommandEncoderWithDescriptor:mtlDesc];
     [_mtlRenderEncoder retain];
-}
-
-void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc)
-{
-    updateRenderCommandEncoder(renderTarget, renderPassDesc);
     //    [_mtlRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
 }
 
