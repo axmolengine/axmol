@@ -156,7 +156,7 @@ void ShaderModuleImpl::compileShader(VkDevice device, ShaderStage stage, std::st
                 refl.num_storage_images  = ibs.read<uint32_t>();
                 refl.num_storage_buffers = ibs.read<uint32_t>();
 
-                // Skip fields we don't need beyond flatten_ubos start
+                // Skip fields we don't need beyond flatten_ubo start
                 ibs.advance(sizeof(sc_chunk_refl) - offsetof(sc_chunk_refl, flatten_ubo));
 
                 SLCReflectContext context{&refl, &ibs};

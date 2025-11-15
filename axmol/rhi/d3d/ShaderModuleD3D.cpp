@@ -168,7 +168,7 @@ void ShaderModuleImpl::compileShader(ID3D11Device* device, ShaderStage stage, st
                 refl.num_storage_buffers = ibs.read<uint32_t>();
 
                 // skip infos we don't need
-                ibs.advance(sizeof(sc_chunk_refl) - offsetof(sc_chunk_refl, flatten_ubos));
+                ibs.advance(sizeof(sc_chunk_refl) - offsetof(sc_chunk_refl, flatten_ubo));
 
                 SLCReflectContext context{&refl, &ibs};
 
