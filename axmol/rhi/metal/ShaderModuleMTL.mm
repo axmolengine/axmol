@@ -245,17 +245,19 @@ void ShaderModuleImpl::reflectUniforms(SLCReflectContext* context)
 
 void ShaderModuleImpl::reflectSamplers(SLCReflectContext* context)
 {
+    constexpr auto skip_fields_bytes = static_cast<ptrdiff_t>(sizeof(sc_refl_texture::image_dim) + sizeof(uint8_t));
+    const auto samplerCount          = context->refl->num_textures;
+    if (samplerCount <= 0)
+        return;
     auto ibs = context->ibs;
     for (int i = 0; i < context->refl->num_textures; ++i)
     {
+        UniformInfo uniform{};
         std::string_view name = _sc_read_name(ibs);
-        auto binding          = ibs->read<int32_t>();
+        uniform.location      = ibs->read<int32_t>();  // sampler binding index
+        ibs->advance(skip_fields_bytes);
+        uniform.count = (std::max)(1, static_cast<int>(ibs->read<uint16_t>()));
 
-        ibs->advance(sizeof(sc_refl_texture) - offsetof(sc_refl_texture, image_dim));
-
-        UniformInfo uniform;
-        uniform.location          = binding;
-        uniform.bufferOffset      = -1;
         _activeUniformInfos[name] = uniform;
     }
 }

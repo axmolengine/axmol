@@ -266,8 +266,8 @@ public:
 protected:
     virtual ~RenderContext() = default;
 
-    RenderTarget* _screenRT{nullptr};   // weak ref (managed by Renderer)
-    RenderTarget* _currentRT{nullptr};  // weak ref (managed by Renderer)
+    RenderTarget* _screenRT{nullptr};         // weak ref (managed by Renderer)
+    RenderTarget* _currentRT{nullptr};        // weak ref (managed by Renderer)
     ProgramState* _programState{nullptr};     // weak ref
     VertexLayout* _vertexLayout{nullptr};     // weak ref
     unsigned int _stencilReferenceValue = 0;  ///< front stencil reference value

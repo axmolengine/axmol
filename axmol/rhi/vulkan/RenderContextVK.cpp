@@ -42,6 +42,8 @@
 namespace ax::rhi::vk
 {
 
+static constexpr uint32_t MAX_DESCRIPTOR_SETS_PER_FRAME = 512;
+
 /*
  * Helper: map PrimitiveType to VkPrimitiveTopology
  *
@@ -313,17 +315,16 @@ void RenderContextImpl::createCommandBuffers()
 void RenderContextImpl::createDescriptorPool()
 {
     // Define the descriptor types and counts supported by the pool
-    std::array<VkDescriptorPoolSize, 2> poolSizes{};
-    poolSizes[0].type            = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    poolSizes[0].descriptorCount = 128;  // Adjust as needed, enough to cover all UBOs per frame
-    poolSizes[1].type            = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-    poolSizes[1].descriptorCount = 128;  // Enough to cover all texture bindings
+    VkDescriptorPoolSize poolSizes[] = {
+        {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 64}, {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 64},
+        /*{VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 32},*/  // SSBO, unused currently
+    };
 
     VkDescriptorPoolCreateInfo poolInfo{};
     poolInfo.sType         = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-    poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
-    poolInfo.pPoolSizes    = poolSizes.data();
-    poolInfo.maxSets       = 128;  // Maximum number of descriptor sets that can be allocated
+    poolInfo.poolSizeCount = static_cast<uint32_t>(std::size(poolSizes));
+    poolInfo.pPoolSizes    = poolSizes;
+    poolInfo.maxSets       = MAX_DESCRIPTOR_SETS_PER_FRAME;  // Maximum number of descriptor sets that can be allocated
     poolInfo.flags         = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
     // Allow individual descriptor sets to be freed for flexible management
 
@@ -554,15 +555,15 @@ bool RenderContextImpl::beginFrame()
     _currentCmdBuffer = _commandBuffers[_currentFrame];
     vkResetCommandBuffer(_currentCmdBuffer, 0);
 
+    auto descriptorPool = _descriptorPools[_currentFrame];
+    vkResetDescriptorPool(_device, descriptorPool, 0);  // safe: only reset current frame pool
+
     VkCommandBufferBeginInfo const binfo{
         .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
         .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
     };
     VkResult vr = vkBeginCommandBuffer(_currentCmdBuffer, &binfo);
     AXASSERT(vr == VK_SUCCESS, "vkBeginCommandBuffer failed");
-
-    auto descriptorPool = _descriptorPools[_currentFrame];
-    vkResetDescriptorPool(_device, descriptorPool, 0);  // safe: only reset current frame pool
 
     return true;
 }
@@ -809,12 +810,12 @@ void RenderContextImpl::prepareDrawing()
     // Allocate descriptor sets (set=0 UBOs, set=1 samplers)
     VkPipelineLayout pipelineLayout = _renderPipeline->getVkPipelineLayout();
     VkDescriptorSetAllocateInfo allocInfo{};
-    allocInfo.sType                  = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-    allocInfo.descriptorPool         = _descriptorPools[_currentFrame];
-    VkDescriptorSetLayout layouts[2] = {_renderPipeline->getDescriptorSetLayout(0),
-                                        _renderPipeline->getDescriptorSetLayout(1)};
-    allocInfo.descriptorSetCount     = _renderPipeline->getDescriptorSetLayoutCount();
-    allocInfo.pSetLayouts            = layouts;
+    allocInfo.sType               = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+    allocInfo.descriptorPool      = _descriptorPools[_currentFrame];
+    auto descriptorSetLayoutState = _renderPipeline->getDescriptorSetLayoutState();
+    auto& descriptorLayoutSets    = descriptorSetLayoutState->descriptorLayoutSets;
+    allocInfo.descriptorSetCount  = descriptorSetLayoutState->descriptorLayoutSetCount;
+    allocInfo.pSetLayouts         = descriptorLayoutSets.data();
 
     VkDescriptorSet descriptorSets[2];
     VkResult res = vkAllocateDescriptorSets(_device, &allocInfo, descriptorSets);
@@ -822,6 +823,7 @@ void RenderContextImpl::prepareDrawing()
 
     auto& writes = _descriptorWritesPerFrame;
     writes.clear();
+    writes.reserve(descriptorSetLayoutState->uniformDescriptorCount + descriptorSetLayoutState->samplerDescriptorCount);
 
     VkDescriptorBufferInfo bufferInfos[2] = {};
 
@@ -874,26 +876,49 @@ void RenderContextImpl::prepareDrawing()
     // --- Samplers (set=1, binding=N) ---
     auto& imageInfos = _descriptorImageInfosPerFrame;
     imageInfos.clear();
+
+    // Reserve once using precomputed samplerDescriptorCount to avoid reallocation
+    imageInfos.reserve(descriptorSetLayoutState->samplerDescriptorCount);
+
     for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
     {
-        auto& texs = bindingSet.texs;
-        for (uint32_t k = 0; k < texs.size(); ++k)
+        const auto& texs = bindingSet.texs;
+        if (texs.empty())
+            continue;
+
+        // Record offset before pushing new imageInfos
+        size_t offset = imageInfos.size();
+
+        if (texs.size() == 1)
         {
-            auto textureImpl = static_cast<TextureImpl*>(texs[k]);
-
-            auto& imageInfo       = imageInfos.emplace_back();
-            imageInfo.sampler     = textureImpl->getSampler();
-            imageInfo.imageView   = textureImpl->internalHandle().view;
-            imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-
-            VkWriteDescriptorSet& write = writes.emplace_back();
-            write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            write.dstSet                = descriptorSets[1];
-            write.dstBinding            = bindingIndex + k;  // preserve shader binding order
-            write.descriptorType        = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-            write.descriptorCount       = 1;
-            write.pImageInfo            = &imageInfo;
+            auto textureImpl                 = static_cast<TextureImpl*>(texs[0]);
+            VkDescriptorImageInfo& imageInfo = imageInfos.emplace_back();
+            imageInfo.sampler                = textureImpl->getSampler();
+            imageInfo.imageView              = textureImpl->internalHandle().view;
+            imageInfo.imageLayout            = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         }
+        else
+        {
+            // Fill VkDescriptorImageInfo for each texture in this binding set
+            for (auto tex : texs)
+            {
+                auto textureImpl = static_cast<TextureImpl*>(tex);
+
+                VkDescriptorImageInfo& imageInfo = imageInfos.emplace_back();
+                imageInfo.sampler                = textureImpl->getSampler();
+                imageInfo.imageView              = textureImpl->internalHandle().view;
+                imageInfo.imageLayout            = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            }
+        }
+
+        // Create one write descriptor covering the whole array
+        VkWriteDescriptorSet& write = writes.emplace_back();
+        write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        write.dstSet          = descriptorSets[1];
+        write.dstBinding      = bindingIndex;  // binding index stays the same
+        write.descriptorType  = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        write.descriptorCount = static_cast<uint32_t>(texs.size());  // number of array elements
+        write.pImageInfo      = imageInfos.data() + offset;          // pointer into stable vector storage
     }
 
     // Commit descriptor writes
@@ -1051,7 +1076,6 @@ void RenderContextImpl::readPixelsImpl(RenderTarget* rt,
     AXASSERT(vkAllocateMemory(_device, &allocInfo, nullptr, &stagingMem) == VK_SUCCESS, "vkAllocateMemory failed");
     AXASSERT(vkBindBufferMemory(_device, stagingBuf, stagingMem, 0) == VK_SUCCESS, "vkBindBufferMemory failed");
 
-
     auto submission = _driver->startIsolateSubmission();
 
     VkCommandBufferBeginInfo const binfo{
@@ -1081,8 +1105,7 @@ void RenderContextImpl::readPixelsImpl(RenderTarget* rt,
     copyRegion.imageOffset                     = {0, 0, 0};
     copyRegion.imageExtent                     = {width, height, 1};
 
-    vkCmdCopyImageToBuffer(submission, srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, stagingBuf, 1,
-                           &copyRegion);
+    vkCmdCopyImageToBuffer(submission, srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, stagingBuf, 1, &copyRegion);
 
     // Restore to original layout using TextureImpl
     colorAttachment->transitionLayout(submission, currentLayout);

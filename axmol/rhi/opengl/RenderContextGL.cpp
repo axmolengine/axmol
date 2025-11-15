@@ -61,9 +61,9 @@ bool RenderContextImpl::beginFrame()
     return true;
 }
 
-void RenderContextImpl::beginRenderPass(const RenderTarget* rt, const RenderPassDesc& descriptor)
+void RenderContextImpl::beginRenderPass(RenderTarget* rt, const RenderPassDesc& descriptor)
 {
-    auto rtGL = static_cast<const RenderTargetImpl*>(rt);
+    auto rtGL = static_cast<RenderTargetImpl*>(rt);
 
     rtGL->bindFrameBuffer();
     rtGL->update();

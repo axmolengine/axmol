@@ -91,7 +91,7 @@ public:
      * MTLRenderCommandEncoder is cached if current RenderPassDesc is identical to previous one.
      * @param descriptor Specifies a group of render targets that hold the results of a render pass.
      */
-    void beginRenderPass(const RenderTarget* renderTarget, const RenderPassDesc& descriptor) override;
+    void beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& descriptor) override;
 
     /**
      * Update depthStencil status, improvment: for metal backend cache it
@@ -269,7 +269,6 @@ private:
     unsigned int _renderTargetHeight = 0;
 
     dispatch_semaphore_t _frameBoundarySemaphore;
-    const RenderTarget* _currentRenderTarget = nil;  // weak ref
     RenderPassDesc _currentRenderPassDesc;
     NSAutoreleasePool* _autoReleasePool = nil;
 

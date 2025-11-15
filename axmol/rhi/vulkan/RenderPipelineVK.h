@@ -49,6 +49,13 @@ public:
     static constexpr int DESCRIPTOR_SET_SAMPLER   = 1;
 
     using VkDescriptorSetLayoutArray = std::array<VkDescriptorSetLayout, MAX_DESCRIPTOR_SET_COUNT>;
+    struct DescriptorSetLayoutState
+    {
+        VkDescriptorSetLayoutArray descriptorLayoutSets{VK_NULL_HANDLE};
+        uint32_t descriptorLayoutSetCount{0};
+        uint32_t samplerDescriptorCount{0};
+        uint32_t uniformDescriptorCount{0};
+    };
 
     explicit RenderPipelineImpl(VkDevice device);
     ~RenderPipelineImpl();
@@ -59,8 +66,7 @@ public:
 
     VkPipeline getVkPipeline() const { return _activePipeline; }
     VkPipelineLayout getVkPipelineLayout() const { return _activePipelineLayout; }
-    VkDescriptorSetLayout getDescriptorSetLayout(int index) { return _activeDescriptorSetLayouts[index]; }
-    uint32_t getDescriptorSetLayoutCount() const { return _activeDescriptorSetLayoutCount; }
+    DescriptorSetLayoutState* getDescriptorSetLayoutState() const { return _activeDescriptorSetLayoutState; }
 
     /**
      * @brief Updates input assembly state for dynamic primitive type handling
@@ -102,13 +108,12 @@ private:
     VkPipelineColorBlendStateCreateInfo _activeBlendState{};
 
     VkPipelineLayout _activePipelineLayout{nullptr};
-    VkDescriptorSetLayoutArray _activeDescriptorSetLayouts{};
-    uint32_t _activeDescriptorSetLayoutCount{};
+    DescriptorSetLayoutState* _activeDescriptorSetLayoutState{nullptr};
 
-    VkPipeline _activePipeline{nullptr};
+    VkPipeline _activePipeline{VK_NULL_HANDLE};
 
     axstd::hash_map<uintptr_t, VkPipelineLayout> _pipelineLayoutCache;
-    axstd::hash_map<uintptr_t, VkDescriptorSetLayoutArray> _descriptorSetLayoutCache;
+    axstd::hash_map<uintptr_t, DescriptorSetLayoutState> _descriptorSetLayoutCache;
     axstd::hash_map<uintptr_t, VkPipeline> _pipelineCache;  // PSO cache
 };
 }  // namespace ax::rhi::vk

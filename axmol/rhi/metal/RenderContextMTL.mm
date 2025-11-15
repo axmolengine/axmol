@@ -235,16 +235,15 @@ bool RenderContextImpl::beginFrame()
     return true;
 }
 
-void RenderContextImpl::updateRenderCommandEncoder(const RenderTarget* renderTarget,
-                                                   const RenderPassDesc& renderPassDesc)
+void RenderContextImpl::updateRenderCommandEncoder(RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc)
 {
-    if (_mtlRenderEncoder != nil && _currentRenderPassDesc == renderPassDesc && _currentRenderTarget == renderTarget &&
+    if (_mtlRenderEncoder != nil && _currentRenderPassDesc == renderPassDesc && _currentRT == renderTarget &&
         !renderTarget->isDirty())
     {
         return;
     }
 
-    _currentRenderTarget   = renderTarget;
+    _currentRT             = renderTarget;
     _currentRenderPassDesc = renderPassDesc;
 
     if (_mtlRenderEncoder != nil)
@@ -261,7 +260,7 @@ void RenderContextImpl::updateRenderCommandEncoder(const RenderTarget* renderTar
     [_mtlRenderEncoder retain];
 }
 
-void RenderContextImpl::beginRenderPass(const RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc)
+void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc)
 {
     updateRenderCommandEncoder(renderTarget, renderPassDesc);
     //    [_mtlRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];

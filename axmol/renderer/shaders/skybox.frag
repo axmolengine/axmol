@@ -3,7 +3,7 @@ precision highp float;
 precision highp int;
 
 layout(location = TEXCOORD0) in vec3        v_reflect;
-layout(binding = 0) uniform samplerCube u_Env;
+layout(set = 1, binding = 0) uniform samplerCube u_Env;
 
 layout(std140, set = 0, binding = 1) uniform fs_ub {
     vec4 u_color;

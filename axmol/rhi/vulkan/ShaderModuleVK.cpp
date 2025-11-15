@@ -157,7 +157,7 @@ void ShaderModuleImpl::compileShader(VkDevice device, ShaderStage stage, std::st
                 refl.num_storage_buffers = ibs.read<uint32_t>();
 
                 // Skip fields we don't need beyond flatten_ubos start
-                ibs.advance(sizeof(sc_chunk_refl) - offsetof(sc_chunk_refl, flatten_ubos));
+                ibs.advance(sizeof(sc_chunk_refl) - offsetof(sc_chunk_refl, flatten_ubo));
 
                 SLCReflectContext context{&refl, &ibs};
 
@@ -307,22 +307,23 @@ void ShaderModuleImpl::reflectUniforms(SLCReflectContext* context)
 
 void ShaderModuleImpl::reflectSamplers(SLCReflectContext* context)
 {
-    auto ibs                = context->ibs;
-    const auto samplerCount = context->refl->num_textures;
+    constexpr auto skip_fields_bytes = static_cast<ptrdiff_t>(sizeof(sc_refl_texture::image_dim) + sizeof(uint8_t));
+    const auto samplerCount          = context->refl->num_textures;
+    if (samplerCount <= 0)
+        return;
+    auto ibs = context->ibs;
     _activeSamplerInfos.reserve(samplerCount);
     for (int i = 0; i < samplerCount; ++i)
     {
+        UniformInfo uniform{};
+
         std::string_view name = _sc_read_name(ibs);
-        auto binding          = ibs->read<int32_t>();  // descriptor binding
+        uniform.location      = ibs->read<int32_t>();  // sampler binding index
+        ibs->advance(skip_fields_bytes);
+        uniform.count = (std::max)(1, static_cast<int>(ibs->read<uint16_t>()));
 
-        ibs->advance(sizeof(sc_refl_texture) - offsetof(sc_refl_texture, image_dim));
-
-        UniformInfo uniform;
-        uniform.location     = binding;  // for Vulkan, sampler/image binding
-        uniform.bufferOffset = -1;
-        auto ret             = _activeUniformInfos.emplace(name, uniform);
+        auto ret = _activeUniformInfos.emplace(name, uniform);
         assert(ret.second);
-
         _activeSamplerInfos.push_back(uniform);
     }
 }

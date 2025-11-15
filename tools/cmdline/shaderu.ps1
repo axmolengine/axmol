@@ -20,6 +20,9 @@ if (!$ScanDirs) {
 $vertexExts = @(".vert", ".vs", ".vsh")
 $fragmentExts = @(".frag", ".fs", ".fsh")
 
+$samplerRegex = 'uniform\s+(sampler2D|sampler2DArray|samplerCube)\s+'
+$uniformRegex = '"uniform\s+\w+\s*\{"'
+
 # Scan target directory
 foreach ($scanDir in $ScanDirs) {
     $TargetDir = (Resolve-Path $scanDir -ErrorAction SilentlyContinue)
@@ -53,8 +56,24 @@ foreach ($scanDir in $ScanDirs) {
         foreach ($line in $lines) {
             $newLine = $line
 
-            # Handle UBOs
-            if ($line -match "uniform\s+\w+\s*\{") {
+            # Handle sampler2D, sampler2DArray, samplerCube
+            if ($line -match $samplerRegex) {
+                if ($line -match "layout\s*\(") {
+                    if($line -notmatch "set\s*=") {
+                        if ($line -match "binding\s*=") {
+                            $newLine = $line -replace "layout\s*\(([^)]*)\)", "layout(set = 1, `$1)"
+                            $changed = $true
+                        }
+                        else {
+                            throw "(1)Invalid shader: $file"
+                        }
+                    }
+                }
+                else {
+                    throw "(2)Invalid shader: $file"
+                }
+            }
+            elseif ($line -match $uniformRegex) {
                 if ($stage -eq "vertex" -and $line -notmatch "set\s*=") {
                     if ($line -match "layout\s*\(") {
                         # Merge into existing layout(...)
@@ -74,24 +93,6 @@ foreach ($scanDir in $ScanDirs) {
                         $newLine = "layout(std140, set = 0, binding = 1) " + $line.Trim()
                     }
                     $changed = $true
-                }
-            }
-
-            # Handle sampler2D
-            if ($line -match "uniform\s+sampler2D\s+") {
-                if ($line -match "layout\s*\(") {
-                    if($line -notmatch "set\s*=") {
-                        if ($line -match "binding\s*=") {
-                            $newLine = $line -replace "layout\s*\(([^)]*)\)", "layout(set = 1, `$1)"
-                            $changed = $true
-                        }
-                        else {
-                            throw "(1)Invalid shader: $file"
-                        }
-                    }
-                }
-                else {
-                    throw "(2)Invalid shader: $file"
                 }
             }
 

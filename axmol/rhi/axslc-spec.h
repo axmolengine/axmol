@@ -1,5 +1,5 @@
 // The Axmol Shader Compiler spec, define macros and structs, can be include anywhere
-// match with axslcc-1.9.0+
+// match with axslcc-3.0.0+
 
 #pragma once
 
@@ -13,7 +13,7 @@ namespace axslc
 
 #pragma pack(push, 1)
 
-#define SC_CHUNK               sc_makefourcc('S', 'G', 'S', ' ')
+#define SC_CHUNK               sc_makefourcc('S', 'G', 'S', '3')
 #define SC_CHUNK_STAG          sc_makefourcc('S', 'T', 'A', 'G')
 #define SC_CHUNK_REFL          sc_makefourcc('R', 'E', 'F', 'L')
 #define SC_CHUNK_CODE          sc_makefourcc('C', 'O', 'D', 'E')
@@ -48,6 +48,17 @@ namespace axslc
 #define SC_IMAGEDIM_BUFFER     sc_makefourcc('B', 'U', 'F', 'F')
 #define SC_IMAGEDIM_SUBPASS    sc_makefourcc('S', 'U', 'B', 'P')
 
+enum Dim
+{
+    Dim1D          = 0,
+    Dim2D          = 1,
+    Dim3D          = 2,
+    DimCube        = 3,
+    DimRect        = 4,
+    DimBuffer      = 5,
+    DimSubpassData = 6
+};
+
 // SGS chunk
 struct sc_chunk
 {
@@ -64,7 +75,7 @@ struct sc_chunk_refl
     uint32_t num_uniform_buffers;
     uint32_t num_storage_images;
     uint32_t num_storage_buffers;
-    uint16_t flatten_ubos;
+    uint16_t flatten_ubo;
     uint16_t debug_info;
 
     // inputs: sc_refl_input[num_inputs]
@@ -83,13 +94,16 @@ struct sc_refl_input
     uint32_t format;
 };
 
+// @since 3.0.0, modified
 struct sc_refl_texture
 {
     char name[32];
     int32_t binding;
-    uint32_t image_dim;
-    uint8_t multisample;
-    uint8_t is_array;
+    uint8_t image_dim;        // @see enum Dim: Dim1D, Dim2D, Dim3D, DimCube ...
+    uint8_t multisample : 1;  // whether sampler2DMS
+    uint8_t arrayed : 1;      // whether samplerXXArray
+    uint8_t reserved : 6;     // reserved field
+    uint16_t count;
 };
 
 struct sc_refl_buffer

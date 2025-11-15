@@ -79,7 +79,7 @@ public:
      * Begin a render pass, initial color, depth and stencil attachment.
      * @param descriptor Specifies a group of render targets that hold the results of a render pass.
      */
-    void beginRenderPass(const RenderTarget* rt, const RenderPassDesc& descriptor) override;
+    void beginRenderPass(RenderTarget* rt, const RenderPassDesc& descriptor) override;
 
     /**
      * Update depthStencil status, improvment: for metal backend cache it

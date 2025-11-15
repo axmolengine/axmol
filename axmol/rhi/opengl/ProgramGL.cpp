@@ -272,12 +272,12 @@ void ProgramImpl::reflectUniformInfos()
     /*
      * construct _activeUniformInfos: uniformName-->UniformInfo
      */
-    UniformInfo uniform;
     GLint nameLen       = 0;
     GLint numOfUniforms = 0;
     glGetProgramiv(_program, GL_ACTIVE_UNIFORMS, &numOfUniforms);
     for (GLint i = 0; i < numOfUniforms; ++i)
     {
+        UniformInfo uniform{};
         buffer.resize(MAX_UNIFORM_NAME_LENGTH + 1);
         glGetActiveUniform(_program, i, static_cast<GLint>(buffer.size()), &nameLen, &uniform.count, &uniform.type,
                            buffer.data());
@@ -313,7 +313,6 @@ void ProgramImpl::reflectUniformInfos()
             assert(uniform.type == GL_SAMPLER_2D || uniform.type == GL_SAMPLER_CUBE ||
                    uniform.type == GL_SAMPLER_2D_ARRAY);
             uniform.location     = glGetUniformLocation(_program, uniformName.data());
-            uniform.bufferOffset = -1;
         }
 
         _activeUniformInfos[uniformName] = uniform;
