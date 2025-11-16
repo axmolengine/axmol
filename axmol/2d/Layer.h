@@ -316,7 +316,7 @@ private:
     Color32 _endColor   = Color32::BLACK;
     Color _endColorRend = Color::BLACK;  // end color used in shader
 
-    Vec2 _vertices[4];
+    Vec3 _vertices[4];
     Vec2 _center;
     float _radius = 0.f;
     float _expand = 0.f;

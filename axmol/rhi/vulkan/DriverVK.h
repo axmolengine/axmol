@@ -93,7 +93,7 @@ public:
     bool setupSurface(const SurfaceCreateInfo& info);
     VkSurfaceKHR getSurface() const { return _surface; }
 
-    const VkExtent2D& getInitialSurfaceExtent() const { return _surfaceInitalExtent; }
+    const VkExtent2D& getSurfaceInitialExtent() const { return _surfaceInitalExtent; }
 
     RenderContext* createRenderContext(void* surfaceContext) override;
     Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial) override;

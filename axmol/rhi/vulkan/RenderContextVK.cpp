@@ -131,7 +131,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface)
     VkResult vr               = vkCreateCommandPool(_device, &poolInfo, nullptr, &_commandPool);
     AXASSERT(vr == VK_SUCCESS, "vkCreateCommandPool failed");
 
-    auto& extent  = driver->getInitialSurfaceExtent();
+    auto& extent  = driver->getSurfaceInitialExtent();
     _screenWidth  = extent.width;
     _screenHeight = extent.height;
 

@@ -146,7 +146,7 @@ struct BuiltinVertexDefine
         desc.startLayout(1);
 
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_POSITION, program->getVertexInputDesc(rhi::VertexInputKind::POSITION),
-                       rhi::VertexFormat::FLOAT2, 0, false);
+                       rhi::VertexFormat::FLOAT3, 0, false);
         desc.endLayout();
     }
 

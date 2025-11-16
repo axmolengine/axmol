@@ -42,8 +42,9 @@ StencilStateManager::StencilStateManager()
     _mvpMatrixLocaiton    = programState->getUniformLocation("u_MVPMatrix");
     _colorUniformLocation = programState->getUniformLocation("u_color");
 
-    Vec2 vertices[4] = {Vec2(-1.0f, -1.0f), Vec2(1.0f, -1.0f), Vec2(1.0f, 1.0f), Vec2(-1.0f, 1.0f)};
-    _customCommand.createVertexBuffer(sizeof(Vec2), 4, CustomCommand::BufferUsage::STATIC);
+    Vec3 vertices[4] = {Vec3(-1.0f, -1.0f, 0.0f), Vec3(1.0f, -1.0f, 0.0f), Vec3(1.0f, 1.0f, 0.0f),
+                        Vec3(-1.0f, 1.0f, 0.0f)};
+    _customCommand.createVertexBuffer(sizeof(Vec3), 4, CustomCommand::BufferUsage::STATIC);
     _customCommand.updateVertexBuffer(vertices, sizeof(vertices));
 
     unsigned short indices[6] = {0, 1, 2, 0, 2, 3};

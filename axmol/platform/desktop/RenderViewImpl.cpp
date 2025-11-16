@@ -244,11 +244,11 @@ private:
 };
 RenderViewImpl* GLFWEventHandler::_view = nullptr;
 
-const std::string RenderViewImpl::EVENT_WINDOW_POSITIONED = "glview_window_positioned";
-const std::string RenderViewImpl::EVENT_WINDOW_RESIZED    = "glview_window_resized";
-const std::string RenderViewImpl::EVENT_WINDOW_FOCUSED    = "glview_window_focused";
-const std::string RenderViewImpl::EVENT_WINDOW_UNFOCUSED  = "glview_window_unfocused";
-const std::string RenderViewImpl::EVENT_WINDOW_CLOSE      = "glview_window_close";
+const std::string RenderViewImpl::EVENT_WINDOW_POSITIONED = "_ax_window_positioned";
+const std::string RenderViewImpl::EVENT_WINDOW_RESIZED    = "_ax_window_resized";
+const std::string RenderViewImpl::EVENT_WINDOW_FOCUSED    = "_ax_window_focused";
+const std::string RenderViewImpl::EVENT_WINDOW_UNFOCUSED  = "_ax_window_unfocused";
+const std::string RenderViewImpl::EVENT_WINDOW_CLOSE      = "_ax_window_close";
 
 ////////////////////////////////////////////////////
 
