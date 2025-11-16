@@ -189,11 +189,11 @@ Renderer::~Renderer()
 
     free(_triBatchesToDraw);
 
-    AX_SAFE_RELEASE(_depthStencilState);
-    AX_SAFE_RELEASE(_context);
-    AX_SAFE_RELEASE(_renderPipeline);
     AX_SAFE_RELEASE(_defaultRT);
     AX_SAFE_RELEASE(_offscreenRT);
+    AX_SAFE_RELEASE(_depthStencilState);
+    AX_SAFE_RELEASE(_renderPipeline);
+    AX_SAFE_RELEASE(_context);
 }
 
 void Renderer::init()
@@ -886,9 +886,13 @@ void Renderer::clear(ClearFlag flags, const Color& color, float depth, unsigned 
 
         if (bitmask::any(flags, ClearFlag::DEPTH))
             descriptor.clearDepthValue = depth;
+        else
+            descriptor.flags.discardStart |= TargetBufferFlags::DEPTH;
 
         if (bitmask::any(flags, ClearFlag::STENCIL))
             descriptor.clearStencilValue = stencil;
+        else
+            descriptor.flags.discardStart |= TargetBufferFlags::STENCIL;
 
         _context->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y,
                                  _scissorState.rect.width, _scissorState.rect.height);

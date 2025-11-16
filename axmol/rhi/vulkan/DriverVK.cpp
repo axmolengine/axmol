@@ -490,7 +490,8 @@ bool DriverImpl::setupSurface(const SurfaceCreateInfo& info)
 RenderContext* DriverImpl::createRenderContext(void* surfaceContext)
 {
     // Swapchain management is out-of-scope here; pass VK_NULL_HANDLE for now
-    return new RenderContextImpl(this, static_cast<VkSurfaceKHR>(surfaceContext));
+    _lastRenderContext = new RenderContextImpl(this, static_cast<VkSurfaceKHR>(surfaceContext));
+    return _lastRenderContext;
 }
 
 Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial)
@@ -790,6 +791,18 @@ void DriverImpl::commitIsolateSubmission(const IsolateSubmission& submission)
         res = vkWaitForFences(_device, 1, &submission.fence, VK_TRUE, UINT64_MAX);
         AXASSERT(res == VK_SUCCESS, "vkWaitForFences failed");
     }
+}
+
+void DriverImpl::destroyFramebuffer(VkFramebuffer fb)
+{
+    vkDestroyFramebuffer(_device, fb, nullptr);
+}
+
+void DriverImpl::destroyRenderPass(VkRenderPass rp)
+{
+    vkDestroyRenderPass(_device, rp, nullptr);
+    if (_lastRenderContext)
+        _lastRenderContext->removeCachedPipelines(rp);
 }
 
 void DriverImpl::queueDisposal(VkSampler sampler)

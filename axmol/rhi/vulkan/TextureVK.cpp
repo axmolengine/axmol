@@ -207,6 +207,11 @@ VkImageLayout TextureImpl::getCurrentLayout() const
     return _layoutTracker.getLayout(0, 0);
 }
 
+void TextureImpl::setKnownLayout(VkImageLayout layout)
+{
+    _layoutTracker.setLayout(0, 0, layout);
+}
+
 // ------------------------------------------------------------
 // updateSamplerDesc
 // ------------------------------------------------------------

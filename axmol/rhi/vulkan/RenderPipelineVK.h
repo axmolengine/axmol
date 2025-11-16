@@ -103,6 +103,8 @@ public:
      */
     // void updateInputAssemblyState(PrimitiveType primitiveType);
 
+    void removeCachedPipelines(VkRenderPass rp);
+
 private:
     void initializePipelineDefaults();
 
@@ -142,7 +144,9 @@ private:
     axstd::hash_map<uintptr_t, VkPipeline> _pipelineCache;  // PSO cache
     axstd::hash_map<VkPipelineLayout, DescriptorPool> _descriptorCache;
 
-    std::unordered_multimap<ProgramImpl*, VkPipeline> _programToPipelineMap;
-    std::unordered_multimap<VkRenderPass, VkPipeline> _renderPassToPipelineMap;
+
+    // TODO:
+    std::multimap<ProgramImpl*, uintptr_t> _programToPipelineMap;
+    std::multimap<VkRenderPass, uintptr_t> _renderPassToPipelineMap;
 };
 }  // namespace ax::rhi::vk

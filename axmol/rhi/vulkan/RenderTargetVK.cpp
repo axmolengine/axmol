@@ -81,9 +81,9 @@ void RenderTargetImpl::invalidate()
     auto device = _driver->getDevice();
 
     for (auto& [_, pass] : _renderPassCache)
-        vkDestroyRenderPass(device, pass, nullptr);
+        _driver->destroyRenderPass(pass);
     for (auto& [_, fb] : _framebufferCache)
-        vkDestroyFramebuffer(device, fb, nullptr);
+        _driver->destroyFramebuffer(fb);
     _renderPassCache.clear();
     _framebufferCache.clear();
     _renderPass  = VK_NULL_HANDLE;
@@ -243,7 +243,20 @@ void RenderTargetImpl::endRenderPass(VkCommandBuffer cmd)
     vkCmdEndRenderPass(cmd);
 
     if (!_defaultRenderTarget)
-        prepareAttachmentsForSampling(cmd);
+    {
+        for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+        {
+            TextureImpl* texImpl = _attachmentTexPtrs[i];
+            if (!texImpl)
+                break;
+            texImpl->setKnownLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        }
+        if (_attachmentViews[DepthViewIndex] != VK_NULL_HANDLE)
+        {
+            if (auto* texImpl = _attachmentTexPtrs[DepthViewIndex])
+                texImpl->setKnownLayout(VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+        }
+    }
 }
 
 void RenderTargetImpl::updateFramebuffer(VkCommandBuffer /*cmd*/)
@@ -360,7 +373,7 @@ void RenderTargetImpl::updateRenderPass(const RenderPassDesc& desc)
                     ? (isDefaultRT ? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL)
                     : VK_IMAGE_LAYOUT_UNDEFINED;
 
-            ad.finalLayout = isDefaultRT ? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            ad.finalLayout = isDefaultRT ? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR : VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
             attachments.push_back(ad);
 
@@ -485,29 +498,6 @@ void RenderTargetImpl::prepareAttachmentsForRendering(VkCommandBuffer cmd)
         TextureImpl* texImpl = _attachmentTexPtrs[DepthViewIndex];
         if (texImpl)
             texImpl->transitionLayout(cmd, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
-    }
-}
-
-void RenderTargetImpl::prepareAttachmentsForSampling(VkCommandBuffer cmd)
-{
-    if (_defaultRenderTarget)
-        return;
-
-    // Color -> SHADER_READ_ONLY_OPTIMAL (contiguous indices starting at 0)
-    for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
-    {
-        TextureImpl* texImpl = _attachmentTexPtrs[i];
-        if (!texImpl)
-            break;
-        texImpl->transitionLayout(cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-    }
-
-    // Depth -> SHADER_READ_ONLY_OPTIMAL (only if sampling is needed)
-    if (_attachmentViews[DepthViewIndex] != VK_NULL_HANDLE)
-    {
-        TextureImpl* texImpl = _attachmentTexPtrs[DepthViewIndex];
-        if (texImpl)
-            texImpl->transitionLayout(cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     }
 }
 

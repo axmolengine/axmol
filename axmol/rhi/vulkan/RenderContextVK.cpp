@@ -621,13 +621,25 @@ void RenderContextImpl::endRenderPass()
     rtImpl->endRenderPass(_currentCmdBuffer);
 
     // Reset state cache
-    _programState    = nullptr;
-    _vertexLayout    = nullptr;
-    _boundPipeline   = nullptr;
+    _programState  = nullptr;
+    _vertexLayout  = nullptr;
+    _boundPipeline = nullptr;
 
     AX_SAFE_RELEASE_NULL(_indexBuffer);
     AX_SAFE_RELEASE_NULL(_vertexBuffer);
     AX_SAFE_RELEASE_NULL(_instanceBuffer);
+
+    if (!rtImpl->isDefaultRenderTarget())
+    {
+        //readPixels(_currentRT, false, [=](const rhi::PixelBufferDesc& pbd) {
+        //    if (pbd)
+        //    {
+        //        auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(),
+        //                                                pbd._data.getSize(), pbd._width, pbd._height, 8, false);
+        //        image->saveToFile(R"(D:\tmp\test.png)"sv, false);
+        //    }
+        //});
+    }
 }
 
 void RenderContextImpl::endFrame()
@@ -718,37 +730,28 @@ void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
     _depthStencilState->update(desc);
 }
 
-void RenderContextImpl::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc)
-{
-    RenderContext::updatePipelineState(rt, desc);
-    AXASSERT(_renderPipeline, "RenderPipelineImpl not set");
-    _renderPipeline->prepareUpdate(_depthStencilState);
-    _renderPipeline->update(rt, desc);
-
-    // Bind pipeline
-    auto pipeline = _renderPipeline->getVkPipeline();
-    if (_boundPipeline != pipeline)
-    {
-        vkCmdBindPipeline(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, _renderPipeline->getVkPipeline());
-        _boundPipeline = pipeline;
-
-        // Prime dynamic states required by this pipeline
-        bitmask::set(_inFlightDynamicDirtyBits[_currentFrame], PIPELINE_REQUIRED_DYNAMIC_BITS);
-    }
-}
-
 void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
 {
     if (w == 0 || h == 0)
         return;
 
     VkViewport vp{};
+
+#if 1
     vp.x        = static_cast<float>(x);
     vp.y        = static_cast<float>(y + h);
     vp.width    = static_cast<float>(w);
     vp.height   = -static_cast<float>(h);
     vp.minDepth = 0.0f;
     vp.maxDepth = 1.0f;
+#else
+    vp.x        = static_cast<float>(x);
+    vp.y        = static_cast<float>(y);
+    vp.width    = static_cast<float>(w);
+    vp.height   = static_cast<float>(h);
+    vp.minDepth = 0.0f;
+    vp.maxDepth = 1.0f;
+#endif
 
     if (vp != _cachedViewport)
     {
@@ -869,11 +872,72 @@ void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
     _instanceBuffer = static_cast<BufferImpl*>(buffer);
 }
 
+void RenderContextImpl::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc)
+{
+    RenderContext::updatePipelineState(rt, desc);
+    AXASSERT(_renderPipeline, "RenderPipelineImpl not set");
+    _renderPipeline->prepareUpdate(_depthStencilState);
+    _renderPipeline->update(rt, desc);
+
+    // Bind pipeline
+    auto pipeline = _renderPipeline->getVkPipeline();
+    if (_boundPipeline != pipeline)
+    {
+        vkCmdBindPipeline(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, _renderPipeline->getVkPipeline());
+        _boundPipeline = pipeline;
+        bitmask::set(_inFlightDynamicDirtyBits[_currentFrame], PIPELINE_REQUIRED_DYNAMIC_BITS);
+    }
+}
+
+void RenderContextImpl::applyPendingDynamicStates()
+{
+    // Viewport
+    if (bitmask::any(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::Viewport))
+    {
+        vkCmdSetViewport(_currentCmdBuffer, 0, 1, &_cachedViewport);
+        bitmask::clear(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::Viewport);
+    }
+
+    // Scissor
+    if (bitmask::any(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::Scissor))
+    {
+        vkCmdSetScissor(_currentCmdBuffer, 0, 1, &_cachedScissor);
+        bitmask::clear(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::Scissor);
+    }
+
+    // Stencil reference if used
+    if (bitmask::any(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::StencilRef))
+    {
+        vkCmdSetStencilReference(_currentCmdBuffer, VK_STENCIL_FRONT_AND_BACK, _stencilReferenceValue);
+        bitmask::clear(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::StencilRef);
+    }
+
+    // CullMode and FrontFace via EXT dynamic state if available
+    if (bitmask::any(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::CullMode))
+    {
+        vkCmdSetCullModeEXT(_currentCmdBuffer, _cachedCullMode);
+        bitmask::clear(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::CullMode);
+    }
+    if (bitmask::any(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::FrontFace))
+    {
+        vkCmdSetFrontFaceEXT(_currentCmdBuffer, _cachedFrontFace);
+        bitmask::clear(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::FrontFace);
+    }
+}
+
+void RenderContextImpl::removeCachedPipelines(VkRenderPass rp)
+{
+    if (_renderPipeline)
+        _renderPipeline->removeCachedPipelines(rp);
+}
+
 void RenderContextImpl::prepareDrawing()
 {
     AXASSERT(_programState, "ProgramState must be set before drawing");
     AXASSERT(_renderPipeline, "RenderPipelineImpl must be set before drawing");
     AXASSERT(_boundPipeline, "boundPipeline must be set before drawing");
+
+    applyPendingDynamicStates();
 
     // Populate CPU-side uniforms via callbacks
     for (auto& cb : _programState->getCallbackUniforms())
@@ -978,9 +1042,9 @@ void RenderContextImpl::prepareDrawing()
         }
         else
         {
-            for (auto* tex : texs)
+            for (auto tex : texs)
             {
-                auto* textureImpl                = static_cast<TextureImpl*>(tex);
+                auto textureImpl                 = static_cast<TextureImpl*>(tex);
                 VkDescriptorImageInfo& imageInfo = imageInfos.emplace_back();
                 imageInfo.sampler                = textureImpl->getSampler();
                 imageInfo.imageView              = textureImpl->internalHandle().view;
@@ -1019,44 +1083,6 @@ void RenderContextImpl::prepareDrawing()
         VkBuffer buffers[]     = {_vertexBuffer->internalHandle(), _instanceBuffer->internalHandle()};
         VkDeviceSize offsets[] = {0, 0};
         vkCmdBindVertexBuffers(_currentCmdBuffer, 0, 2, buffers, offsets);
-    }
-
-    // Apply dynamic states based on dirty bits
-    auto& dynamicDirtyBits = _inFlightDynamicDirtyBits[_currentFrame];
-    if (bitmask::any(dynamicDirtyBits, DynamicStateBits::Viewport))
-    {
-        vkCmdSetViewport(_currentCmdBuffer, 0, 1, &_cachedViewport);
-        bitmask::clear(dynamicDirtyBits, DynamicStateBits::Viewport);
-    }
-
-    if (bitmask::any(dynamicDirtyBits, DynamicStateBits::Scissor))
-    {
-        if (_scissorEnabled)
-            vkCmdSetScissor(_currentCmdBuffer, 0, 1, &_cachedScissor);
-        else
-        {
-            VkRect2D fullRect{{0, 0}, {_renderTargetWidth, _renderTargetHeight}};
-            vkCmdSetScissor(_currentCmdBuffer, 0, 1, &fullRect);
-        }
-        bitmask::clear(dynamicDirtyBits, DynamicStateBits::Scissor);
-    }
-
-    if (bitmask::any(dynamicDirtyBits, DynamicStateBits::StencilRef))
-    {
-        vkCmdSetStencilReference(_currentCmdBuffer, VK_STENCIL_FACE_FRONT_AND_BACK, _stencilReferenceValue);
-        bitmask::clear(dynamicDirtyBits, DynamicStateBits::StencilRef);
-    }
-
-    if (bitmask::any(dynamicDirtyBits, DynamicStateBits::CullMode))
-    {
-        vkCmdSetCullModeEXT(_currentCmdBuffer, _cachedCullMode);
-        bitmask::clear(dynamicDirtyBits, DynamicStateBits::CullMode);
-    }
-
-    if (bitmask::any(dynamicDirtyBits, DynamicStateBits::FrontFace))
-    {
-        vkCmdSetFrontFaceEXT(_currentCmdBuffer, _cachedFrontFace);
-        bitmask::clear(dynamicDirtyBits, DynamicStateBits::FrontFace);
     }
 }
 

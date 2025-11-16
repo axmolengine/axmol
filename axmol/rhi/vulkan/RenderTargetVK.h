@@ -64,7 +64,6 @@ private:
     void updateFramebuffer(VkCommandBuffer cmd);
 
     void prepareAttachmentsForRendering(VkCommandBuffer cmd);
-    void prepareAttachmentsForSampling(VkCommandBuffer cmd);
 
     DriverImpl* _driver{nullptr};
 

@@ -148,6 +148,9 @@ public:
     void beginRecordingIsolateSubmission(const IsolateSubmission& submission);
     void commitIsolateSubmission(const IsolateSubmission& submission);
 
+    void destroyFramebuffer(VkFramebuffer);
+    void destroyRenderPass(VkRenderPass);
+
     void queueDisposal(VkImage image);
     void queueDisposal(VkImageView view);
     void queueDisposal(VkBuffer buffer);
@@ -181,6 +184,8 @@ protected:
 private:
     void initializeFactory();
     void initializeDevice();
+
+    RenderContextImpl* _lastRenderContext{nullptr};
 
     VkDebugUtilsMessengerCreateInfoEXT _debugCreateInfo{};
     VkDebugUtilsMessengerEXT _debugMessenger{VK_NULL_HANDLE};

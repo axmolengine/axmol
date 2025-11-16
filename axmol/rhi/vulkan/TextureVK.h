@@ -121,6 +121,9 @@ public:
     // Gets layout of level=0, layer=0
     VkImageLayout getCurrentLayout() const;
 
+    // internal use
+    void setKnownLayout(VkImageLayout layout);
+
     void updateData(const void* data, int width, int height, int level, int layerIndex = 0) override;
     void updateCompressedData(const void* data,
                               int width,

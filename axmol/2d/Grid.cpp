@@ -52,14 +52,11 @@ bool GridBase::initWithSize(const Vec2& gridSize, const ax::Rect& rect)
     Director* director = Director::getInstance();
     Vec2 s             = director->getCanvasSizeInPixels();
 
-    auto POTWide = utils::nextPOT((unsigned int)s.width);
-    auto POTHigh = utils::nextPOT((unsigned int)s.height);
-
     Texture2D* texture = new Texture2D();
 
     rhi::TextureDesc desc;
-    desc.width        = POTWide;
-    desc.height       = POTHigh;
+    desc.width        = s.width;
+    desc.height       = s.height;
     desc.textureUsage = rhi::TextureUsage::RENDER_TARGET;
     desc.pixelFormat  = rhi::PixelFormat::RGBA8;
 

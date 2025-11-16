@@ -385,7 +385,7 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, VkRend
 {
     const uintptr_t pipelineKey =
         makePipelineKey(desc.blendDesc, _dsState, program, desc.vertexLayout->getHash(), renderPass);
-    auto it                     = _pipelineCache.find(pipelineKey);
+    auto it = _pipelineCache.find(pipelineKey);
     if (it != _pipelineCache.end())
     {
         _activePipeline = it->second;
@@ -432,6 +432,7 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, VkRend
     VkResult res        = vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &gp, nullptr, &pipeline);
     if (res == VK_SUCCESS)
     {
+        _renderPassToPipelineMap.emplace(renderPass, pipelineKey);
         _pipelineCache.emplace(pipelineKey, pipeline);
         _activePipeline = pipeline;
     }
@@ -530,6 +531,26 @@ VkDescriptorPool RenderPipelineImpl::allocateDescriptorPool()
     _descriptorPools.push_back(pool);
 
     return pool;
+}
+
+void RenderPipelineImpl::removeCachedPipelines(VkRenderPass rp)
+{
+    auto range = _renderPassToPipelineMap.equal_range(rp);
+
+    if (range.first != range.second)
+    {
+        for (auto it = range.first; it != range.second; ++it)
+        {
+            auto pipelineKey = it->second;
+            auto pipelineIt = _pipelineCache.find(pipelineKey);
+            if (pipelineIt != _pipelineCache.end())
+            {
+                vkDestroyPipeline(_device, pipelineIt->second, nullptr);
+                _pipelineCache.erase(pipelineIt);
+            }
+        }
+        _renderPassToPipelineMap.erase(range.first, range.second);
+    }
 }
 
 /**

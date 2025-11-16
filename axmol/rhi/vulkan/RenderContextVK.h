@@ -126,6 +126,8 @@ public:
 
     void prepareDrawing();
 
+    void removeCachedPipelines(VkRenderPass rp);
+
 private:
     void rebuildSwapchain();
     void createCommandBuffers();
@@ -141,6 +143,8 @@ private:
         bitmask::set(_inFlightDynamicDirtyBits[0], bits);
         bitmask::set(_inFlightDynamicDirtyBits[1], bits);
     }
+
+    void applyPendingDynamicStates();
 
     DriverImpl* _driver{nullptr};
     VkSurfaceKHR _surface{VK_NULL_HANDLE};
