@@ -116,12 +116,12 @@ constexpr bool only(_BITMASK _Left, _BITMASK _Elements) noexcept
 template <typename _BITMASK>
 inline void set(_BITMASK& _Left, _BITMASK _Elements) noexcept
 {
-    _Left = static_cast<_BITMASK>(static_cast<uint32_t>(_Left) | static_cast<uint32_t>(_Elements));
+    _Left |= _Elements;
 }
 
 template <typename _BITMASK>
 inline void clear(_BITMASK& _Left, _BITMASK _Elements) noexcept
 {
-    _Left = static_cast<_BITMASK>(static_cast<uint32_t>(_Left) & ~static_cast<uint32_t>(_Elements));
+    _Left &= ~_Elements;
 }
 }  // namespace bitmask
