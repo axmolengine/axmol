@@ -37,8 +37,25 @@ class RenderTargetImpl;
 class DriverImpl;
 class SemaphorePool;
 
+enum class DynamicStateBits : uint32_t
+{
+    None       = 0,
+    Viewport   = 1 << 0,
+    Scissor    = 1 << 1,
+    StencilRef = 1 << 2,
+    CullMode   = 1 << 3,
+    FrontFace  = 1 << 4,
+
+};
+
+AX_ENABLE_BITMASK_OPS(DynamicStateBits);
+
 class RenderContextImpl : public RenderContext
 {
+    static constexpr DynamicStateBits PIPELINE_REQUIRED_DYNAMIC_BITS =
+        DynamicStateBits::Viewport | DynamicStateBits::Scissor | DynamicStateBits::StencilRef |
+        DynamicStateBits::CullMode | DynamicStateBits::FrontFace;
+
 public:
     // Maximum number of VkCommandBuffer handles managed simultaneously by VulkanCommands.
     //
@@ -105,6 +122,8 @@ public:
                     bool preserveAxisHint,
                     std::function<void(const PixelBufferDesc&)> callback) override;
 
+    void setStencilReferenceValue(uint32_t value) override;
+
     void prepareDrawing();
 
 private:
@@ -116,6 +135,12 @@ private:
 #endif
 
     void readPixelsImpl(RenderTarget* rt, bool preserveAxisHint, std::function<void(const PixelBufferDesc&)>& callback);
+
+    void markDynamicStateDirty(DynamicStateBits bits) noexcept
+    {
+        bitmask::set(_inFlightDynamicDirtyBits[0], bits);
+        bitmask::set(_inFlightDynamicDirtyBits[1], bits);
+    }
 
     DriverImpl* _driver{nullptr};
     VkSurfaceKHR _surface{VK_NULL_HANDLE};
@@ -133,6 +158,7 @@ private:
     axstd::pod_vector<VkImageView> _swapchainImageViews;
 
     uint32_t _currentFrame{0};
+    std::array<DynamicStateBits, MAX_FRAMES_IN_FLIGHT> _inFlightDynamicDirtyBits{DynamicStateBits::None};
     std::array<VkCommandBuffer, MAX_FRAMES_IN_FLIGHT> _commandBuffers;
     std::array<VkSemaphore, MAX_FRAMES_IN_FLIGHT> _presentCompleteSemaphores;
     std::array<VkFence, MAX_FRAMES_IN_FLIGHT> _inFlightFences{};
@@ -152,6 +178,8 @@ private:
     BufferImpl* _vertexBuffer{nullptr};
     BufferImpl* _indexBuffer{nullptr};
     BufferImpl* _instanceBuffer{nullptr};
+
+    VkPipeline _boundPipeline{VK_NULL_HANDLE};
 
 #pragma region Uniform ring buffer
 
@@ -196,8 +224,9 @@ private:
 
     VkViewport _cachedViewport{};
     VkRect2D _cachedScissor{};
-    VkCullModeFlags _cachedCullMode{};
-    VkFrontFace _cachedFrontFace{};
+    VkCullModeFlags _cachedCullMode{VK_CULL_MODE_FLAG_BITS_MAX_ENUM};
+    VkFrontFace _cachedFrontFace{VK_FRONT_FACE_MAX_ENUM};
+
     bool _scissorEnabled{false};
 
     bool _swapchainDirty{false};

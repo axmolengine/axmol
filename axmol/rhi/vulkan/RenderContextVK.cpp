@@ -42,8 +42,6 @@
 namespace ax::rhi::vk
 {
 
-static constexpr uint32_t MAX_DESCRIPTOR_SETS_PER_FRAME = 1024;
-
 /*
  * Helper: map PrimitiveType to VkPrimitiveTopology
  *
@@ -94,6 +92,24 @@ static VkIndexType toVkIndexType(IndexFormat fmt)
     default:
         return VK_INDEX_TYPE_UINT32;
     }
+}
+
+inline bool nearlyEqual(float a, float b, float eps = 1e-6f)
+{
+    return std::fabs(a - b) < eps;
+}
+
+inline bool operator==(const VkViewport& a, const VkViewport& b)
+{
+    return nearlyEqual(a.x, b.x) && nearlyEqual(a.y, b.y) && nearlyEqual(a.width, b.width) &&
+           nearlyEqual(a.height, b.height) && nearlyEqual(a.minDepth, b.minDepth) &&
+           nearlyEqual(a.maxDepth, b.maxDepth);
+}
+
+inline bool operator==(const VkRect2D& a, const VkRect2D& b)
+{
+    return a.offset.x == b.offset.x && a.offset.y == b.offset.y && a.extent.width == b.extent.width &&
+           a.extent.height == b.extent.height;
 }
 
 // NOTE: This implementation assumes the existence of a Vulkan driver context that owns device, queues,
@@ -322,6 +338,8 @@ void RenderContextImpl::createDescriptorPool()
         {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 64}, {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 64},
         /*{VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 32},*/  // SSBO, unused currently
     };
+
+    constexpr uint32_t MAX_DESCRIPTOR_SETS_PER_FRAME = 1024;
 
     VkDescriptorPoolCreateInfo poolInfo{};
     poolInfo.sType         = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
@@ -603,8 +621,9 @@ void RenderContextImpl::endRenderPass()
     rtImpl->endRenderPass(_currentCmdBuffer);
 
     // Reset state cache
-    _programState = nullptr;
-    _vertexLayout = nullptr;
+    _programState    = nullptr;
+    _vertexLayout    = nullptr;
+    _boundPipeline   = nullptr;
 
     AX_SAFE_RELEASE_NULL(_indexBuffer);
     AX_SAFE_RELEASE_NULL(_vertexBuffer);
@@ -705,6 +724,17 @@ void RenderContextImpl::updatePipelineState(const RenderTarget* rt, const Pipeli
     AXASSERT(_renderPipeline, "RenderPipelineImpl not set");
     _renderPipeline->prepareUpdate(_depthStencilState);
     _renderPipeline->update(rt, desc);
+
+    // Bind pipeline
+    auto pipeline = _renderPipeline->getVkPipeline();
+    if (_boundPipeline != pipeline)
+    {
+        vkCmdBindPipeline(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, _renderPipeline->getVkPipeline());
+        _boundPipeline = pipeline;
+
+        // Prime dynamic states required by this pipeline
+        bitmask::set(_inFlightDynamicDirtyBits[_currentFrame], PIPELINE_REQUIRED_DYNAMIC_BITS);
+    }
 }
 
 void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
@@ -720,7 +750,11 @@ void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h
     vp.minDepth = 0.0f;
     vp.maxDepth = 1.0f;
 
-    _cachedViewport = vp;
+    if (vp != _cachedViewport)
+    {
+        _cachedViewport = vp;
+        markDynamicStateDirty(DynamicStateBits::Viewport);
+    }
 }
 
 void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float width, float height)
@@ -748,36 +782,63 @@ void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float w
         rect.extent = {_renderTargetWidth, _renderTargetHeight};
     }
 
-    _scissorEnabled = isEnabled;
-    _cachedScissor  = rect;
+    if (_scissorEnabled != isEnabled || _cachedScissor != rect)
+    {
+        _scissorEnabled = isEnabled;
+        _cachedScissor  = rect;
+        markDynamicStateDirty(DynamicStateBits::Scissor);
+    }
 }
 
 void RenderContextImpl::setCullMode(CullMode mode)
 {
+    VkCullModeFlags nativeMode{0};
     switch (mode)
     {
     case CullMode::NONE:
-        _cachedCullMode = VK_CULL_MODE_NONE;
+        nativeMode = VK_CULL_MODE_NONE;
         break;
     case CullMode::BACK:
-        _cachedCullMode = VK_CULL_MODE_BACK_BIT;
+        nativeMode = VK_CULL_MODE_BACK_BIT;
         break;
     case CullMode::FRONT:
-        _cachedCullMode = VK_CULL_MODE_FRONT_BIT;
+        nativeMode = VK_CULL_MODE_FRONT_BIT;
         break;
+    }
+
+    if (_cachedCullMode != nativeMode)
+    {
+        _cachedCullMode = nativeMode;
+        markDynamicStateDirty(DynamicStateBits::CullMode);
     }
 }
 
 void RenderContextImpl::setWinding(Winding winding)
 {
+    VkFrontFace frontFace = VkFrontFace::VK_FRONT_FACE_MAX_ENUM;
     switch (winding)
     {
     case Winding::CLOCK_WISE:
-        _cachedFrontFace = VK_FRONT_FACE_CLOCKWISE;
+        frontFace = VK_FRONT_FACE_CLOCKWISE;
         break;
     case Winding::COUNTER_CLOCK_WISE:
-        _cachedFrontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+        frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
         break;
+    }
+
+    if (frontFace != _cachedFrontFace)
+    {
+        _cachedFrontFace = frontFace;
+        markDynamicStateDirty(DynamicStateBits::FrontFace);
+    }
+}
+
+void RenderContextImpl::setStencilReferenceValue(uint32_t value)
+{
+    if (value != _stencilReferenceValue)
+    {
+        RenderContext::setStencilReferenceValue(value);
+        markDynamicStateDirty(DynamicStateBits::StencilRef);
     }
 }
 
@@ -812,13 +873,11 @@ void RenderContextImpl::prepareDrawing()
 {
     AXASSERT(_programState, "ProgramState must be set before drawing");
     AXASSERT(_renderPipeline, "RenderPipelineImpl must be set before drawing");
+    AXASSERT(_boundPipeline, "boundPipeline must be set before drawing");
 
     // Populate CPU-side uniforms via callbacks
     for (auto& cb : _programState->getCallbackUniforms())
         cb.second(_programState, cb.first);
-
-    // Bind pipeline
-    vkCmdBindPipeline(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, _renderPipeline->getVkPipeline());
 
     // Acquire descriptor sets for this frame, matching current pipeline layout
     VkPipelineLayout pipelineLayout = _renderPipeline->getVkPipelineLayout();
@@ -900,48 +959,42 @@ void RenderContextImpl::prepareDrawing()
     imageInfos.clear();
     imageInfos.reserve(dslState->samplerDescriptorCount);
 
-    const bool hasSamplerSet = (dslState->descriptorSetLayoutCount > RenderPipelineImpl::SET_INDEX_SAMPLER) &&
-                               (descriptorSets[RenderPipelineImpl::SET_INDEX_SAMPLER] != VK_NULL_HANDLE);
-
-    if (hasSamplerSet)
+    for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
     {
-        for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
+        const auto& texs = bindingSet.texs;
+        if (texs.empty())
+            continue;
+
+        // Remember current offset in imageInfos before appending
+        const size_t offset = imageInfos.size();
+
+        if (texs.size() == 1)
         {
-            const auto& texs = bindingSet.texs;
-            if (texs.empty())
-                continue;
-
-            // Remember current offset in imageInfos before appending
-            const size_t offset = imageInfos.size();
-
-            if (texs.size() == 1)
+            auto* textureImpl                = static_cast<TextureImpl*>(texs[0]);
+            VkDescriptorImageInfo& imageInfo = imageInfos.emplace_back();
+            imageInfo.sampler                = textureImpl->getSampler();
+            imageInfo.imageView              = textureImpl->internalHandle().view;
+            imageInfo.imageLayout            = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        }
+        else
+        {
+            for (auto* tex : texs)
             {
-                auto* textureImpl                = static_cast<TextureImpl*>(texs[0]);
+                auto* textureImpl                = static_cast<TextureImpl*>(tex);
                 VkDescriptorImageInfo& imageInfo = imageInfos.emplace_back();
                 imageInfo.sampler                = textureImpl->getSampler();
                 imageInfo.imageView              = textureImpl->internalHandle().view;
                 imageInfo.imageLayout            = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             }
-            else
-            {
-                for (auto* tex : texs)
-                {
-                    auto* textureImpl                = static_cast<TextureImpl*>(tex);
-                    VkDescriptorImageInfo& imageInfo = imageInfos.emplace_back();
-                    imageInfo.sampler                = textureImpl->getSampler();
-                    imageInfo.imageView              = textureImpl->internalHandle().view;
-                    imageInfo.imageLayout            = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-                }
-            }
-
-            VkWriteDescriptorSet& write = writes.emplace_back();
-            write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            write.dstSet                = descriptorSets[RenderPipelineImpl::SET_INDEX_SAMPLER];
-            write.dstBinding            = bindingIndex;
-            write.descriptorType        = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-            write.descriptorCount       = static_cast<uint32_t>(texs.size());
-            write.pImageInfo            = imageInfos.data() + offset;
         }
+
+        VkWriteDescriptorSet& write = writes.emplace_back();
+        write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        write.dstSet                = descriptorSets[RenderPipelineImpl::SET_INDEX_SAMPLER];
+        write.dstBinding            = bindingIndex;
+        write.descriptorType        = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        write.descriptorCount       = static_cast<uint32_t>(texs.size());
+        write.pImageInfo            = imageInfos.data() + offset;
     }
 
     // Commit descriptor writes
@@ -951,16 +1004,8 @@ void RenderContextImpl::prepareDrawing()
     }
 
     // Bind descriptor sets: bind only the sets that exist
-    uint32_t setCountToBind = dslState->descriptorSetLayoutCount;
-    if (!hasSamplerSet && setCountToBind > 1)
-        setCountToBind = 1;
-
-    AXASSERT(!writes.empty(), "No descriptor writes prepared before vkUpdateDescriptorSets");
-    AXASSERT(setCountToBind == dslState->descriptorSetLayoutCount || setCountToBind == 1,
-             "Descriptor set count mismatch with pipeline layout");
-
-    vkCmdBindDescriptorSets(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, setCountToBind,
-                            descriptorSets.data(), 0, nullptr);
+    vkCmdBindDescriptorSets(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0,
+                            dslState->descriptorSetLayoutCount, descriptorSets.data(), 0, nullptr);
 
     // Bind vertex buffers
     if (!_instanceBuffer)
@@ -976,20 +1021,43 @@ void RenderContextImpl::prepareDrawing()
         vkCmdBindVertexBuffers(_currentCmdBuffer, 0, 2, buffers, offsets);
     }
 
-    // Dynamic states
-    vkCmdSetViewport(_currentCmdBuffer, 0, 1, &_cachedViewport);
-
-    if (_scissorEnabled)
-        vkCmdSetScissor(_currentCmdBuffer, 0, 1, &_cachedScissor);
-    else
+    // Apply dynamic states based on dirty bits
+    auto& dynamicDirtyBits = _inFlightDynamicDirtyBits[_currentFrame];
+    if (bitmask::any(dynamicDirtyBits, DynamicStateBits::Viewport))
     {
-        VkRect2D fullRect{{0, 0}, {_renderTargetWidth, _renderTargetHeight}};
-        vkCmdSetScissor(_currentCmdBuffer, 0, 1, &fullRect);
+        vkCmdSetViewport(_currentCmdBuffer, 0, 1, &_cachedViewport);
+        bitmask::clear(dynamicDirtyBits, DynamicStateBits::Viewport);
     }
 
-    vkCmdSetStencilReference(_currentCmdBuffer, VK_STENCIL_FACE_FRONT_AND_BACK, _stencilReferenceValue);
-    vkCmdSetCullModeEXT(_currentCmdBuffer, _cachedCullMode);
-    vkCmdSetFrontFaceEXT(_currentCmdBuffer, _cachedFrontFace);
+    if (bitmask::any(dynamicDirtyBits, DynamicStateBits::Scissor))
+    {
+        if (_scissorEnabled)
+            vkCmdSetScissor(_currentCmdBuffer, 0, 1, &_cachedScissor);
+        else
+        {
+            VkRect2D fullRect{{0, 0}, {_renderTargetWidth, _renderTargetHeight}};
+            vkCmdSetScissor(_currentCmdBuffer, 0, 1, &fullRect);
+        }
+        bitmask::clear(dynamicDirtyBits, DynamicStateBits::Scissor);
+    }
+
+    if (bitmask::any(dynamicDirtyBits, DynamicStateBits::StencilRef))
+    {
+        vkCmdSetStencilReference(_currentCmdBuffer, VK_STENCIL_FACE_FRONT_AND_BACK, _stencilReferenceValue);
+        bitmask::clear(dynamicDirtyBits, DynamicStateBits::StencilRef);
+    }
+
+    if (bitmask::any(dynamicDirtyBits, DynamicStateBits::CullMode))
+    {
+        vkCmdSetCullModeEXT(_currentCmdBuffer, _cachedCullMode);
+        bitmask::clear(dynamicDirtyBits, DynamicStateBits::CullMode);
+    }
+
+    if (bitmask::any(dynamicDirtyBits, DynamicStateBits::FrontFace))
+    {
+        vkCmdSetFrontFaceEXT(_currentCmdBuffer, _cachedFrontFace);
+        bitmask::clear(dynamicDirtyBits, DynamicStateBits::FrontFace);
+    }
 }
 
 void RenderContextImpl::drawArrays(PrimitiveType primitiveType,

@@ -261,7 +261,7 @@ public:
      * Update both front and back stencil reference value.
      * @param value Specifies stencil reference value.
      */
-    void setStencilReferenceValue(uint32_t value);
+    virtual void setStencilReferenceValue(uint32_t value);
 
 protected:
     virtual ~RenderContext() = default;
