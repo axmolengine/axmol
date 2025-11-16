@@ -542,7 +542,7 @@ void RenderPipelineImpl::removeCachedPipelines(VkRenderPass rp)
         for (auto it = range.first; it != range.second; ++it)
         {
             auto pipelineKey = it->second;
-            auto pipelineIt = _pipelineCache.find(pipelineKey);
+            auto pipelineIt  = _pipelineCache.find(pipelineKey);
             if (pipelineIt != _pipelineCache.end())
             {
                 vkDestroyPipeline(_device, pipelineIt->second, nullptr);

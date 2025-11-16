@@ -631,14 +631,14 @@ void RenderContextImpl::endRenderPass()
 
     if (!rtImpl->isDefaultRenderTarget())
     {
-        //readPixels(_currentRT, false, [=](const rhi::PixelBufferDesc& pbd) {
-        //    if (pbd)
-        //    {
-        //        auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(),
-        //                                                pbd._data.getSize(), pbd._width, pbd._height, 8, false);
-        //        image->saveToFile(R"(D:\tmp\test.png)"sv, false);
-        //    }
-        //});
+        // readPixels(_currentRT, false, [=](const rhi::PixelBufferDesc& pbd) {
+        //     if (pbd)
+        //     {
+        //         auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(),
+        //                                                 pbd._data.getSize(), pbd._width, pbd._height, 8, false);
+        //         image->saveToFile(R"(D:\tmp\test.png)"sv, false);
+        //     }
+        // });
     }
 }
 

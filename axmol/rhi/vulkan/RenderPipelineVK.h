@@ -144,7 +144,6 @@ private:
     axstd::hash_map<uintptr_t, VkPipeline> _pipelineCache;  // PSO cache
     axstd::hash_map<VkPipelineLayout, DescriptorPool> _descriptorCache;
 
-
     // TODO:
     std::multimap<ProgramImpl*, uintptr_t> _programToPipelineMap;
     std::multimap<VkRenderPass, uintptr_t> _renderPassToPipelineMap;
