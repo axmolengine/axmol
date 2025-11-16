@@ -26,6 +26,7 @@
 #include "axmol/rhi/RenderPipeline.h"
 #include "axmol/tlx/hlookup.hpp"
 #include <glad/vulkan.h>
+#include <unordered_map>
 
 namespace ax::rhi::vk
 {
@@ -140,5 +141,8 @@ private:
     axstd::hash_map<uintptr_t, VkPipelineLayout> _pipelineLayoutCache;
     axstd::hash_map<uintptr_t, VkPipeline> _pipelineCache;  // PSO cache
     axstd::hash_map<VkPipelineLayout, DescriptorPool> _descriptorCache;
+
+    std::unordered_multimap<ProgramImpl*, VkPipeline> _programToPipelineMap;
+    std::unordered_multimap<VkRenderPass, VkPipeline> _renderPassToPipelineMap;
 };
 }  // namespace ax::rhi::vk

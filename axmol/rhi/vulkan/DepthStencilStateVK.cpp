@@ -21,8 +21,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "DepthStencilStateVK.h"
-#include "xxhash/xxhash.h"
+#include "axmol/rhi/vulkan/DepthStencilStateVK.h"
+#include "axmol/tlx/hash.hpp"
 #include <cstring>
 
 namespace ax::rhi::vk
@@ -91,8 +91,10 @@ static VkStencilOpState make_op_state(const StencilDesc& s)
 }
 }  // namespace
 
-DepthStencilStateImpl::DepthStencilStateImpl(VkDevice device) : _device(device)
+DepthStencilStateImpl::DepthStencilStateImpl()
 {
+    _hash = axstd::hash_bytes(&_dsDesc, sizeof(_dsDesc));
+
     // Disabled state
     _disableInfo.sType             = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
     _disableInfo.depthTestEnable   = VK_FALSE;
@@ -106,6 +108,8 @@ DepthStencilStateImpl::DepthStencilStateImpl(VkDevice device) : _device(device)
 void DepthStencilStateImpl::update(const DepthStencilDesc& desc)
 {
     DepthStencilState::update(desc);
+
+    _hash = axstd::hash_bytes(&_dsDesc, sizeof(_dsDesc));
 
     if (!isEnabled())
     {

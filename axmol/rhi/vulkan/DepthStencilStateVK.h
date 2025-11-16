@@ -34,15 +34,19 @@ namespace ax::rhi::vk
 class DepthStencilStateImpl : public DepthStencilState
 {
 public:
-    explicit DepthStencilStateImpl(VkDevice device);
+    DepthStencilStateImpl();
 
     void update(const DepthStencilDesc& desc) override;
+
+    uintptr_t getHash() const { return _hash; }
 
     // Return the Vulkan depth-stencil state create info
     const VkPipelineDepthStencilStateCreateInfo& getVkDepthStencilState() const { return _activeInfo; }
 
 private:
     VkDevice _device{VK_NULL_HANDLE};
+
+    uintptr_t _hash{0};
 
     VkPipelineDepthStencilStateCreateInfo _activeInfo{};
     VkPipelineDepthStencilStateCreateInfo _disableInfo{};

@@ -224,8 +224,8 @@ private:
 
     VkViewport _cachedViewport{};
     VkRect2D _cachedScissor{};
-    VkCullModeFlags _cachedCullMode{VK_CULL_MODE_FLAG_BITS_MAX_ENUM};
-    VkFrontFace _cachedFrontFace{VK_FRONT_FACE_MAX_ENUM};
+    VkCullModeFlags _cachedCullMode{VK_CULL_MODE_NONE};
+    VkFrontFace _cachedFrontFace{VK_FRONT_FACE_COUNTER_CLOCKWISE};
 
     bool _scissorEnabled{false};
 

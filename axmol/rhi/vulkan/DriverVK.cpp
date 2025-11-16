@@ -214,7 +214,6 @@ static std::pair<VkPhysicalDevice, uint32_t> resolveAdapter(const axstd::pod_vec
     return {bestDevice, bestGraphicsQueueFamily};
 }
 
-
 // Helper: create a depth-stencil image as TextureImpl
 TextureImpl* createDepthStencilAttachment(DriverImpl* driver, const VkExtent2D& extent)
 {
@@ -521,7 +520,7 @@ RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* 
 
 DepthStencilState* DriverImpl::createDepthStencilState()
 {
-    return new DepthStencilStateImpl(_device);
+    return new DepthStencilStateImpl();
 }
 
 RenderPipeline* DriverImpl::createRenderPipeline()
@@ -854,11 +853,10 @@ void DriverImpl::cleanPendingResources()
 
 // Rebuild swapchain attachments from a swapchain image handle.
 // Note: swapchainImage must be a VkImage (provided as void* to keep signature parity).
-void DriverImpl::rebuildSwapchainAttachments(
-                                 const axstd::pod_vector<VkImage>& images,
-                                 const axstd::pod_vector<VkImageView>& imageViews,
-                                 const VkExtent2D& extent,
-                                 PixelFormat imagePF)
+void DriverImpl::rebuildSwapchainAttachments(const axstd::pod_vector<VkImage>& images,
+                                             const axstd::pod_vector<VkImageView>& imageViews,
+                                             const VkExtent2D& extent,
+                                             PixelFormat imagePF)
 {
     // Destroy previous attachments
     destroySwapchainAttachments();

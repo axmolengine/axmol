@@ -60,8 +60,8 @@ public:
     VkRenderPass getVkRenderPass() const { return _renderPass; }
 
 private:
-    VkFramebuffer ensureFramebuffer(VkCommandBuffer cmd, VkRenderPass rp);
-    VkRenderPass ensureRenderPass(const RenderPassDesc& desc);
+    void updateRenderPass(const RenderPassDesc& desc);
+    void updateFramebuffer(VkCommandBuffer cmd);
 
     void prepareAttachmentsForRendering(VkCommandBuffer cmd);
     void prepareAttachmentsForSampling(VkCommandBuffer cmd);
@@ -75,8 +75,8 @@ private:
 
     axstd::pod_vector<VkClearValue> _clearValues;
 
-    VkRenderPass _renderPass{VK_NULL_HANDLE};
-    VkFramebuffer _framebuffer{VK_NULL_HANDLE};
+    VkRenderPass _renderPass{VK_NULL_HANDLE};    // active render pass
+    VkFramebuffer _framebuffer{VK_NULL_HANDLE};  // active framebuffer
 
     // Caches keyed by (desc hash, attachment views hash)
     axstd::hash_map<uintptr_t, VkRenderPass> _renderPassCache;

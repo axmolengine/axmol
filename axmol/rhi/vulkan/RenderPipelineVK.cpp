@@ -120,18 +120,22 @@ static inline VkColorComponentFlags toVkColorMask(ColorWriteMask mask)
 // This design minimizes redundant PSOs while ensuring that any change in these critical states
 // correctly triggers pipeline re-creation.
 static inline uintptr_t makePipelineKey(const rhi::BlendDesc& blendDesc,
+                                        const DepthStencilStateImpl* dsState,
                                         void* program,
-                                        void* vertexLayout,
+                                        uint32_t vlHash,
                                         void* renderPass)
 {
     struct HashMe
     {
         rhi::BlendDesc blend{};
+        uintptr_t dsHash;
         void* prog;
-        void* vl;
         void* pass;
+        uint32_t vlHash;
+        uint32_t padding{0};
     };
-    HashMe hashMe{.blend = blendDesc, .prog = program, .vl = vertexLayout, .pass = renderPass};
+    HashMe hashMe{
+        .blend = blendDesc, .dsHash = dsState->getHash(), .prog = program, .pass = renderPass, .vlHash = vlHash};
 
     return axstd::hash_bytes(&hashMe, sizeof(hashMe), 0);
 }
@@ -379,7 +383,8 @@ void RenderPipelineImpl::updatePipelineLayout(ProgramImpl* program)
 
 void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, VkRenderPass renderPass, ProgramImpl* program)
 {
-    const uintptr_t pipelineKey = makePipelineKey(desc.blendDesc, program, desc.vertexLayout, renderPass);
+    const uintptr_t pipelineKey =
+        makePipelineKey(desc.blendDesc, _dsState, program, desc.vertexLayout->getHash(), renderPass);
     auto it                     = _pipelineCache.find(pipelineKey);
     if (it != _pipelineCache.end())
     {
