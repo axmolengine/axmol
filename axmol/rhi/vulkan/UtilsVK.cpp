@@ -114,14 +114,6 @@ static PixelFormatInfo s_pixelFormatInfos[] = {
 static_assert(AX_ARRAYSIZE(s_pixelFormatInfos) == static_cast<int>(PixelFormat::COUNT),
               "The Vulkan GPU texture format info table is incomplete!");
 
-// -------------------------------------------------------------------------------------------------
-// Default attachments
-// vulkan s_swapchainColorAttachments not like off-screen MRT, store array for double/triple buffering
-// -------------------------------------------------------------------------------------------------
-static axstd::pod_vector<TextureImpl*> s_swapchainColorAttachments;
-static uint32_t s_currentSwapchainImageIndex          = 0;
-static TextureImpl* s_swapchainDepthStencilAttachment = nullptr;
-
 inline namespace UtilsVK
 {
 // -------------------------------------------------------------------------------------------------
@@ -140,92 +132,5 @@ const PixelFormatInfo* toVKFormatInfo(PixelFormat pf)
     return nullptr;
 }
 
-// Helper: create a depth-stencil image as TextureImpl
-static TextureImpl* createDepthStencilAttachment(DriverImpl* driver, const VkExtent2D& extent)
-{
-    TextureDesc depthDesc{};
-    depthDesc.textureType  = TextureType::TEXTURE_2D;
-    depthDesc.width        = static_cast<uint16_t>(extent.width);
-    depthDesc.height       = static_cast<uint16_t>(extent.height);
-    depthDesc.arraySize    = 1;
-    depthDesc.mipLevels    = 1;
-    depthDesc.pixelFormat  = PixelFormat::D24S8;
-    depthDesc.textureUsage = TextureUsage::RENDER_TARGET;
-
-    auto tex = new TextureImpl(driver, depthDesc);
-    // init image, imageView
-    tex->updateData(nullptr, extent.width, extent.height, 0);
-    return tex;
-}
-
-// Rebuild swapchain attachments from a swapchain image handle.
-// Note: swapchainImage must be a VkImage (provided as void* to keep signature parity).
-void rebuildSwapchainAttachments(DriverImpl* driver,
-                                 const axstd::pod_vector<VkImage>& images,
-                                 const axstd::pod_vector<VkImageView>& imageViews,
-                                 const VkExtent2D& extent,
-                                 PixelFormat imagePF)
-{
-    // Destroy previous attachments
-    destroySwapchainAttachments();
-
-    if (!driver || images.empty() || imageViews.empty())
-        return;
-
-    TextureDesc colorDesc{};
-    colorDesc.textureType  = TextureType::TEXTURE_2D;
-    colorDesc.width        = static_cast<uint16_t>(extent.width);
-    colorDesc.height       = static_cast<uint16_t>(extent.height);
-    colorDesc.arraySize    = 1;
-    colorDesc.mipLevels    = 1;
-    colorDesc.pixelFormat  = imagePF;
-    colorDesc.textureUsage = TextureUsage::RENDER_TARGET;
-
-    for (auto i = 0; i < images.size(); ++i)
-    {
-        VkImage swapchainImage = images[i];
-        VkImageView imageView  = imageViews[i];
-        // Wrap the swapchain VkImage as TextureImpl (color attachment)
-        // Important: TextureImpl(VkImage) does not own the image memory; it should create a VkImageView for sampling.
-        auto colorTex = new TextureImpl(driver, swapchainImage, imageView);
-        // Update descriptor (sampler, mip info, etc.). The TextureImpl should create view if missing.
-        colorTex->updateTextureDesc(colorDesc);
-        s_swapchainColorAttachments.push_back(colorTex);
-    }
-
-    // Create a matching depth-stencil attachment
-    s_swapchainDepthStencilAttachment = createDepthStencilAttachment(driver, extent);
-}
-
-void destroySwapchainAttachments()
-{
-    if (!s_swapchainColorAttachments.empty())
-    {
-        for (auto tex : s_swapchainColorAttachments)
-            delete tex;
-        s_swapchainColorAttachments.clear();
-    }
-    if (s_swapchainDepthStencilAttachment)
-    {
-        delete s_swapchainDepthStencilAttachment;
-        s_swapchainDepthStencilAttachment = nullptr;
-    }
-}
-
-// Getters for default attachments
-void setSwapchainCurrentImageIndex(uint32_t imageIndex)
-{
-    s_currentSwapchainImageIndex = imageIndex;
-}
-
-TextureImpl* getSwapchainColorAttachment()
-{
-    return s_swapchainColorAttachments[s_currentSwapchainImageIndex];
-}
-
-TextureImpl* getSwapchainDepthStencilAttachment()
-{
-    return s_swapchainDepthStencilAttachment;
-}
 }  // namespace UtilsVK
 }  // namespace ax::rhi::vk

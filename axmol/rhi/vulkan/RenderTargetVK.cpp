@@ -24,8 +24,9 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "RenderTargetVK.h"
-#include "UtilsVK.h"
+#include "axmol/rhi/vulkan/RenderTargetVK.h"
+#include "axmol/rhi/vulkan/DriverVK.h"
+#include "axmol/rhi/vulkan/UtilsVK.h"
 #include "axmol/base/Logging.h"
 #include "axmol/tlx/hash.hpp"
 
@@ -84,8 +85,8 @@ static uintptr_t makeRenderPassKeyHash(const RenderPassDesc& desc,
     return h;
 }
 
-RenderTargetImpl::RenderTargetImpl(VkDevice device, bool defaultRenderTarget)
-    : RenderTarget(defaultRenderTarget), _device(device)
+RenderTargetImpl::RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget)
+    : RenderTarget(defaultRenderTarget), _driver(driver)
 {
     if (_defaultRenderTarget)
         _dirtyFlags = TargetBufferFlags::ALL;
@@ -101,12 +102,14 @@ RenderTargetImpl::~RenderTargetImpl()
 void RenderTargetImpl::invalidate()
 {
     // Conservative: wait idle before destroying caches to avoid "in use" errors.
-    vkDeviceWaitIdle(_device);
+    _driver->waitDeviceIdle();
+
+    auto device = _driver->getDevice();
 
     for (auto& [_, pass] : _renderPassCache)
-        vkDestroyRenderPass(_device, pass, nullptr);
+        vkDestroyRenderPass(device, pass, nullptr);
     for (auto& [_, fb] : _framebufferCache)
-        vkDestroyFramebuffer(_device, fb, nullptr);
+        vkDestroyFramebuffer(device, fb, nullptr);
     _renderPassCache.clear();
     _framebufferCache.clear();
     _renderPass  = VK_NULL_HANDLE;
@@ -130,8 +133,8 @@ void RenderTargetImpl::beginRenderPass(VkCommandBuffer cmd,
     // 1) Collect attachment views and impl pointers
     if (_defaultRenderTarget)
     {
-        const auto colorTex = UtilsVK::getSwapchainColorAttachment();
-        const auto depthTex = UtilsVK::getSwapchainDepthStencilAttachment();
+        const auto colorTex = _driver->getSwapchainColorAttachment();
+        const auto depthTex = _driver->getSwapchainDepthStencilAttachment();
 
         _attachmentViews.fill(VK_NULL_HANDLE);
         _attachmentTexPtrs.fill(nullptr);
@@ -304,7 +307,7 @@ VkFramebuffer RenderTargetImpl::ensureFramebuffer(VkCommandBuffer /*cmd*/, VkRen
         fbci.height          = fbHeight;
         fbci.layers          = 1;
 
-        VkResult vr = vkCreateFramebuffer(_device, &fbci, nullptr, &_framebuffer);
+        VkResult vr = vkCreateFramebuffer(_driver->getDevice(), &fbci, nullptr, &_framebuffer);
         AXASSERT(vr == VK_SUCCESS, "Failed to create VkFramebuffer");
 
         _framebufferCache.emplace(key, _framebuffer);
@@ -465,7 +468,7 @@ VkRenderPass RenderTargetImpl::ensureRenderPass(const RenderPassDesc& desc)
         rpci.dependencyCount = depCount;
         rpci.pDependencies   = deps;
 
-        VkResult vr = vkCreateRenderPass(_device, &rpci, nullptr, &_renderPass);
+        VkResult vr = vkCreateRenderPass(_driver->getDevice(), &rpci, nullptr, &_renderPass);
         AXASSERT(vr == VK_SUCCESS, "Failed to create VkRenderPass");
 
         _renderPassCache.emplace(key, _renderPass);
@@ -522,13 +525,13 @@ void RenderTargetImpl::prepareAttachmentsForSampling(VkCommandBuffer cmd)
 
 RenderTargetImpl::Attachment RenderTargetImpl::getColorAttachment(int index) const
 {
-    return _defaultRenderTarget ? UtilsVK::getSwapchainColorAttachment()
+    return _defaultRenderTarget ? _driver->getSwapchainColorAttachment()
                                 : static_cast<TextureImpl*>(_color[index].texture);
 }
 
 RenderTargetImpl::Attachment RenderTargetImpl::getDepthStencilAttachment() const
 {
-    return _defaultRenderTarget ? UtilsVK::getSwapchainDepthStencilAttachment()
+    return _defaultRenderTarget ? _driver->getSwapchainDepthStencilAttachment()
                                 : static_cast<TextureImpl*>(_depthStencil.texture);
 }
 

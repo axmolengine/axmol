@@ -41,21 +41,38 @@ class ProgramImpl;
  * and caches intermediate objects (blend, depth-stencil, rasterizer, etc.)
  * to avoid redundant Vulkan object creation.
  */
+
 class RenderPipelineImpl : public RenderPipeline
 {
 public:
-    static constexpr int MAX_DESCRIPTOR_SET_COUNT = 2;
-    static constexpr int DESCRIPTOR_SET_UBO       = 0;
-    static constexpr int DESCRIPTOR_SET_SAMPLER   = 1;
+    static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
 
-    using VkDescriptorSetLayoutArray = std::array<VkDescriptorSetLayout, MAX_DESCRIPTOR_SET_COUNT>;
+    static constexpr int MAX_DESCRIPTOR_SETS = 2;
+    static constexpr int SET_INDEX_UBO       = 0;
+    static constexpr int SET_INDEX_SAMPLER   = 1;
+
+    static constexpr uint32_t DEFAULT_DESCRIPTOR_POOL_UNIFORM_COUNT = 64;
+    static constexpr uint32_t DEFAULT_DESCRIPTOR_POOL_SAMPLER_COUNT = 64;
+    static constexpr uint32_t DEFAULT_DESCRIPTOR_POOL_MAX_SETS      = 128;
+
+    using VkDescriptorSetArray       = std::array<VkDescriptorSet, MAX_DESCRIPTOR_SETS>;
+    using VkDescriptorSetLayoutArray = std::array<VkDescriptorSetLayout, MAX_DESCRIPTOR_SETS>;
     struct DescriptorSetLayoutState
     {
-        VkDescriptorSetLayoutArray descriptorLayoutSets{VK_NULL_HANDLE};
-        uint32_t descriptorLayoutSetCount{0};
+        VkDescriptorSetLayoutArray descriptorSetLayouts{VK_NULL_HANDLE};
+        uint32_t descriptorSetLayoutCount{0};
         uint32_t samplerDescriptorCount{0};
         uint32_t uniformDescriptorCount{0};
     };
+
+    struct DescriptorState
+    {
+        VkDescriptorSetArray sets;     // Allocated VkDescriptorSets
+        VkPipelineLayout ownerLayout;  // PipelineLayout
+        int frameIndex;                // Frame index (for multi-frame in flight)
+    };
+
+    using DescriptorPool = std::array<axstd::pod_vector<DescriptorState>, MAX_FRAMES_IN_FLIGHT>;
 
     explicit RenderPipelineImpl(VkDevice device);
     ~RenderPipelineImpl();
@@ -66,7 +83,10 @@ public:
 
     VkPipeline getVkPipeline() const { return _activePipeline; }
     VkPipelineLayout getVkPipelineLayout() const { return _activePipelineLayout; }
-    DescriptorSetLayoutState* getDescriptorSetLayoutState() const { return _activeDescriptorSetLayoutState; }
+    DescriptorSetLayoutState* getDescriptorSetLayoutState() const { return _activeDSL; }
+
+    bool acquireDescriptorState(DescriptorState& outState, int frameIndex);
+    void recycleDescriptorState(DescriptorState& state);
 
     /**
      * @brief Updates input assembly state for dynamic primitive type handling
@@ -90,6 +110,8 @@ private:
     void updatePipelineLayout(ProgramImpl* program);
     void updateGraphicsPipeline(const PipelineDesc& desc, VkRenderPass renderPass, ProgramImpl* program);
 
+    VkDescriptorPool allocateDescriptorPool();
+
 private:
     VkDevice _device{VK_NULL_HANDLE};
 
@@ -108,12 +130,15 @@ private:
     VkPipelineColorBlendStateCreateInfo _activeBlendState{};
 
     VkPipelineLayout _activePipelineLayout{nullptr};
-    DescriptorSetLayoutState* _activeDescriptorSetLayoutState{nullptr};
+    DescriptorSetLayoutState* _activeDSL{nullptr};
 
     VkPipeline _activePipeline{VK_NULL_HANDLE};
 
+    axstd::pod_vector<VkDescriptorPool> _descriptorPools;
+
+    axstd::hash_map<uintptr_t, DescriptorSetLayoutState> _descriptorLayoutCache;
     axstd::hash_map<uintptr_t, VkPipelineLayout> _pipelineLayoutCache;
-    axstd::hash_map<uintptr_t, DescriptorSetLayoutState> _descriptorSetLayoutCache;
     axstd::hash_map<uintptr_t, VkPipeline> _pipelineCache;  // PSO cache
+    axstd::hash_map<VkPipelineLayout, DescriptorPool> _descriptorCache;
 };
 }  // namespace ax::rhi::vk

@@ -214,6 +214,25 @@ static std::pair<VkPhysicalDevice, uint32_t> resolveAdapter(const axstd::pod_vec
     return {bestDevice, bestGraphicsQueueFamily};
 }
 
+
+// Helper: create a depth-stencil image as TextureImpl
+TextureImpl* createDepthStencilAttachment(DriverImpl* driver, const VkExtent2D& extent)
+{
+    TextureDesc depthDesc{};
+    depthDesc.textureType  = TextureType::TEXTURE_2D;
+    depthDesc.width        = static_cast<uint16_t>(extent.width);
+    depthDesc.height       = static_cast<uint16_t>(extent.height);
+    depthDesc.arraySize    = 1;
+    depthDesc.mipLevels    = 1;
+    depthDesc.pixelFormat  = PixelFormat::D24S8;
+    depthDesc.textureUsage = TextureUsage::RENDER_TARGET;
+
+    auto tex = new TextureImpl(driver, depthDesc);
+    // init image, imageView
+    tex->updateData(nullptr, extent.width, extent.height, 0);
+    return tex;
+}
+
 }  // namespace
 
 DriverImpl::DriverImpl() {}
@@ -488,12 +507,12 @@ Texture* DriverImpl::createTexture(const TextureDesc& descriptor)
 RenderTarget* DriverImpl::createDefaultRenderTarget()
 {
     // Default RT: will use swapchain image wrapped externally; here return an empty target
-    return new RenderTargetImpl(_device, true);
+    return new RenderTargetImpl(this, true);
 }
 
 RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
 {
-    auto rt = new RenderTargetImpl(_device, false);
+    auto rt = new RenderTargetImpl(this, false);
     RenderTarget::ColorAttachment colors{{colorAttachment, 0}};
     rt->setColorAttachment(colors);
     rt->setDepthStencilAttachment(depthStencilAttachment);
@@ -831,6 +850,76 @@ void DriverImpl::cleanPendingResources()
     {
         releaseDisposalResources();
     }
+}
+
+// Rebuild swapchain attachments from a swapchain image handle.
+// Note: swapchainImage must be a VkImage (provided as void* to keep signature parity).
+void DriverImpl::rebuildSwapchainAttachments(
+                                 const axstd::pod_vector<VkImage>& images,
+                                 const axstd::pod_vector<VkImageView>& imageViews,
+                                 const VkExtent2D& extent,
+                                 PixelFormat imagePF)
+{
+    // Destroy previous attachments
+    destroySwapchainAttachments();
+
+    if (images.empty() || imageViews.empty())
+        return;
+
+    TextureDesc colorDesc{};
+    colorDesc.textureType  = TextureType::TEXTURE_2D;
+    colorDesc.width        = static_cast<uint16_t>(extent.width);
+    colorDesc.height       = static_cast<uint16_t>(extent.height);
+    colorDesc.arraySize    = 1;
+    colorDesc.mipLevels    = 1;
+    colorDesc.pixelFormat  = imagePF;
+    colorDesc.textureUsage = TextureUsage::RENDER_TARGET;
+
+    for (auto i = 0; i < images.size(); ++i)
+    {
+        VkImage swapchainImage = images[i];
+        VkImageView imageView  = imageViews[i];
+        // Wrap the swapchain VkImage as TextureImpl (color attachment)
+        // Important: TextureImpl(VkImage) does not own the image memory; it should create a VkImageView for sampling.
+        auto colorTex = new TextureImpl(this, swapchainImage, imageView);
+        // Update descriptor (sampler, mip info, etc.). The TextureImpl should create view if missing.
+        colorTex->updateTextureDesc(colorDesc);
+        _swapchainColorAttachments.push_back(colorTex);
+    }
+
+    // Create a matching depth-stencil attachment
+    _swapchainDepthStencilAttachment = createDepthStencilAttachment(this, extent);
+}
+
+void DriverImpl::destroySwapchainAttachments()
+{
+    if (!_swapchainColorAttachments.empty())
+    {
+        for (auto tex : _swapchainColorAttachments)
+            delete tex;
+        _swapchainColorAttachments.clear();
+    }
+    if (_swapchainDepthStencilAttachment)
+    {
+        delete _swapchainDepthStencilAttachment;
+        _swapchainDepthStencilAttachment = nullptr;
+    }
+}
+
+// Getters for default attachments
+void DriverImpl::setSwapchainCurrentImageIndex(uint32_t imageIndex)
+{
+    _currentSwapchainImageIndex = imageIndex;
+}
+
+TextureImpl* DriverImpl::getSwapchainColorAttachment()
+{
+    return _swapchainColorAttachments[_currentSwapchainImageIndex];
+}
+
+TextureImpl* DriverImpl::getSwapchainDepthStencilAttachment()
+{
+    return _swapchainDepthStencilAttachment;
 }
 
 }  // namespace ax::rhi::vk

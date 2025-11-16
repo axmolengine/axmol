@@ -23,7 +23,10 @@
  ****************************************************************************/
 #pragma once
 #include "axmol/rhi/RenderContext.h"
+#include "axmol/rhi/vulkan/RenderPipelineVK.h"
 #include <glad/vulkan.h>
+
+#define _AX_USE_DESCRIPTOR_CACHE 1
 
 namespace ax::rhi::vk
 {
@@ -53,8 +56,7 @@ public:
 
     static constexpr int VS_UBO_BINDING_INDEX = 0;
     static constexpr int FS_UBO_BINDING_INDEX = 1;
-
-    static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
+    static constexpr int MAX_FRAMES_IN_FLIGHT = RenderPipelineImpl::MAX_FRAMES_IN_FLIGHT;
 
     RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface);
     ~RenderContextImpl() override;
@@ -108,7 +110,10 @@ public:
 private:
     void rebuildSwapchain();
     void createCommandBuffers();
+
+#if !_AX_USE_DESCRIPTOR_CACHE
     void createDescriptorPool();
+#endif
 
     void readPixelsImpl(RenderTarget* rt, bool preserveAxisHint, std::function<void(const PixelBufferDesc&)>& callback);
 
@@ -131,7 +136,10 @@ private:
     std::array<VkCommandBuffer, MAX_FRAMES_IN_FLIGHT> _commandBuffers;
     std::array<VkSemaphore, MAX_FRAMES_IN_FLIGHT> _presentCompleteSemaphores;
     std::array<VkFence, MAX_FRAMES_IN_FLIGHT> _inFlightFences{};
+#if !_AX_USE_DESCRIPTOR_CACHE
     std::array<VkDescriptorPool, MAX_FRAMES_IN_FLIGHT> _descriptorPools{};
+#endif
+    std::array<axstd::pod_vector<RenderPipelineImpl::DescriptorState>, MAX_FRAMES_IN_FLIGHT> _inFlightDescriptorStates;
     axstd::pod_vector<VkSemaphore> _renderFinishedSemaphores;
 
     axstd::pod_vector<VkWriteDescriptorSet> _descriptorWritesPerFrame;

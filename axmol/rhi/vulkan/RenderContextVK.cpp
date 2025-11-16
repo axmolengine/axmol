@@ -42,7 +42,7 @@
 namespace ax::rhi::vk
 {
 
-static constexpr uint32_t MAX_DESCRIPTOR_SETS_PER_FRAME = 512;
+static constexpr uint32_t MAX_DESCRIPTOR_SETS_PER_FRAME = 1024;
 
 /*
  * Helper: map PrimitiveType to VkPrimitiveTopology
@@ -120,7 +120,9 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface)
     _screenHeight = extent.height;
 
     createCommandBuffers();
+#if !_AX_USE_DESCRIPTOR_CACHE
     createDescriptorPool();
+#endif
     rebuildSwapchain();
 
     // create sync objects
@@ -166,11 +168,11 @@ RenderContextImpl::~RenderContextImpl()
     for (auto fence : _inFlightFences)
         vkDestroyFence(_device, fence, nullptr);
     _inFlightFences.fill(VK_NULL_HANDLE);
-
+#if !_AX_USE_DESCRIPTOR_CACHE
     for (auto pool : _descriptorPools)
         vkDestroyDescriptorPool(_device, pool, nullptr);
     _descriptorPools.fill(VK_NULL_HANDLE);
-
+#endif
     vkFreeCommandBuffers(_device, _commandPool, static_cast<uint32_t>(_commandBuffers.size()), _commandBuffers.data());
     _commandBuffers.fill(VK_NULL_HANDLE);
 
@@ -180,7 +182,7 @@ RenderContextImpl::~RenderContextImpl()
         _commandPool = VK_NULL_HANDLE;
     }
 
-    UtilsVK::destroySwapchainAttachments();
+    _driver->destroySwapchainAttachments();
 
     for (auto view : _swapchainImageViews)
         vkDestroyImageView(_device, view, nullptr);
@@ -312,10 +314,11 @@ void RenderContextImpl::createCommandBuffers()
     AXASSERT(result == VK_SUCCESS, "vkAllocateCommandBuffers failed");
 }
 
+#if !_AX_USE_DESCRIPTOR_CACHE
 void RenderContextImpl::createDescriptorPool()
 {
     // Define the descriptor types and counts supported by the pool
-    VkDescriptorPoolSize poolSizes[] = {
+    constexpr VkDescriptorPoolSize poolSizes[] = {
         {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 64}, {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 64},
         /*{VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 32},*/  // SSBO, unused currently
     };
@@ -334,6 +337,7 @@ void RenderContextImpl::createDescriptorPool()
         AXASSERT(res == VK_SUCCESS, "Failed to create descriptor pool");
     }
 }
+#endif
 
 bool RenderContextImpl::resizeSwapchain(uint32_t width, uint32_t height)
 {
@@ -483,7 +487,7 @@ void RenderContextImpl::rebuildSwapchain()
         AXASSERT(vr == VK_SUCCESS, "vkCreateImageView failed");
     }
 
-    UtilsVK::rebuildSwapchainAttachments(_driver, _swapchainImages, _swapchainImageViews, extent, pixelFormat);
+    _driver->rebuildSwapchainAttachments(_swapchainImages, _swapchainImageViews, extent, pixelFormat);
 
     // Create render finished semaphores
     if (!_renderFinishedSemaphores.empty())
@@ -550,13 +554,22 @@ bool RenderContextImpl::beginFrame()
 
     vkResetFences(_device, 1, &_inFlightFences[_currentFrame]);
 
-    UtilsVK::setSwapchainCurrentImageIndex(_currentImageIndex);
+    _driver->setSwapchainCurrentImageIndex(_currentImageIndex);
 
     _currentCmdBuffer = _commandBuffers[_currentFrame];
     vkResetCommandBuffer(_currentCmdBuffer, 0);
 
+#if _AX_USE_DESCRIPTOR_CACHE
+    auto& descriptorStates = _inFlightDescriptorStates[_currentFrame];
+    for (auto& state : descriptorStates)
+    {
+        _renderPipeline->recycleDescriptorState(state);
+    }
+    descriptorStates.clear();
+#else
     auto descriptorPool = _descriptorPools[_currentFrame];
     vkResetDescriptorPool(_device, descriptorPool, 0);  // safe: only reset current frame pool
+#endif
 
     VkCommandBufferBeginInfo const binfo{
         .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
@@ -807,51 +820,60 @@ void RenderContextImpl::prepareDrawing()
     // Bind pipeline
     vkCmdBindPipeline(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, _renderPipeline->getVkPipeline());
 
-    // Allocate descriptor sets (set=0 UBOs, set=1 samplers)
+    // Acquire descriptor sets for this frame, matching current pipeline layout
     VkPipelineLayout pipelineLayout = _renderPipeline->getVkPipelineLayout();
+    const auto dslState             = _renderPipeline->getDescriptorSetLayoutState();
+
+#if _AX_USE_DESCRIPTOR_CACHE
+    auto& descriptorState = _inFlightDescriptorStates[_currentFrame].emplace_back();
+    bool ok               = _renderPipeline->acquireDescriptorState(descriptorState, _currentFrame);
+    AXASSERT(ok, "Failed to acquire descriptor sets");
+    auto& descriptorSets = descriptorState.sets;
+#else
     VkDescriptorSetAllocateInfo allocInfo{};
     allocInfo.sType               = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     allocInfo.descriptorPool      = _descriptorPools[_currentFrame];
     auto descriptorSetLayoutState = _renderPipeline->getDescriptorSetLayoutState();
-    auto& descriptorLayoutSets    = descriptorSetLayoutState->descriptorLayoutSets;
-    allocInfo.descriptorSetCount  = descriptorSetLayoutState->descriptorLayoutSetCount;
-    allocInfo.pSetLayouts         = descriptorLayoutSets.data();
+    allocInfo.descriptorSetCount  = descriptorSetLayoutState->descriptorSetLayoutCount;
+    allocInfo.pSetLayouts         = descriptorSetLayoutState->descriptorSetLayouts.data();
 
-    VkDescriptorSet descriptorSets[2];
-    VkResult res = vkAllocateDescriptorSets(_device, &allocInfo, descriptorSets);
+    std::array<VkDescriptorSet, RenderPipelineImpl::MAX_DESCRIPTOR_SETS> descriptorSets{};
+    VkResult res = vkAllocateDescriptorSets(_device, &allocInfo, descriptorSets.data());
     AXASSERT(res == VK_SUCCESS, "Failed to allocate descriptor sets");
+#endif
 
+    assert(descriptorSets[RenderPipelineImpl::SET_INDEX_UBO]);
+
+    // Prepare write lists sized to expected UBO + sampler descriptors
     auto& writes = _descriptorWritesPerFrame;
     writes.clear();
-    writes.reserve(descriptorSetLayoutState->uniformDescriptorCount + descriptorSetLayoutState->samplerDescriptorCount);
+    writes.reserve(dslState->uniformDescriptorCount + dslState->samplerDescriptorCount);
 
     VkDescriptorBufferInfo bufferInfos[2] = {};
 
-    // --- Vertex UBO (set=0, binding=0) ---
+    // --- Vertex UBO (set=0, binding=VS_UBO_BINDING_INDEX) ---
     auto vertUB = _programState->getVertexUniformBuffer();
     if (!vertUB.empty())
     {
-        // Allocate slice from per-frame ring and copy data
         UniformSlice s = allocateUniformSlice(vertUB.size());
         std::memcpy(s.cpuPtr, vertUB.data(), vertUB.size());
 
         VkWriteDescriptorSet& write        = writes.emplace_back();
         VkDescriptorBufferInfo& bufferInfo = bufferInfos[0];
 
-        // Bind slice via descriptor write (UNIFORM_BUFFER with offset/range)
         bufferInfo.buffer = _uniformRings[_currentFrame].buffer;
         bufferInfo.offset = static_cast<VkDeviceSize>(s.offset);
         bufferInfo.range  = static_cast<VkDeviceSize>(vertUB.size());
 
         write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        write.dstSet          = descriptorSets[0];
+        write.dstSet          = descriptorSets[RenderPipelineImpl::SET_INDEX_UBO];  // renamed index
         write.dstBinding      = VS_UBO_BINDING_INDEX;
         write.descriptorType  = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         write.descriptorCount = 1;
         write.pBufferInfo     = &bufferInfo;
     }
 
-    // --- Fragment UBO (set=0, binding=1) ---
+    // --- Fragment UBO (set=0, binding=FS_UBO_BINDING_INDEX) ---
     auto fragUB = _programState->getFragmentUniformBuffer();
     if (!fragUB.empty())
     {
@@ -866,7 +888,7 @@ void RenderContextImpl::prepareDrawing()
         bufferInfo.range  = static_cast<VkDeviceSize>(fragUB.size());
 
         write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        write.dstSet          = descriptorSets[0];
+        write.dstSet          = descriptorSets[RenderPipelineImpl::SET_INDEX_UBO];
         write.dstBinding      = FS_UBO_BINDING_INDEX;
         write.descriptorType  = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         write.descriptorCount = 1;
@@ -876,59 +898,71 @@ void RenderContextImpl::prepareDrawing()
     // --- Samplers (set=1, binding=N) ---
     auto& imageInfos = _descriptorImageInfosPerFrame;
     imageInfos.clear();
+    imageInfos.reserve(dslState->samplerDescriptorCount);
 
-    // Reserve once using precomputed samplerDescriptorCount to avoid reallocation
-    imageInfos.reserve(descriptorSetLayoutState->samplerDescriptorCount);
+    const bool hasSamplerSet = (dslState->descriptorSetLayoutCount > RenderPipelineImpl::SET_INDEX_SAMPLER) &&
+                               (descriptorSets[RenderPipelineImpl::SET_INDEX_SAMPLER] != VK_NULL_HANDLE);
 
-    for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
+    if (hasSamplerSet)
     {
-        const auto& texs = bindingSet.texs;
-        if (texs.empty())
-            continue;
-
-        // Record offset before pushing new imageInfos
-        size_t offset = imageInfos.size();
-
-        if (texs.size() == 1)
+        for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
         {
-            auto textureImpl                 = static_cast<TextureImpl*>(texs[0]);
-            VkDescriptorImageInfo& imageInfo = imageInfos.emplace_back();
-            imageInfo.sampler                = textureImpl->getSampler();
-            imageInfo.imageView              = textureImpl->internalHandle().view;
-            imageInfo.imageLayout            = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-        }
-        else
-        {
-            // Fill VkDescriptorImageInfo for each texture in this binding set
-            for (auto tex : texs)
+            const auto& texs = bindingSet.texs;
+            if (texs.empty())
+                continue;
+
+            // Remember current offset in imageInfos before appending
+            const size_t offset = imageInfos.size();
+
+            if (texs.size() == 1)
             {
-                auto textureImpl = static_cast<TextureImpl*>(tex);
-
+                auto* textureImpl                = static_cast<TextureImpl*>(texs[0]);
                 VkDescriptorImageInfo& imageInfo = imageInfos.emplace_back();
                 imageInfo.sampler                = textureImpl->getSampler();
                 imageInfo.imageView              = textureImpl->internalHandle().view;
                 imageInfo.imageLayout            = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             }
-        }
+            else
+            {
+                for (auto* tex : texs)
+                {
+                    auto* textureImpl                = static_cast<TextureImpl*>(tex);
+                    VkDescriptorImageInfo& imageInfo = imageInfos.emplace_back();
+                    imageInfo.sampler                = textureImpl->getSampler();
+                    imageInfo.imageView              = textureImpl->internalHandle().view;
+                    imageInfo.imageLayout            = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                }
+            }
 
-        // Create one write descriptor covering the whole array
-        VkWriteDescriptorSet& write = writes.emplace_back();
-        write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        write.dstSet                = descriptorSets[1];
-        write.dstBinding            = bindingIndex;  // binding index stays the same
-        write.descriptorType        = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        write.descriptorCount       = static_cast<uint32_t>(texs.size());  // number of array elements
-        write.pImageInfo            = imageInfos.data() + offset;          // pointer into stable vector storage
+            VkWriteDescriptorSet& write = writes.emplace_back();
+            write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            write.dstSet                = descriptorSets[RenderPipelineImpl::SET_INDEX_SAMPLER];
+            write.dstBinding            = bindingIndex;
+            write.descriptorType        = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            write.descriptorCount       = static_cast<uint32_t>(texs.size());
+            write.pImageInfo            = imageInfos.data() + offset;
+        }
     }
 
     // Commit descriptor writes
-    vkUpdateDescriptorSets(_device, static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
+    if (!writes.empty())
+    {
+        vkUpdateDescriptorSets(_device, static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
+    }
 
-    // Bind descriptor sets (no dynamic offsets needed since we baked offset/range in descriptor writes)
-    vkCmdBindDescriptorSets(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0,
-                            allocInfo.descriptorSetCount, descriptorSets, 0, nullptr);
+    // Bind descriptor sets: bind only the sets that exist
+    uint32_t setCountToBind = dslState->descriptorSetLayoutCount;
+    if (!hasSamplerSet && setCountToBind > 1)
+        setCountToBind = 1;
 
-    // === Bind vertex buffers ===
+    AXASSERT(!writes.empty(), "No descriptor writes prepared before vkUpdateDescriptorSets");
+    AXASSERT(setCountToBind == dslState->descriptorSetLayoutCount || setCountToBind == 1,
+             "Descriptor set count mismatch with pipeline layout");
+
+    vkCmdBindDescriptorSets(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, setCountToBind,
+                            descriptorSets.data(), 0, nullptr);
+
+    // Bind vertex buffers
     if (!_instanceBuffer)
     {
         VkBuffer buffers[]     = {_vertexBuffer->internalHandle()};
@@ -942,7 +976,7 @@ void RenderContextImpl::prepareDrawing()
         vkCmdBindVertexBuffers(_currentCmdBuffer, 0, 2, buffers, offsets);
     }
 
-    // ---------- VkPipeline dynamic states -----------
+    // Dynamic states
     vkCmdSetViewport(_currentCmdBuffer, 0, 1, &_cachedViewport);
 
     if (_scissorEnabled)
@@ -956,7 +990,6 @@ void RenderContextImpl::prepareDrawing()
     vkCmdSetStencilReference(_currentCmdBuffer, VK_STENCIL_FACE_FRONT_AND_BACK, _stencilReferenceValue);
     vkCmdSetCullModeEXT(_currentCmdBuffer, _cachedCullMode);
     vkCmdSetFrontFaceEXT(_currentCmdBuffer, _cachedFrontFace);
-    // --------- end dynamic states ----------
 }
 
 void RenderContextImpl::drawArrays(PrimitiveType primitiveType,

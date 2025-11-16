@@ -50,23 +50,6 @@ inline namespace UtilsVK
 VkFormat toVKFormat(PixelFormat pf);
 
 const PixelFormatInfo* toVKFormatInfo(PixelFormat pf);
-
-void rebuildSwapchainAttachments(DriverImpl*,
-                                 const axstd::pod_vector<VkImage>& images,
-                                 const axstd::pod_vector<VkImageView>&,
-                                 const VkExtent2D&,
-                                 PixelFormat imagePF);
-
-void destroySwapchainAttachments();
-
-void setSwapchainCurrentImageIndex(uint32_t imageIndex);
-
-// Get the current swapchain color attachment by recorded swapchain image index
-TextureImpl* getSwapchainColorAttachment();
-
-// Get the current swapchain depth-stencil attachment
-TextureImpl* getSwapchainDepthStencilAttachment();
-
 };  // namespace UtilsVK
 
 /** @} */

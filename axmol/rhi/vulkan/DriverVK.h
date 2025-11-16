@@ -35,6 +35,7 @@ namespace ax::rhi::vk
 
 class RenderContextImpl;
 class DriverImpl;
+class TextureImpl;
 
 struct DisposableResource
 {
@@ -155,6 +156,23 @@ public:
 
     void releaseDisposalResources();
 
+    void rebuildSwapchainAttachments(const axstd::pod_vector<VkImage>& images,
+                                     const axstd::pod_vector<VkImageView>&,
+                                     const VkExtent2D&,
+                                     PixelFormat imagePF);
+
+    void destroySwapchainAttachments();
+
+    void setSwapchainCurrentImageIndex(uint32_t imageIndex);
+
+    // Get the current swapchain color attachment by recorded swapchain image index
+    TextureImpl* getSwapchainColorAttachment();
+
+    // Get the current swapchain depth-stencil attachment
+    TextureImpl* getSwapchainDepthStencilAttachment();
+
+    void waitDeviceIdle() { vkDeviceWaitIdle(_device); }
+
 protected:
     ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
     SamplerHandle createSampler(const SamplerDesc& desc) override;
@@ -189,6 +207,11 @@ private:
     std::string _renderer;
     std::string _version;
     std::string _shaderVersion;
+
+    // store and provide swapchain render target attachments
+    axstd::pod_vector<TextureImpl*> _swapchainColorAttachments;
+    uint32_t _currentSwapchainImageIndex          = 0;
+    TextureImpl* _swapchainDepthStencilAttachment = nullptr;
 };
 
 }  // namespace ax::rhi::vk

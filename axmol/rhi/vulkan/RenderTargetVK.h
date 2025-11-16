@@ -30,6 +30,7 @@
 
 namespace ax::rhi::vk
 {
+class DriverImpl;
 class RenderTargetImpl : public RenderTarget
 {
 public:
@@ -40,7 +41,7 @@ public:
 
     using Attachment = TextureImpl*;
 
-    RenderTargetImpl(VkDevice device, bool defaultRenderTarget);
+    RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget);
     ~RenderTargetImpl();
 
     // Destroy the current live framebuffer and mark attachments dirty
@@ -65,7 +66,7 @@ private:
     void prepareAttachmentsForRendering(VkCommandBuffer cmd);
     void prepareAttachmentsForSampling(VkCommandBuffer cmd);
 
-    VkDevice _device{VK_NULL_HANDLE};
+    DriverImpl* _driver{nullptr};
 
     // Current attachment views for building renderpass/framebuffer
     std::array<VkImageView, MAX_COLOR_ATTCHMENT + 1> _attachmentViews{};
