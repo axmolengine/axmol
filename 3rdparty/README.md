@@ -47,7 +47,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 8.16.0
+- Version: 8.17.0
 - License: Curl (MIT/X)
 
 ## doctest
@@ -124,7 +124,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-871db2c
+  - Version: 2.1-68354f4
   - License: MIT
 
 - tolua

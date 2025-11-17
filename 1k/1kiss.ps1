@@ -280,6 +280,7 @@ $options = @{
     i      = $false # perform install
     scope  = 'local'
     aab    = $false
+    ide    = $null
 }
 
 $optName = $null
@@ -854,6 +855,8 @@ function fetch_pkg($url, $out = $null, $exrep = $null, $prefix = $null) {
 #   $Global:VS_INST
 #
 $Global:VS_INST = $null
+$Global:vs_full_ver = $null
+$Global:vs_major = $null
 function find_vs() {
     if (!$Global:VS_INST) {
         $VSWHERE_EXE = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
@@ -879,6 +882,9 @@ function find_vs() {
                 }
             }
             $Global:VS_INST = $vs_inst_latest
+
+            $Global:vs_full_ver = $Global:VS_INST.installationVersion
+            $Global:vs_major = $Global:vs_full_ver.Split('.')[0]
         }
         else {
             Write-Warning "Visual studio not found, your build may not work, required: $required_vs_ver"
@@ -886,24 +892,30 @@ function find_vs() {
     }
 }
 
-function install_msvc($ver, $arch) {
+function install_msvc($ver, $arch, $vs_major) {
 
     $__install_code = @'
-# install specified msvc for vs2022
+# install specified msvc for vs2022, vs2026
 param(
     $ver = '14.39',
     $arch = 'x64',
-    $vs_major = 17,
-    $vs_minor_base = 9,
-    $msvc_minor_base = 39
+    $vs_major = 17
 )
 
 $msvc_minor = [int]$ver.Split('.')[1]
+if("$vs_major" -eq "17") {
+    $vs_minor_base = 9
+    $msvc_minor_base = 39
+}
+elseif("$vs_major" -eq "18") {
+    $vs_minor_base = 0
+    $msvc_minor_base = 45
+}
 $vs_minor = $vs_minor_base + ($msvc_minor - $msvc_minor_base)
 $vs_ver = "$vs_major.$vs_minor"
 
 $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-$vs_installs = ConvertFrom-Json "$(&$vswhere -version "$vs_major.0" -format 'json')"
+$vs_installs = ConvertFrom-Json "$(&$vswhere -version "$vs_major.0"  -prerelease -format 'json')"
 
 $vs_installer = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\setup.exe"
 $vs_path = $vs_installs[0].installationPath
@@ -933,7 +945,7 @@ install_msvc_comp $mfc_comp_id
     $1k.println("Installing $ver, please press YES in UAC dialog, and don't close popup install window ...")
     $__install_script = [System.IO.Path]::GetTempFileName() + '.ps1'
     [System.IO.File]::WriteAllText($__install_script, $__install_code)
-    $process = Start-Process powershell -ArgumentList "-File `"`"$__install_script`"`" -ver $ver -arch $arch" -Verb runas -PassThru -Wait
+    $process = Start-Process powershell -ArgumentList "-File `"`"$__install_script`"`" -ver $ver -arch $arch -vs_major $vs_major" -Verb runas -PassThru -Wait
     $install_ret = $process.ExitCode
     [System.IO.File]::Delete($__install_script)
 
@@ -1508,6 +1520,7 @@ function setup_msvc() {
     if (!$cl_prog) {
         if ($Global:VS_INST) {
             $vs_path = $Global:VS_INST.installationPath
+            $1k.println("Found Visual Studio: $vs_path, version: $vs_full_ver")
             $dev_cmd_args = "-arch=$target_cpu -host_arch=x64 -no_logo"
 
             # if explicit version specified, use it
@@ -1520,8 +1533,8 @@ function setup_msvc() {
                 $1k.println('Enter vs dev shell success.')
             }
             else {
-                # vs2022 x64,x86 share same msvc component
-                install_msvc $cl_ver $TARGET_CPU
+                # vs2022, vs2026: x64,x86 share same msvc component
+                install_msvc $cl_ver $TARGET_CPU $vs_major
                 $1k.println("Enter vs dev shell ...")
                 Enter-VsDevShell -VsInstanceId $Global:VS_INST.instanceId -SkipAutomaticLocation -DevCmdArguments $dev_cmd_args -ErrorAction SilentlyContinue
                 if ($?) {
@@ -2262,7 +2275,16 @@ if (!$setupOnly) {
         $gn_gen_args = @('gen', $BUILD_DIR)
         if ($Global:is_win_family) {
             $sln_name = Split-Path $(Get-Location).Path -Leaf
-            $gn_gen_args += '--ide=vs2022', "--sln=$sln_name"
+            $vs_ide = $options.ide
+            if(!$vs_ide) {
+                $MSVS_VERSIONS = @{
+                  '18' = '2026'
+                  '17' = '2022'
+                }
+                $vs_year_ver = $MSVS_VERSIONS[$vs_major]
+                $vs_ide = "vs$vs_year_ver"
+            }
+            $gn_gen_args += "--ide=$vs_ide", "--sln=$sln_name"
         }
 
         if ($gn_buildargs_overrides) {

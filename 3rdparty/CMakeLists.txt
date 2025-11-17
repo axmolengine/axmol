@@ -253,7 +253,7 @@ endif()
 
 if(AX_ENABLE_AUDIO)
   # The openal-soft(LGPL 2.1)
-  if(AX_USE_ALSOFT AND NOT EMSCRIPTEN)
+  if(NOT EMSCRIPTEN)
     set(alsoft_opts "ALSOFT_DLOPEN OFF" "ALSOFT_UTILS OFF" "ALSOFT_EXAMPLES OFF" "ALSOFT_INSTALL OFF")
 
     if(AX_USE_ALSOFT_STATIC)
@@ -289,7 +289,6 @@ if(AX_ENABLE_AUDIO)
     ax_add_3rd(openal EXCLUDE_FROM_ALL TARGETS alcommon;OpenAL OPTIONS ${alsoft_opts})
 
     target_include_directories(3rdparty INTERFACE openal)
-    target_compile_definitions(3rdparty INTERFACE AX_USE_ALSOFT=1)
     set_target_properties(OpenAL alcommon PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
 
     if(AX_USE_ALSOFT_STATIC)

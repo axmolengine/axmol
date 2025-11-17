@@ -2,8 +2,6 @@ macro(ax_depend)
   # confim the libs, prepare to link
   set(PLATFORM_SPECIFIC_LIBS)
 
-  message(STATUS "AX_USE_ALSOFT=${AX_USE_ALSOFT}")
-
   if(WINDOWS)
     list(APPEND PLATFORM_SPECIFIC_LIBS ws2_32 userenv psapi winmm Version Iphlpapi)
 
@@ -47,14 +45,6 @@ macro(ax_depend)
       ${AVFOUNDATION_LIBRARY}
       ${COREMEDIA_LIBRARY}
     )
-
-    if(AX_ENABLE_AUDIO AND NOT AX_USE_ALSOFT)
-      find_library(OPENAL_LIBRARY OpenAL)
-      set(_AX_APPLE_LIBS
-        ${OPENAL_LIBRARY}
-        ${_AX_APPLE_LIBS}
-      )
-    endif()
 
     if(MACOSX)
       list(APPEND PREBUILT_SPECIFIC_LIBS GLFW3)

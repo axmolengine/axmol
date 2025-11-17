@@ -56,5 +56,10 @@ public:
     @brief  Called when the application reenters the foreground
     */
     void applicationWillEnterForeground() override;
-};
 
+    /**
+	@brief Called when application will quit
+    @since axmol-2.10.0
+	*/
+    void applicationWillQuit() override;
+};

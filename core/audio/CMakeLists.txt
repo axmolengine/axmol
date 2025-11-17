@@ -24,7 +24,7 @@ set(_AX_AUDIO_SRC
   audio/AudioEngineImpl.cpp
 )
 
-if (AX_USE_ALSOFT)
+if (NOT EMSCRIPTEN)
   set(_AX_AUDIO_HEADER ${_AX_AUDIO_HEADER}
     audio/AudioEffectsExtension.h
   )

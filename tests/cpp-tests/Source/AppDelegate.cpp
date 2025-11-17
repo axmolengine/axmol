@@ -53,7 +53,7 @@ void AppDelegate::initGfxContextAttrs()
     GfxContextAttrs gfxContextAttrs = {8, 8, 8, 8, 24, 8, 0};
 
     RenderView::setGfxContextAttrs(gfxContextAttrs);
-    
+
     Device::setPreferredOrientation(Device::Orientation::SensorLandscape);
 }
 
@@ -157,4 +157,9 @@ void AppDelegate::applicationWillEnterForeground()
     }
 
     Director::getInstance()->startAnimation();
+}
+
+void AppDelegate::applicationWillQuit()
+{
+    TestController::destroyInstance();
 }
