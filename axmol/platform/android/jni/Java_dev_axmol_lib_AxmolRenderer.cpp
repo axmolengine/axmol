@@ -43,27 +43,4 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeRender(JNIEnv*, jc
     ax::Director::getInstance()->mainLoop();
 }
 
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeOnContextLost(JNIEnv*, jclass, jboolean isWarmStart)
-{
-#if AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST
-    auto director = ax::Director::getInstance();
-    ax::EventCustom recreatedEvent(EVENT_APP_RESTARTING);
-    director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
-
-    //  Pop to root scene, replace with an empty scene, and clear all cached data before restarting
-    director->popToRootScene();
-    auto rootScene = Scene::create();
-    director->replaceScene(rootScene);
-    director->purgeCachedData();
-
-    JniHelper::callStaticVoidMethod("dev/axmol/lib/AxmolEngine", "restartProcess");
-#endif
-
-    if (isWarmStart)
-    {
-        auto director = ax::Director::getInstance();
-        ax::EventCustom warmStartEvent(EVENT_APP_WARM_START);
-        director->getEventDispatcher()->dispatchEvent(&warmStartEvent, true);
-    }
-}
 }

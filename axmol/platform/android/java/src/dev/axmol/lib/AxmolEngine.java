@@ -120,17 +120,7 @@ public class AxmolEngine {
 //    public static final int RENDER_API_D3D = 3;
     public static final int RENDER_API_VK  = 4;
 
-    public static boolean sNativeInitialized = false;
     public static boolean sNativePaused = false;
-
-    public static int sSrceenWidth = 960;
-    public static int sScreenHeight = 640;
-
-    public static void setScreenSize(final int width, final int height)
-    {
-        sSrceenWidth = width;
-        sScreenHeight = height;
-    }
 
     // ===========================================================
     // Constructors
@@ -180,13 +170,6 @@ public class AxmolEngine {
         }
     }
 
-    public static void initNativeSurface(Surface surface)
-    {
-        if(!sNativeInitialized) {
-            nativeInitSurface(surface, sSrceenWidth, sScreenHeight);
-            sNativeInitialized = true;
-        }
-    }
 
     // This function returns the absolute path to the OBB if it exists,
     // else it returns the absolute path to the APK.
@@ -1028,8 +1011,6 @@ public class AxmolEngine {
     // Native methods for AxmolEngine
     // ===========================================================
     public static native void nativeInit(final Object pContext, final Object pAssetManager);
-
-    public static native void nativeInitSurface(Object surface, final int width, final int height);
 
     public static native int[] nativeGetGLContextAttrs();
     public static native int nativeGetRenderAPI();

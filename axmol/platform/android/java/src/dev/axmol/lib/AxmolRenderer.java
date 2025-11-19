@@ -47,13 +47,16 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
 
     private long mLastTickInNanoSeconds;
 
-    private boolean mSurfaceCreated = false;
-
-    private Surface mSurface = null;
+    private AxmolPlayer mPlayer = null;
 
     // ===========================================================
     // Constructors
     // ===========================================================
+
+    public AxmolRenderer(AxmolPlayer player)
+    {
+        mPlayer = player;
+    }
 
     // ===========================================================
     // Getter & Setter
@@ -63,27 +66,14 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
         sAnimationInterval = (long) (interval * AxmolRenderer.NANOSECONDSPERSECOND);
     }
 
-    public void setSurface(Surface surface) {
-        mSurface = surface;
-    }
-
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
 
     @Override
     public void onSurfaceCreated(final GL10 GL10, final EGLConfig EGLConfig) {
-        boolean isFirst = !AxmolEngine.sNativeInitialized;
-        AxmolEngine.initNativeSurface(mSurface);
         this.mLastTickInNanoSeconds = System.nanoTime();
-
-        boolean isWarmStart = !mSurfaceCreated;
-        mSurfaceCreated = true;
-
-        if (!isFirst) {
-            // This must be from an OpenGL context loss
-            nativeOnContextLost(isWarmStart);
-        }
+        mPlayer.onNativeSurfaceCreated(mPlayer.getSurface());
     }
 
     @Override
@@ -120,5 +110,4 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     // ===========================================================
 
     private static native void nativeRender();
-    private static native void nativeOnContextLost(final boolean isWarmStart);
 }

@@ -28,13 +28,89 @@ THE SOFTWARE.
 #include "axmol/base/EventCustom.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/platform/Application.h"
+#include "axmol/platform/android/RenderViewImpl-android.h"
 #include "axmol/base/text_utils.h"
+#include "axmol/platform/android/jni/JniHelper.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/renderer/TextureCache.h"
 #include <android/log.h>
-#include <jni.h>
+#include <android/native_window_jni.h>
 
 using namespace ax;
 
+static ANativeWindow* s_nativeWindow;
+
+ANativeWindow* axmolGetANativeWindow()
+{
+    return s_nativeWindow;
+}
+
+static void axmolDispatchContextLost(bool isWarmStart)
+{
+#if AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST
+    auto director = ax::Director::getInstance();
+    ax::EventCustom recreatedEvent(EVENT_APP_RESTARTING);
+    director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
+
+    //  Pop to root scene, replace with an empty scene, and clear all cached data before restarting
+    director->popToRootScene();
+    auto rootScene = Scene::create();
+    director->replaceScene(rootScene);
+    director->purgeCachedData();
+
+    JniHelper::callStaticVoidMethod("dev/axmol/lib/AxmolEngine", "restartProcess");
+#endif
+
+    if (isWarmStart)
+    {
+        auto director = ax::Director::getInstance();
+        ax::EventCustom warmStartEvent(EVENT_APP_WARM_START);
+        director->getEventDispatcher()->dispatchEvent(&warmStartEvent, true);
+    }
+}
+
 extern "C" {
+
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnSurfaceCreated(JNIEnv* env,
+                                                                             jclass,
+                                                                             jobject surface,
+                                                                             jint w,
+                                                                             jint h,
+                                                                             jboolean isWarmStart)
+{
+    if (s_nativeWindow)
+    {
+        ANativeWindow_release(s_nativeWindow);
+    }
+    s_nativeWindow  = ANativeWindow_fromSurface(env, surface);
+    auto director   = ax::Director::getInstance();
+    auto renderView = director->getRenderView();
+    if (!renderView)
+    {
+        renderView = ax::RenderViewImpl::createWithRect(
+            "axmol3", Rect{ax::Rect{0, 0, static_cast<float>(w), static_cast<float>(h)}});
+        director->setRenderView(renderView);
+
+        auto app = ax::Application::getInstance();
+        ax::Application::getInstance()->run();
+    }
+    else
+    {
+        axdrv->resetState();
+        director->resetMatrixStack();
+        ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
+        director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
+        director->setRenderDefaults();
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+        ax::VolatileTextureMgr::reloadAllTextures();
+#endif
+
+#if AX_RENDER_API == AX_RENDER_API_GL
+        axmolDispatchContextLost(isWarmStart);
+#endif
+    }
+}
+
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeTouchesBegin(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
 {
     intptr_t idlong = id;

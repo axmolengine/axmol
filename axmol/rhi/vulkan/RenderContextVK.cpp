@@ -573,6 +573,7 @@ bool RenderContextImpl::beginFrame()
         }
         break;
     default:
+        // TODO: process android VK_ERROR_SURFACE_LOST_KHR
         AXLOGE("axmol: vkAcquireNextImageKHR fail: {}", (unsigned int)result);
         AXASSERT(false, "vkAcquireNextImageKHR failed");
         return false;
@@ -638,18 +639,6 @@ void RenderContextImpl::endRenderPass()
     AX_SAFE_RELEASE_NULL(_indexBuffer);
     AX_SAFE_RELEASE_NULL(_vertexBuffer);
     AX_SAFE_RELEASE_NULL(_instanceBuffer);
-
-    if (!rtImpl->isDefaultRenderTarget())
-    {
-        // readPixels(_currentRT, false, [=](const rhi::PixelBufferDesc& pbd) {
-        //     if (pbd)
-        //     {
-        //         auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(),
-        //                                                 pbd._data.getSize(), pbd._width, pbd._height, 8, false);
-        //         image->saveToFile(R"(D:\tmp\test.png)"sv, false);
-        //     }
-        // });
-    }
 }
 
 void RenderContextImpl::endFrame()

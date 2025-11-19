@@ -26,18 +26,14 @@ THE SOFTWARE.
 #include "axmol/platform/android/jni/Java_dev_axmol_lib_AxmolEngine.h"
 #include <stdlib.h>
 #include <jni.h>
-#include <android/native_window_jni.h>
 #include <android/log.h>
 #include <string>
 #include "axmol/platform/android/jni/JniHelper.h"
 #include "axmol/platform/android/FileUtils-android.h"
-#include "axmol/platform/android/RenderViewImpl-android.h"
 #include "axmol/platform/Application.h"
-#include "axmol/rhi/opengl/DriverGL.h"
 #include "axmol/base/EventType.h"
 #include "axmol/base/EventCustom.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/renderer/TextureCache.h"
 #include "axmol/base/text_utils.h"
 
 #define LOG_TAG   "Java_dev_axmol_lib_AxmolEngine.cpp"
@@ -50,10 +46,7 @@ static void* s_ctx                         = nullptr;
 
 static std::string s_apkPath;
 
-static ANativeWindow* s_nativeWindow;
-
 using namespace ax;
-using namespace std;
 
 extern "C" {
 
@@ -68,34 +61,6 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeInit(JNIEnv* env,
 
     auto app = ax::Application::getInstance();
     app->initContextAttrs();
-}
-
-JNIEXPORT void JNICALL
-Java_dev_axmol_lib_AxmolEngine_nativeInitSurface(JNIEnv* env, jclass, jobject surface, jint w, jint h)
-{
-    auto director   = ax::Director::getInstance();
-    auto renderView = director->getRenderView();
-    if (!renderView)
-    {
-        s_nativeWindow = ANativeWindow_fromSurface(env, surface);
-        renderView     = ax::RenderViewImpl::createWithRect(
-            "axmol3", Rect{ax::Rect{0, 0, static_cast<float>(w), static_cast<float>(h)}});
-        director->setRenderView(renderView);
-
-        auto app = ax::Application::getInstance();
-        ax::Application::getInstance()->run();
-    }
-    else
-    {
-        axdrv->resetState();
-        director->resetMatrixStack();
-        ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
-        director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
-        director->setRenderDefaults();
-#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-        ax::VolatileTextureMgr::reloadAllTextures();
-#endif
-    }
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeSetEditTextDialogResult(JNIEnv* env,
@@ -187,11 +152,6 @@ const char* getApkPath()
 std::string getPackageNameJNI()
 {
     return JniHelper::callStaticStringMethod(className, "getPackageName");
-}
-
-ANativeWindow* axmolGetANativeWindow()
-{
-    return s_nativeWindow;
 }
 
 int getObbAssetFileDescriptorJNI(const char* path, int64_t* startOffset, int64_t* size)

@@ -33,6 +33,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -61,8 +62,13 @@ public class AxmolPlayer extends FrameLayout {
     // Fields
     // ===========================================================
 
+    public static int sScreenWidth = 960;
+    public static int sScreenHeight = 640;
+
     private static Handler sHandler;
     private static WeakReference<AxmolPlayer> sInstance;
+
+    private static boolean sNativeInitialized = false;
 
     private AxmolEditBox mEditBox;
     private TextInputListener mTextInputListener;
@@ -75,6 +81,8 @@ public class AxmolPlayer extends FrameLayout {
     private  boolean mEnableForceDoLayout = false;
 
     private boolean mIsVulkan = false;
+
+    private boolean mSurfaceCreated = false;
 
     private CountDownLatch mNativePauseComplete;
 
@@ -202,9 +210,8 @@ public class AxmolPlayer extends FrameLayout {
         glView.setPreserveEGLContextOnPause(true);
 
         // only valid for GLES
-        AxmolRenderer mRenderer = new AxmolRenderer();
+        AxmolRenderer mRenderer = new AxmolRenderer(this);
         glView.setRenderer(mRenderer);
-        mRenderer.setSurface(glView.getHolder().getSurface());
 
         mSurfaceView = glView;
         addView(mSurfaceView);
@@ -215,7 +222,7 @@ public class AxmolPlayer extends FrameLayout {
         vkView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-                AxmolEngine.initNativeSurface(holder.getSurface());
+                onNativeSurfaceCreated(holder.getSurface());
             }
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
@@ -229,9 +236,8 @@ public class AxmolPlayer extends FrameLayout {
         addView(mSurfaceView);
     }
 
-    @SuppressWarnings("unused")
-    public SurfaceView getSurfaceView() {
-        return mSurfaceView;
+    public Surface getSurface() {
+        return mSurfaceView.getHolder().getSurface();
     }
 
     public AxmolEditBox getEditText() {
@@ -447,7 +453,8 @@ public class AxmolPlayer extends FrameLayout {
         super.onSizeChanged(w, h, oldw, oldh);
 
         if(!this.isInEditMode()) {
-            AxmolEngine.setScreenSize(w, h);
+            sScreenWidth = w;
+            sScreenHeight = h;
         }
     }
 
@@ -536,7 +543,7 @@ public class AxmolPlayer extends FrameLayout {
             if(!mIsVulkan)
                 ((GLSurfaceView)mSurfaceView).setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         }
-        if (AxmolEngine.sNativeInitialized) {
+        if (sNativeInitialized) {
             mNativePauseComplete = new CountDownLatch(1);
             /**
              * onPause may be invoked before onSurfaceCreated,
@@ -703,10 +710,18 @@ public class AxmolPlayer extends FrameLayout {
         }
     }
 
-
     // ===========================================================
     // Native methods for AxmolPlayer
     // ===========================================================
+
+    public void onNativeSurfaceCreated(Surface surface) {
+        boolean isWarmStart = !mSurfaceCreated;
+        mSurfaceCreated = true;
+        AxmolPlayer.nativeOnSurfaceCreated(surface, sScreenWidth, sScreenHeight, isWarmStart);
+        if(!sNativeInitialized) {
+            sNativeInitialized = true;
+        }
+    }
 
     public static native void nativeOnResume();
     public static native void nativeOnPause();
@@ -721,5 +736,6 @@ public class AxmolPlayer extends FrameLayout {
     public static native void nativeTouchesCancel(final int[] ids, final float[] xs, final float[] ys);
     public static native boolean nativeKeyEvent(final int keyCode,boolean isPressed);
 
+    public static native void nativeOnSurfaceCreated(Object surface, final int width, final int height, boolean isWarmStart);
     public static native void nativeOnSurfaceChanged(final int width, final int height);
 }

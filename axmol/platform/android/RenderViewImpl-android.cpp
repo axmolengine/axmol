@@ -37,6 +37,7 @@ THE SOFTWARE.
 
 #include <stdlib.h>
 #include <android/log.h>
+#include <android/native_window_jni.h>
 
 #define DEFAULT_MARGIN_ANDROID           30.0f
 #define WIDE_SCREEN_ASPECT_RATIO_ANDROID 2.0f
@@ -127,7 +128,7 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
         AXLOGE("Failed to create Vulkan window surface.");
         return false;
     }
-    _nativeDisplay = driver->getSurface();
+    _nativeDisplay = (void*)driver->getSurface();
 #endif
 
     updateRenderSurface(rect.size.width, rect.size.height, SurfaceUpdateFlag::AllUpdatesSilently);
