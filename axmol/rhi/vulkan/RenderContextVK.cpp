@@ -139,7 +139,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface)
 #if !_AX_USE_DESCRIPTOR_CACHE
     createDescriptorPool();
 #endif
-    rebuildSwapchain();
+    recreateSwapchain();
 
     // create sync objects
     constexpr VkSemaphoreCreateInfo semaphoreInfo{.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO};
@@ -357,18 +357,19 @@ void RenderContextImpl::createDescriptorPool()
 }
 #endif
 
-bool RenderContextImpl::resizeSwapchain(uint32_t width, uint32_t height)
+bool RenderContextImpl::updateSurface(void* surface, uint32_t width, uint32_t height)
 {
-    if (width == _screenWidth && height == _screenHeight)
+    if (width == _screenWidth && height == _screenHeight && _surface == surface)
         return true;
 
+    _surface        = (VkSurfaceKHR)surface;
     _screenWidth    = width;
     _screenHeight   = height;
     _swapchainDirty = true;
     return true;
 }
 
-void RenderContextImpl::rebuildSwapchain()
+void RenderContextImpl::recreateSwapchain()
 {
     auto physical = _driver->getPhysical();
 
@@ -438,6 +439,17 @@ void RenderContextImpl::rebuildSwapchain()
     VkSurfaceCapabilitiesKHR caps;
     vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical, _surface, &caps);
 
+    VkSurfaceTransformFlagBitsKHR preTransform = caps.currentTransform;
+#if defined(__ANDROID__)
+    uint32_t width  = caps.currentExtent.width;
+    uint32_t height = caps.currentExtent.height;
+    if (caps.currentTransform & VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR ||
+        caps.currentTransform & VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
+    {
+        preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
+    }
+#endif
+
     VkExtent2D extent = caps.currentExtent;
     if (extent.width == UINT32_MAX)
     {
@@ -453,12 +465,14 @@ void RenderContextImpl::rebuildSwapchain()
     if (caps.maxImageCount > 0 && imageCount > caps.maxImageCount)
         imageCount = caps.maxImageCount;
 
-    // Destroy old swapchain if exists
+    // Destroy old swapchain and swapchain images if exists
     if (_swapchain != VK_NULL_HANDLE)
     {
         for (auto view : _swapchainImageViews)
             vkDestroyImageView(_device, view, nullptr);
         vkDestroySwapchainKHR(_device, _swapchain, nullptr);
+        _swapchain = nullptr;
+        _swapchainImageViews.clear();
     }
 
     // Create new swapchain
@@ -472,7 +486,7 @@ void RenderContextImpl::rebuildSwapchain()
     scInfo.imageArrayLayers = 1;
     scInfo.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     scInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-    scInfo.preTransform     = caps.currentTransform;
+    scInfo.preTransform     = preTransform;
     scInfo.compositeAlpha   = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
     scInfo.presentMode      = chosenPresentMode;
     scInfo.clipped          = VK_TRUE;
@@ -510,11 +524,12 @@ void RenderContextImpl::rebuildSwapchain()
 
     _driver->rebuildSwapchainAttachments(_swapchainImages, _swapchainImageViews, extent, pixelFormat);
 
-    // Create render finished semaphores
+    // re-create render finished semaphores
     if (!_renderFinishedSemaphores.empty())
         for (auto semaphore : _renderFinishedSemaphores)
             vkDestroySemaphore(_device, semaphore, nullptr);
     _renderFinishedSemaphores.resize(swapImageCount, VK_NULL_HANDLE);
+
     VkSemaphoreCreateInfo sci{.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO};
     for (uint32_t i = 0; i < swapImageCount; ++i)
     {
@@ -528,6 +543,9 @@ void RenderContextImpl::rebuildSwapchain()
         _screenWidth  = extent.width;
         _screenHeight = extent.height;
     }
+
+    _currentFrame = 0;
+    _currentImageIndex = 0;
 }
 
 void RenderContextImpl::setDepthStencilState(DepthStencilState* depthStencilState)
@@ -545,7 +563,7 @@ bool RenderContextImpl::beginFrame()
     if (_swapchainDirty) [[unlikely]]
     {
         vkDeviceWaitIdle(_device);
-        rebuildSwapchain();
+        recreateSwapchain();
         _swapchainDirty = false;
     }
 
@@ -561,10 +579,6 @@ bool RenderContextImpl::beginFrame()
     {
     case VK_SUCCESS:
         break;
-    case VK_ERROR_OUT_OF_DATE_KHR:
-        // Signal upper layer to recreate swapchain
-        AXLOGW("axmol: swapchain is out of date (frame {}), need to recreate", _currentFrame);
-        return false;
     case VK_SUBOPTIMAL_KHR:
         if (!_suboptimal)
         {
@@ -572,6 +586,13 @@ bool RenderContextImpl::beginFrame()
             AXLOGW("axmol: Suboptimal swap chain.");
         }
         break;
+    case VK_ERROR_OUT_OF_DATE_KHR:
+        // Signal upper layer to recreate swapchain
+        AXLOGI("axmol: swapchain is out of date (frame {}), will be created later", _currentFrame);
+        return false;
+    case VK_ERROR_SURFACE_LOST_KHR:
+        AXLOGI("axmol: surface is lost (frame {}), will be recreated by platform", _currentFrame);
+        return false;
     default:
         // TODO: process android VK_ERROR_SURFACE_LOST_KHR
         AXLOGE("axmol: vkAcquireNextImageKHR fail: {}", (unsigned int)result);
@@ -701,6 +722,9 @@ void RenderContextImpl::endFrame()
         break;
     case VK_ERROR_OUT_OF_DATE_KHR:
         AXLOGI("axmol: swapchain out of date");
+        break;
+    case VK_ERROR_SURFACE_LOST_KHR:
+        AXLOGI("axmol: surface is lost, will be recreated by platform");
         break;
     default:
         AXLOGE("axmol: vkQueuePresentKHR fail: {}", (unsigned int)vr);

@@ -57,6 +57,10 @@ public:
     void* getNativeWindow() const override;
     void* getNativeDisplay() const override;
 
+#if AX_RENDER_API == AX_RENDER_API_VK
+    void recreateVkSurface(bool needUpdateRenderSurface);
+#endif
+
 protected:
     RenderViewImpl();
     virtual ~RenderViewImpl();

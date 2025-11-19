@@ -64,6 +64,7 @@ class GroupCommand;
 class CallbackCommand;
 struct PipelineDesc;
 class Texture2D;
+class RenderView;
 
 /** Class that knows how to sort `RenderCommand` objects.
  Since the commands that have `z == 0` are "pushed back" in
@@ -131,6 +132,7 @@ Whenever possible prefer to use `TrianglesCommand` objects since the renderer wi
  */
 class AX_DLL Renderer
 {
+    friend class RenderView;
 public:
     /**The max number of vertices in a vertex buffer object.*/
     static const int VBO_SIZE = 65536;
@@ -496,7 +498,7 @@ protected:
 
     void popStateBlock();
 
-    void resizeSwapchain(uint32_t width, uint32_t height);
+    void updateSurface(void* surface, uint32_t width, uint32_t height);
 
     rhi::RenderPipeline* _renderPipeline = nullptr;
 

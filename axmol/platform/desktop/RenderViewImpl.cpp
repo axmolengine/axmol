@@ -661,7 +661,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     auto driver = static_cast<ax::rhi::vk::DriverImpl*>(axdrv);
     const rhi::vk::SurfaceCreateInfo createInfo{
         .window = _mainWindow, .width = fbWidth, .height = fbHeight, .createFunc = _createSurface};
-    bool ok = driver->setupSurface(createInfo);
+    bool ok = driver->recreateSurface(createInfo);
     if (!ok)
     {
         AXLOGE("Failed to create Vulkan window surface.");

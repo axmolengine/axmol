@@ -90,7 +90,7 @@ public:
 
     void init();
 
-    bool setupSurface(const SurfaceCreateInfo& info);
+    bool recreateSurface(const SurfaceCreateInfo& info);
     VkSurfaceKHR getSurface() const { return _surface; }
 
     const VkExtent2D& getSurfaceInitialExtent() const { return _surfaceInitalExtent; }

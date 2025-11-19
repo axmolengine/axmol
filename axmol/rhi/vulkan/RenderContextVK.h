@@ -78,7 +78,7 @@ public:
     RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface);
     ~RenderContextImpl() override;
 
-    bool resizeSwapchain(uint32_t width, uint32_t height) override;
+    bool updateSurface(void* surface, uint32_t width, uint32_t height) override;
 
     void setDepthStencilState(DepthStencilState* depthStencilState) override;
     void setRenderPipeline(RenderPipeline* renderPipeline) override;
@@ -129,7 +129,7 @@ public:
     void removeCachedPipelines(VkRenderPass rp);
 
 private:
-    void rebuildSwapchain();
+    void recreateSwapchain();
     void createCommandBuffers();
 
 #if !_AX_USE_DESCRIPTOR_CACHE

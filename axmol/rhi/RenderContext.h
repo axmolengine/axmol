@@ -76,14 +76,14 @@ public:
     void setScreenRenderTarget(RenderTarget* rt) { _screenRT = rt; }
 
     /**
-     * @brief Resize swapchain when window size changed
-     *
+     * @brief Updates surface when the window resized or surface recretad
+     * @param surface
      * @param width
      * @param height
      * @return true
      * @return false
      */
-    virtual bool resizeSwapchain(uint32_t width, uint32_t height);
+    virtual bool updateSurface(void* surface, uint32_t width, uint32_t height);
 
     /**
      * Set depthStencil status once

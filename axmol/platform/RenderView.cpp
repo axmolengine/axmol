@@ -515,8 +515,10 @@ void RenderView::onSurfaceResized()
 
     int screenWidth  = static_cast<uint32_t>(_renderSize.width);
     int screenHeight = static_cast<uint32_t>(_renderSize.height);
-    Director::getInstance()->resizeSwapchain(screenWidth, screenHeight);
 
+    auto renderer = Director::getInstance()->getRenderer();
+    if (renderer)
+        renderer->updateSurface(getNativeDisplay(), screenWidth, screenHeight);
 #ifdef AX_ENABLE_VR
     if (_vrRenderer) [[unlikely]]
         _vrRenderer->onRenderViewResized(this);

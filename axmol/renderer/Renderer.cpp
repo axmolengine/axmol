@@ -834,10 +834,10 @@ void Renderer::readPixels(rhi::RenderTarget* rt,
     _context->readPixels(rt, preserveAxisHint, std::move(callback));
 }
 
-void Renderer::resizeSwapchain(uint32_t width, uint32_t height)
+void Renderer::updateSurface(void* surface, uint32_t width, uint32_t height)
 {
     if (_context)
-        _context->resizeSwapchain(width, height);
+        _context->updateSurface(surface, width, height);
 }
 
 void Renderer::beginRenderPass()

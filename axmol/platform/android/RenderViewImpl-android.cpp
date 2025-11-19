@@ -104,6 +104,8 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
                                   float /*frameZoomFactor*/,
                                   bool /*resizable*/)
 {
+    updateRenderSurface(rect.size.width, rect.size.height, SurfaceUpdateFlag::AllUpdatesSilently);
+
 #if AX_RENDER_API == AX_RENDER_API_GL
     auto glesVer = gladLoaderLoadGLES2();
     if (glesVer)
@@ -111,6 +113,15 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
     else
         throw std::runtime_error("Load GLES fail");
 #else
+    recreateVkSurface(false);
+#endif
+
+    return true;
+}
+
+#if AX_RENDER_API == AX_RENDER_API_VK
+void RenderViewImpl::recreateVkSurface(bool needUpdateRenderSurface)
+{
     auto _createSurface = [](VkInstance inst, void* window, VkSurfaceKHR* surface) {
         VkAndroidSurfaceCreateInfoKHR createInfo{VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR};
         createInfo.window = (ANativeWindow*)window;
@@ -118,22 +129,22 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
     };
     _nativeWindow = axmolGetANativeWindow();
     const rhi::vk::SurfaceCreateInfo createInfo{.window     = _nativeWindow,
-                                                .width      = static_cast<int>(rect.size.width),
-                                                .height     = static_cast<int>(rect.size.height),
+                                                .width      = static_cast<int>(_windowSize.width),
+                                                .height     = static_cast<int>(_windowSize.height),
                                                 .createFunc = _createSurface};
     auto driver = static_cast<ax::rhi::vk::DriverImpl*>(axdrv);
-    bool ok     = driver->setupSurface(createInfo);
+    bool ok     = driver->recreateSurface(createInfo);
     if (!ok)
     {
         AXLOGE("Failed to create Vulkan window surface.");
-        return false;
+        return;
     }
     _nativeDisplay = (void*)driver->getSurface();
-#endif
 
-    updateRenderSurface(rect.size.width, rect.size.height, SurfaceUpdateFlag::AllUpdatesSilently);
-    return true;
+    if(needUpdateRenderSurface)
+        updateRenderSurface(_windowSize.width, _windowSize.height, SurfaceUpdateFlag::AllUpdates);
 }
+#endif
 
 bool RenderViewImpl::initWithFullScreen(std::string_view viewName)
 {

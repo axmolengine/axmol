@@ -414,7 +414,7 @@ RenderContextImpl::~RenderContextImpl()
         _rasterState.Reset();
 }
 
-bool RenderContextImpl::resizeSwapchain(uint32_t width, uint32_t height)
+bool RenderContextImpl::updateSurface(void* /*surface*/, uint32_t width, uint32_t height)
 {
     if (!_swapChain || !_driverImpl || !_screenRT)
         return false;

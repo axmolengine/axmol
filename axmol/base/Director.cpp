@@ -269,8 +269,7 @@ void Director::setRenderDefaults()
 // Draw the Scene
 void Director::drawScene()
 {
-    if (!_renderer->beginFrame()) [[unlikely]]
-        return;
+    const auto canRender = _renderer->beginFrame();
 
     // calculate "global" dt
     calculateDeltaTime();
@@ -287,6 +286,9 @@ void Director::drawScene()
         _scheduler->update(_deltaTime);
         _eventDispatcher->dispatchEvent(_eventAfterUpdate);
     }
+
+    if (!canRender) [[unlikely]]
+        return;
 
     _renderer->clear(ClearFlag::ALL, _clearColor, 1, 0, -10000.0);
 
@@ -664,6 +666,8 @@ void Director::setProjection(Projection projection)
         AXLOGD("Director: unrecognized projection");
         break;
     }
+
+
 
     _projection = projection;
 
@@ -1634,12 +1638,6 @@ void Director::setAnimationInterval(float interval, SetIntervalReason reason)
         stopAnimation();
         startAnimation(reason);
     }
-}
-
-void Director::resizeSwapchain(uint32_t w, uint32_t h)
-{
-    if (_renderer)
-        _renderer->resizeSwapchain(w, h);
 }
 
 }  // namespace ax

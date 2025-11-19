@@ -24,6 +24,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "axmol/base/IMEDispatcher.h"
 #include "axmol/base/Director.h"
+#include "axmol/base/Scheduler.h"
 #include "axmol/base/EventType.h"
 #include "axmol/base/EventCustom.h"
 #include "axmol/base/EventDispatcher.h"
@@ -96,17 +97,20 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnSurfaceCreated(JNI
     }
     else
     {
+#if AX_RENDER_API == AX_RENDER_API_VK
+        director->getScheduler()->runOnAxmolThread([renderView](){
+            static_cast<ax::RenderViewImpl*>(renderView)->recreateVkSurface(true);
+        });
+#elif AX_RENDER_API == AX_RENDER_API_GL
         axdrv->resetState();
         director->resetMatrixStack();
         ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
         director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
         director->setRenderDefaults();
-#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+#    if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         ax::VolatileTextureMgr::reloadAllTextures();
-#endif
-
-#if AX_RENDER_API == AX_RENDER_API_GL
         axmolDispatchContextLost(isWarmStart);
+#    endif
 #endif
     }
 }

@@ -79,7 +79,7 @@ public:
     RenderContextImpl(DriverImpl* driver, void* surfaceContext);
     ~RenderContextImpl() override;
 
-    bool resizeSwapchain(uint32_t width, uint32_t height) override;
+    bool updateSurface(void* surface, uint32_t width, uint32_t height) override;
 
     /**
      * Set depthStencil status

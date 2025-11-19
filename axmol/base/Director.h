@@ -533,15 +533,6 @@ protected:
     void reset();
 
     /**
-     * @brief Internal-only: Resizes the swapchain to accommodate surface changes.
-     * Not intended for external module access.
-     *
-     * @param w
-     * @param h
-     */
-    void resizeSwapchain(uint32_t w, uint32_t h);
-
-    /**
      * @brief Internal-only: Sets canvas size aka design size, invoked by RenderView
      */
     void setCanvasSize(const Vec2& canvasSize);

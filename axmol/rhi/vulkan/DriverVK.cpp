@@ -452,8 +452,9 @@ void DriverImpl::initializeDevice()
     AXASSERT(vr == VK_SUCCESS && _commandPool != VK_NULL_HANDLE, "vkCreateCommandPool failed for transient pool");
 }
 
-bool DriverImpl::setupSurface(const SurfaceCreateInfo& info)
+bool DriverImpl::recreateSurface(const SurfaceCreateInfo& info)
 {
+    auto oldSurface = _surface;
     auto result = info.createFunc(_factory, info.window, &_surface);
     if (result != VK_SUCCESS)
         return false;
@@ -489,6 +490,9 @@ bool DriverImpl::setupSurface(const SurfaceCreateInfo& info)
         vkGetDeviceQueue(_device, _presentQueueFamily, 0, &_presentQueue);
         AXASSERT(_presentQueue != VK_NULL_HANDLE, "vkGetDeviceQueue present failed");
     }
+
+    if (oldSurface)
+        vkDestroySurfaceKHR(_factory, oldSurface, nullptr);
 
     return true;
 }
