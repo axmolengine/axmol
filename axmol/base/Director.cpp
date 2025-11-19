@@ -667,8 +667,6 @@ void Director::setProjection(Projection projection)
         break;
     }
 
-
-
     _projection = projection;
 
     _eventDispatcher->dispatchEvent(_eventProjectionChanged);

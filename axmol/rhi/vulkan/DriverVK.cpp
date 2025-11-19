@@ -455,7 +455,7 @@ void DriverImpl::initializeDevice()
 bool DriverImpl::recreateSurface(const SurfaceCreateInfo& info)
 {
     auto oldSurface = _surface;
-    auto result = info.createFunc(_factory, info.window, &_surface);
+    auto result     = info.createFunc(_factory, info.window, &_surface);
     if (result != VK_SUCCESS)
         return false;
 

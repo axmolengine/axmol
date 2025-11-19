@@ -544,7 +544,7 @@ void RenderContextImpl::recreateSwapchain()
         _screenHeight = extent.height;
     }
 
-    _currentFrame = 0;
+    _currentFrame      = 0;
     _currentImageIndex = 0;
 }
 

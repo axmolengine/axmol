@@ -133,6 +133,7 @@ Whenever possible prefer to use `TrianglesCommand` objects since the renderer wi
 class AX_DLL Renderer
 {
     friend class RenderView;
+
 public:
     /**The max number of vertices in a vertex buffer object.*/
     static const int VBO_SIZE = 65536;

@@ -42,5 +42,4 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeRender(JNIEnv*, jc
 {
     ax::Director::getInstance()->mainLoop();
 }
-
 }

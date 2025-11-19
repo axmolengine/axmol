@@ -141,7 +141,7 @@ void RenderViewImpl::recreateVkSurface(bool needUpdateRenderSurface)
     }
     _nativeDisplay = (void*)driver->getSurface();
 
-    if(needUpdateRenderSurface)
+    if (needUpdateRenderSurface)
         updateRenderSurface(_windowSize.width, _windowSize.height, SurfaceUpdateFlag::AllUpdates);
 }
 #endif

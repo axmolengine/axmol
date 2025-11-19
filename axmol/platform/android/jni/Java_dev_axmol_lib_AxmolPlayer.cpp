@@ -98,9 +98,8 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnSurfaceCreated(JNI
     else
     {
 #if AX_RENDER_API == AX_RENDER_API_VK
-        director->getScheduler()->runOnAxmolThread([renderView](){
-            static_cast<ax::RenderViewImpl*>(renderView)->recreateVkSurface(true);
-        });
+        director->getScheduler()->runOnAxmolThread(
+            [renderView]() { static_cast<ax::RenderViewImpl*>(renderView)->recreateVkSurface(true); });
 #elif AX_RENDER_API == AX_RENDER_API_GL
         axdrv->resetState();
         director->resetMatrixStack();
