@@ -31,7 +31,7 @@
 #include "axmol/platform/Application.h"
 #include "axmol/platform/FileUtils.h"
 #include <jni.h>
-
+#include "axmol/platform/android/jni/JniHelper.h"
 #include "axmol/base/text_utils.h"
 
 using namespace ax;
@@ -43,41 +43,27 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeRender(JNIEnv*, jc
     ax::Director::getInstance()->mainLoop();
 }
 
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeOnPause(JNIEnv*, jclass)
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeOnContextLost(JNIEnv*, jclass, jboolean isWarmStart)
 {
-    if (Director::getInstance()->getRenderView())
+#if AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST
+    auto director = ax::Director::getInstance();
+    ax::EventCustom recreatedEvent(EVENT_APP_RESTARTING);
+    director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
+
+    //  Pop to root scene, replace with an empty scene, and clear all cached data before restarting
+    director->popToRootScene();
+    auto rootScene = Scene::create();
+    director->replaceScene(rootScene);
+    director->purgeCachedData();
+
+    JniHelper::callStaticVoidMethod("dev/axmol/lib/AxmolEngine", "restartProcess");
+#endif
+
+    if (isWarmStart)
     {
-        Application::getInstance()->applicationDidEnterBackground();
-        ax::EventCustom backgroundEvent(EVENT_COME_TO_BACKGROUND);
-        ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&backgroundEvent, true);
+        auto director = ax::Director::getInstance();
+        ax::EventCustom warmStartEvent(EVENT_APP_WARM_START);
+        director->getEventDispatcher()->dispatchEvent(&warmStartEvent, true);
     }
-}
-
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeOnResume(JNIEnv*, jclass)
-{
-    if (Director::getInstance()->getRenderView())
-    {
-        Application::getInstance()->applicationWillEnterForeground();
-        ax::EventCustom foregroundEvent(EVENT_COME_TO_FOREGROUND);
-        ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&foregroundEvent, true);
-    }
-}
-
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeInsertText(JNIEnv* env, jclass, jstring text)
-{
-    std::string strValue = ax::text_utils::getStringUTFCharsJNI(env, text);
-    const char* pszText  = strValue.c_str();
-    ax::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
-}
-
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeDeleteBackward(JNIEnv*, jclass, jint numChars)
-{
-    ax::IMEDispatcher::sharedDispatcher()->dispatchDeleteBackward(numChars);
-}
-
-JNIEXPORT jstring JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeGetContentText(JNIEnv* env, jclass)
-{
-    auto pszText = ax::IMEDispatcher::sharedDispatcher()->getContentText();
-    return ax::text_utils::newStringUTFJNI(env, pszText);
 }
 }

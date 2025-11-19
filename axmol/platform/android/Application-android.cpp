@@ -60,10 +60,21 @@ int Application::run()
     // Initialize instance and axmol.
     if (!applicationDidFinishLaunching())
     {
-        return 0;
+        return -1;
     }
 
-    return -1;
+#if AX_RENDER_API == AX_RENDER_API_VK
+    auto director = Director::getInstance();
+    std::thread t([director] {
+        do
+        {
+            director->mainLoop();
+        } while (sm_pSharedApplication != nullptr);
+    });
+    t.detach();
+#endif
+
+    return 0;
 }
 
 void Application::setAnimationInterval(float interval)

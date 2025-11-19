@@ -25,6 +25,7 @@
 package dev.axmol.lib;
 
 import android.opengl.GLSurfaceView;
+import android.view.Surface;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -45,11 +46,10 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     // ===========================================================
 
     private long mLastTickInNanoSeconds;
-    private int mScreenWidth;
-    private int mScreenHeight;
-    private static boolean gNativeInitialized = false;
-    private static boolean gNativeIsPaused = false;
+
     private boolean mSurfaceCreated = false;
+
+    private Surface mSurface = null;
 
     // ===========================================================
     // Constructors
@@ -63,9 +63,8 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
         sAnimationInterval = (long) (interval * AxmolRenderer.NANOSECONDSPERSECOND);
     }
 
-    public void setScreenWidthAndHeight(final int surfaceWidth, final int surfaceHeight) {
-        this.mScreenWidth = surfaceWidth;
-        this.mScreenHeight = surfaceHeight;
+    public void setSurface(Surface surface) {
+        mSurface = surface;
     }
 
     // ===========================================================
@@ -74,23 +73,22 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(final GL10 GL10, final EGLConfig EGLConfig) {
-        AxmolRenderer.nativeInit(this.mScreenWidth, this.mScreenHeight);
+        boolean isFirst = !AxmolEngine.sNativeInitialized;
+        AxmolEngine.initNativeSurface(mSurface);
         this.mLastTickInNanoSeconds = System.nanoTime();
 
         boolean isWarmStart = !mSurfaceCreated;
         mSurfaceCreated = true;
 
-        if (gNativeInitialized) {
+        if (!isFirst) {
             // This must be from an OpenGL context loss
             nativeOnContextLost(isWarmStart);
-        } else {
-            gNativeInitialized = true;
         }
     }
 
     @Override
     public void onSurfaceChanged(final GL10 GL10, final int width, final int height) {
-        AxmolRenderer.nativeOnSurfaceChanged(width, height);
+        AxmolPlayer.nativeOnSurfaceChanged(width, height);
     }
 
     @Override
@@ -121,80 +119,6 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     // Methods
     // ===========================================================
 
-    private static native void nativeTouchesBegin(final int id, final float x, final float y);
-    private static native void nativeTouchesEnd(final int id, final float x, final float y);
-    private static native void nativeTouchesMove(final int[] ids, final float[] xs, final float[] ys);
-    private static native void nativeTouchesCancel(final int[] ids, final float[] xs, final float[] ys);
-    private static native boolean nativeKeyEvent(final int keyCode,boolean isPressed);
     private static native void nativeRender();
-    private static native void nativeInit(final int width, final int height);
     private static native void nativeOnContextLost(final boolean isWarmStart);
-    private static native void nativeOnSurfaceChanged(final int width, final int height);
-    private static native void nativeOnPause();
-    private static native void nativeOnResume();
-
-    public void handleActionDown(final int id, final float x, final float y) {
-        AxmolRenderer.nativeTouchesBegin(id, x, y);
-    }
-
-    public void handleActionUp(final int id, final float x, final float y) {
-        AxmolRenderer.nativeTouchesEnd(id, x, y);
-    }
-
-    public void handleActionCancel(final int[] ids, final float[] xs, final float[] ys) {
-        AxmolRenderer.nativeTouchesCancel(ids, xs, ys);
-    }
-
-    public void handleActionMove(final int[] ids, final float[] xs, final float[] ys) {
-        AxmolRenderer.nativeTouchesMove(ids, xs, ys);
-    }
-
-    public void handleKeyDown(final int keyCode) {
-        AxmolRenderer.nativeKeyEvent(keyCode, true);
-    }
-
-    public void handleKeyUp(final int keyCode) {
-        AxmolRenderer.nativeKeyEvent(keyCode, false);
-    }
-
-    public void handleOnPause() {
-        /**
-         * onPause may be invoked before onSurfaceCreated,
-         * and engine will be initialized correctly after
-         * onSurfaceCreated is invoked. Can not invoke any
-         * native method before onSurfaceCreated is invoked
-         */
-        if (!gNativeInitialized)
-            return;
-
-        AxmolRenderer.nativeOnPause();
-        gNativeIsPaused = true;
-    }
-
-    public void handleOnResume() {
-        if (gNativeIsPaused) {
-            AxmolRenderer.nativeOnResume();
-            gNativeIsPaused = false;
-        }
-    }
-
-    private static native void nativeInsertText(final String text);
-    private static native void nativeDeleteBackward(final int numChars);
-    private static native String nativeGetContentText();
-
-    public void handleInsertText(final String text) {
-        AxmolRenderer.nativeInsertText(text);
-    }
-
-    public void handleDeleteBackward(final int numChars) {
-        AxmolRenderer.nativeDeleteBackward(numChars);
-    }
-
-    public String getContentText() {
-        return AxmolRenderer.nativeGetContentText();
-    }
-
-    // ===========================================================
-    // Inner and Anonymous Classes
-    // ===========================================================
 }

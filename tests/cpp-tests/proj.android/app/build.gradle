@@ -29,7 +29,7 @@ android {
         externalNativeBuild {
             cmake {
                 targets 'cpp-tests'
-                arguments = ["-DAX_ENABLE_VR=ON"]
+                arguments = ["-DAX_ENABLE_VR=ON","-DAX_RENDER_API=vk"]
                 arguments.addAll(cmakeOptions)
                 cppFlags "-frtti -fexceptions -fsigned-char"
             }

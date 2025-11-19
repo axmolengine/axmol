@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  https://axmol.dev/
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -111,7 +111,7 @@ public class AxmolWebView extends WebView {
             try {
                 URI uri = URI.create(urlString);
                 if (uri != null && uri.getScheme().equals(mJSScheme)) {
-                    AxmolEngine.runOnGLThread(new Runnable() {
+                    AxmolEngine.runOnAxmolThread(new Runnable() {
                         @Override
                         public void run() {
                             WebViewHelper._onJsCallback(mViewTag, urlString);
@@ -127,7 +127,7 @@ public class AxmolWebView extends WebView {
             CountDownLatch latch = new CountDownLatch(1);
 
             // run worker on cocos thread
-            AxmolEngine.runOnGLThread(new ShouldStartLoadingWorker(latch, result, mViewTag, urlString));
+            AxmolEngine.runOnAxmolThread(new ShouldStartLoadingWorker(latch, result, mViewTag, urlString));
 
             // wait for result from cocos thread
             try {
@@ -142,7 +142,7 @@ public class AxmolWebView extends WebView {
         @Override
         public void onPageFinished(WebView view, final String url) {
             super.onPageFinished(view, url);
-            AxmolEngine.runOnGLThread(new Runnable() {
+            AxmolEngine.runOnAxmolThread(new Runnable() {
                 @Override
                 public void run() {
                     WebViewHelper._didFinishLoading(mViewTag, url);
@@ -154,7 +154,7 @@ public class AxmolWebView extends WebView {
         public void onReceivedError(WebView view, int errorCode, String description, final String failingUrl) {
             super.onReceivedError(view, errorCode, description, failingUrl);
             AxmolActivity activity = (AxmolActivity)getContext();
-            AxmolEngine.runOnGLThread(new Runnable() {
+            AxmolEngine.runOnAxmolThread(new Runnable() {
                 @Override
                 public void run() {
                     WebViewHelper._didFailLoading(mViewTag, failingUrl);

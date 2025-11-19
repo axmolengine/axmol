@@ -130,7 +130,7 @@ public class AxmolAccelerometer implements SensorEventListener {
                 y = -y;
             }
 
-            AxmolGLSurfaceView.queueAccelerometer(x,y,z,sensorEvent.timestamp);
+            AxmolPlayer.queueAccelerometer(x,y,z,sensorEvent.timestamp);
 
             /*
             if(BuildConfig.DEBUG) {
@@ -152,7 +152,7 @@ public class AxmolAccelerometer implements SensorEventListener {
 
     // ===========================================================
     // Methods
-        // Native method called from AxmolGLSurfaceView (To be in the same thread)
+        // Native method called from AxmolSurfaceView (To be in the same thread)
     // ===========================================================
 
     public static native void onSensorChanged(final float x, final float y, final float z, final long timestamp);

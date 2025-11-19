@@ -42,7 +42,7 @@ bool WebViewTest::init()
         _webView = ax::ui::WebView::create();
         _webView->setPosition(canvasSize / 2);
         _webView->setContentSize(canvasSize * 0.5);
-        _webView->loadURL("https://www.baidu.com");
+        _webView->loadURL("https://axmol.dev");
         _webView->setScalesPageToFit(true);
 
         _webView->setOnShouldStartLoading(AX_CALLBACK_2(WebViewTest::onWebViewShouldStartLoading, this));
@@ -74,7 +74,8 @@ bool WebViewTest::init()
         resetBtn->addClickEventListener([this, urlTextField](Object*) {
             if (urlTextField->getString().size() != 0)
             {
-                _webView->loadURL(std::string("https://").append(urlTextField->getString()));
+                auto newUrl = fmt::format("https://{}", urlTextField->getString());
+                _webView->loadURL(newUrl);
             }
         });
         this->addChild(resetBtn);

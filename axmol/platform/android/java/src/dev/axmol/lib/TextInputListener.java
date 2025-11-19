@@ -27,25 +27,24 @@ package dev.axmol.lib;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-public class TextInputWrapper implements TextWatcher, OnEditorActionListener {
+public class TextInputListener implements TextWatcher, OnEditorActionListener {
     // ===========================================================
     // Constants
     // ===========================================================
 
-    private static final String TAG = TextInputWrapper.class.getSimpleName();
+    private static final String TAG = TextInputListener.class.getSimpleName();
 
     // ===========================================================
     // Fields
     // ===========================================================
 
-    private final AxmolGLSurfaceView mGLSurfaceView;
+    private final AxmolPlayer mAxmolPlayer;
     private String mText;
     private String mOriginText;
 
@@ -53,8 +52,8 @@ public class TextInputWrapper implements TextWatcher, OnEditorActionListener {
     // Constructors
     // ===========================================================
 
-    public TextInputWrapper(final AxmolGLSurfaceView pAxmolGLSurfaceView) {
-        this.mGLSurfaceView = pAxmolGLSurfaceView;
+    public TextInputListener(final AxmolPlayer player) {
+        this.mAxmolPlayer = player;
     }
 
     // ===========================================================
@@ -62,7 +61,7 @@ public class TextInputWrapper implements TextWatcher, OnEditorActionListener {
     // ===========================================================
 
     private boolean isFullScreenEdit() {
-        final TextView textField = this.mGLSurfaceView.getEditText();
+        final TextView textField = this.mAxmolPlayer.getEditText();
         final InputMethodManager imm = (InputMethodManager) textField.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         return imm.isFullscreenMode();
     }
@@ -91,13 +90,13 @@ public class TextInputWrapper implements TextWatcher, OnEditorActionListener {
         }
 
         if (old_i < this.mText.length()) {
-            this.mGLSurfaceView.deleteBackward(this.mText.length() - old_i);
+            this.mAxmolPlayer.deleteBackward(this.mText.length() - old_i);
         }
 
         int nModified = s.length() - new_i;
         if (nModified > 0) {
             final String insertText = s.subSequence(new_i, s.length()).toString();
-            this.mGLSurfaceView.insertText(insertText);
+            this.mAxmolPlayer.insertText(insertText);
         }
 
         this.mText = s.toString();
@@ -115,11 +114,11 @@ public class TextInputWrapper implements TextWatcher, OnEditorActionListener {
 
     @Override
     public boolean onEditorAction(final TextView pTextView, final int pActionID, final KeyEvent pKeyEvent) {
-        if (this.mGLSurfaceView.getEditText() == pTextView && this.isFullScreenEdit()) {
+        if (this.mAxmolPlayer.getEditText() == pTextView && this.isFullScreenEdit()) {
             // user press the action button, delete all old text and insert new text
             if (null != mOriginText) {
                 if (!this.mOriginText.isEmpty()) {
-                    this.mGLSurfaceView.deleteBackward(this.mOriginText.length());
+                    this.mAxmolPlayer.deleteBackward(this.mOriginText.length());
                 }
             }
 
@@ -137,12 +136,12 @@ public class TextInputWrapper implements TextWatcher, OnEditorActionListener {
             }
 
             final String insertText = text;
-            this.mGLSurfaceView.insertText(insertText);
+            this.mAxmolPlayer.insertText(insertText);
 
         }
 
         if (pActionID == EditorInfo.IME_ACTION_DONE) {
-            this.mGLSurfaceView.requestFocus();
+            this.mAxmolPlayer.requestFocus();
         }
         return false;
     }

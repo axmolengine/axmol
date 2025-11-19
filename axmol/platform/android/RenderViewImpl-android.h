@@ -37,7 +37,6 @@ class AX_DLL RenderViewImpl : public RenderView
 {
 public:
     // static function
-    static void loadGLES2();
     static RenderViewImpl* create(std::string_view viewname);
     static RenderViewImpl* createWithRect(std::string_view viewName,
                                           const Rect& rect,
@@ -55,12 +54,18 @@ public:
 
     WindowPlatform getWindowPlatform() const override { return WindowPlatform::Android; }
 
+    void* getNativeWindow() const override;
+    void* getNativeDisplay() const override;
+
 protected:
     RenderViewImpl();
     virtual ~RenderViewImpl();
 
     bool initWithRect(std::string_view viewName, const Rect& rect, float zoomFactor, bool resizable = false);
     bool initWithFullScreen(std::string_view viewName);
+
+    void* _nativeWindow{nullptr};
+    void* _nativeDisplay{nullptr};
 };
 
 }  // namespace ax

@@ -22,31 +22,33 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
+#include "axmol/base/IMEDispatcher.h"
 #include "axmol/base/Director.h"
-#include "axmol/base/EventKeyboard.h"
+#include "axmol/base/EventType.h"
+#include "axmol/base/EventCustom.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/platform/android/RenderViewImpl-android.h"
-
+#include "axmol/platform/Application.h"
+#include "axmol/base/text_utils.h"
 #include <android/log.h>
 #include <jni.h>
 
 using namespace ax;
 
 extern "C" {
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeTouchesBegin(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeTouchesBegin(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
 {
     intptr_t idlong = id;
     ax::Director::getInstance()->getRenderView()->handleTouchesBegin(1, &idlong, &x, &y);
 }
 
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeTouchesEnd(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeTouchesEnd(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
 {
     intptr_t idlong = id;
     ax::Director::getInstance()->getRenderView()->handleTouchesEnd(1, &idlong, &x, &y);
 }
 
 JNIEXPORT void JNICALL
-Java_dev_axmol_lib_AxmolRenderer_nativeTouchesMove(JNIEnv* env, jclass, jintArray ids, jfloatArray xs, jfloatArray ys)
+Java_dev_axmol_lib_AxmolPlayer_nativeTouchesMove(JNIEnv* env, jclass, jintArray ids, jfloatArray xs, jfloatArray ys)
 {
     int size = env->GetArrayLength(ids);
     jint id[size];
@@ -65,7 +67,7 @@ Java_dev_axmol_lib_AxmolRenderer_nativeTouchesMove(JNIEnv* env, jclass, jintArra
 }
 
 JNIEXPORT void JNICALL
-Java_dev_axmol_lib_AxmolRenderer_nativeTouchesCancel(JNIEnv* env, jclass, jintArray ids, jfloatArray xs, jfloatArray ys)
+Java_dev_axmol_lib_AxmolPlayer_nativeTouchesCancel(JNIEnv* env, jclass, jintArray ids, jfloatArray xs, jfloatArray ys)
 {
     int size = env->GetArrayLength(ids);
     jint id[size];
@@ -106,10 +108,10 @@ static std::unordered_map<int, ax::EventKeyboard::KeyCode> g_keyCodeMap = {
 
 };
 
-JNIEXPORT jboolean JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeKeyEvent(JNIEnv*,
-                                                                           jclass,
-                                                                           jint keyCode,
-                                                                           jboolean isPressed)
+JNIEXPORT jboolean JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeKeyEvent(JNIEnv*,
+                                                                         jclass,
+                                                                         jint keyCode,
+                                                                         jboolean isPressed)
 {
     auto iterKeyCode = g_keyCodeMap.find(keyCode);
     if (iterKeyCode == g_keyCodeMap.end())
@@ -120,5 +122,43 @@ JNIEXPORT jboolean JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeKeyEvent(JNIEn
     ax::EventKeyboard event(iterKeyCode->second, isPressed);
     ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
     return JNI_TRUE;
+}
+
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnPause(JNIEnv*, jclass)
+{
+    if (Director::getInstance()->getRenderView())
+    {
+        Application::getInstance()->applicationDidEnterBackground();
+        ax::EventCustom backgroundEvent(EVENT_COME_TO_BACKGROUND);
+        ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&backgroundEvent, true);
+    }
+}
+
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnResume(JNIEnv*, jclass)
+{
+    if (Director::getInstance()->getRenderView())
+    {
+        Application::getInstance()->applicationWillEnterForeground();
+        ax::EventCustom foregroundEvent(EVENT_COME_TO_FOREGROUND);
+        ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&foregroundEvent, true);
+    }
+}
+
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeInsertText(JNIEnv* env, jclass, jstring text)
+{
+    std::string strValue = ax::text_utils::getStringUTFCharsJNI(env, text);
+    const char* pszText  = strValue.c_str();
+    ax::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
+}
+
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeDeleteBackward(JNIEnv*, jclass, jint numChars)
+{
+    ax::IMEDispatcher::sharedDispatcher()->dispatchDeleteBackward(numChars);
+}
+
+JNIEXPORT jstring JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeGetContentText(JNIEnv* env, jclass)
+{
+    auto pszText = ax::IMEDispatcher::sharedDispatcher()->getContentText();
+    return ax::text_utils::newStringUTFJNI(env, pszText);
 }
 }

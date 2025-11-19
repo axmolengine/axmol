@@ -289,7 +289,7 @@ public class AxmolEditBox extends EditText {
             case KeyEvent.KEYCODE_BACK:
                 AxmolActivity activity = (AxmolActivity)this.getContext();
                 //To prevent program from going to background
-                activity.getGLSurfaceView().requestFocus();
+                activity.getPlayer().requestFocus();
                 return true;
             default:
                 return super.onKeyDown(pKeyCode, pKeyEvent);

@@ -49,30 +49,18 @@ import android.widget.TextView;
 public class EditBoxHelper {
     private static final String TAG = EditBoxHelper.class.getSimpleName();
     private static AxmolActivity mActivity;
-    private static ResizeLayout mFrameLayout;
+    private static AxmolPlayer sAxmolPlayer;
 
     private static SparseArray<AxmolEditBox> mEditBoxArray;
     private static int mViewTag = 0;
     private static float mPadding = 5.0f;
     //Call native methods
-    private static native void editBoxEditingDidBegin(int index);
-    public static void __editBoxEditingDidBegin(int index){
-        editBoxEditingDidBegin(index);
-    }
+    private static native void nativeEditBoxEditingDidBegin(int index);
+    private static native void nativeEditBoxEditingChanged(int index, String text);
+    private static native void nativeEditBoxEditingDidEnd(int index, String text, int action);
 
-    private static native void editBoxEditingChanged(int index, String text);
-    public static void __editBoxEditingChanged(int index, String text){
-        editBoxEditingChanged(index, text);
-    }
-
-    private static native void editBoxEditingDidEnd(int index, String text, int action);
-    public static void __editBoxEditingDidEnd(int index, String text, int action) {
-        editBoxEditingDidEnd(index, text, action);
-    }
-
-
-    public EditBoxHelper(ResizeLayout layout) {
-        EditBoxHelper.mFrameLayout = layout;
+    public EditBoxHelper(AxmolPlayer player) {
+        EditBoxHelper.sAxmolPlayer = player;
 
         EditBoxHelper.mActivity = (AxmolActivity) AxmolActivity.getContext();
         EditBoxHelper.mEditBoxArray = new SparseArray<AxmolEditBox>();
@@ -113,7 +101,7 @@ public class EditBoxHelper {
                 lParams.height = height;
                 lParams.gravity = Gravity.TOP | Gravity.LEFT;
 
-                mFrameLayout.addView(editBox, lParams);
+                sAxmolPlayer.addView(editBox, lParams);
                 editBox.setTag(false);
                 editBox.addTextChangedListener(new TextWatcher() {
                     @Override
@@ -131,10 +119,10 @@ public class EditBoxHelper {
                     public void afterTextChanged(final Editable s) {
                         if (!editBox.getChangedTextProgrammatically()) {
                             if ((Boolean) editBox.getTag()) {
-                                AxmolEngine.runOnGLThread(new Runnable() {
+                                AxmolEngine.runOnAxmolThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        EditBoxHelper.__editBoxEditingChanged(index, s.toString());
+                                        nativeEditBoxEditingChanged(index, s.toString());
                                     }
 
                                 });
@@ -153,31 +141,31 @@ public class EditBoxHelper {
                         editBox.setTag(true);
                         editBox.setChangedTextProgrammatically(false);
                         if (hasFocus) {
-                            AxmolEngine.runOnGLThread(new Runnable() {
+                            AxmolEngine.runOnAxmolThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     editBox.endAction = AxmolEditBox.kEndActionUnknown;
-                                    EditBoxHelper.__editBoxEditingDidBegin(index);
+                                    nativeEditBoxEditingDidBegin(index);
                                 }
                             });
                             editBox.setSelection(editBox.getText().length());
-                            mFrameLayout.setEnableForceDoLayout(true);
-                            mActivity.getGLSurfaceView().setSoftKeyboardShown(true);
+                            sAxmolPlayer.setEnableForceDoLayout(true);
+                            mActivity.getPlayer().setSoftKeyboardShown(true);
                             Log.d(TAG, "edit box get focus");
                         } else {
                             editBox.setVisibility(View.GONE);
                             // Note that we must to copy a string to prevent string content is modified
                             // on UI thread while 's.toString' is invoked at the same time.
                             final String text = new String(editBox.getText().toString());
-                            AxmolEngine.runOnGLThread(new Runnable() {
+                            AxmolEngine.runOnAxmolThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     int action = editBox.endAction;
-                                    EditBoxHelper.__editBoxEditingDidEnd(index, text, action);
+                                    nativeEditBoxEditingDidEnd(index, text, action);
                                 }
                             });
                             mActivity.hideVirtualButton();
-                            mFrameLayout.setEnableForceDoLayout(false);
+                            sAxmolPlayer.setEnableForceDoLayout(false);
                             Log.d(TAG, "edit box lose focus");
                         }
                     }
@@ -227,7 +215,7 @@ public class EditBoxHelper {
                 AxmolEditBox editBox = mEditBoxArray.get(index);
                 if (editBox != null) {
                     mEditBoxArray.remove(index);
-                    mFrameLayout.removeView(editBox);
+                    sAxmolPlayer.removeView(editBox);
                     Log.d(TAG, "remove EditBox");
                 }
             }
@@ -428,9 +416,9 @@ public class EditBoxHelper {
         AxmolEditBox editBox = mEditBoxArray.get(index);
         if (null != editBox) {
             editBox.requestFocus();
-            mActivity.getGLSurfaceView().requestLayout();
+            mActivity.getPlayer().requestLayout();
             imm.showSoftInput(editBox, 0);
-            mActivity.getGLSurfaceView().setSoftKeyboardShown(true);
+            mActivity.getPlayer().setSoftKeyboardShown(true);
         }
     }
 
@@ -444,8 +432,8 @@ public class EditBoxHelper {
         AxmolEditBox editBox = mEditBoxArray.get(index);
         if (null != editBox) {
             imm.hideSoftInputFromWindow(editBox.getWindowToken(), 0);
-            mActivity.getGLSurfaceView().setSoftKeyboardShown(false);
-            mActivity.getGLSurfaceView().requestFocus();
+            mActivity.getPlayer().setSoftKeyboardShown(false);
+            mActivity.getPlayer().requestFocus();
             // can take effect after GLSurfaceView has focus
             mActivity.hideVirtualButton();
         }

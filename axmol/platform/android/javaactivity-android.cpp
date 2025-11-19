@@ -79,74 +79,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
     return JNI_VERSION_1_4;
 }
 
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeInit(JNIEnv*, jclass, jint w, jint h)
-{
-    RenderViewImpl::loadGLES2();
-
-    auto director   = ax::Director::getInstance();
-    auto renderView = director->getRenderView();
-    if (!renderView)
-    {
-        renderView = ax::RenderViewImpl::createWithRect(
-            "axmol3", Rect{ax::Rect{0, 0, static_cast<float>(w), static_cast<float>(h)}});
-        director->setRenderView(renderView);
-
-        ax::Application::getInstance()->run();
-    }
-    else
-    {
-        axdrv->resetState();
-        director->resetMatrixStack();
-        ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
-        director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
-        director->setRenderDefaults();
-#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-        ax::VolatileTextureMgr::reloadAllTextures();
-#endif
-    }
-}
-
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeOnContextLost(JNIEnv*, jclass, jboolean isWarmStart)
-{
-#if AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST
-    auto director = ax::Director::getInstance();
-    ax::EventCustom recreatedEvent(EVENT_APP_RESTARTING);
-    director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
-
-    //  Pop to root scene, replace with an empty scene, and clear all cached data before restarting
-    director->popToRootScene();
-    auto rootScene = Scene::create();
-    director->replaceScene(rootScene);
-    director->purgeCachedData();
-
-    JniHelper::callStaticVoidMethod("dev/axmol/lib/AxmolEngine", "restartProcess");
-#endif
-
-    if (isWarmStart)
-    {
-        auto director = ax::Director::getInstance();
-        ax::EventCustom warmStartEvent(EVENT_APP_WARM_START);
-        director->getEventDispatcher()->dispatchEvent(&warmStartEvent, true);
-    }
-}
-
-JNIEXPORT jintArray JNICALL Java_dev_axmol_lib_AxmolActivity_getGLContextAttrs(JNIEnv* env, jclass)
-{
-    auto app = ax::Application::getInstance();
-    app->initContextAttrs();
-    const auto& contextAttrs = Application::getContextAttrs();
-
-    int tmp[7] = {contextAttrs.redBits,           contextAttrs.greenBits, contextAttrs.blueBits,
-                  contextAttrs.alphaBits,         contextAttrs.depthBits, contextAttrs.stencilBits,
-                  contextAttrs.multisamplingCount};
-
-    jintArray glContextAttrsJava = env->NewIntArray(7);
-    env->SetIntArrayRegion(glContextAttrsJava, 0, 7, tmp);
-
-    return glContextAttrsJava;
-}
-
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeOnSurfaceChanged(JNIEnv*, jclass, jint w, jint h)
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnSurfaceChanged(JNIEnv*, jclass, jint w, jint h)
 {
     auto renderView = ax::Director::getInstance()->getRenderView();
     if (renderView)

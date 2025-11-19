@@ -115,12 +115,29 @@ public class AxmolEngine {
     // The OBB file
     private static ZipResourceFile sOBBFile = null;
 
+//    public static final int RENDER_API_GL  = 1;
+//    public static final int RENDER_API_MTL = 2;
+//    public static final int RENDER_API_D3D = 3;
+    public static final int RENDER_API_VK  = 4;
+
+    public static boolean sNativeInitialized = false;
+    public static boolean sNativePaused = false;
+
+    public static int sSrceenWidth = 960;
+    public static int sScreenHeight = 640;
+
+    public static void setScreenSize(final int width, final int height)
+    {
+        sSrceenWidth = width;
+        sScreenHeight = height;
+    }
+
     // ===========================================================
     // Constructors
     // ===========================================================
 
-    public static void runOnGLThread(final Runnable r) {
-        nativeRunOnGLThread(r);
+    public static void runOnAxmolThread(final Runnable r) {
+        nativeRunOnAxmolThread(r);
     }
 
     public static void runOnUiThread(final Runnable r) {
@@ -128,7 +145,7 @@ public class AxmolEngine {
     }
 
     public static void queueOperation(final long op, final long param) {
-        ((AxmolActivity)sActivity).getGLSurfaceView().queueEvent(new Runnable() {
+        AxmolEngine.runOnAxmolThread(new Runnable() {
             @Override
             public void run() {
                 AxmolEngine.nativeCall0(op, param);
@@ -151,7 +168,7 @@ public class AxmolEngine {
             AxmolEngine.sPackageName = applicationInfo.packageName;
 
             AxmolEngine.sAssetManager = activity.getAssets();
-            AxmolEngine.nativeSetContext((Context)activity, AxmolEngine.sAssetManager);
+            AxmolEngine.nativeInit((Context)activity, AxmolEngine.sAssetManager);
 
             AxmolMediaEngine.setContext(activity);
 
@@ -160,6 +177,14 @@ public class AxmolEngine {
             AxmolEngine.sVibrateService = (Vibrator)activity.getSystemService(Context.VIBRATOR_SERVICE);
 
             sInited = true;
+        }
+    }
+
+    public static void initNativeSurface(Surface surface)
+    {
+        if(!sNativeInitialized) {
+            nativeInitSurface(surface, sSrceenWidth, sScreenHeight);
+            sNativeInitialized = true;
         }
     }
 
@@ -239,15 +264,6 @@ public class AxmolEngine {
     // Methods
     // ===========================================================
 
-    private static native void nativeRunOnGLThread(final Object runnable);
-
-    private static native void nativeSetEditTextDialogResult(final byte[] pBytes);
-
-    private static native void nativeSetContext(final Object pContext, final Object pAssetManager);
-
-    // private static native void nativeSetAudioDeviceInfo(boolean isSupportLowLatency, int deviceSampleRate, int audioBufferSizeInFames);
-
-    public static native void nativeCall0(long func, long ud);
 
     public static String getPackageName() {
         return AxmolEngine.sPackageName;
@@ -388,7 +404,7 @@ public class AxmolEngine {
         try {
             final byte[] bytesUTF8 = pResult.getBytes("UTF8");
 
-            AxmolEngine.runOnGLThread(new Runnable() {
+            AxmolEngine.runOnAxmolThread(new Runnable() {
                 @Override
                 public void run() {
                     AxmolEngine.nativeSetEditTextDialogResult(bytesUTF8);
@@ -1007,4 +1023,22 @@ public class AxmolEngine {
 
         return result[0];
     }
+
+    // ===========================================================
+    // Native methods for AxmolEngine
+    // ===========================================================
+    public static native void nativeInit(final Object pContext, final Object pAssetManager);
+
+    public static native void nativeInitSurface(Object surface, final int width, final int height);
+
+    public static native int[] nativeGetGLContextAttrs();
+    public static native int nativeGetRenderAPI();
+
+    private static native void nativeRunOnAxmolThread(final Object runnable);
+
+    private static native void nativeSetEditTextDialogResult(final byte[] pBytes);
+
+    // private static native void nativeSetAudioDeviceInfo(boolean isSupportLowLatency, int deviceSampleRate, int audioBufferSizeInFames);
+
+    public static native void nativeCall0(long func, long ud);
 }

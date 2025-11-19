@@ -28,7 +28,12 @@ THE SOFTWARE.
 #include "axmol/base/Director.h"
 #include "axmol/base/Macros.h"
 #include "axmol/platform/android/jni/JniHelper.h"
-#include "axmol/platform/GL.h"
+
+#if AX_RENDER_API == AX_RENDER_API_GL
+#    include "axmol/platform/GL.h"
+#else
+#    include "axmol/rhi/vulkan/DriverVK.h"
+#endif
 
 #include <stdlib.h>
 #include <android/log.h>
@@ -36,17 +41,10 @@ THE SOFTWARE.
 #define DEFAULT_MARGIN_ANDROID           30.0f
 #define WIDE_SCREEN_ASPECT_RATIO_ANDROID 2.0f
 
+extern ANativeWindow* axmolGetANativeWindow();
+
 namespace ax
 {
-void RenderViewImpl::loadGLES2()
-{
-    auto glesVer = gladLoaderLoadGLES2();
-    if (glesVer)
-        AXLOGI("Load GLES success, version: {}", glesVer);
-    else
-        throw std::runtime_error("Load GLES fail");
-}
-
 RenderViewImpl* RenderViewImpl::createWithRect(std::string_view viewName,
                                                const Rect& rect,
                                                float frameZoomFactor,
@@ -90,11 +88,48 @@ RenderViewImpl::RenderViewImpl() {}
 
 RenderViewImpl::~RenderViewImpl() {}
 
+void* RenderViewImpl::getNativeWindow() const
+{
+    return _nativeWindow;
+}
+
+void* RenderViewImpl::getNativeDisplay() const
+{
+    return _nativeDisplay;
+}
+
 bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
                                   const Rect& rect,
                                   float /*frameZoomFactor*/,
                                   bool /*resizable*/)
 {
+#if AX_RENDER_API == AX_RENDER_API_GL
+    auto glesVer = gladLoaderLoadGLES2();
+    if (glesVer)
+        AXLOGI("Load GLES success, version: {}", glesVer);
+    else
+        throw std::runtime_error("Load GLES fail");
+#else
+    auto _createSurface = [](VkInstance inst, void* window, VkSurfaceKHR* surface) {
+        VkAndroidSurfaceCreateInfoKHR createInfo{VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR};
+        createInfo.window = (ANativeWindow*)window;
+        return vkCreateAndroidSurfaceKHR(inst, &createInfo, nullptr, surface);
+    };
+    _nativeWindow = axmolGetANativeWindow();
+    const rhi::vk::SurfaceCreateInfo createInfo{.window     = _nativeWindow,
+                                                .width      = static_cast<int>(rect.size.width),
+                                                .height     = static_cast<int>(rect.size.height),
+                                                .createFunc = _createSurface};
+    auto driver = static_cast<ax::rhi::vk::DriverImpl*>(axdrv);
+    bool ok     = driver->setupSurface(createInfo);
+    if (!ok)
+    {
+        AXLOGE("Failed to create Vulkan window surface.");
+        return false;
+    }
+    _nativeDisplay = driver->getSurface();
+#endif
+
     updateRenderSurface(rect.size.width, rect.size.height, SurfaceUpdateFlag::AllUpdatesSilently);
     return true;
 }
@@ -121,11 +156,11 @@ void RenderViewImpl::setIMEKeyboardState(bool bOpen)
 {
     if (bOpen)
     {
-        JniHelper::callStaticVoidMethod("dev.axmol.lib.AxmolGLSurfaceView", "openIMEKeyboard");
+        JniHelper::callStaticVoidMethod("dev.axmol.lib.AxmolPlayer", "openIMEKeyboard");
     }
     else
     {
-        JniHelper::callStaticVoidMethod("dev.axmol.lib.AxmolGLSurfaceView", "closeIMEKeyboard");
+        JniHelper::callStaticVoidMethod("dev.axmol.lib.AxmolPlayer", "closeIMEKeyboard");
     }
 }
 

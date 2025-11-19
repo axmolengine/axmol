@@ -422,6 +422,8 @@ void RenderContextImpl::rebuildSwapchain()
     vkGetPhysicalDeviceSurfacePresentModesKHR(physical, _surface, &presentModeCount, presentModes.data());
 
     VkPresentModeKHR chosenPresentMode = VK_PRESENT_MODE_FIFO_KHR;  // guaranteed
+
+#if !defined(__ANDROID__)
     for (auto& pm : presentModes)
     {
         if (pm == VK_PRESENT_MODE_MAILBOX_KHR)
@@ -430,6 +432,7 @@ void RenderContextImpl::rebuildSwapchain()
             break;
         }
     }
+#endif
 
     // Query surface capabilities
     VkSurfaceCapabilitiesKHR caps;
@@ -554,19 +557,26 @@ bool RenderContextImpl::beginFrame()
 
     VkResult result = vkAcquireNextImageKHR(_device, _swapchain, UINT64_MAX, _presentCompleteSemaphores[_currentFrame],
                                             VK_NULL_HANDLE, &_currentImageIndex);
-    if (result == VK_ERROR_OUT_OF_DATE_KHR)
+    switch (result)
     {
+    case VK_SUCCESS:
+        break;
+    case VK_ERROR_OUT_OF_DATE_KHR:
         // Signal upper layer to recreate swapchain
         AXLOGW("axmol: swapchain is out of date (frame {}), need to recreate", _currentFrame);
         return false;
+    case VK_SUBOPTIMAL_KHR:
+        if (!_suboptimal)
+        {
+            _suboptimal = true;
+            AXLOGW("axmol: Suboptimal swap chain.");
+        }
+        break;
+    default:
+        AXLOGE("axmol: vkAcquireNextImageKHR fail: {}", (unsigned int)result);
+        AXASSERT(false, "vkAcquireNextImageKHR failed");
+        return false;
     }
-    if (result == VK_SUBOPTIMAL_KHR && !_suboptimal)
-    {
-        _suboptimal = true;
-        AXLOGW("axmol: Suboptimal swap chain.");
-    }
-    AXASSERT(result == VK_SUCCESS || result == VK_SUBOPTIMAL_KHR || result == VK_TIMEOUT,
-             "vkAcquireNextImageKHR failed");
 
     _inFrame = true;
 
@@ -704,6 +714,7 @@ void RenderContextImpl::endFrame()
         AXLOGI("axmol: swapchain out of date");
         break;
     default:
+        AXLOGE("axmol: vkQueuePresentKHR fail: {}", (unsigned int)vr);
         AXASSERT(vr && false, "vkQueuePresentKHR failed");
         break;
     }
@@ -883,7 +894,7 @@ void RenderContextImpl::updatePipelineState(const RenderTarget* rt, const Pipeli
     auto pipeline = _renderPipeline->getVkPipeline();
     if (_boundPipeline != pipeline)
     {
-        vkCmdBindPipeline(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, _renderPipeline->getVkPipeline());
+        vkCmdBindPipeline(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
         _boundPipeline = pipeline;
         bitmask::set(_inFlightDynamicDirtyBits[_currentFrame], PIPELINE_REQUIRED_DYNAMIC_BITS);
     }
@@ -1092,7 +1103,7 @@ void RenderContextImpl::drawArrays(PrimitiveType primitiveType,
                                    bool /*wireframe*/)
 {
     prepareDrawing();
-    vkCmdSetPrimitiveTopology(_currentCmdBuffer, toVkPrimitiveTopology(primitiveType));
+    vkCmdSetPrimitiveTopologyEXT(_currentCmdBuffer, toVkPrimitiveTopology(primitiveType));
     vkCmdDraw(_currentCmdBuffer, static_cast<uint32_t>(count), 1, static_cast<uint32_t>(start), 0);
 }
 
@@ -1103,7 +1114,7 @@ void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
                                             bool /*wireframe*/)
 {
     prepareDrawing();
-    vkCmdSetPrimitiveTopology(_currentCmdBuffer, toVkPrimitiveTopology(primitiveType));
+    vkCmdSetPrimitiveTopologyEXT(_currentCmdBuffer, toVkPrimitiveTopology(primitiveType));
     vkCmdDraw(_currentCmdBuffer, static_cast<uint32_t>(count), static_cast<uint32_t>(instanceCount),
               static_cast<uint32_t>(start), 0);
 }
@@ -1120,7 +1131,7 @@ void RenderContextImpl::drawElements(PrimitiveType primitiveType,
     VkIndexType vkIndexType = toVkIndexType(indexType);
     vkCmdBindIndexBuffer(_currentCmdBuffer, _indexBuffer->internalHandle(), 0, vkIndexType);
 
-    vkCmdSetPrimitiveTopology(_currentCmdBuffer, toVkPrimitiveTopology(primitiveType));
+    vkCmdSetPrimitiveTopologyEXT(_currentCmdBuffer, toVkPrimitiveTopology(primitiveType));
     vkCmdDrawIndexed(_currentCmdBuffer, static_cast<uint32_t>(count), 1,
                      static_cast<uint32_t>(offset / (indexType == IndexFormat::U_SHORT ? 2u : 4u)), 0, 0);
 }
@@ -1138,7 +1149,7 @@ void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
     VkIndexType vkIndexType = toVkIndexType(indexType);
     vkCmdBindIndexBuffer(_currentCmdBuffer, _indexBuffer->internalHandle(), 0, vkIndexType);
 
-    vkCmdSetPrimitiveTopology(_currentCmdBuffer, toVkPrimitiveTopology(primitiveType));
+    vkCmdSetPrimitiveTopologyEXT(_currentCmdBuffer, toVkPrimitiveTopology(primitiveType));
     vkCmdDrawIndexed(_currentCmdBuffer, static_cast<uint32_t>(count), static_cast<uint32_t>(instanceCount),
                      static_cast<uint32_t>(offset / (indexType == IndexFormat::U_SHORT ? 2u : 4u)), 0, 0);
 }

@@ -389,14 +389,15 @@ void DriverImpl::initializeDevice()
                                        .pNext = &dynState3Props};
 
     vkGetPhysicalDeviceProperties2(_physical, &props2);
-    assert(dynState3Props.dynamicPrimitiveTopologyUnrestricted);
+    AXLOGI("axmol: vulkan dynamicPrimitiveTopologyUnrestricted={}",
+           dynState3Props.dynamicPrimitiveTopologyUnrestricted);
 
     /*
      * https://vulkan.lunarg.com/doc/view/1.4.328.1/windows/antora/spec/latest/chapters/drawing.html#VUID-vkCmdDraw-dynamicPrimitiveTopologyUnrestricted-07500
      */
-    const char* deviceExtensions[] = {VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME,
-                                      VK_EXT_EXTENDED_DYNAMIC_STATE_2_EXTENSION_NAME,
-                                      VK_EXT_EXTENDED_DYNAMIC_STATE_3_EXTENSION_NAME};
+    axstd::pod_vector<const char*> deviceExtensions;
+    deviceExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+    deviceExtensions.push_back(VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME);
 
     // enable extended dynamic state
     VkPhysicalDeviceExtendedDynamicStateFeaturesEXT extDynState{
@@ -411,8 +412,13 @@ void DriverImpl::initializeDevice()
         .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_3_FEATURES_EXT};
 
     // Chain features
-    extDynState.pNext  = &extDynState2;
-    extDynState2.pNext = &extDynState3;
+    if (dynState3Props.dynamicPrimitiveTopologyUnrestricted)
+    {
+        extDynState.pNext  = &extDynState2;
+        extDynState2.pNext = &extDynState3;
+        deviceExtensions.push_back(VK_EXT_EXTENDED_DYNAMIC_STATE_2_EXTENSION_NAME);
+        deviceExtensions.push_back(VK_EXT_EXTENDED_DYNAMIC_STATE_3_EXTENSION_NAME);
+    }
 
     // queue create info
     float priority = 1.0f;
@@ -427,8 +433,8 @@ void DriverImpl::initializeDevice()
     dinfo.queueCreateInfoCount    = 1;
     dinfo.pQueueCreateInfos       = &qinfo;
     dinfo.pNext                   = &extDynState;
-    dinfo.enabledExtensionCount   = std::size(deviceExtensions);
-    dinfo.ppEnabledExtensionNames = deviceExtensions;
+    dinfo.enabledExtensionCount   = deviceExtensions.size();
+    dinfo.ppEnabledExtensionNames = deviceExtensions.data();
 
     VkResult vr = vkCreateDevice(_physical, &dinfo, nullptr, &_device);
     AXASSERT(vr == VK_SUCCESS && _device != VK_NULL_HANDLE, "vkCreateDevice failed");
