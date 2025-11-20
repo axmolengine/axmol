@@ -389,12 +389,12 @@ public:
     void setClearColor(const Color& clearColor);
     const Color& getClearColor() const { return _clearColor; }
 
-    void mainLoop();
-    /** Invoke main loop with delta time. Then `calculateDeltaTime` can just use the delta time directly.
+    [[internal]] void renderFrame();
+    /** Invoke render frame with delta time. Then `calculateDeltaTime` can just use the delta time directly.
      * The delta time paseed may include vsync time. See issue #17806
      * @since 3.16
      */
-    void mainLoop(float dt);
+    [[internal]] void renderFrame(float dt);
 
     /** The size in pixels of the surface. It could be different than the screen size.
      * High-res devices might have a higher surface size than the screen size.

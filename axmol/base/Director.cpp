@@ -369,7 +369,7 @@ void Director::calculateDeltaTime()
     }
     else
     {
-        // delta time may passed by invoke mainLoop(dt)
+        // delta time may passed by invoke renderFrame(dt)
         if (!_deltaTimePassedByCaller)
         {
             auto now    = std::chrono::steady_clock::now();
@@ -1586,7 +1586,7 @@ void Director::processOperations()
 }
 #endif
 
-void Director::mainLoop()
+void Director::renderFrame()
 {
 #if defined(AX_PLATFORM_PC)
     processOperations();
@@ -1611,11 +1611,11 @@ void Director::mainLoop()
     }
 }
 
-void Director::mainLoop(float dt)
+void Director::renderFrame(float dt)
 {
     _deltaTime               = dt;
     _deltaTimePassedByCaller = true;
-    mainLoop();
+    renderFrame();
 }
 
 void Director::stopAnimation()

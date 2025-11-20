@@ -148,7 +148,7 @@ static id s_sharedDirectorCaller;
 #endif
         CFTimeInterval dt = ((CADisplayLink*)displayLink).timestamp - lastDisplayTime;
         lastDisplayTime   = ((CADisplayLink*)displayLink).timestamp;
-        director->mainLoop(dt);
+        director->renderFrame(dt);
     }
 }
 

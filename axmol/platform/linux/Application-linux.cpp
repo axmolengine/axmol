@@ -72,7 +72,7 @@ int Application::run()
     {
         lastTime = std::chrono::steady_clock::now();
 
-        director->mainLoop();
+        director->renderFrame();
         renderView->pollEvents();
 
         auto interval = std::chrono::steady_clock::now() - lastTime;
@@ -87,14 +87,14 @@ int Application::run()
         }
     }
     /* Only work on Desktop
-     *  Director::mainLoop is really one frame logic
+     *  Director::renderFrame is really one frame logic
      *  when we want to close the window, we should call Director::end();
-     *  then call Director::mainLoop to do release of internal resources
+     *  then call Director::renderFrame to do release of internal resources
      */
     if (renderView->isGfxContextReady())
     {
         director->end();
-        director->mainLoop();
+        director->renderFrame();
         director = nullptr;
     }
     renderView->release();

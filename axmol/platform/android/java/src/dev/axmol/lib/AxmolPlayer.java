@@ -723,6 +723,7 @@ public class AxmolPlayer extends FrameLayout {
         }
     }
 
+    public static native void nativeRenderFrame();
     public static native void nativeOnResume();
     public static native void nativeOnPause();
 

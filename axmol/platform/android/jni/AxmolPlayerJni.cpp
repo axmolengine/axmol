@@ -114,6 +114,11 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnSurfaceCreated(JNI
     }
 }
 
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeRenderFrame(JNIEnv*, jclass)
+{
+    ax::Director::getInstance()->renderFrame();
+}
+
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeTouchesBegin(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
 {
     intptr_t idlong = id;

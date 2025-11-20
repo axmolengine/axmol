@@ -7,11 +7,10 @@ set(${target_name}_src
   Device-android.cpp
   javaactivity-android.cpp
   jni/JniHelper.cpp
-  jni/Java_dev_axmol_lib_AxmolEngine.cpp
-  jni/Java_dev_axmol_lib_AxmolPlayer.cpp
-  jni/Java_dev_axmol_lib_AxmolRenderer.cpp
-  jni/Java_dev_axmol_lib_AxmolAccelerometer.cpp
-  jni/Java_dev_axmol_lib_BitmapHelper.cpp
+  jni/AxmolEngineJni.cpp
+  jni/AxmolPlayerJni.cpp
+  jni/AxmolAccelerometerJni.cpp
+  jni/BitmapHelperJni.cpp
 )
 
 add_library(${target_name} STATIC

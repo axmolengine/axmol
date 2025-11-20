@@ -68,7 +68,7 @@ int Application::run()
     std::thread t([director] {
         do
         {
-            director->mainLoop();
+            director->renderFrame();
         } while (sm_pSharedApplication != nullptr);
     });
     t.detach();

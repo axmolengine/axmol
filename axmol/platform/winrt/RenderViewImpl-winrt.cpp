@@ -517,7 +517,7 @@ void RenderViewImpl::OnRendering()
 {
     if (m_running && m_initialized)
     {
-        Director::getInstance()->mainLoop();
+        Director::getInstance()->renderFrame();
     }
 }
 

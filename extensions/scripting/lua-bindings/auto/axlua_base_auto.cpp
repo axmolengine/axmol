@@ -27495,57 +27495,6 @@ int lua_ax_base_Director_getClearColor(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Director_mainLoop(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Director* obj = nullptr;
-    bool ok  = true;
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Director",0,&tolua_err)) goto tolua_lerror;
-#endif
-    obj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Director_mainLoop'", nullptr);
-        return 0;
-    }
-#endif
-    argc = lua_gettop(tolua_S)-1;
-    do {
-        if (argc == 1) {
-            double arg0;
-            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Director:mainLoop");
-
-            if (!ok) { break; }
-            obj->mainLoop(arg0);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do {
-        if (argc == 0) {
-            obj->mainLoop();
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.Director:mainLoop",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_mainLoop'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_Director_setContentScaleFactor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -28747,7 +28696,6 @@ int lua_register_ax_base_Director(lua_State* tolua_S)
         tolua_function(tolua_S,"setRenderDefaults",lua_ax_base_Director_setRenderDefaults);
         tolua_function(tolua_S,"setClearColor",lua_ax_base_Director_setClearColor);
         tolua_function(tolua_S,"getClearColor",lua_ax_base_Director_getClearColor);
-        tolua_function(tolua_S,"mainLoop",lua_ax_base_Director_mainLoop);
         tolua_function(tolua_S,"setContentScaleFactor",lua_ax_base_Director_setContentScaleFactor);
         tolua_function(tolua_S,"getContentScaleFactor",lua_ax_base_Director_getContentScaleFactor);
         tolua_function(tolua_S,"getScheduler",lua_ax_base_Director_getScheduler);

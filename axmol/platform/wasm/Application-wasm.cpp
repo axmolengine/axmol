@@ -154,7 +154,7 @@ static void renderFrame()
     auto director   = __director;
     auto renderView = director->getRenderView();
 
-    director->mainLoop();
+    director->renderFrame();
     renderView->pollEvents();
 
     if (renderView->windowShouldClose())
@@ -165,7 +165,7 @@ static void renderFrame()
         if (renderView->isGfxContextReady())
         {
             director->end();
-            director->mainLoop();
+            director->renderFrame();
         }
         renderView->release();
 

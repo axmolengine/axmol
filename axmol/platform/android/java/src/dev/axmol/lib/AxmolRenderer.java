@@ -86,7 +86,7 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
         /*
          * Render time MUST be counted in, or the FPS will slower than appointed.
          */
-        AxmolRenderer.nativeRender();
+        AxmolPlayer.nativeRenderFrame();
         /*
          * No need to use algorithm in default(60,90,120... FPS) situation,
          * since onDrawFrame() was called by system 60 times per second by default.
@@ -104,10 +104,4 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
             this.mLastTickInNanoSeconds = System.nanoTime();
         }
     }
-
-    // ===========================================================
-    // Methods
-    // ===========================================================
-
-    private static native void nativeRender();
 }
