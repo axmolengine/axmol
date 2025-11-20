@@ -132,6 +132,13 @@ private:
     void recreateSwapchain();
     void createCommandBuffers();
 
+    enum class SwapchainOp
+    {
+        Acquire,
+        Present
+    };
+    bool handleSwapchainResult(VkResult result, SwapchainOp op, uint32_t prevSemaphoreIndex);
+
 #if !_AX_USE_DESCRIPTOR_CACHE
     void createDescriptorPool();
 #endif
@@ -161,15 +168,18 @@ private:
     axstd::pod_vector<VkImage> _swapchainImages;
     axstd::pod_vector<VkImageView> _swapchainImageViews;
 
+    uint32_t _semaphoreIndex{0};
+
     uint32_t _currentFrame{0};
     std::array<DynamicStateBits, MAX_FRAMES_IN_FLIGHT> _inFlightDynamicDirtyBits{DynamicStateBits::None};
     std::array<VkCommandBuffer, MAX_FRAMES_IN_FLIGHT> _commandBuffers;
-    std::array<VkSemaphore, MAX_FRAMES_IN_FLIGHT> _presentCompleteSemaphores;
     std::array<VkFence, MAX_FRAMES_IN_FLIGHT> _inFlightFences{};
 #if !_AX_USE_DESCRIPTOR_CACHE
     std::array<VkDescriptorPool, MAX_FRAMES_IN_FLIGHT> _descriptorPools{};
 #endif
     std::array<axstd::pod_vector<RenderPipelineImpl::DescriptorState>, MAX_FRAMES_IN_FLIGHT> _inFlightDescriptorStates;
+
+    axstd::pod_vector<VkSemaphore> _acquireCompleteSemaphores;
     axstd::pod_vector<VkSemaphore> _renderFinishedSemaphores;
 
     axstd::pod_vector<VkWriteDescriptorSet> _descriptorWritesPerFrame;
@@ -234,8 +244,9 @@ private:
     bool _scissorEnabled{false};
 
     bool _swapchainDirty{false};
+    bool _inFrame{false};
     bool _suboptimal{false};
 
-    bool _inFrame{false};
+    uint32_t _lastError{0};
 };
 }  // namespace ax::rhi::vk

@@ -226,8 +226,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnResume(JNIEnv*, jc
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeInsertText(JNIEnv* env, jclass, jstring text)
 {
     std::string strValue = ax::text_utils::getStringUTFCharsJNI(env, text);
-    const char* pszText  = strValue.c_str();
-    ax::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
+    ax::IMEDispatcher::sharedDispatcher()->dispatchInsertText(strValue.c_str(), strValue.size());
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeDeleteBackward(JNIEnv*, jclass, jint numChars)

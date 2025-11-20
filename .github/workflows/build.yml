@@ -83,7 +83,7 @@ jobs:
         axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build'
     - uses: actions/upload-artifact@v4
       with:
-        name: windows_d3d11_x64
+        name: windows_vk_x64
         path: |
           build/bin/cpp-tests/**/*
   winuwp-ogl:

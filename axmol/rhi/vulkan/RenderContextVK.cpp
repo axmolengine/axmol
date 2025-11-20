@@ -112,6 +112,13 @@ inline bool operator==(const VkRect2D& a, const VkRect2D& b)
            a.extent.height == b.extent.height;
 }
 
+static void destroySemphores(axstd::pod_vector<VkSemaphore>& semaphores, VkDevice device)
+{
+    for (auto semaphore : semaphores)
+        vkDestroySemaphore(device, semaphore, nullptr);
+    semaphores.clear();
+}
+
 // NOTE: This implementation assumes the existence of a Vulkan driver context that owns device, queues,
 // swapchain, render pass, and descriptor management. Adapt integration points to your driver as needed.
 
@@ -141,19 +148,13 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface)
 #endif
     recreateSwapchain();
 
-    // create sync objects
-    constexpr VkSemaphoreCreateInfo semaphoreInfo{.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO};
+    // create frame fence objects
     constexpr VkFenceCreateInfo fenceInfo{.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
                                           .flags = VK_FENCE_CREATE_SIGNALED_BIT};
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
     {
         if (vkCreateFence(_device, &fenceInfo, nullptr, &_inFlightFences[i]) != VK_SUCCESS)
-        {
-            AXASSERT(false, "failed to create synchronization objects for a frame!");
-        }
-
-        if (vkCreateSemaphore(_device, &semaphoreInfo, nullptr, &_presentCompleteSemaphores[i]) != VK_SUCCESS)
         {
             AXASSERT(false, "failed to create synchronization objects for a frame!");
         }
@@ -173,13 +174,8 @@ RenderContextImpl::~RenderContextImpl()
 
     destroyUniformRingBuffers();
 
-    for (auto semaphore : _renderFinishedSemaphores)
-        vkDestroySemaphore(_device, semaphore, nullptr);
-    _renderFinishedSemaphores.clear();
-
-    for (auto semaphore : _presentCompleteSemaphores)
-        vkDestroySemaphore(_device, semaphore, nullptr);
-    _presentCompleteSemaphores.fill(VK_NULL_HANDLE);
+    destroySemphores(_renderFinishedSemaphores, _device);
+    destroySemphores(_acquireCompleteSemaphores, _device);
 
     for (auto fence : _inFlightFences)
         vkDestroyFence(_device, fence, nullptr);
@@ -441,8 +437,6 @@ void RenderContextImpl::recreateSwapchain()
 
     VkSurfaceTransformFlagBitsKHR preTransform = caps.currentTransform;
 #if defined(__ANDROID__)
-    uint32_t width  = caps.currentExtent.width;
-    uint32_t height = caps.currentExtent.height;
     if (caps.currentTransform & VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR ||
         caps.currentTransform & VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR)
     {
@@ -471,8 +465,6 @@ void RenderContextImpl::recreateSwapchain()
         for (auto view : _swapchainImageViews)
             vkDestroyImageView(_device, view, nullptr);
         vkDestroySwapchainKHR(_device, _swapchain, nullptr);
-        _swapchain = nullptr;
-        _swapchainImageViews.clear();
     }
 
     // Create new swapchain
@@ -493,6 +485,8 @@ void RenderContextImpl::recreateSwapchain()
     scInfo.oldSwapchain     = VK_NULL_HANDLE;
 
     VkResult vr = vkCreateSwapchainKHR(_device, &scInfo, nullptr, &_swapchain);
+    if (vr == VK_ERROR_SURFACE_LOST_KHR)
+        return;
     AXASSERT(vr == VK_SUCCESS, "vkCreateSwapchainKHR failed");
 
     // Retrieve swapchain images
@@ -526,14 +520,18 @@ void RenderContextImpl::recreateSwapchain()
 
     // re-create render finished semaphores
     if (!_renderFinishedSemaphores.empty())
-        for (auto semaphore : _renderFinishedSemaphores)
-            vkDestroySemaphore(_device, semaphore, nullptr);
-    _renderFinishedSemaphores.resize(swapImageCount, VK_NULL_HANDLE);
+        destroySemphores(_renderFinishedSemaphores, _device);
+    if (!_acquireCompleteSemaphores.empty())
+        destroySemphores(_acquireCompleteSemaphores, _device);
 
     VkSemaphoreCreateInfo sci{.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO};
+    _renderFinishedSemaphores.resize(swapImageCount, VK_NULL_HANDLE);
+    _acquireCompleteSemaphores.resize(swapImageCount, VK_NULL_HANDLE);
     for (uint32_t i = 0; i < swapImageCount; ++i)
     {
         VkResult r = vkCreateSemaphore(_device, &sci, nullptr, &_renderFinishedSemaphores[i]);
+        AXASSERT(r == VK_SUCCESS, "vkCreateSemaphore failed");
+        r = vkCreateSemaphore(_device, &sci, nullptr, &_acquireCompleteSemaphores[i]);
         AXASSERT(r == VK_SUCCESS, "vkCreateSemaphore failed");
     }
 
@@ -544,8 +542,12 @@ void RenderContextImpl::recreateSwapchain()
         _screenHeight = extent.height;
     }
 
+    // Resets some state
     _currentFrame      = 0;
     _currentImageIndex = 0;
+    _lastError         = 0;
+    _suboptimal        = false;
+    _semaphoreIndex    = _acquireCompleteSemaphores.size() - 1;
 }
 
 void RenderContextImpl::setDepthStencilState(DepthStencilState* depthStencilState)
@@ -564,41 +566,34 @@ bool RenderContextImpl::beginFrame()
     {
         vkDeviceWaitIdle(_device);
         recreateSwapchain();
+        static_cast<RenderTargetImpl*>(_screenRT)->invalidate();
         _swapchainDirty = false;
     }
 
-    // beginFrame
+    if (_lastError)
+        return false;  // if error not cleared, skip frame
+
+    // wait for previous frame to finish
     vkWaitForFences(_device, 1, &_inFlightFences[_currentFrame], VK_TRUE, UINT64_MAX);
 
     // Reset uniform ring write head for this frame
     resetUniformRingForCurrentFrame();
 
-    VkResult result = vkAcquireNextImageKHR(_device, _swapchain, UINT64_MAX, _presentCompleteSemaphores[_currentFrame],
-                                            VK_NULL_HANDLE, &_currentImageIndex);
-    switch (result)
+    const uint32_t prevSemaphoreIndex = _semaphoreIndex;
+    _semaphoreIndex                   = (_semaphoreIndex + 1) % _acquireCompleteSemaphores.size();
+    const auto maxImageIndex          = static_cast<uint32_t>(_swapchainImages.size());
+
+    VkResult result =
+        vkAcquireNextImageKHR(_device, _swapchain, UINT64_MAX, _acquireCompleteSemaphores[_semaphoreIndex],
+                              VK_NULL_HANDLE, &_currentImageIndex);
+    while (_currentImageIndex > maxImageIndex && (result == VK_SUCCESS || result == VK_SUBOPTIMAL_KHR))
     {
-    case VK_SUCCESS:
-        break;
-    case VK_SUBOPTIMAL_KHR:
-        if (!_suboptimal)
-        {
-            _suboptimal = true;
-            AXLOGW("axmol: Suboptimal swap chain.");
-        }
-        break;
-    case VK_ERROR_OUT_OF_DATE_KHR:
-        // Signal upper layer to recreate swapchain
-        AXLOGI("axmol: swapchain is out of date (frame {}), will be created later", _currentFrame);
-        return false;
-    case VK_ERROR_SURFACE_LOST_KHR:
-        AXLOGI("axmol: surface is lost (frame {}), will be recreated by platform", _currentFrame);
-        return false;
-    default:
-        // TODO: process android VK_ERROR_SURFACE_LOST_KHR
-        AXLOGE("axmol: vkAcquireNextImageKHR fail: {}", (unsigned int)result);
-        AXASSERT(false, "vkAcquireNextImageKHR failed");
-        return false;
+        result = vkAcquireNextImageKHR(_device, _swapchain, UINT64_MAX, _acquireCompleteSemaphores[_semaphoreIndex],
+                                       VK_NULL_HANDLE, &_currentImageIndex);
     }
+
+    if (!handleSwapchainResult(result, SwapchainOp::Acquire, prevSemaphoreIndex))
+        return false;
 
     _inFrame = true;
 
@@ -612,9 +607,7 @@ bool RenderContextImpl::beginFrame()
 #if _AX_USE_DESCRIPTOR_CACHE
     auto& descriptorStates = _inFlightDescriptorStates[_currentFrame];
     for (auto& state : descriptorStates)
-    {
         _renderPipeline->recycleDescriptorState(state);
-    }
     descriptorStates.clear();
 #else
     auto descriptorPool = _descriptorPools[_currentFrame];
@@ -680,7 +673,7 @@ void RenderContextImpl::endFrame()
         }
     }
 
-    const VkSemaphore waitSemaphores[]               = {_presentCompleteSemaphores[_currentFrame]};
+    const VkSemaphore waitSemaphores[]               = {_acquireCompleteSemaphores[_semaphoreIndex]};
     const VkPipelineStageFlags waitSemaphoreStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
 
     // New render-finished semaphore from pool
@@ -708,29 +701,8 @@ void RenderContextImpl::endFrame()
     presentInfo.pSwapchains        = &_swapchain;
     presentInfo.pImageIndices      = &_currentImageIndex;
 
-    vr = vkQueuePresentKHR(_presentQueue, &presentInfo);
-    switch (vr)
-    {
-    case VK_SUCCESS:
-        break;
-    case VK_SUBOPTIMAL_KHR:
-        if (!_suboptimal)
-        {
-            AXLOGW("axmol: Suboptimal swap chain.");
-            _suboptimal = true;
-        }
-        break;
-    case VK_ERROR_OUT_OF_DATE_KHR:
-        AXLOGI("axmol: swapchain out of date");
-        break;
-    case VK_ERROR_SURFACE_LOST_KHR:
-        AXLOGI("axmol: surface is lost, will be recreated by platform");
-        break;
-    default:
-        AXLOGE("axmol: vkQueuePresentKHR fail: {}", (unsigned int)vr);
-        AXASSERT(vr && false, "vkQueuePresentKHR failed");
-        break;
-    }
+    vr           = vkQueuePresentKHR(_presentQueue, &presentInfo);
+    bool succeed = handleSwapchainResult(vr, SwapchainOp::Present, 0);
 
     if (!_postFrameOps.empty())
     {
@@ -743,9 +715,70 @@ void RenderContextImpl::endFrame()
     _driver->releaseDisposalResources();
 
     // Advance frame index for multi-frame-in-flight
-    _currentFrame = (_currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+    if (succeed)
+        _currentFrame = (_currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 
     _inFrame = false;
+}
+
+bool RenderContextImpl::handleSwapchainResult(VkResult result, SwapchainOp op, uint32_t prevSemaphoreIndex)
+{
+    if (result == VK_SUCCESS)
+        return true;
+
+    switch (result)
+    {
+    case VK_SUBOPTIMAL_KHR:
+        if (!_suboptimal)
+        {
+            _suboptimal = true;
+            if (op == SwapchainOp::Present)
+                AXLOGW("axmol: vkQueuePresentKHR suboptimal swap chain.");
+            else
+                AXLOGW("axmol: vkAcquireNextImageKHR suboptimal swap chain.");
+        }
+        return true;
+
+    case VK_ERROR_OUT_OF_DATE_KHR:
+        if (op == SwapchainOp::Present)
+        {
+            AXLOGI("vkQueuePresentKHR: swapchain out of date when present");
+        }
+        else
+        {
+            AXLOGI("vkAcquireNextImageKHR: swapchain out of date");
+            _semaphoreIndex = prevSemaphoreIndex;  // revert
+        }
+        break;
+
+    case VK_ERROR_SURFACE_LOST_KHR:
+        if (op == SwapchainOp::Present)
+        {
+            AXLOGI("vkQueuePresentKHR: surface lost");
+        }
+        else
+        {
+            AXLOGI("vkAcquireNextImageKHR: surface lost");
+            _semaphoreIndex = prevSemaphoreIndex;  // revert
+        }
+        break;
+
+    default:
+        if (op == SwapchainOp::Present)
+        {
+            AXLOGE("axmol: vkQueuePresentKHR fail: {}", (unsigned int)result);
+            AXASSERT(result && false, "vkQueuePresentKHR failed");
+        }
+        else
+        {
+            AXLOGE("axmol: vkAcquireNextImageKHR fail: {}", (unsigned int)result);
+            AXASSERT(false, "vkAcquireNextImageKHR failed");
+        }
+        break;
+    }
+    _lastError = result;
+
+    return false;
 }
 
 void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)

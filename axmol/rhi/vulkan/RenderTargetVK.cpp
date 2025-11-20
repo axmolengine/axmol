@@ -69,6 +69,8 @@ RenderTargetImpl::RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget)
 
 RenderTargetImpl::~RenderTargetImpl()
 {
+    _driver->waitDeviceIdle();
+
     invalidate();
     // We do not destroy cached renderpasses/framebuffers here to allow reuse across RT instances
 }
@@ -76,10 +78,6 @@ RenderTargetImpl::~RenderTargetImpl()
 void RenderTargetImpl::invalidate()
 {
     // Conservative: wait idle before destroying caches to avoid "in use" errors.
-    _driver->waitDeviceIdle();
-
-    auto device = _driver->getDevice();
-
     for (auto& [_, pass] : _renderPassCache)
         _driver->destroyRenderPass(pass);
     for (auto& [_, fb] : _framebufferCache)
@@ -92,6 +90,7 @@ void RenderTargetImpl::invalidate()
     for (auto& v : _attachmentViews)
         v = VK_NULL_HANDLE;
     _attachmentTexPtrs.fill(nullptr);
+    _attachmentViews.fill(nullptr);
 
     _attachmentViewsHash = 0;
     _attachmentsDirty    = true;
