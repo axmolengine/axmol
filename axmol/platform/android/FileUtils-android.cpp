@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "axmol/platform/android/FileUtils-android.h"
 #include "axmol/platform/Common.h"
 #include "axmol/platform/android/jni/JniHelper.h"
-#include "axmol/platform/android/jni/Java_dev_axmol_lib_AxmolEngine.h"
+#include "axmol/platform/android/jni/AxmolEngineJni.h"
 #include "axmol/base/ZipUtils.h"
 
 #include <stdlib.h>

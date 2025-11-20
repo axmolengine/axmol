@@ -26,10 +26,6 @@
  ****************************************************************************/
 
 #include "axmol/2d/FontAtlas.h"
-#if AX_TARGET_PLATFORM != AX_PLATFORM_WIN32 && AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-#    include "axmol/platform/android/jni/Java_dev_axmol_lib_AxmolEngine.h"
-#endif
 #include <algorithm>
 #include "axmol/2d/FontFreeType.h"
 #include "axmol/base/text_utils.h"
