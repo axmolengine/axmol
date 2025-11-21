@@ -2254,6 +2254,57 @@ int lua_register_ax_rhi_Texture(lua_State* tolua_S)
     return 1;
 }
 
+int lua_ax_rhi_DriverBase_createRenderContext(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::DriverBase* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axrhi.DriverBase",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_DriverBase_createRenderContext'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        void* arg0;
+
+        #pragma warning NO CONVERSION TO NATIVE FOR void*
+        ok = false;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_createRenderContext'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->createRenderContext(arg0);
+        object_to_luaval<ax::rhi::RenderContext>(tolua_S, "axrhi.RenderContext",(ax::rhi::RenderContext*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axrhi.DriverBase:createRenderContext",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverBase_createRenderContext'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_rhi_DriverBase_createDefaultRenderTarget(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3002,6 +3053,53 @@ int lua_ax_rhi_DriverBase_getMaxSamplesAllowed(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_rhi_DriverBase_cleanPendingResources(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::DriverBase* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axrhi.DriverBase",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_DriverBase_cleanPendingResources'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_cleanPendingResources'", nullptr);
+            return 0;
+        }
+        obj->cleanPendingResources();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axrhi.DriverBase:cleanPendingResources",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverBase_cleanPendingResources'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_rhi_DriverBase_getInstance(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3082,6 +3180,7 @@ int lua_register_ax_rhi_DriverBase(lua_State* tolua_S)
     tolua_cclass(tolua_S,"DriverBase","axrhi.DriverBase","",nullptr);
 
     tolua_beginmodule(tolua_S,"DriverBase");
+        tolua_function(tolua_S,"createRenderContext",lua_ax_rhi_DriverBase_createRenderContext);
         tolua_function(tolua_S,"createDefaultRenderTarget",lua_ax_rhi_DriverBase_createDefaultRenderTarget);
         tolua_function(tolua_S,"createRenderTarget",lua_ax_rhi_DriverBase_createRenderTarget);
         tolua_function(tolua_S,"createProgram",lua_ax_rhi_DriverBase_createProgram);
@@ -3097,6 +3196,7 @@ int lua_register_ax_rhi_DriverBase(lua_State* tolua_S)
         tolua_function(tolua_S,"getMaxAttributes",lua_ax_rhi_DriverBase_getMaxAttributes);
         tolua_function(tolua_S,"getMaxTextureUnits",lua_ax_rhi_DriverBase_getMaxTextureUnits);
         tolua_function(tolua_S,"getMaxSamplesAllowed",lua_ax_rhi_DriverBase_getMaxSamplesAllowed);
+        tolua_function(tolua_S,"cleanPendingResources",lua_ax_rhi_DriverBase_cleanPendingResources);
         tolua_function(tolua_S,"getInstance", lua_ax_rhi_DriverBase_getInstance);
         tolua_function(tolua_S,"destroyInstance", lua_ax_rhi_DriverBase_destroyInstance);
     tolua_endmodule(tolua_S);

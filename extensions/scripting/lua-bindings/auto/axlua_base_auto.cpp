@@ -101485,6 +101485,53 @@ int lua_ax_base_Renderer_getScissorRect(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Renderer_getContext(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Renderer* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Renderer",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Renderer_getContext'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_getContext'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getContext();
+        object_to_luaval<ax::rhi::RenderContext>(tolua_S, "axrhi.RenderContext",(ax::rhi::RenderContext*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Renderer:getContext",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Renderer_getContext'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Renderer_checkVisibility(lua_State* tolua_S)
 {
     int argc = 0;
@@ -101543,18 +101590,14 @@ int lua_ax_base_Renderer_readPixels(lua_State* tolua_S)
     int argc = 0;
     ax::Renderer* obj = nullptr;
     bool ok  = true;
-
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Renderer",0,&tolua_err)) goto tolua_lerror;
 #endif
-
     obj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
-
 #if _AX_DEBUG >= 1
     if (!obj)
     {
@@ -101562,30 +101605,52 @@ int lua_ax_base_Renderer_readPixels(lua_State* tolua_S)
         return 0;
     }
 #endif
-
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
-    {
-        ax::rhi::RenderTarget* arg0;
-        std::function<void (const ax::rhi::PixelBufferDesc &)> arg1;
+    do {
+        if (argc == 3) {
+            ax::rhi::RenderTarget* arg0;
+            ok &= luaval_to_object<ax::rhi::RenderTarget>(tolua_S, 2, "axrhi.RenderTarget",&arg0, "ax.Renderer:readPixels");
 
-        ok &= luaval_to_object<ax::rhi::RenderTarget>(tolua_S, 2, "axrhi.RenderTarget",&arg0, "ax.Renderer:readPixels");
+            if (!ok) { break; }
+            bool arg1;
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.Renderer:readPixels");
 
-        do {
+            if (!ok) { break; }
+            std::function<void (const ax::rhi::PixelBufferDesc &)> arg2;
+            do {
         	// Lambda binding for lua is not supported.
             assert(false);
         } while(0)
         ;
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_readPixels'", nullptr);
-            return 0;
+
+            if (!ok) { break; }
+            obj->readPixels(arg0, arg1, arg2);
+            lua_settop(tolua_S, 1);
+            return 1;
         }
-        obj->readPixels(arg0, arg1);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Renderer:readPixels",argc, 2);
+    }while(0);
+    ok  = true;
+    do {
+        if (argc == 2) {
+            ax::rhi::RenderTarget* arg0;
+            ok &= luaval_to_object<ax::rhi::RenderTarget>(tolua_S, 2, "axrhi.RenderTarget",&arg0, "ax.Renderer:readPixels");
+
+            if (!ok) { break; }
+            std::function<void (const ax::rhi::PixelBufferDesc &)> arg1;
+            do {
+        	// Lambda binding for lua is not supported.
+            assert(false);
+        } while(0)
+        ;
+
+            if (!ok) { break; }
+            obj->readPixels(arg0, arg1);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.Renderer:readPixels",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -101837,6 +101902,7 @@ int lua_register_ax_base_Renderer(lua_State* tolua_S)
         tolua_function(tolua_S,"setScissorRect",lua_ax_base_Renderer_setScissorRect);
         tolua_function(tolua_S,"getScissorTest",lua_ax_base_Renderer_getScissorTest);
         tolua_function(tolua_S,"getScissorRect",lua_ax_base_Renderer_getScissorRect);
+        tolua_function(tolua_S,"getContext",lua_ax_base_Renderer_getContext);
         tolua_function(tolua_S,"checkVisibility",lua_ax_base_Renderer_checkVisibility);
         tolua_function(tolua_S,"readPixels",lua_ax_base_Renderer_readPixels);
         tolua_function(tolua_S,"beginRenderPass",lua_ax_base_Renderer_beginRenderPass);
