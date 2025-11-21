@@ -552,8 +552,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
                                   float windowZoomFactor,
                                   bool resizable)
 {
-    setViewName(viewName);
-
+    _viewName         = viewName;
     _windowZoomFactor = windowZoomFactor;
 
     Vec2 requestWinSize = rect.size * windowZoomFactor;
@@ -770,6 +769,13 @@ bool RenderViewImpl::initWithFullscreen(std::string_view viewname, const GLFWvid
     glfwWindowHint(GLFW_GREEN_BITS, videoMode.greenBits);
 
     return initWithRect(viewname, ax::Rect(0, 0, (float)videoMode.width, (float)videoMode.height), 1.0f, false);
+}
+
+void RenderViewImpl::setViewName(std::string_view viewName)
+{
+    RenderView::setViewName(viewName);
+    if (_mainWindow)
+        glfwSetWindowTitle(_mainWindow, _viewName.c_str());
 }
 
 bool RenderViewImpl::isGfxContextReady()

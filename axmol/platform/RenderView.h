@@ -292,8 +292,8 @@ public:
      */
     virtual Rect getScissorInPoints() const;
 
-    /** Set the view name.
-     *
+    /*
+     * Sets the view name. will change the window title on desktop platform
      * @param viewname A string will be set to the view as name.
      */
     virtual void setViewName(std::string_view viewname);

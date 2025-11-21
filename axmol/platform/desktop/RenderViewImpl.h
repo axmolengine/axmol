@@ -133,6 +133,8 @@ public:
     void* getNativeDisplay() const override;
     WindowPlatform getWindowPlatform() const override;
 
+    void setViewName(std::string_view viewName) override;
+
 protected:
     RenderViewImpl(bool initglfw = true);
     ~RenderViewImpl() override;

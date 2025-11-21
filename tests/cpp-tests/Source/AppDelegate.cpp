@@ -92,9 +92,6 @@ bool AppDelegate::applicationDidFinishLaunching()
 #ifndef NDEBUG
         title += " *Debug*";
 #endif
-#if AX_RENDER_API != AX_RENDER_API_GL
-        title += fmt::format("({}@{})", axdrv->getVersion(), axdrv->getRenderer());
-#endif
 #ifdef AX_PLATFORM_PC
         renderView =
             RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height), 1.0F, true);
@@ -102,6 +99,9 @@ bool AppDelegate::applicationDidFinishLaunching()
         renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height));
 #endif
         director->setRenderView(renderView);
+
+        title += fmt::format("({}@{})", axdrv->getVersion(), axdrv->getRenderer());
+        renderView->setViewName(title);
     }
 
     const char* const autotest_capture = std::getenv("AXMOL_AUTOTEST_CAPTURE_DIR");
