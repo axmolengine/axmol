@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -22,63 +23,60 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CONFIGURATIONTEST_H__
-#define __CONFIGURATIONTEST_H__
+#pragma once
 
 #include "../BaseTest.h"
 
-DEFINE_TEST_SUITE(ConfigurationTests);
+DEFINE_TEST_SUITE(EnvironmentTests);
 
-class ConfigurationBase : public TestCase
+class EnvironmentBase : public TestCase
 {
 protected:
 public:
     virtual std::string title() const override;
 };
 
-class ConfigurationLoadConfig : public ConfigurationBase
+class EnvironmentLoadConfig : public EnvironmentBase
 {
 public:
-    CREATE_FUNC(ConfigurationLoadConfig);
+    CREATE_FUNC(EnvironmentLoadConfig);
 
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
 };
 
-class ConfigurationQuery : public ConfigurationBase
+class EnvironmentQuery : public EnvironmentBase
 {
 public:
-    CREATE_FUNC(ConfigurationQuery);
+    CREATE_FUNC(EnvironmentQuery);
 
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
 };
 
-class ConfigurationInvalid : public ConfigurationBase
+class EnvironmentInvalid : public EnvironmentBase
 {
 public:
-    CREATE_FUNC(ConfigurationInvalid);
+    CREATE_FUNC(EnvironmentInvalid);
 
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
 };
 
-class ConfigurationDefault : public ConfigurationBase
+class EnvironmentDefault : public EnvironmentBase
 {
 public:
-    CREATE_FUNC(ConfigurationDefault);
+    CREATE_FUNC(EnvironmentDefault);
 
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
 };
 
-class ConfigurationSet : public ConfigurationBase
+class EnvironmentSet : public EnvironmentBase
 {
 public:
-    CREATE_FUNC(ConfigurationSet);
+    CREATE_FUNC(EnvironmentSet);
 
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
 };
-
-#endif  // __CONFIGURATIONTEST_H__

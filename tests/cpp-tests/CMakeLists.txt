@@ -119,7 +119,7 @@ list(APPEND GAME_HEADER
   Source/ParallaxTest/ParallaxTest.h
   Source/testBasic.h
   Source/CurlTest/CurlTest.h
-  Source/ConfigurationTest/ConfigurationTest.h
+  Source/EnvironmentTest/EnvironmentTest.h
   Source/CurrentLanguageTest/CurrentLanguageTest.h
   Source/AppDelegate.h
   Source/LabelTest/LabelTest.h
@@ -265,7 +265,7 @@ list(APPEND GAME_SOURCE
   Source/Camera3DTest/Camera3DTest.cpp
   Source/ClickAndMoveTest/ClickAndMoveTest.cpp
   Source/ClippingNodeTest/ClippingNodeTest.cpp
-  Source/ConfigurationTest/ConfigurationTest.cpp
+  Source/EnvironmentTest/EnvironmentTest.cpp
   Source/ConsoleTest/ConsoleTest.cpp
   Source/CurlTest/CurlTest.cpp
   Source/CurrentLanguageTest/CurrentLanguageTest.cpp
