@@ -27,7 +27,6 @@
 #include "axmol/rhi/metal/DriverMTL.h"
 #include "axmol/rhi/metal/TextureMTL.h"
 #include "axmol/rhi/RHIUtils.h"
-#include "axmol/base/Configuration.h"
 
 namespace ax::rhi::mtl
 {

@@ -370,7 +370,7 @@ public:
      */
     void purgeCachedData();
 
-    /** Sets the default values based on the Configuration info. */
+    /** Sets the default values based on the Environment info. */
     void setDefaultValues();
 
     // Render Helper

@@ -813,7 +813,7 @@ void Console::createCommandAllocator()
 
 void Console::createCommandConfig()
 {
-    addCommand({"config", "Print the Configuration object. Args: [-h | help | ]",
+    addCommand({"config", "Print the Environment object. Args: [-h | help | ]",
                 AX_CALLBACK_2(Console::commandConfig, this)});
 }
 

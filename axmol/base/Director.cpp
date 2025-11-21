@@ -398,7 +398,7 @@ void Director::setRenderView(RenderView* renderView)
 
     if (_renderView != renderView)
     {
-        // Configuration. Gather GPU info
+        // Environment. Gather GPU info
         auto env = Environment::getInstance();
         env->gatherGPUInfo();
         AXLOGI("{}\n", env->getInfo());
