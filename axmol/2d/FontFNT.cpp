@@ -29,7 +29,7 @@
 #include "axmol/2d/FontAtlas.h"
 #include "axmol/2d/SpriteFrameCache.h"
 #include "axmol/platform/FileUtils.h"
-#include "axmol/base/Configuration.h"
+#include "axmol/base/Environment.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/Map.h"
 #include "axmol/base/text_utils.h"
@@ -295,8 +295,8 @@ std::set<unsigned int>* BMFontConfiguration::parseBinaryConfigFile(unsigned char
             uint16_t scaleH = 0;
             memcpy(&scaleH, pData + 6, 2);
 
-            AXASSERT(scaleW <= Configuration::getInstance()->getMaxTextureSize() &&
-                         scaleH <= Configuration::getInstance()->getMaxTextureSize(),
+            AXASSERT(scaleW <= Environment::getInstance()->getMaxTextureSize() &&
+                         scaleH <= Environment::getInstance()->getMaxTextureSize(),
                      "CCLabelBMFont: page can't be larger than supported");
 
             uint16_t pages = 0;
@@ -451,7 +451,7 @@ void BMFontConfiguration::parseCommonArguments(const char* line)
     tmp = strstr(tmp, "scaleW=") + 7;
     sscanf(tmp, "%d", &value);
 
-    int maxTextureSize = Configuration::getInstance()->getMaxTextureSize();
+    int maxTextureSize = Environment::getInstance()->getMaxTextureSize();
     AXASSERT(value <= maxTextureSize, "CCLabelBMFont: page can't be larger than supported");
 
     // scaleH. sanity check

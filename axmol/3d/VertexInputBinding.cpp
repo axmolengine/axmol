@@ -23,7 +23,7 @@
 
 #include "axmol/rhi/Program.h"
 #include "axmol/renderer/Pass.h"
-#include "axmol/base/Configuration.h"
+#include "axmol/base/Environment.h"
 #include "axmol/3d/MeshVertexIndexData.h"
 #include "axmol/3d/shaderinfos.h"
 #include "axmol/3d/VertexInputBinding.h"

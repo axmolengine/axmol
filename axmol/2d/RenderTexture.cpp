@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "axmol/base/Utils.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/base/EventType.h"
-#include "axmol/base/Configuration.h"
+#include "axmol/base/Environment.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventListenerCustom.h"
 #include "axmol/base/EventDispatcher.h"
@@ -198,7 +198,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         int powW = 0;
         int powH = 0;
 
-        if (Configuration::getInstance()->supportsNPOT())
+        if (Environment::getInstance()->supportsNPOT())
         {
             powW = w;
             powH = h;

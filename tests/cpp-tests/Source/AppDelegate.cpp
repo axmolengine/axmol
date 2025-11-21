@@ -81,7 +81,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     // As an example, load config file
     // FIXME:: This should be loaded before the Director is initialized,
     // FIXME:: but at this point, the director is already initialized
-    Configuration::getInstance()->loadConfigFile("configs/config-example.plist");
+    Environment::getInstance()->loadConfigFile("configs/config-example.plist");
 
     // initialize director
     auto director   = Director::getInstance();

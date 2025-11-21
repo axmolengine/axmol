@@ -26,7 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "axmol/base/Configuration.h"
+#include "axmol/base/Environment.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/base/EventCustom.h"
 #include "axmol/base/Director.h"
@@ -38,11 +38,11 @@ namespace ax
 
 extern const char* axmolVersion();
 
-Configuration* Configuration::s_sharedConfiguration = nullptr;
+Environment* Environment::s_sharedEnvironment = nullptr;
 
-const char* Configuration::CONFIG_FILE_LOADED = "config_file_loaded";
+const char* Environment::CONFIG_FILE_LOADED = "config_file_loaded";
 
-Configuration::Configuration()
+Environment::Environment()
     : _maxModelviewStackDepth(0)
     , _supportsPVRTC(false)
     , _supportsETC1(false)
@@ -65,7 +65,7 @@ Configuration::Configuration()
     _loadedEvent = new EventCustom(CONFIG_FILE_LOADED);
 }
 
-bool Configuration::init()
+bool Environment::init()
 {
     _valueDict["axmol.version"] = Value(axmolVersion());
 
@@ -100,12 +100,12 @@ bool Configuration::init()
     return true;
 }
 
-Configuration::~Configuration()
+Environment::~Environment()
 {
     AX_SAFE_DELETE(_loadedEvent);
 }
 
-std::string Configuration::getInfo() const
+std::string Environment::getInfo() const
 {
     // And Dump some warnings as well
 #if AX_ENABLE_PROFILERS
@@ -125,7 +125,7 @@ std::string Configuration::getInfo() const
     return forDump.getDescription();
 }
 
-void Configuration::gatherGPUInfo()
+void Environment::gatherGPUInfo()
 {
     auto driver = axdrv;
 
@@ -179,87 +179,87 @@ void Configuration::gatherGPUInfo()
     _valueDict["supports_OES_depth24"] = Value(_supportsOESDepth24);
 }
 
-Configuration* Configuration::getInstance()
+Environment* Environment::getInstance()
 {
-    if (!s_sharedConfiguration)
+    if (!s_sharedEnvironment)
     {
-        s_sharedConfiguration = new Configuration();
-        s_sharedConfiguration->init();
+        s_sharedEnvironment = new Environment();
+        s_sharedEnvironment->init();
     }
 
-    return s_sharedConfiguration;
+    return s_sharedEnvironment;
 }
 
-void Configuration::destroyInstance()
+void Environment::destroyInstance()
 {
-    AX_SAFE_DELETE(s_sharedConfiguration);
+    AX_SAFE_DELETE(s_sharedEnvironment);
 }
 
 //
 // getters for specific variables.
 // Maintained for backward compatibility reasons only.
 //
-int Configuration::getMaxTextureSize() const
+int Environment::getMaxTextureSize() const
 {
     return axdrv->getMaxTextureSize();
 }
 
-int Configuration::getMaxModelviewStackDepth() const
+int Environment::getMaxModelviewStackDepth() const
 {
     return _maxModelviewStackDepth;
 }
 
-int Configuration::getMaxTextureUnits() const
+int Environment::getMaxTextureUnits() const
 {
     return axdrv->getMaxTextureUnits();
 }
 
-bool Configuration::supportsNPOT() const
+bool Environment::supportsNPOT() const
 {
     return _supportsNPOT;
 }
 
-bool Configuration::supportsPVRTC() const
+bool Environment::supportsPVRTC() const
 {
     return _supportsPVRTC;
 }
 
-bool Configuration::supportsETC1() const
+bool Environment::supportsETC1() const
 {
     return _supportsETC1;
 }
 
-bool Configuration::supportsETC2() const
+bool Environment::supportsETC2() const
 {
     return _supportsETC2;
 }
 
-bool Configuration::supportsS3TC() const
+bool Environment::supportsS3TC() const
 {
     return _supportsS3TC;
 }
 
-bool Configuration::supportsATITC() const
+bool Environment::supportsATITC() const
 {
     return _supportsATITC;
 }
 
-bool Configuration::supportsASTC() const
+bool Environment::supportsASTC() const
 {
     return _supportsASTC;
 }
 
-bool Configuration::supportsBGRA8888() const
+bool Environment::supportsBGRA8888() const
 {
     return _supportsBGRA8888;
 }
 
-bool Configuration::supportsDiscardFramebuffer() const
+bool Environment::supportsDiscardFramebuffer() const
 {
     return _supportsDiscardFramebuffer;
 }
 
-bool Configuration::supportsShareableVAO() const
+bool Environment::supportsShareableVAO() const
 {
 #if AX_TEXTURE_ATLAS_USE_VAO
     return _supportsShareableVAO;
@@ -268,7 +268,7 @@ bool Configuration::supportsShareableVAO() const
 #endif
 }
 
-bool Configuration::supportsMapBuffer() const
+bool Environment::supportsMapBuffer() const
 {
     // Fixes Github issue #16123
     //
@@ -285,31 +285,31 @@ bool Configuration::supportsMapBuffer() const
 #endif
 }
 
-bool Configuration::supportsOESDepth24() const
+bool Environment::supportsOESDepth24() const
 {
     return _supportsOESDepth24;
 }
-bool Configuration::supportsOESPackedDepthStencil() const
+bool Environment::supportsOESPackedDepthStencil() const
 {
     return _supportsOESPackedDepthStencil;
 }
 
-int Configuration::getMaxSupportDirLightInShader() const
+int Environment::getMaxSupportDirLightInShader() const
 {
     return _maxDirLightInShader;
 }
 
-int Configuration::getMaxSupportPointLightInShader() const
+int Environment::getMaxSupportPointLightInShader() const
 {
     return _maxPointLightInShader;
 }
 
-int Configuration::getMaxSupportSpotLightInShader() const
+int Environment::getMaxSupportSpotLightInShader() const
 {
     return _maxSpotLightInShader;
 }
 
-Animate3DQuality Configuration::getAnimate3DQuality() const
+Animate3DQuality Environment::getAnimate3DQuality() const
 {
     return _animate3DQuality;
 }
@@ -317,7 +317,7 @@ Animate3DQuality Configuration::getAnimate3DQuality() const
 //
 // generic getters for properties
 //
-const Value& Configuration::getValue(std::string_view key, const Value& defaultValue) const
+const Value& Environment::getValue(std::string_view key, const Value& defaultValue) const
 {
     auto iter = _valueDict.find(key);
     if (iter != _valueDict.cend())
@@ -326,7 +326,7 @@ const Value& Configuration::getValue(std::string_view key, const Value& defaultV
     return defaultValue;
 }
 
-void Configuration::setValue(std::string_view key, const Value& value)
+void Environment::setValue(std::string_view key, const Value& value)
 {
     axstd::set_item(_valueDict, key, value);  // _valueDict[key] = value;
 }
@@ -334,7 +334,7 @@ void Configuration::setValue(std::string_view key, const Value& value)
 //
 // load file
 //
-void Configuration::loadConfigFile(std::string_view filename)
+void Environment::loadConfigFile(std::string_view filename)
 {
     ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(filename);
     AXASSERT(!dict.empty(), "cannot create dictionary");
@@ -412,7 +412,7 @@ void Configuration::loadConfigFile(std::string_view filename)
     Director::getInstance()->getEventDispatcher()->dispatchEvent(_loadedEvent);
 }
 
-int Configuration::getMaxAttributes() const
+int Environment::getMaxAttributes() const
 {
     return axdrv->getMaxAttributes();
 }

@@ -26,7 +26,7 @@
 #include "axmol/physics3d/Physics3D.h"
 #include <stddef.h>  // offsetof
 #include "axmol/base/Types.h"
-#include "axmol/base/Configuration.h"
+#include "axmol/base/Environment.h"
 #include "axmol/base/Macros.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/Utils.h"

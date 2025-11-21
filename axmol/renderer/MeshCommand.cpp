@@ -25,7 +25,7 @@
 
 #include "axmol/renderer/MeshCommand.h"
 #include "axmol/base/Macros.h"
-#include "axmol/base/Configuration.h"
+#include "axmol/base/Environment.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventCustom.h"
 #include "axmol/base/EventListenerCustom.h"

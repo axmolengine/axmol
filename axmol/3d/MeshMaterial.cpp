@@ -30,7 +30,7 @@
 #include "axmol/renderer/Texture2D.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventType.h"
-#include "axmol/base/Configuration.h"
+#include "axmol/base/Environment.h"
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/renderer/Pass.h"

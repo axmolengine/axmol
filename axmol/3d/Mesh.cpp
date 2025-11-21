@@ -33,7 +33,7 @@
 #include "axmol/2d/Scene.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/Director.h"
-#include "axmol/base/Configuration.h"
+#include "axmol/base/Environment.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/renderer/Material.h"
 #include "axmol/renderer/Technique.h"
@@ -69,7 +69,7 @@ std::string s_uniformSamplerName[] = {
 // helpers
 void Mesh::resetLightUniformValues()
 {
-    const auto& conf            = Configuration::getInstance();
+    const auto& conf            = Environment::getInstance();
     constexpr int maxDirLight   = AX_MAX_DIRECTIONAL_LIGHT;
     constexpr int maxPointLight = AX_MAX_POINT_LIGHT;
     constexpr int maxSpotLight  = AX_MAX_SPOT_LIGHT;
@@ -636,7 +636,7 @@ void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigne
     AXASSERT(pass, "Invalid Pass");
     AXASSERT(scene, "Invalid scene");
 
-    const auto& conf            = Configuration::getInstance();
+    const auto& conf            = Environment::getInstance();
     constexpr int maxDirLight   = AX_MAX_DIRECTIONAL_LIGHT;
     constexpr int maxPointLight = AX_MAX_POINT_LIGHT;
     constexpr int maxSpotLight  = AX_MAX_SPOT_LIGHT;

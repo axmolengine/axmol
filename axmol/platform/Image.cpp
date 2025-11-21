@@ -124,7 +124,7 @@ struct dirent* readdir$INODE64(DIR* dir)
 #include "axmol/platform/Common.h"
 #include "axmol/platform/StdC.h"
 #include "axmol/platform/FileUtils.h"
-#include "axmol/base/Configuration.h"
+#include "axmol/base/Environment.h"
 #include "axmol/base/Utils.h"
 #include "axmol/base/ZipUtils.h"
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
@@ -500,12 +500,12 @@ static rhi::PixelFormat getDevicePVRPixelFormat(rhi::PixelFormat format)
     case rhi::PixelFormat::PVRTC4A:
     case rhi::PixelFormat::PVRTC2:
     case rhi::PixelFormat::PVRTC2A:
-        if (Configuration::getInstance()->supportsPVRTC())
+        if (Environment::getInstance()->supportsPVRTC())
             return format;
         else
             return rhi::PixelFormat::RGBA8;
     case rhi::PixelFormat::ETC1:
-        if (Configuration::getInstance()->supportsETC2())
+        if (Environment::getInstance()->supportsETC2())
             return rhi::PixelFormat::ETC2_RGB;
         else
             return rhi::PixelFormat::RGBA8;
@@ -524,7 +524,7 @@ static rhi::PixelFormat getDevicePVRPixelFormat(rhi::PixelFormat format)
     case rhi::PixelFormat::ASTC10x10:
     case rhi::PixelFormat::ASTC12x10:
     case rhi::PixelFormat::ASTC12x12:
-        return Configuration::getInstance()->supportsASTC() ? format : rhi::PixelFormat::RGBA8;
+        return Environment::getInstance()->supportsASTC() ? format : rhi::PixelFormat::RGBA8;
 
     default:
         return format;
@@ -544,14 +544,14 @@ bool testFormatForPvr3TCSupport(PVR3TexturePixelFormat format)
     {
     case PVR3TexturePixelFormat::ETC2_RGBA:
     case PVR3TexturePixelFormat::ETC2_RGB:
-        return Configuration::getInstance()->supportsETC2();
+        return Environment::getInstance()->supportsETC2();
     case PVR3TexturePixelFormat::DXT1:
     case PVR3TexturePixelFormat::DXT3:
     case PVR3TexturePixelFormat::DXT5:
-        return Configuration::getInstance()->supportsS3TC();
+        return Environment::getInstance()->supportsS3TC();
 
     case PVR3TexturePixelFormat::BGRA8888:
-        return Configuration::getInstance()->supportsBGRA8888();
+        return Environment::getInstance()->supportsBGRA8888();
 
     case PVR3TexturePixelFormat::PVRTC2BPP_RGB:
     case PVR3TexturePixelFormat::PVRTC2BPP_RGBA:
@@ -1558,7 +1558,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
         return false;
     }
 
-    Configuration* configuration = Configuration::getInstance();
+    auto env = Environment::getInstance();
 
     // can not detect the premultiplied alpha from pvr file, use _PVRHaveAlphaPremultiplied instead.
     _hasPremultipliedAlpha = isCompressedImageHavePMA(CompressedImagePMAFlag::PVR);
@@ -1571,7 +1571,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
         AXLOGD("WARNING: Image is flipped. Regenerate it using PVRTexTool");
     }
 
-    if (!configuration->supportsNPOT() && (static_cast<int>(header->width) != utils::nextPOT(header->width) ||
+    if (!env->supportsNPOT() && (static_cast<int>(header->width) != utils::nextPOT(header->width) ||
                                            static_cast<int>(header->height) != utils::nextPOT(header->height)))
     {
         AXLOGD("ERROR: Loading an NPOT texture ({}x{}) but is not supported on this device", header->width,
@@ -1626,7 +1626,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
         switch (formatFlags)
         {
         case PVR2TexturePixelFormat::PVRTC2BPP_RGBA:
-            if (!Configuration::getInstance()->supportsPVRTC())
+            if (!Environment::getInstance()->supportsPVRTC())
             {
                 AXLOGD("Hardware PVR decoder not present. Using software decoder");
                 _unpack                             = true;
@@ -1641,7 +1641,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
             heightBlocks = height / 4;
             break;
         case PVR2TexturePixelFormat::PVRTC4BPP_RGBA:
-            if (!Configuration::getInstance()->supportsPVRTC())
+            if (!Environment::getInstance()->supportsPVRTC())
             {
                 AXLOGD("Hardware PVR decoder not present. Using software decoder");
                 _unpack                             = true;
@@ -1656,7 +1656,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
             heightBlocks = height / 4;
             break;
         case PVR2TexturePixelFormat::BGRA8888:
-            if (!Configuration::getInstance()->supportsBGRA8888())
+            if (!Environment::getInstance()->supportsBGRA8888())
             {
                 AXLOGD("Image. BGRA8888 not supported on this device");
                 return false;
@@ -1795,7 +1795,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
         {
         case PVR3TexturePixelFormat::PVRTC2BPP_RGB:
         case PVR3TexturePixelFormat::PVRTC2BPP_RGBA:
-            if (!Configuration::getInstance()->supportsPVRTC())
+            if (!Environment::getInstance()->supportsPVRTC())
             {
                 AXLOGW("Hardware PVR decoder not present. Using software decoder");
                 _unpack              = true;
@@ -1811,7 +1811,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
             break;
         case PVR3TexturePixelFormat::PVRTC4BPP_RGB:
         case PVR3TexturePixelFormat::PVRTC4BPP_RGBA:
-            if (!Configuration::getInstance()->supportsPVRTC())
+            if (!Environment::getInstance()->supportsPVRTC())
             {
                 AXLOGW("Hardware PVR decoder not present. Using software decoder");
                 _unpack              = true;
@@ -1826,7 +1826,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
             heightBlocks = height / 4;
             break;
         case PVR3TexturePixelFormat::ETC1:
-            if (!Configuration::getInstance()->supportsETC2())
+            if (!Environment::getInstance()->supportsETC2())
             {
                 AXLOGW("Hardware ETC1 decoder not present. Using software decoder");
                 const int bytePerPixel = 4;
@@ -1845,7 +1845,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
             heightBlocks = height / 4;
             break;
         case PVR3TexturePixelFormat::BGRA8888:
-            if (!Configuration::getInstance()->supportsBGRA8888())
+            if (!Environment::getInstance()->supportsBGRA8888())
             {
                 AXLOGW("Image. BGRA8888 not supported on this device");
                 return false;
@@ -1940,7 +1940,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
             }
 
             const bool hw =
-                Configuration::getInstance()->supportsASTC() &&
+                Environment::getInstance()->supportsASTC() &&
                 (v3_pixel_formathash.find((PVR3TexturePixelFormat)pixelFormat) != v3_pixel_formathash.end());
 
             int wBlocks = (width + bx - 1) / bx;
@@ -2050,7 +2050,7 @@ bool Image::initWithETCData(uint8_t* data, ssize_t dataLen, bool ownData)
     // GL_ETC1_RGB8_OES is not available in any desktop GL extension but the compression
     // format is forwards compatible so just use the ETC2 format.
     // @Note axmol-3.0, ETC1 not support sampler2DArray, so preferred ETC2
-    if (Configuration::getInstance()->supportsETC2())
+    if (Environment::getInstance()->supportsETC2())
     {
         _pixelFormat = rhi::PixelFormat::ETC2_RGB;
         forwardPixels(data, dataLen, pixelOffset, ownData);
@@ -2114,7 +2114,7 @@ bool Image::initWithETC2Data(uint8_t* data, ssize_t dataLen, bool ownData)
         // We only support ETC2_RGBA_NO_MIPMAPS and ETC2_RGB_NO_MIPMAPS
         assert(format == ETC2_RGBA_NO_MIPMAPS || format == ETC2_RGB_NO_MIPMAPS);
 
-        if (Configuration::getInstance()->supportsETC2())
+        if (Environment::getInstance()->supportsETC2())
         {
             _pixelFormat = format == ETC2_RGBA_NO_MIPMAPS ? rhi::PixelFormat::ETC2_RGBA : rhi::PixelFormat::ETC2_RGB;
 
@@ -2174,7 +2174,7 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
             break;
         }
 
-        if (Configuration::getInstance()->supportsASTC())
+        if (Environment::getInstance()->supportsASTC())
         {
             if (block_x == 4 && block_y == 4)
             {
@@ -2287,7 +2287,7 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
     const int pixelOffset = sizeof(S3TCTexHeader);
     uint8_t* pixelData    = data + pixelOffset;
 
-    bool hardware = Configuration::getInstance()->supportsS3TC();
+    bool hardware = Environment::getInstance()->supportsS3TC();
     /* if hardware supports s3tc, set pixelformat before loading mipmaps, to support non-mipmapped textures  */
     if (hardware)
     {  // decode texture through hardware
@@ -2340,7 +2340,7 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
 
         int size = ((width + 3) / 4) * ((height + 3) / 4) * blockSize;
 
-        if (Configuration::getInstance()->supportsS3TC())
+        if (Environment::getInstance()->supportsS3TC())
         {  // decode texture through hardware
             _mipmaps[i].data     = (uint8_t*)pixelData + encodeOffset;
             _mipmaps[i].dataSize = size;
@@ -2422,7 +2422,7 @@ bool Image::initWithATITCData(uint8_t* data, ssize_t dataLen, bool ownData)
     int width  = _width;
     int height = _height;
 
-    bool hardware = Configuration::getInstance()->supportsATITC();
+    bool hardware = Environment::getInstance()->supportsATITC();
     if (hardware)  // compressed data length
     {
         AXLOGD("this is atitc H decode");

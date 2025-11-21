@@ -61,7 +61,7 @@ set(_AX_BASE_HEADER
   base/text_utils.h
   base/ScriptSupport.h
   base/EventFocus.h
-  base/Configuration.h
+  base/Environment.h
   base/Protocols.h
   base/TGAlib.h
   base/EventMouse.h
@@ -82,7 +82,7 @@ set(_AX_BASE_HEADER
 set(_AX_BASE_SRC
   base/JobSystem.cpp
   base/AutoreleasePool.cpp
-  base/Configuration.cpp
+  base/Environment.cpp
   base/Logging.cpp
   base/Controller.cpp
   base/Data.cpp

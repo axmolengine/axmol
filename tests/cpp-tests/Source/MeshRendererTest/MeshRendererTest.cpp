@@ -2644,7 +2644,7 @@ MeshRendererNormalMappingTest::MeshRendererNormalMappingTest()
         addChild(mesh);
     }
 
-    int maxAttributes = Configuration::getInstance()->getMaxAttributes();
+    int maxAttributes = Environment::getInstance()->getMaxAttributes();
     AXASSERT(maxAttributes > 8, "attributes supported must be greater than 8");
     if (maxAttributes > 8)
     {

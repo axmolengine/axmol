@@ -180,7 +180,7 @@ bool UIRichTextTest::init()
     {
         auto& widgetSize = _widget->getContentSize();
 
-        auto config = Configuration::getInstance();
+        auto config = Environment::getInstance();
         config->loadConfigFile("configs/config-test-ok.plist");
 
         std::string str1 = config->getValue("Chinese").asString();

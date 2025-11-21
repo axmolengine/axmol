@@ -56,7 +56,7 @@ THE SOFTWARE.
 #include "axmol/base/EventCustom.h"
 #include "axmol/base/Logging.h"
 #include "axmol/base/AutoreleasePool.h"
-#include "axmol/base/Configuration.h"
+#include "axmol/base/Environment.h"
 #include "axmol/base/ObjectFactory.h"
 #include "axmol/platform/Application.h"
 #if defined(AX_ENABLE_AUDIO)
@@ -121,7 +121,7 @@ bool Director::init()
     // FPS
     _lastUpdate = std::chrono::steady_clock::now();
 
-    auto concurrency = Configuration::getInstance()->getValue("axmol.concurrency", Value{-1}).asInt();
+    auto concurrency = Environment::getInstance()->getValue("axmol.concurrency", Value{-1}).asInt();
     _jobSystem       = new JobSystem(concurrency);
 
 #ifdef AX_ENABLE_CONSOLE
@@ -202,7 +202,7 @@ Director::~Director()
 #endif
     AX_SAFE_RELEASE(_eventDispatcher);
 
-    Configuration::destroyInstance();
+    Environment::destroyInstance();
     ObjectFactory::destroyInstance();
     QuadCommand::destroyIsolatedIndices();
 
@@ -216,17 +216,17 @@ Director::~Director()
 
 void Director::setDefaultValues()
 {
-    Configuration* conf = Configuration::getInstance();
+    auto env = Environment::getInstance();
 
     // default FPS
-    float fps             = conf->getValue("axmol.fps", Value(kDefaultFPS)).asFloat();
+    float fps             = env->getValue("axmol.fps", Value(kDefaultFPS)).asFloat();
     _oldAnimationInterval = _animationInterval = 1.0f / fps;
 
     // Display FPS
-    _statsDisplay = conf->getValue("axmol.display_fps", Value(false)).asBool();
+    _statsDisplay = env->getValue("axmol.display_fps", Value(false)).asBool();
 
     // GL projection
-    std::string projection = conf->getValue("axmol.gl.projection", Value("3d")).asString();
+    std::string projection = env->getValue("axmol.gl.projection", Value("3d")).asString();
     if (projection == "3d")
         _projection = Projection::_3D;
     else if (projection == "2d")
@@ -242,17 +242,17 @@ void Director::setDefaultValues()
     */
 
     // PVR v2 has alpha premultiplied ?
-    bool pvr_alpha_premultiplied = conf->getValue("axmol.texture.pvrv2_has_alpha_premultiplied", Value(false)).asBool();
+    bool pvr_alpha_premultiplied = env->getValue("axmol.texture.pvrv2_has_alpha_premultiplied", Value(false)).asBool();
     Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::PVR, pvr_alpha_premultiplied);
 
     // ASTC has alpha premultiplied ?
-    bool astc_alpha_premultiplied = conf->getValue("axmol.texture.astc_has_pma", Value{true}).asBool();
+    bool astc_alpha_premultiplied = env->getValue("axmol.texture.astc_has_pma", Value{true}).asBool();
     Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::ASTC, astc_alpha_premultiplied);
 
     // ETC2 has alpha premultiplied ?
     // Note: no suitable tools(etc2comp, Mali Texture Compression Tool, PVRTexTool) support do PMA currently, so set
     // etc2 PMA default to `false`
-    bool etc2_alpha_premultiplied = conf->getValue("axmol.texture.etc2_has_pma", Value{false}).asBool();
+    bool etc2_alpha_premultiplied = env->getValue("axmol.texture.etc2_has_pma", Value{false}).asBool();
     Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::ETC2, etc2_alpha_premultiplied);
 }
 
@@ -399,9 +399,9 @@ void Director::setRenderView(RenderView* renderView)
     if (_renderView != renderView)
     {
         // Configuration. Gather GPU info
-        Configuration* conf = Configuration::getInstance();
-        conf->gatherGPUInfo();
-        AXLOGI("{}\n", conf->getInfo());
+        auto env = Environment::getInstance();
+        env->gatherGPUInfo();
+        AXLOGI("{}\n", env->getInfo());
 
         if (_renderView)
             _renderView->release();

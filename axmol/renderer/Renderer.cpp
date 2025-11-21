@@ -37,7 +37,7 @@
 #include "axmol/renderer/Pass.h"
 #include "axmol/renderer/Texture2D.h"
 
-#include "axmol/base/Configuration.h"
+#include "axmol/base/Environment.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/EventListenerCustom.h"

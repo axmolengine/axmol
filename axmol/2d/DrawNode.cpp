@@ -27,7 +27,7 @@
 #include <stddef.h>
 #include "axmol/base/Types.h"
 #include "axmol/base/EventType.h"
-#include "axmol/base/Configuration.h"
+#include "axmol/base/Environment.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventListenerCustom.h"

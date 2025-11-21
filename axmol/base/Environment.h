@@ -43,20 +43,21 @@ namespace ax
 
 class EventCustom;
 
-/** @class Configuration
- * @brief Configuration contains some openGL variables
+/** @class Environment
+ * @brief Environment contains some Engine caps and user settings
  * @since v0.99.0
+ * @since axmol-3.0.0 renamed from Configuration to Environment
  */
-class AX_DLL Configuration
+class AX_DLL Environment
 {
 public:
-    /** Returns a shared instance of Configuration.
+    /** Returns a shared instance of Environment.
      *
-     * @return An autoreleased Configuration object.
+     * @return An autoreleased Environment object.
      */
-    static Configuration* getInstance();
+    static Environment* getInstance();
 
-    /** Purge the shared instance of Configuration.
+    /** Purge the shared instance of Environment.
      */
     static void destroyInstance();
 
@@ -64,7 +65,7 @@ public:
     /** Destructor
      * @lua NA
      */
-    virtual ~Configuration();
+    virtual ~Environment();
 
     /** OpenGL Max texture size.
      *
@@ -213,16 +214,16 @@ public:
      */
     const Value& getValue(std::string_view key, const Value& defaultValue = Value::Null) const;
 
-    /** Sets a new key/value pair  in the configuration dictionary.
+    /** Sets a new key/value pair  in the Environment dictionary.
      *
      * @param key A given key.
      * @param value A given value.
      */
     void setValue(std::string_view key, const Value& value);
 
-    /** Returns the Configuration info.
+    /** Returns the Environment info.
      *
-     * @return The Configuration info.
+     * @return The Environment info.
      */
     std::string getInfo() const;
 
@@ -242,8 +243,8 @@ public:
     int getMaxAttributes() const;
 
 private:
-    Configuration();
-    static Configuration* s_sharedConfiguration;
+    Environment();
+    static Environment* s_sharedEnvironment;
     static std::string s_configfile;
 
 protected:

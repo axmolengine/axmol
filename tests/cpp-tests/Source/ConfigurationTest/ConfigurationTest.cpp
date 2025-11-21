@@ -51,8 +51,8 @@ void ConfigurationLoadConfig::onEnter()
 {
     ConfigurationBase::onEnter();
 
-    Configuration::getInstance()->loadConfigFile("configs/config-test-ok.plist");
-    std::string config = Configuration::getInstance()->getInfo();
+    Environment::getInstance()->loadConfigFile("configs/config-test-ok.plist");
+    std::string config = Environment::getInstance()->getInfo();
     AXLOGD("{}\n", config);
 }
 
@@ -70,8 +70,8 @@ void ConfigurationQuery::onEnter()
 {
     ConfigurationBase::onEnter();
 
-    AXLOGD("axmol version: %s", Configuration::getInstance()->getValue("axmol.version").asString());
-    AXLOGD("OpenGL version: %s", Configuration::getInstance()->getValue("gl.version").asString());
+    AXLOGD("axmol version: %s", Environment::getInstance()->getValue("axmol.version").asString());
+    AXLOGD("OpenGL version: %s", Environment::getInstance()->getValue("gl.version").asString());
 }
 
 std::string ConfigurationQuery::subtitle() const
@@ -88,7 +88,7 @@ void ConfigurationInvalid::onEnter()
 {
     ConfigurationBase::onEnter();
 
-    Configuration::getInstance()->loadConfigFile("configs/config-test-invalid.plist");
+    Environment::getInstance()->loadConfigFile("configs/config-test-invalid.plist");
 }
 
 std::string ConfigurationInvalid::subtitle() const
@@ -105,19 +105,19 @@ void ConfigurationDefault::onEnter()
 {
     ConfigurationBase::onEnter();
 
-    std::string c_value = Configuration::getInstance()->getValue("invalid.key", Value("no key")).asString();
+    std::string c_value = Environment::getInstance()->getValue("invalid.key", Value("no key")).asString();
     if (c_value != "no key")
         AXLOGD("1. Test failed!");
     else
         AXLOGD("1. Test OK!");
 
-    bool b_value = Configuration::getInstance()->getValue("invalid.key", Value(true)).asBool();
+    bool b_value = Environment::getInstance()->getValue("invalid.key", Value(true)).asBool();
     if (!b_value)
         AXLOGD("2. Test failed!");
     else
         AXLOGD("2. Test OK!");
 
-    double d_value = Configuration::getInstance()->getValue("invalid.key", Value(42.42)).asDouble();
+    double d_value = Environment::getInstance()->getValue("invalid.key", Value(42.42)).asDouble();
     if (d_value != 42.42)
         AXLOGD("3. Test failed!");
     else
@@ -138,7 +138,7 @@ void ConfigurationSet::onEnter()
 {
     ConfigurationBase::onEnter();
 
-    Configuration* conf = Configuration::getInstance();
+    Configuration* conf = Environment::getInstance();
 
     conf->setValue("this.is.an.int.value", Value(10));
     conf->setValue("this.is.a.bool.value", Value(true));

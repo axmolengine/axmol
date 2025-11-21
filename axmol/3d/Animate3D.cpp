@@ -28,7 +28,7 @@
 #include "axmol/3d/MeshRenderer.h"
 #include "axmol/3d/Skeleton3D.h"
 #include "axmol/platform/FileUtils.h"
-#include "axmol/base/Configuration.h"
+#include "axmol/base/Environment.h"
 #include "axmol/base/EventCustom.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"
@@ -75,7 +75,7 @@ bool Animate3D::init(Animation3D* animation)
     animation->retain();
     setDuration(animation->getDuration());
     setOriginInterval(animation->getDuration());
-    setQuality(Configuration::getInstance()->getAnimate3DQuality());
+    setQuality(Environment::getInstance()->getAnimate3DQuality());
     return true;
 }
 
@@ -91,7 +91,7 @@ bool Animate3D::init(Animation3D* animation, float fromTime, float duration)
     setOriginInterval(duration);
     _animation = animation;
     animation->retain();
-    setQuality(Configuration::getInstance()->getAnimate3DQuality());
+    setQuality(Environment::getInstance()->getAnimate3DQuality());
     return true;
 }
 

@@ -39,7 +39,7 @@ THE SOFTWARE.
 #include "axmol/base/Config.h"
 #include "axmol/base/Macros.h"
 #include "axmol/base/text_utils.h"
-#include "axmol/base/Configuration.h"
+#include "axmol/base/Environment.h"
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/NinePatchImageParser.h"
@@ -337,9 +337,9 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
 
     bool compressed = rhi::RHIUtils::isCompressed(desc.pixelFormat);
 
-    if (compressed && !Configuration::getInstance()->supportsPVRTC() && !Configuration::getInstance()->supportsETC2() &&
-        !Configuration::getInstance()->supportsS3TC() && !Configuration::getInstance()->supportsASTC() &&
-        !Configuration::getInstance()->supportsATITC())
+    if (compressed && !Environment::getInstance()->supportsPVRTC() && !Environment::getInstance()->supportsETC2() &&
+        !Environment::getInstance()->supportsS3TC() && !Environment::getInstance()->supportsASTC() &&
+        !Environment::getInstance()->supportsATITC())
     {
         AXLOGW("WARNING: PVRTC/ETC images are not supported");
         return false;

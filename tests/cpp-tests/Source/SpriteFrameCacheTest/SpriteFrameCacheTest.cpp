@@ -60,7 +60,7 @@ SpriteFrameCachePixelFormatTest::SpriteFrameCachePixelFormatTest()
     loadSpriteFrames("Images/sprite_frames_test/test_RGBA4444.plist", rhi::PixelFormat::RGBA4);
     loadSpriteFrames("Images/sprite_frames_test/test_RGBA5551.plist", rhi::PixelFormat::RGB5A1);
 
-    if (Configuration::getInstance()->supportsPVRTC())
+    if (Environment::getInstance()->supportsPVRTC())
     {
         loadSpriteFrames("Images/sprite_frames_test/test_PVRTC2.plist", rhi::PixelFormat::PVRTC2A);
         loadSpriteFrames("Images/sprite_frames_test/test_PVRTC4.plist", rhi::PixelFormat::PVRTC4A);

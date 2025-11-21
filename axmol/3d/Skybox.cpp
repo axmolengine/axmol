@@ -24,7 +24,7 @@
  ****************************************************************************/
 #include "axmol/3d/Skybox.h"
 #include "axmol/base/Macros.h"
-#include "axmol/base/Configuration.h"
+#include "axmol/base/Environment.h"
 #include "axmol/base/Director.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/RenderState.h"

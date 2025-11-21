@@ -29,7 +29,7 @@
 #include "axmol/renderer/VertexLayoutManager.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/base/Macros.h"
-#include "axmol/base/Configuration.h"
+#include "axmol/base/Environment.h"
 
 #include "xxhash/xxhash.h"
 
