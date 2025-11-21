@@ -116,6 +116,8 @@ function(ax_add_3rd source_dir)
     if (NOT is_imported_lib)
       if(tgt_type STREQUAL "SHARED_LIBRARY")
         set_target_properties(${tgt} PROPERTIES
+          ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+          RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"        
           FOLDER "3rdparty"
         )
       elseif(NOT(tgt_type STREQUAL "INTERFACE_LIBRARY"))
