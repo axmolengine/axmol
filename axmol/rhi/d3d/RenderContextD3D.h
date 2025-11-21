@@ -231,6 +231,7 @@ protected:
     void prepareDrawing();
 
     DriverImpl* _driverImpl{nullptr};
+    ID3D11DeviceContext* _d3d11Context{nullptr};
     IDXGISwapChain* _swapChain{nullptr};
     ID3D11Texture2D* _depthStencilTexture{nullptr};
     ComPtr<ID3D11RasterizerState> _rasterState{nullptr};

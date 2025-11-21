@@ -51,7 +51,7 @@ public:
 
     void invalidate();
 
-    void update(ID3D11DeviceContext*) const;
+    void update(ID3D11DeviceContext*);
 
     void apply(ID3D11DeviceContext*) const;
 
@@ -63,8 +63,9 @@ public:
 
 private:
     ID3D11Device* _device = nullptr;
-    mutable std::array<ID3D11RenderTargetView*, MAX_COLOR_ATTCHMENT> _rtvs{};
-    mutable ID3D11DepthStencilView* _dsv = nullptr;
+    std::array<ID3D11RenderTargetView*, MAX_COLOR_ATTCHMENT> _rtvs{};
+    ID3D11DepthStencilView* _dsv = nullptr;
+    uint32_t _rtvCuont           = 0;
 };
 
 /** @} */

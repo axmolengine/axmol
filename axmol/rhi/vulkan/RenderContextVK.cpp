@@ -794,21 +794,12 @@ void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h
 
     VkViewport vp{};
 
-#if 1
     vp.x        = static_cast<float>(x);
     vp.y        = static_cast<float>(y + h);
     vp.width    = static_cast<float>(w);
     vp.height   = -static_cast<float>(h);
     vp.minDepth = 0.0f;
     vp.maxDepth = 1.0f;
-#else
-    vp.x        = static_cast<float>(x);
-    vp.y        = static_cast<float>(y);
-    vp.width    = static_cast<float>(w);
-    vp.height   = static_cast<float>(h);
-    vp.minDepth = 0.0f;
-    vp.maxDepth = 1.0f;
-#endif
 
     if (vp != _cachedViewport)
     {

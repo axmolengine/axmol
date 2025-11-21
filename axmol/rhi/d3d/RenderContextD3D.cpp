@@ -196,7 +196,8 @@ static constexpr DXGI_FORMAT _AX_SWAPCHAIN_FORMAT = DXGI_FORMAT_R8G8B8A8_UNORM;
 
 RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
 {
-    _driverImpl = driver;
+    _driverImpl   = driver;
+    _d3d11Context = driver->getContext();
 
     auto& contextAttrs = Application::getContextAttrs();
     _renderScaleMode   = contextAttrs.renderScaleMode;
@@ -406,7 +407,7 @@ RenderContextImpl::~RenderContextImpl()
 {
     // cleanup GPU resources
     UtilsD3D::updateDefaultRenderTargetAttachments(nullptr, nullptr);
-    _driverImpl->getContext()->OMSetRenderTargets(0, nullptr, nullptr);
+    _d3d11Context->OMSetRenderTargets(0, nullptr, nullptr);
 
     SafeRelease(_swapChain);
 
@@ -462,8 +463,6 @@ bool RenderContextImpl::beginFrame()
 
 void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc)
 {
-    auto context = _driverImpl->getContext();
-
     auto activeRT = static_cast<RenderTargetImpl*>(renderTarget);
     if (_renderPassDesc == renderPassDesc && _currentRT == activeRT && !activeRT->isDirty())
     {
@@ -476,8 +475,8 @@ void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const Render
         _renderPassDesc = renderPassDesc;
     }
 
-    activeRT->update(context);
-    activeRT->apply(context);
+    activeRT->update(_d3d11Context);
+    activeRT->apply(_d3d11Context);
 
     auto colorAttachment = activeRT->getColorAttachment(0);
     _renderTargetWidth   = colorAttachment.desc.width;
@@ -487,13 +486,13 @@ void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const Render
 
     // clear color
     if (bitmask::any(clearFlags, TargetBufferFlags::COLOR))
-        context->ClearRenderTargetView(activeRT->getRTV(0), renderPassDesc.clearColorValue.data());
+        _d3d11Context->ClearRenderTargetView(activeRT->getRTV(0), renderPassDesc.clearColorValue.data());
 
     // clear depth & stencil
     if (bitmask::any(clearFlags, TargetBufferFlags::DEPTH_AND_STENCIL) && activeRT->getDSV())
-        context->ClearDepthStencilView(activeRT->getDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
-                                       renderPassDesc.clearDepthValue,
-                                       static_cast<UINT8>(renderPassDesc.clearStencilValue));
+        _d3d11Context->ClearDepthStencilView(activeRT->getDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
+                                             renderPassDesc.clearDepthValue,
+                                             static_cast<UINT8>(renderPassDesc.clearStencilValue));
 }
 
 void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
@@ -511,7 +510,7 @@ void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h
 {
     D3D11_VIEWPORT viewport = {};
     viewport.TopLeftX       = static_cast<FLOAT>(x);
-    viewport.TopLeftY       = static_cast<FLOAT>(_renderTargetHeight - y - h);
+    viewport.TopLeftY       = static_cast<FLOAT>(y);
     viewport.Width          = static_cast<FLOAT>(w);
     viewport.Height         = static_cast<FLOAT>(h);
     viewport.MinDepth       = 0.0f;
@@ -577,7 +576,7 @@ void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float w
         _rasterDesc.dirtyFlags |= RF_SCISSOR;
     }
 
-    _driverImpl->getContext()->RSSetScissorRects(1, &rect);
+    _d3d11Context->RSSetScissorRects(1, &rect);
 }
 
 void RenderContextImpl::updateRasterizerState()
@@ -609,7 +608,7 @@ void RenderContextImpl::updateRasterizerState()
     HRESULT hr                             = _driverImpl->getDevice()->CreateRasterizerState(&desc, &rasterizerState);
     if (SUCCEEDED(hr))
     {
-        _driverImpl->getContext()->RSSetState(rasterizerState);
+        _d3d11Context->RSSetState(rasterizerState);
         _rasterState = rasterizerState;
     }
 
@@ -652,9 +651,8 @@ void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
 void RenderContextImpl::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe)
 {
     prepareDrawing();
-    auto context = _driverImpl->getContext();
-    context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType, wireframe));
-    context->Draw(static_cast<UINT>(count), static_cast<UINT>(start));
+    _d3d11Context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType, wireframe));
+    _d3d11Context->Draw(static_cast<UINT>(count), static_cast<UINT>(start));
 }
 
 void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
@@ -664,9 +662,9 @@ void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
                                             bool wireframe)
 {
     prepareDrawing();
-    auto context = _driverImpl->getContext();
-    context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType, wireframe));
-    context->DrawInstanced(static_cast<UINT>(count), static_cast<UINT>(instanceCount), static_cast<UINT>(start), 0);
+    _d3d11Context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType, wireframe));
+    _d3d11Context->DrawInstanced(static_cast<UINT>(count), static_cast<UINT>(instanceCount), static_cast<UINT>(start),
+                                 0);
 }
 
 void RenderContextImpl::drawElements(PrimitiveType primitiveType,
@@ -685,13 +683,9 @@ void RenderContextImpl::drawElements(PrimitiveType primitiveType,
     const UINT startIndex = static_cast<UINT>(offset / indexSize);
     const UINT indexCount = static_cast<UINT>(count);
 
-    auto context = _driverImpl->getContext();
-
-    context->IASetIndexBuffer(_indexBuffer->internalHandle(), dxgiFmt, 0);
-
-    context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType, wireframe));
-
-    context->DrawIndexed(indexCount, startIndex, 0);
+    _d3d11Context->IASetIndexBuffer(_indexBuffer->internalHandle(), dxgiFmt, 0);
+    _d3d11Context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType, wireframe));
+    _d3d11Context->DrawIndexed(indexCount, startIndex, 0);
 }
 
 void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
@@ -711,11 +705,10 @@ void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
     const UINT startIndex = static_cast<UINT>(offset / indexSize);
     const UINT indexCount = static_cast<UINT>(count);
 
-    auto context = _driverImpl->getContext();
-    context->IASetIndexBuffer(_indexBuffer->internalHandle(), dxgiFmt, 0);
+    _d3d11Context->IASetIndexBuffer(_indexBuffer->internalHandle(), dxgiFmt, 0);
 
-    context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType, wireframe));
-    context->DrawIndexedInstanced(static_cast<UINT>(count), static_cast<UINT>(instanceCount), startIndex, 0, 0);
+    _d3d11Context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType, wireframe));
+    _d3d11Context->DrawIndexedInstanced(static_cast<UINT>(count), static_cast<UINT>(instanceCount), startIndex, 0, 0);
 }
 
 void RenderContextImpl::endRenderPass()
@@ -731,7 +724,7 @@ void RenderContextImpl::endRenderPass()
     if (_textureBounds)
     {
         _nullSRVs.resize(_textureBounds, nullptr);
-        _driverImpl->getContext()->PSSetShaderResources(0, _textureBounds, _nullSRVs.data());
+        _d3d11Context->PSSetShaderResources(0, _textureBounds, _nullSRVs.data());
         _textureBounds = 0;
     }
 }
@@ -749,12 +742,14 @@ void RenderContextImpl::prepareDrawing()
 
     // bind shader
     auto program = static_cast<ProgramImpl*>(_programState->getProgram());
-    context->VSSetShader(static_cast<ID3D11VertexShader*>(program->getVertexShader()->internalHandle()), nullptr, 0);
-    context->PSSetShader(static_cast<ID3D11PixelShader*>(program->getFragmentShader()->internalHandle()), nullptr, 0);
+    _d3d11Context->VSSetShader(static_cast<ID3D11VertexShader*>(program->getVertexShader()->internalHandle()), nullptr,
+                               0);
+    _d3d11Context->PSSetShader(static_cast<ID3D11PixelShader*>(program->getFragmentShader()->internalHandle()), nullptr,
+                               0);
 
     // bind vertex layout
     auto vertexLayoutImpl = static_cast<VertexLayoutImpl*>(_vertexLayout);
-    vertexLayoutImpl->apply(context, program);
+    vertexLayoutImpl->apply(_d3d11Context, program);
 
     auto& vertexLayoutDesc = vertexLayoutImpl->getDesc();
 
@@ -764,7 +759,7 @@ void RenderContextImpl::prepareDrawing()
         ID3D11Buffer* vbs[] = {_vertexBuffer->internalHandle()};
         UINT strides[]      = {static_cast<UINT>(vertexLayoutDesc.getStride())};
         UINT offsets[]      = {0};
-        context->IASetVertexBuffers(0, 1, vbs, strides, offsets);
+        _d3d11Context->IASetVertexBuffers(0, 1, vbs, strides, offsets);
     }
     else
     {
@@ -772,18 +767,18 @@ void RenderContextImpl::prepareDrawing()
         UINT strides[]      = {static_cast<UINT>(vertexLayoutDesc.getStride()),
                                static_cast<UINT>(vertexLayoutDesc.getInstanceStride())};
         UINT offsets[]      = {0, 0};
-        context->IASetVertexBuffers(0, 2, vbs, strides, offsets);
+        _d3d11Context->IASetVertexBuffers(0, 2, vbs, strides, offsets);
     }
 
     // bind vertex uniform buffer
     auto vertUB = _programState->getVertexUniformBuffer();
     if (!vertUB.empty())
-        program->bindVertexUniformBuffer(context, vertUB.data(), vertUB.size(), VS_UBO_BINDING_INDEX);
+        program->bindVertexUniformBuffer(_d3d11Context, vertUB.data(), vertUB.size(), VS_UBO_BINDING_INDEX);
 
     // bind fragment uniform Buffer
     auto fragUB = _programState->getFragmentUniformBuffer();
     if (!fragUB.empty())
-        program->bindFragmentUniformBuffer(context, fragUB.data(), fragUB.size(), FS_UBO_BINDING_INDEX);
+        program->bindFragmentUniformBuffer(_d3d11Context, fragUB.data(), fragUB.size(), FS_UBO_BINDING_INDEX);
 
     // bind texture
     _textureBounds = 0;
@@ -837,7 +832,7 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
     {
         D3D11_VIEWPORT vp;
         UINT numViewports = 1;
-        _driverImpl->getContext()->RSGetViewports(&numViewports, &vp);
+        _d3d11Context->RSGetViewports(&numViewports, &vp);
         uint32_t width  = static_cast<uint32_t>(vp.Width);
         uint32_t height = static_cast<uint32_t>(vp.Height);
         uint32_t x      = static_cast<uint32_t>(vp.TopLeftX);
@@ -865,8 +860,7 @@ void RenderContextImpl::readPixels(RenderTarget* rt, UINT x, UINT y, UINT width,
     auto tex = static_cast<RenderTargetImpl*>(rt)->getColorAttachment(0).texure;
     assert(tex);
 
-    ID3D11Device* device         = _driverImpl->getDevice();
-    ID3D11DeviceContext* context = _driverImpl->getContext();
+    ID3D11Device* device = _driverImpl->getDevice();
 
     // D3D11_CPU_ACCESS_READ not allow as render target color attachment
     // so we need create a staging texture for CPU read
@@ -896,10 +890,10 @@ void RenderContextImpl::readPixels(RenderTarget* rt, UINT x, UINT y, UINT width,
 
     D3D11_BOX srcBox = {x, y, 0, x + width, y + height, 1};
 
-    context->CopySubresourceRegion(stagingTex, 0, 0, 0, 0, tex, 0, &srcBox);
+    _d3d11Context->CopySubresourceRegion(stagingTex, 0, 0, 0, 0, tex, 0, &srcBox);
 
     D3D11_MAPPED_SUBRESOURCE mapped;
-    hr = context->Map(stagingTex, 0, D3D11_MAP_READ, 0, &mapped);
+    hr = _d3d11Context->Map(stagingTex, 0, D3D11_MAP_READ, 0, &mapped);
     if (FAILED(hr))
     {
         stagingTex->Release();
@@ -919,9 +913,7 @@ void RenderContextImpl::readPixels(RenderTarget* rt, UINT x, UINT y, UINT width,
     pbd._width  = width;
     pbd._height = height;
 
-    context->Unmap(stagingTex, 0);
-
-    context->Unmap(stagingTex, 0);
+    _d3d11Context->Unmap(stagingTex, 0);
     SafeRelease(stagingTex);
 }
 
