@@ -141,11 +141,11 @@ void MeshRenderer::afterAsyncLoad(void* param)
             auto& nodeDatas     = asyncParam->nodeDatas;
             if (initFrom(*nodeDatas, *meshdatas, *materialdatas))
             {
-                auto meshdata = MeshRendererCache::getInstance()->getMeshRenderData(asyncParam->modelPath);
+                auto meshdata = MeshDataCache::getInstance()->getMeshRenderData(asyncParam->modelPath);
                 if (meshdata == nullptr)
                 {
                     // add to cache
-                    auto data             = new MeshRendererCache::MeshRenderData();
+                    auto data             = new MeshDataCache::MeshRenderData();
                     data->materialdatas   = materialdatas;
                     data->nodedatas       = nodeDatas;
                     data->meshVertexDatas = _meshVertexDatas;
@@ -154,7 +154,7 @@ void MeshRenderer::afterAsyncLoad(void* param)
                         data->programStates.pushBack(mesh->getProgramState());
                     }
 
-                    MeshRendererCache::getInstance()->addMeshRenderData(asyncParam->modelPath, data);
+                    MeshDataCache::getInstance()->addMeshRenderData(asyncParam->modelPath, data);
 
                     AX_SAFE_DELETE(meshdatas);
                     materialdatas = nullptr;
@@ -192,7 +192,7 @@ AABB MeshRenderer::getAABBRecursivelyImp(Node* node)
 
 bool MeshRenderer::loadFromCache(std::string_view path)
 {
-    auto meshdata = MeshRendererCache::getInstance()->getMeshRenderData(path);
+    auto meshdata = MeshDataCache::getInstance()->getMeshRenderData(path);
     if (meshdata)
     {
         for (auto&& it : meshdata->meshVertexDatas)
@@ -222,8 +222,10 @@ bool MeshRenderer::loadFromCache(std::string_view path)
         for (ssize_t i = 0, size = _meshes.size(); i < size; ++i)
         {
             // cloning is needed in order to have one state per mesh
-            auto glstate = meshdata->programStates.at(i);
-            _meshes.at(i)->setProgramState(glstate->clone());
+            auto ps = meshdata->programStates.at(i);
+            auto clonedPS = ps->clone();
+            _meshes.at(i)->setProgramState(clonedPS);
+            clonedPS->release();
         }
         return true;
     }
@@ -311,7 +313,7 @@ bool MeshRenderer::initWithFile(std::string_view path)
         if (initFrom(*nodeDatas, *meshdatas, *materialdatas))
         {
             // add to cache
-            auto data             = new MeshRendererCache::MeshRenderData();
+            auto data             = new MeshDataCache::MeshRenderData();
             data->materialdatas   = materialdatas;
             data->nodedatas       = nodeDatas;
             data->meshVertexDatas = _meshVertexDatas;
@@ -320,7 +322,7 @@ bool MeshRenderer::initWithFile(std::string_view path)
                 data->programStates.pushBack(mesh->getProgramState());
             }
 
-            MeshRendererCache::getInstance()->addMeshRenderData(path, data);
+            MeshDataCache::getInstance()->addMeshRenderData(path, data);
             AX_SAFE_DELETE(meshdatas);
             _contentSize = getBoundingBox().size;
             return true;
@@ -1018,67 +1020,6 @@ Mesh* MeshRenderer::getMesh() const
         return nullptr;
     }
     return _meshes.at(0);
-}
-
-///////////////////////////////////////////////////////////////////////////////////
-MeshRendererCache* MeshRendererCache::_cacheInstance = nullptr;
-MeshRendererCache* MeshRendererCache::getInstance()
-{
-    if (_cacheInstance == nullptr)
-        _cacheInstance = new MeshRendererCache();
-    return _cacheInstance;
-}
-void MeshRendererCache::destroyInstance()
-{
-    if (_cacheInstance)
-    {
-        delete _cacheInstance;
-        _cacheInstance = nullptr;
-    }
-}
-
-MeshRendererCache::MeshRenderData* MeshRendererCache::getMeshRenderData(std::string_view key) const
-{
-    auto it = _meshDatas.find(key);
-    if (it != _meshDatas.end())
-        return it->second;
-    return nullptr;
-}
-
-bool MeshRendererCache::addMeshRenderData(std::string_view key, MeshRendererCache::MeshRenderData* meshdata)
-{
-    auto it = _meshDatas.find(key);
-    if (it == _meshDatas.end())
-    {
-        _meshDatas.emplace(key, meshdata);
-        return true;
-    }
-    return false;
-}
-
-void MeshRendererCache::removeMeshRenderData(std::string_view key)
-{
-    auto it = _meshDatas.find(key);
-    if (it != _meshDatas.end())
-    {
-        delete it->second;
-        _meshDatas.erase(it);
-    }
-}
-
-void MeshRendererCache::removeAllMeshRenderData()
-{
-    for (auto&& it : _meshDatas)
-    {
-        delete it.second;
-    }
-    _meshDatas.clear();
-}
-
-MeshRendererCache::MeshRendererCache() {}
-MeshRendererCache::~MeshRendererCache()
-{
-    removeAllMeshRenderData();
 }
 
 static MeshMaterial* getMeshRendererMaterialForAttribs(MeshVertexData* meshVertexData, bool usesLight)

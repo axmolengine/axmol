@@ -1016,7 +1016,7 @@ function AsyncLoadSprite3DTest:onEnter()
         node:removeAllChildren()
 
         --remove cache data
-        ax.MeshRendererCache:getInstance():removeAllMeshRenderData()
+        ax.MeshDataCache:getInstance():removeAllMeshRenderData()
 
         local function callback(sprite, index)
             local node = self:getChildByTag(101)

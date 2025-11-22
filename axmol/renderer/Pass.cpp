@@ -114,7 +114,9 @@ Pass* Pass::clone() const
     auto pass          = new Pass();
     pass->_renderState = _renderState;
 
-    pass->setProgramState(_programState->clone());
+    auto clonedPS = _programState->clone();
+    pass->setProgramState(clonedPS);
+    clonedPS->release();
 
     pass->_vertexInputBinding = _vertexInputBinding;
     AX_SAFE_RETAIN(pass->_vertexInputBinding);

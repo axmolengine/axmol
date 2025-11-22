@@ -38,6 +38,7 @@
 #include "axmol/3d/Bundle3DData.h"
 #include "axmol/3d/MeshVertexIndexData.h"
 #include "axmol/3d/MeshMaterial.h"
+#include "axmol/3d/MeshDataCache.h"
 
 namespace ax
 {
@@ -341,61 +342,6 @@ protected:
         NodeDatas* nodeDatas;
     };
     AsyncLoadParam _asyncLoadParam;
-};
-
-///////////////////////////////////////////////////////
-/**
- * @brief MeshRendererCache: the cache data of MeshRenderer, used to speed up the creation process of MeshRenderer
- */
-class AX_DLL MeshRendererCache
-{
-public:
-    struct MeshRenderData
-    {
-        Vector<MeshVertexData*> meshVertexDatas;
-        Vector<rhi::ProgramState*> programStates;
-        NodeDatas* nodedatas;
-        MaterialDatas* materialdatas;
-        ~MeshRenderData()
-        {
-            if (nodedatas)
-                delete nodedatas;
-            if (materialdatas)
-                delete materialdatas;
-            meshVertexDatas.clear();
-            programStates.clear();
-        }
-    };
-
-    static MeshRendererCache* getInstance();
-    static void destroyInstance();
-
-    /**
-     * get a MeshData object by key
-     *
-     * @lua NA
-     */
-    MeshRenderData* getMeshRenderData(std::string_view key) const;
-
-    /**
-     * add a MeshData object into the MeshRenderer with a specified key
-     *
-     * @lua NA
-     */
-    bool addMeshRenderData(std::string_view key, MeshRenderData* meshdata);
-
-    /** remove a MeshData from the MeshRenderer with a specified key */
-    void removeMeshRenderData(std::string_view key);
-
-    /** remove all the MeshData objects from the MeshRenderer */
-    void removeAllMeshRenderData();
-
-    MeshRendererCache();
-    ~MeshRendererCache();
-
-protected:
-    static MeshRendererCache* _cacheInstance;
-    axstd::string_map<MeshRenderData*> _meshDatas;  // cached mesh data
 };
 
 // end of 3d group

@@ -175,6 +175,9 @@ void MeshMaterial::releaseBuiltInMaterial()
     AX_SAFE_RELEASE_NULL(_diffuseMaterial);
     AX_SAFE_RELEASE_NULL(_diffuseNoTexMaterial);
     AX_SAFE_RELEASE_NULL(_bumpedDiffuseMaterial);
+    AX_SAFE_RELEASE_NULL(_quadColorMaterial);
+    AX_SAFE_RELEASE_NULL(_quadTextureMaterial);
+    AX_SAFE_RELEASE_NULL(_unLitInstanceMaterial);
 
     AX_SAFE_RELEASE_NULL(_vertexLitMaterialSkin);
     AX_SAFE_RELEASE_NULL(_diffuseMaterialSkin);
@@ -191,6 +194,9 @@ void MeshMaterial::releaseBuiltInMaterial()
     AX_SAFE_RELEASE_NULL(_vertexLitMaterialSkinProgState);
     AX_SAFE_RELEASE_NULL(_diffuseMaterialSkinProgState);
     AX_SAFE_RELEASE_NULL(_bumpedDiffuseMaterialSkinProgState);
+    AX_SAFE_RELEASE_NULL(_quadColorMaterialProgState);
+    AX_SAFE_RELEASE_NULL(_quadTextureMaterialProgState);
+    AX_SAFE_RELEASE_NULL(_unLitInstanceMaterialProgState);
 }
 
 void MeshMaterial::releaseCachedMaterial()

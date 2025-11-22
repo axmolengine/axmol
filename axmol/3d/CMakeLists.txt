@@ -9,6 +9,7 @@ set(_AX_3D_HEADER
   3d/Animate3D.h
   3d/Terrain.h
   3d/AnimationCurve.h
+  3d/MeshDataCache.h
   3d/MeshRenderer.h
   3d/MeshMaterial.h
   3d/OBB.h
@@ -46,6 +47,7 @@ set(_AX_3D_SRC
   3d/Ray.cpp
   3d/Skeleton3D.cpp
   3d/Skybox.cpp
+  3d/MeshDataCache.cpp
   3d/MeshRenderer.cpp
   3d/MeshMaterial.cpp
   3d/Terrain.cpp

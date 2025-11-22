@@ -43,7 +43,7 @@ namespace ax
 
 using Sprite3D              = MeshRenderer;
 using Sprite3DMaterial      = MeshMaterial;
-using Sprite3DCache         = MeshRendererCache;
+using Sprite3DCache         = MeshDataCache;
 using Sprite3DMaterialCache = MeshMaterialCache;
 using Ref                   = Object;
 

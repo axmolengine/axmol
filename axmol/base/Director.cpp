@@ -72,6 +72,7 @@ THE SOFTWARE.
 
 #if defined(AX_ENABLE_3D)
 #    include "axmol/3d/VertexInputBinding.h"
+#    include "axmol/3d/MeshDataCache.h"
 #endif
 
 namespace ax
@@ -1116,6 +1117,9 @@ void Director::reset()
 
 #if defined(AX_ENABLE_3D)
     VertexInputBinding::clearCache();
+    MeshDataCache::destroyInstance();
+    MeshMaterial::releaseBuiltInMaterial();
+    MeshMaterial::releaseCachedMaterial();
 #endif
 
     rhi::SamplerCache::destroyInstance();
