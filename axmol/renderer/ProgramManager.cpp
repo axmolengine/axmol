@@ -26,8 +26,6 @@
 #include "axmol/renderer/ProgramManager.h"
 #include "axmol/rhi/DriverBase.h"
 #include "axmol/rhi/ShaderModule.h"
-#include "axmol/rhi/vulkan/ShaderModuleVK.h"
-#include "axmol/rhi/vulkan/ProgramVK.h"
 #include "axmol/renderer/VertexLayoutManager.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/base/Macros.h"
@@ -233,7 +231,6 @@ Program* ProgramManager::loadProgram(std::string_view vsName,
 
     if (program)
     {
-        auto programImpl = static_cast<rhi::vk::ProgramImpl*>(program);
         AXLOGD("Load program: {} {}, {} ok", progId, vsName, fsName);
 
         program->setProgramIds(progType, progId);
