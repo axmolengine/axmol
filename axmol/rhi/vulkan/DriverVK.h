@@ -47,6 +47,7 @@ struct DisposableResource
         Buffer,
         Memory
     };
+    uint32_t frameMask;
     Type type;
     union
     {
@@ -157,7 +158,7 @@ public:
     void queueDisposal(VkDeviceMemory memory);
     void queueDisposal(VkSampler sampler);
 
-    void releaseDisposalResources();
+    void processDisposalQueue(uint32_t completedMask);
 
     void rebuildSwapchainAttachments(const axstd::pod_vector<VkImage>& images,
                                      const axstd::pod_vector<VkImageView>&,
@@ -177,6 +178,7 @@ public:
     void waitDeviceIdle() { vkDeviceWaitIdle(_device); }
 
 protected:
+    void queueDisposalInternal(DisposableResource&& res);
     ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
     SamplerHandle createSampler(const SamplerDesc& desc) override;
     void destroySampler(SamplerHandle& h) override;
@@ -203,7 +205,7 @@ private:
     VkCommandPool _commandPool{VK_NULL_HANDLE};
     std::mutex _commandPoolMutex;
 
-    std::deque<DisposableResource> _disposalQueue;
+    axstd::pod_vector<DisposableResource> _disposalQueue;
 
     uint32_t _graphicsQueueFamily{0};
     uint32_t _presentQueueFamily{0};

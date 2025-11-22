@@ -128,6 +128,8 @@ public:
 
     void removeCachedPipelines(VkRenderPass rp);
 
+    uint32_t getCurrentFrame() const { return _currentFrame; }
+
 private:
     void recreateSwapchain();
     void createCommandBuffers();

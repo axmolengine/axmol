@@ -63,6 +63,12 @@ namespace ax::rhi::vk
 
 namespace
 {
+
+static inline uint32_t makeMaskUpTo(uint32_t n)
+{
+    return (1u << (n + 1)) - 1u;
+}
+
 static std::string vendorToString(uint32_t vendorId)
 {
     // Common PCI vendor IDs; Vulkan doesn't standardize vendor strings
@@ -816,52 +822,67 @@ void DriverImpl::destroyRenderPass(VkRenderPass rp)
 
 void DriverImpl::queueDisposal(VkSampler sampler)
 {
-    _disposalQueue.push_back({DisposableResource::Type::Sampler, {.sampler = sampler}});
+    queueDisposalInternal({.type = DisposableResource::Type::Sampler, .sampler = sampler});
 }
 void DriverImpl::queueDisposal(VkImage image)
 {
-    _disposalQueue.push_back({DisposableResource::Type::Image, {.image = image}});
+    queueDisposalInternal({.type = DisposableResource::Type::Image, .image = image});
 }
 void DriverImpl::queueDisposal(VkImageView view)
 {
-    _disposalQueue.push_back({DisposableResource::Type::ImageView, {.view = view}});
+    queueDisposalInternal({.type = DisposableResource::Type::ImageView, .view = view});
 }
 void DriverImpl::queueDisposal(VkBuffer buffer)
 {
-    _disposalQueue.push_back({DisposableResource::Type::Buffer, {.buffer = buffer}});
+    queueDisposalInternal({.type = DisposableResource::Type::Buffer, .buffer = buffer});
 }
 void DriverImpl::queueDisposal(VkDeviceMemory memory)
 {
-    _disposalQueue.push_back({DisposableResource::Type::Memory, {.memory = memory}});
+    queueDisposalInternal({.type = DisposableResource::Type::Memory, .memory = memory});
 }
 
-void DriverImpl::releaseDisposalResources()
+void DriverImpl::queueDisposalInternal(DisposableResource&& disposal)
+{
+    disposal.frameMask = 1 << (_lastRenderContext ? _lastRenderContext->getCurrentFrame() : 0);
+    _disposalQueue.emplace_back(disposal);
+}
+
+void DriverImpl::processDisposalQueue(uint32_t completedMask)
 {
     if (!_disposalQueue.empty())
     {
-        vkDeviceWaitIdle(_device);
-        for (auto& res : _disposalQueue)
+        for (size_t i = 0; i < _disposalQueue.size();)
         {
-            switch (res.type)
+            auto& res = _disposalQueue[i];
+            if ((res.frameMask & completedMask) != 0)
             {
-            case DisposableResource::Type::Image:
-                vkDestroyImage(_device, res.image, nullptr);
-                break;
-            case DisposableResource::Type::ImageView:
-                vkDestroyImageView(_device, res.view, nullptr);
-                break;
-            case DisposableResource::Type::Buffer:
-                vkDestroyBuffer(_device, res.buffer, nullptr);
-                break;
-            case DisposableResource::Type::Memory:
-                vkFreeMemory(_device, res.memory, nullptr);
-                break;
-            case DisposableResource::Type::Sampler:
-                vkDestroySampler(_device, res.sampler, nullptr);
-                break;
+                switch (res.type)
+                {
+                case DisposableResource::Type::Image:
+                    vkDestroyImage(_device, res.image, nullptr);
+                    break;
+                case DisposableResource::Type::ImageView:
+                    vkDestroyImageView(_device, res.view, nullptr);
+                    break;
+                case DisposableResource::Type::Buffer:
+                    vkDestroyBuffer(_device, res.buffer, nullptr);
+                    break;
+                case DisposableResource::Type::Memory:
+                    vkFreeMemory(_device, res.memory, nullptr);
+                    break;
+                case DisposableResource::Type::Sampler:
+                    vkDestroySampler(_device, res.sampler, nullptr);
+                    break;
+                }
+
+                _disposalQueue[i] = _disposalQueue.back();
+                _disposalQueue.pop_back();
+            }
+            else
+            {
+                ++i;
             }
         }
-        _disposalQueue.clear();
     }
 }
 
@@ -869,7 +890,9 @@ void DriverImpl::cleanPendingResources()
 {
     if (!_disposalQueue.empty())
     {
-        releaseDisposalResources();
+        vkDeviceWaitIdle(_device);
+        const auto allFramesMask = makeMaskUpTo(RenderContextImpl::MAX_FRAMES_IN_FLIGHT);
+        processDisposalQueue(allFramesMask);
     }
 }
 

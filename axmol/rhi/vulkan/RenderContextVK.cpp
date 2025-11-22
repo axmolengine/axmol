@@ -579,6 +579,8 @@ bool RenderContextImpl::beginFrame()
 
     // wait for previous frame to finish
     vkWaitForFences(_device, 1, &_inFlightFences[_currentFrame], VK_TRUE, UINT64_MAX);
+    vkResetFences(_device, 1, &_inFlightFences[_currentFrame]);
+    _driver->processDisposalQueue( 1 << _currentFrame);
 
     // Reset uniform ring write head for this frame
     resetUniformRingForCurrentFrame();
@@ -590,18 +592,12 @@ bool RenderContextImpl::beginFrame()
     VkResult result =
         vkAcquireNextImageKHR(_device, _swapchain, UINT64_MAX, _acquireCompleteSemaphores[_semaphoreIndex],
                               VK_NULL_HANDLE, &_currentImageIndex);
-    while (_currentImageIndex > maxImageIndex && (result == VK_SUCCESS || result == VK_SUBOPTIMAL_KHR))
-    {
-        result = vkAcquireNextImageKHR(_device, _swapchain, UINT64_MAX, _acquireCompleteSemaphores[_semaphoreIndex],
-                                       VK_NULL_HANDLE, &_currentImageIndex);
-    }
-
     if (!handleSwapchainResult(result, SwapchainOp::Acquire, prevSemaphoreIndex))
         return false;
 
-    _inFrame = true;
+    AXASSERT(_currentImageIndex < maxImageIndex, "swapchain image index out of range!");
 
-    vkResetFences(_device, 1, &_inFlightFences[_currentFrame]);
+    _inFrame = true;
 
     _driver->setSwapchainCurrentImageIndex(_currentImageIndex);
 
@@ -715,8 +711,6 @@ void RenderContextImpl::endFrame()
 
         _postFrameOps.clear();
     }
-
-    _driver->releaseDisposalResources();
 
     // Advance frame index for multi-frame-in-flight
     if (succeed)
