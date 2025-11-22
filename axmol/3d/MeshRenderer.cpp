@@ -222,7 +222,7 @@ bool MeshRenderer::loadFromCache(std::string_view path)
         for (ssize_t i = 0, size = _meshes.size(); i < size; ++i)
         {
             // cloning is needed in order to have one state per mesh
-            auto ps = meshdata->programStates.at(i);
+            auto ps       = meshdata->programStates.at(i);
             auto clonedPS = ps->clone();
             _meshes.at(i)->setProgramState(clonedPS);
             clonedPS->release();
