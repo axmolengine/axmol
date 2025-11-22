@@ -580,7 +580,7 @@ bool RenderContextImpl::beginFrame()
     // wait for previous frame to finish
     vkWaitForFences(_device, 1, &_inFlightFences[_currentFrame], VK_TRUE, UINT64_MAX);
     vkResetFences(_device, 1, &_inFlightFences[_currentFrame]);
-    _driver->processDisposalQueue( 1 << _currentFrame);
+    _driver->processDisposalQueue(1 << _currentFrame);
 
     // Reset uniform ring write head for this frame
     resetUniformRingForCurrentFrame();
