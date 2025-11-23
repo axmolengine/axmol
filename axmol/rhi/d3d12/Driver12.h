@@ -151,6 +151,8 @@ private:
 
     void createDescriptorHeaps();
 
+    bool checkFormatSupport(DXGI_FORMAT format);
+
 private:
     RenderContextImpl* _lastRenderContext{nullptr};
 

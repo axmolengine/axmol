@@ -500,26 +500,6 @@ std::string DriverImpl::getShaderVersion() const
 #endif
 }
 
-bool DriverImpl::checkForFeatureSupported(FeatureType feature)
-{
-    // Basic, conservative feature checks; extend with CheckFeatureSupport if needed.
-    switch (feature)
-    {
-    case FeatureType::VAO:
-    case FeatureType::VERTEX_ATTRIB_BINDING:
-        return true;  // D3D12 uses input layout + PSO (no VAO concept)
-    case FeatureType::DEPTH24:
-    case FeatureType::PACKED_DEPTH_STENCIL:
-    case FeatureType::IMG_FORMAT_BGRA8888:
-    case FeatureType::S3TC:
-    case FeatureType::ASTC:
-        // Depending on runtime and WDDM, formats may vary. Return true conservatively or query.
-        return true;
-    default:
-        return false;
-    }
-}
-
 ID3D12GraphicsCommandList* DriverImpl::startIsolateSubmission()
 {
     // Create allocator
@@ -711,6 +691,51 @@ void DriverImpl::waitDeviceIdle()
     _gfxQueue->Signal(_idleFence, _idleFenceValue);
     _idleFence->SetEventOnCompletion(_idleFenceValue, _idleEvent);
     WaitForSingleObject(_idleEvent, INFINITE);
+}
+
+bool DriverImpl::checkForFeatureSupported(FeatureType feature)
+{
+    // enum class FeatureType : uint32_t
+    // {
+    //     ETC1,
+    //     ETC2,
+    //     S3TC,
+    //     AMD_COMPRESSED_ATC,
+    //     PVRTC,
+    //     IMG_FORMAT_BGRA8888,
+    //     DISCARD_FRAMEBUFFER,
+    //     PACKED_DEPTH_STENCIL,
+    //     VAO,
+    //     MAPBUFFER,
+    //     DEPTH24,
+    //     ASTC,
+    //     VERTEX_ATTRIB_BINDING
+    // };
+
+    switch (feature)
+    {
+    case FeatureType::VAO:
+    case FeatureType::VERTEX_ATTRIB_BINDING:
+        return true;
+    case FeatureType::DEPTH24:
+    case FeatureType::PACKED_DEPTH_STENCIL:
+        return checkFormatSupport(DXGI_FORMAT_D24_UNORM_S8_UINT);
+    case FeatureType::IMG_FORMAT_BGRA8888:
+        return checkFormatSupport(DXGI_FORMAT_B8G8R8A8_UNORM);
+    case FeatureType::S3TC:
+        return checkFormatSupport(DXGI_FORMAT_BC2_UNORM);
+    case FeatureType::ASTC:
+#define DXGI_FORMAT_ASTC_4X4_UNORM DXGI_FORMAT(134)
+        return checkFormatSupport(DXGI_FORMAT_ASTC_4X4_UNORM);
+    }
+    return false;
+}
+
+bool DriverImpl::checkFormatSupport(DXGI_FORMAT format)
+{
+    D3D12_FEATURE_DATA_FORMAT_SUPPORT support = {format};
+    HRESULT hr = _device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &support, sizeof(support));
+    return SUCCEEDED(hr) && (support.Support1 & D3D12_FORMAT_SUPPORT1_TEXTURE2D) != 0;
 }
 
 }  // namespace ax::rhi::d3d12
