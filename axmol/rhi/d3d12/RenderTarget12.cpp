@@ -44,6 +44,34 @@ RenderTargetImpl::~RenderTargetImpl()
 void RenderTargetImpl::invalidate()
 {
     _dirtyFlags = TargetBufferFlags::ALL;
+
+    for (auto i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+    {
+        if (_rtvsDescriptors[i])
+        {
+            _driver->queueDisposal(_rtvsDescriptors[i], DisposableResource::Type::RenderTargetView);
+            _rtvsDescriptors[i] = nullptr;
+            _rtvHandles[i].ptr  = 0;
+        }
+        if (_color[i].texture)
+        {
+            _color[i].texture->release();
+            _color[i].texture = nullptr;
+        }
+    }
+
+    if (_dsvDescriptor)
+    {
+        _driver->queueDisposal(_dsvDescriptor, DisposableResource::Type::DepthStencilView);
+        _dsvDescriptor = nullptr;
+        _dsvHandle.ptr = 0;
+    }
+
+    if (_depthStencil)
+    {
+        _depthStencil.texture->release();
+        _depthStencil.texture = nullptr;
+    }
 }
 
 void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
@@ -62,46 +90,48 @@ void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
             if (!bitmask::any(_dirtyFlags, getMRTColorFlag(i)))
                 continue;
 
-            if (_rtvsDescriptors[i].valid())
-                _driver->freeRTV(_rtvsDescriptors[i]);
+            if (_rtvsDescriptors[i])
+                _driver->queueDisposal(_rtvsDescriptors[i], DisposableResource::Type::RenderTargetView);
 
             if (_color[i].texture)
             {
                 auto texImpl        = static_cast<TextureImpl*>(_color[i].texture);
-                _rtvsDescriptors[i] = _driver->allocRTV();
+                _rtvsDescriptors[i] = _driver->allocateDescriptor(DisposableResource::Type::RenderTargetView);
                 device->CreateRenderTargetView(texImpl->internalHandle().resource.Get(), nullptr,
-                                               _rtvsDescriptors[i].cpu);
+                                               _rtvsDescriptors[i]->cpu);
+
+                _rtvHandles[i] = _rtvsDescriptors[i]->cpu;
             }
             else
             {
-                _rtvsDescriptors[i].reset();
+                _rtvsDescriptors[i] = nullptr;
+                _rtvHandles[i].ptr  = 0;
             }
-
-            _rtvHandles[i] = _rtvsDescriptors[i].cpu;
         }
 
         if (bitmask::any(_dirtyFlags, TargetBufferFlags::DEPTH_AND_STENCIL))
         {
-            if (_dsvDescriptor.valid())
-                _driver->freeDSV(_dsvDescriptor);
+            if (_dsvDescriptor)
+                _driver->queueDisposal(_dsvDescriptor, DisposableResource::Type::DepthStencilView);
 
             if (_depthStencil.texture)
             {
                 auto texImpl   = static_cast<TextureImpl*>(_depthStencil.texture);
-                _dsvDescriptor = _driver->allocDSV();
+                _dsvDescriptor = _driver->allocateDescriptor(DisposableResource::Type::DepthStencilView);
 
                 D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
                 dsvDesc.Format             = DXGI_FORMAT_D24_UNORM_S8_UINT;
                 dsvDesc.ViewDimension      = D3D12_DSV_DIMENSION_TEXTURE2D;
                 dsvDesc.Texture2D.MipSlice = 0;
-                device->CreateDepthStencilView(texImpl->internalHandle().resource.Get(), &dsvDesc, _dsvDescriptor.cpu);
+                device->CreateDepthStencilView(texImpl->internalHandle().resource.Get(), &dsvDesc, _dsvDescriptor->cpu);
+
+                _dsvHandle = _dsvDescriptor->cpu;
             }
             else
             {
-                _dsvDescriptor.reset();
+                _dsvDescriptor = nullptr;
+                _dsvHandle.ptr = 0;
             }
-
-            _dsvHandle = _dsvDescriptor.cpu;
         }
 
         // Count active color attachments
@@ -151,7 +181,7 @@ void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
     {
         prepareAttachmentsForRendering(cmd);
 
-         // Bind RTVs and DSV to pipeline
+        // Bind RTVs and DSV to pipeline
         if (_depthStencil)
             cmd->OMSetRenderTargets(_numRTVs, _rtvHandles.data(), FALSE, &_dsvHandle);
         else
@@ -171,7 +201,6 @@ void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
         }
     }
 
-   
     // Clear depth-stencil if requested
     if (_depthStencil)
     {

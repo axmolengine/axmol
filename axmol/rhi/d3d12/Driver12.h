@@ -52,7 +52,6 @@ class TextureImpl;
 
 struct DisposableResource
 {
-    // D3D12 COM objects are ref-counted; we keep ComPtr here if you want fence-gated disposal.
     enum class Type
     {
         Resource,
@@ -60,15 +59,14 @@ struct DisposableResource
         RenderTargetView,
         DepthStencilView,
         SamplerView,
-        // extend as needed
     };
     uint32_t frameMask{0};
     Type type{};
 
     union
     {
-        DescriptorHandle* dh;
         ID3D12Resource* resource;
+        DescriptorHandle* handle;
     };
 };
 
@@ -119,14 +117,6 @@ public:
     ID3D12CommandQueue* getGraphicsQueue() const { return _gfxQueue.Get(); }
     IDXGIFactory6* getDXGIFactory() const { return _dxgiFactory.Get(); }
 
-    // Swapchain helpers
-    void rebuildSwapchainAttachments(IDXGISwapChain4* swapchain, uint32_t width, uint32_t height);
-
-    // Default RT attachments
-    void setSwapchainCurrentBackBufferIndex(UINT index) { _currentBackBufferIndex = index; }
-    TextureImpl* getSwapchainColorAttachment();
-    TextureImpl* getSwapchainDepthStencilAttachment();
-
     ID3D12GraphicsCommandList* startIsolateSubmission();
     void finishIsolateSubmission(bool waitForCompletion = true);
 
@@ -143,9 +133,12 @@ public:
     ID3D12DescriptorHeap* getRTVHeap(const DescriptorHandle* h) const { return _rtvAllocator->getDescriptorHeap(h); }
     ID3D12DescriptorHeap* getDSVHeap(const DescriptorHandle* h) const { return _dsvAllocator->getDescriptorHeap(h); }
 
-    void processDisposalResources(uint64_t completedFence);
-
     bool compileShader(std::string_view shaderSource, ShaderStage stage, D3D12BlobHandle& outHandle);
+
+    void queueDisposal(ID3D12Resource*);
+    void queueDisposal(DescriptorHandle* handle, DisposableResource::Type type);
+
+    void processDisposalQueue(uint32_t completedMask);
 
     void waitDeviceIdle();
 
@@ -157,8 +150,6 @@ private:
     void initializeDevice();
 
     void createDescriptorHeaps();
-    void createDepthStencilAttachment(UINT width, UINT height);
-    void destroySwapchainAttachments();
 
 private:
     RenderContextImpl* _lastRenderContext{nullptr};
@@ -168,7 +159,11 @@ private:
     Microsoft::WRL::ComPtr<ID3D12Device> _device;
     Microsoft::WRL::ComPtr<ID3D12CommandQueue> _gfxQueue;
 
-    HANDLE _fenceEvent{nullptr};
+    ID3D12Fence* _idleFence{nullptr};
+    HANDLE _idleEvent{nullptr};
+    uint64_t _idleFenceValue{0};
+
+    HANDLE _isolateEvent{nullptr};
     IsolateSubmission _isolateSubmission;
 
     // Descriptor heaps (RTV/DSV for render targets; SRV/UAV/CBV for general use if needed)
@@ -179,11 +174,6 @@ private:
 
     UINT _rtvDescriptorSize{0};
     UINT _dsvDescriptorSize{0};
-
-    // Swapchain attachments storage
-    std::vector<TextureImpl*> _swapchainColorAttachments;
-    UINT _currentBackBufferIndex{0};
-    TextureImpl* _swapchainDepthStencilAttachment{nullptr};
 
     // Disposal queue (optional) if you want fence-gated cleanup beyond ComPtr lifetime
     std::mutex _disposalMutex;

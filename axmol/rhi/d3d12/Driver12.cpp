@@ -118,14 +118,28 @@ static inline const char* stageToProfile(ShaderStage s)
 }
 #endif
 
+static inline uint32_t makeMaskUpTo(uint32_t n)
+{
+    return (1u << (n + 1)) - 1u;
+}
+
 DriverImpl::DriverImpl() {}
 DriverImpl::~DriverImpl()
 {
     cleanPendingResources();
-    destroySwapchainAttachments();
+
     _gfxQueue.Reset();
     _device.Reset();
     _dxgiFactory.Reset();
+
+    if (_idleFence)
+        _idleFence->Release();
+
+    if (_isolateEvent)
+        CloseHandle(_isolateEvent);
+
+    if (_idleEvent)
+        CloseHandle(_idleEvent);
 }
 
 void DriverImpl::init()
@@ -196,7 +210,6 @@ void DriverImpl::init()
     // Debug build arguments
     _dxcArguments = {L"-Zi", L"-Od"};
 #    endif
-
 #endif
 }
 
@@ -436,6 +449,7 @@ void DriverImpl::releaseDescriptor(DescriptorHandle* handle, DisposableResource:
         _dsvAllocator->release(handle);
         break;
     default:
+        assert(false);
         break;
     }
 }
@@ -506,19 +520,6 @@ bool DriverImpl::checkForFeatureSupported(FeatureType feature)
     }
 }
 
-void DriverImpl::cleanPendingResources()
-{
-    // In D3D12, ComPtr takes care of Release(). If using fence-gated disposal, drain here.
-    std::lock_guard<std::mutex> lk(_disposalMutex);
-    _disposalQueue.clear();
-}
-
-void DriverImpl::queueDisposalInternal(DisposableResource&& res)
-{
-    std::lock_guard<std::mutex> lk(_disposalMutex);
-    _disposalQueue.emplace_back(std::move(res));
-}
-
 ID3D12GraphicsCommandList* DriverImpl::startIsolateSubmission()
 {
     // Create allocator
@@ -533,10 +534,6 @@ ID3D12GraphicsCommandList* DriverImpl::startIsolateSubmission()
     // Create (or reuse) a fence for this isolated submission
     _device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&_isolateSubmission.fence));
     _isolateSubmission.fenceValue = 1;
-
-    // Optional: set descriptor heaps consistent with your binding model
-    // ID3D12DescriptorHeap* heaps[] = { srvUavCbvHeap, samplerHeap };
-    // _iso.cmdList->SetDescriptorHeaps(_countof(heaps), heaps);
 
     return _isolateSubmission.cmdList.Get();
 }
@@ -560,11 +557,11 @@ void DriverImpl::finishIsolateSubmission(bool waitForCompletion)
     {
         if (_isolateSubmission.fence->GetCompletedValue() < _isolateSubmission.fenceValue)
         {
-            if (!_fenceEvent)
-                _fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+            if (!_isolateEvent)
+                _isolateEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 
-            _isolateSubmission.fence->SetEventOnCompletion(_isolateSubmission.fenceValue, _fenceEvent);
-            WaitForSingleObject(_fenceEvent, INFINITE);
+            _isolateSubmission.fence->SetEventOnCompletion(_isolateSubmission.fenceValue, _isolateEvent);
+            WaitForSingleObject(_isolateEvent, INFINITE);
         }
     }
 
@@ -575,93 +572,58 @@ void DriverImpl::finishIsolateSubmission(bool waitForCompletion)
     _isolateSubmission.fenceValue = 0;
 }
 
-void DriverImpl::processDisposalResources(uint64_t completedFence) {}
-
-void DriverImpl::destroySwapchainAttachments()
+void DriverImpl::queueDisposal(ID3D12Resource* res)
 {
-    if (!_swapchainColorAttachments.empty())
+    queueDisposalInternal(DisposableResource{.type = DisposableResource::Type::Resource, .resource = res});
+}
+
+void DriverImpl::queueDisposal(DescriptorHandle* handle, DisposableResource::Type type)
+{
+    queueDisposalInternal(DisposableResource{.type = type, .handle = handle});
+}
+
+void DriverImpl::processDisposalQueue(uint32_t completedMask) {
+
+    if (!_disposalQueue.empty())
     {
-        for (auto tex : _swapchainColorAttachments)
-            delete tex;
-        _swapchainColorAttachments.clear();
+        for (size_t i = 0; i < _disposalQueue.size();)
+        {
+            auto& res = _disposalQueue[i];
+            if ((res.frameMask & completedMask) != 0)
+            {
+                if (res.type == DisposableResource::Type::Resource)
+                {
+                    res.resource->Release();
+                }
+                else
+                {
+                    releaseDescriptor(res.handle, res.type);
+                }
+
+                _disposalQueue[i] = _disposalQueue.back();
+                _disposalQueue.pop_back();
+            }
+            else
+            {
+                ++i;
+            }
+        }
     }
-    if (_swapchainDepthStencilAttachment)
-    {
-        delete _swapchainDepthStencilAttachment;
-        _swapchainDepthStencilAttachment = nullptr;
-    }
 }
 
-void DriverImpl::rebuildSwapchainAttachments(IDXGISwapChain4* swapchain, uint32_t width, uint32_t height)
+void DriverImpl::cleanPendingResources()
 {
-    destroySwapchainAttachments();
-
-    // Create color attachments wrapping swapchain buffers
-    const UINT bufferCount = RenderContextImpl::MAX_FRAMES_IN_FLIGHT;
-    _swapchainColorAttachments.reserve(bufferCount);
-
-    for (UINT i = 0; i < bufferCount; ++i)
-    {
-        Microsoft::WRL::ComPtr<ID3D12Resource> backBuffer;
-        HRESULT hr = swapchain->GetBuffer(i, IID_PPV_ARGS(&backBuffer));
-        AXASSERT(SUCCEEDED(hr), "SwapChain GetBuffer failed");
-
-        TextureDesc colorDesc{};
-        colorDesc.textureType  = TextureType::TEXTURE_2D;
-        colorDesc.width        = static_cast<uint16_t>(width);
-        colorDesc.height       = static_cast<uint16_t>(height);
-        colorDesc.arraySize    = 1;
-        colorDesc.mipLevels    = 1;
-        colorDesc.pixelFormat  = PixelFormat::RGBA8;  // matches DXGI_FORMAT_R8G8B8A8_UNORM
-        colorDesc.textureUsage = TextureUsage::RENDER_TARGET;
-
-        auto tex = new TextureImpl(this, colorDesc);
-        // Adopt existing resource, TOOD:
-        // tex->internalHandle().resource = backBuffer;  // wrap swapchain buffer
-
-        _swapchainColorAttachments.push_back(tex);
-    }
-
-    // Create depth-stencil attachment
-    createDepthStencilAttachment(width, height);
+    waitDeviceIdle();
+    const auto allFramesMask = makeMaskUpTo(RenderContextImpl::MAX_FRAMES_IN_FLIGHT);
+    processDisposalQueue(allFramesMask);
 }
 
-void DriverImpl::createDepthStencilAttachment(UINT width, UINT height)
+void DriverImpl::queueDisposalInternal(DisposableResource&& disposal)
 {
-    // Create a D24S8 texture as default depth-stencil
-    TextureDesc depthDesc{};
-    depthDesc.textureType  = TextureType::TEXTURE_2D;
-    depthDesc.width        = static_cast<uint16_t>(width);
-    depthDesc.height       = static_cast<uint16_t>(height);
-    depthDesc.arraySize    = 1;
-    depthDesc.mipLevels    = 1;
-    depthDesc.pixelFormat  = PixelFormat::D24S8;
-    depthDesc.textureUsage = TextureUsage::RENDER_TARGET;
+    std::lock_guard<std::mutex> lk(_disposalMutex);
 
-    auto tex = new TextureImpl(this, depthDesc);
-    tex->updateData(nullptr, width, height, 0);  // initialize resource
-
-    // Create DSV in DSV heap
-    // D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = _dsvHeap->GetCPUDescriptorHandleForHeapStart();
-    D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
-    dsvDesc.Format        = DXGI_FORMAT_D24_UNORM_S8_UINT;
-    dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-    dsvDesc.Flags         = D3D12_DSV_FLAG_NONE;
-
-    // _device->CreateDepthStencilView(tex->internalHandle().resource.Get(), &dsvDesc, dsvHandle);
-    _swapchainDepthStencilAttachment = tex;
-}
-
-TextureImpl* DriverImpl::getSwapchainColorAttachment()
-{
-    if (_swapchainColorAttachments.empty())
-        return nullptr;
-    return _swapchainColorAttachments[_currentBackBufferIndex];
-}
-
-TextureImpl* DriverImpl::getSwapchainDepthStencilAttachment()
-{
-    return _swapchainDepthStencilAttachment;
+    disposal.frameMask = 1 << (_lastRenderContext ? _lastRenderContext->getCurrentFrame() : 0);
+    _disposalQueue.emplace_back(std::move(disposal));
 }
 
 bool DriverImpl::compileShader(std::string_view shaderSource, ShaderStage stage, D3D12BlobHandle& outHandle)
@@ -739,18 +701,16 @@ bool DriverImpl::compileShader(std::string_view shaderSource, ShaderStage stage,
 
 void DriverImpl::waitDeviceIdle()
 {
-    // Create a temporary fence to flush queue
-    Microsoft::WRL::ComPtr<ID3D12Fence> fence;
-    UINT64 value = 1;
-    HANDLE evt   = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+    if (!_idleFence)
+    {
+        _device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&_idleFence));
+        _idleEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+    }
 
-    HRESULT hr = _device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
-    AXASSERT(SUCCEEDED(hr), "CreateFence failed");
-
-    _gfxQueue->Signal(fence.Get(), value);
-    fence->SetEventOnCompletion(value, evt);
-    WaitForSingleObject(evt, INFINITE);
-    CloseHandle(evt);
+    ++_idleFenceValue;
+    _gfxQueue->Signal(_idleFence, _idleFenceValue);
+    _idleFence->SetEventOnCompletion(_idleFenceValue, _idleEvent);
+    WaitForSingleObject(_idleEvent, INFINITE);
 }
 
 }  // namespace ax::rhi::d3d12

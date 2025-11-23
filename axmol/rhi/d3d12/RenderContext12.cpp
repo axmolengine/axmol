@@ -411,8 +411,8 @@ bool RenderContextImpl::updateSurface(void* /*surface*/, uint32_t width, uint32_
     _screenWidth  = width;
     _screenHeight = height;
 
-    _swapchain->ResizeBuffers(MAX_FRAMES_IN_FLIGHT, _screenWidth, _screenHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
-    _driver->rebuildSwapchainAttachments(_swapchain.Get(), _screenWidth, _screenHeight);
+    _swapchainDirty = true;
+
     return true;
 }
 
@@ -434,6 +434,24 @@ bool RenderContextImpl::beginFrame()
     {
         fence->SetEventOnCompletion(_fenceValues[_currentFrame], _fenceEvents[_currentFrame]);
         WaitForSingleObject(_fenceEvents[_currentFrame], INFINITE);
+    }
+
+    _driver->processDisposalQueue(1 << _currentFrame);
+
+    if (_swapchainDirty)
+    {
+        auto rtImpl = static_cast<RenderTargetImpl*>(_screenRT);
+
+        // Release references to the swapchain back buffer for we can ResizeBuffers
+        rtImpl->invalidate();
+
+        _driver->cleanPendingResources();
+
+        _swapchain->ResizeBuffers(SWAPCHAIN_BUFFER_COUNT, _screenWidth, _screenHeight, AX_SWAPCHAIN_FORMAT,
+                                  _swapchainFlags);
+        rtImpl->rebuildAttachmentsForSwapchain(_swapchain.Get(), _screenWidth, _screenHeight);
+
+        _swapchainDirty = false;
     }
 
     resetUniformRingForCurrentFrame(_currentFrame);

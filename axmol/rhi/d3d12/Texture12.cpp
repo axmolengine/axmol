@@ -39,7 +39,7 @@ static constexpr uint32_t LAYER_INITIAL_CAPS = 8;
 static void d3d12TexDescToTexDesc(TextureDesc& td, const D3D12_RESOURCE_DESC& desc)
 {
     td.textureType = (desc.DepthOrArraySize == 6 && desc.Dimension == D3D12_RESOURCE_DIMENSION_TEXTURE2D)
-                          ? TextureType::TEXTURE_CUBE
+                         ? TextureType::TEXTURE_CUBE
                          : TextureType::TEXTURE_2D;
 
     td.width     = static_cast<uint16_t>(desc.Width);
@@ -82,12 +82,11 @@ TextureImpl::TextureImpl(DriverImpl* driver, ComPtr<ID3D12Resource> existingReso
 
 TextureImpl::~TextureImpl()
 {
-    // _nativeTexture.resource.Reset();
-    // if (_nativeTexture.srv.valid())
-    // {
-    //     _driver->freeSRV(_nativeTexture.srv);
-    //     _nativeTexture.srv.reset();
-    // }
+    if (_nativeTexture.resource)
+        _driver->queueDisposal(_nativeTexture.resource.Detach());
+
+    if (_nativeTexture.srv)
+        _driver->queueDisposal(_nativeTexture.srv, DisposableResource::Type::ShaderResourceView);
 }
 
 void TextureImpl::transitionState(ID3D12GraphicsCommandList* cmd, D3D12_RESOURCE_STATES newState)
@@ -458,8 +457,8 @@ void TextureImpl::ensureNativeTexture()
             srvDesc.Texture2D.ResourceMinLODClamp = 0.0f;
         }
 
-        _nativeTexture.srv = _driver->allocSRV();
-        device->CreateShaderResourceView(_nativeTexture.resource.Get(), &srvDesc, _nativeTexture.srv.cpu);
+        _nativeTexture.srv = _driver->allocateDescriptor(DisposableResource::Type::ShaderResourceView);
+        device->CreateShaderResourceView(_nativeTexture.resource.Get(), &srvDesc, _nativeTexture.srv->cpu);
     }
     else
     {

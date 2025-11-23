@@ -72,8 +72,8 @@ private:
 
     DriverImpl* _driver{nullptr};
 
-    std::array<d3d12::DescriptorHandle, MAX_COLOR_ATTCHMENT> _rtvsDescriptors{};
-    DescriptorHandle _dsvDescriptor{};
+    std::array<d3d12::DescriptorHandle*, MAX_COLOR_ATTCHMENT> _rtvsDescriptors{};
+    DescriptorHandle* _dsvDescriptor{};
 
     // Current attachment descriptors
     std::array<D3D12_CPU_DESCRIPTOR_HANDLE, MAX_COLOR_ATTCHMENT> _rtvHandles{};

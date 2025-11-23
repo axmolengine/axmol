@@ -95,10 +95,11 @@ BufferImpl::BufferImpl(DriverImpl* driver, std::size_t size, BufferType type, Bu
 
 BufferImpl::~BufferImpl()
 {
-    // COM objects auto-release via ComPtr; if you have a disposal queue, enqueue here with fence tagging
-    // Example:
-    // _driver->queueDisposal(_resource);
-    // _driver->queueDisposal(_uploadBuffer);
+    if (_resource)
+        _driver->queueDisposal(_resource.Detach());
+
+    if (_uploadBuffer)
+        _driver->queueDisposal(_uploadBuffer.Detach());
 }
 
 /* -------------------------------------------------- createNativeBuffer */
