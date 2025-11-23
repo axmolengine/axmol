@@ -1,14 +1,32 @@
 /****************************************************************************
- Copyright (c) 2019-present Axmol Engine contributors
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
  ****************************************************************************/
 #include "axmol/rhi/d3d12/Driver12.h"
 #include "axmol/rhi/d3d12/RenderContext12.h"
 #include "axmol/rhi/d3d12/Buffer12.h"
 #include "axmol/rhi/d3d12/Texture12.h"
 #include "axmol/rhi/d3d12/Program12.h"
-#include "axmol/rhi/d3d12/ShaderModule12.h"  // if you have separate module; otherwise Program12 handles blobs
+#include "axmol/rhi/d3d12/ShaderModule12.h"
 #include "axmol/rhi/d3d12/RenderTarget12.h"
 #include "axmol/rhi/d3d12/RenderPipeline12.h"
 #include "axmol/rhi/d3d12/DepthStencilState12.h"
@@ -300,7 +318,7 @@ DepthStencilState* DriverImpl::createDepthStencilState()
 
 RenderPipeline* DriverImpl::createRenderPipeline()
 {
-    return new RenderPipelineImpl(_device.Get());
+    return new RenderPipelineImpl(this);
 }
 
 Program* DriverImpl::createProgram(std::string_view vertexShader, std::string_view fragmentShader)
@@ -310,7 +328,7 @@ Program* DriverImpl::createProgram(std::string_view vertexShader, std::string_vi
 
 ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, std::string_view source)
 {
-    return new ShaderModuleImpl(_device.Get(), stage, source);
+    return new ShaderModuleImpl(this, stage, source);
 }
 
 SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
@@ -372,18 +390,54 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     sd.BorderColor[3] = 0.0f;
 
     // --- Allocate a slot in Sampler Heap ---
-    auto handle = allocSampler();
+    auto handle = allocateDescriptor(DisposableResource::Type::SamplerView);
 
-    _device->CreateSampler(&sd, handle.cpu);
+    _device->CreateSampler(&sd, handle->cpu);
 
-    return reinterpret_cast<SamplerHandle>(new D3D12SamplerHandle{handle});
+    return reinterpret_cast<SamplerHandle>(handle);
 }
 
 void DriverImpl::destroySampler(SamplerHandle& h)
 {
-    auto wrapper = reinterpret_cast<D3D12SamplerHandle*>(h);
-    _samplerAllocator->free(wrapper->handle);
-    delete wrapper;
+    releaseDescriptor(reinterpret_cast<DescriptorHandle*>(h), DisposableResource::Type::SamplerView);
+}
+
+DescriptorHandle* DriverImpl::allocateDescriptor(DisposableResource::Type type)
+{
+    switch (type)
+    {
+    case DisposableResource::Type::ShaderResourceView:
+        return _srvAllocator->allocate();
+    case DisposableResource::Type::SamplerView:
+        return _samplerAllocator->allocate();
+    case DisposableResource::Type::RenderTargetView:
+        return _rtvAllocator->allocate();
+    case DisposableResource::Type::DepthStencilView:
+        return _dsvAllocator->allocate();
+    default:
+        return nullptr;
+    }
+}
+
+void DriverImpl::releaseDescriptor(DescriptorHandle* handle, DisposableResource::Type type)
+{
+    switch (type)
+    {
+    case DisposableResource::Type::ShaderResourceView:
+        _srvAllocator->release(handle);
+        break;
+    case DisposableResource::Type::SamplerView:
+        _samplerAllocator->release(handle);
+        break;
+    case DisposableResource::Type::RenderTargetView:
+        _rtvAllocator->release(handle);
+        break;
+    case DisposableResource::Type::DepthStencilView:
+        _dsvAllocator->release(handle);
+        break;
+    default:
+        break;
+    }
 }
 
 VertexLayout* DriverImpl::createVertexLayout(VertexLayoutDesc&& desc)

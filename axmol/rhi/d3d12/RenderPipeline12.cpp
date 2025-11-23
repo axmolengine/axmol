@@ -1,3 +1,26 @@
+/****************************************************************************
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmol.dev/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
 #include "axmol/rhi/d3d12/RenderPipeline12.h"
 #include "axmol/rhi/d3d12/VertexLayout12.h"
 #include "axmol/rhi/d3d12/DepthStencilState12.h"
@@ -87,13 +110,14 @@ static inline uintptr_t makePSOKey(const rhi::BlendDesc& blendDesc,
     return axstd::hash_bytes(&hashMe, sizeof(hashMe), 0);
 }
 
-RenderPipelineImpl::RenderPipelineImpl(ID3D12Device* device) : _device(device)
+RenderPipelineImpl::RenderPipelineImpl(DriverImpl* driver) : _driver(driver)
 {
     initializePipelineDefaults();
 }
 
 RenderPipelineImpl::~RenderPipelineImpl()
 {
+    _driver->waitDeviceIdle();
     _psoCache.clear();
     _rootSigCache.clear();
 }
@@ -252,7 +276,8 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
     AXASSERT(SUCCEEDED(hr), "Failed to serialize root signature");
 
     Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSig;
-    hr = _device->CreateRootSignature(0, sigBlob->GetBufferPointer(), sigBlob->GetBufferSize(), IID_PPV_ARGS(&rootSig));
+    hr = _driver->getDevice()->CreateRootSignature(0, sigBlob->GetBufferPointer(), sigBlob->GetBufferSize(),
+                                                   IID_PPV_ARGS(&rootSig));
     AXASSERT(SUCCEEDED(hr), "Failed to create root signature");
 
     entry.rootSig        = std::move(rootSig);
@@ -290,7 +315,7 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, Progra
     psoDesc.SampleMask            = UINT_MAX;
 
     Microsoft::WRL::ComPtr<ID3D12PipelineState> pso;
-    HRESULT hr = _device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pso));
+    HRESULT hr = _driver->getDevice()->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pso));
     AXASSERT(SUCCEEDED(hr), "Failed to create PSO");
 
     _activePSO = pso;

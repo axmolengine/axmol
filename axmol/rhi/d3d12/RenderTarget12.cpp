@@ -1,3 +1,26 @@
+/****************************************************************************
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmol.dev/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
 #include "axmol/rhi/d3d12/RenderTarget12.h"
 #include "axmol/rhi/d3d12/RenderContext12.h"
 #include "axmol/base/Logging.h"
@@ -117,23 +140,11 @@ void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
             cmd->OMSetRenderTargets(1, &_rtvHandles[imageIndex], FALSE, nullptr);
 
         // Clear color attachments if requested
-        //if (bitmask::any(renderPassDesc.flags.clear, getMRTColorFlag(imageIndex)))
-        //{
-        //    FLOAT clearColor[4] = {renderPassDesc.clearColorValue[0], renderPassDesc.clearColorValue[1],
-        //                           renderPassDesc.clearColorValue[2], renderPassDesc.clearColorValue[3]};
-        //    cmd->ClearRenderTargetView(_rtvHandles[imageIndex], clearColor, 0, nullptr);
-        //}
-
-        for (auto i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+        if (bitmask::any(renderPassDesc.flags.clear, getMRTColorFlag(imageIndex)))
         {
-            if (!_color[i])
-                break;
-            if (bitmask::any(renderPassDesc.flags.clear, getMRTColorFlag(imageIndex)))
-            {
-                FLOAT clearColor[4] = {renderPassDesc.clearColorValue[0], renderPassDesc.clearColorValue[1],
-                                       renderPassDesc.clearColorValue[2], renderPassDesc.clearColorValue[3]};
-                cmd->ClearRenderTargetView(_rtvHandles[imageIndex], clearColor, 0, nullptr);
-            }
+            FLOAT clearColor[4] = {renderPassDesc.clearColorValue[0], renderPassDesc.clearColorValue[1],
+                                   renderPassDesc.clearColorValue[2], renderPassDesc.clearColorValue[3]};
+            cmd->ClearRenderTargetView(_rtvHandles[imageIndex], clearColor, 0, nullptr);
         }
     }
     else

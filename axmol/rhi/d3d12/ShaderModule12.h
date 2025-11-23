@@ -31,9 +31,11 @@
 namespace ax::rhi::d3d12
 {
 /**
- * @addtogroup _d3d11
+ * @addtogroup _d3d12
  * @{
  */
+
+class DriverImpl;
 
 struct SLCReflectContext;
 
@@ -50,6 +52,7 @@ struct UniformBlockInfo
     uint16_t numMembers;  // number of uniforms in this block
     std::string name;     // block name
 };
+
 /**
  * @brief A D3D12-based ShaderModule implementation
  *
@@ -57,7 +60,7 @@ struct UniformBlockInfo
 class ShaderModuleImpl : public ShaderModule
 {
 public:
-    ShaderModuleImpl(ID3D12Device* device, ShaderStage stage, std::string_view source);
+    ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, std::string_view source);
     ~ShaderModuleImpl();
 
     const D3D12BlobHandle& internalHandle() const { return _nativeHandle; }
@@ -118,7 +121,7 @@ public:
     inline std::size_t getUniformBufferSize() const { return _uniformBufferSize; }
 
 private:
-    void compileShader(ID3D12Device* device, ShaderStage stage, std::string_view source);
+    void compileShader(DriverImpl* driver, ShaderStage stage, std::string_view source);
     void releaseShader();
 
     void reflectVertexInputs(SLCReflectContext* context);

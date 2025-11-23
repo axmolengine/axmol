@@ -1,3 +1,26 @@
+/****************************************************************************
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmol.dev/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
 #include "axmol/rhi/d3d12/DescriptorHeapAllocator12.h"
 
 namespace ax::rhi::d3d12
@@ -30,7 +53,7 @@ DescriptorHeapAllocator::DescriptorHeapAllocator(ID3D12Device* device,
                                                  D3D12_DESCRIPTOR_HEAP_TYPE type,
                                                  UINT initialCapacity,
                                                  bool shaderVisible)
-    : _device(device), _type(type), _shaderVisible(shaderVisible)
+    : _handlePool(initialCapacity), _device(device), _type(type), _shaderVisible(shaderVisible)
 {
     _descriptorSize = device->GetDescriptorHandleIncrementSize(type);
     initializeHeapBlock(device, type, initialCapacity, shaderVisible, _blocks.emplace_back());
@@ -62,7 +85,7 @@ static bool tryAcquireSlot(DescriptorHeapBlock& b, uint32_t& outIndex)
     return false;
 }
 
-DescriptorHandle DescriptorHeapAllocator::allocate()
+DescriptorHandle* DescriptorHeapAllocator::allocate()
 {
     std::lock_guard<std::mutex> lock(_mutex);
 
@@ -72,18 +95,18 @@ DescriptorHandle DescriptorHeapAllocator::allocate()
         uint32_t idx = 0;
         if (tryAcquireSlot(b, idx))
         {
-            DescriptorHandle h{};
-            h.blockIndex    = bi;
-            h.slotIndex     = idx;
-            h.shaderVisible = b.shaderVisible;
+            DescriptorHandle* h = (DescriptorHandle*)_handlePool.allocate();
+            h->blockIndex    = bi;
+            h->slotIndex        = idx;
+            h->shaderVisible    = b.shaderVisible;
 
-            h.cpu = b.cpuStart;
-            h.cpu.ptr += SIZE_T(idx) * SIZE_T(b.descriptorSize);
+            h->cpu = b.cpuStart;
+            h->cpu.ptr += SIZE_T(idx) * SIZE_T(b.descriptorSize);
 
             if (b.shaderVisible)
             {
-                h.gpu = b.gpuStart;
-                h.gpu.ptr += UINT64(idx) * UINT64(b.descriptorSize);
+                h->gpu = b.gpuStart;
+                h->gpu.ptr += UINT64(idx) * UINT64(b.descriptorSize);
             }
             return h;
         }
@@ -96,42 +119,42 @@ DescriptorHandle DescriptorHeapAllocator::allocate()
     if (!tryAcquireSlot(b, idx))
         return {};  // catastrophic, should not happen
 
-    DescriptorHandle h{};
-    h.blockIndex    = uint32_t(_blocks.size() - 1);
-    h.slotIndex     = idx;
-    h.shaderVisible = b.shaderVisible;
+    DescriptorHandle* h = (DescriptorHandle*) _handlePool.allocate();
+    h->blockIndex    = uint32_t(_blocks.size() - 1);
+    h->slotIndex     = idx;
+    h->shaderVisible = b.shaderVisible;
 
-    h.cpu = b.cpuStart;
-    h.cpu.ptr += SIZE_T(idx) * SIZE_T(b.descriptorSize);
+    h->cpu = b.cpuStart;
+    h->cpu.ptr += SIZE_T(idx) * SIZE_T(b.descriptorSize);
     if (b.shaderVisible)
     {
-        h.gpu = b.gpuStart;
-        h.gpu.ptr += UINT64(idx) * UINT64(b.descriptorSize);
+        h->gpu = b.gpuStart;
+        h->gpu.ptr += UINT64(idx) * UINT64(b.descriptorSize);
     }
     return h;
 }
 
-ID3D12DescriptorHeap* DescriptorHeapAllocator::getDescriptorHeap(const DescriptorHandle& handle) const
+ID3D12DescriptorHeap* DescriptorHeapAllocator::getDescriptorHeap(const DescriptorHandle* handle) const
 {
     std::lock_guard<std::mutex> lock(_mutex);
-    if (handle.blockIndex >= _blocks.size())
+    if (handle->blockIndex >= _blocks.size())
         return nullptr;
-    return _blocks[handle.blockIndex].heap.Get();
+    return _blocks[handle->blockIndex].heap.Get();
 }
 
-void DescriptorHeapAllocator::free(const DescriptorHandle& h)
+void DescriptorHeapAllocator::release(DescriptorHandle* h)
 {
-    if (!h.valid())
+    if (!h->valid())
         return;
     std::lock_guard<std::mutex> lock(_mutex);
-    if (h.blockIndex >= _blocks.size())
+    if (h->blockIndex >= _blocks.size())
         return;
-    auto& b = _blocks[h.blockIndex];
-    if (h.slotIndex >= b.capacity)
+    auto& b = _blocks[h->blockIndex];
+    if (h->slotIndex >= b.capacity)
         return;
 
-    uint32_t byte = h.slotIndex >> 3;
-    uint8_t mask  = uint8_t(1u << (h.slotIndex & 7));
+    uint32_t byte = h->slotIndex >> 3;
+    uint8_t mask  = uint8_t(1u << (h->slotIndex & 7));
     if (b.freeBits[byte] & mask)
     {
         // double free guard: already free
@@ -139,33 +162,35 @@ void DescriptorHeapAllocator::free(const DescriptorHandle& h)
     }
     b.freeBits[byte] |= mask;
     --b.used;
+
+    _handlePool.release(h);
 }
 
-void DescriptorHeapAllocator::deferFree(const DescriptorHandle& h, uint64_t fenceValue)
-{
-    if (!h.valid())
-        return;
-    std::lock_guard<std::mutex> lock(_mutex);
-    _deferred.push_back({h, fenceValue});
-}
-
-void DescriptorHeapAllocator::reapDeferred(uint64_t completedFence)
-{
-    std::lock_guard<std::mutex> lock(_mutex);
-    size_t w = 0;
-    for (size_t r = 0; r < _deferred.size(); ++r)
-    {
-        if (_deferred[r].fence <= completedFence)
-        {
-            free(_deferred[r].h);
-        }
-        else
-        {
-            _deferred[w++] = _deferred[r];
-        }
-    }
-    _deferred.resize(w);
-}
+//void DescriptorHeapAllocator::deferFree(const DescriptorHandle& h, uint64_t fenceValue)
+//{
+//    if (!h.valid())
+//        return;
+//    std::lock_guard<std::mutex> lock(_mutex);
+//    _deferred.push_back({h, fenceValue});
+//}
+//
+//void DescriptorHeapAllocator::reapDeferred(uint64_t completedFence)
+//{
+//    std::lock_guard<std::mutex> lock(_mutex);
+//    size_t w = 0;
+//    for (size_t r = 0; r < _deferred.size(); ++r)
+//    {
+//        if (_deferred[r].fence <= completedFence)
+//        {
+//            free(_deferred[r].h);
+//        }
+//        else
+//        {
+//            _deferred[w++] = _deferred[r];
+//        }
+//    }
+//    _deferred.resize(w);
+//}
 
 DescriptorHeapAllocator::Stats DescriptorHeapAllocator::stats() const
 {

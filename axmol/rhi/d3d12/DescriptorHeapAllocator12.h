@@ -1,3 +1,26 @@
+/****************************************************************************
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmol.dev/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
 #pragma once
 
 #include <d3d12.h>
@@ -6,6 +29,7 @@
 #include <vector>
 #include <atomic>
 #include <mutex>
+#include "yasio/object_pool.hpp"
 
 namespace ax::rhi::d3d12
 {
@@ -50,18 +74,18 @@ public:
                             bool shaderVisible);
 
     // Allocate a single slot; returns a persistent handle
-    DescriptorHandle allocate();
+    DescriptorHandle* allocate();
 
-    ID3D12DescriptorHeap* getDescriptorHeap(const DescriptorHandle& handle) const;
+    // Release immediately (caller ensures GPU no longer uses it)
+    void release(DescriptorHandle* h);
 
-    // Free immediately (caller ensures GPU no longer uses it)
-    void free(const DescriptorHandle& h);
+    ID3D12DescriptorHeap* getDescriptorHeap(const DescriptorHandle* handle) const;
 
     // Defer free to a frame/fence value
-    void deferFree(const DescriptorHandle& h, uint64_t fenceValue);
+    //void deferFree(const DescriptorHandle& h, uint64_t fenceValue);
 
     // Must be called to reap deferred frees when fence reaches value
-    void reapDeferred(uint64_t completedFence);
+    //void reapDeferred(uint64_t completedFence);
 
     // Recreate a new larger block (auto-called when full)
     void grow();
@@ -80,9 +104,11 @@ public:
     Stats stats() const;
 
 private:
+    yasio::object_pool<DescriptorHandle> _handlePool;
     ID3D12Device* _device = nullptr;
     D3D12_DESCRIPTOR_HEAP_TYPE _type;
     bool _shaderVisible  = false;
+    
     UINT _descriptorSize = 0;
 
     mutable std::mutex _mutex;
@@ -90,6 +116,7 @@ private:
 
     // Growth policy
     UINT _nextCapacity = 0;  // doubled each grow
+
 
     // Deferred free list
     struct DeferredFree

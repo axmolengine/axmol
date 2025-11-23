@@ -25,12 +25,13 @@
 
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/rhi/PixelBufferDesc.h"
+#include <glad/vulkan.h>
 #include <utility>
 
 namespace ax::rhi::vk
 {
 /**
- * @addtogroup _d3d
+ * @addtogroup _vk
  * @{
  */
 

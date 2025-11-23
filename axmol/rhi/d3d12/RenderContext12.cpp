@@ -1,12 +1,35 @@
-#include "RenderContext12.h"
-#include "Driver12.h"
-#include "RenderTarget12.h"
-#include "RenderPipeline12.h"
-#include "DepthStencilState12.h"
-#include "VertexLayout12.h"
-#include "Program12.h"
-#include "Buffer12.h"
-#include "Texture12.h"
+/****************************************************************************
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmol.dev/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+#include "axmol/rhi/d3d12/RenderContext12.h"
+#include "axmol/rhi/d3d12/Driver12.h"
+#include "axmol/rhi/d3d12/RenderTarget12.h"
+#include "axmol/rhi/d3d12/RenderPipeline12.h"
+#include "axmol/rhi/d3d12/DepthStencilState12.h"
+#include "axmol/rhi/d3d12/VertexLayout12.h"
+#include "axmol/rhi/d3d12/Program12.h"
+#include "axmol/rhi/d3d12/Buffer12.h"
+#include "axmol/rhi/d3d12/Texture12.h"
 #include "axmol/base/Logging.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
@@ -322,6 +345,8 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext) :
 
 RenderContextImpl::~RenderContextImpl()
 {
+    _driver->waitDeviceIdle();
+
     // Ensure GPU idle then cleanup handles if needed
     if (_graphicsQueue)
     {
@@ -629,7 +654,7 @@ void RenderContextImpl::updatePipelineState(const RenderTarget* rt, const Pipeli
 
     // Bind PSO & RootSignature
     auto pso = _renderPipeline->getPipelineState();
-    if (pso != _currentPSO)
+    // if (pso != _currentPSO)
     {
         auto rootSigInfo = _renderPipeline->getRootSignature();
 
@@ -811,22 +836,22 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
             auto textureImpl = static_cast<TextureImpl*>(texs[0]);
 
             // SRV handle (already created in TextureImpl::ensureNativeTexture)
-            const DescriptorHandle& srvHandle = textureImpl->internalHandle().srv;
+            const DescriptorHandle* srvHandle = textureImpl->internalHandle().srv;
             // Sampler handle (already created and returned by getSampler())
-            D3D12SamplerHandle* samplerHandle = textureImpl->getSampler();
+            const DescriptorHandle* samplerHandle = textureImpl->getSampler();
 
             if (!heapSet)
             {
                 _descriptorHeaps.push_back(_driver->getSRVHeap(srvHandle));
-                _descriptorHeaps.push_back(_driver->getSamplerHeap(samplerHandle->handle));
+                _descriptorHeaps.push_back(_driver->getSamplerHeap(samplerHandle));
                 cmd->SetDescriptorHeaps(_descriptorHeaps.size(), _descriptorHeaps.data());
             }
 
             // Bind SRV descriptor table (RootParameter index for SRV table)
-            cmd->SetGraphicsRootDescriptorTable(rootSigInfo->srvRootIndex, srvHandle.gpu);
+            cmd->SetGraphicsRootDescriptorTable(rootSigInfo->srvRootIndex, srvHandle->gpu);
 
             // Bind Sampler descriptor table (RootParameter index for Sampler table)
-            cmd->SetGraphicsRootDescriptorTable(rootSigInfo->samplerRootIndex, samplerHandle->handle.gpu);
+            cmd->SetGraphicsRootDescriptorTable(rootSigInfo->samplerRootIndex, samplerHandle->gpu);
         }
         else
         {  // TODO:

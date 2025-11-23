@@ -60,7 +60,7 @@ jobs:
     - name: Build
       shell: pwsh
       run: |
-        .\tools\cmdline\axmol -p win32 -a x64 -xc '-DAX_RENDER_API=d3d' -O3
+        .\tools\cmdline\axmol -p win32 -a x64 -xc '-DAX_RENDER_API=d3d11' -O3
     - name: Check prebuilt workflow
       shell: pwsh
       run: |
@@ -106,7 +106,7 @@ jobs:
 
         - name: Build
           shell: pwsh
-          run: .\tools\cmdline\axmol -p winuwp -a x64 -O3 -xc '-DAX_RENDER_API=d3d'
+          run: .\tools\cmdline\axmol -p winuwp -a x64 -O3 -xc '-DAX_RENDER_API=d3d11'
   win32-clang-ogl:
         runs-on: windows-latest
         steps:

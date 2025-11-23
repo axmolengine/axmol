@@ -54,10 +54,10 @@ struct SLCReflectContext
     yasio::fast_ibstream_view* ibs;
 };
 
-ShaderModuleImpl::ShaderModuleImpl(ID3D12Device* device, ShaderStage stage, std::string_view source)
+ShaderModuleImpl::ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, std::string_view source)
     : ShaderModule(stage)
 {
-    compileShader(device, stage, source);
+    compileShader(driver, stage, source);
 }
 
 ShaderModuleImpl::~ShaderModuleImpl()
@@ -71,7 +71,7 @@ void ShaderModuleImpl::releaseShader()
     _nativeHandle.view = {};
 }
 
-void ShaderModuleImpl::compileShader(ID3D12Device* device, ShaderStage stage, std::string_view source)
+void ShaderModuleImpl::compileShader(DriverImpl* driver, ShaderStage stage, std::string_view source)
 {
     std::fill(std::begin(_builtinVertexInputs), std::end(_builtinVertexInputs), nullptr);
 
@@ -182,8 +182,6 @@ void ShaderModuleImpl::compileShader(ID3D12Device* device, ShaderStage stage, st
 
         assert(ibs.eof());
     } while (false);  // iterator stages, current only 1 stage
-
-    auto driver = static_cast<DriverImpl*>(DriverBase::getInstance());
 
     driver->compileShader(shaderSource, stage, _nativeHandle);
 

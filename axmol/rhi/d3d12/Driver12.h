@@ -1,7 +1,25 @@
 /****************************************************************************
- Copyright (c) 2019-present Axmol Engine contributors
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
  ****************************************************************************/
 #pragma once
 
@@ -38,14 +56,20 @@ struct DisposableResource
     enum class Type
     {
         Resource,
-        DescriptorHeap,
-        PipelineState,
-        RootSignature,
+        ShaderResourceView,
+        RenderTargetView,
+        DepthStencilView,
+        SamplerView,
         // extend as needed
     };
     uint32_t frameMask{0};
     Type type{};
-    Microsoft::WRL::ComPtr<IUnknown> object;  // generic holder
+
+    union
+    {
+        DescriptorHandle* dh;
+        ID3D12Resource* resource;
+    };
 };
 
 struct IsolateSubmission
@@ -54,11 +78,6 @@ struct IsolateSubmission
     Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> cmdList;
     Microsoft::WRL::ComPtr<ID3D12Fence> fence;
     UINT64 fenceValue = 0;
-};
-
-struct D3D12SamplerHandle
-{
-    DescriptorHandle handle;
 };
 
 class DriverImpl : public DriverBase
@@ -112,29 +131,17 @@ public:
     void finishIsolateSubmission(bool waitForCompletion = true);
 
     // Allocation
-    DescriptorHandle allocSRV() { return _srvAllocator->allocate(); }
-    DescriptorHandle allocSampler() { return _samplerAllocator->allocate(); }
-    DescriptorHandle allocRTV() { return _rtvAllocator->allocate(); }
-    DescriptorHandle allocDSV() { return _dsvAllocator->allocate(); }
 
-    // Free or defer free with fence
-    void freeSRV(const DescriptorHandle& h) { _srvAllocator->free(h); }
-    void freeSampler(const DescriptorHandle& h) { _samplerAllocator->free(h); }
-    void freeRTV(const DescriptorHandle& h) { _rtvAllocator->free(h); }
-    void freeDSV(const DescriptorHandle& h) { _dsvAllocator->free(h); }
+    DescriptorHandle* allocateDescriptor(DisposableResource::Type type);
+    void releaseDescriptor(DescriptorHandle* handle, DisposableResource::Type type);
 
-    void deferFreeSRV(const DescriptorHandle& h, uint64_t fence) { _srvAllocator->deferFree(h, fence); }
-    void deferFreeSampler(const DescriptorHandle& h, uint64_t fence) { _samplerAllocator->deferFree(h, fence); }
-    void deferFreeRTV(const DescriptorHandle& h, uint64_t fence) { _rtvAllocator->deferFree(h, fence); }
-    void deferFreeDSV(const DescriptorHandle& h, uint64_t fence) { _dsvAllocator->deferFree(h, fence); }
-
-    ID3D12DescriptorHeap* getSRVHeap(const DescriptorHandle& h) const { return _srvAllocator->getDescriptorHeap(h); }
-    ID3D12DescriptorHeap* getSamplerHeap(const DescriptorHandle& h) const
+    ID3D12DescriptorHeap* getSRVHeap(const DescriptorHandle* h) const { return _srvAllocator->getDescriptorHeap(h); }
+    ID3D12DescriptorHeap* getSamplerHeap(const DescriptorHandle* h) const
     {
         return _samplerAllocator->getDescriptorHeap(h);
     }
-    ID3D12DescriptorHeap* getRTVHeap(const DescriptorHandle& h) const { return _rtvAllocator->getDescriptorHeap(h); }
-    ID3D12DescriptorHeap* getDSVHeap(const DescriptorHandle& h) const { return _dsvAllocator->getDescriptorHeap(h); }
+    ID3D12DescriptorHeap* getRTVHeap(const DescriptorHandle* h) const { return _rtvAllocator->getDescriptorHeap(h); }
+    ID3D12DescriptorHeap* getDSVHeap(const DescriptorHandle* h) const { return _dsvAllocator->getDescriptorHeap(h); }
 
     void processDisposalResources(uint64_t completedFence);
 
@@ -168,7 +175,6 @@ private:
     std::unique_ptr<DescriptorHeapAllocator> _srvAllocator;
     std::unique_ptr<DescriptorHeapAllocator> _rtvAllocator;
     std::unique_ptr<DescriptorHeapAllocator> _dsvAllocator;
-
     std::unique_ptr<DescriptorHeapAllocator> _samplerAllocator;
 
     UINT _rtvDescriptorSize{0};
