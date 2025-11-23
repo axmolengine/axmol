@@ -86,7 +86,8 @@ bool GridBase::initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipp
     AX_SAFE_RETAIN(_texture);
     _isTextureFlipped = flipped;
 
-#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_D3D11 || AX_RENDER_API == AX_RENDER_API_D3D12 || AX_RENDER_API == AX_RENDER_API_VK
+#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_D3D11 || \
+    AX_RENDER_API == AX_RENDER_API_D3D12 || AX_RENDER_API == AX_RENDER_API_VK
     _isTextureFlipped = !flipped;
 #endif
 

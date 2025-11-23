@@ -33,5 +33,4 @@ void fatalError(std::string_view op, HRESULT hr)
     showAlert(msg, "D3D12: Fatal Error", AlertStyle::IconError | AlertStyle::RequireSync);
     utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
 }
-}
-
+}  // namespace ax::rhi::d3d12

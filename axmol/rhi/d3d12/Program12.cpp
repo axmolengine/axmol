@@ -113,4 +113,4 @@ const axstd::string_map<UniformInfo>& ProgramImpl::getActiveUniformInfos(ShaderS
                                         : _fragmentShader->getActiveUniformInfos();
 }
 
-}  // namespace ax::rhi::vk
+}  // namespace ax::rhi::d3d12

@@ -96,7 +96,7 @@ DescriptorHandle* DescriptorHeapAllocator::allocate()
         if (tryAcquireSlot(b, idx))
         {
             DescriptorHandle* h = (DescriptorHandle*)_handlePool.allocate();
-            h->blockIndex    = bi;
+            h->blockIndex       = bi;
             h->slotIndex        = idx;
             h->shaderVisible    = b.shaderVisible;
 
@@ -119,10 +119,10 @@ DescriptorHandle* DescriptorHeapAllocator::allocate()
     if (!tryAcquireSlot(b, idx))
         return {};  // catastrophic, should not happen
 
-    DescriptorHandle* h = (DescriptorHandle*) _handlePool.allocate();
-    h->blockIndex    = uint32_t(_blocks.size() - 1);
-    h->slotIndex     = idx;
-    h->shaderVisible = b.shaderVisible;
+    DescriptorHandle* h = (DescriptorHandle*)_handlePool.allocate();
+    h->blockIndex       = uint32_t(_blocks.size() - 1);
+    h->slotIndex        = idx;
+    h->shaderVisible    = b.shaderVisible;
 
     h->cpu = b.cpuStart;
     h->cpu.ptr += SIZE_T(idx) * SIZE_T(b.descriptorSize);
@@ -166,31 +166,31 @@ void DescriptorHeapAllocator::release(DescriptorHandle* h)
     _handlePool.release(h);
 }
 
-//void DescriptorHeapAllocator::deferFree(const DescriptorHandle& h, uint64_t fenceValue)
+// void DescriptorHeapAllocator::deferFree(const DescriptorHandle& h, uint64_t fenceValue)
 //{
-//    if (!h.valid())
-//        return;
-//    std::lock_guard<std::mutex> lock(_mutex);
-//    _deferred.push_back({h, fenceValue});
-//}
+//     if (!h.valid())
+//         return;
+//     std::lock_guard<std::mutex> lock(_mutex);
+//     _deferred.push_back({h, fenceValue});
+// }
 //
-//void DescriptorHeapAllocator::reapDeferred(uint64_t completedFence)
+// void DescriptorHeapAllocator::reapDeferred(uint64_t completedFence)
 //{
-//    std::lock_guard<std::mutex> lock(_mutex);
-//    size_t w = 0;
-//    for (size_t r = 0; r < _deferred.size(); ++r)
-//    {
-//        if (_deferred[r].fence <= completedFence)
-//        {
-//            free(_deferred[r].h);
-//        }
-//        else
-//        {
-//            _deferred[w++] = _deferred[r];
-//        }
-//    }
-//    _deferred.resize(w);
-//}
+//     std::lock_guard<std::mutex> lock(_mutex);
+//     size_t w = 0;
+//     for (size_t r = 0; r < _deferred.size(); ++r)
+//     {
+//         if (_deferred[r].fence <= completedFence)
+//         {
+//             free(_deferred[r].h);
+//         }
+//         else
+//         {
+//             _deferred[w++] = _deferred[r];
+//         }
+//     }
+//     _deferred.resize(w);
+// }
 
 DescriptorHeapAllocator::Stats DescriptorHeapAllocator::stats() const
 {

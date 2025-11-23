@@ -133,4 +133,4 @@ int evalulateMaxTexSize(D3D_FEATURE_LEVEL fl)
     }
 }
 
-}
+}  // namespace ax::rhi::dxutils

@@ -64,4 +64,4 @@ private:
     ShaderModuleImpl* _fragmentShader = nullptr;
 };
 
-}  // namespace ax::rhi::vk
+}  // namespace ax::rhi::d3d12

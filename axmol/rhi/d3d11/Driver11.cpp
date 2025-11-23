@@ -495,4 +495,4 @@ bool DriverImpl::checkFormatSupport(DXGI_FORMAT format)
     return SUCCEEDED(hr) && (formatSupport & D3D11_FORMAT_SUPPORT_TEXTURE2D);
 }
 
-}  // namespace ax::rhi::d3d
+}  // namespace ax::rhi::d3d11

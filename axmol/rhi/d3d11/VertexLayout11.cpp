@@ -140,4 +140,4 @@ void VertexLayoutImpl::apply(ID3D11DeviceContext* context, Program* program) con
     context->IASetInputLayout(_d3dVL);
 }
 
-}  // namespace ax::rhi::d3d
+}  // namespace ax::rhi::d3d11

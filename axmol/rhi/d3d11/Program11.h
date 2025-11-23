@@ -134,6 +134,6 @@ private:
     BufferImpl* _vsUniformBuffer{nullptr};
     BufferImpl* _fsUniformBuffer{nullptr};
 };
-}  // namespace ax::rhi::d3d
+}  // namespace ax::rhi::d3d11
 
 /** @} */

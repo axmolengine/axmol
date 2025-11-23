@@ -133,4 +133,4 @@ void RenderTargetImpl::apply(ID3D11DeviceContext* context) const
     context->OMSetRenderTargets(_rtvCuont, _rtvs.data(), _dsv);
 }
 
-}  // namespace ax::rhi::d3d
+}  // namespace ax::rhi::d3d11

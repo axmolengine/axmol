@@ -199,4 +199,4 @@ void BufferImpl::usingDefaultStoredData(bool needDefaultStoredData)
     }
 }
 
-}  // namespace ax::rhi::d3d
+}  // namespace ax::rhi::d3d11

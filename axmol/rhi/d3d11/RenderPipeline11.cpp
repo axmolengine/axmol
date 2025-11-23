@@ -255,4 +255,4 @@ void RenderPipelineImpl::update(const RenderTarget*, const PipelineDesc& desc)
     const FLOAT blendColor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
     _context->OMSetBlendState(blendState.Get(), blendColor, sampleMask);
 }
-}  // namespace ax::rhi::d3d
+}  // namespace ax::rhi::d3d11

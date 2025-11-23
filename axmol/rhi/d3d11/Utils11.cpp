@@ -113,4 +113,4 @@ void UtilsD3D::fatalError(std::string_view op, HRESULT hr)
     utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
 }
 
-}  // namespace ax::rhi::d3d
+}  // namespace ax::rhi::d3d11

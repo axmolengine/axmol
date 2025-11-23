@@ -155,4 +155,4 @@ void DepthStencilStateImpl::apply(ID3D11DeviceContext* ctx, UINT stencilRef) con
         ctx->OMSetDepthStencilState(_activeState.Get(), stencilRef);
 }
 
-}  // namespace ax::rhi::d3d
+}  // namespace ax::rhi::d3d11

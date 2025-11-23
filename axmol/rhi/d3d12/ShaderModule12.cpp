@@ -54,8 +54,7 @@ struct SLCReflectContext
     yasio::fast_ibstream_view* ibs;
 };
 
-ShaderModuleImpl::ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, std::string_view source)
-    : ShaderModule(stage)
+ShaderModuleImpl::ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, std::string_view source) : ShaderModule(stage)
 {
     compileShader(driver, stage, source);
 }

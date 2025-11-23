@@ -216,7 +216,7 @@ void BufferImpl::copyFromUploadBuffer(const void* data, std::size_t offset, std:
 
     // Copy from upload buffer to GPU buffer
     submission->CopyBufferRegion(_resource.Get(), static_cast<UINT64>(offset), _uploadBuffer.Get(), 0,
-                          static_cast<UINT64>(size));
+                                 static_cast<UINT64>(size));
 
     // Transition back to a usable state (vertex/index/constant/common)
     D3D12_RESOURCE_STATES targetState = translateInitialState(_type, _usage);

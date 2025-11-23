@@ -143,4 +143,4 @@ void ProgramImpl::bindFragmentUniformBuffer(ID3D11DeviceContext* context,
     ID3D11Buffer* psUniformBuffer = static_cast<ID3D11Buffer*>(_fsUniformBuffer->internalHandle());
     context->PSSetConstantBuffers(bindingIndex, 1, &psUniformBuffer);
 }
-}  // namespace ax::rhi::d3d
+}  // namespace ax::rhi::d3d11

@@ -180,4 +180,4 @@ private:
 
 /** @} */
 
-}  // namespace ax::rhi::d3d
+}  // namespace ax::rhi::d3d11

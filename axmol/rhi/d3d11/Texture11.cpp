@@ -361,4 +361,4 @@ void TextureImpl::generateMipmaps(ID3D11DeviceContext* context)
     _overrideMipLevels = (std::max)(1u, srvDesc.Texture2D.MipLevels);
 }
 
-}  // namespace ax::rhi::d3d
+}  // namespace ax::rhi::d3d11

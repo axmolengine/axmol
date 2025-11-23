@@ -371,4 +371,4 @@ void ShaderModuleImpl::setBuiltinLocations()
     /// u_labelPass
     _builtinUniforms[Uniform::LABEL_PASS] = getUniformInfo(UNIFORM_NAME_LABEL_PASS);
 }
-}  // namespace ax::rhi::d3d
+}  // namespace ax::rhi::d3d11

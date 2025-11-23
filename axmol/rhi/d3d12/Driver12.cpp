@@ -562,7 +562,8 @@ void DriverImpl::queueDisposal(DescriptorHandle* handle, DisposableResource::Typ
     queueDisposalInternal(DisposableResource{.type = type, .handle = handle});
 }
 
-void DriverImpl::processDisposalQueue(uint32_t completedMask) {
+void DriverImpl::processDisposalQueue(uint32_t completedMask)
+{
 
     if (!_disposalQueue.empty())
     {
