@@ -22,6 +22,8 @@ struct DescriptorHandle
     // Validity
     bool shaderVisible = false;
     bool valid() const { return cpu.ptr != 0; }
+
+    void reset() { memset(this, 0x0, sizeof(*this)); }
 };
 
 struct DescriptorHeapBlock

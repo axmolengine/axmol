@@ -6,6 +6,8 @@
 #pragma once
 
 #include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/d3d12/DescriptorHeapAllocator12.h"
+#include "axmol/rhi/d3d12/ShaderModule12.h"
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <wrl/client.h>
@@ -15,17 +17,13 @@
 #include <deque>
 #include <functional>
 #include <array>
-#include "RenderContext12.h"
-#include "Buffer12.h"
-#include "Texture12.h"
-#include "RenderTarget12.h"
-#include "RenderPipeline12.h"
-#include "DepthStencilState12.h"
-#include "VertexLayout12.h"
-#include "Program12.h"
-#include "axmol/rhi/d3d12/DescriptorHeapAllocator12.h"
+
 #include <dxcapi.h>
-#include "axmol/rhi/d3d12/ShaderModule12.h"
+
+namespace ax::rhi
+{
+class RenderTarget;
+}
 
 namespace ax::rhi::d3d12
 {
@@ -189,8 +187,8 @@ private:
     DXGI_ADAPTER_DESC _adapterDesc{};
     std::optional<LARGE_INTEGER> _driverVersion;
 
-    ComPtr<IDxcLibrary> _dxcLibrary;
-    ComPtr<IDxcCompiler> _dxcCompiler;
+    Microsoft::WRL::ComPtr<IDxcLibrary> _dxcLibrary;
+    Microsoft::WRL::ComPtr<IDxcCompiler> _dxcCompiler;
     std::vector<LPCWSTR> _dxcArguments;
 };
 

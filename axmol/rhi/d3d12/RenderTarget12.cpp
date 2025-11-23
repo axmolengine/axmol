@@ -1,5 +1,5 @@
 #include "axmol/rhi/d3d12/RenderTarget12.h"
-#include "axmol/rhi/d3d12/Driver12.h"
+#include "axmol/rhi/d3d12/RenderContext12.h"
 #include "axmol/base/Logging.h"
 
 namespace ax::rhi::d3d12
@@ -10,7 +10,6 @@ RenderTargetImpl::RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget)
 {
     if (_defaultRenderTarget)
         _dirtyFlags = TargetBufferFlags::ALL;
-    _attachmentTexPtrs.fill(nullptr);
 }
 
 RenderTargetImpl::~RenderTargetImpl()
@@ -21,90 +20,149 @@ RenderTargetImpl::~RenderTargetImpl()
 
 void RenderTargetImpl::invalidate()
 {
-    _attachmentTexPtrs.fill(nullptr);
-    _attachmentsDirty = true;
-    _dirtyFlags       = TargetBufferFlags::ALL;
+    _dirtyFlags = TargetBufferFlags::ALL;
 }
 
 void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
                                        const RenderPassDesc& renderPassDesc,
                                        uint32_t width,
-                                       uint32_t height)
+                                       uint32_t height,
+                                       uint32_t imageIndex)
 {
-    // Collect attachments
-    if (_defaultRenderTarget)
+    if (_dirtyFlags != TargetBufferFlags::NONE)
     {
-        auto colorTex = _driver->getSwapchainColorAttachment();
-        auto depthTex = _driver->getSwapchainDepthStencilAttachment();
+        auto device = _driver->getDevice();
 
-        _attachmentTexPtrs.fill(nullptr);
-
-        if (colorTex)
-        {
-            _attachmentTexPtrs[0] = colorTex;
-            //_rtvHandles[0]        = _driver->getRTVDescriptor(colorTex);
-        }
-        if (depthTex)
-        {
-            _attachmentTexPtrs[DepthViewIndex] = depthTex;
-            //_dsvHandle                         = _driver->getDSVDescriptor(depthTex);
-        }
-    }
-    else
-    {
+        // --- Handle user-defined render targets (MRT) ---
         for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
         {
+            if (!bitmask::any(_dirtyFlags, getMRTColorFlag(i)))
+                continue;
+
+            if (_rtvsDescriptors[i].valid())
+                _driver->freeRTV(_rtvsDescriptors[i]);
+
             if (_color[i].texture)
             {
-                auto* texImpl         = static_cast<TextureImpl*>(_color[i].texture);
-                _attachmentTexPtrs[i] = texImpl;
-                //_rtvHandles[i]        = _driver->getRTVDescriptor(texImpl);
+                auto texImpl        = static_cast<TextureImpl*>(_color[i].texture);
+                _rtvsDescriptors[i] = _driver->allocRTV();
+                device->CreateRenderTargetView(texImpl->internalHandle().resource.Get(), nullptr,
+                                               _rtvsDescriptors[i].cpu);
             }
             else
             {
-                _attachmentTexPtrs[i] = nullptr;
+                _rtvsDescriptors[i].reset();
+            }
+
+            _rtvHandles[i] = _rtvsDescriptors[i].cpu;
+        }
+
+        if (bitmask::any(_dirtyFlags, TargetBufferFlags::DEPTH_AND_STENCIL))
+        {
+            if (_dsvDescriptor.valid())
+                _driver->freeDSV(_dsvDescriptor);
+
+            if (_depthStencil.texture)
+            {
+                auto texImpl   = static_cast<TextureImpl*>(_depthStencil.texture);
+                _dsvDescriptor = _driver->allocDSV();
+
+                D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
+                dsvDesc.Format             = DXGI_FORMAT_D24_UNORM_S8_UINT;
+                dsvDesc.ViewDimension      = D3D12_DSV_DIMENSION_TEXTURE2D;
+                dsvDesc.Texture2D.MipSlice = 0;
+                device->CreateDepthStencilView(texImpl->internalHandle().resource.Get(), &dsvDesc, _dsvDescriptor.cpu);
+            }
+            else
+            {
+                _dsvDescriptor.reset();
+            }
+
+            _dsvHandle = _dsvDescriptor.cpu;
+        }
+
+        // Count active color attachments
+        _numRTVs = 0;
+        for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+        {
+            if (_color[i])
+                ++_numRTVs;
+            else
+                break;
+        }
+
+        // Reset dirty flags after binding
+        _dirtyFlags = TargetBufferFlags::NONE;
+    }
+
+    if (!_defaultRenderTarget)
+        imageIndex = 0;  // current for non-default RT, only one set of attachments
+
+    // Transition attachments to render target state if not default
+    if (_defaultRenderTarget)
+    {
+        auto texImpl = static_cast<TextureImpl*>(_color[imageIndex].texture);
+        texImpl->transitionState(cmd, D3D12_RESOURCE_STATE_RENDER_TARGET);
+
+        if (_depthStencil)
+        {
+            auto depthTex = static_cast<TextureImpl*>(_depthStencil.texture);
+            depthTex->transitionState(cmd, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+        }
+
+        // Bind RTVs and DSV to pipeline
+        if (_depthStencil)
+            cmd->OMSetRenderTargets(1, &_rtvHandles[imageIndex], FALSE, &_dsvHandle);
+        else
+            cmd->OMSetRenderTargets(1, &_rtvHandles[imageIndex], FALSE, nullptr);
+
+        // Clear color attachments if requested
+        //if (bitmask::any(renderPassDesc.flags.clear, getMRTColorFlag(imageIndex)))
+        //{
+        //    FLOAT clearColor[4] = {renderPassDesc.clearColorValue[0], renderPassDesc.clearColorValue[1],
+        //                           renderPassDesc.clearColorValue[2], renderPassDesc.clearColorValue[3]};
+        //    cmd->ClearRenderTargetView(_rtvHandles[imageIndex], clearColor, 0, nullptr);
+        //}
+
+        for (auto i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+        {
+            if (!_color[i])
+                break;
+            if (bitmask::any(renderPassDesc.flags.clear, getMRTColorFlag(imageIndex)))
+            {
+                FLOAT clearColor[4] = {renderPassDesc.clearColorValue[0], renderPassDesc.clearColorValue[1],
+                                       renderPassDesc.clearColorValue[2], renderPassDesc.clearColorValue[3]};
+                cmd->ClearRenderTargetView(_rtvHandles[imageIndex], clearColor, 0, nullptr);
             }
         }
-
-        if (_depthStencil.texture)
-        {
-            auto* texImpl                      = static_cast<TextureImpl*>(_depthStencil.texture);
-            _attachmentTexPtrs[DepthViewIndex] = texImpl;
-            //_dsvHandle                         = _driver->getDSVDescriptor(texImpl);
-        }
-        else
-        {
-            _attachmentTexPtrs[DepthViewIndex] = nullptr;
-        }
     }
-
-    // Bind render targets
-    UINT numRTVs = 0;
-    for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
-    {
-        if (_attachmentTexPtrs[i])
-            ++numRTVs;
-        else
-            break;
-    }
-
-    if (_attachmentTexPtrs[DepthViewIndex])
-        cmd->OMSetRenderTargets(numRTVs, _rtvHandles.data(), FALSE, &_dsvHandle);
     else
-        cmd->OMSetRenderTargets(numRTVs, _rtvHandles.data(), FALSE, nullptr);
-
-    // Clear attachments
-    for (size_t i = 0; i < numRTVs; ++i)
     {
-        if (bitmask::any(renderPassDesc.flags.clear, getMRTColorFlag(i)))
+        prepareAttachmentsForRendering(cmd);
+
+         // Bind RTVs and DSV to pipeline
+        if (_depthStencil)
+            cmd->OMSetRenderTargets(_numRTVs, _rtvHandles.data(), FALSE, &_dsvHandle);
+        else
+            cmd->OMSetRenderTargets(_numRTVs, _rtvHandles.data(), FALSE, nullptr);
+
+        // Clear color attachments if requested
+        for (auto i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
         {
-            FLOAT clearColor[4] = {renderPassDesc.clearColorValue[0], renderPassDesc.clearColorValue[1],
-                                   renderPassDesc.clearColorValue[2], renderPassDesc.clearColorValue[3]};
-            cmd->ClearRenderTargetView(_rtvHandles[i], clearColor, 0, nullptr);
+            if (!_color[i])
+                break;
+            if (bitmask::any(renderPassDesc.flags.clear, getMRTColorFlag(imageIndex)))
+            {
+                FLOAT clearColor[4] = {renderPassDesc.clearColorValue[0], renderPassDesc.clearColorValue[1],
+                                       renderPassDesc.clearColorValue[2], renderPassDesc.clearColorValue[3]};
+                cmd->ClearRenderTargetView(_rtvHandles[imageIndex], clearColor, 0, nullptr);
+            }
         }
     }
 
-    if (_attachmentTexPtrs[DepthViewIndex])
+   
+    // Clear depth-stencil if requested
+    if (_depthStencil)
     {
         if (bitmask::any(renderPassDesc.flags.clear, TargetBufferFlags::DEPTH_AND_STENCIL))
         {
@@ -113,26 +171,27 @@ void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
                                        static_cast<UINT8>(renderPassDesc.clearStencilValue), 0, nullptr);
         }
     }
-
-    if (!_defaultRenderTarget)
-        prepareAttachmentsForRendering(cmd);
 }
 
-void RenderTargetImpl::endRenderPass(ID3D12GraphicsCommandList* /*cmd*/)
+void RenderTargetImpl::endRenderPass(ID3D12GraphicsCommandList* cmd, uint32_t imageIndex)
 {
-    // In D3D12, nothing explicit: render pass ends when command list finishes
-    if (!_defaultRenderTarget)
+    if (_defaultRenderTarget)
+    {
+        auto texImpl = static_cast<TextureImpl*>(_color[imageIndex].texture);
+        texImpl->transitionState(cmd, D3D12_RESOURCE_STATE_PRESENT);
+    }
+    else
     {
         for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
         {
-            TextureImpl* texImpl = _attachmentTexPtrs[i];
+            TextureImpl* texImpl = static_cast<TextureImpl*>(_color[i].texture);
             if (!texImpl)
                 break;
             texImpl->setKnownState(D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
         }
-        if (_attachmentTexPtrs[DepthViewIndex])
+        if (_depthStencil)
         {
-            _attachmentTexPtrs[DepthViewIndex]->setKnownState(D3D12_RESOURCE_STATE_DEPTH_WRITE);
+            static_cast<TextureImpl*>(_depthStencil.texture)->setKnownState(D3D12_RESOURCE_STATE_DEPTH_WRITE);
         }
     }
 }
@@ -144,37 +203,86 @@ void RenderTargetImpl::prepareAttachmentsForRendering(ID3D12GraphicsCommandList*
 
     for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
     {
-        TextureImpl* texImpl = _attachmentTexPtrs[i];
+        TextureImpl* texImpl = static_cast<TextureImpl*>(_color[i].texture);
         if (!texImpl)
             break;
         texImpl->transitionState(cmd, D3D12_RESOURCE_STATE_RENDER_TARGET);
     }
 
-    if (_attachmentTexPtrs[DepthViewIndex])
+    if (_depthStencil)
     {
-        _attachmentTexPtrs[DepthViewIndex]->transitionState(cmd, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+        static_cast<TextureImpl*>(_depthStencil.texture)->transitionState(cmd, D3D12_RESOURCE_STATE_DEPTH_WRITE);
     }
 }
 
-void RenderTargetImpl::rebuildAttachmentsForSwapchain(IDXGISwapChain4* swapchain, uint32_t width, uint32_t height) {
-    if (!_defaultRenderTarget) {
+void RenderTargetImpl::rebuildAttachmentsForSwapchain(IDXGISwapChain4* swapchain, uint32_t width, uint32_t height)
+{
+    if (!_defaultRenderTarget)
+    {
         AXLOGW("Attempted to rebuild swapchain attachments on a non-default render target.");
         return;
     }
 
+    static_assert(MAX_COLOR_ATTCHMENT >= RenderContextImpl::SWAPCHAIN_BUFFER_COUNT,
+                  "RenderTargetImpl color attachment array too small for swapchain buffers");
 
+    // destroy existing attachments if any
+    for (int i = 0; i < RenderContextImpl::SWAPCHAIN_BUFFER_COUNT; ++i)
+    {
+        if (_color[i].texture)
+            AX_SAFE_RELEASE_NULL(_color[i].texture);
+    }
+
+    if (_depthStencil.texture)
+    {
+        AX_SAFE_RELEASE_NULL(_depthStencil.texture);
+    }
+
+    // Create color attachments wrapping swapchain buffers
+    const UINT colorAttachmentCount = RenderContextImpl::SWAPCHAIN_BUFFER_COUNT;
+    for (UINT i = 0; i < colorAttachmentCount; ++i)
+    {
+        Microsoft::WRL::ComPtr<ID3D12Resource> backBuffer;
+        HRESULT hr = swapchain->GetBuffer(i, IID_PPV_ARGS(&backBuffer));
+        AXASSERT(SUCCEEDED(hr), "SwapChain GetBuffer failed");
+
+        _color[i].texture = new TextureImpl(_driver, backBuffer);
+        _color[i].level   = 0;
+    }
+
+    // Create depth-stencil attachment
+    // Create a D24S8 texture as default depth-stencil
+    TextureDesc depthDesc{};
+    depthDesc.textureType  = TextureType::TEXTURE_2D;
+    depthDesc.width        = static_cast<uint16_t>(width);
+    depthDesc.height       = static_cast<uint16_t>(height);
+    depthDesc.arraySize    = 1;
+    depthDesc.mipLevels    = 1;
+    depthDesc.pixelFormat  = PixelFormat::D24S8;
+    depthDesc.textureUsage = TextureUsage::RENDER_TARGET;
+
+    auto tex = new TextureImpl(_driver, depthDesc);
+    tex->updateData(nullptr, width, height, 0);  // initialize resource
+
+    // Create DSV in DSV heap
+    D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
+    dsvDesc.Format        = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+    dsvDesc.Flags         = D3D12_DSV_FLAG_NONE;
+    _depthStencil.texture = tex;
+    _depthStencil.level   = 0;
+
+    _dirtyFlags = TargetBufferFlags::ALL;
 }
 
 RenderTargetImpl::Attachment RenderTargetImpl::getColorAttachment(int index) const
 {
-    return _defaultRenderTarget ? _driver->getSwapchainColorAttachment()
-                                : static_cast<TextureImpl*>(_color[index].texture);
+    return static_cast<TextureImpl*>(_color[index].texture);
 }
 
 RenderTargetImpl::Attachment RenderTargetImpl::getDepthStencilAttachment() const
 {
-    return _defaultRenderTarget ? _driver->getSwapchainDepthStencilAttachment()
-                                : static_cast<TextureImpl*>(_depthStencil.texture);
+    return static_cast<TextureImpl*>(_depthStencil.texture);
 }
 
 }  // namespace ax::rhi::d3d12

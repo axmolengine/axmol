@@ -45,7 +45,6 @@ enum class DynamicStateBits : uint32_t
     StencilRef = 1 << 2,
     CullMode   = 1 << 3,
     FrontFace  = 1 << 4,
-
 };
 
 AX_ENABLE_BITMASK_OPS(DynamicStateBits);

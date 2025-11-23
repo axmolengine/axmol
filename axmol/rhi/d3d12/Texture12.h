@@ -5,7 +5,7 @@
 #pragma once
 
 #include "axmol/rhi/Texture.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/rhi/d3d12/DescriptorHeapAllocator12.h"
 #include <d3d12.h>
 #include <wrl/client.h>
 #include <vector>
@@ -17,6 +17,7 @@ namespace ax::rhi::d3d12
 using Microsoft::WRL::ComPtr;
 
 class DriverImpl;
+class D3D12SamplerHandle;
 
 /**
  * @brief A TextureHandle holds D3D12 resource
@@ -24,11 +25,9 @@ class DriverImpl;
 struct TextureHandle
 {
     ComPtr<ID3D12Resource> resource;
-    D3D12_CPU_DESCRIPTOR_HANDLE view;  // SRV for color or DSV for depth-stencil
+    DescriptorHandle srv;  // SRV for color
 
     explicit operator bool() const { return resource != nullptr; }
-
-    void reset() { resource.Reset(); }
 };
 
 /**
@@ -106,6 +105,8 @@ public:
     const TextureHandle& internalHandle() const { return _nativeTexture; }
     const TextureDesc& getDesc() const { return _desc; }
 
+    D3D12SamplerHandle* getSampler() const { return _sampler; }
+
 private:
     void ensureNativeTexture();
     void generateMipmaps(ID3D12GraphicsCommandList* cmd);
@@ -114,7 +115,7 @@ private:
     ResourceStateTracker _stateTracker;
     TextureHandle _nativeTexture{};
     TextureDesc _desc{};
-    bool _ownResources{false};
+    D3D12SamplerHandle* _sampler{nullptr}; // weak ref
 };
 
 }  // namespace ax::rhi::d3d12

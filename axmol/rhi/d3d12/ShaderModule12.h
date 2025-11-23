@@ -26,6 +26,7 @@
 #include <d3d12.h>
 #include <d3dcompiler.h>
 #include <wrl/client.h>
+#include <span>
 
 namespace ax::rhi::d3d12
 {
@@ -42,8 +43,15 @@ struct D3D12BlobHandle
     std::span<uint8_t> view;
 };
 
+struct UniformBlockInfo
+{
+    int binding;          // Vulkan binding index
+    uint32_t sizeBytes;   // total size of the UBO
+    uint16_t numMembers;  // number of uniforms in this block
+    std::string name;     // block name
+};
 /**
- * @brief A D3D11-based ShaderModule implementation
+ * @brief A D3D12-based ShaderModule implementation
  *
  */
 class ShaderModuleImpl : public ShaderModule
@@ -94,6 +102,9 @@ public:
      */
     inline const axstd::string_map<UniformInfo>& getActiveUniformInfos() const { return _activeUniformInfos; }
 
+    inline const std::vector<UniformBlockInfo>& getActiveUniformBlockInfos() const { return _activeUniformBlockInfos; }
+    inline const std::vector<UniformInfo>& getActiveSamplerInfos() const { return _activeSamplerInfos; }
+
     /**
      * Get maximum uniform location.
      * @return Maximum uniform location.
@@ -120,6 +131,10 @@ private:
 
     axstd::string_map<VertexInputDesc> _activeVertexInputs;
     axstd::string_map<UniformInfo> _activeUniformInfos;
+
+    std::vector<UniformBlockInfo> _activeUniformBlockInfos;
+    std::vector<UniformInfo> _activeSamplerInfos;
+    int _samplerCount{0};
 
     const VertexInputDesc* _builtinVertexInputs[VIK_COUNT];
 

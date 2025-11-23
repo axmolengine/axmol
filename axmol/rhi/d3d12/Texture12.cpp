@@ -13,24 +13,58 @@ namespace ax::rhi::d3d12
 static constexpr uint32_t LEVEL_INITIAL_CAPS = 16;
 static constexpr uint32_t LAYER_INITIAL_CAPS = 8;
 
+static void d3d12TexDescToTexDesc(TextureDesc& td, const D3D12_RESOURCE_DESC& desc)
+{
+    td.textureType = (desc.DepthOrArraySize == 6 && desc.Dimension == D3D12_RESOURCE_DIMENSION_TEXTURE2D)
+                          ? TextureType::TEXTURE_CUBE
+                         : TextureType::TEXTURE_2D;
+
+    td.width     = static_cast<uint16_t>(desc.Width);
+    td.height    = static_cast<uint16_t>(desc.Height);
+    td.arraySize = desc.DepthOrArraySize;
+
+    switch (desc.Format)
+    {
+    case DXGI_FORMAT_R8G8B8A8_UNORM:
+        td.pixelFormat = PixelFormat::RGBA8;
+        break;
+    case DXGI_FORMAT_R8_UNORM:
+        td.pixelFormat = PixelFormat::R8;
+        break;
+    case DXGI_FORMAT_D24_UNORM_S8_UINT:
+        td.pixelFormat = PixelFormat::D24S8;
+        break;
+    default:
+        td.pixelFormat = PixelFormat::NONE;
+        break;
+    }
+
+    if (desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET)
+        td.textureUsage = TextureUsage::RENDER_TARGET;
+}
+
 TextureImpl::TextureImpl(DriverImpl* driver, const TextureDesc& desc)
-    : _driver(driver), _ownResources(true), _stateTracker(LEVEL_INITIAL_CAPS, LAYER_INITIAL_CAPS)
+    : _driver(driver), _stateTracker(LEVEL_INITIAL_CAPS, LAYER_INITIAL_CAPS)
 {
     updateTextureDesc(desc);
 }
 
 TextureImpl::TextureImpl(DriverImpl* driver, ComPtr<ID3D12Resource> existingResource)
-    : _driver(driver), _ownResources(false), _stateTracker(LEVEL_INITIAL_CAPS, LAYER_INITIAL_CAPS)
+    : _driver(driver), _stateTracker(LEVEL_INITIAL_CAPS, LAYER_INITIAL_CAPS)
 {
+    D3D12_RESOURCE_DESC d3dDesc = existingResource->GetDesc();
+    d3d12TexDescToTexDesc(_desc, d3dDesc);
     _nativeTexture.resource = existingResource;
 }
 
 TextureImpl::~TextureImpl()
 {
-    if (_ownResources)
-    {
-        _nativeTexture.reset();
-    }
+    // _nativeTexture.resource.Reset();
+    // if (_nativeTexture.srv.valid())
+    // {
+    //     _driver->freeSRV(_nativeTexture.srv);
+    //     _nativeTexture.srv.reset();
+    // }
 }
 
 void TextureImpl::transitionState(ID3D12GraphicsCommandList* cmd, D3D12_RESOURCE_STATES newState)
@@ -74,7 +108,7 @@ void TextureImpl::updateSubData(int xoffset,
                                 int layerIndex)
 {
     ensureNativeTexture();
-    if (!data)
+    if (!data || width <= 0 || height <= 0)
         return;
 
     auto device = _driver->getDevice();
@@ -88,14 +122,14 @@ void TextureImpl::updateSubData(int xoffset,
 
     device->GetCopyableFootprints(&texDesc, level, 1, 0, &footprint, &numRows, &rowSizeInBytes, &totalBytes);
 
-    // Create upload buffer with correct size
+    // Create upload buffer sized to footprint
     D3D12_HEAP_PROPERTIES heapProps{};
     heapProps.Type = D3D12_HEAP_TYPE_UPLOAD;
 
     D3D12_RESOURCE_DESC bufDesc{};
     bufDesc.Dimension          = D3D12_RESOURCE_DIMENSION_BUFFER;
-    bufDesc.Alignment          = 0;           // default alignment
-    bufDesc.Width              = totalBytes;  // buffer size in bytes
+    bufDesc.Alignment          = 0;
+    bufDesc.Width              = totalBytes;
     bufDesc.Height             = 1;
     bufDesc.DepthOrArraySize   = 1;
     bufDesc.MipLevels          = 1;
@@ -116,10 +150,13 @@ void TextureImpl::updateSubData(int xoffset,
     D3D12_RANGE range{0, 0};
     uploadBuffer->Map(0, &range, reinterpret_cast<void**>(&mapped));
 
-    const BYTE* srcData = reinterpret_cast<const BYTE*>(data);
-    for (UINT row = 0; row < numRows; ++row)
+    const UINT bytesPerPixel = ax::rhi::RHIUtils::getBitsPerPixel(_desc.pixelFormat) / 8;
+    const UINT rowCopySize   = width * bytesPerPixel;  // only copy sub-region width
+    const BYTE* srcData      = reinterpret_cast<const BYTE*>(data);
+
+    for (int row = 0; row < height; ++row)
     {
-        memcpy(mapped + row * footprint.Footprint.RowPitch, srcData + row * rowSizeInBytes, rowSizeInBytes);
+        memcpy(mapped + row * footprint.Footprint.RowPitch, srcData + row * rowCopySize, rowCopySize);
     }
 
     uploadBuffer->Unmap(0, nullptr);
@@ -139,7 +176,16 @@ void TextureImpl::updateSubData(int xoffset,
     src.Type            = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
     src.PlacedFootprint = footprint;
 
-    submission->CopyTextureRegion(&dst, xoffset, yoffset, 0, &src, nullptr);
+    // Define source box for the sub-region
+    D3D12_BOX srcBox{};
+    srcBox.left   = 0;
+    srcBox.top    = 0;
+    srcBox.front  = 0;
+    srcBox.right  = width;
+    srcBox.bottom = height;
+    srcBox.back   = 1;
+
+    submission->CopyTextureRegion(&dst, xoffset, yoffset, 0, &src, &srcBox);
 
     // Transition back to shader-readable state
     transitionState(submission, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
@@ -173,16 +219,55 @@ void TextureImpl::updateCompressedSubData(int xoffset,
 
     auto device = _driver->getDevice();
 
-    // Query footprint for the compressed subresource
-    const auto texDesc = _nativeTexture.resource->GetDesc();
-    D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprint;
-    UINT numRows;
-    UINT64 rowSizeInBytes;
-    UINT64 totalBytes;
+    // Query format descriptor from RHI
+    const auto& fmtDesc = ax::rhi::RHIUtils::getFormatDesc(_desc.pixelFormat);
+    AXASSERT(fmtDesc.bpp != 0, "Invalid pixel format");
+    AXASSERT(fmtDesc.blockWidth > 0 && fmtDesc.blockHeight > 0, "Not a block-compressed format");
+    AXASSERT(fmtDesc.blockSize > 0, "Invalid block size");
 
+    // Compute mip dimensions
+    const auto texDesc   = _nativeTexture.resource->GetDesc();
+    const UINT mipWidth  = std::max(1u, static_cast<UINT>(texDesc.Width >> level));
+    const UINT mipHeight = std::max(1u, static_cast<UINT>(texDesc.Height >> level));
+
+    // Enforce minimum block-aligned region (BC formats require at least minBlockX × minBlockY)
+    const UINT reqMinW = fmtDesc.minBlockX ? fmtDesc.minBlockX : fmtDesc.blockWidth;
+    const UINT reqMinH = fmtDesc.minBlockY ? fmtDesc.minBlockY : fmtDesc.blockHeight;
+
+    // Align requested sub-region to blocks; this produces the effective region we will copy
+    const UINT alignedWidth  = ((UINT)width + (fmtDesc.blockWidth - 1)) / fmtDesc.blockWidth * fmtDesc.blockWidth;
+    const UINT alignedHeight = ((UINT)height + (fmtDesc.blockHeight - 1)) / fmtDesc.blockHeight * fmtDesc.blockHeight;
+
+    // Validate destination bounds after alignment
+    AXASSERT(xoffset >= 0 && yoffset >= 0, "Negative offsets not allowed");
+    AXASSERT(static_cast<UINT>(xoffset) + alignedWidth <= mipWidth, "Compressed update exceeds mip width");
+    AXASSERT(static_cast<UINT>(yoffset) + alignedHeight <= mipHeight, "Compressed update exceeds mip height");
+
+    // Also enforce minimum region size (e.g., 4x4 for BC)
+    AXASSERT(alignedWidth >= reqMinW, "Region width smaller than minimum block requirement");
+    AXASSERT(alignedHeight >= reqMinH, "Region height smaller than minimum block requirement");
+
+    // Query footprint (device-aligned RowPitch and totalBytes for the mip)
+    D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprint{};
+    UINT numRows          = 0;
+    UINT64 rowSizeInBytes = 0;  // size of a "row" in bytes (already block-aware for compressed formats)
+    UINT64 totalBytes     = 0;
     device->GetCopyableFootprints(&texDesc, level, 1, 0, &footprint, &numRows, &rowSizeInBytes, &totalBytes);
 
-    // Create upload buffer sized to footprint
+    // Compute copy parameters for the requested region:
+    // blocks per row × bytes per block
+    const UINT blocksPerRow    = alignedWidth / fmtDesc.blockWidth;
+    const UINT rowCopySize     = blocksPerRow * fmtDesc.blockSize;
+    const UINT blockRowsToCopy = alignedHeight / fmtDesc.blockHeight;
+
+    // Sanity check vs provided dataSize (caller may pass exact region size)
+    if (dataSize != 0)
+    {
+        const size_t expectedSize = static_cast<size_t>(rowCopySize) * static_cast<size_t>(blockRowsToCopy);
+        AXASSERT(dataSize >= expectedSize, "Provided compressed dataSize is smaller than required for sub-region");
+    }
+
+    // Create upload buffer sized to the footprint
     D3D12_HEAP_PROPERTIES heapProps{};
     heapProps.Type = D3D12_HEAP_TYPE_UPLOAD;
 
@@ -203,24 +288,24 @@ void TextureImpl::updateCompressedSubData(int xoffset,
     HRESULT hr =
         device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &bufDesc, D3D12_RESOURCE_STATE_GENERIC_READ,
                                         nullptr, IID_PPV_ARGS(&uploadBuffer));
-    assert(SUCCEEDED(hr));
+    AXASSERT(SUCCEEDED(hr), "Failed to create upload buffer");
 
-    // Copy compressed data into upload buffer
+    // Map and copy compressed data row by row, honoring RowPitch
     BYTE* mapped = nullptr;
     D3D12_RANGE range{0, 0};
     uploadBuffer->Map(0, &range, reinterpret_cast<void**>(&mapped));
 
-    // For block-compressed formats, rowSizeInBytes is already block-aligned.
-    // We copy row by row to respect RowPitch alignment.
     const BYTE* srcData = reinterpret_cast<const BYTE*>(data);
-    for (UINT row = 0; row < numRows; ++row)
+    for (UINT row = 0; row < blockRowsToCopy; ++row)
     {
-        memcpy(mapped + row * footprint.Footprint.RowPitch, srcData + row * rowSizeInBytes, rowSizeInBytes);
+        BYTE* dstRow       = mapped + row * footprint.Footprint.RowPitch;
+        const BYTE* srcRow = srcData + row * rowCopySize;
+        memcpy(dstRow, srcRow, rowCopySize);
     }
 
     uploadBuffer->Unmap(0, nullptr);
 
-    // Record copy
+    // Record copy commands
     auto submission = _driver->startIsolateSubmission();
 
     transitionState(submission, D3D12_RESOURCE_STATE_COPY_DEST);
@@ -235,7 +320,16 @@ void TextureImpl::updateCompressedSubData(int xoffset,
     src.Type            = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
     src.PlacedFootprint = footprint;
 
-    submission->CopyTextureRegion(&dst, xoffset, yoffset, 0, &src, nullptr);
+    // Source box for the region (must be block-aligned for compressed formats)
+    D3D12_BOX srcBox{};
+    srcBox.left   = 0;
+    srcBox.top    = 0;
+    srcBox.front  = 0;
+    srcBox.right  = alignedWidth;
+    srcBox.bottom = alignedHeight;
+    srcBox.back   = 1;
+
+    submission->CopyTextureRegion(&dst, xoffset, yoffset, 0, &src, &srcBox);
 
     transitionState(submission, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
@@ -248,11 +342,10 @@ void TextureImpl::updateFaceData(TextureCubeFace side, const void* data)
     updateSubData(0, 0, _desc.width, _desc.height, 0, data, static_cast<int>(side));
 }
 
-void TextureImpl::updateSamplerDesc(const SamplerDesc& sampler)
+void TextureImpl::updateSamplerDesc(const SamplerDesc& samplerDesc)
 {
-    _desc.samplerDesc = sampler;
-    // In D3D12, sampler is created via SamplerCache into a descriptor heap
-    // Here we just cache the desc; actual SRV/ sampler creation is handled elsewhere
+    _desc.samplerDesc = samplerDesc;
+    _sampler          = static_cast<D3D12SamplerHandle*>(SamplerCache::getInstance()->getSampler(samplerDesc));
 }
 
 void TextureImpl::updateTextureDesc(const TextureDesc& desc)
@@ -269,8 +362,8 @@ void TextureImpl::ensureNativeTexture()
 
     auto device = _driver->getDevice();
 
-    DXGI_FORMAT dxgiFmt = dxutils::toDxgiFormatInfo(_desc.pixelFormat)->fmtSrv;
-    if (dxgiFmt == DXGI_FORMAT_UNKNOWN)
+    auto fmtInfo = dxutils::toDxgiFormatInfo(_desc.pixelFormat);
+    if (fmtInfo->format == DXGI_FORMAT_UNKNOWN)
     {
         AXLOGE("axmol: D3D12 does not support pixel format: {}", (int)_desc.pixelFormat);
         return;
@@ -288,7 +381,7 @@ void TextureImpl::ensureNativeTexture()
     texDesc.Height             = _desc.height;
     texDesc.DepthOrArraySize   = arrayLayers;
     texDesc.MipLevels          = mipLevels;
-    texDesc.Format             = dxgiFmt;
+    texDesc.Format             = fmtInfo->format;
     texDesc.SampleDesc.Count   = 1;
     texDesc.SampleDesc.Quality = 0;
     texDesc.Layout             = D3D12_TEXTURE_LAYOUT_UNKNOWN;
@@ -305,9 +398,55 @@ void TextureImpl::ensureNativeTexture()
     D3D12_HEAP_PROPERTIES heapProps{};
     heapProps.Type = D3D12_HEAP_TYPE_DEFAULT;
 
-    HRESULT hr =
-        device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &texDesc, D3D12_RESOURCE_STATE_COMMON,
-                                        nullptr, IID_PPV_ARGS(&_nativeTexture.resource));
+    HRESULT hr;
+    if (_desc.pixelFormat != PixelFormat::D24S8)
+    {
+        hr = device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &texDesc, D3D12_RESOURCE_STATE_COMMON,
+                                             nullptr, IID_PPV_ARGS(&_nativeTexture.resource));
+
+        // --- Create SRV for normal texture ---
+        D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+        srvDesc.Format                  = fmtInfo->fmtSrv;
+        srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+        if (isCube)
+        {
+            srvDesc.ViewDimension                   = D3D12_SRV_DIMENSION_TEXTURECUBE;
+            srvDesc.TextureCube.MostDetailedMip     = 0;
+            srvDesc.TextureCube.MipLevels           = mipLevels;
+            srvDesc.TextureCube.ResourceMinLODClamp = 0.0f;
+        }
+        else if (arrayLayers > 1)
+        {
+            srvDesc.ViewDimension                      = D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
+            srvDesc.Texture2DArray.MostDetailedMip     = 0;
+            srvDesc.Texture2DArray.MipLevels           = mipLevels;
+            srvDesc.Texture2DArray.FirstArraySlice     = 0;
+            srvDesc.Texture2DArray.ArraySize           = arrayLayers;
+            srvDesc.Texture2DArray.PlaneSlice          = 0;
+            srvDesc.Texture2DArray.ResourceMinLODClamp = 0.0f;
+        }
+        else
+        {
+            srvDesc.ViewDimension                 = D3D12_SRV_DIMENSION_TEXTURE2D;
+            srvDesc.Texture2D.MostDetailedMip     = 0;
+            srvDesc.Texture2D.MipLevels           = mipLevels;
+            srvDesc.Texture2D.PlaneSlice          = 0;
+            srvDesc.Texture2D.ResourceMinLODClamp = 0.0f;
+        }
+
+        _nativeTexture.srv = _driver->allocSRV();
+        device->CreateShaderResourceView(_nativeTexture.resource.Get(), &srvDesc, _nativeTexture.srv.cpu);
+    }
+    else
+    {
+        D3D12_CLEAR_VALUE clearValue{};
+        clearValue.Format               = fmtInfo->fmtDsv;
+        clearValue.DepthStencil.Depth   = 1.0f;
+        clearValue.DepthStencil.Stencil = 0;
+        hr = device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &texDesc, D3D12_RESOURCE_STATE_COMMON,
+                                             &clearValue, IID_PPV_ARGS(&_nativeTexture.resource));
+    }
     assert(SUCCEEDED(hr));
 }
 

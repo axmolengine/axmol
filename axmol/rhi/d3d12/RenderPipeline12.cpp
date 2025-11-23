@@ -2,6 +2,7 @@
 #include "axmol/rhi/d3d12/VertexLayout12.h"
 #include "axmol/rhi/d3d12/DepthStencilState12.h"
 #include "axmol/rhi/d3d12/Program12.h"
+#include "axmol/rhi/d3d12/RenderContext12.h"
 #include "axmol/base/Logging.h"
 #include "axmol/tlx/hash.hpp"
 
@@ -67,9 +68,10 @@ static D3D12_BLEND toD3DBlendFactor(BlendFactor f)
 }
 
 static inline uintptr_t makePSOKey(const rhi::BlendDesc& blendDesc,
-                                        const DepthStencilStateImpl* dsState,
-                                        void* program,
-                                        uint32_t vlHash)
+                                   const DepthStencilStateImpl* dsState,
+                                   void* program,
+                                   uint32_t vlHash,
+                                   D3D12_RASTERIZER_DESC& rs)
 {
     struct HashMe
     {
@@ -77,10 +79,10 @@ static inline uintptr_t makePSOKey(const rhi::BlendDesc& blendDesc,
         uintptr_t dsHash;
         void* prog;
         uint32_t vlHash;
-        uint32_t padding{0};
+        uint32_t CullModeAndCCW;
     };
-    HashMe hashMe{
-        .blend = blendDesc, .dsHash = dsState->getHash(), .prog = program, .vlHash = vlHash};
+    HashMe hashMe{.blend = blendDesc, .dsHash = dsState->getHash(), .prog = program, .vlHash = vlHash};
+    hashMe.CullModeAndCCW = (rs.CullMode << 16) | (rs.FrontCounterClockwise ? 1 : 0);
 
     return axstd::hash_bytes(&hashMe, sizeof(hashMe), 0);
 }
@@ -154,15 +156,95 @@ void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc)
 void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
 {
     uintptr_t progKey = reinterpret_cast<uintptr_t>(program);
-    auto it           = _rootSigCache.find(progKey);
-    if (it != _rootSigCache.end())
+    if (auto it = _rootSigCache.find(progKey); it != _rootSigCache.end())
     {
-        _activeRootSignature = it->second;
+        _activeRootSignature = &it->second;
         return;
     }
 
+    RootSignatureEntry entry;
+
+    UINT rootIndex = 0;
+
+    axstd::pod_vector<D3D12_ROOT_PARAMETER> rootParams;
+    rootParams.reserve(4);  // VS UBO, FS UBO, FS SRV table, FS Sampler table
+
+    // --- VS UBO at b0 (space = SET_INDEX_UBO) ---
+    auto& vs_ubs = program->getVertexShader()->getActiveUniformBlockInfos();
+    if (!vs_ubs.empty())
+    {
+        D3D12_ROOT_PARAMETER& param     = rootParams.emplace_back();
+        param.ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+        param.Descriptor.ShaderRegister = vs_ubs[0].binding;  // usually 0
+        param.Descriptor.RegisterSpace  = SET_INDEX_UBO;      // map Vulkan set -> D3D12 space
+        param.ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
+        entry.vsUboRootIndex            = rootIndex++;
+    }
+
+    // --- FS UBO at b1 (space = SET_INDEX_UBO) ---
+    auto* fs     = program->getFragmentShader();
+    auto& fs_ubs = fs->getActiveUniformBlockInfos();
+    if (!fs_ubs.empty())
+    {
+        D3D12_ROOT_PARAMETER& param     = rootParams.emplace_back();
+        param.ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+        param.Descriptor.ShaderRegister = fs_ubs[0].binding;  // usually 1
+        param.Descriptor.RegisterSpace  = SET_INDEX_UBO;
+        param.ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
+        entry.fsUboRootIndex            = rootIndex++;
+    }
+
+    // --- FS SRVs (textures) -> descriptor table, space = SET_INDEX_SRV ---
+    axstd::pod_vector<D3D12_DESCRIPTOR_RANGE> srvRanges;
+    axstd::pod_vector<D3D12_DESCRIPTOR_RANGE> samplerRanges;
+
+    auto& fsSamplers = fs->getActiveSamplerInfos();
+    if (!fsSamplers.empty())
+    {
+        for (auto& smp : fsSamplers)
+        {
+            // In Vulkan, sampler2D is a combined image sampler.
+            // In D3D12 we must split into SRV (t#) and Sampler (s#).
+
+            // --- SRV range (texture part) ---
+            D3D12_DESCRIPTOR_RANGE& srvRange           = srvRanges.emplace_back();
+            srvRange.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            srvRange.NumDescriptors                    = smp.count;      // number of textures
+            srvRange.BaseShaderRegister                = smp.location;   // t#
+            srvRange.RegisterSpace                     = SET_INDEX_SRV;  // match Vulkan set
+            srvRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+            // --- Sampler range (sampler part) ---
+            D3D12_DESCRIPTOR_RANGE& samplerRange           = samplerRanges.emplace_back();
+            samplerRange.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
+            samplerRange.NumDescriptors                    = smp.count;          // number of samplers
+            samplerRange.BaseShaderRegister                = smp.location;       // s#
+            samplerRange.RegisterSpace                     = SET_INDEX_SAMPLER;  // usually same as SRV
+            samplerRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+        }
+
+        // Add SRV descriptor table root parameter
+        D3D12_ROOT_PARAMETER& srvParam               = rootParams.emplace_back();
+        srvParam.ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+        srvParam.DescriptorTable.NumDescriptorRanges = static_cast<UINT>(srvRanges.size());
+        srvParam.DescriptorTable.pDescriptorRanges   = srvRanges.data();
+        srvParam.ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+        entry.srvRootIndex                           = rootIndex++;
+
+        // Add Sampler descriptor table root parameter
+        D3D12_ROOT_PARAMETER& samplerParam               = rootParams.emplace_back();
+        samplerParam.ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+        samplerParam.DescriptorTable.NumDescriptorRanges = static_cast<UINT>(samplerRanges.size());
+        samplerParam.DescriptorTable.pDescriptorRanges   = samplerRanges.data();
+        samplerParam.ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+        entry.samplerRootIndex                           = rootIndex++;
+    }
+
+    // --- finalize root signature ---
     D3D12_ROOT_SIGNATURE_DESC rsDesc{};
-    rsDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+    rsDesc.NumParameters = static_cast<UINT>(rootParams.size());
+    rsDesc.pParameters   = rootParams.data();
+    rsDesc.Flags         = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
     Microsoft::WRL::ComPtr<ID3DBlob> sigBlob;
     Microsoft::WRL::ComPtr<ID3DBlob> errBlob;
@@ -173,13 +255,13 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
     hr = _device->CreateRootSignature(0, sigBlob->GetBufferPointer(), sigBlob->GetBufferSize(), IID_PPV_ARGS(&rootSig));
     AXASSERT(SUCCEEDED(hr), "Failed to create root signature");
 
-    _activeRootSignature = rootSig;
-    _rootSigCache.emplace(progKey, rootSig);
+    entry.rootSig        = std::move(rootSig);
+    _activeRootSignature = &_rootSigCache.emplace(progKey, std::move(entry)).first->second;
 }
 
 void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, ProgramImpl* program)
 {
-    uintptr_t key = makePSOKey(desc.blendDesc, _dsState, program, desc.vertexLayout->getHash());
+    uintptr_t key = makePSOKey(desc.blendDesc, _dsState, program, desc.vertexLayout->getHash(), _rasterDesc);
     auto it       = _psoCache.find(key);
     if (it != _psoCache.end())
     {
@@ -193,7 +275,7 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, Progra
     auto& vi = static_cast<VertexLayoutImpl*>(desc.vertexLayout)->getD3D12InputLayout();
 
     D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc{};
-    psoDesc.pRootSignature        = _activeRootSignature.Get();
+    psoDesc.pRootSignature        = _activeRootSignature->rootSig.Get();
     psoDesc.VS                    = {vsBlob.view.data(), vsBlob.view.size()};
     psoDesc.PS                    = {psBlob.view.data(), psBlob.view.size()};
     psoDesc.BlendState            = _blendDesc;
@@ -205,6 +287,7 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, Progra
     psoDesc.RTVFormats[0]         = DXGI_FORMAT_R8G8B8A8_UNORM;
     psoDesc.DSVFormat             = DXGI_FORMAT_D24_UNORM_S8_UINT;
     psoDesc.SampleDesc.Count      = 1;
+    psoDesc.SampleMask            = UINT_MAX;
 
     Microsoft::WRL::ComPtr<ID3D12PipelineState> pso;
     HRESULT hr = _device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pso));

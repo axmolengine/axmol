@@ -5,7 +5,8 @@
 #pragma once
 
 #include "axmol/rhi/RenderTarget.h"
-#include "Texture12.h"
+#include "axmol/rhi/d3d12/Driver12.h"
+#include "axmol/rhi/d3d12/Texture12.h"
 #include <d3d12.h>
 #include <dxgi1_5.h>
 #include <wrl/client.h>
@@ -34,9 +35,13 @@ public:
     void invalidate();
 
     // Begin a render pass using this target
-    void beginRenderPass(ID3D12GraphicsCommandList* cmd, const RenderPassDesc& desc, uint32_t width, uint32_t height);
+    void beginRenderPass(ID3D12GraphicsCommandList* cmd,
+                         const RenderPassDesc& desc,
+                         uint32_t width,
+                         uint32_t height,
+                         uint32_t imageIndex);
 
-    void endRenderPass(ID3D12GraphicsCommandList* cmd);
+    void endRenderPass(ID3D12GraphicsCommandList* cmd, uint32_t imageIndex);
 
     Attachment getColorAttachment(int index) const;
     Attachment getDepthStencilAttachment() const;
@@ -48,12 +53,14 @@ private:
 
     DriverImpl* _driver{nullptr};
 
+    std::array<d3d12::DescriptorHandle, MAX_COLOR_ATTCHMENT> _rtvsDescriptors{};
+    DescriptorHandle _dsvDescriptor{};
+
     // Current attachment descriptors
-    std::array<D3D12_CPU_DESCRIPTOR_HANDLE, MAX_COLOR_ATTCHMENT + 1> _rtvHandles{};
+    std::array<D3D12_CPU_DESCRIPTOR_HANDLE, MAX_COLOR_ATTCHMENT> _rtvHandles{};
     D3D12_CPU_DESCRIPTOR_HANDLE _dsvHandle{};
 
-    std::array<TextureImpl*, MAX_COLOR_ATTCHMENT + 1> _attachmentTexPtrs{};
-    bool _attachmentsDirty{true};
+    uint32_t _numRTVs{0};
 };
 
 }  // namespace ax::rhi::d3d12

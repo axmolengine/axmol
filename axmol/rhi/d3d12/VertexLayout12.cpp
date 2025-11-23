@@ -58,7 +58,7 @@ VertexLayoutImpl::VertexLayoutImpl(VertexLayoutDesc&& desc) : VertexLayout(std::
         if (inputDesc.format != VertexFormat::MAT4)
         {
             D3D12_INPUT_ELEMENT_DESC elem{};
-            elem.SemanticName         = "TEXCOORD";  // or POSITION/NORMAL, depends on higher-level mapping
+            elem.SemanticName         = inputDesc.semantic;
             elem.SemanticIndex        = inputDesc.index;
             elem.Format               = toDxgiFormat(inputDesc.format, inputDesc.needToBeNormallized);
             elem.InputSlot            = inputDesc.instanceStepRate ? 1 : 0;
@@ -74,7 +74,7 @@ VertexLayoutImpl::VertexLayoutImpl(VertexLayoutDesc&& desc) : VertexLayout(std::
             for (uint32_t i = 0; i < 4; ++i)
             {
                 D3D12_INPUT_ELEMENT_DESC elem{};
-                elem.SemanticName         = "TEXCOORD";  // semantic naming can be customized
+                elem.SemanticName         = inputDesc.semantic;
                 elem.SemanticIndex        = inputDesc.index + i;
                 elem.Format               = DXGI_FORMAT_R32G32B32A32_FLOAT;
                 elem.InputSlot            = inputDesc.instanceStepRate ? 1 : 0;

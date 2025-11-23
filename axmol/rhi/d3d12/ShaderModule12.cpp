@@ -243,11 +243,14 @@ void ShaderModuleImpl::reflectUniforms(SLCReflectContext* context)
     auto ibs           = context->ibs;
     for (int i = 0; i < context->refl->num_uniform_buffers; ++i)
     {
-        ibs->advance(sizeof(sc_refl_ub::name));
-        auto ub_binding    = ibs->read<int32_t>();
+        auto ub_name       = ibs->read_bytes(sizeof(sc_refl_ub::name));
+        auto ub_binding    = ibs->read<int32_t>();  // descriptor set/binding index
         auto ub_size_bytes = ibs->read<uint32_t>();
         ibs->advance(sizeof(sc_refl_ub::array_size));
         auto ub_num_members = ibs->read<uint16_t>();
+
+        _activeUniformBlockInfos.push_back(UniformBlockInfo{
+            .binding = ub_binding, .sizeBytes = ub_size_bytes, .numMembers = ub_num_members, .name = ub_name.data()});
 
         for (int k = 0; k < ub_num_members; ++k)
         {
@@ -269,7 +272,7 @@ void ShaderModuleImpl::reflectUniforms(SLCReflectContext* context)
                 _maxLocation = (i + 1);
         }
         _uniformBufferSize = ub_size_bytes;
-        // current: only support 1 uniform block for d3d11
+        // current: only support 1 uniform block for d3d12
         break;
     }
 }
@@ -281,15 +284,19 @@ void ShaderModuleImpl::reflectSamplers(SLCReflectContext* context)
     if (samplerCount <= 0)
         return;
     auto ibs = context->ibs;
-    for (int i = 0; i < context->refl->num_textures; ++i)
+    _activeSamplerInfos.reserve(samplerCount);
+    for (int i = 0; i < samplerCount; ++i)
     {
         UniformInfo uniform{};
+
         std::string_view name = _sc_read_name(ibs);
         uniform.location      = ibs->read<int32_t>();  // sampler binding index
         ibs->advance(skip_fields_bytes);
         uniform.count = (std::max)(1, static_cast<int>(ibs->read<uint16_t>()));
 
-        _activeUniformInfos[name] = uniform;
+        auto ret = _activeUniformInfos.emplace(name, uniform);
+        assert(ret.second);
+        _activeSamplerInfos.push_back(uniform);
     }
 }
 

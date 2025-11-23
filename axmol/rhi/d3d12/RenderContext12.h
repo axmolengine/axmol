@@ -33,7 +33,19 @@ AX_ENABLE_BITMASK_OPS(DynamicStateBits);
 class RenderContextImpl : public RenderContext
 {
 public:
-    static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
+    static constexpr int MAX_FRAMES_IN_FLIGHT   = 2;
+    static constexpr int SWAPCHAIN_BUFFER_COUNT = 3;
+
+    static constexpr uint32_t VI_BINDING_INDEX            = 0;
+    static constexpr uint32_t VI_INSTANCING_BINDING_INDEX = 1;
+
+    // match axmol shaders
+    static constexpr uint32_t VS_UBO_BINDING_INDEX = 0;
+    static constexpr uint32_t FS_UBO_BINDING_INDEX = 1;
+
+    static constexpr DynamicStateBits PIPELINE_REQUIRED_DYNAMIC_BITS =
+        DynamicStateBits::Viewport | DynamicStateBits::Scissor | DynamicStateBits::StencilRef |
+        DynamicStateBits::CullMode | DynamicStateBits::FrontFace;
 
     RenderContextImpl(DriverImpl* driver, void* surfaceContext);
     ~RenderContextImpl() override;
@@ -91,6 +103,14 @@ private:
 
     void prepareDrawing(ID3D12GraphicsCommandList* cmd);
 
+    void markDynamicStateDirty(DynamicStateBits bits) noexcept
+    {
+        bitmask::set(_inFlightDynamicDirtyBits[0], bits);
+        bitmask::set(_inFlightDynamicDirtyBits[1], bits);
+    }
+
+    void applyPendingDynamicStates();
+
     DriverImpl* _driver{nullptr};
 
     Microsoft::WRL::ComPtr<IDXGISwapChain4> _swapchain;
@@ -103,11 +123,62 @@ private:
     std::array<HANDLE, MAX_FRAMES_IN_FLIGHT> _fenceEvents{};
     std::array<uint64_t, MAX_FRAMES_IN_FLIGHT> _fenceValues{};
 
+    std::array<DynamicStateBits, MAX_FRAMES_IN_FLIGHT> _inFlightDynamicDirtyBits{DynamicStateBits::None};
+
+    ID3D12GraphicsCommandList* _currentCmdList{nullptr};  // weak pointer
+
+    axstd::pod_vector<ID3D12DescriptorHeap*> _descriptorHeaps;
+
+    ID3D12PipelineState* _currentPSO{nullptr};  // weak pointer
+
+    uint32_t _currentImageIndex{0};
+
     uint32_t _currentFrame{0};
     uint32_t _renderTargetWidth{0};
     uint32_t _renderTargetHeight{0};
     uint32_t _screenWidth{0};
     uint32_t _screenHeight{0};
+
+#pragma region Uniform ring buffer
+    struct UniformSlice
+    {
+        std::size_t offset              = 0;        // byte offset from start of ring buffer
+        std::size_t size                = 0;        // requested size (unaligned)
+        uint8_t* cpuPtr                 = nullptr;  // persistently mapped CPU pointer to write data
+        D3D12_GPU_VIRTUAL_ADDRESS gpuVA = 0;        // base GPU VA + offset (bind this)
+    };
+
+    struct UniformRingBuffer
+    {
+        // Upload heap resource (persistently mapped)
+        Microsoft::WRL::ComPtr<ID3D12Resource> resource = nullptr;
+        uint8_t* mapped                                 = nullptr;
+
+        // Capacity & allocation state
+        std::size_t capacity  = 0;  // total bytes
+        std::size_t writeHead = 0;  // current write offset
+
+        // Alignment: CBV requires 256-byte alignment
+        std::size_t align = 256;
+
+        // Cached GPU VA base for fast slice addressing
+        D3D12_GPU_VIRTUAL_ADDRESS baseGpuVA = 0;
+
+        // Reset allocation pointer
+        void reset() { writeHead = 0; }
+
+        bool valid() const { return resource != nullptr && mapped != nullptr && capacity > 0; }
+    };
+
+    // Per-frame ring buffers
+    std::array<UniformRingBuffer, MAX_FRAMES_IN_FLIGHT> _uniformRings{};
+
+    // Public API
+    void createUniformRingBuffers(std::size_t capacityBytes);
+    void destroyUniformRingBuffers();
+    void resetUniformRingForCurrentFrame(UINT frameIndex);
+    UniformSlice allocateUniformSlice(UINT frameIndex, std::size_t size);
+#pragma endregion
 
     DepthStencilStateImpl* _depthStencilState{nullptr};
     RenderPipelineImpl* _renderPipeline{nullptr};
@@ -118,12 +189,11 @@ private:
     D3D12_VIEWPORT _cachedViewport{};
     D3D12_RECT _cachedScissor{};
     D3D12_CULL_MODE _cachedCullMode{D3D12_CULL_MODE_NONE};
+    BOOL _cachedFrontCounterClockwise{FALSE};
 
     UINT _syncInterval{0};
     UINT _presentFlags{0};
     UINT _swapchainFlags{0};
-
-    bool _scissorEnabled{false};
 
     bool _inFrame{false};
 };

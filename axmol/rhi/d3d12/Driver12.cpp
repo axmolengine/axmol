@@ -3,16 +3,16 @@
 
  https://axmol.dev/
  ****************************************************************************/
-#include "Driver12.h"
-#include "RenderContext12.h"
-#include "Buffer12.h"
-#include "Texture12.h"
-#include "Program12.h"
-#include "ShaderModule12.h"  // if you have separate module; otherwise Program12 handles blobs
-#include "RenderTarget12.h"
-#include "RenderPipeline12.h"
-#include "DepthStencilState12.h"
-#include "VertexLayout12.h"
+#include "axmol/rhi/d3d12/Driver12.h"
+#include "axmol/rhi/d3d12/RenderContext12.h"
+#include "axmol/rhi/d3d12/Buffer12.h"
+#include "axmol/rhi/d3d12/Texture12.h"
+#include "axmol/rhi/d3d12/Program12.h"
+#include "axmol/rhi/d3d12/ShaderModule12.h"  // if you have separate module; otherwise Program12 handles blobs
+#include "axmol/rhi/d3d12/RenderTarget12.h"
+#include "axmol/rhi/d3d12/RenderPipeline12.h"
+#include "axmol/rhi/d3d12/DepthStencilState12.h"
+#include "axmol/rhi/d3d12/VertexLayout12.h"
 #include "axmol/base/Logging.h"
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/rhi/DXUtils.h"
