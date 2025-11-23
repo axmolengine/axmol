@@ -30,6 +30,7 @@
 #include "axmol/rhi/d3d12/Program12.h"
 #include "axmol/rhi/d3d12/Buffer12.h"
 #include "axmol/rhi/d3d12/Texture12.h"
+#include "axmol/tlx/flat_set.hpp"
 
 #include <d3d12.h>
 #include <dxgi1_6.h>
@@ -150,7 +151,7 @@ private:
 
     ID3D12GraphicsCommandList* _currentCmdList{nullptr};  // weak pointer
 
-    axstd::pod_vector<ID3D12DescriptorHeap*> _descriptorHeaps;
+    axstd::flat_set<ID3D12DescriptorHeap*> _descriptorHeaps;
 
     ID3D12PipelineState* _currentPSO{nullptr};  // weak pointer
 

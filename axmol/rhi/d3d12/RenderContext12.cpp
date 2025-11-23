@@ -842,37 +842,55 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
 
     // --- bind textures & samplers ---
     _descriptorHeaps.clear();
-    bool heapSet = false;
-    for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
+
+    auto& textureBindingSets = _programState->getTextureBindingSets();
+    if (!textureBindingSets.empty())
     {
-        const auto& texs = bindingSet.texs;
-        if (texs.empty())
-            continue;
-
-        if (texs.size() == 1)
+        for (const auto& [_, bindingSet] : textureBindingSets)
         {
-            auto textureImpl = static_cast<TextureImpl*>(texs[0]);
+            const auto& texs = bindingSet.texs;
+            if (texs.empty())
+                continue;
 
-            // SRV handle (already created in TextureImpl::ensureNativeTexture)
-            const DescriptorHandle* srvHandle = textureImpl->internalHandle().srv;
-            // Sampler handle (already created and returned by getSampler())
-            const DescriptorHandle* samplerHandle = textureImpl->getSampler();
-
-            if (!heapSet)
+            const auto count = texs.size();
+            for (auto i = 0; i < count; ++i)
             {
-                _descriptorHeaps.push_back(_driver->getSRVHeap(srvHandle));
-                _descriptorHeaps.push_back(_driver->getSamplerHeap(samplerHandle));
-                cmd->SetDescriptorHeaps(_descriptorHeaps.size(), _descriptorHeaps.data());
+                auto textureImpl = static_cast<TextureImpl*>(texs[0]);
+
+                // SRV handle (already created in TextureImpl::ensureNativeTexture)
+                const DescriptorHandle* srvHandle = textureImpl->internalHandle().srv;
+                // Sampler handle (already created and returned by getSampler())
+                const DescriptorHandle* samplerHandle = textureImpl->getSampler();
+
+                _descriptorHeaps.insert(_driver->getSRVHeap(srvHandle));
+                _descriptorHeaps.insert(_driver->getSamplerHeap(samplerHandle));
             }
-
-            // Bind SRV descriptor table (RootParameter index for SRV table)
-            cmd->SetGraphicsRootDescriptorTable(rootSigInfo->srvRootIndex, srvHandle->gpu);
-
-            // Bind Sampler descriptor table (RootParameter index for Sampler table)
-            cmd->SetGraphicsRootDescriptorTable(rootSigInfo->samplerRootIndex, samplerHandle->gpu);
         }
-        else
-        {  // TODO:
+
+        cmd->SetDescriptorHeaps(_descriptorHeaps.size(), _descriptorHeaps.data());
+
+        for (const auto& [_, bindingSet] : textureBindingSets)
+        {
+            const auto& texs = bindingSet.texs;
+            if (texs.empty())
+                continue;
+
+            const auto count = texs.size();
+            for (auto i = 0; i < count; ++i)
+            {
+                auto textureImpl = static_cast<TextureImpl*>(texs[i]);
+
+                // SRV handle (already created in TextureImpl::ensureNativeTexture)
+                const DescriptorHandle* srvHandle = textureImpl->internalHandle().srv;
+                // Sampler handle (already created and returned by getSampler())
+                const DescriptorHandle* samplerHandle = textureImpl->getSampler();
+
+                // Bind SRV descriptor table (RootParameter index for SRV table)
+                cmd->SetGraphicsRootDescriptorTable(rootSigInfo->srvRootIndex, srvHandle->gpu);
+
+                // Bind Sampler descriptor table (RootParameter index for Sampler table)
+                cmd->SetGraphicsRootDescriptorTable(rootSigInfo->samplerRootIndex, samplerHandle->gpu);
+            }
         }
     }
 }

@@ -36,7 +36,7 @@ namespace ax::rhi::d3d12
 static constexpr uint32_t LEVEL_INITIAL_CAPS = 16;
 static constexpr uint32_t LAYER_INITIAL_CAPS = 8;
 
-static void d3d12TexDescToTexDesc(TextureDesc& td, const D3D12_RESOURCE_DESC& desc)
+static void D3D12TexDescToTexDesc(TextureDesc& td, const D3D12_RESOURCE_DESC& desc)
 {
     td.textureType = (desc.DepthOrArraySize == 6 && desc.Dimension == D3D12_RESOURCE_DIMENSION_TEXTURE2D)
                          ? TextureType::TEXTURE_CUBE
@@ -66,6 +66,11 @@ static void d3d12TexDescToTexDesc(TextureDesc& td, const D3D12_RESOURCE_DESC& de
         td.textureUsage = TextureUsage::RENDER_TARGET;
 }
 
+static inline UINT D3D12CalcSubresource(UINT MipSlice, UINT ArraySlice, UINT PlaneSlice, UINT MipLevels, UINT ArraySize)
+{
+    return MipSlice + ArraySlice * MipLevels + PlaneSlice * MipLevels * ArraySize;
+}
+
 TextureImpl::TextureImpl(DriverImpl* driver, const TextureDesc& desc)
     : _driver(driver), _stateTracker(LEVEL_INITIAL_CAPS, LAYER_INITIAL_CAPS)
 {
@@ -76,7 +81,7 @@ TextureImpl::TextureImpl(DriverImpl* driver, ComPtr<ID3D12Resource> existingReso
     : _driver(driver), _stateTracker(LEVEL_INITIAL_CAPS, LAYER_INITIAL_CAPS)
 {
     D3D12_RESOURCE_DESC d3dDesc = existingResource->GetDesc();
-    d3d12TexDescToTexDesc(_desc, d3dDesc);
+    D3D12TexDescToTexDesc(_desc, d3dDesc);
     _nativeTexture.resource = existingResource;
 }
 
@@ -191,7 +196,7 @@ void TextureImpl::updateSubData(int xoffset,
     D3D12_TEXTURE_COPY_LOCATION dst{};
     dst.pResource        = _nativeTexture.resource.Get();
     dst.Type             = D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
-    dst.SubresourceIndex = level;
+    dst.SubresourceIndex = D3D12CalcSubresource(level, layerIndex, 0, _desc.mipLevels, _desc.arraySize);
 
     D3D12_TEXTURE_COPY_LOCATION src{};
     src.pResource       = uploadBuffer.Get();
@@ -335,7 +340,7 @@ void TextureImpl::updateCompressedSubData(int xoffset,
     D3D12_TEXTURE_COPY_LOCATION dst{};
     dst.pResource        = _nativeTexture.resource.Get();
     dst.Type             = D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
-    dst.SubresourceIndex = level;
+    dst.SubresourceIndex = D3D12CalcSubresource(level, layerIndex, 0, _desc.mipLevels, _desc.arraySize);
 
     D3D12_TEXTURE_COPY_LOCATION src{};
     src.pResource       = uploadBuffer.Get();
