@@ -1,0 +1,217 @@
+#include "axmol/rhi/d3d12/RenderPipeline12.h"
+#include "axmol/rhi/d3d12/VertexLayout12.h"
+#include "axmol/rhi/d3d12/DepthStencilState12.h"
+#include "axmol/rhi/d3d12/Program12.h"
+#include "axmol/base/Logging.h"
+#include "axmol/tlx/hash.hpp"
+
+namespace ax::rhi::d3d12
+{
+
+// Map BlendOp to D3D12_BLEND_OP
+static D3D12_BLEND_OP toD3DBlendOp(BlendOp op)
+{
+    switch (op)
+    {
+    case BlendOp::ADD:
+        return D3D12_BLEND_OP_ADD;
+    case BlendOp::SUBTRACT:
+        return D3D12_BLEND_OP_SUBTRACT;
+    case BlendOp::REVERSE_SUBTRACT:
+        return D3D12_BLEND_OP_REV_SUBTRACT;
+    // case BlendOp::MIN:
+    //     return D3D12_BLEND_OP_MIN;
+    // case BlendOp::MAX:
+    //     return D3D12_BLEND_OP_MAX;
+    default:
+        return D3D12_BLEND_OP_ADD;
+    }
+}
+
+// Map BlendFactor to D3D12_BLEND
+static D3D12_BLEND toD3DBlendFactor(BlendFactor f)
+{
+    switch (f)
+    {
+    case BlendFactor::ZERO:
+        return D3D12_BLEND_ZERO;
+    case BlendFactor::ONE:
+        return D3D12_BLEND_ONE;
+    case BlendFactor::SRC_COLOR:
+        return D3D12_BLEND_SRC_COLOR;
+    case BlendFactor::ONE_MINUS_SRC_COLOR:
+        return D3D12_BLEND_INV_SRC_COLOR;
+    case BlendFactor::SRC_ALPHA:
+        return D3D12_BLEND_SRC_ALPHA;
+    case BlendFactor::ONE_MINUS_SRC_ALPHA:
+        return D3D12_BLEND_INV_SRC_ALPHA;
+    case BlendFactor::DST_COLOR:
+        return D3D12_BLEND_DEST_COLOR;
+    case BlendFactor::ONE_MINUS_DST_COLOR:
+        return D3D12_BLEND_INV_DEST_COLOR;
+    case BlendFactor::DST_ALPHA:
+        return D3D12_BLEND_DEST_ALPHA;
+    case BlendFactor::ONE_MINUS_DST_ALPHA:
+        return D3D12_BLEND_INV_DEST_ALPHA;
+    // case BlendFactor::CONSTANT_COLOR:
+    //     return D3D12_BLEND_BLEND_FACTOR;
+    // case BlendFactor::ONE_MINUS_CONSTANT_COLOR:
+    //     return D3D12_BLEND_INV_BLEND_FACTOR;
+    case BlendFactor::CONSTANT_ALPHA:
+        return D3D12_BLEND_BLEND_FACTOR;
+    case BlendFactor::SRC_ALPHA_SATURATE:
+        return D3D12_BLEND_SRC_ALPHA_SAT;
+    default:
+        return D3D12_BLEND_ONE;
+    }
+}
+
+static inline uintptr_t makePSOKey(const rhi::BlendDesc& blendDesc,
+                                        const DepthStencilStateImpl* dsState,
+                                        void* program,
+                                        uint32_t vlHash)
+{
+    struct HashMe
+    {
+        rhi::BlendDesc blend{};
+        uintptr_t dsHash;
+        void* prog;
+        uint32_t vlHash;
+        uint32_t padding{0};
+    };
+    HashMe hashMe{
+        .blend = blendDesc, .dsHash = dsState->getHash(), .prog = program, .vlHash = vlHash};
+
+    return axstd::hash_bytes(&hashMe, sizeof(hashMe), 0);
+}
+
+RenderPipelineImpl::RenderPipelineImpl(ID3D12Device* device) : _device(device)
+{
+    initializePipelineDefaults();
+}
+
+RenderPipelineImpl::~RenderPipelineImpl()
+{
+    _psoCache.clear();
+    _rootSigCache.clear();
+}
+
+void RenderPipelineImpl::initializePipelineDefaults()
+{
+    // Blend
+    _blendDesc                        = {};
+    _blendDesc.AlphaToCoverageEnable  = FALSE;
+    _blendDesc.IndependentBlendEnable = FALSE;
+    auto& rt                          = _blendDesc.RenderTarget[0];
+    rt.BlendEnable                    = FALSE;
+    rt.RenderTargetWriteMask          = D3D12_COLOR_WRITE_ENABLE_ALL;
+
+    // Rasterizer
+    _rasterDesc                       = {};
+    _rasterDesc.FillMode              = D3D12_FILL_MODE_SOLID;
+    _rasterDesc.CullMode              = D3D12_CULL_MODE_BACK;
+    _rasterDesc.FrontCounterClockwise = TRUE;
+    _rasterDesc.DepthClipEnable       = TRUE;
+}
+
+void RenderPipelineImpl::update(const RenderTarget* rt, const PipelineDesc& desc)
+{
+    if (!desc.programState || !desc.vertexLayout)
+    {
+        AXASSERT(false, "RenderPipelineImpl::update: invalid inputs");
+        return;
+    }
+
+    auto program = static_cast<ProgramImpl*>(desc.programState->getProgram());
+
+    updateBlendState(desc.blendDesc);
+    updateRootSignature(program);
+    updateGraphicsPipeline(desc, program);
+}
+
+void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc)
+{
+    auto& rt = _blendDesc.RenderTarget[0];
+
+    rt.BlendEnable           = blendDesc.blendEnabled ? TRUE : FALSE;
+    rt.RenderTargetWriteMask = static_cast<UINT>(blendDesc.writeMask);
+
+    // Color blend factors
+    rt.SrcBlend  = toD3DBlendFactor(blendDesc.sourceRGBBlendFactor);
+    rt.DestBlend = toD3DBlendFactor(blendDesc.destinationRGBBlendFactor);
+    rt.BlendOp   = toD3DBlendOp(blendDesc.rgbBlendOp);
+
+    // Alpha blend factors
+    rt.SrcBlendAlpha  = toD3DBlendFactor(blendDesc.sourceAlphaBlendFactor);
+    rt.DestBlendAlpha = toD3DBlendFactor(blendDesc.destinationAlphaBlendFactor);
+    rt.BlendOpAlpha   = toD3DBlendOp(blendDesc.alphaBlendOp);
+
+    // LogicOp
+    rt.LogicOpEnable = FALSE;
+    rt.LogicOp       = D3D12_LOGIC_OP_NOOP;
+}
+
+void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
+{
+    uintptr_t progKey = reinterpret_cast<uintptr_t>(program);
+    auto it           = _rootSigCache.find(progKey);
+    if (it != _rootSigCache.end())
+    {
+        _activeRootSignature = it->second;
+        return;
+    }
+
+    D3D12_ROOT_SIGNATURE_DESC rsDesc{};
+    rsDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+
+    Microsoft::WRL::ComPtr<ID3DBlob> sigBlob;
+    Microsoft::WRL::ComPtr<ID3DBlob> errBlob;
+    HRESULT hr = D3D12SerializeRootSignature(&rsDesc, D3D_ROOT_SIGNATURE_VERSION_1, &sigBlob, &errBlob);
+    AXASSERT(SUCCEEDED(hr), "Failed to serialize root signature");
+
+    Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSig;
+    hr = _device->CreateRootSignature(0, sigBlob->GetBufferPointer(), sigBlob->GetBufferSize(), IID_PPV_ARGS(&rootSig));
+    AXASSERT(SUCCEEDED(hr), "Failed to create root signature");
+
+    _activeRootSignature = rootSig;
+    _rootSigCache.emplace(progKey, rootSig);
+}
+
+void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, ProgramImpl* program)
+{
+    uintptr_t key = makePSOKey(desc.blendDesc, _dsState, program, desc.vertexLayout->getHash());
+    auto it       = _psoCache.find(key);
+    if (it != _psoCache.end())
+    {
+        _activePSO = it->second;
+        return;
+    }
+
+    auto vsBlob = program->getVSBlob();
+    auto psBlob = program->getPSBlob();
+
+    auto& vi = static_cast<VertexLayoutImpl*>(desc.vertexLayout)->getD3D12InputLayout();
+
+    D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc{};
+    psoDesc.pRootSignature        = _activeRootSignature.Get();
+    psoDesc.VS                    = {vsBlob.view.data(), vsBlob.view.size()};
+    psoDesc.PS                    = {psBlob.view.data(), psBlob.view.size()};
+    psoDesc.BlendState            = _blendDesc;
+    psoDesc.RasterizerState       = _rasterDesc;
+    psoDesc.DepthStencilState     = _dsState->getD3D12DepthStencilDesc();
+    psoDesc.InputLayout           = vi;
+    psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+    psoDesc.NumRenderTargets      = 1;
+    psoDesc.RTVFormats[0]         = DXGI_FORMAT_R8G8B8A8_UNORM;
+    psoDesc.DSVFormat             = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    psoDesc.SampleDesc.Count      = 1;
+
+    Microsoft::WRL::ComPtr<ID3D12PipelineState> pso;
+    HRESULT hr = _device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pso));
+    AXASSERT(SUCCEEDED(hr), "Failed to create PSO");
+
+    _activePSO = pso;
+    _psoCache.emplace(key, pso);
+}
+
+}  // namespace ax::rhi::d3d12

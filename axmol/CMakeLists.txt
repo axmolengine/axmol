@@ -50,9 +50,6 @@ endif()
 
 include(CMakeDependentOption)
 
-# set(AX_RENDER_API_GL  1 CACHE INTERNAL "" FORCE)
-# set(AX_RENDER_API_MTL 2 CACHE INTERNAL "" FORCE)
-# set(AX_RENDER_API_D3D 3 CACHE INTERNAL "" FORCE)
 set(AX_RENDER_API "auto" CACHE STRING "Specify axmol graphics render API")
 
 # Determine AX_RENDER_API
@@ -67,7 +64,7 @@ else()
     if(NOT APPLE) # non-apple platforms, invalid api specified, fallback to gl
       set(AX_RENDER_API "gl" CACHE STRING "" FORCE)
     endif()
-    elseif(AX_RENDER_API STREQUAL "d3d")
+    elseif(AX_RENDER_API MATCHES "d3d")
         if(NOT WIN32)
         if(APPLE)
             set(AX_RENDER_API "mtl" CACHE STRING "" FORCE)

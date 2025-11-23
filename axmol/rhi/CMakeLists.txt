@@ -96,33 +96,67 @@ elseif(AX_RENDER_API STREQUAL "mtl")
     rhi/metal/UtilsMTL.mm
     rhi/metal/ProgramMTL.mm
   )
-elseif(AX_RENDER_API STREQUAL "d3d")
+elseif(AX_RENDER_API STREQUAL "d3d11")
     list(APPEND _AX_RHI_HEADER
-    rhi/d3d/BufferD3D.h
-    rhi/d3d/RenderContextD3D.h
-    rhi/d3d/RenderTargetD3D.h
-    rhi/d3d/DepthStencilStateD3D.h
-    rhi/d3d/DriverD3D.h
-    rhi/d3d/RenderPipelineD3D.h
-    rhi/d3d/ShaderModuleD3D.h
-    rhi/d3d/TextureD3D.h
-    rhi/d3d/UtilsD3D.h
-    rhi/d3d/ProgramD3D.h
-    rhi/d3d/VertexLayoutD3D.h
+    rhi/d3d11/Buffer11.h
+    rhi/d3d11/RenderContext11.h
+    rhi/d3d11/RenderTarget11.h
+    rhi/d3d11/DepthStencilState11.h
+    rhi/d3d11/Driver11.h
+    rhi/d3d11/RenderPipeline11.h
+    rhi/d3d11/ShaderModule11.h
+    rhi/d3d11/Texture11.h
+    rhi/d3d11/Utils11.h
+    rhi/d3d11/Program11.h
+    rhi/d3d11/VertexLayout11.h
+    rhi/DXUtils.h
   )
 
   list(APPEND _AX_RHI_SRC
-    rhi/d3d/BufferD3D.cpp
-    rhi/d3d/RenderContextD3D.cpp
-    rhi/d3d/RenderTargetD3D.cpp
-    rhi/d3d/DepthStencilStateD3D.cpp
-    rhi/d3d/DriverD3D.cpp
-    rhi/d3d/RenderPipelineD3D.cpp
-    rhi/d3d/ShaderModuleD3D.cpp
-    rhi/d3d/TextureD3D.cpp
-    rhi/d3d/UtilsD3D.cpp
-    rhi/d3d/ProgramD3D.cpp
-    rhi/d3d/VertexLayoutD3D.cpp
+    rhi/d3d11/Buffer11.cpp
+    rhi/d3d11/RenderContext11.cpp
+    rhi/d3d11/RenderTarget11.cpp
+    rhi/d3d11/DepthStencilState11.cpp
+    rhi/d3d11/Driver11.cpp
+    rhi/d3d11/RenderPipeline11.cpp
+    rhi/d3d11/ShaderModule11.cpp
+    rhi/d3d11/Texture11.cpp
+    rhi/d3d11/Utils11.cpp
+    rhi/d3d11/Program11.cpp
+    rhi/d3d11/VertexLayout11.cpp
+    rhi/DXUtils.cpp
+  )
+elseif(AX_RENDER_API STREQUAL "d3d12")
+    list(APPEND _AX_RHI_HEADER
+    rhi/d3d12/Buffer12.h
+    rhi/d3d12/RenderContext12.h
+    rhi/d3d12/RenderTarget12.h
+    rhi/d3d12/DepthStencilState12.h
+    rhi/d3d12/Driver12.h
+    rhi/d3d12/RenderPipeline12.h
+    rhi/d3d12/ShaderModule12.h
+    rhi/d3d12/Texture12.h
+    rhi/d3d12/Utils12.h
+    rhi/d3d12/Program12.h
+    rhi/d3d12/VertexLayout12.h
+    rhi/d3d12/DescriptorHeapAllocator12.h
+    rhi/DXUtils.h
+  )
+
+  list(APPEND _AX_RHI_SRC
+    rhi/d3d12/Buffer12.cpp
+    rhi/d3d12/RenderContext12.cpp
+    rhi/d3d12/RenderTarget12.cpp
+    rhi/d3d12/DepthStencilState12.cpp
+    rhi/d3d12/Driver12.cpp
+    rhi/d3d12/RenderPipeline12.cpp
+    rhi/d3d12/ShaderModule12.cpp
+    rhi/d3d12/Texture12.cpp
+    rhi/d3d12/Utils12.cpp
+    rhi/d3d12/Program12.cpp
+    rhi/d3d12/VertexLayout12.cpp
+    rhi/d3d12/DescriptorHeapAllocator12.cpp
+    rhi/DXUtils.cpp
   )
 elseif(AX_RENDER_API STREQUAL "vk")
     list(APPEND _AX_RHI_HEADER

@@ -1,0 +1,197 @@
+/****************************************************************************
+ Copyright (c) 2019-present Axmol Engine contributors
+
+ https://axmol.dev/
+ ****************************************************************************/
+#pragma once
+
+#include "axmol/rhi/DriverBase.h"
+#include <d3d12.h>
+#include <dxgi1_6.h>
+#include <wrl/client.h>
+#include <optional>
+#include <string>
+#include <mutex>
+#include <deque>
+#include <functional>
+#include <array>
+#include "RenderContext12.h"
+#include "Buffer12.h"
+#include "Texture12.h"
+#include "RenderTarget12.h"
+#include "RenderPipeline12.h"
+#include "DepthStencilState12.h"
+#include "VertexLayout12.h"
+#include "Program12.h"
+#include "axmol/rhi/d3d12/DescriptorHeapAllocator12.h"
+#include <dxcapi.h>
+#include "axmol/rhi/d3d12/ShaderModule12.h"
+
+namespace ax::rhi::d3d12
+{
+
+class RenderContextImpl;
+class DriverImpl;
+class TextureImpl;
+
+struct DisposableResource
+{
+    // D3D12 COM objects are ref-counted; we keep ComPtr here if you want fence-gated disposal.
+    enum class Type
+    {
+        Resource,
+        DescriptorHeap,
+        PipelineState,
+        RootSignature,
+        // extend as needed
+    };
+    uint32_t frameMask{0};
+    Type type{};
+    Microsoft::WRL::ComPtr<IUnknown> object;  // generic holder
+};
+
+struct IsolateSubmission
+{
+    Microsoft::WRL::ComPtr<ID3D12CommandAllocator> allocator;
+    Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> cmdList;
+    Microsoft::WRL::ComPtr<ID3D12Fence> fence;
+    UINT64 fenceValue = 0;
+};
+
+struct D3D12SamplerHandle
+{
+    DescriptorHandle handle;
+};
+
+class DriverImpl : public DriverBase
+{
+    friend class RenderContextImpl;
+
+public:
+    static constexpr uint32_t MAX_VERTEX_ATTRIBS = 16;
+
+    DriverImpl();
+    ~DriverImpl();
+
+    void init();
+
+    RenderContext* createRenderContext(void* surfaceContext) override;
+    Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial) override;
+    Texture* createTexture(const TextureDesc& descriptor) override;
+    RenderTarget* createDefaultRenderTarget() override;
+    RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
+    DepthStencilState* createDepthStencilState() override;
+    RenderPipeline* createRenderPipeline() override;
+    Program* createProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
+    VertexLayout* createVertexLayout(VertexLayoutDesc&& desc) override;
+
+    ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
+    SamplerHandle createSampler(const SamplerDesc& desc) override;
+    void destroySampler(SamplerHandle&) override;
+
+    std::string getVendor() const override;
+    std::string getRenderer() const override;
+    std::string getVersion() const override;
+    std::string getShaderVersion() const override;
+
+    bool checkForFeatureSupported(FeatureType feature) override;
+
+    void cleanPendingResources() override;
+
+    ID3D12Device* getDevice() const { return _device.Get(); }
+    ID3D12CommandQueue* getGraphicsQueue() const { return _gfxQueue.Get(); }
+    IDXGIFactory6* getDXGIFactory() const { return _dxgiFactory.Get(); }
+
+    // Swapchain helpers
+    void rebuildSwapchainAttachments(IDXGISwapChain4* swapchain, uint32_t width, uint32_t height);
+
+    // Default RT attachments
+    void setSwapchainCurrentBackBufferIndex(UINT index) { _currentBackBufferIndex = index; }
+    TextureImpl* getSwapchainColorAttachment();
+    TextureImpl* getSwapchainDepthStencilAttachment();
+
+    ID3D12GraphicsCommandList* startIsolateSubmission();
+    void finishIsolateSubmission(bool waitForCompletion = true);
+
+    // Allocation
+    DescriptorHandle allocSRV() { return _srvAllocator->allocate(); }
+    DescriptorHandle allocSampler() { return _samplerAllocator->allocate(); }
+    DescriptorHandle allocRTV() { return _rtvAllocator->allocate(); }
+    DescriptorHandle allocDSV() { return _dsvAllocator->allocate(); }
+
+    // Free or defer free with fence
+    void freeSRV(const DescriptorHandle& h) { _srvAllocator->free(h); }
+    void freeSampler(const DescriptorHandle& h) { _samplerAllocator->free(h); }
+    void freeRTV(const DescriptorHandle& h) { _rtvAllocator->free(h); }
+    void freeDSV(const DescriptorHandle& h) { _dsvAllocator->free(h); }
+
+    void deferFreeSRV(const DescriptorHandle& h, uint64_t fence) { _srvAllocator->deferFree(h, fence); }
+    void deferFreeSampler(const DescriptorHandle& h, uint64_t fence) { _samplerAllocator->deferFree(h, fence); }
+    void deferFreeRTV(const DescriptorHandle& h, uint64_t fence) { _rtvAllocator->deferFree(h, fence); }
+    void deferFreeDSV(const DescriptorHandle& h, uint64_t fence) { _dsvAllocator->deferFree(h, fence); }
+
+    ID3D12DescriptorHeap* getSRVHeap(const DescriptorHandle& h) const { return _srvAllocator->getDescriptorHeap(h); }
+    ID3D12DescriptorHeap* getSamplerHeap(const DescriptorHandle& h) const
+    {
+        return _samplerAllocator->getDescriptorHeap(h);
+    }
+    ID3D12DescriptorHeap* getRTVHeap(const DescriptorHandle& h) const { return _rtvAllocator->getDescriptorHeap(h); }
+    ID3D12DescriptorHeap* getDSVHeap(const DescriptorHandle& h) const { return _dsvAllocator->getDescriptorHeap(h); }
+
+    void processDisposalResources(uint64_t completedFence);
+
+    bool compileShader(std::string_view shaderSource, ShaderStage stage, D3D12BlobHandle& outHandle);
+
+    void waitDeviceIdle();
+
+protected:
+    void queueDisposalInternal(DisposableResource&& res);
+
+private:
+    void initializeAdapter();
+    void initializeDevice();
+
+    void createDescriptorHeaps();
+    void createDepthStencilAttachment(UINT width, UINT height);
+    void destroySwapchainAttachments();
+
+private:
+    RenderContextImpl* _lastRenderContext{nullptr};
+
+    Microsoft::WRL::ComPtr<IDXGIFactory6> _dxgiFactory;
+    Microsoft::WRL::ComPtr<IDXGIAdapter> _adapter;
+    Microsoft::WRL::ComPtr<ID3D12Device> _device;
+    Microsoft::WRL::ComPtr<ID3D12CommandQueue> _gfxQueue;
+
+    HANDLE _fenceEvent{nullptr};
+    IsolateSubmission _isolateSubmission;
+
+    // Descriptor heaps (RTV/DSV for render targets; SRV/UAV/CBV for general use if needed)
+    std::unique_ptr<DescriptorHeapAllocator> _srvAllocator;
+    std::unique_ptr<DescriptorHeapAllocator> _rtvAllocator;
+    std::unique_ptr<DescriptorHeapAllocator> _dsvAllocator;
+
+    std::unique_ptr<DescriptorHeapAllocator> _samplerAllocator;
+
+    UINT _rtvDescriptorSize{0};
+    UINT _dsvDescriptorSize{0};
+
+    // Swapchain attachments storage
+    std::vector<TextureImpl*> _swapchainColorAttachments;
+    UINT _currentBackBufferIndex{0};
+    TextureImpl* _swapchainDepthStencilAttachment{nullptr};
+
+    // Disposal queue (optional) if you want fence-gated cleanup beyond ComPtr lifetime
+    std::mutex _disposalMutex;
+    std::vector<DisposableResource> _disposalQueue;
+
+    D3D_FEATURE_LEVEL _featureLevel{D3D_FEATURE_LEVEL_11_0};
+    DXGI_ADAPTER_DESC _adapterDesc{};
+    std::optional<LARGE_INTEGER> _driverVersion;
+
+    ComPtr<IDxcLibrary> _dxcLibrary;
+    ComPtr<IDxcCompiler> _dxcCompiler;
+    std::vector<LPCWSTR> _dxcArguments;
+};
+
+}  // namespace ax::rhi::d3d12

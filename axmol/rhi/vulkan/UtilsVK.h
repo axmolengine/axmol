@@ -25,13 +25,10 @@
 
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/rhi/PixelBufferDesc.h"
-#include "axmol/rhi/vulkan/TextureVK.h"
 #include <utility>
 
 namespace ax::rhi::vk
 {
-class DriverImpl;
-
 /**
  * @addtogroup _d3d
  * @{

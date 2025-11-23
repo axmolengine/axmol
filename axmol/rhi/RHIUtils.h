@@ -78,6 +78,9 @@ inline uint8_t computeMipLevels(int width, int height)
 {
     return static_cast<uint8_t>(floor(log2((std::max)(width, height))) + 1);
 }
+
+std::string_view vendorToString(uint32_t vendorId);
+
 }  // namespace RHIUtils
 }  // namespace ax::rhi
 

@@ -564,7 +564,7 @@ void RenderViewImpl::handleWindowResized()
 
 void RenderViewImpl::updateRenderScale()
 {
-#if AX_RENDER_API == AX_RENDER_API_D3D
+#if AX_RENDER_API == AX_RENDER_API_D3D11 || AX_RENDER_API == AX_RENDER_API_D3D12
     _renderScale = m_dpi / 96.0f;
 #else
     _renderScale = 1.0f;

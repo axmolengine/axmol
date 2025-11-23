@@ -24,7 +24,7 @@
 #pragma once
 
 #include "axmol/rhi/Program.h"
-#include "ShaderModuleVK.h"
+#include "axmol/rhi/vulkan/ShaderModuleVK.h"
 
 namespace ax::rhi::vk
 {

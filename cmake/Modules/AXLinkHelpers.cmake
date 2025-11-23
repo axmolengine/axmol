@@ -263,7 +263,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         "${AX_ROOT_DIR}/3rdparty/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll")
     endif()
 
-    if(AX_GLES_PROFILE OR AX_RENDER_API STREQUAL "d3d")
+    if(AX_GLES_PROFILE OR AX_RENDER_API MATCHES "d3d")
       find_windows_sdk_bin(_winsdk_bin_dir ${ARCH_ALIAS})
       list(APPEND _prebuilt_dlls "${_winsdk_bin_dir}/d3dcompiler_47.dll")
     endif()

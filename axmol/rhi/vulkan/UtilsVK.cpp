@@ -21,11 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "TextureVK.h"
-#include "axmol/rhi/RHIUtils.h"
 #include "axmol/rhi/vulkan/UtilsVK.h"
-#include "axmol/rhi/vulkan/DriverVK.h"
-#include "axmol/base/Logging.h"
 #include <glad/vulkan.h>
 #include <cassert>
 #include <cstdint>

@@ -21,8 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "ProgramVK.h"
-#include "BufferVK.h"
+#include "axmol/rhi/vulkan/ProgramVK.h"
 #include "axmol/rhi/ShaderCache.h"
 #include "axmol/rhi/DriverBase.h"
 #include "axmol/base/Logging.h"

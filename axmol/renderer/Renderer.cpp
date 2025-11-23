@@ -189,7 +189,6 @@ Renderer::~Renderer()
 
     free(_triBatchesToDraw);
 
-    AX_SAFE_RELEASE(_defaultRT);
     AX_SAFE_RELEASE(_offscreenRT);
     AX_SAFE_RELEASE(_depthStencilState);
     AX_SAFE_RELEASE(_renderPipeline);
@@ -207,8 +206,7 @@ void Renderer::init()
     auto nativeDisplay = Director::getInstance()->getRenderView()->getNativeDisplay();
     _context           = driver->createRenderContext(nativeDisplay);
     _dsDesc.flags      = DepthStencilFlags::ALL;
-    _currentRT = _defaultRT = driver->createDefaultRenderTarget();
-    _context->setScreenRenderTarget(_defaultRT);
+    _currentRT = _defaultRT = _context->getScreenRenderTarget();
 
     _renderPipeline = driver->createRenderPipeline();
     _context->setRenderPipeline(_renderPipeline);

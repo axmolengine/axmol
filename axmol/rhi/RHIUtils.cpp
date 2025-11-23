@@ -866,6 +866,74 @@ PixelFormat convertDataToFormat(const unsigned char* data,
         return originFormat;
     }
 }
+
+enum VendorID : uint32_t
+{
+    VENDOR_ID_UNKNOWN = 0x0,
+    VENDOR_ID_AMD     = 0x1002,
+    VENDOR_ID_APPLE   = 0x106B,
+    VENDOR_ID_ARM     = 0x13B5,
+    // Broadcom devices won't use PCI, but this is their Vulkan vendor id.
+    VENDOR_ID_BROADCOM  = 0x14E4,
+    VENDOR_ID_GOOGLE    = 0x1AE0,
+    VENDOR_ID_INTEL     = 0x8086,
+    VENDOR_ID_MESA      = 0x10005,
+    VENDOR_ID_MICROSOFT = 0x1414,
+    VENDOR_ID_NVIDIA    = 0x10DE,
+    VENDOR_ID_POWERVR   = 0x1010,
+    // This is Qualcomm PCI Vendor ID.
+    // Android doesn't have a PCI bus, but all we need is a unique id.
+    VENDOR_ID_QUALCOMM = 0x5143,
+    VENDOR_ID_SAMSUNG  = 0x144D,
+    VENDOR_ID_VIVANTE  = 0x9999,
+    VENDOR_ID_VMWARE   = 0x15AD,
+    VENDOR_ID_VIRTIO   = 0x1AF4,
+};
+
+std::string_view vendorToString(uint32_t vendorId)
+{
+    // Common PCI vendor IDs; Vulkan doesn't standardize vendor strings
+    switch (vendorId)
+    {
+    case VENDOR_ID_AMD:
+        return "AMD"sv;
+    case VENDOR_ID_ARM:
+        return "ARM"sv;
+    case VENDOR_ID_APPLE:
+        return "Apple"sv;
+    case VENDOR_ID_BROADCOM:
+        return "Broadcom"sv;
+    case VENDOR_ID_GOOGLE:
+        return "Google"sv;
+    case VENDOR_ID_INTEL:
+        return "Intel"sv;
+    case VENDOR_ID_MESA:
+        return "Mesa"sv;
+    case VENDOR_ID_MICROSOFT:
+        return "Microsoft"sv;
+    case VENDOR_ID_NVIDIA:
+        return "NVIDIA"sv;
+    case VENDOR_ID_POWERVR:
+        return "Imagination Technologies"sv;
+    case VENDOR_ID_QUALCOMM:
+        return "Qualcomm"sv;
+    case VENDOR_ID_SAMSUNG:
+        return "Samsung Electronics Co., Ltd."sv;
+    case VENDOR_ID_VIVANTE:
+        return "Vivante"sv;
+    case VENDOR_ID_VMWARE:
+        return "VMware"sv;
+    case VENDOR_ID_VIRTIO:
+        return "VirtIO"sv;
+    case 0:
+        return "NULL"sv;
+    default:
+        // TODO(jmadill): More vendor IDs.
+        // UNIMPLEMENTED();
+        return "Unknown";
+    }
+}
+
 }  // namespace RHIUtils
 
 }  // namespace ax::rhi

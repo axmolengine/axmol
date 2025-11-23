@@ -147,9 +147,13 @@ function(ax_add_shader_target target_name)
         set(SC_DEFINES "AXSLC_TARGET_GLSL")
         list(APPEND SC_FLAGS "--lang=glsl" "--profile=${SC_PROFILE}")
       endif()
-    elseif(AX_RENDER_API STREQUAL "d3d")
+    elseif(AX_RENDER_API MATCHES "d3d")
       set(OUT_LANG "HLSL")
-      set(SC_PROFILE "50") # D3D11 HLSL 5.0
+      if(AX_RENDER_API STREQUAL "d3d12")
+        set(SC_PROFILE "51") # D3D12 HLSL 5.1
+      else()
+        set(SC_PROFILE "50") # D3D11 HLSL 5.0
+      endif()
       set(SC_DEFINES "AXSLC_TARGET_HLSL")
       list(APPEND SC_FLAGS "--lang=hlsl" "--profile=${SC_PROFILE}")
     elseif(AX_RENDER_API STREQUAL "mtl")
@@ -200,8 +204,8 @@ function(ax_add_shader_target target_name)
       list(APPEND SC_FLAGS "--cvar=shader_rt_${FILE_NAME}")
     endif()
 
-    # sgs, because Apple Metal lack of shader uniform reflect and d3d reflect only support semantic name, so use --sgs --refelect
-    if(AX_RENDER_API STREQUAL "mtl" OR AX_RENDER_API STREQUAL "d3d" OR AX_RENDER_API STREQUAL "vk")
+    # use --sgs --refelect for non-gl render apis
+    if(NOT AX_RENDER_API MATCHES "gl")
       list(APPEND SC_FLAGS "--sgs" "--reflect")
     endif()
 

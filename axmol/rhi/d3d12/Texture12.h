@@ -1,0 +1,120 @@
+/****************************************************************************
+ Copyright (c) 2019-present Axmol Engine contributors
+ https://axmol.dev/
+ ****************************************************************************/
+#pragma once
+
+#include "axmol/rhi/Texture.h"
+#include "axmol/base/EventListenerCustom.h"
+#include <d3d12.h>
+#include <wrl/client.h>
+#include <vector>
+#include "axmol/tlx/pod_vector.hpp"
+
+namespace ax::rhi::d3d12
+{
+
+using Microsoft::WRL::ComPtr;
+
+class DriverImpl;
+
+/**
+ * @brief A TextureHandle holds D3D12 resource
+ */
+struct TextureHandle
+{
+    ComPtr<ID3D12Resource> resource;
+    D3D12_CPU_DESCRIPTOR_HANDLE view;  // SRV for color or DSV for depth-stencil
+
+    explicit operator bool() const { return resource != nullptr; }
+
+    void reset() { resource.Reset(); }
+};
+
+/**
+ * @brief Track resource states per mip/array slice
+ */
+class ResourceStateTracker
+{
+public:
+    ResourceStateTracker(size_t levelCap, size_t layerCap)
+    {
+        _states.resize(levelCap);
+        for (auto& v : _states)
+            v.resize(layerCap, D3D12_RESOURCE_STATE_COMMON);
+    }
+
+    D3D12_RESOURCE_STATES getState(uint32_t level, uint32_t layer) const
+    {
+        if (level < _states.size() && layer < _states[level].size())
+            return _states[level][layer];
+        return D3D12_RESOURCE_STATE_COMMON;
+    }
+
+    void setState(uint32_t level, uint32_t layer, D3D12_RESOURCE_STATES state)
+    {
+        if (level >= _states.size())
+            _states.resize(level + 1);
+        if (layer >= _states[level].size())
+            _states[level].resize(layer + 1, D3D12_RESOURCE_STATE_COMMON);
+        _states[level][layer] = state;
+    }
+
+private:
+    std::vector<axstd::pod_vector<D3D12_RESOURCE_STATES>> _states;
+};
+
+/**
+ * @brief D3D12 texture implementation (2D, cube, array)
+ */
+class TextureImpl : public rhi::Texture
+{
+public:
+    TextureImpl(DriverImpl*, const TextureDesc& desc);
+    TextureImpl(DriverImpl*, ComPtr<ID3D12Resource> existingResource);
+    ~TextureImpl();
+
+    void transitionState(ID3D12GraphicsCommandList* cmd, D3D12_RESOURCE_STATES newState);
+
+    D3D12_RESOURCE_STATES getCurrentState() const;
+    void setKnownState(D3D12_RESOURCE_STATES state);
+
+    void updateData(const void* data, int width, int height, int level, int layerIndex = 0) override;
+    void updateCompressedData(const void* data,
+                              int width,
+                              int height,
+                              std::size_t dataSize,
+                              int level,
+                              int layerIndex = 0) override;
+
+    void updateSubData(int xoffset, int yoffset, int width, int height, int level, const void* data, int layerIndex = 0)
+        override;
+    void updateCompressedSubData(int xoffset,
+                                 int yoffset,
+                                 int width,
+                                 int height,
+                                 std::size_t dataSize,
+                                 int level,
+                                 const void* data,
+                                 int layerIndex = 0) override;
+
+    void updateFaceData(TextureCubeFace side, const void* data) override;
+
+    void updateSamplerDesc(const SamplerDesc& sampler) override;
+    void updateTextureDesc(const TextureDesc& desc) override;
+
+    const TextureHandle& internalHandle() const { return _nativeTexture; }
+    const TextureDesc& getDesc() const { return _desc; }
+
+private:
+    void ensureNativeTexture();
+    void generateMipmaps(ID3D12GraphicsCommandList* cmd);
+
+    DriverImpl* _driver{nullptr};  // weak pointer
+    ResourceStateTracker _stateTracker;
+    TextureHandle _nativeTexture{};
+    TextureDesc _desc{};
+    bool _ownResources{false};
+};
+
+}  // namespace ax::rhi::d3d12

@@ -31,7 +31,7 @@
 #include "axmol/rhi/vulkan/RenderPipelineVK.h"
 #include "axmol/rhi/vulkan/DepthStencilStateVK.h"
 #include "axmol/rhi/vulkan/VertexLayoutVK.h"
-#include "axmol/rhi/RHITypes.h"
+#include "axmol/rhi/RHIUtils.h"
 
 #include "axmol/base/Logging.h"
 
@@ -67,36 +67,6 @@ namespace
 static inline uint32_t makeMaskUpTo(uint32_t n)
 {
     return (1u << (n + 1)) - 1u;
-}
-
-static std::string vendorToString(uint32_t vendorId)
-{
-    // Common PCI vendor IDs; Vulkan doesn't standardize vendor strings
-    switch (vendorId)
-    {
-    case 0x10DE:
-        return "NVIDIA";
-    case 0x8086:
-        return "Intel";
-    case 0x1002:
-        return "AMD";
-    case 0x13B5:
-        return "ARM";
-    case 0x5143:
-        return "Qualcomm";
-    case 0x106B:
-        return "Apple";
-    case 0x144D:
-        return "Samsung";
-    case 0x15AD:
-        return "VMware";
-    case 0x1AE0:
-        return "Google";
-    case 0x14E4:
-        return "Broadcom";
-    default:
-        return "Unknown";
-    }
 }
 
 static bool isValidationLayerAvailable(const char* layerName)
@@ -284,7 +254,7 @@ void DriverImpl::init()
     VkPhysicalDeviceProperties props{};
     vkGetPhysicalDeviceProperties(_physical, &props);
 
-    _vendor   = vendorToString(props.vendorID);
+    _vendor   = RHIUtils::vendorToString(props.vendorID);
     _renderer = props.deviceName;
     _version  = fmt::format("Vulkan-{}.{}.{}", VK_VERSION_MAJOR(props.apiVersion), VK_VERSION_MINOR(props.apiVersion),
                             VK_VERSION_PATCH(props.apiVersion));

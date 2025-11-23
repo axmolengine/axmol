@@ -21,8 +21,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "TextureVK.h"
-#include "UtilsVK.h"
+#include "axmol/rhi/vulkan/TextureVK.h"
+#include "axmol/rhi/vulkan/UtilsVK.h"
 #include "axmol/rhi/vulkan/DriverVK.h"
 #include "axmol/rhi/SamplerCache.h"
 #include "axmol/rhi/RHIUtils.h"

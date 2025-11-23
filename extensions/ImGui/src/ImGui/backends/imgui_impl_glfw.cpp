@@ -1655,7 +1655,7 @@ IMGUI_IMPL_API bool ImGui_ImplGlfw_InitForAxmol(GLFWwindow* window, bool install
     return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_OpenGL);
 #elif AX_RENDER_API == AX_RENDER_API_MTL
     return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_Metal);
-#elif AX_RENDER_API == AX_RENDER_API_D3D
+#    elif AX_RENDER_API == AX_RENDER_API_D3D11 || AX_RENDER_API == AX_RENDER_API_D3D12
     return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_D3D);
 #elif AX_RENDER_API == AX_RENDER_API_VK
     return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_Vulkan);

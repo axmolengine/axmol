@@ -24,7 +24,7 @@
 #pragma once
 
 #include "axmol/rhi/RenderTarget.h"
-#include "TextureVK.h"
+#include "axmol/rhi/vulkan/TextureVK.h"
 #include <glad/vulkan.h>
 #include <array>
 
