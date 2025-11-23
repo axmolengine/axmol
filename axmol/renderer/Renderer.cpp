@@ -49,6 +49,12 @@
 #include "axmol/rhi/axmol-rhi.h"
 #include "axmol/rhi/RenderTarget.h"
 
+#if (AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_VK || AX_RENDER_API == AX_RENDER_API_D3D12)
+#    define _AX_RENDER_API_MODERN 1
+#else
+#    define _AX_RENDER_API_MODERN 0
+#endif
+
 namespace ax
 {
 
@@ -314,7 +320,7 @@ void Renderer::processRenderCommand(RenderCommand* command)
             drawBatchedTriangles();
 
             _queuedTotalIndexCount = _queuedTotalVertexCount = 0;
-#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_VK
+#if _AX_RENDER_API_MODERN
             _queuedIndexCount = _queuedVertexCount = 0;
             _triangleCommandBufferManager.prepareNextBuffer();
             _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
@@ -324,7 +330,7 @@ void Renderer::processRenderCommand(RenderCommand* command)
 
         // queue it
         _queuedTriangleCommands.emplace_back(cmd);
-#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_VK
+#if _AX_RENDER_API_MODERN
         _queuedIndexCount += cmd->getIndexCount();
         _queuedVertexCount += cmd->getVertexCount();
 #endif
@@ -433,7 +439,7 @@ void Renderer::endFrame()
 {
     _context->endFrame();
 
-#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_VK
+#if _AX_RENDER_API_MODERN
     _triangleCommandBufferManager.putbackAllBuffers();
     _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
     _indexBuffer  = _triangleCommandBufferManager.getIndexBuffer();
@@ -608,7 +614,7 @@ void Renderer::drawBatchedTriangles()
         return;
 
     /************** 1: Setup up vertices/indices *************/
-#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_VK
+#if _AX_RENDER_API_MODERN
     unsigned int vertexBufferFillOffset = _queuedTotalVertexCount - _queuedVertexCount;
     unsigned int indexBufferFillOffset  = _queuedTotalIndexCount - _queuedIndexCount;
 #else
@@ -672,7 +678,7 @@ void Renderer::drawBatchedTriangles()
         firstCommand   = false;
     }
     batchesTotal++;
-#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_VK
+#if _AX_RENDER_API_MODERN
     _vertexBuffer->updateSubData(_verts, vertexBufferFillOffset * sizeof(_verts[0]), _filledVertex * sizeof(_verts[0]));
     _indexBuffer->updateSubData(_indices, indexBufferFillOffset * sizeof(_indices[0]),
                                 _filledIndex * sizeof(_indices[0]));
@@ -703,7 +709,7 @@ void Renderer::drawBatchedTriangles()
     /************** 3: Cleanup *************/
     _queuedTriangleCommands.clear();
 
-#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_VK
+#if _AX_RENDER_API_MODERN
     _queuedIndexCount  = 0;
     _queuedVertexCount = 0;
 #endif
