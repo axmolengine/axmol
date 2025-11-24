@@ -18,7 +18,7 @@
   4. Restart the console after it has finished for environment variables to take effect.
   5. Ensure that the C / C++ compiler toolset is installed on your host machine.
      - Windows: Visual Studio 2022 with desktop workflow
-     - macOS: XCode 14.2+
+     - macOS: Xcode 14.2+
      - Linux: GCC (G++)
 
 ## Creating a new project
@@ -62,16 +62,16 @@ The `axmol build` command will auto-setup the general toolsets, so you'll be abl
   - To just generate project: `axmol build -p winuwp -c`
 - Linux: `axmol build`
 - OSX:
-  - for Intel (x64): `axmol build -p osx -a x64 -c` (generate a xcodeproj, open with XCode to setup the code sign cert and build)
-  - for Apple Silicon (arm64): `axmol build -p osx -a arm64 -c` (generate a xcodeproj, open with XCode to setup the code sign cert and build)
+  - for Intel (x64): `axmol build -p osx -a x64 -c` (generate a xcodeproj, open with Xcode to setup the code sign cert and build)
+  - for Apple Silicon (arm64): `axmol build -p osx -a arm64 -c` (generate a xcodeproj, open with Xcode to setup the code sign cert and build)
 - Android: `axmol build -p android -a arm64` (can run on Windows, Linux and macOS, and script will auto setup Android SDK)
 - iOS:
-  - for devices: `axmol build -p ios -a arm64 -c` (generate a xcodeproj, open with XCode to setup the code sign cert and build)
+  - for devices: `axmol build -p ios -a arm64 -c` (generate a xcodeproj, open with Xcode to setup the code sign cert and build)
   - for simulators:
       - for Intel (x64): `axmol build -p ios -a x64 -sdk simulator -c`
       - for Apple Silicon (arm64): `axmol build -p ios -a arm64 -sdk simulator -c`
 - tvOS:
-  - for devices: `axmol build -p tvos -a arm64 -c` (generate a xcodeproj, open with XCode to setup code sign cert and build)
+  - for devices: `axmol build -p tvos -a arm64 -c` (generate a xcodeproj, open with Xcode to setup code sign cert and build)
   - for simulator: `axmol build -p tvos -a x64 -sdk simulator`
 - WASM: `axmol build -p wasm` (it can run on Windows 8.1+, Linux and macOS, it requires a preinstalled [python3](https://www.python.org/) in env `PATH`)
 
@@ -199,12 +199,12 @@ Note: if you use non-SDK provided CMake, you will need to download `ninja` from 
 
 ### iOS, tvOS and macOS
 
-  1. Ensure that XCode 13+ is installed.
+  1. Ensure that Xcode 13+ is installed.
   2. Create a new project as shown [here](#creating-a-new-project).
   3. In a console window, navigate into the root directory of the project you created in the previous step.
   4. Execute the following command:
    ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```
-  5. Generate the relevant XCode project using one of the following commands:
+  5. Generate the relevant Xcode project using one of the following commands:
      - for iOS arm64:  
      ```axmol build -p ios -a arm64 -c```
      - for iOS simulator arm64:  
@@ -220,7 +220,7 @@ Note: if you use non-SDK provided CMake, you will need to download `ninja` from 
      - for macOS arm64(M1)
      ```axmol build -p osx -a arm64 -c```
 
-  6. After CMake finishes generating, you can open the XCode project at `build_${plat}_${arch}` folder and run cpp-tests or other test targets. For OSC x64 should be `build_x64`.
+  6. After CMake finishes generating, you can open the Xcode project at `build_${plat}_${arch}` folder and run cpp-tests or other test targets. For OSC x64 should be `build_x64`.
   7. Notes:  
      - **Code signing is required to run the iOS / tvOS app on your device. Just change the bundle identifier until the auto manage signing is solved.**  
      - **Axmol only provides arm64, x86_64 prebuilt libraries for iOS / tvOS.**
