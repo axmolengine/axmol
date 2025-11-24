@@ -50,7 +50,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     ax::setLogFmtFlag(ax::LogFmtFlag::Full);
 
     // whether enable global SDF font render support, since axmol-2.0.1
-    FontFreeType::setShareDistanceFieldEnabled(true);
+    FontFreeType::setGlobalSDFEnabled(true);
 
     // initialize director
     auto director = Director::getInstance();

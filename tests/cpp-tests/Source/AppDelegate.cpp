@@ -53,7 +53,7 @@ void AppDelegate::initGfxContextAttrs()
     GfxContextAttrs gfxContextAttrs = {8, 8, 8, 8, 24, 8, 0};
 
     RenderView::setGfxContextAttrs(gfxContextAttrs);
-    
+
     Device::setPreferredOrientation(Device::Orientation::SensorLandscape);
 }
 
@@ -63,7 +63,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     ax::setLogFmtFlag(ax::LogFmtFlag::Full);
 
     // whether enable global SDF font render support, since axmol-2.0.1
-    FontFreeType::setShareDistanceFieldEnabled(true);
+    FontFreeType::setGlobalSDFEnabled(true);
 
     // As an example, load config file
     // FIXME:: This should be loaded before the Director is initialized,
@@ -157,4 +157,9 @@ void AppDelegate::applicationWillEnterForeground()
     }
 
     Director::getInstance()->startAnimation();
+}
+
+void AppDelegate::applicationWillQuit()
+{
+    TestController::destroyInstance();
 }

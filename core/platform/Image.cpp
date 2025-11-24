@@ -584,7 +584,7 @@ bool testFormatForPvr3TCSupport(PVR3TexturePixelFormat format)
     case PVR3TexturePixelFormat::ASTC_10x10:
     case PVR3TexturePixelFormat::ASTC_12x10:
     case PVR3TexturePixelFormat::ASTC_12x12:
-        return Configuration::getInstance()->supportsASTC();
+        return true;
 
     default:
         return false;

@@ -88,6 +88,17 @@ public:
     virtual void applicationWillEnterForeground() = 0;
 
     /**
+     * @brief  This function will be called when the application is about to quit.
+     *         Typically triggered when the user clicks the close button or requests
+     *         to exit the application.
+     * @return void
+     * @lua NA
+     * @since axmol-2.10.0
+     */
+    virtual void applicationWillQuit() {};
+
+
+    /**
      * @brief    Callback by Director for limit FPS.
      * @param interval The time, expressed in seconds, between current frame and next.
      * @lua NA

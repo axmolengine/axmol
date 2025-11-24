@@ -115,7 +115,6 @@ static constexpr auto UNIFORM_NAME_TEXT_COLOR   = "u_textColor"sv;
 static constexpr auto UNIFORM_NAME_EFFECT_COLOR = "u_effectColor"sv;
 static constexpr auto UNIFORM_NAME_EFFECT_WIDTH = "u_effectWidth"sv;
 static constexpr auto UNIFORM_NAME_LABEL_PASS   = "u_labelPass"sv;
-static constexpr auto UNIFORM_NAME_DISTANCE_SPREAD  = "u_distanceSpread"sv;
 
 /// built-in attribute name
 static constexpr auto ATTRIBUTE_NAME_POSITION  = "a_position"sv;

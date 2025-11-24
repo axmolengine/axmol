@@ -99,12 +99,6 @@ cmake_dependent_option(AX_ENABLE_MSEDGE_WEBVIEW2 "Use Microsoft Edge webview2" O
 cmake_dependent_option(AX_ENABLE_MFMEDIA "Enabling microsoft media foundation" ON "WIN32" OFF)
 cmake_dependent_option(AX_ENABLE_VLC_MEDIA "Enabling vlc media" OFF "(WIN32 AND NOT WINRT) OR LINUX" OFF)
 
-if(NOT APPLE AND(NOT EMSCRIPTEN))
-  set(AX_USE_ALSOFT ON CACHE BOOL "" FORCE)
-else()
-  option(AX_USE_ALSOFT "Use ALSOFT on apple" OFF)
-endif()
-
 option(AX_ENABLE_PHYSICS "Build Physics support" ON)
 cmake_dependent_option(AX_ENABLE_MEDIA "Build media support" ON "AX_ENABLE_MFMEDIA OR AX_ENABLE_VLC_MEDIA OR APPLE OR ANDROID" OFF)
 option(AX_ENABLE_AUDIO "Build audio support" ON)
