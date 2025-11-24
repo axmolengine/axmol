@@ -78,11 +78,9 @@ struct SamplerIndex
     };
 };
 
-
 class SamplerCache
 {
 public:
-
     static constexpr uint32_t MAX_SAMPLER_COUNT = 256;
 
     static SamplerCache* getInstance();

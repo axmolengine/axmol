@@ -391,8 +391,8 @@ void DriverImpl::createDescriptorAllocators()
 {
     _srvAllocator =
         std::make_unique<DescriptorHeapAllocator>(_device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 8192u, false);
-    _samplerAllocator =
-        std::make_unique<DescriptorHeapAllocator>(_device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, SamplerCache::MAX_SAMPLER_COUNT, true);
+    _samplerAllocator = std::make_unique<DescriptorHeapAllocator>(_device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER,
+                                                                  SamplerCache::MAX_SAMPLER_COUNT, true);
     _rtvAllocator =
         std::make_unique<DescriptorHeapAllocator>(_device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 1024u, false);
     _dsvAllocator =

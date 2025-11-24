@@ -150,13 +150,13 @@ private:
 
     ComPtr<ID3D12DescriptorHeap> _srvHeaps[MAX_FRAMES_IN_FLIGHT];
 
-    UINT _srvOffset[MAX_FRAMES_IN_FLIGHT]     = {};
+    UINT _srvOffset[MAX_FRAMES_IN_FLIGHT] = {};
 
     std::array<DynamicStateBits, MAX_FRAMES_IN_FLIGHT> _inFlightDynamicDirtyBits{DynamicStateBits::None};
 
     ID3D12GraphicsCommandList* _currentCmdList{nullptr};  // weak pointer
 
-   ID3D12PipelineState* _boundPSO{nullptr};  // weak pointer
+    ID3D12PipelineState* _boundPSO{nullptr};  // weak pointer
 
     uint32_t _currentImageIndex{0};
 
