@@ -34,9 +34,57 @@ namespace ax::rhi
  * @{
  */
 
+// The builtin sampler index
+struct SamplerIndex
+{
+    enum : uint32_t
+    {
+        // --- Linear sampling ---
+        LinearClamp,   // Linear, clamp to edge
+        LinearWrap,    // Linear, repeat
+        LinearMirror,  // Linear, mirror repeat
+        LinearBorder,  // Linear, border color
+
+        // --- Point sampling ---
+        PointClamp,   // Nearest, clamp to edge
+        PointWrap,    // Nearest, repeat
+        PointMirror,  // Nearest, mirror repeat
+        PointBorder,  // Nearest, border color
+
+        // --- Linear + Mipmap ---
+        LinearMipClamp,   // Linear min/mag, mip linear, clamp
+        LinearMipWrap,    // Linear min/mag, mip linear, wrap
+        LinearMipMirror,  // Linear min/mag, mip linear, mirror
+        LinearMipBorder,  // Linear min/mag, mip linear, border
+
+        // --- Anisotropic filtering ---
+        AnisoClamp,   // Anisotropic, clamp to edge
+        AnisoWrap,    // Anisotropic, repeat
+        AnisoMirror,  // Anisotropic, mirror repeat
+        AnisoBorder,  // Anisotropic, border color
+
+        // --- Depth comparison samplers (shadow maps) ---
+        ShadowCmpClamp,   // Compare sampler, clamp to edge
+        ShadowCmpWrap,    // Compare sampler, repeat
+        ShadowCmpMirror,  // Compare sampler, mirror repeat
+        ShadowCmpBorder,  // Compare sampler, border color
+
+        // --- Special cases ---
+        LinearNoMipClamp,  // Linear min/mag, no mip, clamp (UI, 2D sprites)
+        PointNoMipClamp,   // Point min/mag, no mip, clamp (pixel art)
+
+        //
+        Count
+    };
+};
+
+
 class SamplerCache
 {
 public:
+
+    static constexpr uint32_t MAX_SAMPLER_COUNT = 256;
+
     static SamplerCache* getInstance();
     static void destroyInstance();
 

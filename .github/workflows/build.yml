@@ -88,7 +88,7 @@ jobs:
         axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build' -O3
     - uses: actions/upload-artifact@v4
       with:
-        name: windows_d3d11_x64
+        name: windows_d3d12_x64
         path: |
           build/bin/cpp-tests/**/*
   win32-vk:

@@ -80,12 +80,9 @@ public:
     void deallocate(DescriptorHandle* h);
 
     ID3D12DescriptorHeap* getDescriptorHeap(const DescriptorHandle* handle) const;
+    ID3D12DescriptorHeap* getDescriptorHeapByIndex(size_t index) const { return _blocks[index].heap.Get(); }
 
-    // Defer free to a frame/fence value
-    // void deferFree(const DescriptorHandle& h, uint64_t fenceValue);
-
-    // Must be called to reap deferred frees when fence reaches value
-    // void reapDeferred(uint64_t completedFence);
+    void setAllowGrow(bool bval) { _allowGrow; }
 
     // Recreate a new larger block (auto-called when full)
     void grow();
@@ -104,6 +101,7 @@ public:
     Stats stats() const;
 
 private:
+    bool _allowGrow{true};
     yasio::object_pool<DescriptorHandle> _handlePool;
     ID3D12Device* _device = nullptr;
     D3D12_DESCRIPTOR_HEAP_TYPE _type;

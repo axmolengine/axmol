@@ -493,17 +493,15 @@ void TextureImpl::ensureNativeTexture()
 
 void TextureImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd)
 {
-    ID3D12Device* device    = _driver->getDevice();
-    ID3D12Resource* texture = _nativeTexture.resource.Get();
-    const auto desc         = texture->GetDesc();
+    if (_desc.textureUsage == TextureUsage::RENDER_TARGET)
+        return;
 
-    const UINT mipCount   = desc.MipLevels;
-    const UINT arrayCount = desc.DepthOrArraySize;  // 1 for Texture2D, N for Texture2DArray
-    if (mipCount <= 1)
-        return;  // nothing to generate
-
-    if (_driver->generateMipmaps(cmd, texture))
+    auto resource = _nativeTexture.resource.Get();
+    if (_driver->generateMipmaps(cmd, resource))
+    {
+        auto desc          = resource->GetDesc();
         _overrideMipLevels = desc.MipLevels;
+    }
 }
 
 }  // namespace ax::rhi::d3d12

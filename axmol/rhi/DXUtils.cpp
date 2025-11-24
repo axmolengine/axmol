@@ -175,5 +175,4 @@ DXGI_FORMAT getUAVCompatibleFormat(DXGI_FORMAT format)
     }
 }
 
-
 }  // namespace ax::rhi::dxutils

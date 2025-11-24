@@ -45,6 +45,7 @@ namespace ax::rhi::d3d12
 {
 
 static constexpr DXGI_FORMAT AX_SWAPCHAIN_FORMAT = DXGI_FORMAT_R8G8B8A8_UNORM;
+static constexpr UINT MAX_ALLOW_DRAW_CALLS       = 2000;
 
 // Helper: map PrimitiveType to D3D12_PRIMITIVE_TOPOLOGY
 static D3D12_PRIMITIVE_TOPOLOGY toD3DTopology(PrimitiveType type)
@@ -337,7 +338,8 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext) :
                                                                               _screenHeight);
 
     createUniformRingBuffers(1 * 1024 * 1024);  // 1 MB per frame
-    _descriptorHeaps.reserve(16);
+
+    createDescriptorHeaps();
 
     bitmask::set(_inFlightDynamicDirtyBits[0], PIPELINE_REQUIRED_DYNAMIC_BITS);
     bitmask::set(_inFlightDynamicDirtyBits[1], PIPELINE_REQUIRED_DYNAMIC_BITS);
@@ -348,18 +350,15 @@ RenderContextImpl::~RenderContextImpl()
     _driver->waitDeviceIdle();
 
     // Ensure GPU idle then cleanup handles if needed
-    if (_graphicsQueue)
+    for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
     {
-        for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+        if (_fences[i])
         {
-            if (_fences[i])
+            _graphicsQueue->Signal(_fences[i].Get(), ++_fenceValues[i]);
+            if (_fences[i]->GetCompletedValue() < _fenceValues[i])
             {
-                _graphicsQueue->Signal(_fences[i].Get(), ++_fenceValues[i]);
-                if (_fences[i]->GetCompletedValue() < _fenceValues[i])
-                {
-                    _fences[i]->SetEventOnCompletion(_fenceValues[i], _fenceEvents[i]);
-                    WaitForSingleObject(_fenceEvents[i], INFINITE);
-                }
+                _fences[i]->SetEventOnCompletion(_fenceValues[i], _fenceEvents[i]);
+                WaitForSingleObject(_fenceEvents[i], INFINITE);
             }
         }
     }
@@ -371,6 +370,9 @@ RenderContextImpl::~RenderContextImpl()
             CloseHandle(_fenceEvents[i]);
             _fenceEvents[i] = nullptr;
         }
+
+        if (_srvHeaps[i])
+            _srvHeaps[i].Reset();
     }
 
     // Release retained buffers
@@ -399,6 +401,20 @@ void RenderContextImpl::createCommandObjects()
         _fenceValues[i] = 0;
         _fenceEvents[i] = CreateEvent(nullptr, FALSE, FALSE, nullptr);
         AXASSERT(_fenceEvents[i] != nullptr, "CreateEvent failed");
+    }
+}
+
+void RenderContextImpl::createDescriptorHeaps()
+{
+    const auto maxTextureUnits = static_cast<UINT>(_driver->getMaxTextureUnits());
+    const auto maxDescriptors  = maxTextureUnits * MAX_ALLOW_DRAW_CALLS;
+    D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc{.Type           = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+                                           .NumDescriptors = maxDescriptors,
+                                           .Flags          = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE};
+
+    for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+    {
+        _device->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&_srvHeaps[i]));
     }
 }
 
@@ -454,6 +470,9 @@ bool RenderContextImpl::beginFrame()
         _swapchainDirty = false;
     }
 
+    // Reset offsets at the start of each frame
+    _srvOffset[_currentFrame] = 0;
+
     resetUniformRingForCurrentFrame(_currentFrame);
 
     _currentImageIndex = _swapchain->GetCurrentBackBufferIndex();
@@ -465,6 +484,15 @@ bool RenderContextImpl::beginFrame()
     hr              = _currentCmdList->Reset(_commandAllocators[_currentFrame].Get(), nullptr);
     AXASSERT(SUCCEEDED(hr), "CommandList Reset failed");
 
+    _psoDirty = true;
+    bitmask::set(_inFlightDynamicDirtyBits[_currentFrame], PIPELINE_REQUIRED_DYNAMIC_BITS);
+
+    // Sets descriptor heaps
+    auto samplerHeap               = _driver->getSamplerHeap();
+    auto srvHeap                   = _srvHeaps[_currentFrame].Get();
+    ID3D12DescriptorHeap* heaps[2] = {srvHeap, samplerHeap};
+    _currentCmdList->SetDescriptorHeaps(2, heaps);
+
     _inFrame = true;
     return true;
 }
@@ -473,7 +501,12 @@ void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const Render
 {
     AXASSERT(_inFrame, "beginRenderPass must be called within a frame");
     auto rtImpl = static_cast<RenderTargetImpl*>(renderTarget);
-    _currentRT  = renderTarget;
+
+    if (_currentRT != renderTarget)
+    {
+        _psoDirty  = true;
+        _currentRT = renderTarget;
+    }
 
     // Get target size from color0
     auto colorAttachment = rtImpl->getColorAttachment(0);
@@ -672,15 +705,15 @@ void RenderContextImpl::updatePipelineState(const RenderTarget* rt, const Pipeli
 
     // Bind PSO & RootSignature
     auto pso = _renderPipeline->getPipelineState();
-    // if (pso != _currentPSO)
+    if (pso != _boundPSO || _psoDirty)
     {
         auto rootSigInfo = _renderPipeline->getRootSignature();
-
         _currentCmdList->SetGraphicsRootSignature(rootSigInfo->rootSig.Get());
         _currentCmdList->SetPipelineState(_renderPipeline->getPipelineState());
-        _currentPSO = pso;
 
-        bitmask::set(_inFlightDynamicDirtyBits[_currentFrame], PIPELINE_REQUIRED_DYNAMIC_BITS);
+        _boundPSO = pso;
+
+        _psoDirty = false;
     }
 }
 
@@ -841,57 +874,49 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     }
 
     // --- bind textures & samplers ---
-    _descriptorHeaps.clear();
+    auto srvHeap = _srvHeaps[_currentFrame].Get();
+
+    // CPU start handles
+    auto srvCpuStart = srvHeap->GetCPUDescriptorHandleForHeapStart();
+
+    const auto srvStride     = _driver->getSrvDescriptorStride();
+    const auto samplerStride = _driver->getSamplerDescriptorStride();
 
     auto& textureBindingSets = _programState->getTextureBindingSets();
     if (!textureBindingSets.empty())
     {
-        for (const auto& [_, bindingSet] : textureBindingSets)
+        UINT srvCount          = 0;
+        UINT batchSamplerCount = 0;
+
+        // Copy descriptors for each texture in the binding set
+        for (auto& [_, bindingSet] : textureBindingSets)
         {
-            const auto& texs = bindingSet.texs;
-            if (texs.empty())
-                continue;
-
-            const auto count = texs.size();
-            for (auto i = 0; i < count; ++i)
+            for (auto* tex : bindingSet.texs)
             {
-                auto textureImpl = static_cast<TextureImpl*>(texs[0]);
+                auto textureImpl = static_cast<TextureImpl*>(tex);
 
-                // SRV handle (already created in TextureImpl::ensureNativeTexture)
-                const DescriptorHandle* srvHandle = textureImpl->internalHandle().srv;
-                // Sampler handle (already created and returned by getSampler())
-                const DescriptorHandle* samplerHandle = textureImpl->getSampler();
-
-                _descriptorHeaps.insert(_driver->getResourceViewHeap(srvHandle));
-                _descriptorHeaps.insert(_driver->getSamplerHeap(samplerHandle));
+                // Copy SRV descriptor into the current frame heap
+                auto srvHandle = textureImpl->internalHandle().srv;
+                if (srvHandle)
+                {
+                    auto dstSrv = srvCpuStart;
+                    dstSrv.ptr += (_srvOffset[_currentFrame] + srvCount) * srvStride;
+                    _device->CopyDescriptorsSimple(1, dstSrv, srvHandle->cpu, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+                    ++srvCount;
+                }
             }
         }
 
-        cmd->SetDescriptorHeaps(_descriptorHeaps.size(), std::to_address(_descriptorHeaps.begin()));
+        // Bind GPU handles for this batch
+        auto srvGpuStart = srvHeap->GetGPUDescriptorHandleForHeapStart();
+        srvGpuStart.ptr += _srvOffset[_currentFrame] * srvStride;
+        cmd->SetGraphicsRootDescriptorTable(rootSigInfo->srvRootIndex, srvGpuStart);
 
-        for (const auto& [_, bindingSet] : textureBindingSets)
-        {
-            const auto& texs = bindingSet.texs;
-            if (texs.empty())
-                continue;
+        auto samplerGpuStart = _driver->getSamplerHeap()->GetGPUDescriptorHandleForHeapStart();
+        _currentCmdList->SetGraphicsRootDescriptorTable(rootSigInfo->samplerRootIndex, samplerGpuStart);
 
-            const auto count = texs.size();
-            for (auto i = 0; i < count; ++i)
-            {
-                auto textureImpl = static_cast<TextureImpl*>(texs[i]);
-
-                // SRV handle (already created in TextureImpl::ensureNativeTexture)
-                const DescriptorHandle* srvHandle = textureImpl->internalHandle().srv;
-                // Sampler handle (already created and returned by getSampler())
-                const DescriptorHandle* samplerHandle = textureImpl->getSampler();
-
-                // Bind SRV descriptor table (RootParameter index for SRV table)
-                cmd->SetGraphicsRootDescriptorTable(rootSigInfo->srvRootIndex, srvHandle->gpu);
-
-                // Bind Sampler descriptor table (RootParameter index for Sampler table)
-                cmd->SetGraphicsRootDescriptorTable(rootSigInfo->samplerRootIndex, samplerHandle->gpu);
-            }
-        }
+        // Advance offsets for the next batch
+        _srvOffset[_currentFrame] += srvCount;
     }
 }
 

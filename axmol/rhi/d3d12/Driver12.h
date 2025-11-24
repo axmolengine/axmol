@@ -75,6 +75,12 @@ struct IsolateSubmission
     Microsoft::WRL::ComPtr<ID3D12CommandAllocator> allocator;
     Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> cmdList;
     Microsoft::WRL::ComPtr<ID3D12Fence> fence;
+    void reset()
+    {
+        fence.Reset();
+        cmdList.Reset();
+        allocator.Reset();
+    }
     UINT64 fenceValue = 0;
 };
 
@@ -131,13 +137,16 @@ public:
     void deallocateDescriptor(DescriptorHandle* handle, DisposableResource::Type type);
 
     // Gets SRV/UAV/CBV heap
-    ID3D12DescriptorHeap* getResourceViewHeap(const DescriptorHandle* h) const { return _srvAllocator->getDescriptorHeap(h); }
-    ID3D12DescriptorHeap* getSamplerHeap(const DescriptorHandle* h) const
+    ID3D12DescriptorHeap* getResourceViewHeap(const DescriptorHandle* h) const
     {
-        return _samplerAllocator->getDescriptorHeap(h);
+        return _srvAllocator->getDescriptorHeap(h);
     }
+    ID3D12DescriptorHeap* getSamplerHeap() const { return _samplerAllocator->getDescriptorHeapByIndex(0); }
     ID3D12DescriptorHeap* getRtvHeap(const DescriptorHandle* h) const { return _rtvAllocator->getDescriptorHeap(h); }
     ID3D12DescriptorHeap* getDsvHeap(const DescriptorHandle* h) const { return _dsvAllocator->getDescriptorHeap(h); }
+
+    UINT getSrvDescriptorStride() const { return _srvDescriptorStride; }
+    UINT getSamplerDescriptorStride() const { return _samplerDescriptorStride; }
 
     bool compileShader(std::string_view shaderSource, ShaderStage stage, D3D12BlobHandle& outHandle);
 
@@ -155,7 +164,7 @@ private:
     void initializeAdapter();
     void initializeDevice();
 
-    void createDescriptorHeaps();
+    void createDescriptorAllocators();
 
     bool checkFormatSupport(DXGI_FORMAT format);
 
@@ -180,8 +189,8 @@ private:
     std::unique_ptr<DescriptorHeapAllocator> _dsvAllocator;
     std::unique_ptr<DescriptorHeapAllocator> _samplerAllocator;
 
-    UINT _rtvDescriptorSize{0};
-    UINT _dsvDescriptorSize{0};
+    UINT _srvDescriptorStride{0};
+    UINT _samplerDescriptorStride{0};
 
     // Disposal queue (optional) if you want fence-gated cleanup beyond ComPtr lifetime
     std::mutex _disposalMutex;

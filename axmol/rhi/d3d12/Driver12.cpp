@@ -35,7 +35,7 @@
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/rhi/DXUtils.h"
 #include "axmol/rhi/d3d12/Utils12.h"
-#include "axmol/tlx/flat_map.hpp"
+#include "axmol/rhi/SamplerCache.h"
 #include "d3dx12.h"
 #include "ntcvt/ntcvt.hpp"
 
@@ -214,12 +214,19 @@ DriverImpl::~DriverImpl()
 {
     cleanPendingResources();
 
+    _srvAllocator.reset();
+    _rtvAllocator.reset();
+    _dsvAllocator.reset();
+    _samplerAllocator.reset();
+
     _mipmapRootSig.Reset();
     _mipmapPSO2D.Reset();
     _mipmapPSOArray.Reset();
 
     _dxcLibrary.Reset();
     _dxcCompiler.Reset();
+
+    _isolateSubmission.reset();
 
     _gfxQueue.Reset();
     _device.Reset();
@@ -240,7 +247,7 @@ void DriverImpl::init()
 {
     initializeAdapter();
     initializeDevice();
-    createDescriptorHeaps();
+    createDescriptorAllocators();
 
     // check device feature level
     D3D_FEATURE_LEVEL featureLevels[] = {D3D_FEATURE_LEVEL_12_1, D3D_FEATURE_LEVEL_12_0, D3D_FEATURE_LEVEL_11_1,
@@ -291,6 +298,10 @@ void DriverImpl::init()
     _caps.maxTextureSize  = dxutils::evalulateMaxTexSize(_featureLevel);
 
     _caps.maxSamplesAllowed = evalulateMaxMsaaSamples(_device.Get(), DXGI_FORMAT_R8G8B8A8_UNORM);
+
+    // descriptor stdie
+    _srvDescriptorStride     = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+    _samplerDescriptorStride = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
 
 #if _AX_USE_DXC
     // init DXC instances once
@@ -376,16 +387,18 @@ void DriverImpl::initializeDevice()
     AXASSERT(SUCCEEDED(hr), "CreateCommandQueue failed");
 }
 
-void DriverImpl::createDescriptorHeaps()
+void DriverImpl::createDescriptorAllocators()
 {
     _srvAllocator =
-        std::make_unique<DescriptorHeapAllocator>(_device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 8192u, true);
+        std::make_unique<DescriptorHeapAllocator>(_device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 8192u, false);
     _samplerAllocator =
-        std::make_unique<DescriptorHeapAllocator>(_device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, 256u, true);
+        std::make_unique<DescriptorHeapAllocator>(_device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, SamplerCache::MAX_SAMPLER_COUNT, true);
     _rtvAllocator =
         std::make_unique<DescriptorHeapAllocator>(_device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 1024u, false);
     _dsvAllocator =
         std::make_unique<DescriptorHeapAllocator>(_device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 512u, false);
+
+    _samplerAllocator->setAllowGrow(false);
 }
 
 RenderContext* DriverImpl::createRenderContext(void* surfaceContext)
@@ -885,7 +898,7 @@ bool DriverImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource*
     // Bind descriptor heaps (sampler is static in RS)
     if (!descriptorHeaps.empty())
         cmd->SetDescriptorHeaps(descriptorHeaps.size(), std::to_address(descriptorHeaps.begin()));
-     
+
     // Bind root signature and PSO
     cmd->SetComputeRootSignature(_mipmapRootSig.Get());
     cmd->SetPipelineState(isArray ? _mipmapPSOArray.Get() : _mipmapPSO2D.Get());

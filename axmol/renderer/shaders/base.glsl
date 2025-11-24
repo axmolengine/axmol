@@ -60,3 +60,43 @@
 // Binding indices within uniform set
 #define VS_UB_BINDING 0   // Vertex shader uniform block
 #define FS_UB_BINDING 1   // Fragment shader uniform block
+
+
+// ============================================================================
+// Axmol Shader Builtin Sampler
+// ============================================================================
+// ============================================================================
+// --- Linear sampling (default first) ---
+#define LinearClamp       0  // Linear, clamp to edge (default)
+#define LinearWrap        1  // Linear, repeat
+#define LinearMirror      2  // Linear, mirror repeat
+#define LinearBorder      3  // Linear, border color
+
+// --- Point sampling ---
+#define PointClamp        4  // Nearest, clamp to edge
+#define PointWrap         5  // Nearest, repeat
+#define PointMirror       6 // Nearest, mirror repeat
+#define PointBorder       7 // Nearest, border color
+
+// --- Linear + Mipmap ---
+#define LinearMipClamp    8  // Linear min/mag, mip linear, clamp
+#define LinearMipWrap     9  // Linear min/mag, mip linear, wrap
+#define LinearMipMirror   10  // Linear min/mag, mip linear, mirror
+#define LinearMipBorder   11  // Linear min/mag, mip linear, border
+
+// --- Anisotropic filtering ---
+#define AnisoClamp        12 // Anisotropic, clamp to edge
+#define AnisoWrap         13 // Anisotropic, repeat
+#define AnisoMirror       14 // Anisotropic, mirror repeat
+#define AnisoBorder       15 // Anisotropic, border color
+
+// --- Depth comparison samplers (shadow maps) ---
+#define ShadowCmpClamp    16 // Compare sampler, clamp to edge
+#define ShadowCmpWrap     17 // Compare sampler, repeat
+#define ShadowCmpMirror   18 // Compare sampler, mirror repeat
+#define ShadowCmpBorder   19 // Compare sampler, border color
+
+// --- Special cases ---
+#define LinearNoMipClamp  20 // Linear min/mag, no mip, clamp (UI, 2D sprites)
+#define PointNoMipClamp   21 // Point min/mag, no mip, clamp (pixel art)
+

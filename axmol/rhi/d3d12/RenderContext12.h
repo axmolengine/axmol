@@ -124,6 +124,7 @@ public:
 
 private:
     void createCommandObjects();
+    void createDescriptorHeaps();
 
     void prepareDrawing(ID3D12GraphicsCommandList* cmd);
 
@@ -147,13 +148,15 @@ private:
     std::array<HANDLE, MAX_FRAMES_IN_FLIGHT> _fenceEvents{};
     std::array<uint64_t, MAX_FRAMES_IN_FLIGHT> _fenceValues{};
 
+    ComPtr<ID3D12DescriptorHeap> _srvHeaps[MAX_FRAMES_IN_FLIGHT];
+
+    UINT _srvOffset[MAX_FRAMES_IN_FLIGHT]     = {};
+
     std::array<DynamicStateBits, MAX_FRAMES_IN_FLIGHT> _inFlightDynamicDirtyBits{DynamicStateBits::None};
 
     ID3D12GraphicsCommandList* _currentCmdList{nullptr};  // weak pointer
 
-    axstd::flat_set<ID3D12DescriptorHeap*> _descriptorHeaps;
-
-    ID3D12PipelineState* _currentPSO{nullptr};  // weak pointer
+   ID3D12PipelineState* _boundPSO{nullptr};  // weak pointer
 
     uint32_t _currentImageIndex{0};
 
@@ -220,6 +223,7 @@ private:
     UINT _swapchainFlags{0};
 
     bool _swapchainDirty{false};
+    bool _psoDirty{false};
     bool _inFrame{false};
 };
 

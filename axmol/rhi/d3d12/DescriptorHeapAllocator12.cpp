@@ -112,6 +112,9 @@ DescriptorHandle* DescriptorHeapAllocator::allocate()
         }
     }
 
+    if (!_allowGrow)
+        throw std::runtime_error("DescriptorHeapAllocator out of memory!");
+
     // No free slot; grow and retry once
     grow();
     auto& b      = _blocks.back();
@@ -165,32 +168,6 @@ void DescriptorHeapAllocator::deallocate(DescriptorHandle* h)
 
     _handlePool.deallocate(h);
 }
-
-// void DescriptorHeapAllocator::deferFree(const DescriptorHandle& h, uint64_t fenceValue)
-//{
-//     if (!h.valid())
-//         return;
-//     std::lock_guard<std::mutex> lock(_mutex);
-//     _deferred.push_back({h, fenceValue});
-// }
-//
-// void DescriptorHeapAllocator::reapDeferred(uint64_t completedFence)
-//{
-//     std::lock_guard<std::mutex> lock(_mutex);
-//     size_t w = 0;
-//     for (size_t r = 0; r < _deferred.size(); ++r)
-//     {
-//         if (_deferred[r].fence <= completedFence)
-//         {
-//             free(_deferred[r].h);
-//         }
-//         else
-//         {
-//             _deferred[w++] = _deferred[r];
-//         }
-//     }
-//     _deferred.resize(w);
-// }
 
 DescriptorHeapAllocator::Stats DescriptorHeapAllocator::stats() const
 {

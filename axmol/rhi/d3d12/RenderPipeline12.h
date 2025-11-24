@@ -62,6 +62,8 @@ public:
     static constexpr int SET_INDEX_UBO       = 0;
     static constexpr int SET_INDEX_SAMPLER   = 1;
     static constexpr int SET_INDEX_SRV       = 1;
+    static constexpr int SAMPLER_ROOT_INDEX  = 0;
+
     explicit RenderPipelineImpl(DriverImpl* driver);
     ~RenderPipelineImpl();
 
