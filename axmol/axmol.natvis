@@ -1,14 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
-  <Type Name="axstd::pod_vector&lt;*&gt;">
-    <DisplayString>{{ size={_Mylast - _Myfirst} capacity={_Myend - _Myfirst} }}</DisplayString>
-    <Expand>
-      <Item Name="[size]" ExcludeView="simple">_Mylast - _Myfirst</Item>
-      <Item Name="[capacity]" ExcludeView="simple">_Myend - _Myfirst</Item>
-      <ArrayItems>
-        <Size>_Mylast - _Myfirst</Size>
-        <ValuePointer>_Myfirst</ValuePointer>
-      </ArrayItems>
-    </Expand>
-  </Type>
+    <Type Name="axstd::pod_vector&lt;*&gt;">
+        <DisplayString>{{ size={_Mylast - _Myfirst} capacity={_Myend - _Myfirst} }}</DisplayString>
+        <Expand>
+            <Item Name="[size]" ExcludeView="simple">_Mylast - _Myfirst</Item>
+            <Item Name="[capacity]" ExcludeView="simple">_Myend - _Myfirst</Item>
+            <ArrayItems>
+                <Size>_Mylast - _Myfirst</Size>
+                <ValuePointer>_Myfirst</ValuePointer>
+            </ArrayItems>
+        </Expand>
+    </Type>
+    <!-- flat_set visualizer -->
+    <Type Name="axstd::flat_set&lt;*&gt;">
+        <DisplayString>{{size = {_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst}}}</DisplayString>
+        <Expand>
+            <Item Name="[size]">_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst</Item>
+            <Item Name="[capacity]" ExcludeView="simple">_Mypair._Myval2._Mypair._Myval2._Myend - _Mypair._Myval2._Mypair._Myval2._Myfirst</Item>
+            <ArrayItems>
+                <Size>_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst</Size>
+                <ValuePointer>_Mypair._Myval2._Mypair._Myval2._Myfirst</ValuePointer>
+            </ArrayItems>
+        </Expand>
+    </Type>
+
+    <!-- flat_map visualizer -->
+    <Type Name="axstd::flat_map&lt;*&gt;">
+        <DisplayString>{{size = {_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst}}}</DisplayString>
+        <Expand>
+            <Item Name="[size]">_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst</Item>
+            <Item Name="[capacity]" ExcludeView="simple">_Mypair._Myval2._Mypair._Myval2._Myend - _Mypair._Myval2._Mypair._Myval2._Myfirst</Item>
+            <ArrayItems>
+                <Size>_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst</Size>
+                <ValuePointer>_Mypair._Myval2._Mypair._Myval2._Myfirst</ValuePointer>
+            </ArrayItems>
+        </Expand>
+    </Type>
 </AutoVisualizer>

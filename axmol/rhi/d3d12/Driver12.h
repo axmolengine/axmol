@@ -117,21 +117,27 @@ public:
     ID3D12CommandQueue* getGraphicsQueue() const { return _gfxQueue.Get(); }
     IDXGIFactory6* getDXGIFactory() const { return _dxgiFactory.Get(); }
 
+    bool generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource* texture);
+
     ID3D12GraphicsCommandList* startIsolateSubmission();
     void finishIsolateSubmission(bool waitForCompletion = true);
 
+    // New helpers
+    DescriptorHandle* createSRV(ID3D12Resource* resource, const D3D12_SHADER_RESOURCE_VIEW_DESC* desc);
+    DescriptorHandle* createUAV(ID3D12Resource* resource, const D3D12_UNORDERED_ACCESS_VIEW_DESC* desc);
+
     // Allocation
-
     DescriptorHandle* allocateDescriptor(DisposableResource::Type type);
-    void releaseDescriptor(DescriptorHandle* handle, DisposableResource::Type type);
+    void deallocateDescriptor(DescriptorHandle* handle, DisposableResource::Type type);
 
-    ID3D12DescriptorHeap* getSRVHeap(const DescriptorHandle* h) const { return _srvAllocator->getDescriptorHeap(h); }
+    // Gets SRV/UAV/CBV heap
+    ID3D12DescriptorHeap* getResourceViewHeap(const DescriptorHandle* h) const { return _srvAllocator->getDescriptorHeap(h); }
     ID3D12DescriptorHeap* getSamplerHeap(const DescriptorHandle* h) const
     {
         return _samplerAllocator->getDescriptorHeap(h);
     }
-    ID3D12DescriptorHeap* getRTVHeap(const DescriptorHandle* h) const { return _rtvAllocator->getDescriptorHeap(h); }
-    ID3D12DescriptorHeap* getDSVHeap(const DescriptorHandle* h) const { return _dsvAllocator->getDescriptorHeap(h); }
+    ID3D12DescriptorHeap* getRtvHeap(const DescriptorHandle* h) const { return _rtvAllocator->getDescriptorHeap(h); }
+    ID3D12DescriptorHeap* getDsvHeap(const DescriptorHandle* h) const { return _dsvAllocator->getDescriptorHeap(h); }
 
     bool compileShader(std::string_view shaderSource, ShaderStage stage, D3D12BlobHandle& outHandle);
 
@@ -188,6 +194,14 @@ private:
     Microsoft::WRL::ComPtr<IDxcLibrary> _dxcLibrary;
     Microsoft::WRL::ComPtr<IDxcCompiler> _dxcCompiler;
     std::vector<LPCWSTR> _dxcArguments;
+
+    // lazy init helpers
+    void ensureMipmapPipeline(bool isArray);
+    D3D12BlobHandle compileMipmapCS(bool isArray);
+
+    Microsoft::WRL::ComPtr<ID3D12RootSignature> _mipmapRootSig;
+    Microsoft::WRL::ComPtr<ID3D12PipelineState> _mipmapPSO2D;
+    Microsoft::WRL::ComPtr<ID3D12PipelineState> _mipmapPSOArray;
 };
 
 }  // namespace ax::rhi::d3d12

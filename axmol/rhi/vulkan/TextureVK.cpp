@@ -542,7 +542,7 @@ void TextureImpl::updateCompressedSubData(int xoffset,
 
     vkCmdCopyBufferToImage(cmd, stagingBuffer, _nativeTexture.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
 
-    // !!!Vulkan requires baked mipmaps data
+    // !!!Vulkan requires baked mipmaps data for compressed texture
     if (shouldGenMipmaps())
     {
         AXLOGW(

@@ -72,6 +72,25 @@ jobs:
         name: windows_d3d11_x64
         path: |
           build/bin/cpp-tests/**/*
+  win32-d3d12:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v5
+    - name: Build
+      shell: pwsh
+      run: |
+        .\tools\cmdline\axmol -p win32 -a x64 -xc '-DAX_RENDER_API=d3d12' -O3
+    - name: Check prebuilt workflow
+      shell: pwsh
+      run: |
+        ./setup.ps1
+        axmol new HelloCpp
+        axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build' -O3
+    - uses: actions/upload-artifact@v4
+      with:
+        name: windows_d3d11_x64
+        path: |
+          build/bin/cpp-tests/**/*
   win32-vk:
     runs-on: windows-latest
     steps:

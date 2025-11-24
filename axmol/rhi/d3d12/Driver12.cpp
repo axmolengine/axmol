@@ -35,6 +35,8 @@
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/rhi/DXUtils.h"
 #include "axmol/rhi/d3d12/Utils12.h"
+#include "axmol/tlx/flat_map.hpp"
+#include "d3dx12.h"
 #include "ntcvt/ntcvt.hpp"
 
 #include <algorithm>
@@ -70,6 +72,86 @@ void DriverBase::destroyInstance()
 
 namespace ax::rhi::d3d12
 {
+
+static std::string_view kCSGenerateMipsHLSL = R"(
+// mipmaps generation compute shader
+#ifndef THREADS_X
+#define THREADS_X 8
+#endif
+#ifndef THREADS_Y
+#define THREADS_Y 8
+#endif
+
+// Macro to switch between Texture2D and Texture2DArray
+#ifdef USE_ARRAY
+    Texture2DArray<float4> gSrc : register(t0);
+    RWTexture2DArray<float4> gDst : register(u0);
+#else
+    Texture2D<float4> gSrc : register(t0);
+    RWTexture2D<float4> gDst : register(u0);
+#endif
+
+SamplerState gSampler : register(s0);
+
+cbuffer MipConstants : register(b0)
+{
+    uint2  SrcDim;      // source mip width/height
+    uint2  DstDim;      // destination mip width/height
+    float2 InvSrcDim;   // 1.0 / SrcDim
+#ifdef USE_ARRAY
+    uint   FirstSlice;  // starting slice index
+    uint   SliceCount;  // number of slices
+#endif
+}
+
+[numthreads(THREADS_X, THREADS_Y, 1)]
+void main(uint3 tid : SV_DispatchThreadID)
+{
+    if (tid.x >= DstDim.x || tid.y >= DstDim.y)
+        return;
+
+#ifdef USE_ARRAY
+    if (tid.z >= SliceCount)
+        return;
+    uint slice = FirstSlice + tid.z;
+#endif
+
+    // Compute base UV in source mip
+    float2 srcUVBase = (float2(tid.xy) * 2.0f + 0.5f) * InvSrcDim;
+
+#ifdef USE_ARRAY
+    float4 c0 = gSrc.SampleLevel(gSampler, float3(srcUVBase + float2(0,0) * InvSrcDim, slice), 0);
+    float4 c1 = gSrc.SampleLevel(gSampler, float3(srcUVBase + float2(1,0) * InvSrcDim, slice), 0);
+    float4 c2 = gSrc.SampleLevel(gSampler, float3(srcUVBase + float2(0,1) * InvSrcDim, slice), 0);
+    float4 c3 = gSrc.SampleLevel(gSampler, float3(srcUVBase + float2(1,1) * InvSrcDim, slice), 0);
+
+    gDst[uint3(tid.xy, slice)] = (c0 + c1 + c2 + c3) * 0.25f;
+#else
+    float4 c0 = gSrc.SampleLevel(gSampler, srcUVBase + float2(0,0) * InvSrcDim, 0);
+    float4 c1 = gSrc.SampleLevel(gSampler, srcUVBase + float2(1,0) * InvSrcDim, 0);
+    float4 c2 = gSrc.SampleLevel(gSampler, srcUVBase + float2(0,1) * InvSrcDim, 0);
+    float4 c3 = gSrc.SampleLevel(gSampler, srcUVBase + float2(1,1) * InvSrcDim, 0);
+
+    gDst[tid.xy] = (c0 + c1 + c2 + c3) * 0.25f;
+#endif
+}
+)";
+
+static inline bool CheckHR(HRESULT hr, const char* msg = nullptr)
+{
+    if (FAILED(hr))
+    {
+        if (msg)
+            AXLOGE("D3D12 ERROR: {} hr=0x{:X}", msg, hr);
+        else
+            AXLOGE("D3D12 ERROR: hr=0x{:X}", hr);
+
+        AXASSERT(false, "D3D12 call failed!");
+        return false;
+    }
+    return true;
+}
+
 static int evalulateMaxMsaaSamples(ID3D12Device* device, DXGI_FORMAT format)
 {
     uint32_t best = 1;
@@ -99,6 +181,8 @@ static inline std::wstring_view stageToProfile(ShaderStage s)
         return L"vs_6_0"sv;
     case ShaderStage::FRAGMENT:
         return L"ps_6_0"sv;
+    case ShaderStage::COMPUTE:
+        return L"cs_6_0"sv;
     default:
         return L"vs_6_0"sv;
     }
@@ -112,6 +196,8 @@ static inline const char* stageToProfile(ShaderStage s)
         return "vs_5_1";
     case ShaderStage::FRAGMENT:
         return "ps_5_1";
+    case ShaderStage::COMPUTE:
+        return "cs_6_0";
     default:
         return "vs_5_1";
     }
@@ -128,8 +214,16 @@ DriverImpl::~DriverImpl()
 {
     cleanPendingResources();
 
+    _mipmapRootSig.Reset();
+    _mipmapPSO2D.Reset();
+    _mipmapPSOArray.Reset();
+
+    _dxcLibrary.Reset();
+    _dxcCompiler.Reset();
+
     _gfxQueue.Reset();
     _device.Reset();
+    _adapter.Reset();
     _dxgiFactory.Reset();
 
     if (_idleFence)
@@ -412,7 +506,29 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
 
 void DriverImpl::destroySampler(SamplerHandle& h)
 {
-    releaseDescriptor(reinterpret_cast<DescriptorHandle*>(h), DisposableResource::Type::SamplerView);
+    deallocateDescriptor(reinterpret_cast<DescriptorHandle*>(h), DisposableResource::Type::SamplerView);
+}
+
+DescriptorHandle* DriverImpl::createSRV(ID3D12Resource* resource, const D3D12_SHADER_RESOURCE_VIEW_DESC* desc)
+{
+    // Allocate descriptor from SRV heap
+    DescriptorHandle* handle = allocateDescriptor(DisposableResource::Type::ShaderResourceView);
+    AXASSERT(handle, "Failed to allocate SRV descriptor");
+
+    // Create SRV into CPU handle
+    _device->CreateShaderResourceView(resource, desc, handle->cpu);
+    return handle;
+}
+
+DescriptorHandle* DriverImpl::createUAV(ID3D12Resource* resource, const D3D12_UNORDERED_ACCESS_VIEW_DESC* desc)
+{
+    // Allocate descriptor from SRV/UAV heap (same allocator as SRV)
+    DescriptorHandle* handle = allocateDescriptor(DisposableResource::Type::ShaderResourceView);
+    AXASSERT(handle, "Failed to allocate UAV descriptor");
+
+    // Create UAV into CPU handle
+    _device->CreateUnorderedAccessView(resource, nullptr, desc, handle->cpu);
+    return handle;
 }
 
 DescriptorHandle* DriverImpl::allocateDescriptor(DisposableResource::Type type)
@@ -432,21 +548,21 @@ DescriptorHandle* DriverImpl::allocateDescriptor(DisposableResource::Type type)
     }
 }
 
-void DriverImpl::releaseDescriptor(DescriptorHandle* handle, DisposableResource::Type type)
+void DriverImpl::deallocateDescriptor(DescriptorHandle* handle, DisposableResource::Type type)
 {
     switch (type)
     {
     case DisposableResource::Type::ShaderResourceView:
-        _srvAllocator->release(handle);
+        _srvAllocator->deallocate(handle);
         break;
     case DisposableResource::Type::SamplerView:
-        _samplerAllocator->release(handle);
+        _samplerAllocator->deallocate(handle);
         break;
     case DisposableResource::Type::RenderTargetView:
-        _rtvAllocator->release(handle);
+        _rtvAllocator->deallocate(handle);
         break;
     case DisposableResource::Type::DepthStencilView:
-        _dsvAllocator->release(handle);
+        _dsvAllocator->deallocate(handle);
         break;
     default:
         assert(false);
@@ -578,7 +694,7 @@ void DriverImpl::processDisposalQueue(uint32_t completedMask)
                 }
                 else
                 {
-                    releaseDescriptor(res.handle, res.type);
+                    deallocateDescriptor(res.handle, res.type);
                 }
 
                 _disposalQueue[i] = _disposalQueue.back();
@@ -678,6 +794,242 @@ bool DriverImpl::compileShader(std::string_view shaderSource, ShaderStage stage,
 
     return false;
 #endif
+}
+
+bool DriverImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource* texture)
+{
+    if (!cmd || !texture)
+        return false;
+
+    const auto desc       = texture->GetDesc();
+    const UINT mipCount   = desc.MipLevels;
+    const UINT arrayCount = desc.DepthOrArraySize;
+
+    // Nothing to generate if only one mip level
+    if (mipCount <= 1)
+        return true;
+
+    const bool isArray = (arrayCount > 1);
+    ensureMipmapPipeline(isArray);  // lazy init PSO + root signature
+
+    // Build SRV/UAV descriptors for each mip
+    axstd::pod_vector<DescriptorHandle*> mipSrvs(mipCount);
+    axstd::pod_vector<DescriptorHandle*> mipUavs(mipCount);
+    axstd::flat_set<ID3D12DescriptorHeap*> descriptorHeaps;
+
+    for (UINT m = 0; m < mipCount; ++m)
+    {
+        // SRV for mip m
+        D3D12_SHADER_RESOURCE_VIEW_DESC srv{};
+        srv.Format                  = desc.Format;
+        srv.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+        if (isArray)
+        {
+            srv.ViewDimension                  = D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
+            srv.Texture2DArray.MostDetailedMip = m;
+            srv.Texture2DArray.MipLevels       = 1;
+            srv.Texture2DArray.FirstArraySlice = 0;
+            srv.Texture2DArray.ArraySize       = arrayCount;
+        }
+        else
+        {
+            srv.ViewDimension             = D3D12_SRV_DIMENSION_TEXTURE2D;
+            srv.Texture2D.MostDetailedMip = m;
+            srv.Texture2D.MipLevels       = 1;
+        }
+        mipSrvs[m] = createSRV(texture, &srv);
+        descriptorHeaps.insert(getResourceViewHeap(mipSrvs[m]));
+
+        // UAV for mip m
+        D3D12_UNORDERED_ACCESS_VIEW_DESC uav{};
+        uav.Format = dxutils::getUAVCompatibleFormat(desc.Format);
+        if (isArray)
+        {
+            uav.ViewDimension                  = D3D12_UAV_DIMENSION_TEXTURE2DARRAY;
+            uav.Texture2DArray.MipSlice        = m;
+            uav.Texture2DArray.FirstArraySlice = 0;
+            uav.Texture2DArray.ArraySize       = arrayCount;
+        }
+        else
+        {
+            uav.ViewDimension      = D3D12_UAV_DIMENSION_TEXTURE2D;
+            uav.Texture2D.MipSlice = m;
+        }
+        mipUavs[m] = createUAV(texture, &uav);
+        descriptorHeaps.insert(getResourceViewHeap(mipUavs[m]));
+    }
+
+    // Create upload buffer for per-dispatch constants
+    struct MipConstants
+    {
+        uint32_t SrcDim[2];
+        uint32_t DstDim[2];
+        float InvSrcDim[2];
+        uint32_t FirstSlice;
+        uint32_t SliceCount;
+    };
+    const UINT constStride    = 256;  // CB alignment
+    const UINT totalConstSize = mipCount * constStride;
+
+    ComPtr<ID3D12Resource> constUpload;
+    {
+        CD3DX12_HEAP_PROPERTIES heapProps(D3D12_HEAP_TYPE_UPLOAD);
+        auto bufDesc = CD3DX12_RESOURCE_DESC::Buffer(totalConstSize);
+        if (!CheckHR(getDevice()->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &bufDesc,
+                                                          D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
+                                                          IID_PPV_ARGS(&constUpload)),
+                     "Create constant upload buffer"))
+            return false;
+    }
+
+    // Bind descriptor heaps (sampler is static in RS)
+    if (!descriptorHeaps.empty())
+        cmd->SetDescriptorHeaps(descriptorHeaps.size(), std::to_address(descriptorHeaps.begin()));
+     
+    // Bind root signature and PSO
+    cmd->SetComputeRootSignature(_mipmapRootSig.Get());
+    cmd->SetPipelineState(isArray ? _mipmapPSOArray.Get() : _mipmapPSO2D.Get());
+
+    // Transition texture to non-pixel-shader-readable baseline
+    {
+        D3D12_RESOURCE_BARRIER b{};
+        b.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+        b.Transition.pResource   = texture;
+        b.Transition.StateBefore = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+        b.Transition.StateAfter  = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+        b.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+        cmd->ResourceBarrier(1, &b);
+    }
+
+    const UINT baseW = static_cast<UINT>(desc.Width);
+    const UINT baseH = desc.Height;
+
+    for (UINT m = 0; m + 1 < mipCount; ++m)
+    {
+        const UINT srcW = std::max(1u, baseW >> m);
+        const UINT srcH = std::max(1u, baseH >> m);
+        const UINT dstW = std::max(1u, baseW >> (m + 1));
+        const UINT dstH = std::max(1u, baseH >> (m + 1));
+
+        // Transition destination mip (m+1) to UAV
+        {
+            D3D12_RESOURCE_BARRIER bar{};
+            bar.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+            bar.Transition.pResource   = texture;
+            bar.Transition.Subresource = D3D12CalcSubresource(m + 1, 0, 0, mipCount, arrayCount);
+            bar.Transition.StateBefore = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+            bar.Transition.StateAfter  = D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
+            cmd->ResourceBarrier(1, &bar);
+        }
+
+        // Bind SRV/UAV for current pass
+        cmd->SetComputeRootDescriptorTable(0, mipSrvs[m]->gpu);
+        cmd->SetComputeRootDescriptorTable(1, mipUavs[m + 1]->gpu);
+
+        // Upload constants for current mip
+        uint8_t* mapped = nullptr;
+        D3D12_RANGE rr{0, 0};
+        constUpload->Map(0, &rr, reinterpret_cast<void**>(&mapped));
+        auto* c         = reinterpret_cast<MipConstants*>(mapped + m * constStride);
+        c->SrcDim[0]    = srcW;
+        c->SrcDim[1]    = srcH;
+        c->DstDim[0]    = dstW;
+        c->DstDim[1]    = dstH;
+        c->InvSrcDim[0] = 1.0f / float(srcW);
+        c->InvSrcDim[1] = 1.0f / float(srcH);
+        c->FirstSlice   = 0;
+        c->SliceCount   = arrayCount;
+        constUpload->Unmap(0, nullptr);
+
+        D3D12_GPU_VIRTUAL_ADDRESS cbAddr = constUpload->GetGPUVirtualAddress() + m * constStride;
+        cmd->SetComputeRootConstantBufferView(2, cbAddr);
+
+        // Dispatch compute shader
+        const UINT tgX = 8, tgY = 8;  // match HLSL THREADS_X/Y
+        const UINT groupsX = (dstW + tgX - 1) / tgX;
+        const UINT groupsY = (dstH + tgY - 1) / tgY;
+        cmd->Dispatch(groupsX, groupsY, isArray ? arrayCount : 1);
+
+        // Transition destination mip back to non-pixel-shader-readable
+        {
+            D3D12_RESOURCE_BARRIER bar{};
+            bar.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+            bar.Transition.pResource   = texture;
+            bar.Transition.Subresource = D3D12CalcSubresource(m + 1, 0, 0, mipCount, arrayCount);
+            bar.Transition.StateBefore = D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
+            bar.Transition.StateAfter  = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+            cmd->ResourceBarrier(1, &bar);
+        }
+    }
+
+    // Transition whole texture back to pixel-shader-readable
+    {
+        D3D12_RESOURCE_BARRIER b{};
+        b.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+        b.Transition.pResource   = texture;
+        b.Transition.StateBefore = D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+        b.Transition.StateAfter  = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+        b.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+        cmd->ResourceBarrier(1, &b);
+    }
+
+    queueDisposal(constUpload.Detach());
+    for (auto h : mipSrvs)
+        queueDisposal(h, DisposableResource::Type::ShaderResourceView);
+    for (auto h : mipUavs)
+        queueDisposal(h, DisposableResource::Type::ShaderResourceView);
+
+    return true;
+}
+
+void DriverImpl::ensureMipmapPipeline(bool isArray)
+{
+    if (!_mipmapRootSig)
+    {
+        CD3DX12_DESCRIPTOR_RANGE srvRange(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
+        CD3DX12_DESCRIPTOR_RANGE uavRange(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0);
+
+        CD3DX12_ROOT_PARAMETER params[3];
+        params[0].InitAsDescriptorTable(1, &srvRange, D3D12_SHADER_VISIBILITY_ALL);
+        params[1].InitAsDescriptorTable(1, &uavRange, D3D12_SHADER_VISIBILITY_ALL);
+        params[2].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
+
+        CD3DX12_STATIC_SAMPLER_DESC staticSampler(
+            0, D3D12_FILTER_MIN_MAG_MIP_LINEAR, D3D12_TEXTURE_ADDRESS_MODE_CLAMP, D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
+            D3D12_TEXTURE_ADDRESS_MODE_CLAMP, 0.0f, 16, D3D12_COMPARISON_FUNC_ALWAYS,
+            D3D12_STATIC_BORDER_COLOR_OPAQUE_BLACK, 0.0f, D3D12_FLOAT32_MAX, D3D12_SHADER_VISIBILITY_ALL, 0);
+
+        CD3DX12_ROOT_SIGNATURE_DESC rsDesc;
+        rsDesc.Init(_countof(params), params, 1, &staticSampler, D3D12_ROOT_SIGNATURE_FLAG_NONE);
+
+        ComPtr<ID3DBlob> rsBlob, rsErr;
+        CheckHR(D3D12SerializeRootSignature(&rsDesc, D3D_ROOT_SIGNATURE_VERSION_1, &rsBlob, &rsErr));
+        CheckHR(getDevice()->CreateRootSignature(0, rsBlob->GetBufferPointer(), rsBlob->GetBufferSize(),
+                                                 IID_PPV_ARGS(&_mipmapRootSig)));
+    }
+
+    ComPtr<ID3D12PipelineState>& targetPSO = isArray ? _mipmapPSOArray : _mipmapPSO2D;
+    if (!targetPSO)
+    {
+        auto csBlob = compileMipmapCS(isArray);
+        D3D12_COMPUTE_PIPELINE_STATE_DESC psoDesc{};
+        psoDesc.pRootSignature     = _mipmapRootSig.Get();
+        psoDesc.CS.pShaderBytecode = csBlob.view.data();
+        psoDesc.CS.BytecodeLength  = csBlob.view.size();
+        CheckHR(getDevice()->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&targetPSO)));
+    }
+}
+
+D3D12BlobHandle DriverImpl::compileMipmapCS(bool isArray)
+{
+    std::string hlslSource;
+    if (isArray)
+        hlslSource = "#define USE_ARRAY 1\n";
+    hlslSource += std::string(kCSGenerateMipsHLSL);
+    D3D12BlobHandle csBlob;
+    bool ok = compileShader(hlslSource, ShaderStage::COMPUTE, csBlob);
+    AXASSERT(ok, "Compute shader compile failed");
+    return csBlob;
 }
 
 void DriverImpl::waitDeviceIdle()

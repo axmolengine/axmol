@@ -64,6 +64,7 @@ enum class ShaderStage
     UNKNOWN  = -1,
     FRAGMENT = 0,
     VERTEX,
+    COMPUTE,
     DEFAULT = FRAGMENT
 };
 

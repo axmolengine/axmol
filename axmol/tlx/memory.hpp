@@ -280,6 +280,127 @@ inline retain_ptr<T, R> dynamic_pointer_cast(retain_ptr<U, R>&& p) noexcept
     return r;
 }
 
+/** compressed_pair
+ * stores two objects, but applies Empty Base Optimization(EBO) when one of them is an empty type.
+ * This reduces memory overhead.
+ */
+template <class _Ty1,
+          class _Ty2,
+          bool = std::is_empty_v<_Ty1> && !std::is_final_v<_Ty1>,
+          bool = std::is_empty_v<_Ty2> && !std::is_final_v<_Ty2>>
+class compressed_pair;
+
+// Case 1: neither empty
+template <class _Ty1, class _Ty2>
+class compressed_pair<_Ty1, _Ty2, false, false>
+{
+    _Ty1 _Myval1;
+    _Ty2 _Myval2;
+
+public:
+    // constructors
+    constexpr compressed_pair() = default;
+
+    constexpr compressed_pair(const _Ty1& v1, const _Ty2& v2) noexcept(std::is_nothrow_copy_constructible_v<_Ty1> &&
+                                                                       std::is_nothrow_copy_constructible_v<_Ty2>)
+        : _Myval1(v1), _Myval2(v2)
+    {}
+
+    constexpr compressed_pair(_Ty1&& v1, _Ty2&& v2) noexcept(std::is_nothrow_move_constructible_v<_Ty1> &&
+                                                             std::is_nothrow_move_constructible_v<_Ty2>)
+        : _Myval1(std::move(v1)), _Myval2(std::move(v2))
+    {}
+
+    template <class U1, class U2>
+    constexpr compressed_pair(U1&& v1, U2&& v2) noexcept(std::is_nothrow_constructible_v<_Ty1, U1&&> &&
+                                                         std::is_nothrow_constructible_v<_Ty2, U2&&>)
+        : _Myval1(std::forward<U1>(v1)), _Myval2(std::forward<U2>(v2))
+    {}
+
+    // accessors
+    constexpr _Ty1& first() noexcept { return _Myval1; }
+    constexpr const _Ty1& first() const noexcept { return _Myval1; }
+    constexpr _Ty2& second() noexcept { return _Myval2; }
+    constexpr const _Ty2& second() const noexcept { return _Myval2; }
+};
+
+// Case 2: First empty
+template <class _Ty1, class _Ty2>
+class compressed_pair<_Ty1, _Ty2, true, false> : private _Ty1
+{
+    _Ty2 _Myval2;
+
+public:
+    constexpr compressed_pair() = default;
+
+    constexpr compressed_pair(const _Ty1& v1, const _Ty2& v2) noexcept(std::is_nothrow_copy_constructible_v<_Ty2>)
+        : _Ty1(v1), _Myval2(v2)
+    {}
+
+    constexpr compressed_pair(_Ty1&& v1, _Ty2&& v2) noexcept(std::is_nothrow_move_constructible_v<_Ty2>)
+        : _Ty1(std::move(v1)), _Myval2(std::move(v2))
+    {}
+
+    template <class U1, class U2>
+    constexpr compressed_pair(U1&& v1, U2&& v2) noexcept(std::is_nothrow_constructible_v<_Ty2, U2&&>)
+        : _Ty1(std::forward<U1>(v1)), _Myval2(std::forward<U2>(v2))
+    {}
+
+    constexpr _Ty1& first() noexcept { return *this; }
+    constexpr const _Ty1& first() const noexcept { return *this; }
+    constexpr _Ty2& second() noexcept { return _Myval2; }
+    constexpr const _Ty2& second() const noexcept { return _Myval2; }
+};
+
+// Case 3: Second empty
+template <class _Ty1, class _Ty2>
+class compressed_pair<_Ty1, _Ty2, false, true> : private _Ty2
+{
+    _Ty1 _Myval1;
+
+public:
+    constexpr compressed_pair() = default;
+
+    constexpr compressed_pair(const _Ty1& v1, const _Ty2& v2) noexcept(std::is_nothrow_copy_constructible_v<_Ty1>)
+        : _Myval1(v1), _Ty2(v2)
+    {}
+
+    constexpr compressed_pair(_Ty1&& v1, _Ty2&& v2) noexcept(std::is_nothrow_move_constructible_v<_Ty1>)
+        : _Myval1(std::move(v1)), _Ty2(std::move(v2))
+    {}
+
+    template <class U1, class U2>
+    constexpr compressed_pair(U1&& v1, U2&& v2) noexcept(std::is_nothrow_constructible_v<_Ty1, U1&&>)
+        : _Myval1(std::forward<U1>(v1)), _Ty2(std::forward<U2>(v2))
+    {}
+
+    constexpr _Ty1& first() noexcept { return _Myval1; }
+    constexpr const _Ty1& first() const noexcept { return _Myval1; }
+    constexpr _Ty2& second() noexcept { return *this; }
+    constexpr const _Ty2& second() const noexcept { return *this; }
+};
+
+// Case 4: both empty
+template <class _Ty1, class _Ty2>
+class compressed_pair<_Ty1, _Ty2, true, true> : private _Ty1, private _Ty2
+{
+public:
+    constexpr compressed_pair() = default;
+
+    constexpr compressed_pair(const _Ty1& v1, const _Ty2& v2) : _Ty1(v1), _Ty2(v2) {}
+
+    constexpr compressed_pair(_Ty1&& v1, _Ty2&& v2) : _Ty1(std::move(v1)), _Ty2(std::move(v2)) {}
+
+    template <class U1, class U2>
+    constexpr compressed_pair(U1&& v1, U2&& v2) : _Ty1(std::forward<U1>(v1)), _Ty2(std::forward<U2>(v2))
+    {}
+
+    constexpr _Ty1& first() noexcept { return *this; }
+    constexpr const _Ty1& first() const noexcept { return *this; }
+    constexpr _Ty2& second() noexcept { return *this; }
+    constexpr const _Ty2& second() const noexcept { return *this; }
+};
+
 }  // namespace axstd
 
 // std::hash

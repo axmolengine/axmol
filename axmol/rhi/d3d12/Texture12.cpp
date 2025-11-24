@@ -217,6 +217,9 @@ void TextureImpl::updateSubData(int xoffset,
     // Transition back to shader-readable state
     transitionState(submission, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
+    if (shouldGenMipmaps(level))
+        generateMipmaps(submission);
+
     _driver->finishIsolateSubmission(submission);
 }
 
@@ -360,6 +363,14 @@ void TextureImpl::updateCompressedSubData(int xoffset,
 
     transitionState(submission, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
+    // !!! D3D12 requires baked mipmaps data for compressed texture
+    if (shouldGenMipmaps(level))
+    {
+        AXLOGW(
+            "Warning: Compressed textures do not support runtime mipmap generation. "
+            "Please upload precomputed mip levels instead.");
+    }
+
     _driver->finishIsolateSubmission(submission);
 }
 
@@ -422,6 +433,9 @@ void TextureImpl::ensureNativeTexture()
             texDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
     }
 
+    if (shouldGenMipmaps())
+        texDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+
     D3D12_HEAP_PROPERTIES heapProps{};
     heapProps.Type = D3D12_HEAP_TYPE_DEFAULT;
 
@@ -479,9 +493,17 @@ void TextureImpl::ensureNativeTexture()
 
 void TextureImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd)
 {
-    // D3D12 does not provide automatic mipmap generation.
-    // You need to implement a custom compute shader or blit path.
-    AXLOGW("generateMipmaps: Not implemented in D3D12. Please precompute mip levels.");
+    ID3D12Device* device    = _driver->getDevice();
+    ID3D12Resource* texture = _nativeTexture.resource.Get();
+    const auto desc         = texture->GetDesc();
+
+    const UINT mipCount   = desc.MipLevels;
+    const UINT arrayCount = desc.DepthOrArraySize;  // 1 for Texture2D, N for Texture2DArray
+    if (mipCount <= 1)
+        return;  // nothing to generate
+
+    if (_driver->generateMipmaps(cmd, texture))
+        _overrideMipLevels = desc.MipLevels;
 }
 
 }  // namespace ax::rhi::d3d12

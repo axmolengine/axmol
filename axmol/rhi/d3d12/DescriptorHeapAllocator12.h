@@ -76,8 +76,8 @@ public:
     // Allocate a single slot; returns a persistent handle
     DescriptorHandle* allocate();
 
-    // Release immediately (caller ensures GPU no longer uses it)
-    void release(DescriptorHandle* h);
+    // Deallocate immediately (caller ensures GPU no longer uses it)
+    void deallocate(DescriptorHandle* h);
 
     ID3D12DescriptorHeap* getDescriptorHeap(const DescriptorHandle* handle) const;
 

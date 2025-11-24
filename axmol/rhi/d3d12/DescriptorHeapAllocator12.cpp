@@ -142,7 +142,7 @@ ID3D12DescriptorHeap* DescriptorHeapAllocator::getDescriptorHeap(const Descripto
     return _blocks[handle->blockIndex].heap.Get();
 }
 
-void DescriptorHeapAllocator::release(DescriptorHandle* h)
+void DescriptorHeapAllocator::deallocate(DescriptorHandle* h)
 {
     if (!h->valid())
         return;
@@ -163,7 +163,7 @@ void DescriptorHeapAllocator::release(DescriptorHandle* h)
     b.freeBits[byte] |= mask;
     --b.used;
 
-    _handlePool.release(h);
+    _handlePool.deallocate(h);
 }
 
 // void DescriptorHeapAllocator::deferFree(const DescriptorHandle& h, uint64_t fenceValue)

@@ -23,5 +23,7 @@ const PixelFormatInfo* toDxgiFormatInfo(PixelFormat pf);
 
 int evalulateMaxTexSize(D3D_FEATURE_LEVEL fl);
 
+DXGI_FORMAT getUAVCompatibleFormat(DXGI_FORMAT format);
+
 }  // namespace ax::rhi::dxutils
 /** @} */

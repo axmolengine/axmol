@@ -862,12 +862,12 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
                 // Sampler handle (already created and returned by getSampler())
                 const DescriptorHandle* samplerHandle = textureImpl->getSampler();
 
-                _descriptorHeaps.insert(_driver->getSRVHeap(srvHandle));
+                _descriptorHeaps.insert(_driver->getResourceViewHeap(srvHandle));
                 _descriptorHeaps.insert(_driver->getSamplerHeap(samplerHandle));
             }
         }
 
-        cmd->SetDescriptorHeaps(_descriptorHeaps.size(), _descriptorHeaps.data());
+        cmd->SetDescriptorHeaps(_descriptorHeaps.size(), std::to_address(_descriptorHeaps.begin()));
 
         for (const auto& [_, bindingSet] : textureBindingSets)
         {

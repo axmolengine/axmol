@@ -24,32 +24,44 @@
 
 namespace axstd
 {
-// identity extractor: for flat_set
-template <class Key>
-struct identity
+// select1st extractor: for flat_map
+template <class Pair>
+struct select1st
 {
-    const Key& operator()(const Key& k) const noexcept { return k; }
+    using Key = typename Pair::first_type;
+    const Key& operator()(const Pair& p) const noexcept { return p.first; }
 };
 
-// flat_set traits
-template <class Key, class Compare = std::less<Key>, class Alloc = std::allocator<Key>>
-struct flat_set_traits
+// flat_map traits
+template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<Key, T>>>
+struct flat_map_traits
 {
     using key_type       = Key;
-    using value_type     = Key;
+    using value_type     = std::pair<Key, T>;
     using key_compare    = Compare;
     using value_compare  = Compare;
     using allocator_type = Alloc;
-    using key_extractor  = identity<Key>;
+    using key_extractor  = select1st<value_type>;
 };
 
-// flat_set
-template <class Key, class Compare = std::less<Key>, class Alloc = std::allocator<Key>>
-class flat_set : public detail::flat_impl<flat_set_traits<Key, Compare, Alloc>>
+// flat_map
+template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<Key, T>>>
+class flat_map : public detail::flat_impl<flat_map_traits<Key, T, Compare, Alloc>>
 {
-    using impl_type = detail::flat_impl<flat_set_traits<Key, Compare, Alloc>>;
+    using impl_type = detail::flat_impl<flat_map_traits<Key, T, Compare, Alloc>>;
 
 public:
     using impl_type::impl_type;
+
+    // operator[] for map semantics
+    T& operator[](const Key& key)
+    {
+        auto it = this->lower_bound(key);
+        if (it == this->end() || Compare{}(key, it->first))
+        {
+            it = this->_cont.second().insert(it, {key, T{}});
+        }
+        return it->second;
+    }
 };
 }  // namespace axstd
