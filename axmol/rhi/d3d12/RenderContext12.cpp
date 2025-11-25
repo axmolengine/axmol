@@ -559,6 +559,13 @@ void RenderContextImpl::endFrame()
     _fenceValues[_currentFrame]++;
     _graphicsQueue->Signal(_fences[_currentFrame].Get(), _fenceValues[_currentFrame]);
 
+    if (!_postFrameOps.empty())
+    {
+        for (auto& op : _postFrameOps)
+            op();
+        _postFrameOps.clear();
+    }
+
     // Next frame index
     _currentFrame = (_currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
     _inFrame      = false;
@@ -1035,11 +1042,27 @@ RenderContextImpl::UniformSlice RenderContextImpl::allocateUniformSlice(UINT fra
 }
 
 void RenderContextImpl::readPixels(RenderTarget* rt,
-                                   bool /*preserveAxisHint*/,
+                                   bool preserveAxisHint,
                                    std::function<void(const PixelBufferDesc&)> callback)
 {
-    AX_SAFE_RETAIN(rt);
+    if (!rt)
+    {
+        callback({});
+        return;
+    }
+    rt->retain();
 
+    _postFrameOps.emplace_back([this, rt, preserveAxisHint, callback = std::move(callback)]() mutable {
+        readPixelsInternal(rt, preserveAxisHint, callback);
+
+        rt->release();
+    });
+}
+
+void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
+                                       bool preserveAxisHint,
+                                       std::function<void(const PixelBufferDesc&)>& callback)
+{
     // Simplified: readback from swapchain backbuffer color0 by copying to readback resource
     PixelBufferDesc pbd{};
     auto* rtImpl = static_cast<RenderTargetImpl*>(rt);
@@ -1048,7 +1071,6 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
     if (!colorAttachment)
     {
         callback(pbd);
-        AX_SAFE_RELEASE(rt);
         return;
     }
 
@@ -1088,7 +1110,7 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
     AXASSERT(SUCCEEDED(hr), "CreateCommittedResource READBACK failed");
 
     // Record copy from texture to readback via CopyTextureRegion
-    auto cmd = _currentCmdList;
+    auto cmd = _driver->startIsolateSubmission();
     // Ensure list is open; if not, open a tiny list (simplified assumption: we are between frames)
     // Transition source to COPY_SOURCE if needed
     colorAttachment->transitionState(cmd, D3D12_RESOURCE_STATE_COPY_SOURCE);
@@ -1109,37 +1131,27 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
     // Transition source back to sampling
     colorAttachment->transitionState(cmd, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
-    // Close and execute a small copy list if needed
-    hr = cmd->Close();
-    AXASSERT(SUCCEEDED(hr), "CommandList Close (readPixels) failed");
-    ID3D12CommandList* lists[] = {cmd};
-    _graphicsQueue->ExecuteCommandLists(1, lists);
-
-    // Wait for copy completion
-    _fenceValues[_currentFrame]++;
-    _graphicsQueue->Signal(_fences[_currentFrame].Get(), _fenceValues[_currentFrame]);
-    _fences[_currentFrame]->SetEventOnCompletion(_fenceValues[_currentFrame], _fenceEvents[_currentFrame]);
-    WaitForSingleObject(_fenceEvents[_currentFrame], INFINITE);
+    _driver->finishIsolateSubmission(cmd);
 
     // Map and read data
     void* mapped = nullptr;
     D3D12_RANGE readRange{0, bufSize};
-    readback->Map(0, &readRange, &mapped);
 
-    pbd._width  = width;
-    pbd._height = height;
-    pbd._data.resize(bufSize);
-    std::memcpy(pbd._data.data(), mapped, bufSize);
+    hr = readback->Map(0, &readRange, &mapped);
+    if(SUCCEEDED(hr) && mapped) {
+        pbd._width  = width;
+        pbd._height = height;
+        pbd._data.resize(bufSize);
+        std::memcpy(pbd._data.data(), mapped, bufSize);
 
-    D3D12_RANGE written{0, 0};
-    readback->Unmap(0, &written);
+        D3D12_RANGE written{0, 0};
+        readback->Unmap(0, &written);
+    }
+    else {
+        AXLOGE("RenderContextImpl::readPixelsImpl fail, hr={:x}", hr);
+    }
 
     callback(pbd);
-    AX_SAFE_RELEASE(rt);
-
-    // Re-open command list for the frame (since we closed it)
-    _commandAllocators[_currentFrame]->Reset();
-    _currentCmdList->Reset(_commandAllocators[_currentFrame].Get(), nullptr);
 }
 
 }  // namespace ax::rhi::d3d12

@@ -132,6 +132,10 @@ private:
 
     void prepareDrawing(ID3D12GraphicsCommandList* cmd);
 
+    void readPixelsInternal(RenderTarget* rt,
+                            bool preserveAxisHint,
+                            std::function<void(const PixelBufferDesc&)>& callback);
+
     void markDynamicStateDirty(DynamicStateBits bits) noexcept
     {
         bitmask::set(_inFlightDynamicDirtyBits[0], bits);
@@ -219,6 +223,8 @@ private:
     BufferImpl* _vertexBuffer{nullptr};
     BufferImpl* _indexBuffer{nullptr};
     BufferImpl* _instanceBuffer{nullptr};
+
+    std::vector<std::function<void()>> _postFrameOps;
 
     D3D12_VIEWPORT _cachedViewport{};
     D3D12_RECT _cachedScissor{};

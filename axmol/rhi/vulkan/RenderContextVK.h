@@ -146,7 +146,9 @@ private:
     void createDescriptorPool();
 #endif
 
-    void readPixelsImpl(RenderTarget* rt, bool preserveAxisHint, std::function<void(const PixelBufferDesc&)>& callback);
+    void readPixelsInternal(RenderTarget* rt,
+                            bool preserveAxisHint,
+                            std::function<void(const PixelBufferDesc&)>& callback);
 
     void markDynamicStateDirty(DynamicStateBits bits) noexcept
     {

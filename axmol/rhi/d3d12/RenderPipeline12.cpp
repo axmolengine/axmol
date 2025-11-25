@@ -199,8 +199,6 @@ void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc)
 
 void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
 {
-    auto program_id = program->getProgramId();
-
     uintptr_t progKey = reinterpret_cast<uintptr_t>(program);
     if (auto it = _rootSigCache.find(progKey); it != _rootSigCache.end())
     {
