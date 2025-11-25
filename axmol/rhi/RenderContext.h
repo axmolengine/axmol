@@ -264,7 +264,7 @@ public:
     virtual void setStencilReferenceValue(uint32_t value);
 
 protected:
-    virtual ~RenderContext() = default;
+    virtual ~RenderContext();
 
     RenderTarget* _screenRT{nullptr};         // managed by RHI
     RenderTarget* _currentRT{nullptr};        // weak ref (managed by Renderer)

@@ -42,6 +42,8 @@ class RenderPipelineImpl;
 class ProgramImpl;
 class DepthStencilStateImpl;
 
+class DriverImpl;
+
 /**
  * @addtogroup _opengl
  * @{
@@ -54,7 +56,7 @@ class DepthStencilStateImpl;
 class RenderContextImpl : public RenderContext
 {
 public:
-    RenderContextImpl();
+    RenderContextImpl(DriverImpl* driver);
     ~RenderContextImpl();
     /**
      * Set depthStencil status once

@@ -193,7 +193,7 @@ GLint DriverImpl::getDefaultFBO() const
 
 RenderContext* DriverImpl::createRenderContext(void*)
 {
-    return new RenderContextImpl();
+    return new RenderContextImpl(this);
 }
 
 Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial)

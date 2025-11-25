@@ -397,6 +397,8 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
 
     _swapChain = swapChain.Detach();
 
+    _screenRT = _driver->createDefaultRenderTarget();
+
     UtilsD3D::updateDefaultRenderTargetAttachments(_driverImpl, _swapChain);
 
     _nullSRVs.reserve(8);

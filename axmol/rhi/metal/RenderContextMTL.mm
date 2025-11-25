@@ -189,6 +189,8 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
     _mtlLayer.drawableSize = fbSize;
 #endif
 
+    _screenRT = _driver->createDefaultRenderTarget();
+
     UtilsMTL::updateDefaultDepthStencilAttachment(_mtlLayer);
 }
 

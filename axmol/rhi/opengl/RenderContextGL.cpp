@@ -29,14 +29,16 @@
 #include "axmol/rhi/opengl/TextureGL.h"
 #include "axmol/rhi/opengl/DepthStencilStateGL.h"
 #include "axmol/rhi/opengl/ProgramGL.h"
-#include "axmol/base/EventDispatcher.h"
-#include "axmol/base/EventType.h"
-#include "axmol/base/Director.h"
 #include "axmol/rhi/opengl/MacrosGL.h"
 #include "axmol/rhi/opengl/UtilsGL.h"
 #include "axmol/rhi/opengl/RenderTargetGL.h"
 #include "axmol/rhi/opengl/DriverGL.h"
 #include "axmol/rhi/opengl/VertexLayoutGL.h"
+
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/EventType.h"
+#include "axmol/base/Director.h"
+
 #include <algorithm>
 
 namespace ax::rhi::gl
@@ -49,7 +51,10 @@ namespace ax::rhi::gl
 #    define AX_HAVE_MAP_BUFFER_RANGE 0
 #endif
 
-RenderContextImpl::RenderContextImpl() {}
+RenderContextImpl::RenderContextImpl(DriverImpl* driver)
+{
+    _screenRT = driver->createDefaultRenderTarget();
+}
 
 RenderContextImpl::~RenderContextImpl()
 {

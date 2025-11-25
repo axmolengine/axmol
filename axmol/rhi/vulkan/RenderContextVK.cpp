@@ -142,6 +142,8 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface)
     _screenWidth  = extent.width;
     _screenHeight = extent.height;
 
+    _screenRT = _driver->createDefaultRenderTarget();
+
     createCommandBuffers();
 #if !_AX_USE_DESCRIPTOR_CACHE
     createDescriptorPool();

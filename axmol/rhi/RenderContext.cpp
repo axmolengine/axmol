@@ -24,9 +24,15 @@
  ****************************************************************************/
 
 #include "axmol/rhi/RenderContext.h"
+#include "axmol/rhi/RenderTarget.h"
 
 namespace ax::rhi
 {
+
+RenderContext::~RenderContext()
+{
+    AX_SAFE_RELEASE_NULL(_screenRT);
+}
 
 void RenderContext::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc)
 {

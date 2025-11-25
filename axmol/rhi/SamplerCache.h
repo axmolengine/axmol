@@ -25,6 +25,7 @@
 #pragma once
 
 #include "axmol/tlx/hlookup.hpp"
+#include "axmol/tlx/pod_vector.hpp"
 #include "RHITypes.h"
 
 namespace ax::rhi
