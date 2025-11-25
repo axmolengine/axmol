@@ -279,8 +279,10 @@ void ProgramImpl::reflectUniformInfos()
     {
         UniformInfo uniform{};
         buffer.resize(MAX_UNIFORM_NAME_LENGTH + 1);
-        glGetActiveUniform(_program, i, static_cast<GLint>(buffer.size()), &nameLen, &uniform.count, &uniform.type,
+        GLint count{0};
+        glGetActiveUniform(_program, i, static_cast<GLint>(buffer.size()), &nameLen, &count, &uniform.type,
                            buffer.data());
+        uniform.count = static_cast<uint16_t>(count);
 
         uniform.size = UtilsGL::getGLDataTypeSize(uniform.type);
         std::string_view uniformFullName{buffer.data(), static_cast<size_t>(nameLen)};
