@@ -60,15 +60,8 @@ void DriverBase::destroyInstance()
 
 namespace ax::rhi::vk
 {
-
 namespace
 {
-
-static inline uint32_t makeMaskUpTo(uint32_t n)
-{
-    return (1u << (n + 1)) - 1u;
-}
-
 static bool isValidationLayerAvailable(const char* layerName)
 {
     uint32_t layerCount = 0;
@@ -857,8 +850,7 @@ void DriverImpl::cleanPendingResources()
     if (!_disposalQueue.empty())
     {
         vkDeviceWaitIdle(_device);
-        const auto allFramesMask = makeMaskUpTo(RenderContextImpl::MAX_FRAMES_IN_FLIGHT);
-        processDisposalQueue(allFramesMask);
+        processDisposalQueue(bitmask::low_bits<uint32_t>(RenderContextImpl::MAX_FRAMES_IN_FLIGHT));
     }
 }
 

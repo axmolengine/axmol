@@ -206,11 +206,6 @@ static inline const char* stageToProfile(ShaderStage s)
 }
 #endif
 
-static inline uint32_t makeMaskUpTo(uint32_t n)
-{
-    return (1u << (n + 1)) - 1u;
-}
-
 DriverImpl::DriverImpl() {}
 DriverImpl::~DriverImpl()
 {
@@ -724,8 +719,7 @@ void DriverImpl::processDisposalQueue(uint32_t completedMask)
 void DriverImpl::cleanPendingResources()
 {
     waitDeviceIdle();
-    const auto allFramesMask = makeMaskUpTo(RenderContextImpl::MAX_FRAMES_IN_FLIGHT);
-    processDisposalQueue(allFramesMask);
+    processDisposalQueue(bitmask::low_bits<uint32_t>(RenderContextImpl::MAX_FRAMES_IN_FLIGHT));
 }
 
 void DriverImpl::queueDisposalInternal(DisposableResource&& disposal)

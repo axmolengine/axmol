@@ -41,7 +41,7 @@ class BufferImpl;
 class RenderPipelineImpl;
 class ProgramImpl;
 class DepthStencilStateImpl;
-
+class RenderTargetImpl;
 class DriverImpl;
 
 /**
