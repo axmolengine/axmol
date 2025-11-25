@@ -1060,8 +1060,8 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
 }
 
 void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
-                                       bool preserveAxisHint,
-                                       std::function<void(const PixelBufferDesc&)>& callback)
+                                           bool preserveAxisHint,
+                                           std::function<void(const PixelBufferDesc&)>& callback)
 {
     // Simplified: readback from swapchain backbuffer color0 by copying to readback resource
     PixelBufferDesc pbd{};
@@ -1138,7 +1138,8 @@ void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
     D3D12_RANGE readRange{0, bufSize};
 
     hr = readback->Map(0, &readRange, &mapped);
-    if(SUCCEEDED(hr) && mapped) {
+    if (SUCCEEDED(hr) && mapped)
+    {
         pbd._width  = width;
         pbd._height = height;
         pbd._data.resize(bufSize);
@@ -1147,7 +1148,8 @@ void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
         D3D12_RANGE written{0, 0};
         readback->Unmap(0, &written);
     }
-    else {
+    else
+    {
         AXLOGE("RenderContextImpl::readPixelsImpl fail, hr={:x}", hr);
     }
 

@@ -334,8 +334,7 @@ void RenderContextImpl::createDescriptorPool()
 {
     // Define the descriptor types and counts supported by the pool
     constexpr VkDescriptorPoolSize poolSizes[] = {
-        {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 64},
-        {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 64},
+        {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 64}, {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 64},
         /*{VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 32},*/  // SSBO, unused currently
     };
 
@@ -1213,8 +1212,8 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
 }
 
 void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
-                                       bool /*preserveAxisHint*/,
-                                       std::function<void(const PixelBufferDesc&)>& callback)
+                                           bool /*preserveAxisHint*/,
+                                           std::function<void(const PixelBufferDesc&)>& callback)
 {
     PixelBufferDesc pbd{};
     auto* rtImpl = static_cast<RenderTargetImpl*>(rt);
