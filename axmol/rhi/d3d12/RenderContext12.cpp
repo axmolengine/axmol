@@ -477,7 +477,9 @@ bool RenderContextImpl::beginFrame()
     hr              = _currentCmdList->Reset(_commandAllocators[_currentFrame].Get(), nullptr);
     AXASSERT(SUCCEEDED(hr), "CommandList Reset failed");
 
-    _psoDirty = true;
+    _boundRootSig = nullptr;
+    _boundPSO     = nullptr;
+
     bitmask::set(_inFlightDynamicDirtyBits[_currentFrame], PIPELINE_REQUIRED_DYNAMIC_BITS);
 
     // Sets descriptor heaps
@@ -497,8 +499,9 @@ void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const Render
 
     if (_currentRT != renderTarget)
     {
-        _psoDirty  = true;
-        _currentRT = renderTarget;
+        _boundRootSig = nullptr;
+        _boundPSO     = nullptr;
+        _currentRT    = renderTarget;
     }
 
     // Get target size from color0
@@ -699,21 +702,29 @@ void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
     _renderPipeline->update(rt, pipelineDesc);
 
     // Bind PSO & RootSignature
-    auto pso = _renderPipeline->getPipelineState();
-    if (pso != _boundPSO || _psoDirty)
+    uint32_t dirtyFlags = 0;
+    auto rootSigInfo    = _renderPipeline->getRootSignature();
+    auto rootSig        = rootSigInfo->rootSig.Get();
+    if (_boundRootSig != rootSig)
     {
-        auto rootSigInfo = _renderPipeline->getRootSignature();
-        _currentCmdList->SetGraphicsRootSignature(rootSigInfo->rootSig.Get());
-        _currentCmdList->SetPipelineState(_renderPipeline->getPipelineState());
+        _currentCmdList->SetGraphicsRootSignature(rootSig);
+        _boundRootSig = rootSig;
+        dirtyFlags |= 1;
+    }
 
-        if (rootSigInfo->samplerRootIndex != UINT_MAX)
-        {
-            const auto samplerGpuStart = _driver->getSamplerHeap()->GetGPUDescriptorHandleForHeapStart();
-            _currentCmdList->SetGraphicsRootDescriptorTable(rootSigInfo->samplerRootIndex, samplerGpuStart);
-        }
-
+    auto pso = _renderPipeline->getPipelineState();
+    if (pso != _boundPSO)
+    {
+        _currentCmdList->SetPipelineState(pso);
+        dirtyFlags |= 2;
         _boundPSO = pso;
-        _psoDirty = false;
+    }
+
+    const auto samplerRootIndex = rootSigInfo->samplerRootIndex;
+    if (dirtyFlags && samplerRootIndex != UINT_MAX)
+    {
+        const auto samplerGpuStart = _driver->getSamplerHeap()->GetGPUDescriptorHandleForHeapStart();
+        _currentCmdList->SetGraphicsRootDescriptorTable(samplerRootIndex, samplerGpuStart);
     }
 }
 
@@ -880,8 +891,6 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     auto srvCpuStart = srvHeap->GetCPUDescriptorHandleForHeapStart();
 
     const auto srvStride     = _driver->getSrvDescriptorStride();
-    const auto samplerStride = _driver->getSamplerDescriptorStride();
-
     auto& textureBindingSets = _programState->getTextureBindingSets();
     if (!textureBindingSets.empty())
     {
@@ -890,9 +899,10 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
         // Copy descriptors for each texture in the binding set
         for (auto& [_, bindingSet] : textureBindingSets)
         {
-            for (auto* tex : bindingSet.texs)
+            auto& texs = bindingSet.texs;
+            if (texs.size() == 1)
             {
-                auto textureImpl = static_cast<TextureImpl*>(tex);
+                auto textureImpl = static_cast<TextureImpl*>(texs[0]);
 
                 // Copy SRV descriptor into the current frame heap
                 auto srvHandle = textureImpl->internalHandle().srv;
@@ -904,12 +914,31 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
                     ++srvCount;
                 }
             }
+            else  // must > 1, it's array, in shader is 'uniform sampler2D u_details[4];'
+            {
+                for (auto tex : texs)
+                {
+                    auto textureImpl = static_cast<TextureImpl*>(tex);
+
+                    // Copy SRV descriptor into the current frame heap
+                    auto srvHandle = textureImpl->internalHandle().srv;
+                    if (srvHandle)
+                    {
+                        auto dstSrv = srvCpuStart;
+                        dstSrv.ptr += (_srvOffset[_currentFrame] + srvCount) * srvStride;
+                        _device->CopyDescriptorsSimple(1, dstSrv, srvHandle->cpu,
+                                                       D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+                        ++srvCount;
+                    }
+                }
+            }
         }
 
         // Bind GPU handles for this batch
         auto srvGpuStart = srvHeap->GetGPUDescriptorHandleForHeapStart();
         srvGpuStart.ptr += _srvOffset[_currentFrame] * srvStride;
         _currentCmdList->SetGraphicsRootDescriptorTable(rootSigInfo->srvRootIndex, srvGpuStart);
+
         // Advance offsets for the next batch
         _srvOffset[_currentFrame] += srvCount;
     }

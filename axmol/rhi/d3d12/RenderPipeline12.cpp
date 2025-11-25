@@ -200,6 +200,12 @@ void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc)
 void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
 {
     uintptr_t progKey = reinterpret_cast<uintptr_t>(program);
+
+    if (program->getProgramId() == ProgramType::TERRAIN_3D)
+    {
+        OutputDebugStringW(L"hit");
+    }
+
     if (auto it = _rootSigCache.find(progKey); it != _rootSigCache.end())
     {
         _activeRootSignature = &it->second;
@@ -218,16 +224,30 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
 
     // --- FS SRVs (textures) -> descriptor table, space = SET_INDEX_SRV ---
     axstd::pod_vector<D3D12_DESCRIPTOR_RANGE> srvRanges;
-    axstd::pod_vector<D3D12_DESCRIPTOR_RANGE> samplerRanges;
+
+    // --- Sampler descriptor table (global heap) ---
+    D3D12_DESCRIPTOR_RANGE samplerRange{};
 
     auto& fsSamplers = fs->getActiveSamplerInfos();
     if (!fsSamplers.empty())
     {
+        samplerRange.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
+        samplerRange.BaseShaderRegister                = 0;
+        samplerRange.RegisterSpace                     = SET_INDEX_SAMPLER;
+        samplerRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+        D3D12_ROOT_PARAMETER& samplerParam               = rootParams.emplace_back();
+        samplerParam.ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+        samplerParam.DescriptorTable.NumDescriptorRanges = 1;
+        samplerParam.DescriptorTable.pDescriptorRanges   = &samplerRange;
+        samplerParam.ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+        entry.samplerRootIndex                           = rootIndex++;
+
+        uint16_t maxSamplerSlot = 0;
         for (auto& smp : fsSamplers)
         {
             // In Vulkan, sampler2D is a combined image sampler.
-            // In D3D12 we must split into SRV (t#) and Sampler (s#).
-
+            // In D3D12 we only process texture, sampler is in global heap
             // --- SRV range (texture part) ---
             D3D12_DESCRIPTOR_RANGE& srvRange           = srvRanges.emplace_back();
             srvRange.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
@@ -236,22 +256,11 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
             srvRange.RegisterSpace                     = SET_INDEX_SRV;  // match Vulkan set
             srvRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-            // --- Sampler range (sampler part) ---
-            D3D12_DESCRIPTOR_RANGE& samplerRange           = samplerRanges.emplace_back();
-            samplerRange.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
-            samplerRange.NumDescriptors                    = smp.count;          // number of samplers
-            samplerRange.BaseShaderRegister                = smp.location;       // s#
-            samplerRange.RegisterSpace                     = SET_INDEX_SAMPLER;  // usually same as SRV
-            samplerRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+            if (maxSamplerSlot < smp.sampler_slot)
+                maxSamplerSlot = smp.sampler_slot;
         }
 
-        // Add Sampler descriptor table root parameter
-        D3D12_ROOT_PARAMETER& samplerParam               = rootParams.emplace_back();
-        samplerParam.ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-        samplerParam.DescriptorTable.NumDescriptorRanges = static_cast<UINT>(samplerRanges.size());
-        samplerParam.DescriptorTable.pDescriptorRanges   = samplerRanges.data();
-        samplerParam.ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
-        entry.samplerRootIndex                           = rootIndex++;
+        samplerRange.NumDescriptors = maxSamplerSlot + 1;
 
         // Add SRV descriptor table root parameter
         D3D12_ROOT_PARAMETER& srvParam               = rootParams.emplace_back();

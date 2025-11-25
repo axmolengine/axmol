@@ -467,8 +467,9 @@ struct BlendDesc
 
 struct UniformInfo
 {
-    int count    = 0;   // element count
-    int location = -1;  // see also @StageUniformLocation
+    uint16_t count        = 0;   // element count
+    uint16_t sampler_slot = 0;   // sampler slot
+    int location          = -1;  // see also @StageUniformLocation
 
     // in opengl, type means uniform data type, i.e. GL_FLOAT_VEC2, while in metal type means data basic type, i.e.
     // float

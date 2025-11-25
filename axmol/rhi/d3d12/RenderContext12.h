@@ -162,6 +162,7 @@ private:
 
     ID3D12GraphicsCommandList* _currentCmdList{nullptr};  // weak pointer
 
+    ID3D12RootSignature* _boundRootSig{nullptr};
     ID3D12PipelineState* _boundPSO{nullptr};  // weak pointer
 
     uint32_t _currentImageIndex{0};
@@ -229,7 +230,6 @@ private:
     UINT _swapchainFlags{0};
 
     bool _swapchainDirty{false};
-    bool _psoDirty{false};
     bool _inFrame{false};
 };
 
