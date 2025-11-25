@@ -38,8 +38,6 @@ namespace ax
 
 class Touch;
 
-#define TOUCH_PERF_DEBUG 1
-
 /** @class EventTouch
  * @brief Touch event.
  */
@@ -61,6 +59,7 @@ public:
      * Constructor.
      */
     EventTouch();
+    EventTouch(EventCode eventCode, std::vector<Touch*> touches);
 
     /** Get event code.
      *
@@ -74,19 +73,6 @@ public:
      */
     const std::vector<Touch*>& getTouches() const { return _touches; }
 
-#if TOUCH_PERF_DEBUG
-    /** Set the event code.
-     *
-     * @param eventCode A given EventCode.
-     */
-    void setEventCode(EventCode eventCode) { _eventCode = eventCode; };
-    /** Set the touches
-     *
-     * @param touches A given touches vector.
-     */
-    void setTouches(const std::vector<Touch*>& touches) { _touches = touches; };
-#endif
-
 private:
     EventCode _eventCode;
     std::vector<Touch*> _touches;
@@ -94,7 +80,7 @@ private:
     friend class RenderView;
 };
 
-}
+}  // namespace ax
 
 // end of base group
 /// @}
