@@ -47,22 +47,22 @@ public:
     SamplerCache();
     ~SamplerCache();
 
-    void removeAllSamplers();
-
     void invalidateAll();
+
+    SamplerHandle getSampler(SamplerIndex::enum_type samplerIndex);
+    SamplerHandle getSampler(const SamplerDesc& desc);
 
     SamplerIndex::enum_type registerSampler(const SamplerDesc& desc);
 
-    SamplerHandle getSampler(SamplerIndex::enum_type samplerIndex);
-
 private:
+    void removeAllSamplers();
     void createBuiltinSamplers();
     void createBuiltinSampler(uint32_t samplerIndex, const SamplerDesc& desc);
 
     axstd::pod_vector<SamplerHandle> _builtinSamplers;
     axstd::hash_map<SamplerIndex::enum_type, SamplerHandle> _customSamplers;
 
-    axstd::hash_map<uint32_t, uint32_t> _samplersRegsitry; // sampler desc => sampler index registry
+    axstd::hash_map<uint32_t, uint32_t> _samplersRegsitry;  // sampler desc => sampler index registry
 
     DriverBase* _driver{nullptr};
 

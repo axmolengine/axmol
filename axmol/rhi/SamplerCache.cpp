@@ -53,7 +53,8 @@ void SamplerCache::invalidateAll()
     createBuiltinSamplers();
 }
 
-void SamplerCache::removeAllSamplers() {
+void SamplerCache::removeAllSamplers()
+{
 
     for (auto& [_, sampler] : _customSamplers)
         _driver->destroySampler(sampler);
@@ -86,6 +87,12 @@ SamplerIndex::enum_type SamplerCache::registerSampler(const SamplerDesc& desc)
     _samplersRegsitry.emplace(key, samplerIndex);
 
     return static_cast<SamplerIndex::enum_type>(samplerIndex);
+}
+
+SamplerHandle SamplerCache::getSampler(const SamplerDesc& desc)
+{
+    const auto samplerIndex = registerSampler(desc);
+    return getSampler(samplerIndex);
 }
 
 SamplerHandle SamplerCache::getSampler(SamplerIndex::enum_type samplerIndex)
