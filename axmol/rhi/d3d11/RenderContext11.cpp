@@ -397,7 +397,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
 
     _swapChain = swapChain.Detach();
 
-    _screenRT = _driver->createDefaultRenderTarget();
+    _screenRT = new RenderTargetImpl(device, true);
 
     UtilsD3D::updateDefaultRenderTargetAttachments(_driverImpl, _swapChain);
 
@@ -409,6 +409,9 @@ RenderContextImpl::~RenderContextImpl()
     // cleanup GPU resources
     UtilsD3D::updateDefaultRenderTargetAttachments(nullptr, nullptr);
     _d3d11Context->OMSetRenderTargets(0, nullptr, nullptr);
+
+    AX_SAFE_RELEASE_NULL(_screenRT);
+    AX_SAFE_RELEASE_NULL(_renderPipeline);
 
     SafeRelease(_swapChain);
 
@@ -431,8 +434,7 @@ bool RenderContextImpl::updateSurface(void* /*surface*/, uint32_t width, uint32_
         return true;
 
     // Resize swapchain buffers
-    auto impl = static_cast<RenderTargetImpl*>(const_cast<RenderTarget*>(_screenRT));
-    impl->invalidate();
+    _screenRT->invalidate();
 
     HRESULT hr = _swapChain->ResizeBuffers(0, width, height, _AX_SWAPCHAIN_FORMAT, _swapChainFlags);
 
@@ -454,7 +456,7 @@ void RenderContextImpl::setDepthStencilState(DepthStencilState* depthStencilStat
 
 void RenderContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
 {
-    _renderPipeline = static_cast<RenderPipelineImpl*>(renderPipeline);
+    Object::assign(_renderPipeline, static_cast<RenderPipelineImpl*>(renderPipeline));
 }
 
 bool RenderContextImpl::beginFrame()

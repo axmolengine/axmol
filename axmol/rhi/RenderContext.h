@@ -73,7 +73,7 @@ public:
      *
      * @param rt
      */
-    RenderTarget* getScreenRenderTarget() const { return _screenRT; }
+    virtual RenderTarget* getScreenRenderTarget() const = 0;
 
     /**
      * @brief Updates surface when the window resized or surface recretad
@@ -266,7 +266,6 @@ public:
 protected:
     virtual ~RenderContext();
 
-    RenderTarget* _screenRT{nullptr};         // managed by RHI
     RenderTarget* _currentRT{nullptr};        // weak ref (managed by Renderer)
     ProgramState* _programState{nullptr};     // weak ref
     VertexLayout* _vertexLayout{nullptr};     // weak ref

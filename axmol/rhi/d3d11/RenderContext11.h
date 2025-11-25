@@ -79,6 +79,8 @@ public:
     RenderContextImpl(DriverImpl* driver, void* surfaceContext);
     ~RenderContextImpl() override;
 
+    RenderTarget* getScreenRenderTarget() const override { return (RenderTarget*)_screenRT; }
+
     bool updateSurface(void* surface, uint32_t width, uint32_t height) override;
 
     /**
@@ -232,6 +234,8 @@ protected:
 
     DriverImpl* _driverImpl{nullptr};
     ID3D11DeviceContext* _d3d11Context{nullptr};
+
+    RenderTargetImpl* _screenRT{nullptr};
     IDXGISwapChain* _swapChain{nullptr};
     ID3D11Texture2D* _depthStencilTexture{nullptr};
     ComPtr<ID3D11RasterizerState> _rasterState{nullptr};

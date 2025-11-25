@@ -99,7 +99,6 @@ public:
     RenderContext* createRenderContext(void* surfaceContext) override;
     Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial) override;
     Texture* createTexture(const TextureDesc& descriptor) override;
-    RenderTarget* createDefaultRenderTarget() override;
     RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
     DepthStencilState* createDepthStencilState() override;
     RenderPipeline* createRenderPipeline() override;
@@ -187,7 +186,7 @@ private:
     void initializeFactory();
     void initializeDevice();
 
-    RenderContextImpl* _lastRenderContext{nullptr};
+    RenderContextImpl* _currentRenderContext{nullptr};
 
     VkDebugUtilsMessengerCreateInfoEXT _debugCreateInfo{};
     VkDebugUtilsMessengerEXT _debugMessenger{VK_NULL_HANDLE};

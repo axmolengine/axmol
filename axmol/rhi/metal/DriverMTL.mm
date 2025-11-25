@@ -452,11 +452,6 @@ Texture* DriverImpl::createTexture(const TextureDesc& descriptor)
     return new TextureImpl(_mtlDevice, descriptor);
 }
 
-RenderTarget* DriverImpl::createDefaultRenderTarget()
-{
-    return new RenderTargetImpl(true);
-}
-
 RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
 {
     auto rtMTL = new RenderTargetImpl(false);

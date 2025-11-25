@@ -29,10 +29,7 @@
 namespace ax::rhi
 {
 
-RenderContext::~RenderContext()
-{
-    AX_SAFE_RELEASE_NULL(_screenRT);
-}
+RenderContext::~RenderContext() {}
 
 void RenderContext::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc)
 {

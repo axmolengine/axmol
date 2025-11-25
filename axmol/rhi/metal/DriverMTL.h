@@ -121,7 +121,6 @@ public:
      */
     Texture* createTexture(const TextureDesc& descriptor) override;
 
-    RenderTarget* createDefaultRenderTarget() override;
     RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
 
     /**

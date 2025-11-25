@@ -99,7 +99,6 @@ public:
     RenderContext* createRenderContext(void* surfaceContext) override;
     Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial) override;
     Texture* createTexture(const TextureDesc& descriptor) override;
-    RenderTarget* createDefaultRenderTarget() override;
     RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
     DepthStencilState* createDepthStencilState() override;
     RenderPipeline* createRenderPipeline() override;
@@ -169,7 +168,7 @@ private:
     bool checkFormatSupport(DXGI_FORMAT format);
 
 private:
-    RenderContextImpl* _lastRenderContext{nullptr};
+    RenderContextImpl* _currentRenderContext{nullptr};
 
     Microsoft::WRL::ComPtr<IDXGIFactory6> _dxgiFactory;
     Microsoft::WRL::ComPtr<IDXGIAdapter> _adapter;

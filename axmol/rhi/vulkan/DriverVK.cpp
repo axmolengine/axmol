@@ -213,6 +213,8 @@ TextureImpl* createDepthStencilAttachment(DriverImpl* driver, const VkExtent2D& 
 DriverImpl::DriverImpl() {}
 DriverImpl::~DriverImpl()
 {
+    AX_SAFE_RELEASE_NULL(_currentRenderContext);
+
     cleanPendingResources();
 
     if (_commandPool)
@@ -474,9 +476,9 @@ bool DriverImpl::recreateSurface(const SurfaceCreateInfo& info)
 
 RenderContext* DriverImpl::createRenderContext(void* surfaceContext)
 {
-    // Swapchain management is out-of-scope here; pass VK_NULL_HANDLE for now
-    _lastRenderContext = new RenderContextImpl(this, static_cast<VkSurfaceKHR>(surfaceContext));
-    return _lastRenderContext;
+    auto context = new RenderContextImpl(this, static_cast<VkSurfaceKHR>(surfaceContext));
+    Object::assign(_currentRenderContext, context);
+    return context;
 }
 
 Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial)
@@ -487,12 +489,6 @@ Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage 
 Texture* DriverImpl::createTexture(const TextureDesc& descriptor)
 {
     return new TextureImpl(this, descriptor);
-}
-
-RenderTarget* DriverImpl::createDefaultRenderTarget()
-{
-    // Default RT: will use swapchain image wrapped externally; here return an empty target
-    return new RenderTargetImpl(this, true);
 }
 
 RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
@@ -786,8 +782,8 @@ void DriverImpl::destroyFramebuffer(VkFramebuffer fb)
 void DriverImpl::destroyRenderPass(VkRenderPass rp)
 {
     vkDestroyRenderPass(_device, rp, nullptr);
-    if (_lastRenderContext)
-        _lastRenderContext->removeCachedPipelines(rp);
+    if (_currentRenderContext)
+        _currentRenderContext->removeCachedPipelines(rp);
 }
 
 void DriverImpl::queueDisposal(VkSampler sampler)
@@ -813,7 +809,7 @@ void DriverImpl::queueDisposal(VkDeviceMemory memory)
 
 void DriverImpl::queueDisposalInternal(DisposableResource&& disposal)
 {
-    disposal.frameMask = 1 << (_lastRenderContext ? _lastRenderContext->getCurrentFrame() : 0);
+    disposal.frameMask = 1 << (_currentRenderContext ? _currentRenderContext->getCurrentFrame() : 0);
     _disposalQueue.emplace_back(disposal);
 }
 

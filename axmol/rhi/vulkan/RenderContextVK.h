@@ -77,6 +77,8 @@ public:
     RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface);
     ~RenderContextImpl() override;
 
+    RenderTarget* getScreenRenderTarget() const override { return (RenderTarget*)_screenRT; }
+
     bool updateSurface(void* surface, uint32_t width, uint32_t height) override;
 
     void setDepthStencilState(DepthStencilState* depthStencilState) override;
@@ -230,6 +232,8 @@ private:
 #pragma endregion
 
     std::vector<std::function<void()>> _postFrameOps;
+
+    RenderTargetImpl* _screenRT{nullptr};
 
     uint32_t _renderTargetWidth{0};
     uint32_t _renderTargetHeight{0};

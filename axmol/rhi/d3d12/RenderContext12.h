@@ -74,6 +74,8 @@ public:
     RenderContextImpl(DriverImpl* driver, void* surfaceContext);
     ~RenderContextImpl() override;
 
+    RenderTarget* getScreenRenderTarget() const override { return (RenderTarget*)_screenRT; }
+
     bool updateSurface(void* surface, uint32_t width, uint32_t height) override;
 
     void setDepthStencilState(DepthStencilState* depthStencilState) override;
@@ -137,6 +139,8 @@ private:
     void applyPendingDynamicStates();
 
     DriverImpl* _driver{nullptr};
+
+    RenderTargetImpl* _screenRT{nullptr};
 
     Microsoft::WRL::ComPtr<IDXGISwapChain4> _swapchain;
     Microsoft::WRL::ComPtr<ID3D12Device> _device;

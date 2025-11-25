@@ -58,6 +58,9 @@ class RenderContextImpl : public RenderContext
 public:
     RenderContextImpl(DriverImpl* driver);
     ~RenderContextImpl();
+
+    RenderTarget* getScreenRenderTarget() const override { return (RenderTarget*)_screenRT; }
+
     /**
      * Set depthStencil status once
      * @param depthStencilState Specifies the depth and stencil status
@@ -219,6 +222,8 @@ protected:
     void bindVertexBuffer(uint32_t& usedBits) const;
     void bindUniforms(ProgramImpl* program) const;
     void cleanResources();
+
+    RenderTargetImpl* _screenRT{nullptr};
 
     BufferImpl* _vertexBuffer                     = nullptr;
     BufferImpl* _indexBuffer                      = nullptr;

@@ -142,7 +142,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface)
     _screenWidth  = extent.width;
     _screenHeight = extent.height;
 
-    _screenRT = _driver->createDefaultRenderTarget();
+    _screenRT = new RenderTargetImpl(_driver, true);
 
     createCommandBuffers();
 #if !_AX_USE_DESCRIPTOR_CACHE
@@ -173,6 +173,9 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface)
 RenderContextImpl::~RenderContextImpl()
 {
     vkDeviceWaitIdle(_device);
+
+    AX_SAFE_RELEASE_NULL(_screenRT);
+    AX_SAFE_RELEASE_NULL(_renderPipeline);
 
     destroyUniformRingBuffers();
 
@@ -265,8 +268,6 @@ void RenderContextImpl::createUniformRingBuffers(std::size_t capacityBytes)
 // Destroy per-frame uniform ring buffers
 void RenderContextImpl::destroyUniformRingBuffers()
 {
-    vkDeviceWaitIdle(_device);
-
     auto device = _device;
     for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
     {
@@ -563,7 +564,7 @@ void RenderContextImpl::setDepthStencilState(DepthStencilState* depthStencilStat
 
 void RenderContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
 {
-    _renderPipeline = static_cast<RenderPipelineImpl*>(renderPipeline);
+    Object::assign(_renderPipeline, static_cast<RenderPipelineImpl*>(renderPipeline));
 }
 
 bool RenderContextImpl::beginFrame()

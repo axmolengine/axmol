@@ -214,6 +214,8 @@ static inline uint32_t makeMaskUpTo(uint32_t n)
 DriverImpl::DriverImpl() {}
 DriverImpl::~DriverImpl()
 {
+    AX_SAFE_RELEASE_NULL(_currentRenderContext);
+
     cleanPendingResources();
 
     _srvAllocator.reset();
@@ -405,8 +407,9 @@ void DriverImpl::createDescriptorAllocators()
 
 RenderContext* DriverImpl::createRenderContext(void* surfaceContext)
 {
-    _lastRenderContext = new RenderContextImpl(this, surfaceContext);
-    return _lastRenderContext;
+    auto context = new RenderContextImpl(this, surfaceContext);
+    Object::assign(_currentRenderContext, context);
+    return context;
 }
 
 Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial)
@@ -417,11 +420,6 @@ Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage 
 Texture* DriverImpl::createTexture(const TextureDesc& descriptor)
 {
     return new TextureImpl(this, descriptor);
-}
-
-RenderTarget* DriverImpl::createDefaultRenderTarget()
-{
-    return new RenderTargetImpl(this, true);
 }
 
 RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
@@ -734,7 +732,7 @@ void DriverImpl::queueDisposalInternal(DisposableResource&& disposal)
 {
     std::lock_guard<std::mutex> lk(_disposalMutex);
 
-    disposal.frameMask = 1 << (_lastRenderContext ? _lastRenderContext->getCurrentFrame() : 0);
+    disposal.frameMask = 1 << (_currentRenderContext ? _currentRenderContext->getCurrentFrame() : 0);
     _disposalQueue.emplace_back(std::move(disposal));
 }
 

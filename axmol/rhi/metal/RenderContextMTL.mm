@@ -189,7 +189,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
     _mtlLayer.drawableSize = fbSize;
 #endif
 
-    _screenRT = _driver->createDefaultRenderTarget();
+    _screenRT = new RenderTargetImpl(true);
 
     UtilsMTL::updateDefaultDepthStencilAttachment(_mtlLayer);
 }
@@ -201,6 +201,10 @@ RenderContextImpl::~RenderContextImpl()
     id<MTLCommandBuffer> oneOffBuffer = [_mtlCmdQueue commandBuffer];
     [oneOffBuffer commit];
     [oneOffBuffer waitUntilCompleted];
+
+    AX_SAFE_RELEASE_NULL(_screenRT);
+    AX_SAFE_RELEASE_NULL(_renderPipeline);
+
     [oneOffBuffer release];
 
     dispatch_semaphore_signal(_frameBoundarySemaphore);
@@ -220,7 +224,7 @@ void RenderContextImpl::setDepthStencilState(DepthStencilState* depthStencilStat
 
 void RenderContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
 {
-    _renderPipelineImpl = static_cast<RenderPipelineImpl*>(renderPipeline);
+    Object::assign(_renderPipeline, static_cast<RenderPipelineImpl*>(renderPipeline));
 }
 
 bool RenderContextImpl::beginFrame()

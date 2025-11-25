@@ -331,10 +331,10 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext) :
     swapchain.As(&_swapchain);
 
     // Create default screen render target
-    _screenRT = _driver->createDefaultRenderTarget();
+    _screenRT = new RenderTargetImpl(driver, true);
 
     // Build swapchain attachments for screen RT
-    static_cast<RenderTargetImpl*>(_screenRT)->rebuildAttachmentsForSwapchain(_swapchain.Get(), _screenWidth,
+    _screenRT->rebuildAttachmentsForSwapchain(_swapchain.Get(), _screenWidth,
                                                                               _screenHeight);
 
     createUniformRingBuffers(1 * 1024 * 1024);  // 1 MB per frame
@@ -348,6 +348,9 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext) :
 RenderContextImpl::~RenderContextImpl()
 {
     _driver->waitDeviceIdle();
+
+    AX_SAFE_RELEASE_NULL(_screenRT);
+    AX_SAFE_RELEASE_NULL(_renderPipeline);
 
     // Ensure GPU idle then cleanup handles if needed
     for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
@@ -439,7 +442,7 @@ void RenderContextImpl::setDepthStencilState(DepthStencilState* depthStencilStat
 
 void RenderContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
 {
-    _renderPipeline = static_cast<RenderPipelineImpl*>(renderPipeline);
+    Object::assign(_renderPipeline, static_cast<RenderPipelineImpl*>(renderPipeline));
 }
 
 bool RenderContextImpl::beginFrame()

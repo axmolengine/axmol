@@ -54,6 +54,8 @@ public:
     RenderContextImpl(DriverImpl* driver, void* surfaceContext);
     ~RenderContextImpl();
 
+    RenderTarget* getScreenRenderTarget() const override { return (RenderTarget*)_screenRT; }
+
     bool updateSurface(void* surface, uint32_t width, uint32_t height) override;
 
     /**
@@ -245,6 +247,8 @@ private:
 
     static CAMetalLayer* _mtlLayer;
     static id<CAMetalDrawable> _currentDrawable;
+
+    RenderTargetImpl* _screenRT{nullptr};
 
     // weak ref, like context, managed by DriverImpl
     id<MTLCommandQueue> _mtlCmdQueue              = nil;

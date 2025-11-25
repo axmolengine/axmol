@@ -53,12 +53,15 @@ namespace ax::rhi::gl
 
 RenderContextImpl::RenderContextImpl(DriverImpl* driver)
 {
-    _screenRT = driver->createDefaultRenderTarget();
+    _screenRT = new RenderTargetImpl(driver, true);
 }
 
 RenderContextImpl::~RenderContextImpl()
 {
     cleanResources();
+
+    AX_SAFE_RELEASE_NULL(_screenRT);
+    AX_SAFE_RELEASE_NULL(_renderPipeline);
 }
 
 bool RenderContextImpl::beginFrame()
@@ -139,7 +142,7 @@ void RenderContextImpl::setDepthStencilState(DepthStencilState* depthStencilStat
 
 void RenderContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
 {
-    _renderPipeline = static_cast<RenderPipelineImpl*>(renderPipeline);
+    Object::assign(_renderPipeline, static_cast<RenderPipelineImpl*>(renderPipeline));
 }
 
 /**

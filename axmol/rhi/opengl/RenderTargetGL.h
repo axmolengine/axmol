@@ -14,7 +14,7 @@ public:
     /*
      * generateFBO, false, use for screen framebuffer
      */
-    RenderTargetImpl(bool defaultRenderTarget, DriverImpl* driver);
+    RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget);
     ~RenderTargetImpl();
 
     void bindFrameBuffer() const;

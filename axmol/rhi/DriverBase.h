@@ -124,8 +124,6 @@ public:
      */
     virtual Texture* createTexture(const TextureDesc& descriptor) = 0;
 
-    virtual RenderTarget* createDefaultRenderTarget() = 0;
-
     virtual RenderTarget* createRenderTarget(Texture* colorAttachment        = nullptr,
                                              Texture* depthStencilAttachment = nullptr) = 0;
 

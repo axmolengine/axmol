@@ -290,11 +290,6 @@ Texture* DriverImpl::createTexture(const TextureDesc& descriptor)
     return new TextureImpl(_device, descriptor);
 }
 
-RenderTarget* DriverImpl::createDefaultRenderTarget()
-{
-    return new RenderTargetImpl(_device, true);
-}
-
 RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthAttachment)
 {
     auto renderTarget = new RenderTargetImpl(_device, false);
