@@ -24,7 +24,6 @@
 #pragma once
 #include "axmol/rhi/RenderContext.h"
 #include "axmol/rhi/d3d12/RenderPipeline12.h"
-#include "axmol/rhi/d3d12/RenderTarget12.h"
 #include "axmol/rhi/d3d12/DepthStencilState12.h"
 #include "axmol/rhi/d3d12/VertexLayout12.h"
 #include "axmol/rhi/d3d12/Program12.h"
@@ -42,6 +41,7 @@ namespace ax::rhi::d3d12
 {
 
 class DriverImpl;
+class RenderTargetImpl;
 
 enum class DynamicStateBits : uint32_t
 {

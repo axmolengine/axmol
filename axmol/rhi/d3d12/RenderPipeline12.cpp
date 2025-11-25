@@ -26,6 +26,7 @@
 #include "axmol/rhi/d3d12/DepthStencilState12.h"
 #include "axmol/rhi/d3d12/Program12.h"
 #include "axmol/rhi/d3d12/RenderContext12.h"
+#include "axmol/rhi/d3d12/Driver12.h"
 #include "axmol/base/Logging.h"
 #include "axmol/tlx/hash.hpp"
 

@@ -34,6 +34,7 @@ namespace ax::rhi::mtl
 
 class RenderPipelineImpl;
 class DepthStencilStateImpl;
+class RenderTargetImpl;
 
 /**
  * @addtogroup _metal
