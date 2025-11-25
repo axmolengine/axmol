@@ -884,7 +884,7 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
         _currentCmdList->SetGraphicsRootConstantBufferView(rootSigInfo->fsUboRootIndex, s.gpuVA);
     }
 
-    // --- bind textures & samplers ---
+    // --- bind textures ---
     auto srvHeap = _srvHeaps[_currentFrame].Get();
 
     // CPU start handles
@@ -894,53 +894,36 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     auto& textureBindingSets = _programState->getTextureBindingSets();
     if (!textureBindingSets.empty())
     {
-        UINT srvCount = 0;
+        const auto bindingStart = _srvOffset[_currentFrame];
 
         // Copy descriptors for each texture in the binding set
-        for (auto& [_, bindingSet] : textureBindingSets)
+        int maxSlot = -1;
+        for (auto& [bindingIndex, bindingSet] : textureBindingSets)
         {
-            auto& texs = bindingSet.texs;
-            if (texs.size() == 1)
+            const auto count = bindingSet.texs.size();
+            for (size_t i = 0; i < count; ++i)
             {
-                auto textureImpl = static_cast<TextureImpl*>(texs[0]);
+                const int slot   = bindingIndex + i;
+                if (maxSlot < slot)
+                    maxSlot = slot;
 
-                // Copy SRV descriptor into the current frame heap
-                auto srvHandle = textureImpl->internalHandle().srv;
-                if (srvHandle)
-                {
-                    auto dstSrv = srvCpuStart;
-                    dstSrv.ptr += (_srvOffset[_currentFrame] + srvCount) * srvStride;
-                    _device->CopyDescriptorsSimple(1, dstSrv, srvHandle->cpu, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-                    ++srvCount;
-                }
-            }
-            else  // must > 1, it's array, in shader is 'uniform sampler2D u_details[4];'
-            {
-                for (auto tex : texs)
-                {
-                    auto textureImpl = static_cast<TextureImpl*>(tex);
-
-                    // Copy SRV descriptor into the current frame heap
-                    auto srvHandle = textureImpl->internalHandle().srv;
-                    if (srvHandle)
-                    {
-                        auto dstSrv = srvCpuStart;
-                        dstSrv.ptr += (_srvOffset[_currentFrame] + srvCount) * srvStride;
-                        _device->CopyDescriptorsSimple(1, dstSrv, srvHandle->cpu,
-                                                       D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-                        ++srvCount;
-                    }
-                }
+                auto textureImpl = static_cast<TextureImpl*>(bindingSet.texs[i]);
+                auto srvHandle   = textureImpl->internalHandle().srv;
+                assert(!!srvHandle);
+                
+                auto dstSrv = srvCpuStart;
+                dstSrv.ptr += (bindingStart + slot)*srvStride;
+                _device->CopyDescriptorsSimple(1, dstSrv, srvHandle->cpu, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
             }
         }
 
         // Bind GPU handles for this batch
         auto srvGpuStart = srvHeap->GetGPUDescriptorHandleForHeapStart();
-        srvGpuStart.ptr += _srvOffset[_currentFrame] * srvStride;
+        srvGpuStart.ptr += static_cast<UINT64>(bindingStart) * srvStride;
         _currentCmdList->SetGraphicsRootDescriptorTable(rootSigInfo->srvRootIndex, srvGpuStart);
 
         // Advance offsets for the next batch
-        _srvOffset[_currentFrame] += srvCount;
+        _srvOffset[_currentFrame] = bindingStart + static_cast<UINT>(maxSlot + 1);
     }
 }
 

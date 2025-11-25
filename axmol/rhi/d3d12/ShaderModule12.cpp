@@ -289,11 +289,27 @@ void ShaderModuleImpl::reflectSamplers(SLCReflectContext* context)
         std::string_view name = _sc_read_name(ibs);
         uniform.location      = ibs->read<int32_t>();  // sampler binding index
         ibs->advance(skip_fields_bytes);
-        uniform.count = (std::max)(1, static_cast<int>(ibs->read<uint8_t>()));
+        uniform.count        = (std::max)(1, static_cast<int>(ibs->read<uint8_t>()));
         uniform.sampler_slot = ibs->read<uint8_t>();
-        auto ret = _activeUniformInfos.emplace(name, uniform);
+        auto ret             = _activeUniformInfos.emplace(name, uniform);
         assert(ret.second);
         _activeSamplerInfos.push_back(uniform);
+    }
+
+    if (_activeSamplerInfos.size() > 2)
+    {
+        // Important:
+        // In D3D11/D3D12, the order in which descriptor ranges are declared
+        // determines their linear layout inside the root signature's descriptor table.
+        // The GPU does not automatically reorder them by register number (t#).
+        // If the ranges are added in a different order than the shader's register
+        // declarations, the linear indices will not match the expected t# slots,
+        // causing resources to be bound incorrectly (e.g. a texture ending up in
+        // another array slot).
+        // To avoid this, we sort by 'location' (the register index) so that the
+        // SRV ranges are declared in ascending order, matching the shader layout.
+        std::sort(_activeSamplerInfos.begin(), _activeSamplerInfos.end(),
+                  [](auto& a, auto& b) { return a.location < b.location; });
     }
 }
 
