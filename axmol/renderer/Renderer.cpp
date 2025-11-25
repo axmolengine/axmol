@@ -67,7 +67,6 @@ static constexpr rhi::PrimitiveGroup kPrimitiveTypeToGroup[] = {
     /* TRIANGLE_STRIP */ rhi::PrimitiveGroup::Triangle,
 };
 
-
 static inline rhi::PrimitiveGroup toPrimitiveGroup(rhi::PrimitiveType type)
 {
     return kPrimitiveTypeToGroup[static_cast<uint32_t>(type)];

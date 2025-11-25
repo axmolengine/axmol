@@ -386,7 +386,7 @@ void TextureImpl::updateSamplerDesc(const SamplerDesc& samplerDesc)
 
     auto samplerCache = SamplerCache::getInstance();
     auto samplerIndex = samplerCache->registerSampler(samplerDesc);
-    _sampler = static_cast<DescriptorHandle*>(samplerCache->getSampler(samplerIndex));
+    _sampler          = static_cast<DescriptorHandle*>(samplerCache->getSampler(samplerIndex));
 }
 
 void TextureImpl::updateTextureDesc(const TextureDesc& desc)

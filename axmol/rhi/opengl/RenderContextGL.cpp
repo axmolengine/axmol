@@ -158,7 +158,9 @@ void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
  * Update render pipeline status
  * @param depthStencilState Specifies the depth and stencil status
  */
-void RenderContextImpl::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc, PrimitiveGroup primitiveGroup)
+void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
+                                            const PipelineDesc& desc,
+                                            PrimitiveGroup primitiveGroup)
 {
     RenderContext::updatePipelineState(rt, desc, primitiveGroup);
 

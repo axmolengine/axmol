@@ -125,7 +125,9 @@ public:
      * @param rt Specifies the render target.
      * @param pipelineDesc Specifies the pipeline descriptor.
      */
-    void updatePipelineState(const RenderTarget* rt, const PipelineDesc& descriptor, PrimitiveGroup primitiveGroup) override;
+    void updatePipelineState(const RenderTarget* rt,
+                             const PipelineDesc& descriptor,
+                             PrimitiveGroup primitiveGroup) override;
 
     /**
      * Fixed-function state

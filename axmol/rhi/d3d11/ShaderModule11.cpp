@@ -324,7 +324,7 @@ void ShaderModuleImpl::reflectSamplers(SLCReflectContext* context)
         uniform.location      = ibs->read<int32_t>();  // sampler binding index
         ibs->advance(skip_fields_bytes);
         uniform.count = (std::max)(1, static_cast<int>(ibs->read<uint8_t>()));
-        ibs->advance(sizeof(uint8_t)); // skip sampler_slot temporary
+        ibs->advance(sizeof(uint8_t));  // skip sampler_slot temporary
 
         _activeUniformInfos[name] = uniform;
     }

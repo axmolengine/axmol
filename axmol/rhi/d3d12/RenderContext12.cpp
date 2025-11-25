@@ -903,16 +903,16 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
             const auto count = bindingSet.texs.size();
             for (size_t i = 0; i < count; ++i)
             {
-                const int slot   = bindingIndex + i;
+                const int slot = bindingIndex + i;
                 if (maxSlot < slot)
                     maxSlot = slot;
 
                 auto textureImpl = static_cast<TextureImpl*>(bindingSet.texs[i]);
                 auto srvHandle   = textureImpl->internalHandle().srv;
                 assert(!!srvHandle);
-                
+
                 auto dstSrv = srvCpuStart;
-                dstSrv.ptr += (bindingStart + slot)*srvStride;
+                dstSrv.ptr += (bindingStart + slot) * srvStride;
                 _device->CopyDescriptorsSimple(1, dstSrv, srvHandle->cpu, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
             }
         }

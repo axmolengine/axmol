@@ -67,7 +67,10 @@ public:
     explicit RenderPipelineImpl(DriverImpl* driver);
     ~RenderPipelineImpl();
 
-    void prepareUpdate(DepthStencilStateImpl* ds, D3D12_CULL_MODE cullMode, BOOL frontCCW, PrimitiveGroup primitiveGroup)
+    void prepareUpdate(DepthStencilStateImpl* ds,
+                       D3D12_CULL_MODE cullMode,
+                       BOOL frontCCW,
+                       PrimitiveGroup primitiveGroup)
     {
         _dsState                          = ds;
         _rasterDesc.CullMode              = cullMode;

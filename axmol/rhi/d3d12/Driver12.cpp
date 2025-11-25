@@ -1084,7 +1084,7 @@ void DriverImpl::ensureMipmapPipeline(bool isArray)
         CheckHR(getDevice()->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&targetPSO)));
     }
 
-     // Create (or ensure) a shader-visible SRV/UAV heap that we can copy CPU-only descriptors into.
+    // Create (or ensure) a shader-visible SRV/UAV heap that we can copy CPU-only descriptors into.
     // We size it to a safe upper bound (aligned to 64) based on device caps, and reuse across calls.
     if (!_mipmapSrvHeap)
     {

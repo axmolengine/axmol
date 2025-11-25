@@ -921,7 +921,9 @@ void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
     _instanceBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc, PrimitiveGroup primitiveGroup)
+void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
+                                            const PipelineDesc& desc,
+                                            PrimitiveGroup primitiveGroup)
 {
     RenderContext::updatePipelineState(rt, desc, primitiveGroup);
     AXASSERT(_renderPipeline, "RenderPipelineImpl not set");

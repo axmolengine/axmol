@@ -503,7 +503,9 @@ void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
     _depthStencilState->update(desc);
 }
 
-void RenderContextImpl::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc, PrimitiveGroup primitiveGroup)
+void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
+                                            const PipelineDesc& desc,
+                                            PrimitiveGroup primitiveGroup)
 {
     RenderContext::updatePipelineState(rt, desc, primitiveGroup);
     _renderPipeline->update(rt, desc);
