@@ -204,6 +204,8 @@ private:
     Microsoft::WRL::ComPtr<IDxcCompiler> _dxcCompiler;
     std::vector<LPCWSTR> _dxcArguments;
 
+    std::string _shaderCompileBuffer;
+
     // lazy init helpers
     void ensureMipmapPipeline(bool isArray);
     D3D12BlobHandle compileMipmapCS(bool isArray);

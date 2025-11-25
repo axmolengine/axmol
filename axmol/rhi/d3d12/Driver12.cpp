@@ -31,12 +31,14 @@
 #include "axmol/rhi/d3d12/RenderPipeline12.h"
 #include "axmol/rhi/d3d12/DepthStencilState12.h"
 #include "axmol/rhi/d3d12/VertexLayout12.h"
+#include "axmol/rhi/d3d12/Sampler12.h"
+#include "axmol/rhi/d3d12/Utils12.h"
 #include "axmol/base/Logging.h"
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/rhi/DXUtils.h"
-#include "axmol/rhi/d3d12/Utils12.h"
 #include "axmol/rhi/SamplerCache.h"
 #include "d3dx12.h"
+
 #include "ntcvt/ntcvt.hpp"
 
 #include <algorithm>
@@ -739,6 +741,15 @@ void DriverImpl::queueDisposalInternal(DisposableResource&& disposal)
 bool DriverImpl::compileShader(std::string_view shaderSource, ShaderStage stage, D3D12BlobHandle& outHandle)
 {
 #if _AX_USE_DXC
+    if (stage == ShaderStage::FRAGMENT)
+    {
+        _shaderCompileBuffer.clear();
+        _shaderCompileBuffer.reserve(shaderSource.size() + BuiltinSamplers.size());
+        _shaderCompileBuffer += BuiltinSamplers;
+        _shaderCompileBuffer += shaderSource;
+        shaderSource = _shaderCompileBuffer;
+    }
+
     ComPtr<IDxcBlobEncoding> sourceBlob;
     _dxcLibrary->CreateBlobWithEncodingOnHeapCopy(shaderSource.data(), static_cast<UINT32>(shaderSource.size()),
                                                   CP_UTF8, &sourceBlob);
