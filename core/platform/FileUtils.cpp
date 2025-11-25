@@ -779,6 +779,9 @@ const std::vector<std::string>& FileUtils::getOriginalSearchPaths() const
 void FileUtils::setWritablePath(std::string_view writablePath)
 {
     _writablePath = writablePath;
+
+    if (!_writablePath.empty() && (_writablePath.back() != '/'))
+      _writablePath += '/';
 }
 
 const std::string& FileUtils::getDefaultResourceRootPath() const
