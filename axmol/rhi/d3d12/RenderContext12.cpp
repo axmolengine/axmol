@@ -714,8 +714,11 @@ void RenderContextImpl::updatePipelineState(const RenderTarget* rt, const Pipeli
         _currentCmdList->SetGraphicsRootSignature(rootSigInfo->rootSig.Get());
         _currentCmdList->SetPipelineState(_renderPipeline->getPipelineState());
 
-        const auto samplerGpuStart = _driver->getSamplerHeap()->GetGPUDescriptorHandleForHeapStart();
-        _currentCmdList->SetGraphicsRootDescriptorTable(rootSigInfo->samplerRootIndex, samplerGpuStart);
+        if (rootSigInfo->samplerRootIndex != UINT_MAX)
+        {
+            const auto samplerGpuStart = _driver->getSamplerHeap()->GetGPUDescriptorHandleForHeapStart();
+            _currentCmdList->SetGraphicsRootDescriptorTable(rootSigInfo->samplerRootIndex, samplerGpuStart);
+        }
 
         _boundPSO = pso;
         _psoDirty = false;

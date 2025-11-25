@@ -37,6 +37,7 @@
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/rhi/DXUtils.h"
 #include "axmol/rhi/SamplerCache.h"
+#include "yasio/sz.hpp"
 #include "d3dx12.h"
 
 #include "ntcvt/ntcvt.hpp"
@@ -218,6 +219,7 @@ DriverImpl::~DriverImpl()
     _dsvAllocator.reset();
     _samplerAllocator.reset();
 
+    _mipmapSrvHeap.Reset();
     _mipmapRootSig.Reset();
     _mipmapPSO2D.Reset();
     _mipmapPSOArray.Reset();
@@ -828,14 +830,13 @@ bool DriverImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource*
     const bool isArray = (arrayCount > 1);
     ensureMipmapPipeline(isArray);  // lazy init PSO + root signature
 
-    // Build SRV/UAV descriptors for each mip
+    // Build SRV/UAV descriptors for each mip (CPU-only descriptors in your existing pools)
     axstd::pod_vector<DescriptorHandle*> mipSrvs(mipCount);
     axstd::pod_vector<DescriptorHandle*> mipUavs(mipCount);
-    axstd::flat_set<ID3D12DescriptorHeap*> descriptorHeaps;
 
     for (UINT m = 0; m < mipCount; ++m)
     {
-        // SRV for mip m
+        // SRV for mip m (one-level SRV)
         D3D12_SHADER_RESOURCE_VIEW_DESC srv{};
         srv.Format                  = desc.Format;
         srv.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -853,10 +854,9 @@ bool DriverImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource*
             srv.Texture2D.MostDetailedMip = m;
             srv.Texture2D.MipLevels       = 1;
         }
-        mipSrvs[m] = createSRV(texture, &srv);
-        descriptorHeaps.insert(getResourceViewHeap(mipSrvs[m]));
+        mipSrvs[m] = createSRV(texture, &srv);  // returns a handle from CPU-only heap
 
-        // UAV for mip m
+        // UAV for mip m (we write mip m+1, but preparing for all m simplifies indexing)
         D3D12_UNORDERED_ACCESS_VIEW_DESC uav{};
         uav.Format = dxutils::getUAVCompatibleFormat(desc.Format);
         if (isArray)
@@ -871,8 +871,54 @@ bool DriverImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource*
             uav.ViewDimension      = D3D12_UAV_DIMENSION_TEXTURE2D;
             uav.Texture2D.MipSlice = m;
         }
-        mipUavs[m] = createUAV(texture, &uav);
-        descriptorHeaps.insert(getResourceViewHeap(mipUavs[m]));
+        mipUavs[m] = createUAV(texture, &uav);  // returns a handle from CPU-only heap
+    }
+
+    // Precompute per-pass GPU descriptor handles by copying from CPU-only heaps into the shader-visible heap.
+    // For each pass m, we need SRV of mip m and UAV of mip (m+1). Total passes: (mipCount-1), total descriptors:
+    // 2*(mipCount-1).
+    const UINT passCount = (mipCount > 0) ? (mipCount - 1) : 0;
+    struct ViewPairGPU
+    {
+        D3D12_GPU_DESCRIPTOR_HANDLE srv;
+        D3D12_GPU_DESCRIPTOR_HANDLE uav;
+    };
+    axstd::pod_vector<ViewPairGPU> passViews(passCount);
+
+    const auto cpuStart = _mipmapSrvHeap->GetCPUDescriptorHandleForHeapStart();
+    const auto gpuStart = _mipmapSrvHeap->GetGPUDescriptorHandleForHeapStart();
+
+    // Safety: ensure we do not overflow the heap; early-out if capacity insufficient
+    const UINT requiredDescriptors = passCount * 2;
+    const UINT heapCapacity        = _mipmapSrvHeap->GetDesc().NumDescriptors;
+    if (requiredDescriptors > heapCapacity)
+    {
+        // If ever hit, adjust heap sizing policy above
+        AXLOGE("Mipmap SRV heap capacity (%u) insufficient, required: %u", heapCapacity, requiredDescriptors);
+        return false;
+    }
+
+    for (UINT m = 0; m < passCount; ++m)
+    {
+        // Destination indices in the shader-visible heap:
+        // slot = 2*m for SRV, slot = 2*m+1 for UAV
+        const UINT srvIndex = 2 * m;
+        const UINT uavIndex = srvIndex + 1;
+
+        const auto dstSrvCPU = CD3DX12_CPU_DESCRIPTOR_HANDLE(cpuStart, srvIndex, _srvDescriptorStride);
+        const auto dstUavCPU = CD3DX12_CPU_DESCRIPTOR_HANDLE(cpuStart, uavIndex, _srvDescriptorStride);
+
+        // Source CPU-only descriptors from your DescriptorHandle abstraction
+        const auto srcSrvCPU = mipSrvs[m]->cpu;
+        const auto srcUavCPU = mipUavs[m + 1]->cpu;  // writes to mip (m+1)
+
+        // Copy into shader-visible heap
+        getDevice()->CopyDescriptorsSimple(1, dstSrvCPU, srcSrvCPU, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+        getDevice()->CopyDescriptorsSimple(1, dstUavCPU, srcUavCPU, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+        // Compute GPU handles for binding
+        passViews[m].srv = CD3DX12_GPU_DESCRIPTOR_HANDLE(gpuStart, srvIndex, _srvDescriptorStride);
+        passViews[m].uav = CD3DX12_GPU_DESCRIPTOR_HANDLE(gpuStart, uavIndex, _srvDescriptorStride);
     }
 
     // Create upload buffer for per-dispatch constants
@@ -885,7 +931,7 @@ bool DriverImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource*
         uint32_t SliceCount;
     };
     const UINT constStride    = 256;  // CB alignment
-    const UINT totalConstSize = mipCount * constStride;
+    const UINT totalConstSize = passCount * constStride;
 
     ComPtr<ID3D12Resource> constUpload;
     {
@@ -899,8 +945,10 @@ bool DriverImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource*
     }
 
     // Bind descriptor heaps (sampler is static in RS)
-    if (!descriptorHeaps.empty())
-        cmd->SetDescriptorHeaps(descriptorHeaps.size(), std::to_address(descriptorHeaps.begin()));
+    {
+        ID3D12DescriptorHeap* heaps[] = {_mipmapSrvHeap.Get()};
+        cmd->SetDescriptorHeaps(1, heaps);
+    }
 
     // Bind root signature and PSO
     cmd->SetComputeRootSignature(_mipmapRootSig.Get());
@@ -920,7 +968,7 @@ bool DriverImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource*
     const UINT baseW = static_cast<UINT>(desc.Width);
     const UINT baseH = desc.Height;
 
-    for (UINT m = 0; m + 1 < mipCount; ++m)
+    for (UINT m = 0; m < passCount; ++m)
     {
         const UINT srcW = std::max(1u, baseW >> m);
         const UINT srcH = std::max(1u, baseH >> m);
@@ -938,9 +986,9 @@ bool DriverImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource*
             cmd->ResourceBarrier(1, &bar);
         }
 
-        // Bind SRV/UAV for current pass
-        cmd->SetComputeRootDescriptorTable(0, mipSrvs[m]->gpu);
-        cmd->SetComputeRootDescriptorTable(1, mipUavs[m + 1]->gpu);
+        // Bind SRV/UAV for current pass (from the shader-visible heap we filled)
+        cmd->SetComputeRootDescriptorTable(0, passViews[m].srv);
+        cmd->SetComputeRootDescriptorTable(1, passViews[m].uav);
 
         // Upload constants for current mip
         uint8_t* mapped = nullptr;
@@ -989,6 +1037,7 @@ bool DriverImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource*
         cmd->ResourceBarrier(1, &b);
     }
 
+    // Dispose the temporary CPU-only descriptors and upload buffer
     queueDisposal(constUpload.Detach());
     for (auto h : mipSrvs)
         queueDisposal(h, DisposableResource::Type::ShaderResourceView);
@@ -1033,6 +1082,25 @@ void DriverImpl::ensureMipmapPipeline(bool isArray)
         psoDesc.CS.pShaderBytecode = csBlob.view.data();
         psoDesc.CS.BytecodeLength  = csBlob.view.size();
         CheckHR(getDevice()->CreateComputePipelineState(&psoDesc, IID_PPV_ARGS(&targetPSO)));
+    }
+
+     // Create (or ensure) a shader-visible SRV/UAV heap that we can copy CPU-only descriptors into.
+    // We size it to a safe upper bound (aligned to 64) based on device caps, and reuse across calls.
+    if (!_mipmapSrvHeap)
+    {
+        const auto maxMips                = RHIUtils::computeMipLevels(_caps.maxTextureSize, _caps.maxTextureSize);
+        const auto mipmapSrvDescriptorMax = YASIO_SZ_ALIGN(maxMips * 2, 64);  // 2 descriptors per pass (SRV+UAV)
+
+        D3D12_DESCRIPTOR_HEAP_DESC dh{};
+        dh.Type           = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+        dh.NumDescriptors = mipmapSrvDescriptorMax;
+        dh.Flags          = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+
+        _device->CreateDescriptorHeap(&dh, IID_PPV_ARGS(&_mipmapSrvHeap));
+
+        // Cache descriptor size increment for handle offset calculations
+        auto stride = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+        assert(_srvDescriptorStride == stride);
     }
 }
 

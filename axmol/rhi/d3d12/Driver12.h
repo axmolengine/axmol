@@ -212,6 +212,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D12RootSignature> _mipmapRootSig;
     Microsoft::WRL::ComPtr<ID3D12PipelineState> _mipmapPSO2D;
     Microsoft::WRL::ComPtr<ID3D12PipelineState> _mipmapPSOArray;
+    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> _mipmapSrvHeap;
 };
 
 }  // namespace ax::rhi::d3d12
