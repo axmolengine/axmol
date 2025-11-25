@@ -26,6 +26,7 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
  ****************************************************************************/
 #pragma once
 
+#include <stdint.h>
 #include <type_traits>
 
 #if !defined(_STD)

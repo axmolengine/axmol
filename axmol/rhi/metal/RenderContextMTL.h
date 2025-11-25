@@ -258,8 +258,8 @@ private:
     id<MTLBuffer> _mtlIndexBuffer                 = nil;
     id<MTLTexture> _drawableTexture               = nil;
 
-    DepthStencilStateImpl* _depthStencilStateImpl = nullptr;
-    RenderPipelineImpl* _renderPipelineImpl       = nullptr;
+    DepthStencilStateImpl* _depthStencilState = nullptr;
+    RenderPipelineImpl* _renderPipeline       = nullptr;
 
     unsigned int _renderTargetWidth  = 0;
     unsigned int _renderTargetHeight = 0;
