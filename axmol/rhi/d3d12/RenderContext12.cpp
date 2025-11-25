@@ -47,27 +47,18 @@ namespace ax::rhi::d3d12
 static constexpr DXGI_FORMAT AX_SWAPCHAIN_FORMAT = DXGI_FORMAT_R8G8B8A8_UNORM;
 static constexpr UINT MAX_ALLOW_DRAW_CALLS       = 2000;
 
-// Helper: map PrimitiveType to D3D12_PRIMITIVE_TOPOLOGY
-static D3D12_PRIMITIVE_TOPOLOGY toD3DTopology(PrimitiveType type)
+static constexpr D3D12_PRIMITIVE_TOPOLOGY PrimitiveTypeToD3DTopology[] = {
+    /* POINT          */ D3D_PRIMITIVE_TOPOLOGY_POINTLIST,
+    /* LINE           */ D3D_PRIMITIVE_TOPOLOGY_LINELIST,
+    /* LINE_LOOP      */ D3D_PRIMITIVE_TOPOLOGY_LINESTRIP,  // no native LINE_LOOP
+    /* LINE_STRIP     */ D3D_PRIMITIVE_TOPOLOGY_LINESTRIP,
+    /* TRIANGLE       */ D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
+    /* TRIANGLE_STRIP */ D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP,
+};
+
+inline D3D12_PRIMITIVE_TOPOLOGY toD3DTopology(PrimitiveType type)
 {
-    switch (type)
-    {
-    case PrimitiveType::POINT:
-        return D3D_PRIMITIVE_TOPOLOGY_POINTLIST;
-    case PrimitiveType::LINE:
-        return D3D_PRIMITIVE_TOPOLOGY_LINELIST;
-    case PrimitiveType::LINE_STRIP:
-        return D3D_PRIMITIVE_TOPOLOGY_LINESTRIP;
-    case PrimitiveType::TRIANGLE:
-        return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-    case PrimitiveType::TRIANGLE_STRIP:
-        return D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
-    case PrimitiveType::LINE_LOOP:  // D3D12 has no native LINE_LOOP
-        AXLOGW("D3D12 does not support LINE_LOOP; using LINESTRIP");
-        return D3D_PRIMITIVE_TOPOLOGY_LINESTRIP;
-    default:
-        return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-    }
+    return PrimitiveTypeToD3DTopology[static_cast<uint32_t>(type)];
 }
 
 // Helper: map IndexFormat to DXGI_FORMAT
@@ -334,8 +325,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext) :
     _screenRT = new RenderTargetImpl(driver, true);
 
     // Build swapchain attachments for screen RT
-    _screenRT->rebuildAttachmentsForSwapchain(_swapchain.Get(), _screenWidth,
-                                                                              _screenHeight);
+    _screenRT->rebuildAttachmentsForSwapchain(_swapchain.Get(), _screenWidth, _screenHeight);
 
     createUniformRingBuffers(1 * 1024 * 1024);  // 1 MB per frame
 
@@ -474,7 +464,7 @@ bool RenderContextImpl::beginFrame()
     }
 
     // Reset offsets at the start of each frame
-    _srvOffset[_currentFrame]     = 0;
+    _srvOffset[_currentFrame] = 0;
 
     resetUniformRingForCurrentFrame(_currentFrame);
 
@@ -699,12 +689,14 @@ void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
     _depthStencilState->update(desc);
 }
 
-void RenderContextImpl::updatePipelineState(const RenderTarget* rt, const PipelineDesc& descriptor)
+void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
+                                            const PipelineDesc& pipelineDesc,
+                                            PrimitiveGroup primitiveGroup)
 {
-    RenderContext::updatePipelineState(rt, descriptor);
+    RenderContext::updatePipelineState(rt, pipelineDesc, primitiveGroup);
     AXASSERT(_renderPipeline, "RenderPipelineImpl not set");
-    _renderPipeline->prepareUpdate(_depthStencilState, _cachedCullMode, _cachedFrontCounterClockwise);
-    _renderPipeline->update(rt, descriptor);
+    _renderPipeline->prepareUpdate(_depthStencilState, _cachedCullMode, _cachedFrontCounterClockwise, primitiveGroup);
+    _renderPipeline->update(rt, pipelineDesc);
 
     // Bind PSO & RootSignature
     auto pso = _renderPipeline->getPipelineState();
@@ -882,10 +874,10 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     }
 
     // --- bind textures & samplers ---
-    auto srvHeap     = _srvHeaps[_currentFrame].Get();
+    auto srvHeap = _srvHeaps[_currentFrame].Get();
 
     // CPU start handles
-    auto srvCpuStart     = srvHeap->GetCPUDescriptorHandleForHeapStart();
+    auto srvCpuStart = srvHeap->GetCPUDescriptorHandleForHeapStart();
 
     const auto srvStride     = _driver->getSrvDescriptorStride();
     const auto samplerStride = _driver->getSamplerDescriptorStride();
@@ -893,7 +885,7 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     auto& textureBindingSets = _programState->getTextureBindingSets();
     if (!textureBindingSets.empty())
     {
-        UINT srvCount     = 0;
+        UINT srvCount = 0;
 
         // Copy descriptors for each texture in the binding set
         for (auto& [_, bindingSet] : textureBindingSets)

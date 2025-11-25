@@ -31,7 +31,7 @@ namespace ax::rhi
 
 RenderContext::~RenderContext() {}
 
-void RenderContext::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc)
+void RenderContext::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc, PrimitiveGroup /*primitiveGroup*/)
 {
     _programState = desc.programState;
     _vertexLayout = desc.vertexLayout;

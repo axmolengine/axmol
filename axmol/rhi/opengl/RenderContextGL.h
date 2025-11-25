@@ -96,7 +96,7 @@ public:
      * Update render pipeline status
      * @param depthStencilState Specifies the depth and stencil status
      */
-    void updatePipelineState(const RenderTarget* rt, const PipelineDesc& descriptor) override;
+    void updatePipelineState(const RenderTarget* rt, const PipelineDesc& descriptor, PrimitiveGroup primitiveGroup) override;
 
     /**
      * Fixed-function state

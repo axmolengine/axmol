@@ -123,7 +123,7 @@ public:
      * @param rt Specifies the render target.
      * @param pipelineDesc Specifies the pipeline desc.
      */
-    virtual void updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc) = 0;
+    virtual void updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc, PrimitiveGroup primitiveGroup) = 0;
 
     /**
      * Fixed-function state

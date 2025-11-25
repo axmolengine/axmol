@@ -67,11 +67,12 @@ public:
     explicit RenderPipelineImpl(DriverImpl* driver);
     ~RenderPipelineImpl();
 
-    void prepareUpdate(DepthStencilStateImpl* ds, D3D12_CULL_MODE cullMode, BOOL frontCCW)
+    void prepareUpdate(DepthStencilStateImpl* ds, D3D12_CULL_MODE cullMode, BOOL frontCCW, PrimitiveGroup primitiveGroup)
     {
         _dsState                          = ds;
         _rasterDesc.CullMode              = cullMode;
         _rasterDesc.FrontCounterClockwise = frontCCW;
+        _primitiveGroup                   = primitiveGroup;
     }
 
     void update(const RenderTarget*, const PipelineDesc& desc) override;
@@ -90,6 +91,8 @@ private:
     DriverImpl* _driver{nullptr};
 
     const DepthStencilStateImpl* _dsState{nullptr};
+
+    PrimitiveGroup _primitiveGroup{};
 
     D3D12_BLEND_DESC _blendDesc{};
     D3D12_RASTERIZER_DESC _rasterDesc{};

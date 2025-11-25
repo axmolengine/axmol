@@ -95,20 +95,39 @@ static inline uintptr_t makePSOKey(const rhi::BlendDesc& blendDesc,
                                    const DepthStencilStateImpl* dsState,
                                    void* program,
                                    uint32_t vlHash,
-                                   D3D12_RASTERIZER_DESC& rs)
+                                   D3D12_RASTERIZER_DESC& rs,
+                                   PrimitiveGroup primitiveGroup)
 {
-    struct HashMe
+    if constexpr (sizeof(void*) == 8)
     {
-        rhi::BlendDesc blend{};
-        uintptr_t dsHash;
-        void* prog;
-        uint32_t vlHash;
-        uint32_t CullModeAndCCW;
-    };
-    HashMe hashMe{.blend = blendDesc, .dsHash = dsState->getHash(), .prog = program, .vlHash = vlHash};
-    hashMe.CullModeAndCCW = (rs.CullMode << 16) | (rs.FrontCounterClockwise ? 1 : 0);
+        struct HashMe
+        {
+            rhi::BlendDesc blend{};
+            uintptr_t dsHash;
+            void* prog;
+        };
+        HashMe hashMe{.blend = blendDesc, .dsHash = dsState->getHash(), .prog = program};
+        const auto rasterComp =
+            ((uint32_t)primitiveGroup << 16) | (rs.CullMode << 8) | (rs.FrontCounterClockwise ? 1 : 0);
+        const auto seed = (uint64_t)vlHash << 32 | (uint64_t)rasterComp;
 
-    return axstd::hash_bytes(&hashMe, sizeof(hashMe), 0);
+        return axstd::hash_bytes(&hashMe, sizeof(hashMe), seed);
+    }
+    else
+    {
+        struct HashMe
+        {
+            rhi::BlendDesc blend{};
+            uintptr_t dsHash;
+            void* prog;
+            uint32_t vlHash;
+        };
+        HashMe hashMe{.blend = blendDesc, .dsHash = dsState->getHash(), .prog = program, .vlHash = vlHash};
+        const auto rasterComp =
+            ((uint32_t)primitiveGroup << 16) | (rs.CullMode << 8) | (rs.FrontCounterClockwise ? 1 : 0);
+
+        return axstd::hash_bytes(&hashMe, sizeof(hashMe), rasterComp);
+    }
 }
 
 RenderPipelineImpl::RenderPipelineImpl(DriverImpl* driver) : _driver(driver)
@@ -289,13 +308,18 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
 
 void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, ProgramImpl* program)
 {
-    uintptr_t key = makePSOKey(desc.blendDesc, _dsState, program, desc.vertexLayout->getHash(), _rasterDesc);
-    auto it       = _psoCache.find(key);
+    uintptr_t key =
+        makePSOKey(desc.blendDesc, _dsState, program, desc.vertexLayout->getHash(), _rasterDesc, _primitiveGroup);
+    auto it = _psoCache.find(key);
     if (it != _psoCache.end())
     {
         _activePSO = it->second;
         return;
     }
+
+    static constexpr D3D12_PRIMITIVE_TOPOLOGY_TYPE kPrimitiveTopologyTypes[] = {D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT,
+                                                                                D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE,
+                                                                                D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE};
 
     auto vsBlob = program->getVSBlob();
     auto psBlob = program->getPSBlob();
@@ -310,7 +334,7 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, Progra
     psoDesc.RasterizerState       = _rasterDesc;
     psoDesc.DepthStencilState     = _dsState->getD3D12DepthStencilDesc();
     psoDesc.InputLayout           = vi;
-    psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+    psoDesc.PrimitiveTopologyType = kPrimitiveTopologyTypes[(uint32_t)_primitiveGroup];
     psoDesc.NumRenderTargets      = 1;
     psoDesc.RTVFormats[0]         = DXGI_FORMAT_R8G8B8A8_UNORM;
     psoDesc.DSVFormat             = DXGI_FORMAT_D24_UNORM_S8_UINT;

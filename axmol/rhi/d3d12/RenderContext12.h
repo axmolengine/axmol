@@ -82,9 +82,11 @@ public:
     void setRenderPipeline(RenderPipeline* renderPipeline) override;
 
     bool beginFrame() override;
-    void beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& descriptor) override;
+    void beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc) override;
     void updateDepthStencilState(const DepthStencilDesc& descriptor) override;
-    void updatePipelineState(const RenderTarget* rt, const PipelineDesc& descriptor) override;
+    void updatePipelineState(const RenderTarget* rt,
+                             const PipelineDesc& pipelineDesc,
+                             PrimitiveGroup primitiveGroup) override;
 
     void setViewport(int x, int y, unsigned int w, unsigned int h) override;
     void setCullMode(CullMode mode) override;
@@ -154,7 +156,7 @@ private:
 
     ComPtr<ID3D12DescriptorHeap> _srvHeaps[MAX_FRAMES_IN_FLIGHT];
 
-    UINT _srvOffset[MAX_FRAMES_IN_FLIGHT]     = {};
+    UINT _srvOffset[MAX_FRAMES_IN_FLIGHT] = {};
 
     std::array<DynamicStateBits, MAX_FRAMES_IN_FLIGHT> _inFlightDynamicDirtyBits{DynamicStateBits::None};
 

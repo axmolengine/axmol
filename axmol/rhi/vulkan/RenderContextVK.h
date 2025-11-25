@@ -87,7 +87,7 @@ public:
     bool beginFrame() override;
     void beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& descriptor) override;
     void updateDepthStencilState(const DepthStencilDesc& descriptor) override;
-    void updatePipelineState(const RenderTarget* rt, const PipelineDesc& descriptor) override;
+    void updatePipelineState(const RenderTarget* rt, const PipelineDesc& descriptor, PrimitiveGroup) override;
 
     void setViewport(int x, int y, unsigned int w, unsigned int h) override;
     void setCullMode(CullMode mode) override;

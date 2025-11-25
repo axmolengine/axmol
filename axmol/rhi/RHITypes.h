@@ -199,6 +199,14 @@ enum class PrimitiveType : uint32_t
     TRIANGLE_STRIP
 };
 
+// d3d12 requires this hints for create properly PSO
+enum class PrimitiveGroup
+{
+    Point,    // D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT
+    Line,     // D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE
+    Triangle  // D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE
+};
+
 enum class StencilOp : uint32_t
 {
     KEEP,
