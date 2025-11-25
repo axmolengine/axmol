@@ -150,7 +150,7 @@ private:
 
     ComPtr<ID3D12DescriptorHeap> _srvHeaps[MAX_FRAMES_IN_FLIGHT];
 
-    UINT _srvOffset[MAX_FRAMES_IN_FLIGHT] = {};
+    UINT _srvOffset[MAX_FRAMES_IN_FLIGHT]     = {};
 
     std::array<DynamicStateBits, MAX_FRAMES_IN_FLIGHT> _inFlightDynamicDirtyBits{DynamicStateBits::None};
 

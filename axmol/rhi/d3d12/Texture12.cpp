@@ -383,7 +383,10 @@ void TextureImpl::updateFaceData(TextureCubeFace side, const void* data)
 void TextureImpl::updateSamplerDesc(const SamplerDesc& samplerDesc)
 {
     _desc.samplerDesc = samplerDesc;
-    _sampler          = static_cast<DescriptorHandle*>(SamplerCache::getInstance()->getSampler(samplerDesc));
+
+    auto samplerCache = SamplerCache::getInstance();
+    auto samplerIndex = samplerCache->registerSampler(samplerDesc);
+    _sampler = static_cast<DescriptorHandle*>(samplerCache->getSampler(samplerIndex));
 }
 
 void TextureImpl::updateTextureDesc(const TextureDesc& desc)

@@ -1,5 +1,5 @@
 // The Axmol Shader Compiler spec, define macros and structs, can be include anywhere
-// match with axslcc-3.0.0+
+// match with axslcc-3.1.0+
 
 #pragma once
 
@@ -13,7 +13,7 @@ namespace axslc
 
 #pragma pack(push, 1)
 
-#define SC_CHUNK               sc_makefourcc('S', 'G', 'S', '3')
+#define SC_CHUNK               sc_makefourcc('A', 'X', 'S', 'C')
 #define SC_CHUNK_STAG          sc_makefourcc('S', 'T', 'A', 'G')
 #define SC_CHUNK_REFL          sc_makefourcc('R', 'E', 'F', 'L')
 #define SC_CHUNK_CODE          sc_makefourcc('C', 'O', 'D', 'E')
@@ -59,11 +59,13 @@ enum Dim
     DimSubpassData = 6
 };
 
-// SGS chunk
+// sc chunk aka file header
 struct sc_chunk
 {
-    uint32_t lang;  // sc_shader_lang
-    uint32_t profile_ver;
+    uint16_t major;        // SC_VERSION_MAJOR
+    uint16_t minor;        // SC_VERSION_MINOR
+    uint32_t lang;         // shader lang
+    uint32_t profile_ver;  // target profile version
 };
 
 // REFL
@@ -103,7 +105,8 @@ struct sc_refl_texture
     uint8_t multisample : 1;  // whether sampler2DMS
     uint8_t arrayed : 1;      // whether samplerXXArray
     uint8_t reserved : 6;     // reserved field
-    uint16_t count;
+    uint8_t count;            // count: 0~255
+    uint8_t sampler_slot;     // sampler_slot: 0~255
 };
 
 struct sc_refl_buffer

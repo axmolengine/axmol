@@ -30,6 +30,7 @@
 #include "axmol/rhi/Texture.h"
 #include "axmol/rhi/DriverBase.h"
 #include "axmol/rhi/RHIUtils.h"
+#include "axmol/rhi/SamplerCache.h"
 
 namespace ax
 {

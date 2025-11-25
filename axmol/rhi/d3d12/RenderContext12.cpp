@@ -471,7 +471,7 @@ bool RenderContextImpl::beginFrame()
     }
 
     // Reset offsets at the start of each frame
-    _srvOffset[_currentFrame] = 0;
+    _srvOffset[_currentFrame]     = 0;
 
     resetUniformRingForCurrentFrame(_currentFrame);
 
@@ -711,8 +711,10 @@ void RenderContextImpl::updatePipelineState(const RenderTarget* rt, const Pipeli
         _currentCmdList->SetGraphicsRootSignature(rootSigInfo->rootSig.Get());
         _currentCmdList->SetPipelineState(_renderPipeline->getPipelineState());
 
-        _boundPSO = pso;
+        const auto samplerGpuStart = _driver->getSamplerHeap()->GetGPUDescriptorHandleForHeapStart();
+        _currentCmdList->SetGraphicsRootDescriptorTable(rootSigInfo->samplerRootIndex, samplerGpuStart);
 
+        _boundPSO = pso;
         _psoDirty = false;
     }
 }
@@ -838,7 +840,7 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
         vbv.BufferLocation = _vertexBuffer->internalResource()->GetGPUVirtualAddress();
         vbv.SizeInBytes    = static_cast<UINT>(_vertexBuffer->getSize());
         vbv.StrideInBytes  = static_cast<UINT>(_vertexLayout->getStride());
-        cmd->IASetVertexBuffers(0, 1, &vbv);
+        _currentCmdList->IASetVertexBuffers(0, 1, &vbv);
     }
     else
     {
@@ -851,7 +853,7 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
         views[1].SizeInBytes    = static_cast<UINT>(_instanceBuffer->getSize());
         views[1].StrideInBytes  = static_cast<UINT>(_vertexLayout->getInstanceStride());
 
-        cmd->IASetVertexBuffers(0, 2, views);
+        _currentCmdList->IASetVertexBuffers(0, 2, views);
     }
 
     // bind ubos
@@ -861,7 +863,7 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     {
         auto s = allocateUniformSlice(_currentFrame, vsData.size());
         std::memcpy(s.cpuPtr, vsData.data(), vsData.size());
-        cmd->SetGraphicsRootConstantBufferView(rootSigInfo->vsUboRootIndex, s.gpuVA);
+        _currentCmdList->SetGraphicsRootConstantBufferView(rootSigInfo->vsUboRootIndex, s.gpuVA);
     }
 
     // FS UBO
@@ -870,14 +872,14 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     {
         auto s = allocateUniformSlice(_currentFrame, fsData.size());
         std::memcpy(s.cpuPtr, fsData.data(), fsData.size());
-        cmd->SetGraphicsRootConstantBufferView(rootSigInfo->fsUboRootIndex, s.gpuVA);
+        _currentCmdList->SetGraphicsRootConstantBufferView(rootSigInfo->fsUboRootIndex, s.gpuVA);
     }
 
     // --- bind textures & samplers ---
-    auto srvHeap = _srvHeaps[_currentFrame].Get();
+    auto srvHeap     = _srvHeaps[_currentFrame].Get();
 
     // CPU start handles
-    auto srvCpuStart = srvHeap->GetCPUDescriptorHandleForHeapStart();
+    auto srvCpuStart     = srvHeap->GetCPUDescriptorHandleForHeapStart();
 
     const auto srvStride     = _driver->getSrvDescriptorStride();
     const auto samplerStride = _driver->getSamplerDescriptorStride();
@@ -885,8 +887,7 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     auto& textureBindingSets = _programState->getTextureBindingSets();
     if (!textureBindingSets.empty())
     {
-        UINT srvCount          = 0;
-        UINT batchSamplerCount = 0;
+        UINT srvCount     = 0;
 
         // Copy descriptors for each texture in the binding set
         for (auto& [_, bindingSet] : textureBindingSets)
@@ -910,11 +911,7 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
         // Bind GPU handles for this batch
         auto srvGpuStart = srvHeap->GetGPUDescriptorHandleForHeapStart();
         srvGpuStart.ptr += _srvOffset[_currentFrame] * srvStride;
-        cmd->SetGraphicsRootDescriptorTable(rootSigInfo->srvRootIndex, srvGpuStart);
-
-        auto samplerGpuStart = _driver->getSamplerHeap()->GetGPUDescriptorHandleForHeapStart();
-        _currentCmdList->SetGraphicsRootDescriptorTable(rootSigInfo->samplerRootIndex, samplerGpuStart);
-
+        _currentCmdList->SetGraphicsRootDescriptorTable(rootSigInfo->srvRootIndex, srvGpuStart);
         // Advance offsets for the next batch
         _srvOffset[_currentFrame] += srvCount;
     }

@@ -34,49 +34,7 @@ namespace ax::rhi
  * @{
  */
 
-// The builtin sampler index
-struct SamplerIndex
-{
-    enum : uint32_t
-    {
-        // --- Linear sampling ---
-        LinearClamp,   // Linear, clamp to edge
-        LinearWrap,    // Linear, repeat
-        LinearMirror,  // Linear, mirror repeat
-        LinearBorder,  // Linear, border color
-
-        // --- Point sampling ---
-        PointClamp,   // Nearest, clamp to edge
-        PointWrap,    // Nearest, repeat
-        PointMirror,  // Nearest, mirror repeat
-        PointBorder,  // Nearest, border color
-
-        // --- Linear + Mipmap ---
-        LinearMipClamp,   // Linear min/mag, mip linear, clamp
-        LinearMipWrap,    // Linear min/mag, mip linear, wrap
-        LinearMipMirror,  // Linear min/mag, mip linear, mirror
-        LinearMipBorder,  // Linear min/mag, mip linear, border
-
-        // --- Anisotropic filtering ---
-        AnisoClamp,   // Anisotropic, clamp to edge
-        AnisoWrap,    // Anisotropic, repeat
-        AnisoMirror,  // Anisotropic, mirror repeat
-        AnisoBorder,  // Anisotropic, border color
-
-        // --- Depth comparison samplers (shadow maps) ---
-        ShadowCmpClamp,   // Compare sampler, clamp to edge
-        ShadowCmpWrap,    // Compare sampler, repeat
-        ShadowCmpMirror,  // Compare sampler, mirror repeat
-        ShadowCmpBorder,  // Compare sampler, border color
-
-        // --- Special cases ---
-        LinearNoMipClamp,  // Linear min/mag, no mip, clamp (UI, 2D sprites)
-        PointNoMipClamp,   // Point min/mag, no mip, clamp (pixel art)
-
-        //
-        Count
-    };
-};
+class DriverBase;
 
 class SamplerCache
 {
@@ -86,16 +44,29 @@ public:
     static SamplerCache* getInstance();
     static void destroyInstance();
 
+    SamplerCache();
     ~SamplerCache();
 
     void removeAllSamplers();
 
     void invalidateAll();
 
-    SamplerHandle getSampler(const SamplerDesc& desc);
+    SamplerIndex::enum_type registerSampler(const SamplerDesc& desc);
+
+    SamplerHandle getSampler(SamplerIndex::enum_type samplerIndex);
 
 private:
-    axstd::hash_map<uint32_t, SamplerHandle> _samplers;
+    void createBuiltinSamplers();
+    void createBuiltinSampler(uint32_t samplerIndex, const SamplerDesc& desc);
+
+    axstd::pod_vector<SamplerHandle> _builtinSamplers;
+    axstd::hash_map<SamplerIndex::enum_type, SamplerHandle> _customSamplers;
+
+    axstd::hash_map<uint32_t, uint32_t> _samplersRegsitry; // sampler desc => sampler index registry
+
+    DriverBase* _driver{nullptr};
+
+    uint32_t _nextSamplerIndex{0};
 };
 
 // end of _rhi group
