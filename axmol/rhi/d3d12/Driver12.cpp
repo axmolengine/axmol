@@ -254,6 +254,8 @@ DriverImpl::~DriverImpl()
         _idleEvent = nullptr;
     }
 
+    _dxcArguments.clear();
+
     if (debugDevice)
         debugDevice->ReportLiveDeviceObjects(D3D12_RLDO_DETAIL);
 }
@@ -318,7 +320,11 @@ void DriverImpl::init()
     _srvDescriptorStride     = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
     _samplerDescriptorStride = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
 
-
+    // sync objects
+    _isolateEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+    _idleEvent    = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+    _device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&_idleFence));
+    AXASSERT(_isolateEvent && _idleEvent && _idleFence, "Create sync objects failed");
 
 #if _AX_USE_DXC
     // init DXC instances once
@@ -679,9 +685,6 @@ void DriverImpl::finishIsolateSubmission(bool waitForCompletion)
     {
         if (_isolateSubmission.fence->GetCompletedValue() < _isolateSubmission.fenceValue)
         {
-            if (!_isolateEvent)
-                _isolateEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
-
             _isolateSubmission.fence->SetEventOnCompletion(_isolateSubmission.fenceValue, _isolateEvent);
             WaitForSingleObject(_isolateEvent, INFINITE);
         }
@@ -1131,16 +1134,13 @@ D3D12BlobHandle DriverImpl::compileMipmapCS(bool isArray)
 
 void DriverImpl::waitDeviceIdle()
 {
-    if (!_idleFence)
+    if (_idleFence && _idleEvent && _gfxQueue)
     {
-        _device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&_idleFence));
-        _idleEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+        ++_idleFenceValue;
+        _gfxQueue->Signal(_idleFence, _idleFenceValue);
+        _idleFence->SetEventOnCompletion(_idleFenceValue, _idleEvent);
+        WaitForSingleObject(_idleEvent, INFINITE);
     }
-
-    ++_idleFenceValue;
-    _gfxQueue->Signal(_idleFence, _idleFenceValue);
-    _idleFence->SetEventOnCompletion(_idleFenceValue, _idleEvent);
-    WaitForSingleObject(_idleEvent, INFINITE);
 }
 
 bool DriverImpl::checkForFeatureSupported(FeatureType feature)
