@@ -1072,4 +1072,9 @@ void Renderer::popStateBlock()
     _stateBlockStack.pop_back();
 }
 
+uint64_t Renderer::getCompletedFenceValue() const
+{
+    return _context->getCompletedFenceValue();
+}
+
 }  // namespace ax

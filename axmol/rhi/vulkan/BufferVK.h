@@ -69,8 +69,6 @@ public:
 private:
     void createNativeBuffer(const void* initial);
 
-    size_t _capacity{0};
-
     axstd::byte_buffer _defaultData;
     bool _needDefaultStoredData = false;
 

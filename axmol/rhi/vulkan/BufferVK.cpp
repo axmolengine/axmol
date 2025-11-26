@@ -144,7 +144,7 @@ void BufferImpl::createNativeBuffer(const void* initial)
 /* -------------------------------------------------- updateData */
 void BufferImpl::updateData(const void* data, std::size_t size)
 {
-    assert(size <= _size);
+    assert(size <= _capacity);
     assert(data);
 
     updateSubData(data, 0, size);
@@ -153,7 +153,7 @@ void BufferImpl::updateData(const void* data, std::size_t size)
 /* -------------------------------------------------- updateSubData */
 void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t size)
 {
-    assert(data && (offset + size <= _size));
+    assert(data && (offset + size <= _capacity));
 
     auto device = _driver->getDevice();
 

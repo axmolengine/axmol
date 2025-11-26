@@ -109,7 +109,7 @@ void BufferImpl::fillBuffer(const void* data, std::size_t offset, std::size_t si
 
 void BufferImpl::updateData(const void* data, std::size_t size)
 {
-    assert(size && size <= _size);
+    assert(size && size <= _capacity);
 
     if (_buffer)
     {

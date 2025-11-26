@@ -126,6 +126,8 @@ public:
 
     uint32_t getCurrentFrame() const { return _currentFrame; }
 
+    uint64_t getCompletedFenceValue() const override;
+
 private:
     void createCommandObjects();
     void createDescriptorHeaps();
@@ -225,7 +227,7 @@ private:
     BufferImpl* _indexBuffer{nullptr};
     BufferImpl* _instanceBuffer{nullptr};
 
-    std::vector<std::function<void()>> _postFrameOps;
+    std::vector<std::function<void(uint64_t)>> _fenceCompletionOps;
 
     D3D12_VIEWPORT _cachedViewport{};
     D3D12_RECT _cachedScissor{};

@@ -37,6 +37,7 @@
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/rhi/VertexLayout.h"
 
+#include <limits>
 #include <memory>
 #include <vector>
 
@@ -264,6 +265,8 @@ public:
      * @param value Specifies stencil reference value.
      */
     virtual void setStencilReferenceValue(uint32_t value);
+
+    virtual uint64_t getCompletedFenceValue() const { return (std::numeric_limits<uint64_t>::max)(); }
 
 protected:
     virtual ~RenderContext();

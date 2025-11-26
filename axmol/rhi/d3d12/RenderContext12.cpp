@@ -426,25 +426,31 @@ void RenderContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
     Object::assign(_renderPipeline, static_cast<RenderPipelineImpl*>(renderPipeline));
 }
 
+uint64_t RenderContextImpl::getCompletedFenceValue() const
+{
+    return _fenceValues[_currentFrame];
+}
+
 bool RenderContextImpl::beginFrame()
 {
     // Wait fence of current frame
     auto fence = _fences[_currentFrame];
 
     const auto completeFenceValue = fence->GetCompletedValue();
-    if (completeFenceValue < _fenceValues[_currentFrame])
+    const auto frameFenceValue    = _fenceValues[_currentFrame];
+    if (completeFenceValue < frameFenceValue)
     {
-        fence->SetEventOnCompletion(_fenceValues[_currentFrame], _fenceEvents[_currentFrame]);
+        fence->SetEventOnCompletion(frameFenceValue, _fenceEvents[_currentFrame]);
         WaitForSingleObject(_fenceEvents[_currentFrame], INFINITE);
     }
 
-    _advanceFenceValues[_currentFrame] = _fenceValues[_currentFrame] + 1;
+    _advanceFenceValues[_currentFrame] = frameFenceValue + 1;
 
-    if (!_postFrameOps.empty())
+    if (!_fenceCompletionOps.empty())
     {
-        for (auto& op : _postFrameOps)
-            op();
-        _postFrameOps.clear();
+        for (auto& op : _fenceCompletionOps)
+            op(completeFenceValue);
+        _fenceCompletionOps.clear();
     }
 
     _driver->processDisposalQueue(completeFenceValue);
@@ -1051,7 +1057,7 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
     }
     rt->retain();
 
-    _postFrameOps.emplace_back([this, rt, preserveAxisHint, callback = std::move(callback)]() mutable {
+    _fenceCompletionOps.emplace_back([this, rt, preserveAxisHint, callback = std::move(callback)](uint64_t) mutable {
         readPixelsInternal(rt, preserveAxisHint, callback);
 
         rt->release();

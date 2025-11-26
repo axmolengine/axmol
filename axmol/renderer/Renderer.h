@@ -423,6 +423,8 @@ public:
                     bool preserveAxisHint,
                     std::function<void(const rhi::PixelBufferDesc&)> callback);
 
+    uint64_t getCompletedFenceValue() const;
+
     void beginRenderPass();  /// Begin a render pass.
     void endRenderPass();
 

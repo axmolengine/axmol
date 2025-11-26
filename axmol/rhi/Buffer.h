@@ -80,7 +80,22 @@ public:
      */
     std::size_t getSize() const { return _size; }
 
+    std::size_t getCapacity() const { return _capacity; }
+
+    bool resize(std::size_t newSize)
+    {
+        if (newSize <= _capacity)
+        {
+            _size = newSize;
+            return true;
+        }
+        return false;
+    }
+
+    uint64_t getLastFenceValue() const { return _lastFenceValue; }
 protected:
+
+    void setLastFenceValue(uint64_t value) { _lastFenceValue = value; }
     /**
      * @param size Specifies the size in bytes of the buffer object's new data store.
      * @param type Specifies the target buffer object. The symbolic constant must be BufferType::VERTEX or
@@ -88,13 +103,17 @@ protected:
      * @param usage Specifies the expected usage pattern of the data store. The symbolic constant must be
      * GL_STREAM_DRAW, GL_STATIC_DRAW, or GL_DYNAMIC_DRAW.
      */
-    Buffer(std::size_t size, BufferType type, BufferUsage usage) : _usage(usage), _type(type), _size(size) {}
+    Buffer(std::size_t size, BufferType type, BufferUsage usage)
+        : _usage(usage), _type(type), _size(size), _capacity(size)
+    {}
 
     virtual ~Buffer() = default;
 
-    BufferUsage _usage = BufferUsage::DYNAMIC;  ///< Buffer usage.
-    BufferType _type   = BufferType::VERTEX;    ///< Buffer type.
-    std::size_t _size  = 0;                     ///< buffer size in bytes.
+    BufferUsage _usage    = BufferUsage::DYNAMIC;  ///< Buffer usage.
+    BufferType _type      = BufferType::VERTEX;    ///< Buffer type.
+    std::size_t _capacity = 0;
+    std::size_t _size     = 0;  ///< buffer size in bytes.
+    uint64_t _lastFenceValue{0};
 };
 
 // end of _rhi group

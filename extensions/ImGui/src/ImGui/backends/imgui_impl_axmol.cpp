@@ -43,6 +43,89 @@ struct SavedRenderStateData
     bool depthTest{};
 };
 
+class BufferPoolAllocator
+{
+public:
+    BufferPoolAllocator(size_t initialCapacity, BufferType type, BufferUsage usage) : _type(type), _usage(usage)
+    {
+    }
+
+    ~BufferPoolAllocator()
+    {
+        for (auto buf : _buffers)
+            buf->release();
+        _buffers.clear();
+        _useList.clear();
+        _freeList.clear();
+    }
+
+    rhi::Buffer* alloc(size_t size)
+    {
+        for (size_t i = 0; i < _freeList.size();)
+        {
+            auto buf = _freeList[i];
+            if (buf->getCapacity() >= size)
+            {
+                _freeList[i] = _freeList.back();
+                _freeList.pop_back();
+
+                buf->resize(size);
+                _useList.push_back(buf);
+                return buf;
+            }
+            else
+            {
+                ++i;
+            }
+        }
+
+        auto buf      = createBuffer(size);
+        buf->resize(size);
+        _useList.push_back(buf);
+        return buf;
+    }
+
+    void recycle()
+    {
+        if (!_useList.empty())
+        {
+            uint64_t completedFence = Director::getInstance()->getRenderer()->getCompletedFenceValue();
+            for (int i = 0; i < _useList.size();)
+            {
+                auto buf = _useList[i];
+                if (buf->getReferenceCount() > 1)
+                {
+                    ++i;
+                    continue;
+                }
+
+                if (buf->getLastFenceValue() < completedFence)
+                {  // could move from _useList to _freeList
+                    _useList[i] = _useList.back();
+                    _useList.pop_back();
+                    _freeList.push_back(buf);
+                }
+                else
+                    ++i;
+            }
+        }
+    }
+
+private:
+    rhi::Buffer* createBuffer(size_t capacity)
+    {
+        auto buf = rhi::DriverBase::getInstance()->createBuffer(capacity, _type, _usage);
+        _buffers.push_back(buf);
+        return buf;
+    }
+
+    BufferType _type;
+    BufferUsage _usage;
+    std::vector<rhi::Buffer*> _buffers;
+    std::vector<rhi::Buffer*> _useList;
+    std::vector<rhi::Buffer*> _freeList;
+};
+
 struct ImGui_ImplAxmol_Data
 {
     // axmol spec data, TODO: new type: ImGui_ImplAxmol_Data
@@ -63,6 +146,9 @@ struct ImGui_ImplAxmol_Data
     ax::Data TempBuffer;
 
     Vec2 ViewResolution = Vec2(1920, 1080);
+
+    BufferPoolAllocator* VertexBufferAllocator{nullptr};
+    BufferPoolAllocator* IndexBufferAllocator{nullptr};
 };
 
 // Backend data stored in io.BackendRendererUserData to allow support for multiple Dear ImGui contexts
@@ -196,6 +282,9 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_Init()
     io.BackendRendererUserData = (void*)bd;
     io.BackendRendererName     = "imgui_impl_axmol";
 
+    bd->VertexBufferAllocator = new BufferPoolAllocator(2 * 1024 * 1024, BufferType::VERTEX, BufferUsage::DYNAMIC);
+    bd->IndexBufferAllocator  = new BufferPoolAllocator(1 * 1024 * 1024, BufferType::INDEX, BufferUsage::DYNAMIC);
+
 #if AX_RENDER_API == AX_RENDER_API_GL && (!defined(AX_GLES_PROFILE) || AX_GLES_PROFILE >= 300)
     io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;  // We can honor the ImDrawCmd::VtxOffset field,
                                                                 // allowing for large meshes.
@@ -227,6 +316,9 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_Shutdown()
     io.BackendRendererUserData = nullptr;
     io.BackendFlags &= ~(ImGuiBackendFlags_RendererHasVtxOffset | ImGuiBackendFlags_RendererHasTextures |
                          ImGuiBackendFlags_RendererHasViewports);
+
+    IM_DELETE(bd->VertexBufferAllocator);
+    IM_DELETE(bd->IndexBufferAllocator);
     IM_DELETE(bd);
 }
 
@@ -236,6 +328,9 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_NewFrame()
     // bd->CallbackCommands.clear();
     bd->CustomCommands.clear();
     bd->ProgramStates.clear();
+
+    bd->IndexBufferAllocator->recycle();
+    bd->VertexBufferAllocator->recycle();
 
     if (!bd->ProgramInfo.program)
         ImGui_ImplAxmol_CreateDeviceObjects();
@@ -258,6 +353,8 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
     if (fb_width <= 0 || fb_height <= 0)
         return;
 
+    auto bd = ImGui_ImplAxmol_GetBackendData();
+
     const auto renderer = Director::getInstance()->getRenderer();
 
     ImGui_ImplAxmol_SaveRenderState(renderer);
@@ -276,14 +373,15 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
         // Upload vertex/index buffers
         const auto vsize = cmd_list->VtxBuffer.Size * sizeof(ImDrawVert);
         IM_ASSERT(vsize > 0);
-        auto vbuffer = rhi::DriverBase::getInstance()->createBuffer(vsize, BufferType::VERTEX, BufferUsage::STATIC);
-        vbuffer->autorelease();
-        vbuffer->updateData(cmd_list->VtxBuffer.Data, vsize);
         const auto isize = cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx);
         IM_ASSERT(isize > 0);
-        auto ibuffer = rhi::DriverBase::getInstance()->createBuffer(isize, BufferType::INDEX, BufferUsage::STATIC);
-        ibuffer->autorelease();
-        ibuffer->updateData(cmd_list->IdxBuffer.Data, isize);
+
+        auto vertexBuffer = bd->VertexBufferAllocator->alloc(vsize);
+        auto indexBuffer = bd->IndexBufferAllocator->alloc(isize);
+        vertexBuffer->updateData(cmd_list->VtxBuffer.Data, vsize);
+        vertexBuffer->resize(vsize);
+        indexBuffer->updateData(cmd_list->IdxBuffer.Data, isize);
+        indexBuffer->resize(isize);
 
         for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
         {
@@ -343,8 +441,8 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
                         // In order to composite our output buffer we need to preserve alpha
                         cmd->blendDesc().sourceAlphaBlendFactor = BlendFactor::ONE;
                         // set vertex/index buffer
-                        cmd->setIndexBuffer(ibuffer, IMGUI_INDEX_FORMAT);
-                        cmd->setVertexBuffer(vbuffer);
+                        cmd->setIndexBuffer(indexBuffer, IMGUI_INDEX_FORMAT);
+                        cmd->setVertexBuffer(vertexBuffer);
                         cmd->setDrawType(CustomCommand::DrawType::ELEMENT);
                         cmd->setPrimitiveType(PrimitiveType::TRIANGLE);
                         cmd->setIndexDrawInfo(pcmd->IdxOffset, pcmd->ElemCount);
