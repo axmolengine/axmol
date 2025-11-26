@@ -33,62 +33,54 @@
 namespace ax::rhi::d3d12
 {
 
+static constexpr D3D12_BLEND kBlendFactorMap[] = {
+    D3D12_BLEND_ZERO,              // ZERO
+    D3D12_BLEND_ONE,               // ONE
+    D3D12_BLEND_SRC_COLOR,         // SRC_COLOR
+    D3D12_BLEND_INV_SRC_COLOR,     // ONE_MINUS_SRC_COLOR
+    D3D12_BLEND_SRC_ALPHA,         // SRC_ALPHA
+    D3D12_BLEND_INV_SRC_ALPHA,     // ONE_MINUS_SRC_ALPHA
+    D3D12_BLEND_DEST_COLOR,        // DST_COLOR
+    D3D12_BLEND_INV_DEST_COLOR,    // ONE_MINUS_DST_COLOR
+    D3D12_BLEND_DEST_ALPHA,        // DST_ALPHA
+    D3D12_BLEND_INV_DEST_ALPHA,    // ONE_MINUS_DST_ALPHA
+    D3D12_BLEND_BLEND_FACTOR,      // CONSTANT_ALPHA
+    D3D12_BLEND_SRC_ALPHA_SAT,     // SRC_ALPHA_SATURATE
+    D3D12_BLEND_INV_BLEND_FACTOR,  // ONE_MINUS_CONSTANT_ALPHA
+    D3D12_BLEND_BLEND_FACTOR       // BLEND_COLOR
+};
+
+static const D3D12_BLEND_OP kBlendOpMap[] = {
+    D3D12_BLEND_OP_ADD,          // ADD
+    D3D12_BLEND_OP_SUBTRACT,     // SUBTRACT
+    D3D12_BLEND_OP_REV_SUBTRACT  // REVERSE_SUBTRACT
+};
+
+static constexpr bool kBlendFactorColorValid[] = {true, true, true, true, true, true, true,
+                                                 true, true, true, true, true, true, true};
+
+static constexpr bool kBlendFactorAlphaValid[] = {true,  true, false, false, true,  true, false,
+                                                 false, true, true,  true,  false, true, true};
+
 // Map BlendOp to D3D12_BLEND_OP
-static D3D12_BLEND_OP toD3DBlendOp(BlendOp op)
+static inline D3D12_BLEND_OP toD3DBlendOp(BlendOp op)
 {
-    switch (op)
-    {
-    case BlendOp::ADD:
-        return D3D12_BLEND_OP_ADD;
-    case BlendOp::SUBTRACT:
-        return D3D12_BLEND_OP_SUBTRACT;
-    case BlendOp::REVERSE_SUBTRACT:
-        return D3D12_BLEND_OP_REV_SUBTRACT;
-    // case BlendOp::MIN:
-    //     return D3D12_BLEND_OP_MIN;
-    // case BlendOp::MAX:
-    //     return D3D12_BLEND_OP_MAX;
-    default:
-        return D3D12_BLEND_OP_ADD;
-    }
+    auto idx = static_cast<size_t>(op);
+    return kBlendOpMap[idx];
 }
 
-// Map BlendFactor to D3D12_BLEND
-static D3D12_BLEND toD3DBlendFactor(BlendFactor f)
+// For COLOR channels
+static inline D3D12_BLEND toD3DBlendFactorColor(BlendFactor f)
 {
-    switch (f)
-    {
-    case BlendFactor::ZERO:
-        return D3D12_BLEND_ZERO;
-    case BlendFactor::ONE:
-        return D3D12_BLEND_ONE;
-    case BlendFactor::SRC_COLOR:
-        return D3D12_BLEND_SRC_COLOR;
-    case BlendFactor::ONE_MINUS_SRC_COLOR:
-        return D3D12_BLEND_INV_SRC_COLOR;
-    case BlendFactor::SRC_ALPHA:
-        return D3D12_BLEND_SRC_ALPHA;
-    case BlendFactor::ONE_MINUS_SRC_ALPHA:
-        return D3D12_BLEND_INV_SRC_ALPHA;
-    case BlendFactor::DST_COLOR:
-        return D3D12_BLEND_DEST_COLOR;
-    case BlendFactor::ONE_MINUS_DST_COLOR:
-        return D3D12_BLEND_INV_DEST_COLOR;
-    case BlendFactor::DST_ALPHA:
-        return D3D12_BLEND_DEST_ALPHA;
-    case BlendFactor::ONE_MINUS_DST_ALPHA:
-        return D3D12_BLEND_INV_DEST_ALPHA;
-    // case BlendFactor::CONSTANT_COLOR:
-    //     return D3D12_BLEND_BLEND_FACTOR;
-    // case BlendFactor::ONE_MINUS_CONSTANT_COLOR:
-    //     return D3D12_BLEND_INV_BLEND_FACTOR;
-    case BlendFactor::CONSTANT_ALPHA:
-        return D3D12_BLEND_BLEND_FACTOR;
-    case BlendFactor::SRC_ALPHA_SATURATE:
-        return D3D12_BLEND_SRC_ALPHA_SAT;
-    default:
-        return D3D12_BLEND_ONE;
-    }
+    auto idx = static_cast<size_t>(f);
+    return kBlendFactorColorValid[idx] ? kBlendFactorMap[idx] : D3D12_BLEND_ONE;
+}
+
+// For ALPHA channels
+static inline D3D12_BLEND toD3DBlendFactorAlpha(BlendFactor f)
+{
+    auto idx = static_cast<size_t>(f);
+    return kBlendFactorAlphaValid[idx] ? kBlendFactorMap[idx] : D3D12_BLEND_ONE;
 }
 
 static inline uintptr_t makePSOKey(const rhi::BlendDesc& blendDesc,
@@ -183,13 +175,13 @@ void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc)
     rt.RenderTargetWriteMask = static_cast<UINT>(blendDesc.writeMask);
 
     // Color blend factors
-    rt.SrcBlend  = toD3DBlendFactor(blendDesc.sourceRGBBlendFactor);
-    rt.DestBlend = toD3DBlendFactor(blendDesc.destinationRGBBlendFactor);
+    rt.SrcBlend  = toD3DBlendFactorColor(blendDesc.sourceRGBBlendFactor);
+    rt.DestBlend = toD3DBlendFactorColor(blendDesc.destinationRGBBlendFactor);
     rt.BlendOp   = toD3DBlendOp(blendDesc.rgbBlendOp);
 
     // Alpha blend factors
-    rt.SrcBlendAlpha  = toD3DBlendFactor(blendDesc.sourceAlphaBlendFactor);
-    rt.DestBlendAlpha = toD3DBlendFactor(blendDesc.destinationAlphaBlendFactor);
+    rt.SrcBlendAlpha  = toD3DBlendFactorAlpha(blendDesc.sourceAlphaBlendFactor);
+    rt.DestBlendAlpha = toD3DBlendFactorAlpha(blendDesc.destinationAlphaBlendFactor);
     rt.BlendOpAlpha   = toD3DBlendOp(blendDesc.alphaBlendOp);
 
     // LogicOp
