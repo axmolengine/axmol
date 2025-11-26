@@ -262,7 +262,6 @@ DriverImpl::~DriverImpl()
 
 void DriverImpl::init()
 {
-    initializeAdapter();
     initializeDevice();
     createDescriptorAllocators();
 
@@ -328,8 +327,9 @@ void DriverImpl::init()
 #endif
 }
 
-void DriverImpl::initializeAdapter()
+void DriverImpl::initializeDevice()
 {
+    // Create factory
     auto& contextAttrs = Application::getContextAttrs();
     UINT createFlags   = 0;
 
@@ -347,11 +347,8 @@ void DriverImpl::initializeAdapter()
     HRESULT hr = CreateDXGIFactory2(createFlags, IID_PPV_ARGS(&_dxgiFactory));
     AXASSERT(SUCCEEDED(hr), "CreateDXGIFactory2 failed");
 
-    // Choose adapter
+    // Enum adapter and create physical device
     const auto powerPreferrence = contextAttrs.powerPreference;
-    if (powerPreferrence == PowerPreference::Auto)
-        return;
-
     DXGI_GPU_PREFERENCE gpuPref = DXGI_GPU_PREFERENCE_UNSPECIFIED;
     if (powerPreferrence == PowerPreference::HighPerformance)
         gpuPref = DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE;
@@ -359,33 +356,23 @@ void DriverImpl::initializeAdapter()
         gpuPref = DXGI_GPU_PREFERENCE_MINIMUM_POWER;
 
     ComPtr<IDXGIAdapter1> adapter;
-    for (UINT i = 0;
-         _dxgiFactory->EnumAdapterByGpuPreference(i, gpuPref, IID_PPV_ARGS(&adapter)) != DXGI_ERROR_NOT_FOUND; ++i)
+    for (uint32_t adapterIndex = 0;; ++adapterIndex)
     {
-        DXGI_ADAPTER_DESC1 desc;
-        adapter->GetDesc1(&desc);
-        if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
-            continue;
-
-        if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, _uuidof(ID3D12Device), nullptr)))
+        hr = _dxgiFactory->EnumAdapterByGpuPreference(adapterIndex, gpuPref, IID_PPV_ARGS(&adapter));
+        if (hr == DXGI_ERROR_NOT_FOUND)
         {
-            _adapter = adapter;
+            break;  // No more physicalDevices to enumerate.
+        }
+        hr = D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&_device));
+        if (SUCCEEDED(hr))
+        {
+            _adapter = std::move(adapter);
             break;
         }
     }
 
     if (!_adapter)
-    {
-        // Fallback: WARP
-        _dxgiFactory->EnumWarpAdapter(IID_PPV_ARGS(&_adapter));
-    }
-}
-
-void DriverImpl::initializeDevice()
-{
-    // Create D3D12 device
-    HRESULT hr = D3D12CreateDevice(_adapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&_device));
-    AXASSERT(SUCCEEDED(hr), "D3D12CreateDevice failed");
+        AX_D3D_FAST_FAIL(hr);
 
     // Create graphics queue
     D3D12_COMMAND_QUEUE_DESC qdesc{};
@@ -395,33 +382,6 @@ void DriverImpl::initializeDevice()
     qdesc.NodeMask = 0;
     hr             = _device->CreateCommandQueue(&qdesc, IID_PPV_ARGS(&_gfxQueue));
     AXASSERT(SUCCEEDED(hr), "CreateCommandQueue failed");
-
-    // Ensure adapter
-    if (!_adapter)
-    {
-        LUID luid = _device->GetAdapterLuid();
-
-        ComPtr<IDXGIFactory4> factory;
-        CreateDXGIFactory1(IID_PPV_ARGS(&factory));
-
-        ComPtr<IDXGIAdapter1> adapter;
-        for (UINT i = 0; factory->EnumAdapters1(i, &adapter) != DXGI_ERROR_NOT_FOUND; ++i)
-        {
-            DXGI_ADAPTER_DESC1 desc;
-            adapter->GetDesc1(&desc);
-            if (desc.AdapterLuid.LowPart == luid.LowPart && desc.AdapterLuid.HighPart == luid.HighPart)
-            {
-                _adapter = adapter;
-                break;
-            }
-        }
-
-        if (!_adapter)
-            AX_D3D_FAST_FAIL(E_NOINTERFACE);
-
-        AX_D3D_FAST_FAIL(
-            hr = _adapter->GetParent(__uuidof(IDXGIFactory1), (void**)_dxgiFactory.ReleaseAndGetAddressOf()));
-    }
 }
 
 void DriverImpl::createDescriptorAllocators()

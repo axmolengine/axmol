@@ -160,7 +160,6 @@ protected:
     void queueDisposalInternal(DisposableResource&& res);
 
 private:
-    void initializeAdapter();
     void initializeDevice();
 
     void createDescriptorAllocators();
