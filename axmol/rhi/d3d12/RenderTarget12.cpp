@@ -134,40 +134,37 @@ void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
             }
         }
 
-        // Count active color attachments
-        _numRTVs = 0;
-        for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+        if (_defaultRenderTarget)
         {
-            if (_color[i])
-                ++_numRTVs;
-            else
-                break;
+            _numRTVs = 1;
+        }
+        else
+        {
+            // Count active color attachments
+            _numRTVs = 0;
+            for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+            {
+                if (_color[i])
+                    ++_numRTVs;
+                else
+                    break;
+            }
         }
 
         // Reset dirty flags after binding
         _dirtyFlags = TargetBufferFlags::NONE;
     }
 
-    if (!_defaultRenderTarget)
-        imageIndex = 0;  // current for non-default RT, only one set of attachments
-
+    D3D12_CPU_DESCRIPTOR_HANDLE* pRTVs{nullptr};
+    D3D12_CPU_DESCRIPTOR_HANDLE* pDSV{nullptr};
+    
     // Transition attachments to render target state if not default
     if (_defaultRenderTarget)
     {
+        pRTVs = &_rtvHandles[imageIndex];
+
         auto texImpl = static_cast<TextureImpl*>(_color[imageIndex].texture);
         texImpl->transitionState(cmd, D3D12_RESOURCE_STATE_RENDER_TARGET);
-
-        if (_depthStencil)
-        {
-            auto depthTex = static_cast<TextureImpl*>(_depthStencil.texture);
-            depthTex->transitionState(cmd, D3D12_RESOURCE_STATE_DEPTH_WRITE);
-        }
-
-        // Bind RTVs and DSV to pipeline
-        if (_depthStencil)
-            cmd->OMSetRenderTargets(1, &_rtvHandles[imageIndex], FALSE, &_dsvHandle);
-        else
-            cmd->OMSetRenderTargets(1, &_rtvHandles[imageIndex], FALSE, nullptr);
 
         // Clear color attachments if requested
         if (bitmask::any(renderPassDesc.flags.clear, getMRTColorFlag(imageIndex)))
@@ -176,41 +173,50 @@ void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
                                    renderPassDesc.clearColorValue[2], renderPassDesc.clearColorValue[3]};
             cmd->ClearRenderTargetView(_rtvHandles[imageIndex], clearColor, 0, nullptr);
         }
+
+        if (_depthStencil)
+        {
+            pDSV = &_dsvHandle;
+
+            if (bitmask::any(renderPassDesc.flags.clear, TargetBufferFlags::DEPTH_AND_STENCIL))
+            {
+                cmd->ClearDepthStencilView(_dsvHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL,
+                                           renderPassDesc.clearDepthValue,
+                                           static_cast<UINT8>(renderPassDesc.clearStencilValue), 0, nullptr);
+            }
+        }
     }
     else
     {
-        prepareAttachmentsForRendering(cmd);
-
-        // Bind RTVs and DSV to pipeline
-        if (_depthStencil)
-            cmd->OMSetRenderTargets(_numRTVs, _rtvHandles.data(), FALSE, &_dsvHandle);
-        else
-            cmd->OMSetRenderTargets(_numRTVs, _rtvHandles.data(), FALSE, nullptr);
+        pRTVs = _rtvHandles.data();
 
         // Clear color attachments if requested
         for (auto i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
         {
-            if (!_color[i])
+            TextureImpl* texImpl = static_cast<TextureImpl*>(_color[i].texture);
+            if (!texImpl)
                 break;
-            if (bitmask::any(renderPassDesc.flags.clear, getMRTColorFlag(imageIndex)))
+            texImpl->transitionState(cmd, D3D12_RESOURCE_STATE_RENDER_TARGET);
+            if (bitmask::any(renderPassDesc.flags.clear, getMRTColorFlag(i)))
             {
                 FLOAT clearColor[4] = {renderPassDesc.clearColorValue[0], renderPassDesc.clearColorValue[1],
                                        renderPassDesc.clearColorValue[2], renderPassDesc.clearColorValue[3]};
-                cmd->ClearRenderTargetView(_rtvHandles[imageIndex], clearColor, 0, nullptr);
+                cmd->ClearRenderTargetView(_rtvHandles[i], clearColor, 0, nullptr);
+            }
+        }
+        if (_depthStencil)
+        {
+            pDSV = &_dsvHandle;
+            if (bitmask::any(renderPassDesc.flags.clear, TargetBufferFlags::DEPTH_AND_STENCIL))
+            {
+                cmd->ClearDepthStencilView(_dsvHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL,
+                                           renderPassDesc.clearDepthValue,
+                                           static_cast<UINT8>(renderPassDesc.clearStencilValue), 0, nullptr);
             }
         }
     }
 
-    // Clear depth-stencil if requested
-    if (_depthStencil)
-    {
-        if (bitmask::any(renderPassDesc.flags.clear, TargetBufferFlags::DEPTH_AND_STENCIL))
-        {
-            cmd->ClearDepthStencilView(_dsvHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL,
-                                       renderPassDesc.clearDepthValue,
-                                       static_cast<UINT8>(renderPassDesc.clearStencilValue), 0, nullptr);
-        }
-    }
+    cmd->OMSetRenderTargets(_numRTVs, pRTVs, FALSE, pDSV);
 }
 
 void RenderTargetImpl::endRenderPass(ID3D12GraphicsCommandList* cmd, uint32_t imageIndex)
@@ -227,31 +233,9 @@ void RenderTargetImpl::endRenderPass(ID3D12GraphicsCommandList* cmd, uint32_t im
             TextureImpl* texImpl = static_cast<TextureImpl*>(_color[i].texture);
             if (!texImpl)
                 break;
-            texImpl->setKnownState(D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+
+            texImpl->transitionState(cmd, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
         }
-        if (_depthStencil)
-        {
-            static_cast<TextureImpl*>(_depthStencil.texture)->setKnownState(D3D12_RESOURCE_STATE_DEPTH_WRITE);
-        }
-    }
-}
-
-void RenderTargetImpl::prepareAttachmentsForRendering(ID3D12GraphicsCommandList* cmd)
-{
-    if (_defaultRenderTarget)
-        return;
-
-    for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
-    {
-        TextureImpl* texImpl = static_cast<TextureImpl*>(_color[i].texture);
-        if (!texImpl)
-            break;
-        texImpl->transitionState(cmd, D3D12_RESOURCE_STATE_RENDER_TARGET);
-    }
-
-    if (_depthStencil)
-    {
-        static_cast<TextureImpl*>(_depthStencil.texture)->transitionState(cmd, D3D12_RESOURCE_STATE_DEPTH_WRITE);
     }
 }
 

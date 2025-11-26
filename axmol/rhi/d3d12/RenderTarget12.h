@@ -68,8 +68,6 @@ public:
     void rebuildAttachmentsForSwapchain(IDXGISwapChain4* swapchain, uint32_t width, uint32_t height);
 
 private:
-    void prepareAttachmentsForRendering(ID3D12GraphicsCommandList* cmd);
-
     DriverImpl* _driver{nullptr};
 
     std::array<d3d12::DescriptorHandle*, MAX_COLOR_ATTCHMENT> _rtvsDescriptors{};
