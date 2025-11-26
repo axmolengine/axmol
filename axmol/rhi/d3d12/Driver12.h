@@ -26,8 +26,9 @@
 #include "axmol/rhi/DriverBase.h"
 #include "axmol/rhi/d3d12/DescriptorHeapAllocator12.h"
 #include "axmol/rhi/d3d12/ShaderModule12.h"
+#include "axmol/rhi/DXUtils.h"
 #include <d3d12.h>
-#include <dxgi1_6.h>
+#include <dxgi1_4.h>
 #include <wrl/client.h>
 #include <optional>
 #include <string>
@@ -72,9 +73,9 @@ struct DisposableResource
 
 struct IsolateSubmission
 {
-    Microsoft::WRL::ComPtr<ID3D12CommandAllocator> allocator;
-    Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> cmdList;
-    Microsoft::WRL::ComPtr<ID3D12Fence> fence;
+    ComPtr<ID3D12CommandAllocator> allocator;
+    ComPtr<ID3D12GraphicsCommandList> cmdList;
+    ComPtr<ID3D12Fence> fence;
     void reset()
     {
         fence.Reset();
@@ -120,7 +121,7 @@ public:
 
     ID3D12Device* getDevice() const { return _device.Get(); }
     ID3D12CommandQueue* getGraphicsQueue() const { return _gfxQueue.Get(); }
-    IDXGIFactory6* getDXGIFactory() const { return _dxgiFactory.Get(); }
+    const ComPtr<IDXGIFactory4>& getDXGIFactory() const { return _dxgiFactory; }
 
     bool generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource* texture);
 
@@ -169,10 +170,10 @@ private:
 private:
     RenderContextImpl* _currentRenderContext{nullptr};
 
-    Microsoft::WRL::ComPtr<IDXGIFactory6> _dxgiFactory;
-    Microsoft::WRL::ComPtr<IDXGIAdapter> _adapter;
-    Microsoft::WRL::ComPtr<ID3D12Device> _device;
-    Microsoft::WRL::ComPtr<ID3D12CommandQueue> _gfxQueue;
+    ComPtr<IDXGIFactory4> _dxgiFactory;
+    ComPtr<IDXGIAdapter> _adapter;
+    ComPtr<ID3D12Device> _device;
+    ComPtr<ID3D12CommandQueue> _gfxQueue;
 
     ID3D12Fence* _idleFence{nullptr};
     HANDLE _idleEvent{nullptr};
@@ -198,8 +199,8 @@ private:
     DXGI_ADAPTER_DESC _adapterDesc{};
     std::optional<LARGE_INTEGER> _driverVersion;
 
-    Microsoft::WRL::ComPtr<IDxcLibrary> _dxcLibrary;
-    Microsoft::WRL::ComPtr<IDxcCompiler> _dxcCompiler;
+    ComPtr<IDxcLibrary> _dxcLibrary;
+    ComPtr<IDxcCompiler> _dxcCompiler;
     std::vector<LPCWSTR> _dxcArguments;
 
     std::string _shaderCompileBuffer;
@@ -208,10 +209,10 @@ private:
     void ensureMipmapPipeline(bool isArray);
     D3D12BlobHandle compileMipmapCS(bool isArray);
 
-    Microsoft::WRL::ComPtr<ID3D12RootSignature> _mipmapRootSig;
-    Microsoft::WRL::ComPtr<ID3D12PipelineState> _mipmapPSO2D;
-    Microsoft::WRL::ComPtr<ID3D12PipelineState> _mipmapPSOArray;
-    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> _mipmapSrvHeap;
+    ComPtr<ID3D12RootSignature> _mipmapRootSig;
+    ComPtr<ID3D12PipelineState> _mipmapPSO2D;
+    ComPtr<ID3D12PipelineState> _mipmapPSOArray;
+    ComPtr<ID3D12DescriptorHeap> _mipmapSrvHeap;
 };
 
 }  // namespace ax::rhi::d3d12

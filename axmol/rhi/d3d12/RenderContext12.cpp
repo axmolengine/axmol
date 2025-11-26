@@ -171,13 +171,17 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext) :
 {
     _device        = driver->getDevice();
     _graphicsQueue = driver->getGraphicsQueue();
-    auto factory   = driver->getDXGIFactory();
+    auto& factory  = driver->getDXGIFactory();
 
     createCommandObjects();
 
     // Check tearing support
     BOOL allowTearing = FALSE;
-    factory->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &allowTearing, sizeof(allowTearing));
+    ComPtr<IDXGIFactory5> factory5;
+    if (SUCCEEDED(factory.As(&factory5)))
+    {
+        factory5->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &allowTearing, sizeof(allowTearing));
+    }
     _swapchainFlags = allowTearing ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0;
 
     // vsync control

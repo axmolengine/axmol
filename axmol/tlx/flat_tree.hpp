@@ -35,9 +35,37 @@ namespace detail
 template <class _Alloc, class _Value_type>
 using _Rebind_alloc_t = typename std::allocator_traits<_Alloc>::template rebind_alloc<_Value_type>;
 
-// flat_impl: generic flat sorted container implementation
+/****************************************************************************
+ * flat_tree: generic flat sorted container implementation
+ *
+ * This class template provides the core implementation for all flat
+ * associative containers (flat_map, flat_multimap, flat_set, flat_multiset).
+ *
+ * Design:
+ * - Storage is backed by a contiguous sequence (std::vector).
+ * - Elements are kept sorted according to the key comparator (_Traits::key_compare).
+ * - Lookup operations (find, lower_bound, upper_bound, equal_range) use
+ *   binary search on the vector, simulating the semantics of a balanced tree.
+ *
+ * Traits:
+ * - _Traits defines key_type, value_type, allocator_type, key_extractor,
+ *   key_compare, and a constexpr bool allow_duplicates.
+ * - allow_duplicates = false → map/set semantics (unique keys).
+ * - allow_duplicates = true  → multimap/multiset semantics (duplicate keys allowed).
+ *
+ * Complexity:
+ * - Lookup: O(log N) (binary search).
+ * - Insert/Erase: O(N) (vector reallocation/shifting).
+ * - Iteration: O(N), cache-friendly due to contiguous storage.
+ *
+ * Purpose:
+ * - Serves as the common base for flat_map/flat_set variants.
+ * - Provides STL-compatible interface (begin/end, find, lower_bound, upper_bound, equal_range).
+ * - Mimics tree-based associative containers but with flat storage for better
+ *   cache locality and reduced memory overhead.
+ ****************************************************************************/
 template <typename _Traits>
-class flat_impl
+class flat_tree
 {
 public:
     using key_type       = typename _Traits::key_type;
@@ -63,7 +91,7 @@ public:
     using iterator        = typename container_type::iterator;
     using const_iterator  = typename container_type::const_iterator;
 
-    explicit flat_impl(const key_compare& pred = key_compare(), const allocator_type& alloc = allocator_type())
+    explicit flat_tree(const key_compare& pred = key_compare(), const allocator_type& alloc = allocator_type())
         : _Mypair(pred, container_type(alloc))
     {}
 
@@ -114,18 +142,51 @@ public:
                                 [&](const value_type& v, const key_type& k) { return pred(key_extractor{}(v), k); });
     }
 
+    iterator upper_bound(const key_type& key)
+    {
+        auto& cont = _Mypair.second();
+        auto& pred = _Mypair.first();
+        return std::upper_bound(cont.begin(), cont.end(), key,
+                                [&](const key_type& k, const value_type& v) { return pred(k, key_extractor{}(v)); });
+    }
+
+    const_iterator upper_bound(const key_type& key) const
+    {
+        const auto& cont = _Mypair.second();
+        const auto& pred = _Mypair.first();
+        return std::upper_bound(cont.begin(), cont.end(), key,
+                                [&](const key_type& k, const value_type& v) { return pred(k, key_extractor{}(v)); });
+    }
+
+    std::pair<iterator, iterator> equal_range(const key_type& key) { return {lower_bound(key), upper_bound(key)}; }
+
+    std::pair<const_iterator, const_iterator> equal_range(const key_type& key) const
+    {
+        return {lower_bound(key), upper_bound(key)};
+    }
+
     std::pair<iterator, bool> insert(const value_type& v)
     {
         auto& cont        = _Mypair.second();
         auto& comp        = _Mypair.first();
         const key_type& k = key_extractor{}(v);
-        auto it           = lower_bound(k);
-        if (it == cont.end() || comp(k, key_extractor{}(*it)))
+
+        if constexpr (_Traits::allow_duplicates)
         {
-            it = cont.insert(it, v);
+            auto it = upper_bound(k);
+            it      = cont.insert(it, v);
             return {it, true};
         }
-        return {it, false};
+        else
+        {
+            auto it = lower_bound(k);
+            if (it == cont.end() || comp(k, key_extractor{}(*it)))
+            {
+                it = cont.insert(it, v);
+                return {it, true};
+            }
+            return {it, false};
+        }
     }
 
     template <class... Args>
@@ -137,13 +198,10 @@ public:
 
     size_type erase(const key_type& key)
     {
-        auto it = find(key);
-        if (it != end())
-        {
-            _Mypair.second().erase(it);
-            return 1;
-        }
-        return 0;
+        auto range      = equal_range(key);
+        size_type count = std::distance(range.first, range.second);
+        _Mypair.second().erase(range.first, range.second);
+        return count;
     }
 
     iterator erase(const_iterator it) { return _Mypair.second().erase(it); }
@@ -151,5 +209,21 @@ public:
 protected:
     ::axstd::compressed_pair<key_compare, container_type> _Mypair;
 };
+
+/// identity extractor: for flat_set
+template <class Key>
+struct identity
+{
+    const Key& operator()(const Key& k) const noexcept { return k; }
+};
+
+/// select1st extractor: for flat_map
+template <class _Pair>
+struct select1st
+{
+    using Key = typename _Pair::first_type;
+    const Key& operator()(const _Pair& p) const noexcept { return p.first; }
+};
+
 }  // namespace detail
 }  // namespace axstd

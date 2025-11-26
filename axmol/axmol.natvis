@@ -36,4 +36,30 @@
             </ArrayItems>
         </Expand>
     </Type>
+
+    <!-- flat_multiset visualizer -->
+    <Type Name="axstd::flat_multiset&lt;*&gt;">
+        <DisplayString>{{size = {_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst}}}</DisplayString>
+        <Expand>
+            <Item Name="[size]">_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst</Item>
+            <Item Name="[capacity]" ExcludeView="simple">_Mypair._Myval2._Mypair._Myval2._Myend - _Mypair._Myval2._Mypair._Myval2._Myfirst</Item>
+            <ArrayItems>
+                <Size>_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst</Size>
+                <ValuePointer>_Mypair._Myval2._Mypair._Myval2._Myfirst</ValuePointer>
+            </ArrayItems>
+        </Expand>
+    </Type>
+
+    <!-- flat_multimap visualizer -->
+    <Type Name="axstd::flat_multimap&lt;*&gt;">
+        <DisplayString>{{size = {_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst}}}</DisplayString>
+        <Expand>
+            <Item Name="[size]">_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst</Item>
+            <Item Name="[capacity]" ExcludeView="simple">_Mypair._Myval2._Mypair._Myval2._Myend - _Mypair._Myval2._Mypair._Myval2._Myfirst</Item>
+            <ArrayItems>
+                <Size>_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst</Size>
+                <ValuePointer>_Mypair._Myval2._Mypair._Myval2._Myfirst</ValuePointer>
+            </ArrayItems>
+        </Expand>
+    </Type>
 </AutoVisualizer>

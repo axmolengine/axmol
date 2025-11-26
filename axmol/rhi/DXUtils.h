@@ -2,6 +2,12 @@
 #include "axmol/rhi/RHITypes.h"
 #include <dxgi.h>
 #include <d3dcommon.h>
+#include <wrl/client.h>
+
+namespace ax::rhi
+{
+using Microsoft::WRL::ComPtr;
+}
 
 namespace ax::rhi::dxutils
 {

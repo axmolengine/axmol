@@ -35,7 +35,6 @@
 #include "axmol/rhi/d3d12/Utils12.h"
 #include "axmol/base/Logging.h"
 #include "axmol/rhi/RHIUtils.h"
-#include "axmol/rhi/DXUtils.h"
 #include "axmol/rhi/SamplerCache.h"
 #include "yasio/sz.hpp"
 #include "d3dx12.h"
@@ -336,7 +335,7 @@ void DriverImpl::initializeDevice()
     if (contextAttrs.debugLayerEnabled)
     {
         // Enable debug layer if available
-        Microsoft::WRL::ComPtr<ID3D12Debug> debugController;
+        ComPtr<ID3D12Debug> debugController;
         if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController))))
         {
             debugController->EnableDebugLayer();
@@ -356,18 +355,69 @@ void DriverImpl::initializeDevice()
         gpuPref = DXGI_GPU_PREFERENCE_MINIMUM_POWER;
 
     ComPtr<IDXGIAdapter1> adapter;
-    for (uint32_t adapterIndex = 0;; ++adapterIndex)
+    ComPtr<IDXGIFactory6> factory6;
+    uint32_t adapterIndex{0};
+    hr = _dxgiFactory->QueryInterface(IID_PPV_ARGS(&factory6));
+    if (SUCCEEDED(hr))
     {
-        hr = _dxgiFactory->EnumAdapterByGpuPreference(adapterIndex, gpuPref, IID_PPV_ARGS(&adapter));
-        if (hr == DXGI_ERROR_NOT_FOUND)
+        // IDXGIFactory6 is not availablee on all versions of windows 10, If it is available, use it
+        // to enumerate the adapters based on the desired power preference.
+        while ((hr = factory6->EnumAdapterByGpuPreference(
+                    adapterIndex, gpuPref, IID_PPV_ARGS(adapter.ReleaseAndGetAddressOf()))) != DXGI_ERROR_NOT_FOUND)
         {
-            break;  // No more physicalDevices to enumerate.
+            hr = D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&_device));
+            if (SUCCEEDED(hr))
+            {
+                _adapter = std::move(adapter);
+                break;
+            }
         }
-        hr = D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&_device));
-        if (SUCCEEDED(hr))
+    }
+    else
+    {
+        std::vector<std::pair<int, ComPtr<IDXGIAdapter1>>> adapters;
+        while (_dxgiFactory->EnumAdapters1(adapterIndex++, adapter.ReleaseAndGetAddressOf()) != DXGI_ERROR_NOT_FOUND)
         {
-            _adapter = std::move(adapter);
-            break;
+            DXGI_ADAPTER_DESC desc;
+            adapter->GetDesc(&desc);
+
+            int score = 0;
+
+            // Skip Microsoft Basic Render Driver (software adapter)
+            if (desc.VendorId == 0x1414 && desc.DeviceId == 0x8c)
+                continue;
+
+            // 1. Base score by GPU type
+            bool isDiscrete = desc.DedicatedVideoMemory > 0;
+            if (isDiscrete)
+                score += 1000;  // Higher base score for discrete GPU
+            else
+                score += 500;  // Lower base score for integrated GPU
+
+            score += static_cast<int>(desc.DedicatedVideoMemory / (1024 * 1024));
+
+            adapters.emplace_back(score, adapter);
+        }
+
+        if (powerPreferrence == PowerPreference::HighPerformance)
+        {
+            std::stable_sort(adapters.begin(), adapters.end(),
+                             [](auto& lhs, auto& rhs) { return lhs.first > rhs.first; });
+        }
+        else if (powerPreferrence == PowerPreference::LowPower)
+        {
+            std::stable_sort(adapters.begin(), adapters.end(),
+                             [](auto& lhs, auto& rhs) { return lhs.first < rhs.first; });
+        }
+
+        for (auto& [_, adapter] : adapters)
+        {
+            hr = D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&_device));
+            if (SUCCEEDED(hr))
+            {
+                _adapter = std::move(adapter);
+                break;
+            }
         }
     }
 

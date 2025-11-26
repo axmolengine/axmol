@@ -24,38 +24,27 @@
 
 namespace axstd
 {
-// flat_map traits
-template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<Key, T>>>
-struct flat_map_traits
+// flat_multiset traits
+template <class Key, class Compare = std::less<Key>, class Alloc = std::allocator<Key>>
+struct flat_multiset_traits
 {
     using key_type       = Key;
-    using value_type     = std::pair<Key, T>;
+    using value_type     = Key;
     using key_compare    = Compare;
     using value_compare  = Compare;
     using allocator_type = Alloc;
-    using key_extractor  = detail::select1st<value_type>;
+    using key_extractor  = detail::identity<Key>;
 
-    static constexpr bool allow_duplicates = false;
+    static constexpr bool allow_duplicates = true;
 };
 
-/// flat_map
-template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<Key, T>>>
-class flat_map : public detail::flat_tree<flat_map_traits<Key, T, Compare, Alloc>>
+/// flat_multiset
+template <class Key, class Compare = std::less<Key>, class Alloc = std::allocator<Key>>
+class flat_multiset : public detail::flat_tree<flat_multiset_traits<Key, Compare, Alloc>>
 {
-    using impl_type = detail::flat_tree<flat_map_traits<Key, T, Compare, Alloc>>;
+    using impl_type = detail::flat_tree<flat_multiset_traits<Key, Compare, Alloc>>;
 
 public:
     using impl_type::impl_type;
-
-    // operator[] for map semantics
-    T& operator[](const Key& key)
-    {
-        auto it = this->lower_bound(key);
-        if (it == this->end() || Compare{}(key, it->first))
-        {
-            it = this->_Mypair.second().insert(it, {key, T{}});
-        }
-        return it->second;
-    }
 };
 }  // namespace axstd

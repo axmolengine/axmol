@@ -20,17 +20,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-#include "axmol/tlx/flat_impl.hpp"
+#include "axmol/tlx/flat_tree.hpp"
 
 namespace axstd
 {
-// identity extractor: for flat_set
-template <class Key>
-struct identity
-{
-    const Key& operator()(const Key& k) const noexcept { return k; }
-};
-
 // flat_set traits
 template <class Key, class Compare = std::less<Key>, class Alloc = std::allocator<Key>>
 struct flat_set_traits
@@ -40,14 +33,16 @@ struct flat_set_traits
     using key_compare    = Compare;
     using value_compare  = Compare;
     using allocator_type = Alloc;
-    using key_extractor  = identity<Key>;
+    using key_extractor  = detail::identity<Key>;
+
+    static constexpr bool allow_duplicates = false;
 };
 
-// flat_set
+/// flat_set
 template <class Key, class Compare = std::less<Key>, class Alloc = std::allocator<Key>>
-class flat_set : public detail::flat_impl<flat_set_traits<Key, Compare, Alloc>>
+class flat_set : public detail::flat_tree<flat_set_traits<Key, Compare, Alloc>>
 {
-    using impl_type = detail::flat_impl<flat_set_traits<Key, Compare, Alloc>>;
+    using impl_type = detail::flat_tree<flat_set_traits<Key, Compare, Alloc>>;
 
 public:
     using impl_type::impl_type;

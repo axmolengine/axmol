@@ -24,9 +24,9 @@
 
 namespace axstd
 {
-// flat_map traits
+// flat_multimap traits
 template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<Key, T>>>
-struct flat_map_traits
+struct flat_multimap_traits
 {
     using key_type       = Key;
     using value_type     = std::pair<Key, T>;
@@ -35,27 +35,16 @@ struct flat_map_traits
     using allocator_type = Alloc;
     using key_extractor  = detail::select1st<value_type>;
 
-    static constexpr bool allow_duplicates = false;
+    static constexpr bool allow_duplicates = true;
 };
 
-/// flat_map
+/// flat_multimap
 template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<Key, T>>>
-class flat_map : public detail::flat_tree<flat_map_traits<Key, T, Compare, Alloc>>
+class flat_multimap : public detail::flat_tree<flat_multimap_traits<Key, T, Compare, Alloc>>
 {
-    using impl_type = detail::flat_tree<flat_map_traits<Key, T, Compare, Alloc>>;
+    using impl_type = detail::flat_tree<flat_multimap_traits<Key, T, Compare, Alloc>>;
 
 public:
     using impl_type::impl_type;
-
-    // operator[] for map semantics
-    T& operator[](const Key& key)
-    {
-        auto it = this->lower_bound(key);
-        if (it == this->end() || Compare{}(key, it->first))
-        {
-            it = this->_Mypair.second().insert(it, {key, T{}});
-        }
-        return it->second;
-    }
 };
 }  // namespace axstd
