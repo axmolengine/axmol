@@ -262,41 +262,88 @@ void TextureImpl::updateCompressedSubData(int xoffset,
     const UINT mipWidth  = std::max(1u, static_cast<UINT>(texDesc.Width >> level));
     const UINT mipHeight = std::max(1u, static_cast<UINT>(texDesc.Height >> level));
 
-    // Enforce minimum block-aligned region (BC formats require at least minBlockX × minBlockY)
-    const UINT reqMinW = fmtDesc.minBlockX ? fmtDesc.minBlockX : fmtDesc.blockWidth;
-    const UINT reqMinH = fmtDesc.minBlockY ? fmtDesc.minBlockY : fmtDesc.blockHeight;
-
-    // Align requested sub-region to blocks; this produces the effective region we will copy
-    const UINT alignedWidth  = ((UINT)width + (fmtDesc.blockWidth - 1)) / fmtDesc.blockWidth * fmtDesc.blockWidth;
-    const UINT alignedHeight = ((UINT)height + (fmtDesc.blockHeight - 1)) / fmtDesc.blockHeight * fmtDesc.blockHeight;
-
-    // Validate destination bounds after alignment
-    AXASSERT(xoffset >= 0 && yoffset >= 0, "Negative offsets not allowed");
-    AXASSERT(static_cast<UINT>(xoffset) + alignedWidth <= mipWidth, "Compressed update exceeds mip width");
-    AXASSERT(static_cast<UINT>(yoffset) + alignedHeight <= mipHeight, "Compressed update exceeds mip height");
-
-    // Also enforce minimum region size (e.g., 4x4 for BC)
-    AXASSERT(alignedWidth >= reqMinW, "Region width smaller than minimum block requirement");
-    AXASSERT(alignedHeight >= reqMinH, "Region height smaller than minimum block requirement");
-
-    // Query footprint (device-aligned RowPitch and totalBytes for the mip)
+    // Device footprint for the target subresource (row pitch etc.)
     D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprint{};
     UINT numRows          = 0;
-    UINT64 rowSizeInBytes = 0;  // size of a "row" in bytes (already block-aware for compressed formats)
+    UINT64 rowSizeInBytes = 0;
     UINT64 totalBytes     = 0;
     device->GetCopyableFootprints(&texDesc, level, 1, 0, &footprint, &numRows, &rowSizeInBytes, &totalBytes);
 
-    // Compute copy parameters for the requested region:
-    // blocks per row × bytes per block
-    const UINT blocksPerRow    = alignedWidth / fmtDesc.blockWidth;
-    const UINT rowCopySize     = blocksPerRow * fmtDesc.blockSize;
-    const UINT blockRowsToCopy = alignedHeight / fmtDesc.blockHeight;
+    // Prepare source box
+    D3D12_BOX srcBox{};
+    srcBox.front = 0;
+    srcBox.back  = 1;
 
-    // Sanity check vs provided dataSize (caller may pass exact region size)
-    if (dataSize != 0)
+    // --- Handle small mips first: dimensions smaller than one compression block ---
+    const UINT bw       = fmtDesc.blockWidth;   // typically 4
+    const UINT bh       = fmtDesc.blockHeight;  // typically 4
+    const UINT bs       = fmtDesc.blockSize;    // DXT1=8, DXT3/DXT5=16, etc.
+    const bool smallMip = (mipWidth < bw) || (mipHeight < bh);
+
+    UINT rowCopySize     = 0;
+    UINT blockRowsToCopy = 0;
+
+    if (smallMip)
     {
-        const size_t expectedSize = static_cast<size_t>(rowCopySize) * static_cast<size_t>(blockRowsToCopy);
-        AXASSERT(dataSize >= expectedSize, "Provided compressed dataSize is smaller than required for sub-region");
+        // For small mips (< one block), only full-mip uploads starting at (0,0) are valid
+        AXASSERT(xoffset == 0 && yoffset == 0, "Small mip must start at (0,0)");
+        AXASSERT(width == mipWidth && height == mipHeight, "Small mip must be uploaded as a whole");
+
+        // Copy exactly one compression block
+        rowCopySize     = bs;
+        blockRowsToCopy = 1;
+
+        // Source box must cover exactly one block in texel space (even if mip is smaller)
+        srcBox.left   = 0;
+        srcBox.top    = 0;
+        srcBox.right  = bw;
+        srcBox.bottom = bh;
+    }
+    else
+    {
+        // --- Normal case: region must be block-aligned and within bounds ---
+
+        AXASSERT(xoffset >= 0 && yoffset >= 0, "Negative offsets not allowed");
+        AXASSERT(xoffset % bw == 0 && yoffset % bh == 0, "Offsets must be block-aligned for BC formats");
+
+        // Align requested sub-region to the block grid
+        const UINT alignedWidth  = ((UINT)width + (bw - 1)) / bw * bw;
+        const UINT alignedHeight = ((UINT)height + (bh - 1)) / bh * bh;
+
+        // Minimum region requirement (e.g., at least one block)
+        const UINT reqMinW = (fmtDesc.minBlockX ? fmtDesc.minBlockX : bw);
+        const UINT reqMinH = (fmtDesc.minBlockY ? fmtDesc.minBlockY : bh);
+        AXASSERT(alignedWidth >= reqMinW, "Region width smaller than minimum block requirement");
+        AXASSERT(alignedHeight >= reqMinH, "Region height smaller than minimum block requirement");
+
+        // Validate bounds in block space to avoid pixel-space confusion
+        const UINT mipBlocksW = (mipWidth + bw - 1) / bw;
+        const UINT mipBlocksH = (mipHeight + bh - 1) / bh;
+
+        const UINT xBlocks       = static_cast<UINT>(xoffset) / bw;
+        const UINT yBlocks       = static_cast<UINT>(yoffset) / bh;
+        const UINT blocksToCopyW = alignedWidth / bw;
+        const UINT blocksToCopyH = alignedHeight / bh;
+
+        AXASSERT(xBlocks + blocksToCopyW <= mipBlocksW, "Compressed update exceeds mip width (in blocks)");
+        AXASSERT(yBlocks + blocksToCopyH <= mipBlocksH, "Compressed update exceeds mip height (in blocks)");
+
+        // Row copy size = blocks per row × bytes per block
+        rowCopySize     = blocksToCopyW * bs;
+        blockRowsToCopy = blocksToCopyH;
+
+        // Optional sanity check against provided dataSize
+        if (dataSize != 0)
+        {
+            const size_t expectedSize = static_cast<size_t>(rowCopySize) * static_cast<size_t>(blockRowsToCopy);
+            AXASSERT(dataSize >= expectedSize, "Provided compressed dataSize is smaller than required for sub-region");
+        }
+
+        // Source box in texel space (must be multiples of the block size)
+        srcBox.left   = 0;
+        srcBox.top    = 0;
+        srcBox.right  = alignedWidth;
+        srcBox.bottom = alignedHeight;
     }
 
     // Create upload buffer sized to the footprint
@@ -353,20 +400,11 @@ void TextureImpl::updateCompressedSubData(int xoffset,
     src.Type            = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
     src.PlacedFootprint = footprint;
 
-    // Source box for the region (must be block-aligned for compressed formats)
-    D3D12_BOX srcBox{};
-    srcBox.left   = 0;
-    srcBox.top    = 0;
-    srcBox.front  = 0;
-    srcBox.right  = alignedWidth;
-    srcBox.bottom = alignedHeight;
-    srcBox.back   = 1;
-
     submission->CopyTextureRegion(&dst, xoffset, yoffset, 0, &src, &srcBox);
 
     transitionState(submission, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
-    // !!! D3D12 requires baked mipmaps data for compressed texture
+    // Compressed textures require precomputed mipmaps
     if (shouldGenMipmaps(level))
     {
         AXLOGW(

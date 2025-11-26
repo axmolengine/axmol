@@ -2340,7 +2340,7 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
 
         int size = ((width + 3) / 4) * ((height + 3) / 4) * blockSize;
 
-        if (Environment::getInstance()->supportsS3TC())
+        if (hardware)
         {  // decode texture through hardware
             _mipmaps[i].data     = (uint8_t*)pixelData + encodeOffset;
             _mipmaps[i].dataSize = size;
