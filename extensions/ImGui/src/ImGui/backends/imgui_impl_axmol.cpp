@@ -313,8 +313,14 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
                 {
                     // Apply scissor/clipping rectangle
                     ImGui_ImplAxmol_PostCommand([=]() {
+#if AX_RENDER_API == AX_RENDER_API_GL
                         renderer->setScissorRect(clip_rect.x, fb_height - clip_rect.w, clip_rect.z - clip_rect.x,
                                                  clip_rect.w - clip_rect.y);
+
+#else
+                        renderer->setScissorRect(clip_rect.x, clip_rect.y, clip_rect.z - clip_rect.x,
+                                                 clip_rect.w - clip_rect.y);
+#endif
                     });
 
                     auto bd = ImGui_ImplAxmol_GetBackendData();
@@ -380,7 +386,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderPlatform()
 
 IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window, ImGuiViewport* viewport)
 {
-#    if AX_RENDER_API == AX_RENDER_API_GL && defined(GLFW_VERSION_MAJOR)
+#if AX_RENDER_API == AX_RENDER_API_GL && defined(GLFW_VERSION_MAJOR)
     glfwMakeContextCurrent(window);
     auto state = static_cast<gl::OpenGLState*>(glfwGetWindowUserPointer(window));
     if (!state)
@@ -402,7 +408,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window, ImGuiViewpor
         gl::__state->invalidateVertexArrayState();
         gl::__state = state;
     }
-#    endif
+#endif
 }
 
 IMGUI_IMPL_API void ImGui_ImplAxmol_OnDestroyWindow(GLFWwindow* window, ImGuiViewport* viewport)
@@ -422,7 +428,6 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_OnDestroyWindow(GLFWwindow* window, ImGuiVie
         }
 
         viewport->RendererUserData = nullptr;
-
     }
     auto state = static_cast<gl::OpenGLState*>(glfwGetWindowUserPointer(window));
     if (state)
