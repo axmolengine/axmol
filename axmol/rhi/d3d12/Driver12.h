@@ -25,6 +25,7 @@
 
 #include "axmol/rhi/DriverBase.h"
 #include "axmol/rhi/d3d12/DescriptorHeapAllocator12.h"
+#include "axmol/rhi/d3d12/UploadBufferAllocator12.h"
 #include "axmol/rhi/d3d12/ShaderModule12.h"
 #include "axmol/rhi/DXUtils.h"
 #include <d3d12.h>
@@ -71,17 +72,35 @@ struct DisposableResource
     };
 };
 
-struct IsolateSubmission
+class IsolateSubmission
 {
+    friend class DriverImpl;
+
+public:
+    IsolateSubmission() = default;
+
+    IsolateSubmission(const IsolateSubmission&)            = delete;
+    IsolateSubmission& operator=(const IsolateSubmission&) = delete;
+    IsolateSubmission(IsolateSubmission&&)                 = delete;
+    IsolateSubmission& operator=(IsolateSubmission&&)      = delete;
+
+    explicit operator bool() const { return cmdList; }
+    operator ID3D12GraphicsCommandList*() const { return cmdList.Get(); }
+    ID3D12GraphicsCommandList* operator->() const noexcept { return cmdList.Get(); }
+
+private:
+    void create(ID3D12Device*);
+    void reset();
+
+    uint64_t submit(ComPtr<ID3D12CommandQueue>& queue);
+    void waitGPU();
+
+    void release();
+
     ComPtr<ID3D12CommandAllocator> allocator;
     ComPtr<ID3D12GraphicsCommandList> cmdList;
     ComPtr<ID3D12Fence> fence;
-    void reset()
-    {
-        fence.Reset();
-        cmdList.Reset();
-        allocator.Reset();
-    }
+    HANDLE event{nullptr};
     UINT64 fenceValue = 0;
 };
 
@@ -125,8 +144,8 @@ public:
 
     bool generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource* texture);
 
-    ID3D12GraphicsCommandList* startIsolateSubmission();
-    void finishIsolateSubmission(bool waitForCompletion = true);
+    IsolateSubmission& startIsolateSubmission();
+    uint64_t finishIsolateSubmission(IsolateSubmission& submission, bool waitForCompletion = true);
 
     // New helpers
     DescriptorHandle* createSRV(ID3D12Resource* resource, const D3D12_SHADER_RESOURCE_VIEW_DESC* desc);
@@ -144,6 +163,8 @@ public:
     ID3D12DescriptorHeap* getSamplerHeap() const { return _samplerAllocator->getDescriptorHeapByIndex(0); }
     ID3D12DescriptorHeap* getRtvHeap(const DescriptorHandle* h) const { return _rtvAllocator->getDescriptorHeap(h); }
     ID3D12DescriptorHeap* getDsvHeap(const DescriptorHandle* h) const { return _dsvAllocator->getDescriptorHeap(h); }
+
+    UploadBufferAllocator* getUploadBufferAllocator() const { return _uploadBufferAllocator.get(); }
 
     UINT getSrvDescriptorStride() const { return _srvDescriptorStride; }
     UINT getSamplerDescriptorStride() const { return _samplerDescriptorStride; }
@@ -175,11 +196,12 @@ private:
     ComPtr<ID3D12Device> _device;
     ComPtr<ID3D12CommandQueue> _gfxQueue;
 
+    ComPtr<ID3D12CommandQueue> _uploadQueue;
+
     ID3D12Fence* _idleFence{nullptr};
     HANDLE _idleEvent{nullptr};
     uint64_t _idleFenceValue{0};
 
-    HANDLE _isolateEvent{nullptr};
     IsolateSubmission _isolateSubmission;
 
     // Descriptor heaps (RTV/DSV for render targets; SRV/UAV/CBV for general use if needed)
@@ -187,6 +209,8 @@ private:
     std::unique_ptr<DescriptorHeapAllocator> _rtvAllocator;
     std::unique_ptr<DescriptorHeapAllocator> _dsvAllocator;
     std::unique_ptr<DescriptorHeapAllocator> _samplerAllocator;
+
+    std::unique_ptr<UploadBufferAllocator> _uploadBufferAllocator;
 
     UINT _srvDescriptorStride{0};
     UINT _samplerDescriptorStride{0};

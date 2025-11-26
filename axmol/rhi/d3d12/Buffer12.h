@@ -82,8 +82,7 @@ private:
 
     DriverImpl* _driver{nullptr};
 
-    ComPtr<ID3D12Resource> _resource;      // main GPU buffer
-    ComPtr<ID3D12Resource> _uploadBuffer;  // transient upload buffer (for DEFAULT heap writes)
+    ComPtr<ID3D12Resource> _resource;  // main GPU buffer
 
     D3D12_HEAP_TYPE _heapType{D3D12_HEAP_TYPE_DEFAULT};
     D3D12_RESOURCE_STATES _resourceState{D3D12_RESOURCE_STATE_COMMON};

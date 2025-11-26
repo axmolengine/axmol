@@ -149,47 +149,23 @@ void TextureImpl::updateSubData(int xoffset,
 
     device->GetCopyableFootprints(&texDesc, level, 1, 0, &footprint, &numRows, &rowSizeInBytes, &totalBytes);
 
-    // Create upload buffer sized to footprint
-    D3D12_HEAP_PROPERTIES heapProps{};
-    heapProps.Type = D3D12_HEAP_TYPE_UPLOAD;
+    // Allocate upload memory from allocator
+    auto allocator  = _driver->getUploadBufferAllocator();  // raw pointer
+    UploadSpan span = allocator->allocTextureFootprint(totalBytes);
 
-    D3D12_RESOURCE_DESC bufDesc{};
-    bufDesc.Dimension          = D3D12_RESOURCE_DIMENSION_BUFFER;
-    bufDesc.Alignment          = 0;
-    bufDesc.Width              = totalBytes;
-    bufDesc.Height             = 1;
-    bufDesc.DepthOrArraySize   = 1;
-    bufDesc.MipLevels          = 1;
-    bufDesc.Format             = DXGI_FORMAT_UNKNOWN;
-    bufDesc.SampleDesc.Count   = 1;
-    bufDesc.SampleDesc.Quality = 0;
-    bufDesc.Layout             = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-    bufDesc.Flags              = D3D12_RESOURCE_FLAG_NONE;
-
-    ComPtr<ID3D12Resource> uploadBuffer;
-    HRESULT hr =
-        device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &bufDesc, D3D12_RESOURCE_STATE_GENERIC_READ,
-                                        nullptr, IID_PPV_ARGS(&uploadBuffer));
-    assert(SUCCEEDED(hr));
-
-    // Copy data into upload buffer row by row
-    BYTE* mapped = nullptr;
-    D3D12_RANGE range{0, 0};
-    uploadBuffer->Map(0, &range, reinterpret_cast<void**>(&mapped));
-
+    // Copy data into upload memory row by row
     const UINT bytesPerPixel = ax::rhi::RHIUtils::getBitsPerPixel(_desc.pixelFormat) / 8;
-    const UINT rowCopySize   = width * bytesPerPixel;  // only copy sub-region width
+    const UINT rowCopySize   = width * bytesPerPixel;
     const BYTE* srcData      = reinterpret_cast<const BYTE*>(data);
+    BYTE* dstPtr             = span.cpuPtr;
 
     for (int row = 0; row < height; ++row)
     {
-        memcpy(mapped + row * footprint.Footprint.RowPitch, srcData + row * rowCopySize, rowCopySize);
+        memcpy(dstPtr + row * footprint.Footprint.RowPitch, srcData + row * rowCopySize, rowCopySize);
     }
 
-    uploadBuffer->Unmap(0, nullptr);
-
     // Record copy
-    auto submission = _driver->startIsolateSubmission();
+    auto& submission = _driver->startIsolateSubmission();
 
     if (resourceState != D3D12_RESOURCE_STATE_COPY_DEST)
         transitionState(submission, D3D12_RESOURCE_STATE_COPY_DEST);
@@ -200,11 +176,11 @@ void TextureImpl::updateSubData(int xoffset,
     dst.SubresourceIndex = D3D12CalcSubresource(level, layerIndex, 0, _desc.mipLevels, _desc.arraySize);
 
     D3D12_TEXTURE_COPY_LOCATION src{};
-    src.pResource       = uploadBuffer.Get();
-    src.Type            = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
-    src.PlacedFootprint = footprint;
+    src.pResource              = span.heap;
+    src.Type                   = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
+    src.PlacedFootprint        = footprint;
+    src.PlacedFootprint.Offset = span.offset;  // use allocator offset
 
-    // Define source box for the sub-region
     D3D12_BOX srcBox{};
     srcBox.left   = 0;
     srcBox.top    = 0;
@@ -214,14 +190,15 @@ void TextureImpl::updateSubData(int xoffset,
     srcBox.back   = 1;
 
     submission->CopyTextureRegion(&dst, xoffset, yoffset, 0, &src, &srcBox);
-
     // Transition back to shader-readable state
     transitionState(submission, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-
     if (shouldGenMipmaps(level))
         generateMipmaps(submission);
 
-    _driver->finishIsolateSubmission(submission);
+    // Submit and get fence value
+    _driver->finishIsolateSubmission(submission, true);
+
+    allocator->retireSync(span);
 }
 
 void TextureImpl::updateCompressedData(const void* data,
@@ -262,7 +239,7 @@ void TextureImpl::updateCompressedSubData(int xoffset,
     const UINT mipWidth  = std::max(1u, static_cast<UINT>(texDesc.Width >> level));
     const UINT mipHeight = std::max(1u, static_cast<UINT>(texDesc.Height >> level));
 
-    // Device footprint for the target subresource (row pitch etc.)
+    // Device footprint for the target subresource
     D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprint{};
     UINT numRows          = 0;
     UINT64 rowSizeInBytes = 0;
@@ -274,7 +251,7 @@ void TextureImpl::updateCompressedSubData(int xoffset,
     srcBox.front = 0;
     srcBox.back  = 1;
 
-    // --- Handle small mips first: dimensions smaller than one compression block ---
+    // --- Handle small mips first ---
     const UINT bw       = fmtDesc.blockWidth;   // typically 4
     const UINT bh       = fmtDesc.blockHeight;  // typically 4
     const UINT bs       = fmtDesc.blockSize;    // DXT1=8, DXT3/DXT5=16, etc.
@@ -285,15 +262,12 @@ void TextureImpl::updateCompressedSubData(int xoffset,
 
     if (smallMip)
     {
-        // For small mips (< one block), only full-mip uploads starting at (0,0) are valid
         AXASSERT(xoffset == 0 && yoffset == 0, "Small mip must start at (0,0)");
         AXASSERT(width == mipWidth && height == mipHeight, "Small mip must be uploaded as a whole");
 
-        // Copy exactly one compression block
         rowCopySize     = bs;
         blockRowsToCopy = 1;
 
-        // Source box must cover exactly one block in texel space (even if mip is smaller)
         srcBox.left   = 0;
         srcBox.top    = 0;
         srcBox.right  = bw;
@@ -301,22 +275,17 @@ void TextureImpl::updateCompressedSubData(int xoffset,
     }
     else
     {
-        // --- Normal case: region must be block-aligned and within bounds ---
-
         AXASSERT(xoffset >= 0 && yoffset >= 0, "Negative offsets not allowed");
         AXASSERT(xoffset % bw == 0 && yoffset % bh == 0, "Offsets must be block-aligned for BC formats");
 
-        // Align requested sub-region to the block grid
         const UINT alignedWidth  = ((UINT)width + (bw - 1)) / bw * bw;
         const UINT alignedHeight = ((UINT)height + (bh - 1)) / bh * bh;
 
-        // Minimum region requirement (e.g., at least one block)
         const UINT reqMinW = (fmtDesc.minBlockX ? fmtDesc.minBlockX : bw);
         const UINT reqMinH = (fmtDesc.minBlockY ? fmtDesc.minBlockY : bh);
         AXASSERT(alignedWidth >= reqMinW, "Region width smaller than minimum block requirement");
         AXASSERT(alignedHeight >= reqMinH, "Region height smaller than minimum block requirement");
 
-        // Validate bounds in block space to avoid pixel-space confusion
         const UINT mipBlocksW = (mipWidth + bw - 1) / bw;
         const UINT mipBlocksH = (mipHeight + bh - 1) / bh;
 
@@ -328,64 +297,37 @@ void TextureImpl::updateCompressedSubData(int xoffset,
         AXASSERT(xBlocks + blocksToCopyW <= mipBlocksW, "Compressed update exceeds mip width (in blocks)");
         AXASSERT(yBlocks + blocksToCopyH <= mipBlocksH, "Compressed update exceeds mip height (in blocks)");
 
-        // Row copy size = blocks per row × bytes per block
         rowCopySize     = blocksToCopyW * bs;
         blockRowsToCopy = blocksToCopyH;
 
-        // Optional sanity check against provided dataSize
         if (dataSize != 0)
         {
             const size_t expectedSize = static_cast<size_t>(rowCopySize) * static_cast<size_t>(blockRowsToCopy);
             AXASSERT(dataSize >= expectedSize, "Provided compressed dataSize is smaller than required for sub-region");
         }
 
-        // Source box in texel space (must be multiples of the block size)
         srcBox.left   = 0;
         srcBox.top    = 0;
         srcBox.right  = alignedWidth;
         srcBox.bottom = alignedHeight;
     }
 
-    // Create upload buffer sized to the footprint
-    D3D12_HEAP_PROPERTIES heapProps{};
-    heapProps.Type = D3D12_HEAP_TYPE_UPLOAD;
+    // Allocate upload memory from allocator
+    auto* allocator = _driver->getUploadBufferAllocator();  // raw pointer
+    auto span       = allocator->allocTextureFootprint(totalBytes);
 
-    D3D12_RESOURCE_DESC bufDesc{};
-    bufDesc.Dimension          = D3D12_RESOURCE_DIMENSION_BUFFER;
-    bufDesc.Alignment          = 0;
-    bufDesc.Width              = totalBytes;
-    bufDesc.Height             = 1;
-    bufDesc.DepthOrArraySize   = 1;
-    bufDesc.MipLevels          = 1;
-    bufDesc.Format             = DXGI_FORMAT_UNKNOWN;
-    bufDesc.SampleDesc.Count   = 1;
-    bufDesc.SampleDesc.Quality = 0;
-    bufDesc.Layout             = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-    bufDesc.Flags              = D3D12_RESOURCE_FLAG_NONE;
-
-    ComPtr<ID3D12Resource> uploadBuffer;
-    HRESULT hr =
-        device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &bufDesc, D3D12_RESOURCE_STATE_GENERIC_READ,
-                                        nullptr, IID_PPV_ARGS(&uploadBuffer));
-    AXASSERT(SUCCEEDED(hr), "Failed to create upload buffer");
-
-    // Map and copy compressed data row by row, honoring RowPitch
-    BYTE* mapped = nullptr;
-    D3D12_RANGE range{0, 0};
-    uploadBuffer->Map(0, &range, reinterpret_cast<void**>(&mapped));
-
+    // Copy compressed data row by row
     const BYTE* srcData = reinterpret_cast<const BYTE*>(data);
+    BYTE* dstPtr        = span.cpuPtr;
     for (UINT row = 0; row < blockRowsToCopy; ++row)
     {
-        BYTE* dstRow       = mapped + row * footprint.Footprint.RowPitch;
+        BYTE* dstRow       = dstPtr + row * footprint.Footprint.RowPitch;
         const BYTE* srcRow = srcData + row * rowCopySize;
         memcpy(dstRow, srcRow, rowCopySize);
     }
 
-    uploadBuffer->Unmap(0, nullptr);
-
     // Record copy commands
-    auto submission = _driver->startIsolateSubmission();
+    auto& submission = _driver->startIsolateSubmission();
 
     if (resourceState != D3D12_RESOURCE_STATE_COPY_DEST)
         transitionState(submission, D3D12_RESOURCE_STATE_COPY_DEST);
@@ -396,15 +338,15 @@ void TextureImpl::updateCompressedSubData(int xoffset,
     dst.SubresourceIndex = D3D12CalcSubresource(level, layerIndex, 0, _desc.mipLevels, _desc.arraySize);
 
     D3D12_TEXTURE_COPY_LOCATION src{};
-    src.pResource       = uploadBuffer.Get();
-    src.Type            = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
-    src.PlacedFootprint = footprint;
+    src.pResource              = span.heap;
+    src.Type                   = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
+    src.PlacedFootprint        = footprint;
+    src.PlacedFootprint.Offset = span.offset;
 
     submission->CopyTextureRegion(&dst, xoffset, yoffset, 0, &src, &srcBox);
 
     transitionState(submission, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
-    // Compressed textures require precomputed mipmaps
     if (shouldGenMipmaps(level))
     {
         AXLOGW(
@@ -412,7 +354,8 @@ void TextureImpl::updateCompressedSubData(int xoffset,
             "Please upload precomputed mip levels instead.");
     }
 
-    _driver->finishIsolateSubmission(submission);
+    _driver->finishIsolateSubmission(submission, true);
+    allocator->retireSync(span);
 }
 
 void TextureImpl::updateFaceData(TextureCubeFace side, const void* data)

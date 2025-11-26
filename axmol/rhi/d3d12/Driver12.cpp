@@ -208,6 +208,71 @@ static inline const char* stageToProfile(ShaderStage s)
 }
 #endif
 
+static constexpr auto kUploadQueueType = D3D12_COMMAND_LIST_TYPE_DIRECT;
+
+void IsolateSubmission::create(ID3D12Device* device)
+{
+    // Create allocator
+    device->CreateCommandAllocator(kUploadQueueType, IID_PPV_ARGS(&allocator));
+
+    // Create command list
+    device->CreateCommandList(0, kUploadQueueType, allocator.Get(), nullptr, IID_PPV_ARGS(&cmdList));
+
+    // Command lists are created in "open" state; ready for record.
+    // Create (or reuse) a fence for this isolated submission
+    device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
+    fenceValue = 1;
+}
+
+void IsolateSubmission::reset()
+{
+    allocator->Reset();
+    cmdList->Reset(allocator.Get(), nullptr);
+    ++fenceValue;
+}
+
+uint64_t IsolateSubmission::submit(ComPtr<ID3D12CommandQueue>& queue)
+{
+    // Close list
+    cmdList->Close();
+
+    // Execute on same graphics queue
+    ID3D12CommandList* lists[] = {cmdList.Get()};
+    queue->ExecuteCommandLists(1, lists);
+
+    // Signal fence
+    queue->Signal(fence.Get(), fenceValue);
+
+    return fenceValue;
+}
+
+void IsolateSubmission::waitGPU()
+{
+
+    if (fence->GetCompletedValue() < fenceValue)
+    {
+        if (!event)
+            event = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+        fence->SetEventOnCompletion(fenceValue, event);
+        WaitForSingleObject(event, INFINITE);
+    }
+}
+
+void IsolateSubmission::release()
+{
+    waitGPU();
+
+    fence.Reset();
+    cmdList.Reset();
+    allocator.Reset();
+
+    if (event)
+    {
+        CloseHandle(event);
+        event = nullptr;
+    }
+}
+
 DriverImpl::DriverImpl() {}
 DriverImpl::~DriverImpl()
 {
@@ -228,9 +293,12 @@ DriverImpl::~DriverImpl()
     _dxcLibrary.Reset();
     _dxcCompiler.Reset();
 
-    _isolateSubmission.reset();
+    _isolateSubmission.release();
 
+    _uploadQueue.Reset();
     _gfxQueue.Reset();
+
+    _uploadBufferAllocator.reset();
 
     ComPtr<ID3D12DebugDevice> debugDevice;
     _device->QueryInterface(IID_PPV_ARGS(&debugDevice));
@@ -240,13 +308,6 @@ DriverImpl::~DriverImpl()
     _dxgiFactory.Reset();
 
     SafeRelease(_idleFence);
-
-    if (_isolateEvent)
-    {
-        CloseHandle(_isolateEvent);
-        _isolateEvent = nullptr;
-    }
-
     if (_idleEvent)
     {
         CloseHandle(_idleEvent);
@@ -306,10 +367,9 @@ void DriverImpl::init()
     _samplerDescriptorStride = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
 
     // sync objects
-    _isolateEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
-    _idleEvent    = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+    _idleEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
     _device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&_idleFence));
-    AXASSERT(_isolateEvent && _idleEvent && _idleFence, "Create sync objects failed");
+    AXASSERT(_idleEvent && _idleFence, "Create sync objects failed");
 
 #if _AX_USE_DXC
     // init DXC instances once
@@ -432,6 +492,14 @@ void DriverImpl::initializeDevice()
     qdesc.NodeMask = 0;
     hr             = _device->CreateCommandQueue(&qdesc, IID_PPV_ARGS(&_gfxQueue));
     AXASSERT(SUCCEEDED(hr), "CreateCommandQueue failed");
+
+    // Create upload (copy) queue
+    qdesc.Type = kUploadQueueType;
+    hr = _device->CreateCommandQueue(&qdesc, IID_PPV_ARGS(&_uploadQueue));
+    AXASSERT(SUCCEEDED(hr), "CreateCommandQueue failed");
+
+    const auto uploadBufferSize = (std::max)(8 * 1024 * 1024u, contextAttrs.uploadBufferSize);
+    _uploadBufferAllocator      = std::make_unique<UploadBufferAllocator>(_device.Get(), uploadBufferSize);
 }
 
 void DriverImpl::createDescriptorAllocators()
@@ -688,62 +756,33 @@ std::string DriverImpl::getShaderVersion() const
 #endif
 }
 
-ID3D12GraphicsCommandList* DriverImpl::startIsolateSubmission()
+IsolateSubmission& DriverImpl::startIsolateSubmission()
 {
-    if (_isolateSubmission.allocator)
+    if (_isolateSubmission)
     {  // reuse isolate submission
-        if (_isolateSubmission.fence->GetCompletedValue() < _isolateSubmission.fenceValue)
-        {
-            _isolateSubmission.fence->SetEventOnCompletion(_isolateSubmission.fenceValue, _isolateEvent);
-            WaitForSingleObject(_isolateEvent, INFINITE);
-        }
+        _isolateSubmission.waitGPU();
 
         // Reset allocator and command list
-        _isolateSubmission.allocator->Reset();
-        _isolateSubmission.cmdList->Reset(_isolateSubmission.allocator.Get(), nullptr);
-        ++_isolateSubmission.fenceValue;
+        _isolateSubmission.reset();
     }
     else
     {
-        // Create allocator
-        _device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&_isolateSubmission.allocator));
-
-        // Create command list
-        _device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, _isolateSubmission.allocator.Get(), nullptr,
-                                   IID_PPV_ARGS(&_isolateSubmission.cmdList));
-
-        // Command lists are created in "open" state; ready for record.
-        // Create (or reuse) a fence for this isolated submission
-        _device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&_isolateSubmission.fence));
-        _isolateSubmission.fenceValue = 1;
+        _isolateSubmission.create(_device.Get());
     }
 
-    return _isolateSubmission.cmdList.Get();
+    return _isolateSubmission;
 }
 
-void DriverImpl::finishIsolateSubmission(bool waitForCompletion)
+uint64_t DriverImpl::finishIsolateSubmission(IsolateSubmission& submission, bool waitForCompletion)
 {
-    if (!_isolateSubmission.cmdList)
-        return;
+    if (!submission)
+        return 0;
 
-    // Close list
-    _isolateSubmission.cmdList->Close();
-
-    // Execute on same graphics queue
-    ID3D12CommandList* lists[] = {_isolateSubmission.cmdList.Get()};
-    _gfxQueue->ExecuteCommandLists(1, lists);
-
-    // Signal fence
-    _gfxQueue->Signal(_isolateSubmission.fence.Get(), _isolateSubmission.fenceValue);
-
+    auto fenceValue = submission.submit(_uploadQueue);
     if (waitForCompletion)
-    {
-        if (_isolateSubmission.fence->GetCompletedValue() < _isolateSubmission.fenceValue)
-        {
-            _isolateSubmission.fence->SetEventOnCompletion(_isolateSubmission.fenceValue, _isolateEvent);
-            WaitForSingleObject(_isolateEvent, INFINITE);
-        }
-    }
+        submission.waitGPU();
+
+    return fenceValue;
 }
 
 void DriverImpl::queueDisposal(ID3D12Resource* res, uint64_t fenceValue)

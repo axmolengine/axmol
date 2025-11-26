@@ -140,6 +140,7 @@ elseif(AX_RENDER_API STREQUAL "d3d12")
     rhi/d3d12/Program12.h
     rhi/d3d12/VertexLayout12.h
     rhi/d3d12/DescriptorHeapAllocator12.h
+    rhi/d3d12/UploadBufferAllocator12.h
     rhi/DXUtils.h
   )
 
@@ -156,6 +157,7 @@ elseif(AX_RENDER_API STREQUAL "d3d12")
     rhi/d3d12/Program12.cpp
     rhi/d3d12/VertexLayout12.cpp
     rhi/d3d12/DescriptorHeapAllocator12.cpp
+    rhi/d3d12/UploadBufferAllocator12.cpp
     rhi/DXUtils.cpp
   )
 elseif(AX_RENDER_API STREQUAL "vk")

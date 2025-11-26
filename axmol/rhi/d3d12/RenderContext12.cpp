@@ -1104,7 +1104,7 @@ void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
     AXASSERT(SUCCEEDED(hr), "CreateCommittedResource READBACK failed");
 
     // Record copy from texture to readback
-    auto cmd = _driver->startIsolateSubmission();
+    auto& cmd = _driver->startIsolateSubmission();
     colorAttachment->transitionState(cmd, D3D12_RESOURCE_STATE_COPY_SOURCE);
 
     D3D12_TEXTURE_COPY_LOCATION dst{};
@@ -1121,7 +1121,7 @@ void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
 
     // Transition source back to sampling
     colorAttachment->transitionState(cmd, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-    _driver->finishIsolateSubmission(cmd);
+    _driver->finishIsolateSubmission(cmd, true);
 
     // Map and read data
     void* mapped = nullptr;

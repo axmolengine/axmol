@@ -97,9 +97,6 @@ BufferImpl::~BufferImpl()
 {
     if (_resource)
         _driver->queueDisposal(_resource.Detach(), _lastFenceValue);
-
-    if (_uploadBuffer)
-        _driver->queueDisposal(_uploadBuffer.Detach(), _lastFenceValue);
 }
 
 /* -------------------------------------------------- createNativeBuffer */
@@ -188,19 +185,15 @@ void BufferImpl::copyFromUploadBuffer(const void* data, std::size_t offset, std:
 {
     AXASSERT(data && size > 0, "copyFromUploadBuffer invalid args");
 
-    ensureUploadHeap(size);
+    // Allocate upload memory from allocator
+    auto allocator = _driver->getUploadBufferAllocator();  // raw pointer
+    auto span      = allocator->allocBytes(size);          // 256 alignment for safety
 
-    // Map upload heap and write
-    void* mapped = nullptr;
-    D3D12_RANGE readRange{0, 0};
-    HRESULT hr = _uploadBuffer->Map(0, &readRange, &mapped);
-    AXASSERT(SUCCEEDED(hr), "Failed to map upload buffer");
-    std::memcpy(mapped, data, size);
-    D3D12_RANGE written{0, size};
-    _uploadBuffer->Unmap(0, &written);
+    // Copy data into upload memory
+    std::memcpy(span.cpuPtr, data, size);
 
     // Record isolated copy commands
-    auto submission = _driver->startIsolateSubmission();  // returns command list + allocator + queue context
+    auto& submission = _driver->startIsolateSubmission();
 
     // Transition destination buffer to COPY_DEST if needed
     if (_resourceState != D3D12_RESOURCE_STATE_COPY_DEST)
@@ -216,8 +209,8 @@ void BufferImpl::copyFromUploadBuffer(const void* data, std::size_t offset, std:
         _resourceState = D3D12_RESOURCE_STATE_COPY_DEST;
     }
 
-    // Copy from upload buffer to GPU buffer
-    submission->CopyBufferRegion(_resource.Get(), static_cast<UINT64>(offset), _uploadBuffer.Get(), 0,
+    // Copy from upload span to GPU buffer
+    submission->CopyBufferRegion(_resource.Get(), static_cast<UINT64>(offset), span.heap, span.offset,
                                  static_cast<UINT64>(size));
 
     // Transition back to a usable state (vertex/index/constant/common)
@@ -236,45 +229,8 @@ void BufferImpl::copyFromUploadBuffer(const void* data, std::size_t offset, std:
     }
 
     // Submit & fence
-    _driver->finishIsolateSubmission(submission);
-
-    // Optionally enqueue upload buffer disposal after fence, or reuse it
-    // For simplicity we keep a reusable upload buffer sized to last copy size
-}
-
-/* -------------------------------------------------- ensureUploadHeap */
-void BufferImpl::ensureUploadHeap(std::size_t size)
-{
-    // Lazily create or grow upload buffer (UPLOAD heap)
-    if (_uploadBuffer && _uploadBuffer->GetDesc().Width >= size)
-        return;
-
-    auto device = _driver->getDevice();
-
-    D3D12_RESOURCE_DESC desc = {};
-    desc.Dimension           = D3D12_RESOURCE_DIMENSION_BUFFER;
-    desc.Alignment           = 0;
-    desc.Width               = static_cast<UINT64>(size);
-    desc.Height              = 1;
-    desc.DepthOrArraySize    = 1;
-    desc.MipLevels           = 1;
-    desc.Format              = DXGI_FORMAT_UNKNOWN;
-    desc.SampleDesc.Count    = 1;
-    desc.SampleDesc.Quality  = 0;
-    desc.Layout              = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-    desc.Flags               = D3D12_RESOURCE_FLAG_NONE;
-
-    D3D12_HEAP_PROPERTIES heapProps = {};
-    heapProps.Type                  = D3D12_HEAP_TYPE_UPLOAD;
-    heapProps.CPUPageProperty       = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-    heapProps.MemoryPoolPreference  = D3D12_MEMORY_POOL_UNKNOWN;
-    heapProps.CreationNodeMask      = 1;
-    heapProps.VisibleNodeMask       = 1;
-
-    HRESULT hr =
-        device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATE_GENERIC_READ,
-                                        nullptr, IID_PPV_ARGS(&_uploadBuffer));
-    AXASSERT(SUCCEEDED(hr), "Failed to create upload heap buffer");
+    _driver->finishIsolateSubmission(submission, true);
+    allocator->retireSync(span);
 }
 
 /* -------------------------------------------------- usingDefaultStoredData */

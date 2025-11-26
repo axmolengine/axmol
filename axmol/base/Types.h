@@ -504,6 +504,9 @@ struct ContextAttrs
     void* windowParent{nullptr};  // win32-spec
     PowerPreference powerPreference{PowerPreference::Auto};
     RenderScaleMode renderScaleMode{RenderScaleMode::Default};
+
+    // The uploadBuffer size, current used by d3d12 RHI
+    uint32_t uploadBufferSize{16 * 1024 * 1024};
 };
 
 /** @struct Acceleration
