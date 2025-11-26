@@ -545,13 +545,10 @@ void RenderContextImpl::endFrame()
     {
         if (hr == DXGI_ERROR_DEVICE_REMOVED)
         {
-            auto device    = static_cast<DriverImpl*>(DriverBase::getInstance())->getDevice();
-            HRESULT reason = device->GetDeviceRemovedReason();
+            HRESULT reason = _device->GetDeviceRemovedReason();
             AXLOGD("D3D12 Device remove reason: {}", reason);
         }
         // else if (hr == DXGI_ERROR_WAS_STILL_DRAWING)
-        //{
-        // }
     }
 #endif
 
