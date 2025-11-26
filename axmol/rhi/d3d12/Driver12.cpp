@@ -472,6 +472,39 @@ ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, std::string_view
 
 SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
 {
+    static constexpr D3D12_FILTER kFilterTable[8] = {D3D12_FILTER_MIN_MAG_MIP_POINT,
+                                                     D3D12_FILTER_MIN_MAG_POINT_MIP_LINEAR,
+                                                     D3D12_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT,
+                                                     D3D12_FILTER_MIN_POINT_MAG_MIP_LINEAR,
+                                                     D3D12_FILTER_MIN_LINEAR_MAG_MIP_POINT,
+                                                     D3D12_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR,
+                                                     D3D12_FILTER_MIN_MAG_LINEAR_MIP_POINT,
+                                                     D3D12_FILTER_MIN_MAG_MIP_LINEAR};
+
+    static constexpr D3D12_FILTER kCmpFilterTable[8] = {D3D12_FILTER_COMPARISON_MIN_MAG_MIP_POINT,
+                                                        D3D12_FILTER_COMPARISON_MIN_MAG_POINT_MIP_LINEAR,
+                                                        D3D12_FILTER_COMPARISON_MIN_POINT_MAG_LINEAR_MIP_POINT,
+                                                        D3D12_FILTER_COMPARISON_MIN_POINT_MAG_MIP_LINEAR,
+                                                        D3D12_FILTER_COMPARISON_MIN_LINEAR_MAG_MIP_POINT,
+                                                        D3D12_FILTER_COMPARISON_MIN_LINEAR_MAG_POINT_MIP_LINEAR,
+                                                        D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT,
+                                                        D3D12_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR};
+
+    static constexpr D3D12_TEXTURE_ADDRESS_MODE kWrapTbl[4] = {
+        D3D12_TEXTURE_ADDRESS_MODE_WRAP, D3D12_TEXTURE_ADDRESS_MODE_MIRROR, D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
+        D3D12_TEXTURE_ADDRESS_MODE_BORDER};
+
+    static constexpr D3D12_COMPARISON_FUNC kCompareFunTbl[] = {
+        D3D12_COMPARISON_FUNC_NEVER,          // CompareFunc::NEVER
+        D3D12_COMPARISON_FUNC_LESS,           // CompareFunc::LESS
+        D3D12_COMPARISON_FUNC_EQUAL,          // CompareFunc::EQUAL
+        D3D12_COMPARISON_FUNC_LESS_EQUAL,     // CompareFunc::LESS_EQUAL
+        D3D12_COMPARISON_FUNC_GREATER,        // CompareFunc::GREATER
+        D3D12_COMPARISON_FUNC_NOT_EQUAL,      // CompareFunc::NOT_EQUAL
+        D3D12_COMPARISON_FUNC_GREATER_EQUAL,  // CompareFunc::GREATER_EQUAL
+        D3D12_COMPARISON_FUNC_ALWAYS          // CompareFunc::ALWAYS
+    };
+
     D3D12_SAMPLER_DESC sd = {};
 
     // --- Filter ---
@@ -490,24 +523,6 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
         const auto magL = ((int)desc.magFilter & (int)SamplerFilter::MAG_LINEAR);
         const auto mipL = ((int)desc.mipFilter & (int)SamplerFilter::MIP_LINEAR);
 
-        static constexpr D3D12_FILTER kFilterTable[8] = {D3D12_FILTER_MIN_MAG_MIP_POINT,
-                                                    D3D12_FILTER_MIN_MAG_POINT_MIP_LINEAR,
-                                                    D3D12_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT,
-                                                    D3D12_FILTER_MIN_POINT_MAG_MIP_LINEAR,
-                                                    D3D12_FILTER_MIN_LINEAR_MAG_MIP_POINT,
-                                                    D3D12_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR,
-                                                    D3D12_FILTER_MIN_MAG_LINEAR_MIP_POINT,
-                                                    D3D12_FILTER_MIN_MAG_MIP_LINEAR};
-
-        static constexpr D3D12_FILTER kCmpFilterTable[8] = {D3D12_FILTER_COMPARISON_MIN_MAG_MIP_POINT,
-                                                       D3D12_FILTER_COMPARISON_MIN_MAG_POINT_MIP_LINEAR,
-                                                       D3D12_FILTER_COMPARISON_MIN_POINT_MAG_LINEAR_MIP_POINT,
-                                                       D3D12_FILTER_COMPARISON_MIN_POINT_MAG_MIP_LINEAR,
-                                                       D3D12_FILTER_COMPARISON_MIN_LINEAR_MAG_MIP_POINT,
-                                                       D3D12_FILTER_COMPARISON_MIN_LINEAR_MAG_POINT_MIP_LINEAR,
-                                                       D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT,
-                                                       D3D12_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR};
-
         const int idx = (minL << 2) | (magL << 1) | (mipL ? 1 : 0);
 
         if (desc.compareFunc != CompareFunc::NEVER)
@@ -519,26 +534,13 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     }
 
     // --- Wrap ---
-    static constexpr D3D12_TEXTURE_ADDRESS_MODE kWrapTbl[4] = {
-        D3D12_TEXTURE_ADDRESS_MODE_WRAP, D3D12_TEXTURE_ADDRESS_MODE_MIRROR, D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
-        D3D12_TEXTURE_ADDRESS_MODE_BORDER};
     sd.AddressU = kWrapTbl[(int)desc.sAddressMode];
     sd.AddressV = kWrapTbl[(int)desc.tAddressMode];
     sd.AddressW = kWrapTbl[(int)desc.wAddressMode];
 
     // --- Compare ---
-    static constexpr D3D12_COMPARISON_FUNC kCompareFunTbl[] = {
-        D3D12_COMPARISON_FUNC_NEVER,          // CompareFunc::NEVER
-        D3D12_COMPARISON_FUNC_LESS,           // CompareFunc::LESS
-        D3D12_COMPARISON_FUNC_EQUAL,          // CompareFunc::EQUAL
-        D3D12_COMPARISON_FUNC_LESS_EQUAL,     // CompareFunc::LESS_EQUAL
-        D3D12_COMPARISON_FUNC_GREATER,        // CompareFunc::GREATER
-        D3D12_COMPARISON_FUNC_NOT_EQUAL,      // CompareFunc::NOT_EQUAL
-        D3D12_COMPARISON_FUNC_GREATER_EQUAL,  // CompareFunc::GREATER_EQUAL
-        D3D12_COMPARISON_FUNC_ALWAYS          // CompareFunc::ALWAYS
-    };
-
     sd.ComparisonFunc = kCompareFunTbl[(UINT)desc.compareFunc];
+
     sd.MinLOD         = 0.0f;
     sd.MaxLOD         = D3D12_FLOAT32_MAX;
     sd.MipLODBias     = 0.0f;

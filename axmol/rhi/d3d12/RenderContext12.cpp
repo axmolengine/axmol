@@ -182,6 +182,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext) :
 
     // vsync control
     auto& contextAttrs = Application::getContextAttrs();
+    _renderScaleMode   = contextAttrs.renderScaleMode;
     if (contextAttrs.vsync)
     {
         _syncInterval = 1;

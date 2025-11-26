@@ -236,6 +236,8 @@ private:
     UINT _presentFlags{0};
     UINT _swapchainFlags{0};
 
+    RenderScaleMode _renderScaleMode{};
+
     bool _swapchainDirty{false};
     bool _inFrame{false};
 };
