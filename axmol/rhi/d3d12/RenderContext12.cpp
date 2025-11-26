@@ -1063,7 +1063,6 @@ void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
                                            bool preserveAxisHint,
                                            std::function<void(const PixelBufferDesc&)>& callback)
 {
-    // Simplified: readback from swapchain backbuffer color0 by copying to readback resource
     PixelBufferDesc pbd{};
     auto* rtImpl = static_cast<RenderTargetImpl*>(rt);
 
@@ -1074,7 +1073,7 @@ void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
         return;
     }
 
-    // Ensure GPU work finished
+    // Ensure GPU work on current frame finished
     auto fence = _fences[_currentFrame];
     if (fence->GetCompletedValue() < _fenceValues[_currentFrame])
     {
@@ -1086,18 +1085,22 @@ void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
     const UINT width  = desc.width;
     const UINT height = desc.height;
 
-    // Create readback buffer (ROW_MAJOR)
-    const UINT stride   = 4;  // RGBA8
-    const UINT rowPitch = width * stride;
-    const UINT bufSize  = rowPitch * height;
+    // Query footprint for readback
+    const auto nativeTexDesc = colorAttachment->internalHandle().resource->GetDesc();
+    D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprint{};
+    UINT numRows          = 0;
+    UINT64 rowSizeInBytes = 0;
+    UINT64 totalBytes     = 0;
+    _device->GetCopyableFootprints(&nativeTexDesc, 0, 1, 0, &footprint, &numRows, &rowSizeInBytes, &totalBytes);
 
+    // Create readback buffer sized to footprint
     Microsoft::WRL::ComPtr<ID3D12Resource> readback;
     D3D12_HEAP_PROPERTIES heapProps{};
     heapProps.Type = D3D12_HEAP_TYPE_READBACK;
 
     D3D12_RESOURCE_DESC bufDesc{};
     bufDesc.Dimension        = D3D12_RESOURCE_DIMENSION_BUFFER;
-    bufDesc.Width            = bufSize;
+    bufDesc.Width            = totalBytes;  // must match footprint size
     bufDesc.Height           = 1;
     bufDesc.DepthOrArraySize = 1;
     bufDesc.MipLevels        = 1;
@@ -1109,17 +1112,14 @@ void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
                                                   D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&readback));
     AXASSERT(SUCCEEDED(hr), "CreateCommittedResource READBACK failed");
 
-    // Record copy from texture to readback via CopyTextureRegion
+    // Record copy from texture to readback
     auto cmd = _driver->startIsolateSubmission();
-    // Ensure list is open; if not, open a tiny list (simplified assumption: we are between frames)
-    // Transition source to COPY_SOURCE if needed
     colorAttachment->transitionState(cmd, D3D12_RESOURCE_STATE_COPY_SOURCE);
 
     D3D12_TEXTURE_COPY_LOCATION dst{};
-    dst.pResource            = readback.Get();
-    dst.Type                 = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
-    const auto nativeTexDesc = colorAttachment->internalHandle().resource->GetDesc();
-    _device->GetCopyableFootprints(&nativeTexDesc, 0, 1, 0, &dst.PlacedFootprint, nullptr, nullptr, nullptr);
+    dst.pResource       = readback.Get();
+    dst.Type            = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
+    dst.PlacedFootprint = footprint;
 
     D3D12_TEXTURE_COPY_LOCATION src{};
     src.pResource        = colorAttachment->internalHandle().resource.Get();
@@ -1130,27 +1130,33 @@ void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
 
     // Transition source back to sampling
     colorAttachment->transitionState(cmd, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-
     _driver->finishIsolateSubmission(cmd);
 
     // Map and read data
     void* mapped = nullptr;
-    D3D12_RANGE readRange{0, bufSize};
-
+    D3D12_RANGE readRange{0, totalBytes};
     hr = readback->Map(0, &readRange, &mapped);
     if (SUCCEEDED(hr) && mapped)
     {
         pbd._width  = width;
         pbd._height = height;
-        pbd._data.resize(bufSize);
-        std::memcpy(pbd._data.data(), mapped, bufSize);
+        pbd._data.resize(width * height * 4);
+
+        BYTE* srcData = reinterpret_cast<BYTE*>(mapped);
+        BYTE* dstData = pbd._data.data();
+
+        // Copy row by row, removing padding
+        for (UINT row = 0; row < height; ++row)
+        {
+            memcpy(dstData + row * width * 4, srcData + row * footprint.Footprint.RowPitch, width * 4);
+        }
 
         D3D12_RANGE written{0, 0};
         readback->Unmap(0, &written);
     }
     else
     {
-        AXLOGE("RenderContextImpl::readPixelsImpl fail, hr={:x}", hr);
+        AXLOGE("RenderContextImpl::readPixelsInternal fail, hr={:x}", hr);
     }
 
     callback(pbd);
