@@ -67,7 +67,11 @@ public:
 
     void rebuildAttachmentsForSwapchain(IDXGISwapChain4* swapchain, uint32_t width, uint32_t height);
 
+    void setLastFenceValue(uint64_t fenceValue) { _lastFenceValue = fenceValue; }
+    uint64_t getLastFenceValue() const { return _lastFenceValue; }
+
 private:
+    uint64_t _lastFenceValue{0};
     DriverImpl* _driver{nullptr};
 
     std::array<d3d12::DescriptorHandle*, MAX_COLOR_ATTCHMENT> _rtvsDescriptors{};

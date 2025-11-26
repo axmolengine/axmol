@@ -342,20 +342,6 @@ RenderContextImpl::~RenderContextImpl()
     AX_SAFE_RELEASE_NULL(_screenRT);
     AX_SAFE_RELEASE_NULL(_renderPipeline);
 
-    // Ensure GPU idle then cleanup handles if needed
-    for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
-    {
-        if (_fences[i])
-        {
-            _graphicsQueue->Signal(_fences[i].Get(), ++_fenceValues[i]);
-            if (_fences[i]->GetCompletedValue() < _fenceValues[i])
-            {
-                _fences[i]->SetEventOnCompletion(_fenceValues[i], _fenceEvents[i]);
-                WaitForSingleObject(_fenceEvents[i], INFINITE);
-            }
-        }
-    }
-
     for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
     {
         if (_fenceEvents[i])
@@ -439,13 +425,24 @@ bool RenderContextImpl::beginFrame()
 {
     // Wait fence of current frame
     auto fence = _fences[_currentFrame];
-    if (fence->GetCompletedValue() < _fenceValues[_currentFrame])
+
+    const auto completeFenceValue = fence->GetCompletedValue();
+    if (completeFenceValue < _fenceValues[_currentFrame])
     {
         fence->SetEventOnCompletion(_fenceValues[_currentFrame], _fenceEvents[_currentFrame]);
         WaitForSingleObject(_fenceEvents[_currentFrame], INFINITE);
     }
 
-    _driver->processDisposalQueue(1 << _currentFrame);
+    _advanceFenceValues[_currentFrame] = _fenceValues[_currentFrame] + 1;
+
+    if (!_postFrameOps.empty())
+    {
+        for (auto& op : _postFrameOps)
+            op();
+        _postFrameOps.clear();
+    }
+
+    _driver->processDisposalQueue(completeFenceValue);
 
     if (_swapchainDirty)
     {
@@ -511,6 +508,8 @@ void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const Render
 
     // Bind RTV/DSV and clear according to flags
     rtImpl->beginRenderPass(_currentCmdList, descriptor, _renderTargetWidth, _renderTargetHeight, _currentImageIndex);
+
+    rtImpl->setLastFenceValue(_advanceFenceValues[_currentFrame]);
 }
 
 void RenderContextImpl::endRenderPass()
@@ -556,15 +555,8 @@ void RenderContextImpl::endFrame()
 #endif
 
     // Signal fence for this frame
-    _fenceValues[_currentFrame]++;
-    _graphicsQueue->Signal(_fences[_currentFrame].Get(), _fenceValues[_currentFrame]);
-
-    if (!_postFrameOps.empty())
-    {
-        for (auto& op : _postFrameOps)
-            op();
-        _postFrameOps.clear();
-    }
+    _graphicsQueue->Signal(_fences[_currentFrame].Get(), _advanceFenceValues[_currentFrame]);
+    _fenceValues[_currentFrame] = _advanceFenceValues[_currentFrame];
 
     // Next frame index
     _currentFrame = (_currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
@@ -849,6 +841,9 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
 
     applyPendingDynamicStates();
 
+    const auto advanceFenceValue = _advanceFenceValues[_currentFrame];
+    _vertexBuffer->setLastFenceValue(advanceFenceValue);
+
     // bind vertex buffers
     if (!_instanceBuffer)
     {
@@ -860,6 +855,7 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     }
     else
     {
+        _instanceBuffer->setLastFenceValue(advanceFenceValue);
         D3D12_VERTEX_BUFFER_VIEW views[2]{};
         views[0].BufferLocation = _vertexBuffer->internalResource()->GetGPUVirtualAddress();
         views[0].SizeInBytes    = static_cast<UINT>(_vertexBuffer->getSize());
@@ -915,7 +911,8 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
                     maxSlot = slot;
 
                 auto textureImpl = static_cast<TextureImpl*>(bindingSet.texs[i]);
-                auto srvHandle   = textureImpl->internalHandle().srv;
+                textureImpl->setLastFenceValue(advanceFenceValue);
+                auto srvHandle = textureImpl->internalHandle().srv;
                 assert(!!srvHandle);
 
                 auto dstSrv = srvCpuStart;
@@ -1071,14 +1068,6 @@ void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
     {
         callback(pbd);
         return;
-    }
-
-    // Ensure GPU work on current frame finished
-    auto fence = _fences[_currentFrame];
-    if (fence->GetCompletedValue() < _fenceValues[_currentFrame])
-    {
-        fence->SetEventOnCompletion(_fenceValues[_currentFrame], _fenceEvents[_currentFrame]);
-        WaitForSingleObject(_fenceEvents[_currentFrame], INFINITE);
     }
 
     const auto& desc  = colorAttachment->getDesc();

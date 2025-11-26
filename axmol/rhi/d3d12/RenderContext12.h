@@ -157,6 +157,7 @@ private:
     std::array<Microsoft::WRL::ComPtr<ID3D12Fence>, MAX_FRAMES_IN_FLIGHT> _fences;
     std::array<HANDLE, MAX_FRAMES_IN_FLIGHT> _fenceEvents{};
     std::array<uint64_t, MAX_FRAMES_IN_FLIGHT> _fenceValues{};
+    std::array<uint64_t, MAX_FRAMES_IN_FLIGHT> _advanceFenceValues{};
 
     ComPtr<ID3D12DescriptorHeap> _srvHeaps[MAX_FRAMES_IN_FLIGHT];
 

@@ -49,7 +49,7 @@ void RenderTargetImpl::invalidate()
     {
         if (_rtvsDescriptors[i])
         {
-            _driver->queueDisposal(_rtvsDescriptors[i], DisposableResource::Type::RenderTargetView);
+            _driver->queueDisposal(_rtvsDescriptors[i], DisposableResource::Type::RenderTargetView, _lastFenceValue);
             _rtvsDescriptors[i] = nullptr;
             _rtvHandles[i].ptr  = 0;
         }
@@ -62,7 +62,7 @@ void RenderTargetImpl::invalidate()
 
     if (_dsvDescriptor)
     {
-        _driver->queueDisposal(_dsvDescriptor, DisposableResource::Type::DepthStencilView);
+        _driver->queueDisposal(_dsvDescriptor, DisposableResource::Type::DepthStencilView, _lastFenceValue);
         _dsvDescriptor = nullptr;
         _dsvHandle.ptr = 0;
     }
@@ -91,7 +91,8 @@ void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
                 continue;
 
             if (_rtvsDescriptors[i])
-                _driver->queueDisposal(_rtvsDescriptors[i], DisposableResource::Type::RenderTargetView);
+                _driver->queueDisposal(_rtvsDescriptors[i], DisposableResource::Type::RenderTargetView,
+                                       _lastFenceValue);
 
             if (_color[i].texture)
             {
@@ -112,7 +113,7 @@ void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
         if (bitmask::any(_dirtyFlags, TargetBufferFlags::DEPTH_AND_STENCIL))
         {
             if (_dsvDescriptor)
-                _driver->queueDisposal(_dsvDescriptor, DisposableResource::Type::DepthStencilView);
+                _driver->queueDisposal(_dsvDescriptor, DisposableResource::Type::DepthStencilView, _lastFenceValue);
 
             if (_depthStencil.texture)
             {
@@ -157,7 +158,7 @@ void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
 
     D3D12_CPU_DESCRIPTOR_HANDLE* pRTVs{nullptr};
     D3D12_CPU_DESCRIPTOR_HANDLE* pDSV{nullptr};
-    
+
     // Transition attachments to render target state if not default
     if (_defaultRenderTarget)
     {

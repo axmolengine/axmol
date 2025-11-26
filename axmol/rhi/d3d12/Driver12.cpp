@@ -44,6 +44,8 @@
 
 #include <algorithm>
 
+// Note: d3dcompiler_47.dll also works well in HLSL shader model 5.1
+// DXC requires shader model 6.0
 #define _AX_USE_DXC 1
 
 #pragma comment(lib, "dxgi.lib")
@@ -200,7 +202,7 @@ static inline const char* stageToProfile(ShaderStage s)
     case ShaderStage::FRAGMENT:
         return "ps_5_1";
     case ShaderStage::COMPUTE:
-        return "cs_6_0";
+        return "cs_5_1";
     default:
         return "vs_5_1";
     }
@@ -230,18 +232,30 @@ DriverImpl::~DriverImpl()
     _isolateSubmission.reset();
 
     _gfxQueue.Reset();
+
+    ComPtr<ID3D12DebugDevice> debugDevice;
+    _device->QueryInterface(IID_PPV_ARGS(&debugDevice));
+
     _device.Reset();
     _adapter.Reset();
     _dxgiFactory.Reset();
 
-    if (_idleFence)
-        _idleFence->Release();
+    SafeRelease(_idleFence);
 
     if (_isolateEvent)
+    {
         CloseHandle(_isolateEvent);
+        _isolateEvent = nullptr;
+    }
 
     if (_idleEvent)
+    {
         CloseHandle(_idleEvent);
+        _idleEvent = nullptr;
+    }
+
+    if (debugDevice)
+        debugDevice->ReportLiveDeviceObjects(D3D12_RLDO_DETAIL);
 }
 
 void DriverImpl::init()
@@ -303,6 +317,8 @@ void DriverImpl::init()
     // descriptor stdie
     _srvDescriptorStride     = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
     _samplerDescriptorStride = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
+
+
 
 #if _AX_USE_DXC
     // init DXC instances once
@@ -678,25 +694,25 @@ void DriverImpl::finishIsolateSubmission(bool waitForCompletion)
     _isolateSubmission.fenceValue = 0;
 }
 
-void DriverImpl::queueDisposal(ID3D12Resource* res)
+void DriverImpl::queueDisposal(ID3D12Resource* res, uint64_t fenceValue)
 {
-    queueDisposalInternal(DisposableResource{.type = DisposableResource::Type::Resource, .resource = res});
+    queueDisposalInternal(
+        DisposableResource{.type = DisposableResource::Type::Resource, .fenceValue = fenceValue, .resource = res});
 }
 
-void DriverImpl::queueDisposal(DescriptorHandle* handle, DisposableResource::Type type)
+void DriverImpl::queueDisposal(DescriptorHandle* handle, DisposableResource::Type type, uint64_t fenceValue)
 {
-    queueDisposalInternal(DisposableResource{.type = type, .handle = handle});
+    queueDisposalInternal(DisposableResource{.type = type, .fenceValue = fenceValue, .handle = handle});
 }
 
-void DriverImpl::processDisposalQueue(uint32_t completedMask)
+void DriverImpl::processDisposalQueue(uint64_t completeFence)
 {
-
     if (!_disposalQueue.empty())
     {
         for (size_t i = 0; i < _disposalQueue.size();)
         {
             auto& res = _disposalQueue[i];
-            if ((res.frameMask & completedMask) != 0)
+            if (res.fenceValue < completeFence)
             {
                 if (res.type == DisposableResource::Type::Resource)
                 {
@@ -721,20 +737,17 @@ void DriverImpl::processDisposalQueue(uint32_t completedMask)
 void DriverImpl::cleanPendingResources()
 {
     waitDeviceIdle();
-    processDisposalQueue(bitmask::low_bits<uint32_t>(RenderContextImpl::MAX_FRAMES_IN_FLIGHT));
+    processDisposalQueue(UINT64_MAX);
 }
 
 void DriverImpl::queueDisposalInternal(DisposableResource&& disposal)
 {
     std::lock_guard<std::mutex> lk(_disposalMutex);
-
-    disposal.frameMask = 1 << (_currentRenderContext ? _currentRenderContext->getCurrentFrame() : 0);
     _disposalQueue.emplace_back(std::move(disposal));
 }
 
 bool DriverImpl::compileShader(std::string_view shaderSource, ShaderStage stage, D3D12BlobHandle& outHandle)
 {
-#if _AX_USE_DXC
     if (stage == ShaderStage::FRAGMENT)
     {
         _shaderCompileBuffer.clear();
@@ -743,7 +756,7 @@ bool DriverImpl::compileShader(std::string_view shaderSource, ShaderStage stage,
         _shaderCompileBuffer += shaderSource;
         shaderSource = _shaderCompileBuffer;
     }
-
+#if _AX_USE_DXC
     ComPtr<IDxcBlobEncoding> sourceBlob;
     _dxcLibrary->CreateBlobWithEncodingOnHeapCopy(shaderSource.data(), static_cast<UINT32>(shaderSource.size()),
                                                   CP_UTF8, &sourceBlob);
@@ -1038,11 +1051,11 @@ bool DriverImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource*
     }
 
     // Dispose the temporary CPU-only descriptors and upload buffer
-    queueDisposal(constUpload.Detach());
+    queueDisposal(constUpload.Detach(), 1);
     for (auto h : mipSrvs)
-        queueDisposal(h, DisposableResource::Type::ShaderResourceView);
+        queueDisposal(h, DisposableResource::Type::ShaderResourceView, 1);
     for (auto h : mipUavs)
-        queueDisposal(h, DisposableResource::Type::ShaderResourceView);
+        queueDisposal(h, DisposableResource::Type::ShaderResourceView, 1);
 
     return true;
 }

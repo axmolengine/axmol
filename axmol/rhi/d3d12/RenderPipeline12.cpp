@@ -57,10 +57,10 @@ static const D3D12_BLEND_OP kBlendOpMap[] = {
 };
 
 static constexpr bool kBlendFactorColorValid[] = {true, true, true, true, true, true, true,
-                                                 true, true, true, true, true, true, true};
+                                                  true, true, true, true, true, true, true};
 
 static constexpr bool kBlendFactorAlphaValid[] = {true,  true, false, false, true,  true, false,
-                                                 false, true, true,  true,  false, true, true};
+                                                  false, true, true,  true,  false, true, true};
 
 // Map BlendOp to D3D12_BLEND_OP
 static inline D3D12_BLEND_OP toD3DBlendOp(BlendOp op)
@@ -130,6 +130,10 @@ RenderPipelineImpl::RenderPipelineImpl(DriverImpl* driver) : _driver(driver)
 RenderPipelineImpl::~RenderPipelineImpl()
 {
     _driver->waitDeviceIdle();
+
+    _activePSO.Reset();
+    _activeRootSignature = nullptr;
+
     _psoCache.clear();
     _rootSigCache.clear();
 }

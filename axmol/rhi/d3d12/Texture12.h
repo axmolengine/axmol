@@ -127,6 +127,9 @@ public:
 
     DescriptorHandle* getSampler() const { return _sampler; }
 
+    void setLastFenceValue(uint64_t value) { _lastFenceValue = value; }
+    uint64_t getLastFenceValue() const { return _lastFenceValue; }
+
 private:
     D3D12_RESOURCE_STATES ensureNativeTexture(bool prepareForCopyDest);
     void createShaderResourceView(const dxutils::PixelFormatInfo* fmtInfo,
@@ -136,6 +139,7 @@ private:
                                   ID3D12Device* device);
     void generateMipmaps(ID3D12GraphicsCommandList* cmd);
 
+    uint64_t _lastFenceValue{0};
     DriverImpl* _driver{nullptr};  // weak pointer
     ResourceStateTracker _stateTracker;
     TextureHandle _nativeTexture{};

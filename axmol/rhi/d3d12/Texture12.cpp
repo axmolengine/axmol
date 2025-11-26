@@ -87,10 +87,10 @@ TextureImpl::TextureImpl(DriverImpl* driver, ComPtr<ID3D12Resource> existingReso
 TextureImpl::~TextureImpl()
 {
     if (_nativeTexture.resource)
-        _driver->queueDisposal(_nativeTexture.resource.Detach());
+        _driver->queueDisposal(_nativeTexture.resource.Detach(), _lastFenceValue);
 
     if (_nativeTexture.srv)
-        _driver->queueDisposal(_nativeTexture.srv, DisposableResource::Type::ShaderResourceView);
+        _driver->queueDisposal(_nativeTexture.srv, DisposableResource::Type::ShaderResourceView, _lastFenceValue);
 }
 
 void TextureImpl::transitionState(ID3D12GraphicsCommandList* cmd, D3D12_RESOURCE_STATES newState)
@@ -478,6 +478,8 @@ D3D12_RESOURCE_STATES TextureImpl::ensureNativeTexture(bool prepareForCopyDest)
     // create texture resource
     HRESULT hr = device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &texDesc, initialResourceState,
                                                  pClearValue, IID_PPV_ARGS(&_nativeTexture.resource));
+
+    // AXLOGD("TextureImpl: Created resource:{} for {}", fmt::ptr(_nativeTexture.resource.Get()), fmt::ptr(this));
 
     // non depth-stencil texture, we need create SRV for sampling, even through it's textureUsage=RENDER_TARGET
     if (_desc.pixelFormat != PixelFormat::D24S8)

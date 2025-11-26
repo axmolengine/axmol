@@ -96,10 +96,10 @@ BufferImpl::BufferImpl(DriverImpl* driver, std::size_t size, BufferType type, Bu
 BufferImpl::~BufferImpl()
 {
     if (_resource)
-        _driver->queueDisposal(_resource.Detach());
+        _driver->queueDisposal(_resource.Detach(), _lastFenceValue);
 
     if (_uploadBuffer)
-        _driver->queueDisposal(_uploadBuffer.Detach());
+        _driver->queueDisposal(_uploadBuffer.Detach(), _lastFenceValue);
 }
 
 /* -------------------------------------------------- createNativeBuffer */
@@ -133,6 +133,8 @@ void BufferImpl::createNativeBuffer(const void* initial)
     HRESULT hr = device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &desc, initState, nullptr,
                                                  IID_PPV_ARGS(&_resource));
     AXASSERT(SUCCEEDED(hr), "Failed to create ID3D12Resource buffer");
+
+    // AXLOGD("BufferImpl: Created resource: {} for {}", fmt::ptr(_resource.Get()), fmt::ptr(this));
 
     _resourceState = initState;
 

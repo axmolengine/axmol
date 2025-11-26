@@ -60,9 +60,9 @@ struct DisposableResource
         DepthStencilView,
         SamplerView,
     };
-    uint32_t frameMask{0};
-    Type type{};
 
+    Type type{};
+    uint64_t fenceValue;
     union
     {
         ID3D12Resource* resource;
@@ -149,10 +149,10 @@ public:
 
     bool compileShader(std::string_view shaderSource, ShaderStage stage, D3D12BlobHandle& outHandle);
 
-    void queueDisposal(ID3D12Resource*);
-    void queueDisposal(DescriptorHandle* handle, DisposableResource::Type type);
+    void queueDisposal(ID3D12Resource*, uint64_t fenceValue);
+    void queueDisposal(DescriptorHandle* handle, DisposableResource::Type type, uint64_t fenceValue);
 
-    void processDisposalQueue(uint32_t completedMask);
+    void processDisposalQueue(uint64_t completeFence);
 
     void waitDeviceIdle();
 

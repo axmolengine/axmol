@@ -64,6 +64,9 @@ public:
     D3D12_RESOURCE_STATES currentState() const noexcept { return _resourceState; }
     D3D12_RESOURCE_FLAGS resourceFlags() const noexcept { return _resourceFlags; }
 
+    void setLastFenceValue(uint64_t value) { _lastFenceValue = value; }
+    uint64_t getLastFenceValue() const { return _lastFenceValue; }
+
 private:
     void createNativeBuffer(const void* initial);
     void copyFromUploadBuffer(const void* data, std::size_t offset, std::size_t size);
@@ -71,6 +74,7 @@ private:
     static std::size_t alignTo(std::size_t value, std::size_t alignment);
 
 private:
+    uint64_t _lastFenceValue{0};
     size_t _capacity{0};
 
     axstd::byte_buffer _defaultData;
