@@ -690,18 +690,33 @@ std::string DriverImpl::getShaderVersion() const
 
 ID3D12GraphicsCommandList* DriverImpl::startIsolateSubmission()
 {
-    // Create allocator
-    _device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&_isolateSubmission.allocator));
+    if (_isolateSubmission.allocator)
+    {  // reuse isolate submission
+        if (_isolateSubmission.fence->GetCompletedValue() < _isolateSubmission.fenceValue)
+        {
+            _isolateSubmission.fence->SetEventOnCompletion(_isolateSubmission.fenceValue, _isolateEvent);
+            WaitForSingleObject(_isolateEvent, INFINITE);
+        }
 
-    // Create command list
-    _device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, _isolateSubmission.allocator.Get(), nullptr,
-                               IID_PPV_ARGS(&_isolateSubmission.cmdList));
+        // Reset allocator and command list
+        _isolateSubmission.allocator->Reset();
+        _isolateSubmission.cmdList->Reset(_isolateSubmission.allocator.Get(), nullptr);
+        ++_isolateSubmission.fenceValue;
+    }
+    else
+    {
+        // Create allocator
+        _device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&_isolateSubmission.allocator));
 
-    // Command lists are created in "open" state; ready for record.
+        // Create command list
+        _device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, _isolateSubmission.allocator.Get(), nullptr,
+                                   IID_PPV_ARGS(&_isolateSubmission.cmdList));
 
-    // Create (or reuse) a fence for this isolated submission
-    _device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&_isolateSubmission.fence));
-    _isolateSubmission.fenceValue = 1;
+        // Command lists are created in "open" state; ready for record.
+        // Create (or reuse) a fence for this isolated submission
+        _device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&_isolateSubmission.fence));
+        _isolateSubmission.fenceValue = 1;
+    }
 
     return _isolateSubmission.cmdList.Get();
 }
@@ -729,12 +744,6 @@ void DriverImpl::finishIsolateSubmission(bool waitForCompletion)
             WaitForSingleObject(_isolateEvent, INFINITE);
         }
     }
-
-    // Reset transient objects for reuse by COM refcount or free them by scope
-    _isolateSubmission.cmdList.Reset();
-    _isolateSubmission.allocator.Reset();
-    _isolateSubmission.fence.Reset();
-    _isolateSubmission.fenceValue = 0;
 }
 
 void DriverImpl::queueDisposal(ID3D12Resource* res, uint64_t fenceValue)
