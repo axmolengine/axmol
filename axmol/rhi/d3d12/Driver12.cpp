@@ -280,30 +280,17 @@ void DriverImpl::init()
         _featureLevel = featLevels.MaxSupportedFeatureLevel;
     }
 
-    // ensure adapter
-    if (!_adapter)
-    {
-        ComPtr<IDXGIDevice> dxgiDevice;
-        AX_D3D_FAST_FAIL(
-            hr = _device->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(dxgiDevice.GetAddressOf())));
-
-        AX_D3D_FAST_FAIL(hr = dxgiDevice->GetAdapter(_adapter.GetAddressOf()));
-
-        AX_D3D_FAST_FAIL(
-            hr = _adapter->GetParent(__uuidof(IDXGIFactory1), (void**)_dxgiFactory.ReleaseAndGetAddressOf()));
-    }
-
     // adapter version
     LARGE_INTEGER version;
     hr = _adapter->CheckInterfaceSupport(__uuidof(IDXGIDevice), &version);
-    if (FAILED(hr))
+    if (SUCCEEDED(hr))
     {
-        _driverVersion.reset();
-        AXLOGW("Error querying driver version from DXGI Adapter.");
+        _driverVersion = version;
     }
     else
     {
-        _driverVersion = version;
+        _driverVersion.reset();
+        AXLOGW("Error querying driver version from DXGI Adapter.");
     }
 
     // adapter desc
@@ -408,6 +395,33 @@ void DriverImpl::initializeDevice()
     qdesc.NodeMask = 0;
     hr             = _device->CreateCommandQueue(&qdesc, IID_PPV_ARGS(&_gfxQueue));
     AXASSERT(SUCCEEDED(hr), "CreateCommandQueue failed");
+
+    // Ensure adapter
+    if (!_adapter)
+    {
+        LUID luid = _device->GetAdapterLuid();
+
+        ComPtr<IDXGIFactory4> factory;
+        CreateDXGIFactory1(IID_PPV_ARGS(&factory));
+
+        ComPtr<IDXGIAdapter1> adapter;
+        for (UINT i = 0; factory->EnumAdapters1(i, &adapter) != DXGI_ERROR_NOT_FOUND; ++i)
+        {
+            DXGI_ADAPTER_DESC1 desc;
+            adapter->GetDesc1(&desc);
+            if (desc.AdapterLuid.LowPart == luid.LowPart && desc.AdapterLuid.HighPart == luid.HighPart)
+            {
+                _adapter = adapter;
+                break;
+            }
+        }
+
+        if (!_adapter)
+            AX_D3D_FAST_FAIL(E_NOINTERFACE);
+
+        AX_D3D_FAST_FAIL(
+            hr = _adapter->GetParent(__uuidof(IDXGIFactory1), (void**)_dxgiFactory.ReleaseAndGetAddressOf()));
+    }
 }
 
 void DriverImpl::createDescriptorAllocators()
