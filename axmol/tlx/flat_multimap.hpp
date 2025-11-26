@@ -20,7 +20,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-#include "axmol/tlx/flat_tree.hpp"
+#include "axmol/tlx/sorted_vector.hpp"
 
 namespace axstd
 {
@@ -40,9 +40,9 @@ struct flat_multimap_traits
 
 /// flat_multimap
 template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<Key, T>>>
-class flat_multimap : public detail::flat_tree<flat_multimap_traits<Key, T, Compare, Alloc>>
+class flat_multimap : public detail::sorted_vector<flat_multimap_traits<Key, T, Compare, Alloc>>
 {
-    using impl_type = detail::flat_tree<flat_multimap_traits<Key, T, Compare, Alloc>>;
+    using impl_type = detail::sorted_vector<flat_multimap_traits<Key, T, Compare, Alloc>>;
 
 public:
     using impl_type::impl_type;

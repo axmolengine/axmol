@@ -20,7 +20,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-#include "axmol/tlx/flat_tree.hpp"
+#include "axmol/tlx/sorted_vector.hpp"
 
 namespace axstd
 {
@@ -40,9 +40,9 @@ struct flat_multiset_traits
 
 /// flat_multiset
 template <class Key, class Compare = std::less<Key>, class Alloc = std::allocator<Key>>
-class flat_multiset : public detail::flat_tree<flat_multiset_traits<Key, Compare, Alloc>>
+class flat_multiset : public detail::sorted_vector<flat_multiset_traits<Key, Compare, Alloc>>
 {
-    using impl_type = detail::flat_tree<flat_multiset_traits<Key, Compare, Alloc>>;
+    using impl_type = detail::sorted_vector<flat_multiset_traits<Key, Compare, Alloc>>;
 
 public:
     using impl_type::impl_type;

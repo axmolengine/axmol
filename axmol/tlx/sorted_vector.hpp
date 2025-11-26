@@ -36,7 +36,7 @@ template <class _Alloc, class _Value_type>
 using _Rebind_alloc_t = typename std::allocator_traits<_Alloc>::template rebind_alloc<_Value_type>;
 
 /****************************************************************************
- * flat_tree: generic flat sorted container implementation
+ * sorted_vector: generic flat sorted container implementation base on std::vector
  *
  * This class template provides the core implementation for all flat
  * associative containers (flat_map, flat_multimap, flat_set, flat_multiset).
@@ -65,7 +65,7 @@ using _Rebind_alloc_t = typename std::allocator_traits<_Alloc>::template rebind_
  *   cache locality and reduced memory overhead.
  ****************************************************************************/
 template <typename _Traits>
-class flat_tree
+class sorted_vector
 {
 public:
     using key_type       = typename _Traits::key_type;
@@ -91,7 +91,7 @@ public:
     using iterator        = typename container_type::iterator;
     using const_iterator  = typename container_type::const_iterator;
 
-    explicit flat_tree(const key_compare& pred = key_compare(), const allocator_type& alloc = allocator_type())
+    explicit sorted_vector(const key_compare& pred = key_compare(), const allocator_type& alloc = allocator_type())
         : _Mypair(pred, container_type(alloc))
     {}
 
