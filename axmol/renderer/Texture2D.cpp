@@ -337,11 +337,12 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
 
     bool compressed = rhi::RHIUtils::isCompressed(desc.pixelFormat);
 
-    if (compressed && !Environment::getInstance()->supportsPVRTC() && !Environment::getInstance()->supportsETC2() &&
-        !Environment::getInstance()->supportsS3TC() && !Environment::getInstance()->supportsASTC() &&
-        !Environment::getInstance()->supportsATITC())
+    auto env = Environment::getInstance();
+
+    if (compressed && !env->supportsPVRTC() && !env->supportsETC2() && !env->supportsS3TC() && !env->supportsASTC() &&
+        !env->supportsATITC())
     {
-        AXLOGW("WARNING: PVRTC/ETC images are not supported");
+        AXLOGW("WARNING: PVRTC/ETC/ASTC/ATITC images are not supported");
         return false;
     }
 
@@ -365,6 +366,25 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
 #elif AX_RENDER_API == AX_RENDER_API_D3D11 || AX_RENDER_API == AX_RENDER_API_D3D12 || AX_RENDER_API == AX_RENDER_API_VK
     switch (renderFormat)
     {
+    case PixelFormat::RGB8:
+        // Note: conversion to RGBA8 will happends
+        renderFormat = PixelFormat::RGBA8;
+        break;
+    default:
+        break;
+    }
+#endif
+
+#if AX_RENDER_API != AX_RENDER_API_GL
+    switch (renderFormat)
+    {
+#    if (AX_RENDER_API == AX_RENDER_API_MTL && (AX_TARGET_PLATFORM != AX_PLATFORM_IOS || TARGET_OS_SIMULATOR)) || \
+        AX_RENDER_API == AX_RENDER_API_D3D11 || AX_RENDER_API == AX_RENDER_API_D3D12
+    // packed 16 bits pixels only available on iOS, vulkan
+    case PixelFormat::RGB565:
+    case PixelFormat::RGB5A1:
+    case PixelFormat::RGBA4:
+#    endif
     case PixelFormat::RGB8:
         // Note: conversion to RGBA8 will happends
         renderFormat = PixelFormat::RGBA8;
