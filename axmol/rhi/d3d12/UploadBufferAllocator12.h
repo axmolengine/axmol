@@ -126,5 +126,4 @@ private:
     ID3D12Device* mDevice = nullptr;
 };
 
-}  // namespace ax::rhi
-
+}  // namespace ax::rhi::d3d12

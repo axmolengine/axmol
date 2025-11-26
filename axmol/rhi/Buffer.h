@@ -93,8 +93,8 @@ public:
     }
 
     uint64_t getLastFenceValue() const { return _lastFenceValue; }
-protected:
 
+protected:
     void setLastFenceValue(uint64_t value) { _lastFenceValue = value; }
     /**
      * @param size Specifies the size in bytes of the buffer object's new data store.

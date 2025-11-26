@@ -495,7 +495,7 @@ void DriverImpl::initializeDevice()
 
     // Create upload (copy) queue
     qdesc.Type = kUploadQueueType;
-    hr = _device->CreateCommandQueue(&qdesc, IID_PPV_ARGS(&_uploadQueue));
+    hr         = _device->CreateCommandQueue(&qdesc, IID_PPV_ARGS(&_uploadQueue));
     AXASSERT(SUCCEEDED(hr), "CreateCommandQueue failed");
 
     const auto uploadBufferSize = (std::max)(8 * 1024 * 1024u, contextAttrs.uploadBufferSize);
