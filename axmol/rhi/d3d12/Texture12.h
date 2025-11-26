@@ -25,6 +25,7 @@
 
 #include "axmol/rhi/Texture.h"
 #include "axmol/rhi/d3d12/DescriptorHeapAllocator12.h"
+#include "axmol/rhi/DXUtils.h"
 #include <d3d12.h>
 #include <wrl/client.h>
 #include <vector>
@@ -127,7 +128,12 @@ public:
     DescriptorHandle* getSampler() const { return _sampler; }
 
 private:
-    void ensureNativeTexture();
+    D3D12_RESOURCE_STATES ensureNativeTexture(bool prepareForCopyDest);
+    void createShaderResourceView(const dxutils::PixelFormatInfo* fmtInfo,
+                                  uint32_t mipLevels,
+                                  uint32_t arrayLayers,
+                                  bool isCube,
+                                  ID3D12Device* device);
     void generateMipmaps(ID3D12GraphicsCommandList* cmd);
 
     DriverImpl* _driver{nullptr};  // weak pointer

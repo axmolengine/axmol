@@ -45,6 +45,18 @@ class RenderTarget;
 
 class EventCustom;
 
+struct RenderTextureDesc
+{
+    uint32_t width;
+    uint32_t height;
+    PixelFormat format;    // color attachment format
+    PixelFormat dsFormat;  // depth/stencil format
+
+    float clearColor[4] = {0.f, 0.f, 0.f, 0.f};
+    float clearDepth    = 1.0f;  // depth clear value
+    float clearStencil  = 0.0f;  // stencil clear value
+};
+
 /**
  * @addtogroup _2d
  * @{

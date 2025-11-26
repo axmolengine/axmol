@@ -25,7 +25,6 @@
 #include "axmol/rhi/d3d12/Driver12.h"
 #include "axmol/rhi/SamplerCache.h"
 #include "axmol/rhi/RHIUtils.h"
-#include "axmol/rhi/DXUtils.h"
 #include "axmol/base/Logging.h"
 #include <cassert>
 #include <cstring>
@@ -134,8 +133,9 @@ void TextureImpl::updateSubData(int xoffset,
                                 const void* data,
                                 int layerIndex)
 {
-    ensureNativeTexture();
-    if (!data || width <= 0 || height <= 0)
+    bool prepareForCopyDest = data && width > 0 && height > 0 && _desc.textureUsage != TextureUsage::RENDER_TARGET;
+    auto resourceState      = ensureNativeTexture(prepareForCopyDest);
+    if (!prepareForCopyDest || !resourceState)
         return;
 
     auto device = _driver->getDevice();
@@ -191,7 +191,8 @@ void TextureImpl::updateSubData(int xoffset,
     // Record copy
     auto submission = _driver->startIsolateSubmission();
 
-    transitionState(submission, D3D12_RESOURCE_STATE_COPY_DEST);
+    if (resourceState != D3D12_RESOURCE_STATE_COPY_DEST)
+        transitionState(submission, D3D12_RESOURCE_STATE_COPY_DEST);
 
     D3D12_TEXTURE_COPY_LOCATION dst{};
     dst.pResource        = _nativeTexture.resource.Get();
@@ -243,8 +244,9 @@ void TextureImpl::updateCompressedSubData(int xoffset,
                                           const void* data,
                                           int layerIndex)
 {
-    ensureNativeTexture();
-    if (!data || width <= 0 || height <= 0)
+    bool prepareForCopyDest = data && width > 0 && height > 0;
+    auto resourceState      = ensureNativeTexture(prepareForCopyDest);
+    if (!prepareForCopyDest || !resourceState)
         return;
 
     auto device = _driver->getDevice();
@@ -338,7 +340,8 @@ void TextureImpl::updateCompressedSubData(int xoffset,
     // Record copy commands
     auto submission = _driver->startIsolateSubmission();
 
-    transitionState(submission, D3D12_RESOURCE_STATE_COPY_DEST);
+    if (resourceState != D3D12_RESOURCE_STATE_COPY_DEST)
+        transitionState(submission, D3D12_RESOURCE_STATE_COPY_DEST);
 
     D3D12_TEXTURE_COPY_LOCATION dst{};
     dst.pResource        = _nativeTexture.resource.Get();
@@ -396,18 +399,19 @@ void TextureImpl::updateTextureDesc(const TextureDesc& desc)
     updateSamplerDesc(desc.samplerDesc);
 }
 
-void TextureImpl::ensureNativeTexture()
+D3D12_RESOURCE_STATES TextureImpl::ensureNativeTexture(bool prepareForCopyDest)
 {
     if (_nativeTexture)
-        return;
+        return D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
 
     auto device = _driver->getDevice();
 
     auto fmtInfo = dxutils::toDxgiFormatInfo(_desc.pixelFormat);
     if (fmtInfo->format == DXGI_FORMAT_UNKNOWN)
     {
+        assert(false);
         AXLOGE("axmol: D3D12 does not support pixel format: {}", (int)_desc.pixelFormat);
-        return;
+        return D3D12_RESOURCE_STATE_COMMON;
     }
 
     const bool isCube = (_desc.textureType == TextureType::TEXTURE_CUBE);
@@ -428,70 +432,102 @@ void TextureImpl::ensureNativeTexture()
     texDesc.Layout             = D3D12_TEXTURE_LAYOUT_UNKNOWN;
     texDesc.Flags              = D3D12_RESOURCE_FLAG_NONE;
 
-    if (_desc.textureUsage == TextureUsage::RENDER_TARGET)
-    {
-        if (_desc.pixelFormat != PixelFormat::D24S8)
-            texDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
-        else
-            texDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
-    }
-
     if (shouldGenMipmaps())
         texDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
 
     D3D12_HEAP_PROPERTIES heapProps{};
     heapProps.Type = D3D12_HEAP_TYPE_DEFAULT;
+    D3D12_CLEAR_VALUE clearValue{};
+    D3D12_CLEAR_VALUE* pClearValue{nullptr};
 
-    HRESULT hr;
-    if (_desc.pixelFormat != PixelFormat::D24S8)
+    D3D12_RESOURCE_STATES initialResourceState{};
+    if (_desc.textureUsage == TextureUsage::RENDER_TARGET) [[unlikely]]
     {
-        hr = device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &texDesc, D3D12_RESOURCE_STATE_COMMON,
-                                             nullptr, IID_PPV_ARGS(&_nativeTexture.resource));
+        D3D12_CLEAR_VALUE clearValue{};
+        if (_desc.pixelFormat == PixelFormat::D24S8)
+        {  // depth-stencil attachment: screen/offscreen render target
+            clearValue.Format               = fmtInfo->fmtDsv;
+            clearValue.DepthStencil.Depth   = 1.0f;
+            clearValue.DepthStencil.Stencil = 0;
 
-        // --- Create SRV for normal texture ---
-        D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-        srvDesc.Format                  = fmtInfo->fmtSrv;
-        srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+            initialResourceState = D3D12_RESOURCE_STATE_DEPTH_WRITE;
 
-        if (isCube)
-        {
-            srvDesc.ViewDimension                   = D3D12_SRV_DIMENSION_TEXTURECUBE;
-            srvDesc.TextureCube.MostDetailedMip     = 0;
-            srvDesc.TextureCube.MipLevels           = mipLevels;
-            srvDesc.TextureCube.ResourceMinLODClamp = 0.0f;
-        }
-        else if (arrayLayers > 1)
-        {
-            srvDesc.ViewDimension                      = D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
-            srvDesc.Texture2DArray.MostDetailedMip     = 0;
-            srvDesc.Texture2DArray.MipLevels           = mipLevels;
-            srvDesc.Texture2DArray.FirstArraySlice     = 0;
-            srvDesc.Texture2DArray.ArraySize           = arrayLayers;
-            srvDesc.Texture2DArray.PlaneSlice          = 0;
-            srvDesc.Texture2DArray.ResourceMinLODClamp = 0.0f;
+            texDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
         }
         else
-        {
-            srvDesc.ViewDimension                 = D3D12_SRV_DIMENSION_TEXTURE2D;
-            srvDesc.Texture2D.MostDetailedMip     = 0;
-            srvDesc.Texture2D.MipLevels           = mipLevels;
-            srvDesc.Texture2D.PlaneSlice          = 0;
-            srvDesc.Texture2D.ResourceMinLODClamp = 0.0f;
+        {  // color attachment: offscreen render target
+            clearValue.Format   = fmtInfo->fmtSrv;
+            clearValue.Color[0] = 0.0f;
+            clearValue.Color[1] = 0.0f;
+            clearValue.Color[2] = 0.0f;
+            clearValue.Color[3] = 0.0f;  // default alpha
+
+            initialResourceState = D3D12_RESOURCE_STATE_RENDER_TARGET;
+
+            texDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
         }
 
-        _nativeTexture.srv = _driver->allocateDescriptor(DisposableResource::Type::ShaderResourceView);
-        device->CreateShaderResourceView(_nativeTexture.resource.Get(), &srvDesc, _nativeTexture.srv->cpu);
+        pClearValue = &clearValue;
     }
     else
     {
-        D3D12_CLEAR_VALUE clearValue{};
-        clearValue.Format               = fmtInfo->fmtDsv;
-        clearValue.DepthStencil.Depth   = 1.0f;
-        clearValue.DepthStencil.Stencil = 0;
-        hr = device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &texDesc, D3D12_RESOURCE_STATE_COMMON,
-                                             &clearValue, IID_PPV_ARGS(&_nativeTexture.resource));
+        initialResourceState =
+            prepareForCopyDest ? D3D12_RESOURCE_STATE_COPY_DEST : D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
     }
+
+    // create texture resource
+    HRESULT hr = device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &texDesc, initialResourceState,
+                                                 pClearValue, IID_PPV_ARGS(&_nativeTexture.resource));
+
+    // non depth-stencil texture, we need create SRV for sampling, even through it's textureUsage=RENDER_TARGET
+    if (_desc.pixelFormat != PixelFormat::D24S8)
+        createShaderResourceView(fmtInfo, mipLevels, arrayLayers, isCube, device);
     assert(SUCCEEDED(hr));
+
+    setKnownState(initialResourceState);
+
+    return initialResourceState;
+}
+
+void TextureImpl::createShaderResourceView(const dxutils::PixelFormatInfo* fmtInfo,
+                                           uint32_t mipLevels,
+                                           uint32_t arrayLayers,
+                                           bool isCube,
+                                           ID3D12Device* device)
+{
+    // --- Create SRV for normal texture ---
+    D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+    srvDesc.Format                  = fmtInfo->fmtSrv;
+    srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+    if (isCube)
+    {
+        srvDesc.ViewDimension                   = D3D12_SRV_DIMENSION_TEXTURECUBE;
+        srvDesc.TextureCube.MostDetailedMip     = 0;
+        srvDesc.TextureCube.MipLevels           = mipLevels;
+        srvDesc.TextureCube.ResourceMinLODClamp = 0.0f;
+    }
+    else if (arrayLayers > 1)
+    {
+        srvDesc.ViewDimension                      = D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
+        srvDesc.Texture2DArray.MostDetailedMip     = 0;
+        srvDesc.Texture2DArray.MipLevels           = mipLevels;
+        srvDesc.Texture2DArray.FirstArraySlice     = 0;
+        srvDesc.Texture2DArray.ArraySize           = arrayLayers;
+        srvDesc.Texture2DArray.PlaneSlice          = 0;
+        srvDesc.Texture2DArray.ResourceMinLODClamp = 0.0f;
+    }
+    else
+    {
+        srvDesc.ViewDimension                 = D3D12_SRV_DIMENSION_TEXTURE2D;
+        srvDesc.Texture2D.MostDetailedMip     = 0;
+        srvDesc.Texture2D.MipLevels           = mipLevels;
+        srvDesc.Texture2D.PlaneSlice          = 0;
+        srvDesc.Texture2D.ResourceMinLODClamp = 0.0f;
+    }
+
+    _nativeTexture.srv = _driver->allocateDescriptor(DisposableResource::Type::ShaderResourceView);
+    device->CreateShaderResourceView(_nativeTexture.resource.Get(), &srvDesc, _nativeTexture.srv->cpu);
 }
 
 void TextureImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd)
