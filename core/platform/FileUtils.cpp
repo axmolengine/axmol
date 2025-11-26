@@ -933,7 +933,7 @@ bool FileUtils::isAbsolutePathInternal(std::string_view path)
             || (raw[0] == '/' || raw[0] == '\\')    // Current disk drive
     );
 #else
-    return (raw[0] == '/');
+    return (path.length() > 0 && raw[0] == '/');
 #endif
 }
 
