@@ -214,6 +214,9 @@ function(ax_sync_target_dlls ax_target)
   if(AX_GLES_PROFILE OR AX_RENDER_API MATCHES "d3d")
     find_windows_sdk_bin(_winsdk_bin_dir ${ARCH_ALIAS})
     list(APPEND all_depend_dlls "${_winsdk_bin_dir}/d3dcompiler_47.dll")
+    if(AX_RENDER_API STREQUAL "d3d12")
+      list(APPEND all_depend_dlls "${_winsdk_bin_dir}/dxcompiler.dll")
+    endif()
   endif()
 
   # Copy webview2 for ninja
