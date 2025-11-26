@@ -10,7 +10,7 @@ axslcc=1.9.6+
 
 # The cmake, @gradle @axmol-cmdline
 # as latest as possible
-cmake=3.30.0~4.2.0+
+cmake=4.2.0+
 
 # The ninja
 ninja=1.10.0~1.12.1+
