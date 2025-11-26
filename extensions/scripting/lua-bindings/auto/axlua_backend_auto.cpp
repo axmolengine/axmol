@@ -413,7 +413,7 @@ int lua_register_ax_backend_TextureCubeFace(lua_State* tolua_S)
 int lua_ax_backend_Program_getUniformLocation(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Program* cobj = nullptr;
+    ax::backend::Program* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -422,34 +422,34 @@ int lua_ax_backend_Program_getUniformLocation(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axb.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getUniformLocation'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_Program_getUniformLocation'", nullptr);
         return 0;
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::backend::Uniform arg0;
             ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.Program:getUniformLocation");
 
             if (!ok) { break; }
-            ax::backend::UniformLocation ret = cobj->getUniformLocation(arg0);
+            ax::backend::UniformLocation ret = obj->getUniformLocation(arg0);
             uniformLocation_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axb.Program:getUniformLocation");
 
             if (!ok) { break; }
-            ax::backend::UniformLocation ret = cobj->getUniformLocation(arg0);
+            ax::backend::UniformLocation ret = obj->getUniformLocation(arg0);
             uniformLocation_to_luaval(tolua_S, ret);
             return 1;
         }
@@ -468,7 +468,7 @@ int lua_ax_backend_Program_getUniformLocation(lua_State* tolua_S)
 int lua_ax_backend_Program_getAttributeLocation(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Program* cobj = nullptr;
+    ax::backend::Program* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -477,34 +477,34 @@ int lua_ax_backend_Program_getAttributeLocation(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axb.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getAttributeLocation'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_Program_getAttributeLocation'", nullptr);
         return 0;
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::backend::Attribute arg0;
             ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.Program:getAttributeLocation");
 
             if (!ok) { break; }
-            int ret = cobj->getAttributeLocation(arg0);
+            int ret = obj->getAttributeLocation(arg0);
             tolua_pushnumber(tolua_S,(lua_Number)ret);
             return 1;
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axb.Program:getAttributeLocation");
 
             if (!ok) { break; }
-            int ret = cobj->getAttributeLocation(arg0);
+            int ret = obj->getAttributeLocation(arg0);
             tolua_pushnumber(tolua_S,(lua_Number)ret);
             return 1;
         }
@@ -523,7 +523,7 @@ int lua_ax_backend_Program_getAttributeLocation(lua_State* tolua_S)
 int lua_ax_backend_Program_getMaxVertexLocation(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Program* cobj = nullptr;
+    ax::backend::Program* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -535,25 +535,25 @@ int lua_ax_backend_Program_getMaxVertexLocation(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getMaxVertexLocation'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_Program_getMaxVertexLocation'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Program_getMaxVertexLocation'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMaxVertexLocation();
+        auto&& ret = obj->getMaxVertexLocation();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -570,7 +570,7 @@ int lua_ax_backend_Program_getMaxVertexLocation(lua_State* tolua_S)
 int lua_ax_backend_Program_getMaxFragmentLocation(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Program* cobj = nullptr;
+    ax::backend::Program* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -582,25 +582,25 @@ int lua_ax_backend_Program_getMaxFragmentLocation(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getMaxFragmentLocation'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_Program_getMaxFragmentLocation'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Program_getMaxFragmentLocation'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMaxFragmentLocation();
+        auto&& ret = obj->getMaxFragmentLocation();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -617,7 +617,7 @@ int lua_ax_backend_Program_getMaxFragmentLocation(lua_State* tolua_S)
 int lua_ax_backend_Program_getActiveAttributes(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Program* cobj = nullptr;
+    ax::backend::Program* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -629,25 +629,25 @@ int lua_ax_backend_Program_getActiveAttributes(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getActiveAttributes'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_Program_getActiveAttributes'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Program_getActiveAttributes'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getActiveAttributes();
+        auto&& ret = obj->getActiveAttributes();
         program_activeattrs_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -664,7 +664,7 @@ int lua_ax_backend_Program_getActiveAttributes(lua_State* tolua_S)
 int lua_ax_backend_Program_getVertexShader(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Program* cobj = nullptr;
+    ax::backend::Program* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -676,25 +676,25 @@ int lua_ax_backend_Program_getVertexShader(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getVertexShader'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_Program_getVertexShader'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Program_getVertexShader'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getVertexShader();
+        auto&& ret = obj->getVertexShader();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -711,7 +711,7 @@ int lua_ax_backend_Program_getVertexShader(lua_State* tolua_S)
 int lua_ax_backend_Program_getFragmentShader(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Program* cobj = nullptr;
+    ax::backend::Program* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -723,25 +723,25 @@ int lua_ax_backend_Program_getFragmentShader(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getFragmentShader'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_Program_getFragmentShader'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Program_getFragmentShader'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFragmentShader();
+        auto&& ret = obj->getFragmentShader();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -758,7 +758,7 @@ int lua_ax_backend_Program_getFragmentShader(lua_State* tolua_S)
 int lua_ax_backend_Program_setupVertexLayout(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Program* cobj = nullptr;
+    ax::backend::Program* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -770,18 +770,18 @@ int lua_ax_backend_Program_setupVertexLayout(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_setupVertexLayout'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_Program_setupVertexLayout'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::backend::VertexLayoutType arg0;
 
@@ -791,7 +791,7 @@ int lua_ax_backend_Program_setupVertexLayout(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Program_setupVertexLayout'", nullptr);
             return 0;
         }
-        cobj->setupVertexLayout(arg0);
+        obj->setupVertexLayout(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -808,7 +808,7 @@ int lua_ax_backend_Program_setupVertexLayout(lua_State* tolua_S)
 int lua_ax_backend_Program_getProgramType(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Program* cobj = nullptr;
+    ax::backend::Program* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -820,25 +820,25 @@ int lua_ax_backend_Program_getProgramType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getProgramType'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_Program_getProgramType'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Program_getProgramType'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getProgramType();
+        auto&& ret = obj->getProgramType();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -855,7 +855,7 @@ int lua_ax_backend_Program_getProgramType(lua_State* tolua_S)
 int lua_ax_backend_Program_getProgramId(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Program* cobj = nullptr;
+    ax::backend::Program* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -867,25 +867,25 @@ int lua_ax_backend_Program_getProgramId(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getProgramId'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_Program_getProgramId'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Program_getProgramId'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getProgramId();
+        auto&& ret = obj->getProgramId();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -902,7 +902,7 @@ int lua_ax_backend_Program_getProgramId(lua_State* tolua_S)
 int lua_ax_backend_Program_getUniformBufferSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Program* cobj = nullptr;
+    ax::backend::Program* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -914,18 +914,18 @@ int lua_ax_backend_Program_getUniformBufferSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getUniformBufferSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_Program_getUniformBufferSize'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::backend::ShaderStage arg0;
 
@@ -935,7 +935,7 @@ int lua_ax_backend_Program_getUniformBufferSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Program_getUniformBufferSize'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getUniformBufferSize(arg0);
+        auto&& ret = obj->getUniformBufferSize(arg0);
         #pragma warning NO CONVERSION FROM NATIVE FOR ??;
         return 1;
     }
@@ -952,7 +952,7 @@ int lua_ax_backend_Program_getUniformBufferSize(lua_State* tolua_S)
 int lua_ax_backend_Program_getVertexLayout(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Program* cobj = nullptr;
+    ax::backend::Program* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -964,25 +964,25 @@ int lua_ax_backend_Program_getVertexLayout(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_getVertexLayout'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_Program_getVertexLayout'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Program_getVertexLayout'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getVertexLayout();
+        auto&& ret = obj->getVertexLayout();
         object_to_luaval<ax::backend::VertexLayout>(tolua_S, "axb.VertexLayout",(ax::backend::VertexLayout*)ret);
         return 1;
     }
@@ -1067,7 +1067,7 @@ int lua_register_ax_backend_Program(lua_State* tolua_S)
 int lua_ax_backend_VertexLayout_getStride(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::VertexLayout* cobj = nullptr;
+    ax::backend::VertexLayout* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1079,25 +1079,25 @@ int lua_ax_backend_VertexLayout_getStride(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.VertexLayout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::VertexLayout*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::VertexLayout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_VertexLayout_getStride'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_VertexLayout_getStride'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_VertexLayout_getStride'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getStride();
+        auto&& ret = obj->getStride();
         #pragma warning NO CONVERSION FROM NATIVE FOR ??;
         return 1;
     }
@@ -1114,7 +1114,7 @@ int lua_ax_backend_VertexLayout_getStride(lua_State* tolua_S)
 int lua_ax_backend_VertexLayout_getVertexStepMode(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::VertexLayout* cobj = nullptr;
+    ax::backend::VertexLayout* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1126,25 +1126,25 @@ int lua_ax_backend_VertexLayout_getVertexStepMode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.VertexLayout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::VertexLayout*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::VertexLayout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_VertexLayout_getVertexStepMode'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_VertexLayout_getVertexStepMode'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_VertexLayout_getVertexStepMode'", nullptr);
             return 0;
         }
-        int ret = (int)cobj->getVertexStepMode();
+        int ret = (int)obj->getVertexStepMode();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1161,7 +1161,7 @@ int lua_ax_backend_VertexLayout_getVertexStepMode(lua_State* tolua_S)
 int lua_ax_backend_VertexLayout_isValid(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::VertexLayout* cobj = nullptr;
+    ax::backend::VertexLayout* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1173,25 +1173,25 @@ int lua_ax_backend_VertexLayout_isValid(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.VertexLayout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::VertexLayout*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::VertexLayout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_VertexLayout_isValid'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_VertexLayout_isValid'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_VertexLayout_isValid'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isValid();
+        auto&& ret = obj->isValid();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -1208,7 +1208,7 @@ int lua_ax_backend_VertexLayout_isValid(lua_State* tolua_S)
 int lua_ax_backend_VertexLayout_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::VertexLayout* cobj = nullptr;
+    ax::backend::VertexLayout* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1218,15 +1218,15 @@ int lua_ax_backend_VertexLayout_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_VertexLayout_constructor'", nullptr);
             return 0;
         }
-        cobj = new ax::backend::VertexLayout();
-        tolua_pushusertype(tolua_S,(void*)cobj,"axb.VertexLayout");
+        obj = new ax::backend::VertexLayout();
+        tolua_pushusertype(tolua_S,(void*)obj,"axb.VertexLayout");
         tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
@@ -1266,7 +1266,7 @@ int lua_register_ax_backend_VertexLayout(lua_State* tolua_S)
 int lua_ax_backend_ProgramState_clone(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::ProgramState* cobj = nullptr;
+    ax::backend::ProgramState* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1278,25 +1278,25 @@ int lua_ax_backend_ProgramState_clone(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_clone'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_ProgramState_clone'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_clone'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->clone();
+        auto&& ret = obj->clone();
         object_to_luaval<ax::backend::ProgramState>(tolua_S, "axb.ProgramState",(ax::backend::ProgramState*)ret);
         return 1;
     }
@@ -1313,7 +1313,7 @@ int lua_ax_backend_ProgramState_clone(lua_State* tolua_S)
 int lua_ax_backend_ProgramState_getProgram(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::ProgramState* cobj = nullptr;
+    ax::backend::ProgramState* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1325,25 +1325,25 @@ int lua_ax_backend_ProgramState_getProgram(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_getProgram'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_ProgramState_getProgram'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_getProgram'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getProgram();
+        auto&& ret = obj->getProgram();
         object_to_luaval<ax::backend::Program>(tolua_S, "axb.Program",(ax::backend::Program*)ret);
         return 1;
     }
@@ -1360,7 +1360,7 @@ int lua_ax_backend_ProgramState_getProgram(lua_State* tolua_S)
 int lua_ax_backend_ProgramState_getAttributeLocation(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::ProgramState* cobj = nullptr;
+    ax::backend::ProgramState* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1369,34 +1369,34 @@ int lua_ax_backend_ProgramState_getAttributeLocation(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axb.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_getAttributeLocation'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_ProgramState_getAttributeLocation'", nullptr);
         return 0;
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::backend::Attribute arg0;
             ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.ProgramState:getAttributeLocation");
 
             if (!ok) { break; }
-            int ret = cobj->getAttributeLocation(arg0);
+            int ret = obj->getAttributeLocation(arg0);
             tolua_pushnumber(tolua_S,(lua_Number)ret);
             return 1;
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axb.ProgramState:getAttributeLocation");
 
             if (!ok) { break; }
-            int ret = cobj->getAttributeLocation(arg0);
+            int ret = obj->getAttributeLocation(arg0);
             tolua_pushnumber(tolua_S,(lua_Number)ret);
             return 1;
         }
@@ -1415,7 +1415,7 @@ int lua_ax_backend_ProgramState_getAttributeLocation(lua_State* tolua_S)
 int lua_ax_backend_ProgramState_setTexture(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::ProgramState* cobj = nullptr;
+    ax::backend::ProgramState* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1424,16 +1424,16 @@ int lua_ax_backend_ProgramState_setTexture(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axb.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_setTexture'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_ProgramState_setTexture'", nullptr);
         return 0;
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 3) {
             ax::backend::UniformLocation arg0;
             ok &= luaval_to_uniformLocation(tolua_S, 2, arg0, "axb.ProgramState:setTexture");
@@ -1447,25 +1447,25 @@ int lua_ax_backend_ProgramState_setTexture(lua_State* tolua_S)
             ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 4, "axb.TextureBackend",&arg2, "axb.ProgramState:setTexture");
 
             if (!ok) { break; }
-            cobj->setTexture(arg0, arg1, arg2);
+            obj->setTexture(arg0, arg1, arg2);
             lua_settop(tolua_S, 1);
             return 1;
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::backend::TextureBackend* arg0;
             ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 2, "axb.TextureBackend",&arg0, "axb.ProgramState:setTexture");
 
             if (!ok) { break; }
-            cobj->setTexture(arg0);
+            obj->setTexture(arg0);
             lua_settop(tolua_S, 1);
             return 1;
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             ax::backend::UniformLocation arg0;
             ok &= luaval_to_uniformLocation(tolua_S, 2, arg0, "axb.ProgramState:setTexture");
@@ -1483,7 +1483,7 @@ int lua_ax_backend_ProgramState_setTexture(lua_State* tolua_S)
             ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 5, "axb.TextureBackend",&arg3, "axb.ProgramState:setTexture");
 
             if (!ok) { break; }
-            cobj->setTexture(arg0, arg1, arg2, arg3);
+            obj->setTexture(arg0, arg1, arg2, arg3);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -1502,7 +1502,7 @@ int lua_ax_backend_ProgramState_setTexture(lua_State* tolua_S)
 int lua_ax_backend_ProgramState_setParameterAutoBinding(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::ProgramState* cobj = nullptr;
+    ax::backend::ProgramState* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1514,18 +1514,18 @@ int lua_ax_backend_ProgramState_setParameterAutoBinding(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_setParameterAutoBinding'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_ProgramState_setParameterAutoBinding'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2) 
+    if (argc == 2)
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -1538,7 +1538,7 @@ int lua_ax_backend_ProgramState_setParameterAutoBinding(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_setParameterAutoBinding'", nullptr);
             return 0;
         }
-        cobj->setParameterAutoBinding(arg0, arg1);
+        obj->setParameterAutoBinding(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1555,7 +1555,7 @@ int lua_ax_backend_ProgramState_setParameterAutoBinding(lua_State* tolua_S)
 int lua_ax_backend_ProgramState_getMutableVertexLayout(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::ProgramState* cobj = nullptr;
+    ax::backend::ProgramState* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1567,25 +1567,25 @@ int lua_ax_backend_ProgramState_getMutableVertexLayout(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_getMutableVertexLayout'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_ProgramState_getMutableVertexLayout'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_getMutableVertexLayout'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMutableVertexLayout();
+        auto&& ret = obj->getMutableVertexLayout();
         object_to_luaval<ax::backend::VertexLayout>(tolua_S, "axb.VertexLayout",(ax::backend::VertexLayout*)ret);
         return 1;
     }
@@ -1602,7 +1602,7 @@ int lua_ax_backend_ProgramState_getMutableVertexLayout(lua_State* tolua_S)
 int lua_ax_backend_ProgramState_setSharedVertexLayout(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::ProgramState* cobj = nullptr;
+    ax::backend::ProgramState* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1614,18 +1614,18 @@ int lua_ax_backend_ProgramState_setSharedVertexLayout(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_setSharedVertexLayout'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_ProgramState_setSharedVertexLayout'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::backend::VertexLayout* arg0;
 
@@ -1635,7 +1635,7 @@ int lua_ax_backend_ProgramState_setSharedVertexLayout(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_setSharedVertexLayout'", nullptr);
             return 0;
         }
-        cobj->setSharedVertexLayout(arg0);
+        obj->setSharedVertexLayout(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1652,7 +1652,7 @@ int lua_ax_backend_ProgramState_setSharedVertexLayout(lua_State* tolua_S)
 int lua_ax_backend_ProgramState_getBatchId(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::ProgramState* cobj = nullptr;
+    ax::backend::ProgramState* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1664,25 +1664,25 @@ int lua_ax_backend_ProgramState_getBatchId(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_getBatchId'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_ProgramState_getBatchId'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_getBatchId'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getBatchId();
+        auto&& ret = obj->getBatchId();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1699,7 +1699,7 @@ int lua_ax_backend_ProgramState_getBatchId(lua_State* tolua_S)
 int lua_ax_backend_ProgramState_isBatchable(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::ProgramState* cobj = nullptr;
+    ax::backend::ProgramState* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1711,25 +1711,25 @@ int lua_ax_backend_ProgramState_isBatchable(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_isBatchable'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_ProgramState_isBatchable'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_isBatchable'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isBatchable();
+        auto&& ret = obj->isBatchable();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -1746,7 +1746,7 @@ int lua_ax_backend_ProgramState_isBatchable(lua_State* tolua_S)
 int lua_ax_backend_ProgramState_updateBatchId(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::ProgramState* cobj = nullptr;
+    ax::backend::ProgramState* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1758,25 +1758,25 @@ int lua_ax_backend_ProgramState_updateBatchId(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_updateBatchId'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_ProgramState_updateBatchId'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_updateBatchId'", nullptr);
             return 0;
         }
-        cobj->updateBatchId();
+        obj->updateBatchId();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1793,7 +1793,7 @@ int lua_ax_backend_ProgramState_updateBatchId(lua_State* tolua_S)
 int lua_ax_backend_ProgramState_validateSharedVertexLayout(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::ProgramState* cobj = nullptr;
+    ax::backend::ProgramState* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1805,18 +1805,18 @@ int lua_ax_backend_ProgramState_validateSharedVertexLayout(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_validateSharedVertexLayout'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_ProgramState_validateSharedVertexLayout'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::backend::VertexLayoutType arg0;
 
@@ -1826,7 +1826,7 @@ int lua_ax_backend_ProgramState_validateSharedVertexLayout(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_validateSharedVertexLayout'", nullptr);
             return 0;
         }
-        cobj->validateSharedVertexLayout(arg0);
+        obj->validateSharedVertexLayout(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1843,7 +1843,7 @@ int lua_ax_backend_ProgramState_validateSharedVertexLayout(lua_State* tolua_S)
 int lua_ax_backend_ProgramState_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::ProgramState* cobj = nullptr;
+    ax::backend::ProgramState* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1853,7 +1853,7 @@ int lua_ax_backend_ProgramState_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::backend::Program* arg0;
 
@@ -1863,11 +1863,11 @@ int lua_ax_backend_ProgramState_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_constructor'", nullptr);
             return 0;
         }
-        cobj = new ax::backend::ProgramState(arg0);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"axb.ProgramState");
+        obj = new ax::backend::ProgramState(arg0);
+        obj->autorelease();
+        int ID =  (int)obj->_ID ;
+        int* luaID =  &obj->_luaID ;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axb.ProgramState");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.ProgramState:ProgramState",argc, 1);
@@ -1914,7 +1914,7 @@ int lua_register_ax_backend_ProgramState(lua_State* tolua_S)
 int lua_ax_backend_TextureBackend_updateSamplerDescriptor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::TextureBackend* cobj = nullptr;
+    ax::backend::TextureBackend* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1926,18 +1926,18 @@ int lua_ax_backend_TextureBackend_updateSamplerDescriptor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.TextureBackend",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_updateSamplerDescriptor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_TextureBackend_updateSamplerDescriptor'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::backend::SamplerDescriptor arg0;
 
@@ -1947,7 +1947,7 @@ int lua_ax_backend_TextureBackend_updateSamplerDescriptor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_TextureBackend_updateSamplerDescriptor'", nullptr);
             return 0;
         }
-        cobj->updateSamplerDescriptor(arg0);
+        obj->updateSamplerDescriptor(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1964,7 +1964,7 @@ int lua_ax_backend_TextureBackend_updateSamplerDescriptor(lua_State* tolua_S)
 int lua_ax_backend_TextureBackend_generateMipmaps(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::TextureBackend* cobj = nullptr;
+    ax::backend::TextureBackend* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1976,25 +1976,25 @@ int lua_ax_backend_TextureBackend_generateMipmaps(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.TextureBackend",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_generateMipmaps'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_TextureBackend_generateMipmaps'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_TextureBackend_generateMipmaps'", nullptr);
             return 0;
         }
-        cobj->generateMipmaps();
+        obj->generateMipmaps();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2011,7 +2011,7 @@ int lua_ax_backend_TextureBackend_generateMipmaps(lua_State* tolua_S)
 int lua_ax_backend_TextureBackend_updateTextureDescriptor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::TextureBackend* cobj = nullptr;
+    ax::backend::TextureBackend* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2023,18 +2023,18 @@ int lua_ax_backend_TextureBackend_updateTextureDescriptor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.TextureBackend",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_updateTextureDescriptor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_TextureBackend_updateTextureDescriptor'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::backend::TextureDescriptor arg0;
 
@@ -2045,11 +2045,11 @@ int lua_ax_backend_TextureBackend_updateTextureDescriptor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_TextureBackend_updateTextureDescriptor'", nullptr);
             return 0;
         }
-        cobj->updateTextureDescriptor(arg0);
+        obj->updateTextureDescriptor(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2) 
+    if (argc == 2)
     {
         ax::backend::TextureDescriptor arg0;
         int arg1;
@@ -2063,7 +2063,7 @@ int lua_ax_backend_TextureBackend_updateTextureDescriptor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_TextureBackend_updateTextureDescriptor'", nullptr);
             return 0;
         }
-        cobj->updateTextureDescriptor(arg0, arg1);
+        obj->updateTextureDescriptor(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2080,7 +2080,7 @@ int lua_ax_backend_TextureBackend_updateTextureDescriptor(lua_State* tolua_S)
 int lua_ax_backend_TextureBackend_getTextureFormat(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::TextureBackend* cobj = nullptr;
+    ax::backend::TextureBackend* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2092,25 +2092,25 @@ int lua_ax_backend_TextureBackend_getTextureFormat(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.TextureBackend",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_getTextureFormat'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_TextureBackend_getTextureFormat'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_TextureBackend_getTextureFormat'", nullptr);
             return 0;
         }
-        int ret = (int)cobj->getTextureFormat();
+        int ret = (int)obj->getTextureFormat();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2127,7 +2127,7 @@ int lua_ax_backend_TextureBackend_getTextureFormat(lua_State* tolua_S)
 int lua_ax_backend_TextureBackend_getTextureUsage(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::TextureBackend* cobj = nullptr;
+    ax::backend::TextureBackend* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2139,25 +2139,25 @@ int lua_ax_backend_TextureBackend_getTextureUsage(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.TextureBackend",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_getTextureUsage'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_TextureBackend_getTextureUsage'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_TextureBackend_getTextureUsage'", nullptr);
             return 0;
         }
-        int ret = (int)cobj->getTextureUsage();
+        int ret = (int)obj->getTextureUsage();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2174,7 +2174,7 @@ int lua_ax_backend_TextureBackend_getTextureUsage(lua_State* tolua_S)
 int lua_ax_backend_TextureBackend_getTextureType(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::TextureBackend* cobj = nullptr;
+    ax::backend::TextureBackend* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2186,25 +2186,25 @@ int lua_ax_backend_TextureBackend_getTextureType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.TextureBackend",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_getTextureType'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_TextureBackend_getTextureType'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_TextureBackend_getTextureType'", nullptr);
             return 0;
         }
-        int ret = (int)cobj->getTextureType();
+        int ret = (int)obj->getTextureType();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2221,7 +2221,7 @@ int lua_ax_backend_TextureBackend_getTextureType(lua_State* tolua_S)
 int lua_ax_backend_TextureBackend_hasMipmaps(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::TextureBackend* cobj = nullptr;
+    ax::backend::TextureBackend* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2233,25 +2233,25 @@ int lua_ax_backend_TextureBackend_hasMipmaps(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.TextureBackend",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_hasMipmaps'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_TextureBackend_hasMipmaps'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_TextureBackend_hasMipmaps'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->hasMipmaps();
+        auto&& ret = obj->hasMipmaps();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -2268,7 +2268,7 @@ int lua_ax_backend_TextureBackend_hasMipmaps(lua_State* tolua_S)
 int lua_ax_backend_TextureBackend_getCount(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::TextureBackend* cobj = nullptr;
+    ax::backend::TextureBackend* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2280,25 +2280,25 @@ int lua_ax_backend_TextureBackend_getCount(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.TextureBackend",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_getCount'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_TextureBackend_getCount'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_TextureBackend_getCount'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getCount();
+        auto&& ret = obj->getCount();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2315,7 +2315,7 @@ int lua_ax_backend_TextureBackend_getCount(lua_State* tolua_S)
 int lua_ax_backend_TextureBackend_getHandler(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::TextureBackend* cobj = nullptr;
+    ax::backend::TextureBackend* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2327,29 +2327,29 @@ int lua_ax_backend_TextureBackend_getHandler(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.TextureBackend",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_getHandler'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_TextureBackend_getHandler'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_TextureBackend_getHandler'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getHandler();
+        auto&& ret = obj->getHandler();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    if (argc == 1) 
+    if (argc == 1)
     {
         int arg0;
 
@@ -2359,7 +2359,7 @@ int lua_ax_backend_TextureBackend_getHandler(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_TextureBackend_getHandler'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getHandler(arg0);
+        auto&& ret = obj->getHandler(arg0);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2376,7 +2376,7 @@ int lua_ax_backend_TextureBackend_getHandler(lua_State* tolua_S)
 int lua_ax_backend_TextureBackend_getWidth(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::TextureBackend* cobj = nullptr;
+    ax::backend::TextureBackend* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2388,25 +2388,25 @@ int lua_ax_backend_TextureBackend_getWidth(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.TextureBackend",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_getWidth'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_TextureBackend_getWidth'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_TextureBackend_getWidth'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getWidth();
+        auto&& ret = obj->getWidth();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2423,7 +2423,7 @@ int lua_ax_backend_TextureBackend_getWidth(lua_State* tolua_S)
 int lua_ax_backend_TextureBackend_getHeight(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::TextureBackend* cobj = nullptr;
+    ax::backend::TextureBackend* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2435,25 +2435,25 @@ int lua_ax_backend_TextureBackend_getHeight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.TextureBackend",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::TextureBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureBackend_getHeight'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_TextureBackend_getHeight'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_TextureBackend_getHeight'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getHeight();
+        auto&& ret = obj->getHeight();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2500,7 +2500,7 @@ int lua_register_ax_backend_TextureBackend(lua_State* tolua_S)
 int lua_ax_backend_Texture2DBackend_getWidth(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Texture2DBackend* cobj = nullptr;
+    ax::backend::Texture2DBackend* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2512,25 +2512,25 @@ int lua_ax_backend_Texture2DBackend_getWidth(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.Texture2DBackend",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::Texture2DBackend*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::Texture2DBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Texture2DBackend_getWidth'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_Texture2DBackend_getWidth'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Texture2DBackend_getWidth'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getWidth();
+        auto&& ret = obj->getWidth();
         #pragma warning NO CONVERSION FROM NATIVE FOR ??;
         return 1;
     }
@@ -2547,7 +2547,7 @@ int lua_ax_backend_Texture2DBackend_getWidth(lua_State* tolua_S)
 int lua_ax_backend_Texture2DBackend_getHeight(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::Texture2DBackend* cobj = nullptr;
+    ax::backend::Texture2DBackend* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2559,25 +2559,25 @@ int lua_ax_backend_Texture2DBackend_getHeight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.Texture2DBackend",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::Texture2DBackend*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::Texture2DBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Texture2DBackend_getHeight'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_Texture2DBackend_getHeight'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Texture2DBackend_getHeight'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getHeight();
+        auto&& ret = obj->getHeight();
         #pragma warning NO CONVERSION FROM NATIVE FOR ??;
         return 1;
     }
@@ -2615,7 +2615,7 @@ int lua_register_ax_backend_Texture2DBackend(lua_State* tolua_S)
 int lua_ax_backend_TextureCubemapBackend_updateFaceData(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::TextureCubemapBackend* cobj = nullptr;
+    ax::backend::TextureCubemapBackend* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2627,18 +2627,18 @@ int lua_ax_backend_TextureCubemapBackend_updateFaceData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.TextureCubemapBackend",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::TextureCubemapBackend*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::TextureCubemapBackend*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_TextureCubemapBackend_updateFaceData'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_TextureCubemapBackend_updateFaceData'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2) 
+    if (argc == 2)
     {
         ax::backend::TextureCubeFace arg0;
         void* arg1;
@@ -2652,11 +2652,11 @@ int lua_ax_backend_TextureCubemapBackend_updateFaceData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_TextureCubemapBackend_updateFaceData'", nullptr);
             return 0;
         }
-        cobj->updateFaceData(arg0, arg1);
+        obj->updateFaceData(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 3) 
+    if (argc == 3)
     {
         ax::backend::TextureCubeFace arg0;
         void* arg1;
@@ -2673,7 +2673,7 @@ int lua_ax_backend_TextureCubemapBackend_updateFaceData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_TextureCubemapBackend_updateFaceData'", nullptr);
             return 0;
         }
-        cobj->updateFaceData(arg0, arg1, arg2);
+        obj->updateFaceData(arg0, arg1, arg2);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2710,7 +2710,7 @@ int lua_register_ax_backend_TextureCubemapBackend(lua_State* tolua_S)
 int lua_ax_backend_DriverBase_newDefaultRenderTarget(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::DriverBase* cobj = nullptr;
+    ax::backend::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2722,25 +2722,25 @@ int lua_ax_backend_DriverBase_newDefaultRenderTarget(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_newDefaultRenderTarget'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_DriverBase_newDefaultRenderTarget'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_newDefaultRenderTarget'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->newDefaultRenderTarget();
+        auto&& ret = obj->newDefaultRenderTarget();
         object_to_luaval<ax::backend::RenderTarget>(tolua_S, "axb.RenderTarget",(ax::backend::RenderTarget*)ret);
         return 1;
     }
@@ -2757,7 +2757,7 @@ int lua_ax_backend_DriverBase_newDefaultRenderTarget(lua_State* tolua_S)
 int lua_ax_backend_DriverBase_newRenderTarget(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::DriverBase* cobj = nullptr;
+    ax::backend::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2769,29 +2769,29 @@ int lua_ax_backend_DriverBase_newRenderTarget(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_newRenderTarget'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_DriverBase_newRenderTarget'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_newRenderTarget'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->newRenderTarget();
+        auto&& ret = obj->newRenderTarget();
         object_to_luaval<ax::backend::RenderTarget>(tolua_S, "axb.RenderTarget",(ax::backend::RenderTarget*)ret);
         return 1;
     }
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::backend::TextureBackend* arg0;
 
@@ -2801,11 +2801,11 @@ int lua_ax_backend_DriverBase_newRenderTarget(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_newRenderTarget'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->newRenderTarget(arg0);
+        auto&& ret = obj->newRenderTarget(arg0);
         object_to_luaval<ax::backend::RenderTarget>(tolua_S, "axb.RenderTarget",(ax::backend::RenderTarget*)ret);
         return 1;
     }
-    if (argc == 2) 
+    if (argc == 2)
     {
         ax::backend::TextureBackend* arg0;
         ax::backend::TextureBackend* arg1;
@@ -2818,11 +2818,11 @@ int lua_ax_backend_DriverBase_newRenderTarget(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_newRenderTarget'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->newRenderTarget(arg0, arg1);
+        auto&& ret = obj->newRenderTarget(arg0, arg1);
         object_to_luaval<ax::backend::RenderTarget>(tolua_S, "axb.RenderTarget",(ax::backend::RenderTarget*)ret);
         return 1;
     }
-    if (argc == 3) 
+    if (argc == 3)
     {
         ax::backend::TextureBackend* arg0;
         ax::backend::TextureBackend* arg1;
@@ -2838,7 +2838,7 @@ int lua_ax_backend_DriverBase_newRenderTarget(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_newRenderTarget'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->newRenderTarget(arg0, arg1, arg2);
+        auto&& ret = obj->newRenderTarget(arg0, arg1, arg2);
         object_to_luaval<ax::backend::RenderTarget>(tolua_S, "axb.RenderTarget",(ax::backend::RenderTarget*)ret);
         return 1;
     }
@@ -2855,7 +2855,7 @@ int lua_ax_backend_DriverBase_newRenderTarget(lua_State* tolua_S)
 int lua_ax_backend_DriverBase_newDepthStencilState(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::DriverBase* cobj = nullptr;
+    ax::backend::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2867,25 +2867,25 @@ int lua_ax_backend_DriverBase_newDepthStencilState(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_newDepthStencilState'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_DriverBase_newDepthStencilState'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_newDepthStencilState'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->newDepthStencilState();
+        auto&& ret = obj->newDepthStencilState();
         object_to_luaval<ax::backend::DepthStencilState>(tolua_S, "axb.DepthStencilState",(ax::backend::DepthStencilState*)ret);
         return 1;
     }
@@ -2902,7 +2902,7 @@ int lua_ax_backend_DriverBase_newDepthStencilState(lua_State* tolua_S)
 int lua_ax_backend_DriverBase_newProgram(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::DriverBase* cobj = nullptr;
+    ax::backend::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2914,18 +2914,18 @@ int lua_ax_backend_DriverBase_newProgram(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_newProgram'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_DriverBase_newProgram'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2) 
+    if (argc == 2)
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -2938,7 +2938,7 @@ int lua_ax_backend_DriverBase_newProgram(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_newProgram'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->newProgram(arg0, arg1);
+        auto&& ret = obj->newProgram(arg0, arg1);
         object_to_luaval<ax::backend::Program>(tolua_S, "axb.Program",(ax::backend::Program*)ret);
         return 1;
     }
@@ -2955,7 +2955,7 @@ int lua_ax_backend_DriverBase_newProgram(lua_State* tolua_S)
 int lua_ax_backend_DriverBase_resetState(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::DriverBase* cobj = nullptr;
+    ax::backend::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2967,25 +2967,25 @@ int lua_ax_backend_DriverBase_resetState(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_resetState'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_DriverBase_resetState'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_resetState'", nullptr);
             return 0;
         }
-        cobj->resetState();
+        obj->resetState();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3002,7 +3002,7 @@ int lua_ax_backend_DriverBase_resetState(lua_State* tolua_S)
 int lua_ax_backend_DriverBase_getVendor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::DriverBase* cobj = nullptr;
+    ax::backend::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3014,25 +3014,25 @@ int lua_ax_backend_DriverBase_getVendor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getVendor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_DriverBase_getVendor'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_getVendor'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getVendor();
+        auto&& ret = obj->getVendor();
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
@@ -3049,7 +3049,7 @@ int lua_ax_backend_DriverBase_getVendor(lua_State* tolua_S)
 int lua_ax_backend_DriverBase_getRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::DriverBase* cobj = nullptr;
+    ax::backend::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3061,25 +3061,25 @@ int lua_ax_backend_DriverBase_getRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getRenderer'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_DriverBase_getRenderer'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_getRenderer'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRenderer();
+        auto&& ret = obj->getRenderer();
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
@@ -3096,7 +3096,7 @@ int lua_ax_backend_DriverBase_getRenderer(lua_State* tolua_S)
 int lua_ax_backend_DriverBase_getVersion(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::DriverBase* cobj = nullptr;
+    ax::backend::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3108,25 +3108,25 @@ int lua_ax_backend_DriverBase_getVersion(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getVersion'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_DriverBase_getVersion'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_getVersion'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getVersion();
+        auto&& ret = obj->getVersion();
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
@@ -3143,7 +3143,7 @@ int lua_ax_backend_DriverBase_getVersion(lua_State* tolua_S)
 int lua_ax_backend_DriverBase_getShaderVersion(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::DriverBase* cobj = nullptr;
+    ax::backend::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3155,25 +3155,25 @@ int lua_ax_backend_DriverBase_getShaderVersion(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getShaderVersion'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_DriverBase_getShaderVersion'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_getShaderVersion'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getShaderVersion();
+        auto&& ret = obj->getShaderVersion();
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
@@ -3190,7 +3190,7 @@ int lua_ax_backend_DriverBase_getShaderVersion(lua_State* tolua_S)
 int lua_ax_backend_DriverBase_hasExtension(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::DriverBase* cobj = nullptr;
+    ax::backend::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3202,18 +3202,18 @@ int lua_ax_backend_DriverBase_hasExtension(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_hasExtension'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_DriverBase_hasExtension'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -3223,7 +3223,7 @@ int lua_ax_backend_DriverBase_hasExtension(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_hasExtension'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->hasExtension(arg0);
+        auto&& ret = obj->hasExtension(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -3240,7 +3240,7 @@ int lua_ax_backend_DriverBase_hasExtension(lua_State* tolua_S)
 int lua_ax_backend_DriverBase_dumpExtensions(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::DriverBase* cobj = nullptr;
+    ax::backend::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3252,25 +3252,25 @@ int lua_ax_backend_DriverBase_dumpExtensions(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_dumpExtensions'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_DriverBase_dumpExtensions'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_dumpExtensions'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->dumpExtensions();
+        auto&& ret = obj->dumpExtensions();
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -3287,7 +3287,7 @@ int lua_ax_backend_DriverBase_dumpExtensions(lua_State* tolua_S)
 int lua_ax_backend_DriverBase_checkForFeatureSupported(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::DriverBase* cobj = nullptr;
+    ax::backend::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3299,18 +3299,18 @@ int lua_ax_backend_DriverBase_checkForFeatureSupported(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_checkForFeatureSupported'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_DriverBase_checkForFeatureSupported'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::backend::FeatureType arg0;
 
@@ -3320,7 +3320,7 @@ int lua_ax_backend_DriverBase_checkForFeatureSupported(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_checkForFeatureSupported'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->checkForFeatureSupported(arg0);
+        auto&& ret = obj->checkForFeatureSupported(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -3337,7 +3337,7 @@ int lua_ax_backend_DriverBase_checkForFeatureSupported(lua_State* tolua_S)
 int lua_ax_backend_DriverBase_getMaxTextureSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::DriverBase* cobj = nullptr;
+    ax::backend::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3349,25 +3349,25 @@ int lua_ax_backend_DriverBase_getMaxTextureSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getMaxTextureSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_DriverBase_getMaxTextureSize'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_getMaxTextureSize'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMaxTextureSize();
+        auto&& ret = obj->getMaxTextureSize();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3384,7 +3384,7 @@ int lua_ax_backend_DriverBase_getMaxTextureSize(lua_State* tolua_S)
 int lua_ax_backend_DriverBase_getMaxAttributes(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::DriverBase* cobj = nullptr;
+    ax::backend::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3396,25 +3396,25 @@ int lua_ax_backend_DriverBase_getMaxAttributes(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getMaxAttributes'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_DriverBase_getMaxAttributes'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_getMaxAttributes'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMaxAttributes();
+        auto&& ret = obj->getMaxAttributes();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3431,7 +3431,7 @@ int lua_ax_backend_DriverBase_getMaxAttributes(lua_State* tolua_S)
 int lua_ax_backend_DriverBase_getMaxTextureUnits(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::DriverBase* cobj = nullptr;
+    ax::backend::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3443,25 +3443,25 @@ int lua_ax_backend_DriverBase_getMaxTextureUnits(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getMaxTextureUnits'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_DriverBase_getMaxTextureUnits'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_getMaxTextureUnits'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMaxTextureUnits();
+        auto&& ret = obj->getMaxTextureUnits();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3478,7 +3478,7 @@ int lua_ax_backend_DriverBase_getMaxTextureUnits(lua_State* tolua_S)
 int lua_ax_backend_DriverBase_getMaxSamplesAllowed(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::DriverBase* cobj = nullptr;
+    ax::backend::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3490,25 +3490,25 @@ int lua_ax_backend_DriverBase_getMaxSamplesAllowed(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_DriverBase_getMaxSamplesAllowed'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_DriverBase_getMaxSamplesAllowed'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_DriverBase_getMaxSamplesAllowed'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMaxSamplesAllowed();
+        auto&& ret = obj->getMaxSamplesAllowed();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3630,7 +3630,7 @@ int lua_register_ax_backend_DriverBase(lua_State* tolua_S)
 int lua_ax_backend_ProgramManager_getBuiltinProgram(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::ProgramManager* cobj = nullptr;
+    ax::backend::ProgramManager* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3642,18 +3642,18 @@ int lua_ax_backend_ProgramManager_getBuiltinProgram(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.ProgramManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::ProgramManager*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::ProgramManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramManager_getBuiltinProgram'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_ProgramManager_getBuiltinProgram'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         unsigned int arg0;
 
@@ -3663,7 +3663,7 @@ int lua_ax_backend_ProgramManager_getBuiltinProgram(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramManager_getBuiltinProgram'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getBuiltinProgram(arg0);
+        auto&& ret = obj->getBuiltinProgram(arg0);
         object_to_luaval<ax::backend::Program>(tolua_S, "axb.Program",(ax::backend::Program*)ret);
         return 1;
     }
@@ -3680,7 +3680,7 @@ int lua_ax_backend_ProgramManager_getBuiltinProgram(lua_State* tolua_S)
 int lua_ax_backend_ProgramManager_registerCustomProgram(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::ProgramManager* cobj = nullptr;
+    ax::backend::ProgramManager* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3692,18 +3692,18 @@ int lua_ax_backend_ProgramManager_registerCustomProgram(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.ProgramManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::ProgramManager*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::ProgramManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramManager_registerCustomProgram'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_ProgramManager_registerCustomProgram'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2) 
+    if (argc == 2)
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -3716,11 +3716,11 @@ int lua_ax_backend_ProgramManager_registerCustomProgram(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramManager_registerCustomProgram'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->registerCustomProgram(arg0, arg1);
+        auto&& ret = obj->registerCustomProgram(arg0, arg1);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    if (argc == 3) 
+    if (argc == 3)
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -3736,11 +3736,11 @@ int lua_ax_backend_ProgramManager_registerCustomProgram(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramManager_registerCustomProgram'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->registerCustomProgram(arg0, arg1, arg2);
+        auto&& ret = obj->registerCustomProgram(arg0, arg1, arg2);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    if (argc == 4) 
+    if (argc == 4)
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -3759,7 +3759,7 @@ int lua_ax_backend_ProgramManager_registerCustomProgram(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramManager_registerCustomProgram'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->registerCustomProgram(arg0, arg1, arg2, arg3);
+        auto&& ret = obj->registerCustomProgram(arg0, arg1, arg2, arg3);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3776,7 +3776,7 @@ int lua_ax_backend_ProgramManager_registerCustomProgram(lua_State* tolua_S)
 int lua_ax_backend_ProgramManager_loadProgram(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::ProgramManager* cobj = nullptr;
+    ax::backend::ProgramManager* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -3785,16 +3785,16 @@ int lua_ax_backend_ProgramManager_loadProgram(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axb.ProgramManager",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (ax::backend::ProgramManager*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::ProgramManager*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramManager_loadProgram'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_ProgramManager_loadProgram'", nullptr);
         return 0;
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axb.ProgramManager:loadProgram");
@@ -3804,13 +3804,13 @@ int lua_ax_backend_ProgramManager_loadProgram(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axb.ProgramManager:loadProgram");
 
             if (!ok) { break; }
-            ax::backend::Program* ret = cobj->loadProgram(arg0, arg1);
+            ax::backend::Program* ret = obj->loadProgram(arg0, arg1);
             object_to_luaval<ax::backend::Program>(tolua_S, "axb.Program",(ax::backend::Program*)ret);
             return 1;
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axb.ProgramManager:loadProgram");
@@ -3824,19 +3824,19 @@ int lua_ax_backend_ProgramManager_loadProgram(lua_State* tolua_S)
             ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axb.ProgramManager:loadProgram");
 
             if (!ok) { break; }
-            ax::backend::Program* ret = cobj->loadProgram(arg0, arg1, arg2);
+            ax::backend::Program* ret = obj->loadProgram(arg0, arg1, arg2);
             object_to_luaval<ax::backend::Program>(tolua_S, "axb.Program",(ax::backend::Program*)ret);
             return 1;
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             unsigned long long arg0;
             ok &= luaval_to_long_long(tolua_S, 2,(long long*)&arg0, "axb.ProgramManager:loadProgram");
 
             if (!ok) { break; }
-            ax::backend::Program* ret = cobj->loadProgram(arg0);
+            ax::backend::Program* ret = obj->loadProgram(arg0);
             object_to_luaval<ax::backend::Program>(tolua_S, "axb.Program",(ax::backend::Program*)ret);
             return 1;
         }
@@ -3855,7 +3855,7 @@ int lua_ax_backend_ProgramManager_loadProgram(lua_State* tolua_S)
 int lua_ax_backend_ProgramManager_unloadProgram(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::ProgramManager* cobj = nullptr;
+    ax::backend::ProgramManager* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3867,18 +3867,18 @@ int lua_ax_backend_ProgramManager_unloadProgram(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.ProgramManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::ProgramManager*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::ProgramManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramManager_unloadProgram'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_ProgramManager_unloadProgram'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::backend::Program* arg0;
 
@@ -3888,7 +3888,7 @@ int lua_ax_backend_ProgramManager_unloadProgram(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramManager_unloadProgram'", nullptr);
             return 0;
         }
-        cobj->unloadProgram(arg0);
+        obj->unloadProgram(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3905,7 +3905,7 @@ int lua_ax_backend_ProgramManager_unloadProgram(lua_State* tolua_S)
 int lua_ax_backend_ProgramManager_unloadUnusedPrograms(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::ProgramManager* cobj = nullptr;
+    ax::backend::ProgramManager* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3917,25 +3917,25 @@ int lua_ax_backend_ProgramManager_unloadUnusedPrograms(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.ProgramManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::ProgramManager*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::ProgramManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramManager_unloadUnusedPrograms'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_ProgramManager_unloadUnusedPrograms'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramManager_unloadUnusedPrograms'", nullptr);
             return 0;
         }
-        cobj->unloadUnusedPrograms();
+        obj->unloadUnusedPrograms();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3952,7 +3952,7 @@ int lua_ax_backend_ProgramManager_unloadUnusedPrograms(lua_State* tolua_S)
 int lua_ax_backend_ProgramManager_unloadAllPrograms(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::backend::ProgramManager* cobj = nullptr;
+    ax::backend::ProgramManager* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3964,25 +3964,25 @@ int lua_ax_backend_ProgramManager_unloadAllPrograms(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axb.ProgramManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::backend::ProgramManager*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::backend::ProgramManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramManager_unloadAllPrograms'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_backend_ProgramManager_unloadAllPrograms'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramManager_unloadAllPrograms'", nullptr);
             return 0;
         }
-        cobj->unloadAllPrograms();
+        obj->unloadAllPrograms();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4092,41 +4092,41 @@ int lua_register_ax_backend_ProgramManager(lua_State* tolua_S)
 }
 TOLUA_API int register_all_ax_backend(lua_State* tolua_S)
 {
-	tolua_open(tolua_S);
-	
-	tolua_module(tolua_S,"axb",0);
-	tolua_beginmodule(tolua_S,"axb");
+    tolua_open(tolua_S);
 
-	lua_register_ax_backend_BufferUsage(tolua_S);
-	lua_register_ax_backend_BufferType(tolua_S);
-	lua_register_ax_backend_ShaderStage(tolua_S);
-	lua_register_ax_backend_VertexFormat(tolua_S);
-	lua_register_ax_backend_PixelFormat(tolua_S);
-	lua_register_ax_backend_TextureUsage(tolua_S);
-	lua_register_ax_backend_IndexFormat(tolua_S);
-	lua_register_ax_backend_VertexStepMode(tolua_S);
-	lua_register_ax_backend_PrimitiveType(tolua_S);
-	lua_register_ax_backend_TextureType(tolua_S);
-	lua_register_ax_backend_SamplerAddressMode(tolua_S);
-	lua_register_ax_backend_SamplerFilter(tolua_S);
-	lua_register_ax_backend_StencilOperation(tolua_S);
-	lua_register_ax_backend_CompareFunction(tolua_S);
-	lua_register_ax_backend_BlendOperation(tolua_S);
-	lua_register_ax_backend_BlendFactor(tolua_S);
-	lua_register_ax_backend_ColorWriteMask(tolua_S);
-	lua_register_ax_backend_CullMode(tolua_S);
-	lua_register_ax_backend_Winding(tolua_S);
-	lua_register_ax_backend_TextureCubeFace(tolua_S);
-	lua_register_ax_backend_Program(tolua_S);
-	lua_register_ax_backend_VertexLayout(tolua_S);
-	lua_register_ax_backend_ProgramState(tolua_S);
-	lua_register_ax_backend_TextureBackend(tolua_S);
-	lua_register_ax_backend_Texture2DBackend(tolua_S);
-	lua_register_ax_backend_TextureCubemapBackend(tolua_S);
-	lua_register_ax_backend_DriverBase(tolua_S);
-	lua_register_ax_backend_ProgramManager(tolua_S);
+    tolua_module(tolua_S,"axb",0);
+    tolua_beginmodule(tolua_S,"axb");
 
-	tolua_endmodule(tolua_S);
-	return 1;
+    lua_register_ax_backend_BufferUsage(tolua_S);
+    lua_register_ax_backend_BufferType(tolua_S);
+    lua_register_ax_backend_ShaderStage(tolua_S);
+    lua_register_ax_backend_VertexFormat(tolua_S);
+    lua_register_ax_backend_PixelFormat(tolua_S);
+    lua_register_ax_backend_TextureUsage(tolua_S);
+    lua_register_ax_backend_IndexFormat(tolua_S);
+    lua_register_ax_backend_VertexStepMode(tolua_S);
+    lua_register_ax_backend_PrimitiveType(tolua_S);
+    lua_register_ax_backend_TextureType(tolua_S);
+    lua_register_ax_backend_SamplerAddressMode(tolua_S);
+    lua_register_ax_backend_SamplerFilter(tolua_S);
+    lua_register_ax_backend_StencilOperation(tolua_S);
+    lua_register_ax_backend_CompareFunction(tolua_S);
+    lua_register_ax_backend_BlendOperation(tolua_S);
+    lua_register_ax_backend_BlendFactor(tolua_S);
+    lua_register_ax_backend_ColorWriteMask(tolua_S);
+    lua_register_ax_backend_CullMode(tolua_S);
+    lua_register_ax_backend_Winding(tolua_S);
+    lua_register_ax_backend_TextureCubeFace(tolua_S);
+    lua_register_ax_backend_Program(tolua_S);
+    lua_register_ax_backend_VertexLayout(tolua_S);
+    lua_register_ax_backend_ProgramState(tolua_S);
+    lua_register_ax_backend_TextureBackend(tolua_S);
+    lua_register_ax_backend_Texture2DBackend(tolua_S);
+    lua_register_ax_backend_TextureCubemapBackend(tolua_S);
+    lua_register_ax_backend_DriverBase(tolua_S);
+    lua_register_ax_backend_ProgramManager(tolua_S);
+
+    tolua_endmodule(tolua_S);
+    return 1;
 }
 

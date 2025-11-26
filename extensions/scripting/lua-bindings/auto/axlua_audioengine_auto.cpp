@@ -7,7 +7,7 @@
 int lua_ax_audioengine_AudioProfile_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::AudioProfile* cobj = nullptr;
+    ax::AudioProfile* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17,15 +17,15 @@ int lua_ax_audioengine_AudioProfile_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioProfile_constructor'", nullptr);
             return 0;
         }
-        cobj = new ax::AudioProfile();
-        tolua_pushusertype(tolua_S,(void*)cobj,"ax.AudioProfile");
+        obj = new ax::AudioProfile();
+        tolua_pushusertype(tolua_S,(void*)obj,"ax.AudioProfile");
         tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
@@ -175,8 +175,7 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -192,8 +191,7 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 3)
         {
             std::string_view arg0;
@@ -212,8 +210,7 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -225,8 +222,7 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -241,8 +237,7 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 3)
         {
             std::string_view arg0;
@@ -260,8 +255,7 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 4)
         {
             std::string_view arg0;
@@ -304,8 +298,7 @@ int lua_ax_audioengine_AudioEngine_play3d(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -321,8 +314,7 @@ int lua_ax_audioengine_AudioEngine_play3d(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 3)
         {
             std::string_view arg0;
@@ -341,8 +333,7 @@ int lua_ax_audioengine_AudioEngine_play3d(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -357,8 +348,7 @@ int lua_ax_audioengine_AudioEngine_play3d(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 3)
         {
             std::string_view arg0;
@@ -376,8 +366,7 @@ int lua_ax_audioengine_AudioEngine_play3d(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 4)
         {
             std::string_view arg0;
@@ -398,8 +387,7 @@ int lua_ax_audioengine_AudioEngine_play3d(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 5)
         {
             std::string_view arg0;
@@ -1163,8 +1151,7 @@ int lua_ax_audioengine_AudioEngine_getProfile(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -1176,8 +1163,7 @@ int lua_ax_audioengine_AudioEngine_getProfile(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 1)
         {
             int arg0;
@@ -1211,8 +1197,7 @@ int lua_ax_audioengine_AudioEngine_preload(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -1221,7 +1206,7 @@ int lua_ax_audioengine_AudioEngine_preload(lua_State* tolua_S)
             std::function<void (bool)> arg1;
             do {
 			// Lambda binding for lua is not supported.
-			assert(false);
+		    assert(false);
 		} while(0)
 		;
             if (!ok) { break; }
@@ -1231,8 +1216,7 @@ int lua_ax_audioengine_AudioEngine_preload(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -1719,16 +1703,16 @@ int lua_register_ax_audioengine_AudioEngine(lua_State* tolua_S)
 }
 TOLUA_API int register_all_ax_audioengine(lua_State* tolua_S)
 {
-	tolua_open(tolua_S);
-	
-	tolua_module(tolua_S,"ax",0);
-	tolua_beginmodule(tolua_S,"ax");
+    tolua_open(tolua_S);
 
-	lua_register_ax_audioengine_AudioProfile(tolua_S);
-	lua_register_ax_audioengine_AudioEngine(tolua_S);
+    tolua_module(tolua_S,"ax",0);
+    tolua_beginmodule(tolua_S,"ax");
 
-	tolua_endmodule(tolua_S);
-	return 1;
+    lua_register_ax_audioengine_AudioProfile(tolua_S);
+    lua_register_ax_audioengine_AudioEngine(tolua_S);
+
+    tolua_endmodule(tolua_S);
+    return 1;
 }
 
 #endif

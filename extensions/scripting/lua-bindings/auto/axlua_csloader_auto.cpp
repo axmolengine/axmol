@@ -6,7 +6,7 @@
 int lua_ax_csloader_CSLoader_init(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::CSLoader* cobj = nullptr;
+    ax::CSLoader* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18,25 +18,25 @@ int lua_ax_csloader_CSLoader_init(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_init'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_csloader_CSLoader_init'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_init'", nullptr);
             return 0;
         }
-        cobj->init();
+        obj->init();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -53,7 +53,7 @@ int lua_ax_csloader_CSLoader_init(lua_State* tolua_S)
 int lua_ax_csloader_CSLoader_createNodeFromJson(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::CSLoader* cobj = nullptr;
+    ax::CSLoader* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -65,18 +65,18 @@ int lua_ax_csloader_CSLoader_createNodeFromJson(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_createNodeFromJson'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_csloader_CSLoader_createNodeFromJson'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -86,7 +86,7 @@ int lua_ax_csloader_CSLoader_createNodeFromJson(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_createNodeFromJson'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->createNodeFromJson(arg0);
+        auto&& ret = obj->createNodeFromJson(arg0);
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -103,7 +103,7 @@ int lua_ax_csloader_CSLoader_createNodeFromJson(lua_State* tolua_S)
 int lua_ax_csloader_CSLoader_loadNodeWithFile(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::CSLoader* cobj = nullptr;
+    ax::CSLoader* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -115,18 +115,18 @@ int lua_ax_csloader_CSLoader_loadNodeWithFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_loadNodeWithFile'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_csloader_CSLoader_loadNodeWithFile'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -136,7 +136,7 @@ int lua_ax_csloader_CSLoader_loadNodeWithFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_loadNodeWithFile'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->loadNodeWithFile(arg0);
+        auto&& ret = obj->loadNodeWithFile(arg0);
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -153,7 +153,7 @@ int lua_ax_csloader_CSLoader_loadNodeWithFile(lua_State* tolua_S)
 int lua_ax_csloader_CSLoader_loadNodeWithContent(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::CSLoader* cobj = nullptr;
+    ax::CSLoader* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -165,18 +165,18 @@ int lua_ax_csloader_CSLoader_loadNodeWithContent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_loadNodeWithContent'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_csloader_CSLoader_loadNodeWithContent'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -186,7 +186,7 @@ int lua_ax_csloader_CSLoader_loadNodeWithContent(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_loadNodeWithContent'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->loadNodeWithContent(arg0);
+        auto&& ret = obj->loadNodeWithContent(arg0);
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -203,7 +203,7 @@ int lua_ax_csloader_CSLoader_loadNodeWithContent(lua_State* tolua_S)
 int lua_ax_csloader_CSLoader_setRecordJsonPath(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::CSLoader* cobj = nullptr;
+    ax::CSLoader* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -215,18 +215,18 @@ int lua_ax_csloader_CSLoader_setRecordJsonPath(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_setRecordJsonPath'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_csloader_CSLoader_setRecordJsonPath'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         bool arg0;
 
@@ -236,7 +236,7 @@ int lua_ax_csloader_CSLoader_setRecordJsonPath(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_setRecordJsonPath'", nullptr);
             return 0;
         }
-        cobj->setRecordJsonPath(arg0);
+        obj->setRecordJsonPath(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -253,7 +253,7 @@ int lua_ax_csloader_CSLoader_setRecordJsonPath(lua_State* tolua_S)
 int lua_ax_csloader_CSLoader_isRecordJsonPath(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::CSLoader* cobj = nullptr;
+    ax::CSLoader* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -265,25 +265,25 @@ int lua_ax_csloader_CSLoader_isRecordJsonPath(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_isRecordJsonPath'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_csloader_CSLoader_isRecordJsonPath'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_isRecordJsonPath'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isRecordJsonPath();
+        auto&& ret = obj->isRecordJsonPath();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -300,7 +300,7 @@ int lua_ax_csloader_CSLoader_isRecordJsonPath(lua_State* tolua_S)
 int lua_ax_csloader_CSLoader_setJsonPath(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::CSLoader* cobj = nullptr;
+    ax::CSLoader* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -312,18 +312,18 @@ int lua_ax_csloader_CSLoader_setJsonPath(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_setJsonPath'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_csloader_CSLoader_setJsonPath'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string arg0;
 
@@ -333,7 +333,7 @@ int lua_ax_csloader_CSLoader_setJsonPath(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_setJsonPath'", nullptr);
             return 0;
         }
-        cobj->setJsonPath(arg0);
+        obj->setJsonPath(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -350,7 +350,7 @@ int lua_ax_csloader_CSLoader_setJsonPath(lua_State* tolua_S)
 int lua_ax_csloader_CSLoader_getJsonPath(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::CSLoader* cobj = nullptr;
+    ax::CSLoader* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -362,25 +362,25 @@ int lua_ax_csloader_CSLoader_getJsonPath(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_getJsonPath'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_csloader_CSLoader_getJsonPath'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_getJsonPath'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getJsonPath();
+        auto&& ret = obj->getJsonPath();
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -397,7 +397,7 @@ int lua_ax_csloader_CSLoader_getJsonPath(lua_State* tolua_S)
 int lua_ax_csloader_CSLoader_createNodeWithFlatBuffersFile(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::CSLoader* cobj = nullptr;
+    ax::CSLoader* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -409,18 +409,18 @@ int lua_ax_csloader_CSLoader_createNodeWithFlatBuffersFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_createNodeWithFlatBuffersFile'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_csloader_CSLoader_createNodeWithFlatBuffersFile'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -430,7 +430,7 @@ int lua_ax_csloader_CSLoader_createNodeWithFlatBuffersFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_createNodeWithFlatBuffersFile'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->createNodeWithFlatBuffersFile(arg0);
+        auto&& ret = obj->createNodeWithFlatBuffersFile(arg0);
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -447,7 +447,7 @@ int lua_ax_csloader_CSLoader_createNodeWithFlatBuffersFile(lua_State* tolua_S)
 int lua_ax_csloader_CSLoader_bindCallback(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::CSLoader* cobj = nullptr;
+    ax::CSLoader* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -459,18 +459,18 @@ int lua_ax_csloader_CSLoader_bindCallback(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_bindCallback'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_csloader_CSLoader_bindCallback'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4) 
+    if (argc == 4)
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -489,7 +489,7 @@ int lua_ax_csloader_CSLoader_bindCallback(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_bindCallback'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->bindCallback(arg0, arg1, arg2, arg3);
+        auto&& ret = obj->bindCallback(arg0, arg1, arg2, arg3);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -506,7 +506,7 @@ int lua_ax_csloader_CSLoader_bindCallback(lua_State* tolua_S)
 int lua_ax_csloader_CSLoader_createNodeWithFlatBuffersForSimulator(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::CSLoader* cobj = nullptr;
+    ax::CSLoader* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -518,18 +518,18 @@ int lua_ax_csloader_CSLoader_createNodeWithFlatBuffersForSimulator(lua_State* to
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_csloader_CSLoader_createNodeWithFlatBuffersForSimulator'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_csloader_CSLoader_createNodeWithFlatBuffersForSimulator'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -539,7 +539,7 @@ int lua_ax_csloader_CSLoader_createNodeWithFlatBuffersForSimulator(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_createNodeWithFlatBuffersForSimulator'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->createNodeWithFlatBuffersForSimulator(arg0);
+        auto&& ret = obj->createNodeWithFlatBuffersForSimulator(arg0);
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -635,8 +635,7 @@ int lua_ax_csloader_CSLoader_createNodeWithVisibleSize(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -645,7 +644,7 @@ int lua_ax_csloader_CSLoader_createNodeWithVisibleSize(lua_State* tolua_S)
             std::function<void (ax::Object *)> arg1;
             do {
 			// Lambda binding for lua is not supported.
-			assert(false);
+		    assert(false);
 		} while(0)
 		;
             if (!ok) { break; }
@@ -655,8 +654,7 @@ int lua_ax_csloader_CSLoader_createNodeWithVisibleSize(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -679,7 +677,7 @@ int lua_ax_csloader_CSLoader_createNodeWithVisibleSize(lua_State* tolua_S)
 int lua_ax_csloader_CSLoader_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::CSLoader* cobj = nullptr;
+    ax::CSLoader* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -689,15 +687,15 @@ int lua_ax_csloader_CSLoader_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_constructor'", nullptr);
             return 0;
         }
-        cobj = new ax::CSLoader();
-        tolua_pushusertype(tolua_S,(void*)cobj,"ax.CSLoader");
+        obj = new ax::CSLoader();
+        tolua_pushusertype(tolua_S,(void*)obj,"ax.CSLoader");
         tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
@@ -746,14 +744,14 @@ int lua_register_ax_csloader_CSLoader(lua_State* tolua_S)
 }
 TOLUA_API int register_all_ax_csloader(lua_State* tolua_S)
 {
-	tolua_open(tolua_S);
-	
-	tolua_module(tolua_S,"ax",0);
-	tolua_beginmodule(tolua_S,"ax");
+    tolua_open(tolua_S);
 
-	lua_register_ax_csloader_CSLoader(tolua_S);
+    tolua_module(tolua_S,"ax",0);
+    tolua_beginmodule(tolua_S,"ax");
 
-	tolua_endmodule(tolua_S);
-	return 1;
+    lua_register_ax_csloader_CSLoader(tolua_S);
+
+    tolua_endmodule(tolua_S);
+    return 1;
 }
 

@@ -6,7 +6,7 @@
 int lua_ax_webview_WebView_setJavascriptInterfaceScheme(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::ui::WebView* cobj = nullptr;
+    ax::ui::WebView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18,18 +18,18 @@ int lua_ax_webview_WebView_setJavascriptInterfaceScheme(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_webview_WebView_setJavascriptInterfaceScheme'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_webview_WebView_setJavascriptInterfaceScheme'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -39,7 +39,7 @@ int lua_ax_webview_WebView_setJavascriptInterfaceScheme(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_setJavascriptInterfaceScheme'", nullptr);
             return 0;
         }
-        cobj->setJavascriptInterfaceScheme(arg0);
+        obj->setJavascriptInterfaceScheme(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -56,7 +56,7 @@ int lua_ax_webview_WebView_setJavascriptInterfaceScheme(lua_State* tolua_S)
 int lua_ax_webview_WebView_loadHTMLString(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::ui::WebView* cobj = nullptr;
+    ax::ui::WebView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -68,18 +68,18 @@ int lua_ax_webview_WebView_loadHTMLString(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_webview_WebView_loadHTMLString'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_webview_WebView_loadHTMLString'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -89,11 +89,11 @@ int lua_ax_webview_WebView_loadHTMLString(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_loadHTMLString'", nullptr);
             return 0;
         }
-        cobj->loadHTMLString(arg0);
+        obj->loadHTMLString(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2) 
+    if (argc == 2)
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -106,7 +106,7 @@ int lua_ax_webview_WebView_loadHTMLString(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_loadHTMLString'", nullptr);
             return 0;
         }
-        cobj->loadHTMLString(arg0, arg1);
+        obj->loadHTMLString(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -123,7 +123,7 @@ int lua_ax_webview_WebView_loadHTMLString(lua_State* tolua_S)
 int lua_ax_webview_WebView_loadURL(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::ui::WebView* cobj = nullptr;
+    ax::ui::WebView* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -132,16 +132,16 @@ int lua_ax_webview_WebView_loadURL(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_webview_WebView_loadURL'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_webview_WebView_loadURL'", nullptr);
         return 0;
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.WebView:loadURL");
@@ -151,19 +151,19 @@ int lua_ax_webview_WebView_loadURL(lua_State* tolua_S)
             ok &= luaval_to_boolean(tolua_S, 3,&arg1, "axui.WebView:loadURL");
 
             if (!ok) { break; }
-            cobj->loadURL(arg0, arg1);
+            obj->loadURL(arg0, arg1);
             lua_settop(tolua_S, 1);
             return 1;
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.WebView:loadURL");
 
             if (!ok) { break; }
-            cobj->loadURL(arg0);
+            obj->loadURL(arg0);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -182,7 +182,7 @@ int lua_ax_webview_WebView_loadURL(lua_State* tolua_S)
 int lua_ax_webview_WebView_loadFile(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::ui::WebView* cobj = nullptr;
+    ax::ui::WebView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -194,18 +194,18 @@ int lua_ax_webview_WebView_loadFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_webview_WebView_loadFile'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_webview_WebView_loadFile'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -215,7 +215,7 @@ int lua_ax_webview_WebView_loadFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_loadFile'", nullptr);
             return 0;
         }
-        cobj->loadFile(arg0);
+        obj->loadFile(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -232,7 +232,7 @@ int lua_ax_webview_WebView_loadFile(lua_State* tolua_S)
 int lua_ax_webview_WebView_stopLoading(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::ui::WebView* cobj = nullptr;
+    ax::ui::WebView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -244,25 +244,25 @@ int lua_ax_webview_WebView_stopLoading(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_webview_WebView_stopLoading'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_webview_WebView_stopLoading'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_stopLoading'", nullptr);
             return 0;
         }
-        cobj->stopLoading();
+        obj->stopLoading();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -279,7 +279,7 @@ int lua_ax_webview_WebView_stopLoading(lua_State* tolua_S)
 int lua_ax_webview_WebView_reload(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::ui::WebView* cobj = nullptr;
+    ax::ui::WebView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -291,25 +291,25 @@ int lua_ax_webview_WebView_reload(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_webview_WebView_reload'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_webview_WebView_reload'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_reload'", nullptr);
             return 0;
         }
-        cobj->reload();
+        obj->reload();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -326,7 +326,7 @@ int lua_ax_webview_WebView_reload(lua_State* tolua_S)
 int lua_ax_webview_WebView_canGoBack(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::ui::WebView* cobj = nullptr;
+    ax::ui::WebView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -338,25 +338,25 @@ int lua_ax_webview_WebView_canGoBack(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_webview_WebView_canGoBack'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_webview_WebView_canGoBack'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_canGoBack'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->canGoBack();
+        auto&& ret = obj->canGoBack();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -373,7 +373,7 @@ int lua_ax_webview_WebView_canGoBack(lua_State* tolua_S)
 int lua_ax_webview_WebView_canGoForward(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::ui::WebView* cobj = nullptr;
+    ax::ui::WebView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -385,25 +385,25 @@ int lua_ax_webview_WebView_canGoForward(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_webview_WebView_canGoForward'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_webview_WebView_canGoForward'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_canGoForward'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->canGoForward();
+        auto&& ret = obj->canGoForward();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -420,7 +420,7 @@ int lua_ax_webview_WebView_canGoForward(lua_State* tolua_S)
 int lua_ax_webview_WebView_goBack(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::ui::WebView* cobj = nullptr;
+    ax::ui::WebView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -432,25 +432,25 @@ int lua_ax_webview_WebView_goBack(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_webview_WebView_goBack'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_webview_WebView_goBack'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_goBack'", nullptr);
             return 0;
         }
-        cobj->goBack();
+        obj->goBack();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -467,7 +467,7 @@ int lua_ax_webview_WebView_goBack(lua_State* tolua_S)
 int lua_ax_webview_WebView_goForward(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::ui::WebView* cobj = nullptr;
+    ax::ui::WebView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -479,25 +479,25 @@ int lua_ax_webview_WebView_goForward(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_webview_WebView_goForward'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_webview_WebView_goForward'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_goForward'", nullptr);
             return 0;
         }
-        cobj->goForward();
+        obj->goForward();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -514,7 +514,7 @@ int lua_ax_webview_WebView_goForward(lua_State* tolua_S)
 int lua_ax_webview_WebView_evaluateJS(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::ui::WebView* cobj = nullptr;
+    ax::ui::WebView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -526,18 +526,18 @@ int lua_ax_webview_WebView_evaluateJS(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_webview_WebView_evaluateJS'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_webview_WebView_evaluateJS'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -547,7 +547,7 @@ int lua_ax_webview_WebView_evaluateJS(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_evaluateJS'", nullptr);
             return 0;
         }
-        cobj->evaluateJS(arg0);
+        obj->evaluateJS(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -564,7 +564,7 @@ int lua_ax_webview_WebView_evaluateJS(lua_State* tolua_S)
 int lua_ax_webview_WebView_setScalesPageToFit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::ui::WebView* cobj = nullptr;
+    ax::ui::WebView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -576,18 +576,18 @@ int lua_ax_webview_WebView_setScalesPageToFit(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_webview_WebView_setScalesPageToFit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_webview_WebView_setScalesPageToFit'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         bool arg0;
 
@@ -597,7 +597,7 @@ int lua_ax_webview_WebView_setScalesPageToFit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_setScalesPageToFit'", nullptr);
             return 0;
         }
-        cobj->setScalesPageToFit(arg0);
+        obj->setScalesPageToFit(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -614,7 +614,7 @@ int lua_ax_webview_WebView_setScalesPageToFit(lua_State* tolua_S)
 int lua_ax_webview_WebView_getOnJSCallback(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::ui::WebView* cobj = nullptr;
+    ax::ui::WebView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -626,25 +626,25 @@ int lua_ax_webview_WebView_getOnJSCallback(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_webview_WebView_getOnJSCallback'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_webview_WebView_getOnJSCallback'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_getOnJSCallback'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getOnJSCallback();
+        auto&& ret = obj->getOnJSCallback();
         #pragma warning NO CONVERSION FROM NATIVE FOR std::function;
         return 1;
     }
@@ -661,7 +661,7 @@ int lua_ax_webview_WebView_getOnJSCallback(lua_State* tolua_S)
 int lua_ax_webview_WebView_setBounces(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::ui::WebView* cobj = nullptr;
+    ax::ui::WebView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -673,18 +673,18 @@ int lua_ax_webview_WebView_setBounces(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_webview_WebView_setBounces'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_webview_WebView_setBounces'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         bool arg0;
 
@@ -694,7 +694,7 @@ int lua_ax_webview_WebView_setBounces(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_setBounces'", nullptr);
             return 0;
         }
-        cobj->setBounces(arg0);
+        obj->setBounces(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -711,7 +711,7 @@ int lua_ax_webview_WebView_setBounces(lua_State* tolua_S)
 int lua_ax_webview_WebView_setOpacityWebView(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::ui::WebView* cobj = nullptr;
+    ax::ui::WebView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -723,18 +723,18 @@ int lua_ax_webview_WebView_setOpacityWebView(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_webview_WebView_setOpacityWebView'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_webview_WebView_setOpacityWebView'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         double arg0;
 
@@ -744,7 +744,7 @@ int lua_ax_webview_WebView_setOpacityWebView(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_setOpacityWebView'", nullptr);
             return 0;
         }
-        cobj->setOpacityWebView(arg0);
+        obj->setOpacityWebView(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -761,7 +761,7 @@ int lua_ax_webview_WebView_setOpacityWebView(lua_State* tolua_S)
 int lua_ax_webview_WebView_getOpacityWebView(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::ui::WebView* cobj = nullptr;
+    ax::ui::WebView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -773,25 +773,25 @@ int lua_ax_webview_WebView_getOpacityWebView(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_webview_WebView_getOpacityWebView'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_webview_WebView_getOpacityWebView'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_getOpacityWebView'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getOpacityWebView();
+        auto&& ret = obj->getOpacityWebView();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -808,7 +808,7 @@ int lua_ax_webview_WebView_getOpacityWebView(lua_State* tolua_S)
 int lua_ax_webview_WebView_setBackgroundTransparent(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::ui::WebView* cobj = nullptr;
+    ax::ui::WebView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -820,25 +820,25 @@ int lua_ax_webview_WebView_setBackgroundTransparent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_webview_WebView_setBackgroundTransparent'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_webview_WebView_setBackgroundTransparent'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_setBackgroundTransparent'", nullptr);
             return 0;
         }
-        cobj->setBackgroundTransparent();
+        obj->setBackgroundTransparent();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -889,7 +889,7 @@ int lua_ax_webview_WebView_create(lua_State* tolua_S)
 int lua_ax_webview_WebView_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::ui::WebView* cobj = nullptr;
+    ax::ui::WebView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -899,18 +899,18 @@ int lua_ax_webview_WebView_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_constructor'", nullptr);
             return 0;
         }
-        cobj = new ax::ui::WebView();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"axui.WebView");
+        obj = new ax::ui::WebView();
+        obj->autorelease();
+        int ID =  (int)obj->_ID ;
+        int* luaID =  &obj->_luaID ;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axui.WebView");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:WebView",argc, 0);
@@ -962,14 +962,14 @@ int lua_register_ax_webview_WebView(lua_State* tolua_S)
 }
 TOLUA_API int register_all_ax_webview(lua_State* tolua_S)
 {
-	tolua_open(tolua_S);
-	
-	tolua_module(tolua_S,"axui",0);
-	tolua_beginmodule(tolua_S,"axui");
+    tolua_open(tolua_S);
 
-	lua_register_ax_webview_WebView(tolua_S);
+    tolua_module(tolua_S,"axui",0);
+    tolua_beginmodule(tolua_S,"axui");
 
-	tolua_endmodule(tolua_S);
-	return 1;
+    lua_register_ax_webview_WebView(tolua_S);
+
+    tolua_endmodule(tolua_S);
+    return 1;
 }
 
