@@ -603,7 +603,7 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
 }
 
 void DriverImpl::destroySampler(SamplerHandle& h)
-{ // sampler is cached, so don't need queue
+{  // sampler is cached, so don't need queue
     if (h)
     {
         vkDestroySampler(_device, (VkSampler)h, nullptr);

@@ -453,13 +453,13 @@ void WebSocket::close(uint16_t code, std::string_view reason)
         if (_service->is_open(0))
         {
             _state = State::CLOSING;
-            
+
             yasio::obstream obs(sizeof(code, reason.size()));
             obs.write(_closeCode);
             obs.write_bytes(reason);
-            
+
             WebSocketProtocol::sendFrame(*this, obs.data(), obs.length(), ws::detail::opcode::close);
-            
+
             _service->close(0);
 
             if (_transport)
