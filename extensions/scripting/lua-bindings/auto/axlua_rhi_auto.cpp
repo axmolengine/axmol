@@ -53,6 +53,7 @@ int lua_register_ax_rhi_ShaderStage(lua_State* tolua_S)
         tolua_constant(tolua_S, "UNKNOWN", -1);
         tolua_constant(tolua_S, "FRAGMENT", 0);
         tolua_constant(tolua_S, "VERTEX", 1);
+        tolua_constant(tolua_S, "COMPUTE", 2);
         tolua_constant(tolua_S, "DEFAULT", 0);
     tolua_endmodule(tolua_S);
 
