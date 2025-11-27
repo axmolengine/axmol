@@ -387,7 +387,8 @@ list(APPEND GAME_SOURCE
 )
 
 
-if(NOT IOS AND AX_ENABLE_EXT_IMGUI)
+if(NOT IOS AND NOT ANDROID AND AX_ENABLE_EXT_IMGUI)
+    # android support imgui, but box2d testbed not adapt for android which requires GLFW_KEY_XX
     list(APPEND GAME_HEADER
         Source/Box2DTestBed/tests/test.h
         Source/Box2DTestBed/tests/settings.h
