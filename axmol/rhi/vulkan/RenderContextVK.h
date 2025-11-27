@@ -49,8 +49,11 @@ enum class DynamicStateBits : uint32_t
 
 struct GPUFence
 {
-    VkFence handle;
-    uint64_t submitId;
+    operator VkFence() const { return this->fenceHandle; }
+    VkFence* operator&() throw() { return &this->fenceHandle; }
+
+    VkFence fenceHandle{VK_NULL_HANDLE};
+    uint64_t fenceValue{0};
 };
 
 AX_ENABLE_BITMASK_OPS(DynamicStateBits);
@@ -137,6 +140,8 @@ public:
 
     uint32_t getCurrentFrame() const { return _currentFrame; }
 
+    uint64_t getCompletedFenceValue() const override;
+
 private:
     void recreateSwapchain();
     void createCommandBuffers();
@@ -187,7 +192,7 @@ private:
     std::array<GPUFence, MAX_FRAMES_IN_FLIGHT> _inFlightFences{};
 
     uint64_t _completedFenceValue{0};
-    uint64_t _currentFenceValue{0};
+    uint64_t _frameFenceValue{0};
 
 #if !_AX_USE_DESCRIPTOR_CACHE
     std::array<VkDescriptorPool, MAX_FRAMES_IN_FLIGHT> _descriptorPools{};

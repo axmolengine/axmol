@@ -37,7 +37,6 @@
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/rhi/VertexLayout.h"
 
-#include <limits>
 #include <memory>
 #include <vector>
 
@@ -266,7 +265,13 @@ public:
      */
     virtual void setStencilReferenceValue(uint32_t value);
 
-    virtual uint64_t getCompletedFenceValue() const { return (std::numeric_limits<uint64_t>::max)(); }
+    /**
+     * Returns the last completed fence value for GPU synchronization.
+     * Only modern graphics APIs such as D3D12 and Vulkan provide explicit fence value tracking.
+     * Legacy APIs (e.g., OpenGL, D3D11 without timeline semaphores) do not expose this,
+     * so the default implementation returns UINT64_MAX as a sentinel.
+     */
+    virtual uint64_t getCompletedFenceValue() const;
 
 protected:
     virtual ~RenderContext();

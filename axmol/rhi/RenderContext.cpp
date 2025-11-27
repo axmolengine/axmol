@@ -26,6 +26,8 @@
 #include "axmol/rhi/RenderContext.h"
 #include "axmol/rhi/RenderTarget.h"
 
+#include <limits>
+
 namespace ax::rhi
 {
 
@@ -53,5 +55,10 @@ bool RenderContext::updateSurface(void* /*surface*/, uint32_t /*width*/, uint32_
 }
 
 void RenderContext::setFrameBufferOnly(bool /*frameBufferOnly*/) {}
+
+uint64_t RenderContext::getCompletedFenceValue() const
+{
+    return (std::numeric_limits<uint64_t>::max)();
+}
 
 }  // namespace ax::rhi
