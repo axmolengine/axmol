@@ -46,7 +46,10 @@ class DriverImpl;
  */
 class BufferImpl final : public Buffer
 {
+    friend class RenderContextImpl;
+
 public:
+    using Buffer::setLastFenceValue;
     /**
      * @param device   Vulkan logical device
      * @param physical Vulkan physical device (for memory properties)

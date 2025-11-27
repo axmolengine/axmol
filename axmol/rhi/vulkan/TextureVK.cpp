@@ -137,21 +137,21 @@ static void transitionImageLayout(VkCommandBuffer cmd,
     vkCmdPipelineBarrier(cmd, srcStage, dstStage, 0, 0, nullptr, 0, nullptr, 1, &barrier);
 }
 
-void TextureHandle::destroy(DriverImpl* driver)
+void TextureHandle::destroy(DriverImpl* driver, uint64_t fenceValue)
 {
     if (view != VK_NULL_HANDLE)
     {
-        driver->queueDisposal(view);
+        driver->queueDisposal(view, fenceValue);
         view = VK_NULL_HANDLE;
     }
     if (image != VK_NULL_HANDLE)
     {
-        driver->queueDisposal(image);
+        driver->queueDisposal(image, fenceValue);
         image = VK_NULL_HANDLE;
     }
     if (memory != VK_NULL_HANDLE)
     {
-        driver->queueDisposal(memory);
+        driver->queueDisposal(memory, fenceValue);
         memory = VK_NULL_HANDLE;
     }
 }
@@ -178,7 +178,7 @@ TextureImpl::~TextureImpl()
     if (_ownResources)
     {
         _sampler = VK_NULL_HANDLE;  // SamplerCache handles sampler destruction
-        _nativeTexture.destroy(_driver);
+        _nativeTexture.destroy(_driver, _lastFenceValue);
     }
 }
 

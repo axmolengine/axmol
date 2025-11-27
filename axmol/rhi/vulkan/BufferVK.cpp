@@ -100,9 +100,9 @@ BufferImpl::BufferImpl(DriverImpl* driver, std::size_t size, BufferType type, Bu
 BufferImpl::~BufferImpl()
 {
     if (_buffer != VK_NULL_HANDLE)
-        _driver->queueDisposal(_buffer);
+        _driver->queueDisposal(_buffer, _lastFenceValue);
     if (_memory != VK_NULL_HANDLE)
-        _driver->queueDisposal(_memory);
+        _driver->queueDisposal(_memory, _lastFenceValue);
 }
 
 /* -------------------------------------------------- createNativeBuffer */

@@ -35,9 +35,9 @@
 
 #include "axmol/base/Logging.h"
 
-#include <vector>
-#include <cstring>
 #include <algorithm>
+#include <vector>
+#include <limits>
 
 namespace ax::rhi
 {
@@ -406,6 +406,18 @@ void DriverImpl::initializeDevice()
     dinfo.enabledExtensionCount   = deviceExtensions.size();
     dinfo.ppEnabledExtensionNames = deviceExtensions.data();
 
+    // device features
+    VkPhysicalDeviceFeatures deviceFeatures{};
+    vkGetPhysicalDeviceFeatures(_physical, &deviceFeatures);
+
+    bool samplerAnisotropy = deviceFeatures.samplerAnisotropy;
+    if (samplerAnisotropy)
+    {
+        memset(&deviceFeatures, 0, sizeof(deviceFeatures));
+        deviceFeatures.samplerAnisotropy = VK_TRUE;
+        dinfo.pEnabledFeatures           = &deviceFeatures;
+    }
+
     VkResult vr = vkCreateDevice(_physical, &dinfo, nullptr, &_device);
     AXASSERT(vr == VK_SUCCESS && _device != VK_NULL_HANDLE, "vkCreateDevice failed");
 
@@ -591,10 +603,10 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
 }
 
 void DriverImpl::destroySampler(SamplerHandle& h)
-{
+{ // sampler is cached, so don't need queue
     if (h)
     {
-        queueDisposal(static_cast<VkSampler>(h));
+        vkDestroySampler(_device, (VkSampler)h, nullptr);
         h = VK_NULL_HANDLE;
     }
 }
@@ -779,41 +791,40 @@ void DriverImpl::destroyRenderPass(VkRenderPass rp)
         _currentRenderContext->removeCachedPipelines(rp);
 }
 
-void DriverImpl::queueDisposal(VkSampler sampler)
+void DriverImpl::queueDisposal(VkSampler sampler, uint64_t fenceValue)
 {
-    queueDisposalInternal({.type = DisposableResource::Type::Sampler, .sampler = sampler});
+    queueDisposalInternal({.type = DisposableResource::Type::Sampler, .sampler = sampler, .fenceValue = fenceValue});
 }
-void DriverImpl::queueDisposal(VkImage image)
+void DriverImpl::queueDisposal(VkImage image, uint64_t fenceValue)
 {
-    queueDisposalInternal({.type = DisposableResource::Type::Image, .image = image});
+    queueDisposalInternal({.type = DisposableResource::Type::Image, .image = image, .fenceValue = fenceValue});
 }
-void DriverImpl::queueDisposal(VkImageView view)
+void DriverImpl::queueDisposal(VkImageView view, uint64_t fenceValue)
 {
-    queueDisposalInternal({.type = DisposableResource::Type::ImageView, .view = view});
+    queueDisposalInternal({.type = DisposableResource::Type::ImageView, .view = view, .fenceValue = fenceValue});
 }
-void DriverImpl::queueDisposal(VkBuffer buffer)
+void DriverImpl::queueDisposal(VkBuffer buffer, uint64_t fenceValue)
 {
-    queueDisposalInternal({.type = DisposableResource::Type::Buffer, .buffer = buffer});
+    queueDisposalInternal({.type = DisposableResource::Type::Buffer, .buffer = buffer, .fenceValue = fenceValue});
 }
-void DriverImpl::queueDisposal(VkDeviceMemory memory)
+void DriverImpl::queueDisposal(VkDeviceMemory memory, uint64_t fenceValue)
 {
-    queueDisposalInternal({.type = DisposableResource::Type::Memory, .memory = memory});
+    queueDisposalInternal({.type = DisposableResource::Type::Memory, .memory = memory, .fenceValue = fenceValue});
 }
 
 void DriverImpl::queueDisposalInternal(DisposableResource&& disposal)
 {
-    disposal.frameMask = 1 << (_currentRenderContext ? _currentRenderContext->getCurrentFrame() : 0);
     _disposalQueue.emplace_back(disposal);
 }
 
-void DriverImpl::processDisposalQueue(uint32_t completedMask)
+void DriverImpl::processDisposalQueue(uint64_t completedFenceValue)
 {
     if (!_disposalQueue.empty())
     {
         for (size_t i = 0; i < _disposalQueue.size();)
         {
             auto& res = _disposalQueue[i];
-            if ((res.frameMask & completedMask) != 0)
+            if ((res.fenceValue < completedFenceValue) != 0)
             {
                 switch (res.type)
                 {
@@ -850,7 +861,7 @@ void DriverImpl::cleanPendingResources()
     if (!_disposalQueue.empty())
     {
         vkDeviceWaitIdle(_device);
-        processDisposalQueue(bitmask::low_bits<uint32_t>(RenderContextImpl::MAX_FRAMES_IN_FLIGHT));
+        processDisposalQueue((std::numeric_limits<uint64_t>::max)());
     }
 }
 

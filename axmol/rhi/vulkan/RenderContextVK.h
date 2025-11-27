@@ -47,6 +47,12 @@ enum class DynamicStateBits : uint32_t
     FrontFace  = 1 << 4,
 };
 
+struct GPUFence
+{
+    VkFence handle;
+    uint64_t submitId;
+};
+
 AX_ENABLE_BITMASK_OPS(DynamicStateBits);
 
 class RenderContextImpl : public RenderContext
@@ -178,7 +184,11 @@ private:
     uint32_t _currentFrame{0};
     std::array<DynamicStateBits, MAX_FRAMES_IN_FLIGHT> _inFlightDynamicDirtyBits{DynamicStateBits::None};
     std::array<VkCommandBuffer, MAX_FRAMES_IN_FLIGHT> _commandBuffers;
-    std::array<VkFence, MAX_FRAMES_IN_FLIGHT> _inFlightFences{};
+    std::array<GPUFence, MAX_FRAMES_IN_FLIGHT> _inFlightFences{};
+
+    uint64_t _completedFenceValue{0};
+    uint64_t _currentFenceValue{0};
+
 #if !_AX_USE_DESCRIPTOR_CACHE
     std::array<VkDescriptorPool, MAX_FRAMES_IN_FLIGHT> _descriptorPools{};
 #endif

@@ -57,6 +57,7 @@ void SamplerCache::invalidateAll()
 
 void SamplerCache::removeAllSamplers()
 {
+    _driver->waitForGPU();
 
     for (auto& [_, sampler] : _customSamplers)
         _driver->destroySampler(sampler);

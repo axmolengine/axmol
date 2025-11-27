@@ -47,7 +47,6 @@ struct DisposableResource
         Buffer,
         Memory
     };
-    uint32_t frameMask;
     Type type;
     union
     {
@@ -57,6 +56,8 @@ struct DisposableResource
         VkBuffer buffer;
         VkDeviceMemory memory;
     };
+
+    uint64_t fenceValue;
 };
 
 struct IsolateSubmission
@@ -151,13 +152,13 @@ public:
     void destroyFramebuffer(VkFramebuffer);
     void destroyRenderPass(VkRenderPass);
 
-    void queueDisposal(VkImage image);
-    void queueDisposal(VkImageView view);
-    void queueDisposal(VkBuffer buffer);
-    void queueDisposal(VkDeviceMemory memory);
-    void queueDisposal(VkSampler sampler);
+    void queueDisposal(VkImage image, uint64_t fenceValue);
+    void queueDisposal(VkImageView view, uint64_t fenceValue);
+    void queueDisposal(VkBuffer buffer, uint64_t fenceValue);
+    void queueDisposal(VkDeviceMemory memory, uint64_t fenceValue);
+    void queueDisposal(VkSampler sampler, uint64_t fenceValue);
 
-    void processDisposalQueue(uint32_t completedMask);
+    void processDisposalQueue(uint64_t completedFenceValue);
 
     void rebuildSwapchainAttachments(const axstd::pod_vector<VkImage>& images,
                                      const axstd::pod_vector<VkImageView>&,
@@ -174,7 +175,7 @@ public:
     // Get the current swapchain depth-stencil attachment
     TextureImpl* getSwapchainDepthStencilAttachment();
 
-    void waitDeviceIdle() { vkDeviceWaitIdle(_device); }
+    void waitForGPU() override { vkDeviceWaitIdle(_device); }
 
 protected:
     void queueDisposalInternal(DisposableResource&& res);

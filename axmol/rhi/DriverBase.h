@@ -212,6 +212,8 @@ public:
 
     virtual void cleanPendingResources() {}
 
+    virtual void waitForGPU() {};
+
 protected:
     /**
      * New a shaderModule, not auto released.

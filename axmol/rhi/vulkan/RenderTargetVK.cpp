@@ -69,7 +69,7 @@ RenderTargetImpl::RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget)
 
 RenderTargetImpl::~RenderTargetImpl()
 {
-    _driver->waitDeviceIdle();
+    _driver->waitForGPU();
 
     invalidate();
     // We do not destroy cached renderpasses/framebuffers here to allow reuse across RT instances

@@ -54,7 +54,7 @@ struct TextureHandle
     explicit operator bool() const { return image != VK_NULL_HANDLE; }
 
 private:
-    void destroy(DriverImpl* driver);
+    void destroy(DriverImpl* driver, uint64_t fenceValue);
 
     TextureHandle detach()
     {
@@ -153,6 +153,8 @@ public:
     VkSampler getSampler() const { return _sampler; }
     const TextureDesc& getDesc() const { return _desc; }
 
+    void setLastFenceValue(uint64_t fenceValue) { _lastFenceValue = fenceValue; }
+
 private:
     void ensureNativeTexture();
     void generateMipmaps(VkCommandBuffer cmd);
@@ -162,6 +164,8 @@ private:
     TextureHandle _nativeTexture{};
     VkSampler _sampler{VK_NULL_HANDLE};
     TextureDesc _desc{};
+
+    uint64_t _lastFenceValue{0};
 
     bool _ownResources{false};
 };
