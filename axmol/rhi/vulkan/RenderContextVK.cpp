@@ -585,8 +585,6 @@ bool RenderContextImpl::beginFrame()
     if (_lastError)
         return false;  // if error not cleared, skip frame
 
-    ++_frameFenceValue;
-
     // wait for previous frame to finish
     auto& currentFence = _inFlightFences[_currentFrame];
     vkWaitForFences(_device, 1, &currentFence, VK_TRUE, UINT64_MAX);
@@ -594,6 +592,8 @@ bool RenderContextImpl::beginFrame()
 
     _completedFenceValue = currentFence.fenceValue;
     _driver->processDisposalQueue(_completedFenceValue);
+
+    currentFence.fenceValue = ++_frameFenceValue;
 
     // Reset uniform ring write head for this frame
     resetUniformRingForCurrentFrame();
@@ -702,9 +702,8 @@ void RenderContextImpl::endFrame()
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores    = &submissionSemaphore;
 
-    auto& currentFence      = _inFlightFences[_currentFrame];
-    currentFence.fenceValue = _frameFenceValue;
-    vr                      = vkQueueSubmit(_graphicsQueue, 1, &submitInfo, currentFence);
+    vr = vkQueueSubmit(_graphicsQueue, 1, &submitInfo, _inFlightFences[_currentFrame]);
+
     AXASSERT(vr == VK_SUCCESS, "vkQueueSubmit failed");
 
     // Present: wait on render-finished semaphore
