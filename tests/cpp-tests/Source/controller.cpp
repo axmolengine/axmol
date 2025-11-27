@@ -62,7 +62,7 @@ public:
         addTest("Box2D - TestBed", []() { return new Box2DTestBedTests(); });
 #endif
         addTest("Chipmunk2D - Basic", []() { return new ChipmunkTests(); });
-#if AX_ENABLE_EXT_IMGUI
+#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
         addTest("Chipmunk2D - TestBed", []() { return new ChipmunkTestBedTests(); });
 #endif
         addTest("Bugs", []() { return new BugsTests(); });
@@ -189,7 +189,7 @@ Coroutine TestController::traverseTestList(TestList* testList)
          _logIndentation += LOG_INDENTATION;
      }
 
-     co_yield DelayTime::create(0.5);  
+     co_yield DelayTime::create(0.5);
      AXLOGD("{}{}Begin traverse TestList:{}", LOG_TAG, _logIndentation, testList->getTestName());
 
      auto scheduler = _director->getScheduler();
@@ -201,7 +201,7 @@ Coroutine TestController::traverseTestList(TestList* testList)
          while (_isRunInBackground)
          {
              AXLOGD("_director is paused");
-             co_yield DelayTime::create(0.5);  
+             co_yield DelayTime::create(0.5);
          }
          if (callback)
          {
@@ -288,7 +288,7 @@ Coroutine TestController::traverseTestList(TestList* testList)
              {
                  testCase         = (TestCase*)transitionScene->getInScene();
                  testCaseDuration = transitionScene->getDuration() + 0.5f;
-                 
+
              }
              else
              {
