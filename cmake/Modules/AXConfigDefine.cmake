@@ -30,7 +30,7 @@ if(WINRT)
   set(CMAKE_C_FLAGS "/sdl- ${CMAKE_C_FLAGS}")
   set(CMAKE_CXX_FLAGS "/sdl- ${CMAKE_CXX_FLAGS}")
 elseif(WIN32)
-  set(AX_MSEDGE_WEBVIEW2_VERSION "1.0.3537.50" CACHE STRING "")
+  set(AX_MSEDGE_WEBVIEW2_VERSION "1.0.3595.46" CACHE STRING "")
 endif()
 
 # config c standard

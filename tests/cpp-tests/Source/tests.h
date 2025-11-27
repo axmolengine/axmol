@@ -26,9 +26,8 @@
 #ifndef _TESTS_H_
 #define _TESTS_H_
 
-#include "feature-detect.h"
-
 #include "Box2DTest/Box2dTest.h"
+#include "feature-detect.h"
 
 #    if AX_ENABLE_EXT_IMGUI
 #include "Box2DTestBed/Box2DTestBed.h"
