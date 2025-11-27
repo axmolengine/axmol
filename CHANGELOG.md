@@ -1,41 +1,50 @@
-# axmol-2.10.0 Nov.?? 2025
+# axmol-2.10.0 Nov. ?? 2025
 
-## Significant changes relative to 2.9.1:
+## Significant changes relative to 2.9.1
 
 - Improve SDF glow effect rendering by @halx99 in [#2849](https://github.com/axmolengine/axmol/pull/2849)
 - Switch default audio backend on iOS/macOS from `OpenAL.framework` to `openal-soft` by @halx99 in [#2868](https://github.com/axmolengine/axmol/pull/2868)
 - Add new interface `Application::applicationWillQuit` by @halx99 in [#2870](https://github.com/axmolengine/axmol/pull/2870)
-- Mark `FontFreeType::setShareDistanceFieldEnabled` as deprecated by @halx99 in [#2856](https://github.com/axmolengine/axmol/pull/2856), use `FontFreeType::setGlobalSDFEnabled` instead
+- Deprecate `FontFreeType::setShareDistanceFieldEnabled` by @halx99 in [#2856](https://github.com/axmolengine/axmol/pull/2856),  
+  use `FontFreeType::setGlobalSDFEnabled` instead
 
 ## Bug fixes
 
-- Fix: allow ASTC formats to return true in `testFormatForPvr3TCSupport` by @lucycycy in [#2855](https://github.com/axmolengine/axmol/pull/2855)
-- Fix for xcarchive generation on iOS/macOS when using OpenAL-Soft by @rh101 in [#2883](https://github.com/axmolengine/axmol/pull/2883)
+- Fix ASTC formats returning false in `testFormatForPvr3TCSupport` by @lucycycy in [#2855](https://github.com/axmolengine/axmol/pull/2855)
+- Fix xcarchive generation on iOS/macOS when using OpenAL-Soft by @rh101 in [#2883](https://github.com/axmolengine/axmol/pull/2883)
 - [Linux] Fix missing shared OpenAL library issue by @rh101 in [#2885](https://github.com/axmolengine/axmol/pull/2885)
 - Add path length checks to prevent out-of-bounds access in `isAbsolutePathInternal` by @tkzcfc in [#2891](https://github.com/axmolengine/axmol/pull/2891)
 - Fix cpp-tests memory leak by @halx99
-- Fix cpp-tests compile failed when ImGui disabled by @halx99
+- Fix cpp-tests compile failure when ImGui is disabled by @halx99
 
 ## Improvements
 
 - DrawNodeTest improvements by @aismann in [#2859](https://github.com/axmolengine/axmol/pull/2859)
 - Add `errno` and `stdint` includes to `IFileStream.h` by @halx99 in [#2875](https://github.com/axmolengine/axmol/pull/2875)
-- Allow set event code and touches to `EventTouch` by @j-jorge and @halx99 in [#2890](https://github.com/axmolengine/axmol/pull/2890)
+- Allow setting event code and touches in `EventTouch` by @j-jorge and @halx99 in [#2890](https://github.com/axmolengine/axmol/pull/2890)
 - Improve label effect test by @halx99
 - Improve SDF text rendering shaders by @halx99
-- Improve vs2026 support by @halx99
+- Enhance Visual Studio 2026 support by @halx99
 - Update binding template files by @halx99
 
 ## SDK & Tools updates
 
-- cmake: 4.1.1 => 4.2.0 (For VS2026 support)
-- gradle: 9.2.0 => 9.2.1  
-- webview2: 1.0.3537.50 => 1.0.3595.46  
+- cmake: 4.1.1 → 4.2.0 (required for VS2026 support)  
+- gradle: 9.2.0 → 9.2.1  
+- webview2: 1.0.3537.50 → 1.0.3595.46  
 
 ## 3rdparty updates
 
-- curl: 8.16.0 => 8.17.0  
-- luajit: 2.1-871db2c => 2.1-68354f4  
+- curl: 8.16.0 → 8.17.0  
+- luajit: 2.1-871db2c → 2.1-68354f4  
+
+## Community News
+
+- Axmol supports building with **Visual Studio 2026** out of the box.  
+  Ensure that [CMake 4.2.0+](https://cmake.org/download/) is installed.
+
+- In **November 2025**, Axmol introduced **experimental Direct3D12 and Vulkan RHI** support,  
+  marking the first step toward modern, cross‑API rendering backends.
 
 # axmol-2.9.1 Nov.2 2025
 
