@@ -358,7 +358,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
         auto missingIt             = _missingGlyphFallbackFonts.find(charCode);
         uint8_t* bitmap            = nullptr;
         FontFreeType* charRenderer = _fontFreeType;
-        bool sharedBitmapData{true}; // does the bitmap data shared from FontFreeType engine
+        bool sharedBitmapData{true};  // does the bitmap data shared from FontFreeType engine
         if (missingIt == _missingGlyphFallbackFonts.end())
         {
             const GlyphResolution* res{nullptr};
