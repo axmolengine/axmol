@@ -165,6 +165,12 @@ public:
         return {lower_bound(key), upper_bound(key)};
     }
 
+    iterator insert(iterator /*hint*/, const value_type& v)
+    {
+        // ignore hint, do sorted insertion
+        return insert(v).first;
+    }
+
     std::pair<iterator, bool> insert(const value_type& v)
     {
         auto& cont        = _Mypair.second();

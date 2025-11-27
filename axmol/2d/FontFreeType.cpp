@@ -424,7 +424,8 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
                                             int& outHeight,
                                             Rect& outRect,
                                             int& xAdvance,
-                                            const GlyphResolution*& outFallbackRes)
+                                            const GlyphResolution*& outFallbackRes,
+                                            bool& sharedBitmapData)
 {
     unsigned char* ret = nullptr;
 
@@ -466,19 +467,21 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
         }
     }
 
-    return getGlyphBitmapByIndex(glyphIndex, outWidth, outHeight, outRect, xAdvance);
+    return getGlyphBitmapByIndex(glyphIndex, outWidth, outHeight, outRect, xAdvance, sharedBitmapData);
 }
 
 unsigned char* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
                                                    int& outWidth,
                                                    int& outHeight,
                                                    Rect& outRect,
-                                                   int& xAdvance)
+                                                   int& xAdvance,
+                                                   bool& sharedBitmapData)
 {
     unsigned char* ret = nullptr;
 
     do
     {
+        sharedBitmapData = true;
         if (FT_Load_Glyph(_fontFace, glyphIndex, FT_LOAD_RENDER | FT_LOAD_NO_AUTOHINT))
             break;
 
@@ -503,6 +506,8 @@ unsigned char* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
 
         if (_outlineSize > 0 && outWidth > 0 && outHeight > 0)
         {
+            sharedBitmapData = false;
+
             auto copyBitmap = new unsigned char[outWidth * outHeight];
             memcpy(copyBitmap, ret, outWidth * outHeight * sizeof(unsigned char));
 
@@ -653,7 +658,6 @@ void FontFreeType::renderCharAt(unsigned char* dest,
             memcpy(dest + (iX + (iY * atlasWidth)) * 2, bitmap + bitmap_y * 2, bitmapWidth * 2);
             ++iY;
         }
-        delete[] bitmap;
     }
     else
     {

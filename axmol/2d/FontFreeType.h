@@ -129,13 +129,15 @@ public:
                                   int& outHeight,
                                   Rect& outRect,
                                   int& xAdvance,
-                                  const GlyphResolution*& fallbackRes);
+                                  const GlyphResolution*& fallbackRes,
+                                  bool& sharedBitmapData);
 
     unsigned char* getGlyphBitmapByIndex(unsigned int glyphIndex,
                                          int& outWidth,
                                          int& outHeight,
                                          Rect& outRect,
-                                         int& xAdvance);
+                                         int& xAdvance,
+                                         bool& sharedBitmapData);
 
     int getFontAscender() const;
     const char* getFontFamily() const;

@@ -37,7 +37,6 @@
 #include "simdjson/simdjson.h"
 #include "zlib.h"
 #include "axmol/base/ZipUtils.h"
-
 #include "axmol/base/json.h"
 
 namespace ax
@@ -121,7 +120,9 @@ void FontAtlas::loadFontAtlas(std::string_view fontatlasFile, axstd::string_map<
 
 FontAtlas::FontAtlas(Font* theFont)
     : FontAtlas(theFont, CacheTextureWidth, CacheTextureHeight, AX_CONTENT_SCALE_FACTOR())
-{}
+{
+    _newChars.reserve(128);
+}
 
 FontAtlas::FontAtlas(Font* theFont, int atlasWidth, int atlasHeight, float scaleFactor)
     : _font(theFont), _width(atlasWidth), _height(atlasHeight), _scaleFactor(scaleFactor)
@@ -312,58 +313,57 @@ bool FontAtlas::getLetterDefinitionForChar(char32_t utf32Char, FontLetterDefinit
     }
 }
 
-void FontAtlas::findNewCharacters(const std::u32string& u32Text, std::unordered_set<char32_t>& charset)
+bool FontAtlas::findNewCharacters(const std::u32string& u32Text)
 {
+    _newChars.clear();
+
     if (_letterDefinitions.empty())
     {
-        std::copy(u32Text.begin(), u32Text.end(), std::inserter(charset, charset.end()));
+        std::copy(u32Text.begin(), u32Text.end(), std::inserter(_newChars, _newChars.end()));
     }
     else
     {
         for (auto&& charCode : u32Text)
             if (_letterDefinitions.find(charCode) == _letterDefinitions.end())
-                charset.insert(charCode);
+                _newChars.insert(charCode);
     }
+
+    return !_newChars.empty();
 }
 
 bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
 {
-    if (_fontFreeType == nullptr)
-    {
+    if (!_fontFreeType)
         return false;
-    }
-
     if (!_currentPageData)
         reinit();
 
-    std::unordered_set<char32_t> charCodeSet;
-    findNewCharacters(utf32Text, charCodeSet);
-    if (charCodeSet.empty())
-    {
+    if (!findNewCharacters(utf32Text))
         return false;
-    }
 
-    int adjustForDistanceMap = _letterPadding / 2;
-    int adjustForExtend      = _letterEdgeExtend / 2;
-    int bitmapWidth          = 0;
-    int bitmapHeight         = 0;
-    int glyphHeight;
+    const int adjustForDistanceMap = _letterPadding / 2;
+    const int adjustForExtend      = _letterEdgeExtend / 2;
+
+    int bitmapWidth = 0, bitmapHeight = 0;
     Rect tempRect;
-    FontLetterDefinition tempDef;
+    FontLetterDefinition tempDef{};
 
-    auto pixelFormat = _pixelFormat;
+    auto pixelFormat     = _pixelFormat;
+    int startY           = static_cast<int>(_currentPageOrigY);
+    int pageUploadStartY = startY;  // Upload start position of the current page
+    int pageUploadEndY   = startY;  // Upload end position of the current page (updated dynamically)
 
-    int startY = (int)_currentPageOrigY;
-
-    for (auto&& charCode : charCodeSet)
+    for (auto&& charCode : _newChars)
     {
         auto missingIt             = _missingGlyphFallbackFonts.find(charCode);
         uint8_t* bitmap            = nullptr;
         FontFreeType* charRenderer = _fontFreeType;
+        bool sharedBitmapData{true}; // does the bitmap data shared from FontFreeType engine
         if (missingIt == _missingGlyphFallbackFonts.end())
         {
             const GlyphResolution* res{nullptr};
-            bitmap = charRenderer->getGlyphBitmap(charCode, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance, res);
+            bitmap = charRenderer->getGlyphBitmap(charCode, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance, res,
+                                                  sharedBitmapData);
             if (!bitmap && res)
             {
                 auto fallbackIt = _missingFallbackFonts.find(res->faceInfo.family);
@@ -382,86 +382,122 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
                 {
                     unsigned int glyphIndex = res->glyphIndex;
                     bitmap = charRenderer->getGlyphBitmapByIndex(glyphIndex, bitmapWidth, bitmapHeight, tempRect,
-                                                                 tempDef.xAdvance);
+                                                                 tempDef.xAdvance, sharedBitmapData);
                     _missingGlyphFallbackFonts.emplace(charCode, std::make_pair(charRenderer, glyphIndex));
                 }
             }
         }
         else
-        {  // found fallback font for missing charas, getGlyphBitmap without fallback
+        {  // Found fallback font for missing characters, getGlyphBitmap without fallback
             charRenderer            = missingIt->second.first;
             unsigned int glyphIndex = missingIt->second.second;
-            bitmap =
-                charRenderer->getGlyphBitmapByIndex(glyphIndex, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance);
+            bitmap = charRenderer->getGlyphBitmapByIndex(glyphIndex, bitmapWidth, bitmapHeight, tempRect,
+                                                         tempDef.xAdvance, sharedBitmapData);
         }
+
         if (bitmap && bitmapWidth > 0 && bitmapHeight > 0)
         {
+            // Calculate occupied area using actual bitmap size
+            const int glyphWidth  = bitmapWidth + _letterPadding + _letterEdgeExtend;
+            const int glyphHeight = bitmapHeight + _letterPadding + _letterEdgeExtend;
+
+            // Not enough width in current line → wrap to next line
+            if (_currentPageOrigX + glyphWidth > _width)
+            {
+                _currentPageOrigY += _currLineHeight;
+                _currLineHeight   = 0;
+                _currentPageOrigX = 0;
+            }
+
+            // Not enough height → upload current page and start a new page
+            if (_currentPageOrigY + glyphHeight > _height)
+            {
+                // Upload the written region of the current page (startY..pageUploadEndY)
+                updateTextureContent(pixelFormat, pageUploadStartY);
+                // Start a new page
+                addNewPage();
+                _currentPageOrigX = 0;
+                _currentPageOrigY = 0;
+                _currLineHeight   = 0;
+                pageUploadStartY  = 0;
+                pageUploadEndY    = 0;
+            }
+
+            // Calculate tempDef offsets (based on tempRect)
             tempDef.validDefinition = true;
             tempDef.width           = tempRect.size.width + _letterPadding + _letterEdgeExtend;
             tempDef.height          = tempRect.size.height + _letterPadding + _letterEdgeExtend;
             tempDef.offsetX         = tempRect.origin.x - adjustForDistanceMap - adjustForExtend;
             tempDef.offsetY         = _fontAscender + tempRect.origin.y - adjustForDistanceMap - adjustForExtend;
 
-            if (_currentPageOrigX + tempDef.width > _width)
-            {
-                _currentPageOrigY += _currLineHeight;
-                _currLineHeight   = 0;
-                _currentPageOrigX = 0;
-                if (_currentPageOrigY + _lineHeight + _letterPadding + _letterEdgeExtend >= _height)
-                {
-                    updateTextureContent(pixelFormat, startY);
+            // Render glyph into the current page
+            charRenderer->renderCharAt(_currentPageData, static_cast<int>(_currentPageOrigX) + adjustForExtend,
+                                       static_cast<int>(_currentPageOrigY) + adjustForExtend, bitmap, bitmapWidth,
+                                       bitmapHeight, _width, _height);
 
-                    startY = 0;
-
-                    addNewPage();
-                }
-            }
-            glyphHeight     = static_cast<int>(bitmapHeight) + _letterPadding + _letterEdgeExtend;
-            _currLineHeight = std::max(glyphHeight, _currLineHeight);
-            charRenderer->renderCharAt(_currentPageData, (int)_currentPageOrigX + adjustForExtend,
-                                       (int)_currentPageOrigY + adjustForExtend, bitmap, bitmapWidth, bitmapHeight,
-                                       _width, _height);
-
+            // Record glyph position and page
             tempDef.U         = _currentPageOrigX;
             tempDef.V         = _currentPageOrigY;
             tempDef.textureID = _currentPage;
-            _currentPageOrigX += tempDef.width + 1;
-            // take from pixels to points
-            tempDef.width   = tempDef.width / _scaleFactor;
-            tempDef.height  = tempDef.height / _scaleFactor;
-            tempDef.U       = tempDef.U / _scaleFactor;
-            tempDef.V       = tempDef.V / _scaleFactor;
+
+            // Update line height and X pointer (leave 1 pixel spacing between glyphs)
+            _currLineHeight = std::max(glyphHeight, _currLineHeight);
+            _currentPageOrigX += glyphWidth + 1;
+
+            // Maintain upload range (highest Y written on this page)
+            pageUploadEndY = std::max<int>(pageUploadEndY, _currentPageOrigY + _currLineHeight);
+
+            // Convert pixel dimensions to points
+            tempDef.width /= _scaleFactor;
+            tempDef.height /= _scaleFactor;
+            tempDef.U /= _scaleFactor;
+            tempDef.V /= _scaleFactor;
             tempDef.rotated = false;
         }
         else
         {
-            delete[] bitmap;
-
             tempDef.validDefinition = !!tempDef.xAdvance;
-            tempDef.width           = 0;
-            tempDef.height          = 0;
-            tempDef.U               = 0;
-            tempDef.V               = 0;
-            tempDef.offsetX         = 0;
-            tempDef.offsetY         = 0;
-            tempDef.textureID       = 0;
-            tempDef.rotated         = false;
+            tempDef.width = tempDef.height = tempDef.U = tempDef.V = 0;
+            tempDef.offsetX = tempDef.offsetY = 0;
+            tempDef.textureID                 = 0;
+            tempDef.rotated                   = false;
             _currentPageOrigX += 1;
         }
+
+        if (!sharedBitmapData && bitmap)
+            delete[] bitmap;
 
         _letterDefinitions[charCode] = tempDef;
     }
 
-    updateTextureContent(pixelFormat, startY);
+    // Handle remaining upload for the current page (from startY to max written Y)
+    if (pageUploadEndY > pageUploadStartY)
+    {
+        updateTextureContent(pixelFormat, pageUploadStartY);
+    }
 
     return true;
 }
 
 void FontAtlas::updateTextureContent(rhi::PixelFormat format, int startY)
 {
-    auto data = _currentPageData + (_width * (int)startY << _strideShift);
-    _atlasTextures[_currentPage]->updateSubData(data, 0, startY, _width,
-                                                (std::min)((int)_currentPageOrigY - startY + _currLineHeight, _height));
+    // Calculate the starting data pointer
+    auto data = _currentPageData + ((_width * (int)startY) << _strideShift);
+
+    // Calculate the actual upload height: from startY to _currentPageOrigY + _currLineHeight
+    int uploadHeight = (int)_currentPageOrigY + _currLineHeight - startY;
+
+    // Defensive check to avoid negative values or overflow
+    if (uploadHeight < 0)
+        uploadHeight = 0;
+
+    // Clamp to remaining space to prevent out-of-bounds
+    uploadHeight = std::min(uploadHeight, _height - startY);
+    if (uploadHeight <= 0)
+        return;
+
+    // Perform the texture update
+    _atlasTextures[_currentPage]->updateSubData(data, 0, startY, _width, uploadHeight);
 }
 
 void FontAtlas::addNewPage()

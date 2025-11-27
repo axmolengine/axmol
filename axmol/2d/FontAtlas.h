@@ -40,6 +40,8 @@
 #include "axmol/base/Map.h"
 #include "axmol/2d/FontFreeType.h"
 
+#include "axmol/tlx/flat_set.hpp"
+
 namespace ax
 {
 
@@ -132,7 +134,7 @@ protected:
 
     void releaseTextures();
 
-    void findNewCharacters(const std::u32string& u32Text, std::unordered_set<char32_t>& charCodeSet);
+    bool findNewCharacters(const std::u32string& u32Text);
 
     /**
      * Scale each font letter by scaleFactor.
@@ -142,6 +144,8 @@ protected:
     void scaleFontLetterDefinition(float scaleFactor);
 
     void updateTextureContent(rhi::PixelFormat format, int startY);
+
+    axstd::flat_set<char32_t> _newChars;
 
     std::unordered_map<unsigned int, Texture2D*> _atlasTextures;
     std::unordered_map<char32_t, FontLetterDefinition> _letterDefinitions;

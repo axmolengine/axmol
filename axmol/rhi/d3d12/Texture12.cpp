@@ -142,6 +142,12 @@ void TextureImpl::updateSubData(int xoffset,
 
     // Query footprint for the subresource
     const auto texDesc = _nativeTexture.resource->GetDesc();
+
+    assert(xoffset >= 0 && yoffset >= 0);
+    assert(width > 0 && height > 0);
+    assert(xoffset + width <= static_cast<int>(texDesc.Width));
+    assert(yoffset + height <= static_cast<int>(texDesc.Height));
+
     D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprint;
     UINT numRows;
     UINT64 rowSizeInBytes;
