@@ -29,9 +29,9 @@
 #include "Box2DTest/Box2dTest.h"
 #include "feature-detect.h"
 
-#    if AX_ENABLE_EXT_IMGUI && AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID
-#include "Box2DTestBed/Box2DTestBed.h"
-#    endif
+#if AX_ENABLE_EXT_IMGUI && AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID
+#    include "Box2DTestBed/Box2DTestBed.h"
+#endif
 
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_MARMALADE)
 #    include "ClippingNodeTest/ClippingNodeTest.h"

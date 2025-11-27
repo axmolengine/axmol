@@ -49,7 +49,7 @@ public:
 #    pragma message("The optional extension Effekseer is enabled.")
         addTest("Effekseer", []() { return new EffekseerTests(); });
 #endif
-        addTest("Scene3D", [](){ return new Scene3DTests(); });
+        addTest("Scene3D", []() { return new Scene3DTests(); });
 #if AX_ENABLE_EXT_IMGUI
         addTest("ImGui", []() { return new ImGuiTests(); });
 #endif
