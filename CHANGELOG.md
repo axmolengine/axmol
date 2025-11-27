@@ -1,4 +1,4 @@
-# axmol-2.10.0 Nov. ?? 2025
+# axmol-2.10.0 Nov.?? 2025
 
 ## Significant changes relative to 2.9.1:
 
@@ -13,15 +13,22 @@
 - Fix for xcarchive generation on iOS/macOS when using OpenAL-Soft by @rh101 in [#2883](https://github.com/axmolengine/axmol/pull/2883)
 - [Linux] Fix missing shared OpenAL library issue by @rh101 in [#2885](https://github.com/axmolengine/axmol/pull/2885)
 - Add path length checks to prevent out-of-bounds access in `isAbsolutePathInternal` by @tkzcfc in [#2891](https://github.com/axmolengine/axmol/pull/2891)
+- Fix cpp-tests memory leak by @halx99
+- Fix cpp-tests compile failed when ImGui disabled by @halx99
 
 ## Improvements
 
 - DrawNodeTest improvements by @aismann in [#2859](https://github.com/axmolengine/axmol/pull/2859)
 - Add `errno` and `stdint` includes to `IFileStream.h` by @halx99 in [#2875](https://github.com/axmolengine/axmol/pull/2875)
-- Allow passing event code and touches to `EventTouch` constructor by @j-jorge in [#2890](https://github.com/axmolengine/axmol/pull/2890)
+- Allow set event code and touches to `EventTouch` by @j-jorge and @halx99 in [#2890](https://github.com/axmolengine/axmol/pull/2890)
+- Improve label effect test by @halx99
+- Improve SDF text rendering shaders by @halx99
+- Improve vs2026 support by @halx99
+- Update binding template files by @halx99
 
 ## SDK & Tools updates
 
+- cmake: 4.1.1 => 4.2.0 (For VS2026 support)
 - gradle: 9.2.0 => 9.2.1  
 - webview2: 1.0.3537.50 => 1.0.3595.46  
 

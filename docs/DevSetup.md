@@ -7,7 +7,7 @@
      - macOS, Ubuntu, ArchLinux: run `setup.ps1` in `axmol` root directory (recommended).
      - Windows 10+: system installed PowerShell 5.x should work. You will need to run the command `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force` in order to allow PowerShell script to run. This will allow execution of PowerShell scripts for the current user, which is required if you have downloaded the ZIP release of Axmol. If you instead cloned the Axmol repository, then you can use `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force` instead, which is more secure.
   - Manual installation: [Instructions](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) /  [Download](https://github.com/PowerShell/PowerShell/releases)
-- **CMake 3.28.1+**
+- **CMake 4.2.0+**
     - Manual installation is recommended ([download](https://cmake.org/download/)). Make sure to add CMake bin to the system `PATH`, otherwise `axmol build` will auto-setup it to `tools/external/cmake`.
 
 ## Prerequisites
@@ -17,7 +17,7 @@
   3. Run `setup.ps1` in windows powershell or (macOS/Linux/ArchLinux terminal).
   4. Restart the console after it has finished for environment variables to take effect.
   5. Ensure that the C / C++ compiler toolset is installed on your host machine.
-     - Windows: Visual Studio 2022 with desktop workflow
+     - Windows: Visual Studio 2022/2026 with desktop workflow
      - macOS: XCode 14.2+
      - Linux: GCC (G++)
 
@@ -118,31 +118,55 @@ Using a PowerShell console window (command `pwsh`), go to `axmol\tests\<testdir 
 
 ## Manually build with CMake
 
-### Windows (Visual Studio 2022)
+### Windows (Visual Studio 2022/2026)
 
-  1. Install [CMake 3.27.4+](https://cmake.org/download/).
-  2. Install Visual Studio 2022.
-  3. Create a new project as shown [here](#creating-a-new-project).
-  4. In a console window, navigate into the root directory of the project you created in the previous step.
-  5. Generate the relevant Visual Studio project using the cmake command:
-  
-     ```axmol build``` command described in the previous sections (preferred method)
-     or
-     ```cmake -S SOURCE_DIR -B BUILD_DIR -G VISUAL_STUDIO_VERSION_STRING -A [Win32|x64]```
+> **Note:** Visual Studio 2026 is supported, but requires [CMake 4.2.0+](https://cmake.org/download/).  
+> Use generator string `-G "Visual Studio 18 2026"` when invoking cmake.
 
-     For example, let's say `SOURCE_DIR` is the current path `"."`, and `BUILD_DIR` (out-of-source build directory) is named `"build"`:
+1. Install [CMake 4.2.0+](https://cmake.org/download/).
+2. Install Visual Studio 2022 (or 2026 if preferred).
+3. Create a new project as shown [here](#creating-a-new-project).
+4. In a console window, navigate to the root directory of your project.
+5. Generate the Visual Studio project using either:
+   - The recommended shortcut:
+     ```bash
+     axmol build
+     ```
+   - Or directly with cmake:
+     ```bash
+     cmake -S SOURCE_DIR -B BUILD_DIR -G "Visual Studio <version>" -A [Win32|x64]
+     ```
 
-     (Since Axmol 2.1 c++20 is required for all platforms)
-        - 32 bit Visual Studio 2019:
-            ```cmake -S . -B build -G "Visual Studio 16 2019" -A Win32```
-        - 64 bit Visual Studio 2019:
-            ```cmake -S . -B build -G "Visual Studio 16 2019" -A x64```
-        - 32 bit Visual Studio 2022:
-            ```cmake -S . -B build -G "Visual Studio 17 2022" -A Win32```
-        - 64 bit Visual Studio 2022:
-            ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
+   Example (`SOURCE_DIR = "."`, `BUILD_DIR = "build"`):  
+   *(Since Axmol 2.1, C++20 is required on all platforms)*
 
-  6. Use Visual Studio to open the newly created solution file. For example, `./build/ProjectName.sln`.
+   - **Visual Studio 2022 (32-bit):**
+     ```bash
+     cmake -S . -B build -G "Visual Studio 17 2022" -A Win32
+     ```
+   - **Visual Studio 2022 (64-bit):**
+     ```bash
+     cmake -S . -B build -G "Visual Studio 17 2022" -A x64
+     ```
+   - **Visual Studio 2026 (64-bit):**
+     ```bash
+     cmake -S . -B build -G "Visual Studio 18 2026" -A x64
+     ```
+     *(requires CMake 4.2.0+)*  
+
+
+  6. Use Visual Studio to open the newly created solution file:
+
+   - **Visual Studio 2022**  
+     ```text
+     ./build/ProjectName.sln
+     ```
+
+   - **Visual Studio 2026**  
+     ```text
+     ./build/ProjectName.slnx
+     ```
+     *(Note: VS2026 introduces the new `.slnx` solution file format.)*
 
 #### Windows UWP (Visual Studio 2022)
     
