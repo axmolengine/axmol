@@ -111,11 +111,9 @@ ScriptHandlerMgr::ScriptHandlerMgr() {}
 
 ScriptHandlerMgr::~ScriptHandlerMgr() {}
 
-static bool s_axmolAppExiting = false;
-
 ScriptHandlerMgr* ScriptHandlerMgr::getInstance()
 {
-    if (nullptr == _scriptHandlerMgr && !s_axmolAppExiting)
+    if (nullptr == _scriptHandlerMgr)
     {
         _scriptHandlerMgr = new ScriptHandlerMgr();
         _scriptHandlerMgr->init();
