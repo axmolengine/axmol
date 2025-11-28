@@ -575,7 +575,7 @@ IMGUI_IMPL_API bool ImGui_ImplAxmol_CreateDeviceObjects()
     layoutDesc.addAttrib("a_color", info.color, VertexFormat::UBYTE4, offsetof(ImDrawVert, col), true);
     layoutDesc.endLayout();
 
-    info.layout = axvlm->acquireVertexLayout(std::forward<VertexLayoutDesc>(layoutDesc));
+    Object::assign(info.layout, axvlm->getVertexLayout(std::forward<VertexLayoutDesc>(layoutDesc)));
 
     return true;
 }

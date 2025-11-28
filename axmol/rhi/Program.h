@@ -145,7 +145,7 @@ public:
     VertexLayout* getVertexLayout() const { return _vertexLayout; }
 
 protected:
-    void setVertexLayout(VertexLayout* layout) { Object::assign(_vertexLayout, layout); }
+    void setVertexLayout(VertexLayout* layout);
 
     void setProgramIds(uint32_t progType, uint64_t progId);
 

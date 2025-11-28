@@ -150,9 +150,9 @@ bool Box2DTestDebugDrawNode::initWithWorld(b2WorldId worldId)
                        rhi::VertexFormat::FLOAT4, offsetof(CircleData, position), false, 1);
         vfmt.endLayout();
 
-        auto pipelineVL = axvlm->acquireVertexLayout(std::move(vfmt));
+        auto pipelineVL = axvlm->getVertexLayout(std::move(vfmt));
 
-        cmd.setOwnPSVL(pipelinePS, pipelineVL, RenderCommand::ADOPT_FLAG_ALL);
+        cmd.setOwnPSVL(pipelinePS, pipelineVL, RenderCommand::ADOPT_FLAG_PS);
 
         cmd.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE);
         cmd.setDrawType(CustomCommand::DrawType::ARRAY_INSTANCED);
@@ -185,8 +185,8 @@ bool Box2DTestDebugDrawNode::initWithWorld(b2WorldId worldId)
                        offsetof(SolidCircleData, radius), false, 1);
         vfmt.endLayout();
 
-        auto pipelineVL = axvlm->acquireVertexLayout(std::move(vfmt));
-        cmd.setOwnPSVL(pipelinePS, pipelineVL, RenderCommand::ADOPT_FLAG_ALL);
+        auto pipelineVL = axvlm->getVertexLayout(std::move(vfmt));
+        cmd.setOwnPSVL(pipelinePS, pipelineVL, RenderCommand::ADOPT_FLAG_PS);
 
         cmd.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE);
         cmd.setDrawType(CustomCommand::DrawType::ARRAY_INSTANCED);
@@ -219,9 +219,9 @@ bool Box2DTestDebugDrawNode::initWithWorld(b2WorldId worldId)
                        rhi::VertexFormat::FLOAT4, offsetof(CapsuleData, radius), false, 1);
         vfmt.endLayout();
 
-        auto pipelineVL = axvlm->acquireVertexLayout(std::move(vfmt));
+        auto pipelineVL = axvlm->getVertexLayout(std::move(vfmt));
 
-        cmd.setOwnPSVL(pipelinePS, pipelineVL, RenderCommand::ADOPT_FLAG_ALL);
+        cmd.setOwnPSVL(pipelinePS, pipelineVL, RenderCommand::ADOPT_FLAG_PS);
         cmd.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE);
         cmd.setDrawType(CustomCommand::DrawType::ARRAY_INSTANCED);
     }

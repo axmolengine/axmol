@@ -41,4 +41,10 @@ void Program::setProgramIds(uint32_t progType, uint64_t progId)
     _programType = progType;
     _programId   = progId;
 }
+
+void Program::setVertexLayout(VertexLayout* layout)
+{
+    Object::assign(_vertexLayout, layout);
+}
+
 }  // namespace ax::rhi
