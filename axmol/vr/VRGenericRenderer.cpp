@@ -314,7 +314,7 @@ void VRGenericRenderer::setupProgram()
 
     desc.endLayout();
 
-    _vertexLayout = axvlm->acquireVertexLayout(std::move(desc));
+    Object::assign(_vertexLayout, axvlm->getVertexLayout(std::move(desc)));
 
     _leftEyeCmd.setWeakPSVL(_programState, _vertexLayout);
     _rightEyeCmd.setWeakPSVL(_programState, _vertexLayout);
