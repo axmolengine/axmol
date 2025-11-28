@@ -74,7 +74,7 @@ public:
      */
     static VertexInputBinding* spawn(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*, bool instancing);
 
-    static void clearCache();
+    static void purgeCache();
 
     /**
      * Binds this vertex array object.

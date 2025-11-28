@@ -44,8 +44,6 @@ using namespace spine;
 #define NUM_SKELETONS           50
 #define SPINE_NODE_SCALE_FACTOR 0.4
 
-static AxmolTextureLoader textureLoader;
-
 PowInterpolation pow2(2);
 PowOutInterpolation powOut2(2);
 // SwirlVertexEffect effect(400, powOut2);
@@ -162,7 +160,7 @@ bool BatchingExample::init()
 
     _title = "Batching";
 
-    _atlas = new (__FILE__, __LINE__) Atlas("spineboy.atlas", &textureLoader, true);
+    _atlas = new (__FILE__, __LINE__) Atlas("spineboy.atlas", AxmolTextureLoader::getInstance(), true);
     AXASSERT(_atlas, "Error reading atlas file.");
 
     // This attachment loader configures attachments with data needed for axmol rendering.

@@ -659,7 +659,7 @@ static Texture2D* _getTexture(Label* label)
 
 void Label::setVertexLayout()
 {
-    Object::adopt(_vertexLayout, axvlm->acquireBuiltinVertexLayout(VertexLayoutKind::Sprite));
+    Object::assign(_vertexLayout, axvlm->getBuiltinVertexLayout(VertexLayoutKind::Sprite));
 }
 
 bool Label::setProgramState(rhi::ProgramState* programState, bool ownPS /*= false*/)

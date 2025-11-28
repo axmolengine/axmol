@@ -36,8 +36,6 @@
 using namespace ax;
 using namespace spine;
 
-static AxmolTextureLoader textureLoader;
-
 class SkeletonAnimationCullingFix : public SkeletonAnimation
 {
 public:
@@ -55,7 +53,7 @@ public:
                                                        float scale = 1)
     {
         SkeletonAnimationCullingFix* node = new SkeletonAnimationCullingFix();
-        spine::Atlas* atlas               = new spine::Atlas(std::string(atlasFile).c_str(), &textureLoader);
+        spine::Atlas* atlas               = new spine::Atlas(std::string(atlasFile).c_str(), AxmolTextureLoader::getInstance());
         node->initWithJsonFile(std::string(skeletonDataFile), atlas, scale);
         node->autorelease();
         return node;

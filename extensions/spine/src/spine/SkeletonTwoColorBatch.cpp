@@ -74,7 +74,7 @@ namespace {
                                      offsetof(spine::V3F_C4B_C4B_T2F, texCoord), false);
         layoutDesc.endLayout();
 
-        layout = axvlm->acquireVertexLayout(std::move(layoutDesc));
+        Object::assign(layout, axvlm->getVertexLayout(std::move(layoutDesc)));
 	}
 
 	static void initTwoColorProgramState()
@@ -84,7 +84,7 @@ namespace {
 		}
 		auto program       = ProgramManager::getInstance()->loadProgram("custom/spineTwoColorTint_vs",
                                                                                       "custom/spineTwoColorTint_fs");
-		auto *programState = new rhi::ProgramState(program);
+		auto programState = new rhi::ProgramState(program);
 
         rhi::VertexLayout* layout{nullptr};
         updateProgramStateLayout(programState, layout);

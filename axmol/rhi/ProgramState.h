@@ -111,7 +111,12 @@ public:
     virtual ~ProgramState();
 
     /**
-     * Deep clone ProgramState
+     * Creates a deep copy of the current ProgramState.
+     *
+     * Unlike other clone methods, this function does not use autorelease.
+     * The returned object is allocated on the heap, and the caller is
+     * responsible for managing its lifetime and explicitly releasing it
+     * when no longer needed.
      */
     ProgramState* clone() const;
 

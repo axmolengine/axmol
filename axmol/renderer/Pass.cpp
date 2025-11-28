@@ -149,7 +149,7 @@ void Pass::setVertexLayout(rhi::VertexLayout* vertexLayout)
 
 void Pass::initUniformLocations()
 {
-    auto* ps = _programState;
+    auto ps = _programState;
 
     _locMVPMatrix    = ps->getUniformLocation("u_MVPMatrix");
     _locMVMatrix     = ps->getUniformLocation("u_MVMatrix");

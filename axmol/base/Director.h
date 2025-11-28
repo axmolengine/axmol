@@ -95,14 +95,18 @@ public:
     static const char* EVENT_BEFORE_UPDATE;
     /** Director will trigger an event after Schedule::update() is invoked. */
     static const char* EVENT_AFTER_UPDATE;
-    /** Director will trigger an event while resetting Director */
-    static const char* EVENT_RESET;
+
     /** Director will trigger an event after Scene::render() is invoked. */
     static const char* EVENT_AFTER_VISIT;
     /** Director will trigger an event after a scene is drawn, the data is sent to GPU. */
     static const char* EVENT_AFTER_DRAW;
     /** Director will trigger an event before a scene is drawn, right after clear. */
     static const char* EVENT_BEFORE_DRAW;
+
+    /** Director will trigger an event while resetting Director */
+    static const char* EVENT_RESET;
+    /** Director will trigger an event while destroying Director */
+    static const char* EVENT_DESTROY;
 
     /**
      * @brief Possible projection types used by the director.
@@ -593,9 +597,10 @@ protected:
     EventCustom* _eventAfterVisit        = nullptr;
     EventCustom* _eventBeforeUpdate      = nullptr;
     EventCustom* _eventAfterUpdate       = nullptr;
-    EventCustom* _eventResetDirector     = nullptr;
     EventCustom* _beforeSetNextScene     = nullptr;
     EventCustom* _afterSetNextScene      = nullptr;
+    EventCustom* _eventResetDirector     = nullptr;
+    EventCustom* _eventDestroyDirector   = nullptr;
 
     /* delta time since last tick to main loop */
     float _deltaTime              = 0.0f;

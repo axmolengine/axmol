@@ -78,9 +78,9 @@ ProgramManager::~ProgramManager()
 {
     XXH64_freeState(_programIdGen);
 
-    for (auto&& program : _cachedPrograms)
+    for (auto& [_,program] : _cachedPrograms)
     {
-        AX_SAFE_RELEASE(program.second);
+        AX_SAFE_RELEASE(program);
     }
     AXLOGD("deallocing ProgramManager: {}", fmt::ptr(this));
     rhi::ShaderCache::destroyInstance();
@@ -236,7 +236,7 @@ Program* ProgramManager::loadProgram(std::string_view vsName,
         program->setProgramIds(progType, progId);
         if ((unsigned int)vlk < (unsigned int)VertexLayoutKind::Count)
         {
-            auto layout = axvlm->acquireBuiltinVertexLayout(vlk, program);
+            auto layout = axvlm->getBuiltinVertexLayout(vlk, program);
             program->setVertexLayout(layout);
         }
         _cachedPrograms.emplace(progId, program);

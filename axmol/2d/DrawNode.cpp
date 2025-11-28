@@ -150,8 +150,8 @@ void DrawNode::updateShaderInternal(CustomCommand& cmd,
 {
     auto program = axpm->getBuiltinProgram(programType);
     auto ps      = new rhi::ProgramState(program);
-    cmd.setOwnPSVL(ps, axvlm->acquireBuiltinVertexLayout(rhi::VertexLayoutKind::DrawNode),
-                   RenderCommand::ADOPT_FLAG_ALL);
+    cmd.setOwnPSVL(ps, axvlm->getBuiltinVertexLayout(rhi::VertexLayoutKind::DrawNode),
+                   RenderCommand::ADOPT_FLAG_PS);
     cmd.setPrimitiveType(primitiveType);
     cmd.setDrawType(drawType);
 }

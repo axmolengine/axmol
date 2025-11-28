@@ -40,10 +40,9 @@ namespace ax::rhi::gl
 ProgramImpl::ProgramImpl(std::string_view vertexShader, std::string_view fragmentShader)
     : Program(vertexShader, fragmentShader)
 {
-    _vertexShaderModule =
-        static_cast<ShaderModuleImpl*>(ShaderCache::getInstance()->acquireVertexShaderModule(_vsSource));
-    _fragmentShaderModule =
-        static_cast<ShaderModuleImpl*>(ShaderCache::getInstance()->acquireFragmentShaderModule(_fsSource));
+    auto shaderCache      = ShaderCache::getInstance();
+    _vertexShaderModule   = static_cast<ShaderModuleImpl*>(shaderCache->acquireVertexShaderModule(_vsSource));
+    _fragmentShaderModule = static_cast<ShaderModuleImpl*>(shaderCache->acquireFragmentShaderModule(_fsSource));
 
     compileProgram();
 

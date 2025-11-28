@@ -82,24 +82,19 @@ namespace spine {
 		AX_SAFE_RELEASE(_programState);
 	}
 
-	rhi::ProgramState* SkeletonBatch::updateCommandPipelinePS(SkeletonCommand* command, rhi::ProgramState* programState)
-	{
-		auto currentState = command->unsafePS();
-	#if defined(AX_VERSION)
-                if (currentState == nullptr ||
-                    currentState->getBatchId() != programState->getBatchId())
-                {
-	#else
-		if(currentState == nullptr || currentState->getProgram() != programState->getProgram()) {
-	#endif
-			AX_SAFE_RELEASE(currentState);
-            currentState  = programState->clone();
+	rhi::ProgramState* SkeletonBatch::updateCommandPipelinePS(SkeletonCommand* command,
+                                                                  rhi::ProgramState* programState)
+    {
+        auto currentState = command->unsafePS();
+        if (currentState == nullptr || currentState->getBatchId() != programState->getBatchId())
+        {
+            currentState         = programState->clone();
             command->_locMVP     = currentState->getUniformLocation(rhi::UNIFORM_NAME_MVP_MATRIX);
             command->_locTexture = currentState->getUniformLocation(rhi::UNIFORM_NAME_TEXTURE);
-            command->setWeakPSVL(currentState, currentState->getVertexLayout());
-	}
-		return currentState;
-	}
+            command->setOwnPSVL(currentState, currentState->getVertexLayout(), RenderCommand::ADOPT_FLAG_PS);
+        }
+        return currentState;
+    }
 
 	void SkeletonBatch::update(float delta) {
 		reset();

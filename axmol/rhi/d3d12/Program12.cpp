@@ -32,9 +32,9 @@ namespace ax::rhi::d3d12
 ProgramImpl::ProgramImpl(std::string_view vertexShader, std::string_view fragmentShader)
     : Program(vertexShader, fragmentShader)
 {
-    _vertexShader = static_cast<ShaderModuleImpl*>(ShaderCache::getInstance()->acquireVertexShaderModule(_vsSource));
-    _fragmentShader =
-        static_cast<ShaderModuleImpl*>(ShaderCache::getInstance()->acquireFragmentShaderModule(_fsSource));
+    auto shaderCache = ShaderCache::getInstance();
+    _vertexShader    = static_cast<ShaderModuleImpl*>(shaderCache->acquireVertexShaderModule(_vsSource));
+    _fragmentShader  = static_cast<ShaderModuleImpl*>(shaderCache->acquireFragmentShaderModule(_fsSource));
 }
 
 ProgramImpl::~ProgramImpl()

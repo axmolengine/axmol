@@ -70,23 +70,10 @@ public:
     template <class T>
     static bool assign(T*& target, T* newValue)
     {
-        if (newValue)
-            newValue->retain();
-        if (target)
-            target->release();
-        bool ret = target != newValue;
-        target   = newValue;
-        return ret;
-    }
-
-    /*
-     * Take ownership newValue without retain
-     */
-    template <class T>
-    static bool adopt(T*& target, T* newValue)
-    {
         if (target != newValue)
         {
+            if (newValue)
+                newValue->retain();
             if (target)
                 target->release();
             target = newValue;

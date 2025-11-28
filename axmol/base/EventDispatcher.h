@@ -90,7 +90,8 @@ public:
      * @return the generated event. Needed in order to remove the event from the dispatcher
      */
     EventListenerCustom* addCustomEventListener(std::string_view eventName,
-                                                const std::function<void(EventCustom*)>& callback);
+                                                const std::function<void(EventCustom*)>& callback,
+                                                int priority = 1);
 
     /////////////////////////////////////////////
 

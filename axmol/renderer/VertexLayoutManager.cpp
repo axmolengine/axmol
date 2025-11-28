@@ -212,7 +212,22 @@ VertexLayoutManager::VertexLayoutManager()
     _builtinVertexLayouts.resize(static_cast<size_t>(VertexLayoutKind::Count), nullptr);
 }
 
-VertexLayout* VertexLayoutManager::acquireBuiltinVertexLayout(VertexLayoutKind kind, Program* prog)
+VertexLayoutManager::~VertexLayoutManager()
+{
+    _vertexLayoutDescPool.clear();
+    _vertexLayoutDescPool.shrink_to_fit();
+
+    for (auto layout : _builtinVertexLayouts)
+        AX_SAFE_RELEASE(layout);
+    _builtinVertexLayouts.clear();
+
+    for (auto& [_, layout] : _customVertexLayouts)
+        AX_SAFE_RELEASE(layout);
+
+    _customVertexLayouts.clear();
+}
+
+VertexLayout* VertexLayoutManager::getBuiltinVertexLayout(VertexLayoutKind kind, Program* prog)
 {
     if (kind < VertexLayoutKind::Count)
     {
@@ -226,19 +241,17 @@ VertexLayout* VertexLayoutManager::acquireBuiltinVertexLayout(VertexLayoutKind k
 
             layout->setBuiltinId((int)kind);
         }
-        layout->retain();
         return layout;
     }
 
     return nullptr;
 }
 
-VertexLayout* VertexLayoutManager::acquireBuiltinVertexLayout(VertexLayoutKind kind)
+VertexLayout* VertexLayoutManager::getBuiltinVertexLayout(VertexLayoutKind kind)
 {
     if (kind < VertexLayoutKind::Count)
     {
         auto layout = _builtinVertexLayouts[static_cast<int>(kind)];
-        AX_SAFE_RETAIN(layout);
         return layout;
     }
     return nullptr;
@@ -246,7 +259,7 @@ VertexLayout* VertexLayoutManager::acquireBuiltinVertexLayout(VertexLayoutKind k
 
 /// @brief acquire vertex layout by description
 /// @return
-VertexLayout* VertexLayoutManager::acquireVertexLayout(VertexLayoutDesc&& desc)
+VertexLayout* VertexLayoutManager::getVertexLayout(VertexLayoutDesc&& desc)
 {
 
     auto key = desc.getHash();
@@ -267,7 +280,6 @@ VertexLayout* VertexLayoutManager::acquireVertexLayout(VertexLayoutDesc&& desc)
         layout = axdrv->createVertexLayout(std::forward<VertexLayoutDesc>(desc));
         _customVertexLayouts.emplace(key, layout);
     }
-    AX_SAFE_RETAIN(layout);
     return layout;
 }
 

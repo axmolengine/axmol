@@ -51,10 +51,15 @@ namespace spine {
 
 	class SP_API AxmolTextureLoader : public TextureLoader {
 	public:
+        static AxmolTextureLoader* getInstance();
+        static void destroyInstance();
+
+    protected:
 		AxmolTextureLoader();
 
 		virtual ~AxmolTextureLoader();
 
+    public:
 		virtual void load(AtlasPage &page, const String &path);
 
 		virtual void unload(void *texture);
@@ -62,6 +67,10 @@ namespace spine {
 
 	class SP_API AxmolExtension : public DefaultSpineExtension {
 	public:
+        static AxmolExtension* getInstance();
+        static void destroyInstance();
+
+    protected:
 		AxmolExtension();
 
 		virtual ~AxmolExtension();

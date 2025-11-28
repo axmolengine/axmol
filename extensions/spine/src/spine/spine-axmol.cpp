@@ -89,6 +89,30 @@ static Texture2D::TexParams chooseTexParams(spine::AtlasPage& page)
     return texParams;
 }
 
+// The texture loader instance must destroy before spine extension
+static constexpr int TEXTURE_LOADER_DTOR_PRIORITY  = 1;
+static constexpr int SPINE_EXTENSION_DTOR_PRIORITY = 2;
+
+static AxmolTextureLoader* s_textureLoader;
+
+AxmolTextureLoader* AxmolTextureLoader::getInstance()
+{
+    if (!s_textureLoader)
+    {
+        s_textureLoader = new AxmolTextureLoader();
+
+        auto callback = [](ax::EventCustom*) { AxmolTextureLoader::destroyInstance(); };
+        ax::Director::getInstance()->getEventDispatcher()->addCustomEventListener(ax::Director::EVENT_DESTROY, callback,
+                                                                                  TEXTURE_LOADER_DTOR_PRIORITY);
+    }
+    return s_textureLoader;
+}
+
+void AxmolTextureLoader::destroyInstance()
+{
+    AX_SAFE_DELETE(s_textureLoader);
+}
+
 AxmolTextureLoader::AxmolTextureLoader() : TextureLoader() {}
 AxmolTextureLoader::~AxmolTextureLoader() {}
 
@@ -112,6 +136,25 @@ void AxmolTextureLoader::unload(void *texture) {
 	}
 }
 
+static AxmolExtension* s_axmolSpineExtension;
+
+AxmolExtension* AxmolExtension::getInstance()
+{
+    if (!s_axmolSpineExtension)
+    {
+        s_axmolSpineExtension = new AxmolExtension();
+
+        auto callback = [](ax::EventCustom*) { AxmolExtension::destroyInstance(); };
+        ax::Director::getInstance()->getEventDispatcher()->addCustomEventListener(ax::Director::EVENT_DESTROY, callback,
+                                                                                  SPINE_EXTENSION_DTOR_PRIORITY);
+    }
+    return s_axmolSpineExtension;
+}
+
+void AxmolExtension::destroyInstance()
+{
+    AX_SAFE_DELETE(s_axmolSpineExtension);
+}
 
 AxmolExtension::AxmolExtension() : DefaultSpineExtension() {}
 
@@ -129,5 +172,5 @@ char *AxmolExtension::_readFile(const spine::String &path, int *length) {
 }
 
 SpineExtension *spine::getDefaultExtension() {
-	return new AxmolExtension();
+    return AxmolExtension::getInstance();
 }

@@ -651,10 +651,11 @@ void EventDispatcher::addEventListenerWithFixedPriority(EventListener* listener,
 }
 
 EventListenerCustom* EventDispatcher::addCustomEventListener(std::string_view eventName,
-                                                             const std::function<void(EventCustom*)>& callback)
+                                                             const std::function<void(EventCustom*)>& callback,
+                                                             int priority)
 {
     EventListenerCustom* listener = EventListenerCustom::create(eventName, callback);
-    addEventListenerWithFixedPriority(listener, 1);
+    addEventListenerWithFixedPriority(listener, priority);
     return listener;
 }
 

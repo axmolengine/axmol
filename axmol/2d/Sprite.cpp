@@ -378,7 +378,7 @@ void Sprite::setTexture(std::string_view filename)
 void Sprite::setVertexLayout()
 {
     AXASSERT(_programState, "programState should not be nullptr");
-    Object::adopt(_vertexLayout, axvlm->acquireBuiltinVertexLayout(VertexLayoutKind::Sprite));
+    Object::assign(_vertexLayout, axvlm->getBuiltinVertexLayout(VertexLayoutKind::Sprite));
 }
 
 void Sprite::setProgramState(uint32_t type)

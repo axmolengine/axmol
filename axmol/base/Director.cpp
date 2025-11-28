@@ -91,8 +91,10 @@ const char* Director::EVENT_AFTER_DRAW            = "director_after_draw";
 const char* Director::EVENT_AFTER_VISIT           = "director_after_visit";
 const char* Director::EVENT_BEFORE_UPDATE         = "director_before_update";
 const char* Director::EVENT_AFTER_UPDATE          = "director_after_update";
-const char* Director::EVENT_RESET                 = "director_reset";
 const char* Director::EVENT_BEFORE_DRAW           = "director_before_draw";
+
+const char* Director::EVENT_RESET   = "director_reset";
+const char* Director::EVENT_DESTROY = "director_destroy";
 
 Director* Director::getInstance()
 {
@@ -152,7 +154,12 @@ bool Director::init()
     _eventAfterUpdate->setUserData(this);
     _eventProjectionChanged = new EventCustom(EVENT_PROJECTION_CHANGED);
     _eventProjectionChanged->setUserData(this);
+
     _eventResetDirector = new EventCustom(EVENT_RESET);
+    _eventResetDirector->setUserData(this);
+    _eventDestroyDirector = new EventCustom(EVENT_DESTROY);
+    _eventDestroyDirector->setUserData(this);
+
     // init TextureCache
     initTextureCache();
     initMatrixStack();
@@ -176,17 +183,15 @@ Director::~Director()
 {
     AXLOGD("deallocing Director: {}", fmt::ptr(this));
 
+    _eventDispatcher->dispatchEvent(_eventDestroyDirector);
+
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _eventDispatcher->removeEventListener(_rendererRecreatedListener);
     _rendererRecreatedListener = nullptr;
 #endif
 
-#if AX_ENABLE_SCRIPT_BINDING
-    // !!!ScriptEngine instance depends on _scheduler, so must dtor before _scheduler
-    ScriptEngineManager::destroyInstance();
-#endif
-
     AX_SAFE_RELEASE(_scheduler);
+
     AX_SAFE_RELEASE(_actionManager);
 
     AX_SAFE_RELEASE(_beforeSetNextScene);
@@ -198,19 +203,27 @@ Director::~Director()
     AX_SAFE_RELEASE(_eventAfterVisit);
     AX_SAFE_RELEASE(_eventProjectionChanged);
     AX_SAFE_RELEASE(_eventResetDirector);
+    AX_SAFE_RELEASE(_eventDestroyDirector);
 #ifdef AX_ENABLE_CONSOLE
     delete _console;
 #endif
+
+    _eventDispatcher->removeAllEventListeners();
     AX_SAFE_RELEASE(_eventDispatcher);
 
     Environment::destroyInstance();
     ObjectFactory::destroyInstance();
     QuadCommand::destroyIsolatedIndices();
 
+    AX_SAFE_DELETE(_jobSystem);
+
+#if AX_ENABLE_SCRIPT_BINDING
+    // !!!ScriptEngine instance depends on _scheduler, so must dtor before _scheduler
+    ScriptEngineManager::destroyInstance();
+#endif
+
     /** clean auto release pool. */
     PoolManager::destroyInstance();
-
-    AX_SAFE_DELETE(_jobSystem);
 
     s_SharedDirector = nullptr;
 }
@@ -419,10 +432,7 @@ void Director::setRenderView(RenderView* renderView)
             setRenderDefaults();
         }
 
-        if (_eventDispatcher)
-        {
-            _eventDispatcher->setEnabled(true);
-        }
+        _eventDispatcher->setEnabled(true);
     }
 }
 
@@ -1042,8 +1052,7 @@ void Director::reset()
     _runningScene = nullptr;
     _nextScene    = nullptr;
 
-    if (_eventDispatcher)
-        _eventDispatcher->dispatchEvent(_eventResetDirector);
+    _eventDispatcher->dispatchEvent(_eventResetDirector);
 
 #if defined(AX_ENABLE_AUDIO)
     // Fix github issue: https://github.com/axmolengine/axmol/issues/550
@@ -1053,12 +1062,6 @@ void Director::reset()
 
     // cleanup scheduler
     getScheduler()->unscheduleAll();
-
-    // Remove all events
-    if (_eventDispatcher)
-    {
-        _eventDispatcher->removeAllEventListeners();
-    }
 
     if (_notificationNode)
     {
@@ -1105,9 +1108,7 @@ void Director::reset()
     SpriteFrameCache::destroyInstance();
     FileUtils::destroyInstance();
 
-    VertexLayoutManager::destroyInstance();
     ProgramStateRegistry::destroyInstance();
-    ProgramManager::destroyInstance();
 
     // axmol specific data structures
     UserDefault::destroyInstance();
@@ -1116,11 +1117,12 @@ void Director::reset()
     destroyTextureCache();
 
 #if defined(AX_ENABLE_3D)
-    VertexInputBinding::clearCache();
+    VertexInputBinding::purgeCache();
     MeshDataCache::destroyInstance();
     MeshMaterial::releaseBuiltInMaterial();
     MeshMaterial::releaseCachedMaterial();
 #endif
+    VertexLayoutManager::destroyInstance();
 
     rhi::SamplerCache::destroyInstance();
 }
@@ -1132,6 +1134,7 @@ void Director::cleanupDirector()
     // If any graphics resources not cleanup or leaked, will crash on linux when destroy graphics context,
     // so we should cleanup any graphics resources.
     AX_SAFE_DELETE(_renderer);
+
     ProgramManager::destroyInstance();
     rhi::DriverBase::destroyInstance();
 
@@ -1545,6 +1548,9 @@ void Director::setActionManager(ActionManager* actionManager)
 
 void Director::setEventDispatcher(EventDispatcher* dispatcher)
 {
+    assert(dispatcher);
+    if (!dispatcher)
+        return;
     if (_eventDispatcher != dispatcher)
     {
         AX_SAFE_RETAIN(dispatcher);

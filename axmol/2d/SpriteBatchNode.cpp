@@ -124,7 +124,7 @@ void SpriteBatchNode::setUniformLocation()
 void SpriteBatchNode::setVertexLayout()
 {
     AXASSERT(_programState, "programState should not be nullptr");
-    Object::adopt(_vertexLayout, axvlm->acquireBuiltinVertexLayout(rhi::VertexLayoutKind::Sprite));
+    Object::assign(_vertexLayout, axvlm->getBuiltinVertexLayout(rhi::VertexLayoutKind::Sprite));
 }
 
 bool SpriteBatchNode::setProgramState(rhi::ProgramState* programState, bool ownPS /* = false*/)

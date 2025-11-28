@@ -171,8 +171,8 @@ bool DrawNode3D::init()
         desc.addAttrib(iter->first, &iter->second, rhi::VertexFormat::UBYTE4, sizeof(Vec3), true);
     }
     desc.endLayout();
-    _vertexLayout = axvlm->acquireVertexLayout(std::move(desc));
 
+    Object::assign(_vertexLayout, axvlm->getVertexLayout(std::move(desc)));
     _customCommand.setWeakPSVL(_programState, _vertexLayout);
 
     _customCommand.createVertexBuffer(sizeof(V3F_C4B), INITIAL_VERTEX_BUFFER_LENGTH,

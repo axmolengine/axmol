@@ -36,12 +36,9 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
     bool ok                           = false;
 
     auto fileExtension = ax::FileUtils::getPathExtension(dataFile);
-
-    static spine::AxmolTextureLoader s_textureLoader;
-
     do
     {
-        auto atlas = new (__FILE__, __LINE__) spine::Atlas(atlasFile, &s_textureLoader);
+        auto atlas = new (__FILE__, __LINE__) spine::Atlas(atlasFile, spine::AxmolTextureLoader::getInstance());
 
         if (nullptr == (atlas))
             break;

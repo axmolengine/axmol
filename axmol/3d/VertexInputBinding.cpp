@@ -37,18 +37,17 @@ namespace ax
  * older version: cache miss always due to programState always changes when switch
  * render objects
  */
-static axstd::hash_map<uint32_t, VertexInputBinding*>& _bindingCache()
-{
-    static axstd::hash_map<uint32_t, VertexInputBinding*> __vertexInputBindingCache;
-    return __vertexInputBindingCache;
-}
 
-void VertexInputBinding::clearCache()
+static axstd::hash_map<uint32_t, VertexInputBinding*>* s_vertexInputBindingCache;
+
+void VertexInputBinding::purgeCache()
 {
-    auto& cache = _bindingCache();
-    for (auto& [_, vib] : cache)
-        AX_SAFE_RELEASE(vib);
-    cache.clear();
+    if (s_vertexInputBindingCache)
+    {
+        for (auto& [_, vib] : *s_vertexInputBindingCache)
+            AX_SAFE_RELEASE(vib);
+        AX_SAFE_DELETE(s_vertexInputBindingCache);
+    }
 }
 
 VertexInputBinding::~VertexInputBinding()
@@ -78,10 +77,12 @@ VertexInputBinding* VertexInputBinding::spawn(MeshIndexData* meshIndexData,
     hashMe.shaderProg = pass->getProgramState()->getProgram();
     hashMe.instancing = instancing;
 
-    auto hash   = XXH32(&hashMe, sizeof(hashMe), 0);
-    auto& cache = _bindingCache();
-    auto it     = cache.find(hash);
-    if (it != cache.end())
+    auto hash = XXH32(&hashMe, sizeof(hashMe), 0);
+    if (!s_vertexInputBindingCache)
+        s_vertexInputBindingCache = new axstd::hash_map<uint32_t, VertexInputBinding*>();
+    auto cache = s_vertexInputBindingCache;
+    auto it    = cache->find(hash);
+    if (it != cache->end())
     {
         auto b = it->second;
         pass->setVertexLayout(b->_vertexLayout);
@@ -91,7 +92,7 @@ VertexInputBinding* VertexInputBinding::spawn(MeshIndexData* meshIndexData,
     auto b = new VertexInputBinding();
     b->init(meshIndexData, pass, command, instancing);
     b->_hash = hash;
-    cache.emplace(hash, b);
+    cache->emplace(hash, b);
 
     return b;
 }
@@ -133,7 +134,7 @@ bool VertexInputBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshComm
      */
     desc.endLayout(offset);
 
-    _vertexLayout = axvlm->acquireVertexLayout(std::forward<VertexLayoutDesc>(desc));
+    Object::assign(_vertexLayout, axvlm->getVertexLayout(std::forward<VertexLayoutDesc>(desc)));
     pass->setVertexLayout(_vertexLayout);
 
     AXASSERT(offset == meshVertexData->getSizePerVertex(), "vertex layout mismatch!");
