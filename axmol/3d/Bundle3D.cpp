@@ -1807,7 +1807,7 @@ NodeData* Bundle3D::parseNodesRecursivelyJson(simdjson::simdjson_result<simdjson
 
     // set transform
     if (_version == "0.1" || _version == "0.2" || _version == "0.3" || _version == "0.4" || _version == "0.5" ||
-        _version == "0.6")
+        _version == "0.6" || _version == "0.7")
     {
         if (isSkin || singleSprite)
         {
@@ -1976,7 +1976,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
 
         // set transform
         if (_version == "0.1" || _version == "0.2" || _version == "0.3" || _version == "0.4" || _version == "0.5" ||
-            _version == "0.6")
+            _version == "0.6" || _version == "0.7")
         {
             if (isSkin || singleSprite)
             {
