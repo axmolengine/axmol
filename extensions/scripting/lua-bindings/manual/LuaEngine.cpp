@@ -53,6 +53,8 @@ LuaEngine* LuaEngine::getInstance(void)
 
 LuaEngine::~LuaEngine(void)
 {
+    ScriptHandlerMgr::destroyInstance();
+
     AX_SAFE_RELEASE(_stack);
     _defaultEngine = nullptr;
 }
@@ -77,7 +79,9 @@ void LuaEngine::addLuaLoader(lua_CFunction func)
 void LuaEngine::removeScriptObjectByObject(Object* pObj)
 {
     _stack->removeScriptObjectByObject(pObj);
-    ScriptHandlerMgr::getInstance()->removeObjectAllHandlers(pObj);
+    auto scriptHandlerMgr = ScriptHandlerMgr::getInstance();
+    if (scriptHandlerMgr)
+        scriptHandlerMgr->removeObjectAllHandlers(pObj);
 }
 
 void LuaEngine::removeScriptHandler(int nHandler)

@@ -31,6 +31,8 @@
 #include "lua-bindings/manual/LuaStack.h"
 #include "lua-bindings/manual/LuaValue.h"
 #include "lua-bindings/manual/LuaEngine.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
 
 using namespace ax;
 
@@ -109,9 +111,11 @@ ScriptHandlerMgr::ScriptHandlerMgr() {}
 
 ScriptHandlerMgr::~ScriptHandlerMgr() {}
 
+static bool s_axmolAppExiting = false;
+
 ScriptHandlerMgr* ScriptHandlerMgr::getInstance()
 {
-    if (nullptr == _scriptHandlerMgr)
+    if (nullptr == _scriptHandlerMgr && !s_axmolAppExiting)
     {
         _scriptHandlerMgr = new ScriptHandlerMgr();
         _scriptHandlerMgr->init();

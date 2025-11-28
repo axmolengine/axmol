@@ -215,12 +215,12 @@ Director::~Director()
     ObjectFactory::destroyInstance();
     QuadCommand::destroyIsolatedIndices();
 
-    AX_SAFE_DELETE(_jobSystem);
-
 #if AX_ENABLE_SCRIPT_BINDING
-    // !!!ScriptEngine instance depends on _scheduler, so must dtor before _scheduler
+    // !!!All ax::Object instances depends on ScriptEngineManager when script bind enabled
     ScriptEngineManager::destroyInstance();
 #endif
+
+    AX_SAFE_DELETE(_jobSystem);
 
     /** clean auto release pool. */
     PoolManager::destroyInstance();
