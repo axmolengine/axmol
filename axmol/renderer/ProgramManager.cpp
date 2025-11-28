@@ -78,7 +78,7 @@ ProgramManager::~ProgramManager()
 {
     XXH64_freeState(_programIdGen);
 
-    for (auto& [_,program] : _cachedPrograms)
+    for (auto& [_, program] : _cachedPrograms)
     {
         AX_SAFE_RELEASE(program);
     }
