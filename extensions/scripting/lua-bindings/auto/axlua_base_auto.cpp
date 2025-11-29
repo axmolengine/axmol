@@ -34159,6 +34159,30 @@ int lua_ax_base_EventDispatcher_addCustomEventListener(lua_State* tolua_S)
         object_to_luaval<ax::EventListenerCustom>(tolua_S, "ax.EventListenerCustom",(ax::EventListenerCustom*)ret);
         return 1;
     }
+    if (argc == 3)
+    {
+        std::string_view arg0;
+        std::function<void (ax::EventCustom *)> arg1;
+        int arg2;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventDispatcher:addCustomEventListener");
+
+        do {
+        	// Lambda binding for lua is not supported.
+            assert(false);
+        } while(0)
+        ;
+
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventDispatcher:addCustomEventListener");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventDispatcher_addCustomEventListener'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->addCustomEventListener(arg0, arg1, arg2);
+        object_to_luaval<ax::EventListenerCustom>(tolua_S, "ax.EventListenerCustom",(ax::EventListenerCustom*)ret);
+        return 1;
+    }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventDispatcher:addCustomEventListener",argc, 2);
     return 0;
 
