@@ -77,7 +77,7 @@ struct wtimer_hres {
       ULONG MinimumResolution, MaximumResolution, CurrentResolution;
       if (NtQueryTimerResolution(&MinimumResolution, &MaximumResolution, &CurrentResolution) != 0)
         break;
-      ZwSetTimerResolution(yasio::clamp(timer_res, MaximumResolution, MinimumResolution), TRUE, &timer_res);
+      ZwSetTimerResolution(std::clamp(timer_res, MaximumResolution, MinimumResolution), TRUE, &timer_res);
     } while (false);
 #  endif
   }

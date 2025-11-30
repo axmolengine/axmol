@@ -2,8 +2,13 @@
 #include "TestUtils.h"
 #include <iostream>
 
-// #include <flat_set>
-// #include <flat_map>
+#if __has_include(<flat_map>)
+#    include <flat_set>
+#    include <flat_map>
+#    define _AX_STL_HAS_FLAT_CONTAINER 1
+#else
+#    define _AX_STL_HAS_FLAT_CONTAINER 0
+#endif
 
 #include <set>
 #include <unordered_set>
@@ -12,7 +17,7 @@
 #include "axmol/tlx/flat_set.hpp"
 #include "axmol/tlx/flat_map.hpp"
 
-template<typename _Tp>
+template <typename _Tp>
 using my_flat_set = _TLX flat_set<_Tp, std::less<_Tp>, tlx::vector<_Tp>>;
 
 template <typename _Cont1, typename _Cont2>
@@ -122,17 +127,20 @@ static void run_benchmark()
         keys[i] = dist(rng);
     }
 
+#if _AX_STL_HAS_FLAT_CONTAINER
+    auto s4 = benchmark_set<std::flat_set<int>>("std::flat_set", keys);
+    auto m4 = benchmark_map<std::flat_map<int, int>>("std::flat_map", keys);
+#endif
     auto s1 = benchmark_set<std::set<int>>("std::set", keys);
     auto s2 = benchmark_set<std::unordered_set<int>>("std::unordered_set", keys);
     auto s3 = benchmark_set<tlx::hash_set<int>>("tlx::hash_set", keys);
-    //auto s4 = benchmark_set<std::flat_set<int>>("std::flat_set", keys);
+
     auto s5 = benchmark_set<tlx::flat_set<int>>("tlx::flat_set", keys);
     auto s6 = benchmark_set<my_flat_set<int>>("my_flat_set", keys);
 
     auto m1 = benchmark_map<std::map<int, int>>("std::map", keys);
     auto m2 = benchmark_map<std::unordered_map<int, int>>("std::unordered_map", keys);
     auto m3 = benchmark_map<tlx::hash_map<int, int>>("tlx::hash_map", keys);
-    //auto m4 = benchmark_map<std::flat_map<int, int>>("std::flat_map", keys);
     auto m5 = benchmark_map<tlx::flat_map<int, int>>("tlx::flat_map", keys);
 
     std::sort(keys.begin(), keys.end());
@@ -140,7 +148,6 @@ static void run_benchmark()
 
     CHECK(vector_equals(keys, s5.keys()));
     CHECK(vector_equals(keys, s6.keys()));
-    // CHECK(keys == m5.keys());
 }
 
 TEST_SUITE("tlx/Containers")
