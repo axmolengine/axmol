@@ -867,7 +867,7 @@ void io_service::initialize(const io_hostent* channel_eps, int channel_count)
   create_channels(channel_eps, channel_count);
 
 #if !defined(YASIO_USE_CARES)
-  life_mutex_ = std::make_shared<std::shared_mutex>();
+  life_mutex_ = std::make_shared<tlx::shared_mutex>();
   life_token_ = std::make_shared<life_token>();
 #endif
   this->state_ = io_service::state::IDLE;
@@ -877,7 +877,7 @@ void io_service::finalize()
   if (this->state_ == io_service::state::IDLE)
   {
 #if !defined(YASIO_USE_CARES)
-    std::unique_lock<std::shared_mutex> lck(*life_mutex_);
+    std::unique_lock<tlx::shared_mutex> lck(*life_mutex_);
     life_token_.reset();
 #endif
     destroy_channels();
@@ -2064,7 +2064,7 @@ void io_service::start_query(io_channel* ctx)
   // init async name query thread state
   auto resolving_host                         = ctx->remote_host_;
   auto resolving_port                         = ctx->remote_port_;
-  std::weak_ptr<std::shared_mutex> weak_mutex = life_mutex_;
+  std::weak_ptr<tlx::shared_mutex> weak_mutex = life_mutex_;
   std::weak_ptr<life_token> life_token        = life_token_;
   std::thread async_resolv_thread([this, life_token, weak_mutex, resolving_host, resolving_port, ctx] {
     // check life token
@@ -2079,7 +2079,7 @@ void io_service::start_query(io_channel* ctx)
     auto pmtx = weak_mutex.lock();
     if (!pmtx)
       return;
-    std::shared_lock<std::shared_mutex> lck(*pmtx);
+    tlx::shared_lock<tlx::shared_mutex> lck(*pmtx);
 
     // check life token again, when io_service cleanup done, life_token's use_count will be 0,
     // otherwise, we can safe to do follow assignments.
