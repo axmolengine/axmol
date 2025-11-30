@@ -211,6 +211,7 @@ void Application::setAnimationInterval(float interval)
     s_animationInterval = static_cast<int64_t>(interval * NANOSECONDSPERSECOND);
 }
 
+#ifndef AX_CORE_PROFILE
 void Application::setResourceRootPath(const std::string& rootResDir)
 {
     _resourceRootPath = rootResDir;
@@ -228,6 +229,7 @@ const std::string& Application::getResourceRootPath()
 {
     return _resourceRootPath;
 }
+#endif
 
 Application::Platform Application::getTargetPlatform()
 {
