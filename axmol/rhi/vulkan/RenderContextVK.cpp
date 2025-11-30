@@ -112,7 +112,7 @@ inline bool operator==(const VkRect2D& a, const VkRect2D& b)
            a.extent.height == b.extent.height;
 }
 
-static void destroySemphores(axstd::pod_vector<VkSemaphore>& semaphores, VkDevice device)
+static void destroySemphores(tlx::pod_vector<VkSemaphore>& semaphores, VkDevice device)
 {
     for (auto semaphore : semaphores)
         vkDestroySemaphore(device, semaphore, nullptr);

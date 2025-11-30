@@ -50,6 +50,7 @@ set(GAME_SOURCE
     Source/axmol/platform/FileUtilsTests.cpp
 
     Source/axmol/ui/UIHelperTests.cpp
+    Source/axmol/tlx/ContainerTests.cpp
 )
 
 

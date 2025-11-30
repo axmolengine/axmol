@@ -45,8 +45,6 @@
 #    include "axmol/tlx/filesystem.hpp"
 #endif
 
-#include "yasio/string_view.hpp"
-
 namespace ax
 {
 

@@ -1,7 +1,7 @@
 #include "SDFGen.h"
 
-#include <yasio/singleton.hpp>
-#include <yasio/byte_buffer.hpp>
+#include <axmol/tlx/singleton.hpp>
+#include <axmol/tlx/byte_buffer.hpp>
 #include "axmol/tlx/format.hpp"
 
 #include "axmol/base/ZipUtils.h"
@@ -10,7 +10,7 @@
 #include "misc/cpp/imgui_stdlib.h"
 #include <zlib.h>
 #include "axmol/base/JsonWriter.h"
-#include "yasio/utils.hpp"
+#include "yasio/tlx/chrono.hpp"
 
 NS_AX_EXT_BEGIN
 
@@ -94,7 +94,7 @@ public:
             storePath += path;
         }
 
-        auto start = yasio::highp_clock();
+        auto start = tlx::highp_clock();
 
         JsonWriter<> xasset;
 
@@ -147,7 +147,7 @@ public:
 
         fu->writeStringToFile(str, storePath);
 
-        _params->cost = (yasio::highp_clock() - start) / 1000.0;
+        _params->cost = (tlx::highp_clock() - start) / 1000.0;
 
         _params->error.clear();
         return true;
@@ -190,7 +190,7 @@ protected:
 
     FontAtlasGenParams* _params{nullptr};  // weak ref
     std::string _atlasName;                // match with runtime
-    std::vector<yasio::byte_buffer> _pageDatas;
+    std::vector<tlx::byte_buffer> _pageDatas;
 };
 };  // namespace xasset
 

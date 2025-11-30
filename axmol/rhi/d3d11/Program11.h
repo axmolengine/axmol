@@ -83,7 +83,7 @@ public:
      * Get active vertex attributes.
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
-    const axstd::string_map<VertexInputDesc>& getActiveVertexInputs() const override;
+    const tlx::string_map<VertexInputDesc>& getActiveVertexInputs() const override;
 
     /**
      * Get vertex shader module.
@@ -120,7 +120,7 @@ public:
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    const axstd::string_map<UniformInfo>& getActiveUniformInfos(ShaderStage stage) const override;
+    const tlx::string_map<UniformInfo>& getActiveUniformInfos(ShaderStage stage) const override;
 
     ID3DBlob* getVSBlob() const;
 

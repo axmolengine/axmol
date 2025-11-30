@@ -28,13 +28,13 @@ SOFTWARE.
 
 #pragma once
 
-#include "yasio/string.hpp"
-#include "yasio/string_view.hpp"
+#include "yasio/tlx/string.hpp"
+#include "yasio/tlx/string_view.hpp"
 #include <fstream>
 
-namespace yasio
+namespace tlx
 {
-inline yasio::string read_text_file(cxx17::string_view file_path)
+inline tlx::string read_text_file(std::string_view file_path)
 {
   std::ifstream fin(file_path.data(), std::ios_base::binary);
   if (fin.is_open())
@@ -43,7 +43,7 @@ inline yasio::string read_text_file(cxx17::string_view file_path)
     auto n = static_cast<size_t>(fin.tellg());
     if (n > 0)
     {
-      yasio::string ret;
+      tlx::string ret;
       ret.resize_and_overwrite(n, [&fin](char* out, size_t outlen) {
         fin.seekg(std::ios_base::beg);
         fin.read(out, outlen);
@@ -52,6 +52,13 @@ inline yasio::string read_text_file(cxx17::string_view file_path)
       return ret;
     }
   }
-  return yasio::string{};
+  return tlx::string{};
 }
-} // namespace yasio
+
+inline bool is_regular_file(const char* path)
+{
+  struct stat st;
+  return (::stat(path, &st) == 0) && (st.st_mode & S_IFREG);
+}
+
+} // namespace tlx

@@ -39,7 +39,7 @@ PhysicsMeshRenderer* PhysicsMeshRenderer::create(std::string_view modelPath,
     auto ret = new PhysicsMeshRenderer();
     if (ret->initWithFile(modelPath))
     {
-        ret->setModelTexture(modelPath, axstd::empty_sv);
+        ret->setModelTexture(modelPath, tlx::empty_sv);
         auto obj               = Physics3DRigidBody::create(rigidDes);
         ret->_physicsComponent = Physics3DComponent::create(obj, translateInPhysics, rotInPhsyics);
         ret->addComponent(ret->_physicsComponent);
@@ -59,7 +59,7 @@ PhysicsMeshRenderer* PhysicsMeshRenderer::createWithCollider(std::string_view mo
     auto ret = new PhysicsMeshRenderer();
     if (ret->initWithFile(modelPath))
     {
-        ret->setModelTexture(modelPath, axstd::empty_sv);
+        ret->setModelTexture(modelPath, tlx::empty_sv);
         auto obj               = Physics3DCollider::create(colliderDes);
         ret->_physicsComponent = Physics3DComponent::create(obj, translateInPhysics, rotInPhsyics);
         ret->addComponent(ret->_physicsComponent);

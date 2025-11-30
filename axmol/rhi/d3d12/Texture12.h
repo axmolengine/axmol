@@ -28,7 +28,7 @@
 #include "axmol/rhi/DXUtils.h"
 #include <d3d12.h>
 #include <vector>
-#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/vector.hpp"
 
 namespace ax::rhi::d3d12
 {
@@ -76,7 +76,7 @@ public:
     }
 
 private:
-    std::vector<axstd::pod_vector<D3D12_RESOURCE_STATES>> _states;
+    std::vector<tlx::pod_vector<D3D12_RESOURCE_STATES>> _states;
 };
 
 /**

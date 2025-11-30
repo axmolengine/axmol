@@ -38,7 +38,7 @@ namespace ax
  * render objects
  */
 
-static axstd::hash_map<uint32_t, VertexInputBinding*>* s_vertexInputBindingCache;
+static tlx::hash_map<uint32_t, VertexInputBinding*>* s_vertexInputBindingCache;
 
 void VertexInputBinding::purgeCache()
 {
@@ -79,7 +79,7 @@ VertexInputBinding* VertexInputBinding::spawn(MeshIndexData* meshIndexData,
 
     auto hash = XXH32(&hashMe, sizeof(hashMe), 0);
     if (!s_vertexInputBindingCache)
-        s_vertexInputBindingCache = new axstd::hash_map<uint32_t, VertexInputBinding*>();
+        s_vertexInputBindingCache = new tlx::hash_map<uint32_t, VertexInputBinding*>();
     auto cache = s_vertexInputBindingCache;
     auto it    = cache->find(hash);
     if (it != cache->end())

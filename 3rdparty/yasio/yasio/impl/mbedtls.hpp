@@ -51,7 +51,7 @@ YASIO__DECL yssl_ctx_st* yssl_ctx_new(const yssl_options& opts)
       YASIO_LOG("mbedtls_ssl_config_defaults fail with ret=%d", ret);
 
     // rgn engine
-    cxx17::string_view pers = opts.client ? cxx17::string_view{YASIO_SSL_PIN, YASIO_SSL_PIN_LEN} : cxx17::string_view{YASIO_SSL_PON, YASIO_SSL_PON_LEN};
+    std::string_view pers = opts.client ? std::string_view{YASIO_SSL_PIN, YASIO_SSL_PIN_LEN} : std::string_view{YASIO_SSL_PON, YASIO_SSL_PON_LEN};
     ret                     = ::mbedtls_ctr_drbg_seed(&ctx->ctr_drbg, ::mbedtls_entropy_func, &ctx->entropy, (const unsigned char*)pers.data(), pers.length());
     if (ret != 0)
     {

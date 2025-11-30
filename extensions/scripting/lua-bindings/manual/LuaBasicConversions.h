@@ -46,13 +46,12 @@
 #include "axmol/rhi/VertexLayout.h"
 #include "axmol/ui/GUIDefine.h"
 
-#include "yasio/string_view.hpp"
 #include <thread>
 
 using namespace ax;
 
 extern std::unordered_map<uintptr_t, const char*> g_luaType;
-extern std::unordered_map<cxx17::string_view, const char*> g_typeCast;
+extern std::unordered_map<std::string_view, const char*> g_typeCast;
 
 #if _AX_DEBUG >= 1
 void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const char* funcName = "");
@@ -187,7 +186,7 @@ extern bool luaval_to_long_long(lua_State* L, int lo, long long* outValue, const
  * string, otherwise return false.
  */
 extern bool luaval_to_std_string(lua_State* L, int lo, std::string* outValue, const char* funcName = "");
-extern bool luaval_to_std_string_view(lua_State* L, int lo, cxx17::string_view* outValue, const char* funcName = "");
+extern bool luaval_to_std_string_view(lua_State* L, int lo, std::string_view* outValue, const char* funcName = "");
 
 /**
  * Get a ssize_t value from the given acceptable index of stack.
@@ -809,7 +808,7 @@ extern bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<ax::Vec3
 
 extern bool luaval_to_std_map_string_string(lua_State* L,
                                             int lo,
-                                            axstd::string_map<std::string>* ret,
+                                            tlx::string_map<std::string>* ret,
                                             const char* funcName);
 
 /**@}**/
@@ -1012,7 +1011,7 @@ const char* getLuaTypeName(T* ret, const char* defaultTypeName)
         }
         else
         {  // unlike logic, for windows dll only
-            cxx17::string_view strkey(typeName);
+            std::string_view strkey(typeName);
             auto iter2 = g_typeCast.find(strkey);
             if (iter2 != g_typeCast.end())
             {
@@ -1284,7 +1283,7 @@ AX_LUA_DLL bool luaval_to_uniformLocation(lua_State* L, int pos, ax::rhi::Unifor
  */
 AX_LUA_DLL void uniformLocation_to_luaval(lua_State* L, const ax::rhi::UniformLocation& desc);
 
-AX_LUA_DLL void program_activeattrs_to_luaval(lua_State* L, const axstd::string_map<ax::rhi::VertexInputDesc>& map);
+AX_LUA_DLL void program_activeattrs_to_luaval(lua_State* L, const tlx::string_map<ax::rhi::VertexInputDesc>& map);
 
 /**
  * convert ax::ResourceData to lua object

@@ -24,7 +24,7 @@
 #pragma once
 
 #include "glad/vulkan.h"
-#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/vector.hpp"
 
 namespace ax::rhi::vk
 {
@@ -40,6 +40,6 @@ public:
 
 protected:
     VkDevice _device{VK_NULL_HANDLE};
-    axstd::pod_vector<VkSemaphore> _pool;
+    tlx::pod_vector<VkSemaphore> _pool;
 };
 }  // namespace ax::rhi::vk

@@ -119,7 +119,20 @@ SOFTWARE.
 #  define YASIO__OS_BSD_LIKE 0
 #endif
 
+#if !defined(_WIN32) || (defined(NTDDI_VERSION) && NTDDI_VERSION >= NTDDI_VISTA) || (defined(_WIN32_WINNT) && _WIN32_WINNT >= 0x0600)
+#  define YASIO__OS_NT6 1
+#else
+#  define YASIO__OS_NT6 0
+#endif
+
 /// Tests multiplex io model of current OS
+
+// poll
+#if YASIO__OS_NT6
+#  define YASIO__HAS_POLL 1
+#else
+#  define YASIO__HAS_POLL 0
+#endif
 
 // ppoll
 #if defined(__linux__) && !defined(__ANDROID__) || (defined(__ANDROID_API__) && __ANDROID_API__ >= 21)
@@ -170,10 +183,16 @@ SOFTWARE.
 #  define YASIO__HAS_SA_LEN 0
 #endif
 
-#if !defined(_WIN32) || defined(NTDDI_VISTA)
+#if YASIO__OS_NT6
 #  define YASIO__HAS_NTOP 1
 #else
 #  define YASIO__HAS_NTOP 0
+#endif
+
+#if defined(NTDDI_WIN10_RS2) && NTDDI_VERSION >= NTDDI_WIN10_RS2
+#  define YASIO__OS_NT10_RS2 1
+#else
+#  define YASIO__OS_NT10_RS2 0
 #endif
 
 #if defined(_WIN32) && (!defined(WINAPI_FAMILY) || (WINAPI_FAMILY != WINAPI_FAMILY_APP)) && !defined(__MINGW64__) && !defined(__MINGW32__)
@@ -240,18 +259,7 @@ SOFTWARE.
 
 #define YASIO__STD ::std::
 
-#if YASIO__HAS_CXX14
-namespace cxx14
-{
-using namespace std;
-};
-#endif
-
-#if YASIO__HAS_CXX17
-namespace cxx17
-{
-using namespace std;
-};
-#endif
+// The yasio is the original tlx provider
+#define _TLX ::tlx::
 
 #endif

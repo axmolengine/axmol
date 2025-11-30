@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/math/Vec3.h"
 #include "jni/jni.hpp"
-#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/vector.hpp"
 
 namespace jni
 {
@@ -267,10 +267,10 @@ public:
 
     /**
     @brief Call of Java static float* method
-    @return axstd::pod_vector
+    @return tlx::pod_vector
     */
     template <typename... Ts>
-    static axstd::pod_vector<float> callStaticFloatArrayMethod(const char* className,
+    static tlx::pod_vector<float> callStaticFloatArrayMethod(const char* className,
                                                                const char* methodName,
                                                                Ts&&... xs)
     {
@@ -290,7 +290,7 @@ public:
             }
 
             jsize len = t.env->GetArrayLength(array);
-            axstd::pod_vector<float> result(len);
+            tlx::pod_vector<float> result(len);
             jfloat* elems = t.env->GetFloatArrayElements(array, 0);
             if (elems)
             {
@@ -310,10 +310,10 @@ public:
 
     /**
     @brief Call of Java static int* method
-    @return axstd::pod_vector
+    @return tlx::pod_vector
     */
     template <typename... Ts>
-    static axstd::pod_vector<int32_t> callStaticIntArrayMethod(const char* className,
+    static tlx::pod_vector<int32_t> callStaticIntArrayMethod(const char* className,
                                                                const char* methodName,
                                                                Ts&&... xs)
     {
@@ -333,7 +333,7 @@ public:
             }
 
             jsize len = t.env->GetArrayLength(array);
-            axstd::pod_vector<int32_t> result(len);
+            tlx::pod_vector<int32_t> result(len);
             jint* elems = t.env->GetIntArrayElements(array, 0);
             if (elems)
             {

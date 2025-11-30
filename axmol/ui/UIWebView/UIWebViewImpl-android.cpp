@@ -57,8 +57,7 @@ static std::string getFixedBaseUrl(std::string_view baseUrl)
     }
     else if (baseUrl[0] != '/')
     {
-        using namespace cxx17;  // for cxx17::string_view literal
-        if (cxx20::starts_with(baseUrl, "assets/"_sv))
+        if (tlx::starts_with(baseUrl, "assets/"sv))
         {
             fixedBaseUrl.assign(s_assetsBaseUrl).push_back(baseUrl[7]);
         }
@@ -165,7 +164,7 @@ std::string getUrlStringByFileName(std::string_view fileName)
 
     if (urlString[0] == '/')
         urlString.insert(urlString.begin(), s_sdRootBaseUrl.begin(), s_sdRootBaseUrl.end());
-    else if (cxx20::starts_with(cxx17::string_view{urlString}, "assets/"sv))
+    else if (tlx::starts_with(std::string_view{urlString}, "assets/"sv))
         urlString.replace(0, sizeof("assets/") - 1, s_assetsBaseUrl);
     else
         urlString.insert(urlString.begin(), s_assetsBaseUrl.begin(), s_assetsBaseUrl.end());

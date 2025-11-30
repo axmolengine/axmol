@@ -24701,7 +24701,7 @@ int lua_ax_studio_SkeletonNode_changeSkins(lua_State* tolua_S)
     ok  = true;
     do {
         if (argc == 1) {
-            tsl::robin_map<std::string, std::string, axstd::string_hash, axstd::equal_to> arg0;
+            tsl::robin_map<std::string, std::string, tlx::string_hash, tlx::equal_to> arg0;
             ok &= luaval_to_std_map_string_string(tolua_S, 2, &arg0, "ccs.SkeletonNode:changeSkins");
 
             if (!ok) { break; }
@@ -24750,7 +24750,7 @@ int lua_ax_studio_SkeletonNode_addSkinGroup(lua_State* tolua_S)
     if (argc == 2)
     {
         std::string_view arg0;
-        tsl::robin_map<std::string, std::string, axstd::string_hash, axstd::equal_to> arg1;
+        tsl::robin_map<std::string, std::string, tlx::string_hash, tlx::equal_to> arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.SkeletonNode:addSkinGroup");
 

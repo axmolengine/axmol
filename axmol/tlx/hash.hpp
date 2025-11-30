@@ -3,7 +3,7 @@
 #include "xxhash/xxhash.h"
 #include <stdint.h>
 
-namespace axstd
+namespace tlx
 {
 inline uintptr_t hash_bytes(const void* data, size_t length, uintptr_t seed = 0)
 {
@@ -12,4 +12,4 @@ inline uintptr_t hash_bytes(const void* data, size_t length, uintptr_t seed = 0)
     else
         return XXH32(data, length, static_cast<unsigned int>(seed));
 }
-}  // namespace axstd
+}  // namespace tlx

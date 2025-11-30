@@ -22,10 +22,16 @@
 /// The shared_mutex workaround on c++11
 #if YASIO__HAS_CXX17 && !defined(__APPLE__)
 #  include <shared_mutex>
+namespace tlx
+{
+using shared_mutex = ::std::shared_mutex;
+template <class _Mutex>
+using shared_lock = ::std::shared_lock<_Mutex>;
+} // namespace tlx
 #else
 #  include <mutex>
 #  include <condition_variable>
-namespace cxx17
+namespace tlx
 {
 // CLASS TEMPLATE shared_mutex
 class shared_mutex {
@@ -60,7 +66,7 @@ class shared_mutex {
 
   bool one_or_more_readers() const { return (state_ & n_readers_) > 0; }
 
-  shared_mutex(shared_mutex const&) = delete;
+  shared_mutex(shared_mutex const&)            = delete;
   shared_mutex& operator=(shared_mutex const&) = delete;
 
 public:
@@ -183,7 +189,7 @@ public:
     return *this;
   }
 
-  shared_lock(const shared_lock&) = delete;
+  shared_lock(const shared_lock&)            = delete;
   shared_lock& operator=(const shared_lock&) = delete;
 
   void lock()
@@ -244,7 +250,7 @@ private:
       yasio__throw_error0(std::errc::resource_deadlock_would_occur);
   }
 };
-} // namespace cxx17
+} // namespace tlx
 #endif
 
 #endif

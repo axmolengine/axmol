@@ -100,8 +100,7 @@ void EditBoxImplAndroid::setNativeFont(const char* pFontName, int fontSize)
     if (isFontFileExists)
     {
         realFontPath = ax::FileUtils::getInstance()->fullPathForFilename(pFontName);
-        using namespace cxx17;  // for cxx17::string_view literal
-        if (cxx20::starts_with(cxx17::string_view{realFontPath}, "assets/"_sv))
+        if (tlx::starts_with(std::string_view{realFontPath}, "assets/"sv))
         {
             realFontPath = realFontPath.substr(sizeof("assets/") - 1);  // Chop out the 'assets/' portion of the path.
         }

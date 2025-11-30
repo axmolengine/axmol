@@ -160,8 +160,8 @@ public:
 
     void processDisposalQueue(uint64_t completedFenceValue);
 
-    void rebuildSwapchainAttachments(const axstd::pod_vector<VkImage>& images,
-                                     const axstd::pod_vector<VkImageView>&,
+    void rebuildSwapchainAttachments(const tlx::pod_vector<VkImage>& images,
+                                     const tlx::pod_vector<VkImageView>&,
                                      const VkExtent2D&,
                                      PixelFormat imagePF);
 
@@ -205,7 +205,7 @@ private:
     VkCommandPool _commandPool{VK_NULL_HANDLE};
     std::mutex _commandPoolMutex;
 
-    axstd::pod_vector<DisposableResource> _disposalQueue;
+    tlx::pod_vector<DisposableResource> _disposalQueue;
 
     uint32_t _graphicsQueueFamily{0};
     uint32_t _presentQueueFamily{0};
@@ -216,7 +216,7 @@ private:
     std::string _shaderVersion;
 
     // store and provide swapchain render target attachments
-    axstd::pod_vector<TextureImpl*> _swapchainColorAttachments;
+    tlx::pod_vector<TextureImpl*> _swapchainColorAttachments;
     uint32_t _currentSwapchainImageIndex          = 0;
     TextureImpl* _swapchainDepthStencilAttachment = nullptr;
 };

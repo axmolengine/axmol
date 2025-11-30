@@ -25,7 +25,7 @@
 #pragma once
 
 #include "axmol/tlx/hlookup.hpp"
-#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/vector.hpp"
 #include "RHITypes.h"
 
 namespace ax::rhi
@@ -60,10 +60,10 @@ private:
     void createBuiltinSamplers();
     void createBuiltinSampler(uint32_t samplerIndex, const SamplerDesc& desc);
 
-    axstd::pod_vector<SamplerHandle> _builtinSamplers;
-    axstd::hash_map<SamplerIndex::enum_type, SamplerHandle> _customSamplers;
+    tlx::pod_vector<SamplerHandle> _builtinSamplers;
+    tlx::hash_map<SamplerIndex::enum_type, SamplerHandle> _customSamplers;
 
-    axstd::hash_map<uint32_t, uint32_t> _samplersRegsitry;  // sampler desc => sampler index registry
+    tlx::hash_map<uint32_t, uint32_t> _samplersRegsitry;  // sampler desc => sampler index registry
 
     DriverBase* _driver{nullptr};
 

@@ -72,10 +72,10 @@ static bool isConvex(const Vec2* verts, int count)
     return true;  // is convex
 }
 
-static V2F_T2F_C4F* expandBufferAndGetPointer(axstd::pod_vector<V2F_T2F_C4F>& buffer, size_t count)
+static V2F_T2F_C4F* expandBufferAndGetPointer(tlx::pod_vector<V2F_T2F_C4F>& buffer, size_t count)
 {
     size_t oldSize = buffer.size();
-    buffer.expand(count);
+    buffer.extend(count);
     return buffer.data() + oldSize;
 }
 
@@ -226,7 +226,7 @@ void DrawNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     }
 }
 
-static void udpateCommand(CustomCommand& cmd, const axstd::pod_vector<V2F_T2F_C4F>& buffer)
+static void udpateCommand(CustomCommand& cmd, const tlx::pod_vector<V2F_T2F_C4F>& buffer)
 {
     if (buffer.empty())
     {
@@ -413,7 +413,7 @@ void DrawNode::drawQuadBezier(const Vec2& origin,
         return;
     }
 
-    axstd::pod_vector<Vec2> _vertices{
+    tlx::pod_vector<Vec2> _vertices{
         static_cast<size_t>(segments + 1)};  // Vec2* _vertices = _abuf.get<Vec2>(segments + 1);
 
     float t = 0.0f;
@@ -443,7 +443,7 @@ void DrawNode::drawCubicBezier(const Vec2& origin,
         return;
     }
 
-    axstd::pod_vector<Vec2> _vertices{static_cast<size_t>(segments + 1)};
+    tlx::pod_vector<Vec2> _vertices{static_cast<size_t>(segments + 1)};
 
     float t = 0.0f;
     for (unsigned int i = 0; i < segments; i++)
@@ -488,7 +488,7 @@ void DrawNode::drawCardinalSpline(const PointArray* configIn,
     float lt;
     float deltaT = 1.0f / config->count();
 
-    axstd::pod_vector<Vec2> _vertices{static_cast<size_t>(segments)};
+    tlx::pod_vector<Vec2> _vertices{static_cast<size_t>(segments)};
 
     for (unsigned int i = 0; i < segments; i++)
     {
@@ -839,7 +839,7 @@ void DrawNode::_drawPolygon(const Vec2* verts,
 
     auto _vertices = _transform(verts, count, closedPolygon);
 
-    axstd::pod_vector<V2F_T2F_C4F_Triangle> triangleList;
+    tlx::pod_vector<V2F_T2F_C4F_Triangle> triangleList;
 
     int vertex_count = 0;
 
@@ -984,7 +984,7 @@ void DrawNode::_drawPolygon(const Vec2* verts,
                 Vec2 offset, n;
             };
 
-            axstd::pod_vector<ExtrudeVerts> extrude{static_cast<size_t>(sizeof(struct ExtrudeVerts) * count)};
+            tlx::pod_vector<ExtrudeVerts> extrude{static_cast<size_t>(sizeof(struct ExtrudeVerts) * count)};
 
             for (unsigned int i = 0; i < count; i++)
             {
@@ -1304,7 +1304,7 @@ void DrawNode::_drawAStar(const Vec2& center,
     const float coef = 2.0f * (float)M_PI / segments;
     float halfAngle  = coef / 2.0f;
 
-    axstd::pod_vector<Vec2> _vertices(segments * 2 + 1);
+    tlx::pod_vector<Vec2> _vertices(segments * 2 + 1);
 
     int i = 0;
     for (unsigned int a = 0; a < segments; a++)
@@ -1465,7 +1465,7 @@ void DrawNode::_drawPie(const Vec2& center,
     {
         const float coef = 2.0f * (float)M_PI / DEGREES;
 
-        axstd::pod_vector<Vec2> _vertices(DEGREES + 2);
+        tlx::pod_vector<Vec2> _vertices(DEGREES + 2);
 
         int n        = 0;
         float rads   = 0.0f;
@@ -1517,7 +1517,7 @@ void DrawNode::_drawPie(const Vec2& center,
     }
 }
 
-axstd::pod_vector<Vec2> DrawNode::_transform(const Vec2* _vertices, unsigned int& count, bool closedPolygon)
+tlx::pod_vector<Vec2> DrawNode::_transform(const Vec2* _vertices, unsigned int& count, bool closedPolygon)
 {
     Vec2 vert0        = _vertices[0];
     int closedCounter = 0;
@@ -1527,7 +1527,7 @@ axstd::pod_vector<Vec2> DrawNode::_transform(const Vec2* _vertices, unsigned int
         closedCounter = 1;
     }
 
-    axstd::pod_vector<Vec2> vert(count + closedCounter);
+    tlx::pod_vector<Vec2> vert(count + closedCounter);
     if (properties.transform == false)
     {
         memcpy(vert.data(), _vertices, count * sizeof(Vec2));

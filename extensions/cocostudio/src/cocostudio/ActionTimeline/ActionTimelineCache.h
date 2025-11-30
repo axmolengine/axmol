@@ -125,7 +125,7 @@ protected:
     typedef std::function<Frame*(const rapidjson::Value& json)> FrameCreateFunc;
     typedef std::pair<std::string, FrameCreateFunc> Pair;
 
-    axstd::string_map<FrameCreateFunc> _funcs;
+    tlx::string_map<FrameCreateFunc> _funcs;
     ax::StringMap<ActionTimeline*> _animationActions;
 };
 

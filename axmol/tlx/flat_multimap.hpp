@@ -20,31 +20,42 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-#include "axmol/tlx/sorted_vector.hpp"
+#include "axmol/tlx/flat_map_base.hpp"
+#include <vector>
 
-namespace axstd
+namespace tlx
 {
-// flat_multimap traits
-template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<Key, T>>>
+
+// flat_map traits
+template <class Key,
+          class T,
+          class Compare     = std::less<Key>,
+          class KeyAlloc    = std::allocator<Key>,
+          class MappedAlloc = std::allocator<T>>
 struct flat_multimap_traits
 {
-    using key_type       = Key;
-    using value_type     = std::pair<Key, T>;
-    using key_compare    = Compare;
-    using value_compare  = Compare;
-    using allocator_type = Alloc;
-    using key_extractor  = detail::select1st<value_type>;
+    using key_type         = Key;
+    using mapped_type      = T;
+    using key_compare      = Compare;
+    using allocator_type   = KeyAlloc;
+    using key_container    = std::vector<Key, KeyAlloc>;
+    using mapped_container = std::vector<T, MappedAlloc>;
 
     static constexpr bool allow_duplicates = true;
 };
 
-/// flat_multimap
-template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<Key, T>>>
-class flat_multimap : public detail::sorted_vector<flat_multimap_traits<Key, T, Compare, Alloc>>
+template <class Key,
+          class T,
+          class Compare     = std::less<Key>,
+          class KeyAlloc    = std::allocator<Key>,
+          class MappedAlloc = std::allocator<T>>
+class flat_multimap : public detail::flat_map_base<flat_multimap_traits<Key, T, Compare, KeyAlloc, MappedAlloc>>
 {
-    using impl_type = detail::sorted_vector<flat_multimap_traits<Key, T, Compare, Alloc>>;
+    using traits    = flat_multimap_traits<Key, T, Compare, KeyAlloc, MappedAlloc>;
+    using impl_type = detail::flat_map_base<traits>;
 
 public:
     using impl_type::impl_type;
 };
-}  // namespace axstd
+
+}  // namespace tlx

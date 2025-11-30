@@ -195,7 +195,7 @@ private:
 
     bool _autoLoadSpriteFile;
 
-    axstd::string_map<RelativeData> _relativeDatas;
+    tlx::string_map<RelativeData> _relativeDatas;
 };
 
 }  // namespace cocostudio

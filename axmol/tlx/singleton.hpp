@@ -22,14 +22,4 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-
-#include "yasio/byte_buffer.hpp"
-
-namespace axstd
-{
-template <typename _Elem, typename _Alloc = yasio::buffer_allocator<_Elem>>
-using pod_vector = yasio::pod_vector<_Elem, _Alloc>;
-using yasio::erase;
-using yasio::erase_if;
-using yasio::insert_sorted;
-}  // namespace axstd
+#include "yasio/tlx/singleton.hpp"

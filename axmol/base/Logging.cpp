@@ -25,7 +25,7 @@
 
 #include "axmol/base/Logging.h"
 
-#include "yasio/utils.hpp"
+#include "yasio/tlx/chrono.hpp"
 #include "fmt/color.h"
 
 #if defined(_WIN32)
@@ -141,7 +141,7 @@ AX_API LogItem&& preprocessLog(LogItem&& item)
         if (bitmask::any(s_logFmtFlags, LogFmtFlag::TimeStamp))
         {
             struct tm ts = {0};
-            auto tv_msec = yasio::clock<yasio::system_clock_t>();
+            auto tv_msec = tlx::clock<tlx::system_clock_t>();
             auto tv_sec  = static_cast<time_t>(tv_msec / std::milli::den);
             localtime_r(&tv_sec, &ts);
             prefix_size += fmt::format_to_n(wptr + prefix_size, buffer_size - prefix_size,

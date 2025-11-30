@@ -2356,7 +2356,7 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
             int bytePerPixel    = 4;
             unsigned int stride = width * bytePerPixel;
 
-            auto decodeImageData = axstd::make_unique_for_overwrite<uint8_t[]>(stride * height);
+            auto decodeImageData = tlx::make_unique_for_overwrite<uint8_t[]>(stride * height);
             if (FOURCC_DXT1 == header->ddsd.DUMMYUNIONNAMEN4.ddpfPixelFormat.fourCC)
             {
                 s3tc_decode(pixelData + encodeOffset, &decodeImageData[0], width, height, S3TCDecodeFlag::DXT1);

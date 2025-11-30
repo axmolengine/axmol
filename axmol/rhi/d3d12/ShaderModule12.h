@@ -96,13 +96,13 @@ public:
      * Get active attribute informations.
      * @return Active attribute informations. key is attribute name and Value is corresponding attribute info.
      */
-    inline const axstd::string_map<VertexInputDesc>& getActiveVertexInputs() const { return _activeVertexInputs; }
+    inline const tlx::string_map<VertexInputDesc>& getActiveVertexInputs() const { return _activeVertexInputs; }
 
     /**
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    inline const axstd::string_map<UniformInfo>& getActiveUniformInfos() const { return _activeUniformInfos; }
+    inline const tlx::string_map<UniformInfo>& getActiveUniformInfos() const { return _activeUniformInfos; }
 
     inline const std::vector<UniformBlockInfo>& getActiveUniformBlockInfos() const { return _activeUniformBlockInfos; }
     inline const std::vector<UniformInfo>& getActiveSamplerInfos() const { return _activeSamplerInfos; }
@@ -131,8 +131,8 @@ private:
 
     D3D12BlobHandle _nativeHandle;
 
-    axstd::string_map<VertexInputDesc> _activeVertexInputs;
-    axstd::string_map<UniformInfo> _activeUniformInfos;
+    tlx::string_map<VertexInputDesc> _activeVertexInputs;
+    tlx::string_map<UniformInfo> _activeUniformInfos;
 
     std::vector<UniformBlockInfo> _activeUniformBlockInfos;
     std::vector<UniformInfo> _activeSamplerInfos;

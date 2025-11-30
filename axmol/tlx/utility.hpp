@@ -29,7 +29,7 @@
 
 #include "axmol/tlx/feature_test.hpp"
 
-namespace axstd
+namespace tlx
 {
 
 template <typename, typename = void>
@@ -177,4 +177,4 @@ inline void splitpath_cb(_Elem* s, _Pred&& pred, _Fn&& func)  // will convert '\
     }
 }
 
-}  // namespace axstd
+}  // namespace tlx

@@ -72,7 +72,7 @@ public:
 private:
     void createNativeBuffer(const void* initial);
 
-    axstd::byte_buffer _defaultData;
+    tlx::byte_buffer _defaultData;
     bool _needDefaultStoredData = false;
 
     DriverImpl* _driver{nullptr};

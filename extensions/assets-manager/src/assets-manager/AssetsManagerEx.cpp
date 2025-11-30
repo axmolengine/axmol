@@ -784,7 +784,7 @@ void AssetsManagerEx::startUpdate()
         _tempManifest = _remoteManifest;
 
         // Check difference between local manifest and remote manifest
-        axstd::string_map<Manifest::AssetDiff> diff_map = _localManifest->genDiff(_remoteManifest);
+        tlx::string_map<Manifest::AssetDiff> diff_map = _localManifest->genDiff(_remoteManifest);
         if (diff_map.empty())
         {
             updateSucceed();

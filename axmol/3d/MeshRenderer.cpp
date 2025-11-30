@@ -65,7 +65,7 @@ MeshRenderer* MeshRenderer::create()
 
 MeshRenderer* MeshRenderer::create(std::string_view modelPath)
 {
-    return create(modelPath, axstd::empty_sv);
+    return create(modelPath, tlx::empty_sv);
 }
 
 MeshRenderer* MeshRenderer::create(std::string_view modelPath, std::string_view texturePath)

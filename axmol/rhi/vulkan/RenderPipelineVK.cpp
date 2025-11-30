@@ -137,7 +137,7 @@ static inline uintptr_t makePipelineKey(const rhi::BlendDesc& blendDesc,
     HashMe hashMe{
         .blend = blendDesc, .dsHash = dsState->getHash(), .prog = program, .pass = renderPass, .vlHash = vlHash};
 
-    return axstd::hash_bytes(&hashMe, sizeof(hashMe), 0);
+    return tlx::hash_bytes(&hashMe, sizeof(hashMe), 0);
 }
 
 // Build the VkPipelineColorBlendAttachmentState from BlendDesc
@@ -281,8 +281,8 @@ void RenderPipelineImpl::updateDescriptorSetLayouts(ProgramImpl* program)
         return;
     }
 
-    axstd::pod_vector<VkDescriptorSetLayoutBinding> ubBindings;
-    axstd::pod_vector<VkDescriptorSetLayoutBinding> samplerBindings;
+    tlx::pod_vector<VkDescriptorSetLayoutBinding> ubBindings;
+    tlx::pod_vector<VkDescriptorSetLayoutBinding> samplerBindings;
 
     DescriptorSetLayoutState dslState{};
 
@@ -393,7 +393,7 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, VkRend
     }
 
     // Shader stages
-    axstd::pod_vector<VkPipelineShaderStageCreateInfo> stages;
+    tlx::pod_vector<VkPipelineShaderStageCreateInfo> stages;
     if (auto vs = program->getVSModule())
     {
         VkPipelineShaderStageCreateInfo& s = stages.emplace_back();
@@ -499,7 +499,7 @@ void RenderPipelineImpl::recycleDescriptorState(DescriptorState& state)
     {
         AXLOGD("DescriptorSetCache miss: no pool found for pipelineLayout={}, creating new pool",
                fmt::ptr(state.ownerLayout));
-        it = _descriptorCache.emplace(state.ownerLayout, DescriptorPool{}).first;
+        it = _descriptorCache.emplace(state.ownerLayout, DescriptorPool()).first;
     }
 
     // Push the allocation back into the free list for the given frame index

@@ -25,7 +25,7 @@
 #pragma once
 #include <type_traits>
 
-namespace axstd
+namespace tlx
 {
 // enable_if_convertible_t
 template <typename From, typename To, typename R = bool>
@@ -75,4 +75,4 @@ struct is_resizable_container<T,
 template <typename _T>
 inline constexpr bool is_resizable_container_v = is_resizable_container<_T>::value;
 #pragma endregion
-}  // namespace axstd
+}  // namespace tlx

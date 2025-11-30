@@ -52,7 +52,7 @@ static void b2DrawSolidPolygon(b2Transform t,
                                b2HexColor color,
                                PhysicsDebugNode* dn)
 {
-    axstd::pod_vector<Vec2> vec(vertexCount);
+    tlx::pod_vector<Vec2> vec(vertexCount);
     for (size_t i = 0; i < vertexCount; i++)
     {
         auto pt = b2TransformPoint(t, verts[i]);

@@ -33,22 +33,22 @@ THE SOFTWARE.
 
 #if __has_include(<coroutine>)
 #    include <coroutine>
-namespace axstd
+namespace tlx
 {
 using suspend_always = std::suspend_always;
 template <typename _Ty>
 using coroutine_handle = std::coroutine_handle<_Ty>;
-}  // namespace axstd
+}  // namespace tlx
 #elif __has_include(<experimental/coroutine>)
 // fallback to experimental, currently only for android, in the future may don't required,
 // for example: we upgrade ndk in the future releases of axmol
 #    include <experimental/coroutine>
-namespace axstd
+namespace tlx
 {
 using suspend_always = std::experimental::suspend_always;
 template <typename _Ty>
 using coroutine_handle = std::experimental::coroutine_handle<_Ty>;
-}  // namespace axstd
+}  // namespace tlx
 #else
 #    error This compiler missing c++20 coroutine
 #endif
@@ -66,7 +66,7 @@ class AX_DLL Coroutine
 public:
     class promise_type;
 
-    using handle = axstd::coroutine_handle<promise_type>;
+    using handle = tlx::coroutine_handle<promise_type>;
     class promise_type
     {
     public:
@@ -74,18 +74,18 @@ public:
 
         Action* currentAction() const noexcept { return _currentAction; }
 
-        auto final_suspend() const noexcept { return axstd::suspend_always{}; }
+        auto final_suspend() const noexcept { return tlx::suspend_always{}; }
 
         auto get_return_object() noexcept { return Coroutine(handle::from_promise(*this)); }
 
-        auto initial_suspend() const noexcept { return axstd::suspend_always{}; }
+        auto initial_suspend() const noexcept { return tlx::suspend_always{}; }
 
         auto yield_value(Action* action)
         {
             AX_SAFE_RELEASE(_currentAction);
             _currentAction = action;
             AX_SAFE_RETAIN(_currentAction);
-            return axstd::suspend_always{};
+            return tlx::suspend_always{};
         }
 
         void return_void() {}

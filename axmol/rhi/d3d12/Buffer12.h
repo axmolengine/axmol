@@ -73,7 +73,7 @@ private:
     static std::size_t alignTo(std::size_t value, std::size_t alignment);
 
 private:
-    axstd::byte_buffer _defaultData;
+    tlx::byte_buffer _defaultData;
     bool _needDefaultStoredData = false;
 
     DriverImpl* _driver{nullptr};

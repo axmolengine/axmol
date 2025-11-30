@@ -30,7 +30,7 @@
 #include <sstream>
 
 std::unordered_map<uintptr_t, const char*> g_luaType;
-std::unordered_map<cxx17::string_view, const char*> g_typeCast;
+std::unordered_map<std::string_view, const char*> g_typeCast;
 
 #if _AX_DEBUG >= 1
 void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const char* funcName)
@@ -229,7 +229,7 @@ bool luaval_to_std_string(lua_State* L, int lo, std::string* outValue, const cha
     return ok;
 }
 
-bool luaval_to_std_string_view(lua_State* L, int lo, cxx17::string_view* outValue, const char* funcName)
+bool luaval_to_std_string_view(lua_State* L, int lo, std::string_view* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
         return false;
@@ -249,7 +249,7 @@ bool luaval_to_std_string_view(lua_State* L, int lo, cxx17::string_view* outValu
     {
         size_t size;
         auto rawString = lua_tolstring(L, lo, &size);
-        *outValue      = cxx17::string_view(rawString, size);
+        *outValue      = std::string_view(rawString, size);
     }
 
     return ok;
@@ -2837,7 +2837,7 @@ void std_map_string_string_to_luaval(lua_State* L, const std::map<std::string, s
     }
 }
 
-bool luaval_to_std_map_string_string(lua_State* L, int lo, axstd::string_map<std::string>* ret, const char* funcName)
+bool luaval_to_std_map_string_string(lua_State* L, int lo, tlx::string_map<std::string>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -3030,7 +3030,7 @@ void uniformLocation_to_luaval(lua_State* L, const ax::rhi::UniformLocation& loc
     lua_rawset(L, -3);
 }
 
-void program_activeattrs_to_luaval(lua_State* L, const axstd::string_map<ax::rhi::VertexInputDesc>& attrs)
+void program_activeattrs_to_luaval(lua_State* L, const tlx::string_map<ax::rhi::VertexInputDesc>& attrs)
 {
     if (L == nullptr)
         return;

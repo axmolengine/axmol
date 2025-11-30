@@ -40,7 +40,7 @@ SOFTWARE.
 #include <memory>
 #include "yasio/impl/socket.hpp"
 #include "yasio/logging.hpp"
-#include "yasio/string_view.hpp"
+#include "yasio/tlx/string_view.hpp"
 
 namespace yasio
 {
@@ -1066,6 +1066,8 @@ public:
   YASIO__DECL static const char* strerror_r(int error, char* buf, size_t buflen);
   YASIO__DECL static const char* gai_strerror(int error);
 
+  YASIO__DECL static void update_connect_context(socket_native_type s, std::error_code& ec);
+
   /// <summary>
   /// Resolve both ipv4 and ipv6 address as-is
   /// </summary>
@@ -1174,7 +1176,7 @@ template <>
 struct hash<yasio::ip::endpoint> {
   std::size_t operator()(const yasio::ip::endpoint& ep) const YASIO__NOEXCEPT
   {
-    return std::hash<cxx17::string_view>()(cxx17::string_view{reinterpret_cast<const char*>(&ep), static_cast<size_t>(ep.len())});
+    return std::hash<std::string_view>()(std::string_view{reinterpret_cast<const char*>(&ep), static_cast<size_t>(ep.len())});
   }
 };
 } // namespace std

@@ -435,7 +435,7 @@ protected:
 };
 
 template <typename _Valty>
-using StringMap = Map<std::string, _Valty, axstd::string_hash, axstd::equal_to>;
+using StringMap = Map<std::string, _Valty, tlx::string_hash, tlx::equal_to>;
 
 }  // namespace ax
 // end group

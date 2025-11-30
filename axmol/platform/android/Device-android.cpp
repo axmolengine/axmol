@@ -101,8 +101,7 @@ public:
             // If the path name returned includes the 'assets' dir then that needs to be removed, because the
             // android.content.Context requires this portion of the path to be omitted for assets inside the app
             // package.
-            using namespace cxx17;
-            if (cxx20::starts_with(cxx17::string_view{fullPathOrFontName}, "assets/"_sv))
+            if (tlx::starts_with(std::string_view{fullPathOrFontName}, "assets/"sv))
             {
                 fullPathOrFontName =
                     fullPathOrFontName.substr(sizeof("assets/") - 1);  // Chop out the 'assets/' portion of the path.

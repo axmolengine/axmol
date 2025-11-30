@@ -92,7 +92,7 @@ Bone::~Bone(void)
 
 bool Bone::init()
 {
-    return Bone::init(axstd::empty_sv);
+    return Bone::init(tlx::empty_sv);
 }
 
 bool Bone::init(std::string_view name)

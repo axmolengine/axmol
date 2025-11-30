@@ -229,7 +229,7 @@ int64_t FileUtilsAndroid::getFileSize(std::string_view filepath) const
     {
         std::string_view path;
         std::string relativePath;
-        if (cxx20::starts_with(filepath, _defaultResRootPath))
+        if (tlx::starts_with(filepath, _defaultResRootPath))
         {
             path = relativePath = filepath.substr(_defaultResRootPath.size());
         }

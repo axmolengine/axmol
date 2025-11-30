@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
-    <Type Name="axstd::pod_vector&lt;*&gt;">
+    <Type Name="tlx::pod_vector&lt;*&gt;">
         <DisplayString>{{ size={_Mylast - _Myfirst} capacity={_Myend - _Myfirst} }}</DisplayString>
         <Expand>
             <Item Name="[size]" ExcludeView="simple">_Mylast - _Myfirst</Item>
@@ -12,7 +12,7 @@
         </Expand>
     </Type>
     <!-- flat_set visualizer -->
-    <Type Name="axstd::flat_set&lt;*&gt;">
+    <Type Name="tlx::detail::flat_set_base&lt;*&gt;">
         <DisplayString>{{size = {_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst}}}</DisplayString>
         <Expand>
             <Item Name="[size]">_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst</Item>
@@ -25,7 +25,7 @@
     </Type>
 
     <!-- flat_map visualizer -->
-    <Type Name="axstd::flat_map&lt;*&gt;">
+    <Type Name="tlx::flat_map*&lt;*&gt;">
         <DisplayString>{{size = {_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst}}}</DisplayString>
         <Expand>
             <Item Name="[size]">_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst</Item>
@@ -38,7 +38,7 @@
     </Type>
 
     <!-- flat_multiset visualizer -->
-    <Type Name="axstd::flat_multiset&lt;*&gt;">
+    <Type Name="tlx::flat_multiset&lt;*&gt;">
         <DisplayString>{{size = {_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst}}}</DisplayString>
         <Expand>
             <Item Name="[size]">_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst</Item>
@@ -51,7 +51,7 @@
     </Type>
 
     <!-- flat_multimap visualizer -->
-    <Type Name="axstd::flat_multimap&lt;*&gt;">
+    <Type Name="tlx::flat_multimap&lt;*&gt;">
         <DisplayString>{{size = {_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst}}}</DisplayString>
         <Expand>
             <Item Name="[size]">_Mypair._Myval2._Mypair._Myval2._Mylast - _Mypair._Myval2._Mypair._Myval2._Myfirst</Item>

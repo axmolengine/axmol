@@ -29,7 +29,6 @@ SOFTWARE.
 #ifdef _WIN32
 
 #  include "yasio/config.hpp"
-#  include "yasio/utils.hpp"
 
 #  if defined(YASIO__USE_TIMEAPI)
 #    include <timeapi.h>
@@ -56,7 +55,7 @@ struct wtimer_hres {
     TIMECAPS tc;
     if (TIMERR_NOERROR == timeGetDevCaps(&tc, sizeof(TIMECAPS)))
     {
-      timer_res_ = yasio::clamp(static_cast<UINT>(timer_res / _1ms_den), tc.wPeriodMin, tc.wPeriodMax);
+      timer_res_ = std::clamp(static_cast<UINT>(timer_res / _1ms_den), tc.wPeriodMin, tc.wPeriodMax);
       timeBeginPeriod(timer_res_);
     }
 #  else

@@ -244,7 +244,7 @@ private:
     std::shared_ptr<network::Downloader> _downloader;
 
     //! The reference to the local assets
-    const axstd::string_map<Manifest::Asset>* _assets = nullptr;
+    const tlx::string_map<Manifest::Asset>* _assets = nullptr;
 
     //! The path to store successfully downloaded version.
     std::string _storagePath;
@@ -314,7 +314,7 @@ private:
     double _totalSize;
 
     //! Downloaded size for each file
-    axstd::string_map<double> _downloadedSize;
+    tlx::string_map<double> _downloadedSize;
 
     //! Total number of assets to download
     int _totalToDownload = 0;

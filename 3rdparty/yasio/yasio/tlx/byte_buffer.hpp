@@ -27,16 +27,16 @@ SOFTWARE.
 */
 #ifndef YASIO__BYTE_BUFFER_HPP
 #define YASIO__BYTE_BUFFER_HPP
-#include "yasio/pod_vector.hpp"
+#include "yasio/tlx/array_buffer.hpp"
 
-namespace yasio
+namespace tlx
 {
-
-template <typename _Ty, typename _Alloc = buffer_allocator<_Ty>, enable_if_t<is_byte_type<_Ty>::value, int> = 0>
-using basic_byte_buffer = array_buffer<_Ty, _Alloc>;
+// basic_byte_buffer restricted to byte types
+template <typename _Ty, typename _Alloc = tlx::crt_buffer_allocator<_Ty>>
+using basic_byte_buffer = typename std::enable_if<tlx::is_byte_type<_Ty>::value, tlx::array_buffer<_Ty, _Alloc>>::type;
 
 using sbyte_buffer = basic_byte_buffer<char>;
 using byte_buffer  = basic_byte_buffer<unsigned char>;
 
-} // namespace yasio
+} // namespace tlx
 #endif

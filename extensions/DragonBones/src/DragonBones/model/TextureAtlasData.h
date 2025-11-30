@@ -84,7 +84,7 @@ public:
     /**
      * @private
      */
-    axstd::string_map<TextureData*> textures;
+    tlx::string_map<TextureData*> textures;
     /**
      * @private
      */
@@ -106,7 +106,7 @@ protected:
     virtual void _onClear() override;
 
 public:  // For WebAssembly.
-    const axstd::string_map<TextureData*>& getTextures() const { return textures; }
+    const tlx::string_map<TextureData*>& getTextures() const { return textures; }
 };
 /**
  * @internal

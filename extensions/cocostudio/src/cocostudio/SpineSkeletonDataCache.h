@@ -38,7 +38,7 @@ public:
     void removeAllUnusedData(void);
 
 public:
-    axstd::string_map<SkeletonData*> _cacheTable;
+    tlx::string_map<SkeletonData*> _cacheTable;
 };
 
 #    else
@@ -72,7 +72,7 @@ public:
     void removeAllUnusedData(void);
 
 public:
-    axstd::string_map<SkeletonData*> _cacheTable;
+    tlx::string_map<SkeletonData*> _cacheTable;
 };
 
 #    endif

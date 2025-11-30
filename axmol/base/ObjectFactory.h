@@ -51,7 +51,7 @@ public:
         Instance _fun;
         InstanceFunc _func;
     };
-    typedef axstd::string_map<TInfo> FactoryMap;
+    typedef tlx::string_map<TInfo> FactoryMap;
 
     static ObjectFactory* getInstance();
     static void destroyInstance();

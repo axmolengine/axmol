@@ -113,23 +113,23 @@ public:
     /**
      * @private
      */
-    axstd::string_map<BoneData*> bones;
+    tlx::string_map<BoneData*> bones;
     /**
      * @private
      */
-    axstd::string_map<SlotData*> slots;
+    tlx::string_map<SlotData*> slots;
     /**
      * @private
      */
-    axstd::string_map<ConstraintData*> constraints;
+    tlx::string_map<ConstraintData*> constraints;
     /**
      * @private
      */
-    axstd::string_map<SkinData*> skins;
+    tlx::string_map<SkinData*> skins;
     /**
      * @private
      */
-    axstd::string_map<AnimationData*> animations;
+    tlx::string_map<AnimationData*> animations;
     /**
      * - The default skin data.
      * @version DragonBones 4.5

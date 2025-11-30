@@ -670,9 +670,8 @@ int LuaStack::luaLoadChunksFromZIP(lua_State* L)
         return 0;
     }
 
-    using namespace cxx17;
-    const auto BYTECODE_FILE_EXT     = ".luac"_sv;
-    const auto NOT_BYTECODE_FILE_EXT = ".lua"_sv;
+    const auto BYTECODE_FILE_EXT     = ".luac"sv;
+    const auto NOT_BYTECODE_FILE_EXT = ".lua"sv;
 
     const char* zipFilename = lua_tostring(L, -1);
     lua_settop(L, 0);
@@ -703,8 +702,8 @@ int LuaStack::luaLoadChunksFromZIP(lua_State* L)
                     if (pos != std::string::npos)
                     {
                         std::string suffix = filename.substr(pos, filename.length());
-                        if (cxx17::string_view{suffix} == NOT_BYTECODE_FILE_EXT ||
-                            cxx17::string_view{suffix} == BYTECODE_FILE_EXT)
+                        if (std::string_view{suffix} == NOT_BYTECODE_FILE_EXT ||
+                            std::string_view{suffix} == BYTECODE_FILE_EXT)
                         {
                             filename.erase(pos);
                         }

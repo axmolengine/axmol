@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "axmol/base/Protocols.h"
 #include "axmol/2d/Node.h"
 #include "axmol/renderer/CustomCommand.h"
-#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/vector.hpp"
 
 namespace ax
 {
@@ -189,7 +189,7 @@ protected:
     Vec2* _pointVertexes = nullptr;
     float* _pointState   = nullptr;
 
-    axstd::pod_vector<V2F_T2F_C4B> _vertices;
+    tlx::pod_vector<V2F_T2F_C4B> _vertices;
 
     CustomCommand _customCommand;
 

@@ -20,29 +20,39 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-#include "axmol/tlx/sorted_vector.hpp"
+#include "axmol/tlx/flat_map_base.hpp"
+#include <vector>
 
-namespace axstd
+namespace tlx
 {
+
 // flat_map traits
-template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<Key, T>>>
+template <class Key,
+          class T,
+          class Compare     = std::less<Key>,
+          class KeyAlloc    = std::allocator<Key>,
+          class MappedAlloc = std::allocator<T>>
 struct flat_map_traits
 {
-    using key_type       = Key;
-    using value_type     = std::pair<Key, T>;
-    using key_compare    = Compare;
-    using value_compare  = Compare;
-    using allocator_type = Alloc;
-    using key_extractor  = detail::select1st<value_type>;
+    using key_type         = Key;
+    using mapped_type      = T;
+    using key_compare      = Compare;
+    using allocator_type   = KeyAlloc;
+    using key_container    = std::vector<Key, KeyAlloc>;
+    using mapped_container = std::vector<T, MappedAlloc>;
 
     static constexpr bool allow_duplicates = false;
 };
 
-/// flat_map
-template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<Key, T>>>
-class flat_map : public detail::sorted_vector<flat_map_traits<Key, T, Compare, Alloc>>
+template <class Key,
+          class T,
+          class Compare     = std::less<Key>,
+          class KeyAlloc    = std::allocator<Key>,
+          class MappedAlloc = std::allocator<T>>
+class flat_map : public detail::flat_map_base<flat_map_traits<Key, T, Compare, KeyAlloc, MappedAlloc>>
 {
-    using impl_type = detail::sorted_vector<flat_map_traits<Key, T, Compare, Alloc>>;
+    using traits    = flat_map_traits<Key, T, Compare, KeyAlloc, MappedAlloc>;
+    using impl_type = detail::flat_map_base<traits>;
 
 public:
     using impl_type::impl_type;
@@ -50,12 +60,18 @@ public:
     // operator[] for map semantics
     T& operator[](const Key& key)
     {
-        auto it = this->lower_bound(key);
-        if (it == this->end() || Compare{}(key, it->first))
+        auto& pred = this->_Mykeys._Get_first();
+        auto it    = this->lower_bound(key);
+        if (it == this->end() || pred(key, (*it).first))
         {
-            it = this->_Mypair.second().insert(it, {key, T{}});
+            auto pos = it._k_it;
+            auto idx = pos - this->_Mykeys._Myval2.begin();
+            this->_Mykeys._Myval2.insert(pos, key);
+            this->_Myvals.emplace(this->_Myvals.begin() + idx);
+            it = typename impl_type::iterator(this->_Mykeys._Myval2.begin() + idx, this->_Myvals.begin() + idx);
         }
-        return it->second;
+        return (*it).second;
     }
 };
-}  // namespace axstd
+
+}  // namespace tlx

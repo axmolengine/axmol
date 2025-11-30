@@ -37,7 +37,7 @@ SOFTWARE.
 
 #pragma once
 
-#include "yasio/string_view.hpp"
+#include "yasio/tlx/string_view.hpp"
 #include <string.h>
 
 #if defined(_MSC_VER)

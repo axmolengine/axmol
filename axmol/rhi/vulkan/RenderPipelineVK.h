@@ -73,7 +73,7 @@ public:
         int frameIndex;                // Frame index (for multi-frame in flight)
     };
 
-    using DescriptorPool = std::array<axstd::pod_vector<DescriptorState>, MAX_FRAMES_IN_FLIGHT>;
+    using DescriptorPool = std::array<tlx::pod_vector<DescriptorState>, MAX_FRAMES_IN_FLIGHT>;
 
     explicit RenderPipelineImpl(VkDevice device);
     ~RenderPipelineImpl();
@@ -137,12 +137,12 @@ private:
 
     VkPipeline _activePipeline{VK_NULL_HANDLE};
 
-    axstd::pod_vector<VkDescriptorPool> _descriptorPools;
+    tlx::pod_vector<VkDescriptorPool> _descriptorPools;
 
-    axstd::hash_map<uintptr_t, DescriptorSetLayoutState> _descriptorLayoutCache;
-    axstd::hash_map<uintptr_t, VkPipelineLayout> _pipelineLayoutCache;
-    axstd::hash_map<uintptr_t, VkPipeline> _pipelineCache;  // PSO cache
-    axstd::hash_map<VkPipelineLayout, DescriptorPool> _descriptorCache;
+    tlx::hash_map<uintptr_t, DescriptorSetLayoutState> _descriptorLayoutCache;
+    tlx::hash_map<uintptr_t, VkPipelineLayout> _pipelineLayoutCache;
+    tlx::hash_map<uintptr_t, VkPipeline> _pipelineCache;  // PSO cache
+    tlx::hash_map<VkPipelineLayout, DescriptorPool> _descriptorCache;
 
     // TODO:
     std::multimap<ProgramImpl*, uintptr_t> _programToPipelineMap;

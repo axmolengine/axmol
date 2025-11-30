@@ -25,37 +25,49 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+#ifndef YASIO__UTILS_HPP
+#define YASIO__UTILS_HPP
+#include <assert.h>
+#include <sys/stat.h>
+#include <chrono>
+#include <algorithm>
+#include "yasio/compiler/feature_test.hpp"
 
-#pragma once
-
-#include <cstddef>
-#include <type_traits>
-#include "yasio/sz.hpp"
-
-namespace yasio
+namespace tlx
 {
-template <typename _Ty>
-struct aligned_storage_size {
-  static const size_t value = YASIO_SZ_ALIGN(sizeof(_Ty), sizeof(std::max_align_t));
-};
-template <typename _Ty>
-struct is_aligned_storage {
-  static const bool value = aligned_storage_size<_Ty>::value == sizeof(_Ty);
-};
-template <class _Iter>
-struct is_iterator : public std::integral_constant<bool, !std::is_integral<_Iter>::value> {};
+// typedefs
+typedef long long highp_time_t;
+#if YASIO__HAS_CXX11
+typedef std::chrono::steady_clock steady_clock_t;
+#else
+typedef std::chrono::high_resolution_clock steady_clock_t;
+#endif
+typedef std::chrono::system_clock system_clock_t;
 
-template <bool _Test, class _Ty = void>
-using enable_if_t = typename ::std::enable_if<_Test, _Ty>::type;
+// The high precision nano seconds timestamp since epoch
+template <typename _Ty = steady_clock_t>
+inline highp_time_t xhighp_clock()
+{
+  auto duration = _Ty::now().time_since_epoch();
+  return std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count();
+}
+// The high precision micro seconds timestamp since epoch
+template <typename _Ty = steady_clock_t>
+inline highp_time_t highp_clock()
+{
+  return xhighp_clock<_Ty>() / std::milli::den;
+}
+// The normal precision milli seconds timestamp since epoch
+template <typename _Ty = steady_clock_t>
+inline highp_time_t clock()
+{
+  return xhighp_clock<_Ty>() / std::micro::den;
+}
+// The time now in seconds since epoch, better performance than chrono on win32
+// see: win10 sdk ucrt/time/time.cpp:common_time
+// https://docs.microsoft.com/en-us/windows/desktop/sysinfo/acquiring-high-resolution-time-stamps
+inline highp_time_t time_now() { return ::time(nullptr); }
 
-template <typename _Ty>
-struct is_byte_type {
-  static const bool value = std::is_same<_Ty, char>::value || std::is_same<_Ty, unsigned char>::value;
-};
+} // namespace tlx
 
-template <typename _Ty>
-struct is_char_type {
-  static const bool value = std::is_integral<_Ty>::value && sizeof(_Ty) <= sizeof(char32_t);
-};
-
-} // namespace yasio
+#endif

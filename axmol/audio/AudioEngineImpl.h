@@ -97,7 +97,7 @@ private:
     std::queue<ALuint> _unusedSourcesPool;
 
     // filePath,bufferInfo
-    axstd::string_map<std::unique_ptr<AudioCache>> _audioCaches;
+    tlx::string_map<std::unique_ptr<AudioCache>> _audioCaches;
 
     // audioID,AudioInfo
     std::unordered_map<AUDIO_ID, AudioPlayer*> _audioPlayers;

@@ -27,17 +27,17 @@
 // use fast_float instead: https://github.com/fastfloat/fast_float
 #if !defined(_WIN32) && defined(__clang__)
 #    include "fast_float/fast_float.h"
-namespace axstd
+namespace tlx
 {
 using fast_float::from_chars;
 using from_chars_result = fast_float::from_chars_result;
-}  // namespace axstd
+}  // namespace tlx
 
 #else
 #    include <charconv>
-namespace axstd
+namespace tlx
 {
 using std::from_chars;
 using std::from_chars_result;
-}  // namespace axstd
+}  // namespace tlx
 #endif

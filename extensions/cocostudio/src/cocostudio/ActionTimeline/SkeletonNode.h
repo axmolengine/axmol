@@ -54,7 +54,7 @@ public:
      *@brief: change displays
      *@param: boneSkinNameMap, map <name of bone, name of skin to display which added to bone>
      */
-    void changeSkins(const axstd::string_map<std::string>& boneSkinNameMap);
+    void changeSkins(const tlx::string_map<std::string>& boneSkinNameMap);
 
     /**
      *@brief: change displays
@@ -67,7 +67,7 @@ public:
      *@param: groupName, key
      *@param: boneSkinNameMap, map <name of bone, name of skin to display which added to bone>
      */
-    void addSkinGroup(std::string_view groupName, axstd::string_map<std::string> boneSkinNameMap);
+    void addSkinGroup(std::string_view groupName, tlx::string_map<std::string> boneSkinNameMap);
 
     ax::Rect getBoundingBox() const override;
 
@@ -95,7 +95,7 @@ private:
     ax::Vec2 _squareVertices[8];
     VertexData _vertexData[8];
 
-    axstd::string_map<axstd::string_map<std::string>> _skinGroupMap;  // map< suit name, map< bone name, skin name> >
+    tlx::string_map<tlx::string_map<std::string>> _skinGroupMap;  // map< suit name, map< bone name, skin name> >
     AX_DISALLOW_COPY_AND_ASSIGN(SkeletonNode);
 
     void checkSubBonesDirty();

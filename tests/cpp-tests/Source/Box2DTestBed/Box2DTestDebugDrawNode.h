@@ -81,9 +81,9 @@ public:
     CustomCommand _customCommandCircle;
     CustomCommand _customCommandSolidCircle;
     CustomCommand _customCommandCapsule;
-    axstd::pod_vector<CircleData> _circles;
-    axstd::pod_vector<SolidCircleData> _solidCircles;
-    axstd::pod_vector<CapsuleData> _capsules;
+    tlx::pod_vector<CircleData> _circles;
+    tlx::pod_vector<SolidCircleData> _solidCircles;
+    tlx::pod_vector<CapsuleData> _capsules;
     bool _circlesDirty{true};
     bool _solidCirclesDirty{true};
     bool _capsulesDirty{true};

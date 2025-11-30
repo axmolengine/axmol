@@ -20,31 +20,22 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-#include "axmol/tlx/sorted_vector.hpp"
+#include "axmol/tlx/flat_set_base.hpp"
+#include <vector>
 
-namespace axstd
+namespace tlx
 {
-// flat_multiset traits
 template <class Key, class Compare = std::less<Key>, class Alloc = std::allocator<Key>>
 struct flat_multiset_traits
 {
-    using key_type       = Key;
-    using value_type     = Key;
-    using key_compare    = Compare;
-    using value_compare  = Compare;
-    using allocator_type = Alloc;
-    using key_extractor  = detail::identity<Key>;
-
+    using key_type                         = Key;
+    using value_type                       = Key;
+    using key_compare                      = Compare;
+    using allocator_type                   = Alloc;
+    using container_type                   = std::vector<Key, Alloc>;
     static constexpr bool allow_duplicates = true;
 };
 
-/// flat_multiset
 template <class Key, class Compare = std::less<Key>, class Alloc = std::allocator<Key>>
-class flat_multiset : public detail::sorted_vector<flat_multiset_traits<Key, Compare, Alloc>>
-{
-    using impl_type = detail::sorted_vector<flat_multiset_traits<Key, Compare, Alloc>>;
-
-public:
-    using impl_type::impl_type;
-};
-}  // namespace axstd
+using flat_multiset = tlx::detail::flat_set_base<flat_multiset_traits<Key, Compare, Alloc>>;
+}  // namespace tlx

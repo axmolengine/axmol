@@ -28,7 +28,7 @@ SOFTWARE.
 #ifndef YASIO__OBJECT_POOL_HPP
 #define YASIO__OBJECT_POOL_HPP
 
-#include "yasio/type_traits.hpp"
+#include "yasio/tlx/type_traits.hpp"
 #include "yasio/impl/object_pool.hpp"
 
 namespace yasio
@@ -40,7 +40,7 @@ struct null_mutex {
 template <typename _Ty, typename _Mutex = ::yasio::null_mutex>
 class object_pool : public detail::object_pool {
 public:
-  object_pool(size_t _ElemCount = 128) : detail::object_pool(::yasio::aligned_storage_size<_Ty>::value, _ElemCount) {}
+  object_pool(size_t _ElemCount = 128) : detail::object_pool(::tlx::aligned_storage_size<_Ty>::value, _ElemCount) {}
 
   template <typename... _Types>
   _Ty* create(_Types&&... args)

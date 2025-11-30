@@ -38,7 +38,7 @@ namespace ax
 {
 
 template <typename T>
-using retain_ptr = axstd::retain_ptr<T, axstd::retain_traits<Object>>;
+using retain_ptr = tlx::retain_ptr<T, tlx::retain_traits<Object>>;
 
 template <typename T>
 using RefPtr = retain_ptr<T>;

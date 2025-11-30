@@ -72,14 +72,14 @@ private:
     std::array<TextureImpl*, MAX_COLOR_ATTCHMENT + 1> _attachmentTexPtrs;
     uint64_t _attachmentViewsHash{0};
 
-    axstd::pod_vector<VkClearValue> _clearValues;
+    tlx::pod_vector<VkClearValue> _clearValues;
 
     VkRenderPass _renderPass{VK_NULL_HANDLE};    // active render pass
     VkFramebuffer _framebuffer{VK_NULL_HANDLE};  // active framebuffer
 
     // Caches keyed by (desc hash, attachment views hash)
-    axstd::hash_map<uintptr_t, VkRenderPass> _renderPassCache;
-    axstd::hash_map<uintptr_t, VkFramebuffer> _framebufferCache;
+    tlx::hash_map<uintptr_t, VkRenderPass> _renderPassCache;
+    tlx::hash_map<uintptr_t, VkFramebuffer> _framebufferCache;
 
     bool _attachmentsDirty{true};
 };

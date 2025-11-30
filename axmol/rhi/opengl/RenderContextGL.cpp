@@ -449,7 +449,7 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
     glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     auto buffer_ptr = (uint8_t*)glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, bufferSize, GL_MAP_READ_BIT);
 #else
-    axstd::byte_buffer buffer(static_cast<size_t>(bufferSize), 0);
+    tlx::byte_buffer buffer(static_cast<size_t>(bufferSize), 0);
     auto buffer_ptr = buffer.data();
     glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer_ptr);
 #endif
@@ -482,7 +482,7 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
 #if AX_HAVE_MAP_BUFFER_RANGE
             pbd._data.copy(buffer_ptr, static_cast<ssize_t>(bufferSize));
 #else
-            static_cast<axstd::byte_buffer&>(pbd._data).swap(buffer);
+            static_cast<tlx::byte_buffer&>(pbd._data).swap(buffer);
 #endif
         }
     }

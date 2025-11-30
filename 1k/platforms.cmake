@@ -97,6 +97,10 @@ endif()
 
 # compiler id
 
+if(NOT WIN32 AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  set(FULL_CLANG TRUE)
+endif()
+
 # generators that are capable of organizing into a hierarchy of folders
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 

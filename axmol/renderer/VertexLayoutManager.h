@@ -23,7 +23,7 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/vector.hpp"
 #include "axmol/tlx/hlookup.hpp"
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/rhi/VertexLayout.h"
@@ -74,8 +74,8 @@ public:
 private:
     VertexLayout* getBuiltinVertexLayout(VertexLayoutKind kind, rhi::Program* prog);
 
-    axstd::pod_vector<VertexLayout*> _builtinVertexLayouts;
-    axstd::hash_map<uint32_t, VertexLayout*> _customVertexLayouts;
+    tlx::pod_vector<VertexLayout*> _builtinVertexLayouts;
+    tlx::hash_map<uint32_t, VertexLayout*> _customVertexLayouts;
 
     std::vector<VertexLayoutDesc> _vertexLayoutDescPool;
 };

@@ -217,7 +217,7 @@ TEST_SUITE("platform/FileUtils")
 
     TEST_CASE("ResizableBufferAdapter")
     {
-        yasio::byte_buffer buffer;
+        tlx::byte_buffer buffer;
 
         fu->getContents("text/123.txt", &buffer);
         REQUIRE(buffer.size() == 3);

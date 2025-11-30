@@ -48,8 +48,6 @@
 #include <map>
 #include <mutex>
 
-#include "yasio/string_view.hpp"
-
 // minizip 1.2.0 is same with other platforms
 #define unzGoToFirstFile64(A, B, C, D) unzGoToFirstFile2(A, B, C, D, NULL, 0, NULL, 0)
 #define unzGoToNextFile64(A, B, C, D)  unzGoToNextFile2(A, B, C, D, NULL, 0, NULL, 0)
@@ -63,7 +61,7 @@ bool ZipUtils::s_bEncryptionKeyIsValid = false;
 
 // --------------------- ZipUtils ---------------------
 
-yasio::byte_buffer ZipUtils::compressGZ(const void* in, size_t inlen, int level)
+tlx::byte_buffer ZipUtils::compressGZ(const void* in, size_t inlen, int level)
 {
     int err;
     Bytef buffer[512];
@@ -77,7 +75,7 @@ yasio::byte_buffer ZipUtils::compressGZ(const void* in, size_t inlen, int level)
     d_stream.avail_in  = static_cast<uInt>(inlen);
     d_stream.next_out  = buffer;
     d_stream.avail_out = sizeof(buffer);
-    yasio::byte_buffer output;
+    tlx::byte_buffer output;
     err = deflateInit2(&d_stream, level, Z_DEFLATED, MAX_WBITS + 16 /*well: normaly, gzip is: 16*/, MAX_MEM_LEVEL - 1,
                        Z_DEFAULT_STRATEGY);
     if (err != Z_OK)  //
@@ -112,7 +110,7 @@ yasio::byte_buffer ZipUtils::compressGZ(const void* in, size_t inlen, int level)
     return output;
 }
 
-yasio::byte_buffer ZipUtils::decompressGZ(const void* in, size_t inlen, int expected_size)
+tlx::byte_buffer ZipUtils::decompressGZ(const void* in, size_t inlen, int expected_size)
 {  // inflate
     int err;
     Bytef buffer[512];
@@ -126,7 +124,7 @@ yasio::byte_buffer ZipUtils::decompressGZ(const void* in, size_t inlen, int expe
     d_stream.avail_in  = static_cast<uInt>(inlen);
     d_stream.next_out  = buffer;
     d_stream.avail_out = sizeof(buffer);
-    yasio::byte_buffer output;
+    tlx::byte_buffer output;
     err = inflateInit2(&d_stream, MAX_WBITS + 32 /*well: normaly, gzip is: 16*/);
     if (err != Z_OK)  //
         return output;
@@ -286,7 +284,7 @@ ssize_t ZipUtils::inflateMemoryWithHint(unsigned char* in, ssize_t inLength, uns
     auto outBuffer = decompressGZ(std::span{in, in + inLength}, static_cast<int>(outLengthHint));
     auto outLen    = outBuffer.size();
     if (out)
-        *out = outBuffer.release_pointer();
+        *out = outBuffer.detach_abi();
     return outLen;
 }
 
@@ -312,7 +310,7 @@ int ZipUtils::inflateGZipFile(const char* path, unsigned char** out)
     }
 
     /* 512k initial decompress buffer */
-    yasio::byte_buffer buffer;
+    tlx::byte_buffer buffer;
     buffer.reserve(512);
 
     uint8_t readBuffer[512];
@@ -330,7 +328,7 @@ int ZipUtils::inflateGZipFile(const char* path, unsigned char** out)
             break;
         }
 
-        buffer.append(readBuffer, readBuffer + 512);
+        buffer.extend(readBuffer, readBuffer + 512);
     }
 
     if (gzclose(inFile) != Z_OK)
@@ -340,7 +338,7 @@ int ZipUtils::inflateGZipFile(const char* path, unsigned char** out)
 
     auto totalSize = buffer.size();
     if (out)
-        *out = buffer.release_pointer();
+        *out = buffer.detach_abi();
     return static_cast<int>(totalSize);
 }
 
@@ -467,7 +465,7 @@ int ZipUtils::inflateCCZBuffer(const unsigned char* buffer, ssize_t bufferLen, u
         return -1;
     }
 
-    axstd::byte_buffer outBuffer(len);
+    tlx::byte_buffer outBuffer(len);
 
     unsigned long destlen = len;
     size_t source         = (size_t)buffer + sizeof(*header);
@@ -478,7 +476,7 @@ int ZipUtils::inflateCCZBuffer(const unsigned char* buffer, ssize_t bufferLen, u
         AXLOGW("CCZ: Failed to uncompress data");
         return -1;
     }
-    *out = outBuffer.release_pointer();
+    *out = outBuffer.detach_abi();
     return len;
 }
 
@@ -660,7 +658,7 @@ struct ZipFilePrivate
     std::unique_ptr<ourmemory_s> memfs;
 
     // std::unordered_map is faster if available on the platform
-    typedef axstd::string_map<struct ZipEntryInfo> FileListContainer;
+    typedef tlx::string_map<struct ZipEntryInfo> FileListContainer;
     FileListContainer fileList;
 
     zlib_filefunc64_def functionOverrides{};
@@ -786,7 +784,7 @@ std::vector<std::string> ZipFile::listFiles(std::string_view pathname) const
     for (auto&& item : _data->fileList)
     {
         std::string_view filename = item.first;
-        if (cxx20::starts_with(filename, cxx17::string_view{dirname}))
+        if (tlx::starts_with(filename, std::string_view{dirname}))
         {
             std::string_view suffix{filename.substr(dirname.length())};
             auto pos = suffix.find('/');

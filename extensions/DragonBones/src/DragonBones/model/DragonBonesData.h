@@ -107,7 +107,7 @@ public:
     /**
      * @private
      */
-    axstd::string_map<ArmatureData*> armatures;
+    tlx::string_map<ArmatureData*> armatures;
     /**
      * @internal
      */

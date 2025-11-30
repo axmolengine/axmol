@@ -23,17 +23,17 @@
  ****************************************************************************/
 #include "axmol/rhi/SamplerCache.h"
 #include "axmol/rhi/DriverBase.h"
-#include "yasio/singleton.hpp"
+#include "axmol/tlx/singleton.hpp"
 
 namespace ax::rhi
 {
 SamplerCache* SamplerCache::getInstance()
 {
-    return yasio::singleton<SamplerCache>::instance();
+    return tlx::singleton<SamplerCache>::instance();
 }
 void SamplerCache::destroyInstance()
 {
-    yasio::singleton<SamplerCache>::destroy();
+    tlx::singleton<SamplerCache>::destroy();
 }
 
 SamplerCache::SamplerCache()

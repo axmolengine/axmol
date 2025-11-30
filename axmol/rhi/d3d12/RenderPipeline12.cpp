@@ -103,7 +103,7 @@ static inline uintptr_t makePSOKey(const rhi::BlendDesc& blendDesc,
             ((uint32_t)primitiveGroup << 16) | (rs.CullMode << 8) | (rs.FrontCounterClockwise ? 1 : 0);
         const auto seed = (uint64_t)vlHash << 32 | (uint64_t)rasterComp;
 
-        return axstd::hash_bytes(&hashMe, sizeof(hashMe), seed);
+        return tlx::hash_bytes(&hashMe, sizeof(hashMe), seed);
     }
     else
     {
@@ -118,7 +118,7 @@ static inline uintptr_t makePSOKey(const rhi::BlendDesc& blendDesc,
         const auto rasterComp =
             ((uint32_t)primitiveGroup << 16) | (rs.CullMode << 8) | (rs.FrontCounterClockwise ? 1 : 0);
 
-        return axstd::hash_bytes(&hashMe, sizeof(hashMe), rasterComp);
+        return tlx::hash_bytes(&hashMe, sizeof(hashMe), rasterComp);
     }
 }
 
@@ -206,14 +206,14 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
 
     UINT rootIndex = 0;
 
-    axstd::pod_vector<D3D12_ROOT_PARAMETER> rootParams;
+    tlx::pod_vector<D3D12_ROOT_PARAMETER> rootParams;
     rootParams.reserve(4);  // VS UBO, FS UBO, FS SRV table, FS Sampler table
 
     auto vs = program->getVertexShader();
     auto fs = program->getFragmentShader();
 
     // --- FS SRVs (textures) -> descriptor table, space = SET_INDEX_SRV ---
-    axstd::pod_vector<D3D12_DESCRIPTOR_RANGE> srvRanges;
+    tlx::pod_vector<D3D12_DESCRIPTOR_RANGE> srvRanges;
 
     // --- Sampler descriptor table (global heap) ---
     D3D12_DESCRIPTOR_RANGE samplerRange{};

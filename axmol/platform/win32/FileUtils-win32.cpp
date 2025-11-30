@@ -273,7 +273,7 @@ bool FileUtilsWin32::createDirectories(std::string_view dirPath) const
     bool fail = false;
     if ((GetFileAttributesW(path.c_str())) == INVALID_FILE_ATTRIBUTES)
     {
-        axstd::splitpath_cb(&path.front(), [](wchar_t* ptr) { return *ptr != '\0'; },
+        tlx::splitpath_cb(&path.front(), [](wchar_t* ptr) { return *ptr != '\0'; },
                             [&dirPath, &fail](const wchar_t* subpath) {
             auto attribs = GetFileAttributesW(subpath);
             if (attribs == INVALID_FILE_ATTRIBUTES)

@@ -36,7 +36,7 @@ THE SOFTWARE.
 #endif
 #include "GLFW/glfw3.h"
 #if defined(__EMSCRIPTEN__)
-#    include "axmol/tlx/pod_vector.hpp"
+#    include "axmol/tlx/vector.hpp"
 struct EmscriptenMouseEvent;
 struct EmscriptenTouchEvent;
 struct EmscriptenFullscreenChangeEvent;
@@ -200,9 +200,9 @@ protected:
     std::string _glfwError;
 
 #if defined(__EMSCRIPTEN__)
-    axstd::pod_vector<intptr_t> _touchesId;
-    axstd::pod_vector<float> _touchesX;
-    axstd::pod_vector<float> _touchesY;
+    tlx::pod_vector<intptr_t> _touchesId;
+    tlx::pod_vector<float> _touchesX;
+    tlx::pod_vector<float> _touchesY;
 #endif
 
     float _mouseX{0.0f};

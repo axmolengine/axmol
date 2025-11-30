@@ -92,7 +92,7 @@ bool FileUtilsEmscripten::isFileExistInternal(std::string_view path) const
     std::string strPath(path);
     if (strPath[0] != '/')
     {  // Not absolute path, add the default root path at the beginning.
-        if (!cxx20::starts_with(strPath, _defaultResRootPath))
+        if (!tlx::starts_with(strPath, _defaultResRootPath))
         {  // Didn't find "assets/" at the beginning of the path, adding it.
             strPath.insert(0, _defaultResRootPath);
         }

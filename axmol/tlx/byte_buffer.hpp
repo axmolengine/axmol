@@ -23,10 +23,4 @@
  ****************************************************************************/
 #pragma once
 
-#include "yasio/byte_buffer.hpp"
-
-namespace axstd
-{
-using byte_buffer  = yasio::byte_buffer;
-using sbyte_buffer = yasio::sbyte_buffer;
-}  // namespace axstd
+#include "yasio/tlx/byte_buffer.hpp"
