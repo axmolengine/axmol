@@ -80,11 +80,11 @@ public:
   };
   __compressed_pair<allocator_type, _Str_storage> _Mypair;
 
-  basic_string() : _Mypair(__one_then_variadic_args_t{}, _Alloc{}) {}
+  basic_string() : _Mypair(__zero_then_variadic_args_t{}) {}
   basic_string(nullptr_t) = delete;
   explicit basic_string(size_type count) : _Mypair(__one_then_variadic_args_t{}, _Alloc{}) { resize(static_cast<size_type>(count)); }
   basic_string(size_type count, const_reference val) : _Mypair(__one_then_variadic_args_t{}, _Alloc{}) { resize(static_cast<size_type>(count), val); }
-  template <typename _Iter, ::yasio::enable_if_t<::yasio::is_iterator<_Iter>::value, int> = 0>
+  template <typename _Iter, _TLX enable_if_t<_TLX is_iterator<_Iter>::value, int> = 0>
   basic_string(_Iter first, _Iter last) : _Mypair(__one_then_variadic_args_t{}, _Alloc{})
   {
     assign(first, last);
@@ -122,7 +122,7 @@ public:
     return *this;
   }
 
-  template <typename _Iter, ::yasio::enable_if_t<::yasio::is_iterator<_Iter>::value, int> = 0>
+  template <typename _Iter, _TLX enable_if_t<_TLX is_iterator<_Iter>::value, int> = 0>
   void assign(_Iter first, _Iter last)
   {
     _Assign_range(first, last);
@@ -144,7 +144,7 @@ public:
     std::swap(a._Myend, b._Myend);
   }
 
-  template <typename _Iter, ::yasio::enable_if_t<::yasio::is_iterator<_Iter>::value, int> = 0>
+  template <typename _Iter, _TLX enable_if_t<_TLX is_iterator<_Iter>::value, int> = 0>
   iterator insert(iterator _Where, _Iter first, _Iter last)
   {
     auto& st     = _Mypair._Myval2;
@@ -205,7 +205,7 @@ public:
   }
 
   basic_string& append(view_type value) { return this->append(value.begin(), value.end()); }
-  template <typename _Iter, ::yasio::enable_if_t<::yasio::is_iterator<_Iter>::value, int> = 0>
+  template <typename _Iter, _TLX enable_if_t<_TLX is_iterator<_Iter>::value, int> = 0>
   basic_string& append(_Iter first, const _Iter last)
   {
     if (first != last)
@@ -584,7 +584,7 @@ private:
     return st._Mylast; // points to null terminator slot
   }
 
-  template <typename _Iter, ::yasio::enable_if_t<::yasio::is_iterator<_Iter>::value, int> = 0>
+  template <typename _Iter, _TLX enable_if_t<_TLX is_iterator<_Iter>::value, int> = 0>
   void _Assign_range(_Iter first, _Iter last)
   {
     auto& st    = _Mypair._Myval2;

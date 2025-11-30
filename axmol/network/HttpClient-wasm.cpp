@@ -30,7 +30,7 @@
 #include <queue>
 #include "axmol/base/Director.h"
 #include "axmol/platform/FileUtils.h"
-#include "yasio/string_view.hpp"
+#include "yasio/tlx/string_view.hpp"
 
 #if EMSCRIPTEN
 #    include <emscripten/fetch.h>

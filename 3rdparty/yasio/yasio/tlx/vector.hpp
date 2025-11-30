@@ -363,7 +363,9 @@ public:
   using iterator       = sequence_iterator<_Scary_val>;
   using const_iterator = sequence_const_iterator<_Scary_val>;
 
-  constexpr explicit vector(const _Alloc& _Al = _Alloc{}) noexcept : _Mypair(_TLX __one_then_variadic_args_t{}, _Al) {}
+  constexpr vector() noexcept : _Mypair(_TLX __zero_then_variadic_args_t{}) {}
+
+  constexpr explicit vector(const _Alloc& _Al) noexcept : _Mypair(_TLX __one_then_variadic_args_t{}, _Al) {}
 
   constexpr explicit vector(const size_type _Count, const _Alloc& _Al = _Alloc()) : _Mypair(_TLX __one_then_variadic_args_t{}, _Al) { _Construct_n(_Count); }
 
@@ -409,8 +411,8 @@ public:
                 std::exchange(_Right._Mypair._Myval2._Mylast, nullptr), std::exchange(_Right._Mypair._Myval2._Myend, nullptr))
   {}
 
-  constexpr vector(vector&& _Right,
-                   const _TLX identity_t<_Alloc>& _Al_) noexcept(std::allocator_traits<_Alloc>::is_always_equal::value && std::is_nothrow_move_constructible_v<_Ty>)
+  constexpr vector(vector&& _Right, const _TLX identity_t<_Alloc>& _Al_) noexcept(std::allocator_traits<_Alloc>::is_always_equal::value &&
+                                                                                  std::is_nothrow_move_constructible_v<_Ty>)
       : _Mypair(_TLX __one_then_variadic_args_t{}, _Al_)
   {
     _Alty& _Al        = _Getal();
@@ -864,7 +866,7 @@ private:
   }
 
 public:
-  template <class _Iter, enable_if_t<std::is_pointer_v<_Iter>, int> = 0>
+  template <class _Iter, enable_if_t<tlx::is_iterator_v<_Iter>, int> = 0>
   constexpr iterator insert(const_iterator _Where, _Iter _First, _Iter _Last)
   {
     auto _Whereptr          = _Where._Ptr;

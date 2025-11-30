@@ -229,7 +229,7 @@ void ProgramImpl::reflectUniformInfos()
     _maxLocation     = -1;
     _activeUniformInfos.clear();
 
-    yasio::basic_byte_buffer<GLchar> buffer;  // buffer for name
+    tlx::basic_byte_buffer<GLchar> buffer;  // buffer for name
 
     // OpenGL UBO: uloc[0]: block_offset, uloc[1]: offset in block
 

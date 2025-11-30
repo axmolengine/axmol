@@ -157,6 +157,14 @@ TEST_SUITE("tlx/Containers")
     // crash on Linux(maybe others), crt not initalized properly yet.
 #define fu FileUtils::getInstance()
 
+    TEST_CASE("VectorTest")
+    {
+        tlx::vector<char> buffer;
+        std::string messge = "aaaaaaaaaaaaaafbbbbbbbbbbbbbbbbbcccccccccdfefffffff";
+        buffer.insert(buffer.end(), messge.begin(), messge.end());
+        CHECK(buffer.size() == messge.size());
+    }
+
     TEST_CASE("FlatSetTest")
     {
         tlx::flat_set<int> set1;

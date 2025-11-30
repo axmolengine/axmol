@@ -45,6 +45,9 @@ struct is_aligned_storage {
 template <class _Iter>
 struct is_iterator : public std::integral_constant<bool, !std::is_integral<_Iter>::value> {};
 
+template<typename _Iter>
+inline constexpr bool is_iterator_v = is_iterator<_Iter>::value;
+
 template <bool _Test, class _Ty = void>
 using enable_if_t = typename ::std::enable_if<_Test, _Ty>::type;
 

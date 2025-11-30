@@ -46,6 +46,8 @@ SOFTWARE.
 
 #include "yasio/wtimer_hres.hpp"
 
+#include "yasio/tlx/string.hpp"
+
 #if defined(YASIO_ENABLE_KCP)
 struct yasio_kcp_options {
   int kcp_conv_ = 0;

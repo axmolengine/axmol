@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "axmol/base/Types.h"
 #include "axmol/platform/android/jni/JniHelper.h"
 #include "axmol/platform/FileUtils.h"
-#include "yasio/string_view.hpp"
+#include "yasio/tlx/string_view.hpp"
 
 static const char* deviceHelperClassName = "dev.axmol.lib.AxmolEngine";
 
