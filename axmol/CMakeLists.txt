@@ -141,7 +141,7 @@ option(AX_ENABLE_VR "Build VR support" OFF)
 
 option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
 option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
-option(AX_CORE_PROFILE "Whether strip deprecated features" OFF)
+option(AX_CORE_PROFILE "Whether strip deprecated features" ON)
 
 # default value for axmol extensions modules to Build
 # total supported extensions count: 13
