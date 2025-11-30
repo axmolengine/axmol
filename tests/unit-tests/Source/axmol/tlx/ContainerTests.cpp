@@ -12,32 +12,8 @@
 #include "axmol/tlx/flat_set.hpp"
 #include "axmol/tlx/flat_map.hpp"
 
-namespace tlx
-{
-// flat_set traits
-template <class Key, class Compare = std::less<Key>, class Alloc = std::allocator<Key>>
-struct flat_set_traits1
-{
-    using key_type       = Key;
-    using value_type     = Key;
-    using key_compare    = Compare;
-    using value_compare  = Compare;
-    using allocator_type = Alloc;
-    using container_type = tlx::vector<value_type, Alloc>;
-
-    static constexpr bool allow_duplicates = false;
-};
-
-/// flat_set
-template <class Key, class Compare = std::less<Key>, class Alloc = std::allocator<Key>>
-class flat_set1 : public detail::flat_set_base<flat_set_traits1<Key, Compare, Alloc>>
-{
-    using impl_type = detail::flat_set_base<flat_set_traits1<Key, Compare, Alloc>>;
-
-public:
-    using impl_type::impl_type;
-};
-}  // namespace tlx
+template<typename _Tp>
+using my_flat_set = _TLX flat_set<_Tp, std::less<_Tp>, tlx::vector<_Tp>>;
 
 template <typename _Cont1, typename _Cont2>
 static constexpr bool vector_equals(const _Cont1& c1, const _Cont2& c2)
@@ -151,7 +127,7 @@ static void run_benchmark()
     auto s3 = benchmark_set<tlx::hash_set<int>>("tlx::hash_set", keys);
     //auto s4 = benchmark_set<std::flat_set<int>>("std::flat_set", keys);
     auto s5 = benchmark_set<tlx::flat_set<int>>("tlx::flat_set", keys);
-    auto s6 = benchmark_set<tlx::flat_set1<int>>("tlx::flat_set1", keys);
+    auto s6 = benchmark_set<my_flat_set<int>>("my_flat_set", keys);
 
     auto m1 = benchmark_map<std::map<int, int>>("std::map", keys);
     auto m2 = benchmark_map<std::unordered_map<int, int>>("std::unordered_map", keys);
@@ -173,6 +149,58 @@ TEST_SUITE("tlx/Containers")
     // The test suite function will invoke before entrypoint `main`, it will cause
     // crash on Linux(maybe others), crt not initalized properly yet.
 #define fu FileUtils::getInstance()
+
+    TEST_CASE("FlatSetTest")
+    {
+        tlx::flat_set<int> set1;
+        set1.emplace(25);
+        set1.emplace(10);
+        set1.emplace(34);
+        set1.emplace(65);
+        set1.emplace(35);
+        set1.emplace(10);
+
+        CHECK(set1.size() == 5);
+        set1.erase(10);
+        CHECK(set1.size() == 4);
+
+        tlx::flat_multiset<int> set2;
+        set2.emplace(25);
+        set2.emplace(10);
+        set2.emplace(34);
+        set2.emplace(65);
+        set2.emplace(35);
+        set2.emplace(10);
+        CHECK(set2.size() == 6);
+        set2.erase(10);
+        CHECK(set2.size() == 4);
+    }
+
+    TEST_CASE("FlatMapTest")
+    {
+        tlx::flat_map<int, int> map1;
+        map1.emplace(25, 66);
+        map1.emplace(10, 75);
+        map1.emplace(34, 32);
+        map1.emplace(65, 31);
+        map1.emplace(35, 39);
+        map1.emplace(10, 34);
+
+        CHECK(map1.size() == 5);
+        map1.erase(10);
+        CHECK(map1.size() == 4);
+
+        tlx::flat_multimap<int, int> map2;
+        map2.emplace(25, 66);
+        map2.emplace(10, 75);
+        map2.emplace(34, 32);
+        map2.emplace(65, 31);
+        map2.emplace(35, 39);
+        map2.emplace(10, 34);
+        CHECK(map2.size() == 6);
+        map2.erase(10);
+        CHECK(map2.size() == 4);
+    }
 
     TEST_CASE("BenchmarkTest")
     {

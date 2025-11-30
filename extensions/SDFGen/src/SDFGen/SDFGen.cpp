@@ -1,7 +1,7 @@
 #include "SDFGen.h"
 
-#include <axmol/tlx/singleton.hpp>
-#include <axmol/tlx/byte_buffer.hpp>
+#include "axmol/tlx/singleton.hpp"
+#include "axmol/tlx/byte_buffer.hpp"
 #include "axmol/tlx/format.hpp"
 
 #include "axmol/base/ZipUtils.h"
@@ -196,11 +196,11 @@ protected:
 
 SDFGen* SDFGen::getInstance()
 {
-    return yasio::singleton<SDFGen>::instance();
+    return tlx::singleton<SDFGen>::instance();
 }
 void SDFGen::destroyInstance()
 {
-    yasio::singleton<SDFGen>::destroy();
+    tlx::singleton<SDFGen>::destroy();
 }
 
 void SDFGen::open(ax::Scene* scene)
