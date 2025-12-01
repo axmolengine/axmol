@@ -273,7 +273,7 @@ void HttpClient::onRequestComplete(emscripten_fetch_t* fetch)
     if (_httpClient)
     {
         // call back
-        const ccHttpRequestCallback& callback = request->getCallback();
+        const auto& callback = request->getCompleteCallback();
         if (callback)
             callback(_httpClient, response);
         response.reset();
