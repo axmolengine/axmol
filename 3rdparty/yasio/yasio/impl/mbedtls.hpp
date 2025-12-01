@@ -31,7 +31,7 @@ SOFTWARE.
 
 #if YASIO_SSL_BACKEND == 2
 
-#  include "yasio/split.hpp"
+#  include "yasio/tlx/split.hpp"
 
 YASIO__DECL yssl_ctx_st* yssl_ctx_new(const yssl_options& opts)
 {
@@ -65,9 +65,9 @@ YASIO__DECL yssl_ctx_st* yssl_ctx_new(const yssl_options& opts)
     if (yasio__valid_str(opts.crtfile_)) // the cafile_ must be full path
     {
       int fail_count = 0;
-      yasio::split(
+      tlx::split(
           opts.crtfile_, ',', [&](char* first, char* last) {
-            yasio::split_term null_term(last);
+            tlx::split_term_guard null_term(last);
 
             if ((ret = ::mbedtls_x509_crt_parse_file(&ctx->cert, first)) != 0)
             {

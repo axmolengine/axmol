@@ -210,7 +210,6 @@ public:
      * @param callback the HttpCompleteCallback function.
      */
     void setCompleteCallback(const HttpCompleteCallback& callback) { _pCallback = callback; }
-    AX_DEPRECATED(2.9) void setResponseCallback(const HttpCompleteCallback& callback) { setCompleteCallback(callback); }
 
     /**
      * Get HttpCompleteCallback callback function.
@@ -219,7 +218,6 @@ public:
      */
 
     const HttpCompleteCallback& getCompleteCallback() const { return _pCallback; }
-    AX_DEPRECATED(2.9) const HttpCompleteCallback& getCallback() const { return getCompleteCallback(); }
 
     /**
      * @brief Set the data callback for handling received data chunks.

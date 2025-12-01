@@ -38,6 +38,7 @@ THE SOFTWARE.
 #include "axmol/base/Utils.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/tlx/utility.hpp"
+#include "axmol/tlx/split.hpp"
 #include <ranges>
 #include <charconv>
 
@@ -735,11 +736,11 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
 
             tmxMapInfo->setStoringCharacters(false);
-            auto currentString = tmxMapInfo->getCurrentString();
+            std::string_view currentString = tmxMapInfo->getCurrentString();
 
             tlx::pod_vector<uint32_t> tileGids;
-            tlx::split_cb(currentString, '\n', [&tileGids](const char* first, const char* last) {
-                tlx::split_cb(std::string_view{first, static_cast<size_t>(last - first)}, ',',
+            tlx::split(currentString, '\n', [&tileGids](const char* first, const char* last) {
+                tlx::split(std::string_view{first, static_cast<size_t>(last - first)}, ',',
                                 [&tileGids](const char* _first, const char* _last) {
                     unsigned int gid{0};
                     std::from_chars(_first, _last, gid);

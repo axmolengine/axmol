@@ -51,6 +51,7 @@ THE SOFTWARE.
 #include "pugixml/pugixml.hpp"
 
 #include "axmol/tlx/filesystem.hpp"
+#include "axmol/tlx/split.hpp"
 
 #if defined(_WIN32)
 inline stdfs::path toFspath(const std::string_view& pathSV)
@@ -1030,7 +1031,7 @@ bool FileUtils::createDirectories(std::string_view path) const
 
     bool fail{false};
     std::string mpath{path};
-    tlx::splitpath_cb(&mpath.front(), [](char* ptr) { return *ptr != '\0'; }, [&fail](const char* subpath) {
+    tlx::split_path(&mpath.front(), [](char* ptr) { return *ptr != '\0'; }, [&fail](const char* subpath) {
         struct stat st;
         if (stat(subpath, &st) != 0)
         {

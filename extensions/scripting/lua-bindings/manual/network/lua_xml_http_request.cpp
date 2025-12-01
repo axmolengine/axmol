@@ -205,7 +205,7 @@ void LuaMinXmlHttpRequest::_setHttpRequestHeader()
  */
 void LuaMinXmlHttpRequest::_sendRequest()
 {
-    _httpRequest->setResponseCallback([this](ax::network::HttpClient* sender, ax::network::HttpResponse* response) {
+    _httpRequest->setCompleteCallback([this](ax::network::HttpClient* sender, ax::network::HttpResponse* response) {
         if (_isAborted)
             return;
         auto tag = response->getHttpRequest()->getTag();

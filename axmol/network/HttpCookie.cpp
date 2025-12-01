@@ -36,7 +36,7 @@
 #include <sstream>
 
 #include "yasio/tlx/string_view.hpp"
-#include "axmol/tlx/utility.hpp"
+#include "axmol/tlx/split.hpp"
 #include "fmt/compile.h"
 
 namespace ax
@@ -62,12 +62,12 @@ void HttpCookie::readFile()
     std::string inString = FileUtils::getInstance()->getStringFromFile(_cookieFileName);
     if (!inString.empty())
     {
-        tlx::split_cb(&inString.front(), inString.length(), '\n', [this](char* s, char* e) {
+        tlx::split(inString, '\n', [this](char* s, char* e) {
             if (*s == '#')  // skip comment
                 return;
             int count = 0;
             CookieInfo cookieInfo;
-            tlx::split_cb(s, e - s, '\t', [&, this](char* ss, char* ee) {
+            tlx::split(std::span<char>{s, static_cast<size_t>(e - s)}, '\t', [&, this](char* ss, char* ee) {
                 auto ch = *ee;  // store
                 *ee     = '\0';
                 switch (count)
@@ -161,7 +161,7 @@ bool HttpCookie::updateOrAddCookie(std::string_view cookie, const Uri& uri)
 
     unsigned int count = 0;
     CookieInfo info;
-    tlx::split_cb(cookie.data(), cookie.length(), ';', [&](const char* start, const char* end) {
+    tlx::split(cookie, ';', [&](const char* start, const char* end) {
         unsigned int count_ = 0;
         while (*start == ' ')
             ++start;  // skip ws
@@ -169,7 +169,7 @@ bool HttpCookie::updateOrAddCookie(std::string_view cookie, const Uri& uri)
         {
             std::string_view key;
             std::string_view value;
-            tlx::split_cb(start, end - start, '=', [&](const char* s, const char* e) {
+            tlx::split(start, end, '=', [&](const char* s, const char* e) {
                 switch (++count_)
                 {
                 case 1:
@@ -229,7 +229,7 @@ bool HttpCookie::updateOrAddCookie(std::string_view cookie, const Uri& uri)
         }
         else
         {  // first is cookie name
-            tlx::split_cb(start, end - start, '=', [&](const char* s, const char* e) {
+            tlx::split(start, end, '=', [&](const char* s, const char* e) {
                 switch (++count_)
                 {
                 case 1:
