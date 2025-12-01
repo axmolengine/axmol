@@ -25,14 +25,14 @@
  ****************************************************************************/
 #pragma once
 
-#if !defined(__APPLE__) && !defined(__EMSCRIPTEN__)
-#    if !defined(AX_USE_ALSOFT)
-#        define AX_USE_ALSOFT 1
-#    endif
+#if defined(AX_USE_ALSOFT)
+#    undef AX_USE_ALSOFT
+#endif
+
+#if !defined(__EMSCRIPTEN__)
+#    define AX_USE_ALSOFT 1
 #else
-#    if !defined(AX_USE_ALSOFT)
-#        define AX_USE_ALSOFT 0
-#    endif
+#    define AX_USE_ALSOFT 0
 #endif
 
 // Use the OpenAL Soft headers bundled with Axmol instead of system-installed AL/xxx.h.

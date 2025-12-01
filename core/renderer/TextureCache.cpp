@@ -416,7 +416,8 @@ Texture2D* TextureCache::getDummyTexture()
     constexpr std::string_view key = "/dummy-texture"sv;
     // Gets the texture by key firstly.
     auto texture = this->getTextureForKey(key);
-    if (texture) return texture;
+    if (texture)
+        return texture;
 
     // If texture wasn't in cache, create it from RAW data.
 #ifdef NDEBUG
@@ -424,9 +425,9 @@ Texture2D* TextureCache::getDummyTexture()
 #else
     unsigned char texls[] = {255, 0, 0, 255};  // 1*1 red picture
 #endif
-    Image* image = new Image();  // Notes: andorid: VolatileTextureMgr traits image as dynmaic object
+    Image* image        = new Image();  // Notes: andorid: VolatileTextureMgr traits image as dynmaic object
     bool AX_UNUSED isOK = image->initWithRawData(texls, sizeof(texls), 1, 1, sizeof(unsigned char));
-    texture = this->addImage(image, key);
+    texture             = this->addImage(image, key);
     image->release();
     return texture;
 }
@@ -560,12 +561,13 @@ Texture2D* TextureCache::addImage(const Data& imageData, std::string_view key)
 {
     AXASSERT(!imageData.isNull() && !key.empty(), "TextureCache: imageData MUST not be empty and key not empty");
 
-    Texture2D * texture = nullptr;
+    Texture2D* texture = nullptr;
 
     do
     {
         auto it = _textures.find(key);
-        if (it != _textures.end()) {
+        if (it != _textures.end())
+        {
             texture = it->second;
             break;
         }
@@ -603,7 +605,6 @@ Texture2D* TextureCache::addImage(const Data& imageData, std::string_view key)
         AX_SAFE_RELEASE(image);
 
     } while (0);
-
 
     return texture;
 }
@@ -750,6 +751,12 @@ void TextureCache::waitForQuit()
     ul.unlock();
     if (_loadingThread)
         _loadingThread->join();
+
+    for (AsyncStruct* s : _asyncStructQueue)
+        delete s;
+
+    _asyncStructQueue.clear();
+    _requestQueue.clear();
 }
 
 std::string TextureCache::getCachedTextureInfo() const
@@ -770,14 +777,14 @@ std::string TextureCache::getCachedTextureInfo() const
         totalBytes += bytes;
         count++;
         auto msg = fmt::format_to_z(tmp, "\"{}\" rc={} id={} {} x {} @ {} bpp => {} KB\n", texture.first,
-                 tex->getReferenceCount(), fmt::ptr(tex->getBackendTexture()), tex->getPixelsWide(),
-                 tex->getPixelsHigh(), bpp, bytes / 1024);
+                                    tex->getReferenceCount(), fmt::ptr(tex->getBackendTexture()), tex->getPixelsWide(),
+                                    tex->getPixelsHigh(), bpp, bytes / 1024);
 
         ret += msg;
     }
 
-    auto msg = fmt::format_to_z(tmp, "TextureCache dumpDebugInfo: {} textures, for {} KB ({:.2f} MB)\n",
-             count, totalBytes / 1024, totalBytes / (1024.0f * 1024.0f));
+    auto msg = fmt::format_to_z(tmp, "TextureCache dumpDebugInfo: {} textures, for {} KB ({:.2f} MB)\n", count,
+                                totalBytes / 1024, totalBytes / (1024.0f * 1024.0f));
     ret += msg;
 
     return ret;
@@ -850,7 +857,8 @@ void VolatileTextureMgr::addImage(Texture2D* tt, Image* image)
 
     VolatileTexture* vt = getOrAddVolatileTexture(tt);
 
-    if(vt->_uiImage != image) {
+    if (vt->_uiImage != image)
+    {
         AX_SAFE_RELEASE(vt->_uiImage);
         image->retain();
         vt->_uiImage         = image;
@@ -989,4 +997,4 @@ void VolatileTextureMgr::reloadTexture(Texture2D* texture, std::string_view file
 
 #endif  // AX_ENABLE_CACHE_TEXTURE_DATA
 
-}
+}  // namespace ax
