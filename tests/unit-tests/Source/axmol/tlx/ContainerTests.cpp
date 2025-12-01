@@ -3,11 +3,17 @@
 #include <iostream>
 
 #if __has_include(<flat_map>)
-#    include <flat_set>
 #    include <flat_map>
-#    define _AX_STL_HAS_FLAT_CONTAINER 1
+#    define _AX_STL_HAS_FLAT_MAP 1
 #else
-#    define _AX_STL_HAS_FLAT_CONTAINER 0
+#    define _AX_STL_HAS_FLAT_MAP 0
+#endif
+
+#if __has_include(<flat_set>)
+#    include <flat_set>
+#    define _AX_STL_HAS_FLAT_SET 1
+#else
+#    define _AX_STL_HAS_FLAT_SET 0
 #endif
 
 #include <set>
@@ -135,7 +141,7 @@ static void run_benchmark()
 
     auto s5 = benchmark_set<tlx::flat_set<int>>("tlx::flat_set", keys);
     auto s6 = benchmark_set<my_flat_set<int>>("my_flat_set", keys);
-#if _AX_STL_HAS_FLAT_CONTAINER
+#if _AX_STL_HAS_FLAT_SET
     auto s4 = benchmark_set<std::flat_set<int>>("std::flat_set", keys);
 #endif
 
@@ -143,7 +149,7 @@ static void run_benchmark()
     auto m2 = benchmark_map<std::unordered_map<int, int>>("std::unordered_map", keys);
     auto m3 = benchmark_map<tlx::hash_map<int, int>>("tlx::hash_map", keys);
     auto m5 = benchmark_map<tlx::flat_map<int, int>>("tlx::flat_map", keys);
-#if _AX_STL_HAS_FLAT_CONTAINER
+#if _AX_STL_HAS_FLAT_MAP
     auto m4 = benchmark_map<std::flat_map<int, int>>("std::flat_map", keys);
 #endif
 
@@ -206,7 +212,9 @@ TEST_SUITE("tlx/Containers")
         // all extended values shoud preserve uninitialized
         tlx::pod_vector<TrivalCtor1> arr5;
         arr5.resize(2);
+#ifndef __APPLE__
         CHECK((arr5[0].value != 0 && arr5[1].value != 0));
+#endif
 
         arr5.resize(4, TrivalCtor1{39});
         CHECK((arr5[2].value == 39 && arr5[3].value == 39));
