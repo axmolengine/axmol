@@ -23,6 +23,55 @@
 #include "axmol/tlx/flat_set.hpp"
 #include "axmol/tlx/flat_map.hpp"
 
+#if defined(_WIN32) || defined(_WIN64)
+
+#    define __TRY(SIGID) if (true)
+#    define __CATCH      else
+#    define __FINALLY    if (true)
+#    define __ENDTRY
+
+#else  // POSIX / Unix-like
+
+#    include <signal.h>
+#    include <setjmp.h>
+
+static thread_local sigjmp_buf __doctest_jumpbuf;
+
+void __doctest_signal_handler(int sig)
+{
+    if (sig != SIGKILL)
+        ::siglongjmp(__doctest_jumpbuf, 1);  // jump back to safe point
+}
+
+#    define __TRY(sig_num)                               \
+        do                                               \
+        {                                                \
+            const auto __sig_num = sig_num;              \
+            struct sigaction sa{};                       \
+            sa.sa_handler = __doctest_signal_handler;    \
+            sigemptyset(&sa.sa_mask);                    \
+            sa.sa_flags = 0;                             \
+            sigaction(__sig_num, &sa, nullptr);          \
+            int __ret = sigsetjmp(__doctest_jumpbuf, 1); \
+            if (__ret == 0)
+
+#    define __CATCH else
+
+#    define __FINALLY                                   \
+        {                                               \
+            struct sigaction sa_default{};              \
+            sa_default.sa_handler = SIG_DFL;            \
+            sigemptyset(&sa_default.sa_mask);           \
+            sa_default.sa_flags = 0;                    \
+            sigaction(__sig_num, &sa_default, nullptr); \
+        }
+
+#    define __ENDTRY \
+        }            \
+        while (0)
+
+#endif
+
 template <typename _Tp>
 using my_flat_set = _TLX flat_set<_Tp, std::less<_Tp>, tlx::vector<_Tp>>;
 
@@ -189,6 +238,8 @@ TEST_SUITE("tlx/Containers")
             void* ptr;
         };
 
+        ax::setLogFmtFlag(ax::LogFmtFlag::Full);
+
         tlx::vector<char> arr1;
         std::string msg = "aaaaaaaaaaaaaafbbbbbbbbbbbbbbbbbcccccccccdfefffffff";
         arr1 += msg;
@@ -198,24 +249,37 @@ TEST_SUITE("tlx/Containers")
         arr2.resize(2);
         CHECK((arr2[0].value == 123 && arr2[1].value == 123 && arr2.size() == 2));
 
-        // pod vector, no auto fill when dtor is trivial
-        tlx::pod_vector<NonTrivalCtor1> arr3;
-        arr3.resize(2);
-        CHECK((arr3[0].value != 123 && arr3[1].value != 123 && arr3.size() == 2));
-
         // normal vector whti trival ctor types, shoud initialized to zero
-        tlx::vector<TrivalCtor1> arr4;
-        arr4.resize(2);
-        CHECK((arr4[0].value == 0 && arr4[1].value == 0));
+        tlx::vector<TrivalCtor1> arr3;
+        arr3.resize(2);
+        CHECK((arr3[0].value == 0 && arr3[1].value == 0));
 
-        // pod vector, no auto fill when dtor is trivial
-        // all extended values shoud preserve uninitialized
+        // while, if you run unittest with Xcode debugger, the debugger still raise exception
+        __TRY(SIGILL)
+        {
+            // pod vector, no auto fill when dtor is trivial
+            tlx::pod_vector<NonTrivalCtor1> arr4;
+            arr4.resize(2);
+            CHECK((arr4[0].value != 123 && arr4[1].value != 123 && arr4.size() == 2));
+            AXLOGI("Access uninitialzed object membmer done (non optimized build or non-Apple platforms)");
+        }
+        __CATCH
+        {
+            AXLOGI("Access uninitialzed object member raise SIGILL (optimized build on Apple platforms)");
+        }
+        __FINALLY
+        {
+            ;
+        }
+        __ENDTRY;
+
         tlx::pod_vector<TrivalCtor1> arr5;
         arr5.resize(2);
+
 #ifndef __APPLE__
         CHECK((arr5[0].value != 0 && arr5[1].value != 0));
 #endif
-
+        // we can safe access initialized member without exception catch
         arr5.resize(4, TrivalCtor1{39});
         CHECK((arr5[2].value == 39 && arr5[3].value == 39));
 
