@@ -411,12 +411,13 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
                 {
                     // Apply scissor/clipping rectangle
                     ImGui_ImplAxmol_PostCommand([=]() {
-#if AX_RENDER_API == AX_RENDER_API_GL
-                        renderer->setScissorRect(clip_rect.x, fb_height - clip_rect.w, clip_rect.z - clip_rect.x,
+#if AX_RENDER_API == AX_RENDER_API_D3D11 || AX_RENDER_API == AX_RENDER_API_D3D12
+                        renderer->setScissorRect(clip_rect.x, clip_rect.y, clip_rect.z - clip_rect.x,
                                                  clip_rect.w - clip_rect.y);
+                        
 
 #else
-                        renderer->setScissorRect(clip_rect.x, clip_rect.y, clip_rect.z - clip_rect.x,
+                        renderer->setScissorRect(clip_rect.x, fb_height - clip_rect.w, clip_rect.z - clip_rect.x,
                                                  clip_rect.w - clip_rect.y);
 #endif
                     });

@@ -568,7 +568,7 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     samplerDesc.compareFunction = toMTLCompareFunc(desc.compareFunc);
 
     // --- Anisotropy ---
-    samplerDesc.maxAnisotropy = desc.anisotropy;
+    samplerDesc.maxAnisotropy = std::clamp(desc.anisotropy, 1u, 16u);
 
     // --- Create Sampler ---
     id<MTLSamplerState> sampler = [_mtlDevice newSamplerStateWithDescriptor:samplerDesc];
