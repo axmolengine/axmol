@@ -121,7 +121,7 @@ using element_of_t = typename element_of<_Ty>::type;
 // element_of_nocvref_t: evaluate element_of on remove_cvref_t<_Ty>
 // useful for deducing delim/delims types from an input type
 template <typename _Ty>
-using element_of_nocvref_t = typename std::remove_cvref_t<element_of_t<typename std::remove_cvref_t<_Ty>>>;
+using element_of_nocvref_t = std::remove_cvref_t<element_of_t<std::remove_cvref_t<_Ty>>>;
 
 // -----------------------------
 // is_span_of detection
