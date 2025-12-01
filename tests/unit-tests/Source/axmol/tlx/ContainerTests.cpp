@@ -25,9 +25,9 @@
 
 #if defined(_WIN32) || defined(_WIN64)
 
-#    define __TRY(SIGID) if (true)
-#    define __CATCH      else
-#    define __FINALLY    if (true)
+#    define __TRY     if (true)
+#    define __CATCH   else
+#    define __FINALLY if (true)
 #    define __ENDTRY
 
 #else  // POSIX / Unix-like
@@ -39,31 +39,40 @@ static thread_local sigjmp_buf __doctest_jumpbuf;
 
 void __doctest_signal_handler(int sig)
 {
-    if (sig != SIGKILL)
-        ::siglongjmp(__doctest_jumpbuf, 1);  // jump back to safe point
+    AXLOGI("Caught signal: {}", sig);
+    ::siglongjmp(__doctest_jumpbuf, 1);  // jump back to safe point
 }
 
-#    define __TRY(sig_num)                               \
+#    define __TRY                                        \
         do                                               \
         {                                                \
-            const auto __sig_num = sig_num;              \
             struct sigaction sa{};                       \
             sa.sa_handler = __doctest_signal_handler;    \
             sigemptyset(&sa.sa_mask);                    \
             sa.sa_flags = 0;                             \
-            sigaction(__sig_num, &sa, nullptr);          \
+            for (int i = 1; i < NSIG; ++i)               \
+            {                                            \
+                if (i == SIGKILL || i == SIGSTOP)        \
+                    continue;                            \
+                sigaction(i, &sa, nullptr);              \
+            }                                            \
             int __ret = sigsetjmp(__doctest_jumpbuf, 1); \
             if (__ret == 0)
 
 #    define __CATCH else
 
-#    define __FINALLY                                   \
-        {                                               \
-            struct sigaction sa_default{};              \
-            sa_default.sa_handler = SIG_DFL;            \
-            sigemptyset(&sa_default.sa_mask);           \
-            sa_default.sa_flags = 0;                    \
-            sigaction(__sig_num, &sa_default, nullptr); \
+#    define __FINALLY                               \
+        {                                           \
+            struct sigaction sa_default{};          \
+            sa_default.sa_handler = SIG_DFL;        \
+            sigemptyset(&sa_default.sa_mask);       \
+            sa_default.sa_flags = 0;                \
+            for (int i = 1; i < NSIG; ++i)          \
+            {                                       \
+                if (i == SIGKILL || i == SIGSTOP)   \
+                    continue;                       \
+                sigaction(i, &sa_default, nullptr); \
+            }                                       \
         }
 
 #    define __ENDTRY \
@@ -255,12 +264,28 @@ TEST_SUITE("tlx/Containers")
         CHECK((arr3[0].value == 0 && arr3[1].value == 0));
 
         // while, if you run unittest with Xcode debugger, the debugger still raise exception
-        __TRY(SIGILL)
+        __TRY
         {
             // pod vector, no auto fill when dtor is trivial
             tlx::pod_vector<NonTrivalCtor1> arr4;
             arr4.resize(2);
             CHECK((arr4[0].value != 123 && arr4[1].value != 123 && arr4.size() == 2));
+
+            tlx::pod_vector<TrivalCtor1> arr5;
+            arr5.resize(2);
+
+#ifndef __APPLE__
+            CHECK((arr5[0].value != 0 && arr5[1].value != 0));
+#endif
+            // we can safe access initialized member without exception catch
+            arr5.resize(4, TrivalCtor1{39});
+            CHECK((arr5[2].value == 39 && arr5[3].value == 39));
+
+            arr5.resize(128, TrivalCtor1{66});
+            CHECK((arr5[2].value == 39 && arr5[3].value == 39));
+
+            CHECK((arr5[10].value == 66 && arr5[22].value == 66));
+
             AXLOGI("Access uninitialzed object membmer done (non optimized build or non-Apple platforms)");
         }
         __CATCH
@@ -272,21 +297,6 @@ TEST_SUITE("tlx/Containers")
             ;
         }
         __ENDTRY;
-
-        tlx::pod_vector<TrivalCtor1> arr5;
-        arr5.resize(2);
-
-#ifndef __APPLE__
-        CHECK((arr5[0].value != 0 && arr5[1].value != 0));
-#endif
-        // we can safe access initialized member without exception catch
-        arr5.resize(4, TrivalCtor1{39});
-        CHECK((arr5[2].value == 39 && arr5[3].value == 39));
-
-        arr5.resize(128, TrivalCtor1{66});
-        CHECK((arr5[2].value == 39 && arr5[3].value == 39));
-
-        CHECK((arr5[10].value == 66 && arr5[22].value == 66));
 
         // shoud report compile error, non trivial dtors types can't use tlx::pod_vector
         // tlx::pod_vector<NonTrivialDtor1> arr6;
