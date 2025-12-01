@@ -282,8 +282,8 @@ protected:
     void setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigned int lightmask);
     void bindMeshCommand();
     tlx::hash_map<NTextureData::Usage, Texture2D*> _textures;  // textures that submesh is using
-    MeshSkin* _skin;                                             // skin
-    bool _visible;                                               // is the submesh visible
+    MeshSkin* _skin;                                           // skin
+    bool _visible;                                             // is the submesh visible
 
     bool _instancing;
     rhi::Buffer* _instanceTransformBuffer;

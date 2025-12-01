@@ -79,7 +79,7 @@ public:
             tlx::resize_and_overrite(*_cont, num_of_bytes, std::move(op));
         else
             tlx::resize_and_overrite(*_cont, count_element(num_of_bytes),
-                                       [op_ = std::move(op)](void* out, size_t count) {
+                                     [op_ = std::move(op)](void* out, size_t count) {
                 const auto num_of_bytes = op_(out, count * element_size);
                 return count_element(num_of_bytes);
             });

@@ -351,7 +351,7 @@ void Scheduler::priorityIn(tlx::pod_vector<SchedHandle*>& list,
 {
     auto sched = new SchedHandle(&list, callback, target, priority, paused);
     tlx::ordered_insert(list, sched,
-                         [](const SchedHandle* lhs, const SchedHandle* rhs) { return lhs->priority < rhs->priority; });
+                        [](const SchedHandle* lhs, const SchedHandle* rhs) { return lhs->priority < rhs->priority; });
 
     _schedIndexMap.emplace(target, sched);
 }

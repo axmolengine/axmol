@@ -1182,7 +1182,7 @@ void MyXMLVisitor::setTagDescription(std::string_view tag,
 {
     // MyXMLVisitor::_tagTables[tag] = {isFontElement, std::move(handleVisitEnter), std::move(handleVisitExit)};
     tlx::set_item(MyXMLVisitor::_tagTables, tag,
-                    TagBehavior{isFontElement, std::move(handleVisitEnter), std::move(handleVisitExit)});
+                  TagBehavior{isFontElement, std::move(handleVisitEnter), std::move(handleVisitExit)});
 }
 
 void MyXMLVisitor::removeTagDescription(std::string_view tag)

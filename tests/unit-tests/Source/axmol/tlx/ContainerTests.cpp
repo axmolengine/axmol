@@ -23,7 +23,8 @@ using my_flat_set = _TLX flat_set<_Tp, std::less<_Tp>, tlx::vector<_Tp>>;
 template <typename _Cont1, typename _Cont2>
 static constexpr bool sequence_container_equals(const _Cont1& c1, const _Cont2& c2)
 {
-    static_assert(std::is_same_v<typename _Cont1::value_type, typename _Cont2::value_type>, "sequence_container_equals must have same value types");
+    static_assert(std::is_same_v<typename _Cont1::value_type, typename _Cont2::value_type>,
+                  "sequence_container_equals must have same value types");
     return c1.size() == c2.size() && 0 == memcmp(c1.data(), c2.data(), c1.size() * sizeof(typename _Cont1::value_type));
 }
 
@@ -161,19 +162,23 @@ TEST_SUITE("tlx/Containers")
     {
         static int _dtor_invoke_counter = 0;
 
-        struct NonTrivalCtor1 {
+        struct NonTrivalCtor1
+        {
             int value = 123;
         };
 
-        struct TrivalCtor1 {
+        struct TrivalCtor1
+        {
             int value;
         };
 
-        struct NonTrivialDtor1 {
-            ~NonTrivialDtor1() {
+        struct NonTrivialDtor1
+        {
+            ~NonTrivialDtor1()
+            {
                 ++_dtor_invoke_counter;
-                if(ptr) 
-                  free(ptr);
+                if (ptr)
+                    free(ptr);
             }
             void* ptr;
         };
@@ -212,7 +217,7 @@ TEST_SUITE("tlx/Containers")
         CHECK((arr5[10].value == 66 && arr5[22].value == 66));
 
         // shoud report compile error, non trivial dtors types can't use tlx::pod_vector
-        // tlx::pod_vector<NonTrivialDtor1> arr6; 
+        // tlx::pod_vector<NonTrivialDtor1> arr6;
 
         {
             _dtor_invoke_counter = 0;

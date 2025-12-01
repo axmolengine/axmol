@@ -270,9 +270,7 @@ public:
     @return tlx::pod_vector
     */
     template <typename... Ts>
-    static tlx::pod_vector<float> callStaticFloatArrayMethod(const char* className,
-                                                               const char* methodName,
-                                                               Ts&&... xs)
+    static tlx::pod_vector<float> callStaticFloatArrayMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         ax::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jni::Array<jfloat>(std::decay_t<Ts>...)>{}();
@@ -313,9 +311,7 @@ public:
     @return tlx::pod_vector
     */
     template <typename... Ts>
-    static tlx::pod_vector<int32_t> callStaticIntArrayMethod(const char* className,
-                                                               const char* methodName,
-                                                               Ts&&... xs)
+    static tlx::pod_vector<int32_t> callStaticIntArrayMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         ax::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jni::Array<jint>(std::decay_t<Ts>...)>{}();

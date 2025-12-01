@@ -117,7 +117,7 @@ void HttpClientTest::onMenuGetTestClicked(ax::Object* sender)
         request->setUrl("https://just-make-this-request-failed.com");
         request->setRequestType(HttpRequest::Type::GET);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
-        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setCompleteCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         request->setTag("GET test2");
         HttpClient::getInstance()->send(request);
         request->release();
@@ -130,7 +130,7 @@ void HttpClientTest::onMenuGetTestClicked(ax::Object* sender)
         request->setUrl("https://httpbin.org/ip");
         request->setRequestType(HttpRequest::Type::GET);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
-        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setCompleteCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         request->setTag("GET test3");
         HttpClient::getInstance()->send(request);
         // don't forget to release it, pair to new
@@ -143,7 +143,7 @@ void HttpClientTest::onMenuGetTestClicked(ax::Object* sender)
         request->setUrl("https://httpbin.org/get");
         request->setRequestType(HttpRequest::Type::GET);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
-        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setCompleteCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         request->setTag("GET test4");
         HttpClient::getInstance()->send(request);
         request->release();
@@ -155,7 +155,7 @@ void HttpClientTest::onMenuGetTestClicked(ax::Object* sender)
         request->setUrl("https://github.com/yasio/yasio");
         request->setRequestType(HttpRequest::Type::GET);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
-        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setCompleteCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         request->setTag("GET test5");
         HttpClient::getInstance()->send(request);
         request->release();
@@ -172,7 +172,7 @@ void HttpClientTest::onMenuPatchTestClicked(Object* sender)
         HttpRequest* request = new HttpRequest();
         request->setUrl("https://httpbin.org/patch");
         request->setRequestType(HttpRequest::Type::PATCH);
-        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setCompleteCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 
         // write the body data
         const char* bodyData = "visitor=axmol&TestSuite=Extensions Test/NetworkTest";
@@ -190,7 +190,7 @@ void HttpClientTest::onMenuPatchTestClicked(Object* sender)
         std::vector<std::string> headers;
         headers.emplace_back("Content-Type: application/json; charset=utf-8");
         request->setHeaders(headers);
-        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setCompleteCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 
         // write the post data
         const char* bodyData = "visitor=axmol&TestSuite=Extensions Test/NetworkTest";
@@ -212,7 +212,7 @@ void HttpClientTest::onMenuPostTestClicked(ax::Object* sender)
         request->setUrl("https://httpbin.org/post");
         request->setRequestType(HttpRequest::Type::POST);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
-        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setCompleteCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 
         // write the post data
         const char* postData = "visitor=axmol&TestSuite=Extensions Test/NetworkTest";
@@ -228,7 +228,7 @@ void HttpClientTest::onMenuPostTestClicked(ax::Object* sender)
         request->setUrl("https://httpbin.org/post");
         request->setRequestType(HttpRequest::Type::POST);
         request->setHeaders(std::vector<std::string>{CHROME_UA, "Content-Type: application/json; charset=utf-8"});
-        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setCompleteCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 
         // write the post data
         const char* postData = "visitor=axmol&TestSuite=Extensions Test/NetworkTest";
@@ -247,7 +247,7 @@ void HttpClientTest::onMenuPostBinaryTestClicked(ax::Object* sender)
     HttpRequest* request = new HttpRequest();
     request->setUrl("https://httpbin.org/post");
     request->setRequestType(HttpRequest::Type::POST);
-    request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+    request->setCompleteCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 
     // write the post data
     char postData[22] = "binary=hello\0\0cocos2d";  // including \0, the strings after \0 should not be cut in response
@@ -267,7 +267,7 @@ void HttpClientTest::onMenuPutTestClicked(Object* sender)
         HttpRequest* request = new HttpRequest();
         request->setUrl("https://httpbin.org/put");
         request->setRequestType(HttpRequest::Type::PUT);
-        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setCompleteCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 
         // write the post data
         const char* postData = "visitor=axmol&TestSuite=Extensions Test/NetworkTest";
@@ -285,7 +285,7 @@ void HttpClientTest::onMenuPutTestClicked(Object* sender)
         std::vector<std::string> headers;
         headers.emplace_back("Content-Type: application/json; charset=utf-8");
         request->setHeaders(headers);
-        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setCompleteCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 
         // write the post data
         const char* postData = "visitor=axmol&TestSuite=Extensions Test/NetworkTest";
@@ -306,7 +306,7 @@ void HttpClientTest::onMenuDeleteTestClicked(Object* sender)
         HttpRequest* request = new HttpRequest();
         request->setUrl("https://just-make-this-request-failed.com");
         request->setRequestType(HttpRequest::Type::DELETE);
-        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setCompleteCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         request->setTag("DELETE test1");
         HttpClient::getInstance()->send(request);
         request->release();
@@ -317,7 +317,7 @@ void HttpClientTest::onMenuDeleteTestClicked(Object* sender)
         HttpRequest* request = new HttpRequest();
         request->setUrl("https://httpbin.org/delete");
         request->setRequestType(HttpRequest::Type::DELETE);
-        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setCompleteCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         request->setTag("DELETE test2");
         HttpClient::getInstance()->send(request);
         request->release();
@@ -420,7 +420,7 @@ void HttpClientClearRequestsTest::onMenuCancelAllClicked(ax::Object* sender)
         url << "https://axmol.dev/assets/img/logo.png?id=" << std::to_string(i);
         request->setUrl(url.str());
         request->setRequestType(HttpRequest::Type::GET);
-        request->setResponseCallback(AX_CALLBACK_2(HttpClientClearRequestsTest::onHttpRequestCompleted, this));
+        request->setCompleteCallback(AX_CALLBACK_2(HttpClientClearRequestsTest::onHttpRequestCompleted, this));
 
         url.str("");
         url << "TEST_" << std::to_string(i);
@@ -449,7 +449,7 @@ void HttpClientClearRequestsTest::onMenuCancelSomeClicked(ax::Object* sender)
         url << "https://axmol.dev/assets/img/logo.png?id=" << std::to_string(i);
         request->setUrl(url.str());
         request->setRequestType(HttpRequest::Type::GET);
-        request->setResponseCallback(AX_CALLBACK_2(HttpClientClearRequestsTest::onHttpRequestCompleted, this));
+        request->setCompleteCallback(AX_CALLBACK_2(HttpClientClearRequestsTest::onHttpRequestCompleted, this));
 
         url.str("");
         if (i < 5)

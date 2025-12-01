@@ -647,7 +647,7 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_
                         // Director::getInstance()->getTextureCache()->addUIImage()
                         image                   = new Image();
                         const auto imageDataLen = deflated.size();
-                        bool isOK = image->initWithImageData(deflated.detach_abi(), imageDataLen, true);
+                        bool isOK               = image->initWithImageData(deflated.detach_abi(), imageDataLen, true);
                         AXASSERT(isOK, "CCParticleSystem: error init image with Data");
                         AX_BREAK_IF(!isOK);
 

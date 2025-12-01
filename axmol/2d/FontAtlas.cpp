@@ -319,7 +319,7 @@ bool FontAtlas::findNewCharacters(const std::u32string& u32Text)
 
     if (_letterDefinitions.empty())
     {
-        _newChars.insert(u32Text.begin(), u32Text.end()); 
+        _newChars.insert(u32Text.begin(), u32Text.end());
     }
     else
     {

@@ -171,10 +171,7 @@ public:
         return _program->getVertexInputDesc(name);
     }
 
-    const tlx::string_map<VertexInputDesc>& getActiveVertexInputs() const
-    {
-        return _program->getActiveVertexInputs();
-    }
+    const tlx::string_map<VertexInputDesc>& getActiveVertexInputs() const { return _program->getActiveVertexInputs(); }
 
     /*
      * Gets the inmutable vertex layout from _program

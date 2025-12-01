@@ -190,7 +190,7 @@ PUScriptCompiler::~PUScriptCompiler()
 }
 
 tlx::string_map<PUAbstractNodeList>::iterator PUScriptCompiler::compile(const PUConcreteNodeList& nodes,
-                                                                          std::string_view file)
+                                                                        std::string_view file)
 {
     if (nodes.empty())
         return _compiledScripts.end();

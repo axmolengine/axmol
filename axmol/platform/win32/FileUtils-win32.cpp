@@ -35,8 +35,7 @@ THE SOFTWARE.
 #include <sys/stat.h>
 
 #include "ntcvt/ntcvt.hpp"
-
-#include "axmol/tlx/utility.hpp"
+#include "axmol/tlx/split.hpp"
 
 namespace ax
 {
@@ -274,7 +273,7 @@ bool FileUtilsWin32::createDirectories(std::string_view dirPath) const
     if ((GetFileAttributesW(path.c_str())) == INVALID_FILE_ATTRIBUTES)
     {
         tlx::split_path(&path.front(), [](wchar_t* ptr) { return *ptr != '\0'; },
-                            [&dirPath, &fail](const wchar_t* subpath) {
+                        [&dirPath, &fail](const wchar_t* subpath) {
             auto attribs = GetFileAttributesW(subpath);
             if (attribs == INVALID_FILE_ATTRIBUTES)
             {

@@ -1316,7 +1316,7 @@ void Terrain::Chunk::calculateAABB()
 {
     tlx::pod_vector<Vec3> pos;
     tlx::resize_and_transform(_originalVertices.begin(), _originalVertices.end(), pos,
-                                [](const auto& it) { return it._position; });
+                              [](const auto& it) { return it._position; });
     _aabb.updateMinMax(&pos[0], pos.size());
 }
 

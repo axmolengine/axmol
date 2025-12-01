@@ -848,8 +848,7 @@ AX_DLL std::string base64Encode(const void* in, size_t inlen)
          *
          */
 
-        tlx::resize_and_overrite(ret, n,
-                                   [in, inlen](char* out, size_t) { return ax::base64::encode(out, in, inlen); });
+        tlx::resize_and_overrite(ret, n, [in, inlen](char* out, size_t) { return ax::base64::encode(out, in, inlen); });
 
         return ret;
     }

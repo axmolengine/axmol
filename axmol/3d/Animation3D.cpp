@@ -124,9 +124,9 @@ bool Animation3D::init(const Animation3DData& data)
                 continue;
 
             tlx::resize_and_transform(iter.second.begin(), iter.second.end(), keys,
-                                        [](const auto& keyIter) { return keyIter._time; });
+                                      [](const auto& keyIter) { return keyIter._time; });
             tlx::resize_and_transform(iter.second.begin(), iter.second.end(), values,
-                                        [](const auto& keyIter) { return keyIter._key; });
+                                      [](const auto& keyIter) { return keyIter._key; });
 
             curve->translateCurve = Curve::AnimationCurveVec3::create(&keys[0], &values[0].x, (int)keys.size());
             if (curve->translateCurve)
@@ -150,9 +150,9 @@ bool Animation3D::init(const Animation3DData& data)
                 continue;
 
             tlx::resize_and_transform(iter.second.begin(), iter.second.end(), keys,
-                                        [](const auto& keyIter) { return keyIter._time; });
+                                      [](const auto& keyIter) { return keyIter._time; });
             tlx::resize_and_transform(iter.second.begin(), iter.second.end(), values,
-                                        [](const auto& keyIter) { return keyIter._key; });
+                                      [](const auto& keyIter) { return keyIter._key; });
 
             curve->rotCurve = Curve::AnimationCurveQuat::create(&keys[0], &values[0].x, (int)keys.size());
             if (curve->rotCurve)
@@ -176,9 +176,9 @@ bool Animation3D::init(const Animation3DData& data)
                 continue;
 
             tlx::resize_and_transform(iter.second.begin(), iter.second.end(), keys,
-                                        [](const auto& keyIter) { return keyIter._time; });
+                                      [](const auto& keyIter) { return keyIter._time; });
             tlx::resize_and_transform(iter.second.begin(), iter.second.end(), values,
-                                        [](const auto& keyIter) { return keyIter._key; });
+                                      [](const auto& keyIter) { return keyIter._key; });
 
             curve->scaleCurve = Curve::AnimationCurveVec3::create(&keys[0], &values[0].x, (int)keys.size());
             if (curve->scaleCurve)

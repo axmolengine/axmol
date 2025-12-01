@@ -145,7 +145,7 @@ public:
 protected:
     rhi::Buffer* _vertexBuffer = nullptr;  // vertex buffer
     ssize_t _sizePerVertex     = -1;
-    Vector<MeshIndexData*> _indices;               // index data
+    Vector<MeshIndexData*> _indices;             // index data
     tlx::pod_vector<MeshVertexAttrib> _attribs;  // vertex attributes
 
     int _vertexCount = 0;  // vertex count

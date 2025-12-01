@@ -741,7 +741,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             tlx::pod_vector<uint32_t> tileGids;
             tlx::split(currentString, '\n', [&tileGids](const char* first, const char* last) {
                 tlx::split(std::string_view{first, static_cast<size_t>(last - first)}, ',',
-                                [&tileGids](const char* _first, const char* _last) {
+                           [&tileGids](const char* _first, const char* _last) {
                     unsigned int gid{0};
                     std::from_chars(_first, _last, gid);
                     tileGids.push_back(gid);

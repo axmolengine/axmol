@@ -1122,7 +1122,7 @@ void Director::reset()
     MeshMaterial::releaseBuiltInMaterial();
     MeshMaterial::releaseCachedMaterial();
 #endif
-    
+
     rhi::SamplerCache::destroyInstance();
 }
 

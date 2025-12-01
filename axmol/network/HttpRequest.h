@@ -299,7 +299,7 @@ protected:
     // properties
     Type _requestType;                 /// kHttpRequestGet, kHttpRequestPost or other enums
     std::string _url;                  /// target url that this request is sent to
-    tlx::sbyte_buffer _requestData;  /// used for POST
+    tlx::sbyte_buffer _requestData;    /// used for POST
     std::string _tag;                  /// user defined tag, to identify different requests in response callback
     ccHttpRequestCallback _pCallback;  /// C++11 style callbacks
     HttpDataCallback _pDataCallback;
