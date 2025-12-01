@@ -23,10 +23,21 @@
  ****************************************************************************/
 #pragma once
 
-#include "yasio/tlx/array_buffer.hpp"
+#include "yasio/tlx/vector.hpp"
+#include "yasio/tlx/buffer_alloc.hpp"
 
 namespace tlx
 {
-template <typename _Ty, typename _Alloc = _TLX crt_buffer_allocator<_Ty>>
-using pod_vector = _TLX array_buffer<_Ty, _Alloc>;
+// alias: pod_vector
+// Usage restriction: only valid for types that are BOTH:
+// 1. Trivially destructible
+// 2. Trivially copyable
+//
+// This ensures that raw memory operations (e.g. memcpy, memset) and
+// skipping value-initialization are safe. In practice, this alias
+// should be used only with POD or standard-layout types.
+template <typename _Ty, typename _Alloc = tlx::crt_buffer_allocator<_Ty>>
+using pod_vector = typename std::enable_if<std::is_trivially_copyable<_Ty>::value,
+                                           ::tlx::vector<_Ty, _Alloc, fill_policy::no_fill_trivial_dtor>>::type;
+
 }  // namespace tlx

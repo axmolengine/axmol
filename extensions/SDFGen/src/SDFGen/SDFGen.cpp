@@ -11,6 +11,7 @@
 #include <zlib.h>
 #include "axmol/base/JsonWriter.h"
 #include "yasio/tlx/chrono.hpp"
+#include "yasio/tlx/string_view.hpp"
 
 NS_AX_EXT_BEGIN
 
@@ -250,9 +251,9 @@ void SDFGen::refreshFontList()
     auto& contentPath = fu->getDefaultResourceRootPath();
     for (auto& filePath : fileList)
     {
-        if (!cxx20::ic::ends_with(filePath, ".ttf") && !cxx20::ic::ends_with(filePath, ".ttc"))
+        if (!tlx::ic::ends_with(filePath, ".ttf") && !tlx::ic::ends_with(filePath, ".ttc"))
             continue;
-        if (cxx20::starts_with(filePath, contentPath))
+        if (tlx::starts_with(filePath, contentPath))
             _fontList.emplace_back(filePath.substr(contentPath.size()));
         else
             _fontList.emplace_back(std::move(filePath));

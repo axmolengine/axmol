@@ -21,8 +21,9 @@ template <typename _Tp>
 using my_flat_set = _TLX flat_set<_Tp, std::less<_Tp>, tlx::vector<_Tp>>;
 
 template <typename _Cont1, typename _Cont2>
-static constexpr bool vector_equals(const _Cont1& c1, const _Cont2& c2)
+static constexpr bool sequence_container_equals(const _Cont1& c1, const _Cont2& c2)
 {
+    static_assert(std::is_same_v<typename _Cont1::value_type, typename _Cont2::value_type>, "sequence_container_equals must have same value types");
     return c1.size() == c2.size() && 0 == memcmp(c1.data(), c2.data(), c1.size() * sizeof(typename _Cont1::value_type));
 }
 
@@ -127,42 +128,100 @@ static void run_benchmark()
         keys[i] = dist(rng);
     }
 
-#if _AX_STL_HAS_FLAT_CONTAINER
-    auto s4 = benchmark_set<std::flat_set<int>>("std::flat_set", keys);
-    auto m4 = benchmark_map<std::flat_map<int, int>>("std::flat_map", keys);
-#endif
     auto s1 = benchmark_set<std::set<int>>("std::set", keys);
     auto s2 = benchmark_set<std::unordered_set<int>>("std::unordered_set", keys);
     auto s3 = benchmark_set<tlx::hash_set<int>>("tlx::hash_set", keys);
 
     auto s5 = benchmark_set<tlx::flat_set<int>>("tlx::flat_set", keys);
     auto s6 = benchmark_set<my_flat_set<int>>("my_flat_set", keys);
+#if _AX_STL_HAS_FLAT_CONTAINER
+    auto s4 = benchmark_set<std::flat_set<int>>("std::flat_set", keys);
+#endif
 
     auto m1 = benchmark_map<std::map<int, int>>("std::map", keys);
     auto m2 = benchmark_map<std::unordered_map<int, int>>("std::unordered_map", keys);
     auto m3 = benchmark_map<tlx::hash_map<int, int>>("tlx::hash_map", keys);
     auto m5 = benchmark_map<tlx::flat_map<int, int>>("tlx::flat_map", keys);
+#if _AX_STL_HAS_FLAT_CONTAINER
+    auto m4 = benchmark_map<std::flat_map<int, int>>("std::flat_map", keys);
+#endif
 
     std::sort(keys.begin(), keys.end());
     keys.erase(std::unique(keys.begin(), keys.end()), keys.end());
 
-    CHECK(vector_equals(keys, s5.keys()));
-    CHECK(vector_equals(keys, s6.keys()));
+    CHECK(sequence_container_equals(keys, s5.keys()));
+    CHECK(sequence_container_equals(keys, s6.keys()));
 }
 
 TEST_SUITE("tlx/Containers")
 {
-    // !!!Don't invoke FileUtils::getInstacne at here, it's dangerous due to
-    // The test suite function will invoke before entrypoint `main`, it will cause
-    // crash on Linux(maybe others), crt not initalized properly yet.
 #define fu FileUtils::getInstance()
 
     TEST_CASE("VectorTest")
     {
-        tlx::vector<char> buffer;
-        std::string messge = "aaaaaaaaaaaaaafbbbbbbbbbbbbbbbbbcccccccccdfefffffff";
-        buffer.insert(buffer.end(), messge.begin(), messge.end());
-        CHECK(buffer.size() == messge.size());
+        static int _dtor_invoke_counter = 0;
+
+        struct NonTrivalCtor1 {
+            int value = 123;
+        };
+
+        struct TrivalCtor1 {
+            int value;
+        };
+
+        struct NonTrivialDtor1 {
+            ~NonTrivialDtor1() {
+                ++_dtor_invoke_counter;
+                if(ptr) 
+                  free(ptr);
+            }
+            void* ptr;
+        };
+
+        tlx::vector<char> arr1;
+        std::string msg = "aaaaaaaaaaaaaafbbbbbbbbbbbbbbbbbcccccccccdfefffffff";
+        arr1 += msg;
+        CHECK(sequence_container_equals(arr1, msg));
+
+        tlx::vector<NonTrivalCtor1> arr2;
+        arr2.resize(2);
+        CHECK((arr2[0].value == 123 && arr2[1].value == 123 && arr2.size() == 2));
+
+        // pod vector, no auto fill when dtor is trivial
+        tlx::pod_vector<NonTrivalCtor1> arr3;
+        arr3.resize(2);
+        CHECK((arr3[0].value != 123 && arr3[1].value != 123 && arr3.size() == 2));
+
+        // normal vector whti trival ctor types, shoud initialized to zero
+        tlx::vector<TrivalCtor1> arr4;
+        arr4.resize(2);
+        CHECK((arr4[0].value == 0 && arr4[1].value == 0));
+
+        // pod vector, no auto fill when dtor is trivial
+        // all extended values shoud preserve uninitialized
+        tlx::pod_vector<TrivalCtor1> arr5;
+        arr5.resize(2);
+        CHECK((arr5[0].value != 0 && arr5[1].value != 0));
+
+        arr5.resize(4, TrivalCtor1{39});
+        CHECK((arr5[2].value == 39 && arr5[3].value == 39));
+
+        arr5.resize(128, TrivalCtor1{66});
+        CHECK((arr5[2].value == 39 && arr5[3].value == 39));
+
+        CHECK((arr5[10].value == 66 && arr5[22].value == 66));
+
+        // shoud report compile error, non trivial dtors types can't use tlx::pod_vector
+        // tlx::pod_vector<NonTrivialDtor1> arr6; 
+
+        {
+            _dtor_invoke_counter = 0;
+            tlx::vector<NonTrivialDtor1> arr7;
+
+            arr7.resize(9);
+        }
+
+        CHECK(_dtor_invoke_counter == 9);
     }
 
     TEST_CASE("FlatSetTest")

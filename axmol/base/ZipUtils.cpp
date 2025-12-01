@@ -45,6 +45,7 @@
 #include "axmol/base/Data.h"
 #include "axmol/base/Macros.h"
 #include "axmol/platform/FileUtils.h"
+#include "yasio/tlx/string_view.hpp"
 #include <map>
 #include <mutex>
 

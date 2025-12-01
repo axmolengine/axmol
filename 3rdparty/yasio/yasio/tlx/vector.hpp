@@ -272,7 +272,33 @@ struct _Vector_val {
   pointer _Myend;
 };
 
-template <class _Ty, class _Alloc = std::allocator<_Ty>>
+struct fill_policy {
+  enum enum_type
+  {
+    fill_always,
+    no_fill_trivial_ctor,
+    no_fill_trivial_dtor,
+    no_fill_trivial,
+  };
+
+  template <class _Ty>
+  static constexpr bool is_no_auto_fill(fill_policy::enum_type policy) noexcept
+  {
+    switch (policy)
+    {
+      case fill_policy::no_fill_trivial_ctor:
+        return std::is_trivially_default_constructible_v<_Ty>;
+      case fill_policy::no_fill_trivial_dtor:
+        return std::is_trivially_destructible_v<_Ty>;
+      case fill_policy::no_fill_trivial:
+        return std::is_trivially_default_constructible_v<_Ty> && std::is_trivially_destructible_v<_Ty>;
+      default: // fill_always
+        return false;
+    }
+  }
+};
+
+template <class _Ty, class _Alloc = std::allocator<_Ty>, fill_policy::enum_type _FillPolicy = fill_policy::fill_always>
 class vector { // varying size array of values
 private:
   template <class>
@@ -283,7 +309,7 @@ private:
   using _Alty_traits = std::allocator_traits<_Alty>;
 
 public:
-  // static constexpr bool is_trivial = std::is_trivially_constructible_v<_Ty>::value || is_trivially_destructible_v<_Ty>;
+  static constexpr bool no_auto_fill = fill_policy::is_no_auto_fill<_Ty>(_FillPolicy);
 
   static_assert(std::is_object_v<_Ty>, "The C++ Standard forbids containers of non-object types "
                                        "because of [container.requirements].");
@@ -353,7 +379,7 @@ private:
       {
         auto& _Al     = _Target->_Getal();
         auto& _Mylast = _Target->_Mypair._Myval2._Mylast;
-        destroy_range(_Destroyed_first, _Mylast, _Al);
+        _TLX destroy_range(_Destroyed_first, _Mylast, _Al);
         _Mylast = _Vaporized_first;
       }
     }
@@ -616,17 +642,13 @@ public:
 
   void attach_abi(pointer ptr, size_type len, size_type capacity = (size_type)-1)
   {
+    _Tidy();
     auto& _My_data    = _Mypair._Myval2;
     _My_data._Myfirst = ptr;
     _My_data._Mylast  = ptr + len;
     _My_data._Myend   = ptr + (capacity != (size_type)-1 ? capacity : len);
   }
 
-  void shrink_to_empty()
-  {
-    clear();
-    shrink_to_fit();
-  }
 #pragma endregion
 
 public:
@@ -1076,7 +1098,7 @@ private:
     {
       _Appended_last = _TLX uninitialized_fill_n(_Appended_first, _Newsize - _Oldsize, _Val, _Al);
     }
-    else
+    else if constexpr (!no_auto_fill)
     {
       _Appended_last = _TLX uninitialized_value_construct_n(_Appended_first, _Newsize - _Oldsize, _Al);
     }
@@ -1106,7 +1128,7 @@ private:
     if (_Newsize < _Oldsize)
     { // trim
       const pointer _Newlast = _Myfirst + _Newsize;
-      destroy_range(_Newlast, _Mylast, _Al);
+      _TLX destroy_range(_Newlast, _Mylast, _Al);
       _Mylast = _Newlast;
       return;
     }
@@ -1122,13 +1144,9 @@ private:
 
       const pointer _Oldlast = _Mylast;
       if constexpr (std::is_same_v<_Ty2, _Ty>)
-      {
         _Mylast = _TLX uninitialized_fill_n(_Oldlast, _Newsize - _Oldsize, _Val, _Al);
-      }
-      else
-      {
+      else if constexpr (!no_auto_fill)
         _Mylast = _TLX uninitialized_value_construct_n(_Oldlast, _Newsize - _Oldsize, _Al);
-      }
     }
 
     // if _Newsize == _Oldsize, do nothing; avoid invalidating iterators
@@ -1283,7 +1301,7 @@ public:
     if (_Firstptr != _Lastptr)
     { // something to do, invalidate iterators
       const pointer _Newlast = move_unchecked(_Lastptr, _Mylast, _Firstptr);
-      destroy_range(_Newlast, _Mylast, _Getal());
+      _TLX destroy_range(_Newlast, _Mylast, _Getal());
       _Mylast = _Newlast;
     }
 
@@ -1304,7 +1322,7 @@ public:
       return;
     }
 
-    destroy_range(_Myfirst, _Mylast, _Getal());
+    _TLX destroy_range(_Myfirst, _Mylast, _Getal());
     _Mylast = _Myfirst;
   }
 
@@ -1633,13 +1651,13 @@ private:
 };
 
 #pragma region c++20 like std::erase
-template <typename _Ty, typename _Alloc>
-void erase(vector<_Ty, _Alloc>& cont, const _Ty& val)
+template <typename _Ty, typename _Alloc, fill_policy::enum_type _Policy>
+void erase(vector<_Ty, _Alloc, _Policy>& cont, const _Ty& val)
 {
   cont.erase(std::remove(cont.begin(), cont.end(), val), cont.end());
 }
-template <typename _Ty, typename _Alloc, typename _Pr>
-void erase_if(vector<_Ty, _Alloc>& cont, _Pr pred)
+template <typename _Ty, typename _Alloc, fill_policy::enum_type _Policy, typename _Pr>
+void erase_if(vector<_Ty, _Alloc, _Policy>& cont, _Pr pred)
 {
   cont.erase(std::remove_if(cont.begin(), cont.end(), pred), cont.end());
 }

@@ -14,7 +14,7 @@ public:
     AppDelegate();
     ~AppDelegate() override;
 
-    void initContextAttrs();
+    void initContextAttrs() override;
 
     /**
     @brief    Implement Director and Scene init code here.

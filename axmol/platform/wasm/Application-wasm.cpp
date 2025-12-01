@@ -37,7 +37,6 @@ THE SOFTWARE.
 #    include "axmol/base/Utils.h"
 #    include "axmol/platform/FileUtils.h"
 #    include "axmol/platform/Device.h"
-#    include "yasio/utils.hpp"
 #    include <emscripten/emscripten.h>
 
 extern void axmol_wasm_app_exit();

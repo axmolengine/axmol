@@ -138,14 +138,14 @@ struct _Identity {
 template <class _Ty>
 using identity_t = typename _Identity<_Ty>::type;
 
-template <class Alloc>
+template <class _Alloc>
 class __uninitialized_backout_al {
 public:
-  using allocator_traits = typename std::allocator_traits<Alloc>;
-  using pointer    = typename allocator_traits::pointer;
-  using value_type = typename allocator_traits::value_type;
+  using allocator_traits = typename std::allocator_traits<_Alloc>;
+  using pointer          = typename allocator_traits::pointer;
+  using value_type       = typename allocator_traits::value_type;
 
-  __uninitialized_backout_al(pointer dest, Alloc& al) : _dest(dest), _cur(dest), _alloc(al), _released(false) {}
+  __uninitialized_backout_al(pointer dest, _Alloc& al) : _dest(dest), _cur(dest), _alloc(al), _released(false) {}
 
   ~__uninitialized_backout_al()
   {
@@ -153,7 +153,7 @@ public:
     {
       for (auto p = _dest; p != _cur; ++p)
       {
-        std::allocator_traits<Alloc>::destroy(_alloc, p);
+        std::allocator_traits<_Alloc>::destroy(_alloc, p);
       }
     }
   }
@@ -161,7 +161,7 @@ public:
   template <class... Args>
   void _Emplace_back(Args&&... args)
   {
-    std::allocator_traits<Alloc>::construct(_alloc, _cur, std::forward<Args>(args)...);
+    std::allocator_traits<_Alloc>::construct(_alloc, _cur, std::forward<Args>(args)...);
     ++_cur;
   }
 
@@ -174,7 +174,7 @@ public:
 private:
   pointer _dest;
   pointer _cur;
-  Alloc& _alloc;
+  _Alloc& _alloc;
   bool _released;
 };
 
@@ -182,8 +182,8 @@ struct __value_init_tag { // tag to request value-initialization
   explicit __value_init_tag() = default;
 };
 
-template <class Iter>
-using iter_ref_t = typename std::iterator_traits<Iter>::reference;
+template <typename _Iter>
+using iter_ref_t = typename std::iterator_traits<_Iter>::reference;
 
 inline void __xlength_error(const char* what) { throw ::std::length_error(what); }
 
@@ -191,17 +191,17 @@ inline void __xout_of_range(const char* what) { throw ::std::out_of_range(what);
 
 static_assert(std::is_same_v<typename std::iterator_traits<int*>::value_type, int>);
 
-template <class Iter>
-inline constexpr bool is_pod_iterator_v = std::is_trivially_copyable_v<typename std::iterator_traits<Iter>::value_type>;
+template <typename _Iter>
+inline constexpr bool is_pod_iterator_v = std::is_trivially_copyable_v<typename std::iterator_traits<_Iter>::value_type>;
 
-template <class Iter, class Ptr>
-inline constexpr bool bitcopy_assignable_v = std::is_trivially_copyable_v<typename std::iterator_traits<Iter>::value_type> &&
-                                      std::is_same_v<typename std::iterator_traits<Iter>::value_type, typename std::pointer_traits<Ptr>::element_type>;
+template <typename _Iter, typename _Ptr>
+inline constexpr bool bitcopy_assignable_v = std::is_trivially_copyable_v<typename std::iterator_traits<_Iter>::value_type> &&
+                                             std::is_same_v<typename std::iterator_traits<_Iter>::value_type, typename std::pointer_traits<_Ptr>::element_type>;
 
-template <class Alloc>
-typename Alloc::pointer uninitialized_fill_n(typename Alloc::pointer first, size_t count, const typename Alloc::value_type& val, Alloc& alloc)
+template <typename _Ptr, typename _Alloc>
+_Ptr uninitialized_fill_n(_Ptr first, size_t count, const typename _Alloc::value_type& val, _Alloc& alloc)
 {
-  using T = typename Alloc::value_type;
+  using T = typename _Alloc::value_type;
 
   if constexpr (std::is_trivially_copyable_v<T>)
   {
@@ -215,16 +215,16 @@ typename Alloc::pointer uninitialized_fill_n(typename Alloc::pointer first, size
   {
     for (size_t i = 0; i < count; ++i)
     {
-      std::allocator_traits<Alloc>::construct(alloc, first + i, val);
+      std::allocator_traits<_Alloc>::construct(alloc, first + i, val);
     }
     return first + count;
   }
 }
 
-template <class InIt, class OutPtr, class Alloc>
-constexpr OutPtr uninitialized_move(InIt first, InIt last, OutPtr dest, Alloc& alloc)
+template <typename _InIt, typename _OutPtr, typename _Alloc>
+constexpr _OutPtr uninitialized_move(_InIt first, _InIt last, _OutPtr dest, _Alloc& alloc)
 {
-  using T          = typename Alloc::value_type;
+  using T          = typename _Alloc::value_type;
   const auto count = static_cast<size_t>(last - first);
 
   if constexpr (std::is_trivially_copyable_v<T>)
@@ -236,7 +236,7 @@ constexpr OutPtr uninitialized_move(InIt first, InIt last, OutPtr dest, Alloc& a
     }
   }
 
-  __uninitialized_backout_al<Alloc> backout{dest, alloc};
+  __uninitialized_backout_al<_Alloc> backout{dest, alloc};
   for (; first != last; ++first)
   {
     backout._Emplace_back(std::move(*first));
@@ -244,10 +244,10 @@ constexpr OutPtr uninitialized_move(InIt first, InIt last, OutPtr dest, Alloc& a
   return backout._Release();
 }
 
-template <class InIt, class Alloc, class OutPtr>
-constexpr OutPtr uninitialized_copy_n(InIt first, size_t count, OutPtr dest, Alloc& alloc)
+template <typename _InIt, typename _Alloc, typename _OutPtr>
+constexpr _OutPtr uninitialized_copy_n(_InIt first, size_t count, _OutPtr dest, _Alloc& alloc)
 {
-  using T = typename Alloc::value_type;
+  using T = typename _Alloc::value_type;
 
   if constexpr (std::is_trivially_copyable_v<T>)
   {
@@ -256,7 +256,7 @@ constexpr OutPtr uninitialized_copy_n(InIt first, size_t count, OutPtr dest, All
   }
   else
   {
-    __uninitialized_backout_al<Alloc> backout{dest, alloc};
+    __uninitialized_backout_al<_Alloc> backout{dest, alloc};
     for (; count != 0; ++first, --count)
     {
       backout._Emplace_back(*first);
@@ -265,10 +265,10 @@ constexpr OutPtr uninitialized_copy_n(InIt first, size_t count, OutPtr dest, All
   }
 }
 
-template <class InIt, class Alloc>
-typename Alloc::pointer uninitialized_copy(InIt first, InIt last, typename Alloc::pointer dest, Alloc& alloc)
+template <typename _InIt, typename _Ptr, typename _Alloc>
+_Ptr uninitialized_copy(_InIt first, _InIt last, _Ptr dest, _Alloc& alloc)
 {
-  using T = typename Alloc::value_type;
+  using T = typename _Alloc::value_type;
 
   const auto count = static_cast<size_t>(last - first);
 
@@ -279,7 +279,7 @@ typename Alloc::pointer uninitialized_copy(InIt first, InIt last, typename Alloc
   }
   else
   {
-    __uninitialized_backout_al<Alloc> backout{dest, alloc};
+    __uninitialized_backout_al<_Alloc> backout{dest, alloc};
     for (; first != last; ++first)
     {
       backout._Emplace_back(*first);
@@ -288,33 +288,37 @@ typename Alloc::pointer uninitialized_copy(InIt first, InIt last, typename Alloc
   }
 }
 
-template <class Alloc, class Ptr>
-constexpr void destroy_range(Ptr first, Ptr last, Alloc& alloc) noexcept
+template <typename _Alloc, typename Ptr>
+constexpr void destroy_range(Ptr first, Ptr last, _Alloc& alloc) noexcept
 {
-  using T = typename Alloc::value_type;
+  using T = typename _Alloc::value_type;
 
   if constexpr (!std::is_trivially_destructible_v<T>)
   {
     for (; first != last; ++first)
     {
-      std::allocator_traits<Alloc>::destroy(alloc, std::to_address(first));
+      std::allocator_traits<_Alloc>::destroy(alloc, std::to_address(first));
     }
   }
 }
 
-template <class Alloc>
-typename Alloc::pointer uninitialized_value_construct_n(typename Alloc::pointer first, size_t count, Alloc& alloc)
+/*
+ * trivially_constructible types: Use memset to zero for
+ * non-trivially_constructible types: default constructor
+ */
+template <typename _Ptr, typename _Alloc>
+_Ptr uninitialized_value_construct_n(_Ptr first, size_t count, _Alloc& alloc)
 {
-  using T = typename Alloc::value_type;
+  using T = typename _Alloc::value_type;
 
-  if constexpr (std::is_trivially_constructible_v<T> && std::is_trivially_destructible_v<T>)
+  if constexpr (std::is_trivially_constructible_v<T>)
   {
     ::memset(first, 0, count * sizeof(T));
     return first + count;
   }
   else
   {
-    __uninitialized_backout_al<Alloc> backout{first, alloc};
+    __uninitialized_backout_al<_Alloc> backout{first, alloc};
     for (; count > 0; --count)
     {
       backout._Emplace_back();
@@ -323,7 +327,7 @@ typename Alloc::pointer uninitialized_value_construct_n(typename Alloc::pointer 
   }
 }
 
-template <class InCtgIt, class OutCtgIt>
+template <typename InCtgIt, typename OutCtgIt>
 OutCtgIt copy_memmove_n(InCtgIt first, size_t count, OutCtgIt dest)
 {
   using T = typename std::iterator_traits<InCtgIt>::value_type;
@@ -345,10 +349,10 @@ OutCtgIt copy_memmove_n(InCtgIt first, size_t count, OutCtgIt dest)
   }
 }
 
-template <class InIt, class OutIt>
-constexpr OutIt move_unchecked(InIt first, InIt last, OutIt dest)
+template <typename _InIt, typename _OutIt>
+constexpr _OutIt move_unchecked(_InIt first, _InIt last, _OutIt dest)
 {
-  using T          = typename std::iterator_traits<InIt>::value_type;
+  using T          = typename std::iterator_traits<_InIt>::value_type;
   const auto count = static_cast<size_t>(last - first);
 
   if constexpr (std::is_trivially_copyable_v<T>)
@@ -366,7 +370,7 @@ constexpr OutIt move_unchecked(InIt first, InIt last, OutIt dest)
   }
 }
 
-template <class _CtgIt1, class _CtgIt2>
+template <typename _CtgIt1, typename _CtgIt2>
 _CtgIt2 copy_backward_memmove(_CtgIt1 _First, _CtgIt1 _Last, _CtgIt2 _Dest)
 {
   // implement copy_backward-like function as memmove
@@ -392,13 +396,13 @@ _CtgIt2 copy_backward_memmove(_CtgIt1 _First, _CtgIt1 _Last, _CtgIt2 _Dest)
   }
 }
 
-template <class _BidIt1, class _BidIt2>
+template <typename _BidIt1, typename _BidIt2>
 _BidIt2 copy_backward_memmove(std::move_iterator<_BidIt1> _First, std::move_iterator<_BidIt1> _Last, _BidIt2 _Dest)
 {
   return copy_backward_memmove(_First.base(), _Last.base(), _Dest);
 }
 
-template <class _BidIt1, class _BidIt2>
+template <typename _BidIt1, typename _BidIt2>
 _BidIt2 move_backward_unchecked(_BidIt1 _First, _BidIt1 _Last, _BidIt2 _Dest)
 {
   // move [_First, _Last) backwards to [..., _Dest)
@@ -419,12 +423,12 @@ _BidIt2 move_backward_unchecked(_BidIt1 _First, _BidIt1 _Last, _BidIt2 _Dest)
   return _Dest;
 }
 
-template <class InIt, class SizeTy, class OutIt>
-constexpr OutIt copy_n_unchecked4(InIt first, SizeTy count, OutIt dest)
+template <typename _InIt, typename _SizeTy, typename _OutIt>
+constexpr _OutIt copy_n_unchecked4(_InIt first, _SizeTy count, _OutIt dest)
 {
-  using T = typename std::iterator_traits<InIt>::value_type;
+  using T = typename std::iterator_traits<_InIt>::value_type;
 
-  static_assert(std::is_integral_v<SizeTy>, "SizeTy must be integer-like");
+  static_assert(std::is_integral_v<_SizeTy>, "must be integer-like");
   if (count < 0)
     return dest;
 
@@ -444,7 +448,7 @@ constexpr OutIt copy_n_unchecked4(InIt first, SizeTy count, OutIt dest)
   return dest;
 }
 
-} // namespace yasio
+} // namespace tlx
 
 #define _TLX_VERIFY_RANGE(cond, mesg)                   \
   do                                                    \

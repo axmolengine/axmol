@@ -108,7 +108,6 @@ void Data::fastSet(uint8_t* bytes, const ssize_t size)
 {
     AXASSERT(size >= 0, "fastSet size should be non-negative");
     // AXASSERT(bytes, "bytes should not be nullptr");
-    _impl.shrink_to_empty();
     _impl.attach_abi(bytes, size);
 }
 
