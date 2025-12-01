@@ -46,7 +46,7 @@ SOFTWARE.
 #include <memory>   // std::to_address
 
 #if defined(__cpp_lib_ranges)
-#include <ranges>
+#  include <ranges>
 #endif
 
 #if defined(_MSC_VER)
@@ -121,7 +121,7 @@ using element_of_t = typename element_of<_Ty>::type;
 // element_of_nocvref_t: evaluate element_of on remove_cvref_t<_Ty>
 // useful for deducing delim/delims types from an input type
 template <typename _Ty>
-using element_of_nocvref_t = typename element_of<std::remove_cvref_t<_Ty>>::type;
+using element_of_nocvref_t = typename std::remove_cvref_t<element_of_t<typename std::remove_cvref_t<_Ty>>>;
 
 // -----------------------------
 // is_span_of detection
@@ -136,48 +136,68 @@ template <typename _Ty>
 inline constexpr bool is_span_of_v = is_span_of<std::remove_cvref_t<_Ty>>::value;
 
 // -----------------------------
-// detail implementations
+// string_traits
 // -----------------------------
-namespace detail
-{
-
 template <typename Elem>
-struct split_traits_base;
+struct string_traits_base;
 
 // narrow char
 template <>
-struct split_traits_base<char> {
-  static const char* find_char(const char* s, char delim) { return std::strchr(s, delim); }
-  static const char* find_any(const char* s, const char* delims) { return std::strpbrk(s, delims); }
+struct string_traits_base<char> {
+  // Unsafe: requires null-terminated input string, since no explicit length is provided
+  static const char* find(const char* s, char delim) { return std::strchr(s, delim); }
+  static char* find(char* s, char delim) { return std::strchr(s, delim); }
 
-  static char* find_char(char* s, char delim) { return std::strchr(s, delim); }
-  static char* find_any(char* s, const char* delims) { return std::strpbrk(s, delims); }
+  static const char* find(const char* s, const char* delim) { return std::strstr(s, delim); }
+  static char* find(char* s, const char* delim) { return std::strstr(s, delim); }
+
+  static const char* find_first_of(const char* s, const char* delims) { return std::strpbrk(s, delims); }
+  static char* find_first_of(char* s, const char* delims) { return std::strpbrk(s, delims); }
+
+  // Safe: input string with length
+  static const char* find(const char* s, size_t n, char delim) { return static_cast<const char*>(std::memchr(s, n, delim)); }
+  static char* find(char* s, size_t n, char delim) { return static_cast<char*>(std::memchr(s, n, delim)); }
 };
 
 // wide char
 template <>
-struct split_traits_base<wchar_t> {
-  static const wchar_t* find_char(const wchar_t* s, wchar_t delim) { return std::wcschr(s, delim); }
-  static const wchar_t* find_any(const wchar_t* s, const wchar_t* delims) { return std::wcspbrk(s, delims); }
+struct string_traits_base<wchar_t> {
+  // Unsafe:
+  static wchar_t* find(wchar_t* s, wchar_t delim) { return std::wcschr(s, delim); }
+  static const wchar_t* find(const wchar_t* s, wchar_t delim) { return std::wcschr(s, delim); }
 
-  static wchar_t* find_char(wchar_t* s, wchar_t delim) { return std::wcschr(s, delim); }
-  static wchar_t* find_any(wchar_t* s, const wchar_t* delims) { return std::wcspbrk(s, delims); }
+  static const wchar_t* find(const wchar_t* s, const wchar_t* delim) { return std::wcsstr(s, delim); }
+  static wchar_t* find(wchar_t* s, const wchar_t* delim) { return std::wcsstr(s, delim); }
+
+  static const wchar_t* find_first_of(const wchar_t* s, const wchar_t* delims) { return std::wcspbrk(s, delims); }
+  static wchar_t* find_first_of(wchar_t* s, const wchar_t* delims) { return std::wcspbrk(s, delims); }
+
+  // Safe: input string with length
+  static const wchar_t* find(const wchar_t* s, size_t n, wchar_t delim) { return std::wmemchr(s, n, delim); }
+  static wchar_t* find(wchar_t* s, size_t n, wchar_t delim) { return std::wmemchr(s, n, delim); }
 };
 
 template <typename Elem>
-using split_traits = split_traits_base<std::remove_cv_t<Elem>>;
+using string_traits = string_traits_base<std::remove_cv_t<Elem>>;
+
+// -----------------------------
+// detail implementations
+// -----------------------------
+namespace detail
+{
 
 // -----------------------------
 // split_if implementations
 // -----------------------------
 
 // pointer version: keep nullptr as end sentinel to avoid strlen
+// unsafe stub
 template <typename Elem, typename Pred>
 inline void split_if(Elem* s, Elem delim, Pred&& pred)
 {
   Elem* start = s;
   Elem* ptr   = s;
-  while ((ptr = split_traits<Elem>::find_char(ptr, delim)))
+  while ((ptr = string_traits<Elem>::find(ptr, delim)))
   {
     if (start <= ptr && !pred(start, ptr))
       return;
@@ -195,7 +215,7 @@ inline void split_if(std::span<Elem> s, std::remove_cv_t<Elem> delim, Pred&& pre
   Elem* start = s.data();
   Elem* ptr   = start;
   Elem* end   = start + s.size();
-  while ((ptr = split_traits<Elem>::find_char(ptr, delim)))
+  while ((ptr = string_traits<Elem>::find(ptr, end - ptr, delim)))
   {
     if (ptr >= end)
       break;
@@ -223,13 +243,14 @@ inline void split(std::span<Elem> s, std::remove_cv_t<Elem> delim, Fn&& func)
 // -----------------------------
 
 // pointer version: delims is pointer to (possibly const) char type; end sentinel nullptr
+// unsafe stub
 template <typename Elem, typename Pred>
 inline void split_of_if(Elem* s, const std::remove_cv_t<Elem>* delims, Pred&& pred)
 {
   Elem* start = s;
   Elem* ptr   = s;
-  Elem delim  = *delims;
-  while ((ptr = split_traits<Elem>::find_any(ptr, delims)))
+  auto delim  = *delims;
+  while ((ptr = string_traits<Elem>::find_first_of(ptr, delims)))
   {
     if (start <= ptr)
     {
@@ -245,13 +266,13 @@ inline void split_of_if(Elem* s, const std::remove_cv_t<Elem>* delims, Pred&& pr
 
 // span version: delims is pointer to remove_cv_t<Elem>
 template <typename Elem, typename Pred>
-inline void split_of_if(std::span<Elem> s, const std::remove_cv_t<Elem>* delims, Pred&& pred)
+inline void split_of_if(std::span<Elem> s, std::basic_string_view<std::remove_cv_t<Elem>> delims, Pred&& pred)
 {
   Elem* start = s.data();
   Elem* ptr   = start;
   Elem* end   = start + s.size();
-  Elem delim  = *delims;
-  while ((ptr = split_traits<Elem>::find_any(ptr, delims)))
+  auto delim  = *delims.data();
+  while ((ptr = std::find_first_of(ptr, end, delims.begin(), delims.end())))
   {
     if (ptr >= end)
       break;
@@ -268,9 +289,9 @@ inline void split_of_if(std::span<Elem> s, const std::remove_cv_t<Elem>* delims,
     pred(start, end, delim);
 }
 
-// convenience span wrapper (callback style)
+// convenience span wrapper (callback style), [delim is string_iew]
 template <typename Elem, typename Fn>
-inline void split_of(std::span<Elem> s, const std::remove_cv_t<Elem>* delims, Fn&& func)
+inline void split_of(std::span<Elem> s, std::basic_string_view<Elem> delims, Fn&& func)
 {
   split_of_if(s, delims, [func = std::forward<Fn>(func)](Elem* f, Elem* l, Elem d) {
     func(f, l, d);
@@ -284,9 +305,9 @@ inline void split_of(std::span<Elem> s, const std::remove_cv_t<Elem>* delims, Fn
 // external dispatching helpers
 // -----------------------------
 
-// split_if: accept string-like types, pointers, spans
+// split_if: accept string-like types, pointers, spans [delim is char]
 template <typename Str, typename Pred>
-inline void split_if(Str&& s, const element_of_nocvref_t<Str> delim, Pred&& pred)
+inline void split_if(Str&& s, element_of_nocvref_t<Str> delim, Pred&& pred)
 {
   using Tp = std::remove_cvref_t<Str>;
 
@@ -315,7 +336,7 @@ inline void split_if(Str&& s, const element_of_nocvref_t<Str> delim, Pred&& pred
 
 // split_of_if: similar dispatch
 template <typename Str, typename Pred>
-inline void split_of_if(Str&& s, const element_of_nocvref_t<Str>* delims, Pred&& pred)
+inline void split_of_if(Str&& s, std::basic_string_view<element_of_nocvref_t<Str>> delims, Pred&& pred)
 {
   using Tp = std::remove_cvref_t<Str>;
 
@@ -355,7 +376,7 @@ inline void split(Str&& s, const element_of_nocvref_t<Str> delim, Fn&& func)
 }
 
 template <typename Str, typename Fn>
-inline void split_of(Str&& s, const element_of_nocvref_t<Str>* delims, Fn&& func)
+inline void split_of(Str&& s, std::basic_string_view<element_of_nocvref_t<Str>> delims, Fn&& func)
 {
   split_of_if(std::forward<Str>(s), delims, [func = std::forward<Fn>(func)](auto* first, auto last, auto delim) {
     func(first, last, delim);
@@ -384,7 +405,7 @@ inline void split(Iter first, Iter last, const element_of_nocvref_t<Iter> delim,
 }
 
 template <typename Iter, typename Fn>
-inline void split_of(Iter first, Iter last, const element_of_nocvref_t<Iter>* delims, Fn&& func)
+inline void split_of(Iter first, Iter last, std::basic_string_view<element_of_nocvref_t<Iter>> delims, Fn&& func)
 {
   using Ptr      = decltype(std::to_address(first));
   using ElemSpan = std::remove_pointer_t<std::remove_cv_t<Ptr>>;

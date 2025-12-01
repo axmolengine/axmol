@@ -857,32 +857,44 @@ private:
         _TLX move_backward_unchecked(_Whereptr, _Oldlast - _Count, _Oldlast);
         _TLX destroy_range(_Whereptr, _Whereptr + _Count, _Al);
 
-        _TLX uninitialized_copy_n(std::move(_First), _Count, _Whereptr, _Al);
-        // glue the broken pieces back together
+        try
+        {
+          _TLX uninitialized_copy_n(std::move(_First), _Count, _Whereptr, _Al);
+        }
+        catch (...)
+        {
+          // glue the broken pieces back together
 
-        _Vaporization_guard _Guard{this, _Whereptr, _Oldlast, _Whereptr + _Count};
-        _TLX uninitialized_move(_Whereptr + _Count, _Whereptr + 2 * _Count, _Whereptr, _Al);
-        _Guard._Target = nullptr;
+          _Vaporization_guard _Guard{this, _Whereptr, _Oldlast, _Whereptr + _Count};
+          _TLX uninitialized_move(_Whereptr + _Count, _Whereptr + 2 * _Count, _Whereptr, _Al);
+          _Guard._Target = nullptr;
 
-        _TLX move_unchecked(_Whereptr + 2 * _Count, _Mylast, _Whereptr + _Count);
-        _TLX destroy_range(_Oldlast, _Mylast, _Al);
-        _Mylast = _Oldlast;
+          _TLX move_unchecked(_Whereptr + 2 * _Count, _Mylast, _Whereptr + _Count);
+          _TLX destroy_range(_Oldlast, _Mylast, _Al);
+          _Mylast = _Oldlast;
+          throw;
+        }
       }
       else
       { // affected elements don't overlap before/after
         const pointer _Relocated = _Whereptr + _Count;
         _Mylast                  = _TLX uninitialized_move(_Whereptr, _Oldlast, _Relocated, _Al);
         _TLX destroy_range(_Whereptr, _Oldlast, _Al);
+        try
+        {
+          _TLX uninitialized_copy_n(std::move(_First), _Count, _Whereptr, _Al);
+          // glue the broken pieces back together
+        }
+        catch (...)
+        {
+          _Vaporization_guard _Guard{this, _Whereptr, _Oldlast, _Relocated};
+          _TLX uninitialized_move(_Relocated, _Mylast, _Whereptr, _Al);
+          _Guard._Target = nullptr;
 
-        _TLX uninitialized_copy_n(std::move(_First), _Count, _Whereptr, _Al);
-        // glue the broken pieces back together
-
-        _Vaporization_guard _Guard{this, _Whereptr, _Oldlast, _Relocated};
-        _TLX uninitialized_move(_Relocated, _Mylast, _Whereptr, _Al);
-        _Guard._Target = nullptr;
-
-        _TLX destroy_range(_Relocated, _Mylast, _Al);
-        _Mylast = _Oldlast;
+          _TLX destroy_range(_Relocated, _Mylast, _Al);
+          _Mylast = _Oldlast;
+          throw;
+        }
       }
     }
   }
