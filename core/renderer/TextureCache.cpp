@@ -63,7 +63,7 @@ std::string TextureCache::getETC1AlphaFileSuffix()
     return s_etc1AlphaFileSuffix;
 }
 
-TextureCache::TextureCache() : _loadingThread(nullptr), _needQuit(false), _asyncRefCount(0) {}
+TextureCache::TextureCache() : _needQuit(false) {}
 
 TextureCache::~TextureCache()
 {
@@ -71,8 +71,6 @@ TextureCache::~TextureCache()
 
     for (auto&& texture : _textures)
         texture.second->release();
-
-    AX_SAFE_DELETE(_loadingThread);
 }
 
 std::string TextureCache::getDescription() const
@@ -80,13 +78,13 @@ std::string TextureCache::getDescription() const
     return fmt::format("<TextureCache | Number of textures = {}>", static_cast<int>(_textures.size()));
 }
 
-struct TextureCache::AsyncStruct
+struct TextureCache::LoadRequest
 {
 public:
-    AsyncStruct(std::string_view fn, const std::function<void(Texture2D*)>& f, std::string_view key)
-        : filename(fn)
+    LoadRequest(std::string fn, const std::function<void(Texture2D*)>& f, std::string_view key)
+        : filename(std::move(fn))
         , callback(f)
-        , callbackKey(key)
+        , callbackKey(std::move(key))
         , pixelFormat(Texture2D::getDefaultAlphaPixelFormat())
         , loadSuccess(false)
     {}
@@ -102,10 +100,10 @@ public:
 
 /**
  The addImageAsync logic follow the steps:
- - find the image has been add or not, if not add an AsyncStruct to _requestQueue  (GL thread)
- - get AsyncStruct from _requestQueue, load res and fill image data to AsyncStruct.image, then add AsyncStruct to
+ - find the image has been add or not, if not add an LoadRequest to _requestQueue  (GL thread)
+ - get LoadRequest from _requestQueue, load res and fill image data to LoadRequest.image, then add LoadRequest to
  _responseQueue (Load thread)
- - on schedule callback, get AsyncStruct from _responseQueue, convert image to texture, then delete AsyncStruct (GL
+ - on schedule callback, get LoadRequest from _responseQueue, convert image to texture, then delete LoadRequest (GL
  thread)
 
  the Critical Area include these members:
@@ -113,11 +111,11 @@ public:
  - _responseQueue: locked by _responseMutex
 
  the object's life time:
- - AsyncStruct: construct and destruct in GL thread
+ - LoadRequest: construct and destruct in GL thread
  - image data: new in Load thread, delete in GL thread(by Image instance)
 
  Note:
- - all AsyncStruct referenced in _asyncStructQueue, for unbind function use.
+ - all LoadRequest referenced in _loadRequests, for unbind function use.
 
  How to deal add image many times?
  - At first, this situation is abnormal, we only ensure the logic is correct.
@@ -139,10 +137,10 @@ void TextureCache::addImageAsync(std::string_view path, const std::function<void
 
 /**
  The addImageAsync logic follow the steps:
- - find the image has been add or not, if not add an AsyncStruct to _requestQueue  (GL thread)
- - get AsyncStruct from _requestQueue, load res and fill image data to AsyncStruct.image, then add AsyncStruct to
+ - find the image has been add or not, if not add an LoadRequest to _requestQueue  (GL thread)
+ - get LoadRequest from _requestQueue, load res and fill image data to LoadRequest.image, then add LoadRequest to
  _responseQueue (Load thread)
- - on schedule callback, get AsyncStruct from _responseQueue, convert image to texture, then delete AsyncStruct (GL
+ - on schedule callback, get LoadRequest from _responseQueue, convert image to texture, then delete LoadRequest (GL
  thread)
 
  the Critical Area include these members:
@@ -150,11 +148,11 @@ void TextureCache::addImageAsync(std::string_view path, const std::function<void
  - _responseQueue: locked by _responseMutex
 
  the object's life time:
- - AsyncStruct: construct and destruct in GL thread
+ - LoadRequest: construct and destruct in GL thread
  - image data: new in Load thread, delete in GL thread(by Image instance)
 
  Note:
- - all AsyncStruct referenced in _asyncStructQueue, for unbind function use.
+ - all LoadRequest referenced in _loadRequests, for unbind function use.
 
  How to deal add image many times?
  - At first, this situation is abnormal, we only ensure the logic is correct.
@@ -199,135 +197,112 @@ void TextureCache::addImageAsync(std::string_view path,
     }
 
     // lazy init
-    if (_loadingThread == nullptr)
+    if (_loadingThreads.empty())
     {
         // create a new thread to load images
-        _needQuit      = false;
-        _loadingThread = new std::thread(&TextureCache::loadImage, this);
+        _needQuit = false;
+
+        const size_t threadCount = std::max<size_t>(1, std::thread::hardware_concurrency());
+        _loadingThreads.reserve(threadCount);
+
+        for (size_t i = 0; i != threadCount; ++i)
+            _loadingThreads.emplace_back(&TextureCache::loadImage, this);
     }
 
-    if (0 == _asyncRefCount)
+    if (_loadRequests.empty())
     {
         Director::getInstance()->getScheduler()->schedule(AX_SCHEDULE_SELECTOR(TextureCache::addImageAsyncCallBack),
                                                           this, 0, false);
     }
 
-    ++_asyncRefCount;
+    std::unique_ptr<LoadRequest> data(new LoadRequest(std::move(fullpath), callback, callbackKey));
 
-    // generate async struct
-    AsyncStruct* data = new AsyncStruct(fullpath, callback, callbackKey);
+    _loadRequests.emplace_back(data.get());
 
-    // add async struct into queue
-    _asyncStructQueue.emplace_back(data);
-    std::unique_lock<std::mutex> ul(_requestMutex);
-    _requestQueue.emplace_back(data);
+    std::unique_lock<std::mutex> ul(_pendingMutex);
+    _pendingRequests.emplace_back(std::move(data));
     _sleepCondition.notify_one();
 }
 
 void TextureCache::unbindImageAsync(std::string_view callbackKey)
 {
-    if (_asyncStructQueue.empty())
-    {
-        return;
-    }
-
-    for (auto&& asyncStruct : _asyncStructQueue)
-    {
-        if (asyncStruct->callbackKey == callbackKey)
-        {
-            asyncStruct->callback = nullptr;
-        }
-    }
+    for (LoadRequest* const request : _loadRequests)
+        if (request->callbackKey == callbackKey)
+            request->callback = nullptr;
 }
 
 void TextureCache::unbindAllImageAsync()
 {
-    if (_asyncStructQueue.empty())
-    {
-        return;
-    }
-    for (auto&& asyncStruct : _asyncStructQueue)
-    {
-        asyncStruct->callback = nullptr;
-    }
+    for (LoadRequest* const request : _loadRequests)
+        request->callback = nullptr;
 }
 
 void TextureCache::loadImage()
 {
-    AsyncStruct* asyncStruct = nullptr;
-    while (!_needQuit)
+    while (true)
     {
-        std::unique_lock<std::mutex> ul(_requestMutex);
-        // pop an AsyncStruct from request queue
-        if (_requestQueue.empty())
-        {
-            asyncStruct = nullptr;
-        }
-        else
-        {
-            asyncStruct = _requestQueue.front();
-            _requestQueue.pop_front();
-        }
+        std::unique_ptr<LoadRequest> request;
 
-        if (nullptr == asyncStruct)
         {
-            if (_needQuit)
+            std::unique_lock<std::mutex> ul(_pendingMutex);
+
+            if (!_pendingRequests.empty())
             {
-                break;
+                request = std::move(_pendingRequests.back());
+                _pendingRequests.pop_back();
             }
-            _sleepCondition.wait(ul);
-            continue;
+
+            if (!request)
+            {
+                if (_needQuit)
+                    break;
+
+                _sleepCondition.wait(ul);
+                continue;
+            }
         }
-        ul.unlock();
 
         // load image
-        asyncStruct->loadSuccess = asyncStruct->image.initWithImageFileThreadSafe(asyncStruct->filename);
+        request->loadSuccess = request->image.initWithImageFileThreadSafe(request->filename);
 
         // ETC1 ALPHA supports.
-        if (asyncStruct->loadSuccess && asyncStruct->image.getFileType() == Image::Format::ETC1 &&
+        if (request->loadSuccess && request->image.getFileType() == Image::Format::ETC1 &&
             !s_etc1AlphaFileSuffix.empty())
         {  // check whether alpha texture exists & load it
-            auto alphaFile = asyncStruct->filename + s_etc1AlphaFileSuffix;
+            auto alphaFile = request->filename + s_etc1AlphaFileSuffix;
             if (FileUtils::getInstance()->isFileExist(alphaFile))
-                asyncStruct->imageAlpha.initWithImageFileThreadSafe(alphaFile);
+                request->imageAlpha.initWithImageFileThreadSafe(alphaFile);
         }
-        // push the asyncStruct to response queue
-        _responseMutex.lock();
-        _responseQueue.emplace_back(asyncStruct);
-        _responseMutex.unlock();
+
+        const std::unique_lock lock(_doneMutex);
+        _doneRequests.emplace_back(std::move(request));
     }
 }
 
 void TextureCache::addImageAsyncCallBack(float /*dt*/)
 {
-    Texture2D* texture       = nullptr;
-    AsyncStruct* asyncStruct = nullptr;
     while (true)
     {
-        // pop an AsyncStruct from response queue
-        _responseMutex.lock();
-        if (_responseQueue.empty())
+        std::unique_ptr<LoadRequest> request;
         {
-            asyncStruct = nullptr;
-        }
-        else
-        {
-            asyncStruct = _responseQueue.front();
-            _responseQueue.pop_front();
+            std::unique_lock<std::mutex> lock(_doneMutex);
 
-            // the asyncStruct's sequence order in _asyncStructQueue must equal to the order in _responseQueue
-            AX_ASSERT(asyncStruct == _asyncStructQueue.front());
-            _asyncStructQueue.pop_front();
+            if (!_doneRequests.empty())
+            {
+                request = std::move(_doneRequests.back());
+                _doneRequests.pop_back();
+            }
         }
-        _responseMutex.unlock();
 
-        if (nullptr == asyncStruct)
-        {
+        if (!request)
             break;
-        }
+
+        _loadRequests.erase(std::find(_loadRequests.begin(), _loadRequests.end(), request.get()));
+
+        Texture2D* texture;
 
         // check the image has been convert to texture or not
-        auto it = _textures.find(asyncStruct->filename);
+        const auto it = _textures.find(request->filename);
         if (it != _textures.end())
         {
             texture = it->second;
@@ -335,49 +310,44 @@ void TextureCache::addImageAsyncCallBack(float /*dt*/)
         else
         {
             // convert image to texture
-            if (asyncStruct->loadSuccess)
+            if (request->loadSuccess)
             {
-                Image* image = &(asyncStruct->image);
+                Image* image = &(request->image);
                 // generate texture in render thread
                 texture = new Texture2D();
+                texture->retain();
+                texture->autorelease();
 
-                texture->initWithImage(image, asyncStruct->pixelFormat);
+                texture->initWithImage(image, request->pixelFormat);
                 // parse 9-patch info
-                this->parseNinePatchImage(image, texture, asyncStruct->filename);
+                parseNinePatchImage(image, texture, request->filename);
 #if AX_ENABLE_CACHE_TEXTURE_DATA
                 // cache the texture file name
-                VolatileTextureMgr::addImageTexture(texture, asyncStruct->filename);
+                VolatileTextureMgr::addImageTexture(texture, request->filename);
 #endif
                 // cache the texture. retain it, since it is added in the map
-                _textures.emplace(asyncStruct->filename, texture);
-                texture->retain();
-
-                texture->autorelease();
+                _textures.emplace(request->filename, texture);
                 // ETC1 ALPHA supports.
-                if (asyncStruct->imageAlpha.getFileType() == Image::Format::ETC1)
+                if (request->imageAlpha.getFileType() == Image::Format::ETC1)
                 {
-                    texture->updateWithImage(&asyncStruct->imageAlpha, asyncStruct->pixelFormat, 1);
+                    texture->updateWithImage(&request->imageAlpha, request->pixelFormat, 1);
                 }
             }
             else
             {
                 texture = nullptr;
-                AXLOGW("axmol: failed to call TextureCache::addImageAsync({})", asyncStruct->filename);
+                AXLOGW("axmol: failed to call TextureCache::addImageAsync({})", request->filename);
             }
         }
 
         // call callback function
-        if (asyncStruct->callback)
+        if (request->callback)
         {
-            (asyncStruct->callback)(texture);
+            (request->callback)(texture);
         }
-
-        // release the asyncStruct
-        delete asyncStruct;
-        --_asyncRefCount;
     }
 
-    if (0 == _asyncRefCount)
+    if (_loadRequests.empty())
     {
         Director::getInstance()->getScheduler()->unschedule(AX_SCHEDULE_SELECTOR(TextureCache::addImageAsyncCallBack),
                                                             this);
@@ -744,19 +714,21 @@ std::string TextureCache::getTextureFilePath(ax::Texture2D* texture) const
 
 void TextureCache::waitForQuit()
 {
-    // notify sub thread to quick
-    std::unique_lock<std::mutex> ul(_requestMutex);
-    _needQuit = true;
-    _sleepCondition.notify_one();
-    ul.unlock();
-    if (_loadingThread)
-        _loadingThread->join();
+    {
+        // notify sub thread to quit.
+        const std::unique_lock<std::mutex> ul(_pendingMutex);
+        _needQuit = true;
+        _pendingRequests.clear();
+        _sleepCondition.notify_all();
+    }
 
-    for (AsyncStruct* s : _asyncStructQueue)
-        delete s;
+    for (std::thread& t : _loadingThreads)
+        t.join();
 
-    _asyncStructQueue.clear();
-    _requestQueue.clear();
+    _loadingThreads.clear();
+
+    _loadRequests.clear();
+    _doneRequests.clear();
 }
 
 std::string TextureCache::getCachedTextureInfo() const

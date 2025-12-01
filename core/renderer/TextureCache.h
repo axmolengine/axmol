@@ -32,10 +32,9 @@ THE SOFTWARE.
 #include <mutex>
 #include <thread>
 #include <condition_variable>
-#include <queue>
 #include <string>
-#include <unordered_map>
 #include <functional>
+#include <vector>
 
 #include "base/Object.h"
 #include "renderer/Texture2D.h"
@@ -225,24 +224,32 @@ private:
     void loadImage();
     void parseNinePatchImage(Image* image, Texture2D* texture, std::string_view path);
 
-public:
 protected:
-    struct AsyncStruct;
+    struct LoadRequest;
 
-    std::thread* _loadingThread;
+    std::vector<std::thread> _loadingThreads;
 
-    std::deque<AsyncStruct*> _asyncStructQueue;
-    std::deque<AsyncStruct*> _requestQueue;
-    std::deque<AsyncStruct*> _responseQueue;
+    /// Textures to be loaded by the loading threads.
+    std::vector<std::unique_ptr<LoadRequest>> _pendingRequests;
 
-    std::mutex _requestMutex;
-    std::mutex _responseMutex;
+    /**
+     * Textures that have been loaded, waiting for the notification to be sent
+     * to the caller.
+     */
+    std::vector<std::unique_ptr<LoadRequest>> _doneRequests;
+
+    /**
+     * All requests, can be accessed from Axmol's thread without
+     * synchronization.
+     */
+    std::vector<LoadRequest*> _loadRequests;
+
+    std::mutex _pendingMutex;
+    std::mutex _doneMutex;
 
     std::condition_variable _sleepCondition;
 
     bool _needQuit;
-
-    int _asyncRefCount;
 
     hlookup::string_map<Texture2D*> _textures;
 
