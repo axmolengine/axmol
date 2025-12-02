@@ -25,16 +25,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-
-/*
- * The standard split stub of tlx:
- *   The pred callback prototype: [](CStr first, CStr last) ->bool{ return true; }
- *   returns:
- *     true: want continue split
- *     false: want end split
- *
- */
-
 #pragma once
 
 #include <type_traits>
