@@ -86,7 +86,7 @@ public:
 
 protected:
     static MeshDataCache* _cacheInstance;
-    axstd::string_map<MeshRenderData*> _meshDatas;  // cached mesh data
+    tlx::string_map<MeshRenderData*> _meshDatas;  // cached mesh data
 };
 
 // end of 3d group

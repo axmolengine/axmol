@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
@@ -25,21 +25,40 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef YASIO__MEMORY
-#define YASIO__MEMORY
-#include <memory>
 
-#include "yasio/compiler/feature_test.hpp"
+#pragma once
 
-/// The make_unique workaround on c++11
-#if !YASIO__HAS_CXX14
-namespace cxx14
+#include <cstddef>
+#include <type_traits>
+#include "yasio/sz.hpp"
+
+namespace tlx
 {
-template <typename _Ty, typename... _Args> std::unique_ptr<_Ty> make_unique(_Args&&... args)
-{
-  return std::unique_ptr<_Ty>(new _Ty(std::forward<_Args>(args)...));
-}
-} // namespace cxx14
-#endif
+template <typename _Ty>
+struct aligned_storage_size {
+  static const size_t value = YASIO_SZ_ALIGN(sizeof(_Ty), sizeof(std::max_align_t));
+};
+template <typename _Ty>
+struct is_aligned_storage {
+  static const bool value = aligned_storage_size<_Ty>::value == sizeof(_Ty);
+};
+template <class _Iter>
+struct is_iterator : public std::integral_constant<bool, !std::is_integral<_Iter>::value> {};
 
-#endif
+template<typename _Iter>
+inline constexpr bool is_iterator_v = is_iterator<_Iter>::value;
+
+template <bool _Test, class _Ty = void>
+using enable_if_t = typename ::std::enable_if<_Test, _Ty>::type;
+
+template <typename _Ty>
+struct is_byte_type {
+  static const bool value = std::is_same<_Ty, char>::value || std::is_same<_Ty, unsigned char>::value;
+};
+
+template <typename _Ty>
+struct is_char_type {
+  static const bool value = std::is_integral<_Ty>::value && sizeof(_Ty) <= sizeof(char32_t);
+};
+
+} // namespace yasio

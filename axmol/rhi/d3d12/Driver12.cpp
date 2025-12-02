@@ -947,8 +947,8 @@ bool DriverImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource*
     ensureMipmapPipeline(isArray);  // lazy init PSO + root signature
 
     // Build SRV/UAV descriptors for each mip (CPU-only descriptors in your existing pools)
-    axstd::pod_vector<DescriptorHandle*> mipSrvs(mipCount);
-    axstd::pod_vector<DescriptorHandle*> mipUavs(mipCount);
+    tlx::pod_vector<DescriptorHandle*> mipSrvs(mipCount);
+    tlx::pod_vector<DescriptorHandle*> mipUavs(mipCount);
 
     for (UINT m = 0; m < mipCount; ++m)
     {
@@ -999,7 +999,7 @@ bool DriverImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource*
         D3D12_GPU_DESCRIPTOR_HANDLE srv;
         D3D12_GPU_DESCRIPTOR_HANDLE uav;
     };
-    axstd::pod_vector<ViewPairGPU> passViews(passCount);
+    tlx::pod_vector<ViewPairGPU> passViews(passCount);
 
     const auto cpuStart = _mipmapSrvHeap->GetCPUDescriptorHandleForHeapStart();
     const auto gpuStart = _mipmapSrvHeap->GetGPUDescriptorHandleForHeapStart();

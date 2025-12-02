@@ -123,8 +123,8 @@ public:
   using convert_traits_type = _Traits;
   using this_type           = binary_reader_impl<_Traits>;
   binary_reader_impl() { this->reset("", 0); }
-  binary_reader_impl(const sbyte_buffer& d) { this->reset(d); }
-  binary_reader_impl(const cxx17::string_view& d) { this->reset(d); }
+  binary_reader_impl(const tlx::sbyte_buffer& d) { this->reset(d); }
+  binary_reader_impl(const std::string_view& d) { this->reset(d); }
   binary_reader_impl(const void* data, size_t size) { this->reset(data, size); }
   template <typename _BufferType>
   binary_reader_impl(const binary_writer_impl<_Traits, _BufferType>* obs)
@@ -143,8 +143,8 @@ public:
 
   ~binary_reader_impl() {}
 
-  void reset(const sbyte_buffer& d) { reset(d.data(), d.size()); }
-  void reset(const cxx17::string_view& d) { reset(d.data(), d.length()); }
+  void reset(const tlx::sbyte_buffer& d) { reset(d.data(), d.size()); }
+  void reset(const std::string_view& d) { reset(d.data(), d.length()); }
   void reset(const void* data, size_t size)
   {
     first_ = ptr_ = static_cast<const char*>(data);
@@ -165,7 +165,7 @@ public:
 
   int read_varint(int size)
   {
-    size = yasio::clamp(size, 1, YASIO_SSIZEOF(int));
+    size = std::clamp(size, 1, YASIO_SSIZEOF(int));
 
     int value = 0;
     ::memcpy(&value, consume(size), size);
@@ -173,7 +173,7 @@ public:
   }
 
   /* read blob data with '7bit encoded int' length field */
-  cxx17::string_view read_v()
+  std::string_view read_v()
   {
     int count = read_ix<int>();
     return read_bytes(count);
@@ -210,15 +210,15 @@ public:
       ::memcpy(oav, consume(len), len);
   }
 
-  cxx17::string_view read_v32() { return read_v_fx<uint32_t>(); }
-  cxx17::string_view read_v16() { return read_v_fx<uint16_t>(); }
-  cxx17::string_view read_v8() { return read_v_fx<uint8_t>(); }
+  std::string_view read_v32() { return read_v_fx<uint32_t>(); }
+  std::string_view read_v16() { return read_v_fx<uint16_t>(); }
+  std::string_view read_v8() { return read_v_fx<uint8_t>(); }
 
-  cxx17::string_view read_bytes(int len)
+  std::string_view read_bytes(int len)
   {
     if (len > 0)
-      return cxx17::string_view(consume(len), len);
-    return cxx17::string_view{};
+      return std::string_view(consume(len), len);
+    return std::string_view{};
   }
 
   bool empty() const { return first_ == last_; }
@@ -264,7 +264,7 @@ public:
   }
 
   template <typename _LenT>
-  inline cxx17::string_view read_v_fx()
+  inline std::string_view read_v_fx()
   {
     _LenT n = this->read<_LenT>();
     if (n > 0)
@@ -272,11 +272,11 @@ public:
     return {};
   }
 
-  cxx17::string_view range_view(size_t start, size_t end)
+  std::string_view range_view(size_t start, size_t end)
   {
     if (start <= end && (first_ + end) <= last_)
-      return cxx17::string_view{first_ + start, end - start};
-    return cxx17::string_view{};
+      return std::string_view{first_ + start, end - start};
+    return std::string_view{};
   }
 
   bool eof() const { return ptr_ == last_; }
@@ -305,7 +305,7 @@ template <typename _Traits>
 class basic_ibstream : public binary_reader_impl<_Traits> {
 public:
   basic_ibstream() {}
-  basic_ibstream(sbyte_buffer blob) : binary_reader_impl<_Traits>(), blob_(std::move(blob)) { this->reset(blob_.data(), static_cast<int>(blob_.size())); }
+  basic_ibstream(tlx::sbyte_buffer blob) : binary_reader_impl<_Traits>(), blob_(std::move(blob)) { this->reset(blob_.data(), static_cast<int>(blob_.size())); }
   basic_ibstream(const basic_obstream<_Traits>* obs) : binary_reader_impl<_Traits>(), blob_(obs->buffer())
   {
     this->reset(blob_.data(), static_cast<int>(blob_.size()));
@@ -332,7 +332,7 @@ public:
   }
 
 protected:
-  sbyte_buffer blob_;
+  tlx::sbyte_buffer blob_;
 };
 
 using ibstream_view = binary_reader_impl<convert_traits<network_convert_tag>>;

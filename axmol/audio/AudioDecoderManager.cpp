@@ -38,7 +38,7 @@ THE SOFTWARE.
 #    include "axmol/audio/AudioDecoderEXT.h"
 #endif
 
-#include "yasio/string_view.hpp"
+#include "yasio/tlx/string_view.hpp"
 
 namespace ax
 {
@@ -60,7 +60,7 @@ void AudioDecoderManager::destroy()
 
 AudioDecoder* AudioDecoderManager::createDecoder(std::string_view path)
 {
-    if (cxx20::ic::ends_with(path, ".ogg") || cxx20::ic::ends_with(path, ".opus"))
+    if (tlx::ic::ends_with(path, ".ogg") || tlx::ic::ends_with(path, ".opus"))
     {
         constexpr char VORBIS_SIGN[]        = {0x1, 'v', 'o', 'r', 'b', 'i', 's', '\0'};
         constexpr char OPUS_SIGN[]          = {'O', 'p', 'u', 's', 'H', 'e', 'a', 'd'};
@@ -96,11 +96,11 @@ AudioDecoder* AudioDecoderManager::createDecoder(std::string_view path)
         }
     }
 #if !defined(__APPLE__)
-    else if (cxx20::ic::ends_with(path, ".mp3"))
+    else if (tlx::ic::ends_with(path, ".mp3"))
     {
         return new AudioDecoderMp3();
     }
-    else if (cxx20::ic::ends_with(path, ".wav"))
+    else if (tlx::ic::ends_with(path, ".wav"))
     {
         return new AudioDecoderWav();
     }

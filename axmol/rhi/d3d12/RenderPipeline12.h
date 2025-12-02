@@ -104,8 +104,8 @@ private:
     RootSignatureEntry* _activeRootSignature{nullptr};
     ComPtr<ID3D12PipelineState> _activePSO;
 
-    axstd::hash_map<uintptr_t, ComPtr<ID3D12PipelineState>> _psoCache;
-    axstd::hash_map<uintptr_t, RootSignatureEntry> _rootSigCache;
+    tlx::hash_map<uintptr_t, ComPtr<ID3D12PipelineState>> _psoCache;
+    tlx::hash_map<uintptr_t, RootSignatureEntry> _rootSigCache;
 };
 
 }  // namespace ax::rhi::d3d12

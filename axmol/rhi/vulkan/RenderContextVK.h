@@ -181,8 +181,8 @@ private:
 
     VkCommandPool _commandPool{VK_NULL_HANDLE};
 
-    axstd::pod_vector<VkImage> _swapchainImages;
-    axstd::pod_vector<VkImageView> _swapchainImageViews;
+    tlx::pod_vector<VkImage> _swapchainImages;
+    tlx::pod_vector<VkImageView> _swapchainImageViews;
 
     uint32_t _semaphoreIndex{0};
 
@@ -197,13 +197,13 @@ private:
 #if !_AX_USE_DESCRIPTOR_CACHE
     std::array<VkDescriptorPool, MAX_FRAMES_IN_FLIGHT> _descriptorPools{};
 #endif
-    std::array<axstd::pod_vector<RenderPipelineImpl::DescriptorState>, MAX_FRAMES_IN_FLIGHT> _inFlightDescriptorStates;
+    std::array<tlx::pod_vector<RenderPipelineImpl::DescriptorState>, MAX_FRAMES_IN_FLIGHT> _inFlightDescriptorStates;
 
-    axstd::pod_vector<VkSemaphore> _acquireCompleteSemaphores;
-    axstd::pod_vector<VkSemaphore> _renderFinishedSemaphores;
+    tlx::pod_vector<VkSemaphore> _acquireCompleteSemaphores;
+    tlx::pod_vector<VkSemaphore> _renderFinishedSemaphores;
 
-    axstd::pod_vector<VkWriteDescriptorSet> _descriptorWritesPerFrame;
-    axstd::pod_vector<VkDescriptorImageInfo> _descriptorImageInfosPerFrame;
+    tlx::pod_vector<VkWriteDescriptorSet> _descriptorWritesPerFrame;
+    tlx::pod_vector<VkDescriptorImageInfo> _descriptorImageInfosPerFrame;
 
     VkCommandBuffer _currentCmdBuffer{VK_NULL_HANDLE};  // weak pointer
 

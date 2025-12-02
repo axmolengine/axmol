@@ -9,8 +9,10 @@
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,31 +22,5 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-#include "axmol/tlx/sorted_vector.hpp"
 
-namespace axstd
-{
-// flat_multiset traits
-template <class Key, class Compare = std::less<Key>, class Alloc = std::allocator<Key>>
-struct flat_multiset_traits
-{
-    using key_type       = Key;
-    using value_type     = Key;
-    using key_compare    = Compare;
-    using value_compare  = Compare;
-    using allocator_type = Alloc;
-    using key_extractor  = detail::identity<Key>;
-
-    static constexpr bool allow_duplicates = true;
-};
-
-/// flat_multiset
-template <class Key, class Compare = std::less<Key>, class Alloc = std::allocator<Key>>
-class flat_multiset : public detail::sorted_vector<flat_multiset_traits<Key, Compare, Alloc>>
-{
-    using impl_type = detail::sorted_vector<flat_multiset_traits<Key, Compare, Alloc>>;
-
-public:
-    using impl_type::impl_type;
-};
-}  // namespace axstd
+#include "yasio/tlx/split.hpp"

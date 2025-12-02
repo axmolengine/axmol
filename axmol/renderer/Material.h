@@ -208,7 +208,7 @@ protected:
     // weak reference
     Node* _target = nullptr;
 
-    axstd::string_map<int> _textureSlots;
+    tlx::string_map<int> _textureSlots;
     int _textureSlotIndex = 0;
 
     bool _isTransparent = false;  // is this mesh transparent.

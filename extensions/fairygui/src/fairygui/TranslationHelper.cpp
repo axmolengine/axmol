@@ -15,7 +15,7 @@ NS_FGUI_BEGIN
 
 using namespace std;
 
-axstd::string_map<axstd::string_map<std::string> > TranslationHelper::strings;
+tlx::string_map<tlx::string_map<std::string> > TranslationHelper::strings;
 
 void TranslationHelper::loadFromXML(const char* xmlString, size_t nBytes)
 {

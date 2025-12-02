@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include <functional>
 #include <mutex>
 #include <set>
-#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/vector.hpp"
 #include "axmol/base/Object.h"
 #include "axmol/base/Vector.h"
 
@@ -156,11 +156,11 @@ private:
 
 struct SchedHandle
 {
-    SchedHandle(axstd::pod_vector<SchedHandle*>* o, const ccSchedulerFunc& cb, void* t, int pri, bool psd) noexcept
+    SchedHandle(tlx::pod_vector<SchedHandle*>* o, const ccSchedulerFunc& cb, void* t, int pri, bool psd) noexcept
         : owner(o), callback(cb), target(t), priority(pri), paused(psd)
     {}
     SchedHandle(const SchedHandle&) = delete;
-    axstd::pod_vector<SchedHandle*>* owner;  // the owner sched list of this sched
+    tlx::pod_vector<SchedHandle*>* owner;  // the owner sched list of this sched
     ccSchedulerFunc callback;
     void* target;
     int priority;
@@ -484,12 +484,12 @@ protected:
 
     // update specific
 
-    void priorityIn(axstd::pod_vector<SchedHandle*>& list,
+    void priorityIn(tlx::pod_vector<SchedHandle*>& list,
                     const ccSchedulerFunc& callback,
                     void* target,
                     int priority,
                     bool paused);
-    void appendIn(axstd::pod_vector<SchedHandle*>& list, const ccSchedulerFunc& callback, void* target, bool paused);
+    void appendIn(tlx::pod_vector<SchedHandle*>& list, const ccSchedulerFunc& callback, void* target, bool paused);
 
     void addToWaitList(const ccSchedulerFunc& callback, void* target, int priority, bool paused);
 
@@ -499,19 +499,19 @@ protected:
 
     float _timeScale;
 
-    axstd::pod_vector<SchedHandle*> _waitList;  // list wait active
+    tlx::pod_vector<SchedHandle*> _waitList;  // list wait active
 
     //
     // "updates with priority" stuff
     //
-    axstd::pod_vector<SchedHandle*> _updatesNegList;  // list of priority < 0
-    axstd::pod_vector<SchedHandle*> _updates0List;    // list priority == 0
-    axstd::pod_vector<SchedHandle*> _updatesPosList;  // list priority > 0
+    tlx::pod_vector<SchedHandle*> _updatesNegList;  // list of priority < 0
+    tlx::pod_vector<SchedHandle*> _updates0List;    // list priority == 0
+    tlx::pod_vector<SchedHandle*> _updatesPosList;  // list priority > 0
     // weak reference SchedHandle map used to fetch quickly the list entries for pause,delete,etc
     std::unordered_map<void*, SchedHandle*> _schedIndexMap;
 
     // the vector holds list entries that needs to be deleted after update
-    axstd::pod_vector<SchedHandle*> _updateDeleteVector;
+    tlx::pod_vector<SchedHandle*> _updateDeleteVector;
 
     // Used for "selectors with interval"
     std::unordered_map<void*, TimerHandle> _timersMap;

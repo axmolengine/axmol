@@ -312,7 +312,7 @@ protected:
 
     Vector<MeshVertexData*> _meshVertexDatas;
 
-    axstd::string_map<AttachNode*> _attachments;
+    tlx::string_map<AttachNode*> _attachments;
 
     BlendFunc _blend;
 

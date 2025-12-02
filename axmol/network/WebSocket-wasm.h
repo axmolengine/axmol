@@ -27,7 +27,7 @@
 #include "axmol/platform/PlatformMacros.h"
 #include <string>
 #include "axmol/base/Object.h"
-#include "yasio/byte_buffer.hpp"
+#include "axmol/tlx/byte_buffer.hpp"
 
 #include <emscripten/websocket.h>
 

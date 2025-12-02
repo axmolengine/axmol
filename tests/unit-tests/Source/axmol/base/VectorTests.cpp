@@ -226,7 +226,7 @@ TEST_SUITE("base/Vector")
 
         // Sort
         Vector<Node*> vecForSort = createVector();
-        std::sort(vecForSort.begin(), vecForSort.end(), [](Node* a, Node* b) { return a->getTag() >= b->getTag(); });
+        std::sort(vecForSort.begin(), vecForSort.end(), [](Node* a, Node* b) { return a->getTag() > b->getTag(); });
 
         for (int i = 0; i < 20; ++i)
         {

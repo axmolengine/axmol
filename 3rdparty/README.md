@@ -194,7 +194,7 @@
 
 ## png
 - [![Upstream](https://img.shields.io/github/v/tag/glennrp/libpng?label=Upstream)](https://github.com/glennrp/libpng)
-- Version: 1.6.50
+- Version: 1.6.51
 - License: PNG Reference Library License version 2
 
 ## poly2tri

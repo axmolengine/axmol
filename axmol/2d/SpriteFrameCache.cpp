@@ -327,8 +327,8 @@ void SpriteFrameCache::insertFrame(const std::shared_ptr<SpriteSheet>& spriteShe
     _spriteFrames.insert(frameId, spriteFrame);  // add SpriteFrame
     if (spriteSheet->pathId == (uint64_t)-1)
         spriteSheet->pathId = computeHash(spriteSheet->path);
-    axstd::set_item(_spriteSheets, spriteSheet->pathId, spriteSheet);
-    axstd::set_item(_spriteFrameToSpriteSheetMap, frameId, spriteSheet);
+    tlx::set_item(_spriteSheets, spriteSheet->pathId, spriteSheet);
+    tlx::set_item(_spriteFrameToSpriteSheetMap, frameId, spriteSheet);
 }
 
 bool SpriteFrameCache::eraseFrame(std::string_view frameName)

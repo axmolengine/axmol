@@ -45,7 +45,7 @@ public:
     const VertexInputDesc* getVertexInputDesc(std::string_view name) const override;
     const VertexInputDesc* getVertexInputDesc(VertexInputKind name) const override;
 
-    const axstd::string_map<VertexInputDesc>& getActiveVertexInputs() const override;
+    const tlx::string_map<VertexInputDesc>& getActiveVertexInputs() const override;
 
     ShaderModuleImpl* getVertexShader() const { return _vertexShader; }
     ShaderModuleImpl* getFragmentShader() const { return _fragmentShader; }
@@ -54,7 +54,7 @@ public:
     int getMaxFragmentLocation() const override;
 
     std::size_t getUniformBufferSize(ShaderStage stage) const override;
-    const axstd::string_map<UniformInfo>& getActiveUniformInfos(ShaderStage stage) const override;
+    const tlx::string_map<UniformInfo>& getActiveUniformInfos(ShaderStage stage) const override;
 
     const D3D12BlobHandle& getVSBlob() const { return _vertexShader->internalHandle(); }
     const D3D12BlobHandle& getPSBlob() const { return _fragmentShader->internalHandle(); }

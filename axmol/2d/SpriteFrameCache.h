@@ -297,8 +297,8 @@ protected:
 
 private:
     ax::Map<uint64_t, SpriteFrame*> _spriteFrames;
-    axstd::hash_map<uint64_t, std::shared_ptr<SpriteSheet>> _spriteSheets;
-    axstd::hash_map<uint64_t, std::shared_ptr<SpriteSheet>> _spriteFrameToSpriteSheetMap;
+    tlx::hash_map<uint64_t, std::shared_ptr<SpriteSheet>> _spriteSheets;
+    tlx::hash_map<uint64_t, std::shared_ptr<SpriteSheet>> _spriteFrameToSpriteSheetMap;
 
     std::map<uint32_t, std::shared_ptr<ISpriteSheetLoader>> _spriteSheetLoaders;
 };

@@ -46,12 +46,12 @@ THE SOFTWARE.
 
 #if defined(_WIN32)
 #    include "ntcvt/ntcvt.hpp"
-#    include "yasio/string_view.hpp"
 #endif
 
 #include "pugixml/pugixml.hpp"
 
 #include "axmol/tlx/filesystem.hpp"
+#include "axmol/tlx/split.hpp"
 
 #if defined(_WIN32)
 inline stdfs::path toFspath(const std::string_view& pathSV)
@@ -176,7 +176,7 @@ public:
                 // add a new dictionary into the pre dictionary
                 AXASSERT(!_dictStack.empty(), "The state is wrong!");
                 ValueMap* preDict = _dictStack.top();
-                auto& curVal      = axstd::set_item(*preDict, _curKey, Value(ValueMap()))->second;
+                auto& curVal      = tlx::set_item(*preDict, _curKey, Value(ValueMap()))->second;
                 _curDict          = &curVal.asValueMap();
             }
 
@@ -572,7 +572,7 @@ FileUtils::Status FileUtils::getContents(std::string_view filename, ResizableBuf
 std::string FileUtils::getPathForFilename(std::string_view filename, std::string_view searchPath) const
 {
     auto file                  = filename;
-    std::string_view file_path = axstd::empty_sv;
+    std::string_view file_path = tlx::empty_sv;
     size_t pos                 = filename.find_last_of('/');
     if (pos != std::string::npos)
     {
@@ -716,6 +716,9 @@ const std::vector<std::string>& FileUtils::getOriginalSearchPaths() const
 void FileUtils::setWritablePath(std::string_view writablePath)
 {
     _writablePath = writablePath;
+
+    if (!_writablePath.empty() && (_writablePath.back() != '/'))
+      _writablePath += '/';
 }
 
 const std::string& FileUtils::getDefaultResourceRootPath() const
@@ -856,10 +859,10 @@ bool FileUtils::isAbsolutePathInternal(std::string_view path)
 #if defined(_WIN32)
     // see also: https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file?redirectedfrom=MSDN
     return ((path.length() > 2 && ((raw[0] >= 'a' && raw[0] <= 'z') || (raw[0] >= 'A' && raw[0] <= 'Z')) &&
-             raw[1] == ':')                         // Normal absolute path
-            || cxx20::starts_with(path, R"(\\?\)")  // Win32 File Namespaces for Long Path
-            || cxx20::starts_with(path, R"(\\.\)")  // Win32 Device Namespaces for device
-            || (raw[0] == '/' || raw[0] == '\\')    // Current disk drive
+             raw[1] == ':')                       // Normal absolute path
+            || tlx::starts_with(path, R"(\\?\)")  // Win32 File Namespaces for Long Path
+            || tlx::starts_with(path, R"(\\.\)")  // Win32 Device Namespaces for device
+            || (raw[0] == '/' || raw[0] == '\\')  // Current disk drive
     );
 #else
     return (path.length() > 0 && raw[0] == '/');
@@ -1031,7 +1034,7 @@ bool FileUtils::createDirectories(std::string_view path) const
 
     bool fail{false};
     std::string mpath{path};
-    axstd::splitpath_cb(&mpath.front(), [](char* ptr) { return *ptr != '\0'; }, [&fail](const char* subpath) {
+    tlx::split_path(&mpath.front(), [](char* ptr) { return *ptr != '\0'; }, [&fail](const char* subpath) {
         struct stat st;
         if (stat(subpath, &st) != 0)
         {

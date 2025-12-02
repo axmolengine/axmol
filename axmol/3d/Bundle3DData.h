@@ -36,7 +36,8 @@
 #include <string>
 
 #include "axmol/3d/shaderinfos.h"
-#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/vector.hpp"
+#include "axmol/tlx/byte_buffer.hpp"
 
 namespace ax
 {
@@ -115,7 +116,7 @@ public:
         assert(_stride == sizeof(_Ty));
         auto ifirst     = reinterpret_cast<const uint8_t*>(first);
         auto size_bytes = std::distance(first, last) * sizeof(_Ty);
-        _buffer.insert((yasio::byte_buffer::iterator)position, ifirst, ifirst + size_bytes);
+        _buffer.insert(tlx::byte_buffer::iterator(position), ifirst, ifirst + size_bytes);
     }
 
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
@@ -188,9 +189,9 @@ public:
     size_t bsize() const { return _buffer.size(); }
 
     /** Resizes the count of indices in the container. */
-    void resize(size_t size) { _buffer.resize(static_cast<yasio::byte_buffer::size_type>(size * _stride)); }
+    void resize(size_t size) { _buffer.resize(static_cast<tlx::byte_buffer::size_type>(size * _stride)); }
     /** Resizes the container in bytes. */
-    void bresize(size_t size) { _buffer.resize(static_cast<yasio::byte_buffer::size_type>(size)); }
+    void bresize(size_t size) { _buffer.resize(static_cast<tlx::byte_buffer::size_type>(size)); }
 
     /** Returns true if the container is empty. Otherwise, false. */
     bool empty() const { return _buffer.empty(); }
@@ -202,14 +203,14 @@ public:
         for (auto it = _buffer.begin(); it != _buffer.end(); it += _stride)
         {
             uint32_t val = 0;
-            memcpy(&val, it, _stride);
+            memcpy(&val, std::to_address(it), _stride);
             cb(val);
         }
     }
 
 protected:
     unsigned char _stride;
-    yasio::byte_buffer _buffer;
+    tlx::byte_buffer _buffer;
 };
 
 /**mesh vertex attribute
@@ -307,7 +308,7 @@ struct MeshData
     std::vector<std::string> subMeshIds;  // subMesh Names (since 3.3)
     std::vector<AABB> subMeshAABB;
     int numIndex;
-    axstd::pod_vector<MeshVertexAttrib> attribs;
+    tlx::pod_vector<MeshVertexAttrib> attribs;
     int attribCount;
 
 public:
@@ -521,9 +522,9 @@ public:
     };
 
 public:
-    axstd::string_map<std::vector<Vec3Key>> _translationKeys;
-    axstd::string_map<std::vector<QuatKey>> _rotationKeys;
-    axstd::string_map<std::vector<Vec3Key>> _scaleKeys;
+    tlx::string_map<std::vector<Vec3Key>> _translationKeys;
+    tlx::string_map<std::vector<QuatKey>> _rotationKeys;
+    tlx::string_map<std::vector<Vec3Key>> _scaleKeys;
 
     float _totalTime;
 

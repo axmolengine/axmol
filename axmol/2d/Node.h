@@ -86,6 +86,8 @@ class EventListener;
 
 typedef std::map<uint64_t, Node*> NodeIndexerMap_t;
 
+AX_DLL uint64_t hashNodeName(std::string_view);
+
 /** @class Node
 * @brief Node is the base element of the Scene Graph. Elements of the Scene Graph must be Node objects or subclasses of
 it. The most common Node objects are: Scene, Layer, Sprite, Menu, Label.
@@ -980,6 +982,8 @@ public:
      * @since v3.2
      */
     virtual void setName(std::string_view name);
+
+    uint64_t getHashOfName() const;
 
     /**
      * Returns a custom user data pointer.

@@ -72,6 +72,8 @@ void TextureBindingSet::assign(const TextureBindingSet& other)
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         setTextureArray(other.loc, other.slots, other.texs);
 #else
+
+        std::vector<rhi::Texture*> fuck;
         setTextureArray(-1, other.slots, other.texs);
 #endif
     }
@@ -128,7 +130,7 @@ void TextureBindingSet::setTextureArray(int location, std::span<const TextureBin
 #endif
 }
 
-void TextureBindingSet::setTextureArray(int location, std::span<const int> slots, std::span<rhi::Texture*> texs)
+void TextureBindingSet::setTextureArray(int location, std::span<const int> slots, std::span<rhi::Texture* const> texs)
 {
     bool retain = !slots.empty() && (slots.size() == texs.size());
 

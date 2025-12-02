@@ -23,7 +23,7 @@
  ****************************************************************************/
 #include "axmol/renderer/VertexLayoutManager.h"
 #include "axmol/rhi/DriverBase.h"
-#include "yasio/singleton.hpp"
+#include "axmol/tlx/singleton.hpp"
 
 namespace ax
 {
@@ -199,12 +199,12 @@ static constexpr size_t MAX_DESC_POOL_SIZE = 64;
 
 VertexLayoutManager* VertexLayoutManager::getInstance()
 {
-    return yasio::singleton<VertexLayoutManager>::instance();
+    return tlx::singleton<VertexLayoutManager>::instance();
 }
 
 void VertexLayoutManager::destroyInstance()
 {
-    yasio::singleton<VertexLayoutManager>::destroy();
+    tlx::singleton<VertexLayoutManager>::destroy();
 }
 
 VertexLayoutManager::VertexLayoutManager()

@@ -17,7 +17,12 @@
 #elif YASIO__HAS_EVPORT && defined(YASIO_ENABLE_HPERF_IO)
 #  include "yasio/impl/evport_io_watcher.hpp"
 #elif !defined(YASIO_DISABLE_POLL)
-#  include "yasio/impl/poll_io_watcher.hpp"
+#  if YASIO__HAS_POLL
+#    include "yasio/impl/poll_io_watcher.hpp"
+#  else
+#    pragma message("Falling back to select_io_watcher due to target OS(NT < 6.0) not support poll")
+#    include "yasio/impl/select_io_watcher.hpp"
+#  endif
 #else
 #  include "yasio/impl/select_io_watcher.hpp"
 #endif
@@ -33,7 +38,7 @@ using io_watcher = kqueue_io_watcher;
 using io_watcher = epoll_io_watcher;
 #elif defined(YASIO__EVPORT_IO_WATCHER_HPP)
 using io_watcher = evport_io_watcher;
-#elif !defined(YASIO_DISABLE_POLL)
+#elif !defined(YASIO_DISABLE_POLL) && YASIO__HAS_POLL
 using io_watcher = poll_io_watcher;
 #else
 using io_watcher = select_io_watcher;

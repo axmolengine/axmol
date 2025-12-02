@@ -33,7 +33,7 @@
 #    include "axmol/math/Math.h"
 #    include "box2d/box2d.h"
 
-#    include "axmol/tlx/pod_vector.hpp"
+#    include "axmol/tlx/vector.hpp"
 
 namespace ax
 {
@@ -337,7 +337,7 @@ protected:
 protected:
     PhysicsBody* _body;
 
-    axstd::pod_vector<b2ShapeId> _b2Shapes;
+    tlx::pod_vector<b2ShapeId> _b2Shapes;
 
     Type _type;
     float _area;

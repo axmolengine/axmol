@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "axmol/2d/AutoPolygon.h"
 #include "poly2tri/poly2tri.h"
 #include "axmol/base/Director.h"
-#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/vector.hpp"
 #include "axmol/renderer/TextureCache.h"
 #include "clipper2/clipper.h"
 #include <algorithm>
@@ -608,8 +608,8 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
     cdt.Triangulate();
     std::vector<p2t::Triangle*> tris = cdt.GetTriangles();
 
-    axstd::pod_vector<unsigned short> indices(tris.size() * 3);
-    axstd::pod_vector<V3F_T2F_C4B> verts;
+    tlx::pod_vector<unsigned short> indices(tris.size() * 3);
+    tlx::pod_vector<V3F_T2F_C4B> verts;
     verts.reserve(indices.size() / 2);  // we won't know the size of verts until we process all of the triangles!
 
     unsigned short idx = 0;
@@ -649,7 +649,7 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
 
     // Triangles should really use std::vector and not arrays for verts and indices.
     // Then the above memcpy would not be necessary
-    TrianglesCommand::Triangles triangles = {verts.release_pointer(), indices.release_pointer(), (unsigned int)vdx,
+    TrianglesCommand::Triangles triangles = {verts.detach_abi(), indices.detach_abi(), (unsigned int)vdx,
                                              (unsigned int)idx};
     return triangles;
 }

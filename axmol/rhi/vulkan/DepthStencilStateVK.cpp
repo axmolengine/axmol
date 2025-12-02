@@ -93,7 +93,7 @@ static VkStencilOpState make_op_state(const StencilDesc& s)
 
 DepthStencilStateImpl::DepthStencilStateImpl()
 {
-    _hash = axstd::hash_bytes(&_dsDesc, sizeof(_dsDesc));
+    _hash = tlx::hash_bytes(&_dsDesc, sizeof(_dsDesc));
 
     // Disabled state
     _disableInfo.sType             = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
@@ -109,7 +109,7 @@ void DepthStencilStateImpl::update(const DepthStencilDesc& desc)
 {
     DepthStencilState::update(desc);
 
-    _hash = axstd::hash_bytes(&_dsDesc, sizeof(_dsDesc));
+    _hash = tlx::hash_bytes(&_dsDesc, sizeof(_dsDesc));
 
     if (!isEnabled())
     {

@@ -92,7 +92,7 @@ static D3D12_DEPTH_STENCILOP_DESC make_op_desc(const StencilDesc& s)
 
 DepthStencilStateImpl::DepthStencilStateImpl()
 {
-    _hash = axstd::hash_bytes(&_dsDesc, sizeof(_dsDesc));
+    _hash = tlx::hash_bytes(&_dsDesc, sizeof(_dsDesc));
 
     // Disabled state (depth test/write off, stencil off)
     _disableDesc.DepthEnable      = FALSE;
@@ -112,7 +112,7 @@ void DepthStencilStateImpl::update(const DepthStencilDesc& desc)
 {
     DepthStencilState::update(desc);
 
-    _hash = axstd::hash_bytes(&_dsDesc, sizeof(_dsDesc));
+    _hash = tlx::hash_bytes(&_dsDesc, sizeof(_dsDesc));
 
     if (!isEnabled())
     {

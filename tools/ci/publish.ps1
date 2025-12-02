@@ -376,12 +376,11 @@ Write-Host "Create main package $pkg_file_path done, ${total} files found, MD5: 
 
 Pop-Location
 
-[System.IO.File]::AppendAllText($release_note, "## MD5 Hash of the release artifacts`n  - ``${pkg_file_name}``: $md5_digest`n  - ``${bs_pkg_file_name}``: $bs_md5_digest")
+[System.IO.File]::AppendAllText($release_note, "## MD5 Hash of the release artifacts`n  - ``${pkg_file_name}``: $md5_digest")
 
 if ($env:GITHUB_ACTIONS -eq 'true') {
     echo "release_tag=v$version" >> ${env:GITHUB_OUTPUT}
     echo "release_pkg=$pkg_file_name" >> ${env:GITHUB_OUTPUT}
-    echo "bs_release_pkg=$bs_pkg_file_name" >> ${env:GITHUB_OUTPUT}
     echo "release_note=$release_note" >> ${env:GITHUB_OUTPUT}
     echo "prerelease=$prerelease" >> ${env:GITHUB_OUTPUT}
 }

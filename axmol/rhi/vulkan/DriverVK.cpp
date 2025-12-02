@@ -104,7 +104,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL vkDebugCallback(VkDebugUtilsMessageSeverit
     return VK_FALSE;
 }
 
-static std::pair<VkPhysicalDevice, uint32_t> resolveAdapter(const axstd::pod_vector<VkPhysicalDevice>& devices,
+static std::pair<VkPhysicalDevice, uint32_t> resolveAdapter(const tlx::pod_vector<VkPhysicalDevice>& devices,
                                                             VkInstance instance,
                                                             PowerPreference pref)
 {
@@ -274,7 +274,7 @@ void DriverImpl::initializeFactory()
     appInfo.apiVersion         = VK_API_VERSION_1_3;  // axmol requires vulkan-1.3
 
     // Collect required extensions
-    axstd::pod_vector<const char*> extensions;
+    tlx::pod_vector<const char*> extensions;
     extensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
@@ -342,7 +342,7 @@ void DriverImpl::initializeDevice()
     vkEnumeratePhysicalDevices(_factory, &count, nullptr);
     AXASSERT(count > 0, "No Vulkan physical devices found");
 
-    axstd::pod_vector<VkPhysicalDevice> devices(count);
+    tlx::pod_vector<VkPhysicalDevice> devices(count);
     vkEnumeratePhysicalDevices(_factory, &count, devices.data());
 
     auto [physical, graphicsQueueFamily] = resolveAdapter(devices, _factory, contextAttrs.powerPreference);
@@ -365,7 +365,7 @@ void DriverImpl::initializeDevice()
     /*
      * https://vulkan.lunarg.com/doc/view/1.4.328.1/windows/antora/spec/latest/chapters/drawing.html#VUID-vkCmdDraw-dynamicPrimitiveTopologyUnrestricted-07500
      */
-    axstd::pod_vector<const char*> deviceExtensions;
+    tlx::pod_vector<const char*> deviceExtensions;
     deviceExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
     deviceExtensions.push_back(VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME);
 
@@ -867,8 +867,8 @@ void DriverImpl::cleanPendingResources()
 
 // Rebuild swapchain attachments from a swapchain image handle.
 // Note: swapchainImage must be a VkImage (provided as void* to keep signature parity).
-void DriverImpl::rebuildSwapchainAttachments(const axstd::pod_vector<VkImage>& images,
-                                             const axstd::pod_vector<VkImageView>& imageViews,
+void DriverImpl::rebuildSwapchainAttachments(const tlx::pod_vector<VkImage>& images,
+                                             const tlx::pod_vector<VkImageView>& imageViews,
                                              const VkExtent2D& extent,
                                              PixelFormat imagePF)
 {

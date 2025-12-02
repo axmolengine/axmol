@@ -29,9 +29,7 @@ THE SOFTWARE.
 #include "axmol/platform/PlatformMacros.h"
 #include "extensions/ExtensionMacros.h"
 #include <string>
-
-#include "yasio/string_view.hpp"
-
+#include <string_view>
 // rapidjson
 #include "rapidjson/document.h"
 

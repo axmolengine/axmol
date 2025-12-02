@@ -740,7 +740,7 @@ void Console::performCommand(socket_native_type fd, std::string_view command)
     }
 
     int index = 0;
-    axstd::string_map<Command*>::iterator it;
+    tlx::string_map<Command*>::iterator it;
     std::string cmd_args;
     for (auto rgn : std::views::split(command, ' '))
     {
@@ -1135,10 +1135,10 @@ void Console::commandTouchSubCommandTap(socket_native_type fd, std::string_view 
         switch (argi++)
         {
         case 1:
-            axstd::from_chars(argv.data(), argv.data() + argv.length(), x);
+            tlx::from_chars(argv.data(), argv.data() + argv.length(), x);
             break;
         case 2:
-            axstd::from_chars(argv.data(), argv.data() + argv.length(), x);
+            tlx::from_chars(argv.data(), argv.data() + argv.length(), x);
             break;
         }
         if (argi == 3)
@@ -1406,7 +1406,7 @@ void Console::printFileUtils(socket_native_type fd)
     Console::Utility::sendPrompt(fd);
 }
 
-void Console::sendHelp(socket_native_type fd, const axstd::string_map<Command*>& commands, const char* msg)
+void Console::sendHelp(socket_native_type fd, const tlx::string_map<Command*>& commands, const char* msg)
 {
     Console::Utility::sendToConsole(fd, msg, strlen(msg));
     for (auto&& it : commands)

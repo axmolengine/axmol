@@ -81,8 +81,8 @@ stl_type_map = {
     'std::unordered_multimap': 2,
     'std::map': 2,
     'tsl::robin_map': 2,
-    'axstd::hash_map': 2,
-    'axstd::string_map': 2,
+    'tlx::hash_map': 2,
+    'tlx::string_map': 2,
     'std::multimap': 2,
     'std::vector': 1,
     'std::list': 1,
@@ -93,8 +93,8 @@ stl_type_map = {
     'std::unordered_set': 1,
     'std::unordered_multiset': 1,
     'tsl::robin_set': 1,
-    'axstd::hash_set': 1,
-    'axstd::string_set': 1,
+    'tlx::hash_set': 1,
+    'tlx::string_set': 1,
     'std::stack': 1,
     'std::queue': 1,
     'std::deque': 1,
@@ -715,9 +715,9 @@ class NativeType(object):
     def to_string(self, generator):
 
         if self.name.find("robin_map<std::string, ") == 0:
-            self.name = self.name.replace(">", ", axstd::string_hash, axstd::equal_to>")
-            self.namespaced_name = self.namespaced_name.replace(">", ", axstd::string_hash, axstd::equal_to>")
-            self.whole_name = self.whole_name.replace(">", ", axstd::string_hash, axstd::equal_to>")
+            self.name = self.name.replace(">", ", tlx::string_hash, tlx::equal_to>")
+            self.namespaced_name = self.namespaced_name.replace(">", ", tlx::string_hash, tlx::equal_to>")
+            self.whole_name = self.whole_name.replace(">", ", tlx::string_hash, tlx::equal_to>")
 
         conversions = generator.config['conversions']
         if 'native_types' in conversions:
@@ -765,7 +765,7 @@ class NativeType(object):
             name = to_replace
 
         if name.find("tsl::robin_map<std::string, ") >= 0:
-            name = name.replace(">", ", axstd::string_hash, axstd::equal_to>")
+            name = name.replace(">", ", tlx::string_hash, tlx::equal_to>")
 
         return name
 
@@ -1731,7 +1731,7 @@ class Generator(object):
         if namespace_class_name.find("::") >= 0:
             if namespace_class_name.find("std::") == 0 or namespace_class_name.find("cxx17::") == 0:
                 return namespace_class_name
-            if namespace_class_name.find("tsl::") == 0 or namespace_class_name.find("axstd::") == 0:
+            if namespace_class_name.find("tsl::") == 0 or namespace_class_name.find("tlx::") == 0:
                 return namespace_class_name
             else:
                 raise Exception("The namespace (%s) conversion wasn't set in 'ns_map' section of the conversions.yaml" % namespace_class_name)
@@ -1743,7 +1743,7 @@ class Generator(object):
         for (k, v) in script_ns_dict.items():
             if namespace_class_name.find("std::") == 0 or namespace_class_name.find("cxx17::") == 0:
                 return False
-            if namespace_class_name.find("tsl::") == 0 or namespace_class_name.find("axstd::") == 0:
+            if namespace_class_name.find("tsl::") == 0 or namespace_class_name.find("tlx::") == 0:
                 return False
             if namespace_class_name.find(k) >= 0:
                 return True
@@ -1766,7 +1766,7 @@ class Generator(object):
                 return "Array"
             if namespace_class_name.find("std::map") == 0 or namespace_class_name.find("std::unordered_map") == 0:
                 return "map_object"
-            if namespace_class_name.find("tsl::robin_") >= 0 or namespace_class_name.find("axstd::string_map") == 0:
+            if namespace_class_name.find("tsl::robin_") >= 0 or namespace_class_name.find("tlx::string_map") == 0:
                 return "map_object"
             if namespace_class_name.find("std::function") == 0:
                 return "function"
@@ -1812,7 +1812,7 @@ class Generator(object):
                 return "array_table"
             if namespace_class_name.find("std::map") == 0 or namespace_class_name.find("std::unordered_map") == 0:
                 return "map_table"
-            if namespace_class_name.find("tsl::robin_") >= 0 or namespace_class_name.find("axstd::string_map") == 0:
+            if namespace_class_name.find("tsl::robin_") >= 0 or namespace_class_name.find("tlx::string_map") == 0:
                 return "map_table"
             if namespace_class_name.find("std::function") == 0:
                 return "function"

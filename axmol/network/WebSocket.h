@@ -50,7 +50,7 @@
 #    include "axmol/base/Scheduler.h"
 #    include "axmol/base/ConcurrentDeque.h"
 #    include "yasio/yasio_fwd.hpp"
-#    include "yasio/byte_buffer.hpp"
+#    include "axmol/tlx/byte_buffer.hpp"
 #    include "axmol/network/Uri.h"
 #    include "llhttp.h"
 #    include "websocket_parser.h"
@@ -152,17 +152,17 @@ public:
     class MessageEvent : public Event
     {
     public:
-        MessageEvent(yasio::sbyte_buffer&& message, bool isBinary) : _message(std::move(message)), _isBinary(isBinary)
+        MessageEvent(tlx::sbyte_buffer&& message, bool isBinary) : _message(std::move(message)), _isBinary(isBinary)
         {
             this->_type = Type::ON_MESSAGE;
         }
 
-        yasio::sbyte_buffer& getMessage() { return _message; }
-        const yasio::sbyte_buffer& getMessage() const { return _message; }
+        tlx::sbyte_buffer& getMessage() { return _message; }
+        const tlx::sbyte_buffer& getMessage() const { return _message; }
         bool isBinary() const { return _isBinary; }
 
     private:
-        yasio::sbyte_buffer _message;
+        tlx::sbyte_buffer _message;
         bool _isBinary;
         /* TODO:
         issued;
@@ -429,7 +429,7 @@ protected:
     std::string _closeReason;
 
     // for receiveData
-    yasio::sbyte_buffer _receivedData;
+    tlx::sbyte_buffer _receivedData;
     std::recursive_mutex _receivedDataMtx;
 
     EventListenerCustom* _resetDirectorListener;

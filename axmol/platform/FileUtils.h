@@ -76,10 +76,10 @@ public:
     void resize_and_overwrite(size_t num_of_bytes, std::function<size_t(void*, size_t)> op) override
     {
         if constexpr (element_size == 1)
-            axstd::resize_and_overrite(*_cont, num_of_bytes, std::move(op));
+            tlx::resize_and_overrite(*_cont, num_of_bytes, std::move(op));
         else
-            axstd::resize_and_overrite(*_cont, count_element(num_of_bytes),
-                                       [op_ = std::move(op)](void* out, size_t count) {
+            tlx::resize_and_overrite(*_cont, count_element(num_of_bytes),
+                                     [op_ = std::move(op)](void* out, size_t count) {
                 const auto num_of_bytes = op_(out, count * element_size);
                 return count_element(num_of_bytes);
             });
@@ -207,7 +207,7 @@ public:
      *      - Status::TooLarge when there file to be read is too large (> 2^32-1), the buffer will not changed.
      *      - Status::ObtainSizeFailed when failed to obtain the file size, the buffer will not changed.
      */
-    template <typename T, typename E = std::enable_if_t<axstd::is_resizable_container_v<T>>>
+    template <typename T, typename E = std::enable_if_t<tlx::is_resizable_container_v<T>>>
     Status getContents(std::string_view filename, T* buffer) const
     {
         ResizableBufferAdapter<T> buf(buffer);
@@ -562,10 +562,10 @@ public:
     virtual void listFilesRecursively(std::string_view dirPath, std::vector<std::string>* files) const;
 
     /** Returns the full path cache. */
-    const axstd::string_map<std::string> getFullPathCache() const { return _fullPathCache; }
+    const tlx::string_map<std::string> getFullPathCache() const { return _fullPathCache; }
 
     /** Returns the full path cache. */
-    const axstd::string_map<std::string> getFullPathCacheDir() const { return _fullPathCacheDir; }
+    const tlx::string_map<std::string> getFullPathCacheDir() const { return _fullPathCacheDir; }
 
     /**
      *  Checks whether a file exists without considering search paths and resolution orders.
@@ -655,13 +655,13 @@ protected:
      *  The full path cache for normal files. When a file is found, it will be added into this cache.
      *  This variable is used for improving the performance of file search.
      */
-    mutable axstd::string_map<std::string> _fullPathCache;
+    mutable tlx::string_map<std::string> _fullPathCache;
 
     /**
      *  The full path cache for directories. When a diretory is found, it will be added into this cache.
      *  This variable is used for improving the performance of file search.
      */
-    mutable axstd::string_map<std::string> _fullPathCacheDir;
+    mutable tlx::string_map<std::string> _fullPathCacheDir;
 
     /**
      * Writable path.

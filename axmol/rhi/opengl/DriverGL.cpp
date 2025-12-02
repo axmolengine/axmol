@@ -35,7 +35,7 @@
 #include "axmol/rhi/opengl/MacrosGL.h"
 #include "axmol/rhi/opengl/VertexLayoutGL.h"
 
-#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/vector.hpp"
 #include "axmol/tlx/utility.hpp"
 #include "axmol/tlx/format.hpp"
 #include "xxhash/xxhash.h"
@@ -143,7 +143,7 @@ DriverImpl::DriverImpl()
     });
 
     // texture compressions
-    axstd::pod_vector<GLint> formats;
+    tlx::pod_vector<GLint> formats;
     GLint numFormats{0};
     glGetIntegerv(GL_NUM_COMPRESSED_TEXTURE_FORMATS, &numFormats);
     if (numFormats > 0)
@@ -407,7 +407,7 @@ static GLuint compileShader(GLenum shaderType, const GLchar* source)
 
     if (logLength > 1)
     {
-        auto errorLog = axstd::make_unique_for_overwrite<char[]>(static_cast<size_t>(logLength));
+        auto errorLog = tlx::make_unique_for_overwrite<char[]>(static_cast<size_t>(logLength));
         glGetShaderInfoLog(shader, logLength, nullptr, static_cast<GLchar*>(errorLog.get()));
         AXLOGE("axmol:ERROR: Failed to compile shader, detail: {}\n{}", errorLog.get(), source);
     }

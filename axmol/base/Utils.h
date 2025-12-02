@@ -288,7 +288,7 @@ AX_DLL void killCurrentProcess();
 template <typename T, typename F, typename... Ts>
 static RefPtr<T> makeInstance(F&& memf, Ts&&... args)
 {
-    RefPtr<T> pRet(new T(), axstd::adopt_object);
+    RefPtr<T> pRet(new T(), tlx::adopt_object);
     if (pRet && std::mem_fn(memf)(pRet.get(), std::forward<Ts>(args)...))
         return pRet;
 
@@ -451,7 +451,7 @@ inline std::string base64Encode(std::span<_Ty, _Extent> in)
  *
  @since axmol-1.0.0
  */
-AX_DLL yasio::byte_buffer base64Decode(std::string_view s);
+AX_DLL tlx::byte_buffer base64Decode(std::string_view s);
 
 /**
  * Encodes bytes into a 64base encoded memory with terminating '\0' character.

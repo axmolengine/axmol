@@ -45,7 +45,7 @@
 #    include "axmol/tlx/filesystem.hpp"
 #endif
 
-#include "yasio/string_view.hpp"
+#include "yasio/tlx/string_view.hpp"
 
 namespace ax
 {
@@ -212,9 +212,9 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
     for (const auto& entry : stdfs::recursive_directory_iterator(fileFolder))
     {
 #    if !defined(_WIN32)
-        if (entry.is_regular_file() && cxx20::ends_with(entry.path().native(), ".material"sv))
+        if (entry.is_regular_file() && tlx::ends_with(entry.path().native(), ".material"sv))
 #    else
-        if (entry.is_regular_file() && cxx20::ends_with(entry.path().native(), L".material"sv))
+        if (entry.is_regular_file() && tlx::ends_with(entry.path().native(), L".material"sv))
 #    endif
         {
             auto pathU8Str = entry.path().generic_u8string();

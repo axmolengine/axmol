@@ -377,7 +377,7 @@ private:
         RichText::VisitEnterHandler handleVisitEnter;
         RichText::VisitExitHandler handleVisitExit;
     };
-    typedef axstd::string_map<TagBehavior> TagTables;
+    typedef tlx::string_map<TagBehavior> TagTables;
 
     static TagTables _tagTables;
 
@@ -1181,8 +1181,8 @@ void MyXMLVisitor::setTagDescription(std::string_view tag,
                                      RichText::VisitExitHandler&& handleVisitExit)
 {
     // MyXMLVisitor::_tagTables[tag] = {isFontElement, std::move(handleVisitEnter), std::move(handleVisitExit)};
-    axstd::set_item(MyXMLVisitor::_tagTables, tag,
-                    TagBehavior{isFontElement, std::move(handleVisitEnter), std::move(handleVisitExit)});
+    tlx::set_item(MyXMLVisitor::_tagTables, tag,
+                  TagBehavior{isFontElement, std::move(handleVisitEnter), std::move(handleVisitExit)});
 }
 
 void MyXMLVisitor::removeTagDescription(std::string_view tag)
@@ -1666,7 +1666,7 @@ ValueMap RichText::getDefaults() const
 
 static inline bool parseHexDigit(uint8_t& out, const char* p, int n)
 {
-    auto ret = axstd::from_chars(p, p + n, out, 16);
+    auto ret = tlx::from_chars(p, p + n, out, 16);
     return ret.ec == std::errc{};
 }
 

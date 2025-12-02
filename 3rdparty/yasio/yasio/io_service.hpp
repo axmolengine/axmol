@@ -39,19 +39,19 @@ SOFTWARE.
 #include <map>
 #include "yasio/sz.hpp"
 #include "yasio/config.hpp"
-#include "yasio/singleton.hpp"
 #include "yasio/impl/concurrent_queue.hpp"
-#include "yasio/utils.hpp"
+#include "yasio/tlx/singleton.hpp"
+#include "yasio/tlx/chrono.hpp"
 #include "yasio/errc.hpp"
-#include "yasio/memory.hpp"
-#include "yasio/string_view.hpp"
+#include "yasio/tlx/memory.hpp"
+#include "yasio/tlx/string_view.hpp"
 #include "yasio/object_pool.hpp"
-#include "yasio/byte_buffer.hpp"
+#include "yasio/tlx/byte_buffer.hpp"
 #include "yasio/xxsocket.hpp"
 #include "yasio/io_watcher.hpp"
 
 #if !defined(YASIO_USE_CARES)
-#  include "yasio/shared_mutex.hpp"
+#  include "yasio/tlx/shared_mutex.hpp"
 #endif
 
 #if defined(YASIO_ENABLE_KCP)
@@ -400,7 +400,7 @@ typedef completion_cb_t io_completion_cb_t;
 
 namespace
 {
-static const int yasio__max_rcvbuf = YASIO_SZ(64, k);
+static const size_t yasio__max_rcvbuf = YASIO_SZ(64, k);
 } // namespace
 
 // the ssl role
@@ -412,10 +412,10 @@ enum ssl_role
 
 struct io_hostent {
   io_hostent() = default;
-  io_hostent(cxx17::string_view ip, u_short port) : host_(cxx17::svtos(ip)), port_(port) {}
+  io_hostent(std::string_view ip, u_short port) : host_(ip), port_(port) {}
   io_hostent(io_hostent&& rhs) YASIO__NOEXCEPT : host_(std::move(rhs.host_)), port_(rhs.port_) {}
   io_hostent(const io_hostent& rhs) : host_(rhs.host_), port_(rhs.port_) {}
-  void set_ip(cxx17::string_view ip) { cxx17::assign(host_, ip); }
+  void set_ip(std::string_view ip) { host_ = ip; }
   const std::string& get_ip() const { return host_; }
   void set_port(u_short port) { port_ = port; }
   u_short get_port() const { return port_; }
@@ -425,17 +425,17 @@ struct io_hostent {
 
 class YASIO_API highp_timer {
 public:
-  highp_timer(io_service& service) : service_(service){};
+  highp_timer(io_service& service) : service_(service) {};
   highp_timer(const highp_timer&)            = delete;
   highp_timer(highp_timer&&)                 = delete;
   highp_timer& operator=(const highp_timer&) = delete;
   void expires_from_now(const std::chrono::microseconds& duration)
   {
     this->duration_    = duration;
-    this->expire_time_ = yasio::steady_clock_t::now() + this->duration_;
+    this->expire_time_ = tlx::steady_clock_t::now() + this->duration_;
   }
 
-  void expires_from_now() { this->expire_time_ = yasio::steady_clock_t::now() + this->duration_; }
+  void expires_from_now() { this->expire_time_ = tlx::steady_clock_t::now() + this->duration_; }
 
   // Wait timer timeout once.
   void async_wait_once(timerv_cb_t cb)
@@ -466,8 +466,8 @@ public:
   YASIO__DECL std::chrono::microseconds wait_duration() const;
 
   io_service& service_;
-  std::chrono::microseconds duration_                         = {};
-  std::chrono::time_point<yasio::steady_clock_t> expire_time_ = {};
+  std::chrono::microseconds duration_                       = {};
+  std::chrono::time_point<tlx::steady_clock_t> expire_time_ = {};
 };
 
 struct YASIO_API io_base {
@@ -561,13 +561,13 @@ protected:
 private:
   YASIO__DECL io_channel(io_service& service, int index);
 
-  void set_address(cxx17::string_view host, u_short port)
+  void set_address(std::string_view host, u_short port)
   {
     set_host(host);
     set_port(port);
   }
 
-  YASIO__DECL void set_host(cxx17::string_view host);
+  YASIO__DECL void set_host(std::string_view host);
   YASIO__DECL void set_port(u_short port);
 
   void clear_mutable_flags() { properties_ &= 0x00ffffff; }
@@ -598,7 +598,7 @@ private:
   u_short remote_port_ = 0;
 
   // The last query success time in microseconds for dns cache support
-  highp_time_t query_success_time_ = 0;
+  tlx::highp_time_t query_success_time_ = 0;
 
 #if defined(YASIO_ENABLE_ARES_PROFILER)
   highp_time_t query_start_time_;
@@ -642,7 +642,7 @@ private:
   ip::endpoint multiaddr_, multiif_;
 
   // Current it's only for UDP
-  sbyte_buffer buffer_;
+  tlx::sbyte_buffer buffer_;
 
   // The bytes transferred from socket low layer, currently, only works for client channel
   long long bytes_transferred_ = 0;
@@ -655,7 +655,7 @@ private:
 
 class io_send_buffer {
 public:
-  explicit io_send_buffer(yasio::sbyte_buffer&& mutable_buffer)
+  explicit io_send_buffer(tlx::sbyte_buffer&& mutable_buffer)
   {
     mutable_buffer_ = std::move(mutable_buffer);
     data_           = mutable_buffer_.data();
@@ -680,7 +680,7 @@ public:
   size_t size() const { return size_; }
 
 private:
-  yasio::sbyte_buffer mutable_buffer_;
+  tlx::sbyte_buffer mutable_buffer_;
 
   const char* data_;
   size_t size_;
@@ -742,7 +742,7 @@ public:
 protected:
   io_service& get_service() const { return ctx_->get_service(); }
   bool is_open() const { return state_ == state::OPENED && socket_ && socket_->is_open(); }
-  sbyte_buffer fetch_packet()
+  tlx::sbyte_buffer fetch_packet()
   {
     expected_size_ = -1;
     return std::move(expected_packet_);
@@ -766,10 +766,10 @@ protected:
   YASIO__DECL void complete_op(io_send_op*, int error);
 
   // Call at io_service
-  YASIO__DECL virtual int do_read(int revent, int& error, highp_time_t& wait_duration);
+  YASIO__DECL virtual int do_read(int revent, int& error, tlx::highp_time_t& wait_duration);
 
   // Call at io_service, try flush pending packet
-  YASIO__DECL virtual bool do_write(highp_time_t& wait_duration);
+  YASIO__DECL virtual bool do_write(tlx::highp_time_t& wait_duration);
 
   // Sets the underlying layer socket io primitives.
   YASIO__DECL virtual void set_primitives();
@@ -778,11 +778,11 @@ protected:
 
   bool is_valid() const { return ctx_ != nullptr; }
 
-  yasio::sbyte_buffer buffer_{static_cast<size_t>(yasio__max_rcvbuf)};
-  int offset_ = 0;                 // recv buffer offset
+  tlx::sbyte_buffer buffer_;
+  int offset_ = 0; // recv buffer offset
 
   int expected_size_ = -1;
-  sbyte_buffer expected_packet_;
+  tlx::sbyte_buffer expected_packet_;
 
   io_channel* ctx_;
 
@@ -838,7 +838,7 @@ protected:
   YASIO__DECL void confgure_remote(const ip::endpoint& peer);
 
   // process received data from low level
-  YASIO__DECL virtual int handle_input(char* data, int bytes_transferred, int& error, highp_time_t& wait_duration);
+  YASIO__DECL virtual int handle_input(char* data, int bytes_transferred, int& error, tlx::highp_time_t& wait_duration);
 
   ip::endpoint peer_;                // for recv only, unstable
   mutable ip::endpoint destination_; // for sendto only, stable
@@ -856,11 +856,11 @@ public:
 protected:
   YASIO__DECL void set_primitives() override;
 
-  YASIO__DECL int do_read(int revent, int& error, highp_time_t& wait_duration) override;
+  YASIO__DECL int do_read(int revent, int& error, tlx::highp_time_t& wait_duration) override;
 
   YASIO__DECL bool do_write(highp_time_t& wait_duration) override;
 
-  YASIO__DECL int handle_input(char* buf, int len, int& error, highp_time_t& wait_duration) override;
+  YASIO__DECL int handle_input(char* buf, int len, int& error, tlx::highp_time_t& wait_duration) override;
 
   int interval() const { return kcp_->interval * std::milli::den; }
 
@@ -873,7 +873,7 @@ protected:
 class io_transport_kcp {};
 #endif
 
-using io_packet = sbyte_buffer;
+using io_packet = tlx::sbyte_buffer;
 #if !defined(YASIO_USE_SHARED_PACKET)
 using packet_t = io_packet;
 inline packet_t wrap_packet(io_packet& raw_packet) { return std::move(raw_packet); }
@@ -977,7 +977,7 @@ public:
     if (t)
       t->ud_.ptr = (void*)(uintptr_t)uval;
   }
-  highp_time_t timestamp() const { return timestamp_; }
+  tlx::highp_time_t timestamp() const { return timestamp_; }
 #endif
 #if !defined(YASIO_DISABLE_OBJECT_POOL)
   DEFINE_CONCURRENT_OBJECT_POOL_ALLOCATION(io_event, 128)
@@ -997,7 +997,7 @@ private:
   io_packet_view packet_view_;
 #if !defined(YASIO_MINIFY_EVENT)
   void* source_ud_;
-  highp_time_t timestamp_ = highp_clock();
+  tlx::highp_time_t timestamp_ = tlx::highp_clock();
 #endif
 };
 
@@ -1097,9 +1097,9 @@ public:
   */
   int write(transport_handle_t thandle, const void* buf, size_t len, completion_cb_t completion_handler = nullptr)
   {
-    return write(thandle, sbyte_buffer{(const char*)buf, (const char*)buf + len}, std::move(completion_handler));
+    return write(thandle, tlx::sbyte_buffer{(const char*)buf, (const char*)buf + len}, std::move(completion_handler));
   }
-  YASIO__DECL int write(transport_handle_t thandle, sbyte_buffer buffer, completion_cb_t completion_handler = nullptr);
+  YASIO__DECL int write(transport_handle_t thandle, tlx::sbyte_buffer buffer, completion_cb_t completion_handler = nullptr);
   YASIO__DECL int forward(transport_handle_t thandle, const void* buf, size_t len, completion_cb_t completion_handler);
 
   /*
@@ -1111,9 +1111,9 @@ public:
    */
   int write_to(transport_handle_t thandle, const void* buf, size_t len, const ip::endpoint& to, completion_cb_t completion_handler = nullptr)
   {
-    return write_to(thandle, sbyte_buffer{(const char*)buf, (const char*)buf + len}, to, std::move(completion_handler));
+    return write_to(thandle, tlx::sbyte_buffer{(const char*)buf, (const char*)buf + len}, to, std::move(completion_handler));
   }
-  YASIO__DECL int write_to(transport_handle_t thandle, sbyte_buffer buffer, const ip::endpoint& to, completion_cb_t completion_handler = nullptr);
+  YASIO__DECL int write_to(transport_handle_t thandle, tlx::sbyte_buffer buffer, const ip::endpoint& to, completion_cb_t completion_handler = nullptr);
   YASIO__DECL int forward_to(transport_handle_t thandle, const void* buf, size_t len, const ip::endpoint& to, completion_cb_t completion_handler);
 
   // The highp_timer support, !important, the callback is called on the thread of io_service
@@ -1159,7 +1159,7 @@ private:
 
   YASIO__DECL void wakeup();
 
-  YASIO__DECL highp_time_t get_timeout(highp_time_t usec);
+  YASIO__DECL tlx::highp_time_t get_timeout(tlx::highp_time_t usec);
 
   YASIO__DECL int do_resolve(io_channel* ctx);
   YASIO__DECL void do_connect(io_channel*);
@@ -1207,7 +1207,7 @@ private:
   template <typename... _Types>
   inline void fire_event(_Types&&... args)
   {
-    auto event = cxx14::make_unique<io_event>(std::forward<_Types>(args)...);
+    auto event = std::make_unique<io_event>(std::forward<_Types>(args)...);
     if (options_.on_defer_event_ && options_.on_defer_event_(event))
       return;
     events_.emplace(std::move(event));
@@ -1215,7 +1215,7 @@ private:
   template <typename... _Types>
   inline void forward_packet(_Types&&... args)
   {
-    options_.on_event_(cxx14::make_unique<io_event>(std::forward<_Types>(args)...));
+    options_.on_event_(std::make_unique<io_event>(std::forward<_Types>(args)...));
   }
 
   // new/delete client socket connection channel
@@ -1239,7 +1239,7 @@ private:
 
   YASIO__DECL void update_dns_status();
 
-  bool address_expired(io_channel* ctx) const { return (highp_clock() - ctx->query_success_time_) > options_.dns_cache_timeout_; }
+  bool address_expired(io_channel* ctx) const { return (tlx::highp_clock() - ctx->query_success_time_) > options_.dns_cache_timeout_; }
 
   /* For log macro only */
   inline const print_fn2_t& __get_cprint() const { return options_.print_; }
@@ -1250,7 +1250,7 @@ private:
   std::thread::id worker_id_;
 
   /* The current time according to the event loop. in msecs. */
-  std::chrono::time_point<yasio::steady_clock_t> current_time_;
+  std::chrono::time_point<tlx::steady_clock_t> current_time_;
 
   privacy::concurrent_queue<event_ptr, true> events_;
 
@@ -1268,7 +1268,7 @@ private:
   std::recursive_mutex timer_queue_mtx_;
 
   // the next wait duration for socket.select
-  highp_time_t wait_duration_;
+  tlx::highp_time_t wait_duration_;
 
   io_watcher io_watcher_;
 
@@ -1277,10 +1277,10 @@ private:
 
   // options
   struct __unnamed_options {
-    highp_time_t connect_timeout_     = 10LL * std::micro::den;
-    highp_time_t dns_cache_timeout_   = 600LL * std::micro::den;
-    highp_time_t dns_queries_timeout_ = 5LL * std::micro::den;
-    int dns_queries_tries_            = 5;
+    tlx::highp_time_t connect_timeout_     = 10LL * std::micro::den;
+    tlx::highp_time_t dns_cache_timeout_   = 600LL * std::micro::den;
+    tlx::highp_time_t dns_queries_timeout_ = 5LL * std::micro::den;
+    int dns_queries_tries_                 = 5;
 
     bool dns_dirty_ = false;
 
@@ -1339,7 +1339,7 @@ private:
   // we need life_token + life_mutex
   struct life_token {};
   std::shared_ptr<life_token> life_token_;
-  std::shared_ptr<cxx17::shared_mutex> life_mutex_;
+  std::shared_ptr<tlx::shared_mutex> life_mutex_;
 #endif
 }; // io_service
 
@@ -1349,7 +1349,7 @@ using namespace yasio::inet;
 #endif
 } /* namespace yasio */
 
-#define yasio_shared_service yasio::singleton<yasio::inet::io_service>::instance
+#define yasio_shared_service (_TLX singleton<yasio::inet::io_service>::instance)
 
 #if defined(YASIO_HEADER_ONLY)
 #  include "yasio/io_service.cpp" // lgtm [cpp/include-non-header]

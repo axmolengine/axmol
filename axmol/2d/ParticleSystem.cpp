@@ -635,7 +635,7 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_
                     if (dataLen != 0)
                     {
                         // if it fails, try to get it from the base64-gzipped data
-                        yasio::byte_buffer buffer = utils::base64Decode(textureData);
+                        auto buffer = utils::base64Decode(textureData);
                         AXASSERT(!buffer.empty(), "CCParticleSystem: error decoding textureImageData");
                         AX_BREAK_IF(buffer.empty());
 
@@ -647,7 +647,7 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_
                         // Director::getInstance()->getTextureCache()->addUIImage()
                         image                   = new Image();
                         const auto imageDataLen = deflated.size();
-                        bool isOK = image->initWithImageData(deflated.release_pointer(), imageDataLen, true);
+                        bool isOK               = image->initWithImageData(deflated.detach_abi(), imageDataLen, true);
                         AXASSERT(isOK, "CCParticleSystem: error init image with Data");
                         AX_BREAK_IF(!isOK);
 

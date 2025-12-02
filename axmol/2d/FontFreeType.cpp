@@ -68,7 +68,7 @@ typedef struct _DataRef
     unsigned int referenceCount = 0;
 } DataRef;
 
-static axstd::string_map<DataRef> s_cacheFontData;
+static tlx::string_map<DataRef> s_cacheFontData;
 
 // ------ freetype2 stream parsing support ---
 static unsigned long ft_stream_read_callback(FT_Stream stream,

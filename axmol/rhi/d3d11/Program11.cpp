@@ -53,7 +53,7 @@ const VertexInputDesc* ProgramImpl::getVertexInputDesc(std::string_view name) co
     return _vertexShader->getVertexInputDesc(name);
 }
 
-const axstd::string_map<VertexInputDesc>& ProgramImpl::getActiveVertexInputs() const
+const tlx::string_map<VertexInputDesc>& ProgramImpl::getActiveVertexInputs() const
 {
     return _vertexShader->getActiveVertexInputs();
 }
@@ -105,7 +105,7 @@ std::size_t ProgramImpl::getUniformBufferSize(ShaderStage stage) const
     return 0;
 }
 
-const axstd::string_map<UniformInfo>& ProgramImpl::getActiveUniformInfos(ShaderStage stage) const
+const tlx::string_map<UniformInfo>& ProgramImpl::getActiveUniformInfos(ShaderStage stage) const
 {
     return stage == ShaderStage::VERTEX ? _vertexShader->getActiveUniformInfos()
                                         : _fragmentShader->getActiveUniformInfos();

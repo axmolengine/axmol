@@ -28,7 +28,7 @@
 #include <glad/vulkan.h>
 
 #include <vector>
-#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/vector.hpp"
 
 namespace ax::rhi::vk
 {
@@ -99,7 +99,7 @@ public:
     }
 
 private:
-    std::vector<axstd::pod_vector<VkImageLayout>> _layouts;
+    std::vector<tlx::pod_vector<VkImageLayout>> _layouts;
 };
 
 /**

@@ -33,7 +33,7 @@
 #pragma once
 
 #include "axmol/2d/Node.h"
-#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/vector.hpp"
 #include "axmol/base/Types.h"
 #include "axmol/renderer/CustomCommand.h"
 #include "axmol/math/Math.h"
@@ -561,9 +561,9 @@ protected:
     CustomCommand _customCommandPoint;
     CustomCommand _customCommandLine;
 
-    axstd::pod_vector<V2F_T2F_C4F> _triangles;
-    axstd::pod_vector<V2F_T2F_C4F> _points;
-    axstd::pod_vector<V2F_T2F_C4F> _lines;
+    tlx::pod_vector<V2F_T2F_C4F> _triangles;
+    tlx::pod_vector<V2F_T2F_C4F> _points;
+    tlx::pod_vector<V2F_T2F_C4F> _lines;
 
 private:
     // Internal function _drawPoint
@@ -661,7 +661,7 @@ private:
      * @param count The number of vertices.
      * @param closedPolygon The closedPolygon flag.
      */
-    axstd::pod_vector<Vec2> _transform(const Vec2* vertices, unsigned int& count, bool closedPolygon = false);
+    tlx::pod_vector<Vec2> _transform(const Vec2* vertices, unsigned int& count, bool closedPolygon = false);
 
     void applyTransform(const Vec2* from, Vec2* to, unsigned int count);
 

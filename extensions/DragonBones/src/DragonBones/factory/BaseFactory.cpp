@@ -141,7 +141,7 @@ void BaseFactory::_buildSlots(const BuildArmaturePackage& dataPackage, Armature*
         return;
     }
 
-    axstd::string_map<std::vector<DisplayData*>*> skinSlots;
+    tlx::string_map<std::vector<DisplayData*>*> skinSlots;
     for (auto& pair : defaultSkin->displays)
     {
         auto& displays        = pair.second;

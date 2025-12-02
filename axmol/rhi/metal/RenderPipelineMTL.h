@@ -75,7 +75,7 @@ private:
     PixelFormat _colorAttachmentsFormat[MAX_COLOR_ATTCHMENT] = {PixelFormat::NONE};
     PixelFormat _depthStencilPF                              = PixelFormat::NONE;
 
-    axstd::hash_map<uint32_t, id<MTLRenderPipelineState>> _mtlStateCache;
+    tlx::hash_map<uint32_t, id<MTLRenderPipelineState>> _mtlStateCache;
 };
 
 // end of _metal group

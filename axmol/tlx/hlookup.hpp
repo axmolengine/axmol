@@ -27,6 +27,7 @@
 #pragma once
 #include <string>
 #include <string_view>
+#include <memory>
 #include <map>
 #include <set>
 #include <unordered_map>
@@ -38,7 +39,7 @@
 using namespace std::string_literals;
 using namespace std::string_view_literals;
 
-namespace axstd
+namespace tlx
 {
 struct string_hash
 {
@@ -63,11 +64,11 @@ struct equal_to
     using is_transparent = void;
 };
 
-template <typename _Kty, typename _Valty>
-using hash_map = tsl::robin_map<_Kty, _Valty, std::hash<_Kty>, equal_to>;
+template <typename _Kty, typename _Valty, typename _Alloc = std::allocator<std::pair<_Kty, _Valty>>>
+using hash_map = tsl::robin_map<_Kty, _Valty, std::hash<_Kty>, equal_to, _Alloc>;
 
-template <typename _Kty>
-using hash_set = tsl::robin_set<_Kty, std::hash<_Kty>, equal_to>;
+template <typename _Kty, typename _Alloc = std::allocator<_Kty>>
+using hash_set = tsl::robin_set<_Kty, std::hash<_Kty>, equal_to, _Alloc>;
 
 template <typename _Valty>
 using string_map = tsl::robin_map<std::string, _Valty, string_hash, equal_to>;
@@ -90,4 +91,4 @@ inline auto set_item(_Cont& cont, _Kty&& k, _Valty&& v)
 
 inline constexpr auto empty_sv = ""sv;
 
-}  // namespace axstd
+}  // namespace tlx

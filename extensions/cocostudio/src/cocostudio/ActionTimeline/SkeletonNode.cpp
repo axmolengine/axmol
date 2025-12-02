@@ -280,7 +280,7 @@ void SkeletonNode::batchDrawAllSubBones()
 #endif  // AX_STUDIO_ENABLED_VIEW
 }
 
-void SkeletonNode::changeSkins(const axstd::string_map<std::string>& boneSkinNameMap)
+void SkeletonNode::changeSkins(const tlx::string_map<std::string>& boneSkinNameMap)
 {
     for (auto&& boneskin : boneSkinNameMap)
     {
@@ -314,7 +314,7 @@ const ax::StringMap<BoneNode*>& SkeletonNode::getAllSubBonesMap() const
     return _subBonesMap;
 }
 
-void SkeletonNode::addSkinGroup(std::string_view groupName, axstd::string_map<std::string> boneSkinNameMap)
+void SkeletonNode::addSkinGroup(std::string_view groupName, tlx::string_map<std::string> boneSkinNameMap)
 {
     _skinGroupMap.emplace(groupName, std::move(boneSkinNameMap));
 }

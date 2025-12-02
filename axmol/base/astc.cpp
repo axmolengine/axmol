@@ -20,7 +20,7 @@
 #include <deque>
 #include "astcenc/astcenc.h"
 #include "astcenc/astcenc_internal_entry.h"
-#include "yasio/utils.hpp"
+#include "yasio/tlx/chrono.hpp"
 
 #include "axmol/base/Director.h"
 
@@ -215,13 +215,13 @@ template <typename _FMT>
 struct benchmark_printer
 {
     benchmark_printer(_FMT&& fmt, int w, int h, float den)
-        : _fmt(fmt), _w(w), _h(h), _den(den), _start(yasio::highp_clock())
+        : _fmt(fmt), _w(w), _h(h), _den(den), _start(tlx::highp_clock())
     {}
-    ~benchmark_printer() { AXLOGI("{}", fmt::format(_fmt, _w, _h, (yasio::highp_clock() - _start) / _den)); }
+    ~benchmark_printer() { AXLOGI("{}", fmt::format(_fmt, _w, _h, (tlx::highp_clock() - _start) / _den)); }
     _FMT _fmt;
     int _w, _h;
     float _den;
-    yasio::highp_time_t _start;
+    tlx::highp_time_t _start;
 };
 int astc_decompress_image(const uint8_t* in,
                           uint32_t inlen,

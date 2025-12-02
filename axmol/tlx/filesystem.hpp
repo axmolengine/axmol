@@ -28,8 +28,16 @@
 #if (defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && __IPHONE_OS_VERSION_MIN_REQUIRED < 130000) || \
     (defined(__NDK_MAJOR__) && __NDK_MAJOR__ < 22)
 #    include "ghc/filesystem.hpp"
-namespace stdfs = ghc::filesystem;
+namespace tlx
+{
+namespace filesystem = ghc::filesystem;
+}
 #else
 #    include <filesystem>
-namespace stdfs = std::filesystem;
+namespace tlx
+{
+namespace filesystem = std::filesystem;
+}
 #endif
+
+namespace stdfs = tlx::filesystem;

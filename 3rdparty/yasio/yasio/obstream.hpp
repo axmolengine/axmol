@@ -33,10 +33,10 @@ SOFTWARE.
 #include <limits>
 #include <stack>
 #include <fstream>
-#include "yasio/string_view.hpp"
+#include <algorithm>
+#include "yasio/tlx/string_view.hpp"
 #include "yasio/endian_portable.hpp"
-#include "yasio/utils.hpp"
-#include "yasio/byte_buffer.hpp"
+#include "yasio/tlx/byte_buffer.hpp"
 namespace yasio
 {
 enum : size_t
@@ -143,7 +143,7 @@ private:
   std::array<char, _Extent> impl_;
 };
 
-template <typename _Cont = sbyte_buffer>
+template <typename _Cont = tlx::sbyte_buffer>
 class dynamic_buffer_span {
 public:
   using implementation_type = _Cont;
@@ -179,7 +179,7 @@ private:
   implementation_type* outs_;
 };
 
-template <typename _Cont = sbyte_buffer>
+template <typename _Cont = tlx::sbyte_buffer>
 class dynamic_buffer : public dynamic_buffer_span<_Cont> {
 public:
   using super_type = dynamic_buffer_span<_Cont>;
@@ -271,7 +271,7 @@ public:
 
   void push(int size)
   {
-    size = yasio::clamp(size, 1, YASIO_SSIZEOF(int));
+    size = std::clamp(size, 1, YASIO_SSIZEOF(int));
 
     auto bufsize = outs_->length();
     offset_stack_.push(bufsize);
@@ -280,7 +280,7 @@ public:
 
   void pop(int size)
   {
-    size = yasio::clamp(size, 1, YASIO_SSIZEOF(int));
+    size = std::clamp(size, 1, YASIO_SSIZEOF(int));
 
     auto offset = offset_stack_.top();
     auto value  = static_cast<int>(outs_->length() - offset - size);
@@ -291,7 +291,7 @@ public:
 
   void pop(int value, int size)
   {
-    size = yasio::clamp(size, 1, YASIO_SSIZEOF(int));
+    size = std::clamp(size, 1, YASIO_SSIZEOF(int));
 
     auto offset = offset_stack_.top();
     value       = convert_traits_type::toint(value, size);
@@ -319,7 +319,7 @@ public:
 #endif
 
   /* write blob data with '7bit encoded int' length field */
-  void write_v(cxx17::string_view value)
+  void write_v(std::string_view value)
   {
     int len = static_cast<int>(value.length());
     write_ix(len);
@@ -327,15 +327,15 @@ public:
   }
 
   /* 32 bits length field */
-  void write_v32(cxx17::string_view value) { write_v_fx<uint32_t>(value); }
+  void write_v32(std::string_view value) { write_v_fx<uint32_t>(value); }
   /* 16 bits length field */
-  void write_v16(cxx17::string_view value) { write_v_fx<uint16_t>(value); }
+  void write_v16(std::string_view value) { write_v_fx<uint16_t>(value); }
   /* 8 bits length field */
-  void write_v8(cxx17::string_view value) { write_v_fx<uint8_t>(value); }
+  void write_v8(std::string_view value) { write_v_fx<uint8_t>(value); }
 
   void write_byte(uint8_t value) { outs_->write_byte(value); }
 
-  void write_bytes(cxx17::string_view v) { return write_bytes(v.data(), static_cast<int>(v.size())); }
+  void write_bytes(std::string_view v) { return write_bytes(v.data(), static_cast<int>(v.size())); }
   void write_bytes(const void* d, int n) { outs_->write_bytes(d, n); }
   void write_bytes(size_t offset, const void* d, int n) { outs_->write_bytes(offset, d, n); }
   void fill_bytes(int n, uint8_t val = 0) { outs_->fill_bytes(n, val); }
@@ -373,7 +373,7 @@ public:
 
   void write_varint(int value, int size)
   {
-    size = yasio::clamp(size, 1, YASIO_SSIZEOF(int));
+    size = std::clamp(size, 1, YASIO_SSIZEOF(int));
 
     value = convert_traits_type::toint(value, size);
     write_bytes(&value, size);
@@ -401,7 +401,7 @@ public:
 
 private:
   template <typename _LenT>
-  inline void write_v_fx(cxx17::string_view value)
+  inline void write_v_fx(std::string_view value)
   {
     int size = static_cast<int>(value.size());
     this->write<_LenT>(static_cast<_LenT>(size));
@@ -500,7 +500,7 @@ using obstream      = obstream_any<dynamic_extent>;
 using fast_obstream = fast_obstream_any<dynamic_extent>;
 
 //-------- basic_obstream_span
-template <typename _ConvertTraits, typename _Cont = sbyte_buffer>
+template <typename _ConvertTraits, typename _Cont = tlx::sbyte_buffer>
 class basic_obstream_span;
 
 template <typename _ConvertTraits, typename _Cont>

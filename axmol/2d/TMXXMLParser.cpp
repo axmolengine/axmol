@@ -38,6 +38,7 @@ THE SOFTWARE.
 #include "axmol/base/Utils.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/tlx/utility.hpp"
+#include "axmol/tlx/split.hpp"
 #include <ranges>
 #include <charconv>
 
@@ -455,7 +456,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
             Vec2 layerSize      = layer->_layerSize;
             auto tilesAmount    = static_cast<size_t>(layerSize.width * layerSize.height);
 
-            layer->_tiles = (uint32_t*)axstd::pod_vector<uint32_t>(tilesAmount, 0U).release_pointer();
+            layer->_tiles = (uint32_t*)tlx::pod_vector<uint32_t>(tilesAmount, 0U).detach_abi();
         }
         else if (encoding == "base64")
         {
@@ -721,11 +722,11 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
                     return;
                 }
 
-                layer->_tiles = reinterpret_cast<uint32_t*>(buffer.release_pointer());
+                layer->_tiles = reinterpret_cast<uint32_t*>(buffer.detach_abi());
             }
             else
             {
-                layer->_tiles = reinterpret_cast<uint32_t*>(buffer.release_pointer());
+                layer->_tiles = reinterpret_cast<uint32_t*>(buffer.detach_abi());
             }
 
             tmxMapInfo->setCurrentString("");
@@ -735,19 +736,19 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
 
             tmxMapInfo->setStoringCharacters(false);
-            auto currentString = tmxMapInfo->getCurrentString();
+            std::string_view currentString = tmxMapInfo->getCurrentString();
 
-            axstd::pod_vector<uint32_t> tileGids;
-            axstd::split_cb(currentString, '\n', [&tileGids](const char* first, const char* last) {
-                axstd::split_cb(std::string_view{first, static_cast<size_t>(last - first)}, ',',
-                                [&tileGids](const char* _first, const char* _last) {
+            tlx::pod_vector<uint32_t> tileGids;
+            tlx::split(currentString, '\n', [&tileGids](const char* first, const char* last) {
+                tlx::split(std::string_view{first, static_cast<size_t>(last - first)}, ',',
+                           [&tileGids](const char* _first, const char* _last) {
                     unsigned int gid{0};
                     std::from_chars(_first, _last, gid);
                     tileGids.push_back(gid);
                 });
             });
 
-            layer->_tiles = tileGids.release_pointer();
+            layer->_tiles = tileGids.detach_abi();
 
             tmxMapInfo->setCurrentString("");
         }

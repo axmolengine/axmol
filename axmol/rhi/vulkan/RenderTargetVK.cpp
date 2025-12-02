@@ -39,7 +39,7 @@ namespace ax::rhi::vk
 // - Attachment count
 // - Framebuffer width/height
 static uintptr_t makeFramebufferKeyHash(VkRenderPass rp,
-                                        const axstd::pod_vector<VkImageView>& views,
+                                        const tlx::pod_vector<VkImageView>& views,
                                         uint32_t width,
                                         uint32_t height)
 {
@@ -53,9 +53,9 @@ static uintptr_t makeFramebufferKeyHash(VkRenderPass rp,
     } hdr{reinterpret_cast<uintptr_t>(rp), static_cast<uint32_t>(views.size()), width, height};
 
     // Hash header first, then hash the views array in order.
-    uintptr_t h = axstd::hash_bytes(&hdr, sizeof(hdr), 0);
+    uintptr_t h = tlx::hash_bytes(&hdr, sizeof(hdr), 0);
     if (!views.empty())
-        h = axstd::hash_bytes(views.data(), views.size_bytes(), h);
+        h = tlx::hash_bytes(views.data(), views.size_bytes(), h);
     return h;
 }
 
@@ -270,7 +270,7 @@ void RenderTargetImpl::updateFramebuffer(VkCommandBuffer /*cmd*/)
     hashMe.attachmentsHash = _attachmentViewsHash;
     hashMe.renderPassh     = _renderPass;
 
-    auto key = axstd::hash_bytes(&hashMe, sizeof(hashMe));
+    auto key = tlx::hash_bytes(&hashMe, sizeof(hashMe));
     if (auto it = _framebufferCache.find(key); it != _framebufferCache.end())
     {
         _framebuffer = it->second;
@@ -278,7 +278,7 @@ void RenderTargetImpl::updateFramebuffer(VkCommandBuffer /*cmd*/)
     else
     {
         // Build ordered views vector (contiguous colors + optional depth)
-        axstd::pod_vector<VkImageView> views;
+        tlx::pod_vector<VkImageView> views;
         views.reserve(MAX_COLOR_ATTCHMENT + 1);
         for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
         {
@@ -322,7 +322,7 @@ void RenderTargetImpl::updateFramebuffer(VkCommandBuffer /*cmd*/)
 
 void RenderTargetImpl::updateRenderPass(const RenderPassDesc& desc)
 {
-    const auto key = axstd::hash_bytes(&desc, sizeof(desc), _attachmentViewsHash);
+    const auto key = tlx::hash_bytes(&desc, sizeof(desc), _attachmentViewsHash);
 
     if (auto it = _renderPassCache.find(key); it != _renderPassCache.end())
     {
@@ -331,8 +331,8 @@ void RenderTargetImpl::updateRenderPass(const RenderPassDesc& desc)
     else
     {
         // Build attachment descriptions deterministically (contiguous colors + optional depth)
-        axstd::pod_vector<VkAttachmentDescription> attachments;
-        axstd::pod_vector<VkAttachmentReference> colorRefs;
+        tlx::pod_vector<VkAttachmentDescription> attachments;
+        tlx::pod_vector<VkAttachmentReference> colorRefs;
         VkAttachmentReference depthRef{};
         attachments.reserve(MAX_COLOR_ATTCHMENT + 1);
         colorRefs.reserve(MAX_COLOR_ATTCHMENT);

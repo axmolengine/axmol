@@ -36,7 +36,7 @@
 #include <string>
 #include <sstream>
 
-#include "yasio/byte_buffer.hpp"
+#include "axmol/tlx/byte_buffer.hpp"
 
 using namespace ax;
 using namespace ax::network;
@@ -112,7 +112,7 @@ private:
     std::string _url;
     std::string _meth;
     std::string _type;
-    yasio::sbyte_buffer _data;
+    tlx::sbyte_buffer _data;
     int _readyState;
     int _status;
     std::string _statusText;
@@ -205,7 +205,7 @@ void LuaMinXmlHttpRequest::_setHttpRequestHeader()
  */
 void LuaMinXmlHttpRequest::_sendRequest()
 {
-    _httpRequest->setResponseCallback([this](ax::network::HttpClient* sender, ax::network::HttpResponse* response) {
+    _httpRequest->setCompleteCallback([this](ax::network::HttpClient* sender, ax::network::HttpResponse* response) {
         if (_isAborted)
             return;
         auto tag = response->getHttpRequest()->getTag();

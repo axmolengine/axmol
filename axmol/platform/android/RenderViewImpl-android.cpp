@@ -201,7 +201,7 @@ Rect RenderViewImpl::getSafeAreaRect() const
     float insetLeft   = 0.0f;
     float insetRight  = 0.0f;
 
-    static axstd::pod_vector<int32_t> cornerRadii =
+    static tlx::pod_vector<int32_t> cornerRadii =
         JniHelper::callStaticIntArrayMethod("dev/axmol/lib/AxmolEngine", "getDeviceCornerRadii");
 
     if (isScreenRound)
@@ -291,7 +291,7 @@ Rect RenderViewImpl::getSafeAreaRect() const
     if (isCutoutEnabled)
     {
         // screen with enabled cutout area (ex. Google Pixel 3 XL, Huawei P20, Asus ZenFone 5, etc)
-        static axstd::pod_vector<int32_t> safeInsets =
+        static tlx::pod_vector<int32_t> safeInsets =
             JniHelper::callStaticIntArrayMethod("dev/axmol/lib/AxmolEngine", "getSafeInsets");
 
         if (safeInsets.size() >= 4)

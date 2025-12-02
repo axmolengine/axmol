@@ -428,7 +428,7 @@ signed char Properties::readChar()
 {
     if (eof())
         return EOF;
-    return static_cast<axstd::byte_buffer&>(*_data)[(*_dataIdx)++];
+    return static_cast<tlx::byte_buffer&>(*_data)[(*_dataIdx)++];
 }
 
 char* Properties::readLine(char* output, int num)
@@ -442,7 +442,7 @@ char* Properties::readLine(char* output, int num)
 
     for (i = 0; i < num && dataIdx + i < _data->size(); i++)
     {
-        auto c = static_cast<axstd::byte_buffer&>(*_data)[dataIdx + i];
+        auto c = static_cast<tlx::byte_buffer&>(*_data)[dataIdx + i];
         if (c == '\n')
             break;
         output[i] = c;

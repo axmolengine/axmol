@@ -223,8 +223,8 @@ protected:
 
     std::function<void(Frame*)> _frameEventListener;
     std::function<void()> _lastFrameListener;
-    std::map<int, axstd::string_map<std::function<void()>>> _frameEndCallFuncs;
-    axstd::string_map<AnimationInfo> _animationInfos;
+    std::map<int, tlx::string_map<std::function<void()>>> _frameEndCallFuncs;
+    tlx::string_map<AnimationInfo> _animationInfos;
 };
 
 NS_TIMELINE_END

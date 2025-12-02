@@ -50,7 +50,7 @@ SOFTWARE.
 #include <mutex>
 #include <atomic>
 
-namespace yasio
+namespace tlx
 {
 template <typename _Ty, bool delay = false>
 class singleton_constructor {
@@ -154,6 +154,6 @@ std::atomic<_Ty*> singleton<_Ty>::__single__;
 template <typename _Ty>
 std::mutex singleton<_Ty>::__mutex__;
 
-} // namespace yasio
+} // namespace tlx
 
 #endif

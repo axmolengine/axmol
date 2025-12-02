@@ -54,13 +54,13 @@ THE SOFTWARE.
 #    define RENDER_IN_SUBPIXEL(__ARGS__) (ceil(__ARGS__))
 #endif
 
-/*
- * 4.5x faster than std::hash in release mode
- */
-#define AX_HASH_NODE_NAME(name) (!name.empty() ? XXH3_64bits(name.data(), name.length()) : 0)
-
 namespace ax
 {
+AX_DLL uint64_t hashNodeName(std::string_view name)
+{
+  // 4.5x faster than std::hash in release mode.
+  return !name.empty() ? XXH3_64bits(name.data(), name.length()) : 0;
+}
 
 // FIXME:: Yes, nodes might have a sort problem once every 30 days if the game runs at 60 FPS and each frame sprites are
 // reordered.
@@ -718,6 +718,11 @@ void Node::setName(std::string_view name)
     _name = name;
 }
 
+uint64_t Node::getHashOfName() const
+{
+  return _hashOfName;
+}
+
 void Node::updateParentChildrenIndexer(int tag)
 {
     auto parentChildrenIndexer = getParentChildrenIndexer();
@@ -731,11 +736,11 @@ void Node::updateParentChildrenIndexer(int tag)
 
 void Node::updateParentChildrenIndexer(std::string_view name)
 {
-    uint64_t newHash           = AX_HASH_NODE_NAME(name);
+    uint64_t newHash           = hashNodeName(name);
     auto parentChildrenIndexer = getParentChildrenIndexer();
     if (parentChildrenIndexer)
     {
-        auto oldHash = AX_HASH_NODE_NAME(_name);
+        auto oldHash = hashNodeName(_name);
         if (oldHash != newHash)
             parentChildrenIndexer->erase(oldHash);
         (*parentChildrenIndexer)[newHash] = this;
@@ -832,7 +837,7 @@ Node* Node::getChildByTag(int tag) const
 Node* Node::getChildByName(std::string_view name) const
 {
     // AXASSERT(!name.empty(), "Invalid name");
-    auto hash = AX_HASH_NODE_NAME(name);
+    auto hash = hashNodeName(name);
     if (_childrenIndexer)
     {
         auto it = _childrenIndexer->find(hash);

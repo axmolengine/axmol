@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "axmol/2d/Node.h"
 #include "axmol/renderer/PipelineDesc.h"
 
-#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/vector.hpp"
 
 namespace ax
 {
@@ -187,8 +187,8 @@ protected:
     Vec2 _barChangeRate;
     float _percentage = 0.0f;
     Sprite* _sprite   = nullptr;
-    axstd::pod_vector<V2F_T2F_C4F> _vertexData;
-    axstd::pod_vector<unsigned short> _indexData;
+    tlx::pod_vector<V2F_T2F_C4F> _vertexData;
+    tlx::pod_vector<unsigned short> _indexData;
     bool _reverseDirection = false;
 
     CustomCommand _customCommand;

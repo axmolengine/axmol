@@ -126,23 +126,23 @@ public:
     /**
      * @private
      */
-    axstd::string_map<std::vector<TimelineData*>> boneTimelines;
+    tlx::string_map<std::vector<TimelineData*>> boneTimelines;
     /**
      * @private
      */
-    axstd::string_map<std::vector<TimelineData*>> slotTimelines;
+    tlx::string_map<std::vector<TimelineData*>> slotTimelines;
     /**
      * @private
      */
-    axstd::string_map<std::vector<TimelineData*>> constraintTimelines;
+    tlx::string_map<std::vector<TimelineData*>> constraintTimelines;
     /**
      * @private
      */
-    axstd::string_map<std::vector<int>> boneCachedFrameIndices;
+    tlx::string_map<std::vector<int>> boneCachedFrameIndices;
     /**
      * @private
      */
-    axstd::string_map<std::vector<int>> slotCachedFrameIndices;
+    tlx::string_map<std::vector<int>> slotCachedFrameIndices;
     /**
      * @private
      */

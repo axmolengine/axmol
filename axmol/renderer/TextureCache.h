@@ -256,7 +256,7 @@ protected:
 
     int _outstandingTaskCount;
 
-    axstd::string_map<Texture2D*> _textures;
+    tlx::string_map<Texture2D*> _textures;
 
     static std::string s_etc1AlphaFileSuffix;
 };

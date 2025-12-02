@@ -62,7 +62,7 @@ void ShaderModuleImpl::compileShader(ShaderStage stage, std::string_view source)
 
         if (logLength > 1)
         {
-            auto errorLog = axstd::make_unique_for_overwrite<char[]>(static_cast<size_t>(logLength));
+            auto errorLog = tlx::make_unique_for_overwrite<char[]>(static_cast<size_t>(logLength));
             glGetShaderInfoLog(_shader, logLength, nullptr, (GLchar*)errorLog.get());
             AXLOGE("axmol:ERROR: Failed to compile shader, detail: {}\n{}", errorLog.get(), source.data());
         }

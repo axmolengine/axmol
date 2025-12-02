@@ -78,9 +78,7 @@ jobs:
       with:
         tag_name: ${{ steps.make_pkg.outputs.release_tag }}
         name: ${{ steps.make_pkg.outputs.release_tag }}
-        files: |
-          ${{ steps.make_pkg.outputs.release_pkg }}
-          ${{ steps.make_pkg.outputs.bs_release_pkg }}
+        files: steps.make_pkg.outputs.release_pkg }}
         body_path: ${{ steps.make_pkg.outputs.release_note }}
         prerelease: ${{ steps.make_pkg.outputs.prerelease }}
         target_commitish: ${{ steps.make_pkg.outputs.commitish }}

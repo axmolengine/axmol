@@ -62,7 +62,7 @@ private:
     SpriteFrameCacheHelper();
     ~SpriteFrameCacheHelper();
 
-    axstd::string_map<std::vector<ax::SpriteFrame*>> _usingSpriteFrames;
+    tlx::string_map<std::vector<ax::SpriteFrame*>> _usingSpriteFrames;
     static SpriteFrameCacheHelper* _spriteFrameCacheHelper;
 };
 

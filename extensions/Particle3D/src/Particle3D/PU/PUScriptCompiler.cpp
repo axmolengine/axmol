@@ -76,7 +76,7 @@ void PUObjectAbstractNode::addVariable(std::string_view inName)
 void PUObjectAbstractNode::setVariable(std::string_view inName, std::string_view value)
 {
     // _env[inName] = value;
-    axstd::set_item(_env, inName, value);
+    tlx::set_item(_env, inName, value);
 }
 
 std::pair<bool, std::string> PUObjectAbstractNode::getVariable(std::string_view inName) const
@@ -96,7 +96,7 @@ std::pair<bool, std::string> PUObjectAbstractNode::getVariable(std::string_view 
     return std::make_pair(false, "");
 }
 
-const axstd::string_map<std::string>& PUObjectAbstractNode::getVariables() const
+const tlx::string_map<std::string>& PUObjectAbstractNode::getVariables() const
 {
     return _env;
 }
@@ -189,8 +189,8 @@ PUScriptCompiler::~PUScriptCompiler()
     _compiledScripts.clear();
 }
 
-axstd::string_map<PUAbstractNodeList>::iterator PUScriptCompiler::compile(const PUConcreteNodeList& nodes,
-                                                                          std::string_view file)
+tlx::string_map<PUAbstractNodeList>::iterator PUScriptCompiler::compile(const PUConcreteNodeList& nodes,
+                                                                        std::string_view file)
 {
     if (nodes.empty())
         return _compiledScripts.end();
@@ -198,7 +198,7 @@ axstd::string_map<PUAbstractNodeList>::iterator PUScriptCompiler::compile(const 
     PUAbstractNodeList aNodes;
     convertToAST(nodes, aNodes);
 
-    return axstd::set_item(_compiledScripts, file, aNodes);  // _compiledScripts[file] = aNodes;
+    return tlx::set_item(_compiledScripts, file, aNodes);  // _compiledScripts[file] = aNodes;
     // for(PUAbstractNodeList::iterator i = aNodes.begin(); i != aNodes.end(); ++i)
     //{
     //     PUScriptTranslator *translator = PUTranslateManager::Instance()->getTranslator(*i);

@@ -37,7 +37,7 @@
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/rhi/Program.h"
 #include "axmol/renderer/VertexLayoutManager.h"
-#include "yasio/byte_buffer.hpp"
+#include "axmol/tlx/byte_buffer.hpp"
 
 namespace ax::rhi
 {
@@ -82,12 +82,12 @@ struct AX_DLL TextureBindingSet
 
     void setTexture(int location, int slot, rhi::Texture* tex);
     void setTextureArray(int location, std::span<const TextureBinding> units);
-    void setTextureArray(int location, std::span<const int> slots, std::span<rhi::Texture*> texs);
+    void setTextureArray(int location, std::span<const int> slots, std::span<rhi::Texture* const> texs);
 
     void releaseTextures();
 
-    axstd::pod_vector<int> slots;
-    mutable axstd::pod_vector<rhi::Texture*> texs;
+    tlx::pod_vector<int> slots;
+    mutable tlx::pod_vector<rhi::Texture*> texs;
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     int loc = -1;
 #endif
@@ -171,10 +171,7 @@ public:
         return _program->getVertexInputDesc(name);
     }
 
-    const axstd::string_map<VertexInputDesc>& getActiveVertexInputs() const
-    {
-        return _program->getActiveVertexInputs();
-    }
+    const tlx::string_map<VertexInputDesc>& getActiveVertexInputs() const { return _program->getActiveVertexInputs(); }
 
     /*
      * Gets the inmutable vertex layout from _program
@@ -234,7 +231,8 @@ public:
      */
     std::span<const char> getVertexUniformBuffer() const
     {
-        return std::span{_uniformBuffer.begin() + _vertexUniformBufferStart, _uniformBuffer.end()};
+        return std::span{_uniformBuffer.data() + _vertexUniformBufferStart,
+                         _uniformBuffer.size() - _vertexUniformBufferStart};
     }
 
     /**
@@ -243,7 +241,7 @@ public:
      */
     std::span<const char> getFragmentUniformBuffer() const
     {
-        return std::span{_uniformBuffer.begin(), _uniformBuffer.begin() + _vertexUniformBufferStart};
+        return std::span{_uniformBuffer.data(), _vertexUniformBufferStart};
     }
 #endif
 
@@ -357,7 +355,7 @@ protected:
     rhi::Program* _program = nullptr;
     std::unordered_map<UniformLocation, UniformCallback, UniformLocation> _callbackUniforms;
 
-    yasio::sbyte_buffer _uniformBuffer;
+    tlx::sbyte_buffer _uniformBuffer;
 #if AX_RENDER_API != AX_RENDER_API_GL
     std::size_t _vertexUniformBufferStart = 0;
 #endif

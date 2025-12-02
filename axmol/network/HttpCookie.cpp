@@ -27,8 +27,7 @@
 #include "axmol/network/HttpCookie.h"
 #include "axmol/network/Uri.h"
 #include "axmol/platform/FileUtils.h"
-#include "yasio/utils.hpp"
-#include "yasio/string_view.hpp"
+#include "yasio/tlx/chrono.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,7 +35,8 @@
 #include <iomanip>
 #include <sstream>
 
-#include "axmol/tlx/utility.hpp"
+#include "yasio/tlx/string_view.hpp"
+#include "axmol/tlx/split.hpp"
 #include "fmt/compile.h"
 
 namespace ax
@@ -62,13 +62,12 @@ void HttpCookie::readFile()
     std::string inString = FileUtils::getInstance()->getStringFromFile(_cookieFileName);
     if (!inString.empty())
     {
-        axstd::split_cb(&inString.front(), inString.length(), '\n', [this](char* s, char* e) {
+        tlx::split(inString, '\n', [this](char* s, char* e) {
             if (*s == '#')  // skip comment
                 return;
             int count = 0;
             CookieInfo cookieInfo;
-            using namespace cxx17;
-            axstd::split_cb(s, e - s, '\t', [&, this](char* ss, char* ee) {
+            tlx::split(std::span<char>{s, static_cast<size_t>(e - s)}, '\t', [&, this](char* ss, char* ee) {
                 auto ch = *ee;  // store
                 *ee     = '\0';
                 switch (count)
@@ -80,7 +79,7 @@ void HttpCookie::readFile()
                     cookieInfo.path.assign(ss, ee - ss);
                     break;
                 case SECURE_INDEX:
-                    cookieInfo.secure = cxx17::string_view{ss, (size_t)(ee - ss)} == "TRUE"_sv;
+                    cookieInfo.secure = std::string_view{ss, (size_t)(ee - ss)} == "TRUE"sv;
                     break;
                 case EXPIRES_INDEX:
                     cookieInfo.expires = static_cast<time_t>(strtoll(ss, nullptr, 10));
@@ -110,7 +109,7 @@ const CookieInfo* HttpCookie::getMatchCookie(const Uri& uri) const
 {
     for (auto&& cookie : _cookies)
     {
-        if (cxx20::ends_with(uri.getHost(), cookie.domain) && cxx20::starts_with(uri.getPath(), cookie.path))
+        if (tlx::ends_with(uri.getHost(), cookie.domain) && tlx::starts_with(uri.getPath(), cookie.path))
             return &cookie;
     }
 
@@ -136,9 +135,9 @@ std::string HttpCookie::checkAndGetFormatedMatchCookies(const Uri& uri)
     for (auto iter = _cookies.begin(); iter != _cookies.end();)
     {
         auto& cookie = *iter;
-        if (cxx20::ends_with(uri.getHost(), cookie.domain) && cxx20::starts_with(uri.getPath(), cookie.path))
+        if (tlx::ends_with(uri.getHost(), cookie.domain) && tlx::starts_with(uri.getPath(), cookie.path))
         {
-            if (yasio::time_now() >= cookie.expires)
+            if (tlx::time_now() >= cookie.expires)
             {
                 iter = _cookies.erase(iter);
                 continue;
@@ -162,41 +161,40 @@ bool HttpCookie::updateOrAddCookie(std::string_view cookie, const Uri& uri)
 
     unsigned int count = 0;
     CookieInfo info;
-    axstd::split_cb(cookie.data(), cookie.length(), ';', [&](const char* start, const char* end) {
+    tlx::split(cookie, ';', [&](const char* start, const char* end) {
         unsigned int count_ = 0;
         while (*start == ' ')
             ++start;  // skip ws
         if (++count > 1)
         {
-            cxx17::string_view key;
-            cxx17::string_view value;
-            axstd::split_cb(start, end - start, '=', [&](const char* s, const char* e) {
+            std::string_view key;
+            std::string_view value;
+            tlx::split(start, end, '=', [&](const char* s, const char* e) {
                 switch (++count_)
                 {
                 case 1:
-                    key = cxx17::string_view(s, e - s);
+                    key = std::string_view(s, e - s);
                     break;
                 case 2:
-                    value = cxx17::string_view(s, e - s);
+                    value = std::string_view(s, e - s);
                     break;
                 }
             });
 
-            using namespace cxx17;
-            if (cxx20::ic::iequals(key, "domain"_sv))
+            if (tlx::ic::iequals(key, "domain"sv))
             {
                 if (!value.empty())
                     info.domain.assign(value.data(), value.length());
             }
-            else if (cxx20::ic::iequals(key, "path"_sv))
+            else if (tlx::ic::iequals(key, "path"sv))
             {
                 if (!value.empty())
                     info.path.assign(value.data(), value.length());
             }
-            else if (cxx20::ic::iequals(key, "expires"_sv))
+            else if (tlx::ic::iequals(key, "expires"sv))
             {
                 std::string expires_ctime(!value.empty() ? value.data() : "", value.length());
-                if (cxx20::ends_with(expires_ctime, " GMT"_sv))
+                if (tlx::ends_with(expires_ctime, " GMT"sv))
                     expires_ctime.resize(expires_ctime.length() - sizeof(" GMT") + 1);
                 if (expires_ctime.empty())
                     return;
@@ -224,14 +222,14 @@ bool HttpCookie::updateOrAddCookie(std::string_view cookie, const Uri& uri)
                         info.expires = mktime(&dt);
                 }
             }
-            else if (cxx20::ic::iequals(key, "secure"_sv))
+            else if (tlx::ic::iequals(key, "secure"sv))
             {
                 info.secure = true;
             }
         }
         else
         {  // first is cookie name
-            axstd::split_cb(start, end - start, '=', [&](const char* s, const char* e) {
+            tlx::split(start, end, '=', [&](const char* s, const char* e) {
                 switch (++count_)
                 {
                 case 1:

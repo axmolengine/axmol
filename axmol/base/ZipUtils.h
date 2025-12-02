@@ -78,18 +78,18 @@ class AX_DLL ZipUtils
 {
 public:
     template <typename _Ty, size_t _Extent = std::dynamic_extent>
-    inline static yasio::byte_buffer compressGZ(std::span<_Ty, _Extent> in, int level = -1)
+    inline static tlx::byte_buffer compressGZ(std::span<_Ty, _Extent> in, int level = -1)
     {
         return compressGZ(in.data(), in.size_bytes(), level);
     }
     template <typename _Ty, size_t _Extent = std::dynamic_extent>
-    inline static yasio::byte_buffer decompressGZ(std::span<_Ty, _Extent> in, int expected_size = -1)
+    inline static tlx::byte_buffer decompressGZ(std::span<_Ty, _Extent> in, int expected_size = -1)
     {
         return decompressGZ(in.data(), in.size_bytes(), expected_size);
     }
 
-    static yasio::byte_buffer compressGZ(const void* in, size_t inlen, int level = -1);
-    static yasio::byte_buffer decompressGZ(const void* in, size_t inlen, int expected_size = -1);
+    static tlx::byte_buffer compressGZ(const void* in, size_t inlen, int level = -1);
+    static tlx::byte_buffer decompressGZ(const void* in, size_t inlen, int expected_size = -1);
 
     /**
      * Inflates either zlib or gzip deflated memory. The inflated memory is expected to be freed by the caller.

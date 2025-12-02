@@ -9,8 +9,10 @@
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,31 +22,22 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-#include "axmol/tlx/sorted_vector.hpp"
 
-namespace axstd
+#include "yasio/tlx/vector.hpp"
+#include "yasio/tlx/buffer_alloc.hpp"
+
+namespace tlx
 {
-// flat_multimap traits
-template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<Key, T>>>
-struct flat_multimap_traits
-{
-    using key_type       = Key;
-    using value_type     = std::pair<Key, T>;
-    using key_compare    = Compare;
-    using value_compare  = Compare;
-    using allocator_type = Alloc;
-    using key_extractor  = detail::select1st<value_type>;
+// alias: pod_vector
+// Usage restriction: only valid for types that are BOTH:
+// 1. Trivially destructible
+// 2. Trivially copyable
+//
+// This ensures that raw memory operations (e.g. memcpy, memset) and
+// skipping value-initialization are safe. In practice, this alias
+// should be used only with POD or standard-layout types.
+template <typename _Ty, typename _Alloc = tlx::crt_buffer_allocator<_Ty>>
+using pod_vector = typename std::enable_if<std::is_trivially_copyable<_Ty>::value,
+                                           ::tlx::vector<_Ty, _Alloc, fill_policy::nontrivial_dtor>>::type;
 
-    static constexpr bool allow_duplicates = true;
-};
-
-/// flat_multimap
-template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<Key, T>>>
-class flat_multimap : public detail::sorted_vector<flat_multimap_traits<Key, T, Compare, Alloc>>
-{
-    using impl_type = detail::sorted_vector<flat_multimap_traits<Key, T, Compare, Alloc>>;
-
-public:
-    using impl_type::impl_type;
-};
-}  // namespace axstd
+}  // namespace tlx

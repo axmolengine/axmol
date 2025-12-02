@@ -97,7 +97,7 @@ protected:
     ax::CustomCommand _customCommand;
     rhi::DepthStencilDesc* _depthstencilDescriptor = nullptr;
     rhi::UniformLocation _locMVPMatrix;
-    axstd::pod_vector<V3F_C4F> _bufferLines;
+    tlx::pod_vector<V3F_C4F> _bufferLines;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(DrawNode3D);

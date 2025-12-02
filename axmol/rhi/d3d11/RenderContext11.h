@@ -253,7 +253,7 @@ protected:
     UINT _screenHeight{0};
     RenderPassDesc _renderPassDesc{};
 
-    axstd::pod_vector<ID3D11ShaderResourceView*> _nullSRVs;
+    tlx::pod_vector<ID3D11ShaderResourceView*> _nullSRVs;
     UINT _textureBounds{0};
 
     UINT _swapChainFlags{0};

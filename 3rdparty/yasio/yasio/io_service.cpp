@@ -46,6 +46,8 @@ SOFTWARE.
 
 #include "yasio/wtimer_hres.hpp"
 
+#include "yasio/tlx/string.hpp"
+
 #if defined(YASIO_ENABLE_KCP)
 struct yasio_kcp_options {
   int kcp_conv_ = 0;
@@ -73,7 +75,7 @@ struct yasio_kcp_options {
   do                                                                                                                           \
   {                                                                                                                            \
     auto& __cprint = __get_cprint();                                                                                           \
-    auto __msg           = ::yasio::strfmt(127, "[yasio][%lld]" format "\n", ::yasio::clock<system_clock_t>(), ##__VA_ARGS__); \
+    auto __msg           = ::yasio::strfmt(127, "[yasio][%lld]" format "\n", ::tlx::clock<::tlx::system_clock_t>(), ##__VA_ARGS__); \
     if (__cprint)                                                                                                              \
       __cprint(level, __msg.c_str());                                                                                          \
     else {                                                                                                                     \
@@ -320,11 +322,11 @@ int io_channel::configure_multicast_group(bool onoff)
     return socket_->set_optval(IPPROTO_IPV6, onoff ? IPV6_JOIN_GROUP : IPV6_LEAVE_GROUP, &mreq_v6, (int)sizeof(mreq_v6));
   }
 }
-void io_channel::set_host(cxx17::string_view host)
+void io_channel::set_host(std::string_view host)
 {
   if (this->remote_host_ != host)
   {
-    cxx17::assign(this->remote_host_, host);
+    this->remote_host_ = host;
     yasio__setbits(properties_, YCPF_HOST_DIRTY);
   }
 }
@@ -360,7 +362,7 @@ int io_channel::__builtin_decode_len(void* d, int n)
   return n;
 }
 // -------------------- io_transport ---------------------
-io_transport::io_transport(io_channel* ctx, xxsocket_ptr&& s) : ctx_(ctx)
+io_transport::io_transport(io_channel* ctx, xxsocket_ptr&& s) : ctx_(ctx), buffer_(yasio__max_rcvbuf)
 {
   this->state_  = io_base::state::OPENED;
   this->socket_ = std::move(s);
@@ -372,15 +374,15 @@ const print_fn2_t& io_transport::__get_cprint() const { return ctx_->get_service
 int io_transport::write(io_send_buffer&& buffer, completion_cb_t&& handler)
 {
   int n = static_cast<int>(buffer.size());
-  send_queue_.emplace(cxx14::make_unique<io_send_op>(std::move(buffer), std::move(handler)));
+  send_queue_.emplace(std::make_unique<io_send_op>(std::move(buffer), std::move(handler)));
   get_service().wakeup();
   return n;
 }
-int io_transport::do_read(int revent, int& error, highp_time_t&)
+int io_transport::do_read(int revent, int& error, tlx::highp_time_t&)
 {
   return this->call_read(buffer_.data() + offset_, static_cast<int>(buffer_.size() - offset_), revent, error);
 }
-bool io_transport::do_write(highp_time_t& wait_duration)
+bool io_transport::do_write(tlx::highp_time_t& wait_duration)
 {
   bool ret = false;
   do
@@ -623,7 +625,7 @@ int io_transport_udp::write(io_send_buffer&& buffer, completion_cb_t&& handler)
 int io_transport_udp::write_to(io_send_buffer&& buffer, const ip::endpoint& to, completion_cb_t&& handler)
 {
   int n = static_cast<int>(buffer.size());
-  send_queue_.emplace(cxx14::make_unique<io_sendto_op>(std::move(buffer), std::move(handler), to));
+  send_queue_.emplace(std::make_unique<io_sendto_op>(std::move(buffer), std::move(handler), to));
   get_service().wakeup();
   return n;
 }
@@ -660,7 +662,7 @@ void io_transport_udp::set_primitives()
     };
   }
 }
-int io_transport_udp::handle_input(char* data, int bytes_transferred, int& /*error*/, highp_time_t&)
+int io_transport_udp::handle_input(char* data, int bytes_transferred, int& /*error*/, tlx::highp_time_t&)
 { // pure udp, dispatch to upper layer directly
   auto& service = get_service();
   if (!service.options_.forward_packet_)
@@ -707,7 +709,7 @@ void io_transport_kcp::set_primitives()
     return nsent;
   };
 }
-bool io_transport_kcp::do_write(highp_time_t& wait_duration)
+bool io_transport_kcp::do_write(tlx::highp_time_t& wait_duration)
 {
   bool ret = io_transport_udp::do_write(wait_duration);
 
@@ -720,7 +722,7 @@ bool io_transport_kcp::do_write(highp_time_t& wait_duration)
 
   return ret;
 }
-int io_transport_kcp::do_read(int revent, int& error, highp_time_t& wait_duration)
+int io_transport_kcp::do_read(int revent, int& error, tlx::highp_time_t& wait_duration)
 {
   int n = this->call_read(&rawbuf_.front(), static_cast<int>(rawbuf_.size()), revent, error);
   if (n > 0)
@@ -742,7 +744,7 @@ int io_transport_kcp::do_read(int revent, int& error, highp_time_t& wait_duratio
   }
   return n;
 }
-int io_transport_kcp::handle_input(char* buf, int len, int& error, highp_time_t& wait_duration)
+int io_transport_kcp::handle_input(char* buf, int len, int& error, tlx::highp_time_t& wait_duration)
 {
   // ikcp in event always in service thread, so no need to lock
   if (0 == ::ikcp_input(kcp_, buf, len))
@@ -867,7 +869,7 @@ void io_service::initialize(const io_hostent* channel_eps, int channel_count)
   create_channels(channel_eps, channel_count);
 
 #if !defined(YASIO_USE_CARES)
-  life_mutex_ = std::make_shared<cxx17::shared_mutex>();
+  life_mutex_ = std::make_shared<tlx::shared_mutex>();
   life_token_ = std::make_shared<life_token>();
 #endif
   this->state_ = io_service::state::IDLE;
@@ -877,7 +879,7 @@ void io_service::finalize()
   if (this->state_ == io_service::state::IDLE)
   {
 #if !defined(YASIO_USE_CARES)
-    std::unique_lock<cxx17::shared_mutex> lck(*life_mutex_);
+    std::unique_lock<tlx::shared_mutex> lck(*life_mutex_);
     life_token_.reset();
 #endif
     destroy_channels();
@@ -919,7 +921,7 @@ void io_service::clear_transports()
   for (auto transport : transports_)
   {
     cleanup_io(transport);
-    yasio::invoke_dtor(transport);
+    tlx::invoke_dtor(transport);
     this->tpool_.push_back(transport);
   }
   transports_.clear();
@@ -972,7 +974,7 @@ void io_service::run()
 
   do
   {
-    this->current_time_ = yasio::steady_clock_t::now();
+    this->current_time_ = tlx::steady_clock_t::now();
 
     auto waitd_usec = get_timeout(this->wait_duration_); // Gets current wait duration
 #if defined(YASIO_USE_CARES)
@@ -1188,7 +1190,7 @@ void io_service::handle_close(transport_handle_t thandle)
     cleanup_channel(ctx, false);
   }
 }
-int io_service::write(transport_handle_t transport, sbyte_buffer buffer, completion_cb_t handler)
+int io_service::write(transport_handle_t transport, tlx::sbyte_buffer buffer, completion_cb_t handler)
 {
   if (transport && transport->is_open())
     return !buffer.empty() ? transport->write(io_send_buffer{std::move(buffer)}, std::move(handler)) : 0;
@@ -1208,7 +1210,7 @@ int io_service::forward(transport_handle_t transport, const void* buf, size_t le
     return -1;
   }
 }
-int io_service::write_to(transport_handle_t transport, sbyte_buffer buffer, const ip::endpoint& to, completion_cb_t handler)
+int io_service::write_to(transport_handle_t transport, tlx::sbyte_buffer buffer, const ip::endpoint& to, completion_cb_t handler)
 {
   if (transport && transport->is_open())
     return !buffer.empty() ? transport->write_to(io_send_buffer{std::move(buffer)}, to, std::move(handler)) : 0;
@@ -1760,7 +1762,7 @@ void io_service::deallocate_transport(transport_handle_t t)
 {
   if (t->is_valid())
   {
-    yasio::invoke_dtor(t);
+    tlx::invoke_dtor(t);
     this->tpool_.push_back(t);
   }
 }
@@ -1814,7 +1816,7 @@ bool io_service::do_read(transport_handle_t transport)
       }
       else if (n > 0)
       { // forward packet, don't perform unpack, it's useful for implement streaming based protocol, like http, websocket and ...
-        this->forward_packet(transport->cindex(), io_packet_view{transport->buffer_.data(), n}, transport);
+        this->forward_packet(transport->cindex(), io_packet_view(transport->buffer_.data(), n), transport);
       }
     }
     else
@@ -1959,7 +1961,7 @@ void io_service::process_deferred_events()
   if (!options_.no_dispatch_ && dispatch() > 0)
     this->wait_duration_ = 0;
 }
-highp_time_t io_service::get_timeout(highp_time_t usec)
+tlx::highp_time_t io_service::get_timeout(tlx::highp_time_t usec)
 {
   this->wait_duration_ = this->sched_freq_; // Reset next wait duration per frame
 
@@ -2062,10 +2064,10 @@ void io_service::start_query(io_channel* ctx)
 #endif
 #if !defined(YASIO_USE_CARES)
   // init async name query thread state
-  auto resolving_host                           = ctx->remote_host_;
-  auto resolving_port                           = ctx->remote_port_;
-  std::weak_ptr<cxx17::shared_mutex> weak_mutex = life_mutex_;
-  std::weak_ptr<life_token> life_token          = life_token_;
+  auto resolving_host                         = ctx->remote_host_;
+  auto resolving_port                         = ctx->remote_port_;
+  std::weak_ptr<tlx::shared_mutex> weak_mutex = life_mutex_;
+  std::weak_ptr<life_token> life_token        = life_token_;
   std::thread async_resolv_thread([this, life_token, weak_mutex, resolving_host, resolving_port, ctx] {
     // check life token
     if (life_token.use_count() < 1)
@@ -2079,7 +2081,7 @@ void io_service::start_query(io_channel* ctx)
     auto pmtx = weak_mutex.lock();
     if (!pmtx)
       return;
-    cxx17::shared_lock<cxx17::shared_mutex> lck(*pmtx);
+    tlx::shared_lock<tlx::shared_mutex> lck(*pmtx);
 
     // check life token again, when io_service cleanup done, life_token's use_count will be 0,
     // otherwise, we can safe to do follow assignments.
@@ -2088,7 +2090,7 @@ void io_service::start_query(io_channel* ctx)
     if (error == 0)
     {
       ctx->remote_eps_         = std::move(remote_eps);
-      ctx->query_success_time_ = highp_clock();
+      ctx->query_success_time_ = tlx::highp_clock();
 #  if defined(YASIO_ENABLE_ARES_PROFILER)
       YASIO_KLOGD("[index: %d] query %s succeed, cost: %g(ms)", ctx->index_, ctx->remote_host_.c_str(),
                   (ctx->query_success_time_ - ctx->query_start_time_) / 1000.0);
@@ -2209,22 +2211,22 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
       break;
 #endif
     case YOPT_S_CONNECT_TIMEOUT:
-      options_.connect_timeout_ = static_cast<highp_time_t>(va_arg(ap, int)) * std::micro::den;
+      options_.connect_timeout_ = static_cast<tlx::highp_time_t>(va_arg(ap, int)) * std::micro::den;
       break;
     case YOPT_S_CONNECT_TIMEOUTMS:
-      options_.connect_timeout_ = static_cast<highp_time_t>(va_arg(ap, int)) * std::milli::den;
+      options_.connect_timeout_ = static_cast<tlx::highp_time_t>(va_arg(ap, int)) * std::milli::den;
       break;
     case YOPT_S_DNS_CACHE_TIMEOUT:
-      options_.dns_cache_timeout_ = static_cast<highp_time_t>(va_arg(ap, int)) * std::micro::den;
+      options_.dns_cache_timeout_ = static_cast<tlx::highp_time_t>(va_arg(ap, int)) * std::micro::den;
       break;
     case YOPT_S_DNS_CACHE_TIMEOUTMS:
-      options_.dns_cache_timeout_ = static_cast<highp_time_t>(va_arg(ap, int)) * std::milli::den;
+      options_.dns_cache_timeout_ = static_cast<tlx::highp_time_t>(va_arg(ap, int)) * std::milli::den;
       break;
     case YOPT_S_DNS_QUERIES_TIMEOUT:
-      options_.dns_queries_timeout_ = static_cast<highp_time_t>(va_arg(ap, int)) * std::micro::den;
+      options_.dns_queries_timeout_ = static_cast<tlx::highp_time_t>(va_arg(ap, int)) * std::micro::den;
       break;
     case YOPT_S_DNS_QUERIES_TIMEOUTMS:
-      options_.dns_queries_timeout_ = static_cast<highp_time_t>(va_arg(ap, int)) * std::milli::den;
+      options_.dns_queries_timeout_ = static_cast<tlx::highp_time_t>(va_arg(ap, int)) * std::milli::den;
       break;
     case YOPT_S_DNS_QUERIES_TRIES:
       options_.dns_queries_tries_ = va_arg(ap, int);
@@ -2264,7 +2266,7 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
       {
         channel->uparams_.max_frame_length    = va_arg(ap, int);
         channel->uparams_.length_field_offset = va_arg(ap, int);
-        channel->uparams_.length_field_length = yasio::clamp(va_arg(ap, int), YASIO_SSIZEOF(int8_t), YASIO_SSIZEOF(int));
+        channel->uparams_.length_field_length = std::clamp(va_arg(ap, int), YASIO_SSIZEOF(int8_t), YASIO_SSIZEOF(int));
         channel->uparams_.length_adjustment   = va_arg(ap, int);
       }
       break;
@@ -2272,7 +2274,7 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
     case YOPT_C_UNPACK_STRIP: {
       auto channel = channel_at(static_cast<size_t>(va_arg(ap, int)));
       if (channel)
-        channel->uparams_.initial_bytes_to_strip = yasio::clamp(va_arg(ap, int), 0, YASIO_UNPACK_MAX_STRIP);
+        channel->uparams_.initial_bytes_to_strip = std::clamp(va_arg(ap, int), 0, YASIO_UNPACK_MAX_STRIP);
       break;
     }
     case YOPT_C_UNPACK_NO_BSWAP: {

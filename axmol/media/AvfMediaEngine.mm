@@ -29,7 +29,7 @@
 #    include <TargetConditionals.h>
 
 #    include <assert.h>
-#    include "yasio/string_view.hpp"
+#    include "yasio/tlx/string_view.hpp"
 #    include "yasio/endian_portable.hpp"
 
 #    if TARGET_OS_IPHONE
@@ -193,7 +193,7 @@ bool AvfMediaEngine::open(std::string_view sourceUri)
     NSURL* nsMediaUrl = nil;
     std::string_view Path;
 
-    if (cxx20::starts_with(sourceUri, "file://"sv))
+    if (tlx::starts_with(sourceUri, "file://"sv))
     {
         // Media Framework doesn't percent encode the URL, so the path portion is just a native file path.
         // Extract it and then use it create a proper URL.

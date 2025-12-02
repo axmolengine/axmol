@@ -31,7 +31,7 @@ SOFTWARE.
 
 #if YASIO_SSL_BACKEND == 1 // OpenSSL
 
-#  include "yasio/split.hpp"
+#  include "yasio/tlx/split.hpp"
 
 // The ssl error mask (1 << 31), a little hack, but works
 #  define YSSL_ERR_MASK 0x80000000
@@ -53,8 +53,8 @@ YASIO__DECL yssl_ctx_st* yssl_ctx_new(const yssl_options& opts)
     if (yasio__valid_str(opts.crtfile_))
     { // CAfile for verify
       fail_count = 0;
-      yasio::split(opts.crtfile_, ',', [&](char* first, char* last) {
-        yasio::split_term null_term(last);
+      tlx::split(opts.crtfile_, ',', [&](char* first, char* last) {
+        tlx::split_term_guard null_term(last);
 
 #  if defined(OPENSSL_VERSION_MAJOR) && (OPENSSL_VERSION_MAJOR >= 3)
         /* OpenSSL 3.0.0 has deprecated SSL_CTX_load_verify_locations */

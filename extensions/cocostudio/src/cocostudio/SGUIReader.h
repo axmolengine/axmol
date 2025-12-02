@@ -90,9 +90,9 @@ protected:
     std::string m_strFilePath;
     ax::ValueMap _fileDesignSizes;
 
-    typedef axstd::string_map<SEL_ParseEvent> ParseCallBackMap;
+    typedef tlx::string_map<SEL_ParseEvent> ParseCallBackMap;
     ParseCallBackMap _mapParseSelector;
-    typedef axstd::string_map<Object*> ParseObjectMap;
+    typedef tlx::string_map<Object*> ParseObjectMap;
     ParseObjectMap _mapObject;
 
 public:

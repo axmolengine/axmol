@@ -106,9 +106,9 @@ public:
 
     /**
      * Get the http response data.
-     * @return yasio::sbyte_buffer* the pointer that point to the _responseData.
+     * @return tlx::sbyte_buffer* the pointer that point to the _responseData.
      */
-    yasio::sbyte_buffer* getResponseData() { return &_responseData; }
+    tlx::sbyte_buffer* getResponseData() { return &_responseData; }
 
     bool isSucceed() const { return _responseCode == 200; }
 
@@ -304,7 +304,7 @@ protected:
     Uri _requestUri;
     bool _finished = false;  /// to indicate if the http request is successful simply
     uint64_t _contentLength{0};
-    yasio::sbyte_buffer _responseData;  /// the returned raw data. You can also dump it as a string
+    tlx::sbyte_buffer _responseData;  /// the returned raw data. You can also dump it as a string
     std::string _currentHeader;
     std::string _currentHeaderValue;
     ResponseHeaderMap _responseHeaders;  /// the returned raw header data. You can also dump it as a string

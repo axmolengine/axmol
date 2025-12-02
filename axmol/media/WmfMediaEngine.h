@@ -55,7 +55,7 @@
 #    include <mutex>
 #    include <deque>
 
-#    include "yasio/byte_buffer.hpp"
+#    include "axmol/tlx/byte_buffer.hpp"
 
 namespace ax
 {
@@ -283,8 +283,8 @@ protected:
     MEVideoPixelFormat m_videoPF = MEVideoPixelFormat::INVALID;
 
     mutable std::mutex m_frameBuffer1Mtx;
-    yasio::byte_buffer m_frameBuffer1;  // for write
-    yasio::byte_buffer m_frameBuffer2;  // for read
+    tlx::byte_buffer m_frameBuffer1;  // for write
+    tlx::byte_buffer m_frameBuffer2;  // for read
 };
 
 struct WmfMediaEngineFactory : public MediaEngineFactory

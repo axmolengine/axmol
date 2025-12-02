@@ -30,7 +30,7 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 #include <string_view>
 
-#include "yasio/byte_buffer.hpp"
+#include "axmol/tlx/byte_buffer.hpp"
 #include "axmol/tlx/format.hpp"
 
 namespace ax
@@ -223,10 +223,10 @@ protected:
     {
         if constexpr (_Pretty)
             if (_level)
-                _buffer.expand(_level * _options.indentCharCount, _options.indentChar);
+                _buffer.extend(_level * _options.indentCharCount, _options.indentChar);
     }
 
-    yasio::sbyte_buffer _buffer;
+    tlx::sbyte_buffer _buffer;
     uint16_t _level{0};
     bool _pendingValue{false};
     JsonWriterOptions _options;

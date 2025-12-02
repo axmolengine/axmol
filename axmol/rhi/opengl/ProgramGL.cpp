@@ -30,8 +30,8 @@
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/EventType.h"
 #include "axmol/tlx/utility.hpp"
-#include "axmol/tlx/pod_vector.hpp"
-#include "yasio/byte_buffer.hpp"
+#include "axmol/tlx/vector.hpp"
+#include "axmol/tlx/byte_buffer.hpp"
 #include "axmol/rhi/opengl/UtilsGL.h"
 #include "axmol/rhi/opengl/OpenGLState.h"
 
@@ -128,7 +128,7 @@ void ProgramImpl::compileProgram()
         glGetProgramiv(_program, GL_INFO_LOG_LENGTH, &errorInfoLen);
         if (errorInfoLen > 1)
         {
-            auto errorInfo = axstd::make_unique_for_overwrite<char[]>(static_cast<size_t>(errorInfoLen));
+            auto errorInfo = tlx::make_unique_for_overwrite<char[]>(static_cast<size_t>(errorInfoLen));
             glGetProgramInfoLog(_program, errorInfoLen, NULL, errorInfo.get());
             AXLOGE("axmol:ERROR: {}: failed to link program: {} ", __FUNCTION__, errorInfo.get());
         }
@@ -198,7 +198,7 @@ void ProgramImpl::reflectVertexInputs()
     _activeVertexInputs.reserve(numOfActiveInputs);
 
     constexpr int MAX_VERTEX_INPUT_NAME_LENGTH = 255;
-    auto attrName = axstd::make_unique_for_overwrite<char[]>(MAX_VERTEX_INPUT_NAME_LENGTH + 1);
+    auto attrName = tlx::make_unique_for_overwrite<char[]>(MAX_VERTEX_INPUT_NAME_LENGTH + 1);
 
     GLint attrNameLen = 0;
     GLenum attrType;
@@ -229,7 +229,7 @@ void ProgramImpl::reflectUniformInfos()
     _maxLocation     = -1;
     _activeUniformInfos.clear();
 
-    yasio::basic_byte_buffer<GLchar> buffer;  // buffer for name
+    tlx::basic_byte_buffer<GLchar> buffer;  // buffer for name
 
     // OpenGL UBO: uloc[0]: block_offset, uloc[1]: offset in block
 
@@ -240,7 +240,7 @@ void ProgramImpl::reflectUniformInfos()
     GLint numblocks{0};
     glGetProgramiv(_program, GL_ACTIVE_UNIFORM_BLOCKS, &numblocks);
 
-    axstd::pod_vector<GLint> uniformBlcokOffsets(numblocks);
+    tlx::pod_vector<GLint> uniformBlcokOffsets(numblocks);
     for (int blockIndex = 0; blockIndex < numblocks; ++blockIndex)
     {
         GLint blockSize{0};
@@ -404,12 +404,12 @@ int ProgramImpl::getOriginalLocation(int location) const
 }
 #endif
 
-const axstd::string_map<VertexInputDesc>& ProgramImpl::getActiveVertexInputs() const
+const tlx::string_map<VertexInputDesc>& ProgramImpl::getActiveVertexInputs() const
 {
     return _activeVertexInputs;
 }
 
-const axstd::string_map<UniformInfo>& ProgramImpl::getActiveUniformInfos(ShaderStage /*stage*/) const
+const tlx::string_map<UniformInfo>& ProgramImpl::getActiveUniformInfos(ShaderStage /*stage*/) const
 {
     return _activeUniformInfos;
 }

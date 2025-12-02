@@ -49,7 +49,7 @@ private:
     ID3D11Device* _device         = nullptr;
     ID3D11DeviceContext* _context = nullptr;
 
-    axstd::hash_map<uint32_t, ComPtr<ID3D11BlendState>> _blendCache;
+    tlx::hash_map<uint32_t, ComPtr<ID3D11BlendState>> _blendCache;
 };
 
 /** @} */

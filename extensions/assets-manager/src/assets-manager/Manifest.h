@@ -56,7 +56,7 @@ struct ManifestAsset
     int downloadState;
 };
 
-typedef axstd::string_map<DownloadUnit> DownloadUnits;
+typedef tlx::string_map<DownloadUnit> DownloadUnits;
 
 class AX_EX_DLL Manifest : public Object
 {
@@ -155,7 +155,7 @@ protected:
     /** @brief Generate difference between this Manifest and another.
      * @param b   The other manifest
      */
-    axstd::string_map<AssetDiff> genDiff(const Manifest* b) const;
+    tlx::string_map<AssetDiff> genDiff(const Manifest* b) const;
 
     /** @brief Generate resuming download assets list
      * @param units   The download units reference to be modified by the generation result
@@ -182,7 +182,7 @@ protected:
 
     /** @brief Gets all groups version.
      */
-    const axstd::string_map<std::string>& getGroupVerions() const;
+    const tlx::string_map<std::string>& getGroupVerions() const;
 
     /** @brief Gets version for the given group.
      * @param group   Key of the requested group
@@ -193,7 +193,7 @@ protected:
      * @brief Gets assets.
      * @lua NA
      */
-    const axstd::string_map<Asset>& getAssets() const;
+    const tlx::string_map<Asset>& getAssets() const;
 
     /** @brief Set the download state for an asset
      * @param key   Key of the asset to set
@@ -232,13 +232,13 @@ private:
     std::vector<std::string> _groups;
 
     //! The versions of all local group [Optional]
-    axstd::string_map<std::string> _groupVer;
+    tlx::string_map<std::string> _groupVer;
 
     //! The version of local engine
     std::string _engineVer;
 
     //! Full assets list
-    axstd::string_map<Asset> _assets;
+    tlx::string_map<Asset> _assets;
 
     //! All search paths
     std::vector<std::string> _searchPaths;

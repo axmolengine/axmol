@@ -330,10 +330,10 @@ protected:
     void cleanToRemovedListeners();
 
     /** Listeners map */
-    axstd::string_map<EventListenerVector*> _listenerMap;
+    tlx::string_map<EventListenerVector*> _listenerMap;
 
     /** The map of dirty flag */
-    axstd::string_map<DirtyFlag> _priorityDirtyFlagMap;
+    tlx::string_map<DirtyFlag> _priorityDirtyFlagMap;
 
     /** The map of node and event listeners */
     std::unordered_map<Node*, std::vector<EventListener*>*> _nodeListenersMap;

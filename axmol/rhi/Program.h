@@ -103,7 +103,7 @@ public:
      * Get active vertex attributes.
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
-    virtual const axstd::string_map<VertexInputDesc>& getActiveVertexInputs() const = 0;
+    virtual const tlx::string_map<VertexInputDesc>& getActiveVertexInputs() const = 0;
 
     /**
      * Get vertex shader.
@@ -140,7 +140,7 @@ public:
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    virtual const axstd::string_map<UniformInfo>& getActiveUniformInfos(ShaderStage stage) const = 0;
+    virtual const tlx::string_map<UniformInfo>& getActiveUniformInfos(ShaderStage stage) const = 0;
 
     VertexLayout* getVertexLayout() const { return _vertexLayout; }
 

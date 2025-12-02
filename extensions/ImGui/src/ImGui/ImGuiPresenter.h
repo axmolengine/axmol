@@ -180,7 +180,7 @@ private:
 
     int64_t _beginFrames = 0;
 
-    axstd::string_map<float> _fontsInfoMap;
+    tlx::string_map<float> _fontsInfoMap;
 
     bool _purgeNextLoop = false;
 };

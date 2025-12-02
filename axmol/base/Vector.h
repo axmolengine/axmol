@@ -111,7 +111,7 @@ public:
     const_reverse_iterator crend() const { return _data.crend(); }
 
     /** Constructor. */
-    Vector() : _data() { static_assert(axstd::is_ref_counted_v<T>, "Invalid Type for ax::Vector!"); }
+    Vector() : _data() { static_assert(tlx::is_ref_counted_v<T>, "Invalid Type for ax::Vector!"); }
 
     /**
      * Constructor with a capacity.
@@ -119,7 +119,7 @@ public:
      */
     explicit Vector(ssize_t capacity) : _data()
     {
-        static_assert(axstd::is_ref_counted_v<T>, "Invalid Type for ax::Vector!");
+        static_assert(tlx::is_ref_counted_v<T>, "Invalid Type for ax::Vector!");
         AXLOGV("In the default constructor with capacity of Vector.");
         reserve(capacity);
     }
@@ -143,7 +143,7 @@ public:
     /** Copy constructor. */
     Vector(const Vector& other)
     {
-        static_assert(axstd::is_ref_counted_v<T>, "Invalid Type for ax::Vector!");
+        static_assert(tlx::is_ref_counted_v<T>, "Invalid Type for ax::Vector!");
         AXLOGV("In the copy constructor!");
         _data = other._data;
         addRefForAllObjects();
@@ -152,7 +152,7 @@ public:
     /** Constructor with std::move semantic. */
     Vector(Vector&& other)
     {
-        static_assert(axstd::is_ref_counted_v<T>, "Invalid Type for ax::Vector!");
+        static_assert(tlx::is_ref_counted_v<T>, "Invalid Type for ax::Vector!");
         AXLOGV("In the move constructor of Vector!");
         _data = std::move(other._data);
     }

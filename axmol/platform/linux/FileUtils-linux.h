@@ -48,9 +48,6 @@ class AX_DLL FileUtilsLinux : public FileUtils
 protected:
     FileUtilsLinux();
 
-private:
-    std::string _writablePath;
-
 public:
     /* override functions */
     bool init() override;
