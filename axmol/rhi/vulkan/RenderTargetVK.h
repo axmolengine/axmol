@@ -48,7 +48,11 @@ public:
     void invalidate();
 
     // Begin a render pass using this target
-    void beginRenderPass(VkCommandBuffer cmd, const RenderPassDesc& desc, uint32_t width, uint32_t height);
+    void beginRenderPass(VkCommandBuffer cmd,
+                         const RenderPassDesc& desc,
+                         uint32_t width,
+                         uint32_t height,
+                         uint32_t imageIndex);
 
     void endRenderPass(VkCommandBuffer cmd);
 
@@ -59,9 +63,14 @@ public:
 
     VkRenderPass getVkRenderPass() const { return _renderPass; }
 
+    void rebuildSwapchainAttachments(const tlx::pod_vector<VkImage>& images,
+                                     const tlx::pod_vector<VkImageView>&,
+                                     const VkExtent2D&,
+                                     PixelFormat imagePF);
+
 private:
-    void updateRenderPass(const RenderPassDesc& desc);
-    void updateFramebuffer(VkCommandBuffer cmd);
+    void updateRenderPass(const RenderPassDesc& desc, uint32_t imageIndex);
+    void updateFramebuffer(VkCommandBuffer cmd, uint32_t imageIndex);
 
     void prepareAttachmentsForRendering(VkCommandBuffer cmd);
 
@@ -69,8 +78,9 @@ private:
 
     // Current attachment views for building renderpass/framebuffer
     std::array<VkImageView, MAX_COLOR_ATTCHMENT + 1> _attachmentViews{};
-    std::array<TextureImpl*, MAX_COLOR_ATTCHMENT + 1> _attachmentTexPtrs;
-    uint64_t _attachmentViewsHash{0};
+    // Seed values used to compute framebuffer/render pass hash per swapchain image
+    std::array<uintptr_t, MAX_COLOR_ATTCHMENT> _renderHashSeeds{};
+    uintptr_t _activeHashSeed{0};
 
     tlx::pod_vector<VkClearValue> _clearValues;
 
@@ -80,8 +90,6 @@ private:
     // Caches keyed by (desc hash, attachment views hash)
     tlx::hash_map<uintptr_t, VkRenderPass> _renderPassCache;
     tlx::hash_map<uintptr_t, VkFramebuffer> _framebufferCache;
-
-    bool _attachmentsDirty{true};
 };
 
 }  // namespace ax::rhi::vk

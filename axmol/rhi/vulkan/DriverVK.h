@@ -160,20 +160,7 @@ public:
 
     void processDisposalQueue(uint64_t completedFenceValue);
 
-    void rebuildSwapchainAttachments(const tlx::pod_vector<VkImage>& images,
-                                     const tlx::pod_vector<VkImageView>&,
-                                     const VkExtent2D&,
-                                     PixelFormat imagePF);
-
-    void destroySwapchainAttachments();
-
     void setSwapchainCurrentImageIndex(uint32_t imageIndex);
-
-    // Get the current swapchain color attachment by recorded swapchain image index
-    TextureImpl* getSwapchainColorAttachment();
-
-    // Get the current swapchain depth-stencil attachment
-    TextureImpl* getSwapchainDepthStencilAttachment();
 
     void waitForGPU() override { vkDeviceWaitIdle(_device); }
 
@@ -214,11 +201,6 @@ private:
     std::string _renderer;
     std::string _version;
     std::string _shaderVersion;
-
-    // store and provide swapchain render target attachments
-    tlx::pod_vector<TextureImpl*> _swapchainColorAttachments;
-    uint32_t _currentSwapchainImageIndex          = 0;
-    TextureImpl* _swapchainDepthStencilAttachment = nullptr;
 };
 
 }  // namespace ax::rhi::vk

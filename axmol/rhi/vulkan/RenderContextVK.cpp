@@ -199,8 +199,6 @@ RenderContextImpl::~RenderContextImpl()
         _commandPool = VK_NULL_HANDLE;
     }
 
-    _driver->destroySwapchainAttachments();
-
     for (auto view : _swapchainImageViews)
         vkDestroyImageView(_device, view, nullptr);
 
@@ -523,7 +521,7 @@ void RenderContextImpl::recreateSwapchain()
         AXASSERT(vr == VK_SUCCESS, "vkCreateImageView failed");
     }
 
-    _driver->rebuildSwapchainAttachments(_swapchainImages, _swapchainImageViews, extent, pixelFormat);
+    _screenRT->rebuildSwapchainAttachments(_swapchainImages, _swapchainImageViews, extent, pixelFormat);
 
     // re-create render finished semaphores
     if (!_renderFinishedSemaphores.empty())
@@ -612,8 +610,6 @@ bool RenderContextImpl::beginFrame()
 
     _inFrame = true;
 
-    _driver->setSwapchainCurrentImageIndex(_currentImageIndex);
-
     _currentCmdBuffer = _commandBuffers[_currentFrame];
     vkResetCommandBuffer(_currentCmdBuffer, 0);
 
@@ -650,7 +646,8 @@ void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const Render
     _renderTargetHeight  = colorAttachment->getDesc().height;
 
     // Delegate to RenderTargetImplVK: it will select/create VkRenderPass and VkFramebuffer
-    rtImpl->beginRenderPass(_currentCmdBuffer, renderPassDesc, _renderTargetWidth, _renderTargetHeight);
+    rtImpl->beginRenderPass(_currentCmdBuffer, renderPassDesc, _renderTargetWidth, _renderTargetHeight,
+                            _currentImageIndex);
 }
 
 void RenderContextImpl::endRenderPass()
