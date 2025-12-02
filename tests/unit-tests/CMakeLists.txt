@@ -51,6 +51,7 @@ set(GAME_SOURCE
 
     Source/axmol/ui/UIHelperTests.cpp
     Source/axmol/tlx/ContainerTests.cpp
+    Source/axmol/tlx/SplitTests.cpp
 )
 
 

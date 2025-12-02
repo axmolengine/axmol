@@ -33,6 +33,7 @@ SOFTWARE.
 #include <string.h>
 #include <iterator>
 #include <type_traits>
+#include <assert.h>
 
 #include "yasio/compiler/feature_test.hpp"
 
@@ -450,17 +451,7 @@ constexpr _OutIt copy_n_unchecked4(_InIt first, _SizeTy count, _OutIt dest)
 
 } // namespace tlx
 
-#define _TLX_VERIFY_RANGE(cond, mesg)                   \
-  do                                                    \
-  {                                                     \
-    if (cond)                                           \
-      ; /* contextually convertible to bool paranoia */ \
-    else                                                \
-    {                                                   \
-      throw std::out_of_range(mesg);                    \
-    }                                                   \
-                                                        \
-  } while (false)
+#define _TLX_VERIFY(cond, mesg) assert(cond && mesg)
 
 #define _TLX_INTERNAL_CHECK(cond) assert(cond)
 

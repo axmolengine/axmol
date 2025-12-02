@@ -40,10 +40,13 @@ SOFTWARE.
 #include <type_traits>
 #include <string_view>
 #include <span>
-#include <cstring>  // strchr, strpbrk
-#include <cwchar>   // wcschr, wcspbrk
+
 #include <iterator> // std::distance
-#include <memory>   // std::to_address
+#include <memory>
+
+#include <string.h> // strchr, strpbrk
+#include <wchar.h>  // wcschr, wcspbrk
+#include <assert.h>
 
 #if defined(__cpp_lib_ranges)
 #  include <ranges>
@@ -52,6 +55,10 @@ SOFTWARE.
 #if defined(_MSC_VER)
 #  pragma warning(push)
 #  pragma warning(disable : 4706)
+#endif
+
+#ifndef _TLX_VERIFY
+#  define _TLX_VERIFY(cond, mesg) assert(cond&& mesg)
 #endif
 
 namespace tlx
@@ -145,36 +152,36 @@ struct string_traits_base;
 template <>
 struct string_traits_base<char> {
   // Unsafe: requires null-terminated input string, since no explicit length is provided
-  static const char* find(const char* s, char delim) { return std::strchr(s, delim); }
-  static char* find(char* s, char delim) { return std::strchr(s, delim); }
+  static const char* find(const char* s, char delim) { return ::strchr(s, delim); }
+  static char* find(char* s, char delim) { return ::strchr(s, delim); }
 
-  static const char* find(const char* s, const char* delim) { return std::strstr(s, delim); }
-  static char* find(char* s, const char* delim) { return std::strstr(s, delim); }
+  static const char* find(const char* s, const char* delim) { return ::strstr(s, delim); }
+  static char* find(char* s, const char* delim) { return ::strstr(s, delim); }
 
-  static const char* find_first_of(const char* s, const char* delims) { return std::strpbrk(s, delims); }
-  static char* find_first_of(char* s, const char* delims) { return std::strpbrk(s, delims); }
+  static const char* find_first_of(const char* s, const char* delims) { return ::strpbrk(s, delims); }
+  static char* find_first_of(char* s, const char* delims) { return ::strpbrk(s, delims); }
 
   // Safe: input string with length
-  static const char* find(const char* s, size_t n, char delim) { return static_cast<const char*>(std::memchr(s, n, delim)); }
-  static char* find(char* s, size_t n, char delim) { return static_cast<char*>(std::memchr(s, n, delim)); }
+  static const char* find(const char* s, size_t n, char delim) { return static_cast<const char*>(::memchr(s, delim, n)); }
+  static char* find(char* s, size_t n, char delim) { return static_cast<char*>(::memchr(s, delim, n)); }
 };
 
 // wide char
 template <>
 struct string_traits_base<wchar_t> {
   // Unsafe:
-  static wchar_t* find(wchar_t* s, wchar_t delim) { return std::wcschr(s, delim); }
-  static const wchar_t* find(const wchar_t* s, wchar_t delim) { return std::wcschr(s, delim); }
+  static wchar_t* find(wchar_t* s, wchar_t delim) { return ::wcschr(s, delim); }
+  static const wchar_t* find(const wchar_t* s, wchar_t delim) { return ::wcschr(s, delim); }
 
-  static const wchar_t* find(const wchar_t* s, const wchar_t* delim) { return std::wcsstr(s, delim); }
-  static wchar_t* find(wchar_t* s, const wchar_t* delim) { return std::wcsstr(s, delim); }
+  static const wchar_t* find(const wchar_t* s, const wchar_t* delim) { return ::wcsstr(s, delim); }
+  static wchar_t* find(wchar_t* s, const wchar_t* delim) { return ::wcsstr(s, delim); }
 
-  static const wchar_t* find_first_of(const wchar_t* s, const wchar_t* delims) { return std::wcspbrk(s, delims); }
-  static wchar_t* find_first_of(wchar_t* s, const wchar_t* delims) { return std::wcspbrk(s, delims); }
+  static const wchar_t* find_first_of(const wchar_t* s, const wchar_t* delims) { return ::wcspbrk(s, delims); }
+  static wchar_t* find_first_of(wchar_t* s, const wchar_t* delims) { return ::wcspbrk(s, delims); }
 
   // Safe: input string with length
-  static const wchar_t* find(const wchar_t* s, size_t n, wchar_t delim) { return std::wmemchr(s, n, delim); }
-  static wchar_t* find(wchar_t* s, size_t n, wchar_t delim) { return std::wmemchr(s, n, delim); }
+  static const wchar_t* find(const wchar_t* s, size_t n, wchar_t delim) { return ::wmemchr(s, delim, n); }
+  static wchar_t* find(wchar_t* s, size_t n, wchar_t delim) { return ::wmemchr(s, delim, n); }
 };
 
 template <typename Elem>
@@ -187,55 +194,85 @@ namespace detail
 {
 
 // -----------------------------
-// split_if implementations
+// split_until implementations
 // -----------------------------
 
-// pointer version: keep nullptr as end sentinel to avoid strlen
+// split_until by char
 // unsafe stub
 template <typename Elem, typename Pred>
-inline void split_if(Elem* s, Elem delim, Pred&& pred)
+inline void split_until(Elem* s, std::remove_cv_t<Elem> delim, Pred&& pred)
 {
   Elem* start = s;
   Elem* ptr   = s;
   while ((ptr = string_traits<Elem>::find(ptr, delim)))
   {
-    if (start <= ptr && !pred(start, ptr))
+    _TLX_VERIFY(start <= ptr, "tlx::split: out of range");
+    if (pred(start, ptr))
       return;
-    start = ptr + 1;
-    ++ptr;
+    start = ++ptr;
   }
   // end sentinel: nullptr (caller wrapper must accept auto last)
   pred(start, nullptr);
 }
 
-// span version: Elem may be const-qualified; delim uses remove_cv_t<Elem>
+// split_until by char
+// safe stub
 template <typename Elem, typename Pred>
-inline void split_if(std::span<Elem> s, std::remove_cv_t<Elem> delim, Pred&& pred)
+inline void split_until(std::span<Elem> s, std::remove_cv_t<Elem> delim, Pred&& pred)
 {
   Elem* start = s.data();
   Elem* ptr   = start;
   Elem* end   = start + s.size();
   while ((ptr = string_traits<Elem>::find(ptr, end - ptr, delim)))
   {
-    if (ptr >= end)
-      break;
-    if (start <= ptr && !pred(start, ptr))
+    _TLX_VERIFY(start <= ptr, "tlx::split: out of range");
+    if (pred(start, ptr))
       return;
-    start = ptr + 1;
-    ++ptr;
+    start = ++ptr;
   }
-  if (start <= end)
-    pred(start, end);
+  _TLX_VERIFY(start <= end, "tlx::split: out of range");
+  pred(start, end);
 }
 
-// convenience span wrapper (callback style)
-template <typename Elem, typename Fn>
-inline void split(std::span<Elem> s, std::remove_cv_t<Elem> delim, Fn&& func)
+// split_until by string
+// unsafe stub
+template <typename Elem, typename Pred>
+inline void split_until(Elem* s, std::basic_string_view<std::remove_cv_t<Elem>> delim, Pred&& pred)
 {
-  split_if(s, delim, [func = std::forward<Fn>(func)](Elem* f, Elem* l) {
-    func(f, l);
-    return true;
-  });
+  _TLX_VERIFY(!delim.empty(), "tlx::split: empty delimiter not allowed");
+
+  auto start = s; // the start of every string
+  auto ptr   = s; // source string iterator
+  auto dlen  = delim.size();
+  while ((ptr = string_traits<Elem>::find(ptr, delim.data())))
+  {
+    _TLX_VERIFY(start <= ptr, "tlx::split: out of range");
+    if (pred(start, ptr))
+      return;
+    start = (ptr += dlen);
+  }
+  pred(start, nullptr);
+}
+
+// split_until by string
+template <typename Elem, typename Pred>
+inline void split_until(std::span<Elem> s, std::basic_string_view<std::remove_cv_t<Elem>> delim, Pred&& pred)
+{
+  _TLX_VERIFY(!delim.empty(), "tlx::split: empty delimiter not allowed");
+
+  auto start = s.data(); // the start of every string
+  auto ptr   = start;    // source string iterator
+  auto end   = start + s.size();
+  auto dlen  = delim.size();
+  while ((ptr = std::search(ptr, end, delim.begin(), delim.end())) != end)
+  {
+    _TLX_VERIFY(start <= ptr, "tlx::split: out of range");
+    if (pred(start, ptr))
+      return;
+    start = (ptr += dlen);
+  }
+  _TLX_VERIFY(start <= end, "tlx::split: out of range");
+  pred(start, end);
 }
 
 // -----------------------------
@@ -245,58 +282,44 @@ inline void split(std::span<Elem> s, std::remove_cv_t<Elem> delim, Fn&& func)
 // pointer version: delims is pointer to (possibly const) char type; end sentinel nullptr
 // unsafe stub
 template <typename Elem, typename Pred>
-inline void split_of_if(Elem* s, const std::remove_cv_t<Elem>* delims, Pred&& pred)
+inline void split_of_until(Elem* s, std::basic_string_view<std::remove_cv_t<Elem>> delims, Pred&& pred)
 {
+  _TLX_VERIFY(!delims.empty(), "tlx::split_of: empty delimiter not allowed");
+
   Elem* start = s;
   Elem* ptr   = s;
-  auto delim  = *delims;
-  while ((ptr = string_traits<Elem>::find_first_of(ptr, delims)))
+  auto delim  = delims[0];
+  while ((ptr = string_traits<Elem>::find_first_of(ptr, delims.data())))
   {
-    if (start <= ptr)
-    {
-      if (!pred(start, ptr, delim))
-        return;
-      delim = *ptr;
-    }
-    start = ptr + 1;
-    ++ptr;
+    _TLX_VERIFY(start <= ptr, "tlx::split_of: out of range");
+    if (pred(start, ptr, delim))
+      return;
+    delim = *ptr;
+    start = ++ptr;
   }
   pred(start, nullptr, delim);
 }
 
 // span version: delims is pointer to remove_cv_t<Elem>
 template <typename Elem, typename Pred>
-inline void split_of_if(std::span<Elem> s, std::basic_string_view<std::remove_cv_t<Elem>> delims, Pred&& pred)
+inline void split_of_until(std::span<Elem> s, std::basic_string_view<std::remove_cv_t<Elem>> delims, Pred&& pred)
 {
+  _TLX_VERIFY(!delims.empty(), "tlx::split_of: empty delimiter not allowed");
+
   Elem* start = s.data();
   Elem* ptr   = start;
   Elem* end   = start + s.size();
   auto delim  = *delims.data();
-  while ((ptr = std::find_first_of(ptr, end, delims.begin(), delims.end())))
+  while ((ptr = std::find_first_of(ptr, end, delims.begin(), delims.end())) != end)
   {
-    if (ptr >= end)
-      break;
-    if (start <= ptr)
-    {
-      if (!pred(start, ptr, delim))
-        return;
-      delim = *ptr;
-    }
-    start = ptr + 1;
-    ++ptr;
+    _TLX_VERIFY(start <= ptr, "tlx::split_of: out of range");
+    if (pred(start, ptr, delim))
+      return;
+    delim = *ptr;
+    start = ++ptr;
   }
-  if (start <= end)
-    pred(start, end, delim);
-}
-
-// convenience span wrapper (callback style), [delim is string_iew]
-template <typename Elem, typename Fn>
-inline void split_of(std::span<Elem> s, std::basic_string_view<Elem> delims, Fn&& func)
-{
-  split_of_if(s, delims, [func = std::forward<Fn>(func)](Elem* f, Elem* l, Elem d) {
-    func(f, l, d);
-    return true;
-  });
+  _TLX_VERIFY(start <= end, "tlx::split_of: out of range");
+  pred(start, end, delim);
 }
 
 } // namespace detail
@@ -305,20 +328,20 @@ inline void split_of(std::span<Elem> s, std::basic_string_view<Elem> delims, Fn&
 // external dispatching helpers
 // -----------------------------
 
-// split_if: accept string-like types, pointers, spans [delim is char]
+// split_until: accept string-like types, pointers, spans [delim is char]
 template <typename Str, typename Pred>
-inline void split_if(Str&& s, element_of_nocvref_t<Str> delim, Pred&& pred)
+inline void split_until(Str&& s, element_of_nocvref_t<Str> delim, Pred&& pred)
 {
   using Tp = std::remove_cvref_t<Str>;
 
   if constexpr (std::is_pointer_v<Tp>)
   {
     // pointer (char*/wchar_t*)
-    detail::split_if(s, delim, std::forward<Pred>(pred));
+    detail::split_until(s, delim, std::forward<Pred>(pred));
   }
   else if constexpr (is_span_of_v<Tp>)
   {
-    detail::split_if(s, delim, std::forward<Pred>(pred));
+    detail::split_until(s, delim, std::forward<Pred>(pred));
   }
   else if constexpr (is_contiguous_like_v<Tp>)
   {
@@ -326,27 +349,27 @@ inline void split_if(Str&& s, element_of_nocvref_t<Str> delim, Pred&& pred)
     // std::basic_string<...>, std::span<...> etc.)
     using ElemPtr = decltype(std::declval<Tp>().data()); // e.g. const char*
     using Elem    = std::remove_pointer_t<ElemPtr>;      // preserves const
-    detail::split_if(std::span<Elem>(s.data(), s.size()), delim, std::forward<Pred>(pred));
+    detail::split_until(std::span<Elem>(s.data(), s.size()), delim, std::forward<Pred>(pred));
   }
   else
   {
-    static_assert(sizeof(Tp) == 0, "Unsupported type for tlx::split_if");
+    static_assert(sizeof(Tp) == 0, "Unsupported type for tlx::split_until");
   }
 }
 
-// split_of_if: similar dispatch
 template <typename Str, typename Pred>
-inline void split_of_if(Str&& s, std::basic_string_view<element_of_nocvref_t<Str>> delims, Pred&& pred)
+inline void split_until(Str&& s, std::basic_string_view<element_of_nocvref_t<Str>> delim, Pred&& pred)
 {
   using Tp = std::remove_cvref_t<Str>;
 
   if constexpr (std::is_pointer_v<Tp>)
   {
-    detail::split_of_if(s, delims, std::forward<Pred>(pred));
+    // pointer (char*/wchar_t*)
+    detail::split_until(s, delim, std::forward<Pred>(pred));
   }
   else if constexpr (is_span_of_v<Tp>)
   {
-    detail::split_of_if(s, delims, std::forward<Pred>(pred));
+    detail::split_until(s, delim, std::forward<Pred>(pred));
   }
   else if constexpr (is_contiguous_like_v<Tp>)
   {
@@ -354,11 +377,39 @@ inline void split_of_if(Str&& s, std::basic_string_view<element_of_nocvref_t<Str
     // std::basic_string<...>, std::span<...> etc.)
     using ElemPtr = decltype(std::declval<Tp>().data()); // e.g. const char*
     using Elem    = std::remove_pointer_t<ElemPtr>;      // preserves const
-    detail::split_of_if(std::span<Elem>(s.data(), s.size()), delims, std::forward<Pred>(pred));
+    detail::split_until(std::span<Elem>(s.data(), s.size()), delim, std::forward<Pred>(pred));
   }
   else
   {
-    static_assert(sizeof(Tp) == 0, "Unsupported type for tlx::split_of_if");
+    static_assert(sizeof(Tp) == 0, "Unsupported type for tlx::split_until");
+  }
+}
+
+// split_of_until: similar dispatch
+template <typename Str, typename Pred>
+inline void split_of_until(Str&& s, std::basic_string_view<element_of_nocvref_t<Str>> delims, Pred&& pred)
+{
+  using Tp = std::remove_cvref_t<Str>;
+
+  if constexpr (std::is_pointer_v<Tp>)
+  {
+    detail::split_of_until(s, delims, std::forward<Pred>(pred));
+  }
+  else if constexpr (is_span_of_v<Tp>)
+  {
+    detail::split_of_until(s, delims, std::forward<Pred>(pred));
+  }
+  else if constexpr (is_contiguous_like_v<Tp>)
+  {
+    // Any type that exposes data() and size() (std::string, std::string_view,
+    // std::basic_string<...>, std::span<...> etc.)
+    using ElemPtr = decltype(std::declval<Tp>().data()); // e.g. const char*
+    using Elem    = std::remove_pointer_t<ElemPtr>;      // preserves const
+    detail::split_of_until(std::span<Elem>(s.data(), s.size()), delims, std::forward<Pred>(pred));
+  }
+  else
+  {
+    static_assert(sizeof(Tp) == 0, "Unsupported type for tlx::split_of_until");
   }
 }
 
@@ -367,20 +418,29 @@ inline void split_of_if(Str&& s, std::basic_string_view<element_of_nocvref_t<Str
 // note: wrapper lambdas accept `auto last` (not auto*) so they can receive nullptr
 // -----------------------------
 template <typename Str, typename Fn>
-inline void split(Str&& s, const element_of_nocvref_t<Str> delim, Fn&& func)
+inline void split(Str&& s, element_of_nocvref_t<Str> delim, Fn&& func)
 {
-  split_if(std::forward<Str>(s), delim, [func = std::forward<Fn>(func)](auto* first, auto last) {
+  split_until(std::forward<Str>(s), delim, [func = std::forward<Fn>(func)](auto* first, auto last) {
     func(first, last);
-    return true;
+    return false;
+  });
+}
+
+template <typename Str, typename Fn>
+inline void split(Str&& s, std::basic_string_view<element_of_nocvref_t<Str>> delim, Fn&& func)
+{
+  split_until(std::forward<Str>(s), delim, [func = std::forward<Fn>(func)](auto* first, auto last) {
+    func(first, last);
+    return false;
   });
 }
 
 template <typename Str, typename Fn>
 inline void split_of(Str&& s, std::basic_string_view<element_of_nocvref_t<Str>> delims, Fn&& func)
 {
-  split_of_if(std::forward<Str>(s), delims, [func = std::forward<Fn>(func)](auto* first, auto last, auto delim) {
+  split_of_until(std::forward<Str>(s), delims, [func = std::forward<Fn>(func)](auto* first, auto last, auto delim) {
     func(first, last, delim);
-    return true;
+    return false;
   });
 }
 
@@ -398,9 +458,9 @@ inline void split(Iter first, Iter last, const element_of_nocvref_t<Iter> delim,
   auto n         = std::distance(first, last);
   // construct span with element type matching pointer returned by to_address
   std::span<ElemSpan> sp(std::to_address(first), static_cast<size_t>(n));
-  detail::split_if(sp, delim, [func = std::forward<Fn>(func)](ElemSpan* f, ElemSpan* l) {
+  detail::split_until(sp, delim, [func = std::forward<Fn>(func)](ElemSpan* f, ElemSpan* l) {
     func(f, l);
-    return true;
+    return false;
   });
 }
 
@@ -411,9 +471,9 @@ inline void split_of(Iter first, Iter last, std::basic_string_view<element_of_no
   using ElemSpan = std::remove_pointer_t<std::remove_cv_t<Ptr>>;
   auto n         = std::distance(first, last);
   std::span<ElemSpan> sp(std::to_address(first), static_cast<size_t>(n));
-  detail::split_of_if(sp, delims, [func = std::forward<Fn>(func)](ElemSpan* f, ElemSpan* l, ElemSpan d) {
+  detail::split_of_until(sp, delims, [func = std::forward<Fn>(func)](ElemSpan* f, ElemSpan* l, ElemSpan d) {
     func(f, l, d);
-    return true;
+    return false;
   });
 }
 
@@ -425,30 +485,30 @@ namespace tlx
 template <typename _Elem, typename _Pred, typename _Fn>
 inline void split_path(_Elem* s, _Pred&& pred, _Fn&& func)
 {
-  _Elem* _Start = s;
-  _Elem* _Ptr   = s;
-  while (pred(_Ptr))
+  _Elem* start = s;
+  _Elem* ptr   = s;
+  while (pred(ptr))
   {
-    if (*_Ptr == _Elem('\\') || *_Ptr == _Elem('/'))
+    if (*ptr == _Elem('\\') || *ptr == _Elem('/'))
     {
-      if (_Ptr != _Start)
+      if (ptr != start)
       {
-        auto _Ch = *_Ptr;
-        *_Ptr    = _Elem('\0');
+        auto _Ch = *ptr;
+        *ptr     = _Elem('\0');
         bool brk = func(s);
 #if defined(_WIN32)
-        *_Ptr = _Elem('\\');
+        *ptr = _Elem('\\');
 #else
-        *_Ptr = _Elem('/');
+        *ptr = _Elem('/');
 #endif
         if (brk)
           return;
       }
-      _Start = _Ptr + 1;
+      start = ptr + 1;
     }
-    ++_Ptr;
+    ++ptr;
   }
-  if (_Start < _Ptr)
+  if (start < ptr)
     func(s);
 }
 } // namespace tlx

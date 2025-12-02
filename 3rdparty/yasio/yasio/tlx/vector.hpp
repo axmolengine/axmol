@@ -658,7 +658,8 @@ public:
     auto _Whereptr = _Where._Ptr;
     auto& _My_data = _Mypair._Myval2;
     auto _Oldlast  = _My_data._Mylast;
-
+    _TLX_VERIFY(_Whereptr >= _My_data._Myfirst && _Oldlast >= _Whereptr,
+                "vector emplace iterator outside range");
     if (_Oldlast != _My_data._Myend)
     {
       if (_Whereptr == _Oldlast)
@@ -708,6 +709,8 @@ public:
 
     const pointer _Oldfirst = _My_data._Myfirst;
     const pointer _Oldlast  = _Mylast;
+
+    _TLX_VERIFY(_Whereptr >= _Oldfirst && _Oldlast >= _Whereptr, "vector insert iterator outside range");
 
     const auto _Whereoff        = static_cast<size_type>(_Whereptr - _Oldfirst);
     const auto _Unused_capacity = static_cast<size_type>(_My_data._Myend - _Oldlast);
@@ -935,21 +938,11 @@ public:
     pointer& _Myfirst = _My_data._Myfirst;
     pointer& _Mylast  = _My_data._Mylast;
 
-    constexpr bool _Nothrow_construct = std::is_nothrow_copy_constructible_v<_Ty>;
-
     const auto _Oldcapacity = static_cast<size_type>(_My_data._Myend - _Myfirst);
     if (_Newsize > _Oldcapacity)
     { // reallocate
       _Clear_and_reserve_geometric(_Newsize);
-      if constexpr (_Nothrow_construct)
-      {
-        _Mylast = _TLX uninitialized_fill_n(_Myfirst, _Newsize, _Val, _Al);
-      }
-      else
-      {
-        _Mylast = _TLX uninitialized_fill_n(_Myfirst, _Newsize, _Val, _Al);
-      }
-
+      _Mylast = _TLX uninitialized_fill_n(_Myfirst, _Newsize, _Val, _Al);
       return;
     }
 
@@ -957,14 +950,7 @@ public:
     if (_Newsize > _Oldsize)
     {
       std::fill(_Myfirst, _Mylast, _Val);
-      if constexpr (_Nothrow_construct)
-      {
-        _Mylast = _TLX uninitialized_fill_n(_Mylast, _Newsize - _Oldsize, _Val, _Al);
-      }
-      else
-      {
-        _Mylast = _TLX uninitialized_fill_n(_Mylast, _Newsize - _Oldsize, _Val, _Al);
-      }
+      _Mylast = _TLX uninitialized_fill_n(_Mylast, _Newsize - _Oldsize, _Val, _Al);
     }
     else
     {
@@ -986,20 +972,11 @@ private:
     pointer& _Mylast  = _My_data._Mylast;
     pointer& _Myend   = _My_data._Myend;
 
-    constexpr bool _Nothrow_construct = std::is_nothrow_constructible_v<_Ty, iter_ref_t<_Iter>>;
-
     const auto _Oldcapacity = static_cast<size_type>(_Myend - _Myfirst);
     if (_Newsize > _Oldcapacity)
     {
       _Clear_and_reserve_geometric(_Newsize);
-      if constexpr (_Nothrow_construct)
-      {
-        _Mylast = _TLX uninitialized_copy_n(std::move(_First), _Newsize, _Myfirst, _Al);
-      }
-      else
-      {
-        _Mylast = _TLX uninitialized_copy_n(std::move(_First), _Newsize, _Myfirst, _Al);
-      }
+      _Mylast = _TLX uninitialized_copy_n(std::move(_First), _Newsize, _Myfirst, _Al);
       return;
     }
 
@@ -1025,14 +1002,7 @@ private:
         }
       }
 
-      if constexpr (_Nothrow_construct)
-      {
-        _Mylast = _TLX uninitialized_copy_n(std::move(_First), _Newsize - _Oldsize, _Mylast, _Al);
-      }
-      else
-      {
-        _Mylast = _TLX uninitialized_copy_n(std::move(_First), _Newsize - _Oldsize, _Mylast, _Al);
-      }
+      _Mylast = _TLX uninitialized_copy_n(std::move(_First), _Newsize - _Oldsize, _Mylast, _Al);
     }
     else
     {
@@ -1405,12 +1375,14 @@ public:
   constexpr _Ty& operator[](const size_type _Pos) noexcept /* strengthened */
   {
     auto& _My_data = _Mypair._Myval2;
+    _TLX_VERIFY(_Pos < static_cast<size_type>(_My_data._Mylast - _My_data._Myfirst), "vector subscript out of range");
     return _My_data._Myfirst[_Pos];
   }
 
   constexpr const _Ty& operator[](const size_type _Pos) const noexcept /* strengthened */
   {
     auto& _My_data = _Mypair._Myval2;
+    _TLX_VERIFY(_Pos < static_cast<size_type>(_My_data._Mylast - _My_data._Myfirst), "vector subscript out of range");
     return _My_data._Myfirst[_Pos];
   }
 
@@ -1418,9 +1390,7 @@ public:
   {
     auto& _My_data = _Mypair._Myval2;
     if (static_cast<size_type>(_My_data._Mylast - _My_data._Myfirst) <= _Pos)
-    {
       _Xrange();
-    }
 
     return _My_data._Myfirst[_Pos];
   }
@@ -1429,9 +1399,7 @@ public:
   {
     auto& _My_data = _Mypair._Myval2;
     if (static_cast<size_type>(_My_data._Mylast - _My_data._Myfirst) <= _Pos)
-    {
       _Xrange();
-    }
 
     return _My_data._Myfirst[_Pos];
   }
@@ -1439,24 +1407,28 @@ public:
   constexpr _Ty& front() noexcept /* strengthened */
   {
     auto& _My_data = _Mypair._Myval2;
+    _TLX_VERIFY(_My_data._Myfirst != _My_data._Mylast, "front() called on empty vector");
     return *_My_data._Myfirst;
   }
 
   constexpr const _Ty& front() const noexcept /* strengthened */
   {
     auto& _My_data = _Mypair._Myval2;
+    _TLX_VERIFY(_My_data._Myfirst != _My_data._Mylast, "front() called on empty vector");
     return *_My_data._Myfirst;
   }
 
   constexpr _Ty& back() noexcept /* strengthened */
   {
     auto& _My_data = _Mypair._Myval2;
+    _TLX_VERIFY(_My_data._Myfirst != _My_data._Mylast, "back() called on empty vector");
     return _My_data._Mylast[-1];
   }
 
   constexpr const _Ty& back() const noexcept /* strengthened */
   {
     auto& _My_data = _Mypair._Myval2;
+    _TLX_VERIFY(_My_data._Myfirst != _My_data._Mylast, "back() called on empty vector");
     return _My_data._Mylast[-1];
   }
 
@@ -1610,21 +1582,11 @@ private:
     pointer& _Myfirst = _My_data._Myfirst;
     pointer& _Mylast  = _My_data._Mylast;
 
-    constexpr bool _Nothrow_construct = std::is_nothrow_move_constructible_v<_Ty>;
-
     const auto _Oldcapacity = static_cast<size_type>(_My_data._Myend - _Myfirst);
     if (_Newsize > _Oldcapacity)
     {
       _Clear_and_reserve_geometric(_Newsize);
-      if constexpr (_Nothrow_construct)
-      {
-        _Mylast = uninitialized_move(_First, _Last, _Myfirst, _Al);
-      }
-      else
-      {
-        _Mylast = uninitialized_move(_First, _Last, _Myfirst, _Al);
-      }
-
+      _Mylast = uninitialized_move(_First, _Last, _Myfirst, _Al);
       return;
     }
 
@@ -1633,15 +1595,7 @@ private:
     {
       const pointer _Mid = _First + _Oldsize;
       move_unchecked(_First, _Mid, _Myfirst);
-
-      if constexpr (_Nothrow_construct)
-      {
-        _Mylast = uninitialized_move(_Mid, _Last, _Mylast, _Al);
-      }
-      else
-      {
-        _Mylast = uninitialized_move(_Mid, _Last, _Mylast, _Al);
-      }
+      _Mylast = uninitialized_move(_Mid, _Last, _Mylast, _Al);
     }
     else
     {

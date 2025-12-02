@@ -149,7 +149,7 @@ public:
   {
     auto& st     = _Mypair._Myval2;
     auto _Mylast = st._Mylast;
-    _TLX_VERIFY_RANGE(_Where >= st._Myfirst && _Where <= _Mylast && first <= last, "basic_string: out of range!");
+    _TLX_VERIFY(_Where >= st._Myfirst && _Where <= _Mylast && first <= last, "basic_string: out of range!");
     if (first != last)
     {
       auto insertion_pos = static_cast<size_type>(std::distance(st._Myfirst, _Where));
@@ -180,7 +180,7 @@ public:
   {
     auto& st     = _Mypair._Myval2;
     auto _Mylast = st._Mylast;
-    _TLX_VERIFY_RANGE(_Where >= st._Myfirst && _Where <= _Mylast, "basic_string: out of range!");
+    _TLX_VERIFY(_Where >= st._Myfirst && _Where <= _Mylast, "basic_string: out of range!");
     if (count)
     {
       auto insertion_pos = std::distance(st._Myfirst, _Where);
@@ -243,7 +243,7 @@ public:
   {
     auto& st           = _Mypair._Myval2;
     const auto _Mylast = st._Mylast;
-    _TLX_VERIFY_RANGE(_Where >= st._Myfirst && _Where < _Mylast, "basic_string: out of range!");
+    _TLX_VERIFY(_Where >= st._Myfirst && _Where < _Mylast, "basic_string: out of range!");
     st._Mylast = std::move(_Where + 1, _Mylast, _Where);
     // keep null terminator
     *_Mylast_ptr() = value_type(0);
@@ -254,7 +254,7 @@ public:
   {
     auto& st           = _Mypair._Myval2;
     const auto _Mylast = st._Mylast;
-    _TLX_VERIFY_RANGE((first <= last) && first >= st._Myfirst && last <= _Mylast, "basic_string: out of range!");
+    _TLX_VERIFY((first <= last) && first >= st._Myfirst && last <= _Mylast, "basic_string: out of range!");
     st._Mylast = std::move(last, _Mylast, first);
     // keep null terminator
     *_Mylast_ptr() = value_type(0);
@@ -263,13 +263,13 @@ public:
 
   value_type& front()
   {
-    _TLX_VERIFY_RANGE(!empty(), "basic_string: out of range!");
+    _TLX_VERIFY(!empty(), "basic_string: out of range!");
     return *_Mypair._Myval2._Myfirst;
   }
 
   value_type& back()
   {
-    _TLX_VERIFY_RANGE(!empty(), "basic_string: out of range!");
+    _TLX_VERIFY(!empty(), "basic_string: out of range!");
     return *(_Mypair._Myval2._Mylast - 1);
   }
 
@@ -299,12 +299,12 @@ public:
   reference operator[](size_type index) { return this->at(index); }
   const_reference at(size_type index) const
   {
-    _TLX_VERIFY_RANGE(index < this->size(), "basic_string: out of range!");
+    _TLX_VERIFY(index < this->size(), "basic_string: out of range!");
     return _Mypair._Myval2._Myfirst[index];
   }
   reference at(size_type index)
   {
-    _TLX_VERIFY_RANGE(index < this->size(), "basic_string: out of range!");
+    _TLX_VERIFY(index < this->size(), "basic_string: out of range!");
     return _Mypair._Myval2._Myfirst[index];
   }
 
@@ -448,7 +448,7 @@ public:
   my_type& replace(const size_type _Off, size_type _Nx, const _Elem* const _Ptr, const size_type _Count)
   { // replace port from https://github.com/microsoft/stl
     auto& st = _Mypair._Myval2;
-    _TLX_VERIFY_RANGE(_Off < size(), "basic_string: out of range!");
+    _TLX_VERIFY(_Off < size(), "basic_string: out of range!");
     _Nx = (std::min)(_Nx, size() - _Off);
     if (_Nx == _Count)
     { // size doesn't change, so a single move does the trick
