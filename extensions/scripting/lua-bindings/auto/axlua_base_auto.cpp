@@ -7685,6 +7685,53 @@ int lua_ax_base_Node_setName(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Node_getHashOfName(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Node* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Node",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Node_getHashOfName'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_getHashOfName'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getHashOfName();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:getHashOfName",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Node_getHashOfName'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Node_setUserObject(lua_State* tolua_S)
 {
     int argc = 0;
@@ -11901,6 +11948,7 @@ int lua_register_ax_base_Node(lua_State* tolua_S)
         tolua_function(tolua_S,"setTag",lua_ax_base_Node_setTag);
         tolua_function(tolua_S,"getName",lua_ax_base_Node_getName);
         tolua_function(tolua_S,"setName",lua_ax_base_Node_setName);
+        tolua_function(tolua_S,"getHashOfName",lua_ax_base_Node_getHashOfName);
         tolua_function(tolua_S,"setUserObject",lua_ax_base_Node_setUserObject);
         tolua_function(tolua_S,"isRunning",lua_ax_base_Node_isRunning);
         tolua_function(tolua_S,"cleanup",lua_ax_base_Node_cleanup);
