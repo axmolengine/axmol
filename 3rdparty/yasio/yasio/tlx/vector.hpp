@@ -658,8 +658,7 @@ public:
     auto _Whereptr = _Where._Ptr;
     auto& _My_data = _Mypair._Myval2;
     auto _Oldlast  = _My_data._Mylast;
-    _TLX_VERIFY(_Whereptr >= _My_data._Myfirst && _Oldlast >= _Whereptr,
-                "vector emplace iterator outside range");
+    _TLX_VERIFY(_Whereptr >= _My_data._Myfirst && _Oldlast >= _Whereptr, "vector emplace iterator outside range");
     if (_Oldlast != _My_data._Myend)
     {
       if (_Whereptr == _Oldlast)
@@ -1616,6 +1615,36 @@ private:
   __compressed_pair<_Alty, _Scary_val> _Mypair;
 };
 
+#pragma region operator==
+template <typename T, typename Alloc, fill_policy::enum_type Policy>
+inline constexpr bool operator==(const tlx::vector<T, Alloc, Policy>& lhs, const tlx::vector<T, Alloc, Policy>& rhs)
+{
+  if (lhs.size() != rhs.size())
+    return false;
+  return std::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+template <typename T, typename Alloc, fill_policy::enum_type Policy, typename OtherContainer,
+          typename = std::enable_if_t<std::is_same<T, typename OtherContainer::value_type>::value &&
+                                      !std::is_same<OtherContainer, tlx::vector<T, Alloc, Policy>>::value>>
+inline constexpr bool operator==(const tlx::vector<T, Alloc, Policy>& lhs, const OtherContainer& rhs)
+{
+  if (lhs.size() != rhs.size())
+    return false;
+  return std::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+template <typename T, typename Alloc, fill_policy::enum_type Policy, typename OtherContainer,
+          typename = std::enable_if_t<std::is_same<T, typename OtherContainer::value_type>::value &&
+                                      !std::is_same<OtherContainer, tlx::vector<T, Alloc, Policy>>::value>>
+inline constexpr bool operator==(const OtherContainer& lhs, const tlx::vector<T, Alloc, Policy>& rhs)
+{
+  if (lhs.size() != rhs.size())
+    return false;
+  return std::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+#pragma endregion
+
 #pragma region c++20 like std::erase
 template <typename _Ty, typename _Alloc, fill_policy::enum_type _Policy>
 void erase(vector<_Ty, _Alloc, _Policy>& cont, const _Ty& val)
@@ -1664,3 +1693,4 @@ struct pointer_traits<_TLX sequence_iterator<_Myvec>> {
   static constexpr element_type* to_address(const pointer _Iter) noexcept { return std::to_address(_Iter._Ptr); }
 };
 } // namespace std
+

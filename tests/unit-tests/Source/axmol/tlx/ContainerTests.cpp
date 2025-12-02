@@ -84,14 +84,6 @@ void __doctest_signal_handler(int sig)
 template <typename _Tp>
 using my_flat_set = _TLX flat_set<_Tp, std::less<_Tp>, tlx::vector<_Tp>>;
 
-template <typename _Cont1, typename _Cont2>
-static constexpr bool sequence_container_equals(const _Cont1& c1, const _Cont2& c2)
-{
-    static_assert(std::is_same_v<typename _Cont1::value_type, typename _Cont2::value_type>,
-                  "sequence_container_equals must have same value types");
-    return c1.size() == c2.size() && 0 == memcmp(c1.data(), c2.data(), c1.size() * sizeof(typename _Cont1::value_type));
-}
-
 template <typename Set>
 static auto benchmark_set(const std::string& name, const std::vector<int>& keys)
 {
@@ -214,8 +206,8 @@ static void run_benchmark()
     std::sort(keys.begin(), keys.end());
     keys.erase(std::unique(keys.begin(), keys.end()), keys.end());
 
-    CHECK(sequence_container_equals(keys, s5.keys()));
-    CHECK(sequence_container_equals(keys, s6.keys()));
+    CHECK(keys == s5.keys());
+    CHECK(keys == s6.keys());
 }
 
 TEST_SUITE("tlx/Containers")
@@ -249,10 +241,17 @@ TEST_SUITE("tlx/Containers")
 
         ax::setLogFmtFlag(ax::LogFmtFlag::Full);
 
+        std::list<char> list0{'2', '3', '4', '5', 'b'};
+        tlx::vector<char> arr0;
+        arr0.reserve(list0.size());
+        for (auto ch : list0)
+            arr0.emplace_back(ch);
+        CHECK(arr0 == list0);
+
         tlx::vector<char> arr1;
         std::string msg = "aaaaaaaaaaaaaafbbbbbbbbbbbbbbbbbcccccccccdfefffffff";
         arr1 += msg;
-        CHECK(sequence_container_equals(arr1, msg));
+        CHECK(arr1 == msg);
 
         tlx::vector<NonTrivalCtor1> arr2;
         arr2.resize(2);

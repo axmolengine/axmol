@@ -47,7 +47,6 @@ auto collect_tlx_split_unsafe(const char* s, std::string_view delim)
     return results;
 }
 
-
 auto collect_tlx_split_safe(std::string_view s, std::string_view delim)
 {
     std::vector<std::string> results;
@@ -128,7 +127,6 @@ auto collect_std_split_of(const std::string& s, std::string_view delims)
     return results;
 }
 
-
 TEST_SUITE("tlx/SplitTests")
 {
 
@@ -140,7 +138,7 @@ TEST_SUITE("tlx/SplitTests")
     {
 
         std::string ssss = "";
-        char delim    = ',';
+        char delim       = ',';
         for (auto&& sub : ssss | std::views::split(delim))
         {
             int fuck = 0;
