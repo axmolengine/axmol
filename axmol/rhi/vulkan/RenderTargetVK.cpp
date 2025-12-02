@@ -61,7 +61,9 @@ static uintptr_t makeFramebufferKeyHash(VkRenderPass rp,
 
 RenderTargetImpl::RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget)
     : RenderTarget(defaultRenderTarget), _driver(driver)
-{}
+{
+    _clearValues.reserve(MAX_COLOR_ATTCHMENT + 1);
+}
 
 RenderTargetImpl::~RenderTargetImpl()
 {
@@ -247,31 +249,42 @@ void RenderTargetImpl::beginRenderPass(VkCommandBuffer cmd,
     // 4) Clear values
     _clearValues.clear();
 
-    for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+    if (_defaultRenderTarget)
     {
-        if (_attachmentViews[i] != VK_NULL_HANDLE)
+        VkClearValue& cv = _clearValues.emplace_back();
+        if (bitmask::any(renderPassDesc.flags.clear, getMRTColorFlag(imageIndex)))
+            cv.color = {renderPassDesc.clearColorValue[0], renderPassDesc.clearColorValue[1],
+                        renderPassDesc.clearColorValue[2], renderPassDesc.clearColorValue[3]};
+        else
+            cv.color = {{0.f, 0.f, 0.f, 0.f}};
+    }
+    else
+    {
+        for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
         {
-            VkClearValue cv{};
-            if (bitmask::any(renderPassDesc.flags.clear, getMRTColorFlag(i)))
+            if (_attachmentViews[i] != VK_NULL_HANDLE)
             {
-                cv.color = {renderPassDesc.clearColorValue[0], renderPassDesc.clearColorValue[1],
-                            renderPassDesc.clearColorValue[2], renderPassDesc.clearColorValue[3]};
+                VkClearValue& cv = _clearValues.emplace_back();
+                if (bitmask::any(renderPassDesc.flags.clear, getMRTColorFlag(i)))
+                {
+                    cv.color = {renderPassDesc.clearColorValue[0], renderPassDesc.clearColorValue[1],
+                                renderPassDesc.clearColorValue[2], renderPassDesc.clearColorValue[3]};
+                }
+                else
+                {
+                    cv.color = {{0.f, 0.f, 0.f, 0.f}};
+                }
             }
             else
             {
-                cv.color = {{0.f, 0.f, 0.f, 0.f}};
+                break;  // contiguous color attachments assumption
             }
-            _clearValues.push_back(cv);
-        }
-        else
-        {
-            break;  // contiguous color attachments assumption
         }
     }
 
     if (_attachmentViews[DepthViewIndex] != VK_NULL_HANDLE)
     {
-        VkClearValue dsv{};
+        VkClearValue& dsv = _clearValues.emplace_back();
         if (bitmask::any(renderPassDesc.flags.clear, TargetBufferFlags::DEPTH_AND_STENCIL))
         {
             dsv.depthStencil.depth   = renderPassDesc.clearDepthValue;
@@ -282,19 +295,6 @@ void RenderTargetImpl::beginRenderPass(VkCommandBuffer cmd,
             dsv.depthStencil.depth   = 1.0f;
             dsv.depthStencil.stencil = 0u;
         }
-
-#if 0
-        if (bitmask::any(renderPassDesc.flags.clear, TargetBufferFlags::DEPTH))
-            dsv.depthStencil.depth = renderPassDesc.clearDepthValue;
-        else
-            dsv.depthStencil.depth = 1.0f;
-
-        if (bitmask::any(renderPassDesc.flags.clear, TargetBufferFlags::STENCIL))
-            dsv.depthStencil.stencil = static_cast<uint32_t>(renderPassDesc.clearStencilValue);
-        else
-            dsv.depthStencil.stencil = 0u;
-#endif
-        _clearValues.push_back(dsv);
     }
 
     // 5) Transition to render layouts (non-default RT only)
@@ -564,7 +564,7 @@ void RenderTargetImpl::updateRenderPass(const RenderPassDesc& desc, uint32_t ima
 
 void RenderTargetImpl::prepareAttachmentsForRendering(VkCommandBuffer cmd)
 {
-    if (_defaultRenderTarget)
+    if (_defaultRenderTarget) [[likely]]
         return;
 
     // Color -> ATTACHMENT_OPTIMAL (contiguous indices starting at 0)
