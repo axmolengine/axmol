@@ -58,8 +58,8 @@ namespace ax
 {
 AX_DLL uint64_t hashNodeName(std::string_view name)
 {
-  // 4.5x faster than std::hash in release mode.
-  return !name.empty() ? XXH3_64bits(name.data(), name.length()) : 0;
+    // 4.5x faster than std::hash in release mode.
+    return !name.empty() ? XXH3_64bits(name.data(), name.length()) : 0;
 }
 
 // FIXME:: Yes, nodes might have a sort problem once every 30 days if the game runs at 60 FPS and each frame sprites are
@@ -720,7 +720,7 @@ void Node::setName(std::string_view name)
 
 uint64_t Node::getHashOfName() const
 {
-  return _hashOfName;
+    return _hashOfName;
 }
 
 void Node::updateParentChildrenIndexer(int tag)

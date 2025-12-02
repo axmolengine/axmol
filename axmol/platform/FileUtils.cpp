@@ -718,7 +718,7 @@ void FileUtils::setWritablePath(std::string_view writablePath)
     _writablePath = writablePath;
 
     if (!_writablePath.empty() && (_writablePath.back() != '/'))
-      _writablePath += '/';
+        _writablePath += '/';
 }
 
 const std::string& FileUtils::getDefaultResourceRootPath() const
