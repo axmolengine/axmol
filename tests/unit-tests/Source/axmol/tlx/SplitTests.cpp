@@ -136,14 +136,6 @@ TEST_SUITE("tlx/SplitTests")
 
     TEST_CASE("split basic (char delimiter)")
     {
-
-        std::string ssss = "";
-        char delim       = ',';
-        for (auto&& sub : ssss | std::views::split(delim))
-        {
-            int fuck = 0;
-        }
-
         std::string s = "a,b,c";
         auto tlx_res  = collect_tlx_split_unsafe(s.c_str(), ',');
         auto std_res  = collect_std_split(s, ',');

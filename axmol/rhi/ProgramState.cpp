@@ -72,8 +72,6 @@ void TextureBindingSet::assign(const TextureBindingSet& other)
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         setTextureArray(other.loc, other.slots, other.texs);
 #else
-
-        std::vector<rhi::Texture*> fuck;
         setTextureArray(-1, other.slots, other.texs);
 #endif
     }
