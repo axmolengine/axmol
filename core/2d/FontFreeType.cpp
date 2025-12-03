@@ -545,9 +545,9 @@ unsigned char* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
 
                 auto px = outlineMinX - blendImageMinX;
                 auto py = blendImageMaxY - outlineMaxY;
-                for (int x = 0; x < outlineWidth; ++x)
+                for (int y = 0; y < outlineHeight; ++y)
                 {
-                    for (int y = 0; y < outlineHeight; ++y)
+                    for (int x = 0; x < outlineWidth; ++x)
                     {
                         index                 = px + x + ((py + y) * blendWidth);
                         index2                = x + (y * outlineWidth);
@@ -557,9 +557,9 @@ unsigned char* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
 
                 px = glyphMinX - blendImageMinX;
                 py = blendImageMaxY - glyphMaxY;
-                for (int x = 0; x < outWidth; ++x)
+                for (int y = 0; y < outHeight; ++y)
                 {
-                    for (int y = 0; y < outHeight; ++y)
+                    for (int x = 0; x < outWidth; ++x)
                     {
                         index                     = px + x + ((y + py) * blendWidth);
                         index2                    = x + (y * outWidth);
