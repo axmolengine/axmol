@@ -36,7 +36,6 @@
 #include <string>
 
 #include "axmol/3d/shaderinfos.h"
-#include "axmol/tlx/vector.hpp"
 #include "axmol/rhi/IndexArray.h"
 
 namespace ax
@@ -44,7 +43,7 @@ namespace ax
 
 using ilist_u16_t = rhi::ilist_u16_t;
 using ilist_u32_t = rhi::ilist_u32_t;
-using IndexArray = rhi::IndexArray;
+using IndexArray  = rhi::IndexArray;
 
 /**mesh vertex attribute
  * @lua NA

@@ -38,10 +38,10 @@ public:
         return stride == 2 ? rhi::IndexFormat::U_SHORT : rhi::IndexFormat::U_INT;
     }
 
-    // variant container_type 
+    // variant container_type
     using index16_array_t = tlx::pod_vector<uint16_t>;
     using index32_array_t = tlx::pod_vector<uint32_t>;
-    using container_type = std::variant<index16_array_t, index32_array_t>;
+    using container_type  = std::variant<index16_array_t, index32_array_t>;
 
     // Constructors
     IndexArray() : _cont(index16_array_t{}) {}
@@ -73,8 +73,7 @@ public:
     // Format
     rhi::IndexFormat format() const
     {
-        return std::holds_alternative<index16_array_t>(_cont) ? rhi::IndexFormat::U_SHORT
-                                                                       : rhi::IndexFormat::U_INT;
+        return std::holds_alternative<index16_array_t>(_cont) ? rhi::IndexFormat::U_SHORT : rhi::IndexFormat::U_INT;
     }
 
     // Clear
