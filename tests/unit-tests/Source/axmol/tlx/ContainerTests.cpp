@@ -291,7 +291,7 @@ TEST_SUITE("tlx/Containers")
         }
         __CATCH
         {
-            AXLOGI("Access uninitialzed object member raise SIGILL (optimized build on Apple platforms)");
+            AXLOGI("Access uninitialzed object member raise SIGILL(4)/SIGTRAP(5) (optimized build on Apple platforms)");
         }
         __FINALLY
         {
