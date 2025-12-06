@@ -1,3 +1,26 @@
+/****************************************************************************
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmol.dev/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
 #pragma once
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/tlx/vector.hpp"
@@ -82,34 +105,23 @@ public:
         std::visit([](auto& v) { v.clear(); }, _cont);
     }
 
-    void clear(rhi::IndexFormat fmt)
+    void reserve(size_type count)
     {
-        if (fmt == rhi::IndexFormat::U_SHORT)
-        {
-            _cont.emplace<index16_array_t>();
-        }
-        else
-        {
-            _cont.emplace<index32_array_t>();
-        }
+        std::visit([count](auto& v) { v.reserve(count); }, _cont);
     }
 
     // Emplace back (typed)
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
     void emplace_back(const _Ty& val)
     {
-        if constexpr (std::is_same_v<_Ty, uint16_t>)
-        {
-            auto* vec = std::get_if<index16_array_t>(&_cont);
-            assert(vec && "Index format mismatch: expected U_SHORT");
-            vec->push_back(val);
-        }
-        else
-        {
-            auto* vec = std::get_if<index32_array_t>(&_cont);
-            assert(vec && "Index format mismatch: expected U_INT32");
-            vec->push_back(val);
-        }
+        push_back(val);
+    }
+
+    template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
+    void push_back(const _Ty& val)
+    {
+        auto& vec = std::get<tlx::pod_vector<_Ty>>(_cont);
+        vec.push_back(val);
     }
 
     // Insert range [first,last) at position
@@ -117,54 +129,23 @@ public:
     void insert(_Ty* position, _Ty* first, _Ty* last)
     {
         // Note: position/first/last are expected to come from us; if external, make sure they match format.
-        if constexpr (std::is_same_v<_Ty, uint16_t>)
-        {
-            auto* vec = std::get_if<index16_array_t>(&_cont);
-            assert(vec && "Index format mismatch: expected U_SHORT");
-            auto pos_index = static_cast<std::size_t>(position - vec->data());
-            vec->insert(vec->begin() + pos_index, first, last);
-        }
-        else
-        {
-            auto* vec = std::get_if<index32_array_t>(&_cont);
-            assert(vec && "Index format mismatch: expected U_INT");
-            auto pos_index = static_cast<std::size_t>(position - vec->data());
-            vec->insert(vec->begin() + pos_index, first, last);
-        }
+        auto& vec      = std::get<tlx::pod_vector<_Ty>>(_cont);
+        auto pos_index = static_cast<std::size_t>(position - vec.data());
+        vec.insert(vec.begin() + pos_index, first, last);
     }
 
     // Begin/End (typed) — returns typed pointers, matching original intent
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
     const _Ty* begin() const
     {
-        if constexpr (std::is_same_v<_Ty, uint16_t>)
-        {
-            const auto* vec = std::get_if<index16_array_t>(&_cont);
-            assert(vec && "Index format mismatch: expected U_SHORT");
-            return vec->data();
-        }
-        else
-        {
-            const auto* vec = std::get_if<index32_array_t>(&_cont);
-            assert(vec && "Index format mismatch: expected U_INT");
-            return vec->data();
-        }
+        auto& vec = std::get<tlx::pod_vector<_Ty>>(_cont);
+        return vec.data();
     }
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
     _Ty* begin()
     {
-        if constexpr (std::is_same_v<_Ty, uint16_t>)
-        {
-            auto* vec = std::get_if<index16_array_t>(&_cont);
-            assert(vec && "Index format mismatch: expected U_SHORT");
-            return vec->data();
-        }
-        else
-        {
-            auto* vec = std::get_if<index32_array_t>(&_cont);
-            assert(vec && "Index format mismatch: expected U_INT");
-            return vec->data();
-        }
+        auto& vec = std::get<tlx::pod_vector<_Ty>>(_cont);
+        return vec.data();
     }
 
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
@@ -182,98 +163,45 @@ public:
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
     _Ty* erase(_Ty* position)
     {
-        if constexpr (std::is_same_v<_Ty, uint16_t>)
-        {
-            auto* vec = std::get_if<index16_array_t>(&_cont);
-            assert(vec && "Index format mismatch: expected U_SHORT");
-            auto idx = static_cast<std::size_t>(position - vec->data());
-            auto it  = vec->erase(vec->begin() + idx);
-            return it != vec->end() ? vec->data() + (it - vec->begin()) : vec->data() + vec->size();
-        }
-        else
-        {
-            auto* vec = std::get_if<index32_array_t>(&_cont);
-            assert(vec && "Index format mismatch: expected U_INT");
-            auto idx = static_cast<std::size_t>(position - vec->data());
-            auto it  = vec->erase(vec->begin() + idx);
-            return it != vec->end() ? vec->data() + (it - vec->begin()) : vec->data() + vec->size();
-        }
+        auto& vec = std::get<tlx::pod_vector<_Ty>>(_cont);
+        auto idx  = static_cast<std::size_t>(position - vec.data());
+        auto it   = vec.erase(vec.begin() + idx);
+        return it != vec.end() ? vec.data() + (it - vec.begin()) : vec.data() + vec.size();
     }
 
     // Erase range [first,last) (typed pointers)
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
     _Ty* erase(_Ty* first, _Ty* last)
     {
-        if constexpr (std::is_same_v<_Ty, uint16_t>)
-        {
-            auto* vec = std::get_if<index16_array_t>(&_cont);
-            assert(vec && "Index format mismatch: expected U_SHORT");
-            auto s  = static_cast<std::size_t>(first - vec->data());
-            auto e  = static_cast<std::size_t>(last - vec->data());
-            auto it = vec->erase(vec->begin() + s, vec->begin() + e);
-            return it != vec->end() ? vec->data() + (it - vec->begin()) : vec->data() + vec->size();
-        }
-        else
-        {
-            auto* vec = std::get_if<index32_array_t>(&_cont);
-            assert(vec && "Index format mismatch: expected U_INT");
-            auto s  = static_cast<std::size_t>(first - vec->data());
-            auto e  = static_cast<std::size_t>(last - vec->data());
-            auto it = vec->erase(vec->begin() + s, vec->begin() + e);
-            return it != vec->end() ? vec->data() + (it - vec->begin()) : vec->data() + vec->size();
-        }
+        auto& vec = std::get<tlx::pod_vector<_Ty>>(_cont);
+        auto s    = static_cast<std::size_t>(first - vec.data());
+        auto e    = static_cast<std::size_t>(last - vec.data());
+        auto it   = vec.erase(vec.begin() + s, vec.begin() + e);
+        return it != vec.end() ? vec.data() + (it - vec.begin()) : vec.data() + vec.size();
     }
 
     // at — reference return, safe (no memcpy)
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
     _Ty& at(size_t idx)
     {
-        if constexpr (std::is_same_v<_Ty, uint16_t>)
-        {
-            return std::get<index16_array_t>(_cont).at(idx);
-        }
-        else
-        {
-            return std::get<index32_array_t>(_cont).at(idx);
-        }
+        return std::get<tlx::pod_vector<_Ty>>(_cont).at(idx);
     }
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
     const _Ty& at(size_t idx) const
     {
-        if constexpr (std::is_same_v<_Ty, uint16_t>)
-        {
-            return std::get<index16_array_t>(_cont).at(idx);
-        }
-        else
-        {
-            return std::get<index32_array_t>(_cont).at(idx);
-        }
+        return std::get<tlx::pod_vector<_Ty>>(_cont).at(idx);
     }
 
     // operator[] — reference return
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
     _Ty& operator[](size_t idx)
     {
-        if constexpr (std::is_same_v<_Ty, uint16_t>)
-        {
-            return std::get<index16_array_t>(_cont)[idx];
-        }
-        else
-        {
-            return std::get<index32_array_t>(_cont)[idx];
-        }
+        return std::get<tlx::pod_vector<_Ty>>(_cont)[idx];
     }
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
     const _Ty& operator[](size_t idx) const
     {
-        if constexpr (std::is_same_v<_Ty, uint16_t>)
-        {
-            return std::get<index16_array_t>(_cont)[idx];
-        }
-        else
-        {
-            return std::get<index32_array_t>(_cont)[idx];
-        }
+        return std::get<tlx::pod_vector<_Ty>>(_cont)[idx];
     }
 
     // data — typed pointer, matching format
@@ -281,17 +209,11 @@ public:
     {
         // If you truly need raw bytes, reinterpret is safe because the underlying storage is properly aligned.
         // But better expose typed data() to avoid confusion:
-        return std::visit([](auto& vec) {
-            using V = std::decay_t<decltype(vec)>;
-            return reinterpret_cast<uint8_t*>(vec.data());
-        }, _cont);
+        return std::visit([](auto& vec) { return reinterpret_cast<uint8_t*>(vec.data()); }, _cont);
     }
     const uint8_t* data() const noexcept
     {
-        return std::visit([](auto const& vec) {
-            using V = std::decay_t<decltype(vec)>;
-            return reinterpret_cast<const uint8_t*>(vec.data());
-        }, _cont);
+        return std::visit([](auto const& vec) { return reinterpret_cast<const uint8_t*>(vec.data()); }, _cont);
     }
 
     // size/count and size_bytes
@@ -302,8 +224,8 @@ public:
     size_t size_bytes() const
     {
         return std::visit([](auto const& vec) {
-            using T = typename std::decay_t<decltype(vec)>::value_type;
-            return vec.size() * sizeof(T);
+            using value_type = typename std::decay_t<decltype(vec)>::value_type;
+            return vec.size() * sizeof(value_type);
         }, _cont);
     }
 
@@ -317,14 +239,11 @@ public:
 
     // for_each — keep unified callback with uint32_t values
     template <typename _Fty>
-    void for_each(_Fty cb) const
+    void for_each(_Fty&& cb) const
     {
         std::visit([&](auto const& vec) {
-            using T = typename std::decay_t<decltype(vec)>::value_type;
             for (const auto& v : vec)
-            {
                 cb(static_cast<uint32_t>(v));
-            }
         }, _cont);
     }
 
@@ -332,8 +251,8 @@ public:
     unsigned char stride() const
     {
         return std::visit([](auto const& vec) -> unsigned char {
-            using T = typename std::decay_t<decltype(vec)>::value_type;
-            return static_cast<unsigned char>(sizeof(T));
+            using value_type = typename std::decay_t<decltype(vec)>::value_type;
+            return static_cast<unsigned char>(sizeof(value_type));
         }, _cont);
     }
 

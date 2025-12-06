@@ -422,6 +422,16 @@ TEST_SUITE("tlx/Containers")
         CHECK(arr.at<uint16_t>(1) == 30);
     }
 
+    TEST_CASE("IndexArray erase range")
+    {
+        IndexArray arr{ilist_u16_t{10, 20, 30, 40, 50, 60, 70, 80, 90, 100}};
+        auto* pos = arr.begin<uint16_t>() + 1;
+        arr.erase<uint16_t>(pos, pos + 5);
+        CHECK(arr.size() == 5);
+        CHECK(arr.at<uint16_t>(0) == 10);
+        CHECK(arr.at<uint16_t>(1) == 70);
+    }
+
     TEST_CASE("IndexArray resize and clear")
     {
         IndexArray arr(rhi::IndexFormat::U_INT);
