@@ -23,6 +23,8 @@
 #include "axmol/tlx/flat_set.hpp"
 #include "axmol/tlx/flat_map.hpp"
 
+#include "axmol/3d/Bundle3DData.h"
+
 #if defined(_WIN32) || defined(_WIN64)
 
 #    define __TRY     if (true)
@@ -239,7 +241,7 @@ TEST_SUITE("tlx/Containers")
             void* ptr;
         };
 
-        ax::setLogFmtFlag(ax::LogFmtFlag::Full);
+        ax::setLogFmtFlag(ax::LogFmtFlag::Level | ax::LogFmtFlag::TimeStamp);
 
         std::list<char> list0{'2', '3', '4', '5', 'b'};
         tlx::vector<char> arr0;
@@ -360,6 +362,25 @@ TEST_SUITE("tlx/Containers")
         CHECK(map2.size() == 6);
         map2.erase(10);
         CHECK(map2.size() == 4);
+    }
+    
+    TEST_CASE("IndexArray")
+    {
+        ax::IndexArray indicies;
+        indicies.emplace_back<uint16_t>(10);
+        indicies.emplace_back<uint16_t>(20);
+        indicies.emplace_back<uint16_t>(30);
+        indicies.emplace_back<uint16_t>(40);
+        indicies.emplace_back<uint16_t>(50);
+        indicies.emplace_back<uint16_t>(60);
+        
+        CHECK(indicies.size_bytes() == 12);
+        
+        CHECK(indicies[2] == 30);
+        
+        indicies.erase(indicies.begin(), indicies.end());
+        
+        CHECK(indicies.empty());
     }
 
     TEST_CASE("BenchmarkTest")

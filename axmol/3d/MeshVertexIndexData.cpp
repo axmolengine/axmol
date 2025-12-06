@@ -76,7 +76,7 @@ MeshIndexData::MeshIndexData()
 {
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
-        _indexBuffer->updateData((void*)_indexData.data(), _indexData.bsize());
+        _indexBuffer->updateData((void*)_indexData.data(), _indexData.size_bytes());
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
 #endif
@@ -134,12 +134,12 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::
     for (size_t i = 0, size = meshdata.subMeshIndices.size(); i < size; ++i)
     {
         auto& indices    = meshdata.subMeshIndices[i];
-        auto indexBuffer = axdrv->createBuffer(indices.bsize(), rhi::BufferType::INDEX, rhi::BufferUsage::STATIC);
+        auto indexBuffer = axdrv->createBuffer(indices.size_bytes(), rhi::BufferType::INDEX, rhi::BufferUsage::STATIC);
         indexBuffer->autorelease();
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         indexBuffer->usingDefaultStoredData(false);
 #endif
-        indexBuffer->updateData((void*)indices.data(), indices.bsize());
+        indexBuffer->updateData((void*)indices.data(), indices.size_bytes());
 
         std::string id           = (i < meshdata.subMeshIds.size() ? meshdata.subMeshIds[i] : "");
         MeshIndexData* indexdata = nullptr;
