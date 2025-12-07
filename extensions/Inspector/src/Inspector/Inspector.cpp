@@ -414,7 +414,8 @@ void Inspector::close()
     _target        = nullptr;
 
     auto presenter = ImGuiPresenter::getInstance();
-    if (presenter) {
+    if (presenter)
+    {
         presenter->removeRenderLoop("#insp");
         presenter->clearFonts();
     }
