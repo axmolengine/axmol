@@ -218,8 +218,7 @@ id<CAMetalDrawable> RenderContextImpl::acquireDrawable()
 {
     if (_currentDrawable)
         return _currentDrawable;
-    _currentDrawable = [_mtlLayer nextDrawable];
-    return _currentDrawable;
+    return (_currentDrawable = [_mtlLayer nextDrawable]);
 }
 
 void RenderContextImpl::releaseDrawable()
