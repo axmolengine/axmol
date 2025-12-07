@@ -2,6 +2,7 @@
 #include "axmol/rhi/metal/UtilsMTL.h"
 #include "axmol/rhi/metal/TextureMTL.h"
 #include "axmol/rhi/metal/RenderContextMTL.h"
+#include "axmol/rhi/metal/DriverMTL.h"
 
 namespace ax::rhi::mtl
 {
@@ -31,7 +32,8 @@ static MTLStoreAction getStoreAction(const RenderPassDesc& params, TargetBufferF
     return MTLStoreActionStore;
 }
 
-RenderTargetImpl::RenderTargetImpl(bool defaultRenderTarget) : RenderTarget(defaultRenderTarget) {}
+RenderTargetImpl::RenderTargetImpl() : RenderTarget(false) {}
+RenderTargetImpl::RenderTargetImpl(RenderContextImpl* context) : RenderTarget(true), _context(context) {}
 RenderTargetImpl::~RenderTargetImpl() {}
 
 void RenderTargetImpl::applyRenderPassAttachments(const RenderPassDesc& params, MTLRenderPassDescriptor* desc) const
@@ -44,7 +46,7 @@ void RenderTargetImpl::applyRenderPassAttachments(const RenderPassDesc& params, 
         auto attachment = getColorAttachment(static_cast<int>(i));
         if (!attachment)
         {
-            continue;
+            break; // assume MRT must store contiguous
         }
 
         const auto MRTColorFlag = getMRTColorFlag(i);
@@ -88,10 +90,38 @@ void RenderTargetImpl::applyRenderPassAttachments(const RenderPassDesc& params, 
     _dirtyFlags = TargetBufferFlags::NONE;
 }
 
+void RenderTargetImpl::rebuildSwapchainAttachments()
+{
+    AX_SAFE_RELEASE_NULL(_depthStencil.texture);
+    
+    auto mtlLayer = _context->getMetalLayer();
+    
+    auto width  = mtlLayer.drawableSize.width;
+    auto height = mtlLayer.drawableSize.height;
+    
+    // depth-stencil
+    TextureDesc depthDesc{};
+    depthDesc.textureType  = TextureType::TEXTURE_2D;
+    depthDesc.width        = static_cast<uint16_t>(width);
+    depthDesc.height       = static_cast<uint16_t>(height);
+    depthDesc.arraySize    = 1;
+    depthDesc.mipLevels    = 1;
+    depthDesc.pixelFormat  = PixelFormat::D24S8;
+    depthDesc.textureUsage = TextureUsage::RENDER_TARGET;
+
+    auto mtlDevice = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLDevice();
+    auto tex = new TextureImpl(mtlDevice, depthDesc);
+    // ensure native texture
+    tex->updateData(nullptr, width, height, 0);
+    _depthStencil.texture = tex;
+    
+    _dirtyFlags = TargetBufferFlags::COLOR0 | TargetBufferFlags::DEPTH_AND_STENCIL;
+}
+
 RenderTargetImpl::Attachment RenderTargetImpl::getColorAttachment(int index) const
 {
-    if (isDefaultRenderTarget() && index == 0)
-        return {RenderContextImpl::getCurrentDrawable().texture, 0};
+    if (isDefaultRenderTarget())
+        return index == 0 ? Attachment{_context->acquireDrawable().texture, 0} : Attachment{};
     auto& rb = this->_color[index];
     return RenderTargetImpl::Attachment{
         static_cast<bool>(rb) ? static_cast<TextureImpl*>(rb.texture)->internalHandle() : nil, rb.level};
@@ -100,17 +130,16 @@ RenderTargetImpl::Attachment RenderTargetImpl::getColorAttachment(int index) con
 RenderTargetImpl::Attachment RenderTargetImpl::getDepthStencilAttachment() const
 {
     if (isDefaultRenderTarget())
-        return {UtilsMTL::getDefaultDepthStencilTexture(), 0};
-    auto& rb = this->_depthStencil;
-    return RenderTargetImpl::Attachment{!!rb ? static_cast<TextureImpl*>(rb.texture)->internalHandle() : nil, rb.level};
+        return {static_cast<TextureImpl*>(_depthStencil.texture)->internalHandle(), 0};
+    return RenderTargetImpl::Attachment{!!_depthStencil ? static_cast<TextureImpl*>(_depthStencil.texture)->internalHandle() : nil, _depthStencil.level};
 }
 
 PixelFormat RenderTargetImpl::getColorAttachmentPixelFormat(int index) const
 {
     // !!!important
     // the default framebuffer pixel format is: MTLPixelFormatBGRA8Unorm
-    if (isDefaultRenderTarget() && index == 0)
-        return PixelFormat::BGRA8;
+    if (isDefaultRenderTarget())
+        return index == 0 ? PixelFormat::BGRA8 : PixelFormat::NONE;
     auto& rb = this->_color[index];
     return rb ? rb.texture->getPixelFormat() : PixelFormat::NONE;
 }

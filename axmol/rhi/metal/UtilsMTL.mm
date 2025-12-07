@@ -30,9 +30,6 @@
 
 namespace ax::rhi::mtl
 {
-
-id<MTLTexture> UtilsMTL::_defaultDepthStencilAttachmentTexture = nil;
-
 namespace
 {
 MTLPixelFormat getSupportedDepthStencilFormat()
@@ -130,28 +127,6 @@ void UtilsMTL::initGPUTextureFormats()
     // MTLPixelFormatDepth32Float_Stencil8
     auto& info = s_textureFormats[(int)PixelFormat::D24S8];
     info.fmt   = getSupportedDepthStencilFormat();
-}
-
-id<MTLTexture> UtilsMTL::getDefaultDepthStencilTexture()
-{
-    return _defaultDepthStencilAttachmentTexture;
-}
-
-void UtilsMTL::updateDefaultDepthStencilAttachment(CAMetalLayer* layer)
-{
-    if (_defaultDepthStencilAttachmentTexture != nil)
-    {
-        [_defaultDepthStencilAttachmentTexture release];
-    }
-
-    MTLTextureDescriptor* textureDesc     = [[MTLTextureDescriptor alloc] init];
-    textureDesc.width                     = layer.drawableSize.width;
-    textureDesc.height                    = layer.drawableSize.height;
-    textureDesc.pixelFormat               = s_textureFormats[(int)PixelFormat::D24S8].fmt;
-    textureDesc.resourceOptions           = MTLResourceStorageModePrivate;
-    textureDesc.usage                     = MTLTextureUsageRenderTarget;
-    _defaultDepthStencilAttachmentTexture = [layer.device newTextureWithDescriptor:textureDesc];
-    [textureDesc release];
 }
 
 MTLPixelFormat UtilsMTL::getDefaultColorAttachmentPixelFormat()

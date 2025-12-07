@@ -913,8 +913,6 @@ void Renderer::clear(ClearFlag flags, const Color& color, float depth, unsigned 
         else
             descriptor.flags.discardStart |= TargetBufferFlags::STENCIL;
 
-        _context->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y,
-                                 _scissorState.rect.width, _scissorState.rect.height);
         _context->beginRenderPass(_currentRT, descriptor);
         _context->endRenderPass();
     };

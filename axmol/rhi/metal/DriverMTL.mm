@@ -454,7 +454,7 @@ Texture* DriverImpl::createTexture(const TextureDesc& descriptor)
 
 RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
 {
-    auto rtMTL = new RenderTargetImpl(false);
+    auto rtMTL = new RenderTargetImpl();
     RenderTarget::ColorAttachment colors{{colorAttachment, 0}};
     rtMTL->setColorAttachment(colors);
     rtMTL->setDepthStencilAttachment(depthStencilAttachment);

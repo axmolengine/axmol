@@ -137,19 +137,7 @@ static MTLCullMode toMTLCullMode(CullMode mode)
     }
 }
 
-static MTLRenderPassDescriptor* toMTLRenderPassDesc(const RenderTarget* rt, const RenderPassDesc& desc)
-{
-    MTLRenderPassDescriptor* mtlDesc = [MTLRenderPassDescriptor renderPassDescriptor];
-
-    auto rtMTL = static_cast<const RenderTargetImpl*>(rt);
-    rtMTL->applyRenderPassAttachments(desc, mtlDesc);
-    return mtlDesc;
-}
-
 }  // namespace
-
-CAMetalLayer* RenderContextImpl::_mtlLayer              = nil;
-id<CAMetalDrawable> RenderContextImpl::_currentDrawable = nil;
 
 RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
 {
@@ -189,9 +177,8 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
     _mtlLayer.drawableSize = fbSize;
 #endif
 
-    _screenRT = new RenderTargetImpl(true);
-
-    UtilsMTL::updateDefaultDepthStencilAttachment(_mtlLayer);
+    _screenRT = new RenderTargetImpl(this);
+    _screenRT->rebuildSwapchainAttachments();
 }
 
 RenderContextImpl::~RenderContextImpl()
@@ -213,7 +200,7 @@ RenderContextImpl::~RenderContextImpl()
 bool RenderContextImpl::updateSurface(void* /*surface*/, uint32_t width, uint32_t height)
 {
     [_mtlLayer setDrawableSize:CGSizeMake(width, height)];
-    UtilsMTL::updateDefaultDepthStencilAttachment(_mtlLayer);
+    _screenRT->rebuildSwapchainAttachments();
     return true;
 }
 
@@ -225,6 +212,18 @@ void RenderContextImpl::setDepthStencilState(DepthStencilState* depthStencilStat
 void RenderContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
 {
     Object::assign(_renderPipeline, static_cast<RenderPipelineImpl*>(renderPipeline));
+}
+
+id<CAMetalDrawable> RenderContextImpl::acquireDrawable()
+{
+    if(_currentDrawable) return _currentDrawable;
+    _currentDrawable = [_mtlLayer nextDrawable];
+    return _currentDrawable;
+}
+
+void RenderContextImpl::releaseDrawable()
+{
+    _currentDrawable = nil;
 }
 
 bool RenderContextImpl::beginFrame()
@@ -259,7 +258,10 @@ void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const Render
         _mtlRenderEncoder = nil;
     }
 
-    auto mtlDesc        = toMTLRenderPassDesc(renderTarget, renderPassDesc);
+    MTLRenderPassDescriptor* mtlDesc = [MTLRenderPassDescriptor renderPassDescriptor];
+    auto rtMTL = static_cast<const RenderTargetImpl*>(_currentRT);
+    rtMTL->applyRenderPassAttachments(renderPassDesc, mtlDesc);
+    
     _renderTargetWidth  = (unsigned int)mtlDesc.colorAttachments[0].texture.width;
     _renderTargetHeight = (unsigned int)mtlDesc.colorAttachments[0].texture.height;
     _mtlRenderEncoder   = [_currentCmdBuffer renderCommandEncoderWithDescriptor:mtlDesc];
@@ -406,9 +408,8 @@ void RenderContextImpl::endFrame()
     [_mtlRenderEncoder release];
     _mtlRenderEncoder = nil;
 
-    auto currentDrawable = getCurrentDrawable();
-    [_currentCmdBuffer presentDrawable:currentDrawable];
-    _drawableTexture = currentDrawable.texture;
+    auto drawable = acquireDrawable();
+    [_currentCmdBuffer presentDrawable:drawable];
     [_currentCmdBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
       // GPU work is complete
       // Signal the semaphore to start the CPU work
@@ -417,7 +418,7 @@ void RenderContextImpl::endFrame()
 
     flush();
 
-    resetCurrentDrawable();
+    releaseDrawable();
     [_autoReleasePool drain];
 }
 
@@ -456,13 +457,14 @@ void RenderContextImpl::flushCaptureCommands()
         [_currentCmdBuffer waitUntilCompleted];
 
         PixelBufferDesc screenPixelData;
+        auto drawableTexture = acquireDrawable().texture;
         for (auto& cb : _captureCallbacks)
         {
             if (cb.first == nil)
             {  // screen capture
                 if (!screenPixelData)
                 {
-                    readPixels(_drawableTexture, 0, 0, [_drawableTexture width], [_drawableTexture height],
+                    readPixels(drawableTexture, 0, 0, [drawableTexture width], [drawableTexture height],
                                screenPixelData);
                     // screen framebuffer copied, restore screen framebuffer only to true
                     setFrameBufferOnly(true);
@@ -575,6 +577,7 @@ void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float w
         scissorRect.width  = _renderTargetWidth;
         scissorRect.height = _renderTargetHeight;
     }
+    
     [_mtlRenderEncoder setScissorRect:scissorRect];
 }
 
@@ -635,19 +638,6 @@ void RenderContextImpl::readPixels(id<MTLTexture> texture,
 void RenderContextImpl::setFrameBufferOnly(bool frameBufferOnly)
 {
     [_mtlLayer setFramebufferOnly:frameBufferOnly];
-}
-
-id<CAMetalDrawable> RenderContextImpl::getCurrentDrawable()
-{
-    if (!_currentDrawable)
-        _currentDrawable = [_mtlLayer nextDrawable];
-
-    return _currentDrawable;
-}
-
-void RenderContextImpl::resetCurrentDrawable()
-{
-    _currentDrawable = nil;
 }
 
 }  // namespace ax::rhi::mtl

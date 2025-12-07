@@ -55,14 +55,6 @@ struct UtilsMTL
      */
     static void initGPUTextureFormats();
 
-    /**
-     * Update default render target attachments: color, depth-stecil
-     * @param texture Specifies the texture to be setted to the color attachemnt.
-     */
-    static void updateDefaultDepthStencilAttachment(CAMetalLayer* layer);
-
-    static id<MTLTexture> getDefaultDepthStencilTexture();
-
     static MTLPixelFormat getDefaultColorAttachmentPixelFormat();
 
     static MTLPixelFormat getDefaultDepthStencilAttachmentPixelFormat();
@@ -88,9 +80,6 @@ struct UtilsMTL
      * @param format Specifies the format of the image.
      */
     static void swizzleImage(unsigned char* image, std::size_t width, std::size_t height, MTLPixelFormat format);
-
-private:
-    static id<MTLTexture> _defaultDepthStencilAttachmentTexture;
 };
 
 }  // namespace mtl

@@ -205,8 +205,9 @@ public:
 
     id<MTLRenderCommandEncoder> getRenderCommandEncoder() const { return _mtlRenderEncoder; }
 
-    static id<CAMetalDrawable> getCurrentDrawable();
-    static void resetCurrentDrawable();
+    CAMetalLayer* getMetalLayer() { return _mtlLayer; }
+    
+    id<CAMetalDrawable> acquireDrawable();
 
 protected:
     /**
@@ -237,7 +238,9 @@ protected:
      * @note This interface is specificaly designed for metal.
      */
     void setFrameBufferOnly(bool frameBufferOnly) override;
-
+    
+    void releaseDrawable();
+    
 private:
     void prepareDrawing() const;
     void setTextures() const;
@@ -246,17 +249,15 @@ private:
     void flush();
     void flushCaptureCommands();
 
-    static CAMetalLayer* _mtlLayer;
-    static id<CAMetalDrawable> _currentDrawable;
-
+    CAMetalLayer* _mtlLayer{nil};
     RenderTargetImpl* _screenRT{nullptr};
+    id<CAMetalDrawable> _currentDrawable{nil};
 
     // weak ref, like context, managed by DriverImpl
     id<MTLCommandQueue> _mtlCmdQueue              = nil;
     id<MTLCommandBuffer> _currentCmdBuffer        = nil;
     id<MTLRenderCommandEncoder> _mtlRenderEncoder = nil;
     id<MTLBuffer> _mtlIndexBuffer                 = nil;
-    id<MTLTexture> _drawableTexture               = nil;
 
     DepthStencilStateImpl* _depthStencilState = nullptr;
     RenderPipelineImpl* _renderPipeline       = nullptr;
