@@ -267,7 +267,7 @@ public:
 };
 
 static ImGuiPresenter* _instance = nullptr;
-ImGuiPresenter* ImGuiPresenter::acquireInstance()
+ImGuiPresenter* ImGuiPresenter::getInstance()
 {
     if (_instance)
     {
@@ -281,7 +281,7 @@ ImGuiPresenter* ImGuiPresenter::acquireInstance()
     return _instance;
 }
 
-void ImGuiPresenter::releaseInstance()
+void ImGuiPresenter::destroyInstance()
 {
     if (_instance)
         _instance->_pendingDestroy = true;

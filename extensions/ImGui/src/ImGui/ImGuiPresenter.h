@@ -59,10 +59,25 @@ public:
         DEFAULT_FONT_SIZE = 13  // see imgui.cpp
     };
 
-    static ImGuiPresenter* getInstance() { return acquireInstance(); }
-    static void destroyInstance() { releaseInstance(); }
-    static ImGuiPresenter* acquireInstance();
-    static void releaseInstance();
+    /**
+     * @brief Returns the singleton instance of ImGuiPresenter.
+     *
+     * If the instance does not exist, it will be created and initialized.
+     * If the instance has been marked for destruction (_pendingDestroy == true),
+     * this function returns nullptr instead of a valid pointer.
+     *
+     * @return Pointer to the ImGuiPresenter instance, or nullptr if pending destroy.
+     */
+    static ImGuiPresenter* getInstance();
+
+    /**
+     * @brief Marks the singleton instance for destruction.
+     *
+     * This does not immediately delete the object; it only sets
+     * the _pendingDestroy flag to true. After this call,
+     * getInstance() will return nullptr.
+     */
+    static void destroyInstance();
 
     /// deprecated use enableDPIScale instead
     float scaleAllByDPI(float userScale = 1.0f) { return enableDPIScale(userScale); }

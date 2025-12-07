@@ -80,7 +80,7 @@ Box2DTestBedTests::Box2DTestBedTests()
     g_camera.m_zoom   = 80;
     g_camera.m_center = b2Vec2_zero;
 
-    ImGuiPresenter::acquireInstance()->setViewResolution(g_camera.m_width, g_camera.m_height);
+    ImGuiPresenter::getInstance()->setViewResolution(g_camera.m_width, g_camera.m_height);
 
     SortTests();
 
@@ -238,12 +238,12 @@ bool Box2DTestBed::onMouseScroll(Event* event)
 void Box2DTestBed::onEnter()
 {
     Scene::onEnter();
-    ImGuiPresenter::acquireInstance()->addFont(FileUtils::getInstance()->fullPathForFilename("fonts/arial.ttf"));
-    ImGuiPresenter::acquireInstance()->addRenderLoop("#bv3t", AX_CALLBACK_0(Box2DTestBed::renderSamples, this), this);
+    ImGuiPresenter::getInstance()->addFont(FileUtils::getInstance()->fullPathForFilename("fonts/arial.ttf"));
+    ImGuiPresenter::getInstance()->addRenderLoop("#bv3t", AX_CALLBACK_0(Box2DTestBed::renderSamples, this), this);
 }
 void Box2DTestBed::onExit()
 {
-    ImGuiPresenter::acquireInstance()->removeRenderLoop("#bv3t");
+    ImGuiPresenter::getInstance()->removeRenderLoop("#bv3t");
     Scene::onExit();
 }
 

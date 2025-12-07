@@ -123,7 +123,7 @@ void InspectorSpritePropertyHandler::drawProperties(Node* node)
     auto texture = sprite->getTexture();
     ImGui::TextWrapped("Texture: %s", texture->getPath().c_str());
 
-    ImGuiPresenter::acquireInstance()->image(sprite, ImVec2(256, 256));
+    ImGuiPresenter::getInstance()->image(sprite, ImVec2(256, 256));
 }
 
 bool InspectorLabelProtocolPropertyHandler::isSupportedType(Node* node)
@@ -397,7 +397,7 @@ void Inspector::openForScene(Scene* target)
         return;
     }
 
-    auto* presenter = ImGuiPresenter::acquireInstance();
+    auto* presenter = ImGuiPresenter::getInstance();
     presenter->addFont(FileUtils::getInstance()->fullPathForFilename(_fontPath), _fontSize);
     presenter->enableDPIScale();
     presenter->addRenderLoop("#insp", AX_CALLBACK_0(Inspector::mainLoop, this), target);
@@ -413,7 +413,7 @@ void Inspector::close()
     _selected_node = nullptr;
     _target        = nullptr;
 
-    auto presenter = ImGuiPresenter::acquireInstance();
+    auto presenter = ImGuiPresenter::getInstance();
     if (presenter) {
         presenter->removeRenderLoop("#insp");
         presenter->clearFonts();

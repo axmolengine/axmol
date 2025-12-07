@@ -17,7 +17,7 @@ static ImVec4 clear_color       = ImColor(114, 144, 154);
 
 ImGuiTests::ImGuiTests()
 {
-    ImGuiPresenter::acquireInstance()->setViewResolution(1280, 720);
+    ImGuiPresenter::getInstance()->setViewResolution(1280, 720);
 
     ADD_TEST_CASE(ImGuiTest);
 }
@@ -32,20 +32,20 @@ void ImGuiTest::onEnter()
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
 
-    ImGuiPresenter::acquireInstance()->addFont(FileUtils::getInstance()->fullPathForFilename("fonts/arial.ttf"));
-    ImGuiPresenter::acquireInstance()->enableDPIScale();
-    ImGuiPresenter::acquireInstance()->addRenderLoop("#test", AX_CALLBACK_0(ImGuiTest::onDrawImGui, this), this);
+    ImGuiPresenter::getInstance()->addFont(FileUtils::getInstance()->fullPathForFilename("fonts/arial.ttf"));
+    ImGuiPresenter::getInstance()->enableDPIScale();
+    ImGuiPresenter::getInstance()->addRenderLoop("#test", AX_CALLBACK_0(ImGuiTest::onDrawImGui, this), this);
 }
 
 void ImGuiTest::onExit()
 {
-    ImGuiPresenter::acquireInstance()->removeRenderLoop("#test");
-    ImGuiPresenter::acquireInstance()->clearFonts();
+    ImGuiPresenter::getInstance()->removeRenderLoop("#test");
+    ImGuiPresenter::getInstance()->clearFonts();
 
 #    if !defined(__ANDROID__)
     SDFGen::getInstance()->close();
 #    endif
-    ImGuiPresenter::releaseInstance();
+    ImGuiPresenter::destroyInstance();
 
     SpriteFrameCache::getInstance()->removeUnusedSpriteFrames();
 
@@ -69,7 +69,7 @@ void ImGuiTest::onDrawImGui()
                     ImGui::GetIO().Framerate);
 
         auto spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("grossini_dance_05.png");
-        ImGuiPresenter::acquireInstance()->image(spriteFrame, ImVec2(256, 256), false);
+        ImGuiPresenter::getInstance()->image(spriteFrame, ImVec2(256, 256), false);
     }
 
     // 2. Show another simple window, this time using an explicit Begin/End pair

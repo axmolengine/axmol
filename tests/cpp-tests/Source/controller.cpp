@@ -429,7 +429,7 @@ TestController* TestController::getInstance()
 void TestController::destroyInstance()
 {
 #if AX_ENABLE_EXT_IMGUI
-    extension::ImGuiPresenter::releaseInstance();
+    extension::ImGuiPresenter::destroyInstance();
 #endif
     if (s_testController)
     {
