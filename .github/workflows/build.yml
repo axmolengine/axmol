@@ -224,7 +224,7 @@ jobs:
         path: |
           templates/**/*.apk
           tests/**/*.apk
-  ios:
+  ios-sim-x64:
     runs-on: macos-latest
     strategy:
       matrix:
@@ -239,6 +239,22 @@ jobs:
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p $env:TARGET_OS -a 'x64'
+  ios-sim-arm64:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        target_os:
+          - ios
+          - tvos
+    env:
+      TARGET_OS: ${{ matrix.target_os }}
+    steps:
+    - uses: actions/checkout@v5
+
+    - name: Build
+      shell: pwsh
+      # axmol cmdline can't guess ios arm64 as simulator, so need specify by option '-sdk'
+      run: ./tools/cmdline/axmol -p $env:TARGET_OS -a 'arm64' -sdk 'simulator'
   wasm:
     runs-on: ubuntu-latest
     steps:
