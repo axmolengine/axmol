@@ -271,24 +271,25 @@ std::function<void(ImGuiPresenter*)> ImGuiPresenter::_onInit;
 
 ImGuiPresenter* ImGuiPresenter::getInstance()
 {
-    if (_instance == nullptr)
+    if (_instance)
     {
-        _instance = new ImGuiPresenter();
-        _instance->init();
-        if (_onInit)
-            _onInit(_instance);
+        if (!_instance->_pendingDestroy)
+            return _instance;
+        _instance->cleanup();
+        delete _instance;
     }
+
+    _instance = new ImGuiPresenter();
+    _instance->init();
+    if (_onInit)
+        _onInit(_instance);
     return _instance;
 }
 
 void ImGuiPresenter::destroyInstance()
 {
     if (_instance)
-    {
-        _instance->cleanup();
-        delete _instance;
-        _instance = nullptr;
-    }
+        _instance->_pendingDestroy = true;
 }
 
 void ImGuiPresenter::init()
@@ -502,6 +503,14 @@ void ImGuiPresenter::endFrame()
 
         ImGui_ImplAxmol_RenderPlatform();
         --_beginFrames;
+    }
+
+    if (_pendingDestroy)
+    {
+        cleanup();
+        delete this;
+        if (_instance == this)
+            _instance = nullptr;
     }
 }
 

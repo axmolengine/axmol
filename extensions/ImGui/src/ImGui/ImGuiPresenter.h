@@ -182,7 +182,15 @@ private:
 
     tlx::string_map<float> _fontsInfoMap;
 
-    bool _purgeNextLoop = false;
+    bool _purgeNextLoop = false;  // whether invoke director->end at next loop
+
+    // _pendingDestroy: mark for delayed destruction.
+    // ImGuiPresenter cannot be destroyed immediately inside callbacks,
+    // because ImGui_ImplGlfw may still access backend data.
+    // We defer cleanup + delete until endFrame(), ensuring safe destruction.
+    // If getInstance() is called while pendingDestroy, the old instance
+    // will be cleaned up and a new one created to avoid ImGui context assertion.
+    bool _pendingDestroy = false;  // whether destroy self at next frame
 };
 
 NS_AX_EXT_END
