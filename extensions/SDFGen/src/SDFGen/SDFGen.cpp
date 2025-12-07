@@ -219,19 +219,21 @@ void SDFGen::open(ax::Scene* scene)
     _atlasParams->sourceFont = "fonts/arial.ttf";
     _atlasParams->fontAsset  = "fonts/arial-SDF.xasset";
 
-    ImGuiPresenter::getInstance()->addFont(defaultFontFile);
+    ImGuiPresenter::acquireInstance()->addFont(defaultFontFile);
     /* For Simplified Chinese support, please use:
-    ImGuiPresenter::getInstance()->addFont(R"(C:\Windows\Fonts\msyh.ttc)", ImGuiPresenter::DEFAULT_FONT_SIZE,
+    ImGuiPresenter::acquireInstance()->addFont(R"(C:\Windows\Fonts\msyh.ttc)", ImGuiPresenter::DEFAULT_FONT_SIZE,
                                        ImGuiPresenter::GLYPH_RANGES::CHINESE_GENERAL);
     */
-    ImGuiPresenter::getInstance()->enableDPIScale();  // enable dpi scale for 4K display support, depends at least one
+    ImGuiPresenter::acquireInstance()->enableDPIScale();  // enable dpi scale for 4K display support, depends at least one
                                                       // valid ttf/ttc font was added.
-    ImGuiPresenter::getInstance()->addRenderLoop("#sdfg", AX_CALLBACK_0(SDFGen::onImGuiDraw, this), scene);
+    ImGuiPresenter::acquireInstance()->addRenderLoop("#sdfg", AX_CALLBACK_0(SDFGen::onImGuiDraw, this), scene);
 }
 
 void SDFGen::close()
 {
-    ImGuiPresenter::getInstance()->removeRenderLoop("#sdfg");
+    auto presenter = ImGuiPresenter::acquireInstance();
+    if (presenter)
+        presenter->removeRenderLoop("#sdfg");
 
     delete _atlasParams;
     _atlasParams = nullptr;
@@ -348,7 +350,7 @@ void SDFGen::onImGuiDraw()
 
         ImGui::Separator();
         ImGui::Text("Atlas View:");
-        ImGuiPresenter::getInstance()->image(_atlasViewer, ImVec2(viewerSize.width, viewerSize.height));
+        ImGuiPresenter::acquireInstance()->image(_atlasViewer, ImVec2(viewerSize.width, viewerSize.height));
     }
 
     ImGui::End();

@@ -59,9 +59,10 @@ public:
         DEFAULT_FONT_SIZE = 13  // see imgui.cpp
     };
 
-    static ImGuiPresenter* getInstance();
-    static void destroyInstance();
-    static void setOnInit(const std::function<void(ImGuiPresenter*)>& callBack);
+    static ImGuiPresenter* getInstance() { return acquireInstance(); }
+    static void destroyInstance() { releaseInstance(); }
+    static ImGuiPresenter* acquireInstance();
+    static void releaseInstance();
 
     /// deprecated use enableDPIScale instead
     float scaleAllByDPI(float userScale = 1.0f) { return enableDPIScale(userScale); }
@@ -161,8 +162,6 @@ private:
     void endFrame();
 
 private:
-    static std::function<void(ImGuiPresenter*)> _onInit;
-
     struct ImGuiLoop
     {
         ImGuiEventTracker* tracker;

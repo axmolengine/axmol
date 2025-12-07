@@ -267,26 +267,21 @@ public:
 };
 
 static ImGuiPresenter* _instance = nullptr;
-std::function<void(ImGuiPresenter*)> ImGuiPresenter::_onInit;
-
-ImGuiPresenter* ImGuiPresenter::getInstance()
+ImGuiPresenter* ImGuiPresenter::acquireInstance()
 {
     if (_instance)
     {
         if (!_instance->_pendingDestroy)
             return _instance;
-        _instance->cleanup();
-        delete _instance;
+        return nullptr;
     }
 
     _instance = new ImGuiPresenter();
     _instance->init();
-    if (_onInit)
-        _onInit(_instance);
     return _instance;
 }
 
-void ImGuiPresenter::destroyInstance()
+void ImGuiPresenter::releaseInstance()
 {
     if (_instance)
         _instance->_pendingDestroy = true;
@@ -369,11 +364,6 @@ void ImGuiPresenter::cleanup()
         }
         _renderLoops.clear();
     }
-}
-
-void ImGuiPresenter::setOnInit(const std::function<void(ImGuiPresenter*)>& callBack)
-{
-    _onInit = callBack;
 }
 
 void ImGuiPresenter::updateFonts(void* ud)
@@ -464,6 +454,13 @@ void ImGuiPresenter::beginFrame()
         Director::getInstance()->end();
         return;
     }
+    if (_pendingDestroy)
+    {
+        cleanup();
+        delete this;
+        if (_instance == this)
+            _instance = nullptr;
+    }
     if (!_renderLoops.empty())
     {
         // create frame
@@ -503,14 +500,6 @@ void ImGuiPresenter::endFrame()
 
         ImGui_ImplAxmol_RenderPlatform();
         --_beginFrames;
-    }
-
-    if (_pendingDestroy)
-    {
-        cleanup();
-        delete this;
-        if (_instance == this)
-            _instance = nullptr;
     }
 }
 

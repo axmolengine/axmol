@@ -27,7 +27,7 @@ forked from https://github.com/Xrysnow/cocos2d-x-imgui and add many improvements
 * Calculate deltaTime at ```ImGui_ImplCocos2dx_NewFrame``` to avoid error when ```cc.Director``` paused
 * Refine ```Init/Shutdown```, Restore all callbacks for glfw to solve recreate ```ImGuiPresenter``` instance support
 * Use ```FOURCC``` for key of ImGui render loop
-* Add dpi scale support, use ```ImGuiPresenter::getInstance()->enableDPIScale();```
+* Add dpi scale support, use ```ImGuiPresenter::acquireInstance()->enableDPIScale();```
 * Easy font manager, stable API ```addFont,removeFont,clearFonts``` to manage ImGui fonts, with ImGui API, very hard to do correctly.
 * Easy to add/use custom or imgui pre-defined glyph ranges ```ImGuiPresenter::GLYPH_RANGES,addGlyphRanges,removeGlyphRanges```
 and then specify the glyph ranges id while calling `addFont`
@@ -45,18 +45,18 @@ public:
     void onEnter() override
     {
         Scene::onEnter();
-        ImGuiPresenter::getInstance()->addFont(R"(C:\Windows\Fonts\msyh.ttc)");
+        ImGuiPresenter::acquireInstance()->addFont(R"(C:\Windows\Fonts\msyh.ttc)");
         /* For Simplified Chinese support, please use:
-        ImGuiPresenter::getInstance()->addFont(R"(C:\Windows\Fonts\msyh.ttc)", ImGuiPresenter::DEFAULT_FONT_SIZE,
+        ImGuiPresenter::acquireInstance()->addFont(R"(C:\Windows\Fonts\msyh.ttc)", ImGuiPresenter::DEFAULT_FONT_SIZE,
                                            ImGuiPresenter::GLYPH_RANGES::CHINESE_GENERAL);
         */
-        ImGuiPresenter::getInstance()->enableDPIScale(); // enable dpi scale for 4K display support, depends at least one valid ttf/ttc font was added.
-        ImGuiPresenter::getInstance()->addRenderLoop("#im01", AX_CALLBACK_0(GameScene::onImGuiDraw, this), this);
+        ImGuiPresenter::acquireInstance()->enableDPIScale(); // enable dpi scale for 4K display support, depends at least one valid ttf/ttc font was added.
+        ImGuiPresenter::acquireInstance()->addRenderLoop("#im01", AX_CALLBACK_0(GameScene::onImGuiDraw, this), this);
     }
     void onExit() override
     {
         Scene::onExit();
-        ImGuiPresenter::getInstance()->removeRenderLoop("#im01");
+        ImGuiPresenter::acquireInstance()->removeRenderLoop("#im01");
     }
     void onImGuiDraw()
     {
