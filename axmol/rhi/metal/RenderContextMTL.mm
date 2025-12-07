@@ -216,7 +216,8 @@ void RenderContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
 
 id<CAMetalDrawable> RenderContextImpl::acquireDrawable()
 {
-    if(_currentDrawable) return _currentDrawable;
+    if (_currentDrawable)
+        return _currentDrawable;
     _currentDrawable = [_mtlLayer nextDrawable];
     return _currentDrawable;
 }
@@ -259,9 +260,9 @@ void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const Render
     }
 
     MTLRenderPassDescriptor* mtlDesc = [MTLRenderPassDescriptor renderPassDescriptor];
-    auto rtMTL = static_cast<const RenderTargetImpl*>(_currentRT);
+    auto rtMTL                       = static_cast<const RenderTargetImpl*>(_currentRT);
     rtMTL->applyRenderPassAttachments(renderPassDesc, mtlDesc);
-    
+
     _renderTargetWidth  = (unsigned int)mtlDesc.colorAttachments[0].texture.width;
     _renderTargetHeight = (unsigned int)mtlDesc.colorAttachments[0].texture.height;
     _mtlRenderEncoder   = [_currentCmdBuffer renderCommandEncoderWithDescriptor:mtlDesc];
@@ -577,7 +578,7 @@ void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float w
         scissorRect.width  = _renderTargetWidth;
         scissorRect.height = _renderTargetHeight;
     }
-    
+
     [_mtlRenderEncoder setScissorRect:scissorRect];
 }
 

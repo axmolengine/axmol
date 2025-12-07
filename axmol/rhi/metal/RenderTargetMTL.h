@@ -21,17 +21,17 @@ public:
     RenderTargetImpl();
     RenderTargetImpl(RenderContextImpl* context);
     ~RenderTargetImpl();
-    
+
     void applyRenderPassAttachments(const RenderPassDesc&, MTLRenderPassDescriptor*) const;
-    
+
     Attachment getColorAttachment(int index) const;
     Attachment getDepthStencilAttachment() const;
 
     PixelFormat getColorAttachmentPixelFormat(int index) const;
     PixelFormat getDepthStencilAttachmentPixelFormat() const;
-    
+
     void rebuildSwapchainAttachments();
-    
+
     RenderContextImpl* _context{nullptr};
 };
 

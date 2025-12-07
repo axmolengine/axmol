@@ -46,7 +46,7 @@ void RenderTargetImpl::applyRenderPassAttachments(const RenderPassDesc& params, 
         auto attachment = getColorAttachment(static_cast<int>(i));
         if (!attachment)
         {
-            break; // assume MRT must store contiguous
+            break;  // assume MRT must store contiguous
         }
 
         const auto MRTColorFlag = getMRTColorFlag(i);
@@ -93,12 +93,12 @@ void RenderTargetImpl::applyRenderPassAttachments(const RenderPassDesc& params, 
 void RenderTargetImpl::rebuildSwapchainAttachments()
 {
     AX_SAFE_RELEASE_NULL(_depthStencil.texture);
-    
+
     auto mtlLayer = _context->getMetalLayer();
-    
+
     auto width  = mtlLayer.drawableSize.width;
     auto height = mtlLayer.drawableSize.height;
-    
+
     // depth-stencil
     TextureDesc depthDesc{};
     depthDesc.textureType  = TextureType::TEXTURE_2D;
@@ -110,11 +110,11 @@ void RenderTargetImpl::rebuildSwapchainAttachments()
     depthDesc.textureUsage = TextureUsage::RENDER_TARGET;
 
     auto mtlDevice = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLDevice();
-    auto tex = new TextureImpl(mtlDevice, depthDesc);
+    auto tex       = new TextureImpl(mtlDevice, depthDesc);
     // ensure native texture
     tex->updateData(nullptr, width, height, 0);
     _depthStencil.texture = tex;
-    
+
     _dirtyFlags = TargetBufferFlags::COLOR0 | TargetBufferFlags::DEPTH_AND_STENCIL;
 }
 
@@ -131,7 +131,9 @@ RenderTargetImpl::Attachment RenderTargetImpl::getDepthStencilAttachment() const
 {
     if (isDefaultRenderTarget())
         return {static_cast<TextureImpl*>(_depthStencil.texture)->internalHandle(), 0};
-    return RenderTargetImpl::Attachment{!!_depthStencil ? static_cast<TextureImpl*>(_depthStencil.texture)->internalHandle() : nil, _depthStencil.level};
+    return RenderTargetImpl::Attachment{
+        !!_depthStencil ? static_cast<TextureImpl*>(_depthStencil.texture)->internalHandle() : nil,
+        _depthStencil.level};
 }
 
 PixelFormat RenderTargetImpl::getColorAttachmentPixelFormat(int index) const

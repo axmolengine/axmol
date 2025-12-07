@@ -206,7 +206,7 @@ public:
     id<MTLRenderCommandEncoder> getRenderCommandEncoder() const { return _mtlRenderEncoder; }
 
     CAMetalLayer* getMetalLayer() { return _mtlLayer; }
-    
+
     id<CAMetalDrawable> acquireDrawable();
 
 protected:
@@ -238,9 +238,9 @@ protected:
      * @note This interface is specificaly designed for metal.
      */
     void setFrameBufferOnly(bool frameBufferOnly) override;
-    
+
     void releaseDrawable();
-    
+
 private:
     void prepareDrawing() const;
     void setTextures() const;
