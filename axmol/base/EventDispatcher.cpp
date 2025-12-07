@@ -1076,6 +1076,7 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
                     return false;
 
                 const auto event = touchContext.event;
+                auto touch       = touchContext.touch;
                 event->setCurrentTarget(listener->_node);
 
                 bool isClaimed = false;
@@ -1087,16 +1088,16 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
                 {
                     if (listener->onTouchBegan)
                     {
-                        isClaimed = listener->onTouchBegan(touchContext.touch, event);
+                        isClaimed = listener->onTouchBegan(touch, event);
                         if (isClaimed && listener->_isRegistered)
                         {
-                            listener->_claimedTouches.emplace_back(touchContext.touch);
+                            listener->_claimedTouches.emplace_back(touch);
                         }
                     }
                 }
                 else if (!listener->_claimedTouches.empty() &&
                          ((removedIter = std::find(listener->_claimedTouches.begin(), listener->_claimedTouches.end(),
-                                                   touchContext.touch)) != listener->_claimedTouches.end()))
+                                                   touch)) != listener->_claimedTouches.end()))
                 {
                     isClaimed = true;
 
@@ -1105,13 +1106,13 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
                     case EventTouch::EventCode::MOVED:
                         if (listener->onTouchMoved)
                         {
-                            listener->onTouchMoved(touchContext.touch, event);
+                            listener->onTouchMoved(touch, event);
                         }
                         break;
                     case EventTouch::EventCode::ENDED:
                         if (listener->onTouchEnded)
                         {
-                            listener->onTouchEnded(touchContext.touch, event);
+                            listener->onTouchEnded(touch, event);
                         }
                         if (listener->_isRegistered)
                         {
@@ -1121,7 +1122,7 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
                     case EventTouch::EventCode::CANCELLED:
                         if (listener->onTouchCancelled)
                         {
-                            listener->onTouchCancelled(touchContext.touch, event);
+                            listener->onTouchCancelled(touch, event);
                         }
                         if (listener->_isRegistered)
                         {
@@ -1141,7 +1142,7 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
                     return true;
                 }
 
-                AXASSERT(touchContext.touch->getID() == (*touchContext.touchesIter)->getID(),
+                AXASSERT(touch->getID() == (*touchContext.touchesIter)->getID(),
                          "touches ID should be equal to mutableTouchesIter's ID.");
 
                 if (isClaimed && listener->_isRegistered && listener->_needSwallow)
