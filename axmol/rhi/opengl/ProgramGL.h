@@ -45,20 +45,6 @@ namespace ax::rhi::gl
 class ShaderModuleImpl;
 
 /**
- * Store attribute information.
- */
-struct AttributeInfo
-{
-    unsigned int location         = 0;
-    unsigned int size             = 0;
-    GLenum type                   = GL_BYTE;
-    GLsizei stride                = 0;
-    unsigned int offset           = 0;
-    GLboolean needToBeNormallized = GL_FALSE;
-    std::string name;
-};
-
-/**
  * @addtogroup _opengl
  * @{
  */
@@ -89,12 +75,6 @@ public:
     ProgramImpl(std::string_view vertexShader, std::string_view fragmentShader);
 
     ~ProgramImpl();
-
-    /**
-     * Get attribute informations.
-     * @return Attribute informations.
-     */
-    inline const std::vector<AttributeInfo>& getAttributeInfos() const { return _attributeInfos; }
 
     /**
      * Get program object.
@@ -188,8 +168,6 @@ private:
     ShaderModuleImpl* _fragmentShaderModule = nullptr;
 
     tlx::pod_vector<UniformBlockDesc> _uniformBuffers;
-
-    std::vector<AttributeInfo> _attributeInfos;
 
     tlx::string_map<VertexInputDesc> _activeVertexInputs;
     tlx::string_map<UniformInfo> _activeUniformInfos;

@@ -473,7 +473,7 @@ struct UniformInfo
 
     // in opengl, type means uniform data type, i.e. GL_FLOAT_VEC2, while in metal type means data basic type, i.e.
     // float
-    unsigned int type         = 0;
+    unsigned int varType      = 0;
     unsigned int size         = 0;  // element size
     unsigned int bufferOffset = 0;
 };
@@ -537,7 +537,7 @@ struct VertexInputDesc
     // vulkan: binding_index
     int location = -1;
     int count    = 0;
-    int format   = 0;
+    int varType  = 0;
 };
 
 /// built-in uniform name

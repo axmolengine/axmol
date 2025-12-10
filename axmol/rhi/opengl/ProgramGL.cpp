@@ -213,7 +213,7 @@ void ProgramImpl::reflectVertexInputs()
 
         rhi::VertexInputDesc info;
         info.location = glGetAttribLocation(_program, name.data());
-        info.format   = attrType;
+        info.varType  = attrType;
         info.count    = UtilsGL::getGLDataTypeSize(attrType) * attrSize;
         CHECK_GL_ERROR_DEBUG();
         _activeVertexInputs.emplace(name, std::move(info));
@@ -279,11 +279,11 @@ void ProgramImpl::reflectUniformInfos()
         UniformInfo uniform{};
         buffer.resize(MAX_UNIFORM_NAME_LENGTH + 1);
         GLint count{0};
-        glGetActiveUniform(_program, i, static_cast<GLint>(buffer.size()), &nameLen, &count, &uniform.type,
+        glGetActiveUniform(_program, i, static_cast<GLint>(buffer.size()), &nameLen, &count, &uniform.varType,
                            buffer.data());
         uniform.count = static_cast<uint16_t>(count);
 
-        uniform.size = UtilsGL::getGLDataTypeSize(uniform.type);
+        uniform.size = UtilsGL::getGLDataTypeSize(uniform.varType);
         std::string_view uniformFullName{buffer.data(), static_cast<size_t>(nameLen)};
         std::string_view uniformName{uniformFullName};
 
@@ -311,8 +311,8 @@ void ProgramImpl::reflectUniformInfos()
         }
         else
         {  // must be samper: sampler2D, sampler2DArray, samplerCube
-            assert(uniform.type == GL_SAMPLER_2D || uniform.type == GL_SAMPLER_CUBE ||
-                   uniform.type == GL_SAMPLER_2D_ARRAY);
+            assert(uniform.varType == GL_SAMPLER_2D || uniform.varType == GL_SAMPLER_CUBE ||
+                   uniform.varType == GL_SAMPLER_2D_ARRAY);
             uniform.location = glGetUniformLocation(_program, uniformName.data());
         }
 

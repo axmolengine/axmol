@@ -3056,7 +3056,7 @@ void program_activeattrs_to_luaval(lua_State* L, const tlx::string_map<ax::rhi::
         lua_rawset(L, -3);
 
         lua_pushstring(L, "format");
-        lua_pushinteger(L, p.second.format);
+        lua_pushinteger(L, p.second.varType);
         lua_rawset(L, -3);
 
         lua_pushstring(L, p.first.c_str());

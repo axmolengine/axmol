@@ -75,12 +75,20 @@ std::string_view ShaderModule::parseReflection(std::string_view source)
     uint32_t fourccId = ibs.read<uint32_t>();
     if (fourccId != SC_CHUNK)
     {
-        assert(false);
+        assert(false && "axmol: Not valid axslcc shader chunk");
         return shaderSource;
     }
     auto sc_size = ibs.read<uint32_t>();  // always 0, doesn't matter
     struct sc_chunk chunk;
     ibs.read_bytes(&chunk, static_cast<int>(sizeof(chunk)));
+    if (chunk.major < 3 || chunk.minor < 2)
+    {
+        AXLOGE(
+            "shader chunk version too old: found {}.{}, required >= 3.2, "
+            "Please update/recompile the shader.",
+            chunk.major, chunk.minor);
+        assert(false && "axmol: Shader version too old");
+    }
 
     do
     {
@@ -211,19 +219,19 @@ void ShaderModule::reflectVertexInputs(SLCReflectContext* context)
     for (int i = 0; i < context->refl->num_inputs; ++i)
     {
         std::string_view name     = _sc_read_name(ibs);
-        auto loc                  = ibs->read<int32_t>();
         std::string_view semantic = _sc_read_name(ibs);
-        auto semantic_index       = ibs->read<uint32_t>();
-        auto format               = ibs->read<uint32_t>();
+        auto location             = ibs->read<int32_t>();
+        auto semantic_index       = ibs->read<uint16_t>();
+        auto var_type             = ibs->read<uint16_t>();
 
         VertexInputDesc desc;
         desc.semantic = semantic;
 #if AX_RENDER_API == AX_RENDER_API_D3D11 || AX_RENDER_API == AX_RENDER_API_D3D12
         desc.location = semantic_index;
 #else
-        desc.location = loc;
+        desc.location = location;
 #endif
-        desc.format = format;
+        desc.varType = var_type;
         _activeVertexInputs.emplace(name, desc);
     }
 }
@@ -248,15 +256,15 @@ void ShaderModule::reflectUniforms(SLCReflectContext* context)
             UniformInfo uniform;
             auto name       = _sc_read_name(ibs);
             auto offset     = ibs->read<int32_t>();
-            auto format     = ibs->read<uint32_t>();
             auto size_bytes = ibs->read<uint32_t>();
             auto array_size = ibs->read<uint16_t>();
+            auto var_type   = ibs->read<uint16_t>();
 
             uniform.count             = array_size;
             uniform.location          = ub_binding;
             uniform.size              = size_bytes;
             uniform.bufferOffset      = offset;
-            uniform.type              = format;
+            uniform.varType           = var_type;
             _activeUniformInfos[name] = uniform;
 
             if (_maxLocation < i)
