@@ -507,6 +507,9 @@ struct ContextAttrs
 
     // The uploadBuffer size, current used by d3d12 RHI
     uint32_t uploadBufferSize{16 * 1024 * 1024};
+
+    // Whether sampler binding is fully controlled by shader (D3D12 style)
+    bool shaderControlledSampler{false};
 };
 
 /** @struct Acceleration

@@ -75,4 +75,16 @@ struct is_resizable_container<T,
 template <typename _T>
 inline constexpr bool is_resizable_container_v = is_resizable_container<_T>::value;
 #pragma endregion
+
+template <typename... Ts>
+struct select1st;
+
+template <typename First, typename... Rest>
+struct select1st<First, Rest...> {
+  using type = First;
+};
+
+template <typename... Ts>
+using select1st_t = typename select1st<Ts...>::type;
+
 }  // namespace tlx

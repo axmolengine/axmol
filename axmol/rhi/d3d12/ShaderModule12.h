@@ -64,86 +64,8 @@ public:
 
     const D3D12BlobHandle& internalHandle() const { return _nativeHandle; }
 
-    /**
-     * Get uniform info by engine built-in uniform enum name.
-     * @param name Specifies the engine built-in uniform enum name.
-     * @return The uniform location.
-     */
-    const UniformInfo& getUniformInfo(Uniform name) const;
-
-    /**
-     * Get uniform info by name.
-     * @param uniform Specifies the uniform name.
-     * @return The uniform location.
-     */
-    const UniformInfo& getUniformInfo(std::string_view name) const;
-
-    /**
-     * Get attribute location by engine built-in attribute enum name.
-     * @param name Specifies the engine built-in attribute enum name.
-     * @return The attribute location.
-     */
-    const VertexInputDesc* getVertexInputDesc(VertexInputKind name) const;
-
-    /**
-     * Get attribute location by attribute name.
-     * @param name Specifies the attribute name.
-     * @return The attribute location.
-     */
-    const VertexInputDesc* getVertexInputDesc(std::string_view name) const;
-
-    /**
-     * Get active attribute informations.
-     * @return Active attribute informations. key is attribute name and Value is corresponding attribute info.
-     */
-    inline const tlx::string_map<VertexInputDesc>& getActiveVertexInputs() const { return _activeVertexInputs; }
-
-    /**
-     * Get all uniformInfos.
-     * @return The uniformInfos.
-     */
-    inline const tlx::string_map<UniformInfo>& getActiveUniformInfos() const { return _activeUniformInfos; }
-
-    inline const std::vector<UniformBlockInfo>& getActiveUniformBlockInfos() const { return _activeUniformBlockInfos; }
-    inline const std::vector<UniformInfo>& getActiveSamplerInfos() const { return _activeSamplerInfos; }
-
-    /**
-     * Get maximum uniform location.
-     * @return Maximum uniform location.
-     */
-    inline const int getMaxLocation() const { return _maxLocation; }
-
-    /**
-     * Get uniform buffer size in bytes that holds all the uniforms.
-     * @return The uniform buffer size.
-     */
-    inline std::size_t getUniformBufferSize() const { return _uniformBufferSize; }
-
 private:
-    void compileShader(DriverImpl* driver, ShaderStage stage, std::string_view source);
-    void releaseShader();
-
-    void reflectVertexInputs(SLCReflectContext* context);
-    void reflectUniforms(SLCReflectContext* context);
-    void reflectSamplers(SLCReflectContext* context);
-
-    void setBuiltinLocations();
-
     D3D12BlobHandle _nativeHandle;
-
-    tlx::string_map<VertexInputDesc> _activeVertexInputs;
-    tlx::string_map<UniformInfo> _activeUniformInfos;
-
-    std::vector<UniformBlockInfo> _activeUniformBlockInfos;
-    std::vector<UniformInfo> _activeSamplerInfos;
-    int _samplerCount{0};
-
-    const VertexInputDesc* _builtinVertexInputs[VIK_COUNT];
-
-    int _maxLocation = -1;
-    UniformInfo _builtinUniforms[UNIFORM_COUNT];
-
-    std::size_t _uniformBufferSize = 0;
 };
 
 /** @} */

@@ -25,6 +25,7 @@
 #include <utility>
 #include <type_traits>
 #include "yasio/tlx/memory.hpp"
+#include "axmol/tlx/type_traits.hpp"
 
 namespace tlx
 {
@@ -122,46 +123,116 @@ public:
 
     iterator insert(const_iterator hint, const key_type& k) { return emplace_hint(hint, k); }
 
-    template <class... Args>
-    std::pair<iterator, bool> emplace(Args&&... args)
+    template <typename... _Args>
+    std::pair<iterator, bool> emplace(_Args&&... _Vals)
     {
-        key_type k(std::forward<Args>(args)...);
-        if constexpr (_IsUnique)
+        if constexpr (std::is_same_v<_Kty, tlx::select1st_t<std::remove_cvref_t<_Args>...>>)
         {
-            auto it = this->lower_bound(k);
-            if (it == _Mycont.end() || _Mycomp(k, *it))
-            {
-                it = _Mycont.insert(it, std::move(k));
-                return {it, true};
-            }
-            return {it, false};
+            return _Emplace(std::forward<_Args>(_Vals)...);
         }
         else
         {
-            auto it = this->upper_bound(k);
-            it      = _Mycont.insert(it, std::move(k));
-            return {it, true};
+            return _Emplace(_Kty(std::forward<_Args>(_Vals)...));
         }
     }
 
-    template <class... Args>
-    iterator emplace_hint(const_iterator hint, Args&&... args)
+    template <typename _Ty>
+    std::pair<iterator, bool> _Emplace(_Ty&& _Val)
     {
-        key_type k(std::forward<Args>(args)...);
         if constexpr (_IsUnique)
         {
-            if (hint == _Mycont.end() || _Mycomp(k, *hint))
+            auto _Where = lower_bound(_Val);
+            if (_Where != cend() && !_Mycomp(_Val, *_Where))
             {
-                return _Mycont.insert(hint, std::move(k));
+                return std::pair{_Where, false};
+            }
+
+            return std::pair{_Mycont.emplace(_Where, std::forward<_Ty>(_Val)), true};
+        }
+        else
+        {
+            return std::pair{_Mycont.emplace(upper_bound(_Val), std::forward<_Ty>(_Val)), true};
+        }
+    }
+
+    template <typename... _Args>
+    iterator emplace_hint(const_iterator _Hint, _Args&&... _Vals)
+    {
+        if constexpr (std::is_same_v<_Kty, tlx::select1st_t<std::remove_cvref_t<_Args>...>>)
+        {
+            return _Emplace_hint(_Hint, std::forward<_Args>(_Vals)...);
+        }
+        else
+        {
+            return _Emplace_hint(_Hint, _Kty(std::forward<_Args>(_Vals)...));
+        }
+    }
+
+    template <typename _Ty>
+    iterator _Emplace_hint(const_iterator _Where, _Ty&& _Val)
+    {
+        const const_iterator _Begin = cbegin();
+        const const_iterator _End   = cend();
+        if constexpr (_IsUnique)
+        {
+            // look for lower_bound(_Val)
+            if (_Where == _End || !_Mycomp(*_Where, _Val))
+            {
+                // _Val <= *_Where
+                if (_Where == _Begin || _Mycomp(*(_Where - 1), _Val))
+                {
+                    // _Val > *(_Where-1) ~ lower_bound is _Where
+                }
+                else
+                {
+                    // _Val <= *(_Where-1) ~ lower_bound is in [_Begin,_Where-1]
+                    _Where = std::lower_bound(_Begin, _Where - 1, _Val, _Mycomp);
+                }
             }
             else
             {
-                return emplace(std::move(k)).first;
+                // _Val > *_Where ~ lower_bound is in [_Where+1,_End]
+                _Where = std::lower_bound(_Where + 1, _End, _Val, _Mycomp);
+            }
+
+            if (_Where != _End && !_Mycomp(_Val, *_Where))
+            {
+                return begin() + std::distance(cbegin(), _Where);
+            }
+
+            if constexpr (std::is_same_v<std::remove_cvref_t<_Ty>, _Kty>)
+            {
+                return _Mycont.emplace(_Where, std::forward<_Ty>(_Val));
+            }
+            else
+            {
+                _Kty _Keyval(std::forward<_Ty>(_Val));
+                return _Mycont.emplace(_Where, std::move(_Keyval));
             }
         }
         else
         {
-            return _Mycont.insert(hint, std::move(k));
+            // look for closest position just prior to _Where, respecting ordering
+            if (_Where == _End || _Compare(_Val, *_Where))
+            {
+                // _Val < *_Where
+                if (_Where == _Begin || !_Compare(_Val, *(_Where - 1)))
+                {
+                    // _Val >= *(_Where-1) ~ closest valid position is _Where
+                }
+                else
+                {
+                    // _Val < *(_Where-1) ~ closest valid position is upper_bound(_Val) located in [_Begin,_Where-1]
+                    _Where = std::upper_bound(_Begin, _Where - 1, _Val, _Mycomp);
+                }
+            }
+            else
+            {
+                // _Val >= *_Where ~ search for lower_bound in [_Where,_End] to place _Val "as close as possible"
+                _Where = std::lower_bound(_Where, _End, _Val, _Mycomp);
+            }
+
+            return _Mycont.emplace(_Where, std::forward<_Ty>(_Val));
         }
     }
 

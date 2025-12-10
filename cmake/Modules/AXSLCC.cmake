@@ -204,10 +204,8 @@ function(ax_add_shader_target target_name)
       list(APPEND SC_FLAGS "--cvar=shader_rt_${FILE_NAME}")
     endif()
 
-    # use --sgs --refelect for non-gl render apis
-    if(NOT AX_RENDER_API MATCHES "gl")
-      list(APPEND SC_FLAGS "--sgs" "--reflect")
-    endif()
+    # use --sgs --refelect for all render apis
+    list(APPEND SC_FLAGS "--sgs" "--reflect")
 
     # input
     if(${FILE_EXT} IN_LIST AXSLCC_FRAG_SOURCE_FILE_EXTENSIONS)
