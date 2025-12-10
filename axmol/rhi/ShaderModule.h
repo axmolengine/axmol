@@ -65,7 +65,6 @@ enum VertexInputKind : uint32_t
     VIK_COUNT  //
 };
 
-
 struct UniformBlockInfo
 {
     int binding;          // Vulkan binding index
