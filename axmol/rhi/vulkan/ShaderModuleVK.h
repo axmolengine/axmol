@@ -24,7 +24,6 @@
 #pragma once
 #include "axmol/rhi/ShaderModule.h"
 #include <glad/vulkan.h>
-#include "axmol/tlx/hlookup.hpp"
 
 namespace ax::rhi::vk
 {

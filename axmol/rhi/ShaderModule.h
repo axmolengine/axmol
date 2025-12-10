@@ -26,6 +26,7 @@
 
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/base/Object.h"
+#include "axmol/tlx/hlookup.hpp"
 
 #include <string>
 
