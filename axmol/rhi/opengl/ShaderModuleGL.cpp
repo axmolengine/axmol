@@ -34,7 +34,8 @@ namespace ax::rhi::gl
 
 ShaderModuleImpl::ShaderModuleImpl(ShaderStage stage, std::string_view source) : ShaderModule(stage)
 {
-    compileShader(stage, source);
+    auto shaderSource = parseReflection(source);
+    compileShader(stage, shaderSource);
 }
 
 ShaderModuleImpl::~ShaderModuleImpl()
