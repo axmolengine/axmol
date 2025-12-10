@@ -43,6 +43,12 @@ void RenderTargetImpl::invalidate()
 
     SafeRelease(_dsv);
 
+    if (_defaultRenderTarget)
+    {
+        AX_SAFE_RELEASE_NULL(_color[0].texture);
+        AX_SAFE_RELEASE_NULL(_depthStencil.texture);
+    }
+
     _dirtyFlags = TargetBufferFlags::ALL;
 }
 

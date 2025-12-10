@@ -436,11 +436,13 @@ bool RenderContextImpl::updateSurface(void* /*surface*/, uint32_t width, uint32_
     _screenRT->invalidate();
 
     HRESULT hr = _swapChain->ResizeBuffers(0, width, height, _AX_SWAPCHAIN_FORMAT, _swapChainFlags);
+    if (FAILED(hr))
+    {
+        AXLOGW("D3D11: swapchain ResizeBuffers failed: {}", hr);
+        return false;
+    }
 
     _screenRT->rebuildAttachmentsForSwapchain(_swapChain, width, height);
-
-    if (FAILED(hr))
-        return false;
 
     _screenWidth  = width;
     _screenHeight = height;
