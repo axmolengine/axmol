@@ -90,7 +90,9 @@ ParticleSystemQuad* ParticleSystemQuad::createWithTotalParticles(int numberOfPar
 {
     AXASSERT(numberOfParticles <= 10000,
              "Adding more than 10000 particles will crash the renderer, the mesh generated has an index format of "
-             "U_SHORT (uint16_t)");
+             "U_SHORT (uint16_t).");
+
+    numberOfParticles = std::min(numberOfParticles, 10000);
 
     ParticleSystemQuad* ret = new ParticleSystemQuad();
     if (ret->initWithTotalParticles(numberOfParticles))
@@ -686,6 +688,11 @@ void ParticleSystemQuad::draw(Renderer* renderer, const Mat4& transform, uint32_
 
 void ParticleSystemQuad::setTotalParticles(int tp)
 {
+    AXASSERT(tp <= 10000,
+        "Adding more than 10000 particles will crash the renderer, the mesh generated has an index format of "
+        "U_SHORT (uint16_t).");
+
+    tp = std::min(tp, 10000);
     // If we are setting the total number of particles to a number higher
     // than what is allocated, we need to allocate new arrays
     if (tp > _allocatedParticles)
@@ -695,9 +702,18 @@ void ParticleSystemQuad::setTotalParticles(int tp)
         size_t indicesSize = sizeof(_indices[0]) * tp * 6 * 1;
 
         _particleData.release();
+
+///[2025.12.02]/////////////////////////////////////////////////////////////////////
+/// BUG from WUCJ638: Even with _isSpawnScaleIn or _isSpawnFadeIn (and the other ///
+/// alike) set, their memory aren't allocated after resetting total particles,   ///
+/// causing nullptr exception on updating new particle later                     ///
+////////////////////////////////////////////////////////////////////////////////////
+//////// Fix Begin
+
         if (!_particleData.init(tp))
         {
             AXLOGW("Particle system: not enough memory");
+            _particleData.release();    // WUCJ638
             return;
         }
         V3F_C4B_T2F_Quad* quadsNew = (V3F_C4B_T2F_Quad*)realloc(_quads, quadsSize);
@@ -729,6 +745,28 @@ void ParticleSystemQuad::setTotalParticles(int tp)
 
         _totalParticles = tp;
 
+        bool hasOpacityFadeInAllocated = _isOpacityFadeInAllocated,
+             hasScaleInAllocated       = _isScaleInAllocated,
+             hasAnimAllocated          = _isAnimAllocated,
+             hasHSVAllocated           = _isHSVAllocated;
+
+        deallocOpacityFadeInMem();
+        deallocScaleInMem();
+        deallocAnimationMem();
+        deallocHSVMem();
+
+        bool isExtraAllocSuccessful = (!hasOpacityFadeInAllocated || allocOpacityFadeInMem() ) &&
+                                      (!hasScaleInAllocated       || allocScaleInMem()       ) &&
+                                      (!hasAnimAllocated          || allocAnimationMem()     ) &&
+                                      (!hasHSVAllocated           || allocHSVMem()           );
+        if (!isExtraAllocSuccessful){
+            AXLOGW("Particle system: not enough memory");
+            _particleData.release();    // WUCJ638
+            return;
+        }
+
+//////// Fix End
+//////////////////////////////////////////////////////////////////////////////////////
         // Init particles
         if (_batchNode)
         {
