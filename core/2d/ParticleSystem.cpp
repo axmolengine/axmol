@@ -118,7 +118,7 @@ bool ParticleData::init(int count)
     deltaColorG = (float*)malloc(count * sizeof(float));
     deltaColorB = (float*)malloc(count * sizeof(float));
     deltaColorA = (float*)malloc(count * sizeof(float));
-
+    
     size            = (float*)malloc(count * sizeof(float));
     deltaSize       = (float*)malloc(count * sizeof(float));
     rotation        = (float*)malloc(count * sizeof(float));
@@ -137,6 +137,7 @@ bool ParticleData::init(int count)
     modeB.degreesPerSecond = (float*)malloc(count * sizeof(float));
     modeB.deltaRadius      = (float*)malloc(count * sizeof(float));
     modeB.radius           = (float*)malloc(count * sizeof(float));
+
 
     return posx && posy && startPosX && startPosY && colorR && colorG && colorB && colorA && deltaColorR &&
            deltaColorG && deltaColorB && deltaColorA && size && deltaSize && rotation && staticRotation &&
@@ -374,6 +375,7 @@ void ParticleSystem::deallocOpacityFadeInMem()
     _isOpacityFadeInAllocated = false;
 }
 
+// @return true if succeed in allocating
 bool ParticleSystem::allocScaleInMem()
 {
     if (!_isScaleInAllocated)
@@ -860,8 +862,8 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
         }
     }
 
-    if (animationCellIndex != -1 || animationIndex != -1)
-        allocAnimationMem();
+     if (animationCellIndex != -1 || animationIndex != -1)
+         allocAnimationMem();
 
     if (_isAnimAllocated)
     {
@@ -941,8 +943,14 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
     SET_DELTA_COLOR(_particleData.colorB, _particleData.deltaColorB);
     SET_DELTA_COLOR(_particleData.colorA, _particleData.deltaColorA);
 
+    ///[2025.12.07]//////////////////////////////////////////////
+    /// BUG From WUCJ638 : when OpacityFadeIn or ScaleFadeIn  ///
+    /// equals to zero, source would't emit any particles.    ///
+    /////////////////////////////////////////////////////////////
+    ///// FIX begin
+
     // opacity fade in
-    if (_isOpacityFadeInAllocated)
+    if (_isOpacityFadeInAllocated && _spawnFadeIn + _spawnFadeInVar > 0)
     {
         for (int i = start; i < _particleCount; ++i)
         {
@@ -952,7 +960,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
     }
 
     // scale fade in
-    if (_isScaleInAllocated)
+    if (_isScaleInAllocated && _spawnScaleIn + _spawnScaleInVar > 0)
     {
         for (int i = start; i < _particleCount; ++i)
         {
@@ -960,6 +968,8 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
         }
         std::fill_n(_particleData.scaleInDelta + start, _particleCount - start, 0.0F);
     }
+    ///// Fix end
+    //////////////////////////////////////////////////////////////
 
     // hue saturation value color
     if (_isHSVAllocated)
@@ -1540,7 +1550,16 @@ void ParticleSystem::resetSystem()
 {
     _isActive = true;
     _elapsed  = 0;
-    std::fill_n(_particleData.timeToLive, _particleCount, 0.0F);
+
+    // [2025.12.09] Bug from WUCJ638:
+    //   Visually, resetting System would actually remove all existed particles
+    // before emitting them again. Therefore just simply set _particleCount
+    // to zero.
+    //   Without doing so, particles with loop animation enabled would crash,
+    // for particleData.animIndex are junk and would cause Out-of-Range excep-
+    // -tion in update() function
+    _particleCount = 0;
+    //std::fill_n(_particleData.timeToLive, _particleCount, 0.0F);
 }
 
 bool ParticleSystem::isFull()
@@ -2099,9 +2118,22 @@ void ParticleSystem::useHSV(bool hsv)
         deallocHSVMem();
 };
 
+///[2025.12.06]/////////////////////////////////////////////////////////
+/// BUG from WUCJ638 : modification would get ignored after memory   ///
+/// is allocated, that is "nothing happens", we only have one change ///
+/// to change the value.                                             ///
+/// Same problem has been found inside this FIX block:               ///
+/// 1. setSpawnFadeInVar  2. setSpawnScaleIn   3. setSpawnScaleInVar ///
+/// [WARNING] setAnimation wasn't fixed yet but they have the same   ///
+/// behavior in allocatinng memory.                                  ///
+////////////////////////////////////////////////////////////////////////
+////////// Fix begin
 void ParticleSystem::setSpawnFadeIn(float time)
 {
-    if (time != 0.0F && !allocOpacityFadeInMem())
+// Modification is allowed when:
+//  - memory hasn't allocated, time neq 0.0F and allocation has done successfully;
+//  - or memory has allocated.
+    if(!_isOpacityFadeInAllocated && (time == 0.0F || !allocOpacityFadeInMem()))
         return;
 
     _spawnFadeIn = time;
@@ -2109,7 +2141,7 @@ void ParticleSystem::setSpawnFadeIn(float time)
 
 void ParticleSystem::setSpawnFadeInVar(float time)
 {
-    if (time != 0.0F && !allocOpacityFadeInMem())
+    if(!_isOpacityFadeInAllocated && (time == 0.0F || !allocOpacityFadeInMem()))
         return;
 
     _spawnFadeInVar = time;
@@ -2117,7 +2149,7 @@ void ParticleSystem::setSpawnFadeInVar(float time)
 
 void ParticleSystem::setSpawnScaleIn(float time)
 {
-    if (time != 0.0F && !allocScaleInMem())
+    if(!_isScaleInAllocated && (time == 0.0F || !allocScaleInMem()))
         return;
 
     _spawnScaleIn = time;
@@ -2125,11 +2157,13 @@ void ParticleSystem::setSpawnScaleIn(float time)
 
 void ParticleSystem::setSpawnScaleInVar(float time)
 {
-    if (time != 0.0F && !allocScaleInMem())
+    if(!_isScaleInAllocated && (time == 0.0F || !allocScaleInMem()))
         return;
 
     _spawnScaleInVar = time;
 }
+////////// Fix end
+////////////////////////////////////////////////////////////////////////
 
 int ParticleSystem::getTotalParticles() const
 {
