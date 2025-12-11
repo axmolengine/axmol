@@ -1,5 +1,5 @@
-// The Axmol Shader Compiler spec, define macros and structs, can be include anywhere
-// match with axslcc-3.1.0+
+// The Axmol Shader Compiler spec, define macros and structs
+// match with axslcc-3.2.0+
 
 #pragma once
 
@@ -13,42 +13,23 @@ namespace axslc
 
 #pragma pack(push, 1)
 
-#define SC_CHUNK               sc_makefourcc('A', 'X', 'S', 'C')
-#define SC_CHUNK_STAG          sc_makefourcc('S', 'T', 'A', 'G')
-#define SC_CHUNK_REFL          sc_makefourcc('R', 'E', 'F', 'L')
-#define SC_CHUNK_CODE          sc_makefourcc('C', 'O', 'D', 'E')
-#define SC_CHUNK_DATA          sc_makefourcc('D', 'A', 'T', 'A')
+#define SC_CHUNK          sc_makefourcc('A', 'X', 'S', 'C')
+#define SC_CHUNK_STAG     sc_makefourcc('S', 'T', 'A', 'G')
+#define SC_CHUNK_REFL     sc_makefourcc('R', 'E', 'F', 'L')
+#define SC_CHUNK_CODE     sc_makefourcc('C', 'O', 'D', 'E')
+#define SC_CHUNK_DATA     sc_makefourcc('D', 'A', 'T', 'A')
 
-#define SC_LANG_GLES           sc_makefourcc('G', 'L', 'E', 'S')
-#define SC_LANG_HLSL           sc_makefourcc('H', 'L', 'S', 'L')
-#define SC_LANG_GLSL           sc_makefourcc('G', 'L', 'S', 'L')
-#define SC_LANG_MSL            sc_makefourcc('M', 'S', 'L', ' ')
-#define SC_LANG_SPIRV          sc_makefourcc('S', 'P', 'I', 'R')
+#define SC_LANG_GLES      sc_makefourcc('G', 'L', 'E', 'S')
+#define SC_LANG_HLSL      sc_makefourcc('H', 'L', 'S', 'L')
+#define SC_LANG_GLSL      sc_makefourcc('G', 'L', 'S', 'L')
+#define SC_LANG_MSL       sc_makefourcc('M', 'S', 'L', ' ')
+#define SC_LANG_SPIRV     sc_makefourcc('S', 'P', 'I', 'R')
 
-#define SC_VERTEXFORMAT_FLOAT  sc_makefourcc('F', 'L', 'T', '1')
-#define SC_VERTEXFORMAT_FLOAT2 sc_makefourcc('F', 'L', 'T', '2')
-#define SC_VERTEXFORMAT_FLOAT3 sc_makefourcc('F', 'L', 'T', '3')
-#define SC_VERTEXFORMAT_FLOAT4 sc_makefourcc('F', 'L', 'T', '4')
-#define SC_VERTEXFORMAT_INT    sc_makefourcc('I', 'N', 'T', '1')
-#define SC_VERTEXFORMAT_INT2   sc_makefourcc('I', 'N', 'T', '2')
-#define SC_VERTEXFORMAT_INT3   sc_makefourcc('I', 'N', 'T', '3')
-#define SC_VERTEXFORMAT_INT4   sc_makefourcc('I', 'N', 'T', '4')
-#define SC_VERTEXFORMAT_MAT3   sc_makefourcc('M', 'A', 'T', '3')
-#define SC_VERTEXFORMAT_MAT4   sc_makefourcc('M', 'A', 'T', '4')
+#define SC_STAGE_VERTEX   sc_makefourcc('V', 'E', 'R', 'T')
+#define SC_STAGE_FRAGMENT sc_makefourcc('F', 'R', 'A', 'G')
+#define SC_STAGE_COMPUTE  sc_makefourcc('C', 'O', 'M', 'P')
 
-#define SC_STAGE_VERTEX        sc_makefourcc('V', 'E', 'R', 'T')
-#define SC_STAGE_FRAGMENT      sc_makefourcc('F', 'R', 'A', 'G')
-#define SC_STAGE_COMPUTE       sc_makefourcc('C', 'O', 'M', 'P')
-
-#define SC_IMAGEDIM_1D         sc_makefourcc('1', 'D', ' ', ' ')
-#define SC_IMAGEDIM_2D         sc_makefourcc('2', 'D', ' ', ' ')
-#define SC_IMAGEDIM_3D         sc_makefourcc('3', 'D', ' ', ' ')
-#define SC_IMAGEDIM_CUBE       sc_makefourcc('C', 'U', 'B', 'E')
-#define SC_IMAGEDIM_RECT       sc_makefourcc('R', 'E', 'C', 'T')
-#define SC_IMAGEDIM_BUFFER     sc_makefourcc('B', 'U', 'F', 'F')
-#define SC_IMAGEDIM_SUBPASS    sc_makefourcc('S', 'U', 'B', 'P')
-
-enum Dim
+enum Dim : uint16_t
 {
     Dim1D          = 0,
     Dim2D          = 1,
@@ -57,6 +38,32 @@ enum Dim
     DimRect        = 4,
     DimBuffer      = 5,
     DimSubpassData = 6
+};
+
+enum SCType : uint16_t
+{
+    // Float
+    SC_TYPE_FLOAT4,
+    SC_TYPE_FLOAT3,
+    SC_TYPE_FLOAT2,
+    SC_TYPE_FLOAT,
+    // Int
+    SC_TYPE_INT4,
+    SC_TYPE_INT3,
+    SC_TYPE_INT2,
+    SC_TYPE_INT,
+    // Unsigned / Packed (vertex inputs)
+    SC_TYPE_USHORT4,
+    SC_TYPE_USHORT2,
+    SC_TYPE_UBYTE4,
+    // Matrix
+    SC_TYPE_MAT4,
+    SC_TYPE_MAT3,
+    // Half precision (uniforms)
+    SC_TYPE_HALF4,
+    SC_TYPE_HALF3,
+    SC_TYPE_HALF2,
+    SC_TYPE_HALF,
 };
 
 // sc chunk aka file header
@@ -90,10 +97,10 @@ struct sc_chunk_refl
 struct sc_refl_input
 {
     char name[32];
-    int32_t loc;
     char semantic[32];
-    uint32_t semantic_index;
-    uint32_t format;
+    int32_t location;
+    uint16_t semantic_index;
+    uint16_t var_type;
 };
 
 // @since 3.0.0, modified
@@ -130,9 +137,9 @@ typedef struct sc_refl_uniformbuffer_member
 {
     char name[32];
     int32_t offset;
-    uint32_t format;
     uint32_t size_bytes;
     uint16_t array_size;
+    uint16_t var_type;
 } sc_refl_ub_member;
 #pragma pack(pop)
 

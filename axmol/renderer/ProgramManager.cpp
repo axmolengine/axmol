@@ -231,6 +231,12 @@ Program* ProgramManager::loadProgram(std::string_view vsName,
 
     if (program)
     {
+
+        if (progType == ProgramType::LABEL_DISTANCE_NORMAL)
+        {
+            AXLOGI("fuck");
+        }
+
         AXLOGD("Load program: {} {}, {} ok", progId, vsName, fsName);
 
         program->setProgramIds(progType, progId);

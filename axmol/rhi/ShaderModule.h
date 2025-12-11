@@ -27,6 +27,7 @@
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/base/Object.h"
 #include "axmol/tlx/hlookup.hpp"
+#include "axmol/tlx/vector.hpp"
 
 #include <string>
 
@@ -166,7 +167,7 @@ protected:
     std::vector<UniformBlockInfo> _activeUniformBlockInfos;
     std::vector<UniformInfo> _activeSamplerInfos;
     UniformInfo _builtinUniforms[UNIFORM_COUNT];
-    const VertexInputDesc* _builtinVertexInputs[VIK_COUNT];
+    tlx::pod_vector<const VertexInputDesc*> _builtinVertexInputs;
     int _maxLocation{-1};
     std::size_t _uniformBufferSize{0};
 };

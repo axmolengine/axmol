@@ -256,7 +256,7 @@ void ShaderModule::reflectUniforms(SLCReflectContext* context)
             UniformInfo uniform;
             auto name       = _sc_read_name(ibs);
             auto offset     = ibs->read<int32_t>();
-            auto size_bytes = ibs->read<uint32_t>();
+            auto size_bytes = static_cast<uint16_t>(ibs->read<uint32_t>());
             auto array_size = ibs->read<uint16_t>();
             auto var_type   = ibs->read<uint16_t>();
 
@@ -286,7 +286,7 @@ void ShaderModule::reflectSamplers(SLCReflectContext* context)
     _activeSamplerInfos.reserve(samplerCount);
     for (int i = 0; i < samplerCount; ++i)
     {
-        UniformInfo uniform{};
+        UniformInfo uniform{.bufferOffset=(unsigned int)-1};
 
         std::string_view name = _sc_read_name(ibs);
         uniform.location      = ibs->read<int32_t>();  // sampler binding index
@@ -319,20 +319,25 @@ void ShaderModule::setBuiltinLocations()
 {
     /*--- Builtin Attribs ---*/
 
-    /// a_position
-    _builtinVertexInputs[VertexInputKind::POSITION] = getVertexInputDesc(VERTEX_INPUT_NAME_POSITION);
+    if (_stage == ShaderStage::VERTEX)
+    {
+        _builtinVertexInputs.resize(VertexInputKind::VIK_COUNT, nullptr);
 
-    /// a_color
-    _builtinVertexInputs[VertexInputKind::COLOR] = getVertexInputDesc(VERTEX_INPUT_NAME_COLOR);
+        /// a_position
+        _builtinVertexInputs[VertexInputKind::POSITION] = getVertexInputDesc(VERTEX_INPUT_NAME_POSITION);
 
-    /// a_texCoord
-    _builtinVertexInputs[VertexInputKind::TEXCOORD] = getVertexInputDesc(VERTEX_INPUT_NAME_TEXCOORD);
+        /// a_color
+        _builtinVertexInputs[VertexInputKind::COLOR] = getVertexInputDesc(VERTEX_INPUT_NAME_COLOR);
 
-    // a_normal
-    _builtinVertexInputs[VertexInputKind::NORMAL] = getVertexInputDesc(VERTEX_INPUT_NAME_NORMAL);
+        /// a_texCoord
+        _builtinVertexInputs[VertexInputKind::TEXCOORD] = getVertexInputDesc(VERTEX_INPUT_NAME_TEXCOORD);
 
-    // a_instance, metal use SSUBO(Shader Storage Uniform Buffer) before axmol-3.0.0
-    _builtinVertexInputs[VertexInputKind::INSTANCE] = getVertexInputDesc(VERTEX_INPUT_NAME_INSTANCE);
+        // a_normal
+        _builtinVertexInputs[VertexInputKind::NORMAL] = getVertexInputDesc(VERTEX_INPUT_NAME_NORMAL);
+
+        // a_instance, metal use SSUBO(Shader Storage Uniform Buffer) before axmol-3.0.0
+        _builtinVertexInputs[VertexInputKind::INSTANCE] = getVertexInputDesc(VERTEX_INPUT_NAME_INSTANCE);
+    }
 
     /*--- Builtin Uniforms ---*/
 
