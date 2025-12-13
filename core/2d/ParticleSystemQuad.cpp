@@ -701,14 +701,7 @@ void ParticleSystemQuad::setTotalParticles(int tp)
         size_t quadsSize   = sizeof(_quads[0]) * tp * 1;
         size_t indicesSize = sizeof(_indices[0]) * tp * 6 * 1;
 
-        _particleData.release();
-
-///[2025.12.02]/////////////////////////////////////////////////////////////////////
-/// BUG from WUCJ638: Even with _isSpawnScaleIn or _isSpawnFadeIn (and the other ///
-/// alike) set, their memory aren't allocated after resetting total particles,   ///
-/// causing nullptr exception on updating new particle later                     ///
-////////////////////////////////////////////////////////////////////////////////////
-//////// Fix Begin
+        _particleData.release();                     
 
         if (!_particleData.init(tp))
         {
@@ -745,6 +738,11 @@ void ParticleSystemQuad::setTotalParticles(int tp)
 
         _totalParticles = tp;
 
+        // Reallocation of OpacityFadeIn, ScaleIn, Animation and HSV is independent of
+        // _particleData.init(), but relies on _totalParticles; before doing so, we have
+        // to delete their previous memory first, as allocation would check if allocation
+        // flag is false.
+        
         bool hasOpacityFadeInAllocated = _isOpacityFadeInAllocated,
              hasScaleInAllocated       = _isScaleInAllocated,
              hasAnimAllocated          = _isAnimAllocated,
@@ -761,12 +759,10 @@ void ParticleSystemQuad::setTotalParticles(int tp)
                                       (!hasHSVAllocated           || allocHSVMem()           );
         if (!isExtraAllocSuccessful){
             AXLOGW("Particle system: not enough memory");
-            _particleData.release();    // WUCJ638
+            _particleData.release();
             return;
         }
-
-//////// Fix End
-//////////////////////////////////////////////////////////////////////////////////////
+        
         // Init particles
         if (_batchNode)
         {
