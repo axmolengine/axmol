@@ -159,17 +159,10 @@ void ByteBuffer::writeS(const std::string& value)
 ax::Color32 ByteBuffer::readColor()
 {
     int startIndex = _offset + _position;
-#if COCOS2D_VERSION >= 0x00040000
     uint8_t r = _buffer[startIndex];
     uint8_t g = _buffer[startIndex + 1];
     uint8_t b = _buffer[startIndex + 2];
     uint8_t a = _buffer[startIndex + 3];
-#else
-    GLubyte r = _buffer[startIndex];
-    GLubyte g = _buffer[startIndex + 1];
-    GLubyte b = _buffer[startIndex + 2];
-    GLubyte a = _buffer[startIndex + 3];
-#endif
     _position += 4;
 
     return ax::Color32(r, g, b, a);

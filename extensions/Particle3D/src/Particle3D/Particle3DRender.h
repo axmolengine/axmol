@@ -42,7 +42,6 @@ class ParticleSystem3D;
 class Renderer;
 class MeshCommand;
 class MeshRenderer;
-class GLProgramState;
 class IndexBuffer;
 class VertexBuffer;
 class Texture2D;

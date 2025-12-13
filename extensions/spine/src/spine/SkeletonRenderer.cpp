@@ -95,9 +95,6 @@ namespace spine {
 		_skeleton->updateWorldTransform(Physics_Update);
 	}
 
-	void SkeletonRenderer::setupGLProgramState(bool /*twoColorTintEnabled*/) {
-		}
-
 	void SkeletonRenderer::setSkeletonData(SkeletonData *skeletonData, bool ownsSkeletonData) {
 		_skeleton = new (__FILE__, __LINE__) Skeleton(skeletonData);
 		_ownsSkeletonData = ownsSkeletonData;
@@ -670,7 +667,6 @@ namespace spine {
 
 	void SkeletonRenderer::setTwoColorTint(bool enabled) {
 		_twoColorTint = enabled;
-		setupGLProgramState(enabled);
 	}
 
 	bool SkeletonRenderer::isTwoColorTint() {

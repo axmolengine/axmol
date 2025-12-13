@@ -595,23 +595,14 @@ void* UIPackage::getItemAsset(PackageItem* item)
 void UIPackage::loadAtlas(PackageItem* item)
 {
     Image* image = new Image();
-#if COCOS2D_VERSION < 0x00031702
-    Image::setPNGPremultipliedAlphaEnabled(false);
-#endif
     if (!image->initWithImageFile(item->file))
     {
         item->texture = _emptyTexture;
         _emptyTexture->retain();
         delete image;
-#if COCOS2D_VERSION < 0x00031702
-        Image::setPNGPremultipliedAlphaEnabled(true);
-#endif
         AXLOGW("FairyGUI: texture '{}' not found in {}", item->file, _name);
         return;
     }
-#if COCOS2D_VERSION < 0x00031702
-    Image::setPNGPremultipliedAlphaEnabled(true);
-#endif
 
     auto checkAlphaFile = [item]() {
         string alphaFilePath;

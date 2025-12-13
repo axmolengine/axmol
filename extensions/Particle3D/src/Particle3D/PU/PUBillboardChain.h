@@ -38,7 +38,6 @@ namespace ax
 {
 
 class MeshCommand;
-class GLProgramState;
 class IndexBuffer;
 class VertexBuffer;
 class Texture2D;
