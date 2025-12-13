@@ -2109,7 +2109,7 @@ void ParticleSystem::setSpawnFadeIn(float time)
     // Modification is allowed when:
     //  - memory hasn't been allocated, time != 0.0F and allocation has done successfully; OR
     //  - memory has allocated.
-    if(!_isOpacityFadeInAllocated && (time == 0.0F || !allocOpacityFadeInMem()))
+    if (!_isOpacityFadeInAllocated && (time == 0.0F || !allocOpacityFadeInMem()))
         return;
 
     _spawnFadeIn = time;
@@ -2117,7 +2117,7 @@ void ParticleSystem::setSpawnFadeIn(float time)
 
 void ParticleSystem::setSpawnFadeInVar(float time)
 {
-    if(!_isOpacityFadeInAllocated && (time == 0.0F || !allocOpacityFadeInMem()))
+    if (!_isOpacityFadeInAllocated && (time == 0.0F || !allocOpacityFadeInMem()))
         return;
 
     _spawnFadeInVar = time;
@@ -2125,7 +2125,7 @@ void ParticleSystem::setSpawnFadeInVar(float time)
 
 void ParticleSystem::setSpawnScaleIn(float time)
 {
-    if(!_isScaleInAllocated && (time == 0.0F || !allocScaleInMem()))
+    if (!_isScaleInAllocated && (time == 0.0F || !allocScaleInMem()))
         return;
 
     _spawnScaleIn = time;
@@ -2133,7 +2133,7 @@ void ParticleSystem::setSpawnScaleIn(float time)
 
 void ParticleSystem::setSpawnScaleInVar(float time)
 {
-    if(!_isScaleInAllocated && (time == 0.0F || !allocScaleInMem()))
+    if (!_isScaleInAllocated && (time == 0.0F || !allocScaleInMem()))
         return;
 
     _spawnScaleInVar = time;
