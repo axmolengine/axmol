@@ -31,7 +31,6 @@
 #include "axmol/platform/GL.h"
 #include "axmol/rhi/Program.h"
 #include "axmol/rhi/DriverBase.h"
-#include "axmol/rhi/opengl/BufferGL.h"
 
 #include <string>
 #include <vector>
@@ -85,7 +84,7 @@ private:
     GLuint _program             = 0;
 
     // The ubo instances
-    tlx::pod_vector<BufferImpl*> _uniformBuffers;
+    UniformBufferVector _uniformBuffers;
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     EventListenerCustom* _backToForegroundListener = nullptr;

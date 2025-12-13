@@ -95,12 +95,12 @@ public:
     RenderPipeline* createRenderPipeline() override;
 
     /**
-     * Create a Program, not auto release.
-     * @param vertexShader Specifes this is a vertex shader source.
-     * @param fragmentShader Specifes this is a fragment shader source.
+     * Create an auto released Program.
+     * @param vsData Specifes this is a vertex shader data.
+     * @param fsData Specifes this is a fragment shader data.
      * @return A Program instance.
      */
-    Program* createProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
+    Program* createProgram(Data vsData, Data fsData) override;
 
     VertexLayout* createVertexLayout(VertexLayoutDesc&& desc) override;
 
@@ -146,10 +146,10 @@ protected:
     /**
      * Create a shaderModule.
      * @param stage Specifies whether is vertex shader or fragment shader.
-     * @param source Specifies shader source.
+     * @param chunk Specifies shader chunk.
      * @return A ShaderModule object.
      */
-    ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
+    ShaderModule* createShaderModule(ShaderStage stage, Data& chunk) override;
     SamplerHandle createSampler(const SamplerDesc& desc) override;
     void destroySampler(SamplerHandle& h) override;
 

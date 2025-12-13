@@ -94,6 +94,8 @@ public:
 
     uint64_t getLastFenceValue() const { return _lastFenceValue; }
 
+    virtual ~Buffer() = default;
+
 protected:
     void setLastFenceValue(uint64_t value) { _lastFenceValue = value; }
     /**
@@ -106,8 +108,6 @@ protected:
     Buffer(std::size_t size, BufferType type, BufferUsage usage)
         : _usage(usage), _type(type), _size(size), _capacity(size)
     {}
-
-    virtual ~Buffer() = default;
 
     BufferUsage _usage    = BufferUsage::DYNAMIC;  ///< Buffer usage.
     BufferType _type      = BufferType::VERTEX;    ///< Buffer type.

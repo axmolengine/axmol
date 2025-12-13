@@ -48,11 +48,10 @@ inline const char* stageToProfile(ShaderStage s)
 }
 }  // namespace
 
-ShaderModuleImpl::ShaderModuleImpl(ID3D11Device* device, ShaderStage stage, std::string_view source)
-    : ShaderModule(stage)
+ShaderModuleImpl::ShaderModuleImpl(ID3D11Device* device, ShaderStage stage, Data& data)
+    : ShaderModule(stage, data)
 {
-    auto shaderSource = parseReflection(source);
-    compileShader(device, stage, shaderSource);
+    compileShader(device);
 }
 
 ShaderModuleImpl::~ShaderModuleImpl()
@@ -61,15 +60,15 @@ ShaderModuleImpl::~ShaderModuleImpl()
     SafeRelease(_blob);
 }
 
-void ShaderModuleImpl::compileShader(ID3D11Device* device, ShaderStage stage, std::string_view shaderSource)
+void ShaderModuleImpl::compileShader(ID3D11Device* device)
 {
     ComPtr<ID3DBlob> errorBlob;
     UINT flags = D3DCOMPILE_OPTIMIZATION_LEVEL2 | D3DCOMPILE_ENABLE_STRICTNESS;
 #if !defined(NDEBUG)
     flags |= D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
-    HRESULT hr = D3DCompile(shaderSource.data(), shaderSource.size(), nullptr, nullptr, nullptr, "main",
-                            stageToProfile(stage), flags, 0, &_blob, &errorBlob);
+    HRESULT hr = D3DCompile(_codeSpan.data(), _codeSpan.size(), nullptr, nullptr, nullptr, "main",
+                            stageToProfile(_stage), flags, 0, &_blob, &errorBlob);
     if (FAILED(hr))
     {
         std::string_view errorDetail =
@@ -80,7 +79,7 @@ void ShaderModuleImpl::compileShader(ID3D11Device* device, ShaderStage stage, st
         return;
     }
 
-    if (stage == ShaderStage::VERTEX)
+    if (_stage == ShaderStage::VERTEX)
         device->CreateVertexShader(_blob->GetBufferPointer(), _blob->GetBufferSize(), nullptr,
                                    (ID3D11VertexShader**)&_shader);
     else

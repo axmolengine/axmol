@@ -66,14 +66,14 @@ public:
     using const_iterator  = const_pointer;
 
     inlined_vector() noexcept : _Mypair(_TLX __zero_then_variadic_args_t{}) {}
-    inlined_vector(const inlined_vector& other) noexcept : _Mypair(_TLX __zero_then_variadic_args_t{})
-    {
-        _Assign(other);
-    }
-    inlined_vector(inlined_vector&& other) noexcept : _Mypair(_TLX __zero_then_variadic_args_t{})
+
+    inlined_vector(const inlined_vector& other) : _Mypair(_TLX __zero_then_variadic_args_t{}) { _Assign(other); }
+
+    inlined_vector(inlined_vector&& other) : _Mypair(_TLX __zero_then_variadic_args_t{})
     {
         _Assign_rv(std::move(other));
     }
+
     ~inlined_vector() noexcept
     {
         clear();
@@ -218,7 +218,7 @@ public:
         tlx::construct_at(_Mypair._Myval2._Mylast - 1, std::forward<_Valty>(vals)...);
     }
 
-    void swap(inlined_vector& other) noexcept
+    void swap(inlined_vector& other)
     {
         if (this == std::addressof(other))
             return;
@@ -263,13 +263,27 @@ public:
                 }
                 else
                 {
-                    for (size_type i = bs; i < as; ++i)
-                        tlx::construct_at(rhs._Myfirst + i, std::move(lhs._Myfirst[i]));
+                    size_type i = bs;
+                    try
+                    {
+                        for (; i < as; ++i)
+                            tlx::construct_at(rhs._Myfirst + i, std::move(lhs._Myfirst[i]));
+                    }
+                    catch (...)
+                    {
+                        // roll back constructed elements
+                        if constexpr (!std::is_trivially_destructible_v<_Ty>)
+                        {
+                            for (size_type j = bs; j < i; ++j)
+                                tlx::invoke_dtor(rhs._Myfirst + j);
+                        }
+                        throw;
+                    }
 
                     if constexpr (!std::is_trivially_destructible_v<_Ty>)
                     {
-                        for (size_type i = bs; i < as; ++i)
-                            tlx::invoke_dtor(lhs._Myfirst + i);
+                        for (size_type i2 = bs; i2 < as; ++i2)
+                            tlx::invoke_dtor(lhs._Myfirst + i2);
                     }
                 }
 
@@ -288,13 +302,26 @@ public:
                 }
                 else
                 {
-                    for (size_type i = as; i < bs; ++i)
-                        tlx::construct_at(lhs._Myfirst + i, std::move(rhs._Myfirst[i]));
+                    size_type i = as;
+                    try
+                    {
+                        for (; i < bs; ++i)
+                            tlx::construct_at(lhs._Myfirst + i, std::move(rhs._Myfirst[i]));
+                    }
+                    catch (...)
+                    {
+                        if constexpr (!std::is_trivially_destructible_v<_Ty>)
+                        {
+                            for (size_type j = as; j < i; ++j)
+                                tlx::invoke_dtor(lhs._Myfirst + j);
+                        }
+                        throw;
+                    }
 
                     if constexpr (!std::is_trivially_destructible_v<_Ty>)
                     {
-                        for (size_type i = as; i < bs; ++i)
-                            tlx::invoke_dtor(rhs._Myfirst + i);
+                        for (size_type i2 = as; i2 < bs; ++i2)
+                            tlx::invoke_dtor(rhs._Myfirst + i2);
                     }
                 }
 
@@ -323,7 +350,6 @@ public:
             _Ty* heap_end   = heap_side->_Myend;
 
             // 1) Move inline_side's inline elements into heap_side's inline buffer.
-            //    We must have a way to access heap_side's own inline buffer.
             _Ty* heap_inline_first = heap_side->inlined_data();  // address of heap_side's embedded inline buffer
 
             if constexpr (std::is_trivially_copyable_v<_Ty>)
@@ -332,9 +358,25 @@ public:
             }
             else
             {
-                for (size_type i = 0; i < inline_size; ++i)
-                    tlx::construct_at(heap_inline_first + i, std::move(inline_side->_Myfirst[i]));
+                size_type constructed = 0;
+                try
+                {
+                    for (; constructed < inline_size; ++constructed)
+                        tlx::construct_at(heap_inline_first + constructed,
+                                          std::move(inline_side->_Myfirst[constructed]));
+                }
+                catch (...)
+                {
+                    // destroy any successfully constructed elements
+                    if constexpr (!std::is_trivially_destructible_v<_Ty>)
+                    {
+                        for (size_type j = 0; j < constructed; ++j)
+                            tlx::invoke_dtor(heap_inline_first + j);
+                    }
+                    throw;
+                }
 
+                // now destroy source inline elements
                 if constexpr (!std::is_trivially_destructible_v<_Ty>)
                 {
                     for (size_type i = 0; i < inline_size; ++i)
@@ -347,13 +389,13 @@ public:
             inline_side->_Mylast  = heap_first + heap_size;
             inline_side->_Myend   = heap_end;
 
-            // 3) heap_side is reset to use its inline buffer (now holding inline_side's former inline elements)
+            // 3) heap_side is reset to use its inline buffer
             heap_side->_Myfirst = heap_inline_first;
             heap_side->_Mylast  = heap_inline_first + inline_size;
             heap_side->_Myend   = heap_inline_first + _Initial;
         }
 
-        // Swap allocators (allocator propagation rules are ignored here)
+        // Swap allocators (allocator propagation rules are honored here)
         if constexpr (std::allocator_traits<_Alty>::propagate_on_container_swap::value)
             std::swap(_Mypair._Get_first(), other._Mypair._Get_first());
     }
@@ -386,34 +428,60 @@ private:
             }
             else
             {
-                for (size_type i = 0; i < n; ++i)
-                    tlx::construct_at(dst._Myfirst + i, src._Myfirst[i]);
+                size_type i = 0;
+                try
+                {
+                    for (; i < n; ++i)
+                        tlx::construct_at(dst._Myfirst + i, src._Myfirst[i]);
+                }
+                catch (...)
+                {
+                    if constexpr (!std::is_trivially_destructible_v<_Ty>)
+                    {
+                        for (size_type j = 0; j < i; ++j)
+                            tlx::invoke_dtor(dst._Myfirst + j);
+                    }
+                    throw;
+                }
             }
             dst._Mylast = dst._Myfirst + n;
         }
         else
         {
             // heap copy
-            dst._Myfirst = _Getal().allocate(n);
-            dst._Myend   = dst._Myfirst + n;
-            dst._Mylast  = dst._Myfirst;
+            _Ty* new_first = _Getal().allocate(n);
+            _Ty* new_last  = new_first;
 
             if constexpr (std::is_trivially_copyable_v<_Ty>)
             {
-                ::memcpy(dst._Myfirst, src._Myfirst, n * sizeof(_Ty));
+                ::memcpy(new_first, src._Myfirst, n * sizeof(_Ty));
+                new_last = new_first + n;
             }
             else
             {
-                for (size_type i = 0; i < n; ++i)
-                    tlx::construct_at(dst._Myfirst + i, src._Myfirst[i]);
+                size_type i = 0;
+                try
+                {
+                    for (; i < n; ++i, ++new_last)
+                        tlx::construct_at(new_first + i, src._Myfirst[i]);
+                }
+                catch (...)
+                {
+                    if constexpr (!std::is_trivially_destructible_v<_Ty>)
+                    {
+                        for (size_type j = 0; j < i; ++j)
+                            tlx::invoke_dtor(new_first + j);
+                    }
+                    _Getal().deallocate(new_first, n);
+                    throw;
+                }
             }
-            dst._Mylast = dst._Myfirst + n;
+
+            dst._Myfirst = new_first;
+            dst._Mylast  = new_last;
+            dst._Myend   = new_first + n;
         }
     }
-
-    // ------------------------------------------------------------
-    // helper: swap
-    // ------------------------------------------------------------
 
     constexpr void _Resize_uninitialized(const size_type _Newsize)
     {
@@ -442,27 +510,49 @@ private:
             size_type _Oldsize = size();
             size_type _Newcap  = _Calculate_growth(_Newsize);
 
-            _Ty* _Newvec = _Getal().allocate(_Newcap);
+            _Ty* _Newvec  = _Getal().allocate(_Newcap);
+            _Ty* _Newlast = _Newvec;
 
-            // move old elements
+            // move or copy old elements into new storage
             if constexpr (!std::is_trivially_copyable_v<_Ty>)
             {
-                for (size_type i = 0; i < _Oldsize; ++i)
-                    new (_Newvec + i) _Ty(std::move(_My_data._Myfirst[i]));
+                size_type i = 0;
+                try
+                {
+                    for (; i < _Oldsize; ++i, ++_Newlast)
+                        tlx::construct_at(_Newvec + i, std::move(_My_data._Myfirst[i]));
+                }
+                catch (...)
+                {
+                    if constexpr (!std::is_trivially_destructible_v<_Ty>)
+                    {
+                        for (size_type j = 0; j < i; ++j)
+                            tlx::invoke_dtor(_Newvec + j);
+                    }
+                    _Getal().deallocate(_Newvec, _Newcap);
+                    throw;
+                }
             }
             else
             {
                 ::memcpy(_Newvec, _My_data._Myfirst, _Oldsize * sizeof(_Ty));
+                _Newlast = _Newvec + _Oldsize;
             }
 
+            // destroy old elements in old storage
             if constexpr (!std::is_trivially_destructible_v<_Ty>)
             {
                 for (size_type i = 0; i < _Oldsize; ++i)
                     tlx::invoke_dtor(_My_data._Myfirst + i);
             }
 
-            _Tidy();
+            // free old storage if it was heap
+            if (!_My_data.is_inlined())
+            {
+                _Getal().deallocate(_My_data._Myfirst, static_cast<size_type>(_My_data._Myend - _My_data._Myfirst));
+            }
 
+            // install new storage
             _My_data._Myfirst = _Newvec;
             _My_data._Mylast  = _Newvec + _Newsize;
             _My_data._Myend   = _Newvec + _Newcap;
@@ -494,7 +584,7 @@ private:
     {
         auto& _My_data = _Mypair._Myval2;
         if (!_My_data.is_inlined())
-            _Getal().deallocate(_My_data._Myfirst, capacity());
+            _Getal().deallocate(_My_data._Myfirst, static_cast<size_type>(_My_data._Myend - _My_data._Myfirst));
         _My_data.reset_uninitialized();
     }
 
@@ -502,7 +592,6 @@ private:
     static void _Xrange() { _TLX __xout_of_range("invalid vector subscript"); }
 
     constexpr _Alty& _Getal() noexcept { return _Mypair._Get_first(); }
-
     constexpr const _Alty& _Getal() const noexcept { return _Mypair._Get_first(); }
 
     __compressed_pair<_Alty, _Vec_val> _Mypair;

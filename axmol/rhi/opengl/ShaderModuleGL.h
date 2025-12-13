@@ -55,7 +55,9 @@ public:
     inline GLuint getShader() const { return _shader; }
 
 protected:
-    void compileShader() override;
+    void recompileShader() override;
+
+    void compileShader();
     void deleteShader();
 
     GLuint _shader = 0;

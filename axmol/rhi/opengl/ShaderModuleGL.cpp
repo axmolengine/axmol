@@ -32,11 +32,19 @@
 namespace ax::rhi::gl
 {
 
-ShaderModuleImpl::ShaderModuleImpl(ShaderStage stage, Data& data) : ShaderModule(stage, data) {}
+ShaderModuleImpl::ShaderModuleImpl(ShaderStage stage, Data& data) : ShaderModule(stage, data)
+{
+    compileShader();
+}
 
 ShaderModuleImpl::~ShaderModuleImpl()
 {
     deleteShader();
+}
+
+void ShaderModuleImpl::recompileShader()
+{
+    compileShader();
 }
 
 void ShaderModuleImpl::compileShader()

@@ -59,7 +59,7 @@ enum class BufferType : uint32_t
     UNIFORM = UNIFORM_BUFFER
 };
 
-enum class ShaderStage
+enum class ShaderStage : int16_t
 {
     UNKNOWN  = -1,
     FRAGMENT = 0,

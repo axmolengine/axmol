@@ -741,10 +741,7 @@ void RenderContextImpl::prepareDrawing()
 
     // bind shader
     auto program = static_cast<ProgramImpl*>(_programState->getProgram());
-    _d3d11Context->VSSetShader(static_cast<ID3D11VertexShader*>(program->getVertexShader()->internalHandle()), nullptr,
-                               0);
-    _d3d11Context->PSSetShader(static_cast<ID3D11PixelShader*>(program->getFragmentShader()->internalHandle()), nullptr,
-                               0);
+    program->apply(context);
 
     // bind vertex layout
     auto vertexLayoutImpl = static_cast<VertexLayoutImpl*>(_vertexLayout);
@@ -769,15 +766,8 @@ void RenderContextImpl::prepareDrawing()
         _d3d11Context->IASetVertexBuffers(0, 2, vbs, strides, offsets);
     }
 
-    // bind vertex uniform buffer
-    auto vertUB = _programState->getVertexUniformBuffer();
-    if (!vertUB.empty())
-        program->bindVertexUniformBuffer(_d3d11Context, vertUB.data(), vertUB.size(), VS_UBO_BINDING_INDEX);
-
-    // bind fragment uniform Buffer
-    auto fragUB = _programState->getFragmentUniformBuffer();
-    if (!fragUB.empty())
-        program->bindFragmentUniformBuffer(_d3d11Context, fragUB.data(), fragUB.size(), FS_UBO_BINDING_INDEX);
+    auto cpuBuffer = _programState->getUniformBuffer();
+    program->bindUniformBuffers(_d3d11Context, cpuBuffer.data(), cpuBuffer.size());
 
     // bind texture
     _textureBounds = 0;

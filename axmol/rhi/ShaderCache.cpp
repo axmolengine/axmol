@@ -82,8 +82,6 @@ rhi::ShaderModule* ShaderCache::acquireShaderModule(rhi::ShaderStage stage, Data
     }
 
     ShaderModule* const shader = axdrv->createShaderModule(stage, data);
-
-    shader->compileShader();
     shader->setHashValue(key);
     _cachedShaders.emplace(key, shader);
 
@@ -114,7 +112,7 @@ void ShaderCache::removeUnusedShader()
 void ShaderCache::recompileAll()
 {
     for(auto&[_, shaderModule] : _cachedShaders)
-        shaderModule->compileShader();
+        shaderModule->recompileShader();
 }
 #endif
 

@@ -29,6 +29,7 @@
 #include "axmol/base/Object.h"
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/rhi/ShaderCache.h"
+#include "axmol/rhi/Buffer.h"
 #include "axmol/tlx/hlookup.hpp"
 #include "axmol/tlx/inlined_vector.hpp"
 
@@ -78,6 +79,7 @@ struct UniformBlockInfo
     uint32_t cpuOffset;     // offset in CPU buffer
     uint32_t sizeBytes;     // total size of the UBO
     uint16_t numMembers;    // number of uniforms in this block
+    ShaderStage stage;
     std::string_view name;  // block name
 };
 
@@ -89,6 +91,7 @@ struct SLCReflectContext;
  */
 
 using UniformLocationVector = tlx::inlined_vector<rhi::UniformLocation, 2>;
+using UniformBufferVector = tlx::inlined_vector<rhi::Buffer*, 2>;
 
 /**
  * A program.
@@ -96,6 +99,9 @@ using UniformLocationVector = tlx::inlined_vector<rhi::UniformLocation, 2>;
 class AX_DLL Program : public Object
 {
     friend class ::ax::ProgramManager;
+
+protected:
+    Program(Data& vsData, Data& fsData);
 
 public:
     using UniformMap          = std::map<uint64_t, UniformInfo>;
@@ -198,8 +204,6 @@ protected:
     void setProgramIds(uint32_t progType, uint64_t progId);
 
     const UniformInfo* getFirstUniformInfo(std::string_view name);
-
-    Program(Data& vsData, Data& fsData);
 
     void parseStageReflection(ShaderStage stage, SLCReflectContext* context);
     void resolveBuiltinBindings();

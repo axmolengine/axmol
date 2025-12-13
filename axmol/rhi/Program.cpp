@@ -58,6 +58,7 @@ struct SLCReflectContext
     uint32_t _cpuOffset{0};
     yasio::fast_ibstream_view* ibs{nullptr};
     sc_chunk_refl* refl{nullptr};
+    ShaderStage stage{ShaderStage::UNKNOWN};
 };
 
 Program::Program(Data& vsData, Data& fsData)
@@ -74,6 +75,8 @@ Program::Program(Data& vsData, Data& fsData)
 
 Program::~Program()
 {
+    AX_SAFE_RELEASE(_vsModule);
+    AX_SAFE_RELEASE(_fsModule);
     AX_SAFE_RELEASE(_vertexLayout);
 }
 
@@ -166,7 +169,8 @@ void Program::parseStageReflection(ShaderStage stage, SLCReflectContext* context
 {
     const auto& shaderData = stage == ShaderStage::VERTEX ? _vsModule->getChunkData() : _fsModule->getChunkData();
     yasio::fast_ibstream_view ibs(shaderData.data(), shaderData.size());
-    context->ibs = &ibs;
+    context->ibs   = &ibs;
+    context->stage = stage;
     // shader module already verify shader source, just advance
     ibs.advance(sizeof(uint32_t));  // skip fourcc
     // since 3.3.0, it should be match the whole shader data size
@@ -307,6 +311,7 @@ void Program::reflectUniforms(SLCReflectContext* context)
                                                             .cpuOffset  = cpuOffset,
                                                             .sizeBytes  = ub_size_bytes,
                                                             .numMembers = ub_num_members,
+                                                            .stage      = context->stage,
                                                             .name       = ub_name.data()});
         for (int k = 0; k < ub_num_members; ++k)
         {

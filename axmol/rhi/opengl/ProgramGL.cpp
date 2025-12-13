@@ -34,6 +34,7 @@
 #include "axmol/tlx/byte_buffer.hpp"
 #include "axmol/rhi/opengl/UtilsGL.h"
 #include "axmol/rhi/opengl/OpenGLState.h"
+#include "axmol/rhi/opengl/BufferGL.h"
 
 namespace ax::rhi::gl
 {
@@ -50,9 +51,6 @@ ProgramImpl::ProgramImpl(Data& vsData, Data& fsData) : Program(vsData, fsData)
 ProgramImpl::~ProgramImpl()
 {
     deleteUniformBuffers();
-
-    AX_SAFE_RELEASE(_vsModule);
-    AX_SAFE_RELEASE(_fsModule);
     if (_program)
         glDeleteProgram(_program);
 
@@ -123,18 +121,17 @@ void ProgramImpl::compileProgram()
     {
         const auto blockIndex = glGetUniformBlockIndex(_program, uboInfo.name.data());
         glUniformBlockBinding(_program, blockIndex, uboInfo.binding);
-        _uniformBuffers.push_back(static_cast<BufferImpl*>(
-            driver->createBuffer(uboInfo.sizeBytes, BufferType::UNIFORM, BufferUsage::DYNAMIC)));
+        _uniformBuffers.push_back(driver->createBuffer(uboInfo.sizeBytes, BufferType::UNIFORM, BufferUsage::DYNAMIC));
     }
 }
 
 void ProgramImpl::bindUniformBuffers(const char* buffer, size_t bufferSize)
 {
     const auto uboCount = _activeUniformBlockInfos.size();
-    for (int i = 0; i < uboCount; ++i)
+    for (size_t i = 0; i < uboCount; ++i)
     {
         auto& info = _activeUniformBlockInfos[i];
-        auto& ubo  = _uniformBuffers[i];
+        auto ubo  = static_cast<BufferImpl*>(_uniformBuffers[i]);
         ubo->updateData(buffer + info.cpuOffset, info.sizeBytes);
         __state->bindUniformBufferBase(info.binding, ubo->internalHandle());
     }
@@ -146,7 +143,7 @@ void ProgramImpl::deleteUniformBuffers()
 {
     if (_uniformBuffers.empty())
         return;
-    for (auto& ubo : _uniformBuffers)
+    for (auto ubo : _uniformBuffers)
         delete ubo;
     _uniformBuffers.clear();
 }

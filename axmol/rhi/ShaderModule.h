@@ -62,7 +62,7 @@ protected:
     virtual ~ShaderModule();
     void setHashValue(uint64_t hash) { _hash = hash; }
 
-    virtual void compileShader() = 0;
+    virtual void recompileShader() {};
 
     void parseShaderCode();
 
