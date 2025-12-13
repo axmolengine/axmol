@@ -598,6 +598,53 @@ int lua_ax_rhi_Program_getProgramId(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_rhi_Program_getActiveUniformBlockInfos(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::Program* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axrhi.Program",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Program_getActiveUniformBlockInfos'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Program_getActiveUniformBlockInfos'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getActiveUniformBlockInfos();
+        object_to_luaval<std::vector<ax::rhi::UniformBlockInfo>&>(tolua_S, "std::vector<ax::rhi::UniformBlockInfo>",(std::vector<ax::rhi::UniformBlockInfo>&)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axrhi.Program:getActiveUniformBlockInfos",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Program_getActiveUniformBlockInfos'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_rhi_Program_getVertexLayout(lua_State* tolua_S)
 {
     int argc = 0;
@@ -645,6 +692,100 @@ int lua_ax_rhi_Program_getVertexLayout(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_rhi_Program_getVSModule(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::Program* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axrhi.Program",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Program_getVSModule'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Program_getVSModule'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getVSModule();
+        object_to_luaval<ax::rhi::ShaderModule>(tolua_S, "axrhi.ShaderModule",(ax::rhi::ShaderModule*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axrhi.Program:getVSModule",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Program_getVSModule'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_rhi_Program_getFSModule(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::Program* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axrhi.Program",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Program_getFSModule'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Program_getFSModule'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getFSModule();
+        object_to_luaval<ax::rhi::ShaderModule>(tolua_S, "axrhi.ShaderModule",(ax::rhi::ShaderModule*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axrhi.Program:getFSModule",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Program_getFSModule'.",&tolua_err);
+#endif
+
+    return 0;
+}
 static int lua_ax_rhi_Program_finalize(lua_State* tolua_S)
 {
     AXLOGV("luabindings: finalizing LUA object (Program)");
@@ -662,7 +803,10 @@ int lua_register_ax_rhi_Program(lua_State* tolua_S)
         tolua_function(tolua_S,"getVertexInputDesc",lua_ax_rhi_Program_getVertexInputDesc);
         tolua_function(tolua_S,"getProgramType",lua_ax_rhi_Program_getProgramType);
         tolua_function(tolua_S,"getProgramId",lua_ax_rhi_Program_getProgramId);
+        tolua_function(tolua_S,"getActiveUniformBlockInfos",lua_ax_rhi_Program_getActiveUniformBlockInfos);
         tolua_function(tolua_S,"getVertexLayout",lua_ax_rhi_Program_getVertexLayout);
+        tolua_function(tolua_S,"getVSModule",lua_ax_rhi_Program_getVSModule);
+        tolua_function(tolua_S,"getFSModule",lua_ax_rhi_Program_getFSModule);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::rhi::Program).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axrhi.Program";
@@ -1078,6 +1222,53 @@ int lua_ax_rhi_ProgramState_getVertexInputDesc(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_rhi_ProgramState_getActiveUniformBlockInfos(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::ProgramState* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axrhi.ProgramState",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_ProgramState_getActiveUniformBlockInfos'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_ProgramState_getActiveUniformBlockInfos'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getActiveUniformBlockInfos();
+        object_to_luaval<std::vector<ax::rhi::UniformBlockInfo>&>(tolua_S, "std::vector<ax::rhi::UniformBlockInfo>",(std::vector<ax::rhi::UniformBlockInfo>&)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axrhi.ProgramState:getActiveUniformBlockInfos",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_ProgramState_getActiveUniformBlockInfos'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_rhi_ProgramState_setTexture(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1438,6 +1629,7 @@ int lua_register_ax_rhi_ProgramState(lua_State* tolua_S)
         tolua_function(tolua_S,"clone",lua_ax_rhi_ProgramState_clone);
         tolua_function(tolua_S,"getProgram",lua_ax_rhi_ProgramState_getProgram);
         tolua_function(tolua_S,"getVertexInputDesc",lua_ax_rhi_ProgramState_getVertexInputDesc);
+        tolua_function(tolua_S,"getActiveUniformBlockInfos",lua_ax_rhi_ProgramState_getActiveUniformBlockInfos);
         tolua_function(tolua_S,"setTexture",lua_ax_rhi_ProgramState_setTexture);
         tolua_function(tolua_S,"setParameterAutoBinding",lua_ax_rhi_ProgramState_setParameterAutoBinding);
         tolua_function(tolua_S,"getBuiltinVertexLayout",lua_ax_rhi_ProgramState_getBuiltinVertexLayout);
