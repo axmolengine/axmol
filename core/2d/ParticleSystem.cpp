@@ -138,7 +138,6 @@ bool ParticleData::init(int count)
     modeB.deltaRadius      = (float*)malloc(count * sizeof(float));
     modeB.radius           = (float*)malloc(count * sizeof(float));
 
-
     return posx && posy && startPosX && startPosY && colorR && colorG && colorB && colorA && deltaColorR &&
            deltaColorG && deltaColorB && deltaColorA && size && deltaSize && rotation && staticRotation &&
            deltaRotation && totalTimeToLive && timeToLive && atlasIndex && modeA.dirX && modeA.dirY &&
