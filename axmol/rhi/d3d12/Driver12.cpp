@@ -863,8 +863,8 @@ bool DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage,
     }
 #if _AX_USE_DXC
     ComPtr<IDxcBlobEncoding> sourceBlob;
-    _dxcLibrary->CreateBlobWithEncodingOnHeapCopy(shaderCode.data(), static_cast<UINT32>(shaderCode.size()),
-                                                  CP_UTF8, &sourceBlob);
+    _dxcLibrary->CreateBlobWithEncodingOnHeapCopy(shaderCode.data(), static_cast<UINT32>(shaderCode.size()), CP_UTF8,
+                                                  &sourceBlob);
 
     std::wstring_view entryPoint = L"main";
     std::wstring_view profile    = stageToProfile(stage);

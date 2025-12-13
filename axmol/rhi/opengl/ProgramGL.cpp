@@ -131,7 +131,7 @@ void ProgramImpl::bindUniformBuffers(const uint8_t* buffer, size_t bufferSize)
     for (size_t i = 0; i < uboCount; ++i)
     {
         auto& info = _activeUniformBlockInfos[i];
-        auto ubo  = static_cast<BufferImpl*>(_uniformBuffers[i]);
+        auto ubo   = static_cast<BufferImpl*>(_uniformBuffers[i]);
         ubo->updateData(buffer + info.cpuOffset, info.sizeBytes);
         __state->bindUniformBufferBase(info.binding, ubo->internalHandle());
     }

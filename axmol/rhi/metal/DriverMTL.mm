@@ -476,7 +476,7 @@ Program* DriverImpl::createProgram(Data vsData, Data fsData)
     return new ProgramImpl(vsData, fsData);
 }
 
-ShaderModule* DriverImpl::createShaderModule(ShaderStage stage,  Data& chunk)
+ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, Data& chunk)
 {
     return new ShaderModuleImpl(_mtlDevice, stage, chunk);
 }

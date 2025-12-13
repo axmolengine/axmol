@@ -29,8 +29,6 @@
 namespace ax::rhi::vk
 {
 
-ProgramImpl::ProgramImpl(Data& vsData, Data& fsData) : Program(vsData, fsData)
-{
-}
+ProgramImpl::ProgramImpl(Data& vsData, Data& fsData) : Program(vsData, fsData) {}
 
 }  // namespace ax::rhi::vk

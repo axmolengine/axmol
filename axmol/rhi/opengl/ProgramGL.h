@@ -81,7 +81,7 @@ private:
     void reloadProgram();
 #endif
 
-    GLuint _program             = 0;
+    GLuint _program = 0;
 
     // The ubo instances
     UniformBufferVector _uniformBuffers;

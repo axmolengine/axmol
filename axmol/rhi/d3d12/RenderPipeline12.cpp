@@ -214,7 +214,7 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
         D3D12_ROOT_PARAMETER& param     = rootParams.emplace_back();
         param.ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
         param.Descriptor.ShaderRegister = uboInfo.binding;  // usually 0
-        param.Descriptor.RegisterSpace  = SET_INDEX_UBO;      // map Vulkan set -> D3D12 space
+        param.Descriptor.RegisterSpace  = SET_INDEX_UBO;    // map Vulkan set -> D3D12 space
         param.ShaderVisibility =
             uboInfo.stage == ShaderStage::VERTEX ? D3D12_SHADER_VISIBILITY_VERTEX : D3D12_SHADER_VISIBILITY_PIXEL;
 
@@ -252,8 +252,8 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
             // --- SRV range (texture part) ---
             D3D12_DESCRIPTOR_RANGE& srvRange           = srvRanges.emplace_back();
             srvRange.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-            srvRange.NumDescriptors                    = smp->count;      // number of textures
-            srvRange.BaseShaderRegister                = smp->location;   // t#
+            srvRange.NumDescriptors                    = smp->count;     // number of textures
+            srvRange.BaseShaderRegister                = smp->location;  // t#
             srvRange.RegisterSpace                     = SET_INDEX_SRV;  // match Vulkan set
             srvRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 

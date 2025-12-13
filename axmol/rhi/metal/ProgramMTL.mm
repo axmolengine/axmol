@@ -35,9 +35,6 @@ namespace
 // constexpr std::string_view metalSpecificDefine = "#define METAL\n"sv;
 }
 
-ProgramImpl::ProgramImpl(Data& vsData, Data& fsData)
-    : Program(vsData, fsData)
-{
-}
+ProgramImpl::ProgramImpl(Data& vsData, Data& fsData) : Program(vsData, fsData) {}
 
 }  // namespace ax::rhi::mtl

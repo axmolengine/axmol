@@ -111,7 +111,7 @@ void ShaderCache::removeUnusedShader()
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
 void ShaderCache::recompileAll()
 {
-    for(auto&[_, shaderModule] : _cachedShaders)
+    for (auto& [_, shaderModule] : _cachedShaders)
         shaderModule->recompileShader();
 }
 #endif

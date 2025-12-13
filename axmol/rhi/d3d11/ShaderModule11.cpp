@@ -48,8 +48,7 @@ inline const char* stageToProfile(ShaderStage s)
 }
 }  // namespace
 
-ShaderModuleImpl::ShaderModuleImpl(ID3D11Device* device, ShaderStage stage, Data& data)
-    : ShaderModule(stage, data)
+ShaderModuleImpl::ShaderModuleImpl(ID3D11Device* device, ShaderStage stage, Data& data) : ShaderModule(stage, data)
 {
     compileShader(device);
 }

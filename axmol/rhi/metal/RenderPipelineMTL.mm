@@ -311,10 +311,10 @@ void RenderPipelineImpl::setBlendState(MTLRenderPipelineColorAttachmentDescripto
 
 void RenderPipelineImpl::setShaderModules(Program* program)
 {
-    auto vsModule = static_cast<ShaderModuleImpl*>(program->getVSModule());
+    auto vsModule                         = static_cast<ShaderModuleImpl*>(program->getVSModule());
     _mtlRenderPipelineDesc.vertexFunction = vsModule->getMTLFunction();
 
-    auto fsModule = static_cast<ShaderModuleImpl*>(program->getFSModule());
+    auto fsModule                           = static_cast<ShaderModuleImpl*>(program->getFSModule());
     _mtlRenderPipelineDesc.fragmentFunction = fsModule->getMTLFunction();
 }
 

@@ -30,8 +30,7 @@
 namespace ax::rhi::mtl
 {
 
-ShaderModuleImpl::ShaderModuleImpl(id<MTLDevice> mtlDevice, ShaderStage stage, Data& chunk)
-    : ShaderModule(stage, chunk)
+ShaderModuleImpl::ShaderModuleImpl(id<MTLDevice> mtlDevice, ShaderStage stage, Data& chunk) : ShaderModule(stage, chunk)
 {
     NSString* shader = [[NSString alloc] initWithBytes:_codeSpan.data()
                                                 length:_codeSpan.size()

@@ -29,11 +29,7 @@
 namespace ax::rhi::d3d12
 {
 
-ProgramImpl::ProgramImpl(Data& vsData, Data& fsData) : Program(vsData, fsData)
-{
-}
+ProgramImpl::ProgramImpl(Data& vsData, Data& fsData) : Program(vsData, fsData) {}
 
-ProgramImpl::~ProgramImpl()
-{
-}
+ProgramImpl::~ProgramImpl() {}
 }  // namespace ax::rhi::d3d12
