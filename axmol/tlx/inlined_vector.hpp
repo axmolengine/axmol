@@ -212,10 +212,10 @@ public:
     void push_back(_Ty&& v) { emplace_back(std::forward<_Ty>(v)); }
 
     template <typename... _Valty>
-    void emplace_back(_Valty&&... vals)
+    _Ty& emplace_back(_Valty&&... vals)
     {
         _Resize_uninitialized(size() + 1);
-        tlx::construct_at(_Mypair._Myval2._Mylast - 1, std::forward<_Valty>(vals)...);
+        return *tlx::construct_at(_Mypair._Myval2._Mylast - 1, std::forward<_Valty>(vals)...);
     }
 
     void swap(inlined_vector& other)

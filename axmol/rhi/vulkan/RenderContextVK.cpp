@@ -1031,47 +1031,24 @@ void RenderContextImpl::prepareDrawing()
     writes.clear();
     writes.reserve(dslState->uniformDescriptorCount + dslState->samplerDescriptorCount);
 
-    VkDescriptorBufferInfo bufferInfos[2] = {};
+    _descriptorBufferInfos.clear();
 
-    // --- Vertex UBO (set=0, binding=VS_UBO_BINDING_INDEX) ---
-    auto vertUB = _programState->getVertexUniformBuffer();
-    if (!vertUB.empty())
+    auto& cpuBuffer = _programState->getUniformBuffer();
+    for (auto& uboInfo : _programState->getActiveUniformBlockInfos())
     {
-        UniformSlice s = allocateUniformSlice(vertUB.size());
-        std::memcpy(s.cpuPtr, vertUB.data(), vertUB.size());
+        UniformSlice s = allocateUniformSlice(uboInfo.sizeBytes);
+        std::memcpy(s.cpuPtr, cpuBuffer.data() + uboInfo.cpuOffset, uboInfo.sizeBytes);
 
         VkWriteDescriptorSet& write        = writes.emplace_back();
-        VkDescriptorBufferInfo& bufferInfo = bufferInfos[0];
+        VkDescriptorBufferInfo& bufferInfo = _descriptorBufferInfos.emplace_back();
 
         bufferInfo.buffer = _uniformRings[_currentFrame].buffer;
         bufferInfo.offset = static_cast<VkDeviceSize>(s.offset);
-        bufferInfo.range  = static_cast<VkDeviceSize>(vertUB.size());
+        bufferInfo.range  = static_cast<VkDeviceSize>(uboInfo.sizeBytes);
 
         write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         write.dstSet          = descriptorSets[RenderPipelineImpl::SET_INDEX_UBO];  // renamed index
-        write.dstBinding      = VS_UBO_BINDING_INDEX;
-        write.descriptorType  = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        write.descriptorCount = 1;
-        write.pBufferInfo     = &bufferInfo;
-    }
-
-    // --- Fragment UBO (set=0, binding=FS_UBO_BINDING_INDEX) ---
-    auto fragUB = _programState->getFragmentUniformBuffer();
-    if (!fragUB.empty())
-    {
-        UniformSlice s = allocateUniformSlice(fragUB.size());
-        std::memcpy(s.cpuPtr, fragUB.data(), fragUB.size());
-
-        VkWriteDescriptorSet& write        = writes.emplace_back();
-        VkDescriptorBufferInfo& bufferInfo = bufferInfos[1];
-
-        bufferInfo.buffer = _uniformRings[_currentFrame].buffer;
-        bufferInfo.offset = static_cast<VkDeviceSize>(s.offset);
-        bufferInfo.range  = static_cast<VkDeviceSize>(fragUB.size());
-
-        write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        write.dstSet          = descriptorSets[RenderPipelineImpl::SET_INDEX_UBO];
-        write.dstBinding      = FS_UBO_BINDING_INDEX;
+        write.dstBinding      = uboInfo.binding;
         write.descriptorType  = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         write.descriptorCount = 1;
         write.pBufferInfo     = &bufferInfo;

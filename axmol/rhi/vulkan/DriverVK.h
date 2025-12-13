@@ -103,7 +103,7 @@ public:
     RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
     DepthStencilState* createDepthStencilState() override;
     RenderPipeline* createRenderPipeline() override;
-    Program* createProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
+    Program* createProgram(Data vsData, Data fsData) override;
     VertexLayout* createVertexLayout(VertexLayoutDesc&& desc) override;
 
     std::string getVendor() const override;
@@ -160,13 +160,11 @@ public:
 
     void processDisposalQueue(uint64_t completedFenceValue);
 
-    void setSwapchainCurrentImageIndex(uint32_t imageIndex);
-
     void waitForGPU() override { vkDeviceWaitIdle(_device); }
 
 protected:
     void queueDisposalInternal(DisposableResource&& res);
-    ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
+    ShaderModule* createShaderModule(ShaderStage stage, Data& chunk) override;
     SamplerHandle createSampler(const SamplerDesc& desc) override;
     void destroySampler(SamplerHandle& h) override;
 

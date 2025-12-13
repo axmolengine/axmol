@@ -515,14 +515,14 @@ RenderPipeline* DriverImpl::createRenderPipeline()
     return new RenderPipelineImpl(_device);
 }
 
-Program* DriverImpl::createProgram(std::string_view vertexShader, std::string_view fragmentShader)
+Program* DriverImpl::createProgram(Data vsData, Data fsData)
 {
-    return new ProgramImpl(vertexShader, fragmentShader);
+    return new ProgramImpl(vsData, fsData);
 }
 
-ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, std::string_view source)
+ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, Data& chunk)
 {
-    return new ShaderModuleImpl(_device, stage, source);
+    return new ShaderModuleImpl(_device, stage, chunk);
 }
 
 SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)

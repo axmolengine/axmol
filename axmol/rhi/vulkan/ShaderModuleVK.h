@@ -39,13 +39,13 @@ namespace ax::rhi::vk
 class ShaderModuleImpl : public ShaderModule
 {
 public:
-    ShaderModuleImpl(VkDevice device, ShaderStage stage, std::string_view source);
+    ShaderModuleImpl(VkDevice device, ShaderStage stage, Data& chunk);
     ~ShaderModuleImpl();
 
     VkShaderModule internalHandle() const { return _shader; }
 
 private:
-    void compileShader(VkDevice device, ShaderStage stage, std::string_view source);
+    void compileShader(VkDevice device);
     VkShaderModule _shader = VK_NULL_HANDLE;
 };
 

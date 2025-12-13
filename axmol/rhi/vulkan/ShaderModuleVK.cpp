@@ -30,10 +30,9 @@
 namespace ax::rhi::vk
 {
 
-ShaderModuleImpl::ShaderModuleImpl(VkDevice device, ShaderStage stage, std::string_view source) : ShaderModule(stage)
+ShaderModuleImpl::ShaderModuleImpl(VkDevice device, ShaderStage stage, Data& chunk) : ShaderModule(stage, chunk)
 {
-    auto shaderSource = parseReflection(source);
-    compileShader(device, stage, shaderSource);
+    compileShader(device);
 }
 
 ShaderModuleImpl::~ShaderModuleImpl()
@@ -48,20 +47,20 @@ ShaderModuleImpl::~ShaderModuleImpl()
     }
 }
 
-void ShaderModuleImpl::compileShader(VkDevice device, ShaderStage stage, std::string_view shaderSource)
+void ShaderModuleImpl::compileShader(VkDevice device)
 {
     // Create VkShaderModule from SPIR-V bytes
-    if (shaderSource.empty())
+    if (_codeSpan.empty())
     {
-        AXLOGE("axmol: Shader code blob is empty.");
+        AXLOGE("axmol: Shader code is empty.");
         assert(false);
         return;
     }
 
     VkShaderModuleCreateInfo smci{};
     smci.sType    = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-    smci.codeSize = shaderSource.size();
-    smci.pCode    = reinterpret_cast<const uint32_t*>(shaderSource.data());
+    smci.codeSize = _codeSpan.size();
+    smci.pCode    = reinterpret_cast<const uint32_t*>(_codeSpan.data());
 
     VkResult vr = vkCreateShaderModule(device, &smci, nullptr, &_shader);
     if (vr != VK_SUCCESS || _shader == VK_NULL_HANDLE)

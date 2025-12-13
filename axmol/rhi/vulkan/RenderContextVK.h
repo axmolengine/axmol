@@ -263,6 +263,8 @@ private:
     VkCullModeFlags _cachedCullMode{VK_CULL_MODE_NONE};
     VkFrontFace _cachedFrontFace{VK_FRONT_FACE_COUNTER_CLOCKWISE};
 
+    tlx::inlined_vector<VkDescriptorBufferInfo, 2> _descriptorBufferInfos;
+
     bool _scissorEnabled{false};
 
     bool _swapchainDirty{false};

@@ -286,45 +286,31 @@ void RenderPipelineImpl::updateDescriptorSetLayouts(ProgramImpl* program)
 
     DescriptorSetLayoutState dslState{};
 
-    // VS uniform blocks -> set=0
-    auto vs = program->getVertexShader();
-    for (auto& ub : vs->getActiveUniformBlockInfos())
+    for (auto& ub : program->getActiveUniformBlockInfos())
     {
+        const auto stageFlags =
+            ub.stage == ShaderStage::VERTEX ? VK_SHADER_STAGE_VERTEX_BIT : VK_SHADER_STAGE_FRAGMENT_BIT;
         VkDescriptorSetLayoutBinding& b = ubBindings.emplace_back();
         b.binding                       = ub.binding;
         b.descriptorType                = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         b.descriptorCount               = 1;
-        b.stageFlags                    = VK_SHADER_STAGE_VERTEX_BIT;
-        b.pImmutableSamplers            = nullptr;
-
-        ++dslState.uniformDescriptorCount;
-    }
-
-    // FS uniform blocks -> set=0
-    auto fs = program->getFragmentShader();
-    for (auto& ub : fs->getActiveUniformBlockInfos())
-    {
-        VkDescriptorSetLayoutBinding& b = ubBindings.emplace_back();
-        b.binding                       = ub.binding;
-        b.descriptorType                = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        b.descriptorCount               = 1;
-        b.stageFlags                    = VK_SHADER_STAGE_FRAGMENT_BIT;
+        b.stageFlags                    = stageFlags;
         b.pImmutableSamplers            = nullptr;
 
         ++dslState.uniformDescriptorCount;
     }
 
     // FS samplers -> set=1
-    for (auto& smp : fs->getActiveSamplerInfos())
+    for (auto& [_, smp] : program->getActiveTextureInfos())
     {
         VkDescriptorSetLayoutBinding& b = samplerBindings.emplace_back();
-        b.binding                       = smp.location;
+        b.binding                       = smp->location;
         b.descriptorType                = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        b.descriptorCount               = smp.count;
+        b.descriptorCount               = smp->count;
         b.stageFlags                    = VK_SHADER_STAGE_FRAGMENT_BIT;
         b.pImmutableSamplers            = nullptr;
 
-        dslState.samplerDescriptorCount += smp.count;
+        dslState.samplerDescriptorCount += smp->count;
     }
 
     // Create DescriptorSetLayout for UBOs (set=0)
@@ -394,20 +380,19 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, VkRend
 
     // Shader stages
     tlx::pod_vector<VkPipelineShaderStageCreateInfo> stages;
-    if (auto vs = program->getVSModule())
     {
         VkPipelineShaderStageCreateInfo& s = stages.emplace_back();
         s.sType                            = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
         s.stage                            = VK_SHADER_STAGE_VERTEX_BIT;
-        s.module                           = vs;
+        s.module                           = program->getNativeVSModule();
         s.pName                            = "main";
     }
-    if (auto fs = program->getFSModule())
+
     {
         VkPipelineShaderStageCreateInfo& s = stages.emplace_back();
         s.sType                            = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
         s.stage                            = VK_SHADER_STAGE_FRAGMENT_BIT;
-        s.module                           = fs;
+        s.module                           = program->getNativeFSModule();
         s.pName                            = "main";
     }
 
