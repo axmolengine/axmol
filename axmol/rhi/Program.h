@@ -75,10 +75,10 @@ enum VertexInputKind : uint32_t
 
 struct UniformBlockInfo
 {
-    int binding;            // Vulkan binding index
-    uint32_t cpuOffset;     // offset in CPU buffer
-    uint32_t sizeBytes;     // total size of the UBO
-    uint16_t numMembers;    // number of uniforms in this block
+    int binding;          // Vulkan binding index
+    uint32_t cpuOffset;   // offset in CPU buffer
+    uint32_t sizeBytes;   // total size of the UBO
+    uint16_t numMembers;  // number of uniforms in this block
     ShaderStage stage;
     std::string_view name;  // block name
 };
@@ -91,7 +91,7 @@ struct SLCReflectContext;
  */
 
 using UniformLocationVector = tlx::inlined_vector<rhi::UniformLocation, 2>;
-using UniformBufferVector = tlx::inlined_vector<rhi::Buffer*, 2>;
+using UniformBufferVector   = tlx::inlined_vector<rhi::Buffer*, 2>;
 
 /**
  * A program.
@@ -196,7 +196,12 @@ public:
      */
     const UniformMap& getActiveUniformInfos() const { return _activeUniformInfos; }
 
+    const std::vector<UniformBlockInfo>& getActiveUniformBlockInfos() const { return _activeUniformBlockInfos; }
+
     VertexLayout* getVertexLayout() const { return _vertexLayout; }
+
+    ShaderModule* getVSModule() const { return _vsModule; }
+    ShaderModule* getFSModule() const { return _fsModule; }
 
 protected:
     void setVertexLayout(VertexLayout* layout);

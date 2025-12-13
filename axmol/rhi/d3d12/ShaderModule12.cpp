@@ -29,10 +29,9 @@
 
 namespace ax::rhi::d3d12
 {
-ShaderModuleImpl::ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, std::string_view source) : ShaderModule(stage)
+ShaderModuleImpl::ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, Data& chunk) : ShaderModule(stage, chunk)
 {
-    auto shaderSource = parseReflection(source);
-    driver->compileShader(shaderSource, stage, _nativeHandle);
+    driver->compileShader(_codeSpan, stage, _nativeHandle);
 }
 
 ShaderModuleImpl::~ShaderModuleImpl()

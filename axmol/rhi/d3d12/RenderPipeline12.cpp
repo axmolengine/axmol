@@ -209,8 +209,20 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
     tlx::pod_vector<D3D12_ROOT_PARAMETER> rootParams;
     rootParams.reserve(4);  // VS UBO, FS UBO, FS SRV table, FS Sampler table
 
-    auto vs = program->getVertexShader();
-    auto fs = program->getFragmentShader();
+    int maxUboBinding = -1;
+    for (auto& uboInfo : program->getActiveUniformBlockInfos())
+    {
+        D3D12_ROOT_PARAMETER& param     = rootParams.emplace_back();
+        param.ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+        param.Descriptor.ShaderRegister = uboInfo.binding;  // usually 0
+        param.Descriptor.RegisterSpace  = SET_INDEX_UBO;      // map Vulkan set -> D3D12 space
+        param.ShaderVisibility =
+            uboInfo.stage == ShaderStage::VERTEX ? D3D12_SHADER_VISIBILITY_VERTEX : D3D12_SHADER_VISIBILITY_PIXEL;
+
+        // hack: rootIndex must match the uboInfo.binding
+        assert(rootIndex == uboInfo.binding);
+        rootIndex++;
+    }
 
     // --- FS SRVs (textures) -> descriptor table, space = SET_INDEX_SRV ---
     tlx::pod_vector<D3D12_DESCRIPTOR_RANGE> srvRanges;
@@ -218,7 +230,7 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
     // --- Sampler descriptor table (global heap) ---
     D3D12_DESCRIPTOR_RANGE samplerRange{};
 
-    auto& fsSamplers = fs->getActiveSamplerInfos();
+    auto& fsSamplers = program->getActiveTextureInfos();
     if (!fsSamplers.empty())
     {
         samplerRange.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
@@ -234,20 +246,20 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
         entry.samplerRootIndex                           = rootIndex++;
 
         uint16_t maxSamplerSlot = 0;
-        for (auto& smp : fsSamplers)
+        for (auto& [_, smp] : fsSamplers)
         {
             // In Vulkan, sampler2D is a combined image sampler.
             // In D3D12 we only process texture, sampler is in global heap
             // --- SRV range (texture part) ---
             D3D12_DESCRIPTOR_RANGE& srvRange           = srvRanges.emplace_back();
             srvRange.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-            srvRange.NumDescriptors                    = smp.count;      // number of textures
-            srvRange.BaseShaderRegister                = smp.location;   // t#
+            srvRange.NumDescriptors                    = smp->count;      // number of textures
+            srvRange.BaseShaderRegister                = smp->location;   // t#
             srvRange.RegisterSpace                     = SET_INDEX_SRV;  // match Vulkan set
             srvRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-            if (maxSamplerSlot < smp.sampler_slot)
-                maxSamplerSlot = smp.sampler_slot;
+            if (maxSamplerSlot < smp->samplerSlot)
+                maxSamplerSlot = smp->samplerSlot;
         }
 
         samplerRange.NumDescriptors = maxSamplerSlot + 1;
@@ -259,30 +271,6 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
         srvParam.DescriptorTable.pDescriptorRanges   = srvRanges.data();
         srvParam.ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
         entry.srvRootIndex                           = rootIndex++;
-    }
-
-    // --- VS UBO at b0 (space = SET_INDEX_UBO) ---
-    auto& vs_ubs = vs->getActiveUniformBlockInfos();
-    if (!vs_ubs.empty())
-    {
-        D3D12_ROOT_PARAMETER& param     = rootParams.emplace_back();
-        param.ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-        param.Descriptor.ShaderRegister = vs_ubs[0].binding;  // usually 0
-        param.Descriptor.RegisterSpace  = SET_INDEX_UBO;      // map Vulkan set -> D3D12 space
-        param.ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
-        entry.vsUboRootIndex            = rootIndex++;
-    }
-
-    // --- FS UBO at b1 (space = SET_INDEX_UBO) ---
-    auto& fs_ubs = fs->getActiveUniformBlockInfos();
-    if (!fs_ubs.empty())
-    {
-        D3D12_ROOT_PARAMETER& param     = rootParams.emplace_back();
-        param.ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-        param.Descriptor.ShaderRegister = fs_ubs[0].binding;  // usually 1
-        param.Descriptor.RegisterSpace  = SET_INDEX_UBO;
-        param.ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-        entry.fsUboRootIndex            = rootIndex++;
     }
 
     // --- finalize root signature ---

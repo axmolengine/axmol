@@ -173,6 +173,11 @@ public:
 
     const tlx::string_map<VertexInputDesc>& getActiveVertexInputs() const { return _program->getActiveVertexInputs(); }
 
+    const std::vector<UniformBlockInfo>& getActiveUniformBlockInfos() const
+    {
+        return _program->getActiveUniformBlockInfos();
+    }
+
     /*
      * Gets the inmutable vertex layout from _program
      * @returns nullable
@@ -221,7 +226,7 @@ public:
         return _textureBindingSets;
     }
 
-    std::span<const char> getUniformBuffer() { return std::span{_uniformBuffer}; }
+    const tlx::byte_buffer& getUniformBuffer() const { return _uniformBuffer; }
 
     /**
      * An abstract base class that can be extended to support custom material auto bindings.
@@ -324,7 +329,7 @@ protected:
     rhi::Program* _program = nullptr;
     std::unordered_map<UniformLocation, UniformCallback, UniformLocationHash> _callbackUniforms;
 
-    tlx::sbyte_buffer _uniformBuffer;
+    tlx::byte_buffer _uniformBuffer;
 
     std::unordered_map<int, TextureBindingSet> _textureBindingSets;
 

@@ -36,32 +36,11 @@ class BufferImpl;
 class ProgramImpl : public Program
 {
 public:
-    ProgramImpl(std::string_view vertexShader, std::string_view fragmentShader);
+    ProgramImpl(Data& vsData, Data& fsData);
     ~ProgramImpl() override;
 
-    UniformLocation getUniformLocation(std::string_view uniform) const override;
-    UniformLocation getUniformLocation(rhi::Uniform name) const override;
-
-    const VertexInputDesc* getVertexInputDesc(std::string_view name) const override;
-    const VertexInputDesc* getVertexInputDesc(VertexInputKind name) const override;
-
-    const tlx::string_map<VertexInputDesc>& getActiveVertexInputs() const override;
-
-    ShaderModuleImpl* getVertexShader() const { return _vertexShader; }
-    ShaderModuleImpl* getFragmentShader() const { return _fragmentShader; }
-
-    int getMaxVertexLocation() const override;
-    int getMaxFragmentLocation() const override;
-
-    std::size_t getUniformBufferSize(ShaderStage stage) const override;
-    const tlx::string_map<UniformInfo>& getActiveUniformInfos(ShaderStage stage) const override;
-
-    const D3D12BlobHandle& getVSBlob() const { return _vertexShader->internalHandle(); }
-    const D3D12BlobHandle& getPSBlob() const { return _fragmentShader->internalHandle(); }
-
-private:
-    ShaderModuleImpl* _vertexShader   = nullptr;
-    ShaderModuleImpl* _fragmentShader = nullptr;
+    const D3D12BlobHandle& getVSBlob() const { return static_cast<ShaderModuleImpl*>(_vsModule)->internalHandle(); }
+    const D3D12BlobHandle& getPSBlob() const { return static_cast<ShaderModuleImpl*>(_fsModule)->internalHandle(); }
 };
 
 }  // namespace ax::rhi::d3d12

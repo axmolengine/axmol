@@ -44,8 +44,6 @@ struct RootSignatureEntry
     Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSig;
 
     // RootParameter indices
-    UINT vsUboRootIndex   = UINT_MAX;
-    UINT fsUboRootIndex   = UINT_MAX;
     UINT srvRootIndex     = UINT_MAX;
     UINT samplerRootIndex = UINT_MAX;
 };

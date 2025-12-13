@@ -59,7 +59,7 @@ struct UniformBlockInfo
 class ShaderModuleImpl : public ShaderModule
 {
 public:
-    ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, std::string_view source);
+    ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, Data& chunk);
     ~ShaderModuleImpl();
 
     const D3D12BlobHandle& internalHandle() const { return _nativeHandle; }

@@ -884,22 +884,15 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     }
 
     // bind ubos
-    // VS UBO
-    auto vsData = _programState->getVertexUniformBuffer();
-    if (!vsData.empty())
+    const auto cpuBuffer = _programState->getUniformBuffer();
+    if (!cpuBuffer.empty())
     {
-        auto s = allocateUniformSlice(_currentFrame, vsData.size());
-        std::memcpy(s.cpuPtr, vsData.data(), vsData.size());
-        _currentCmdList->SetGraphicsRootConstantBufferView(rootSigInfo->vsUboRootIndex, s.gpuVA);
-    }
-
-    // FS UBO
-    auto fsData = _programState->getFragmentUniformBuffer();
-    if (!fsData.empty())
-    {
-        auto s = allocateUniformSlice(_currentFrame, fsData.size());
-        std::memcpy(s.cpuPtr, fsData.data(), fsData.size());
-        _currentCmdList->SetGraphicsRootConstantBufferView(rootSigInfo->fsUboRootIndex, s.gpuVA);
+        for (auto& uboInfo : _programState->getActiveUniformBlockInfos())
+        {
+            auto s = allocateUniformSlice(_currentFrame, uboInfo.sizeBytes);
+            ::memcpy(s.cpuPtr, cpuBuffer.data() + uboInfo.cpuOffset, uboInfo.sizeBytes);
+            _currentCmdList->SetGraphicsRootConstantBufferView(uboInfo.binding, s.gpuVA);
+        }
     }
 
     // --- bind textures ---

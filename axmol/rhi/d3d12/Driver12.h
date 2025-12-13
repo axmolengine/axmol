@@ -28,6 +28,7 @@
 #include "axmol/rhi/d3d12/UploadBufferAllocator12.h"
 #include "axmol/rhi/d3d12/ShaderModule12.h"
 #include "axmol/rhi/DXUtils.h"
+#include "axmol/tlx/byte_buffer.hpp"
 #include <d3d12.h>
 #include <dxgi1_4.h>
 #include <optional>
@@ -121,10 +122,10 @@ public:
     RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
     DepthStencilState* createDepthStencilState() override;
     RenderPipeline* createRenderPipeline() override;
-    Program* createProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
+    Program* createProgram(Data vsData, Data fsData) override;
     VertexLayout* createVertexLayout(VertexLayoutDesc&& desc) override;
 
-    ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
+    ShaderModule* createShaderModule(ShaderStage stage, Data&) override;
     SamplerHandle createSampler(const SamplerDesc& desc) override;
     void destroySampler(SamplerHandle&) override;
 
@@ -168,7 +169,7 @@ public:
     UINT getSrvDescriptorStride() const { return _srvDescriptorStride; }
     UINT getSamplerDescriptorStride() const { return _samplerDescriptorStride; }
 
-    bool compileShader(std::string_view shaderSource, ShaderStage stage, D3D12BlobHandle& outHandle);
+    bool compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, D3D12BlobHandle& outHandle);
 
     void queueDisposal(ID3D12Resource*, uint64_t fenceValue);
     void queueDisposal(DescriptorHandle* handle, DisposableResource::Type type, uint64_t fenceValue);
@@ -226,7 +227,7 @@ private:
     ComPtr<IDxcCompiler> _dxcCompiler;
     std::vector<LPCWSTR> _dxcArguments;
 
-    std::string _shaderCompileBuffer;
+    tlx::byte_buffer _shaderCompileBuffer;
 
     // lazy init helpers
     void ensureMipmapPipeline(bool isArray);

@@ -70,7 +70,16 @@ Program::Program(Data& vsData, Data& fsData)
     SLCReflectContext context{};
     parseStageReflection(ShaderStage::VERTEX, &context);
     parseStageReflection(ShaderStage::FRAGMENT, &context);
+
     resolveBuiltinBindings();
+
+#if AX_RENDER_API == AX_RENDER_API_D3D12
+    if (_activeUniformBlockInfos.size() > 1)
+    {
+        std::sort(_activeUniformBlockInfos.begin(), _activeUniformBlockInfos.end(),
+                  [](auto& a, auto& b) { return a.binding < b.binding; });
+    }
+#endif
 }
 
 Program::~Program()
@@ -368,7 +377,7 @@ void Program::reflectSamplers(SLCReflectContext* context)
         _activeTextureInfos.emplace_back(name, &ret.first->second);
     }
 #if AX_RENDER_API == AX_RENDER_API_D3D12
-    if (_activeTextureInfos.size() > 2)
+    if (_activeTextureInfos.size() > 1)
     {
         // Important:
         // In D3D11/D3D12, the order in which descriptor ranges are declared
