@@ -58,7 +58,7 @@ void ShaderModule::parseShaderCode(void)
     if (chunk.major < 3 || chunk.minor < 3)
     {
         AXLOGE(
-            "shader chunk version too old: found {}.{}, required >= 3.2, "
+            "The axslcc shader chunk version too old: found {}.{}, required >= 3.3, "
             "Please update/recompile the shader.",
             chunk.major, chunk.minor);
         assert(false && "axmol: Shader version too old");
