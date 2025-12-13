@@ -884,7 +884,7 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     }
 
     // bind ubos
-    const auto cpuBuffer = _programState->getUniformBuffer();
+    const auto& cpuBuffer = _programState->getUniformBuffer();
     if (!cpuBuffer.empty())
     {
         for (auto& uboInfo : _programState->getActiveUniformBlockInfos())

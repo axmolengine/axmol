@@ -70,7 +70,7 @@ public:
      */
     inline GLuint internalHandle() const { return _program; }
 
-    void bindUniformBuffers(const char* buffer, size_t bufferSize);
+    void bindUniformBuffers(const uint8_t* buffer, size_t bufferSize);
 
 private:
     void compileProgram();

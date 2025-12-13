@@ -50,7 +50,7 @@ ID3DBlob* ProgramImpl::getVSBlob() const
     return static_cast<ShaderModuleImpl*>(_vsModule)->getShaderBlob();
 }
 
-void ProgramImpl::bindUniformBuffers(ID3D11DeviceContext* context, const char* buffer, size_t bufferSize)
+void ProgramImpl::bindUniformBuffers(ID3D11DeviceContext* context, const uint8_t* buffer, size_t bufferSize)
 {
     const auto uboCount = _activeUniformBlockInfos.size();
     for (size_t i = 0; i < uboCount; ++i)

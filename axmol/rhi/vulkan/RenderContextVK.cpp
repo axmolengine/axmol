@@ -1034,24 +1034,28 @@ void RenderContextImpl::prepareDrawing()
     _descriptorBufferInfos.clear();
 
     auto& cpuBuffer = _programState->getUniformBuffer();
-    for (auto& uboInfo : _programState->getActiveUniformBlockInfos())
+    if (!cpuBuffer.empty())
     {
-        UniformSlice s = allocateUniformSlice(uboInfo.sizeBytes);
-        std::memcpy(s.cpuPtr, cpuBuffer.data() + uboInfo.cpuOffset, uboInfo.sizeBytes);
+        auto bufferPtr = cpuBuffer.data();
+        for (auto& uboInfo : _programState->getActiveUniformBlockInfos())
+        {
+            UniformSlice s = allocateUniformSlice(uboInfo.sizeBytes);
+            std::memcpy(s.cpuPtr, bufferPtr + uboInfo.cpuOffset, uboInfo.sizeBytes);
 
-        VkWriteDescriptorSet& write        = writes.emplace_back();
-        VkDescriptorBufferInfo& bufferInfo = _descriptorBufferInfos.emplace_back();
+            VkWriteDescriptorSet& write        = writes.emplace_back();
+            VkDescriptorBufferInfo& bufferInfo = _descriptorBufferInfos.emplace_back();
 
-        bufferInfo.buffer = _uniformRings[_currentFrame].buffer;
-        bufferInfo.offset = static_cast<VkDeviceSize>(s.offset);
-        bufferInfo.range  = static_cast<VkDeviceSize>(uboInfo.sizeBytes);
+            bufferInfo.buffer = _uniformRings[_currentFrame].buffer;
+            bufferInfo.offset = static_cast<VkDeviceSize>(s.offset);
+            bufferInfo.range  = static_cast<VkDeviceSize>(uboInfo.sizeBytes);
 
-        write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        write.dstSet          = descriptorSets[RenderPipelineImpl::SET_INDEX_UBO];  // renamed index
-        write.dstBinding      = uboInfo.binding;
-        write.descriptorType  = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        write.descriptorCount = 1;
-        write.pBufferInfo     = &bufferInfo;
+            write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            write.dstSet          = descriptorSets[RenderPipelineImpl::SET_INDEX_UBO];  // renamed index
+            write.dstBinding      = uboInfo.binding;
+            write.descriptorType  = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+            write.descriptorCount = 1;
+            write.pBufferInfo     = &bufferInfo;
+        }
     }
 
     // --- Samplers (set=1, binding=N) ---

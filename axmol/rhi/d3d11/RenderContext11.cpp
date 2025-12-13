@@ -766,7 +766,7 @@ void RenderContextImpl::prepareDrawing()
         _d3d11Context->IASetVertexBuffers(0, 2, vbs, strides, offsets);
     }
 
-    auto cpuBuffer = _programState->getUniformBuffer();
+    auto& cpuBuffer = _programState->getUniformBuffer();
     program->bindUniformBuffers(_d3d11Context, cpuBuffer.data(), cpuBuffer.size());
 
     // bind texture

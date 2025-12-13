@@ -177,9 +177,9 @@ void RenderPipelineImpl::update(const RenderTarget* renderTarget, const Pipeline
     memset(&hashMe, 0, sizeof(hashMe));
     const auto& blendDesc = pipelineDesc.blendDesc;
     chooseAttachmentFormat(renderTarget, _colorAttachmentsFormat, _depthStencilPF);
-    auto program              = static_cast<ProgramImpl*>(pipelineDesc.programState->getProgram());
-    hashMe.vertexShaderHash   = program->getVertexShader()->getHashValue();
-    hashMe.fragmentShaderHash = program->getFragmentShader()->getHashValue();
+    auto program              = pipelineDesc.programState->getProgram();
+    hashMe.vertexShaderHash   = program->getVSModule()->getHashValue();
+    hashMe.fragmentShaderHash = program->getFSModule()->getHashValue();
     memcpy(&hashMe.colorAttachment, &_colorAttachmentsFormat, sizeof(_colorAttachmentsFormat));
     hashMe.depthStencilPF              = _depthStencilPF;
     hashMe.blendEnabled                = blendDesc.blendEnabled;
@@ -215,7 +215,7 @@ void RenderPipelineImpl::update(const RenderTarget* renderTarget, const Pipeline
 
     _mtlRenderPipelineDesc = [[MTLRenderPipelineDescriptor alloc] init];
 
-    setShaderModules(pipelineDesc);
+    setShaderModules(program);
     setVertexLayout(_mtlRenderPipelineDesc, pipelineDesc);
 
     setBlendStateAndFormat(pipelineDesc.blendDesc);
@@ -309,13 +309,13 @@ void RenderPipelineImpl::setBlendState(MTLRenderPipelineColorAttachmentDescripto
     colorAttachmentDesc.destinationAlphaBlendFactor = toMTLBlendFactor(blendDesc.destinationAlphaBlendFactor);
 }
 
-void RenderPipelineImpl::setShaderModules(const PipelineDesc& descriptor)
+void RenderPipelineImpl::setShaderModules(Program* program)
 {
-    auto vertexShaderModule = static_cast<ProgramImpl*>(descriptor.programState->getProgram())->getVertexShader();
-    _mtlRenderPipelineDesc.vertexFunction = vertexShaderModule->getMTLFunction();
+    auto vsModule = static_cast<ShaderModuleImpl*>(program->getVSModule());
+    _mtlRenderPipelineDesc.vertexFunction = vsModule->getMTLFunction();
 
-    auto fragShaderModule = static_cast<ProgramImpl*>(descriptor.programState->getProgram())->getFragmentShader();
-    _mtlRenderPipelineDesc.fragmentFunction = fragShaderModule->getMTLFunction();
+    auto fsModule = static_cast<ShaderModuleImpl*>(program->getFSModule());
+    _mtlRenderPipelineDesc.fragmentFunction = fsModule->getMTLFunction();
 }
 
 void RenderPipelineImpl::chooseAttachmentFormat(const RenderTarget* renderTarget,

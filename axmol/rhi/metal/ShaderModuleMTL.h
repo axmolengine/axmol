@@ -50,7 +50,7 @@ public:
      * @param stage Specify what kinds of shader to be created.
      * @param source Specify the shader source.
      */
-    ShaderModuleImpl(id<MTLDevice> mtlDevice, ShaderStage stage, std::string_view source);
+    ShaderModuleImpl(id<MTLDevice> mtlDevice, ShaderStage stage, Data& chunk);
     ~ShaderModuleImpl();
 
     /**

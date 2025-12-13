@@ -358,7 +358,7 @@ void RenderContextImpl::bindUniforms(ProgramImpl* program) const
         for (auto&& cb : callbacks)
             cb.second(_programState, cb.first);
 
-        auto&& buffer = _programState->getUniformBuffer();
+        auto& buffer = _programState->getUniformBuffer();
         program->bindUniformBuffers(buffer.data(), buffer.size());
 
         CHECK_GL_ERROR_DEBUG();

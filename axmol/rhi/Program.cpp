@@ -186,7 +186,7 @@ void Program::parseStageReflection(ShaderStage stage, SLCReflectContext* context
     ibs.advance(sizeof(uint32_t));  // skip sc_size
     struct sc_chunk chunk;
     ibs.advance(sizeof(sc_chunk));  // skip header
-    uint32_t fourccId{0};
+    uint32_t fourccId;
     do
     {
         fourccId = ibs.read<uint32_t>();

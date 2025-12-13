@@ -25,23 +25,23 @@
 
 #include "axmol/rhi/metal/ShaderModuleMTL.h"
 #include "axmol/rhi/metal/DriverMTL.h"
+#include "axmol/base/Logging.h"
 
 namespace ax::rhi::mtl
 {
 
-ShaderModuleImpl::ShaderModuleImpl(id<MTLDevice> mtlDevice, ShaderStage stage, std::string_view source)
-    : ShaderModule(stage)
+ShaderModuleImpl::ShaderModuleImpl(id<MTLDevice> mtlDevice, ShaderStage stage, Data& chunk)
+    : ShaderModule(stage, chunk)
 {
-    auto shaderSource = this->parseReflection(source);
-
-    auto metalShader = shaderSource.data();
-    NSString* shader = [NSString stringWithUTF8String:metalShader];
+    NSString* shader = [[NSString alloc] initWithBytes:_codeSpan.data()
+                                                length:_codeSpan.size()
+                                              encoding:NSUTF8StringEncoding];
     NSError* error;
     id<MTLLibrary> library = [mtlDevice newLibraryWithSource:shader options:nil error:&error];
     if (!library)
     {
         NSLog(@"Can not compile metal shader: %@", error);
-        NSLog(@"%s", metalShader);
+        AXLOGE("{}", std::string_view{(const char*)_codeSpan.data(), _codeSpan.size()});
         assert(false);
         return;
     }
@@ -51,7 +51,7 @@ ShaderModuleImpl::ShaderModuleImpl(id<MTLDevice> mtlDevice, ShaderStage stage, s
     if (!_mtlFunction)
     {
         NSLog(@"metal shader is ---------------");
-        NSLog(@"%s", metalShader);
+        AXLOGE("{}", std::string_view{(const char*)_codeSpan.data(), _codeSpan.size()});
         assert(false);
     }
 

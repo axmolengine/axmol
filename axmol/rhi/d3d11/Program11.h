@@ -59,7 +59,7 @@ public:
             static_cast<ID3D11PixelShader*>(static_cast<ShaderModuleImpl*>(_fsModule)->internalHandle()), nullptr, 0);
     }
 
-    void bindUniformBuffers(ID3D11DeviceContext*, const char* buffer, size_t bufferSize);
+    void bindUniformBuffers(ID3D11DeviceContext*, const uint8_t* buffer, size_t bufferSize);
 
 private:
     // The ubo instances

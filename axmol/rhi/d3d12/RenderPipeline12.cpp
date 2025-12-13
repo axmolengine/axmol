@@ -209,7 +209,6 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
     tlx::pod_vector<D3D12_ROOT_PARAMETER> rootParams;
     rootParams.reserve(4);  // VS UBO, FS UBO, FS SRV table, FS Sampler table
 
-    int maxUboBinding = -1;
     for (auto& uboInfo : program->getActiveUniformBlockInfos())
     {
         D3D12_ROOT_PARAMETER& param     = rootParams.emplace_back();

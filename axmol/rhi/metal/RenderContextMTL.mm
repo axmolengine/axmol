@@ -535,17 +535,23 @@ void RenderContextImpl::setUniformBuffer() const
         auto& callbackUniforms = _programState->getCallbackUniforms();
         for (auto& cb : callbackUniforms)
             cb.second(_programState, cb.first);
-
-        auto vertexUB = _programState->getVertexUniformBuffer();
-        if (!vertexUB.empty())
+        
+        auto& cpuBuffer = _programState->getUniformBuffer();
+        if(cpuBuffer.empty())
+            return;
+        const auto bufferPtr = cpuBuffer.data();
+        for(auto& uboInfo : _programState->getActiveUniformBlockInfos())
         {
-            [_mtlRenderEncoder setVertexBytes:vertexUB.data() length:vertexUB.size() atIndex:VS_UBO_BINDING_INDEX];
-        }
-
-        auto fragUB = _programState->getFragmentUniformBuffer();
-        if (!fragUB.empty())
-        {
-            [_mtlRenderEncoder setFragmentBytes:fragUB.data() length:fragUB.size() atIndex:FS_UBO_BINDING_INDEX];
+            switch(uboInfo.stage)
+            {
+                case ShaderStage::VERTEX:
+                    [_mtlRenderEncoder setVertexBytes:bufferPtr + uboInfo.cpuOffset length:uboInfo.sizeBytes atIndex:VS_UBO_BINDING_INDEX];
+                    break;
+                case ShaderStage::FRAGMENT:
+                    [_mtlRenderEncoder setFragmentBytes:bufferPtr + uboInfo.cpuOffset length:uboInfo.sizeBytes atIndex:FS_UBO_BINDING_INDEX];
+                    break;
+                default:;
+            }
         }
     }
 }

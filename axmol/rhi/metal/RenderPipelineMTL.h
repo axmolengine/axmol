@@ -62,7 +62,7 @@ public:
 private:
     void setVertexLayout(MTLRenderPipelineDescriptor*, const PipelineDesc&);
     void setBlendState(MTLRenderPipelineColorAttachmentDescriptor*, const BlendDesc&);
-    void setShaderModules(const PipelineDesc&);
+    void setShaderModules(Program*);
     void setBlendStateAndFormat(const BlendDesc&);
     void chooseAttachmentFormat(const RenderTarget* renderTarget,
                                 PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT],

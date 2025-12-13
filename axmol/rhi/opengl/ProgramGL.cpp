@@ -125,7 +125,7 @@ void ProgramImpl::compileProgram()
     }
 }
 
-void ProgramImpl::bindUniformBuffers(const char* buffer, size_t bufferSize)
+void ProgramImpl::bindUniformBuffers(const uint8_t* buffer, size_t bufferSize)
 {
     const auto uboCount = _activeUniformBlockInfos.size();
     for (size_t i = 0; i < uboCount; ++i)

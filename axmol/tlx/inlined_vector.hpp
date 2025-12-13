@@ -33,7 +33,11 @@ class inlined_vector
 
     struct _Vec_val
     {
-        _Vec_val() { reset_uninitialized(); }
+        _Vec_val()
+        {
+            reset_uninitialized();
+            ::memset(_Mybuf, 0, sizeof(_Mybuf));
+        }
 
         void reset_uninitialized()
         {
@@ -493,17 +497,16 @@ private:
         auto& _My_data = _Mypair._Myval2;
         if (_Newsize <= capacity())
         {
-            const auto new_last = _My_data._Myfirst + _Newsize;
+            const auto _Newlast = _My_data._Myfirst + _Newsize;
             if constexpr (!std::is_trivially_destructible_v<_Ty>)
             {
-                auto diff = static_cast<difference_type>(size()) - static_cast<difference_type>(_Newsize);
-                if (diff > 0)
+                if (_Newlast < _My_data._Mylast)
                 {
-                    for (pointer p = _My_data._Mylast; p != new_last;)
+                    for (pointer p = _My_data._Mylast - 1; p >= _Newlast;)
                         tlx::invoke_dtor(--p);
                 }
             }
-            _My_data._Mylast = new_last;
+            _My_data._Mylast = _Newlast;
         }
         else
         {
@@ -519,7 +522,7 @@ private:
                 size_type i = 0;
                 try
                 {
-                    for (; i < _Oldsize; ++i, ++_Newlast)
+                    for (; i < _Oldsize; ++i)
                         tlx::construct_at(_Newvec + i, std::move(_My_data._Myfirst[i]));
                 }
                 catch (...)
@@ -536,7 +539,6 @@ private:
             else
             {
                 ::memcpy(_Newvec, _My_data._Myfirst, _Oldsize * sizeof(_Ty));
-                _Newlast = _Newvec + _Oldsize;
             }
 
             // destroy old elements in old storage
