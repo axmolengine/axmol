@@ -692,7 +692,7 @@ void ParticleSystemQuad::setTotalParticles(int tp)
         "Adding more than 10000 particles will crash the renderer, the mesh generated has an index format of "
         "U_SHORT (uint16_t).");
 
-    tp = std::min(tp, 10000);
+    tp = (std::min)(tp, 10000);
     // If we are setting the total number of particles to a number higher
     // than what is allocated, we need to allocate new arrays
     if (tp > _allocatedParticles)
@@ -706,7 +706,7 @@ void ParticleSystemQuad::setTotalParticles(int tp)
         if (!_particleData.init(tp))
         {
             AXLOGW("Particle system: not enough memory");
-            _particleData.release();    // WUCJ638
+            _particleData.release();
             return;
         }
         V3F_C4B_T2F_Quad* quadsNew = (V3F_C4B_T2F_Quad*)realloc(_quads, quadsSize);

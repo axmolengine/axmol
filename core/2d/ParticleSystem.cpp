@@ -118,7 +118,7 @@ bool ParticleData::init(int count)
     deltaColorG = (float*)malloc(count * sizeof(float));
     deltaColorB = (float*)malloc(count * sizeof(float));
     deltaColorA = (float*)malloc(count * sizeof(float));
-    
+
     size            = (float*)malloc(count * sizeof(float));
     deltaSize       = (float*)malloc(count * sizeof(float));
     rotation        = (float*)malloc(count * sizeof(float));
@@ -862,8 +862,8 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
         }
     }
 
-     if (animationCellIndex != -1 || animationIndex != -1)
-         allocAnimationMem();
+    if (animationCellIndex != -1 || animationIndex != -1)
+        allocAnimationMem();
 
     if (_isAnimAllocated)
     {
@@ -2107,9 +2107,9 @@ void ParticleSystem::useHSV(bool hsv)
 
 void ParticleSystem::setSpawnFadeIn(float time)
 {
-// Modification is allowed when:
-//  - memory hasn't been allocated, time != 0.0F and allocation has done successfully; OR
-//  - memory has allocated.
+    // Modification is allowed when:
+    //  - memory hasn't been allocated, time != 0.0F and allocation has done successfully; OR
+    //  - memory has allocated.
     if(!_isOpacityFadeInAllocated && (time == 0.0F || !allocOpacityFadeInMem()))
         return;
 
