@@ -311,7 +311,7 @@ void Pass::setUniformDirLightColor(const void* data, size_t dataLen)
 
 void Pass::setUniformDirLightDir(const void* data, size_t dataLen)
 {
-    for (auto loc : _locDirLightDir)
+    for (auto& loc : _locDirLightDir)
         TRY_SET_UNIFORM(loc);
 }
 
@@ -342,7 +342,7 @@ void Pass::setUniformSpotLightPosition(const void* data, size_t dataLen)
 
 void Pass::setUniformSpotLightDir(const void* data, size_t dataLen)
 {
-    for (auto loc : _locSpotLightDir)
+    for (auto& loc : _locSpotLightDir)
         TRY_SET_UNIFORM(loc);
 }
 
