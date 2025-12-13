@@ -163,15 +163,15 @@ void Pass::initUniformLocations()
     _locMatrixPalette = ps->getUniformLocation("u_matrixPalette");
 
     _locDirLightColor = ps->getUniformLocation(s_dirLightUniformColorName);
-    _locDirLightDir   = ps->getUniformLocation(s_dirLightUniformDirName);
+    ps->getUniformLocations(s_dirLightUniformDirName, _locDirLightDir);
 
     _locPointLightColor        = ps->getUniformLocation(s_pointLightUniformColorName);
     _locPointLightPosition     = ps->getUniformLocation(s_pointLightUniformPositionName);
     _locPointLightRangeInverse = ps->getUniformLocation(s_pointLightUniformRangeInverseName);
 
-    _locSpotLightColor         = ps->getUniformLocation(s_spotLightUniformColorName);
-    _locSpotLightPosition      = ps->getUniformLocation(s_spotLightUniformPositionName);
-    _locSpotLightDir           = ps->getUniformLocation(s_spotLightUniformDirName);
+    _locSpotLightColor    = ps->getUniformLocation(s_spotLightUniformColorName);
+    _locSpotLightPosition = ps->getUniformLocation(s_spotLightUniformPositionName);
+    ps->getUniformLocations(s_spotLightUniformDirName, _locSpotLightDir);
     _locSpotLightInnerAngleCos = ps->getUniformLocation(s_spotLightUniformInnerAngleCosName);
     _locSpotLightOuterAngleCos = ps->getUniformLocation(s_spotLightUniformOuterAngleCosName);
     _locSpotLightRangeInverse  = ps->getUniformLocation(s_spotLightUniformRangeInverseName);
@@ -311,7 +311,8 @@ void Pass::setUniformDirLightColor(const void* data, size_t dataLen)
 
 void Pass::setUniformDirLightDir(const void* data, size_t dataLen)
 {
-    TRY_SET_UNIFORM(_locDirLightDir);
+    for (auto loc : _locDirLightDir)
+        TRY_SET_UNIFORM(loc);
 }
 
 void Pass::setUniformPointLightColor(const void* data, size_t dataLen)
@@ -341,7 +342,8 @@ void Pass::setUniformSpotLightPosition(const void* data, size_t dataLen)
 
 void Pass::setUniformSpotLightDir(const void* data, size_t dataLen)
 {
-    TRY_SET_UNIFORM(_locSpotLightDir);
+    for (auto loc : _locSpotLightDir)
+        TRY_SET_UNIFORM(loc);
 }
 
 void Pass::setUniformSpotLightInnerAngleCos(const void* data, size_t dataLen)

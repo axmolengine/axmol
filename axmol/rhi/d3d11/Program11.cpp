@@ -73,7 +73,7 @@ UniformLocation ProgramImpl::getUniformLocation(std::string_view uniform) const
     auto& frag = _fragmentShader->getUniformInfo(uniform);
 
     if (vert.location != -1 && frag.location != -1)
-        AXASSERT(vert.type == frag.type && vert.count == frag.count && vert.size == frag.size,
+        AXASSERT(vert.varType == frag.varType && vert.count == frag.count && vert.size == frag.size,
                  "Same vertex and fragment uniform must much in type and size");
 
     return UniformLocation{{frag.location, frag.location == -1 ? -1 : static_cast<int>(frag.bufferOffset)},

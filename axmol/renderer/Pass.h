@@ -166,7 +166,7 @@ private:
     rhi::UniformLocation _locMatrixPalette;  // u_matrixPalette
 
     rhi::UniformLocation _locDirLightColor;
-    rhi::UniformLocation _locDirLightDir;
+    rhi::UniformLocationVector _locDirLightDir;
 
     rhi::UniformLocation _locPointLightColor;
     rhi::UniformLocation _locPointLightPosition;
@@ -174,7 +174,7 @@ private:
 
     rhi::UniformLocation _locSpotLightColor;
     rhi::UniformLocation _locSpotLightPosition;
-    rhi::UniformLocation _locSpotLightDir;
+    rhi::UniformLocationVector _locSpotLightDir;
     rhi::UniformLocation _locSpotLightInnerAngleCos;
     rhi::UniformLocation _locSpotLightOuterAngleCos;
     rhi::UniformLocation _locSpotLightRangeInverse;

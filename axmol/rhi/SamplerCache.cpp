@@ -48,7 +48,7 @@ SamplerCache::~SamplerCache()
     removeAllSamplers();
 }
 
-void SamplerCache::invalidateAll()
+void SamplerCache::rebuild()
 {
     removeAllSamplers();
 

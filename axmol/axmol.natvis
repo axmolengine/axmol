@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+    <Type Name="tlx::inlined_vector&lt;*&gt;">
+        <AlternativeType Name="tlx::vector&lt;*&gt;" />
+        <DisplayString>{{ size={_Mypair._Myval2._Mylast - _Mypair._Myval2._Myfirst} capacity={_Mypair._Myval2._Myend - _Mypair._Myval2._Myfirst} }}</DisplayString>
+        <Expand>
+            <Item Name="[size]" ExcludeView="simple">_Mypair._Myval2._Mylast - _Mypair._Myval2._Myfirst</Item>
+            <Item Name="[capacity]" ExcludeView="simple">_Mypair._Myval2._Myend - _Mypair._Myval2._Myfirst</Item>
+            <ArrayItems>
+                <Size>_Mypair._Myval2._Mylast - _Mypair._Myval2._Myfirst</Size>
+                <ValuePointer>_Mypair._Myval2._Myfirst</ValuePointer>
+            </ArrayItems>
+        </Expand>
+    </Type>
     <!-- flat_set_base visualizer -->
     <Type Name="tlx::flat_set_base&lt;*&gt;">
         <DisplayString>{{size = {_Mycont._Mypair._Myval2._Mylast - _Mycont._Mypair._Myval2._Myfirst}}}</DisplayString>

@@ -69,11 +69,7 @@ void TextureBindingSet::assign(const TextureBindingSet& other)
 {
     if (this != &other)
     {
-#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-        setTextureArray(other.loc, other.slots, other.texs);
-#else
-        setTextureArray(-1, other.slots, other.texs);
-#endif
+        setTextureArray(this->runtimeLocation, other.slots, other.texs);
     }
 }
 
@@ -81,12 +77,9 @@ void TextureBindingSet::swap(TextureBindingSet& other)
 {
     if (this != &other)
     {
-        std::swap(slots, other.slots);
-        std::swap(texs, other.texs);
-
-#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-        std::swap(loc, other.loc);
-#endif
+        std::swap(this->slots, other.slots);
+        std::swap(this->texs, other.texs);
+        std::swap(this->runtimeLocation, other.runtimeLocation);
     }
 }
 
@@ -96,11 +89,9 @@ void TextureBindingSet::setTexture(int location, int slot, rhi::Texture* tex)
     {
         tex->retain();
         releaseTextures();
+        this->runtimeLocation = location;
         this->slots.push_back(slot);
         this->texs.push_back(tex);
-#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-        this->loc = location;
-#endif
     }
 }
 
@@ -113,7 +104,8 @@ void TextureBindingSet::setTextureArray(int location, std::span<const TextureBin
 
     if (!units.empty())
     {
-        const auto count = units.size();
+        this->runtimeLocation = location;
+        const auto count      = units.size();
         this->texs.resize(count);
         this->slots.resize(count);
         for (int i = 0; i < count; ++i)
@@ -122,10 +114,6 @@ void TextureBindingSet::setTextureArray(int location, std::span<const TextureBin
             this->slots[i] = units[i].slot;
         }
     }
-
-#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    this->loc = location;
-#endif
 }
 
 void TextureBindingSet::setTextureArray(int location, std::span<const int> slots, std::span<rhi::Texture* const> texs)
@@ -142,16 +130,13 @@ void TextureBindingSet::setTextureArray(int location, std::span<const int> slots
 
     if (retain)
     {
+        this->runtimeLocation = location;
         this->slots.resize(slots.size());
         this->texs.resize(slots.size());
 
         memcpy(this->slots.data(), slots.data(), slots.size_bytes());
         memcpy(this->texs.data(), texs.data(), texs.size_bytes());
     }
-
-#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    this->loc = location;
-#endif
 }
 
 void TextureBindingSet::releaseTextures()
@@ -160,6 +145,7 @@ void TextureBindingSet::releaseTextures()
         AX_SAFE_RELEASE(tex);
     this->texs.clear();
     this->slots.clear();
+    this->runtimeLocation = -1;
 }
 
 /* CLASS ProgramState */
@@ -173,22 +159,8 @@ bool ProgramState::init(Program* program)
     AX_SAFE_RETAIN(program);
     _program = program;
 
-#if AX_RENDER_API == AX_RENDER_API_GL
-    auto uboSize = _program->getUniformBufferSize(ShaderStage::DEFAULT);
-    _uniformBuffer.resize((std::max)(uboSize, (size_t)1), 0);
-#else
-    auto fragUboSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
-    auto vertUboSize = _program->getUniformBufferSize(ShaderStage::VERTEX);
-
-    _uniformBuffer.resize((std::max)(vertUboSize + fragUboSize, (size_t)1), 0);
-    _vertexUniformBufferStart = fragUboSize;
-#endif
-
-#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    _backToForegroundListener =
-        EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { this->resetUniforms(); });
-    Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
-#endif
+    auto uniformBufferSize = _program->getUniformBufferSize();
+    _uniformBuffer.resize((std::max)(uniformBufferSize, (size_t)1), 0);
 
     const auto programId = program->getProgramId();
     if (programId < ProgramType::BUILTIN_COUNT)
@@ -196,6 +168,12 @@ bool ProgramState::init(Program* program)
         this->_batchId     = programId;
         this->_isBatchable = true;
     }
+
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+    _backToForegroundListener = EventListenerCustom::create(
+        EVENT_RENDERER_RECREATED, [this](EventCustom*) { this->remapTextureRuntimeLocations(); });
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
+#endif
 
     return true;
 }
@@ -206,24 +184,20 @@ void ProgramState::updateBatchId()
     _isBatchable = true;
 }
 
-void ProgramState::resetUniforms()
+void ProgramState::remapTextureRuntimeLocations()
 {
-#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     if (_program == nullptr)
         return;
 
-    const auto& uniformLocation = _program->getAllUniformsLocation();
-    for (const auto& uniform : uniformLocation)
+    const auto& textureInfos = _program->getActiveTextureInfos();
+    for (auto& entry : textureInfos)
     {
-        auto location       = uniform.second;
-        auto mappedLocation = _program->getMappedLocation(location);
-
         // check if current location had been set before
-        auto it = _textureBindingSets.find(location);
-        if (it != _textureBindingSets.end())
-            it->second.loc = mappedLocation;
+        auto& textureInfo = entry.second;
+        auto bindingIt    = _textureBindingSets.find(textureInfo->location);
+        if (bindingIt != _textureBindingSets.end())
+            bindingIt->second.runtimeLocation = textureInfo->runtimeLocation;
     }
-#endif
 }
 
 ProgramState::~ProgramState()
@@ -241,23 +215,24 @@ ProgramState* ProgramState::clone() const
     cp->_textureBindingSets = _textureBindingSets;
 
     cp->_uniformBuffer = _uniformBuffer;
-#if AX_RENDER_API != AX_RENDER_API_GL
-    cp->_vertexUniformBufferStart = _vertexUniformBufferStart;
-#endif
-
-    cp->_batchId     = this->_batchId;
-    cp->_isBatchable = this->_isBatchable;
+    cp->_batchId       = this->_batchId;
+    cp->_isBatchable   = this->_isBatchable;
     return cp;
 }
 
-rhi::UniformLocation ProgramState::getUniformLocation(rhi::Uniform name) const
+rhi::UniformLocation ProgramState::getUniformLocation(rhi::Uniform kind) const
+{
+    return _program->getUniformLocation(kind);
+}
+
+rhi::UniformLocation ProgramState::getUniformLocation(std::string_view name) const
 {
     return _program->getUniformLocation(name);
 }
 
-rhi::UniformLocation ProgramState::getUniformLocation(std::string_view uniform) const
+void ProgramState::getUniformLocations(std::string_view name, UniformLocationVector& outLocations) const
 {
-    return _program->getUniformLocation(uniform);
+    _program->getUniformLocations(name, outLocations);
 }
 
 void ProgramState::setCallbackUniform(const rhi::UniformLocation& uniformLocation, const UniformCallback& callback)
@@ -267,52 +242,38 @@ void ProgramState::setCallbackUniform(const rhi::UniformLocation& uniformLocatio
 
 void ProgramState::setUniform(const rhi::UniformLocation& uniformLocation, const void* data, std::size_t size)
 {
-    if (uniformLocation.stages[0])
+    if (uniformLocation)
     {
-#if AX_RENDER_API == AX_RENDER_API_GL
-        auto& info                = uniformLocation.stages[0];
-        const auto resolvedOffset = info.location + info.offset;
-#else
-        const auto resolvedOffset = uniformLocation.stages[0].offset;
-#endif
-        setUniform(data, size, resolvedOffset, 0);
+        auto offset    = uniformLocation.offset;
+        auto cpuOffset = uniformLocation.cpuOffset;
+        assert(offset >= 0);
+        assert(cpuOffset >= 0);
+        assert(cpuOffset + offset + size <= _uniformBuffer.size());
+        memcpy(_uniformBuffer.data() + cpuOffset + offset, data, size);
     }
-#if AX_RENDER_API != AX_RENDER_API_GL
-    if (uniformLocation.stages[1])
-        setUniform(data, size, uniformLocation.stages[1].offset, _vertexUniformBufferStart);
-#endif
-}
-
-void ProgramState::setUniform(const void* data, std::size_t size, int offset, int start)
-{
-    assert(offset >= 0);
-    assert(start + offset + size <= _uniformBuffer.size());
-    memcpy(_uniformBuffer.data() + start + offset, data, size);
 }
 
 void ProgramState::setTexture(rhi::Texture* texture)
 {
-    auto location = getUniformLocation((rhi::Uniform)(rhi::Uniform::TEXTURE));
+    auto location = getUniformLocation(rhi::Uniform::TEXTURE);
     setTexture(location, 0, texture);
 }
 
 void ProgramState::setTexture(const rhi::UniformLocation& uniformLocation, int slot, rhi::Texture* texture)
 {
-    auto location = uniformLocation.stages[0].location;
-    if (location >= 0)
+    if (uniformLocation)
     {
-        auto& bindingSet = _textureBindingSets[location];
-        bindingSet.setTexture(location, slot, texture);
+        auto& bindingSet = _textureBindingSets[uniformLocation.location];
+        bindingSet.setTexture(uniformLocation.runtimeLocation, slot, texture);
     }
 }
 
 void ProgramState::setTextureArray(const rhi::UniformLocation& uniformLocation, std::span<TextureBinding> units)
 {
-    auto location = uniformLocation.stages[0].location;
-    if (location >= 0)
+    if (uniformLocation)
     {
-        auto& bindingSet = _textureBindingSets[location];
-        bindingSet.setTextureArray(location, units);
+        auto& bindingSet = _textureBindingSets[uniformLocation.location];
+        bindingSet.setTextureArray(uniformLocation.runtimeLocation, units);
     }
 }
 
@@ -320,11 +281,10 @@ void ProgramState::setTextureArray(const rhi::UniformLocation& uniformLocation,
                                    std::span<int> slots,
                                    std::span<rhi::Texture*> textures)
 {
-    auto location = uniformLocation.stages[0].location;
-    if (location >= 0)
+    if (uniformLocation)
     {
-        auto& bindingSet = _textureBindingSets[location];
-        bindingSet.setTextureArray(location, slots, textures);
+        auto& bindingSet = _textureBindingSets[uniformLocation.location];
+        bindingSet.setTextureArray(uniformLocation.runtimeLocation, slots, textures);
     }
 }
 

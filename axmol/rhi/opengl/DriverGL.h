@@ -104,7 +104,7 @@ public:
      * @param fragmentShader Specifes this is a fragment shader source.
      * @return A Program instance.
      */
-    Program* createProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
+    Program* createProgram(Data vsData, Data fsData) override;
 
     VertexLayout* createVertexLayout(VertexLayoutDesc&&) override;
 
@@ -161,7 +161,7 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
+    ShaderModule* createShaderModule(ShaderStage stage, Data& source) override;
 
     SamplerHandle createSampler(const SamplerDesc& desc) override;
     void destroySampler(SamplerHandle&) override;

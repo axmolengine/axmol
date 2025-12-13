@@ -216,9 +216,9 @@ RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* 
     return rtGL;
 }
 
-ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, std::string_view source)
+ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, Data& data)
 {
-    return new ShaderModuleImpl(stage, source);
+    return new ShaderModuleImpl(stage, data);
 }
 
 SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
@@ -371,9 +371,9 @@ RenderPipeline* DriverImpl::createRenderPipeline()
     return new RenderPipelineImpl();
 }
 
-Program* DriverImpl::createProgram(std::string_view vertexShader, std::string_view fragmentShader)
+Program* DriverImpl::createProgram(Data vsData, Data fsData)
 {
-    return new ProgramImpl(vertexShader, fragmentShader);
+    return new ProgramImpl(vsData, fsData);
 }
 
 VertexLayout* DriverImpl::createVertexLayout(VertexLayoutDesc&& desc)

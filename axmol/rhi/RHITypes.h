@@ -467,18 +467,36 @@ struct BlendDesc
 
 struct UniformInfo
 {
-    uint16_t count        = 0;   // element count
-    uint16_t sampler_slot = 0;   // sampler slot
-    int location          = -1;  // see also @StageUniformLocation
+    // Stable location from axslcc reflection.
+    // Used as the unified binding key across all rendering backends.
+    int16_t location = -1;
 
-    // in opengl, type means uniform data type, i.e. GL_FLOAT_VEC2, while in metal type means data basic type, i.e.
-    // float
-    unsigned int varType      = 0;
-    unsigned int size         = 0;  // element size
-    unsigned int bufferOffset = 0;
+    // Runtime location used by the active backend.
+    // - On GL: this is the result of glGetUniformLocation().
+    // - On non-GL backends: nativeLocation == location (no runtime lookup needed).
+    int16_t runtimeLocation = -1;
+
+    // Byte offset inside UBO/constant buffer.
+    // -1 indicates this uniform is not part of a UBO.
+    int32_t offset    = -1;  // offset inside the block
+    int32_t cpuOffset = -1;  // absolute offset in CPU buffer
+
+    // Internal uniform type (16-bit enum).
+    // Represents the logical shader type (float, vec4, mat4, sampler2D, ...).
+    uint16_t varType = 0;
+
+    // Size in bytes of a single element (not array total size).
+    // Always <= 65535.
+    uint16_t elementSize = 0;
+
+    // Number of array elements (1 for non-array uniforms).
+    uint16_t count = 0;
+
+    // axslcc-provided sampler slot index (for combined image samplers).
+    uint16_t samplerSlot = 0;
 };
 
-struct StageUniformLocation
+struct UniformLocation
 {
     /*
      * gl: base_offset
@@ -486,45 +504,27 @@ struct StageUniformLocation
      * metal: binding_index
      * vulkan: binding_index
      */
-    int location = -1;
-    int offset   = -1;
+    int16_t location        = -1;  // stable axslcc location
+    int16_t runtimeLocation = -1;  // backend runtime location
+
+    int offset    = -1;
+    int cpuOffset = -1;
 
     operator bool() const { return location != -1; }
-    bool operator==(const StageUniformLocation& other) const
+    bool operator==(const UniformLocation& other) const { return location == other.location && offset == other.offset; }
+
+    void reset()
     {
-        return location == other.location && offset == other.offset;
+        location        = -1;
+        runtimeLocation = -1;
+        offset          = -1;
+        cpuOffset       = -1;
     }
 };
 
-struct UniformLocation
+struct UniformLocationHash
 {
-    UniformLocation() = default;
-    UniformLocation(StageUniformLocation&& s0, StageUniformLocation&& s1)
-    {
-        stages[0] = s0;
-        stages[1] = s1;
-    }
-
-    /*
-     * OpenGL(ES): all uniform linked to stages[0]
-     * Other APIs: stages[0] for fragment shader, stages[1] for vertex shader
-     */
-    StageUniformLocation stages[2];
-
-    operator bool() const { return stages[0] || stages[1]; }
-    void reset()
-    {
-        stages[0] = {};
-        stages[1] = {};
-    }
-    bool operator==(const UniformLocation& other) const
-    {
-        return stages[0] == other.stages[0] && stages[1] == other.stages[1];
-    }
-    std::size_t operator()(const UniformLocation&) const  // used as a hash function
-    {
-        return size_t(stages[0].location) ^ size_t(stages[1].location << 16);
-    }
+    size_t operator()(UniformLocation const& u) const noexcept { return std::size_t(u.location); }
 };
 
 // vertex input descriptor in vertex shader

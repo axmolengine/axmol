@@ -22,7 +22,7 @@
 #include "axmol/tlx/hlookup.hpp"
 #include "axmol/tlx/flat_set.hpp"
 #include "axmol/tlx/flat_map.hpp"
-
+#include "axmol/tlx/inlined_vector.hpp"
 #include "axmol/rhi/IndexArray.h"
 
 #if defined(_WIN32) || defined(_WIN64)
@@ -211,6 +211,22 @@ static void run_benchmark()
     CHECK(keys == s5.keys());
     CHECK(keys == s6.keys());
 }
+
+struct NonTrival1
+{
+    int value;
+    static int ctor;
+    static int dtor;
+    static int move_ctor;
+
+    NonTrival1(int v = 0) : value(v) { ++ctor; }
+    NonTrival1(const NonTrival1& o) : value(o.value) { ++ctor; }
+    NonTrival1(NonTrival1&& o) noexcept : value(o.value) { ++move_ctor; }
+    ~NonTrival1() { ++dtor; }
+};
+int NonTrival1::ctor      = 0;
+int NonTrival1::dtor      = 0;
+int NonTrival1::move_ctor = 0;
 
 TEST_SUITE("tlx/Containers")
 {
@@ -443,5 +459,156 @@ TEST_SUITE("tlx/Containers")
         std::vector<uint32_t> values;
         arr.for_each([&](uint32_t v) { values.push_back(v); });
         CHECK(values == std::vector<uint32_t>{1, 2, 3});
+    }
+
+    TEST_CASE("inlined_vector basic push_back and access")
+    {
+        tlx::inlined_vector<int, 4> v;
+        CHECK(v.empty());
+        CHECK(v.size() == 0);
+
+        v.push_back(1);
+        v.push_back(2);
+        v.push_back(3);
+
+        CHECK(v.size() == 3);
+        CHECK(v[0] == 1);
+        CHECK(v[1] == 2);
+        CHECK(v[2] == 3);
+    }
+
+    TEST_CASE("inlined_vector inline capacity behavior")
+    {
+        tlx::inlined_vector<int, 3> v;
+        v.push_back(10);
+        v.push_back(20);
+        v.push_back(30);
+
+        CHECK(v.size() == 3);
+        CHECK(v.capacity() == 3);                               // inline buffer
+        CHECK(v.begin() == reinterpret_cast<int*>(v.begin()));  // sanity
+    }
+
+    TEST_CASE("inlined_vector heap growth")
+    {
+        tlx::inlined_vector<int, 2> v;
+        v.push_back(1);
+        v.push_back(2);
+        v.push_back(3);  // 触发扩容
+
+        CHECK(v.size() == 3);
+        CHECK(v.capacity() >= 3);
+        CHECK(v[2] == 3);
+    }
+
+    TEST_CASE("inlined_vector copy constructor")
+    {
+        tlx::inlined_vector<int, 4> a;
+        a.push_back(5);
+        a.push_back(6);
+
+        tlx::inlined_vector<int, 4> b = a;
+
+        CHECK(b.size() == 2);
+        CHECK(b[0] == 5);
+        CHECK(b[1] == 6);
+    }
+
+    TEST_CASE("inlined_vector move constructor")
+    {
+        tlx::inlined_vector<int, 4> a;
+        a.push_back(7);
+        a.push_back(8);
+
+        tlx::inlined_vector<int, 4> b = std::move(a);
+
+        CHECK(b.size() == 2);
+        CHECK(b[0] == 7);
+        CHECK(b[1] == 8);
+    }
+
+    TEST_CASE("inlined_vector copy assignment")
+    {
+        tlx::inlined_vector<int, 4> a;
+        a.push_back(1);
+        a.push_back(2);
+
+        tlx::inlined_vector<int, 4> b;
+        b.push_back(9);
+
+        b = a;
+
+        CHECK(b.size() == 2);
+        CHECK(b[0] == 1);
+        CHECK(b[1] == 2);
+    }
+
+    TEST_CASE("inlined_vector move assignment")
+    {
+        tlx::inlined_vector<int, 4> a;
+        a.push_back(3);
+        a.push_back(4);
+
+        tlx::inlined_vector<int, 4> b;
+        b.push_back(99);
+
+        b = std::move(a);
+
+        CHECK(b.size() == 2);
+        CHECK(b[0] == 3);
+        CHECK(b[1] == 4);
+    }
+
+    TEST_CASE("inlined_vector swap")
+    {
+        tlx::inlined_vector<int, 4> a;
+        a.push_back(1);
+        a.push_back(2);
+
+        tlx::inlined_vector<int, 4> b;
+        b.push_back(9);
+
+        a.swap(b);
+
+        CHECK(a.size() == 1);
+        CHECK(a[0] == 9);
+
+        CHECK(b.size() == 2);
+        CHECK(b[0] == 1);
+        CHECK(b[1] == 2);
+    }
+
+    TEST_CASE("inlined_vector clear")
+    {
+        tlx::inlined_vector<int, 4> v;
+        v.push_back(1);
+        v.push_back(2);
+
+        v.clear();
+        CHECK(v.size() == 0);
+
+        v.push_back(3);
+        CHECK(v[0] == 3);
+    }
+
+    TEST_CASE("inlined_vector with non-trivial type")
+    {
+
+        NonTrival1::ctor = NonTrival1::dtor = NonTrival1::move_ctor = 0;
+
+        {
+            tlx::inlined_vector<NonTrival1, 2> v;
+            v.emplace_back(10);
+            v.emplace_back(20);
+            v.emplace_back(30);  // heap growth
+
+            CHECK(v.size() == 3);
+            CHECK(v[0].value == 10);
+            CHECK(v[1].value == 20);
+            CHECK(v[2].value == 30);
+        }
+
+        CHECK(NonTrival1::ctor >= 3);
+        CHECK(NonTrival1::dtor >= 3);
     }
 }

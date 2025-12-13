@@ -28,7 +28,9 @@
 #include "axmol/base/Object.h"
 #include "axmol/tlx/hlookup.hpp"
 #include "axmol/tlx/vector.hpp"
+#include "axmol/base/Data.h"
 
+#include <span>
 #include <string>
 
 namespace ax::rhi
@@ -38,43 +40,6 @@ namespace ax::rhi
  * @addtogroup _rhi
  * @{
  */
-
-enum Uniform : uint32_t
-{
-    MVP_MATRIX,
-    TEXTURE,
-    TEXTURE1,
-    TEXTURE2,
-    TEXTURE3,
-    TEXT_COLOR,
-    EFFECT_COLOR,
-    EFFECT_WIDTH,
-    LABEL_PASS,
-    UNIFORM_COUNT  // Maximum uniforms
-};
-
-enum VertexInputKind : uint32_t
-{
-    POSITION,
-    COLOR,
-    TEXCOORD,
-    TEXCOORD1,
-    TEXCOORD2,
-    TEXCOORD3,
-    NORMAL,
-    INSTANCE,
-    VIK_COUNT  //
-};
-
-struct UniformBlockInfo
-{
-    int binding;          // Vulkan binding index
-    uint32_t sizeBytes;   // total size of the UBO
-    uint16_t numMembers;  // number of uniforms in this block
-    std::string name;     // block name
-};
-
-struct SLCReflectContext;
 
 /**
  * Create shader.
@@ -90,86 +55,23 @@ public:
 
     uint64_t getHashValue() const { return _hash; }
 
-    /**
-     * Get uniform info by engine built-in uniform enum name.
-     * @param name Specifies the engine built-in uniform enum name.
-     * @return The uniform location.
-     */
-    const UniformInfo& getUniformInfo(Uniform name) const;
-
-    /**
-     * Get uniform info by name.
-     * @param uniform Specifies the uniform name.
-     * @return The uniform location.
-     */
-    const UniformInfo& getUniformInfo(std::string_view name) const;
-
-    /**
-     * Get attribute location by engine built-in attribute enum name.
-     * @param name Specifies the engine built-in attribute enum name.
-     * @return The attribute location.
-     */
-    const VertexInputDesc* getVertexInputDesc(VertexInputKind name) const;
-
-    /**
-     * Get attribute location by attribute name.
-     * @param name Specifies the attribute name.
-     * @return The attribute location.
-     */
-    const VertexInputDesc* getVertexInputDesc(std::string_view name) const;
-
-    /**
-     * Get active attribute informations.
-     * @return Active attribute informations. key is attribute name and Value is corresponding attribute info.
-     */
-    inline const tlx::string_map<VertexInputDesc>& getActiveVertexInputs() const { return _activeVertexInputs; }
-
-    /**
-     * Get all uniformInfos.
-     * @return The uniformInfos.
-     */
-    inline const tlx::string_map<UniformInfo>& getActiveUniformInfos() const { return _activeUniformInfos; }
-
-    inline const std::vector<UniformBlockInfo>& getActiveUniformBlockInfos() const { return _activeUniformBlockInfos; }
-    inline const std::vector<UniformInfo>& getActiveSamplerInfos() const { return _activeSamplerInfos; }
-
-    /**
-     * Get maximum uniform location.
-     * @return Maximum uniform location.
-     */
-    inline const int getMaxLocation() const { return _maxLocation; }
-
-    /**
-     * Get uniform buffer size in bytes that holds all the uniforms.
-     * @return The uniform buffer size.
-     */
-    inline std::size_t getUniformBufferSize() const { return _uniformBufferSize; }
+    inline const Data& getChunkData() const { return _chunkData; }
 
 protected:
-    ShaderModule(ShaderStage stage);
+    ShaderModule(ShaderStage stage, Data& data);
     virtual ~ShaderModule();
     void setHashValue(uint64_t hash) { _hash = hash; }
 
-    std::string_view parseReflection(std::string_view source);
+    virtual void compileShader() = 0;
 
-    void reflectVertexInputs(SLCReflectContext* context);
-    void reflectUniforms(SLCReflectContext* context);
-    void reflectSamplers(SLCReflectContext* context);
-
-    void setBuiltinLocations();
+    void parseShaderCode();
 
     friend class ShaderCache;
     ShaderStage _stage = ShaderStage::VERTEX;
     uint64_t _hash     = 0;
 
-    tlx::string_map<VertexInputDesc> _activeVertexInputs;
-    tlx::string_map<UniformInfo> _activeUniformInfos;
-    std::vector<UniformBlockInfo> _activeUniformBlockInfos;
-    std::vector<UniformInfo> _activeSamplerInfos;
-    UniformInfo _builtinUniforms[UNIFORM_COUNT];
-    tlx::pod_vector<const VertexInputDesc*> _builtinVertexInputs;
-    int _maxLocation{-1};
-    std::size_t _uniformBufferSize{0};
+    Data _chunkData;               // owns the axslcc chunk
+    std::span<uint8_t> _codeSpan;  // view into parsed shader code
 };
 
 // end of _rhi group

@@ -170,10 +170,11 @@ bool Director::init()
     // listen the event that renderer was recreated on Android/WP8
     _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
         _isStatusLabelUpdated = true;  // Force recreation of textures
-        rhi::SamplerCache::getInstance()->invalidateAll();
+        rhi::SamplerCache::getInstance()->rebuild();
+        rhi::ShaderCache::getInstance()->recompileAll();
     });
 
-    _eventDispatcher->addEventListenerWithFixedPriority(_rendererRecreatedListener, -1);
+    _eventDispatcher->addEventListenerWithFixedPriority(_rendererRecreatedListener, -2);
 #endif
 
     return true;

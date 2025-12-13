@@ -30,6 +30,7 @@
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/rhi/ShaderCache.h"
 #include "axmol/tlx/hlookup.hpp"
+#include "axmol/tlx/inlined_vector.hpp"
 
 #include <functional>
 #include <vector>
@@ -44,10 +45,50 @@ namespace rhi
 class ShaderModule;
 class VertexLayout;
 
+enum Uniform : uint32_t
+{
+    MVP_MATRIX,
+    TEXTURE,
+    TEXTURE1,
+    TEXTURE2,
+    TEXTURE3,
+    TEXT_COLOR,
+    EFFECT_COLOR,
+    EFFECT_WIDTH,
+    LABEL_PASS,
+    UNIFORM_COUNT  // Maximum uniforms
+};
+
+enum VertexInputKind : uint32_t
+{
+    POSITION,
+    COLOR,
+    TEXCOORD,
+    TEXCOORD1,
+    TEXCOORD2,
+    TEXCOORD3,
+    NORMAL,
+    INSTANCE,
+    VIK_COUNT  //
+};
+
+struct UniformBlockInfo
+{
+    int binding;            // Vulkan binding index
+    uint32_t cpuOffset;     // offset in CPU buffer
+    uint32_t sizeBytes;     // total size of the UBO
+    uint16_t numMembers;    // number of uniforms in this block
+    std::string_view name;  // block name
+};
+
+struct SLCReflectContext;
+
 /**
  * @addtogroup _rhi
  * @{
  */
+
+using UniformLocationVector = tlx::inlined_vector<rhi::UniformLocation, 2>;
 
 /**
  * A program.
@@ -57,65 +98,79 @@ class AX_DLL Program : public Object
     friend class ::ax::ProgramManager;
 
 public:
-    ~Program();
+    using UniformMap          = std::map<uint64_t, UniformInfo>;
+    using TextureUniformEntry = std::pair<std::string_view, UniformInfo*>;
+
+    virtual ~Program();
 
     /**
      * Get uniform location by name.
      * @param uniform Specifies the uniform name.
      * @return The uniform location.
      */
-    virtual UniformLocation getUniformLocation(std::string_view uniform) const = 0;
+    UniformLocation getUniformLocation(std::string_view name) const;
 
     /**
      * Get uniform location by engine built-in uniform enum name.
      * @param name Specifies the engine built-in uniform enum name.
      * @return The uniform location.
      */
-    virtual UniformLocation getUniformLocation(rhi::Uniform name) const = 0;
+    UniformLocation getUniformLocation(rhi::Uniform kind) const;
+
+    /**
+     * @brief Retrieves all uniform locations associated with the given uniform name.
+     *
+     * This function resolves the uniform name to all reflected uniform entries
+     * across all shader stages (e.g., vertex, fragment). A uniform name may map to
+     * multiple locations when:
+     *   - the same uniform appears in multiple stages,
+     *   - the uniform is an array,
+     *   - the uniform expands to multiple backend binding slots (e.g., samplers).
+     *
+     * The resolved locations are appended to the user‑provided @p out vector.
+     * No memory is allocated internally; callers may reuse the same vector to
+     * minimize allocations and improve cache locality.
+     *
+     * @param name The short uniform name (e.g., "u_color").
+     * @param out  The output vector to which all matching uniform locations
+     *             will be appended.
+     *
+     * @note This API complements the legacy getUniformLocation() method, which
+     *       returns only the first matching location for backward compatibility.
+     */
+    void getUniformLocations(std::string_view name, UniformLocationVector& out) const;
+
+    /**
+     * Get uniform buffer size in bytes that can hold all the uniforms.
+     * @param stage Specifies the shader stage. The symbolic constant can be either VERTEX or FRAGMENT.
+     * @return The uniform buffer size in bytes.
+     */
+    std::size_t getUniformBufferSize() const;
 
     /**
      * Get attribute location by attribute name.
      * @param name Specifies the attribute name.
      * @return The attribute location.
      */
-    virtual const VertexInputDesc* getVertexInputDesc(std::string_view name) const = 0;
+    const VertexInputDesc* getVertexInputDesc(std::string_view name) const;
 
     /**
      * Get attribute location by engine built-in attribute enum name.
      * @param name Specifies the engine built-in attribute enum name.
      * @return The attribute location.
      */
-    virtual const VertexInputDesc* getVertexInputDesc(rhi::VertexInputKind name) const = 0;
-
-    /**
-     * Get maximum vertex location.
-     * @return Maximum vertex locaiton.
-     */
-    virtual int getMaxVertexLocation() const = 0;
-
-    /**
-     * Get maximum fragment location.
-     * @return Maximum fragment location.
-     */
-    virtual int getMaxFragmentLocation() const = 0;
+    const VertexInputDesc* getVertexInputDesc(rhi::VertexInputKind name) const
+    {
+        return _builtinVertexInputs[(int)name];
+    }
 
     /**
      * Get active vertex attributes.
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
-    virtual const tlx::string_map<VertexInputDesc>& getActiveVertexInputs() const = 0;
+    const tlx::string_map<VertexInputDesc>& getActiveVertexInputs() const { return _activeVertexInputs; }
 
-    /**
-     * Get vertex shader.
-     * @return Vertex shader.
-     */
-    std::string_view getVertexShaderSource() const { return _vsSource; }
-
-    /**
-     * Get fragment shader.
-     * @ Fragment shader.
-     */
-    std::string_view getFragmentShaderSource() const { return _fsSource; }
+    const std::vector<TextureUniformEntry>& getActiveTextureInfos() const { return _activeTextureInfos; };
 
     /**
      * Get engine built-in program type.
@@ -130,17 +185,10 @@ public:
     uint64_t getProgramId() const { return _programId; }
 
     /**
-     * Get uniform buffer size in bytes that can hold all the uniforms.
-     * @param stage Specifies the shader stage. The symbolic constant can be either VERTEX or FRAGMENT.
-     * @return The uniform buffer size in bytes.
-     */
-    virtual std::size_t getUniformBufferSize(ShaderStage stage) const = 0;
-
-    /**
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    virtual const tlx::string_map<UniformInfo>& getActiveUniformInfos(ShaderStage stage) const = 0;
+    const UniformMap& getActiveUniformInfos() const { return _activeUniformInfos; }
 
     VertexLayout* getVertexLayout() const { return _vertexLayout; }
 
@@ -149,46 +197,46 @@ protected:
 
     void setProgramIds(uint32_t progType, uint64_t progId);
 
-    /**
-     * @param vs Specifes the vertex shader source.
-     * @param fs Specifes the fragment shader source.
-     */
-    Program(std::string_view vs, std::string_view fs);
+    const UniformInfo* getFirstUniformInfo(std::string_view name);
 
-#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    /**
-     * In case of EGL context lost, the engine will reload shaders. Thus location of uniform may changed.
-     * The engine will maintain the relationship between the original uniform location and the current active uniform
-     * location.
-     * @param location Specifies original location.
-     * @return Current active uniform location.
-     * @see `int getOriginalLocation(int location) const`
-     */
-    virtual int getMappedLocation(int location) const = 0;
+    Program(Data& vsData, Data& fsData);
 
-    /**
-     * In case of EGL context lost, the engine will reload shaders. Thus location of uniform may changed.
-     * The engine will maintain the relationship between the original uniform location and the current active uniform
-     * location.
-     * @param location Specifies the current active uniform location.
-     * @return The original uniform location.
-     * @see `int getMappedLocation(int location) const`
-     */
-    virtual int getOriginalLocation(int location) const = 0;
+    void parseStageReflection(ShaderStage stage, SLCReflectContext* context);
+    void resolveBuiltinBindings();
 
-    /**
-     * Get all uniform locations.
-     * @return All uniform locations.
-     */
-    virtual const std::unordered_map<std::string, int> getAllUniformsLocation() const = 0;
-    friend class ProgramState;
-#endif
+    void reflectVertexInputs(SLCReflectContext* context);
+    void reflectUniforms(SLCReflectContext* context);
+    void reflectSamplers(SLCReflectContext* context);
 
-    std::string _vsSource;  ///< Vertex shader.
-    std::string _fsSource;  ///< Fragment shader.
+    void addShortNameMapping(std::string_view shortName, uint64_t reflectedId);
+
     VertexLayout* _vertexLayout{nullptr};
     uint32_t _programType = ProgramType::CUSTOM_PROGRAM;  ///< built-in program type, initial value is CUSTOM_PROGRAM.
     uint64_t _programId   = 0;
+
+    ShaderModule* _vsModule = nullptr;
+    ShaderModule* _fsModule = nullptr;
+
+    // vertex inputs
+    tlx::string_map<VertexInputDesc> _activeVertexInputs;
+
+    // the active uniform infos
+    UniformMap _activeUniformInfos;
+
+    tlx::hash_map<std::string_view, tlx::pod_vector<uint64_t>> _shortNameToIds;
+
+    // unstable textures reflection, we need copy and update runtimeLocation after link program every time
+    std::vector<TextureUniformEntry> _activeTextureInfos;
+
+    // Populated once from ShaderModule reflection at program creation.
+    // Contains stable, backend‑independent metadata for all active uniform blocks.
+    std::vector<UniformBlockInfo> _activeUniformBlockInfos;
+
+    const UniformInfo* _builtinUniforms[UNIFORM_COUNT];
+    tlx::pod_vector<const VertexInputDesc*> _builtinVertexInputs;
+
+    // The total uniform buffer size
+    std::size_t _uniformBufferSize{0};
 };
 
 // end of _rhi group

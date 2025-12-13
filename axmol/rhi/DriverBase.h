@@ -142,7 +142,7 @@ public:
      * @param fragmentShader Specifes this is a fragment shader source.
      * @return A Program instance.
      */
-    virtual Program* createProgram(std::string_view vsSource, std::string_view fsSource) = 0;
+    virtual Program* createProgram(Data vsData, Data fsData) = 0;
 
     virtual VertexLayout* createVertexLayout(VertexLayoutDesc&& desc);
 
@@ -221,7 +221,7 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    virtual ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) = 0;
+    virtual ShaderModule* createShaderModule(ShaderStage stage, Data& payload) = 0;
 
     virtual SamplerHandle createSampler(const SamplerDesc& desc) = 0;
     virtual void destroySampler(SamplerHandle&)                  = 0;

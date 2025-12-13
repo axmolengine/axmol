@@ -51,17 +51,6 @@ class ShaderModuleImpl;
 
 #define MAX_UNIFORM_NAME_LENGTH 256
 
-struct UniformBlockDesc
-{
-    UniformBlockDesc(BufferImpl* ubo, int loc, int size) : _ubo(ubo), _location(loc), _size(size) {}
-    BufferImpl* _ubo;
-    int _location;
-    int _size;
-#if !AX_64BITS
-    int __padding;
-#endif
-};
-
 /**
  * An OpenGL program.
  */
@@ -72,7 +61,7 @@ public:
      * @param vertexShader Specifes the vertex shader source.
      * @param fragmentShader Specifes the fragment shader source.
      */
-    ProgramImpl(std::string_view vertexShader, std::string_view fragmentShader);
+    ProgramImpl(Data& vsData, Data& fsData);
 
     ~ProgramImpl();
 
@@ -82,110 +71,25 @@ public:
      */
     inline GLuint internalHandle() const { return _program; }
 
-    /**
-     * Get uniform location by name.
-     * @param uniform Specifies the uniform name.
-     * @return The uniform location.
-     */
-    UniformLocation getUniformLocation(std::string_view uniform) const override;
-
-    /**
-     * Get uniform location by engine built-in uniform enum name.
-     * @param name Specifies the engine built-in uniform enum name.
-     * @return The uniform location.
-     */
-    UniformLocation getUniformLocation(rhi::Uniform name) const override;
-
-    /**
-     * Get attribute location by attribute name.
-     * @param name Specifies the attribute name.
-     * @return The attribute location.
-     */
-    const VertexInputDesc* getVertexInputDesc(std::string_view name) const override;
-
-    /**
-     * Get attribute location by engine built-in attribute enum name.
-     * @param name Specifies the engine built-in attribute enum name.
-     * @return The attribute location.
-     */
-    const VertexInputDesc* getVertexInputDesc(VertexInputKind name) const override;
-
-    /**
-     * Get maximum vertex location.
-     * @return Maximum vertex locaiton.
-     */
-    int getMaxVertexLocation() const override;
-
-    /**
-     * Get maximum fragment location.
-     * @return Maximum fragment location.
-     */
-    int getMaxFragmentLocation() const override;
-
-    /**
-     * Get active vertex attributes.
-     * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
-     */
-    const tlx::string_map<VertexInputDesc>& getActiveVertexInputs() const override;
-
-    /**
-     * Get uniform buffer size in bytes that can hold all the uniforms.
-     * @param stage Specifies the shader stage. The symbolic constant can be either VERTEX or FRAGMENT.
-     * @return The uniform buffer size in bytes.
-     */
-    std::size_t getUniformBufferSize(ShaderStage stage) const override;
-
-    /**
-     * Get all uniformInfos.
-     * @return The uniformInfos.
-     */
-    const tlx::string_map<UniformInfo>& getActiveUniformInfos(ShaderStage stage) const override;
-
     void bindUniformBuffers(const char* buffer, size_t bufferSize);
 
 private:
     void compileProgram();
 
-    void reflectVertexInputs();
-    void reflectUniformInfos();
-
-    void setBuiltinLocations();
-
-    void clearUniformBuffers();
+    void deleteUniformBuffers();
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     void reloadProgram();
-    int getMappedLocation(int location) const override;
-    int getOriginalLocation(int location) const override;
-    const std::unordered_map<std::string, int> getAllUniformsLocation() const override
-    {
-        return _originalUniformLocations;
-    }
 #endif
 
-    GLuint _program                         = 0;
-    ShaderModuleImpl* _vertexShaderModule   = nullptr;
-    ShaderModuleImpl* _fragmentShaderModule = nullptr;
+    GLuint _program             = 0;
 
-    tlx::pod_vector<UniformBlockDesc> _uniformBuffers;
-
-    tlx::string_map<VertexInputDesc> _activeVertexInputs;
-    tlx::string_map<UniformInfo> _activeUniformInfos;
+    // The ubo instances
+    tlx::pod_vector<BufferImpl*> _uniformBuffers;
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    std::unordered_map<std::string, int>
-        _originalUniformLocations;  ///< record the uniform location when shader was first created.
-    std::unordered_map<int, int> _mapToCurrentActiveLocation;  ///<
-    std::unordered_map<int, int> _mapToOriginalLocation;       ///<
     EventListenerCustom* _backToForegroundListener = nullptr;
 #endif
-
-    std::size_t _totalBufferSize = 0;  // total uniform buffer size (all blocks)
-
-    int _maxLocation = -1;
-
-    const VertexInputDesc* _builtinVertxInputs[VertexInputKind::VIK_COUNT];
-    UniformLocation _builtinUniformLocation[UNIFORM_COUNT];
 };
 // end of _opengl group
 /// @}

@@ -86,11 +86,9 @@ struct AX_DLL TextureBindingSet
 
     void releaseTextures();
 
+    int runtimeLocation = -1;
     tlx::pod_vector<int> slots;
     mutable tlx::pod_vector<rhi::Texture*> texs;
-#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    int loc = -1;
-#endif
 };
 
 /**
@@ -139,15 +137,17 @@ public:
      * @return Uniform location.
      * @see `rhi::UniformLocation getUniformLocation(rhi::Uniform name) const`
      */
-    rhi::UniformLocation getUniformLocation(std::string_view uniform) const;
+    rhi::UniformLocation getUniformLocation(std::string_view name) const;
 
     /**
      * Get uniform location in a more efficient way by the given built-in uniform name.
      * @param uniform Specifies the engin built-in uniform name.
      * @return Uniform location.
-     * @see `rhi::UniformLocation getUniformLocation(rhi::Uniform name) const`
+     * @see `rhi::UniformLocation getUniformLocation(rhi::Uniform kind) const`
      */
-    rhi::UniformLocation getUniformLocation(rhi::Uniform name) const;
+    rhi::UniformLocation getUniformLocation(rhi::Uniform kind) const;
+
+    void getUniformLocations(std::string_view name, UniformLocationVector& outLocations) const;
 
     /**
      * Get an attribute location by the actual attribute name.
@@ -190,7 +190,7 @@ public:
      * Get the uniform callback function.
      * @return Uniform callback funciton.
      */
-    inline const std::unordered_map<UniformLocation, UniformCallback, UniformLocation>& getCallbackUniforms() const
+    inline const std::unordered_map<UniformLocation, UniformCallback, UniformLocationHash>& getCallbackUniforms() const
     {
         return _callbackUniforms;
     }
@@ -221,29 +221,7 @@ public:
         return _textureBindingSets;
     }
 
-#if AX_RENDER_API == AX_RENDER_API_GL
     std::span<const char> getUniformBuffer() { return std::span{_uniformBuffer}; }
-#else
-
-    /**
-     * Get vertex uniform buffer. The buffer store all the vertex uniform's data.
-     * @return vertex uniform buffer, not nullable
-     */
-    std::span<const char> getVertexUniformBuffer() const
-    {
-        return std::span{_uniformBuffer.data() + _vertexUniformBufferStart,
-                         _uniformBuffer.size() - _vertexUniformBufferStart};
-    }
-
-    /**
-     * Get fragment uniform buffer. The buffer store all the fragment uniform's data for metal.
-     * @return fragment uniform buffer, not nullable
-     */
-    std::span<const char> getFragmentUniformBuffer() const
-    {
-        return std::span{_uniformBuffer.data(), _vertexUniformBufferStart};
-    }
-#endif
 
     /**
      * An abstract base class that can be extended to support custom material auto bindings.
@@ -328,18 +306,9 @@ public:
 
 protected:
     /**
-     * Set the vertex uniform data.
-     * @param data Specifies the new values to be used for the specified uniform variable.
-     * @param size Specifies the uniform data size.
-     * @param offset Specifies the offset of the uniform in bytes.
-     * @param start Specifies the start offset of the uniform in bytes.
+     * Remap texture runtime location in  binding set when EGL context lost
      */
-    void setUniform(const void* data, std::size_t size, int offset, int start);
-
-    /**
-     * Reset uniform informations when EGL context lost
-     */
-    void resetUniforms();
+    void remapTextureRuntimeLocations();
 
     /// Initialize.
     bool init(Program* program);
@@ -353,12 +322,9 @@ protected:
     void applyAutoBinding(std::string_view, std::string_view);
 
     rhi::Program* _program = nullptr;
-    std::unordered_map<UniformLocation, UniformCallback, UniformLocation> _callbackUniforms;
+    std::unordered_map<UniformLocation, UniformCallback, UniformLocationHash> _callbackUniforms;
 
     tlx::sbyte_buffer _uniformBuffer;
-#if AX_RENDER_API != AX_RENDER_API_GL
-    std::size_t _vertexUniformBufferStart = 0;
-#endif
 
     std::unordered_map<int, TextureBindingSet> _textureBindingSets;
 
@@ -367,11 +333,12 @@ protected:
     static std::vector<AutoBindingResolver*> _customAutoBindingResolvers;
 
     uint64_t _batchId = -1;
-    bool _isBatchable = false;
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    EventListenerCustom* _backToForegroundListener = nullptr;
+    EventListenerCustom* _backToForegroundListener{nullptr};
 #endif
+
+    bool _isBatchable = false;
 };
 
 // end of _rhi group

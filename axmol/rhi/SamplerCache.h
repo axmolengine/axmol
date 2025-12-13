@@ -48,7 +48,7 @@ public:
     SamplerCache();
     ~SamplerCache();
 
-    void invalidateAll();
+    void rebuild();
 
     SamplerHandle getSampler(SamplerIndex::enum_type samplerIndex);
     SamplerHandle getSampler(const SamplerDesc& desc);

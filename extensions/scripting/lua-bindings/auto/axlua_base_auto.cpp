@@ -3244,7 +3244,7 @@ int lua_register_ax_base_EventListenerCustom(lua_State* tolua_S)
     return 1;
 }
 
-int lua_ax_base_ShaderCache_purge(lua_State* tolua_S)
+int lua_ax_base_ShaderCache_removeAllShaders(lua_State* tolua_S)
 {
     int argc = 0;
     ax::rhi::ShaderCache* obj = nullptr;
@@ -3264,7 +3264,7 @@ int lua_ax_base_ShaderCache_purge(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_ShaderCache_purge'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_ShaderCache_removeAllShaders'", nullptr);
         return 0;
     }
 #endif
@@ -3274,19 +3274,19 @@ int lua_ax_base_ShaderCache_purge(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ShaderCache_purge'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ShaderCache_removeAllShaders'", nullptr);
             return 0;
         }
-        obj->purge();
+        obj->removeAllShaders();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axrhi.ShaderCache:purge",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axrhi.ShaderCache:removeAllShaders",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ShaderCache_purge'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ShaderCache_removeAllShaders'.",&tolua_err);
 #endif
 
     return 0;
@@ -3319,9 +3319,9 @@ int lua_ax_base_ShaderCache_acquireVertexShaderModule(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        std::string_view arg0;
+        ax::Data arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axrhi.ShaderCache:acquireVertexShaderModule");
+        luaL_error(tolua_S, "ax::Data unsupported");;
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ShaderCache_acquireVertexShaderModule'", nullptr);
@@ -3369,9 +3369,9 @@ int lua_ax_base_ShaderCache_acquireFragmentShaderModule(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        std::string_view arg0;
+        ax::Data arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axrhi.ShaderCache:acquireFragmentShaderModule");
+        luaL_error(tolua_S, "ax::Data unsupported");;
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ShaderCache_acquireFragmentShaderModule'", nullptr);
@@ -3434,6 +3434,53 @@ int lua_ax_base_ShaderCache_removeUnusedShader(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ShaderCache_removeUnusedShader'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_ShaderCache_recompileAll(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::ShaderCache* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axrhi.ShaderCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::ShaderCache*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_ShaderCache_recompileAll'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ShaderCache_recompileAll'", nullptr);
+            return 0;
+        }
+        obj->recompileAll();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axrhi.ShaderCache:recompileAll",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ShaderCache_recompileAll'.",&tolua_err);
 #endif
 
     return 0;
@@ -3518,10 +3565,11 @@ int lua_register_ax_base_ShaderCache(lua_State* tolua_S)
     tolua_cclass(tolua_S,"ShaderCache","axrhi.ShaderCache","",nullptr);
 
     tolua_beginmodule(tolua_S,"ShaderCache");
-        tolua_function(tolua_S,"purge",lua_ax_base_ShaderCache_purge);
+        tolua_function(tolua_S,"removeAllShaders",lua_ax_base_ShaderCache_removeAllShaders);
         tolua_function(tolua_S,"acquireVertexShaderModule",lua_ax_base_ShaderCache_acquireVertexShaderModule);
         tolua_function(tolua_S,"acquireFragmentShaderModule",lua_ax_base_ShaderCache_acquireFragmentShaderModule);
         tolua_function(tolua_S,"removeUnusedShader",lua_ax_base_ShaderCache_removeUnusedShader);
+        tolua_function(tolua_S,"recompileAll",lua_ax_base_ShaderCache_recompileAll);
         tolua_function(tolua_S,"getInstance", lua_ax_base_ShaderCache_getInstance);
         tolua_function(tolua_S,"destroyInstance", lua_ax_base_ShaderCache_destroyInstance);
     tolua_endmodule(tolua_S);
