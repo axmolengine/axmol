@@ -186,97 +186,94 @@ void Program::parseStageReflection(ShaderStage stage, SLCReflectContext* context
     ibs.advance(sizeof(uint32_t));  // skip sc_size
     struct sc_chunk chunk;
     ibs.advance(sizeof(sc_chunk));  // skip header
-    uint32_t fourccId;
-    do
+
+    auto fourccId = ibs.read<uint32_t>();
+    if (fourccId != SC_CHUNK_STAG)
     {
-        fourccId = ibs.read<uint32_t>();
-        if (fourccId != SC_CHUNK_STAG)
-        {
-            assert(false);
-            return;  // error
-        }
-        auto stage_size       = ibs.read<uint32_t>();  // stage_size
-        auto stage_id         = ibs.read<uint32_t>();  // stage_id
-        ShaderStage ref_stage = (ShaderStage)-1;
-        if (stage_id == SC_STAGE_VERTEX)
-            ref_stage = ShaderStage::VERTEX;
-        else if (stage_id == SC_STAGE_FRAGMENT)
-            ref_stage = ShaderStage::FRAGMENT;
+        assert(false);
+        return;  // error
+    }
+    auto stage_size       = ibs.read<uint32_t>();  // stage_size
+    auto stage_id         = ibs.read<uint32_t>();  // stage_id
+    ShaderStage ref_stage = (ShaderStage)-1;
+    if (stage_id == SC_STAGE_VERTEX)
+        ref_stage = ShaderStage::VERTEX;
+    else if (stage_id == SC_STAGE_FRAGMENT)
+        ref_stage = ShaderStage::FRAGMENT;
 
-        assert(ref_stage == stage && "Shader stage mismatch in axslc chunk");
+    assert(ref_stage == stage && "Shader stage mismatch in axslc chunk");
 
+    fourccId = ibs.read<uint32_t>();
+    if (fourccId == SC_CHUNK_CODE || fourccId == SC_CHUNK_DATA)
+    {
+        // Expecting SPIR-V binary blob from axslc, not text
+        const int codeLen = ibs.read<int>();
+        ibs.advance(codeLen);  // skip shader code
+    }
+    else
+    {
+        AXLOGE("axmol: No code/data chunk (SC_CHUNK_CODE/SC_CHUNK_DATA) found for shader stage.");
+        assert(false);
+    }
+
+    if (!ibs.eof())
+    {  // try read reflect info
         fourccId = ibs.read<uint32_t>();
-        if (fourccId == SC_CHUNK_CODE || fourccId == SC_CHUNK_DATA)
+        if (fourccId == SC_CHUNK_REFL)
         {
-            // Expecting SPIR-V binary blob from axslc, not text
-            const int codeLen = ibs.read<int>();
-            ibs.advance(codeLen);  // skip shader code
+            /*
+             REFL: Reflection data for the shader stage
+             struct sc_chunk_refl: reflection data header
+             struct sc_refl_input[]: array of vertex-shader input attributes (see sc_chunk_refl for number of
+             inputs) struct sc_refl_uniformbuffer[]: array of uniform buffer objects (see sc_chunk_refl for number
+             of uniform buffers) struct sc_refl_texture[]: array of texture objects (see sc_chunk_refl for number
+             of textures) struct sc_refl_texture[]: array of storage image objects (see sc_chunk_refl for number
+             of storage images) struct sc_refl_buffer[]: array of storage buffer objects (see sc_chunk_refl for
+             number of storage buffers)
+             */
+            const auto refl_size        = ibs.read<uint32_t>();
+            const auto refl_data_offset = ibs.tell();
+            sc_chunk_refl refl{};
+            ibs.advance(sizeof(refl.name));
+            refl.num_inputs          = ibs.read<uint32_t>();
+            refl.num_textures        = ibs.read<uint32_t>();
+            refl.num_uniform_buffers = ibs.read<uint32_t>();
+            refl.num_storage_images  = ibs.read<uint32_t>();
+            refl.num_storage_buffers = ibs.read<uint32_t>();
+
+            // skip infos we don't need
+            ibs.advance(sizeof(sc_chunk_refl) - offsetof(sc_chunk_refl, flatten_ubo));
+
+            // SLCReflectContext context{&refl, &ibs};
+            // context
+            context->refl = &refl;
+
+            // refl_inputs
+            reflectVertexInputs(context);
+
+            // refl_uniformbuffers
+            reflectUniforms(context);
+
+            // refl_textures
+            reflectSamplers(context);
+
+            // refl_storage_images: ignore
+            ibs.advance(refl.num_storage_images * sizeof(sc_refl_texture));
+
+            // refl_storage_buffers: ignore
+            ibs.advance(refl.num_storage_buffers * sizeof(sc_refl_buffer));
+
+            assert(ibs.tell() - refl_data_offset == refl_size && "Reflection chunk size mismatch");
         }
         else
         {
-            AXLOGE("axmol: No code/data chunk (SC_CHUNK_CODE/SC_CHUNK_DATA) found for shader stage.");
+            AXLOGE("axmol: Missing reflection chunk (SC_CHUNK_REFL).");
             assert(false);
+            return;
         }
+    }
 
-        if (!ibs.eof())
-        {  // try read reflect info
-            fourccId = ibs.read<uint32_t>();
-            if (fourccId == SC_CHUNK_REFL)
-            {
-                /*
-                 REFL: Reflection data for the shader stage
-                 struct sc_chunk_refl: reflection data header
-                 struct sc_refl_input[]: array of vertex-shader input attributes (see sc_chunk_refl for number of
-                 inputs) struct sc_refl_uniformbuffer[]: array of uniform buffer objects (see sc_chunk_refl for number
-                 of uniform buffers) struct sc_refl_texture[]: array of texture objects (see sc_chunk_refl for number
-                 of textures) struct sc_refl_texture[]: array of storage image objects (see sc_chunk_refl for number
-                 of storage images) struct sc_refl_buffer[]: array of storage buffer objects (see sc_chunk_refl for
-                 number of storage buffers)
-                 */
-                const auto refl_size        = ibs.read<uint32_t>();
-                const auto refl_data_offset = ibs.tell();
-                sc_chunk_refl refl{};
-                ibs.advance(sizeof(refl.name));
-                refl.num_inputs          = ibs.read<uint32_t>();
-                refl.num_textures        = ibs.read<uint32_t>();
-                refl.num_uniform_buffers = ibs.read<uint32_t>();
-                refl.num_storage_images  = ibs.read<uint32_t>();
-                refl.num_storage_buffers = ibs.read<uint32_t>();
-
-                // skip infos we don't need
-                ibs.advance(sizeof(sc_chunk_refl) - offsetof(sc_chunk_refl, flatten_ubo));
-
-                // SLCReflectContext context{&refl, &ibs};
-                // context
-                context->refl = &refl;
-
-                // refl_inputs
-                reflectVertexInputs(context);
-
-                // refl_uniformbuffers
-                reflectUniforms(context);
-
-                // refl_textures
-                reflectSamplers(context);
-
-                // refl_storage_images: ignore
-                ibs.advance(refl.num_storage_images * sizeof(sc_refl_texture));
-
-                // refl_storage_buffers: ignore
-                ibs.advance(refl.num_storage_buffers * sizeof(sc_refl_buffer));
-
-                assert(ibs.tell() - refl_data_offset == refl_size && "Reflection chunk size mismatch");
-            }
-            else
-            {
-                AXLOGE("axmol: Missing reflection chunk (SC_CHUNK_REFL).");
-                assert(false);
-                return;
-            }
-        }
-
-        assert(ibs.eof());
-    } while (false);  // iterator stages, current only 1 stage
+    assert(ibs.eof());
 }
 
 void Program::reflectVertexInputs(SLCReflectContext* context)
