@@ -944,7 +944,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
     SET_DELTA_COLOR(_particleData.colorG, _particleData.deltaColorG);
     SET_DELTA_COLOR(_particleData.colorB, _particleData.deltaColorB);
     SET_DELTA_COLOR(_particleData.colorA, _particleData.deltaColorA);
-    
+
     // Should skip these initialization when OpacityFadeIn or ScaleFadeIn is 0, otherwise
     // particles would fail to show up.
     // opacity fade in
