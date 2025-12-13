@@ -942,13 +942,9 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
     SET_DELTA_COLOR(_particleData.colorG, _particleData.deltaColorG);
     SET_DELTA_COLOR(_particleData.colorB, _particleData.deltaColorB);
     SET_DELTA_COLOR(_particleData.colorA, _particleData.deltaColorA);
-
-    ///[2025.12.07]//////////////////////////////////////////////
-    /// BUG From WUCJ638 : when OpacityFadeIn or ScaleFadeIn  ///
-    /// equals to zero, source would't emit any particles.    ///
-    /////////////////////////////////////////////////////////////
-    ///// FIX begin
-
+    
+    // Should skip these initialization when OpacityFadeIn or ScaleFadeIn is 0, otherwise
+    // particles would fail to show up.
     // opacity fade in
     if (_isOpacityFadeInAllocated && _spawnFadeIn + _spawnFadeInVar > 0)
     {
@@ -968,8 +964,6 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
         }
         std::fill_n(_particleData.scaleInDelta + start, _particleCount - start, 0.0F);
     }
-    ///// Fix end
-    //////////////////////////////////////////////////////////////
 
     // hue saturation value color
     if (_isHSVAllocated)
@@ -1550,16 +1544,9 @@ void ParticleSystem::resetSystem()
 {
     _isActive = true;
     _elapsed  = 0;
-
-    // [2025.12.09] Bug from WUCJ638:
-    //   Visually, resetting System would actually remove all existed particles
-    // before emitting them again. Therefore just simply set _particleCount
-    // to zero.
-    //   Without doing so, particles with loop animation enabled would crash,
-    // for particleData.animIndex are junk and would cause Out-of-Range excep-
-    // -tion in update() function
+    // Setting _particleCount to zero could prevent Out-of-Range exception when updating
+    // particle's loop animation after calling setTotalParticle().
     _particleCount = 0;
-    //std::fill_n(_particleData.timeToLive, _particleCount, 0.0F);
 }
 
 bool ParticleSystem::isFull()
@@ -2118,21 +2105,11 @@ void ParticleSystem::useHSV(bool hsv)
         deallocHSVMem();
 };
 
-///[2025.12.06]/////////////////////////////////////////////////////////
-/// BUG from WUCJ638 : modification would get ignored after memory   ///
-/// is allocated, that is "nothing happens", we only have one change ///
-/// to change the value.                                             ///
-/// Same problem has been found inside this FIX block:               ///
-/// 1. setSpawnFadeInVar  2. setSpawnScaleIn   3. setSpawnScaleInVar ///
-/// [WARNING] setAnimation wasn't fixed yet but they have the same   ///
-/// behavior in allocatinng memory.                                  ///
-////////////////////////////////////////////////////////////////////////
-////////// Fix begin
 void ParticleSystem::setSpawnFadeIn(float time)
 {
 // Modification is allowed when:
-//  - memory hasn't allocated, time neq 0.0F and allocation has done successfully;
-//  - or memory has allocated.
+//  - memory hasn't been allocated, time != 0.0F and allocation has done successfully; OR
+//  - memory has allocated.
     if(!_isOpacityFadeInAllocated && (time == 0.0F || !allocOpacityFadeInMem()))
         return;
 
@@ -2162,8 +2139,6 @@ void ParticleSystem::setSpawnScaleInVar(float time)
 
     _spawnScaleInVar = time;
 }
-////////// Fix end
-////////////////////////////////////////////////////////////////////////
 
 int ParticleSystem::getTotalParticles() const
 {
