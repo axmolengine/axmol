@@ -1078,53 +1078,6 @@ int lua_ax_rhi_ProgramState_getVertexInputDesc(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_rhi_ProgramState_getActiveVertexInputs(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::rhi::ProgramState* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axrhi.ProgramState",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_ProgramState_getActiveVertexInputs'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_ProgramState_getActiveVertexInputs'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getActiveVertexInputs();
-        object_to_luaval<tsl::robin_map<std::string, ax::rhi::VertexInputDesc, tlx::string_hash, tlx::equal_to>&>(tolua_S, "tsl.robin_map<std::string, ax::rhi::VertexInputDesc>",(tsl::robin_map<std::string, ax::rhi::VertexInputDesc, tlx::string_hash, tlx::equal_to>&)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axrhi.ProgramState:getActiveVertexInputs",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_ProgramState_getActiveVertexInputs'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_rhi_ProgramState_setTexture(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1485,7 +1438,6 @@ int lua_register_ax_rhi_ProgramState(lua_State* tolua_S)
         tolua_function(tolua_S,"clone",lua_ax_rhi_ProgramState_clone);
         tolua_function(tolua_S,"getProgram",lua_ax_rhi_ProgramState_getProgram);
         tolua_function(tolua_S,"getVertexInputDesc",lua_ax_rhi_ProgramState_getVertexInputDesc);
-        tolua_function(tolua_S,"getActiveVertexInputs",lua_ax_rhi_ProgramState_getActiveVertexInputs);
         tolua_function(tolua_S,"setTexture",lua_ax_rhi_ProgramState_setTexture);
         tolua_function(tolua_S,"setParameterAutoBinding",lua_ax_rhi_ProgramState_setParameterAutoBinding);
         tolua_function(tolua_S,"getBuiltinVertexLayout",lua_ax_rhi_ProgramState_getBuiltinVertexLayout);

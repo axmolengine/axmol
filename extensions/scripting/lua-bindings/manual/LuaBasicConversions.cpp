@@ -2943,7 +2943,7 @@ bool luaval_to_samplerDesc(lua_State* L, int pos, ax::rhi::SamplerDesc& output, 
     return true;
 }
 
-bool luaval_to_stageUniformLocation(lua_State* L, int pos, ax::rhi::StageUniformLocation& loc, const char* message)
+bool luaval_to_uniformLocation(lua_State* L, int pos, ax::rhi::UniformLocation& loc, const char* message)
 {
     if (L == nullptr)
         return false;
@@ -2969,10 +2969,28 @@ bool luaval_to_stageUniformLocation(lua_State* L, int pos, ax::rhi::StageUniform
     loc.offset = int(lua_tointeger(L, -1));
     lua_pop(L, 1);
 
+    lua_pushstring(L, "cpuOffset");
+    lua_gettable(L, pos);
+    if (lua_isnil(L, -1))
+    {
+        AXASSERT(false, "invalidate UniformLocation value");
+    }
+    loc.cpuOffset = int(lua_tointeger(L, -1));
+    lua_pop(L, 1);
+
+    lua_pushstring(L, "runtimeLocation");
+    lua_gettable(L, pos);
+    if (lua_isnil(L, -1))
+    {
+        AXASSERT(false, "invalidate UniformLocation value");
+    }
+    loc.runtimeLocation = int(lua_tointeger(L, -1));
+    lua_pop(L, 1);
+
     return true;
 }
 
-void stageUniformLocation_to_luaval(lua_State* L, const ax::rhi::StageUniformLocation& loc)
+void uniformLocation_to_luaval(lua_State* L, const ax::rhi::UniformLocation& loc)
 {
     if (L == nullptr)
         return;
@@ -2986,47 +3004,13 @@ void stageUniformLocation_to_luaval(lua_State* L, const ax::rhi::StageUniformLoc
     lua_pushstring(L, "offset");
     lua_pushinteger(L, loc.offset);
     lua_rawset(L, -3);
-}
 
-bool luaval_to_uniformLocation(lua_State* L, int pos, ax::rhi::UniformLocation& loc, const char* message)
-{
-    if (L == nullptr)
-        return false;
-
-    lua_pushstring(L, "vertStage");
-    lua_gettable(L, pos);
-    if (lua_isnil(L, -1))
-    {
-        AXASSERT(false, "invalidate UniformLocation value");
-    }
-    luaval_to_stageUniformLocation(L, -1, loc.stages[1], "");
-    lua_pop(L, 1);
-
-    lua_pushstring(L, "fragStage");
-    lua_gettable(L, pos);
-    if (lua_isnil(L, -1))
-    {
-        AXASSERT(false, "invalidate UniformLocation value");
-    }
-    luaval_to_stageUniformLocation(L, -1, loc.stages[0], "");
-    lua_pop(L, 1);
-
-    return true;
-}
-
-void uniformLocation_to_luaval(lua_State* L, const ax::rhi::UniformLocation& loc)
-{
-    if (L == nullptr)
-        return;
-
-    lua_newtable(L);
-
-    lua_pushstring(L, "vertStage");
-    stageUniformLocation_to_luaval(L, loc.stages[1]);
+    lua_pushstring(L, "cpuOffset");
+    lua_pushinteger(L, loc.cpuOffset);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "fragStage");
-    stageUniformLocation_to_luaval(L, loc.stages[0]);
+    lua_pushstring(L, "runtimeLocation");
+    lua_pushinteger(L, loc.runtimeLocation);
     lua_rawset(L, -3);
 }
 

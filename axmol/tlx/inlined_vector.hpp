@@ -229,9 +229,6 @@ public:
         const bool a_inlined = lhs.is_inlined();
         const bool b_inlined = rhs.is_inlined();
 
-        // Swap allocators (allocator propagation rules are ignored here)
-        std::swap(_Mypair._Get_first(), other._Mypair._Get_first());
-
         // ------------------------------------------------------------
         // Case 1: both vectors use heap storage
         // ------------------------------------------------------------
@@ -355,6 +352,10 @@ public:
             heap_side->_Mylast  = heap_inline_first + inline_size;
             heap_side->_Myend   = heap_inline_first + _Initial;
         }
+
+        // Swap allocators (allocator propagation rules are ignored here)
+        if constexpr (std::allocator_traits<_Alty>::propagate_on_container_swap::value)
+            std::swap(_Mypair._Get_first(), other._Mypair._Get_first());
     }
 
 private:
