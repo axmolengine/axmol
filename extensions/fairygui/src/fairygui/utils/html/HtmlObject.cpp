@@ -41,8 +41,11 @@ static bool s_isGfxDidDrop = false;
 
 HtmlObjectContext* HtmlObjectContext::getInstance()
 {
-    if (s_htmlContext || s_isGfxDidDrop) [[likely]]
+    if (s_htmlContext) [[likely]]
         return s_htmlContext;
+
+    if (s_isGfxDidDrop)
+        return nullptr;
 
     s_htmlContext = new HtmlObjectContext();
 
