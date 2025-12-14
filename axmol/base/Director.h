@@ -85,28 +85,33 @@ class AX_DLL Director
 {
 public:
     /** Director will trigger an event before set next scene. */
-    static const char* EVENT_BEFORE_SET_NEXT_SCENE;
+    static std::string_view EVENT_BEFORE_SET_NEXT_SCENE;
     /** Director will trigger an event after set next scene. */
-    static const char* EVENT_AFTER_SET_NEXT_SCENE;
+    static std::string_view EVENT_AFTER_SET_NEXT_SCENE;
 
     /** Director will trigger an event when projection type is changed. */
-    static const char* EVENT_PROJECTION_CHANGED;
+    static std::string_view EVENT_PROJECTION_CHANGED;
     /** Director will trigger an event before Schedule::update() is invoked. */
-    static const char* EVENT_BEFORE_UPDATE;
+    static std::string_view EVENT_BEFORE_UPDATE;
     /** Director will trigger an event after Schedule::update() is invoked. */
-    static const char* EVENT_AFTER_UPDATE;
+    static std::string_view EVENT_AFTER_UPDATE;
 
     /** Director will trigger an event after Scene::render() is invoked. */
-    static const char* EVENT_AFTER_VISIT;
+    static std::string_view EVENT_AFTER_VISIT;
     /** Director will trigger an event after a scene is drawn, the data is sent to GPU. */
-    static const char* EVENT_AFTER_DRAW;
+    static std::string_view EVENT_AFTER_DRAW;
     /** Director will trigger an event before a scene is drawn, right after clear. */
-    static const char* EVENT_BEFORE_DRAW;
+    static std::string_view EVENT_BEFORE_DRAW;
 
     /** Director will trigger an event while resetting Director */
-    static const char* EVENT_RESET;
+    static std::string_view EVENT_RESET;
     /** Director will trigger an event while destroying Director */
-    static const char* EVENT_DESTROY;
+    static std::string_view EVENT_DESTROY;
+
+    /** Director will trigger an event before dropping the graphics subsystem */
+    static std::string_view EVENT_BEFORE_GFX_DROP;
+    /** Director will trigger an event after dropping the graphics subsystem */
+    static std::string_view EVENT_AFTER_GFX_DROP;
 
     /**
      * @brief Possible projection types used by the director.
@@ -601,6 +606,8 @@ protected:
     EventCustom* _afterSetNextScene      = nullptr;
     EventCustom* _eventResetDirector     = nullptr;
     EventCustom* _eventDestroyDirector   = nullptr;
+    EventCustom* _eventBeforeGfxDrop     = nullptr;
+    EventCustom* _eventAfterGfxDrop      = nullptr;
 
     /* delta time since last tick to main loop */
     float _deltaTime              = 0.0f;

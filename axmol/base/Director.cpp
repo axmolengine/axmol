@@ -84,17 +84,18 @@ static Director* s_SharedDirector = nullptr;
 
 #define kDefaultFPS 60  // 60 frames per second
 
-const char* Director::EVENT_BEFORE_SET_NEXT_SCENE = "director_before_set_next_scene";
-const char* Director::EVENT_AFTER_SET_NEXT_SCENE  = "director_after_set_next_scene";
-const char* Director::EVENT_PROJECTION_CHANGED    = "director_projection_changed";
-const char* Director::EVENT_AFTER_DRAW            = "director_after_draw";
-const char* Director::EVENT_AFTER_VISIT           = "director_after_visit";
-const char* Director::EVENT_BEFORE_UPDATE         = "director_before_update";
-const char* Director::EVENT_AFTER_UPDATE          = "director_after_update";
-const char* Director::EVENT_BEFORE_DRAW           = "director_before_draw";
-
-const char* Director::EVENT_RESET   = "director_reset";
-const char* Director::EVENT_DESTROY = "director_destroy";
+std::string_view Director::EVENT_BEFORE_SET_NEXT_SCENE = "director_before_set_next_scene"sv;
+std::string_view Director::EVENT_AFTER_SET_NEXT_SCENE  = "director_after_set_next_scene"sv;
+std::string_view Director::EVENT_PROJECTION_CHANGED    = "director_projection_changed"sv;
+std::string_view Director::EVENT_AFTER_DRAW            = "director_after_draw"sv;
+std::string_view Director::EVENT_AFTER_VISIT           = "director_after_visit"sv;
+std::string_view Director::EVENT_BEFORE_UPDATE         = "director_before_update"sv;
+std::string_view Director::EVENT_AFTER_UPDATE          = "director_after_update"sv;
+std::string_view Director::EVENT_BEFORE_DRAW           = "director_before_draw"sv;
+std::string_view Director::EVENT_RESET                 = "director_reset"sv;
+std::string_view Director::EVENT_DESTROY               = "director_destroy"sv;
+std::string_view Director::EVENT_BEFORE_GFX_DROP       = "director_before_gfx_drop"sv;
+std::string_view Director::EVENT_AFTER_GFX_DROP        = "director_after_gfx_drop"sv;
 
 Director* Director::getInstance()
 {
@@ -160,6 +161,11 @@ bool Director::init()
     _eventDestroyDirector = new EventCustom(EVENT_DESTROY);
     _eventDestroyDirector->setUserData(this);
 
+    _eventBeforeGfxDrop = new EventCustom(EVENT_BEFORE_GFX_DROP);
+    _eventBeforeGfxDrop->setUserData(this);
+    _eventAfterGfxDrop = new EventCustom(EVENT_AFTER_GFX_DROP);
+    _eventAfterGfxDrop->setUserData(this);
+
     // init TextureCache
     initTextureCache();
     initMatrixStack();
@@ -205,6 +211,8 @@ Director::~Director()
     AX_SAFE_RELEASE(_eventProjectionChanged);
     AX_SAFE_RELEASE(_eventResetDirector);
     AX_SAFE_RELEASE(_eventDestroyDirector);
+    AX_SAFE_RELEASE(_eventBeforeGfxDrop);
+    AX_SAFE_RELEASE(_eventAfterGfxDrop);
 #ifdef AX_ENABLE_CONSOLE
     delete _console;
 #endif
@@ -1131,6 +1139,8 @@ void Director::cleanupDirector()
 {
     reset();
 
+    _eventDispatcher->dispatchEvent(_eventBeforeGfxDrop);
+
     // If any graphics resources not cleanup or leaked, will crash on linux when destroy graphics context,
     // so we should cleanup any graphics resources.
     AX_SAFE_DELETE(_renderer);
@@ -1145,6 +1155,8 @@ void Director::cleanupDirector()
         _renderView->end();
         _renderView = nullptr;
     }
+
+    _eventDispatcher->dispatchEvent(_eventAfterGfxDrop);
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
     utils::killCurrentProcess();
