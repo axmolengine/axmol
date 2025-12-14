@@ -32,8 +32,6 @@ THE SOFTWARE.
 NS_FGUI_BEGIN
 using namespace ax;
 
-using namespace std;
-
 static bool s_isGfxDidDrop = false;
 
 HtmlObjectContext* HtmlObjectContext::s_htmlObjContext;
@@ -113,7 +111,7 @@ bool HtmlObjectContext::isLoaderPoolEmpty() const
     return this->loaderPool.empty();
 }
 
-HtmlObject::HtmlObject() : _ui(nullptr), _hidden(false) {}
+HtmlObject::HtmlObject() : _element(nullptr), _owner(nullptr), _ui(nullptr), _hidden(false) {}
 
 HtmlObject::~HtmlObject()
 {
@@ -242,8 +240,8 @@ void HtmlObject::createInput()
 
     _ui = context->acquireObject(context->inputResource, "inputResource"sv);
 
-    string type = _element->getString("type");
-    transform(type.begin(), type.end(), type.begin(), ::tolower);
+    std::string type = _element->getString("type");
+    std::transform(type.begin(), type.end(), type.begin(), ::tolower);
     _hidden = type == "hidden";
 
     int width  = _element->getInt("width");
