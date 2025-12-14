@@ -34,20 +34,18 @@ using namespace ax;
 
 using namespace std;
 
-class HtmlObjectContext;
-
-static HtmlObjectContext* s_htmlContext;
 static bool s_isGfxDidDrop = false;
 
+HtmlObjectContext* HtmlObjectContext::s_htmlObjContext;
 HtmlObjectContext* HtmlObjectContext::getInstance()
 {
-    if (s_htmlContext) [[likely]]
-        return s_htmlContext;
+    if (s_htmlObjContext) [[likely]]
+        return s_htmlObjContext;
 
     if (s_isGfxDidDrop)
         return nullptr;
 
-    s_htmlContext = new HtmlObjectContext();
+    s_htmlObjContext = new HtmlObjectContext();
 
     Director::getInstance()->getEventDispatcher()->addCustomEventListener(Director::EVENT_BEFORE_GFX_DROP,
                                                                           [](EventCustom*) {
@@ -55,16 +53,16 @@ HtmlObjectContext* HtmlObjectContext::getInstance()
         HtmlObjectContext::destroyInstance();
     });
 
-    return s_htmlContext;
+    return s_htmlObjContext;
 }
 
 void HtmlObjectContext::destroyInstance()
 {
-    if (s_htmlContext)
+    if (s_htmlObjContext)
     {
         Director::getInstance()->getEventDispatcher()->removeCustomEventListeners(Director::EVENT_BEFORE_GFX_DROP);
-        delete s_htmlContext;
-        s_htmlContext = nullptr;
+        delete s_htmlObjContext;
+        s_htmlObjContext = nullptr;
     }
 }
 

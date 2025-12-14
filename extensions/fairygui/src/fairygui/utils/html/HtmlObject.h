@@ -36,6 +36,8 @@ protected:
     GObjectPool objectPool;
     ax::Vector<GObject*> loaderPool;
 
+    static HtmlObjectContext* s_htmlObjContext;
+
     HtmlObjectContext()  = default;
     ~HtmlObjectContext() = default;
 
