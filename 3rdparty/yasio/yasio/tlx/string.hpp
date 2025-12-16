@@ -81,7 +81,7 @@ public:
   __compressed_pair<allocator_type, _Str_storage> _Mypair;
 
   basic_string() : _Mypair(__zero_then_variadic_args_t{}) {}
-  basic_string(nullptr_t) = delete;
+  basic_string(::std::nullptr_t) = delete;
   explicit basic_string(size_type count) : _Mypair(__one_then_variadic_args_t{}, _Alloc{}) { resize(static_cast<size_type>(count)); }
   basic_string(size_type count, const_reference val) : _Mypair(__one_then_variadic_args_t{}, _Alloc{}) { resize(static_cast<size_type>(count), val); }
   template <typename _Iter, _TLX enable_if_t<_TLX is_iterator<_Iter>::value, int> = 0>

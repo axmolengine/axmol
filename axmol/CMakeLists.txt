@@ -50,6 +50,25 @@ endif()
 
 include(CMakeDependentOption)
 
+# check linux system libraries
+if(LINUX)
+  find_package(X11 REQUIRED)
+  
+  # including GTK3.0 and WebKit2Gtk4.x
+  find_package(PkgConfig REQUIRED)
+  pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+
+  set(_webkit2gtk_vers "4.1;4.0")
+
+  foreach(_ver ${_webkit2gtk_vers})
+    pkg_check_modules(WEBKIT2GTK webkit2gtk-${_ver})
+
+    if(WEBKIT2GTK_LIBRARY_DIRS)
+      break()
+    endif()
+  endforeach()
+endif()
+
 set(AX_RENDER_API "auto" CACHE STRING "Specify axmol graphics render API")
 set_property(CACHE AX_RENDER_API PROPERTY STRINGS d3d11 d3d12 vk mtl gl)
 
@@ -406,6 +425,10 @@ ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_VR)
 ax_config_pred(${_AX_CORE_LIB} AX_CORE_PROFILE)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_WAYLAND)
 
+if(LINUX AND WEBKIT2GTK_FOUND)
+  target_compile_definitions(${_AX_CORE_LIB} PUBLIC AX_HAVE_WEBKIT2GTK=1)
+endif()
+
 # add base macro define and compile options
 use_ax_compile_define(${_AX_CORE_LIB})
 use_ax_compile_options(${_AX_CORE_LIB})
@@ -548,29 +571,29 @@ if(ANDROID)
       target_link_libraries(${_AX_CORE_LIB} ${AX_LUA_ENGINE})
     endif()
   endif()
-endif()
-
-if(LINUX)
-  find_package(X11 REQUIRED)
+elseif(LINUX)
   target_include_directories(${_AX_CORE_LIB} PUBLIC "${X11_X11_INCLUDE_PATH}")
 
-  # X11 gets linked by cmake/Modules/AXLinkHelpers.cmake
-
-  # including GTK3.0 and WebKit2Gtk4.x
-  find_package(PkgConfig REQUIRED)
-  pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
-
-  set(_webkit2gtk_vers "4.1;4.0")
-
-  foreach(_ver ${_webkit2gtk_vers})
-    pkg_check_modules(WEBKIT2GTK webkit2gtk-${_ver})
-
-    if(WEBKIT2GTK_LIBRARY_DIRS)
-      break()
+  # remove system freetype2 due to we already embed freetype
+  set(_gtk_includes "")
+  set(_filtered_freetype FALSE)
+  foreach(dir IN LISTS GTK3_INCLUDE_DIRS)
+    if(NOT dir MATCHES "freetype2")
+      list(APPEND _gtk_includes "${dir}")
+    else()
+      set(_filtered_freetype TRUE)
     endif()
   endforeach()
 
-  target_include_directories(${_AX_CORE_LIB} PUBLIC ${GTK3_INCLUDE_DIRS} ${WEBKIT2GTK_INCLUDE_DIRS})
-  target_link_directories(${_AX_CORE_LIB} PRIVATE ${GTK3_LIBRARY_DIRS} ${WEBKIT2GTK_LIBRARY_DIRS})
-  target_link_libraries(${_AX_CORE_LIB} ${GTK3_LIBRARIES} ${WEBKIT2GTK_LIBRARIES})
+  if(_filtered_freetype)
+    message(STATUS "GTK3: filtered out system freetype include directory")
+  endif()
+
+  target_include_directories(${_AX_CORE_LIB} PUBLIC ${_gtk_includes})
+  target_link_directories(${_AX_CORE_LIB} PRIVATE ${GTK3_LIBRARY_DIRS})
+
+  if(WEBKIT2GTK_FOUND)
+    target_include_directories(${_AX_CORE_LIB} PUBLIC ${WEBKIT2GTK_INCLUDE_DIRS})
+    target_link_libraries(${_AX_CORE_LIB} ${WEBKIT2GTK_LIBRARIES})
+  endif()
 endif()

@@ -325,7 +325,7 @@ else {
             if ($LinuxDistro -eq 'Debian') {
                 println "It will take few minutes"
                 $os_name = $PSVersionTable.OS
-                $os_ver = [Regex]::Match($os_name, '(\d+\.)+(\*|\d+)(\-[a-z0-9]+)?').Value
+                $os_ver = [Regex]::Match($os_name, '\d+(\.\d+)*(-[a-z0-9]+)?').Value
                 if (($os_name -match 'Ubuntu' -and [VersionEx]$os_ver -ge [VersionEx]'24.04') -or
                     ($os_name -match 'Debian' -and [VersionEx]$os_ver -ge [VersionEx]'13')) {
                     $webkit2gtk_dev = 'libwebkit2gtk-4.1-dev'
