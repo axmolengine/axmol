@@ -193,7 +193,7 @@ if(WINRT)
   target_compile_definitions(freetype PUBLIC "generic=GenericFromFreeTypeLibrary")
 endif()
 
-target_include_directories(3rdparty BEFORE INTERFACE "freetype/include")
+target_include_directories(3rdparty INTERFACE "freetype/include")
 
 if(AX_ENABLE_NAVMESH)
   ax_add_3rd(recast)
