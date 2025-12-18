@@ -165,29 +165,39 @@ void PhysicsDemo::toggleDebugCallback(Object* /*sender*/)
 
 namespace
 {
-    const int LOGO_WIDTH_COLORED = 146;
-    const int LOGO_HEIGHT_COLORED = 38;
-    const float LOGO_IMAGE_COLORED[] =
-    { -37, 2.5, -143, 2.5, -143, 2.5, -2, 2.5, -139, 2.5, -2, 2.5, -140, 1.5, -2, 2.5, -2, 2.5, -133, 3.2, -3, 2.5, -2, 2.5, -132, 7.2, -1, 1.5, -2, 2.5,
-      -132, 3.2, -3, 3.2, -2, 2.5, -8, 12.1, -67, 11.1, -35, 2.2, -5, 2.2, -2, 1.5, -8, 16.1, -48, 8.1, -7, 15.1, -31, 2.2, -7, 2.2, -10, 17.1, -45, 11.1,
-      -5, 17.1, -30, 2.2, -7, 2.2, -10, 18.1, -43, 13.1, -4, 18.1, -29, 2.2, -7, 2.2, -10, 19.1, -41, 15.1, -3, 19.1, -29, 2.2, -5, 2.2, -11, 20.1, -40,
-      16.1, -2, 20.1, -28, 3.2, -3, 3.2, -11, 20.1, -8, 6.1, -8, 5.1, -6, 5.1, -1, 17.1, -2, 21.1, -13, 13.4, -2, 7.2, -12, 7.1, -6, 7.1, -6, 10.1, -5, 7.1,
-      -4, 14.1, -3, 8.1, -1, 8.1, -5, 8.1, -13, 13.4, -4, 3.2, -14, 7.1, -6, 7.1, -5, 12.1, -4, 8.1, -2, 15.1, -4, 7.1, -1, 8.1, -6, 7.1, -13, 13.4, -21,
-      7.1, -5, 8.1, -4, 14.1, -4, 7.1, -1, 8.1, -1, 7.1, -4, 7.1, -1, 8.1, -6, 7.1, -13, 3.4, -7, 3.4, -21, 20.1, -3, 16.1, -3, 15.1, -3, 5.1, -5, 7.1, -1,
-      8.1, -6, 7.1, -13, 3.4, -7, 3.4, -21, 19.1, -4, 17.1, -3, 14.1, -12, 7.1, -2, 8.1, -7, 6.1, -13, 3.4, -7, 3.4, -21, 18.1, -4, 8.1, -2, 8.1, -4, 12.1,
-      -12, 8.1, -2, 8.1, -7, 6.1, -13, 3.4, -7, 3.4, -21, 19.1, -3, 7.1, -4, 8.1, -3, 11.1, -12, 8.1, -3, 8.1, -7, 6.1, -13, 3.4, -7, 3.4, -21, 20.1, -1, 8.1,
-      -5, 7.1, -4, 10.1, -11, 8.1, -4, 8.1, -7, 6.1, -13, 3.4, -7, 3.4, -21, 20.1, -1, 8.1, -5, 7.1, -4, 9.1, -10, 9.1, -5, 8.1, -7, 6.1, -13, 3.4, -7, 3.4,
-      -21, 7.1, -6, 15.1, -6, 7.1, -5, 8.1, -9, 9.1, -6, 8.1, -6, 7.1, -8, 23.4, -16, 7.1, -7, 14.1, -6, 7.1, -4, 9.1, -8, 9.1, -7, 8.1, -6, 7.1, -8, 23.4,
-      -16, 7.1, -7, 15.1, -5, 7.1, -4, 10.1, -6, 9.1, -8, 8.1, -6, 7.1, -8, 23.4, -16, 7.1, -6, 8.1, -1, 7.1, -4, 8.1, -3, 12.1, -4, 8.1, -10, 8.1, -4, 9.1,
-      -8, 3.4, -7, 3.4, -7, 3.4, -16, 21.1, -1, 8.1, -3, 7.1, -3, 13.1, -4, 16.1, -2, 20.1, -9, 3.4, -7, 3.4, -7, 3.4, -16, 20.1, -2, 18.1, -3, 14.1, -2, 18.1,
-      -1, 20.1, -9, 3.4, -7, 3.4, -7, 3.4, -16, 20.1, -3, 16.1, -3, 16.1, -1, 18.1, -1, 19.1, -10, 3.4, -7, 3.4, -7, 3.4, -16, 19.1, -5, 15.1, -2, 8.1, -2, 7.1,
-      -1, 18.1, -1, 18.1, -11, 3.4, -7, 3.4, -7, 3.4, -16, 18.1, -7, 13.1, -3, 7.1, -3, 26.1, -1, 17.1, -12, 3.4, -7, 3.4, -7, 3.4, -17, 15.1, -10, 10.1, -6,
-      5.1, -5, 6.1, -2, 16.1, -3, 14.1, -14, 3.4, -7, 3.4, -7, 3.4, -44, 6.1, -73, 23.4, -115, 40.3, -106, 40.3, -106, 40.3, -106 };
+const int LOGO_WIDTH_COLORED     = 146;
+const int LOGO_HEIGHT_COLORED    = 38;
+const float LOGO_IMAGE_COLORED[] = {
+    -37,  2.5,  -143, 2.5,  -143, 2.5,  -2,   2.5,  -139, 2.5,  -2,   2.5,  -140, 1.5,  -2,   2.5,  -2,   2.5,  -133,
+    3.2,  -3,   2.5,  -2,   2.5,  -132, 7.2,  -1,   1.5,  -2,   2.5,  -132, 3.2,  -3,   3.2,  -2,   2.5,  -8,   12.1,
+    -67,  11.1, -35,  2.2,  -5,   2.2,  -2,   1.5,  -8,   16.1, -48,  8.1,  -7,   15.1, -31,  2.2,  -7,   2.2,  -10,
+    17.1, -45,  11.1, -5,   17.1, -30,  2.2,  -7,   2.2,  -10,  18.1, -43,  13.1, -4,   18.1, -29,  2.2,  -7,   2.2,
+    -10,  19.1, -41,  15.1, -3,   19.1, -29,  2.2,  -5,   2.2,  -11,  20.1, -40,  16.1, -2,   20.1, -28,  3.2,  -3,
+    3.2,  -11,  20.1, -8,   6.1,  -8,   5.1,  -6,   5.1,  -1,   17.1, -2,   21.1, -13,  13.4, -2,   7.2,  -12,  7.1,
+    -6,   7.1,  -6,   10.1, -5,   7.1,  -4,   14.1, -3,   8.1,  -1,   8.1,  -5,   8.1,  -13,  13.4, -4,   3.2,  -14,
+    7.1,  -6,   7.1,  -5,   12.1, -4,   8.1,  -2,   15.1, -4,   7.1,  -1,   8.1,  -6,   7.1,  -13,  13.4, -21,  7.1,
+    -5,   8.1,  -4,   14.1, -4,   7.1,  -1,   8.1,  -1,   7.1,  -4,   7.1,  -1,   8.1,  -6,   7.1,  -13,  3.4,  -7,
+    3.4,  -21,  20.1, -3,   16.1, -3,   15.1, -3,   5.1,  -5,   7.1,  -1,   8.1,  -6,   7.1,  -13,  3.4,  -7,   3.4,
+    -21,  19.1, -4,   17.1, -3,   14.1, -12,  7.1,  -2,   8.1,  -7,   6.1,  -13,  3.4,  -7,   3.4,  -21,  18.1, -4,
+    8.1,  -2,   8.1,  -4,   12.1, -12,  8.1,  -2,   8.1,  -7,   6.1,  -13,  3.4,  -7,   3.4,  -21,  19.1, -3,   7.1,
+    -4,   8.1,  -3,   11.1, -12,  8.1,  -3,   8.1,  -7,   6.1,  -13,  3.4,  -7,   3.4,  -21,  20.1, -1,   8.1,  -5,
+    7.1,  -4,   10.1, -11,  8.1,  -4,   8.1,  -7,   6.1,  -13,  3.4,  -7,   3.4,  -21,  20.1, -1,   8.1,  -5,   7.1,
+    -4,   9.1,  -10,  9.1,  -5,   8.1,  -7,   6.1,  -13,  3.4,  -7,   3.4,  -21,  7.1,  -6,   15.1, -6,   7.1,  -5,
+    8.1,  -9,   9.1,  -6,   8.1,  -6,   7.1,  -8,   23.4, -16,  7.1,  -7,   14.1, -6,   7.1,  -4,   9.1,  -8,   9.1,
+    -7,   8.1,  -6,   7.1,  -8,   23.4, -16,  7.1,  -7,   15.1, -5,   7.1,  -4,   10.1, -6,   9.1,  -8,   8.1,  -6,
+    7.1,  -8,   23.4, -16,  7.1,  -6,   8.1,  -1,   7.1,  -4,   8.1,  -3,   12.1, -4,   8.1,  -10,  8.1,  -4,   9.1,
+    -8,   3.4,  -7,   3.4,  -7,   3.4,  -16,  21.1, -1,   8.1,  -3,   7.1,  -3,   13.1, -4,   16.1, -2,   20.1, -9,
+    3.4,  -7,   3.4,  -7,   3.4,  -16,  20.1, -2,   18.1, -3,   14.1, -2,   18.1, -1,   20.1, -9,   3.4,  -7,   3.4,
+    -7,   3.4,  -16,  20.1, -3,   16.1, -3,   16.1, -1,   18.1, -1,   19.1, -10,  3.4,  -7,   3.4,  -7,   3.4,  -16,
+    19.1, -5,   15.1, -2,   8.1,  -2,   7.1,  -1,   18.1, -1,   18.1, -11,  3.4,  -7,   3.4,  -7,   3.4,  -16,  18.1,
+    -7,   13.1, -3,   7.1,  -3,   26.1, -1,   17.1, -12,  3.4,  -7,   3.4,  -7,   3.4,  -17,  15.1, -10,  10.1, -6,
+    5.1,  -5,   6.1,  -2,   16.1, -3,   14.1, -14,  3.4,  -7,   3.4,  -7,   3.4,  -44,  6.1,  -73,  23.4, -115, 40.3,
+    -106, 40.3, -106, 40.3, -106};
 
-    float frand()
-    {
-        return rand() / RAND_MAX;
-    }
+float frand()
+{
+    return rand() / RAND_MAX;
+}
 }  // namespace
 
 Sprite* PhysicsDemo::makeBall(Vec2 point, float radius, PhysicsMaterial material)
@@ -280,7 +290,7 @@ bool PhysicsDemo::onTouchBegan(Touch* touch, Event* event)
 
     if (body != nullptr)
     {
-        Node* mouse = Node::create();
+        Node* mouse      = Node::create();
         auto physicsBody = PhysicsBody::create();
         physicsBody->setDynamic(false);
         mouse->addComponent(physicsBody);
@@ -324,21 +334,23 @@ void PhysicsDemoLogoSmash::onEnter()
 {
     PhysicsDemo::onEnter();
 
-    Color32 colorList[] = { Color32::WHITE, Color32::GRAY, Color32::RED, Color32::GREEN, Color32(0, 178, 255), Color32(255, 174, 201) };
+    Color32 colorList[] = {Color32::WHITE, Color32::GRAY,        Color32::RED,
+                           Color32::GREEN, Color32(0, 178, 255), Color32(255, 174, 201)};
 
     _physicsWorld->setGravity(Vec2(0.0f, 0.0f));
     _physicsWorld->setUpdateRate(1);
 
-    _ball = SpriteBatchNode::create("Images/ball.png", LOGO_WIDTH_COLORED * LOGO_HEIGHT_COLORED + LOGO_WIDTH_COLORED + LOGO_HEIGHT_COLORED);
+    _ball = SpriteBatchNode::create(
+        "Images/ball.png", LOGO_WIDTH_COLORED * LOGO_HEIGHT_COLORED + LOGO_WIDTH_COLORED + LOGO_HEIGHT_COLORED);
     addChild(_ball);
 
-    int x = 0;
-    int y = 0;
+    int x     = 0;
+    int y     = 0;
     int index = 0;
     while (index < (sizeof(LOGO_IMAGE_COLORED) / sizeof(LOGO_IMAGE_COLORED[0])))
     {
-        int colPos = 0;
-        int step = 0;
+        int colPos  = 0;
+        int step    = 0;
         float value = LOGO_IMAGE_COLORED[index];
 
         if (value < 0)
@@ -346,19 +358,18 @@ void PhysicsDemoLogoSmash::onEnter()
         else
         {
             step = int(value);
-            value += 0.12f; // (int) rounding "fix" for next line 
-            colPos = int((value - step) * 10 -1);
+            value += 0.12f;  // (int) rounding "fix" for next line
+            colPos = int((value - step) * 10 - 1);
         }
         while (step > 0)
         {
             float xJitter = 0.15 * frand();
             float yJitter = 0.15 * frand();
 
-            Node* ball =
-                makeBall(Vec2(2 * (x + xJitter) + VisibleRect::getVisibleRect().size.width / 4,
-                    (2 * (-y + yJitter) + VisibleRect::getVisibleRect().size.height / 2 +
-                        LOGO_HEIGHT_COLORED)),
-                    0.95f, PhysicsMaterial(0.01f, 0.0f, 0.0f));
+            Node* ball = makeBall(
+                Vec2(2 * (x + xJitter) + VisibleRect::getVisibleRect().size.width / 4,
+                     (2 * (-y + yJitter) + VisibleRect::getVisibleRect().size.height / 2 + LOGO_HEIGHT_COLORED)),
+                0.95f, PhysicsMaterial(0.01f, 0.0f, 0.0f));
             ball->setColor(colorList[colPos]);
             auto physicsBody = ball->getPhysicsBody();
 
@@ -399,7 +410,7 @@ void PhysicsDemoClickAdd::onEnter()
 {
     PhysicsDemo::onEnter();
 
-    auto touchListener = EventListenerTouchAllAtOnce::create();
+    auto touchListener            = EventListenerTouchAllAtOnce::create();
     touchListener->onTouchesEnded = AX_CALLBACK_2(PhysicsDemoClickAdd::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
@@ -445,7 +456,7 @@ void PhysicsDemoClickAdd::onAcceleration(Acceleration* acc, Event* /*event*/)
     prevY = accelY;
 
     auto v = Vec2(accelX, accelY);
-    v = v * 200;
+    v      = v * 200;
 
     _physicsWorld->setGravity(v);
 }
@@ -454,7 +465,7 @@ void PhysicsDemoPyramidStack::onEnter()
 {
     PhysicsDemo::onEnter();
 
-    auto touchListener = EventListenerTouchOneByOne::create();
+    auto touchListener          = EventListenerTouchOneByOne::create();
     touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemoPyramidStack::onTouchBegan, this);
     touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemoPyramidStack::onTouchMoved, this);
     touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemoPyramidStack::onTouchEnded, this);
@@ -462,7 +473,7 @@ void PhysicsDemoPyramidStack::onEnter()
 
     auto node = Node::create();
     node->addComponent(PhysicsBody::createEdgeSegment(VisibleRect::leftBottom() + Vec2(0.0f, 50.0f),
-        VisibleRect::rightBottom() + Vec2(0.0f, 50.0f)));
+                                                      VisibleRect::rightBottom() + Vec2(0.0f, 50.0f)));
     this->addChild(node);
 
     auto ball = Sprite::create("Images/ball.png");
@@ -504,7 +515,7 @@ void PhysicsDemoRayCast::onEnter()
 {
     PhysicsDemo::onEnter();
 
-    auto listener = EventListenerTouchAllAtOnce::create();
+    auto listener            = EventListenerTouchAllAtOnce::create();
     listener->onTouchesEnded = AX_CALLBACK_2(PhysicsDemoRayCast::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
@@ -512,10 +523,10 @@ void PhysicsDemoRayCast::onEnter()
 
     auto node = DrawNode::create();
     node->addComponent(PhysicsBody::createEdgeSegment(VisibleRect::leftBottom() + Vec2(0.0f, 50.0f),
-        VisibleRect::rightBottom() + Vec2(0.0f, 50.0f),
-        PHYSICSBODY_MATERIAL_DEFAULT, 0.5f));
+                                                      VisibleRect::rightBottom() + Vec2(0.0f, 50.0f),
+                                                      PHYSICSBODY_MATERIAL_DEFAULT, 0.5f));
     node->drawSegment(VisibleRect::leftBottom() + Vec2(0.0f, 50.0f), VisibleRect::rightBottom() + Vec2(0.0f, 50.0f),
-        0.5f, STATIC_COLOR);
+                      0.5f, STATIC_COLOR);
     this->addChild(node);
 
     MenuItemFont::setFontSize(18);
@@ -557,7 +568,7 @@ bool PhysicsDemoRayCast::anyRay(PhysicsWorld& /*world*/, const PhysicsRayCastInf
 
 void PhysicsDemoRayCast::update(float /*delta*/)
 {
-    float L = 150.0f;
+    float L     = 150.0f;
     Vec2 point1 = VisibleRect::center();
     Vec2 d(L * cosf(_angle), L * sinf(_angle));
     Vec2 point2 = point1 + d;
@@ -569,7 +580,7 @@ void PhysicsDemoRayCast::update(float /*delta*/)
     case 0:
     {
         Vec2 point3 = point2;
-        auto func = AX_CALLBACK_3(PhysicsDemoRayCast::anyRay, this);
+        auto func   = AX_CALLBACK_3(PhysicsDemoRayCast::anyRay, this);
 
         _physicsWorld->rayCast(func, point1, point2, &point3);
         _node->drawSegment(point1, point3, 0.5f, STATIC_COLOR);
@@ -584,18 +595,18 @@ void PhysicsDemoRayCast::update(float /*delta*/)
     }
     case 1:
     {
-        Vec2 point3 = point2;
-        float friction = 1.0f;
+        Vec2 point3                     = point2;
+        float friction                  = 1.0f;
         PhysicsRayCastCallbackFunc func = [&point3, &friction](PhysicsWorld& /*world*/, const PhysicsRayCastInfo& info,
-            void* /*data*/) -> bool {
-                if (friction > info.fraction)
-                {
-                    point3 = info.contact;
-                    friction = info.fraction;
-                }
+                                                               void* /*data*/) -> bool {
+            if (friction > info.fraction)
+            {
+                point3   = info.contact;
+                friction = info.fraction;
+            }
 
-                return true;
-            };
+            return true;
+        };
 
         _physicsWorld->rayCast(func, point1, point2, nullptr);
         _node->drawSegment(point1, point3, 1, STATIC_COLOR);
@@ -615,14 +626,14 @@ void PhysicsDemoRayCast::update(float /*delta*/)
         int num = 0;
 
         PhysicsRayCastCallbackFunc func = [&points, &num](PhysicsWorld& /*world*/, const PhysicsRayCastInfo& info,
-            void* /*data*/) -> bool {
-                if (num < MAX_MULTI_RAYCAST_NUM)
-                {
-                    points[num++] = info.contact;
-                }
+                                                          void* /*data*/) -> bool {
+            if (num < MAX_MULTI_RAYCAST_NUM)
+            {
+                points[num++] = info.contact;
+            }
 
-                return true;
-            };
+            return true;
+        };
 
         _physicsWorld->rayCast(func, point1, point2, nullptr);
 
@@ -680,7 +691,7 @@ void PhysicsDemoActions::onEnter()
     PhysicsDemo::onEnter();
     _physicsWorld->setGravity(Vec2::ZERO);
 
-    auto touchListener = EventListenerTouchOneByOne::create();
+    auto touchListener          = EventListenerTouchOneByOne::create();
     touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemoActions::onTouchBegan, this);
     touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemoActions::onTouchMoved, this);
     touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemoActions::onTouchEnded, this);
@@ -702,11 +713,11 @@ void PhysicsDemoActions::onEnter()
     sp3->getPhysicsBody()->setTag(DRAG_BODYS_TAG);
     sp4->getPhysicsBody()->setTag(DRAG_BODYS_TAG);
 
-    auto actionTo = JumpTo::create(2, Vec2(100, 100), 50, 4);
-    auto actionBy = JumpBy::create(2, Vec2(300, 0), 50, 4);
-    auto actionUp = JumpBy::create(2, Vec2(0, 50), 80, 4);
+    auto actionTo     = JumpTo::create(2, Vec2(100, 100), 50, 4);
+    auto actionBy     = JumpBy::create(2, Vec2(300, 0), 50, 4);
+    auto actionUp     = JumpBy::create(2, Vec2(0, 50), 80, 4);
     auto actionByBack = actionBy->reverse();
-    auto rotateBy = RotateBy::create(2, 180);
+    auto rotateBy     = RotateBy::create(2, 180);
     auto rotateByBack = RotateBy::create(2, -180);
 
     sp1->runAction(RepeatForever::create(actionUp));
@@ -727,16 +738,16 @@ void PhysicsDemoJoints::onEnter()
     PhysicsDemo::onEnter();
     toggleDebug();
 
-    auto listener = EventListenerTouchOneByOne::create();
+    auto listener          = EventListenerTouchOneByOne::create();
     listener->onTouchBegan = AX_CALLBACK_2(PhysicsDemo::onTouchBegan, this);
     listener->onTouchMoved = AX_CALLBACK_2(PhysicsDemo::onTouchMoved, this);
     listener->onTouchEnded = AX_CALLBACK_2(PhysicsDemo::onTouchEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    float width = (VisibleRect::getVisibleRect().size.width - 10) / 4;
+    float width  = (VisibleRect::getVisibleRect().size.width - 10) / 4;
     float height = (VisibleRect::getVisibleRect().size.height - 50) / 4;
 
-    Node* node = Node::create();
+    Node* node       = Node::create();
     PhysicsBody* box = PhysicsBody::create();
     node->addComponent(box);
 
@@ -753,7 +764,7 @@ void PhysicsDemoJoints::onEnter()
             // if ((i * 4 + j) > testidx)
             //     continue;
             Vec2 offset(VisibleRect::leftBottom().x + 5 + j * width + width / 2,
-                VisibleRect::leftBottom().y + 50 + i * height + height / 2);
+                        VisibleRect::leftBottom().y + 50 + i * height + height / 2);
             box->addCollider(
                 PhysicsColliderEdgeBox::create(box, Size(width, height), PHYSICSSHAPE_MATERIAL_DEFAULT, 0.5, offset));
 
@@ -761,11 +772,11 @@ void PhysicsDemoJoints::onEnter()
             {
             case 0:
             {
-                auto sp1 = makeBall(offset - Vec2(30, 0), 10);
+                auto sp1            = makeBall(offset - Vec2(30, 0), 10);
                 auto sp1PhysicsBody = sp1->getPhysicsBody();
                 sp1PhysicsBody->setTag(DRAG_BODYS_TAG);
 
-                auto sp2 = makeBall(offset + Vec2(30, 0), 10);
+                auto sp2            = makeBall(offset + Vec2(30, 0), 10);
                 auto sp2PhysicsBody = sp2->getPhysicsBody();
                 sp2PhysicsBody->setTag(DRAG_BODYS_TAG);
 
@@ -779,11 +790,11 @@ void PhysicsDemoJoints::onEnter()
             case 1:
             {
 
-                auto sp1 = makeBall(offset - Vec2(30.0f, 0.0f), 10);
+                auto sp1            = makeBall(offset - Vec2(30.0f, 0.0f), 10);
                 auto sp1PhysicsBody = sp1->getPhysicsBody();
                 sp1PhysicsBody->setTag(DRAG_BODYS_TAG);
 
-                auto sp2 = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
+                auto sp2            = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
                 auto sp2PhysicsBody = sp2->getPhysicsBody();
                 sp2PhysicsBody->setTag(DRAG_BODYS_TAG);
 
@@ -796,11 +807,11 @@ void PhysicsDemoJoints::onEnter()
             }
             case 2:
             {
-                auto sp1 = makeBall(offset - Vec2(30.0f, 0.0f), 10);
+                auto sp1            = makeBall(offset - Vec2(30.0f, 0.0f), 10);
                 auto sp1PhysicsBody = sp1->getPhysicsBody();
                 sp1PhysicsBody->setTag(DRAG_BODYS_TAG);
 
-                auto sp2 = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
+                auto sp2            = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
                 auto sp2PhysicsBody = sp2->getPhysicsBody();
                 sp2PhysicsBody->setTag(DRAG_BODYS_TAG);
 
@@ -814,16 +825,16 @@ void PhysicsDemoJoints::onEnter()
             }
             case 3:
             {
-                auto sp1 = makeBall(offset - Vec2(30.0f, 0.0f), 10);
+                auto sp1            = makeBall(offset - Vec2(30.0f, 0.0f), 10);
                 auto sp1PhysicsBody = sp1->getPhysicsBody();
                 sp1PhysicsBody->setTag(DRAG_BODYS_TAG);
 
-                auto sp2 = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
+                auto sp2            = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
                 auto sp2PhysicsBody = sp2->getPhysicsBody();
                 sp2PhysicsBody->setTag(DRAG_BODYS_TAG);
 
                 PhysicsJointLimit* joint = PhysicsJointLimit::instantiate(sp1PhysicsBody, sp2PhysicsBody, Point::ZERO,
-                    Point::ZERO, 30.0f, 60.0f);
+                                                                          Point::ZERO, 30.0f, 60.0f);
                 getPhysicsWorld()->addJoint(joint);
 
                 this->addChild(sp1);
@@ -832,16 +843,16 @@ void PhysicsDemoJoints::onEnter()
             }
             case 4:
             {
-                auto sp1 = makeBall(offset - Vec2(30.0f, 0.0f), 10);
+                auto sp1            = makeBall(offset - Vec2(30.0f, 0.0f), 10);
                 auto sp1PhysicsBody = sp1->getPhysicsBody();
                 sp1PhysicsBody->setTag(DRAG_BODYS_TAG);
 
-                auto sp2 = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
+                auto sp2            = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
                 auto sp2PhysicsBody = sp2->getPhysicsBody();
                 sp2PhysicsBody->setTag(DRAG_BODYS_TAG);
 
                 PhysicsJointSpring* joint = PhysicsJointSpring::instantiate(sp1PhysicsBody, sp2PhysicsBody, Point::ZERO,
-                    Point::ZERO, 500.0f, 0.3f);
+                                                                            Point::ZERO, 500.0f, 0.3f);
                 getPhysicsWorld()->addJoint(joint);
 
                 this->addChild(sp1);
@@ -850,11 +861,11 @@ void PhysicsDemoJoints::onEnter()
             }
             case 5:
             {
-                auto sp1 = makeBall(offset - Vec2(30.0f, 0.0f), 10);
+                auto sp1            = makeBall(offset - Vec2(30.0f, 0.0f), 10);
                 auto sp1PhysicsBody = sp1->getPhysicsBody();
                 sp1PhysicsBody->setTag(DRAG_BODYS_TAG);
 
-                auto sp2 = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
+                auto sp2            = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
                 auto sp2PhysicsBody = sp2->getPhysicsBody();
                 sp2PhysicsBody->setTag(DRAG_BODYS_TAG);
 
@@ -868,11 +879,11 @@ void PhysicsDemoJoints::onEnter()
             }
             case 6:
             {
-                auto sp1 = makeBox(offset - Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
+                auto sp1            = makeBox(offset - Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
                 auto sp1PhysicsBody = sp1->getPhysicsBody();
                 sp1PhysicsBody->setTag(DRAG_BODYS_TAG);
 
-                auto sp2 = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
+                auto sp2            = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
                 auto sp2PhysicsBody = sp2->getPhysicsBody();
                 sp2PhysicsBody->setTag(DRAG_BODYS_TAG);
 
@@ -888,11 +899,11 @@ void PhysicsDemoJoints::onEnter()
             }
             case 7:
             {
-                auto sp1 = makeBox(offset - Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
+                auto sp1            = makeBox(offset - Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
                 auto sp1PhysicsBody = sp1->getPhysicsBody();
                 sp1PhysicsBody->setTag(DRAG_BODYS_TAG);
 
-                auto sp2 = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
+                auto sp2            = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
                 auto sp2PhysicsBody = sp2->getPhysicsBody();
                 sp2PhysicsBody->setTag(DRAG_BODYS_TAG);
 
@@ -908,11 +919,11 @@ void PhysicsDemoJoints::onEnter()
             }
             case 8:
             {
-                auto sp1 = makeBox(offset - Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
+                auto sp1            = makeBox(offset - Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
                 auto sp1PhysicsBody = sp1->getPhysicsBody();
                 sp1PhysicsBody->setTag(DRAG_BODYS_TAG);
 
-                auto sp2 = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
+                auto sp2            = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
                 auto sp2PhysicsBody = sp2->getPhysicsBody();
                 sp2PhysicsBody->setTag(DRAG_BODYS_TAG);
 
@@ -928,11 +939,11 @@ void PhysicsDemoJoints::onEnter()
             }
             case 9:
             {
-                auto sp1 = makeBox(offset - Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
+                auto sp1            = makeBox(offset - Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
                 auto sp1PhysicsBody = sp1->getPhysicsBody();
                 sp1PhysicsBody->setTag(DRAG_BODYS_TAG);
 
-                auto sp2 = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
+                auto sp2            = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
                 auto sp2PhysicsBody = sp2->getPhysicsBody();
                 sp2PhysicsBody->setTag(DRAG_BODYS_TAG);
 
@@ -947,11 +958,11 @@ void PhysicsDemoJoints::onEnter()
             }
             case 10:
             {
-                auto sp1 = makeBox(offset - Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
+                auto sp1            = makeBox(offset - Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
                 auto sp1PhysicsBody = sp1->getPhysicsBody();
                 sp1PhysicsBody->setTag(DRAG_BODYS_TAG);
 
-                auto sp2 = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
+                auto sp2            = makeBox(offset + Vec2(30.0f, 0.0f), Size(30.0f, 10.0f));
                 auto sp2PhysicsBody = sp2->getPhysicsBody();
                 sp2PhysicsBody->setTag(DRAG_BODYS_TAG);
 
@@ -982,16 +993,16 @@ void PhysicsDemoPump::onEnter()
     PhysicsDemo::onEnter();
     toggleDebug();
 
-    _distance = 0.0f;
-    _rotationV = 0.0f;
-    auto touchListener = EventListenerTouchOneByOne::create();
+    _distance                   = 0.0f;
+    _rotationV                  = 0.0f;
+    auto touchListener          = EventListenerTouchOneByOne::create();
     touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemoPump::onTouchBegan, this);
     touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemoPump::onTouchMoved, this);
     touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemoPump::onTouchEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
     scheduleUpdate();
 
-    auto node = Node::create();
+    auto node     = Node::create();
     auto nodeBody = PhysicsBody::create();
     node->addComponent(nodeBody);
     nodeBody->setDynamic(false);
@@ -1000,23 +1011,23 @@ void PhysicsDemoPump::onEnter()
     nodeBody->addCollider(PhysicsColliderEdgeSegment::create(
         nodeBody, VisibleRect::leftTop() + Vec2(50, 0), VisibleRect::leftTop() + Vec2(50, -130), staticMaterial, 2.0f));
     nodeBody->addCollider(PhysicsColliderEdgeSegment::create(nodeBody, VisibleRect::leftTop() + Vec2(190, 0),
-        VisibleRect::leftTop() + Vec2(100, -50), staticMaterial,
-        2.0f));
+                                                             VisibleRect::leftTop() + Vec2(100, -50), staticMaterial,
+                                                             2.0f));
     nodeBody->addCollider(PhysicsColliderEdgeSegment::create(nodeBody, VisibleRect::leftTop() + Vec2(100, -50),
-        VisibleRect::leftTop() + Vec2(100, -90), staticMaterial,
-        2.0f));
+                                                             VisibleRect::leftTop() + Vec2(100, -90), staticMaterial,
+                                                             2.0f));
     nodeBody->addCollider(PhysicsColliderEdgeSegment::create(nodeBody, VisibleRect::leftTop() + Vec2(50, -130),
-        VisibleRect::leftTop() + Vec2(100, -145), staticMaterial,
-        2.0f));
+                                                             VisibleRect::leftTop() + Vec2(100, -145), staticMaterial,
+                                                             2.0f));
     nodeBody->addCollider(PhysicsColliderEdgeSegment::create(nodeBody, VisibleRect::leftTop() + Vec2(100, -145),
-        VisibleRect::leftBottom() + Vec2(100, 80), staticMaterial,
-        2.0f));
+                                                             VisibleRect::leftBottom() + Vec2(100, 80), staticMaterial,
+                                                             2.0f));
     nodeBody->addCollider(PhysicsColliderEdgeSegment::create(nodeBody, VisibleRect::leftTop() + Vec2(150, -80),
-        VisibleRect::leftBottom() + Vec2(150, 80), staticMaterial,
-        2.0f));
+                                                             VisibleRect::leftBottom() + Vec2(150, 80), staticMaterial,
+                                                             2.0f));
     nodeBody->addCollider(PhysicsColliderEdgeSegment::create(nodeBody, VisibleRect::leftTop() + Vec2(150, -80),
-        VisibleRect::rightTop() + Vec2(-100, -150), staticMaterial,
-        2.0f));
+                                                             VisibleRect::rightTop() + Vec2(-100, -150), staticMaterial,
+                                                             2.0f));
 
     nodeBody->setCategoryBitmask(0x01);
     node->setPosition(Vec2::ZERO);
@@ -1026,16 +1037,16 @@ void PhysicsDemoPump::onEnter()
     for (int i = 0; i < 6; ++i)
     {
         auto ball = makeBall(VisibleRect::leftTop() + Vec2(75 + AXRANDOM_0_1() * 90, 0.0f), 22,
-            PhysicsMaterial(0.05f, 0.0f, 0.1f));
+                             PhysicsMaterial(0.05f, 0.0f, 0.1f));
         ball->getPhysicsBody()->setTag(DRAG_BODYS_TAG);
         addChild(ball);
     }
 
-    Vec2 vec[4] = { VisibleRect::leftTop() + Vec2(102, -148), VisibleRect::leftTop() + Vec2(148, -161),
-                   VisibleRect::leftBottom() + Vec2(148, 20), VisibleRect::leftBottom() + Vec2(102, 20) };
+    Vec2 vec[4] = {VisibleRect::leftTop() + Vec2(102, -148), VisibleRect::leftTop() + Vec2(148, -161),
+                   VisibleRect::leftBottom() + Vec2(148, 20), VisibleRect::leftBottom() + Vec2(102, 20)};
 
     // pump
-    auto pump = Node::create();
+    auto pump   = Node::create();
     auto center = PhysicsCollider::getPolygonCenter(vec, 4);
     pump->setPosition(center);
     auto pumpBody = PhysicsBody::createPolygon(vec, 4, PHYSICSBODY_MATERIAL_DEFAULT, -center);
@@ -1070,7 +1081,7 @@ void PhysicsDemoPump::onEnter()
     _physicsWorld->addJoint(PhysicsJointGear::instantiate(sgearBody, bgearBody, (float)-M_PI_2, -2.0f));
 
     // plugger
-    Vec2 seg[] = { VisibleRect::leftTop() + Vec2(75, -120), VisibleRect::leftBottom() + Vec2(75, -100) };
+    Vec2 seg[]     = {VisibleRect::leftTop() + Vec2(75, -120), VisibleRect::leftBottom() + Vec2(75, -100)};
     Vec2 segCenter = (seg[1] + seg[0]) / 2;
     seg[1] -= segCenter;
     seg[0] -= segCenter;
@@ -1160,7 +1171,7 @@ void PhysicsDemoOneWayPlatform::onEnter()
 {
     PhysicsDemo::onEnter();
 
-    auto touchListener = EventListenerTouchOneByOne::create();
+    auto touchListener          = EventListenerTouchOneByOne::create();
     touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemoOneWayPlatform::onTouchBegan, this);
     touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemoOneWayPlatform::onTouchMoved, this);
     touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemoOneWayPlatform::onTouchEnded, this);
@@ -1168,23 +1179,23 @@ void PhysicsDemoOneWayPlatform::onEnter()
 
     auto ground = Node::create();
     ground->addComponent(PhysicsBody::createEdgeSegment(VisibleRect::leftBottom() + Vec2(0.0f, 50.0f),
-        VisibleRect::rightBottom() + Vec2(0.0f, 50.0f)));
+                                                        VisibleRect::rightBottom() + Vec2(0.0f, 50.0f)));
     this->addChild(ground);
 
-    auto platform = makeBox(VisibleRect::center(), Size(200.0f, 50.0f));
+    auto platform     = makeBox(VisibleRect::center(), Size(200.0f, 50.0f));
     auto platformBody = platform->getPhysicsBody();
     platformBody->setDynamic(false);
     platformBody->setContactTestBitmask(0xFFFFFFFF);
     this->addChild(platform);
 
-    auto ball = makeBall(VisibleRect::center() - Vec2(0.0f, 50.0f), 20);
+    auto ball     = makeBall(VisibleRect::center() - Vec2(0.0f, 50.0f), 20);
     auto ballBody = ball->getPhysicsBody();
     ballBody->setVelocity(Vec2(0.0f, 150.0f));
     ballBody->setTag(DRAG_BODYS_TAG);
     ballBody->setContactTestBitmask(0xFFFFFFFF);
     this->addChild(ball);
 
-    auto contactListener = EventListenerPhysicsContactWithBodies::create(platformBody, ballBody);
+    auto contactListener            = EventListenerPhysicsContactWithBodies::create(platformBody, ballBody);
     contactListener->onContactBegin = AX_CALLBACK_1(PhysicsDemoOneWayPlatform::onContactBegin, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 }
@@ -1206,18 +1217,18 @@ void PhysicsDemoSlice::onEnter()
 
     _sliceTag = 1;
 
-    auto touchListener = EventListenerTouchOneByOne::create();
+    auto touchListener          = EventListenerTouchOneByOne::create();
     touchListener->onTouchBegan = [](Touch* /*touch*/, Event* /*event*/) -> bool { return true; };
     touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemoSlice::onTouchEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     auto ground = Node::create();
     ground->addComponent(PhysicsBody::createEdgeSegment(VisibleRect::leftBottom() + Vec2(0, 50),
-        VisibleRect::rightBottom() + Vec2(0.0f, 50.0f)));
+                                                        VisibleRect::rightBottom() + Vec2(0.0f, 50.0f)));
     this->addChild(ground);
 
-    auto box = Node::create();
-    Vec2 points[4] = { Vec2(-100.0f, -100.0f), Vec2(-100.0f, 100.0f), Vec2(100.0f, 100.0f), Vec2(100.0f, -100.0f) };
+    auto box       = Node::create();
+    Vec2 points[4] = {Vec2(-100.0f, -100.0f), Vec2(-100.0f, 100.0f), Vec2(100.0f, 100.0f), Vec2(100.0f, -100.0f)};
     box->addComponent(PhysicsBody::createPolygon(points, 4));
     box->setPosition(VisibleRect::center());
     box->getPhysicsBody()->setTag(_sliceTag);
@@ -1234,8 +1245,8 @@ bool PhysicsDemoSlice::slice(PhysicsWorld& /*world*/, const PhysicsRayCastInfo& 
     if (!info.shape->containsPoint(info.start) && !info.shape->containsPoint(info.end))
     {
         Vec2 normal = info.end - info.start;
-        normal = normal.getPerp().getNormalized();
-        float dist = info.start.dot(normal);
+        normal      = normal.getPerp().getNormalized();
+        float dist  = info.start.dot(normal);
 
         clipPoly(dynamic_cast<PhysicsColliderPolygon*>(info.shape), normal, dist);
         clipPoly(dynamic_cast<PhysicsColliderPolygon*>(info.shape), -normal, -dist);
@@ -1249,13 +1260,13 @@ bool PhysicsDemoSlice::slice(PhysicsWorld& /*world*/, const PhysicsRayCastInfo& 
 void PhysicsDemoSlice::clipPoly(PhysicsColliderPolygon* shape, Vec2 normal, float distance)
 {
     PhysicsBody* body = shape->getBody();
-    int count = shape->getPointsCount();
-    int pointsCount = 0;
-    Vec2* points = new Vec2[count + 1];
+    int count         = shape->getPointsCount();
+    int pointsCount   = 0;
+    Vec2* points      = new Vec2[count + 1];
 
     for (int i = 0, j = count - 1; i < count; j = i, ++i)
     {
-        Vec2 a = body->local2World(shape->getPoint(j));
+        Vec2 a      = body->local2World(shape->getPoint(j));
         float aDist = a.dot(normal) - distance;
 
         if (aDist < 0.0f)
@@ -1264,19 +1275,19 @@ void PhysicsDemoSlice::clipPoly(PhysicsColliderPolygon* shape, Vec2 normal, floa
             ++pointsCount;
         }
 
-        Vec2 b = body->local2World(shape->getPoint(i));
+        Vec2 b      = body->local2World(shape->getPoint(i));
         float bDist = b.dot(normal) - distance;
 
         if (aDist * bDist < 0.0f)
         {
-            float t = std::fabs(aDist) / (std::fabs(aDist) + std::fabs(bDist));
+            float t             = std::fabs(aDist) / (std::fabs(aDist) + std::fabs(bDist));
             points[pointsCount] = a.lerp(b, t);
             ++pointsCount;
         }
     }
 
-    Vec2 center = PhysicsCollider::getPolygonCenter(points, pointsCount);
-    Node* node = Node::create();
+    Vec2 center          = PhysicsCollider::getPolygonCenter(points, pointsCount);
+    Node* node           = Node::create();
     PhysicsBody* polygon = PhysicsBody::createPolygon(points, pointsCount, PHYSICSBODY_MATERIAL_DEFAULT, -center);
     node->setPosition(center);
     node->addComponent(polygon);
@@ -1336,10 +1347,10 @@ void PhysicsContactTest::onEnter()
     _physicsWorld->setGravity(Vec2::ZERO);
     auto s = VisibleRect::getVisibleRect().size;
 
-    _yellowBoxNum = 50;
-    _blueBoxNum = 50;
+    _yellowBoxNum      = 50;
+    _blueBoxNum        = 50;
     _yellowTriangleNum = 50;
-    _blueTriangleNum = 50;
+    _blueTriangleNum   = 50;
 
     MenuItemFont::setFontSize(65);
     auto decrease1 = MenuItemFont::create(" - ", AX_CALLBACK_1(PhysicsContactTest::onDecrease, this));
@@ -1350,8 +1361,8 @@ void PhysicsContactTest::onEnter()
     increase1->setTag(1);
 
     float prevMenuPos = getSubtitleLabel()->getPosition().y - getSubtitleLabel()->getContentSize().height;
-    float menuStep = (getSubtitleLabel()->getPosition().y - getRestartTestItem()->getPosition().y) * 0.25f;
-    auto menu1 = Menu::create(decrease1, increase1, nullptr);
+    float menuStep    = (getSubtitleLabel()->getPosition().y - getRestartTestItem()->getPosition().y) * 0.25f;
+    auto menu1        = Menu::create(decrease1, increase1, nullptr);
     menu1->alignItemsHorizontally();
     menu1->setPosition(Vec2(s.width / 2, prevMenuPos));
     addChild(menu1, 1);
@@ -1470,28 +1481,28 @@ void PhysicsContactTest::resetTest()
     root->setTag(10);
     this->addChild(root);
 
-    auto s = VisibleRect::getVisibleRect().size;
+    auto s            = VisibleRect::getVisibleRect().size;
     float prevMenuPos = getSubtitleLabel()->getPosition().y - getSubtitleLabel()->getContentSize().height;
-    float menuStep = (getSubtitleLabel()->getPosition().y - getRestartTestItem()->getPosition().y) * 0.25f;
+    float menuStep    = (getSubtitleLabel()->getPosition().y - getRestartTestItem()->getPosition().y) * 0.25f;
     std::string strNum;
     char buf[10];
 
-    auto mark = fmt::format_to_z(buf, "{}", _yellowBoxNum);
+    auto mark  = fmt::format_to_z(buf, "{}", _yellowBoxNum);
     auto label = Label::createWithTTF(mark, "fonts/arial.ttf", 32);
     root->addChild(label, 1);
     label->setPosition(Vec2(s.width / 2, prevMenuPos));
 
-    mark = fmt::format_to_z(buf, "{}", _blueBoxNum);
+    mark  = fmt::format_to_z(buf, "{}", _blueBoxNum);
     label = Label::createWithTTF(mark, "fonts/arial.ttf", 32);
     root->addChild(label, 1);
     label->setPosition(Vec2(s.width / 2, prevMenuPos -= menuStep));
 
-    mark = fmt::format_to_z(buf, "{}", _yellowTriangleNum);
+    mark  = fmt::format_to_z(buf, "{}", _yellowTriangleNum);
     label = Label::createWithTTF(mark, "fonts/arial.ttf", 32);
     root->addChild(label, 1);
     label->setPosition(Vec2(s.width / 2, prevMenuPos -= menuStep));
 
-    mark = fmt::format_to_z(buf, "{}", _blueTriangleNum);
+    mark  = fmt::format_to_z(buf, "{}", _blueTriangleNum);
     label = Label::createWithTTF(mark, "fonts/arial.ttf", 32);
     root->addChild(label, 1);
     label->setPosition(Vec2(s.width / 2, prevMenuPos -= menuStep));
@@ -1501,7 +1512,7 @@ void PhysicsContactTest::resetTest()
     wall->setPosition(VisibleRect::center());
     root->addChild(wall);
 
-    auto contactListener = EventListenerPhysicsContact::create();
+    auto contactListener            = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = AX_CALLBACK_1(PhysicsContactTest::onContactBegin, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
@@ -1510,12 +1521,12 @@ void PhysicsContactTest::resetTest()
     {
         Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
         Size canvasSize = VisibleRect::getVisibleRect().size;
-        Vec2 position = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
-        position.x = position.x * AXRANDOM_0_1();
-        position.y = position.y * AXRANDOM_0_1();
-        position = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
+        Vec2 position   = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
+        position.x      = position.x * AXRANDOM_0_1();
+        position.y      = position.y * AXRANDOM_0_1();
+        position        = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
         Vec2 velocity((float)(AXRANDOM_0_1() - 0.5) * 200, (float)(AXRANDOM_0_1() - 0.5) * 200);
-        auto box = makeBox(position, size, 1, PhysicsMaterial(0.1f, 1, 0.0f));
+        auto box     = makeBox(position, size, 1, PhysicsMaterial(0.1f, 1, 0.0f));
         auto boxBody = box->getPhysicsBody();
         boxBody->setVelocity(velocity);
         boxBody->setCategoryBitmask(0x01);     // 0001
@@ -1529,12 +1540,12 @@ void PhysicsContactTest::resetTest()
     {
         Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
         Size canvasSize = VisibleRect::getVisibleRect().size;
-        Vec2 position = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
-        position.x = position.x * AXRANDOM_0_1();
-        position.y = position.y * AXRANDOM_0_1();
-        position = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
+        Vec2 position   = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
+        position.x      = position.x * AXRANDOM_0_1();
+        position.y      = position.y * AXRANDOM_0_1();
+        position        = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
         Vec2 velocity((float)(AXRANDOM_0_1() - 0.5) * 200, (float)(AXRANDOM_0_1() - 0.5) * 200);
-        auto box = makeBox(position, size, 2, PhysicsMaterial(0.1f, 1, 0.0f));
+        auto box     = makeBox(position, size, 2, PhysicsMaterial(0.1f, 1, 0.0f));
         auto boxBody = box->getPhysicsBody();
         boxBody->setVelocity(velocity);
         boxBody->setCategoryBitmask(0x02);     // 0010
@@ -1548,12 +1559,12 @@ void PhysicsContactTest::resetTest()
     {
         Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
         Size canvasSize = VisibleRect::getVisibleRect().size;
-        Vec2 position = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
-        position.x = position.x * AXRANDOM_0_1();
-        position.y = position.y * AXRANDOM_0_1();
-        position = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
+        Vec2 position   = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
+        position.x      = position.x * AXRANDOM_0_1();
+        position.y      = position.y * AXRANDOM_0_1();
+        position        = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
         Vec2 velocity((float)(AXRANDOM_0_1() - 0.5) * 300, (float)(AXRANDOM_0_1() - 0.5) * 300);
-        auto triangle = makeTriangle(position, size, 1, PhysicsMaterial(0.1f, 1, 0.0f));
+        auto triangle     = makeTriangle(position, size, 1, PhysicsMaterial(0.1f, 1, 0.0f));
         auto triangleBody = triangle->getPhysicsBody();
         triangleBody->setVelocity(velocity);
         triangleBody->setCategoryBitmask(0x04);     // 0100
@@ -1567,12 +1578,12 @@ void PhysicsContactTest::resetTest()
     {
         Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
         Size canvasSize = VisibleRect::getVisibleRect().size;
-        Vec2 position = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
-        position.x = position.x * AXRANDOM_0_1();
-        position.y = position.y * AXRANDOM_0_1();
-        position = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
+        Vec2 position   = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
+        position.x      = position.x * AXRANDOM_0_1();
+        position.y      = position.y * AXRANDOM_0_1();
+        position        = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
         Vec2 velocity((float)(AXRANDOM_0_1() - 0.5) * 300, (float)(AXRANDOM_0_1() - 0.5) * 300);
-        auto triangle = makeTriangle(position, size, 2, PhysicsMaterial(0.1f, 1, 0.0f));
+        auto triangle     = makeTriangle(position, size, 2, PhysicsMaterial(0.1f, 1, 0.0f));
         auto triangleBody = triangle->getPhysicsBody();
         triangleBody->setVelocity(velocity);
         triangleBody->setCategoryBitmask(0x08);     // 1000
@@ -1584,8 +1595,8 @@ void PhysicsContactTest::resetTest()
 
 bool PhysicsContactTest::onContactBegin(PhysicsContact& contact)
 {
-    PhysicsBody* a = contact.getShapeA()->getBody();
-    PhysicsBody* b = contact.getShapeB()->getBody();
+    PhysicsBody* a    = contact.getShapeA()->getBody();
+    PhysicsBody* b    = contact.getShapeB()->getBody();
     PhysicsBody* body = (a->getCategoryBitmask() == 0x04 || a->getCategoryBitmask() == 0x08) ? a : b;
     AX_ASSERT(body->getCategoryBitmask() == 0x04 || body->getCategoryBitmask() == 0x08);
 
@@ -1608,7 +1619,7 @@ void PhysicsPositionRotationTest::onEnter()
     toggleDebug();
     _physicsWorld->setGravity(Point::ZERO);
 
-    auto touchListener = EventListenerTouchOneByOne::create();
+    auto touchListener          = EventListenerTouchOneByOne::create();
     touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemo::onTouchBegan, this);
     touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemo::onTouchMoved, this);
     touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemo::onTouchEnded, this);
@@ -1671,7 +1682,7 @@ void PhysicsSetGravityEnableTest::onEnter()
 {
     PhysicsDemo::onEnter();
 
-    auto touchListener = EventListenerTouchOneByOne::create();
+    auto touchListener          = EventListenerTouchOneByOne::create();
     touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemo::onTouchBegan, this);
     touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemo::onTouchMoved, this);
     touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemo::onTouchEnded, this);
@@ -1690,7 +1701,7 @@ void PhysicsSetGravityEnableTest::onEnter()
     commonBox->getPhysicsBody()->setGravityEnable(true);
     addChild(commonBox);
 
-    auto box = makeBox(Vec2(200, 100), Size(50, 50), 2);
+    auto box     = makeBox(Vec2(200, 100), Size(50, 50), 2);
     auto boxBody = box->getPhysicsBody();
     boxBody->setTag(DRAG_BODYS_TAG);
     boxBody->setGravityEnable(false);
@@ -1729,7 +1740,7 @@ void PhysicsDemoBug5482::onEnter()
 
     toggleDebug();
 
-    auto touchListener = EventListenerTouchOneByOne::create();
+    auto touchListener          = EventListenerTouchOneByOne::create();
     touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemo::onTouchBegan, this);
     touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemo::onTouchMoved, this);
     touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemo::onTouchEnded, this);
@@ -1872,7 +1883,7 @@ void PhysicsTransformTest::onEnter()
     toggleDebug();
     _physicsWorld->setGravity(Point::ZERO);
 
-    auto touchListener = EventListenerTouchOneByOne::create();
+    auto touchListener          = EventListenerTouchOneByOne::create();
     touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsTransformTest::onTouchBegan, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
@@ -1903,7 +1914,7 @@ void PhysicsTransformTest::onEnter()
     leftBall->getPhysicsBody()->setTag(DRAG_BODYS_TAG);
     _parentSprite->addChild(leftBall);
 
-    ScaleTo* scaleTo = ScaleTo::create(2.0, 0.5);
+    ScaleTo* scaleTo   = ScaleTo::create(2.0, 0.5);
     ScaleTo* scaleBack = ScaleTo::create(2.0, 1.0);
     _parentSprite->runAction(RepeatForever::create(Sequence::create(scaleTo, scaleBack, nullptr)));
 
@@ -1921,10 +1932,10 @@ void PhysicsTransformTest::onEnter()
     bullet->getPhysicsBody()->setVelocity(Vec2(100.0f, 100.0f));
     _rootLayer->addChild(bullet);
 
-    MoveBy* move = MoveBy::create(2.0f, Vec2(100.0f, 100.0f));
-    MoveBy* move2 = MoveBy::create(2.0f, Vec2(-200.0f, 0.0f));
-    MoveBy* move3 = MoveBy::create(2.0f, Vec2(100.0f, -100.0f));
-    ScaleTo* scale = ScaleTo::create(3.0f, 0.3f);
+    MoveBy* move    = MoveBy::create(2.0f, Vec2(100.0f, 100.0f));
+    MoveBy* move2   = MoveBy::create(2.0f, Vec2(-200.0f, 0.0f));
+    MoveBy* move3   = MoveBy::create(2.0f, Vec2(100.0f, -100.0f));
+    ScaleTo* scale  = ScaleTo::create(3.0f, 0.3f);
     ScaleTo* scale2 = ScaleTo::create(3.0f, 1.0f);
 
     RotateBy* rotate = RotateBy::create(6.0f, 360);
@@ -1943,7 +1954,7 @@ void PhysicsIssue9959::onEnter()
 {
     PhysicsDemo::onEnter();
 
-    auto origin = Director::getInstance()->getVisibleOrigin();
+    auto origin      = Director::getInstance()->getVisibleOrigin();
     auto visibleSize = Director::getInstance()->getVisibleSize();
 
     auto scale9Sprite1 = ui::Scale9Sprite::create("Images/blocks.png");
@@ -1999,7 +2010,7 @@ void PhysicsDemoPyramidStackFixedUpdate::onEnter()
 {
     PhysicsDemo::onEnter();
 
-    auto touchListener = EventListenerTouchOneByOne::create();
+    auto touchListener          = EventListenerTouchOneByOne::create();
     touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemoPyramidStackFixedUpdate::onTouchBegan, this);
     touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemoPyramidStackFixedUpdate::onTouchMoved, this);
     touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemoPyramidStackFixedUpdate::onTouchEnded, this);
@@ -2007,7 +2018,7 @@ void PhysicsDemoPyramidStackFixedUpdate::onEnter()
 
     auto node = Node::create();
     node->addComponent(PhysicsBody::createEdgeSegment(VisibleRect::leftBottom() + Vec2(0.0f, 50.0f),
-        VisibleRect::rightBottom() + Vec2(0.0f, 50.0f)));
+                                                      VisibleRect::rightBottom() + Vec2(0.0f, 50.0f)));
     this->addChild(node);
 
     auto ball = Sprite::create("Images/ball.png");
@@ -2051,7 +2062,7 @@ void PhysicsDemoPyramidStackFixedUpdate::fixedUpdate(float delta)
     if (_delayTime >= 3.0f && !_isAddBall)
     {
         _isAddBall = true;
-        auto ball = getChildByTag(100);
+        auto ball  = getChildByTag(100);
         if (ball)
             ball->setScale(ball->getScale() * 3);
     }
