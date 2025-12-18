@@ -4,7 +4,7 @@
 // 0x00 HI ME LO
 // 00   03 08 00
 #define AX_VERSION_MAJOR 2
-#define AX_VERSION_MINOR 10
+#define AX_VERSION_MINOR 11
 #define AX_VERSION_PATCH 0
 
 /* Define axmol version helper macros */

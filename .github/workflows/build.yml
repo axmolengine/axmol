@@ -29,41 +29,32 @@ on:
 
 env:
   __1K_CXXSTD: '${{ inputs.cxxstd }}'
+  GH_XCODE_VER: '16.4'
 
 run-name: 'build@c++${{ inputs.cxxstd || 20 }}'
 
 jobs:
-  win32:
+  win32-ogl:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v6
-
     - name: Build
       shell: pwsh
       run: |
-        .\tools\cmdline\axmol -p win32 -a x64
-        .\tools\cmdline\axmol run -p win32 -a x64 -t unit-tests
+        .\tools\cmdline\axmol -p win32 -a x64 -O3
+        .\tools\cmdline\axmol run -p win32 -a x64 -t unit-tests -O3
     - name: Check prebuilt workflow
       shell: pwsh
       run: |
         ./setup.ps1
         axmol new HelloCpp
-        axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build'
-    - uses: actions/upload-artifact@v4
+        axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build' -O3
+    - uses: actions/upload-artifact@v6
       with:
-        name: windows_x64
+        name: windows_ogl_x64
         path: |
           build/bin/cpp-tests/**/*
-  win32-dll:
-        runs-on: windows-latest
-        steps:
-        - uses: actions/checkout@v6
-
-        - name: Build
-          shell: pwsh
-          run: .\tools\cmdline\axmol -p win32 -a x64 -dll
-  winuwp:
-        # build uwp debug avoid github CI fail with memory issue
+  winuwp-ogl:
         runs-on: windows-latest
         steps:
         - uses: actions/checkout@v6
@@ -71,18 +62,22 @@ jobs:
         - name: Build
           shell: pwsh
           run: .\tools\cmdline\axmol -p winuwp -a x64 -O3
-  win32-clang:
+  win32-clang-ogl:
         runs-on: windows-latest
-        env:
-          # Test winsdk < 10.0.22000.0 (missing C11 standard stdalign.h), axmol will auto fallback to C99 for resolving compiling issue.
-          WINSDK_VER: '10.0.19041.0'
         steps:
         - uses: actions/checkout@v6
 
         - name: Build
           shell: pwsh
-          run: .\tools\cmdline\axmol -p win32 -a 'x64' -cc clang -sdk $env:WINSDK_VER -O3
-  linux:
+          run: .\tools\cmdline\axmol -p win32 -a 'x64' -cc clang -O3
+  win32-dll-ogl:
+        runs-on: windows-latest
+        steps:
+        - uses: actions/checkout@v6
+        - name: Build
+          shell: pwsh
+          run: .\tools\cmdline\axmol -p win32 -a x64 -dll
+  linux-ogl:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
@@ -96,22 +91,28 @@ jobs:
       shell: pwsh
       run: ./tools/cmdline/axmol -p linux -a x64 -t 'cpp-tests,lua-tests' && ./tools/cmdline/axmol run -p linux -a x64 -t unit-tests -wait
   osx-arm64:
-    runs-on: macos-latest
+    runs-on: ${{ vars.GH_MACOS_VER }}
     steps:
     - uses: actions/checkout@v6
-
+    - uses: maxim-lobanov/setup-xcode@v1
+      id: setup-xcode
+      with:
+        xcode-version: '${{ env.GH_XCODE_VER }}'
     - name: Build
       shell: pwsh
-      run: ./tools/cmdline/axmol -p osx && ./tools/cmdline/axmol run -p osx -t unit-tests
+      run: ./tools/cmdline/axmol -p osx -a arm64 && ./tools/cmdline/axmol run -p osx -a arm64 -t unit-tests
   osx-x64:
-    runs-on: macos-latest
+    runs-on: ${{ vars.GH_MACOS_VER }}-intel
     steps:
     - uses: actions/checkout@v6
-
+    - uses: maxim-lobanov/setup-xcode@v1
+      id: setup-xcode
+      with:
+        xcode-version: '${{ env.GH_XCODE_VER }}'
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p osx -a x64
-  android:
+  android-ogl:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -130,14 +131,14 @@ jobs:
       run: |
         $AX_ROOT = $(Get-Location).Path
         ./tools/cmdline/axmol -p android -a $env:BUILD_ARCH
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: android_${{ matrix.arch }}
         path: |
           templates/**/*.apk
           tests/**/*.apk
   ios-sim-x64:
-    runs-on: macos-latest
+    runs-on: ${{ vars.GH_MACOS_VER }}
     strategy:
       matrix:
         target_os:
@@ -147,10 +148,32 @@ jobs:
       TARGET_OS: ${{ matrix.target_os }}
     steps:
     - uses: actions/checkout@v6
-
+    - uses: maxim-lobanov/setup-xcode@v1
+      id: setup-xcode
+      with:
+        xcode-version: '${{ env.GH_XCODE_VER }}'
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p $env:TARGET_OS -a 'x64'
+  ios-sim-arm64:
+    runs-on: ${{ vars.GH_MACOS_VER }}
+    strategy:
+      matrix:
+        target_os:
+          - ios
+          - tvos
+    env:
+      TARGET_OS: ${{ matrix.target_os }}
+    steps:
+    - uses: actions/checkout@v6
+    - uses: maxim-lobanov/setup-xcode@v1
+      id: setup-xcode
+      with:
+        xcode-version: '${{ env.GH_XCODE_VER }}'
+    - name: Build
+      shell: pwsh
+      # axmol cmdline can't guess ios arm64 as simulator, so need specify by option '-sdk'
+      run: ./tools/cmdline/axmol -p $env:TARGET_OS -a 'arm64' -sdk 'simulator'
   wasm:
     runs-on: ubuntu-latest
     steps:
@@ -159,7 +182,7 @@ jobs:
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p wasm -O3 -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON,-DAX_WASM_THREADS=8' -j2 -t 'cpp-tests,fairygui-tests,lua-tests'
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: wasm
         path: build_wasm/bin/**/*
