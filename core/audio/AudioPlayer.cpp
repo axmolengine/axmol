@@ -37,9 +37,12 @@
 
 #include "yasio/thread_name.hpp"
 
+#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS && !AX_USE_ALSOFT
+extern bool __axmolAudioSessionInterrupted;
+#endif
+
 namespace ax
 {
-
 namespace
 {
 unsigned int __playerIdIndex = 0;
@@ -48,7 +51,7 @@ unsigned int __playerIdIndex = 0;
 AudioPlayer::AudioPlayer()
     : _audioCache(nullptr)
     , _finishCallbak(nullptr)
-    , _isDestroyed(false)
+    , _stopping(false)
     , _removeByAudioEngine(false)
     , _ready(false)
     , _currTime(0.0f)
@@ -67,7 +70,7 @@ AudioPlayer::AudioPlayer()
 AudioPlayer::~AudioPlayer()
 {
     AXLOGV("~AudioPlayer() ({}), id={}", fmt::ptr(this), _id);
-    destroy();
+    stop();
 
     if (_streamingSource)
     {
@@ -75,15 +78,15 @@ AudioPlayer::~AudioPlayer()
     }
 }
 
-void AudioPlayer::destroy()
+void AudioPlayer::stop()
 {
     std::unique_lock<std::mutex> lck(_play2dMutex);
-    if (_isDestroyed)
+    if (_stopping)
         return;
 
-    AXLOGV("AudioPlayer::destroy begin, id={}", _id);
+    AXLOGV("AudioPlayer::stop begin, id={}", _id);
 
-    _isDestroyed = true;
+    _stopping = true;
 
     do
     {
@@ -91,7 +94,7 @@ void AudioPlayer::destroy()
         {
             if (_audioCache->_state == AudioCache::State::INITIAL)
             {
-                AXLOGV("AudioPlayer::destroy, id={}, cache isn't ready!", _id);
+                AXLOGV("AudioPlayer::stop, id={}, cache isn't ready!", _id);
                 break;
             }
 
@@ -120,22 +123,43 @@ void AudioPlayer::destroy()
                 _rotateBufferThread = nullptr;
                 AXLOGV("{}", "rotateBufferThread exited!");
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
+#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS && !AX_USE_ALSOFT
                 // some specific OpenAL implement defects existed on iOS platform
                 // refer to: https://github.com/cocos2d/cocos2d-x/issues/18597
+                static constexpr int WAIT_TIMEOUT_MS = 200;
                 ALint sourceState;
                 ALint bufferProcessed = 0;
+                int waitMs = 0;
                 alGetSourcei(_alSource, AL_SOURCE_STATE, &sourceState);
+
                 if (sourceState == AL_PLAYING)
                 {
                     alGetSourcei(_alSource, AL_BUFFERS_PROCESSED, &bufferProcessed);
+                    bool waitInterrupted = false;
                     while (bufferProcessed < QUEUEBUFFER_NUM)
                     {
+                        if (__axmolAudioSessionInterrupted)
+                        {
+                            waitInterrupted = true;
+                            AXLOGD("Audio stop: interrupted, skip wait");
+                            break;
+                        }
+                        
                         std::this_thread::sleep_for(std::chrono::milliseconds(2));
+                        waitMs += 2;
+                        if (waitMs > WAIT_TIMEOUT_MS)
+                        {
+                            waitInterrupted = true;
+                            AXLOGD("Audio stop: timeout, skip wait");
+                            break;
+                        }
                         alGetSourcei(_alSource, AL_BUFFERS_PROCESSED, &bufferProcessed);
                     }
-                    alSourceUnqueueBuffers(_alSource, QUEUEBUFFER_NUM, _bufferIds);
-                    CHECK_AL_ERROR_DEBUG();
+                    if (!waitInterrupted)
+                    {
+                        alSourceUnqueueBuffers(_alSource, QUEUEBUFFER_NUM, _bufferIds);
+                        CHECK_AL_ERROR_DEBUG();
+                    }
                 }
                 AXLOGV("{}", "UnqueueBuffers Before alSourceStop");
 #endif
@@ -155,7 +179,7 @@ void AudioPlayer::destroy()
     _removeByAudioEngine = true;
 
     _ready = false;
-    AXLOGV("AudioPlayer::destroy end, id={}", _id);
+    AXLOGV("AudioPlayer::stop end, id={}", _id);
 }
 
 void AudioPlayer::setCache(AudioCache* cache)
@@ -168,7 +192,7 @@ bool AudioPlayer::play2d()
     std::unique_lock<std::mutex> lck(_play2dMutex);
     AXLOGV("AudioPlayer::play2d, _alSource: {}, player id={}", _alSource, _id);
 
-    if (_isDestroyed)
+    if (_stopping)
         return false;
 
     /*********************************************************************/
@@ -224,7 +248,7 @@ bool AudioPlayer::play2d()
 
         {
             std::unique_lock<std::mutex> lk(_sleepMutex);
-            if (_isDestroyed)
+            if (_stopping)
                 break;
 
             if (_streamingSource)
@@ -284,7 +308,7 @@ bool AudioPlayer::play3d()
     std::unique_lock<std::mutex> lck(_play2dMutex);
     AXLOGV("AudioPlayer::play2d, _alSource: {}, player id={}", _alSource, _id);
 
-    if (_isDestroyed)
+    if (_stopping)
         return false;
 
     /*********************************************************************/
@@ -346,7 +370,7 @@ bool AudioPlayer::play3d()
 
         {
             std::unique_lock<std::mutex> lk(_sleepMutex);
-            if (_isDestroyed)
+            if (_stopping)
                 break;
 
             if (_streamingSource)
@@ -455,7 +479,7 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
         ALint bufferProcessed = 0;
         bool needToExitThread = false;
 
-        while (!_isDestroyed)
+        while (!_stopping)
         {
             alGetSourcei(_alSource, AL_SOURCE_STATE, &sourceState);
             if (sourceState == AL_PLAYING)
@@ -541,7 +565,7 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
             }
 
             std::unique_lock<std::mutex> lk(_sleepMutex);
-            if (_isDestroyed || needToExitThread)
+            if (_stopping || needToExitThread)
             {
                 break;
             }
@@ -683,7 +707,7 @@ void AudioPlayer::setReverbProperties(const ReverbProperties* reverbProperties)
 
 bool AudioPlayer::setLoop(bool loop)
 {
-    if (!_isDestroyed)
+    if (!_stopping)
     {
         _loop = loop;
         return true;
@@ -694,7 +718,7 @@ bool AudioPlayer::setLoop(bool loop)
 
 bool AudioPlayer::setTime(float time)
 {
-    if (!_isDestroyed && time >= 0.0f && time < _audioCache->_duration)
+    if (!_stopping && time >= 0.0f && time < _audioCache->_duration)
     {
 
         _currTime  = time;

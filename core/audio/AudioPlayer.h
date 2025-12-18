@@ -53,7 +53,7 @@ public:
     AudioPlayer();
     ~AudioPlayer();
 
-    void destroy();
+    void stop();
 
     // queue buffer related stuff
     bool setTime(float time);
@@ -85,7 +85,7 @@ protected:
 
     std::function<void(AUDIO_ID, std::string_view)> _finishCallbak;
 
-    bool _isDestroyed;
+    bool _stopping;
     bool _removeByAudioEngine;
     bool _ready;
     ALuint _alSource;
