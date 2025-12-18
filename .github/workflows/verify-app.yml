@@ -70,7 +70,7 @@ jobs:
         axmol new HelloCpp
         axmol -d HelloCpp
   osx-arm64:
-    runs-on: macos-latest
+    runs-on: ${{ vars.GH_MACOS_VER }}
     steps:
     - uses: actions/checkout@v6
       with:
@@ -86,7 +86,7 @@ jobs:
         axmol new HelloCpp
         axmol -d HelloCpp
   osx-x64:
-    runs-on: macos-13
+    runs-on: ${{ vars.GH_MACOS_VER }}-intel
     steps:
     - uses: actions/checkout@v6
       with:
@@ -114,7 +114,7 @@ jobs:
         axmol new HelloCpp
         axmol -p android -d HelloCpp
   ios:
-    runs-on: macos-latest
+    runs-on: ${{ vars.GH_MACOS_VER }}
     strategy:
       matrix:
         target_os:
