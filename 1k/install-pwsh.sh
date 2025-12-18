@@ -12,7 +12,7 @@ mkdir -p $cacheDir
 
 pwsh_ver=$1
 if [ "$pwsh_ver" = "" ] ; then
-    pwsh_ver='7.5.3'
+    pwsh_ver='7.5.4'
 fi
 
 pwsh_min_ver=$2

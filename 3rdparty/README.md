@@ -22,7 +22,7 @@
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: 1.34.5
+- Version: 1.34.6
 - License: MIT
 
 ## Chipmunk2D
@@ -98,7 +98,7 @@
 
 ## jpeg-turbo
 - [![Upstream](https://img.shields.io/github/v/release/libjpeg-turbo/libjpeg-turbo?label=Upstream)](https://github.com/libjpeg-turbo/libjpeg-turbo)
-- Version: 3.1.2
+- Version: 3.1.3
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp
@@ -124,7 +124,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-68354f4
+  - Version: 2.1-7152e15
   - License: MIT
 
 - tolua

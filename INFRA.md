@@ -11,8 +11,8 @@
 ## Microsoft.Web.WebView2
 
 - [![nuget](https://img.shields.io/nuget/v/Microsoft.Web.WebView2?label=Upstream)](https://www.nuget.org/packages/Microsoft.Web.WebView2)
-- Version: 1.0.3595.46
-- License: https://www.nuget.org/packages/Microsoft.Web.WebView2/1.0.3595.46/License
+- Version: 1.0.3650.58
+- License: https://www.nuget.org/packages/Microsoft.Web.WebView2/1.0.3650.58/License
 - Platform: Win32
 - Managed by: `cmake/Modules/AXConfigDefine.cmake`
 
