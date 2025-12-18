@@ -165,7 +165,9 @@ bool Texture2D::initWithData(const void* data,
                              int pixelsHigh,
                              bool preMultipliedAlpha)
 {
-    AXASSERT(dataLen > 0 && pixelsWide > 0 && pixelsHigh > 0, "Invalid size");
+    AXASSERT(dataLen > 0, "Invalid size");
+    AXASSERT(pixelsWide > 0, "Invalid size");
+    AXASSERT(pixelsHigh > 0, "Invalid size");
 
     // if data has no mipmaps, we will consider it has only one mipmap
     MipmapInfo mipmap;
