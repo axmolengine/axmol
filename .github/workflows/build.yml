@@ -29,7 +29,6 @@ on:
 
 env:
   __1K_CXXSTD: '${{ inputs.cxxstd }}'
-  GH_MACOS_VER: 'macos-15'
   GH_XCODE_VER: '16.4'
 
 run-name: 'build@c++${{ inputs.cxxstd || 23 }}'
@@ -170,7 +169,7 @@ jobs:
       shell: pwsh
       run: ./tools/cmdline/axmol -p linux -a x64 -t 'cpp-tests,lua-tests' -xc '-DAX_RENDER_API=vk'
   osx-arm64:
-    runs-on: ${{ env.GH_MACOS_VER }}
+    runs-on: ${{ vars.GH_MACOS_VER }}
     steps:
     - uses: actions/checkout@v6
     - uses: maxim-lobanov/setup-xcode@v1
@@ -181,7 +180,7 @@ jobs:
       shell: pwsh
       run: ./tools/cmdline/axmol -p osx -a arm64 && ./tools/cmdline/axmol run -p osx -a arm64 -t unit-tests
   osx-x64:
-    runs-on: ${{ env.GH_MACOS_VER }}-intel
+    runs-on: ${{ vars.GH_MACOS_VER }}-intel
     steps:
     - uses: actions/checkout@v6
     - uses: maxim-lobanov/setup-xcode@v1
@@ -233,7 +232,7 @@ jobs:
           templates/**/*.apk
           tests/**/*.apk
   ios-sim-x64:
-    runs-on: ${{ env.GH_MACOS_VER }}
+    runs-on: ${{ vars.GH_MACOS_VER }}
     strategy:
       matrix:
         target_os:
@@ -251,7 +250,7 @@ jobs:
       shell: pwsh
       run: ./tools/cmdline/axmol -p $env:TARGET_OS -a 'x64'
   ios-sim-arm64:
-    runs-on: ${{ env.GH_MACOS_VER }}
+    runs-on: ${{ vars.GH_MACOS_VER }}
     strategy:
       matrix:
         target_os:
