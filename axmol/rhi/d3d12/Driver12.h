@@ -189,8 +189,8 @@ private:
     void createDescriptorAllocators();
 
     bool checkFormatSupport(DXGI_FORMAT format);
+    bool detectDXCAvailability();
 
-private:
     RenderContextImpl* _currentRenderContext{nullptr};
 
     ComPtr<IDXGIFactory4> _dxgiFactory;

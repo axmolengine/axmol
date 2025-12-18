@@ -200,138 +200,6 @@ static inline const char* stageToProfileFXC(ShaderStage s)
     }
 }
 
-// ------------------------------------------------------------
-// Detect whether DXC is usable on this machine.
-// 1. DXC must compile a minimal shader
-// 2. Driver must accept the DXIL (PSO creation test)
-// ------------------------------------------------------------
-static bool detectDXCAvailability(ID3D12Device* device,
-                                  IDxcLibrary* lib,
-                                  IDxcCompiler* compiler,
-                                  std::span<LPCWSTR> args)
-{
-    if (!device || !lib || !compiler)
-    {
-        AXLOGW("DXC unavailable: missing compiler or library.");
-        return false;
-    }
-
-    // --- 1. Minimal VS shader ---
-    static constexpr std::string_view kVS = R"(
-        struct VSIn { float3 pos : POSITION; };
-        struct VSOut { float4 pos : SV_Position; };
-        VSOut main(VSIn input)
-        {
-            VSOut o;
-            o.pos = float4(input.pos, 1.0);
-            return o;
-        }
-    )"sv;
-
-    // --- 2. Minimal PS shader ---
-    static constexpr std::string_view kPS = R"(
-        float4 main() : SV_Target
-        {
-            return float4(1, 0, 0, 1);
-        }
-    )"sv;
-
-    auto compileShader = [&](std::string_view src, LPCWSTR entry, LPCWSTR profile, ComPtr<IDxcBlob>& outBlob) -> bool {
-        ComPtr<IDxcBlobEncoding> srcBlob;
-        HRESULT hr = lib->CreateBlobWithEncodingOnHeapCopy(src.data(), (UINT)src.size(), CP_UTF8, &srcBlob);
-        if (FAILED(hr))
-            return false;
-
-        ComPtr<IDxcOperationResult> result;
-        hr = compiler->Compile(srcBlob.Get(), nullptr, entry, profile, args.data(), (UINT)args.size(), nullptr, 0,
-                               nullptr, &result);
-        if (FAILED(hr))
-            return false;
-
-        HRESULT status;
-        result->GetStatus(&status);
-        if (FAILED(status))
-            return false;
-
-        result->GetResult(&outBlob);
-        return outBlob != nullptr;
-    };
-
-    // Compile VS
-    ComPtr<IDxcBlob> vsBlob;
-    if (!compileShader(kVS, L"main", L"vs_6_0", vsBlob))
-    {
-        AXLOGW("DXC unavailable: VS compile failed.");
-        return false;
-    }
-
-    // Compile PS
-    ComPtr<IDxcBlob> psBlob;
-    if (!compileShader(kPS, L"main", L"ps_6_0", psBlob))
-    {
-        AXLOGW("DXC unavailable: PS compile failed.");
-        return false;
-    }
-
-    // --- 3. Create minimal root signature ---
-    D3D12_ROOT_SIGNATURE_DESC rsDesc{};
-    rsDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-
-    ComPtr<ID3DBlob> sigBlob, errBlob;
-    HRESULT hr = D3D12SerializeRootSignature(&rsDesc, D3D_ROOT_SIGNATURE_VERSION_1, &sigBlob, &errBlob);
-    if (FAILED(hr))
-    {
-        AXLOGW("DXC unavailable: root signature serialization failed.");
-        return false;
-    }
-
-    ComPtr<ID3D12RootSignature> rootSig;
-    hr = device->CreateRootSignature(0, sigBlob->GetBufferPointer(), sigBlob->GetBufferSize(), IID_PPV_ARGS(&rootSig));
-    if (FAILED(hr))
-    {
-        AXLOGW("DXC unavailable: root signature creation failed.");
-        return false;
-    }
-
-    // --- 4. Build minimal PSO ---
-    D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc{};
-    psoDesc.pRootSignature = rootSig.Get();
-
-    psoDesc.VS = {vsBlob->GetBufferPointer(), vsBlob->GetBufferSize()};
-    psoDesc.PS = {psBlob->GetBufferPointer(), psBlob->GetBufferSize()};
-
-    // Input layout for POSITION
-    D3D12_INPUT_ELEMENT_DESC layout[] = {
-        {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0}};
-    psoDesc.InputLayout = {layout, _countof(layout)};
-
-    // Rasterizer / Blend / Depth
-    psoDesc.RasterizerState   = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-    psoDesc.BlendState        = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-    psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-
-    psoDesc.SampleMask            = UINT_MAX;
-    psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-
-    psoDesc.NumRenderTargets = 1;
-    psoDesc.RTVFormats[0]    = DXGI_FORMAT_R8G8B8A8_UNORM;
-
-    psoDesc.SampleDesc.Count = 1;
-
-    // --- 5. Try creating PSO (this validates DXIL acceptance) ---
-    ComPtr<ID3D12PipelineState> pso;
-    hr = device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pso));
-
-    if (FAILED(hr))
-    {
-        AXLOGW("DXC unavailable: driver rejected DXIL, hr=0x{:08x}", static_cast<unsigned>(hr));
-        return false;
-    }
-
-    AXLOGI("DXC is available and DXIL is accepted by driver.");
-    return true;
-}
-
 static constexpr auto kUploadQueueType = D3D12_COMMAND_LIST_TYPE_DIRECT;
 
 void IsolateSubmission::create(ID3D12Device* device)
@@ -508,7 +376,7 @@ void DriverImpl::init()
     _dxcArguments = {L"-Zi", L"-Od"};
 #endif
 
-    _dxcAvailable = detectDXCAvailability(_device.Get(), _dxcLibrary.Get(), _dxcCompiler.Get(), _dxcArguments);
+    _dxcAvailable = detectDXCAvailability();
 }
 
 void DriverImpl::initializeDevice()
@@ -1412,6 +1280,132 @@ bool DriverImpl::checkFormatSupport(DXGI_FORMAT format)
     D3D12_FEATURE_DATA_FORMAT_SUPPORT support = {format};
     HRESULT hr = _device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &support, sizeof(support));
     return SUCCEEDED(hr) && (support.Support1 & D3D12_FORMAT_SUPPORT1_TEXTURE2D) != 0;
+}
+
+bool DriverImpl::detectDXCAvailability()
+{
+    if (!_device || !_dxcLibrary || !_dxcCompiler)
+    {
+        AXLOGW("DXC unavailable: missing compiler or library.");
+        return false;
+    }
+
+    // --- 1. Minimal VS shader ---
+    static constexpr std::string_view kVS = R"(
+        struct VSIn { float3 pos : POSITION; };
+        struct VSOut { float4 pos : SV_Position; };
+        VSOut main(VSIn input)
+        {
+            VSOut o;
+            o.pos = float4(input.pos, 1.0);
+            return o;
+        }
+    )"sv;
+
+    // --- 2. Minimal PS shader ---
+    static constexpr std::string_view kPS = R"(
+        float4 main() : SV_Target
+        {
+            return float4(1, 0, 0, 1);
+        }
+    )"sv;
+
+    auto&& _compileShader = [this](std::string_view src, LPCWSTR entry, LPCWSTR profile,
+                                   ComPtr<IDxcBlob>& outBlob) -> bool {
+        ComPtr<IDxcBlobEncoding> srcBlob;
+        HRESULT hr = _dxcLibrary->CreateBlobWithEncodingOnHeapCopy(src.data(), (UINT)src.size(), CP_UTF8, &srcBlob);
+        if (FAILED(hr))
+            return false;
+
+        ComPtr<IDxcOperationResult> result;
+        hr = _dxcCompiler->Compile(srcBlob.Get(), nullptr, entry, profile, _dxcArguments.data(),
+                                   (UINT)_dxcArguments.size(), nullptr, 0, nullptr, &result);
+        if (FAILED(hr))
+            return false;
+
+        HRESULT status;
+        result->GetStatus(&status);
+        if (FAILED(status))
+            return false;
+
+        result->GetResult(&outBlob);
+        return outBlob != nullptr;
+    };
+
+    // Compile VS
+    ComPtr<IDxcBlob> vsBlob;
+    if (!_compileShader(kVS, L"main", L"vs_6_0", vsBlob))
+    {
+        AXLOGW("DXC unavailable: VS compile failed.");
+        return false;
+    }
+
+    // Compile PS
+    ComPtr<IDxcBlob> psBlob;
+    if (!_compileShader(kPS, L"main", L"ps_6_0", psBlob))
+    {
+        AXLOGW("DXC unavailable: PS compile failed.");
+        return false;
+    }
+
+    // --- 3. Create minimal root signature ---
+    D3D12_ROOT_SIGNATURE_DESC rsDesc{};
+    rsDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+
+    ComPtr<ID3DBlob> sigBlob, errBlob;
+    HRESULT hr = D3D12SerializeRootSignature(&rsDesc, D3D_ROOT_SIGNATURE_VERSION_1, &sigBlob, &errBlob);
+    if (FAILED(hr))
+    {
+        AXLOGW("DXC unavailable: root signature serialization failed.");
+        return false;
+    }
+
+    ComPtr<ID3D12RootSignature> rootSig;
+    hr = _device->CreateRootSignature(0, sigBlob->GetBufferPointer(), sigBlob->GetBufferSize(), IID_PPV_ARGS(&rootSig));
+    if (FAILED(hr))
+    {
+        AXLOGW("DXC unavailable: root signature creation failed.");
+        return false;
+    }
+
+    // --- 4. Build minimal PSO ---
+    D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc{};
+    psoDesc.pRootSignature = rootSig.Get();
+
+    psoDesc.VS = {vsBlob->GetBufferPointer(), vsBlob->GetBufferSize()};
+    psoDesc.PS = {psBlob->GetBufferPointer(), psBlob->GetBufferSize()};
+
+    // Input layout for POSITION
+    D3D12_INPUT_ELEMENT_DESC layout[] = {
+        {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0}};
+    psoDesc.InputLayout = {layout, _countof(layout)};
+
+    // Rasterizer / Blend / Depth
+    psoDesc.RasterizerState   = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+    psoDesc.BlendState        = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+    psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+    psoDesc.DSVFormat         = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
+    psoDesc.SampleMask            = UINT_MAX;
+    psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+
+    psoDesc.NumRenderTargets = 1;
+    psoDesc.RTVFormats[0]    = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+    psoDesc.SampleDesc.Count = 1;
+
+    // --- 5. Try creating PSO (this validates DXIL acceptance) ---
+    ComPtr<ID3D12PipelineState> pso;
+    hr = _device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pso));
+
+    if (FAILED(hr))
+    {
+        AXLOGW("DXC unavailable: driver rejected DXIL, hr=0x{:08x}", static_cast<unsigned>(hr));
+        return false;
+    }
+
+    AXLOGI("DXC is available and DXIL is accepted by driver.");
+    return true;
 }
 
 }  // namespace ax::rhi::d3d12
