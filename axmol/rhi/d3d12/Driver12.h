@@ -38,6 +38,8 @@
 #include <functional>
 #include <array>
 
+// Note: d3dcompiler_47.dll also works well in HLSL shader model 5.1
+// DXC requires shader model 6.0
 #include <dxcapi.h>
 
 namespace ax::rhi
@@ -226,6 +228,8 @@ private:
     ComPtr<IDxcLibrary> _dxcLibrary;
     ComPtr<IDxcCompiler> _dxcCompiler;
     std::vector<LPCWSTR> _dxcArguments;
+
+    bool _dxcAvailable{false};
 
     tlx::byte_buffer _shaderCompileBuffer;
 

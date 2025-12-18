@@ -329,7 +329,11 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, Progra
 
     Microsoft::WRL::ComPtr<ID3D12PipelineState> pso;
     HRESULT hr = _driver->getDevice()->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pso));
-    AXASSERT(SUCCEEDED(hr), "Failed to create PSO");
+    if (FAILED(hr))
+    {
+        AXLOGE("Failed to create PSO, hr=0x{:08x}", static_cast<unsigned>(hr));
+        AXASSERT(false, "Failed to create PSO");
+    }
 
     _activePSO = pso;
     _psoCache.emplace(key, pso);
