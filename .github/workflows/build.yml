@@ -29,6 +29,8 @@ on:
 
 env:
   __1K_CXXSTD: '${{ inputs.cxxstd }}'
+  GH_MACOS_VER: 'macos-15'
+  GH_XCODE_VER: '16.4'
 
 run-name: 'build@c++${{ inputs.cxxstd || 23 }}'
 
@@ -168,18 +170,24 @@ jobs:
       shell: pwsh
       run: ./tools/cmdline/axmol -p linux -a x64 -t 'cpp-tests,lua-tests' -xc '-DAX_RENDER_API=vk'
   osx-arm64:
-    runs-on: macos-latest
+    runs-on: ${{ env.GH_MACOS_VER }}
     steps:
     - uses: actions/checkout@v6
-
+    - uses: maxim-lobanov/setup-xcode@v1
+      id: setup-xcode
+      with:
+        xcode-version: '${{ env.GH_XCODE_VER }}'
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p osx -a arm64 && ./tools/cmdline/axmol run -p osx -a arm64 -t unit-tests
   osx-x64:
-    runs-on: macos-latest
+    runs-on: ${{ env.GH_MACOS_VER }}-intel
     steps:
     - uses: actions/checkout@v6
-
+    - uses: maxim-lobanov/setup-xcode@v1
+      id: setup-xcode
+      with:
+        xcode-version: '${{ env.GH_XCODE_VER }}'
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p osx -a x64
@@ -225,7 +233,7 @@ jobs:
           templates/**/*.apk
           tests/**/*.apk
   ios-sim-x64:
-    runs-on: macos-latest
+    runs-on: ${{ env.GH_MACOS_VER }}
     strategy:
       matrix:
         target_os:
@@ -235,12 +243,15 @@ jobs:
       TARGET_OS: ${{ matrix.target_os }}
     steps:
     - uses: actions/checkout@v6
-
+    - uses: maxim-lobanov/setup-xcode@v1
+      id: setup-xcode
+      with:
+        xcode-version: '${{ env.GH_XCODE_VER }}'
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p $env:TARGET_OS -a 'x64'
   ios-sim-arm64:
-    runs-on: macos-latest
+    runs-on: ${{ env.GH_MACOS_VER }}
     strategy:
       matrix:
         target_os:
@@ -250,7 +261,10 @@ jobs:
       TARGET_OS: ${{ matrix.target_os }}
     steps:
     - uses: actions/checkout@v6
-
+    - uses: maxim-lobanov/setup-xcode@v1
+      id: setup-xcode
+      with:
+        xcode-version: '${{ env.GH_XCODE_VER }}'
     - name: Build
       shell: pwsh
       # axmol cmdline can't guess ios arm64 as simulator, so need specify by option '-sdk'
