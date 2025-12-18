@@ -324,7 +324,7 @@ void PhysicsDemoLogoSmash::onEnter()
 {
     PhysicsDemo::onEnter();
 
-    Color32 colorList[] = { Color32::WHITE, Color32::GRAY, Color32::RED, Color32::GREEN, Color32::BLUE, Color32(255, 174, 201) };
+    Color32 colorList[] = { Color32::WHITE, Color32::GRAY, Color32::RED, Color32::GREEN, Color32(0, 178, 255), Color32(255, 174, 201) };
 
     _physicsWorld->setGravity(Vec2(0.0f, 0.0f));
     _physicsWorld->setUpdateRate(1);
