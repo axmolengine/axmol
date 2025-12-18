@@ -217,7 +217,7 @@ static bool detectDXCAvailability(ID3D12Device* device,
     }
 
     // --- 1. Minimal VS shader ---
-    static const char* kVS = R"(
+    static constexpr std::string_view kVS = R"(
         struct VSIn { float3 pos : POSITION; };
         struct VSOut { float4 pos : SV_Position; };
         VSOut main(VSIn input)
@@ -226,19 +226,19 @@ static bool detectDXCAvailability(ID3D12Device* device,
             o.pos = float4(input.pos, 1.0);
             return o;
         }
-    )";
+    )"sv;
 
     // --- 2. Minimal PS shader ---
-    static const char* kPS = R"(
+    static constexpr std::string_view kPS = R"(
         float4 main() : SV_Target
         {
             return float4(1, 0, 0, 1);
         }
-    )";
+    )"sv;
 
-    auto compileShader = [&](const char* src, LPCWSTR entry, LPCWSTR profile, ComPtr<IDxcBlob>& outBlob) -> bool {
+    auto compileShader = [&](std::string_view src, LPCWSTR entry, LPCWSTR profile, ComPtr<IDxcBlob>& outBlob) -> bool {
         ComPtr<IDxcBlobEncoding> srcBlob;
-        HRESULT hr = lib->CreateBlobWithEncodingOnHeapCopy(src, (UINT)strlen(src), CP_UTF8, &srcBlob);
+        HRESULT hr = lib->CreateBlobWithEncodingOnHeapCopy(src.data(), (UINT)src.size(), CP_UTF8, &srcBlob);
         if (FAILED(hr))
             return false;
 
