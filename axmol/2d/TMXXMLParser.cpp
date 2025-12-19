@@ -600,15 +600,14 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
             const auto offsetX = static_cast<int>(objectGroup->getPositionOffset().x);
             const auto offsetY = static_cast<int>(objectGroup->getPositionOffset().y);
             // std::views::split 2~3x faster than std::getline
-            for (auto pt : std::views::split(value, ' '))
+            for (auto&& pt : std::views::split(value, ' '))
             {
-                std::string_view citem{pt.data(), pt.size()};
                 int idx = 0;
                 ValueMap pointDict;
-                for (auto subrgn : std::views::split(pt, ','))
+                for (auto&& subrgn : std::views::split(pt, ','))
                 {
                     int axisVal = 0;
-                    std::string_view word(subrgn.data());
+                    std::string_view word{subrgn.begin(), subrgn.end()};
                     std::from_chars(word.data(), word.data() + word.length(), axisVal, 10);
                     switch (idx++)
                     {
@@ -644,14 +643,15 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
 
             const auto offsetX = static_cast<int>(objectGroup->getPositionOffset().x);
             const auto offsetY = static_cast<int>(objectGroup->getPositionOffset().y);
-            for (auto pt : std::views::split(value, ' '))
+            for (auto&& pt : std::views::split(value, ' '))
             {
                 int idx = 0;
                 ValueMap pointDict;
-                for (auto pt_axis : std::views::split(pt, ','))
+                for (auto&& pt_axis : std::views::split(pt, ','))
                 {
                     int axisVal = 0;
-                    std::from_chars(pt_axis.data(), pt_axis.data() + pt_axis.size(), axisVal, 10);
+                    std::string_view word{pt_axis.begin(), pt_axis.end()};
+                    std::from_chars(word.data(), word.data() + word.size(), axisVal, 10);
                     switch (idx++)
                     {
                     case 0:

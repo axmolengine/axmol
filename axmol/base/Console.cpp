@@ -716,9 +716,9 @@ bool Console::parseCommand(socket_native_type fd)
     try
     {
         std::string_view cmdLine(buf);
-        for (auto rgn : std::views::split(cmdLine, _commandSeparator))
+        for (auto&& rgn : std::views::split(cmdLine, _commandSeparator))
         {
-            std::string_view command{&*rgn.begin(), static_cast<size_t>(std::ranges::distance(rgn))};
+            std::string_view command{rgn.begin(), rgn.end()};
             performCommand(fd, command);
         }
     }
@@ -742,9 +742,9 @@ void Console::performCommand(socket_native_type fd, std::string_view command)
     int index = 0;
     tlx::string_map<Command*>::iterator it;
     std::string cmd_args;
-    for (auto rgn : std::views::split(command, ' '))
+    for (auto&& rgn : std::views::split(command, ' '))
     {
-        std::string_view cmd_arg{&*rgn.begin(), static_cast<size_t>(std::ranges::distance(rgn))};
+        std::string_view cmd_arg{rgn.begin(), rgn.end()};
         if (index == 0)
         {
             it = _commands.find(text_utils::trim(cmd_arg));
@@ -1129,9 +1129,9 @@ void Console::commandTouchSubCommandTap(socket_native_type fd, std::string_view 
 {
     int argi = 0;
     float x, y;
-    for (auto rgn : std::views::split(args, ' '))
+    for (auto&& rgn : std::views::split(args, ' '))
     {
-        std::string_view argv{&*rgn.begin(), static_cast<size_t>(std::ranges::distance(rgn))};
+        std::string_view argv{rgn.begin(), rgn.end()};
         switch (argi++)
         {
         case 1:
@@ -1167,9 +1167,9 @@ void Console::commandTouchSubCommandTap(socket_native_type fd, std::string_view 
 void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_view args)
 {
     std::vector<std::string_view> argv;
-    for (auto rgn : std::views::split(args, ' '))
+    for (auto&& rgn : std::views::split(args, ' '))
     {
-        argv.emplace_back(&*rgn.begin(), static_cast<size_t>(std::ranges::distance(rgn)));
+        argv.emplace_back(std::string_view{rgn.begin(), rgn.end()});
     }
 
     if ((argv.size() == 5) && (Console::Utility::isFloat(argv[1])) && (Console::Utility::isFloat(argv[2])) &&
