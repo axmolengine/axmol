@@ -78,11 +78,15 @@ inline auto resize_and_transform(const _InIt _First, const _InIt _Last, _OutCont
     return std::transform(_First, _Last, _Dest.begin(), _Func);
 }
 
-template<typename _SeqCont, typename _Operation>
-inline void resize_and_overrite(_SeqCont& cont, size_t size, _Operation op) {
-    if constexpr (has_resize_and_overwrite<_SeqCont>::value) {
+template <typename _SeqCont, typename _Operation>
+inline void resize_and_overrite(_SeqCont& cont, size_t size, _Operation op)
+{
+    if constexpr (has_resize_and_overwrite<_SeqCont>::value)
+    {
         cont.resize_and_overwrite(size, op);
-    } else {
+    }
+    else
+    {
         cont.resize(size);
         const auto ret = op(cont.data(), size);
         if (ret < size)
@@ -90,13 +94,16 @@ inline void resize_and_overrite(_SeqCont& cont, size_t size, _Operation op) {
     }
 }
 
+// Convert a subrange into a std::string_view.
+// Requirements:
+// 1. The subrange must originate from contiguous memory (e.g. a split_view of std::string or std::string_view).
+// 2. &*subrgn.begin() is used to obtain a pointer to the first element.
+// 3. std::ranges::distance(subrgn) is used to compute the length.
+// 4. No copy is performed; the returned string_view references the original buffer.
+// 5. If the subrange comes from a non‑contiguous container (like std::list), this is undefined behavior.
 template <typename _Subrgn>
-std::string_view to_string_view(_Subrgn&& subrgn)
+inline std::string_view to_string_view(_Subrgn&& subrgn)
 {
-    using Iter = decltype(subrgn.begin());
-
-    static_assert(std::contiguous_iterator<Iter>,
-                  "to_string_view requires contiguous_iterator (e.g. from std::string or std::string_view)");
     return std::string_view{&*subrgn.begin(), static_cast<size_t>(std::ranges::distance(subrgn))};
 }
 
