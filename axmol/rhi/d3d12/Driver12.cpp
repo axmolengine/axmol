@@ -613,7 +613,7 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
         else
             sd.Filter = D3D12_FILTER_ANISOTROPIC;
 
-        sd.MaxAnisotropy = desc.anisotropy ? desc.anisotropy : 1;
+        sd.MaxAnisotropy = std::clamp(desc.anisotropy + 1u, 1u, 16u);
     }
     else
     {

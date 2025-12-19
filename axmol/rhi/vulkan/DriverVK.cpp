@@ -588,7 +588,7 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
 
     // Anisotropy
     info.anisotropyEnable = (desc.minFilter == SamplerFilter::MIN_ANISOTROPIC) ? VK_TRUE : VK_FALSE;
-    info.maxAnisotropy    = (desc.anisotropy > 0 ? static_cast<float>(desc.anisotropy) : 1.0f);
+    info.maxAnisotropy    = static_cast<float>(std::clamp(desc.anisotropy + 1u, 1u, 16u));
 
     info.borderColor             = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
     info.unnormalizedCoordinates = VK_FALSE;

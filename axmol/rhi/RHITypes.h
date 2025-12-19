@@ -379,7 +379,7 @@ struct SamplerDesc
     SamplerAddressMode tAddressMode : 2 = SamplerAddressMode::CLAMP;
     SamplerAddressMode wAddressMode : 2 = SamplerAddressMode::CLAMP;
     CompareFunc compareFunc : 4         = CompareFunc::NEVER;
-    uint32_t anisotropy : 4             = 1;
+    uint32_t anisotropy : 4             = 0;
     uint32_t reserved : 12              = 0;
 };
 static_assert(sizeof(SamplerDesc) == 4, "incompatible type: SamplerDesc");

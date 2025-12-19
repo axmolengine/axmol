@@ -167,6 +167,13 @@ DriverImpl::DriverImpl()
     //     supported");
     // }
 
+#ifdef GL_TEXTURE_MAX_ANISOTROPY_EXT
+    if (hasExtension("GL_EXT_texture_filter_anisotropic"))
+    {
+        glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &_cap.maxAnisotropy);
+    }
+#endif
+
     // default FBO
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_defaultFBO);
 
@@ -334,20 +341,11 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     }
 
     // --- Anisotropy ---
-#ifdef GL_TEXTURE_MAX_ANISOTROPY_EXT
-    if (desc.anisotropy > 1)
+    if (desc.anisotropy > 0 && _cap.maxAnisotropy > 1.0f)
     {
-        GLfloat aniso    = static_cast<GLfloat>(desc.anisotropy);
-        GLfloat maxAniso = 0.0f;
-        glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAniso);
-        if (maxAniso > 0.0f)
-        {
-            if (aniso > maxAniso)
-                aniso = maxAniso;
-            glSamplerParameterf(sampler, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
-        }
+        GLfloat aniso = std::clamp(static_cast<GLfloat>(desc.anisotropy + 1), 1.0f, _cap.maxAnisotropy);
+        glSamplerParameterf(sampler, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
     }
-#endif
 
     return reinterpret_cast<SamplerHandle>(static_cast<uintptr_t>(sampler));
 }

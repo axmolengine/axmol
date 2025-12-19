@@ -41,6 +41,7 @@ struct DriverCapImpl
     bool textureCompressionAstc{false};
     bool textureCompressionEtc2{false};
     bool vertexAttribBinding{false};
+    float maxAnisotropy{0.0f};
 };
 
 /**
