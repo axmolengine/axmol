@@ -17,9 +17,9 @@
   3. Run `setup.ps1` in windows powershell or (macOS/Linux/ArchLinux terminal).
   4. Restart the console after it has finished for environment variables to take effect.
   5. Ensure that the C / C++ compiler toolset is installed on your host machine.
-     - Windows: Visual Studio 2022/2026 with desktop workflow
-     - macOS: XCode 14.2+
-     - Linux: GCC (G++)
+     - Windows 10+: Visual Studio 2022/2026 with desktop workflow
+     - macOS Monterey 12.5+: Xcode 14.2+
+     - Linux(Ubuntu 22.04+, Debian 11+, ArchLinux): GCC (G++)
 
 ## Creating a new project
 
