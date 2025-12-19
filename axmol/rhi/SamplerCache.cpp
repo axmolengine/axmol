@@ -194,7 +194,7 @@ void SamplerCache::createBuiltinSamplers()
         d.minFilter  = SamplerFilter::MIN_ANISOTROPIC;
         d.magFilter  = SamplerFilter::MAG_LINEAR;
         d.mipFilter  = SamplerFilter::MIP_LINEAR;
-        d.anisotropy = 16;
+        d.anisotropy = 0xF;
 
         d.sAddressMode = SamplerAddressMode::CLAMP;
         createBuiltinSampler(SamplerIndex::AnisoClamp, d);
