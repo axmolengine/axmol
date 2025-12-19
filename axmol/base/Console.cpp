@@ -718,7 +718,7 @@ bool Console::parseCommand(socket_native_type fd)
         std::string_view cmdLine(buf);
         for (auto&& rgn : std::views::split(cmdLine, _commandSeparator))
         {
-            std::string_view command{rgn.begin(), rgn.end()};
+            std::string_view command{rgn};
             performCommand(fd, command);
         }
     }
@@ -744,7 +744,7 @@ void Console::performCommand(socket_native_type fd, std::string_view command)
     std::string cmd_args;
     for (auto&& rgn : std::views::split(command, ' '))
     {
-        std::string_view cmd_arg{rgn.begin(), rgn.end()};
+        std::string_view cmd_arg{rgn};
         if (index == 0)
         {
             it = _commands.find(text_utils::trim(cmd_arg));
@@ -1131,7 +1131,7 @@ void Console::commandTouchSubCommandTap(socket_native_type fd, std::string_view 
     float x, y;
     for (auto&& rgn : std::views::split(args, ' '))
     {
-        std::string_view argv{rgn.begin(), rgn.end()};
+        std::string_view argv{rgn};
         switch (argi++)
         {
         case 1:
@@ -1169,7 +1169,7 @@ void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_vie
     std::vector<std::string_view> argv;
     for (auto&& rgn : std::views::split(args, ' '))
     {
-        argv.emplace_back(std::string_view{rgn.begin(), rgn.end()});
+        argv.emplace_back(std::string_view{rgn});
     }
 
     if ((argv.size() == 5) && (Console::Utility::isFloat(argv[1])) && (Console::Utility::isFloat(argv[2])) &&

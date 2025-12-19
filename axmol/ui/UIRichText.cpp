@@ -2106,7 +2106,7 @@ void RichText::handleTextRenderer(std::string_view text,
         ++realLines;
 
         size_t splitParts = 0;
-        std::string_view lineText{subrgn.begin(), subrgn.end()};
+        std::string_view lineText{subrgn};
         textSpan.reset(lineText);
         while (!textSpan.empty())
         {
