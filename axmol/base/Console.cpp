@@ -38,7 +38,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <fcntl.h>
-#include <ranges>
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
 #    include <io.h>
@@ -54,6 +53,7 @@
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/base/Utils.h"
 #include "axmol/base/text_utils.h"
+#include "axmol/tlx/utility.hpp"
 
 #include "yasio/xxsocket.hpp"
 
@@ -718,7 +718,7 @@ bool Console::parseCommand(socket_native_type fd)
         std::string_view cmdLine(buf);
         for (auto&& rgn : std::views::split(cmdLine, _commandSeparator))
         {
-            std::string_view command{rgn};
+            std::string_view command = tlx::to_string_view(rgn);
             performCommand(fd, command);
         }
     }
@@ -744,7 +744,7 @@ void Console::performCommand(socket_native_type fd, std::string_view command)
     std::string cmd_args;
     for (auto&& rgn : std::views::split(command, ' '))
     {
-        std::string_view cmd_arg{rgn};
+        std::string_view cmd_arg = tlx::to_string_view(rgn);
         if (index == 0)
         {
             it = _commands.find(text_utils::trim(cmd_arg));
@@ -1131,7 +1131,7 @@ void Console::commandTouchSubCommandTap(socket_native_type fd, std::string_view 
     float x, y;
     for (auto&& rgn : std::views::split(args, ' '))
     {
-        std::string_view argv{rgn};
+        std::string_view argv = tlx::to_string_view(rgn);
         switch (argi++)
         {
         case 1:
@@ -1169,7 +1169,7 @@ void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_vie
     std::vector<std::string_view> argv;
     for (auto&& rgn : std::views::split(args, ' '))
     {
-        argv.emplace_back(std::string_view{rgn});
+        argv.emplace_back(tlx::to_string_view(rgn));
     }
 
     if ((argv.size() == 5) && (Console::Utility::isFloat(argv[1])) && (Console::Utility::isFloat(argv[2])) &&

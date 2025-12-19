@@ -26,7 +26,8 @@
 #include <type_traits>
 #include <memory>
 #include <string_view>
-
+#include <ranges>
+#include <iterator>
 #include "axmol/tlx/feature_test.hpp"
 
 namespace tlx
@@ -87,6 +88,16 @@ inline void resize_and_overrite(_SeqCont& cont, size_t size, _Operation op) {
         if (ret < size)
             cont.resize(ret);
     }
+}
+
+template <typename _Subrgn>
+std::string_view to_string_view(_Subrgn&& subrgn)
+{
+    using Iter = decltype(subrgn.begin());
+
+    static_assert(std::contiguous_iterator<Iter>,
+                  "to_string_view requires contiguous_iterator (e.g. from std::string or std::string_view)");
+    return std::string_view{&*subrgn.begin(), static_cast<size_t>(std::ranges::distance(subrgn))};
 }
 
 }  // namespace tlx

@@ -31,7 +31,6 @@
 #include <locale>
 #include <algorithm>
 #include <regex>
-#include <ranges>
 
 #include "axmol/platform/FileUtils.h"
 #include "axmol/platform/Application.h"
@@ -45,6 +44,7 @@
 #include "axmol/ui/UIHelper.h"
 
 #include "axmol/tlx/format.hpp"
+#include "axmol/tlx/utility.hpp"
 #include "axmol/platform/SAXParser.h"
 
 using namespace ax;
@@ -2106,7 +2106,7 @@ void RichText::handleTextRenderer(std::string_view text,
         ++realLines;
 
         size_t splitParts = 0;
-        std::string_view lineText{subrgn};
+        std::string_view lineText = tlx::to_string_view(subrgn);
         textSpan.reset(lineText);
         while (!textSpan.empty())
         {

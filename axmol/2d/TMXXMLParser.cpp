@@ -607,7 +607,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
                 for (auto&& subrgn : std::views::split(pt, ','))
                 {
                     int axisVal = 0;
-                    std::string_view word{subrgn};
+                    std::string_view word = tlx::to_string_view(subrgn);
                     std::from_chars(word.data(), word.data() + word.length(), axisVal, 10);
                     switch (idx++)
                     {
@@ -650,7 +650,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
                 for (auto&& pt_axis : std::views::split(pt, ','))
                 {
                     int axisVal = 0;
-                    std::string_view word{pt_axis};
+                    std::string_view word = tlx::to_string_view(pt_axis);
                     std::from_chars(word.data(), word.data() + word.size(), axisVal, 10);
                     switch (idx++)
                     {
