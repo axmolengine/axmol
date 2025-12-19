@@ -319,7 +319,7 @@ else {
             }
         }
 
-        Write-Host "Are you continue install linux dependencies for axmol? (y/N) " -NoNewline
+        Write-Host "Install Axmol Linux dependencies (one-time)? (y/N) " -NoNewline
         $answer = Read-Host
         if ($answer -like 'y*') {
             if ($LinuxDistro -eq 'Debian') {
@@ -361,7 +361,12 @@ else {
                 # if vlc encouter codec error, install
                 # sudo apt install ubuntu-restricted-extras
                 println "Install packages: $DEPENDS ..."
-                sudo apt install --allow-unauthenticated --yes $DEPENDS > /dev/null
+                if ("$env:GITHUB_ACTIONS" -eq 'true') {
+                    sudo apt install --allow-unauthenticated --yes $DEPENDS > /dev/null
+                }
+                else {
+                    sudo apt install --allow-unauthenticated --yes $DEPENDS
+                }
             }
             elseif ($LinuxDistro -eq 'Arch') {
                 $mirror_list = [System.IO.File]::ReadAllText('/etc/pacman.d/mirrorlist')
