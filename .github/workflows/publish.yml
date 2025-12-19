@@ -28,36 +28,21 @@ jobs:
     steps:
     - uses: actions/checkout@v6
 
-    - name: Check release ver from input
-      if: ${{ github.event.inputs.version != '' }}
+    - name: Check release version
       id: check_ver
       shell: pwsh
       run: |
-        $release_ver = '${{ github.event.inputs.version }}'
-        echo "release_ver=$release_ver" >> ${env:GITHUB_OUTPUT}
-        echo "release_ver=$release_ver" >> ${env:GITHUB_ENV}
-
-    - name: Check release ver from commits
-      if: ${{ steps.check_ver.outputs.release_ver == '' }}
-      shell: pwsh
-      run: |
-        # commit message template: Version 2.7.0
+        # commit message template: Version 1.8.0
         $commit_msg = "$(git show -s --format=%s)"
-        echo "commit_msg: $commit_msg"
-        $matchInfo = [Regex]::Match($commit_msg, 'Version\s(\d+\.)+(-)?(\*|\d+)')
-        if ($matchInfo.Success) { $matchInfo = [Regex]::Match($matchInfo.Value, '(\d+\.)+(-)?(\*|\d+)') }
-        $release_ver = if($matchInfo.Success) { $matchInfo.Value.TrimStart('Version ') }
-        echo "release_ver=$release_ver" >> ${env:GITHUB_ENV}
-
-    - name: Forward release ver to step make_pkg
-      id: forward_ver
-      shell: pwsh
-      run: |
-        echo "Forwarding release_ver=$env:release_ver ..."
-        echo "release_ver=$env:release_ver" >> ${env:GITHUB_OUTPUT}
+        echo "Parsing release version from commit message: $commit_msg"
+        $matchInfo = [Regex]::Match($commit_msg, '^Version\s+(?<ver>\d+\.\d+\.\d+)$')
+        if(!$matchInfo.Success) { $matchInfo = [Regex]::Match('${{github.event.inputs.version}}', '^(?<ver>\d+\.\d+\.\d+(-\w+)?)$') }
+        if($matchInfo.Success) { $release_ver = $matchInfo.Groups['ver'].Value } else { $release_ver='' }
+        echo "release_ver=$release_ver"
+        echo "release_ver=$release_ver" >> ${env:GITHUB_OUTPUT}
 
     - name: Make package
-      if: ${{ steps.forward_ver.outputs.release_ver != '' }}
+      if: ${{ steps.check_ver.outputs.release_ver != '' }}
       id: make_pkg
       # Some projects don't allow in-source building, so create a separate build directory
       # We'll use this as our working directory for all subsequent commands
@@ -69,7 +54,7 @@ jobs:
         axmol -xc '-DAX_WITH_LZ4=ON,-DAX_WITH_CARES=ON,-DAX_WITH_YAML_CPP=ON,-DAX_WITH_KCP=ON' -c
         $input_commitish = "${{ github.event.inputs.commitish }}"
         if (!$input_commitish) { $input_commitish = $(git -C $AX_ROOT branch --show-current) }
-        ./tools/ci/publish.ps1 -version "${{ steps.forward_ver.outputs.release_ver }}" -commitish $input_commitish
+        ./tools/ci/publish.ps1 -version "${{ steps.check_ver.outputs.release_ver }}" -commitish $input_commitish
         echo "commitish=$input_commitish" >> ${env:GITHUB_OUTPUT}
 
     - name: Publish to github release page
