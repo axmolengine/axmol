@@ -11,6 +11,7 @@ on:
       - 'docs/**'
       - '.github/workflows/publish.yml'
       - 'tools/ci/make-pkg.ps1'
+      - '.github/workflows/debian.yml'
 
   workflow_dispatch:
 jobs:
