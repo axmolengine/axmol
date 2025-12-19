@@ -10,7 +10,7 @@ param( [switch]$updateAdt                    #\
 # Bash Start ------------------------------------------------------------
 scriptdir="`dirname "${BASH_SOURCE[0]}"`"
 if ! command -v pwsh > /dev/null; then
-    $scriptdir/1k/install-pwsh.sh
+    $scriptdir/1k/pwshi.sh
 fi
 pwsh $scriptdir/setup.ps1 "$@"
 # Bash End --------------------------------------------------------------
@@ -49,16 +49,15 @@ if ($pwsh_ver -lt [VersionEx]'5.0') {
 
     # try setup WMF5.1, require reboot, try run setup.ps1 several times
     Write-Host "Configuring WMF5.1 ..."
-    $osVer = [System.Environment]::OSVersion.Version
 
-    if ($osVer.Major -ne 6) {
-        throw "Unsupported OSVersion: $($osVer.ToString())"
+    if ($NtOSVersion.Major -ne 6) {
+        throw "Unsupported OSVersion: $($NtOSVersion.ToString())"
     }
-    if ($osVer.Minor -ne 1 -and $osVer -ne 3) {
+    if ($NtOSVersion.Minor -ne 1 -and $NtOSVersion -ne 3) {
         throw "Only win7 SP1 or win8 supported"
     }
 
-    $is_win7 = $osVer.Minor -eq 1
+    $is_win7 = $NtOSVersion.Minor -eq 1
 
     # [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 5.1 non-win10
 
@@ -115,11 +114,33 @@ if ($pwsh_ver -lt [VersionEx]'5.0') {
     exit 0
 }
 
+# Check Windows 10 developer mode
+if ($IsWin) {
+    if ($NtOSVersion.Major -ge 10) {
+
+        $IsDevMode = (Get-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock -ErrorAction SilentlyContinue).AllowDevelopmentWithoutDevLicense -eq 1
+
+        if ($IsDevMode) {
+            Write-Output 'axmol: Developer Mode is enabled on this Windows 10+ device.'
+        }
+        else {
+            Write-Warning 'axmol: Developer Mode is currently disabled on this Windows 10+ device.'
+            Write-Warning 'axmol:   Some features (such as creating symbolic links without admin rights) may not work.'
+            Write-Output  'axmol:   Opening the Developer Mode settings page. Please enable it and run this script again.'
+            Start-Process "ms-settings:developers"
+            exit 0
+        }
+
+    }
+    else {
+        Write-Warning 'axmol:  Your system version is below Windows 10.'
+        Write-Warning 'axmol:    Windows 7 / 8.1 do not support Developer Mode and require admin rights for symbolic links.'
+        Write-Warning 'axmol:    Upgrading to Windows 10 or later is strongly recommended.'
+    }
+}
+
 # powershell 7 require mark as global explicit if want access in function via $Global:xxx
 $Global:AX_CLI_ROOT = Join-Path $AX_ROOT 'tools/cmdline'
-
-# https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_environment_variables
-$IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
 
 if ($IsWin) {
     if ("$env:AX_ROOT" -ne "$AX_ROOT") {
@@ -173,12 +194,18 @@ if ($IsWin) {
     }
 
     $execPolicy = powershell -Command 'Get-ExecutionPolicy'
-    if ($execPolicy -ne 'Bypass') {
-        println "Setting system installed powershell execution policy '$execPolicy'==>'Bypass', please click 'YES' on UAC dialog"
-        Start-Process powershell -ArgumentList '-Command "Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force"' -WindowStyle Hidden -Wait -Verb runas
+    if ($pwsh_ver.Major -gt 5) {
+        $execPolicy = powershell -Command 'Get-ExecutionPolicy'
+        if ($execPolicy -ne 'Bypass') {
+            println "Setting system installed powershell execution policy '$execPolicy'==>'Bypass', please click 'YES' on UAC dialog"
+            Start-Process powershell -ArgumentList '-Command "Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force"' -WindowStyle Hidden -Wait -Verb runas
+        }
+        else {
+            println "Nice, the system installed powershell execution policy is '$execPolicy'"
+        }
     }
     else {
-        println "Nice, the system installed powershell execution policy is '$execPolicy'"
+        println "Axmol setup.ps1 is running under the system-installed PowerShell with execution policy: $execPolicy"
     }
 }
 else {
@@ -298,7 +325,7 @@ else {
             if ($LinuxDistro -eq 'Debian') {
                 println "It will take few minutes"
                 $os_name = $PSVersionTable.OS
-                $os_ver = [Regex]::Match($os_name, '(\d+\.)+(\*|\d+)(\-[a-z0-9]+)?').Value
+                $os_ver = [Regex]::Match($os_name, '\d+(\.\d+)*(-[a-z0-9]+)?').Value
                 if (($os_name -match 'Ubuntu' -and [VersionEx]$os_ver -ge [VersionEx]'24.04') -or
                     ($os_name -match 'Debian' -and [VersionEx]$os_ver -ge [VersionEx]'13')) {
                     $webkit2gtk_dev = 'libwebkit2gtk-4.1-dev'
@@ -327,6 +354,8 @@ else {
                 $DEPENDS += 'g++'
                 $DEPENDS += 'libasound2-dev'
                 $DEPENDS += 'libxxf86vm-dev'
+
+                # vlc
                 $DEPENDS += 'libvlc-dev', 'libvlccore-dev', 'vlc'
 
                 # if vlc encouter codec error, install

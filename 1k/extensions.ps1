@@ -1,3 +1,14 @@
+# PowerShell 5.x No builtin variable: $IsWindows
+if ($Global:__1k_ext_imported) { return }
+
+$Global:__1k_ext_imported = $true
+
+$Global:IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
+
+if ($Global:IsWin) {
+    $Global:NtOSVersion = [System.Environment]::OSVersion.Version
+}
+
 # The System.Version compare not relex: [Version]'1.0' -eq [Version]'1.0.0' == false
 # So provide a spec VersionEx make [VersionEx]'1.0' -eq [VersionEx]'1.0.0' == true available
 if (-not ([System.Management.Automation.PSTypeName]'System.VersionEx').Type) {
@@ -22,7 +33,7 @@ namespace System
         public int Revision { get { return _Revision; } }
 
         int DefaultFormatFieldCount { get { return (_Build > 0 || _Revision > 0) ? (_Revision > 0 ? 4 : 3) : 2; } }
- 
+
         public VersionEx() { }
 
         public VersionEx(string version)
@@ -34,7 +45,7 @@ namespace System
             _Revision = v.Revision;
         }
 
-        public VersionEx(System.Version version) { 
+        public VersionEx(System.Version version) {
             _Major = version.Major;
             _Minor = version.Minor;
             _Build = Math.Max(version.Build, 0);
@@ -222,15 +233,15 @@ namespace System
 }
 
 
-function ConvertFrom-Props {
+function Global:ConvertFrom-Props {
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $InputObject
     )
 
     $props = @{}
 
-    foreach($_ in $InputObject) {
+    foreach ($_ in $InputObject) {
         if ($_ -match "^#.*$") {
             continue
         }
@@ -244,9 +255,9 @@ function ConvertFrom-Props {
     return $props
 }
 
-function ConvertTo-Props {
+function Global:ConvertTo-Props {
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $InputObject
     )
 

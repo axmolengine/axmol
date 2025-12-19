@@ -150,7 +150,7 @@ if(ARCHS MATCHES "((arm64|arm64e|x86_64)(^|;|, )?)+")
   endif()
 endif()
 
-# This little function lets you set any XCode specific property, refer to: ios.toolchain.cmake
+# This little function lets you set any Xcode specific property, refer to: ios.toolchain.cmake
 function(set_xcode_property TARGET XCODE_PROPERTY XCODE_VALUE)
   if(ARGC LESS 4 OR ARGV3 STREQUAL "All")
     set_property(TARGET ${TARGET} PROPERTY XCODE_ATTRIBUTE_${XCODE_PROPERTY} ${XCODE_VALUE})
