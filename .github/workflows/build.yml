@@ -92,7 +92,7 @@ jobs:
       shell: pwsh
       run: ./tools/cmdline/axmol -p linux -a x64 -t 'cpp-tests,lua-tests' && ./tools/cmdline/axmol run -p linux -a x64 -t unit-tests -wait
   osx-arm64:
-    runs-on: ${{ vars.GH_MACOS_VER }}
+    runs-on: macos-15
     steps:
     - uses: actions/checkout@v6
     - uses: maxim-lobanov/setup-xcode@v1
@@ -103,7 +103,7 @@ jobs:
       shell: pwsh
       run: ./tools/cmdline/axmol -p osx -a arm64 && ./tools/cmdline/axmol run -p osx -a arm64 -t unit-tests
   osx-x64:
-    runs-on: ${{ vars.GH_MACOS_VER }}-intel
+    runs-on: macos-15-intel
     steps:
     - uses: actions/checkout@v6
     - uses: maxim-lobanov/setup-xcode@v1
@@ -139,7 +139,7 @@ jobs:
           templates/**/*.apk
           tests/**/*.apk
   ios-sim-x64:
-    runs-on: ${{ vars.GH_MACOS_VER }}
+    runs-on: macos-15
     strategy:
       matrix:
         target_os:
@@ -157,7 +157,7 @@ jobs:
       shell: pwsh
       run: ./tools/cmdline/axmol -p $env:TARGET_OS -a 'x64'
   ios-sim-arm64:
-    runs-on: ${{ vars.GH_MACOS_VER }}
+    runs-on: macos-15
     strategy:
       matrix:
         target_os:
