@@ -46,6 +46,11 @@ THE SOFTWARE.
 #define AX_CONTENT_DIR     "Content/"
 #define AX_CONTENT_DIR_LEN (sizeof("Content/") - 1)
 
+namespace pugi
+{
+class xml_document;
+}
+
 namespace ax
 {
 
@@ -412,6 +417,16 @@ public:
      *@return bool
      */
     virtual bool writeDataToFile(const Data& data, std::string_view fullPath) const;
+
+    /**
+     * save xml document to file
+     *
+     *@param xmlDoc the xmlDoc want to save
+     *@param fullPath The full path to the file you want to save a string
+     *@return bool
+     *@since axmol-3.0
+     */
+    static bool writeXmlDocToFile(const pugi::xml_document& xmlDoc, std::string_view fullPath);
 
     /**
      * save data to file

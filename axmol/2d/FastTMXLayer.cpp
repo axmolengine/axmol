@@ -1015,9 +1015,7 @@ TMXTileAnimTask::TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation
     _frameCount   = static_cast<uint32_t>(_animation->_frames.size());
     _tilePosition = tilePos;
     _flag         = flag;
-    std::stringstream ss;
-    ss << "TickAnimOnTilePos(" << _tilePosition.x << "," << _tilePosition.y << ")";
-    _key = ss.str();
+    _key          = fmt::format("TickAnimOnTilePos({},{})", _tilePosition.x, _tilePosition.y);
 }
 
 void TMXTileAnimTask::tickAndScheduleNext(float dt)

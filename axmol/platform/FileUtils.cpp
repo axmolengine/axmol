@@ -386,9 +386,8 @@ bool FileUtils::writeValueMapToFile(const ValueMap& dict, std::string_view fullP
     auto rootEle = doc.document_element();
 
     generateElementForDict(dict, rootEle);
-    std::stringstream ss;
-    doc.save(ss, "  ");
-    return writeStringToFile(ss.str(), fullPath);
+
+    return writeXmlDocToFile(doc, fullPath);
 }
 
 bool FileUtils::writeValueVectorToFile(const ValueVector& vecData, std::string_view fullPath) const
@@ -401,9 +400,8 @@ bool FileUtils::writeValueVectorToFile(const ValueVector& vecData, std::string_v
 
     auto rootEle = doc.document_element();
     generateElementForArray(vecData, rootEle);
-    std::stringstream ss;
-    doc.save(ss, "  ");
-    return writeStringToFile(ss.str(), fullPath);
+
+    return writeXmlDocToFile(doc, fullPath);
 }
 
 static void generateElementForObject(const Value& value, pugi::xml_node& parent)
@@ -492,6 +490,14 @@ bool FileUtils::writeStringToFile(std::string_view dataStr, std::string_view ful
 bool FileUtils::writeDataToFile(const Data& data, std::string_view fullPath) const
 {
     return FileUtils::writeBinaryToFile(data.getBytes(), data.getSize(), fullPath);
+}
+
+bool FileUtils::writeXmlDocToFile(const pugi::xml_document& xmlDoc, std::string_view fullPath)
+{
+    std::stringstream ss;
+    xmlDoc.save(ss, "  ");
+    auto ssview = ss.view();
+    return writeBinaryToFile(ssview.data(), ssview.size(), fullPath);
 }
 
 bool FileUtils::writeBinaryToFile(const void* data, size_t dataSize, std::string_view fullPath)

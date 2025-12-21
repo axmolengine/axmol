@@ -460,7 +460,7 @@ static std::string& replacePathSeperator(std::string& path)
 
 std::string LoadMtl(tlx::string_map<int>& material_map, std::vector<material_t>& materials, std::istream& inStream)
 {
-    std::stringstream err;
+    std::string err;
 
     // Create a default material anyway.
     material_t material;
@@ -676,7 +676,7 @@ std::string LoadMtl(tlx::string_map<int>& material_map, std::vector<material_t>&
     material_map.insert(std::pair<std::string, int>(material.name, static_cast<int>(materials.size())));
     materials.emplace_back(material);
 
-    return err.str();
+    return err;
 }
 
 std::string MaterialFileReader::operator()(std::string_view matId,
@@ -694,14 +694,13 @@ std::string MaterialFileReader::operator()(std::string_view matId,
         filepath = matId;
     }
 
-    std::string err = "";
+    std::string err;
 
     std::istringstream matIStream(ax::FileUtils::getInstance()->getStringFromFile(filepath));
     if (!matIStream)
     {
-        std::stringstream ss;
-        ss << "WARN: Material file [ " << filepath << " ] not found. Created a default material.";
-        err += ss.str();
+        fmt::format_to(std::back_inserter(err), "WARN: Material file [ {} ] not found. Created a default material.\n",
+                       filepath);
     }
     err += LoadMtl(matMap, materials, matIStream);
 
@@ -716,13 +715,10 @@ std::string LoadObj(std::vector<shape_t>& shapes,
 
     shapes.clear();
 
-    std::stringstream err;
-
     std::istringstream ifs(ax::FileUtils::getInstance()->getStringFromFile(filename));
     if (!ifs)
     {
-        err << "Cannot open file [" << filename << "]" << std::endl;
-        return err.str();
+        return fmt::format("Cannot open file [ {} ]\n", filename);
     }
 
     std::string basePath;
@@ -740,7 +736,7 @@ std::string LoadObj(std::vector<shape_t>& shapes,
                     std::istream& inStream,
                     MaterialReader& readMatFn)
 {
-    std::stringstream err;
+    std::string err;
 
     std::vector<float> v;
     std::vector<float> vn;
@@ -966,6 +962,6 @@ std::string LoadObj(std::vector<shape_t>& shapes,
     }
     faceGroup.clear();  // for safety
 
-    return err.str();
+    return err;
 }
 }  // namespace tinyobj

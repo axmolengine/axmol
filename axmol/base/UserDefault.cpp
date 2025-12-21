@@ -514,9 +514,7 @@ void UserDefault::flush()
     for (auto&& kv : _values)
         r.append_child(kv.first.c_str()).append_child(pugi::xml_node_type::node_pcdata).set_value(kv.second.c_str());
 
-    std::stringstream ss;
-    doc.save(ss, "  ");
-    FileUtils::getInstance()->writeStringToFile(ss.str(), _filePath);
+    FileUtils::getInstance()->writeXmlDocToFile(doc, _filePath);
 #endif
 }
 
