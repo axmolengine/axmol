@@ -91,7 +91,7 @@ bool ActionTimeline::init()
     return true;
 }
 
-void ActionTimeline::play(std::string name, bool loop)
+void ActionTimeline::play(std::string_view name, bool loop)
 {
     if (_animationInfos.find(name) == _animationInfos.end())
     {
@@ -306,7 +306,7 @@ void ActionTimeline::addAnimationInfo(const AnimationInfo& animationInfo)
     addFrameEndCallFunc(animationInfo.endIndex, animationInfo.name, animationInfo.clipEndCallBack);
 }
 
-void ActionTimeline::removeAnimationInfo(std::string animationName)
+void ActionTimeline::removeAnimationInfo(std::string_view animationName)
 {
     auto clipIter = _animationInfos.find(animationName);
     if (clipIter == _animationInfos.end())
@@ -329,7 +329,7 @@ const AnimationInfo& ActionTimeline::getAnimationInfo(std::string_view animation
     return _animationInfos.find(animationName)->second;
 }
 
-void ActionTimeline::setAnimationEndCallFunc(const std::string animationName, std::function<void()> func)
+void ActionTimeline::setAnimationEndCallFunc(std::string_view animationName, std::function<void()> func)
 {
     auto clipIter = _animationInfos.find(animationName);
     if (clipIter == _animationInfos.end())

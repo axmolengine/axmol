@@ -75,7 +75,7 @@ public:
     ActionTimeline();
     virtual ~ActionTimeline();
 
-    virtual void play(std::string animationName, bool loop);
+    virtual void play(std::string_view animationName, bool loop);
 
     virtual bool init();
 
@@ -148,14 +148,14 @@ public:
 
     /** AnimationInfo*/
     virtual void addAnimationInfo(const AnimationInfo& animationInfo);
-    virtual void removeAnimationInfo(std::string animationName);
+    virtual void removeAnimationInfo(std::string_view animationName);
     virtual bool IsAnimationInfoExists(std::string_view animationName);
     virtual const AnimationInfo& getAnimationInfo(std::string_view animationName);
     /**add a frame end call back to animation's end frame
      * @param animationName  @addFrameEndCallFunc, make the animationName as funcKey
      * @param func the callback function
      */
-    virtual void setAnimationEndCallFunc(const std::string animationName, std::function<void()> func);
+    virtual void setAnimationEndCallFunc(std::string_view animationName, std::function<void()> func);
 
     /** Set ActionTimeline's frame event callback function */
     void setFrameEventCallFunc(std::function<void(Frame*)> listener);

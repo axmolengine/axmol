@@ -109,7 +109,7 @@ void FontAtlas::loadFontAtlas(std::string_view fontatlasFile, tlx::string_map<Fo
         catch (std::exception& ex)
         {
             fontAtlas->release();
-            throw ex;  // rethrow
+            throw;  // rethrow
         }
     }
     catch (std::exception& ex)
