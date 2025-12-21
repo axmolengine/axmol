@@ -21474,10 +21474,10 @@ int lua_ax_studio_ActionTimeline_play(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2)
     {
-        std::string arg0;
+        std::string_view arg0;
         bool arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ActionTimeline:play");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ActionTimeline:play");
 
         ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ccs.ActionTimeline:play");
         if(!ok)
@@ -22450,9 +22450,9 @@ int lua_ax_studio_ActionTimeline_removeAnimationInfo(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ActionTimeline:removeAnimationInfo");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ActionTimeline:removeAnimationInfo");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimeline_removeAnimationInfo'", nullptr);
@@ -22600,10 +22600,10 @@ int lua_ax_studio_ActionTimeline_setAnimationEndCallFunc(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2)
     {
-        std::string arg0;
+        std::string_view arg0;
         std::function<void ()> arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ActionTimeline:setAnimationEndCallFunc");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ActionTimeline:setAnimationEndCallFunc");
 
         do {
         	// Lambda binding for lua is not supported.
