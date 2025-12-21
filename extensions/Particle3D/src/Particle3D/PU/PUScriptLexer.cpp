@@ -48,7 +48,7 @@ void PUScriptLexer::openLexer(std::string_view str, std::string_view source, PUS
 
     const wchar_t varopener = '$', quote = '\"', slash = '/', backslash = '\\', openbrace = '{', closebrace = '}',
                   colon = ':', star = '*', cr = '\r', lf = '\n';
-    char c, lastc;
+    char c = 0, lastc;
 
     std::string lexeme;
     unsigned int line = 1, state = READY, lastQuote = 0;

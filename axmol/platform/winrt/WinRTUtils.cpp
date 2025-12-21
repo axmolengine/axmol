@@ -223,19 +223,19 @@ bool replaceXamlElement(Windows::Foundation::IInspectable const& parent,
 
 std::string computeHashForFile(const std::string& filePath)
 {
-    std::string ret = filePath;
-    size_t pos      = ret.find_last_of('/');
+    std::string_view tmp = filePath;
+    size_t pos           = tmp.find_last_of('/');
 
     if (pos != std::string::npos)
     {
-        ret = ret.substr(pos);
+        tmp = tmp.substr(pos);
     }
 
-    pos = ret.find_last_of('.');
+    pos = tmp.find_last_of('.');
 
     if (pos != std::string::npos)
     {
-        ret = ret.substr(0, pos);
+        tmp = tmp.substr(0, pos);
     }
 
     CREATEFILE2_EXTENDED_PARAMETERS extParams = {0};
@@ -246,20 +246,24 @@ std::string computeHashForFile(const std::string& filePath)
     extParams.hTemplateFile                   = nullptr;
     extParams.lpSecurityAttributes            = nullptr;
 
-    winrt::file_handle handle{CreateFile2(std::wstring(filePath.begin(), filePath.end()).c_str(), GENERIC_READ,
-                                          FILE_SHARE_READ, OPEN_EXISTING, &extParams)};
+    winrt::file_handle handle{
+        CreateFile2(ntcvt::from_chars(filePath).c_str(), GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, &extParams)};
+
+    std::string ret;
+
     if (handle)
     {
         FILE_BASIC_INFO fInfo = {0};
         if (GetFileInformationByHandleEx(handle.get(), FileBasicInfo, &fInfo, sizeof(FILE_BASIC_INFO)))
         {
-            std::stringstream ss;
-            ss << ret << "_";
-            ss << fInfo.CreationTime.QuadPart;
-            ss << fInfo.ChangeTime.QuadPart;
-            ret = ss.str();
+            // two 64 bits for time info + '_'
+            ret.reserve(tmp.size() + 41);
+            fmt::format_to(std::back_inserter(ret), "{}_{}{}", tmp, fInfo.CreationTime.QuadPart,
+                           fInfo.ChangeTime.QuadPart);
         }
     }
+    else
+        ret = tmp;
 
     return ret;
 }
