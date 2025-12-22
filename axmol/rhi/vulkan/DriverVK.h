@@ -29,6 +29,7 @@
 #include <string>
 #include <mutex>
 #include <deque>
+#include "axmol/tlx/flat_set.hpp"
 
 namespace ax::rhi::vk
 {
@@ -75,6 +76,13 @@ struct SurfaceCreateInfo
     int width{0};
     int height{0};
     CreateSurfaceFunc createFunc{};
+};
+
+struct DriverCapImpl
+{
+    bool extendedDynamicStateSupported{false};
+    bool dynamicPrimitiveTopologyUnrestricted{false};
+    bool samplerAnisotropySupported{false};
 };
 
 class DriverImpl : public DriverBase
@@ -162,6 +170,12 @@ public:
 
     void waitForGPU() override { vkDeviceWaitIdle(_device); }
 
+    bool hasExtension(std::string_view extName) const override;
+
+    bool isExtendedDynamicStateSupported() const { return _vkCaps.extendedDynamicStateSupported; }
+    bool isDynamicPrimitiveTopologyUnrestricted() const { return _vkCaps.dynamicPrimitiveTopologyUnrestricted; }
+    bool isSamplerAnisotropySupported() const { return _vkCaps.samplerAnisotropySupported; }
+
 protected:
     void queueDisposalInternal(DisposableResource&& res);
     ShaderModule* createShaderModule(ShaderStage stage, Data& chunk) override;
@@ -171,6 +185,10 @@ protected:
 private:
     void initializeFactory();
     void initializeDevice();
+
+    tlx::flat_set<uint32_t> _supportedExtensions;
+
+    DriverCapImpl _vkCaps;
 
     RenderContextImpl* _currentRenderContext{nullptr};
 

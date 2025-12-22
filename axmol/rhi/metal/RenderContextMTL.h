@@ -101,7 +101,7 @@ public:
      * @param rt Specifies the render target.
      * @param desc Specifies the pipeline descriptor.
      */
-    void updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc, PrimitiveGroup primitiveGroup) override;
+    void updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc, PrimitiveType primitiveType) override;
 
     /**
      * Fixed-function state
@@ -133,7 +133,7 @@ public:
     /**
      * Set indexes when drawing primitives with index list
      * @ buffer A buffer object that the device will read indexes from.
-     * @ see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`
+     * @ see `drawElements(IndexFormat indexType, unsigned int count, unsigned int offset)`
      */
     void setIndexBuffer(Buffer* buffer) override;
 
@@ -141,39 +141,23 @@ public:
 
     /**
      * Draw primitives without an index list.
-     * @param primitiveType The type of primitives that elements are assembled into.
      * @param start For each instance, the first index to draw
      * @param count For each instance, the number of indexes to draw
-     * @see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`
-     *
-     * TODO: Implement a wireframe mode for METAL devices. Refer to: https://forums.ogre3d.org/viewtopic.php?t=95089
+     * @see `drawElements(IndexFormat indexType, unsigned int count, unsigned int offset)`
      */
-    void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe) override;
-    void drawArraysInstanced(PrimitiveType primitiveType,
-                             std::size_t start,
-                             std::size_t count,
-                             int instanceCount,
-                             bool wireframe = false) override;
+    void drawArrays(std::size_t start, std::size_t count, bool wireframe) override;
+    void drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool wireframe = false) override;
 
     /**
      * Draw primitives with an index list.
-     * @param primitiveType The type of primitives that elements are assembled into.
      * @param indexType The type if indexes, either 16 bit integer or 32 bit integer.
      * @param count The number of indexes to read from the index buffer for each instance.
      * @param offset Byte offset within indexBuffer to start reading indexes from.
      * @see `setIndexBuffer(Buffer* buffer)`
      * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
-     *
-     * TODO: Implement a wireframe mode for METAL devices. Refer to: https://forums.ogre3d.org/viewtopic.php?t=95089
      */
-    void drawElements(PrimitiveType primitiveType,
-                      IndexFormat indexType,
-                      std::size_t count,
-                      std::size_t offset,
-                      bool wireframe) override;
-
-    void drawElementsInstanced(PrimitiveType primitiveType,
-                               IndexFormat indexType,
+    void drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool wireframe) override;
+    void drawElementsInstanced(IndexFormat indexType,
                                std::size_t count,
                                std::size_t offset,
                                int instanceCount,
@@ -261,6 +245,8 @@ private:
 
     DepthStencilStateImpl* _depthStencilState = nullptr;
     RenderPipelineImpl* _renderPipeline       = nullptr;
+
+    MTLPrimitiveType _primitiveType = MTLPrimitiveTypeTriangle;
 
     unsigned int _renderTargetWidth  = 0;
     unsigned int _renderTargetHeight = 0;

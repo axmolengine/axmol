@@ -122,10 +122,9 @@ public:
      * So a new render pipeline object will be created only if it hasn't been created before.
      * @param rt Specifies the render target.
      * @param pipelineDesc Specifies the pipeline desc.
+     * @param primitiveType The type of primitives that elements are assembled into.
      */
-    virtual void updatePipelineState(const RenderTarget* rt,
-                                     const PipelineDesc& desc,
-                                     PrimitiveGroup primitiveGroup) = 0;
+    virtual void updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc, PrimitiveType primitiveType) = 0;
 
     /**
      * Fixed-function state
@@ -169,40 +168,29 @@ public:
 
     /**
      * Draw primitives without an index list.
-     * @param primitiveType The type of primitives that elements are assembled into.
      * @param start For each instance, the first index to draw
      * @param count For each instance, the number of indexes to draw
      * @see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`
      */
-    virtual void drawArrays(PrimitiveType primitiveType,
-                            std::size_t start,
-                            std::size_t count,
-                            bool wireframe = false) = 0;
+    virtual void drawArrays(std::size_t start, std::size_t count, bool wireframe = false) = 0;
 
-    virtual void drawArraysInstanced(PrimitiveType primitiveType,
-                                     std::size_t start,
+    virtual void drawArraysInstanced(std::size_t start,
                                      std::size_t count,
                                      int instanceCount,
                                      bool wireframe = false) = 0;
 
     /**
      * Draw primitives with an index list.
-     * @param primitiveType The type of primitives that elements are assembled into.
      * @param indexType The type if indexes, either 16 bit integer or 32 bit integer.
      * @param count The number of indexes to read from the index buffer for each instance.
      * @param offset Byte offset within indexBuffer to start reading indexes from.
      * @see `setIndexBuffer(Buffer* buffer)`
      * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
      */
-    virtual void drawElements(PrimitiveType primitiveType,
-                              IndexFormat indexType,
-                              std::size_t count,
-                              std::size_t offset,
-                              bool wireframe = false) = 0;
+    virtual void drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool wireframe = false) = 0;
 
     /**
      * Draw primitives with an index list instanced.
-     * @param primitiveType The type of primitives that elements are assembled into.
      * @param indexType The type if indexes, either 16 bit integer or 32 bit integer.
      * @param count The number of indexes to read from the index buffer for each instance.
      * @param offset Byte offset within indexBuffer to start reading indexes from.
@@ -210,8 +198,7 @@ public:
      * @see `setIndexBuffer(Buffer* buffer)`
      * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
      */
-    virtual void drawElementsInstanced(PrimitiveType primitiveType,
-                                       IndexFormat indexType,
+    virtual void drawElementsInstanced(IndexFormat indexType,
                                        std::size_t count,
                                        std::size_t offset,
                                        int instanceCount,

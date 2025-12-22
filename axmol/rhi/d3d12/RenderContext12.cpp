@@ -61,6 +61,20 @@ inline D3D12_PRIMITIVE_TOPOLOGY toD3DTopology(PrimitiveType type)
     return PrimitiveTypeToD3DTopology[static_cast<uint32_t>(type)];
 }
 
+static constexpr rhi::PrimitiveGroup kPrimitiveTypeToGroup[] = {
+    /* POINT          */ rhi::PrimitiveGroup::Point,
+    /* LINE           */ rhi::PrimitiveGroup::Line,
+    /* LINE_LOOP      */ rhi::PrimitiveGroup::Line,
+    /* LINE_STRIP     */ rhi::PrimitiveGroup::Line,
+    /* TRIANGLE       */ rhi::PrimitiveGroup::Triangle,
+    /* TRIANGLE_STRIP */ rhi::PrimitiveGroup::Triangle,
+};
+
+static inline rhi::PrimitiveGroup toPrimitiveGroup(PrimitiveType type)
+{
+    return kPrimitiveTypeToGroup[static_cast<uint32_t>(type)];
+}
+
 // Helper: map IndexFormat to DXGI_FORMAT
 static DXGI_FORMAT toDxgiIndexFormat(IndexFormat fmt)
 {
@@ -554,21 +568,20 @@ void RenderContextImpl::endFrame()
 
     // Present
     hr = _swapchain->Present(_syncInterval, _presentFlags);
-    AXASSERT(SUCCEEDED(hr), "SwapChain Present failed");
-
-#ifdef NDEBUG
-    (void)hr;
-#else
     if (FAILED(hr))
     {
         if (hr == DXGI_ERROR_DEVICE_REMOVED)
         {
             HRESULT reason = _device->GetDeviceRemovedReason();
-            AXLOGD("D3D12 Device remove reason: {}", reason);
+            AXLOGE("D3D12 Device remove reason: {}", reason);
         }
-        // else if (hr == DXGI_ERROR_WAS_STILL_DRAWING)
+        else
+        {
+            AXLOGE("SwapChain Present failed: hr=0x{:X}", hr);
+        }
+
+        std::abort();
     }
-#endif
 
     // Signal fence for this frame
     auto& currentFence = _inflightFences[_currentFrame];
@@ -709,12 +722,15 @@ void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 
 void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
                                             const PipelineDesc& pipelineDesc,
-                                            PrimitiveGroup primitiveGroup)
+                                            PrimitiveType primitiveType)
 {
-    RenderContext::updatePipelineState(rt, pipelineDesc, primitiveGroup);
+    RenderContext::updatePipelineState(rt, pipelineDesc, primitiveType);
     AXASSERT(_renderPipeline, "RenderPipelineImpl not set");
-    _renderPipeline->prepareUpdate(_depthStencilState, _cachedCullMode, _cachedFrontCounterClockwise, primitiveGroup);
+    _renderPipeline->prepareUpdate(_depthStencilState, _cachedCullMode, _cachedFrontCounterClockwise,
+                                   toPrimitiveGroup(primitiveType));
     _renderPipeline->update(rt, pipelineDesc);
+
+    _currentCmdList->IASetPrimitiveTopology(toD3DTopology(primitiveType));
 
     // Bind PSO & RootSignature
     uint32_t dirtyFlags = 0;
@@ -770,46 +786,28 @@ void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
     _instanceBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::drawArrays(PrimitiveType primitiveType,
-                                   std::size_t start,
-                                   std::size_t count,
-                                   bool /*wireframe*/)
+void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool /*wireframe*/)
 {
     AXASSERT(_renderPipeline && _vertexBuffer, "Pipeline and vertex buffer must be set");
 
     prepareDrawing(_currentCmdList);
 
-    // Set primitive topology
-    _currentCmdList->IASetPrimitiveTopology(toD3DTopology(primitiveType));
-    // Draw
     _currentCmdList->DrawInstanced(static_cast<UINT>(count), 1, static_cast<UINT>(start), 0);
 }
 
-void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
-                                            std::size_t start,
-                                            std::size_t count,
-                                            int instanceCount,
-                                            bool /*wireframe*/)
+void RenderContextImpl::drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool /*wireframe*/)
 {
     AXASSERT(_renderPipeline && _vertexBuffer, "Pipeline and vertex buffer must be set");
 
     prepareDrawing(_currentCmdList);
-
-    _currentCmdList->IASetPrimitiveTopology(toD3DTopology(primitiveType));
 
     _currentCmdList->DrawInstanced(static_cast<UINT>(count), static_cast<UINT>(instanceCount), static_cast<UINT>(start),
                                    0);
 }
 
-void RenderContextImpl::drawElements(PrimitiveType primitiveType,
-                                     IndexFormat indexType,
-                                     std::size_t count,
-                                     std::size_t offset,
-                                     bool /*wireframe*/)
+void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool /*wireframe*/)
 {
     AXASSERT(_renderPipeline && _vertexBuffer && _indexBuffer, "Pipeline, vertex and index buffers must be set");
-
-    _currentCmdList->IASetPrimitiveTopology(toD3DTopology(primitiveType));
 
     prepareDrawing(_currentCmdList);
 
@@ -823,8 +821,7 @@ void RenderContextImpl::drawElements(PrimitiveType primitiveType,
     _currentCmdList->DrawIndexedInstanced(static_cast<UINT>(count), 1, 0, 0, 0);
 }
 
-void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
-                                              IndexFormat indexType,
+void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
                                               std::size_t count,
                                               std::size_t offset,
                                               int instanceCount,
@@ -833,8 +830,6 @@ void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
     AXASSERT(_renderPipeline && _vertexBuffer && _indexBuffer, "Pipeline, vertex and index buffers must be set");
 
     prepareDrawing(_currentCmdList);
-
-    _currentCmdList->IASetPrimitiveTopology(toD3DTopology(primitiveType));
 
     // IB
     D3D12_INDEX_BUFFER_VIEW ibv{};

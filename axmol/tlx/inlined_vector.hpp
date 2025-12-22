@@ -69,13 +69,21 @@ public:
     using iterator        = pointer;
     using const_iterator  = const_pointer;
 
-    inlined_vector() noexcept : _Mypair(_TLX __zero_then_variadic_args_t{}) {}
+    constexpr inlined_vector() noexcept : _Mypair(_TLX __zero_then_variadic_args_t{}) {}
 
-    inlined_vector(const inlined_vector& other) : _Mypair(_TLX __zero_then_variadic_args_t{}) { _Assign(other); }
+    constexpr inlined_vector(const inlined_vector& other) : _Mypair(_TLX __zero_then_variadic_args_t{})
+    {
+        _Assign(other);
+    }
 
-    inlined_vector(inlined_vector&& other) : _Mypair(_TLX __zero_then_variadic_args_t{})
+    constexpr inlined_vector(inlined_vector&& other) : _Mypair(_TLX __zero_then_variadic_args_t{})
     {
         _Assign_rv(std::move(other));
+    }
+
+    constexpr inlined_vector(std::initializer_list<_Ty> ilist) : _Mypair(_TLX __zero_then_variadic_args_t{})
+    {
+        _Assign_ilist(ilist);
     }
 
     ~inlined_vector() noexcept
@@ -408,12 +416,12 @@ private:
     // ------------------------------------------------------------
     // helper: move from other
     // ------------------------------------------------------------
-    void _Assign_rv(inlined_vector&& other) { this->swap(other); }
+    constexpr void _Assign_rv(inlined_vector&& other) { this->swap(other); }
 
     // ------------------------------------------------------------
     // helper: deep copy from other
     // ------------------------------------------------------------
-    void _Assign(const inlined_vector& other)
+    constexpr void _Assign(const inlined_vector& other)
     {
         auto& dst         = _Mypair._Myval2;
         const auto& src   = other._Mypair._Myval2;
@@ -468,6 +476,80 @@ private:
                 {
                     for (; i < n; ++i, ++new_last)
                         tlx::construct_at(new_first + i, src._Myfirst[i]);
+                }
+                catch (...)
+                {
+                    if constexpr (!std::is_trivially_destructible_v<_Ty>)
+                    {
+                        for (size_type j = 0; j < i; ++j)
+                            tlx::invoke_dtor(new_first + j);
+                    }
+                    _Getal().deallocate(new_first, n);
+                    throw;
+                }
+            }
+
+            dst._Myfirst = new_first;
+            dst._Mylast  = new_last;
+            dst._Myend   = new_first + n;
+        }
+    }
+
+    // helper: deep copy from initializer_list
+    constexpr void _Assign_ilist(std::initializer_list<_Ty> init)
+    {
+        auto& dst         = _Mypair._Myval2;
+        const size_type n = init.size();
+
+        if (n <= _Initial)
+        {
+            // inline copy
+            dst._Myfirst = reinterpret_cast<_Ty*>(dst._Mybuf);
+            dst._Myend   = dst._Myfirst + _Initial;
+            dst._Mylast  = dst._Myfirst;
+
+            if constexpr (std::is_trivially_copyable_v<_Ty>)
+            {
+                ::memcpy(dst._Myfirst, init.begin(), n * sizeof(_Ty));
+            }
+            else
+            {
+                size_type i = 0;
+                try
+                {
+                    for (auto it = init.begin(); it != init.end(); ++it, ++i)
+                        tlx::construct_at(dst._Myfirst + i, *it);
+                }
+                catch (...)
+                {
+                    if constexpr (!std::is_trivially_destructible_v<_Ty>)
+                    {
+                        for (size_type j = 0; j < i; ++j)
+                            tlx::invoke_dtor(dst._Myfirst + j);
+                    }
+                    throw;
+                }
+            }
+            dst._Mylast = dst._Myfirst + n;
+        }
+        else
+        {
+            // heap copy
+            _Ty* new_first = _Getal().allocate(n);
+            _Ty* new_last  = new_first;
+
+            if constexpr (std::is_trivially_copyable_v<_Ty>)
+            {
+                ::memcpy(new_first, init.begin(), n * sizeof(_Ty));
+                new_last = new_first + n;
+            }
+            else
+            {
+                size_type i = 0;
+                try
+                {
+                    for (auto it = init.begin(); it != init.end(); ++it, ++i, ++new_last)
+                        tlx::construct_at(new_first + i, *it);
                 }
                 catch (...)
                 {

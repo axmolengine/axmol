@@ -165,7 +165,7 @@ enum class PVR3TextureFlag
     PremultipliedAlpha = (1 << 1)  // has premultiplied alpha
 };
 
-static const char gPVRTexIdentifier[5] = "PVR!";
+static constexpr std::string_view gPVRTexIdentifier = "PVR!"sv;
 
 // v2
 enum class PVR2TexturePixelFormat : uint8_t
@@ -533,11 +533,6 @@ static rhi::PixelFormat getDevicePVRPixelFormat(rhi::PixelFormat format)
 
 namespace
 {
-bool testFormatForPvr2TCSupport(PVR2TexturePixelFormat /*format*/)
-{
-    return true;
-}
-
 bool testFormatForPvr3TCSupport(PVR3TexturePixelFormat format)
 {
     switch (format)
@@ -916,7 +911,7 @@ bool Image::isPvr(const uint8_t* data, ssize_t dataLen)
     const PVRv2TexHeader* headerv2 = static_cast<const PVRv2TexHeader*>(static_cast<const void*>(data));
     const PVRv3TexHeader* headerv3 = static_cast<const PVRv3TexHeader*>(static_cast<const void*>(data));
 
-    return memcmp(&headerv2->pvrTag, gPVRTexIdentifier, strlen(gPVRTexIdentifier)) == 0 ||
+    return memcmp(&headerv2->pvrTag, gPVRTexIdentifier.data(), gPVRTexIdentifier.size()) == 0 ||
            AX_SWAP_INT32_BIG_TO_HOST(headerv3->version) == 0x50565203;
 }
 
@@ -1553,7 +1548,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
     const PVRv2TexHeader* header = static_cast<const PVRv2TexHeader*>(static_cast<const void*>(data));
 
     // Make sure that tag is in correct formatting
-    if (memcmp(&header->pvrTag, gPVRTexIdentifier, strlen(gPVRTexIdentifier)) != 0)
+    if (memcmp(&header->pvrTag, gPVRTexIdentifier.data(), gPVRTexIdentifier.size()) != 0)
     {
         return false;
     }
@@ -1578,13 +1573,6 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
     {
         AXLOGD("ERROR: Loading an NPOT texture ({}x{}) but is not supported on this device", header->width,
                header->height);
-        return false;
-    }
-
-    if (!testFormatForPvr2TCSupport(formatFlags))
-    {
-        AXLOGD("WARNING: Unsupported PVR Pixel Format: {:02X}. Re-encode it with a OpenGL pixel format variant",
-               (int)formatFlags);
         return false;
     }
 
@@ -1618,7 +1606,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
     const int pixelOffset = sizeof(PVRv2TexHeader);
     uint8_t* pixelData    = data + pixelOffset;
 
-    int dataOffset = 0, dataSize = 0;
+    int dataOffset = 0;
     // Get ptr to where data starts..
     int dataLength = AX_SWAP_INT32_LITTLE_TO_HOST(header->dataLength);
 
@@ -1681,7 +1669,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
             heightBlocks = 2;
         }
 
-        dataSize         = widthBlocks * heightBlocks * ((blockSize * bpp) / 8);
+        auto dataSize    = widthBlocks * heightBlocks * ((blockSize * bpp) / 8);
         int packetLength = (dataLength - dataOffset);
         packetLength     = packetLength > dataSize ? dataSize : packetLength;
 
@@ -2767,7 +2755,7 @@ bool Image::saveImageToJPG(std::string_view filePath)
         if (hasAlpha())
         {
             uint8_t* tempData = static_cast<uint8_t*>(malloc(_width * _height * 3));
-            if (nullptr == tempData)
+            if (!tempData)
             {
                 jpeg_finish_compress(&cinfo);
                 jpeg_destroy_compress(&cinfo);
@@ -2797,10 +2785,7 @@ bool Image::saveImageToJPG(std::string_view filePath)
                 (void)jpeg_write_scanlines(&cinfo, row_pointer, 1);
             }
 
-            if (tempData != nullptr)
-            {
-                free(tempData);
-            }
+            free(tempData);
         }
         else
         {

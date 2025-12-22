@@ -101,7 +101,7 @@ public:
     void updateDepthStencilState(const DepthStencilDesc& descriptor) override;
     void updatePipelineState(const RenderTarget* rt,
                              const PipelineDesc& pipelineDesc,
-                             PrimitiveGroup primitiveGroup) override;
+                             PrimitiveType primitiveType) override;
 
     void setViewport(int x, int y, unsigned int w, unsigned int h) override;
     void setCullMode(CullMode mode) override;
@@ -112,19 +112,10 @@ public:
     void setIndexBuffer(Buffer* buffer) override;
     void setInstanceBuffer(Buffer* buffer) override;
 
-    void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe) override;
-    void drawArraysInstanced(PrimitiveType primitiveType,
-                             std::size_t start,
-                             std::size_t count,
-                             int instanceCount,
-                             bool wireframe) override;
-    void drawElements(PrimitiveType primitiveType,
-                      IndexFormat indexType,
-                      std::size_t count,
-                      std::size_t offset,
-                      bool wireframe) override;
-    void drawElementsInstanced(PrimitiveType primitiveType,
-                               IndexFormat indexType,
+    void drawArrays(std::size_t start, std::size_t count, bool wireframe) override;
+    void drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool wireframe) override;
+    void drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool wireframe) override;
+    void drawElementsInstanced(IndexFormat indexType,
                                std::size_t count,
                                std::size_t offset,
                                int instanceCount,

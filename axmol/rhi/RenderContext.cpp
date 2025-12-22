@@ -35,7 +35,7 @@ RenderContext::~RenderContext() {}
 
 void RenderContext::updatePipelineState(const RenderTarget* rt,
                                         const PipelineDesc& desc,
-                                        PrimitiveGroup /*primitiveGroup*/)
+                                        PrimitiveType /*primitiveType*/)
 {
     _programState = desc.programState;
     _vertexLayout = desc.vertexLayout;

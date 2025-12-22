@@ -160,11 +160,13 @@ void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
  */
 void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
                                             const PipelineDesc& desc,
-                                            PrimitiveGroup primitiveGroup)
+                                            PrimitiveType primitiveType)
 {
-    RenderContext::updatePipelineState(rt, desc, primitiveGroup);
+    RenderContext::updatePipelineState(rt, desc, primitiveType);
 
     _renderPipeline->update(rt, desc);
+
+    _primitiveType = UtilsGL::toGLPrimitiveType(primitiveType);
 }
 
 void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
@@ -215,7 +217,7 @@ void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
     _instanceBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe)
+void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -223,9 +225,9 @@ void RenderContextImpl::drawArrays(PrimitiveType primitiveType, std::size_t star
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #else
     if (wireframe)
-        primitiveType = PrimitiveType::LINE;
+        _primitiveType = GL_LINES;
 #endif
-    glDrawArrays(UtilsGL::toGLPrimitiveType(primitiveType), start, count);
+    glDrawArrays(_primitiveType, start, count);
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -233,11 +235,7 @@ void RenderContextImpl::drawArrays(PrimitiveType primitiveType, std::size_t star
     cleanResources();
 }
 
-void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
-                                            std::size_t start,
-                                            std::size_t count,
-                                            int instanceCount,
-                                            bool wireframe)
+void RenderContextImpl::drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -245,9 +243,9 @@ void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #else
     if (wireframe)
-        primitiveType = PrimitiveType::LINE;
+        _primitiveType = GL_LINES;
 #endif
-    glDrawArraysInstanced(UtilsGL::toGLPrimitiveType(primitiveType), start, count, instanceCount);
+    glDrawArraysInstanced(_primitiveType, start, count, instanceCount);
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -255,11 +253,7 @@ void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
     cleanResources();
 }
 
-void RenderContextImpl::drawElements(PrimitiveType primitiveType,
-                                     IndexFormat indexType,
-                                     std::size_t count,
-                                     std::size_t offset,
-                                     bool wireframe)
+void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -267,11 +261,10 @@ void RenderContextImpl::drawElements(PrimitiveType primitiveType,
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #else
     if (wireframe)
-        primitiveType = PrimitiveType::LINE;
+        _primitiveType = GL_LINES;
 #endif
     __state->bindBuffer(BufferType::ELEMENT_ARRAY_BUFFER, _indexBuffer->internalHandle());
-    glDrawElements(UtilsGL::toGLPrimitiveType(primitiveType), count, UtilsGL::toGLIndexType(indexType),
-                   (GLvoid*)offset);
+    glDrawElements(_primitiveType, count, UtilsGL::toGLIndexType(indexType), (GLvoid*)offset);
     CHECK_GL_ERROR_DEBUG();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe)
@@ -280,8 +273,7 @@ void RenderContextImpl::drawElements(PrimitiveType primitiveType,
     cleanResources();
 }
 
-void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
-                                              IndexFormat indexType,
+void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
                                               std::size_t count,
                                               std::size_t offset,
                                               int instanceCount,
@@ -293,11 +285,10 @@ void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #else
     if (wireframe)
-        primitiveType = PrimitiveType::LINE;
+        _primitiveType = GL_LINES;
 #endif
     __state->bindBuffer(BufferType::ELEMENT_ARRAY_BUFFER, _indexBuffer->internalHandle());
-    glDrawElementsInstanced(UtilsGL::toGLPrimitiveType(primitiveType), count, UtilsGL::toGLIndexType(indexType),
-                            (GLvoid*)offset, instanceCount);
+    glDrawElementsInstanced(_primitiveType, count, UtilsGL::toGLIndexType(indexType), (GLvoid*)offset, instanceCount);
     CHECK_GL_ERROR_DEBUG();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe)

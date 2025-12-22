@@ -43,9 +43,17 @@ enum class DynamicStateBits : uint32_t
     Viewport   = 1 << 0,
     Scissor    = 1 << 1,
     StencilRef = 1 << 2,
-    CullMode   = 1 << 3,
-    FrontFace  = 1 << 4,
 };
+AX_ENABLE_BITMASK_OPS(DynamicStateBits);
+
+enum class ExtendedDynamicStateBits : uint32_t
+{
+    None              = 0,
+    CullMode          = 1 << 0,
+    FrontFace         = 1 << 1,
+    PrimitiveTopology = 1 << 2,
+};
+AX_ENABLE_BITMASK_OPS(ExtendedDynamicStateBits);
 
 struct GPUFence
 {
@@ -56,13 +64,14 @@ struct GPUFence
     uint64_t fenceValue{0};
 };
 
-AX_ENABLE_BITMASK_OPS(DynamicStateBits);
-
 class RenderContextImpl : public RenderContext
 {
-    static constexpr DynamicStateBits PIPELINE_REQUIRED_DYNAMIC_BITS =
-        DynamicStateBits::Viewport | DynamicStateBits::Scissor | DynamicStateBits::StencilRef |
-        DynamicStateBits::CullMode | DynamicStateBits::FrontFace;
+    static constexpr DynamicStateBits PIPELINE_ALL_DYNAMIC_BITS =
+        DynamicStateBits::Viewport | DynamicStateBits::Scissor | DynamicStateBits::StencilRef;
+
+    static constexpr ExtendedDynamicStateBits PIPELINE_ALL_EXTENDED_DYNAMIC_BITS =
+        ExtendedDynamicStateBits::CullMode | ExtendedDynamicStateBits::FrontFace |
+        ExtendedDynamicStateBits::PrimitiveTopology;
 
 public:
     // Maximum number of VkCommandBuffer handles managed simultaneously by VulkanCommands.
@@ -96,7 +105,7 @@ public:
     bool beginFrame() override;
     void beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& descriptor) override;
     void updateDepthStencilState(const DepthStencilDesc& descriptor) override;
-    void updatePipelineState(const RenderTarget* rt, const PipelineDesc& descriptor, PrimitiveGroup) override;
+    void updatePipelineState(const RenderTarget* rt, const PipelineDesc& descriptor, PrimitiveType) override;
 
     void setViewport(int x, int y, unsigned int w, unsigned int h) override;
     void setCullMode(CullMode mode) override;
@@ -107,19 +116,10 @@ public:
     void setIndexBuffer(Buffer* buffer) override;
     void setInstanceBuffer(Buffer* buffer) override;
 
-    void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe) override;
-    void drawArraysInstanced(PrimitiveType primitiveType,
-                             std::size_t start,
-                             std::size_t count,
-                             int instanceCount,
-                             bool wireframe) override;
-    void drawElements(PrimitiveType primitiveType,
-                      IndexFormat indexType,
-                      std::size_t count,
-                      std::size_t offset,
-                      bool wireframe) override;
-    void drawElementsInstanced(PrimitiveType primitiveType,
-                               IndexFormat indexType,
+    void drawArrays(std::size_t start, std::size_t count, bool wireframe) override;
+    void drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool wireframe) override;
+    void drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool wireframe) override;
+    void drawElementsInstanced(IndexFormat indexType,
                                std::size_t count,
                                std::size_t offset,
                                int instanceCount,
@@ -167,6 +167,8 @@ private:
         bitmask::set(_inFlightDynamicDirtyBits[1], bits);
     }
 
+    void markExtendedDynamicStateDirty(ExtendedDynamicStateBits bits) noexcept;
+
     void applyPendingDynamicStates();
 
     DriverImpl* _driver{nullptr};
@@ -188,6 +190,8 @@ private:
 
     uint32_t _currentFrame{0};
     std::array<DynamicStateBits, MAX_FRAMES_IN_FLIGHT> _inFlightDynamicDirtyBits{DynamicStateBits::None};
+    std::array<ExtendedDynamicStateBits, MAX_FRAMES_IN_FLIGHT> _inFlightExtendedDynamicDirtyBits{
+        ExtendedDynamicStateBits::None};
     std::array<VkCommandBuffer, MAX_FRAMES_IN_FLIGHT> _commandBuffers;
     std::array<GPUFence, MAX_FRAMES_IN_FLIGHT> _inFlightFences{};
 
@@ -260,8 +264,11 @@ private:
 
     VkViewport _cachedViewport{};
     VkRect2D _cachedScissor{};
-    VkCullModeFlags _cachedCullMode{VK_CULL_MODE_NONE};
-    VkFrontFace _cachedFrontFace{VK_FRONT_FACE_COUNTER_CLOCKWISE};
+
+    ExtendedDynamicState _extendedDynamicState{};
+    // VkCullModeFlags _cachedCullMode{VK_CULL_MODE_NONE};
+    // VkFrontFace _cachedFrontFace{VK_FRONT_FACE_COUNTER_CLOCKWISE};
+    // VkPrimitiveTopology _cachedPrimitiveTopology{VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST};
 
     tlx::inlined_vector<VkDescriptorBufferInfo, 2> _descriptorBufferInfos;
 

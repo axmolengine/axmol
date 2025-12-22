@@ -276,9 +276,10 @@ void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 
 void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
                                             const PipelineDesc& desc,
-                                            PrimitiveGroup primitiveGroup)
+                                            PrimitiveType primitiveType)
 {
-    RenderContext::updatePipelineState(rt, desc, primitiveGroup);
+    _primitiveType = toMTLPrimitive(primitiveType);
+    RenderContext::updatePipelineState(rt, desc, primitiveType);
     _renderPipeline->update(rt, desc);
     [_mtlRenderEncoder setRenderPipelineState:_renderPipeline->getMTLRenderPipelineState()];
 }
@@ -332,51 +333,39 @@ void RenderContextImpl::setIndexBuffer(Buffer* buffer)
     [_mtlIndexBuffer retain];
 }
 
-void RenderContextImpl::drawArrays(PrimitiveType primitiveType,
-                                   std::size_t start,
-                                   std::size_t count,
-                                   bool wireframe /* unused */)
+void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool wireframe /* unused */)
 {
     prepareDrawing();
-    [_mtlRenderEncoder drawPrimitives:toMTLPrimitive(primitiveType) vertexStart:start vertexCount:count];
+    [_mtlRenderEncoder drawPrimitives:_primitiveType vertexStart:start vertexCount:count];
 }
 
-void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
-                                            std::size_t start,
+void RenderContextImpl::drawArraysInstanced(std::size_t start,
                                             std::size_t count,
                                             int instanceCount,
                                             bool wireframe /* unused */)
 {
     prepareDrawing();
-    [_mtlRenderEncoder drawPrimitives:toMTLPrimitive(primitiveType)
-                          vertexStart:start
-                          vertexCount:count
-                        instanceCount:instanceCount];
+    [_mtlRenderEncoder drawPrimitives:_primitiveType vertexStart:start vertexCount:count instanceCount:instanceCount];
 }
 
-void RenderContextImpl::drawElements(PrimitiveType primitiveType,
-                                     IndexFormat indexType,
-                                     std::size_t count,
-                                     std::size_t offset,
-                                     bool /* wireframe */)
+void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool /* wireframe */)
 {
     prepareDrawing();
-    [_mtlRenderEncoder drawIndexedPrimitives:toMTLPrimitive(primitiveType)
+    [_mtlRenderEncoder drawIndexedPrimitives:_primitiveType
                                   indexCount:count
                                    indexType:toMTLIndexType(indexType)
                                  indexBuffer:_mtlIndexBuffer
                            indexBufferOffset:offset];
 }
 
-void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
-                                              IndexFormat indexType,
+void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
                                               std::size_t count,
                                               std::size_t offset,
                                               int instanceCount,
                                               bool /* wireframe */)
 {
     prepareDrawing();
-    [_mtlRenderEncoder drawIndexedPrimitives:toMTLPrimitive(primitiveType)
+    [_mtlRenderEncoder drawIndexedPrimitives:_primitiveType
                                   indexCount:count
                                    indexType:toMTLIndexType(indexType)
                                  indexBuffer:_mtlIndexBuffer

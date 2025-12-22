@@ -51,7 +51,7 @@ public:
      */
     RenderPipelineImpl(id<MTLDevice> mtlDevice);
     ~RenderPipelineImpl();
-    void update(const RenderTarget* renderTarget, const PipelineDesc&) override;
+    void update(const RenderTarget* renderTarget, const PipelineDesc&);
 
     /**
      * Get a MTLRenderPipelineState object.

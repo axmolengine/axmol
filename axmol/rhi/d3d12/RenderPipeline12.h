@@ -76,7 +76,7 @@ public:
         _primitiveGroup                   = primitiveGroup;
     }
 
-    void update(const RenderTarget*, const PipelineDesc& desc) override;
+    void update(const RenderTarget*, const PipelineDesc& desc);
 
     ID3D12PipelineState* getPipelineState() const { return _activePSO.Get(); }
     RootSignatureEntry* getRootSignature() const { return _activeRootSignature; }

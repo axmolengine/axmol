@@ -29,9 +29,23 @@
 
 namespace tlx
 {
+struct sorted_unique_t
+{
+    explicit sorted_unique_t() = default;
+};
+inline constexpr sorted_unique_t sorted_unique{};
+
+struct sorted_equivalent_t
+{
+    explicit sorted_equivalent_t() = default;
+};
+inline constexpr sorted_equivalent_t sorted_equivalent{};
+
 template <bool _IsUnique, class _Kty, class _Pred, class _Container>
 class flat_set_base
 {
+    using _Sorted_t = std::conditional_t<_IsUnique, sorted_unique_t, sorted_equivalent_t>;
+
 public:
     using key_type       = _Kty;
     using value_type     = _Kty;
@@ -49,6 +63,13 @@ public:
 
     flat_set_base() : _Mycont(), _Mycomp() {}
     explicit flat_set_base(container_type cont, const key_compare& pred = key_compare())
+        : _Mycont(std::move(cont)), _Mycomp(pred)
+    {}
+    flat_set_base(_Sorted_t, container_type cont, const key_compare& pred = key_compare())
+        : _Mycont(std::move(cont)), _Mycomp(pred)
+    {
+    }
+    flat_set_base(_Sorted_t, const container_type& cont, const key_compare& pred = key_compare())
         : _Mycont(std::move(cont)), _Mycomp(pred)
     {}
 
@@ -80,6 +101,12 @@ public:
         if (it != _Mycont.end() && !_Mycomp(key, *it) && !_Mycomp(*it, key))
             return it;
         return _Mycont.end();
+    }
+
+    bool contains(const key_type& key) const
+    {
+        auto it = this->lower_bound(key);
+        return it != _Mycont.end() && !_Mycomp(key, *it) && !_Mycomp(*it, key);
     }
 
     iterator lower_bound(const key_type& key) { return std::lower_bound(_Mycont.begin(), _Mycont.end(), key, _Mycomp); }

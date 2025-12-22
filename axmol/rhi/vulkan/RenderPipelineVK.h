@@ -33,6 +33,15 @@ namespace ax::rhi::vk
 class DepthStencilStateImpl;
 class VertexLayoutImpl;
 class ProgramImpl;
+class DriverImpl;
+
+struct ExtendedDynamicState
+{
+    VkCullModeFlags cullMode : 2              = VK_CULL_MODE_NONE;
+    VkFrontFace frontFace : 1                 = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+    VkPrimitiveTopology primitiveTopology : 4 = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+    uint32_t reserved : 25                    = 0;
+};
 
 /**
  * @brief Vulkan-based RenderPipeline implementation
@@ -75,12 +84,12 @@ public:
 
     using DescriptorPool = std::array<tlx::pod_vector<DescriptorState>, MAX_FRAMES_IN_FLIGHT>;
 
-    explicit RenderPipelineImpl(VkDevice device);
+    explicit RenderPipelineImpl(DriverImpl* driver);
     ~RenderPipelineImpl();
 
     void prepareUpdate(DepthStencilStateImpl* ds) { _dsState = ds; }
 
-    void update(const RenderTarget*, const PipelineDesc& desc) override;
+    void update(const RenderTarget*, const PipelineDesc& desc, const ExtendedDynamicState& state);
 
     VkPipeline getVkPipeline() const { return _activePipeline; }
     VkPipelineLayout getVkPipelineLayout() const { return _activePipelineLayout; }
@@ -106,16 +115,20 @@ public:
     void removeCachedPipelines(VkRenderPass rp);
 
 private:
-    void initializePipelineDefaults();
+    void initializePipelineDefaults(DriverImpl* driver);
 
     void updateBlendState(const BlendDesc& blendDesc);
     void updateDescriptorSetLayouts(ProgramImpl* program);
     void updatePipelineLayout(ProgramImpl* program);
-    void updateGraphicsPipeline(const PipelineDesc& desc, VkRenderPass renderPass, ProgramImpl* program);
+    void updateGraphicsPipeline(const PipelineDesc& desc,
+                                const ExtendedDynamicState& states,
+                                VkRenderPass renderPass,
+                                ProgramImpl* program);
 
     VkDescriptorPool allocateDescriptorPool();
 
 private:
+    DriverImpl* _driverImpl{nullptr};
     VkDevice _device{VK_NULL_HANDLE};
 
     const DepthStencilStateImpl* _dsState{nullptr};

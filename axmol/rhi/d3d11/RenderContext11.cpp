@@ -47,7 +47,7 @@
 
 namespace ax::rhi::d3d11
 {
-static D3D11_PRIMITIVE_TOPOLOGY toD3DPrimitiveTopology(PrimitiveType type, bool wireframe)
+static D3D11_PRIMITIVE_TOPOLOGY toD3DPrimitiveTopology(PrimitiveType type)
 {
     switch (type)
     {
@@ -505,10 +505,12 @@ void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 
 void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
                                             const PipelineDesc& desc,
-                                            PrimitiveGroup primitiveGroup)
+                                            PrimitiveType primitiveType)
 {
-    RenderContext::updatePipelineState(rt, desc, primitiveGroup);
+    RenderContext::updatePipelineState(rt, desc, primitiveType);
     _renderPipeline->update(rt, desc);
+
+    _d3d11Context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType));
 }
 
 void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
@@ -647,30 +649,20 @@ void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
     _instanceBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe)
+void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool /*wireframe*/)
 {
     prepareDrawing();
-    _d3d11Context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType, wireframe));
     _d3d11Context->Draw(static_cast<UINT>(count), static_cast<UINT>(start));
 }
 
-void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
-                                            std::size_t start,
-                                            std::size_t count,
-                                            int instanceCount,
-                                            bool wireframe)
+void RenderContextImpl::drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool /*wireframe*/)
 {
     prepareDrawing();
-    _d3d11Context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType, wireframe));
     _d3d11Context->DrawInstanced(static_cast<UINT>(count), static_cast<UINT>(instanceCount), static_cast<UINT>(start),
                                  0);
 }
 
-void RenderContextImpl::drawElements(PrimitiveType primitiveType,
-                                     IndexFormat indexType,
-                                     std::size_t count,
-                                     std::size_t offset,
-                                     bool wireframe)
+void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool /*wireframe*/)
 {
     prepareDrawing();
 
@@ -683,16 +675,14 @@ void RenderContextImpl::drawElements(PrimitiveType primitiveType,
     const UINT indexCount = static_cast<UINT>(count);
 
     _d3d11Context->IASetIndexBuffer(_indexBuffer->internalHandle(), dxgiFmt, 0);
-    _d3d11Context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType, wireframe));
     _d3d11Context->DrawIndexed(indexCount, startIndex, 0);
 }
 
-void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
-                                              IndexFormat indexType,
+void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
                                               std::size_t count,
                                               std::size_t offset,
                                               int instanceCount,
-                                              bool wireframe)
+                                              bool /*wireframe*/)
 {
     prepareDrawing();
 
@@ -705,8 +695,6 @@ void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
     const UINT indexCount = static_cast<UINT>(count);
 
     _d3d11Context->IASetIndexBuffer(_indexBuffer->internalHandle(), dxgiFmt, 0);
-
-    _d3d11Context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType, wireframe));
     _d3d11Context->DrawIndexedInstanced(static_cast<UINT>(count), static_cast<UINT>(instanceCount), startIndex, 0, 0);
 }
 

@@ -42,6 +42,8 @@
 namespace ax::rhi::vk
 {
 
+static constexpr uint32_t kPreferredSwapchainImageCount = 3;
+
 /*
  * Helper: map PrimitiveType to VkPrimitiveTopology
  *
@@ -58,26 +60,23 @@ namespace ax::rhi::vk
  * By default, Axmol relies on TRIANGLE_LIST and other common topologies,
  * which cover the majority of rendering scenarios.
  */
+
+static constexpr VkPrimitiveTopology kPrimitiveTopologyMap[] = {
+    VK_PRIMITIVE_TOPOLOGY_POINT_LIST,     // POINT
+    VK_PRIMITIVE_TOPOLOGY_LINE_LIST,      // LINE
+    VK_PRIMITIVE_TOPOLOGY_LINE_STRIP,     // LINE_LOOP (Not present in Vulkan, LINE_STRIP)
+    VK_PRIMITIVE_TOPOLOGY_LINE_STRIP,     // LINE_STRIP
+    VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,  // TRIANGLE
+    VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP  // TRIANGLE_STRIP
+};
+
 static VkPrimitiveTopology toVkPrimitiveTopology(PrimitiveType type)
 {
-    switch (type)
+    if (type == PrimitiveType::LINE_LOOP) [[unlikely]]
     {
-    case PrimitiveType::POINT:
-        return VK_PRIMITIVE_TOPOLOGY_POINT_LIST;
-    case PrimitiveType::LINE:
-        return VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
-    case PrimitiveType::LINE_LOOP:
         AXLOGE("axmol-vulkan RHI doesn't support LINE_LOOP");
-        return VK_PRIMITIVE_TOPOLOGY_LINE_STRIP;  // Vulkan has no LINE_LOOP
-    case PrimitiveType::LINE_STRIP:
-        return VK_PRIMITIVE_TOPOLOGY_LINE_STRIP;
-    case PrimitiveType::TRIANGLE:
-        return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-    case PrimitiveType::TRIANGLE_STRIP:
-        return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP;
-    default:
-        return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     }
+    return kPrimitiveTopologyMap[(size_t)type];
 }
 
 // Helper: map IndexFormat to VkIndexType
@@ -460,9 +459,10 @@ void RenderContextImpl::recreateSwapchain()
         AXLOGE("axmol: Failed to create swapchain: extent width/height is 0");
     }
 
-    uint32_t imageCount = caps.minImageCount + 1;
-    if (caps.maxImageCount > 0 && imageCount > caps.maxImageCount)
-        imageCount = caps.maxImageCount;
+    const auto maxImageCount = caps.maxImageCount == 0 ? (std::numeric_limits<uint32_t>::max)() : caps.maxImageCount;
+    auto preferredImageCount = std::clamp(kPreferredSwapchainImageCount, caps.minImageCount, maxImageCount);
+    AXLOGI("Creating swapchain: {}x{}, format={}, presentMode={}, preferredImageCount={}", extent.width, extent.height,
+           static_cast<int>(surfaceFormat.format), static_cast<int>(chosenPresentMode), preferredImageCount);
 
     // Destroy old swapchain and swapchain images if exists
     if (_swapchain != VK_NULL_HANDLE)
@@ -476,7 +476,7 @@ void RenderContextImpl::recreateSwapchain()
     VkSwapchainCreateInfoKHR scInfo{};
     scInfo.sType            = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     scInfo.surface          = _surface;
-    scInfo.minImageCount    = imageCount;
+    scInfo.minImageCount    = preferredImageCount;
     scInfo.imageFormat      = surfaceFormat.format;
     scInfo.imageColorSpace  = surfaceFormat.colorSpace;
     scInfo.imageExtent      = extent;
@@ -497,7 +497,8 @@ void RenderContextImpl::recreateSwapchain()
     // Retrieve swapchain images
     uint32_t swapImageCount{1};
     vkGetSwapchainImagesKHR(_device, _swapchain, &swapImageCount, nullptr);
-    swapImageCount = std::clamp(swapImageCount, 1u, static_cast<uint32_t>(MAX_COLOR_ATTCHMENT));
+    AXLOGI("vkGetSwapchainImagesKHR returned {} images", swapImageCount);
+
     _swapchainImages.resize(swapImageCount);
     vkGetSwapchainImagesKHR(_device, _swapchain, &swapImageCount, _swapchainImages.data());
 
@@ -851,6 +852,15 @@ void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float w
     }
 }
 
+void RenderContextImpl::setStencilReferenceValue(uint32_t value)
+{
+    if (value != _stencilReferenceValue)
+    {
+        RenderContext::setStencilReferenceValue(value);
+        markDynamicStateDirty(DynamicStateBits::StencilRef);
+    }
+}
+
 void RenderContextImpl::setCullMode(CullMode mode)
 {
     VkCullModeFlags nativeMode{0};
@@ -867,10 +877,10 @@ void RenderContextImpl::setCullMode(CullMode mode)
         break;
     }
 
-    if (_cachedCullMode != nativeMode)
+    if (_extendedDynamicState.cullMode != nativeMode)
     {
-        _cachedCullMode = nativeMode;
-        markDynamicStateDirty(DynamicStateBits::CullMode);
+        _extendedDynamicState.cullMode = nativeMode;
+        markExtendedDynamicStateDirty(ExtendedDynamicStateBits::CullMode);
     }
 }
 
@@ -887,19 +897,19 @@ void RenderContextImpl::setWinding(Winding winding)
         break;
     }
 
-    if (frontFace != _cachedFrontFace)
+    if (_extendedDynamicState.frontFace != frontFace)
     {
-        _cachedFrontFace = frontFace;
-        markDynamicStateDirty(DynamicStateBits::FrontFace);
+        _extendedDynamicState.frontFace = frontFace;
+        markExtendedDynamicStateDirty(ExtendedDynamicStateBits::FrontFace);
     }
 }
 
-void RenderContextImpl::setStencilReferenceValue(uint32_t value)
+void RenderContextImpl::markExtendedDynamicStateDirty(ExtendedDynamicStateBits bits) noexcept
 {
-    if (value != _stencilReferenceValue)
+    if (_driver->isExtendedDynamicStateSupported())
     {
-        RenderContext::setStencilReferenceValue(value);
-        markDynamicStateDirty(DynamicStateBits::StencilRef);
+        bitmask::set(_inFlightExtendedDynamicDirtyBits[0], bits);
+        bitmask::set(_inFlightExtendedDynamicDirtyBits[1], bits);
     }
 }
 
@@ -932,12 +942,19 @@ void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
 
 void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
                                             const PipelineDesc& desc,
-                                            PrimitiveGroup primitiveGroup)
+                                            PrimitiveType primitiveType)
 {
-    RenderContext::updatePipelineState(rt, desc, primitiveGroup);
+    auto primitiveTopology = toVkPrimitiveTopology(primitiveType);
+    if (_extendedDynamicState.primitiveTopology != primitiveTopology)
+    {
+        _extendedDynamicState.primitiveTopology = primitiveTopology;
+        markExtendedDynamicStateDirty(ExtendedDynamicStateBits::PrimitiveTopology);
+    }
+
+    RenderContext::updatePipelineState(rt, desc, primitiveType);
     AXASSERT(_renderPipeline, "RenderPipelineImpl not set");
     _renderPipeline->prepareUpdate(_depthStencilState);
-    _renderPipeline->update(rt, desc);
+    _renderPipeline->update(rt, desc, _extendedDynamicState);
 
     // Bind pipeline
     auto pipeline = _renderPipeline->getVkPipeline();
@@ -945,7 +962,10 @@ void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
     {
         vkCmdBindPipeline(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
         _boundPipeline = pipeline;
-        bitmask::set(_inFlightDynamicDirtyBits[_currentFrame], PIPELINE_REQUIRED_DYNAMIC_BITS);
+        bitmask::set(_inFlightDynamicDirtyBits[_currentFrame], PIPELINE_ALL_DYNAMIC_BITS);
+
+        if (_driver->isExtendedDynamicStateSupported())
+            bitmask::set(_inFlightExtendedDynamicDirtyBits[_currentFrame], PIPELINE_ALL_EXTENDED_DYNAMIC_BITS);
     }
 }
 
@@ -972,16 +992,26 @@ void RenderContextImpl::applyPendingDynamicStates()
         bitmask::clear(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::StencilRef);
     }
 
-    // CullMode and FrontFace via EXT dynamic state if available
-    if (bitmask::any(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::CullMode))
+    if (_driver->isExtendedDynamicStateSupported())
     {
-        vkCmdSetCullModeEXT(_currentCmdBuffer, _cachedCullMode);
-        bitmask::clear(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::CullMode);
-    }
-    if (bitmask::any(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::FrontFace))
-    {
-        vkCmdSetFrontFaceEXT(_currentCmdBuffer, _cachedFrontFace);
-        bitmask::clear(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::FrontFace);
+        // CullMode and FrontFace via EXT dynamic state if available
+        if (bitmask::any(_inFlightExtendedDynamicDirtyBits[_currentFrame], ExtendedDynamicStateBits::CullMode))
+        {
+            vkCmdSetCullModeEXT(_currentCmdBuffer, _extendedDynamicState.cullMode);
+            bitmask::clear(_inFlightExtendedDynamicDirtyBits[_currentFrame], ExtendedDynamicStateBits::CullMode);
+        }
+        if (bitmask::any(_inFlightExtendedDynamicDirtyBits[_currentFrame], ExtendedDynamicStateBits::FrontFace))
+        {
+            vkCmdSetFrontFaceEXT(_currentCmdBuffer, _extendedDynamicState.frontFace);
+            bitmask::clear(_inFlightExtendedDynamicDirtyBits[_currentFrame], ExtendedDynamicStateBits::FrontFace);
+        }
+
+        if (bitmask::any(_inFlightExtendedDynamicDirtyBits[_currentFrame], ExtendedDynamicStateBits::PrimitiveTopology))
+        {
+            vkCmdSetPrimitiveTopologyEXT(_currentCmdBuffer, _extendedDynamicState.primitiveTopology);
+            bitmask::clear(_inFlightExtendedDynamicDirtyBits[_currentFrame],
+                           ExtendedDynamicStateBits::PrimitiveTopology);
+        }
     }
 }
 
@@ -1133,33 +1163,20 @@ void RenderContextImpl::prepareDrawing()
     }
 }
 
-void RenderContextImpl::drawArrays(PrimitiveType primitiveType,
-                                   std::size_t start,
-                                   std::size_t count,
-                                   bool /*wireframe*/)
+void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool /*wireframe*/)
 {
     prepareDrawing();
-    vkCmdSetPrimitiveTopologyEXT(_currentCmdBuffer, toVkPrimitiveTopology(primitiveType));
     vkCmdDraw(_currentCmdBuffer, static_cast<uint32_t>(count), 1, static_cast<uint32_t>(start), 0);
 }
 
-void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
-                                            std::size_t start,
-                                            std::size_t count,
-                                            int instanceCount,
-                                            bool /*wireframe*/)
+void RenderContextImpl::drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool /*wireframe*/)
 {
     prepareDrawing();
-    vkCmdSetPrimitiveTopologyEXT(_currentCmdBuffer, toVkPrimitiveTopology(primitiveType));
     vkCmdDraw(_currentCmdBuffer, static_cast<uint32_t>(count), static_cast<uint32_t>(instanceCount),
               static_cast<uint32_t>(start), 0);
 }
 
-void RenderContextImpl::drawElements(PrimitiveType primitiveType,
-                                     IndexFormat indexType,
-                                     std::size_t count,
-                                     std::size_t offset,
-                                     bool /*wireframe*/)
+void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool /*wireframe*/)
 {
     prepareDrawing();
 
@@ -1167,14 +1184,11 @@ void RenderContextImpl::drawElements(PrimitiveType primitiveType,
     _indexBuffer->setLastFenceValue(_frameFenceValue);
     VkIndexType vkIndexType = toVkIndexType(indexType);
     vkCmdBindIndexBuffer(_currentCmdBuffer, _indexBuffer->internalHandle(), 0, vkIndexType);
-
-    vkCmdSetPrimitiveTopologyEXT(_currentCmdBuffer, toVkPrimitiveTopology(primitiveType));
     vkCmdDrawIndexed(_currentCmdBuffer, static_cast<uint32_t>(count), 1,
                      static_cast<uint32_t>(offset / (indexType == IndexFormat::U_SHORT ? 2u : 4u)), 0, 0);
 }
 
-void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
-                                              IndexFormat indexType,
+void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
                                               std::size_t count,
                                               std::size_t offset,
                                               int instanceCount,
@@ -1186,8 +1200,6 @@ void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
     _indexBuffer->setLastFenceValue(_frameFenceValue);
     VkIndexType vkIndexType = toVkIndexType(indexType);
     vkCmdBindIndexBuffer(_currentCmdBuffer, _indexBuffer->internalHandle(), 0, vkIndexType);
-
-    vkCmdSetPrimitiveTopologyEXT(_currentCmdBuffer, toVkPrimitiveTopology(primitiveType));
     vkCmdDrawIndexed(_currentCmdBuffer, static_cast<uint32_t>(count), static_cast<uint32_t>(instanceCount),
                      static_cast<uint32_t>(offset / (indexType == IndexFormat::U_SHORT ? 2u : 4u)), 0, 0);
 }

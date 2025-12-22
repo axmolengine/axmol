@@ -28,6 +28,31 @@
 #include <glad/vulkan.h>
 #include <utility>
 
+// Helper to log Vulkan error with context
+#define VK_LOG_ERROR(mesg, detail) AXLOGE("{} - {} in {} {} line {}", mesg, detail, __FILE__, __FUNCTION__, __LINE__)
+
+// Verify boolean expression
+#define VK_VERIFY(expr, mesg)          \
+    do                                 \
+    {                                  \
+        if (!(expr))                   \
+        {                              \
+            VK_LOG_ERROR(mesg, #expr); \
+            std::abort();              \
+        }                              \
+    } while (false)
+
+// Verify Vulkan result
+#define VK_VERIFY_RESULT(vkRet, mesg)                                                         \
+    do                                                                                        \
+    {                                                                                         \
+        if ((vkRet) != VK_SUCCESS)                                                            \
+        {                                                                                     \
+            VK_LOG_ERROR(mesg, fmt::format("Vulkan error code {}", static_cast<int>(vkRet))); \
+            std::abort();                                                                     \
+        }                                                                                     \
+    } while (false)
+
 namespace ax::rhi::vk
 {
 /**

@@ -43,7 +43,7 @@ class RenderPipelineImpl : public RenderPipeline
 {
 public:
     RenderPipelineImpl(ID3D11Device* device, ID3D11DeviceContext* context) : _device(device), _context(context) {}
-    void update(const RenderTarget*, const PipelineDesc& desc) override;
+    void update(const RenderTarget*, const PipelineDesc& desc);
 
 private:
     ID3D11Device* _device         = nullptr;

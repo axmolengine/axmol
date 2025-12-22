@@ -101,6 +101,8 @@ void RenderTargetImpl::rebuildSwapchainAttachments(const tlx::pod_vector<VkImage
     if (images.empty() || imageViews.empty())
         return;
 
+    VK_VERIFY(images.size() <= MAX_COLOR_ATTCHMENT, "Too many swapchain images");
+
     _dirtyFlags = TargetBufferFlags::DEPTH_AND_STENCIL;
 
     // destroy old attachments

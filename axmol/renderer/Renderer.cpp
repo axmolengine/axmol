@@ -58,20 +58,6 @@
 namespace ax
 {
 
-static constexpr rhi::PrimitiveGroup kPrimitiveTypeToGroup[] = {
-    /* POINT          */ rhi::PrimitiveGroup::Point,
-    /* LINE           */ rhi::PrimitiveGroup::Line,
-    /* LINE_LOOP      */ rhi::PrimitiveGroup::Line,
-    /* LINE_STRIP     */ rhi::PrimitiveGroup::Line,
-    /* TRIANGLE       */ rhi::PrimitiveGroup::Triangle,
-    /* TRIANGLE_STRIP */ rhi::PrimitiveGroup::Triangle,
-};
-
-static inline rhi::PrimitiveGroup toPrimitiveGroup(rhi::PrimitiveType type)
-{
-    return kPrimitiveTypeToGroup[static_cast<uint32_t>(type)];
-}
-
 // helper
 static bool compareRenderCommand(RenderCommand* a, RenderCommand* b)
 {
@@ -710,8 +696,8 @@ void Renderer::drawBatchedTriangles()
     for (int i = 0; i < batchesTotal; ++i)
     {
         auto& drawInfo = _triBatchesToDraw[i];
-        _context->updatePipelineState(_currentRT, drawInfo.cmd->getPipelineDesc(), rhi::PrimitiveGroup::Triangle);
-        _context->drawElements(rhi::PrimitiveType::TRIANGLE, rhi::IndexFormat::U_SHORT, drawInfo.indicesToDraw,
+        _context->updatePipelineState(_currentRT, drawInfo.cmd->getPipelineDesc(), rhi::PrimitiveType::TRIANGLE);
+        _context->drawElements(rhi::IndexFormat::U_SHORT, drawInfo.indicesToDraw,
                                drawInfo.offset * sizeof(_indices[0]));
 
         _drawnBatches++;
@@ -740,33 +726,32 @@ void Renderer::drawCustomCommand(RenderCommand* command)
     _context->setVertexBuffer(cmd->getVertexBuffer());
 
     const auto primitiveType = cmd->getPrimitiveType();
-    _context->updatePipelineState(_currentRT, cmd->getPipelineDesc(), toPrimitiveGroup(primitiveType));
+    _context->updatePipelineState(_currentRT, cmd->getPipelineDesc(), primitiveType);
 
     auto drawType = cmd->getDrawType();
     switch (drawType)
     {
     case CustomCommand::DrawType::ELEMENT:
         _context->setIndexBuffer(cmd->getIndexBuffer());
-        _context->drawElements(primitiveType, cmd->getIndexFormat(), cmd->getIndexDrawCount(),
-                               cmd->getIndexDrawOffset(), cmd->isWireframe());
+        _context->drawElements(cmd->getIndexFormat(), cmd->getIndexDrawCount(), cmd->getIndexDrawOffset(),
+                               cmd->isWireframe());
         _drawnVertices += cmd->getIndexDrawCount();
         break;
     case CustomCommand::DrawType::ELEMENT_INSTANCED:
         _context->setIndexBuffer(cmd->getIndexBuffer());
         _context->setInstanceBuffer(cmd->getInstanceBuffer());
-        _context->drawElementsInstanced(primitiveType, cmd->getIndexFormat(), cmd->getIndexDrawCount(),
-                                        cmd->getIndexDrawOffset(), cmd->getInstanceCount(), cmd->isWireframe());
+        _context->drawElementsInstanced(cmd->getIndexFormat(), cmd->getIndexDrawCount(), cmd->getIndexDrawOffset(),
+                                        cmd->getInstanceCount(), cmd->isWireframe());
         _drawnVertices += cmd->getIndexDrawCount() * cmd->getInstanceCount();
         break;
     case CustomCommand::DrawType::ARRAY:
-        _context->drawArrays(cmd->getPrimitiveType(), cmd->getVertexDrawStart(), cmd->getVertexDrawCount(),
-                             cmd->isWireframe());
+        _context->drawArrays(cmd->getVertexDrawStart(), cmd->getVertexDrawCount(), cmd->isWireframe());
         _drawnVertices += cmd->getVertexDrawCount();
         break;
     case CustomCommand::DrawType::ARRAY_INSTANCED:
         _context->setInstanceBuffer(cmd->getInstanceBuffer());
-        _context->drawArraysInstanced(primitiveType, cmd->getVertexDrawStart(), cmd->getVertexDrawCount(),
-                                      cmd->getInstanceCount(), cmd->isWireframe());
+        _context->drawArraysInstanced(cmd->getVertexDrawStart(), cmd->getVertexDrawCount(), cmd->getInstanceCount(),
+                                      cmd->isWireframe());
         _drawnVertices += cmd->getVertexDrawCount() * cmd->getInstanceCount();
         break;
     default:;

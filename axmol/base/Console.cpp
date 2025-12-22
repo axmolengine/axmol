@@ -116,15 +116,16 @@ ssize_t Console::Utility::mydprintf(int sock, const char* format, ...)
     char buf[16386];
 
     va_start(args, format);
-    vsnprintf(buf, sizeof(buf), format, args);
+    int n = vsnprintf(buf, sizeof(buf), format, args);
     va_end(args);
-    return sendToConsole(sock, buf, strlen(buf));
+    if (n > 0)
+        return sendToConsole(sock, buf, n);
+    return 0;
 }
 
 void Console::Utility::sendPrompt(int fd)
 {
-    const char* prompt = _prompt.c_str();
-    send(fd, prompt, strlen(prompt), 0);
+    send(fd, _prompt.c_str(), static_cast<int>(_prompt.size()), 0);
 }
 
 void Console::Utility::setPrompt(std::string_view prompt)
