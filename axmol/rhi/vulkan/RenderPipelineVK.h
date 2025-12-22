@@ -37,10 +37,10 @@ class DriverImpl;
 
 struct ExtendedDynamicState
 {
-    VkCullModeFlags cullMode : 2              = VK_CULL_MODE_NONE;
-    VkFrontFace frontFace : 1                 = VK_FRONT_FACE_COUNTER_CLOCKWISE;
-    VkPrimitiveTopology primitiveTopology : 4 = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-    uint32_t reserved : 25                    = 0;
+    VkCullModeFlags cullMode : 4              = VK_CULL_MODE_NONE;
+    VkFrontFace frontFace : 4                 = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+    VkPrimitiveTopology primitiveTopology : 8 = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+    uint32_t reserved : 16                    = 0;
 };
 
 /**

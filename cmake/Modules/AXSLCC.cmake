@@ -163,7 +163,7 @@ function(ax_add_shader_target target_name)
     elseif(AX_RENDER_API STREQUAL "vk")
       set(OUT_LANG "SPIRV")
       set(SC_DEFINES "AXSLC_TARGET_SPIRV")
-      set(SC_PROFILE "130")
+      set(SC_PROFILE "100") # SPIR-V 1.0
       list(APPEND SC_FLAGS "--lang=spirv" "--profile=${SC_PROFILE}")
     else()
       message(FATAL_ERROR "Unsupported AX_RENDER_API=${AX_RENDER_API}")

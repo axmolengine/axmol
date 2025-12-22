@@ -266,9 +266,6 @@ private:
     VkRect2D _cachedScissor{};
 
     ExtendedDynamicState _extendedDynamicState{};
-    // VkCullModeFlags _cachedCullMode{VK_CULL_MODE_NONE};
-    // VkFrontFace _cachedFrontFace{VK_FRONT_FACE_COUNTER_CLOCKWISE};
-    // VkPrimitiveTopology _cachedPrimitiveTopology{VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST};
 
     tlx::inlined_vector<VkDescriptorBufferInfo, 2> _descriptorBufferInfos;
 
