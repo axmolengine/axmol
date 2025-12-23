@@ -380,10 +380,10 @@ struct PrivateVideoContext
 
 std::unique_ptr<MediaEngineFactory> _meFactory = MediaEngineFactory::create();
 
-const char* BODY_IMAGE_1_PIXEL_HEIGHT =
-    "iVBORw0KGgoAAAANSUhEUgAAAAwAAAABCAMAAADdNb8LAAAAA1BMVEX///+nxBvIAAAACklEQVR4AWNABgAADQABYc2cpAAAAABJRU5ErkJggg==";
+static constexpr std::string_view BODY_IMAGE_1_PIXEL_HEIGHT =
+    "iVBORw0KGgoAAAANSUhEUgAAAAwAAAABCAMAAADdNb8LAAAAA1BMVEX///+nxBvIAAAACklEQVR4AWNABgAADQABYc2cpAAAAABJRU5ErkJggg=="sv;
 
-const char* BODY_IMAGE_1_PIXEL_HEIGHT_KEY = "/__bodyImage";
+static constexpr std::string_view BODY_IMAGE_1_PIXEL_HEIGHT_KEY = "/__bodyImage"sv;
 
 constexpr auto TIMELINE_BAR_HEIGHT = 12.f;
 

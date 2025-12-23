@@ -73,7 +73,7 @@ public:
         static bool isFloat(std::string_view myString);
 
         /** send a message to console */
-        static ssize_t sendToConsole(int fd, const void* buffer, size_t length, int flags = 0);
+        static ssize_t sendToConsole(int fd, std::string_view mesg, int flags = 0);
 
         /** my dprintf() */
         static ssize_t mydprintf(int sock, const char* format, ...);
@@ -279,7 +279,7 @@ private:
     void printFileUtils(socket_native_type fd);
 
     /** send help message to console */
-    static void sendHelp(socket_native_type fd, const tlx::string_map<Command*>& commands, const char* msg);
+    static void sendHelp(socket_native_type fd, const tlx::string_map<Command*>& commands, std::string_view msg);
 };
 
 }  // namespace ax

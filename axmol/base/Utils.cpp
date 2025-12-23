@@ -296,14 +296,14 @@ Rect getCascadeBoundingBox(Node* node)
     return cbb;
 }
 
-Sprite* createSpriteFromBase64Cached(const char* base64String, const char* key)
+Sprite* createSpriteFromBase64Cached(std::string_view base64String, std::string_view key)
 {
     Texture2D* texture = Director::getInstance()->getTextureCache()->getTextureForKey(key);
 
     if (texture == nullptr)
     {
         unsigned char* decoded;
-        int length = base64Decode((const unsigned char*)base64String, (unsigned int)strlen(base64String), &decoded);
+        int length = base64Decode((const unsigned char*)base64String.data(), (unsigned int)base64String.size(), &decoded);
 
         Image* image     = new Image();
         bool imageResult = image->initWithImageData(decoded, length, true);
@@ -324,10 +324,10 @@ Sprite* createSpriteFromBase64Cached(const char* base64String, const char* key)
     return sprite;
 }
 
-Sprite* createSpriteFromBase64(const char* base64String)
+Sprite* createSpriteFromBase64(std::string_view base64String)
 {
     unsigned char* decoded;
-    int length = base64Decode((const unsigned char*)base64String, (unsigned int)strlen(base64String), &decoded);
+    int length = base64Decode((const unsigned char*)base64String.data(), (unsigned int)base64String.size(), &decoded);
 
     Image* image     = new Image();
     bool imageResult = image->initWithImageData(decoded, length, decoded);

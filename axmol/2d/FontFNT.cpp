@@ -100,21 +100,15 @@ BMFontConfiguration* BMFontConfiguration::create(std::string_view FNTfile)
 bool BMFontConfiguration::initWithFNTfile(std::string_view FNTfile)
 {
     _characterSet = this->parseConfigFile(FNTfile);
-
-    if (!_characterSet)
-    {
-        return false;
-    }
-
-    return true;
+    return !_characterSet.empty();
 }
 
-std::set<unsigned int>* BMFontConfiguration::getCharacterSet() const
+const std::set<unsigned int>& BMFontConfiguration::getCharacterSet() const
 {
     return _characterSet;
 }
 
-BMFontConfiguration::BMFontConfiguration() : _commonHeight(0), _characterSet(nullptr), _fontSize(0) {}
+BMFontConfiguration::BMFontConfiguration() : _commonHeight(0), _characterSet(), _fontSize(0) {}
 
 BMFontConfiguration::~BMFontConfiguration()
 {
@@ -122,7 +116,6 @@ BMFontConfiguration::~BMFontConfiguration()
     this->purgeFontDefDictionary();
     this->purgeKerningDictionary();
     _atlasName.clear();
-    AX_SAFE_DELETE(_characterSet);
 }
 
 std::string BMFontConfiguration::description() const
@@ -142,30 +135,30 @@ void BMFontConfiguration::purgeFontDefDictionary()
     _fontDefDictionary.clear();
 }
 
-std::set<unsigned int>* BMFontConfiguration::parseConfigFile(std::string_view controlFile)
+std::set<unsigned int> BMFontConfiguration::parseConfigFile(std::string_view controlFile)
 {
     std::string data = FileUtils::getInstance()->getStringFromFile(controlFile);
     if (data.empty())
     {
-        return nullptr;
+        return {};
     }
-    if (data.size() >= (sizeof("BMP") - 1) && memcmp("BMF", data.c_str(), sizeof("BMP") - 1) == 0)
+    if (data.starts_with("BMF"sv))
     {
         // Handle fnt file of binary format
-        std::set<unsigned int>* ret =
+        std::set<unsigned int> ret =
             parseBinaryConfigFile((unsigned char*)&data.front(), static_cast<uint32_t>(data.size()), controlFile);
         return ret;
     }
     if (data[0] == 0)
     {
         AXLOGW("axmol: Error parsing FNTfile {}", controlFile);
-        return nullptr;
+        return {};
     }
     auto contents = data.c_str();
+    auto contentsLen = data.size();
 
-    std::set<unsigned int>* validCharsString = new std::set<unsigned int>();
+    std::set<unsigned int> validCharsString;
 
-    auto contentsLen = strlen(contents);
     char line[512]   = {0};
 
     auto next         = strchr(contents, '\n');
@@ -212,7 +205,7 @@ std::set<unsigned int>* BMFontConfiguration::parseConfigFile(std::string_view co
         {
             // Parse the current line and create a new CharDef
             unsigned int charID = this->parseCharacterDefinition(line);
-            validCharsString->insert(charID);
+            validCharsString.insert(charID);
         }
         else if (memcmp(line, "kerning first", 13) == 0)
         {
@@ -223,14 +216,13 @@ std::set<unsigned int>* BMFontConfiguration::parseConfigFile(std::string_view co
     return validCharsString;
 }
 
-std::set<unsigned int>* BMFontConfiguration::parseBinaryConfigFile(unsigned char* pData,
-                                                                   uint32_t size,
-                                                                   std::string_view controlFile)
+std::set<unsigned int> BMFontConfiguration::parseBinaryConfigFile(unsigned char* pData,
+                                                                 uint32_t size,
+                                                                 std::string_view controlFile)
 {
     /* based on http://www.angelcode.com/products/bmfont/doc/file_format.html file format */
 
-    std::set<unsigned int>* validCharsString = new std::set<unsigned int>();
-
+    std::set<unsigned int> validCharsString;
     uint32_t remains = size;
 
     AXASSERT(pData[3] == 3, "Only version 3 is supported");
@@ -367,7 +359,7 @@ std::set<unsigned int>* BMFontConfiguration::parseBinaryConfigFile(unsigned char
                 memcpy(&xadvance, pData + (i * 20) + 16, 2);
                 fontDef.xAdvance = xadvance;
 
-                validCharsString->insert(fontDef.charID);
+                validCharsString.insert(fontDef.charID);
             }
         }
         else if (blockId == 5)
@@ -662,7 +654,7 @@ FontAtlas* FontFNT::newFontAtlas()
     if (_configuration->_fontDefDictionary.empty())
         return nullptr;
 
-    size_t numGlyphs = _configuration->_characterSet->size();
+    size_t numGlyphs = _configuration->_characterSet.size();
     if (numGlyphs == 0)
         return nullptr;
 

@@ -28,13 +28,13 @@ THE SOFTWARE.
 #include "axmol/2d/Sprite.h"
 #include "axmol/base/Utils.h"
 
-static const char* CIRCLE_IMAGE =
+static constexpr std::string_view CIRCLE_IMAGE =
     "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAA8ElEQVRIx62VyRGCQBBF+6gWRCEmYDIQkhiBCgHhSclC8YqWzOV5oVzKAYZp3r1/"
     "9fpbxAIBMTsKrjx5cqVgR0wgLhCRUWOjJiPqD56xoaGPhpRZV/iSEy6crHmw5oIrF9b/lVeMofrJgjlnxlIy/"
     "wik+JB+mme8BExbBhm+5CJC2LE2LtSEQoyGWDioBA5CoRIohJtK4CYDxzNEM4GAugR1E9VjVC+"
     "SZpXvhCJCrjomESLvc17pDGX7bWmlh6UtpjPVCWy9zaJ0TD7qfm3pwERMz2trRVZk3K3BD/L34AY+dEDCniMVBkPFkT2J/b2/"
-    "AIV+dRpFLOYoAAAAAElFTkSuQmCC";
-static const char* CIRCLE_IMAGE_KEY = "/__circleImage";
+    "AIV+dRpFLOYoAAAAAElFTkSuQmCC"sv;
+static constexpr std::string_view CIRCLE_IMAGE_KEY = "/__circleImage"sv;
 
 namespace ax
 {

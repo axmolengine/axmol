@@ -93,7 +93,7 @@ public:  //@public
     std::unordered_map<uint64_t /* key */, int /* amount */> _kerningDictionary;
 
     // Character Set defines the letters that actually exist in the font
-    std::set<unsigned int>* _characterSet;
+    std::set<unsigned int> _characterSet;
 
     //! Font size
     int _fontSize;
@@ -120,11 +120,11 @@ public:
     std::string_view getAtlasName() { return _atlasName; }
     void setAtlasName(std::string_view atlasName) { _atlasName = atlasName; }
 
-    std::set<unsigned int>* getCharacterSet() const;
+    const std::set<unsigned int>& getCharacterSet() const;
 
 protected:
-    virtual std::set<unsigned int>* parseConfigFile(std::string_view controlFile);
-    virtual std::set<unsigned int>* parseBinaryConfigFile(unsigned char* pData,
+    virtual std::set<unsigned int> parseConfigFile(std::string_view controlFile);
+    virtual std::set<unsigned int> parseBinaryConfigFile(unsigned char* pData,
                                                           uint32_t size,
                                                           std::string_view controlFile);
 

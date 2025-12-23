@@ -146,14 +146,14 @@ AX_DLL Rect getCascadeBoundingBox(Node* node);
 
  * @return Returns an instance of sprite
  */
-AX_DLL Sprite* createSpriteFromBase64Cached(const char* base64String, const char* key);
+AX_DLL Sprite* createSpriteFromBase64Cached(std::string_view base64String, std::string_view key);
 
 /**
 * Create a sprite instance from base64 encoded image.
 
 * @return Returns an instance of sprite
 */
-AX_DLL Sprite* createSpriteFromBase64(const char* base64String);
+AX_DLL Sprite* createSpriteFromBase64(std::string_view base64String);
 
 /**
  * Find a child by name recursively

@@ -35,15 +35,15 @@ namespace ax
 namespace ui
 {
 
-static const char* HALF_CIRCLE_IMAGE =
+static constexpr std::string_view HALF_CIRCLE_IMAGE =
     "iVBORw0KGgoAAAANSUhEUgAAAAwAAAAGCAMAAADAMI+zAAAAJ1BMVEX///////////////////////////////////////////////////"
     "9Ruv0SAAAADHRSTlMABgcbbW7Hz9Dz+PmlcJP5AAAAMElEQVR4AUXHwQ2AQAhFwYcLH1H6r1djzDK3ASxUpTBeK/"
-    "uTCyz7dx54b44m4p5cD1MwAooEJyk3AAAAAElFTkSuQmCC";
-static const char* BODY_IMAGE_1_PIXEL_HEIGHT =
-    "iVBORw0KGgoAAAANSUhEUgAAAAwAAAABCAMAAADdNb8LAAAAA1BMVEX///+nxBvIAAAACklEQVR4AWNABgAADQABYc2cpAAAAABJRU5ErkJggg==";
+    "uTCyz7dx54b44m4p5cD1MwAooEJyk3AAAAAElFTkSuQmCC"sv;
+static constexpr std::string_view BODY_IMAGE_1_PIXEL_HEIGHT =
+    "iVBORw0KGgoAAAANSUhEUgAAAAwAAAABCAMAAADdNb8LAAAAA1BMVEX///+nxBvIAAAACklEQVR4AWNABgAADQABYc2cpAAAAABJRU5ErkJggg=="sv;
 
-static const char* HALF_CIRCLE_IMAGE_KEY         = "/__halfCircleImage";
-static const char* BODY_IMAGE_1_PIXEL_HEIGHT_KEY = "/__bodyImage";
+static constexpr std::string_view HALF_CIRCLE_IMAGE_KEY         = "/__halfCircleImage"sv;
+static constexpr std::string_view BODY_IMAGE_1_PIXEL_HEIGHT_KEY = "/__bodyImage"sv;
 
 static const Color32 DEFAULT_COLOR(52, 65, 87, 255);
 static const float DEFAULT_MARGIN            = 20;

@@ -84,18 +84,16 @@ bool Console::Utility::isFloat(std::string_view myString)
     return ss.eof() && !ss.fail();
 }
 
-ssize_t Console::Utility::sendToConsole(int fd, const void* buffer, size_t length, int flags)
+ssize_t Console::Utility::sendToConsole(int fd, std::string_view mesg, int flags)
 {
-    if (_prompt.length() == length)
+    if (_prompt == mesg)
     {
-        if (strncmp(_prompt.c_str(), static_cast<const char*>(buffer), length) == 0)
-        {
-            fprintf(stderr, "bad parameter error: a buffer is the prompt string.\n");
-            return 0;
-        }
+        fprintf(stderr, "bad parameter error: a buffer is the prompt string.\n");
+        return 0;
     }
 
-    const char* buf = static_cast<const char*>(buffer);
+    const char* buf = static_cast<const char*>(mesg.data());
+    auto length     = mesg.size();
     ssize_t retLen  = 0;
     for (size_t i = 0; i < length;)
     {
@@ -119,7 +117,7 @@ ssize_t Console::Utility::mydprintf(int sock, const char* format, ...)
     int n = vsnprintf(buf, sizeof(buf), format, args);
     va_end(args);
     if (n > 0)
-        return sendToConsole(sock, buf, n);
+        return sendToConsole(sock, std::string_view{buf, static_cast<size_t>(n)});
     return 0;
 }
 
@@ -260,7 +258,7 @@ void Console::Command::commandHelp(int fd, std::string_view /*args*/)
 
     if (!_subCommands.empty())
     {
-        sendHelp(fd, _subCommands, "");
+        sendHelp(fd, _subCommands, ""sv);
     }
 }
 
@@ -584,7 +582,7 @@ void Console::loop()
                 {
                     for (auto&& fd : _fds)
                     {
-                        Console::Utility::sendToConsole(fd, str.c_str(), str.length());
+                        Console::Utility::sendToConsole(fd, str);
                     }
                 }
                 _DebugStrings.clear();
@@ -692,8 +690,8 @@ bool Console::parseCommand(socket_native_type fd)
         }
         else
         {
-            const char err[] = "upload: invalid args! Type 'help' for options\n";
-            Console::Utility::sendToConsole(fd, err, strlen(err));
+            std::string_view err = "upload: invalid args! Type 'help' for options\n"sv;
+            Console::Utility::sendToConsole(fd, err);
             Console::Utility::sendPrompt(fd);
             return true;
         }
@@ -708,9 +706,9 @@ bool Console::parseCommand(socket_native_type fd)
         auto r   = readline(fd, pb, sizeof(buf) - 6);
         if (r < 0)
         {
-            const char err[] = "Unknown error!\n";
+            std::string_view err = "Unknown error!\n"sv;
             Console::Utility::sendPrompt(fd);
-            Console::Utility::sendToConsole(fd, err, strlen(err));
+            Console::Utility::sendToConsole(fd, err);
             return false;
         }
     }
@@ -725,7 +723,7 @@ bool Console::parseCommand(socket_native_type fd)
     }
     catch (const std::runtime_error& e)
     {
-        Console::Utility::sendToConsole(fd, e.what(), strlen(e.what()));
+        Console::Utility::sendToConsole(fd, e.what());
     }
 
     Console::Utility::sendPrompt(fd);
@@ -1025,7 +1023,7 @@ void Console::commandFpsSubCommandOnOff(socket_native_type /*fd*/, std::string_v
 
 void Console::commandHelp(socket_native_type fd, std::string_view /*args*/)
 {
-    sendHelp(fd, _commands, "\nAvailable commands:\n");
+    sendHelp(fd, _commands, "\nAvailable commands:\n"sv);
 }
 
 void Console::commandProjection(socket_native_type fd, std::string_view /*args*/)
@@ -1160,8 +1158,8 @@ void Console::commandTouchSubCommandTap(socket_native_type fd, std::string_view 
     }
     else
     {
-        const char msg[] = "touch: invalid arguments.\n";
-        Console::Utility::sendToConsole(fd, msg, strlen(msg));
+        std::string_view msg = "touch: invalid arguments.\n"sv;
+        Console::Utility::sendToConsole(fd, msg);
     }
 }
 
@@ -1271,8 +1269,8 @@ void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_vie
     }
     else
     {
-        const char msg[] = "touch: invalid arguments.\n";
-        Console::Utility::sendToConsole(fd, msg, strlen(msg));
+        std::string_view msg = "touch: invalid arguments.\n"sv;
+        Console::Utility::sendToConsole(fd, msg);
     }
 }
 
@@ -1293,8 +1291,8 @@ void Console::commandUpload(socket_native_type fd)
             {
                 if (c == x)
                 {
-                    const char err[] = "upload: invalid file name!\n";
-                    Console::Utility::sendToConsole(fd, err, strlen(err));
+                    std::string_view err = "upload: invalid file name!\n"sv;
+                    Console::Utility::sendToConsole(fd, err);
                     return;
                 }
             }
@@ -1325,8 +1323,8 @@ void Console::commandUpload(socket_native_type fd)
     auto fs = FileUtils::getInstance()->openFileStream(filepath, IFileStream::Mode::WRITE);
     if (!fs)
     {
-        const char err[] = "can't create file!\n";
-        Console::Utility::sendToConsole(fd, err, strlen(err));
+        std::string_view err = "can't create file!\n"sv;
+        Console::Utility::sendToConsole(fd, err);
         return;
     }
 
@@ -1365,7 +1363,7 @@ int Console::printSceneGraph(socket_native_type fd, Node* node, int level)
 {
     int total = 1;
     for (int i = 0; i < level; ++i)
-        Console::Utility::sendToConsole(fd, "-", 1);
+        Console::Utility::sendToConsole(fd, "-"sv);
 
     Console::Utility::mydprintf(fd, " %s\n", node->getDescription().c_str());
 
@@ -1377,7 +1375,7 @@ int Console::printSceneGraph(socket_native_type fd, Node* node, int level)
 
 void Console::printSceneGraphBoot(socket_native_type fd)
 {
-    Console::Utility::sendToConsole(fd, "\n", 1);
+    Console::Utility::sendToConsole(fd, "\n"sv);
     auto scene = Director::getInstance()->getRunningScene();
     int total  = printSceneGraph(fd, scene, 0);
     Console::Utility::mydprintf(fd, "Total Nodes: %d\n", total);
@@ -1407,9 +1405,10 @@ void Console::printFileUtils(socket_native_type fd)
     Console::Utility::sendPrompt(fd);
 }
 
-void Console::sendHelp(socket_native_type fd, const tlx::string_map<Command*>& commands, const char* msg)
+void Console::sendHelp(socket_native_type fd, const tlx::string_map<Command*>& commands, std::string_view msg)
 {
-    Console::Utility::sendToConsole(fd, msg, strlen(msg));
+    if (!msg.empty())
+        Console::Utility::sendToConsole(fd, msg);
     for (auto&& it : commands)
     {
         auto command = it.second;
