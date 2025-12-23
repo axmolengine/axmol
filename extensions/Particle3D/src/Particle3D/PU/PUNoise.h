@@ -69,7 +69,7 @@ protected:
     double grad(int hash, double x, double y, double z);
 
 protected:
-    int _p[512];
+    int _p[512] = {};
     unsigned short _octaves;
     double _frequency;
     double _amplitude;
