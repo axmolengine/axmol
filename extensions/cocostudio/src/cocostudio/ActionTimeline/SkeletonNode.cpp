@@ -272,7 +272,6 @@ void SkeletonNode::batchDrawAllSubBones()
     _batchBoneCommand.updateIndexBuffer(indices.data(), indices.size_bytes());
 }
 
-
 void SkeletonNode::changeSkins(const tlx::string_map<std::string>& boneSkinNameMap)
 {
     for (auto&& boneskin : boneSkinNameMap)
