@@ -216,7 +216,7 @@ protected:
 
     ax::StringMap<Bone*> _boneDic{};  //! The dictionary of the bones, include all bones in the armature, no matter it
                                       //! is
-                                    //! the direct bone or the indirect bone. It is different from m_pChindren.
+                                      //! the direct bone or the indirect bone. It is different from m_pChindren.
 
     ax::Vector<Bone*> _topBoneList{};
 
