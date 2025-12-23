@@ -114,9 +114,28 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnSurfaceCreated(JNI
     }
 }
 
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnSurfaceChanged(JNIEnv*, jclass, jint w, jint h)
+{
+    auto director   = ax::Director::getInstance();
+    auto renderView = director->getRenderView();
+    if (renderView)
+    {
+        auto&& _updateRenderSurface = [renderView, w, h]() {
+            renderView->updateRenderSurface(w, h, ax::RenderView::AllUpdates);
+        };
+#if AX_RENDER_API == AX_RENDER_API_VK
+        director->getScheduler()->runOnAxmolThread(_updateRenderSurface);
+#else
+        _updateRenderSurface();
+#endif
+    }
+}
+
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeRenderFrame(JNIEnv*, jclass)
 {
+#if AX_RENDER_API == AX_RENDER_API_GL
     ax::Director::getInstance()->renderFrame();
+#endif
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeTouchesBegin(JNIEnv*, jclass, jint id, jfloat x, jfloat y)

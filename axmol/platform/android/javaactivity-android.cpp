@@ -78,13 +78,6 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
 
     return JNI_VERSION_1_4;
 }
-
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnSurfaceChanged(JNIEnv*, jclass, jint w, jint h)
-{
-    auto renderView = ax::Director::getInstance()->getRenderView();
-    if (renderView)
-        renderView->updateRenderSurface(w, h, ax::RenderView::AllUpdates);
-}
 }
 #undef LOGD
 #undef LOG_TAG
