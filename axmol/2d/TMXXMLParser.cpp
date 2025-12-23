@@ -179,30 +179,25 @@ TMXMapInfo::~TMXMapInfo()
 
 bool TMXMapInfo::parseXMLString(std::string_view xmlString)
 {
-    size_t len = xmlString.size();
-    if (len <= 0)
+    if (xmlString.empty())
         return false;
 
     SAXParser parser;
 
-    if (false == parser.init("UTF-8"))
-    {
+    if (!parser.init("UTF-8"))
         return false;
-    }
 
     parser.setDelegator(this);
 
-    return parser.parse(xmlString.data(), len, SAXParser::ParseOption::TRIM_WHITESPACE);
+    return parser.parse(xmlString.data(), xmlString.size(), SAXParser::ParseOption::TRIM_WHITESPACE);
 }
 
 bool TMXMapInfo::parseXMLFile(std::string_view xmlFilename)
 {
     SAXParser parser;
 
-    if (false == parser.init("UTF-8"))
-    {
+    if (!parser.init("UTF-8"))
         return false;
-    }
 
     parser.setDelegator(this);
 

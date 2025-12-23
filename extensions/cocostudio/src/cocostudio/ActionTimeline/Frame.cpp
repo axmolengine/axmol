@@ -177,7 +177,7 @@ RotationFrame* RotationFrame::create()
     return frame;
 }
 
-RotationFrame::RotationFrame() : _rotation(0) {}
+RotationFrame::RotationFrame() : _rotation(0), _betwennRotation(0) {}
 
 void RotationFrame::onEnter(Frame* nextFrame, int /*currentFrameIndex*/)
 {
@@ -221,7 +221,7 @@ SkewFrame* SkewFrame::create()
     return frame;
 }
 
-SkewFrame::SkewFrame() : _skewX(0), _skewY(0) {}
+SkewFrame::SkewFrame() : _skewX(0), _skewY(0), _betweenSkewX(0), _betweenSkewY(0) {}
 
 void SkewFrame::onEnter(Frame* nextFrame, int /*currentFrameIndex*/)
 {
@@ -321,7 +321,7 @@ PositionFrame* PositionFrame::create()
     return frame;
 }
 
-PositionFrame::PositionFrame() : _position(0, 0) {}
+PositionFrame::PositionFrame() : _position(0, 0), _betweenX(0), _betweenY(0) {}
 
 void PositionFrame::onEnter(Frame* nextFrame, int /*currentFrameIndex*/)
 {
@@ -369,7 +369,7 @@ ScaleFrame* ScaleFrame::create()
     return frame;
 }
 
-ScaleFrame::ScaleFrame() : _scaleX(1), _scaleY(1) {}
+ScaleFrame::ScaleFrame() : _scaleX(1), _scaleY(1), _betweenScaleX(0), _betweenScaleY(0) {}
 
 void ScaleFrame::onEnter(Frame* nextFrame, int /*currentFrameIndex*/)
 {
@@ -639,7 +639,7 @@ AlphaFrame* AlphaFrame::create()
     return frame;
 }
 
-AlphaFrame::AlphaFrame() : _alpha(255) {}
+AlphaFrame::AlphaFrame() : _alpha(255), _betweenAlpha(0) {}
 
 void AlphaFrame::onEnter(Frame* nextFrame, int /*currentFrameIndex*/)
 {

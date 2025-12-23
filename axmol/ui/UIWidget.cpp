@@ -760,7 +760,7 @@ bool Widget::isAncestorsEnabled()
     {
         return true;
     }
-    if (parentWidget && !parentWidget->isEnabled())
+    if (!parentWidget->isEnabled())
     {
         return false;
     }

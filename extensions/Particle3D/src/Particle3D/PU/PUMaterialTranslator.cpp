@@ -103,8 +103,7 @@ static const std::string matToken[] = {
     "mirror",
 };
 
-CCPUMaterialTranslator::CCPUMaterialTranslator()  //: mTechnique(0)
-{}
+CCPUMaterialTranslator::CCPUMaterialTranslator() : _material(nullptr), _ms(nullptr) {}
 CCPUMaterialTranslator::~CCPUMaterialTranslator() {}
 
 void CCPUMaterialTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode* node)

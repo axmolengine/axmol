@@ -348,7 +348,7 @@ void Bone::setChildArmature(Armature* armature)
 {
     if (_childArmature != armature)
     {
-        if (armature == nullptr && _childArmature)
+        if (armature == nullptr)
         {
             _childArmature->setParentBone(nullptr);
         }

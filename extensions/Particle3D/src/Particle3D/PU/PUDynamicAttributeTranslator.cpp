@@ -29,7 +29,7 @@
 
 namespace ax
 {
-PUDynamicAttributeTranslator::PUDynamicAttributeTranslator() {}
+PUDynamicAttributeTranslator::PUDynamicAttributeTranslator() : _dynamicAttribute(nullptr) {}
 
 PUDynamicAttributeTranslator::~PUDynamicAttributeTranslator() {}
 

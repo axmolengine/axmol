@@ -34,7 +34,7 @@ namespace ax
 const bool PUAlignAffector::DEFAULT_RESIZE = false;
 
 //-----------------------------------------------------------------------
-PUAlignAffector::PUAlignAffector() : PUAffector(), _resize(DEFAULT_RESIZE) {}
+PUAlignAffector::PUAlignAffector() : PUAffector(), _resize(DEFAULT_RESIZE), _previousParticle(nullptr) {}
 
 PUAlignAffector::~PUAlignAffector() {}
 

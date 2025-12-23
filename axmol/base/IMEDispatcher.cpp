@@ -67,12 +67,6 @@ typedef std::list<IMEDelegate*>::iterator DelegateIter;
 class IMEDispatcher::Impl
 {
 public:
-    Impl() {}
-
-    ~Impl() {}
-
-    void init() { _delegateWithIme = 0; }
-
     DelegateIter findDelegate(IMEDelegate* delegate)
     {
         DelegateIter end = _delegateList.end();
@@ -86,18 +80,15 @@ public:
         return end;
     }
 
-    DelegateList _delegateList;
-    IMEDelegate* _delegateWithIme;
+    DelegateList _delegateList{};
+    IMEDelegate* _delegateWithIme{nullptr};
 };
 
 //////////////////////////////////////////////////////////////////////////
 // Cons/Destructor
 //////////////////////////////////////////////////////////////////////////
 
-IMEDispatcher::IMEDispatcher() : _impl(new IMEDispatcher::Impl)
-{
-    _impl->init();
-}
+IMEDispatcher::IMEDispatcher() : _impl(new IMEDispatcher::Impl) {}
 
 IMEDispatcher::~IMEDispatcher()
 {

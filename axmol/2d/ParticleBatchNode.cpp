@@ -337,7 +337,7 @@ void ParticleBatchNode::getCurrentIndex(int* oldIndex, int* newIndex, Node* chil
             *newIndex   = i;
             foundNewIdx = true;
 
-            if (foundCurrentIdx && foundNewIdx)
+            if (foundCurrentIdx)
             {
                 break;
             }
@@ -354,7 +354,7 @@ void ParticleBatchNode::getCurrentIndex(int* oldIndex, int* newIndex, Node* chil
                 minusOne = -1;
             }
 
-            if (foundCurrentIdx && foundNewIdx)
+            if (foundNewIdx)
             {
                 break;
             }

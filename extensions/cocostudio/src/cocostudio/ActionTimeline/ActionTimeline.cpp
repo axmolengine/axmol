@@ -80,6 +80,7 @@ ActionTimeline::ActionTimeline()
     , _currentFrame(0)
     , _startFrame(0)
     , _endFrame(0)
+    , _loop(false)
     , _frameEventListener(nullptr)
     , _lastFrameListener(nullptr)
 {}

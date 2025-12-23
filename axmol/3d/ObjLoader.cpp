@@ -45,7 +45,7 @@ struct vertex_index
 {
     int v_idx, vt_idx, vn_idx;
     vertex_index() : v_idx(0), vt_idx(0), vn_idx(0) {};
-    vertex_index(int idx) : v_idx(idx), vt_idx(idx), vn_idx(idx) {};
+    explicit vertex_index(int idx) : v_idx(idx), vt_idx(idx), vn_idx(idx) {};
     vertex_index(int vidx, int vtidx, int vnidx) : v_idx(vidx), vt_idx(vtidx), vn_idx(vnidx) {};
 };
 // for std::map

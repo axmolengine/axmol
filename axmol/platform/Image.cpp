@@ -2682,10 +2682,7 @@ bool Image::saveImageToPNG(std::string_view filePath, bool isToRGB)
                 free(row_pointers);
                 row_pointers = nullptr;
 
-                if (tempData != nullptr)
-                {
-                    free(tempData);
-                }
+                free(tempData);
             }
             else
             {

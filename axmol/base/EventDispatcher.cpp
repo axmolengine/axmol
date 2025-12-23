@@ -52,7 +52,7 @@ namespace
 class DispatchGuard
 {
 public:
-    DispatchGuard(int& count) : _count(count) { ++_count; }
+    explicit DispatchGuard(int& count) : _count(count) { ++_count; }
 
     ~DispatchGuard() { --_count; }
 

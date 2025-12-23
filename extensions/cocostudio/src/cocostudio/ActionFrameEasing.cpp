@@ -34,7 +34,7 @@ namespace cocostudio
 #    define M_PI_X_2 (float)M_PI * 2.0f
 #endif
 
-ActionFrameEasing::ActionFrameEasing() {}
+ActionFrameEasing::ActionFrameEasing() : _type(FrameEasingType::kframeEasingInstant), _fValue(0) {}
 ActionFrameEasing::~ActionFrameEasing() {}
 
 float ActionFrameEasing::bounceTime(float t)

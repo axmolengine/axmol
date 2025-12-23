@@ -742,62 +742,35 @@ int LuaEngine::handleEvent(ScriptHandlerMgr::HandlerType type, void* data)
     case ScriptHandlerMgr::HandlerType::TABLECELL_HIGHLIGHT:
     case ScriptHandlerMgr::HandlerType::TABLECELL_UNHIGHLIGHT:
     case ScriptHandlerMgr::HandlerType::TABLECELL_WILL_RECYCLE:
-    {
         return handleTableViewEvent(type, data);
-    }
-    break;
     case ScriptHandlerMgr::HandlerType::ASSETSMANAGER_PROGRESS:
     case ScriptHandlerMgr::HandlerType::ASSETSMANAGER_ERROR:
     case ScriptHandlerMgr::HandlerType::ASSETSMANAGER_SUCCESS:
-    {
         return handleAssetsManagerEvent(type, data);
-    }
-    break;
     case ScriptHandlerMgr::HandlerType::ARMATURE_EVENT:
-    {
         return handleArmatureWrapper(type, data);
-    }
-    break;
     case ScriptHandlerMgr::HandlerType::EVENT_ACC:
-    {
         return handleEventAcc(data);
-    }
-    break;
     case ScriptHandlerMgr::HandlerType::EVENT_KEYBOARD_PRESSED:
     case ScriptHandlerMgr::HandlerType::EVENT_KEYBOARD_RELEASED:
-    {
         return handleEventKeyboard(type, data);
-    }
-    break;
     case ScriptHandlerMgr::HandlerType::EVENT_CUSTIOM:
-    {
         return handleEvenCustom(data);
-    }
-    break;
     case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_BEGAN:
     case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_MOVED:
     case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_ENDED:
     case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_CANCELLED:
-    {
         return handleEventTouch(type, data);
-    }
-    break;
     case ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_BEGAN:
     case ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_MOVED:
     case ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_ENDED:
     case ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_CANCELLED:
-    {
         return handleEventTouches(type, data);
-    }
-    break;
     case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_DOWN:
     case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_UP:
     case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_MOVE:
     case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_SCROLL:
-    {
         return handleEventMouse(type, data);
-    }
-    break;
     default:
         break;
     }

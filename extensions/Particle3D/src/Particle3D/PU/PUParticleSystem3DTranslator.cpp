@@ -29,7 +29,7 @@
 namespace ax
 {
 
-PUParticleSystem3DTranslator::PUParticleSystem3DTranslator() {}
+PUParticleSystem3DTranslator::PUParticleSystem3DTranslator() : _system(nullptr) {}
 PUParticleSystem3DTranslator::~PUParticleSystem3DTranslator() {}
 
 void PUParticleSystem3DTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode* node)

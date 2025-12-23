@@ -45,7 +45,6 @@ public:
     {
         _ratio  = ratio;
         _offset = offset;
-        _child  = nullptr;
         return true;
     }
 
@@ -59,9 +58,9 @@ public:
     void setChild(Node* child) { _child = child; }
 
 private:
-    Vec2 _ratio;
-    Vec2 _offset;
-    Node* _child;  // weak ref
+    Vec2 _ratio{};
+    Vec2 _offset{};
+    Node* _child{nullptr};  // weak ref
 };
 
 ParallaxNode::ParallaxNode()

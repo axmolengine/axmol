@@ -158,7 +158,7 @@ void TriggerObj::serialize(const rapidjson::Value& val)
         if (con == nullptr)
         {
             AXLOGD("class {} can not be implemented!", classname);
-            AXASSERT(con != nullptr, "con can't be nullptr!");
+            AXASSERT(false, "con can't be nullptr!");
         }
 
         AXASSERT(con != nullptr, "con can't be nullptr!");
@@ -181,7 +181,7 @@ void TriggerObj::serialize(const rapidjson::Value& val)
         if (act == nullptr)
         {
             AXLOGD("class {} can not be implemented!", classname);
-            AXASSERT(act != nullptr, "act can't be nullptr!");
+            AXASSERT(false, "act can't be nullptr!");
         }
         act->serialize(subDict);
         act->init();

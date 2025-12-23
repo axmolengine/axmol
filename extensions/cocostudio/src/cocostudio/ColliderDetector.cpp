@@ -131,7 +131,7 @@ ColliderDetector* ColliderDetector::create(Bone* bone)
     return nullptr;
 }
 
-ColliderDetector::ColliderDetector() : _active(false)
+ColliderDetector::ColliderDetector() : _bone(nullptr), _active(false)
 {
 #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT
     _body   = nullptr;

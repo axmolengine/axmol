@@ -59,7 +59,7 @@ static const uintptr_t STIMER_TARGET_SCRIPT = STIMER_TARGET_NATIVE - 1;
 
 struct TimerObject
 {
-    TimerObject(vcallback_t&& callback) : callback_(std::move(callback)), referenceCount_(1) {}
+    explicit TimerObject(vcallback_t&& callback) : callback_(std::move(callback)), referenceCount_(1) {}
 
     vcallback_t callback_;
     static uintptr_t s_timerId;

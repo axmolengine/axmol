@@ -31,7 +31,7 @@
 namespace ax
 {
 //-----------------------------------------------------------------------
-PUDynamicAttribute::PUDynamicAttribute() {}
+PUDynamicAttribute::PUDynamicAttribute() : _type(DynamicAttributeType::DAT_FIXED), _valueChangedExternally(false) {}
 //-----------------------------------------------------------------------
 PUDynamicAttribute::~PUDynamicAttribute() {}
 //-----------------------------------------------------------------------
@@ -214,7 +214,6 @@ float PUDynamicAttributeCurved::getValue(float x)
             return (*it1).y;
         }
     }
-    break;
 
     case IT_SPLINE:
     {
@@ -225,7 +224,6 @@ float PUDynamicAttributeCurved::getValue(float x)
         float fraction = x / _range;
         return (_spline.interpolate(fraction < 1.0f ? fraction : 1.0f)).y;
     }
-    break;
     }
 
     return 0;

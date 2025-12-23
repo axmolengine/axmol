@@ -64,10 +64,7 @@ struct LuaEventAccelerationData
     void* acc;
     Event* event;
 
-    LuaEventAccelerationData(void* inAcc,Event* inEvent)
-    :acc(inAcc),event(inEvent)
-    {
-    }
+    LuaEventAccelerationData(void* inAcc, Event* inEvent) : acc(inAcc), event(inEvent) {}
 };
 
 struct LuaEventKeyboarData
@@ -75,10 +72,7 @@ struct LuaEventKeyboarData
     int keyCode;
     Event* event;
 
-    LuaEventKeyboarData(int inKeyCode,Event* inEvent)
-    :keyCode(inKeyCode),event(inEvent)
-    {
-    }
+    LuaEventKeyboarData(int inKeyCode, Event* inEvent) : keyCode(inKeyCode), event(inEvent) {}
 };
 
 struct LuaEventTouchData
@@ -86,11 +80,7 @@ struct LuaEventTouchData
     Touch* touch;
     Event* event;
 
-    LuaEventTouchData(Touch* inTouch, Event* inEvent)
-    :touch(inTouch),
-    event(inEvent)
-    {
-    }
+    LuaEventTouchData(Touch* inTouch, Event* inEvent) : touch(inTouch), event(inEvent) {}
 };
 
 struct LuaEventTouchesData
@@ -98,29 +88,22 @@ struct LuaEventTouchesData
     std::vector<Touch*> touches;
     Event* event;
 
-    LuaEventTouchesData(const std::vector<Touch*>& inTouches, Event* inEvent)
-    :touches(inTouches),
-    event(inEvent)
-    {
-    }
+    LuaEventTouchesData(const std::vector<Touch*>& inTouches, Event* inEvent) : touches(inTouches), event(inEvent) {}
 };
 
 struct LuaEventMouseData
 {
     Event* event;
 
-    LuaEventMouseData(Event* inEvent)
-    :event(inEvent)
-    {
-    }
+    explicit LuaEventMouseData(Event* inEvent) : event(inEvent) {}
 };
 
-class LuaNode :public ax::Node
+class LuaNode : public ax::Node
 {
 public:
     virtual ~LuaNode() {}
 
-    void draw(ax::Renderer *renderer, const ax::Mat4& transform, uint32_t flags) override;
+    void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 };
 
 TOLUA_API int tolua_luanode_open(lua_State* tolua_S);

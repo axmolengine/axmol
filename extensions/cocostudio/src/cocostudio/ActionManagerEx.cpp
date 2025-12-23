@@ -50,7 +50,7 @@ void ActionManagerEx::destroyInstance()
     }
 }
 
-ActionManagerEx::ActionManagerEx() {}
+ActionManagerEx::ActionManagerEx() : _studioVersionNumber(0) {}
 
 ActionManagerEx::~ActionManagerEx()
 {

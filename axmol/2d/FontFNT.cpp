@@ -584,10 +584,6 @@ FontFNT* FontFNT::create(std::string_view fntFilePath)
     FontFNT* tempFont = new FontFNT(newConf);
 
     tempFont->setFontSize((float)newConf->_fontSize);
-    if (!tempFont)
-    {
-        return nullptr;
-    }
     tempFont->autorelease();
     return tempFont;
 }

@@ -83,7 +83,7 @@ public:
 class MaterialFileReader : public MaterialReader
 {
 public:
-    MaterialFileReader(std::string_view mtl_basepath) : m_mtlBasePath(mtl_basepath) {}
+    explicit MaterialFileReader(std::string_view mtl_basepath) : m_mtlBasePath(mtl_basepath) {}
     virtual ~MaterialFileReader() {}
     virtual std::string operator()(std::string_view matId,
                                    std::vector<material_t>& materials,

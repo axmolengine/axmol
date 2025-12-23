@@ -42,6 +42,7 @@ ProcessBase::ProcessBase(void)
     , _durationTween(0)
     , _currentFrame(0)
     , _curFrameIndex(0)
+    , _nextFrameIndex(0)
     , _isLoopBack(false)
 {}
 

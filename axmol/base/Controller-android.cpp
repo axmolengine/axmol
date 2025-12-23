@@ -40,7 +40,7 @@ namespace ax
 class ControllerImpl
 {
 public:
-    ControllerImpl(Controller* controller) : _controller(controller) {}
+    explicit ControllerImpl(Controller* controller) : _controller(controller) {}
 
     static std::vector<Controller*>::iterator findController(std::string_view deviceName, int deviceId)
     {

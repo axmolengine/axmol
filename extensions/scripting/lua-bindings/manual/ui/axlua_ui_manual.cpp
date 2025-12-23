@@ -1075,8 +1075,8 @@ static int toaxlua_EventListenerFocus_create(lua_State* L)
         if (nullptr == tolua_ret)
             return 0;
 
-        int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
-        int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
+        int ID     = (int)tolua_ret->_ID;
+        int* luaID = &tolua_ret->_luaID;
         toluafix_pushusertype_object(L, ID, luaID, (void*)tolua_ret, "ax.EventListenerFocus");
 
         return 1;

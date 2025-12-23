@@ -55,6 +55,7 @@ ArmatureAnimation::ArmatureAnimation()
     , _ignoreFrameEvent(false)
     , _onMovementList(false)
     , _movementListLoop(false)
+    , _movementIndex(0)
     , _movementListDurationTo(-1)
     , _userObject(nullptr)
 

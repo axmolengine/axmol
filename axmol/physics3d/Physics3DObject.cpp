@@ -371,7 +371,7 @@ bool Physics3DRigidBody::isKinematic() const
 class btCollider : public btGhostObject
 {
 public:
-    btCollider(Physics3DCollider* collider) : _collider(collider) {};
+    explicit btCollider(Physics3DCollider* collider) : _collider(collider) {}
     ~btCollider() {};
 
     /// this method is mainly for expert/internal use only.

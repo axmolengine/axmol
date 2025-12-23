@@ -62,7 +62,7 @@ void Device::setAccelerometerInterval(float interval) {}
 class BitmapDC
 {
 public:
-    BitmapDC(HWND hWnd = nullptr)
+    explicit BitmapDC(HWND hWnd)
         : _DC(nullptr), _bmp(nullptr), _font((HFONT)GetStockObject(DEFAULT_GUI_FONT)), _wnd(hWnd)
     {
         HDC hdc = GetDC(hWnd);
@@ -411,7 +411,7 @@ private:
 
 static BitmapDC& sharedBitmapDC()
 {
-    static BitmapDC s_BmpDC;
+    static BitmapDC s_BmpDC{nullptr};
     return s_BmpDC;
 }
 

@@ -1068,7 +1068,6 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
                 fmt::format("error: The csloader version not match, require version is:{}, but {} provided!",
                             csBuildId->c_str(), _csBuildID);
             throw std::logic_error(exceptionMsg.c_str());
-            return nullptr;
         }
     }
 

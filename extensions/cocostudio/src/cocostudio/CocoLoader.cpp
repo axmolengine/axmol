@@ -151,11 +151,8 @@ stExpCocoNode* stExpCocoNode::GetChildArray(CocoLoader* pCoco)
 }
 
 CocoLoader::CocoLoader()
-{
-    m_pRootNode        = nullptr;
-    m_pObjectDescArray = nullptr;
-    m_pMemoryBuff      = nullptr;
-}
+    : m_pFileHeader(nullptr), m_pRootNode(nullptr), m_pObjectDescArray(nullptr), m_pMemoryBuff(nullptr)
+{}
 
 CocoLoader::~CocoLoader()
 {

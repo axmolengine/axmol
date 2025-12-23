@@ -30,6 +30,8 @@
 
 namespace ax
 {
+static constexpr unsigned int MAX_GAUSSIAN_LOOP = 16;
+
 // Constants
 const Vec3 PUMeshSurfaceEmitter::DEFAULT_SCALE(1, 1, 1);
 const MeshInfo::MeshSurfaceDistribution PUMeshSurfaceEmitter::DEFAULT_DISTRIBUTION = MeshInfo::MSD_HOMOGENEOUS;
@@ -179,7 +181,7 @@ MeshInfo::~MeshInfo()
     _triangles.clear();
 }
 //-----------------------------------------------------------------------
-inline float MeshInfo::getGaussianRandom(float high, float cutoff)
+float MeshInfo::getGaussianRandom(float high, float cutoff)
 {
     float x1, w;
     unsigned int max = 0;
@@ -190,8 +192,10 @@ inline float MeshInfo::getGaussianRandom(float high, float cutoff)
         w       = x1 * x1 + x2 * x2;
 
         // Prevent infinite loop
-        if (w >= 1.0f && max > 4)
-            w = x1;
+        if (++max > MAX_GAUSSIAN_LOOP)
+        {
+            return AXRANDOM_0_1() * high;
+        }
 
     } while (w >= 1.0f);
 

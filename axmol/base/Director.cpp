@@ -1404,8 +1404,7 @@ void Director::createStatsLabel()
     bool isOK    = image->initWithImageData(data, dataLength, false);
     if (!isOK)
     {
-        if (image)
-            delete image;
+        delete image;
         AXLOGE("{}", "Fails: init fps_images");
         return;
     }

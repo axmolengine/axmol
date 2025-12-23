@@ -97,7 +97,7 @@ static void s3tc_decode_block(uint8_t** blockData,
             alphaArray[6] = (alphaArray[0] * 2 + alphaArray[1] * 5) / 7;
             alphaArray[7] = (alphaArray[0] * 1 + alphaArray[1] * 6) / 7;
         }
-        else if (alphaArray[0] < alphaArray[1])
+        else
         {
             alphaArray[2] = (alphaArray[0] * 4 + alphaArray[1] * 1) / 5;
             alphaArray[3] = (alphaArray[0] * 3 + alphaArray[1] * 2) / 5;

@@ -30,7 +30,7 @@
 
 namespace ax
 {
-PURendererTranslator::PURendererTranslator() {}
+PURendererTranslator::PURendererTranslator() : _renderer(nullptr) {}
 
 PURendererTranslator::~PURendererTranslator() {}
 

@@ -123,9 +123,10 @@ void ActionTimelineCache::init()
 
 void ActionTimelineCache::removeAction(std::string_view fileName)
 {
-    if (_animationActions.find(fileName) != _animationActions.end())
+    auto it = _animationActions.find(fileName);
+    if (it != _animationActions.end())
     {
-        _animationActions.erase(fileName);
+        _animationActions.erase(it);
     }
 }
 
@@ -223,7 +224,7 @@ Timeline* ActionTimelineCache::loadTimeline(const rapidjson::Value& json)
     if (frameType == nullptr)
         return nullptr;
 
-    if (frameType && _funcs.find(frameType) != _funcs.end())
+    if (_funcs.find(frameType) != _funcs.end())
     {
         timeline = Timeline::create();
 

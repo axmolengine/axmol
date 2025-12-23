@@ -250,35 +250,28 @@ void SkeletonNode::batchDrawAllSubBones()
                                          ax::CustomCommand::BufferUsage::DYNAMIC);
     _batchBoneCommand.updateVertexBuffer(_batchedBoneVertexData.data(), sizeof(VertexData) * _batchedVeticesCount);
 
-#ifdef AX_STUDIO_ENABLED_VIEW
-// TODO
-//     glLineWidth(1);
-//     glEnable(GL_LINE_SMOOTH);
-//     glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
-//     for (int i = 0; i < _batchedVeticesCount; i += 4 )
-//     {
-//         glDrawArrays(GL_TRIANGLE_FAN, i, 4);
-//         glDrawArrays(GL_LINE_LOOP, i, 4);
-//     }
-//     AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _batchedVeticesCount);
-#else
-    unsigned short* indices = (unsigned short*)malloc(sizeof(unsigned short) * _batchedVeticesCount);
+    int quadCount  = _batchedVeticesCount / 4;
+    int indexCount = quadCount * 6;
+
+    tlx::pod_vector<unsigned short> indices(static_cast<size_t>(indexCount));
+
+    int idx = 0;
     for (int i = 0; i < _batchedVeticesCount; i += 4)
     {
-        *indices++ = i;
-        *indices++ = i + 1;
-        *indices++ = i + 2;
+        indices[idx++] = i;
+        indices[idx++] = i + 1;
+        indices[idx++] = i + 2;
 
-        *indices++ = i;
-        *indices++ = i + 2;
-        *indices++ = i + 3;
+        indices[idx++] = i;
+        indices[idx++] = i + 2;
+        indices[idx++] = i + 3;
     }
-    _batchBoneCommand.createIndexBuffer(ax::CustomCommand::IndexFormat::U_SHORT, _batchedVeticesCount,
+
+    _batchBoneCommand.createIndexBuffer(ax::CustomCommand::IndexFormat::U_SHORT, indexCount,
                                         ax::CustomCommand::BufferUsage::DYNAMIC);
-    _batchBoneCommand.updateIndexBuffer(indices, sizeof(unsigned short) * _batchedVeticesCount);
-    free(indices);
-#endif  // AX_STUDIO_ENABLED_VIEW
+    _batchBoneCommand.updateIndexBuffer(indices.data(), indices.size_bytes());
 }
+
 
 void SkeletonNode::changeSkins(const tlx::string_map<std::string>& boneSkinNameMap)
 {

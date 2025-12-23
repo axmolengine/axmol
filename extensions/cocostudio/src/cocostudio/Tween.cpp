@@ -52,8 +52,9 @@ Tween::Tween()
     , _to(nullptr)
     , _between(nullptr)
     , _bone(nullptr)
-
     , _frameTweenEasing(Linear)
+    , _betweenDuration(0)
+    , _totalDuration(0)
     , _fromIndex(0)
     , _toIndex(0)
     , _animation(nullptr)
@@ -341,7 +342,8 @@ void Tween::arriveKeyFrame(FrameData* keyFrameData)
 
 FrameData* Tween::tweenNodeTo(float percent, FrameData* node)
 {
-    node = node == nullptr ? _tweenData : node;
+    if (!node)
+        node = _tweenData;
 
     if (!_from->isTween)
     {
