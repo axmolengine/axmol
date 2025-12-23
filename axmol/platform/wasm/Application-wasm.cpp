@@ -37,6 +37,7 @@ THE SOFTWARE.
 #    include "axmol/base/Utils.h"
 #    include "axmol/platform/FileUtils.h"
 #    include "axmol/platform/Device.h"
+#    include "axmol/tlx/utility.hpp"
 #    include <emscripten/emscripten.h>
 
 extern void axmol_wasm_app_exit();
@@ -275,18 +276,16 @@ Application* Application::getInstance()
 const char* Application::getCurrentLanguageCode()
 {
     static char code[3] = {0};
-    char pLanguageName[16];
+    char pLanguageName[16] = {0};
     getCurrentLangISO2(pLanguageName);
-    strncpy(code, pLanguageName, 2);
-    code[2] = '\0';
+    tlx::cstrcpy(code, pLanguageName);
     return code;
 }
 
 LanguageType Application::getCurrentLanguage()
 {
-    char pLanguageName[16];
-    getCurrentLangISO2(pLanguageName);
-    return utils::getLanguageTypeByISO2(pLanguageName);
+    auto langCode = getCurrentLanguageCode();
+    return utils::getLanguageTypeByISO2(langCode);
 }
 
 }  // namespace ax

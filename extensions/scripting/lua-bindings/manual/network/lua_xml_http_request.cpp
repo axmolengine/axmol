@@ -233,7 +233,7 @@ void LuaMinXmlHttpRequest::_sendRequest()
             if (0 != handler)
             {
                 AXLOGD("come in handler, handler is {}", handler);
-                ax::CommonScriptData data(handler, "");
+                ax::CommonScriptData data(handler, ""sv);
                 ax::ScriptEvent event(ax::ScriptEventType::kCommonEvent, (void*)&data);
                 ax::ScriptEngineManager::sendEventToLua(event);
             }
@@ -264,7 +264,7 @@ void LuaMinXmlHttpRequest::_sendRequest()
 
         if (0 != handler)
         {
-            ax::CommonScriptData data(handler, "");
+            ax::CommonScriptData data(handler, ""sv);
             ax::ScriptEvent event(ax::ScriptEventType::kCommonEvent, (void*)&data);
             ax::ScriptEngineManager::sendEventToLua(event);
         }

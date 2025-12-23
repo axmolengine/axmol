@@ -409,7 +409,7 @@ public:
                 (void*)view, ScriptHandlerMgr::HandlerType::SCROLLVIEW_SCROLL);
             if (0 != handler)
             {
-                CommonScriptData data(handler, "");
+                CommonScriptData data(handler, ""sv);
                 ScriptEvent event(kCommonEvent, (void*)&data);
                 LuaEngine::getInstance()->sendEvent(event);
             }
@@ -424,7 +424,7 @@ public:
                 (void*)view, ScriptHandlerMgr::HandlerType::SCROLLVIEW_ZOOM);
             if (0 != handler)
             {
-                CommonScriptData data(handler, "");
+                CommonScriptData data(handler, ""sv);
                 ScriptEvent event(kCommonEvent, (void*)&data);
                 LuaEngine::getInstance()->sendEvent(event);
             }

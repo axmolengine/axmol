@@ -28,6 +28,7 @@
 #include <string_view>
 #include <ranges>
 #include <iterator>
+#include <string.h>
 #include "axmol/tlx/feature_test.hpp"
 
 namespace tlx
@@ -105,6 +106,21 @@ template <typename _Subrgn>
 inline std::string_view to_string_view(_Subrgn&& subrgn)
 {
     return std::string_view{&*subrgn.begin(), static_cast<size_t>(std::ranges::distance(subrgn))};
+}
+
+template <size_t _N>
+inline void cstrcpy(char (&dest)[_N], std::string_view src)
+{
+    size_t copy_len = std::min(src.size(), _N - 1);
+    ::memcpy(dest, src.data(), copy_len);
+    dest[copy_len] = '\0';
+}
+
+inline void cstrcpy(char* dest, size_t destSize, std::string_view src)
+{
+    size_t copy_len = std::min(src.size(), destSize - 1);
+    ::memcpy(dest, src.data(), copy_len);
+    dest[copy_len] = '\0';
 }
 
 }  // namespace tlx
