@@ -84,7 +84,7 @@ struct Properties::InputStreamView
         do
         {
             c = readChar();
-        } while (isspace(c) && c != EOF);
+        } while (isspace(static_cast<unsigned char>(c)) && c != EOF);
 
         // If we are not at the end of the file, then since we found a
         // non-whitespace character, we put the cursor back in front of it.
@@ -125,34 +125,6 @@ void calculateNamespacePath(std::string_view urlString,
                             std::vector<std::string_view>& namespacePath);
 /** @script{ignore} */
 Properties* getPropertiesFromNamespacePath(Properties* properties, const std::vector<std::string_view>& namespacePath);
-
-static char* trimWhiteSpace(char* str)
-{
-    if (!str)
-    {
-        return str;
-    }
-
-    // Trim leading space.
-    while (*str != '\0' && isspace(*str))
-        str++;
-
-    // All spaces?
-    if (*str == 0)
-    {
-        return str;
-    }
-
-    // Trim trailing space.
-    char* end = str + strlen(str) - 1;
-    while (end > str && isspace(*end))
-        end--;
-
-    // Write new null terminator.
-    *(end + 1) = 0;
-
-    return str;
-}
 
 Properties::Properties() : _variables(nullptr), _dirPath(nullptr), _parent(nullptr)
 {
@@ -341,9 +313,7 @@ void Properties::readProperties(InputStreamView* isv)
                 size_t braceClosePos = trimmedLine.find('}');
 
                 // Get the last non-whitespace character
-                std::string_view lineEndView = trimmedLine;
-                while (!lineEndView.empty() && isspace(lineEndView.back()))
-                    lineEndView.remove_suffix(1);
+                std::string_view lineEndView = text_utils::rtrim(trimmedLine);
 
                 // Check if the line ends with '}'
                 bool endsWithBrace = !lineEndView.empty() && lineEndView.back() == '}';
