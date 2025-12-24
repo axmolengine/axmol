@@ -225,15 +225,17 @@ void EditBoxImplWasm::nativeOpenKeyboard()
 
     this->editBoxEditingDidBegin();
 
+    auto text = this->getText();
+
     EM_ASM(
         {
             var input = Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input");
             // sync input value from native and focus
-            input.value     = UTF8ToString($0);
-            input.maxlength = $1 != -1 ? $1 : undefined;
+            input.value     = UTF8ToString($0, $1);
+            input.maxlength = $2 != -1 ? $1 : undefined;
             input.focus();
         },
-        this->getText(), (int)_maxLength);
+        text.data(), (int)text.size(), (int)_maxLength);
 
     auto rect = ui::Helper::convertBoundingBoxToScreen(_editBox);
     this->updateNativeFrame(rect);

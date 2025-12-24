@@ -180,7 +180,7 @@
 {
     _editState = NO;
 
-    getEditBoxImplMac()->editBoxEditingDidEnd([self getText], [self getEndAction:notification]);
+    getEditBoxImplMac()->editBoxEditingDidEnd([[self getText] UTF8String], [self getEndAction:notification]);
 }
 
 - (void)setMaxLength:(int)length
@@ -193,7 +193,7 @@
  */
 - (void)controlTextDidChange:(NSNotification*)notification
 {
-    getEditBoxImplMac()->editBoxEditingChanged([self getText]);
+    getEditBoxImplMac()->editBoxEditingChanged([[self getText] UTF8String]);
 }
 
 - (NSString*)getDefaultFontName
@@ -330,7 +330,7 @@
 {
     _editState = NO;
 
-    getEditBoxImplMac()->editBoxEditingDidEnd([self getText], [self getEndAction:notification]);
+    getEditBoxImplMac()->editBoxEditingDidEnd([[self getText] UTF8String], [self getEndAction:notification]);
 }
 
 - (ax::ui::EditBoxDelegate::EditBoxEndAction)getEndAction:(NSNotification*)notification
