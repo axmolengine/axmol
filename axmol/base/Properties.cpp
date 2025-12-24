@@ -231,6 +231,10 @@ void Properties::readProperties(InputStreamView* isv)
 {
     AXASSERT(!isv->empty(), "Invalid data");
 
+    constexpr std::string_view multiLineCommentEnd   = "*/"sv;
+    constexpr std::string_view multiLineCommentStart = "/*"sv;
+    constexpr std::string_view singleLineComment     = "//"sv;
+
     std::string_view line;
     int c;
     bool comment = false;
@@ -256,21 +260,15 @@ void Properties::readProperties(InputStreamView* isv)
         if (comment)
         {
             // Check for end of multi-line comment at either start or end of line
-            if (trimmedLine.starts_with("*/"sv))
+            if (trimmedLine.starts_with(multiLineCommentEnd) || trimmedLine.ends_with(multiLineCommentEnd))
                 comment = false;
-            else
-            {
-                size_t len = trimmedLine.size();
-                if (trimmedLine.ends_with("*/"sv))
-                    comment = false;
-            }
         }
-        else if (trimmedLine.starts_with("/*"sv))
+        else if (trimmedLine.starts_with(multiLineCommentStart))
         {
             // Start of multi-line comment (must be at start of line)
             comment = true;
         }
-        else if (!trimmedLine.starts_with("//"sv))
+        else if (!trimmedLine.starts_with(singleLineComment))
         {
             // If an '=' appears on this line, parse it as a name/value pair.
             size_t equalPos = trimmedLine.find('=');
@@ -309,14 +307,8 @@ void Properties::readProperties(InputStreamView* isv)
                 // Check for inheritance: ':'
                 size_t colonPos = trimmedLine.find(':');
 
-                // Check for '}' on same line.
-                size_t braceClosePos = trimmedLine.find('}');
-
-                // Get the last non-whitespace character
-                std::string_view lineEndView = text_utils::rtrim(trimmedLine);
-
-                // Check if the line ends with '}'
-                bool endsWithBrace = !lineEndView.empty() && lineEndView.back() == '}';
+                // Check if the line ends with '}', trimmedLine already has trailing whitespace removed
+                const bool endsWithBrace = trimmedLine.ends_with('}');
 
                 // Extract tokens without creating vector
                 std::string_view name, id, parentID;
@@ -333,17 +325,17 @@ void Properties::readProperties(InputStreamView* isv)
                     name = trimmedLine.substr(start, end - start);
 
                     // Skip whitespace after name
-                    start = trimmedLine.find_first_not_of(" \t", end);
+                    start = trimmedLine.find_first_not_of(" \t"sv, end);
                     if (start != std::string_view::npos)
                     {
                         // Find second token (id or special character)
-                        end = trimmedLine.find_first_of(" \t:{", start);
+                        end = trimmedLine.find_first_of(" \t:{"sv, start);
                         if (end != std::string_view::npos)
                         {
                             id = trimmedLine.substr(start, end - start);
 
                             // Skip whitespace after id
-                            start = trimmedLine.find_first_not_of(" \t", end);
+                            start = trimmedLine.find_first_not_of(" \t"sv, end);
                         }
                         else
                         {
@@ -361,7 +353,7 @@ void Properties::readProperties(InputStreamView* isv)
                 }
 
                 // Check if the name is just '}' (end of namespace)
-                if (name == "}")
+                if (name == "}"sv)
                 {
                     // End of namespace.
                     return;
@@ -377,11 +369,11 @@ void Properties::readProperties(InputStreamView* isv)
                     {
                         start = colonPosInSubstr + 1;
                         // Skip whitespace after ':'
-                        start = trimmedLine.find_first_not_of(" \t", start);
+                        start = trimmedLine.find_first_not_of(" \t"sv, start);
                         if (start != std::string_view::npos)
                         {
                             // Get parentID (stop at whitespace or '{')
-                            end = trimmedLine.find_first_of(" \t{", start);
+                            end = trimmedLine.find_first_of(" \t{"sv, start);
                             if (end != std::string_view::npos)
                             {
                                 parentID = trimmedLine.substr(start, end - start);
