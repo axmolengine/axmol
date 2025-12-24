@@ -247,24 +247,12 @@ Properties* Properties::createNonRefCounted(std::string_view url)
     return p;
 }
 
-static size_t extractVariable(std::string_view str, char* outName, size_t outSize)
+static std::string_view extractVariable(std::string_view str)
 {
-    if (str.empty() || !outName || outSize == 0)
-        return 0;
+    if (str.size() > 3 && str[0] == '$' && str[1] == '{' && str.back() == '}')
+        return str.substr(2, str.size() - 3);
 
-    size_t len = str.size();
-    if (len > 3 && str[0] == '$' && str[1] == '{' && str[len - 1] == '}')
-    {
-        size_t copyLen = len - 3;
-        if (copyLen >= outSize)
-            copyLen = outSize - 1;
-
-        memcpy(outName, str.data() + 2, copyLen);
-        outName[copyLen] = '\0';
-        return copyLen;
-    }
-
-    return 0;
+    return std::string_view();
 }
 
 void Properties::readProperties(InputStreamView* isv)
@@ -272,7 +260,6 @@ void Properties::readProperties(InputStreamView* isv)
     AXASSERT(!isv->empty(), "Invalid data");
 
     std::string_view line;
-    char variable[256];
     int c;
     bool comment = false;
 
@@ -297,21 +284,21 @@ void Properties::readProperties(InputStreamView* isv)
         if (comment)
         {
             // Check for end of multi-line comment at either start or end of line
-            if (tlx::starts_with(trimmedLine, "*/"))
+            if (trimmedLine.starts_with("*/"sv))
                 comment = false;
             else
             {
                 size_t len = trimmedLine.size();
-                if (len >= 2 && tlx::ends_with(trimmedLine, "*/"))
+                if (trimmedLine.ends_with("*/"sv))
                     comment = false;
             }
         }
-        else if (tlx::starts_with(trimmedLine, "/*"))
+        else if (trimmedLine.starts_with("/*"sv))
         {
             // Start of multi-line comment (must be at start of line)
             comment = true;
         }
-        else if (!tlx::starts_with(trimmedLine, "//"))
+        else if (!trimmedLine.starts_with("//"sv))
         {
             // If an '=' appears on this line, parse it as a name/value pair.
             size_t equalPos = trimmedLine.find('=');
@@ -328,9 +315,10 @@ void Properties::readProperties(InputStreamView* isv)
                 }
 
                 // Is this a variable assignment?
-                if (auto varLen = extractVariable(name, variable, sizeof(variable)))
+                std::string_view varName = extractVariable(name);
+                if (!varName.empty())
                 {
-                    setVariable(std::string_view{variable, varLen}, value);
+                    setVariable(varName, value);
                 }
                 else
                 {
@@ -542,7 +530,7 @@ void Properties::resolveInheritance(std::string_view id)
         // If the namespace has a parent ID, find the parent.
         if (!derived->_parentID.empty())
         {
-            Properties* parent = getNamespace(derived->_parentID.c_str());
+            Properties* parent = getNamespace(derived->_parentID);
             if (parent)
             {
                 resolveInheritance(parent->getId());
@@ -797,22 +785,22 @@ Properties::Type Properties::getType(std::string_view name) const
 
 std::string_view Properties::getString(std::string_view name, std::string_view defaultValue) const
 {
-    char variable[256];
     std::string_view value = ""sv;
 
     if (!name.empty())
     {
         // If 'name' is a variable, return the variable value
-        if (auto varLen = extractVariable(name, variable, sizeof(variable)))
+        std::string_view varName = extractVariable(name);
+        if (!varName.empty())
         {
-            return getVariable(std::string_view{variable, varLen}, defaultValue);
+            return getVariable(varName, defaultValue);
         }
 
         for (const auto& itr : _properties)
         {
             if (itr.name == name)
             {
-                value = itr.value.c_str();
+                value = itr.value;
                 break;
             }
         }
@@ -822,15 +810,16 @@ std::string_view Properties::getString(std::string_view name, std::string_view d
         // No name provided - get the value at the current iterator position
         if (_propertiesItr != _properties.end())
         {
-            value = _propertiesItr->value.c_str();
+            value = _propertiesItr->value;
         }
     }
 
     if (!value.empty())
     {
         // If the value references a variable, return the variable value
-        if (auto varLen = extractVariable(value, variable, sizeof(variable)))
-            return getVariable(std::string_view{variable, varLen}, defaultValue);
+        std::string_view varName = extractVariable(value);
+        if (!varName.empty())
+            return getVariable(varName, defaultValue);
 
         return value;
     }
@@ -1012,7 +1001,7 @@ std::string_view Properties::getVariable(std::string_view name, std::string_view
         {
             Property& prop = (*_variables)[i];
             if (prop.name == name)
-                return prop.value.c_str();
+                return prop.value;
         }
     }
 
