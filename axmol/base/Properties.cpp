@@ -271,15 +271,9 @@ void Properties::readProperties(InputStreamView* isv)
 {
     AXASSERT(!isv->empty(), "Invalid data");
 
-    char line[2048];  // MaxPerLine chars is 2048
+    std::string_view line;
     char variable[256];
     int c;
-    char* name;
-    char* value;
-    char* parentID;
-    char* rc;
-    char* rcc;
-    char* rccc;
     bool comment = false;
 
     while (true)
@@ -291,61 +285,47 @@ void Properties::readProperties(InputStreamView* isv)
         if (isv->eof())
             break;
 
-        // Read the next line.
-        rc = isv->readLine(line, sizeof(line));
-        if (rc == nullptr)
-        {
-            AXLOGE("Error reading line from file.");
-            return;
-        }
+        // Read the next line as string_view
+        line = isv->readLineSV();
+        if (line.empty())
+            continue;
+
+        // Remove leading/trailing whitespace
+        std::string_view trimmedLine = text_utils::trim(line);
 
         // Ignore comments
         if (comment)
         {
             // Check for end of multi-line comment at either start or end of line
-            if (strncmp(line, "*/", 2) == 0)
+            if (tlx::starts_with(trimmedLine, "*/"))
                 comment = false;
             else
             {
-                auto trimedLine = trimWhiteSpace(line);
-                const auto len  = strlen(trimedLine);
-                if (len >= 2 && strncmp(trimedLine + (len - 2), "*/", 2) == 0)
+                size_t len = trimmedLine.size();
+                if (len >= 2 && tlx::ends_with(trimmedLine, "*/"))
                     comment = false;
             }
         }
-        else if (strncmp(line, "/*", 2) == 0)
+        else if (tlx::starts_with(trimmedLine, "/*"))
         {
             // Start of multi-line comment (must be at start of line)
             comment = true;
         }
-        else if (strncmp(line, "//", 2) != 0)
+        else if (!tlx::starts_with(trimmedLine, "//"))
         {
             // If an '=' appears on this line, parse it as a name/value pair.
-            // Note: strchr() has to be called before strtok(), or a backup of line has to be kept.
-            rc = strchr(line, '=');
-            if (rc != nullptr)
+            size_t equalPos = trimmedLine.find('=');
+            if (equalPos != std::string_view::npos)
             {
-                // First token should be the property name.
-                name = strtok(line, "=");
-                if (name == nullptr)
+                // Split into name and value parts
+                std::string_view name  = text_utils::trim(trimmedLine.substr(0, equalPos));
+                std::string_view value = text_utils::trim(trimmedLine.substr(equalPos + 1));
+
+                if (name.empty())
                 {
                     AXLOGE("Error parsing properties file: attribute without name.");
                     return;
                 }
-
-                // Remove white-space from name.
-                name = trimWhiteSpace(name);
-
-                // Scan for next token, the property's value.
-                value = strtok(nullptr, "");
-                if (value == nullptr)
-                {
-                    AXLOGE("Error parsing properties file: attribute with name ('{}') but no value.", name);
-                    return;
-                }
-
-                // Remove white-space from value.
-                value = trimWhiteSpace(value);
 
                 // Is this a variable assignment?
                 if (auto varLen = extractVariable(name, variable, sizeof(variable)))
@@ -355,57 +335,118 @@ void Properties::readProperties(InputStreamView* isv)
                 else
                 {
                     // Normal name/value pair
-                    _properties.emplace_back(Property(name, make_sv(value)));
+                    _properties.emplace_back(Property(name, value));
                 }
             }
             else
             {
-                parentID = nullptr;
-
-                // Get the last character on the line (ignoring whitespace).
-                const char* lineEnd = trimWhiteSpace(line) + (strlen(trimWhiteSpace(line)) - 1);
-
                 // This line might begin or end a namespace,
                 // or it might be a key/value pair without '='.
 
                 // Check for '{' on same line.
-                rc = strchr(line, '{');
+                size_t braceOpenPos = trimmedLine.find('{');
 
                 // Check for inheritance: ':'
-                rcc = strchr(line, ':');
+                size_t colonPos = trimmedLine.find(':');
 
                 // Check for '}' on same line.
-                rccc = strchr(line, '}');
+                size_t braceClosePos = trimmedLine.find('}');
 
-                // Get the name of the namespace.
-                name = strtok(line, " \t\n{");
-                name = trimWhiteSpace(name);
-                if (name == nullptr)
+                // Get the last non-whitespace character
+                std::string_view lineEndView = trimmedLine;
+                while (!lineEndView.empty() && isspace(lineEndView.back()))
+                    lineEndView.remove_suffix(1);
+
+                // Check if the line ends with '}'
+                bool endsWithBrace = !lineEndView.empty() && lineEndView.back() == '}';
+
+                // Extract tokens without creating vector
+                std::string_view name, id, parentID;
+
+                // Find first token (name)
+                size_t start = 0;
+                size_t end   = trimmedLine.find_first_of(" \t", start);
+                if (end == std::string_view::npos)
                 {
-                    AXLOGE("Error parsing properties file: failed to determine a valid token for line '{}'.", line);
+                    name = trimmedLine.substr(start);
+                }
+                else
+                {
+                    name = trimmedLine.substr(start, end - start);
+
+                    // Skip whitespace after name
+                    start = trimmedLine.find_first_not_of(" \t", end);
+                    if (start != std::string_view::npos)
+                    {
+                        // Find second token (id or special character)
+                        end = trimmedLine.find_first_of(" \t:{", start);
+                        if (end != std::string_view::npos)
+                        {
+                            id = trimmedLine.substr(start, end - start);
+
+                            // Skip whitespace after id
+                            start = trimmedLine.find_first_not_of(" \t", end);
+                        }
+                        else
+                        {
+                            id    = trimmedLine.substr(start);
+                            start = std::string_view::npos;
+                        }
+                    }
+                }
+
+                if (name.empty())
+                {
+                    AXLOGE("Error parsing properties file: failed to determine a valid token for line '{}'.",
+                           trimmedLine);
                     return;
                 }
-                else if (name[0] == '}')
+
+                // Check if the name is just '}' (end of namespace)
+                if (name == "}")
                 {
                     // End of namespace.
                     return;
                 }
 
-                // Get its ID if it has one.
-                value = strtok(nullptr, ":{");
-                value = trimWhiteSpace(value);
-
-                // Get its parent ID if it has one.
-                if (rcc != nullptr)
+                // Handle inheritance (parentID) if ':' exists
+                if (colonPos != std::string_view::npos && start != std::string_view::npos)
                 {
-                    parentID = strtok(nullptr, "{");
-                    parentID = trimWhiteSpace(parentID);
+                    // Find the ':' and get the token after it (parentID)
+                    // Skip to after ':'
+                    size_t colonPosInSubstr = trimmedLine.find(':', start);
+                    if (colonPosInSubstr != std::string_view::npos)
+                    {
+                        start = colonPosInSubstr + 1;
+                        // Skip whitespace after ':'
+                        start = trimmedLine.find_first_not_of(" \t", start);
+                        if (start != std::string_view::npos)
+                        {
+                            // Get parentID (stop at whitespace or '{')
+                            end = trimmedLine.find_first_of(" \t{", start);
+                            if (end != std::string_view::npos)
+                            {
+                                parentID = trimmedLine.substr(start, end - start);
+                            }
+                            else
+                            {
+                                parentID = trimmedLine.substr(start);
+                            }
+                        }
+                    }
                 }
 
-                if (value != nullptr && value[0] == '{')
+                // Trim any trailing whitespace from id and parentID
+                id       = text_utils::trim(id);
+                parentID = text_utils::trim(parentID);
+
+                // Check if this line contains a namespace definition
+                bool hasBraceOnSameLine = (braceOpenPos != std::string_view::npos);
+
+                if (hasBraceOnSameLine)
                 {
                     // If the namespace ends on this line, seek back to right before the '}' character.
-                    if (rccc && rccc == lineEnd)
+                    if (endsWithBrace)
                     {
                         if (!isv->advance(-1))
                         {
@@ -427,12 +468,12 @@ void Properties::readProperties(InputStreamView* isv)
                         }
                     }
 
-                    // New namespace without an ID.
-                    Properties* space = new Properties(isv, name, ""sv, make_sv(parentID), this);
+                    // Create new namespace.
+                    Properties* space = new Properties(isv, name, id, parentID, this);
                     _namespaces.emplace_back(space);
 
                     // If the namespace ends on this line, seek to right after the '}' character.
-                    if (rccc && rccc == lineEnd)
+                    if (endsWithBrace)
                     {
                         if (!isv->advance(1))
                         {
@@ -443,68 +484,25 @@ void Properties::readProperties(InputStreamView* isv)
                 }
                 else
                 {
-                    // If '{' appears on the same line.
-                    if (rc != nullptr)
+                    // Find out if the next line starts with "{"
+                    isv->skipWhiteSpace();
+                    c = isv->readChar();
+                    if (c == '{')
                     {
-                        // If the namespace ends on this line, seek back to right before the '}' character.
-                        if (rccc && rccc == lineEnd)
-                        {
-                            if (!isv->advance(-1))
-                            {
-                                AXLOGE("Failed to seek back to before a '}}' character in properties file.");
-                                return;
-                            }
-                            while (isv->readChar() != '}')
-                            {
-                                if (!isv->advance(-2))
-                                {
-                                    AXLOGE("Failed to seek back to before a '}}' character in properties file.");
-                                    return;
-                                }
-                            }
-                            if (!isv->advance(-1))
-                            {
-                                AXLOGE("Failed to seek back to before a '}}' character in properties file.");
-                                return;
-                            }
-                        }
-
                         // Create new namespace.
-                        Properties* space = new Properties(isv, name, make_sv(value), make_sv(parentID), this);
+                        Properties* space = new Properties(isv, name, id, parentID, this);
                         _namespaces.emplace_back(space);
-
-                        // If the namespace ends on this line, seek to right after the '}' character.
-                        if (rccc && rccc == lineEnd)
-                        {
-                            if (!isv->advance(1))
-                            {
-                                AXLOGE("Failed to seek to immediately after a '}}' character in properties file.");
-                                return;
-                            }
-                        }
                     }
                     else
                     {
-                        // Find out if the next line starts with "{"
-                        isv->skipWhiteSpace();
-                        c = isv->readChar();
-                        if (c == '{')
-                        {
-                            // Create new namespace.
-                            Properties* space = new Properties(isv, name, make_sv(value), make_sv(parentID), this);
-                            _namespaces.emplace_back(space);
-                        }
-                        else
-                        {
-                            // Back up from fgetc()
-                            if (!isv->advance(-1))
-                                AXLOGE(
-                                    "Failed to seek backwards a single character after testing if the next line starts "
-                                    "with '{{'.");
+                        // Back up from readChar()
+                        if (!isv->advance(-1))
+                            AXLOGE(
+                                "Failed to seek backwards a single character after testing if the next line starts "
+                                "with '{{'.");
 
-                            // Store "name value" as a name/value pair, or even just "name".
-                            _properties.emplace_back(Property(name, make_sv(value)));
-                        }
+                        // Store "name value" as a name/value pair, or even just "name".
+                        _properties.emplace_back(Property(name, id));
                     }
                 }
             }
