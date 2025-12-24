@@ -461,12 +461,12 @@ void BMFontConfiguration::parseCommonArguments(std::string_view line)
     //////////////////////////////////////////////////////////////////////////
 
     // Height
-    auto pos = parseNumParam(line, "lineHeight="sv, _commonHeight);
+    parseNumParam(line, "lineHeight="sv, _commonHeight);
 
 #if defined(_AX_DEBUG) && _AX_DEBUG > 0
     // scaleW. sanity check
     int value{-1};
-    pos = parseNumParam(line, "scaleW="sv, value, pos);
+    auto pos = parseNumParam(line, "scaleW="sv, value);
 
     int maxTextureSize = Environment::getInstance()->getMaxTextureSize();
     AXASSERT(value <= maxTextureSize, "CCLabelBMFont: page can't be larger than supported");

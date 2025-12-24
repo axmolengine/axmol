@@ -28522,7 +28522,7 @@ int lua_ax_base_Properties_getNextProperty(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getNextProperty();
-        tolua_pushstring(tolua_S,(const char*)ret);
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Properties:getNextProperty",argc, 0);
@@ -28652,8 +28652,8 @@ int lua_ax_base_Properties_getNamespace(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do {
         if (argc == 0) {
-            const char* ret = obj->getNamespace();
-            tolua_pushstring(tolua_S,(const char*)ret);
+            std::string_view ret = obj->getNamespace();
+            lua_pushlstring(tolua_S,ret.data(),ret.length());
             return 1;
         }
     }while(0);
@@ -28791,9 +28791,9 @@ int lua_ax_base_Properties_exists(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        const char* arg0;
+        std::string_view arg0;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:exists"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:exists");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Properties_exists'", nullptr);
@@ -28852,9 +28852,9 @@ int lua_ax_base_Properties_getType(lua_State* tolua_S)
     }
     if (argc == 1)
     {
-        const char* arg0;
+        std::string_view arg0;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getType"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Properties_getType'", nullptr);
@@ -28908,38 +28908,38 @@ int lua_ax_base_Properties_getString(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getString();
-        tolua_pushstring(tolua_S,(const char*)ret);
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     if (argc == 1)
     {
-        const char* arg0;
+        std::string_view arg0;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getString"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getString");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Properties_getString'", nullptr);
             return 0;
         }
         auto&& ret = obj->getString(arg0);
-        tolua_pushstring(tolua_S,(const char*)ret);
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     if (argc == 2)
     {
-        const char* arg0;
-        const char* arg1;
+        std::string_view arg0;
+        std::string_view arg1;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getString"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getString");
 
-        std::string arg1_tmp; ok &= luaval_to_std_string(tolua_S, 3, &arg1_tmp, "ax.Properties:getString"); arg1 = arg1_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.Properties:getString");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Properties_getString'", nullptr);
             return 0;
         }
         auto&& ret = obj->getString(arg0, arg1);
-        tolua_pushstring(tolua_S,(const char*)ret);
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Properties:getString",argc, 0);
@@ -28980,12 +28980,12 @@ int lua_ax_base_Properties_setString(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2)
     {
-        const char* arg0;
-        const char* arg1;
+        std::string_view arg0;
+        std::string_view arg1;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:setString"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:setString");
 
-        std::string arg1_tmp; ok &= luaval_to_std_string(tolua_S, 3, &arg1_tmp, "ax.Properties:setString"); arg1 = arg1_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.Properties:setString");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Properties_setString'", nullptr);
@@ -29044,9 +29044,9 @@ int lua_ax_base_Properties_getBool(lua_State* tolua_S)
     }
     if (argc == 1)
     {
-        const char* arg0;
+        std::string_view arg0;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getBool"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getBool");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Properties_getBool'", nullptr);
@@ -29058,10 +29058,10 @@ int lua_ax_base_Properties_getBool(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        const char* arg0;
+        std::string_view arg0;
         bool arg1;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getBool"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getBool");
 
         ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.Properties:getBool");
         if(!ok)
@@ -29122,9 +29122,9 @@ int lua_ax_base_Properties_getInt(lua_State* tolua_S)
     }
     if (argc == 1)
     {
-        const char* arg0;
+        std::string_view arg0;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getInt"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getInt");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Properties_getInt'", nullptr);
@@ -29183,9 +29183,9 @@ int lua_ax_base_Properties_getFloat(lua_State* tolua_S)
     }
     if (argc == 1)
     {
-        const char* arg0;
+        std::string_view arg0;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getFloat"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getFloat");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Properties_getFloat'", nullptr);
@@ -29233,10 +29233,10 @@ int lua_ax_base_Properties_getMat4(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2)
     {
-        const char* arg0;
+        std::string_view arg0;
         ax::Mat4* arg1;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getMat4"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getMat4");
 
         ok &= luaval_to_object<ax::Mat4>(tolua_S, 3, "ax.Mat4",&arg1, "ax.Properties:getMat4");
         if(!ok)
@@ -29286,10 +29286,10 @@ int lua_ax_base_Properties_getVec2(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2)
     {
-        const char* arg0;
+        std::string_view arg0;
         ax::Vec2* arg1;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getVec2"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getVec2");
 
         ok &= luaval_to_object<ax::Vec2>(tolua_S, 3, "ax.Vec2",&arg1, "ax.Properties:getVec2");
         if(!ok)
@@ -29339,10 +29339,10 @@ int lua_ax_base_Properties_getVec3(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2)
     {
-        const char* arg0;
+        std::string_view arg0;
         ax::Vec3* arg1;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getVec3"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getVec3");
 
         ok &= luaval_to_object<ax::Vec3>(tolua_S, 3, "ax.Vec3",&arg1, "ax.Properties:getVec3");
         if(!ok)
@@ -29392,10 +29392,10 @@ int lua_ax_base_Properties_getVec4(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2)
     {
-        const char* arg0;
+        std::string_view arg0;
         ax::Vec4* arg1;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getVec4"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getVec4");
 
         ok &= luaval_to_object<ax::Vec4>(tolua_S, 3, "ax.Vec4",&arg1, "ax.Properties:getVec4");
         if(!ok)
@@ -29445,10 +29445,10 @@ int lua_ax_base_Properties_getQuaternionFromAxisAngle(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2)
     {
-        const char* arg0;
+        std::string_view arg0;
         ax::Quaternion* arg1;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getQuaternionFromAxisAngle"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getQuaternionFromAxisAngle");
 
         ok &= luaval_to_object<ax::Quaternion>(tolua_S, 3, "ax.Quaternion",&arg1, "ax.Properties:getQuaternionFromAxisAngle");
         if(!ok)
@@ -29498,10 +29498,10 @@ int lua_ax_base_Properties_getColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2)
     {
-        const char* arg0;
+        std::string_view arg0;
         ax::Color* arg1;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getColor"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getColor");
 
         #pragma warning NO CONVERSION TO NATIVE FOR Color*
         ok = false;
@@ -29552,10 +29552,10 @@ int lua_ax_base_Properties_getPath(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2)
     {
-        const char* arg0;
+        std::string_view arg0;
         std::string* arg1;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getPath"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getPath");
 
         #pragma warning NO CONVERSION TO NATIVE FOR basic_string*
         ok = false;
@@ -29606,33 +29606,33 @@ int lua_ax_base_Properties_getVariable(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        const char* arg0;
+        std::string_view arg0;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getVariable"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getVariable");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Properties_getVariable'", nullptr);
             return 0;
         }
         auto&& ret = obj->getVariable(arg0);
-        tolua_pushstring(tolua_S,(const char*)ret);
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     if (argc == 2)
     {
-        const char* arg0;
-        const char* arg1;
+        std::string_view arg0;
+        std::string_view arg1;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getVariable"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getVariable");
 
-        std::string arg1_tmp; ok &= luaval_to_std_string(tolua_S, 3, &arg1_tmp, "ax.Properties:getVariable"); arg1 = arg1_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.Properties:getVariable");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Properties_getVariable'", nullptr);
             return 0;
         }
         auto&& ret = obj->getVariable(arg0, arg1);
-        tolua_pushstring(tolua_S,(const char*)ret);
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Properties:getVariable",argc, 1);
@@ -29673,12 +29673,12 @@ int lua_ax_base_Properties_setVariable(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2)
     {
-        const char* arg0;
-        const char* arg1;
+        std::string_view arg0;
+        std::string_view arg1;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:setVariable"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:setVariable");
 
-        std::string arg1_tmp; ok &= luaval_to_std_string(tolua_S, 3, &arg1_tmp, "ax.Properties:setVariable"); arg1 = arg1_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.Properties:setVariable");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Properties_setVariable'", nullptr);
@@ -29715,9 +29715,9 @@ int lua_ax_base_Properties_parseVec2(lua_State* tolua_S)
 
     if (argc == 2)
     {
-        const char* arg0;
+        std::string_view arg0;
         ax::Vec2* arg1;
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:parseVec2"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:parseVec2");
         ok &= luaval_to_object<ax::Vec2>(tolua_S, 3, "ax.Vec2",&arg1, "ax.Properties:parseVec2");
         if(!ok)
         {
@@ -29753,9 +29753,9 @@ int lua_ax_base_Properties_parseVec3(lua_State* tolua_S)
 
     if (argc == 2)
     {
-        const char* arg0;
+        std::string_view arg0;
         ax::Vec3* arg1;
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:parseVec3"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:parseVec3");
         ok &= luaval_to_object<ax::Vec3>(tolua_S, 3, "ax.Vec3",&arg1, "ax.Properties:parseVec3");
         if(!ok)
         {
@@ -29791,9 +29791,9 @@ int lua_ax_base_Properties_parseVec4(lua_State* tolua_S)
 
     if (argc == 2)
     {
-        const char* arg0;
+        std::string_view arg0;
         ax::Vec4* arg1;
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:parseVec4"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:parseVec4");
         ok &= luaval_to_object<ax::Vec4>(tolua_S, 3, "ax.Vec4",&arg1, "ax.Properties:parseVec4");
         if(!ok)
         {
@@ -29829,9 +29829,9 @@ int lua_ax_base_Properties_parseAxisAngle(lua_State* tolua_S)
 
     if (argc == 2)
     {
-        const char* arg0;
+        std::string_view arg0;
         ax::Quaternion* arg1;
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:parseAxisAngle"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:parseAxisAngle");
         ok &= luaval_to_object<ax::Quaternion>(tolua_S, 3, "ax.Quaternion",&arg1, "ax.Properties:parseAxisAngle");
         if(!ok)
         {
@@ -29867,9 +29867,9 @@ int lua_ax_base_Properties_parseColor(lua_State* tolua_S)
 
     if (argc == 2)
     {
-        const char* arg0;
+        std::string_view arg0;
         ax::Color* arg1;
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:parseColor"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:parseColor");
         #pragma warning NO CONVERSION TO NATIVE FOR Color*
         ok = false;
         if(!ok)

@@ -34866,9 +34866,9 @@ int lua_ax_ui_EditBox_setText(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        const char* arg0;
+        std::string_view arg0;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "axui.EditBox:setText"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.EditBox:setText");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_setText'", nullptr);
@@ -34922,7 +34922,7 @@ int lua_ax_ui_EditBox_getText(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getText();
-        tolua_pushstring(tolua_S,(const char*)ret);
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.EditBox:getText",argc, 0);
@@ -34963,10 +34963,10 @@ int lua_ax_ui_EditBox_setFont(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2)
     {
-        const char* arg0;
+        std::string_view arg0;
         int arg1;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "axui.EditBox:setFont"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.EditBox:setFont");
 
         ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.EditBox:setFont");
         if(!ok)
@@ -35016,9 +35016,9 @@ int lua_ax_ui_EditBox_setFontName(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        const char* arg0;
+        std::string_view arg0;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "axui.EditBox:setFontName"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.EditBox:setFontName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_setFontName'", nullptr);
@@ -35072,7 +35072,7 @@ int lua_ax_ui_EditBox_getFontName(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getFontName();
-        tolua_pushstring(tolua_S,(const char*)ret);
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.EditBox:getFontName",argc, 0);
@@ -35307,10 +35307,10 @@ int lua_ax_ui_EditBox_setPlaceholderFont(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2)
     {
-        const char* arg0;
+        std::string_view arg0;
         int arg1;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "axui.EditBox:setPlaceholderFont"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.EditBox:setPlaceholderFont");
 
         ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.EditBox:setPlaceholderFont");
         if(!ok)
@@ -35360,9 +35360,9 @@ int lua_ax_ui_EditBox_setPlaceholderFontName(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        const char* arg0;
+        std::string_view arg0;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "axui.EditBox:setPlaceholderFontName"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.EditBox:setPlaceholderFontName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_setPlaceholderFontName'", nullptr);
@@ -35416,7 +35416,7 @@ int lua_ax_ui_EditBox_getPlaceholderFontName(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getPlaceholderFontName();
-        tolua_pushstring(tolua_S,(const char*)ret);
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.EditBox:getPlaceholderFontName",argc, 0);
@@ -35651,9 +35651,9 @@ int lua_ax_ui_EditBox_setPlaceHolder(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        const char* arg0;
+        std::string_view arg0;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "axui.EditBox:setPlaceHolder"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.EditBox:setPlaceHolder");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_setPlaceHolder'", nullptr);
@@ -35707,7 +35707,7 @@ int lua_ax_ui_EditBox_getPlaceHolder(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getPlaceHolder();
-        tolua_pushstring(tolua_S,(const char*)ret);
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.EditBox:getPlaceHolder",argc, 0);
