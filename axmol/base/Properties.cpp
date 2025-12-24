@@ -52,12 +52,64 @@ struct Properties::InputStreamView
 {
     InputStreamView(char* data, size_t size) : _first(data), _last(data + size), _ptr(data) {}
 
-    char* readLine(char* output, int outlen);
+    char* readLine(char* output, int outlen)
+    {
+        if (eof())
+            return nullptr;
 
-    void skipWhiteSpace();
-    signed char readChar();
-    bool advance(int offset);
-    bool eof();
+        int bytes_read = 0;
+        for (; _ptr < _last && bytes_read < (outlen - 1);)
+        {
+            const auto c = *_ptr++;
+            if (c == '\n') [[unlikely]]
+                break;
+            output[bytes_read++] = c;
+        }
+
+        output[bytes_read] = '\0';
+
+        return output;
+    }
+    std::string_view readLineSV()
+    {
+        char* lineStart = _ptr;
+        while (!eof() && *_ptr != '\n')
+            _ptr++;
+        return std::string_view(lineStart, _ptr - lineStart);
+    }
+
+    void skipWhiteSpace()
+    {
+        signed char c;
+        do
+        {
+            c = readChar();
+        } while (isspace(c) && c != EOF);
+
+        // If we are not at the end of the file, then since we found a
+        // non-whitespace character, we put the cursor back in front of it.
+        if (c != EOF)
+        {
+            if (!advance(-1))
+            {
+                AXLOGE("Failed to seek backwards one character after skipping whitespace.");
+            }
+        }
+    }
+
+    signed char readChar()
+    {
+        if (eof())
+            return EOF;
+        return *_ptr++;
+    }
+    bool advance(int offset)
+    {
+        if (!eof())
+            _ptr += offset;
+        return !eof();
+    }
+    bool eof() { return _ptr >= _last || _ptr < _first; }
 
     bool empty() const { return _first == _last; }
 
@@ -65,63 +117,6 @@ struct Properties::InputStreamView
     char* _last;
     char* _ptr;
 };
-
-signed char Properties::InputStreamView::readChar()
-{
-    if (eof())
-        return EOF;
-    return *_ptr++;
-}
-
-char* Properties::InputStreamView::readLine(char* output, int outlen)
-{
-    if (eof())
-        return nullptr;
-
-    int bytes_read = 0;
-    for (; _ptr < _last && bytes_read < (outlen - 1);)
-    {
-        const auto c = *_ptr++;
-        if (c == '\n') [[unlikely]]
-            break;
-        output[bytes_read++] = c;
-    }
-
-    output[bytes_read] = '\0';
-
-    return output;
-}
-
-bool Properties::InputStreamView::advance(int offset)
-{
-    if (!eof())
-        _ptr += offset;
-    return !eof();
-}
-
-bool Properties::InputStreamView::eof()
-{
-    return _ptr >= _last || _ptr < _first;
-}
-
-void Properties::InputStreamView::skipWhiteSpace()
-{
-    signed char c;
-    do
-    {
-        c = readChar();
-    } while (isspace(c) && c != EOF);
-
-    // If we are not at the end of the file, then since we found a
-    // non-whitespace character, we put the cursor back in front of it.
-    if (c != EOF)
-    {
-        if (!advance(-1))
-        {
-            AXLOGE("Failed to seek backwards one character after skipping whitespace.");
-        }
-    }
-}
 
 // Utility functions (shared with SceneLoader).
 /** @script{ignore} */
