@@ -34,6 +34,7 @@
 #include "axmol/base/Map.h"
 #include "axmol/base/text_utils.h"
 #include "axmol/renderer/TextureCache.h"
+#include "axmol/tlx/charconv.hpp"
 
 #include <cmath>
 
@@ -53,6 +54,22 @@ enum
 };
 
 struct _FontDefHashElement;
+
+template<typename _Tp>
+static size_t parseNumParam(std::string_view line, std::string_view key, _Tp& outValue, size_t offset = 0)
+{
+    auto pos = line.find(key, offset);
+    if (pos == std::string_view::npos)
+        return std::string_view::npos;
+
+    auto substr = line.substr(pos + key.size());
+
+    auto [last, ec] = tlx::from_chars(substr, outValue);
+    if (ec != std::errc{})
+        return std::string_view::npos;
+
+    return last - line.data();
+}
 
 //
 // FNTConfig Cache - free functions
@@ -170,6 +187,8 @@ std::set<unsigned int> BMFontConfiguration::parseConfigFile(std::string_view con
         memcpy(line, contents + parseCount, lineLength);
         line[lineLength] = 0;
 
+        std::string_view linesv{line, lineLength};
+
         parseCount += lineLength + 1;
         if (parseCount < contentsLen)
         {
@@ -186,16 +205,16 @@ std::set<unsigned int> BMFontConfiguration::parseConfigFile(std::string_view con
             // FIXME: info parsing is incomplete
             // Not needed for the Hiero editors, but needed for the AngelCode editor
             //            [self parseInfoArguments:line];
-            this->parseInfoArguments(line);
+            this->parseInfoArguments(linesv);
         }
         // Check to see if the start of the line is something we are interested in
         else if (memcmp(line, "common lineHeight", 17) == 0)
         {
-            this->parseCommonArguments(line);
+            this->parseCommonArguments(linesv);
         }
         else if (memcmp(line, "page id", 7) == 0)
         {
-            this->parseImageFileName(line, controlFile);
+            this->parseImageFileName(linesv, controlFile);
         }
         else if (memcmp(line, "chars c", 7) == 0)
         {
@@ -204,12 +223,12 @@ std::set<unsigned int> BMFontConfiguration::parseConfigFile(std::string_view con
         else if (memcmp(line, "char", 4) == 0)
         {
             // Parse the current line and create a new CharDef
-            unsigned int charID = this->parseCharacterDefinition(line);
+            unsigned int charID = this->parseCharacterDefinition(linesv);
             validCharsString.insert(charID);
         }
         else if (memcmp(line, "kerning first", 13) == 0)
         {
-            this->parseKerningEntry(line);
+            this->parseKerningEntry(linesv);
         }
     }
 
@@ -393,7 +412,7 @@ std::set<unsigned int> BMFontConfiguration::parseBinaryConfigFile(unsigned char*
     return validCharsString;
 }
 
-void BMFontConfiguration::parseImageFileName(const char* line, std::string_view fntFile)
+void BMFontConfiguration::parseImageFileName(std::string_view line, std::string_view fntFile)
 {
     //////////////////////////////////////////////////////////////////////////
     // line to parse:
@@ -401,17 +420,25 @@ void BMFontConfiguration::parseImageFileName(const char* line, std::string_view 
     //////////////////////////////////////////////////////////////////////////
 
     // page ID. Sanity check
-    int pageId;
-    sscanf(line, "page id=%d", &pageId);
+    int pageId{-1};
+    auto pos = parseNumParam(line, "page id=", pageId);
     AXASSERT(pageId == 0, "LabelBMFont file could not be found");
 
     // file
-    char fileName[255];
-    sscanf(strstr(line, "file=\"") + 6, "%[^\"]", fileName);
+    std::string_view fileName;
+    auto start = line.find("file=\"", pos);
+    if (start != std::string_view::npos)
+    {
+        start += 6;
+        auto end = line.find('"', start);
+        if (end != std::string_view::npos)
+            fileName = line.substr(start, end - start);
+    }
+
     _atlasName = FileUtils::getInstance()->fullPathFromRelativeFile(fileName, fntFile);
 }
 
-void BMFontConfiguration::parseInfoArguments(const char* line)
+void BMFontConfiguration::parseInfoArguments(std::string_view line)
 {
     //////////////////////////////////////////////////////////////////////////
     // possible lines to parse:
@@ -419,14 +446,14 @@ void BMFontConfiguration::parseInfoArguments(const char* line)
     // spacing=0,0 outline=0 info face="Cracked" size=36 bold=0 italic=0 charset="" unicode=0 stretchH=100 smooth=1 aa=1
     // padding=0,0,0,0 spacing=1,1
     //////////////////////////////////////////////////////////////////////////
-    sscanf(strstr(line, "size=") + 5, "%d", &_fontSize);
-    // padding
-    sscanf(strstr(line, "padding=") + 8, "%d,%d,%d,%d", &_padding.top, &_padding.right, &_padding.bottom,
-           &_padding.left);
-    // AXLOGD("axmol: padding: {},{},{},{}", _padding.left, _padding.top, _padding.right, _padding.bottom);
+    auto pos = parseNumParam(line, "size="sv, _fontSize);
+
+    pos = line.find("padding=", pos);
+    if (pos != std::string_view::npos)
+        tlx::from_chars(line.substr(pos + 8), ',', _padding.top, _padding.right, _padding.bottom, _padding.left);
 }
 
-void BMFontConfiguration::parseCommonArguments(const char* line)
+void BMFontConfiguration::parseCommonArguments(std::string_view line)
 {
     //////////////////////////////////////////////////////////////////////////
     // line to parse:
@@ -434,32 +461,28 @@ void BMFontConfiguration::parseCommonArguments(const char* line)
     //////////////////////////////////////////////////////////////////////////
 
     // Height
-    auto tmp = strstr(line, "lineHeight=") + 11;
-    sscanf(tmp, "%d", &_commonHeight);
+    auto pos = parseNumParam(line, "lineHeight="sv, _commonHeight);
 
 #if defined(_AX_DEBUG) && _AX_DEBUG > 0
     // scaleW. sanity check
-    int value;
-    tmp = strstr(tmp, "scaleW=") + 7;
-    sscanf(tmp, "%d", &value);
+    int value{-1};
+    pos = parseNumParam(line, "scaleW="sv, value, pos);
 
     int maxTextureSize = Environment::getInstance()->getMaxTextureSize();
     AXASSERT(value <= maxTextureSize, "CCLabelBMFont: page can't be larger than supported");
 
     // scaleH. sanity check
-    tmp = strstr(tmp, "scaleH=") + 7;
-    sscanf(tmp, "%d", &value);
+    pos = parseNumParam(line, "scaleH="sv, value, pos);
     AXASSERT(value <= maxTextureSize, "CCLabelBMFont: page can't be larger than supported");
 
     // pages. sanity check
-    tmp = strstr(tmp, "pages=") + 6;
-    sscanf(tmp, "%d", &value);
+    parseNumParam(line, "pages="sv, value, pos);
     AXASSERT(value == 1, "CCBitfontAtlas: only supports 1 page");
 #endif
     // packed (ignore) What does this mean ??
 }
 
-unsigned int BMFontConfiguration::parseCharacterDefinition(const char* line)
+unsigned int BMFontConfiguration::parseCharacterDefinition(std::string_view line)
 {
     unsigned int charID = 0;
 
@@ -469,38 +492,30 @@ unsigned int BMFontConfiguration::parseCharacterDefinition(const char* line)
     //////////////////////////////////////////////////////////////////////////
 
     // Character ID
-    auto tmp = strstr(line, "id=") + 3;
-    sscanf(tmp, "%u", &charID);
+    auto pos = parseNumParam(line, "id="sv, charID);
 
     BMFontDef& characterDefinition = _fontDefDictionary[charID];
     characterDefinition.charID     = charID;
 
     // Character x
-    tmp = strstr(tmp, "x=") + 2;
-    sscanf(tmp, "%f", &characterDefinition.rect.origin.x);
+    pos = parseNumParam(line, "x="sv, characterDefinition.rect.origin.x, pos);
     // Character y
-    tmp = strstr(tmp, "y=") + 2;
-    sscanf(tmp, "%f", &characterDefinition.rect.origin.y);
+    pos = parseNumParam(line, "y="sv, characterDefinition.rect.origin.y, pos);
     // Character width
-    tmp = strstr(tmp, "width=") + 6;
-    sscanf(tmp, "%f", &characterDefinition.rect.size.width);
+    pos = parseNumParam(line, "width="sv, characterDefinition.rect.size.width, pos);
     // Character height
-    tmp = strstr(tmp, "height=") + 7;
-    sscanf(tmp, "%f", &characterDefinition.rect.size.height);
+    pos = parseNumParam(line, "height="sv, characterDefinition.rect.size.height, pos);
     // Character xoffset
-    tmp = strstr(tmp, "xoffset=") + 8;
-    sscanf(tmp, "%hd", &characterDefinition.xOffset);
+    pos = parseNumParam(line, "xoffset="sv, characterDefinition.xOffset, pos);
     // Character yoffset
-    tmp = strstr(tmp, "yoffset=") + 8;
-    sscanf(tmp, "%hd", &characterDefinition.yOffset);
+    pos = parseNumParam(line, "yoffset="sv, characterDefinition.yOffset, pos);
     // Character xadvance
-    tmp = strstr(tmp, "xadvance=") + 9;
-    sscanf(tmp, "%hd", &characterDefinition.xAdvance);
+    parseNumParam(line, "xadvance="sv, characterDefinition.xAdvance, pos);
 
     return charID;
 }
 
-void BMFontConfiguration::parseKerningEntry(const char* line)
+void BMFontConfiguration::parseKerningEntry(std::string_view line)
 {
     //////////////////////////////////////////////////////////////////////////
     // line to parse:
@@ -508,14 +523,12 @@ void BMFontConfiguration::parseKerningEntry(const char* line)
     //////////////////////////////////////////////////////////////////////////
 
     int first, second, amount;
-    auto tmp = strstr(line, "first=") + 6;
-    sscanf(tmp, "%d", &first);
+    auto pos = parseNumParam(line, "first="sv, first);
 
-    tmp = strstr(tmp, "second=") + 7;
-    sscanf(tmp, "%d", &second);
+    pos = parseNumParam(line, "second="sv, second, pos);
 
-    tmp = strstr(tmp, "amount=") + 7;
-    sscanf(tmp, "%d", &amount);
+
+    parseNumParam(line, "amount="sv, amount, pos);
 
     uint64_t key = ((uint64_t)first << 32) | ((uint64_t)second & 0xffffffffll);
 

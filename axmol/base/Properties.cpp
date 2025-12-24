@@ -841,7 +841,7 @@ std::string_view Properties::getString(std::string_view name, std::string_view d
     {
         // If the value references a variable, return the variable value
         if (auto varLen = extractVariable(value, variable, sizeof(variable)))
-            return getVariable(std::string_view{variable}, defaultValue);
+            return getVariable(std::string_view{variable, varLen}, defaultValue);
 
         return value;
     }

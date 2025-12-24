@@ -61,13 +61,13 @@ BMFont padding
 typedef struct _BMFontPadding
 {
     /// padding left
-    int left;
+    int left{0};
     /// padding top
-    int top;
+    int top{0};
     /// padding right
-    int right;
+    int right{0};
     /// padding bottom
-    int bottom;
+    int bottom{0};
 } BMFontPadding;
 
 /** @brief BMFontConfiguration has parsed configuration of the .fnt file
@@ -84,7 +84,7 @@ public:  //@public
     int _commonHeight;
 
     //! Padding
-    BMFontPadding _padding;
+    BMFontPadding _padding{};
 
     //! atlas name
     std::string _atlasName;
@@ -129,11 +129,11 @@ protected:
                                                           std::string_view controlFile);
 
 private:
-    unsigned int parseCharacterDefinition(const char* line);
-    void parseInfoArguments(const char* line);
-    void parseCommonArguments(const char* line);
-    void parseImageFileName(const char* line, std::string_view fntFile);
-    void parseKerningEntry(const char* line);
+    unsigned int parseCharacterDefinition(std::string_view line);
+    void parseInfoArguments(std::string_view line);
+    void parseCommonArguments(std::string_view line);
+    void parseImageFileName(std::string_view line, std::string_view fntFile);
+    void parseKerningEntry(std::string_view line);
     void purgeKerningDictionary();
     void purgeFontDefDictionary();
 };
