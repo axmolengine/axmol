@@ -289,7 +289,7 @@ static bool LinuxInputBox(std::string_view entryLine)
     switch (result)
     {
     case 0:
-        entryLine = gtk_entry_get_text(GTK_ENTRY(entry));
+        // entryLine = gtk_entry_get_text(GTK_ENTRY(entry));
         didChange = true;
         break;
     default:

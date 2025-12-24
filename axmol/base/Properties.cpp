@@ -34,8 +34,15 @@
 #include "axmol/math/Quaternion.h"
 #include "axmol/base/text_utils.h"
 #include "axmol/base/Data.h"
+#include "axmol/tlx/charconv.hpp"
 
-using namespace ax;
+namespace ax
+{
+
+static std::string_view make_sv(const char* cstr)
+{
+    return cstr ? std::string_view{cstr} : std::string_view{};
+}
 
 // Utility functions (shared with SceneLoader).
 /** @script{ignore} */
@@ -72,7 +79,7 @@ Properties::Properties(const Properties& copy)
 }
 
 Properties::Properties(Data* data, ssize_t* dataIdx)
-    : _dataIdx(dataIdx), _data(data), _variables(NULL), _dirPath(NULL), _parent(NULL)
+    : _dataIdx(dataIdx), _data(data), _variables(nullptr), _dirPath(nullptr), _parent(nullptr)
 {
     readProperties();
     rewind();
@@ -81,16 +88,16 @@ Properties::Properties(Data* data, ssize_t* dataIdx)
 Properties::Properties(Data* data,
                        ssize_t* dataIdx,
                        std::string_view name,
-                       const char* id,
-                       const char* parentID,
+                       std::string_view id,
+                       std::string_view parentID,
                        Properties* parent)
-    : _dataIdx(dataIdx), _data(data), _namespace(name), _variables(NULL), _dirPath(NULL), _parent(parent)
+    : _dataIdx(dataIdx), _data(data), _namespace(name), _variables(nullptr), _dirPath(nullptr), _parent(parent)
 {
-    if (id)
+    if (!id.empty())
     {
         _id = id;
     }
-    if (parentID)
+    if (!parentID.empty())
     {
         _parentID = parentID;
     }
@@ -142,19 +149,19 @@ Properties* Properties::createNonRefCounted(std::string_view url)
     return p;
 }
 
-static bool isVariable(const char* str, char* outName, size_t outSize)
+static bool isVariable(std::string_view str, char* outName, size_t outSize)
 {
-    if (!str || !outName || outSize == 0)
+    if (str.empty() || !outName || outSize == 0)
         return false;
 
-    size_t len = strlen(str);
+    size_t len = str.size();
     if (len > 3 && str[0] == '$' && str[1] == '{' && str[len - 1] == '}')
     {
         size_t copyLen = len - 3;
         if (copyLen >= outSize)
             copyLen = outSize - 1;
 
-        memcpy(outName, str + 2, copyLen);
+        memcpy(outName, str.data() + 2, copyLen);
         outName[copyLen] = '\0';
         return true;
     }
@@ -188,7 +195,7 @@ void Properties::readProperties()
 
         // Read the next line.
         rc = readLine(line, 2048);
-        if (rc == NULL)
+        if (rc == nullptr)
         {
             AXLOGE("Error reading line from file.");
             return;
@@ -218,11 +225,11 @@ void Properties::readProperties()
             // If an '=' appears on this line, parse it as a name/value pair.
             // Note: strchr() has to be called before strtok(), or a backup of line has to be kept.
             rc = strchr(line, '=');
-            if (rc != NULL)
+            if (rc != nullptr)
             {
                 // First token should be the property name.
                 name = strtok(line, "=");
-                if (name == NULL)
+                if (name == nullptr)
                 {
                     AXLOGE("Error parsing properties file: attribute without name.");
                     return;
@@ -232,8 +239,8 @@ void Properties::readProperties()
                 name = trimWhiteSpace(name);
 
                 // Scan for next token, the property's value.
-                value = strtok(NULL, "");
-                if (value == NULL)
+                value = strtok(nullptr, "");
+                if (value == nullptr)
                 {
                     AXLOGE("Error parsing properties file: attribute with name ('{}') but no value.", name);
                     return;
@@ -250,12 +257,12 @@ void Properties::readProperties()
                 else
                 {
                     // Normal name/value pair
-                    _properties.emplace_back(Property(name, value));
+                    _properties.emplace_back(Property(name, make_sv(value)));
                 }
             }
             else
             {
-                parentID = NULL;
+                parentID = nullptr;
 
                 // Get the last character on the line (ignoring whitespace).
                 const char* lineEnd = trimWhiteSpace(line) + (strlen(trimWhiteSpace(line)) - 1);
@@ -275,7 +282,7 @@ void Properties::readProperties()
                 // Get the name of the namespace.
                 name = strtok(line, " \t\n{");
                 name = trimWhiteSpace(name);
-                if (name == NULL)
+                if (name == nullptr)
                 {
                     AXLOGE("Error parsing properties file: failed to determine a valid token for line '{}'.", line);
                     return;
@@ -287,35 +294,35 @@ void Properties::readProperties()
                 }
 
                 // Get its ID if it has one.
-                value = strtok(NULL, ":{");
+                value = strtok(nullptr, ":{");
                 value = trimWhiteSpace(value);
 
                 // Get its parent ID if it has one.
-                if (rcc != NULL)
+                if (rcc != nullptr)
                 {
-                    parentID = strtok(NULL, "{");
+                    parentID = strtok(nullptr, "{");
                     parentID = trimWhiteSpace(parentID);
                 }
 
-                if (value != NULL && value[0] == '{')
+                if (value != nullptr && value[0] == '{')
                 {
                     // If the namespace ends on this line, seek back to right before the '}' character.
                     if (rccc && rccc == lineEnd)
                     {
-                        if (seekFromCurrent(-1) == false)
+                        if (!seekFromCurrent(-1))
                         {
                             AXLOGE("Failed to seek back to before a '}}' character in properties file.");
                             return;
                         }
                         while (readChar() != '}')
                         {
-                            if (seekFromCurrent(-2) == false)
+                            if (!seekFromCurrent(-2))
                             {
                                 AXLOGE("Failed to seek back to before a '}}' character in properties file.");
                                 return;
                             }
                         }
-                        if (seekFromCurrent(-1) == false)
+                        if (!seekFromCurrent(-1))
                         {
                             AXLOGE("Failed to seek back to before a '}}' character in properties file.");
                             return;
@@ -323,13 +330,13 @@ void Properties::readProperties()
                     }
 
                     // New namespace without an ID.
-                    Properties* space = new Properties(_data, _dataIdx, name, NULL, parentID, this);
+                    Properties* space = new Properties(_data, _dataIdx, name, ""sv, make_sv(parentID), this);
                     _namespaces.emplace_back(space);
 
                     // If the namespace ends on this line, seek to right after the '}' character.
                     if (rccc && rccc == lineEnd)
                     {
-                        if (seekFromCurrent(1) == false)
+                        if (!seekFromCurrent(1))
                         {
                             AXLOGE("Failed to seek to immediately after a '}}' character in properties file.");
                             return;
@@ -339,25 +346,25 @@ void Properties::readProperties()
                 else
                 {
                     // If '{' appears on the same line.
-                    if (rc != NULL)
+                    if (rc != nullptr)
                     {
                         // If the namespace ends on this line, seek back to right before the '}' character.
                         if (rccc && rccc == lineEnd)
                         {
-                            if (seekFromCurrent(-1) == false)
+                            if (!seekFromCurrent(-1))
                             {
                                 AXLOGE("Failed to seek back to before a '}}' character in properties file.");
                                 return;
                             }
                             while (readChar() != '}')
                             {
-                                if (seekFromCurrent(-2) == false)
+                                if (!seekFromCurrent(-2))
                                 {
                                     AXLOGE("Failed to seek back to before a '}}' character in properties file.");
                                     return;
                                 }
                             }
-                            if (seekFromCurrent(-1) == false)
+                            if (!seekFromCurrent(-1))
                             {
                                 AXLOGE("Failed to seek back to before a '}}' character in properties file.");
                                 return;
@@ -365,13 +372,13 @@ void Properties::readProperties()
                         }
 
                         // Create new namespace.
-                        Properties* space = new Properties(_data, _dataIdx, name, value, parentID, this);
+                        Properties* space = new Properties(_data, _dataIdx, name, make_sv(value), make_sv(parentID), this);
                         _namespaces.emplace_back(space);
 
                         // If the namespace ends on this line, seek to right after the '}' character.
                         if (rccc && rccc == lineEnd)
                         {
-                            if (seekFromCurrent(1) == false)
+                            if (!seekFromCurrent(1))
                             {
                                 AXLOGE("Failed to seek to immediately after a '}}' character in properties file.");
                                 return;
@@ -386,26 +393,19 @@ void Properties::readProperties()
                         if (c == '{')
                         {
                             // Create new namespace.
-                            Properties* space = new Properties(_data, _dataIdx, name, value, parentID, this);
+                            Properties* space = new Properties(_data, _dataIdx, name, make_sv(value), make_sv(parentID), this);
                             _namespaces.emplace_back(space);
                         }
                         else
                         {
                             // Back up from fgetc()
-                            if (seekFromCurrent(-1) == false)
+                            if (!seekFromCurrent(-1))
                                 AXLOGE(
                                     "Failed to seek backwards a single character after testing if the next line starts "
                                     "with '{{'.");
 
                             // Store "name value" as a name/value pair, or even just "name".
-                            if (value != NULL)
-                            {
-                                _properties.emplace_back(Property(name, value));
-                            }
-                            else
-                            {
-                                _properties.emplace_back(Property(name, ""));
-                            }
+                            _properties.emplace_back(Property(name, make_sv(value)));
                         }
                     }
                 }
@@ -484,7 +484,7 @@ void Properties::skipWhiteSpace()
     // non-whitespace character, we put the cursor back in front of it.
     if (c != EOF)
     {
-        if (seekFromCurrent(-1) == false)
+        if (!seekFromCurrent(-1))
         {
             AXLOGE("Failed to seek backwards one character after skipping whitespace.");
         }
@@ -493,7 +493,7 @@ void Properties::skipWhiteSpace()
 
 char* Properties::trimWhiteSpace(char* str)
 {
-    if (str == NULL)
+    if (!str)
     {
         return str;
     }
@@ -582,7 +582,7 @@ void Properties::resolveInheritance(std::string_view id)
         }
         else
         {
-            derived = NULL;
+            derived = nullptr;
         }
     }
 }
@@ -593,8 +593,8 @@ void Properties::mergeWith(Properties* overrides)
 
     // Overwrite or add each property found in child.
     overrides->rewind();
-    const char* name = overrides->getNextProperty();
-    while (name)
+    auto name = overrides->getNextProperty();
+    while (!name.empty())
     {
         this->setString(name, overrides->getString());
         name = overrides->getNextProperty();
@@ -634,7 +634,7 @@ void Properties::mergeWith(Properties* overrides)
     }
 }
 
-const char* Properties::getNextProperty()
+std::string_view Properties::getNextProperty()
 {
     if (_propertiesItr == _properties.end())
     {
@@ -647,7 +647,7 @@ const char* Properties::getNextProperty()
         ++_propertiesItr;
     }
 
-    return _propertiesItr == _properties.end() ? NULL : _propertiesItr->name.c_str();
+    return _propertiesItr == _properties.end() ? std::string_view() : _propertiesItr->name;
 }
 
 Properties* Properties::getNextNamespace()
@@ -699,19 +699,19 @@ Properties* Properties::getNamespace(std::string_view id, bool searchNames, bool
     return nullptr;
 }
 
-const char* Properties::getNamespace() const
+std::string_view Properties::getNamespace() const
 {
-    return _namespace.c_str();
+    return _namespace;
 }
 
 std::string_view Properties::getId() const
 {
-    return _id.c_str();
+    return _id;
 }
 
-bool Properties::exists(const char* name) const
+bool Properties::exists(std::string_view name) const
 {
-    if (name == NULL)
+    if (name.empty())
         return false;
 
     for (const auto& itr : _properties)
@@ -723,26 +723,28 @@ bool Properties::exists(const char* name) const
     return false;
 }
 
-static bool isStringNumeric(const char* str)
+static bool isStringNumeric(std::string_view str)
 {
-    AXASSERT(str, "invalid str");
+    AXASSERT(!str.empty(), "invalid str");
+
+    const char* ptr = str.data();
 
     // The first character may be '-'
-    if (*str == '-')
-        str++;
+    if (*ptr == '-')
+        ptr++;
 
     // The first character after the sign must be a digit
-    if (!isdigit(*str))
+    if (!isdigit(*ptr))
         return false;
-    str++;
+    ptr++;
 
     // All remaining characters must be digits, with a single decimal (.) permitted
     unsigned int decimalCount = 0;
-    while (*str)
+    while (*ptr)
     {
-        if (!isdigit(*str))
+        if (!isdigit(*ptr))
         {
-            if (*str == '.' && decimalCount == 0)
+            if (*ptr == '.' && decimalCount == 0)
             {
                 // Max of 1 decimal allowed
                 decimalCount++;
@@ -752,22 +754,22 @@ static bool isStringNumeric(const char* str)
                 return false;
             }
         }
-        str++;
+        ptr++;
     }
     return true;
 }
 
-Properties::Type Properties::getType(const char* name) const
+Properties::Type Properties::getType(std::string_view name) const
 {
-    const char* value = getString(name);
-    if (!value)
+    auto value = getString(name);
+    if (value.empty())
     {
         return Properties::NONE;
     }
 
     // Parse the value to determine the format
     unsigned int commaCount = 0;
-    char* valuePtr          = const_cast<char*>(value);
+    auto valuePtr           = value.data();
     while ((valuePtr = strchr(valuePtr, ',')))
     {
         valuePtr++;
@@ -791,12 +793,12 @@ Properties::Type Properties::getType(const char* name) const
     }
 }
 
-const char* Properties::getString(const char* name, const char* defaultValue) const
+std::string_view Properties::getString(std::string_view name, std::string_view defaultValue) const
 {
     char variable[256];
-    const char* value = NULL;
+    std::string_view value = ""sv;
 
-    if (name)
+    if (!name.empty())
     {
         // If 'name' is a variable, return the variable value
         if (isVariable(name, variable, 256))
@@ -822,7 +824,7 @@ const char* Properties::getString(const char* name, const char* defaultValue) co
         }
     }
 
-    if (value)
+    if (!value.empty())
     {
         // If the value references a variable, return the variable value
         if (isVariable(value, variable, 256))
@@ -834,22 +836,22 @@ const char* Properties::getString(const char* name, const char* defaultValue) co
     return defaultValue;
 }
 
-bool Properties::setString(const char* name, const char* value)
+bool Properties::setString(std::string_view name, std::string_view value)
 {
-    if (name)
+    if (!name.empty())
     {
         for (auto&& itr : _properties)
         {
             if (itr.name == name)
             {
                 // Update the first property that matches this name
-                itr.value = value ? value : "";
+                itr.value = value;
                 return true;
             }
         }
 
         // There is no property with this name, so add one
-        _properties.emplace_back(Property(name, value ? value : ""));
+        _properties.emplace_back(Property(name, value));
     }
     else
     {
@@ -857,32 +859,31 @@ bool Properties::setString(const char* name, const char* value)
         if (_propertiesItr == _properties.end())
             return false;
 
-        _propertiesItr->value = value ? value : "";
+        _propertiesItr->value = value;
     }
 
     return true;
 }
 
-bool Properties::getBool(const char* name, bool defaultValue) const
+bool Properties::getBool(std::string_view name, bool defaultValue) const
 {
-    const char* valueString = getString(name);
-    if (valueString)
+    auto valueString = getString(name);
+    if (!valueString.empty())
     {
-        return (strcmp(valueString, "true") == 0);
+        return valueString == "true";
     }
 
     return defaultValue;
 }
 
-int Properties::getInt(const char* name) const
+int Properties::getInt(std::string_view name) const
 {
-    const char* valueString = getString(name);
-    if (valueString)
+    auto valueString = getString(name);
+    if (!valueString.empty())
     {
-        int value;
-        int scanned;
-        scanned = sscanf(valueString, "%d", &value);
-        if (scanned != 1)
+        int value{};
+        auto [_, ec] = tlx::from_chars(valueString, value);
+        if (ec != std::errc{})
         {
             AXLOGE("Error attempting to parse property '{}' as an integer.", name);
             return 0;
@@ -893,15 +894,14 @@ int Properties::getInt(const char* name) const
     return 0;
 }
 
-float Properties::getFloat(const char* name) const
+float Properties::getFloat(std::string_view name) const
 {
-    const char* valueString = getString(name);
-    if (valueString)
+    auto valueString = getString(name);
+    if (!valueString.empty())
     {
-        float value;
-        int scanned;
-        scanned = sscanf(valueString, "%f", &value);
-        if (scanned != 1)
+        float value{};
+        auto [_, ec] = tlx::from_chars(valueString, value);
+        if (ec != std::errc{})
         {
             AXLOGE("Error attempting to parse property '{}' as a float.", name);
             return 0.0f;
@@ -912,19 +912,18 @@ float Properties::getFloat(const char* name) const
     return 0.0f;
 }
 
-bool Properties::getMat4(const char* name, Mat4* out) const
+bool Properties::getMat4(std::string_view name, Mat4* out) const
 {
     AXASSERT(out, "Invalid out");
 
-    const char* valueString = getString(name);
-    if (valueString)
+    auto valueString = getString(name);
+    if (!valueString.empty())
     {
         float m[16];
-        int scanned;
-        scanned = sscanf(valueString, "%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f", &m[0], &m[1], &m[2], &m[3],
-                         &m[4], &m[5], &m[6], &m[7], &m[8], &m[9], &m[10], &m[11], &m[12], &m[13], &m[14], &m[15]);
+        auto [_, ec] = tlx::from_chars(valueString, ',', m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8], m[9],
+                                       m[10], m[11], m[12], m[13], m[14], m[15]);
 
-        if (scanned != 16)
+        if (ec != std::errc{})
         {
             AXLOGE("Error attempting to parse property '{}' as a matrix.", name);
             out->setIdentity();
@@ -939,36 +938,36 @@ bool Properties::getMat4(const char* name, Mat4* out) const
     return false;
 }
 
-bool Properties::getVec2(const char* name, Vec2* out) const
+bool Properties::getVec2(std::string_view name, Vec2* out) const
 {
     return parseVec2(getString(name), out);
 }
 
-bool Properties::getVec3(const char* name, Vec3* out) const
+bool Properties::getVec3(std::string_view name, Vec3* out) const
 {
     return parseVec3(getString(name), out);
 }
 
-bool Properties::getVec4(const char* name, Vec4* out) const
+bool Properties::getVec4(std::string_view name, Vec4* out) const
 {
     return parseVec4(getString(name), out);
 }
 
-bool Properties::getQuaternionFromAxisAngle(const char* name, Quaternion* out) const
+bool Properties::getQuaternionFromAxisAngle(std::string_view name, Quaternion* out) const
 {
     return parseAxisAngle(getString(name), out);
 }
 
-bool Properties::getColor(const char* name, Color* out) const
+bool Properties::getColor(std::string_view name, Color* out) const
 {
     return parseColor(getString(name), out);
 }
 
-bool Properties::getPath(const char* name, std::string* path) const
+bool Properties::getPath(std::string_view name, std::string* path) const
 {
-    AXASSERT(name && path, "Invalid name or path");
-    const char* valueString = getString(name);
-    if (valueString)
+    AXASSERT(!name.empty() && path, "Invalid name or path");
+    auto valueString = getString(name);
+    if (!valueString.empty())
     {
         if (FileUtils::getInstance()->isFileExist(valueString))
         {
@@ -978,11 +977,11 @@ bool Properties::getPath(const char* name, std::string* path) const
         else
         {
             const Properties* prop = this;
-            while (prop != NULL)
+            while (prop != nullptr)
             {
                 // Search for the file path relative to the bundle file
                 const std::string* dirPath = prop->_dirPath;
-                if (dirPath != NULL && !dirPath->empty())
+                if (dirPath != nullptr && !dirPath->empty())
                 {
                     std::string relativePath = *dirPath;
                     relativePath.append(valueString);
@@ -999,9 +998,9 @@ bool Properties::getPath(const char* name, std::string* path) const
     return false;
 }
 
-const char* Properties::getVariable(const char* name, const char* defaultValue) const
+std::string_view Properties::getVariable(std::string_view name, std::string_view defaultValue) const
 {
-    if (name == NULL)
+    if (name.empty())
         return defaultValue;
 
     // Search for variable in this Properties object
@@ -1019,11 +1018,11 @@ const char* Properties::getVariable(const char* name, const char* defaultValue) 
     return _parent ? _parent->getVariable(name, defaultValue) : defaultValue;
 }
 
-void Properties::setVariable(const char* name, const char* value)
+void Properties::setVariable(std::string_view name, std::string_view value)
 {
-    AXASSERT(name, "Invalid name");
+    AXASSERT(!name.empty(), "Invalid name");
 
-    Property* prop = NULL;
+    Property* prop = nullptr;
 
     // Search for variable in this Properties object and parents
     Properties* current = const_cast<Properties*>(this);
@@ -1047,14 +1046,14 @@ void Properties::setVariable(const char* name, const char* value)
     if (prop)
     {
         // Found an existing property, set it
-        prop->value = value ? value : "";
+        prop->value = value;
     }
     else
     {
         // Add a new variable with this name
         if (!_variables)
             _variables = new std::vector<Property>();
-        _variables->emplace_back(name, value ? std::string_view{value} : ""sv);
+        _variables->emplace_back(name, value);
     }
 }
 
@@ -1095,7 +1094,7 @@ void Properties::setDirectoryPath(const std::string* path)
 
 void Properties::setDirectoryPath(std::string_view path)
 {
-    if (_dirPath == NULL)
+    if (_dirPath == nullptr)
     {
         _dirPath = new std::string(path);
     }
@@ -1142,7 +1141,7 @@ Properties* getPropertiesFromNamespacePath(Properties* properties, const std::ve
         {
             while (true)
             {
-                if (iter == NULL)
+                if (iter == nullptr)
                 {
                     AXLOGW("Failed to load properties object from url.");
                     return nullptr;
@@ -1172,12 +1171,12 @@ Properties* getPropertiesFromNamespacePath(Properties* properties, const std::ve
         return properties;
 }
 
-bool Properties::parseVec2(const char* str, Vec2* out)
+bool Properties::parseVec2(std::string_view str, Vec2* out)
 {
-    if (str)
+    if (!str.empty())
     {
         float x, y;
-        if (sscanf(str, "%f,%f", &x, &y) == 2)
+        if (tlx::from_chars(str, ',', x, y).ec == std::errc{})
         {
             if (out)
                 out->set(x, y);
@@ -1185,7 +1184,7 @@ bool Properties::parseVec2(const char* str, Vec2* out)
         }
         else
         {
-            AXLOGW("Error attempting to parse property as a two-dimensional vector: {}", str);
+            AXLOGE("Error attempting to parse property as a two-dimensional vector: {}", str);
         }
     }
 
@@ -1194,12 +1193,12 @@ bool Properties::parseVec2(const char* str, Vec2* out)
     return false;
 }
 
-bool Properties::parseVec3(const char* str, Vec3* out)
+bool Properties::parseVec3(std::string_view str, Vec3* out)
 {
-    if (str)
+    if (!str.empty())
     {
         float x, y, z;
-        if (sscanf(str, "%f,%f,%f", &x, &y, &z) == 3)
+        if (tlx::from_chars(str, ',', x, y, z).ec == std::errc{})
         {
             if (out)
                 out->set(x, y, z);
@@ -1207,7 +1206,7 @@ bool Properties::parseVec3(const char* str, Vec3* out)
         }
         else
         {
-            AXLOGW("Error attempting to parse property as a three-dimensional vector: {}", str);
+            AXLOGE("Error attempting to parse property as a three-dimensional vector: {}", str);
         }
     }
 
@@ -1216,12 +1215,12 @@ bool Properties::parseVec3(const char* str, Vec3* out)
     return false;
 }
 
-bool Properties::parseVec4(const char* str, Vec4* out)
+bool Properties::parseVec4(std::string_view str, Vec4* out)
 {
-    if (str)
+    if (!str.empty())
     {
         float x, y, z, w;
-        if (sscanf(str, "%f,%f,%f,%f", &x, &y, &z, &w) == 4)
+        if (tlx::from_chars(str, ',', x, y, z, w).ec == std::errc{})
         {
             if (out)
                 out->set(x, y, z, w);
@@ -1229,7 +1228,7 @@ bool Properties::parseVec4(const char* str, Vec4* out)
         }
         else
         {
-            AXLOGW("Error attempting to parse property as a four-dimensional vector: {}", str);
+            AXLOGE("Error attempting to parse property as a four-dimensional vector: {}", str);
         }
     }
 
@@ -1238,12 +1237,12 @@ bool Properties::parseVec4(const char* str, Vec4* out)
     return false;
 }
 
-bool Properties::parseAxisAngle(const char* str, Quaternion* out)
+bool Properties::parseAxisAngle(std::string_view str, Quaternion* out)
 {
-    if (str)
+    if (!str.empty())
     {
         float x, y, z, theta;
-        if (sscanf(str, "%f,%f,%f,%f", &x, &y, &z, &theta) == 4)
+        if (tlx::from_chars(str, ',', x, y, z, theta).ec == std::errc{})
         {
             if (out)
                 out->set(Vec3(x, y, z), MATH_DEG_TO_RAD(theta));
@@ -1251,7 +1250,7 @@ bool Properties::parseAxisAngle(const char* str, Quaternion* out)
         }
         else
         {
-            AXLOGW("Error attempting to parse property as an axis-angle rotation: {}", str);
+            AXLOGE("Error attempting to parse property as an axis-angle rotation: {}", str);
         }
     }
 
@@ -1260,15 +1259,16 @@ bool Properties::parseAxisAngle(const char* str, Quaternion* out)
     return false;
 }
 
-bool Properties::parseColor(const char* str, Color* out)
+bool Properties::parseColor(std::string_view str, Color* out)
 {
-    if (str)
+    if (!str.empty())
     {
-        if (strlen(str) == 9 && str[0] == '#')
+        if (str.length() == 9 && str[0] == '#')
         {
             // Read the string into an int as hex.
             unsigned int color;
-            if (sscanf(str + 1, "%x", &color) == 1)
+            auto [_, ec] = tlx::from_chars(str.substr(1), color, 16);
+            if (ec == std::errc{})
             {
                 if (out)
                     out->set(Color::fromHex(color));
@@ -1277,7 +1277,7 @@ bool Properties::parseColor(const char* str, Color* out)
             else
             {
                 // Invalid format
-                AXLOGW("Error attempting to parse property as an RGBA color: {}", str);
+                AXLOGE("Error attempting to parse property as an RGBA color: {}", str);
             }
         }
         else
@@ -1291,3 +1291,5 @@ bool Properties::parseColor(const char* str, Color* out)
         out->set(0.0f, 0.0f, 0.0f, 0.0f);
     return false;
 }
+
+}  // namespace ax

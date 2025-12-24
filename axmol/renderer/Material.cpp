@@ -39,6 +39,7 @@
 #include "axmol/platform/FileUtils.h"
 #include "axmol/base/Logging.h"
 #include "axmol/tlx/utility.hpp"
+#include "yasio/tlx/string_view.hpp"
 
 #include <sstream>
 
@@ -50,8 +51,7 @@ namespace ax
 {
 
 // Helpers declaration
-static const char* getOptionalString(Properties* properties, const char* key, const char* defaultValue);
-static bool isValidUniform(const char* name);
+static bool isValidUniform(std::string_view name);
 
 Material* Material::createWithFilename(std::string_view filepath)
 {
@@ -118,7 +118,7 @@ bool Material::initWithFile(std::string_view validfilename)
     Properties* properties = Properties::createNonRefCounted(validfilename);
 
     // get the first material
-    parseProperties((strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace());
+    parseProperties(!properties->getNamespace().empty() ? properties : properties->getNextNamespace());
 
     AX_SAFE_DELETE(properties);
     return true;
@@ -158,12 +158,12 @@ bool Material::parseProperties(Properties* materialProperties)
     auto space = materialProperties->getNextNamespace();
     while (space)
     {
-        const char* name = space->getNamespace();
-        if (strcmp(name, "technique") == 0)
+        auto name = space->getNamespace();
+        if (name == "technique")
         {
             parseTechnique(space);
         }
-        else if (strcmp(name, "renderState") == 0)
+        else if (name == "renderState")
         {
             parseRenderState(&_renderState.getStateBlock(), space);
         }
@@ -189,12 +189,12 @@ bool Material::parseTechnique(Properties* techniqueProperties)
     auto space = techniqueProperties->getNextNamespace();
     while (space)
     {
-        const char* name = space->getNamespace();
-        if (strcmp(name, "pass") == 0)
+        std::string_view name = space->getNamespace();
+        if (name == "pass")
         {
             parsePass(technique, space);
         }
-        else if (strcmp(name, "renderState") == 0)
+        else if (name == "renderState")
         {
             parseRenderState(&technique->getStateBlock(), space);
         }
@@ -220,12 +220,12 @@ bool Material::parsePass(Technique* technique, Properties* passProperties)
     auto space = passProperties->getNextNamespace();
     while (space)
     {
-        const char* name = space->getNamespace();
-        if (strcmp(name, "shader") == 0)
+        std::string_view name = space->getNamespace();
+        if (name == "shader")
         {
             parseShader(pass, space);
         }
-        else if (strcmp(name, "renderState") == 0)
+        else if (name == "renderState")
         {
             parseRenderState(&pass->_renderState.getStateBlock(), space);
         }
@@ -247,13 +247,8 @@ bool Material::parseSampler(rhi::ProgramState* programState, Properties* sampler
     AXASSERT(!samplerProperties->getId().empty(), "Sampler must have an id. The id is the uniform name");
 
     // mipmap
-    bool usemipmap     = false;
-    const char* mipmap = getOptionalString(samplerProperties, "mipmap", "false");
-    if (mipmap && strcasecmp(mipmap, "true") == 0)
-    {
-        usemipmap = true;
-    }
-
+    std::string_view mipmap = samplerProperties->getString("mipmap"sv, "false"sv);
+    bool usemipmap = tlx::ic::iequals(mipmap, "true");
     // required
     auto filename = samplerProperties->getString("path");
 
@@ -269,47 +264,47 @@ bool Material::parseSampler(rhi::ProgramState* programState, Properties* sampler
         Texture2D::TexParams texParams;
 
         // valid options: REPEAT, CLAMP
-        const char* wrapS = getOptionalString(samplerProperties, "wrapS", "CLAMP_TO_EDGE");
-        if (strcasecmp(wrapS, "REPEAT") == 0)
+        auto wrapS = samplerProperties->getString("wrapS"sv, "CLAMP_TO_EDGE"sv);
+        if (tlx::ic::iequals(wrapS, "REPEAT"sv))
             texParams.sAddressMode = rhi::SamplerAddressMode::REPEAT;
-        else if (strcasecmp(wrapS, "CLAMP_TO_EDGE") == 0)
+        else if (tlx::ic::iequals(wrapS, "CLAMP_TO_EDGE"sv))
             texParams.sAddressMode = rhi::SamplerAddressMode::CLAMP;
         else
             AXLOGW("Invalid wrapS: {}", wrapS);
 
         // valid options: REPEAT, CLAMP
-        const char* wrapT = getOptionalString(samplerProperties, "wrapT", "CLAMP_TO_EDGE");
-        if (strcasecmp(wrapT, "REPEAT") == 0)
+        auto wrapT = samplerProperties->getString("wrapT"sv, "CLAMP_TO_EDGE"sv);
+        if (tlx::ic::iequals(wrapT, "REPEAT"sv))
             texParams.tAddressMode = rhi::SamplerAddressMode::REPEAT;
-        else if (strcasecmp(wrapT, "CLAMP_TO_EDGE") == 0)
+        else if (tlx::ic::iequals(wrapT, "CLAMP_TO_EDGE"sv))
             texParams.tAddressMode = rhi::SamplerAddressMode::CLAMP;
         else
             AXLOGW("Invalid wrapT: {}", wrapT);
 
         // valid options: NEAREST, LINEAR, NEAREST_MIPMAP_NEAREST, LINEAR_MIPMAP_NEAREST, NEAREST_MIPMAP_LINEAR,
         // LINEAR_MIPMAP_LINEAR
-        const char* minFilter =
-            getOptionalString(samplerProperties, "minFilter", usemipmap ? "LINEAR_MIPMAP_NEAREST" : "LINEAR");
-        if (strcasecmp(minFilter, "NEAREST") == 0)
+        auto minFilter =
+            samplerProperties->getString("minFilter"sv, usemipmap ? "LINEAR_MIPMAP_NEAREST"sv : "LINEAR"sv);
+        if (tlx::ic::iequals(minFilter, "NEAREST"sv))
             texParams.minFilter = rhi::SamplerFilter::MIN_NEAREST;
-        else if (strcasecmp(minFilter, "LINEAR") == 0)
+        else if (tlx::ic::iequals(minFilter, "LINEAR"sv))
             texParams.minFilter = rhi::SamplerFilter::MIN_LINEAR;
-        else if (strcasecmp(minFilter, "NEAREST_MIPMAP_NEAREST") == 0)
+        else if (tlx::ic::iequals(minFilter, "NEAREST_MIPMAP_NEAREST"sv))
         {
             texParams.minFilter = rhi::SamplerFilter::MIN_NEAREST;
             texParams.mipFilter = rhi::SamplerFilter::MIP_NEAREST;
         }
-        else if (strcasecmp(minFilter, "LINEAR_MIPMAP_NEAREST") == 0)
+        else if (tlx::ic::iequals(minFilter, "LINEAR_MIPMAP_NEAREST"sv))
         {
             texParams.minFilter = rhi::SamplerFilter::MIN_LINEAR;
             texParams.mipFilter = rhi::SamplerFilter::MIP_NEAREST;
         }
-        else if (strcasecmp(minFilter, "NEAREST_MIPMAP_LINEAR") == 0)
+        else if (tlx::ic::iequals(minFilter, "NEAREST_MIPMAP_LINEAR"sv))
         {
             texParams.minFilter = rhi::SamplerFilter::MIN_NEAREST;
             texParams.mipFilter = rhi::SamplerFilter::MIP_LINEAR;
         }
-        else if (strcasecmp(minFilter, "LINEAR_MIPMAP_LINEAR") == 0)
+        else if (tlx::ic::iequals(minFilter, "LINEAR_MIPMAP_LINEAR"sv))
         {
             texParams.minFilter = rhi::SamplerFilter::LINEAR;
             texParams.mipFilter = rhi::SamplerFilter::MIP_LINEAR;
@@ -318,10 +313,10 @@ bool Material::parseSampler(rhi::ProgramState* programState, Properties* sampler
             AXLOGW("Invalid minFilter: {}", minFilter);
 
         // valid options: NEAREST, LINEAR
-        const char* magFilter = getOptionalString(samplerProperties, "magFilter", "LINEAR");
-        if (strcasecmp(magFilter, "NEAREST") == 0)
+        auto magFilter = samplerProperties->getString("magFilter"sv, "LINEAR"sv);
+        if (tlx::ic::iequals(magFilter, "NEAREST"sv))
             texParams.magFilter = rhi::SamplerFilter::NEAREST;
-        else if (strcasecmp(magFilter, "LINEAR") == 0)
+        else if (tlx::ic::iequals(magFilter, "LINEAR"sv))
             texParams.magFilter = rhi::SamplerFilter::LINEAR;
         else
             AXLOGW("Invalid magFilter: {}", magFilter);
@@ -354,15 +349,15 @@ bool Material::parseSampler(rhi::ProgramState* programState, Properties* sampler
 bool Material::parseShader(Pass* pass, Properties* shaderProperties)
 {
     // vertexShader
-    const char* vertShader = getOptionalString(shaderProperties, "vertexShader", nullptr);
+    std::string_view vertShader = shaderProperties->getString("vertexShader");
 
     // fragmentShader
-    const char* fragShader = getOptionalString(shaderProperties, "fragmentShader", nullptr);
+    std::string_view fragShader = shaderProperties->getString("fragmentShader");
 
     // compileTimeDefines, since axmol-1.1 no longer support compile time defines
-    // const char* compileTimeDefines = getOptionalString(shaderProperties, "defines", "");
+    // const char* compileTimeDefines = shaderProperties->getString("defines"sv);
 
-    if (vertShader && fragShader)
+    if (!vertShader.empty() && !fragShader.empty())
     {
         auto program      = ProgramManager::getInstance()->loadProgram(vertShader, fragShader);
         auto programState = new rhi::ProgramState(program);
@@ -370,7 +365,7 @@ bool Material::parseShader(Pass* pass, Properties* shaderProperties)
 
         // Parse uniforms only if the ProgramState was created
         auto property = shaderProperties->getNextProperty();
-        while (property)
+        while (!property.empty())
         {
             if (isValidUniform(property))
             {
@@ -383,8 +378,8 @@ bool Material::parseShader(Pass* pass, Properties* shaderProperties)
         auto space = shaderProperties->getNextNamespace();
         while (space)
         {
-            const char* name = space->getNamespace();
-            if (strcmp(name, "sampler") == 0)
+            auto name = space->getNamespace();
+            if (name == "sampler")
             {
                 parseSampler(programState, space);
             }
@@ -396,7 +391,7 @@ bool Material::parseShader(Pass* pass, Properties* shaderProperties)
     return true;
 }
 
-bool Material::parseUniform(rhi::ProgramState* programState, Properties* properties, const char* uniformName)
+bool Material::parseUniform(rhi::ProgramState* programState, Properties* properties, std::string_view uniformName)
 {
     bool ret = true;
 
@@ -465,7 +460,7 @@ bool Material::parseRenderState(RenderState::StateBlock* state, Properties* prop
     }
 
     auto property = properties->getNextProperty();
-    while (property)
+    while (!property.empty())
     {
         // Parse uniforms only if the ProgramState was created
         // Render state only can have "strings" or numbers as values. No new namespaces
@@ -570,19 +565,10 @@ ssize_t Material::getTechniqueCount() const
 }
 
 // Helpers implementation
-static bool isValidUniform(const char* name)
+static bool isValidUniform(std::string_view name)
 {
-    return !(strcmp(name, "defines") == 0 || strcmp(name, "vertexShader") == 0 || strcmp(name, "fragmentShader") == 0);
+    return !(name == "defines" || name == "vertexShader" || name == "fragmentShader");
 }
 
-static const char* getOptionalString(Properties* properties, const char* key, const char* defaultValue)
-{
-
-    const char* ret = properties->getString(key);
-    if (!ret)
-        ret = defaultValue;
-
-    return ret;
-}
 
 }  // namespace ax
