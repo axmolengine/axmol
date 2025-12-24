@@ -430,18 +430,21 @@ bool AssetsManagerEx::decompress(std::string_view zip)
     {
         // Get info about current file.
         unz_file_info fileInfo;
-        char fileName[MAX_FILENAME];
-        if (unzGetCurrentFileInfo(zipfile, &fileInfo, fileName, MAX_FILENAME, NULL, 0, NULL, 0) != UNZ_OK)
+        char pszFileName[MAX_FILENAME];
+        if (unzGetCurrentFileInfo(zipfile, &fileInfo, pszFileName, MAX_FILENAME, NULL, 0, NULL, 0) != UNZ_OK)
         {
             AXLOGD("AssetsManagerEx : can not read compressed file info\n");
             unzClose(zipfile);
             return false;
         }
-        std::string fullPath{rootPath};
+        std::string_view fileName{pszFileName, static_cast<size_t>(fileInfo.size_filename)};
+        std::string fullPath;
+        fullPath.reserve(rootPath.size() + fileName.size());
+        fullPath += rootPath;
         fullPath += fileName;
 
         // Check if this entry is a directory or a file.
-        const size_t filenameLength = strlen(fileName);
+        const size_t filenameLength = fileName.size();
         if (fileName[filenameLength - 1] == '/')
         {
             // There are not directory entry in some case.

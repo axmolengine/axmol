@@ -630,7 +630,7 @@ int LuaStack::executeFunction(int handler,
 
 int LuaStack::reload(const char* moduleFileName)
 {
-    if (nullptr == moduleFileName || strlen(moduleFileName) == 0)
+    if (!moduleFileName || !*moduleFileName)
     {
         AXLOGD("moudulFileName is null");
         return 1;

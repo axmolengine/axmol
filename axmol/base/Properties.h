@@ -159,6 +159,8 @@ class Data;
  */
 class AX_DLL Properties
 {
+    struct InputStreamView;
+
 public:
     /**
      * Data types supported by the properties class.
@@ -523,27 +525,20 @@ private:
      *
      * @param stream The stream used for reading the properties from file.
      */
-    Properties(Data* data, ssize_t* dataIdx);
+    Properties(InputStreamView* isv);
     Properties(const Properties& copy);
 
     /**
      * Constructor. Read from the beginning of namespace specified.
      */
-    Properties(Data* data,
-               ssize_t* dataIdx,
+    Properties(InputStreamView* context,
                std::string_view name,
                std::string_view id,
                std::string_view parentID,
                Properties* parent);
 
     // Data manipulation methods
-    void readProperties();
-    void skipWhiteSpace();
-    char* trimWhiteSpace(char* str);
-    signed char readChar();
-    char* readLine(char* output, int num);
-    bool seekFromCurrent(int offset);
-    bool eof();
+    void readProperties(InputStreamView* isv);
 
     // Called after createNonRefCounted(); copies info from parents into derived namespaces.
     void resolveInheritance(std::string_view id = std::string_view{});
@@ -560,10 +555,6 @@ private:
     /**
      * Reads the next character from the Data. Returns EOF if the end of the Data is reached.
      */
-
-    // XXX: hack in order to simulate GamePlay's Stream with Cocos2d's Data
-    ssize_t* _dataIdx;
-    Data* _data;
 
     std::string _namespace;
     std::string _id;

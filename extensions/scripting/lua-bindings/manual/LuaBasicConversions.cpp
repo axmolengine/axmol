@@ -35,7 +35,7 @@ std::unordered_map<std::string_view, const char*> g_typeCast;
 #if _AX_DEBUG >= 1
 void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const char* funcName)
 {
-    if (NULL == L || NULL == err || NULL == msg || 0 == strlen(msg))
+    if (NULL == L || NULL == err || NULL == msg || !*msg)
         return;
 
     if (msg[0] == '#')

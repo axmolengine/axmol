@@ -154,12 +154,12 @@ std::set<unsigned int> BMFontConfiguration::parseConfigFile(std::string_view con
         AXLOGW("axmol: Error parsing FNTfile {}", controlFile);
         return {};
     }
-    auto contents = data.c_str();
+    auto contents    = data.c_str();
     auto contentsLen = data.size();
 
     std::set<unsigned int> validCharsString;
 
-    char line[512]   = {0};
+    char line[512] = {0};
 
     auto next         = strchr(contents, '\n');
     auto base         = contents;
@@ -217,8 +217,8 @@ std::set<unsigned int> BMFontConfiguration::parseConfigFile(std::string_view con
 }
 
 std::set<unsigned int> BMFontConfiguration::parseBinaryConfigFile(unsigned char* pData,
-                                                                 uint32_t size,
-                                                                 std::string_view controlFile)
+                                                                  uint32_t size,
+                                                                  std::string_view controlFile)
 {
     /* based on http://www.angelcode.com/products/bmfont/doc/file_format.html file format */
 
@@ -301,8 +301,8 @@ std::set<unsigned int> BMFontConfiguration::parseBinaryConfigFile(unsigned char*
              pageNames 	p*(n+1) 	strings 	0 	p null terminated strings, each with length n
              */
 
-            const char* value = (const char*)pData;
-            AXASSERT(strlen(value) < blockSize, "Block size should be less then string");
+            std::string_view value = (const char*)pData;
+            AXASSERT(value.size() < blockSize, "Block size should be less then string");
 
             _atlasName = FileUtils::getInstance()->fullPathFromRelativeFile(value, controlFile);
         }

@@ -251,14 +251,7 @@ static int axlua_WebSocket_sendString00(lua_State* tolua_S)
         if (!data)
             return 0;
 
-        if (strlen(data) != size)
-        {
-            self->send((const unsigned char*)data, (unsigned int)size);
-        }
-        else
-        {
-            self->send(data);
-        }
+        self->send((const unsigned char*)data, (unsigned int)size);
     }
     return 0;
 #    ifndef TOLUA_RELEASE

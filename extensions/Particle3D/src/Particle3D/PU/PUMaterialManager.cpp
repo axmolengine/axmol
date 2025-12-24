@@ -157,12 +157,14 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
         FindClose(handle);
     }
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    std::string::size_type pos    = fileFolder.find("assets/");
+    constexpr std::string_view androidAssetsPrefix = "assets/"sv;
+
+    std::string::size_type pos    = fileFolder.find(androidAssetsPrefix);
     std::string_view relativePath = fileFolder;
     if (pos != std::string::npos)
     {
         // "assets/" is at the beginning of the path and we don't want it
-        relativePath = fileFolder.substr(pos + strlen("assets/"));
+        relativePath = fileFolder.substr(pos + androidAssetsPrefix.size());
     }
     AAssetDir* dir       = AAssetManager_openDir(FileUtilsAndroid::getAssetManager(), relativePath.data());
     const char* fileName = nullptr;
@@ -170,7 +172,7 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
     std::string fullpath;
     while ((fileName = AAssetDir_getNextFileName(dir)) != nullptr)
     {
-        if (FileUtils::getPathExtension(fileName) == ".material")
+        if (FileUtils::getPathExtension(fileName) == ".material"sv)
         {
             fullpath.assign(fileFolder).append(seg).append(fileName);
             loadMaterials(fullpath);
@@ -197,7 +199,7 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
             continue;
         }
 
-        if (FileUtils::getPathExtension(file->d_name) == ".material")
+        if (FileUtils::getPathExtension(file->d_name) == ".material"sv)
         {
             std::string fullpath{fileFolder};
             fullpath.append("/"sv).append(file->d_name);

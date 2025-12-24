@@ -35,6 +35,7 @@
 #include "axmol/base/text_utils.h"
 #include "axmol/base/Data.h"
 #include "axmol/tlx/charconv.hpp"
+#include "axmol/tlx/split.hpp"
 
 namespace ax
 {
@@ -42,6 +43,85 @@ namespace ax
 static std::string_view make_sv(const char* cstr)
 {
     return cstr ? std::string_view{cstr} : std::string_view{};
+}
+
+
+//
+// class Properties::InputStreamView
+//
+struct Properties::InputStreamView
+{
+    InputStreamView(char* data, size_t size) : _first(data), _last(data + size), _ptr(data) {}
+
+    char* readLine(char* output, int outlen);
+
+    void skipWhiteSpace();
+    signed char readChar();
+    bool advance(int offset);
+    bool eof();
+
+    bool empty() const { return _first == _last; }
+
+    char* _first;
+    char* _last;
+    char* _ptr;
+};
+
+signed char Properties::InputStreamView::readChar()
+{
+    if (eof())
+        return EOF;
+    return *_ptr++;
+}
+
+char* Properties::InputStreamView::readLine(char* output, int outlen)
+{
+    if (eof())
+        return nullptr;
+
+    int bytes_read = 0;
+    for (; _ptr < _last && bytes_read < (outlen - 1);)
+    {
+        const auto c = *_ptr++;
+        if (c == '\n') [[unlikely]]
+            break;
+        output[bytes_read++] = c;
+    }
+
+    output[bytes_read] = '\0';
+
+    return output;
+}
+
+bool Properties::InputStreamView::advance(int offset)
+{
+    if (!eof())
+        _ptr += offset;
+    return !eof();
+}
+
+bool Properties::InputStreamView::eof()
+{
+    return _ptr >= _last || _ptr < _first;
+}
+
+void Properties::InputStreamView::skipWhiteSpace()
+{
+    signed char c;
+    do
+    {
+        c = readChar();
+    } while (isspace(c) && c != EOF);
+
+    // If we are not at the end of the file, then since we found a
+    // non-whitespace character, we put the cursor back in front of it.
+    if (c != EOF)
+    {
+        if (!advance(-1))
+        {
+            AXLOGE("Failed to seek backwards one character after skipping whitespace.");
+        }
+    }
 }
 
 // Utility functions (shared with SceneLoader).
@@ -52,15 +132,43 @@ void calculateNamespacePath(std::string_view urlString,
 /** @script{ignore} */
 Properties* getPropertiesFromNamespacePath(Properties* properties, const std::vector<std::string_view>& namespacePath);
 
-Properties::Properties() : _dataIdx(nullptr), _data(nullptr), _variables(nullptr), _dirPath(nullptr), _parent(nullptr)
+
+static char* trimWhiteSpace(char* str)
 {
-    _properties.reserve(32);
+    if (!str)
+    {
+        return str;
+    }
+
+    // Trim leading space.
+    while (*str != '\0' && isspace(*str))
+        str++;
+
+    // All spaces?
+    if (*str == 0)
+    {
+        return str;
+    }
+
+    // Trim trailing space.
+    char* end = str + strlen(str) - 1;
+    while (end > str && isspace(*end))
+        end--;
+
+    // Write new null terminator.
+    *(end + 1) = 0;
+
+    return str;
 }
 
+ Properties::Properties() : _variables(nullptr), _dirPath(nullptr),
+ _parent(nullptr)
+{
+     _properties.reserve(32);
+ }
+
 Properties::Properties(const Properties& copy)
-    : _dataIdx(copy._dataIdx)
-    , _data(copy._data)
-    , _namespace(copy._namespace)
+    : _namespace(copy._namespace)
     , _id(copy._id)
     , _parentID(copy._parentID)
     , _properties(copy._properties)
@@ -78,20 +186,19 @@ Properties::Properties(const Properties& copy)
     rewind();
 }
 
-Properties::Properties(Data* data, ssize_t* dataIdx)
-    : _dataIdx(dataIdx), _data(data), _variables(nullptr), _dirPath(nullptr), _parent(nullptr)
+Properties::Properties(InputStreamView* isv)
+    : _variables(nullptr), _dirPath(nullptr), _parent(nullptr)
 {
-    readProperties();
+    readProperties(isv);
     rewind();
 }
 
-Properties::Properties(Data* data,
-                       ssize_t* dataIdx,
+Properties::Properties(InputStreamView* isv,
                        std::string_view name,
                        std::string_view id,
                        std::string_view parentID,
                        Properties* parent)
-    : _dataIdx(dataIdx), _data(data), _namespace(name), _variables(nullptr), _dirPath(nullptr), _parent(parent)
+    : _namespace(name), _variables(nullptr), _dirPath(nullptr), _parent(parent)
 {
     if (!id.empty())
     {
@@ -101,7 +208,7 @@ Properties::Properties(Data* data,
     {
         _parentID = parentID;
     }
-    readProperties();
+    readProperties(isv);
     rewind();
 }
 
@@ -121,9 +228,9 @@ Properties* Properties::createNonRefCounted(std::string_view url)
 
     // data will be released automatically when 'data' goes out of scope
     // so we pass data as weak pointer
-    auto data              = FileUtils::getInstance()->getDataFromFile(fileString);
-    ssize_t dataIdx        = 0;
-    Properties* properties = new Properties(&data, &dataIdx);
+    auto data = FileUtils::getInstance()->getDataFromFile(fileString);
+    InputStreamView isv{(char*)data.data(), static_cast<size_t>(data.size())};
+    Properties* properties = new Properties(&isv);
     properties->resolveInheritance();
 
     // Get the specified properties object.
@@ -149,10 +256,10 @@ Properties* Properties::createNonRefCounted(std::string_view url)
     return p;
 }
 
-static bool isVariable(std::string_view str, char* outName, size_t outSize)
+static size_t extractVariable(std::string_view str, char* outName, size_t outSize)
 {
     if (str.empty() || !outName || outSize == 0)
-        return false;
+        return 0;
 
     size_t len = str.size();
     if (len > 3 && str[0] == '$' && str[1] == '{' && str[len - 1] == '}')
@@ -163,17 +270,17 @@ static bool isVariable(std::string_view str, char* outName, size_t outSize)
 
         memcpy(outName, str.data() + 2, copyLen);
         outName[copyLen] = '\0';
-        return true;
+        return copyLen;
     }
 
-    return false;
+    return 0;
 }
 
-void Properties::readProperties()
+void Properties::readProperties(InputStreamView* isv)
 {
-    AXASSERT(_data->getSize() > 0, "Invalid data");
+    AXASSERT(!isv->empty(), "Invalid data");
 
-    char line[2048];
+    char line[2048]; // MaxPerLine chars is 2048
     char variable[256];
     int c;
     char* name;
@@ -187,14 +294,14 @@ void Properties::readProperties()
     while (true)
     {
         // Skip whitespace at the start of lines
-        skipWhiteSpace();
+        isv->skipWhiteSpace();
 
         // Stop when we have reached the end of the file.
-        if (eof())
+        if (isv->eof())
             break;
 
         // Read the next line.
-        rc = readLine(line, 2048);
+        rc = isv->readLine(line, sizeof(line));
         if (rc == nullptr)
         {
             AXLOGE("Error reading line from file.");
@@ -209,9 +316,9 @@ void Properties::readProperties()
                 comment = false;
             else
             {
-                trimWhiteSpace(line);
-                const auto len = strlen(line);
-                if (len >= 2 && strncmp(line + (len - 2), "*/", 2) == 0)
+                auto trimedLine = trimWhiteSpace(line);
+                const auto len  = strlen(trimedLine);
+                if (len >= 2 && strncmp(trimedLine + (len - 2), "*/", 2) == 0)
                     comment = false;
             }
         }
@@ -250,9 +357,9 @@ void Properties::readProperties()
                 value = trimWhiteSpace(value);
 
                 // Is this a variable assignment?
-                if (isVariable(name, variable, 256))
+                if (auto varLen = extractVariable(name, variable, sizeof(variable)))
                 {
-                    setVariable(variable, value);
+                    setVariable(std::string_view{variable, varLen}, value);
                 }
                 else
                 {
@@ -309,20 +416,20 @@ void Properties::readProperties()
                     // If the namespace ends on this line, seek back to right before the '}' character.
                     if (rccc && rccc == lineEnd)
                     {
-                        if (!seekFromCurrent(-1))
+                        if (!isv->advance(-1))
                         {
                             AXLOGE("Failed to seek back to before a '}}' character in properties file.");
                             return;
                         }
-                        while (readChar() != '}')
+                        while (isv->readChar() != '}')
                         {
-                            if (!seekFromCurrent(-2))
+                            if (!isv->advance(-2))
                             {
                                 AXLOGE("Failed to seek back to before a '}}' character in properties file.");
                                 return;
                             }
                         }
-                        if (!seekFromCurrent(-1))
+                        if (!isv->advance(-1))
                         {
                             AXLOGE("Failed to seek back to before a '}}' character in properties file.");
                             return;
@@ -330,13 +437,13 @@ void Properties::readProperties()
                     }
 
                     // New namespace without an ID.
-                    Properties* space = new Properties(_data, _dataIdx, name, ""sv, make_sv(parentID), this);
+                    Properties* space = new Properties(isv, name, ""sv, make_sv(parentID), this);
                     _namespaces.emplace_back(space);
 
                     // If the namespace ends on this line, seek to right after the '}' character.
                     if (rccc && rccc == lineEnd)
                     {
-                        if (!seekFromCurrent(1))
+                        if (!isv->advance(1))
                         {
                             AXLOGE("Failed to seek to immediately after a '}}' character in properties file.");
                             return;
@@ -351,20 +458,20 @@ void Properties::readProperties()
                         // If the namespace ends on this line, seek back to right before the '}' character.
                         if (rccc && rccc == lineEnd)
                         {
-                            if (!seekFromCurrent(-1))
+                            if (!isv->advance(-1))
                             {
                                 AXLOGE("Failed to seek back to before a '}}' character in properties file.");
                                 return;
                             }
-                            while (readChar() != '}')
+                            while (isv->readChar() != '}')
                             {
-                                if (!seekFromCurrent(-2))
+                                if (!isv->advance(-2))
                                 {
                                     AXLOGE("Failed to seek back to before a '}}' character in properties file.");
                                     return;
                                 }
                             }
-                            if (!seekFromCurrent(-1))
+                            if (!isv->advance(-1))
                             {
                                 AXLOGE("Failed to seek back to before a '}}' character in properties file.");
                                 return;
@@ -372,13 +479,13 @@ void Properties::readProperties()
                         }
 
                         // Create new namespace.
-                        Properties* space = new Properties(_data, _dataIdx, name, make_sv(value), make_sv(parentID), this);
+                        Properties* space = new Properties(isv, name, make_sv(value), make_sv(parentID), this);
                         _namespaces.emplace_back(space);
 
                         // If the namespace ends on this line, seek to right after the '}' character.
                         if (rccc && rccc == lineEnd)
                         {
-                            if (!seekFromCurrent(1))
+                            if (!isv->advance(1))
                             {
                                 AXLOGE("Failed to seek to immediately after a '}}' character in properties file.");
                                 return;
@@ -388,18 +495,18 @@ void Properties::readProperties()
                     else
                     {
                         // Find out if the next line starts with "{"
-                        skipWhiteSpace();
-                        c = readChar();
+                        isv->skipWhiteSpace();
+                        c = isv->readChar();
                         if (c == '{')
                         {
                             // Create new namespace.
-                            Properties* space = new Properties(_data, _dataIdx, name, make_sv(value), make_sv(parentID), this);
+                            Properties* space = new Properties(isv, name, make_sv(value), make_sv(parentID), this);
                             _namespaces.emplace_back(space);
                         }
                         else
                         {
                             // Back up from fgetc()
-                            if (!seekFromCurrent(-1))
+                            if (!isv->advance(-1))
                                 AXLOGE(
                                     "Failed to seek backwards a single character after testing if the next line starts "
                                     "with '{{'.");
@@ -423,100 +530,6 @@ Properties::~Properties()
     }
 
     AX_SAFE_DELETE(_variables);
-}
-
-//
-// Stream simulation
-//
-signed char Properties::readChar()
-{
-    if (eof())
-        return EOF;
-    return static_cast<tlx::byte_buffer&>(*_data)[(*_dataIdx)++];
-}
-
-char* Properties::readLine(char* output, int num)
-{
-    if (eof())
-        return nullptr;
-
-    // little optimization: avoid unneeded dereferences
-    const ssize_t dataIdx = *_dataIdx;
-    int i;
-
-    for (i = 0; i < num && dataIdx + i < _data->size(); i++)
-    {
-        auto c = static_cast<tlx::byte_buffer&>(*_data)[dataIdx + i];
-        if (c == '\n')
-            break;
-        output[i] = c;
-    }
-
-    output[i] = '\0';
-
-    // restore value
-    *_dataIdx = dataIdx + i;
-
-    return output;
-}
-
-bool Properties::seekFromCurrent(int offset)
-{
-    (*_dataIdx) += offset;
-
-    return (!eof() && *_dataIdx >= 0);
-}
-
-bool Properties::eof()
-{
-    return (*_dataIdx >= _data->size());
-}
-
-void Properties::skipWhiteSpace()
-{
-    signed char c;
-    do
-    {
-        c = readChar();
-    } while (isspace(c) && c != EOF);
-
-    // If we are not at the end of the file, then since we found a
-    // non-whitespace character, we put the cursor back in front of it.
-    if (c != EOF)
-    {
-        if (!seekFromCurrent(-1))
-        {
-            AXLOGE("Failed to seek backwards one character after skipping whitespace.");
-        }
-    }
-}
-
-char* Properties::trimWhiteSpace(char* str)
-{
-    if (!str)
-    {
-        return str;
-    }
-
-    // Trim leading space.
-    while (*str != '\0' && isspace(*str))
-        str++;
-
-    // All spaces?
-    if (*str == 0)
-    {
-        return str;
-    }
-
-    // Trim trailing space.
-    char* end = str + strlen(str) - 1;
-    while (end > str && isspace(*end))
-        end--;
-
-    // Write new null terminator.
-    *(end + 1) = 0;
-
-    return str;
 }
 
 void Properties::resolveInheritance(std::string_view id)
@@ -801,9 +814,9 @@ std::string_view Properties::getString(std::string_view name, std::string_view d
     if (!name.empty())
     {
         // If 'name' is a variable, return the variable value
-        if (isVariable(name, variable, 256))
+        if (auto varLen = extractVariable(name, variable, sizeof(variable)))
         {
-            return getVariable(variable, defaultValue);
+            return getVariable(std::string_view{variable, varLen}, defaultValue);
         }
 
         for (const auto& itr : _properties)
@@ -827,8 +840,8 @@ std::string_view Properties::getString(std::string_view name, std::string_view d
     if (!value.empty())
     {
         // If the value references a variable, return the variable value
-        if (isVariable(value, variable, 256))
-            return getVariable(variable, defaultValue);
+        if (auto varLen = extractVariable(value, variable, sizeof(variable)))
+            return getVariable(std::string_view{variable}, defaultValue);
 
         return value;
     }

@@ -131,7 +131,7 @@ void EditBoxImplWin::createEditCtrl(bool singleLine)
         ::SendMessageW(_hwndEdit, EM_LIMITTEXT, this->_maxLength, 0);
         s_previousFocusWnd = s_hwndCocos;
         this->setNativeFont(this->getNativeDefaultFontName(), this->_fontSize);
-        this->setNativeText(this->_text));
+        this->setNativeText(this->_text);
     }
 }
 
@@ -159,7 +159,7 @@ void EditBoxImplWin::setNativeFontColor(const Color32& /*color*/)
     // not implemented yet
 }
 
-void EditBoxImplWin::setNativePlaceholderFont(std::string_view /*fontName*/, int /*fontSize*)
+void EditBoxImplWin::setNativePlaceholderFont(std::string_view /*fontName*/, int /*fontSize*/)
 {
     // not implemented yet
 }
