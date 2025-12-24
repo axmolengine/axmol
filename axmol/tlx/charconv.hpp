@@ -66,7 +66,7 @@ struct default_chars_format<_Tp, std::enable_if_t<std::is_integral_v<_Tp>>>
 template <typename _Tp>
 struct default_chars_format<_Tp, std::enable_if_t<std::is_floating_point_v<_Tp>>>
 {
-    static constexpr std::chars_format value = std::chars_format::general;
+    static constexpr ::tlx::chars_format value = ::tlx::chars_format::general;
 };
 
 template <typename _Tp>
@@ -78,7 +78,7 @@ inline auto from_chars(std::span<const char> chars,
 }
 
 template <typename... Ts>
-inline std::from_chars_result from_chars(std::span<const char> chars, char sep, Ts&... outvals)
+inline ::tlx::from_chars_result from_chars(std::span<const char> chars, char sep, Ts&... outvals)
 {
     auto first = chars.data();
     auto last  = chars.data() + chars.size();
@@ -88,7 +88,7 @@ inline std::from_chars_result from_chars(std::span<const char> chars, char sep, 
             ++p;
     };
 
-    std::from_chars_result res{first, std::errc()};
+    ::tlx::from_chars_result res{first, std::errc()};
 
     auto&& parse_one = [&skip_spaces, &first, last, &res, sep](auto& out) -> bool {
         skip_spaces(first);
