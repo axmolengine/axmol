@@ -95,7 +95,7 @@ const char* Application::getCurrentLanguageCode()
 {
     static char code[3]  = {0};
     std::string language = JniHelper::callStaticStringMethod(applicationHelperClassName, "getCurrentLanguage");
-    if(language.length() < 2)
+    if (language.length() < 2)
         return "en";
     code[0] = language[0];
     code[1] = language[1];

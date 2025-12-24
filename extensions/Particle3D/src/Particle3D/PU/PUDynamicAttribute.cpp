@@ -326,8 +326,7 @@ PUDynamicAttributeCurved* PUDynamicAttributeCurved::clone()
 }
 
 //-----------------------------------------------------------------------
-PUDynamicAttributeOscillate::PUDynamicAttributeOscillate()
-    : _oscillationType(PUDynamicAttributeOscillate::OSCT_SINE)
+PUDynamicAttributeOscillate::PUDynamicAttributeOscillate() : _oscillationType(PUDynamicAttributeOscillate::OSCT_SINE)
 {
     _type = PUDynamicAttribute::DAT_OSCILLATE;
 }

@@ -212,8 +212,10 @@ UIFont* EditBoxImplIOS::constructFont(std::string_view fontName, int fontSize)
     AXASSERT(!fontName.empty(), "fontName can't be nullptr");
     auto hostView      = static_cast<RenderHostView*>(ax::Director::getInstance()->getRenderView()->getNativeDisplay());
     float retinaFactor = hostView.contentScaleFactor;
-    NSString* fntName  = [[NSString alloc] initWithBytes:fontName.data() length:fontName.length() encoding:NSUTF8StringEncoding];
-    fntName = [[fntName lastPathComponent] stringByDeletingPathExtension];
+    NSString* fntName  = [[NSString alloc] initWithBytes:fontName.data()
+                                                 length:fontName.length()
+                                               encoding:NSUTF8StringEncoding];
+    fntName            = [[fntName lastPathComponent] stringByDeletingPathExtension];
 
     auto renderView   = ax::Director::getInstance()->getRenderView();
     float scaleFactor = renderView->getScaleX();

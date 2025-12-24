@@ -55,7 +55,7 @@ enum
 
 struct _FontDefHashElement;
 
-template<typename _Tp>
+template <typename _Tp>
 static size_t parseNumParam(std::string_view line, std::string_view key, _Tp& outValue, size_t offset = 0)
 {
     auto pos = line.find(key, offset);
@@ -526,7 +526,6 @@ void BMFontConfiguration::parseKerningEntry(std::string_view line)
     auto pos = parseNumParam(line, "first="sv, first);
 
     pos = parseNumParam(line, "second="sv, second, pos);
-
 
     parseNumParam(line, "amount="sv, amount, pos);
 

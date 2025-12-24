@@ -303,7 +303,8 @@ Sprite* createSpriteFromBase64Cached(std::string_view base64String, std::string_
     if (texture == nullptr)
     {
         unsigned char* decoded;
-        int length = base64Decode((const unsigned char*)base64String.data(), (unsigned int)base64String.size(), &decoded);
+        int length =
+            base64Decode((const unsigned char*)base64String.data(), (unsigned int)base64String.size(), &decoded);
 
         Image* image     = new Image();
         bool imageResult = image->initWithImageData(decoded, length, true);

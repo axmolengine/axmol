@@ -45,7 +45,6 @@ static std::string_view make_sv(const char* cstr)
     return cstr ? std::string_view{cstr} : std::string_view{};
 }
 
-
 //
 // class Properties::InputStreamView
 //
@@ -132,7 +131,6 @@ void calculateNamespacePath(std::string_view urlString,
 /** @script{ignore} */
 Properties* getPropertiesFromNamespacePath(Properties* properties, const std::vector<std::string_view>& namespacePath);
 
-
 static char* trimWhiteSpace(char* str)
 {
     if (!str)
@@ -161,11 +159,10 @@ static char* trimWhiteSpace(char* str)
     return str;
 }
 
- Properties::Properties() : _variables(nullptr), _dirPath(nullptr),
- _parent(nullptr)
+Properties::Properties() : _variables(nullptr), _dirPath(nullptr), _parent(nullptr)
 {
-     _properties.reserve(32);
- }
+    _properties.reserve(32);
+}
 
 Properties::Properties(const Properties& copy)
     : _namespace(copy._namespace)
@@ -186,8 +183,7 @@ Properties::Properties(const Properties& copy)
     rewind();
 }
 
-Properties::Properties(InputStreamView* isv)
-    : _variables(nullptr), _dirPath(nullptr), _parent(nullptr)
+Properties::Properties(InputStreamView* isv) : _variables(nullptr), _dirPath(nullptr), _parent(nullptr)
 {
     readProperties(isv);
     rewind();
@@ -280,7 +276,7 @@ void Properties::readProperties(InputStreamView* isv)
 {
     AXASSERT(!isv->empty(), "Invalid data");
 
-    char line[2048]; // MaxPerLine chars is 2048
+    char line[2048];  // MaxPerLine chars is 2048
     char variable[256];
     int c;
     char* name;

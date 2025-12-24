@@ -75,7 +75,9 @@ void EditBoxImplMac::createNativeControl(const ax::Rect& frame)
 NSFont* EditBoxImplMac::constructFont(std::string_view fontName, int fontSize)
 {
     // [NSString stringWithUTF8String:fontName.data()];
-    NSString* fntName  = [[NSString alloc] initWithBytes:fontName.data() length:fontName.length() encoding:NSUTF8StringEncoding];
+    NSString* fntName  = [[NSString alloc] initWithBytes:fontName.data()
+                                                 length:fontName.length()
+                                               encoding:NSUTF8StringEncoding];
     fntName            = [[fntName lastPathComponent] stringByDeletingPathExtension];
     float retinaFactor = _inRetinaMode ? 2.0f : 1.0f;
     auto renderView    = ax::Director::getInstance()->getRenderView();

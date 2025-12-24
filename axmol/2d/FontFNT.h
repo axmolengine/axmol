@@ -125,8 +125,8 @@ public:
 protected:
     virtual std::set<unsigned int> parseConfigFile(std::string_view controlFile);
     virtual std::set<unsigned int> parseBinaryConfigFile(unsigned char* pData,
-                                                          uint32_t size,
-                                                          std::string_view controlFile);
+                                                         uint32_t size,
+                                                         std::string_view controlFile);
 
 private:
     unsigned int parseCharacterDefinition(std::string_view line);

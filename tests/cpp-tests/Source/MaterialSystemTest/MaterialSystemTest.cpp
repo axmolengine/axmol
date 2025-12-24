@@ -490,7 +490,7 @@ static void printProperties(Properties* properties, int indent)
     AXLOGD("{}Namespace: {}  ID: {}\n{}{{", chindent, spacename, id, chindent);
 
     // Print all properties in this namespace.
-    auto name  = properties->getNextProperty();
+    auto name = properties->getNextProperty();
     std::string_view value;
     while (!name.empty())
     {

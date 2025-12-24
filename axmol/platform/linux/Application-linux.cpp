@@ -136,7 +136,7 @@ Application* Application::getInstance()
 const char* Application::getCurrentLanguageCode()
 {
     static char code[3] = {0};
-    const char* first = getenv("LANG");
+    const char* first   = getenv("LANG");
     if (!first)
         return "en";
     auto last = strchr(first, '_');

@@ -479,7 +479,10 @@ struct CommonScriptData
      *
      * @lua NA
      */
-    CommonScriptData(int inHandler, std::string_view inName, Object* inSource = nullptr, std::string_view inClassName = ""sv)
+    CommonScriptData(int inHandler,
+                     std::string_view inName,
+                     Object* inSource             = nullptr,
+                     std::string_view inClassName = ""sv)
         : handler(inHandler), eventSource(inSource)
     {
         if (inName.empty())

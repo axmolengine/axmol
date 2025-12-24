@@ -326,7 +326,7 @@ bool EditBoxImplLinux::isEditing()
 void EditBoxImplLinux::nativeOpenKeyboard()
 {
     std::string_view text = this->getText();
-    bool didChange   = LinuxInputBox(text);
+    bool didChange        = LinuxInputBox(text);
     if (didChange)
     {
         this->editBoxEditingDidEnd(text);

@@ -248,7 +248,7 @@ bool Material::parseSampler(rhi::ProgramState* programState, Properties* sampler
 
     // mipmap
     std::string_view mipmap = samplerProperties->getString("mipmap"sv, "false"sv);
-    bool usemipmap = tlx::ic::iequals(mipmap, "true");
+    bool usemipmap          = tlx::ic::iequals(mipmap, "true");
     // required
     auto filename = samplerProperties->getString("path");
 
@@ -569,6 +569,5 @@ static bool isValidUniform(std::string_view name)
 {
     return !(name == "defines" || name == "vertexShader" || name == "fragmentShader");
 }
-
 
 }  // namespace ax
