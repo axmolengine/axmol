@@ -54,29 +54,29 @@ public:
 
     bool initWithSize(const Size& size) override;
 
-    void setFont(const char* pFontName, int fontSize) override;
+    void setFont(std::string_view fontName, int fontSize) override;
     void setFontColor(const Color32& color) override;
-    void setPlaceholderFont(const char* pFontName, int fontSize) override;
+    void setPlaceholderFont(std::string_view fontName, int fontSize) override;
     void setPlaceholderFontColor(const Color32& color) override;
     void setInputMode(EditBox::InputMode inputMode) override;
     void setInputFlag(EditBox::InputFlag inputFlag) override;
     void setReturnType(EditBox::KeyboardReturnType returnType) override;
-    void setText(const char* pText) override;
-    void setPlaceHolder(const char* pText) override;
+    void setText(std::string_view text) override;
+    void setPlaceHolder(std::string_view text) override;
     void setVisible(bool visible) override;
 
     void setMaxLength(int maxLength) override;
     void setTextHorizontalAlignment(TextHAlignment alignment) override;
 
     int getMaxLength() override { return _maxLength; }
-    const char* getText() override { return _text.c_str(); }
-    const char* getPlaceHolder() override { return _placeHolder.c_str(); }
+    std::string_view getText() override { return _text; }
+    std::string_view getPlaceHolder() override { return _placeHolder; }
 
-    const char* getFontName() override { return _fontName.c_str(); }
+    std::string_view getFontName() override { return _fontName; }
     int getFontSize() override { return _fontSize; }
     const Color32& getFontColor() override { return _colText; }
 
-    const char* getPlaceholderFontName() override { return _placeholderFontName.c_str(); }
+    std::string_view getPlaceholderFontName() override { return _placeholderFontName; }
     int getPlaceholderFontSize() override { return _placeholderFontSize; }
     const Color32& getPlaceholderFontColor() override { return _colPlaceHolder; }
 
@@ -111,28 +111,28 @@ public:
     void editBoxEditingDidEnd(std::string_view text,
                               EditBoxDelegate::EditBoxEndAction action = EditBoxDelegate::EditBoxEndAction::UNKNOWN);
 
-    bool isEditing() override                                                   = 0;
-    virtual void createNativeControl(const Rect& frame)                         = 0;
-    virtual void setNativeFont(const char* pFontName, int fontSize)             = 0;
-    virtual void setNativeFontColor(const Color32& color)                       = 0;
-    virtual void setNativePlaceholderFont(const char* pFontName, int fontSize)  = 0;
-    virtual void setNativePlaceholderFontColor(const Color32& color)            = 0;
-    virtual void setNativeInputMode(EditBox::InputMode inputMode)               = 0;
-    virtual void setNativeInputFlag(EditBox::InputFlag inputFlag)               = 0;
-    virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType)    = 0;
-    virtual void setNativeTextHorizontalAlignment(ax::TextHAlignment alignment) = 0;
-    virtual void setNativeText(const char* pText)                               = 0;
-    virtual void setNativePlaceHolder(const char* pText)                        = 0;
-    virtual void setNativeVisible(bool visible)                                 = 0;
-    virtual void updateNativeFrame(const Rect& rect)                            = 0;
-    virtual const char* getNativeDefaultFontName()                              = 0;
-    virtual void nativeOpenKeyboard()                                           = 0;
-    virtual void nativeCloseKeyboard()                                          = 0;
+    bool isEditing() override                                                      = 0;
+    virtual void createNativeControl(const Rect& frame)                            = 0;
+    virtual void setNativeFont(std::string_view fontName, int fontSize)            = 0;
+    virtual void setNativeFontColor(const Color32& color)                          = 0;
+    virtual void setNativePlaceholderFont(std::string_view fontName, int fontSize) = 0;
+    virtual void setNativePlaceholderFontColor(const Color32& color)               = 0;
+    virtual void setNativeInputMode(EditBox::InputMode inputMode)                  = 0;
+    virtual void setNativeInputFlag(EditBox::InputFlag inputFlag)                  = 0;
+    virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType)       = 0;
+    virtual void setNativeTextHorizontalAlignment(ax::TextHAlignment alignment)    = 0;
+    virtual void setNativeText(std::string_view text)                              = 0;
+    virtual void setNativePlaceHolder(std::string_view text)                       = 0;
+    virtual void setNativeVisible(bool visible)                                    = 0;
+    virtual void updateNativeFrame(const Rect& rect)                               = 0;
+    virtual std::string_view getNativeDefaultFontName()                            = 0;
+    virtual void nativeOpenKeyboard()                                              = 0;
+    virtual void nativeCloseKeyboard()                                             = 0;
     virtual void setNativeMaxLength(int maxLength) {};
 
 protected:
     void initInactiveLabels(const Size& size);
-    void setInactiveText(const char* pText);
+    void setInactiveText(std::string_view text);
     void refreshLabelAlignment();
     void placeInactiveLabels(const Size& size);
     void doAnimationWhenKeyboardMove(float duration, float distance) override {};

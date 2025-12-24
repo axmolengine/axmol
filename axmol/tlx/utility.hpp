@@ -29,6 +29,7 @@
 #include <ranges>
 #include <iterator>
 #include <string.h>
+#include <assert.h>
 #include "axmol/tlx/feature_test.hpp"
 
 namespace tlx
@@ -108,19 +109,49 @@ inline std::string_view to_string_view(_Subrgn&& subrgn)
     return std::string_view{&*subrgn.begin(), static_cast<size_t>(std::ranges::distance(subrgn))};
 }
 
+
+/**
+ * @brief Safely copy a string into a fixed-size C-style buffer.
+ *
+ * Copies characters from the source string into the destination buffer,
+ * ensuring that the destination is always null-terminated. At most
+ * (buffer_size - 1) characters are copied, so truncation may occur if
+ * the source string is longer than the destination capacity.
+ *
+ * @param dest       Destination buffer (C-style string).
+ * @param destSize   Size of the destination buffer in characters.
+ * @param src        Source string to copy (std::string_view).
+ *
+ * @return The number of characters actually copied into the destination
+ *         (excluding the terminating null character).
+ *
+ * @note This function behaves similarly to BSD's strlcpy, but returns
+ *       the number of characters copied rather than the full source length.
+ *       Callers can detect truncation by comparing the return value with
+ *       src.size().
+ *
+ * Example:
+ *   char buf[16];
+ *   size_t copied = tlx::strlcpy(buf, sizeof(buf), "Hello, world!");
+ *   // buf contains "Hello, world!" truncated if necessary.
+ */
 template <size_t _N>
-inline void cstrcpy(char (&dest)[_N], std::string_view src)
+inline size_t strlcpy(char (&dest)[_N], std::string_view src)
 {
-    size_t copy_len = std::min(src.size(), _N - 1);
+    static_assert(_N > 0, "Destination buffer size must be greater than zero.");
+    size_t copy_len = (std::min)(src.size(), _N - 1);
     ::memcpy(dest, src.data(), copy_len);
     dest[copy_len] = '\0';
+    return copy_len;
 }
 
-inline void cstrcpy(char* dest, size_t destSize, std::string_view src)
+inline size_t strlcpy(char* dest, size_t destSize, std::string_view src)
 {
-    size_t copy_len = std::min(src.size(), destSize - 1);
+    assert(destSize > 1);
+    size_t copy_len = (std::min)(src.size(), destSize - 1);
     ::memcpy(dest, src.data(), copy_len);
     dest[copy_len] = '\0';
+    return copy_len;
 }
 
 }  // namespace tlx

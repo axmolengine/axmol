@@ -131,7 +131,7 @@ void EditBoxImplWin::createEditCtrl(bool singleLine)
         ::SendMessageW(_hwndEdit, EM_LIMITTEXT, this->_maxLength, 0);
         s_previousFocusWnd = s_hwndCocos;
         this->setNativeFont(this->getNativeDefaultFontName(), this->_fontSize);
-        this->setNativeText(this->_text.c_str());
+        this->setNativeText(this->_text));
     }
 }
 
@@ -140,7 +140,7 @@ void EditBoxImplWin::createNativeControl(const Rect& frame)
     this->createEditCtrl(false);
 }
 
-void EditBoxImplWin::setNativeFont(const char* pFontName, int fontSize)
+void EditBoxImplWin::setNativeFont(std::string_view fontName, int fontSize)
 {
     auto renderView = Director::getInstance()->getRenderView();
     HFONT hFont = ::CreateFontW(static_cast<int>(fontSize * renderView->getScaleX()), 0, 0, 0, FW_NORMAL, FALSE, FALSE,
@@ -154,17 +154,17 @@ void EditBoxImplWin::setNativeFont(const char* pFontName, int fontSize)
     );
 }
 
-void EditBoxImplWin::setNativeFontColor(const Color32& color)
+void EditBoxImplWin::setNativeFontColor(const Color32& /*color*/)
 {
     // not implemented yet
 }
 
-void EditBoxImplWin::setNativePlaceholderFont(const char* pFontName, int fontSize)
+void EditBoxImplWin::setNativePlaceholderFont(std::string_view /*fontName*/, int /*fontSize*)
 {
     // not implemented yet
 }
 
-void EditBoxImplWin::setNativePlaceholderFontColor(const Color32& color)
+void EditBoxImplWin::setNativePlaceholderFontColor(const Color32& /*color*/)
 {
     // not implemented yet
 }
@@ -237,10 +237,9 @@ void EditBoxImplWin::setNativeTextHorizontalAlignment(TextHAlignment alignment)
     ::SetWindowLongW(_hwndEdit, GWL_STYLE, style);
 }
 
-void EditBoxImplWin::setNativeText(const char* pText)
+void EditBoxImplWin::setNativeText(std::string_view text)
 {
     std::u16string utf16Result;
-    std::string text(pText);
     ax::text_utils::UTF8ToUTF16(text, utf16Result);
     this->_changedTextManually = true;
     ::SetWindowTextW(_hwndEdit, (LPCWSTR)utf16Result.c_str());
@@ -253,7 +252,7 @@ void EditBoxImplWin::setNativeText(const char* pText)
     }
 }
 
-void EditBoxImplWin::setNativePlaceHolder(const char* pText)
+void EditBoxImplWin::setNativePlaceHolder(std::string_view /*text*/)
 {
     // not implemented yet
 }
@@ -276,9 +275,9 @@ void EditBoxImplWin::updateNativeFrame(const Rect& rect)
                    SWP_NOZORDER);
 }
 
-const char* EditBoxImplWin::getNativeDefaultFontName()
+std::string_view EditBoxImplWin::getNativeDefaultFontName()
 {
-    return "Arial";
+    return "Arial"sv;
 }
 
 void EditBoxImplWin::nativeOpenKeyboard()
@@ -384,7 +383,7 @@ void EditBoxImplWin::_WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
         // when app enter background, this message also be called.
         if (this->_editingMode && !::IsWindowVisible(hwnd))
         {
-            this->editBoxEditingDidEnd(this->getText(), _endAction);
+            this->editBoxEditingDidEnd(this->getNativeText(), _endAction);
         }
         break;
     default:
@@ -392,7 +391,7 @@ void EditBoxImplWin::_WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     }
 }
 
-std::string EditBoxImplWin::getText() const
+std::string EditBoxImplWin::getNativeText() const
 {
     std::u16string wstrResult;
     std::string utf8Result;
@@ -419,7 +418,7 @@ LRESULT EditBoxImplWin::hookGLFWWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
             EditBoxImplWin* pThis = (EditBoxImplWin*)GetWindowLongPtrW((HWND)lParam, GWLP_USERDATA);
             if (pThis && !pThis->_changedTextManually)
             {
-                pThis->editBoxEditingChanged(pThis->getText());
+                pThis->editBoxEditingChanged(pThis->getNativeText());
                 pThis->_changedTextManually = false;
             }
         }
@@ -434,7 +433,7 @@ LRESULT EditBoxImplWin::hookGLFWWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
             {
                 if (pThis->_editingMode && !IsWindowVisible(s_previousFocusWnd))
                 {
-                    pThis->editBoxEditingDidEnd(pThis->getText());
+                    pThis->editBoxEditingDidEnd(pThis->getNativeText());
                 }
             }
             else

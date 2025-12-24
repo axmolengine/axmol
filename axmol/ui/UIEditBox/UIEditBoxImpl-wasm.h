@@ -46,19 +46,19 @@ public:
 
     bool isEditing() override;
     void createNativeControl(const Rect& frame) override;
-    void setNativeFont(const char* pFontName, int fontSize) override;
+    void setNativeFont(std::string_view fontName, int fontSize) override;
     void setNativeFontColor(const Color32& color) override;
-    void setNativePlaceholderFont(const char* pFontName, int fontSize) override;
+    void setNativePlaceholderFont(std::string_view fontName, int fontSize) override;
     void setNativePlaceholderFontColor(const Color32& color) override;
     void setNativeInputMode(EditBox::InputMode inputMode) override;
     void setNativeInputFlag(EditBox::InputFlag inputFlag) override;
     void setNativeReturnType(EditBox::KeyboardReturnType returnType) override;
     void setNativeTextHorizontalAlignment(TextHAlignment alignment) override;
-    void setNativeText(const char* pText) override;
-    void setNativePlaceHolder(const char* pText) override;
+    void setNativeText(std::string_view text) override;
+    void setNativePlaceHolder(std::string_view text) override;
     void setNativeVisible(bool visible) override;
     void updateNativeFrame(const Rect& rect) override;
-    const char* getNativeDefaultFontName() override;
+    std::string_view getNativeDefaultFontName() override;
     void nativeOpenKeyboard() override;
     void nativeCloseKeyboard() override;
     void setNativeMaxLength(int maxLength) override;

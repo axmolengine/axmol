@@ -258,7 +258,7 @@ static bool load_gtk3()
     return !!gtk3;
 }
 
-static bool LinuxInputBox(std::string& entryLine)
+static bool LinuxInputBox(std::string_view entryLine)
 {
     if (!load_gtk3())
     {
@@ -277,7 +277,7 @@ static bool LinuxInputBox(std::string& entryLine)
 
     gtk_container_add(GTK_CONTAINER(contentArea), entry);
     gtk_dialog_add_button(GTK_DIALOG(dialog), "OK", 0);
-    gtk_entry_set_text(GTK_ENTRY(entry), entryLine.c_str());
+    gtk_entry_set_text(GTK_ENTRY(entry), entryLine.data());
 
     g_signal_connect(dialog, "focus-out-event", G_CALLBACK(dialogFocusOutCallback), NULL);
     gtk_window_set_keep_above(GTK_WINDOW(dialog), true);
@@ -325,7 +325,7 @@ bool EditBoxImplLinux::isEditing()
 
 void EditBoxImplLinux::nativeOpenKeyboard()
 {
-    std::string text = this->getText();
+    std::string_view text = this->getText();
     bool didChange   = LinuxInputBox(text);
     if (didChange)
     {

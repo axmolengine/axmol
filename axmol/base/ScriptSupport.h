@@ -488,7 +488,7 @@ struct CommonScriptData
         }
         else
         {
-            tlx::cstrcpy(eventName, inName);
+            tlx::strlcpy(eventName, inName);
         }
 
         if (inClassName.empty())
@@ -497,7 +497,7 @@ struct CommonScriptData
         }
         else
         {
-            tlx::cstrcpy(eventSourceClassName, inClassName);
+            tlx::strlcpy(eventSourceClassName, inClassName);
         }
     }
 };

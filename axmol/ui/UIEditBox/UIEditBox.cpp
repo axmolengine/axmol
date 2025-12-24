@@ -434,57 +434,54 @@ EditBoxDelegate* EditBox::getDelegate()
     return _delegate;
 }
 
-void EditBox::setText(const char* pText)
+void EditBox::setText(std::string_view text)
 {
-    if (pText != nullptr)
+    if (_editBoxImpl != nullptr)
+    {
+        _editBoxImpl->setText(text);
+    }
+}
+
+std::string_view EditBox::getText() const
+{
+    if (_editBoxImpl != nullptr)
+    {
+        std::string_view text = _editBoxImpl->getText();
+        if (!text.empty())
+            return text;
+    }
+
+    return ""sv;
+}
+
+void EditBox::setFont(std::string_view fontName, int fontSize)
+{
+    AXASSERT(!fontName.empty(), "fontName can't be empty");
+    if (!fontName.empty())
     {
         if (_editBoxImpl != nullptr)
         {
-            _editBoxImpl->setText(pText);
+            _editBoxImpl->setFont(fontName, fontSize);
         }
     }
 }
 
-const char* EditBox::getText() const
+void EditBox::setFontName(std::string_view fontName)
 {
+    AXASSERT(!fontName.empty(), "fontName can't be empty");
     if (_editBoxImpl != nullptr)
     {
-        const char* pText = _editBoxImpl->getText();
-        if (pText != nullptr)
-            return pText;
-    }
-
-    return "";
-}
-
-void EditBox::setFont(const char* pFontName, int fontSize)
-{
-    AXASSERT(pFontName != nullptr, "fontName can't be nullptr");
-    if (pFontName != nullptr)
-    {
-        if (_editBoxImpl != nullptr)
-        {
-            _editBoxImpl->setFont(pFontName, fontSize);
-        }
+        _editBoxImpl->setFont(fontName, _editBoxImpl->getFontSize());
     }
 }
 
-void EditBox::setFontName(const char* pFontName)
-{
-    AXASSERT(pFontName != nullptr, "fontName can't be nullptr");
-    if (_editBoxImpl != nullptr)
-    {
-        _editBoxImpl->setFont(pFontName, _editBoxImpl->getFontSize());
-    }
-}
-
-const char* EditBox::getFontName() const
+std::string_view EditBox::getFontName() const
 {
     if (_editBoxImpl != nullptr)
     {
         return _editBoxImpl->getFontName();
     }
-    return "";
+    return ""sv;
 }
 
 void EditBox::setFontSize(int fontSize)
@@ -521,28 +518,28 @@ const Color32& EditBox::getFontColor() const
     return Color32::WHITE;
 }
 
-void EditBox::setPlaceholderFont(const char* pFontName, int fontSize)
+void EditBox::setPlaceholderFont(std::string_view fontName, int fontSize)
 {
-    AXASSERT(pFontName != nullptr, "fontName can't be nullptr");
-    if (pFontName != nullptr)
+    AXASSERT(!fontName.empty(), "fontName can't be empty");
+    if (!fontName.empty())
     {
         if (_editBoxImpl != nullptr)
         {
-            _editBoxImpl->setPlaceholderFont(pFontName, fontSize);
+            _editBoxImpl->setPlaceholderFont(fontName, fontSize);
         }
     }
 }
 
-void EditBox::setPlaceholderFontName(const char* pFontName)
+void EditBox::setPlaceholderFontName(std::string_view fontName)
 {
-    AXASSERT(pFontName != nullptr, "fontName can't be nullptr");
+    AXASSERT(!fontName.empty(), "fontName can't be empty");
     if (_editBoxImpl != nullptr)
     {
-        _editBoxImpl->setPlaceholderFont(pFontName, _editBoxImpl->getPlaceholderFontSize());
+        _editBoxImpl->setPlaceholderFont(fontName, _editBoxImpl->getPlaceholderFontSize());
     }
 }
 
-const char* EditBox::getPlaceholderFontName() const
+std::string_view EditBox::getPlaceholderFontName() const
 {
     if (_editBoxImpl != nullptr)
     {
@@ -585,24 +582,21 @@ const Color32& EditBox::getPlaceholderFontColor() const
     return Color32::GRAY;
 }
 
-void EditBox::setPlaceHolder(const char* pText)
+void EditBox::setPlaceHolder(std::string_view text)
 {
-    if (pText != nullptr)
+    if (_editBoxImpl != nullptr)
     {
-        if (_editBoxImpl != nullptr)
-        {
-            _editBoxImpl->setPlaceHolder(pText);
-        }
+        _editBoxImpl->setPlaceHolder(text);
     }
 }
 
-const char* EditBox::getPlaceHolder() const
+std::string_view EditBox::getPlaceHolder() const
 {
     if (_editBoxImpl != nullptr)
     {
         return _editBoxImpl->getPlaceHolder();
     }
-    return "";
+    return ""sv;
 }
 
 void EditBox::setInputMode(EditBox::InputMode inputMode)

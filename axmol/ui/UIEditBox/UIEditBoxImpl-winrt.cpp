@@ -452,7 +452,7 @@ UIEditBoxImplWinrt::UIEditBoxImplWinrt(EditBox* pEditText) : EditBoxImplCommon(p
     _system_control       = _system_control_agile.get().as<EditBoxWinRT>();
 }
 
-void UIEditBoxImplWinrt::setNativeFont(const char* pFontName, int fontSize)
+void UIEditBoxImplWinrt::setNativeFont(std::string_view fontName, int fontSize)
 {
     // fontSize
     _fontSize      = fontSize;
@@ -462,10 +462,10 @@ void UIEditBoxImplWinrt::setNativeFont(const char* pFontName, int fontSize)
     _system_control->setFontSize(_fontSize * ax::Director::getInstance()->getRenderView()->getScaleY() /** scale.y*/);
 
     // fontFamily
-    auto font = ax::FontFreeType::create(pFontName, fontSize, ax::GlyphCollection::DYNAMIC, ""sv);
+    auto font = ax::FontFreeType::create(fontName, fontSize, ax::GlyphCollection::DYNAMIC, ""sv);
     if (font != nullptr)
     {
-        std::string fontName = "ms-appx:///Content/" + std::string(pFontName) + '#' + font->getFontFamily();
+        std::string fontName = fmt::format("ms-appx:///Content/{}#{}", fontName, font->getFontFamily());
         _system_control->setFontFamily(PlatformStringFromString(fontName));
     }
 }
@@ -491,9 +491,9 @@ void UIEditBoxImplWinrt::setNativeTextHorizontalAlignment(ax::TextHAlignment ali
     _system_control->setTextHorizontalAlignment((int)alignment);
 }
 
-void UIEditBoxImplWinrt::setNativeText(const char* pText)
+void UIEditBoxImplWinrt::setNativeText(std::string_view text)
 {
-    _system_control->setText(PlatformStringFromString(pText));
+    _system_control->setText(PlatformStringFromString(text));
 }
 
 void UIEditBoxImplWinrt::setNativeVisible(bool visible)

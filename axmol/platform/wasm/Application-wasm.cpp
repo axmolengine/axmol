@@ -278,7 +278,7 @@ const char* Application::getCurrentLanguageCode()
     static char code[3] = {0};
     char pLanguageName[16] = {0};
     getCurrentLangISO2(pLanguageName);
-    tlx::cstrcpy(code, pLanguageName);
+    tlx::strlcpy(code, pLanguageName);
     return code;
 }
 
