@@ -2024,7 +2024,7 @@ if (!$setupOnly) {
                     $CONFIG_ALL_OPTIONS += "-DCMAKE_BUILD_TYPE=$optimize_flag"
                 }
 
-                if ($using_ninja) {
+                if ($using_ninja -and $Global:is_android) {
                     $CONFIG_ALL_OPTIONS += "-DCMAKE_MAKE_PROGRAM=$ninja_prog"
                 }
 
