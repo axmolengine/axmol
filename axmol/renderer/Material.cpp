@@ -251,9 +251,9 @@ bool Material::parseSampler(rhi::ProgramState* programState, Properties* sampler
 
     // mipmap
     std::string_view mipmap = samplerProperties->getString("mipmap"sv, "false"sv);
-    bool usemipmap          = tlx::ic::iequals(mipmap, "true");
+    bool usemipmap          = tlx::ic::iequals(mipmap, "true"sv);
     // required
-    auto filename = samplerProperties->getString("path");
+    auto filename = samplerProperties->getString("path"sv);
 
     auto texture = Director::getInstance()->getTextureCache()->addImage(filename, usemipmap);
     if (!texture)
@@ -352,10 +352,10 @@ bool Material::parseSampler(rhi::ProgramState* programState, Properties* sampler
 bool Material::parseShader(Pass* pass, Properties* shaderProperties)
 {
     // vertexShader
-    std::string_view vertShader = shaderProperties->getString("vertexShader");
+    std::string_view vertShader = shaderProperties->getString("vertexShader"sv);
 
     // fragmentShader
-    std::string_view fragShader = shaderProperties->getString("fragmentShader");
+    std::string_view fragShader = shaderProperties->getString("fragmentShader"sv);
 
     // compileTimeDefines, since axmol-1.1 no longer support compile time defines
     // const char* compileTimeDefines = shaderProperties->getString("defines"sv);
