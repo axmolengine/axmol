@@ -96,6 +96,7 @@ class AxmolUtils {
         def profiles = loadProfiles(project, true)
         def buildProfiles = resolveBasicBuildProfiles(project, profiles)
 
+        def ninjaVer = translateVer(profiles['ninja'])
         def cmakeVer = translateVer(profiles['cmake'])
         def ndkVer = translateNdkVer(profiles['ndk'])
 
@@ -131,25 +132,9 @@ class AxmolUtils {
 
         // ndkVer,ndkPath,cmakeVer,cmakeOptions(AX_USE_XXX, AX_ENABLE_XXX, AX_ENABLE_EXT_XXX),cmakeDir<nullable>
         findNDK(sdkRoot, ndkVer, buildProfiles)
+        findNinja(ninjaVer, buildProfiles)
         findCMake(sdkRoot, cmakeVer, buildProfiles)
-        parseCMakeOptions(project, buildProfiles)
-        def cmakeDir = buildProfiles['cmakeDir']
-        if (cmakeDir != null) {
-            def symlinkDir = joinPath(sdkRoot, 'cmake', buildProfiles['cmakeVer'])
-            def symlinkDirFile = new File(symlinkDir)
-            if (!symlinkDirFile.exists()) {
-                println "Creating symlink ${symlinkDir} ==> ${cmakeDir} ..."
-
-                def parentDir = symlinkDirFile.parentFile
-                if(!parentDir.exists()) {
-                    parentDir.mkdirs()
-                }
-
-                createSymbolicLink(symlinkDirFile, new File(cmakeDir))
-            } else {
-                println "The symlinkd ${symlinkDir} ==> ${cmakeDir} exist"
-            }
-        }
+        generateCMakeOptions(project, buildProfiles)
 
         // dump build profiles
         println("---------- :${project.rootProject.name} build profiles ----------")
@@ -281,6 +266,46 @@ class AxmolUtils {
         throw new Exception("No installed ndk found, required $ndkVer.*, sdkRoot: $sdkRoot")
     }
 
+
+    private static void findNinja(ninjaVer, buildProfiles) {
+        def allowNewerNinja = false
+        if(ninjaVer.endsWith('+')) {
+            allowNewerNinja = true
+            ninjaVer = ninjaVer.substring(0, ninjaVer.length() - 1)
+        }
+
+
+
+        def ninjaBinDirs = []
+
+        def ninjaBinDir = findExecutableDirInPath("ninja${getExecutableSuffix()}")
+        if (ninjaBinDir != null) {
+            ninjaBinDirs.add(ninjaBinDir)
+        }
+        ninjaBinDir = joinPath(Paths.get("${getEngineRoot()}").toAbsolutePath().toString(), 'tools', 'external', 'ninja')
+        ninjaBinDirs.add(ninjaBinDir)
+
+        def verifiedVer = null
+        def verifiedPath = null
+        for(ninjaDir in ninjaBinDirs) {
+            println "Verifying ninja version in ${ninjaDir}"
+            def programPath =  "$ninjaDir${File.separator}ninja${getExecutableSuffix()}"
+            verifiedVer = verifyProgramVer("ninja", programPath, ninjaVer, allowNewerNinja)
+            if(verifiedVer != null) {
+                verifiedPath = programPath
+                break
+            }
+        }
+
+        if(verifiedVer == null) {
+            throw new Exception("No suitable ninja found, required $ninjaVer")
+        }
+
+        buildProfiles['ninjaPath'] = verifiedPath
+        buildProfiles['ninjaVer'] = verifiedVer
+    }
+
+
     /**
      * Find suitable cmake for current project
      * @param project The current android project
@@ -320,52 +345,69 @@ class AxmolUtils {
             }
         }
 
-        def cmakeBinDir = getCMakeBinFromPath()
+        def cmakeBinDir = findExecutableDirInPath("cmake${getExecutableSuffix()}")
         if(cmakeBinDir != null) {
             cmakeBinDirs.add(cmakeBinDir)
         }
 
-        cmakeBinDir = joinPath(Paths.get("${getEngineRoot()}").toAbsolutePath().toString(), 'tools', 'external', 'cmake', 'bin')
-        cmakeBinDirs.add(cmakeBinDir)
+        // Use engine cmake as fallback
+        def fallbackCMakeDir = joinPath(Paths.get("${getEngineRoot()}").toAbsolutePath().toString(), 'tools', 'external', 'cmake', 'bin')
+        cmakeBinDirs.add(fallbackCMakeDir)
 
         // find in cmakeBinDirs
-        def foundCMakeVer = null
+        def verifiedVer = null
         def index = 0
         for(item in cmakeBinDirs) {
-            println "find cmake in ${item}"
-            foundCMakeVer = findCMakeFromBinDir(cmakeVer, item, allowNewerCMake)
-            if(foundCMakeVer != null) {
+            println "Verifying cmake version in ${item}"
+            def pgoramPath = "$item${File.separator}cmake${getExecutableSuffix()}"
+            verifiedVer = verifyProgramVer("cmake", pgoramPath, cmakeVer, allowNewerCMake)
+            if(verifiedVer != null) {
                 break
             }
             ++index
         }
 
+        // Create symlink at sdk cmake when using fallback cmake in axmol engine
+        // Only present for compatibility purpose, may remove in future axmol releases
         if (index == (cmakeBinDirs.size() - 1)) {
-            // using  cmakeBinDir=axmol/tools/external/cmake/bin
-            buildProfiles['cmakeDir'] = joinPath(Paths.get("${getEngineRoot()}").toAbsolutePath().toString(), 'tools', 'external', 'cmake')
+            def symlinkDir = joinPath(sdkRoot, 'cmake', buildProfiles['cmakeVer'])
+            def symlinkDirFile = new File(symlinkDir)
+            if (!symlinkDirFile.exists()) {
+                println "Creating symlink ${symlinkDir} ==> ${fallbackCMakeDir} ..."
+
+                def parentDir = symlinkDirFile.parentFile
+                if(!parentDir.exists()) {
+                    parentDir.mkdirs()
+                }
+
+                createSymbolicLink(symlinkDirFile, new File(fallbackCMakeDir))
+            } else {
+                println "The symlinkd ${symlinkDir} ==> ${fallbackCMakeDir} exist"
+            }
         }
 
-        if(foundCMakeVer == null) {
-            println("No suitable cmake found, required $cmakeVer, the gradle will install it")
-            foundCMakeVer = cmakeVer
+        if(verifiedVer == null) {
+            throw new Exception("No suitable cmake found, required $cmakeVer")
         }
 
-        buildProfiles['cmakeVer'] = foundCMakeVer
+        buildProfiles['cmakeVer'] = verifiedVer
     }
 
     private static String joinPath(String first, String... more) {
         return Paths.get(first, more).toString()
     }
 
-    private static void parseCMakeOptions(project, buildProfiles) {
+    private static void generateCMakeOptions(project, buildProfiles) {
         def options = []
         for(item in project.properties) {
             if (item.key.startsWith('_1K_')) {
                 options.add("\"-D${item.key.substring(4)}=${item.value}\"")
             }
         }
-        def androidProjDir = project.projectDir.toString().replaceAll("\\\\", "/");
+        def androidProjDir = project.projectDir.toString().replaceAll("\\\\", "/")
+        def ninjaPath = buildProfiles['ninjaPath'].replaceAll("\\\\", "/")
         options.add('"-DCMAKE_FIND_ROOT_PATH="')
+        options.add("\"-DCMAKE_MAKE_PROGRAM=${ninjaPath}\"")
         options.add('"-DANDROID_STL=c++_shared"')
         options.add('"-DANDROID_TOOLCHAIN=clang"')
         options.add('"-DANDROID_ARM_NEON=TRUE"')
@@ -396,17 +438,10 @@ class AxmolUtils {
         return false
     }
 
-    private static String findCMakeFromBinDir(String cmakeVer, String cmakeBin, boolean allowNewerCMake) {
-        def foundCMakeVer = null
-
-        String ninjaPath = cmakeBin + File.separator + getNinjaProgramName()
-        if(!new File(ninjaPath).isFile()) {
-            println("The required ninja program is not present in cmake bin dir: '$cmakeBin', skipped")
-            return null
-        }
+    private static String verifyProgramVer(String programName, String programPath, String requiredVer, boolean allowNewerVer) {
+        def verifiedVer = null
 
         try {
-            def programPath = cmakeBin + File.separator + getCMakeProgramName()
             Process proc = isWindows() ? Runtime.getRuntime().exec("\"$programPath\" --version") : Runtime.getRuntime().exec("$programPath --version")
             proc.waitFor()
             int exitVal = proc.exitValue()
@@ -414,63 +449,64 @@ class AxmolUtils {
                 InputStream stdIn = proc.getInputStream();
                 InputStreamReader isr = new InputStreamReader(stdIn)
                 BufferedReader br = new BufferedReader(isr)
-                String verLine = br.readLine()
-                def verInfo = verLine.split("\\s")
-                if (verInfo.length >= 3) {
-                    def foundVer = verInfo[2]
-                    def minusIdx = foundVer.indexOf('-')
-                    def canonVer = minusIdx == -1 ? foundVer : foundVer.substring(0, minusIdx)
-                    def ret = compareVersion(canonVer, cmakeVer)
-                    if (ret == 0) {
-                        println("Using found cmake ($canonVer,path=$programPath)")
-                        foundCMakeVer = canonVer
+                String canonVer = extractVersionFromOutput(br.readLine())
+                def ret = compareVersion(canonVer, requiredVer)
+                if (ret == 0) {
+                    println("Using found ${programName} ($canonVer,path=$programPath)")
+                    verifiedVer = canonVer
+                }
+                else if(ret > 0) {
+                    if(allowNewerVer) {
+                        println("Using found newer ${programName} (version=$canonVer,path=$programPath), (minimum required is: ${requiredVer})")
+                        verifiedVer = canonVer
                     }
-                    else if(ret > 0) {
-                        if(allowNewerCMake) {
-                            println("Using found newer cmake (version=$canonVer,path=$programPath), (minimum required is: ${cmakeVer})")
-                            foundCMakeVer = canonVer
-                        }
-                        else {
-                            println("The cmake ${cmakeVer} is required, but $canonVer found!")
-                        }
+                    else {
+                        println("The ${programName} ${requiredVer} is required, but $canonVer found!")
                     }
                 }
             }
         }
         catch(Exception ex) {
-            println("Execute cmake failed: " + ex.message)
+            println("Execute ${programName} failed: " + ex.message)
         }
 
-        return foundCMakeVer
+        return verifiedVer
     }
 
-    private static String getCMakeBinFromPath() {
-        String cmakeExecName = getCMakeProgramName()
-        def foundBinPath = null
+    // find executable absolute dir form system env: PATH
+    private static String findExecutableDirInPath(String fileName) {
+        def foundDir = null
         Stream.of(System.getenv("PATH").split(Pattern.quote(File.pathSeparator)))
                 .map(Paths::get)
                 .anyMatch(path -> {
-                    def programPath = path.resolve(cmakeExecName)
-                    boolean fileExist = Files.exists(path.resolve(cmakeExecName))
+                    def programPath = path.resolve(fileName)
+                    boolean fileExist = Files.exists(path.resolve(fileName))
                     if(fileExist) {
-                        foundBinPath = path.toAbsolutePath().toString()
+                        foundDir = path.toAbsolutePath().toString()
                     }
                     return fileExist
                 })
 
-        return foundBinPath
+        return foundDir
     }
 
-    private static String getCMakeProgramName() {
-        return isWindows() ? "cmake.exe" : "cmake"
-    }
-
-    private static String getNinjaProgramName() {
-        return isWindows() ? "ninja.exe" : "ninja"
+    private static String getExecutableSuffix() {
+        return isWindows() ? ".exe" : "";
     }
 
     private static boolean isWindows() {
         return System.getProperty("os.name").toLowerCase().contains("windows")
+    }
+
+    private static String extractVersionFromOutput(String output) {
+        def pattern = ~/(\d+\.\d+(?:\.\d+)?)/
+        def matcher = pattern.matcher(output)
+
+        if (matcher.find()) {
+            return matcher.group(1)
+        }
+
+        throw new RuntimeException("Could not extract version from output: ${output}")
     }
 
     static void createSymbolicLink(File linkDir, File targetDir) {

@@ -13,7 +13,7 @@ axslcc=1.14.0
 cmake=4.2.0~4.2.1+
 
 # The ninja
-ninja=1.10.0~1.12.1+
+ninja=1.10.0~1.13.2+
 
 # --- endregion
 
@@ -73,10 +73,10 @@ buildtools=35.0.0
 androidstudio=2025.1.1+
 
 # The android dependencies managed by @gradle
-appcompat=1.7.0
+appcompat=1.7.1
 media3=1.2.1
 annotation=1.9.1
-guava=33.3.1
+guava=33.5.0
 
 # --- endregion
 

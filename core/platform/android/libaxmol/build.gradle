@@ -10,8 +10,8 @@ android {
     compileSdk = targetSdk.toInteger()
 
     defaultConfig {
-        minSdkVersion = minSdk
-        targetSdkVersion = targetSdk
+        minSdkVersion minSdk
+        targetSdkVersion targetSdk
         versionCode 1
         versionName "1.0"
     }
@@ -42,7 +42,9 @@ dependencies {
     def guava_ver = buildProfiles['guava']
 
     // refer to: https://developer.android.com/jetpack/androidx/releases/media3?hl=zh-cn#declaring_dependencies
-    // For media playback using ExoPlayer
+    // ExoPlayer integration note:
+    // Axmol rewrites ExoPlayer's MediaCodecVideoRenderer based on media3-1.2.1 to enable video pixel capture,
+    // allowing video frames to be rendered directly into the Axmol scene graph.
     api "androidx.media3:media3-exoplayer:$media3_ver"
 
     // For DASH playback support with ExoPlayer

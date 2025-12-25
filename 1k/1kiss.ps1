@@ -1133,18 +1133,6 @@ function setup_cmake($skipOS = $false) {
     return $cmake_prog, $cmake_ver
 }
 
-function ensure_cmake_ninja($cmake_prog, $ninja_prog) {
-    # ensure ninja in cmake_bin
-    $cmake_bin = Split-Path $cmake_prog -Parent
-    $cmake_ninja_prog, $__ = find_prog -name 'ninja' -path $cmake_bin -mode 'ONLY' -silent $true
-    if (!$cmake_ninja_prog) {
-        $ninja_symlink_target = Join-Path $cmake_bin (Split-Path $ninja_prog -Leaf)
-        # try link ninja exist cmake bin directory
-        create_symlink $ninja_prog $ninja_symlink_target
-    }
-    return $?
-}
-
 function setup_nsis() {
     if (!$manifest['nsis']) { return $null }
     $nsis_bin = Join-Path $install_prefix "nsis"
@@ -1849,14 +1837,6 @@ if ($Global:is_win32) {
 }
 elseif ($Global:is_android) {
     $ninja_prog = setup_ninja
-    # ensure ninja in cmake_bin
-    if (!(ensure_cmake_ninja $cmake_prog $ninja_prog)) {
-        $cmake_prog, $Script:cmake_ver = setup_cmake -skipOS $true
-        if (!(ensure_cmake_ninja $cmake_prog $ninja_prog)) {
-            $1k.println("Ensure ninja in cmake bin directory fail")
-        }
-    }
-
     setup_jdk # setup android sdk cmdlinetools require jdk
     $sdk_root, $ndk_root = setup_android_sdk
     $env:ANDROID_HOME = $sdk_root
@@ -2044,7 +2024,7 @@ if (!$setupOnly) {
                     $CONFIG_ALL_OPTIONS += "-DCMAKE_BUILD_TYPE=$optimize_flag"
                 }
 
-                if ($using_ninja -and $Global:is_android) {
+                if ($using_ninja) {
                     $CONFIG_ALL_OPTIONS += "-DCMAKE_MAKE_PROGRAM=$ninja_prog"
                 }
 
