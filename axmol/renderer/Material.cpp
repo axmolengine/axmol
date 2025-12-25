@@ -51,7 +51,10 @@ namespace ax
 {
 
 // Helpers declaration
-static bool isValidUniform(std::string_view name);
+static inline bool isValidUniform(std::string_view name)
+{
+    return !(name == "defines"sv || name == "vertexShader"sv || name == "fragmentShader"sv);
+}
 
 Material* Material::createWithFilename(std::string_view filepath)
 {
@@ -159,11 +162,11 @@ bool Material::parseProperties(Properties* materialProperties)
     while (space)
     {
         auto name = space->getNamespace();
-        if (name == "technique")
+        if (name == "technique"sv)
         {
             parseTechnique(space);
         }
-        else if (name == "renderState")
+        else if (name == "renderState"sv)
         {
             parseRenderState(&_renderState.getStateBlock(), space);
         }
@@ -190,11 +193,11 @@ bool Material::parseTechnique(Properties* techniqueProperties)
     while (space)
     {
         std::string_view name = space->getNamespace();
-        if (name == "pass")
+        if (name == "pass"sv)
         {
             parsePass(technique, space);
         }
-        else if (name == "renderState")
+        else if (name == "renderState"sv)
         {
             parseRenderState(&technique->getStateBlock(), space);
         }
@@ -221,11 +224,11 @@ bool Material::parsePass(Technique* technique, Properties* passProperties)
     while (space)
     {
         std::string_view name = space->getNamespace();
-        if (name == "shader")
+        if (name == "shader"sv)
         {
             parseShader(pass, space);
         }
-        else if (name == "renderState")
+        else if (name == "renderState"sv)
         {
             parseRenderState(&pass->_renderState.getStateBlock(), space);
         }
@@ -379,7 +382,7 @@ bool Material::parseShader(Pass* pass, Properties* shaderProperties)
         while (space)
         {
             auto name = space->getNamespace();
-            if (name == "sampler")
+            if (name == "sampler"sv)
             {
                 parseSampler(programState, space);
             }
@@ -562,12 +565,6 @@ void Material::setTechnique(std::string_view techniqueName)
 ssize_t Material::getTechniqueCount() const
 {
     return _techniques.size();
-}
-
-// Helpers implementation
-static bool isValidUniform(std::string_view name)
-{
-    return !(name == "defines" || name == "vertexShader" || name == "fragmentShader");
 }
 
 }  // namespace ax
