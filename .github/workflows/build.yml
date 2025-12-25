@@ -136,8 +136,7 @@ jobs:
       with:
         name: android_${{ matrix.arch }}
         path: |
-          templates/**/*.apk
-          tests/**/*.apk
+          tests/**/outputs/**/*.apk
   ios-sim-x64:
     runs-on: macos-15
     strategy:
