@@ -52,24 +52,6 @@ struct Properties::InputStreamView
 {
     InputStreamView(char* data, size_t size) : _first(data), _last(data + size), _ptr(data) {}
 
-    char* readLine(char* output, int outlen)
-    {
-        if (eof())
-            return nullptr;
-
-        int bytes_read = 0;
-        for (; _ptr < _last && bytes_read < (outlen - 1);)
-        {
-            const auto c = *_ptr++;
-            if (c == '\n') [[unlikely]]
-                break;
-            output[bytes_read++] = c;
-        }
-
-        output[bytes_read] = '\0';
-
-        return output;
-    }
     std::string_view readLineSV()
     {
         char* lineStart = _ptr;
