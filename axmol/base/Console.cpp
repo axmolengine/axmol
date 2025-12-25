@@ -88,7 +88,7 @@ ssize_t Console::Utility::sendToConsole(int fd, std::string_view mesg, int flags
 {
     if (_prompt == mesg)
     {
-        fprintf(stderr, "bad parameter error: a buffer is the prompt string.\n");
+        AXLOGE("bad parameter error: a buffer is the prompt string.\n");
         return 0;
     }
 
