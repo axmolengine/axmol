@@ -408,7 +408,7 @@ bool AssetsManager::uncompress()
             return false;
         }
 
-        std::string_view fileName(pszFileName);
+        std::string_view fileName{pszFileName, static_cast<size_t>(fileInfo.size_filename)};
 
         std::string fullPath;
         fullPath.reserve(_storagePath.size() + fileName.size());
