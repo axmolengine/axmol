@@ -738,9 +738,9 @@ bool ZipFile::setFilter(std::string_view filter)
             int posErr = unzGetFilePos(_data->zipFile, &posInfo);
             if (posErr == UNZ_OK)
             {
-                std::string currentFileName = szCurrentFileName;
+                std::string_view currentFileName{szCurrentFileName, static_cast<size_t>(fileInfo.size_filename)};
                 // cache info about filtered files only (like 'assets/')
-                if (filter.empty() || currentFileName.substr(0, filter.length()) == filter)
+                if (filter.empty() || currentFileName.starts_with(filter))
                 {
                     _data->fileList[currentFileName] = ZipEntryInfo{posInfo, (uint64_t)fileInfo.uncompressed_size, 0};
                 }

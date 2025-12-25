@@ -232,7 +232,7 @@ void EditBoxImplWasm::nativeOpenKeyboard()
             var input = Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input");
             // sync input value from native and focus
             input.value     = UTF8ToString($0, $1);
-            input.maxlength = $2 != -1 ? $1 : undefined;
+            input.maxlength = $2 != -1 ? $2 : undefined;
             input.focus();
         },
         text.data(), (int)text.size(), (int)_maxLength);
