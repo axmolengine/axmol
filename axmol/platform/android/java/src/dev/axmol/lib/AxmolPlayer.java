@@ -263,6 +263,10 @@ public class AxmolPlayer extends FrameLayout {
         nativeOnSurfaceChanged(width, height);
     }
 
+    public void onSurfaceDestroyed(){
+        Log.d(TAG, "onSurfaceDestroyed");
+    }
+
     // ===========================================================
     // Static access
     // ===========================================================

@@ -37,6 +37,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Vulkan implementation of Axmol render surface.
  * Manages its own render thread similar to GLSurfaceView's behavior.
+ *
+ * Key points:
+ * - No UI-thread surface-initialized flag; surface state is kept inside RenderThread.
+ * - All native/Vulkan calls are dispatched to the render thread via queueEvent.
+ * - Synchronization for thread creation/destruction uses sThreadManager (shared monitor).
  */
 public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, SurfaceHolder.Callback2 {
     private static final String TAG = "AxmolSurfaceViewVK";
@@ -46,14 +51,20 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
     // Thread manager for coordinating multiple Vulkan render threads (if needed)
     private static final RenderThreadManager sThreadManager = new RenderThreadManager();
 
+    // Render thread instance (owned by this view)
     private RenderThread mRenderThread;
-    private boolean mIsInitialized = false;
+
+    // Player that implements native hooks (must be provided)
     private AxmolPlayer mPlayer;
 
-    // Rendering mode control
+    // Rendering mode control (UI-visible flag to request pause/resume)
     private volatile boolean mRenderPaused = false;
-    // private volatile boolean mShouldRender = false;
+
+    // Track detach/attach state similar to GLSurfaceView
     private boolean mDetached;
+
+    private final WeakReference<AxmolSurfaceViewVK> mThisWeakRef =
+        new WeakReference<AxmolSurfaceViewVK>(this);
 
     public AxmolSurfaceViewVK(AxmolPlayer player) {
         super(player.getContext());
@@ -67,15 +78,23 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
         setFocusableInTouchMode(true);
         // Set surface holder callback
         getHolder().addCallback(this);
-        // Set Z-order to ensure surface is placed on top of other views
+        // Optionally set Z-order if needed
         setZOrderOnTop(true);
         setKeepScreenOn(true);
 
-        // Start render thread if not already running
-        mRenderThread = new RenderThread(mThisWeakRef);
-        mRenderThread.start();
+        // Start render thread eagerly (GLSurfaceView starts thread when setRenderer is called;
+        // here we start a render thread to accept events)
+        synchronized (sThreadManager) {
+            if (mRenderThread == null) {
+                mRenderThread = new RenderThread(mThisWeakRef);
+                mRenderThread.start();
+            }
+        }
     }
 
+    // -------------------------
+    // SurfaceHolder callbacks
+    // -------------------------
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         Log.d(TAG, "surfaceCreated");
@@ -86,32 +105,20 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
             return;
         }
 
+        // Synchronize on shared thread manager to mirror GLSurfaceView behavior
         synchronized (sThreadManager) {
-            // If render thread is missing or already exited, create and start it.
+            // Ensure render thread exists and is running
             if (mRenderThread == null || mRenderThread.hasExited()) {
                 mRenderThread = new RenderThread(mThisWeakRef);
-                // preserve default render mode or set previously stored mode if you keep one
                 mRenderThread.start();
             }
 
-            // Post initialization to the render thread to ensure all native calls
-            // (ANativeWindow_fromSurface, vkCreateAndroidSurfaceKHR, etc.) happen on the same thread.
+            // Dispatch surfaceCreated to render thread (native creation must run on render thread)
             final RenderThread rt = mRenderThread;
             rt.queueEvent(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        if (!mIsInitialized) {
-                            // Let AxmolPlayer (native) create VkSurfaceKHR using the provided Surface.
-                            mPlayer.onSurfaceCreated(surface);
-                            mIsInitialized = true;
-                            Log.d(TAG, "surfaceCreated: initialized on render thread");
-                        } else {
-                            Log.d(TAG, "surfaceCreated: already initialized");
-                        }
-                    } catch (Exception e) {
-                        Log.e(TAG, "Exception during onSurfaceCreated", e);
-                    }
+                    rt.handleSurfaceCreated(surface);
                 }
             });
         }
@@ -126,59 +133,40 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
             rt = mRenderThread;
         }
 
-        // If render thread is not ready, queue a resize event that will run when thread is available.
         if (rt == null || rt.hasExited()) {
-            Log.w(TAG, "surfaceChanged: render thread not ready, queueing resize");
-            // Use queueEvent to ensure the call runs on the render thread once it's created.
-            // If mRenderThread is null now, this will be handled after thread creation in surfaceCreated.
-            if (mRenderThread != null) {
-                mRenderThread.queueEvent(new Runnable() {
-                    @Override
-                    public void run() {
-                        AxmolPlayer.nativeOnSurfaceChanged(width, height);
-                    }
-                });
-            } else {
-                // Fallback: start a short-lived runnable on a new thread to avoid dropping the event.
-                // Preferably, surfaceCreated will handle initialization and subsequent resize.
-                Log.w(TAG, "surfaceChanged: no render thread to accept resize; resize will be handled after create");
-            }
+            Log.w(TAG, "surfaceChanged: render thread not ready; resize will be handled after create");
             return;
         }
 
-        // Dispatch resize to render thread so swapchain recreation happens on the render thread.
+        // Dispatch resize to render thread so swapchain recreation happens on render thread
         rt.queueEvent(new Runnable() {
             @Override
             public void run() {
-                try {
-                    if (!mIsInitialized) {
-                        // Defensive: if initialization hasn't happened yet, attempt to initialize first.
-                        final Surface s = holder.getSurface();
-                        if (s != null) {
-                            mPlayer.onSurfaceCreated(s);
-                            mIsInitialized = true;
-                        }
-                    }
-                    // Notify native layer about the new surface size (rebuild swapchain there).
-                    AxmolPlayer.nativeOnSurfaceChanged(width, height);
-                } catch (Exception e) {
-                    Log.e(TAG, "Exception during surfaceChanged handling", e);
-                }
+                rt.handleSurfaceChanged(width, height);
             }
         });
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        Log.d(TAG, "Surface destroyed");
+        Log.d(TAG, "surfaceDestroyed");
 
         synchronized (sThreadManager) {
-            // Stop render thread
             if (mRenderThread != null) {
-                sThreadManager.threadExiting(mRenderThread);
-                mRenderThread.requestExitAndWait();
+                final RenderThread rt = mRenderThread;
+
+                // Ask render thread to perform native cleanup on its own thread
+                rt.queueEvent(new Runnable() {
+                    @Override
+                    public void run() {
+                        rt.handleSurfaceDestroyed();
+                    }
+                });
+
+                // Request thread exit and wait for cleanup to complete
+                sThreadManager.threadExiting(rt);
+                rt.requestExitAndWait();
                 mRenderThread = null;
-                mIsInitialized = false;
             }
         }
     }
@@ -186,29 +174,42 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
     @Override
     public void surfaceRedrawNeeded(SurfaceHolder holder) {
         // Request a redraw if needed
-        if (mRenderThread != null) {
-            mRenderThread.requestRedraw();
+        synchronized (sThreadManager) {
+            if (mRenderThread != null) {
+                mRenderThread.requestRedraw();
+            }
         }
     }
 
+    // -------------------------
+    // AxmolRenderHost methods
+    // -------------------------
     @Override
     public void configureRenderMode(int mode) {
-        mRenderThread.setRenderMode(mode);
+        synchronized (sThreadManager) {
+            if (mRenderThread != null) {
+                mRenderThread.setRenderMode(mode);
+            }
+        }
     }
 
     @Override
     public void onRenderPause() {
         mRenderPaused = true;
-        if (mRenderThread != null) {
-            mRenderThread.onPause();
+        synchronized (sThreadManager) {
+            if (mRenderThread != null) {
+                mRenderThread.onPause();
+            }
         }
     }
 
     @Override
     public void onRenderResume() {
         mRenderPaused = false;
-        if (mRenderThread != null) {
-            mRenderThread.onResume();
+        synchronized (sThreadManager) {
+            if (mRenderThread != null) {
+                mRenderThread.onResume();
+            }
         }
     }
 
@@ -224,15 +225,21 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
 
     /**
      * Queue a Runnable to be executed on the Vulkan render thread.
+     * If the render thread is not available, the runnable will be dropped with a warning.
      */
     public void queueEvent(Runnable runnable) {
-        mRenderThread.queueEvent(runnable);
+        synchronized (sThreadManager) {
+            if (mRenderThread != null) {
+                mRenderThread.queueEvent(runnable);
+            } else {
+                Log.w(TAG, "queueEvent: render thread is null, dropping event");
+            }
+        }
     }
 
-    /**
-     * This method is used as part of the View class and is not normally
-     * called or subclassed by clients of GLSurfaceView.
-     */
+    // -------------------------
+    // Attach / detach handling
+    // -------------------------
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -240,43 +247,58 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
             Log.d(TAG, "onAttachedToWindow reattach =" + mDetached);
         }
         if (mDetached) {
-            int renderMode = RENDERMODE_CONTINUOUSLY;
-            if (mRenderThread != null) {
-                renderMode = mRenderThread.getRenderMode();
+            synchronized (sThreadManager) {
+                int renderMode = RenderThread.RENDERMODE_CONTINUOUSLY;
+                if (mRenderThread != null) {
+                    renderMode = mRenderThread.getRenderMode();
+                }
+                mRenderThread = new RenderThread(mThisWeakRef);
+                if (renderMode != RenderThread.RENDERMODE_CONTINUOUSLY) {
+                    mRenderThread.setRenderMode(renderMode);
+                }
+                mRenderThread.start();
             }
-            mRenderThread = new RenderThread(mThisWeakRef);
-            if (renderMode != RENDERMODE_CONTINUOUSLY) {
-                mRenderThread.setRenderMode(renderMode);
-            }
-            mRenderThread.start();
         }
         mDetached = false;
     }
+
     @Override
     protected void onDetachedFromWindow() {
         if (LOG_ATTACH_DETACH) {
             Log.d(TAG, "onDetachedFromWindow");
         }
-        if (mRenderThread != null) {
-            mRenderThread.requestExitAndWait();
+        synchronized (sThreadManager) {
+            if (mRenderThread != null) {
+                mRenderThread.requestExitAndWait();
+                mRenderThread = null;
+            }
         }
         mDetached = true;
         super.onDetachedFromWindow();
     }
 
-    /**
-     * Dedicated render thread for Vulkan rendering.
-     * Mimics GLSurfaceView's render thread behavior.
-     */
+    // -------------------------
+    // Internal class: RenderThread implementation
+    // -------------------------
     private class RenderThread extends Thread {
         private WeakReference<AxmolSurfaceViewVK> mSurfaceViewWeakRef;
+        private final BlockingQueue<Runnable> mEventQueue = new LinkedBlockingQueue<>();
+        private final Object mThreadLock = new Object();
+
+        // Thread control flags
         private volatile boolean mShouldExit = false;
         private volatile boolean mExited = false;
         private volatile boolean mRequestRedraw = false;
         private volatile boolean mPaused = false;
+
+        // Render mode constants (mirror GLSurfaceView)
+        public static final int RENDERMODE_WHEN_DIRTY = 0;
+        public static final int RENDERMODE_CONTINUOUSLY = 1;
         private int mRenderMode = RENDERMODE_CONTINUOUSLY;
-        private final BlockingQueue<Runnable> mEventQueue = new LinkedBlockingQueue<>();
-        private final Object mThreadLock = new Object();
+
+        // Surface / initialization state (kept on render thread)
+        private boolean mSurfaceInitialized = false;
+        private Surface mCurrentSurface = null;
 
         public RenderThread(WeakReference<AxmolSurfaceViewVK> surfaceViewWeakRef) {
             super();
@@ -287,7 +309,7 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
         public void run() {
             setName("RenderThread " + getId());
             try {
-                sThreadManager.threadStarting(mRenderThread);
+                sThreadManager.threadStarting(this);
                 guardedRun();
             } catch (InterruptedException e) {
                 // fall thru and exit normally
@@ -303,13 +325,15 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
             try {
                 // Main render loop
                 while (!mShouldExit) {
-                    // Check if rendering is paused
+                    // Process pending events first
+                    processEvents();
+
+                    // If paused, wait until resumed
                     if (mPaused || mRenderPaused) {
                         synchronized (mThreadLock) {
                             try {
                                 mThreadLock.wait(100); // Sleep longer when paused
                             } catch (InterruptedException e) {
-                                // Thread interrupted
                                 Thread.currentThread().interrupt();
                                 break;
                             }
@@ -317,12 +341,13 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
                         continue;
                     }
 
-                    // Process pending events
-                    processEvents();
-
                     // Render frame if initialized
-                    if (mIsInitialized && !mPaused && !mRenderPaused) {
-                        mPlayer.onDrawFrame();
+                    if (mSurfaceInitialized && !mPaused && !mRenderPaused) {
+                        try {
+                            mPlayer.onDrawFrame();
+                        } catch (Throwable t) {
+                            Log.e(TAG, "Exception in onDrawFrame", t);
+                        }
                     }
 
                     // Handle render mode: wait if in WHEN_DIRTY mode
@@ -335,6 +360,9 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
                                 break;
                             }
                         }
+                    } else {
+                        // In continuous mode yield to avoid busy loop
+                        Thread.yield();
                     }
                     mRequestRedraw = false;
                 }
@@ -359,11 +387,14 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
         }
 
         private void cleanup() {
-            // Notify native layer that surface is destroyed
-            if (mIsInitialized) {
-                // We might need a native method for Vulkan cleanup
-                // AxmolPlayer.nativeOnSurfaceDestroyed();
-                Log.d(TAG, "Vulkan surface cleanup needed");
+            // Notify native layer that surface is destroyed if needed
+            if (mSurfaceInitialized) {
+                try {
+                } catch (Throwable t) {
+                    Log.e(TAG, "Exception during nativeOnSurfaceDestroyed in cleanup", t);
+                }
+                mSurfaceInitialized = false;
+                mCurrentSurface = null;
             }
 
             // Clear event queue
@@ -371,20 +402,87 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
             Log.d(TAG, "RenderThread cleanup completed");
         }
 
-        public void requestExitAndWait() {
-            mShouldExit = true;
-            synchronized (mThreadLock) {
-                mThreadLock.notifyAll();
+        // -------------------------
+        // Surface handlers (run on render thread)
+        // -------------------------
+        void handleSurfaceCreated(Surface surface) {
+            // Defensive: if already initialized with same surface, skip
+            if (mSurfaceInitialized && mCurrentSurface == surface) {
+                Log.d(TAG, "handleSurfaceCreated: already initialized with same surface");
+                return;
             }
 
-            try {
-                join(2000); // Wait up to 2 seconds
-                if (isAlive()) {
-                    Log.w(TAG, "RenderThread did not exit gracefully, interrupting");
-                    interrupt();
+            // If previously initialized with another surface, destroy it first
+            if (mSurfaceInitialized) {
+                try {
+                    mPlayer.onSurfaceDestroyed();
+                } catch (Throwable t) {
+                    Log.e(TAG, "Exception during nativeOnSurfaceDestroyed before reinit", t);
                 }
-            } catch (InterruptedException e) {
-                Log.w(TAG, "Interrupted while waiting for render thread to exit");
+                mSurfaceInitialized = false;
+                mCurrentSurface = null;
+            }
+
+            // Call into player/native to create VkSurfaceKHR using the provided Surface.
+            try {
+                // Use mPlayer.onSurfaceCreated(surface) if your Java->native path is implemented there.
+                // If nativeOnSurfaceCreated exists and returns boolean, you can call it instead.
+                mPlayer.onSurfaceCreated(surface);
+                // If no exception thrown, mark as initialized. If your native call can fail,
+                // adapt to check return value or throw on failure.
+                mSurfaceInitialized = true;
+                mCurrentSurface = surface;
+                Log.d(TAG, "handleSurfaceCreated: native surface created successfully");
+            } catch (Throwable t) {
+                Log.e(TAG, "Exception during onSurfaceCreated", t);
+                mSurfaceInitialized = false;
+                mCurrentSurface = null;
+            }
+        }
+
+        void handleSurfaceChanged(int width, int height) {
+            if (!mSurfaceInitialized) {
+                Log.w(TAG, "handleSurfaceChanged: surface not initialized yet");
+                return;
+            }
+            try {
+                AxmolPlayer.nativeOnSurfaceChanged(width, height);
+            } catch (Throwable t) {
+                Log.e(TAG, "Exception during nativeOnSurfaceChanged", t);
+            }
+        }
+
+        void handleSurfaceDestroyed() {
+            if (!mSurfaceInitialized) {
+                Log.d(TAG, "handleSurfaceDestroyed: nothing to destroy");
+                return;
+            }
+            try {
+                mPlayer.onSurfaceDestroyed();
+            } catch (Throwable t) {
+                Log.e(TAG, "Exception during nativeOnSurfaceDestroyed", t);
+            } finally {
+                mSurfaceInitialized = false;
+                mCurrentSurface = null;
+            }
+        }
+
+        // -------------------------
+        // Control methods (can be called from UI thread)
+        // -------------------------
+        public void requestExitAndWait() {
+            // don't call this from GLThread thread or it is a guaranteed
+            // deadlock!
+            synchronized(sThreadManager) {
+                mShouldExit = true;
+                sThreadManager.notifyAll();
+                while (! mExited) {
+                    try {
+                        sThreadManager.wait();
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
             }
         }
 
@@ -437,10 +535,7 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
         }
     }
 
-    private final WeakReference<AxmolSurfaceViewVK> mThisWeakRef =
-        new WeakReference<AxmolSurfaceViewVK>(this);
-
-    /**
+    /** Internal class: RenderThreadManager
      * Simplified thread manager for Vulkan render threads.
      * Currently manages thread lifecycle tracking for potential future extension.
      */
@@ -453,7 +548,6 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
          * Assigns a unique ID to the thread.
          */
         public synchronized void threadStarting(RenderThread thread) {
-            // For future extension: track active threamSurfaceLockds, assign priorities, etc.
             int threadId = mThreadCounter.incrementAndGet();
             Log.d(TAG, "Vulkan render thread starting, ID: " + threadId);
         }
@@ -463,7 +557,6 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
          */
         public synchronized void threadExiting(RenderThread thread) {
             Log.d(TAG, "Vulkan render thread exiting");
-            // For future extension: cleanup thread resources, notify other threads, etc.
             if (thread.hasExited()) {
                 Log.d(TAG, "Thread already marked as exited");
             }
@@ -474,7 +567,6 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
          * This would be called when all Vulkan threads need to release shared resources.
          */
         public synchronized void releaseVulkanContextLocked() {
-            // For future extension: if we implement shared Vulkan resources
             Log.d(TAG, "Releasing Vulkan context (placeholder)");
         }
     }

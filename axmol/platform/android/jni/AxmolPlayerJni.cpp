@@ -123,9 +123,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnSurfaceChanged(JNI
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeRenderFrame(JNIEnv*, jclass)
 {
-#if AX_RENDER_API == AX_RENDER_API_GL
     ax::Director::getInstance()->renderFrame();
-#endif
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeTouchesBegin(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
