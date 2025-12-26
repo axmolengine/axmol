@@ -108,6 +108,10 @@ public class AxmolPlayer extends FrameLayout {
         mEnableForceDoLayout = flag;
     }
 
+    public AxmolEditBox getEditText() {
+        return this.mEditBox;
+    }
+
     // ===========================================================
     // Constructors
     // ===========================================================
@@ -213,6 +217,15 @@ public class AxmolPlayer extends FrameLayout {
         addView(surfaceView);
     }
 
+    // ===========================================================
+    // Render loop controller methods
+    // ===========================================================
+
+    @SuppressWarnings("unused")
+    public static void setAnimationInterval(float interval) {
+        sAnimationInterval = (long) (interval * NANOSECONDSPERSECOND);
+    }
+
     public void onDrawFrame() {
         /*
          * Render time MUST be counted in, or the FPS will slower than appointed.
@@ -247,11 +260,7 @@ public class AxmolPlayer extends FrameLayout {
     }
 
     public void onSurfaceChanged(int width, int height) {
-
-    }
-
-    public AxmolEditBox getEditText() {
-        return this.mEditBox;
+        nativeOnSurfaceChanged(width, height);
     }
 
     // ===========================================================

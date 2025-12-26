@@ -43,11 +43,12 @@ public class AxmolSurfaceViewGL extends GLSurfaceView implements AxmolRenderHost
 
     public AxmolSurfaceViewGL(AxmolPlayer player) {
         super(player.getContext());
-        mPlayer = player;
-        initView();
+        init(player);
     }
 
-    private void initView() {
+    private void init(AxmolPlayer player) {
+        mPlayer = player;
+
         final int[] glContextAttrs = AxmolEngine.nativeGetGLContextAttrs();
         AxmolEGLConfigChooser chooser = new AxmolEGLConfigChooser(glContextAttrs);
         setEGLConfigChooser(chooser);

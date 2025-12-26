@@ -68,7 +68,7 @@ int Application::run()
 
 void Application::setAnimationInterval(float interval)
 {
-    JniHelper::callStaticVoidMethod("dev/axmol/lib/AxmolRenderer", "setAnimationInterval", interval);
+    JniHelper::callStaticVoidMethod("dev/axmol/lib/AxmolPlayer", "setAnimationInterval", interval);
 }
 
 //////////////////////////////////////////////////////////////////////////
