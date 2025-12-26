@@ -80,9 +80,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnSurfaceCreated(JNI
                                                                              jboolean isWarmStart)
 {
     if (s_nativeWindow)
-    {
         ANativeWindow_release(s_nativeWindow);
-    }
     s_nativeWindow  = ANativeWindow_fromSurface(env, surface);
     auto director   = ax::Director::getInstance();
     auto renderView = director->getRenderView();
@@ -98,8 +96,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnSurfaceCreated(JNI
     else
     {
 #if AX_RENDER_API == AX_RENDER_API_VK
-        director->getScheduler()->runOnAxmolThread(
-            [renderView]() { static_cast<ax::RenderViewImpl*>(renderView)->recreateVkSurface(true); });
+        static_cast<ax::RenderViewImpl*>(renderView)->recreateVkSurface(true);
 #elif AX_RENDER_API == AX_RENDER_API_GL
         axdrv->resetState();
         director->resetMatrixStack();
@@ -120,14 +117,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnSurfaceChanged(JNI
     auto renderView = director->getRenderView();
     if (renderView)
     {
-        auto&& _updateRenderSurface = [renderView, w, h]() {
-            renderView->updateRenderSurface(w, h, ax::RenderView::AllUpdates);
-        };
-#if AX_RENDER_API == AX_RENDER_API_VK
-        director->getScheduler()->runOnAxmolThread(_updateRenderSurface);
-#else
-        _updateRenderSurface();
-#endif
+        renderView->updateRenderSurface(w, h, ax::RenderView::AllUpdates);
     }
 }
 

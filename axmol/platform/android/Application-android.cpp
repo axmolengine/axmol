@@ -63,17 +63,6 @@ int Application::run()
         return -1;
     }
 
-#if AX_RENDER_API == AX_RENDER_API_VK
-    auto director = Director::getInstance();
-    std::thread t([director] {
-        do
-        {
-            director->renderFrame();
-        } while (sm_pSharedApplication != nullptr);
-    });
-    t.detach();
-#endif
-
     return 0;
 }
 
