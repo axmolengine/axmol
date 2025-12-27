@@ -92,6 +92,9 @@ public class AxmolPlayer extends FrameLayout {
     private WebViewHelper mWebViewHelper = null;
     private EditBoxHelper mEditBoxHelper = null;
 
+    private int mLastSurfaceWidth = 0;
+    private int mLastSurfaceHeight = 0;
+
     public boolean isSoftKeyboardShown() {
         return mSoftKeyboardShown;
     }
@@ -260,11 +263,11 @@ public class AxmolPlayer extends FrameLayout {
     }
 
     public void onSurfaceChanged(int width, int height) {
-        nativeOnSurfaceChanged(width, height);
-    }
-
-    public void onSurfaceDestroyed(){
-        Log.d(TAG, "onSurfaceDestroyed");
+        if (mLastSurfaceWidth != width || mLastSurfaceHeight != height) {
+            mLastSurfaceWidth = width;
+            mLastSurfaceHeight = height;
+            nativeOnSurfaceChanged(width, height);
+        }
     }
 
     // ===========================================================
@@ -534,15 +537,15 @@ public class AxmolPlayer extends FrameLayout {
     // ===========================================================
 
     public void onPause() {
-        mRenderHost.onRenderPause();
+        mRenderHost.onPause();
     }
 
     public void onResume() {
-        mRenderHost.onRenderResume();
+        mRenderHost.onResume();
     }
 
     public void handleOnResume() {
-        mRenderHost.configureRenderMode(AxmolRenderHost.RENDERMODE_CONTINUOUSLY);
+        mRenderHost.setRenderMode(AxmolRenderHost.RENDERMODE_CONTINUOUSLY);
 
         AxmolEngine.runOnAxmolThread(new Runnable() {
             @Override
@@ -556,7 +559,7 @@ public class AxmolPlayer extends FrameLayout {
     }
 
     public void handleOnPause() {
-        mRenderHost.configureRenderMode(AxmolRenderHost.RENDERMODE_WHEN_DIRTY);
+        mRenderHost.setRenderMode(AxmolRenderHost.RENDERMODE_WHEN_DIRTY);
 
         mNativePauseComplete = new CountDownLatch(1);
 
@@ -572,11 +575,15 @@ public class AxmolPlayer extends FrameLayout {
                      */
                     AxmolPlayer.nativeOnPause();
                     AxmolEngine.sNativePaused = true;
-
-                    mNativePauseComplete.countDown();
                 }
+
+                mNativePauseComplete.countDown();
             }
         });
+    }
+
+    public void queueEvent(Runnable r) {
+        mRenderHost.queueEvent(r);
     }
 
     public void waitForPauseToComplete() {

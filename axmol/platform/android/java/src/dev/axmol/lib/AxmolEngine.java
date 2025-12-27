@@ -127,9 +127,8 @@ public class AxmolEngine {
     // ===========================================================
 
     public static void runOnAxmolThread(final Runnable r) {
-        nativeRunOnAxmolThread(r);
+        ((AxmolActivity)sActivity).runOnAxmolThread(r);
     }
-
     public static void runOnUiThread(final Runnable r) {
         sActivity.runOnUiThread(r);
     }

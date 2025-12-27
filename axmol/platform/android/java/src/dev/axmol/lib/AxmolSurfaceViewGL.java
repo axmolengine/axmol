@@ -23,7 +23,6 @@
  ****************************************************************************/
 package dev.axmol.lib;
 
-import android.opengl.GLSurfaceView;
 import android.content.Context;
 import android.util.Log;
 
@@ -36,7 +35,7 @@ import javax.microedition.khronos.opengles.GL10;
  * OpenGL ES implementation of Axmol render surface.
  * Uses GLSurfaceView's built-in render thread mechanism.
  */
-public class AxmolSurfaceViewGL extends GLSurfaceView implements AxmolRenderHost {
+public class AxmolSurfaceViewGL extends dev.axmol.lib.GLSurfaceView {
     private static final String TAG = "AxmolSurfaceViewGL";
 
     private AxmolPlayer mPlayer;
@@ -76,21 +75,6 @@ public class AxmolSurfaceViewGL extends GLSurfaceView implements AxmolRenderHost
 
         // Use continuous rendering mode
         setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-    }
-
-    @Override
-    public void configureRenderMode(int mode) {
-        super.setRenderMode(mode == AxmolRenderHost.RENDERMODE_CONTINUOUSLY ? GLSurfaceView.RENDERMODE_CONTINUOUSLY : GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-    }
-
-    @Override
-    public void onRenderPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onRenderResume() {
-        super.onResume();
     }
 
     private class AxmolEGLConfigChooser implements GLSurfaceView.EGLConfigChooser {

@@ -23,15 +23,12 @@
  ****************************************************************************/
 package dev.axmol.lib;
 
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.util.Log;
-import android.view.View;
 
 import java.lang.ref.WeakReference;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -47,6 +44,11 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
     private static final String TAG = "AxmolSurfaceViewVK";
 
     private static final boolean LOG_ATTACH_DETACH = true;
+    private static final boolean LOG_THREADS = false;
+    private final static boolean LOG_PAUSE_RESUME = false;
+    private final static boolean LOG_SURFACE = false;
+    private final static boolean LOG_RENDERER = false;
+    private final static boolean LOG_RENDERER_DRAW_FRAME = false;
 
     // Thread manager for coordinating multiple Vulkan render threads (if needed)
     private static final RenderThreadManager sThreadManager = new RenderThreadManager();
@@ -57,11 +59,8 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
     // Player that implements native hooks (must be provided)
     private AxmolPlayer mPlayer;
 
-    // Rendering mode control (UI-visible flag to request pause/resume)
-    private volatile boolean mRenderPaused = false;
-
     // Track detach/attach state similar to GLSurfaceView
-    private boolean mDetached;
+    private boolean mDetached = false;
 
     private final WeakReference<AxmolSurfaceViewVK> mThisWeakRef =
         new WeakReference<AxmolSurfaceViewVK>(this);
@@ -92,135 +91,70 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
         }
     }
 
+    @Override
+    public void setRenderMode(int mode) {
+        if (mRenderThread != null) {
+            mRenderThread.setRenderMode(mode);
+        }
+    }
+
+    @Override
+    public int getRenderMode() {
+        return mRenderThread != null ? mRenderThread.getRenderMode() : RENDERMODE_CONTINUOUSLY;
+    }
+
+    public void requestRender() {
+        if (mRenderThread != null) {
+            mRenderThread.requestRender();
+        }
+    }
+
     // -------------------------
     // SurfaceHolder callbacks
     // -------------------------
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Log.d(TAG, "surfaceCreated");
-
-        final Surface surface = holder.getSurface();
-        if (surface == null) {
-            Log.w(TAG, "surfaceCreated: holder.getSurface() == null");
-            return;
+        if (mRenderThread != null) {
+            mRenderThread.surfaceCreated(holder);
         }
-
-        // Synchronize on shared thread manager to mirror GLSurfaceView behavior
-        synchronized (sThreadManager) {
-            // Ensure render thread exists and is running
-            if (mRenderThread == null || mRenderThread.hasExited()) {
-                mRenderThread = new RenderThread(mThisWeakRef);
-                mRenderThread.start();
-            }
-
-            // Dispatch surfaceCreated to render thread (native creation must run on render thread)
-            final RenderThread rt = mRenderThread;
-            rt.queueEvent(new Runnable() {
-                @Override
-                public void run() {
-                    rt.handleSurfaceCreated(surface);
-                }
-            });
-        }
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        Log.d(TAG, "surfaceChanged: " + width + "x" + height);
-
-        final RenderThread rt;
-        synchronized (sThreadManager) {
-            rt = mRenderThread;
-        }
-
-        if (rt == null || rt.hasExited()) {
-            Log.w(TAG, "surfaceChanged: render thread not ready; resize will be handled after create");
-            return;
-        }
-
-        // Dispatch resize to render thread so swapchain recreation happens on render thread
-        rt.queueEvent(new Runnable() {
-            @Override
-            public void run() {
-                rt.handleSurfaceChanged(width, height);
-            }
-        });
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        Log.d(TAG, "surfaceDestroyed");
-
-        synchronized (sThreadManager) {
-            if (mRenderThread != null) {
-                final RenderThread rt = mRenderThread;
-
-                // Ask render thread to perform native cleanup on its own thread
-                rt.queueEvent(new Runnable() {
-                    @Override
-                    public void run() {
-                        rt.handleSurfaceDestroyed();
-                    }
-                });
-
-                // Request thread exit and wait for cleanup to complete
-                sThreadManager.threadExiting(rt);
-                rt.requestExitAndWait();
-                mRenderThread = null;
-            }
+        if (mRenderThread != null) {
+            mRenderThread.surfaceDestroyed();
         }
     }
 
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
+        if (mRenderThread != null) {
+            mRenderThread.onWindowResize(w, h);
+        }
+    }
+
+    @Override
+    public void surfaceRedrawNeededAsync(SurfaceHolder holder, Runnable finishDrawing) {
+        if (mRenderThread != null) {
+            mRenderThread.requestRenderAndNotify(finishDrawing);
+        }
+    }
+
+    @Deprecated
     @Override
     public void surfaceRedrawNeeded(SurfaceHolder holder) {
-        // Request a redraw if needed
-        synchronized (sThreadManager) {
-            if (mRenderThread != null) {
-                mRenderThread.requestRedraw();
-            }
-        }
-    }
-
-    // -------------------------
-    // AxmolRenderHost methods
-    // -------------------------
-    @Override
-    public void configureRenderMode(int mode) {
-        synchronized (sThreadManager) {
-            if (mRenderThread != null) {
-                mRenderThread.setRenderMode(mode);
-            }
-        }
+        // Since we are part of the framework we know only surfaceRedrawNeededAsync
+        // will be called.
     }
 
     @Override
-    public void onRenderPause() {
-        mRenderPaused = true;
-        synchronized (sThreadManager) {
-            if (mRenderThread != null) {
-                mRenderThread.onPause();
-            }
-        }
+    public void onPause() {
+        if (mRenderThread != null) mRenderThread.onPause();
     }
 
     @Override
-    public void onRenderResume() {
-        mRenderPaused = false;
-        synchronized (sThreadManager) {
-            if (mRenderThread != null) {
-                mRenderThread.onResume();
-            }
-        }
-    }
-
-    @Override
-    protected void onVisibilityChanged(View changedView, int visibility) {
-        super.onVisibilityChanged(changedView, visibility);
-        if (visibility == View.VISIBLE) {
-            onRenderResume();
-        } else {
-            onRenderPause();
-        }
+    public void onResume() {
+        if (mRenderThread != null) mRenderThread.onResume();
     }
 
     /**
@@ -228,12 +162,10 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
      * If the render thread is not available, the runnable will be dropped with a warning.
      */
     public void queueEvent(Runnable runnable) {
-        synchronized (sThreadManager) {
-            if (mRenderThread != null) {
-                mRenderThread.queueEvent(runnable);
-            } else {
-                Log.w(TAG, "queueEvent: render thread is null, dropping event");
-            }
+        if (mRenderThread != null) {
+            mRenderThread.queueEvent(runnable);
+        } else {
+            Log.w(TAG, "RenderThread is null, dropping event");
         }
     }
 
@@ -248,12 +180,12 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
         }
         if (mDetached) {
             synchronized (sThreadManager) {
-                int renderMode = RenderThread.RENDERMODE_CONTINUOUSLY;
+                int renderMode = RENDERMODE_CONTINUOUSLY;
                 if (mRenderThread != null) {
                     renderMode = mRenderThread.getRenderMode();
                 }
                 mRenderThread = new RenderThread(mThisWeakRef);
-                if (renderMode != RenderThread.RENDERMODE_CONTINUOUSLY) {
+                if (renderMode != RENDERMODE_CONTINUOUSLY) {
                     mRenderThread.setRenderMode(renderMode);
                 }
                 mRenderThread.start();
@@ -281,27 +213,40 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
     // Internal class: RenderThread implementation
     // -------------------------
     private class RenderThread extends Thread {
-        private WeakReference<AxmolSurfaceViewVK> mSurfaceViewWeakRef;
-        private final BlockingQueue<Runnable> mEventQueue = new LinkedBlockingQueue<>();
-        private final Object mThreadLock = new Object();
 
         // Thread control flags
-        private volatile boolean mShouldExit = false;
-        private volatile boolean mExited = false;
-        private volatile boolean mRequestRedraw = false;
-        private volatile boolean mPaused = false;
+        private boolean mShouldExit;
+        private boolean mExited;
+        private boolean mRequestPaused;
+        private boolean mPaused;
+        private boolean mHasSurface;
+        private boolean mWaitingForSurface;
+        private boolean mShouldRelease;
 
-        // Render mode constants (mirror GLSurfaceView)
-        public static final int RENDERMODE_WHEN_DIRTY = 0;
-        public static final int RENDERMODE_CONTINUOUSLY = 1;
+        private int mWidth;
+        private int mHeight;
         private int mRenderMode = RENDERMODE_CONTINUOUSLY;
+        private boolean mRequestRender;
+        private boolean mWantRenderNotification;
+        private boolean mRenderComplete;
+        private ArrayList<Runnable> mEventQueue = new ArrayList<Runnable>();
+        private Runnable mFinishDrawingRunnable = null;
 
-        // Surface / initialization state (kept on render thread)
-        private boolean mSurfaceInitialized = false;
-        private Surface mCurrentSurface = null;
+        /**
+         * Set once at thread construction time, nulled out when the parent view is garbage
+         * called. This weak reference allows the VKSurfaceView to be garbage collected while
+         * the RenderThread is still alive.
+         */
+        private WeakReference<AxmolSurfaceViewVK> mSurfaceViewWeakRef;
 
         public RenderThread(WeakReference<AxmolSurfaceViewVK> surfaceViewWeakRef) {
             super();
+
+            mWidth = 0;
+            mHeight = 0;
+            mRequestRender = true;
+            mRenderMode = RENDERMODE_CONTINUOUSLY;
+            mWantRenderNotification = false;
             mSurfaceViewWeakRef = surfaceViewWeakRef;
         }
 
@@ -319,164 +264,237 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
         }
 
         private void guardedRun() throws InterruptedException {
-            // Set thread priority for better rendering performance
-            android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_DISPLAY);
+            boolean doRenderNotification = false;
+            Runnable event = null;
 
             try {
-                // Main render loop
-                while (!mShouldExit) {
-                    // Process pending events first
-                    processEvents();
+                while (true) {
+                    synchronized (sThreadManager) {
+                        while (true) {
+                            if (mShouldExit) {
+                                return;
+                            }
 
-                    // If paused, wait until resumed
-                    if (mPaused || mRenderPaused) {
-                        synchronized (mThreadLock) {
-                            try {
-                                mThreadLock.wait(100); // Sleep longer when paused
-                            } catch (InterruptedException e) {
-                                Thread.currentThread().interrupt();
+                            // Process queued events first
+                            if (!mEventQueue.isEmpty()) {
+                                event = mEventQueue.remove(0);
                                 break;
                             }
+
+                            // Update pause state
+                            if (mPaused != mRequestPaused) {
+                                mPaused = mRequestPaused;
+                                sThreadManager.notifyAll();
+                            }
+
+                            // Update surface waiting state
+                            if (mHasSurface != mWaitingForSurface) {
+                                mWaitingForSurface = !mHasSurface;
+                                sThreadManager.notifyAll();
+                            }
+
+                            // Check if we should release resources
+                            if (mShouldRelease) {
+                                mShouldRelease = false;
+                                sThreadManager.notifyAll();
+                            }
+
+                            // Determine if we should render
+                            boolean readyToRender = mHasSurface && (mWidth > 0) && (mHeight > 0) &&
+                                !mPaused && (mRequestRender || (mRenderMode == RENDERMODE_CONTINUOUSLY));
+
+                            if (readyToRender) {
+                                // consume request render
+                                mRequestRender = false;
+
+                                // If UI requested a render-notify, convert to local flag
+                                if (mWantRenderNotification) {
+                                    mWantRenderNotification = false;
+                                    doRenderNotification = true;
+                                }
+
+                                sThreadManager.notifyAll();
+                                break; // Exit wait loop to render
+                            }
+
+                            // Wait for next event or state change
+                            sThreadManager.wait();
                         }
+                    }
+
+                    // Process queued event (outside of sThreadManager lock)
+                    if (event != null) {
+                        try {
+                            event.run();
+                        } catch (RuntimeException e) {
+                            Log.e(TAG, "Event runnable threw", e);
+                        }
+                        event = null;
                         continue;
                     }
 
-                    // Render frame if initialized
-                    if (mSurfaceInitialized && !mPaused && !mRenderPaused) {
+                    // Perform rendering (do not hold sThreadManager while calling into player)
+                    if (mHasSurface && (mWidth > 0) && (mHeight > 0) && !mPaused) {
                         try {
-                            mPlayer.onDrawFrame();
-                        } catch (Throwable t) {
-                            Log.e(TAG, "Exception in onDrawFrame", t);
+                            AxmolSurfaceViewVK view = mSurfaceViewWeakRef.get();
+                            AxmolPlayer player = (view != null) ? view.mPlayer : null;
+                            if (player != null) {
+                                player.onDrawFrame();
+                            } else {
+                                Log.w(TAG, "Skipping onDrawFrame: view or player is null");
+                            }
+                        } catch (RuntimeException e) {
+                            Log.e(TAG, "Exception during frame rendering", e);
                         }
-                    }
 
-                    // Handle render mode: wait if in WHEN_DIRTY mode
-                    if (mRenderMode == RENDERMODE_WHEN_DIRTY && !mRequestRedraw) {
-                        synchronized (mThreadLock) {
+                        // After rendering, execute finishDrawing runnable if present.
+                        Runnable finish = null;
+                        synchronized (sThreadManager) {
+                            finish = mFinishDrawingRunnable;
+                            mFinishDrawingRunnable = null;
+                        }
+                        if (finish != null) {
                             try {
-                                mThreadLock.wait(); // Wait until redraw is requested
-                            } catch (InterruptedException e) {
-                                Thread.currentThread().interrupt();
-                                break;
+                                finish.run();
+                            } catch (RuntimeException e) {
+                                Log.e(TAG, "finishDrawing runnable threw", e);
                             }
                         }
-                    } else {
-                        // In continuous mode yield to avoid busy loop
-                        Thread.yield();
+
+                        // Notify render completion if requested (must notify while holding lock)
+                        if (doRenderNotification) {
+                            synchronized (sThreadManager) {
+                                mRenderComplete = true;
+                                sThreadManager.notifyAll();
+                            }
+                            doRenderNotification = false;
+                        }
                     }
-                    mRequestRedraw = false;
                 }
             } finally {
-                // Mark thread as exited
-                mExited = true;
-
-                // Cleanup resources
-                cleanup();
-            }
-        }
-
-        private void processEvents() {
-            Runnable event;
-            while ((event = mEventQueue.poll()) != null) {
-                try {
-                    event.run();
-                } catch (Exception e) {
-                    Log.e(TAG, "Exception in render thread event", e);
+                // Clear event queue and mark exited
+                synchronized (sThreadManager) {
+                    mExited = true;
+                    sThreadManager.notifyAll();
                 }
+                mEventQueue.clear();
+                Log.d(TAG, "RenderThread cleanup completed");
             }
         }
 
-        private void cleanup() {
-            // Notify native layer that surface is destroyed if needed
-            if (mSurfaceInitialized) {
-                try {
-                } catch (Throwable t) {
-                    Log.e(TAG, "Exception during nativeOnSurfaceDestroyed in cleanup", t);
-                }
-                mSurfaceInitialized = false;
-                mCurrentSurface = null;
-            }
-
-            // Clear event queue
-            mEventQueue.clear();
-            Log.d(TAG, "RenderThread cleanup completed");
-        }
-
-        // -------------------------
-        // Surface handlers (run on render thread)
-        // -------------------------
-        void handleSurfaceCreated(Surface surface) {
-            // Defensive: if already initialized with same surface, skip
-            if (mSurfaceInitialized && mCurrentSurface == surface) {
-                Log.d(TAG, "handleSurfaceCreated: already initialized with same surface");
-                return;
-            }
-
-            // If previously initialized with another surface, destroy it first
-            if (mSurfaceInitialized) {
-                try {
-                    mPlayer.onSurfaceDestroyed();
-                } catch (Throwable t) {
-                    Log.e(TAG, "Exception during nativeOnSurfaceDestroyed before reinit", t);
-                }
-                mSurfaceInitialized = false;
-                mCurrentSurface = null;
-            }
-
-            // Call into player/native to create VkSurfaceKHR using the provided Surface.
-            try {
-                // Use mPlayer.onSurfaceCreated(surface) if your Java->native path is implemented there.
-                // If nativeOnSurfaceCreated exists and returns boolean, you can call it instead.
-                mPlayer.onSurfaceCreated(surface);
-                // If no exception thrown, mark as initialized. If your native call can fail,
-                // adapt to check return value or throw on failure.
-                mSurfaceInitialized = true;
-                mCurrentSurface = surface;
-                Log.d(TAG, "handleSurfaceCreated: native surface created successfully");
-            } catch (Throwable t) {
-                Log.e(TAG, "Exception during onSurfaceCreated", t);
-                mSurfaceInitialized = false;
-                mCurrentSurface = null;
-            }
-        }
-
-        void handleSurfaceChanged(int width, int height) {
-            if (!mSurfaceInitialized) {
-                Log.w(TAG, "handleSurfaceChanged: surface not initialized yet");
-                return;
-            }
-            try {
-                AxmolPlayer.nativeOnSurfaceChanged(width, height);
-            } catch (Throwable t) {
-                Log.e(TAG, "Exception during nativeOnSurfaceChanged", t);
-            }
-        }
-
-        void handleSurfaceDestroyed() {
-            if (!mSurfaceInitialized) {
-                Log.d(TAG, "handleSurfaceDestroyed: nothing to destroy");
-                return;
-            }
-            try {
-                mPlayer.onSurfaceDestroyed();
-            } catch (Throwable t) {
-                Log.e(TAG, "Exception during nativeOnSurfaceDestroyed", t);
-            } finally {
-                mSurfaceInitialized = false;
-                mCurrentSurface = null;
-            }
+        private boolean readyToDraw() {
+            return (!mPaused) && mHasSurface
+                && (mWidth > 0) && (mHeight > 0)
+                && (mRequestRender || (mRenderMode == RENDERMODE_CONTINUOUSLY));
         }
 
         // -------------------------
         // Control methods (can be called from UI thread)
         // -------------------------
-        public void requestExitAndWait() {
-            // don't call this from GLThread thread or it is a guaranteed
-            // deadlock!
-            synchronized(sThreadManager) {
-                mShouldExit = true;
+        public void setRenderMode(int renderMode) {
+            if (!((RENDERMODE_WHEN_DIRTY <= renderMode) && (renderMode <= RENDERMODE_CONTINUOUSLY))) {
+                throw new IllegalArgumentException("renderMode");
+            }
+            synchronized (sThreadManager) {
+                mRenderMode = renderMode;
                 sThreadManager.notifyAll();
-                while (! mExited) {
+            }
+        }
+
+        public int getRenderMode() {
+            synchronized (sThreadManager) {
+                return mRenderMode;
+            }
+        }
+
+        public void requestRender() {
+            synchronized (sThreadManager) {
+                mRequestRender = true;
+                sThreadManager.notifyAll();
+            }
+        }
+
+        /**
+         * Request a render and notify caller when the next frame is finished.
+         * finishDrawing will be executed on the render thread after the frame is drawn.
+         */
+        public void requestRenderAndNotify(Runnable finishDrawing) {
+            synchronized (sThreadManager) {
+                // reentrancy guard: if called from render thread, ignore
+                if (Thread.currentThread() == this) {
+                    return;
+                }
+                mWantRenderNotification = true;
+                mRequestRender = true;
+                mRenderComplete = false;
+                final Runnable oldCallback = mFinishDrawingRunnable;
+                mFinishDrawingRunnable = () -> {
+                    if (oldCallback != null) {
+                        oldCallback.run();
+                    }
+                    if (finishDrawing != null) {
+                        finishDrawing.run();
+                    }
+                };
+                sThreadManager.notifyAll();
+            }
+        }
+
+        /**
+         * Called from UI thread when SurfaceHolder.surfaceCreated is invoked.
+         * We queue an event to the render thread; the runnable will set mHasSurface
+         * and call player's onSurfaceCreated on the render thread.
+         */
+        public void surfaceCreated(final SurfaceHolder holder) {
+            queueEvent(new Runnable() {
+                @Override
+                public void run() {
+                    synchronized (sThreadManager) {
+                        mHasSurface = true;
+                        mRequestRender = true;
+                        sThreadManager.notifyAll(); // must notify while holding lock
+                    }
+                    AxmolSurfaceViewVK view = mSurfaceViewWeakRef.get();
+                    if (view != null && view.mPlayer != null) {
+                        try {
+                            view.mPlayer.onSurfaceCreated(holder.getSurface());
+                        } catch (RuntimeException e) {
+                            Log.e(TAG, "onSurfaceCreated threw", e);
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * Called from UI thread when SurfaceHolder.surfaceDestroyed is invoked.
+         * We queue an event to the render thread; the runnable will clear mHasSurface
+         * and call player's onSurfaceDestroyed on the render thread.
+         */
+        public void surfaceDestroyed() {
+            queueEvent(new Runnable() {
+                @Override
+                public void run() {
+                    synchronized (sThreadManager) {
+                        mHasSurface = false;
+                        mRequestRender = false;
+                        sThreadManager.notifyAll(); // must notify while holding lock
+                    }
+                }
+            });
+        }
+
+        public void onPause() {
+            synchronized (sThreadManager) {
+                if (LOG_PAUSE_RESUME) {
+                    Log.i("RenderThread", "onPause tid=" + getId());
+                }
+                mRequestPaused = true;
+                sThreadManager.notifyAll();
+                while ((!mExited) && (!mPaused)) {
+                    if (LOG_PAUSE_RESUME) {
+                        Log.i("Main thread", "onPause waiting for mPaused.");
+                    }
                     try {
                         sThreadManager.wait();
                     } catch (InterruptedException ex) {
@@ -486,47 +504,118 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
             }
         }
 
-        public void requestRedraw() {
-            mRequestRedraw = true;
-            synchronized (mThreadLock) {
-                mThreadLock.notifyAll();
-            }
-        }
-
-        public void onPause() {
-            mPaused = true;
-        }
-
         public void onResume() {
-            mPaused = false;
-            requestRedraw(); // Request redraw when resuming
-        }
-
-        public void setRenderMode(int mode) {
-            synchronized (mThreadLock) {
-                if (mode == RENDERMODE_WHEN_DIRTY) {
-                    mRenderMode = RENDERMODE_WHEN_DIRTY;
-                } else {
-                    mRenderMode = RENDERMODE_CONTINUOUSLY;
-                    mThreadLock.notifyAll(); // Wake up thread if waiting
+            synchronized (sThreadManager) {
+                if (LOG_PAUSE_RESUME) {
+                    Log.i("RenderThread", "onResume tid=" + getId());
+                }
+                mRequestPaused = false;
+                mRequestRender = true;
+                mRenderComplete = false;
+                sThreadManager.notifyAll();
+                while ((!mExited) && mPaused && (!mRenderComplete)) {
+                    if (LOG_PAUSE_RESUME) {
+                        Log.i("Main thread", "onResume waiting for !mPaused.");
+                    }
+                    try {
+                        sThreadManager.wait();
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
             }
         }
 
-        public int getRenderMode() {
-            return mRenderMode;
-        }
+        /**
+         * Handle window resize from UI thread. We queue a runnable to the render thread
+         * which updates sizes and calls player's onSurfaceChanged. The UI thread waits
+         * for render-thread-side handling to complete, with a timeout to avoid indefinite blocking.
+         */
+        public void onWindowResize(final int w, final int h) {
+            // Update desired size and request a render from the UI thread side
+            synchronized (sThreadManager) {
+                mWidth = w;
+                mHeight = h;
+                mRequestRender = true;
+                mRenderComplete = false;
+            }
 
-        public void queueEvent(Runnable runnable) {
-            if (mExited) {
-                Log.w(TAG, "RenderThread already exited, discarding event");
+            // If we're already on the render thread, just return; next loop will pick up changes.
+            if (Thread.currentThread() == this) {
                 return;
             }
 
-            mEventQueue.offer(runnable);
-            // Wake up thread if waiting
-            synchronized (mThreadLock) {
-                mThreadLock.notifyAll();
+            queueEvent(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        synchronized (sThreadManager) {
+                            mWidth = w;
+                            mHeight = h;
+                            // notify any waiters that size changed
+                            sThreadManager.notifyAll();
+                        }
+                        AxmolSurfaceViewVK view = mSurfaceViewWeakRef.get();
+                        if (view != null && view.mPlayer != null) {
+                            try {
+                                view.mPlayer.onSurfaceChanged(w, h);
+                            } catch (RuntimeException e) {
+                                Log.e(TAG, "onSurfaceChanged threw", e);
+                            }
+                        }
+                    } finally {
+                        synchronized (sThreadManager) {
+                            mRenderComplete = true;
+                            sThreadManager.notifyAll();
+                        }
+                    }
+                }
+            });
+
+            // Wait for the render thread to process the resize and render a frame.
+            // If the render thread is paused, exited, or not ready to draw, don't block indefinitely.
+            long start = System.currentTimeMillis();
+            long timeoutMs = 2000;
+            synchronized (sThreadManager) {
+                while (!mExited && !mPaused && !mRenderComplete && readyToDraw()) {
+                    if (LOG_SURFACE) {
+                        Log.i(TAG, "onWindowResize waiting for render complete from tid=" + getId());
+                    }
+                    long elapsed = System.currentTimeMillis() - start;
+                    long waitMs = timeoutMs - elapsed;
+                    if (waitMs <= 0) break;
+                    try {
+                        sThreadManager.wait(waitMs);
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
+                }
+            }
+        }
+
+        public void requestExitAndWait() {
+            // don't call this from RenderThread thread or it is a guaranteed deadlock!
+            synchronized (sThreadManager) {
+                mShouldExit = true;
+                sThreadManager.notifyAll();
+                while (!mExited) {
+                    try {
+                        sThreadManager.wait();
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            }
+        }
+
+        public void queueEvent(Runnable r) {
+            if (r == null) {
+                throw new IllegalArgumentException("r must not be null");
+            }
+            synchronized (sThreadManager) {
+                mEventQueue.add(r);
+                sThreadManager.notifyAll();
             }
         }
 
@@ -535,7 +624,8 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
         }
     }
 
-    /** Internal class: RenderThreadManager
+    /**
+     * Internal class: RenderThreadManager
      * Simplified thread manager for Vulkan render threads.
      * Currently manages thread lifecycle tracking for potential future extension.
      */
