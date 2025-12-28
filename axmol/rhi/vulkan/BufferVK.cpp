@@ -219,7 +219,7 @@ void BufferImpl::updateIndex()
         return;
 
     // DriverImpl is expected to provide a frame index in range [0, MAX_FRAMES_IN_FLIGHT)
-    uint32_t frameIndex = _driver->getFrameIndex();
+    int frameIndex = _driver->getFrameIndex();
 
     // If current backing already corresponds to this frame, nothing to do.
     if (_currentFrameIndex == frameIndex)
