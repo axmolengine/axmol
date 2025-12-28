@@ -591,7 +591,7 @@ void RenderContextImpl::endFrame()
     _frameIndex = (_frameIndex + 1) % MAX_FRAMES_IN_FLIGHT;
 
     _driver->setFrameIndex(_frameIndex);
-    _inFrame      = false;
+    _inFrame = false;
 }
 
 void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
