@@ -31,6 +31,13 @@ cmake_minimum_required(VERSION 3.22...4.2)
 
 project(axmol)
 
+# Check 'CMakeCache.txt' exists.
+# Deleting the cache file 'CMakeCache.txt often fixes weird CMake issues.
+set(CACHE_FILE "${CMAKE_BINARY_DIR}/CMakeCache.txt")
+if(EXISTS ${CACHE_FILE})
+ message(SEND_ERROR  "Please remove '${CMAKE_BINARY_DIR}' directory or at least '${CACHE_FILE}' before you build.")
+endif()
+
 if(XCODE)
   set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
 endif()
