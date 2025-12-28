@@ -7,7 +7,7 @@
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
+ copies of the Software, and to permit persons to whom the Software are
  furnished to do so, subject to the following conditions:
 
  The above copyright notice and this permission notice shall be included in
@@ -23,6 +23,7 @@
  ****************************************************************************/
 #include "axmol/rhi/vulkan/BufferVK.h"
 #include "axmol/rhi/vulkan/DriverVK.h"
+#include "axmol/rhi/RHITypes.h"  // MAX_INFLIGHT_BUFFER
 
 namespace ax::rhi::vk
 {
@@ -67,7 +68,7 @@ static VkBufferUsageFlags translateBindFlag(BufferType t)
         return VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
 
     case BufferType::PIXEL_PACK_BUFFER:
-        // read backbuffer，map as staging or copy target
+        // read backbuffer, map as staging or copy target
         return VK_BUFFER_USAGE_TRANSFER_DST_BIT;
 
     default:
@@ -93,52 +94,145 @@ BufferImpl::BufferImpl(DriverImpl* driver, std::size_t size, BufferType type, Bu
     if (initial && size)
         _defaultData.assign(static_cast<const uint8_t*>(initial), static_cast<const uint8_t*>(initial) + size);
 
+    // Create native buffers (single or per-frame backings depending on memory properties)
     if (usage != BufferUsage::IMMUTABLE || initial)
         createNativeBuffer(initial);
 }
 
 BufferImpl::~BufferImpl()
 {
-    if (_buffer != VK_NULL_HANDLE)
-        _driver->queueDisposal(_buffer, _lastFenceValue);
-    if (_memory != VK_NULL_HANDLE)
-        _driver->queueDisposal(_memory, _lastFenceValue);
+    // Queue disposal of all native resources via driver disposal queue.
+    // If per-frame dynamic backings were created, dispose all of them.
+    if (!_dynamicBuffers.empty())
+    {
+        for (size_t i = 0; i < _dynamicBuffers.size(); ++i)
+        {
+            if (_dynamicBuffers[i] != VK_NULL_HANDLE)
+                _driver->queueDisposal(_dynamicBuffers[i], _lastFenceValue);
+            if (_dynamicMemories[i] != VK_NULL_HANDLE)
+                _driver->queueDisposal(_dynamicMemories[i], _lastFenceValue);
+        }
+    }
+    else
+    {
+        if (_buffer != VK_NULL_HANDLE)
+            _driver->queueDisposal(_buffer, _lastFenceValue);
+        if (_memory != VK_NULL_HANDLE)
+            _driver->queueDisposal(_memory, _lastFenceValue);
+    }
 }
 
 /* -------------------------------------------------- createNativeBuffer */
 void BufferImpl::createNativeBuffer(const void* initial)
 {
-    VkBufferCreateInfo bufferInfo{};
-    bufferInfo.sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    bufferInfo.size        = _capacity;
-    bufferInfo.usage       = _usageFlags;
-    bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-
     auto device = _driver->getDevice();
-    if (vkCreateBuffer(device, &bufferInfo, nullptr, &_buffer) != VK_SUCCESS)
+
+    // If host-visible memory is requested (dynamic usage), allocate per-frame backings
+    if (_memoryProperties & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
     {
-        AXLOGE("Failed to create VkBuffer, size={}, alignedSize={}", _size, _capacity);
-        assert(false && "Failed to create VkBuffer");
+        // Create MAX_FRAMES_IN_FLIGHT separate host-visible buffers to avoid CPU overwriting GPU-in-flight data.
+        _dynamicBuffers.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+        _dynamicMemories.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+
+        for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+        {
+            VkBufferCreateInfo bufferInfo{};
+            bufferInfo.sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+            bufferInfo.size        = _capacity;
+            bufferInfo.usage       = _usageFlags;
+            bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+            if (vkCreateBuffer(device, &bufferInfo, nullptr, &_dynamicBuffers[i]) != VK_SUCCESS)
+            {
+                AXLOGE("Failed to create VkBuffer (dynamic backing), size={}, index={}", _capacity, i);
+                assert(false && "Failed to create VkBuffer (dynamic backing)");
+            }
+
+            VkMemoryRequirements memReq;
+            vkGetBufferMemoryRequirements(device, _dynamicBuffers[i], &memReq);
+
+            VkMemoryAllocateInfo allocInfo{};
+            allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+            allocInfo.allocationSize  = memReq.size;
+            allocInfo.memoryTypeIndex = _driver->findMemoryType(memReq.memoryTypeBits, _memoryProperties);
+
+            if (vkAllocateMemory(device, &allocInfo, nullptr, &_dynamicMemories[i]) != VK_SUCCESS)
+            {
+                AXLOGE("Failed to allocate VkDeviceMemory (dynamic backing)");
+                assert(false && "Failed to allocate VkDeviceMemory (dynamic backing)");
+            }
+
+            vkBindBufferMemory(device, _dynamicBuffers[i], _dynamicMemories[i], 0);
+        }
+
+        // Set active handle to nothing yet (will lazily switch on first write)
+        _buffer            = VK_NULL_HANDLE;
+        _memory            = VK_NULL_HANDLE;
+        _currentFrameIndex = -1;
+    }
+    else
+    {
+        // Single device-local buffer (static/immutable)
+        VkBufferCreateInfo bufferInfo{};
+        bufferInfo.sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        bufferInfo.size        = _capacity;
+        bufferInfo.usage       = _usageFlags;
+        bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+        if (vkCreateBuffer(device, &bufferInfo, nullptr, &_buffer) != VK_SUCCESS)
+        {
+            AXLOGE("Failed to create VkBuffer, size={}, alignedSize={}", _size, _capacity);
+            assert(false && "Failed to create VkBuffer");
+        }
+
+        VkMemoryRequirements memReq;
+        vkGetBufferMemoryRequirements(device, _buffer, &memReq);
+
+        VkMemoryAllocateInfo allocInfo{};
+        allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        allocInfo.allocationSize  = memReq.size;
+        allocInfo.memoryTypeIndex = _driver->findMemoryType(memReq.memoryTypeBits, _memoryProperties);
+
+        if (vkAllocateMemory(device, &allocInfo, nullptr, &_memory) != VK_SUCCESS)
+        {
+            AXLOGE("Failed to allocate VkDeviceMemory");
+            assert(false && "Failed to allocate VkDeviceMemory");
+        }
+
+        vkBindBufferMemory(device, _buffer, _memory, 0);
     }
 
-    VkMemoryRequirements memReq;
-    vkGetBufferMemoryRequirements(device, _buffer, &memReq);
-
-    VkMemoryAllocateInfo allocInfo{};
-    allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    allocInfo.allocationSize  = memReq.size;
-    allocInfo.memoryTypeIndex = _driver->findMemoryType(memReq.memoryTypeBits, _memoryProperties);
-
-    if (vkAllocateMemory(device, &allocInfo, nullptr, &_memory) != VK_SUCCESS)
-    {
-        AXLOGE("Failed to allocate VkDeviceMemory");
-        assert(false && "Failed to allocate VkDeviceMemory");
-    }
-
-    vkBindBufferMemory(device, _buffer, _memory, 0);
-
+    // If initial data provided, write into the current backing
     if (initial)
         updateData(initial, _capacity);
+}
+
+/* -------------------------------------------------- updateIndex
+   Lazy switch to the backing buffer corresponding to the current frame index
+   provided by DriverImpl. This avoids O(N) per-frame iteration and performs
+   the switch only when the buffer is actually updated.
+*/
+void BufferImpl::updateIndex()
+{
+    // Only applicable if we have multiple dynamic backings
+    if (_dynamicBuffers.empty())
+        return;
+
+    // DriverImpl is expected to provide a frame index in range [0, MAX_FRAMES_IN_FLIGHT)
+    uint32_t frameIndex = _driver->getFrameIndex();
+
+    // If current backing already corresponds to this frame, nothing to do.
+    if (_currentFrameIndex == frameIndex)
+        return;
+
+    // Sanity-check: ensure index fits our backing array.
+    AXASSERT(frameIndex >= 0 && frameIndex < static_cast<int>(_dynamicBuffers.size()),
+             "frame index out of range for dynamic buffers");
+
+    // Switch active handles to the frame-specific backing
+    _currentFrameIndex = frameIndex;
+    _buffer            = _dynamicBuffers[frameIndex];
+    _memory            = _dynamicMemories[frameIndex];
 }
 
 /* -------------------------------------------------- updateData */
@@ -157,10 +251,18 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
 
     auto device = _driver->getDevice();
 
+    // If this buffer has host-visible per-frame backings, ensure we are
+    // writing to the backing designated for the current frame.
+    if (!_dynamicBuffers.empty())
+    {
+        updateIndex();
+    }
+
     if (_memoryProperties & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
     {
         // Host visible memory: directly map and copy
         void* mapped = nullptr;
+        // Map the memory at the appropriate offset
         vkMapMemory(device, _memory, offset, size, 0, &mapped);
         std::memcpy(static_cast<uint8_t*>(mapped), data, size);
         vkUnmapMemory(device, _memory);
@@ -168,8 +270,8 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
     else
     {
         // Device local memory: use staging buffer + isolate commands
-        VkBuffer stagingBuf;
-        VkDeviceMemory stagingMem;
+        VkBuffer stagingBuf       = VK_NULL_HANDLE;
+        VkDeviceMemory stagingMem = VK_NULL_HANDLE;
 
         // Create staging buffer
         VkBufferCreateInfo bufInfo{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};

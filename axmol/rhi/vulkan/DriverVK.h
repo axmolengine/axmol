@@ -176,6 +176,9 @@ public:
     bool isDynamicPrimitiveTopologyUnrestricted() const { return _vkCaps.dynamicPrimitiveTopologyUnrestricted; }
     bool isSamplerAnisotropySupported() const { return _vkCaps.samplerAnisotropySupported; }
 
+    void setFrameIndex(int index) { _frameIndex = index; }
+    int getFrameIndex() const { return _frameIndex; }
+
 protected:
     void queueDisposalInternal(DisposableResource&& res);
     ShaderModule* createShaderModule(ShaderStage stage, Data& chunk) override;
@@ -212,6 +215,8 @@ private:
 
     uint32_t _graphicsQueueFamily{0};
     uint32_t _presentQueueFamily{0};
+
+    int _frameIndex{0};
 
     std::string _vendor;
     std::string _renderer;

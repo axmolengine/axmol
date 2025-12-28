@@ -185,7 +185,7 @@ private:
     tlx::pod_vector<VkImageView> _swapchainImageViews;
 
     uint32_t _imageIndex{0};
-    uint32_t _frameIndex{0};
+    int _frameIndex{0};
 
     std::array<DynamicStateBits, MAX_FRAMES_IN_FLIGHT> _inFlightDynamicDirtyBits{DynamicStateBits::None};
     std::array<ExtendedDynamicStateBits, MAX_FRAMES_IN_FLIGHT> _inFlightExtendedDynamicDirtyBits{
