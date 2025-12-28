@@ -255,7 +255,7 @@ public:
     ISpriteSheetLoader* getSpriteSheetLoader(uint32_t spriteSheetFormat);
 
     std::shared_ptr<SpriteSheet> getSpriteSheet(std::string_view spriteSheetFileName);
-    
+
 protected:
     // MARMALADE: Made this protected not private, as deriving from this class is pretty useful
     SpriteFrameCache() {}

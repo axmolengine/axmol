@@ -466,7 +466,7 @@ std::shared_ptr<SpriteSheet> SpriteFrameCache::getSpriteSheet(std::string_view f
     {
         return it->second;
     }
-    
+
     return nullptr;
 }
 
