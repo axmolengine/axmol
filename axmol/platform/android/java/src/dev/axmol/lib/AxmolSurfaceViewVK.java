@@ -651,13 +651,5 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
                 Log.d(TAG, "Thread already marked as exited");
             }
         }
-
-        /**
-         * Release Vulkan resources if needed.
-         * This would be called when all Vulkan threads need to release shared resources.
-         */
-        public synchronized void releaseVulkanContextLocked() {
-            Log.d(TAG, "Releasing Vulkan context (placeholder)");
-        }
     }
 }

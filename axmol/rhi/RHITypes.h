@@ -32,13 +32,13 @@
 
 #define MAX_COLOR_ATTCHMENT 4
 
-#define MAX_INFLIGHT_BUFFER 3
-
 #define AX_ARRAYSIZE(A)     (sizeof(A) / sizeof((A)[0]))
 
 namespace ax::rhi
 {
 using namespace std::string_view_literals;
+
+inline constexpr int MAX_FRAMES_IN_FLIGHT = 3;
 
 enum class BufferUsage : uint32_t
 {

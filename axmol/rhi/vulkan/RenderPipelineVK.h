@@ -55,8 +55,6 @@ struct ExtendedDynamicState
 class RenderPipelineImpl : public RenderPipeline
 {
 public:
-    static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
-
     static constexpr int MAX_DESCRIPTOR_SETS = 2;
     static constexpr int SET_INDEX_UBO       = 0;
     static constexpr int SET_INDEX_SAMPLER   = 1;

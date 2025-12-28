@@ -90,7 +90,6 @@ public:
 
     static constexpr int VS_UBO_BINDING_INDEX = 0;
     static constexpr int FS_UBO_BINDING_INDEX = 1;
-    static constexpr int MAX_FRAMES_IN_FLIGHT = RenderPipelineImpl::MAX_FRAMES_IN_FLIGHT;
 
     RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface);
     ~RenderContextImpl() override;
@@ -138,8 +137,6 @@ public:
 
     void removeCachedPipelines(VkRenderPass rp);
 
-    uint32_t getCurrentFrame() const { return _currentFrame; }
-
     uint64_t getCompletedFenceValue() const override;
 
 private:
@@ -163,8 +160,10 @@ private:
 
     void markDynamicStateDirty(DynamicStateBits bits) noexcept
     {
-        bitmask::set(_inFlightDynamicDirtyBits[0], bits);
-        bitmask::set(_inFlightDynamicDirtyBits[1], bits);
+        auto&& apply = [this, bits]<std::size_t... _Idx>(std::index_sequence<_Idx...>) {
+            (bitmask::set(_inFlightDynamicDirtyBits[_Idx], bits), ...);
+        };
+        apply(std::make_index_sequence<MAX_FRAMES_IN_FLIGHT>{});
     }
 
     void markExtendedDynamicStateDirty(ExtendedDynamicStateBits bits) noexcept;
@@ -179,16 +178,15 @@ private:
     VkQueue _presentQueue{VK_NULL_HANDLE};
 
     VkSwapchainKHR _swapchain{VK_NULL_HANDLE};
-    uint32_t _currentImageIndex{0};  // current swapchain image index
 
     VkCommandPool _commandPool{VK_NULL_HANDLE};
 
     tlx::pod_vector<VkImage> _swapchainImages;
     tlx::pod_vector<VkImageView> _swapchainImageViews;
 
-    uint32_t _semaphoreIndex{0};
+    uint32_t _imageIndex{0};
+    uint32_t _frameIndex{0};
 
-    uint32_t _currentFrame{0};
     std::array<DynamicStateBits, MAX_FRAMES_IN_FLIGHT> _inFlightDynamicDirtyBits{DynamicStateBits::None};
     std::array<ExtendedDynamicStateBits, MAX_FRAMES_IN_FLIGHT> _inFlightExtendedDynamicDirtyBits{
         ExtendedDynamicStateBits::None};
@@ -203,7 +201,7 @@ private:
 #endif
     std::array<tlx::pod_vector<RenderPipelineImpl::DescriptorState>, MAX_FRAMES_IN_FLIGHT> _inFlightDescriptorStates;
 
-    tlx::pod_vector<VkSemaphore> _acquireCompleteSemaphores;
+    tlx::pod_vector<VkSemaphore> _presentCompleteSemaphores;
     tlx::pod_vector<VkSemaphore> _renderFinishedSemaphores;
 
     tlx::pod_vector<VkWriteDescriptorSet> _descriptorWritesPerFrame;

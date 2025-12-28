@@ -166,7 +166,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface)
     _descriptorImageInfosPerFrame.reserve(16);
 
     // Create per-frame uniform ring buffers (capacity can be tuned)
-    createUniformRingBuffers(1 * 1024 * 1024);  // 1 MB per frame
+    createUniformRingBuffers(2 * 1024 * 1024);  // 2 MB per frame
 }
 
 RenderContextImpl::~RenderContextImpl()
@@ -179,7 +179,7 @@ RenderContextImpl::~RenderContextImpl()
     destroyUniformRingBuffers();
 
     destroySemphores(_renderFinishedSemaphores, _device);
-    destroySemphores(_acquireCompleteSemaphores, _device);
+    destroySemphores(_presentCompleteSemaphores, _device);
 
     for (auto fence : _inFlightFences)
         vkDestroyFence(_device, fence, nullptr);
@@ -290,14 +290,14 @@ void RenderContextImpl::destroyUniformRingBuffers()
 // Reset current frame ring buffer write head after its fence is signaled
 void RenderContextImpl::resetUniformRingForCurrentFrame()
 {
-    UniformRingBuffer& ring = _uniformRings[_currentFrame];
+    UniformRingBuffer& ring = _uniformRings[_frameIndex];
     ring.writeHead          = 0;
 }
 
 // Allocate aligned slice from current frame's ring buffer
 RenderContextImpl::UniformSlice RenderContextImpl::allocateUniformSlice(std::size_t size)
 {
-    UniformRingBuffer& ring = _uniformRings[_currentFrame];
+    UniformRingBuffer& ring = _uniformRings[_frameIndex];
 
     // Align allocation size to device requirement
     std::size_t aligned = (size + ring.align - 1) & ~(ring.align - 1);
@@ -528,17 +528,23 @@ void RenderContextImpl::recreateSwapchain()
     // re-create render finished semaphores
     if (!_renderFinishedSemaphores.empty())
         destroySemphores(_renderFinishedSemaphores, _device);
-    if (!_acquireCompleteSemaphores.empty())
-        destroySemphores(_acquireCompleteSemaphores, _device);
+    if (!_presentCompleteSemaphores.empty())
+        destroySemphores(_presentCompleteSemaphores, _device);
 
-    VkSemaphoreCreateInfo sci{.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO};
+    VkSemaphoreCreateInfo sci{};
+    sci.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
     _renderFinishedSemaphores.resize(swapImageCount, VK_NULL_HANDLE);
-    _acquireCompleteSemaphores.resize(swapImageCount, VK_NULL_HANDLE);
     for (uint32_t i = 0; i < swapImageCount; ++i)
     {
         VkResult r = vkCreateSemaphore(_device, &sci, nullptr, &_renderFinishedSemaphores[i]);
         AXASSERT(r == VK_SUCCESS, "vkCreateSemaphore failed");
-        r = vkCreateSemaphore(_device, &sci, nullptr, &_acquireCompleteSemaphores[i]);
+    }
+
+    _presentCompleteSemaphores.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
+    {
+        auto r = vkCreateSemaphore(_device, &sci, nullptr, &_presentCompleteSemaphores[i]);
         AXASSERT(r == VK_SUCCESS, "vkCreateSemaphore failed");
     }
 
@@ -550,11 +556,10 @@ void RenderContextImpl::recreateSwapchain()
     }
 
     // Resets some state
-    _currentFrame      = 0;
-    _currentImageIndex = 0;
-    _lastError         = 0;
-    _suboptimal        = false;
-    _semaphoreIndex    = _acquireCompleteSemaphores.size() - 1;
+    _frameIndex = 0;
+    _imageIndex = 0;
+    _lastError  = 0;
+    _suboptimal = false;
 }
 
 void RenderContextImpl::setDepthStencilState(DepthStencilState* depthStencilState)
@@ -586,7 +591,7 @@ bool RenderContextImpl::beginFrame()
         return false;  // if error not cleared, skip frame
 
     // wait for previous frame to finish
-    auto& currentFence = _inFlightFences[_currentFrame];
+    auto& currentFence = _inFlightFences[_frameIndex];
     vkWaitForFences(_device, 1, &currentFence, VK_TRUE, UINT64_MAX);
     vkResetFences(_device, 1, &currentFence);
 
@@ -598,30 +603,27 @@ bool RenderContextImpl::beginFrame()
     // Reset uniform ring write head for this frame
     resetUniformRingForCurrentFrame();
 
-    const uint32_t prevSemaphoreIndex = _semaphoreIndex;
-    _semaphoreIndex                   = (_semaphoreIndex + 1) % _acquireCompleteSemaphores.size();
-    const auto maxImageIndex          = static_cast<uint32_t>(_swapchainImages.size());
+    const auto maxImageIndex = static_cast<uint32_t>(_swapchainImages.size());
 
-    VkResult result =
-        vkAcquireNextImageKHR(_device, _swapchain, UINT64_MAX, _acquireCompleteSemaphores[_semaphoreIndex],
-                              VK_NULL_HANDLE, &_currentImageIndex);
-    if (!handleSwapchainResult(result, SwapchainOp::Acquire, prevSemaphoreIndex))
+    VkResult result = vkAcquireNextImageKHR(_device, _swapchain, UINT64_MAX, _presentCompleteSemaphores[_frameIndex],
+                                            VK_NULL_HANDLE, &_imageIndex);
+    if (!handleSwapchainResult(result, SwapchainOp::Acquire, _frameIndex))
         return false;
 
-    AXASSERT(_currentImageIndex < maxImageIndex, "swapchain image index out of range!");
+    AXASSERT(_imageIndex < maxImageIndex, "swapchain image index out of range!");
 
     _inFrame = true;
 
-    _currentCmdBuffer = _commandBuffers[_currentFrame];
+    _currentCmdBuffer = _commandBuffers[_frameIndex];
     vkResetCommandBuffer(_currentCmdBuffer, 0);
 
 #if _AX_USE_DESCRIPTOR_CACHE
-    auto& descriptorStates = _inFlightDescriptorStates[_currentFrame];
+    auto& descriptorStates = _inFlightDescriptorStates[_frameIndex];
     for (auto& state : descriptorStates)
         _renderPipeline->recycleDescriptorState(state);
     descriptorStates.clear();
 #else
-    auto descriptorPool = _descriptorPools[_currentFrame];
+    auto descriptorPool = _descriptorPools[_frameIndex];
     vkResetDescriptorPool(_device, descriptorPool, 0);  // safe: only reset current frame pool
 #endif
 
@@ -648,8 +650,7 @@ void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const Render
     _renderTargetHeight  = colorAttachment->getDesc().height;
 
     // Delegate to RenderTargetImplVK: it will select/create VkRenderPass and VkFramebuffer
-    rtImpl->beginRenderPass(_currentCmdBuffer, renderPassDesc, _renderTargetWidth, _renderTargetHeight,
-                            _currentImageIndex);
+    rtImpl->beginRenderPass(_currentCmdBuffer, renderPassDesc, _renderTargetWidth, _renderTargetHeight, _imageIndex);
 }
 
 void RenderContextImpl::endRenderPass()
@@ -674,7 +675,7 @@ void RenderContextImpl::endFrame()
 
     // If non-coherent, flush written uniform range before submit (optional)
     {
-        UniformRingBuffer& ring = _uniformRings[_currentFrame];
+        UniformRingBuffer& ring = _uniformRings[_frameIndex];
         if (!ring.isCoherent && ring.writeHead > 0)
         {
             VkMappedMemoryRange range{VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE};
@@ -685,23 +686,22 @@ void RenderContextImpl::endFrame()
         }
     }
 
-    const VkSemaphore waitSemaphores[]               = {_acquireCompleteSemaphores[_semaphoreIndex]};
-    const VkPipelineStageFlags waitSemaphoreStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+    const VkPipelineStageFlags waitDestinationStageMask{VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
 
     // New render-finished semaphore from pool
-    VkSemaphore submissionSemaphore = _renderFinishedSemaphores[_currentImageIndex];
+    VkSemaphore submissionSemaphore = _renderFinishedSemaphores[_imageIndex];
 
     VkSubmitInfo submitInfo{};
     submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo.commandBufferCount   = 1;
     submitInfo.pCommandBuffers      = &_currentCmdBuffer;
     submitInfo.waitSemaphoreCount   = 1;
-    submitInfo.pWaitSemaphores      = waitSemaphores;
-    submitInfo.pWaitDstStageMask    = waitSemaphoreStages;
+    submitInfo.pWaitSemaphores      = &_presentCompleteSemaphores[_frameIndex];
+    submitInfo.pWaitDstStageMask    = &waitDestinationStageMask;
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores    = &submissionSemaphore;
 
-    vr = vkQueueSubmit(_graphicsQueue, 1, &submitInfo, _inFlightFences[_currentFrame]);
+    vr = vkQueueSubmit(_graphicsQueue, 1, &submitInfo, _inFlightFences[_frameIndex]);
 
     AXASSERT(vr == VK_SUCCESS, "vkQueueSubmit failed");
 
@@ -712,12 +712,11 @@ void RenderContextImpl::endFrame()
     presentInfo.pWaitSemaphores    = &submissionSemaphore;
     presentInfo.swapchainCount     = 1;
     presentInfo.pSwapchains        = &_swapchain;
-    presentInfo.pImageIndices      = &_currentImageIndex;
+    presentInfo.pImageIndices      = &_imageIndex;
 
-    vr           = vkQueuePresentKHR(_presentQueue, &presentInfo);
-    bool succeed = handleSwapchainResult(vr, SwapchainOp::Present, 0);
+    vr = vkQueuePresentKHR(_presentQueue, &presentInfo);
+    handleSwapchainResult(vr, SwapchainOp::Present, 0);
 
-    if (!_postFrameOps.empty())
     {
         for (auto& op : _postFrameOps)
             op();
@@ -726,13 +725,12 @@ void RenderContextImpl::endFrame()
     }
 
     // Advance frame index for multi-frame-in-flight
-    if (succeed)
-        _currentFrame = (_currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+    _frameIndex = (_frameIndex + 1) % MAX_FRAMES_IN_FLIGHT;
 
     _inFrame = false;
 }
 
-bool RenderContextImpl::handleSwapchainResult(VkResult result, SwapchainOp op, uint32_t prevSemaphoreIndex)
+bool RenderContextImpl::handleSwapchainResult(VkResult result, SwapchainOp op, uint32_t frameIndex)
 {
     if (result == VK_SUCCESS)
         return true;
@@ -758,7 +756,7 @@ bool RenderContextImpl::handleSwapchainResult(VkResult result, SwapchainOp op, u
         else
         {
             AXLOGI("vkAcquireNextImageKHR: swapchain out of date");
-            _semaphoreIndex = prevSemaphoreIndex;  // revert
+            //_currentImageReadyIndex = prevSemaphoreIndex;  // revert
         }
         break;
 
@@ -770,7 +768,7 @@ bool RenderContextImpl::handleSwapchainResult(VkResult result, SwapchainOp op, u
         else
         {
             AXLOGI("vkAcquireNextImageKHR: surface lost");
-            _semaphoreIndex = prevSemaphoreIndex;  // revert
+            //_currentImageReadyIndex = prevSemaphoreIndex;  // revert
         }
         break;
 
@@ -908,8 +906,10 @@ void RenderContextImpl::markExtendedDynamicStateDirty(ExtendedDynamicStateBits b
 {
     if (_driver->isExtendedDynamicStateSupported())
     {
-        bitmask::set(_inFlightExtendedDynamicDirtyBits[0], bits);
-        bitmask::set(_inFlightExtendedDynamicDirtyBits[1], bits);
+        auto&& apply = [this, bits]<std::size_t... _Idx>(std::index_sequence<_Idx...>) {
+            (bitmask::set(_inFlightExtendedDynamicDirtyBits[_Idx], bits), ...);
+        };
+        apply(std::make_index_sequence<MAX_FRAMES_IN_FLIGHT>{});
     }
 }
 
@@ -962,55 +962,54 @@ void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
     {
         vkCmdBindPipeline(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
         _boundPipeline = pipeline;
-        bitmask::set(_inFlightDynamicDirtyBits[_currentFrame], PIPELINE_ALL_DYNAMIC_BITS);
+        bitmask::set(_inFlightDynamicDirtyBits[_frameIndex], PIPELINE_ALL_DYNAMIC_BITS);
 
         if (_driver->isExtendedDynamicStateSupported())
-            bitmask::set(_inFlightExtendedDynamicDirtyBits[_currentFrame], PIPELINE_ALL_EXTENDED_DYNAMIC_BITS);
+            bitmask::set(_inFlightExtendedDynamicDirtyBits[_frameIndex], PIPELINE_ALL_EXTENDED_DYNAMIC_BITS);
     }
 }
 
 void RenderContextImpl::applyPendingDynamicStates()
 {
     // Viewport
-    if (bitmask::any(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::Viewport))
+    if (bitmask::any(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::Viewport))
     {
         vkCmdSetViewport(_currentCmdBuffer, 0, 1, &_cachedViewport);
-        bitmask::clear(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::Viewport);
+        bitmask::clear(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::Viewport);
     }
 
     // Scissor
-    if (bitmask::any(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::Scissor))
+    if (bitmask::any(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::Scissor))
     {
         vkCmdSetScissor(_currentCmdBuffer, 0, 1, &_cachedScissor);
-        bitmask::clear(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::Scissor);
+        bitmask::clear(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::Scissor);
     }
 
     // Stencil reference if used
-    if (bitmask::any(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::StencilRef))
+    if (bitmask::any(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::StencilRef))
     {
         vkCmdSetStencilReference(_currentCmdBuffer, VK_STENCIL_FRONT_AND_BACK, _stencilReferenceValue);
-        bitmask::clear(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::StencilRef);
+        bitmask::clear(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::StencilRef);
     }
 
     if (_driver->isExtendedDynamicStateSupported())
     {
         // CullMode and FrontFace via EXT dynamic state if available
-        if (bitmask::any(_inFlightExtendedDynamicDirtyBits[_currentFrame], ExtendedDynamicStateBits::CullMode))
+        if (bitmask::any(_inFlightExtendedDynamicDirtyBits[_frameIndex], ExtendedDynamicStateBits::CullMode))
         {
             vkCmdSetCullModeEXT(_currentCmdBuffer, _extendedDynamicState.cullMode);
-            bitmask::clear(_inFlightExtendedDynamicDirtyBits[_currentFrame], ExtendedDynamicStateBits::CullMode);
+            bitmask::clear(_inFlightExtendedDynamicDirtyBits[_frameIndex], ExtendedDynamicStateBits::CullMode);
         }
-        if (bitmask::any(_inFlightExtendedDynamicDirtyBits[_currentFrame], ExtendedDynamicStateBits::FrontFace))
+        if (bitmask::any(_inFlightExtendedDynamicDirtyBits[_frameIndex], ExtendedDynamicStateBits::FrontFace))
         {
             vkCmdSetFrontFaceEXT(_currentCmdBuffer, _extendedDynamicState.frontFace);
-            bitmask::clear(_inFlightExtendedDynamicDirtyBits[_currentFrame], ExtendedDynamicStateBits::FrontFace);
+            bitmask::clear(_inFlightExtendedDynamicDirtyBits[_frameIndex], ExtendedDynamicStateBits::FrontFace);
         }
 
-        if (bitmask::any(_inFlightExtendedDynamicDirtyBits[_currentFrame], ExtendedDynamicStateBits::PrimitiveTopology))
+        if (bitmask::any(_inFlightExtendedDynamicDirtyBits[_frameIndex], ExtendedDynamicStateBits::PrimitiveTopology))
         {
             vkCmdSetPrimitiveTopologyEXT(_currentCmdBuffer, _extendedDynamicState.primitiveTopology);
-            bitmask::clear(_inFlightExtendedDynamicDirtyBits[_currentFrame],
-                           ExtendedDynamicStateBits::PrimitiveTopology);
+            bitmask::clear(_inFlightExtendedDynamicDirtyBits[_frameIndex], ExtendedDynamicStateBits::PrimitiveTopology);
         }
     }
 }
@@ -1038,14 +1037,14 @@ void RenderContextImpl::prepareDrawing()
     const auto dslState             = _renderPipeline->getDescriptorSetLayoutState();
 
 #if _AX_USE_DESCRIPTOR_CACHE
-    auto& descriptorState = _inFlightDescriptorStates[_currentFrame].emplace_back();
-    bool ok               = _renderPipeline->acquireDescriptorState(descriptorState, _currentFrame);
+    auto& descriptorState = _inFlightDescriptorStates[_frameIndex].emplace_back();
+    bool ok               = _renderPipeline->acquireDescriptorState(descriptorState, _frameIndex);
     AXASSERT(ok, "Failed to acquire descriptor sets");
     auto& descriptorSets = descriptorState.sets;
 #else
     VkDescriptorSetAllocateInfo allocInfo{};
     allocInfo.sType               = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-    allocInfo.descriptorPool      = _descriptorPools[_currentFrame];
+    allocInfo.descriptorPool      = _descriptorPools[_frameIndex];
     auto descriptorSetLayoutState = _renderPipeline->getDescriptorSetLayoutState();
     allocInfo.descriptorSetCount  = descriptorSetLayoutState->descriptorSetLayoutCount;
     allocInfo.pSetLayouts         = descriptorSetLayoutState->descriptorSetLayouts.data();
@@ -1076,7 +1075,7 @@ void RenderContextImpl::prepareDrawing()
             VkWriteDescriptorSet& write        = writes.emplace_back();
             VkDescriptorBufferInfo& bufferInfo = _descriptorBufferInfos.emplace_back();
 
-            bufferInfo.buffer = _uniformRings[_currentFrame].buffer;
+            bufferInfo.buffer = _uniformRings[_frameIndex].buffer;
             bufferInfo.offset = static_cast<VkDeviceSize>(s.offset);
             bufferInfo.range  = static_cast<VkDeviceSize>(uboInfo.sizeBytes);
 
@@ -1236,7 +1235,7 @@ void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
     }
 
     // ensure last rendering commands submission finished
-    vkWaitForFences(_device, 1, &_inFlightFences[_currentFrame], VK_TRUE, UINT64_MAX);
+    vkWaitForFences(_device, 1, &_inFlightFences[_frameIndex], VK_TRUE, UINT64_MAX);
 
     auto& colorDesc = colorAttachment->getDesc();
 

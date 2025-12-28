@@ -72,7 +72,6 @@ struct GPUFence
 class RenderContextImpl : public RenderContext
 {
 public:
-    static constexpr int MAX_FRAMES_IN_FLIGHT   = 2;
     static constexpr int SWAPCHAIN_BUFFER_COUNT = 3;
 
     static constexpr uint32_t VI_BINDING_INDEX            = 0;

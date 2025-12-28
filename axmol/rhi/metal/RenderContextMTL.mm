@@ -141,7 +141,7 @@ static MTLCullMode toMTLCullMode(CullMode mode)
 
 RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
 {
-    _frameBoundarySemaphore = dispatch_semaphore_create(MAX_INFLIGHT_BUFFER);
+    _frameBoundarySemaphore = dispatch_semaphore_create(MAX_FRAMES_IN_FLIGHT);
     auto mtlDevice          = driver->getMTLDevice();
     _mtlCmdQueue            = driver->getMTLCmdQueue();
     auto& contextAttrs      = Application::getContextAttrs();
