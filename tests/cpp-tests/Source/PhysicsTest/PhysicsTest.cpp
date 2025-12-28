@@ -887,8 +887,6 @@ void PhysicsDemoJoints::onEnter()
                 auto sp2PhysicsBody = sp2->getPhysicsBody();
                 sp2PhysicsBody->setTag(DRAG_BODYS_TAG);
 
-                getPhysicsWorld()->addJoint(PhysicsJointPin::instantiate(sp1PhysicsBody, box, sp1->getPosition()));
-                getPhysicsWorld()->addJoint(PhysicsJointPin::instantiate(sp2PhysicsBody, box, sp2->getPosition()));
                 PhysicsJointRotarySpring* joint =
                     PhysicsJointRotarySpring::instantiate(sp1PhysicsBody, sp2PhysicsBody, 3000.0f, 60.0f);
                 getPhysicsWorld()->addJoint(joint);
@@ -907,8 +905,6 @@ void PhysicsDemoJoints::onEnter()
                 auto sp2PhysicsBody = sp2->getPhysicsBody();
                 sp2PhysicsBody->setTag(DRAG_BODYS_TAG);
 
-                getPhysicsWorld()->addJoint(PhysicsJointPin::instantiate(sp1PhysicsBody, box, sp1->getPosition()));
-                getPhysicsWorld()->addJoint(PhysicsJointPin::instantiate(sp2PhysicsBody, box, sp2->getPosition()));
                 PhysicsJointRotaryLimit* joint =
                     PhysicsJointRotaryLimit::instantiate(sp1PhysicsBody, sp2PhysicsBody, 0.0f, (float)M_PI_2);
                 getPhysicsWorld()->addJoint(joint);
@@ -927,8 +923,6 @@ void PhysicsDemoJoints::onEnter()
                 auto sp2PhysicsBody = sp2->getPhysicsBody();
                 sp2PhysicsBody->setTag(DRAG_BODYS_TAG);
 
-                getPhysicsWorld()->addJoint(PhysicsJointPin::instantiate(sp1PhysicsBody, box, sp1->getPosition()));
-                getPhysicsWorld()->addJoint(PhysicsJointPin::instantiate(sp2PhysicsBody, box, sp2->getPosition()));
                 PhysicsJointRatchet* joint =
                     PhysicsJointRatchet::instantiate(sp1PhysicsBody, sp2PhysicsBody, 0.0f, (float)M_PI_2);
                 getPhysicsWorld()->addJoint(joint);
@@ -947,8 +941,6 @@ void PhysicsDemoJoints::onEnter()
                 auto sp2PhysicsBody = sp2->getPhysicsBody();
                 sp2PhysicsBody->setTag(DRAG_BODYS_TAG);
 
-                getPhysicsWorld()->addJoint(PhysicsJointPin::instantiate(sp1PhysicsBody, box, sp1->getPosition()));
-                getPhysicsWorld()->addJoint(PhysicsJointPin::instantiate(sp2PhysicsBody, box, sp2->getPosition()));
                 PhysicsJointGear* joint = PhysicsJointGear::instantiate(sp1PhysicsBody, sp2PhysicsBody, 0.0f, 2.0f);
                 getPhysicsWorld()->addJoint(joint);
 
@@ -966,8 +958,6 @@ void PhysicsDemoJoints::onEnter()
                 auto sp2PhysicsBody = sp2->getPhysicsBody();
                 sp2PhysicsBody->setTag(DRAG_BODYS_TAG);
 
-                getPhysicsWorld()->addJoint(PhysicsJointPin::instantiate(sp1PhysicsBody, box, sp1->getPosition()));
-                getPhysicsWorld()->addJoint(PhysicsJointPin::instantiate(sp2PhysicsBody, box, sp2->getPosition()));
                 PhysicsJointMotor* joint =
                     PhysicsJointMotor::instantiate(sp1PhysicsBody, sp2PhysicsBody, (float)M_PI_2);
                 getPhysicsWorld()->addJoint(joint);
