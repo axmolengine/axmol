@@ -180,6 +180,9 @@ public:
 
     void waitForGPU() override;
 
+    void setFrameIndex(int index) { _frameIndex = index; }
+    int getFrameIndex() const { return _frameIndex; }
+
 protected:
     void queueDisposalInternal(DisposableResource&& res);
 
@@ -241,6 +244,8 @@ private:
     ComPtr<ID3D12PipelineState> _mipmapPSO2D;
     ComPtr<ID3D12PipelineState> _mipmapPSOArray;
     ComPtr<ID3D12DescriptorHeap> _mipmapSrvHeap;
+
+    int _frameIndex{0};
 };
 
 }  // namespace ax::rhi::d3d12

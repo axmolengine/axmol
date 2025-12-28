@@ -464,7 +464,7 @@ uint64_t RenderContextImpl::getCompletedFenceValue() const
 bool RenderContextImpl::beginFrame()
 {
     // Wait fence of current frame
-    auto& currentFence   = _inflightFences[_currentFrame];
+    auto& currentFence   = _inflightFences[_frameIndex];
     _completedFenceValue = currentFence.wait();
     _driver->processDisposalQueue(_completedFenceValue);
 
@@ -494,27 +494,27 @@ bool RenderContextImpl::beginFrame()
     }
 
     // Reset offsets at the start of each frame
-    _srvOffset[_currentFrame] = 0;
+    _srvOffset[_frameIndex] = 0;
 
-    resetUniformRingForCurrentFrame(_currentFrame);
+    resetUniformRingForCurrentFrame(_frameIndex);
 
-    _currentImageIndex = _swapchain->GetCurrentBackBufferIndex();
+    _imageIndex = _swapchain->GetCurrentBackBufferIndex();
 
     // Reset allocator and command list
-    HRESULT hr = _commandAllocators[_currentFrame]->Reset();
+    HRESULT hr = _commandAllocators[_frameIndex]->Reset();
     AXASSERT(SUCCEEDED(hr), "CommandAllocator Reset failed");
-    _currentCmdList = _commandLists[_currentFrame].Get();
-    hr              = _currentCmdList->Reset(_commandAllocators[_currentFrame].Get(), nullptr);
+    _currentCmdList = _commandLists[_frameIndex].Get();
+    hr              = _currentCmdList->Reset(_commandAllocators[_frameIndex].Get(), nullptr);
     AXASSERT(SUCCEEDED(hr), "CommandList Reset failed");
 
     _boundRootSig = nullptr;
     _boundPSO     = nullptr;
 
-    bitmask::set(_inFlightDynamicDirtyBits[_currentFrame], PIPELINE_REQUIRED_DYNAMIC_BITS);
+    bitmask::set(_inFlightDynamicDirtyBits[_frameIndex], PIPELINE_REQUIRED_DYNAMIC_BITS);
 
     // Sets descriptor heaps
     auto samplerHeap               = _driver->getSamplerHeap();
-    auto srvHeap                   = _srvHeaps[_currentFrame].Get();
+    auto srvHeap                   = _srvHeaps[_frameIndex].Get();
     ID3D12DescriptorHeap* heaps[2] = {srvHeap, samplerHeap};
     _currentCmdList->SetDescriptorHeaps(2, heaps);
 
@@ -540,7 +540,7 @@ void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const Render
     _renderTargetHeight  = colorAttachment->getDesc().height;
 
     // Bind RTV/DSV and clear according to flags
-    rtImpl->beginRenderPass(_currentCmdList, descriptor, _renderTargetWidth, _renderTargetHeight, _currentImageIndex);
+    rtImpl->beginRenderPass(_currentCmdList, descriptor, _renderTargetWidth, _renderTargetHeight, _imageIndex);
 
     rtImpl->setLastFenceValue(_frameFenceValue);
 }
@@ -548,7 +548,7 @@ void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const Render
 void RenderContextImpl::endRenderPass()
 {
     // Reset cached state objects
-    static_cast<RenderTargetImpl*>(_currentRT)->endRenderPass(_currentCmdList, _currentImageIndex);
+    static_cast<RenderTargetImpl*>(_currentRT)->endRenderPass(_currentCmdList, _imageIndex);
 
     _programState = nullptr;
     _vertexLayout = nullptr;
@@ -584,11 +584,13 @@ void RenderContextImpl::endFrame()
     }
 
     // Signal fence for this frame
-    auto& currentFence = _inflightFences[_currentFrame];
+    auto& currentFence = _inflightFences[_frameIndex];
     _graphicsQueue->Signal(currentFence.handle, currentFence.value);
 
     // Next frame index
-    _currentFrame = (_currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+    _frameIndex = (_frameIndex + 1) % MAX_FRAMES_IN_FLIGHT;
+
+    _driver->setFrameIndex(_frameIndex);
     _inFrame      = false;
 }
 
@@ -695,22 +697,22 @@ void RenderContextImpl::setStencilReferenceValue(uint32_t value)
 
 void RenderContextImpl::applyPendingDynamicStates()
 {
-    if (bitmask::any(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::StencilRef))
+    if (bitmask::any(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::StencilRef))
     {
         _currentCmdList->OMSetStencilRef(_stencilReferenceValue);
-        bitmask::clear(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::StencilRef);
+        bitmask::clear(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::StencilRef);
     }
 
-    if (bitmask::any(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::Viewport))
+    if (bitmask::any(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::Viewport))
     {
         _currentCmdList->RSSetViewports(1, &_cachedViewport);
-        bitmask::clear(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::Viewport);
+        bitmask::clear(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::Viewport);
     }
 
-    if (bitmask::any(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::Scissor))
+    if (bitmask::any(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::Scissor))
     {
         _currentCmdList->RSSetScissorRects(1, &_cachedScissor);
-        bitmask::clear(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::Scissor);
+        bitmask::clear(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::Scissor);
     }
 }
 
@@ -884,14 +886,14 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     {
         for (auto& uboInfo : _programState->getActiveUniformBlockInfos())
         {
-            auto s = allocateUniformSlice(_currentFrame, uboInfo.sizeBytes);
+            auto s = allocateUniformSlice(_frameIndex, uboInfo.sizeBytes);
             ::memcpy(s.cpuPtr, cpuBuffer.data() + uboInfo.cpuOffset, uboInfo.sizeBytes);
             _currentCmdList->SetGraphicsRootConstantBufferView(uboInfo.binding, s.gpuVA);
         }
     }
 
     // --- bind textures ---
-    auto srvHeap = _srvHeaps[_currentFrame].Get();
+    auto srvHeap = _srvHeaps[_frameIndex].Get();
 
     // CPU start handles
     auto srvCpuStart = srvHeap->GetCPUDescriptorHandleForHeapStart();
@@ -900,7 +902,7 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     auto& textureBindingSets = _programState->getTextureBindingSets();
     if (!textureBindingSets.empty())
     {
-        const auto bindingStart = _srvOffset[_currentFrame];
+        const auto bindingStart = _srvOffset[_frameIndex];
 
         // Copy descriptors for each texture in the binding set
         int maxSlot = -1;
@@ -930,7 +932,7 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
         _currentCmdList->SetGraphicsRootDescriptorTable(rootSigInfo->srvRootIndex, srvGpuStart);
 
         // Advance offsets for the next batch
-        _srvOffset[_currentFrame] = bindingStart + static_cast<UINT>(maxSlot + 1);
+        _srvOffset[_frameIndex] = bindingStart + static_cast<UINT>(maxSlot + 1);
     }
 }
 
