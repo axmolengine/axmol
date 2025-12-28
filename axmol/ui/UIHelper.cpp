@@ -278,7 +278,7 @@ Vec2 Helper::getVisibleSize(void)
 }
 
 /// Get node group size
-Vec2 Helper::getNodeGroupSize(const std::vector<Node*>& nodes)
+Vec2 Helper::getNodeGroupSize(std::span<Node* const> nodes)
 {
     if (nodes.empty())
     {
@@ -322,7 +322,7 @@ Vec2 Helper::getNodeGroupSize(const std::vector<Node*>& nodes)
 }
 
 /// Set nodes group size
-void Helper::setNodeGroupSize(const std::vector<Node*>& nodes, const Vec2& newSize)
+void Helper::setNodeGroupSize(std::span<Node* const> nodes, const Vec2& newSize)
 {
     Vec2 groupSize = getNodeGroupScaledSize(nodes);
     if (groupSize.height == 0 || groupSize.width == 0 || newSize.width == 0 || newSize.height == 0)
@@ -352,7 +352,7 @@ void Helper::setNodeGroupSize(const std::vector<Node*>& nodes, const Vec2& newSi
     }
 }
 
-Vec2 Helper::getNodeGroupScaledSize(const std::vector<Node*>& nodes)
+Vec2 Helper::getNodeGroupScaledSize(std::span<Node* const> nodes)
 {
     if (nodes.empty())
     {
@@ -401,7 +401,7 @@ Vec2 Helper::getNodeGroupScaledSize(const std::vector<Node*>& nodes)
 }
 
 /// Get Node group left
-float Helper::getNodeGroupLeft(const std::vector<Node*>& nodes)
+float Helper::getNodeGroupLeft(std::span<Node* const> nodes)
 {
     size_t index  = 0;
     float minLeft = getNodeLeft(nodes[index]);
@@ -416,7 +416,7 @@ float Helper::getNodeGroupLeft(const std::vector<Node*>& nodes)
 }
 
 /// Get node group top
-float Helper::getNodeGroupTop(const std::vector<Node*>& nodes)
+float Helper::getNodeGroupTop(std::span<Node* const> nodes)
 {
     size_t index = 0;
     float minTop = getNodeTop(nodes[index]);
@@ -431,7 +431,7 @@ float Helper::getNodeGroupTop(const std::vector<Node*>& nodes)
 }
 
 /// Get node group right
-float Helper::getNodeGroupRight(const std::vector<Node*>& nodes)
+float Helper::getNodeGroupRight(std::span<Node* const> nodes)
 {
     size_t index   = 0;
     float minRight = getNodeRight(nodes[index]);
@@ -446,7 +446,7 @@ float Helper::getNodeGroupRight(const std::vector<Node*>& nodes)
 }
 
 /// Get node group bottom
-float Helper::getNodeGroupBottom(const std::vector<Node*>& nodes)
+float Helper::getNodeGroupBottom(std::span<Node* const> nodes)
 {
     size_t index    = 0;
     float minBottom = getNodeBottom(nodes[index]);
@@ -464,7 +464,7 @@ float Helper::getNodeGroupBottom(const std::vector<Node*>& nodes)
 ** setNodeGroupLeft
 **
 */
-void Helper::setNodeGroupLeft(const std::vector<Node*>& nodes, float left)
+void Helper::setNodeGroupLeft(std::span<Node* const> nodes, float left)
 {
     float delta = left - getNodeGroupLeft(nodes);
 
@@ -478,7 +478,7 @@ void Helper::setNodeGroupLeft(const std::vector<Node*>& nodes, float left)
 ** setNodeGroupLeft
 **
 */
-void Helper::setNodeGroupTop(const std::vector<Node*>& nodes, float top)
+void Helper::setNodeGroupTop(std::span<Node* const> nodes, float top)
 {
     float delta = top - getNodeGroupTop(nodes);
 
@@ -488,7 +488,7 @@ void Helper::setNodeGroupTop(const std::vector<Node*>& nodes, float top)
     }
 }
 
-void Helper::setNodeGroupLT(const std::vector<Node*>& nodes, const ax::Vec2& p)
+void Helper::setNodeGroupLT(std::span<Node* const> nodes, const ax::Vec2& p)
 {
     float deltaL = p.x - getNodeGroupLeft(nodes);
     float deltaT = p.y - getNodeGroupTop(nodes);
@@ -503,7 +503,7 @@ void Helper::setNodeGroupLT(const std::vector<Node*>& nodes, const ax::Vec2& p)
 ** setNodeGroupRight
 **
 */
-void Helper::setNodeGroupRight(const std::vector<Node*>& nodes, float right)
+void Helper::setNodeGroupRight(std::span<Node* const> nodes, float right)
 {
     float delta = right - getNodeGroupRight(nodes);
 
@@ -517,7 +517,7 @@ void Helper::setNodeGroupRight(const std::vector<Node*>& nodes, float right)
 ** setNodeGroupRight
 **
 */
-void Helper::setNodeGroupBottom(const std::vector<Node*>& nodes, float bottom)
+void Helper::setNodeGroupBottom(std::span<Node* const> nodes, float bottom)
 {
     float delta = bottom - getNodeGroupBottom(nodes);
 
@@ -527,7 +527,7 @@ void Helper::setNodeGroupBottom(const std::vector<Node*>& nodes, float bottom)
     }
 }
 
-void Helper::moveNodeGroupHorizontally(const std::vector<Node*>& nodes, float delta)
+void Helper::moveNodeGroupHorizontally(std::span<Node* const> nodes, float delta)
 {
     for (auto&& node : nodes)
     {
@@ -535,7 +535,7 @@ void Helper::moveNodeGroupHorizontally(const std::vector<Node*>& nodes, float de
     }
 }
 
-void Helper::moveNodeGroupVertically(const std::vector<Node*>& nodes, float delta)
+void Helper::moveNodeGroupVertically(std::span<Node* const> nodes, float delta)
 {
     for (auto&& node : nodes)
     {
@@ -550,7 +550,7 @@ void Helper::moveNodeGroupVertically(const std::vector<Node*>& nodes, float delt
 /// 水平居中
 /// </summary>
 /// <param name="nodes"></param>
-void Helper::centerHorizontally(const std::vector<Node*>& nodes)
+void Helper::centerHorizontally(std::span<Node* const> nodes)
 {
     if (nodes.empty())
     {
@@ -592,7 +592,7 @@ void Helper::centerHorizontally(const std::vector<Node*>& nodes)
 /// 垂直居中
 /// </summary>
 /// <param name="nodes"></param>
-void Helper::centerVertically(const std::vector<Node*>& nodes)
+void Helper::centerVertically(std::span<Node* const> nodes)
 {
     if (nodes.empty())
     {
@@ -629,7 +629,7 @@ void Helper::centerVertically(const std::vector<Node*>& nodes)
 /// 居中
 /// </summary>
 /// <param name="nodes"></param>
-void Helper::centerToParent(const std::vector<Node*>& nodes)
+void Helper::centerToParent(std::span<Node* const> nodes)
 {
     if (nodes.empty())
     {
@@ -682,7 +682,7 @@ void Helper::centerToParent(const std::vector<Node*>& nodes)
 /// 左对齐
 /// </summary>
 /// <param name="nodes"></param>
-void Helper::alignLefts(const std::vector<Node*>& nodes)
+void Helper::alignLefts(std::span<Node* const> nodes)
 {
     if (nodes.size() < 2)
         return;
@@ -703,7 +703,7 @@ void Helper::alignLefts(const std::vector<Node*>& nodes)
 /// 右对齐
 /// </summary>
 /// <param name="nodes"></param>
-void Helper::alignRights(const std::vector<Node*>& nodes)
+void Helper::alignRights(std::span<Node* const> nodes)
 {
     if (nodes.size() < 2)
         return;
@@ -726,7 +726,7 @@ void Helper::alignRights(const std::vector<Node*>& nodes)
 /// 顶端对齐
 /// </summary>
 /// <param name="nodes"></param>
-void Helper::alignTops(const std::vector<Node*>& nodes)
+void Helper::alignTops(std::span<Node* const> nodes)
 {
     if (nodes.size() < 2)
         return;
@@ -747,7 +747,7 @@ void Helper::alignTops(const std::vector<Node*>& nodes)
 /// 底端对齐
 /// </summary>
 /// <param name="nodes"></param>
-void Helper::alignBottoms(const std::vector<Node*>& nodes)
+void Helper::alignBottoms(std::span<Node* const> nodes)
 {
     if (nodes.size() < 2)
         return;
@@ -770,7 +770,7 @@ void Helper::alignBottoms(const std::vector<Node*>& nodes)
 /// 水平对齐
 /// </summary>
 /// <param name="nodes"></param>
-void Helper::alignHorizontals(const std::vector<Node*>& nodes)
+void Helper::alignHorizontals(std::span<Node* const> nodes)
 {
     if (nodes.size() < 2)
         return;
@@ -804,7 +804,7 @@ void Helper::alignHorizontals(const std::vector<Node*>& nodes)
 /// 垂直对齐
 /// </summary>
 /// <param name="nodes"></param>
-void Helper::alignVerticals(const std::vector<Node*>& nodes)
+void Helper::alignVerticals(std::span<Node* const> nodes)
 {
     if (nodes.size() < 2)
         return;
@@ -838,7 +838,7 @@ void Helper::alignVerticals(const std::vector<Node*>& nodes)
 /// 中心原点对齐
 /// </summary>
 /// <param name="nodes"></param>
-void Helper::alignCenters(const std::vector<Node*>& nodes)
+void Helper::alignCenters(std::span<Node* const> nodes)
 {
     if (nodes.size() < 2)
         return;
@@ -851,7 +851,7 @@ void Helper::alignCenters(const std::vector<Node*>& nodes)
 /// 使宽度相等
 /// </summary>
 /// <param name="nodes"></param>
-void Helper::makeSameWidth(const std::vector<Node*>& nodes)
+void Helper::makeSameWidth(std::span<Node* const> nodes)
 {
     if (nodes.size() < 2)
         return;
@@ -875,7 +875,7 @@ void Helper::makeSameWidth(const std::vector<Node*>& nodes)
 /// 使高度相等
 /// </summary>
 /// <param name="nodes"></param>
-void Helper::makeSameHeight(const std::vector<Node*>& nodes)
+void Helper::makeSameHeight(std::span<Node* const> nodes)
 {
     if (nodes.size() < 2)
         return;
@@ -899,7 +899,7 @@ void Helper::makeSameHeight(const std::vector<Node*>& nodes)
 /// 使得大小相等
 /// </summary>
 /// <param name="nodes"></param>
-void Helper::makeSameSize(const std::vector<Node*>& nodes)
+void Helper::makeSameSize(std::span<Node* const> nodes)
 {
     if (nodes.size() < 2)
         return;
@@ -941,7 +941,7 @@ void Helper::makeHorizontalSpacingEqual(std::vector<Node*>& nodes)
 /// 使水平间距相等
 /// </summary>
 /// <param name="nodes"></param>
-void Helper::makeHorizontalSpacingEqual(const std::vector<Node*>& nodes, float theSpacing)
+void Helper::makeHorizontalSpacingEqual(std::span<Node* const> nodes, float theSpacing)
 {
     for (size_t index = 0; index < nodes.size() - 1; ++index)
     {
@@ -1019,12 +1019,12 @@ void Helper::decreaseVerticalSpacing(std::vector<Node*>& nodes, float theSpacing
     increaseVerticalSpacing(nodes, -theSpacing);
 }
 
-void Helper::removeHorizontalSpacing(const std::vector<Node*>& nodes)
+void Helper::removeHorizontalSpacing(std::span<Node* const> nodes)
 {
     Helper::makeHorizontalSpacingEqual(nodes, 0);
 }
 
-void Helper::removeVerticalSpacing(const std::vector<Node*>& nodes)
+void Helper::removeVerticalSpacing(std::span<Node* const> nodes)
 {
     Helper::makeVerticalSpacingEqual(nodes, 0);
 }
@@ -1033,7 +1033,7 @@ void Helper::removeVerticalSpacing(const std::vector<Node*>& nodes)
 /// 使垂直间距相等
 /// </summary>
 /// <param name="nodes"></param>
-void Helper::makeVerticalSpacingEqual(const std::vector<Node*>& nodes, float theSpacing)
+void Helper::makeVerticalSpacingEqual(std::span<Node* const> nodes, float theSpacing)
 {
     for (size_t index = 0; index < nodes.size() - 1; ++index)
     {

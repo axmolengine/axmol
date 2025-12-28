@@ -100,9 +100,9 @@ void HttpCookie::readFile()
     }
 }
 
-const std::vector<CookieInfo>* HttpCookie::getCookies() const
+std::span<const CookieInfo> HttpCookie::getCookies() const
 {
-    return &_cookies;
+    return _cookies;
 }
 
 const CookieInfo* HttpCookie::getMatchCookie(const Uri& uri) const

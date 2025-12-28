@@ -85,6 +85,7 @@ stl_type_map = {
     'tlx::string_map': 2,
     'std::multimap': 2,
     'std::vector': 1,
+    'std::span': 1,
     'std::list': 1,
     'std::forward_list': 1,
     'std::priority_queue': 1,
@@ -108,6 +109,7 @@ stl_type_map = {
     'hash_map': 2,
     'string_map': 2,
     'vector': 1,
+    'span': 1,
     'list': 1,
     'forward_list': 1,
     'priority_queue': 1,
@@ -526,6 +528,7 @@ class NativeType(object):
             decl = ntype.get_declaration()
 
             nt.namespaced_name = get_namespaced_name(decl).replace('::__ndk1', '')
+            nt.namespaced_name = re.sub(r'\b(?:std::)?span<\s*(?:const\s+)?', 'std::vector<', nt.namespaced_name)
 
             if decl.kind == cindex.CursorKind.CLASS_DECL \
                 and not nt.namespaced_name.startswith('std::function') \

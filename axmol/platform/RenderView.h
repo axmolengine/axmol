@@ -362,7 +362,7 @@ public:
      *
      * @param filelist The array contains icons.
      */
-    virtual void setIcon(const std::vector<std::string_view>& filelist) const {};
+    virtual void setIcon(std::span<const std::string_view> filelist) const {};
 
     /** Set default window icon (implemented for windows and linux).
      * On windows it will use icon from .exe file (if included).

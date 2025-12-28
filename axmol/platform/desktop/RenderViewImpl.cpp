@@ -824,15 +824,15 @@ void RenderViewImpl::setIMEKeyboardState(bool /*bOpen*/) {}
 #if AX_ICON_SET_SUPPORT
 void RenderViewImpl::setIcon(std::string_view filename) const
 {
-    this->setIcon(std::vector<std::string_view>{filename});
+    this->setIcon({filename});
 }
 
-void RenderViewImpl::setIcon(const std::vector<std::string_view>& filelist) const
+void RenderViewImpl::setIcon(std::span<const std::string_view> filelist) const
 {
     if (filelist.empty())
         return;
     std::vector<Image*> icons;
-    for (auto const& filename : filelist)
+    for (auto& filename : filelist)
     {
         Image* icon = new Image();
         if (icon->initWithImageFile(filename))

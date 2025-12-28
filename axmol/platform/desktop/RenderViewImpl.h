@@ -113,7 +113,7 @@ public:
 
 #if AX_ICON_SET_SUPPORT
     void setIcon(std::string_view filename) const override;
-    void setIcon(const std::vector<std::string_view>& filelist) const override;
+    void setIcon(std::span<const std::string_view> filelist) const override;
     void setDefaultIcon() const override;
 #endif /* AX_ICON_SET_SUPPORT */
 

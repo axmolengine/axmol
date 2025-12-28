@@ -204,6 +204,10 @@ public:
      */
     ssize_t size() const { return _data.size(); }
 
+    // For span compatibility
+    const T* data() const { return _data.data(); }
+    T* data() { return _data.data(); }
+
     /** @brief Returns whether the Vector is empty (i.e. whether its size is 0).
      *  @note This function does not modify the container in any way. To clear the content of a vector, see
      * Vector::clear.

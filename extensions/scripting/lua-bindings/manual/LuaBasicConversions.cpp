@@ -1059,7 +1059,7 @@ bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, ax::ValueVector* 
             {
                 lua_pop(L, 1);
                 ValueMap dictVal;
-                if (luaval_to_ccvaluemap(L, i + 2, &dictVal))
+                if (luaval_to_valuemap(L, i + 2, &dictVal))
                 {
                     ret->emplace_back(Value(dictVal));
                 }
@@ -1068,7 +1068,7 @@ bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, ax::ValueVector* 
             {
                 lua_pop(L, 1);
                 ValueVector arrVal;
-                if (luaval_to_ccvaluevector(L, i + 2, &arrVal))
+                if (luaval_to_valuevector(L, i + 2, &arrVal))
                 {
                     ret->emplace_back(Value(arrVal));
                 }
@@ -1103,7 +1103,7 @@ bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, ax::ValueVector* 
     return true;
 }
 
-bool luaval_to_ccvalue(lua_State* L, int lo, ax::Value* ret, const char* funcName)
+bool luaval_to_value(lua_State* L, int lo, ax::Value* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret)
         return false;
@@ -1121,7 +1121,7 @@ bool luaval_to_ccvalue(lua_State* L, int lo, ax::Value* ret, const char* funcNam
         {
             lua_pop(L, 1);
             ValueMap dictVal;
-            if (luaval_to_ccvaluemap(L, lo, &dictVal))
+            if (luaval_to_valuemap(L, lo, &dictVal))
             {
                 *ret = Value(dictVal);
             }
@@ -1130,7 +1130,7 @@ bool luaval_to_ccvalue(lua_State* L, int lo, ax::Value* ret, const char* funcNam
         {
             lua_pop(L, 1);
             ValueVector arrVal;
-            if (luaval_to_ccvaluevector(L, lo, &arrVal))
+            if (luaval_to_valuevector(L, lo, &arrVal))
             {
                 *ret = Value(arrVal);
             }
@@ -1159,7 +1159,7 @@ bool luaval_to_ccvalue(lua_State* L, int lo, ax::Value* ret, const char* funcNam
 
     return ok;
 }
-bool luaval_to_ccvaluemap(lua_State* L, int lo, ax::ValueMap* ret, const char* funcName)
+bool luaval_to_valuemap(lua_State* L, int lo, ax::ValueMap* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret)
         return false;
@@ -1201,7 +1201,7 @@ bool luaval_to_ccvaluemap(lua_State* L, int lo, ax::ValueMap* ret, const char* f
                     {
                         lua_pop(L, 1);
                         ValueMap dictVal;
-                        if (luaval_to_ccvaluemap(L, lua_gettop(L), &dictVal))
+                        if (luaval_to_valuemap(L, lua_gettop(L), &dictVal))
                         {
                             dict[stringKey] = Value(dictVal);
                         }
@@ -1210,7 +1210,7 @@ bool luaval_to_ccvaluemap(lua_State* L, int lo, ax::ValueMap* ret, const char* f
                     {
                         lua_pop(L, 1);
                         ValueVector arrVal;
-                        if (luaval_to_ccvaluevector(L, lua_gettop(L), &arrVal))
+                        if (luaval_to_valuevector(L, lua_gettop(L), &arrVal))
                         {
                             dict[stringKey] = Value(arrVal);
                         }
@@ -1246,7 +1246,7 @@ bool luaval_to_ccvaluemap(lua_State* L, int lo, ax::ValueMap* ret, const char* f
 
     return ok;
 }
-bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, ax::ValueMapIntKey* ret, const char* funcName)
+bool luaval_to_valuemapintkey(lua_State* L, int lo, ax::ValueMapIntKey* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret)
         return false;
@@ -1289,7 +1289,7 @@ bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, ax::ValueMapIntKey* ret, c
                     {
                         lua_pop(L, 1);
                         ValueMap dictVal;
-                        if (luaval_to_ccvaluemap(L, lua_gettop(L), &dictVal))
+                        if (luaval_to_valuemap(L, lua_gettop(L), &dictVal))
                         {
                             dict[intKey] = Value(dictVal);
                         }
@@ -1298,7 +1298,7 @@ bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, ax::ValueMapIntKey* ret, c
                     {
                         lua_pop(L, 1);
                         ValueVector arrVal;
-                        if (luaval_to_ccvaluevector(L, lua_gettop(L), &arrVal))
+                        if (luaval_to_valuevector(L, lua_gettop(L), &arrVal))
                         {
                             dict[intKey] = Value(arrVal);
                         }
@@ -1334,7 +1334,7 @@ bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, ax::ValueMapIntKey* ret, c
 
     return ok;
 }
-bool luaval_to_ccvaluevector(lua_State* L, int lo, ax::ValueVector* ret, const char* funcName)
+bool luaval_to_valuevector(lua_State* L, int lo, ax::ValueVector* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret)
         return false;
@@ -1370,7 +1370,7 @@ bool luaval_to_ccvaluevector(lua_State* L, int lo, ax::ValueVector* ret, const c
                 {
                     lua_pop(L, 1);
                     ValueMap dictVal;
-                    if (luaval_to_ccvaluemap(L, lua_gettop(L), &dictVal))
+                    if (luaval_to_valuemap(L, lua_gettop(L), &dictVal))
                     {
                         ret->emplace_back(Value(dictVal));
                     }
@@ -1379,7 +1379,7 @@ bool luaval_to_ccvaluevector(lua_State* L, int lo, ax::ValueVector* ret, const c
                 {
                     lua_pop(L, 1);
                     ValueVector arrVal;
-                    if (luaval_to_ccvaluevector(L, lua_gettop(L), &arrVal))
+                    if (luaval_to_valuevector(L, lua_gettop(L), &arrVal))
                     {
                         ret->emplace_back(Value(arrVal));
                     }
@@ -2365,7 +2365,7 @@ void fontdefinition_to_luaval(lua_State* L, const FontDefinition& inValue)
     lua_rawset(L, -3);                                          /* table[key] = value, L: table */
 }
 
-void ccvalue_to_luaval(lua_State* L, const ax::Value& inValue)
+void value_to_luaval(lua_State* L, const ax::Value& inValue)
 {
     const Value& obj = inValue;
     switch (obj.getTypeFamily())
@@ -2384,19 +2384,19 @@ void ccvalue_to_luaval(lua_State* L, const ax::Value& inValue)
         lua_pushstring(L, obj.asStringRef().data());
         break;
     case Value::Type::VECTOR:
-        ccvaluevector_to_luaval(L, obj.asValueVector());
+        valuespan_to_luaval(L, obj.asValueVector());
         break;
     case Value::Type::MAP:
-        ccvaluemap_to_luaval(L, obj.asValueMap());
+        valuemap_to_luaval(L, obj.asValueMap());
         break;
     case Value::Type::INT_KEY_MAP:
-        ccvaluemapintkey_to_luaval(L, obj.asIntKeyMap());
+        valuemapintkey_to_luaval(L, obj.asIntKeyMap());
         break;
     default:
         break;
     }
 }
-void ccvaluemap_to_luaval(lua_State* L, const ax::ValueMap& inValue)
+void valuemap_to_luaval(lua_State* L, const ax::ValueMap& inValue)
 {
     lua_newtable(L);
 
@@ -2441,21 +2441,21 @@ void ccvaluemap_to_luaval(lua_State* L, const ax::ValueMap& inValue)
         case Value::Type::VECTOR:
         {
             lua_pushstring(L, key.c_str());
-            ccvaluevector_to_luaval(L, obj.asValueVector());
+            valuespan_to_luaval(L, obj.asValueVector());
             lua_rawset(L, -3);
         }
         break;
         case Value::Type::MAP:
         {
             lua_pushstring(L, key.c_str());
-            ccvaluemap_to_luaval(L, obj.asValueMap());
+            valuemap_to_luaval(L, obj.asValueMap());
             lua_rawset(L, -3);
         }
         break;
         case Value::Type::INT_KEY_MAP:
         {
             lua_pushstring(L, key.c_str());
-            ccvaluemapintkey_to_luaval(L, obj.asIntKeyMap());
+            valuemapintkey_to_luaval(L, obj.asIntKeyMap());
             lua_rawset(L, -3);
         }
         break;
@@ -2464,7 +2464,7 @@ void ccvaluemap_to_luaval(lua_State* L, const ax::ValueMap& inValue)
         }
     }
 }
-void ccvaluemapintkey_to_luaval(lua_State* L, const ax::ValueMapIntKey& inValue)
+void valuemapintkey_to_luaval(lua_State* L, const ax::ValueMapIntKey& inValue)
 {
     lua_newtable(L);
 
@@ -2513,21 +2513,21 @@ void ccvaluemapintkey_to_luaval(lua_State* L, const ax::ValueMapIntKey& inValue)
         case Value::Type::VECTOR:
         {
             lua_pushstring(L, key.c_str());
-            ccvaluevector_to_luaval(L, obj.asValueVector());
+            valuespan_to_luaval(L, obj.asValueVector());
             lua_rawset(L, -3);
         }
         break;
         case Value::Type::MAP:
         {
             lua_pushstring(L, key.c_str());
-            ccvaluemap_to_luaval(L, obj.asValueMap());
+            valuemap_to_luaval(L, obj.asValueMap());
             lua_rawset(L, -3);
         }
         break;
         case Value::Type::INT_KEY_MAP:
         {
             lua_pushstring(L, key.c_str());
-            ccvaluemapintkey_to_luaval(L, obj.asIntKeyMap());
+            valuemapintkey_to_luaval(L, obj.asIntKeyMap());
             lua_rawset(L, -3);
         }
         break;
@@ -2536,7 +2536,7 @@ void ccvaluemapintkey_to_luaval(lua_State* L, const ax::ValueMapIntKey& inValue)
         }
     }
 }
-void ccvaluevector_to_luaval(lua_State* L, const ax::ValueVector& inValue)
+void valuespan_to_luaval(lua_State* L, std::span<const Value> inValue)
 {
     lua_newtable(L);
 
@@ -2584,7 +2584,7 @@ void ccvaluevector_to_luaval(lua_State* L, const ax::ValueVector& inValue)
         case Value::Type::VECTOR:
         {
             lua_pushnumber(L, (lua_Number)index);
-            ccvaluevector_to_luaval(L, obj.asValueVector());
+            valuespan_to_luaval(L, obj.asValueVector());
             lua_rawset(L, -3);
             ++index;
         }
@@ -2592,7 +2592,7 @@ void ccvaluevector_to_luaval(lua_State* L, const ax::ValueVector& inValue)
         case Value::Type::MAP:
         {
             lua_pushnumber(L, (lua_Number)index);
-            ccvaluemap_to_luaval(L, obj.asValueMap());
+            valuemap_to_luaval(L, obj.asValueMap());
             lua_rawset(L, -3);
             ++index;
         }
@@ -2600,7 +2600,7 @@ void ccvaluevector_to_luaval(lua_State* L, const ax::ValueVector& inValue)
         case Value::Type::INT_KEY_MAP:
         {
             lua_pushnumber(L, (lua_Number)index);
-            ccvaluemapintkey_to_luaval(L, obj.asIntKeyMap());
+            valuemapintkey_to_luaval(L, obj.asIntKeyMap());
             lua_rawset(L, -3);
             ++index;
         }
@@ -2695,7 +2695,7 @@ void mesh_vertex_attrib_to_luaval(lua_State* L, const ax::MeshVertexAttrib& inVa
     lua_rawset(L, -3);
 }
 
-void ccvector_std_string_to_luaval(lua_State* L, const std::vector<std::string>& inValue)
+void strspan_to_luaval(lua_State* L, std::span<const std::string> inValue)
 {
     if (nullptr == L)
         return;
@@ -2704,16 +2704,16 @@ void ccvector_std_string_to_luaval(lua_State* L, const std::vector<std::string>&
 
     int index = 1;
 
-    for (std::string_view value : inValue)
+    for (auto& str : inValue)
     {
         lua_pushnumber(L, (lua_Number)index);
-        lua_pushlstring(L, value.data(), value.length());
+        lua_pushlstring(L, str.c_str(), str.length());
         lua_rawset(L, -3);
         ++index;
     }
 }
 
-void ccvector_int_to_luaval(lua_State* L, const std::vector<int>& inValue)
+void intspan_to_luaval(lua_State* L, std::span<const int> inValue)
 {
     if (nullptr == L)
         return;
@@ -2730,7 +2730,7 @@ void ccvector_int_to_luaval(lua_State* L, const std::vector<int>& inValue)
     }
 }
 
-void ccvector_float_to_luaval(lua_State* L, const std::vector<float>& inValue)
+void floatspan_to_luaval(lua_State* L, std::span<const float> inValue)
 {
     if (nullptr == L)
         return;
@@ -2747,7 +2747,7 @@ void ccvector_float_to_luaval(lua_State* L, const std::vector<float>& inValue)
     }
 }
 
-void ccvector_ushort_to_luaval(lua_State* L, const std::vector<unsigned short>& inValue)
+void ushortspan_to_luaval(lua_State* L, std::span<unsigned short> inValue)
 {
     if (nullptr == L)
         return;
@@ -2805,7 +2805,7 @@ void texParams_to_luaval(lua_State* L, const ax::Texture2D::TexParams& inValue)
     lua_rawset(L, -3);
 }
 
-void std_vector_vec3_to_luaval(lua_State* L, const std::vector<ax::Vec3>& inValue)
+void vec3span_to_luaval(lua_State* L, std::span<const ax::Vec3> inValue)
 {
     if (nullptr == L)
         return;

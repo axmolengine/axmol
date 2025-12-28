@@ -4669,7 +4669,7 @@ int lua_ax_extension_Manifest_getSearchPaths(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getSearchPaths();
-        ccvector_std_string_to_luaval(tolua_S, ret);
+        strspan_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Manifest:getSearchPaths",argc, 0);

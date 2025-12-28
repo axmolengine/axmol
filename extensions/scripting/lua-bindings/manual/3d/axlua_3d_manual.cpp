@@ -623,7 +623,7 @@ int axlua_3d_Bundle3D_getTrianglesList(lua_State* L)
         }
 
         std::vector<ax::Vec3> ret = ax::Bundle3D::getTrianglesList(arg0);
-        std_vector_vec3_to_luaval(L, ret);
+        vec3span_to_luaval(L, ret);
         return 1;
     }
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Bundle3D:getTrianglesList", argc, 1);

@@ -6016,7 +6016,7 @@ int lua_ax_studio_DisplayManager_getDecorativeDisplayList(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getDecorativeDisplayList();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:getDecorativeDisplayList",argc, 0);
@@ -10412,7 +10412,7 @@ int lua_ax_studio_ArmatureDataManager_getArmatureDatas(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getArmatureDatas();
-        ccmap_string_key_to_luaval(tolua_S, ret);
+        axmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:getArmatureDatas",argc, 0);
@@ -10459,7 +10459,7 @@ int lua_ax_studio_ArmatureDataManager_getAnimationDatas(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getAnimationDatas();
-        ccmap_string_key_to_luaval(tolua_S, ret);
+        axmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:getAnimationDatas",argc, 0);
@@ -10506,7 +10506,7 @@ int lua_ax_studio_ArmatureDataManager_getTextureDatas(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getTextureDatas();
-        ccmap_string_key_to_luaval(tolua_S, ret);
+        axmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:getTextureDatas",argc, 0);
@@ -11029,7 +11029,7 @@ int lua_ax_studio_Armature_getBoneDic(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getBoneDic();
-        ccmap_string_key_to_luaval(tolua_S, ret);
+        axmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:getBoneDic",argc, 0);
@@ -16608,7 +16608,7 @@ int lua_ax_studio_Frame_getEasingParams(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getEasingParams();
-        ccvector_float_to_luaval(tolua_S, ret);
+        floatspan_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Frame:getEasingParams",argc, 0);
@@ -20593,7 +20593,7 @@ int lua_ax_studio_Timeline_getFrames(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getFrames();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Timeline:getFrames",argc, 0);
@@ -22359,7 +22359,7 @@ int lua_ax_studio_ActionTimeline_getTimelines(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getTimelines();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:getTimelines",argc, 0);
@@ -23529,7 +23529,7 @@ int lua_ax_studio_BoneNode_getChildBones(lua_State* tolua_S)
     do {
         if (argc == 0) {
             ax::Vector<cocostudio::timeline::BoneNode *>& ret = obj->getChildBones();
-            ccvector_to_luaval(tolua_S, ret);
+            axvector_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -23537,7 +23537,7 @@ int lua_ax_studio_BoneNode_getChildBones(lua_State* tolua_S)
     do {
         if (argc == 0) {
             const ax::Vector<cocostudio::timeline::BoneNode *>& ret = obj->getChildBones();
-            ccvector_to_luaval(tolua_S, ret);
+            axvector_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -23633,7 +23633,7 @@ int lua_ax_studio_BoneNode_getAllSubBones(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getAllSubBones();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:getAllSubBones",argc, 0);
@@ -23810,7 +23810,7 @@ int lua_ax_studio_BoneNode_getVisibleSkins(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getVisibleSkins();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:getVisibleSkins",argc, 0);
@@ -23847,7 +23847,7 @@ int lua_ax_studio_BoneNode_getSkins(lua_State* tolua_S)
     do {
         if (argc == 0) {
             ax::Vector<ax::Node *>& ret = obj->getSkins();
-            ccvector_to_luaval(tolua_S, ret);
+            axvector_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -23855,7 +23855,7 @@ int lua_ax_studio_BoneNode_getSkins(lua_State* tolua_S)
     do {
         if (argc == 0) {
             const ax::Vector<ax::Node *>& ret = obj->getSkins();
-            ccvector_to_luaval(tolua_S, ret);
+            axvector_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -23904,7 +23904,7 @@ int lua_ax_studio_BoneNode_getAllSubSkins(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getAllSubSkins();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:getAllSubSkins",argc, 0);
@@ -24653,7 +24653,7 @@ int lua_ax_studio_SkeletonNode_getAllSubBonesMap(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getAllSubBonesMap();
-        ccmap_string_key_to_luaval(tolua_S, ret);
+        axmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SkeletonNode:getAllSubBonesMap",argc, 0);

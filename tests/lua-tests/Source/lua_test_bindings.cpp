@@ -676,7 +676,7 @@ int axlua_ValueTypeJudgeInTable_create(lua_State* L)
     if (argc == 1)
     {
         ax::ValueMap arg0;
-        ok &= luaval_to_ccvaluemap(L, 2, &arg0, "ax.ValueTypeJudgeInTable:create");
+        ok &= luaval_to_valuemap(L, 2, &arg0, "ax.ValueTypeJudgeInTable:create");
         if (!ok)
             return 0;
         ax::ValueTypeJudgeInTable* ret = ax::ValueTypeJudgeInTable::create(arg0);

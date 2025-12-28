@@ -913,7 +913,7 @@ int axlua_Sequence_create(lua_State* tolua_S)
 
         if (1 == argc && tolua_istable(tolua_S, 2, 0, &tolua_err))
         {
-            luaval_to_ccvector(tolua_S, 2, &array, "ax.Sequence:create");
+            luaval_to_axvector(tolua_S, 2, &array, "ax.Sequence:create");
         }
         else
         {
@@ -1762,7 +1762,7 @@ static int axlua_Spawn_create(lua_State* tolua_S)
 
         if (1 == argc && tolua_istable(tolua_S, 2, 0, &tolua_err))
         {
-            luaval_to_ccvector(tolua_S, 2, &array, "ax.Spawn:create");
+            luaval_to_axvector(tolua_S, 2, &array, "ax.Spawn:create");
         }
         else
         {
@@ -2637,7 +2637,7 @@ static int toaxlua_LayerMultiplex_create(lua_State* tolua_S)
 
     if (argc > 0)
     {
-        if (luavals_variadic_to_ccvector(tolua_S, argc, &arg0))
+        if (luavals_variadic_to_axvector(tolua_S, argc, &arg0))
         {
             LayerMultiplex* tolua_ret = LayerMultiplex::createWithArray(arg0);
             int nID                   = (tolua_ret) ? (int)tolua_ret->_ID : -1;
@@ -5109,7 +5109,7 @@ static int axlua_TMXTiledMap_getPropertiesForGID(lua_State* tolua_S)
         if (!ok)
             return 0;
         ax::Value ret = obj->getPropertiesForGID(arg0);
-        ccvalue_to_luaval(tolua_S, ret);
+        value_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",

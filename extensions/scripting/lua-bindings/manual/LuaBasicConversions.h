@@ -447,7 +447,7 @@ static inline bool luaval_to_array_of_Point(lua_State* L,
  * otherwise return true.
  */
 template <class T>
-bool luavals_variadic_to_ccvector(lua_State* L, int argc, ax::Vector<T>* ret)
+bool luavals_variadic_to_axvector(lua_State* L, int argc, ax::Vector<T>* ret)
 {
     if (nullptr == L || argc == 0)
         return false;
@@ -483,7 +483,7 @@ bool luavals_variadic_to_ccvector(lua_State* L, int argc, ax::Vector<T>* ret)
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 template <class T>
-bool luaval_to_ccvector(lua_State* L, int lo, ax::Vector<T>* ret, const char* funcName = "")
+bool luaval_to_axvector(lua_State* L, int lo, ax::Vector<T>* ret, const char* funcName = "")
 {
     if (nullptr == L || nullptr == ret)
         return false;
@@ -560,7 +560,7 @@ bool luaval_to_std_vector_int(lua_State* L, int lo, std::vector<int>* ret, const
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 template <class T>
-bool luaval_to_ccmap_string_key(lua_State* L, int lo, ax::Map<std::string, T>* ret, const char* funcName = "")
+bool luaval_to_axmap_string_key(lua_State* L, int lo, ax::Map<std::string, T>* ret, const char* funcName = "")
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -615,7 +615,7 @@ bool luaval_to_ccmap_string_key(lua_State* L, int lo, ax::Map<std::string, T>* r
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the L and ret is not nullptr,otherwise return false.
  */
-extern bool luaval_to_ccvalue(lua_State* L, int lo, ax::Value* ret, const char* funcName = "");
+extern bool luaval_to_value(lua_State* L, int lo, ax::Value* ret, const char* funcName = "");
 
 /**
  * Get a ax::ValueMap object from the given acceptable index of stack.
@@ -627,7 +627,7 @@ extern bool luaval_to_ccvalue(lua_State* L, int lo, ax::Value* ret, const char* 
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the type of Lua value at the index is a Lua table, otherwise return false.
  */
-extern bool luaval_to_ccvaluemap(lua_State* L, int lo, ax::ValueMap* ret, const char* funcName = "");
+extern bool luaval_to_valuemap(lua_State* L, int lo, ax::ValueMap* ret, const char* funcName = "");
 
 /**
  * Get a ax::ValueMapIntKey object from the given acceptable index of stack.
@@ -639,7 +639,7 @@ extern bool luaval_to_ccvaluemap(lua_State* L, int lo, ax::ValueMap* ret, const 
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the type of Lua value at the index is a Lua table, otherwise return false.
  */
-extern bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, ax::ValueMapIntKey* ret, const char* funcName = "");
+extern bool luaval_to_valuemapintkey(lua_State* L, int lo, ax::ValueMapIntKey* ret, const char* funcName = "");
 
 /**
  * Get a ax::ValueVector object from the given acceptable index of stack.
@@ -651,7 +651,7 @@ extern bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, ax::ValueMapIntKey*
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the type of Lua value at the index is a Lua table, otherwise return false.
  */
-extern bool luaval_to_ccvaluevector(lua_State* L, int lo, ax::ValueVector* ret, const char* funcName = "");
+extern bool luaval_to_valuevector(lua_State* L, int lo, ax::ValueVector* ret, const char* funcName = "");
 
 /**
  * Get a Type T object from the given acceptable index of stack.
@@ -1034,7 +1034,7 @@ const char* getLuaTypeName(T* ret, const char* defaultTypeName)
  * @param inValue a ax::Vector object.
  */
 template <class T>
-void ccvector_to_luaval(lua_State* L, const ax::Vector<T>& inValue)
+void axvector_to_luaval(lua_State* L, const ax::Vector<T>& inValue)
 {
     lua_newtable(L);
 
@@ -1072,7 +1072,7 @@ void ccvector_to_luaval(lua_State* L, const ax::Vector<T>& inValue)
  * @param v a ax::Map object.
  */
 template <class T>
-void ccmap_string_key_to_luaval(lua_State* L, const ax::StringMap<T>& v)
+void axmap_string_key_to_luaval(lua_State* L, const ax::StringMap<T>& v)
 {
     lua_newtable(L);
 
@@ -1115,7 +1115,7 @@ void ccmap_string_key_to_luaval(lua_State* L, const ax::StringMap<T>& v)
  * @param L the current lua_State.
  * @param inValue a ax::Value object.
  */
-void ccvalue_to_luaval(lua_State* L, const ax::Value& inValue);
+void value_to_luaval(lua_State* L, const ax::Value& inValue);
 
 /**
  * Push a Lua hash table converted from a ax::ValueMap object into the Lua stack.
@@ -1124,7 +1124,7 @@ void ccvalue_to_luaval(lua_State* L, const ax::Value& inValue);
  * @param L the current lua_State.
  * @param inValue a ax::ValueMap object.
  */
-void ccvaluemap_to_luaval(lua_State* L, const ax::ValueMap& inValue);
+void valuemap_to_luaval(lua_State* L, const ax::ValueMap& inValue);
 
 /**
  * Push a Lua hash table converted from a ax::ValueMapIntKey object into the Lua stack.
@@ -1133,7 +1133,7 @@ void ccvaluemap_to_luaval(lua_State* L, const ax::ValueMap& inValue);
  * @param L the current lua_State.
  * @param inValue a ax::ValueMapIntKey object.
  */
-void ccvaluemapintkey_to_luaval(lua_State* L, const ax::ValueMapIntKey& inValue);
+void valuemapintkey_to_luaval(lua_State* L, const ax::ValueMapIntKey& inValue);
 
 /**
  * Push a Lua array table converted from a ax::ValueVector object into the Lua stack.
@@ -1142,7 +1142,7 @@ void ccvaluemapintkey_to_luaval(lua_State* L, const ax::ValueMapIntKey& inValue)
  * @param L the current lua_State.
  * @param inValue a ax::ValueVector object.
  */
-void ccvaluevector_to_luaval(lua_State* L, const ax::ValueVector& inValue);
+void valuespan_to_luaval(lua_State* L, std::span<const Value> inValue);
 
 /**@}**/
 
@@ -1194,7 +1194,7 @@ void mesh_vertex_attrib_to_luaval(lua_State* L, const ax::MeshVertexAttrib& inVa
  * @param L the current lua_State.
  * @param inValue a std::vector<std::string> value.
  */
-void ccvector_std_string_to_luaval(lua_State* L, const std::vector<std::string>& inValue);
+void strspan_to_luaval(lua_State* L, std::span<const std::string> inValue);
 
 /**
  * Push a Lua array table converted from a std::vector<int> into the Lua stack.
@@ -1203,7 +1203,7 @@ void ccvector_std_string_to_luaval(lua_State* L, const std::vector<std::string>&
  * @param L the current lua_State.
  * @param inValue a std::vector<int> value.
  */
-void ccvector_int_to_luaval(lua_State* L, const std::vector<int>& inValue);
+void intspan_to_luaval(lua_State* L, std::span<const int> inValue);
 
 /**
  * Push a Lua array table converted from a std::vector<float> into the Lua stack.
@@ -1212,7 +1212,7 @@ void ccvector_int_to_luaval(lua_State* L, const std::vector<int>& inValue);
  * @param L the current lua_State.
  * @param inValue a std::vector<float> value.
  */
-void ccvector_float_to_luaval(lua_State* L, const std::vector<float>& inValue);
+void floatspan_to_luaval(lua_State* L, std::span<const float> inValue);
 
 /**
  * Push a Lua array table converted from a std::vector<unsigned short> into the Lua stack.
@@ -1221,7 +1221,7 @@ void ccvector_float_to_luaval(lua_State* L, const std::vector<float>& inValue);
  * @param L the current lua_State.
  * @param inValue a std::vector<float> value.
  */
-void ccvector_ushort_to_luaval(lua_State* L, const std::vector<unsigned short>& inValue);
+void ushortspan_to_luaval(lua_State* L, std::span<unsigned short> inValue);
 
 /**
  * Push a table converted from a ax::Quaternion object into the Lua stack.
@@ -1249,7 +1249,7 @@ void texParams_to_luaval(lua_State* L, const ax::Texture2D::TexParams& inValue);
  * @param L the current lua_State.
  * @param inValue a std::vector<ax::Vec3> value.
  */
-void std_vector_vec3_to_luaval(lua_State* L, const std::vector<ax::Vec3>& inValue);
+void vec3span_to_luaval(lua_State* L, std::span<const ax::Vec3> inValue);
 
 /**
  * Push a Lua dict table converted from a std::map<std::string, std::string> into the Lua stack.

@@ -690,54 +690,54 @@ public:
     }
 
     /// Get node group size
-    static Vec2 getNodeGroupSize(const std::vector<ax::Node*>& nodes);
+    static Vec2 getNodeGroupSize(std::span<Node* const> nodes);
 
-    static Vec2 getNodeGroupScaledSize(const std::vector<ax::Node*>& nodes);
+    static Vec2 getNodeGroupScaledSize(std::span<Node* const> nodes);
 
     /// Set nodes group size
-    static void setNodeGroupSize(const std::vector<ax::Node*>& nodes, const Vec2& newSize);
+    static void setNodeGroupSize(std::span<Node* const> nodes, const Vec2& newSize);
 
     /// Get Node group left
-    static float getNodeGroupLeft(const std::vector<ax::Node*>& nodes);
+    static float getNodeGroupLeft(std::span<Node* const> nodes);
 
     /// Get node group top
-    static float getNodeGroupTop(const std::vector<ax::Node*>& nodes);
+    static float getNodeGroupTop(std::span<Node* const> nodes);
 
     /// Get node group right
-    static float getNodeGroupRight(const std::vector<ax::Node*>& nodes);
+    static float getNodeGroupRight(std::span<Node* const> nodes);
 
     /// Get node group bottom
-    static float getNodeGroupBottom(const std::vector<ax::Node*>& nodes);
+    static float getNodeGroupBottom(std::span<Node* const> nodes);
 
     /*
     ** setNodeGroupLeft
     **
     */
-    static void setNodeGroupLeft(const std::vector<ax::Node*>& nodes, float left);
+    static void setNodeGroupLeft(std::span<Node* const> nodes, float left);
 
     /*
     ** setNodeGroupLeft
     **
     */
-    static void setNodeGroupTop(const std::vector<ax::Node*>& nodes, float top);
+    static void setNodeGroupTop(std::span<Node* const> nodes, float top);
 
-    static void setNodeGroupLT(const std::vector<ax::Node*>& nodes, const ax::Vec2& p);
-
-    /*
-    ** setNodeGroupRight
-    **
-    */
-    static void setNodeGroupRight(const std::vector<ax::Node*>& nodes, float right);
+    static void setNodeGroupLT(std::span<Node* const> nodes, const ax::Vec2& p);
 
     /*
     ** setNodeGroupRight
     **
     */
-    static void setNodeGroupBottom(const std::vector<ax::Node*>& nodes, float bottom);
+    static void setNodeGroupRight(std::span<Node* const> nodes, float right);
+
+    /*
+    ** setNodeGroupRight
+    **
+    */
+    static void setNodeGroupBottom(std::span<Node* const> nodes, float bottom);
 
     //// move node group, use UI direction
-    static void moveNodeGroupHorizontally(const std::vector<ax::Node*>& nodes, float delta);
-    static void moveNodeGroupVertically(const std::vector<ax::Node*>& nodes, float delta);
+    static void moveNodeGroupHorizontally(std::span<Node* const> nodes, float delta);
+    static void moveNodeGroupVertically(std::span<Node* const> nodes, float delta);
 
     /* @brief: group layout and alignment
     ** @remark:
@@ -746,79 +746,79 @@ public:
     /// Center horiz to parent
     /// </summary>
     /// <param name="nodes"></param>
-    static void centerHorizontally(const std::vector<ax::Node*>& nodes);
+    static void centerHorizontally(std::span<Node* const> nodes);
 
     /// <summary>
     /// Center vertical to parent
     /// </summary>
     /// <param name="nodes"></param>
-    static void centerVertically(const std::vector<ax::Node*>& nodes);
+    static void centerVertically(std::span<Node* const> nodes);
 
     /// <summary>
     /// Center to parent
     /// </summary>
     /// <param name="nodes"></param>
-    static void centerToParent(const std::vector<ax::Node*>& nodes);
+    static void centerToParent(std::span<Node* const> nodes);
 
     /// <summary>
     /// Align lefts
     /// </summary>
     /// <param name="nodes"></param>
-    static void alignLefts(const std::vector<ax::Node*>& nodes);
+    static void alignLefts(std::span<Node* const> nodes);
 
     /// <summary>
     /// Align rights
     /// </summary>
     /// <param name="nodes"></param>
-    static void alignRights(const std::vector<ax::Node*>& nodes);
+    static void alignRights(std::span<Node* const> nodes);
 
     /// <summary>
     /// Align tops
     /// </summary>
     /// <param name="nodes"></param>
-    static void alignTops(const std::vector<ax::Node*>& nodes);
+    static void alignTops(std::span<Node* const> nodes);
 
     /// <summary>
     /// Align bottoms
     /// </summary>
     /// <param name="nodes"></param>
-    static void alignBottoms(const std::vector<ax::Node*>& nodes);
+    static void alignBottoms(std::span<Node* const> nodes);
 
     /// <summary>
     /// Align horiz
     /// </summary>
     /// <param name="nodes"></param>
-    static void alignHorizontals(const std::vector<ax::Node*>& nodes);
+    static void alignHorizontals(std::span<Node* const> nodes);
 
     /// <summary>
     /// Align vertical
     /// </summary>
     /// <param name="nodes"></param>
-    static void alignVerticals(const std::vector<ax::Node*>& nodes);
+    static void alignVerticals(std::span<Node* const> nodes);
 
     /// <summary>
     /// Align centers
     /// </summary>
     /// <param name="nodes"></param>
-    static void alignCenters(const std::vector<ax::Node*>& nodes);
+    static void alignCenters(std::span<Node* const> nodes);
 
     /// <summary>
     /// Make same width
     /// </summary>
     /// <param name="nodes"></param>
-    static void makeSameWidth(const std::vector<ax::Node*>& nodes);
+    static void makeSameWidth(std::span<Node* const> nodes);
 
     /// <summary>
     /// Make same height
     /// </summary>
     /// <param name="nodes"></param>
-    static void makeSameHeight(const std::vector<ax::Node*>& nodes);
+    static void makeSameHeight(std::span<Node* const> nodes);
 
     /// <summary>
     /// Make same size
     /// </summary>
     /// <param name="nodes"></param>
-    static void makeSameSize(const std::vector<ax::Node*>& nodes);
+    static void makeSameSize(std::span<Node* const> nodes);
 
     /// <summary>
     /// Make horiz spacing equal
@@ -860,25 +860,25 @@ public:
     /// Remove horiz spacing
     /// </summary>
     /// <param name="nodes"></param>
-    static void removeHorizontalSpacing(const std::vector<ax::Node*>& nodes);
+    static void removeHorizontalSpacing(std::span<Node* const> nodes);
 
     /// <summary>
     /// Remove Vertical spacing
     /// </summary>
     /// <param name="nodes"></param>
-    static void removeVerticalSpacing(const std::vector<ax::Node*>& nodes);
+    static void removeVerticalSpacing(std::span<Node* const> nodes);
 
     /// <summary>
     /// maybe for internal use
     /// </summary>
     /// <param name="nodes"></param>
-    static void makeHorizontalSpacingEqual(const std::vector<ax::Node*>& nodes, float theSpacing);
+    static void makeHorizontalSpacingEqual(std::span<Node* const> nodes, float theSpacing);
 
     /// <summary>
     /// maybe for internal use
     /// </summary>
     /// <param name="nodes"></param>
-    static void makeVerticalSpacingEqual(const std::vector<ax::Node*>& nodes, float theSpacing);
+    static void makeVerticalSpacingEqual(std::span<Node* const> nodes, float theSpacing);
 
     /// <summary>
     /// CLASS VisibleRect

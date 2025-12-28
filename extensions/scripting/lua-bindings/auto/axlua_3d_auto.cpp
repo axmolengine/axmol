@@ -689,7 +689,7 @@ int lua_ax_3d_Animate3D_setKeyFrameUserInfo(lua_State* tolua_S)
 
         ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Animate3D:setKeyFrameUserInfo");
 
-        ok &= luaval_to_ccvaluemap(tolua_S, 3, &arg1, "ax.Animate3D:setKeyFrameUserInfo");
+        ok &= luaval_to_valuemap(tolua_S, 3, &arg1, "ax.Animate3D:setKeyFrameUserInfo");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Animate3D_setKeyFrameUserInfo'", nullptr);
@@ -1263,7 +1263,7 @@ int lua_ax_3d_TextureCube_getImagePaths(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getImagePaths();
-        ccvector_std_string_to_luaval(tolua_S, ret);
+        strspan_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TextureCube:getImagePaths",argc, 0);
@@ -5265,7 +5265,7 @@ int lua_ax_3d_MeshRenderer_getMeshes(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getMeshes();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:getMeshes",argc, 0);
@@ -6823,7 +6823,7 @@ int lua_ax_3d_Terrain_getHeightData(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getHeightData();
-        ccvector_float_to_luaval(tolua_S, ret);
+        floatspan_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Terrain:getHeightData",argc, 0);

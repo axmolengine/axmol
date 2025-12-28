@@ -7935,7 +7935,7 @@ int lua_ax_base_Node_getChildren(lua_State* tolua_S)
     do {
         if (argc == 0) {
             const ax::Vector<ax::Node *>& ret = obj->getChildren();
-            ccvector_to_luaval(tolua_S, ret);
+            axvector_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -7943,7 +7943,7 @@ int lua_ax_base_Node_getChildren(lua_State* tolua_S)
     do {
         if (argc == 0) {
             ax::Vector<ax::Node *>& ret = obj->getChildren();
-            ccvector_to_luaval(tolua_S, ret);
+            axvector_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -16313,7 +16313,7 @@ int lua_ax_base_AnimationFrame_getUserInfo(lua_State* tolua_S)
     do {
         if (argc == 0) {
             ax::ValueMap& ret = obj->getUserInfo();
-            ccvaluemap_to_luaval(tolua_S, ret);
+            valuemap_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -16321,7 +16321,7 @@ int lua_ax_base_AnimationFrame_getUserInfo(lua_State* tolua_S)
     do {
         if (argc == 0) {
             const ax::ValueMap& ret = obj->getUserInfo();
-            ccvaluemap_to_luaval(tolua_S, ret);
+            valuemap_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -16366,7 +16366,7 @@ int lua_ax_base_AnimationFrame_setUserInfo(lua_State* tolua_S)
     {
         ax::ValueMap arg0;
 
-        ok &= luaval_to_ccvaluemap(tolua_S, 2, &arg0, "ax.AnimationFrame:setUserInfo");
+        ok &= luaval_to_valuemap(tolua_S, 2, &arg0, "ax.AnimationFrame:setUserInfo");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_AnimationFrame_setUserInfo'", nullptr);
@@ -16469,7 +16469,7 @@ int lua_ax_base_AnimationFrame_initWithSpriteFrame(lua_State* tolua_S)
 
         ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.AnimationFrame:initWithSpriteFrame");
 
-        ok &= luaval_to_ccvaluemap(tolua_S, 4, &arg2, "ax.AnimationFrame:initWithSpriteFrame");
+        ok &= luaval_to_valuemap(tolua_S, 4, &arg2, "ax.AnimationFrame:initWithSpriteFrame");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_AnimationFrame_initWithSpriteFrame'", nullptr);
@@ -16511,7 +16511,7 @@ int lua_ax_base_AnimationFrame_create(lua_State* tolua_S)
         ax::ValueMap arg2;
         ok &= luaval_to_object<ax::SpriteFrame>(tolua_S, 2, "ax.SpriteFrame",&arg0, "ax.AnimationFrame:create");
         ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.AnimationFrame:create");
-        ok &= luaval_to_ccvaluemap(tolua_S, 4, &arg2, "ax.AnimationFrame:create");
+        ok &= luaval_to_valuemap(tolua_S, 4, &arg2, "ax.AnimationFrame:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_AnimationFrame_create'", nullptr);
@@ -16973,7 +16973,7 @@ int lua_ax_base_Animation_getFrames(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getFrames();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Animation:getFrames",argc, 0);
@@ -17016,7 +17016,7 @@ int lua_ax_base_Animation_setFrames(lua_State* tolua_S)
     {
         ax::Vector<ax::AnimationFrame *> arg0;
 
-        ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Animation:setFrames");
+        ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.Animation:setFrames");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Animation_setFrames'", nullptr);
@@ -17354,7 +17354,7 @@ int lua_ax_base_Animation_initWithSpriteFrames(lua_State* tolua_S)
     {
         ax::Vector<ax::SpriteFrame *> arg0;
 
-        ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Animation:initWithSpriteFrames");
+        ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.Animation:initWithSpriteFrames");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Animation_initWithSpriteFrames'", nullptr);
@@ -17369,7 +17369,7 @@ int lua_ax_base_Animation_initWithSpriteFrames(lua_State* tolua_S)
         ax::Vector<ax::SpriteFrame *> arg0;
         double arg1;
 
-        ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Animation:initWithSpriteFrames");
+        ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.Animation:initWithSpriteFrames");
 
         ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Animation:initWithSpriteFrames");
         if(!ok)
@@ -17387,7 +17387,7 @@ int lua_ax_base_Animation_initWithSpriteFrames(lua_State* tolua_S)
         double arg1;
         unsigned int arg2;
 
-        ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Animation:initWithSpriteFrames");
+        ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.Animation:initWithSpriteFrames");
 
         ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Animation:initWithSpriteFrames");
 
@@ -17443,7 +17443,7 @@ int lua_ax_base_Animation_initWithAnimationFrames(lua_State* tolua_S)
         double arg1;
         unsigned int arg2;
 
-        ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Animation:initWithAnimationFrames");
+        ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.Animation:initWithAnimationFrames");
 
         ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Animation:initWithAnimationFrames");
 
@@ -17485,7 +17485,7 @@ int lua_ax_base_Animation_create(lua_State* tolua_S)
         if (argc == 2)
         {
             ax::Vector<ax::AnimationFrame *> arg0;
-            ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Animation:create");
+            ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.Animation:create");
             if (!ok) { break; }
             double arg1;
             ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Animation:create");
@@ -17500,7 +17500,7 @@ int lua_ax_base_Animation_create(lua_State* tolua_S)
         if (argc == 3)
         {
             ax::Vector<ax::AnimationFrame *> arg0;
-            ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Animation:create");
+            ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.Animation:create");
             if (!ok) { break; }
             double arg1;
             ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Animation:create");
@@ -17549,7 +17549,7 @@ int lua_ax_base_Animation_createWithSpriteFrames(lua_State* tolua_S)
     if (argc == 1)
     {
         ax::Vector<ax::SpriteFrame *> arg0;
-        ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Animation:createWithSpriteFrames");
+        ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.Animation:createWithSpriteFrames");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Animation_createWithSpriteFrames'", nullptr);
@@ -17563,7 +17563,7 @@ int lua_ax_base_Animation_createWithSpriteFrames(lua_State* tolua_S)
     {
         ax::Vector<ax::SpriteFrame *> arg0;
         double arg1;
-        ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Animation:createWithSpriteFrames");
+        ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.Animation:createWithSpriteFrames");
         ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Animation:createWithSpriteFrames");
         if(!ok)
         {
@@ -17579,7 +17579,7 @@ int lua_ax_base_Animation_createWithSpriteFrames(lua_State* tolua_S)
         ax::Vector<ax::SpriteFrame *> arg0;
         double arg1;
         unsigned int arg2;
-        ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Animation:createWithSpriteFrames");
+        ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.Animation:createWithSpriteFrames");
         ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Animation:createWithSpriteFrames");
         ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Animation:createWithSpriteFrames");
         if(!ok)
@@ -17975,7 +17975,7 @@ int lua_ax_base_Sequence_init(lua_State* tolua_S)
     {
         ax::Vector<ax::FiniteTimeAction *> arg0;
 
-        ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Sequence:init");
+        ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.Sequence:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Sequence_init'", nullptr);
@@ -18630,7 +18630,7 @@ int lua_ax_base_Spawn_init(lua_State* tolua_S)
     {
         ax::Vector<ax::FiniteTimeAction *> arg0;
 
-        ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Spawn:init");
+        ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.Spawn:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Spawn_init'", nullptr);
@@ -32003,7 +32003,7 @@ int lua_ax_base_FileUtils_getSearchPaths(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getSearchPaths();
-        ccvector_std_string_to_luaval(tolua_S, ret);
+        strspan_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:getSearchPaths",argc, 0);
@@ -32050,7 +32050,7 @@ int lua_ax_base_FileUtils_getOriginalSearchPaths(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getOriginalSearchPaths();
-        ccvector_std_string_to_luaval(tolua_S, ret);
+        strspan_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:getOriginalSearchPaths",argc, 0);
@@ -32341,7 +32341,7 @@ int lua_ax_base_FileUtils_getValueMapFromFile(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getValueMapFromFile(arg0);
-        ccvaluemap_to_luaval(tolua_S, ret);
+        valuemap_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:getValueMapFromFile",argc, 1);
@@ -32394,7 +32394,7 @@ int lua_ax_base_FileUtils_getValueMapFromData(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getValueMapFromData(arg0, arg1);
-        ccvaluemap_to_luaval(tolua_S, ret);
+        valuemap_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:getValueMapFromData",argc, 2);
@@ -32438,7 +32438,7 @@ int lua_ax_base_FileUtils_writeToFile(lua_State* tolua_S)
         ax::ValueMap arg0;
         std::string_view arg1;
 
-        ok &= luaval_to_ccvaluemap(tolua_S, 2, &arg0, "ax.FileUtils:writeToFile");
+        ok &= luaval_to_valuemap(tolua_S, 2, &arg0, "ax.FileUtils:writeToFile");
 
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.FileUtils:writeToFile");
         if(!ok)
@@ -32544,7 +32544,7 @@ int lua_ax_base_FileUtils_writeValueMapToFile(lua_State* tolua_S)
         ax::ValueMap arg0;
         std::string_view arg1;
 
-        ok &= luaval_to_ccvaluemap(tolua_S, 2, &arg0, "ax.FileUtils:writeValueMapToFile");
+        ok &= luaval_to_valuemap(tolua_S, 2, &arg0, "ax.FileUtils:writeValueMapToFile");
 
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.FileUtils:writeValueMapToFile");
         if(!ok)
@@ -32597,7 +32597,7 @@ int lua_ax_base_FileUtils_writeValueVectorToFile(lua_State* tolua_S)
         ax::ValueVector arg0;
         std::string_view arg1;
 
-        ok &= luaval_to_ccvaluevector(tolua_S, 2, &arg0, "ax.FileUtils:writeValueVectorToFile");
+        ok &= luaval_to_valuevector(tolua_S, 2, &arg0, "ax.FileUtils:writeValueVectorToFile");
 
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.FileUtils:writeValueVectorToFile");
         if(!ok)
@@ -32656,7 +32656,7 @@ int lua_ax_base_FileUtils_getValueVectorFromFile(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getValueVectorFromFile(arg0);
-        ccvaluevector_to_luaval(tolua_S, ret);
+        valuespan_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:getValueVectorFromFile",argc, 1);
@@ -33123,7 +33123,7 @@ int lua_ax_base_FileUtils_listFiles(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->listFiles(arg0);
-        ccvector_std_string_to_luaval(tolua_S, ret);
+        strspan_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:listFiles",argc, 1);
@@ -46576,7 +46576,7 @@ int lua_ax_base_ActionManager_pauseAllRunningActions(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->pauseAllRunningActions();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ActionManager:pauseAllRunningActions",argc, 0);
@@ -46619,7 +46619,7 @@ int lua_ax_base_ActionManager_resumeTargets(lua_State* tolua_S)
     {
         ax::Vector<ax::Node *> arg0;
 
-        ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.ActionManager:resumeTargets");
+        ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.ActionManager:resumeTargets");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ActionManager_resumeTargets'", nullptr);
@@ -62783,7 +62783,7 @@ int lua_ax_base_LayerMultiplex_initWithArray(lua_State* tolua_S)
     {
         ax::Vector<ax::Node *> arg0;
 
-        ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.LayerMultiplex:initWithArray");
+        ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.LayerMultiplex:initWithArray");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerMultiplex_initWithArray'", nullptr);
@@ -65367,7 +65367,7 @@ int lua_ax_base_MenuItemToggle_setSubItems(lua_State* tolua_S)
     {
         ax::Vector<ax::MenuItem *> arg0;
 
-        ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.MenuItemToggle:setSubItems");
+        ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.MenuItemToggle:setSubItems");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_MenuItemToggle_setSubItems'", nullptr);
@@ -65821,7 +65821,7 @@ int lua_ax_base_Menu_initWithArray(lua_State* tolua_S)
     {
         ax::Vector<ax::MenuItem *> arg0;
 
-        ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Menu:initWithArray");
+        ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.Menu:initWithArray");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Menu_initWithArray'", nullptr);
@@ -77163,7 +77163,7 @@ int lua_ax_base_ParticleSystem_initWithDictionary(lua_State* tolua_S)
     do {
         if (argc == 2) {
             ax::ValueMap arg0;
-            ok &= luaval_to_ccvaluemap(tolua_S, 2, &arg0, "ax.ParticleSystem:initWithDictionary");
+            ok &= luaval_to_valuemap(tolua_S, 2, &arg0, "ax.ParticleSystem:initWithDictionary");
 
             if (!ok) { break; }
             std::string_view arg1;
@@ -77179,7 +77179,7 @@ int lua_ax_base_ParticleSystem_initWithDictionary(lua_State* tolua_S)
     do {
         if (argc == 1) {
             ax::ValueMap arg0;
-            ok &= luaval_to_ccvaluemap(tolua_S, 2, &arg0, "ax.ParticleSystem:initWithDictionary");
+            ok &= luaval_to_valuemap(tolua_S, 2, &arg0, "ax.ParticleSystem:initWithDictionary");
 
             if (!ok) { break; }
             bool ret = obj->initWithDictionary(arg0);
@@ -77700,7 +77700,7 @@ int lua_ax_base_ParticleSystem_getAllParticleSystems(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = ax::ParticleSystem::getAllParticleSystems();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.ParticleSystem:getAllParticleSystems",argc, 0);
@@ -78595,7 +78595,7 @@ int lua_ax_base_ParticleSystemQuad_create(lua_State* tolua_S)
         if (argc == 1)
         {
             ax::ValueMap arg0;
-            ok &= luaval_to_ccvaluemap(tolua_S, 2, &arg0, "ax.ParticleSystemQuad:create");
+            ok &= luaval_to_valuemap(tolua_S, 2, &arg0, "ax.ParticleSystemQuad:create");
             if (!ok) { break; }
             ax::ParticleSystemQuad* ret = ax::ParticleSystemQuad::create(arg0);
             object_to_luaval<ax::ParticleSystemQuad>(tolua_S, "ax.ParticleSystemQuad",(ax::ParticleSystemQuad*)ret);
@@ -82401,7 +82401,7 @@ int lua_ax_base_ProtectedNode_getProtectedChildren(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getProtectedChildren();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ProtectedNode:getProtectedChildren",argc, 0);
@@ -95446,7 +95446,7 @@ int lua_ax_base_Technique_getPasses(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getPasses();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Technique:getPasses",argc, 0);
@@ -96007,7 +96007,7 @@ int lua_ax_base_Material_getTechniques(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getTechniques();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Material:getTechniques",argc, 0);
@@ -104261,7 +104261,7 @@ int lua_ax_base_AnimationCache_addAnimationsWithDictionary(lua_State* tolua_S)
         ax::ValueMap arg0;
         std::string_view arg1;
 
-        ok &= luaval_to_ccvaluemap(tolua_S, 2, &arg0, "ax.AnimationCache:addAnimationsWithDictionary");
+        ok &= luaval_to_valuemap(tolua_S, 2, &arg0, "ax.AnimationCache:addAnimationsWithDictionary");
 
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.AnimationCache:addAnimationsWithDictionary");
         if(!ok)
@@ -106073,7 +106073,7 @@ int lua_ax_base_TMXObjectGroup_getProperty(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getProperty(arg0);
-        ccvalue_to_luaval(tolua_S, ret);
+        value_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TMXObjectGroup:getProperty",argc, 1);
@@ -106123,7 +106123,7 @@ int lua_ax_base_TMXObjectGroup_getObject(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getObject(arg0);
-        ccvaluemap_to_luaval(tolua_S, ret);
+        valuemap_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TMXObjectGroup:getObject",argc, 1);
@@ -106257,7 +106257,7 @@ int lua_ax_base_TMXObjectGroup_getProperties(lua_State* tolua_S)
     do {
         if (argc == 0) {
             ax::ValueMap& ret = obj->getProperties();
-            ccvaluemap_to_luaval(tolua_S, ret);
+            valuemap_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -106265,7 +106265,7 @@ int lua_ax_base_TMXObjectGroup_getProperties(lua_State* tolua_S)
     do {
         if (argc == 0) {
             const ax::ValueMap& ret = obj->getProperties();
-            ccvaluemap_to_luaval(tolua_S, ret);
+            valuemap_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -106310,7 +106310,7 @@ int lua_ax_base_TMXObjectGroup_setProperties(lua_State* tolua_S)
     {
         ax::ValueMap arg0;
 
-        ok &= luaval_to_ccvaluemap(tolua_S, 2, &arg0, "ax.TMXObjectGroup:setProperties");
+        ok &= luaval_to_valuemap(tolua_S, 2, &arg0, "ax.TMXObjectGroup:setProperties");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXObjectGroup_setProperties'", nullptr);
@@ -106354,7 +106354,7 @@ int lua_ax_base_TMXObjectGroup_getObjects(lua_State* tolua_S)
     do {
         if (argc == 0) {
             ax::ValueVector& ret = obj->getObjects();
-            ccvaluevector_to_luaval(tolua_S, ret);
+            valuespan_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -106362,7 +106362,7 @@ int lua_ax_base_TMXObjectGroup_getObjects(lua_State* tolua_S)
     do {
         if (argc == 0) {
             const ax::ValueVector& ret = obj->getObjects();
-            ccvaluevector_to_luaval(tolua_S, ret);
+            valuespan_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -106407,7 +106407,7 @@ int lua_ax_base_TMXObjectGroup_setObjects(lua_State* tolua_S)
     {
         ax::ValueVector arg0;
 
-        ok &= luaval_to_ccvaluevector(tolua_S, 2, &arg0, "ax.TMXObjectGroup:setObjects");
+        ok &= luaval_to_valuevector(tolua_S, 2, &arg0, "ax.TMXObjectGroup:setObjects");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXObjectGroup_setObjects'", nullptr);
@@ -106524,7 +106524,7 @@ int lua_ax_base_TMXLayerInfo_setProperties(lua_State* tolua_S)
     {
         ax::ValueMap arg0;
 
-        ok &= luaval_to_ccvaluemap(tolua_S, 2, &arg0, "ax.TMXLayerInfo:setProperties");
+        ok &= luaval_to_valuemap(tolua_S, 2, &arg0, "ax.TMXLayerInfo:setProperties");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXLayerInfo_setProperties'", nullptr);
@@ -106578,7 +106578,7 @@ int lua_ax_base_TMXLayerInfo_getProperties(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getProperties();
-        ccvaluemap_to_luaval(tolua_S, ret);
+        valuemap_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TMXLayerInfo:getProperties",argc, 0);
@@ -106995,7 +106995,7 @@ int lua_ax_base_TMXMapInfo_getTileProperties(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getTileProperties();
-        ccvaluemapintkey_to_luaval(tolua_S, ret);
+        valuemapintkey_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TMXMapInfo:getTileProperties",argc, 0);
@@ -107038,7 +107038,7 @@ int lua_ax_base_TMXMapInfo_setTileProperties(lua_State* tolua_S)
     {
         ax::ValueMapIntKey arg0;
 
-        ok &= luaval_to_ccvaluemapintkey(tolua_S, 2, &arg0, "ax.TMXMapInfo:setTileProperties");
+        ok &= luaval_to_valuemapintkey(tolua_S, 2, &arg0, "ax.TMXMapInfo:setTileProperties");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXMapInfo_setTileProperties'", nullptr);
@@ -107664,7 +107664,7 @@ int lua_ax_base_TMXMapInfo_getLayers(lua_State* tolua_S)
     do {
         if (argc == 0) {
             ax::Vector<ax::TMXLayerInfo *>& ret = obj->getLayers();
-            ccvector_to_luaval(tolua_S, ret);
+            axvector_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -107672,7 +107672,7 @@ int lua_ax_base_TMXMapInfo_getLayers(lua_State* tolua_S)
     do {
         if (argc == 0) {
             const ax::Vector<ax::TMXLayerInfo *>& ret = obj->getLayers();
-            ccvector_to_luaval(tolua_S, ret);
+            axvector_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -107717,7 +107717,7 @@ int lua_ax_base_TMXMapInfo_setLayers(lua_State* tolua_S)
     {
         ax::Vector<ax::TMXLayerInfo *> arg0;
 
-        ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.TMXMapInfo:setLayers");
+        ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.TMXMapInfo:setLayers");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXMapInfo_setLayers'", nullptr);
@@ -107761,7 +107761,7 @@ int lua_ax_base_TMXMapInfo_getTilesets(lua_State* tolua_S)
     do {
         if (argc == 0) {
             ax::Vector<ax::TMXTilesetInfo *>& ret = obj->getTilesets();
-            ccvector_to_luaval(tolua_S, ret);
+            axvector_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -107769,7 +107769,7 @@ int lua_ax_base_TMXMapInfo_getTilesets(lua_State* tolua_S)
     do {
         if (argc == 0) {
             const ax::Vector<ax::TMXTilesetInfo *>& ret = obj->getTilesets();
-            ccvector_to_luaval(tolua_S, ret);
+            axvector_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -107814,7 +107814,7 @@ int lua_ax_base_TMXMapInfo_setTilesets(lua_State* tolua_S)
     {
         ax::Vector<ax::TMXTilesetInfo *> arg0;
 
-        ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.TMXMapInfo:setTilesets");
+        ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.TMXMapInfo:setTilesets");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXMapInfo_setTilesets'", nullptr);
@@ -107858,7 +107858,7 @@ int lua_ax_base_TMXMapInfo_getObjectGroups(lua_State* tolua_S)
     do {
         if (argc == 0) {
             ax::Vector<ax::TMXObjectGroup *>& ret = obj->getObjectGroups();
-            ccvector_to_luaval(tolua_S, ret);
+            axvector_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -107866,7 +107866,7 @@ int lua_ax_base_TMXMapInfo_getObjectGroups(lua_State* tolua_S)
     do {
         if (argc == 0) {
             const ax::Vector<ax::TMXObjectGroup *>& ret = obj->getObjectGroups();
-            ccvector_to_luaval(tolua_S, ret);
+            axvector_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -107911,7 +107911,7 @@ int lua_ax_base_TMXMapInfo_setObjectGroups(lua_State* tolua_S)
     {
         ax::Vector<ax::TMXObjectGroup *> arg0;
 
-        ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.TMXMapInfo:setObjectGroups");
+        ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.TMXMapInfo:setObjectGroups");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXMapInfo_setObjectGroups'", nullptr);
@@ -108343,7 +108343,7 @@ int lua_ax_base_TMXMapInfo_getProperties(lua_State* tolua_S)
     do {
         if (argc == 0) {
             ax::ValueMap& ret = obj->getProperties();
-            ccvaluemap_to_luaval(tolua_S, ret);
+            valuemap_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -108351,7 +108351,7 @@ int lua_ax_base_TMXMapInfo_getProperties(lua_State* tolua_S)
     do {
         if (argc == 0) {
             const ax::ValueMap& ret = obj->getProperties();
-            ccvaluemap_to_luaval(tolua_S, ret);
+            valuemap_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -108396,7 +108396,7 @@ int lua_ax_base_TMXMapInfo_setProperties(lua_State* tolua_S)
     {
         ax::ValueMap arg0;
 
-        ok &= luaval_to_ccvaluemap(tolua_S, 2, &arg0, "ax.TMXMapInfo:setProperties");
+        ok &= luaval_to_valuemap(tolua_S, 2, &arg0, "ax.TMXMapInfo:setProperties");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXMapInfo_setProperties'", nullptr);
@@ -109346,7 +109346,7 @@ int lua_ax_base_FastTMXLayer_getProperty(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getProperty(arg0);
-        ccvalue_to_luaval(tolua_S, ret);
+        value_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FastTMXLayer:getProperty",argc, 1);
@@ -109915,7 +109915,7 @@ int lua_ax_base_FastTMXLayer_getProperties(lua_State* tolua_S)
     do {
         if (argc == 0) {
             ax::ValueMap& ret = obj->getProperties();
-            ccvaluemap_to_luaval(tolua_S, ret);
+            valuemap_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -109923,7 +109923,7 @@ int lua_ax_base_FastTMXLayer_getProperties(lua_State* tolua_S)
     do {
         if (argc == 0) {
             const ax::ValueMap& ret = obj->getProperties();
-            ccvaluemap_to_luaval(tolua_S, ret);
+            valuemap_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -109968,7 +109968,7 @@ int lua_ax_base_FastTMXLayer_setProperties(lua_State* tolua_S)
     {
         ax::ValueMap arg0;
 
-        ok &= luaval_to_ccvaluemap(tolua_S, 2, &arg0, "ax.FastTMXLayer:setProperties");
+        ok &= luaval_to_valuemap(tolua_S, 2, &arg0, "ax.FastTMXLayer:setProperties");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXLayer_setProperties'", nullptr);
@@ -110840,7 +110840,7 @@ int lua_ax_base_TMXTileAnimManager_getTasks(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getTasks();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TMXTileAnimManager:getTasks",argc, 0);
@@ -111090,7 +111090,7 @@ int lua_ax_base_FastTMXTiledMap_getProperty(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getProperty(arg0);
-        ccvalue_to_luaval(tolua_S, ret);
+        value_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FastTMXTiledMap:getProperty",argc, 1);
@@ -111140,7 +111140,7 @@ int lua_ax_base_FastTMXTiledMap_getPropertiesForGID(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getPropertiesForGID(arg0);
-        ccvalue_to_luaval(tolua_S, ret);
+        value_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FastTMXTiledMap:getPropertiesForGID",argc, 1);
@@ -111468,7 +111468,7 @@ int lua_ax_base_FastTMXTiledMap_getObjectGroups(lua_State* tolua_S)
     do {
         if (argc == 0) {
             ax::Vector<ax::TMXObjectGroup *>& ret = obj->getObjectGroups();
-            ccvector_to_luaval(tolua_S, ret);
+            axvector_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -111476,7 +111476,7 @@ int lua_ax_base_FastTMXTiledMap_getObjectGroups(lua_State* tolua_S)
     do {
         if (argc == 0) {
             const ax::Vector<ax::TMXObjectGroup *>& ret = obj->getObjectGroups();
-            ccvector_to_luaval(tolua_S, ret);
+            axvector_to_luaval(tolua_S, ret);
             return 1;
         }
     }while(0);
@@ -111521,7 +111521,7 @@ int lua_ax_base_FastTMXTiledMap_setObjectGroups(lua_State* tolua_S)
     {
         ax::Vector<ax::TMXObjectGroup *> arg0;
 
-        ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.FastTMXTiledMap:setObjectGroups");
+        ok &= luaval_to_axvector(tolua_S, 2, &arg0, "ax.FastTMXTiledMap:setObjectGroups");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXTiledMap_setObjectGroups'", nullptr);
@@ -111575,7 +111575,7 @@ int lua_ax_base_FastTMXTiledMap_getProperties(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getProperties();
-        ccvaluemap_to_luaval(tolua_S, ret);
+        valuemap_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FastTMXTiledMap:getProperties",argc, 0);
@@ -111618,7 +111618,7 @@ int lua_ax_base_FastTMXTiledMap_setProperties(lua_State* tolua_S)
     {
         ax::ValueMap arg0;
 
-        ok &= luaval_to_ccvaluemap(tolua_S, 2, &arg0, "ax.FastTMXTiledMap:setProperties");
+        ok &= luaval_to_valuemap(tolua_S, 2, &arg0, "ax.FastTMXTiledMap:setProperties");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXTiledMap_setProperties'", nullptr);
@@ -111913,7 +111913,7 @@ int lua_ax_base_FastTMXTiledMap_getLayers(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getLayers();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FastTMXTiledMap:getLayers",argc, 0);

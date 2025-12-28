@@ -3158,7 +3158,7 @@ int lua_ax_physics_PhysicsBody_getColliders(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getColliders();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsBody:getColliders",argc, 0);
@@ -11454,7 +11454,7 @@ int lua_ax_physics_PhysicsWorld_getShapes(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getShapes(arg0);
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld:getShapes",argc, 1);
@@ -11551,7 +11551,7 @@ int lua_ax_physics_PhysicsWorld_getAllBodies(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getAllBodies();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld:getAllBodies",argc, 0);
