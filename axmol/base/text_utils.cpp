@@ -60,7 +60,7 @@ std::string_view rtrim(std::string_view s)
  *
  * Return value: the index of the last character that is not c.
  * */
-unsigned int getIndexOfLastNotChar16(const std::vector<char16_t>& str, char16_t c)
+unsigned int getIndexOfLastNotChar16(std::span<const char16_t> str, char16_t c)
 {
     int len = static_cast<int>(str.size());
 

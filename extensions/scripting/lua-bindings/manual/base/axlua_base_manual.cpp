@@ -2662,7 +2662,57 @@ tolua_lerror:
     return 0;
 #endif
 }
+int lua_ax_base_FileUtils_setSearchPaths(lua_State* tolua_S)
+{
+    int argc           = 0;
+    ax::FileUtils* obj = nullptr;
+    bool ok            = true;
 
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S, 1, "ax.FileUtils", 0, &tolua_err))
+        goto tolua_lerror;
+#endif
+
+    obj = (ax::FileUtils*)tolua_tousertype(tolua_S, 1, 0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S, "invalid 'obj' in function 'lua_ax_base_FileUtils_setSearchPaths'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+    if (argc == 1)
+    {
+        std::vector<std::string> arg0;
+
+        ok &= luaval_to_std_vector_string(tolua_S, 2, &arg0, "ax.FileUtils:setSearchPaths");
+        if (!ok)
+        {
+            tolua_error(tolua_S, "invalid arguments in function 'lua_ax_base_FileUtils_setSearchPaths'", nullptr);
+            return 0;
+        }
+        obj->setSearchPaths(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:setSearchPaths",
+               argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+tolua_lerror:
+    tolua_error(tolua_S, "#ferror in function 'lua_ax_base_FileUtils_setSearchPaths'.", &tolua_err);
+#endif
+
+    return 0;
+}
 static int toaxlua_FileUtils_getStringFromFile(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
@@ -3657,6 +3707,10 @@ static void extendFileUtils(lua_State* tolua_S)
 
         lua_pushstring(tolua_S, "getDataFromFile");
         lua_pushcfunction(tolua_S, toaxlua_FileUtils_getDataFromFile);
+        lua_rawset(tolua_S, -3);
+
+        lua_pushstring(tolua_S, "setSearchPaths");
+        lua_pushcfunction(tolua_S, lua_ax_base_FileUtils_setSearchPaths);
         lua_rawset(tolua_S, -3);
     }
     lua_pop(tolua_S, 1);

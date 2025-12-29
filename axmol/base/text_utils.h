@@ -31,6 +31,7 @@
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/tlx/format.hpp"
 #include <vector>
+#include <span>
 #include <string>
 #include <sstream>
 
@@ -229,7 +230,7 @@ AX_DLL size_t eraseUTF8CharAt(std::string& str, size_t utf8CharOffset);
  *  @param c     The character to be searched for.
  *  @returns The index of the last character that is not \p c.
  */
-AX_DLL unsigned int getIndexOfLastNotChar16(const std::vector<char16_t>& str, char16_t c);
+AX_DLL unsigned int getIndexOfLastNotChar16(std::span<const char16_t> str, char16_t c);
 
 /**
  *  @brief Gets char16_t vector from a given utf16 string.

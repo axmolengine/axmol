@@ -750,11 +750,9 @@ void FileUtils::setDefaultResourceRootPath(std::string_view path)
     }
 }
 
-void FileUtils::setSearchPaths(const std::vector<std::string>& searchPaths)
+void FileUtils::updateSearchPaths()
 {
     bool existDefaultRootPath = false;
-    _originalSearchPaths      = searchPaths;
-
     _fullPathCache.clear();
     _fullPathCacheDir.clear();
     _searchPathArray.clear();

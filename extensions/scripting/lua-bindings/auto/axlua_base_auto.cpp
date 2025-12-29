@@ -31755,56 +31755,6 @@ int lua_ax_base_FileUtils_fullPathForDirectory(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_FileUtils_setSearchPaths(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::FileUtils* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.FileUtils",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_FileUtils_setSearchPaths'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
-    {
-        std::vector<std::string> arg0;
-
-        ok &= luaval_to_std_vector_string(tolua_S, 2, &arg0, "ax.FileUtils:setSearchPaths");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_setSearchPaths'", nullptr);
-            return 0;
-        }
-        obj->setSearchPaths(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:setSearchPaths",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FileUtils_setSearchPaths'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_FileUtils_getDefaultResourceRootPath(lua_State* tolua_S)
 {
     int argc = 0;
@@ -33595,7 +33545,6 @@ int lua_register_ax_base_FileUtils(lua_State* tolua_S)
         tolua_function(tolua_S,"fullPathForFilename",lua_ax_base_FileUtils_fullPathForFilename);
         tolua_function(tolua_S,"fullPathFromRelativeFile",lua_ax_base_FileUtils_fullPathFromRelativeFile);
         tolua_function(tolua_S,"fullPathForDirectory",lua_ax_base_FileUtils_fullPathForDirectory);
-        tolua_function(tolua_S,"setSearchPaths",lua_ax_base_FileUtils_setSearchPaths);
         tolua_function(tolua_S,"getDefaultResourceRootPath",lua_ax_base_FileUtils_getDefaultResourceRootPath);
         tolua_function(tolua_S,"setDefaultResourceRootPath",lua_ax_base_FileUtils_setDefaultResourceRootPath);
         tolua_function(tolua_S,"addSearchPath",lua_ax_base_FileUtils_addSearchPath);

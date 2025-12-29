@@ -2340,7 +2340,7 @@ Bundle3D::~Bundle3D()
     clear();
 }
 
-ax::AABB Bundle3D::calculateAABB(const std::vector<float>& vertex, int stride, const IndexArray& indices)
+ax::AABB Bundle3D::calculateAABB(std::span<const float> vertex, int stride, const IndexArray& indices)
 {
     AABB aabb;
     stride /= 4;

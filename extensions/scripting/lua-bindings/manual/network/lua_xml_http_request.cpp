@@ -196,7 +196,7 @@ void LuaMinXmlHttpRequest::_setHttpRequestHeader()
 
     if (!header.empty())
     {
-        _httpRequest->setHeaders(header);
+        _httpRequest->setHeaders(std::move(header));
     }
 }
 

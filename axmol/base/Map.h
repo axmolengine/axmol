@@ -31,6 +31,7 @@
 #include "axmol/base/Macros.h"
 #include "axmol/base/Object.h"
 #include "axmol/tlx/hlookup.hpp"
+#include <span>
 #include <vector>
 
 /**
@@ -332,7 +333,7 @@ public:
      * @param keys Keys of elements to be erased.
      */
     template <typename _K2>
-    void erase(const std::vector<_K2>& keys)
+    void erase(std::span<const _K2>& keys)
     {
         for (const auto& key : keys)
         {

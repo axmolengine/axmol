@@ -32,7 +32,7 @@
 #include "BaseTest.h"
 #include "extensions/axmol-ext.h"
 
-#include <charconv>
+#include "axmol/tlx/charconv.hpp"
 #include <system_error>
 
 using namespace ax;
@@ -135,7 +135,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     auto&& oldSearchPaths = fileUtils->getSearchPaths();
     std::copy(oldSearchPaths.begin(), oldSearchPaths.end(), std::back_inserter(searchPaths));
-    fileUtils->setSearchPaths(searchPaths);
+    fileUtils->setSearchPaths(std::move(searchPaths));
 
     renderView->setDesignResolutionSize(g_designSize.width, g_designSize.height, ResolutionPolicy::SHOW_ALL);
 
@@ -151,8 +151,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     int autotest                   = 0;
     if (autotest_env)
     {
-        const std::from_chars_result r =
-            std::from_chars(autotest_env, autotest_env + std::strlen(autotest_env), autotest);
+        const std::from_chars_result r = tlx::from_chars(std::string_view{autotest_env}, autotest);
         if (r.ec != std::errc{})
             AXLOGW("Could not parse AXMOL_START_AUTOTEST: {}.", std::make_error_code(r.ec).message());
     }

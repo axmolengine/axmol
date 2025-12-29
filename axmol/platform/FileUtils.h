@@ -305,7 +305,23 @@ public:
      *  In js:var setSearchPaths(var jsval);
      *  @lua NA
      */
-    virtual void setSearchPaths(const std::vector<std::string>& searchPaths);
+    template <typename _Range>
+    void setSearchPaths(_Range&& searchPaths)
+    {
+        if constexpr (std::is_same_v<std::remove_cvref_t<_Range>, std::vector<std::string>> &&
+                      std::is_rvalue_reference_v<decltype(searchPaths)>)
+            _originalSearchPaths = std::move(searchPaths);
+        else
+            _originalSearchPaths.assign(std::begin(searchPaths), std::end(searchPaths));
+
+        this->updateSearchPaths();
+    }
+
+    /**
+     * @brief update
+     * since axmol-3.0
+     */
+    virtual void updateSearchPaths();
 
     /**
      * Get default resource root path.
