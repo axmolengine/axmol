@@ -151,7 +151,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     int autotest                   = 0;
     if (autotest_env)
     {
-        const std::from_chars_result r = tlx::from_chars(std::string_view{autotest_env}, autotest);
+        const tlx::from_chars_result r = tlx::from_chars(std::string_view{autotest_env}, autotest);
         if (r.ec != std::errc{})
             AXLOGW("Could not parse AXMOL_START_AUTOTEST: {}.", std::make_error_code(r.ec).message());
     }
