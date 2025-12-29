@@ -82,7 +82,7 @@ public:
      *
      * @param touches A given touches vector.
      */
-    void setTouches(std::span<Touch* const> touches) { _touches.assign_range(touches); };
+    void setTouches(std::span<Touch* const> touches) { _touches.assign(touches.begin(), touches.end()); };
 
 private:
     EventCode _eventCode;
