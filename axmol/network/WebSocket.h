@@ -306,7 +306,7 @@ public:
      *
      * @param headers The string vector of custom-defined headers.
      */
-    template<typename _Range>
+    template <typename _Range>
     void setHeaders(_Range&& headers)
     {
         if constexpr (std::is_same_v<std::remove_cvref_t<_Range>, std::vector<std::string>> &&
