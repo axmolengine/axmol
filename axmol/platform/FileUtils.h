@@ -318,12 +318,6 @@ public:
     }
 
     /**
-     * @brief update
-     * since axmol-3.0
-     */
-    virtual void updateSearchPaths();
-
-    /**
      * Get default resource root path.
      */
     const std::string& getDefaultResourceRootPath() const;
@@ -621,6 +615,12 @@ public:
     virtual std::unique_ptr<IFileStream> openFileStream(std::string_view filePath, IFileStream::Mode mode) const;
 
 protected:
+    /**
+     * @brief update
+     * since axmol-3.0
+     */
+    virtual void updateSearchPaths();
+
     /**
      *  The default constructor.
      */
