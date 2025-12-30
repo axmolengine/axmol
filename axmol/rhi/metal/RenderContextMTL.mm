@@ -165,7 +165,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
     _mtlLayer.displaySyncEnabled = contextAttrs.vsync;
     [contentView setLayer:_mtlLayer];
 #else
-    UIView* view              = (id)surfaceContext;
+    UIView* view              = static_cast<UIView*>(surface);
     _mtlLayer                 = (CAMetalLayer*)[view layer];
     _mtlLayer.device          = mtlDevice;
     _mtlLayer.pixelFormat     = MTLPixelFormatBGRA8Unorm;
