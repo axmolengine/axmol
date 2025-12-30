@@ -485,9 +485,9 @@ struct UniformInfo
     // Represents the logical shader type (float, vec4, mat4, sampler2D, ...).
     uint16_t varType = 0;
 
-    // Size in bytes of a single element (not array total size).
+    // Size in bytes
     // Always <= 65535.
-    uint16_t elementSize = 0;
+    uint16_t sizeBytes = 0;
 
     // Number of array elements (1 for non-array uniforms).
     uint16_t count = 0;

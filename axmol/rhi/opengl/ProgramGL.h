@@ -48,8 +48,6 @@ class ShaderModuleImpl;
  * @{
  */
 
-#define MAX_UNIFORM_NAME_LENGTH 256
-
 /**
  * An OpenGL program.
  */

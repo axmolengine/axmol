@@ -46,11 +46,6 @@ static inline std::string_view _sc_read_name(yasio::fast_ibstream_view* ibs)
     return name;
 }
 
-static uint64_t _make_reflected_id(const UniformInfo& info)
-{
-    return tlx::hash64_bytes(&info.location, sizeof(info.location), static_cast<uint32_t>(info.offset));
-}
-
 }  // namespace
 
 struct SLCReflectContext
@@ -158,7 +153,7 @@ void Program::getUniformLocations(std::string_view name, UniformLocationVector& 
     }
 }
 
-const UniformInfo* Program::getFirstUniformInfo(std::string_view name)
+const UniformInfo* Program::getFirstUniformInfo(std::string_view name) const
 {
     auto it = _shortNameToIds.find(name);
     if (it != _shortNameToIds.end())
@@ -167,6 +162,11 @@ const UniformInfo* Program::getFirstUniformInfo(std::string_view name)
         return &_activeUniformInfos.at(it->second[0]);
     }
     return nullptr;
+}
+
+UniformInfo& Program::getUniformInfo(uint64_t id)
+{
+    return _activeUniformInfos.at(id);
 }
 
 std::size_t Program::getUniformBufferSize() const
@@ -303,46 +303,54 @@ void Program::reflectVertexInputs(SLCReflectContext* context)
 void Program::reflectUniforms(SLCReflectContext* context)
 {
     auto ibs = context->ibs;
+    char nameBuffer[UNIFORM_NAME_BUFFER_SIZE];
     for (int i = 0; i < context->refl->num_uniform_buffers; ++i)
     {
-        auto ub_name       = _sc_read_name(ibs);
-        auto ub_binding    = ibs->read<int32_t>();  // descriptor set/binding index
-        auto ub_size_bytes = ibs->read<uint32_t>();
+        auto ubName      = _sc_read_name(ibs);
+        auto ubBinding   = ibs->read<int32_t>();  // descriptor set/binding index
+        auto ubSizeBytes = ibs->read<uint32_t>();
         ibs->advance(sizeof(sc_refl_ub::array_size));
-        auto ub_num_members = ibs->read<uint16_t>();
+        auto ubNumOfMembers = ibs->read<uint16_t>();
 
         const auto cpuOffset = context->_cpuOffset;
-        context->_cpuOffset += ub_size_bytes;
-        _activeUniformBlockInfos.push_back(UniformBlockInfo{.binding    = ub_binding,
+        context->_cpuOffset += ubSizeBytes;
+        _activeUniformBlockInfos.push_back(UniformBlockInfo{.binding    = ubBinding,
                                                             .cpuOffset  = cpuOffset,
-                                                            .sizeBytes  = ub_size_bytes,
-                                                            .numMembers = ub_num_members,
+                                                            .sizeBytes  = ubSizeBytes,
+                                                            .numMembers = ubNumOfMembers,
                                                             .stage      = context->stage,
-                                                            .name       = ub_name.data()});
-        for (int k = 0; k < ub_num_members; ++k)
+                                                            .name       = ubName.data()});
+
+        size_t ubNameLen      = tlx::strlcpy(nameBuffer, sizeof(nameBuffer), ubName);
+        nameBuffer[ubNameLen] = '.';
+        for (int k = 0; k < ubNumOfMembers; ++k)
         {
             UniformInfo uniform;
-            auto name       = _sc_read_name(ibs);
-            auto offset     = ibs->read<int32_t>();
-            auto size_bytes = static_cast<uint16_t>(ibs->read<uint32_t>());
-            auto array_size = ibs->read<uint16_t>();
-            auto var_type   = ibs->read<uint16_t>();
+            auto name = _sc_read_name(ibs);
 
-            uniform.count           = array_size;
-            uniform.location        = ub_binding;
-            uniform.runtimeLocation = ub_binding;
-            uniform.elementSize     = size_bytes;
+            auto shortNameLen = tlx::strlcpy(nameBuffer + ubNameLen + 1, sizeof(nameBuffer) - (ubNameLen + 1), name);
+
+            const std::string_view uniformFullName(nameBuffer, ubNameLen + shortNameLen + 1);
+            auto offset    = ibs->read<int32_t>();
+            auto sizeBytes = static_cast<uint16_t>(ibs->read<uint32_t>());
+            auto arraySize = ibs->read<uint16_t>();
+            auto varType   = ibs->read<uint16_t>();
+
+            uniform.count           = arraySize;
+            uniform.location        = ubBinding;
+            uniform.runtimeLocation = ubBinding;
+            uniform.sizeBytes       = sizeBytes;
             uniform.offset          = offset;
             uniform.cpuOffset       = cpuOffset;
-            uniform.varType         = var_type;
+            uniform.varType         = varType;
 
-            const auto reflectedId = _make_reflected_id(uniform);
+            const auto reflectedId = makeUniformNameKey(uniformFullName);
             auto ret               = _activeUniformInfos.emplace(reflectedId, uniform);
             assert(ret.second);
 
             addShortNameMapping(name, reflectedId);
         }
-        _uniformBufferSize += ub_size_bytes;
+        _uniformBufferSize += ubSizeBytes;
     }
 }
 
@@ -366,7 +374,7 @@ void Program::reflectSamplers(SLCReflectContext* context)
         uniform.count       = (std::max)(1, static_cast<int>(ibs->read<uint8_t>()));
         uniform.samplerSlot = ibs->read<uint8_t>();
 
-        const auto reflectedId = _make_reflected_id(uniform);
+        const auto reflectedId = makeTextureNameKey(name);
         auto ret               = _activeUniformInfos.emplace(reflectedId, uniform);
         assert(ret.second);
         addShortNameMapping(name, reflectedId);
@@ -452,6 +460,16 @@ void Program::addShortNameMapping(std::string_view shortName, uint64_t reflected
     {
         it->second.push_back(reflectedId);
     }
+}
+
+uint64_t Program::makeUniformNameKey(std::string_view name)
+{
+    return tlx::hash64_str(name, 0);
+}
+
+uint64_t Program::makeTextureNameKey(std::string_view name)
+{
+    return tlx::hash64_str(name, 1);
 }
 
 }  // namespace ax::rhi

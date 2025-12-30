@@ -93,6 +93,8 @@ struct SLCReflectContext;
 using UniformLocationVector = tlx::inlined_vector<rhi::UniformLocation, 2>;
 using UniformBufferVector   = tlx::inlined_vector<rhi::Buffer*, 2>;
 
+inline constexpr int UNIFORM_NAME_BUFFER_SIZE = 128;
+
 /**
  * A program.
  */
@@ -203,12 +205,17 @@ public:
     ShaderModule* getVSModule() const { return _vsModule; }
     ShaderModule* getFSModule() const { return _fsModule; }
 
+    static uint64_t makeUniformNameKey(std::string_view name);
+    static uint64_t makeTextureNameKey(std::string_view name);
+
 protected:
     void setVertexLayout(VertexLayout* layout);
 
     void setProgramIds(uint32_t progType, uint64_t progId);
 
-    const UniformInfo* getFirstUniformInfo(std::string_view name);
+    const UniformInfo* getFirstUniformInfo(std::string_view name) const;
+
+    UniformInfo& getUniformInfo(uint64_t id);
 
     void parseStageReflection(ShaderStage stage, SLCReflectContext* context);
     void resolveBuiltinBindings();

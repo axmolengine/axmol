@@ -117,12 +117,93 @@ void ProgramImpl::compileProgram()
     /// --- create uniform buffers and setup binding point
     auto driver = DriverBase::getInstance();
     deleteUniformBuffers();
+
+#if defined(_WIN32) && AX_GLES_PROFILE
     for (auto& uboInfo : _activeUniformBlockInfos)
     {
         const auto blockIndex = glGetUniformBlockIndex(_program, uboInfo.name.data());
         glUniformBlockBinding(_program, blockIndex, uboInfo.binding);
         _uniformBuffers.push_back(driver->createBuffer(uboInfo.sizeBytes, BufferType::UNIFORM, BufferUsage::DYNAMIC));
     }
+#else
+    if (!_activeUniformBlockInfos.empty())
+    {
+        // Desktop GL or Android GLES, should use block size from driver
+        // see issue: https://github.com/axmolengine/axmol/issues/2987
+        tlx::hash_map<int, UniformBlockInfo*> blockInfoMap;
+        blockInfoMap.reserve(_activeUniformBlockInfos.size());
+        uint32_t cpuOffset = 0;
+        for (auto& uboInfo : _activeUniformBlockInfos)
+        {
+            const auto blockIndex = glGetUniformBlockIndex(_program, uboInfo.name.data());
+            glUniformBlockBinding(_program, blockIndex, uboInfo.binding);
+
+            GLint blockSize{0};
+            glGetActiveUniformBlockiv(_program, blockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
+            uboInfo.sizeBytes = blockSize;
+
+            uboInfo.cpuOffset = cpuOffset;
+            cpuOffset += blockSize;
+
+            blockInfoMap.emplace(blockIndex, &uboInfo);
+
+            _uniformBuffers.push_back(
+                driver->createBuffer(uboInfo.sizeBytes, BufferType::UNIFORM, BufferUsage::DYNAMIC));
+        }
+
+        /*
+         * Adjust offset, cpuOffset, elementSize from Graphics API
+         */
+        GLchar nameBuffer[UNIFORM_NAME_BUFFER_SIZE];
+        GLint nameLen       = 0;
+        GLint numOfUniforms = 0;
+        glGetProgramiv(_program, GL_ACTIVE_UNIFORMS, &numOfUniforms);
+        for (GLint i = 0; i < numOfUniforms; ++i)
+        {
+            GLint count{0};
+            GLenum uniformType{0};
+            glGetActiveUniform(_program, i, UNIFORM_NAME_BUFFER_SIZE, &nameLen, &count, &uniformType, nameBuffer);
+
+            std::string_view uniformFullName{nameBuffer, static_cast<size_t>(nameLen)};
+
+            // Trim name vs_ub.xxx[0] --> vs_ub.xxx
+            const auto pos = uniformFullName.find('[');
+            if (pos != std::string_view::npos)
+                uniformFullName = uniformFullName.substr(0, pos);
+
+            GLint blockIndex{-1};
+            glGetActiveUniformsiv(_program, 1, reinterpret_cast<const GLuint*>(&i), GL_UNIFORM_BLOCK_INDEX,
+                                  &blockIndex);
+            if (blockIndex != -1)
+            {  // member of uniform block
+                auto blockInfo = blockInfoMap[blockIndex];
+                GLint uniformOffset{-1};
+                glGetActiveUniformsiv(_program, 1, reinterpret_cast<const GLuint*>(&i), GL_UNIFORM_OFFSET,
+                                      &uniformOffset);
+                auto elementSize = UtilsGL::getGLDataTypeSize(uniformType);
+                try
+                {
+                    const auto uniformId = makeUniformNameKey(uniformFullName);
+                    auto& uniformInfo    = getUniformInfo(uniformId);
+
+                    if (uniformInfo.cpuOffset != blockInfo->cpuOffset)
+                        uniformInfo.cpuOffset = blockInfo->cpuOffset;
+
+                    if (uniformInfo.offset != uniformOffset)
+                        uniformInfo.offset = uniformOffset;
+
+                    const auto sizeBytes = elementSize * uniformInfo.count;
+                    if (uniformInfo.sizeBytes != sizeBytes)
+                        uniformInfo.sizeBytes = sizeBytes;
+                }
+                catch (const std::exception& /*ex*/)
+                {
+                    AXLOGE("exception occurred when adjust uniform info");
+                }
+            }
+        }
+    }
+#endif
 }
 
 void ProgramImpl::bindUniformBuffers(const uint8_t* buffer, size_t bufferSize)
