@@ -1026,6 +1026,78 @@ int lua_ax_rhi_Program_getFSModule(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_rhi_Program_makeUniformNameKey(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"axrhi.Program",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        std::string_view arg0;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axrhi.Program:makeUniformNameKey");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Program_makeUniformNameKey'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::rhi::Program::makeUniformNameKey(arg0);
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axrhi.Program:makeUniformNameKey",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Program_makeUniformNameKey'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_rhi_Program_makeTextureNameKey(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"axrhi.Program",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        std::string_view arg0;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axrhi.Program:makeTextureNameKey");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Program_makeTextureNameKey'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::rhi::Program::makeTextureNameKey(arg0);
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axrhi.Program:makeTextureNameKey",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Program_makeTextureNameKey'.",&tolua_err);
+#endif
+    return 0;
+}
 static int lua_ax_rhi_Program_finalize(lua_State* tolua_S)
 {
     AXLOGV("luabindings: finalizing LUA object (Program)");
@@ -1046,6 +1118,8 @@ int lua_register_ax_rhi_Program(lua_State* tolua_S)
         tolua_function(tolua_S,"getVertexLayout",lua_ax_rhi_Program_getVertexLayout);
         tolua_function(tolua_S,"getVSModule",lua_ax_rhi_Program_getVSModule);
         tolua_function(tolua_S,"getFSModule",lua_ax_rhi_Program_getFSModule);
+        tolua_function(tolua_S,"makeUniformNameKey", lua_ax_rhi_Program_makeUniformNameKey);
+        tolua_function(tolua_S,"makeTextureNameKey", lua_ax_rhi_Program_makeTextureNameKey);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::rhi::Program).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axrhi.Program";
