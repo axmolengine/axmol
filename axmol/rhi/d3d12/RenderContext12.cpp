@@ -231,7 +231,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface) 
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     RECT clientRect;
-    HWND hwnd = (HWND)surface.ptr;
+    HWND hwnd = static_cast<HWND>(surface);
     GetClientRect(hwnd, &clientRect);
     _screenWidth  = clientRect.right - clientRect.left;
     _screenHeight = clientRect.bottom - clientRect.top;
@@ -261,7 +261,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface) 
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WINUWP
     do
     {
-        ComPtr<IUnknown> surfaceHold = reinterpret_cast<IUnknown*>(surface.ptr);
+        ComPtr<IUnknown> surfaceHold(static_cast<IUnknown*>(surface));
         ComPtr<ISwapChainPanel> swapChainPanel;
         hr = surfaceHold.As(&swapChainPanel);
         AX_BREAK_IF(FAILED(hr));

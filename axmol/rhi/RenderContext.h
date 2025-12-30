@@ -83,7 +83,7 @@ public:
      * @return true
      * @return false
      */
-    virtual bool updateSurface(Handle64 surface, uint32_t width, uint32_t height);
+    virtual bool updateSurface(SurfaceHandle surface, uint32_t width, uint32_t height);
 
     /**
      * Set depthStencil status once

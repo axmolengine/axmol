@@ -574,14 +574,14 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     id<MTLSamplerState> sampler = [_mtlDevice newSamplerStateWithDescriptor:samplerDesc];
     [samplerDesc release];
 
-    return (__bridge SamplerHandle)sampler;
+    return SamplerHandle{(__bridge void*)sampler};
 }
 
 void DriverImpl::destroySampler(SamplerHandle& sampler)
 {
     if (sampler)
     {
-        [reinterpret_cast<id<MTLSamplerState>>(sampler) release];
+        [static_cast<id<MTLSamplerState>>(sampler) release];
         sampler = nullptr;
     }
 }

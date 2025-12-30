@@ -347,15 +347,16 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
         glSamplerParameterf(sampler, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
     }
 
-    return reinterpret_cast<SamplerHandle>(static_cast<uintptr_t>(sampler));
+    return static_cast<uint64_t>(sampler);
 }
 
 void DriverImpl::destroySampler(SamplerHandle& h)
 {
     if (h)
     {
-        GLuint sampler = static_cast<GLuint>(reinterpret_cast<uintptr_t>(h));
+        GLuint sampler = static_cast<GLuint>(h);
         __state->deleteSampler(sampler);
+        h = nullptr;
     }
 }
 

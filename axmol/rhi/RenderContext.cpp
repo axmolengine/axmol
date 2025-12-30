@@ -49,7 +49,7 @@ void RenderContext::setStencilReferenceValue(uint32_t value)
     _stencilReferenceValue = value;
 }
 
-bool RenderContext::updateSurface(Handle64 /*surface*/, uint32_t /*width*/, uint32_t /*height*/)
+bool RenderContext::updateSurface(SurfaceHandle /*surface*/, uint32_t /*width*/, uint32_t /*height*/)
 {
     return true;
 }

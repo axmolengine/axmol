@@ -433,12 +433,12 @@ union Handle64
     void* ptr;
     uint64_t u64;
 
-    Handle64() : u64(0) {}
-    Handle64(std::nullptr_t) : u64(0) {}
-    Handle64(void* p) : ptr(p) {}
-    Handle64(uint64_t v) : u64(v) {}
-    Handle64(const Handle64&) = default;
-    Handle64(Handle64&&)      = default;
+    constexpr Handle64() : u64(0) {}
+    constexpr Handle64(std::nullptr_t) : u64(0) {}
+    constexpr Handle64(void* p) : ptr(p) {}
+    constexpr Handle64(uint64_t v) : u64(v) {}
+    constexpr Handle64(const Handle64&) = default;
+    constexpr Handle64(Handle64&&)      = default;
 
     Handle64& operator=(std::nullptr_t)
     {
@@ -459,7 +459,7 @@ union Handle64
     Handle64& operator=(Handle64&&)      = default;
 
     template <typename _Ty>
-    explicit operator _Ty() const
+    constexpr explicit operator _Ty() const
     {
         using _Uty = std::remove_cv_t<std::remove_reference_t<_Ty>>;
         if constexpr (std::is_pointer_v<_Uty>)
@@ -469,7 +469,7 @@ union Handle64
     }
 
     template <typename _Ty>
-    bool operator==(_Ty&& rhs) const
+    constexpr bool operator==(_Ty&& rhs) const
     {
         using _Uty = std::remove_cv_t<std::remove_reference_t<_Ty>>;
         if constexpr (std::is_pointer_v<_Uty>)
@@ -478,7 +478,7 @@ union Handle64
             return static_cast<_Uty>(u64) == rhs;
     }
 
-    void reset() { u64 = 0; }
+    constexpr void reset() { u64 = 0; }
 };
 
 using SurfaceHandle = Handle64;

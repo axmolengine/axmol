@@ -676,7 +676,7 @@ void DriverImpl::destroySampler(SamplerHandle& h)
     if (h)
     {
         vkDestroySampler(_device, static_cast<VkSampler>(h), nullptr);
-        h.reset();
+        h = nullptr;
     }
 }
 

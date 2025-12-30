@@ -147,7 +147,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
     auto& contextAttrs      = Application::getContextAttrs();
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
     CGSize fbSize;
-    NSView* contentView = (id)surface.ptr;
+    NSView* contentView = static_cast<NSView*>(surface);
     @autoreleasepool
     {
         const NSRect contentRect = [contentView frame];

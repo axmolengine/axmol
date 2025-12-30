@@ -519,7 +519,7 @@ void RenderPipelineImpl::recycleDescriptorState(DescriptorState& state)
     auto it = _descriptorCache.find(state.ownerLayout);
     if (it == _descriptorCache.end())
     {
-        AXLOGD("DescriptorSetCache miss: no pool found for pipelineLayout={}, creating new pool",
+        AXLOGD("DescriptorSetCache miss: no pool found for pipelineLayout=0x{:016x}, creating new pool",
                reinterpret_cast<uint64_t>(state.ownerLayout));
         it = _descriptorCache.emplace(state.ownerLayout, DescriptorPool()).first;
     }

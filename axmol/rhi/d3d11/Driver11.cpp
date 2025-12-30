@@ -387,12 +387,14 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
 
     ID3D11SamplerState* sampler{nullptr};
     _device->CreateSamplerState(&sd, &sampler);
-    return sampler;
+    return SamplerHandle(sampler);
 }
 
 void DriverImpl::destroySampler(SamplerHandle& h)
 {
-    SafeRelease(reinterpret_cast<ID3D11SamplerState*&>(h));
+    auto samplerState = static_cast<ID3D11SamplerState*>(h);
+    SafeRelease(samplerState);
+    h = nullptr;
 }
 
 VertexLayout* DriverImpl::createVertexLayout(VertexLayoutDesc&& desc)
