@@ -432,7 +432,7 @@ void RenderContextImpl::createDescriptorHeaps()
     }
 }
 
-bool RenderContextImpl::updateSurface(void* /*surface*/, uint32_t width, uint32_t height)
+bool RenderContextImpl::updateSurface(SurfaceHandle /*surface*/, uint32_t width, uint32_t height)
 {
     // For D3D12, surface is HWND; if resized, mark for swapchain resize
     if (_screenWidth == width && _screenHeight == height)
