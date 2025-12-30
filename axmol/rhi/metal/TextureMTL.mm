@@ -60,7 +60,7 @@ TextureImpl::~TextureImpl() {}
 
 void TextureImpl::updateSamplerDesc(const SamplerDesc& desc)
 {
-    _mtlSamplerState = (id<MTLSamplerState>)SamplerCache::getInstance()->getSampler(desc);
+    _mtlSamplerState = static_cast<id<MTLSamplerState>>(SamplerCache::getInstance()->getSampler(desc));
 }
 
 void TextureImpl::updateTextureDesc(const TextureDesc& desc)

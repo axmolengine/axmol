@@ -81,8 +81,7 @@ void TextureImpl::invalidate()
 
 void TextureImpl::updateSamplerDesc(const SamplerDesc& desc)
 {
-    this->_nativeSampler =
-        static_cast<GLuint>(reinterpret_cast<uintptr_t>(SamplerCache::getInstance()->getSampler(desc)));
+    this->_nativeSampler = static_cast<GLuint>(SamplerCache::getInstance()->getSampler(desc));
 }
 
 void TextureImpl::ensureNativeTexture(size_t imageSize)
