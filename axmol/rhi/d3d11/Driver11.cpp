@@ -277,9 +277,9 @@ HRESULT DriverImpl::createD3DDevice(int requestDriverType, int createFlags)
                                &_context);
 }
 
-RenderContext* DriverImpl::createRenderContext(void* surfaceContext)
+RenderContext* DriverImpl::createRenderContext(SurfaceHandle surface)
 {
-    return new RenderContextImpl(this, surfaceContext);
+    return new RenderContextImpl(this, surface);
 }
 
 Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial)

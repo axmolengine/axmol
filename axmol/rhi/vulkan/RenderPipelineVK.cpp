@@ -124,7 +124,7 @@ static inline VkColorComponentFlags toVkColorMask(ColorWriteMask mask)
 static inline uintptr_t makePipelineKey(const rhi::BlendDesc& blendDesc,
                                         const DepthStencilStateImpl* dsState,
                                         void* program,
-                                        void* renderPass,
+                                        VkRenderPass renderPass,
                                         uint32_t vlHash,
                                         uint32_t extendedDynState)
 {
@@ -133,14 +133,14 @@ static inline uintptr_t makePipelineKey(const rhi::BlendDesc& blendDesc,
         rhi::BlendDesc blend{};
         uintptr_t dsHash;
         void* prog;
-        void* pass;
+        uint64_t pass;
         uint32_t vlHash;
         uint32_t extendedDynState;
     };
     HashMe hashMe{.blend            = blendDesc,
                   .dsHash           = dsState->getHash(),
                   .prog             = program,
-                  .pass             = renderPass,
+                  .pass             = reinterpret_cast<uint64_t>(renderPass),
                   .vlHash           = vlHash,
                   .extendedDynState = extendedDynState};
 
@@ -460,7 +460,7 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc,
     }
     else
     {
-        _activePipeline = nullptr;
+        _activePipeline = VK_NULL_HANDLE;
         AXLOGE("vkCreateGraphicsPipelines fail: {}", (int)res);
     }
 }
@@ -520,7 +520,7 @@ void RenderPipelineImpl::recycleDescriptorState(DescriptorState& state)
     if (it == _descriptorCache.end())
     {
         AXLOGD("DescriptorSetCache miss: no pool found for pipelineLayout={}, creating new pool",
-               fmt::ptr(state.ownerLayout));
+               reinterpret_cast<uint64_t>(state.ownerLayout));
         it = _descriptorCache.emplace(state.ownerLayout, DescriptorPool()).first;
     }
 

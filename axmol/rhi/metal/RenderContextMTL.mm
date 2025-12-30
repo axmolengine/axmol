@@ -139,7 +139,7 @@ static MTLCullMode toMTLCullMode(CullMode mode)
 
 }  // namespace
 
-RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
+RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
 {
     _frameBoundarySemaphore = dispatch_semaphore_create(MAX_FRAMES_IN_FLIGHT);
     auto mtlDevice          = driver->getMTLDevice();
@@ -147,7 +147,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
     auto& contextAttrs      = Application::getContextAttrs();
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
     CGSize fbSize;
-    NSView* contentView = (id)surfaceContext;
+    NSView* contentView = (id)surface.ptr;
     @autoreleasepool
     {
         const NSRect contentRect = [contentView frame];

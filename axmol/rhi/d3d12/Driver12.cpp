@@ -522,9 +522,9 @@ void DriverImpl::createDescriptorAllocators()
     _samplerAllocator->setAllowGrow(false);
 }
 
-RenderContext* DriverImpl::createRenderContext(void* surfaceContext)
+RenderContext* DriverImpl::createRenderContext(SurfaceHandle surface)
 {
-    auto context = new RenderContextImpl(this, surfaceContext);
+    auto context = new RenderContextImpl(this, surface);
     Object::assign(_currentRenderContext, context);
     return context;
 }

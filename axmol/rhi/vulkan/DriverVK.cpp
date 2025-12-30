@@ -545,9 +545,9 @@ bool DriverImpl::recreateSurface(const SurfaceCreateInfo& info)
     return true;
 }
 
-RenderContext* DriverImpl::createRenderContext(void* surfaceContext)
+RenderContext* DriverImpl::createRenderContext(SurfaceHandle surface)
 {
-    auto context = new RenderContextImpl(this, static_cast<VkSurfaceKHR>(surfaceContext));
+    auto context = new RenderContextImpl(this, surface);
     Object::assign(_currentRenderContext, context);
     return context;
 }
@@ -668,15 +668,15 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     VkSampler sampler{};
     VkResult vr = vkCreateSampler(_device, &info, nullptr, &sampler);
     VK_VERIFY_RESULT(vr, "vkCreateSampler failed");
-    return sampler;
+    return SamplerHandle(sampler);
 }
 
 void DriverImpl::destroySampler(SamplerHandle& h)
 {  // sampler is cached, so don't need queue
     if (h)
     {
-        vkDestroySampler(_device, (VkSampler)h, nullptr);
-        h = VK_NULL_HANDLE;
+        vkDestroySampler(_device, static_cast<VkSampler>(h), nullptr);
+        h.reset();
     }
 }
 
@@ -788,8 +788,8 @@ void DriverImpl::freeCommandBuffers(VkCommandBuffer* cmds, uint32_t count)
 
 IsolateSubmission DriverImpl::allocateIsolateSubmission()
 {
-    VkCommandBuffer cmd{nullptr};
-    VkFence fence{nullptr};
+    VkCommandBuffer cmd{VK_NULL_HANDLE};
+    VkFence fence{VK_NULL_HANDLE};
 
     allocateCommandBuffers(&cmd, 1);
 
@@ -860,23 +860,23 @@ void DriverImpl::destroyRenderPass(VkRenderPass rp)
         _currentRenderContext->removeCachedPipelines(rp);
 }
 
-void DriverImpl::queueDisposal(VkSampler sampler, uint64_t fenceValue)
+void DriverImpl::disposeSampler(VkSampler sampler, uint64_t fenceValue)
 {
     queueDisposalInternal({.type = DisposableResource::Type::Sampler, .sampler = sampler, .fenceValue = fenceValue});
 }
-void DriverImpl::queueDisposal(VkImage image, uint64_t fenceValue)
+void DriverImpl::disposeImage(VkImage image, uint64_t fenceValue)
 {
     queueDisposalInternal({.type = DisposableResource::Type::Image, .image = image, .fenceValue = fenceValue});
 }
-void DriverImpl::queueDisposal(VkImageView view, uint64_t fenceValue)
+void DriverImpl::disposeImageView(VkImageView view, uint64_t fenceValue)
 {
     queueDisposalInternal({.type = DisposableResource::Type::ImageView, .view = view, .fenceValue = fenceValue});
 }
-void DriverImpl::queueDisposal(VkBuffer buffer, uint64_t fenceValue)
+void DriverImpl::disposeBuffer(VkBuffer buffer, uint64_t fenceValue)
 {
     queueDisposalInternal({.type = DisposableResource::Type::Buffer, .buffer = buffer, .fenceValue = fenceValue});
 }
-void DriverImpl::queueDisposal(VkDeviceMemory memory, uint64_t fenceValue)
+void DriverImpl::disposeMemory(VkDeviceMemory memory, uint64_t fenceValue)
 {
     queueDisposalInternal({.type = DisposableResource::Type::Memory, .memory = memory, .fenceValue = fenceValue});
 }

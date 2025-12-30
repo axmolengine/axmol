@@ -193,7 +193,7 @@ static HRESULT runOnUIThread(const ComPtr<ICoreDispatcher>& dispatcher, _Fty&& f
 
 static constexpr DXGI_FORMAT _AX_SWAPCHAIN_FORMAT = DXGI_FORMAT_R8G8B8A8_UNORM;
 
-RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
+RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
 {
     _driverImpl   = driver;
     _d3d11Context = driver->getContext();
@@ -233,7 +233,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
     HRESULT hr = factory->QueryInterface(IID_PPV_ARGS(&factory2));
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     RECT clientRect;
-    auto hwnd = (HWND)surfaceContext;
+    auto hwnd = (HWND)surface.ptr;
     GetClientRect(hwnd, &clientRect);
     _screenWidth  = clientRect.right - clientRect.left;
     _screenHeight = clientRect.bottom - clientRect.top;
@@ -298,7 +298,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
         do
         {
             // ISwapChainPanel
-            ComPtr<IUnknown> surfaceHold = reinterpret_cast<IUnknown*>(surfaceContext);
+            ComPtr<IUnknown> surfaceHold = reinterpret_cast<IUnknown*>(surface.ptr);
             ComPtr<ISwapChainPanel> swapChainPanel;
             hr = surfaceHold.As(&swapChainPanel);
             AX_BREAK_IF(FAILED(hr));
@@ -418,7 +418,7 @@ RenderContextImpl::~RenderContextImpl()
         _rasterState.Reset();
 }
 
-bool RenderContextImpl::updateSurface(void* /*surface*/, uint32_t width, uint32_t height)
+bool RenderContextImpl::updateSurface(SurfaceHandle /*surface*/, uint32_t width, uint32_t height)
 {
     if (!_swapChain || !_driverImpl || !_screenRT)
         return false;

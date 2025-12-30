@@ -100,11 +100,14 @@ public:
     virtual ~DriverBase() = default;
 
     /**
-     * New a Render Context object, not auto released.
-     * @param surfaceContext, current is win32 HWND or IUnkown*(swapChainPanel)
-     * @return A RenderContext object.
+     * Create a RenderContext (not auto‑released).
+     * @param surfaceHandle Platform-specific surface:
+     *        - Win32: HWND
+     *        - UWP: IUnknown* (SwapChainPanel)
+     *        - Vulkan: VkSurfaceKHR
+     * @return RenderContext instance
      */
-    virtual RenderContext* createRenderContext(void* surfaceContext) = 0;
+    virtual RenderContext* createRenderContext(SurfaceHandle surface) = 0;
 
     /**
      * New a Buffer object, not auto released.

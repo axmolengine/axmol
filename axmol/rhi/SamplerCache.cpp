@@ -61,7 +61,7 @@ void SamplerCache::removeAllSamplers()
 
     for (auto& [_, sampler] : _customSamplers)
         _driver->destroySampler(sampler);
-    for (auto sampler : _builtinSamplers)
+    for (auto&& sampler : _builtinSamplers)
         _driver->destroySampler(sampler);
 
     _customSamplers.clear();

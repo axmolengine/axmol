@@ -33,32 +33,6 @@
 namespace ax::rhi::vk
 {
 
-// Build a robust framebuffer cache key including:
-// - RenderPass handle (value)
-// - Ordered image view handles (contiguous color attachments, optional depth)
-// - Attachment count
-// - Framebuffer width/height
-static uintptr_t makeFramebufferKeyHash(VkRenderPass rp,
-                                        const tlx::pod_vector<VkImageView>& views,
-                                        uint32_t width,
-                                        uint32_t height)
-{
-    // Pack a small POD blob to hash deterministically.
-    struct Header
-    {
-        uintptr_t rp;
-        uint32_t count;
-        uint32_t width;
-        uint32_t height;
-    } hdr{reinterpret_cast<uintptr_t>(rp), static_cast<uint32_t>(views.size()), width, height};
-
-    // Hash header first, then hash the views array in order.
-    uintptr_t h = tlx::hash_bytes(&hdr, sizeof(hdr), 0);
-    if (!views.empty())
-        h = tlx::hash_bytes(views.data(), views.size_bytes(), h);
-    return h;
-}
-
 RenderTargetImpl::RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget)
     : RenderTarget(defaultRenderTarget), _driver(driver)
 {
@@ -85,7 +59,7 @@ void RenderTargetImpl::invalidate()
     _renderPass  = VK_NULL_HANDLE;
     _framebuffer = VK_NULL_HANDLE;
 
-    _attachmentViews.fill(nullptr);
+    _attachmentViews.fill(VK_NULL_HANDLE);
 
     _renderHashSeeds.fill(0);
     _activeHashSeed = 0;
@@ -199,8 +173,8 @@ void RenderTargetImpl::beginRenderPass(VkCommandBuffer cmd,
         else
         {
             _activeHashSeed = _renderHashSeeds[imageIndex] =
-                tlx::hash_bytes(&_attachmentViews[imageIndex], sizeof(VkImageView),
-                                reinterpret_cast<uintptr_t>(_attachmentViews[DepthViewIndex]));
+                tlx::hash64_bytes(&_attachmentViews[imageIndex], sizeof(VkImageView),
+                                  reinterpret_cast<uint64_t>(_attachmentViews[DepthViewIndex]));
         }
     }
     else
@@ -236,7 +210,7 @@ void RenderTargetImpl::beginRenderPass(VkCommandBuffer cmd,
                 }
             }
 
-            _activeHashSeed = XXH64(&_attachmentViews[0], sizeof(_attachmentViews), 0);
+            _activeHashSeed = tlx::hash64_bytes(&_attachmentViews[0], sizeof(_attachmentViews));
 
             _dirtyFlags = TargetBufferFlags::NONE;
         }
@@ -340,7 +314,7 @@ void RenderTargetImpl::updateFramebuffer(VkCommandBuffer /*cmd*/, uint32_t image
 {
     AXASSERT(_renderPass, "updateFramebuffer: RenderPass must set");
 
-    auto key = tlx::hash_bytes(&_renderPass, sizeof(_renderPass), _activeHashSeed);
+    auto key = tlx::hash64_bytes(&_renderPass, sizeof(_renderPass), _activeHashSeed);
     if (auto it = _framebufferCache.find(key); it != _framebufferCache.end())
     {
         _framebuffer = it->second;
@@ -398,7 +372,7 @@ void RenderTargetImpl::updateFramebuffer(VkCommandBuffer /*cmd*/, uint32_t image
 
 void RenderTargetImpl::updateRenderPass(const RenderPassDesc& desc, uint32_t imageIndex)
 {
-    const auto key = tlx::hash_bytes(&desc, sizeof(desc), _activeHashSeed);
+    const auto key = tlx::hash64_bytes(&desc, sizeof(desc), _activeHashSeed);
 
     if (auto it = _renderPassCache.find(key); it != _renderPassCache.end())
     {

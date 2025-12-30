@@ -68,7 +68,7 @@ public:
      * Create a RenderContext object, not auto released.
      * @return A RenderContext object.
      */
-    RenderContext* createRenderContext(void*) override;
+    RenderContext* createRenderContext(SurfaceHandle) override;
 
     /**
      * New a Buffer object, not auto released.

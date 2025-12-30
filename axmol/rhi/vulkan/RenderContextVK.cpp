@@ -121,10 +121,10 @@ static void destroySemphores(tlx::pod_vector<VkSemaphore>& semaphores, VkDevice 
 // NOTE: This implementation assumes the existence of a Vulkan driver context that owns device, queues,
 // swapchain, render pass, and descriptor management. Adapt integration points to your driver as needed.
 
-RenderContextImpl::RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface)
+RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
 {
     _driver        = driver;
-    _surface       = surface;
+    _surface       = static_cast<VkSurfaceKHR>(surface);
     _graphicsQueue = driver->getGraphicsQueue();
     _presentQueue  = driver->getPresentQueue();
     _device        = driver->getDevice();
@@ -353,12 +353,12 @@ void RenderContextImpl::createDescriptorPool()
 }
 #endif
 
-bool RenderContextImpl::updateSurface(void* surface, uint32_t width, uint32_t height)
+bool RenderContextImpl::updateSurface(SurfaceHandle surface, uint32_t width, uint32_t height)
 {
-    if (width == _screenWidth && height == _screenHeight && _surface == surface)
+    if (width == _screenWidth && height == _screenHeight && surface == _surface)
         return true;
 
-    _surface        = (VkSurfaceKHR)surface;
+    _surface        = static_cast<VkSurfaceKHR>(surface);
     _screenWidth    = width;
     _screenHeight   = height;
     _swapchainDirty = true;
@@ -661,7 +661,7 @@ void RenderContextImpl::endRenderPass()
     // Reset state cache
     _programState  = nullptr;
     _vertexLayout  = nullptr;
-    _boundPipeline = nullptr;
+    _boundPipeline = VK_NULL_HANDLE;
 
     AX_SAFE_RELEASE_NULL(_indexBuffer);
     AX_SAFE_RELEASE_NULL(_vertexBuffer);

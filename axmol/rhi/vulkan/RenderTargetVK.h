@@ -79,8 +79,8 @@ private:
     // Current attachment views for building renderpass/framebuffer
     std::array<VkImageView, MAX_COLOR_ATTCHMENT + 1> _attachmentViews{};
     // Seed values used to compute framebuffer/render pass hash per swapchain image
-    std::array<uintptr_t, MAX_COLOR_ATTCHMENT> _renderHashSeeds{};
-    uintptr_t _activeHashSeed{0};
+    std::array<uint64_t, MAX_COLOR_ATTCHMENT> _renderHashSeeds{};
+    uint64_t _activeHashSeed{0};
 
     tlx::pod_vector<VkClearValue> _clearValues;
 
@@ -88,8 +88,8 @@ private:
     VkFramebuffer _framebuffer{VK_NULL_HANDLE};  // active framebuffer
 
     // Caches keyed by (desc hash, attachment views hash)
-    tlx::hash_map<uintptr_t, VkRenderPass> _renderPassCache;
-    tlx::hash_map<uintptr_t, VkFramebuffer> _framebufferCache;
+    tlx::hash_map<uint64_t, VkRenderPass> _renderPassCache;
+    tlx::hash_map<uint64_t, VkFramebuffer> _framebufferCache;
 };
 
 }  // namespace ax::rhi::vk

@@ -105,7 +105,7 @@ public:
 
     const VkExtent2D& getSurfaceInitialExtent() const { return _surfaceInitalExtent; }
 
-    RenderContext* createRenderContext(void* surfaceContext) override;
+    RenderContext* createRenderContext(SurfaceHandle surface) override;
     Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial) override;
     Texture* createTexture(const TextureDesc& descriptor) override;
     RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
@@ -160,11 +160,11 @@ public:
     void destroyFramebuffer(VkFramebuffer);
     void destroyRenderPass(VkRenderPass);
 
-    void queueDisposal(VkImage image, uint64_t fenceValue);
-    void queueDisposal(VkImageView view, uint64_t fenceValue);
-    void queueDisposal(VkBuffer buffer, uint64_t fenceValue);
-    void queueDisposal(VkDeviceMemory memory, uint64_t fenceValue);
-    void queueDisposal(VkSampler sampler, uint64_t fenceValue);
+    void disposeImage(VkImage image, uint64_t fenceValue);
+    void disposeImageView(VkImageView view, uint64_t fenceValue);
+    void disposeBuffer(VkBuffer buffer, uint64_t fenceValue);
+    void disposeMemory(VkDeviceMemory memory, uint64_t fenceValue);
+    void disposeSampler(VkSampler sampler, uint64_t fenceValue);
 
     void processDisposalQueue(uint64_t completedFenceValue);
 

@@ -118,7 +118,7 @@ public:
 
     void init();
 
-    RenderContext* createRenderContext(void* surfaceContext) override;
+    RenderContext* createRenderContext(SurfaceHandle surface) override;
     Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial) override;
     Texture* createTexture(const TextureDesc& descriptor) override;
     RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;

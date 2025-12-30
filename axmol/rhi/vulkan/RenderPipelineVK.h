@@ -143,7 +143,7 @@ private:
     VkPipelineColorBlendAttachmentState _activeAttachment{};
     VkPipelineColorBlendStateCreateInfo _activeBlendState{};
 
-    VkPipelineLayout _activePipelineLayout{nullptr};
+    VkPipelineLayout _activePipelineLayout{VK_NULL_HANDLE};
     DescriptorSetLayoutState* _activeDSL{nullptr};
 
     VkPipeline _activePipeline{VK_NULL_HANDLE};

@@ -205,10 +205,10 @@ public:
     ShaderModule* getVSModule() const { return _vsModule; }
     ShaderModule* getFSModule() const { return _fsModule; }
 
+protected:
     static uint64_t makeUniformNameKey(std::string_view name);
     static uint64_t makeTextureNameKey(std::string_view name);
 
-protected:
     void setVertexLayout(VertexLayout* layout);
 
     void setProgramIds(uint32_t progType, uint64_t progId);

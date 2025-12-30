@@ -101,7 +101,7 @@ public:
      * New a RenderContext object.
      * @return A RenderContext object.
      */
-    RenderContext* createRenderContext(void*) override;
+    RenderContext* createRenderContext(SurfaceHandle) override;
 
     /**
      * New a Buffer object.

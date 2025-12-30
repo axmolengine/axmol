@@ -108,17 +108,17 @@ BufferImpl::~BufferImpl()
         for (size_t i = 0; i < _dynamicBuffers.size(); ++i)
         {
             if (_dynamicBuffers[i] != VK_NULL_HANDLE)
-                _driver->queueDisposal(_dynamicBuffers[i], _lastFenceValue);
+                _driver->disposeBuffer(_dynamicBuffers[i], _lastFenceValue);
             if (_dynamicMemories[i] != VK_NULL_HANDLE)
-                _driver->queueDisposal(_dynamicMemories[i], _lastFenceValue);
+                _driver->disposeMemory(_dynamicMemories[i], _lastFenceValue);
         }
     }
     else
     {
         if (_buffer != VK_NULL_HANDLE)
-            _driver->queueDisposal(_buffer, _lastFenceValue);
+            _driver->disposeBuffer(_buffer, _lastFenceValue);
         if (_memory != VK_NULL_HANDLE)
-            _driver->queueDisposal(_memory, _lastFenceValue);
+            _driver->disposeMemory(_memory, _lastFenceValue);
     }
 }
 

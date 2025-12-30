@@ -52,7 +52,7 @@ public:
     /**
      * @param driver The device for which MTLCommandQueue object was created.
      */
-    RenderContextImpl(DriverImpl* driver, void* surfaceContext);
+    RenderContextImpl(DriverImpl* driver, SurfaceHandle surface);
     ~RenderContextImpl();
 
     RenderTarget* getScreenRenderTarget() const override { return (RenderTarget*)_screenRT; }

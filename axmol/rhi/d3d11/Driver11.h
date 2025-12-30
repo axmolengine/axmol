@@ -60,7 +60,7 @@ public:
      * Create a RenderContext object.
      * @return A RenderContext object.
      */
-    RenderContext* createRenderContext(void* surfaceContext) override;
+    RenderContext* createRenderContext(SurfaceHandle surface) override;
 
     /**
      * Create a Buffer object.

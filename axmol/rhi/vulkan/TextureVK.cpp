@@ -141,17 +141,17 @@ void TextureHandle::destroy(DriverImpl* driver, uint64_t fenceValue)
 {
     if (view != VK_NULL_HANDLE)
     {
-        driver->queueDisposal(view, fenceValue);
+        driver->disposeImageView(view, fenceValue);
         view = VK_NULL_HANDLE;
     }
     if (image != VK_NULL_HANDLE)
     {
-        driver->queueDisposal(image, fenceValue);
+        driver->disposeImage(image, fenceValue);
         image = VK_NULL_HANDLE;
     }
     if (memory != VK_NULL_HANDLE)
     {
-        driver->queueDisposal(memory, fenceValue);
+        driver->disposeMemory(memory, fenceValue);
         memory = VK_NULL_HANDLE;
     }
 }
@@ -219,7 +219,7 @@ void TextureImpl::updateSamplerDesc(const SamplerDesc& sampler)
 {
     _desc.samplerDesc = sampler;
 
-    _sampler = (VkSampler)SamplerCache::getInstance()->getSampler(sampler);
+    _sampler = static_cast<VkSampler>(SamplerCache::getInstance()->getSampler(sampler));
     assert(_sampler && "Gets vkCreateSampler failed");
 }
 

@@ -198,7 +198,7 @@ GLint DriverImpl::getDefaultFBO() const
     return _defaultFBO;
 }
 
-RenderContext* DriverImpl::createRenderContext(void*)
+RenderContext* DriverImpl::createRenderContext(SurfaceHandle)
 {
     return new RenderContextImpl(this);
 }

@@ -193,7 +193,7 @@ uint64_t GPUFence::wait() const
     return completeFenceValue;
 }
 
-RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext) : _driver(driver)
+RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface) : _driver(driver)
 {
     _device        = driver->getDevice();
     _graphicsQueue = driver->getGraphicsQueue();
@@ -231,7 +231,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext) :
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     RECT clientRect;
-    HWND hwnd = (HWND)surfaceContext;
+    HWND hwnd = (HWND)surface.ptr;
     GetClientRect(hwnd, &clientRect);
     _screenWidth  = clientRect.right - clientRect.left;
     _screenHeight = clientRect.bottom - clientRect.top;
@@ -261,7 +261,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext) :
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WINUWP
     do
     {
-        ComPtr<IUnknown> surfaceHold = reinterpret_cast<IUnknown*>(surfaceContext);
+        ComPtr<IUnknown> surfaceHold = reinterpret_cast<IUnknown*>(surface.ptr);
         ComPtr<ISwapChainPanel> swapChainPanel;
         hr = surfaceHold.As(&swapChainPanel);
         AX_BREAK_IF(FAILED(hr));

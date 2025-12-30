@@ -91,12 +91,12 @@ public:
     static constexpr int VS_UBO_BINDING_INDEX = 0;
     static constexpr int FS_UBO_BINDING_INDEX = 1;
 
-    RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface);
+    RenderContextImpl(DriverImpl* driver, SurfaceHandle surface);
     ~RenderContextImpl() override;
 
     RenderTarget* getScreenRenderTarget() const override { return (RenderTarget*)_screenRT; }
 
-    bool updateSurface(void* surface, uint32_t width, uint32_t height) override;
+    bool updateSurface(SurfaceHandle surface, uint32_t width, uint32_t height) override;
 
     void setDepthStencilState(DepthStencilState* depthStencilState) override;
     void setRenderPipeline(RenderPipeline* renderPipeline) override;
