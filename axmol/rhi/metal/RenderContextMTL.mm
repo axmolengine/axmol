@@ -197,7 +197,7 @@ RenderContextImpl::~RenderContextImpl()
     dispatch_semaphore_signal(_frameBoundarySemaphore);
 }
 
-bool RenderContextImpl::updateSurface(void* /*surface*/, uint32_t width, uint32_t height)
+bool RenderContextImpl::updateSurface(SurfaceHandle /*surface*/, uint32_t width, uint32_t height)
 {
     [_mtlLayer setDrawableSize:CGSizeMake(width, height)];
     _screenRT->rebuildSwapchainAttachments();

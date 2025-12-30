@@ -57,7 +57,7 @@ public:
 
     RenderTarget* getScreenRenderTarget() const override { return (RenderTarget*)_screenRT; }
 
-    bool updateSurface(void* surface, uint32_t width, uint32_t height) override;
+    bool updateSurface(SurfaceHandle surface, uint32_t width, uint32_t height) override;
 
     /**
      * Set depthStencil status
