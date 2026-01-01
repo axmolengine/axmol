@@ -34,11 +34,6 @@ class DriverImpl;
 class RenderTargetImpl : public RenderTarget
 {
 public:
-    enum
-    {
-        DepthViewIndex = MAX_COLOR_ATTCHMENT,
-    };
-
     using Attachment = TextureImpl*;
 
     RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget);
@@ -77,12 +72,14 @@ private:
     DriverImpl* _driver{nullptr};
 
     // Current attachment views for building renderpass/framebuffer
-    std::array<VkImageView, MAX_COLOR_ATTCHMENT + 1> _attachmentViews{};
+    tlx::inlined_vector<VkImageView, DEFAULT_COLOR_COUNT + 1> _attachmentViews{};
+
     // Seed values used to compute framebuffer/render pass hash per swapchain image
-    std::array<uint64_t, MAX_COLOR_ATTCHMENT> _renderHashSeeds{};
-    uint64_t _activeHashSeed{0};
+    tlx::inlined_vector<uint64_t, DEFAULT_COLOR_COUNT> _renderHashSeeds{};
 
     tlx::pod_vector<VkClearValue> _clearValues;
+
+    uint64_t _activeHashSeed{0};
 
     VkRenderPass _renderPass{VK_NULL_HANDLE};    // active render pass
     VkFramebuffer _framebuffer{VK_NULL_HANDLE};  // active framebuffer

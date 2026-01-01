@@ -33,17 +33,15 @@ class inlined_vector
 
     struct _Vec_val
     {
-        _Vec_val()
-        {
-            reset_uninitialized();
-            ::memset(_Mybuf, 0, sizeof(_Mybuf));
-        }
+        _Vec_val() { reset(); }
 
-        void reset_uninitialized()
+        void reset()
         {
             _Myfirst = reinterpret_cast<_Ty*>(_Mybuf);
             _Mylast  = _Myfirst;
             _Myend   = _Myfirst + _Initial;
+
+            ::memset(_Mybuf, 0, sizeof(_Mybuf));
         }
 
         _Ty* inlined_data() { return reinterpret_cast<_Ty*>(_Mybuf); }
@@ -226,9 +224,12 @@ public:
     template <typename... _Valty>
     _Ty& emplace_back(_Valty&&... vals)
     {
-        _Resize_uninitialized(size() + 1);
+        _Resize(size() + 1, _TLX no_init);
         return *tlx::construct_at(_Mypair._Myval2._Mylast - 1, std::forward<_Valty>(vals)...);
     }
+
+    constexpr void resize(size_t _Newsize) { _Resize(_Newsize, _TLX value_init); }
+    constexpr void resize(size_t _Newsize, const value_type& _Val) { _Resize(_Newsize, _Val); }
 
     void swap(inlined_vector& other)
     {
@@ -569,78 +570,96 @@ private:
         }
     }
 
-    constexpr void _Resize_uninitialized(const size_type _Newsize)
+    template <typename _Ty2>
+    constexpr void _Resize(const size_type _Newsize, const _Ty2& _Val)
     {
         if (_Newsize > max_size())
         {
             _Xlength();
         }
 
-        auto& _My_data = _Mypair._Myval2;
-        if (_Newsize <= capacity())
+        auto& _Al          = _Getal();
+        auto& _My_data     = _Mypair._Myval2;
+        auto& _Myfirst     = _My_data._Myfirst;
+        auto& _Mylast      = _My_data._Mylast;
+        auto& _Myend       = _My_data._Myend;
+        size_type _Oldsize = static_cast<size_type>(_Mylast - _Myfirst);
+        if (_Newsize < _Oldsize)
         {
-            const auto _Newlast = _My_data._Myfirst + _Newsize;
-            if constexpr (!std::is_trivially_destructible_v<_Ty>)
-            {
-                if (_Newlast < _My_data._Mylast)
-                {
-                    for (pointer p = _My_data._Mylast - 1; p >= _Newlast;)
-                        tlx::invoke_dtor(--p);
-                }
-            }
-            _My_data._Mylast = _Newlast;
+            // trim
+            const pointer _Newlast = _Myfirst + _Newsize;
+            _TLX destroy_range(_Newlast, _Mylast, _Al);
+            _Mylast = _Newlast;
+            return;
         }
-        else
+
+        if (_Newsize > _Oldsize)
         {
-            size_type _Oldsize = size();
-            size_type _Newcap  = _Calculate_growth(_Newsize);
+            const auto _Oldcap = static_cast<size_type>(_Myend - _Myfirst);
+            size_type _Newcap  = _Newsize > _Oldcap ? _Calculate_growth(_Newsize) : _Oldcap;
 
-            _Ty* _Newvec  = _Getal().allocate(_Newcap);
-            _Ty* _Newlast = _Newvec;
-
-            // move or copy old elements into new storage
-            if constexpr (!std::is_trivially_copyable_v<_Ty>)
+            if (_Newcap > _Oldcap)
             {
-                size_type i = 0;
-                try
+                auto _Newvec = _Getal().allocate(_Newcap);
+
+                // move or copy old elements into new storage
+                if constexpr (!std::is_trivially_copyable_v<_Ty>)
                 {
-                    for (; i < _Oldsize; ++i)
-                        tlx::construct_at(_Newvec + i, std::move(_My_data._Myfirst[i]));
-                }
-                catch (...)
-                {
-                    if constexpr (!std::is_trivially_destructible_v<_Ty>)
+                    size_type i = 0;
+                    try
                     {
-                        for (size_type j = 0; j < i; ++j)
-                            tlx::invoke_dtor(_Newvec + j);
+                        for (; i < _Oldsize; ++i)
+                            tlx::construct_at(_Newvec + i, std::move(_Myfirst[i]));
                     }
-                    _Getal().deallocate(_Newvec, _Newcap);
-                    throw;
+                    catch (...)
+                    {
+                        if constexpr (!std::is_trivially_destructible_v<_Ty>)
+                        {
+                            for (size_type j = 0; j < i; ++j)
+                                tlx::invoke_dtor(_Newvec + j);
+                        }
+                        _Getal().deallocate(_Newvec, _Newcap);
+                        throw;
+                    }
                 }
+                else
+                {
+                    ::memcpy(_Newvec, _Myfirst, _Oldsize * sizeof(_Ty));
+                }
+
+                // destroy old elements in old storage
+                if constexpr (!std::is_trivially_destructible_v<_Ty>)
+                {
+                    for (size_type i = 0; i < _Oldsize; ++i)
+                        tlx::invoke_dtor(_Myfirst + i);
+                }
+
+                // free old storage if it was heap
+                if (!_My_data.is_inlined())
+                {
+                    _Getal().deallocate(_Myfirst, _Oldcap);
+                }
+
+                // install new storage
+                _Myfirst = _Newvec;
+                _Mylast  = _Newvec + _Oldsize;
+                _Myend   = _Newvec + _Newcap;
+            }
+
+            if constexpr (std::is_same_v<_Ty2, _Ty>)
+            {  // Fill with user value: use memset for 1‑byte POD, construct otherwise
+                _Mylast = _TLX uninitialized_fill_n(_Mylast, _Newsize - _Oldsize, _Val, _Al);
+            }
+            else if constexpr (std::is_same_v<_Ty2, _TLX value_init_t>)
+            {  // Fill with value init: fast-pass
+                _Mylast = _TLX uninitialized_value_construct_n(_Mylast, _Newsize - _Oldsize, _Al);
             }
             else
-            {
-                ::memcpy(_Newvec, _My_data._Myfirst, _Oldsize * sizeof(_Ty));
+            {  // No fill: blazing fast
+                _Mylast = _Myfirst + _Newsize;
             }
-
-            // destroy old elements in old storage
-            if constexpr (!std::is_trivially_destructible_v<_Ty>)
-            {
-                for (size_type i = 0; i < _Oldsize; ++i)
-                    tlx::invoke_dtor(_My_data._Myfirst + i);
-            }
-
-            // free old storage if it was heap
-            if (!_My_data.is_inlined())
-            {
-                _Getal().deallocate(_My_data._Myfirst, static_cast<size_type>(_My_data._Myend - _My_data._Myfirst));
-            }
-
-            // install new storage
-            _My_data._Myfirst = _Newvec;
-            _My_data._Mylast  = _Newvec + _Newsize;
-            _My_data._Myend   = _Newvec + _Newcap;
         }
+        // if _Newsize == _Oldsize, do nothing
     }
 
     constexpr size_type _Calculate_growth(const size_type _Newsize) const
@@ -669,7 +688,7 @@ private:
         auto& _My_data = _Mypair._Myval2;
         if (!_My_data.is_inlined())
             _Getal().deallocate(_My_data._Myfirst, static_cast<size_type>(_My_data._Myend - _My_data._Myfirst));
-        _My_data.reset_uninitialized();
+        _My_data.reset();
     }
 
     static void _Xlength() { _TLX __xlength_error("vector too long"); }

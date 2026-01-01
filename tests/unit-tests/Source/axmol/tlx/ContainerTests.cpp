@@ -494,7 +494,7 @@ TEST_SUITE("tlx/Containers")
         tlx::inlined_vector<int, 2> v;
         v.push_back(1);
         v.push_back(2);
-        v.push_back(3);  // 触发扩容
+        v.push_back(3);
 
         CHECK(v.size() == 3);
         CHECK(v.capacity() >= 3);
@@ -602,10 +602,20 @@ TEST_SUITE("tlx/Containers")
             v.emplace_back(20);
             v.emplace_back(30);  // heap growth
 
+            CHECK((NonTrival1::ctor == 3 && NonTrival1::move_ctor == 2));
+
             CHECK(v.size() == 3);
             CHECK(v[0].value == 10);
             CHECK(v[1].value == 20);
             CHECK(v[2].value == 30);
+
+            v.resize(10);
+            CHECK(v.size() == 10);
+            CHECK(v[9].value == 0);
+
+            const auto dtor = NonTrival1::dtor;
+            v.resize(7);
+            CHECK((NonTrival1::dtor == (dtor + 3)));
         }
 
         CHECK(NonTrival1::ctor >= 3);

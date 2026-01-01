@@ -64,7 +64,7 @@ public:
 
 private:
     ID3D11Device* _device = nullptr;
-    std::array<ID3D11RenderTargetView*, MAX_COLOR_ATTCHMENT> _rtvs{};
+    std::array<ID3D11RenderTargetView*, DEFAULT_COLOR_COUNT> _rtvs{};
     ID3D11DepthStencilView* _dsv = nullptr;
     uint32_t _rtvCuont           = 0;
 };

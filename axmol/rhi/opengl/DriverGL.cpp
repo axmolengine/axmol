@@ -217,9 +217,8 @@ RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* 
 {
     auto rtGL = new RenderTargetImpl(this, false);
     rtGL->bindFrameBuffer();
-    RenderTarget::ColorAttachment colors{{colorAttachment, 0}};
-    rtGL->setColorAttachment(colors);
-    rtGL->setDepthStencilAttachment(depthStencilAttachment);
+    rtGL->setColorTexture(colorAttachment);
+    rtGL->setDepthStencilTexture(depthStencilAttachment);
     return rtGL;
 }
 

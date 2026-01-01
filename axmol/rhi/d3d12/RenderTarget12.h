@@ -42,7 +42,7 @@ class RenderTargetImpl : public RenderTarget
 public:
     enum
     {
-        DepthViewIndex = MAX_COLOR_ATTCHMENT,
+        DepthViewIndex = DEFAULT_COLOR_COUNT,
     };
 
     using Attachment = TextureImpl*;
@@ -73,11 +73,11 @@ private:
     uint64_t _lastFenceValue{0};
     DriverImpl* _driver{nullptr};
 
-    std::array<d3d12::DescriptorHandle*, MAX_COLOR_ATTCHMENT> _rtvsDescriptors{};
+    std::array<d3d12::DescriptorHandle*, DEFAULT_COLOR_COUNT> _rtvsDescriptors{};
     DescriptorHandle* _dsvDescriptor{};
 
     // Current attachment descriptors
-    std::array<D3D12_CPU_DESCRIPTOR_HANDLE, MAX_COLOR_ATTCHMENT> _rtvHandles{};
+    std::array<D3D12_CPU_DESCRIPTOR_HANDLE, DEFAULT_COLOR_COUNT> _rtvHandles{};
     D3D12_CPU_DESCRIPTOR_HANDLE _dsvHandle{};
 
     uint32_t _numRTVs{0};

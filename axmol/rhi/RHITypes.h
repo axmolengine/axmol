@@ -28,11 +28,10 @@
 #include <stdint.h>
 #include <assert.h>
 #include <string>
+#include <bit>
 #include "axmol/tlx/bitmask.hpp"
 
-#define MAX_COLOR_ATTCHMENT 4
-
-#define AX_ARRAYSIZE(A)     (sizeof(A) / sizeof((A)[0]))
+#define AX_ARRAYSIZE(A) (sizeof(A) / sizeof((A)[0]))
 
 namespace ax::rhi
 {
@@ -261,25 +260,28 @@ AX_ENABLE_BITSHIFT_OPS(ColorWriteMask)
 /**
  * Bitmask for selecting render buffers
  */
-enum class TargetBufferFlags : uint8_t
+enum class TargetBufferFlags : uint32_t
 {
-    NONE              = 0x0u,    //!< No buffer selected.
-    COLOR0            = 0x1u,    //!< Color buffer selected.
-    COLOR1            = 0x2u,    //!< Color buffer selected.
-    COLOR2            = 0x4u,    //!< Color buffer selected.
-    COLOR3            = 0x8u,    //!< Color buffer selected.
-    COLOR             = COLOR0,  //!< \deprecated
-    COLOR_ALL         = COLOR0 | COLOR1 | COLOR2 | COLOR3,
-    DEPTH             = 0x10u,                       //!< Depth buffer selected.
-    STENCIL           = 0x20u,                       //!< Stencil buffer selected.
+    NONE              = 0x0u,     //!< No buffer selected.
+    COLOR0            = 1u,       //!< Color buffer selected.
+    COLOR1            = 1u << 1,  //!< Color buffer selected.
+    COLOR2            = 1u << 2,  //!< Color buffer selected.
+    COLOR3            = 1u << 3,  //!< Color buffer selected.
+    COLOR             = COLOR0,   //!< \deprecated
+    COLOR_ALL         = 0x3FFFFFFFu,
+    DEPTH             = 1u << 30,                    //!< Depth buffer selected.
+    STENCIL           = 1u << 31,                    //!< Stencil buffer selected.
     DEPTH_AND_STENCIL = DEPTH | STENCIL,             //!< depth and stencil buffer selected.
     ALL               = COLOR_ALL | DEPTH | STENCIL  //!< Color, depth and stencil buffer selected.
 };
 AX_ENABLE_BITMASK_OPS(TargetBufferFlags)
 
+inline constexpr uint32_t DEFAULT_COLOR_COUNT = 4;
+inline constexpr uint32_t MAX_COLOR_COUNT     = std::popcount((uint32_t)TargetBufferFlags::COLOR_ALL);
+
 inline TargetBufferFlags getMRTColorFlag(size_t index) noexcept
 {
-    assert(index < 4);
+    assert(index < 30);
     return TargetBufferFlags(1u << index);
 }
 

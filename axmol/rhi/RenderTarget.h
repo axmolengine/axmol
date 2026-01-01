@@ -27,6 +27,7 @@ THE SOFTWARE.
 
 #include "axmol/base/Object.h"
 #include "axmol/rhi/Texture.h"
+#include "axmol/tlx/inlined_vector.hpp"
 #include <assert.h>
 
 namespace ax::rhi
@@ -49,9 +50,12 @@ public:
         uint8_t level    = 0;  // level when attached to a texture
         explicit operator bool() const { return texture != nullptr; }
     };
-    typedef RenderBuffer ColorAttachment[MAX_COLOR_ATTCHMENT];
+    using ColorAttachment = tlx::inlined_vector<RenderBuffer, DEFAULT_COLOR_COUNT>;
 
-    RenderTarget(bool defaultRenderTarget) : _defaultRenderTarget(defaultRenderTarget) {}
+    RenderTarget(bool defaultRenderTarget) : _defaultRenderTarget(defaultRenderTarget)
+    {
+        _color.resize(DEFAULT_COLOR_COUNT);
+    }
     virtual ~RenderTarget()
     {
         for (auto colorItem : _color)
@@ -61,39 +65,25 @@ public:
 
     bool isDefaultRenderTarget() const { return _defaultRenderTarget; }
 
-    void setColorAttachment(ColorAttachment attachment)
+    void setColorTexture(Texture* texture, int level = 0, int index = 0)
     {
-        for (int i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
-        {
-            auto colorItem = _color[i];
-            if (colorItem.texture != attachment[i].texture || colorItem.level != attachment[i].level)
-                _dirtyFlags |= getMRTColorFlag(i);
-            AX_SAFE_RELEASE(colorItem.texture);
-        }
-        memcpy(_color, attachment, sizeof(ColorAttachment));
-        for (auto colorItem : _color)
-            AX_SAFE_RETAIN(colorItem.texture);
-    };
-
-    void setColorAttachment(Texture* attachment, int level = 0, int index = 0)
-    {
-        if (_color[index].texture != attachment || _color[index].level != level)
+        if (_color[index].texture != texture || _color[index].level != level)
         {
             _dirtyFlags |= getMRTColorFlag(index);
             AX_SAFE_RELEASE(_color[index].texture);
-            _color[index].texture = attachment;
+            _color[index].texture = texture;
             _color[index].level   = level;
             AX_SAFE_RETAIN(_color[index].texture);
         }
     }
 
-    void setDepthStencilAttachment(Texture* attachment, int level = 0)
+    void setDepthStencilTexture(Texture* texture, int level = 0)
     {
-        if (_depthStencil.texture != attachment || _depthStencil.level != level)
+        if (_depthStencil.texture != texture || _depthStencil.level != level)
         {
-            _dirtyFlags |= TargetBufferFlags::DEPTH;
+            _dirtyFlags |= TargetBufferFlags::DEPTH_AND_STENCIL;
             AX_SAFE_RELEASE(_depthStencil.texture);
-            _depthStencil.texture = attachment;
+            _depthStencil.texture = texture;
             _depthStencil.level   = level;
             AX_SAFE_RETAIN(_depthStencil.texture);
         }

@@ -237,15 +237,14 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         }
         else
         {
-            _renderTarget =
-                axdrv->createRenderTarget(_colorTexture ? _colorTexture->getRHITexture() : nullptr,
-                                          _depthStencilTexture ? _depthStencilTexture->getRHITexture() : nullptr);
+            _renderTarget = axdrv->createRenderTarget(
+                _colorTexture->getRHITexture(), _depthStencilTexture ? _depthStencilTexture->getRHITexture() : nullptr);
         }
 
-        _renderTarget->setColorAttachment(_colorTexture ? _colorTexture->getRHITexture() : nullptr);
+        _renderTarget->setColorTexture(_colorTexture->getRHITexture());
 
         auto depthStencilTexture = _depthStencilTexture ? _depthStencilTexture->getRHITexture() : nullptr;
-        _renderTarget->setDepthStencilAttachment(depthStencilTexture);
+        _renderTarget->setDepthStencilTexture(depthStencilTexture);
 
         clearColorAttachment();
 

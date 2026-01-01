@@ -60,7 +60,7 @@ RenderTargetImpl::~RenderTargetImpl()
 
         bindFrameBuffer();
 
-        for (auto slot = 0; slot < MAX_COLOR_ATTCHMENT; ++slot)
+        for (auto slot = 0; slot < DEFAULT_COLOR_COUNT; ++slot)
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + slot, GL_TEXTURE_2D, 0, 0);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
 
@@ -90,8 +90,8 @@ void RenderTargetImpl::update() const
     {
         if (bitmask::any(_dirtyFlags, TargetBufferFlags::COLOR_ALL))
         {  // color attachments
-            GLenum bufs[MAX_COLOR_ATTCHMENT] = {GL_NONE};
-            for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+            GLenum bufs[DEFAULT_COLOR_COUNT] = {GL_NONE};
+            for (size_t i = 0; i < DEFAULT_COLOR_COUNT; ++i)
             {
                 auto textureInfo = _color[i];
                 if (textureInfo.texture)
@@ -103,7 +103,7 @@ void RenderTargetImpl::update() const
                         textureInfo.level);
             }
 
-            glDrawBuffers(MAX_COLOR_ATTCHMENT, bufs);
+            glDrawBuffers(DEFAULT_COLOR_COUNT, bufs);
 
             CHECK_GL_ERROR_DEBUG();
         }

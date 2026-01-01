@@ -162,7 +162,7 @@ void RenderPipelineImpl::update(const RenderTarget* renderTarget, const Pipeline
         size_t vertexShaderHash;
         size_t fragmentShaderHash;
         unsigned int vertexLayoutInfo[32];
-        rhi::PixelFormat colorAttachment[MAX_COLOR_ATTCHMENT];
+        rhi::PixelFormat colorAttachment[DEFAULT_COLOR_COUNT];
         rhi::PixelFormat depthStencilPF;
         bool blendEnabled;
         unsigned int writeMask;
@@ -319,12 +319,12 @@ void RenderPipelineImpl::setShaderModules(Program* program)
 }
 
 void RenderPipelineImpl::chooseAttachmentFormat(const RenderTarget* renderTarget,
-                                                PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT],
+                                                PixelFormat colorAttachmentsFormat[DEFAULT_COLOR_COUNT],
                                                 PixelFormat& depthStencilFormat)
 {
     // Choose color attachment format
     auto rtMTL = static_cast<const RenderTargetImpl*>(renderTarget);
-    for (auto i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+    for (auto i = 0; i < DEFAULT_COLOR_COUNT; ++i)
         colorAttachmentsFormat[i] = rtMTL->getColorAttachmentPixelFormat(i);
 
     depthStencilFormat = rtMTL->getDepthStencilAttachmentPixelFormat();
@@ -332,7 +332,7 @@ void RenderPipelineImpl::chooseAttachmentFormat(const RenderTarget* renderTarget
 
 void RenderPipelineImpl::setBlendStateAndFormat(const BlendDesc& blendDesc)
 {
-    for (int i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+    for (int i = 0; i < DEFAULT_COLOR_COUNT; ++i)
     {
         if (PixelFormat::NONE == _colorAttachmentsFormat[i])
         {

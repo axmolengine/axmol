@@ -45,7 +45,7 @@ void RenderTargetImpl::invalidate()
 {
     _dirtyFlags = TargetBufferFlags::ALL;
 
-    for (auto i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+    for (auto i = 0; i < DEFAULT_COLOR_COUNT; ++i)
     {
         if (_rtvsDescriptors[i])
         {
@@ -85,7 +85,7 @@ void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
         auto device = _driver->getDevice();
 
         // --- Handle user-defined render targets (MRT) ---
-        for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+        for (size_t i = 0; i < DEFAULT_COLOR_COUNT; ++i)
         {
             if (!bitmask::any(_dirtyFlags, getMRTColorFlag(i)))
                 continue;
@@ -143,7 +143,7 @@ void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
         {
             // Count active color attachments
             _numRTVs = 0;
-            for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+            for (size_t i = 0; i < DEFAULT_COLOR_COUNT; ++i)
             {
                 if (_color[i])
                     ++_numRTVs;
@@ -192,7 +192,7 @@ void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
         pRTVs = _rtvHandles.data();
 
         // Clear color attachments if requested
-        for (auto i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+        for (auto i = 0; i < DEFAULT_COLOR_COUNT; ++i)
         {
             TextureImpl* texImpl = static_cast<TextureImpl*>(_color[i].texture);
             if (!texImpl)
@@ -229,7 +229,7 @@ void RenderTargetImpl::endRenderPass(ID3D12GraphicsCommandList* cmd, uint32_t im
     }
     else
     {
-        for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+        for (size_t i = 0; i < DEFAULT_COLOR_COUNT; ++i)
         {
             TextureImpl* texImpl = static_cast<TextureImpl*>(_color[i].texture);
             if (!texImpl)
@@ -248,7 +248,7 @@ void RenderTargetImpl::rebuildAttachmentsForSwapchain(IDXGISwapChain4* swapchain
         return;
     }
 
-    static_assert(MAX_COLOR_ATTCHMENT >= RenderContextImpl::SWAPCHAIN_BUFFER_COUNT,
+    static_assert(DEFAULT_COLOR_COUNT >= RenderContextImpl::SWAPCHAIN_BUFFER_COUNT,
                   "RenderTargetImpl color attachment array too small for swapchain buffers");
 
     // destroy existing attachments if any

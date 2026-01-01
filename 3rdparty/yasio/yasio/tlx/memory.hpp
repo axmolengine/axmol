@@ -487,8 +487,12 @@ struct __auto_value_init_t { // tag to request value-initialization
 struct value_init_t { // tag to request value-initialization
   explicit value_init_t() = default;
 };
-
 inline constexpr value_init_t value_init = value_init_t{};
+
+struct no_init_t { // tag to request no-initialization
+  explicit no_init_t() = default;
+};
+inline constexpr no_init_t no_init = no_init_t{};
 
 } // namespace tlx
 

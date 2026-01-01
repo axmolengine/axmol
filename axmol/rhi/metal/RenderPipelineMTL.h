@@ -65,14 +65,14 @@ private:
     void setShaderModules(Program*);
     void setBlendStateAndFormat(const BlendDesc&);
     void chooseAttachmentFormat(const RenderTarget* renderTarget,
-                                PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT],
+                                PixelFormat colorAttachmentsFormat[DEFAULT_COLOR_COUNT],
                                 PixelFormat&);
 
     id<MTLRenderPipelineState> _mtlRenderPipelineState = nil;
     id<MTLDevice> _mtlDevice                           = nil;
 
     MTLRenderPipelineDescriptor* _mtlRenderPipelineDesc      = nil;
-    PixelFormat _colorAttachmentsFormat[MAX_COLOR_ATTCHMENT] = {PixelFormat::NONE};
+    PixelFormat _colorAttachmentsFormat[DEFAULT_COLOR_COUNT] = {PixelFormat::NONE};
     PixelFormat _depthStencilPF                              = PixelFormat::NONE;
 
     tlx::hash_map<uint32_t, id<MTLRenderPipelineState>> _mtlStateCache;

@@ -84,7 +84,8 @@ void RenderTargetImpl::beginRenderPass(ID3D11DeviceContext* context)
             if (bitmask::any(_dirtyFlags, TargetBufferFlags::COLOR_ALL))
             {  // color attachments
                 _rtvCuont = 0;
-                for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+                const auto colorCount = _color.size();
+                for (size_t i = 0; i < colorCount; ++i)
                 {
                     if (bitmask::any(_dirtyFlags, getMRTColorFlag(i)))
                     {
