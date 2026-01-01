@@ -39,6 +39,8 @@ namespace ax::rhi::mtl
  * @{
  */
 
+class RenderTargetImpl;
+
 /**
  * Create and compile a new MTLRenderPipelineState object synchronously.
  */
@@ -63,18 +65,12 @@ private:
     void setVertexLayout(MTLRenderPipelineDescriptor*, const PipelineDesc&);
     void setBlendState(MTLRenderPipelineColorAttachmentDescriptor*, const BlendDesc&);
     void setShaderModules(Program*);
-    void setBlendStateAndFormat(const BlendDesc&);
-    void chooseAttachmentFormat(const RenderTarget* renderTarget,
-                                PixelFormat colorAttachmentsFormat[INITIAL_COLOR_CAPACITY],
-                                PixelFormat&);
+    void setBlendStateAndFormat(const BlendDesc&, const RenderTargetImpl* rt);
 
     id<MTLRenderPipelineState> _mtlRenderPipelineState = nil;
     id<MTLDevice> _mtlDevice                           = nil;
 
-    MTLRenderPipelineDescriptor* _mtlRenderPipelineDesc      = nil;
-    PixelFormat _colorAttachmentsFormat[INITIAL_COLOR_CAPACITY] = {PixelFormat::NONE};
-    PixelFormat _depthStencilPF                              = PixelFormat::NONE;
-
+    MTLRenderPipelineDescriptor* _mtlRenderPipelineDesc  = nil;
     tlx::hash_map<uint32_t, id<MTLRenderPipelineState>> _mtlStateCache;
 };
 

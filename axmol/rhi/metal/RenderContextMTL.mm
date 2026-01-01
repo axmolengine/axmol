@@ -259,7 +259,7 @@ void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const Render
     }
 
     MTLRenderPassDescriptor* mtlDesc = [MTLRenderPassDescriptor renderPassDescriptor];
-    auto rtMTL                       = static_cast<const RenderTargetImpl*>(_currentRT);
+    auto rtMTL                       = static_cast<RenderTargetImpl*>(_currentRT);
     rtMTL->applyRenderPassAttachments(renderPassDesc, mtlDesc);
 
     _renderTargetWidth  = (unsigned int)mtlDesc.colorAttachments[0].texture.width;

@@ -162,8 +162,7 @@ void RenderPipelineImpl::update(const RenderTarget* renderTarget, const Pipeline
         size_t vertexShaderHash;
         size_t fragmentShaderHash;
         unsigned int vertexLayoutInfo[32];
-        rhi::PixelFormat colorAttachment[INITIAL_COLOR_CAPACITY];
-        rhi::PixelFormat depthStencilPF;
+        uint32_t rtHash; // The RenderTarget pixel formats hash
         bool blendEnabled;
         unsigned int writeMask;
         unsigned int rgbBlendOp;
@@ -173,15 +172,15 @@ void RenderPipelineImpl::update(const RenderTarget* renderTarget, const Pipeline
         unsigned int sourceAlphaBlendFactor;
         unsigned int destinationAlphaBlendFactor;
     } hashMe;
+    
+    auto rtImpl = static_cast<const RenderTargetImpl*>(renderTarget);
 
     memset(&hashMe, 0, sizeof(hashMe));
     const auto& blendDesc = pipelineDesc.blendDesc;
-    chooseAttachmentFormat(renderTarget, _colorAttachmentsFormat, _depthStencilPF);
     auto program              = pipelineDesc.programState->getProgram();
     hashMe.vertexShaderHash   = program->getVSModule()->getHashValue();
     hashMe.fragmentShaderHash = program->getFSModule()->getHashValue();
-    memcpy(&hashMe.colorAttachment, &_colorAttachmentsFormat, sizeof(_colorAttachmentsFormat));
-    hashMe.depthStencilPF              = _depthStencilPF;
+    hashMe.rtHash              = rtImpl->getHash();
     hashMe.blendEnabled                = blendDesc.blendEnabled;
     hashMe.writeMask                   = (unsigned int)blendDesc.writeMask;
     hashMe.rgbBlendOp                  = (unsigned int)blendDesc.rgbBlendOp;
@@ -218,7 +217,7 @@ void RenderPipelineImpl::update(const RenderTarget* renderTarget, const Pipeline
     setShaderModules(program);
     setVertexLayout(_mtlRenderPipelineDesc, pipelineDesc);
 
-    setBlendStateAndFormat(pipelineDesc.blendDesc);
+    setBlendStateAndFormat(pipelineDesc.blendDesc, rtImpl);
 
     NSError* error          = nil;
     _mtlRenderPipelineState = [_mtlDevice newRenderPipelineStateWithDescriptor:_mtlRenderPipelineDesc error:&error];
@@ -318,33 +317,17 @@ void RenderPipelineImpl::setShaderModules(Program* program)
     _mtlRenderPipelineDesc.fragmentFunction = fsModule->getMTLFunction();
 }
 
-void RenderPipelineImpl::chooseAttachmentFormat(const RenderTarget* renderTarget,
-                                                PixelFormat colorAttachmentsFormat[INITIAL_COLOR_CAPACITY],
-                                                PixelFormat& depthStencilFormat)
+void RenderPipelineImpl::setBlendStateAndFormat(const BlendDesc& blendDesc, const RenderTargetImpl* rt)
 {
-    // Choose color attachment format
-    auto rtMTL = static_cast<const RenderTargetImpl*>(renderTarget);
-    for (auto i = 0; i < INITIAL_COLOR_CAPACITY; ++i)
-        colorAttachmentsFormat[i] = rtMTL->getColorAttachmentPixelFormat(i);
-
-    depthStencilFormat = rtMTL->getDepthStencilAttachmentPixelFormat();
-}
-
-void RenderPipelineImpl::setBlendStateAndFormat(const BlendDesc& blendDesc)
-{
-    for (int i = 0; i < INITIAL_COLOR_CAPACITY; ++i)
+    auto& nativeColorFormats = rt->getNativeColorFormats();
+    auto formatCount = nativeColorFormats.size();
+    for(size_t i = 0; i < formatCount; ++i)
     {
-        if (PixelFormat::NONE == _colorAttachmentsFormat[i])
-        {
-            _mtlRenderPipelineDesc.colorAttachments[i].pixelFormat = MTLPixelFormat::MTLPixelFormatInvalid;
-            continue;
-        }
-
-        _mtlRenderPipelineDesc.colorAttachments[i].pixelFormat = UtilsMTL::toMTLPixelFormat(_colorAttachmentsFormat[i]);
+        _mtlRenderPipelineDesc.colorAttachments[i].pixelFormat = nativeColorFormats[i];
         setBlendState(_mtlRenderPipelineDesc.colorAttachments[i], blendDesc);
     }
 
-    auto nativePF                                       = UtilsMTL::toMTLPixelFormat(_depthStencilPF);
+    auto nativePF                                       = rt->getNativeDSFormat();
     _mtlRenderPipelineDesc.depthAttachmentPixelFormat   = nativePF;
     _mtlRenderPipelineDesc.stencilAttachmentPixelFormat = nativePF;
 }
