@@ -70,7 +70,7 @@ private:
     id<MTLRenderPipelineState> _mtlRenderPipelineState = nil;
     id<MTLDevice> _mtlDevice                           = nil;
 
-    MTLRenderPipelineDescriptor* _mtlRenderPipelineDesc  = nil;
+    MTLRenderPipelineDescriptor* _mtlRenderPipelineDesc = nil;
     tlx::hash_map<uint32_t, id<MTLRenderPipelineState>> _mtlStateCache;
 };
 

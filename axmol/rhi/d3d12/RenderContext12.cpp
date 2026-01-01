@@ -44,7 +44,7 @@
 namespace ax::rhi::d3d12
 {
 
-static constexpr UINT MAX_ALLOW_DRAW_CALLS       = 2000;
+static constexpr UINT MAX_ALLOW_DRAW_CALLS = 2000;
 
 static constexpr D3D12_PRIMITIVE_TOPOLOGY PrimitiveTypeToD3DTopology[] = {
     /* POINT          */ D3D_PRIMITIVE_TOPOLOGY_POINTLIST,

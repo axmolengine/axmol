@@ -276,7 +276,7 @@ enum class TargetBufferFlags : uint32_t
 };
 AX_ENABLE_BITMASK_OPS(TargetBufferFlags)
 
-inline constexpr uint32_t MAX_COLOR_COUNT     = std::popcount((uint32_t)TargetBufferFlags::COLOR_ALL);
+inline constexpr uint32_t MAX_COLOR_COUNT = std::popcount((uint32_t)TargetBufferFlags::COLOR_ALL);
 
 inline TargetBufferFlags getMRTColorFlag(size_t index) noexcept
 {

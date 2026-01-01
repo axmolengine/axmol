@@ -193,7 +193,7 @@ static HRESULT runOnUIThread(const ComPtr<ICoreDispatcher>& dispatcher, _Fty&& f
 
 RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
 {
-    _driver   = driver;
+    _driver       = driver;
     _d3d11Context = driver->getContext();
 
     auto& contextAttrs = Application::getContextAttrs();

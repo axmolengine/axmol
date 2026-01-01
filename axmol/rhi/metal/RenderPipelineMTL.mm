@@ -162,7 +162,7 @@ void RenderPipelineImpl::update(const RenderTarget* renderTarget, const Pipeline
         size_t vertexShaderHash;
         size_t fragmentShaderHash;
         unsigned int vertexLayoutInfo[32];
-        uint32_t rtHash; // The RenderTarget pixel formats hash
+        uint32_t rtHash;  // The RenderTarget pixel formats hash
         bool blendEnabled;
         unsigned int writeMask;
         unsigned int rgbBlendOp;
@@ -172,15 +172,15 @@ void RenderPipelineImpl::update(const RenderTarget* renderTarget, const Pipeline
         unsigned int sourceAlphaBlendFactor;
         unsigned int destinationAlphaBlendFactor;
     } hashMe;
-    
+
     auto rtImpl = static_cast<const RenderTargetImpl*>(renderTarget);
 
     memset(&hashMe, 0, sizeof(hashMe));
-    const auto& blendDesc = pipelineDesc.blendDesc;
-    auto program              = pipelineDesc.programState->getProgram();
-    hashMe.vertexShaderHash   = program->getVSModule()->getHashValue();
-    hashMe.fragmentShaderHash = program->getFSModule()->getHashValue();
-    hashMe.rtHash              = rtImpl->getHash();
+    const auto& blendDesc              = pipelineDesc.blendDesc;
+    auto program                       = pipelineDesc.programState->getProgram();
+    hashMe.vertexShaderHash            = program->getVSModule()->getHashValue();
+    hashMe.fragmentShaderHash          = program->getFSModule()->getHashValue();
+    hashMe.rtHash                      = rtImpl->getHash();
     hashMe.blendEnabled                = blendDesc.blendEnabled;
     hashMe.writeMask                   = (unsigned int)blendDesc.writeMask;
     hashMe.rgbBlendOp                  = (unsigned int)blendDesc.rgbBlendOp;
@@ -320,8 +320,8 @@ void RenderPipelineImpl::setShaderModules(Program* program)
 void RenderPipelineImpl::setBlendStateAndFormat(const BlendDesc& blendDesc, const RenderTargetImpl* rt)
 {
     auto& nativeColorFormats = rt->getNativeColorFormats();
-    auto formatCount = nativeColorFormats.size();
-    for(size_t i = 0; i < formatCount; ++i)
+    auto formatCount         = nativeColorFormats.size();
+    for (size_t i = 0; i < formatCount; ++i)
     {
         _mtlRenderPipelineDesc.colorAttachments[i].pixelFormat = nativeColorFormats[i];
         setBlendState(_mtlRenderPipelineDesc.colorAttachments[i], blendDesc);

@@ -32,9 +32,7 @@ RenderTargetImpl::RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget)
     : _driver(driver), _device(driver->getDevice()), RenderTarget(defaultRenderTarget)
 {}
 
-RenderTargetImpl::~RenderTargetImpl()
-{
-}
+RenderTargetImpl::~RenderTargetImpl() {}
 
 void RenderTargetImpl::cleanupResources()
 {

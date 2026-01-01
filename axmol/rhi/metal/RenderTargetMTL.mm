@@ -34,14 +34,17 @@ static MTLStoreAction getStoreAction(const RenderPassDesc& params, TargetBufferF
 }
 
 RenderTargetImpl::RenderTargetImpl() : RenderTarget(false) {}
-RenderTargetImpl::RenderTargetImpl(RenderContextImpl* context) : RenderTarget(true), _context(context) { _dirtyFlags = TargetBufferFlags::ALL; }
+RenderTargetImpl::RenderTargetImpl(RenderContextImpl* context) : RenderTarget(true), _context(context)
+{
+    _dirtyFlags = TargetBufferFlags::ALL;
+}
 RenderTargetImpl::~RenderTargetImpl() {}
 
 void RenderTargetImpl::applyRenderPassAttachments(const RenderPassDesc& params, MTLRenderPassDescriptor* desc)
 {
     // const auto discardFlags = params.flags.discardEnd;
     auto clearFlags = params.flags.clear;
-    
+
     const auto colorCount = _color.size();
 
     for (size_t i = 0; i < colorCount; i++)
@@ -89,18 +92,20 @@ void RenderTargetImpl::applyRenderPassAttachments(const RenderPassDesc& params, 
                 desc.stencilAttachment.clearStencil = params.clearStencilValue;
         }
     }
-    
+
     if (_dirtyFlags != TargetBufferFlags::NONE)
     {
         for (size_t i = 0; i < colorCount; i++)
         {
             auto pf = getColorAttachmentPixelFormat(static_cast<int>(i));
-            if (pf == PixelFormat::NONE) break;
+            if (pf == PixelFormat::NONE)
+                break;
             _nativeColorFormats.push_back(UtilsMTL::toMTLPixelFormat(pf));
         }
         _nativeDSFormat = UtilsMTL::toMTLPixelFormat(getDepthStencilAttachmentPixelFormat());
-        _hash = tlx::hash32_bytes(_nativeColorFormats.data(), _nativeColorFormats.size(), static_cast<uint32_t>(_nativeDSFormat));
-        
+        _hash           = tlx::hash32_bytes(_nativeColorFormats.data(), _nativeColorFormats.size(),
+                                            static_cast<uint32_t>(_nativeDSFormat));
+
         _dirtyFlags = TargetBufferFlags::NONE;
     }
 }
@@ -108,8 +113,8 @@ void RenderTargetImpl::applyRenderPassAttachments(const RenderPassDesc& params, 
 void RenderTargetImpl::rebuildSwapchainAttachments()
 {
     cleanupResources();
-    
-    _color.resize(1); // only for place holder
+
+    _color.resize(1);  // only for place holder
 
     auto mtlLayer = _context->getMetalLayer();
 
