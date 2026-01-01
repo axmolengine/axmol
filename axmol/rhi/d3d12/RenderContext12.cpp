@@ -306,7 +306,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface) 
             desc1.Width  = static_cast<UINT>(panelSize.Width);
             desc1.Height = static_cast<UINT>(panelSize.Height);
         }
-        desc1.Format           = AX_SWAPCHAIN_FORMAT;
+        desc1.Format           = DEFAULT_SWAPCHAIN_FORMAT;
         desc1.SampleDesc.Count = 1;
         desc1.BufferUsage      = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         desc1.BufferCount      = SWAPCHAIN_BUFFER_COUNT;
