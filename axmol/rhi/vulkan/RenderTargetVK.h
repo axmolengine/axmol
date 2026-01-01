@@ -26,7 +26,6 @@
 #include "axmol/rhi/RenderTarget.h"
 #include "axmol/rhi/vulkan/TextureVK.h"
 #include <glad/vulkan.h>
-#include <array>
 
 namespace ax::rhi::vk
 {
