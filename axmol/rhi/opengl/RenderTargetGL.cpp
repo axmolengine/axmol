@@ -60,7 +60,7 @@ RenderTargetImpl::~RenderTargetImpl()
 
         bindFrameBuffer();
 
-        for (auto slot = 0; slot < INITIAL_COLOR_CAPACITY; ++slot)
+        for (auto slot = 0; slot < static_cast<int>(_color.size()); ++slot)
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + slot, GL_TEXTURE_2D, 0, 0);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
 
