@@ -118,6 +118,20 @@ public:
         return _My_data._Myfirst == _My_data._Mylast;
     }
 
+    constexpr pointer data() noexcept /* strengthened */
+    {
+        auto& _My_data = _Mypair._Myval2;
+        _TLX_VERIFY(_My_data._Myfirst != _My_data._Mylast, "data() called on empty inlined_vector");
+        return _My_data._Myfirst;
+    }
+
+    constexpr const_pointer data() const noexcept /* strengthened */
+    {
+        auto& _My_data = _Mypair._Myval2;
+        _TLX_VERIFY(_My_data._Myfirst != _My_data._Mylast, "data() called on empty inlined_vector");
+        return _My_data._Myfirst;
+    }
+
     constexpr size_type size() const noexcept
     {
         auto& _My_data = _Mypair._Myval2;
@@ -230,6 +244,17 @@ public:
 
     constexpr void resize(size_t _Newsize) { _Resize(_Newsize, _TLX value_init); }
     constexpr void resize(size_t _Newsize, const value_type& _Val) { _Resize(_Newsize, _Val); }
+
+    void pop_back()
+    {
+        auto& _My_data   = _Mypair._Myval2;
+        pointer& _Mylast = _My_data._Mylast;
+
+        _TLX_VERIFY(_My_data._Myfirst != _Mylast, "pop_back() called on empty vector");
+
+        _Alty_traits::destroy(_Getal(), std::to_address(_Mylast - 1));
+        --_Mylast;
+    }
 
     void swap(inlined_vector& other)
     {

@@ -583,7 +583,6 @@ bool RenderContextImpl::beginFrame()
     {
         vkDeviceWaitIdle(_device);
         recreateSwapchain();
-        static_cast<RenderTargetImpl*>(_screenRT)->invalidate();
         _swapchainDirty = false;
     }
 

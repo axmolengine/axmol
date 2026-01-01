@@ -1251,6 +1251,8 @@ public:
     auto& _My_data   = _Mypair._Myval2;
     pointer& _Mylast = _My_data._Mylast;
 
+    _TLX_VERIFY(_My_data._Myfirst != _Mylast, "pop_back() called on empty vector");
+
     _Alty_traits::destroy(_Getal(), std::to_address(_Mylast - 1));
     --_Mylast;
   }

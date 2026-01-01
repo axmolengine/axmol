@@ -40,7 +40,7 @@ public:
     ~RenderTargetImpl();
 
     // Destroy the current live framebuffer and mark attachments dirty
-    void invalidate();
+    void cleanupResources();
 
     // Begin a render pass using this target
     void beginRenderPass(VkCommandBuffer cmd,
@@ -63,6 +63,8 @@ public:
                                      const VkExtent2D&,
                                      PixelFormat imagePF);
 
+    void setColorTexture(Texture* texture, int level = 0, int index = 0) override;
+
 private:
     void updateRenderPass(const RenderPassDesc& desc, uint32_t imageIndex);
     void updateFramebuffer(VkCommandBuffer cmd, uint32_t imageIndex);
@@ -72,10 +74,11 @@ private:
     DriverImpl* _driver{nullptr};
 
     // Current attachment views for building renderpass/framebuffer
-    tlx::inlined_vector<VkImageView, DEFAULT_COLOR_COUNT + 1> _attachmentViews{};
+    tlx::inlined_vector<VkImageView, INITIAL_COLOR_CAPACITY + 1> _attachmentViews{};
 
     // Seed values used to compute framebuffer/render pass hash per swapchain image
-    tlx::inlined_vector<uint64_t, DEFAULT_COLOR_COUNT> _renderHashSeeds{};
+    // only used for screen render target
+    tlx::inlined_vector<uint64_t, INITIAL_COLOR_CAPACITY> _renderHashSeeds{};
 
     tlx::pod_vector<VkClearValue> _clearValues;
 

@@ -137,7 +137,7 @@ protected:
 
     void prepareDrawing();
 
-    DriverImpl* _driverImpl{nullptr};
+    DriverImpl* _driver{nullptr};
     ID3D11DeviceContext* _d3d11Context{nullptr};
 
     RenderTargetImpl* _screenRT{nullptr};

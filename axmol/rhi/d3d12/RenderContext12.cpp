@@ -44,7 +44,6 @@
 namespace ax::rhi::d3d12
 {
 
-static constexpr DXGI_FORMAT AX_SWAPCHAIN_FORMAT = DXGI_FORMAT_R8G8B8A8_UNORM;
 static constexpr UINT MAX_ALLOW_DRAW_CALLS       = 2000;
 
 static constexpr D3D12_PRIMITIVE_TOPOLOGY PrimitiveTypeToD3DTopology[] = {
@@ -239,7 +238,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface) 
     DXGI_SWAP_CHAIN_DESC1 desc1 = {};
     desc1.Width                 = _screenWidth;
     desc1.Height                = _screenHeight;
-    desc1.Format                = AX_SWAPCHAIN_FORMAT;
+    desc1.Format                = DEFAULT_SWAPCHAIN_FORMAT;
     desc1.SampleDesc.Count      = 1;
     desc1.BufferUsage           = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     desc1.BufferCount           = SWAPCHAIN_BUFFER_COUNT;
@@ -356,7 +355,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface) 
     _screenRT = new RenderTargetImpl(driver, true);
 
     // Build swapchain attachments for screen RT
-    _screenRT->rebuildAttachmentsForSwapchain(_swapchain.Get(), _screenWidth, _screenHeight);
+    _screenRT->rebuildSwapchainBuffers(_swapchain.Get(), _screenWidth, _screenHeight);
 
     createUniformRingBuffers(1 * 1024 * 1024);  // 1 MB per frame
 
@@ -481,14 +480,7 @@ bool RenderContextImpl::beginFrame()
     {
         auto rtImpl = static_cast<RenderTargetImpl*>(_screenRT);
 
-        // Release references to the swapchain back buffer for we can ResizeBuffers
-        rtImpl->invalidate();
-
-        _driver->cleanPendingResources();
-
-        _swapchain->ResizeBuffers(SWAPCHAIN_BUFFER_COUNT, _screenWidth, _screenHeight, AX_SWAPCHAIN_FORMAT,
-                                  _swapchainFlags);
-        rtImpl->rebuildAttachmentsForSwapchain(_swapchain.Get(), _screenWidth, _screenHeight);
+        rtImpl->rebuildSwapchainBuffers(_swapchain.Get(), _screenWidth, _screenHeight, _swapchainFlags);
 
         _swapchainDirty = false;
     }

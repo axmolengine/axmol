@@ -54,7 +54,7 @@ void AppDelegate::initContextAttrs()
 {
     // set app context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
     // powerPreference only affect when RHI backend is D3D11, D3D12, Vulkan
-    ContextAttrs contextAttrs = {.debugLayerEnabled = false, .powerPreference = PowerPreference::HighPerformance};
+    ContextAttrs contextAttrs = {.debugLayerEnabled = true, .powerPreference = PowerPreference::HighPerformance};
 
     // V-Sync is enabled by default since axmol 2.2.
     // Uncomment to disable V-Sync and unlock FPS.

@@ -17,13 +17,16 @@ public:
     RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget);
     ~RenderTargetImpl();
 
+    void setColorTexture(Texture* texture, int level = 0, int index = 0) override;
+
     void bindFrameBuffer() const;
     void unbindFrameBuffer() const;
 
-    void update() const;
+    void update();
 
 public:
     GLuint _FBO = 0;
+    tlx::pod_vector<GLenum> _GLbufs;
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     EventListenerCustom* _rendererRecreatedListener{nullptr};
 #endif

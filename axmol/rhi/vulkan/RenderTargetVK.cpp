@@ -42,12 +42,9 @@ RenderTargetImpl::RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget)
 RenderTargetImpl::~RenderTargetImpl()
 {
     _driver->waitForGPU();
-
-    invalidate();
-    // We do not destroy cached renderpasses/framebuffers here to allow reuse across RT instances
 }
 
-void RenderTargetImpl::invalidate()
+void RenderTargetImpl::cleanupResources()
 {
     // Conservative: wait idle before destroying caches to avoid "in use" errors.
     for (auto& [_, pass] : _renderPassCache)
@@ -59,11 +56,17 @@ void RenderTargetImpl::invalidate()
     _renderPass  = VK_NULL_HANDLE;
     _framebuffer = VK_NULL_HANDLE;
 
-    std::fill(_attachmentViews.begin(), _attachmentViews.end(), VK_NULL_HANDLE);
-    std::fill(_renderHashSeeds.begin(), _renderHashSeeds.end(), 0);
+    _attachmentViews.clear();
+    _renderHashSeeds.clear();
     _activeHashSeed = 0;
 
-    _dirtyFlags = TargetBufferFlags::ALL;
+    RenderTarget::cleanupResources();
+}
+
+void RenderTargetImpl::setColorTexture(Texture* texture, int level, int index)
+{
+    RenderTarget::setColorTexture(texture, level, index);
+    _attachmentViews.resize(_color.size() + 1);
 }
 
 void RenderTargetImpl::rebuildSwapchainAttachments(const tlx::pod_vector<VkImage>& images,
@@ -75,20 +78,10 @@ void RenderTargetImpl::rebuildSwapchainAttachments(const tlx::pod_vector<VkImage
         return;
 
     VK_VERIFY(images.size() <= MAX_COLOR_COUNT, "Too many swapchain images");
+    
+    cleanupResources();
 
     _dirtyFlags = TargetBufferFlags::DEPTH_AND_STENCIL;
-
-    // destroy old attachments
-    // colors
-    for (auto tex : _color)
-    {
-        if (tex)
-            AX_SAFE_RELEASE_NULL(tex.texture);
-    }
-
-    // depth-stencil
-    if (_depthStencil)
-        AX_SAFE_RELEASE_NULL(_depthStencil.texture);
 
     /// create new attachments
     _color.resize(images.size());

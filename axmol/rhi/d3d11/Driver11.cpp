@@ -299,7 +299,7 @@ Texture* DriverImpl::createTexture(const TextureDesc& descriptor)
 
 RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthAttachment)
 {
-    auto renderTarget = new RenderTargetImpl(_device, false);
+    auto renderTarget = new RenderTargetImpl(this, false);
     renderTarget->setColorTexture(colorAttachment);
     renderTarget->setDepthStencilTexture(depthAttachment);
     return renderTarget;

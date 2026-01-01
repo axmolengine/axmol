@@ -60,7 +60,7 @@ RenderTargetImpl::~RenderTargetImpl()
 
         bindFrameBuffer();
 
-        for (auto slot = 0; slot < DEFAULT_COLOR_COUNT; ++slot)
+        for (auto slot = 0; slot < INITIAL_COLOR_CAPACITY; ++slot)
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + slot, GL_TEXTURE_2D, 0, 0);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
 
@@ -82,7 +82,13 @@ void RenderTargetImpl::unbindFrameBuffer() const
     __state->bindFrameBuffer(0);
 }
 
-void RenderTargetImpl::update() const
+void RenderTargetImpl::setColorTexture(Texture* texture, int level, int index)
+{
+    RenderTarget::setColorTexture(texture, level, 0);
+    _GLbufs.resize(_color.size());
+}
+
+void RenderTargetImpl::update()
 {
     if (!_dirtyFlags)
         return;
@@ -90,12 +96,13 @@ void RenderTargetImpl::update() const
     {
         if (bitmask::any(_dirtyFlags, TargetBufferFlags::COLOR_ALL))
         {  // color attachments
-            GLenum bufs[DEFAULT_COLOR_COUNT] = {GL_NONE};
-            for (size_t i = 0; i < DEFAULT_COLOR_COUNT; ++i)
+            std::fill(_GLbufs.begin(), _GLbufs.end(), GL_NONE);
+            const auto colorCount = _color.size();
+            for (size_t i = 0; i < colorCount; ++i)
             {
                 auto textureInfo = _color[i];
                 if (textureInfo.texture)
-                    bufs[i] = GL_COLOR_ATTACHMENT0 + i;
+                    _GLbufs[i] = GL_COLOR_ATTACHMENT0 + i;
                 if (bitmask::any(_dirtyFlags, getMRTColorFlag(i)))
                     glFramebufferTexture2D(
                         GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D,
@@ -103,7 +110,7 @@ void RenderTargetImpl::update() const
                         textureInfo.level);
             }
 
-            glDrawBuffers(DEFAULT_COLOR_COUNT, bufs);
+            glDrawBuffers(colorCount, _GLbufs.data());
 
             CHECK_GL_ERROR_DEBUG();
         }

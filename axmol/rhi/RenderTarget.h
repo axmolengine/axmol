@@ -38,6 +38,8 @@ namespace ax::rhi
  * @{
  */
 
+static constexpr uint32_t INITIAL_COLOR_CAPACITY = 4;
+
 /**
  * Render Target
  */
@@ -50,44 +52,17 @@ public:
         uint8_t level    = 0;  // level when attached to a texture
         explicit operator bool() const { return texture != nullptr; }
     };
-    using ColorAttachment = tlx::inlined_vector<RenderBuffer, DEFAULT_COLOR_COUNT>;
+    using ColorAttachment = tlx::inlined_vector<RenderBuffer, INITIAL_COLOR_CAPACITY>;
 
-    RenderTarget(bool defaultRenderTarget) : _defaultRenderTarget(defaultRenderTarget)
-    {
-        _color.resize(DEFAULT_COLOR_COUNT);
-    }
-    virtual ~RenderTarget()
-    {
-        for (auto colorItem : _color)
-            AX_SAFE_RELEASE(colorItem.texture);
-        AX_SAFE_RELEASE(_depthStencil.texture);
-    }
+    RenderTarget(bool defaultRenderTarget) : _defaultRenderTarget(defaultRenderTarget) {}
+    virtual ~RenderTarget();
 
     bool isDefaultRenderTarget() const { return _defaultRenderTarget; }
 
-    void setColorTexture(Texture* texture, int level = 0, int index = 0)
-    {
-        if (_color[index].texture != texture || _color[index].level != level)
-        {
-            _dirtyFlags |= getMRTColorFlag(index);
-            AX_SAFE_RELEASE(_color[index].texture);
-            _color[index].texture = texture;
-            _color[index].level   = level;
-            AX_SAFE_RETAIN(_color[index].texture);
-        }
-    }
+    virtual void cleanupResources();
 
-    void setDepthStencilTexture(Texture* texture, int level = 0)
-    {
-        if (_depthStencil.texture != texture || _depthStencil.level != level)
-        {
-            _dirtyFlags |= TargetBufferFlags::DEPTH_AND_STENCIL;
-            AX_SAFE_RELEASE(_depthStencil.texture);
-            _depthStencil.texture = texture;
-            _depthStencil.level   = level;
-            AX_SAFE_RETAIN(_depthStencil.texture);
-        }
-    }
+    virtual void setColorTexture(Texture* texture, int level = 0, int index = 0);
+    virtual void setDepthStencilTexture(Texture* texture, int level = 0);
 
     bool isDirty() const { return !!_dirtyFlags; }
 

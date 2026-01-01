@@ -32,6 +32,7 @@ set(_AX_RHI_SRC
   renderer/VertexLayoutManager.cpp
   rhi/Program.cpp
   rhi/ProgramState.cpp
+  rhi/RenderTarget.cpp
   rhi/ShaderCache.cpp
   rhi/RenderPassDesc.cpp
   rhi/SamplerCache.cpp

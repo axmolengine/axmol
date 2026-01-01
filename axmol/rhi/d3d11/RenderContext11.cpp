@@ -191,11 +191,9 @@ static HRESULT runOnUIThread(const ComPtr<ICoreDispatcher>& dispatcher, _Fty&& f
 }
 #endif
 
-static constexpr DXGI_FORMAT _AX_SWAPCHAIN_FORMAT = DXGI_FORMAT_R8G8B8A8_UNORM;
-
 RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
 {
-    _driverImpl   = driver;
+    _driver   = driver;
     _d3d11Context = driver->getContext();
 
     auto& contextAttrs = Application::getContextAttrs();
@@ -244,7 +242,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
         DXGI_SWAP_CHAIN_DESC1 desc1 = {};
         desc1.Width                 = _screenWidth;
         desc1.Height                = _screenHeight;
-        desc1.Format                = _AX_SWAPCHAIN_FORMAT;
+        desc1.Format                = DEFAULT_SWAPCHAIN_FORMAT;
         desc1.SampleDesc.Count      = 1;  // Flip not support MSAA
         desc1.BufferUsage           = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         desc1.BufferCount           = 2;
@@ -279,7 +277,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
         scDesc.BufferCount                        = 1;
         scDesc.BufferDesc.Width                   = _screenWidth;
         scDesc.BufferDesc.Height                  = _screenHeight;
-        scDesc.BufferDesc.Format                  = _AX_SWAPCHAIN_FORMAT;
+        scDesc.BufferDesc.Format                  = DEFAULT_SWAPCHAIN_FORMAT;
         scDesc.BufferDesc.RefreshRate.Numerator   = 60;
         scDesc.BufferDesc.RefreshRate.Denominator = 1;
         scDesc.BufferUsage                        = DXGI_USAGE_RENDER_TARGET_OUTPUT;
@@ -347,7 +345,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
                 desc1.Width  = static_cast<UINT>(panelSize.Width);
                 desc1.Height = static_cast<UINT>(panelSize.Height);
             }
-            desc1.Format           = _AX_SWAPCHAIN_FORMAT;
+            desc1.Format           = DEFAULT_SWAPCHAIN_FORMAT;
             desc1.SampleDesc.Count = 1;  // Flip not support MSAA
             desc1.BufferUsage      = DXGI_USAGE_RENDER_TARGET_OUTPUT;
             desc1.BufferCount      = 2;
@@ -397,9 +395,9 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
 
     _swapChain = swapChain.Detach();
 
-    _screenRT = new RenderTargetImpl(device, true);
+    _screenRT = new RenderTargetImpl(_driver, true);
 
-    _screenRT->rebuildAttachmentsForSwapchain(_swapChain, _screenWidth, _screenHeight);
+    _screenRT->rebuildSwapchainBuffers(_swapChain, _screenWidth, _screenHeight);
 
     _nullSRVs.reserve(8);
 }
@@ -420,7 +418,7 @@ RenderContextImpl::~RenderContextImpl()
 
 bool RenderContextImpl::updateSurface(SurfaceHandle /*surface*/, uint32_t width, uint32_t height)
 {
-    if (!_swapChain || !_driverImpl || !_screenRT)
+    if (!_swapChain || !_driver || !_screenRT)
         return false;
 
     // Since the window size can be zero when minimized, delay rebuilding until it returns to normal state
@@ -433,16 +431,8 @@ bool RenderContextImpl::updateSurface(SurfaceHandle /*surface*/, uint32_t width,
         return true;
 
     // Resize swapchain buffers
-    _screenRT->invalidate();
-
-    HRESULT hr = _swapChain->ResizeBuffers(0, width, height, _AX_SWAPCHAIN_FORMAT, _swapChainFlags);
-    if (FAILED(hr))
-    {
-        AXLOGW("D3D11: swapchain ResizeBuffers failed: {}", hr);
+    if (!_screenRT->rebuildSwapchainBuffers(_swapChain, width, height, _swapChainFlags))
         return false;
-    }
-
-    _screenRT->rebuildAttachmentsForSwapchain(_swapChain, width, height);
 
     _screenWidth  = width;
     _screenHeight = height;
@@ -523,7 +513,7 @@ void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h
     viewport.MinDepth       = 0.0f;
     viewport.MaxDepth       = 1.0f;
 
-    _driverImpl->getContext()->RSSetViewports(1, &viewport);
+    _driver->getContext()->RSSetViewports(1, &viewport);
 }
 
 void RenderContextImpl::setCullMode(CullMode mode)
@@ -611,7 +601,7 @@ void RenderContextImpl::updateRasterizerState()
     desc.DepthClipEnable = TRUE;
     desc.ScissorEnable   = _rasterDesc.scissorEnable ? TRUE : FALSE;
 
-    _AXASSERT_HR(_driverImpl->getDevice()->CreateRasterizerState(&desc, _rasterState.ReleaseAndGetAddressOf()));
+    _AXASSERT_HR(_driver->getDevice()->CreateRasterizerState(&desc, _rasterState.ReleaseAndGetAddressOf()));
     _d3d11Context->RSSetState(_rasterState.Get());
     _rasterDesc.dirtyFlags = 0;
 }
@@ -721,7 +711,7 @@ void RenderContextImpl::prepareDrawing()
     assert(_programState);
     updateRasterizerState();
 
-    auto context = _driverImpl->getContext();
+    auto context = _driver->getContext();
 
     auto& callbackUniforms = _programState->getCallbackUniforms();
     for (auto& cb : callbackUniforms)
@@ -837,7 +827,7 @@ void RenderContextImpl::readPixels(RenderTarget* rt, UINT x, UINT y, UINT width,
     auto tex = static_cast<RenderTargetImpl*>(rt)->getColorAttachment(0).texure;
     assert(tex);
 
-    ID3D11Device* device = _driverImpl->getDevice();
+    ID3D11Device* device = _driver->getDevice();
 
     // D3D11_CPU_ACCESS_READ not allow as render target color attachment
     // so we need create a staging texture for CPU read
