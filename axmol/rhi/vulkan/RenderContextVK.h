@@ -135,7 +135,8 @@ public:
 
     void prepareDrawing();
 
-    void removeCachedPipelines(VkRenderPass rp);
+    void removeCachedPSOsByRenderPass(VkRenderPass rp);
+    void removeCachedObjectsByProgram(Program* program);
 
     uint64_t getCompletedFenceValue() const override;
 

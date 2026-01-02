@@ -27,8 +27,8 @@
 #include "axmol/rhi/vulkan/VertexLayoutVK.h"
 #include "axmol/rhi/vulkan/ProgramVK.h"
 #include "axmol/rhi/vulkan/ShaderModuleVK.h"
-#include "axmol/rhi/ProgramState.h"
 #include "axmol/rhi/vulkan/DriverVK.h"
+#include "axmol/rhi/vulkan/UtilsVK.h"
 #include "axmol/tlx/hlookup.hpp"
 #include "axmol/tlx/hash.hpp"
 #include "axmol/tlx/inlined_vector.hpp"
@@ -162,7 +162,7 @@ static inline VkPipelineColorBlendAttachmentState makeVkBlendAttachment(const Bl
     return att;
 }
 
-RenderPipelineImpl::RenderPipelineImpl(DriverImpl* driver) : _driverImpl(driver), _device(driver->getDevice())
+RenderPipelineImpl::RenderPipelineImpl(DriverImpl* driver) : _driver(driver), _device(driver->getDevice())
 {
     initializePipelineDefaults(driver);
 }
@@ -371,15 +371,9 @@ void RenderPipelineImpl::updatePipelineLayout(ProgramImpl* program)
     plc.pPushConstantRanges    = nullptr;
 
     VkResult result = vkCreatePipelineLayout(_device, &plc, nullptr, &pipelineLayout);
-    if (result == VK_SUCCESS)
-    {
-        _pipelineLayoutCache.emplace(progKey, pipelineLayout);
-        _activePipelineLayout = pipelineLayout;
-    }
-    else
-    {
-        AXLOGE("vkCreatePipelineLayout fail: {}", (int)result);
-    }
+    VK_VERIFY_RESULT(result, "vkCreatePipelineLayout fail");
+    _pipelineLayoutCache.emplace(progKey, pipelineLayout);
+    _activePipelineLayout = pipelineLayout;
 }
 
 void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc,
@@ -390,14 +384,14 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc,
     static_assert(sizeof(state) == 4, "ExtendedDynamicState size must be 4 bytes");
 
     uint32_t extendedDynState;
-    if (!_driverImpl->isExtendedDynamicStateSupported())
+    if (!_driver->isExtendedDynamicStateSupported())
     {  // bake all
         _rasterState.cullMode  = state.cullMode;
         _rasterState.frontFace = state.frontFace;
         _iaState.topology      = state.primitiveTopology;
         extendedDynState       = std::bit_cast<uint32_t>(state);
     }
-    else if (!_driverImpl->isDynamicPrimitiveTopologyUnrestricted())
+    else if (!_driver->isDynamicPrimitiveTopologyUnrestricted())
     {
         // bake topology only
         _iaState.topology = state.primitiveTopology;
@@ -452,17 +446,10 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc,
 
     VkPipeline pipeline = VK_NULL_HANDLE;
     VkResult res        = vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &gp, nullptr, &pipeline);
-    if (res == VK_SUCCESS)
-    {
-        _renderPassToPipelineMap.emplace(renderPass, pipelineKey);
-        _pipelineCache.emplace(pipelineKey, pipeline);
-        _activePipeline = pipeline;
-    }
-    else
-    {
-        _activePipeline = VK_NULL_HANDLE;
-        AXLOGE("vkCreateGraphicsPipelines fail: {}", (int)res);
-    }
+    VK_VERIFY_RESULT(res, "vkCreateGraphicsPipelines fail");
+    _renderPassToPipelineMap.emplace(renderPass, pipelineKey);
+    _pipelineCache.emplace(pipelineKey, pipeline);
+    _activePipeline = pipeline;
 }
 
 bool RenderPipelineImpl::acquireDescriptorState(DescriptorState& state, int frameIndex)
@@ -548,14 +535,14 @@ VkDescriptorPool RenderPipelineImpl::allocateDescriptorPool()
 
     VkDescriptorPool pool = VK_NULL_HANDLE;
     VkResult vr           = vkCreateDescriptorPool(_device, &pci, nullptr, &pool);
-    AXASSERT(vr == VK_SUCCESS, "Failed to create descriptor pool");
+    VK_VERIFY_RESULT(vr, "Failed to create descriptor pool");
 
     _descriptorPools.push_back(pool);
 
     return pool;
 }
 
-void RenderPipelineImpl::removeCachedPipelines(VkRenderPass rp)
+void RenderPipelineImpl::removeCachedPSOsByRenderPass(VkRenderPass rp)
 {
     auto range = _renderPassToPipelineMap.equal_range(rp);
 
@@ -574,6 +561,48 @@ void RenderPipelineImpl::removeCachedPipelines(VkRenderPass rp)
         _renderPassToPipelineMap.erase(range.first, range.second);
     }
 }
+
+void RenderPipelineImpl::removeCachedObjectsByProgram(Program* program)
+{
+    uintptr_t progKey = reinterpret_cast<uintptr_t>(program);
+
+    _driver->waitForGPU();
+
+    // remove descriptor set layouts
+    auto dslIt = _descriptorLayoutCache.find(progKey);
+    if (dslIt != _descriptorLayoutCache.end())
+    {
+        auto& res = dslIt->second.descriptorSetLayouts;
+        if (res[SET_INDEX_UBO])
+            vkDestroyDescriptorSetLayout(_device, res[SET_INDEX_UBO], nullptr);
+        if (res[SET_INDEX_SAMPLER])
+            vkDestroyDescriptorSetLayout(_device, res[SET_INDEX_SAMPLER], nullptr);
+        _descriptorLayoutCache.erase(dslIt);
+    }
+
+    // remove pipeline layout
+    auto plIt = _pipelineLayoutCache.find(progKey);
+    if (plIt != _pipelineLayoutCache.end())
+    {
+        vkDestroyPipelineLayout(_device, plIt->second, nullptr);
+        _pipelineLayoutCache.erase(plIt);
+    }
+
+    // remove pipeline(s)
+    auto range = _programToPipelineMap.equal_range(program);
+    for (auto it = range.first; it != range.second; ++it)
+    {
+        auto pipelineKey = it->second;
+        auto pipelineIt  = _pipelineCache.find(pipelineKey);
+        if (pipelineIt != _pipelineCache.end())
+        {
+            vkDestroyPipeline(_device, pipelineIt->second, nullptr);
+            _pipelineCache.erase(pipelineIt);
+        }
+    }
+    _programToPipelineMap.erase(range.first, range.second);
+}
+
 
 /**
  * @brief Updates input assembly state for dynamic primitive type handling

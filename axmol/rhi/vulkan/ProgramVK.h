@@ -37,6 +37,7 @@ class ProgramImpl : public Program
 {
 public:
     ProgramImpl(Data& vsData, Data& fsData);
+    ~ProgramImpl() override;
 
     // Vulkan specific: return VkShaderModule handles
     VkShaderModule getNativeVSModule() const { return static_cast<ShaderModuleImpl*>(_vsModule)->internalHandle(); }

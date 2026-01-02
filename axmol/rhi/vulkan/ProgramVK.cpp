@@ -22,13 +22,18 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "axmol/rhi/vulkan/ProgramVK.h"
+#include "axmol/rhi/vulkan/DriverVK.h"
 #include "axmol/rhi/ShaderCache.h"
-#include "axmol/rhi/DriverBase.h"
 #include "axmol/base/Logging.h"
 
 namespace ax::rhi::vk
 {
 
 ProgramImpl::ProgramImpl(Data& vsData, Data& fsData) : Program(vsData, fsData) {}
+
+ProgramImpl::~ProgramImpl()
+{
+    static_cast<DriverImpl*>(DriverBase::getInstance())->removeCachedObjectsByProgram(this);
+}
 
 }  // namespace ax::rhi::vk

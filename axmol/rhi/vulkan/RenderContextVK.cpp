@@ -323,6 +323,7 @@ void RenderContextImpl::createCommandBuffers()
 }
 
 #if !_AX_USE_DESCRIPTOR_CACHE
+
 void RenderContextImpl::createDescriptorPool()
 {
     // Define the descriptor types and counts supported by the pool
@@ -988,10 +989,16 @@ void RenderContextImpl::applyPendingDynamicStates()
     }
 }
 
-void RenderContextImpl::removeCachedPipelines(VkRenderPass rp)
+void RenderContextImpl::removeCachedPSOsByRenderPass(VkRenderPass rp)
 {
     if (_renderPipeline)
-        _renderPipeline->removeCachedPipelines(rp);
+        _renderPipeline->removeCachedPSOsByRenderPass(rp);
+}
+
+void RenderContextImpl::removeCachedObjectsByProgram(Program* program)
+{
+    if (_renderPipeline)
+        _renderPipeline->removeCachedObjectsByProgram(program);
 }
 
 void RenderContextImpl::prepareDrawing()

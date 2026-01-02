@@ -39,7 +39,7 @@ public:
     ~RenderTargetImpl();
 
     // Destroy the current live framebuffer and mark attachments dirty
-    void cleanupResources();
+    void cleanupResources() override;
 
     // Begin a render pass using this target
     void beginRenderPass(VkCommandBuffer cmd,

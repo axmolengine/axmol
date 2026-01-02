@@ -865,7 +865,13 @@ void DriverImpl::destroyRenderPass(VkRenderPass rp)
 {
     vkDestroyRenderPass(_device, rp, nullptr);
     if (_currentRenderContext)
-        _currentRenderContext->removeCachedPipelines(rp);
+        _currentRenderContext->removeCachedPSOsByRenderPass(rp);
+}
+
+void DriverImpl::removeCachedObjectsByProgram(Program* program)
+{
+    if (_currentRenderContext)
+        _currentRenderContext->removeCachedObjectsByProgram(program);
 }
 
 void DriverImpl::disposeSampler(VkSampler sampler, uint64_t fenceValue)

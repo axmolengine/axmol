@@ -159,6 +159,7 @@ public:
 
     void destroyFramebuffer(VkFramebuffer);
     void destroyRenderPass(VkRenderPass);
+    void removeCachedObjectsByProgram(Program* program);
 
     void disposeImage(VkImage image, uint64_t fenceValue);
     void disposeImageView(VkImageView view, uint64_t fenceValue);
