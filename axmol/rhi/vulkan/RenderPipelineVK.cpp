@@ -121,25 +121,25 @@ static inline VkColorComponentFlags toVkColorMask(ColorWriteMask mask)
 //
 // This design minimizes redundant PSOs while ensuring that any change in these critical states
 // correctly triggers pipeline re-creation.
-static inline uintptr_t makePipelineKey(const rhi::BlendDesc& blendDesc,
-                                        const DepthStencilStateImpl* dsState,
-                                        void* program,
-                                        VkRenderPass renderPass,
-                                        uint32_t vlHash,
-                                        uint32_t extendedDynState)
+static inline uintptr_t makePipelineId(const rhi::BlendDesc& blendDesc,
+                                       const DepthStencilStateImpl* dsState,
+                                       uint64_t programId,
+                                       VkRenderPass renderPass,
+                                       uint32_t vlHash,
+                                       uint32_t extendedDynState)
 {
     struct HashMe
     {
         rhi::BlendDesc blend{};
         uintptr_t dsHash;
-        void* prog;
+        uint64_t progId;
         uint64_t pass;
         uint32_t vlHash;
         uint32_t extendedDynState;
     };
     HashMe hashMe{.blend            = blendDesc,
                   .dsHash           = dsState->getHash(),
-                  .prog             = program,
+                  .progId           = programId,
                   .pass             = reinterpret_cast<uint64_t>(renderPass),
                   .vlHash           = vlHash,
                   .extendedDynState = extendedDynState};
@@ -288,8 +288,8 @@ void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc)
 
 void RenderPipelineImpl::updateDescriptorSetLayouts(ProgramImpl* program)
 {
-    uintptr_t progKey = (uintptr_t)program;
-    auto it           = _descriptorLayoutCache.find(progKey);
+    auto progId = program->getProgramId();
+    auto it     = _descriptorLayoutCache.find(progId);
     if (it != _descriptorLayoutCache.end())
     {
         _activeDSL = &it->second;
@@ -349,13 +349,13 @@ void RenderPipelineImpl::updateDescriptorSetLayouts(ProgramImpl* program)
         ++dslState.descriptorSetLayoutCount;
     }
 
-    _activeDSL = &_descriptorLayoutCache.emplace(progKey, dslState).first->second;
+    _activeDSL = &_descriptorLayoutCache.emplace(progId, dslState).first->second;
 }
 
 void RenderPipelineImpl::updatePipelineLayout(ProgramImpl* program)
 {
-    uintptr_t progKey = (uintptr_t)program;
-    auto it           = _pipelineLayoutCache.find(progKey);
+    auto progId = program->getProgramId();
+    auto it     = _pipelineLayoutCache.find(progId);
     if (it != _pipelineLayoutCache.end())
     {
         _activePipelineLayout = it->second;
@@ -372,7 +372,7 @@ void RenderPipelineImpl::updatePipelineLayout(ProgramImpl* program)
 
     VkResult result = vkCreatePipelineLayout(_device, &plc, nullptr, &pipelineLayout);
     VK_VERIFY_RESULT(result, "vkCreatePipelineLayout fail");
-    _pipelineLayoutCache.emplace(progKey, pipelineLayout);
+    _pipelineLayoutCache.emplace(progId, pipelineLayout);
     _activePipelineLayout = pipelineLayout;
 }
 
@@ -400,9 +400,9 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc,
     else
         extendedDynState = 0;  // all dynamic
 
-    const uintptr_t pipelineKey =
-        makePipelineKey(desc.blendDesc, _dsState, program, renderPass, desc.vertexLayout->getHash(), extendedDynState);
-    auto it = _pipelineCache.find(pipelineKey);
+    const uintptr_t pipelineId = makePipelineId(desc.blendDesc, _dsState, program->getProgramId(), renderPass,
+                                                desc.vertexLayout->getHash(), extendedDynState);
+    auto it                    = _pipelineCache.find(pipelineId);
     if (it != _pipelineCache.end())
     {
         _activePipeline = it->second;
@@ -447,8 +447,8 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc,
     VkPipeline pipeline = VK_NULL_HANDLE;
     VkResult res        = vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &gp, nullptr, &pipeline);
     VK_VERIFY_RESULT(res, "vkCreateGraphicsPipelines fail");
-    _renderPassToPipelineMap.emplace(renderPass, pipelineKey);
-    _pipelineCache.emplace(pipelineKey, pipeline);
+    _renderPassToPipelineMap.emplace(renderPass, pipelineId);
+    _pipelineCache.emplace(pipelineId, pipeline);
     _activePipeline = pipeline;
 }
 
@@ -564,12 +564,12 @@ void RenderPipelineImpl::removeCachedPSOsByRenderPass(VkRenderPass rp)
 
 void RenderPipelineImpl::removeCachedObjectsByProgram(Program* program)
 {
-    uintptr_t progKey = reinterpret_cast<uintptr_t>(program);
+    auto progId = program->getProgramId();
 
     _driver->waitForGPU();
 
     // remove descriptor set layouts
-    auto dslIt = _descriptorLayoutCache.find(progKey);
+    auto dslIt = _descriptorLayoutCache.find(progId);
     if (dslIt != _descriptorLayoutCache.end())
     {
         auto& res = dslIt->second.descriptorSetLayouts;
@@ -581,7 +581,7 @@ void RenderPipelineImpl::removeCachedObjectsByProgram(Program* program)
     }
 
     // remove pipeline layout
-    auto plIt = _pipelineLayoutCache.find(progKey);
+    auto plIt = _pipelineLayoutCache.find(progId);
     if (plIt != _pipelineLayoutCache.end())
     {
         vkDestroyPipelineLayout(_device, plIt->second, nullptr);
@@ -589,7 +589,7 @@ void RenderPipelineImpl::removeCachedObjectsByProgram(Program* program)
     }
 
     // remove pipeline(s)
-    auto range = _programToPipelineMap.equal_range(program);
+    auto range = _programToPipelineMap.equal_range(progId);
     for (auto it = range.first; it != range.second; ++it)
     {
         auto pipelineKey = it->second;
@@ -602,7 +602,6 @@ void RenderPipelineImpl::removeCachedObjectsByProgram(Program* program)
     }
     _programToPipelineMap.erase(range.first, range.second);
 }
-
 
 /**
  * @brief Updates input assembly state for dynamic primitive type handling

@@ -152,12 +152,12 @@ private:
 
     tlx::pod_vector<VkDescriptorPool> _descriptorPools;
 
-    tlx::hash_map<uintptr_t, DescriptorSetLayoutState> _descriptorLayoutCache;
-    tlx::hash_map<uintptr_t, VkPipelineLayout> _pipelineLayoutCache;
-    tlx::hash_map<uintptr_t, VkPipeline> _pipelineCache;  // PSO cache
+    tlx::hash_map<uint64_t, DescriptorSetLayoutState> _descriptorLayoutCache;  // progId -> dsSet
+    tlx::hash_map<uint64_t, VkPipelineLayout> _pipelineLayoutCache;            // progId -> pipelineLayout
+    tlx::hash_map<uintptr_t, VkPipeline> _pipelineCache;                       // PSO cache
     tlx::hash_map<VkPipelineLayout, DescriptorPool> _descriptorCache;
 
-    std::multimap<Program*, uintptr_t> _programToPipelineMap;
-    std::multimap<VkRenderPass, uintptr_t> _renderPassToPipelineMap;
+    std::multimap<uint64_t, uintptr_t> _programToPipelineMap;         // progId -> PSO id
+    std::multimap<VkRenderPass, uintptr_t> _renderPassToPipelineMap;  // renderPass -> PSO id
 };
 }  // namespace ax::rhi::vk
