@@ -367,6 +367,12 @@ class AxmolUtils {
             ++index
         }
 
+        if(verifiedVer == null) {
+            throw new Exception("No suitable cmake found, required $cmakeVer")
+        }
+
+        buildProfiles['cmakeVer'] = verifiedVer
+ 
         // Create symlink at sdk cmake when using fallback cmake in axmol engine
         // Only present for compatibility purpose, may remove in future axmol releases
         if (index == (cmakeBinDirs.size() - 1)) {
@@ -385,12 +391,6 @@ class AxmolUtils {
                 println "The symlinkd ${symlinkDir} ==> ${fallbackCMakeDir} exist"
             }
         }
-
-        if(verifiedVer == null) {
-            throw new Exception("No suitable cmake found, required $cmakeVer")
-        }
-
-        buildProfiles['cmakeVer'] = verifiedVer
     }
 
     private static String joinPath(String first, String... more) {
