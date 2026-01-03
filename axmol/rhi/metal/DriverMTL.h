@@ -96,6 +96,9 @@ public:
     DriverImpl();
     ~DriverImpl();
 
+    bool init() override { return true; }
+    DriverType type() override { return DriverType::Metal; }
+
     /// @name Setters & Getters
     /**
      * New a RenderContext object.

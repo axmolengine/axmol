@@ -86,16 +86,12 @@ struct DriverCaps
 class AX_DLL DriverBase
 {
 public:
-    struct Caps
-    {};
     friend class ShaderCache;
     friend class SamplerCache;
 
-    /**
-     * Returns a shared instance of the DriverBase.
-     */
-    static DriverBase* getInstance();
-    static void destroyInstance();
+    virtual bool init() = 0;
+
+    virtual DriverType type() = 0;
 
     virtual ~DriverBase() = default;
 
@@ -230,13 +226,15 @@ protected:
     virtual void destroySampler(SamplerHandle&)                  = 0;
 
     DriverCaps _caps;
-
-private:
-    static DriverBase* _instance;
 };
 
 // end of _rhi group
 /// @}
 }  // namespace ax::rhi
 
-#define axdrv ax::rhi::DriverBase::getInstance()
+namespace ax::rhi
+{
+DriverBase* currentDriver();
+}
+
+#define axdrv ax::rhi::currentDriver()

@@ -150,7 +150,7 @@ MTLPixelFormat UtilsMTL::toMTLPixelFormat(PixelFormat textureFormat)
 
 void UtilsMTL::generateMipmaps(id<MTLTexture> texture)
 {
-    auto cmdQueue = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLCmdQueue();
+    auto cmdQueue = static_cast<DriverImpl*>(axdrv)->getMTLCmdQueue();
     @autoreleasepool
     {
         auto oneOffBuffer                        = [cmdQueue commandBuffer];

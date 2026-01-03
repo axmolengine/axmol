@@ -32,6 +32,7 @@
 #include "axmol/rhi/vulkan/DepthStencilStateVK.h"
 #include "axmol/rhi/vulkan/VertexLayoutVK.h"
 #include "axmol/rhi/vulkan/UtilsVK.h"
+#include "axmol/rhi/DriverFactory.h"
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/tlx/hash.hpp"
 #include "axmol/base/Logging.h"
@@ -42,20 +43,9 @@
 
 namespace ax::rhi
 {
-DriverBase* DriverBase::getInstance()
+std::unique_ptr<DriverBase> VulkanDriverFactory::create()
 {
-    if (!_instance)
-    {
-        _instance = new vk::DriverImpl();
-        static_cast<vk::DriverImpl*>(_instance)->init();
-    }
-
-    return _instance;
-}
-
-void DriverBase::destroyInstance()
-{
-    AX_SAFE_DELETE(_instance);
+    return std::make_unique<vk::DriverImpl>();
 }
 }  // namespace ax::rhi
 

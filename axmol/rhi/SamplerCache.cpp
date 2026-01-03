@@ -38,7 +38,7 @@ void SamplerCache::destroyInstance()
 
 SamplerCache::SamplerCache()
 {
-    _driver = DriverBase::getInstance();
+    _driver = axdrv;
 
     createBuiltinSamplers();
 }

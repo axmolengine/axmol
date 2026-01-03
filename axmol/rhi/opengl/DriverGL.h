@@ -24,8 +24,9 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/rhi/DriverBase.h"
 #include "axmol/platform/GL.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverFactory.h"
 #include "axmol/rhi/opengl/OpenGLState.h"
 #include "axmol/tlx/hlookup.hpp"
 
@@ -52,6 +53,10 @@ class DriverImpl : public DriverBase
 public:
     DriverImpl();
     ~DriverImpl();
+
+    bool init() override { return true; }
+
+    DriverType type() override { return DriverType::OpenGL; }
 
     /* The vertex data buffers binding index start, the axslcc(SPIRV-Cross)
      */

@@ -1,5 +1,4 @@
 /****************************************************************************
- Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
@@ -22,17 +21,27 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-
+#pragma once
+#include <memory>
+#include <vector>
+#include <algorithm>
+#include "axmol/tlx/hlookup.hpp"
 #include "axmol/rhi/DriverBase.h"
-
-#include "axmol/rhi/VertexLayout.h"
 
 namespace ax::rhi
 {
-
-VertexLayout* DriverBase::createVertexLayout(VertexLayoutDesc&& desc)
+class DriverRuntime
 {
-    return new VertexLayout(std::forward<VertexLayoutDesc>(desc));
-}
+public:
+    static void init();
+    static void uninit();
+
+    static DriverBase* currentDriver() { return _currentDriver.get(); }
+    static DriverType currentDriverType() { return _currentDriverType; }
+
+private:
+    static std::unique_ptr<DriverBase> _currentDriver;
+    static DriverType _currentDriverType;
+};
 
 }  // namespace ax::rhi

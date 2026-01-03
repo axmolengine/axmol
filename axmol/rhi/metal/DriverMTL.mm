@@ -37,19 +37,7 @@
 
 namespace ax::rhi
 {
-DriverBase* DriverBase::getInstance()
-{
-    if (!_instance)
-        _instance = new mtl::DriverImpl();
-
-    return _instance;
-}
-
-void DriverBase::destroyInstance()
-{
-    if (_instance)
-        delete _instance;
-}
+    std::unique_ptr<DriverBase> MetalDriverFactory::create() { return std::make_unique<mtl::DriverImpl>(); }
 }  // namespace ax::rhi
 
 namespace ax::rhi::mtl

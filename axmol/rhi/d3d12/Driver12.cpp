@@ -52,19 +52,9 @@
 
 namespace ax::rhi
 {
-DriverBase* DriverBase::getInstance()
+std::unique_ptr<DriverBase> D3D12DriverFactory::create()
 {
-    if (!_instance)
-    {
-        _instance = new d3d12::DriverImpl();
-        static_cast<d3d12::DriverImpl*>(_instance)->init();
-    }
-    return _instance;
-}
-
-void DriverBase::destroyInstance()
-{
-    AX_SAFE_DELETE(_instance);
+    return std::make_unique<d3d12::DriverImpl>();
 }
 }  // namespace ax::rhi
 
@@ -311,7 +301,7 @@ DriverImpl::~DriverImpl()
         debugDevice->ReportLiveDeviceObjects(D3D12_RLDO_DETAIL);
 }
 
-void DriverImpl::init()
+bool DriverImpl::init()
 {
     initializeDevice();
     createDescriptorAllocators();
@@ -377,6 +367,8 @@ void DriverImpl::init()
 #endif
 
     _dxcAvailable = detectDXCAvailability();
+
+    return true;
 }
 
 void DriverImpl::initializeDevice()

@@ -74,7 +74,7 @@ bool DistortingCallbackMetal::OnDistorting(EffekseerRenderer::Renderer* renderer
 
     if(textureInternal_ == nullptr)
     {
-        auto driver = static_cast<cocos2d::rhi::DriverMTL*>(cocos2d::rhi::DriverBase::getInstance());
+        auto driver = static_cast<cocos2d::rhi::DriverMTL*>(axdrv);
 
         MTLTextureDescriptor* textureDescriptor =
         [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:cocos2d::rhi::UtilsMTL::getDefaultColorAttachmentPixelFormat()
@@ -102,7 +102,7 @@ bool DistortingCallbackMetal::OnDistorting(EffekseerRenderer::Renderer* renderer
 
     [blitEncoder copyFromTexture:drawable.texture sourceSlice:0 sourceLevel:0 sourceOrigin:region.origin sourceSize:region.size toTexture:texture destinationSlice:0 destinationLevel:0 destinationOrigin:{0, 0, 0}];
     [blitEncoder endEncoding];
-    cocos2d::rhi::DriverBase::getInstance()->setFrameBufferOnly(true); // reset
+    axdrv->setFrameBufferOnly(true); // reset
 
     SetMTLObjectsFromCocos2d(commandList_);
 

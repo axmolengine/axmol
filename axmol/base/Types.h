@@ -510,6 +510,10 @@ struct ContextAttrs
 
     // Whether sampler binding is fully controlled by shader (D3D12 style)
     bool shaderControlledSampler{false};
+
+    int driverPriorities[(int)rhi::DriverType::Count]{
+        rhi::DefaultDriverPriority::D3D12, rhi::DefaultDriverPriority::D3D11, rhi::DefaultDriverPriority::Vulkan,
+        rhi::DefaultDriverPriority::Metal, rhi::DefaultDriverPriority::OpenGL};
 };
 
 /** @struct Acceleration

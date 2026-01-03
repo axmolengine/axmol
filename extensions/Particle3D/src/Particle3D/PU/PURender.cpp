@@ -82,7 +82,7 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
     if (_vertexBuffer == nullptr)
     {
         size_t stride = sizeof(V3F_T2F_C4F);
-        _vertexBuffer = rhi::DriverBase::getInstance()->createBuffer(
+        _vertexBuffer = axdrv->createBuffer(
             stride * 4 * particleSystem->getParticleQuota(), rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
@@ -94,7 +94,7 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
     if (_indexBuffer == nullptr)
     {
         _indexBuffer =
-            rhi::DriverBase::getInstance()->createBuffer(6 * particleSystem->getParticleQuota() * sizeof(uint16_t),
+            axdrv->createBuffer(6 * particleSystem->getParticleQuota() * sizeof(uint16_t),
                                                          rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)
         {
@@ -696,7 +696,7 @@ void PUParticle3DBoxRender::render(Renderer* renderer, const Mat4& transform, Pa
     if (_vertexBuffer == nullptr && _indexBuffer == nullptr)
     {
         size_t stride = sizeof(V3F_T2F_C4F);
-        _vertexBuffer = rhi::DriverBase::getInstance()->createBuffer(
+        _vertexBuffer = axdrv->createBuffer(
             stride * 8 * particleSystem->getParticleQuota(), rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
@@ -706,7 +706,7 @@ void PUParticle3DBoxRender::render(Renderer* renderer, const Mat4& transform, Pa
         _vertices.resize(8 * particleSystem->getParticleQuota());
 
         _indexBuffer =
-            rhi::DriverBase::getInstance()->createBuffer(sizeof(uint16_t) * 36 * particleSystem->getParticleQuota(),
+            axdrv->createBuffer(sizeof(uint16_t) * 36 * particleSystem->getParticleQuota(),
                                                          rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)
         {
@@ -886,7 +886,7 @@ void PUSphereRender::render(Renderer* renderer, const Mat4& transform, ParticleS
     {
         size_t stride = sizeof(V3F_T2F_C4F);
         _vertexBuffer =
-            rhi::DriverBase::getInstance()->createBuffer(stride * vertexCount * particleSystem->getParticleQuota(),
+            axdrv->createBuffer(stride * vertexCount * particleSystem->getParticleQuota(),
                                                          rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
@@ -895,7 +895,7 @@ void PUSphereRender::render(Renderer* renderer, const Mat4& transform, ParticleS
         }
         _vertices.resize(vertexCount * particleSystem->getParticleQuota());
 
-        _indexBuffer = rhi::DriverBase::getInstance()->createBuffer(
+        _indexBuffer = axdrv->createBuffer(
             sizeof(uint16_t) * indexCount * particleSystem->getParticleQuota(), rhi::BufferType::INDEX,
             rhi::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)

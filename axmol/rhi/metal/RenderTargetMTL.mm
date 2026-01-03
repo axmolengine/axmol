@@ -131,7 +131,7 @@ void RenderTargetImpl::rebuildSwapchainAttachments()
     depthDesc.pixelFormat  = PixelFormat::D24S8;
     depthDesc.textureUsage = TextureUsage::RENDER_TARGET;
 
-    auto mtlDevice = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLDevice();
+    auto mtlDevice = static_cast<DriverImpl*>(axdrv)->getMTLDevice();
     auto tex       = new TextureImpl(mtlDevice, depthDesc);
     // ensure native texture
     tex->updateData(nullptr, width, height, 0);

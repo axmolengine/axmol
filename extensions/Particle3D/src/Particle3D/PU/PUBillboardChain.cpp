@@ -158,13 +158,13 @@ void PUBillboardChain::setupBuffers()
         AX_SAFE_RELEASE_NULL(_indexBuffer);
 
         size_t stride = sizeof(V3F_T2F_C4F);
-        _vertexBuffer = rhi::DriverBase::getInstance()->createBuffer(
+        _vertexBuffer = axdrv->createBuffer(
             stride * _chainElementList.size() * 2, rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
         V3F_T2F_C4F vi = {Vec3(0.0f, 0.0f, 0.0f), Vec2(0.0f, 0.0f), Color::WHITE};
         _vertices.resize(_chainElementList.size() * 2, vi);
 
         _indexBuffer =
-            rhi::DriverBase::getInstance()->createBuffer(_chainCount * _maxElementsPerChain * 6 * sizeof(uint16_t),
+            axdrv->createBuffer(_chainCount * _maxElementsPerChain * 6 * sizeof(uint16_t),
                                                          rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
 
         _indices.resize(_chainCount * _maxElementsPerChain * 6, 0);

@@ -3260,7 +3260,7 @@ int lua_ax_rhi_DriverBase_getInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_getInstance'", nullptr);
             return 0;
         }
-        auto&& ret = ax::rhi::DriverBase::getInstance();
+        auto&& ret = axdrv;
         object_to_luaval<ax::rhi::DriverBase>(tolua_S, "axrhi.DriverBase",(ax::rhi::DriverBase*)ret);
         return 1;
     }

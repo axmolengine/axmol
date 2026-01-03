@@ -681,7 +681,7 @@ void EffectEmitter::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& paren
     if (!manager->isDistorted)
     {
         // allow frame buffer texture to be copied for distortion
-        cocos2d::rhi::DriverBase::getInstance()->setFrameBufferOnly(false);
+        axdrv->setFrameBufferOnly(false);
     }
 #endif
 

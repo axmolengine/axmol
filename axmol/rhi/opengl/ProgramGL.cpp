@@ -115,7 +115,7 @@ void ProgramImpl::compileProgram()
     }
 
     /// --- create uniform buffers and setup binding point
-    auto driver = DriverBase::getInstance();
+    auto driver = axdrv;
     deleteUniformBuffers();
 
 #if defined(_WIN32) && AX_GLES_PROFILE

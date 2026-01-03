@@ -596,7 +596,7 @@ void RenderContextImpl::readPixels(id<MTLTexture> texture,
                                                                                            width:texWidth
                                                                                           height:texHeight
                                                                                        mipmapped:NO];
-    id<MTLDevice> device              = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLDevice();
+    id<MTLDevice> device              = static_cast<DriverImpl*>(axdrv)->getMTLDevice();
     id<MTLTexture> readPixelsTexture  = [device newTextureWithDescriptor:textureDesc];
 
     auto oneOffBuffer = [_mtlCmdQueue commandBuffer];

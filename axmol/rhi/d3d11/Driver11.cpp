@@ -41,21 +41,9 @@
 
 namespace ax::rhi
 {
-
-DriverBase* DriverBase::getInstance()
+std::unique_ptr<DriverBase> D3D11DriverFactory::create()
 {
-    if (!_instance)
-    {
-        _instance = new d3d11::DriverImpl();
-        static_cast<d3d11::DriverImpl*>(_instance)->init();
-    }
-
-    return _instance;
-}
-
-void DriverBase::destroyInstance()
-{
-    AX_SAFE_DELETE(_instance);
+    return std::make_unique<d3d11::DriverImpl>();
 }
 }  // namespace ax::rhi
 

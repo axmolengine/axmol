@@ -39,6 +39,27 @@ using namespace std::string_view_literals;
 
 inline constexpr int MAX_FRAMES_IN_FLIGHT = 3;
 
+enum class DriverType
+{
+    Unkown = -1,
+    D3D12,
+    D3D11,
+    Vulkan,
+    Metal,
+    OpenGL,  // GL or GLES
+    Count
+};
+
+struct DefaultDriverPriority
+{
+    static constexpr int Null   = 0;
+    static constexpr int OpenGL = 70;
+    static constexpr int D3D11  = 80;
+    static constexpr int Vulkan = 90;
+    static constexpr int D3D12  = 100;
+    static constexpr int Metal  = 100;
+};
+
 enum class BufferUsage : uint32_t
 {
     STATIC,

@@ -61,6 +61,8 @@ The RenderViewImpl for win32,linux,macos,wasm
 #    include "axmol/rhi/vulkan/DriverVK.h"
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
+#include "axmol/rhi/DriverRuntime.h"
+
 /** glfw3native.h */
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    ifndef GLFW_EXPOSE_NATIVE_WIN32
@@ -595,7 +597,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     // Init GPU device by driver for non-opengl RHI
     // Initialize the D3D driver before creating the window to avoid a brief white flash
     // caused by driver initialization stutter (hundreds of milliseconds) after the window appears.
-    axdrv;
+    ax::rhi::DriverRuntime::init();
 #endif
 
     _renderScaleMode = contextAttrs.renderScaleMode;
@@ -634,7 +636,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     loadGL();
 #    endif
     // Init driver after load GL
-    axdrv;
+    ax::rhi::DriverRuntime::init();
     glfwSetWindowUserPointer(_mainWindow, rhi::gl::__state);
 #endif
 

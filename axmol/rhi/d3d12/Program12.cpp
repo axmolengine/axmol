@@ -33,6 +33,6 @@ ProgramImpl::ProgramImpl(Data& vsData, Data& fsData) : Program(vsData, fsData) {
 
 ProgramImpl::~ProgramImpl()
 {
-    static_cast<DriverImpl*>(DriverBase::getInstance())->removeCachedPipelineObjects(this);
+    static_cast<DriverImpl*>(axdrv)->removeCachedPipelineObjects(this);
 }
 }  // namespace ax::rhi::d3d12

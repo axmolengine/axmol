@@ -114,7 +114,7 @@ public:
 private:
     rhi::Buffer* createBuffer(size_t capacity)
     {
-        auto buf = rhi::DriverBase::getInstance()->createBuffer(capacity, _type, _usage);
+        auto buf = axdrv->createBuffer(capacity, _type, _usage);
         _buffers.push_back(buf);
         return buf;
     }
@@ -296,7 +296,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_Init()
 
     ImGuiPlatformIO& platform_io         = ImGui::GetPlatformIO();
     platform_io.Renderer_TextureMaxWidth = platform_io.Renderer_TextureMaxHeight =
-        rhi::DriverBase::getInstance()->getMaxTextureSize();
+        axdrv->getMaxTextureSize();
 
     io.IniFilename = nullptr;
 
@@ -414,7 +414,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
 #if AX_RENDER_API == AX_RENDER_API_D3D12
                         renderer->setScissorRect(clip_rect.x, clip_rect.y, clip_rect.z - clip_rect.x,
                                                  clip_rect.w - clip_rect.y);
-                        
+
 
 #else
                         renderer->setScissorRect(clip_rect.x, fb_height - clip_rect.w, clip_rect.z - clip_rect.x,

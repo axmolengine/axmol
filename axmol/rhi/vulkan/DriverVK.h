@@ -98,7 +98,9 @@ public:
     DriverImpl();
     ~DriverImpl();
 
-    void init();
+    bool init() override;
+
+    DriverType type() override { return DriverType::Vulkan; }
 
     bool recreateSurface(const SurfaceCreateInfo& info);
     VkSurfaceKHR getSurface() const { return _surface; }

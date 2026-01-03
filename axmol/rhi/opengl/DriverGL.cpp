@@ -50,17 +50,9 @@
 
 namespace ax::rhi
 {
-DriverBase* DriverBase::getInstance()
+std::unique_ptr<DriverBase> GLDriverFactory::create()
 {
-    if (!_instance)
-        _instance = new gl::DriverImpl();
-
-    return _instance;
-}
-
-void DriverBase::destroyInstance()
-{
-    AX_SAFE_DELETE(_instance);
+    return std::make_unique<gl::DriverImpl>();
 }
 }  // namespace ax::rhi
 

@@ -28,6 +28,7 @@
 #include "axmol/rhi/d3d12/UploadBufferAllocator12.h"
 #include "axmol/rhi/d3d12/ShaderModule12.h"
 #include "axmol/rhi/DXUtils.h"
+#include "axmol/rhi/DriverFactory.h"
 #include "axmol/tlx/byte_buffer.hpp"
 #include <d3d12.h>
 #include <dxgi1_4.h>
@@ -116,7 +117,8 @@ public:
     DriverImpl();
     ~DriverImpl();
 
-    void init();
+    bool init() override;
+    DriverType type() override { return DriverType::D3D12; }
 
     RenderContext* createRenderContext(SurfaceHandle surface) override;
     Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial) override;
