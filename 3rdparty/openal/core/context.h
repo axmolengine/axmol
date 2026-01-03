@@ -6,33 +6,33 @@
 #include <array>
 #include <atomic>
 #include <bitset>
-#include <cstddef>
 #include <memory>
+#include <span>
 #include <thread>
 #include <vector>
 
-#include "alsem.h"
-#include "alspan.h"
+#include "alnumeric.h"
 #include "async_event.h"
 #include "atomic.h"
 #include "flexarray.h"
+#include "gsl/gsl"
 #include "opthelpers.h"
+#include "ringbuffer.h"
 #include "vecmat.h"
 
 struct DeviceBase;
-struct EffectSlot;
+struct EffectSlotBase;
 struct EffectSlotProps;
-struct RingBuffer;
 struct Voice;
 struct VoiceChange;
 struct VoicePropsItem;
 
 
-inline constexpr float SpeedOfSoundMetersPerSec{343.3f};
+inline constexpr auto SpeedOfSoundMetersPerSec = 343.3f;
 
-inline constexpr float AirAbsorbGainHF{0.99426f}; /* -0.05dB */
+inline constexpr auto AirAbsorbGainHF = 0.99426f; /* -0.05dB */
 
-enum class DistanceModel : unsigned char {
+enum class DistanceModel : u8 {
     Disable,
     Inverse, InverseClamped,
     Linear, LinearClamped,
@@ -43,56 +43,56 @@ enum class DistanceModel : unsigned char {
 
 
 struct ContextProps {
-    std::array<float,3> Position;
-    std::array<float,3> Velocity;
-    std::array<float,3> OrientAt;
-    std::array<float,3> OrientUp;
-    float Gain;
-    float MetersPerUnit;
-    float AirAbsorptionGainHF;
+    std::array<f32, 3> Position;
+    std::array<f32, 3> Velocity;
+    std::array<f32, 3> OrientAt;
+    std::array<f32, 3> OrientUp;
+    f32 Gain;
+    f32 MetersPerUnit;
+    f32 AirAbsorptionGainHF;
 
-    float DopplerFactor;
-    float DopplerVelocity;
-    float SpeedOfSound;
+    f32 DopplerFactor;
+    f32 DopplerVelocity;
+    f32 SpeedOfSound;
 #if ALSOFT_EAX
-    float DistanceFactor;
+    f32 DistanceFactor;
 #endif
     bool SourceDistanceModel;
     DistanceModel mDistanceModel;
 
-    std::atomic<ContextProps*> next{};
+    std::atomic<ContextProps*> next;
 };
 
 struct ContextParams {
     /* Pointer to the most recent property values that are awaiting an update. */
     std::atomic<ContextProps*> ContextUpdate{nullptr};
 
-    alu::Vector Position;
-    alu::Matrix Matrix{alu::Matrix::Identity()};
-    alu::Vector Velocity;
+    al::Vector Position;
+    al::Matrix Matrix{al::Matrix::Identity()};
+    al::Vector Velocity;
 
-    float Gain{1.0f};
-    float MetersPerUnit{1.0f};
-    float AirAbsorptionGainHF{AirAbsorbGainHF};
+    f32 Gain{1.0f};
+    f32 MetersPerUnit{1.0f};
+    f32 AirAbsorptionGainHF{AirAbsorbGainHF};
 
-    float DopplerFactor{1.0f};
-    float SpeedOfSound{SpeedOfSoundMetersPerSec}; /* in units per sec! */
+    f32 DopplerFactor{1.0f};
+    f32 SpeedOfSound{SpeedOfSoundMetersPerSec}; /* in units per sec! */
 
     bool SourceDistanceModel{false};
     DistanceModel mDistanceModel{};
 };
 
 struct ContextBase {
-    DeviceBase *const mDevice;
+    gsl::not_null<DeviceBase*> const mDevice;
 
     /* Counter for the pre-mixing updates, in 31.1 fixed point (lowest bit
      * indicates if updates are currently happening).
      */
-    std::atomic<unsigned int> mUpdateCount{0u};
+    std::atomic<u32> mUpdateCount{0_u32};
     std::atomic<bool> mHoldUpdates{false};
     std::atomic<bool> mStopVoicesOnDisconnect{true};
 
-    float mGainBoost{1.0f};
+    f32 mGainBoost{1.0f};
 
     /* Linked lists of unused property containers, free to use for future
      * updates.
@@ -107,7 +107,7 @@ struct ContextBase {
      * last processed, and any after are pending.
      */
     VoiceChange *mVoiceChangeTail{};
-    std::atomic<VoiceChange*> mCurrentVoiceChange{};
+    std::atomic<VoiceChange*> mCurrentVoiceChange;
 
     void allocVoiceChanges();
     void allocVoiceProps();
@@ -118,22 +118,22 @@ struct ContextBase {
 
     using VoiceArray = al::FlexArray<Voice*>;
     al::atomic_unique_ptr<VoiceArray> mVoices;
-    std::atomic<size_t> mActiveVoiceCount{};
+    std::atomic<size_t> mActiveVoiceCount;
 
-    void allocVoices(size_t addcount);
-    [[nodiscard]] auto getVoicesSpan() const noexcept -> al::span<Voice*>
+    void allocVoices(usize addcount);
+    [[nodiscard]] auto getVoicesSpan() const noexcept LIFETIMEBOUND -> std::span<Voice*>
     {
         return {mVoices.load(std::memory_order_relaxed)->data(),
             mActiveVoiceCount.load(std::memory_order_relaxed)};
     }
-    [[nodiscard]] auto getVoicesSpanAcquired() const noexcept -> al::span<Voice*>
+    [[nodiscard]] auto getVoicesSpanAcquired() const noexcept LIFETIMEBOUND -> std::span<Voice*>
     {
         return {mVoices.load(std::memory_order_acquire)->data(),
             mActiveVoiceCount.load(std::memory_order_acquire)};
     }
 
 
-    using EffectSlotArray = al::FlexArray<EffectSlot*>;
+    using EffectSlotArray = al::FlexArray<EffectSlotBase*>;
     /* This array is split in half. The front half is the list of activated
      * effect slots as set by the app, and the back half is the same list but
      * sorted to ensure later effect slots are fed by earlier ones.
@@ -141,8 +141,9 @@ struct ContextBase {
     al::atomic_unique_ptr<EffectSlotArray> mActiveAuxSlots;
 
     std::thread mEventThread;
-    al::semaphore mEventSem;
-    std::unique_ptr<RingBuffer> mAsyncEvents;
+    FifoBufferPtr<AsyncEvent> mAsyncEvents;
+    /* u32 to work with macOS wait/notify wrappers, but really just a bool. */
+    std::atomic<u32> mEventsPending;
     using AsyncEventBitset = std::bitset<al::to_underlying(AsyncEnableBits::Count)>;
     std::atomic<AsyncEventBitset> mEnabledEvts{0u};
 
@@ -161,9 +162,9 @@ struct ContextBase {
     std::vector<VoicePropsCluster> mVoicePropClusters;
 
 
-    EffectSlot *getEffectSlot();
+    auto getEffectSlot() LIFETIMEBOUND -> gsl::not_null<EffectSlotBase*>;
 
-    using EffectSlotCluster = std::unique_ptr<std::array<EffectSlot,4>>;
+    using EffectSlotCluster = std::unique_ptr<std::array<EffectSlotBase,4>>;
     std::vector<EffectSlotCluster> mEffectSlotClusters;
 
     using EffectSlotPropsCluster = std::unique_ptr<std::array<EffectSlotProps,4>>;
@@ -175,11 +176,12 @@ struct ContextBase {
     using ContextPropsCluster = std::unique_ptr<std::array<ContextProps,2>>;
     std::vector<ContextPropsCluster> mContextPropClusters;
 
-
-    explicit ContextBase(DeviceBase *device);
     ContextBase(const ContextBase&) = delete;
     ContextBase& operator=(const ContextBase&) = delete;
-    virtual ~ContextBase();
+
+protected:
+    explicit ContextBase(gsl::not_null<DeviceBase*> device LIFETIMEBOUND);
+    ~ContextBase();
 };
 
 #endif /* CORE_CONTEXT_H */

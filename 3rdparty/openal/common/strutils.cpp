@@ -1,71 +1,96 @@
 
 #include "config.h"
 
-#include "strutils.h"
+#include "strutils.hpp"
 
 #include <cstdlib>
 
 #ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-#include "alstring.h"
+#include "gsl/gsl"
 
 /* NOLINTBEGIN(bugprone-suspicious-stringview-data-usage) */
-std::string wstr_to_utf8(std::wstring_view wstr)
+auto wstr_to_utf8(std::wstring_view wstr) -> std::string
 {
-    std::string ret;
+    static constexpr auto flags = DWORD{WC_ERR_INVALID_CHARS};
+    auto ret = std::string{};
+    if(wstr.empty()) [[unlikely]]
+        return ret;
 
-    const int len{WideCharToMultiByte(CP_UTF8, 0, wstr.data(), al::sizei(wstr), nullptr, 0,
-        nullptr, nullptr)};
-    if(len > 0)
+    const auto u16len = gsl::narrow<int>(wstr.size());
+    auto len = WideCharToMultiByte(CP_UTF8, flags, wstr.data(), u16len, nullptr, 0, nullptr,
+        nullptr);
+    if(len < 1) [[unlikely]]
+        return ret;
+
+    ret.resize(gsl::narrow<size_t>(len));
+    len = WideCharToMultiByte(CP_UTF8, flags, wstr.data(), u16len, ret.data(), len, nullptr,
+        nullptr);
+    if(len < 1) [[unlikely]]
     {
-        ret.resize(static_cast<size_t>(len));
-        WideCharToMultiByte(CP_UTF8, 0, wstr.data(), al::sizei(wstr), ret.data(), len,
-            nullptr, nullptr);
+        ret.clear();
+        return ret;
     }
 
     return ret;
 }
 
-std::wstring utf8_to_wstr(std::string_view str)
+auto utf8_to_wstr(std::string_view str) -> std::wstring
 {
-    std::wstring ret;
+    static constexpr auto flags = DWORD{MB_ERR_INVALID_CHARS};
+    auto ret = std::wstring{};
+    if(str.empty()) [[unlikely]]
+        return ret;
 
-    const int len{MultiByteToWideChar(CP_UTF8, 0, str.data(), al::sizei(str), nullptr, 0)};
-    if(len > 0)
+    const auto u8len = gsl::narrow<int>(str.size());
+    auto len = MultiByteToWideChar(CP_UTF8, flags, str.data(), u8len, nullptr, 0);
+    if(len < 1) [[unlikely]]
+        return ret;
+
+    ret.resize(gsl::narrow<size_t>(len));
+    len = MultiByteToWideChar(CP_UTF8, flags, str.data(), u8len, ret.data(), len);
+    if(len < 1) [[unlikely]]
     {
-        ret.resize(static_cast<size_t>(len));
-        MultiByteToWideChar(CP_UTF8, 0, str.data(), al::sizei(str), ret.data(), len);
+        ret.clear();
+        return ret;
     }
 
     return ret;
 }
 /* NOLINTEND(bugprone-suspicious-stringview-data-usage) */
-#endif
 
 namespace al {
 
-std::optional<std::string> getenv(const char *envname)
+auto getenv(const gsl::czstring envname) -> std::optional<std::string>
 {
-#ifdef _GAMING_XBOX
-    const char *str{::getenv(envname)};
+    auto *str = _wgetenv(utf8_to_wstr(envname).c_str());
+    if(str && *str != L'\0')
+        return wstr_to_utf8(str);
+    return std::nullopt;
+}
+
+auto getenv(const gsl::cwzstring envname) -> std::optional<std::wstring>
+{
+    auto *str = _wgetenv(envname);
+    if(str && *str != L'\0')
+        return str;
+    return std::nullopt;
+}
+
+} /* namespace al */
+
 #else
-    const char *str{std::getenv(envname)};
-#endif
+
+namespace al {
+
+auto getenv(const gsl::czstring envname) -> std::optional<std::string>
+{
+    auto *str = std::getenv(envname);
     if(str && *str != '\0')
         return str;
     return std::nullopt;
 }
 
-#ifdef _WIN32
-std::optional<std::wstring> getenv(const WCHAR *envname)
-{
-    const WCHAR *str{_wgetenv(envname)};
-    if(str && *str != L'\0')
-        return str;
-    return std::nullopt;
-}
+} /* namespace al */
 #endif
-
-} // namespace al

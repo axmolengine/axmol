@@ -7,31 +7,33 @@
 #include <atomic>
 #include <utility>
 
+#include "alformat.hpp"
 #include "core/devformat.h"
 
 
 namespace al {
-auto backend_exception::make_string(fmt::string_view fmt, fmt::format_args args) -> std::string
-{ return fmt::vformat(fmt, std::move(args)); }
 
-backend_exception::~backend_exception() = default;
+auto backend_exception::make_string(al::string_view const fmt, al::format_args args)
+    -> std::string
+{ return al::vformat(fmt, std::move(args)); }
+
 } // namespace al
 
 
-bool BackendBase::reset()
+auto BackendBase::reset() -> bool
 { throw al::backend_exception{al::backend_error::DeviceError, "Invalid BackendBase call"}; }
 
-void BackendBase::captureSamples(std::byte*, uint)
+void BackendBase::captureSamples(std::span<std::byte> outbuffer [[maybe_unused]])
 { }
 
-uint BackendBase::availableSamples()
-{ return 0; }
+auto BackendBase::availableSamples() -> usize
+{ return 0_uz; }
 
-ClockLatency BackendBase::getClockLatency()
+auto BackendBase::getClockLatency() -> ClockLatency
 {
-    ClockLatency ret{};
+    auto ret = ClockLatency{};
 
-    uint refcount;
+    auto refcount = u32{};
     do {
         refcount = mDevice->waitForMix();
         ret.ClockTime = mDevice->getClockTime();

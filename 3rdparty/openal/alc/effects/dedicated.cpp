@@ -23,10 +23,10 @@
 #include <algorithm>
 #include <array>
 #include <cstdlib>
+#include <span>
 #include <variant>
 
 #include "alc/effects/base.h"
-#include "alspan.h"
 #include "core/bufferline.h"
 #include "core/devformat.h"
 #include "core/device.h"
@@ -41,8 +41,6 @@ struct ContextBase;
 
 namespace {
 
-using uint = unsigned int;
-
 struct DedicatedState final : public EffectState {
     /* The "dedicated" effect can output to the real output, so should have
      * gains for all possible output channels and not just the main ambisonic
@@ -53,24 +51,24 @@ struct DedicatedState final : public EffectState {
 
 
     void deviceUpdate(const DeviceBase *device, const BufferStorage *buffer) final;
-    void update(const ContextBase *context, const EffectSlot *slot, const EffectProps *props_,
+    void update(const ContextBase *context, const EffectSlotBase *slot, const EffectProps *props_,
         const EffectTarget target) final;
-    void process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn,
-        const al::span<FloatBufferLine> samplesOut) final;
+    void process(const size_t samplesToDo, const std::span<const FloatBufferLine> samplesIn,
+        const std::span<FloatBufferLine> samplesOut) final;
 };
 
 void DedicatedState::deviceUpdate(const DeviceBase*, const BufferStorage*)
 {
-    std::fill(mCurrentGains.begin(), mCurrentGains.end(), 0.0f);
+    mCurrentGains.fill(0.0f);
 }
 
-void DedicatedState::update(const ContextBase*, const EffectSlot *slot,
+void DedicatedState::update(const ContextBase*, const EffectSlotBase *slot,
     const EffectProps *props_, const EffectTarget target)
 {
-    std::fill(mTargetGains.begin(), mTargetGains.end(), 0.0f);
+    mTargetGains.fill(0.0f);
 
     auto &props = std::get<DedicatedProps>(*props_);
-    const float Gain{slot->Gain * props.Gain};
+    const auto Gain = slot->Gain * props.Gain;
 
     if(props.Target == DedicatedProps::Dialog)
     {
@@ -89,12 +87,14 @@ void DedicatedState::update(const ContextBase*, const EffectSlot *slot,
             static constexpr auto coeffs = CalcDirectionCoeffs(std::array{0.0f, 0.0f, -1.0f});
 
             mOutTarget = target.Main->Buffer;
-            ComputePanGains(target.Main, coeffs, Gain, mTargetGains);
+            ComputePanGains(target.Main, coeffs, Gain,
+                std::span{mTargetGains}.first<MaxAmbiChannels>());
         }
     }
     else if(props.Target == DedicatedProps::Lfe)
     {
-        const size_t idx{target.RealOut ? target.RealOut->ChannelIndex[LFE] : InvalidChannelIndex};
+        const auto idx = size_t{target.RealOut ? target.RealOut->ChannelIndex[LFE]
+            : InvalidChannelIndex};
         if(idx != InvalidChannelIndex)
         {
             mOutTarget = target.RealOut->Buffer;
@@ -103,9 +103,10 @@ void DedicatedState::update(const ContextBase*, const EffectSlot *slot,
     }
 }
 
-void DedicatedState::process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn, const al::span<FloatBufferLine> samplesOut)
+void DedicatedState::process(const size_t samplesToDo,
+    const std::span<const FloatBufferLine> samplesIn, const std::span<FloatBufferLine> samplesOut)
 {
-    MixSamples(al::span{samplesIn[0]}.first(samplesToDo), samplesOut, mCurrentGains, mTargetGains,
+    MixSamples(std::span{samplesIn[0]}.first(samplesToDo), samplesOut, mCurrentGains, mTargetGains,
         samplesToDo, 0);
 }
 
@@ -117,8 +118,8 @@ struct DedicatedStateFactory final : public EffectStateFactory {
 
 } // namespace
 
-EffectStateFactory *DedicatedStateFactory_getFactory()
+auto DedicatedStateFactory_getFactory() -> gsl::not_null<EffectStateFactory*>
 {
     static DedicatedStateFactory DedicatedFactory{};
-    return &DedicatedFactory;
+    return gsl::make_not_null(&DedicatedFactory);
 }

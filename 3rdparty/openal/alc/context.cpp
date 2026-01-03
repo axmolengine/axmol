@@ -5,13 +5,12 @@
 
 #include <algorithm>
 #include <array>
+#include <bit>
 #include <cstddef>
 #include <functional>
-#include <iterator>
 #include <numeric>
 #include <optional>
 #include <string_view>
-#include <tuple>
 #include <utility>
 
 #include "AL/efx.h"
@@ -22,11 +21,9 @@
 #include "al/effect.h"
 #include "al/event.h"
 #include "al/listener.h"
-#include "albit.h"
 #include "alc/alu.h"
 #include "alc/backends/base.h"
 #include "alnumeric.h"
-#include "alspan.h"
 #include "atomic.h"
 #include "core/async_event.h"
 #include "core/devformat.h"
@@ -36,6 +33,9 @@
 #include "core/voice_change.h"
 #include "device.h"
 #include "flexarray.h"
+#include "fmt/format.h"
+#include "fmt/ranges.h"
+#include "gsl/gsl"
 #include "ringbuffer.h"
 #include "vecmat.h"
 
@@ -50,9 +50,9 @@ using namespace std::string_view_literals;
 using voidp = void*;
 
 /* Default context extensions */
-std::vector<std::string_view> getContextExtensions() noexcept
+auto getContextExtensions() noexcept -> std::vector<std::string_view>
 {
-    return std::vector<std::string_view>{
+    return std::vector({
         "AL_EXT_ALAW"sv,
         "AL_EXT_BFORMAT"sv,
         "AL_EXT_debug"sv,
@@ -96,47 +96,61 @@ std::vector<std::string_view> getContextExtensions() noexcept
         "AL_SOFT_source_start_delay"sv,
         "AL_SOFT_UHJ"sv,
         "AL_SOFT_UHJ_ex"sv,
-    };
+    });
 }
 
 } // namespace
 
 
-std::atomic<bool> ALCcontext::sGlobalContextLock{false};
-std::atomic<ALCcontext*> ALCcontext::sGlobalContext{nullptr};
+namespace al {
 
-ALCcontext::ThreadCtx::~ThreadCtx()
+std::atomic<bool> Context::sGlobalContextLock{false};
+std::atomic<Context*> Context::sGlobalContext{nullptr};
+
+Context::ThreadCtx::~ThreadCtx()
 {
-    if(ALCcontext *ctx{std::exchange(ALCcontext::sLocalContext, nullptr)})
+    if(auto *ctx = std::exchange(sLocalContext, nullptr))
     {
-        const bool result{ctx->releaseIfNoDelete()};
+        const auto result = ctx->releaseIfNoDelete();
         ERR("Context {} current for thread being destroyed{}!", voidp{ctx},
             result ? "" : ", leak detected");
     }
 }
-thread_local ALCcontext::ThreadCtx ALCcontext::sThreadContext;
+thread_local Context::ThreadCtx Context::sThreadContext;
 
-ALeffect ALCcontext::sDefaultEffect;
+Effect Context::sDefaultEffect;
 
 
-ALCcontext::ALCcontext(al::intrusive_ptr<al::Device> device, ContextFlagBitset flags)
-    : ContextBase{device.get()}, mALDevice{std::move(device)}, mContextFlags{flags}
+void ContextDeleter::operator()(gsl::owner<Context*> const context) const noexcept
+{ delete context; }
+
+auto Context::Create(const gsl::not_null<intrusive_ptr<Device>> &device,
+    ContextFlagBitset const flags) -> intrusive_ptr<Context>
 {
-    mDebugGroups.emplace_back(DebugSource::Other, 0, std::string{});
-    mDebugEnabled.store(mContextFlags.test(ContextFlags::DebugBit), std::memory_order_relaxed);
+    auto ret = ContextRef{new Context{device, flags}};
+    ret->init();
+    return ret;
+}
 
+
+Context::Context(gsl::not_null<intrusive_ptr<Device>> const &device, ContextFlagBitset const flags)
+    : ContextBase{get_not_null(device)}, mALDevice{device}, mContextFlags{flags}
+    , mDebugEnabled{flags.test(ContextFlags::DebugBit)}
+    , mDebugGroups{{DebugSource::Other, 0, std::string{}}}
+{
     /* Low-severity debug messages are disabled by default. */
     alDebugMessageControlDirectEXT(this, AL_DONT_CARE_EXT, AL_DONT_CARE_EXT,
         AL_DEBUG_SEVERITY_LOW_EXT, 0, nullptr, AL_FALSE);
 }
 
-ALCcontext::~ALCcontext()
+Context::~Context()
 {
     TRACE("Freeing context {}", voidp{this});
+    deinit();
 
-    size_t count{std::accumulate(mSourceList.cbegin(), mSourceList.cend(), 0_uz,
+    auto count = std::accumulate(mSourceList.cbegin(), mSourceList.cend(), 0_uz,
         [](size_t cur, const SourceSubList &sublist) noexcept -> size_t
-        { return cur + static_cast<uint>(al::popcount(~sublist.FreeMask)); })};
+    { return cur + gsl::narrow_cast<uint>(std::popcount(~sublist.mFreeMask)); });
     if(count > 0)
         WARN("{} Source{} not deleted", count, (count==1)?"":"s");
     mSourceList.clear();
@@ -149,27 +163,27 @@ ALCcontext::~ALCcontext()
     mDefaultSlot = nullptr;
     count = std::accumulate(mEffectSlotList.cbegin(), mEffectSlotList.cend(), 0_uz,
         [](size_t cur, const EffectSlotSubList &sublist) noexcept -> size_t
-        { return cur + static_cast<uint>(al::popcount(~sublist.FreeMask)); });
+    { return cur + gsl::narrow_cast<uint>(std::popcount(~sublist.mFreeMask)); });
     if(count > 0)
         WARN("{} AuxiliaryEffectSlot{} not deleted", count, (count==1)?"":"s");
     mEffectSlotList.clear();
     mNumEffectSlots = 0;
 }
 
-void ALCcontext::init()
+void Context::init()
 {
-    if(sDefaultEffect.type != AL_EFFECT_NULL && mDevice->Type == DeviceType::Playback)
+    if(sDefaultEffect.mType != AL_EFFECT_NULL && mDevice->Type == DeviceType::Playback)
     {
-        mDefaultSlot = std::make_unique<ALeffectslot>(this);
+        mDefaultSlot = std::make_unique<EffectSlot>(gsl::make_not_null(this));
         aluInitEffectPanning(mDefaultSlot->mSlot, this);
     }
 
-    std::unique_ptr<EffectSlotArray> auxslots;
+    auto auxslots = std::unique_ptr<EffectSlotArray>{};
     if(!mDefaultSlot)
-        auxslots = EffectSlot::CreatePtrArray(0);
+        auxslots = EffectSlotBase::CreatePtrArray(0);
     else
     {
-        auxslots = EffectSlot::CreatePtrArray(2);
+        auxslots = EffectSlotBase::CreatePtrArray(2);
         (*auxslots)[0] = mDefaultSlot->mSlot;
         (*auxslots)[1] = mDefaultSlot->mSlot;
         mDefaultSlot->mState = SlotState::Playing;
@@ -178,8 +192,8 @@ void ALCcontext::init()
 
     allocVoiceChanges();
     {
-        VoiceChange *cur{mVoiceChangeTail};
-        while(VoiceChange *next{cur->mNext.load(std::memory_order_relaxed)})
+        auto *cur = mVoiceChangeTail;
+        while(auto *next = cur->mNext.load(std::memory_order_relaxed))
             cur = next;
         mCurrentVoiceChange.store(cur, std::memory_order_relaxed);
     }
@@ -188,13 +202,13 @@ void ALCcontext::init()
 
     if(sBufferSubDataCompat)
     {
-        auto iter = std::find(mExtensions.begin(), mExtensions.end(), "AL_EXT_SOURCE_RADIUS"sv);
+        auto iter = std::ranges::find(mExtensions, "AL_EXT_SOURCE_RADIUS"sv);
         if(iter != mExtensions.end()) mExtensions.erase(iter);
 
         /* Insert the AL_SOFT_buffer_sub_data extension string between
          * AL_SOFT_buffer_length_query and AL_SOFT_callback_buffer.
          */
-        iter = std::find(mExtensions.begin(), mExtensions.end(), "AL_SOFT_callback_buffer"sv);
+        iter = std::ranges::find(mExtensions, "AL_SOFT_callback_buffer"sv);
         mExtensions.emplace(iter, "AL_SOFT_buffer_sub_data"sv);
     }
 
@@ -202,33 +216,16 @@ void ALCcontext::init()
     eax_initialize_extensions();
 #endif // ALSOFT_EAX
 
-    if(!mExtensions.empty())
-    {
-        const size_t len{std::accumulate(mExtensions.cbegin()+1, mExtensions.cend(),
-            mExtensions.front().length(),
-            [](size_t current, std::string_view ext) noexcept
-            { return current + ext.length() + 1; })};
-
-        std::string extensions;
-        extensions.reserve(len);
-        extensions += mExtensions.front();
-        for(std::string_view ext : al::span{mExtensions}.subspan<1>())
-        {
-            extensions += ' ';
-            extensions += ext;
-        }
-
-        mExtensionsString = std::move(extensions);
-    }
+    mExtensionsString = fmt::format("{}", fmt::join(mExtensions, " "));
 
 #if ALSOFT_EAX
     eax_set_defaults();
 #endif
 
-    mParams.Position = alu::Vector{0.0f, 0.0f, 0.0f, 1.0f};
-    mParams.Matrix = alu::Matrix::Identity();
-    mParams.Velocity = alu::Vector{};
-    mParams.Gain = mListener.Gain;
+    mParams.Position = al::Vector{0.0f, 0.0f, 0.0f, 1.0f};
+    mParams.Matrix = al::Matrix::Identity();
+    mParams.Velocity = al::Vector{};
+    mParams.Gain = mListener.mGain;
     mParams.MetersPerUnit = mListener.mMetersPerUnit
 #if ALSOFT_EAX
         * eaxGetDistanceFactor()
@@ -245,7 +242,7 @@ void ALCcontext::init()
     mParams.mDistanceModel = mDistanceModel;
 
 
-    mAsyncEvents = RingBuffer::Create(1024, sizeof(AsyncEvent), false);
+    mAsyncEvents = FifoBuffer<AsyncEvent>::Create(1024, false);
     StartEventThrd(this);
 
 
@@ -253,7 +250,7 @@ void ALCcontext::init()
     mActiveVoiceCount.store(64, std::memory_order_relaxed);
 }
 
-void ALCcontext::deinit()
+void Context::deinit()
 {
     if(sLocalContext == this)
     {
@@ -262,7 +259,7 @@ void ALCcontext::deinit()
         sThreadContext.set(nullptr);
     }
 
-    if(ALCcontext *origctx{this}; sGlobalContext.compare_exchange_strong(origctx, nullptr))
+    if(auto *origctx = this; sGlobalContext.compare_exchange_strong(origctx, nullptr))
     {
         auto _ = ContextRef{origctx};
         while(sGlobalContextLock.load()) {
@@ -272,42 +269,10 @@ void ALCcontext::deinit()
         }
     }
 
-    bool stopPlayback{};
-    /* First make sure this context exists in the device's list. */
-    auto oldarray = al::span{*mDevice->mContexts.load(std::memory_order_acquire)};
-    if(auto toremove = static_cast<size_t>(std::count(oldarray.begin(), oldarray.end(), this)))
-    {
-        using ContextArray = al::FlexArray<ContextBase*>;
-        const auto newsize = size_t{oldarray.size() - toremove};
-        auto newarray = ContextArray::Create(newsize);
-
-        /* Copy the current/old context handles to the new array, excluding the
-         * given context.
-         */
-        std::copy_if(oldarray.begin(), oldarray.end(), newarray->begin(),
-            [this](ContextBase *ctx) { return ctx != this; });
-
-        /* Store the new context array in the device. Wait for any current mix
-         * to finish before deleting the old array.
-         */
-        auto prevarray = mDevice->mContexts.exchange(std::move(newarray));
-        std::ignore = mDevice->waitForMix();
-
-        stopPlayback = (newsize == 0);
-    }
-    else
-        stopPlayback = oldarray.empty();
-
     StopEventThrd(this);
-
-    if(stopPlayback && mALDevice->mDeviceState == DeviceState::Playing)
-    {
-        mALDevice->Backend->stop();
-        mALDevice->mDeviceState = DeviceState::Configured;
-    }
 }
 
-void ALCcontext::applyAllUpdates()
+void Context::applyAllUpdates()
 {
     /* Tell the mixer to stop applying updates, then wait for any active
      * updating to finish, before providing updates.
@@ -324,8 +289,8 @@ void ALCcontext::applyAllUpdates()
 
     if(std::exchange(mPropsDirty, false))
         UpdateContextProps(this);
-    UpdateAllEffectSlotProps(this);
-    UpdateAllSourceProps(this);
+    UpdateAllEffectSlotProps(gsl::make_not_null(this));
+    UpdateAllSourceProps(gsl::make_not_null(this));
 
     /* Now with all updates declared, let the mixer continue applying them so
      * they all happen at once.
@@ -333,35 +298,36 @@ void ALCcontext::applyAllUpdates()
     mHoldUpdates.store(false, std::memory_order_release);
 }
 
+} // namespace al
 
 #if ALSOFT_EAX
 namespace {
 
-template<typename F>
-void ForEachSource(ALCcontext *context, F func)
+void ForEachSource(al::Context *context, std::invocable<al::Source&> auto&& func)
 {
-    for(auto &sublist : context->mSourceList)
+    std::ranges::for_each(context->mSourceList, [&func](SourceSubList &sublist)
     {
-        uint64_t usemask{~sublist.FreeMask};
+        auto usemask = ~sublist.mFreeMask;
         while(usemask)
         {
-            const auto idx = static_cast<uint>(al::countr_zero(usemask));
-            usemask &= ~(1_u64 << idx);
+            const auto idx = as_unsigned(std::countr_zero(usemask));
+            usemask ^= 1_u64 << idx;
 
-            func((*sublist.Sources)[idx]);
+            std::invoke(func, (*sublist.mSources)[idx]);
         }
-    }
+    });
 }
 
 } // namespace
 
+namespace al {
 
-bool ALCcontext::eaxIsCapable() const noexcept
+auto Context::eaxIsCapable() const noexcept -> bool
 {
     return eax_has_enough_aux_sends();
 }
 
-void ALCcontext::eaxUninitialize() noexcept
+void Context::eaxUninitialize() noexcept
 {
     if(!mEaxIsInitialized)
         return;
@@ -371,20 +337,11 @@ void ALCcontext::eaxUninitialize() noexcept
     mEaxFxSlots.uninitialize();
 }
 
-ALenum ALCcontext::eax_eax_set(
-    const GUID* property_set_id,
-    ALuint property_id,
-    ALuint property_source_id,
-    ALvoid* property_value,
-    ALuint property_value_size)
+auto Context::eax_eax_set(const GUID *property_set_id, ALuint property_id,
+    ALuint property_source_id, ALvoid *property_value, ALuint property_value_size) -> ALenum
 {
-    const auto call = create_eax_call(
-        EaxCallType::set,
-        property_set_id,
-        property_id,
-        property_source_id,
-        property_value,
-        property_value_size);
+    const auto call = create_eax_call(EaxCallType::set, property_set_id, property_id,
+        property_source_id, property_value, property_value_size);
 
     eax_initialize();
 
@@ -415,20 +372,11 @@ ALenum ALCcontext::eax_eax_set(
     return AL_NO_ERROR;
 }
 
-ALenum ALCcontext::eax_eax_get(
-    const GUID* property_set_id,
-    ALuint property_id,
-    ALuint property_source_id,
-    ALvoid* property_value,
-    ALuint property_value_size)
+auto Context::eax_eax_get(const GUID* property_set_id, ALuint property_id,
+    ALuint property_source_id, ALvoid *property_value, ALuint property_value_size) -> ALenum
 {
-    const auto call = create_eax_call(
-        EaxCallType::get,
-        property_set_id,
-        property_id,
-        property_source_id,
-        property_value,
-        property_value_size);
+    const auto call = create_eax_call(EaxCallType::get, property_set_id, property_id,
+        property_source_id, property_value, property_value_size);
 
     eax_initialize();
 
@@ -451,37 +399,26 @@ ALenum ALCcontext::eax_eax_get(
     return AL_NO_ERROR;
 }
 
-void ALCcontext::eaxSetLastError() noexcept
+void Context::eaxSetLastError() noexcept
 {
     mEaxLastError = EAXERR_INVALID_OPERATION;
 }
 
-[[noreturn]] void ALCcontext::eax_fail(const char* message)
-{
-    throw ContextException{message};
-}
+[[noreturn]]
+void Context::eax_fail(const std::string_view message) { throw ContextException{message}; }
 
-[[noreturn]] void ALCcontext::eax_fail_unknown_property_set_id()
-{
-    eax_fail("Unknown property ID.");
-}
+[[noreturn]]
+void Context::eax_fail_unknown_property_set_id() { eax_fail("Unknown property ID."); }
 
-[[noreturn]] void ALCcontext::eax_fail_unknown_primary_fx_slot_id()
-{
-    eax_fail("Unknown primary FX Slot ID.");
-}
+[[noreturn]]
+void Context::eax_fail_unknown_primary_fx_slot_id()
+{ eax_fail("Unknown primary FX Slot ID."); }
 
-[[noreturn]] void ALCcontext::eax_fail_unknown_property_id()
-{
-    eax_fail("Unknown property ID.");
-}
+[[noreturn]] void Context::eax_fail_unknown_property_id() { eax_fail("Unknown property ID."); }
 
-[[noreturn]] void ALCcontext::eax_fail_unknown_version()
-{
-    eax_fail("Unknown version.");
-}
+[[noreturn]] void Context::eax_fail_unknown_version() { eax_fail("Unknown version."); }
 
-void ALCcontext::eax_initialize_extensions()
+void Context::eax_initialize_extensions()
 {
     if(!eax_g_is_enabled)
         return;
@@ -497,7 +434,7 @@ void ALCcontext::eax_initialize_extensions()
     }
 }
 
-void ALCcontext::eax_initialize()
+void Context::eax_initialize()
 {
     if(mEaxIsInitialized)
         return;
@@ -519,34 +456,34 @@ void ALCcontext::eax_initialize()
     mEaxIsInitialized = true;
 }
 
-bool ALCcontext::eax_has_no_default_effect_slot() const noexcept
+auto Context::eax_has_no_default_effect_slot() const noexcept -> bool
 {
     return mDefaultSlot == nullptr;
 }
 
-void ALCcontext::eax_ensure_no_default_effect_slot() const
+void Context::eax_ensure_no_default_effect_slot() const
 {
     if(!eax_has_no_default_effect_slot())
         eax_fail("There is a default effect slot in the context.");
 }
 
-bool ALCcontext::eax_has_enough_aux_sends() const noexcept
+auto Context::eax_has_enough_aux_sends() const noexcept -> bool
 {
     return mALDevice->NumAuxSends >= EAX_MAX_FXSLOTS;
 }
 
-void ALCcontext::eax_ensure_enough_aux_sends() const
+void Context::eax_ensure_enough_aux_sends() const
 {
     if(!eax_has_enough_aux_sends())
         eax_fail("Not enough aux sends.");
 }
 
-void ALCcontext::eax_ensure_compatibility()
+void Context::eax_ensure_compatibility() const
 {
     eax_ensure_enough_aux_sends();
 }
 
-unsigned long ALCcontext::eax_detect_speaker_configuration() const
+auto Context::eax_detect_speaker_configuration() const -> eax_ulong
 {
 #define EAX_PREFIX "[EAX_DETECT_SPEAKER_CONFIG]"
 
@@ -557,7 +494,7 @@ unsigned long ALCcontext::eax_detect_speaker_configuration() const
         /* Pretend 7.1 if using UHJ output, since they both provide full
          * horizontal surround.
          */
-        if(mDevice->mUhjEncoder)
+        if(std::holds_alternative<UhjPostProcess>(mDevice->mPostProcess))
             return SPEAKERS_7;
         if(mDevice->Flags.test(DirectEar))
             return HEADPHONES;
@@ -588,23 +525,23 @@ unsigned long ALCcontext::eax_detect_speaker_configuration() const
 #undef EAX_PREFIX
 }
 
-void ALCcontext::eax_update_speaker_configuration()
+void Context::eax_update_speaker_configuration()
 {
     mEaxSpeakerConfig = eax_detect_speaker_configuration();
 }
 
-void ALCcontext::eax_set_last_error_defaults() noexcept
+void Context::eax_set_last_error_defaults() noexcept
 {
     mEaxLastError = EAXCONTEXT_DEFAULTLASTERROR;
 }
 
-void ALCcontext::eax_session_set_defaults() noexcept
+void Context::eax_session_set_defaults() noexcept
 {
     mEaxSession.ulEAXVersion = EAXCONTEXT_DEFAULTEAXSESSION;
     mEaxSession.ulMaxActiveSends = EAXCONTEXT_DEFAULTMAXACTIVESENDS;
 }
 
-void ALCcontext::eax4_context_set_defaults(Eax4Props& props) noexcept
+void Context::eax4_context_set_defaults(Eax4Props& props) noexcept
 {
     props.guidPrimaryFXSlotID = EAX40CONTEXT_DEFAULTPRIMARYFXSLOTID;
     props.flDistanceFactor = EAXCONTEXT_DEFAULTDISTANCEFACTOR;
@@ -612,13 +549,13 @@ void ALCcontext::eax4_context_set_defaults(Eax4Props& props) noexcept
     props.flHFReference = EAXCONTEXT_DEFAULTHFREFERENCE;
 }
 
-void ALCcontext::eax4_context_set_defaults(Eax4State& state) noexcept
+void Context::eax4_context_set_defaults(Eax4State& state) noexcept
 {
     eax4_context_set_defaults(state.i);
     state.d = state.i;
 }
 
-void ALCcontext::eax5_context_set_defaults(Eax5Props& props) noexcept
+void Context::eax5_context_set_defaults(Eax5Props& props) noexcept
 {
     props.guidPrimaryFXSlotID = EAX50CONTEXT_DEFAULTPRIMARYFXSLOTID;
     props.flDistanceFactor = EAXCONTEXT_DEFAULTDISTANCEFACTOR;
@@ -627,13 +564,13 @@ void ALCcontext::eax5_context_set_defaults(Eax5Props& props) noexcept
     props.flMacroFXFactor = EAXCONTEXT_DEFAULTMACROFXFACTOR;
 }
 
-void ALCcontext::eax5_context_set_defaults(Eax5State& state) noexcept
+void Context::eax5_context_set_defaults(Eax5State& state) noexcept
 {
     eax5_context_set_defaults(state.i);
     state.d = state.i;
 }
 
-void ALCcontext::eax_context_set_defaults()
+void Context::eax_context_set_defaults()
 {
     eax5_context_set_defaults(mEax123);
     eax4_context_set_defaults(mEax4);
@@ -643,14 +580,14 @@ void ALCcontext::eax_context_set_defaults()
     mEaxDf.reset();
 }
 
-void ALCcontext::eax_set_defaults()
+void Context::eax_set_defaults()
 {
     eax_set_last_error_defaults();
     eax_session_set_defaults();
     eax_context_set_defaults();
 }
 
-void ALCcontext::eax_dispatch_fx_slot(const EaxCall& call)
+void Context::eax_dispatch_fx_slot(const EaxCall& call)
 {
     const auto fx_slot_index = call.get_fx_slot_index();
     if(!fx_slot_index.has_value())
@@ -659,98 +596,63 @@ void ALCcontext::eax_dispatch_fx_slot(const EaxCall& call)
     auto& fx_slot = eaxGetFxSlot(*fx_slot_index);
     if(fx_slot.eax_dispatch(call))
     {
-        std::lock_guard<std::mutex> source_lock{mSourceLock};
-        ForEachSource(this, std::mem_fn(&ALsource::eaxMarkAsChanged));
+        const auto srclock = std::lock_guard{mSourceLock};
+        ForEachSource(this, &Source::eaxMarkAsChanged);
     }
 }
 
-void ALCcontext::eax_dispatch_source(const EaxCall& call)
+void Context::eax_dispatch_source(const EaxCall& call)
 {
     const auto source_id = call.get_property_al_name();
-    std::lock_guard<std::mutex> source_lock{mSourceLock};
-    const auto source = ALsource::EaxLookupSource(*this, source_id);
+    const auto srclock = std::lock_guard{mSourceLock};
 
-    if (source == nullptr)
+    const auto source = Source::EaxLookupSource(gsl::make_not_null(this), source_id);
+    if(source == nullptr)
         eax_fail("Source not found.");
 
     source->eaxDispatch(call);
 }
 
-void ALCcontext::eax_get_misc(const EaxCall& call)
+void Context::eax_get_misc(const EaxCall& call)
 {
     switch(call.get_property_id())
     {
-    case EAXCONTEXT_NONE:
-        break;
-    case EAXCONTEXT_LASTERROR:
-        call.set_value<ContextException>(mEaxLastError);
-        mEaxLastError = EAX_OK;
-        break;
-    case EAXCONTEXT_SPEAKERCONFIG:
-        call.set_value<ContextException>(mEaxSpeakerConfig);
-        break;
-    case EAXCONTEXT_EAXSESSION:
-        call.set_value<ContextException>(mEaxSession);
-        break;
-    default:
-        eax_fail_unknown_property_id();
+    case EAXCONTEXT_NONE: break;
+    case EAXCONTEXT_LASTERROR: call.store(std::exchange(mEaxLastError, EAX_OK)); break;
+    case EAXCONTEXT_SPEAKERCONFIG: call.store(mEaxSpeakerConfig); break;
+    case EAXCONTEXT_EAXSESSION: call.store(mEaxSession); break;
+    default: eax_fail_unknown_property_id();
     }
 }
 
-void ALCcontext::eax4_get(const EaxCall& call, const Eax4Props& props)
+void Context::eax4_get(const EaxCall& call, const Eax4Props& props)
 {
     switch(call.get_property_id())
     {
-    case EAXCONTEXT_ALLPARAMETERS:
-        call.set_value<ContextException>(props);
-        break;
-    case EAXCONTEXT_PRIMARYFXSLOTID:
-        call.set_value<ContextException>(props.guidPrimaryFXSlotID);
-        break;
-    case EAXCONTEXT_DISTANCEFACTOR:
-        call.set_value<ContextException>(props.flDistanceFactor);
-        break;
-    case EAXCONTEXT_AIRABSORPTIONHF:
-        call.set_value<ContextException>(props.flAirAbsorptionHF);
-        break;
-    case EAXCONTEXT_HFREFERENCE:
-        call.set_value<ContextException>(props.flHFReference);
-        break;
-    default:
-        eax_get_misc(call);
-        break;
+    case EAXCONTEXT_ALLPARAMETERS: call.store(props); break;
+    case EAXCONTEXT_PRIMARYFXSLOTID: call.store(props.guidPrimaryFXSlotID); break;
+    case EAXCONTEXT_DISTANCEFACTOR: call.store(props.flDistanceFactor); break;
+    case EAXCONTEXT_AIRABSORPTIONHF: call.store(props.flAirAbsorptionHF); break;
+    case EAXCONTEXT_HFREFERENCE: call.store(props.flHFReference); break;
+    default: eax_get_misc(call); break;
     }
 }
 
-void ALCcontext::eax5_get(const EaxCall& call, const Eax5Props& props)
+void Context::eax5_get(const EaxCall& call, const Eax5Props& props)
 {
     switch(call.get_property_id())
     {
-    case EAXCONTEXT_ALLPARAMETERS:
-        call.set_value<ContextException>(props);
-        break;
-    case EAXCONTEXT_PRIMARYFXSLOTID:
-        call.set_value<ContextException>(props.guidPrimaryFXSlotID);
-        break;
-    case EAXCONTEXT_DISTANCEFACTOR:
-        call.set_value<ContextException>(props.flDistanceFactor);
-        break;
-    case EAXCONTEXT_AIRABSORPTIONHF:
-        call.set_value<ContextException>(props.flAirAbsorptionHF);
-        break;
-    case EAXCONTEXT_HFREFERENCE:
-        call.set_value<ContextException>(props.flHFReference);
-        break;
-    case EAXCONTEXT_MACROFXFACTOR:
-        call.set_value<ContextException>(props.flMacroFXFactor);
-        break;
-    default:
-        eax_get_misc(call);
-        break;
+    case EAXCONTEXT_ALLPARAMETERS: call.store(props); break;
+    case EAXCONTEXT_PRIMARYFXSLOTID: call.store(props.guidPrimaryFXSlotID); break;
+    case EAXCONTEXT_DISTANCEFACTOR: call.store(props.flDistanceFactor); break;
+    case EAXCONTEXT_AIRABSORPTIONHF: call.store(props.flAirAbsorptionHF); break;
+    case EAXCONTEXT_HFREFERENCE: call.store(props.flHFReference); break;
+    case EAXCONTEXT_MACROFXFACTOR: call.store(props.flMacroFXFactor); break;
+    default: eax_get_misc(call); break;
     }
 }
 
-void ALCcontext::eax_get(const EaxCall& call)
+void Context::eax_get(const EaxCall& call)
 {
     switch(call.get_version())
     {
@@ -760,18 +662,18 @@ void ALCcontext::eax_get(const EaxCall& call)
     }
 }
 
-void ALCcontext::eax_context_commit_primary_fx_slot_id()
+void Context::eax_context_commit_primary_fx_slot_id()
 {
     mEaxPrimaryFxSlotIndex = mEax.guidPrimaryFXSlotID;
 }
 
-void ALCcontext::eax_context_commit_distance_factor()
+void Context::eax_context_commit_distance_factor()
 {
     /* mEax.flDistanceFactor was changed, so the context props are dirty. */
     mPropsDirty = true;
 }
 
-void ALCcontext::eax_context_commit_air_absorption_hf()
+void Context::eax_context_commit_air_absorption_hf()
 {
     const auto new_value = level_mb_to_gain(mEax.flAirAbsorptionHF);
 
@@ -782,31 +684,29 @@ void ALCcontext::eax_context_commit_air_absorption_hf()
     mPropsDirty = true;
 }
 
-void ALCcontext::eax_context_commit_hf_reference()
+void Context::eax_context_commit_hf_reference()
 {
     // TODO
 }
 
-void ALCcontext::eax_context_commit_macro_fx_factor()
+void Context::eax_context_commit_macro_fx_factor()
 {
     // TODO
 }
 
-void ALCcontext::eax_initialize_fx_slots()
+void Context::eax_initialize_fx_slots()
 {
-    mEaxFxSlots.initialize(*this);
+    mEaxFxSlots.initialize(gsl::make_not_null(this));
     mEaxPrimaryFxSlotIndex = mEax.guidPrimaryFXSlotID;
 }
 
-void ALCcontext::eax_update_sources()
+void Context::eax_update_sources()
 {
-    std::unique_lock<std::mutex> source_lock{mSourceLock};
-    auto update_source = [](ALsource &source)
-    { source.eaxCommit(); };
-    ForEachSource(this, update_source);
+    const auto srclock = std::lock_guard{mSourceLock};
+    ForEachSource(this, &Source::eaxCommit);
 }
 
-void ALCcontext::eax_set_misc(const EaxCall& call)
+void Context::eax_set_misc(const EaxCall& call)
 {
     switch(call.get_property_id())
     {
@@ -823,12 +723,12 @@ void ALCcontext::eax_set_misc(const EaxCall& call)
     }
 }
 
-void ALCcontext::eax4_defer_all(const EaxCall& call, Eax4State& state)
+void Context::eax4_defer_all(const EaxCall& call, Eax4State& state)
 {
-    const auto& src = call.get_value<ContextException, const EAX40CONTEXTPROPERTIES>();
+    const auto &src = call.load<const EAX40CONTEXTPROPERTIES>();
     Eax4AllValidator{}(src);
-    const auto& dst_i = state.i;
-    auto& dst_d = state.d;
+    const auto &dst_i = state.i;
+    auto &dst_d = state.d;
     dst_d = src;
 
     if(dst_i.guidPrimaryFXSlotID != dst_d.guidPrimaryFXSlotID)
@@ -844,7 +744,7 @@ void ALCcontext::eax4_defer_all(const EaxCall& call, Eax4State& state)
         mEaxDf.set(eax_hf_reference_dirty_bit);
 }
 
-void ALCcontext::eax4_defer(const EaxCall& call, Eax4State& state)
+void Context::eax4_defer(const EaxCall& call, Eax4State& state)
 {
     switch(call.get_property_id())
     {
@@ -852,19 +752,19 @@ void ALCcontext::eax4_defer(const EaxCall& call, Eax4State& state)
         eax4_defer_all(call, state);
         break;
     case EAXCONTEXT_PRIMARYFXSLOTID:
-        eax_defer<Eax4PrimaryFxSlotIdValidator, eax_primary_fx_slot_id_dirty_bit>(call, state,
+        eax_defer<Eax4PrimaryFxSlotIdValidator>(call, state, eax_primary_fx_slot_id_dirty_bit,
             &EAX40CONTEXTPROPERTIES::guidPrimaryFXSlotID);
         break;
     case EAXCONTEXT_DISTANCEFACTOR:
-        eax_defer<Eax4DistanceFactorValidator, eax_distance_factor_dirty_bit>(call, state,
+        eax_defer<Eax4DistanceFactorValidator>(call, state, eax_distance_factor_dirty_bit,
             &EAX40CONTEXTPROPERTIES::flDistanceFactor);
         break;
     case EAXCONTEXT_AIRABSORPTIONHF:
-        eax_defer<Eax4AirAbsorptionHfValidator, eax_air_absorption_hf_dirty_bit>(call, state,
+        eax_defer<Eax4AirAbsorptionHfValidator>(call, state, eax_air_absorption_hf_dirty_bit,
             &EAX40CONTEXTPROPERTIES::flAirAbsorptionHF);
         break;
     case EAXCONTEXT_HFREFERENCE:
-        eax_defer<Eax4HfReferenceValidator, eax_hf_reference_dirty_bit>(call, state,
+        eax_defer<Eax4HfReferenceValidator>(call, state, eax_hf_reference_dirty_bit,
             &EAX40CONTEXTPROPERTIES::flHFReference);
         break;
     default:
@@ -873,12 +773,12 @@ void ALCcontext::eax4_defer(const EaxCall& call, Eax4State& state)
     }
 }
 
-void ALCcontext::eax5_defer_all(const EaxCall& call, Eax5State& state)
+void Context::eax5_defer_all(const EaxCall& call, Eax5State& state)
 {
-    const auto& src = call.get_value<ContextException, const EAX50CONTEXTPROPERTIES>();
+    const auto &src = call.load<const EAX50CONTEXTPROPERTIES>();
     Eax4AllValidator{}(src);
-    const auto& dst_i = state.i;
-    auto& dst_d = state.d;
+    const auto &dst_i = state.i;
+    auto &dst_d = state.d;
     dst_d = src;
 
     if(dst_i.guidPrimaryFXSlotID != dst_d.guidPrimaryFXSlotID)
@@ -897,7 +797,7 @@ void ALCcontext::eax5_defer_all(const EaxCall& call, Eax5State& state)
         mEaxDf.set(eax_macro_fx_factor_dirty_bit);
 }
 
-void ALCcontext::eax5_defer(const EaxCall& call, Eax5State& state)
+void Context::eax5_defer(const EaxCall& call, Eax5State& state)
 {
     switch(call.get_property_id())
     {
@@ -905,23 +805,23 @@ void ALCcontext::eax5_defer(const EaxCall& call, Eax5State& state)
         eax5_defer_all(call, state);
         break;
     case EAXCONTEXT_PRIMARYFXSLOTID:
-        eax_defer<Eax5PrimaryFxSlotIdValidator, eax_primary_fx_slot_id_dirty_bit>(call, state,
+        eax_defer<Eax5PrimaryFxSlotIdValidator>(call, state, eax_primary_fx_slot_id_dirty_bit,
             &EAX50CONTEXTPROPERTIES::guidPrimaryFXSlotID);
         break;
     case EAXCONTEXT_DISTANCEFACTOR:
-        eax_defer<Eax4DistanceFactorValidator, eax_distance_factor_dirty_bit>(call, state,
+        eax_defer<Eax4DistanceFactorValidator>(call, state, eax_distance_factor_dirty_bit,
             &EAX50CONTEXTPROPERTIES::flDistanceFactor);
         break;
     case EAXCONTEXT_AIRABSORPTIONHF:
-        eax_defer<Eax4AirAbsorptionHfValidator, eax_air_absorption_hf_dirty_bit>(call, state,
+        eax_defer<Eax4AirAbsorptionHfValidator>(call, state, eax_air_absorption_hf_dirty_bit,
             &EAX50CONTEXTPROPERTIES::flAirAbsorptionHF);
         break;
     case EAXCONTEXT_HFREFERENCE:
-        eax_defer<Eax4HfReferenceValidator, eax_hf_reference_dirty_bit>(call, state,
+        eax_defer<Eax4HfReferenceValidator>(call, state, eax_hf_reference_dirty_bit,
             &EAX50CONTEXTPROPERTIES::flHFReference);
         break;
     case EAXCONTEXT_MACROFXFACTOR:
-        eax_defer<Eax5MacroFxFactorValidator, eax_macro_fx_factor_dirty_bit>(call, state,
+        eax_defer<Eax5MacroFxFactorValidator>(call, state, eax_macro_fx_factor_dirty_bit,
             &EAX50CONTEXTPROPERTIES::flMacroFXFactor);
         break;
     default:
@@ -930,7 +830,7 @@ void ALCcontext::eax5_defer(const EaxCall& call, Eax5State& state)
     }
 }
 
-void ALCcontext::eax_set(const EaxCall& call)
+void Context::eax_set(const EaxCall& call)
 {
     const auto version = call.get_version();
     switch(version)
@@ -944,43 +844,43 @@ void ALCcontext::eax_set(const EaxCall& call)
     mEaxVersion = version;
 }
 
-void ALCcontext::eax4_context_commit(Eax4State& state, std::bitset<eax_dirty_bit_count>& dst_df)
+void Context::eax4_context_commit(Eax4State& state, std::bitset<eax_dirty_bit_count>& dst_df)
 {
     if(mEaxDf.none())
         return;
 
-    eax_context_commit_property<eax_primary_fx_slot_id_dirty_bit>(state, dst_df,
+    eax_context_commit_property(state, dst_df, eax_primary_fx_slot_id_dirty_bit,
         &EAX40CONTEXTPROPERTIES::guidPrimaryFXSlotID);
-    eax_context_commit_property<eax_distance_factor_dirty_bit>(state, dst_df,
+    eax_context_commit_property(state, dst_df, eax_distance_factor_dirty_bit,
         &EAX40CONTEXTPROPERTIES::flDistanceFactor);
-    eax_context_commit_property<eax_air_absorption_hf_dirty_bit>(state, dst_df,
+    eax_context_commit_property(state, dst_df, eax_air_absorption_hf_dirty_bit,
         &EAX40CONTEXTPROPERTIES::flAirAbsorptionHF);
-    eax_context_commit_property<eax_hf_reference_dirty_bit>(state, dst_df,
+    eax_context_commit_property(state, dst_df, eax_hf_reference_dirty_bit,
         &EAX40CONTEXTPROPERTIES::flHFReference);
 
     mEaxDf.reset();
 }
 
-void ALCcontext::eax5_context_commit(Eax5State& state, std::bitset<eax_dirty_bit_count>& dst_df)
+void Context::eax5_context_commit(Eax5State &state, std::bitset<eax_dirty_bit_count> &dst_df)
 {
     if(mEaxDf.none())
         return;
 
-    eax_context_commit_property<eax_primary_fx_slot_id_dirty_bit>(state, dst_df,
+    eax_context_commit_property(state, dst_df, eax_primary_fx_slot_id_dirty_bit,
         &EAX50CONTEXTPROPERTIES::guidPrimaryFXSlotID);
-    eax_context_commit_property<eax_distance_factor_dirty_bit>(state, dst_df,
+    eax_context_commit_property(state, dst_df, eax_distance_factor_dirty_bit,
         &EAX50CONTEXTPROPERTIES::flDistanceFactor);
-    eax_context_commit_property<eax_air_absorption_hf_dirty_bit>(state, dst_df,
+    eax_context_commit_property(state, dst_df, eax_air_absorption_hf_dirty_bit,
         &EAX50CONTEXTPROPERTIES::flAirAbsorptionHF);
-    eax_context_commit_property<eax_hf_reference_dirty_bit>(state, dst_df,
+    eax_context_commit_property(state, dst_df, eax_hf_reference_dirty_bit,
         &EAX50CONTEXTPROPERTIES::flHFReference);
-    eax_context_commit_property<eax_macro_fx_factor_dirty_bit>(state, dst_df,
+    eax_context_commit_property(state, dst_df, eax_macro_fx_factor_dirty_bit,
         &EAX50CONTEXTPROPERTIES::flMacroFXFactor);
 
     mEaxDf.reset();
 }
 
-void ALCcontext::eax_context_commit()
+void Context::eax_context_commit()
 {
     auto dst_df = std::bitset<eax_dirty_bit_count>{};
 
@@ -1021,7 +921,7 @@ void ALCcontext::eax_context_commit()
         eax_update_sources();
 }
 
-void ALCcontext::eaxCommit()
+void Context::eaxCommit()
 {
     mEaxNeedsCommit = false;
     eax_context_commit();
@@ -1029,49 +929,6 @@ void ALCcontext::eaxCommit()
     eax_update_sources();
 }
 
+} // namespace al
 
-FORCE_ALIGN auto AL_APIENTRY EAXSet(const GUID *property_set_id, ALuint property_id,
-    ALuint source_id, ALvoid *value, ALuint value_size) noexcept -> ALenum
-{
-    auto context = GetContextRef();
-    if(!context) UNLIKELY return AL_INVALID_OPERATION;
-    return EAXSetDirect(context.get(), property_set_id, property_id, source_id, value, value_size);
-}
-
-FORCE_ALIGN auto AL_APIENTRY EAXSetDirect(ALCcontext *context, const GUID *property_set_id,
-    ALuint property_id, ALuint source_id, ALvoid *value, ALuint value_size) noexcept -> ALenum
-try
-{
-    std::lock_guard<std::mutex> prop_lock{context->mPropLock};
-    return context->eax_eax_set(property_set_id, property_id, source_id, value, value_size);
-}
-catch(...)
-{
-    context->eaxSetLastError();
-    eax_log_exception(std::data(__func__));
-    return AL_INVALID_OPERATION;
-}
-
-
-FORCE_ALIGN auto AL_APIENTRY EAXGet(const GUID *property_set_id, ALuint property_id,
-    ALuint source_id, ALvoid *value, ALuint value_size) noexcept -> ALenum
-{
-    auto context = GetContextRef();
-    if(!context) UNLIKELY return AL_INVALID_OPERATION;
-    return EAXGetDirect(context.get(), property_set_id, property_id, source_id, value, value_size);
-}
-
-FORCE_ALIGN auto AL_APIENTRY EAXGetDirect(ALCcontext *context, const GUID *property_set_id,
-    ALuint property_id, ALuint source_id, ALvoid *value, ALuint value_size) noexcept -> ALenum
-try
-{
-    std::lock_guard<std::mutex> prop_lock{context->mPropLock};
-    return context->eax_eax_get(property_set_id, property_id, source_id, value, value_size);
-}
-catch(...)
-{
-    context->eaxSetLastError();
-    eax_log_exception(std::data(__func__));
-    return AL_INVALID_OPERATION;
-}
 #endif // ALSOFT_EAX

@@ -1,8 +1,8 @@
 #ifndef EAX_EFFECT_INCLUDED
 #define EAX_EFFECT_INCLUDED
 
-#include <cassert>
 #include <memory>
+#include <string_view>
 #include <variant>
 
 #include "AL/al.h"
@@ -34,9 +34,6 @@ using EaxEffectProps = std::variant<std::monostate,
 template<typename... Ts>
 struct overloaded : Ts... { using Ts::operator()...; };
 
-template<typename... Ts>
-overloaded(Ts...) -> overloaded<Ts...>;
-
 constexpr ALenum EnumFromEaxEffectType(const EaxEffectProps &props)
 {
     return std::visit(overloaded{
@@ -66,14 +63,14 @@ struct EaxReverbCommitter {
     EaxEffectProps &mEaxProps;
     EffectProps &mAlProps;
 
-    [[noreturn]] static void fail(const char* message);
+    [[noreturn]] static void fail(const std::string_view message);
     [[noreturn]] static void fail_unknown_property_id()
     { fail(EaxEffectErrorMessages::unknown_property_id()); }
 
     template<typename TValidator, typename TProperty>
     static void defer(const EaxCall& call, TProperty& property)
     {
-        const auto& value = call.get_value<Exception, const TProperty>();
+        const auto &value = call.load<const TProperty>();
         TValidator{}(value);
         property = value;
     }
@@ -81,7 +78,7 @@ struct EaxReverbCommitter {
     template<typename TValidator, typename TDeferrer, typename TProperties, typename TProperty>
     static void defer(const EaxCall& call, TProperties& properties, TProperty&)
     {
-        const auto& value = call.get_value<Exception, const TProperty>();
+        const auto &value = call.load<const TProperty>();
         TValidator{}(value);
         TDeferrer{}(properties, value);
     }
@@ -89,18 +86,18 @@ struct EaxReverbCommitter {
     template<typename TValidator, typename TProperty>
     static void defer3(const EaxCall& call, EAXREVERBPROPERTIES& properties, TProperty& property)
     {
-        const auto& value = call.get_value<Exception, const TProperty>();
+        const auto& value = call.load<const TProperty>();
         TValidator{}(value);
-        if (value == property)
+        if(value == property)
             return;
         property = value;
         properties.ulEnvironment = EAX_ENVIRONMENT_UNDEFINED;
     }
 
 
-    bool commit(const EAX_REVERBPROPERTIES &props);
-    bool commit(const EAX20LISTENERPROPERTIES &props);
-    bool commit(const EAXREVERBPROPERTIES &props);
+    [[nodiscard]] auto commit(const EAX_REVERBPROPERTIES &props) const -> bool;
+    [[nodiscard]] auto commit(const EAX20LISTENERPROPERTIES &props) const -> bool;
+    [[nodiscard]] auto commit(const EAXREVERBPROPERTIES &props) const -> bool;
 
     static void SetDefaults(EAX_REVERBPROPERTIES &props);
     static void SetDefaults(EAX20LISTENERPROPERTIES &props);
@@ -127,14 +124,14 @@ struct EaxCommitter {
     EffectProps &mAlProps;
 
     template<typename TValidator, typename TProperty>
-    static void defer(const EaxCall& call, TProperty& property)
+    static void defer(const EaxCall &call, TProperty &property)
     {
-        const auto& value = call.get_value<Exception, const TProperty>();
+        const auto &value = call.load<const TProperty>();
         TValidator{}(value);
         property = value;
     }
 
-    [[noreturn]] static void fail(const char *message);
+    [[noreturn]] static void fail(const std::string_view message);
     [[noreturn]] static void fail_unknown_property_id()
     { fail(EaxEffectErrorMessages::unknown_property_id()); }
 
@@ -146,126 +143,30 @@ private:
     friend T;
 };
 
-struct EaxAutowahCommitter : public EaxCommitter<EaxAutowahCommitter> {
-    template<typename ...Args>
-    explicit EaxAutowahCommitter(Args&& ...args) : EaxCommitter{std::forward<Args>(args)...} { }
-
-    bool commit(const EAXAUTOWAHPROPERTIES &props);
-
-    static void SetDefaults(EaxEffectProps &props);
-    static void Get(const EaxCall &call, const EAXAUTOWAHPROPERTIES &props);
-    static void Set(const EaxCall &call, EAXAUTOWAHPROPERTIES &props);
+#define DECL_COMMITTER(T, P) struct T : EaxCommitter<T> {                     \
+    T(EaxEffectProps &eaxprops, EffectProps &alprops)                         \
+        : EaxCommitter{eaxprops, alprops}                                     \
+    { }                                                                       \
+                                                                              \
+    [[nodiscard]] auto commit(const P &props) const -> bool;                  \
+                                                                              \
+    static void SetDefaults(EaxEffectProps &props);                           \
+    static void Get(const EaxCall &call, const P &props);                     \
+    static void Set(const EaxCall &call, P &props);                           \
 };
-struct EaxChorusCommitter : public EaxCommitter<EaxChorusCommitter> {
-    template<typename ...Args>
-    explicit EaxChorusCommitter(Args&& ...args) : EaxCommitter{std::forward<Args>(args)...} { }
-
-    bool commit(const EAXCHORUSPROPERTIES &props);
-
-    static void SetDefaults(EaxEffectProps &props);
-    static void Get(const EaxCall &call, const EAXCHORUSPROPERTIES &props);
-    static void Set(const EaxCall &call, EAXCHORUSPROPERTIES &props);
-};
-struct EaxCompressorCommitter : public EaxCommitter<EaxCompressorCommitter> {
-    template<typename ...Args>
-    explicit EaxCompressorCommitter(Args&& ...args) : EaxCommitter{std::forward<Args>(args)...} { }
-
-    bool commit(const EAXAGCCOMPRESSORPROPERTIES &props);
-
-    static void SetDefaults(EaxEffectProps &props);
-    static void Get(const EaxCall &call, const EAXAGCCOMPRESSORPROPERTIES &props);
-    static void Set(const EaxCall &call, EAXAGCCOMPRESSORPROPERTIES &props);
-};
-struct EaxDistortionCommitter : public EaxCommitter<EaxDistortionCommitter> {
-    template<typename ...Args>
-    explicit EaxDistortionCommitter(Args&& ...args) : EaxCommitter{std::forward<Args>(args)...} { }
-
-    bool commit(const EAXDISTORTIONPROPERTIES &props);
-
-    static void SetDefaults(EaxEffectProps &props);
-    static void Get(const EaxCall &call, const EAXDISTORTIONPROPERTIES &props);
-    static void Set(const EaxCall &call, EAXDISTORTIONPROPERTIES &props);
-};
-struct EaxEchoCommitter : public EaxCommitter<EaxEchoCommitter> {
-    template<typename ...Args>
-    explicit EaxEchoCommitter(Args&& ...args) : EaxCommitter{std::forward<Args>(args)...} { }
-
-    bool commit(const EAXECHOPROPERTIES &props);
-
-    static void SetDefaults(EaxEffectProps &props);
-    static void Get(const EaxCall &call, const EAXECHOPROPERTIES &props);
-    static void Set(const EaxCall &call, EAXECHOPROPERTIES &props);
-};
-struct EaxEqualizerCommitter : public EaxCommitter<EaxEqualizerCommitter> {
-    template<typename ...Args>
-    explicit EaxEqualizerCommitter(Args&& ...args) : EaxCommitter{std::forward<Args>(args)...} { }
-
-    bool commit(const EAXEQUALIZERPROPERTIES &props);
-
-    static void SetDefaults(EaxEffectProps &props);
-    static void Get(const EaxCall &call, const EAXEQUALIZERPROPERTIES &props);
-    static void Set(const EaxCall &call, EAXEQUALIZERPROPERTIES &props);
-};
-struct EaxFlangerCommitter : public EaxCommitter<EaxFlangerCommitter> {
-    template<typename ...Args>
-    explicit EaxFlangerCommitter(Args&& ...args) : EaxCommitter{std::forward<Args>(args)...} { }
-
-    bool commit(const EAXFLANGERPROPERTIES &props);
-
-    static void SetDefaults(EaxEffectProps &props);
-    static void Get(const EaxCall &call, const EAXFLANGERPROPERTIES &props);
-    static void Set(const EaxCall &call, EAXFLANGERPROPERTIES &props);
-};
-struct EaxFrequencyShifterCommitter : public EaxCommitter<EaxFrequencyShifterCommitter> {
-    template<typename ...Args>
-    explicit EaxFrequencyShifterCommitter(Args&& ...args) : EaxCommitter{std::forward<Args>(args)...} { }
-
-    bool commit(const EAXFREQUENCYSHIFTERPROPERTIES &props);
-
-    static void SetDefaults(EaxEffectProps &props);
-    static void Get(const EaxCall &call, const EAXFREQUENCYSHIFTERPROPERTIES &props);
-    static void Set(const EaxCall &call, EAXFREQUENCYSHIFTERPROPERTIES &props);
-};
-struct EaxModulatorCommitter : public EaxCommitter<EaxModulatorCommitter> {
-    template<typename ...Args>
-    explicit EaxModulatorCommitter(Args&& ...args) : EaxCommitter{std::forward<Args>(args)...} { }
-
-    bool commit(const EAXRINGMODULATORPROPERTIES &props);
-
-    static void SetDefaults(EaxEffectProps &props);
-    static void Get(const EaxCall &call, const EAXRINGMODULATORPROPERTIES &props);
-    static void Set(const EaxCall &call, EAXRINGMODULATORPROPERTIES &props);
-};
-struct EaxPitchShifterCommitter : public EaxCommitter<EaxPitchShifterCommitter> {
-    template<typename ...Args>
-    explicit EaxPitchShifterCommitter(Args&& ...args) : EaxCommitter{std::forward<Args>(args)...} { }
-
-    bool commit(const EAXPITCHSHIFTERPROPERTIES &props);
-
-    static void SetDefaults(EaxEffectProps &props);
-    static void Get(const EaxCall &call, const EAXPITCHSHIFTERPROPERTIES &props);
-    static void Set(const EaxCall &call, EAXPITCHSHIFTERPROPERTIES &props);
-};
-struct EaxVocalMorpherCommitter : public EaxCommitter<EaxVocalMorpherCommitter> {
-    template<typename ...Args>
-    explicit EaxVocalMorpherCommitter(Args&& ...args) : EaxCommitter{std::forward<Args>(args)...} { }
-
-    bool commit(const EAXVOCALMORPHERPROPERTIES &props);
-
-    static void SetDefaults(EaxEffectProps &props);
-    static void Get(const EaxCall &call, const EAXVOCALMORPHERPROPERTIES &props);
-    static void Set(const EaxCall &call, EAXVOCALMORPHERPROPERTIES &props);
-};
-struct EaxNullCommitter : public EaxCommitter<EaxNullCommitter> {
-    template<typename ...Args>
-    explicit EaxNullCommitter(Args&& ...args) : EaxCommitter{std::forward<Args>(args)...} { }
-
-    bool commit(const std::monostate &props);
-
-    static void SetDefaults(EaxEffectProps &props);
-    static void Get(const EaxCall &call, const std::monostate &props);
-    static void Set(const EaxCall &call, std::monostate &props);
-};
+DECL_COMMITTER(EaxAutowahCommitter, EAXAUTOWAHPROPERTIES)
+DECL_COMMITTER(EaxChorusCommitter, EAXCHORUSPROPERTIES)
+DECL_COMMITTER(EaxCompressorCommitter, EAXAGCCOMPRESSORPROPERTIES)
+DECL_COMMITTER(EaxDistortionCommitter, EAXDISTORTIONPROPERTIES)
+DECL_COMMITTER(EaxEchoCommitter, EAXECHOPROPERTIES)
+DECL_COMMITTER(EaxEqualizerCommitter, EAXEQUALIZERPROPERTIES)
+DECL_COMMITTER(EaxFlangerCommitter, EAXFLANGERPROPERTIES)
+DECL_COMMITTER(EaxFrequencyShifterCommitter, EAXFREQUENCYSHIFTERPROPERTIES)
+DECL_COMMITTER(EaxModulatorCommitter, EAXRINGMODULATORPROPERTIES)
+DECL_COMMITTER(EaxPitchShifterCommitter, EAXPITCHSHIFTERPROPERTIES)
+DECL_COMMITTER(EaxVocalMorpherCommitter, EAXVOCALMORPHERPROPERTIES)
+DECL_COMMITTER(EaxNullCommitter, std::monostate)
+#undef DECL_COMMITTER
 
 template<typename T>
 struct CommitterFromProps { };
@@ -285,7 +186,7 @@ template<> struct CommitterFromProps<EAXPITCHSHIFTERPROPERTIES> { using type = E
 template<> struct CommitterFromProps<EAXVOCALMORPHERPROPERTIES> { using type = EaxVocalMorpherCommitter; };
 
 template<typename T>
-using CommitterFor = typename CommitterFromProps<std::remove_cv_t<std::remove_reference_t<T>>>::type;
+using CommitterFor = CommitterFromProps<std::remove_cvref_t<T>>::type;
 
 
 class EaxEffect {
@@ -383,9 +284,8 @@ public:
 
     static void call_set(const EaxCall &call, EaxEffectProps &props)
     {
-        return std::visit([&](auto &arg)
-        { return CommitterFor<decltype(arg)>::Set(call, arg); },
-        props);
+        return std::visit([&]<typename T>(T &arg) { return CommitterFor<T>::Set(call, arg); },
+            props);
     }
 
     void set(const EaxCall &call)
@@ -404,9 +304,8 @@ public:
 
     static void call_get(const EaxCall &call, const EaxEffectProps &props)
     {
-        return std::visit([&](auto &arg)
-        { return CommitterFor<decltype(arg)>::Get(call, arg); },
-        props);
+        return std::visit([&]<typename T>(T &arg) { return CommitterFor<T>::Get(call, arg); },
+            props);
     }
 
     void get(const EaxCall &call) const
@@ -424,9 +323,9 @@ public:
 
     bool call_commit(const EaxEffectProps &props)
     {
-        return std::visit([&](auto &arg)
-        { return CommitterFor<decltype(arg)>{props_, al_effect_props_}.commit(arg); },
-        props);
+        return std::visit([&]<typename T>(T &arg)
+            { return CommitterFor<T>{props_, al_effect_props_}.commit(arg); },
+            props);
     }
 
     bool commit(int eax_version)

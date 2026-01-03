@@ -180,11 +180,12 @@
 
 ## OpenAL Soft
 - [![Upstream](https://img.shields.io/github/v/tag/kcat/openal-soft?label=Upstream)](https://github.com/kcat/openal-soft)
-- Version: 1.24.3
+- Version: 1.25.0
 - Modifications: 
   - Remove `-Werror=undef`
   - Linking `fmt::fmt` instead `alsoft::fmt`
   - Exclude target `alsoft::excommon`
+  - Fix `al::char_as_u8/al::u8_as_char` with compiler flag: `-fno-char8_t` or `/Zc:char8_t-`
 - License: LGPL-2.1
 
 ## OpenSSL

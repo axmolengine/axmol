@@ -3,24 +3,27 @@
 
 #include <variant>
 
-#include "AL/alc.h"
 #include "AL/al.h"
 
 #include "core/effects/base.h"
 #include "opthelpers.h"
 
+namespace al {
+struct Context;
+} // namespace al
+
 #define DECL_HANDLER(N, T)                                                    \
 struct N {                                                                    \
     using prop_type = T;                                                      \
                                                                               \
-    static void SetParami(ALCcontext *context, prop_type &props, ALenum param, int val);           \
-    static void SetParamiv(ALCcontext *context, prop_type &props, ALenum param, const int *vals);  \
-    static void SetParamf(ALCcontext *context, prop_type &props, ALenum param, float val);         \
-    static void SetParamfv(ALCcontext *context, prop_type &props, ALenum param, const float *vals);\
-    static void GetParami(ALCcontext *context, const prop_type &props, ALenum param, int *val);    \
-    static void GetParamiv(ALCcontext *context, const prop_type &props, ALenum param, int *vals);  \
-    static void GetParamf(ALCcontext *context, const prop_type &props, ALenum param, float *val);  \
-    static void GetParamfv(ALCcontext *context, const prop_type &props, ALenum param, float *vals);\
+    static void SetParami(al::Context *context, prop_type &props, ALenum param, int val);           \
+    static void SetParamiv(al::Context *context, prop_type &props, ALenum param, const int *vals);  \
+    static void SetParamf(al::Context *context, prop_type &props, ALenum param, float val);         \
+    static void SetParamfv(al::Context *context, prop_type &props, ALenum param, const float *vals);\
+    static void GetParami(al::Context *context, const prop_type &props, ALenum param, int *val);    \
+    static void GetParamiv(al::Context *context, const prop_type &props, ALenum param, int *vals);  \
+    static void GetParamf(al::Context *context, const prop_type &props, ALenum param, float *val);  \
+    static void GetParamfv(al::Context *context, const prop_type &props, ALenum param, float *vals);\
 };
 DECL_HANDLER(NullEffectHandler, std::monostate)
 DECL_HANDLER(ReverbEffectHandler, ReverbProps)
@@ -43,22 +46,22 @@ DECL_HANDLER(ConvolutionEffectHandler, ConvolutionProps)
 
 
 /* Default properties for the given effect types. */
-DECL_HIDDEN extern const EffectProps NullEffectProps;
-DECL_HIDDEN extern const EffectProps ReverbEffectProps;
-DECL_HIDDEN extern const EffectProps StdReverbEffectProps;
-DECL_HIDDEN extern const EffectProps AutowahEffectProps;
-DECL_HIDDEN extern const EffectProps ChorusEffectProps;
-DECL_HIDDEN extern const EffectProps CompressorEffectProps;
-DECL_HIDDEN extern const EffectProps DistortionEffectProps;
-DECL_HIDDEN extern const EffectProps EchoEffectProps;
-DECL_HIDDEN extern const EffectProps EqualizerEffectProps;
-DECL_HIDDEN extern const EffectProps FlangerEffectProps;
-DECL_HIDDEN extern const EffectProps FshifterEffectProps;
-DECL_HIDDEN extern const EffectProps ModulatorEffectProps;
-DECL_HIDDEN extern const EffectProps PshifterEffectProps;
-DECL_HIDDEN extern const EffectProps VmorpherEffectProps;
-DECL_HIDDEN extern const EffectProps DedicatedDialogEffectProps;
-DECL_HIDDEN extern const EffectProps DedicatedLfeEffectProps;
-DECL_HIDDEN extern const EffectProps ConvolutionEffectProps;
+DECL_HIDDEN extern constinit const EffectProps NullEffectProps;
+DECL_HIDDEN extern constinit const EffectProps ReverbEffectProps;
+DECL_HIDDEN extern constinit const EffectProps StdReverbEffectProps;
+DECL_HIDDEN extern constinit const EffectProps AutowahEffectProps;
+DECL_HIDDEN extern constinit const EffectProps ChorusEffectProps;
+DECL_HIDDEN extern constinit const EffectProps CompressorEffectProps;
+DECL_HIDDEN extern constinit const EffectProps DistortionEffectProps;
+DECL_HIDDEN extern constinit const EffectProps EchoEffectProps;
+DECL_HIDDEN extern constinit const EffectProps EqualizerEffectProps;
+DECL_HIDDEN extern constinit const EffectProps FlangerEffectProps;
+DECL_HIDDEN extern constinit const EffectProps FshifterEffectProps;
+DECL_HIDDEN extern constinit const EffectProps ModulatorEffectProps;
+DECL_HIDDEN extern constinit const EffectProps PshifterEffectProps;
+DECL_HIDDEN extern constinit const EffectProps VmorpherEffectProps;
+DECL_HIDDEN extern constinit const EffectProps DedicatedDialogEffectProps;
+DECL_HIDDEN extern constinit const EffectProps DedicatedLfeEffectProps;
+DECL_HIDDEN extern constinit const EffectProps ConvolutionEffectProps;
 
 #endif /* AL_EFFECTS_EFFECTS_H */

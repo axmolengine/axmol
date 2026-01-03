@@ -4,51 +4,47 @@
 
 #include <array>
 
-#include "api.h"
 #include "exception.h"
 
 
-namespace
-{
+namespace {
 
-
-class EaxFxSlotsException :
-    public EaxException
-{
+/* NOLINTNEXTLINE(clazy-copyable-polymorphic) Exceptions must be copyable. */
+class EaxFxSlotsException final : public EaxException {
 public:
-    explicit EaxFxSlotsException(
-        const char* message)
-        :
-        EaxException{"EAX_FX_SLOTS", message}
-    {
-    }
-}; // EaxFxSlotsException
-
+    explicit EaxFxSlotsException(const std::string_view message)
+        : EaxException{"EAX_FX_SLOTS", message}
+    { }
+};
 
 } // namespace
 
-
-void EaxFxSlots::initialize(ALCcontext& al_context)
+void EaxFxSlots::initialize(gsl::not_null<al::Context*> al_context)
 {
-    initialize_fx_slots(al_context);
+    auto fx_slot_index = EaxFxSlotIndexValue{};
+
+    for(auto& fx_slot : fx_slots_)
+    {
+        fx_slot = eax_create_al_effect_slot(al_context);
+        fx_slot->eax_initialize(fx_slot_index);
+        fx_slot_index += 1;
+    }
 }
 
 void EaxFxSlots::uninitialize() noexcept
 {
-    for (auto& fx_slot : fx_slots_)
-    {
+    for(auto &fx_slot : fx_slots_)
         fx_slot = nullptr;
-    }
 }
 
-const ALeffectslot& EaxFxSlots::get(EaxFxSlotIndex index) const
+auto EaxFxSlots::get(EaxFxSlotIndex const index) const -> al::EffectSlot const&
 {
     if(!index.has_value())
         fail("Empty index.");
     return *fx_slots_[index.value()];
 }
 
-ALeffectslot& EaxFxSlots::get(EaxFxSlotIndex index)
+auto EaxFxSlots::get(EaxFxSlotIndex const index) -> al::EffectSlot&
 {
     if(!index.has_value())
         fail("Empty index.");
@@ -56,20 +52,5 @@ ALeffectslot& EaxFxSlots::get(EaxFxSlotIndex index)
 }
 
 [[noreturn]]
-void EaxFxSlots::fail(
-    const char* message)
-{
-    throw EaxFxSlotsException{message};
-}
-
-void EaxFxSlots::initialize_fx_slots(ALCcontext& al_context)
-{
-    auto fx_slot_index = EaxFxSlotIndexValue{};
-
-    for (auto& fx_slot : fx_slots_)
-    {
-        fx_slot = eax_create_al_effect_slot(al_context);
-        fx_slot->eax_initialize(al_context, fx_slot_index);
-        fx_slot_index += 1;
-    }
-}
+void EaxFxSlots::fail(std::string_view const message)
+{ throw EaxFxSlotsException{message}; }

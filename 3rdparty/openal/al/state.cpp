@@ -42,6 +42,7 @@
 #include "alc/context.h"
 #include "alc/device.h"
 #include "alc/inprogext.h"
+#include "alformat.hpp"
 #include "alnumeric.h"
 #include "atomic.h"
 #include "core/context.h"
@@ -49,9 +50,10 @@
 #include "core/mixer/defs.h"
 #include "core/voice.h"
 #include "direct_defs.h"
+#include "gsl/gsl"
 #include "intrusive_ptr.h"
 #include "opthelpers.h"
-#include "strutils.h"
+#include "strutils.hpp"
 
 #if ALSOFT_EAX
 #include "eax/globals.h"
@@ -100,7 +102,7 @@ template<> struct ResamplerName<Resampler::FastBSinc48>
 template<> struct ResamplerName<Resampler::BSinc48>
 { static constexpr const ALchar *Get() noexcept { return "47th order Sinc"; } };
 
-const ALchar *GetResamplerName(const Resampler rtype)
+constexpr auto GetResamplerName(const Resampler rtype) -> const ALchar*
 {
 #define HANDLE_RESAMPLER(r) case r: return ResamplerName<r>::Get()
     switch(rtype)
@@ -147,7 +149,8 @@ constexpr auto ALenumFromDistanceModel(DistanceModel model) -> ALenum
     case DistanceModel::Exponent: return AL_EXPONENT_DISTANCE;
     case DistanceModel::ExponentClamped: return AL_EXPONENT_DISTANCE_CLAMPED;
     }
-    throw std::runtime_error{"Unexpected distance model "+std::to_string(static_cast<int>(model))};
+    throw std::runtime_error{al::format("Unexpected distance model {:#x}",
+        al::to_underlying(model))};
 }
 
 enum PropertyValue : ALenum {
@@ -174,32 +177,35 @@ enum PropertyValue : ALenum {
 
 template<typename T>
 struct PropertyCastType {
-    template<typename U>
-    constexpr auto operator()(U&& value) const noexcept
-    { return static_cast<T>(std::forward<U>(value)); }
+    template<typename U> [[nodiscard]]
+    constexpr auto operator()(U&& value) const noexcept -> T
+    { return gsl::narrow_cast<T>(std::forward<U>(value)); }
 };
 /* Special-case ALboolean to be an actual bool instead of a char type. */
 template<>
 struct PropertyCastType<ALboolean> {
-    template<typename U>
-    constexpr ALboolean operator()(U&& value) const noexcept
-    { return static_cast<bool>(std::forward<U>(value)) ? AL_TRUE : AL_FALSE; }
+    template<typename U> [[nodiscard]]
+    constexpr auto operator()(U&& value) const noexcept -> ALboolean
+    { return gsl::narrow_cast<bool>(std::forward<U>(value)) ? AL_TRUE : AL_FALSE; }
 };
 
 
 template<typename T>
-void GetValue(ALCcontext *context, ALenum pname, T *values)
+void GetValue(gsl::not_null<al::Context*> context, ALenum pname, T *values) noexcept
 {
-    auto cast_value = PropertyCastType<T>{};
+    static constexpr auto cast_value = PropertyCastType<T>{};
 
-    switch(static_cast<PropertyValue>(pname))
+    if(!values) [[unlikely]]
+        return context->setError(AL_INVALID_VALUE, "NULL pointer");
+
+    switch(PropertyValue{pname})
     {
     case AL_DOPPLER_FACTOR:
         *values = cast_value(context->mDopplerFactor);
         return;
 
     case AL_DOPPLER_VELOCITY:
-        if(context->mContextFlags.test(ContextFlags::DebugBit)) UNLIKELY
+        if(context->mContextFlags.test(ContextFlags::DebugBit)) [[unlikely]]
             context->debugMessage(DebugSource::API, DebugType::DeprecatedBehavior, 0,
                 DebugSeverity::Medium,
                 "AL_DOPPLER_VELOCITY is deprecated in AL 1.1, use AL_SPEED_OF_SOUND; "
@@ -233,14 +239,14 @@ void GetValue(ALCcontext *context, ALenum pname, T *values)
 
     case AL_DEBUG_LOGGED_MESSAGES_EXT:
     {
-        std::lock_guard<std::mutex> debuglock{context->mDebugCbLock};
+        auto debuglock = std::lock_guard{context->mDebugCbLock};
         *values = cast_value(context->mDebugLog.size());
         return;
     }
 
     case AL_DEBUG_NEXT_LOGGED_MESSAGE_LENGTH_EXT:
     {
-        std::lock_guard<std::mutex> debuglock{context->mDebugCbLock};
+        auto debuglock = std::lock_guard{context->mDebugCbLock};
         *values = cast_value(context->mDebugLog.empty() ? 0_uz
             : (context->mDebugLog.front().mMessage.size()+1));
         return;
@@ -281,8 +287,8 @@ void GetValue(ALCcontext *context, ALenum pname, T *values)
     case AL_EAX_RAM_FREE:
         if(eax_g_is_enabled)
         {
-            auto device = context->mALDevice.get();
-            std::lock_guard<std::mutex> device_lock{device->BufferLock};
+            auto const device = al::get_not_null(context->mALDevice);
+            auto devlock = std::lock_guard{device->BufferLock};
             *values = cast_value(device->eax_x_ram_free_size);
             return;
         }
@@ -295,8 +301,38 @@ void GetValue(ALCcontext *context, ALenum pname, T *values)
     context->setError(AL_INVALID_ENUM, "Invalid context property {:#04x}", as_unsigned(pname));
 }
 
+template<>
+void GetValue(gsl::not_null<al::Context*> context, ALenum pname, ALvoid **values) noexcept
+{
+    if(!values) [[unlikely]]
+        return context->setError(AL_INVALID_VALUE, "NULL pointer");
 
-inline void UpdateProps(ALCcontext *context)
+    switch(pname)
+    {
+    case AL_EVENT_CALLBACK_FUNCTION_SOFT:
+        /* NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast) */
+        *values = reinterpret_cast<void*>(context->mEventCb);
+        return;
+
+    case AL_EVENT_CALLBACK_USER_PARAM_SOFT:
+        *values = context->mEventParam;
+        return;
+
+    case AL_DEBUG_CALLBACK_FUNCTION_EXT:
+        /* NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast) */
+        *values = reinterpret_cast<void*>(context->mDebugCb);
+        return;
+
+    case AL_DEBUG_CALLBACK_USER_PARAM_EXT:
+        *values = context->mDebugParam;
+        return;
+    }
+    context->setError(AL_INVALID_ENUM, "Invalid context pointer property {:#04x}",
+        as_unsigned(pname));
+}
+
+
+inline void UpdateProps(al::Context *context)
 {
     if(!context->mDeferUpdates)
         UpdateContextProps(context);
@@ -304,30 +340,17 @@ inline void UpdateProps(ALCcontext *context)
         context->mPropsDirty = true;
 }
 
-} // namespace
 
-/* WARNING: Non-standard export! Not part of any extension, or exposed in the
- * alcFunctions list.
- */
-AL_API auto AL_APIENTRY alsoft_get_version() noexcept -> const ALchar*
-{
-    static const auto spoof = al::getenv("ALSOFT_SPOOF_VERSION");
-    if(spoof) return spoof->c_str();
-    return ALSOFT_VERSION;
-}
-
-
-AL_API DECL_FUNC1(void, alEnable, ALenum,capability)
-FORCE_ALIGN void AL_APIENTRY alEnableDirect(ALCcontext *context, ALenum capability) noexcept
+void alEnable(gsl::not_null<al::Context*> context, ALenum capability) noexcept
 {
     switch(capability)
     {
     case AL_SOURCE_DISTANCE_MODEL:
-        {
-            std::lock_guard<std::mutex> proplock{context->mPropLock};
-            context->mSourceDistanceModel = true;
-            UpdateProps(context);
-        }
+    {
+        auto proplock = std::lock_guard{context->mPropLock};
+        context->mSourceDistanceModel = true;
+        UpdateProps(context);
+    }
         return;
 
     case AL_DEBUG_OUTPUT_EXT:
@@ -342,17 +365,16 @@ FORCE_ALIGN void AL_APIENTRY alEnableDirect(ALCcontext *context, ALenum capabili
         as_unsigned(capability));
 }
 
-AL_API DECL_FUNC1(void, alDisable, ALenum,capability)
-FORCE_ALIGN void AL_APIENTRY alDisableDirect(ALCcontext *context, ALenum capability) noexcept
+void alDisable(gsl::not_null<al::Context*> context, ALenum capability) noexcept
 {
     switch(capability)
     {
     case AL_SOURCE_DISTANCE_MODEL:
-        {
-            std::lock_guard<std::mutex> proplock{context->mPropLock};
-            context->mSourceDistanceModel = false;
-            UpdateProps(context);
-        }
+    {
+        auto proplock = std::lock_guard{context->mPropLock};
+        context->mSourceDistanceModel = false;
+        UpdateProps(context);
+    }
         return;
 
     case AL_DEBUG_OUTPUT_EXT:
@@ -367,10 +389,9 @@ FORCE_ALIGN void AL_APIENTRY alDisableDirect(ALCcontext *context, ALenum capabil
         as_unsigned(capability));
 }
 
-AL_API DECL_FUNC1(ALboolean, alIsEnabled, ALenum,capability)
-FORCE_ALIGN ALboolean AL_APIENTRY alIsEnabledDirect(ALCcontext *context, ALenum capability) noexcept
+auto alIsEnabled(gsl::not_null<al::Context*> context, ALenum capability) noexcept -> ALboolean
 {
-    std::lock_guard<std::mutex> proplock{context->mPropLock};
+    auto proplock = std::lock_guard{context->mPropLock};
     switch(capability)
     {
     case AL_SOURCE_DISTANCE_MODEL: return context->mSourceDistanceModel ? AL_TRUE : AL_FALSE;
@@ -383,121 +404,21 @@ FORCE_ALIGN ALboolean AL_APIENTRY alIsEnabledDirect(ALCcontext *context, ALenum 
     return AL_FALSE;
 }
 
-#define DECL_GETFUNC(R, Name, Ext)                                            \
-auto AL_APIENTRY Name##Ext(ALenum pname) noexcept -> R                        \
-{                                                                             \
-    auto value = R{};                                                         \
-    auto context = GetContextRef();                                           \
-    if(!context) UNLIKELY return value;                                       \
-    Name##vDirect##Ext(GetContextRef().get(), pname, &value);                 \
-    return value;                                                             \
-}                                                                             \
-FORCE_ALIGN auto AL_APIENTRY Name##Direct##Ext(ALCcontext *context, ALenum pname) noexcept -> R \
-{                                                                             \
-    auto value = R{};                                                         \
-    Name##vDirect##Ext(context, pname, &value);                               \
-    return value;                                                             \
-}
 
-AL_API DECL_GETFUNC(ALboolean, alGetBoolean,)
-AL_API DECL_GETFUNC(ALdouble, alGetDouble,)
-AL_API DECL_GETFUNC(ALfloat, alGetFloat,)
-AL_API DECL_GETFUNC(ALint, alGetInteger,)
-
-DECL_GETFUNC(ALvoidptr, alGetPointer,EXT)
-AL_API DECL_GETFUNC(ALint64SOFT, alGetInteger64,SOFT)
-AL_API DECL_GETFUNC(ALvoidptr, alGetPointer,SOFT)
-
-#undef DECL_GETFUNC
-
-
-AL_API DECL_FUNC2(void, alGetBooleanv, ALenum,pname, ALboolean*,values)
-FORCE_ALIGN void AL_APIENTRY alGetBooleanvDirect(ALCcontext *context, ALenum pname, ALboolean *values) noexcept
-{
-    if(!values) UNLIKELY
-        return context->setError(AL_INVALID_VALUE, "NULL pointer");
-    GetValue(context, pname, values);
-}
-
-AL_API DECL_FUNC2(void, alGetDoublev, ALenum,pname, ALdouble*,values)
-FORCE_ALIGN void AL_APIENTRY alGetDoublevDirect(ALCcontext *context, ALenum pname, ALdouble *values) noexcept
-{
-    if(!values) UNLIKELY
-        return context->setError(AL_INVALID_VALUE, "NULL pointer");
-    GetValue(context, pname, values);
-}
-
-AL_API DECL_FUNC2(void, alGetFloatv, ALenum,pname, ALfloat*,values)
-FORCE_ALIGN void AL_APIENTRY alGetFloatvDirect(ALCcontext *context, ALenum pname, ALfloat *values) noexcept
-{
-    if(!values) UNLIKELY
-        return context->setError(AL_INVALID_VALUE, "NULL pointer");
-    GetValue(context, pname, values);
-}
-
-AL_API DECL_FUNC2(void, alGetIntegerv, ALenum,pname, ALint*,values)
-FORCE_ALIGN void AL_APIENTRY alGetIntegervDirect(ALCcontext *context, ALenum pname, ALint *values) noexcept
-{
-    if(!values) UNLIKELY
-        return context->setError(AL_INVALID_VALUE, "NULL pointer");
-    GetValue(context, pname, values);
-}
-
-AL_API DECL_FUNCEXT2(void, alGetInteger64v,SOFT, ALenum,pname, ALint64SOFT*,values)
-FORCE_ALIGN void AL_APIENTRY alGetInteger64vDirectSOFT(ALCcontext *context, ALenum pname, ALint64SOFT *values) noexcept
-{
-    if(!values) UNLIKELY
-        return context->setError(AL_INVALID_VALUE, "NULL pointer");
-    GetValue(context, pname, values);
-}
-
-AL_API DECL_FUNCEXT2(void, alGetPointerv,SOFT, ALenum,pname, ALvoid**,values)
-FORCE_ALIGN void AL_APIENTRY alGetPointervDirectSOFT(ALCcontext *context, ALenum pname, ALvoid **values) noexcept
-{ return alGetPointervDirectEXT(context, pname, values); }
-
-FORCE_ALIGN DECL_FUNCEXT2(void, alGetPointerv,EXT, ALenum,pname, ALvoid**,values)
-FORCE_ALIGN void AL_APIENTRY alGetPointervDirectEXT(ALCcontext *context, ALenum pname, ALvoid **values) noexcept
-{
-    if(!values) UNLIKELY
-        return context->setError(AL_INVALID_VALUE, "NULL pointer");
-
-    switch(pname)
-    {
-    case AL_EVENT_CALLBACK_FUNCTION_SOFT:
-        *values = reinterpret_cast<void*>(context->mEventCb);
-        return;
-
-    case AL_EVENT_CALLBACK_USER_PARAM_SOFT:
-        *values = context->mEventParam;
-        return;
-
-    case AL_DEBUG_CALLBACK_FUNCTION_EXT:
-        *values = reinterpret_cast<void*>(context->mDebugCb);
-        return;
-
-    case AL_DEBUG_CALLBACK_USER_PARAM_EXT:
-        *values = context->mDebugParam;
-        return;
-    }
-    context->setError(AL_INVALID_ENUM, "Invalid context pointer property {:#04x}",
-        as_unsigned(pname));
-}
-
-AL_API DECL_FUNC1(const ALchar*, alGetString, ALenum,pname)
-FORCE_ALIGN const ALchar* AL_APIENTRY alGetStringDirect(ALCcontext *context, ALenum pname) noexcept
+auto alGetString(gsl::not_null<al::Context*> context, ALenum pname) noexcept -> gsl::czstring
 {
     switch(pname)
     {
     case AL_VENDOR:
-        if(auto device = context->mALDevice.get(); !device->mVendorOverride.empty())
+        if(auto &device = context->mALDevice; !device->mVendorOverride.empty())
             return device->mVendorOverride.c_str();
         return GetVendorString();
     case AL_VERSION:
-        if(auto device = context->mALDevice.get(); !device->mVersionOverride.empty())
+        if(auto &device = context->mALDevice; !device->mVersionOverride.empty())
             return device->mVersionOverride.c_str();
         return GetVersionString();
     case AL_RENDERER:
-        if(auto device = context->mALDevice.get(); !device->mRendererOverride.empty())
+        if(auto &device = context->mALDevice; !device->mRendererOverride.empty())
             return device->mRendererOverride.c_str();
         return GetRendererString();
     case AL_EXTENSIONS: return context->mExtensionsString.c_str();
@@ -514,38 +435,36 @@ FORCE_ALIGN const ALchar* AL_APIENTRY alGetStringDirect(ALCcontext *context, ALe
     return nullptr;
 }
 
-AL_API DECL_FUNC1(void, alDopplerFactor, ALfloat,value)
-FORCE_ALIGN void AL_APIENTRY alDopplerFactorDirect(ALCcontext *context, ALfloat value) noexcept
+
+void alDopplerFactor(gsl::not_null<al::Context*> context, ALfloat value) noexcept
 {
     if(!(value >= 0.0f && std::isfinite(value)))
-        context->setError(AL_INVALID_VALUE, "Doppler factor {:f} out of range", value);
+        context->setError(AL_INVALID_VALUE, "Doppler factor {} out of range", value);
     else
     {
-        std::lock_guard<std::mutex> proplock{context->mPropLock};
+        auto proplock = std::lock_guard{context->mPropLock};
         context->mDopplerFactor = value;
         UpdateProps(context);
     }
 }
 
-AL_API DECL_FUNC1(void, alSpeedOfSound, ALfloat,value)
-FORCE_ALIGN void AL_APIENTRY alSpeedOfSoundDirect(ALCcontext *context, ALfloat value) noexcept
+void alSpeedOfSound(gsl::not_null<al::Context*> context, ALfloat value) noexcept
 {
     if(!(value > 0.0f && std::isfinite(value)))
-        context->setError(AL_INVALID_VALUE, "Speed of sound {:f} out of range", value);
+        context->setError(AL_INVALID_VALUE, "Speed of sound {} out of range", value);
     else
     {
-        std::lock_guard<std::mutex> proplock{context->mPropLock};
+        auto proplock = std::lock_guard{context->mPropLock};
         context->mSpeedOfSound = value;
         UpdateProps(context);
     }
 }
 
-AL_API DECL_FUNC1(void, alDistanceModel, ALenum,value)
-FORCE_ALIGN void AL_APIENTRY alDistanceModelDirect(ALCcontext *context, ALenum value) noexcept
+void alDistanceModel(gsl::not_null<al::Context*> context, ALenum value) noexcept
 {
     if(auto model = DistanceModelFromALenum(value))
     {
-        std::lock_guard<std::mutex> proplock{context->mPropLock};
+        auto proplock = std::lock_guard{context->mPropLock};
         context->mDistanceModel = *model;
         if(!context->mSourceDistanceModel)
             UpdateProps(context);
@@ -556,29 +475,14 @@ FORCE_ALIGN void AL_APIENTRY alDistanceModelDirect(ALCcontext *context, ALenum v
 }
 
 
-AL_API DECL_FUNCEXT(void, alDeferUpdates,SOFT)
-FORCE_ALIGN void AL_APIENTRY alDeferUpdatesDirectSOFT(ALCcontext *context) noexcept
-{
-    std::lock_guard<std::mutex> proplock{context->mPropLock};
-    context->deferUpdates();
-}
-
-AL_API DECL_FUNCEXT(void, alProcessUpdates,SOFT)
-FORCE_ALIGN void AL_APIENTRY alProcessUpdatesDirectSOFT(ALCcontext *context) noexcept
-{
-    std::lock_guard<std::mutex> proplock{context->mPropLock};
-    context->processUpdates();
-}
-
-
-AL_API DECL_FUNCEXT2(const ALchar*, alGetStringi,SOFT, ALenum,pname, ALsizei,index)
-FORCE_ALIGN const ALchar* AL_APIENTRY alGetStringiDirectSOFT(ALCcontext *context, ALenum pname, ALsizei index) noexcept
+auto alGetStringiSOFT(gsl::not_null<al::Context*> context, ALenum pname, ALsizei index) noexcept
+    -> gsl::czstring
 {
     switch(pname)
     {
     case AL_RESAMPLER_NAME_SOFT:
         if(index >= 0 && index <= al::to_underlying(Resampler::Max))
-            return GetResamplerName(static_cast<Resampler>(index));
+            return GetResamplerName(gsl::narrow_cast<Resampler>(index));
         context->setError(AL_INVALID_VALUE, "Resampler name index {} out of range", index);
         return nullptr;
     }
@@ -588,32 +492,112 @@ FORCE_ALIGN const ALchar* AL_APIENTRY alGetStringiDirectSOFT(ALCcontext *context
 }
 
 
+void alDeferUpdatesSOFT(gsl::not_null<al::Context*> context) noexcept
+{
+    auto proplock = std::lock_guard{context->mPropLock};
+    context->deferUpdates();
+}
+
+void alProcessUpdatesSOFT(gsl::not_null<al::Context*> context) noexcept
+{
+    auto proplock = std::lock_guard{context->mPropLock};
+    context->processUpdates();
+}
+
+} // namespace
+
+/* WARNING: Non-standard export! Not part of any extension, or exposed in the
+ * alcFunctions list.
+ */
+AL_API auto AL_APIENTRY alsoft_get_version() noexcept -> const ALchar*
+{
+    static const auto spoof = al::getenv("ALSOFT_SPOOF_VERSION");
+    if(spoof) return spoof->c_str();
+    return ALSOFT_VERSION;
+}
+
+
+AL_API DECL_FUNC1(void, alEnable, ALenum,capability)
+AL_API DECL_FUNC1(void, alDisable, ALenum,capability)
+AL_API DECL_FUNC1(ALboolean, alIsEnabled, ALenum,capability)
+
+#define DECL_GETFUNC(DECL, R, Name, Ext)                                      \
+DECL auto AL_APIENTRY Name##Ext(ALenum pname) noexcept -> R                   \
+{                                                                             \
+    auto value = R{};                                                         \
+    auto context = GetContextRef();                                           \
+    if(context) [[likely]]                                                    \
+        GetValue(gsl::make_not_null(context.get()), pname, &value);           \
+    return value;                                                             \
+}                                                                             \
+FORCE_ALIGN auto AL_APIENTRY Name##Direct##Ext(ALCcontext *context,           \
+    ALenum pname) noexcept -> R                                               \
+{                                                                             \
+    auto value = R{};                                                         \
+    GetValue(al::verify_context(context), pname, &value);                     \
+    return value;                                                             \
+}                                                                             \
+DECL auto AL_APIENTRY Name##v##Ext(ALenum pname, R *values) noexcept -> void  \
+{                                                                             \
+    auto context = GetContextRef();                                           \
+    if(context) [[likely]]                                                    \
+        GetValue(gsl::make_not_null(context.get()), pname, values);           \
+}                                                                             \
+FORCE_ALIGN auto AL_APIENTRY Name##v##Direct##Ext(ALCcontext *context,        \
+    ALenum pname, R *values) noexcept -> void                                 \
+{                                                                             \
+    GetValue(al::verify_context(context), pname, values);                     \
+}
+
+DECL_GETFUNC(AL_API, ALboolean, alGetBoolean,)
+DECL_GETFUNC(AL_API, ALdouble, alGetDouble,)
+DECL_GETFUNC(AL_API, ALfloat, alGetFloat,)
+DECL_GETFUNC(AL_API, ALint, alGetInteger,)
+
+DECL_GETFUNC(FORCE_ALIGN, ALvoidptr, alGetPointer,EXT)
+DECL_GETFUNC(AL_API, ALint64SOFT, alGetInteger64,SOFT)
+DECL_GETFUNC(AL_API, ALvoidptr, alGetPointer,SOFT)
+#undef DECL_GETFUNC
+
+
+AL_API DECL_FUNC1(const ALchar*, alGetString, ALenum,pname)
+
+AL_API DECL_FUNC1(void, alDopplerFactor, ALfloat,value)
+AL_API DECL_FUNC1(void, alSpeedOfSound, ALfloat,value)
+AL_API DECL_FUNC1(void, alDistanceModel, ALenum,value)
+
+AL_API DECL_FUNCEXT(void, alDeferUpdates,SOFT)
+AL_API DECL_FUNCEXT(void, alProcessUpdates,SOFT)
+
+AL_API DECL_FUNCEXT2(const ALchar*, alGetStringi,SOFT, ALenum,pname, ALsizei,index)
+
+
 AL_API void AL_APIENTRY alDopplerVelocity(ALfloat value) noexcept
 {
-    ContextRef context{GetContextRef()};
-    if(!context) UNLIKELY return;
+    auto context = GetContextRef();
+    if(!context) [[unlikely]] return;
 
-    if(context->mContextFlags.test(ContextFlags::DebugBit)) UNLIKELY
+    if(context->mContextFlags.test(ContextFlags::DebugBit)) [[unlikely]]
         context->debugMessage(DebugSource::API, DebugType::DeprecatedBehavior, 1,
             DebugSeverity::Medium,
             "alDopplerVelocity is deprecated in AL 1.1, use alSpeedOfSound; "
             "alDopplerVelocity(x) -> alSpeedOfSound(343.3f * x)");
 
     if(!(value >= 0.0f && std::isfinite(value)))
-        context->setError(AL_INVALID_VALUE, "Doppler velocity {:f} out of range", value);
+        context->setError(AL_INVALID_VALUE, "Doppler velocity {} out of range", value);
     else
     {
-        std::lock_guard<std::mutex> proplock{context->mPropLock};
+        auto proplock = std::lock_guard{context->mPropLock};
         context->mDopplerVelocity = value;
         UpdateProps(context.get());
     }
 }
 
 
-void UpdateContextProps(ALCcontext *context)
+void UpdateContextProps(al::Context *context)
 {
     /* Get an unused property container, or allocate a new one as needed. */
-    ContextProps *props{context->mFreeContextProps.load(std::memory_order_acquire)};
+    auto *props = context->mFreeContextProps.load(std::memory_order_acquire);
     if(!props)
     {
         context->allocContextProps();
@@ -627,11 +611,11 @@ void UpdateContextProps(ALCcontext *context)
 
     /* Copy in current property values. */
     const auto &listener = context->mListener;
-    props->Position = listener.Position;
-    props->Velocity = listener.Velocity;
-    props->OrientAt = listener.OrientAt;
-    props->OrientUp = listener.OrientUp;
-    props->Gain = listener.Gain;
+    props->Position = listener.mPosition;
+    props->Velocity = listener.mVelocity;
+    props->OrientAt = listener.mOrientAt;
+    props->OrientUp = listener.mOrientUp;
+    props->Gain = listener.mGain;
     props->MetersPerUnit = listener.mMetersPerUnit;
 
     props->AirAbsorptionGainHF = context->mAirAbsorptionGainHF;

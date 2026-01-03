@@ -5,13 +5,12 @@
 #include <cstdint>
 #include <optional>
 
-struct ALCcontext;
-struct ALCdevice;
-struct EffectSlot;
+struct EffectSlotBase;
 
 enum class StereoEncoding : std::uint8_t;
 
 namespace al {
+struct Context;
 struct Device;
 } // namespace al
 
@@ -36,6 +35,6 @@ void aluInit(CompatFlagBitset flags, const float nfcscale);
  */
 void aluInitRenderer(al::Device *device, int hrtf_id, std::optional<StereoEncoding> stereomode);
 
-void aluInitEffectPanning(EffectSlot *slot, ALCcontext *context);
+void aluInitEffectPanning(EffectSlotBase *slot, al::Context *context);
 
 #endif

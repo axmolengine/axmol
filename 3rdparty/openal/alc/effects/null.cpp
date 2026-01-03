@@ -2,8 +2,8 @@
 #include "config.h"
 
 #include <cstddef>
+#include <span>
 
-#include "alspan.h"
 #include "base.h"
 #include "core/bufferline.h"
 #include "core/effects/base.h"
@@ -12,7 +12,7 @@
 struct BufferStorage;
 struct ContextBase;
 struct DeviceBase;
-struct EffectSlot;
+struct EffectSlotBase;
 
 
 namespace {
@@ -22,10 +22,10 @@ struct NullState final : public EffectState {
     ~NullState() override;
 
     void deviceUpdate(const DeviceBase *device, const BufferStorage *buffer) override;
-    void update(const ContextBase *context, const EffectSlot *slot, const EffectProps *props,
+    void update(const ContextBase *context, const EffectSlotBase *slot, const EffectProps *props,
         const EffectTarget target) override;
-    void process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn,
-        const al::span<FloatBufferLine> samplesOut) override;
+    void process(const size_t samplesToDo, const std::span<const FloatBufferLine> samplesIn,
+        const std::span<FloatBufferLine> samplesOut) override;
 };
 
 /* This constructs the effect state. It's called when the object is first
@@ -50,7 +50,7 @@ void NullState::deviceUpdate(const DeviceBase* /*device*/, const BufferStorage* 
 /* This updates the effect state with new properties. This is called any time
  * the effect is (re)loaded into a slot.
  */
-void NullState::update(const ContextBase* /*context*/, const EffectSlot* /*slot*/,
+void NullState::update(const ContextBase* /*context*/, const EffectSlotBase* /*slot*/,
     const EffectProps* /*props*/, const EffectTarget /*target*/)
 {
 }
@@ -60,8 +60,8 @@ void NullState::update(const ContextBase* /*context*/, const EffectSlot* /*slot*
  * not replace it.
  */
 void NullState::process(const size_t/*samplesToDo*/,
-    const al::span<const FloatBufferLine> /*samplesIn*/,
-    const al::span<FloatBufferLine> /*samplesOut*/)
+    const std::span<const FloatBufferLine> /*samplesIn*/,
+    const std::span<FloatBufferLine> /*samplesOut*/)
 {
 }
 
@@ -76,8 +76,8 @@ al::intrusive_ptr<EffectState> NullStateFactory::create()
 
 } // namespace
 
-EffectStateFactory *NullStateFactory_getFactory()
+auto NullStateFactory_getFactory() -> gsl::not_null<EffectStateFactory*>
 {
     static NullStateFactory NullFactory{};
-    return &NullFactory;
+    return gsl::make_not_null(&NullFactory);
 }

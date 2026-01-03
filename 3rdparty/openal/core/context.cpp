@@ -1,17 +1,17 @@
 
 #include "config.h"
 
-#include <cassert>
-#include <functional>
 #include <limits>
 #include <memory>
+#include <ranges>
+#include <span>
 #include <stdexcept>
 #include <utility>
 
-#include "async_event.h"
 #include "context.h"
 #include "device.h"
 #include "effectslot.h"
+#include "gsl/gsl"
 #include "logging.h"
 #include "ringbuffer.h"
 #include "voice.h"
@@ -22,8 +22,8 @@
 static_assert(std::atomic<ContextBase::AsyncEventBitset>::is_always_lock_free, "atomic<bitset> isn't lock-free");
 #endif
 
-ContextBase::ContextBase(DeviceBase *device) : mDevice{device}
-{ assert(mEnabledEvts.is_lock_free()); }
+ContextBase::ContextBase(gsl::not_null<DeviceBase*> device) : mDevice{device}
+{ Expects(mEnabledEvts.is_lock_free()); }
 
 ContextBase::~ContextBase()
 {
@@ -32,30 +32,21 @@ ContextBase::~ContextBase()
 
     if(mAsyncEvents)
     {
-        size_t count{0};
-        for(auto &evt : mAsyncEvents->getReadVector())
-        {
-            if(evt.len > 0)
-            {
-                std::destroy_n(std::launder(reinterpret_cast<AsyncEvent*>(evt.buf)), evt.len);
-                count += evt.len;
-            }
-        }
-        if(count > 0)
-            TRACE("Destructed {} orphaned event{}", count, (count==1)?"":"s");
-        mAsyncEvents->readAdvance(count);
+        if(const auto count = mAsyncEvents->readSpace(); count > 0)
+            TRACE("Destructing {} orphaned event{}", count, (count==1)?"":"s");
+        mAsyncEvents = nullptr;
     }
 }
 
 
 void ContextBase::allocVoiceChanges()
 {
-    static constexpr size_t clustersize{std::tuple_size_v<VoiceChangeCluster::element_type>};
+    static constexpr auto clustersize = std::tuple_size_v<VoiceChangeCluster::element_type>;
 
-    VoiceChangeCluster clusterptr{std::make_unique<VoiceChangeCluster::element_type>()};
-    const auto cluster = al::span{*clusterptr};
+    auto clusterptr = std::make_unique<VoiceChangeCluster::element_type>();
+    const auto cluster = std::span{*clusterptr};
 
-    for(size_t i{1};i < clustersize;++i)
+    for(const auto i : std::views::iota(1_uz, clustersize))
         cluster[i-1].mNext.store(std::addressof(cluster[i]), std::memory_order_relaxed);
     cluster[clustersize-1].mNext.store(mVoiceChangeTail, std::memory_order_relaxed);
 
@@ -71,7 +62,7 @@ void ContextBase::allocVoiceProps()
         (mVoicePropClusters.size()+1) * clustersize);
 
     auto clusterptr = std::make_unique<VoicePropsCluster::element_type>();
-    auto cluster = al::span{*clusterptr};
+    auto cluster = std::span{*clusterptr};
     for(size_t i{1};i < clustersize;++i)
         cluster[i-1].next.store(std::addressof(cluster[i]), std::memory_order_relaxed);
     mVoicePropClusters.emplace_back(std::move(clusterptr));
@@ -110,8 +101,8 @@ void ContextBase::allocVoices(size_t addcount)
     auto newarray = VoiceArray::Create(totalcount);
     auto voice_iter = newarray->begin();
     for(VoiceCluster &cluster : mVoiceClusters)
-        voice_iter = std::transform(cluster->begin(), cluster->end(), voice_iter,
-            [](Voice &voice) noexcept -> Voice* { return &voice; });
+        voice_iter = std::ranges::transform(*cluster, voice_iter,
+            [](Voice &voice) noexcept -> Voice* { return std::addressof(voice); }).out;
 
     if(auto oldvoices = mVoices.exchange(std::move(newarray), std::memory_order_acq_rel))
         std::ignore = mDevice->waitForMix();
@@ -126,7 +117,7 @@ void ContextBase::allocEffectSlotProps()
         (mEffectSlotPropClusters.size()+1) * clustersize);
 
     auto clusterptr = std::make_unique<EffectSlotPropsCluster::element_type>();
-    auto cluster = al::span{*clusterptr};
+    auto cluster = std::span{*clusterptr};
     for(size_t i{1};i < clustersize;++i)
         cluster[i-1].next.store(std::addressof(cluster[i]), std::memory_order_relaxed);
     auto *newcluster = mEffectSlotPropClusters.emplace_back(std::move(clusterptr)).get();
@@ -138,14 +129,14 @@ void ContextBase::allocEffectSlotProps()
         std::memory_order_acq_rel, std::memory_order_acquire) == false);
 }
 
-EffectSlot *ContextBase::getEffectSlot()
+auto ContextBase::getEffectSlot() -> gsl::not_null<EffectSlotBase*>
 {
-    for(auto& clusterptr : mEffectSlotClusters)
+    for(auto &clusterptr : mEffectSlotClusters)
     {
-        const auto cluster = al::span{*clusterptr};
-        auto iter = std::find_if_not(cluster.begin(), cluster.end(),
-            std::mem_fn(&EffectSlot::InUse));
-        if(iter != cluster.end()) return al::to_address(iter);
+        const auto cluster = std::span{*clusterptr};
+        if(const auto iter = std::ranges::find_if_not(cluster, &EffectSlotBase::InUse);
+            iter != cluster.end())
+            return gsl::make_not_null(std::to_address(iter));
     }
 
     auto clusterptr = std::make_unique<EffectSlotCluster::element_type>();
@@ -155,7 +146,7 @@ EffectSlot *ContextBase::getEffectSlot()
     TRACE("Increasing allocated effect slots to {}", totalcount);
 
     mEffectSlotClusters.emplace_back(std::move(clusterptr));
-    return mEffectSlotClusters.back()->data();
+    return gsl::make_not_null(mEffectSlotClusters.back()->data());
 }
 
 
@@ -167,7 +158,7 @@ void ContextBase::allocContextProps()
         (mContextPropClusters.size()+1) * clustersize);
 
     auto clusterptr = std::make_unique<ContextPropsCluster::element_type>();
-    auto cluster = al::span{*clusterptr};
+    auto cluster = std::span{*clusterptr};
     for(size_t i{1};i < clustersize;++i)
         cluster[i-1].next.store(std::addressof(cluster[i]), std::memory_order_relaxed);
     auto *newcluster = mContextPropClusters.emplace_back(std::move(clusterptr)).get();

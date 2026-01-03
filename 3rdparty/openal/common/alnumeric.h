@@ -5,41 +5,104 @@
 
 #include <algorithm>
 #include <array>
+#include <bit>
 #include <cmath>
+#include <concepts>
 #include <cstddef>
 #include <cstdint>
+#include <limits>
 #include <string_view>
 #include <type_traits>
 #ifdef HAVE_INTRIN_H
 #include <intrin.h>
 #endif
 #if HAVE_SSE_INTRINSICS
-#include <xmmintrin.h>
+#include <emmintrin.h>
 #endif
 
-#include "albit.h"
-#include "altraits.h"
+#include "altypes.hpp"
+#include "gsl/gsl"
 #include "opthelpers.h"
 
 
-constexpr auto operator "" _i64(unsigned long long n) noexcept { return static_cast<std::int64_t>(n); }
-constexpr auto operator "" _u64(unsigned long long n) noexcept { return static_cast<std::uint64_t>(n); }
+namespace al {
 
-constexpr auto operator "" _z(unsigned long long n) noexcept
-{ return static_cast<std::make_signed_t<std::size_t>>(n); }
-constexpr auto operator "" _uz(unsigned long long n) noexcept { return static_cast<std::size_t>(n); }
-constexpr auto operator "" _zu(unsigned long long n) noexcept { return static_cast<std::size_t>(n); }
-
-
-template<typename T, std::enable_if_t<std::is_integral_v<T>,bool> = true>
-constexpr auto as_unsigned(T value) noexcept
+#if HAS_BUILTIN(__builtin_add_overflow)
+template<std::integral T> [[nodiscard]]
+constexpr auto add_sat(T const lhs, T const rhs) noexcept -> T
 {
-    using UT = std::make_unsigned_t<T>;
-    return static_cast<UT>(value);
+    T res;
+    if(!__builtin_add_overflow(lhs, rhs, &res))
+        return res;
+    if constexpr(std::is_signed_v<T>)
+    {
+        if(rhs < 0)
+            return std::numeric_limits<T>::min();
+    }
+    return std::numeric_limits<T>::max();
 }
 
+#else
 
-constexpr auto GetCounterSuffix(size_t count) noexcept -> std::string_view
+template<std::integral T> [[nodiscard]]
+constexpr auto add_sat(T lhs, T rhs) noexcept -> T
+{
+    if constexpr(std::is_signed_v<T>)
+    {
+        if(rhs < 0)
+        {
+            if(lhs < std::numeric_limits<T>::min()-rhs)
+                return std::numeric_limits<T>::min();
+            return lhs + rhs;
+        }
+        if(lhs > std::numeric_limits<T>::max()-rhs)
+            return std::numeric_limits<T>::max();
+        return lhs + rhs;
+    }
+    else
+    {
+        const auto res = static_cast<T>(lhs + rhs);
+        if(res < lhs)
+            return std::numeric_limits<T>::max();
+        return res;
+    }
+}
+#endif
+
+template<std::integral R, std::integral T> [[nodiscard]]
+constexpr auto saturate_cast(T val) noexcept -> R
+{
+    if constexpr(std::numeric_limits<R>::digits < std::numeric_limits<T>::digits)
+    {
+        if constexpr(std::is_signed_v<R> && std::is_signed_v<T>)
+        {
+            if(val < std::numeric_limits<R>::min())
+                return std::numeric_limits<R>::min();
+        }
+        if(val > T{std::numeric_limits<R>::max()})
+            return std::numeric_limits<R>::max();
+    }
+    if constexpr(std::is_unsigned_v<R> && std::is_signed_v<T>)
+    {
+        if(val < 0)
+            return R{0};
+    }
+    return gsl::narrow_cast<R>(val);
+}
+
+} /* namespace al */
+
+template<std::integral T> [[nodiscard]]
+constexpr auto as_unsigned(T value) noexcept
+{ return static_cast<std::make_unsigned_t<T>>(value); }
+
+template<std::integral T> [[nodiscard]]
+constexpr auto as_signed(T value) noexcept
+{ return static_cast<std::make_signed_t<T>>(value); }
+
+
+[[nodiscard]]
+constexpr auto GetCounterSuffix(usize const count) noexcept -> std::string_view
 {
     using namespace std::string_view_literals;
     return (((count%100)/10) == 1) ? "th"sv :
@@ -49,14 +112,14 @@ constexpr auto GetCounterSuffix(size_t count) noexcept -> std::string_view
 }
 
 
-constexpr auto lerpf(float val1, float val2, float mu) noexcept -> float
-{ return val1 + (val2-val1)*mu; }
-constexpr auto lerpd(double val1, double val2, double mu) noexcept -> double
+[[nodiscard]]
+constexpr auto lerpf(f32 const val1, f32 const val2, f32 const mu) noexcept -> f32
 { return val1 + (val2-val1)*mu; }
 
 
 /** Find the next power-of-2 for non-power-of-2 numbers. */
-inline uint32_t NextPowerOf2(uint32_t value) noexcept
+[[nodiscard]]
+constexpr auto NextPowerOf2(u32 value) noexcept -> u32
 {
     if(value > 0)
     {
@@ -71,19 +134,24 @@ inline uint32_t NextPowerOf2(uint32_t value) noexcept
 }
 
 /**
- * If the value is not already a multiple of r, round down to the next
+ * If the value is not already a multiple of r, round toward zero to the next
  * multiple.
  */
-template<typename T>
-constexpr T RoundDown(T value, al::type_identity_t<T> r) noexcept
+template<std::integral T> [[nodiscard]]
+constexpr auto RoundToZero(T value, std::type_identity_t<T> r) noexcept -> T
 { return value - (value%r); }
 
 /**
- * If the value is not already a multiple of r, round up to the next multiple.
+ * If the value is not already a multiple of r, round away from zero to the
+ * next multiple.
  */
-template<typename T>
-constexpr T RoundUp(T value, al::type_identity_t<T> r) noexcept
-{ return RoundDown(value + r-1, r); }
+template<std::integral T> [[nodiscard]]
+constexpr auto RoundFromZero(T value, std::type_identity_t<T> r) noexcept -> T
+{
+    if(value >= 0)
+        return RoundToZero(value + r-1, r);
+    return RoundToZero(value - r+1, r);
+}
 
 
 /**
@@ -92,7 +160,8 @@ constexpr T RoundUp(T value, al::type_identity_t<T> r) noexcept
  * change it on its own threads. On some systems, a truncating conversion may
  * always be the fastest method.
  */
-inline int fastf2i(float f) noexcept
+[[nodiscard]]
+inline auto fastf2i(f32 const f) noexcept -> i32
 {
 #if HAVE_SSE_INTRINSICS
     return _mm_cvt_ss2si(_mm_set_ss(f));
@@ -113,70 +182,62 @@ inline int fastf2i(float f) noexcept
 
 #else
 
-    return static_cast<int>(f);
+    return gsl::narrow_cast<int>(f);
 #endif
 }
-inline unsigned int fastf2u(float f) noexcept
-{ return static_cast<unsigned int>(fastf2i(f)); }
+[[nodiscard]]
+inline auto fastf2u(f32 const f) noexcept -> u32
+{ return gsl::narrow_cast<u32>(fastf2i(f)); }
 
-/** Converts float-to-int using standard behavior (truncation). */
-inline int float2int(float f) noexcept
+/**
+ * Converts float-to-int using standard behavior (truncation). Out of range
+ * values are clamped.
+ */
+[[nodiscard]]
+inline auto float2int(f32 const f) noexcept -> i32
 {
-#if HAVE_SSE_INTRINSICS
-    return _mm_cvtt_ss2si(_mm_set_ss(f));
+    /* We can't rely on SSE or the compiler generated conversion if we want
+     * clamping behavior with overflow and underflow.
+     */
+    const auto conv_i = std::bit_cast<i32>(f);
 
-#elif (defined(_MSC_VER) && defined(_M_IX86_FP) && _M_IX86_FP == 0) \
-    || ((defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__)) \
-        && !defined(__SSE_MATH__))
-    const int conv_i{al::bit_cast<int>(f)};
+    const auto sign = (conv_i>>31) | 1;
+    const auto shift = ((conv_i>>23)&0xff) - (127+23);
 
-    const int sign{(conv_i>>31) | 1};
-    const int shift{((conv_i>>23)&0xff) - (127+23)};
-
-    /* Over/underflow */
-    if(shift >= 31 || shift < -23) UNLIKELY
+    /* Too small. */
+    if(shift < -23) [[unlikely]]
         return 0;
+    /* Too large (or NaN). */
+    if(shift > 7) [[unlikely]]
+        return (sign > 0) ? std::numeric_limits<i32>::max() : std::numeric_limits<i32>::min();
 
-    const int mant{(conv_i&0x7fffff) | 0x800000};
-    if(shift < 0) LIKELY
+    const auto mant = (conv_i&0x7f'ff'ff) | 0x80'00'00;
+    if(shift < 0) [[likely]]
         return (mant >> -shift) * sign;
     return (mant << shift) * sign;
-
-#else
-
-    return static_cast<int>(f);
-#endif
 }
-inline unsigned int float2uint(float f) noexcept
-{ return static_cast<unsigned int>(float2int(f)); }
-
-/** Converts double-to-int using standard behavior (truncation). */
-inline int double2int(double d) noexcept
+/**
+ * Converts float-to-uint using standard behavior (truncation). Out of range
+ * values are clamped.
+ */
+[[nodiscard]]
+inline auto float2uint(f32 const f) noexcept -> u32
 {
-#if HAVE_SSE_INTRINSICS
-    return _mm_cvttsd_si32(_mm_set_sd(d));
+    const auto conv_i = std::bit_cast<i32>(f);
 
-#elif (defined(_MSC_VER) && defined(_M_IX86_FP) && _M_IX86_FP < 2) \
-    || ((defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__)) \
-        && !defined(__SSE2_MATH__))
-    const int64_t conv_i64{al::bit_cast<int64_t>(d)};
+    /* A 0 mask for negative values creates a 0 result. */
+    const auto mask = static_cast<u32>(conv_i>>31) ^ 0xff'ff'ff'ff_u32;
+    const auto shift = ((conv_i>>23)&0xff) - (127+23);
 
-    const int sign{static_cast<int>(conv_i64 >> 63) | 1};
-    const int shift{(static_cast<int>(conv_i64 >> 52) & 0x7ff) - (1023 + 52)};
-
-    /* Over/underflow */
-    if(shift >= 63 || shift < -52) UNLIKELY
+    if(shift < -23) [[unlikely]]
         return 0;
+    if(shift > 8) [[unlikely]]
+        return std::numeric_limits<u32>::max() & mask;
 
-    const int64_t mant{(conv_i64 & 0xfffffffffffff_i64) | 0x10000000000000_i64};
-    if(shift < 0) LIKELY
-        return static_cast<int>(mant >> -shift) * sign;
-    return static_cast<int>(mant << shift) * sign;
-
-#else
-
-    return static_cast<int>(d);
-#endif
+    const auto mant = gsl::narrow_cast<u32>(conv_i&0x7f'ff'ff) | 0x80'00'00_u32;
+    if(shift < 0) [[likely]]
+        return (mant >> -shift) & mask;
+    return (mant << shift) & mask;
 }
 
 /**
@@ -184,7 +245,8 @@ inline int double2int(double d) noexcept
  * rounding mode. This is essentially an inlined version of rintf, although
  * makes fewer promises (e.g. -0 or -0.25 rounded to 0 may result in +0).
  */
-inline float fast_roundf(float f) noexcept
+[[nodiscard]]
+inline auto fast_roundf(f32 f) noexcept -> f32
 {
 #if (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__)) \
     && !defined(__SSE_MATH__)
@@ -204,16 +266,16 @@ inline float fast_roundf(float f) noexcept
     /* Integral limit, where sub-integral precision is not available for
      * floats.
      */
-    static constexpr std::array ilim{
+    static constexpr auto ilim = std::array{
          8388608.0f /*  0x1.0p+23 */,
         -8388608.0f /* -0x1.0p+23 */
     };
-    const unsigned int conv_i{al::bit_cast<unsigned int>(f)};
+    const auto conv_u = std::bit_cast<u32>(f);
 
-    const unsigned int sign{(conv_i>>31)&0x01};
-    const unsigned int expo{(conv_i>>23)&0xff};
+    const auto sign = (conv_u>>31u)&0x01u;
+    const auto expo = (conv_u>>23u)&0xffu;
 
-    if(expo >= 150/*+23*/) UNLIKELY
+    if(expo >= 150/*+23*/) [[unlikely]]
     {
         /* An exponent (base-2) of 23 or higher is incapable of sub-integral
          * precision, so it's already an integral value. We don't need to worry
@@ -241,7 +303,8 @@ inline float fast_roundf(float f) noexcept
 
 
 // Converts level (mB) to gain.
-inline float level_mb_to_gain(float x)
+[[nodiscard]]
+inline auto level_mb_to_gain(f32 const x) -> f32
 {
     if(x <= -10'000.0f)
         return 0.0f;
@@ -249,7 +312,8 @@ inline float level_mb_to_gain(float x)
 }
 
 // Converts gain to level (mB).
-inline float gain_to_level_mb(float x)
+[[nodiscard]]
+inline auto gain_to_level_mb(f32 const x) -> f32
 {
     if(x <= 1e-05f)
         return -10'000.0f;

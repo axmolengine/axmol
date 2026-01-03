@@ -2,12 +2,11 @@
 #define CORE_MIXER_DEFS_H
 
 #include <array>
-#include <cstdint>
-#include <cstdlib>
-#include <utility>
+#include <ranges>
+#include <span>
 #include <variant>
 
-#include "alspan.h"
+#include "alnumeric.h"
 #include "core/bufferline.h"
 #include "core/cubic_defs.h"
 
@@ -15,19 +14,18 @@ struct HrtfChannelState;
 struct HrtfFilter;
 struct MixHrtfFilter;
 
-using uint = unsigned int;
-using float2 = std::array<float,2>;
+using f32x2 = std::array<f32, 2>;
 
 
-inline constexpr int MixerFracBits{16};
-inline constexpr int MixerFracOne{1 << MixerFracBits};
-inline constexpr int MixerFracMask{MixerFracOne - 1};
-inline constexpr int MixerFracHalf{MixerFracOne >> 1};
+inline constexpr auto MixerFracBits = 16_i32;
+inline constexpr auto MixerFracOne = 1_i32 << MixerFracBits;
+inline constexpr auto MixerFracMask = MixerFracOne - 1_i32;
+inline constexpr auto MixerFracHalf = MixerFracOne >> 1_i32;
 
-inline constexpr float GainSilenceThreshold{0.00001f}; /* -100dB */
+inline constexpr auto GainSilenceThreshold = 0.00001_f32; /* -100dB */
 
 
-enum class Resampler : std::uint8_t {
+enum class Resampler : u8 {
     Point,
     Linear,
     Spline,
@@ -47,68 +45,106 @@ enum class Resampler : std::uint8_t {
  * mappings for every sample.
  */
 struct BsincState {
-    float sf; /* Scale interpolation factor. */
-    uint m; /* Coefficient count. */
-    uint l; /* Left coefficient offset. */
+    f32 sf; /* Scale interpolation factor. */
+    u32 m; /* Coefficient count. */
+    u32 l; /* Left coefficient offset. */
     /* Filter coefficients, followed by the phase, scale, and scale-phase
      * delta coefficients. Starting at phase index 0, each subsequent phase
      * index follows contiguously.
      */
-    al::span<const float> filter;
+    std::span<f32 const> filter;
 };
 
 struct CubicState {
     /* Filter coefficients, and coefficient deltas. Starting at phase index 0,
      * each subsequent phase index follows contiguously.
      */
-    al::span<const CubicCoefficients,CubicPhaseCount> filter;
-    explicit CubicState(al::span<const CubicCoefficients,CubicPhaseCount> f) : filter{f} { }
+    std::span<CubicCoefficients const, CubicPhaseCount> filter;
+    explicit CubicState(std::span<CubicCoefficients const,CubicPhaseCount> const f) : filter{f} { }
 };
 
-using InterpState = std::variant<std::monostate,CubicState,BsincState>;
+using InterpState = std::variant<std::monostate, CubicState, BsincState>;
 
-using ResamplerFunc = void(*)(const InterpState *state, const al::span<const float> src, uint frac,
-    const uint increment, const al::span<float> dst);
+using ResamplerFunc = void(*)(InterpState const *state, std::span<f32 const> src, u32 frac,
+    u32 increment, std::span<f32> dst);
 
-ResamplerFunc PrepareResampler(Resampler resampler, uint increment, InterpState *state);
+[[nodiscard]]
+auto PrepareResampler(Resampler resampler, u32 increment, InterpState *state) -> ResamplerFunc;
+
+#define DECL_RESAMPLER(T, I)                                                  \
+void Resample_##T##_##I(InterpState const *state, std::span<f32 const> src,   \
+    u32 frac, u32 increment, std::span<f32> dst);
+
+#define DECL_MIXER(I)                                                         \
+void Mix_##I(std::span<f32 const> InSamples,                                  \
+    std::span<FloatBufferLine> OutBuffer, std::span<f32> CurrentGains,        \
+    std::span<f32 const> TargetGains, usize Counter, usize OutPos);           \
+void Mix_##I(std::span<f32 const> InSamples, std::span<f32> OutBuffer,        \
+    f32 &CurrentGain, f32 TargetGain, usize Counter);
+
+#define DECL_HRTF_MIXER(I) \
+void MixHrtf_##I(std::span<f32 const> InSamples,                              \
+    std::span<f32x2> AccumSamples, u32 IrSize,                                \
+    MixHrtfFilter const *hrtfparams, usize SamplesToDo);                      \
+void MixHrtfBlend_##I(std::span<f32 const> InSamples,                         \
+    std::span<f32x2> AccumSamples, u32 IrSize, HrtfFilter const *oldparams,   \
+    MixHrtfFilter const *newparams, usize SamplesToDo);                       \
+void MixDirectHrtf_##I(FloatBufferSpan LeftOut, FloatBufferSpan RightOut,     \
+    std::span<FloatBufferLine const> InSamples, std::span<f32x2> AccumSamples,\
+    std::span<f32, BufferLineSize> TempBuf,                                   \
+    std::span<HrtfChannelState> ChanState, usize IrSize, usize SamplesToDo);
 
 
-template<typename TypeTag, typename InstTag>
-void Resample_(const InterpState *state, const al::span<const float> src, uint frac,
-    const uint increment, const al::span<float> dst);
+DECL_RESAMPLER(Point, C)
+DECL_RESAMPLER(Linear, C)
+DECL_RESAMPLER(Cubic, C)
+DECL_RESAMPLER(FastBSinc, C)
+DECL_RESAMPLER(BSinc, C)
 
-template<typename InstTag>
-void Mix_(const al::span<const float> InSamples, const al::span<FloatBufferLine> OutBuffer,
-    const al::span<float> CurrentGains, const al::span<const float> TargetGains,
-    const size_t Counter, const size_t OutPos);
-template<typename InstTag>
-void Mix_(const al::span<const float> InSamples, const al::span<float> OutBuffer,
-    float &CurrentGain, const float TargetGain, const size_t Counter);
+DECL_MIXER(C)
+DECL_HRTF_MIXER(C)
 
-template<typename InstTag>
-void MixHrtf_(const al::span<const float> InSamples, const al::span<float2> AccumSamples,
-    const uint IrSize, const MixHrtfFilter *hrtfparams, const size_t SamplesToDo);
-template<typename InstTag>
-void MixHrtfBlend_(const al::span<const float> InSamples, const al::span<float2> AccumSamples,
-    const uint IrSize, const HrtfFilter *oldparams, const MixHrtfFilter *newparams,
-    const size_t SamplesToDo);
-template<typename InstTag>
-void MixDirectHrtf_(const FloatBufferSpan LeftOut, const FloatBufferSpan RightOut,
-    const al::span<const FloatBufferLine> InSamples, const al::span<float2> AccumSamples,
-    const al::span<float,BufferLineSize> TempBuf, const al::span<HrtfChannelState> ChanState,
-    const size_t IrSize, const size_t SamplesToDo);
+#if HAVE_SSE
+DECL_RESAMPLER(Cubic, SSE)
+DECL_RESAMPLER(FastBSinc, SSE)
+DECL_RESAMPLER(BSinc, SSE)
+
+DECL_MIXER(SSE)
+DECL_HRTF_MIXER(SSE)
+#endif
+#if HAVE_SSE2
+DECL_RESAMPLER(Linear, SSE2)
+DECL_RESAMPLER(Cubic, SSE2)
+#endif
+#if HAVE_SSE4_1
+DECL_RESAMPLER(Linear, SSE4)
+DECL_RESAMPLER(Cubic, SSE4)
+#endif
+#if HAVE_NEON
+DECL_RESAMPLER(Linear, NEON)
+DECL_RESAMPLER(Cubic, NEON)
+DECL_RESAMPLER(FastBSinc, NEON)
+DECL_RESAMPLER(BSinc, NEON)
+
+DECL_MIXER(NEON)
+DECL_HRTF_MIXER(NEON)
+#endif
+
+#undef DECL_HRTF_MIXER
+#undef DECL_MIXER
+#undef DECL_RESAMPLER
 
 /* Vectorized resampler helpers */
-template<size_t N>
-constexpr void InitPosArrays(uint pos, uint frac, const uint increment,
-    const al::span<uint,N> frac_arr, const al::span<uint,N> pos_arr)
+template<usize N>
+constexpr void InitPosArrays(u32 const pos, u32 const frac, u32 const increment,
+    std::span<u32, N> const frac_arr, std::span<u32, N> const pos_arr)
 {
     static_assert(pos_arr.size() == frac_arr.size());
     pos_arr[0] = pos;
     frac_arr[0] = frac;
-    for(size_t i{1};i < pos_arr.size();++i)
+    for(auto const i : std::views::iota(1_uz, pos_arr.size()))
     {
-        const uint frac_tmp{frac_arr[i-1] + increment};
+        auto const frac_tmp = frac_arr[i-1] + increment;
         pos_arr[i] = pos_arr[i-1] + (frac_tmp>>MixerFracBits);
         frac_arr[i] = frac_tmp&MixerFracMask;
     }

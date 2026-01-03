@@ -1,42 +1,38 @@
 #ifndef CORE_FILTERS_SPLITTER_H
 #define CORE_FILTERS_SPLITTER_H
 
-#include <cstddef>
+#include <span>
 
-#include "alspan.h"
+#include "alnumeric.h"
 
 
 /* Band splitter. Splits a signal into two phase-matching frequency bands. */
-template<typename Real>
-class BandSplitterR {
-    Real mCoeff{0.0f};
-    Real mLpZ1{0.0f};
-    Real mLpZ2{0.0f};
-    Real mApZ1{0.0f};
+class BandSplitter {
+    f32 mCoeff{0.0f};
+    f32 mLpZ1{0.0f};
+    f32 mLpZ2{0.0f};
+    f32 mApZ1{0.0f};
 
 public:
-    BandSplitterR() = default;
-    BandSplitterR(const BandSplitterR&) = default;
-    explicit BandSplitterR(Real f0norm) { init(f0norm); }
-    BandSplitterR& operator=(const BandSplitterR&) = default;
+    BandSplitter() = default;
+    BandSplitter(BandSplitter const&) = default;
+    explicit BandSplitter(f32 const f0norm) { init(f0norm); }
+    auto operator=(BandSplitter const&) -> BandSplitter& = default;
 
-    void init(Real f0norm);
+    void init(f32 f0norm);
     void clear() noexcept { mLpZ1 = mLpZ2 = mApZ1 = 0.0f; }
-    void process(const al::span<const Real> input, const al::span<Real> hpout,
-        const al::span<Real> lpout);
+    void process(std::span<f32 const> input, std::span<f32> hpout, std::span<f32> lpout);
 
-    void processHfScale(const al::span<const Real> input, const al::span<Real> output,
-        const Real hfscale);
+    void processHfScale(std::span<f32 const> input, std::span<f32> output, f32 hfscale);
 
-    void processHfScale(const al::span<Real> samples, const Real hfscale);
-    void processScale(const al::span<Real> samples, const Real hfscale, const Real lfscale);
+    void processHfScale(std::span<f32> samples, f32 hfscale);
+    void processScale(std::span<f32> samples, f32 hfscale, f32 lfscale);
 
     /**
      * The all-pass portion of the band splitter. Applies the same phase shift
      * without splitting or scaling the signal.
      */
-    void processAllPass(const al::span<Real> samples);
+    void processAllPass(std::span<f32> samples);
 };
-using BandSplitter = BandSplitterR<float>;
 
 #endif /* CORE_FILTERS_SPLITTER_H */

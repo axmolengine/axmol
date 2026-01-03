@@ -25,10 +25,11 @@
 #include <cmath>
 #include <cstdlib>
 #include <functional>
+#include <ranges>
+#include <span>
 #include <variant>
 
 #include "alc/effects/base.h"
-#include "alspan.h"
 #include "core/ambidefs.h"
 #include "core/bufferline.h"
 #include "core/context.h"
@@ -102,28 +103,23 @@ struct EqualizerState final : public EffectState {
 
 
     void deviceUpdate(const DeviceBase *device, const BufferStorage *buffer) override;
-    void update(const ContextBase *context, const EffectSlot *slot, const EffectProps *props,
+    void update(const ContextBase *context, const EffectSlotBase *slot, const EffectProps *props,
         const EffectTarget target) override;
-    void process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn,
-        const al::span<FloatBufferLine> samplesOut) override;
+    void process(const size_t samplesToDo, const std::span<const FloatBufferLine> samplesIn,
+        const std::span<FloatBufferLine> samplesOut) override;
 };
 
 void EqualizerState::deviceUpdate(const DeviceBase*, const BufferStorage*)
 {
-    for(auto &e : mChans)
-    {
-        e.mTargetChannel = InvalidChannelIndex;
-        std::for_each(e.mFilter.begin(), e.mFilter.end(), std::mem_fn(&BiquadFilter::clear));
-        e.mCurrentGain = 0.0f;
-    }
+    mChans.fill(OutParams{});
 }
 
-void EqualizerState::update(const ContextBase *context, const EffectSlot *slot,
+void EqualizerState::update(const ContextBase *context, const EffectSlotBase *slot,
     const EffectProps *props_, const EffectTarget target)
 {
     auto &props = std::get<EqualizerProps>(*props_);
-    const DeviceBase *device{context->mDevice};
-    auto frequency = static_cast<float>(device->mSampleRate);
+    auto const device = al::get_not_null(context->mDevice);
+    auto const frequency = static_cast<float>(device->mSampleRate);
 
     /* Calculate coefficients for the each type of filter. Note that the shelf
      * and peaking filters' gain is for the centerpoint of the transition band,
@@ -131,8 +127,8 @@ void EqualizerState::update(const ContextBase *context, const EffectSlot *slot,
      * property gains need their dB halved (sqrt of linear gain) for the
      * shelf/peak to reach the provided gain.
      */
-    float gain{std::sqrt(props.LowGain)};
-    float f0norm{props.LowCutoff / frequency};
+    auto gain = std::sqrt(props.LowGain);
+    auto f0norm = props.LowCutoff / frequency;
     mChans[0].mFilter[0].setParamsFromSlope(BiquadType::LowShelf, f0norm, gain, 0.75f);
 
     gain = std::sqrt(props.Mid1Gain);
@@ -150,32 +146,34 @@ void EqualizerState::update(const ContextBase *context, const EffectSlot *slot,
     mChans[0].mFilter[3].setParamsFromSlope(BiquadType::HighShelf, f0norm, gain, 0.75f);
 
     /* Copy the filter coefficients for the other input channels. */
-    for(size_t i{1u};i < slot->Wet.Buffer.size();++i)
+    std::ranges::for_each(mChans | std::views::take(slot->Wet.Buffer.size()) | std::views::drop(1),
+        [filters=std::span{mChans[0].mFilter}](const std::span<BiquadFilter,4> targets)
     {
-        mChans[i].mFilter[0].copyParamsFrom(mChans[0].mFilter[0]);
-        mChans[i].mFilter[1].copyParamsFrom(mChans[0].mFilter[1]);
-        mChans[i].mFilter[2].copyParamsFrom(mChans[0].mFilter[2]);
-        mChans[i].mFilter[3].copyParamsFrom(mChans[0].mFilter[3]);
-    }
+        targets[0].copyParamsFrom(filters[0]);
+        targets[1].copyParamsFrom(filters[1]);
+        targets[2].copyParamsFrom(filters[2]);
+        targets[3].copyParamsFrom(filters[3]);
+    }, &OutParams::mFilter);
 
     mOutTarget = target.Main->Buffer;
-    auto set_channel = [this](size_t idx, uint outchan, float outgain)
+    target.Main->setAmbiMixParams(slot->Wet, slot->Gain,
+        [this](const size_t idx, const uint outchan, const float outgain)
     {
         mChans[idx].mTargetChannel = outchan;
         mChans[idx].mTargetGain = outgain;
-    };
-    target.Main->setAmbiMixParams(slot->Wet, slot->Gain, set_channel);
+    });
 }
 
-void EqualizerState::process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn, const al::span<FloatBufferLine> samplesOut)
+void EqualizerState::process(const size_t samplesToDo,
+    const std::span<const FloatBufferLine> samplesIn, const std::span<FloatBufferLine> samplesOut)
 {
-    const auto buffer = al::span{mSampleBuffer}.first(samplesToDo);
+    const auto buffer = std::span{mSampleBuffer}.first(samplesToDo);
     auto chan = mChans.begin();
-    for(const auto &input : samplesIn)
+    std::ranges::for_each(samplesIn, [=,&chan](const FloatConstBufferSpan input)
     {
-        if(const size_t outidx{chan->mTargetChannel}; outidx != InvalidChannelIndex)
+        if(const auto outidx = size_t{chan->mTargetChannel}; outidx != InvalidChannelIndex)
         {
-            const auto inbuf = al::span{input}.first(samplesToDo);
+            const auto inbuf = std::span{input}.first(samplesToDo);
             DualBiquad{chan->mFilter[0], chan->mFilter[1]}.process(inbuf, buffer);
             DualBiquad{chan->mFilter[2], chan->mFilter[3]}.process(buffer, buffer);
 
@@ -183,7 +181,7 @@ void EqualizerState::process(const size_t samplesToDo, const al::span<const Floa
                 samplesToDo);
         }
         ++chan;
-    }
+    });
 }
 
 
@@ -194,8 +192,8 @@ struct EqualizerStateFactory final : public EffectStateFactory {
 
 } // namespace
 
-EffectStateFactory *EqualizerStateFactory_getFactory()
+auto EqualizerStateFactory_getFactory() -> gsl::not_null<EffectStateFactory*>
 {
     static EqualizerStateFactory EqualizerFactory{};
-    return &EqualizerFactory;
+    return gsl::make_not_null(&EqualizerFactory);
 }

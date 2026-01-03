@@ -9,10 +9,10 @@
 #include "flexarray.h"
 #include "intrusive_ptr.h"
 
-struct EffectSlot;
+struct EffectSlotBase;
 struct WetBuffer;
 
-using EffectSlotArray = al::FlexArray<EffectSlot*>;
+using EffectSlotArray = al::FlexArray<EffectSlotBase*>;
 
 
 enum class EffectSlotType : unsigned char {
@@ -36,18 +36,18 @@ enum class EffectSlotType : unsigned char {
 struct EffectSlotProps {
     float Gain;
     bool  AuxSendAuto;
-    EffectSlot *Target;
+    EffectSlotBase *Target;
 
     EffectSlotType Type;
     EffectProps Props;
 
     al::intrusive_ptr<EffectState> State;
 
-    std::atomic<EffectSlotProps*> next{};
+    std::atomic<EffectSlotProps*> next;
 };
 
 
-struct EffectSlot {
+struct EffectSlotBase {
     bool InUse{false};
 
     std::atomic<EffectSlotProps*> Update{nullptr};
@@ -61,7 +61,7 @@ struct EffectSlot {
 
     float Gain{1.0f};
     bool  AuxSendAuto{true};
-    EffectSlot *Target{nullptr};
+    EffectSlotBase *Target{nullptr};
 
     EffectSlotType EffectType{EffectSlotType::None};
     EffectProps mEffectProps;

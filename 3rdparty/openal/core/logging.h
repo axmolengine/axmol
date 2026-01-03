@@ -1,13 +1,16 @@
 #ifndef CORE_LOGGING_H
 #define CORE_LOGGING_H
 
-#include <cstdio>
+#include <string_view>
 
-#include "fmt/core.h"
+#include "alformat.hpp"
+#include "alnumeric.h"
+#include "filesystem.h"
+#include "gsl/gsl"
 #include "opthelpers.h"
 
 
-enum class LogLevel {
+enum class LogLevel : u8 {
     Disable,
     Error,
     Warning,
@@ -15,26 +18,31 @@ enum class LogLevel {
 };
 DECL_HIDDEN extern LogLevel gLogLevel;
 
-DECL_HIDDEN extern FILE *gLogFile;
 
-
-using LogCallbackFunc = void(*)(void *userptr, char level, const char *message, int length) noexcept;
+using LogCallbackFunc = auto(*)(void *userptr, char level, gsl::czstring message, int length)
+    noexcept -> void;
 
 void al_set_log_callback(LogCallbackFunc callback, void *userptr);
 
-
-void al_print_impl(LogLevel level, const fmt::string_view fmt, fmt::format_args args);
+void al_open_logfile(fs::path const &fname);
+void al_print_impl(LogLevel level, al::string_view fmt, al::format_args&& args);
 
 template<typename ...Args>
-void al_print(LogLevel level, fmt::format_string<Args...> fmt, Args&& ...args) noexcept
+void al_print(LogLevel const level, al::format_string<Args...> const fmt, Args&& ...args) noexcept
 try {
-    al_print_impl(level, fmt, fmt::make_format_args(args...));
-} catch(...) { }
+    al_print_impl(level, fmt.get(), al::make_format_args(args...));
+} catch(...) { /* Swallow all exceptions */ }
 
-#define TRACE(...) al_print(LogLevel::Trace, __VA_ARGS__)
+template<typename ...Args>
+void TRACE(al::format_string<Args...> const fmt, Args&& ...args) noexcept
+{ al_print(LogLevel::Trace, fmt, std::forward<Args>(args)...); }
 
-#define WARN(...) al_print(LogLevel::Warning, __VA_ARGS__)
+template<typename ...Args>
+void WARN(al::format_string<Args...> const fmt, Args&& ...args) noexcept
+{ al_print(LogLevel::Warning, fmt, std::forward<Args>(args)...); }
 
-#define ERR(...) al_print(LogLevel::Error, __VA_ARGS__)
+template<typename ...Args>
+void ERR(al::format_string<Args...> const fmt, Args&& ...args) noexcept
+{ al_print(LogLevel::Error, fmt, std::forward<Args>(args)...); }
 
 #endif /* CORE_LOGGING_H */

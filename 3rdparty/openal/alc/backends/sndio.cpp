@@ -26,6 +26,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <poll.h>
+#include <span>
 #include <system_error>
 #include <thread>
 #include <vector>
@@ -34,6 +35,7 @@
 #include "core/device.h"
 #include "core/helpers.h"
 #include "core/logging.h"
+#include "gsl/gsl"
 #include "ringbuffer.h"
 
 #include <sndio.h>
@@ -51,19 +53,20 @@ struct SioPar : public sio_par {
     void clear() { sio_initpar(this); }
 };
 
-struct SndioPlayback final : public BackendBase {
-    explicit SndioPlayback(DeviceBase *device) noexcept : BackendBase{device} { }
+struct SndioPlayback final : BackendBase {
+    explicit SndioPlayback(gsl::not_null<DeviceBase*> const device) noexcept : BackendBase{device}
+    { }
     ~SndioPlayback() override;
 
-    int mixerProc();
+    void mixerProc();
 
     void open(std::string_view name) override;
-    bool reset() override;
+    auto reset() -> bool override;
     void start() override;
     void stop() override;
 
     sio_hdl *mSndHandle{nullptr};
-    uint mFrameStep{};
+    u32 mFrameStep{};
 
     std::vector<std::byte> mBuffer;
 
@@ -78,10 +81,10 @@ SndioPlayback::~SndioPlayback()
     mSndHandle = nullptr;
 }
 
-int SndioPlayback::mixerProc()
+void SndioPlayback::mixerProc()
 {
-    const size_t frameStep{mFrameStep};
-    const size_t frameSize{frameStep * mDevice->bytesFromFmt()};
+    auto const frameStep = usize{mFrameStep};
+    auto const frameSize = frameStep * mDevice->bytesFromFmt();
 
     SetRTPriority();
     althrd_setname(GetMixerThreadName());
@@ -89,13 +92,13 @@ int SndioPlayback::mixerProc()
     while(!mKillNow.load(std::memory_order_acquire)
         && mDevice->Connected.load(std::memory_order_acquire))
     {
-        al::span<std::byte> buffer{mBuffer};
+        auto buffer = std::span{mBuffer};
 
-        mDevice->renderSamples(buffer.data(), static_cast<uint>(buffer.size() / frameSize),
+        mDevice->renderSamples(buffer.data(), gsl::narrow_cast<u32>(buffer.size() / frameSize),
             frameStep);
         while(!buffer.empty() && !mKillNow.load(std::memory_order_acquire))
         {
-            size_t wrote{sio_write(mSndHandle, buffer.data(), buffer.size())};
+            const auto wrote = sio_write(mSndHandle, buffer.data(), buffer.size());
             if(wrote > buffer.size() || wrote == 0)
             {
                 ERR("sio_write failed: {:#x}", wrote);
@@ -105,8 +108,6 @@ int SndioPlayback::mixerProc()
             buffer = buffer.subspan(wrote);
         }
     }
-
-    return 0;
 }
 
 
@@ -118,7 +119,7 @@ void SndioPlayback::open(std::string_view name)
         throw al::backend_exception{al::backend_error::NoDevice, "Device name \"{}\" not found",
             name};
 
-    sio_hdl *sndHandle{sio_open(nullptr, SIO_PLAY, 0)};
+    auto *sndHandle = sio_open(nullptr, SIO_PLAY, 0);
     if(!sndHandle)
         throw al::backend_exception{al::backend_error::NoDevice, "Could not open backend device"};
 
@@ -129,9 +130,9 @@ void SndioPlayback::open(std::string_view name)
     mDeviceName = name;
 }
 
-bool SndioPlayback::reset()
+auto SndioPlayback::reset() -> bool
 {
-    SioPar par;
+    auto par = SioPar{};
 
     auto tryfmt = mDevice->FmtType;
     while(true)
@@ -230,15 +231,7 @@ bool SndioPlayback::reset()
     mDevice->mUpdateSize = par.round;
     mDevice->mBufferSize = par.bufsz + par.round;
 
-    mBuffer.resize(size_t{mDevice->mUpdateSize} * par.pchan*par.bps);
-    if(par.sig == 1)
-        std::fill(mBuffer.begin(), mBuffer.end(), std::byte{});
-    else if(par.bits == 8)
-        std::fill_n(mBuffer.data(), mBuffer.size(), std::byte(0x80));
-    else if(par.bits == 16)
-        std::fill_n(reinterpret_cast<uint16_t*>(mBuffer.data()), mBuffer.size()/2, 0x8000);
-    else if(par.bits == 32)
-        std::fill_n(reinterpret_cast<uint32_t*>(mBuffer.data()), mBuffer.size()/4, 0x80000000u);
+    mBuffer.resize(usize{mDevice->mUpdateSize} * par.pchan*par.bps);
 
     return true;
 }
@@ -275,21 +268,22 @@ void SndioPlayback::stop()
  * directly from the device. However, this depends on reasonable support for
  * capture buffer sizes apps may request.
  */
-struct SndioCapture final : public BackendBase {
-    explicit SndioCapture(DeviceBase *device) noexcept : BackendBase{device} { }
+struct SndioCapture final : BackendBase {
+    explicit SndioCapture(gsl::not_null<DeviceBase*> const device) noexcept : BackendBase{device}
+    { }
     ~SndioCapture() override;
 
-    int recordProc();
+    void recordProc();
 
     void open(std::string_view name) override;
     void start() override;
     void stop() override;
-    void captureSamples(std::byte *buffer, uint samples) override;
-    uint availableSamples() override;
+    void captureSamples(std::span<std::byte> outbuffer) override;
+    auto availableSamples() -> usize override;
 
     sio_hdl *mSndHandle{nullptr};
 
-    RingBufferPtr mRing;
+    RingBufferPtr<std::byte> mRing;
 
     std::atomic<bool> mKillNow{true};
     std::thread mThread;
@@ -302,33 +296,33 @@ SndioCapture::~SndioCapture()
     mSndHandle = nullptr;
 }
 
-int SndioCapture::recordProc()
+void SndioCapture::recordProc()
 {
     SetRTPriority();
     althrd_setname(GetRecordThreadName());
 
-    const uint frameSize{mDevice->frameSizeFromFmt()};
+    auto const frameSize = mDevice->frameSizeFromFmt();
 
-    int nfds_pre{sio_nfds(mSndHandle)};
+    auto const nfds_pre = sio_nfds(mSndHandle);
     if(nfds_pre <= 0)
     {
         mDevice->handleDisconnect("Incorrect return value from sio_nfds(): {}", nfds_pre);
-        return 1;
+        return;
     }
 
-    auto fds = std::vector<pollfd>(static_cast<uint>(nfds_pre));
+    auto fds = std::vector<pollfd>(gsl::narrow_cast<unsigned>(nfds_pre));
 
     while(!mKillNow.load(std::memory_order_acquire)
         && mDevice->Connected.load(std::memory_order_acquire))
     {
         /* Wait until there's some samples to read. */
-        const int nfds{sio_pollfd(mSndHandle, fds.data(), POLLIN)};
+        const auto nfds = sio_pollfd(mSndHandle, fds.data(), POLLIN);
         if(nfds <= 0)
         {
             mDevice->handleDisconnect("Failed to get polling fds: {}", nfds);
             break;
         }
-        int pollres{::poll(fds.data(), fds.size(), 2000)};
+        const auto pollres = ::poll(fds.data(), fds.size(), 2000);
         if(pollres < 0)
         {
             if(errno == EINTR) continue;
@@ -338,7 +332,7 @@ int SndioCapture::recordProc()
         if(pollres == 0)
             continue;
 
-        const int revents{sio_revents(mSndHandle, fds.data())};
+        const auto revents = sio_revents(mSndHandle, fds.data());
         if((revents&POLLHUP))
         {
             mDevice->handleDisconnect("Got POLLHUP from poll events");
@@ -347,11 +341,10 @@ int SndioCapture::recordProc()
         if(!(revents&POLLIN))
             continue;
 
-        auto data = mRing->getWriteVector();
-        al::span<std::byte> buffer{data[0].buf, data[0].len*frameSize};
+        auto buffer = mRing->getWriteVector()[0];
         while(!buffer.empty())
         {
-            size_t got{sio_read(mSndHandle, buffer.data(), buffer.size())};
+            const auto got = sio_read(mSndHandle, buffer.data(), buffer.size());
             if(got == 0)
                 break;
             if(got > buffer.size())
@@ -364,20 +357,15 @@ int SndioCapture::recordProc()
             mRing->writeAdvance(got / frameSize);
             buffer = buffer.subspan(got);
             if(buffer.empty())
-            {
-                data = mRing->getWriteVector();
-                buffer = {data[0].buf, data[0].len*frameSize};
-            }
+                buffer = mRing->getWriteVector()[0];
         }
         if(buffer.empty())
         {
             /* Got samples to read, but no place to store it. Drop it. */
-            static std::array<char,4096> junk;
+            static auto junk = std::array<char,4096>{};
             sio_read(mSndHandle, junk.data(), junk.size() - (junk.size()%frameSize));
         }
     }
-
-    return 0;
 }
 
 
@@ -460,8 +448,8 @@ void SndioCapture::open(std::string_view name)
             DevFmtTypeString(mDevice->FmtType), DevFmtChannelsString(mDevice->FmtChans),
             mDevice->mSampleRate, par.sig?'s':'u', par.bps*8, par.rchan, par.rate};
 
-    mRing = RingBuffer::Create(mDevice->mBufferSize, size_t{par.bps}*par.rchan, false);
-    mDevice->mBufferSize = static_cast<uint>(mRing->writeSpace());
+    mRing = RingBuffer<std::byte>::Create(mDevice->mBufferSize, usize{par.bps}*par.rchan, false);
+    mDevice->mBufferSize = gsl::narrow_cast<u32>(mRing->writeSpace());
     mDevice->mUpdateSize = par.round;
 
     setDefaultChannelOrder();
@@ -495,27 +483,27 @@ void SndioCapture::stop()
         ERR("Error stopping device");
 }
 
-void SndioCapture::captureSamples(std::byte *buffer, uint samples)
-{ std::ignore = mRing->read(buffer, samples); }
+void SndioCapture::captureSamples(std::span<std::byte> const outbuffer)
+{ std::ignore = mRing->read(outbuffer); }
 
-uint SndioCapture::availableSamples()
-{ return static_cast<uint>(mRing->readSpace()); }
+auto SndioCapture::availableSamples() -> usize
+{ return mRing->readSpace(); }
 
 } // namespace
 
-BackendFactory &SndIOBackendFactory::getFactory()
+auto SndIOBackendFactory::getFactory() -> BackendFactory&
 {
     static SndIOBackendFactory factory{};
     return factory;
 }
 
-bool SndIOBackendFactory::init()
+auto SndIOBackendFactory::init() -> bool
 { return true; }
 
-bool SndIOBackendFactory::querySupport(BackendType type)
+auto SndIOBackendFactory::querySupport(BackendType const type) -> bool
 { return (type == BackendType::Playback || type == BackendType::Capture); }
 
-auto SndIOBackendFactory::enumerate(BackendType type) -> std::vector<std::string>
+auto SndIOBackendFactory::enumerate(BackendType const type) -> std::vector<std::string>
 {
     switch(type)
     {
@@ -526,7 +514,8 @@ auto SndIOBackendFactory::enumerate(BackendType type) -> std::vector<std::string
     return {};
 }
 
-BackendPtr SndIOBackendFactory::createBackend(DeviceBase *device, BackendType type)
+auto SndIOBackendFactory::createBackend(gsl::not_null<DeviceBase*> const device,
+    BackendType const type) -> BackendPtr
 {
     if(type == BackendType::Playback)
         return BackendPtr{new SndioPlayback{device}};
