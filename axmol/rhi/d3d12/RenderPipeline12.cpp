@@ -295,8 +295,7 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
 void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, ProgramImpl* program)
 {
     const auto progId = program->getProgramId();
-    auto key = makePSOKey(desc.blendDesc, _dsState, progId, desc.vertexLayout->getHash(), _rasterDesc,
-                          _primitiveGroup);
+    auto key = makePSOKey(desc.blendDesc, _dsState, progId, desc.vertexLayout->getHash(), _rasterDesc, _primitiveGroup);
     auto it  = _psoCache.find(key);
     if (it != _psoCache.end())
     {
@@ -307,8 +306,8 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, Progra
     static constexpr D3D12_PRIMITIVE_TOPOLOGY_TYPE kPrimitiveTopologyTypes[] = {D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT,
                                                                                 D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE,
                                                                                 D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE};
-    auto vsBlob = program->getVSBlob();
-    auto psBlob = program->getPSBlob();
+    auto vsBlob                                                              = program->getVSBlob();
+    auto psBlob                                                              = program->getPSBlob();
 
     auto& vi = static_cast<VertexLayoutImpl*>(desc.vertexLayout)->getD3D12InputLayout();
 
