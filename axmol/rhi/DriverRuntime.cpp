@@ -4,6 +4,8 @@
 #include "axmol/rhi/DriverFactory.h"
 #include "axmol/tlx/inlined_vector.hpp"
 
+#include "axmol/rhi/axslc-spec.h"
+
 #if AX_ENABLE_D3D12
 #    include "axmol/rhi/d3d12/Driver12.h"
 #endif
@@ -25,9 +27,12 @@ namespace ax::rhi
 
 std::unique_ptr<DriverBase> DriverRuntime::_currentDriver;
 DriverType DriverRuntime::_currentDriverType = DriverType::Unkown;
+uint32_t DriverRuntime::_currentShaderLang   = static_cast<uint32_t>(-1);
 
-void DriverRuntime::init(bool bThrowIfFail)
+void DriverRuntime::init(DriverType driverType)
 {
+    const auto hasPreferredDriverType = driverType != DriverType::Unkown;
+
     auto& contextAttrs = ApplicationBase::getContextAttrs();
 
     tlx::inlined_vector<std::unique_ptr<DriverFactory>, (int)DriverType::Count> factories;
@@ -56,16 +61,40 @@ void DriverRuntime::init(bool bThrowIfFail)
 
     for (auto& f : factories)
     {
+        if (hasPreferredDriverType && driverType != f->type())
+            continue;
         auto driver = f->create();
         if (driver && driver->init())
         {
             _currentDriverType = driver->type();
-            _currentDriver = std::move(driver);
+            _currentDriver     = std::move(driver);
+
+            switch (_currentDriverType)
+            {
+            case DriverType::OpenGL:
+#if AX_GLES_PROFILE
+                _currentShaderLang = axslc::SHADER_LANG_ESSL;
+#else
+                _currentShaderLang = axslc::SHADER_LANG_GLSL;
+#endif
+                break;
+            case DriverType::D3D11:
+            case DriverType::D3D12:
+                _currentShaderLang = axslc::SHADER_LANG_HLSL;
+                break;
+            case DriverType::Vulkan:
+                _currentShaderLang = axslc::SHADER_LANG_SPIRV;
+                break;
+            case DriverType::Metal:
+                _currentShaderLang == axslc::SHADER_LANG_MSL;
+                break;
+            }
+
             break;
         }
     }
 
-    if (!_currentDriver && bThrowIfFail)
+    if (!_currentDriver && hasPreferredDriverType)
         throw std::runtime_error("DriverRuntime::init failed: no suitable driver initialized");
 }
 

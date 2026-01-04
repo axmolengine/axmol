@@ -172,8 +172,6 @@ Renderer::Renderer()
 
     // for the batched TriangleCommand
     _triBatchesToDraw = (TriBatchToDraw*)malloc(sizeof(_triBatchesToDraw[0]) * _triBatchesToDrawCapacity);
-
-    _isModernRHI = !rhi::DriverRuntime::isOpenGL() && !rhi::DriverRuntime::isD3D11();
 }
 
 Renderer::~Renderer()
@@ -216,6 +214,8 @@ void Renderer::init()
 
     _depthStencilState = driver->createDepthStencilState();
     _context->setDepthStencilState(_depthStencilState);
+
+    _isModernRHI = !rhi::DriverRuntime::isOpenGL() && !rhi::DriverRuntime::isD3D11();
 }
 
 rhi::RenderTarget* Renderer::getOffscreenRenderTarget()

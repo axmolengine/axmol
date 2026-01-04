@@ -175,16 +175,13 @@ std::size_t Program::getUniformBufferSize() const
 
 void Program::parseStageReflection(ShaderStage stage, SLCReflectContext* context)
 {
-    const auto& shaderData = stage == ShaderStage::VERTEX ? _vsModule->getChunkData() : _fsModule->getChunkData();
+    auto shaderModule      = stage == ShaderStage::VERTEX ? _vsModule : _fsModule;
+    const auto& shaderData = shaderModule->getChunkData();
     yasio::fast_ibstream_view ibs(shaderData.data(), shaderData.size());
     context->ibs   = &ibs;
     context->stage = stage;
-    // shader module already verify shader source, just advance
-    ibs.advance(sizeof(uint32_t));  // skip fourcc
-    // since 3.3.0, it should be match the whole shader data size
-    ibs.advance(sizeof(uint32_t));  // skip sc_size
-    struct sc_chunk chunk;
-    ibs.advance(sizeof(sc_chunk));  // skip header
+
+    ibs.seek(shaderModule->getStageOffset(), SEEK_SET);
 
     auto fourccId = ibs.read<uint32_t>();
     if (fourccId != SC_CHUNK_STAG)
@@ -272,7 +269,7 @@ void Program::parseStageReflection(ShaderStage stage, SLCReflectContext* context
         }
     }
 
-    assert(ibs.eof());
+    // assert(ibs.eof());
 }
 
 void Program::reflectVertexInputs(SLCReflectContext* context)

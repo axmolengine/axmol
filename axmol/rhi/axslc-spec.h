@@ -1,5 +1,5 @@
 // The Axmol Shader Compiler spec, define macros and structs
-// match with axslcc-3.2.0+
+// match with axslcc-3.4.0+
 
 #pragma once
 
@@ -42,6 +42,15 @@ enum Dim : uint16_t
     DimSubpassData = 6
 };
 
+enum ShaderLang {
+    SHADER_LANG_ESSL = 0,
+    SHADER_LANG_HLSL,
+    SHADER_LANG_MSL,
+    SHADER_LANG_GLSL,
+    SHADER_LANG_SPIRV,
+    SHADER_LANG_COUNT
+};
+
 enum SCType : uint16_t
 {
     // Float
@@ -73,8 +82,14 @@ struct sc_chunk
 {
     uint16_t major;        // SC_VERSION_MAJOR
     uint16_t minor;        // SC_VERSION_MINOR
-    uint32_t lang;         // shader lang
-    uint32_t profile_ver;  // target profile version
+    uint16_t num_targets;
+    uint16_t reserved;
+};
+
+struct sc_target_entry {
+    uint32_t lang; // SC_LANG_GLES / HLSL / MSL / SPIRV ...
+    uint32_t profile_ver;
+    uint32_t offset;
 };
 
 // REFL

@@ -33,7 +33,7 @@ namespace ax::rhi
 class DriverRuntime
 {
 public:
-    static void init(bool bThrowIfFail);
+    static void init(DriverType driverType = DriverType::Unkown);
     static void uninit();
 
     static DriverBase* currentDriver() { return _currentDriver.get(); }
@@ -45,9 +45,12 @@ public:
     static bool isD3D12() { return _currentDriverType == DriverType::D3D12; }
     static bool isVulkan() { return _currentDriverType == DriverType::Vulkan; }
 
+    static uint32_t currentShaderLang() { return _currentShaderLang; }
+
 private:
     static std::unique_ptr<DriverBase> _currentDriver;
     static DriverType _currentDriverType;
+    static uint32_t _currentShaderLang;
 };
 
 }  // namespace ax::rhi

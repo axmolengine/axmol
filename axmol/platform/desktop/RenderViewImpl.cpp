@@ -561,7 +561,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 
     // Try init driver first time, if all driver init fail
     // The driverType still unknonw
-    ax::rhi::DriverRuntime::init(false);
+    ax::rhi::DriverRuntime::init();
 
     const auto driverType        = rhi::DriverRuntime::currentDriverType();
     const auto useFallbackDriver = driverType == rhi::DriverType::OpenGL || driverType == rhi::DriverType::Unkown;
@@ -593,7 +593,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 
     glfwWindowHint(GLFW_SAMPLES, contextAttrs.multisamplingCount);
 
-    const auto requestVisible = contextAttrs.visible;
+    const auto requireShowByUser = contextAttrs.visible;
     glfwWindowHint(GLFW_VISIBLE, false);
     glfwWindowHint(GLFW_DECORATED, contextAttrs.decorated);
 
@@ -636,8 +636,11 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
         glfwSetWindowUserPointer(_mainWindow, rhi::gl::__state);
 
         if (driverType == rhi::DriverType::Unkown)
-            ax::rhi::DriverRuntime::init(true);
+            ax::rhi::DriverRuntime::init(rhi::DriverType::OpenGL);
     }
+
+    if (requireShowByUser)
+        glfwShowWindow(_mainWindow);
 
     /*
      *  Note that the created window and context may differ from what you requested,
@@ -718,21 +721,24 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     glfwSetWindowCloseCallback(_mainWindow, GLFWEventHandler::onGLFWWindowCloseCallback);
 
 #if AX_ENABLE_GL
+    if (driverType == rhi::DriverType::OpenGL)
+    {
 #    if !defined(__EMSCRIPTEN__)
-    glfwSwapInterval(contextAttrs.vsync ? 1 : 0);
+        glfwSwapInterval(contextAttrs.vsync ? 1 : 0);
 #    endif
-    // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
+        // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
 #    if !AX_GLES_PROFILE
-    // Enable point size by default.
+        // Enable point size by default.
 #        if defined(GL_VERSION_2_0)
-    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+        glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 #        else
-    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE_ARB);
+        glEnable(GL_VERTEX_PROGRAM_POINT_SIZE_ARB);
 #        endif
-    if (contextAttrs.multisamplingCount > 0)
-        glEnable(GL_MULTISAMPLE);
+        if (contextAttrs.multisamplingCount > 0)
+            glEnable(GL_MULTISAMPLE);
 #    endif
-    CHECK_GL_ERROR_DEBUG();
+        CHECK_GL_ERROR_DEBUG();
+    }
 #endif
     return true;
 }
