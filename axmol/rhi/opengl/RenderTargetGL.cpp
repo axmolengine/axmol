@@ -84,7 +84,7 @@ void RenderTargetImpl::unbindFrameBuffer() const
 
 void RenderTargetImpl::setColorTexture(Texture* texture, int level, int index)
 {
-    RenderTarget::setColorTexture(texture, level, 0);
+    RenderTarget::setColorTexture(texture, level, index);
     _GLbufs.resize(_color.size());
 }
 
