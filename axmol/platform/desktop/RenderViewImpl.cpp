@@ -559,8 +559,13 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 
     Vec2 requestWinSize = rect.size * windowZoomFactor;
 
-    const auto driverType = rhi::DriverRuntime::currentDriverType();
-    if (driverType == rhi::DriverType::OpenGL)
+    // Try init driver first time, if all driver init fail
+    // The driverType still unknonw
+    ax::rhi::DriverRuntime::init(false);
+
+    const auto driverType        = rhi::DriverRuntime::currentDriverType();
+    const auto useFallbackDriver = driverType == rhi::DriverType::OpenGL || driverType == rhi::DriverType::Unkown;
+    if (useFallbackDriver)
     {
 #if AX_GLES_PROFILE
         glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
@@ -588,18 +593,13 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 
     glfwWindowHint(GLFW_SAMPLES, contextAttrs.multisamplingCount);
 
-    glfwWindowHint(GLFW_VISIBLE, contextAttrs.visible);
+    const auto requestVisible = contextAttrs.visible;
+    glfwWindowHint(GLFW_VISIBLE, false);
     glfwWindowHint(GLFW_DECORATED, contextAttrs.decorated);
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
     glfwWindowHintPointer(GLFW_WIN32_HWND_PARENT, contextAttrs.windowParent);
 #endif
-
-    // Init GPU device by driver for non-opengl RHI
-    // Initialize the D3D driver before creating the window to avoid a brief white flash
-    // caused by driver initialization stutter (hundreds of milliseconds) after the window appears.
-    if (driverType != rhi::DriverType::OpenGL)
-        ax::rhi::DriverRuntime::init();
 
     _renderScaleMode = contextAttrs.renderScaleMode;
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || \
@@ -630,16 +630,13 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 
     glfwSetWindowSizeLimits(_mainWindow, 1, 1, GLFW_DONT_CARE, GLFW_DONT_CARE);
 
-    if (driverType != rhi::DriverType::OpenGL)
+    if (useFallbackDriver)
     {
         glfwMakeContextCurrent(_mainWindow);
-
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
-        loadGL();
-#endif
-        // Init driver after load GL
-        ax::rhi::DriverRuntime::init();
         glfwSetWindowUserPointer(_mainWindow, rhi::gl::__state);
+
+        if (driverType == rhi::DriverType::Unkown)
+            ax::rhi::DriverRuntime::init(true);
     }
 
     /*
@@ -1457,131 +1454,6 @@ void RenderViewImpl::onGLFWWindowCloseCallback(GLFWwindow* window)
         glfwSetWindowShouldClose(window, 0);
     }
 }
-
-#if AX_TARGET_PLATFORM != AX_PLATFORM_MAC && AX_ENABLE_GL
-static bool loadFboExtensions()
-{
-    // If the current opengl driver doesn't have framebuffers methods, check if an extension exists
-    if (glGenFramebuffers == nullptr)
-    {
-        auto driver = axdrv;
-        AXLOGW("OpenGL: glGenFramebuffers is nullptr, try to detect an extension");
-        if (driver->hasExtension("ARB_framebuffer_object"sv))
-        {
-            AXLOGI("OpenGL: ARB_framebuffer_object is supported");
-
-            glIsRenderbuffer      = (PFNGLISRENDERBUFFERPROC)glfwGetProcAddress("glIsRenderbuffer");
-            glBindRenderbuffer    = (PFNGLBINDRENDERBUFFERPROC)glfwGetProcAddress("glBindRenderbuffer");
-            glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC)glfwGetProcAddress("glDeleteRenderbuffers");
-            glGenRenderbuffers    = (PFNGLGENRENDERBUFFERSPROC)glfwGetProcAddress("glGenRenderbuffers");
-            glRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC)glfwGetProcAddress("glRenderbufferStorage");
-            glGetRenderbufferParameteriv =
-                (PFNGLGETRENDERBUFFERPARAMETERIVPROC)glfwGetProcAddress("glGetRenderbufferParameteriv");
-            glIsFramebuffer          = (PFNGLISFRAMEBUFFERPROC)glfwGetProcAddress("glIsFramebuffer");
-            glBindFramebuffer        = (PFNGLBINDFRAMEBUFFERPROC)glfwGetProcAddress("glBindFramebuffer");
-            glDeleteFramebuffers     = (PFNGLDELETEFRAMEBUFFERSPROC)glfwGetProcAddress("glDeleteFramebuffers");
-            glGenFramebuffers        = (PFNGLGENFRAMEBUFFERSPROC)glfwGetProcAddress("glGenFramebuffers");
-            glCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSPROC)glfwGetProcAddress("glCheckFramebufferStatus");
-            glFramebufferTexture1D   = (PFNGLFRAMEBUFFERTEXTURE1DPROC)glfwGetProcAddress("glFramebufferTexture1D");
-            glFramebufferTexture2D   = (PFNGLFRAMEBUFFERTEXTURE2DPROC)glfwGetProcAddress("glFramebufferTexture2D");
-            glFramebufferTexture3D   = (PFNGLFRAMEBUFFERTEXTURE3DPROC)glfwGetProcAddress("glFramebufferTexture3D");
-            glFramebufferRenderbuffer =
-                (PFNGLFRAMEBUFFERRENDERBUFFERPROC)glfwGetProcAddress("glFramebufferRenderbuffer");
-            glGetFramebufferAttachmentParameteriv = (PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC)glfwGetProcAddress(
-                "glGetFramebufferAttachmentParameteriv");
-            glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC)glfwGetProcAddress("glGenerateMipmap");
-        }
-        else if (driver->hasExtension("EXT_framebuffer_object"sv))
-        {
-            AXLOGI("OpenGL: EXT_framebuffer_object is supported");
-            glIsRenderbuffer      = (PFNGLISRENDERBUFFERPROC)glfwGetProcAddress("glIsRenderbufferEXT");
-            glBindRenderbuffer    = (PFNGLBINDRENDERBUFFERPROC)glfwGetProcAddress("glBindRenderbufferEXT");
-            glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC)glfwGetProcAddress("glDeleteRenderbuffersEXT");
-            glGenRenderbuffers    = (PFNGLGENRENDERBUFFERSPROC)glfwGetProcAddress("glGenRenderbuffersEXT");
-            glRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC)glfwGetProcAddress("glRenderbufferStorageEXT");
-            glGetRenderbufferParameteriv =
-                (PFNGLGETRENDERBUFFERPARAMETERIVPROC)glfwGetProcAddress("glGetRenderbufferParameterivEXT");
-            glIsFramebuffer      = (PFNGLISFRAMEBUFFERPROC)glfwGetProcAddress("glIsFramebufferEXT");
-            glBindFramebuffer    = (PFNGLBINDFRAMEBUFFERPROC)glfwGetProcAddress("glBindFramebufferEXT");
-            glDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSPROC)glfwGetProcAddress("glDeleteFramebuffersEXT");
-            glGenFramebuffers    = (PFNGLGENFRAMEBUFFERSPROC)glfwGetProcAddress("glGenFramebuffersEXT");
-            glCheckFramebufferStatus =
-                (PFNGLCHECKFRAMEBUFFERSTATUSPROC)glfwGetProcAddress("glCheckFramebufferStatusEXT");
-            glFramebufferTexture1D = (PFNGLFRAMEBUFFERTEXTURE1DPROC)glfwGetProcAddress("glFramebufferTexture1DEXT");
-            glFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DPROC)glfwGetProcAddress("glFramebufferTexture2DEXT");
-            glFramebufferTexture3D = (PFNGLFRAMEBUFFERTEXTURE3DPROC)glfwGetProcAddress("glFramebufferTexture3DEXT");
-            glFramebufferRenderbuffer =
-                (PFNGLFRAMEBUFFERRENDERBUFFERPROC)glfwGetProcAddress("glFramebufferRenderbufferEXT");
-            glGetFramebufferAttachmentParameteriv = (PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC)glfwGetProcAddress(
-                "glGetFramebufferAttachmentParameterivEXT");
-            glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC)glfwGetProcAddress("glGenerateMipmapEXT");
-        }
-        else if (driver->hasExtension("GL_ANGLE_framebuffer_blit"sv))
-        {
-            AXLOGI("OpenGL: GL_ANGLE_framebuffer_object is supported");
-
-            glIsRenderbuffer      = (PFNGLISRENDERBUFFERPROC)glfwGetProcAddress("glIsRenderbufferOES");
-            glBindRenderbuffer    = (PFNGLBINDRENDERBUFFERPROC)glfwGetProcAddress("glBindRenderbufferOES");
-            glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC)glfwGetProcAddress("glDeleteRenderbuffersOES");
-            glGenRenderbuffers    = (PFNGLGENRENDERBUFFERSPROC)glfwGetProcAddress("glGenRenderbuffersOES");
-            glRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC)glfwGetProcAddress("glRenderbufferStorageOES");
-            // glGetRenderbufferParameteriv =
-            // (PFNGLGETRENDERBUFFERPARAMETERIVPROC)glfwGetProcAddress("glGetRenderbufferParameterivOES");
-            glIsFramebuffer      = (PFNGLISFRAMEBUFFERPROC)glfwGetProcAddress("glIsFramebufferOES");
-            glBindFramebuffer    = (PFNGLBINDFRAMEBUFFERPROC)glfwGetProcAddress("glBindFramebufferOES");
-            glDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSPROC)glfwGetProcAddress("glDeleteFramebuffersOES");
-            glGenFramebuffers    = (PFNGLGENFRAMEBUFFERSPROC)glfwGetProcAddress("glGenFramebuffersOES");
-            glCheckFramebufferStatus =
-                (PFNGLCHECKFRAMEBUFFERSTATUSPROC)glfwGetProcAddress("glCheckFramebufferStatusOES");
-            glFramebufferRenderbuffer =
-                (PFNGLFRAMEBUFFERRENDERBUFFERPROC)glfwGetProcAddress("glFramebufferRenderbufferOES");
-            glFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DPROC)glfwGetProcAddress("glFramebufferTexture2DOES");
-            glGetFramebufferAttachmentParameteriv = (PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC)glfwGetProcAddress(
-                "glGetFramebufferAttachmentParameterivOES");
-            glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC)glfwGetProcAddress("glGenerateMipmapOES");
-        }
-        else
-        {
-            AXLOGE("OpenGL: No framebuffers extension is supported");
-            AXLOGE("OpenGL: Any call to Fbo will crash!");
-            return false;
-        }
-    }
-    return true;
-}
-
-// helper
-bool RenderViewImpl::loadGL()
-{
-#    if AX_ENABLE_GL
-
-#        if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
-
-    // glad: load all OpenGL function pointers
-    // ---------------------------------------
-#            if !AX_GLES_PROFILE
-    if (!gladLoadGL(glfwGetProcAddress))
-    {
-        AXLOGE("glad: Failed to Load GL");
-        return false;
-    }
-#            else
-    if (!gladLoadGLES2(glfwGetProcAddress))
-    {
-        AXLOGE("glad: Failed to Load GLES2");
-        return false;
-    }
-#            endif
-
-    loadFboExtensions();
-#        endif  // (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
-    return true;
-#    else
-    return false;
-#    endif
-}
-
-#endif
 
 }  // namespace ax
 

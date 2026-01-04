@@ -33,7 +33,7 @@ namespace ax::rhi
 class DriverRuntime
 {
 public:
-    static void init();
+    static void init(bool bThrowIfFail);
     static void uninit();
 
     static DriverBase* currentDriver() { return _currentDriver.get(); }

@@ -4,10 +4,25 @@ set(target_name ${lib_name})
 
 project(${target_name})
 
-if(AX_RENDER_API STREQUAL "gl")
-  set(target_src_files "include/glad/gl.h" src/gl.c)
-elseif(AX_RENDER_API STREQUAL "vk")
-  set(target_src_files "include/glad/vulkan.h" src/vulkan.c)
+set(target_src_files)
+
+# glad used on platforms: WINDOWS, LINUX, ANDROID, WASM
+if(AX_ENABLE_GL)
+  if (AX_GLES_PROFILE)
+    list(APPEND target_src_files "include/glad/gles2.h" src/egl.c src/gles2.c)
+    if (NOT ANDROID) # Win32, Andorid use system EGL
+      list(APPEND target_src_files "include/glad/egl.h" src/egl.c src/egl.c)
+    endif()
+  else()
+    list(APPEND target_src_files "include/glad/gl.h" src/gl.c)
+    if (WIN32)
+      list(APPEND target_src_files "include/glad/wgl.h" src/wgl.c)
+    endif()
+  endif()
+endif()
+
+if(AX_ENABLE_VK)
+  list(APPEND target_src_files "include/glad/vulkan.h" src/vulkan.c)
 endif()
 
 add_library(${target_name} ${target_src_files})
@@ -18,18 +33,21 @@ if(BUILD_SHARED_LIBS)
     PRIVATE GLAD_API_CALL_EXPORT_BUILD=1
   )
 
-  if(NOT WINDOWS AND AX_USE_GL)
+  if(NOT WINDOWS AND AX_ENABLE_GL)
     target_link_libraries(${target_name} EGL)
   endif()
 endif()
 
-if(ANDROID)
-  if(AX_RENDER_API STREQUAL "gl")
+if(AX_ENABLE_GL)
+  if(ANDROID)
     target_compile_definitions(${target_name}
-        PUBLIC GLAD_GLES2=1
-        PUBLIC GLAD_GLES2_USE_SYSTEM_EGL=1 # refer: https://github.com/Dav1dde/glad/pull/438
+      PUBLIC GLAD_GLES2_USE_SYSTEM_EGL=1 # refer: https://github.com/Dav1dde/glad/pull/438
     )
-  elseif(AX_RENDER_API STREQUAL "vk")
+  endif()
+endif()
+
+if(ANDROID)
+  if(AX_ENABLE_VK)
     target_compile_definitions(${target_name}
       PUBLIC VK_USE_PLATFORM_ANDROID_KHR=1
     )

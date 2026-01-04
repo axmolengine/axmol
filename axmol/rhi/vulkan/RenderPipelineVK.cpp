@@ -371,7 +371,7 @@ void RenderPipelineImpl::updatePipelineLayout(ProgramImpl* program)
     plc.pPushConstantRanges    = nullptr;
 
     VkResult result = vkCreatePipelineLayout(_device, &plc, nullptr, &pipelineLayout);
-    VK_VERIFY_RESULT(result, "vkCreatePipelineLayout fail");
+    VK_REQUIRE(result, "vkCreatePipelineLayout fail");
     _pipelineLayoutCache.emplace(progId, pipelineLayout);
     _activePipelineLayout = pipelineLayout;
 }
@@ -446,7 +446,7 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc,
 
     VkPipeline pipeline = VK_NULL_HANDLE;
     VkResult res        = vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &gp, nullptr, &pipeline);
-    VK_VERIFY_RESULT(res, "vkCreateGraphicsPipelines fail");
+    VK_REQUIRE(res, "vkCreateGraphicsPipelines fail");
     _renderPassToPipelineMap.emplace(renderPass, pipelineId);
     _pipelineCache.emplace(pipelineId, pipeline);
     _activePipeline = pipeline;
@@ -535,7 +535,7 @@ VkDescriptorPool RenderPipelineImpl::allocateDescriptorPool()
 
     VkDescriptorPool pool = VK_NULL_HANDLE;
     VkResult vr           = vkCreateDescriptorPool(_device, &pci, nullptr, &pool);
-    VK_VERIFY_RESULT(vr, "Failed to create descriptor pool");
+    VK_REQUIRE(vr, "Failed to create descriptor pool");
 
     _descriptorPools.push_back(pool);
 

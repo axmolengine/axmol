@@ -114,4 +114,4 @@ elseif(AX_ISA_LEVEL)
   endif()
 endif()
 
-message(AUTHOR_WARNING "AX_ISA_SIMD=${AX_ISA_SIMD}")
+message(STATUS "AX_ISA_SIMD=${AX_ISA_SIMD}")

@@ -81,7 +81,7 @@ void RenderTargetImpl::rebuildSwapchainAttachments(const tlx::pod_vector<VkImage
                                                    PixelFormat imagePF,
                                                    VkFormat surfaceFormat)
 {
-    VK_VERIFY(!images.empty() && images.size() <= MAX_COLOR_COUNT, "Too many swapchain images");
+    VK_REQUIRE_EXPR(!images.empty() && images.size() <= MAX_COLOR_COUNT, "Too many swapchain images");
 
     _dirtyFlags = TargetBufferFlags::DEPTH_AND_STENCIL;
 

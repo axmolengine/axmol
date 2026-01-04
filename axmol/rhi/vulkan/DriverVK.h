@@ -189,8 +189,8 @@ protected:
     void destroySampler(SamplerHandle& h) override;
 
 private:
-    void initializeFactory();
-    void initializeDevice();
+    bool initializeFactory();
+    bool initializeDevice();
 
     tlx::flat_set<uint32_t> _supportedExtensions;
 

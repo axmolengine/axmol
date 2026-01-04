@@ -111,7 +111,7 @@ list(REMOVE_DUPLICATES AX_RENDER_API_LIST)
 # Validate and set macros
 foreach(api IN LISTS _ax_valid_apis)
   string(TOUPPER ${api} api)
-  set(AX_ENABLE_${api} 0) # default all to 0
+  set(AX_ENABLE_${api} 0 CACHE INTERNAL "" FORCE) # default all to 0
 endforeach()
 
 foreach(api IN LISTS AX_RENDER_API_LIST)
@@ -119,20 +119,20 @@ foreach(api IN LISTS AX_RENDER_API_LIST)
     message(FATAL_ERROR "Invalid RHI backend: ${api}. Valid values: ${_ax_valid_apis}")
   endif()
   string(TOUPPER ${api} api)
-  set(AX_ENABLE_${api} 1)
+  set(AX_ENABLE_${api} 1 CACHE INTERNAL "" FORCE)
 endforeach()
 
 # Platform forced disables
 if(APPLE)
-  set(AX_ENABLE_D3D11 0)
-  set(AX_ENABLE_D3D12 0)
-  set(AX_ENABLE_VK 0)
+  set(AX_ENABLE_D3D11 0 CACHE INTERNAL "" FORCE)
+  set(AX_ENABLE_D3D12 0 CACHE INTERNAL "" FORCE)
+  set(AX_ENABLE_VK 0 CACHE INTERNAL "" FORCE)
 elseif(WIN32)
-  set(AX_ENABLE_MTL 0)
+  set(AX_ENABLE_MTL 0 CACHE INTERNAL "" FORCE)
 elseif(ANDROID OR LINUX)
-  set(AX_ENABLE_D3D11 0)
-  set(AX_ENABLE_D3D12 0)
-  set(AX_ENABLE_MTL 0)
+  set(AX_ENABLE_D3D11 0 CACHE INTERNAL "" FORCE)
+  set(AX_ENABLE_D3D12 0 CACHE INTERNAL "" FORCE)
+  set(AX_ENABLE_MTL 0 CACHE INTERNAL "" FORCE)
 endif()
 
 # GLES profile handling

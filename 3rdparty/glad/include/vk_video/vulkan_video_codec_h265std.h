@@ -19,7 +19,7 @@ extern "C" {
 
 
 
-// vulkan_video_codec_h265std is a preprocessor guard. Do not pass it to API calls.
+/* vulkan_video_codec_h265std is a preprocessor guard. Do not pass it to API calls. */
 #define vulkan_video_codec_h265std 1
 #include "vulkan_video_codecs_common.h"
 #define STD_VIDEO_H265_CPB_CNT_LIST_SIZE  32U

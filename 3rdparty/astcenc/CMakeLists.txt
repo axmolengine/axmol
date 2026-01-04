@@ -41,7 +41,7 @@ if(NOT WASM)
   if(NOT(ARCH_ALIAS STREQUAL "x86") AND NOT TVOS AND NOT(ARCH_ALIAS MATCHES "arm.*v7"))
     set(ASTC_ISA_SIMD ${AX_ISA_SIMD})
   else() # astcenc not support sse4/avx tvos/x86/armv7
-    message(AUTHOR_WARNING "Skipping AVX2/SSE4/NEON detection for astc-encoder when build tvos/x86/armv7")
+    message(STATUS "Skipping AVX2/SSE4/NEON detection for astc-encoder when build tvos/x86/armv7")
 
     if(AX_HAVE_SSE2_INTRINSICS)
       set(ASTC_ISA_SIMD "sse2")
@@ -53,7 +53,7 @@ else()
   set(ASTC_ISA_SIMD "null")
 endif()
 
-message(AUTHOR_WARNING "ASTC_ISA_SIMD=${ASTC_ISA_SIMD}")
+message(STATUS "ASTC_ISA_SIMD=${ASTC_ISA_SIMD}")
 
 # Set up configuration for SIMD ISA builds
 if(ASTC_ISA_SIMD STREQUAL "neon")

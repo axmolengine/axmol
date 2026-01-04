@@ -19,7 +19,7 @@ extern "C" {
 
 
 
-// vulkan_video_codec_av1std is a preprocessor guard. Do not pass it to API calls.
+/* vulkan_video_codec_av1std is a preprocessor guard. Do not pass it to API calls. */
 #define vulkan_video_codec_av1std 1
 #include "vulkan_video_codecs_common.h"
 #define STD_VIDEO_AV1_NUM_REF_FRAMES      8U
@@ -144,7 +144,7 @@ typedef enum StdVideoAV1ColorPrimaries {
     STD_VIDEO_AV1_COLOR_PRIMARIES_SMPTE_432 = 12,
     STD_VIDEO_AV1_COLOR_PRIMARIES_EBU_3213 = 22,
     STD_VIDEO_AV1_COLOR_PRIMARIES_INVALID = 0x7FFFFFFF,
-  // STD_VIDEO_AV1_COLOR_PRIMARIES_BT_UNSPECIFIED is a legacy alias
+  /* STD_VIDEO_AV1_COLOR_PRIMARIES_BT_UNSPECIFIED is a legacy alias */
     STD_VIDEO_AV1_COLOR_PRIMARIES_BT_UNSPECIFIED = STD_VIDEO_AV1_COLOR_PRIMARIES_UNSPECIFIED,
     STD_VIDEO_AV1_COLOR_PRIMARIES_MAX_ENUM = 0x7FFFFFFF
 } StdVideoAV1ColorPrimaries;

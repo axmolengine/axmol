@@ -28,10 +28,8 @@ THE SOFTWARE.
 
 #include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && AX_ENABLE_GL
-
-#    include "glad/gl.h"
-
 #    if AX_GLES_PROFILE
+#        include "glad/gles2.h"
 #        undef GL_DEPTH_STENCIL
 #        undef GL_DEPTH24_STENCIL8
 #        undef GL_UNSIGNED_INT_24_8
@@ -83,7 +81,8 @@ THE SOFTWARE.
 #            define glGetFramebufferAttachmentParameteriv glGetFramebufferAttachmentParameterivOES
 #            define glGenerateMipmap                      glGenerateMipmapOES
 #        endif
-
+#    else
+#        include "glad/gl.h"
 #    endif
 
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WIN32

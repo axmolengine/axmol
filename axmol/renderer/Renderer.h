@@ -43,8 +43,9 @@
 namespace ax
 {
 
-using CullMode = rhi::CullMode;
-using Winding  = rhi::Winding;
+using CullMode      = rhi::CullMode;
+using Winding       = rhi::Winding;
+using SurfaceHandle = rhi::SurfaceHandle;
 
 namespace rhi
 {

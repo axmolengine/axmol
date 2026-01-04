@@ -19,7 +19,7 @@ extern "C" {
 
 
 
-// vulkan_video_codecs_common is a preprocessor guard. Do not pass it to API calls.
+/* vulkan_video_codecs_common is a preprocessor guard. Do not pass it to API calls. */
 #define vulkan_video_codecs_common 1
 #if !defined(VK_NO_STDINT_H)
     #include <stdint.h>

@@ -142,9 +142,6 @@ protected:
     bool initWithRect(std::string_view viewName, const Rect& rect, float zoomFactor, bool resizable);
     bool initWithFullScreen(std::string_view viewName);
     bool initWithFullscreen(std::string_view viewname, const GLFWvidmode& videoMode, GLFWmonitor* monitor);
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)  // Windows, Linux: use glad to loadGL
-    bool loadGL();
-#endif
 
     // GLFW callbacks
     void onGLFWError(int errorID, const char* errorDesc);

@@ -26,7 +26,7 @@ namespace ax::rhi
 std::unique_ptr<DriverBase> DriverRuntime::_currentDriver;
 DriverType DriverRuntime::_currentDriverType = DriverType::Unkown;
 
-void DriverRuntime::init()
+void DriverRuntime::init(bool bThrowIfFail)
 {
     auto& contextAttrs = ApplicationBase::getContextAttrs();
 
@@ -65,7 +65,7 @@ void DriverRuntime::init()
         }
     }
 
-    if (!_currentDriver)
+    if (!_currentDriver && bThrowIfFail)
         throw std::runtime_error("DriverRuntime::init failed: no suitable driver initialized");
 }
 

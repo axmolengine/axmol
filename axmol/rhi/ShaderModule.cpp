@@ -55,10 +55,10 @@ void ShaderModule::parseShaderCode(void)
     auto sc_size = ibs.read<uint32_t>();
     struct sc_chunk chunk;
     ibs.read_bytes(&chunk, static_cast<int>(sizeof(chunk)));
-    if (chunk.major < 3 || chunk.minor < 3)
+    if (chunk.major < 3 || chunk.minor < 4)
     {
         AXLOGE(
-            "The axslcc shader chunk version too old: found {}.{}, required >= 3.3, "
+            "The axslcc shader chunk version too old: found {}.{}, required >= 3.4, "
             "Please update/recompile the shader.",
             chunk.major, chunk.minor);
         assert(false && "axmol: Shader version too old");

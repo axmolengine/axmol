@@ -48,6 +48,16 @@
 #    define GL_COMPRESSED_RGBA_ASTC_4x4 0x93B0
 #endif
 
+#if defined(GLAD_GL) || defined(GLAD_GLES2)
+#    define _AX_USE_GLAD 1
+#else
+#    define _AX_USE_GLAD 0
+#endif
+
+#if _AX_USE_GLAD && AX_GLES_PROFILE && !defined(GLAD_GLES2_USE_SYSTEM_EGL)
+#    include "glad/egl.h"
+#endif
+
 namespace ax::rhi
 {
 std::unique_ptr<DriverBase> GLDriverFactory::create()
@@ -77,8 +87,35 @@ static void GL_EnumAllExtensions(_Fty&& func)
     }
 }
 
-DriverImpl::DriverImpl()
+#if _AX_USE_GLAD
+static bool loadGL()
 {
+#    if AX_GLES_PROFILE
+#        if !defined(GLAD_GLES2_USE_SYSTEM_EGL)
+    gladLoaderLoadEGL(EGL_DEFAULT_DISPLAY);
+#        endif
+    return !!gladLoaderLoadGLES2();
+#    else
+    return !!gladLoaderLoadGL();
+#    endif
+}
+#endif
+
+DriverImpl::DriverImpl() {}
+
+DriverImpl::~DriverImpl()
+{
+    if (_sharedVAO)
+        glDeleteVertexArrays(1, &_sharedVAO);
+}
+
+bool DriverImpl::init()
+{
+#if _AX_USE_GLAD
+    if (!loadGL())
+        return false;
+#endif
+
     /// driver info
     auto pszVersion = (char const*)glGetString(GL_VERSION);
     if (pszVersion)
@@ -120,7 +157,7 @@ DriverImpl::DriverImpl()
         AXLOGE("{}", msg);
         showAlert(msg, "OpenGL init failed", AlertStyle::RequireSync);
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
-        return;
+        return false;
     }
 
     // caps
@@ -177,12 +214,8 @@ DriverImpl::DriverImpl()
     __state->bindVertexArray(_sharedVAO);
 
     CHECK_GL_ERROR_DEBUG();
-}
 
-DriverImpl::~DriverImpl()
-{
-    if (_sharedVAO)
-        glDeleteVertexArrays(1, &_sharedVAO);
+    return true;
 }
 
 GLint DriverImpl::getDefaultFBO() const
