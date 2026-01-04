@@ -27,7 +27,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "axmol/2d/AnchoredSprite.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverRuntime.h"
 #include "axmol/tlx/format.hpp"
 
 namespace ax

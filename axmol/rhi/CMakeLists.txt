@@ -39,7 +39,7 @@ set(_AX_RHI_SRC
   rhi/DriverRuntime.cpp
 )
 
-if(AX_RENDER_API STREQUAL "gl")
+if(AX_ENABLE_GL)
   list(APPEND _AX_RHI_HEADER
     rhi/opengl/OpenGLState.h
     rhi/opengl/BufferGL.h
@@ -70,7 +70,9 @@ if(AX_RENDER_API STREQUAL "gl")
     rhi/opengl/RenderTargetGL.cpp
     rhi/opengl/VertexLayoutGL.cpp
   )
-elseif(AX_RENDER_API STREQUAL "mtl")
+endif()
+
+if(AX_ENABLE_MTL)
   list(APPEND _AX_RHI_HEADER
     rhi/metal/BufferMTL.h
     rhi/metal/BufferManager.h
@@ -98,7 +100,9 @@ elseif(AX_RENDER_API STREQUAL "mtl")
     rhi/metal/UtilsMTL.mm
     rhi/metal/ProgramMTL.mm
   )
-elseif(AX_RENDER_API STREQUAL "d3d11")
+endif()
+
+if(AX_ENABLE_D3D11)
     list(APPEND _AX_RHI_HEADER
     rhi/d3d11/Buffer11.h
     rhi/d3d11/RenderContext11.h
@@ -126,7 +130,9 @@ elseif(AX_RENDER_API STREQUAL "d3d11")
     rhi/d3d11/VertexLayout11.cpp
     rhi/DXUtils.cpp
   )
-elseif(AX_RENDER_API STREQUAL "d3d12")
+endif()
+
+if(AX_ENABLE_D3D12)
     list(APPEND _AX_RHI_HEADER
     rhi/d3d12/Buffer12.h
     rhi/d3d12/RenderContext12.h
@@ -158,7 +164,9 @@ elseif(AX_RENDER_API STREQUAL "d3d12")
     rhi/d3d12/UploadBufferAllocator12.cpp
     rhi/DXUtils.cpp
   )
-elseif(AX_RENDER_API STREQUAL "vk")
+endif()
+
+if(AX_ENABLE_VK)
     list(APPEND _AX_RHI_HEADER
     rhi/vulkan/BufferVK.h
     rhi/vulkan/RenderContextVK.h

@@ -35,7 +35,7 @@
 #include <spine/Extension.h>
 #include <stddef.h>// offsetof
 
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverRuntime.h"
 #include "axmol/renderer/Shaders.h"
 #include "xxhash.h"
 
@@ -280,7 +280,7 @@ namespace spine {
         {
             pipelinePS = _twoColorProgramState->clone(); // Unlike other clone methods, this function does not use autorelease
         }
-        
+
         AXASSERT(pipelinePS, "programState should not be null");
 
         const axmol::Mat4& projectionMat =

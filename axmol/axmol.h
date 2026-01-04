@@ -204,7 +204,7 @@ THE SOFTWARE.
 
 #include "axmol/platform/RenderViewImpl.h"
 
-#if AX_RENDER_API == AX_RENDER_API_GL
+#if AX_ENABLE_GL
 #    include "axmol/platform/GL.h"
 #endif
 

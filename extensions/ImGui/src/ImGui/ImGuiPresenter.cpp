@@ -37,12 +37,6 @@ THE SOFTWARE.
 
 #include "xxhash.h"
 
-#if defined(AX_PLATFORM_PC) && AX_RENDER_API == AX_RENDER_API_GL
-#    define AX_IMGUI_ENABLE_MULTI_VIEWPORT 1
-#else
-#    define AX_IMGUI_ENABLE_MULTI_VIEWPORT 0
-#endif
-
 NS_AX_EXT_BEGIN
 
 namespace
@@ -298,8 +292,9 @@ void ImGuiPresenter::init()
     // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  // Enable Docking
 
-#if AX_IMGUI_ENABLE_MULTI_VIEWPORT
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport / Platform Windows
+#if defined(AX_PLATFORM_PC)
+    if (rhi::DriverRuntime::isOpenGL())
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport / Platform Windows
 #endif
     // io.ConfigViewportsNoAutoMerge = true;
     // io.ConfigViewportsNoTaskBarIcon = true;

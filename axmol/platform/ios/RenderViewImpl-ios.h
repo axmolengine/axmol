@@ -66,7 +66,7 @@ public:
     void* getNativeWindow() const override { return _hostWindowHandle; }
 
     /** @since axmol-3.0, returns the objective-c EARenderView instance */
-    void* getNativeDisplay() const override { return _hostViewHandle; }
+    SurfaceHandle getNativeDisplay() const override { return _hostViewHandle; }
 
     WindowPlatform getWindowPlatform() const override { return WindowPlatform::UIKit; }
 

@@ -29,11 +29,14 @@ THE SOFTWARE.
 #include "axmol/base/Macros.h"
 #include "axmol/platform/android/jni/JniHelper.h"
 
-#if AX_RENDER_API == AX_RENDER_API_GL
+#if AX_ENABLE_GL
 #    include "axmol/platform/GL.h"
-#else
+#endif
+#if AX_ENABLE_VK
 #    include "axmol/rhi/vulkan/DriverVK.h"
 #endif
+
+#include "axmol/rhi/DriverRuntime.h"
 
 #include <stdlib.h>
 #include <android/log.h>
@@ -94,7 +97,7 @@ void* RenderViewImpl::getNativeWindow() const
     return _nativeWindow;
 }
 
-void* RenderViewImpl::getNativeDisplay() const
+SurfaceHandle RenderViewImpl::getNativeDisplay() const
 {
     return _nativeDisplay;
 }
@@ -106,22 +109,25 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
 {
     updateRenderSurface(rect.size.width, rect.size.height, SurfaceUpdateFlag::AllUpdatesSilently);
 
-#if AX_RENDER_API == AX_RENDER_API_GL
-    auto glesVer = gladLoaderLoadGLES2();
-    if (glesVer)
-        AXLOGI("Load GLES success, version: {}", glesVer);
+    if (rhi::DriverRuntime::isOpenGL())
+    {
+        auto glesVer = gladLoaderLoadGLES2();
+        if (glesVer)
+            AXLOGI("Load GLES success, version: {}", glesVer);
+        else
+            throw std::runtime_error("Load GLES fail");
+    }
     else
-        throw std::runtime_error("Load GLES fail");
-#else
-    recreateVkSurface(false);
-#endif
+    {
+        recreateVkSurface(false);
+    }
 
     return true;
 }
 
-#if AX_RENDER_API == AX_RENDER_API_VK
 void RenderViewImpl::recreateVkSurface(bool needUpdateRenderSurface)
 {
+#if AX_ENABLE_VK
     auto _createSurface = [](VkInstance inst, void* window, VkSurfaceKHR* surface) {
         VkAndroidSurfaceCreateInfoKHR createInfo{VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR};
         createInfo.window = (ANativeWindow*)window;
@@ -143,8 +149,8 @@ void RenderViewImpl::recreateVkSurface(bool needUpdateRenderSurface)
 
     if (needUpdateRenderSurface)
         updateRenderSurface(_windowSize.width, _windowSize.height, SurfaceUpdateFlag::AllUpdates);
-}
 #endif
+}
 
 bool RenderViewImpl::initWithFullScreen(std::string_view viewName)
 {

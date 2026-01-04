@@ -157,7 +157,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     websocket-parser
   )
 
-  if(AX_RENDER_API STREQUAL "gl" OR AX_RENDER_API STREQUAL "vk")
+  if(AX_ENABLE_GL OR AX_ENABLE_VK)
     list(APPEND LIBS glad)
   endif()
 
@@ -263,10 +263,10 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         "${AX_ROOT_DIR}/3rdparty/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll")
     endif()
 
-    if(AX_GLES_PROFILE OR AX_RENDER_API MATCHES "d3d")
+    if(AX_GLES_PROFILE OR AX_ENABLE_D3D12 OR AX_ENABLE_D3D11)
       find_windows_sdk_bin(_winsdk_bin_dir ${ARCH_ALIAS})
       list(APPEND _prebuilt_dlls "${_winsdk_bin_dir}/d3dcompiler_47.dll")
-      if(AX_RENDER_API STREQUAL "d3d12")
+      if(AX_ENABLE_D3D12)
         list(APPEND all_depend_dlls "${_winsdk_bin_dir}/dxcompiler.dll")
       endif()
     endif()

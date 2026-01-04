@@ -48,12 +48,7 @@
 
 #include "axmol/rhi/axmol-rhi.h"
 #include "axmol/rhi/RenderTarget.h"
-
-#if (AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_VK || AX_RENDER_API == AX_RENDER_API_D3D12)
-#    define _AX_RENDER_API_MODERN 1
-#else
-#    define _AX_RENDER_API_MODERN 0
-#endif
+#include "axmol/rhi/DriverRuntime.h"
 
 namespace ax
 {
@@ -177,6 +172,8 @@ Renderer::Renderer()
 
     // for the batched TriangleCommand
     _triBatchesToDraw = (TriBatchToDraw*)malloc(sizeof(_triBatchesToDraw[0]) * _triBatchesToDrawCapacity);
+
+    _isModernRHI = !rhi::DriverRuntime::isOpenGL() && !rhi::DriverRuntime::isD3D11();
 }
 
 Renderer::~Renderer()
@@ -320,20 +317,22 @@ void Renderer::processRenderCommand(RenderCommand* command)
             drawBatchedTriangles();
 
             _queuedTotalIndexCount = _queuedTotalVertexCount = 0;
-#if _AX_RENDER_API_MODERN
-            _queuedIndexCount = _queuedVertexCount = 0;
-            _triangleCommandBufferManager.prepareNextBuffer();
-            _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
-            _indexBuffer  = _triangleCommandBufferManager.getIndexBuffer();
-#endif
+            if (_isModernRHI)
+            {
+                _queuedIndexCount = _queuedVertexCount = 0;
+                _triangleCommandBufferManager.prepareNextBuffer();
+                _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
+                _indexBuffer  = _triangleCommandBufferManager.getIndexBuffer();
+            }
         }
 
         // queue it
         _queuedTriangleCommands.emplace_back(cmd);
-#if _AX_RENDER_API_MODERN
-        _queuedIndexCount += cmd->getIndexCount();
-        _queuedVertexCount += cmd->getVertexCount();
-#endif
+        if (_isModernRHI)
+        {
+            _queuedIndexCount += cmd->getIndexCount();
+            _queuedVertexCount += cmd->getVertexCount();
+        }
         _queuedTotalVertexCount += cmd->getVertexCount();
         _queuedTotalIndexCount += cmd->getIndexCount();
     }
@@ -439,11 +438,12 @@ void Renderer::endFrame()
 {
     _context->endFrame();
 
-#if _AX_RENDER_API_MODERN
-    _triangleCommandBufferManager.putbackAllBuffers();
-    _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
-    _indexBuffer  = _triangleCommandBufferManager.getIndexBuffer();
-#endif
+    if (_isModernRHI)
+    {
+        _triangleCommandBufferManager.putbackAllBuffers();
+        _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
+        _indexBuffer  = _triangleCommandBufferManager.getIndexBuffer();
+    }
     _queuedTotalIndexCount  = 0;
     _queuedTotalVertexCount = 0;
 }
@@ -614,13 +614,17 @@ void Renderer::drawBatchedTriangles()
         return;
 
     /************** 1: Setup up vertices/indices *************/
-#if _AX_RENDER_API_MODERN
-    unsigned int vertexBufferFillOffset = _queuedTotalVertexCount - _queuedVertexCount;
-    unsigned int indexBufferFillOffset  = _queuedTotalIndexCount - _queuedIndexCount;
-#else
-    unsigned int vertexBufferFillOffset = 0;
-    unsigned int indexBufferFillOffset  = 0;
-#endif
+    unsigned int vertexBufferFillOffset, indexBufferFillOffset;
+    if (_isModernRHI)
+    {
+        vertexBufferFillOffset = _queuedTotalVertexCount - _queuedVertexCount;
+        indexBufferFillOffset  = _queuedTotalIndexCount - _queuedIndexCount;
+    }
+    else
+    {
+        vertexBufferFillOffset = 0;
+        indexBufferFillOffset  = 0;
+    }
 
     _triBatchesToDraw[0].offset        = indexBufferFillOffset;
     _triBatchesToDraw[0].indicesToDraw = 0;
@@ -678,14 +682,18 @@ void Renderer::drawBatchedTriangles()
         firstCommand   = false;
     }
     batchesTotal++;
-#if _AX_RENDER_API_MODERN
-    _vertexBuffer->updateSubData(_verts, vertexBufferFillOffset * sizeof(_verts[0]), _filledVertex * sizeof(_verts[0]));
-    _indexBuffer->updateSubData(_indices, indexBufferFillOffset * sizeof(_indices[0]),
-                                _filledIndex * sizeof(_indices[0]));
-#else
-    _vertexBuffer->updateData(_verts, _filledVertex * sizeof(_verts[0]));
-    _indexBuffer->updateData(_indices, _filledIndex * sizeof(_indices[0]));
-#endif
+    if (_isModernRHI)
+    {
+        _vertexBuffer->updateSubData(_verts, vertexBufferFillOffset * sizeof(_verts[0]),
+                                     _filledVertex * sizeof(_verts[0]));
+        _indexBuffer->updateSubData(_indices, indexBufferFillOffset * sizeof(_indices[0]),
+                                    _filledIndex * sizeof(_indices[0]));
+    }
+    else
+    {
+        _vertexBuffer->updateData(_verts, _filledVertex * sizeof(_verts[0]));
+        _indexBuffer->updateData(_indices, _filledIndex * sizeof(_indices[0]));
+    }
 
     /************** 2: Draw *************/
     beginRenderPass();
@@ -709,10 +717,11 @@ void Renderer::drawBatchedTriangles()
     /************** 3: Cleanup *************/
     _queuedTriangleCommands.clear();
 
-#if _AX_RENDER_API_MODERN
-    _queuedIndexCount  = 0;
-    _queuedVertexCount = 0;
-#endif
+    if (_isModernRHI)
+    {
+        _queuedIndexCount  = 0;
+        _queuedVertexCount = 0;
+    }
 }
 
 void Renderer::drawCustomCommand(RenderCommand* command)
@@ -838,7 +847,7 @@ void Renderer::readPixels(rhi::RenderTarget* rt,
     _context->readPixels(rt, preserveAxisHint, std::move(callback));
 }
 
-void Renderer::updateSurface(void* surface, uint32_t width, uint32_t height)
+void Renderer::updateSurface(SurfaceHandle surface, uint32_t width, uint32_t height)
 {
     if (_context)
         _context->updateSurface(surface, width, height);
@@ -870,6 +879,11 @@ void Renderer::beginRenderPass()
 void Renderer::endRenderPass()
 {
     _context->endRenderPass();
+}
+
+void Renderer::setFrameBufferOnly(bool bVal)
+{
+    _context->setFrameBufferOnly(bVal);
 }
 
 void Renderer::clear(ClearFlag flags, const Color& color, float depth, unsigned int stencil, float globalOrder)

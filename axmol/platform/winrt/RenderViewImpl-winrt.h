@@ -143,7 +143,7 @@ public:
     void SetQueueOperationCb(std::function<void(AsyncOperation, void*)> cb);
 
     void* getNativeWindow() const override;
-    void* getNativeDisplay() const override;
+    SurfaceHandle getNativeDisplay() const override;
     WindowPlatform getWindowPlatform() const override { return WindowPlatform::CoreWindow; }
 
     float getRenderScale() const override { return _renderScale; }

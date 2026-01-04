@@ -5,12 +5,6 @@
 #include <Effekseer.h>
 #include <EffekseerRendererCommon/EffekseerRenderer.Renderer.h>
 
-//#if AX_RENDER_API == AX_RENDER_API_MTL
-//#include <EffekseerRendererMetal.h>
-//#else
-//#include <EffekseerRendererGL.h>
-//#endif
-
 namespace efk
 {
 class EffectManager;
@@ -85,7 +79,7 @@ private:
 	::Effekseer::Handle handle = -1;
 
 	// cocos2d::CallbackCommand renderCommand;
-	
+
 	void beforeRender(EffekseerRenderer::RendererRef, Effekseer::RefPtr<EffekseerRenderer::CommandList>);
     void afterRender(EffekseerRenderer::RendererRef, Effekseer::RefPtr<EffekseerRenderer::CommandList>);
 
@@ -317,7 +311,7 @@ private:
 	::EffekseerRenderer::DistortingCallback* distortingCallback = NULL;
     ::Effekseer::RefPtr<::EffekseerRenderer::SingleFrameMemoryPool> memoryPool_ = nullptr;
     ::Effekseer::RefPtr<::EffekseerRenderer::CommandList> commandList_ = nullptr;
-    
+
 	bool isDistortionEnabled = false;
 
 	bool isDistorted = false;
@@ -397,7 +391,7 @@ public:
         \~English    This is called within begin. For special behavioural handling of different graphic device
     */
     void newFrame();
-    
+
 	/**
 		@brief
 		\~English	Update the manager every frame.
@@ -431,7 +425,7 @@ public:
 
 	void setCameraMatrix(const cocos2d::Mat4& mat);
 	void setProjectionMatrix(const cocos2d::Mat4& mat);
-    
+
     Effekseer::RefPtr<::EffekseerRenderer::CommandList> getInternalCommandList() { return commandList_; }
 };
 
@@ -449,7 +443,7 @@ public:
 		@brief
 		\~English	Create the instance of network server class.
 		\~Japanese	ネットワークサーバークラスのインスタンスを生成する。
-	
+
 
 		@return
 		\~English	Instance

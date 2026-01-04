@@ -53,7 +53,7 @@ include(CMakeDependentOption)
 # check linux system libraries
 if(LINUX)
   find_package(X11 REQUIRED)
-  
+
   # including GTK3.0 and WebKit2Gtk4.x
   find_package(PkgConfig REQUIRED)
   pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
@@ -69,75 +69,86 @@ if(LINUX)
   endforeach()
 endif()
 
-set(AX_RENDER_API "auto" CACHE STRING "Specify axmol graphics render API")
-set_property(CACHE AX_RENDER_API PROPERTY STRINGS d3d11 d3d12 vk mtl gl)
+set(AX_RENDER_API "auto" CACHE STRING "Specify axmol graphics render API (semicolon separated list)")
 
-# Determine AX_RENDER_API
+if(APPLE)
+  # macOS / iOS
+  set(_ax_valid_apis mtl gl)   # Metal + optional GL (desktop macOS)
+elseif(WIN32)
+  # Windows
+  set(_ax_valid_apis d3d11 d3d12 vk gl)
+elseif(ANDROID)
+  # Android
+  set(_ax_valid_apis vk gl)
+elseif(LINUX)
+  # Linux
+  set(_ax_valid_apis vk gl)
+elseif(WASM)
+  # WebAssembly
+  set(_ax_valid_apis gl)
+else()
+  # Fallback
+  set(_ax_valid_apis gl)
+endif()
+
+# Parse AX_RENDER_API into list
 if(AX_RENDER_API STREQUAL "auto")
   if(APPLE)
     set(AX_RENDER_API "mtl" CACHE STRING "" FORCE)
+  elseif(WIN32)
+    set(AX_RENDER_API "d3d12" CACHE STRING "" FORCE)
   else()
     set(AX_RENDER_API "gl" CACHE STRING "" FORCE)
   endif()
-else()
-  if(AX_RENDER_API STREQUAL "mtl")
-    if(NOT APPLE) # non-apple platforms, invalid api specified, fallback to gl
-      set(AX_RENDER_API "gl" CACHE STRING "" FORCE)
-    endif()
-    elseif(AX_RENDER_API MATCHES "d3d")
-        if(NOT WIN32)
-        if(APPLE)
-            set(AX_RENDER_API "mtl" CACHE STRING "" FORCE)
-        else()
-            set(AX_RENDER_API "gl" CACHE STRING "" FORCE)
-        endif()
-        endif()
-    elseif(AX_RENDER_API STREQUAL "vk")
-        if(APPLE)
-        set(AX_RENDER_API "mtl" CACHE STRING "" FORCE)
-    endif()
+endif()
+
+string(REPLACE "," " " AX_RENDER_API_LIST "${AX_RENDER_API}")
+separate_arguments(AX_RENDER_API_LIST)
+
+# Remove duplicates
+list(REMOVE_DUPLICATES AX_RENDER_API_LIST)
+
+# Validate and set macros
+foreach(api IN LISTS _ax_valid_apis)
+  string(TOUPPER ${api} api)
+  set(AX_ENABLE_${api} 0) # default all to 0
+endforeach()
+
+foreach(api IN LISTS AX_RENDER_API_LIST)
+  if(NOT api IN_LIST _ax_valid_apis)
+    message(FATAL_ERROR "Invalid RHI backend: ${api}. Valid values: ${_ax_valid_apis}")
   endif()
+  string(TOUPPER ${api} api)
+  set(AX_ENABLE_${api} 1)
+endforeach()
+
+# Platform forced disables
+if(APPLE)
+  set(AX_ENABLE_D3D11 0)
+  set(AX_ENABLE_D3D12 0)
+  set(AX_ENABLE_VK 0)
+elseif(WIN32)
+  set(AX_ENABLE_MTL 0)
+elseif(ANDROID OR LINUX)
+  set(AX_ENABLE_D3D11 0)
+  set(AX_ENABLE_D3D12 0)
+  set(AX_ENABLE_MTL 0)
 endif()
 
-set(_ax_valid_apis gl vk d3d11 d3d12 mtl)
-if(NOT AX_RENDER_API IN_LIST _ax_valid_apis)
-    message(FATAL_ERROR "Invalid AX_RENDER_API=${AX_RENDER_API}. Valid values: gl vk d3d11 d3d12 mtl")
-endif()
-
-set(_RENDER_NOTICE "AX_RENDER_API=${AX_RENDER_API}")
-
-# Determine AX_GLES_PROFILE
-if(AX_RENDER_API STREQUAL "gl")
+# GLES profile handling
+unset(AX_GLES_PROFILE CACHE)
+if(AX_ENABLE_GL)
   if(WIN32 OR ANDROID OR IOS OR TVOS OR WASM)
-    set(_GLES_PROFILE 300)
-  else()
-    set(_GLES_PROFILE 0)
+    set(AX_GLES_PROFILE 300 CACHE STRING "")
   endif()
-
-  if(_GLES_PROFILE)
-    set(AX_GLES_PROFILE ${_GLES_PROFILE} CACHE STRING "")
-
-    if(AX_GLES_PROFILE LESS _GLES_PROFILE)
-      if(WINRT OR NOT WIN32)
-        set(AX_GLES_PROFILE ${_GLES_PROFILE} CACHE STRING "" FORCE)
-        message(AUTHOR_WARNING "Forcing GLES profile to ${_GLES_PROFILE} for OpenGL ES")
-      else()
-        # Win32 Desktop Apps can use desktop gl, so disable gles profile
-        unset(AX_GLES_PROFILE CACHE)
-      endif()
-    endif()
-  else() # Force disable GLES due to platform not support
-    unset(AX_GLES_PROFILE CACHE)
-  endif()
-else()
-  unset(AX_GLES_PROFILE CACHE)
 endif()
 
+# Render notice
+set(_RENDER_NOTICE "AX_RENDER_API=${AX_RENDER_API_LIST}")
 if(AX_GLES_PROFILE)
   string(APPEND _RENDER_NOTICE ", AX_GLES_PROFILE=${AX_GLES_PROFILE}")
 endif()
-
-message(AUTHOR_WARNING "${_RENDER_NOTICE}")
+message(STATUS "${_RENDER_NOTICE}")
 
 if(LINUX)
   include(CheckIncludeFile)
@@ -424,6 +435,12 @@ ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_CONSOLE)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_VR)
 ax_config_pred(${_AX_CORE_LIB} AX_CORE_PROFILE)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_WAYLAND)
+
+ax_config_pred1(${_AX_CORE_LIB} AX_ENABLE_D3D11)
+ax_config_pred1(${_AX_CORE_LIB} AX_ENABLE_D3D12)
+ax_config_pred1(${_AX_CORE_LIB} AX_ENABLE_GL)
+ax_config_pred1(${_AX_CORE_LIB} AX_ENABLE_VK)
+ax_config_pred1(${_AX_CORE_LIB} AX_ENABLE_MTL)
 
 if(LINUX AND WEBKIT2GTK_FOUND)
   target_compile_definitions(${_AX_CORE_LIB} PUBLIC AX_HAVE_WEBKIT2GTK=1)

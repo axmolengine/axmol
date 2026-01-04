@@ -84,8 +84,7 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
  *
  * @since v0.99.5
  */
-#if ((AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)) && \
-    AX_RENDER_API != AX_RENDER_API_VK
+#if ((AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)) && AX_ENABLE_GL
 #    if !defined(AX_ENABLE_CONTEXT_LOSS_RECOVERY)
 #        define AX_ENABLE_CONTEXT_LOSS_RECOVERY 1
 #    endif

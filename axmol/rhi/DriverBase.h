@@ -231,10 +231,3 @@ protected:
 // end of _rhi group
 /// @}
 }  // namespace ax::rhi
-
-namespace ax::rhi
-{
-DriverBase* currentDriver();
-}
-
-#define axdrv ax::rhi::currentDriver()

@@ -106,7 +106,9 @@
 #include "imgui.h"
 #ifndef IMGUI_DISABLE
 #include "imgui_impl_glfw.h"
+
 #include "imgui_impl_axmol.h" // axmol spec
+#include "axmol/rhi/DriverRuntime.h" // axmol spec
 
 // Clang warnings with -Weverything
 #if defined(__clang__)
@@ -1356,9 +1358,8 @@ static void ImGui_ImplGlfw_DestroyWindow(ImGuiViewport* viewport)
             for (int i = 0; i < IM_ARRAYSIZE(bd->KeyOwnerWindows); i++)
                 if (bd->KeyOwnerWindows[i] == vd->Window)
                     ImGui_ImplGlfw_KeyCallback(vd->Window, i, 0, GLFW_RELEASE, 0); // Later params are only used for main viewport, on which this function is never called.
-#if AX_RENDER_API == AX_RENDER_API_GL // axmol spec
-            ImGui_ImplAxmol_OnDestroyWindow(vd->Window, viewport);
-#endif
+            if (ax::rhi::DriverRuntime::isOpenGL()) // axmol spec
+                ImGui_ImplAxmol_OnDestroyWindow(vd->Window, viewport);
             ImGui_ImplGlfw_ContextMap_Remove(vd->Window);
             glfwDestroyWindow(vd->Window);
         }
@@ -1653,18 +1654,21 @@ static LRESULT CALLBACK ImGui_ImplGlfw_WndProc(HWND hWnd, UINT msg, WPARAM wPara
 // axmol spec
 IMGUI_IMPL_API bool ImGui_ImplGlfw_InitForAxmol(GLFWwindow* window, bool install_callbacks)
 {
-#if AX_RENDER_API == AX_RENDER_API_GL
-    return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_OpenGL);
-#elif AX_RENDER_API == AX_RENDER_API_MTL
-    return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_Metal);
-#    elif AX_RENDER_API == AX_RENDER_API_D3D11 || AX_RENDER_API == AX_RENDER_API_D3D12
-    return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_D3D);
-#elif AX_RENDER_API == AX_RENDER_API_VK
-    return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_Vulkan);
-#else
-#error "imgui glfw backend not support current render API"
+    auto driverType = ax::rhi::DriverRuntime::currentDriverType();
+    switch (driverType)
+    {
+    case ax::rhi::DriverType::OpenGL:
+        return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_OpenGL);
+    case ax::rhi::DriverType::Metal:
+        return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_Metal);
+    case ax::rhi::DriverType::D3D12:
+    case ax::rhi::DriverType::D3D11:
+        return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_D3D);
+    case ax::rhi::DriverType::Vulkan:
+        return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_Vulkan);
+    }
+
     return false;
-#endif
 }
 
 #endif // #ifndef IMGUI_DISABLE

@@ -11,7 +11,7 @@
 #include "axmol/renderer/Shaders.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/CallbackCommand.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverRuntime.h"
 #include "axmol/rhi/Buffer.h"
 
 using namespace ax;
@@ -46,9 +46,7 @@ struct SavedRenderStateData
 class BufferPoolAllocator
 {
 public:
-    BufferPoolAllocator(size_t initialCapacity, BufferType type, BufferUsage usage) : _type(type), _usage(usage)
-    {
-    }
+    BufferPoolAllocator(size_t initialCapacity, BufferType type, BufferUsage usage) : _type(type), _usage(usage) {}
 
     ~BufferPoolAllocator()
     {
@@ -79,7 +77,7 @@ public:
             }
         }
 
-        auto buf      = createBuffer(size);
+        auto buf = createBuffer(size);
         buf->resize(size);
         _useList.push_back(buf);
         return buf;
@@ -285,9 +283,10 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_Init()
     bd->VertexBufferAllocator = new BufferPoolAllocator(2 * 1024 * 1024, BufferType::VERTEX, BufferUsage::DYNAMIC);
     bd->IndexBufferAllocator  = new BufferPoolAllocator(1 * 1024 * 1024, BufferType::INDEX, BufferUsage::DYNAMIC);
 
-#if AX_RENDER_API == AX_RENDER_API_GL && (!defined(AX_GLES_PROFILE) || AX_GLES_PROFILE >= 300)
-    io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;  // We can honor the ImDrawCmd::VtxOffset field,
-                                                                // allowing for large meshes.
+#if (!defined(AX_GLES_PROFILE) || AX_GLES_PROFILE >= 300)
+    if (rhi::DriverRuntime::isOpenGL())
+        io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;  // We can honor the ImDrawCmd::VtxOffset field,
+                                                                    // allowing for large meshes.
 #endif
     io.BackendFlags |=
         ImGuiBackendFlags_RendererHasTextures;  // We can honor ImGuiPlatformIO::Textures[] requests during render.
@@ -295,8 +294,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_Init()
         ImGuiBackendFlags_RendererHasViewports;  // We can create multi-viewports on the Renderer side (optional)
 
     ImGuiPlatformIO& platform_io         = ImGui::GetPlatformIO();
-    platform_io.Renderer_TextureMaxWidth = platform_io.Renderer_TextureMaxHeight =
-        axdrv->getMaxTextureSize();
+    platform_io.Renderer_TextureMaxWidth = platform_io.Renderer_TextureMaxHeight = axdrv->getMaxTextureSize();
 
     io.IniFilename = nullptr;
 
@@ -377,7 +375,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
         IM_ASSERT(isize > 0);
 
         auto vertexBuffer = bd->VertexBufferAllocator->alloc(vsize);
-        auto indexBuffer = bd->IndexBufferAllocator->alloc(isize);
+        auto indexBuffer  = bd->IndexBufferAllocator->alloc(isize);
         vertexBuffer->updateData(cmd_list->VtxBuffer.Data, vsize);
         vertexBuffer->resize(vsize);
         indexBuffer->updateData(cmd_list->IdxBuffer.Data, isize);
@@ -411,15 +409,12 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
                 {
                     // Apply scissor/clipping rectangle
                     ImGui_ImplAxmol_PostCommand([=]() {
-#if AX_RENDER_API == AX_RENDER_API_D3D12
-                        renderer->setScissorRect(clip_rect.x, clip_rect.y, clip_rect.z - clip_rect.x,
-                                                 clip_rect.w - clip_rect.y);
-
-
-#else
-                        renderer->setScissorRect(clip_rect.x, fb_height - clip_rect.w, clip_rect.z - clip_rect.x,
-                                                 clip_rect.w - clip_rect.y);
-#endif
+                        if (rhi::DriverRuntime::isD3D12())
+                            renderer->setScissorRect(clip_rect.x, clip_rect.y, clip_rect.z - clip_rect.x,
+                                                     clip_rect.w - clip_rect.y);
+                        else
+                            renderer->setScissorRect(clip_rect.x, fb_height - clip_rect.w, clip_rect.z - clip_rect.x,
+                                                     clip_rect.w - clip_rect.y);
                     });
 
                     auto bd = ImGui_ImplAxmol_GetBackendData();
@@ -475,17 +470,22 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderPlatform()
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
 
-#if AX_RENDER_API == AX_RENDER_API_GL && !defined(__ANDROID__)
+#if !defined(__ANDROID__)
         // restore context
-        GLFWwindow* prev_current_context = glfwGetCurrentContext();
-        ImGui_ImplAxmol_PostCommand([=]() { ImGui_ImplAxmol_MakeCurrent(prev_current_context, nullptr); });
+        if (rhi::DriverRuntime::isOpenGL())
+        {
+            GLFWwindow* prev_current_context = glfwGetCurrentContext();
+            ImGui_ImplAxmol_PostCommand([=]() { ImGui_ImplAxmol_MakeCurrent(prev_current_context, nullptr); });
+        }
 #endif
     }
 }
 
 IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window, ImGuiViewport* viewport)
 {
-#if AX_RENDER_API == AX_RENDER_API_GL && defined(GLFW_VERSION_MAJOR)
+#if defined(GLFW_VERSION_MAJOR)
+    if (!rhi::DriverRuntime::isOpenGL())
+        return;
     glfwMakeContextCurrent(window);
     auto state = static_cast<gl::OpenGLState*>(glfwGetWindowUserPointer(window));
     if (!state)
@@ -512,7 +512,9 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window, ImGuiViewpor
 
 IMGUI_IMPL_API void ImGui_ImplAxmol_OnDestroyWindow(GLFWwindow* window, ImGuiViewport* viewport)
 {
-#if AX_RENDER_API == AX_RENDER_API_GL && defined(GLFW_VERSION_MAJOR)
+#if defined(GLFW_VERSION_MAJOR)
+    if (!rhi::DriverRuntime::isOpenGL())
+        return;
     if (viewport->RendererUserData)
     {
         auto prev_context = glfwGetCurrentContext();

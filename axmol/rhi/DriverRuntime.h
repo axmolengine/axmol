@@ -39,9 +39,17 @@ public:
     static DriverBase* currentDriver() { return _currentDriver.get(); }
     static DriverType currentDriverType() { return _currentDriverType; }
 
+    static bool isOpenGL() { return _currentDriverType == DriverType::OpenGL; }
+    static bool isMetal() { return _currentDriverType == DriverType::Metal; }
+    static bool isD3D11() { return _currentDriverType == DriverType::D3D11; }
+    static bool isD3D12() { return _currentDriverType == DriverType::D3D12; }
+    static bool isVulkan() { return _currentDriverType == DriverType::Vulkan; }
+
 private:
     static std::unique_ptr<DriverBase> _currentDriver;
     static DriverType _currentDriverType;
 };
 
 }  // namespace ax::rhi
+
+#define axdrv ax::rhi::DriverRuntime::currentDriver()

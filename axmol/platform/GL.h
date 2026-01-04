@@ -34,11 +34,11 @@ THE SOFTWARE.
 #if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
 #    include "axmol/platform/android/GL-android.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
-#    if AX_RENDER_API == AX_RENDER_API_GL
+#    if AX_ENABLE_GL
 #        include "axmol/platform/win32/GL-win32.h"
 #    endif
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
-#    if AX_RENDER_API == AX_RENDER_API_GL
+#    if AX_ENABLE_GL
 #        include "axmol/platform/winrt/GL-winrt.h"
 #    endif
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
@@ -46,16 +46,16 @@ THE SOFTWARE.
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 #    include "axmol/platform/wasm/GL-wasm.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_IOS
-#    if AX_RENDER_API == AX_RENDER_API_GL
+#    if AX_ENABLE_GL
 #        include "axmol/platform/ios/GL-ios.h"
 #    endif
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-#    if AX_RENDER_API == AX_RENDER_API_GL
+#    if AX_ENABLE_GL
 #        include "axmol/platform/mac/GL-mac.h"
 #    endif
 #endif
 
-#if AX_RENDER_API == AX_RENDER_API_GL
+#if AX_ENABLE_GL
 #    if !defined(GL_BGRA)
 #        define GL_BGRA 0x80E1
 #    endif

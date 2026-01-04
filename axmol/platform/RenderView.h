@@ -49,6 +49,8 @@ class Scene;
 class Renderer;
 class Director;
 
+using SurfaceHandle = rhi::SurfaceHandle;
+
 /** There are some Resolution Policy for Adapt to the screen. */
 enum class ResolutionPolicy
 {
@@ -424,7 +426,7 @@ public:
      *   macOS: NSGLContext*
      *   iOS/tvOS: EARenderView*
      */
-    virtual void* getNativeDisplay() const { return nullptr; }
+    virtual SurfaceHandle getNativeDisplay() const { return nullptr; }
 
     /**
      * @brief Get the Window Platform object

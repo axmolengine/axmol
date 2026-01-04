@@ -179,11 +179,7 @@ DXGI_FORMAT getUAVCompatibleFormat(DXGI_FORMAT format)
 void fatalError(std::string_view op, HRESULT hr)
 {
     auto msg = fmt::format("{}: 0x{:08x}", op, static_cast<unsigned>(hr));
-#if AX_RENDER_API == AX_RENDER_API_D3D12
-    showAlert(msg, "axmol: D3D12: Fatal Error", AlertStyle::IconError | AlertStyle::RequireSync);
-#else
-    showAlert(msg, "axmol: D3D11: Fatal Error", AlertStyle::IconError | AlertStyle::RequireSync);
-#endif
+    showAlert(msg, "axmol: D3D: Fatal Error", AlertStyle::IconError | AlertStyle::RequireSync);
     utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
 }
 

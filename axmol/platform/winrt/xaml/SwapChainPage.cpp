@@ -22,6 +22,7 @@
 
 #include "axmol/platform/winrt/RenderViewImpl-winrt.h"
 #include "axmol/platform/Application.h"
+#include "axmol/rhi/DriverRuntime.h"
 
 #include "yasio/wtimer_hres.hpp"
 
@@ -63,8 +64,9 @@ SwapChainPage::SwapChainPage()
     , m_visible(false)
     , m_orientation(DisplayOrientations::Landscape)
 {
-#if AX_RENDER_API == AX_RENDER_API_GL
-    m_eglSurfaceProvider = new EGLSurfaceProvider();
+#if AX_ENABLE_GL
+    if (rhi::DriverRuntime::isOpenGL())
+        m_eglSurfaceProvider = new EGLSurfaceProvider();
 #endif
     InitializeComponent();
 
@@ -159,7 +161,9 @@ void SwapChainPage::OnPanelSizeChanged(Windows::Foundation::IInspectable const& 
 void SwapChainPage::CreateRenderSurface()
 {
     UpdatePanelSize();
-#if AX_RENDER_API == AX_RENDER_API_GL
+#if AX_ENABLE_GL
+    if (!rhi::DriverRuntime::isOpenGL())
+        return;
     if (m_eglSurfaceProvider && m_eglSurface == EGL_NO_SURFACE)
     {
         // The app can configure the SwapChainPanel which may boost performance.
@@ -191,7 +195,9 @@ void SwapChainPage::UpdatePanelSize()
 
 void SwapChainPage::DestroyRenderSurface()
 {
-#if AX_RENDER_API == AX_RENDER_API_GL
+#if AX_ENABLE_GL
+    if (!rhi::DriverRuntime::isOpenGL())
+        return;
     if (m_eglSurfaceProvider)
     {
         m_eglSurfaceProvider->DestroySurface(m_eglSurface);
@@ -205,11 +211,14 @@ void SwapChainPage::DestroyRenderSurface()
 
 void SwapChainPage::RecoverFromLostDevice()
 {
-#if AX_RENDER_API == AX_RENDER_API_GL
-    critical_section::scoped_lock lock(m_eglSurfaceCriticalSection);
-    DestroyRenderSurface();
-    m_eglSurfaceProvider->Reset();
-    CreateRenderSurface();
+#if AX_ENABLE_GL
+    if (rhi::DriverRuntime::isOpenGL())
+    {
+        critical_section::scoped_lock lock(m_eglSurfaceCriticalSection);
+        DestroyRenderSurface();
+        m_eglSurfaceProvider->Reset();
+        CreateRenderSurface();
+    }
 #endif
 
     std::unique_lock<std::mutex> locker(m_sleepMutex);
@@ -219,7 +228,8 @@ void SwapChainPage::RecoverFromLostDevice()
 
 void SwapChainPage::TerminateApp()
 {
-#if AX_RENDER_API == AX_RENDER_API_GL
+#if AX_ENABLE_GL
+    if (rhi::DriverRuntime::isOpenGL())
     {
         critical_section::scoped_lock lock(m_eglSurfaceCriticalSection);
 
@@ -261,8 +271,9 @@ void SwapChainPage::StartRenderLoop()
                                                          swapChainPanel());
         }
 
-#if AX_RENDER_API == AX_RENDER_API_GL
-        m_eglSurfaceProvider->MakeCurrent(m_eglSurface);
+#if AX_ENABLE_GL
+        if (rhi::DriverRuntime::isOpenGL())
+            m_eglSurfaceProvider->MakeCurrent(m_eglSurface);
 #endif
 
         // !!!Start the engine renderer on the render thread so that WICImageDecoder
@@ -328,44 +339,46 @@ void SwapChainPage::StartRenderLoop()
                 return false;
             }
 
-#if AX_RENDER_API == AX_RENDER_API_GL
-            EGLBoolean result = GL_FALSE;
-            {
-                critical_section::scoped_lock lock(m_eglSurfaceCriticalSection);
-                result = m_eglSurfaceProvider->SwapBuffers(m_eglSurface);
-            }
-
-            if (result != GL_TRUE)
-            {
-                // The call to eglSwapBuffers was not be successful (i.e. due to Device Lost)
-                // If the call fails, then we must reinitialize EGL and the GL resources.
-                m_renderer->Pause();
-                m_deviceLost = true;
-
-                // XAML objects like the SwapChainPanel must only be manipulated on the UI thread.
-                auto thiz = this;
-                swapChainPanel().Dispatcher().RunAsync(Windows::UI::Core::CoreDispatcherPriority::High,
-                                                       ([thiz]() { thiz->RecoverFromLostDevice(); }));
-
-                // wait until OpenGL is reset or thread is cancelled
-                while (m_deviceLost)
+#if AX_ENABLE_GL
+            if (rhi::DriverRuntime::isOpenGL()) {
+                EGLBoolean result = GL_FALSE;
                 {
-                    std::unique_lock<std::mutex> lock(m_sleepMutex);
-                    m_sleepCondition.wait(lock);
+                    critical_section::scoped_lock lock(m_eglSurfaceCriticalSection);
+                    result = m_eglSurfaceProvider->SwapBuffers(m_eglSurface);
+                }
 
-                    if (action.Status() != Windows::Foundation::AsyncStatus::Started)
-                    {
-                        return false;  // thread was cancelled. Exit thread
-                    }
+                if (result != GL_TRUE)
+                {
+                    // The call to eglSwapBuffers was not be successful (i.e. due to Device Lost)
+                    // If the call fails, then we must reinitialize EGL and the GL resources.
+                    m_renderer->Pause();
+                    m_deviceLost = true;
 
-                    if (!m_deviceLost)
+                    // XAML objects like the SwapChainPanel must only be manipulated on the UI thread.
+                    auto thiz = this;
+                    swapChainPanel().Dispatcher().RunAsync(Windows::UI::Core::CoreDispatcherPriority::High,
+                                                        ([thiz]() { thiz->RecoverFromLostDevice(); }));
+
+                    // wait until OpenGL is reset or thread is cancelled
+                    while (m_deviceLost)
                     {
-                        m_eglSurfaceProvider->MakeCurrent(m_eglSurface);
-                        m_renderer->DeviceLost();
-                    }
-                    else  // spurious wake up
-                    {
-                        continue;
+                        std::unique_lock<std::mutex> lock(m_sleepMutex);
+                        m_sleepCondition.wait(lock);
+
+                        if (action.Status() != Windows::Foundation::AsyncStatus::Started)
+                        {
+                            return false;  // thread was cancelled. Exit thread
+                        }
+
+                        if (!m_deviceLost)
+                        {
+                            m_eglSurfaceProvider->MakeCurrent(m_eglSurface);
+                            m_renderer->DeviceLost();
+                        }
+                        else  // spurious wake up
+                        {
+                            continue;
+                        }
                     }
                 }
             }

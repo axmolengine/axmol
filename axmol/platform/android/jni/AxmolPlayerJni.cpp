@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "axmol/platform/android/RenderViewImpl-android.h"
 #include "axmol/base/text_utils.h"
 #include "axmol/platform/android/jni/JniHelper.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverRuntime.h"
 #include "axmol/renderer/TextureCache.h"
 #include <android/log.h>
 #include <android/native_window_jni.h>
@@ -95,19 +95,22 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnSurfaceCreated(JNI
     }
     else
     {
-#if AX_RENDER_API == AX_RENDER_API_VK
-        static_cast<ax::RenderViewImpl*>(renderView)->recreateVkSurface(true);
-#elif AX_RENDER_API == AX_RENDER_API_GL
-        axdrv->resetState();
-        director->resetMatrixStack();
-        ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
-        director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
-        director->setRenderDefaults();
-#    if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-        ax::VolatileTextureMgr::reloadAllTextures();
-        axmolDispatchContextLost(isWarmStart);
-#    endif
+        if (rhi::DriverRuntime::isVulkan())
+        {
+            static_cast<ax::RenderViewImpl*>(renderView)->recreateVkSurface(true);
+        }
+        else
+        {
+            axdrv->resetState();
+            director->resetMatrixStack();
+            ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
+            director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
+            director->setRenderDefaults();
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+            ax::VolatileTextureMgr::reloadAllTextures();
+            axmolDispatchContextLost(isWarmStart);
 #endif
+        }
     }
 }
 

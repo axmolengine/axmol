@@ -42,7 +42,7 @@
 #include "axmol/base/Director.h"
 
 #include "axmol/rhi/Buffer.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverRuntime.h"
 
 using namespace std;
 

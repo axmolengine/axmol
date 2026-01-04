@@ -42,7 +42,7 @@ THE SOFTWARE.
 #include "axmol/platform/FileUtils.h"
 #include "axmol/base/Utils.h"
 #include "axmol/base/NinePatchImageParser.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverRuntime.h"
 
 using namespace std;
 

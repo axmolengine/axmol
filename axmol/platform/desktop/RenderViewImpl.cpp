@@ -49,15 +49,17 @@ The RenderViewImpl for win32,linux,macos,wasm
 
 #include "axmol/renderer/Renderer.h"
 
-#if AX_RENDER_API == AX_RENDER_API_MTL
+#if AX_ENABLE_MTL
 #    include <Metal/Metal.h>
 #    include "axmol/rhi/metal/DriverMTL.h"
 #    include "axmol/rhi/metal/UtilsMTL.h"
-#elif AX_RENDER_API == AX_RENDER_API_GL
+#endif
+#if AX_ENABLE_GL
 #    include "axmol/rhi/opengl/DriverGL.h"
 #    include "axmol/rhi/opengl/MacrosGL.h"
 #    include "axmol/rhi/opengl/OpenGLState.h"
-#elif AX_RENDER_API == AX_RENDER_API_VK
+#endif
+#if AX_ENABLE_VK
 #    include "axmol/rhi/vulkan/DriverVK.h"
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
@@ -453,25 +455,23 @@ void* RenderViewImpl::getNativeWindow() const
 #endif
 }
 
-void* RenderViewImpl::getNativeDisplay() const
+SurfaceHandle RenderViewImpl::getNativeDisplay() const
 {
-#if AX_RENDER_API == AX_RENDER_API_VK
-    return _vkSurface;
-#else
-#    if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+    auto driverType = rhi::DriverRuntime::currentDriverType();
+    if (driverType == rhi::DriverType::Vulkan)
+        return _vkSurface;
+
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     return glfwGetWin32Window(_mainWindow);
-#    elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-#        if AX_RENDER_API == AX_RENDER_API_MTL
-    return (void*)glfwGetCocoaView(_mainWindow);
-#        else
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
+    return driverType == rhi::DriverType::Metal ? (void*)glfwGetCocoaView(_mainWindow)
+                                                : (void*)glfwGetNSGLContext(_mainWindow);
     return (void*)glfwGetNSGLContext(_mainWindow);
-#        endif
-#    elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
     int platform = glfwGetPlatform();
     return platform == GLFW_PLATFORM_WAYLAND ? (void*)glfwGetWaylandDisplay() : (void*)glfwGetX11Display();
-#    else
+#else
     return nullptr;
-#    endif
 #endif
 }
 
@@ -559,20 +559,22 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 
     Vec2 requestWinSize = rect.size * windowZoomFactor;
 
-#if AX_RENDER_API == AX_RENDER_API_GL
-#    if AX_GLES_PROFILE
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-    glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, AX_GLES_PROFILE / AX_GLES_PROFILE_DEN);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-#    else
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);  // We want OpenGL 3.3
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // We don't want the old OpenGL
-#    endif
-#else  // Other Graphics driver, don't create gl context.
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+    const auto driverType = rhi::DriverRuntime::currentDriverType();
+    if (driverType == rhi::DriverType::OpenGL)
+    {
+#if AX_GLES_PROFILE
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+        glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, AX_GLES_PROFILE / AX_GLES_PROFILE_DEN);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+#else
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);  // We want OpenGL 3.3
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // We don't want the old OpenGL
 #endif
+    }
+    else  // Other Graphics driver, don't create gl context.
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
     auto& contextAttrs = Application::getContextAttrs();
 
@@ -593,12 +595,11 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     glfwWindowHintPointer(GLFW_WIN32_HWND_PARENT, contextAttrs.windowParent);
 #endif
 
-#if AX_RENDER_API != AX_RENDER_API_GL
     // Init GPU device by driver for non-opengl RHI
     // Initialize the D3D driver before creating the window to avoid a brief white flash
     // caused by driver initialization stutter (hundreds of milliseconds) after the window appears.
-    ax::rhi::DriverRuntime::init();
-#endif
+    if (driverType != rhi::DriverType::OpenGL)
+        ax::rhi::DriverRuntime::init();
 
     _renderScaleMode = contextAttrs.renderScaleMode;
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || \
@@ -629,16 +630,17 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 
     glfwSetWindowSizeLimits(_mainWindow, 1, 1, GLFW_DONT_CARE, GLFW_DONT_CARE);
 
-#if AX_RENDER_API == AX_RENDER_API_GL
-    glfwMakeContextCurrent(_mainWindow);
+    if (driverType != rhi::DriverType::OpenGL)
+    {
+        glfwMakeContextCurrent(_mainWindow);
 
-#    if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
-    loadGL();
-#    endif
-    // Init driver after load GL
-    ax::rhi::DriverRuntime::init();
-    glfwSetWindowUserPointer(_mainWindow, rhi::gl::__state);
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
+        loadGL();
 #endif
+        // Init driver after load GL
+        ax::rhi::DriverRuntime::init();
+        glfwSetWindowUserPointer(_mainWindow, rhi::gl::__state);
+    }
 
     /*
      *  Note that the created window and context may differ from what you requested,
@@ -655,20 +657,23 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
     updateRenderSurface(fbWidth, fbHeight, SurfaceUpdateFlag::RenderSizeChanged | SurfaceUpdateFlag::SilentUpdate);
 
-#if AX_RENDER_API == AX_RENDER_API_VK
-    auto _createSurface = [](VkInstance inst, void* window, VkSurfaceKHR* surface) {
-        return glfwCreateWindowSurface(inst, static_cast<GLFWwindow*>(window), nullptr, surface);
-    };
-    auto driver = static_cast<ax::rhi::vk::DriverImpl*>(axdrv);
-    const rhi::vk::SurfaceCreateInfo createInfo{
-        .window = _mainWindow, .width = fbWidth, .height = fbHeight, .createFunc = _createSurface};
-    bool ok = driver->recreateSurface(createInfo);
-    if (!ok)
+#if AX_ENABLE_VK
+    if (driverType == rhi::DriverType::Vulkan)
     {
-        AXLOGE("Failed to create Vulkan window surface.");
-        return false;
+        auto _createSurface = [](VkInstance inst, void* window, VkSurfaceKHR* surface) {
+            return glfwCreateWindowSurface(inst, static_cast<GLFWwindow*>(window), nullptr, surface);
+        };
+        auto driver = static_cast<ax::rhi::vk::DriverImpl*>(axdrv);
+        const rhi::vk::SurfaceCreateInfo createInfo{
+            .window = _mainWindow, .width = fbWidth, .height = fbHeight, .createFunc = _createSurface};
+        bool ok = driver->recreateSurface(createInfo);
+        if (!ok)
+        {
+            AXLOGE("Failed to create Vulkan window surface.");
+            return false;
+        }
+        _vkSurface = driver->getSurface();
     }
-    _vkSurface = driver->getSurface();
 #endif
 
     int w, h;
@@ -715,7 +720,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     glfwSetWindowFocusCallback(_mainWindow, GLFWEventHandler::onGLFWWindowFocusCallback);
     glfwSetWindowCloseCallback(_mainWindow, GLFWEventHandler::onGLFWWindowCloseCallback);
 
-#if AX_RENDER_API == AX_RENDER_API_GL
+#if AX_ENABLE_GL
 #    if !defined(__EMSCRIPTEN__)
     glfwSwapInterval(contextAttrs.vsync ? 1 : 0);
 #    endif
@@ -787,9 +792,7 @@ bool RenderViewImpl::isGfxContextReady()
 
 void RenderViewImpl::end()
 {
-#if AX_RENDER_API == AX_RENDER_API_VK
     _vkSurface = nullptr;
-#endif
 
     if (_mainWindow)
     {
@@ -802,8 +805,8 @@ void RenderViewImpl::end()
 
 void RenderViewImpl::swapBuffers()
 {
-#if AX_RENDER_API == AX_RENDER_API_GL
-    if (_mainWindow)
+#if AX_ENABLE_GL
+    if (_mainWindow && rhi::DriverRuntime::isOpenGL())
         glfwSwapBuffers(_mainWindow);
 #endif
 }
@@ -1455,7 +1458,7 @@ void RenderViewImpl::onGLFWWindowCloseCallback(GLFWwindow* window)
     }
 }
 
-#if AX_TARGET_PLATFORM != AX_PLATFORM_MAC && AX_RENDER_API == AX_RENDER_API_GL
+#if AX_TARGET_PLATFORM != AX_PLATFORM_MAC && AX_ENABLE_GL
 static bool loadFboExtensions()
 {
     // If the current opengl driver doesn't have framebuffers methods, check if an extension exists
@@ -1550,28 +1553,32 @@ static bool loadFboExtensions()
 // helper
 bool RenderViewImpl::loadGL()
 {
-#    if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
+#    if AX_ENABLE_GL
+
+#        if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
-#        if !AX_GLES_PROFILE
+#            if !AX_GLES_PROFILE
     if (!gladLoadGL(glfwGetProcAddress))
     {
         AXLOGE("glad: Failed to Load GL");
         return false;
     }
-#        else
+#            else
     if (!gladLoadGLES2(glfwGetProcAddress))
     {
         AXLOGE("glad: Failed to Load GLES2");
         return false;
     }
-#        endif
+#            endif
 
     loadFboExtensions();
-#    endif  // (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
-
+#        endif  // (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
     return true;
+#    else
+    return false;
+#    endif
 }
 
 #endif

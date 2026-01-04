@@ -7,7 +7,7 @@ macro(ax_depend)
 
     if(WINRT)
       list(APPEND PLATFORM_SPECIFIC_LIBS windowscodecs Advapi32 runtimeobject Dwrite)
-    elseif(AX_RENDER_API STREQUAL "gl" AND NOT AX_GLES_PROFILE) # ONLY Win32 Apps support DesktopGL if not use ANGLE
+    elseif(AX_ENABLE_GL AND NOT AX_GLES_PROFILE) # ONLY Win32 Apps support DesktopGL if not use ANGLE
       list(APPEND PLATFORM_SPECIFIC_LIBS opengl32)
     endif()
   elseif(LINUX)
@@ -27,12 +27,10 @@ macro(ax_depend)
     find_package(Threads REQUIRED)
     set(THREADS_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
   elseif(ANDROID)
-    if(AX_RENDER_API STREQUAL "gl")
+    list(APPEND PLATFORM_SPECIFIC_LIBS log android OpenSLES)
+    if(AX_ENABLE_GL)
       # GLES backend
-      list(APPEND PLATFORM_SPECIFIC_LIBS GLESv2 EGL log android OpenSLES)
-    elseif(AX_RENDER_API STREQUAL "vk")
-      # Vulkan backend
-      list(APPEND PLATFORM_SPECIFIC_LIBS log android OpenSLES)
+      list(APPEND PLATFORM_SPECIFIC_LIBS GLESv2 EGL)
     endif()
   elseif(APPLE)
     include_directories(/System/Library/Frameworks)
@@ -75,7 +73,7 @@ macro(ax_depend)
         ${COREAUDIO_LIBRARY}
         ${SYSTEMCONFIGURATION_LIBRARY}
       )
-      if(AX_RENDER_API STREQUAL "gl")
+      if(AX_ENABLE_GL)
         find_library(OPENGL_LIBRARY OpenGL)
         list(APPEND PLATFORM_SPECIFIC_LIBS ${OPENGL_LIBRARY})
       endif()
@@ -102,7 +100,7 @@ macro(ax_depend)
         ${_AX_APPLE_LIBS}
       )
 
-      if(AX_RENDER_API STREQUAL "gl")
+      if(AX_ENABLE_GL)
         find_library(OPENGLES_LIBRARY OpenGLES)
         list(APPEND PLATFORM_SPECIFIC_LIBS ${OPENGLES_LIBRARY})
       endif()

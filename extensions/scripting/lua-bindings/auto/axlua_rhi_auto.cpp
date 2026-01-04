@@ -3,7 +3,7 @@
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/rhi/Texture.h"
 #include "axmol/rhi/VertexLayout.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverRuntime.h"
 #include "axmol/rhi/RenderTarget.h"
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"

@@ -6,7 +6,7 @@
 #include <functional>
 #include "axmol/platform/PlatformConfig.h"
 
-#if AX_RENDER_API == AX_RENDER_API_GL
+#if AX_ENABLE_GL
 #    include "axmol/rhi/opengl/OpenGLState.h"
 #endif
 

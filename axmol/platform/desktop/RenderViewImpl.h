@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "axmol/platform/Common.h"
 #include "axmol/platform/RenderView.h"
 #include "axmol/base/EventMouse.h"
-#if AX_RENDER_API == AX_RENDER_API_VK
+#if AX_ENABLE_VK
 #    include "glad/vulkan.h"
 #endif
 #include "GLFW/glfw3.h"
@@ -130,7 +130,7 @@ public:
     float getRenderScale() const override { return _renderScale; }
 
     void* getNativeWindow() const override;
-    void* getNativeDisplay() const override;
+    SurfaceHandle getNativeDisplay() const override;
     WindowPlatform getWindowPlatform() const override;
 
     void setViewName(std::string_view viewName) override;
@@ -193,9 +193,8 @@ protected:
 
     GLFWwindow* _mainWindow;
     GLFWmonitor* _monitor;
-#if AX_RENDER_API == AX_RENDER_API_VK
-    VkSurfaceKHR _vkSurface{nullptr};
-#endif
+
+    void* _vkSurface{nullptr};
 
     std::string _glfwError;
 
