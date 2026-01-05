@@ -40,14 +40,6 @@
 #include "axmol/tlx/format.hpp"
 #include "xxhash/xxhash.h"
 
-#if !defined(GL_COMPRESSED_RGBA8_ETC2_EAC)
-#    define GL_COMPRESSED_RGBA8_ETC2_EAC 0x9278
-#endif
-
-#if !defined(GL_COMPRESSED_RGBA_ASTC_4x4)
-#    define GL_COMPRESSED_RGBA_ASTC_4x4 0x93B0
-#endif
-
 #if defined(GLAD_GL) || defined(GLAD_GLES2)
 #    define _AX_USE_GLAD 1
 #else
