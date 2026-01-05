@@ -568,9 +568,11 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 #endif
 
     const auto driverType        = rhi::DriverRuntime::currentDriverType();
-    const auto useFallbackDriver = driverType == rhi::DriverType::OpenGL || driverType == rhi::DriverType::Unkown;
-    if (useFallbackDriver)
+    const auto requiresGL = driverType == rhi::DriverType::OpenGL || driverType == rhi::DriverType::Unkown;
+    if (requiresGL)
     {
+        if constexpr (!AX_ENABLE_GL)
+            throw std::runtime_error("OpenGL driver requires AX_ENABLE_GL to be enabled");
 #if AX_GLES_PROFILE
         glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
         glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
@@ -635,7 +637,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     glfwSetWindowSizeLimits(_mainWindow, 1, 1, GLFW_DONT_CARE, GLFW_DONT_CARE);
 
 #if AX_ENABLE_GL
-    if (useFallbackDriver)
+    if (requiresGL)
     {
         glfwMakeContextCurrent(_mainWindow);
         glfwSetWindowUserPointer(_mainWindow, rhi::gl::__state);
