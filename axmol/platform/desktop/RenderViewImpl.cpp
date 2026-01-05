@@ -634,6 +634,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 
     glfwSetWindowSizeLimits(_mainWindow, 1, 1, GLFW_DONT_CARE, GLFW_DONT_CARE);
 
+#if AX_ENABLE_GL
     if (useFallbackDriver)
     {
         glfwMakeContextCurrent(_mainWindow);
@@ -642,6 +643,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
         if (driverType == rhi::DriverType::Unkown)
             ax::rhi::DriverRuntime::init(rhi::DriverType::OpenGL);
     }
+#endif
 
     if (requireShowByUser)
         glfwShowWindow(_mainWindow);

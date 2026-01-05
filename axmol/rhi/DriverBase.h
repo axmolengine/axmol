@@ -47,7 +47,7 @@ class Program;
 class VertexLayout;
 
 class SamplerCache;
-
+class DriverRuntime;
 struct VertexLayoutDesc;
 
 enum class FeatureType : uint32_t
@@ -85,14 +85,15 @@ struct DriverCaps
  */
 class AX_DLL DriverBase
 {
-public:
     friend class ShaderCache;
     friend class SamplerCache;
+    friend class DriverRuntime;
 
-    virtual bool init() = 0;
-
+protected:
+    virtual bool init()       = 0;
     virtual DriverType type() = 0;
 
+public:
     virtual ~DriverBase() = default;
 
     /**
