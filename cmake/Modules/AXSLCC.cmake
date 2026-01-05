@@ -184,7 +184,7 @@ function(ax_add_shader_target target_name)
       set(SC_DEFINES "${SC_DEFINES},${SOURCE_SC_DEFINES}")
     endif()
     if(SC_DEFINES)
-      list(APPEND SC_FLAGS "\"--defines=${SC_DEFINES}\"")
+      list(APPEND SC_FLAGS "--defines=${SC_DEFINES}")
     endif()
 
     # includes
@@ -234,13 +234,14 @@ function(ax_add_shader_target target_name)
       add_custom_command(
         MAIN_DEPENDENCY ${SC_FILE} OUTPUT ${SC_OUTPUT} COMMAND ${AXSLCC_EXE} ${SC_FLAGS} "--cross-args=${CROSS_ARGS}"
         COMMENT "${SC_COMMENT}"
+        VERBATIM
       )
       list(APPEND compiled_shaders ${SC_OUTPUT})
     else() # dual outputs
       set(SC_DEFINES1 "${SC_DEFINES},${SOURCE_SC_OUTPUT1}")
       set(SC_FLAGS1 ${SC_FLAGS})
-      list(REMOVE_ITEM SC_FLAGS1 "\"--defines=${SC_DEFINES}\"")
-      list(APPEND SC_FLAGS1 "\"--defines=${SC_DEFINES1}\"")
+      list(REMOVE_ITEM SC_FLAGS1 "--defines=${SC_DEFINES}")
+      list(APPEND SC_FLAGS1 "--defines=${SC_DEFINES1}")
 
       list(APPEND SC_FLAGS "--output=${SC_OUTPUT}")
       set(SC_OUTPUT1 "${SC_OUTPUT}_1")
@@ -249,9 +250,10 @@ function(ax_add_shader_target target_name)
       add_custom_command(
         MAIN_DEPENDENCY ${SC_FILE}
         OUTPUT ${SC_OUTPUT} ${SC_OUTPUT1}
-        COMMAND ${AXSLCC_EXE} ${SC_FLAGS}  "--cross-args=${CROSS_ARGS}"
-        COMMAND ${AXSLCC_EXE} ${SC_FLAGS1}  "--cross-args=${CROSS_ARGS}"
+        COMMAND ${AXSLCC_EXE} ${SC_FLAGS} "--cross-args=${CROSS_ARGS}"
+        COMMAND ${AXSLCC_EXE} ${SC_FLAGS1} "--cross-args=${CROSS_ARGS}"
         COMMENT "${SC_COMMENT}"
+        VERBATIM
       )
       list(APPEND compiled_shaders ${SC_OUTPUT} ${SC_OUTPUT1})
     endif()
