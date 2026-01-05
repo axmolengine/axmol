@@ -234,7 +234,7 @@ THE SOFTWARE.
 // Windows: use ANGLE GLES
 #ifndef AX_GLES_PROFILE
 #    if AX_ENABLE_GL && (defined(__ANDROID__) || defined(_WIN32) || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
-                                  AX_TARGET_PLATFORM == AX_PLATFORM_TVOS)
+                         AX_TARGET_PLATFORM == AX_PLATFORM_TVOS)
 #        define AX_GLES_PROFILE 300
 #    else
 #        define AX_GLES_PROFILE 0

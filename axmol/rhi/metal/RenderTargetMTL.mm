@@ -95,7 +95,7 @@ void RenderTargetImpl::applyRenderPassAttachments(const RenderPassDesc& params, 
     if (_dirtyFlags != TargetBufferFlags::NONE)
     {
         _nativeColorFormats.clear();
-        
+
         for (size_t i = 0; i < colorCount; i++)
         {
             auto pf = getColorAttachmentPixelFormat(static_cast<int>(i));

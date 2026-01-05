@@ -112,7 +112,6 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
     if (rhi::DriverRuntime::isUnknown())
         rhi::DriverRuntime::init(rhi::DriverType::OpenGL);
 
-
     if (rhi::DriverRuntime::isVulkan())
     {
         recreateVkSurface(false);

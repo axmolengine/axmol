@@ -235,5 +235,4 @@ AX_DLL DriverBase* currentDriver();
 /// @}
 }  // namespace ax::rhi
 
-
 #define axdrv ax::rhi::currentDriver()

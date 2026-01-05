@@ -413,7 +413,7 @@ bool DriverImpl::init()
     const FeatureSet maxKnownFeatureSet    = FeatureSet::FeatureSet_macOS_GPUFamily2_v1;
     _isDepth24Stencil8PixelFormatSupported = [_mtlDevice isDepth24Stencil8PixelFormatSupported];
 #endif
-    
+
     for (auto featureSet = maxKnownFeatureSet; featureSet >= minRequiredFeatureSet; --featureSet)
     {
         if ([_mtlDevice supportsFeatureSet:MTLFeatureSet(featureSet)])

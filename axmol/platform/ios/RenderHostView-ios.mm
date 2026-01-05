@@ -183,7 +183,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
        numberOfSamples:(unsigned int)nSamples
 {
     auto driverType = ax::rhi::DriverRuntime::init();
-    
+
     if ((self = [super initWithFrame:frame]))
     {
         self.textInputView = [[TextInputView alloc] initWithFrame:frame];
@@ -213,7 +213,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
                 [self release];
                 return nil;
             }
-            
+
             if (driverType == ax::rhi::DriverType::Unknown)
                 ax::rhi::DriverRuntime::init(ax::rhi::DriverType::OpenGL);
         }
