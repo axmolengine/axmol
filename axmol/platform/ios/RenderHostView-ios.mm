@@ -182,6 +182,8 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
          multiSampling:(BOOL)sampling
        numberOfSamples:(unsigned int)nSamples
 {
+    ax::rhi::DriverRuntime::init();
+    
     if ((self = [super initWithFrame:frame]))
     {
         self.textInputView = [[TextInputView alloc] initWithFrame:frame];
@@ -193,7 +195,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
             self.contentScaleFactor = [[UIScreen mainScreen] scale];
         }
 
-        if (rhi::DriverRuntime::isMetal())
+        if (ax::rhi::DriverRuntime::isMetal())
         {
             AX_UNUSED_PARAM(format);
             AX_UNUSED_PARAM(depth);
@@ -222,7 +224,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
     if ((self = [super initWithCoder:aDecoder]))
     {
         self.textInputView = [[TextInputView alloc] initWithCoder:aDecoder];
-        if (rhi::DriverRuntime::isMetal())
+        if (ax::rhi::DriverRuntime::isMetal())
         {
             backingSize_ = [self bounds].size;
         }
@@ -307,7 +309,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 
     savedBounds_              = [self bounds];
     self.textInputView.bounds = savedBounds_;
-    if (rhi::DriverRuntime::isMetal())
+    if (ax::rhi::DriverRuntime::isMetal())
     {
         backingSize_ = savedBounds_.size;
         backingSize_.width *= self.contentScaleFactor;
@@ -315,8 +317,10 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
     }
     else
     {
+#if AX_ENABLE_GL
         [renderer_ resizeFromLayer:(CAEAGLLayer*)self.layer];
         backingSize_ = [renderer_ backingSize];
+#endif
     }
     auto renderView = director->getRenderView();
     if (renderView)
