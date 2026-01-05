@@ -89,7 +89,7 @@ static uint32_t FindMaxMsaaSamples(ID3D11Device* device, DXGI_FORMAT format)
 
 DriverImpl::DriverImpl() {}
 
-void DriverImpl::init()
+bool DriverImpl::init()
 {
     initializeAdapter();
     initializeDevice();
@@ -127,6 +127,8 @@ void DriverImpl::init()
     _caps.maxTextureSize = EstimateMaxTexSize(_device->GetFeatureLevel());
 
     _caps.maxSamplesAllowed = static_cast<int32_t>(FindMaxMsaaSamples(_device, DXGI_FORMAT_R8G8B8A8_UNORM));
+
+    return true;
 }
 
 DriverImpl::~DriverImpl()

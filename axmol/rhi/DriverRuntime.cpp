@@ -86,7 +86,7 @@ void DriverRuntime::init(DriverType driverType)
                 _currentShaderLang = axslc::SHADER_LANG_SPIRV;
                 break;
             case DriverType::Metal:
-                _currentShaderLang == axslc::SHADER_LANG_MSL;
+                _currentShaderLang = axslc::SHADER_LANG_MSL;
                 break;
             }
 
