@@ -77,7 +77,7 @@ SwapChainPage::SwapChainPage()
     // If any of the high-performance APIs (D3D11/D3D12/Vulkan/Metal) are enabled,
     // the runtime will attempt initialization in the default priority order.
     // If all attempts fail, OpenGL will then be explicitly selected as the fallback.
-    rhi::DriverRuntime::init();
+    auto driverType = rhi::DriverRuntime::init();
     m_requiresGL = driverType == rhi::DriverType::Unknown || driverType == rhi::DriverType::OpenGL;
 #else
     m_requiresGL = true;

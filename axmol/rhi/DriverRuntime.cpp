@@ -29,7 +29,7 @@ std::unique_ptr<DriverBase> DriverRuntime::_currentDriver;
 DriverType DriverRuntime::_currentDriverType = DriverType::Unknown;
 uint32_t DriverRuntime::_currentShaderLang   = static_cast<uint32_t>(-1);
 
-void DriverRuntime::init(DriverType driverType)
+DriverType DriverRuntime::init(DriverType driverType)
 {
     const auto hasPreferredDriverType = driverType != DriverType::Unknown;
 
@@ -96,6 +96,8 @@ void DriverRuntime::init(DriverType driverType)
 
     if (!_currentDriver && hasPreferredDriverType)
         throw std::runtime_error("DriverRuntime::init failed: no suitable driver initialized");
+
+    return _currentDriverType;
 }
 
 void DriverRuntime::uninit()

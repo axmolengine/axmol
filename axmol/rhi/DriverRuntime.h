@@ -33,7 +33,7 @@ namespace ax::rhi
 class AX_DLL DriverRuntime
 {
 public:
-    static void init(DriverType driverType = DriverType::Unknown);
+    static DriverType init(DriverType driverType = DriverType::Unknown);
     static void uninit();
 
     static DriverBase* currentDriver() { return _currentDriver.get(); }

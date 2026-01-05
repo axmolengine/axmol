@@ -225,6 +225,12 @@ bool DriverImpl::init()
 
     VK_VERIFY_EXPR(gladVulkanVer != 0, "Vulkan is not supported on this device!");
 
+    if (GLAD_VERSION_MAJOR(gladVulkanVer) < 1 || GLAD_VERSION_MINOR(gladVulkanVer) < 1)
+    {
+        AXLOGW("Axmol requires vulkan-1.1");
+        return false;
+    }
+
     if (!initializeFactory())
         return false;
 
