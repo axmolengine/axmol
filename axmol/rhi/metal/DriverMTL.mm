@@ -33,6 +33,7 @@
 #include "axmol/rhi/metal/ProgramMTL.h"
 #include "axmol/rhi/metal/RenderTargetMTL.h"
 #include "axmol/rhi/metal/UtilsMTL.h"
+#include "axmol/rhi/DriverFactory.h"
 #include "axmol/base/Macros.h"
 
 namespace ax::rhi

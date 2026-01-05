@@ -30,6 +30,7 @@ THE SOFTWARE.
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/base/AutoreleasePool.h"
 #include "axmol/base/Types.h"
+#include "axmol/platform/Common.h"
 
 namespace ax
 {

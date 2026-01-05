@@ -103,4 +103,9 @@ void DriverRuntime::uninit()
     _currentDriver.reset();
 }
 
+AX_DLL DriverBase* currentDriver()
+{
+    return DriverRuntime::currentDriver();
+}
+
 }  // namespace ax::rhi

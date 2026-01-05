@@ -46,6 +46,9 @@ void RenderTargetImpl::applyRenderPassAttachments(const RenderPassDesc& params, 
     auto clearFlags = params.flags.clear;
 
     const auto colorCount = _color.size();
+    
+    if (colorCount > 1)
+        printf("\n");
 
     for (size_t i = 0; i < colorCount; i++)
     {
@@ -95,6 +98,8 @@ void RenderTargetImpl::applyRenderPassAttachments(const RenderPassDesc& params, 
 
     if (_dirtyFlags != TargetBufferFlags::NONE)
     {
+        _nativeColorFormats.clear();
+        
         for (size_t i = 0; i < colorCount; i++)
         {
             auto pf = getColorAttachmentPixelFormat(static_cast<int>(i));

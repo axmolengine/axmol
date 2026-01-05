@@ -30,7 +30,7 @@
 
 namespace ax::rhi
 {
-class DriverRuntime
+class AX_DLL DriverRuntime
 {
 public:
     static void init(DriverType driverType = DriverType::Unknown);
@@ -56,5 +56,3 @@ private:
 };
 
 }  // namespace ax::rhi
-
-#define axdrv ax::rhi::DriverRuntime::currentDriver()
