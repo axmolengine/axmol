@@ -33,8 +33,6 @@ THE SOFTWARE.
 #    import <OpenGL/gl3.h>
 #    import <OpenGL/gl3ext.h>
 
-#    define AX_GL_DEPTH24_STENCIL8 -1
-
 #    define glClearDepthf          glClearDepth
 #    define glDepthRangef          glDepthRange
 #    define glReleaseShaderCompiler(xxx)

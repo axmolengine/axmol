@@ -171,7 +171,6 @@ function(ax_add_shader_target target_name)
 
     # Join all cross args
     string(JOIN "&" CROSS_ARGS ${CROSS_ARGS_LIST})
-    list(APPEND SC_FLAGS "\"--cross-args=${CROSS_ARGS}\"")
 
     # no-suffix since 1.18.1 released by axmolengine
     list(APPEND SC_FLAGS "--no-suffix")
@@ -233,7 +232,7 @@ function(ax_add_shader_target target_name)
       list(APPEND SC_FLAGS "--output=${SC_OUTPUT}")
       set_source_files_properties(${SC_FILE} DIRECTORY ${CMAKE_BINARY_DIR} PROPERTIES AXSLCC_OUTPUT ${SC_OUTPUT})
       add_custom_command(
-        MAIN_DEPENDENCY ${SC_FILE} OUTPUT ${SC_OUTPUT} COMMAND ${AXSLCC_EXE} ${SC_FLAGS}
+        MAIN_DEPENDENCY ${SC_FILE} OUTPUT ${SC_OUTPUT} COMMAND ${AXSLCC_EXE} ${SC_FLAGS} "--cross-args=${CROSS_ARGS}"
         COMMENT "${SC_COMMENT}"
       )
       list(APPEND compiled_shaders ${SC_OUTPUT})
@@ -250,8 +249,8 @@ function(ax_add_shader_target target_name)
       add_custom_command(
         MAIN_DEPENDENCY ${SC_FILE}
         OUTPUT ${SC_OUTPUT} ${SC_OUTPUT1}
-        COMMAND ${AXSLCC_EXE} ${SC_FLAGS}
-        COMMAND ${AXSLCC_EXE} ${SC_FLAGS1}
+        COMMAND ${AXSLCC_EXE} ${SC_FLAGS}  "--cross-args=${CROSS_ARGS}"
+        COMMAND ${AXSLCC_EXE} ${SC_FLAGS1}  "--cross-args=${CROSS_ARGS}"
         COMMENT "${SC_COMMENT}"
       )
       list(APPEND compiled_shaders ${SC_OUTPUT} ${SC_OUTPUT1})
