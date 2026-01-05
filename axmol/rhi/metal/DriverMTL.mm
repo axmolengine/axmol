@@ -394,7 +394,11 @@ bool supportS3TC(FeatureSet featureSet)
 
 bool DriverImpl::_isDepth24Stencil8PixelFormatSupported = false;
 
-DriverImpl::DriverImpl()
+DriverImpl::DriverImpl() {}
+
+DriverImpl::~DriverImpl() {}
+
+bool DriverImpl::init()
 {
     _mtlDevice   = MTLCreateSystemDefaultDevice();
     _mtlCmdQueue = [_mtlDevice newCommandQueue];
@@ -409,7 +413,7 @@ DriverImpl::DriverImpl()
     const FeatureSet maxKnownFeatureSet    = FeatureSet::FeatureSet_macOS_GPUFamily2_v1;
     _isDepth24Stencil8PixelFormatSupported = [_mtlDevice isDepth24Stencil8PixelFormatSupported];
 #endif
-
+    
     for (auto featureSet = maxKnownFeatureSet; featureSet >= minRequiredFeatureSet; --featureSet)
     {
         if ([_mtlDevice supportsFeatureSet:MTLFeatureSet(featureSet)])
@@ -425,9 +429,9 @@ DriverImpl::DriverImpl()
     _caps.maxSamplesAllowed = getMaxSamplerEntries(_featureSet);
     _caps.maxTextureUnits   = getMaxTextureEntries(_featureSet);
     _caps.maxTextureSize    = getMaxTextureWidthHeight(_featureSet);
-}
 
-DriverImpl::~DriverImpl() {}
+    return true;
+}
 
 RenderContext* DriverImpl::createRenderContext(SurfaceHandle surface)
 {

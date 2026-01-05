@@ -96,7 +96,7 @@ public:
     DriverImpl();
     ~DriverImpl();
 
-    bool init() override { return true; }
+    bool init() override;
     DriverType type() override { return DriverType::Metal; }
 
     /// @name Setters & Getters

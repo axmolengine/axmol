@@ -512,8 +512,9 @@ struct ContextAttrs
     bool shaderControlledSampler{false};
 
     int driverPriorities[(int)rhi::DriverType::Count]{
-        rhi::DefaultDriverPriority::D3D12, rhi::DefaultDriverPriority::D3D11, rhi::DefaultDriverPriority::Vulkan,
-        rhi::DefaultDriverPriority::Metal, rhi::DefaultDriverPriority::OpenGL};
+        rhi::DefaultDriverPriority::OpenGL, rhi::DefaultDriverPriority::D3D11,
+        rhi::DefaultDriverPriority::D3D12, rhi::DefaultDriverPriority::Vulkan,
+        rhi::DefaultDriverPriority::Metal};
 };
 
 /** @struct Acceleration

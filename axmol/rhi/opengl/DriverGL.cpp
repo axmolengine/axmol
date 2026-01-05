@@ -110,27 +110,23 @@ bool DriverImpl::init()
 
     /// driver info
     auto pszVersion = (char const*)glGetString(GL_VERSION);
-    if (pszVersion)
-    {
-        auto hint   = strstr(pszVersion, "OpenGL ES");
-        _verInfo.es = !!hint;
-        if (_verInfo.es)
-        {
-            _verInfo.major = hint[10] - '0';
-            _verInfo.minor = hint[12] - '0';
-        }
-        else
-        {
-            _verInfo.major = (pszVersion[0] - '0');
-            _verInfo.minor = (pszVersion[2] - '0');
-        }
+    if (!pszVersion)
+        return false;
 
-        _version = pszVersion;
+    auto hint   = strstr(pszVersion, "OpenGL ES");
+    _verInfo.es = !!hint;
+    if (_verInfo.es)
+    {
+        _verInfo.major = hint[10] - '0';
+        _verInfo.minor = hint[12] - '0';
     }
     else
     {
-        _version = "null";
+        _verInfo.major = (pszVersion[0] - '0');
+        _verInfo.minor = (pszVersion[2] - '0');
     }
+
+    _version = pszVersion;
 
     // check OpenGL version at first
     constexpr int REQUIRED_GLES_MAJOR = (AX_GLES_PROFILE / AX_GLES_PROFILE_DEN);

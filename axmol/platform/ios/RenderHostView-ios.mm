@@ -182,7 +182,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
          multiSampling:(BOOL)sampling
        numberOfSamples:(unsigned int)nSamples
 {
-    ax::rhi::DriverRuntime::init();
+    auto driverType = ax::rhi::DriverRuntime::init();
     
     if ((self = [super initWithFrame:frame]))
     {
@@ -213,6 +213,9 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
                 [self release];
                 return nil;
             }
+            
+            if (driverType == ax::rhi::DriverType::Unknown)
+                ax::rhi::DriverRuntime::init(ax::rhi::DriverType::OpenGL);
         }
     }
 

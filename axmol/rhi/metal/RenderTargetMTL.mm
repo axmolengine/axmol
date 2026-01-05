@@ -46,10 +46,6 @@ void RenderTargetImpl::applyRenderPassAttachments(const RenderPassDesc& params, 
     auto clearFlags = params.flags.clear;
 
     const auto colorCount = _color.size();
-    
-    if (colorCount > 1)
-        printf("\n");
-
     for (size_t i = 0; i < colorCount; i++)
     {
         auto attachment = getColorAttachment(static_cast<int>(i));
