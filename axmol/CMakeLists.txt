@@ -137,19 +137,21 @@ if(AX_ENABLE_GL)
   if(MACOSX OR LINUX)
     # Desktop OpenGL, no GLES profile needed
     unset(AX_GLES_PROFILE CACHE)
-  elseif(WIN32 AND NOT WINRT)
-    # Win32 desktop OpenGL allows GLES profile = 0
+  else()
     set(_GLES_MIN_PROFILE 300)
-    if(AX_GLES_PROFILE GREATER 0 AND AX_GLES_PROFILE LESS _GLES_MIN_PROFILE)
-      set(AX_GLES_PROFILE ${_GLES_MIN_PROFILE} CACHE STRING "" FORCE)
-      message(AUTHOR_WARNING "AX_GLES_PROFILE was too low; forced to ${_GLES_MIN_PROFILE}")
-    endif()
-  else() # WinRT, iOS, tvOS, Android
-    # These platforms require GLES profile >= 300
-    set(_GLES_MIN_PROFILE 300)
-    if(NOT AX_GLES_PROFILE OR AX_GLES_PROFILE LESS _GLES_MIN_PROFILE)
-      set(AX_GLES_PROFILE ${_GLES_MIN_PROFILE} CACHE STRING "" FORCE)
-      message(AUTHOR_WARNING "AX_GLES_PROFILE was too low; forced to ${_GLES_MIN_PROFILE}")
+    set(AX_GLES_PROFILE ${_GLES_MIN_PROFILE} CACHE STRING "")
+    if(WIN32 AND NOT WINRT)
+      # Win32 desktop OpenGL allows GLES profile = 0
+      if(AX_GLES_PROFILE GREATER 0 AND AX_GLES_PROFILE LESS _GLES_MIN_PROFILE)
+        set(AX_GLES_PROFILE ${_GLES_MIN_PROFILE} CACHE STRING "" FORCE)
+        message(AUTHOR_WARNING "AX_GLES_PROFILE was too low; forced to ${_GLES_MIN_PROFILE}")
+      endif()
+    else() # Win32 desktop OpenGL allows GLES profile = 0
+      # These platforms require GLES profile >= 300
+      if(NOT AX_GLES_PROFILE OR AX_GLES_PROFILE LESS _GLES_MIN_PROFILE)
+        set(AX_GLES_PROFILE ${_GLES_MIN_PROFILE} CACHE STRING "" FORCE)
+        message(AUTHOR_WARNING "AX_GLES_PROFILE was too low; forced to ${_GLES_MIN_PROFILE}")
+      endif()
     endif()
   endif()
 endif()

@@ -197,3 +197,7 @@ if(AX_ENABLE_VK)
     rhi/vulkan/SemaphorePoolVK.cpp
   )
 endif()
+
+if(APPLE)
+  set_source_files_properties(rhi/DriverRuntime.cpp PROPERTIES LANGUAGE OBJCXX)
+endif()
