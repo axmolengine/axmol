@@ -57,7 +57,7 @@ public:
     void* getNativeWindow() const override;
     SurfaceHandle getNativeDisplay() const override;
 
-    void recreateVkSurface(bool needUpdateRenderSurface);
+    [[internal]] void recreateVkSurface(bool needUpdateRenderSurface);
 
 protected:
     RenderViewImpl();

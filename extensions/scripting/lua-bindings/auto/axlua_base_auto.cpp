@@ -103862,56 +103862,6 @@ int lua_register_ax_base_Application(lua_State* tolua_S)
     return 1;
 }
 
-int lua_ax_base_RenderViewImpl_recreateVkSurface(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::RenderViewImpl* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewImpl",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::RenderViewImpl*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewImpl_recreateVkSurface'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
-    {
-        bool arg0;
-
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.RenderViewImpl:recreateVkSurface");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewImpl_recreateVkSurface'", nullptr);
-            return 0;
-        }
-        obj->recreateVkSurface(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewImpl:recreateVkSurface",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewImpl_recreateVkSurface'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_RenderViewImpl_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -104070,7 +104020,6 @@ int lua_register_ax_base_RenderViewImpl(lua_State* tolua_S)
     tolua_cclass(tolua_S,"RenderViewImpl","ax.RenderViewImpl","ax.RenderView",nullptr);
 
     tolua_beginmodule(tolua_S,"RenderViewImpl");
-        tolua_function(tolua_S,"recreateVkSurface",lua_ax_base_RenderViewImpl_recreateVkSurface);
         tolua_function(tolua_S,"create", lua_ax_base_RenderViewImpl_create);
         tolua_function(tolua_S,"createWithRect", lua_ax_base_RenderViewImpl_createWithRect);
         tolua_function(tolua_S,"createWithFullscreen", lua_ax_base_RenderViewImpl_createWithFullscreen);
