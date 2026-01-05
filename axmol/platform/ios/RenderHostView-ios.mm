@@ -109,7 +109,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 #elif !AX_ENABLE_MTL && AX_ENABLE_GL
     return [CAEAGLLayer class];
 #else
-    return rhi::DriverRuntime::isMetal() ? [CAMetalLayer class] : [CAEAGLLayer class];
+    return ax::rhi::DriverRuntime::isMetal() ? [CAMetalLayer class] : [CAEAGLLayer class];
 #endif
 }
 
@@ -294,7 +294,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];  // remove keyboard notification
 #if AX_ENABLE_GL
-    if (rhi::DriverRuntime::isOpenGL())
+    if (ax::rhi::DriverRuntime::isOpenGL())
         [renderer_ release];
 #endif
     [self.textInputView release];
@@ -339,7 +339,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
     //    -> context_ MUST be the OpenGL context
     //    -> renderbuffer_ must be the RENDER BUFFER
 
-    if (rhi::DriverRuntime::isMetal())
+    if (ax::rhi::DriverRuntime::isMetal())
         return;
 
 #    ifdef __IPHONE_4_0

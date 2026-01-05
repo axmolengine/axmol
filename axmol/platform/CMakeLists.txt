@@ -98,7 +98,7 @@ elseif(APPLE)
       platform/ios/AxmolViewController.mm
     )
 
-    if(AX_RENDER_API STREQUAL "gl")
+    if(AX_ENABLE_GL)
       set(_AX_PLATFORM_SPECIFIC_HEADER
         ${_AX_PLATFORM_SPECIFIC_HEADER}
         platform/ios/ES3Renderer-ios.h
