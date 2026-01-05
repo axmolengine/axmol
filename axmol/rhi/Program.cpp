@@ -289,7 +289,7 @@ void Program::reflectVertexInputs(SLCReflectContext* context)
         VertexInputDesc desc;
         desc.semantic = semantic;
         desc.location = isD3D ? semantic_index : location;
-        desc.varType = var_type;
+        desc.varType  = var_type;
         _activeVertexInputs.emplace(name, desc);
     }
 }

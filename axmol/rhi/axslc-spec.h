@@ -42,7 +42,8 @@ enum Dim : uint16_t
     DimSubpassData = 6
 };
 
-enum ShaderLang {
+enum ShaderLang
+{
     SHADER_LANG_ESSL = 0,
     SHADER_LANG_HLSL,
     SHADER_LANG_MSL,
@@ -80,14 +81,15 @@ enum SCType : uint16_t
 // sc chunk aka file header
 struct sc_chunk
 {
-    uint16_t major;        // SC_VERSION_MAJOR
-    uint16_t minor;        // SC_VERSION_MINOR
+    uint16_t major;  // SC_VERSION_MAJOR
+    uint16_t minor;  // SC_VERSION_MINOR
     uint16_t num_targets;
     uint16_t reserved;
 };
 
-struct sc_target_entry {
-    uint32_t lang; // SC_LANG_GLES / HLSL / MSL / SPIRV ...
+struct sc_target_entry
+{
+    uint32_t lang;  // SC_LANG_GLES / HLSL / MSL / SPIRV ...
     uint32_t profile_ver;
     uint32_t offset;
 };

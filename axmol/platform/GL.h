@@ -61,7 +61,6 @@ THE SOFTWARE.
 #        include <OpenGL/gl3ext.h>
 #    endif
 
-
 #    if !defined(GL_BGRA)
 #        define GL_BGRA 0x80E1
 #    endif

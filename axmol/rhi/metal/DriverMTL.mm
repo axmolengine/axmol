@@ -37,7 +37,10 @@
 
 namespace ax::rhi
 {
-    std::unique_ptr<DriverBase> MetalDriverFactory::create() { return std::make_unique<mtl::DriverImpl>(); }
+std::unique_ptr<DriverBase> MetalDriverFactory::create()
+{
+    return std::make_unique<mtl::DriverImpl>();
+}
 }  // namespace ax::rhi
 
 namespace ax::rhi::mtl

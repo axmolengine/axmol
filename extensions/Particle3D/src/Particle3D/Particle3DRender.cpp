@@ -80,8 +80,8 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
     if (_vertexBuffer == nullptr)
     {
         size_t stride = sizeof(V3F_T2F_C4F);
-        _vertexBuffer = axdrv->createBuffer(
-            stride * 4 * particleSystem->getParticleQuota(), rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
+        _vertexBuffer = axdrv->createBuffer(stride * 4 * particleSystem->getParticleQuota(), rhi::BufferType::VERTEX,
+                                            rhi::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
             AXLOGD("Particle3DQuadRender::render create vertex buffer failed");
@@ -91,9 +91,8 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
 
     if (_indexBuffer == nullptr)
     {
-        _indexBuffer =
-            axdrv->createBuffer(sizeof(uint16_t) * 6 * particleSystem->getParticleQuota(),
-                                                         rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
+        _indexBuffer = axdrv->createBuffer(sizeof(uint16_t) * 6 * particleSystem->getParticleQuota(),
+                                           rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)
         {
             AXLOGD("Particle3DQuadRender::render create index buffer failed");

@@ -567,7 +567,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     ax::rhi::DriverRuntime::init();
 #endif
 
-    const auto driverType        = rhi::DriverRuntime::currentDriverType();
+    const auto driverType = rhi::DriverRuntime::currentDriverType();
     const auto requiresGL = driverType == rhi::DriverType::OpenGL || driverType == rhi::DriverType::Unkown;
     if (requiresGL)
     {

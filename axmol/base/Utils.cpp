@@ -107,8 +107,7 @@ void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
     auto eventDispatcher = director->getEventDispatcher();
 
     // !!!Metal: needs setFrameBufferOnly before draw
-    const auto eventName =
-        rhi::DriverRuntime::isMetal() ? Director::EVENT_BEFORE_DRAW : Director::EVENT_AFTER_DRAW;
+    const auto eventName = rhi::DriverRuntime::isMetal() ? Director::EVENT_BEFORE_DRAW : Director::EVENT_AFTER_DRAW;
 
     s_captureScreenListener = eventDispatcher->addCustomEventListener(eventName, [=](EventCustom* /*event*/) {
         eventDispatcher->removeEventListener(s_captureScreenListener);

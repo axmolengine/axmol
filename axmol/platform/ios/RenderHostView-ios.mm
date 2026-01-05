@@ -193,12 +193,14 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
             self.contentScaleFactor = [[UIScreen mainScreen] scale];
         }
 
-        if(rhi::DriverRuntime::isMetal()) {
+        if (rhi::DriverRuntime::isMetal())
+        {
             AX_UNUSED_PARAM(format);
             AX_UNUSED_PARAM(depth);
             AX_UNUSED_PARAM(sharegroup);
         }
-        else {
+        else
+        {
             pixelformat_        = format;
             depthFormat_        = depth;
             multiSampling_      = sampling;
@@ -220,10 +222,12 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
     if ((self = [super initWithCoder:aDecoder]))
     {
         self.textInputView = [[TextInputView alloc] initWithCoder:aDecoder];
-        if (rhi::DriverRuntime::isMetal()) {
+        if (rhi::DriverRuntime::isMetal())
+        {
             backingSize_ = [self bounds].size;
         }
-        else {
+        else
+        {
             CAEAGLLayer* eaglLayer = (CAEAGLLayer*)[self layer];
 
             pixelformat_      = (int)ax::PixelFormat::RGB565;

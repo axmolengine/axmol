@@ -82,8 +82,8 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
     if (_vertexBuffer == nullptr)
     {
         size_t stride = sizeof(V3F_T2F_C4F);
-        _vertexBuffer = axdrv->createBuffer(
-            stride * 4 * particleSystem->getParticleQuota(), rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
+        _vertexBuffer = axdrv->createBuffer(stride * 4 * particleSystem->getParticleQuota(), rhi::BufferType::VERTEX,
+                                            rhi::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
             AXLOGD("PUParticle3DQuadRender::render create vertex buffer failed");
@@ -93,9 +93,8 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
 
     if (_indexBuffer == nullptr)
     {
-        _indexBuffer =
-            axdrv->createBuffer(6 * particleSystem->getParticleQuota() * sizeof(uint16_t),
-                                                         rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
+        _indexBuffer = axdrv->createBuffer(6 * particleSystem->getParticleQuota() * sizeof(uint16_t),
+                                           rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)
         {
             AXLOGD("PUParticle3DQuadRender::render create index buffer failed");
@@ -696,8 +695,8 @@ void PUParticle3DBoxRender::render(Renderer* renderer, const Mat4& transform, Pa
     if (_vertexBuffer == nullptr && _indexBuffer == nullptr)
     {
         size_t stride = sizeof(V3F_T2F_C4F);
-        _vertexBuffer = axdrv->createBuffer(
-            stride * 8 * particleSystem->getParticleQuota(), rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
+        _vertexBuffer = axdrv->createBuffer(stride * 8 * particleSystem->getParticleQuota(), rhi::BufferType::VERTEX,
+                                            rhi::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
             AXLOGD("PUParticle3DBoxRender::render create vertex buffer failed");
@@ -705,9 +704,8 @@ void PUParticle3DBoxRender::render(Renderer* renderer, const Mat4& transform, Pa
         }
         _vertices.resize(8 * particleSystem->getParticleQuota());
 
-        _indexBuffer =
-            axdrv->createBuffer(sizeof(uint16_t) * 36 * particleSystem->getParticleQuota(),
-                                                         rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
+        _indexBuffer = axdrv->createBuffer(sizeof(uint16_t) * 36 * particleSystem->getParticleQuota(),
+                                           rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)
         {
             AXLOGD("PUParticle3DBoxRender::render create index buffer failed");
@@ -885,9 +883,8 @@ void PUSphereRender::render(Renderer* renderer, const Mat4& transform, ParticleS
     if (_vertexBuffer == nullptr && _indexBuffer == nullptr)
     {
         size_t stride = sizeof(V3F_T2F_C4F);
-        _vertexBuffer =
-            axdrv->createBuffer(stride * vertexCount * particleSystem->getParticleQuota(),
-                                                         rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
+        _vertexBuffer = axdrv->createBuffer(stride * vertexCount * particleSystem->getParticleQuota(),
+                                            rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
             AXLOGD("PUSphereRender::render create vertex buffer failed");
@@ -895,9 +892,8 @@ void PUSphereRender::render(Renderer* renderer, const Mat4& transform, ParticleS
         }
         _vertices.resize(vertexCount * particleSystem->getParticleQuota());
 
-        _indexBuffer = axdrv->createBuffer(
-            sizeof(uint16_t) * indexCount * particleSystem->getParticleQuota(), rhi::BufferType::INDEX,
-            rhi::BufferUsage::DYNAMIC);
+        _indexBuffer = axdrv->createBuffer(sizeof(uint16_t) * indexCount * particleSystem->getParticleQuota(),
+                                           rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)
         {
             AXLOGD("PUSphereRender::render create index buffer failed");

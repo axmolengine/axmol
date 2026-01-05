@@ -340,7 +340,8 @@ void SwapChainPage::StartRenderLoop()
             }
 
 #if AX_ENABLE_GL
-            if (rhi::DriverRuntime::isOpenGL()) {
+            if (rhi::DriverRuntime::isOpenGL())
+            {
                 EGLBoolean result = GL_FALSE;
                 {
                     critical_section::scoped_lock lock(m_eglSurfaceCriticalSection);
@@ -357,7 +358,7 @@ void SwapChainPage::StartRenderLoop()
                     // XAML objects like the SwapChainPanel must only be manipulated on the UI thread.
                     auto thiz = this;
                     swapChainPanel().Dispatcher().RunAsync(Windows::UI::Core::CoreDispatcherPriority::High,
-                                                        ([thiz]() { thiz->RecoverFromLostDevice(); }));
+                                                           ([thiz]() { thiz->RecoverFromLostDevice(); }));
 
                     // wait until OpenGL is reset or thread is cancelled
                     while (m_deviceLost)
