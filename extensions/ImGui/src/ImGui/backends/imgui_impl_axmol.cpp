@@ -483,7 +483,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderPlatform()
 
 IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window, ImGuiViewport* viewport)
 {
-#if defined(GLFW_VERSION_MAJOR)
+#if defined(GLFW_VERSION_MAJOR) && AX_ENABLE_GL
     if (!rhi::DriverRuntime::isOpenGL())
         return;
     glfwMakeContextCurrent(window);
@@ -512,7 +512,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window, ImGuiViewpor
 
 IMGUI_IMPL_API void ImGui_ImplAxmol_OnDestroyWindow(GLFWwindow* window, ImGuiViewport* viewport)
 {
-#if defined(GLFW_VERSION_MAJOR)
+#if defined(GLFW_VERSION_MAJOR) && AX_ENABLE_GL
     if (!rhi::DriverRuntime::isOpenGL())
         return;
     if (viewport->RendererUserData)

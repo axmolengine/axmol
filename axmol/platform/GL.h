@@ -112,18 +112,6 @@ THE SOFTWARE.
 #        define GL_DEPTH_COMPONENT32 GL_DEPTH_COMPONENT32_OES
 #    endif
 
-#    ifndef glClearDepth
-#        define glClearDepth glClearDepthf
-#    endif
-
-#    ifndef glMapBuffer
-#        define glMapBuffer glMapBufferOES
-#    endif
-
-#    ifndef glDrawBuffer
-#        define glDrawBuffer(...)
-#    endif
-
 #    if !defined(GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG)
 #        define GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG        0x8C00
 #        define GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG        0x8C01
@@ -196,6 +184,19 @@ THE SOFTWARE.
 #        define GL_COMPRESSED_RGBA_S3TC_DXT1_EXT 0x83F1
 #        define GL_COMPRESSED_RGBA_S3TC_DXT3_EXT 0x83F2
 #        define GL_COMPRESSED_RGBA_S3TC_DXT5_EXT 0x83F3
+#    endif
+
+
+#    ifndef glClearDepth
+#        define glClearDepth glClearDepthf
+#    endif
+
+#    ifndef glMapBuffer
+#        define glMapBuffer glMapBufferOES
+#    endif
+
+#    ifndef glDrawBuffer
+#        define glDrawBuffer(...)
 #    endif
 
 #endif
