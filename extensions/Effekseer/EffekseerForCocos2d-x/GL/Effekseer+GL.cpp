@@ -1,6 +1,8 @@
 #include "../EffekseerForCocos2d-x.h"
 #if AX_ENABLE_GL
 
+#include "axmol/rhi/opengl/TextureGL.h"
+
 #include "../../EffekseerRendererCommon/ModelLoader.h"
 #include "../../EffekseerRendererGL/EffekseerRendererGL.h"
 #include "../../EffekseerRendererGL/EffekseerRenderer/EffekseerRendererGL.MaterialLoader.h"

@@ -28,6 +28,18 @@ THE SOFTWARE.
 
 #include "glad/gles2.h"
 
+#ifndef GL_WRITE_ONLY
+#    define GL_WRITE_ONLY GL_WRITE_ONLY_OES
+#endif
+
+#ifndef GL_DEPTH_COMPONENT32
+#    define GL_DEPTH_COMPONENT32 GL_DEPTH_COMPONENT32_OES
+#endif
+
 #ifndef glClearDepth
 #    define glClearDepth glClearDepthf
+#endif
+
+#ifndef glMapBuffer
+#    define glMapBuffer glMapBufferOES
 #endif
