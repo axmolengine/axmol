@@ -10,7 +10,7 @@ set(target_src_files)
 if(AX_ENABLE_GL)
   if (AX_GLES_PROFILE)
     list(APPEND target_src_files "include/glad/gles2.h" src/egl.c src/gles2.c)
-    if (NOT ANDROID) # Win32, Andorid use system EGL
+    if (NOT ANDROID AND NOT WASM) # Win32, Andorid use system EGL
       list(APPEND target_src_files "include/glad/egl.h" src/egl.c src/egl.c)
     endif()
   else()
@@ -39,7 +39,7 @@ if(BUILD_SHARED_LIBS)
 endif()
 
 if(AX_ENABLE_GL)
-  if(ANDROID)
+  if(ANDROID OR WASM)
     target_compile_definitions(${target_name}
       PUBLIC GLAD_GLES2_USE_SYSTEM_EGL=1 # refer: https://github.com/Dav1dde/glad/pull/438
     )

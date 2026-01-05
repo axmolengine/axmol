@@ -559,9 +559,13 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 
     Vec2 requestWinSize = rect.size * windowZoomFactor;
 
-    // Try init driver first time, if all driver init fail
-    // The driverType still unknonw
+#if AX_ENABLE_D3D11 || AX_ENABLE_D3D12 || AX_ENABLE_VK || AX_ENABLE_MTL
+    // Try to initialize a high-performance graphics driver first.
+    // If any of the high-performance APIs (D3D11/D3D12/Vulkan/Metal) are enabled,
+    // the runtime will attempt initialization in the default priority order.
+    // If all attempts fail, OpenGL will then be explicitly selected as the fallback.
     ax::rhi::DriverRuntime::init();
+#endif
 
     const auto driverType        = rhi::DriverRuntime::currentDriverType();
     const auto useFallbackDriver = driverType == rhi::DriverType::OpenGL || driverType == rhi::DriverType::Unkown;
