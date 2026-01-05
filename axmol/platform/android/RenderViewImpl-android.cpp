@@ -109,15 +109,11 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
 {
     updateRenderSurface(rect.size.width, rect.size.height, SurfaceUpdateFlag::AllUpdatesSilently);
 
-    if (rhi::DriverRuntime::isOpenGL())
-    {
-        auto glesVer = gladLoaderLoadGLES2();
-        if (glesVer)
-            AXLOGI("Load GLES success, version: {}", glesVer);
-        else
-            throw std::runtime_error("Load GLES fail");
-    }
-    else
+    if (rhi::DriverRuntime::isUnknown())
+        rhi::DriverRuntime::init(rhi::DriverType::OpenGL);
+
+
+    if (rhi::DriverRuntime::isVulkan())
     {
         recreateVkSurface(false);
     }
