@@ -41,7 +41,7 @@ inline constexpr int MAX_FRAMES_IN_FLIGHT = 3;
 
 enum class DriverType
 {
-    Unkown = -1,
+    Unknown = -1,
     OpenGL,  // GL or GLES
     D3D11,
     D3D12,

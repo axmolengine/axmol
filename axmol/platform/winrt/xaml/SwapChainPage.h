@@ -108,6 +108,8 @@ public:
     bool m_deviceLost;
     bool m_visible;
     bool m_cursorVisible;
+    bool m_requiresGL{false};
+
     Windows::Graphics::Display::DisplayOrientations m_orientation;
 
     std::mutex m_sleepMutex;

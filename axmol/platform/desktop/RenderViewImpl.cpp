@@ -568,7 +568,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 #endif
 
     const auto driverType = rhi::DriverRuntime::currentDriverType();
-    const auto requiresGL = driverType == rhi::DriverType::OpenGL || driverType == rhi::DriverType::Unkown;
+    const auto requiresGL = driverType == rhi::DriverType::OpenGL || driverType == rhi::DriverType::Unknown;
     if (requiresGL)
     {
         if constexpr (!AX_ENABLE_GL)
@@ -642,7 +642,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
         glfwMakeContextCurrent(_mainWindow);
         glfwSetWindowUserPointer(_mainWindow, rhi::gl::__state);
 
-        if (driverType == rhi::DriverType::Unkown)
+        if (driverType == rhi::DriverType::Unknown)
             ax::rhi::DriverRuntime::init(rhi::DriverType::OpenGL);
     }
 #endif

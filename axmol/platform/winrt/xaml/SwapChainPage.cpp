@@ -19,6 +19,7 @@
  */
 #include "axmol/platform/winrt/xaml/SwapChainPage.h"
 #include "SwapChainPage.g.cpp"
+#include "AppDelegate.h"
 
 #include "axmol/platform/winrt/RenderViewImpl-winrt.h"
 #include "axmol/platform/Application.h"
@@ -32,9 +33,8 @@
 #include <winrt/Windows.Foundation.Metadata.h>
 #include <winrt/Windows.UI.Input.Core.h>
 
-using namespace winrt;
-
 using namespace ax;
+using namespace winrt;
 using namespace Concurrency;
 using namespace Windows::Foundation;
 using namespace Windows::Graphics::Display;
@@ -54,6 +54,11 @@ using namespace Windows::UI::Xaml::Navigation;
 using namespace Windows::UI::Input;
 #endif
 
+namespace
+{
+std::unique_ptr<AppDelegate> appDelegate;
+}
+
 namespace winrt::AxmolAppWinRT::implementation
 {
 SwapChainPage::SwapChainPage()
@@ -64,8 +69,22 @@ SwapChainPage::SwapChainPage()
     , m_visible(false)
     , m_orientation(DisplayOrientations::Landscape)
 {
+    appDelegate.reset(new AppDelegate());
+    ax::Application::getInstance()->initContextAttrs();
+
+#if AX_ENABLE_D3D11 || AX_ENABLE_D3D12
+    // Try to initialize a high-performance graphics driver first.
+    // If any of the high-performance APIs (D3D11/D3D12/Vulkan/Metal) are enabled,
+    // the runtime will attempt initialization in the default priority order.
+    // If all attempts fail, OpenGL will then be explicitly selected as the fallback.
+    rhi::DriverRuntime::init();
+    m_requiresGL = driverType == rhi::DriverType::Unkown || driverType == rhi::DriverType::OpenGL;
+#else
+    m_requiresGL = true;
+#endif
+
 #if AX_ENABLE_GL
-    if (rhi::DriverRuntime::isOpenGL())
+    if (m_requiresGL)
         m_eglSurfaceProvider = new EGLSurfaceProvider();
 #endif
     InitializeComponent();
@@ -162,7 +181,7 @@ void SwapChainPage::CreateRenderSurface()
 {
     UpdatePanelSize();
 #if AX_ENABLE_GL
-    if (!rhi::DriverRuntime::isOpenGL())
+    if (!m_requiresGL)
         return;
     if (m_eglSurfaceProvider && m_eglSurface == EGL_NO_SURFACE)
     {
@@ -196,7 +215,7 @@ void SwapChainPage::UpdatePanelSize()
 void SwapChainPage::DestroyRenderSurface()
 {
 #if AX_ENABLE_GL
-    if (!rhi::DriverRuntime::isOpenGL())
+    if (!m_requiresGL)
         return;
     if (m_eglSurfaceProvider)
     {
@@ -212,7 +231,7 @@ void SwapChainPage::DestroyRenderSurface()
 void SwapChainPage::RecoverFromLostDevice()
 {
 #if AX_ENABLE_GL
-    if (rhi::DriverRuntime::isOpenGL())
+    if (m_requiresGL)
     {
         critical_section::scoped_lock lock(m_eglSurfaceCriticalSection);
         DestroyRenderSurface();
@@ -229,7 +248,7 @@ void SwapChainPage::RecoverFromLostDevice()
 void SwapChainPage::TerminateApp()
 {
 #if AX_ENABLE_GL
-    if (rhi::DriverRuntime::isOpenGL())
+    if (m_requiresGL)
     {
         critical_section::scoped_lock lock(m_eglSurfaceCriticalSection);
 
@@ -272,8 +291,12 @@ void SwapChainPage::StartRenderLoop()
         }
 
 #if AX_ENABLE_GL
-        if (rhi::DriverRuntime::isOpenGL())
+        if (m_requiresGL)
+        {
             m_eglSurfaceProvider->MakeCurrent(m_eglSurface);
+            if (rhi::DriverRuntime::isUnknown())
+                rhi::DriverRuntime::init(rhi::DriverType::OpenGL);
+        }
 #endif
 
         // !!!Start the engine renderer on the render thread so that WICImageDecoder

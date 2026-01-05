@@ -26,12 +26,12 @@ namespace ax::rhi
 {
 
 std::unique_ptr<DriverBase> DriverRuntime::_currentDriver;
-DriverType DriverRuntime::_currentDriverType = DriverType::Unkown;
+DriverType DriverRuntime::_currentDriverType = DriverType::Unknown;
 uint32_t DriverRuntime::_currentShaderLang   = static_cast<uint32_t>(-1);
 
 void DriverRuntime::init(DriverType driverType)
 {
-    const auto hasPreferredDriverType = driverType != DriverType::Unkown;
+    const auto hasPreferredDriverType = driverType != DriverType::Unknown;
 
     auto& contextAttrs = ApplicationBase::getContextAttrs();
 
