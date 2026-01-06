@@ -26,14 +26,29 @@ namespace ax::rhi
 {
 
 std::unique_ptr<DriverBase> DriverContext::_currentDriver;
-DriverType DriverContext::_currentDriverType = DriverType::Unknown;
+DriverType DriverContext::_currentDriverType = DriverType::Auto;
 int DriverContext::_currentShaderLang        = axslc::SHADER_LANG_NONE;
 int DriverContext::_currentShaderProfile     = 0;
+
+static int _driverPriorities[(int)rhi::DriverType::Count] = {
+    rhi::DefaultDriverPriority::OpenGL, rhi::DefaultDriverPriority::D3D11, rhi::DefaultDriverPriority::D3D12,
+    rhi::DefaultDriverPriority::Vulkan, rhi::DefaultDriverPriority::Metal};
 
 // refer: https://github.com/KhronosGroup/SPIRV-Cross/blob/main/spirv_msl.hpp#L575
 static uint32_t make_msl_version(uint32_t major, uint32_t minor = 0, uint32_t patch = 0)
 {
     return (major * 10000) + (minor * 100) + patch;
+}
+
+void DriverContext::setDriverPriority(DriverType driverType, int prio)
+{
+    if (driverType != DriverType::Auto)
+        _driverPriorities[(int)driverType] = prio;
+}
+
+int DriverContext::getDriverPriority(DriverType driverType)
+{
+    return driverType != DriverType::Auto ? _driverPriorities[(int)driverType] : 0;
 }
 
 void DriverContext::makeCurrentDriver()
@@ -43,19 +58,19 @@ void DriverContext::makeCurrentDriver()
     tlx::inlined_vector<std::unique_ptr<DriverFactory>, (int)DriverType::Count> factories;
 
 #if AX_ENABLE_D3D12
-    factories.push_back(std::make_unique<D3D12DriverFactory>(contextAttrs.driverPriorities[(int)DriverType::D3D12]));
+    factories.push_back(std::make_unique<D3D12DriverFactory>(_driverPriorities[(int)DriverType::D3D12]));
 #endif
 
 #if AX_ENABLE_VK
-    factories.push_back(std::make_unique<VulkanDriverFactory>(contextAttrs.driverPriorities[(int)DriverType::Vulkan]));
+    factories.push_back(std::make_unique<VulkanDriverFactory>(_driverPriorities[(int)DriverType::Vulkan]));
 #endif
 
 #if AX_ENABLE_D3D11
-    factories.push_back(std::make_unique<D3D11DriverFactory>(contextAttrs.driverPriorities[(int)DriverType::D3D11]));
+    factories.push_back(std::make_unique<D3D11DriverFactory>(_driverPriorities[(int)DriverType::D3D11]));
 #endif
 
 #if AX_ENABLE_MTL
-    factories.push_back(std::make_unique<MetalDriverFactory>(contextAttrs.driverPriorities[(int)DriverType::Metal]));
+    factories.push_back(std::make_unique<MetalDriverFactory>(_driverPriorities[(int)DriverType::Metal]));
 #endif
 
     if (factories.size() > 1)
@@ -67,7 +82,9 @@ void DriverContext::makeCurrentDriver()
     for (auto& f : factories)
     {
         auto driver = f->create();
-        if (driver && driver->init())
+        if (contextAttrs.driverPreference != DriverPreference::Auto && driver->type() != contextAttrs.driverPreference)
+            continue;
+        if (driver->init())
         {
             _currentDriverType = driver->type();
             _currentDriver     = std::move(driver);

@@ -484,6 +484,8 @@ enum class RenderScaleMode
     Physical  // Use logical pixels multiplied by the DPI scale factor
 };
 
+using DriverPreference = rhi::DriverType;
+
 /** @struct ContextAttrs
  *
  * The axmol Engine attributes.
@@ -504,16 +506,13 @@ struct ContextAttrs
     void* windowParent{nullptr};  // win32-spec
     PowerPreference powerPreference{PowerPreference::Auto};
     RenderScaleMode renderScaleMode{RenderScaleMode::Default};
+    DriverPreference driverPreference{DriverPreference::Auto};
 
     // The uploadBuffer size, current used by d3d12 RHI
     uint32_t uploadBufferSize{16 * 1024 * 1024};
 
     // Whether sampler binding is fully controlled by shader (D3D12 style)
     bool shaderControlledSampler{false};
-
-    int driverPriorities[(int)rhi::DriverType::Count]{
-        rhi::DefaultDriverPriority::OpenGL, rhi::DefaultDriverPriority::D3D11, rhi::DefaultDriverPriority::D3D12,
-        rhi::DefaultDriverPriority::Vulkan, rhi::DefaultDriverPriority::Metal};
 };
 
 /** @struct Acceleration

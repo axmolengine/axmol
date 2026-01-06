@@ -41,6 +41,41 @@ namespace ax::rhi
 class AX_DLL DriverContext
 {
 public:
+
+    /**
+     * @brief Sets the priority value for a specific driver type.
+     *
+     * This function allows advanced users to override the default driver
+     * selection order by assigning a custom priority to a given driver type.
+     * Higher values indicate higher preference when selecting the current driver.
+     *
+     * @note This call is **optional**. If not invoked, the engine will use
+     *       built-in default priorities to select the driver. It is primarily
+     *       intended for advanced users who need fine-grained control over
+     *       backend selection.
+     *
+     * @warning To ensure the priority takes effect, this function should be
+     *          invoked as early as possible, typically in the application
+     *          delegate's constructor, before any rendering context or window
+     *          is created. Late changes may not apply if the driver has already
+     *          been initialized.
+     *
+     * @param driverType The driver type to assign a priority to.
+     * @param prio       The priority value (higher means more preferred).
+     */
+    static void setDriverPriority(DriverType driverType, int prio);
+
+    /**
+     * @brief Retrieves the current priority value for a specific driver type.
+     *
+     * This function returns the priority value previously assigned to the
+     * given driver type, either by default or via setDriverPriority().
+     *
+     * @param driverType The driver type to query.
+     * @return The priority value associated with the driver type.
+     */
+    static int getDriverPriority(DriverType driverType);
+
     /**
      * @brief Selects and prepares the current driver instance.
      *
