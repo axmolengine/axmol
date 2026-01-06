@@ -63,12 +63,6 @@ struct VulkanDriverFactory : DriverFactory
     std::unique_ptr<DriverBase> create() override;
 };
 
-struct GLDriverFactory : DriverFactory
-{
-    GLDriverFactory(int prio) : DriverFactory(DriverType::OpenGL, prio) {}
-    std::unique_ptr<DriverBase> create() override;
-};
-
 struct MetalDriverFactory : DriverFactory
 {
     MetalDriverFactory(int prio) : DriverFactory(DriverType::Metal, prio) {}

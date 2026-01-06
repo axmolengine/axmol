@@ -38,7 +38,7 @@
 #include "axmol/tlx/vector.hpp"
 #include "axmol/tlx/utility.hpp"
 #include "axmol/tlx/format.hpp"
-#include "xxhash/xxhash.h"
+#include "axmol/tlx/hash.hpp"
 
 #if defined(GLAD_GL) || defined(GLAD_GLES2)
 #    define _AX_USE_GLAD 1
@@ -50,21 +50,8 @@
 #    include "glad/egl.h"
 #endif
 
-namespace ax::rhi
-{
-std::unique_ptr<DriverBase> GLDriverFactory::create()
-{
-    return std::make_unique<gl::DriverImpl>();
-}
-}  // namespace ax::rhi
-
 namespace ax::rhi::gl
 {
-
-static inline uint32_t hashString(std::string_view str)
-{
-    return !str.empty() ? XXH32(str.data(), str.length(), 0) : 0;
-}
 
 template <typename _Fty>
 static void GL_EnumAllExtensions(_Fty&& func)
@@ -154,7 +141,7 @@ bool DriverImpl::init()
 
     // exts
     GL_EnumAllExtensions([this](const std::string_view& ext) {
-        const auto key = hashString(ext);
+        const auto key = tlx::hash32_str(ext);
         _glExtensions.insert(key);
     });
 
@@ -698,7 +685,7 @@ bool DriverImpl::checkForFeatureSupported(FeatureType feature)
 
 bool DriverImpl::hasExtension(std::string_view searchName) const
 {
-    const auto key = hashString(searchName);
+    const auto key = tlx::hash32_str(searchName);
     return _glExtensions.find(key) != _glExtensions.end();
 }
 
