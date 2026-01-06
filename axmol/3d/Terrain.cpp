@@ -33,7 +33,7 @@ using namespace ax;
 #include <stddef.h>  // offsetof
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/Shaders.h"
-#include "axmol/rhi/DriverRuntime.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/rhi/Program.h"
 #include "axmol/rhi/Buffer.h"
 #include "axmol/base/Director.h"

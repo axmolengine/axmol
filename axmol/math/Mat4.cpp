@@ -26,7 +26,7 @@
 #include "axmol/math/Quaternion.h"
 #include "axmol/math/MathUtil.h"
 #include "axmol/base/Macros.h"
-#include "axmol/rhi/DriverRuntime.h"
+#include "axmol/rhi/DriverContext.h"
 
 NS_AX_MATH_BEGIN
 
@@ -120,7 +120,7 @@ void Mat4::createPerspective(float fieldOfView, float aspectRatio, float zNearPl
     dst->m[11] = -1.0f;
     dst->m[14] = -2.0f * zFarPlane * zNearPlane * f_n;
 
-    if (rhi::DriverRuntime::isMetal())
+    if (rhi::DriverContext::isMetal())
     {
         // https://metashapes.com/blog/opengl-metal-projection-matrix-problem/
         dst->m[10] = -zFarPlane * f_n;
@@ -159,7 +159,7 @@ void Mat4::createOrthographicOffCenter(float left,
     dst->m[15] = 1;
 
     //// https://metashapes.com/blog/opengl-metal-projection-matrix-problem/
-    if (rhi::DriverRuntime::isMetal())
+    if (rhi::DriverContext::isMetal())
     {
         dst->m[10] = 1 / (zNearPlane - zFarPlane);
         dst->m[14] = zNearPlane / (zNearPlane - zFarPlane);

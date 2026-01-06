@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "axmol/platform/winrt/WinRTUtils.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/EventMouse.h"
-#include "axmol/rhi/DriverRuntime.h"
+#include "axmol/rhi/DriverContext.h"
 #include <future>
 
 #include <winrt/Windows.UI.Xaml.Controls.h>
@@ -565,7 +565,7 @@ void RenderViewImpl::handleWindowResized()
 
 void RenderViewImpl::updateRenderScale()
 {
-    if (!rhi::DriverRuntime::isOpenGL())
+    if (!rhi::DriverContext::isOpenGL())
         _renderScale = m_dpi / 96.0f;
     else
         _renderScale = 1.0f;

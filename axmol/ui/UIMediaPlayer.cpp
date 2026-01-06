@@ -517,7 +517,7 @@ void createMediaControlTexture()
             Vec2(border + (i * panelW) + (i * gap) + (panelW / 2.f), imageSize.height - border - (panelH / 2.f));
         item.second(midPoint);
 
-        if (rhi::DriverRuntime::isOpenGL())
+        if (rhi::DriverContext::isOpenGL())
         {
             g_mediaControlTextureRegions[item.first] =
                 Rect(border + (panelW * i) + (gap * i), imageSize.height - border - panelH, panelW, panelH);

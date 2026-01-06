@@ -37,7 +37,7 @@ THE SOFTWARE.
 #include "axmol/renderer/Renderer.h"
 #include "axmol/2d/Camera.h"
 #include "axmol/renderer/TextureCache.h"
-#include "axmol/rhi/DriverRuntime.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/rhi/Texture.h"
 #include "axmol/rhi/RenderTarget.h"
 
@@ -46,7 +46,7 @@ namespace ax
 
 void RenderTexture::applySpriteFlippedY(Sprite* sp)
 {
-    sp->setFlippedY(rhi::DriverRuntime::isOpenGL());
+    sp->setFlippedY(rhi::DriverContext::isOpenGL());
 }
 
 // implementation RenderTexture

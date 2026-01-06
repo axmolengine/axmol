@@ -179,7 +179,7 @@
   - License: BSD-3-Clause
 
 ## OpenAL Soft
-- [![Upstream](https://img.shields.io/github/v/tag/kcat/openal-soft?label=Upstream)](https://github.com/kcat/openal-soft)
+- [![Upstream](https://img.shields.io/github/v/release/kcat/openal-soft?label=Upstream)](https://github.com/kcat/openal-soft)
 - Version: 1.25.0
 - Modifications: 
   - Remove `-Werror=undef`

@@ -10,7 +10,7 @@
 #include "Type/csmVector.hpp"
 #include "Model/CubismModel.hpp"
 #include <float.h>
-#include "axmol/rhi/DriverRuntime.h"
+#include "axmol/rhi/DriverBase.h"
 
 using namespace ax;
 

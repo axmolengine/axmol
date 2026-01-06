@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/rhi/RenderTarget.h"
-#include "axmol/rhi/DriverRuntime.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/2d/Camera.h"
 
 namespace ax
@@ -84,7 +84,7 @@ bool GridBase::initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipp
 
     _texture = texture;
     AX_SAFE_RETAIN(_texture);
-    _isTextureFlipped = rhi::DriverRuntime::isOpenGL() ? flipped : !flipped;
+    _isTextureFlipped = rhi::DriverContext::isOpenGL() ? flipped : !flipped;
 
     if (rect.equals(Rect::ZERO))
     {

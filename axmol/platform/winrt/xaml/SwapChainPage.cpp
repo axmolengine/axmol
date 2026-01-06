@@ -23,7 +23,7 @@
 
 #include "axmol/platform/winrt/RenderViewImpl-winrt.h"
 #include "axmol/platform/Application.h"
-#include "axmol/rhi/DriverRuntime.h"
+#include "axmol/rhi/DriverContext.h"
 
 #include "yasio/wtimer_hres.hpp"
 
@@ -76,8 +76,8 @@ SwapChainPage::SwapChainPage()
     // If any of the high-performance APIs (D3D11/D3D12/Vulkan/Metal) are enabled,
     // the runtime will attempt initialization in the default priority order.
     // If all attempts fail, OpenGL will then be explicitly selected as the fallback.
-    rhi::DriverRuntime::makeCurrentDriver();
-    m_fallbackGL = rhi::DriverRuntime::isOpenGL();
+    rhi::DriverContext::makeCurrentDriver();
+    m_fallbackGL = rhi::DriverContext::isOpenGL();
 #endif
 
 #if AX_ENABLE_GL
@@ -291,7 +291,7 @@ void SwapChainPage::StartRenderLoop()
         if (m_fallbackGL)
         {
             m_eglSurfaceProvider->MakeCurrent(m_eglSurface);
-            rhi::DriverRuntime::activateCurrentDriver();
+            rhi::DriverContext::activateCurrentDriver();
         }
 #endif
 
@@ -359,7 +359,7 @@ void SwapChainPage::StartRenderLoop()
             }
 
 #if AX_ENABLE_GL
-            if (rhi::DriverRuntime::isOpenGL())
+            if (rhi::DriverContext::isOpenGL())
             {
                 EGLBoolean result = GL_FALSE;
                 {

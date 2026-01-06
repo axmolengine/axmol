@@ -36,7 +36,8 @@
   - AX_ENABLE_EXT_JSONDEFAULT: the UserDefault based on json, default: `FALSE`
   - AX_ENABLE_EXT_LUA: the lua extension, default: `TRUE`
 - AX_WITH_XXX: usually user don't need care it
-- AX_RENDER_API: specify render api, valid values are: `auto`, `gl`, `mtl`, `d3d11`, `d3d12`, `vk`, default: `auto`
+- AX_RENDER_API: specify render api, valid values are: `auto`, `gl`, `mtl`, `d3d11`, `d3d12`, `vk`, default: `auto`.  
+  You may also specify multiple APIs separated by semicolons, e.g. "-DAX_RENDER_API=vk;gl" This will enable both Vulkan and OpenGL backends in the build.
 - AX_GLES_PROFILE: specify GLES profile version, only works when selected render api is `gl`, default: `300`, valid value `300`, `310`
 - AX_CORE_PROFILE: whether strip all deprecated features, default `FALSE`, Setting this to `TRUE` before upgrading your game project helps ensure compatibility with future Axmol versions.
 - AX_ISA_LEVEL: specifiy SIMD Instructions Acceleration Level: 0~4, 0: disabled, 1: SSE2, 2: SSE4.1/NEON, 3: SSE4.2, 4: AVX2, default: 2

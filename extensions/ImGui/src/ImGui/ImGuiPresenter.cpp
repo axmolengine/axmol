@@ -293,7 +293,7 @@ void ImGuiPresenter::init()
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  // Enable Docking
 
 #if defined(AX_PLATFORM_PC)
-    if (rhi::DriverRuntime::isOpenGL())
+    if (rhi::DriverContext::isOpenGL())
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport / Platform Windows
 #endif
     // io.ConfigViewportsNoAutoMerge = true;

@@ -43,7 +43,7 @@ THE SOFTWARE.
 #include "axmol/platform/FileUtils.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/ProgramState.h"
-#include "axmol/rhi/DriverRuntime.h"
+#include "axmol/rhi/DriverContext.h"
 
 namespace ax
 {
@@ -1315,7 +1315,7 @@ void Sprite::setScaleX(float scaleX)
 
 void Sprite::setScaleY(float scaleY)
 {
-    if (rhi::DriverRuntime::isMetal())
+    if (rhi::DriverContext::isMetal())
     {
         if (_texture && _texture->isRenderTarget())
             scaleY = std::abs(scaleY);

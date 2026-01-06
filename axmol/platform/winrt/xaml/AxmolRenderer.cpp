@@ -26,7 +26,7 @@
 #include "axmol/base/EventType.h"
 #include "axmol/base/EventCustom.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/rhi/DriverRuntime.h"
+#include "axmol/rhi/DriverContext.h"
 
 // These are used by the shader compilation methods.
 #include <vector>

@@ -74,9 +74,9 @@ void ShaderModule::parseShaderCode(void)
     }
 
     // find target entry
-    const auto driverType        = DriverRuntime::currentDriverType();
-    const auto currentShaderLang = DriverRuntime::currentShaderLang();
-    const auto currentProfileVer = DriverRuntime::currentShaderProfile();
+    const auto driverType        = DriverContext::currentDriverType();
+    const auto currentShaderLang = DriverContext::currentShaderLang();
+    const auto currentProfileVer = DriverContext::currentShaderProfile();
 
     for (int i = 0; i < chunk.num_targets; ++i)
     {

@@ -30,7 +30,7 @@
 #include "axmol/base/EventListenerCustom.h"
 #include "axmol/platform/GL.h"
 #include "axmol/rhi/Program.h"
-#include "axmol/rhi/DriverRuntime.h"
+#include "axmol/rhi/DriverContext.h"
 
 #include <string>
 #include <vector>

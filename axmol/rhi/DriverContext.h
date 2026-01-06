@@ -25,12 +25,11 @@
 #include <memory>
 #include <vector>
 #include <algorithm>
-#include "axmol/tlx/hlookup.hpp"
 #include "axmol/rhi/DriverBase.h"
 
 namespace ax::rhi
 {
-class AX_DLL DriverRuntime
+class AX_DLL DriverContext
 {
 public:
     /**
@@ -41,11 +40,8 @@ public:
      * the driver is created and automatically initialized. For OpenGL, only the
      * driver object is constructed here; initialization must be deferred until
      * a valid window/context is available.
-     *
-     * @return Pointer to the created DriverBase instance, or nullptr if no driver
-     *         could be prepared.
      */
-    static DriverBase* makeCurrentDriver();
+    static void makeCurrentDriver();
 
     /**
      * @brief Activates the current driver (OpenGL only).
@@ -57,9 +53,6 @@ public:
      * For non-OpenGL drivers, initialization is already performed during
      * makeCurrentDriver(), so this function is not needed and will typically
      * be a no-op.
-     *
-     * @return true if the OpenGL driver was successfully initialized; false if
-     *         initialization failed or no OpenGL driver is current.
      */
     static void activateCurrentDriver();
 

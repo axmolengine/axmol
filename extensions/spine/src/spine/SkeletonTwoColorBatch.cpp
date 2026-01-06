@@ -35,7 +35,7 @@
 #include <spine/Extension.h>
 #include <stddef.h>// offsetof
 
-#include "axmol/rhi/DriverRuntime.h"
+#include "axmol/rhi/DriverBase.h"
 #include "axmol/renderer/Shaders.h"
 #include "xxhash.h"
 

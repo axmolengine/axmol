@@ -63,7 +63,7 @@ The RenderViewImpl for win32,linux,macos,wasm
 #    include "axmol/rhi/vulkan/DriverVK.h"
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
-#include "axmol/rhi/DriverRuntime.h"
+#include "axmol/rhi/DriverContext.h"
 
 /** glfw3native.h */
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
@@ -460,7 +460,7 @@ void* RenderViewImpl::getNativeWindow() const
 
 SurfaceHandle RenderViewImpl::getNativeDisplay() const
 {
-    auto driverType = DriverRuntime::currentDriverType();
+    auto driverType = DriverContext::currentDriverType();
     if (driverType == DriverType::Vulkan)
         return _vkSurface;
 
@@ -566,8 +566,8 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     // If any of the high-performance APIs (D3D11/D3D12/Vulkan/Metal) are enabled,
     // the runtime will attempt initialization in the default priority order.
     // If all attempts fail, OpenGL will then be explicitly selected as the fallback.
-    DriverRuntime::makeCurrentDriver();
-    const auto fallbackGL = DriverRuntime::isOpenGL();
+    DriverContext::makeCurrentDriver();
+    const auto fallbackGL = DriverContext::isOpenGL();
     if (fallbackGL)
     {
 #if AX_GLES_PROFILE
@@ -638,7 +638,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     {
         glfwMakeContextCurrent(_mainWindow);
         glfwSetWindowUserPointer(_mainWindow, gl::__state);
-        DriverRuntime::activateCurrentDriver();
+        DriverContext::activateCurrentDriver();
     }
 #endif
 
@@ -661,7 +661,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     updateRenderSurface(fbWidth, fbHeight, SurfaceUpdateFlag::RenderSizeChanged | SurfaceUpdateFlag::SilentUpdate);
 
 #if AX_ENABLE_VK
-    if (DriverRuntime::isVulkan())
+    if (DriverContext::isVulkan())
     {
         auto _createSurface = [](VkInstance inst, void* window, VkSurfaceKHR* surface) {
             return glfwCreateWindowSurface(inst, static_cast<GLFWwindow*>(window), nullptr, surface);
@@ -812,7 +812,7 @@ void RenderViewImpl::end()
 void RenderViewImpl::swapBuffers()
 {
 #if AX_ENABLE_GL
-    if (_mainWindow && DriverRuntime::isOpenGL())
+    if (_mainWindow && DriverContext::isOpenGL())
         glfwSwapBuffers(_mainWindow);
 #endif
 }

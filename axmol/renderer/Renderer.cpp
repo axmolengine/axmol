@@ -48,7 +48,7 @@
 
 #include "axmol/rhi/axmol-rhi.h"
 #include "axmol/rhi/RenderTarget.h"
-#include "axmol/rhi/DriverRuntime.h"
+#include "axmol/rhi/DriverContext.h"
 
 namespace ax
 {
@@ -215,7 +215,7 @@ void Renderer::init()
     _depthStencilState = driver->createDepthStencilState();
     _context->setDepthStencilState(_depthStencilState);
 
-    _isModernRHI = !rhi::DriverRuntime::isOpenGL() && !rhi::DriverRuntime::isD3D11();
+    _isModernRHI = !rhi::DriverContext::isOpenGL() && !rhi::DriverContext::isD3D11();
 }
 
 rhi::RenderTarget* Renderer::getOffscreenRenderTarget()

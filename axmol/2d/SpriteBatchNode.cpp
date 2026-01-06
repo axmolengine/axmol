@@ -39,7 +39,7 @@ THE SOFTWARE.
 #include "axmol/renderer/QuadCommand.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/ProgramState.h"
-#include "axmol/rhi/DriverRuntime.h"
+#include "axmol/rhi/DriverContext.h"
 
 namespace ax
 {

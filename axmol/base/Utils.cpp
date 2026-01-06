@@ -47,7 +47,7 @@ THE SOFTWARE.
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/renderer/RenderState.h"
 #include "axmol/rhi/PixelBufferDesc.h"
-#include "axmol/rhi/DriverRuntime.h"
+#include "axmol/rhi/DriverContext.h"
 
 #include "axmol/platform/Image.h"
 #include "axmol/platform/FileUtils.h"
@@ -107,7 +107,7 @@ void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
     auto eventDispatcher = director->getEventDispatcher();
 
     // !!!Metal: needs setFrameBufferOnly before draw
-    const auto eventName = rhi::DriverRuntime::isMetal() ? Director::EVENT_BEFORE_DRAW : Director::EVENT_AFTER_DRAW;
+    const auto eventName = rhi::DriverContext::isMetal() ? Director::EVENT_BEFORE_DRAW : Director::EVENT_AFTER_DRAW;
 
     s_captureScreenListener = eventDispatcher->addCustomEventListener(eventName, [=](EventCustom* /*event*/) {
         eventDispatcher->removeEventListener(s_captureScreenListener);

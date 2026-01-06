@@ -11,7 +11,7 @@
 #include "axmol/renderer/Shaders.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/CallbackCommand.h"
-#include "axmol/rhi/DriverRuntime.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/rhi/Buffer.h"
 
 using namespace ax;
@@ -284,7 +284,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_Init()
     bd->IndexBufferAllocator  = new BufferPoolAllocator(1 * 1024 * 1024, BufferType::INDEX, BufferUsage::DYNAMIC);
 
 #if (!defined(AX_GLES_PROFILE) || AX_GLES_PROFILE >= 300)
-    if (rhi::DriverRuntime::isOpenGL())
+    if (rhi::DriverContext::isOpenGL())
         io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;  // We can honor the ImDrawCmd::VtxOffset field,
                                                                     // allowing for large meshes.
 #endif
@@ -409,7 +409,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
                 {
                     // Apply scissor/clipping rectangle
                     ImGui_ImplAxmol_PostCommand([=]() {
-                        if (rhi::DriverRuntime::isD3D12())
+                        if (rhi::DriverContext::isD3D12())
                             renderer->setScissorRect(clip_rect.x, clip_rect.y, clip_rect.z - clip_rect.x,
                                                      clip_rect.w - clip_rect.y);
                         else
@@ -472,7 +472,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderPlatform()
 
 #if !defined(__ANDROID__)
         // restore context
-        if (rhi::DriverRuntime::isOpenGL())
+        if (rhi::DriverContext::isOpenGL())
         {
             GLFWwindow* prev_current_context = glfwGetCurrentContext();
             ImGui_ImplAxmol_PostCommand([=]() { ImGui_ImplAxmol_MakeCurrent(prev_current_context, nullptr); });
@@ -484,7 +484,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderPlatform()
 IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window, ImGuiViewport* viewport)
 {
 #if defined(GLFW_VERSION_MAJOR) && AX_ENABLE_GL
-    if (!rhi::DriverRuntime::isOpenGL())
+    if (!rhi::DriverContext::isOpenGL())
         return;
     glfwMakeContextCurrent(window);
     auto state = static_cast<gl::OpenGLState*>(glfwGetWindowUserPointer(window));
@@ -513,7 +513,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window, ImGuiViewpor
 IMGUI_IMPL_API void ImGui_ImplAxmol_OnDestroyWindow(GLFWwindow* window, ImGuiViewport* viewport)
 {
 #if defined(GLFW_VERSION_MAJOR) && AX_ENABLE_GL
-    if (!rhi::DriverRuntime::isOpenGL())
+    if (!rhi::DriverContext::isOpenGL())
         return;
     if (viewport->RendererUserData)
     {

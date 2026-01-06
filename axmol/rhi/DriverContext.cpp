@@ -1,6 +1,6 @@
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/platform/ApplicationBase.h"
-#include "axmol/rhi/DriverRuntime.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/rhi/DriverFactory.h"
 #include "axmol/tlx/inlined_vector.hpp"
 
@@ -25,10 +25,10 @@
 namespace ax::rhi
 {
 
-std::unique_ptr<DriverBase> DriverRuntime::_currentDriver;
-DriverType DriverRuntime::_currentDriverType = DriverType::Unknown;
-int DriverRuntime::_currentShaderLang        = axslc::SHADER_LANG_NONE;
-int DriverRuntime::_currentShaderProfile     = 0;
+std::unique_ptr<DriverBase> DriverContext::_currentDriver;
+DriverType DriverContext::_currentDriverType = DriverType::Unknown;
+int DriverContext::_currentShaderLang        = axslc::SHADER_LANG_NONE;
+int DriverContext::_currentShaderProfile     = 0;
 
 // refer: https://github.com/KhronosGroup/SPIRV-Cross/blob/main/spirv_msl.hpp#L575
 static uint32_t make_msl_version(uint32_t major, uint32_t minor = 0, uint32_t patch = 0)
@@ -36,7 +36,7 @@ static uint32_t make_msl_version(uint32_t major, uint32_t minor = 0, uint32_t pa
     return (major * 10000) + (minor * 100) + patch;
 }
 
-DriverBase* DriverRuntime::makeCurrentDriver()
+void DriverContext::makeCurrentDriver()
 {
     auto& contextAttrs = ApplicationBase::getContextAttrs();
 
@@ -116,13 +116,13 @@ DriverBase* DriverRuntime::makeCurrentDriver()
         _currentShaderLang = AX_GLES_PROFILE ? axslc::SHADER_LANG_ESSL : axslc::SHADER_LANG_GLSL;
 #else
         throw std::runtime_error(
-            "DriverRuntime::makeCurrentDriver failed: no suitable driver initialized "
+            "DriverContext::makeCurrentDriver failed: no suitable driver initialized "
             "and OpenGL fallback is not available (AX_ENABLE_GL disabled).");
 #endif
     }
 }
 
-void DriverRuntime::activateCurrentDriver()
+void DriverContext::activateCurrentDriver()
 {
     if (_currentDriver && isOpenGL() && !_currentShaderProfile)
     {
@@ -131,14 +131,14 @@ void DriverRuntime::activateCurrentDriver()
     }
 }
 
-void DriverRuntime::destroyCurrentDriver()
+void DriverContext::destroyCurrentDriver()
 {
     _currentDriver.reset();
 }
 
 AX_DLL DriverBase* currentDriver()
 {
-    return DriverRuntime::currentDriver();
+    return DriverContext::currentDriver();
 }
 
 }  // namespace ax::rhi
