@@ -191,7 +191,7 @@ jobs:
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p osx -a x64
-  android-ogl:
+  android:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -209,28 +209,13 @@ jobs:
       shell: pwsh
       run: |
         $AX_ROOT = $(Get-Location).Path
-        ./tools/cmdline/axmol -p android -a $env:BUILD_ARCH
+        ./tools/cmdline/axmol -p android -a $env:BUILD_ARCH -xc "-DAX_RENDER_API=vk;gl"
     - uses: actions/upload-artifact@v6
       with:
-        name: android_${{ matrix.arch }}_ogl
+        name: android_${{ matrix.arch }}
         path: |
           templates/**/*.apk
           tests/**/*.apk
-  android-vk:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v6
-
-    - name: Build
-      shell: pwsh
-      run: |
-        $AX_ROOT = $(Get-Location).Path
-        ./tools/cmdline/axmol -p android -a arm64 -xc '-DAX_RENDER_API=vk'
-    - uses: actions/upload-artifact@v6
-      with:
-        name: android_arm64_vk
-        path: |
-          tests/**/outputs/**/*.apk
   ios-sim-x64:
     runs-on: macos-15
     strategy:

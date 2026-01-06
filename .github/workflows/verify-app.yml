@@ -112,7 +112,7 @@ jobs:
       run: |
         ./setup.ps1
         axmol new HelloCpp
-        axmol -p android -d HelloCpp
+        axmol -p android -d HelloCpp -xc "-DAX_RENDER_API=vk;gl"
   ios:
     runs-on: macos-15
     strategy:
