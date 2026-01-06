@@ -41,7 +41,6 @@ namespace ax::rhi
 class AX_DLL DriverContext
 {
 public:
-
     /**
      * @brief Sets the priority value for a specific driver type.
      *

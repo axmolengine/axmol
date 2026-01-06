@@ -31,11 +31,6 @@ SOFTWARE.
 #include "yasio/bindings/lyasio.hpp"
 #include "yasio/object_pool.hpp"
 
-// A workaround to fix compile issue caused by `CCPlatformMacros.h` doesn't handle `__has_attribute` it properly
-#  if !__has_attribute(format)
-#    undef __has_attribute
-#  endif
-
 #include "axmol/base/Director.h"
 #include "axmol/base/Scheduler.h"
 #include "axmol/tlx/memory.hpp"
