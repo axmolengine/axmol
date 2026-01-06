@@ -169,6 +169,8 @@ public:
      */
     std::string getVersion() const override;
 
+    std::string getShaderVersion() const override;
+
     /**
      * Check if feature supported by Metal.
      * @param feature Specify feature to be query.

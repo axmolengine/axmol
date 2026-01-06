@@ -588,12 +588,17 @@ std::string DriverImpl::getVendor() const
 
 std::string DriverImpl::getRenderer() const
 {
-    return _deviceName.c_str();
+    return _deviceName;
 }
 
 std::string DriverImpl::getVersion() const
 {
     return std::string{featureSetToString(_featureSet)};
+}
+
+std::string DriverImpl::getShaderVersion() const
+{
+    return "MSL 2.0"s;
 }
 
 bool DriverImpl::checkForFeatureSupported(FeatureType feature)

@@ -29,6 +29,15 @@
 
 namespace ax::rhi
 {
+/**
+ * @class DriverContext
+ * @brief Centralized manager for graphics driver lifecycle and shader environment.
+ *
+ * DriverContext provides a unified interface to create, activate, and destroy
+ * rendering drivers across multiple backends (D3D, Vulkan, Metal, OpenGL).
+ * It abstracts backend differences and ensures consistent shader language/profile
+ * setup for the current driver.
+ */
 class AX_DLL DriverContext
 {
 public:
