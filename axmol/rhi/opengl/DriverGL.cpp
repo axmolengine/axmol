@@ -105,13 +105,13 @@ bool DriverImpl::init()
 {
 #if _AX_USE_GLAD
     if (!loadGL())
-        return false;
+        throw std::runtime_error("OpenGL init failed, context not ready");
 #endif
 
     /// driver info
     auto pszVersion = (char const*)glGetString(GL_VERSION);
     if (!pszVersion)
-        return false;
+        throw std::runtime_error("OpenGL init failed, version is null");
 
     auto hint   = strstr(pszVersion, "OpenGL ES");
     _verInfo.es = !!hint;
@@ -143,9 +143,8 @@ bool DriverImpl::init()
             REQUIRED_GLES_MAJOR, AX_GLES_PROFILE % AX_GLES_PROFILE, _version);
 #endif
         AXLOGE("{}", msg);
-        showAlert(msg, "OpenGL init failed", AlertStyle::RequireSync);
-        utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
-        return false;
+        showAlert(msg, "OpenGL init failed, version too old", AlertStyle::RequireSync);
+        throw std::runtime_error("OpenGL init failed, version too old");
     }
 
     // caps

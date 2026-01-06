@@ -33,8 +33,40 @@ namespace ax::rhi
 class AX_DLL DriverRuntime
 {
 public:
-    static DriverType init(DriverType driverType = DriverType::Unknown);
-    static void uninit();
+    /**
+     * @brief Selects and prepares the current driver instance.
+     *
+     * This function chooses the most suitable driver implementation based on
+     * the configured priorities and available backends. For non-OpenGL drivers,
+     * the driver is created and automatically initialized. For OpenGL, only the
+     * driver object is constructed here; initialization must be deferred until
+     * a valid window/context is available.
+     *
+     * @return Pointer to the created DriverBase instance, or nullptr if no driver
+     *         could be prepared.
+     */
+    static DriverBase* makeCurrentDriver();
+
+    /**
+     * @brief Activates the current driver (OpenGL only).
+     *
+     * This function is only required when using OpenGL, since its initialization
+     * cannot be performed at construction time. It should be called after the
+     * window and GL context have been created, to complete the driver setup.
+     *
+     * For non-OpenGL drivers, initialization is already performed during
+     * makeCurrentDriver(), so this function is not needed and will typically
+     * be a no-op.
+     *
+     * @return true if the OpenGL driver was successfully initialized; false if
+     *         initialization failed or no OpenGL driver is current.
+     */
+    static void activateCurrentDriver();
+
+    /**
+     * @brief Releases and destroys the current driver instance, freeing all associated resources.
+     */
+    static void destroyCurrentDriver();
 
     static DriverBase* currentDriver() { return _currentDriver.get(); }
     static DriverType currentDriverType() { return _currentDriverType; }
@@ -45,14 +77,14 @@ public:
     static bool isD3D12() { return _currentDriverType == DriverType::D3D12; }
     static bool isVulkan() { return _currentDriverType == DriverType::Vulkan; }
 
-    static bool isUnknown() { return _currentDriverType == DriverType::Unknown; }
-
-    static uint32_t currentShaderLang() { return _currentShaderLang; }
+    static int currentShaderLang() { return _currentShaderLang; }
+    static int currentShaderProfile() { return _currentShaderProfile; }
 
 private:
     static std::unique_ptr<DriverBase> _currentDriver;
     static DriverType _currentDriverType;
-    static uint32_t _currentShaderLang;
+    static int _currentShaderLang;
+    static int _currentShaderProfile;
 };
 
 }  // namespace ax::rhi

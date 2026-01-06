@@ -72,19 +72,16 @@ SwapChainPage::SwapChainPage()
     appDelegate.reset(new AppDelegate());
     ax::Application::getInstance()->initContextAttrs();
 
-#if AX_ENABLE_D3D11 || AX_ENABLE_D3D12
     // Try to initialize a high-performance graphics driver first.
     // If any of the high-performance APIs (D3D11/D3D12/Vulkan/Metal) are enabled,
     // the runtime will attempt initialization in the default priority order.
     // If all attempts fail, OpenGL will then be explicitly selected as the fallback.
-    auto driverType = rhi::DriverRuntime::init();
-    m_requiresGL    = driverType == rhi::DriverType::Unknown || driverType == rhi::DriverType::OpenGL;
-#else
-    m_requiresGL = true;
+    rhi::DriverRuntime::makeCurrentDriver();
+    m_fallbackGL = rhi::DriverRuntime::isOpenGL();
 #endif
 
 #if AX_ENABLE_GL
-    if (m_requiresGL)
+    if (m_fallbackGL)
         m_eglSurfaceProvider = new EGLSurfaceProvider();
 #endif
     InitializeComponent();
@@ -181,7 +178,7 @@ void SwapChainPage::CreateRenderSurface()
 {
     UpdatePanelSize();
 #if AX_ENABLE_GL
-    if (!m_requiresGL)
+    if (!m_fallbackGL)
         return;
     if (m_eglSurfaceProvider && m_eglSurface == EGL_NO_SURFACE)
     {
@@ -215,7 +212,7 @@ void SwapChainPage::UpdatePanelSize()
 void SwapChainPage::DestroyRenderSurface()
 {
 #if AX_ENABLE_GL
-    if (!m_requiresGL)
+    if (!m_fallbackGL)
         return;
     if (m_eglSurfaceProvider)
     {
@@ -231,7 +228,7 @@ void SwapChainPage::DestroyRenderSurface()
 void SwapChainPage::RecoverFromLostDevice()
 {
 #if AX_ENABLE_GL
-    if (m_requiresGL)
+    if (m_fallbackGL)
     {
         critical_section::scoped_lock lock(m_eglSurfaceCriticalSection);
         DestroyRenderSurface();
@@ -248,7 +245,7 @@ void SwapChainPage::RecoverFromLostDevice()
 void SwapChainPage::TerminateApp()
 {
 #if AX_ENABLE_GL
-    if (m_requiresGL)
+    if (m_fallbackGL)
     {
         critical_section::scoped_lock lock(m_eglSurfaceCriticalSection);
 
@@ -291,11 +288,10 @@ void SwapChainPage::StartRenderLoop()
         }
 
 #if AX_ENABLE_GL
-        if (m_requiresGL)
+        if (m_fallbackGL)
         {
             m_eglSurfaceProvider->MakeCurrent(m_eglSurface);
-            if (rhi::DriverRuntime::isUnknown())
-                rhi::DriverRuntime::init(rhi::DriverType::OpenGL);
+            rhi::DriverRuntime::activateCurrentDriver();
         }
 #endif
 

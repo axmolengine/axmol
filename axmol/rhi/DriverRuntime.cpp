@@ -27,12 +27,17 @@ namespace ax::rhi
 
 std::unique_ptr<DriverBase> DriverRuntime::_currentDriver;
 DriverType DriverRuntime::_currentDriverType = DriverType::Unknown;
-uint32_t DriverRuntime::_currentShaderLang   = static_cast<uint32_t>(-1);
+int DriverRuntime::_currentShaderLang        = axslc::SHADER_LANG_NONE;
+int DriverRuntime::_currentShaderProfile     = 0;
 
-DriverType DriverRuntime::init(DriverType driverType)
+// refer: https://github.com/KhronosGroup/SPIRV-Cross/blob/main/spirv_msl.hpp#L575
+static uint32_t make_msl_version(uint32_t major, uint32_t minor = 0, uint32_t patch = 0)
 {
-    const auto hasPreferredDriverType = driverType != DriverType::Unknown;
+    return (major * 10000) + (minor * 100) + patch;
+}
 
+DriverBase* DriverRuntime::makeCurrentDriver()
+{
     auto& contextAttrs = ApplicationBase::getContextAttrs();
 
     tlx::inlined_vector<std::unique_ptr<DriverFactory>, (int)DriverType::Count> factories;
@@ -40,17 +45,17 @@ DriverType DriverRuntime::init(DriverType driverType)
 #if AX_ENABLE_D3D12
     factories.push_back(std::make_unique<D3D12DriverFactory>(contextAttrs.driverPriorities[(int)DriverType::D3D12]));
 #endif
+
 #if AX_ENABLE_VK
     factories.push_back(std::make_unique<VulkanDriverFactory>(contextAttrs.driverPriorities[(int)DriverType::Vulkan]));
 #endif
+
 #if AX_ENABLE_D3D11
     factories.push_back(std::make_unique<D3D11DriverFactory>(contextAttrs.driverPriorities[(int)DriverType::D3D11]));
 #endif
+
 #if AX_ENABLE_MTL
     factories.push_back(std::make_unique<MetalDriverFactory>(contextAttrs.driverPriorities[(int)DriverType::Metal]));
-#endif
-#if AX_ENABLE_GL
-    factories.push_back(std::make_unique<GLDriverFactory>(contextAttrs.driverPriorities[(int)DriverType::OpenGL]));
 #endif
 
     if (factories.size() > 1)
@@ -61,8 +66,6 @@ DriverType DriverRuntime::init(DriverType driverType)
 
     for (auto& f : factories)
     {
-        if (hasPreferredDriverType && driverType != f->type())
-            continue;
         auto driver = f->create();
         if (driver && driver->init())
         {
@@ -71,22 +74,21 @@ DriverType DriverRuntime::init(DriverType driverType)
 
             switch (_currentDriverType)
             {
-            case DriverType::OpenGL:
-#if AX_GLES_PROFILE
-                _currentShaderLang = axslc::SHADER_LANG_ESSL;
-#else
-                _currentShaderLang = axslc::SHADER_LANG_GLSL;
-#endif
-                break;
             case DriverType::D3D11:
+                _currentShaderLang    = axslc::SHADER_LANG_HLSL;
+                _currentShaderProfile = 50;
+                break;
             case DriverType::D3D12:
-                _currentShaderLang = axslc::SHADER_LANG_HLSL;
+                _currentShaderLang    = axslc::SHADER_LANG_HLSL;
+                _currentShaderProfile = 51;
                 break;
             case DriverType::Vulkan:
-                _currentShaderLang = axslc::SHADER_LANG_SPIRV;
+                _currentShaderLang    = axslc::SHADER_LANG_SPIRV;
+                _currentShaderProfile = 100;
                 break;
             case DriverType::Metal:
-                _currentShaderLang = axslc::SHADER_LANG_MSL;
+                _currentShaderLang    = axslc::SHADER_LANG_MSL;
+                _currentShaderProfile = make_msl_version(2, 0);
                 break;
             }
 
@@ -94,13 +96,42 @@ DriverType DriverRuntime::init(DriverType driverType)
         }
     }
 
-    if (!_currentDriver && hasPreferredDriverType)
-        throw std::runtime_error("DriverRuntime::init failed: no suitable driver initialized");
-
-    return _currentDriverType;
+    // Fallback branch:
+    // - If no driver was successfully created from the preferred list,
+    //   and OpenGL support is compiled in (AX_ENABLE_GL),
+    //   we construct an OpenGL driver instance here as a fallback.
+    // - IMPORTANT: OpenGL cannot be fully initialized until a valid
+    //   window/context has been created (GLFW/SDL/Native window).
+    //   Therefore, only the driver object is constructed at this stage;
+    //   the actual driver->init() call must be invoked later,
+    //   after the window is created and the GL context is current.
+    // - If AX_ENABLE_GL is disabled, no fallback is possible and
+    //   we throw an exception to indicate that no suitable driver
+    //   could be initialized.
+    if (!_currentDriver)
+    {
+#if AX_ENABLE_GL
+        _currentDriver     = std::make_unique<gl::DriverImpl>();
+        _currentDriverType = _currentDriver->type();
+        _currentShaderLang = AX_GLES_PROFILE ? axslc::SHADER_LANG_ESSL : axslc::SHADER_LANG_GLSL;
+#else
+        throw std::runtime_error(
+            "DriverRuntime::makeCurrentDriver failed: no suitable driver initialized "
+            "and OpenGL fallback is not available (AX_ENABLE_GL disabled).");
+#endif
+    }
 }
 
-void DriverRuntime::uninit()
+void DriverRuntime::activateCurrentDriver()
+{
+    if (_currentDriver && isOpenGL() && !_currentShaderProfile)
+    {
+        _currentDriver->init();
+        _currentShaderProfile = AX_GLES_PROFILE ? 300 : 330;
+    }
+}
+
+void DriverRuntime::destroyCurrentDriver()
 {
     _currentDriver.reset();
 }

@@ -63,7 +63,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeInit(JNIEnv* env,
     auto app = ax::Application::getInstance();
     app->initContextAttrs();
 
-    rhi::DriverRuntime::init();
+    rhi::DriverRuntime::makeCurrentDriver();
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeSetEditTextDialogResult(JNIEnv* env,

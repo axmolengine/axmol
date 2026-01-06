@@ -30,7 +30,7 @@ namespace ax::rhi
 {
 using namespace ::axslc;
 
-static bool matchLang(uint32_t currentLang, uint32_t currentProfile, uint32_t lang, uint32_t profile)
+static bool matchLang(int currentLang, int currentProfile, int lang, int profile)
 {
     if (currentLang == ShaderLang::SHADER_LANG_HLSL)
         return currentLang == lang && currentProfile == profile;
@@ -76,21 +76,12 @@ void ShaderModule::parseShaderCode(void)
     // find target entry
     const auto driverType        = DriverRuntime::currentDriverType();
     const auto currentShaderLang = DriverRuntime::currentShaderLang();
-    uint32_t currentProfileVer{0};
-    switch (driverType)
-    {
-    case DriverType::D3D12:
-        currentProfileVer = 51;
-        break;
-    case DriverType::D3D11:
-        currentProfileVer = 50;
-        break;
-    }
+    const auto currentProfileVer = DriverRuntime::currentShaderProfile();
 
     for (int i = 0; i < chunk.num_targets; ++i)
     {
-        auto lang        = ibs.read<uint32_t>();
-        auto profile_ver = ibs.read<uint32_t>();
+        auto lang        = ibs.read<int>();
+        auto profile_ver = ibs.read<int>();
         if (matchLang(currentShaderLang, currentProfileVer, lang, profile_ver))
         {
             _stageOffset = ibs.read<uint32_t>();

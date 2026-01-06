@@ -108,7 +108,7 @@ public:
     bool m_deviceLost;
     bool m_visible;
     bool m_cursorVisible;
-    bool m_requiresGL{false};
+    bool m_fallbackGL{false};
 
     Windows::Graphics::Display::DisplayOrientations m_orientation;
 

@@ -107,6 +107,9 @@ The RenderViewImpl for win32,linux,macos,wasm
 
 namespace ax
 {
+
+using namespace rhi;
+
 #if defined(__EMSCRIPTEN__)
 struct IVec2
 {
@@ -457,15 +460,15 @@ void* RenderViewImpl::getNativeWindow() const
 
 SurfaceHandle RenderViewImpl::getNativeDisplay() const
 {
-    auto driverType = rhi::DriverRuntime::currentDriverType();
-    if (driverType == rhi::DriverType::Vulkan)
+    auto driverType = DriverRuntime::currentDriverType();
+    if (driverType == DriverType::Vulkan)
         return _vkSurface;
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     return glfwGetWin32Window(_mainWindow);
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-    return driverType == rhi::DriverType::Metal ? (void*)glfwGetCocoaView(_mainWindow)
-                                                : (void*)glfwGetNSGLContext(_mainWindow);
+    return driverType == DriverType::Metal ? (void*)glfwGetCocoaView(_mainWindow)
+                                           : (void*)glfwGetNSGLContext(_mainWindow);
     return (void*)glfwGetNSGLContext(_mainWindow);
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
     int platform = glfwGetPlatform();
@@ -559,20 +562,14 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 
     Vec2 requestWinSize = rect.size * windowZoomFactor;
 
-#if AX_ENABLE_D3D11 || AX_ENABLE_D3D12 || AX_ENABLE_VK || AX_ENABLE_MTL
     // Try to initialize a high-performance graphics driver first.
     // If any of the high-performance APIs (D3D11/D3D12/Vulkan/Metal) are enabled,
     // the runtime will attempt initialization in the default priority order.
     // If all attempts fail, OpenGL will then be explicitly selected as the fallback.
-    ax::rhi::DriverRuntime::init();
-#endif
-
-    const auto driverType = rhi::DriverRuntime::currentDriverType();
-    const auto requiresGL = driverType == rhi::DriverType::OpenGL || driverType == rhi::DriverType::Unknown;
-    if (requiresGL)
+    DriverRuntime::makeCurrentDriver();
+    const auto fallbackGL = DriverRuntime::isOpenGL();
+    if (fallbackGL)
     {
-        if constexpr (!AX_ENABLE_GL)
-            throw std::runtime_error("OpenGL driver requires AX_ENABLE_GL to be enabled");
 #if AX_GLES_PROFILE
         glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
         glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
@@ -637,13 +634,11 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     glfwSetWindowSizeLimits(_mainWindow, 1, 1, GLFW_DONT_CARE, GLFW_DONT_CARE);
 
 #if AX_ENABLE_GL
-    if (requiresGL)
+    if (fallbackGL)
     {
         glfwMakeContextCurrent(_mainWindow);
-        glfwSetWindowUserPointer(_mainWindow, rhi::gl::__state);
-
-        if (driverType == rhi::DriverType::Unknown)
-            ax::rhi::DriverRuntime::init(rhi::DriverType::OpenGL);
+        glfwSetWindowUserPointer(_mainWindow, gl::__state);
+        DriverRuntime::activateCurrentDriver();
     }
 #endif
 
@@ -666,13 +661,13 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     updateRenderSurface(fbWidth, fbHeight, SurfaceUpdateFlag::RenderSizeChanged | SurfaceUpdateFlag::SilentUpdate);
 
 #if AX_ENABLE_VK
-    if (driverType == rhi::DriverType::Vulkan)
+    if (DriverRuntime::isVulkan())
     {
         auto _createSurface = [](VkInstance inst, void* window, VkSurfaceKHR* surface) {
             return glfwCreateWindowSurface(inst, static_cast<GLFWwindow*>(window), nullptr, surface);
         };
-        auto driver = static_cast<ax::rhi::vk::DriverImpl*>(axdrv);
-        const rhi::vk::SurfaceCreateInfo createInfo{
+        auto driver = static_cast<vk::DriverImpl*>(axdrv);
+        const vk::SurfaceCreateInfo createInfo{
             .window = _mainWindow, .width = fbWidth, .height = fbHeight, .createFunc = _createSurface};
         bool ok = driver->recreateSurface(createInfo);
         if (!ok)
@@ -729,7 +724,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     glfwSetWindowCloseCallback(_mainWindow, GLFWEventHandler::onGLFWWindowCloseCallback);
 
 #if AX_ENABLE_GL
-    if (driverType == rhi::DriverType::OpenGL)
+    if (fallbackGL)
     {
 #    if !defined(__EMSCRIPTEN__)
         glfwSwapInterval(contextAttrs.vsync ? 1 : 0);
@@ -817,7 +812,7 @@ void RenderViewImpl::end()
 void RenderViewImpl::swapBuffers()
 {
 #if AX_ENABLE_GL
-    if (_mainWindow && rhi::DriverRuntime::isOpenGL())
+    if (_mainWindow && DriverRuntime::isOpenGL())
         glfwSwapBuffers(_mainWindow);
 #endif
 }

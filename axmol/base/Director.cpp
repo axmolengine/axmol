@@ -1164,7 +1164,7 @@ void Director::cleanupDirector()
 
     ProgramManager::destroyInstance();
     VertexLayoutManager::destroyInstance();
-    rhi::DriverRuntime::uninit();
+    rhi::DriverRuntime::destroyCurrentDriver();
 
     // OpenGL view
     if (_renderView)

@@ -44,6 +44,7 @@ enum Dim : uint16_t
 
 enum ShaderLang
 {
+    SHADER_LANG_NONE = -1,
     SHADER_LANG_ESSL = 0,
     SHADER_LANG_HLSL,
     SHADER_LANG_MSL,
