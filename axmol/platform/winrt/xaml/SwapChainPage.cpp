@@ -78,7 +78,6 @@ SwapChainPage::SwapChainPage()
     // If all attempts fail, OpenGL will then be explicitly selected as the fallback.
     rhi::DriverContext::makeCurrentDriver();
     m_fallbackGL = rhi::DriverContext::isOpenGL();
-#endif
 
 #if AX_ENABLE_GL
     if (m_fallbackGL)
