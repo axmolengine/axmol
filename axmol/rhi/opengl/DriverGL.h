@@ -25,7 +25,7 @@
 #pragma once
 
 #include "axmol/platform/GL.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/rhi/DriverFactory.h"
 #include "axmol/rhi/opengl/OpenGLState.h"
 #include "axmol/tlx/hlookup.hpp"

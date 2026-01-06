@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 #import <Metal/Metal.h>
 #import <QuartzCore/CAMetalLayer.h>
 

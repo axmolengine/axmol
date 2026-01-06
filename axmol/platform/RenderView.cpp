@@ -33,7 +33,6 @@ THE SOFTWARE.
 #include "axmol/2d/Camera.h"
 #include "axmol/2d/Scene.h"
 #include "axmol/renderer/Renderer.h"
-#include "axmol/rhi/DriverContext.h"
 
 namespace ax
 {

@@ -23,7 +23,7 @@ conversions:
     "cocostudio::timeline::": "ccs."
     "cocostudio::": "ccs."
     "ax::tweenfunc::": "ax."
-    "ax::rhi::": "axrhi."
+    "ax::rhi::": "axr."
     "tsl::": "tsl."
     "tlx::": "tlx."
     "fairygui::": "fgui."

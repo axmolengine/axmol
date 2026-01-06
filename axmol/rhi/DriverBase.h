@@ -229,10 +229,6 @@ protected:
     DriverCaps _caps;
 };
 
-AX_DLL DriverBase* currentDriver();
-
 // end of _rhi group
 /// @}
 }  // namespace ax::rhi
-
-#define axdrv ax::rhi::currentDriver()

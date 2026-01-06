@@ -23,6 +23,7 @@
  ****************************************************************************/
 #include "axmol/rhi/d3d11/Program11.h"
 #include "axmol/rhi/d3d11/Buffer11.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/rhi/ShaderCache.h"
 
 namespace ax::rhi::d3d11

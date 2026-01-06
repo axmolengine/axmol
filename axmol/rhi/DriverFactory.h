@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 
 namespace ax::rhi
 {

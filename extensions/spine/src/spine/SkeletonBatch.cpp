@@ -36,7 +36,7 @@ USING_NS_AX;
 #define EVENT_AFTER_DRAW_RESET_POSITION "director_after_draw"
 #define INITIAL_SIZE (2000)
 
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/renderer/Shaders.h"
 
 namespace spine {

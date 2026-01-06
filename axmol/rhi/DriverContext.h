@@ -90,3 +90,5 @@ private:
 };
 
 }  // namespace ax::rhi
+
+#define axdrv ax::rhi::DriverContext::currentDriver()

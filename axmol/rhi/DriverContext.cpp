@@ -136,9 +136,4 @@ void DriverContext::destroyCurrentDriver()
     _currentDriver.reset();
 }
 
-AX_DLL DriverBase* currentDriver()
-{
-    return DriverContext::currentDriver();
-}
-
 }  // namespace ax::rhi

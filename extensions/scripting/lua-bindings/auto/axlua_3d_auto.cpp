@@ -1216,7 +1216,7 @@ int lua_ax_3d_TextureCube_getRHITexture(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getRHITexture();
-        object_to_luaval<ax::rhi::Texture>(tolua_S, "axrhi.Texture",(ax::rhi::Texture*)ret);
+        object_to_luaval<ax::rhi::Texture>(tolua_S, "axr.Texture",(ax::rhi::Texture*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TextureCube:getRHITexture",argc, 0);
@@ -2112,7 +2112,7 @@ int lua_ax_3d_Mesh_getProgramState(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getProgramState();
-        object_to_luaval<ax::rhi::ProgramState>(tolua_S, "axrhi.ProgramState",(ax::rhi::ProgramState*)ret);
+        object_to_luaval<ax::rhi::ProgramState>(tolua_S, "axr.ProgramState",(ax::rhi::ProgramState*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Mesh:getProgramState",argc, 0);
@@ -2349,7 +2349,7 @@ int lua_ax_3d_Mesh_setProgramState(lua_State* tolua_S)
     {
         ax::rhi::ProgramState* arg0;
 
-        ok &= luaval_to_object<ax::rhi::ProgramState>(tolua_S, 2, "axrhi.ProgramState",&arg0, "ax.Mesh:setProgramState");
+        ok &= luaval_to_object<ax::rhi::ProgramState>(tolua_S, 2, "axr.ProgramState",&arg0, "ax.Mesh:setProgramState");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Mesh_setProgramState'", nullptr);
@@ -4069,7 +4069,7 @@ int lua_ax_3d_MeshMaterial_createWithProgramState(lua_State* tolua_S)
     if (argc == 1)
     {
         ax::rhi::ProgramState* arg0;
-        ok &= luaval_to_object<ax::rhi::ProgramState>(tolua_S, 2, "axrhi.ProgramState",&arg0, "ax.MeshMaterial:createWithProgramState");
+        ok &= luaval_to_object<ax::rhi::ProgramState>(tolua_S, 2, "axr.ProgramState",&arg0, "ax.MeshMaterial:createWithProgramState");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshMaterial_createWithProgramState'", nullptr);

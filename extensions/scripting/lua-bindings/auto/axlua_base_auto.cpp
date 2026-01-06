@@ -4489,7 +4489,7 @@ int lua_ax_base_Texture2D_getRHITexture(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getRHITexture();
-        object_to_luaval<ax::rhi::Texture>(tolua_S, "axrhi.Texture",(ax::rhi::Texture*)ret);
+        object_to_luaval<ax::rhi::Texture>(tolua_S, "axr.Texture",(ax::rhi::Texture*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Texture2D:getRHITexture",argc, 0);
@@ -12288,7 +12288,7 @@ int lua_ax_base_Node_setProgramState(lua_State* tolua_S)
     do {
         if (argc == 1) {
             ax::rhi::ProgramState* arg0;
-            ok &= luaval_to_object<ax::rhi::ProgramState>(tolua_S, 2, "axrhi.ProgramState",&arg0, "ax.Node:setProgramState");
+            ok &= luaval_to_object<ax::rhi::ProgramState>(tolua_S, 2, "axr.ProgramState",&arg0, "ax.Node:setProgramState");
 
             if (!ok) { break; }
             bool ret = obj->setProgramState(arg0);
@@ -12300,7 +12300,7 @@ int lua_ax_base_Node_setProgramState(lua_State* tolua_S)
     do {
         if (argc == 2) {
             ax::rhi::ProgramState* arg0;
-            ok &= luaval_to_object<ax::rhi::ProgramState>(tolua_S, 2, "axrhi.ProgramState",&arg0, "ax.Node:setProgramState");
+            ok &= luaval_to_object<ax::rhi::ProgramState>(tolua_S, 2, "axr.ProgramState",&arg0, "ax.Node:setProgramState");
 
             if (!ok) { break; }
             bool arg1;
@@ -12425,7 +12425,7 @@ int lua_ax_base_Node_setProgramStateByProgramId(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->setProgramStateByProgramId(arg0);
-        object_to_luaval<ax::rhi::ProgramState>(tolua_S, "axrhi.ProgramState",(ax::rhi::ProgramState*)ret);
+        object_to_luaval<ax::rhi::ProgramState>(tolua_S, "axr.ProgramState",(ax::rhi::ProgramState*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:setProgramStateByProgramId",argc, 1);
@@ -12472,7 +12472,7 @@ int lua_ax_base_Node_getProgramState(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getProgramState();
-        object_to_luaval<ax::rhi::ProgramState>(tolua_S, "axrhi.ProgramState",(ax::rhi::ProgramState*)ret);
+        object_to_luaval<ax::rhi::ProgramState>(tolua_S, "axr.ProgramState",(ax::rhi::ProgramState*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:getProgramState",argc, 0);
@@ -83753,7 +83753,7 @@ int lua_ax_base_RenderTexture_getRenderTarget(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getRenderTarget();
-        object_to_luaval<ax::rhi::RenderTarget>(tolua_S, "axrhi.RenderTarget",(ax::rhi::RenderTarget*)ret);
+        object_to_luaval<ax::rhi::RenderTarget>(tolua_S, "axr.RenderTarget",(ax::rhi::RenderTarget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderTexture:getRenderTarget",argc, 0);
@@ -95525,7 +95525,7 @@ int lua_ax_base_Technique_createWithProgramState(lua_State* tolua_S)
         ax::Material* arg0;
         ax::rhi::ProgramState* arg1;
         ok &= luaval_to_object<ax::Material>(tolua_S, 2, "ax.Material",&arg0, "ax.Technique:createWithProgramState");
-        ok &= luaval_to_object<ax::rhi::ProgramState>(tolua_S, 3, "axrhi.ProgramState",&arg1, "ax.Technique:createWithProgramState");
+        ok &= luaval_to_object<ax::rhi::ProgramState>(tolua_S, 3, "axr.ProgramState",&arg1, "ax.Technique:createWithProgramState");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Technique_createWithProgramState'", nullptr);
@@ -95648,9 +95648,9 @@ int lua_ax_base_Material_draw(lua_State* tolua_S)
 
         ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Material:draw");
 
-        ok &= luaval_to_object<ax::rhi::Buffer>(tolua_S, 4, "axrhi.Buffer",&arg2, "ax.Material:draw");
+        ok &= luaval_to_object<ax::rhi::Buffer>(tolua_S, 4, "axr.Buffer",&arg2, "ax.Material:draw");
 
-        ok &= luaval_to_object<ax::rhi::Buffer>(tolua_S, 5, "axrhi.Buffer",&arg3, "ax.Material:draw");
+        ok &= luaval_to_object<ax::rhi::Buffer>(tolua_S, 5, "axr.Buffer",&arg3, "ax.Material:draw");
 
         ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.Material:draw");
 
@@ -96555,7 +96555,7 @@ int lua_ax_base_Material_createWithProgramState(lua_State* tolua_S)
     if (argc == 1)
     {
         ax::rhi::ProgramState* arg0;
-        ok &= luaval_to_object<ax::rhi::ProgramState>(tolua_S, 2, "axrhi.ProgramState",&arg0, "ax.Material:createWithProgramState");
+        ok &= luaval_to_object<ax::rhi::ProgramState>(tolua_S, 2, "axr.ProgramState",&arg0, "ax.Material:createWithProgramState");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Material_createWithProgramState'", nullptr);
@@ -96683,7 +96683,7 @@ int lua_ax_base_Pass_getProgramState(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getProgramState();
-        object_to_luaval<ax::rhi::ProgramState>(tolua_S, "axrhi.ProgramState",(ax::rhi::ProgramState*)ret);
+        object_to_luaval<ax::rhi::ProgramState>(tolua_S, "axr.ProgramState",(ax::rhi::ProgramState*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Pass:getProgramState",argc, 0);
@@ -96737,9 +96737,9 @@ int lua_ax_base_Pass_draw(lua_State* tolua_S)
 
         ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Pass:draw");
 
-        ok &= luaval_to_object<ax::rhi::Buffer>(tolua_S, 4, "axrhi.Buffer",&arg2, "ax.Pass:draw");
+        ok &= luaval_to_object<ax::rhi::Buffer>(tolua_S, 4, "axr.Buffer",&arg2, "ax.Pass:draw");
 
-        ok &= luaval_to_object<ax::rhi::Buffer>(tolua_S, 5, "axrhi.Buffer",&arg3, "ax.Pass:draw");
+        ok &= luaval_to_object<ax::rhi::Buffer>(tolua_S, 5, "axr.Buffer",&arg3, "ax.Pass:draw");
 
         ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.Pass:draw");
 
@@ -97141,7 +97141,7 @@ int lua_ax_base_Pass_setUniformTexture(lua_State* tolua_S)
 
         ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Pass:setUniformTexture");
 
-        ok &= luaval_to_object<ax::rhi::Texture>(tolua_S, 3, "axrhi.Texture",&arg1, "ax.Pass:setUniformTexture");
+        ok &= luaval_to_object<ax::rhi::Texture>(tolua_S, 3, "axr.Texture",&arg1, "ax.Pass:setUniformTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setUniformTexture'", nullptr);
@@ -97194,7 +97194,7 @@ int lua_ax_base_Pass_setUniformNormTexture(lua_State* tolua_S)
 
         ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Pass:setUniformNormTexture");
 
-        ok &= luaval_to_object<ax::rhi::Texture>(tolua_S, 3, "axrhi.Texture",&arg1, "ax.Pass:setUniformNormTexture");
+        ok &= luaval_to_object<ax::rhi::Texture>(tolua_S, 3, "axr.Texture",&arg1, "ax.Pass:setUniformNormTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setUniformNormTexture'", nullptr);
@@ -97990,7 +97990,7 @@ int lua_ax_base_Pass_createWithProgramState(lua_State* tolua_S)
         ax::Technique* arg0;
         ax::rhi::ProgramState* arg1;
         ok &= luaval_to_object<ax::Technique>(tolua_S, 2, "ax.Technique",&arg0, "ax.Pass:createWithProgramState");
-        ok &= luaval_to_object<ax::rhi::ProgramState>(tolua_S, 3, "axrhi.ProgramState",&arg1, "ax.Pass:createWithProgramState");
+        ok &= luaval_to_object<ax::rhi::ProgramState>(tolua_S, 3, "axr.ProgramState",&arg1, "ax.Pass:createWithProgramState");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_createWithProgramState'", nullptr);
@@ -98127,7 +98127,7 @@ int lua_ax_base_ProgramManager_getBuiltinProgram(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getBuiltinProgram(arg0);
-        object_to_luaval<ax::rhi::Program>(tolua_S, "axrhi.Program",(ax::rhi::Program*)ret);
+        object_to_luaval<ax::rhi::Program>(tolua_S, "axr.Program",(ax::rhi::Program*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ProgramManager:getBuiltinProgram",argc, 1);
@@ -98268,7 +98268,7 @@ int lua_ax_base_ProgramManager_loadProgram(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::rhi::Program* ret = obj->loadProgram(arg0, arg1);
-            object_to_luaval<ax::rhi::Program>(tolua_S, "axrhi.Program",(ax::rhi::Program*)ret);
+            object_to_luaval<ax::rhi::Program>(tolua_S, "axr.Program",(ax::rhi::Program*)ret);
             return 1;
         }
     }while(0);
@@ -98288,7 +98288,7 @@ int lua_ax_base_ProgramManager_loadProgram(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::rhi::Program* ret = obj->loadProgram(arg0, arg1, arg2);
-            object_to_luaval<ax::rhi::Program>(tolua_S, "axrhi.Program",(ax::rhi::Program*)ret);
+            object_to_luaval<ax::rhi::Program>(tolua_S, "axr.Program",(ax::rhi::Program*)ret);
             return 1;
         }
     }while(0);
@@ -98300,7 +98300,7 @@ int lua_ax_base_ProgramManager_loadProgram(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::rhi::Program* ret = obj->loadProgram(arg0);
-            object_to_luaval<ax::rhi::Program>(tolua_S, "axrhi.Program",(ax::rhi::Program*)ret);
+            object_to_luaval<ax::rhi::Program>(tolua_S, "axr.Program",(ax::rhi::Program*)ret);
             return 1;
         }
     }while(0);
@@ -98345,7 +98345,7 @@ int lua_ax_base_ProgramManager_unloadProgram(lua_State* tolua_S)
     {
         ax::rhi::Program* arg0;
 
-        ok &= luaval_to_object<ax::rhi::Program>(tolua_S, 2, "axrhi.Program",&arg0, "ax.ProgramManager:unloadProgram");
+        ok &= luaval_to_object<ax::rhi::Program>(tolua_S, 2, "axr.Program",&arg0, "ax.ProgramManager:unloadProgram");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProgramManager_unloadProgram'", nullptr);
@@ -99332,7 +99332,7 @@ int lua_ax_base_Renderer_getRenderTarget(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getRenderTarget();
-        object_to_luaval<ax::rhi::RenderTarget>(tolua_S, "axrhi.RenderTarget",(ax::rhi::RenderTarget*)ret);
+        object_to_luaval<ax::rhi::RenderTarget>(tolua_S, "axr.RenderTarget",(ax::rhi::RenderTarget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Renderer:getRenderTarget",argc, 0);
@@ -99375,7 +99375,7 @@ int lua_ax_base_Renderer_setRenderTarget(lua_State* tolua_S)
     {
         ax::rhi::RenderTarget* arg0;
 
-        ok &= luaval_to_object<ax::rhi::RenderTarget>(tolua_S, 2, "axrhi.RenderTarget",&arg0, "ax.Renderer:setRenderTarget");
+        ok &= luaval_to_object<ax::rhi::RenderTarget>(tolua_S, 2, "axr.RenderTarget",&arg0, "ax.Renderer:setRenderTarget");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_setRenderTarget'", nullptr);
@@ -99429,7 +99429,7 @@ int lua_ax_base_Renderer_getDefaultRenderTarget(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getDefaultRenderTarget();
-        object_to_luaval<ax::rhi::RenderTarget>(tolua_S, "axrhi.RenderTarget",(ax::rhi::RenderTarget*)ret);
+        object_to_luaval<ax::rhi::RenderTarget>(tolua_S, "axr.RenderTarget",(ax::rhi::RenderTarget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Renderer:getDefaultRenderTarget",argc, 0);
@@ -99476,7 +99476,7 @@ int lua_ax_base_Renderer_getOffscreenRenderTarget(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getOffscreenRenderTarget();
-        object_to_luaval<ax::rhi::RenderTarget>(tolua_S, "axrhi.RenderTarget",(ax::rhi::RenderTarget*)ret);
+        object_to_luaval<ax::rhi::RenderTarget>(tolua_S, "axr.RenderTarget",(ax::rhi::RenderTarget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Renderer:getOffscreenRenderTarget",argc, 0);
@@ -101253,7 +101253,7 @@ int lua_ax_base_Renderer_getContext(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getContext();
-        object_to_luaval<ax::rhi::RenderContext>(tolua_S, "axrhi.RenderContext",(ax::rhi::RenderContext*)ret);
+        object_to_luaval<ax::rhi::RenderContext>(tolua_S, "axr.RenderContext",(ax::rhi::RenderContext*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Renderer:getContext",argc, 0);
@@ -101343,7 +101343,7 @@ int lua_ax_base_Renderer_readPixels(lua_State* tolua_S)
     do {
         if (argc == 3) {
             ax::rhi::RenderTarget* arg0;
-            ok &= luaval_to_object<ax::rhi::RenderTarget>(tolua_S, 2, "axrhi.RenderTarget",&arg0, "ax.Renderer:readPixels");
+            ok &= luaval_to_object<ax::rhi::RenderTarget>(tolua_S, 2, "axr.RenderTarget",&arg0, "ax.Renderer:readPixels");
 
             if (!ok) { break; }
             bool arg1;
@@ -101367,7 +101367,7 @@ int lua_ax_base_Renderer_readPixels(lua_State* tolua_S)
     do {
         if (argc == 2) {
             ax::rhi::RenderTarget* arg0;
-            ok &= luaval_to_object<ax::rhi::RenderTarget>(tolua_S, 2, "axrhi.RenderTarget",&arg0, "ax.Renderer:readPixels");
+            ok &= luaval_to_object<ax::rhi::RenderTarget>(tolua_S, 2, "axr.RenderTarget",&arg0, "ax.Renderer:readPixels");
 
             if (!ok) { break; }
             std::function<void (const ax::rhi::PixelBufferDesc &)> arg1;
