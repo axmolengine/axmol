@@ -67,9 +67,8 @@ static void b2DrawSolidPolygon(b2Transform t,
 // void (*DrawCircle)(b2Vec2 center, float radius, b2HexColor color, void* context);
 static void b2DrawCircle(b2Vec2 center, float radius, b2HexColor color, PhysicsDebugNode* dn)
 {
-    dn->drawCircle(Vec2(center.x * dn->getPTMRatio(), center.y * dn->getPTMRatio()) + dn->getWorldOffset(),
-                   radius * dn->getPTMRatio(), AX_DEGREES_TO_RADIANS(0), 30, true, 1.0f, 1.0f,
-                   PhysicsHelper::toColor(color));
+    dn->drawDot(Vec2(center.x * dn->getPTMRatio(), center.y * dn->getPTMRatio()) + dn->getWorldOffset(),
+                radius * dn->getPTMRatio(), PhysicsHelper::toColor(color));
 }
 
 /// Draw a solid circle.
@@ -80,8 +79,11 @@ static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, Phy
     Vec2 c       = {Vec2(center.x * dn->getPTMRatio(), center.y * dn->getPTMRatio()) + dn->getWorldOffset()};
     auto color4f = PhysicsHelper::toColor(color);
 
-    dn->drawSolidCircle(c, radius * dn->getPTMRatio(), AX_DEGREES_TO_RADIANS(0), 20, 1.0f, 1.0f,
-                        ax::Color(color4f.r / 2, color4f.g / 2, color4f.b / 2, color4f.a), 0.4f, color4f);
+    dn->drawDot(Vec2(center.x * dn->getPTMRatio(), center.y * dn->getPTMRatio()) + dn->getWorldOffset(),
+                radius * dn->getPTMRatio(), Color);
+    dn->drawDot(Vec2(center.x * dn->getPTMRatio(), center.y * dn->getPTMRatio()) + dn->getWorldOffset(),
+                radius * dn->getPTMRatio() - 1, ax::Color(Color.r / 4, Color.g / 4, Color.b / 4, Color.a));
+    
     // Draw a line fixed in the circle to animate rotation.
     b2Vec2 pp = {(center + radius * b2Rot_GetXAxis(t.q))};
     Vec2 cp   = {Vec2(pp.x * dn->getPTMRatio(), pp.y * dn->getPTMRatio()) + dn->getWorldOffset()};
