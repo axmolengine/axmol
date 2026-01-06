@@ -83,7 +83,7 @@ static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, Phy
                 radius * dn->getPTMRatio(), color4f);
     dn->drawDot(Vec2(center.x * dn->getPTMRatio(), center.y * dn->getPTMRatio()) + dn->getWorldOffset(),
                 radius * dn->getPTMRatio() - 0.5f, ax::Color(color4f.r / 4, color4f.g / 4, color4f.b / 4, color4f.a));
-    
+
     // Draw a line fixed in the circle to animate rotation.
     b2Vec2 pp = {(center + radius * b2Rot_GetXAxis(t.q))};
     Vec2 cp   = {Vec2(pp.x * dn->getPTMRatio(), pp.y * dn->getPTMRatio()) + dn->getWorldOffset()};
