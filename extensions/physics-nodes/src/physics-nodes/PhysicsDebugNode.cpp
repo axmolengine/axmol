@@ -80,9 +80,9 @@ static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, Phy
     auto color4f = PhysicsHelper::toColor(color);
 
     dn->drawDot(Vec2(center.x * dn->getPTMRatio(), center.y * dn->getPTMRatio()) + dn->getWorldOffset(),
-                radius * dn->getPTMRatio(), Color);
+                radius * dn->getPTMRatio(), color4f);
     dn->drawDot(Vec2(center.x * dn->getPTMRatio(), center.y * dn->getPTMRatio()) + dn->getWorldOffset(),
-                radius * dn->getPTMRatio() - 0.5f, ax::Color(Color.r / 4, Color.g / 4, Color.b / 4, Color.a));
+                radius * dn->getPTMRatio() - 0.5f, ax::Color(color4f.r / 4, color4f.g / 4, color4f.b / 4, color4f.a));
     
     // Draw a line fixed in the circle to animate rotation.
     b2Vec2 pp = {(center + radius * b2Rot_GetXAxis(t.q))};
