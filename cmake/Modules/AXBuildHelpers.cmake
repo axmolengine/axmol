@@ -493,6 +493,16 @@ function(ax_setup_app_config app_name)
     # output macOS/iOS .app
     set_target_properties(${app_name} PROPERTIES MACOSX_BUNDLE 1)
 
+    set_target_properties(${app_name} PROPERTIES
+      XCODE_ATTRIBUTE_SKIP_INSTALL "NO"
+      XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym"
+      XCODE_ATTRIBUTE_GCC_GENERATE_DEBUGGING_SYMBOLS "YES"
+      XCODE_ATTRIBUTE_DEPLOYMENT_POSTPROCESSING "YES"
+      XCODE_ATTRIBUTE_ENABLE_STDEBUG_INFORMATION_FORMAT "dwarf-with-dsym"
+      # XCODE_ATTRIBUTE_STRIP_STYLE "debugging"
+      XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "$(inherited)"
+    )
+
     # set codesign
     if(IOS AND(NOT("${CMAKE_OSX_SYSROOT}" MATCHES ".*simulator.*")))
       set_xcode_property(${app_name} CODE_SIGNING_REQUIRED "YES")
