@@ -111,30 +111,19 @@ function(ax_add_3rd source_dir)
       add_dependencies(3rdparty ${tgt})
     endif()
 
-    get_target_property(is_imported_lib ${tgt} IMPORTED)
+    get_target_property(_is_imported_lib ${tgt} IMPORTED)
+    
+    if(NOT _is_imported_lib AND NOT (tgt_type STREQUAL "INTERFACE_LIBRARY"))
+      set_target_properties(${tgt} PROPERTIES
+        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" # Windows/Linux/macOS, .a, .lib
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin" # Windows .dll, .exe
+        FOLDER "3rdparty"
+      )
 
-    if (NOT is_imported_lib)
-      if(tgt_type STREQUAL "SHARED_LIBRARY")
-        if(LINUX)
-          set_target_properties(${tgt} PROPERTIES
-            ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-            LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-            FOLDER "3rdparty"
-          )
-        else()
-          set_target_properties(${tgt} PROPERTIES
-            ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-            FOLDER "3rdparty"
-          )
-        endif()
-      elseif(NOT(tgt_type STREQUAL "INTERFACE_LIBRARY"))
+      get_target_property(_apple_framework ${tgt} MACOSX_FRAMEWORK_NAME)
+      if(NOT _apple_framework)
         set_target_properties(${tgt} PROPERTIES
-          ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-          LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-          RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-          FOLDER "3rdparty"
+          LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" # .so, .dylib, windows imported .lib
         )
       endif()
     endif()
@@ -207,7 +196,7 @@ if(AX_WITH_JPEG AND NOT WINRT AND NOT EMSCRIPTEN)
   ax_add_3rd(jpeg-turbo)
 endif()
 
-ax_add_3rd(openssl TARGETS OpenSSL::SSL)
+ax_add_3rd(openssl TARGETS OpenSSL::SSL OpenSSL::Crypto)
 
 if(AX_WITH_WEBP)
   ax_add_3rd(webp)

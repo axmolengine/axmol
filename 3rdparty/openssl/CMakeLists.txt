@@ -8,7 +8,7 @@ _1kfetch_dist(openssl)
 set(OPENSSL_INCLUDE_DIR "${openssl_INC_DIR}" CACHE STRING "OpenSSL include dir" FORCE)
 
 # -----macro: set openssl sub target-----
-macro(set_openssl_sub_target sub_target_name sub_lib_name)
+macro(import_openssl_sub_target sub_target_name sub_lib_name)
   if(WINDOWS)
     add_library(${sub_target_name} SHARED IMPORTED GLOBAL)
   else()
@@ -41,7 +41,6 @@ macro(set_openssl_sub_target sub_target_name sub_lib_name)
   endif()
 
   if(${sub_lib_name} STREQUAL "ssl")
-    set(OPENSSL_ROOT_DIR "${openssl_LIB_DIR}" CACHE STRING "" FORCE)
     set(OPENSSL_SSL_LIBRARY "OpenSSL::SSL" CACHE STRING "" FORCE)
   else()
     set(OPENSSL_CRYPTO_LIBRARY "OpenSSL::Crypto" CACHE STRING "" FORCE)
@@ -49,12 +48,12 @@ macro(set_openssl_sub_target sub_target_name sub_lib_name)
 endmacro()
 
 # -----sub target 1: ssl-----
-set(target_name OpenSSL::SSL ssl)
-set_openssl_sub_target(${target_name})
+import_openssl_sub_target(OpenSSL::SSL ssl)
 
 # -----sub target 2: crypto-----
-set(target_name OpenSSL::Crypto crypto)
-set_openssl_sub_target(${target_name})
+import_openssl_sub_target(OpenSSL::Crypto crypto)
+
+set(OPENSSL_ROOT_DIR "${openssl_LIB_DIR}" CACHE STRING "" FORCE)
 
 # Ensure OpenSSL::SSL automatically propagates its dependency on OpenSSL::Crypto
 target_link_libraries(OpenSSL::SSL INTERFACE OpenSSL::Crypto)
