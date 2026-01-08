@@ -111,9 +111,7 @@ function(ax_add_3rd source_dir)
       add_dependencies(3rdparty ${tgt})
     endif()
 
-    get_target_property(_is_imported_lib ${tgt} IMPORTED)
-    
-    if(NOT _is_imported_lib AND NOT (tgt_type STREQUAL "INTERFACE_LIBRARY"))
+    if(NOT (tgt_type STREQUAL "INTERFACE_LIBRARY"))
       set_target_properties(${tgt} PROPERTIES
         ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" # Windows/Linux/macOS, .a, .lib
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin" # Windows .dll, .exe
@@ -250,6 +248,10 @@ if(AX_ENABLE_AUDIO)
       "ALSOFT_UTILS OFF"
       "ALSOFT_EXAMPLES OFF"
       "ALSOFT_INSTALL OFF"
+      "ALSOFT_INSTALL_CONFIG OFF"
+      "ALSOFT_INSTALL_HRTF_DATA OFF"
+      "ALSOFT_INSTALL_AMBDEC_PRESETS OFF"
+      "ALSOFT_INSTALL_UTILS OFF"
       "ALSOFT_ENABLE_MODULES OFF"
     )
 
