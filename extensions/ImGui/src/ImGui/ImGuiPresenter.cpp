@@ -174,11 +174,14 @@ public:
         listener->onTouchBegan = [this](Touch* touch, Event*) -> bool { return ImGui::GetIO().WantCaptureMouse; };
         _trackLayer->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, _trackLayer);
 
-        // add by halx99
-        auto stopAnyMouse  = [=](EventMouse* event) -> bool { return ImGui::GetIO().WantCaptureMouse; };
+        // capture mouse events
+        auto captureMouse  = [=](EventMouse* event) -> bool { return ImGui::GetIO().WantCaptureMouse; };
         auto mouseListener = EventListenerMouse::create();
         mouseListener->setSwallowMouse(true);
-        mouseListener->onMouseDown = mouseListener->onMouseUp = stopAnyMouse;
+        mouseListener->onMouseDown   = captureMouse;
+        mouseListener->onMouseUp     = captureMouse;
+        mouseListener->onMouseMove   = captureMouse;
+        mouseListener->onMouseScroll = captureMouse;
         _trackLayer->getEventDispatcher()->addEventListenerWithSceneGraphPriority(mouseListener, _trackLayer);
         scene->addChild(_trackLayer, INT_MAX);
 #endif
