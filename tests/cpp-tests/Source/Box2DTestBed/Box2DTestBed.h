@@ -28,8 +28,8 @@
 #include "axmol/axmol.h"
 #include "box2d/box2d.h"
 #include "../BaseTest.h"
-#include "Box2DTestDebugDrawNode.h"
 
+class SampleDrawNode;
 class SampleEntry;
 class Sample;
 
@@ -66,7 +66,7 @@ public:
     Sample* m_sample{};
     int m_entryIndex{};
 
-    Vec2 m_statsWindowOffset{};
+    ax::Vec2 m_statsWindowOffset{};
 
 private:
     b2Vec2 _mouseDownPos{};
@@ -78,7 +78,7 @@ private:
     ax::EventListenerMouse* _mouseListener{};
 
     // Debug stuff
-    Box2DTestDebugDrawNode* _debugDraw{};
+    SampleDrawNode* _debugDrawNode{};
 };
 
 #endif

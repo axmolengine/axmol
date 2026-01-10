@@ -7,7 +7,6 @@
 
 #include "world.h"
 
-#include "aabb.h"
 #include "arena_allocator.h"
 #include "array.h"
 #include "bitset.h"
@@ -195,8 +194,6 @@ b2WorldId b2CreateWorld( const b2WorldDef* def )
 	world->maxContactPushSpeed = def->maxContactPushSpeed;
 	world->contactHertz = def->contactHertz;
 	world->contactDampingRatio = def->contactDampingRatio;
-	world->jointHertz = def->jointHertz;
-	world->jointDampingRatio = def->jointDampingRatio;
 
 	if ( def->frictionCallback == NULL )
 	{
@@ -413,11 +410,11 @@ static void b2CollideTask( int startIndex, int endIndex, uint32_t threadIndex, v
 			b2Vec2 centerOffsetA = b2RotateVector( transformA.q, bodySimA->localCenter );
 			b2Vec2 centerOffsetB = b2RotateVector( transformB.q, bodySimB->localCenter );
 
-			// This updates solid contacts and sensors
+			// This updates solid contacts
 			bool touching =
 				b2UpdateContact( world, contactSim, shapeA, transformA, centerOffsetA, shapeB, transformB, centerOffsetB );
 
-			// State changes that affect island connectivity. Also affects contact and sensor events.
+			// State changes that affect island connectivity. Also affects contact events.
 			if ( touching == true && wasTouching == false )
 			{
 				contactSim->simFlags |= b2_simStartedTouching;
@@ -631,7 +628,7 @@ static void b2Collide( b2StepContext* context )
 			else if ( simFlags & b2_simStartedTouching )
 			{
 				B2_ASSERT( contact->islandId == B2_NULL_INDEX );
-				// Contact is solid
+
 				if ( flags & b2_contactEnableContactEvents )
 				{
 					b2ContactBeginTouchEvent event = { shapeIdA, shapeIdB, contactSim->manifold };
@@ -663,8 +660,6 @@ static void b2Collide( b2StepContext* context )
 			else if ( simFlags & b2_simStoppedTouching )
 			{
 				contactSim->simFlags &= ~b2_simStoppedTouching;
-
-				// Contact is solid
 				contact->flags &= ~b2_contactTouchingFlag;
 
 				if ( contact->flags & b2_contactEnableContactEvents )
@@ -765,12 +760,11 @@ void b2World_Step( b2WorldId worldId, float timeStep, int subStepCount )
 	world->inv_h = context.inv_h;
 
 	// Hertz values get reduced for large time steps
-	float contactHertz = b2MinFloat( world->contactHertz, 0.25f * context.inv_h );
-	float jointHertz = b2MinFloat( world->jointHertz, 0.125f * context.inv_h );
-
+	float contactHertz = b2MinFloat( world->contactHertz, 0.125f * context.inv_h );
 	context.contactSoftness = b2MakeSoft( contactHertz, world->contactDampingRatio, context.h );
 	context.staticSoftness = b2MakeSoft( 2.0f * contactHertz, world->contactDampingRatio, context.h );
-	context.jointSoftness = b2MakeSoft( jointHertz, world->jointDampingRatio, context.h );
+
+	world->contactSpeed = world->maxContactPushSpeed / context.staticSoftness.massScale;
 
 	context.restitutionThreshold = world->restitutionThreshold;
 	context.maxLinearVelocity = world->maxLinearSpeed;
@@ -1096,7 +1090,7 @@ static void b2DrawWithBounds( b2World* world, b2DebugDraw* draw )
 								// graph color
 								float pointSize = contact->colorIndex == B2_OVERFLOW_INDEX ? 7.5f : 5.0f;
 								draw->DrawPointFcn( point->point, pointSize, graphColors[contact->colorIndex], draw->context );
-								// g_draw.DrawString(point->position, "%d", point->color);
+								// m_context->draw.DrawString(point->position, "%d", point->color);
 							}
 							else if ( point->separation > linearSlop )
 							{
@@ -1395,7 +1389,7 @@ void b2World_Draw( b2WorldId worldId, b2DebugDraw* draw )
 						// graph color
 						float pointSize = colorIndex == B2_OVERFLOW_INDEX ? 7.5f : 5.0f;
 						draw->DrawPointFcn( point->point, pointSize, colors[colorIndex], draw->context );
-						// g_draw.DrawString(point->position, "%d", point->color);
+						// m_context->draw.DrawString(point->position, "%d", point->color);
 					}
 					else if ( point->separation > linearSlop )
 					{
@@ -1422,9 +1416,9 @@ void b2World_Draw( b2WorldId worldId, b2DebugDraw* draw )
 					else if ( draw->drawContactImpulses )
 					{
 						b2Vec2 p1 = point->point;
-						b2Vec2 p2 = b2MulAdd( p1, k_impulseScale * point->normalImpulse, normal );
+						b2Vec2 p2 = b2MulAdd( p1, k_impulseScale * point->totalNormalImpulse, normal );
 						draw->DrawSegmentFcn( p1, p2, impulseColor, draw->context );
-						snprintf( buffer, B2_ARRAY_COUNT( buffer ), "%.2f", 1000.0f * point->normalImpulse );
+						snprintf( buffer, B2_ARRAY_COUNT( buffer ), "%.2f", 1000.0f * point->totalNormalImpulse );
 						draw->DrawStringFcn( p1, buffer, b2_colorWhite, draw->context );
 					}
 
@@ -1842,19 +1836,6 @@ void b2World_SetContactTuning( b2WorldId worldId, float hertz, float dampingRati
 	world->maxContactPushSpeed = b2ClampFloat( pushSpeed, 0.0f, FLT_MAX );
 }
 
-void b2World_SetJointTuning( b2WorldId worldId, float hertz, float dampingRatio )
-{
-	b2World* world = b2GetWorldFromId( worldId );
-	B2_ASSERT( world->locked == false );
-	if ( world->locked )
-	{
-		return;
-	}
-
-	world->jointHertz = b2ClampFloat( hertz, 0.0f, FLT_MAX );
-	world->jointDampingRatio = b2ClampFloat( dampingRatio, 0.0f, FLT_MAX );
-}
-
 void b2World_SetMaximumLinearSpeed( b2WorldId worldId, float maximumLinearSpeed )
 {
 	B2_ASSERT( b2IsValidFloat( maximumLinearSpeed ) && maximumLinearSpeed > 0.0f );
@@ -2077,10 +2058,7 @@ static bool TreeQueryCallback( int proxyId, uint64_t userData, void* context )
 
 	b2Shape* shape = b2ShapeArray_Get( &world->shapes, shapeId );
 
-	b2Filter shapeFilter = shape->filter;
-	b2QueryFilter queryFilter = worldContext->filter;
-
-	if ( ( shapeFilter.categoryBits & queryFilter.maskBits ) == 0 || ( shapeFilter.maskBits & queryFilter.categoryBits ) == 0 )
+	if ( b2ShouldQueryCollide( shape->filter, worldContext->filter ) == false )
 	{
 		return true;
 	}
@@ -2137,10 +2115,7 @@ static bool TreeOverlapCallback( int proxyId, uint64_t userData, void* context )
 
 	b2Shape* shape = b2ShapeArray_Get( &world->shapes, shapeId );
 
-	b2Filter shapeFilter = shape->filter;
-	b2QueryFilter queryFilter = worldContext->filter;
-
-	if ( ( shapeFilter.categoryBits & queryFilter.maskBits ) == 0 || ( shapeFilter.maskBits & queryFilter.categoryBits ) == 0 )
+	if ( b2ShouldQueryCollide( shape->filter, worldContext->filter ) == false )
 	{
 		return true;
 	}
@@ -2217,10 +2192,8 @@ static float RayCastCallback( const b2RayCastInput* input, int proxyId, uint64_t
 	b2World* world = worldContext->world;
 
 	b2Shape* shape = b2ShapeArray_Get( &world->shapes, shapeId );
-	b2Filter shapeFilter = shape->filter;
-	b2QueryFilter queryFilter = worldContext->filter;
 
-	if ( ( shapeFilter.categoryBits & queryFilter.maskBits ) == 0 || ( shapeFilter.maskBits & queryFilter.categoryBits ) == 0 )
+	if ( b2ShouldQueryCollide( shape->filter, worldContext->filter ) == false )
 	{
 		return input->maxFraction;
 	}
@@ -2286,6 +2259,12 @@ b2TreeStats b2World_CastRay( b2WorldId worldId, b2Vec2 origin, b2Vec2 translatio
 // This callback finds the closest hit. This is the most common callback used in games.
 static float b2RayCastClosestFcn( b2ShapeId shapeId, b2Vec2 point, b2Vec2 normal, float fraction, void* context )
 {
+	// Ignore initial overlap
+	if (fraction == 0.0f)
+	{
+		return -1.0f;
+	}
+	
 	b2RayResult* rayResult = (b2RayResult*)context;
 	rayResult->shapeId = shapeId;
 	rayResult->point = point;
@@ -2340,10 +2319,8 @@ static float ShapeCastCallback( const b2ShapeCastInput* input, int proxyId, uint
 	b2World* world = worldContext->world;
 
 	b2Shape* shape = b2ShapeArray_Get( &world->shapes, shapeId );
-	b2Filter shapeFilter = shape->filter;
-	b2QueryFilter queryFilter = worldContext->filter;
 
-	if ( ( shapeFilter.categoryBits & queryFilter.maskBits ) == 0 || ( shapeFilter.maskBits & queryFilter.categoryBits ) == 0 )
+	if ( b2ShouldQueryCollide( shape->filter, worldContext->filter ) == false )
 	{
 		return input->maxFraction;
 	}
@@ -2434,10 +2411,8 @@ static float MoverCastCallback( const b2ShapeCastInput* input, int proxyId, uint
 	b2World* world = worldContext->world;
 
 	b2Shape* shape = b2ShapeArray_Get( &world->shapes, shapeId );
-	b2Filter shapeFilter = shape->filter;
-	b2QueryFilter queryFilter = worldContext->filter;
 
-	if ( ( shapeFilter.categoryBits & queryFilter.maskBits ) == 0 || ( shapeFilter.maskBits & queryFilter.categoryBits ) == 0 )
+	if ( b2ShouldQueryCollide( shape->filter, worldContext->filter ) == false )
 	{
 		return worldContext->fraction;
 	}
@@ -2513,10 +2488,7 @@ static bool TreeCollideCallback( int proxyId, uint64_t userData, void* context )
 
 	b2Shape* shape = b2ShapeArray_Get( &world->shapes, shapeId );
 
-	b2Filter shapeFilter = shape->filter;
-	b2QueryFilter queryFilter = worldContext->filter;
-
-	if ( ( shapeFilter.categoryBits & queryFilter.maskBits ) == 0 || ( shapeFilter.maskBits & queryFilter.categoryBits ) == 0 )
+	if ( b2ShouldQueryCollide( shape->filter, worldContext->filter ) == false )
 	{
 		return true;
 	}
@@ -2526,7 +2498,8 @@ static bool TreeCollideCallback( int proxyId, uint64_t userData, void* context )
 
 	b2PlaneResult result = b2CollideMover( shape, transform, &worldContext->mover );
 
-	if ( result.hit )
+	// todo handle deep overlap
+	if ( result.hit && b2IsNormalized(result.plane.normal) )
 	{
 		b2ShapeId id = { shape->id + 1, world->worldId, shape->generation };
 		return worldContext->fcn( id, &result, worldContext->userContext );
@@ -3244,7 +3217,6 @@ void b2ValidateContacts( b2World* world )
 
 		if ( setId == b2_awakeSet )
 		{
-			// If touching and not a sensor
 			if ( touching )
 			{
 				B2_ASSERT( 0 <= contact->colorIndex && contact->colorIndex < B2_GRAPH_COLOR_COUNT );
@@ -3261,7 +3233,7 @@ void b2ValidateContacts( b2World* world )
 		}
 		else
 		{
-			// Sleeping and non-touching contacts or sensor contacts belong in the disabled set
+			// Sleeping and non-touching contacts belong in the disabled set
 			B2_ASSERT( touching == false && setId == b2_disabledSet );
 		}
 
@@ -3270,7 +3242,6 @@ void b2ValidateContacts( b2World* world )
 		B2_ASSERT( contactSim->bodyIdA == contact->edges[0].bodyId );
 		B2_ASSERT( contactSim->bodyIdB == contact->edges[1].bodyId );
 
-		// Sim touching is true for solid and sensor contacts
 		bool simTouching = ( contactSim->simFlags & b2_simTouchingFlag ) != 0;
 		B2_ASSERT( touching == simTouching );
 

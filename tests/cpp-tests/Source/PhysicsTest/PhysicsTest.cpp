@@ -113,6 +113,7 @@ void PhysicsDemo::onEnter()
     auto& settings      = debugDrawNode->getB2DebugDraw();
     settings.drawShapes = true;
     settings.drawJoints = true;
+    settings.drawBounds = false;
     debugDrawNode->setVisible(_debugDraw);
     _debugDrawNode = debugDrawNode;
 

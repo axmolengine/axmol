@@ -1,58 +1,220 @@
-#include "Box2DTestDebugDrawNode.h"
+#include "./draw.h"
 #include "VisibleRect.h"
 #include "axmol/physics/PhysicsHelper.h"
 #include "imgui.h"
 
 using namespace ax;
 
-Box2DTestDebugDrawNode* g_pDebugDrawNode;
-GLFWwindow* g_mainWindow;
-b2SampleCamera g_camera;
+#define BUFFER_OFFSET( x ) ( (const void*)( x ) )
 
-b2AABB b2SampleCamera::GetViewBounds()
+#define SHADER_TEXT( x ) "#version 330\n" #x
+
+struct RGBA8
 {
-    b2AABB bounds;
-    bounds.lowerBound = ConvertScreenToWorld({0.0f, (float)m_height});
-    bounds.upperBound = ConvertScreenToWorld({(float)m_width, 0.0f});
-    return bounds;
+	uint8_t r, g, b, a;
+};
+
+static RGBA8 MakeRGBA8( b2HexColor c, float alpha )
+{
+	return { uint8_t( ( c >> 16 ) & 0xFF ), uint8_t( ( c >> 8 ) & 0xFF ), uint8_t( c & 0xFF ), uint8_t( 0xFF * alpha ) };
 }
 
-b2Vec2 b2SampleCamera::ConvertScreenToWorld(b2Vec2 ps)
+SampleCamera::SampleCamera()
 {
-    float w = float(m_width);
-    float h = float(m_height);
-    float u = ps.x / w;
-    float v = (h - ps.y) / h;
-
-    float ratio    = w / h;
-    b2Vec2 extents = {m_zoom * ratio, m_zoom};
-
-    b2Vec2 lower = b2Sub(m_center, extents);
-    b2Vec2 upper = b2Add(m_center, extents);
-
-    b2Vec2 pw = {(1.0f - u) * lower.x + u * upper.x, (1.0f - v) * lower.y + v * upper.y};
-    return pw;
+	m_width = 1920;
+	m_height = 1080;
+	ResetView();
 }
 
-b2Vec2 b2SampleCamera::ConvertWorldToScreen(b2Vec2 pw)
+void SampleCamera::ResetView()
 {
-    float w     = float(m_width);
-    float h     = float(m_height);
-    float ratio = w / h;
-
-    b2Vec2 extents = {m_zoom * ratio, m_zoom};
-
-    b2Vec2 lower = b2Sub(m_center, extents);
-    b2Vec2 upper = b2Add(m_center, extents);
-
-    float u = (pw.x - lower.x) / (upper.x - lower.x);
-    float v = (pw.y - lower.y) / (upper.y - lower.y);
-
-    b2Vec2 ps = {u * w, (1.0f - v) * h};
-    return ps;
+	m_center = { 0.0f, 20.0f };
+	m_zoom = 1.0f;
 }
 
-static void b2DrawCircle(b2Vec2 center, float radius, b2HexColor color, Box2DTestDebugDrawNode* context)
+b2Vec2 SampleCamera::ConvertScreenToWorld(b2Vec2 ps)
+{
+	float w = float( m_width );
+	float h = float( m_height );
+	float u = ps.x / w;
+	float v = ( h - ps.y ) / h;
+
+	float ratio = w / h;
+	b2Vec2 extents = { m_zoom * ratio, m_zoom };
+
+	b2Vec2 lower = b2Sub( m_center, extents );
+	b2Vec2 upper = b2Add( m_center, extents );
+
+	b2Vec2 pw = { ( 1.0f - u ) * lower.x + u * upper.x, ( 1.0f - v ) * lower.y + v * upper.y };
+	return pw;
+}
+
+b2Vec2 SampleCamera::ConvertWorldToScreen(b2Vec2 pw)
+{
+	float w = float( m_width );
+	float h = float( m_height );
+	float ratio = w / h;
+
+	b2Vec2 extents = { m_zoom * ratio, m_zoom };
+
+	b2Vec2 lower = b2Sub( m_center, extents );
+	b2Vec2 upper = b2Add( m_center, extents );
+
+	float u = ( pw.x - lower.x ) / ( upper.x - lower.x );
+	float v = ( pw.y - lower.y ) / ( upper.y - lower.y );
+
+	b2Vec2 ps = { u * w, ( 1.0f - v ) * h };
+	return ps;
+}
+
+// Convert from world coordinates to normalized device coordinates.
+// http://www.songho.ca/opengl/gl_projectionmatrix.html
+// This also includes the view transform
+void SampleCamera::BuildProjectionMatrix(float* m, float zBias)
+{
+	float ratio = float( m_width ) / float( m_height );
+	b2Vec2 extents = { m_zoom * ratio, m_zoom };
+
+	b2Vec2 lower = b2Sub( m_center, extents );
+	b2Vec2 upper = b2Add( m_center, extents );
+	float w = upper.x - lower.x;
+	float h = upper.y - lower.y;
+
+	m[0] = 2.0f / w;
+	m[1] = 0.0f;
+	m[2] = 0.0f;
+	m[3] = 0.0f;
+
+	m[4] = 0.0f;
+	m[5] = 2.0f / h;
+	m[6] = 0.0f;
+	m[7] = 0.0f;
+
+	m[8] = 0.0f;
+	m[9] = 0.0f;
+	m[10] = -1.0f;
+	m[11] = 0.0f;
+
+	m[12] = -2.0f * m_center.x / w;
+	m[13] = -2.0f * m_center.y / h;
+	m[14] = zBias;
+	m[15] = 1.0f;
+}
+
+b2AABB SampleCamera::GetViewBounds()
+{
+	b2AABB bounds;
+	bounds.lowerBound = ConvertScreenToWorld( { 0.0f, (float)m_height } );
+	bounds.upperBound = ConvertScreenToWorld( { (float)m_width, 0.0f } );
+	return bounds;
+}
+
+
+#pragma region SampleDraw
+void SampleDraw::DrawPolygon(const b2Vec2* vertices, int32_t vertexCount, b2HexColor color)
+{
+    m_debugDraw.DrawPolygonFcn(vertices, vertexCount, color, m_context);
+}
+
+void SampleDraw::DrawSolidPolygon(b2Transform transform,
+                                  const b2Vec2* vertices,
+                                  int32_t vertexCount,
+                                  float radius,
+                                  b2HexColor color)
+{
+    m_debugDraw.DrawSolidPolygonFcn(transform, vertices, vertexCount, radius, color, m_context);
+}
+
+void SampleDraw::DrawCircle(b2Vec2 center, float radius, b2HexColor color)
+{
+    m_debugDraw.DrawCircleFcn(center, radius, color, m_context);
+}
+void SampleDraw::DrawSolidCircle(b2Transform transform, b2Vec2 center, float radius, b2HexColor color)
+{
+    m_debugDraw.DrawSolidCircleFcn(transform, radius, color, m_context);
+}
+
+void SampleDraw::DrawSolidCapsule(b2Vec2 p1, b2Vec2 p2, float radius, b2HexColor color)
+{
+    m_debugDraw.DrawSolidCapsuleFcn(p1, p2, radius, color, m_context);
+}
+
+void SampleDraw::DrawSegment(b2Vec2 p1, b2Vec2 p2, b2HexColor color)
+{
+    m_debugDraw.DrawSegmentFcn(p1, p2, color, m_context);
+}
+
+void SampleDraw::DrawTransform(b2Transform transform)
+{
+    m_debugDraw.DrawTransformFcn(transform, m_context);
+}
+
+void SampleDraw::DrawPoint(b2Vec2 p, float size, b2HexColor color)
+{
+    m_debugDraw.DrawPointFcn(p, size, color, m_context);
+}
+
+void SampleDraw::DrawAABB(b2AABB aabb, b2HexColor color)
+{
+    m_context->drawRect(Vec2{aabb.lowerBound.x, aabb.lowerBound.y}, Vec2{aabb.upperBound.x, aabb.upperBound.y},
+                   PhysicsHelper::toColor(color));
+}
+
+void SampleDraw::DrawString(int x, int y, const char* pszFormat, ...)
+{
+    // va_list args;
+    // va_start(args, pszFormat);
+    // auto ret = text_utils::vformat(pszFormat, args);
+    // va_end(args);
+    //
+    // _debugString.append(ret);
+    // _debugString.push_back('\n');
+    // _textRender->setString(_debugString);
+
+    va_list arg;
+    va_start(arg, pszFormat);
+    ImGui::Begin("Overlay", nullptr,
+                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_AlwaysAutoResize |
+                     ImGuiWindowFlags_NoScrollbar);
+    ImGui::PushFont(m_regularFont, ImGui::GetStyle().FontSizeBase);
+    ImGui::SetCursorPos(ImVec2(float(x), float(y)));
+    ImGui::TextColoredV(ImColor(230, 153, 153, 255), pszFormat, arg);
+    ImGui::PopFont();
+    ImGui::End();
+    va_end(arg);
+}
+
+void SampleDraw::DrawString(b2Vec2 p, const char* pszFormat, ...)
+{
+    /*va_list args;
+    va_start(args, pszFormat);
+    auto ret = text_utils::vformat(pszFormat, args);
+    va_end(args);
+
+    _debugString.append(ret);
+    _debugString.push_back('\n');
+    _textRender->setString(_debugString);*/
+
+    extern SampleCamera& getBox2dTestBedCamera();
+
+    b2Vec2 ps = getBox2dTestBedCamera().ConvertWorldToScreen(p);
+
+    va_list arg;
+    va_start(arg, pszFormat);
+    ImGui::Begin("Overlay", nullptr,
+                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_AlwaysAutoResize |
+                     ImGuiWindowFlags_NoScrollbar);
+    ImGui::SetCursorPos(ImVec2(ps.x, ps.y));
+    ImGui::TextColoredV(ImColor(230, 230, 230, 255), pszFormat, arg);
+    ImGui::End();
+    va_end(arg);
+}
+
+#pragma endregion
+
+
+#pragma region SampleDrawNode
+static void b2DrawCircle(b2Vec2 center, float radius, b2HexColor color, SampleDrawNode* context)
 {
     auto ratio  = context->getPTMRatio();
     auto offset = context->getWorldOffset();
@@ -60,7 +222,7 @@ static void b2DrawCircle(b2Vec2 center, float radius, b2HexColor color, Box2DTes
                                   b2Vec2{center.x * ratio + offset.x, center.y * ratio + offset.y}, radius * ratio});
 }
 
-static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, Box2DTestDebugDrawNode* context)
+static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, SampleDrawNode* context)
 {
     // RGBA8 rgba = MakeRGBA8(color, 1.0f);
     // m_circles.push_back({{transform.p.x, transform.p.y, transform.q.c, transform.q.s}, radius, rgba});
@@ -71,7 +233,7 @@ static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, Box
                         radius * ratio});
 }
 
-static void b2DrawSolidCapsule(b2Vec2 pt1, b2Vec2 pt2, float radius, b2HexColor c, Box2DTestDebugDrawNode* context)
+static void b2DrawSolidCapsule(b2Vec2 pt1, b2Vec2 pt2, float radius, b2HexColor c, SampleDrawNode* context)
 {
     auto ratio  = context->getPTMRatio();
     auto offset = context->getWorldOffset();
@@ -99,21 +261,18 @@ static void b2DrawSolidCapsule(b2Vec2 pt1, b2Vec2 pt2, float radius, b2HexColor 
                          length});
 }
 
-Box2DTestDebugDrawNode::~Box2DTestDebugDrawNode()
+SampleDrawNode::~SampleDrawNode()
 {
     _customCommandCircle.releasePSVL();
     _customCommandSolidCircle.releasePSVL();
     _customCommandCapsule.releasePSVL();
 }
 
-bool Box2DTestDebugDrawNode::initWithWorld(b2WorldId worldId)
+bool SampleDrawNode::initWithWorld(b2WorldId worldId)
 {
-    g_pDebugDrawNode = this;
-    g_mainWindow     = static_cast<RenderViewImpl*>(_director->getRenderView())->getWindow();
-
     bool ret = ax::extension::PhysicsDebugNode::initWithWorld(worldId);
 
-#define __b2_setfun(f) _debugDraw.f##Fcn = reinterpret_cast<decltype(_debugDraw.f##Fcn)>(b2##f);
+#define __b2_setfun(f) _debugDraw->f##Fcn = reinterpret_cast<decltype(_debugDraw->f##Fcn)>(b2##f);
     __b2_setfun(DrawCircle);
     __b2_setfun(DrawSolidCircle);
     __b2_setfun(DrawSolidCapsule);
@@ -229,116 +388,25 @@ bool Box2DTestDebugDrawNode::initWithWorld(b2WorldId worldId)
     return ret;
 }
 
-void Box2DTestDebugDrawNode::DrawPolygon(const b2Vec2* vertices, int32_t vertexCount, b2HexColor color)
-{
-    _debugDraw.DrawPolygonFcn(vertices, vertexCount, color, this);
-}
-
-void Box2DTestDebugDrawNode::DrawSolidPolygon(b2Transform transform,
-                                              const b2Vec2* vertices,
-                                              int32_t vertexCount,
-                                              float radius,
-                                              b2HexColor color)
-{
-    _debugDraw.DrawSolidPolygonFcn(transform, vertices, vertexCount, radius, color, this);
-}
-
-void Box2DTestDebugDrawNode::DrawCircle(b2Vec2 center, float radius, b2HexColor color)
-{
-    _debugDraw.DrawCircleFcn(center, radius, color, this);
-}
-void Box2DTestDebugDrawNode::DrawSolidCircle(b2Transform transform, b2Vec2 center, float radius, b2HexColor color)
-{
-    _debugDraw.DrawSolidCircleFcn(transform, radius, color, this);
-}
-
-void Box2DTestDebugDrawNode::DrawSolidCapsule(b2Vec2 p1, b2Vec2 p2, float radius, b2HexColor color)
-{
-    _debugDraw.DrawSolidCapsuleFcn(p1, p2, radius, color, this);
-}
-
-void Box2DTestDebugDrawNode::DrawSegment(b2Vec2 p1, b2Vec2 p2, b2HexColor color)
-{
-    _debugDraw.DrawSegmentFcn(p1, p2, color, this);
-}
-
-void Box2DTestDebugDrawNode::DrawTransform(b2Transform transform)
-{
-    _debugDraw.DrawTransformFcn(transform, this);
-}
-
-void Box2DTestDebugDrawNode::DrawPoint(b2Vec2 p, float size, b2HexColor color)
-{
-    _debugDraw.DrawPointFcn(p, size, color, this);
-}
-
-void Box2DTestDebugDrawNode::DrawString(int x, int y, const char* pszFormat, ...)
-{
-    // va_list args;
-    // va_start(args, pszFormat);
-    // auto ret = text_utils::vformat(pszFormat, args);
-    // va_end(args);
-    //
-    // _debugString.append(ret);
-    // _debugString.push_back('\n');
-    // _textRender->setString(_debugString);
-
-    va_list arg;
-    va_start(arg, pszFormat);
-    ImGui::Begin("Overlay", nullptr,
-                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_AlwaysAutoResize |
-                     ImGuiWindowFlags_NoScrollbar);
-    ImGui::PushFont(g_draw.m_regularFont, ImGui::GetStyle().FontSizeBase);
-    ImGui::SetCursorPos(ImVec2(float(x), float(y)));
-    ImGui::TextColoredV(ImColor(230, 153, 153, 255), pszFormat, arg);
-    ImGui::PopFont();
-    ImGui::End();
-    va_end(arg);
-}
-
-void Box2DTestDebugDrawNode::DrawString(b2Vec2 p, const char* pszFormat, ...)
-{
-    /*va_list args;
-    va_start(args, pszFormat);
-    auto ret = text_utils::vformat(pszFormat, args);
-    va_end(args);
-
-    _debugString.append(ret);
-    _debugString.push_back('\n');
-    _textRender->setString(_debugString);*/
-
-    b2Vec2 ps = g_camera.ConvertWorldToScreen(p);
-
-    va_list arg;
-    va_start(arg, pszFormat);
-    ImGui::Begin("Overlay", nullptr,
-                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_AlwaysAutoResize |
-                     ImGuiWindowFlags_NoScrollbar);
-    ImGui::SetCursorPos(ImVec2(ps.x, ps.y));
-    ImGui::TextColoredV(ImColor(230, 230, 230, 255), pszFormat, arg);
-    ImGui::End();
-    va_end(arg);
-}
-
-void Box2DTestDebugDrawNode::AddCapsule(const CapsuleData& capsule)
+void SampleDrawNode::AddCapsule(const CapsuleData& capsule)
 {
     _capsules.push_back(capsule);
     _capsulesDirty = true;
 }
 
-void Box2DTestDebugDrawNode::AddCircle(const CircleData& circle)
+void SampleDrawNode::AddCircle(const CircleData& circle)
 {
     _circles.push_back(circle);
     _circlesDirty = true;
 }
 
-void Box2DTestDebugDrawNode::AddCircle(const SolidCircleData& circle)
+void SampleDrawNode::AddCircle(const SolidCircleData& circle)
 {
     _solidCircles.push_back(circle);
     _solidCirclesDirty = true;
 }
 
-void Box2DTestDebugDrawNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void SampleDrawNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
     PhysicsDebugNode::draw(renderer, transform, flags);
 
@@ -410,7 +478,7 @@ void Box2DTestDebugDrawNode::draw(Renderer* renderer, const Mat4& transform, uin
         submitDrawCommand(renderer, _customCommandCapsule, transform);
 }
 
-void Box2DTestDebugDrawNode::submitDrawCommand(Renderer* renderer, CustomCommand& cmd, const Mat4& transform)
+void SampleDrawNode::submitDrawCommand(Renderer* renderer, CustomCommand& cmd, const Mat4& transform)
 {
     rhi::BlendDesc& blendDescriptor             = cmd.blendDesc();
     blendDescriptor.blendEnabled                = true;
@@ -435,7 +503,7 @@ void Box2DTestDebugDrawNode::submitDrawCommand(Renderer* renderer, CustomCommand
     renderer->addCommand(&cmd);
 }
 
-void Box2DTestDebugDrawNode::clear()
+void SampleDrawNode::clear()
 {
     ax::extension::PhysicsDebugNode::clear();
 
@@ -451,8 +519,4 @@ void Box2DTestDebugDrawNode::clear()
     _debugString.clear();
 }
 
-void Box2DTestDebugDrawNode::DrawAABB(b2AABB aabb, b2HexColor color)
-{
-    this->drawRect(Vec2{aabb.lowerBound.x, aabb.lowerBound.y}, Vec2{aabb.upperBound.x, aabb.upperBound.y},
-                   PhysicsHelper::toColor(color));
-}
+#pragma endregion

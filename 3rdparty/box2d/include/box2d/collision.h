@@ -68,7 +68,7 @@ typedef struct b2ShapeCastInput
 	bool canEncroach;
 } b2ShapeCastInput;
 
-/// Low level ray cast or shape-cast output data
+/// Low level ray cast or shape-cast output data. Returns a zero fraction and normal in the case of initial overlap.
 typedef struct b2CastOutput
 {
 	/// The surface normal at the hit point
@@ -382,7 +382,7 @@ typedef struct b2DistanceOutput
 {
 	b2Vec2 pointA;	  ///< Closest point on shapeA
 	b2Vec2 pointB;	  ///< Closest point on shapeB
-	b2Vec2 normal;	  ///< Normal vector that points from A to B
+	b2Vec2 normal;	  ///< Normal vector that points from A to B. Invalid if distance is zero.
 	float distance;	  ///< The final distance, zero if overlapped
 	int iterations;	  ///< Number of GJK iterations used
 	int simplexCount; ///< The number of simplexes stored in the simplex array
@@ -425,7 +425,7 @@ typedef struct b2ShapeCastPairInput
 } b2ShapeCastPairInput;
 
 /// Perform a linear shape cast of shape B moving and shape A fixed. Determines the hit point, normal, and translation fraction.
-/// You may optionally supply an array to hold debug data.
+/// Initially touching shapes are treated as a miss.
 B2_API b2CastOutput b2ShapeCast( const b2ShapeCastPairInput* input );
 
 /// Make a proxy for use in overlap, shape cast, and related functions. This is a deep copy of the points.
@@ -785,6 +785,9 @@ typedef struct b2PlaneResult
 	/// The collision plane between the mover and a convex shape
 	b2Plane plane;
 
+	// The collision point on the shape.
+	b2Vec2 point;
+
 	/// Did the collision register a hit? If not this plane should be ignored.
 	bool hit;
 } b2PlaneResult;
@@ -810,18 +813,18 @@ typedef struct b2CollisionPlane
 /// Result returned by b2SolvePlanes
 typedef struct b2PlaneSolverResult
 {
-	/// The final position of the mover
-	b2Vec2 position;
+	/// The translation of the mover
+	b2Vec2 translation;
 
 	/// The number of iterations used by the plane solver. For diagnostics.
 	int iterationCount;
 } b2PlaneSolverResult;
 
 /// Solves the position of a mover that satisfies the given collision planes.
-/// @param position this must be the position used to generate the collision planes
+/// @param targetDelta the desired movement from the position used to generate the collision planes
 /// @param planes the collision planes
 /// @param count the number of collision planes
-B2_API b2PlaneSolverResult b2SolvePlanes( b2Vec2 position, b2CollisionPlane* planes, int count );
+B2_API b2PlaneSolverResult b2SolvePlanes( b2Vec2 targetDelta, b2CollisionPlane* planes, int count );
 
 /// Clips the velocity against the given collision planes. Planes with zero push or clipVelocity
 /// set to false are skipped.

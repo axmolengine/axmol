@@ -523,10 +523,6 @@ bool TaskScheduler::TryRunTask( uint32_t threadNum_, uint32_t& hintPipeToCheck_i
     return false;
 }
 
-static inline uint32_t RotateLeft( uint32_t value, int32_t count )
-{
-    return ( value << count ) | ( value >> ( 32 - count ));
-}
 /*  xxHash variant based on documentation on
     https://github.com/Cyan4973/xxHash/blob/eec5700f4d62113b47ee548edbc4746f61ffb098/doc/xxhash_spec.md
 
@@ -536,17 +532,13 @@ static inline uint32_t RotateLeft( uint32_t value, int32_t count )
 */
 static inline uint32_t Hash32( uint32_t in_ )
 {
-    static const uint32_t PRIME32_1 = 2654435761U;  // 0b10011110001101110111100110110001
     static const uint32_t PRIME32_2 = 2246822519U;  // 0b10000101111010111100101001110111
     static const uint32_t PRIME32_3 = 3266489917U;  // 0b11000010101100101010111000111101
-    static const uint32_t PRIME32_4 =  668265263U;  // 0b00100111110101001110101100101111
     static const uint32_t PRIME32_5 =  374761393U;  // 0b00010110010101100110011110110001
     static const uint32_t SEED      = 0; // can configure seed if needed
 
-    // simple hash of nodes, does not check if nodePool is compressed or not.
+    // less than 16 bytes of input so simplified hash steps
     uint32_t acc = SEED + PRIME32_5;
-
-    // add node types to map, and also ensure that fully empty nodes are well distributed by hashing the pointer.
     acc += in_;
     acc = acc ^ (acc >> 15);
     acc = acc * PRIME32_2;
@@ -820,7 +812,6 @@ void TaskScheduler::SplitAndAddTask( uint32_t threadNum_, SubTaskSet subTask_, u
 {
     int32_t numAdded = 0;
     int32_t numNewTasksSinceNotification = 0;
-    int32_t numRun   = 0;
 
     int32_t upperBoundNumToAdd = 2 + (int32_t)( ( subTask_.partition.end - subTask_.partition.start ) / rangeToSplit_ );
 
@@ -848,7 +839,6 @@ void TaskScheduler::SplitAndAddTask( uint32_t threadNum_, SubTaskSet subTask_, u
                 subTask_.partition.start = taskToAdd.partition.end;
             }
             taskToAdd.pTask->ExecuteRange( taskToAdd.partition, threadNum_ );
-            ++numRun;
         }
     }
     int32_t countToRemove = upperBoundNumToAdd - numAdded;

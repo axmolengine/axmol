@@ -32,6 +32,9 @@ class AX_EX_DLL PhysicsDebugNode : public DrawNode
 {
 public:
     PhysicsDebugNode();
+    explicit PhysicsDebugNode(b2DebugDraw* externalDebugDraw);
+    ~PhysicsDebugNode();
+
     virtual bool initWithWorld(b2WorldId worldId);
 
     void setAutoDraw(bool bval) { _autoDraw = bval; }
@@ -50,11 +53,14 @@ public:
     // Overrides
     void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
-    b2DebugDraw& getB2DebugDraw() { return _debugDraw; }
+    b2DebugDraw& getB2DebugDraw() { return *_debugDraw; }
 
 protected:
+    void setBuiltinDrawFuncs();
+
     b2WorldId _world{};
-    b2DebugDraw _debugDraw{b2DefaultDebugDraw()};
+    b2DebugDraw* _debugDraw{nullptr};
+    bool _ownDebugDraw;
     bool _autoDraw{true};
     float _thinkness{0.5f};
 

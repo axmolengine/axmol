@@ -143,16 +143,34 @@ void PhysicsDebugNode::draw(Renderer* renderer, const Mat4& transform, uint32_t 
     {
         // clear the shapes information before draw current shapes.
         clear();
-        b2World_Draw(_world, &_debugDraw);
+        b2World_Draw(_world, _debugDraw);
     }
 
     DrawNode::draw(renderer, transform, flags);
 }
 
-PhysicsDebugNode::PhysicsDebugNode()
+PhysicsDebugNode::PhysicsDebugNode() : _ownDebugDraw(true)
 {
-    _debugDraw.context = this;
-#define __b2_setfun(f) _debugDraw.f##Fcn = reinterpret_cast<decltype(_debugDraw.f##Fcn)>(b2##f);
+    _debugDraw = new b2DebugDraw(b2DefaultDebugDraw());
+    setBuiltinDrawFuncs();
+}
+
+PhysicsDebugNode::PhysicsDebugNode(b2DebugDraw* externalDebugDraw) : _ownDebugDraw(false)
+{
+    _debugDraw = externalDebugDraw;
+    setBuiltinDrawFuncs();
+}
+
+PhysicsDebugNode::~PhysicsDebugNode()
+{
+    if (_ownDebugDraw)
+        AX_SAFE_DELETE(_debugDraw);
+}
+
+void PhysicsDebugNode::setBuiltinDrawFuncs()
+{
+    _debugDraw->context = this;
+#define __b2_setfun(f) _debugDraw->f##Fcn = reinterpret_cast<decltype(_debugDraw->f##Fcn)>(b2##f);
     __b2_setfun(DrawPolygon);
     __b2_setfun(DrawSolidPolygon);
     __b2_setfun(DrawCircle);
