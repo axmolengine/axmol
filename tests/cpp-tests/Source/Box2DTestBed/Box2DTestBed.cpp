@@ -84,6 +84,8 @@ Box2DTestBedTests::Box2DTestBedTests()
     s_context.camera.m_zoom   = 80;
     s_context.camera.m_center = b2Vec2_zero;
 
+    s_context.window = static_cast<RenderViewImpl*>(Director::getInstance()->getRenderView())->getWindow();
+
     ImGuiPresenter::getInstance()->setViewResolution(s_context.camera.m_width, s_context.camera.m_height);
 
     SortTests();
@@ -242,6 +244,8 @@ bool Box2DTestBed::onMouseScroll(Event* event)
 void Box2DTestBed::onEnter()
 {
     Scene::onEnter();
+    _director->getRenderView()->setWindowSize(1920, 1080);
+    ImGuiPresenter::getInstance()->enableDPIScale();
     ImGuiPresenter::getInstance()->addFont(FileUtils::getInstance()->fullPathForFilename("fonts/arial.ttf"));
     ImGuiPresenter::getInstance()->addRenderLoop("#bv3t", AX_CALLBACK_0(Box2DTestBed::renderSamples, this), this);
 }
@@ -282,13 +286,14 @@ void Box2DTestBed::renderSamples()
 {
     _debugDrawNode->clear();
 
-    float menuWidth = 180.0f;
-    auto cursorPos  = ImGui::GetCursorScreenPos();
+    auto cursorPos = ImGui::GetCursorScreenPos();
 
-    ImVec2 statsWindowPos  = {cursorPos.x + m_statsWindowOffset.x, cursorPos.y + m_statsWindowOffset.y};
-    ImVec2 statsWindowSize = {s_context.camera.m_width - 10.f, s_context.camera.m_height - 10.f};
-    ImGui::SetNextWindowPos(statsWindowPos);
-    ImGui::SetNextWindowSize(statsWindowSize);
+    auto& windowSize          = _director->getRenderView()->getWindowSize();
+    s_context.camera.m_width  = static_cast<int>(windowSize.width);
+    s_context.camera.m_height = static_cast<int>(windowSize.height);
+
+    ImGui::SetNextWindowPos({5.f, 5.f});
+    ImGui::SetNextWindowSize({s_context.camera.m_width - 10.f, s_context.camera.m_height - 10.f});
     ImGui::SetNextWindowBgAlpha(0.0f);
     ImGui::Begin("Overlay", nullptr,
                  ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_AlwaysAutoResize |
@@ -306,24 +311,23 @@ void Box2DTestBed::renderSamples()
     m_sample->Step();
 
     /// BEGIN UpdateUI
-    int maxWorkers = enki::GetNumHardwareThreads();
-
+    int maxWorkers  = enki::GetNumHardwareThreads();
+    float menuWidth = 180.0f * Device::getPixelRatio();
     if (s_context.draw.m_showUI)
     {
-        ImVec2 toolWindowPos  = {(cursorPos.x + s_context.camera.m_width - menuWidth - 80), (cursorPos.y - 80)};
-        ImVec2 toolWindowSize = {menuWidth, s_context.camera.m_height - 200.0f};
-        ImGui::SetNextWindowPos(toolWindowPos, ImGuiCond_FirstUseEver);
-        ImGui::SetNextWindowSize(toolWindowSize, ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowPos({s_context.camera.m_width - menuWidth - 10.0f, 10.0f});
+        ImGui::SetNextWindowSize({menuWidth, s_context.camera.m_height - 20.0f});
+
         ImGui::Begin("Tools", &s_context.draw.m_showUI,
-                     /*ImGuiWindowFlags_NoMove | */ ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+                     ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
         if (ImGui::BeginTabBar("ControlTabs", ImGuiTabBarFlags_None))
         {
             if (ImGui::BeginTabItem("Controls"))
             {
                 ImGui::PushItemWidth(100.0f);
-                ImGui::SliderInt("Sub-steps", &s_context.subStepCount, 1, 50);
-                ImGui::SliderFloat("Hertz", &s_context.hertz, 5.0f, 120.0f, "%.0f hz");
+                ImGui::SliderInt("Sub-steps", &s_context.subStepCount, 1, 32);
+                ImGui::SliderFloat("Hertz", &s_context.hertz, 5.0f, 240.0f, "%.0f hz");
 
                 if (ImGui::SliderInt("Workers", &s_context.workerCount, 1, maxWorkers))
                 {
@@ -343,13 +347,16 @@ void Box2DTestBed::renderSamples()
                 ImGui::Checkbox("Shapes", &s_context.drawShapes);
                 ImGui::Checkbox("Joints", &s_context.drawJoints);
                 ImGui::Checkbox("Joint Extras", &s_context.drawJointExtras);
-                ImGui::Checkbox("AABBs", &s_context.drawBounds);
+                ImGui::Checkbox("Bounds", &s_context.drawBounds);
                 ImGui::Checkbox("Contact Points", &s_context.drawContactPoints);
                 ImGui::Checkbox("Contact Normals", &s_context.drawContactNormals);
                 ImGui::Checkbox("Contact Impulses", &s_context.drawContactImpulses);
+                ImGui::Checkbox("Contact Features", &s_context.drawContactFeatures);
                 ImGui::Checkbox("Friction Impulses", &s_context.drawFrictionImpulses);
-                ImGui::Checkbox("Center of Masses", &s_context.drawMass);
+                ImGui::Checkbox("Mass", &s_context.drawMass);
+                ImGui::Checkbox("Body Names", &s_context.drawBodyNames);
                 ImGui::Checkbox("Graph Colors", &s_context.drawGraphColors);
+                ImGui::Checkbox("Islands", &s_context.drawIslands);
                 ImGui::Checkbox("Counters", &s_context.drawCounters);
                 ImGui::Checkbox("Profile", &s_context.drawProfile);
 
@@ -392,7 +399,7 @@ void Box2DTestBed::renderSamples()
 
             ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 
-            if (ImGui::BeginTabItem("Tests"))
+            if (ImGui::BeginTabItem("Samples"))
             {
                 int categoryIndex    = 0;
                 const char* category = g_sampleEntries[categoryIndex].category;
@@ -452,10 +459,7 @@ void Box2DTestBed::renderSamples()
         snprintf(buffer, 128, "%.1f ms - step %d - camera (%g, %g, %g)", 1000.0f * _director->getDeltaTime(),
                  m_sample->m_stepCount, s_context.camera.m_center.x, s_context.camera.m_center.y,
                  s_context.camera.m_zoom);
-        // snprintf( buffer, 128, "%.1f ms", 1000.0f * frameTime );
-
         ImGui::Begin("Overlay", nullptr,
-
                      ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_AlwaysAutoResize |
                          ImGuiWindowFlags_NoScrollbar);
         ImGui::SetCursorPos(ImVec2(5.0f, s_context.camera.m_height - 50.0f));
