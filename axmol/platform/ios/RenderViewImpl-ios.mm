@@ -29,6 +29,7 @@
 #include "axmol/platform/ios/RenderHostView-ios.h"
 #include "axmol/platform/ios/DirectorCaller-ios.h"
 #include "axmol/platform/ios/RenderViewImpl-ios.h"
+#include "axmol/platform/ios/AxmolViewController.h"
 #include "axmol/platform/Application.h"
 #include "axmol/platform/Device.h"
 #include "axmol/base/Touch.h"
@@ -216,13 +217,12 @@ void RenderViewImpl::setMultipleTouchEnabled(bool enabled)
 void RenderViewImpl::showWindow(void* viewController)
 {
     auto window     = (__bridge UIWindow*)_hostWindowHandle;
-    auto controller = (__bridge UIViewController*)viewController;
+    auto controller = (__bridge AxmolViewController*)viewController;
 
 #if !defined(AX_TARGET_OS_TVOS)
     controller.extendedLayoutIncludesOpaqueBars = YES;
 #endif
-    auto view       = (__bridge RenderHostView*)_hostViewHandle;
-    controller.view = view;
+    controller.renderHostView = (__bridge RenderHostView*)_hostViewHandle;
 
     // Set RootViewController to window
     if ([[UIDevice currentDevice].systemVersion floatValue] < 6.0)

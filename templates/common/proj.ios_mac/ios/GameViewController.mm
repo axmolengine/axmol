@@ -30,5 +30,9 @@
 @implementation GameViewController
 
 // Override to allow custom control the app behavior.
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+}
 
 @end

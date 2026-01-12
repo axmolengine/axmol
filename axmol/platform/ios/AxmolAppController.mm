@@ -37,7 +37,7 @@ using namespace ax;
 
 - (UIViewController*)createRootViewController
 {
-    return [[AxmolViewController alloc] initWithNibName:nil bundle:nil];
+    return [[AxmolViewController alloc] init];
 }
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
@@ -54,7 +54,7 @@ using namespace ax;
     _viewController = [self createRootViewController];
 
     renderView->showWindow(_viewController);
-
+    
     // IMPORTANT: Setting the RenderView should be done after creating the RootViewController
     Director::getInstance()->setRenderView(renderView);
 

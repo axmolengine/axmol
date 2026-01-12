@@ -498,10 +498,10 @@ float RenderView::getScaleY() const
 
 void RenderView::onSurfaceResized()
 {
-    AXLOGD("RenderView::onSurfaceResized");
-
     int screenWidth  = static_cast<uint32_t>(_renderSize.width);
     int screenHeight = static_cast<uint32_t>(_renderSize.height);
+    
+    AXLOGD("RenderView::onSurfaceResized: ({}x{})", screenWidth, screenHeight);
 
     auto renderer = Director::getInstance()->getRenderer();
     if (renderer)
