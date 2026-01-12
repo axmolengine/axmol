@@ -508,9 +508,15 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
         samplerDesc.mipFilter = MTLSamplerMipFilterLinear;
         break;
     }
+    
+    bool supportBorderColor{false};
+    if (@available(iOS 14.0, macOS 10.12, *))
+    {
+        supportBorderColor = ([_mtlDevice respondsToSelector:@selector(supportsSamplerBorderColor)] && [_mtlDevice supportsSamplerBorderColor]);
+    }
 
     // --- Address Modes ---
-    auto toMTLAddressMode = [](SamplerAddressMode mode) -> MTLSamplerAddressMode {
+    auto toMTLAddressMode = [supportBorderColor](SamplerAddressMode mode) -> MTLSamplerAddressMode {
         switch (mode)
         {
         case SamplerAddressMode::REPEAT:
@@ -520,7 +526,7 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
         case SamplerAddressMode::CLAMP:
             return MTLSamplerAddressModeClampToEdge;
         case SamplerAddressMode::BORDER:
-            return MTLSamplerAddressModeClampToBorderColor;
+            return supportBorderColor ? MTLSamplerAddressModeClampToBorderColor : MTLSamplerAddressModeClampToEdge;
         }
         return MTLSamplerAddressModeRepeat;
     };
@@ -533,7 +539,10 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     if (desc.sAddressMode == SamplerAddressMode::BORDER || desc.tAddressMode == SamplerAddressMode::BORDER ||
         desc.wAddressMode == SamplerAddressMode::BORDER)
     {
-        samplerDesc.borderColor = MTLSamplerBorderColorTransparentBlack;
+        if (supportBorderColor)
+        {
+            samplerDesc.borderColor = MTLSamplerBorderColorTransparentBlack;
+        }
     }
 
     // --- Compare Function ---
