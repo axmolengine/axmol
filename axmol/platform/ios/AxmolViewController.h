@@ -29,6 +29,6 @@
 }
 - (BOOL)prefersStatusBarHidden;
 
-@property (nonatomic, strong) UIView *renderHostView;
+@property(nonatomic, strong) UIView* renderHostView;
 
 @end

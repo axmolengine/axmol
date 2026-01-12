@@ -48,7 +48,7 @@ customization that is not appropriate for viewDidLoad.
 - (void)loadView
 {
     // create platform render view
-    auto r = [[UIScreen mainScreen] bounds];
+    auto r                   = [[UIScreen mainScreen] bounds];
     RenderHostView* hostView = [RenderHostView viewWithFrame:r
                                                  pixelFormat:(int)RenderViewImpl::_pixelFormat
                                                  depthFormat:(int)RenderViewImpl::_depthFormat

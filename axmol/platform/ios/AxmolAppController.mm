@@ -54,7 +54,7 @@ using namespace ax;
     _viewController = [self createRootViewController];
 
     renderView->showWindow(_viewController);
-    
+
     // IMPORTANT: Setting the RenderView should be done after creating the RootViewController
     Director::getInstance()->setRenderView(renderView);
 

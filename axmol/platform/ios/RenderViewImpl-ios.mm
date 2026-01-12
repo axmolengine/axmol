@@ -151,9 +151,7 @@ void RenderViewImpl::choosePixelFormats()
 
 RenderViewImpl::RenderViewImpl() {}
 
-RenderViewImpl::~RenderViewImpl()
-{
-}
+RenderViewImpl::~RenderViewImpl() {}
 
 bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
                                   const Rect& rect,
@@ -214,11 +212,11 @@ void RenderViewImpl::showWindow(void* viewController)
     // Calling makeKeyAndVisible triggers the AxmolViewController lifecycle:
     // loadView -> viewDidLoad -> viewWillAppear
     [window makeKeyAndVisible];
-    
+
     // After lifecycle completes, controller.view is initialized with RenderHostView
-    auto hostView = controller.view;
+    auto hostView   = controller.view;
     _hostViewHandle = controller.view;
-    
+
     const auto size               = resolveViewSizeToOrientation([hostView bounds].size);
     const auto backingScaleFactor = [hostView contentScaleFactor];
 
