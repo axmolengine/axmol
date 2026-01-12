@@ -83,21 +83,19 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnSurfaceCreated(JNI
         ANativeWindow_release(s_nativeWindow);
 
     s_nativeWindow = ANativeWindow_fromSurface(env, surface);
-    if (s_nativeWindow == nullptr) {
-        AXLOGW("ANativeWindow_fromSurface failed: surface={}, "
-               "windowSize=({} x {}), threadId={}",
-               fmt::ptr(surface),
-               static_cast<int>(w),
-               static_cast<int>(h),
-               (long)gettid());
+    if (s_nativeWindow == nullptr)
+    {
+        AXLOGW(
+            "ANativeWindow_fromSurface failed: surface={}, "
+            "windowSize=({} x {}), threadId={}",
+            fmt::ptr(surface), static_cast<int>(w), static_cast<int>(h), (long)gettid());
         return;
     }
 
-    AXLOGI("ANativeWindow_fromSurface success: window={}, "
-           "size=({} x {})",
-           fmt::ptr(s_nativeWindow),
-           static_cast<int>(w),
-           static_cast<int>(h));
+    AXLOGI(
+        "ANativeWindow_fromSurface success: window={}, "
+        "size=({} x {})",
+        fmt::ptr(s_nativeWindow), static_cast<int>(w), static_cast<int>(h));
 
     auto director   = ax::Director::getInstance();
     auto renderView = director->getRenderView();

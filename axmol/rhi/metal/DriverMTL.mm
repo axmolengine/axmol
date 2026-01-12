@@ -508,11 +508,12 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
         samplerDesc.mipFilter = MTLSamplerMipFilterLinear;
         break;
     }
-    
+
     bool supportBorderColor{false};
     if (@available(iOS 14.0, macOS 10.12, *))
     {
-        supportBorderColor = ([_mtlDevice respondsToSelector:@selector(supportsSamplerBorderColor)] && [_mtlDevice supportsSamplerBorderColor]);
+        supportBorderColor = ([_mtlDevice respondsToSelector:@selector(supportsSamplerBorderColor)] &&
+                              [_mtlDevice supportsSamplerBorderColor]);
     }
 
     // --- Address Modes ---

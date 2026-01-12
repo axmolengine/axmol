@@ -546,10 +546,10 @@ void RenderContextImpl::recreateSwapchain()
     }
 
     // Resets some state
-    _frameIndex = 0;
-    _imageIndex = 0;
-    _lastError  = VK_SUCCESS;
-    _suboptimal = false;
+    _frameIndex     = 0;
+    _imageIndex     = 0;
+    _lastError      = VK_SUCCESS;
+    _suboptimal     = false;
     _swapchainDirty = false;
 }
 
