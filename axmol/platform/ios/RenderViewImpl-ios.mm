@@ -153,8 +153,6 @@ RenderViewImpl::RenderViewImpl() {}
 
 RenderViewImpl::~RenderViewImpl()
 {
-    // auto hostView = (__bridge RenderHostView*) _hostViewHandle;
-    //[hostView release];
 }
 
 bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
@@ -167,28 +165,6 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
 
     // create platform window
     _hostWindowHandle = [[UIWindow alloc] initWithFrame:r];
-
-    // create platform render view
-    RenderHostView* hostView = [RenderHostView viewWithFrame:r
-                                                 pixelFormat:(int)_pixelFormat
-                                                 depthFormat:(int)_depthFormat
-                                          preserveBackbuffer:NO
-                                                  sharegroup:nil
-                                               multiSampling:_multisamplingCount > 0 ? YES : NO
-                                             numberOfSamples:_multisamplingCount];
-
-    // Not available on tvOS
-#if !defined(AX_TARGET_OS_TVOS)
-    [hostView setMultipleTouchEnabled:YES];
-#endif
-    const auto size               = resolveViewSizeToOrientation([hostView bounds].size);
-    const auto backingScaleFactor = [hostView contentScaleFactor];
-
-    // simply set renderSize, renderSize to framebufferSize with renderScale=1.0
-    updateRenderSurface(size.width * backingScaleFactor, size.height * backingScaleFactor,
-                        SurfaceUpdateFlag::AllUpdatesSilently);
-
-    _hostViewHandle = hostView;
 
     return true;
 }
@@ -222,7 +198,6 @@ void RenderViewImpl::showWindow(void* viewController)
 #if !defined(AX_TARGET_OS_TVOS)
     controller.extendedLayoutIncludesOpaqueBars = YES;
 #endif
-    controller.renderHostView = (__bridge RenderHostView*)_hostViewHandle;
 
     // Set RootViewController to window
     if ([[UIDevice currentDevice].systemVersion floatValue] < 6.0)
@@ -236,7 +211,20 @@ void RenderViewImpl::showWindow(void* viewController)
         [window setRootViewController:controller];
     }
 
+    // Calling makeKeyAndVisible triggers the AxmolViewController lifecycle:
+    // loadView -> viewDidLoad -> viewWillAppear
     [window makeKeyAndVisible];
+    
+    // After lifecycle completes, controller.view is initialized with RenderHostView
+    auto hostView = controller.view;
+    _hostViewHandle = controller.view;
+    
+    const auto size               = resolveViewSizeToOrientation([hostView bounds].size);
+    const auto backingScaleFactor = [hostView contentScaleFactor];
+
+    // simply set renderSize, renderSize to framebufferSize with renderScale=1.0
+    updateRenderSurface(size.width * backingScaleFactor, size.height * backingScaleFactor,
+                        SurfaceUpdateFlag::AllUpdatesSilently);
 
 #if !defined(AX_TARGET_OS_TVOS)
     [controller prefersStatusBarHidden];
