@@ -32,6 +32,7 @@
 #include <string.h>
 #include <string>
 #include <vector>
+#include <span>
 
 namespace ax
 {
