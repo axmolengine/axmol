@@ -111,30 +111,17 @@ function(ax_add_3rd source_dir)
       add_dependencies(3rdparty ${tgt})
     endif()
 
-    get_target_property(is_imported_lib ${tgt} IMPORTED)
+    if(NOT (tgt_type STREQUAL "INTERFACE_LIBRARY"))
+      set_target_properties(${tgt} PROPERTIES
+        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" # Windows/Linux/macOS, .a, .lib
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin" # Windows .dll, .exe
+        FOLDER "3rdparty"
+      )
 
-    if (NOT is_imported_lib)
-      if(tgt_type STREQUAL "SHARED_LIBRARY")
-        if(LINUX)
-          set_target_properties(${tgt} PROPERTIES
-            ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-            LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"        
-            FOLDER "3rdparty"
-          )
-        else()      
-          set_target_properties(${tgt} PROPERTIES
-            ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"         
-            FOLDER "3rdparty"
-          )
-        endif()
-      elseif(NOT(tgt_type STREQUAL "INTERFACE_LIBRARY"))
+      get_target_property(_apple_framework ${tgt} MACOSX_FRAMEWORK_NAME)
+      if(NOT _apple_framework)
         set_target_properties(${tgt} PROPERTIES
-          ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-          LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-          RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-          FOLDER "3rdparty"
+          LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" # .so, .dylib, windows imported .lib
         )
       endif()
     endif()
@@ -223,7 +210,7 @@ if(AX_WITH_JPEG AND NOT WINRT AND NOT EMSCRIPTEN)
   ax_add_3rd(jpeg-turbo)
 endif()
 
-ax_add_3rd(openssl TARGETS OpenSSL::SSL)
+ax_add_3rd(openssl TARGETS OpenSSL::SSL OpenSSL::Crypto)
 
 if(AX_WITH_WEBP)
   ax_add_3rd(webp)
@@ -272,7 +259,17 @@ endif()
 if(AX_ENABLE_AUDIO)
   # The openal-soft(LGPL 2.1)
   if(NOT EMSCRIPTEN)
-    set(alsoft_opts "ALSOFT_DLOPEN OFF" "ALSOFT_UTILS OFF" "ALSOFT_EXAMPLES OFF" "ALSOFT_INSTALL OFF")
+    set(alsoft_opts
+      "ALSOFT_DLOPEN OFF"
+      "ALSOFT_UTILS OFF"
+      "ALSOFT_EXAMPLES OFF"
+      "ALSOFT_INSTALL OFF"
+      "ALSOFT_INSTALL_CONFIG OFF"
+      "ALSOFT_INSTALL_HRTF_DATA OFF"
+      "ALSOFT_INSTALL_AMBDEC_PRESETS OFF"
+      "ALSOFT_INSTALL_UTILS OFF"
+      "ALSOFT_ENABLE_MODULES OFF"
+    )
 
     if(AX_USE_ALSOFT_STATIC)
       list(APPEND alsoft_opts "LIBTYPE STATIC")
@@ -294,7 +291,8 @@ if(AX_ENABLE_AUDIO)
         "ALSOFT_BACKEND_SNDIO OFF"
         "ALSOFT_BACKEND_JACK OFF"
         "ALSOFT_BACKEND_PORTAUDIO OFF"
-        "ALSOFT_BACKEND_SDL2 OFF")
+        "ALSOFT_BACKEND_SDL2 OFF"
+        )
       set(ALSOFT_RTKIT OFF CACHE BOOL "Enable RTKit support" FORCE)
     elseif(WINDOWS)
       list(APPEND alsoft_opts "ALSOFT_BACKEND_WASAPI ON" "ALSOFT_BACKEND_WAVE OFF" "ALSOFT_BACKEND_DSOUND OFF" "ALSOFT_BACKEND_WINMM OFF")
