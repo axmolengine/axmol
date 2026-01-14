@@ -1,3 +1,13 @@
+# axmol-2.11.2 (??, 2026)
+
+## Bug fixes
+
+- Fix a regression introduced by 2.8.0 that AxmolViewController lifecycle methods are not invoked on iOS by @halx99 in [#3026](https://github.com/axmolengine/axmol/pull/3026)
+
+## Improvements
+
+- Fix compile warning: macos openal bundle id mismatch by @halx99
+
 # axmol-2.11.1 (Dec 31, 2025)
 
 ## Significant changes relative to 2.11.0
