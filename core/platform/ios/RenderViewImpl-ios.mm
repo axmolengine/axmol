@@ -29,6 +29,7 @@
 #include "platform/ios/RenderHostView-ios.h"
 #include "platform/ios/DirectorCaller-ios.h"
 #include "platform/ios/RenderViewImpl-ios.h"
+#include "platform/ios/AxmolViewController.h"
 #include "platform/Device.h"
 #include "base/Touch.h"
 #include "base/Director.h"
@@ -147,8 +148,6 @@ RenderViewImpl::RenderViewImpl() {}
 
 RenderViewImpl::~RenderViewImpl()
 {
-    // auto eaView = (__bridge RenderHostView*) _hostViewHandle;
-    //[eaView release];
 }
 
 #ifndef AX_CORE_PROFILE
@@ -224,13 +223,13 @@ void RenderViewImpl::setMultipleTouchEnabled(bool enabled)
 void RenderViewImpl::showWindow(void* viewController)
 {
     auto window = (__bridge UIWindow*)_hostWindowHandle;
-    auto controller = (__bridge UIViewController*)viewController;
+    auto controller = (__bridge AxmolViewController*)viewController;
 
 #if !defined(AX_TARGET_OS_TVOS)
     controller.extendedLayoutIncludesOpaqueBars = YES;
 #endif
-    auto view = (__bridge RenderHostView*)_hostViewHandle;
-    controller.view = view;
+    
+    controller.hostView = (__bridge UIView*)_hostViewHandle;
 
     // Set RootViewController to window
     if ([[UIDevice currentDevice].systemVersion floatValue] < 6.0)

@@ -29,4 +29,6 @@
 }
 - (BOOL)prefersStatusBarHidden;
 
+@property(nonatomic, readwrite) UIView* hostView;
+
 @end

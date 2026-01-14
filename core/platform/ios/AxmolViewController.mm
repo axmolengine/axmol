@@ -24,6 +24,7 @@
 
 #import "AxmolViewController.h"
 #import "platform/ios/RenderHostView-ios.h"
+#import "platform/ios/RenderViewImpl-ios.h"
 #include "platform/Device.h"
 #include "platform/Application.h"
 #include "base/Director.h"
@@ -44,9 +45,10 @@ customization that is not appropriate for viewDidLoad.
 */
 
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
-// - (void)loadView
-// {
-// }
+- (void)loadView
+{
+    self.view = self.hostView;
+}
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
