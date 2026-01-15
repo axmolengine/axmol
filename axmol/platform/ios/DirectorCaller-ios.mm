@@ -25,7 +25,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-
 #import "axmol/platform/ios/DirectorCaller-ios.h"
 #import "axmol/platform/ios/RenderHostView-ios.h"
 #import "axmol/base/Director.h"
@@ -33,32 +32,33 @@
 #include <mach/mach_time.h>
 
 #if AX_ENABLE_GL
-#import <OpenGLES/EAGL.h>
+#    import <OpenGLES/EAGL.h>
 #endif
 
 #include <span>
 #include <cmath>
 #include <algorithm>
 
-// refer to: https://developer.apple.com/documentation/quartzcore/optimizing-iphone-and-ipad-apps-to-support-promotion-displays?language=objc
-static constexpr int kAllowedFpsArray[] = {30, 60, 120};
+// refer to:
+// https://developer.apple.com/documentation/quartzcore/optimizing-iphone-and-ipad-apps-to-support-promotion-displays?language=objc
+static constexpr int kAllowedFpsArray[]               = {30, 60, 120};
 static constexpr std::span<const int> kAllowedFpsSpan = kAllowedFpsArray;
 
-static int normalizeInterval(double& interval) {
-    int value = static_cast<int>(1 / interval);
-    int framesPerSecond =  *std::min_element(kAllowedFpsSpan.begin(), kAllowedFpsSpan.end(),
-        [value](int a, int b) {
-            return std::abs(value - a) < std::abs(value - b);
-        }
-    );
-    
+static int normalizeInterval(double& interval)
+{
+    int value           = static_cast<int>(1 / interval);
+    int framesPerSecond = *std::min_element(kAllowedFpsSpan.begin(), kAllowedFpsSpan.end(), [value](int a, int b) {
+        return std::abs(value - a) < std::abs(value - b);
+    });
+
     const auto maxFPS = [[UIScreen mainScreen] maximumFramesPerSecond];
-    if (framesPerSecond > maxFPS) {
+    if (framesPerSecond > maxFPS)
+    {
         framesPerSecond = static_cast<int>(maxFPS);
     }
-    
+
     interval = 1 / framesPerSecond;
-    
+
     return framesPerSecond;
 }
 
@@ -141,20 +141,18 @@ static id s_sharedDirectorCaller;
     [self stopMainLoop];
 
     displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(doCaller:)];
-    
+
     if (@available(iOS 15.0, *))
     {
-        displayLink.preferredFrameRateRange = (CAFrameRateRange){
-            .minimum = static_cast<float>(kAllowedFpsSpan.front()),
-            .maximum = static_cast<float>(kAllowedFpsSpan.back()),
-            .preferred = static_cast<float>(self.framesPerSecond)
-        };
+        displayLink.preferredFrameRateRange = (CAFrameRateRange){.minimum = static_cast<float>(kAllowedFpsSpan.front()),
+                                                                 .maximum = static_cast<float>(kAllowedFpsSpan.back()),
+                                                                 .preferred = static_cast<float>(self.framesPerSecond)};
     }
     else
     {
         displayLink.preferredFramesPerSecond = self.framesPerSecond;
     }
-    
+
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
@@ -170,8 +168,8 @@ static id s_sharedDirectorCaller;
 - (void)setAnimationInterval:(double)intervalNew
 {
     self.framesPerSecond = normalizeInterval(intervalNew);
-    self.interval = intervalNew;
-    
+    self.interval        = intervalNew;
+
     [self startMainLoop];
 }
 
