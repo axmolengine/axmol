@@ -1,4 +1,4 @@
-# axmol-2.11.2 (??, 2026)
+# axmol-2.11.2 (Jan 15, 2026)
 
 ## Bug fixes
 
@@ -6,7 +6,7 @@
 
 ## Improvements
 
-- Fix compile warning: macos openal bundle id mismatch by @halx99
+- Resolved a compile warning caused by a macOS OpenAL bundle ID mismatch by @halx99
 
 # axmol-2.11.1 (Dec 31, 2025)
 
