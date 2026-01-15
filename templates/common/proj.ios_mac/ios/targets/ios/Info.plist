@@ -48,7 +48,9 @@
     <false/>
     <key>UIRequiresFullScreen</key>
     <true/>
+    <key>CADisableMinimumFrameDurationOnPhone</key>
+    <true/>
     <key>NSHumanReadableCopyright</key>
-    <string>Copyright © 2023. All rights reserved.</string>
+    <string>Copyright © 2026. All rights reserved.</string>
 </dict>
 </plist>
