@@ -2,6 +2,7 @@
  Copyright (c) 2013      cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -27,11 +28,10 @@
 #include <string>
 #include "AppDelegate.h"
 
-#include "axmol/axmol.h"
 #include "controller.h"
 #include "BaseTest.h"
 #include "extensions/axmol-ext.h"
-
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/tlx/charconv.hpp"
 #include <system_error>
 
@@ -41,17 +41,17 @@ AppDelegate::AppDelegate() : _testController(nullptr) {}
 
 AppDelegate::~AppDelegate()
 {
-
     AXLOGI("AppDelegate::~AppDelegate");
-    // SimpleAudioEngine::end();
-    // TODO: minggo
-    //  cocostudio::ArmatureDataManager::destroyInstance();
 }
 
 // if you want a different context, modify the value of contextAttrs
 // it will affect all platforms
 void AppDelegate::initContextAttrs()
 {
+    // set vulkan min android api level, 31 for Android 12
+    // refer: https://developer.android.com/tools/releases/platforms
+    rhi::DriverContext::setVulkanMinAndroidApiLevel(31);
+
     // set app context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
     // powerPreference only affect when RHI backend is D3D11, D3D12, Vulkan
     ContextAttrs contextAttrs = {.debugLayerEnabled = false, .powerPreference = PowerPreference::HighPerformance};

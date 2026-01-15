@@ -22,6 +22,10 @@
 #    include "axmol/rhi/opengl/DriverGL.h"
 #endif
 
+#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+#    include <android/api-level.h>
+#endif
+
 namespace ax::rhi
 {
 
@@ -29,6 +33,7 @@ std::unique_ptr<DriverBase> DriverContext::_currentDriver;
 DriverType DriverContext::_currentDriverType = DriverType::Auto;
 int DriverContext::_currentShaderLang        = axslc::SHADER_LANG_NONE;
 int DriverContext::_currentShaderProfile     = 0;
+int DriverContext::_vulkanMinAndroidApiLevel = 31;  // Android 12
 
 static int _driverPriorities[(int)rhi::DriverType::Count] = {
     rhi::DefaultDriverPriority::OpenGL, rhi::DefaultDriverPriority::D3D11, rhi::DefaultDriverPriority::D3D12,
@@ -38,6 +43,11 @@ static int _driverPriorities[(int)rhi::DriverType::Count] = {
 static uint32_t make_msl_version(uint32_t major, uint32_t minor = 0, uint32_t patch = 0)
 {
     return (major * 10000) + (minor * 100) + patch;
+}
+
+void DriverContext::setVulkanMinAndroidApiLevel(int apiLevel)
+{
+    _vulkanMinAndroidApiLevel = apiLevel;
 }
 
 void DriverContext::setDriverPriority(DriverType driverType, int prio)
@@ -62,7 +72,15 @@ void DriverContext::makeCurrentDriver()
 #endif
 
 #if AX_ENABLE_VK
+#    if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+    int apiLevel = android_get_device_api_level();
+    if (apiLevel >= _vulkanMinAndroidApiLevel)
+        factories.push_back(std::make_unique<VulkanDriverFactory>(_driverPriorities[(int)DriverType::Vulkan]));
+    else
+        AXLOGI("Vulkan skipped: device API level {} < required {}", apiLevel, _vulkanMinAndroidApiLevel);
+#    else
     factories.push_back(std::make_unique<VulkanDriverFactory>(_driverPriorities[(int)DriverType::Vulkan]));
+#    endif
 #endif
 
 #if AX_ENABLE_D3D11

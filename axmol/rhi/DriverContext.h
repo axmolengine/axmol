@@ -42,6 +42,31 @@ class AX_DLL DriverContext
 {
 public:
     /**
+     * @brief Sets the minimum Android API level required to enable Vulkan.
+     *
+     * This function allows applications to restrict Vulkan usage based on
+     * the device's Android OS version. If the current device reports Vulkan
+     * support but its API level is lower than the configured minimum, Vulkan
+     * will be skipped during driver selection and the engine will fall back
+     * to the next available backend (e.g. OpenGL ES).
+     *
+     * @note This call is optional. If not invoked, Vulkan will be considered
+     *       on all devices that report support, regardless of OS version.
+     *
+     * @warning To ensure the restriction takes effect, this function should
+     *          be invoked as early as possible (e.g. in the application
+     *          delegate's constructor/initContextAttrs), before any rendering context or
+     *          driver initialization occurs.
+     *
+     * @param apiLevel The minimum Android API level (Default is 31 for Android 12)
+     *                 required to allow Vulkan usage.
+     *                 refers:
+     *                   - https://apilevels.com/
+     *                   - https://developer.android.com/tools/releases/platforms
+     */
+    static void setVulkanMinAndroidApiLevel(int apiLevel);
+
+    /**
      * @brief Sets the priority value for a specific driver type.
      *
      * This function allows advanced users to override the default driver
@@ -55,7 +80,7 @@ public:
      *
      * @warning To ensure the priority takes effect, this function should be
      *          invoked as early as possible, typically in the application
-     *          delegate's constructor, before any rendering context or window
+     *          delegate's constructor/initContextAttrs, before any rendering context or window
      *          is created. Late changes may not apply if the driver has already
      *          been initialized.
      *
@@ -121,6 +146,7 @@ private:
     static DriverType _currentDriverType;
     static int _currentShaderLang;
     static int _currentShaderProfile;
+    static int _vulkanMinAndroidApiLevel;
 };
 
 }  // namespace ax::rhi
