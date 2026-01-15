@@ -116,7 +116,7 @@ static id s_sharedDirectorCaller;
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [displayLink release];
+    [self stopMainLoop];
     [super dealloc];
 }
 
