@@ -59,10 +59,10 @@ private:
 
     TextureHandle detach()
     {
-        auto ret   = *this;
-        image      = VK_NULL_HANDLE;
-        view       = VK_NULL_HANDLE;
-        vmaMemory  = VK_NULL_HANDLE;
+        auto ret  = *this;
+        image     = VK_NULL_HANDLE;
+        view      = VK_NULL_HANDLE;
+        vmaMemory = VK_NULL_HANDLE;
         return ret;
     }
 };
