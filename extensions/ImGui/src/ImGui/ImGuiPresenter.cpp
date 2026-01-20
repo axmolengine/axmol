@@ -338,8 +338,10 @@ void ImGuiPresenter::init()
     ImGui::StyleColorsClassic();
 
     auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-    _event1 = eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [this](EventCustom*) { beginFrame(); });
-    _event2 = eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [this](EventCustom*) { endFrame(); });
+    _event1 =
+        eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [this](EventCustom*) { beginFrame(); });
+    _event2 =
+        eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [this](EventCustom*) { endFrame(); });
     _event3 = eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_GFX_DROP, [](EventCustom*) {
         if (_instance)
         {
