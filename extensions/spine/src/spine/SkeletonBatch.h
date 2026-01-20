@@ -79,6 +79,8 @@ namespace spine {
 
 		// pool of indices
 		Vector<unsigned short> _indices;
+
+        ax::EventListener* _afterDrawListener{nullptr};
 	};
 
 }// namespace spine

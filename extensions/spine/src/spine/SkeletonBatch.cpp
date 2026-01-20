@@ -33,7 +33,6 @@
 #include <spine/Extension.h>
 
 USING_NS_AX;
-#define EVENT_AFTER_DRAW_RESET_POSITION "director_after_draw"
 #define INITIAL_SIZE (2000)
 
 #include "axmol/rhi/DriverContext.h"
@@ -65,13 +64,14 @@ namespace spine {
 		reset();
 		// callback after drawing is finished so we can clear out the batch state
 		// for the next frame
-		Director::getInstance()->getEventDispatcher()->addCustomEventListener(EVENT_AFTER_DRAW_RESET_POSITION, [this](EventCustom *eventCustom) {
+        _afterDrawListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(
+                    Director::EVENT_AFTER_DRAW, [this](EventCustom* eventCustom) {
 			this->update(0);
 		});
 	}
 
 	SkeletonBatch::~SkeletonBatch() {
-		Director::getInstance()->getEventDispatcher()->removeCustomEventListeners(EVENT_AFTER_DRAW_RESET_POSITION);
+        Director::getInstance()->getEventDispatcher()->removeEventListener(_afterDrawListener);
 
 		for (unsigned int i = 0; i < _commandsPool.size(); i++) {
             _commandsPool[i]->releasePSVL();

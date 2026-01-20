@@ -184,6 +184,10 @@ private:
         bool removing = false;
     };
 
+    ax::EventListener* _event1;
+    ax::EventListener* _event2;
+    ax::EventListener* _event3;
+
     std::unordered_map<uint32_t, ImGuiLoop> _renderLoops;
 
     std::unordered_map<Object*, int> _objsRefIdMap;

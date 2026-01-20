@@ -278,6 +278,7 @@ ImGuiPresenter* ImGuiPresenter::getInstance()
 
     _instance = new ImGuiPresenter();
     _instance->init();
+
     return _instance;
 }
 
@@ -337,15 +338,23 @@ void ImGuiPresenter::init()
     ImGui::StyleColorsClassic();
 
     auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-    eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [this](EventCustom*) { beginFrame(); });
-    eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [this](EventCustom*) { endFrame(); });
+    _event1 = eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [this](EventCustom*) { beginFrame(); });
+    _event2 = eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [this](EventCustom*) { endFrame(); });
+    _event3 = eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_GFX_DROP, [](EventCustom*) {
+        if (_instance)
+        {
+            _instance->cleanup();
+            AX_SAFE_DELETE(_instance);
+        }
+    });
 }
 
 void ImGuiPresenter::cleanup()
 {
     auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-    eventDispatcher->removeCustomEventListeners(Director::EVENT_AFTER_VISIT);
-    eventDispatcher->removeCustomEventListeners(Director::EVENT_BEFORE_DRAW);
+    eventDispatcher->removeEventListener(_event1);
+    eventDispatcher->removeEventListener(_event2);
+    eventDispatcher->removeEventListener(_event3);
 
     ImGui_ImplAxmol_SetUpdateFontsFunc(nullptr, nullptr);
     ImGui_ImplAxmol_Shutdown();
@@ -365,6 +374,9 @@ void ImGuiPresenter::cleanup()
         }
         _renderLoops.clear();
     }
+
+    _usedObjs.clear();
+    _objsRefIdMap.clear();
 }
 
 void ImGuiPresenter::updateFonts(void* ud)

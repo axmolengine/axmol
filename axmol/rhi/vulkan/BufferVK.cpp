@@ -183,7 +183,7 @@ BufferImpl::BufferImpl(DriverImpl* driver, std::size_t size, BufferType type, Bu
 BufferImpl::~BufferImpl()
 {
     // Clean up all VMA allocations
-    auto vmaAllocator = _driver->getVmaAllocator();
+    auto& vmaAllocator = _driver->getVmaAllocator();
 
     // If per-frame dynamic backings were created, dispose all of them
     if (!_dynamicBuffers.empty())
@@ -241,7 +241,7 @@ void BufferImpl::createNativeBuffer(const void* initial)
             bufferInfo.usage       = _usageFlags;
             bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-            VmaAllocationInfo allocationInfo;
+            VmaAllocationInfo allocationInfo{};
             VkResult res = vmaCreateBuffer(vmaAllocator, &bufferInfo, &allocCreateInfo, &_dynamicBuffers[i],
                                            &_dynamicMemories[i], &allocationInfo);
             VK_REQUIRE(res, "vmaCreateBuffer failed");
@@ -279,7 +279,7 @@ void BufferImpl::createNativeBuffer(const void* initial)
             allocCreateInfo.priority = evalMemoryPriority(_memoryProperties, _usageFlags);
         }
 
-        VmaAllocationInfo allocationInfo;
+        VmaAllocationInfo allocationInfo{};
         VkResult res =
             vmaCreateBuffer(vmaAllocator, &bufferInfo, &allocCreateInfo, &_buffer, &_memory, &allocationInfo);
         VK_REQUIRE(res, "vmaCreateBuffer failed");
@@ -365,8 +365,7 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
     {
         // Device local memory: use staging buffer + isolate commands
         VkBuffer stagingBuffer          = VK_NULL_HANDLE;
-        VmaAllocation stagingAllocation = nullptr;
-        void* stagingMappedData         = nullptr;
+        VmaAllocation stagingAllocation = VK_NULL_HANDLE;
 
         // Create staging buffer with VMA
         VkBufferCreateInfo bufferInfo{};
@@ -386,7 +385,7 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
             allocCreateInfo.priority = 0.1f;
         }
 
-        VmaAllocationInfo allocationInfo;
+        VmaAllocationInfo allocationInfo{};
         VkResult res = vmaCreateBuffer(vmaAllocator, &bufferInfo, &allocCreateInfo, &stagingBuffer, &stagingAllocation,
                                        &allocationInfo);
         VK_REQUIRE(res, "vmaCreateBuffer failed");

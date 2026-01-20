@@ -204,6 +204,11 @@ void SDFGen::destroyInstance()
     tlx::singleton<SDFGen>::destroy();
 }
 
+SDFGen::~SDFGen()
+{
+    this->close();
+}
+
 void SDFGen::open(ax::Scene* scene)
 {
     refreshFontList();
@@ -231,14 +236,14 @@ void SDFGen::open(ax::Scene* scene)
 
 void SDFGen::close()
 {
+    if (!_atlasParams)
+        return;
     auto presenter = ImGuiPresenter::getInstance();
     if (presenter)
         presenter->removeRenderLoop("#sdfg");
 
-    delete _atlasParams;
-    _atlasParams = nullptr;
-
-    _atlasViewer->release();
+    AX_SAFE_DELETE(_atlasParams);
+    AX_SAFE_RELEASE_NULL(_atlasViewer);
 }
 
 void SDFGen::refreshFontList()

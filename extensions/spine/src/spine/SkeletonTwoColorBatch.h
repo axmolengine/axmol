@@ -129,6 +129,9 @@ namespace spine {
 
 		TwoColorTrianglesCommand *nextFreeCommand();
 
+        ax::EventListener* _event1{nullptr};
+        ax::EventListener* _event2{nullptr};
+
 		// pool of commands
 		std::vector<TwoColorTrianglesCommand *> _commandsPool;
 		uint32_t _nextFreeCommand;

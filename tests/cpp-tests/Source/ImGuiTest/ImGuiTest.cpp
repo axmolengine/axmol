@@ -39,15 +39,16 @@ void ImGuiTest::onEnter()
 
 void ImGuiTest::onExit()
 {
+#    if !defined(__ANDROID__)
+    SDFGen::destroyInstance();
+#    endif
+
     auto presenter = ImGuiPresenter::getInstance();
     if (presenter)
     {
         ImGuiPresenter::getInstance()->removeRenderLoop("#test");
         ImGuiPresenter::getInstance()->clearFonts();
 
-#    if !defined(__ANDROID__)
-        SDFGen::getInstance()->close();
-#    endif
         ImGuiPresenter::destroyInstance();
     }
 

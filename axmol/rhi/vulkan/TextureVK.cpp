@@ -485,9 +485,7 @@ void TextureImpl::updateCompressedSubData(int xoffset,
 
     // Create staging buffer using VMA
     VkBuffer stagingBuffer          = VK_NULL_HANDLE;
-    VmaAllocation stagingAllocation = nullptr;
-    void* mappedData                = nullptr;
-
+    VmaAllocation stagingAllocation = VK_NULL_HANDLE;
     VkBufferCreateInfo bufferInfo{};
     bufferInfo.sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
     bufferInfo.size        = expectedSize;
@@ -651,14 +649,11 @@ void TextureImpl::ensureNativeTexture()
     if (isLargeTexture(_desc.width, _desc.height, mipLevels))
         allocCreateInfo.flags |= VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT;
 
-    VmaAllocationInfo allocationInfo;
+    VmaAllocationInfo allocationInfo{};
     VkResult res = vmaCreateImage(vmaAllocator, &imageInfo, &allocCreateInfo, &_nativeTexture.image,
                                   &_nativeTexture.vmaMemory, &allocationInfo);
 
     VK_REQUIRE(res, "vmaCreateImage failed");
-
-    // Store VMA allocation
-    // _nativeTexture.vmaAllocation = _nativeTexture.allocation;  // Assuming you update struct
 
     // Create image view
     VkImageViewCreateInfo viewInfo{};
@@ -689,16 +684,7 @@ void TextureImpl::ensureNativeTexture()
     viewInfo.subresourceRange.layerCount     = arrayLayers;
 
     res = vkCreateImageView(device, &viewInfo, nullptr, &_nativeTexture.view);
-    if (res != VK_SUCCESS)
-    {
-        // Clean up VMA allocation if image view creation fails
-        vmaDestroyImage(vmaAllocator, _nativeTexture.image, _nativeTexture.vmaMemory);
-        _nativeTexture.image     = VK_NULL_HANDLE;
-        _nativeTexture.vmaMemory = VK_NULL_HANDLE;
-
-        AXLOGE("vkCreateImageView failed: {}", (uint32_t)res);
-        VK_ABORT("vkCreateImageView failed");
-    }
+    VK_REQUIRE(res, "vkCreateImageView failed");
 }
 
 }  // namespace ax::rhi::vk

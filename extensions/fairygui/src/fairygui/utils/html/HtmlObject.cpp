@@ -44,13 +44,6 @@ HtmlObjectContext* HtmlObjectContext::getInstance()
         return nullptr;
 
     s_htmlObjContext = new HtmlObjectContext();
-
-    Director::getInstance()->getEventDispatcher()->addCustomEventListener(Director::EVENT_BEFORE_GFX_DROP,
-                                                                          [](EventCustom*) {
-        s_isGfxDidDrop = true;
-        HtmlObjectContext::destroyInstance();
-    });
-
     return s_htmlObjContext;
 }
 
@@ -58,10 +51,23 @@ void HtmlObjectContext::destroyInstance()
 {
     if (s_htmlObjContext)
     {
-        Director::getInstance()->getEventDispatcher()->removeCustomEventListeners(Director::EVENT_BEFORE_GFX_DROP);
         delete s_htmlObjContext;
         s_htmlObjContext = nullptr;
     }
+}
+
+HtmlObjectContext::HtmlObjectContext()
+{
+    _beforeGfxDestroyListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(
+        Director::EVENT_BEFORE_GFX_DROP, [](EventCustom*) {
+        s_isGfxDidDrop = true;
+        HtmlObjectContext::destroyInstance();
+    });
+}
+
+HtmlObjectContext::~HtmlObjectContext()
+{
+    Director::getInstance()->getEventDispatcher()->removeEventListener(_beforeGfxDestroyListener);
 }
 
 void HtmlObjectContext::recycleObject(GObject* obj)

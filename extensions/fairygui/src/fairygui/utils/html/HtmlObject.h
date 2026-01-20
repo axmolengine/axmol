@@ -35,11 +35,12 @@ public:
 protected:
     GObjectPool objectPool;
     ax::Vector<GObject*> loaderPool;
+    ax::EventListener* _beforeGfxDestroyListener{nullptr};
 
     static HtmlObjectContext* s_htmlObjContext;
 
-    HtmlObjectContext()  = default;
-    ~HtmlObjectContext() = default;
+    HtmlObjectContext();
+    ~HtmlObjectContext();
 
     HtmlObjectContext(const HtmlObjectContext&)            = delete;
     HtmlObjectContext& operator=(const HtmlObjectContext&) = delete;

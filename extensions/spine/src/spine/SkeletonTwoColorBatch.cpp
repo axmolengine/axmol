@@ -40,7 +40,6 @@
 #include "xxhash.h"
 
 USING_NS_AX;
-#define EVENT_AFTER_DRAW_RESET_POSITION "director_after_draw"
 #define INITIAL_SIZE (2000)
 #define MAX_VERTICES 64000
 #define MAX_INDICES 64000
@@ -136,16 +135,6 @@ namespace spine {
         if (!s_TwoColorInstance)
         {
             s_TwoColorInstance = new SkeletonTwoColorBatch();
-
-            auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-
-            // callback after drawing is finished so we can clear out the batch state
-            // for the next frame
-            eventDispatcher->addCustomEventListener(EVENT_AFTER_DRAW_RESET_POSITION,
-                                                    [](EventCustom*) { s_TwoColorInstance->update(0); });
-
-            eventDispatcher->addCustomEventListener(Director::EVENT_DESTROY,
-                                                    [](EventCustom*) { SkeletonTwoColorBatch::destroyInstance(); });
         }
         return s_TwoColorInstance;
 	}
@@ -153,8 +142,6 @@ namespace spine {
 	void SkeletonTwoColorBatch::destroyInstance() {
         if (s_TwoColorInstance)
         {
-            Director::getInstance()->getEventDispatcher()->removeCustomEventListeners(
-                EVENT_AFTER_DRAW_RESET_POSITION);
             delete s_TwoColorInstance;
             s_TwoColorInstance = nullptr;
 		}
@@ -193,9 +180,22 @@ namespace spine {
         layoutDesc.endLayout();
 
         Object::assign(_twoColorVertexLayout, axvlm->getVertexLayout(std::move(layoutDesc)));
+
+        auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+
+        // callback after drawing is finished so we can clear out the batch state
+        // for the next frame
+        _event1 = eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_DRAW,
+                                                [](EventCustom*) { s_TwoColorInstance->update(0); });
+
+        _event2 = eventDispatcher->addCustomEventListener(Director::EVENT_DESTROY,
+                                                [](EventCustom*) { SkeletonTwoColorBatch::destroyInstance(); });
 	}
 
 	SkeletonTwoColorBatch::~SkeletonTwoColorBatch() {
+        auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+        eventDispatcher->removeEventListener(_event1);
+        eventDispatcher->removeEventListener(_event2);
         for (auto& command : _commandsPool)
         {
             if (command)

@@ -938,7 +938,7 @@ void DriverImpl::processDisposalQueue(uint64_t completedFenceValue)
         for (size_t i = 0; i < _disposalQueue.size();)
         {
             auto& res = _disposalQueue[i];
-            if ((res.fenceValue <= completedFenceValue) != 0)
+            if ((res.fenceValue <= completedFenceValue))
             {
                 switch (res.type)
                 {
