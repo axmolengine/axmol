@@ -499,6 +499,7 @@ void RenderContextImpl::recreateSwapchain()
     scInfo.imageColorSpace  = surfaceFormat.colorSpace;
     scInfo.imageExtent      = extent;
     scInfo.imageArrayLayers = 1;
+    // VK_IMAGE_USAGE_TRANSFER_SRC_BIT: Allows use as a blit source (for readPixels)
     scInfo.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
     scInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
     scInfo.preTransform     = preTransform;
@@ -698,6 +699,14 @@ void RenderContextImpl::endFrame()
     vr = vkQueueSubmit(_graphicsQueue, 1, &submitInfo, _inFlightFences[_frameIndex]);
     AXASSERT(vr == VK_SUCCESS, "vkQueueSubmit failed");
 
+    if (!_postFrameOps.empty())
+    {
+        for (auto& op : _postFrameOps)
+            op();
+
+        _postFrameOps.clear();
+    }
+
     // Present: wait on render-finished semaphore
     VkPresentInfoKHR presentInfo{};
     presentInfo.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -709,13 +718,6 @@ void RenderContextImpl::endFrame()
 
     vr = vkQueuePresentKHR(_presentQueue, &presentInfo);
     handleSwapchainResult(vr, SwapchainOp::Present, 0);
-
-    {
-        for (auto& op : _postFrameOps)
-            op();
-
-        _postFrameOps.clear();
-    }
 
     // Advance frame index for multi-frame-in-flight
     _frameIndex = (_frameIndex + 1) % MAX_FRAMES_IN_FLIGHT;
@@ -1216,28 +1218,26 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
     rt->retain();
 
     _postFrameOps.emplace_back([this, rt, preserveAxisHint, callback = std::move(callback)]() mutable {
-        readPixelsInternal(rt, preserveAxisHint, callback);
+        doReadPixels(rt, preserveAxisHint, callback);
         rt->release();
     });
 }
 
-void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
-                                           bool /*preserveAxisHint*/,
-                                           std::function<void(const PixelBufferDesc&)>& callback)
+void RenderContextImpl::doReadPixels(RenderTarget* rt,
+                                     bool /*preserveAxisHint*/,
+                                     std::function<void(const PixelBufferDesc&)>& callback)
 {
     PixelBufferDesc pbd{};
     auto* rtImpl = static_cast<RenderTargetImpl*>(rt);
 
-    const auto imageIndex     = rtImpl->isDefaultRenderTarget() ? _imageIndex : 0;
-    auto colorAttachment  = rtImpl->getColorAttachment(imageIndex);
+    const bool isDefaultRT = rtImpl->isDefaultRenderTarget();
+    const auto imageIndex  = isDefaultRT ? _imageIndex : 0;
+    auto colorAttachment   = rtImpl->getColorAttachment(imageIndex);
     if (!colorAttachment)
     {
         callback(pbd);
         return;
     }
-
-    // ensure last rendering commands submission finished
-    vkWaitForFences(_device, 1, &_inFlightFences[_frameIndex], VK_TRUE, UINT64_MAX);
 
     auto& colorDesc = colorAttachment->getDesc();
 

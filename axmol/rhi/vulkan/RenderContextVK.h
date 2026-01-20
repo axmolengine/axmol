@@ -155,7 +155,7 @@ private:
     void createDescriptorPool();
 #endif
 
-    void readPixelsInternal(RenderTarget* rt,
+    void doReadPixels(RenderTarget* rt,
                             bool preserveAxisHint,
                             std::function<void(const PixelBufferDesc&)>& callback);
 
