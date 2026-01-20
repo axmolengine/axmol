@@ -81,6 +81,8 @@
 - Version: 2.0.8
 - License: MIT
 
+`vk_mem_alloc.h` is taken from https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator Version: git-e722e57 (Dec 1, 2025)
+
 ## glfw
 - [![Upstream](https://img.shields.io/github/v/release/glfw/glfw?label=Upstream)](https://github.com/glfw/glfw)
 - Version: 3.4 with modified for create as win32 child window support
