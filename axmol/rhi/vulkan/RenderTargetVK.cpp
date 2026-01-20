@@ -318,12 +318,13 @@ void RenderTargetImpl::endRenderPass(VkCommandBuffer cmd)
         {
             if (!rb)
                 break;
-            static_cast<TextureImpl*>(rb.texture)->setKnownLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+            auto texImpl = static_cast<TextureImpl*>(rb.texture);
+            texImpl->transitionLayout(cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         }
         if (_depthStencil)
         {
-            static_cast<TextureImpl*>(_depthStencil.texture)
-                ->setKnownLayout(VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+            auto texImpl = static_cast<TextureImpl*>(_depthStencil.texture);
+            texImpl->setKnownLayout(VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
         }
     }
 }
@@ -436,7 +437,7 @@ void RenderTargetImpl::updateRenderPass(const RenderPassDesc& desc, uint32_t ima
                     ? (isDefaultRT ? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL)
                     : VK_IMAGE_LAYOUT_UNDEFINED;
 
-            ad.finalLayout = isDefaultRT ? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR : VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            ad.finalLayout = isDefaultRT ? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
             attachments.push_back(ad);
 

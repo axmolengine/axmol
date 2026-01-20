@@ -211,6 +211,8 @@ DriverImpl::~DriverImpl()
         vkDestroySurfaceKHR(_factory, _surface, nullptr);
     if (_debugMessenger)
         vkDestroyDebugUtilsMessengerEXT(_factory, _debugMessenger, nullptr);
+    if (_vmaAllocator)
+        vmaDestroyAllocator(_vmaAllocator);
     if (_device)
         vkDestroyDevice(_device, nullptr);
     if (_factory)
@@ -248,6 +250,19 @@ bool DriverImpl::init()
         }
     }
 
+    // Vma allocator
+    VmaAllocatorCreateInfo allocatorCreateInfo = {};
+    allocatorCreateInfo.flags                  = VMA_ALLOCATOR_CREATE_EXT_MEMORY_BUDGET_BIT;
+    allocatorCreateInfo.vulkanApiVersion       = _apiVersion;
+    allocatorCreateInfo.physicalDevice         = _physical;
+    allocatorCreateInfo.device                 = _device;
+    allocatorCreateInfo.instance               = _factory;
+    allocatorCreateInfo.pVulkanFunctions       = nullptr;
+
+    if (_vkCaps.memoryPrioritySupported)
+        allocatorCreateInfo.flags |= VMA_ALLOCATOR_CREATE_EXT_MEMORY_PRIORITY_BIT;
+    VK_VERIFY(vmaCreateAllocator(&allocatorCreateInfo, &_vmaAllocator), "vmaCreateAllocator fail");
+
     return true;
 }
 
@@ -258,7 +273,7 @@ bool DriverImpl::initializeFactory()
     // vkEnumerateInstanceVersion is available since Vulkan 1.1; while Axmol can initialize on Android 7/8 devices
     // limited to Vulkan 1.0, that version is known to be buggy. For maximum compatibility, GLES is recommended
     // until dynamic RHI support is available.
-    const uint32_t apiVersion = vkEnumerateInstanceVersion ? VK_API_VERSION_1_1 : VK_API_VERSION_1_0;
+    _apiVersion = vkEnumerateInstanceVersion ? VK_API_VERSION_1_1 : VK_API_VERSION_1_0;
 
     constexpr auto engineVersion = VK_MAKE_VERSION(AX_VERSION_MAJOR, AX_VERSION_MINOR, AX_VERSION_PATCH);
     VkApplicationInfo appInfo{
@@ -267,7 +282,7 @@ bool DriverImpl::initializeFactory()
         .applicationVersion = engineVersion,
         .pEngineName        = "Axmol3",
         .engineVersion      = engineVersion,
-        .apiVersion         = apiVersion,
+        .apiVersion         = _apiVersion,
     };
 
     // Collect required extensions
@@ -382,6 +397,13 @@ bool DriverImpl::initializeDevice()
     else
     {
         AXLOGW("axmol: VK_EXT_extended_dynamic_state extension not supported, fallback to baked InputAssemblyState");
+    }
+
+    if (hasExtension(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
+    {
+        _vkCaps.memoryPrioritySupported = true;
+        deviceExtensions.push_back(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME);
+        AXLOGI("axmol: VK_EXT_memory_priority extension supported");
     }
 
     // Query device properties and capabilities
@@ -883,21 +905,25 @@ void DriverImpl::disposeSampler(VkSampler sampler, uint64_t fenceValue)
 {
     queueDisposalInternal({.type = DisposableResource::Type::Sampler, .sampler = sampler, .fenceValue = fenceValue});
 }
+
 void DriverImpl::disposeImage(VkImage image, uint64_t fenceValue)
 {
     queueDisposalInternal({.type = DisposableResource::Type::Image, .image = image, .fenceValue = fenceValue});
 }
+
 void DriverImpl::disposeImageView(VkImageView view, uint64_t fenceValue)
 {
     queueDisposalInternal({.type = DisposableResource::Type::ImageView, .view = view, .fenceValue = fenceValue});
 }
+
 void DriverImpl::disposeBuffer(VkBuffer buffer, uint64_t fenceValue)
 {
     queueDisposalInternal({.type = DisposableResource::Type::Buffer, .buffer = buffer, .fenceValue = fenceValue});
 }
-void DriverImpl::disposeMemory(VkDeviceMemory memory, uint64_t fenceValue)
+
+void DriverImpl::disposeVmaMemory(VmaAllocation memory, uint64_t fenceValue)
 {
-    queueDisposalInternal({.type = DisposableResource::Type::Memory, .memory = memory, .fenceValue = fenceValue});
+    queueDisposalInternal({.type = DisposableResource::Type::VmaMemory, .vmaMemory = memory, .fenceValue = fenceValue});
 }
 
 void DriverImpl::queueDisposalInternal(DisposableResource&& disposal)
@@ -925,11 +951,11 @@ void DriverImpl::processDisposalQueue(uint64_t completedFenceValue)
                 case DisposableResource::Type::Buffer:
                     vkDestroyBuffer(_device, res.buffer, nullptr);
                     break;
-                case DisposableResource::Type::Memory:
-                    vkFreeMemory(_device, res.memory, nullptr);
-                    break;
                 case DisposableResource::Type::Sampler:
                     vkDestroySampler(_device, res.sampler, nullptr);
+                    break;
+                case DisposableResource::Type::VmaMemory:
+                    vmaFreeMemory(_vmaAllocator, res.vmaMemory);
                     break;
                 }
 

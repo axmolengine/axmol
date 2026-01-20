@@ -234,7 +234,7 @@ void RenderPipelineImpl::initializePipelineDefaults(DriverImpl* driver)
     static constexpr size_t MAX_DYNAMIC_STATES                                = 8;
     static tlx::inlined_vector<VkDynamicState, MAX_DYNAMIC_STATES> s_dynamics = {
         VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR, VK_DYNAMIC_STATE_STENCIL_REFERENCE,
-        VK_DYNAMIC_STATE_BLEND_CONSTANTS, VK_DYNAMIC_STATE_DEPTH_BIAS};
+        VK_DYNAMIC_STATE_BLEND_CONSTANTS};
 
     if (s_dynamics.size() < MAX_DYNAMIC_STATES && driver->isExtendedDynamicStateSupported())
     {

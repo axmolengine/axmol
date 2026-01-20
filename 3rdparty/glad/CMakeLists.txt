@@ -19,7 +19,7 @@ if(AX_ENABLE_GL)
 endif()
 
 if(AX_ENABLE_VK)
-  list(APPEND target_src_files "include/glad/vulkan.h" src/vulkan.c)
+  list(APPEND target_src_files "include/glad/vulkan.h" src/vulkan.c src/vk_mem_alloc.cpp)
 endif()
 
 add_library(${target_name} ${target_src_files})

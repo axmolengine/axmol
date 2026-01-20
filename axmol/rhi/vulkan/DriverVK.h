@@ -25,6 +25,7 @@
 
 #include "axmol/rhi/DriverContext.h"
 #include <glad/vulkan.h>
+#include <vk_mem_alloc.h>
 #include <optional>
 #include <string>
 #include <mutex>
@@ -46,7 +47,7 @@ struct DisposableResource
         Image,
         ImageView,
         Buffer,
-        Memory
+        VmaMemory,
     };
     Type type;
     union
@@ -55,7 +56,7 @@ struct DisposableResource
         VkImage image;
         VkImageView view;
         VkBuffer buffer;
-        VkDeviceMemory memory;
+        VmaAllocation vmaMemory;
     };
 
     uint64_t fenceValue;
@@ -78,11 +79,12 @@ struct SurfaceCreateInfo
     CreateSurfaceFunc createFunc{};
 };
 
-struct DriverCapImpl
+struct VulkanCaps
 {
     bool extendedDynamicStateSupported{false};
     bool dynamicPrimitiveTopologyUnrestricted{false};
     bool samplerAnisotropySupported{false};
+    bool memoryPrioritySupported{false};
 };
 
 class DriverImpl : public DriverBase
@@ -165,9 +167,9 @@ public:
 
     void disposeImage(VkImage image, uint64_t fenceValue);
     void disposeImageView(VkImageView view, uint64_t fenceValue);
-    void disposeBuffer(VkBuffer buffer, uint64_t fenceValue);
-    void disposeMemory(VkDeviceMemory memory, uint64_t fenceValue);
     void disposeSampler(VkSampler sampler, uint64_t fenceValue);
+    void disposeBuffer(VkBuffer buffer, uint64_t fenceValue);
+    void disposeVmaMemory(VmaAllocation memory, uint64_t fenceValue);
 
     void processDisposalQueue(uint64_t completedFenceValue);
 
@@ -178,9 +180,12 @@ public:
     bool isExtendedDynamicStateSupported() const { return _vkCaps.extendedDynamicStateSupported; }
     bool isDynamicPrimitiveTopologyUnrestricted() const { return _vkCaps.dynamicPrimitiveTopologyUnrestricted; }
     bool isSamplerAnisotropySupported() const { return _vkCaps.samplerAnisotropySupported; }
+    bool isMemoryPrioritySupported() const { return _vkCaps.memoryPrioritySupported; }
 
     void setFrameIndex(int index) { _frameIndex = index; }
     int getFrameIndex() const { return _frameIndex; }
+
+    VmaAllocator& getVmaAllocator() { return _vmaAllocator; }
 
 protected:
     void queueDisposalInternal(DisposableResource&& res);
@@ -194,13 +199,14 @@ private:
 
     tlx::flat_set<uint32_t> _supportedExtensions;
 
-    DriverCapImpl _vkCaps;
+    VulkanCaps _vkCaps;
 
     RenderContextImpl* _currentRenderContext{nullptr};
 
     VkDebugUtilsMessengerCreateInfoEXT _debugCreateInfo{};
     VkDebugUtilsMessengerEXT _debugMessenger{VK_NULL_HANDLE};
 
+    uint32_t _apiVersion{0};
     VkInstance _factory{VK_NULL_HANDLE};
     VkPhysicalDevice _physical{VK_NULL_HANDLE};
     VkDevice _device{VK_NULL_HANDLE};
@@ -213,6 +219,8 @@ private:
     // command pool
     VkCommandPool _commandPool{VK_NULL_HANDLE};
     std::mutex _commandPoolMutex;
+
+    VmaAllocator _vmaAllocator{VK_NULL_HANDLE};
 
     tlx::pod_vector<DisposableResource> _disposalQueue;
 

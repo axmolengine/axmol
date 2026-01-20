@@ -213,6 +213,13 @@ void RenderContextImpl::createUniformRingBuffers(std::size_t capacityBytes)
 
     auto device = _driver->getDevice();
 
+    VkMemoryPriorityAllocateInfoEXT priorityInfo = {
+        .sType = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT, .pNext = nullptr, .priority = 1.0f};
+
+    VkMemoryAllocateInfo mai{.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO};
+    if (_driver->isMemoryPrioritySupported())
+        mai.pNext = &priorityInfo;
+
     VkPhysicalDeviceProperties props{};
     vkGetPhysicalDeviceProperties(_driver->getPhysical(), &props);
     std::size_t devAlign = std::max<std::size_t>(1, props.limits.minUniformBufferOffsetAlignment);
@@ -239,8 +246,6 @@ void RenderContextImpl::createUniformRingBuffers(std::size_t capacityBytes)
         uint32_t typeIndex = _driver->findMemoryType(
             memReq.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-        VkMemoryAllocateInfo mai{};
-        mai.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
         mai.allocationSize  = memReq.size;
         mai.memoryTypeIndex = typeIndex;
 
@@ -494,7 +499,7 @@ void RenderContextImpl::recreateSwapchain()
     scInfo.imageColorSpace  = surfaceFormat.colorSpace;
     scInfo.imageExtent      = extent;
     scInfo.imageArrayLayers = 1;
-    scInfo.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    scInfo.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
     scInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
     scInfo.preTransform     = preTransform;
     scInfo.compositeAlpha   = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
@@ -691,7 +696,6 @@ void RenderContextImpl::endFrame()
     submitInfo.pSignalSemaphores    = &submissionSemaphore;
 
     vr = vkQueueSubmit(_graphicsQueue, 1, &submitInfo, _inFlightFences[_frameIndex]);
-
     AXASSERT(vr == VK_SUCCESS, "vkQueueSubmit failed");
 
     // Present: wait on render-finished semaphore
@@ -1224,7 +1228,8 @@ void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
     PixelBufferDesc pbd{};
     auto* rtImpl = static_cast<RenderTargetImpl*>(rt);
 
-    auto colorAttachment = rtImpl->getColorAttachment(0);
+    const auto imageIndex     = rtImpl->isDefaultRenderTarget() ? _imageIndex : 0;
+    auto colorAttachment  = rtImpl->getColorAttachment(imageIndex);
     if (!colorAttachment)
     {
         callback(pbd);
@@ -1244,27 +1249,19 @@ void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
     const uint32_t pixelStride    = 4;
     const VkDeviceSize bufferSize = static_cast<VkDeviceSize>(width) * static_cast<VkDeviceSize>(height) * pixelStride;
 
-    // Create HOST_VISIBLE | COHERENT staging buffer
-    VkBuffer stagingBuf       = VK_NULL_HANDLE;
-    VkDeviceMemory stagingMem = VK_NULL_HANDLE;
+    // Create HOST_VISIBLE | COHERENT staging buffer using VMA
+    VkBuffer stagingBuf = VK_NULL_HANDLE;
+    VmaAllocation stagingAlloc;
+    VmaAllocationCreateInfo allocInfo = {};
+    allocInfo.usage                   = VMA_MEMORY_USAGE_CPU_ONLY;
 
-    VkBufferCreateInfo bufInfo{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
+    VkBufferCreateInfo bufInfo{.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
     bufInfo.size        = bufferSize;
     bufInfo.usage       = VK_BUFFER_USAGE_TRANSFER_DST_BIT;
     bufInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-    AXASSERT(vkCreateBuffer(_device, &bufInfo, nullptr, &stagingBuf) == VK_SUCCESS, "vkCreateBuffer failed");
 
-    VkMemoryRequirements memReq{};
-    vkGetBufferMemoryRequirements(_device, stagingBuf, &memReq);
-
-    uint32_t typeIndex = _driver->findMemoryType(
-        memReq.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-    VkMemoryAllocateInfo allocInfo{VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO};
-    allocInfo.allocationSize  = memReq.size;
-    allocInfo.memoryTypeIndex = typeIndex;
-    AXASSERT(vkAllocateMemory(_device, &allocInfo, nullptr, &stagingMem) == VK_SUCCESS, "vkAllocateMemory failed");
-    AXASSERT(vkBindBufferMemory(_device, stagingBuf, stagingMem, 0) == VK_SUCCESS, "vkBindBufferMemory failed");
+    auto res = vmaCreateBuffer(_driver->getVmaAllocator(), &bufInfo, &allocInfo, &stagingBuf, &stagingAlloc, nullptr);
+    VK_REQUIRE(res, "vmaCreateBuffer failed");
 
     auto submission = _driver->startIsolateSubmission();
 
@@ -1305,18 +1302,17 @@ void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
 
     // Map and copy out
     void* mapped = nullptr;
-    AXASSERT(vkMapMemory(_device, stagingMem, 0, bufferSize, 0, &mapped) == VK_SUCCESS, "vkMapMemory failed");
+    AXASSERT(vmaMapMemory(_driver->getVmaAllocator(), stagingAlloc, &mapped) == VK_SUCCESS, "vmaMapMemory failed");
 
     pbd._width  = width;
     pbd._height = height;
     pbd._data.resize(static_cast<size_t>(bufferSize));
     std::memcpy(pbd._data.data(), mapped, static_cast<size_t>(bufferSize));
 
-    vkUnmapMemory(_device, stagingMem);
+    vmaUnmapMemory(_driver->getVmaAllocator(), stagingAlloc);
 
     // Cleanup
-    vkDestroyBuffer(_device, stagingBuf, nullptr);
-    vkFreeMemory(_device, stagingMem, nullptr);
+    vmaDestroyBuffer(_driver->getVmaAllocator(), stagingBuf, stagingAlloc);
 
     callback(pbd);
 }

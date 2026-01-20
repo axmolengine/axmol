@@ -26,7 +26,7 @@
 #include <vector>
 #include <cassert>
 #include <glad/vulkan.h>
-
+#include <vk_mem_alloc.h>
 #include "axmol/rhi/Buffer.h"
 #include "axmol/tlx/byte_buffer.hpp"
 #include "axmol/rhi/RHITypes.h"  // for MAX_INFLIGHT_BUFFER
@@ -85,11 +85,14 @@ private:
 
     // Current active handle (may point to one of _dynamicBuffers or the single static buffer)
     VkBuffer _buffer{VK_NULL_HANDLE};
-    VkDeviceMemory _memory{VK_NULL_HANDLE};
+    VmaAllocation _memory{VK_NULL_HANDLE};
+    void* _currentMappedData{nullptr};
 
     // When dynamic backing is used we keep all backings here
-    std::vector<VkBuffer> _dynamicBuffers;
-    std::vector<VkDeviceMemory> _dynamicMemories;
+    tlx::pod_vector<VkBuffer> _dynamicBuffers;
+    tlx::pod_vector<VmaAllocation> _dynamicMemories;
+    tlx::pod_vector<void*> _dynamicMappedData;
+
     int _currentFrameIndex{0};
     uint32_t _lastSeenFrame{UINT32_MAX};
 
