@@ -16,11 +16,34 @@
 
 #include "alcomplex.h"
 #include "alnumeric.h"
+#include "allpass_conv.hpp"
 #include "gsl/gsl"
 #include "pffft.h"
 #include "phase_shifter.h"
 #include "vector.h"
 
+
+/* UHJ is primarily defined in terms of classical B-Format. In particular,
+ * classical B-Format defines the encoding gains for a given sound at
+ * azimuth 'a' and elevation 'e' as:
+ *
+ * W = 1
+ * X = sqrt(2) * cos(a) * cos(e)
+ * Y = sqrt(2) * sin(a) * cos(e)
+ * Z = sqrt(2) * sin(e)
+ *
+ * That is, FuMa with an additional sqrt(2) scaling. The encoding and decoding
+ * functions below work according to N3D scaling, which has the gains:
+*
+ * W = 1
+ * X = sqrt(3) * cos(a) * cos(e)
+ * Y = sqrt(3) * sin(a) * cos(e)
+ * Z = sqrt(3) * sin(e)
+ *
+ * Consequently, encoding equations for N3D input need the X/Y/Z coefficients
+ * scaled down by sqrt(2/3), while decoding equations for N3D output need the
+ * X/Y/Z coefficients scaled up by sqrt(3/2). W remains unchanged.
+ */
 
 namespace {
 
@@ -28,98 +51,9 @@ template<std::size_t A, typename T, std::size_t N>
 constexpr auto assume_aligned_span(const std::span<T,N> s) noexcept -> std::span<T,N>
 { return std::span<T,N>{std::assume_aligned<A>(s.data()), s.size()}; }
 
-/* Convolution is implemented using a segmented overlap-add method. The filter
- * response is broken up into multiple segments of 128 samples, and each
- * segment has an FFT applied with a 256-sample buffer (the latter half left
- * silent) to get its frequency-domain response.
- *
- * Input samples are similarly broken up into 128-sample segments, with a 256-
- * sample FFT applied to each new incoming segment to get its frequency-domain
- * response. A history of FFT'd input segments is maintained, equal to the
- * number of filter response segments.
- *
- * To apply the convolution, each filter response segment is convolved with its
- * paired input segment (using complex multiplies, far cheaper than time-domain
- * FIRs), accumulating into an FFT buffer. The input history is then shifted to
- * align with later filter response segments for the next input segment.
- *
- * An inverse FFT is then applied to the accumulated FFT buffer to get a 256-
- * sample time-domain response for output, which is split in two halves. The
- * first half is the 128-sample output, and the second half is a 128-sample
- * (really, 127) delayed extension, which gets added to the output next time.
- * Convolving two time-domain responses of length N results in a time-domain
- * signal of length N*2 - 1, and this holds true regardless of the convolution
- * being applied in the frequency domain, so these "overflow" samples need to
- * be accounted for.
- */
-template<size_t FilterSize>
-struct SegmentedFilter {
-    static constexpr size_t sFftLength{256};
-    static constexpr size_t sSampleLength{sFftLength / 2};
-    static constexpr size_t sNumSegments{FilterSize/sSampleLength};
-    static_assert(FilterSize >= sFftLength);
-    static_assert((FilterSize % sSampleLength) == 0);
-
-    PFFFTSetup mFft;
-    alignas(16) std::array<float,sFftLength*sNumSegments> mFilterData;
-
-    SegmentedFilter() noexcept : mFft{sFftLength, PFFFT_REAL}
-    {
-        /* To set up the filter, we first need to generate the desired
-         * response (not reversed).
-         */
-        auto tmpBuffer = std::vector(FilterSize, 0.0);
-        for(const auto i : std::views::iota(0_uz, FilterSize/2))
-        {
-            const auto k = int{FilterSize/2} - gsl::narrow_cast<int>(i*2 + 1);
-
-            const auto w = 2.0*std::numbers::pi/double{FilterSize}
-                * gsl::narrow_cast<double>(i*2 + 1);
-            const auto window = 0.3635819 - 0.4891775*std::cos(w) + 0.1365995*std::cos(2.0*w)
-                - 0.0106411*std::cos(3.0*w);
-
-            const auto pk = std::numbers::pi * gsl::narrow_cast<double>(k);
-            tmpBuffer[i*2 + 1] = window * (1.0-std::cos(pk)) / pk;
-        }
-
-        /* The response is split into segments that are converted to the
-         * frequency domain, each on their own (0 stuffed).
-         */
-        using complex_d = std::complex<double>;
-        auto fftBuffer = std::vector<complex_d>(sFftLength);
-        auto fftTmp = al::vector<float,16>(sFftLength);
-        auto filter = mFilterData.begin();
-        for(const auto s : std::views::iota(0_uz, sNumSegments))
-        {
-            const auto tmpspan = std::span{tmpBuffer}.subspan(sSampleLength*s, sSampleLength);
-            auto iter = std::ranges::copy(tmpspan, fftBuffer.begin()).out;
-            std::ranges::fill(iter, fftBuffer.end(), complex_d{});
-            forward_fft(fftBuffer);
-
-            /* Convert to zdomain data for PFFFT, scaled by the FFT length so
-             * the iFFT result will be normalized.
-             */
-            for(const auto i : std::views::iota(0_uz, sSampleLength))
-            {
-                fftTmp[i*2 + 0] = gsl::narrow_cast<float>(fftBuffer[i].real()) / float{sFftLength};
-                fftTmp[i*2 + 1] = gsl::narrow_cast<float>((i==0) ? fftBuffer[sSampleLength].real()
-                    : fftBuffer[i].imag()) / float{sFftLength};
-            }
-            mFft.zreorder(fftTmp.begin(), filter, PFFFT_BACKWARD);
-            std::advance(filter, sFftLength);
-        }
-    }
-};
-
-template<size_t N>
-const SegmentedFilter<N> gSegmentedFilter;
-
-template<size_t N>
-const PhaseShifterT<N> PShifter;
-
 } // namespace
 
-/* Encoding UHJ from B-Format is done as:
+/* Encoding UHJ from classical B-Format is done as:
  *
  * S = 0.9396926*W + 0.1855740*X
  * D = j(-0.3420201*W + 0.5098604*X) + 0.6554516*Y
@@ -132,11 +66,22 @@ const PhaseShifterT<N> PShifter;
  * where j is a wide-band +90 degree phase shift. 3-channel UHJ excludes Q,
  * while 2-channel excludes Q and T.
  *
+ * Adjusting for N3D input scaling and preapplying the half scale, the
+ * calculation becomes:
+ *
+ * S = 0.4698463*W + 0.0757602682546*X
+ * D = j(-0.17101005*W + 0.208149636675*X) + 0.267586995182*Y
+ *
+ * Left = S + D
+ * Right = S - D
+ * T = j(-0.1432*W + 0.5317025735*X) - 0.57735026919*Y
+ * Q = 0.797880458882*Z
+ *
  * The phase shift is done using a linear FIR filter implemented from a
  * segmented FFT'd response for the desired shift.
  */
 
-template<size_t N>
+template<usize N>
 void UhjEncoder<N>::encode(const std::span<float> LeftOut, const std::span<float> RightOut,
     const std::span<const std::span<const float>> InSamples)
 {
@@ -153,11 +98,11 @@ void UhjEncoder<N>::encode(const std::span<float> LeftOut, const std::span<float
     std::ranges::copy(xinput, std::next(mX.begin(), sFilterDelay));
     std::ranges::copy(yinput, std::next(mY.begin(), sFilterDelay));
 
-    /* S = 0.9396926*W + 0.1855740*X */
+    /* S = 0.4698463*W + 0.0757602682546*X */
     std::ranges::transform(mW | std::views::take(samplesToDo), mX, mS.begin(),
-        [](const float w, const float x) noexcept { return 0.9396926f*w + 0.1855740f*x; });
+        [](const float w, const float x) noexcept { return 0.4698463f*w + 0.0757602682546f*x; });
 
-    /* Precompute j(-0.3420201*W + 0.5098604*X) and store in mD. */
+    /* Precompute j(-0.17101005*W + 0.208149636675*X) and store in mD. */
     auto dstore = mD.begin();
     auto curseg = mCurrentSegment;
     for(auto base = 0_uz;base < samplesToDo;)
@@ -174,7 +119,7 @@ void UhjEncoder<N>::encode(const std::span<float> LeftOut, const std::span<float
          * filter input.
          */
         std::ranges::transform(wseg, xseg, wxio.begin(), [](const float w, const float x) noexcept
-        { return -0.3420201f*w + 0.5098604f*x; });
+        { return -0.17101005f*w + 0.208149636675f*x; });
 
         mFifoPos += todo;
         base += todo;
@@ -226,9 +171,9 @@ void UhjEncoder<N>::encode(const std::span<float> LeftOut, const std::span<float
     }
     mCurrentSegment = curseg;
 
-    /* D = j(-0.3420201*W + 0.5098604*X) + 0.6554516*Y */
+    /* D = j(-0.17101005*W + 0.208149636675*X) + 0.267586995182*Y */
     std::ranges::transform(mD | std::views::take(samplesToDo), mY, mD.begin(),
-        [](const float jwx, const float y) noexcept { return jwx + 0.6554516f*y; });
+        [](const float jwx, const float y) noexcept { return jwx + 0.267586995182f*y; });
 
     /* Copy the future samples to the front for next time. */
     const auto take_end = std::views::drop(samplesToDo) | std::views::take(sFilterDelay);
@@ -259,15 +204,15 @@ void UhjEncoder<N>::encode(const std::span<float> LeftOut, const std::span<float
 
     /* Combine the direct signal with the produced output. */
 
-    /* Left = (S + D)/2.0 */
+    /* Left = S + D */
     const auto left = assume_aligned_span<16>(LeftOut);
     for(auto i = 0_uz;i < samplesToDo;++i)
-        left[i] += (mS[i] + mD[i]) * 0.5f;
+        left[i] += mS[i] + mD[i];
 
-    /* Right = (S - D)/2.0 */
+    /* Right = S - D */
     const auto right = assume_aligned_span<16>(RightOut);
     for(auto i = 0_uz;i < samplesToDo;++i)
-        right[i] += (mS[i] - mD[i]) * 0.5f;
+        right[i] += mS[i] - mD[i];
 }
 
 /* This encoding implementation uses two sets of four chained IIR filters to
@@ -293,25 +238,25 @@ void UhjEncoderIIR::encode(const std::span<float> LeftOut, const std::span<float
     const auto xinput = assume_aligned_span<16>(InSamples[1].first(samplesToDo));
     const auto yinput = assume_aligned_span<16>(InSamples[2].first(samplesToDo));
 
-    /* S = 0.9396926*W + 0.1855740*X */
+    /* S = 0.4698463*W + 0.0757602682546*X */
     std::ranges::transform(winput, xinput, mTemp.begin(),
-        [](const float w, const float x) noexcept { return 0.9396926f*w + 0.1855740f*x; });
+        [](const float w, const float x) noexcept { return 0.4698463f*w + 0.0757602682546f*x; });
     process(mFilter1WX, Filter1Coeff, std::span{mTemp}.first(samplesToDo), true,
         std::span{mS}.subspan(1));
     mS[0] = mDelayWX; mDelayWX = mS[samplesToDo];
 
-    /* Precompute j(-0.3420201*W + 0.5098604*X) and store in mWX. */
+    /* Precompute j(-0.17101005*W + 0.208149636675*X) and store in mWX. */
     std::ranges::transform(winput, xinput, mTemp.begin(),
-        [](const float w, const float x) noexcept { return -0.3420201f*w + 0.5098604f*x; });
+        [](const float w, const float x) noexcept { return -0.17101005f*w + 0.208149636675f*x; });
     process(mFilter2WX, Filter2Coeff, std::span{mTemp}.first(samplesToDo), true, mWX);
 
     /* Apply filter1 to Y and store in mD. */
     process(mFilter1Y, Filter1Coeff, yinput, true, std::span{mD}.subspan(1));
     mD[0] = mDelayY; mDelayY = mD[samplesToDo];
 
-    /* D = j(-0.3420201*W + 0.5098604*X) + 0.6554516*Y */
+    /* D = j(-0.17101005*W + 0.208149636675*X) + 0.267586995182*Y */
     std::ranges::transform(mWX | std::views::take(samplesToDo), mD, mD.begin(),
-        [](const float jwx, const float y) noexcept { return jwx + 0.6554516f*y; });
+        [](const float jwx, const float y) noexcept { return jwx + 0.267586995182f*y; });
 
     /* Apply the base filter to the existing output to align with the processed
      * signal.
@@ -320,21 +265,21 @@ void UhjEncoderIIR::encode(const std::span<float> LeftOut, const std::span<float
     process(mFilter1Direct[0], Filter1Coeff, left, true, std::span{mTemp}.subspan(1));
     mTemp[0] = mDirectDelay[0]; mDirectDelay[0] = mTemp[samplesToDo];
 
-    /* Left = (S + D)/2.0 */
+    /* Left = S + D */
     for(auto i = 0_uz;i < samplesToDo;++i)
-        left[i] = (mS[i] + mD[i])*0.5f + mTemp[i];
+        left[i] = mS[i] + mD[i] + mTemp[i];
 
     const auto right = assume_aligned_span<16>(RightOut.first(samplesToDo));
     process(mFilter1Direct[1], Filter1Coeff, right, true, std::span{mTemp}.subspan(1));
     mTemp[0] = mDirectDelay[1]; mDirectDelay[1] = mTemp[samplesToDo];
 
-    /* Right = (S - D)/2.0 */
+    /* Right = S - D */
     for(auto i = 0_uz;i < samplesToDo;++i)
-        right[i] = (mS[i] - mD[i])*0.5f + mTemp[i];
+        right[i] = mS[i] - mD[i] + mTemp[i];
 }
 
 
-/* Decoding UHJ is done as:
+/* Decoding UHJ to classical B-Format is done as:
  *
  * S = Left + Right
  * D = Left - Right
@@ -346,6 +291,13 @@ void UhjEncoderIIR::encode(const std::span<float> LeftOut, const std::span<float
  *
  * where j is a +90 degree phase shift. 3-channel UHJ excludes Q, while 2-
  * channel excludes Q and T.
+ *
+ * Adjusting for N3D output scaling, this becomes:
+ *
+ * W = 0.981532*S + 0.161245010788*j(1.01449414406*D + 0.940383607152*T)
+ * X = 0.512550829698*S - j(1.01449414406*D + 0.940383607152*T)
+ * Y = 0.974857725791*D - 0.82840763305*T + j(0.228577809582*S)
+ * Z = 1.25332058063*Q
  */
 template<size_t N>
 void UhjDecoder<N>::decode(const std::span<std::span<float>> samples, const bool updateState)
@@ -372,22 +324,22 @@ void UhjDecoder<N>::decode(const std::span<std::span<float>> samples, const bool
     const auto xoutput = assume_aligned_span<16>(samples[1].first(samplesToDo));
     const auto youtput = assume_aligned_span<16>(samples[2].first(samplesToDo));
 
-    /* Precompute j(0.828331*D + 0.767820*T) and store in xoutput. */
+    /* Precompute j(1.01449414406*D + 0.940383607152*T) and store in xoutput. */
     auto tmpiter = std::ranges::copy(mDTHistory, mTemp.begin()).out;
     std::ranges::transform(mD | std::views::take(samplesToDo+sInputPadding), mT, tmpiter,
-        [](const float d, const float t) noexcept { return 0.828331f*d + 0.767820f*t; });
+        [](const float d, const float t) { return 1.01449414406f*d + 0.940383607152f*t; });
     if(updateState) [[likely]]
         std::ranges::copy(mTemp|std::views::drop(samplesToDo)|std::views::take(mDTHistory.size()),
             mDTHistory.begin());
-    PShifter<N>.process(xoutput, mTemp);
+    gPShifter<N>.process(xoutput, mTemp);
 
-    /* W = 0.981532*S + 0.197484*j(0.828331*D + 0.767820*T) */
+    /* W = 0.981532*S + 0.161245010788*j(1.01449414406*D + 0.940383607152*T) */
     std::ranges::transform(mS | std::views::take(samplesToDo), xoutput, woutput.begin(),
-        [](const float s, const float jdt) noexcept { return 0.981532f*s + 0.197484f*jdt; });
+        [](const float s, const float jdt) noexcept { return 0.981532f*s + 0.161245010788f*jdt; });
 
-    /* X = 0.418496*S - j(0.828331*D + 0.767820*T) */
+    /* X = 0.512550829698*S - j(1.01449414406*D + 0.940383607152*T) */
     std::ranges::transform(mS | std::views::take(samplesToDo), xoutput, xoutput.begin(),
-        [](const float s, const float jdt) noexcept { return 0.418496f*s - jdt; });
+        [](const float s, const float jdt) noexcept { return 0.512550829698f*s - jdt; });
 
     /* Precompute j*S and store in youtput. */
     tmpiter = std::ranges::copy(mSHistory, mTemp.begin()).out;
@@ -395,17 +347,17 @@ void UhjDecoder<N>::decode(const std::span<std::span<float>> samples, const bool
     if(updateState) [[likely]]
         std::ranges::copy(mTemp|std::views::drop(samplesToDo)|std::views::take(mSHistory.size()),
             mSHistory.begin());
-    PShifter<N>.process(youtput, mTemp);
+    gPShifter<N>.process(youtput, mTemp);
 
-    /* Y = 0.795968*D - 0.676392*T + j(0.186633*S) */
+    /* Y = 0.974857725791*D - 0.82840763305*T + j(0.228577809582*S) */
     for(auto i = 0_uz;i < samplesToDo;++i)
-        youtput[i] = 0.795968f*mD[i] - 0.676392f*mT[i] + 0.186633f*youtput[i];
+        youtput[i] = 0.974857725791f*mD[i] - 0.82840763305f*mT[i] + 0.228577809582f*youtput[i];
 
     if(samples.size() > 3)
     {
         const auto zoutput = assume_aligned_span<16>(samples[3].first(samplesToDo));
-        /* Z = 1.023332*Q */
-        std::ranges::transform(zoutput, zoutput.begin(), [](float q) { return 1.023332f*q; });
+        /* Z = 1.25332058063*Q */
+        std::ranges::transform(zoutput, zoutput.begin(), [](float q) { return 1.25332058063f*q; });
     }
 }
 
@@ -429,10 +381,10 @@ void UhjDecoderIIR::decode(const std::span<std::span<float>> samples, const bool
     const auto xoutput = assume_aligned_span<16>(samples[1].first(samplesToDo));
     const auto youtput = assume_aligned_span<16>(samples[2].first(samplesToDo));
 
-    /* Precompute j(0.828331*D + 0.767820*T) and store in xoutput. */
+    /* Precompute j(1.01449414406*D + 0.940383607152*T) and store in xoutput. */
     std::ranges::transform(mD, assume_aligned_span<16>(samples[2]), mTemp.begin(),
         [](const float d, const float t) noexcept
-    { return 0.828331f*d + 0.767820f*t; });
+    { return 1.01449414406f*d + 0.940383607152f*t; });
     if(mFirstRun) processOne(mFilter2DT, Filter2Coeff, mTemp[0]);
     process(mFilter2DT, Filter2Coeff, std::span{mTemp}.subspan(1, samplesToDo), updateState,
         xoutput);
@@ -440,25 +392,25 @@ void UhjDecoderIIR::decode(const std::span<std::span<float>> samples, const bool
     /* Apply filter1 to S and store in mTemp. */
     process(mFilter1S, Filter1Coeff, std::span{mS}.first(samplesToDo), updateState, mTemp);
 
-    /* W = 0.981532*S + 0.197484*j(0.828331*D + 0.767820*T) */
+    /* W = 0.981532*S + 0.161245010788*j(1.01449414406*D + 0.940383607152*T) */
     std::ranges::transform(mTemp, xoutput, woutput.begin(),
-        [](const float s, const float jdt) noexcept { return 0.981532f*s + 0.197484f*jdt; });
-    /* X = 0.418496*S - j(0.828331*D + 0.767820*T) */
+        [](const float s, const float jdt) noexcept { return 0.981532f*s + 0.161245010788f*jdt; });
+    /* X = 0.512550829698*S - j(1.01449414406*D + 0.940383607152*T) */
     std::ranges::transform(mTemp, xoutput, xoutput.begin(),
-        [](const float s, const float jdt) noexcept { return 0.418496f*s - jdt; });
+        [](const float s, const float jdt) noexcept { return 0.512550829698f*s - jdt; });
 
-    /* Apply filter1 to (0.795968*D - 0.676392*T) and store in mTemp. */
+    /* Apply filter1 to (0.974857725791*D - 0.82840763305*T) and store in mTemp. */
     std::ranges::transform(mD | std::views::take(samplesToDo), youtput, youtput.begin(),
-        [](const float d, const float t) noexcept { return 0.795968f*d - 0.676392f*t; });
+        [](const float d, const float t) { return 0.974857725791f*d - 0.82840763305f*t; });
     process(mFilter1DT, Filter1Coeff, youtput, updateState, mTemp);
 
     /* Precompute j*S and store in youtput. */
     if(mFirstRun) processOne(mFilter2S, Filter2Coeff, mS[0]);
     process(mFilter2S, Filter2Coeff, std::span{mS}.subspan(1, samplesToDo), updateState, youtput);
 
-    /* Y = 0.795968*D - 0.676392*T + j(0.186633*S) */
+    /* Y = 0.974857725791*D - 0.82840763305*T + j(0.228577809582*S) */
     std::ranges::transform(mTemp | std::views::take(samplesToDo), youtput, youtput.begin(),
-        [](const float dt, const float js) noexcept { return dt + 0.186633f*js; });
+        [](const float dt, const float js) noexcept { return dt + 0.228577809582f*js; });
 
     if(samples.size() > 3)
     {
@@ -467,26 +419,32 @@ void UhjDecoderIIR::decode(const std::span<std::span<float>> samples, const bool
         /* Apply filter1 to Q and store in mTemp. */
         process(mFilter1Q, Filter1Coeff, zoutput, updateState, mTemp);
 
-        /* Z = 1.023332*Q */
+        /* Z = 1.25332058063*Q */
         std::ranges::transform(mTemp | std::views::take(samplesToDo), zoutput.begin(),
-            [](const float q) noexcept { return 1.023332f*q; });
+            [](const float q) noexcept { return 1.25332058063f*q; });
     }
 
     mFirstRun = false;
 }
 
 
-/* Super Stereo processing is done as:
+/* Super Stereo processing for classical B-Format is done as:
  *
  * S = Left + Right
  * D = Left - Right
  *
- * W = 0.6098637*S + 0.6896511*j*w*D
- * X = 0.8624776*S - 0.7626955*j*w*D
- * Y = 1.6822415*w*D + 0.2156194*j*S
+ * W = 0.6098637*S + j(0.6896511*w*D)
+ * X = 0.8624776*S - j(0.7626955*w*D)
+ * Y = 1.6822415*w*D + j(0.2156194*S)
  *
  * where j is a +90 degree phase shift. w is a variable control for the
  * resulting stereo width, with the range 0 <= w <= 0.7.
+ *
+ * Adjusting again for N3D output scaling, this becomes:
+ *
+ * W = 0.6098637*S + j(0.6896511*w*D)
+ * X = 1.05631501729*S - j(0.934107402059*w*D)
+ * Y = 2.06031664957*w*D + j(0.264078754323*S)
  */
 template<size_t N>
 void UhjStereoDecoder<N>::decode(const std::span<std::span<float>> samples, const bool updateState)
@@ -544,14 +502,14 @@ void UhjStereoDecoder<N>::decode(const std::span<std::span<float>> samples, cons
     if(updateState) [[likely]]
         std::ranges::copy(mTemp|std::views::drop(samplesToDo)|std::views::take(mDTHistory.size()),
             mDTHistory.begin());
-    PShifter<N>.process(xoutput, mTemp);
+    gPShifter<N>.process(xoutput, mTemp);
 
-    /* W = 0.6098637*S + 0.6896511*j*w*D */
+    /* W = 0.6098637*S + j(0.6896511*w*D) */
     std::ranges::transform(mS, xoutput, woutput.begin(), [](const float s, const float jd) noexcept
     { return 0.6098637f*s + 0.6896511f*jd; });
-    /* X = 0.8624776*S - 0.7626955*j*w*D */
+    /* X = 1.05631501729*S - j(0.934107402059*w*D) */
     std::ranges::transform(mS, xoutput, xoutput.begin(), [](const float s, const float jd) noexcept
-    { return 0.8624776f*s - 0.7626955f*jd; });
+    { return 1.05631501729f*s - 0.934107402059f*jd; });
 
     /* Precompute j*S and store in youtput. */
     tmpiter = std::ranges::copy(mSHistory, mTemp.begin()).out;
@@ -559,11 +517,11 @@ void UhjStereoDecoder<N>::decode(const std::span<std::span<float>> samples, cons
     if(updateState) [[likely]]
         std::ranges::copy(mTemp|std::views::drop(samplesToDo)|std::views::take(mSHistory.size()),
             mSHistory.begin());
-    PShifter<N>.process(youtput, mTemp);
+    gPShifter<N>.process(youtput, mTemp);
 
-    /* Y = 1.6822415*w*D + 0.2156194*j*S */
+    /* Y = 2.06031664957*w*D + j(0.264078754323*S) */
     std::ranges::transform(mD, youtput, youtput.begin(), [](const float d, const float js) noexcept
-    { return 1.6822415f*d + 0.2156194f*js; });
+    { return 2.06031664957f*d + 0.264078754323f*js; });
 }
 
 void UhjStereoDecoderIIR::decode(const std::span<std::span<float>> samples, const bool updateState)
@@ -622,12 +580,12 @@ void UhjStereoDecoderIIR::decode(const std::span<std::span<float>> samples, cons
     if(mFirstRun) processOne(mFilter2D, Filter2Coeff, mD[0]);
     process(mFilter2D, Filter2Coeff, std::span{mD}.subspan(1, samplesToDo), updateState, xoutput);
 
-    /* W = 0.6098637*S + 0.6896511*j*w*D */
+    /* W = 0.6098637*S + j(0.6896511*w*D) */
     std::ranges::transform(mTemp, xoutput, woutput.begin(), [](float s, float jd) noexcept
     { return 0.6098637f*s + 0.6896511f*jd; });
-    /* X = 0.8624776*S - 0.7626955*j*w*D */
+    /* X = 1.05631501729*S - j(0.934107402059*w*D) */
     std::ranges::transform(mTemp, xoutput, xoutput.begin(), [](float s, float jd) noexcept
-    { return 0.8624776f*s - 0.7626955f*jd; });
+    { return 1.05631501729f*s - 0.934107402059f*jd; });
 
     /* Precompute j*S and store in youtput. */
     if(mFirstRun) processOne(mFilter2S, Filter2Coeff, mS[0]);
@@ -636,9 +594,9 @@ void UhjStereoDecoderIIR::decode(const std::span<std::span<float>> samples, cons
     /* Apply filter1 to D and store in mTemp. */
     process(mFilter1D, Filter1Coeff, std::span{mD}.first(samplesToDo), updateState, mTemp);
 
-    /* Y = 1.6822415*w*D + 0.2156194*j*S */
+    /* Y = 2.06031664957*w*D + j(0.264078754323*S) */
     std::ranges::transform(mTemp, youtput, youtput.begin(), [](float d, float js) noexcept
-    { return 1.6822415f*d + 0.2156194f*js; });
+    { return 2.06031664957f*d + 0.264078754323f*js; });
 
     mFirstRun = false;
 }

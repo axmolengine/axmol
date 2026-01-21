@@ -5,10 +5,9 @@
 #include <cstddef>
 #include <string_view>
 
+#include "altypes.hpp"
 
-using uint = unsigned int;
-
-enum Channel : unsigned char {
+enum Channel : u8 {
     FrontLeft = 0,
     FrontRight,
     FrontCenter,
@@ -54,7 +53,7 @@ enum Channel : unsigned char {
 
 
 /* Device formats */
-enum DevFmtType : unsigned char {
+enum DevFmtType : u8 {
     DevFmtByte,
     DevFmtUByte,
     DevFmtShort,
@@ -65,7 +64,7 @@ enum DevFmtType : unsigned char {
 
     DevFmtTypeDefault = DevFmtFloat
 };
-enum DevFmtChannels : unsigned char {
+enum DevFmtChannels : u8 {
     DevFmtMono,
     DevFmtStereo,
     DevFmtQuad,
@@ -79,37 +78,43 @@ enum DevFmtChannels : unsigned char {
 
     DevFmtChannelsDefault = DevFmtStereo
 };
-inline constexpr std::size_t MaxOutputChannels{32};
+inline constexpr auto MaxOutputChannels = 32_uz;
 
 /* DevFmtType traits, providing the type, etc given a DevFmtType. */
-template<DevFmtType T>
+template<DevFmtType>
 struct DevFmtTypeTraits { };
 
 template<>
-struct DevFmtTypeTraits<DevFmtByte> { using Type = int8_t; };
+struct DevFmtTypeTraits<DevFmtByte> { using Type = i8; };
 template<>
-struct DevFmtTypeTraits<DevFmtUByte> { using Type = uint8_t; };
+struct DevFmtTypeTraits<DevFmtUByte> { using Type = u8; };
 template<>
-struct DevFmtTypeTraits<DevFmtShort> { using Type = int16_t; };
+struct DevFmtTypeTraits<DevFmtShort> { using Type = i16; };
 template<>
-struct DevFmtTypeTraits<DevFmtUShort> { using Type = uint16_t; };
+struct DevFmtTypeTraits<DevFmtUShort> { using Type = u16; };
 template<>
-struct DevFmtTypeTraits<DevFmtInt> { using Type = int32_t; };
+struct DevFmtTypeTraits<DevFmtInt> { using Type = i32; };
 template<>
-struct DevFmtTypeTraits<DevFmtUInt> { using Type = uint32_t; };
+struct DevFmtTypeTraits<DevFmtUInt> { using Type = u32; };
 template<>
-struct DevFmtTypeTraits<DevFmtFloat> { using Type = float; };
+struct DevFmtTypeTraits<DevFmtFloat> { using Type = f32; };
 
 template<DevFmtType T>
 using DevFmtType_t = DevFmtTypeTraits<T>::Type;
 
 
-uint BytesFromDevFmt(DevFmtType type) noexcept;
-uint ChannelsFromDevFmt(DevFmtChannels chans, uint ambiorder) noexcept;
-inline uint FrameSizeFromDevFmt(DevFmtChannels chans, DevFmtType type, uint ambiorder) noexcept
+[[nodiscard]]
+auto BytesFromDevFmt(DevFmtType type) noexcept -> u32;
+[[nodiscard]]
+auto ChannelsFromDevFmt(DevFmtChannels chans, u32 ambiorder) noexcept -> u32;
+[[nodiscard]]
+inline auto FrameSizeFromDevFmt(DevFmtChannels const chans, DevFmtType const type,
+    u32 const ambiorder) noexcept -> u32
 { return ChannelsFromDevFmt(chans, ambiorder) * BytesFromDevFmt(type); }
 
+[[nodiscard]]
 auto DevFmtTypeString(DevFmtType type) noexcept -> std::string_view;
+[[nodiscard]]
 auto DevFmtChannelsString(DevFmtChannels chans) noexcept -> std::string_view;
 
 enum class DevAmbiLayout : bool {
@@ -119,7 +124,7 @@ enum class DevAmbiLayout : bool {
     Default = ACN
 };
 
-enum class DevAmbiScaling : unsigned char {
+enum class DevAmbiScaling : u8 {
     FuMa,
     SN3D,
     N3D,

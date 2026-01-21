@@ -1136,7 +1136,7 @@ void InitUhjPanning(al::Device *const device)
 
     std::ranges::transform(AmbiIndex::FromFuMa2D | std::views::take(count),
         device->Dry.AmbiMap.begin(), [](u8 const acn) noexcept -> BFChannelConfig
-    { return BFChannelConfig{1.0f/AmbiScale::FromUHJ[acn], acn}; });
+    { return BFChannelConfig{1.0f/AmbiScale::FromN3D[acn], acn}; });
     AllocChannels(device, count, device->channelsFromFmt());
 
     /* TODO: Should this default to something else? This is simply a regular
@@ -1383,7 +1383,20 @@ void aluInitRenderer(al::Device *const device, i32 const hrtf_id,
         }
     case StereoEncoding::Tsme:
         {
-            auto [proc, ftype] = init_encoder(TsmeEncoderIIR::Tag{});
+            auto proc = std::unique_ptr<EncoderBase>{};
+            auto ftype = std::string_view{};
+            switch(TsmeEncodeQuality)
+            {
+                case TsmeQualityType::IIR:
+                    std::tie(proc, ftype) = init_encoder(TsmeEncoderIIR::Tag{});
+                    break;
+                case TsmeQualityType::FIR256:
+                    std::tie(proc, ftype) = init_encoder(TsmeEncoder<TsmeLength256>::Tag{});
+                    break;
+                case TsmeQualityType::FIR512:
+                    std::tie(proc, ftype) = init_encoder(TsmeEncoder<TsmeLength512>::Tag{});
+                    break;
+            }
             Ensures(proc != nullptr);
 
             TRACE("Tetraphonic surround matrix encoding enabled ({} encoder)", ftype);

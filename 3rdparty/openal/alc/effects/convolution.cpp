@@ -118,7 +118,6 @@ constexpr auto GetAmbiScales(AmbiScaling scaletype) noexcept
     {
     case AmbiScaling::FuMa: return std::span{AmbiScale::FromFuMa};
     case AmbiScaling::SN3D: return std::span{AmbiScale::FromSN3D};
-    case AmbiScaling::UHJ: return std::span{AmbiScale::FromUHJ};
     case AmbiScaling::N3D: break;
     }
     return std::span{AmbiScale::FromN3D};
@@ -206,7 +205,7 @@ struct ConvolutionState final : public EffectState {
     FmtChannels mChannels{};
     AmbiLayout mAmbiLayout{};
     AmbiScaling mAmbiScaling{};
-    uint mAmbiOrder{};
+    u32 mAmbiOrder{};
 
     size_t mFifoPos{0};
     alignas(16) std::array<float,ConvolveUpdateSamples*2> mInput{};
@@ -271,7 +270,7 @@ void ConvolutionState::deviceUpdate(const DeviceBase *device, const BufferStorag
     using UhjDecoderType = UhjDecoder<512>;
     static constexpr auto DecoderPadding = UhjDecoderType::sInputPadding;
 
-    static constexpr uint MaxConvolveAmbiOrder{1u};
+    static constexpr auto MaxConvolveAmbiOrder = 1_u32;
 
     if(!mFft)
         mFft = PFFFTSetup{ConvolveUpdateSize, PFFFT_REAL};
@@ -294,7 +293,7 @@ void ConvolutionState::deviceUpdate(const DeviceBase *device, const BufferStorag
 
     mChannels = buffer->mChannels;
     mAmbiLayout = IsUHJ(mChannels) ? AmbiLayout::FuMa : buffer->mAmbiLayout;
-    mAmbiScaling = IsUHJ(mChannels) ? AmbiScaling::UHJ : buffer->mAmbiScaling;
+    mAmbiScaling = IsUHJ(mChannels) ? AmbiScaling::N3D : buffer->mAmbiScaling;
     mAmbiOrder = std::min(buffer->mAmbiOrder, MaxConvolveAmbiOrder);
 
     const auto realChannels = buffer->channelsFromFmt();
@@ -310,8 +309,8 @@ void ConvolutionState::deviceUpdate(const DeviceBase *device, const BufferStorag
     auto resampler = PPhaseResampler{};
     if(device->mSampleRate != buffer->mSampleRate)
         resampler.init(buffer->mSampleRate, device->mSampleRate);
-    const auto resampledCount = static_cast<uint>(
-        (uint64_t{buffer->mSampleLen}*device->mSampleRate+(buffer->mSampleRate-1)) /
+    const auto resampledCount = static_cast<u32>(
+        (u64{buffer->mSampleLen}*device->mSampleRate+(buffer->mSampleRate-1)) /
         buffer->mSampleRate);
 
     const auto splitter = BandSplitter{device->mXOverFreq/static_cast<float>(device->mSampleRate)};
