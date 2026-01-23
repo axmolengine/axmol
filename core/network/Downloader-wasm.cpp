@@ -72,7 +72,7 @@ namespace ax { namespace network {
             emscripten_fetch_attr_t attr;
             emscripten_fetch_attr_init(&attr);
             strcpy(attr.requestMethod, "GET");
-            attr.attributes = EMSCRIPTEN_FETCH_LOAD_TO_MEMORY | EMSCRIPTEN_FETCH_PERSIST_FILE;
+            attr.attributes = EMSCRIPTEN_FETCH_LOAD_TO_MEMORY;
             if(task->storagePath.length() == 0) {
                 attr.onsuccess = DownloaderEmscripten::onDataLoad;
             }else{
