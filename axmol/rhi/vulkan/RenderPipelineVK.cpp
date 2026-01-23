@@ -171,22 +171,18 @@ RenderPipelineImpl::~RenderPipelineImpl()
 {
     vkDeviceWaitIdle(_device);
 
-    for (auto& [_, res] : _pipelineLayoutCache)
+    for (auto& [_, state] : _pipelineLayoutCache)
     {
-        if (res)
-            vkDestroyPipelineLayout(_device, res, nullptr);
+        if (state.layout)
+            vkDestroyPipelineLayout(_device, state.layout, nullptr);
+
+        auto& descSetLayouts = state.descriptorSetLayouts;
+        if (descSetLayouts[SET_INDEX_UBO])
+            vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_UBO], nullptr);
+        if (descSetLayouts[SET_INDEX_SAMPLER])
+            vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_SAMPLER], nullptr);
     }
     _pipelineLayoutCache.clear();
-
-    for (auto& [_, state] : _descriptorLayoutCache)
-    {
-        auto& res = state.descriptorSetLayouts;
-        if (res[SET_INDEX_UBO])
-            vkDestroyDescriptorSetLayout(_device, res[SET_INDEX_UBO], nullptr);
-        if (res[SET_INDEX_SAMPLER])
-            vkDestroyDescriptorSetLayout(_device, res[SET_INDEX_SAMPLER], nullptr);
-    }
-    _descriptorLayoutCache.clear();
 
     for (auto pool : _descriptorPools)
         vkDestroyDescriptorPool(_device, pool, nullptr);
@@ -267,12 +263,11 @@ void RenderPipelineImpl::update(const RenderTarget* rt, const PipelineDesc& desc
     auto* vkRT              = static_cast<const RenderTargetImpl*>(rt);
     VkRenderPass renderPass = vkRT->getVkRenderPass();  // provided by RenderTargetImpl
 
-    auto program = static_cast<ProgramImpl*>(desc.programState->getProgram());
-
+    auto program  = static_cast<ProgramImpl*>(desc.programState->getProgram());
+    _activeProgId = program->getProgramId();
     updateBlendState(desc.blendDesc);
-    updateDescriptorSetLayouts(program);
-    updatePipelineLayout(program);
-    updateGraphicsPipeline(desc, state, renderPass, program);
+    updatePipelineLayoutState(program);
+    updateGraphicsPipeline(program, desc, state, renderPass);
 }
 
 void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc)
@@ -286,20 +281,19 @@ void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc)
     std::fill(std::begin(_activeBlendState.blendConstants), std::end(_activeBlendState.blendConstants), 0.0f);
 }
 
-void RenderPipelineImpl::updateDescriptorSetLayouts(ProgramImpl* program)
+void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
 {
-    auto progId = program->getProgramId();
-    auto it     = _descriptorLayoutCache.find(progId);
-    if (it != _descriptorLayoutCache.end())
+    auto it = _pipelineLayoutCache.find(_activeProgId);
+    if (it != _pipelineLayoutCache.end())
     {
-        _activeDSL = &it->second;
+        _activeLayoutState = &it->second;
         return;
     }
 
     tlx::pod_vector<VkDescriptorSetLayoutBinding> ubBindings;
     tlx::pod_vector<VkDescriptorSetLayoutBinding> samplerBindings;
 
-    DescriptorSetLayoutState dslState{};
+    auto& state = _pipelineLayoutCache.emplace(_activeProgId, PipelineLayoutState{}).first->second;
 
     for (auto& ub : program->getActiveUniformBlockInfos())
     {
@@ -312,7 +306,7 @@ void RenderPipelineImpl::updateDescriptorSetLayouts(ProgramImpl* program)
         b.stageFlags                    = stageFlags;
         b.pImmutableSamplers            = nullptr;
 
-        ++dslState.uniformDescriptorCount;
+        ++state.uniformDescriptorCount;
     }
 
     // FS samplers -> set=1
@@ -325,7 +319,7 @@ void RenderPipelineImpl::updateDescriptorSetLayouts(ProgramImpl* program)
         b.stageFlags                    = VK_SHADER_STAGE_FRAGMENT_BIT;
         b.pImmutableSamplers            = nullptr;
 
-        dslState.samplerDescriptorCount += smp->count;
+        state.samplerDescriptorCount += smp->count;
     }
 
     // Create DescriptorSetLayout for UBOs (set=0)
@@ -333,9 +327,9 @@ void RenderPipelineImpl::updateDescriptorSetLayouts(ProgramImpl* program)
     dsl0.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
     dsl0.bindingCount = static_cast<uint32_t>(ubBindings.size());
     dsl0.pBindings    = ubBindings.data();
-    vkCreateDescriptorSetLayout(_device, &dsl0, nullptr, &dslState.descriptorSetLayouts[SET_INDEX_UBO]);
+    vkCreateDescriptorSetLayout(_device, &dsl0, nullptr, &state.descriptorSetLayouts[SET_INDEX_UBO]);
 
-    dslState.descriptorSetLayoutCount = 1;
+    state.descriptorSetLayoutCount = 1;
     if (!samplerBindings.empty())
     {
         // Create DescriptorSetLayout for samplers (set=1)
@@ -343,43 +337,27 @@ void RenderPipelineImpl::updateDescriptorSetLayouts(ProgramImpl* program)
         dsl1.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
         dsl1.bindingCount = static_cast<uint32_t>(samplerBindings.size());
         dsl1.pBindings    = samplerBindings.data();
-        auto vr =
-            vkCreateDescriptorSetLayout(_device, &dsl1, nullptr, &dslState.descriptorSetLayouts[SET_INDEX_SAMPLER]);
+        auto vr = vkCreateDescriptorSetLayout(_device, &dsl1, nullptr, &state.descriptorSetLayouts[SET_INDEX_SAMPLER]);
         assert(vr == VK_SUCCESS);
-        ++dslState.descriptorSetLayoutCount;
+        ++state.descriptorSetLayoutCount;
     }
 
-    _activeDSL = &_descriptorLayoutCache.emplace(progId, dslState).first->second;
-}
-
-void RenderPipelineImpl::updatePipelineLayout(ProgramImpl* program)
-{
-    auto progId = program->getProgramId();
-    auto it     = _pipelineLayoutCache.find(progId);
-    if (it != _pipelineLayoutCache.end())
-    {
-        _activePipelineLayout = it->second;
-        return;
-    }
-
-    VkPipelineLayout pipelineLayout{VK_NULL_HANDLE};
     VkPipelineLayoutCreateInfo plc{};
     plc.sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    plc.setLayoutCount         = _activeDSL->descriptorSetLayoutCount;
-    plc.pSetLayouts            = _activeDSL->descriptorSetLayouts.data();
+    plc.setLayoutCount         = state.descriptorSetLayoutCount;
+    plc.pSetLayouts            = state.descriptorSetLayouts.data();
     plc.pushConstantRangeCount = 0;
     plc.pPushConstantRanges    = nullptr;
 
-    VkResult result = vkCreatePipelineLayout(_device, &plc, nullptr, &pipelineLayout);
+    VkResult result = vkCreatePipelineLayout(_device, &plc, nullptr, &state.layout);
     VK_REQUIRE(result, "vkCreatePipelineLayout fail");
-    _pipelineLayoutCache.emplace(progId, pipelineLayout);
-    _activePipelineLayout = pipelineLayout;
+    _activeLayoutState = &state;
 }
 
-void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc,
+void RenderPipelineImpl::updateGraphicsPipeline(ProgramImpl* program,
+                                                const PipelineDesc& desc,
                                                 const ExtendedDynamicState& state,
-                                                VkRenderPass renderPass,
-                                                ProgramImpl* program)
+                                                VkRenderPass renderPass)
 {
     static_assert(sizeof(state) == 4, "ExtendedDynamicState size must be 4 bytes");
 
@@ -400,7 +378,7 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc,
     else
         extendedDynState = 0;  // all dynamic
 
-    const uintptr_t pipelineId = makePipelineId(desc.blendDesc, _dsState, program->getProgramId(), renderPass,
+    const uintptr_t pipelineId = makePipelineId(desc.blendDesc, _dsState, _activeProgId, renderPass,
                                                 desc.vertexLayout->getHash(), extendedDynState);
     auto it                    = _pipelineCache.find(pipelineId);
     if (it != _pipelineCache.end())
@@ -440,7 +418,7 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc,
     gp.pDepthStencilState  = &_dsState->getVkDepthStencilState();
     gp.pColorBlendState    = &_activeBlendState;
     gp.pDynamicState       = &_dynState;
-    gp.layout              = _activePipelineLayout;
+    gp.layout              = _activeLayoutState->layout;
     gp.renderPass          = renderPass;
     gp.subpass             = 0;
 
@@ -454,35 +432,28 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc,
 
 bool RenderPipelineImpl::acquireDescriptorState(DescriptorState& state, int frameIndex)
 {
-    AXASSERT(_activeDSL, "DescriptorSetState must be valid");
-    auto* dss = _activeDSL;
-
+    AXASSERT(_activeLayoutState, "PipelineLayoutState must be valid");
     // 1) Try to reuse a recycled allocation from the cache
-    auto it = _descriptorCache.find(_activePipelineLayout);
+    auto it = _descriptorCache.find(_activeProgId);
     if (it != _descriptorCache.end())
     {
-        auto& pool     = it->second;
-        auto& freeList = pool[frameIndex];
+        auto& freeList = it->second;
         if (!freeList.empty())
         {
             state = freeList.back();
             freeList.pop_back();
-
-            assert(state.frameIndex == -1);
-            state.frameIndex = frameIndex;
             return true;
         }
     }
 
-    auto& outSets     = state.sets;
-    state.frameIndex  = frameIndex;
-    state.ownerLayout = _activePipelineLayout;
+    auto& outSets = state.sets;
+    state.progId  = _activeProgId;
 
     VkDescriptorSetAllocateInfo ai{};
     ai.sType              = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     ai.descriptorPool     = _descriptorPools.back();
-    ai.descriptorSetCount = dss->descriptorSetLayoutCount;
-    ai.pSetLayouts        = dss->descriptorSetLayouts.data();
+    ai.descriptorSetCount = _activeLayoutState->descriptorSetLayoutCount;
+    ai.pSetLayouts        = _activeLayoutState->descriptorSetLayouts.data();
 
     VkResult vr = vkAllocateDescriptorSets(_device, &ai, outSets.data());
     if (vr == VK_SUCCESS)
@@ -503,18 +474,14 @@ bool RenderPipelineImpl::acquireDescriptorState(DescriptorState& state, int fram
 void RenderPipelineImpl::recycleDescriptorState(DescriptorState& state)
 {
     // Find the cache entry for this layout state
-    auto it = _descriptorCache.find(state.ownerLayout);
+    auto it = _descriptorCache.find(state.progId);
     if (it == _descriptorCache.end())
     {
-        AXLOGD("DescriptorSetCache miss: no pool found for pipelineLayout=0x{:016x}, creating new pool",
-               reinterpret_cast<uint64_t>(state.ownerLayout));
-        it = _descriptorCache.emplace(state.ownerLayout, DescriptorPool()).first;
+        it = _descriptorCache.emplace(state.progId, DescriptorFreeList()).first;
     }
 
     // Push the allocation back into the free list for the given frame index
-    auto& pool       = it->second;
-    auto& freeList   = pool[state.frameIndex];
-    state.frameIndex = -1;  // mark it's free to reuse
+    auto& freeList = it->second;
     freeList.push_back(state);
 }
 
@@ -568,24 +535,33 @@ void RenderPipelineImpl::removeCachedObjects(Program* key)
 
     _driver->waitForGPU();
 
-    // remove descriptor set layouts
-    auto dslIt = _descriptorLayoutCache.find(progId);
-    if (dslIt != _descriptorLayoutCache.end())
+    // remove layout state
+    auto layoutIt = _pipelineLayoutCache.find(progId);
+    if (layoutIt != _pipelineLayoutCache.end())
     {
-        auto& res = dslIt->second.descriptorSetLayouts;
-        if (res[SET_INDEX_UBO])
-            vkDestroyDescriptorSetLayout(_device, res[SET_INDEX_UBO], nullptr);
-        if (res[SET_INDEX_SAMPLER])
-            vkDestroyDescriptorSetLayout(_device, res[SET_INDEX_SAMPLER], nullptr);
-        _descriptorLayoutCache.erase(dslIt);
-    }
+        auto& layoutState = layoutIt->second;
 
-    // remove pipeline layout
-    auto plIt = _pipelineLayoutCache.find(progId);
-    if (plIt != _pipelineLayoutCache.end())
-    {
-        vkDestroyPipelineLayout(_device, plIt->second, nullptr);
-        _pipelineLayoutCache.erase(plIt);
+        // remove descriptor sets
+        auto descriptorIt = _descriptorCache.find(progId);
+        if (descriptorIt != _descriptorCache.end())
+        {
+            for (auto& descriptorState : descriptorIt->second)
+            {
+                vkFreeDescriptorSets(_device, descriptorState.pool, layoutState.descriptorSetLayoutCount,
+                                     descriptorState.sets.data());
+            }
+            _descriptorCache.erase(descriptorIt);
+        }
+
+        if (layoutState.layout)
+            vkDestroyPipelineLayout(_device, layoutState.layout, nullptr);
+
+        auto& descSetLayouts = layoutState.descriptorSetLayouts;
+        if (descSetLayouts[SET_INDEX_UBO])
+            vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_UBO], nullptr);
+        if (descSetLayouts[SET_INDEX_SAMPLER])
+            vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_SAMPLER], nullptr);
+        _pipelineLayoutCache.erase(layoutIt);
     }
 
     // remove pipeline(s)
@@ -602,52 +578,5 @@ void RenderPipelineImpl::removeCachedObjects(Program* key)
     }
     _programToPipelineMap.erase(range.first, range.second);
 }
-
-/**
- * @brief Updates input assembly state for dynamic primitive type handling
- * Axmol engine uses dynamic primitive types which provides flexibility for most rendering scenarios.
- * Current limitation: LINE_LOOP primitive type is not supported in the dynamic implementation.
- * This implementation covers the majority of use cases efficiently. If LINE_LOOP support is required
- * in the future:
- * Uncomment and implement this function
- * Call it at appropriate locations in the rendering pipeline
- * Include primitive type in pipeline key generation to ensure proper state management
- * The dynamic approach balances performance and flexibility while maintaining compatibility
- * with modern graphics APIs.
- */
-// void RenderPipelineImpl::updateInputAssemblyState(PrimitiveType primType)
-//{
-//     switch (primType)
-//     {
-//     case PrimitiveType::POINT:
-//         _iaState.topology               = VK_PRIMITIVE_TOPOLOGY_POINT_LIST;
-//         _iaState.primitiveRestartEnable = VK_FALSE;
-//         break;
-//     case PrimitiveType::LINE:
-//         _iaState.topology               = VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
-//         _iaState.primitiveRestartEnable = VK_FALSE;
-//         break;
-//     case PrimitiveType::LINE_LOOP:
-//         _iaState.topology               = VK_PRIMITIVE_TOPOLOGY_LINE_STRIP;
-//         _iaState.primitiveRestartEnable = VK_TRUE;  // simulate restart index loop
-//         break;
-//     case PrimitiveType::LINE_STRIP:
-//         _iaState.topology               = VK_PRIMITIVE_TOPOLOGY_LINE_STRIP;
-//         _iaState.primitiveRestartEnable = VK_FALSE;
-//         break;
-//     case PrimitiveType::TRIANGLE:
-//         _iaState.topology               = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-//         _iaState.primitiveRestartEnable = VK_FALSE;
-//         break;
-//     case PrimitiveType::TRIANGLE_STRIP:
-//         _iaState.topology               = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP;
-//         _iaState.primitiveRestartEnable = VK_FALSE;
-//         break;
-//     default:
-//         _iaState.topology               = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-//         _iaState.primitiveRestartEnable = VK_FALSE;
-//         break;
-//     }
-// }
 
 }  // namespace ax::rhi::vk

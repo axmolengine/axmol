@@ -43,6 +43,14 @@ struct ExtendedDynamicState
     uint32_t reserved : 16                    = 0;
 };
 
+class DescriptorPool
+{
+public:
+    size_t capacity() const { return 0; }
+
+protected:
+};
+
 /**
  * @brief Vulkan-based RenderPipeline implementation
  *
@@ -65,9 +73,11 @@ public:
 
     using VkDescriptorSetArray       = std::array<VkDescriptorSet, MAX_DESCRIPTOR_SETS>;
     using VkDescriptorSetLayoutArray = std::array<VkDescriptorSetLayout, MAX_DESCRIPTOR_SETS>;
-    struct DescriptorSetLayoutState
+    struct PipelineLayoutState
     {
+        VkPipelineLayout layout{VK_NULL_HANDLE};
         VkDescriptorSetLayoutArray descriptorSetLayouts{VK_NULL_HANDLE};
+
         uint32_t descriptorSetLayoutCount{0};
         uint32_t samplerDescriptorCount{0};
         uint32_t uniformDescriptorCount{0};
@@ -75,12 +85,12 @@ public:
 
     struct DescriptorState
     {
-        VkDescriptorSetArray sets;     // Allocated VkDescriptorSets
-        VkPipelineLayout ownerLayout;  // PipelineLayout
-        int frameIndex;                // Frame index (for multi-frame in flight)
+        VkDescriptorSetArray sets{};  // Allocated VkDescriptorSets
+        uint64_t progId{0};         // progId associated with this descriptor set
+        VkDescriptorPool pool{VK_NULL_HANDLE};
     };
 
-    using DescriptorPool = std::array<tlx::pod_vector<DescriptorState>, MAX_FRAMES_IN_FLIGHT>;
+    using DescriptorFreeList = tlx::pod_vector<DescriptorState>;
 
     explicit RenderPipelineImpl(DriverImpl* driver);
     ~RenderPipelineImpl();
@@ -90,25 +100,10 @@ public:
     void update(const RenderTarget*, const PipelineDesc& desc, const ExtendedDynamicState& state);
 
     VkPipeline getVkPipeline() const { return _activePipeline; }
-    VkPipelineLayout getVkPipelineLayout() const { return _activePipelineLayout; }
-    DescriptorSetLayoutState* getDescriptorSetLayoutState() const { return _activeDSL; }
+    PipelineLayoutState* getPipelineLayoutState() const { return _activeLayoutState; }
 
     bool acquireDescriptorState(DescriptorState& outState, int frameIndex);
     void recycleDescriptorState(DescriptorState& state);
-
-    /**
-     * @brief Updates input assembly state for dynamic primitive type handling
-     * Axmol engine uses dynamic primitive types which provides flexibility for most rendering scenarios.
-     * Current limitation: LINE_LOOP primitive type is not supported in the dynamic implementation.
-     * This implementation covers the majority of use cases efficiently. If LINE_LOOP support is required
-     * in the future:
-     * Uncomment and implement this function
-     * Call it at appropriate locations in the rendering pipeline
-     * Include primitive type in pipeline key generation to ensure proper state management
-     * The dynamic approach balances performance and flexibility while maintaining compatibility
-     * with modern graphics APIs.
-     */
-    // void updateInputAssemblyState(PrimitiveType primitiveType);
 
     void removeCachedObjects(VkRenderPass key);
     void removeCachedObjects(Program* key);
@@ -117,12 +112,11 @@ private:
     void initializePipelineDefaults(DriverImpl* driver);
 
     void updateBlendState(const BlendDesc& blendDesc);
-    void updateDescriptorSetLayouts(ProgramImpl* program);
-    void updatePipelineLayout(ProgramImpl* program);
-    void updateGraphicsPipeline(const PipelineDesc& desc,
+    void updatePipelineLayoutState(ProgramImpl* program);
+    void updateGraphicsPipeline(ProgramImpl* program,
+                                const PipelineDesc& desc,
                                 const ExtendedDynamicState& states,
-                                VkRenderPass renderPass,
-                                ProgramImpl* program);
+                                VkRenderPass renderPass);
 
     VkDescriptorPool allocateDescriptorPool();
 
@@ -144,19 +138,18 @@ private:
     VkPipelineColorBlendAttachmentState _activeAttachment{};
     VkPipelineColorBlendStateCreateInfo _activeBlendState{};
 
-    VkPipelineLayout _activePipelineLayout{VK_NULL_HANDLE};
-    DescriptorSetLayoutState* _activeDSL{nullptr};
+    uint64_t _activeProgId{0};
 
+    PipelineLayoutState* _activeLayoutState{nullptr};
     VkPipeline _activePipeline{VK_NULL_HANDLE};
 
-    tlx::pod_vector<VkDescriptorPool> _descriptorPools;
-
-    tlx::hash_map<uint64_t, DescriptorSetLayoutState> _descriptorLayoutCache;  // progId -> dsSet
-    tlx::hash_map<uint64_t, VkPipelineLayout> _pipelineLayoutCache;            // progId -> pipelineLayout
-    tlx::hash_map<uintptr_t, VkPipeline> _pipelineCache;                       // PSO cache
-    tlx::hash_map<VkPipelineLayout, DescriptorPool> _descriptorCache;
+    tlx::hash_map<uint64_t, PipelineLayoutState> _pipelineLayoutCache;  // progId -> PipelineLayoutState
+    tlx::hash_map<uintptr_t, VkPipeline> _pipelineCache;  // PSO cache
+    tlx::hash_map<uint64_t, DescriptorFreeList> _descriptorCache;  // progId -> recycled desc sets
 
     std::multimap<uint64_t, uintptr_t> _programToPipelineMap;         // progId -> PSO id
     std::multimap<VkRenderPass, uintptr_t> _renderPassToPipelineMap;  // renderPass -> PSO id
+
+    tlx::pod_vector<VkDescriptorPool> _descriptorPools;
 };
 }  // namespace ax::rhi::vk

@@ -1036,8 +1036,7 @@ void RenderContextImpl::prepareDrawing()
         cb.second(_programState, cb.first);
 
     // Acquire descriptor sets for this frame, matching current pipeline layout
-    VkPipelineLayout pipelineLayout = _renderPipeline->getVkPipelineLayout();
-    const auto dslState             = _renderPipeline->getDescriptorSetLayoutState();
+    auto layoutState = _renderPipeline->getPipelineLayoutState();
 
 #if _AX_USE_DESCRIPTOR_CACHE
     auto& descriptorState = _inFlightDescriptorStates[_frameIndex].emplace_back();
@@ -1046,11 +1045,10 @@ void RenderContextImpl::prepareDrawing()
     auto& descriptorSets = descriptorState.sets;
 #else
     VkDescriptorSetAllocateInfo allocInfo{};
-    allocInfo.sType               = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-    allocInfo.descriptorPool      = _descriptorPools[_frameIndex];
-    auto descriptorSetLayoutState = _renderPipeline->getDescriptorSetLayoutState();
-    allocInfo.descriptorSetCount  = descriptorSetLayoutState->descriptorSetLayoutCount;
-    allocInfo.pSetLayouts         = descriptorSetLayoutState->descriptorSetLayouts.data();
+    allocInfo.sType              = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+    allocInfo.descriptorPool     = _descriptorPools[_frameIndex];
+    allocInfo.descriptorSetCount = layoutState->descriptorSetLayoutCount;
+    allocInfo.pSetLayouts        = layoutState->descriptorSetLayouts.data();
 
     std::array<VkDescriptorSet, RenderPipelineImpl::MAX_DESCRIPTOR_SETS> descriptorSets{};
     VkResult res = vkAllocateDescriptorSets(_device, &allocInfo, descriptorSets.data());
@@ -1062,7 +1060,7 @@ void RenderContextImpl::prepareDrawing()
     // Prepare write lists sized to expected UBO + sampler descriptors
     auto& writes = _descriptorWritesPerFrame;
     writes.clear();
-    writes.reserve(dslState->uniformDescriptorCount + dslState->samplerDescriptorCount);
+    writes.reserve(layoutState->uniformDescriptorCount + layoutState->samplerDescriptorCount);
 
     _descriptorBufferInfos.clear();
 
@@ -1094,7 +1092,7 @@ void RenderContextImpl::prepareDrawing()
     // --- Samplers (set=1, binding=N) ---
     auto& imageInfos = _descriptorImageInfosPerFrame;
     imageInfos.clear();
-    imageInfos.reserve(dslState->samplerDescriptorCount);
+    imageInfos.reserve(layoutState->samplerDescriptorCount);
 
     for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
     {
@@ -1145,8 +1143,8 @@ void RenderContextImpl::prepareDrawing()
     }
 
     // Bind descriptor sets: bind only the sets that exist
-    vkCmdBindDescriptorSets(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0,
-                            dslState->descriptorSetLayoutCount, descriptorSets.data(), 0, nullptr);
+    vkCmdBindDescriptorSets(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, layoutState->layout, 0,
+                            layoutState->descriptorSetLayoutCount, descriptorSets.data(), 0, nullptr);
 
     // Bind vertex buffers
     _vertexBuffer->setLastFenceValue(_frameFenceValue);
