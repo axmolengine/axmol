@@ -173,8 +173,9 @@ private:
     VkPipeline _activePipeline{VK_NULL_HANDLE};
 
     tlx::hash_map<uint64_t, PipelineLayoutState> _pipelineLayoutCache;  // progId -> PipelineLayoutState
-    tlx::hash_map<uintptr_t, VkPipeline> _pipelineCache;                // PSO cache
     tlx::hash_map<uint64_t, DescriptorFreeList> _descriptorCache;       // progId -> recycled desc sets
+
+    tlx::hash_map<uintptr_t, VkPipeline> _pipelineCache;  // PSO cache
 
     std::multimap<uint64_t, uintptr_t> _programToPipelineMap;         // progId -> PSO id
     std::multimap<VkRenderPass, uintptr_t> _renderPassToPipelineMap;  // renderPass -> PSO id

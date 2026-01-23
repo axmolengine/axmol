@@ -263,6 +263,7 @@ void DescriptorAllocator::freeDescriptorSets(DescriptorState* descriptor)
 #endif
         descriptor->pool->freeDescriptorSets(_device, static_cast<uint32_t>(_poolSizes.size()), descriptor);
         descriptor->allocator = nullptr;
+        descriptor->progId    = 0;
     }
 }
 
@@ -615,7 +616,7 @@ void RenderPipelineImpl::recycleDescriptorState(DescriptorState* descriptorState
         it = _descriptorCache.emplace(descriptorState->progId, DescriptorFreeList()).first;
     }
 
-    // Push the allocation back into the free list for the given frame index
+    // Push the allocation back into the free list
     auto& freeList = it->second;
     freeList.push_back(descriptorState);
 }
