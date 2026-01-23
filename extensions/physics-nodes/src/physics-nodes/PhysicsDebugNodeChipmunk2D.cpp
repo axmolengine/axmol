@@ -95,7 +95,7 @@ static void DrawShape(cpShape* shape, DrawNode* renderer)
     case CP_SEGMENT_SHAPE:
     {
         cpSegmentShape* seg = (cpSegmentShape*)shape;
-        renderer->drawSegment(cpVert2Point(seg->ta), cpVert2Point(seg->tb), cpfmax(seg->r, 1.0), color);
+        renderer->drawSegment(cpVert2Point(seg->ta), cpVert2Point(seg->tb), cpfmax(seg->r*4, 1.0), color);
     }
     break;
     case CP_POLY_SHAPE:
@@ -109,7 +109,7 @@ static void DrawShape(cpShape* shape, DrawNode* renderer)
             pPoints[i] = cpVert2Point(poly->planes[i].v0);
         if (cpfmax(poly->r, 1.0) > 1.0)
         {
-            renderer->drawPolygon(pPoints, num, Color4F{}, poly->r, color);
+            renderer->drawPolygon(pPoints, num, Color4F{}, poly->r*2, color);
         }
         else
         {
