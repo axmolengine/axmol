@@ -144,9 +144,6 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
     _screenRT = new RenderTargetImpl(_driver, true);
 
     createCommandBuffers();
-#if !_AX_USE_DESCRIPTOR_CACHE
-    createDescriptorPool();
-#endif
     recreateSwapchain();
 
     // create frame fence objects
@@ -174,6 +171,13 @@ RenderContextImpl::~RenderContextImpl()
     vkDeviceWaitIdle(_device);
     vkQueueWaitIdle(_presentQueue);
 
+    for (auto& descriptorStates : _inFlightDescriptorStates)
+    {
+        for (auto state : descriptorStates)
+            _renderPipeline->recycleDescriptorState(state);
+        descriptorStates.clear();
+    }
+
     AX_SAFE_RELEASE_NULL(_screenRT);
     _driver->destroyStaleResources();
     AX_SAFE_RELEASE_NULL(_renderPipeline);
@@ -186,11 +190,6 @@ RenderContextImpl::~RenderContextImpl()
     for (auto fence : _inFlightFences)
         vkDestroyFence(_device, fence, nullptr);
     _inFlightFences.fill({});
-#if !_AX_USE_DESCRIPTOR_CACHE
-    for (auto pool : _descriptorPools)
-        vkDestroyDescriptorPool(_device, pool, nullptr);
-    _descriptorPools.fill(VK_NULL_HANDLE);
-#endif
     vkFreeCommandBuffers(_device, _commandPool, static_cast<uint32_t>(_commandBuffers.size()), _commandBuffers.data());
     _commandBuffers.fill(VK_NULL_HANDLE);
 
@@ -328,34 +327,6 @@ void RenderContextImpl::createCommandBuffers()
     auto result = vkAllocateCommandBuffers(_device, &allocInfo, _commandBuffers.data());
     AXASSERT(result == VK_SUCCESS, "vkAllocateCommandBuffers failed");
 }
-
-#if !_AX_USE_DESCRIPTOR_CACHE
-
-void RenderContextImpl::createDescriptorPool()
-{
-    // Define the descriptor types and counts supported by the pool
-    constexpr VkDescriptorPoolSize poolSizes[] = {
-        {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 64}, {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 64},
-        /*{VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 32},*/  // SSBO, unused currently
-    };
-
-    constexpr uint32_t MAX_DESCRIPTOR_SETS_PER_FRAME = 1024;
-
-    VkDescriptorPoolCreateInfo poolInfo{};
-    poolInfo.sType         = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-    poolInfo.poolSizeCount = static_cast<uint32_t>(std::size(poolSizes));
-    poolInfo.pPoolSizes    = poolSizes;
-    poolInfo.maxSets       = MAX_DESCRIPTOR_SETS_PER_FRAME;  // Maximum number of descriptor sets that can be allocated
-    poolInfo.flags         = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-    // Allow individual descriptor sets to be freed for flexible management
-
-    for (auto i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
-    {
-        VkResult res = vkCreateDescriptorPool(_device, &poolInfo, nullptr, &_descriptorPools[i]);
-        AXASSERT(res == VK_SUCCESS, "Failed to create descriptor pool");
-    }
-}
-#endif
 
 bool RenderContextImpl::updateSurface(SurfaceHandle surface, uint32_t width, uint32_t height)
 {
@@ -612,15 +583,10 @@ bool RenderContextImpl::beginFrame()
     _currentCmdBuffer = _commandBuffers[_frameIndex];
     vkResetCommandBuffer(_currentCmdBuffer, 0);
 
-#if _AX_USE_DESCRIPTOR_CACHE
     auto& descriptorStates = _inFlightDescriptorStates[_frameIndex];
-    for (auto& state : descriptorStates)
+    for (auto state : descriptorStates)
         _renderPipeline->recycleDescriptorState(state);
     descriptorStates.clear();
-#else
-    auto descriptorPool = _descriptorPools[_frameIndex];
-    vkResetDescriptorPool(_device, descriptorPool, 0);  // safe: only reset current frame pool
-#endif
 
     VkCommandBufferBeginInfo const binfo{
         .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
@@ -1038,24 +1004,11 @@ void RenderContextImpl::prepareDrawing()
     // Acquire descriptor sets for this frame, matching current pipeline layout
     auto layoutState = _renderPipeline->getPipelineLayoutState();
 
-#if _AX_USE_DESCRIPTOR_CACHE
     auto& descriptorState = _inFlightDescriptorStates[_frameIndex].emplace_back();
-    bool ok               = _renderPipeline->acquireDescriptorState(descriptorState, _frameIndex);
-    AXASSERT(ok, "Failed to acquire descriptor sets");
-    auto& descriptorSets = descriptorState.sets;
-#else
-    VkDescriptorSetAllocateInfo allocInfo{};
-    allocInfo.sType              = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-    allocInfo.descriptorPool     = _descriptorPools[_frameIndex];
-    allocInfo.descriptorSetCount = layoutState->descriptorSetLayoutCount;
-    allocInfo.pSetLayouts        = layoutState->descriptorSetLayouts.data();
+    descriptorState       = _renderPipeline->acquireDescriptorState();
+    auto& descriptorSets  = descriptorState->sets;
 
-    std::array<VkDescriptorSet, RenderPipelineImpl::MAX_DESCRIPTOR_SETS> descriptorSets{};
-    VkResult res = vkAllocateDescriptorSets(_device, &allocInfo, descriptorSets.data());
-    AXASSERT(res == VK_SUCCESS, "Failed to allocate descriptor sets");
-#endif
-
-    assert(descriptorSets[RenderPipelineImpl::SET_INDEX_UBO]);
+    assert(descriptorSets[SET_INDEX_UBO]);
 
     // Prepare write lists sized to expected UBO + sampler descriptors
     auto& writes = _descriptorWritesPerFrame;
@@ -1081,7 +1034,7 @@ void RenderContextImpl::prepareDrawing()
             bufferInfo.range  = static_cast<VkDeviceSize>(uboInfo.sizeBytes);
 
             write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            write.dstSet          = descriptorSets[RenderPipelineImpl::SET_INDEX_UBO];  // renamed index
+            write.dstSet          = descriptorSets[SET_INDEX_UBO];  // renamed index
             write.dstBinding      = uboInfo.binding;
             write.descriptorType  = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
             write.descriptorCount = 1;
@@ -1129,7 +1082,7 @@ void RenderContextImpl::prepareDrawing()
 
         VkWriteDescriptorSet& write = writes.emplace_back();
         write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        write.dstSet                = descriptorSets[RenderPipelineImpl::SET_INDEX_SAMPLER];
+        write.dstSet                = descriptorSets[SET_INDEX_SAMPLER];
         write.dstBinding            = bindingIndex;
         write.descriptorType        = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
         write.descriptorCount       = static_cast<uint32_t>(texs.size());

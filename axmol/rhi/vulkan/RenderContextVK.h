@@ -26,8 +26,6 @@
 #include "axmol/rhi/vulkan/RenderPipelineVK.h"
 #include <glad/vulkan.h>
 
-#define _AX_USE_DESCRIPTOR_CACHE 1
-
 namespace ax::rhi::vk
 {
 class BufferImpl;
@@ -151,10 +149,6 @@ private:
     };
     bool handleSwapchainResult(VkResult result, SwapchainOp op, uint32_t prevSemaphoreIndex);
 
-#if !_AX_USE_DESCRIPTOR_CACHE
-    void createDescriptorPool();
-#endif
-
     void doReadPixels(RenderTarget* rt, bool preserveAxisHint, std::function<void(const PixelBufferDesc&)>& callback);
 
     void markDynamicStateDirty(DynamicStateBits bits) noexcept
@@ -194,10 +188,7 @@ private:
     uint64_t _completedFenceValue{0};
     uint64_t _frameFenceValue{0};
 
-#if !_AX_USE_DESCRIPTOR_CACHE
-    std::array<VkDescriptorPool, MAX_FRAMES_IN_FLIGHT> _descriptorPools{};
-#endif
-    std::array<tlx::pod_vector<RenderPipelineImpl::DescriptorState>, MAX_FRAMES_IN_FLIGHT> _inFlightDescriptorStates;
+    std::array<tlx::pod_vector<DescriptorState*>, MAX_FRAMES_IN_FLIGHT> _inFlightDescriptorStates;
 
     tlx::pod_vector<VkSemaphore> _presentCompleteSemaphores;
     tlx::pod_vector<VkSemaphore> _renderFinishedSemaphores;
