@@ -174,45 +174,6 @@ static int max_arbiters    = 0;
 static int max_points      = 0;
 static int max_constraints = 0;
 
-void ChipmunkTestBed::DrawInfo()
-{
-    int arbiters = _space->arbiters->num;
-    int points   = 0;
-
-    for (int i = 0; i < arbiters; i++)
-        points += ((cpArbiter*)(_space->arbiters->arr[i]))->count;
-
-    int constraints = (_space->constraints->num + points) * _space->iterations;
-
-    max_arbiters    = arbiters > max_arbiters ? arbiters : max_arbiters;
-    max_points      = points > max_points ? points : max_points;
-    max_constraints = constraints > max_constraints ? constraints : max_constraints;
-
-    char buffer[1024];
-    constexpr auto format =
-        "Arbiters: {} ({}) - "
-        "Contact Points: {} ({})\n"
-        "Other Constraints: {}, Iterations: {}\n"
-        "Constraints x Iterations: {} ({})\n"
-        "Time:{:5.2f}s, KE:{:5.2e}"sv;
-
-    cpArray* bodies = _space->dynamicBodies;
-    cpFloat ke      = 0.0f;
-    for (int i = 0; i < bodies->num; i++)
-    {
-        cpBody* body = (cpBody*)bodies->arr[i];
-        if (body->m == INFINITY || body->i == INFINITY)
-            continue;
-
-        ke += body->m * cpvdot(body->v, body->v) + body->i * body->w * body->w;
-    }
-
-    auto msg =
-        fmt::format_to_z(buffer, format, arbiters, max_arbiters, points, max_points, _space->constraints->num,
-                         _space->iterations, constraints, max_constraints, ChipmunkDemoTime, (ke < 1e-10f ? 0.0f : ke));
-
-    drawInfo->setString(msg);
-}
 
 static char PrintStringBuffer[1024 * 8];
 static char* PrintStringCursor;
@@ -503,7 +464,6 @@ void ChipmunkTestBed::updateInit(ChipmunkDemo tt)
     drawCP->clear();
     updateMouseBody();
     ChipmunkDemoTime += tt.timestep;
-    ChipmunkTestBed::DrawInfo();
     tt.updateFunc(_space, tt.timestep);
 }
 
