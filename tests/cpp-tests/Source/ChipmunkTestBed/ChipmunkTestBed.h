@@ -51,7 +51,6 @@ public:
     bool onMouseDown(ax::Event* event);
     bool onMouseUp(ax::Event* event);
     bool onMouseMove(ax::Event* event);
-    void DrawInfo();
     void updateInit(ChipmunkDemo tt);
 
     cpSpace* _space;                                              // strong ref

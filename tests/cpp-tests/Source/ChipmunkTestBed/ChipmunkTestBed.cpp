@@ -91,7 +91,7 @@ cpBool ChipmunkDemoRightDown  = cpFalse;
 cpBool ChipmunkDemoLeftDown   = cpFalse;
 double ChipmunkDemoTime;
 
-cpBody* mouse_body        = cpBodyNewKinematic();
+cpBody* mouse_body               = cpBodyNewKinematic();
 static cpConstraint* mouse_joint = nullptr;
 
 char const* ChipmunkDemoMessageString = nullptr;
@@ -102,7 +102,7 @@ cpShapeFilter NOT_GRABBABLE_FILTER = {CP_NO_GROUP, ~GRABBABLE_MASK_BIT, ~GRABBAB
 
 ax::DrawNode* drawCP = nullptr;
 
-void ChipmunkDemoDefaultDrawImpl(cpSpace* space){};
+void ChipmunkDemoDefaultDrawImpl(cpSpace* space) {};
 
 void ChipmunkDebugDrawDot(cpFloat size, cpVect pos, cpSpaceDebugColor fillColor)
 {
@@ -174,44 +174,6 @@ static int max_arbiters    = 0;
 static int max_points      = 0;
 static int max_constraints = 0;
 
-void ChipmunkTestBed::DrawInfo()
-{
-    int arbiters = _space->arbiters->num;
-    int points   = 0;
-
-    for (int i = 0; i < arbiters; i++)
-        points += ((cpArbiter*)(_space->arbiters->arr[i]))->count;
-
-    int constraints = (_space->constraints->num + points) * _space->iterations;
-
-    max_arbiters    = arbiters > max_arbiters ? arbiters : max_arbiters;
-    max_points      = points > max_points ? points : max_points;
-    max_constraints = constraints > max_constraints ? constraints : max_constraints;
-
-    char buffer[1024];
-    constexpr auto format =
-        "Arbiters: {} ({}) - "
-        "Contact Points: {} ({})\n"
-        "Other Constraints: {}, Iterations: {}\n"
-        "Constraints x Iterations: {} ({})\n"
-        "Time:{:5.2f}s, KE:{:5.2e}"sv;
-
-    cpArray* bodies = _space->dynamicBodies;
-    cpFloat ke      = 0.0f;
-    for (int i = 0; i < bodies->num; i++)
-    {
-        cpBody* body = (cpBody*)bodies->arr[i];
-        if (body->m == INFINITY || body->i == INFINITY)
-            continue;
-
-        ke += body->m * cpvdot(body->v, body->v) + body->i * body->w * body->w;
-    }
-
-    auto msg = fmt::format_to_z(buffer, format, arbiters, max_arbiters, points, max_points, _space->constraints->num, _space->iterations,
-            constraints, max_constraints, ChipmunkDemoTime, (ke < 1e-10f ? 0.0f : ke));
-
-    drawInfo->setString(msg);
-}
 
 static char PrintStringBuffer[1024 * 8];
 static char* PrintStringCursor;
@@ -308,9 +270,9 @@ ChipmunkTestBed::ChipmunkTestBed()
 {
     // halx99: since axmol init scene default camera at 'initWithXXX' function, only change design size at scene
     // construct is ok see also: https://github.com/axmolengine/axmol/commit/581a7921554c09746616759d5a5ca6ce9d3eaa22
-    auto director = Director::getInstance();
-    auto renderView   = director->getRenderView();
-    Size designSize(g_designSize.width * 0.85, g_designSize.height * 0.85);
+    auto director   = Director::getInstance();
+    auto renderView = director->getRenderView();
+    Size designSize(g_designSize.width * 1.5, g_designSize.height * 1.5);
     renderView->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::SHOW_ALL);
 
     // creating a keyboard event listener
@@ -395,11 +357,11 @@ void ChipmunkTestBed::initPhysics()
 
 void ChipmunkTestBed::update(float delta)
 {
-    //#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
-    //    cpSpaceStep(_space, delta);
-    //#else
-    //    cpHastySpaceStep(_space, delta);
-    //#endif
+    // #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+    //     cpSpaceStep(_space, delta);
+    // #else
+    //     cpHastySpaceStep(_space, delta);
+    // #endif
 }
 
 void ChipmunkTestBed::createResetButton()
@@ -484,8 +446,8 @@ bool ChipmunkTestBed::onMouseUp(Event* event)
 
 bool ChipmunkTestBed::onMouseMove(Event* event)
 {
-    EventMouse* e = (EventMouse*)event;
-    auto pt = e->getLocation();
+    EventMouse* e       = (EventMouse*)event;
+    auto pt             = e->getLocation();
     ChipmunkDemoMouse.x = pt.x - physicsDebugNodeOffset.x;
     ChipmunkDemoMouse.y = pt.y - physicsDebugNodeOffset.y;
 
@@ -502,7 +464,6 @@ void ChipmunkTestBed::updateInit(ChipmunkDemo tt)
     drawCP->clear();
     updateMouseBody();
     ChipmunkDemoTime += tt.timestep;
-    ChipmunkTestBed::DrawInfo();
     tt.updateFunc(_space, tt.timestep);
 }
 
