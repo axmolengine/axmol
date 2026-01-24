@@ -166,8 +166,10 @@ static inline VkPipelineColorBlendAttachmentState makeVkBlendAttachment(const Bl
  * CLASS DescriptorPool
  */
 
-void DescriptorPool::init(VkDevice device, std::span<const VkDescriptorPoolSize> poolSizes)
+void DescriptorPool::init(DescriptorAllocator* allocator, std::span<const VkDescriptorPoolSize> poolSizes)
 {
+    _allocator = allocator;
+
     VkDescriptorPoolCreateInfo poolInfo{};
     poolInfo.sType         = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
     poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
@@ -178,24 +180,22 @@ void DescriptorPool::init(VkDevice device, std::span<const VkDescriptorPoolSize>
 
     poolInfo.maxSets = _capacity;
 
-    auto ret = vkCreateDescriptorPool(device, &poolInfo, nullptr, &_pool);
+    auto ret = vkCreateDescriptorPool(_allocator->getDevice(), &poolInfo, nullptr, &_pool);
     VK_REQUIRE(ret, "vkCreateDescriptorPool failed");
 }
 
-void DescriptorPool::dispose(VkDevice device)
+void DescriptorPool::dispose()
 {
     if (_pool != VK_NULL_HANDLE)
     {
-        vkDestroyDescriptorPool(device, _pool, nullptr);
+        vkDestroyDescriptorPool(_allocator->getDevice(), _pool, nullptr);
         _pool = VK_NULL_HANDLE;
     }
     _capacity  = 0;
     _allocated = 0;
 }
 
-void DescriptorPool::allocateDescriptorSets(VkDevice device,
-                                            const PipelineLayoutState* layoutState,
-                                            DescriptorState* descriptor)
+void DescriptorPool::allocateDescriptorSets(const PipelineLayoutState* layoutState, DescriptorState* descriptorState)
 {
     VK_REQUIRE_EXPR(available() >= layoutState->descriptorSetLayoutCount, "The descriptor pool is full");
     VkDescriptorSetAllocateInfo ai{};
@@ -204,18 +204,20 @@ void DescriptorPool::allocateDescriptorSets(VkDevice device,
     ai.descriptorSetCount = layoutState->descriptorSetLayoutCount;
     ai.pSetLayouts        = layoutState->descriptorSetLayouts.data();
 
-    VkResult result = vkAllocateDescriptorSets(device, &ai, descriptor->sets.data());
+    VkResult result = vkAllocateDescriptorSets(_allocator->getDevice(), &ai, descriptorState->sets.data());
     VK_REQUIRE(result, "vkAllocateDescriptorSets failed");
-    descriptor->pool = this;
+    descriptorState->pool = this;
     _allocated += layoutState->descriptorSetLayoutCount;
 }
 
-void DescriptorPool::freeDescriptorSets(VkDevice device, uint32_t descriptorCount, DescriptorState* descriptor)
+void DescriptorPool::freeDescriptorSets(uint32_t descriptorCount, DescriptorState* descriptorState)
 {
-    VkResult result = vkFreeDescriptorSets(device, _pool, descriptorCount, descriptor->sets.data());
+    VkResult result =
+        vkFreeDescriptorSets(_allocator->getDevice(), _pool, descriptorCount, descriptorState->sets.data());
     VK_REQUIRE(result, "vkFreeDescriptorSets failed");
-    descriptor->pool = nullptr;
-    descriptor->sets.fill(VK_NULL_HANDLE);
+    descriptorState->progId = 0;
+    descriptorState->pool   = nullptr;
+    descriptorState->sets.fill(VK_NULL_HANDLE);
     _allocated -= descriptorCount;
 }
 
@@ -235,35 +237,33 @@ void DescriptorAllocator::dispose()
 {
     for (auto pool : _pools)
     {
-        pool->dispose(_device);
+        pool->dispose();
         delete pool;
     }
     _pools.clear();
 }
 
-void DescriptorAllocator::allocateDescriptorSets(const PipelineLayoutState* layoutState, DescriptorState* descriptor)
+void DescriptorAllocator::allocateDescriptorSets(const PipelineLayoutState* layoutState,
+                                                 DescriptorState* descriptorState)
 {
-    descriptor->allocator = this;
-
     auto& pool = _pools.back();
     if (pool->available() > 0)
-        pool->allocateDescriptorSets(_device, layoutState, descriptor);
+        pool->allocateDescriptorSets(layoutState, descriptorState);
     else
-        spawnPool()->allocateDescriptorSets(_device, layoutState, descriptor);
+        spawnPool()->allocateDescriptorSets(layoutState, descriptorState);
 }
 
-void DescriptorAllocator::freeDescriptorSets(DescriptorState* descriptor)
+void DescriptorAllocator::freeDescriptorSets(DescriptorState* descriptorState)
 {
-    if (descriptor->pool)
+    if (descriptorState->pool)
     {
 #ifndef NDEBUG
-        VK_REQUIRE_EXPR(descriptor->allocator == this, "DescriptorAllocator::freeDescriptorSets: invalid allocator");
-        auto it = std::find(_pools.begin(), _pools.end(), descriptor->pool);
+        VK_REQUIRE_EXPR(descriptorState->pool->getAllocator() == this,
+                        "DescriptorAllocator::freeDescriptorSets: invalid allocator");
+        auto it = std::find(_pools.begin(), _pools.end(), descriptorState->pool);
         VK_REQUIRE_EXPR(it != _pools.end(), "DescriptorAllocator::freeDescriptorSets: pool not owned by allocator");
 #endif
-        descriptor->pool->freeDescriptorSets(_device, static_cast<uint32_t>(_poolSizes.size()), descriptor);
-        descriptor->allocator = nullptr;
-        descriptor->progId    = 0;
+        descriptorState->pool->freeDescriptorSets(static_cast<uint32_t>(_poolSizes.size()), descriptorState);
     }
 }
 
@@ -276,7 +276,7 @@ void DescriptorAllocator::sortPools()
 DescriptorPool* DescriptorAllocator::spawnPool()
 {
     auto newPool = new DescriptorPool();
-    newPool->init(_device, _poolSizes);
+    newPool->init(this, _poolSizes);
     _pools.push_back(newPool);
     return newPool;
 }
@@ -306,22 +306,13 @@ RenderPipelineImpl::~RenderPipelineImpl()
 {
     vkDeviceWaitIdle(_device);
 
-    for (auto& [_, descriptorState] : _descriptorCache)
-    {
-        for (auto descriptor : descriptorState)
-        {
-            if (descriptor->allocator)
-                descriptor->allocator->freeDescriptorSets(descriptor);
-            _descriptorStatePool.destroy(descriptor);
-        }
-    }
-    _descriptorStatePool.purge();
-    _descriptorCache.clear();
-    _descriptorAllocator1.dispose();
-    _descriptorAllocator2.dispose();
-
     for (auto& [_, state] : _pipelineLayoutCache)
     {
+        if (state.descriptorSetLayoutCount == 2)
+            freeDescriptorStates(_descriptorAllocator2, state.descriptorFreeList, false);
+        else
+            freeDescriptorStates(_descriptorAllocator1, state.descriptorFreeList, false);
+
         if (state.layout)
             vkDestroyPipelineLayout(_device, state.layout, nullptr);
 
@@ -332,6 +323,10 @@ RenderPipelineImpl::~RenderPipelineImpl()
             vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_SAMPLER], nullptr);
     }
     _pipelineLayoutCache.clear();
+
+    _descriptorStatePool.purge();
+    _descriptorAllocator1.dispose();
+    _descriptorAllocator2.dispose();
 
     for (auto& [_, res] : _pipelineCache)
     {
@@ -580,10 +575,9 @@ DescriptorState* RenderPipelineImpl::acquireDescriptorState()
     AXASSERT(_activeLayoutState, "PipelineLayoutState must be valid");
     DescriptorState* descriptorState{nullptr};
     // 1) Try to reuse a recycled allocation from the cache
-    auto it = _descriptorCache.find(_activeProgId);
-    if (it != _descriptorCache.end())
+    if (_activeLayoutState)
     {
-        auto& freeList = it->second;
+        auto& freeList = _activeLayoutState->descriptorFreeList;
         if (!freeList.empty())
         {
             descriptorState = freeList.back();
@@ -607,18 +601,44 @@ DescriptorState* RenderPipelineImpl::acquireDescriptorState()
     return descriptorState;
 }
 
-void RenderPipelineImpl::recycleDescriptorState(DescriptorState* descriptorState)
+void RenderPipelineImpl::recycleDescriptorStates(std::span<DescriptorState*> descriptorStates, bool needResort)
 {
-    // Find the cache entry for this layout state
-    auto it = _descriptorCache.find(descriptorState->progId);
-    if (it == _descriptorCache.end())
+    int allocatorMods{0};
+    for (auto descriptorState : descriptorStates)
     {
-        it = _descriptorCache.emplace(descriptorState->progId, DescriptorFreeList()).first;
+        // Find the cache entry for this layout state
+        auto it = _pipelineLayoutCache.find(descriptorState->progId);
+        if (it != _pipelineLayoutCache.end()) [[likely]]
+        {
+            // Push the allocation back into the free list for reuse directly
+            auto& freeList = it->second.descriptorFreeList;
+            freeList.push_back(descriptorState);
+        }
+        else
+        {
+            // means the relative program unloaded, just free to driver pool
+            if (descriptorState->pool)
+            {
+                auto allocator = descriptorState->pool->getAllocator();
+                allocator->freeDescriptorSets(descriptorState);
+
+                if (allocator == &_descriptorAllocator2)
+                    allocatorMods |= 2;
+                else
+                    allocatorMods |= 1;
+            }
+
+            _descriptorStatePool.destroy(descriptorState);
+        }
     }
 
-    // Push the allocation back into the free list
-    auto& freeList = it->second;
-    freeList.push_back(descriptorState);
+    if (needResort && allocatorMods) [[unlikely]]
+    {
+        if (allocatorMods & 2)
+            _descriptorAllocator2.sortPools();
+        if (allocatorMods & 1)
+            _descriptorAllocator1.sortPools();
+    }
 }
 
 void RenderPipelineImpl::removeCachedObjects(VkRenderPass key)
@@ -654,29 +674,10 @@ void RenderPipelineImpl::removeCachedObjects(Program* key)
         auto& layoutState = layoutIt->second;
 
         // remove descriptor sets cache
-        auto descriptorIt = _descriptorCache.find(progId);
-        if (descriptorIt != _descriptorCache.end())
-        {
-            if (layoutState.descriptorSetLayoutCount == 2) [[likely]]
-            {
-                for (auto descriptorState : descriptorIt->second)
-                {
-                    _descriptorAllocator2.freeDescriptorSets(descriptorState);
-                    _descriptorStatePool.destroy(descriptorState);
-                }
-                _descriptorAllocator2.sortPools();
-            }
-            else
-            {
-                for (auto descriptorState : descriptorIt->second)
-                {
-                    _descriptorAllocator1.freeDescriptorSets(descriptorState);
-                    _descriptorStatePool.destroy(descriptorState);
-                }
-                _descriptorAllocator1.sortPools();
-            }
-            _descriptorCache.erase(descriptorIt);
-        }
+        if (layoutState.descriptorSetLayoutCount == 2) [[likely]]
+            freeDescriptorStates(_descriptorAllocator2, layoutState.descriptorFreeList, true);
+        else
+            freeDescriptorStates(_descriptorAllocator1, layoutState.descriptorFreeList, true);
 
         if (layoutState.layout)
             vkDestroyPipelineLayout(_device, layoutState.layout, nullptr);
@@ -702,6 +703,20 @@ void RenderPipelineImpl::removeCachedObjects(Program* key)
         }
     }
     _programToPipelineMap.erase(range.first, range.second);
+}
+
+void RenderPipelineImpl::freeDescriptorStates(DescriptorAllocator& allocator,
+                                              DescriptorList& descriptorStates,
+                                              bool needResortPools)
+{
+    for (auto descriptorState : descriptorStates)
+    {
+        allocator.freeDescriptorSets(descriptorState);
+        _descriptorStatePool.destroy(descriptorState);
+    }
+    descriptorStates.clear();
+    if (needResortPools)
+        allocator.sortPools();
 }
 
 }  // namespace ax::rhi::vk

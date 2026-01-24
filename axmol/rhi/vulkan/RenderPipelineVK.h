@@ -52,6 +52,18 @@ struct ExtendedDynamicState
 
 using VkDescriptorSetArray       = std::array<VkDescriptorSet, MAX_DESCRIPTOR_SETS>;
 using VkDescriptorSetLayoutArray = std::array<VkDescriptorSetLayout, MAX_DESCRIPTOR_SETS>;
+
+class DescriptorPool;
+class DescriptorAllocator;
+struct DescriptorState
+{
+    DescriptorPool* pool{nullptr};
+    VkDescriptorSetArray sets{};  // Allocated VkDescriptorSets
+    uint64_t progId{0};           // progId associated with this descriptor set
+};
+
+using DescriptorList = tlx::pod_vector<DescriptorState*>;
+
 struct PipelineLayoutState
 {
     VkPipelineLayout layout{VK_NULL_HANDLE};
@@ -60,33 +72,25 @@ struct PipelineLayoutState
     uint32_t descriptorSetLayoutCount{0};
     uint32_t samplerDescriptorCount{0};
     uint32_t uniformDescriptorCount{0};
+
+    DescriptorList descriptorFreeList;  // recycled descriptor sets
 };
 
-class DescriptorPool;
 class DescriptorAllocator;
-struct DescriptorState
-{
-    DescriptorAllocator* allocator{nullptr};
-    DescriptorPool* pool{nullptr};
-    VkDescriptorSetArray sets{};  // Allocated VkDescriptorSets
-    uint64_t progId{0};           // progId associated with this descriptor set
-};
-
-using DescriptorFreeList = tlx::pod_vector<DescriptorState*>;
-
 class DescriptorPool
 {
 public:
-    void init(VkDevice device, std::span<const VkDescriptorPoolSize> poolSizes);
-    void dispose(VkDevice device);
+    void init(DescriptorAllocator* allocator, std::span<const VkDescriptorPoolSize> poolSizes);
+    void dispose();
 
     int available() const { return _capacity - _allocated; }
-    int capacity() const { return _capacity; }
+    void allocateDescriptorSets(const PipelineLayoutState* layoutState, DescriptorState* descriptorState);
+    void freeDescriptorSets(uint32_t descriptorCount, DescriptorState* descriptorState);
 
-    void allocateDescriptorSets(VkDevice device, const PipelineLayoutState* layoutState, DescriptorState* descriptor);
-    void freeDescriptorSets(VkDevice device, uint32_t descriptorCount, DescriptorState* descriptor);
+    DescriptorAllocator* getAllocator() { return _allocator; }
 
 protected:
+    DescriptorAllocator* _allocator{nullptr};
     VkDescriptorPool _pool{VK_NULL_HANDLE};
     int _capacity{0};
     int _allocated{0};
@@ -98,10 +102,13 @@ public:
     void init(VkDevice device, std::span<const VkDescriptorPoolSize> poolSizes);
     void dispose();
 
-    void allocateDescriptorSets(const PipelineLayoutState* layoutState, DescriptorState* descriptor);
-    void freeDescriptorSets(DescriptorState* descriptor);
+    void allocateDescriptorSets(const PipelineLayoutState* layoutState, DescriptorState* descriptorState);
+    void freeDescriptorSets(DescriptorState* descriptorState);
 
     void sortPools();
+
+    VkDevice getDevice() const { return _device; }
+    const tlx::pod_vector<VkDescriptorPoolSize>& getPoolSizes() const { return _poolSizes; }
 
 protected:
     DescriptorPool* spawnPool();
@@ -134,7 +141,7 @@ public:
     PipelineLayoutState* getPipelineLayoutState() const { return _activeLayoutState; }
 
     DescriptorState* acquireDescriptorState();
-    void recycleDescriptorState(DescriptorState* state);
+    void recycleDescriptorStates(std::span<DescriptorState*> descriptorStates, bool needResort);
 
     void removeCachedObjects(VkRenderPass key);
     void removeCachedObjects(Program* key);
@@ -148,6 +155,9 @@ private:
                                 const PipelineDesc& desc,
                                 const ExtendedDynamicState& states,
                                 VkRenderPass renderPass);
+
+    // free descriptor sets associated with the given descriptorStates to driver: VkDescriptorPool
+    void freeDescriptorStates(DescriptorAllocator& allocator, DescriptorList& descriptorStates, bool needResortPools);
 
 private:
     DriverImpl* _driver{nullptr};
@@ -173,7 +183,6 @@ private:
     VkPipeline _activePipeline{VK_NULL_HANDLE};
 
     tlx::hash_map<uint64_t, PipelineLayoutState> _pipelineLayoutCache;  // progId -> PipelineLayoutState
-    tlx::hash_map<uint64_t, DescriptorFreeList> _descriptorCache;       // progId -> recycled desc sets
 
     tlx::hash_map<uintptr_t, VkPipeline> _pipelineCache;  // PSO cache
 

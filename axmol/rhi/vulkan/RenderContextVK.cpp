@@ -173,8 +173,7 @@ RenderContextImpl::~RenderContextImpl()
 
     for (auto& descriptorStates : _inFlightDescriptorStates)
     {
-        for (auto state : descriptorStates)
-            _renderPipeline->recycleDescriptorState(state);
+        _renderPipeline->recycleDescriptorStates(descriptorStates, false);
         descriptorStates.clear();
     }
 
@@ -584,8 +583,7 @@ bool RenderContextImpl::beginFrame()
     vkResetCommandBuffer(_currentCmdBuffer, 0);
 
     auto& descriptorStates = _inFlightDescriptorStates[_frameIndex];
-    for (auto state : descriptorStates)
-        _renderPipeline->recycleDescriptorState(state);
+    _renderPipeline->recycleDescriptorStates(descriptorStates, true);
     descriptorStates.clear();
 
     VkCommandBufferBeginInfo const binfo{
