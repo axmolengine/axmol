@@ -999,19 +999,17 @@ void RenderContextImpl::prepareDrawing()
     for (auto& cb : _programState->getCallbackUniforms())
         cb.second(_programState, cb.first);
 
-    // Acquire descriptor sets for this frame, matching current pipeline layout
-    auto layoutState = _renderPipeline->getPipelineLayoutState();
-
-    auto& descriptorState = _inFlightDescriptorStates[_frameIndex].emplace_back();
-    descriptorState       = _renderPipeline->acquireDescriptorState();
-    auto& descriptorSets  = descriptorState->sets;
+    // Acquire descriptor state, matching current pipeline layout
+    auto descriptorState = _renderPipeline->acquireDescriptorState();
+    _inFlightDescriptorStates[_frameIndex].emplace_back(descriptorState);
+    auto& descriptorSets = descriptorState->sets;
 
     assert(descriptorSets[SET_INDEX_UBO]);
 
     // Prepare write lists sized to expected UBO + sampler descriptors
     auto& writes = _descriptorWritesPerFrame;
     writes.clear();
-    writes.reserve(layoutState->uniformDescriptorCount + layoutState->samplerDescriptorCount);
+    writes.reserve(descriptorState->uniformDescriptorCount + descriptorState->samplerDescriptorCount);
 
     _descriptorBufferInfos.clear();
 
@@ -1043,7 +1041,7 @@ void RenderContextImpl::prepareDrawing()
     // --- Samplers (set=1, binding=N) ---
     auto& imageInfos = _descriptorImageInfosPerFrame;
     imageInfos.clear();
-    imageInfos.reserve(layoutState->samplerDescriptorCount);
+    imageInfos.reserve(descriptorState->samplerDescriptorCount);
 
     for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
     {
@@ -1089,11 +1087,10 @@ void RenderContextImpl::prepareDrawing()
 
     // Commit descriptor writes
     if (!writes.empty())
-    {
         vkUpdateDescriptorSets(_device, static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
-    }
 
     // Bind descriptor sets: bind only the sets that exist
+    auto layoutState = _renderPipeline->getPipelineLayoutState();
     vkCmdBindDescriptorSets(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, layoutState->layout, 0,
                             layoutState->descriptorSetLayoutCount, descriptorSets.data(), 0, nullptr);
 
