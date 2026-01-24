@@ -175,13 +175,19 @@ void DescriptorPool::init(DescriptorAllocator* allocator, std::span<const VkDesc
     poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
     poolInfo.pPoolSizes    = poolSizes.data();
     poolInfo.flags         = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-    for (const auto& size : poolSizes)
-        _capacity += size.descriptorCount;
-
-    poolInfo.maxSets = _capacity;
+    poolInfo.maxSets       = DESCRIPTOR_POOL_MAX_SETS;
 
     auto ret = vkCreateDescriptorPool(_allocator->getDevice(), &poolInfo, nullptr, &_pool);
     VK_REQUIRE(ret, "vkCreateDescriptorPool failed");
+
+    _freeSetCount = _maxSetCount = DESCRIPTOR_POOL_MAX_SETS;
+    for (auto& poolSize : poolSizes)
+    {
+        if (poolSize.type == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
+            _freeUniformDescriptorCount = _maxUniformDescriptorCount = poolSize.descriptorCount;
+        else if (poolSize.type == VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
+            _freeSamplerDescriptorCount = _maxSamplerDescriptorCount = poolSize.descriptorCount;
+    }
 }
 
 void DescriptorPool::dispose()
@@ -191,13 +197,14 @@ void DescriptorPool::dispose()
         vkDestroyDescriptorPool(_allocator->getDevice(), _pool, nullptr);
         _pool = VK_NULL_HANDLE;
     }
-    _capacity  = 0;
-    _allocated = 0;
+    _freeSetCount = _maxSetCount = 0;
+    _freeUniformDescriptorCount = _maxUniformDescriptorCount = 0;
+    _freeSamplerDescriptorCount = _maxSamplerDescriptorCount = 0;
 }
 
 void DescriptorPool::allocateDescriptorSets(const PipelineLayoutState* layoutState, DescriptorState* descriptorState)
 {
-    VK_REQUIRE_EXPR(available() >= layoutState->descriptorSetLayoutCount, "The descriptor pool is full");
+    // VK_REQUIRE_EXPR(canAllocate(layoutState), "The descriptor pool is full");
     VkDescriptorSetAllocateInfo ai{};
     ai.sType              = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     ai.descriptorPool     = _pool;
@@ -206,19 +213,30 @@ void DescriptorPool::allocateDescriptorSets(const PipelineLayoutState* layoutSta
 
     VkResult result = vkAllocateDescriptorSets(_allocator->getDevice(), &ai, descriptorState->sets.data());
     VK_REQUIRE(result, "vkAllocateDescriptorSets failed");
-    descriptorState->pool = this;
-    _allocated += layoutState->descriptorSetLayoutCount;
+    descriptorState->pool                   = this;
+    descriptorState->uniformDescriptorCount = static_cast<uint16_t>(layoutState->uniformDescriptorCount);
+    descriptorState->samplerDescriptorCount = static_cast<uint16_t>(layoutState->samplerDescriptorCount);
+
+    _freeSetCount -= layoutState->descriptorSetLayoutCount;
+    _freeUniformDescriptorCount -= layoutState->uniformDescriptorCount;
+    if (layoutState->samplerDescriptorCount > 0)
+        _freeSamplerDescriptorCount -= layoutState->samplerDescriptorCount;
 }
 
-void DescriptorPool::freeDescriptorSets(uint32_t descriptorCount, DescriptorState* descriptorState)
+void DescriptorPool::freeDescriptorSets(uint32_t descriptorSetCount, DescriptorState* descriptorState)
 {
     VkResult result =
-        vkFreeDescriptorSets(_allocator->getDevice(), _pool, descriptorCount, descriptorState->sets.data());
+        vkFreeDescriptorSets(_allocator->getDevice(), _pool, descriptorSetCount, descriptorState->sets.data());
     VK_REQUIRE(result, "vkFreeDescriptorSets failed");
-    descriptorState->progId = 0;
-    descriptorState->pool   = nullptr;
+    _freeSetCount += descriptorSetCount;
+    _freeUniformDescriptorCount += descriptorState->uniformDescriptorCount;
+    _freeSamplerDescriptorCount += descriptorState->samplerDescriptorCount;
+
+    descriptorState->uniformDescriptorCount = 0;
+    descriptorState->samplerDescriptorCount = 0;
+    descriptorState->progId                 = 0;
+    descriptorState->pool                   = nullptr;
     descriptorState->sets.fill(VK_NULL_HANDLE);
-    _allocated -= descriptorCount;
 }
 
 /*
@@ -247,7 +265,7 @@ void DescriptorAllocator::allocateDescriptorSets(const PipelineLayoutState* layo
                                                  DescriptorState* descriptorState)
 {
     auto& pool = _pools.back();
-    if (pool->available() > 0)
+    if (pool->canAllocate(layoutState))
         pool->allocateDescriptorSets(layoutState, descriptorState);
     else
         spawnPool()->allocateDescriptorSets(layoutState, descriptorState);
@@ -290,14 +308,14 @@ RenderPipelineImpl::RenderPipelineImpl(DriverImpl* driver) : _driver(driver), _d
 
     // For UBO only
     VkDescriptorPoolSize poolSizes1[] = {
-        {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, DESCRIPTOR_POOL_ELEMENT_COUNT},
+        {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, DESCRIPTOR_POOL_MAX_SETS * DESCRIPTOR_POOL_UNIFORM_MULTIPLIER},
     };
     _descriptorAllocator1.init(_device, poolSizes1);
 
     // For UBO + sampler
     constexpr VkDescriptorPoolSize poolSizes2[] = {
-        {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, DESCRIPTOR_POOL_ELEMENT_COUNT},
-        {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DESCRIPTOR_POOL_ELEMENT_COUNT},
+        {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, DESCRIPTOR_POOL_MAX_SETS * DESCRIPTOR_POOL_UNIFORM_MULTIPLIER},
+        {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DESCRIPTOR_POOL_MAX_SETS * DESCRIPTOR_POOL_SAMPLER_MULTIPLIER},
     };
     _descriptorAllocator2.init(_device, poolSizes2);
 }
@@ -586,7 +604,7 @@ DescriptorState* RenderPipelineImpl::acquireDescriptorState()
         }
     }
 
-    descriptorState         = _descriptorStatePool.create();
+    descriptorState         = _descriptorStatePool.construt();
     descriptorState->progId = _activeProgId;
 
     if (_activeLayoutState->descriptorSetLayoutCount == 2) [[likely]]

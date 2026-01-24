@@ -40,7 +40,9 @@ static constexpr int MAX_DESCRIPTOR_SETS = 2;
 static constexpr int SET_INDEX_UBO       = 0;
 static constexpr int SET_INDEX_SAMPLER   = 1;
 
-static constexpr uint32_t DESCRIPTOR_POOL_ELEMENT_COUNT = 64;
+static constexpr uint32_t DESCRIPTOR_POOL_MAX_SETS           = 128;
+static constexpr uint32_t DESCRIPTOR_POOL_UNIFORM_MULTIPLIER = 2;
+static constexpr uint32_t DESCRIPTOR_POOL_SAMPLER_MULTIPLIER = 2;
 
 struct ExtendedDynamicState
 {
@@ -60,6 +62,8 @@ struct DescriptorState
     DescriptorPool* pool{nullptr};
     VkDescriptorSetArray sets{};  // Allocated VkDescriptorSets
     uint64_t progId{0};           // progId associated with this descriptor set
+    uint16_t uniformDescriptorCount{0};
+    uint16_t samplerDescriptorCount{0};
 };
 
 using DescriptorList = tlx::pod_vector<DescriptorState*>;
@@ -83,17 +87,30 @@ public:
     void init(DescriptorAllocator* allocator, std::span<const VkDescriptorPoolSize> poolSizes);
     void dispose();
 
-    int available() const { return _capacity - _allocated; }
+    bool canAllocate(const PipelineLayoutState* layoutState)
+    {
+        return _freeSetCount >= layoutState->descriptorSetLayoutCount &&
+               _freeUniformDescriptorCount >= layoutState->uniformDescriptorCount &&
+               _freeSamplerDescriptorCount >= layoutState->samplerDescriptorCount;
+    }
+    int available() const { return _freeSetCount > 0; }
     void allocateDescriptorSets(const PipelineLayoutState* layoutState, DescriptorState* descriptorState);
-    void freeDescriptorSets(uint32_t descriptorCount, DescriptorState* descriptorState);
+    void freeDescriptorSets(uint32_t descriptorSetCount, DescriptorState* descriptorState);
 
     DescriptorAllocator* getAllocator() { return _allocator; }
 
 protected:
     DescriptorAllocator* _allocator{nullptr};
     VkDescriptorPool _pool{VK_NULL_HANDLE};
-    int _capacity{0};
-    int _allocated{0};
+
+    int _maxSetCount{0};
+    int _freeSetCount{0};
+
+    int _maxUniformDescriptorCount{0};
+    int _freeUniformDescriptorCount{0};
+
+    int _maxSamplerDescriptorCount{0};
+    int _freeSamplerDescriptorCount{0};
 };
 
 class DescriptorAllocator
