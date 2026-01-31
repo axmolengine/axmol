@@ -513,35 +513,53 @@ else {
 $1k.println("proj_dir=$((Get-Location).Path), install_prefix=$install_prefix")
 
 # 1kdist
-$sentry_file = Join-Path $PSScriptRoot '.gitee'
-$mirror = if ($1k.isfile($sentry_file)) { 'gitee' } else { 'github' }
-$mirror_conf_file = $1k.realpath("$PSScriptRoot/manifest.json")
-$mirror_current = $null
-$devtools_url_base = $null
-$1kdist_ver = $null
+$sentry_file = Join-Path $PSScriptRoot '.active-mirror'
 
-if ($1k.isfile($mirror_conf_file)) {
-    $mirror_conf = ConvertFrom-Json (Get-Content $mirror_conf_file -raw)
-    $mirror_current = $mirror_conf.mirrors.$mirror
-    $mirror_url_base = "https://$($mirror_current.host)/"
-    $1kdist_url_base = $mirror_url_base
-
-    $1kdist_url_base += $mirror_current.'1kdist'
-    $devtools_url_base += "$1kdist_url_base/devtools"
-    $1kdist_ver = $mirror_conf.versions.'1kdist'
-    $1kdist_url_base += "/$1kdist_ver"
+if ($1k.isfile($sentry_file)) {
+    $Script:ACTIVE_MIRROR = Get-Content $sentry_file
 }
 else {
-    $mirror_url_base = 'https://github.com/'
-    $1kdist_url_base = $mirror_url_base
+    $Script:ACTIVE_MIRROR = 'origin'
 }
 
-function 1kdist_url($filename) {
-    return "$1kdist_url_base/$filename"
-}
+$mirrors_conf_file = Join-Path $PSScriptRoot 'mirrors.json'
+$mirrors_conf = ConvertFrom-Json (Get-Content $mirrors_conf_file -raw)
 
-function devtool_url($filename) {
-    return "$devtools_url_base/$filename"
+function devtool_url($name, $ver = $null, $mirror = $null) {
+    $tool_info = $mirrors_conf.devtools.$name
+    if ($tool_info -is [string]) {
+        return $(eval $tool_info)
+    }
+
+    if ($tool_info.mirrors -is [string]) {
+        # single mirror
+        $base_url = $tool_info.mirrors
+    }
+    else {
+        if (!$mirror) { $mirror = $Script:ACTIVE_MIRROR }
+        $base_url = $tool_info.mirrors.$mirror
+    }
+
+    $artifacts = $tool_info.artifacts
+    if ($artifacts -is [string]) {
+        $artifact = $artifacts
+    }
+    else {
+        $couple = "$HOST_OS-$HOST_CPU"
+        if ([bool]$artifacts.psobject.Properties[$HOST_OS]) {
+            $artifact = $artifacts.$HOST_OS
+        }
+        elseif([bool]$artifacts.psobject.Properties[$couple]) {
+            $artifact = $artifacts.$couple
+        }
+        else {
+            $artifact = $artifacts.other
+        }
+    }
+
+    $url = "$base_url$artifact"
+    # eval url with $ver on current scope
+    return eval $url
 }
 
 # accept x.y.z-rc1
@@ -967,7 +985,8 @@ function setup_nuget() {
         $1k.mkdirs($nuget_bin)
 
         $nuget_prog = Join-Path $nuget_bin 'nuget.exe'
-        download_file "https://dist.nuget.org/win-x86-commandline/v$nuget_ver/nuget.exe" $nuget_prog
+        $nuget_url = devtool_url 'nuget' $nuget_ver
+        download_file $nuget_url $nuget_prog
         if (!$1k.isfile($nuget_prog)) {
             throw "Install nuget fail"
         }
@@ -1010,18 +1029,9 @@ function setup_axslcc() {
         $1k.del($axslcc_prog)
     }
 
-    $suffix = @('win64.zip', 'linux.tar.gz', 'osx{0}.tar.gz')[$HOST_OS_INT]
-    if ($IsMacOS) {
-        if ([System.VersionEx]$axslcc_ver -ge [System.VersionEx]'1.9.4.1') {
-            $suffix = $suffix -f "-$HOST_CPU"
-        }
-        else {
-            $suffix = $suffix -f ''
-        }
-    }
+    $pkg_url = devtool_url 'axslcc' $axslcc_ver
 
-    $glscc_base_url = $mirror_current.axslcc
-    fetch_pkg "$mirror_url_base$glscc_base_url/v$axslcc_ver/axslcc-$axslcc_ver-$suffix" -exrep "axslcc"
+    fetch_pkg $pkg_url -exrep "axslcc"
 
     if ($1k.isfile($axslcc_prog)) {
         $1k.println("Using axslcc: $axslcc_prog, version: $axslcc_ver")
@@ -1032,7 +1042,6 @@ function setup_axslcc() {
 
 function setup_ninja() {
     if (!$manifest['ninja']) { return $null }
-    $suffix = @('win', 'linux', 'mac')[$HOST_OS_INT]
     $ninja_bin = Join-Path $install_prefix 'ninja'
     $ninja_prog, $ninja_ver = find_prog -name 'ninja'
     if ($ninja_prog) {
@@ -1041,7 +1050,8 @@ function setup_ninja() {
 
     $ninja_prog, $ninja_ver = find_prog -name 'ninja' -path $ninja_bin -silent $true
     if (!$ninja_prog) {
-        fetch_pkg "https://github.com/ninja-build/ninja/releases/download/v$ninja_ver/ninja-$suffix.zip" -exrep 'ninja'
+        $pkg_url = devtool_url 'ninja' $ninja_ver
+        fetch_pkg $pkg_url -exrep 'ninja'
     }
     $1k.addpath($ninja_bin)
     $ninja_prog = (Join-Path $ninja_bin "ninja$EXE_SUFFIX")
@@ -1063,24 +1073,10 @@ function setup_cmake($skipOS = $false) {
     if (!$cmake_prog) {
         $1k.rmdirs($cmake_root)
 
-        $cmake_suffix = @(".zip", ".sh", ".tar.gz")[$HOST_OS_INT]
-        if ($HOST_OS_INT -ne $HOST_MAC) {
-            $cmake_pkg_name = "cmake-$cmake_ver-$HOST_OS-x86_64"
-        }
-        else {
-            $cmake_pkg_name = "cmake-$cmake_ver-$HOST_OS-universal"
-        }
-
-        $cmake_pkg_path = Join-Path $install_prefix "$cmake_pkg_name$cmake_suffix"
-
-        $assemble_url = $channels['cmake']
-        if (!$assemble_url) {
-            $cmake_url = "https://github.com/Kitware/CMake/releases/download/v$cmake_ver/$cmake_pkg_name$cmake_suffix"
-        }
-        else {
-            $cmake_url = & $assemble_url -FileName "$cmake_pkg_name$cmake_suffix"
-        }
-
+        $cmake_url = devtool_url 'cmake' $cmake_ver
+        $cmake_pkg_filename = Split-Path $cmake_url -Leaf
+        $cmake_pkg_path = Join-Path $install_prefix $cmake_pkg_filename
+        $cmake_pkg_name = [System.IO.Path]::GetFileNameWithoutExtension($cmake_pkg_filename)
         $cmake_dir = Join-Path $install_prefix $cmake_pkg_name
         if ($IsMacOS) {
             $cmake_app_contents = Join-Path $cmake_dir 'CMake.app/Contents'
@@ -1143,7 +1139,8 @@ function setup_nsis() {
 
     $nsis_prog, $nsis_ver = find_prog -name 'nsis' -cmd 'makensis' -params '/VERSION' -path $nsis_bin -silent $true
     if (!$nsis_prog) {
-        fetch_pkg "https://nchc.dl.sourceforge.net/project/nsis/NSIS%203/$nsis_ver/nsis-$nsis_ver.zip" -exrep "nsis-$nsis_ver=nsis"
+        $nsis_url = devtool_url 'nsis' $nsis_ver
+        fetch_pkg $nsis_url -exrep "nsis-$nsis_ver=nsis"
     }
     $1k.addpath($nsis_bin)
     $nsis_prog = (Join-Path $nsis_bin "makensis$EXE_SUFFIX")
@@ -1159,7 +1156,8 @@ function setup_nasm() {
         if ($IsWin) {
             $nasm_bin = Join-Path $install_prefix "nasm-$nasm_ver"
             if (!$1k.isdir($nasm_bin)) {
-                fetch_pkg "https://www.nasm.us/pub/nasm/releasebuilds/$nasm_ver/win64/nasm-$nasm_ver-win64.zip"
+                $nasm_url = devtool_url 'nasm' $nasm_ver
+                fetch_pkg $nasm_url
             }
             $1k.addpath($nasm_bin)
         }
@@ -1181,8 +1179,6 @@ function setup_nasm() {
 
 function setup_jdk() {
     if (!$manifest['jdk']) { return $null }
-    $arch_suffix = if ($HOST_CPU -eq 'x64') { 'x64' } else { 'aarch64' }
-    $suffix = @("windows-$arch_suffix.zip", "linux-$arch_suffix.tar.gz", "macOS-$arch_suffix.tar.gz")[$HOST_OS_INT]
     $javac_prog, $jdk_ver = find_prog -name 'jdk' -cmd 'javac'
     if ($javac_prog) {
         return $javac_prog
@@ -1194,7 +1190,8 @@ function setup_jdk() {
 
     $javac_prog, $jdk_ver = find_prog -name 'jdk' -cmd 'javac' -path $jdk_bin -silent $true
     if (!$javac_prog) {
-        fetch_pkg "https://aka.ms/download-jdk/microsoft-jdk-$jdk_ver-$suffix" -exrep "jdk-$jdk_ver+*=jdk"
+        $jdk_url = devtool_url 'jdk' $jdk_ver
+        fetch_pkg $jdk_url -exrep "jdk-$jdk_ver+*=jdk"
     }
 
     $env:JAVA_HOME = $java_home
@@ -1238,9 +1235,10 @@ function setup_7z() {
     $7z_cmd_info = Get-Command '7z' -ErrorAction SilentlyContinue
     if (!$7z_cmd_info) {
         if ($IsWin) {
-            $7z_prog = Join-Path $install_prefix '7z2301-x64/7z.exe'
+            $7z_ver = '2501'
+            $7z_prog = Join-Path $install_prefix '7z$7z_ver-x64/7z.exe'
             if (!$1k.isfile($7z_prog)) {
-                fetch_pkg $(devtool_url '7z2301-x64.zip')
+                fetch_pkg $(devtool_url '7zip' $7z_ver)
             }
 
             $7z_bin = Split-Path $7z_prog -Parent
@@ -1269,7 +1267,8 @@ function setup_llvm() {
         $clang_prog, $clang_ver = find_prog -name 'llvm' -cmd "clang" -path $llvm_bin -silent $true
         if (!$clang_prog) {
             setup_7z
-            fetch_pkg "https://github.com/llvm/llvm-project/releases/download/llvmorg-${clang_ver}/LLVM-${clang_ver}-win64.exe" -exrep 'LLVM'
+            $llvm_url = devtool_url 'llvm' $clang_ver
+            fetch_pkg $llvm_url -exrep 'LLVM'
 
             $clang_prog, $clang_ver = find_prog -name 'llvm' -cmd "clang" -path $llvm_bin -silent $true
             if (!$clang_prog) {
@@ -1381,12 +1380,10 @@ function setup_android_sdk() {
     $cmdlinetools_bin = Join-Path $cmdlinetools_prefix "$cmdlinetools_ver/bin"
     $sdkmanager_prog, $sdkmanager_ver = (find_prog -name 'cmdlinetools' -cmd 'sdkmanager' -path $cmdlinetools_bin -params "--version", "--sdk_root=$sdk_root")
     if (!$sdkmanager_prog) {
-        $suffix = @('win', 'linux', 'mac')[$HOST_OS_INT]
         if (!$sdkmanager_prog) {
             $1k.println("Installing cmdlinetools version: $sdkmanager_ver ...")
-
-            $cmdlinetools_pkg_name = "commandlinetools-$suffix-$($cmdlinetools_rev)_latest.zip"
-            $cmdlinetools_url = "https://dl.google.com/android/repository/$cmdlinetools_pkg_name"
+            $cmdlinetools_url = devtool_url 'cmdlinetools' $cmdlinetools_rev
+            $cmdlinetools_pkg_name = Split-Path $cmdlinetools_url -Leaf
             fetch_pkg $cmdlinetools_url -o $cmdlinetools_pkg_name -exrep "cmdline-tools=$cmdlinetools_ver" -prefix $cmdlinetools_prefix
             $sdkmanager_prog, $_ = (find_prog -name 'cmdlinetools' -cmd 'sdkmanager' -path $cmdlinetools_bin -params "--version", "--sdk_root=$sdk_root" -silent $True)
             if (!$sdkmanager_prog) {
@@ -1414,7 +1411,7 @@ function setup_android_sdk() {
                 "android-ndk-${ndk_r23d_rev}-linux-x86_64.zip",
                 "android-ndk-${ndk_r23d_rev}-darwin-x86_64.zip")[$HOST_OS_INT]
             $_target_os = @('win64', 'linux', 'darwin_mac')[$HOST_OS_INT]
-            . (Join-Path $PSScriptRoot 'resolv-url.ps1') -artifact $_artifact -target $_target_os -build_id $ndk_r23d_rev -manifest gcloud -out_var 'artifact_info'
+            . (Join-Path $PSScriptRoot 'resolv-url.ps1') -artifact $_artifact -target $_target_os -build_id $ndk_r23d_rev -mirror gcloud -out_var 'artifact_info'
             $artifact_url = $artifact_info[0].messageData
             $full_ver = "23.3.${ndk_r23d_rev}"
             $ndk_root = Join-Path $ndk_prefix $full_ver
@@ -1479,7 +1476,8 @@ function setup_emsdk() {
         if (!$emsdk_cmd) {
             $emsdk_root = Join-Path $install_prefix 'emsdk'
             if (!$1k.isdir($emsdk_root)) {
-                git clone 'https://github.com/emscripten-core/emsdk.git' $emsdk_root
+                $emsdk_url = devtool_url 'emsdk' $emcc_ver
+                git clone $emsdk_url $emsdk_root
             }
             else {
                 git -C $emsdk_root pull
@@ -1577,13 +1575,14 @@ function setup_gclient() {
     # git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git $gclient_dir
     $gclient_dir = Join-Path $install_prefix 'depot_tools'
     if (!$1k.isdir($gclient_dir)) {
+        $depot_tools_url = devtool_url 'depot_tools' $null
         if ($IsWin) {
             $1k.mkdirs($gclient_dir)
-            Invoke-WebRequest -Uri "https://storage.googleapis.com/chrome-infra/depot_tools.zip" -OutFile "${gclient_dir}.zip"
+            Invoke-WebRequest -Uri $depot_tools_url -OutFile "${gclient_dir}.zip"
             Expand-Archive -Path "${gclient_dir}.zip" -DestinationPath $gclient_dir
         }
         else {
-            git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git $gclient_dir
+            git clone $depot_tools_url $gclient_dir
         }
 
     }

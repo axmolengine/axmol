@@ -2,7 +2,6 @@
 param(
     $uri, # the pkg uri
     $prefix, # the prefix to store
-    $manifest_file = $null,
     $name = $null,
     $version = $null, # version hint
     $revision = $null, # revision hint
@@ -113,19 +112,24 @@ else {
 if (!$url) {
     # fetch package from manifest config
     $lib_src = Join-Path $prefix $name
-    $mirror = if (!(Test-Path (Join-Path $PSScriptRoot '.gitee') -PathType Leaf)) { 'github' } else { 'gitee' }
-    $url_base = @{'github' = 'https://github.com/'; 'gitee' = 'https://gitee.com/' }[$mirror]
-
-    $manifest_map = ConvertFrom-Json (Get-Content $manifest_file -raw)
+    $active_mirror_file = Join-Path $PSScriptRoot '.active-mirror'
+    if (Test-Path $active_mirror_file -PathType Leaf) {
+        $active_mirror = Get-Content $active_mirror_file
+    }
+    else {
+        $active_mirror = 'origin'
+    }
+    $mirrors_conf = ConvertFrom-Json (Get-Content $(Join-Path $PSScriptRoot 'mirrors.json') -raw)
 
     if (!$version) {
-        $version_map = $manifest_map.versions
-        $version = $version_map.PSObject.Properties[$name].Value
+        . (Join-Path $PSScriptRoot 'extensions.ps1')
+        $versions = ConvertFrom-Props (Get-Content $(Join-Path $PSScriptRoot 'build.profiles'))
+        $version = $versions[$name]
     }
     if ($version) {
-        $url_path = $manifest_map.mirrors.PSObject.Properties[$mirror].Value.PSObject.Properties[$name].Value
-        if ($url_path) {
-            $url = "$url_base/$url_path"
+        $repo_url = $mirrors_conf.dependencies.$name.mirrors.$active_mirror
+        if ($repo_url) {
+            $url = $repo_url
             if (!$url.EndsWith('.git')) { $url += '.git' }
         }
     }

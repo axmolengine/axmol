@@ -2,7 +2,7 @@
 param(
     [Alias('artifact')]
     $name,
-    $manifest,
+    $mirror_path,
     $target,
     $build_id,
     $branch,
@@ -11,7 +11,7 @@ param(
 
 $artifact_url = $null
 
-if ($manifest -eq 'gcloud') {
+if ($mirror_path -eq 'gcloud') {
     function Get-LatestGoodBuild {
         param (
             [string]$branch,
@@ -39,16 +39,24 @@ if ($manifest -eq 'gcloud') {
     $artifact_url = "https://androidbuildinternal.googleapis.com/android/internal/build/v3/builds/$([uri]::EscapeDataString($build_id))/$([uri]::EscapeDataString($target))/attempts/latest/artifacts/$([uri]::EscapeDataString($artifact))/url"
 }
 else {
-    if (Test-Path $manifest -PathType Leaf) {
-        $mirror = if (!(Test-Path (Join-Path $PSScriptRoot '.gitee') -PathType Leaf)) { 'github' } else { 'gitee' }
+    if (!$mirror_path) { $mirror_path = Join-Path $PSScriptRoot 'mirrors.json' }
+    if (Test-Path $mirror_path -PathType Leaf) {
+        $active_mirror_file = Join-Path $PSScriptRoot '.active-mirror'
+        if (Test-Path $active_mirror_file -PathType Leaf) {
+            $active_mirror = Get-Content $active_mirror_file
+        }
+        else {
+            $active_mirror = 'origin'
+        }
 
-        $manifest_map = ConvertFrom-Json (Get-Content $manifest -raw)
-        $ver = $manifest_map.versions.PSObject.Properties[$name].Value
-        $mirror_current = $manifest_map.mirrors.PSObject.Properties[$mirror].Value.PSObject.Properties
-        $url_base = "https://$($mirror_current['host'].Value)/"
-        $url_path = $mirror_current[$name].Value
+        $mirrors_conf = ConvertFrom-Json (Get-Content $mirror_path -raw)
+        $repo_url = $mirrors_conf.dependencies.$name.mirrors.$active_mirror
 
-        $artifact_url = "$url_base$url_path#$ver"
+        . (Join-Path $PSScriptRoot 'extensions.ps1')
+        $versions = ConvertFrom-Props (Get-Content $(Join-Path $PSScriptRoot 'build.profiles'))
+        $ver = $versions[$name]
+
+        $artifact_url = "$repo_url#$ver"
     }
 }
 

@@ -65,7 +65,6 @@ endif()
 add_library(3rdparty INTERFACE)
 
 set(_1kfetch_cache_dir "${_AX_ROOT}/cache" CACHE STRING "" FORCE)
-set(_1kfetch_manifest "${_AX_ROOT}/1k/manifest.json" CACHE STRING "" FORCE)
 
 # fetch prebuilts of 1kdist and git sources
 include(${_AX_ROOT}/1k/fetch.cmake)

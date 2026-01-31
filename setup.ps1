@@ -441,8 +441,8 @@ if ($updateAdt) {
 
     if (!$gradleMirror) { $gradleMirror = 'origin' }
 
-    $gradle_base_url = $mirror_conf.'gradle-mirrors'.$gradleMirror
-    $gradle_base_url = $gradle_base_url.Replace(':', "\:")
+    $gradle_url = devtool_url 'gradle' $gradleVer -mirror $gradleMirror
+    $gradle_url = $gradle_url.Replace(':', "\:")
 
     $gradle_settings_file = Join-Path $aproj_source_gradle_wrapper 'gradle-wrapper.properties'
     $settings_lines = Get-Content $gradle_settings_file
@@ -450,7 +450,7 @@ if ($updateAdt) {
     for ($i = 1; $i -lt $settings_lines.Count; ++$i) {
         $line_text = $settings_lines[$i]
         if ($line_text -match '^distributionUrl\s*=.*') {
-            $settings_lines[$i] = "distributionUrl=$gradle_base_url/gradle-$gradleVer-bin.zip"
+            $settings_lines[$i] = "distributionUrl=$gradle_url"
             break
         }
     }

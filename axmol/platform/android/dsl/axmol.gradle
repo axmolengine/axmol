@@ -131,9 +131,9 @@ class AxmolUtils {
         }
 
         // ndkVer,ndkPath,cmakeVer,cmakeOptions(AX_USE_XXX, AX_ENABLE_XXX, AX_ENABLE_EXT_XXX),cmakeDir<nullable>
-        findNDK(sdkRoot, ndkVer, buildProfiles)
-        findNinja(ninjaVer, buildProfiles)
-        findCMake(sdkRoot, cmakeVer, buildProfiles)
+        resolveNDK(sdkRoot, ndkVer, buildProfiles)
+        resolveNinja(ninjaVer, buildProfiles)
+        resolveCMake(sdkRoot, cmakeVer, buildProfiles)
         generateCMakeOptions(project, buildProfiles)
 
         // dump build profiles
@@ -231,7 +231,7 @@ class AxmolUtils {
      * @param ndkVer The required ndk version for current project
      * @param buildProfiles
      */
-    private static void findNDK(sdkRoot, ndkVer, buildProfiles) {
+    private static void resolveNDK(sdkRoot, ndkVer, buildProfiles) {
         if (ndkVer.endsWith('+')) {
             ndkVer = ndkVer.substring(0, ndkVer.length() - 1)
         }
@@ -267,14 +267,12 @@ class AxmolUtils {
     }
 
 
-    private static void findNinja(ninjaVer, buildProfiles) {
+    private static void resolveNinja(ninjaVer, buildProfiles) {
         def allowNewerNinja = false
         if(ninjaVer.endsWith('+')) {
             allowNewerNinja = true
             ninjaVer = ninjaVer.substring(0, ninjaVer.length() - 1)
         }
-
-
 
         def ninjaBinDirs = []
 
@@ -298,7 +296,7 @@ class AxmolUtils {
         }
 
         if(verifiedVer == null) {
-            throw new Exception("No suitable ninja found, required $ninjaVer")
+            throw new Exception("No suitable ninja found, required $ninjaVer, please run setup.ps1 and try again")
         }
 
         buildProfiles['ninjaPath'] = verifiedPath
@@ -307,18 +305,17 @@ class AxmolUtils {
 
 
     /**
-     * Find suitable cmake for current project
+     * Resolve suitable cmake for current project
      * @param project The current android project
      * @param cmakeVer The required cmake version of project
      * @param buildProfiles
      */
-    private static void findCMake(sdkRoot, String cmakeVer, buildProfiles) {
+    private static void resolveCMake(sdkRoot, String cmakeVer, buildProfiles) {
         def allowNewerCMake = false
         if(cmakeVer.endsWith('+')) {
             allowNewerCMake = true
             cmakeVer = cmakeVer.substring(0, cmakeVer.length() - 1)
         }
-
 
         def cmakeBinDirs = []
         def verList = []
@@ -351,8 +348,8 @@ class AxmolUtils {
         }
 
         // Use engine cmake as fallback
-        def fallbackCMakeDir = joinPath(Paths.get("${getEngineRoot()}").toAbsolutePath().toString(), 'tools', 'external', 'cmake', 'bin')
-        cmakeBinDirs.add(fallbackCMakeDir)
+        def fallbackCMakeDir = joinPath(Paths.get("${getEngineRoot()}").toAbsolutePath().toString(), 'tools', 'external', 'cmake')
+        cmakeBinDirs.add(joinPath(fallbackCMakeDir, 'bin'))
 
         // find in cmakeBinDirs
         def verifiedVer = null
@@ -368,11 +365,11 @@ class AxmolUtils {
         }
 
         if(verifiedVer == null) {
-            throw new Exception("No suitable cmake found, required $cmakeVer")
+            throw new Exception("No suitable cmake found, required $cmakeVer, please run setup.ps1 and try again")
         }
 
         buildProfiles['cmakeVer'] = verifiedVer
- 
+
         // Create symlink at sdk cmake when using fallback cmake in axmol engine
         // Only present for compatibility purpose, may remove in future axmol releases
         if (index == (cmakeBinDirs.size() - 1)) {

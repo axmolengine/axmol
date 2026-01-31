@@ -234,7 +234,7 @@ tests/*-tests/build_*
 /cache
 /_cache
 
-.gitee
+.active-mirror
 release_note_draft.txt
 
 *.hprof

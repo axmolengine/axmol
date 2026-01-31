@@ -2,9 +2,8 @@
 # the 1k fetch functions
 # require predefine variable:
 # _1kfetch_cache_dir
-# _1kfetch_manifest
 #
-cmake_minimum_required(VERSION 3.23...4.0)
+cmake_minimum_required(VERSION 3.23...4.2)
 
 # ## 1kdist url
 find_program(PWSH_PROG NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -16,11 +15,6 @@ function(_1kfetch_init)
     set(_1kfetch_cache_dir "${_1kfetch_cache_dir}" CACHE STRING "" FORCE)
   endif()
 
-  if(NOT _1kfetch_manifest)
-    file(REAL_PATH "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/manifest.json" _1kfetch_manifest)
-    set(_1kfetch_manifest "${_1kfetch_manifest}" CACHE STRING "" FORCE)
-  endif()
-
   if(NOT EXISTS ${PWSH_PROG}) # try again
     unset(PWSH_PROG CACHE)
     find_program(PWSH_PROG NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -28,7 +22,6 @@ function(_1kfetch_init)
 
   execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/resolv-url.ps1
     -name "1kdist"
-    -manifest ${_1kfetch_manifest}
     OUTPUT_VARIABLE _1kdist_url
     RESULT_VARIABLE _1kdist_error
   )
@@ -37,7 +30,7 @@ function(_1kfetch_init)
     string(REPLACE "#" ";" _1kdist_url ${_1kdist_url})
     list(GET _1kdist_url 0 _1kdist_base_url)
     list(GET _1kdist_url 1 _1kdist_ver)
-    set(_1kdist_base_url "${_1kdist_base_url}/${_1kdist_ver}" PARENT_SCOPE)
+    set(_1kdist_base_url "${_1kdist_base_url}${_1kdist_ver}" PARENT_SCOPE)
     set(_1kdist_ver ${_1kdist_ver} PARENT_SCOPE)
   else()
     message(AUTHOR_WARNING "Resolve 1kdist uri fail, ${_1kdist_error}, the _1kfetch_dist will not work")
@@ -55,6 +48,10 @@ function(_1kfetch_dist package_name)
 
   if(NOT IS_DIRECTORY ${_prebuilt_root})
     set(package_store "${_1kfetch_cache_dir}/1kdist/${_1kdist_ver}/${package_name}.zip")
+
+    if (NOT _1kdist_base_url)
+      message(FATAL_ERROR "1kdist_base_url is empty")
+    endif()
 
     if(NOT EXISTS ${package_store})
       set(package_url "${_1kdist_base_url}/${package_name}.zip")
@@ -108,7 +105,6 @@ function(_1kfetch uri)
     set(_fetch_args
       -uri "${uri}"
       -prefix "${_1kfetch_cache_dir}"
-      -manifest "${_1kfetch_manifest}"
       -name "${_pkg_name}"
     )
 
@@ -150,12 +146,12 @@ function(_1kfetch_fast uri)
 
   set(_sentry_file "${_pkg_store}/_1kiss")
 
-  if(NOT _manifest_conf)
-    file(READ "${_1kfetch_manifest}" _manifest_conf)
+  if(NOT _mirrors_conf)
+    file(READ "${CMAKE_CURRENT_LIST_DIR}/mirrors.json" _mirrors_conf)
   endif()
 
-  string(JSON _url GET "${_manifest_conf}" "mirrors" "github" "${_pkg_name}")
-  string(JSON _version GET "${_manifest_conf}" "versions" "${_pkg_name}")
+  string(JSON _url GET "${_mirrors_conf}" "mirrors" "github" "${_pkg_name}")
+  string(JSON _version GET "${_mirrors_conf}" "versions" "${_pkg_name}")
   string(PREPEND _url "https://github.com/")
 
   if(NOT EXISTS "${_sentry_file}")
