@@ -692,9 +692,13 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     emscripten_set_orientationchange_callback(this, EM_TRUE, GLFWEventHandler::onWebOrientationChangeCallback);
     emscripten_set_fullscreenchange_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, this, EM_TRUE, GLFWEventHandler::onWebFullscreenCallback);
 
-    _isTouchDevice = !!EM_ASM_INT(return window.matchMedia('(pointer: coarse)').matches && !window.matchMedia('(any-hover: hover)').matches;
+    _isTouchDevice = !!EM_ASM_INT(
+        return window.matchMedia('(pointer: coarse)').matches && !window.matchMedia('(any-hover: hover)').matches;
     );
-    AXLOGI("RenderViewImpl::initWithRect: isTouchDevice: {}", _isTouchDevice);
+    const auto maxTouchPoints = EM_ASM_INT(
+        return navigator.maxTouchPoints;
+    );
+    AXLOGI("RenderViewImpl::initWithRect: isTouchDevice: {}, maxTouchPoints: {}", _isTouchDevice, maxTouchPoints);
     if (_isTouchDevice)
     {
         const auto eventTarget = EMSCRIPTEN_EVENT_TARGET_WINDOW;
