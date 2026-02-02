@@ -692,16 +692,16 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     emscripten_set_orientationchange_callback(this, EM_TRUE, GLFWEventHandler::onWebOrientationChangeCallback);
     emscripten_set_fullscreenchange_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, this, EM_TRUE, GLFWEventHandler::onWebFullscreenCallback);
 
-    _isTouchDevice = !!EM_ASM_INT(return (('ontouchstart' in window) ||
-        (navigator.maxTouchPoints > 0) ||
-        (navigator.msMaxTouchPoints > 0)) ? 1 : 0;
+    _isTouchDevice = !!EM_ASM_INT(return window.matchMedia('(pointer: coarse)').matches && !window.matchMedia('(any-hover: hover)').matches;
     );
+    AXLOGI("RenderViewImpl::initWithRect: isTouchDevice: {}", _isTouchDevice);
     if (_isTouchDevice)
     {
-        emscripten_set_touchstart_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
-        emscripten_set_touchend_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
-        emscripten_set_touchmove_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
-        emscripten_set_touchcancel_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
+        const auto eventTarget = EMSCRIPTEN_EVENT_TARGET_WINDOW;
+        emscripten_set_touchstart_callback(eventTarget, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
+        emscripten_set_touchend_callback(eventTarget, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
+        emscripten_set_touchmove_callback(eventTarget, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
+        emscripten_set_touchcancel_callback(eventTarget, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
     }
     else
     {
