@@ -130,6 +130,13 @@ public:
 
         FLAGS_DIRTY_MASK = (FLAGS_TRANSFORM_DIRTY | FLAGS_CONTENT_SIZE_DIRTY),
     };
+
+    enum : uint8_t
+    {
+        CASCADE_COLOR_MASK        = (1 << 0),
+        CASCADE_OPACITY_ONLY_MASK = (1 << 1),
+    };
+
     /// @{
     /// @name Constructor, Destructor and Initializers
 
@@ -1690,7 +1697,7 @@ public:
      * Whether cascadeOpacity is enabled or not.
      * @return A boolean value.
      */
-    virtual bool isCascadeOpacityEnabled() const;
+    inline bool isCascadeOpacityEnabled() const { return _cascadeMode != 0; }
     /**
      * Change node's cascadeOpacity property.
      * @param cascadeOpacityEnabled True to enable cascadeOpacity, false otherwise.
@@ -1721,11 +1728,20 @@ public:
      * Query whether cascadeColor is enabled or not.
      * @return Whether cascadeColor is enabled or not.
      */
-    virtual bool isCascadeColorEnabled() const;
+    inline bool isCascadeColorEnabled() const { return (_cascadeMode & CASCADE_COLOR_MASK) != 0; }
     /**
-     * If you want node's color affect the children node's color, then set it to true.
-     * Otherwise, set it to false.
-     * @param cascadeColorEnabled A boolean value.
+     * Sets whether to enable color cascade.
+     *
+     * When enabled, the node's color (including RGB and Alpha channels) will affect
+     * the displayed color of all its children.
+     * Since axmol-3.0, when color cascade is enabled, the node's opacity (Alpha)
+     * also affects children, making it a superset of opacity cascade.
+     *
+     * Note:
+     * - If both color cascade and opacity cascade are enabled, color cascade takes precedence
+     * - To affect only opacity without affecting color, use setCascadeOpacityEnabled()
+     *
+     * @param cascadeColorEnabled Whether to enable color cascade
      */
     virtual void setCascadeColorEnabled(bool cascadeColorEnabled);
 
@@ -1977,8 +1993,7 @@ protected:
                                          ///< otherwise. Used by Layer and Scene.
 
     bool _isTransitionFinished;  ///< flag to indicate whether the transition was finished
-    bool _cascadeColorEnabled;
-    bool _cascadeOpacityEnabled;
+    uint8_t _cascadeMode;
     bool _contentSizeDirty;  ///< whether or not the contentSize is dirty
 
     mutable bool _transformDirty;            ///< transform dirty flag

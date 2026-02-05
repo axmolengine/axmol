@@ -140,7 +140,6 @@ bool UIScale9SpriteHierarchialTest::init()
         Sprite* normalSprite1 = Sprite::create("cocosui/animationbuttonnormal.png");
         normalSprite1->setPosition(100, 270);
         normalSprite1->setCascadeColorEnabled(true);
-        normalSprite1->setCascadeOpacityEnabled(true);
         normalSprite1->setColor(Color32::GREEN);
 
         this->addChild(normalSprite1);
@@ -678,7 +677,6 @@ bool UIS9CascadeOpacityAndColor::init()
         float y         = 0 + (canvasSize.height / 2);
         auto rgba       = Layer::create();
         rgba->setCascadeColorEnabled(true);
-        rgba->setCascadeOpacityEnabled(true);
         this->addChild(rgba);
 
         auto blocks_scaled_with_insets = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9r.png");

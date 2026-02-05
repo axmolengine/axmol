@@ -141,7 +141,6 @@ bool Menu::initWithArray(const Vector<MenuItem*>& arrayOfItems)
 
         // enable cascade color and opacity on menus
         setCascadeColorEnabled(true);
-        setCascadeOpacityEnabled(true);
 
         auto touchListener = EventListenerTouchOneByOne::create();
         touchListener->setSwallowTouches(true);

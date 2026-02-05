@@ -67,7 +67,6 @@ ScrollViewBar::ScrollViewBar(ScrollView* parent, ScrollView::Direction direction
     AXASSERT(parent != nullptr, "Parent scroll view must not be null!");
     AXASSERT(direction != ScrollView::Direction::BOTH, "Illegal scroll direction for scroll bar!");
     setCascadeColorEnabled(true);
-    setCascadeOpacityEnabled(true);
 }
 
 ScrollViewBar::~ScrollViewBar() {}

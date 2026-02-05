@@ -152,7 +152,6 @@ void Slider::initRenderer()
     _slidBallRenderer->addChild(_slidBallPressedRenderer);
     _slidBallRenderer->addChild(_slidBallDisabledRenderer);
     _slidBallRenderer->setCascadeColorEnabled(true);
-    _slidBallRenderer->setCascadeOpacityEnabled(true);
 
     addProtectedChild(_slidBallRenderer, SLIDBALL_RENDERER_Z, -1);
 }

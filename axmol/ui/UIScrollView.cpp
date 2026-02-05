@@ -144,7 +144,6 @@ void ScrollView::initRenderer()
     _innerContainer = Layout::create();
     _innerContainer->setColor(Color32::WHITE);
     _innerContainer->setCascadeColorEnabled(true);
-    _innerContainer->setCascadeOpacityEnabled(true);
     addProtectedChild(_innerContainer, 1, 1);
 }
 

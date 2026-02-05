@@ -237,7 +237,7 @@ void ProgressTimer::updateDisplayedOpacity(uint8_t parentOpacity)
     updateColor();
     updateProgress();
 
-    if (_cascadeOpacityEnabled)
+    if (isCascadeOpacityEnabled())
     {
         _sprite->updateDisplayedOpacity(_displayedColor.a);
 

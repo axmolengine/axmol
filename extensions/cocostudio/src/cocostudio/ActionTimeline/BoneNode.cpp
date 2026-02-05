@@ -457,7 +457,7 @@ void BoneNode::updateColor()
 
 void BoneNode::updateDisplayedColor(const ax::Color32& /*parentColor*/)
 {
-    if (_cascadeColorEnabled)
+    if (isCascadeColorEnabled())
     {
         for (const auto& child : _boneSkins)
         {
@@ -468,7 +468,7 @@ void BoneNode::updateDisplayedColor(const ax::Color32& /*parentColor*/)
 
 void BoneNode::updateDisplayedOpacity(uint8_t /*parentOpacity*/)
 {
-    if (_cascadeOpacityEnabled)
+    if (isCascadeOpacityEnabled())
     {
         for (const auto& child : _boneSkins)
         {

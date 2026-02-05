@@ -107,12 +107,11 @@ void ProtectedNode::addProtectedChild(Node* child, int zOrder, int tag)
         }
     }
 
-    if (_cascadeColorEnabled)
+    if (isCascadeColorEnabled())
     {
         updateCascadeColor();
     }
-
-    if (_cascadeOpacityEnabled)
+    else if (isCascadeOpacityEnabled())
     {
         updateCascadeOpacity();
     }
@@ -372,7 +371,7 @@ void ProtectedNode::updateDisplayedOpacity(uint8_t parentOpacity)
     _displayedColor.a = _realColor.a * parentOpacity / 255.0;
     updateColor();
 
-    if (_cascadeOpacityEnabled)
+    if (isCascadeOpacityEnabled())
     {
         for (auto&& child : _children)
         {
@@ -391,18 +390,25 @@ void ProtectedNode::updateDisplayedColor(const Color32& parentColor)
     _displayedColor.r = _realColor.r * parentColor.r / 255.0f;
     _displayedColor.g = _realColor.g * parentColor.g / 255.0f;
     _displayedColor.b = _realColor.b * parentColor.b / 255.0f;
-    if (_cascadeOpacityEnabled)
-        _displayedColor.a = _realColor.a * parentColor.a / 255.0f;
+    _displayedColor.a = _realColor.a * parentColor.a / 255.0f;
 
     updateColor();
 
-    if (_cascadeColorEnabled)
+    if (isCascadeColorEnabled())
     {
         for (const auto& child : _children)
         {
             child->updateDisplayedColor(_displayedColor);
         }
     }
+    else if (isCascadeOpacityEnabled())
+    {
+        for (const auto& child : _children)
+        {
+            child->updateDisplayedOpacity(_displayedColor.a);
+        }
+    }
+
     for (const auto& child : _protectedChildren)
     {
         child->updateDisplayedColor(_displayedColor);

@@ -115,9 +115,7 @@ Node::Node()
     , _componentContainer(nullptr)
     , _displayedColor(Color32::WHITE)
     , _realColor(Color32::WHITE)
-    , _cascadeColorEnabled(false)
-    , _cascadeOpacityEnabled(false)
-    , _childFollowCameraMask(false)
+    , _cascadeMode(0)
     , _cameraMask(1)
     , _onEnterCallback(nullptr)
     , _onExitCallback(nullptr)
@@ -1042,12 +1040,11 @@ void Node::addChildHelper(Node* child, int localZOrder, int tag, std::string_vie
         }
     }
 
-    if (_cascadeColorEnabled)
+    if (isCascadeColorEnabled())
     {
         updateCascadeColor();
     }
-
-    if (_cascadeOpacityEnabled)
+    else if (isCascadeOpacityEnabled())
     {
         updateCascadeOpacity();
     }
@@ -2027,16 +2024,15 @@ uint8_t Node::getDisplayedOpacity() const
 void Node::setOpacity(uint8_t opacity)
 {
     _displayedColor.a = _realColor.a = opacity;
-
     updateCascadeOpacity();
 }
 
 void Node::updateDisplayedOpacity(uint8_t parentOpacity)
 {
-    _displayedColor.a = _realColor.a * parentOpacity / 255.0;
+    _displayedColor.a = static_cast<uint32_t>(_realColor.a * parentOpacity / 255.0f);
     updateColor();
 
-    if (_cascadeOpacityEnabled)
+    if (isCascadeOpacityEnabled())
     {
         for (const auto& child : _children)
         {
@@ -2045,27 +2041,41 @@ void Node::updateDisplayedOpacity(uint8_t parentOpacity)
     }
 }
 
-bool Node::isCascadeOpacityEnabled() const
-{
-    return _cascadeOpacityEnabled;
-}
-
 void Node::setCascadeOpacityEnabled(bool cascadeOpacityEnabled)
 {
-    if (_cascadeOpacityEnabled == cascadeOpacityEnabled)
+    // Get current state
+    bool currentColorEnabled   = isCascadeColorEnabled();
+    bool currentOpacityEnabled = isCascadeOpacityEnabled();
+
+    // No state change needed
+    if (cascadeOpacityEnabled == currentOpacityEnabled)
     {
         return;
     }
 
-    _cascadeOpacityEnabled = cascadeOpacityEnabled;
-
     if (cascadeOpacityEnabled)
     {
-        updateCascadeOpacity();
+        // Enable opacity cascade
+        if (!currentColorEnabled && !currentOpacityEnabled)
+        {
+            // Neither color nor opacity cascade is enabled, enable opacity-only cascade
+            _cascadeMode = CASCADE_OPACITY_ONLY_MASK;
+            updateCascadeOpacity();
+        }
+        // When color cascade is already enabled, opacity cascade is automatically enabled
+        // No action needed
     }
     else
     {
-        disableCascadeOpacity();
+        // Disable opacity cascade
+        if (!currentColorEnabled && currentOpacityEnabled)
+        {
+            // Color cascade is not enabled but opacity cascade is, disable all cascades
+            _cascadeMode = 0;
+            disableCascadeOpacity();
+        }
+        // When color cascade is enabled, opacity cascade cannot be disabled separately
+        // The request is ignored
     }
 }
 
@@ -2111,43 +2121,46 @@ const Color32& Node::getDisplayedColor() const
 void Node::setColor(const Color32& color)
 {
     _displayedColor = _realColor = color;
-
     updateCascadeColor();
 }
 
 void Node::updateDisplayedColor(const Color32& parentColor)
 {
-    _displayedColor.r = _realColor.r * parentColor.r / 255.0f;
-    _displayedColor.g = _realColor.g * parentColor.g / 255.0f;
-    _displayedColor.b = _realColor.b * parentColor.b / 255.0f;
-    if (_cascadeOpacityEnabled)
-        _displayedColor.a = _realColor.a * parentColor.a / 255.0f;
+    _displayedColor.r = static_cast<uint8_t>(_realColor.r * parentColor.r / 255.0f);
+    _displayedColor.g = static_cast<uint8_t>(_realColor.g * parentColor.g / 255.0f);
+    _displayedColor.b = static_cast<uint8_t>(_realColor.b * parentColor.b / 255.0f);
+    _displayedColor.a = static_cast<uint8_t>(_realColor.a * parentColor.a / 255.0f);
     updateColor();
 
-    if (_cascadeColorEnabled)
+    if (isCascadeColorEnabled())
     {
         for (const auto& child : _children)
         {
             child->updateDisplayedColor(_displayedColor);
         }
     }
-}
-
-bool Node::isCascadeColorEnabled() const
-{
-    return _cascadeColorEnabled;
+    else if (isCascadeOpacityEnabled())
+    {
+        for (const auto& child : _children)
+        {
+            child->updateDisplayedOpacity(_displayedColor.a);
+        }
+    }
 }
 
 void Node::setCascadeColorEnabled(bool cascadeColorEnabled)
 {
-    if (_cascadeColorEnabled == cascadeColorEnabled)
+    if (isCascadeColorEnabled() == cascadeColorEnabled)
     {
         return;
     }
 
-    _cascadeColorEnabled = cascadeColorEnabled;
+    if (cascadeColorEnabled)
+        _cascadeMode |= CASCADE_COLOR_MASK;
+    else
+        _cascadeMode &= ~CASCADE_COLOR_MASK;
 
-    if (_cascadeColorEnabled)
+    if (cascadeColorEnabled)
     {
         updateCascadeColor();
     }
