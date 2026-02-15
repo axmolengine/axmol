@@ -100,9 +100,9 @@ bool DriverImpl::init()
     if (!pszVersion)
         throw std::runtime_error("OpenGL init failed, version is null");
 
+    _verInfo.es = !!AX_GLES_PROFILE;
     auto hint   = strstr(pszVersion, "OpenGL ES");
-    _verInfo.es = !!hint;
-    if (_verInfo.es)
+    if (hint)
     {
         _verInfo.major = hint[10] - '0';
         _verInfo.minor = hint[12] - '0';
@@ -115,25 +115,18 @@ bool DriverImpl::init()
 
     _version = pszVersion;
 
-    // check OpenGL version at first
-    constexpr int REQUIRED_GLES_MAJOR = (AX_GLES_PROFILE / AX_GLES_PROFILE_DEN);
-    constexpr int REQUIRED_GLES_MINOR = (AX_GLES_PROFILE % AX_GLES_PROFILE_DEN) / 10;
-    if ((!_verInfo.es && (_verInfo.major < 3 || (_verInfo.major == 3 && _verInfo.minor < 3))) ||
-        (_verInfo.es && (_verInfo.major < REQUIRED_GLES_MAJOR || _verInfo.minor < REQUIRED_GLES_MINOR)))
+#if !AX_GLES_PROFILE
+    // check Desktop GL version at first
+    if (_verInfo.major < 3 || (_verInfo.major == 3 && _verInfo.minor < 3))
     {
-#if AX_GLES_PROFILE == 0
         auto msg = fmt::format(
             "OpeGL 3.3+ is required. Current version:{} incompatible (update driver or make current context).",
             _version);
-#else
-        auto msg = fmt::format(
-            "OpeGL ES {}.{}+ is required. Current version:{} incompatible (update driver or make current context).",
-            REQUIRED_GLES_MAJOR, REQUIRED_GLES_MINOR, _version);
-#endif
         AXLOGE("{}", msg);
         showAlert(msg, "OpenGL init failed, version too old", AlertStyle::RequireSync);
         throw std::runtime_error("OpenGL init failed, version too old");
     }
+#endif
 
     // caps
     glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &_caps.maxAttributes);

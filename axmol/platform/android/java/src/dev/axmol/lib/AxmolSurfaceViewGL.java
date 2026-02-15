@@ -52,7 +52,7 @@ public class AxmolSurfaceViewGL extends dev.axmol.lib.GLSurfaceView {
         AxmolEGLConfigChooser chooser = new AxmolEGLConfigChooser(glContextAttrs);
         setEGLConfigChooser(chooser);
 
-        setEGLContextClientVersion(2);
+        setEGLContextClientVersion(3);
         setFocusableInTouchMode(true);
         setPreserveEGLContextOnPause(true);
 
