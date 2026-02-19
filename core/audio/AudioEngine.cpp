@@ -96,7 +96,7 @@ bool AudioEngine::lazyInit()
 
 AUDIO_ID AudioEngine::play2d(std::string_view filePath, bool loop, float volume, const AudioProfile* profile)
 {
-    return play2d(filePath, ax::AudioPlayerSettings{loop, volume, 0.0f});
+    return play2d(filePath, ax::AudioPlayerSettings{loop, volume, 0.0f}, profile);
 }
 
 AUDIO_ID AudioEngine::play2d(std::string_view filePath, const AudioPlayerSettings& settings, const AudioProfile* profile)
