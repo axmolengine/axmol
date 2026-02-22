@@ -148,18 +148,16 @@ static inline uintptr_t makePipelineId(const rhi::BlendDesc& blendDesc,
 }
 
 // Build the VkPipelineColorBlendAttachmentState from BlendDesc
-static inline VkPipelineColorBlendAttachmentState makeVkBlendAttachment(const BlendDesc& desc)
+static inline void toVkBlendAttachment(const BlendDesc& desc, VkPipelineColorBlendAttachmentState& outState)
 {
-    VkPipelineColorBlendAttachmentState att{};
-    att.colorWriteMask      = toVkColorMask(desc.writeMask);
-    att.blendEnable         = desc.blendEnabled ? VK_TRUE : VK_FALSE;
-    att.srcColorBlendFactor = toVkBlendFactor(desc.sourceRGBBlendFactor);
-    att.dstColorBlendFactor = toVkBlendFactor(desc.destinationRGBBlendFactor);
-    att.colorBlendOp        = toVkBlendOp(desc.rgbBlendOp);
-    att.srcAlphaBlendFactor = toVkBlendFactor(desc.sourceAlphaBlendFactor);
-    att.dstAlphaBlendFactor = toVkBlendFactor(desc.destinationAlphaBlendFactor);
-    att.alphaBlendOp        = toVkBlendOp(desc.alphaBlendOp);
-    return att;
+    outState.colorWriteMask      = toVkColorMask(desc.writeMask);
+    outState.blendEnable         = desc.blendEnabled ? VK_TRUE : VK_FALSE;
+    outState.srcColorBlendFactor = toVkBlendFactor(desc.sourceRGBBlendFactor);
+    outState.dstColorBlendFactor = toVkBlendFactor(desc.destinationRGBBlendFactor);
+    outState.colorBlendOp        = toVkBlendOp(desc.rgbBlendOp);
+    outState.srcAlphaBlendFactor = toVkBlendFactor(desc.sourceAlphaBlendFactor);
+    outState.dstAlphaBlendFactor = toVkBlendFactor(desc.destinationAlphaBlendFactor);
+    outState.alphaBlendOp        = toVkBlendOp(desc.alphaBlendOp);
 }
 
 /*
@@ -420,19 +418,24 @@ void RenderPipelineImpl::update(const RenderTarget* rt, const PipelineDesc& desc
 
     auto program  = static_cast<ProgramImpl*>(desc.programState->getProgram());
     _activeProgId = program->getProgramId();
-    updateBlendState(desc.blendDesc);
+    updateBlendState(desc.blendDesc, vkRT->getColorAttachmentCount());
     updatePipelineLayoutState(program);
     updateGraphicsPipeline(program, desc, state, renderPass);
 }
 
-void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc)
+void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc, uint32_t colorAttachmentCount)
 {
-    _activeAttachment                 = makeVkBlendAttachment(blendDesc);
+    _activeBlendAttachmentStates.clear();
+    for (uint32_t i = 0; i < colorAttachmentCount; ++i)
+    {
+        auto& outState = _activeBlendAttachmentStates.emplace_back();
+        toVkBlendAttachment(blendDesc, outState);
+    }
     _activeBlendState                 = {};
     _activeBlendState.sType           = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     _activeBlendState.logicOpEnable   = VK_FALSE;
-    _activeBlendState.attachmentCount = 1;
-    _activeBlendState.pAttachments    = &_activeAttachment;
+    _activeBlendState.attachmentCount = colorAttachmentCount;
+    _activeBlendState.pAttachments    = _activeBlendAttachmentStates.data();
     std::fill(std::begin(_activeBlendState.blendConstants), std::end(_activeBlendState.blendConstants), 0.0f);
 }
 

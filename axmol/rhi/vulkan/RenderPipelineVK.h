@@ -27,6 +27,7 @@
 #include "axmol/tlx/hlookup.hpp"
 #include <glad/vulkan.h>
 #include <unordered_map>
+#include "axmol/tlx/vector.hpp"
 #include "yasio/object_pool.hpp"
 
 namespace ax::rhi::vk
@@ -166,7 +167,7 @@ public:
 private:
     void initializePipelineDefaults(DriverImpl* driver);
 
-    void updateBlendState(const BlendDesc& blendDesc);
+    void updateBlendState(const BlendDesc& blendDesc, uint32_t colorAttachmentCount);
     void updatePipelineLayoutState(ProgramImpl* program);
     void updateGraphicsPipeline(ProgramImpl* program,
                                 const PipelineDesc& desc,
@@ -191,7 +192,7 @@ private:
     VkPipelineDynamicStateCreateInfo _dynState{};
 #pragma endregion
 
-    VkPipelineColorBlendAttachmentState _activeAttachment{};
+    tlx::pod_vector<VkPipelineColorBlendAttachmentState> _activeBlendAttachmentStates{};
     VkPipelineColorBlendStateCreateInfo _activeBlendState{};
 
     uint64_t _activeProgId{0};

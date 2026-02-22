@@ -194,6 +194,8 @@ void RenderTargetImpl::beginRenderPass(VkCommandBuffer cmd,
                 tlx::hash64_bytes(&_attachmentViews[imageIndex], sizeof(VkImageView),
                                   reinterpret_cast<uint64_t>(_attachmentViews.back()));
         }
+
+        _numMRT = 1;
     }
     else
     {  // Offscreen RenderTarget, update all attachment one-time
@@ -229,6 +231,8 @@ void RenderTargetImpl::beginRenderPass(VkCommandBuffer cmd,
             }
 
             _activeHashSeed = tlx::hash64_bytes(&_attachmentViews[0], sizeof(_attachmentViews));
+
+            _numMRT = static_cast<uint32_t>(_color.size());
 
             _dirtyFlags = TargetBufferFlags::NONE;
         }
