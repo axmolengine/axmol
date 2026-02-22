@@ -66,5 +66,6 @@ Due to Axmol Engine is a fork of Cocos2d-x-4.0, so the [Cocos2d-x AUTHORS](https
     tkzcfc
     theunwisewolf (TheUnwiseWolf)
     Tosik86
+    w1257
     weiwest
     Yehsam23

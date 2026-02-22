@@ -127,10 +127,12 @@ public:
                     DrawNode::PointType pointType = DrawNode::PointType::Rect);
 
     /** Draw an line from origin to destination with color.
+     * If thickness is 1.0f and drawOrder is false, always quickly draws 1px wide lines regardless of scale.
      *
      * @param origin The line origin.
      * @param destination The line destination.
      * @param color The line color.
+     * @param thickness The width of the line.
      */
     void drawLine(const Vec2& origin,
                   const Vec2& destination,

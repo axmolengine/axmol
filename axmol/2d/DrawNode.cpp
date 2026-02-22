@@ -1064,9 +1064,6 @@ void DrawNode::_drawSegment(const Vec2& from,
                             DrawNode::EndType etStart,
                             DrawNode::EndType etEnd)
 {
-    if (thickness < 1.0f)
-        thickness = 1.0f;
-
     if (thickness == 1.0f && !properties.drawOrder)
     {
         _drawLine(from, to, color);  // fastest way to draw a line
