@@ -654,7 +654,7 @@ macro(ax_setup_app_props app_name)
     # string(APPEND EMSCRIPTEN_LINK_FLAGS " -gsplit-dwarf")
 
     if(AX_WASM_GENERATE_SYMBOL_FILE)
-      string(APPEND EMSCRIPTEN_LINK_FLAGS "-g --emit-symbol-map")
+      string(APPEND EMSCRIPTEN_LINK_FLAGS " -g --emit-symbol-map")
     endif()
 
     if(NOT DEFINED _APP_RES_FOLDER)
