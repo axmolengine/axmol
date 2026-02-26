@@ -58,6 +58,24 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Android")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
   set(LINUX TRUE)
   set(PLATFORM_NAME linux)
+  if(NOT DEFINED ARCH_ALIAS)
+    message(STATUS "Detecting build target triple ...")
+    execute_process(
+      COMMAND ${CMAKE_CXX_COMPILER} -dumpmachine
+      OUTPUT_VARIABLE _cxx_target_triple
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+
+    message(STATUS "Detected build target triple: ${_cxx_target_triple}")
+
+    if(_cxx_target_triple MATCHES "x86_64")
+      set(ARCH_ALIAS "x64" CACHE STRING "" FORCE)
+    elseif(_cxx_target_triple MATCHES "aarch64" OR _cxx_target_triple MATCHES "arm64")
+      set(ARCH_ALIAS "arm64" CACHE STRING "" FORCE)
+    else()
+      message(FATAL_ERROR "Unsupported platform: ${_cxx_target_triple}")
+    endif()
+  endif()
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
   set(WASM TRUE)
   set(EMSCRIPTEN TRUE)
