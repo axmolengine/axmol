@@ -6,7 +6,7 @@
 # --- region platfom:common
 
 # The axmol shader compiler, legacy name is 'glslcc' before axmol-2.3.0
-axslcc=3.4.0+
+axslcc=3.5.0+
 
 # The cmake, @gradle @axmol-cmdline
 # as latest as possible
@@ -93,7 +93,7 @@ emsdk=3.1.73~5.0.1+
 # --- endregion
 
 # --- region dependencies @fetch.cmake
-1kdist=v113
+1kdist=v114
 oboe=1.10.0
 kcp=v1.7-f4f3a89
 lz4=v1.10.0

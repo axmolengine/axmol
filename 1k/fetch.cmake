@@ -82,7 +82,7 @@ function(_1kfetch_dist package_name)
   else()
     set(_prebuilt_lib_dir "${_prebuilt_root}/lib/${PLATFORM_NAME}")
 
-    if(ANDROID OR WIN32)
+    if(ANDROID OR WIN32 OR LINUX)
       set(_prebuilt_lib_dir "${_prebuilt_lib_dir}/${ARCH_ALIAS}")
     endif()
   endif()
