@@ -40,7 +40,8 @@
     "cmake": {
       "artifacts": {
         "windows": "cmake-${ver}-windows-x86_64.zip",
-        "linux": "cmake-${ver}-linux-x86_64.sh",
+        "linux-x64": "cmake-${ver}-linux-x86_64.sh",
+        "linux-arm64": "cmake-${ver}-linux-aarch64.sh",
         "macos": "cmake-${ver}-macos-universal.tar.gz"
       },
       "mirrors": "https://github.com/Kitware/CMake/releases/download/v${ver}/"
