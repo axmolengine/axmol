@@ -248,8 +248,6 @@ $cmake_generators = @{
     'linux'   = 'Unix Makefiles'
 }
 
-$channels = @{}
-
 # refer to: https://developer.android.com/studio#command-line-tools-only
 $cmdlinetools_revs = @{
     '12.0' = '11076708'
@@ -340,14 +338,16 @@ $osVerString = if ($IsWin) { "Microsoft Windows $($NtOSVersion.ToString())" } el
 # arm64,x64
 # uname -m: arm64/aarch64,x86_64
 if ($IsWin) {
-    $__1k_archs = @{9="x64"; 10="arm64"}
-    $__1k_arch_code = [int](Get-CimInstance Win32_Processor).Architecture[0]
+    # refer: https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor
+    $__1k_archs = @{9="x64"; 12="arm64"}
+    $__1k_arch_code = [int](Get-CimInstance Win32_Processor).Architecture
+    $1k.println("Host architecture code: $__1k_arch_code")
     $HOST_CPU = $__1k_archs[$__1k_arch_code]
 } else {
     $HOST_CPU = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLower()
 }
 
-$1k.println("PowerShell $pwsh_ver on $osVerString")
+$1k.println("PowerShell $pwsh_ver on $osVerString ($HOST_CPU)")
 
 # determine build target os
 $TARGET_OS = $options.p
@@ -1235,7 +1235,7 @@ function setup_7z() {
     $7z_cmd_info = Get-Command '7z' -ErrorAction SilentlyContinue
     if (!$7z_cmd_info) {
         if ($IsWin) {
-            $7z_ver = '2501'
+            $7z_ver = '2600'
             $7z_prog = Join-Path $install_prefix "7z$7z_ver-x64/7z.exe"
             if (!$1k.isfile($7z_prog)) {
                 fetch_pkg $(devtool_url '7zip' $7z_ver)

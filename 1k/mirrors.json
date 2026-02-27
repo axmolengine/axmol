@@ -55,7 +55,16 @@
       },
       "mirrors": "https://github.com/ninja-build/ninja/releases/download/v${ver}/"
     },
-    "llvm": "https://github.com/llvm/llvm-project/releases/download/llvmorg-${ver}/LLVM-${ver}-win64.exe",
+    "llvm": {
+        "artifacts": {
+            "windows-x64": "LLVM-${ver}-win64.exe",
+            "windows-arm64": "LLVM-${ver}-woa64.exe",
+            "linux-x64": "LLVM-${ver}-Linux-x64.tar.xz",
+            "linux-arm64": "LLVM-${ver}-Linux-ARM64.tar.xz",
+            "macos-arm64": "LLVM-${ver}-macOS-ARM64.tar.xz"
+        },
+        "mirrors": "https://github.com/llvm/llvm-project/releases/download/llvmorg-${ver}/"
+    },
     "nuget": "https://dist.nuget.org/win-x86-commandline/v${ver}/nuget.exe",
     "nasm": "https://www.nasm.us/pub/nasm/releasebuilds/${ver}/win64/nasm-${ver}-win64.zip",
     "emsdk": "https://github.com/emscripten-core/emsdk.git",
@@ -86,7 +95,10 @@
       }
     },
     "7zip": {
-      "artifacts": "7z${ver}-x64.zip",
+      "artifacts": {
+        "windows-x64": "7z${ver}-x64.zip",
+        "windows-arm64": "7z${ver}-arm64.zip"
+      },
       "mirrors": {
         "origin": "https://github.com/simdsoft/1kiss/releases/download/devtools/",
         "atomgit": "https://atomgit.com/simdsoft/1kiss/releases/download/devtools/",
@@ -103,7 +115,8 @@
     },
     "axslcc": {
       "artifacts": {
-        "windows": "axslcc-${ver}-win-x64.zip",
+        "windows-x64": "axslcc-${ver}-win-x64.zip",
+        "windows-arm64": "axslcc-${ver}-win-arm64.zip",
         "linux-x64": "axslcc-${ver}-linux-x64.tar.gz",
         "linux-arm64": "axslcc-${ver}-linux-arm64.tar.gz",
         "macos-x64": "axslcc-${ver}-osx-x64.tar.gz",

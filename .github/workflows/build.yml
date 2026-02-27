@@ -112,6 +112,21 @@ jobs:
         name: windows_vk_x64
         path: |
           build/bin/cpp-tests/**/*
+  win32-arm64:
+    runs-on: windows-11-arm
+    steps:
+    - uses: actions/checkout@v6
+    - name: Build
+      shell: pwsh
+      run: |
+        .\tools\cmdline\axmol -p win32 -a arm64 -xc '-DAX_RENDER_API=vk' -O3
+        .\tools\cmdline\axmol run -p win32 -a arm64 -t unit-tests -O3
+    - name: Check prebuilt workflow
+      shell: pwsh
+      run: |
+        ./setup.ps1
+        axmol new HelloCpp
+        axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build' -O3
   winuwp-ogl:
         runs-on: windows-latest
         steps:
