@@ -490,7 +490,10 @@ public:
 
     void drawColoredTriangle(const Vec2* vertices3, const Color* color3);
     void drawTriangle(const Vec2* vertices3, const Color& color, float thickness = 1.0f);
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     void drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color& color, float thickness = 1.0f);
 
     void drawSolidTriangle(const Vec2* vertices3,

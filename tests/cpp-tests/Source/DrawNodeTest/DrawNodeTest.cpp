@@ -26,6 +26,7 @@ THE SOFTWARE.
 #include "DrawNodeTest.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/CustomCommand.h"
+#include <chrono>
 
 #if defined(_WIN32)
 #    pragma push_macro("TRANSPARENT")
@@ -1331,17 +1332,94 @@ float verticesFB[] = {
     14.540f, 3.373f,  14.330f, 3.236f,  14.050f, 3.047f,  13.730f, 2.800f,  13.360f, 2.489f,  12.950f,
     2.107f,  12.520f, 1.649f,  0.842f,  1.649f,  27.220f, 1.649f,  27.220f, 1.052f};
 
+
+static Vec2 horse[] = {
+    {415, 25.4},    {406.6, 41.3},  {398.7, 48.1},  {393.9, 65.8},  {367.9, 107.7}, {364.1, 130.6}, {370.2, 142},
+    {381.5, 143},   {396, 149.2},   {439.5, 179.6}, {452, 201.5},   {452, 231.2},   {461.1, 240.3}, {477.3, 247},
+    {531.4, 254},   {574.8, 267.2}, {659.3, 316.4}, {677.9, 336},   {690.2, 337.9}, {773.4, 336},   {805.5, 313.6},
+    {817.2, 301.9}, {820.3, 292.7}, {840, 279},     {840, 263.2},   {845.1, 258},   {870.2, 257},   {884.6, 260.3},
+    {887.1, 269.2}, {880.6, 283.3}, {862.4, 296.3}, {862.5, 296.4}, {829.2, 332.7}, {822.2, 335.5}, {807.3, 354.5},
+    {791.8, 363.8}, {770.3, 370.4}, {793.5, 382},   {806.7, 382.9}, {831.9, 372.3}, {852, 355.2},   {866.7, 351.3},
+    {876.9, 333.9}, {908.6, 337.1}, {917, 341.8},   {917, 354.9},   {898, 372.8},   {878.9, 376.8}, {870.1, 385.7},
+    {835.1, 399.7}, {825.2, 410.7}, {814.5, 415},   {789.7, 417},   {754.7, 405},   {734.9, 405},   {734, 422.3},
+    {726.8, 445.9}, {701, 479.6},   {701, 554.6},   {706.5, 567.5}, {713.4, 571.8}, {730.2, 567.9}, {748.5, 577},
+    {780.7, 577},   {790.6, 573.7}, {809.9, 594.1}, {811.1, 609.7}, {792.2, 631.6}, {742.7, 654.9}, {709.9, 664.7},
+    {692.7, 679},   {671, 679},     {671, 674.3},   {677, 666},     {648.2, 679.1}, {641.1, 677.3}, {650.1, 658.2},
+    {641.9, 655.8}, {622.4, 635.3}, {580.3, 572},   {546.1, 503.6}, {543.8, 483.2}, {557, 482.1},   {557, 481.9},
+    {545.4, 471.3}, {525.6, 435.5}, {508.6, 419.5}, {477.1, 402.8}, {477.1, 402.7}, {425.4, 390.9}, {373.1, 368.8},
+    {352.7, 355.5}, {321.1, 321},   {308.1, 321},   {289.3, 326},   {263.8, 326},   {216.2, 315},   {177.2, 323},
+    {154.8, 323},   {111.9, 314.8}, {106.5, 307.7}, {134.4, 302},   {158.4, 290.1}, {169.1, 288.2}, {118.5, 281},
+    {39, 252.4},    {39, 244.1},    {75, 243},      {126.2, 243},   {148.9, 247.8}, {134.3, 229.1}, {125.1, 210.7},
+    {116, 175.3},   {116, 156.8},   {122.5, 153.5}, {158.3, 196.5}, {215.9, 241.2}, {235.5, 251},   {240, 251.4},
+    {236.5, 248.3}, {224.5, 229.5}, {209.6, 222},   {212.5, 211.9}, {242.4, 213},   {257, 219.3},   {282.3, 238.5},
+    {308.4, 266.3}, {310.1, 249.4}, {340.9, 195.6}, {340, 185.7},   {331.7, 175.6}, {295.9, 160.7}, {285.7, 150.5},
+    {295.2, 123.1}, {304.2, 111},   {315, 75.7},    {315, 15},      {321.3, 10},    {363.1, 11.1},  {362, 34.7},
+    {352.9, 46.7},  {349, 69.8},    {355, 58.4},    {356, 43.3},    {365.9, 29.4},  {364.9, 11.1},  {413.9, 8.9},
+};
+
+static Vec2 spider[] = {
+    {233.9, 47.1},  {240, 78.8},    {239, 122},     {245, 162.7},   {255.7, 196.9}, {271.8, 221},   {285.9, 253.4},
+    {290, 274.8},   {290, 299.1},   {298, 306.2},   {381.3, 350.8}, {386.7, 349.5}, {386.1, 345.9}, {327.2, 288},
+    {324.9, 278.8}, {327.7, 272.2}, {315.2, 254.9}, {308, 230.4},   {300, 150.9},   {305.1, 129.4}, {317.3, 101.8},
+    {324.5, 94.6},  {334.2, 98.8},  {328, 146.3},   {328.9, 187.6}, {345.9, 227.4}, {349, 243.9},   {348, 260.2},
+    {370.5, 283.7}, {394.4, 316.5}, {406.9, 325.5}, {427, 310.2},   {443.9, 303.9}, {466.9, 310.2}, {482.9, 323.1},
+    {491.3, 324.7}, {543, 266.1},   {550.1, 220.3}, {561.2, 200},   {565, 186},     {566, 139.3},   {560.8, 98.5},
+    {570.4, 95.8},  {575.6, 99.7},  {594, 142.6},   {592, 193.2},   {585, 234.5},   {578.8, 254.9}, {568.9, 268.6},
+    {568, 287.9},   {508.8, 346.9}, {508.3, 350.2}, {512.6, 350.9}, {566.1, 319.2}, {596.8, 306.3}, {604, 299.1},
+    {605, 271.7},   {609.1, 254.4}, {622.2, 223},   {639.3, 197.9}, {651, 160.6},   {659.1, 55.1},  {671.6, 42.5},
+    {684.4, 49.5},  {688.9, 56.2},  {697, 100},     {691, 141.4},   {672.9, 214.2}, {673, 214.3},   {668, 252.5},
+    {660.8, 273.8}, {642.6, 306.2}, {634.1, 315.7}, {629.5, 317.2}, {634.2, 331.3}, {627.4, 341.5}, {613.8, 348.8},
+    {526, 378.7},   {524.9, 379.8}, {549.7, 379},   {636, 367},     {660.5, 369.8}, {664.2, 358.1}, {683.4, 329.7},
+    {717.7, 294.5}, {732.6, 284.4}, {752.2, 259},   {779.2, 210},   {809.3, 131.9}, {814.2, 127},   {820.8, 127},
+    {826.9, 133.1}, {828, 145.1},   {818.9, 184.7}, {810.1, 203.1}, {813, 211.8},   {812, 224.6},   {781.7, 278},
+    {734.6, 349.2}, {708.3, 377.5}, {690.8, 389.9}, {678.5, 392.6}, {674.7, 403.1}, {665.1, 412.7}, {653.3, 417},
+    {548.1, 410},   {537.4, 411.8}, {560.7, 421.1}, {560.6, 421.1}, {623.8, 439.1}, {658.4, 457.9}, {673.4, 455.9},
+    {681.6, 461},   {685.8, 461},   {692.4, 448.8}, {716.7, 423.4}, {755.7, 399.4}, {775.6, 380.6}, {821.4, 321.8},
+    {848.5, 270.5}, {859.6, 264.4}, {867.1, 274.5}, {864.9, 288.5}, {856.8, 310.9}, {840.9, 336.5}, {840, 352.5},
+    {835.7, 361.1}, {748.3, 460.5}, {718.8, 478.9}, {701.2, 483.7}, {690.3, 497.6}, {675.4, 504},   {662.2, 504},
+    {651.3, 493.1}, {642, 495},     {628.3, 491.9}, {541.1, 446.3}, {588.5, 494.6}, {655.5, 570.7}, {666.8, 584.1},
+    {669.5, 595},   {677.8, 595},   {694, 609.3},   {722.9, 585.3}, {764.9, 565.2}, {814.9, 517.3}, {828.4, 511.1},
+    {857.4, 505},   {875.7, 495.9}, {887, 498.4},   {887, 508.7},   {881.3, 515.6}, {851.9, 529.8}, {851.8, 529.7},
+    {823.1, 549.5}, {823.2, 549.6}, {798.2, 569.6}, {755.2, 611.6}, {734.7, 622.9}, {706.2, 627.8}, {701.5, 636.4},
+    {689.6, 644},   {660.2, 645},   {649.1, 633.9}, {648.1, 623.4}, {638.9, 619.7}, {624.5, 605.3}, {533.6, 488.3},
+    {531, 528.3},   {524.9, 550.7}, {513, 573.4},   {515, 605.5},   {506.3, 619.2}, {499, 611.8},   {499, 597.9},
+    {495.9, 595.5}, {480, 607.8},   {458.1, 616.7}, {449.3, 627.8}, {437, 617.8},   {413.9, 608.7}, {401.3, 597.1},
+    {397.7, 597.7}, {394.8, 615.1}, {388.5, 619.9}, {380, 606.5},   {381.9, 572.4}, {372.1, 554.8}, {365, 530.4},
+    {359.6, 490},   {274.5, 601.3}, {258.1, 618.8}, {246.8, 621.5}, {245.9, 634.9}, {234.7, 645.1}, {220.8, 644},
+    {205.5, 644},   {198.7, 640.6}, {187.9, 626.8}, {164.4, 623.9}, {141.8, 612.7}, {84.6, 559.5},  {84.6, 559.4},
+    {49.1, 534.7},  {49.1, 534.8},  {16.8, 517.6},  {9.1, 509.9},   {7.8, 499.5},   {18.2, 496.9},  {47.4, 510},
+    {63.4, 510},    {74, 514.2},    {99.3, 532.5},  {127.1, 563.3}, {172, 585.3},   {192.4, 600.6}, {199, 609},
+    {201.2, 609},   {213, 597.2},   {224.4, 594.3}, {228.2, 583.1}, {236.5, 571.7}, {349.8, 450.6}, {337.7, 454.9},
+    {260.5, 494},   {243.6, 494.9}, {228.4, 505.1}, {217.3, 502.9}, {204.6, 496.6}, {195.9, 483.8}, {179.3, 480.9},
+    {152.8, 464.6}, {133.5, 445.4}, {72.4, 377.3},  {61.3, 362},    {40.1, 319.8},  {26.9, 278.1},  {29.4, 267.2},
+    {40.1, 265.9},  {68.6, 315.8},  {114.4, 376.6}, {135.1, 397.3}, {158.1, 409.3}, {178.3, 424.5}, {204.6, 451.8},
+    {209.8, 460.5}, {220.7, 455.9}, {233.5, 457.8}, {248.1, 447.2}, {359.2, 410.7}, {353.8, 410},   {271.1, 417},
+    {238.6, 417},   {230.9, 413.7}, {223.4, 407.3}, {215.6, 391.8}, {207.3, 390.9}, {186.7, 377.6}, {162.4, 352.2},
+    {99.3, 255},    {82, 223.4},    {83.9, 201.2},  {73.1, 176.6},  {67, 146},      {69.3, 131.1},  {84.4, 129.9},
+    {108.8, 197.1}, {142.7, 260.9}, {167.2, 290.3}, {183.3, 300.4}, {202.5, 319.7}, {218.7, 339.9}, {234.1, 368.8},
+    {254, 367},     {367.8, 380.2}, {365, 377.7},   {290.2, 352.9}, {265.3, 340.4}, {261.9, 326.9}, {265.5, 316.8},
+    {253.5, 309.4}, {239.2, 283.8}, {223, 236.4},   {218, 195.2},   {218, 195.1},   {205, 147.4},   {200, 110.1},
+    {203, 71.6},    {208.7, 55.7},  {209, 55.7},    {209, 49.2},    {217.1, 40},    {227.9, 40},
+};
+
 // clang-format on
 
 DrawNodeTests::DrawNodeTests()
 {
     ADD_TEST_CASE(DrawNodeCircleTest);
+    ADD_TEST_CASE(DrawNodeSolidCircleTest);
+    ADD_TEST_CASE(DrawNodePolygonTest);
+
     ADD_TEST_CASE(DrawNodeSpLinesTest);
     ADD_TEST_CASE(DrawNodeSpLinesOpenClosedTest);
     ADD_TEST_CASE(DrawNodeAxmolTest2);
 
+    ADD_TEST_CASE(DrawNodeRoundRectTest);
+    ADD_TEST_CASE(DrawNodeButtonTest);
+
 #if defined(AX_PLATFORM_PC)
     ADD_TEST_CASE(CandyMixEeffect);
+    ADD_TEST_CASE(DrawNodePointTest);
 #endif
     ADD_TEST_CASE(DrawNodePictureTest);
     ADD_TEST_CASE(DrawNodeJellyFishTest);
@@ -1392,14 +1470,14 @@ DrawNodeBaseTest::DrawNodeBaseTest()
         drawNode->properties.setTransform(true);
         addChild(drawNode);
     }
-    menuItemDrawOrder->setFontSize(10);
-    menuItemTransform->setFontSize(10);
+    menuItemDrawOrder->setFontSize(8);
+    menuItemTransform->setFontSize(8);
     menuItemDrawOrder = MenuItemFont::create("drawOrder: false", AX_CALLBACK_1(DrawNodeBaseTest::setDrawOrder, this));
     menuItemTransform = MenuItemFont::create("transform: true", AX_CALLBACK_1(DrawNodeBaseTest::setTransform, this));
 
     auto menu = Menu::create(menuItemDrawOrder, menuItemTransform, nullptr);
-    menu->alignItemsVerticallyWithPadding(4);
-    menu->setPosition(Vec2(size.x - 50, size.y / 2 - 20));
+    menu->alignItemsVertically();
+    menu->setPosition(Vec2(center.x, size.y / 4.0f));
     addChild(menu, 1000);
 }
 
@@ -1492,7 +1570,7 @@ void DrawNodeBaseTest::drawDirection(const Vec2* vec, const int size, Vec2 offse
 {
     for (size_t i = 0; i < size; i++)
     {
-        auto label = Label::createWithTTF(std::to_string(i).c_str(), "fonts/Marker Felt.ttf", 10);
+        auto label = Label::createWithTTF(std::to_string(i).c_str(), "fonts/Marker Felt.ttf", 8);
         addChild(label);
         label->setPosition(vec[i] + offset);
     }
@@ -1525,7 +1603,7 @@ void DrawNodeBaseTest::changeRotation(ax::Object* pSender, ax::ui::Slider::Event
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
         slider[sliderType::Rotation]      = dynamic_cast<ax::ui::Slider*>(pSender);
-        sliderValue[sliderType::Rotation] = slider[sliderType::Rotation]->getPercent() * 3.6;
+        sliderValue[sliderType::Rotation] = slider[sliderType::Rotation]->getPercent() * 0.1f;
         sliderLabel[sliderType::Rotation]->setString("Rotation: (" +
                                                      Value(sliderValue[sliderType::Rotation]).asString() + ")");
     }
@@ -1536,17 +1614,48 @@ void DrawNodeBaseTest::changeThickness(ax::Object* pSender, ax::ui::Slider::Even
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
         slider[sliderType::Thickness]      = dynamic_cast<ax::ui::Slider*>(pSender);
-        sliderValue[sliderType::Thickness] = slider[sliderType::Thickness]->getPercent() * 0.1;
+        sliderValue[sliderType::Thickness] = slider[sliderType::Thickness]->getPercent() * 0.1f;
         sliderLabel[sliderType::Thickness]->setString("Thickness: (" +
                                                       Value(sliderValue[sliderType::Thickness]).asString() + ")");
     }
 }
 
+void DrawNodeBaseTest::changeFactor(ax::Object* pSender, ax::ui::Slider::EventType type)
+{
+    if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
+    {
+        slider[sliderType::Factor]      = dynamic_cast<ax::ui::Slider*>(pSender);
+        sliderValue[sliderType::Factor] = slider[sliderType::Factor]->getPercent() * 0.1f;
+        sliderLabel[sliderType::Factor]->setString("Factor: (" + Value(sliderValue[sliderType::Factor]).asString() +
+                                                   ")");
+    }
+}
+
+void DrawNodeBaseTest::changeScale(ax::Object* pSender, ax::ui::Slider::EventType type)
+{
+    if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
+    {
+        slider[sliderType::Scale]      = dynamic_cast<ax::ui::Slider*>(pSender);
+        sliderValue[sliderType::Scale] = slider[sliderType::Scale]->getPercent() * 0.1f;
+        sliderLabel[sliderType::Scale]->setString("Scale: (" + Value(sliderValue[sliderType::Scale]).asString() + ")");
+    }
+}
+
+void DrawNodeBaseTest::changeNodeScale(ax::Object* pSender, ax::ui::Slider::EventType type)
+{
+    if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
+    {
+        slider[sliderType::NodeScale]      = dynamic_cast<ax::ui::Slider*>(pSender);
+        sliderValue[sliderType::NodeScale] = slider[sliderType::NodeScale]->getPercent() * 0.1f;
+        sliderLabel[sliderType::NodeScale]->setString("NodeScale: (" +
+                                                      Value(sliderValue[sliderType::NodeScale]).asString() + ")");
+    }
+}
+
+
 void DrawNodeBaseTest::initSliders()
 {
     _currentSeletedItemIndex = 0;
-
-    std::string text[sliderType::sliderTypeLast] = {"AngleStart", "AngleEnd", "Rotation", "Thickness"};
 
     auto ttfConfig = TTFConfig("fonts/arial.ttf", 5);
     for (int i = 0; i < (sliderType::sliderTypeLast); i++)
@@ -1557,10 +1666,11 @@ void DrawNodeBaseTest::initSliders()
         slider[i]->loadSlidBallTextures("ccs-res/cocosui/sliderballnormal.png", "ccs-res/cocosui/sliderballpressed.png",
                                         "");
         slider[i]->loadProgressBarTexture("cocosui/sliderProgress.png");
-        slider[i]->setPosition(Vec2(size.width - slider[i]->getContentSize().x / 2 - 10, size.height / 6 + i * 16));
+        slider[i]->setPosition(Vec2(5, 20 + i * 16));
         slider[i]->setPercent(sliderValue[i]);
 
         slider[i]->setEnabled(false);
+        slider[i]->setVisible(true);
         slider[i]->setScale(0.5f);
         addChild(slider[i], 20);
 
@@ -1574,7 +1684,11 @@ void DrawNodeBaseTest::initSliders()
     slider[sliderType::AngleEnd]->addEventListener(AX_CALLBACK_2(DrawNodeBaseTest::changeEndAngle, this));
     slider[sliderType::Rotation]->addEventListener(AX_CALLBACK_2(DrawNodeBaseTest::changeRotation, this));
     slider[sliderType::Thickness]->addEventListener(AX_CALLBACK_2(DrawNodeBaseTest::changeThickness, this));
+    slider[sliderType::Factor]->addEventListener(AX_CALLBACK_2(DrawNodeBaseTest::changeFactor, this));
+    slider[sliderType::Scale]->addEventListener(AX_CALLBACK_2(DrawNodeBaseTest::changeScale, this));
+    slider[sliderType::NodeScale]->addEventListener(AX_CALLBACK_2(DrawNodeBaseTest::changeNodeScale, this));
 }
+
 
 DrawNodeMorphTest_SolidPolygon::DrawNodeMorphTest_SolidPolygon()
 {
@@ -2529,7 +2643,7 @@ void DrawNodePieTest::onEnter()
     sliderValue[sliderType::AngleEnd] = 100;
     slider[sliderType::AngleEnd]->setPercent(sliderValue[sliderType::AngleEnd]);
 
-    sliderValue[sliderType::Rotation] = 10;
+    sliderValue[sliderType::Rotation] = 0;
     slider[sliderType::Rotation]->setPercent(sliderValue[sliderType::Rotation]);
 
     sliderValue[sliderType::Thickness] = 10;
@@ -2554,15 +2668,30 @@ DrawNodeMethodsTest::DrawNodeMethodsTest()
     static float startPosX          = 0;
 
     auto listview = createListView();
-    listview->setPosition(Vec2(0.0f, 40.0f));
+    listview->setPosition(Vec2(1.0f, 130.0f));
     addChild(listview);
 
-    drawNode->setScale(0.5);
+    drawNode->setScale(sliderValue[sliderType::Scale]);
     drawNode->setPosition(center);
 
     initSliders();
+    slider[sliderType::NodeScale]->setEnabled(true);
+    slider[sliderType::Scale]->setEnabled(true);
+    slider[sliderType::Factor]->setEnabled(true);
     slider[sliderType::Thickness]->setEnabled(true);
     slider[sliderType::Rotation]->setEnabled(true);
+    slider[sliderType::AngleStart]->setEnabled(false);
+    slider[sliderType::AngleStart]->setVisible(false);
+    slider[sliderType::AngleEnd]->setEnabled(false);
+    slider[sliderType::AngleEnd]->setVisible(false);
+
+    sliderLabel[sliderType::NodeScale]->setVisible(true);
+    sliderLabel[sliderType::Scale]->setVisible(true);
+    sliderLabel[sliderType::Factor]->setVisible(true);
+    sliderLabel[sliderType::Thickness]->setVisible(true);
+    sliderLabel[sliderType::Rotation]->setVisible(true);
+    sliderLabel[sliderType::AngleStart]->setVisible(false);
+    sliderLabel[sliderType::AngleEnd]->setVisible(false);
 
     labelRound = Label::createWithTTF("DrawNode::Round", "fonts/arial.ttf", 12);
     addChild(labelRound, 1);
@@ -2584,6 +2713,7 @@ ax::ui::ListView* DrawNodeMethodsTest::createListView()
     for (size_t i = 0; i < (drawMethodes::LAST); i++)
     {
         auto ui = ax::ui::Text::create();
+        ui->setFontSize(8);
         ui->setString(drawMethods[i].c_str());
         contentSize.x = MAX(ui->getContentSize().x, contentSize.x);
         contentSize.y = MAX(ui->getContentSize().y, contentSize.y);
@@ -2610,27 +2740,26 @@ void DrawNodeMethodsTest::update(float dt)
 
 void DrawNodeMethodsTest::onEnter()
 {
+    DrawNodeBaseTest::onEnter();
     for (int i = 0; i < sliderType::sliderTypeLast; i++)
     {
-        sliderValue[i] = 1;
+        sliderValue[i] = 10;
         slider[i]->setPercent(sliderValue[i]);
     }
-    sliderValue[sliderType::Thickness] = 10;
-    slider[sliderType::Thickness]->setPercent(sliderValue[sliderType::Thickness]);
     sliderValue[sliderType::Rotation] = 0;
     slider[sliderType::Rotation]->setPercent(sliderValue[sliderType::Rotation]);
 
-    DrawNodeBaseTest::onEnter();
+
 }
 
 std::string DrawNodeMethodsTest::title() const
 {
-    return "DrawNode Stress Tests";
+    return "DrawNode Properties Tests";
 }
 
 string DrawNodeMethodsTest::subtitle() const
 {
-    return "";
+    return "Scale,Factor,Thickness,Rotation,DrawOrder,Transform)";
 }
 
 void DrawNodeMethodsTest::drawAll()
@@ -2643,7 +2772,11 @@ void DrawNodeMethodsTest::drawAll()
     }
 
     drawNode->clear();
-    drawNode->properties.setDefaultValues();
+
+    drawNode->setScale(sliderValue[sliderType::NodeScale]);
+    drawNode->properties.setScale(Vec2(sliderValue[sliderType::Scale], sliderValue[sliderType::Scale]));
+    drawNode->properties.setFactor(sliderValue[sliderType::Factor]);
+    drawNode->properties.setRotation(sliderValue[sliderType::Rotation]);
 
     labelRound->setVisible(false);
     labelSquare->setVisible(false);
@@ -2653,10 +2786,11 @@ void DrawNodeMethodsTest::drawAll()
     {
     case drawMethodes::Line:
     {
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 30; i++)
         {
-            drawNode->drawLine(Vec2(-size.x / 2, -size.y / 2 + i * 4), Vec2(size.x - 50, -size.y / 2 + i * 4),
-                               Color::random().withAlpha(1.0f), sliderValue[sliderType::Thickness]);
+            float yPos = -size.y / 2.5 + i * 11;
+            drawNode->drawLine(Vec2(-size.x / 2, yPos), Vec2(size.x - 50, yPos), Color::random().withAlpha(1.0f),
+                               sliderValue[sliderType::Thickness]);
         }
 
         break;
@@ -2824,9 +2958,9 @@ void DrawNodeMethodsTest::drawAll()
         drawNode->properties.setPosition(Vec2(200, 0));
         drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color::RED,
                            sliderValue[sliderType::Thickness]);
-        drawNode->properties.setPosition(Vec2(0.0f, -300.0f));
+        drawNode->properties.setPosition(Vec2(0.0f, -200.0f));
         drawNode->properties.setRotation(rotation / 10.0f);
-        drawNode->properties.setScale(Vec2(2.0f, 2.0f));
+        drawNode->properties.setScale(Vec2(5.0f, 5.0f));
         drawNode->properties.setCenter(vertices1[4]);
         drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color::BLUE,
                            sliderValue[sliderType::Thickness]);
@@ -2941,8 +3075,7 @@ void DrawNodeMethodsTest::drawAll()
                                   Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 30,
                                   Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 30};
         drawNode->properties.setPosition(center);
-        drawNode->properties.setScale(Vec2(10, 10));
-        // for (int i = 0; i < 10; i++)
+ 
         {
 
             drawNode->drawSolidTriangle(Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20,
@@ -2963,6 +3096,10 @@ void DrawNodeMethodsTest::drawAll()
 
         int yy1 = 150;
         int yy  = 0;
+
+        drawNode->drawSegment(Vec2(-150.0f, yy - yy1-40), Vec2(200, yy - yy1-40), sliderValue[sliderType::Thickness],
+            Color::MAGENTA, DrawNode::Round, DrawNode::Round);
+
         drawNode->drawSegment(Vec2(-150.0f, yy - yy1), Vec2(200, yy - yy1), 20 + 5 * sliderValue[sliderType::Thickness],
                               Color::GREEN, DrawNode::Round, DrawNode::Round);
         labelRound->setPosition(Vec2(250.0f, 85));
@@ -3434,6 +3571,160 @@ string DrawNodeAxmolTest2::subtitle() const
     return "";
 }
 
+DrawNodePolygonTest::DrawNodePolygonTest()
+{
+    ax::DrawNode* drawNode = ax::DrawNode::create();
+    addChild(drawNode);
+    drawNode->properties.setTransform(true);
+    drawNode->setScale(0.3f);
+    drawNode->properties.setPosition(Vec2(150, 590));
+    drawNode->properties.setScale({0.4f, 0.4f});
+    drawNode->drawSolidPolygon(horse, sizeof(horse) / sizeof(horse[0]), Color::WHITE, 0.0f, Color::RED);
+    drawNode->properties.setPosition(Vec2(30, 200));
+    drawNode->properties.setScale({1.0f, 1.0f});
+    drawNode->drawPoly(horse, sizeof(horse) / sizeof(horse[0]), true, Color::GREEN);
+    drawNode->properties.setPosition(Vec2(700, 220));
+    drawNode->properties.setScale({0.1f, 0.1f});
+    drawNode->drawSolidPolygon(spider, sizeof(spider) / sizeof(spider[0]), Color::YELLOW, 2.0f, Color::RED);
+    drawNode->properties.setScale({0.2f, 0.2f});
+    drawNode->properties.setPosition(Vec2(880, 200));
+    drawNode->drawPoly(spider, sizeof(spider) / sizeof(spider[0]), true, Color::RED);
+    drawNode->properties.setScale({0.4f, 0.4f});
+    drawNode->properties.setPosition(Vec2(1100, 160));
+    drawNode->drawPoly(spider, sizeof(spider) / sizeof(spider[0]), true, Color::RED, true);
+    drawNode->properties.setScale({0.7f, 0.7f});
+    drawNode->properties.setPosition(Vec2(950, 400));
+    drawNode->drawSolidPolygon(spider, sizeof(spider) / sizeof(spider[0]), Color::YELLOW, 5.0f, Color::RED);
+}
+
+std::string DrawNodePolygonTest::title() const
+{
+    return "Polygon Test";
+}
+
+std::string DrawNodePolygonTest::subtitle() const
+{
+    return "";
+}
+
+DrawNodeCircleTest::DrawNodeCircleTest()
+{
+    drawNode->properties.setPosition(Vec2(100, -10));
+    for (int i = 3; i <= 24; i++)
+    {
+        drawNode->drawCircle(center, 5 * i, AX_DEGREES_TO_RADIANS(90), i, false, 1.0f, 1.0f, Color::WHITE);
+    }
+    drawNode->drawCircle(center, 130, AX_DEGREES_TO_RADIANS(90), 48, false, 1.0f, 1.0f, Color::MAGENTA);
+
+    drawNode->properties.setPosition(Vec2(-10, 10));
+    for (size_t i = 0; i < 3; i++)
+    {
+        drawNode->drawCircle(Vec2(120, 150), 85 - 18.8 * i, AX_DEGREES_TO_RADIANS(90), 5, false, 1.0f, 1.0f,
+                             Color::BLUE, 3.0f);
+    }
+
+    drawNode->properties.setCenter(Vec2(120, 150));
+    for (int i = 0; i < 5; i++)
+    {
+        drawNode->properties.setRotation(AX_DEGREES_TO_RADIANS(360 / 5 * i));
+        drawNode->drawSolidCircle(Vec2(120, 197), 10, 0, 36, 1.0f, 1.0f, Color::BLUE);
+        drawNode->drawSolidCircle(Vec2(120, 215), 12, 0, 36, 1.0f, 1.0f, Color::BLUE);
+        drawNode->drawSolidCircle(Vec2(120, 235), 16, 0, 36, 1.0f, 1.0f, Color::BLUE);
+    }
+}
+
+std::string DrawNodeCircleTest::title() const
+{
+    return "Circle Test";
+}
+
+std::string DrawNodeCircleTest::subtitle() const
+{
+    return "Axmol,  '3...20', '48'-Corner";
+}
+
+
+
+DrawNodeSolidCircleTest::DrawNodeSolidCircleTest()
+{
+    showCircles();
+
+    autoTestLabel     = Label::createWithTTF("Slow is on ", "fonts/arial.ttf", 16);
+    auto autoTestItem = MenuItemLabel::create(autoTestLabel, [=](Object* sender) {
+        static std::string text = "Fast";
+        if (fast)
+        {
+            fast = false;
+            text = "Slow is on";
+
+            showCircles();
+        }
+        else
+        {
+            fast = true;
+            text = "Fast is on";
+            showCircles();
+        }
+        //  autoTestLabel->setString(text);
+        rect = autoTestLabel->getBoundingBox();
+    });
+
+    autoTestItem->setPosition(Vec2(VisibleRect::center().x, VisibleRect::top().y - 100));
+
+    auto menu = Menu::create(autoTestItem, nullptr);
+    menu->setPosition(Vec2::ZERO);
+    addChild(menu, 1);
+}
+
+void DrawNodeSolidCircleTest::showCircles()
+{
+    static float radius = 20;
+    drawNode->clear();
+
+    auto start = std::chrono::high_resolution_clock::now();
+    for (int i = 0; i < 10000; i++)
+    {
+        Vec2 pos = VisibleRect::center() + Vec2((VisibleRect::center().x - 50) * AXRANDOM_MINUS1_1(),
+                                                (VisibleRect::center().y - 50) * AXRANDOM_MINUS1_1());
+        //drawNode->drawSolidCircle(pos, radius, 0, 36,
+        //                          Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1() + 0.1f));
+        pos = VisibleRect::center() + Vec2((VisibleRect::center().x - 50) * AXRANDOM_MINUS1_1(),
+                                           (VisibleRect::center().y - 50) * AXRANDOM_MINUS1_1());
+
+        Color color  = Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1() + 0.1f);
+     //  float radius = 10 + AXRANDOM_0_1() * 80;
+        if (fast)
+        {
+     //;       drawNode->drawSolidCircle(pos, radius, color);
+        }
+        else
+        {
+            drawNode->drawSolidCircle(pos, radius, 0, 36, color);
+        }
+    }
+    auto end = std::chrono::high_resolution_clock::now();
+    duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    AXLOGD("Duration: {}", duration.count());
+    if (autoTestLabel)
+    {
+        autoTestLabel->setString(std::to_string(duration.count()));
+    }
+
+    drawNode->properties.setDrawOrder(true);
+    rect = {190, 205, 100, 30};
+ //;   drawNode->drawSolidRect(rect, (fast) ? Color::GREEN : Color::RED);
+}
+
+std::string DrawNodeSolidCircleTest::title() const
+{
+    return "SolidCircle Stress Test";
+}
+
+std::string DrawNodeSolidCircleTest::subtitle() const
+{
+    return "10000 Circles";
+}
+
 DrawNodeIssueTester::DrawNodeIssueTester()
 {
     static Vec2 vertices[] = {Vec2(0.0f, 0.0f), Vec2(50.0f, 50.0f), Vec2(100.0f, 50.0f), Vec2(100.0f, 100.0f),
@@ -3517,7 +3808,7 @@ void DrawNodeIssueTester::update(float dt)
 
 string DrawNodeIssueTester::title() const
 {
-    return "";
+    return "Playground";
 }
 
 string DrawNodeIssueTester::subtitle() const
@@ -3525,41 +3816,6 @@ string DrawNodeIssueTester::subtitle() const
     return "";
 }
 
-DrawNodeCircleTest::DrawNodeCircleTest()
-{
-    drawNode->properties.setPosition(Vec2(100, 0));
-    for (int i = 3; i <= 8; i++)
-    {
-        drawNode->drawCircle(center, 10 * i, AX_DEGREES_TO_RADIANS(90), i, false, 1.0f, 1.0f, Color::WHITE);
-    }
-    drawNode->drawCircle(center, 90, AX_DEGREES_TO_RADIANS(90), 36, false, 1.0f, 1.0f, Color::WHITE);
-
-    for (size_t i = 0; i < 3; i++)
-    {
-        drawNode->properties.setPosition(Vec2(0, 0));
-        drawNode->drawCircle(Vec2(120, 150), 80 - 19 * i, AX_DEGREES_TO_RADIANS(90), 5, false, 1.0f, 1.0f, Color::BLUE,
-                             3.0f);
-    }
-
-    drawNode->properties.setCenter(Vec2(120, 150));
-    for (int i = 0; i < 5; i++)
-    {
-        drawNode->properties.setRotation(AX_DEGREES_TO_RADIANS(360 / 5 * i));
-        drawNode->drawSolidCircle(Vec2(120, 195), 10, 0, 36, 1.0f, 1.0f, Color::BLUE);
-        drawNode->drawSolidCircle(Vec2(120, 210), 12, 0, 36, 1.0f, 1.0f, Color::BLUE);
-        drawNode->drawSolidCircle(Vec2(120, 230), 16, 0, 36, 1.0f, 1.0f, Color::BLUE);
-    }
-}
-
-std::string DrawNodeCircleTest::title() const
-{
-    return "Circle Test";
-}
-
-std::string DrawNodeCircleTest::subtitle() const
-{
-    return "Axmol, N-Corner, Circle";
-}
 
 DrawNodeSpLinesTest::DrawNodeSpLinesTest()
 {
@@ -3602,6 +3858,8 @@ std::string DrawNodeSpLinesTest::subtitle() const
 
 void DrawNodeSpLinesTest::update(float dt)
 {
+    static int xlabel = 0;
+    static float step = 0;
     drawNode->clear();
 
     // Issue #2302
@@ -3616,14 +3874,270 @@ void DrawNodeSpLinesTest::update(float dt)
     drawNode->drawCardinalSpline(pts, 0.5f, 360, Color::RED, 5.0f);
     drawNode->drawCardinalSpline(pts2, 0.5f, 360, Color::GREEN, 2.0f);
 
-    int i1 = RandomHelper::random_int(0, n - 1);
-    int i2 = RandomHelper::random_int(0, n - 1);
+    step += dt;
+    if (step > 0.2)
+    {
+        step = 0;
+        xlabel++;
+        if (xlabel > n - 1)
+        {
+            xlabel = 0;
+        }
+    }
+
+    int i1 = xlabel;
+    int i2 = n - 1 - xlabel;
+    drawNode->drawLine(pts->getControlPointAtIndex(i1) - Vec2(0, 30), pts->getControlPointAtIndex(i1) + Vec2(0, 30),
+                       Color::YELLOW, 2.0f);
     drawNode->drawDot(pts->getControlPointAtIndex(i1), 7, Color(0, 1, 0, 0.3));
     drawNode->drawDot(pts->getControlPointAtIndex(i1), 4, Color::GREEN);
 
-    drawNode->drawDot(pts2->getControlPointAtIndex(i2), 7, Color(0, 1, 0, 0.3));
-    drawNode->drawDot(pts2->getControlPointAtIndex(i2), 4, Color::GREEN);
+    drawNode->drawLine(pts2->getControlPointAtIndex(i2) - Vec2(0, 30), pts2->getControlPointAtIndex(i2) + Vec2(0, 30),
+                       Color::YELLOW, 2.0f);
+    drawNode->drawDot(pts2->getControlPointAtIndex(i2), 7, Color(1, 0, 0, 0.3));
+    drawNode->drawDot(pts2->getControlPointAtIndex(i2), 4, Color::RED);
 }
+
+DrawNodeRoundRectTest::DrawNodeRoundRectTest()
+{
+     //drawNode = DrawNode::create();
+     //addChild(drawNode);
+    // drawNode->setAnchorPoint(Vec2(0.5f, 0.5f));
+    //  drawNode->drawRect(Vec2(123, 123), Vec2(227, 227), Color(1, 1, 0, 1), 2);
+    //  drawNode->drawRect(Vec2(115, 130), Vec2(130, 115), Vec2(115, 100), Vec2(100, 115), Color::MAGENTA, 2);
+    //   for (int i = 0; i < 10; i++)
+  //  {
+        //drawNode->drawRoundedRect(Vec2(115, 130), Vec2(130, 115), 40, Color::GREEN);
+        //drawNode->drawRoundedRect(Vec2(10, 50), Vec2(227, 70), 20, Color::YELLOW);
+        //drawNode->drawRoundedRect(Vec2(300, 50), Vec2(100, 60), 5, Color::GRAY);
+   // }
+}
+
+std::string DrawNodeRoundRectTest::title() const
+{
+    return "drawRoundRect Test";
+}
+
+std::string DrawNodeRoundRectTest::subtitle() const
+{
+    return "";
+}
+
+DrawNodeButtonTest::DrawNodeButtonTest()
+{
+    static int buttonStatus[3];
+
+    auto layer = Layer::create();
+    addChild(layer);
+
+    //// Make a reference grid so distortion is visible
+    // auto draw = DrawNode::create();
+    // for (int x = -300; x <= 300; x += 30)
+    //     draw->drawLine(Vec2(x, -300), Vec2(x, 300), Color(0.2f, 0.2f, 0.2f, 1));
+    // for (int y = -300; y <= 300; y += 30)
+    //     draw->drawLine(Vec2(-300, y), Vec2(300, y), Color(0.2f, 0.2f, 0.2f, 1));
+    // addChild(draw);
+
+    // Create the stencil shape (e.g., a circle),
+    auto stencil = DrawNode::create();
+// ;   stencil->drawRoundedRect(Vec2(115, 130), Vec2(100, 40), 20, Color(0, 0, 0, 1));
+    //  stencil->setPosition(Vec2(240, 160));  // Center of screen
+
+    //// Create the content to be clipped "D:\_git\axmol3org\tests\cpp-tests\Content\Images\pattern1.png"
+    // "D:\_git\axmol3org\tests\cpp-tests\Content\hd\Images\MagentaSquare.png"
+    auto sprite = Sprite::create("hd/Images/MagentaSquare.png");
+    sprite->setPosition(Vec2(115, 130));
+    sprite->setScaleX(2.9);
+    // Create the clipping node
+    auto clipper = ClippingNode::create();
+    clipper->setStencil(stencil);
+    clipper->setInverted(false);        // Set to true to invert the mask
+    clipper->setAlphaThreshold(0.05f);  // Pixels with alpha < threshold are discarded
+    clipper->addChild(sprite);
+    layer->addChild(clipper);
+
+    auto stencil1 = DrawNode::create();
+ // ;  stencil1->drawRoundedRect(Vec2(215, 60), Vec2(200, 60), 30, Color(1, 1, 1, 1));
+
+    auto stencil2 = DrawNode::create();
+  // ; stencil1->drawRoundedRect(Vec2(215, 60), Vec2(200, 60), 30, Color(1, 1, 1, 1));
+
+    Color bright           = Color(1, 0, 0, 1);
+    Color dark             = Color(0.2, 0, 0, 1);
+    static Color color3[]  = {bright, bright, dark};
+    static Color color31[] = {dark, dark, bright};
+
+    Vec2 triangle[]  = {{215, 120}, {415, 120}, {215, 60}};
+    Vec2 triangle1[] = {{215, 60}, {415, 60}, {415, 120}};
+
+    stencil2->drawColoredTriangle(triangle, color3);
+    stencil2->drawColoredTriangle(triangle1, color31);
+    // float thick = 2.0f;
+    // for (unsigned int i = 0; i < 100; i++)
+    //{
+    //     float a = (float)i;
+    //     stencil2->drawLine(Vec2(215, 30 + i * thick), Vec2(415, 30 + i * thick), Color(1 - (a / 100), 1, 1, 1),
+    //                        thick * 2);
+    // }
+    auto sprite1 = Sprite::create("hd/Images/MagentaSquare.png");
+    sprite1->setPosition(Vec2(215, 60));
+    // sprite1->setScaleX(1.5);
+    // sprite1->setScaleY(1.5);
+    //  Create the clipping node
+    auto clipper1 = ClippingNode::create();
+    clipper1->setStencil(stencil1);
+    clipper1->setInverted(false);        // Set to true to invert the mask
+    clipper1->setAlphaThreshold(0.05f);  // Pixels with alpha < threshold are discarded
+    clipper1->addChild(stencil2);
+
+    layer->addChild(clipper1);
+
+    auto autoTestLabel = Label::createWithTTF("Button1", "fonts/arial.ttf", 16);
+
+    auto autoTestItem = MenuItemLabel::create(autoTestLabel, [=](Object* sender) {
+        switch (buttonStatus[0])
+        {
+        case 0:
+        {
+
+            auto col = stencil2->getColor();
+            stencil2->setColor(Color32::BLUE);
+            //   sprite1->setColor(Color3B::BLUE);
+            break;
+        }
+        case 1:
+        {
+            stencil->setScale(1.0);
+            break;
+        }
+        case 2:
+        {
+            break;
+        }
+
+        default:
+            break;
+        }
+
+        // if (buttonStatus[0] == 0)
+        //{
+        //     buttonStatus[0] = 1;;
+        //     showCircles();
+        // }
+        // else
+        //{
+        //     fast = true;
+        //     showCircles();
+        // }
+    });
+
+    autoTestItem->setPosition(Vec2(115, 130) + Vec2(100, 40) / 2);
+
+    auto menu = Menu::create(autoTestItem, nullptr);
+    menu->setPosition(Vec2::ZERO);
+    addChild(menu, 3);
+
+    auto autoTestLabel1 = Label::createWithTTF("Button2", "fonts/arial.ttf", 16, {200, 60}, TextHAlignment::CENTER,
+                                               TextVAlignment::CENTER);
+    auto autoTestItem1  = MenuItemLabel::create(autoTestLabel1, [=](Object* sender) {
+        switch (buttonStatus[0])
+        {
+        case 0:
+        {
+            stencil2->clear();
+            stencil2->drawColoredTriangle(triangle, color31);
+            stencil2->drawColoredTriangle(triangle1, color3);
+
+            scheduleOnce([=](float) {
+                stencil2->clear();
+                stencil2->drawColoredTriangle(triangle, color3);
+                stencil2->drawColoredTriangle(triangle1, color31);
+            }, 0.1, "update_font_size");
+
+            break;
+        }
+        case 1:
+        {
+            break;
+        }
+        case 2:
+        {
+            break;
+        }
+
+        default:
+            break;
+        }
+
+        // if (buttonStatus[0] == 0)
+        //{
+        //     buttonStatus[0] = 1;;
+        //     showCircles();
+        // }
+        // else
+        //{
+        //     fast = true;
+        //     showCircles();
+        // }
+    });
+    //  autoTestItem1->setAnchorPoint({0, 0});
+    autoTestItem1->setPosition(Vec2(215, 60) + Vec2(200, 60) / 2);
+
+    auto menu1 = Menu::create(autoTestItem1, nullptr);
+    menu1->setPosition(Vec2::ZERO);
+
+    // menu1->setContentSize({200, 60});
+    addChild(menu1, 3);
+
+    //
+
+    // auto stencil1 = DrawNode::create();
+    // stencil1->drawSolidCircle(Vec2(0, 0), 10, 0, 36, Color(1, 1, 1, 1));
+    // stencil->setPosition(Vec2(240, 160));  // Center of screen
+    // auto clipper1 = ClippingNode::create();
+    // clipper1->setStencil(stencil1);
+    // clipper1->setInverted(true);        // Set to true to invert the mask
+    // clipper1->setAlphaThreshold(0.05f);  // Pixels with alpha < threshold are discarded
+    // clipper1->addChild(clipper);
+
+    // auto renderTex = RenderTexture::create(256, 256);
+
+    // const auto& proj = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+
+    // renderTex->beginWithClear(0, 0, 0, 0);
+
+    // Vec2 verts[] = {Vec2(0, 0), Vec2(256, 0), Vec2(256, 256), Vec2(0, 256)};
+
+    // Color bottomColor(1, 0, 0, 1);  // Red
+    // Color topColor(0, 0, 1, 1);     // Blue
+
+    // Color colors[] = {bottomColor, bottomColor, topColor, topColor};
+
+    // drawNode = DrawNode::create();
+    // drawNode->drawPolygon(verts, 4, Color::WHITE, 0, Color::BLACK, colors);
+
+    // drawNode->visit(Director::getInstance()->getRenderer(), proj.getInversed(), 0);  // Draw into the render texture
+    // renderTex->end();
+
+    //// Create a sprite from the texture
+    // auto gradientSprite = Sprite::createWithTexture(renderTex->getSprite()->getTexture());
+    // gradientSprite->setFlippedY(true);  // Important: RenderTexture is upside-down
+    // gradientSprite->setPosition(Vec2(240, 160));
+    // addChild(gradientSprite);
+}
+
+std::string DrawNodeButtonTest::title() const
+{
+    return "Example: Button";
+}
+
+std::string DrawNodeButtonTest::subtitle() const
+{
+    return "";
+}
+
+
+
 
 DrawNodeSpLinesOpenClosedTest::DrawNodeSpLinesOpenClosedTest()
 {
@@ -3727,6 +4241,54 @@ void DrawNodeSpLinesOpenClosedTest::update(float dt)
 }
 
 #if defined(AX_PLATFORM_PC)
+
+DrawNodePointTest::DrawNodePointTest()
+{
+    Vec2 visibleSize = Director::getInstance()->getVisibleSize();
+
+    // drawNode->clear();
+    // DrawNodeBaseTest::update(dt);
+
+    //    _subtitle = "please wait";
+    Color color = Color::RED;
+    int delta   = 10;
+    int xx      = 0;
+    int yy      = 0;
+    for (unsigned int y = 0; y < visibleSize.height; y += delta)
+    {
+        color = Color::RED;
+        if (y % 3 == 0)
+        {
+            color = Color::BLUE;
+        }
+        for (unsigned int x = 0; x < visibleSize.width; x += delta)
+        {
+            if (x % 4 == 0)
+            {
+                color = Color::RED;
+            }
+            Vec2 pos = {(float)x + delta / 2, (float)y + delta / 2};
+            drawNode->drawPoint(pos, delta - 1, color, ax::DrawNode::Circle);
+            xx++;
+        }
+        yy++;
+    }
+    // scheduleUpdate();
+}
+
+std::string DrawNodePointTest::title() const
+{
+    return "Performance: POINT";
+}
+
+std::string DrawNodePointTest::subtitle() const
+{
+    return "";
+}
+
+void DrawNodePointTest::update(float dt) {}
+
+
 CandyMixEeffect::CandyMixEeffect()
 {
     static const float BUTTON_WIDTH = 30;

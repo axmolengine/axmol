@@ -527,11 +527,6 @@ void DrawNode::drawSolidPolygon(const Vec2* verts,
                                 const Color& borderColor,
                                 bool isconvex)
 {
-    if (thickness < 0.0f)
-    {
-        AXLOGW("{}: thickness < 0, changed to 0", __FUNCTION__);
-        thickness = 0.0f;
-    }
     _drawPolygon(verts, count, fillColor, borderColor, true, thickness, isconvex);
 }
 
@@ -541,9 +536,14 @@ void DrawNode::drawSolidRect(const Vec2& origin,
                              float thickness,
                              const Color& borderColor)
 {
+<<<<<<< Updated upstream
      Vec2 _vertices5[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
     _drawPolygon(_vertices5, 5, fillColor, borderColor, true, thickness, true);
 }
+=======
+    Vec2 _vertices5[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
+    _drawPolygon(_vertices5, 5, fillColor, borderColor, true, thickness, true);
+>>>>>>> Stashed changes
 }
 
 void DrawNode::drawSolidPoly(const Vec2* poli,
@@ -553,11 +553,6 @@ void DrawNode::drawSolidPoly(const Vec2* poli,
                              const Color& borderColor,
                              bool isconvex)
 {
-    if (thickness < 0.0f)
-    {
-        AXLOGW("{}: thickness < 0, changed to 0", __FUNCTION__);
-        thickness = 0.0f;
-    }
     _drawPolygon(poli, numberOfPoints, color, borderColor, true, thickness, isconvex);
 }
 
@@ -573,11 +568,6 @@ void DrawNode::drawPie(const Vec2& center,
                        DrawMode drawMode,
                        float thickness)
 {
-    if (thickness < 0.0f)
-    {
-        AXLOGW("{}: thickness < 0, changed to 0", __FUNCTION__);
-        thickness = 0.0f;
-    }
     _drawPie(center, radius, rotation, startAngle, endAngle, scaleX, scaleY, fillColor, borderColor, drawMode,
              thickness);
 }
@@ -606,11 +596,6 @@ void DrawNode::drawSolidCircle(const Vec2& center,
                                const Color& borderColor,
                                bool drawLineToCenter)
 {
-    if (thickness < 0.0f)
-    {
-        AXLOGW("{}: thickness < 0, changed to 0", __FUNCTION__);
-        thickness = 0.0f;
-    }
     _drawCircle(center, radius, angle, segments, drawLineToCenter, scaleX, scaleY, borderColor, fillColor, true,
                 thickness);
 }
@@ -623,21 +608,11 @@ void DrawNode::drawSolidCircle(const Vec2& center,
                                float scaleY,
                                const Color& color)
 {
-    if (radius < 0.0f)
-    {
-        AXLOGW("{}: radius < 0, changed to 0", __FUNCTION__);
-        radius = 0.0f;
-    }
     _drawCircle(center, radius, angle, segments, false, scaleX, scaleY, Color(), color, true);
 }
 
 void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, const Color& color)
 {
-    if (radius < 0.0f)
-    {
-        AXLOGW("{}: radius < 0, changed to 0", __FUNCTION__);
-        radius = 0.0f;
-    }
     _drawCircle(center, radius, angle, segments, false, 1.0f, 1.0f, Color(), color, true);
 }
 
@@ -646,15 +621,27 @@ void DrawNode::drawColoredTriangle(const Vec2* vertices3, const Color* color3)
     _drawColoredTriangle(vertices3, color3);
 }
 
+<<<<<<< Updated upstream
 void DrawNode::drawTriangle(const Vec2* vertices3, const Color& color, float thickness)
+=======
+void DrawNode::drawTriangle(const Vec2* vertices3, const Color& color, const float thickness)
+>>>>>>> Stashed changes
 {
     _drawPoly(vertices3, 3, false, color, thickness, true);
 }
 
+<<<<<<< Updated upstream
 void DrawNode::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color& color, float thickness)
 {
     Vec2 vertices3[3] = {p1, p2, p3};
     _drawPoly(vertices3, 3, false, color, thickness, true);
+=======
+void DrawNode::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color& color, const float thickness )
+{
+    Vec2 vertices3[3] = {p1, p2, p3};
+    _drawPoly(vertices3, 3, false, color, thickness, true);
+
+>>>>>>> Stashed changes
 }
 
 void DrawNode::drawSolidTriangle(const Vec2* vertices3,
@@ -805,7 +792,11 @@ void DrawNode::_drawPolygon(const Vec2* verts,
     if (outline)
     {
         float width = thickness * properties.factor * 0.25f;
+<<<<<<< Updated upstream
         if (width != 1.0f || properties.drawOrder)
+=======
+        if (thickness != 1.0f || properties.drawOrder)
+>>>>>>> Stashed changes
         {
             for (unsigned int i = 1; i < (count); i++)
             {
@@ -915,8 +906,14 @@ void DrawNode::_drawPoly(const Vec2* verts,
                          float thickness,
                          bool isconvex)
 {
+<<<<<<< Updated upstream
 	float width = thickness * properties.factor * 0.25f;
     if (width == 1.0f && !properties.drawOrder)
+=======
+    float width = thickness * properties.factor * 0.25f;
+
+    if (width == 1.0f && !properties.drawOrder)    
+>>>>>>> Stashed changes
     {
         auto _vertices = _transform(verts, count, closedPolygon);
 
@@ -951,6 +948,10 @@ void DrawNode::_drawSegment(const Vec2& from,
                             DrawNode::EndType etEnd)
 {
     float width = thickness * properties.factor * 0.25f;
+<<<<<<< Updated upstream
+=======
+    
+>>>>>>> Stashed changes
     if (width == 1.0f && !properties.drawOrder)
     {
         _drawLine(from, to, color);  // fastest way to draw a line
