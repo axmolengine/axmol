@@ -3643,8 +3643,6 @@ std::string DrawNodeCircleTest::subtitle() const
     return "Axmol,  '3...20', '48'-Corner";
 }
 
-
-
 DrawNodeSolidCircleTest::DrawNodeSolidCircleTest()
 {
     showCircles();

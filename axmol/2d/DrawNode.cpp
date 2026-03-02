@@ -536,14 +536,8 @@ void DrawNode::drawSolidRect(const Vec2& origin,
                              float thickness,
                              const Color& borderColor)
 {
-<<<<<<< Updated upstream
      Vec2 _vertices5[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
     _drawPolygon(_vertices5, 5, fillColor, borderColor, true, thickness, true);
-}
-=======
-    Vec2 _vertices5[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
-    _drawPolygon(_vertices5, 5, fillColor, borderColor, true, thickness, true);
->>>>>>> Stashed changes
 }
 
 void DrawNode::drawSolidPoly(const Vec2* poli,
@@ -621,27 +615,16 @@ void DrawNode::drawColoredTriangle(const Vec2* vertices3, const Color* color3)
     _drawColoredTriangle(vertices3, color3);
 }
 
-<<<<<<< Updated upstream
+
 void DrawNode::drawTriangle(const Vec2* vertices3, const Color& color, float thickness)
-=======
-void DrawNode::drawTriangle(const Vec2* vertices3, const Color& color, const float thickness)
->>>>>>> Stashed changes
 {
     _drawPoly(vertices3, 3, false, color, thickness, true);
 }
 
-<<<<<<< Updated upstream
 void DrawNode::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color& color, float thickness)
 {
     Vec2 vertices3[3] = {p1, p2, p3};
     _drawPoly(vertices3, 3, false, color, thickness, true);
-=======
-void DrawNode::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color& color, const float thickness )
-{
-    Vec2 vertices3[3] = {p1, p2, p3};
-    _drawPoly(vertices3, 3, false, color, thickness, true);
-
->>>>>>> Stashed changes
 }
 
 void DrawNode::drawSolidTriangle(const Vec2* vertices3,
@@ -792,11 +775,8 @@ void DrawNode::_drawPolygon(const Vec2* verts,
     if (outline)
     {
         float width = thickness * properties.factor * 0.25f;
-<<<<<<< Updated upstream
         if (width != 1.0f || properties.drawOrder)
-=======
-        if (thickness != 1.0f || properties.drawOrder)
->>>>>>> Stashed changes
+
         {
             for (unsigned int i = 1; i < (count); i++)
             {
@@ -906,14 +886,8 @@ void DrawNode::_drawPoly(const Vec2* verts,
                          float thickness,
                          bool isconvex)
 {
-<<<<<<< Updated upstream
 	float width = thickness * properties.factor * 0.25f;
     if (width == 1.0f && !properties.drawOrder)
-=======
-    float width = thickness * properties.factor * 0.25f;
-
-    if (width == 1.0f && !properties.drawOrder)    
->>>>>>> Stashed changes
     {
         auto _vertices = _transform(verts, count, closedPolygon);
 
@@ -948,10 +922,6 @@ void DrawNode::_drawSegment(const Vec2& from,
                             DrawNode::EndType etEnd)
 {
     float width = thickness * properties.factor * 0.25f;
-<<<<<<< Updated upstream
-=======
-    
->>>>>>> Stashed changes
     if (width == 1.0f && !properties.drawOrder)
     {
         _drawLine(from, to, color);  // fastest way to draw a line
@@ -1136,11 +1106,11 @@ void DrawNode::_drawCircle(const Vec2& center,
     AX_SAFE_DELETE_ARRAY(_vertices);
 }
 
-void DrawNode::_drawColoredTriangle(Vec2* vertices3, const Color* color3)
+void DrawNode::_drawColoredTriangle(const Vec2* vertices3, const Color* color3)
 {
     unsigned int vertex_count = 3;
 
-    applyTransform(vertices3, vertices3, vertex_count);
+   // applyTransform(vertices3, vertices, vertex_count);
 
     auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, vertex_count));
     _trianglesDirty = true;
