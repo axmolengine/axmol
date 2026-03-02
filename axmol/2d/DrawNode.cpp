@@ -541,13 +541,9 @@ void DrawNode::drawSolidRect(const Vec2& origin,
                              float thickness,
                              const Color& borderColor)
 {
-    if (thickness < 0.0f)
-    {
-        AXLOGW("{}: thickness < 0, changed to 0", __FUNCTION__);
-        thickness = 0.0f;
-    }
-    Vec2 _vertices[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
-    _drawPolygon(_vertices, 5, fillColor, borderColor, true, thickness, true);
+     Vec2 _vertices5[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
+    _drawPolygon(_vertices5, 5, fillColor, borderColor, true, thickness, true);
+}
 }
 
 void DrawNode::drawSolidPoly(const Vec2* poli,
@@ -647,13 +643,11 @@ void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, un
 
 void DrawNode::drawColoredTriangle(const Vec2* vertices3, const Color* color3)
 {
-    Vec2 vertices[3] = {vertices3[0], vertices3[1], vertices3[2]};
-    _drawColoredTriangle(vertices, color3);
+    _drawColoredTriangle(vertices3, color3);
 }
 
 void DrawNode::drawTriangle(const Vec2* vertices3, const Color& color, float thickness)
 {
-    Vec2 vertices[3] = {vertices3[0], vertices3[1], vertices3[2]};
     _drawPoly(vertices3, 3, false, color, thickness, true);
 }
 
@@ -678,7 +672,6 @@ void DrawNode::drawSolidTriangle(const Vec2& p1,
                                  const Color& borderColor,
                                  float thickness)
 {
-
     Vec2 vertices3[3] = {p1, p2, p3};
     _drawPolygon(vertices3, 3, fillColor, borderColor, true, thickness, true);
 }
@@ -811,8 +804,8 @@ void DrawNode::_drawPolygon(const Vec2* verts,
     }
     if (outline)
     {
-        float width = thickness / properties.factor;
-        if (thickness != 1.0f || properties.drawOrder)
+        float width = thickness * properties.factor * 0.25f;
+        if (width != 1.0f || properties.drawOrder)
         {
             for (unsigned int i = 1; i < (count); i++)
             {
@@ -922,7 +915,8 @@ void DrawNode::_drawPoly(const Vec2* verts,
                          float thickness,
                          bool isconvex)
 {
-    if (thickness == 1.0f && !properties.drawOrder)
+	float width = thickness * properties.factor * 0.25f;
+    if (width == 1.0f && !properties.drawOrder)
     {
         auto _vertices = _transform(verts, count, closedPolygon);
 
@@ -956,10 +950,8 @@ void DrawNode::_drawSegment(const Vec2& from,
                             DrawNode::EndType etStart,
                             DrawNode::EndType etEnd)
 {
-    if (thickness < 1.0f)
-        thickness = 1.0f;
-
-    if (thickness == 1.0f && !properties.drawOrder)
+    float width = thickness * properties.factor * 0.25f;
+    if (width == 1.0f && !properties.drawOrder)
     {
         _drawLine(from, to, color);  // fastest way to draw a line
     }
@@ -967,8 +959,6 @@ void DrawNode::_drawSegment(const Vec2& from,
     {
         Vec2 vertices[2] = {from, to};
         applyTransform(vertices, vertices, 2);
-
-        float width = thickness / (2 * properties.factor);
 
         Vec2 a  = vertices[0];
         Vec2 b  = vertices[1];
@@ -1079,7 +1069,7 @@ void DrawNode::_drawSegment(const Vec2& from,
         }
     }
 }
-// Internal function _drawLine => thickness is always 1 (fastes way to draw a line)
+// Internal function _drawLine => thickness is ALWAYS 1 (fastes way to draw a line)
 void DrawNode::_drawLine(const Vec2& from, const Vec2& to, const Color& color)
 {
     Vec2 vertices[2] = {from, to};
@@ -1217,7 +1207,7 @@ void DrawNode::_drawPoints(const Vec2* position,
                 Vec2 destination = position[i] + vec2Size4;
                 Vec2 _vertices[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y),
                                     origin};
-                _drawPolygon(_vertices, 5, color, color, false, 0.0f, true);
+                _drawPolygon(_vertices, 5, color, color, false, pointSize, true);
             }
             break;
             default:
