@@ -651,16 +651,16 @@ void DrawNode::drawColoredTriangle(const Vec2* vertices3, const Color* color3)
     _drawColoredTriangle(vertices, color3);
 }
 
-void DrawNode::drawTriangle(const Vec2* vertices3, const Color& color)
+void DrawNode::drawTriangle(const Vec2* vertices3, const Color& color, float thickness)
 {
     Vec2 vertices[3] = {vertices3[0], vertices3[1], vertices3[2]};
-    _drawTriangle(vertices, Color::TRANSPARENT, color, false, 0.0f);
+    _drawPoly(vertices3, 3, false, color, thickness, true);
 }
 
-void DrawNode::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color& color)
+void DrawNode::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color& color, float thickness)
 {
-    Vec2 vertices[3] = {p1, p2, p3};
-    _drawTriangle(vertices, Color::TRANSPARENT, color, false, 0.0f);
+    Vec2 vertices3[3] = {p1, p2, p3};
+    _drawPoly(vertices3, 3, false, color, thickness, true);
 }
 
 void DrawNode::drawSolidTriangle(const Vec2* vertices3,
@@ -668,13 +668,7 @@ void DrawNode::drawSolidTriangle(const Vec2* vertices3,
                                  const Color& borderColor,
                                  float thickness)
 {
-    if (thickness < 0.0f)
-    {
-        AXLOGW("{}: thickness < 0, changed to 0", __FUNCTION__);
-        thickness = 0.0f;
-    }
-    Vec2 vertices[3] = {vertices3[0], vertices3[1], vertices3[2]};
-    _drawTriangle(vertices, fillColor, borderColor, true, thickness);
+    _drawPolygon(vertices3, 3, fillColor, borderColor, true, thickness, true);
 }
 
 void DrawNode::drawSolidTriangle(const Vec2& p1,
@@ -684,13 +678,9 @@ void DrawNode::drawSolidTriangle(const Vec2& p1,
                                  const Color& borderColor,
                                  float thickness)
 {
-    if (thickness < 0.0f)
-    {
-        AXLOGW("{}: thickness < 0, changed to 0", __FUNCTION__);
-        thickness = 0.0f;
-    }
-    Vec2 vertices[3] = {p1, p2, p3};
-    _drawTriangle(vertices, fillColor, borderColor, false, thickness);
+
+    Vec2 vertices3[3] = {p1, p2, p3};
+    _drawPolygon(vertices3, 3, fillColor, borderColor, true, thickness, true);
 }
 
 void DrawNode::clear()
@@ -1167,31 +1157,6 @@ void DrawNode::_drawColoredTriangle(Vec2* vertices3, const Color* color3)
     triangles[0] = {{vertices3[0], Vec2::ZERO, color3[0]},
                     {vertices3[1], Vec2::ZERO, color3[1]},
                     {vertices3[2], Vec2::ZERO, color3[2]}};
-}
-
-void DrawNode::_drawTriangle(Vec2* vertices3,
-                             const Color& borderColor,
-                             const Color& fillColor,
-                             bool solid,
-                             float thickness)
-{
-    unsigned int vertex_count = 3;
-
-    if (thickness != 0.0f)
-    {
-        _drawPolygon(vertices3, vertex_count, fillColor, borderColor, true, thickness, true);
-    }
-    else
-    {
-        applyTransform(vertices3, vertices3, vertex_count);
-
-        auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, vertex_count));
-        _trianglesDirty = true;
-
-        triangles[0] = {{vertices3[0], Vec2::ZERO, fillColor},
-                        {vertices3[1], Vec2::ZERO, fillColor},
-                        {vertices3[2], Vec2::ZERO, fillColor}};
-    }
 }
 
 void DrawNode::_drawAStar(const Vec2& center,
