@@ -489,9 +489,9 @@ public:
      */
 
     void drawColoredTriangle(const Vec2* vertices3, const Color* color3);
-    void drawTriangle(const Vec2* vertices3, const Color& color);
+    void drawTriangle(const Vec2* vertices3, const Color& color, float thickness = 1.0f);
 
-    void drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color& color);
+    void drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color& color, float thickness = 1.0f);
 
     void drawSolidTriangle(const Vec2* vertices3,
                            const Color& fillColor,
@@ -582,14 +582,8 @@ private:
     // Internal function _drawDot
     void _drawDot(const Vec2& pos, float radius, const Color& color);
 
-    // Internal function _drawTriangle
+    // Internal function _drawColoredTriangle
     // Note: modifies supplied vertex array
-    void _drawTriangle(Vec2* vertices3,
-                       const Color& borderColor,
-                       const Color& fillColor,
-                       bool solid      = true,
-                       float thickness = 0.0f);
-
     void _drawColoredTriangle(Vec2* vertices3, const Color* color3);
 
     // Internal function _drawAStar

@@ -300,12 +300,6 @@ void DrawNode::drawLine(const Vec2& origin,
                         DrawNode::EndType etStart,
                         DrawNode::EndType etEnd)
 {
-    if (thickness <= 0.0f)
-    {
-        AXLOGW("{}: thickness <= 0", __FUNCTION__);
-        return;
-    }
-
     _drawSegment(origin, destination, color, thickness, etStart, etEnd);
 }
 
@@ -315,11 +309,6 @@ void DrawNode::drawPoly(const Vec2* poli,
                         const Color& color,
                         float thickness)
 {
-    if (thickness <= 0.0f)
-    {
-        AXLOGW("{}: thickness <= 0", __FUNCTION__);
-        return;
-    }
     _drawPoly(poli, numberOfPoints, closedPolygon, color, thickness);
 }
 
@@ -333,17 +322,6 @@ void DrawNode::drawCircle(const Vec2& center,
                           const Color& color,
                           float thickness)
 {
-    if (thickness <= 0.0f)
-    {
-        AXLOGW("{}: thickness <= 0", __FUNCTION__);
-        return;
-    }
-    if (radius == 0.0f)
-    {
-        AXLOGW("{}: radius == 0", __FUNCTION__);
-        return;
-    }
-
     _drawCircle(center, radius, angle, segments, drawLineToCenter, scaleX, scaleY, color, Color(), false, thickness);
 }
 
@@ -355,17 +333,6 @@ void DrawNode::drawCircle(const Vec2& center,
                           const Color& color,
                           float thickness)
 {
-    if (thickness <= 0.0f)
-    {
-        AXLOGW("{}: thickness <= 0", __FUNCTION__);
-        return;
-    }
-    if (radius == 0.0f)
-    {
-        AXLOGW("{}: radius == 0", __FUNCTION__);
-        return;
-    }
-
     _drawCircle(center, radius, angle, segments, drawLineToCenter, 1.0f, 1.0f, color, color, false, thickness);
 }
 
@@ -376,11 +343,6 @@ void DrawNode::drawStar(const Vec2& center,
                         const Color& color,
                         float thickness)
 {
-    if (thickness <= 0.0f)
-    {
-        AXLOGW("{}: thickness <= 0", __FUNCTION__);
-        return;
-    }
     _drawAStar(center, radiusI, radiusO, segments, color, color, thickness, false);
 }
 
@@ -392,11 +354,6 @@ void DrawNode::drawSolidStar(const Vec2& center,
                              const Color& filledColor,
                              float thickness)
 {
-    if (thickness < 0.0f)
-    {
-        AXLOGW("{}: thickness < 0, changed to 0", __FUNCTION__);
-        thickness = 0.0f;
-    }
     _drawAStar(center, radiusI, radiusO, segments, color, filledColor, thickness, true);
 }
 
@@ -407,12 +364,6 @@ void DrawNode::drawQuadBezier(const Vec2& origin,
                               const Color& color,
                               float thickness)
 {
-    if (thickness <= 0.0f)
-    {
-        AXLOGW("{}: thickness <= 0", __FUNCTION__);
-        return;
-    }
-
     tlx::pod_vector<Vec2> _vertices{
         static_cast<size_t>(segments + 1)};  // Vec2* _vertices = _abuf.get<Vec2>(segments + 1);
 
@@ -437,12 +388,6 @@ void DrawNode::drawCubicBezier(const Vec2& origin,
                                const Color& color,
                                float thickness)
 {
-    if (thickness <= 0.0f)
-    {
-        AXLOGW("{}: thickness <= 0", __FUNCTION__);
-        return;
-    }
-
     tlx::pod_vector<Vec2> _vertices{static_cast<size_t>(segments + 1)};
 
     float t = 0.0f;
@@ -467,12 +412,6 @@ void DrawNode::drawCardinalSpline(const PointArray* configIn,
                                   float thickness,
                                   bool closed)
 {
-    if (thickness <= 0.0f)
-    {
-        AXLOGW("{}: thickness <= 0", __FUNCTION__);
-        return;
-    }
-
     // Don't change the original PointArray
     PointArray* config = configIn->clone();
 
@@ -531,21 +470,11 @@ void DrawNode::drawCatmullRom(const PointArray* pointsIn,
                               float thickness,
                               bool closed)
 {
-    if (thickness <= 0.0f)
-    {
-        AXLOGW("{}: thickness <= 0", __FUNCTION__);
-        return;
-    }
     drawCardinalSpline(pointsIn, 0.5f, segments, color, thickness, closed);
 }
 
 void DrawNode::drawDot(const Vec2& pos, float radius, const Color& color)
 {
-    if (radius <= 0.0f)
-    {
-        AXLOGW("{}: radius <= 0", __FUNCTION__);
-        return;
-    }
     _drawDot(pos, radius, color);
 }
 
@@ -556,24 +485,12 @@ void DrawNode::drawRect(const Vec2& p1,
                         const Color& color,
                         float thickness)
 {
-    if (thickness <= 0.0f)
-    {
-        AXLOGW("{}: thickness <= 0", __FUNCTION__);
-        return;
-    }
-
     Vec2 line[5] = {p1, p2, p3, p4, p1};
     _drawPoly(line, 5, false, color, thickness, true);
 }
 
 void DrawNode::drawRect(const Vec2& origin, const Vec2& destination, const Color& color, float thickness)
 {
-    if (thickness <= 0.0f)
-    {
-        AXLOGW("{}: thickness <= 0", __FUNCTION__);
-        return;
-    }
-
     Vec2 line[5] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
     _drawPoly(line, 5, false, color, thickness, true);
 }
@@ -585,11 +502,6 @@ void DrawNode::drawSegment(const Vec2& from,
                            DrawNode::EndType etStart,
                            DrawNode::EndType etEnd)
 {
-    if (thickness <= 0.0f)
-    {
-        AXLOGW("{}: thickness <= 0", __FUNCTION__);
-        return;
-    }
     _drawSegment(from, to, color, thickness, etStart, etEnd);
 }
 
@@ -600,21 +512,11 @@ void DrawNode::drawPolygon(const Vec2* verts,
                            const Color& borderColor,
                            bool isconvex)
 {
-    if (thickness < 0.0f)
-    {
-        AXLOGW("{}: thickness < 0, changed to 0", __FUNCTION__);
-        thickness = 0.0f;
-    }
     _drawPolygon(verts, count, fillColor, borderColor, true, thickness, isconvex);
 }
 
 void DrawNode::drawPolygon(const Vec2* verts, int count, float thickness, const Color& borderColor, bool isconvex)
 {
-    if (thickness < 0.0f)
-    {
-        AXLOGW("{}: thickness < 0, changed to 0", __FUNCTION__);
-        thickness = 0.0f;
-    }
     _drawPolygon(verts, count, Color::TRANSPARENT, borderColor, true, thickness, isconvex);
 }
 
@@ -1508,7 +1410,7 @@ void DrawNode::_drawPie(const Vec2& center,
             break;
         case DrawMode::Semi:
             if (fillColor != Color::TRANSPARENT)
-                _drawPolygon(_vertices.data(), n, fillColor, borderColor, true, 0, false);
+            _drawPolygon(_vertices.data(), n, fillColor, borderColor, true, 0, false);
             _drawPoly(_vertices.data(), n, true, borderColor, thickness, true);
             break;
         default:
