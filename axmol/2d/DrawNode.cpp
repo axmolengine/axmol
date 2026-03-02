@@ -537,7 +537,7 @@ void DrawNode::drawSolidRect(const Vec2& origin,
                              const Color& borderColor)
 {
      Vec2 _vertices5[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
-    _drawPolygon(_vertices5, 5, fillColor, borderColor, true, thickness, true);
+    _drawPolygon(_vertices5, 5, fillColor, borderColor, false, thickness, true);
 }
 
 void DrawNode::drawSolidPoly(const Vec2* poli,
@@ -748,7 +748,6 @@ void DrawNode::_drawPolygon(const Vec2* verts,
     }
 
     vertex_count *= 3;
-
     auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, vertex_count));
     _trianglesDirty = true;
 
@@ -775,8 +774,7 @@ void DrawNode::_drawPolygon(const Vec2* verts,
     if (outline)
     {
         float width = thickness * properties.factor * 0.25f;
-        if (width != 1.0f || properties.drawOrder)
-
+        if (thickness != 1.0f || properties.drawOrder)
         {
             for (unsigned int i = 1; i < (count); i++)
             {
@@ -886,8 +884,7 @@ void DrawNode::_drawPoly(const Vec2* verts,
                          float thickness,
                          bool isconvex)
 {
-	float width = thickness * properties.factor * 0.25f;
-    if (width == 1.0f && !properties.drawOrder)
+    if (thickness == 1.0f && !properties.drawOrder)
     {
         auto _vertices = _transform(verts, count, closedPolygon);
 
@@ -921,8 +918,7 @@ void DrawNode::_drawSegment(const Vec2& from,
                             DrawNode::EndType etStart,
                             DrawNode::EndType etEnd)
 {
-    float width = thickness * properties.factor * 0.25f;
-    if (width == 1.0f && !properties.drawOrder)
+    if (thickness == 1.0f && !properties.drawOrder)
     {
         _drawLine(from, to, color);  // fastest way to draw a line
     }
@@ -930,6 +926,7 @@ void DrawNode::_drawSegment(const Vec2& from,
     {
         Vec2 vertices[2] = {from, to};
         applyTransform(vertices, vertices, 2);
+        float width = thickness * properties.factor * 0.25f;
 
         Vec2 a  = vertices[0];
         Vec2 b  = vertices[1];
