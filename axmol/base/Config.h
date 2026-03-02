@@ -201,6 +201,7 @@ THE SOFTWARE.
 #endif
 
 /** @def AX_SPRITEBATCHNODE_DEBUG_DRAW
+ * Used for debug but it is not implemented.
  * If enabled, all subclasses of Sprite that are rendered using an SpriteBatchNode draw a bounding box.
  * Useful for debugging purposes only. It is recommended to leave it disabled.
  * To enable set it to a value different than 0. Disabled by default.
@@ -219,6 +220,7 @@ THE SOFTWARE.
 #endif
 
 /** @def AX_LABELATLAS_DEBUG_DRAW
+ * Used for debug but it is not implemented.
  * If enabled, all subclasses of LabeltAtlas will draw a bounding box
  * Useful for debugging purposes only. It is recommended to leave it disabled.
  * To enable set it to a value different than 0. Disabled by default.
