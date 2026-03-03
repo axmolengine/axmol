@@ -624,7 +624,7 @@ void DrawNode::drawTriangle(const Vec2* vertices3, const Color& color, float thi
 void DrawNode::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color& color, float thickness)
 {
     Vec2 vertices3[3] = {p1, p2, p3};
-    _drawPoly(vertices3, 3, false, color, thickness, true);
+    _drawPoly(vertices3, 3, true, color, thickness, true);
 }
 
 void DrawNode::drawSolidTriangle(const Vec2* vertices3,
@@ -1106,15 +1106,15 @@ void DrawNode::_drawCircle(const Vec2& center,
 void DrawNode::_drawColoredTriangle(const Vec2* vertices3, const Color* color3)
 {
     unsigned int vertex_count = 3;
-
-   // applyTransform(vertices3, vertices, vertex_count);
+    Vec2* _vertices3          = new Vec2[vertex_count];
+    applyTransform(vertices3, _vertices3, vertex_count);
 
     auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, vertex_count));
     _trianglesDirty = true;
 
-    triangles[0] = {{vertices3[0], Vec2::ZERO, color3[0]},
-                    {vertices3[1], Vec2::ZERO, color3[1]},
-                    {vertices3[2], Vec2::ZERO, color3[2]}};
+    triangles[0] = {{_vertices3[0], Vec2::ZERO, color3[0]},
+                    {_vertices3[1], Vec2::ZERO, color3[1]},
+                    {_vertices3[2], Vec2::ZERO, color3[2]}};
 }
 
 void DrawNode::_drawAStar(const Vec2& center,
