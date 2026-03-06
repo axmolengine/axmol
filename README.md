@@ -89,11 +89,13 @@ Axmol Engine has iterated and improved over the Cocos2d-x v4.0 base. Now is fast
 **Architectures**:
 * iOS/tvOS (x64, arm64)
 * Android (x86, x64, armv7, arm64)
-* Windows (x86, x64)
-* Linux (x64)
+* Windows (x86, x64, arm64)
+* Linux (x64, arm64)
 * OSX (x64, arm64)
 * UWP (x64, arm64)
 * Wasm32, Wasm64(since axmol-v3)
+
+*Note: The arm64 build support for Linux and Windows has been available since Axmol v3.*
 
 **Supported 2D physics engines** ([more info here](https://github.com/axmolengine/axmol/wiki/2D-Physics-Engines-Information)):
 * Box2D

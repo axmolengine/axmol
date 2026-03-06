@@ -106,9 +106,8 @@ inline void resize_and_overrite(_SeqCont& cont, size_t size, _Operation op)
 template <typename _Subrgn>
 inline std::string_view to_string_view(_Subrgn&& subrgn)
 {
-    return std::string_view{&*subrgn.begin(), static_cast<size_t>(std::ranges::distance(subrgn))};
+    return std::string_view{std::ranges::data(subrgn), static_cast<size_t>(std::ranges::size(subrgn))};
 }
-
 
 /**
  * @brief Safely copy a string into a fixed-size C-style buffer.
