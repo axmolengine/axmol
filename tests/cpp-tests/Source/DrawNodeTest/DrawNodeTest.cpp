@@ -28,10 +28,10 @@ THE SOFTWARE.
 #include "axmol/renderer/CustomCommand.h"
 #include <chrono>
 
-#if defined(_WIN32)
-#    pragma push_macro("TRANSPARENT")
-#    undef TRANSPARENT
-#endif
+//#if defined(_WIN32)
+//#    pragma push_macro("TRANSPARENT")
+//#    undef TRANSPARENT
+//#endif
 
 USING_NS_AX;
 using namespace std;
@@ -1437,7 +1437,7 @@ DrawNodeTests::DrawNodeTests()
 DrawNodeBaseTest::DrawNodeBaseTest()
 {
     auto director = Director::getInstance();
-    director->setClearColor(Color::TRANSPARENT);
+    director->setClearColor(Color());
 
     origin = director->getVisibleOrigin();
     size   = director->getVisibleSize();
@@ -2112,6 +2112,18 @@ void DrawNodeLineDrawTest::update(float dt)
 
     drawNode->clear();
 
+    drawNode->properties.setDrawOrder(true);
+    drawNode->drawSolidRect({7, 7}, {8, 8}, {0, 1, 0, 1}, 1.0f, {1, 0, 0, 1});
+    drawNode->properties.setFactor(1);
+    drawNode->properties.setFactor(1);
+    drawNode->setScale(32);
+
+   // parent node scale : 32 node scale : 1 Properties scale : 1 Properties factor : 1
+
+
+
+
+
     float segments   = 36.0f;
     int radius       = 100;
     float angle      = 360 / segments;
@@ -2202,7 +2214,7 @@ void DrawNodeThicknessTest::update(float dt)
         {135.250000f, 108.625000f}, {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
         {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
     };
-    drawNode->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color::TRANSPARENT,
+    drawNode->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color(),
                           sliderValue[sliderType::Thickness] / 2, Color::RED);
 
     // open random color poly
@@ -2427,7 +2439,12 @@ string DrawNodeThicknessTest::subtitle() const
 DrawNodeThicknessStressTest::DrawNodeThicknessStressTest()
 {
     initSliders();
-    slider[sliderType::Thickness]->setEnabled(true);
+    for (int i = 0; i < (sliderType::sliderTypeLast); i++)
+    {
+        slider[i]->setEnabled(false);
+        slider[i]->setVisible(false);
+        sliderLabel[i]->setVisible(false);
+    }
 
     scheduleUpdate();
 }
@@ -2462,7 +2479,7 @@ void DrawNodeThicknessStressTest::update(float dt)
         {135.250000f, 108.625000f}, {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
         {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
     };
-    drawNode->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color::TRANSPARENT, negativThickness,
+    drawNode->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color(), negativThickness,
                           Color::RED);
 
     // open random color poly
@@ -2472,7 +2489,7 @@ void DrawNodeThicknessStressTest::update(float dt)
 
     // closed random color poly
     Vec2 vertices2[] = {Vec2(30.0f, 130.0f), Vec2(30.0f, 230.0f), Vec2(50.0f, 200.0f)};
-    drawNode->drawPoly(vertices2, 3, true, Color::random().withAlpha(1.0f), negativThickness);
+    drawNode->drawPoly(vertices2, 3, true, Color::RED, negativThickness);
 
     // drawNode some beziers
     drawNode->drawQuadBezier(Vec2(size.width - 150, size.height - 150), Vec2(size.width - 70, size.height - 10),
@@ -2503,14 +2520,14 @@ void DrawNodeThicknessStressTest::update(float dt)
     auto s = Director::getInstance()->getCanvasSize();
 
     drawNode->drawPoint(Vec2(s.width / 2 - 120, s.height / 2 - 120), negativThickness,
-                        Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+                        Color::WHITE);
 
     // drawNode 4 small points
     Vec2 position[] = {Vec2(60, 60), Vec2(70, 70), Vec2(60, 70), Vec2(70, 60)};
-    drawNode->drawPoints(position, 4, 5, Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1), DrawNode::Rect);
+    drawNode->drawPoints(position, 4, 5, Color::ORANGE, DrawNode::Rect);
 
     Vec2 position1[] = {Vec2(100, 100), Vec2(170, 170), Vec2(260, 170), Vec2(170, 260)};
-    drawNode->drawPoints(position1, 4, 25, Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1), DrawNode::Rect);
+    drawNode->drawPoints(position1, 4, 25, Color::MAGENTA, DrawNode::Rect);
 
     // drawNode a rectangle
     drawNode->drawRect(Vec2(23, 23), Vec2(7, 7), Color(1, 1, 0, 1), negativThickness);
@@ -2557,22 +2574,18 @@ void DrawNodeThicknessStressTest::update(float dt)
 
     // drawNode triangle
     drawNode->drawTriangle(Vec2(10.0f, 10.0f), Vec2(70.0f, 30.0f), Vec2(100.0f, 140.0f),
-                           Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
+                           Color::GREEN);
 }
-
-void DrawNodeThicknessStressTest::onEnter()
-{
-    for (int i = 0; i < sliderType::sliderTypeLast; i++)
-    {
-        sliderValue[i] = 1;
-        slider[i]->setPercent(sliderValue[i]);
-    }
-
-    sliderValue[sliderType::Thickness] = 5;
-    slider[sliderType::Thickness]->setPercent(sliderValue[sliderType::Thickness]);
-
-    DrawNodeBaseTest::onEnter();
-}
+//
+//void DrawNodeThicknessStressTest::onEnter()
+//{
+//    for (int i = 0; i < (sliderType::sliderTypeLast); i++)
+//    {
+//        slider[i]->setEnabled(false);
+//        slider[i]->setVisible(false);
+//        sliderLabel[i]->setVisible(false);
+//    }
+//}
 
 string DrawNodeThicknessStressTest::title() const
 {
@@ -2581,7 +2594,7 @@ string DrawNodeThicknessStressTest::title() const
 
 string DrawNodeThicknessStressTest::subtitle() const
 {
-    return "";
+    return "Thickness: -99999999.9999";
 }
 
 DrawNodePieTest::DrawNodePieTest()
@@ -2609,17 +2622,17 @@ void DrawNodePieTest::update(float dt)
     // Outlined
     drawNode->drawPie(VisibleRect::center() - Vec2(95.0f, -35.0f), 40, sliderValue[sliderType::Rotation],
                       sliderValue[sliderType::AngleStart], sliderValue[sliderType::AngleEnd], 1.0f, 1.0f,
-                      Color::TRANSPARENT, Color::BLUE, drawNode->DrawMode::Outline, sliderValue[sliderType::Thickness]);
+                      Color(), Color::BLUE, drawNode->DrawMode::Outline, sliderValue[sliderType::Thickness]);
 
     // Line
     drawNode->drawPie(VisibleRect::center() + Vec2(0.0f, 35.0f), 40, sliderValue[sliderType::Rotation],
                       sliderValue[sliderType::AngleStart], sliderValue[sliderType::AngleEnd], 1.0f, 1.0f,
-                      Color::TRANSPARENT, Color::BLUE, drawNode->DrawMode::Line, sliderValue[sliderType::Thickness]);
+                      Color(), Color::BLUE, drawNode->DrawMode::Line, sliderValue[sliderType::Thickness]);
 
     //  Semi
     drawNode->drawPie(VisibleRect::center() + Vec2(95.0f, 35.0f), 40, sliderValue[sliderType::Rotation],
                       sliderValue[sliderType::AngleStart], sliderValue[sliderType::AngleEnd], 1.0f, 1.0f,
-                      Color::TRANSPARENT, Color::BLUE, drawNode->DrawMode::Semi, sliderValue[sliderType::Thickness]);
+                      Color(), Color::BLUE, drawNode->DrawMode::Semi, sliderValue[sliderType::Thickness]);
 
     // Semi (Filled)
     drawNode->drawPie(VisibleRect::center() + Vec2(190.0f, 35.0f), 40, sliderValue[sliderType::Rotation],
@@ -3051,20 +3064,21 @@ void DrawNodeMethodsTest::drawAll()
     {
         static Color color3[] = {Color::GREEN, Color::BLUE, Color::RED};
         drawNode->properties.setPosition(center);
-        drawNode->properties.setScale(Vec2(10, 10));
+      //  drawNode->properties.setScale(Vec2(10, 10));
 
         {
-            drawNode->drawTriangle(Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20,
-                                   Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20,
-                                   Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20, Color::RED);
+            drawNode->drawTriangle(Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 200,
+                                   Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 200,
+                                   Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 200, Color::RED,
+                                   sliderValue[sliderType::Thickness]);
         }
-        {
-            Vec2 triangle[] = {Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20,
-                               Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20,
-                               Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20};
+        //{
+        //    Vec2 triangle[] = {Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20,
+        //                       Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20,
+        //                       Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20};
 
-            drawNode->drawColoredTriangle(triangle, color3);
-        }
+        //    drawNode->drawColoredTriangle(triangle, color3);
+        //}
         break;
     }
     case drawMethodes::SolidTriangle:
@@ -3758,7 +3772,7 @@ DrawNodeIssueTester::DrawNodeIssueTester()
         y += thick + 1;
         drawNode->drawLine(Vec2(140, y), Vec2(180, y), Color::random().withAlpha(1.0f), thick);
     }
-    drawNode->drawPie(Vec2(-220, 150), 20, 0, 100, 300, 1, 1, Color::TRANSPARENT, Color::BLUE, DrawNode::DrawMode::Line,
+    drawNode->drawPie(Vec2(-220, 150), 20, 0, 100, 300, 1, 1, Color(), Color::BLUE, DrawNode::DrawMode::Line,
                       10);
 
     drawNode->properties.setPosition(Vec2(50, -100));
@@ -4125,6 +4139,6 @@ void CandyMixEeffect::update(float dt)
 }
 #endif
 
-#if defined(_WIN32)
-#    pragma pop_macro("TRANSPARENT")
-#endif
+//#if defined(_WIN32)
+//#    pragma pop_macro("TRANSPARENT")
+//#endif

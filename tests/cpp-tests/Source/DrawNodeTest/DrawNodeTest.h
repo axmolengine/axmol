@@ -417,7 +417,7 @@ public:
     virtual std::string subtitle() const override;
 
     void update(float dt) override;
-    void onEnter() override;
+  //  void onEnter() override;
 
     void changeThreshold(Object* pSender, ax::ui::Slider::EventType type);
     void changeLineWidth(Object* pSender, ax::ui::Slider::EventType type);

@@ -41,11 +41,6 @@
 namespace ax
 {
 
-#if defined(_WIN32)
-#    pragma push_macro("TRANSPARENT")
-#    undef TRANSPARENT
-#endif
-
 /** Is a polygon convex?
  * @param verts A pointer to point coordinates.
  * @param count The number of verts measured in points.
@@ -365,7 +360,7 @@ void DrawNode::drawQuadBezier(const Vec2& origin,
                               float thickness)
 {
     tlx::pod_vector<Vec2> _vertices{
-        static_cast<size_t>(segments + 1)};  // Vec2* _vertices = _abuf.get<Vec2>(segments + 1);
+        static_cast<size_t>(segments + 1)}; 
 
     float t = 0.0f;
     for (unsigned int i = 0; i < segments; i++)
@@ -517,7 +512,7 @@ void DrawNode::drawPolygon(const Vec2* verts,
 
 void DrawNode::drawPolygon(const Vec2* verts, int count, float thickness, const Color& borderColor, bool isconvex)
 {
-    _drawPolygon(verts, count, Color::TRANSPARENT, borderColor, true, thickness, isconvex);
+    _drawPolygon(verts, count, Color(), borderColor, true, thickness, isconvex);
 }
 
 void DrawNode::drawSolidPolygon(const Vec2* verts,
@@ -576,7 +571,7 @@ void DrawNode::drawPie(const Vec2& center,
                        const Color& color,
                        DrawMode drawMode)
 {
-    _drawPie(center, radius, angle, startAngle, endAngle, scaleX, scaleY, Color::TRANSPARENT, color, drawMode, 1.0f);
+    _drawPie(center, radius, angle, startAngle, endAngle, scaleX, scaleY, Color(), color, drawMode, 1.0f);
 }
 
 void DrawNode::drawSolidCircle(const Vec2& center,
@@ -615,10 +610,9 @@ void DrawNode::drawColoredTriangle(const Vec2* vertices3, const Color* color3)
     _drawColoredTriangle(vertices3, color3);
 }
 
-
 void DrawNode::drawTriangle(const Vec2* vertices3, const Color& color, float thickness)
 {
-    _drawPoly(vertices3, 3, false, color, thickness, true);
+    _drawPoly(vertices3, 3, true, color, thickness, true);
 }
 
 void DrawNode::drawTriangle(const Vec2& p1, const Vec2& p2, const Vec2& p3, const Color& color, float thickness)
@@ -907,7 +901,7 @@ void DrawNode::_drawPoly(const Vec2* verts,
     }
     else
     {
-        _drawPolygon(verts, count, Color::TRANSPARENT, color, closedPolygon, thickness, isconvex);
+        _drawPolygon(verts, count, Color(), color, closedPolygon, thickness, isconvex);
     }
 }
 
@@ -1271,11 +1265,11 @@ void DrawNode::_drawPie(const Vec2& center,
             _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, fillColor, true, thickness);
             break;
         case DrawMode::Outline:
-            _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, Color::TRANSPARENT, true,
+            _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, Color(), true,
                         thickness);
             break;
         case DrawMode::Line:
-            _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, Color::TRANSPARENT, true,
+            _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, Color(), true,
                         thickness);
             break;
         case DrawMode::Semi:
@@ -1320,7 +1314,7 @@ void DrawNode::_drawPie(const Vec2& center,
         case DrawMode::Fill:
             _vertices[n++] = center;
             _vertices[n++] = _vertices[0];
-            _drawPolygon(_vertices.data(), n, fillColor, Color::TRANSPARENT, true, 0, false);
+            _drawPolygon(_vertices.data(), n, fillColor, Color(), true, 0, false);
             _drawPoly(_vertices.data(), n, false, borderColor, thickness, true);
             break;
         case DrawMode::Outline:
@@ -1332,7 +1326,7 @@ void DrawNode::_drawPie(const Vec2& center,
             _drawPoly(_vertices.data(), n, false, borderColor, thickness, true);
             break;
         case DrawMode::Semi:
-            if (fillColor != Color::TRANSPARENT)
+            if (fillColor != Color())
             _drawPolygon(_vertices.data(), n, fillColor, borderColor, true, 0, false);
             _drawPoly(_vertices.data(), n, true, borderColor, thickness, true);
             break;
@@ -1429,7 +1423,4 @@ void DrawNode::Properties::setDefaultValues()
     drawOrder = false;
 };
 
-#if defined(_WIN32)
-#    pragma pop_macro("TRANSPARENT")
-#endif
 }  // namespace ax
