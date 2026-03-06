@@ -1,3 +1,23 @@
+# axmol-2.11.3 (Feb 23, 2026)
+
+## Bug fixes
+
+- Fix cmake symlink path in gradle by @halx99
+- Fix Downloader storage issue, new options for wasm by @AlexandreK38 in [#3049](https://github.com/axmolengine/axmol/pull/3049)
+- Fix chipmunk2D debug draw issues, resize designSize, removed DrawInfo by @aismann in [#3050](https://github.com/axmolengine/axmol/pull/3050)
+- Fix omitted AudioEngine AudioProfile parameter in play2d by @theSlyest in [#3065](https://github.com/axmolengine/axmol/pull/3065)
+
+# axmol-2.11.2 (Jan 15, 2026)
+
+## Bug fixes
+
+- Fix a regression introduced by 2.8.0 that AxmolViewController lifecycle methods are not invoked on iOS by @halx99 in [#3026](https://github.com/axmolengine/axmol/pull/3026)
+
+## Improvements
+
+- Resolved a compile warning caused by a macOS OpenAL bundle ID mismatch by @halx99
+
+
 # axmol-2.11.1 (Dec 31, 2025)
 
 ## Significant changes relative to 2.11.0
