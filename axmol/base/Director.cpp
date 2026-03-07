@@ -401,7 +401,7 @@ void Director::calculateDeltaTime()
     // new delta time. Re-fixed issue #1277
     if (_nextDeltaTimeZero)
     {
-        _deltaTime         = 0;
+        _deltaTime         = 1e-6;
         _nextDeltaTimeZero = false;
         _lastUpdate        = std::chrono::steady_clock::now();
     }
@@ -414,7 +414,7 @@ void Director::calculateDeltaTime()
             _deltaTime  = std::chrono::duration_cast<std::chrono::microseconds>(now - _lastUpdate).count() / 1000000.0f;
             _lastUpdate = now;
         }
-        _deltaTime = MAX(0, _deltaTime);
+        _deltaTime = MAX(1e-6, _deltaTime);
     }
 
 #if defined(_AX_DEBUG) && _AX_DEBUG
@@ -430,6 +430,7 @@ float Director::getDeltaTime() const
 {
     return _deltaTime;
 }
+
 void Director::setRenderView(RenderView* renderView)
 {
     AXASSERT(renderView, "opengl view should not be null");
@@ -1287,20 +1288,13 @@ void Director::resume()
 #endif
 
     _paused    = false;
-    _deltaTime = 0;
+    _deltaTime = 1e-6;
     // fix issue #3509, skip one fps to avoid incorrect time calculation.
     setNextDeltaTimeZero(true);
 }
 
 void Director::updateFrameRate()
 {
-    //    static const float FPS_FILTER = 0.1f;
-    //    static float prevDeltaTime = 0.016f; // 60FPS
-    //
-    //    float dt = _deltaTime * FPS_FILTER + (1.0f-FPS_FILTER) * prevDeltaTime;
-    //    prevDeltaTime = dt;
-    //    _frameRate = 1.0f/dt;
-
     // Frame rate should be the real value of current frame.
     _frameRate = 1.0f / _deltaTime;
 }
