@@ -690,7 +690,7 @@ public:
         /** Get the DrawNode drawOrder
          *
          */
-        bool getDrawOrder() { return drawOrder; };
+        const bool getDrawOrder() const { return drawOrder; };
 
         /** Set the DrawNode transform
          *
@@ -702,7 +702,7 @@ public:
         /** Get the DrawNode transform
          *
          */
-        const bool getTransform() { return transform; };
+        const bool getTransform() const { return transform; };
 
         /** Set the DrawNode scale for each drawing primitive after this.
 
@@ -713,7 +713,7 @@ public:
 
         */
        // ax::Vec2 getScale() { return scale; };
-        const ax::Vec2& getScale() const { return scale; };
+        const Vec2& getScale() const { return scale; };
 
         /** Set the DrawNode rotation for each drawing primitive after this.
 
