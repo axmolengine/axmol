@@ -690,7 +690,7 @@ public:
         /** Get the DrawNode drawOrder
          *
          */
-        bool getDrawOrder(void) { return drawOrder; };
+        bool getDrawOrder() { return drawOrder; };
 
         /** Set the DrawNode transform
          *
@@ -702,7 +702,7 @@ public:
         /** Get the DrawNode transform
          *
          */
-        bool getTransform(void) { return transform; };
+        const bool getTransform() { return transform; };
 
         /** Set the DrawNode scale for each drawing primitive after this.
 
@@ -712,7 +712,8 @@ public:
        /** Get the DrawNode scale for each drawing primitive after this.
 
         */
-        ax::Vec2 getScale() { return scale; };
+       // ax::Vec2 getScale() { return scale; };
+        const ax::Vec2& getScale() const { return scale; };
 
         /** Set the DrawNode rotation for each drawing primitive after this.
 
@@ -722,7 +723,7 @@ public:
         /** Get the DrawNode rotation for each drawing primitive after this.
 
         */
-        float getRotation() { return rotation; };
+        const float getRotation() const { return rotation; };
 
         /** Set the DrawNode center of rotation for each drawing primitive after this.
 
@@ -732,7 +733,7 @@ public:
         /** Get the DrawNode center of rotation for each drawing primitive after this.
 
         */
-        Vec2 getCenter() { return center; };
+        const Vec2 getCenter() const  { return center; };
 
         /** Set the DrawNode position for each drawing primitive after this.
 
@@ -742,14 +743,21 @@ public:
         /** Get the DrawNode position for drawing primitive.
 
         */
-        Vec2 getPosition() { return position; };
+        const Vec2 getPosition() const { return position; };
 
-        /** Set all default DrawNode properties.
+        /** Get the DrawNode factor for drawing primitive.
+
+        */
+        const float getFactor() const { return factor; };
+        /** Get the DrawNode factor for drawing primitive.
+
+        */
+        void setFactor(float fac) { factor = fac; };
+
+         /** Set all default DrawNode properties.
 
         */
         void setDefaultValues();
-        float getFactor() { return factor; };
-        void setFactor(float fac) { factor = fac; };
 
     } properties;
 };
