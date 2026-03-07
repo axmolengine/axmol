@@ -610,7 +610,7 @@ protected:
     EventCustom* _eventAfterGfxDrop      = nullptr;
 
     /* delta time since last tick to main loop */
-    float _deltaTime              = 0.0f;
+    float _deltaTime              = 1e-6;
     bool _deltaTimePassedByCaller = false;
 
     /* The _renderView, where everything is rendered, RenderView is a abstract class,cocos2d-x provide RenderViewImpl
