@@ -28,9 +28,9 @@ THE SOFTWARE.
 #include "axmol/renderer/CustomCommand.h"
 #include <chrono>
 
-#if AX_ENABLE_EXT_IMGUI && AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID
+#include "extensions/ExtensionMacros.h"
 #include "ImGuiPresenter.h"
-#endif
+
 
 USING_NS_AX;
 USING_NS_AX_EXT;
