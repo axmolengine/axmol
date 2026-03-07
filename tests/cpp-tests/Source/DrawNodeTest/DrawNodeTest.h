@@ -34,23 +34,7 @@ DEFINE_TEST_SUITE(DrawNodeTests);
 class DrawNodeBaseTest : public TestCase
 {
 
-protected:
-    enum sliderType
-    {
-        AngleStart = 0,
-        AngleEnd,
-        Rotation,
-        Thickness,
-        Factor,
-        Scale,
-        NodeScale,
-        sliderTypeLast
-    };
-
-    std::string text[sliderType::sliderTypeLast] = {
-        "AngleStart", "AngleEnd", "Rotation", "Thickness", "Factor", "Scale", "NodeScale",
-    };
-
+ protected:
     enum drawMethodes
     {
         Line = 0,
@@ -102,25 +86,27 @@ protected:
 public:
     DrawNodeBaseTest();
 
-    void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
-    void listviewCallback(ax::Object* sender, ax::ui::ListView::EventType type);
-    void setDrawOrder(Object* sender);
-    void setTransform(Object* sender);
 
     void update(float dt) override;
+    void onDrawImGui();
+    void onExit() override;
+    void onEnter() override;
 
     virtual std::string title() const override;
     void drawDirection(const ax::Vec2* vec, const int size, ax::Vec2 offset);
 
-    void initSliders();
-
-    void changeStartAngle(ax::Object* pSender, ax::ui::Slider::EventType type);
-    void changeEndAngle(ax::Object* pSender, ax::ui::Slider::EventType type);
-    void changeRotation(ax::Object* pSender, ax::ui::Slider::EventType type);
-    void changeThickness(ax::Object* pSender, ax::ui::Slider::EventType type);
-    void changeFactor(ax::Object* pSender, ax::ui::Slider::EventType type);
-    void changeScale(ax::Object* pSender, ax::ui::Slider::EventType type);
-    void changeNodeScale(ax::Object* pSender, ax::ui::Slider::EventType type);
+    float ns;        //drawNode->getScale;
+    ax::Vec2 ps;     //drawNode->properties.scale;
+    float pf;        //drawNode->properties.factor;
+    float thickness; 
+    float pr;        //drawNode->properties.rotation();
+    float as;        // angle start
+    float ae;        // angle end
+    bool drawOrder;  
+    bool transform;
+    int flagGUI = -1;
+    ax::Scene* _target = nullptr;
+    
 
     // using from https://github.com/intmainreturn00/AwesomeNode/
     void generateDataPoints();
@@ -137,18 +123,6 @@ public:
 protected:
     int _currentSeletedItemIndex = 0;
 
-    // UI stuff
-    ax::ui::Slider* slider[sliderType::sliderTypeLast];
-    ax::Label* sliderLabel[sliderType::sliderTypeLast];
-    float sliderValue[sliderType::sliderTypeLast];
-
-    ax::ui::RadioButtonGroup* _radioButtonGroup;
-    ax::Layer* _uiLayer;
-    ax::ui::Layout* _widget;
-    int selectedRadioButton;
-
-    ax::MenuItemFont* menuItemDrawOrder;
-    ax::MenuItemFont* menuItemTransform;
 
     // DrawNode stuff
     ax::DrawNode* drawNode = nullptr;
@@ -267,12 +241,6 @@ public:
 
     void update(float dt) override;
     void onEnter() override;
-
-private:
-    // ax::Label* _lineWidthLabel;
-    // float lineWidth = 0;
-    ax::Label* _thicknessLabel;
-    float thickness = 1.0f;
 };
 
 class DrawNodeVersionsTest : public DrawNodeBaseTest
@@ -318,7 +286,11 @@ public:
 
 class DrawNodeMethodsTest : public DrawNodeBaseTest
 {
+
 public:
+
+
+
     CREATE_FUNC(DrawNodeMethodsTest);
 
     DrawNodeMethodsTest();
@@ -332,6 +304,7 @@ public:
     void drawAll();
 
 private:
+
     ax::ui::ListView* createListView();
 
     ax::Vec2* verticess;

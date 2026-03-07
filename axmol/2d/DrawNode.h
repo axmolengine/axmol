@@ -709,6 +709,11 @@ public:
         */
         void setScale(Vec2 s) { scale = s; };
 
+       /** Get the DrawNode scale for each drawing primitive after this.
+
+        */
+        ax::Vec2 getScale() { return scale; };
+
         /** Set the DrawNode rotation for each drawing primitive after this.
 
         */
