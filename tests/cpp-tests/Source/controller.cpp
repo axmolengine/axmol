@@ -87,7 +87,9 @@ public:
         addTest("BillBoard", []() { return new BillBoardTests(); });
         addTest("Camera3D", []() { return new Camera3DTests(); });
         addTest("Clipping", []() { return new ClippingNodeTests(); });
+#if AX_ENABLE_EXT_IMGUI && AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID
         addTest("DrawNode", []() { return new DrawNodeTests(); });
+#endif
         addTest("Label", []() { return new NewLabelTests(); });
         addTest("Layer", []() { return new LayerTests(); });
         addTest("Light", []() { return new LightTests(); });
