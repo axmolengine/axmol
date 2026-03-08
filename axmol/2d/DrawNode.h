@@ -690,7 +690,7 @@ public:
         /** Get the DrawNode drawOrder
          *
          */
-        const bool getDrawOrder() const { return drawOrder; };
+        bool getDrawOrder() { return drawOrder; };
 
         /** Set the DrawNode transform
          *
@@ -702,7 +702,7 @@ public:
         /** Get the DrawNode transform
          *
          */
-        const bool getTransform() const { return transform; };
+        bool getTransform() { return transform; };
 
         /** Set the DrawNode scale for each drawing primitive after this.
 
@@ -712,7 +712,6 @@ public:
         /** Get the DrawNode scale for each drawing primitive after this.
 
          */
-        // ax::Vec2 getScale() { return scale; };
         const Vec2& getScale() const { return scale; };
 
         /** Set the DrawNode rotation for each drawing primitive after this.
@@ -723,7 +722,7 @@ public:
         /** Get the DrawNode rotation for each drawing primitive after this.
 
         */
-        const float getRotation() const { return rotation; };
+        float getRotation() { return rotation; };
 
         /** Set the DrawNode center of rotation for each drawing primitive after this.
 
@@ -733,7 +732,7 @@ public:
         /** Get the DrawNode center of rotation for each drawing primitive after this.
 
         */
-        const Vec2 getCenter() const { return center; };
+        const Vec2& getCenter() const { return center; };
 
         /** Set the DrawNode position for each drawing primitive after this.
 
@@ -743,12 +742,12 @@ public:
         /** Get the DrawNode position for drawing primitive.
 
         */
-        const Vec2 getPosition() const { return position; };
+        const Vec2& getPosition() const { return position; };
 
         /** Get the DrawNode factor for drawing primitive.
 
         */
-        const float getFactor() const { return factor; };
+        float getFactor() { return factor; };
         /** Get the DrawNode factor for drawing primitive.
 
         */
