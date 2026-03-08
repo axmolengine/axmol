@@ -61,7 +61,9 @@ public:
         addTest("AudioEngine", []() { return new AudioEngineTests(); });
 
         addTest("Box2D - Basic", []() { return new Box2DTests(); });
-#if AX_ENABLE_EXT_IMGUI && AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID
+
+        // Box2DTestBed is only works on PC platforms, because it requires glfw which is not available on mobile platforms
+#if AX_ENABLE_EXT_IMGUI && defined(AX_PLATFORM_PC)
         addTest("Box2D - TestBed", []() { return new Box2DTestBedTests(); });
 #endif
         addTest("Bugs", []() { return new BugsTests(); });

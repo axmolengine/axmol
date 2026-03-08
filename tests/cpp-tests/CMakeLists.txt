@@ -395,6 +395,7 @@ if(AX_ENABLE_EXT_IMGUI)
   list(APPEND GAME_HEADER Source/ImGuiTest/ImGuiTest.h)
   list(APPEND GAME_SOURCE Source/ImGuiTest/ImGuiTest.cpp)
 
+  # Box2DTestBed is only works on PC platforms, because it requires glfw which is not available on mobile platforms
   if((WINDOWS OR MACOSX OR LINUX OR WASM) AND(NOT WINRT))
     file(GLOB_RECURSE BOX2D_TESTBED_SOURCES Source/Box2DTestBed/*.h;Source/Box2DTestBed/*.cpp;Source/Box2DTestBed/*.c)
     list(APPEND GAME_SOURCE ${BOX2D_TESTBED_SOURCES})

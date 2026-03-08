@@ -1,14 +1,9 @@
-#include "imgui_impl_android.h"
-#include "imgui_impl_axmol.h"
+#include "imgui_impl_axmol_sw.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventListenerTouch.h"
 #include "axmol/base/IMEDelegate.h"
 #include "axmol/rhi/axmol-rhi.h"
 #include <functional>
-#include <android/native_window.h>
-#include <android/input.h>
-#include <android/keycodes.h>
-#include <android/log.h>
 #include <imgui_internal.h>
 #include "axmol/base/IMEDelegate.h"
 #include "axmol/base/EventDispatcher.h"
@@ -49,15 +44,15 @@ protected:
     }
 };
 
-// Android data
+// Axmol SingleWindow Platform data
 
-struct ImGui_ImplAndroid_Data
+struct ImGui_ImplAxmolSW_Data
 {
     RenderView* Window{nullptr};
     double Time{0};
     bool InstalledCallbacks{false};
 
-    // ImGui_ImplAndroid_Data()   { memset(this, 0, sizeof(*this)); }
+    // ImGui_ImplAxmolSW_Data()   { memset(this, 0, sizeof(*this)); }
 
     // axmol spec data
     Vec2 ViewResolution = Vec2(1920, 1080);
@@ -68,14 +63,14 @@ struct ImGui_ImplAndroid_Data
 };
 
 // Backend data stored in io.BackendPlatformUserData to allow support for multiple Dear ImGui contexts
-static ImGui_ImplAndroid_Data* ImGui_ImplAndroid_GetBackendData()
+static ImGui_ImplAxmolSW_Data* ImGui_ImplAxmolSW_GetBackendData()
 {
-    return ImGui::GetCurrentContext() ? (ImGui_ImplAndroid_Data*)ImGui::GetIO().BackendPlatformUserData : nullptr;
+    return ImGui::GetCurrentContext() ? (ImGui_ImplAxmolSW_Data*)ImGui::GetIO().BackendPlatformUserData : nullptr;
 }
 
 static ax::Vec2 convertToScreen(const Vec2& pos)
 {
-    auto* bd    = ImGui_ImplAndroid_GetBackendData();
+    auto* bd    = ImGui_ImplAxmolSW_GetBackendData();
     ImGuiIO& io = ImGui::GetIO();
     auto origin = bd->Window->getViewportRect().origin;
     auto uiX    = (pos.x * bd->Window->getScaleX() + origin.x) / io.DisplayFramebufferScale.x;
@@ -110,15 +105,15 @@ static bool ImGui_ImplAxmol_HitTest(const ImVec2& p)
 static int s_CapturedTouchId = -1;
 
 // Functions
-bool ImGui_ImplAndroid_InitForAxmol(RenderView* window, bool install_callbacks)
+bool ImGui_ImplAxmolSW_InitForAxmol(RenderView* window, bool install_callbacks)
 {
     ImGuiIO& io = ImGui::GetIO();
     IM_ASSERT(io.BackendPlatformUserData == nullptr && "Already initialized a platform backend!");
 
     // Setup backend capabilities flags
-    ImGui_ImplAndroid_Data* bd = IM_NEW(ImGui_ImplAndroid_Data)();
+    ImGui_ImplAxmolSW_Data* bd = IM_NEW(ImGui_ImplAxmolSW_Data)();
     io.BackendPlatformUserData = (void*)bd;
-    io.BackendPlatformName     = "imgui_impl_android";
+    io.BackendPlatformName     = "imgui_impl_axmol_sw";
     // io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;         // We can honor GetMouseCursor() values (optional)
     io.BackendFlags |=
         ImGuiBackendFlags_HasSetMousePos;  // We can honor io.WantSetMousePos requests (optional, rarely used)
@@ -143,7 +138,7 @@ bool ImGui_ImplAndroid_InitForAxmol(RenderView* window, bool install_callbacks)
 
     touchListener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
         ImGuiIO& io                = ImGui::GetIO();
-        ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
+        ImGui_ImplAxmolSW_Data* bd = ImGui_ImplAxmolSW_GetBackendData();
         auto location              = convertToScreen(touch->getLocationInView());
         auto touchPos              = ImVec2(location.x, location.y);
 
@@ -169,7 +164,7 @@ bool ImGui_ImplAndroid_InitForAxmol(RenderView* window, bool install_callbacks)
         if (touch->getID() != s_CapturedTouchId)
             return;
         ImGuiIO& io                = ImGui::GetIO();
-        ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
+        ImGui_ImplAxmolSW_Data* bd = ImGui_ImplAxmolSW_GetBackendData();
         auto location              = convertToScreen(touch->getLocationInView());
         io.AddMousePosEvent(location.x, location.y);
         bd->LastValidMousePos = ImVec2(location.x, location.y);
@@ -179,7 +174,7 @@ bool ImGui_ImplAndroid_InitForAxmol(RenderView* window, bool install_callbacks)
         if (touch->getID() != s_CapturedTouchId)
             return;
         ImGuiIO& io                = ImGui::GetIO();
-        ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
+        ImGui_ImplAxmolSW_Data* bd = ImGui_ImplAxmolSW_GetBackendData();
         auto location              = convertToScreen(touch->getLocationInView());
         io.AddMousePosEvent(location.x, location.y);
         bd->LastValidMousePos = ImVec2(location.x, location.y);
@@ -204,7 +199,7 @@ bool ImGui_ImplAndroid_InitForAxmol(RenderView* window, bool install_callbacks)
             return;
 
         ImGuiIO& io                = ImGui::GetIO();
-        ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
+        ImGui_ImplAxmolSW_Data* bd = ImGui_ImplAxmolSW_GetBackendData();
         auto location              = convertToScreen(touch->getLocationInView());
         io.AddMousePosEvent(location.x, location.y);
         bd->LastValidMousePos = ImVec2(location.x, location.y);
@@ -219,9 +214,9 @@ bool ImGui_ImplAndroid_InitForAxmol(RenderView* window, bool install_callbacks)
     return true;
 }
 
-void ImGui_ImplAndroid_Shutdown()
+void ImGui_ImplAxmolSW_Shutdown()
 {
-    ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
+    ImGui_ImplAxmolSW_Data* bd = ImGui_ImplAxmolSW_GetBackendData();
     IM_ASSERT(bd != nullptr && "No platform backend to shutdown, or already shutdown?");
     ImGuiIO& io = ImGui::GetIO();
 
@@ -229,20 +224,18 @@ void ImGui_ImplAndroid_Shutdown()
     io.BackendPlatformUserData = nullptr;
     io.BackendRendererUserData = nullptr;
 
-#if defined(__ANDROID__)
     Director::getInstance()->getEventDispatcher()->removeEventListener(bd->TouchListener);
     AX_SAFE_RELEASE_NULL(bd->TouchListener);
-#endif
 
     IM_DELETE(bd);
 }
 
-void ImGui_ImplAndroid_NewFrame()
+void ImGui_ImplAxmolSW_NewFrame()
 {
     ImGuiIO& io = ImGui::GetIO();
 
-    ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
-    IM_ASSERT(bd != nullptr && "Did you call ImGui_ImplAndroid_InitForXXX()?");
+    ImGui_ImplAxmolSW_Data* bd = ImGui_ImplAxmolSW_GetBackendData();
+    IM_ASSERT(bd != nullptr && "Did you call ImGui_ImplAxmolSW_InitForXXX()?");
 
     // Setup display size (every frame to accommodate for window resizing)
     int32_t window_width  = bd->ViewResolution.width;
@@ -255,48 +248,17 @@ void ImGui_ImplAndroid_NewFrame()
         io.DisplayFramebufferScale = ImVec2((float)display_width / window_width, (float)display_height / window_height);
 
     // Setup time step
-    struct timespec current_timespec;
-    clock_gettime(CLOCK_MONOTONIC, &current_timespec);
-    double current_time = (double)(current_timespec.tv_sec) + (current_timespec.tv_nsec / 1000000000.0);
+    auto now            = std::chrono::high_resolution_clock::now();
+    auto duration       = now.time_since_epoch();
+    double current_time = std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count() / 1e9;
     io.DeltaTime        = bd->Time > 0.0 ? (float)(current_time - bd->Time) : (float)(1.0f / 60.0f);
     bd->Time            = current_time;
-}
-
-//--------------------------------------------------------------------------------------------------------
-// MULTI-VIEWPORT / PLATFORM INTERFACE SUPPORT
-// This is an _advanced_ and _optional_ feature, allowing the backend to create and handle multiple viewports
-// simultaneously. If you are new to dear imgui or creating a new binding for dear imgui, it is recommended that you
-// completely ignore this section first..
-//--------------------------------------------------------------------------------------------------------
-
-// Helper structure we store in the void* RenderUserData field of each ImGuiViewport to easily retrieve our backend
-// data.
-struct ImGui_ImplAndroid_ViewportData
-{
-    RenderView* Window;
-    bool WindowOwned;
-    int IgnoreWindowPosEventFrame;
-    int IgnoreWindowSizeEventFrame;
-
-    ImGui_ImplAndroid_ViewportData()
-    {
-        Window                     = nullptr;
-        WindowOwned                = false;
-        IgnoreWindowSizeEventFrame = IgnoreWindowPosEventFrame = -1;
-    }
-    ~ImGui_ImplAndroid_ViewportData() { IM_ASSERT(Window == nullptr); }
-};
-
-static void ImGui_ImplAndroid_WindowCloseCallback(RenderView* window)
-{
-    if (ImGuiViewport* viewport = ImGui::FindViewportByPlatformHandle(window))
-        viewport->PlatformRequestClose = true;
 }
 
 // @imgui_impl_axmol.h
 IMGUI_IMPL_API void ImGui_ImplAxmol_SetViewResolution(float width, float height)
 {
-    auto bd = ImGui_ImplAndroid_GetBackendData();
+    auto bd = ImGui_ImplAxmolSW_GetBackendData();
     bd->ViewResolution.set(width, height);
 }
 
