@@ -359,8 +359,7 @@ void DrawNode::drawQuadBezier(const Vec2& origin,
                               const Color& color,
                               float thickness)
 {
-    tlx::pod_vector<Vec2> _vertices{
-        static_cast<size_t>(segments + 1)}; 
+    tlx::pod_vector<Vec2> _vertices{static_cast<size_t>(segments + 1)};
 
     float t = 0.0f;
     for (unsigned int i = 0; i < segments; i++)
@@ -531,7 +530,7 @@ void DrawNode::drawSolidRect(const Vec2& origin,
                              float thickness,
                              const Color& borderColor)
 {
-     Vec2 _vertices5[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
+    Vec2 _vertices5[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
     _drawPolygon(_vertices5, 5, fillColor, borderColor, false, thickness, true);
 }
 
@@ -1265,12 +1264,10 @@ void DrawNode::_drawPie(const Vec2& center,
             _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, fillColor, true, thickness);
             break;
         case DrawMode::Outline:
-            _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, Color(), true,
-                        thickness);
+            _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, Color(), true, thickness);
             break;
         case DrawMode::Line:
-            _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, Color(), true,
-                        thickness);
+            _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, Color(), true, thickness);
             break;
         case DrawMode::Semi:
             _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, fillColor, true, thickness);
@@ -1327,7 +1324,7 @@ void DrawNode::_drawPie(const Vec2& center,
             break;
         case DrawMode::Semi:
             if (fillColor != Color())
-            _drawPolygon(_vertices.data(), n, fillColor, borderColor, true, 0, false);
+                _drawPolygon(_vertices.data(), n, fillColor, borderColor, true, 0, false);
             _drawPoly(_vertices.data(), n, true, borderColor, thickness, true);
             break;
         default:

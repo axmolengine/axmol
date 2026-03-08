@@ -34,7 +34,7 @@ DEFINE_TEST_SUITE(DrawNodeTests);
 class DrawNodeBaseTest : public TestCase
 {
 
- protected:
+protected:
     enum drawMethodes
     {
         Line = 0,
@@ -86,7 +86,6 @@ class DrawNodeBaseTest : public TestCase
 public:
     DrawNodeBaseTest();
 
-
     void update(float dt) override;
     void onDrawImGui();
     void onExit() override;
@@ -95,18 +94,17 @@ public:
     virtual std::string title() const override;
     void drawDirection(const ax::Vec2* vec, const int size, ax::Vec2 offset);
 
-    float ns;        //drawNode->getScale;
-    ax::Vec2 ps;     //drawNode->properties.scale;
-    float pf;        //drawNode->properties.factor;
-    float thickness; 
-    float pr;        //drawNode->properties.rotation();
-    float as;        // angle start
-    float ae;        // angle end
-    bool drawOrder;  
+    float ns;     // drawNode->getScale;
+    ax::Vec2 ps;  // drawNode->properties.scale;
+    float pf;     // drawNode->properties.factor;
+    float thickness;
+    float pr;  // drawNode->properties.rotation();
+    float as;  // angle start
+    float ae;  // angle end
+    bool drawOrder;
     bool transform;
-    int flagGUI = -1;
+    int flagGUI        = -1;
     ax::Scene* _target = nullptr;
-    
 
     // using from https://github.com/intmainreturn00/AwesomeNode/
     void generateDataPoints();
@@ -122,7 +120,6 @@ public:
 
 protected:
     int _currentSeletedItemIndex = 0;
-
 
     // DrawNode stuff
     ax::DrawNode* drawNode = nullptr;
@@ -288,9 +285,6 @@ class DrawNodeMethodsTest : public DrawNodeBaseTest
 {
 
 public:
-
-
-
     CREATE_FUNC(DrawNodeMethodsTest);
 
     DrawNodeMethodsTest();
@@ -304,7 +298,6 @@ public:
     void drawAll();
 
 private:
-
     ax::ui::ListView* createListView();
 
     ax::Vec2* verticess;
@@ -390,7 +383,7 @@ public:
     virtual std::string subtitle() const override;
 
     void update(float dt) override;
-  //  void onEnter() override;
+    //  void onEnter() override;
 
     void changeThreshold(Object* pSender, ax::ui::Slider::EventType type);
     void changeLineWidth(Object* pSender, ax::ui::Slider::EventType type);

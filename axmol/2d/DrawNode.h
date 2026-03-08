@@ -709,10 +709,10 @@ public:
         */
         void setScale(Vec2 s) { scale = s; };
 
-       /** Get the DrawNode scale for each drawing primitive after this.
+        /** Get the DrawNode scale for each drawing primitive after this.
 
-        */
-       // ax::Vec2 getScale() { return scale; };
+         */
+        // ax::Vec2 getScale() { return scale; };
         const Vec2& getScale() const { return scale; };
 
         /** Set the DrawNode rotation for each drawing primitive after this.
@@ -733,7 +733,7 @@ public:
         /** Get the DrawNode center of rotation for each drawing primitive after this.
 
         */
-        const Vec2 getCenter() const  { return center; };
+        const Vec2 getCenter() const { return center; };
 
         /** Set the DrawNode position for each drawing primitive after this.
 
@@ -754,9 +754,9 @@ public:
         */
         void setFactor(float fac) { factor = fac; };
 
-         /** Set all default DrawNode properties.
+        /** Set all default DrawNode properties.
 
-        */
+       */
         void setDefaultValues();
 
     } properties;

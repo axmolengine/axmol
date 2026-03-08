@@ -72,7 +72,7 @@
 #include "DataVisitorTest/DataVisitorTest.h"
 #include "NetworkTest/NetworkTest.h"
 #if AX_ENABLE_EXT_IMGUI
-#include "DrawNodeTest/DrawNodeTest.h"
+#    include "DrawNodeTest/DrawNodeTest.h"
 #endif
 #include "EffectsAdvancedTest/EffectsAdvancedTest.h"
 #include "EffectsTest/EffectsTest.h"
