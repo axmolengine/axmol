@@ -248,9 +248,9 @@ void ImGui_ImplAxmolSW_NewFrame()
         io.DisplayFramebufferScale = ImVec2((float)display_width / window_width, (float)display_height / window_height);
 
     // Setup time step
-    struct timespec current_timespec;
-    clock_gettime(CLOCK_MONOTONIC, &current_timespec);
-    double current_time = (double)(current_timespec.tv_sec) + (current_timespec.tv_nsec / 1000000000.0);
+    auto now            = std::chrono::high_resolution_clock::now();
+    auto duration       = now.time_since_epoch();
+    double current_time = std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count() / 1e9;
     io.DeltaTime        = bd->Time > 0.0 ? (float)(current_time - bd->Time) : (float)(1.0f / 60.0f);
     bd->Time            = current_time;
 }
