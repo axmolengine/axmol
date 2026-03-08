@@ -25,9 +25,9 @@ set(SOURCE
 list(APPEND SOURCE src/ImGui/backends/imgui_impl_axmol.cpp)
 list(APPEND HEADER src/ImGui/backends/imgui_impl_axmol.h)
 
-if(ANDROID)
-  list(APPEND SOURCE src/ImGui/backends/imgui_impl_android.cpp)
-  list(APPEND HEADER src/ImGui/backends/imgui_impl_android.h)
+if(WINRT OR ANDROID OR IOS)
+  list(APPEND SOURCE src/ImGui/backends/imgui_impl_axmol_sw.cpp)
+  list(APPEND HEADER src/ImGui/backends/imgui_impl_axmol_sw.h)
 else()
   list(APPEND SOURCE src/ImGui/backends/imgui_impl_glfw.cpp)
   list(APPEND HEADER src/ImGui/backends/imgui_impl_glfw.h)

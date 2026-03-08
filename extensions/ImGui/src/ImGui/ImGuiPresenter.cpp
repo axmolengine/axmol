@@ -24,14 +24,12 @@ THE SOFTWARE.
 
 #include "ImGuiPresenter.h"
 #include <assert.h>
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-#    include "backends/imgui_impl_android.h"
-#else
+#if defined(AX_PLATFORM_PC)
 #    include "backends/imgui_impl_glfw.h"
+#    include "backends/imgui_impl_axmol.h"
+#else
+#    include "backends/imgui_impl_axmol_sw.h"
 #endif
-
-#include "backends/imgui_impl_axmol.h"
-
 #include "imgui_internal.h"
 #include "misc/freetype/imgui_freetype.h"
 
@@ -165,7 +163,7 @@ class ImGuiSceneEventTracker : public ImGuiEventTracker
 public:
     bool initWithScene(Scene* scene)
     {
-#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
+#if defined(AX_PLATFORM_PC)
         _trackLayer = utils::newInstance<Node>(&Node::initLayer);
 
         // note: when at the first click to focus the window, this will not take effect
@@ -206,7 +204,7 @@ public:
 
     ~ImGuiSceneEventTracker() override
     {
-#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
+#if defined(AX_PLATFORM_PC)
         if (_trackLayer)
         {
             if (_trackLayer->getParent())
@@ -227,7 +225,7 @@ class ImGuiGlobalEventTracker : public ImGuiEventTracker
 public:
     bool init()
     {
-#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
+#if defined(AX_PLATFORM_PC)
         // note: when at the first click to focus the window, this will not take effect
 
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
@@ -252,7 +250,7 @@ public:
 
     ~ImGuiGlobalEventTracker() override
     {
-#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
+#if defined(AX_PLATFORM_PC)
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
         eventDispatcher->removeEventListener(_mouseListener);
         eventDispatcher->removeEventListener(_touchListener);
@@ -325,11 +323,11 @@ void ImGuiPresenter::init()
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    ImGui_ImplAndroid_InitForAxmol(Director::getInstance()->getRenderView(), true);
-#else
+#if defined(AX_PLATFORM_PC)
     auto window = static_cast<RenderViewImpl*>(Director::getInstance()->getRenderView())->getWindow();
     ImGui_ImplGlfw_InitForAxmol(window, true);
+#else
+    ImGui_ImplAxmolSW_InitForAxmol(Director::getInstance()->getRenderView(), true);
 #endif
     ImGui_ImplAxmol_Init();
 
@@ -360,10 +358,10 @@ void ImGuiPresenter::cleanup()
 
     ImGui_ImplAxmol_SetUpdateFontsFunc(nullptr, nullptr);
     ImGui_ImplAxmol_Shutdown();
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    ImGui_ImplAndroid_Shutdown();
-#else
+#if defined(AX_PLATFORM_PC)
     ImGui_ImplGlfw_Shutdown();
+#else
+    ImGui_ImplAxmolSW_Shutdown();
 #endif
 
     ImGui::DestroyContext();
@@ -481,10 +479,10 @@ void ImGuiPresenter::beginFrame()
     {
         // create frame
         ImGui_ImplAxmol_NewFrame();
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-        ImGui_ImplAndroid_NewFrame();
-#else
+#if defined(AX_PLATFORM_PC)
         ImGui_ImplGlfw_NewFrame();
+#else
+        ImGui_ImplAxmolSW_NewFrame();
 #endif
         ImGui::NewFrame();
 

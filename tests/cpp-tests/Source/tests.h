@@ -29,7 +29,7 @@
 #include "Box2DTest/Box2dTest.h"
 #include "feature-detect.h"
 
-#if AX_ENABLE_EXT_IMGUI && AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID
+#if AX_ENABLE_EXT_IMGUI && defined(AX_PLATFORM_PC)
 #    include "Box2DTestBed/Box2DTestBed.h"
 #endif
 
