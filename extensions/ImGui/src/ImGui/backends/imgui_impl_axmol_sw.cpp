@@ -105,7 +105,7 @@ static bool ImGui_ImplAxmol_HitTest(const ImVec2& p)
 static int s_CapturedTouchId = -1;
 
 // Functions
-bool ImGui_ImplAxmolSW_InitForAxmol(RenderView* window, bool install_callbacks)
+bool ImGui_ImplAxmolSW_Init(RenderView* window, bool install_callbacks)
 {
     ImGuiIO& io = ImGui::GetIO();
     IM_ASSERT(io.BackendPlatformUserData == nullptr && "Already initialized a platform backend!");
@@ -114,11 +114,8 @@ bool ImGui_ImplAxmolSW_InitForAxmol(RenderView* window, bool install_callbacks)
     ImGui_ImplAxmolSW_Data* bd = IM_NEW(ImGui_ImplAxmolSW_Data)();
     io.BackendPlatformUserData = (void*)bd;
     io.BackendPlatformName     = "imgui_impl_axmol_sw";
-    // io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;         // We can honor GetMouseCursor() values (optional)
-    io.BackendFlags |=
-        ImGuiBackendFlags_HasSetMousePos;  // We can honor io.WantSetMousePos requests (optional, rarely used)
-    // io.BackendFlags |= ImGuiBackendFlags_PlatformHasViewports;    // We can create multi-viewports on the Platform
-    // side (optional)
+    // We can honor io.WantSetMousePos requests (optional, rarely used)
+    io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
     bd->Window = window;
     bd->Time   = 0.0;

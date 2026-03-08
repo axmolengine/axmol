@@ -50,7 +50,7 @@ if (!(Test-Path "$prefix" -PathType Container)) {
 }
 
 function setup_doxygen() {
-    $doxygen_ver = '1.14.0'
+    $doxygen_ver = '1.16.1'
 
     $doxygen_pkg_name = if ($isWin) { "doxygen-$doxygen_ver.windows.x64.bin.zip" } else { "doxygen-$doxygen_ver.linux.bin.tar.gz" }
     $doxygen_pkg_path = Join-Path $prefix $doxygen_pkg_name

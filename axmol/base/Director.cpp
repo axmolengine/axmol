@@ -401,7 +401,7 @@ void Director::calculateDeltaTime()
     // new delta time. Re-fixed issue #1277
     if (_nextDeltaTimeZero)
     {
-        _deltaTime         = 1e-6;
+        _deltaTime         = 1e-6f;
         _nextDeltaTimeZero = false;
         _lastUpdate        = std::chrono::steady_clock::now();
     }
@@ -414,7 +414,7 @@ void Director::calculateDeltaTime()
             _deltaTime  = std::chrono::duration_cast<std::chrono::microseconds>(now - _lastUpdate).count() / 1000000.0f;
             _lastUpdate = now;
         }
-        _deltaTime = MAX(1e-6, _deltaTime);
+        _deltaTime = MAX(1e-6f, _deltaTime);
     }
 
 #if defined(_AX_DEBUG) && _AX_DEBUG
@@ -1288,7 +1288,7 @@ void Director::resume()
 #endif
 
     _paused    = false;
-    _deltaTime = 1e-6;
+    _deltaTime = 1e-6f;
     // fix issue #3509, skip one fps to avoid incorrect time calculation.
     setNextDeltaTimeZero(true);
 }

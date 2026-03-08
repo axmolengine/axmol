@@ -26,10 +26,10 @@ THE SOFTWARE.
 #include <assert.h>
 #if defined(AX_PLATFORM_PC)
 #    include "backends/imgui_impl_glfw.h"
-#    include "backends/imgui_impl_axmol.h"
 #else
 #    include "backends/imgui_impl_axmol_sw.h"
 #endif
+#include "backends/imgui_impl_axmol.h"
 #include "imgui_internal.h"
 #include "misc/freetype/imgui_freetype.h"
 
@@ -292,7 +292,7 @@ void ImGuiPresenter::init()
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
-    (void)io;
+
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
     // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  // Enable Docking
@@ -327,7 +327,7 @@ void ImGuiPresenter::init()
     auto window = static_cast<RenderViewImpl*>(Director::getInstance()->getRenderView())->getWindow();
     ImGui_ImplGlfw_InitForAxmol(window, true);
 #else
-    ImGui_ImplAxmolSW_InitForAxmol(Director::getInstance()->getRenderView(), true);
+    ImGui_ImplAxmolSW_Init(Director::getInstance()->getRenderView(), true);
 #endif
     ImGui_ImplAxmol_Init();
 

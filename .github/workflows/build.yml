@@ -143,6 +143,14 @@ jobs:
         - name: Build
           shell: pwsh
           run: .\tools\cmdline\axmol -p winuwp -a x64 -O3 -xc '-DAX_RENDER_API=d3d11'
+  winuwp-d3d12:
+        runs-on: windows-latest
+        steps:
+        - uses: actions/checkout@v6
+
+        - name: Build
+          shell: pwsh
+          run: .\tools\cmdline\axmol -p winuwp -a x64 -O3 -xc '-DAX_RENDER_API=d3d12'
   win32-clang-ogl:
         runs-on: windows-latest
         steps:
