@@ -71,7 +71,7 @@
 #include "CurrentLanguageTest/CurrentLanguageTest.h"
 #include "DataVisitorTest/DataVisitorTest.h"
 #include "NetworkTest/NetworkTest.h"
-#    if AX_ENABLE_EXT_IMGUI && AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID
+#if AX_ENABLE_EXT_IMGUI
 #include "DrawNodeTest/DrawNodeTest.h"
 #endif
 #include "EffectsAdvancedTest/EffectsAdvancedTest.h"
