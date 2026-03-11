@@ -3640,49 +3640,6 @@ LabelUnderlineStrikethroughMultiline::LabelUnderlineStrikethroughMultiline()
 {
     auto s = Director::getInstance()->getCanvasSize();
 
-    TTFConfig ttfConf("fonts/arial.ttf", 40, GlyphCollection::DYNAMIC, nullptr, true);
-
-    // Glow SDF (GPU)
-    auto label1 = Label::createWithTTF(ttfConf, "Glow1", TextHAlignment::CENTER, s.width);
-    label1->setPosition(Vec2(s.width / 2, s.height * 0.7));
-    label1->setTextColor(Color32::GREEN);
-    label1->enableGlow(Color32::YELLOW);
-    label1->enableUnderline();
-    label1->enableStrikethrough();
-    addChild(label1);
-
-    // Glow normal(CPU)
-    ttfConf.distanceFieldEnabled = false;
-    auto label2                  = Label::createWithTTF(ttfConf, "Glow2", TextHAlignment::CENTER, s.width);
-    label2->setPosition(Vec2(s.width / 2, s.height * 0.6));
-    label2->setTextColor(Color32::GREEN);
-    label2->enableGlow(Color32::YELLOW);
-    label2->enableUnderline();
-    label2->enableStrikethrough();
-    addChild(label2);
-
-    // Outline SDF(GPU)
-    ttfConf.distanceFieldEnabled = true;
-    ttfConf.outlineSize          = 2;
-    auto label3                  = Label::createWithTTF(ttfConf, "Outline1", TextHAlignment::CENTER, s.width);
-    label3->setPosition(Vec2(s.width / 2, s.height * 0.48));
-    label3->setTextColor(Color32::RED);
-    label3->enableOutline(Color32::BLUE);
-    label3->enableUnderline();
-    label3->enableStrikethrough();
-    addChild(label3);
-
-    // Outline normal(CPU by freetype2)
-    ttfConf.distanceFieldEnabled = false;
-    ttfConf.outlineSize          = 2;
-    auto label4                  = Label::createWithTTF(ttfConf, "Outline2", TextHAlignment::CENTER, s.width);
-    label4->setPosition(Vec2(s.width / 2, s.height * 0.36));
-    label4->setTextColor(Color32::RED);
-    label4->enableOutline(Color32::BLUE, 2);
-    label4->enableUnderline();
-    label4->enableStrikethrough();
-    addChild(label4);
-
     std::string font = "fonts/arial.ttf";
 
     // ttf
@@ -3690,7 +3647,7 @@ LabelUnderlineStrikethroughMultiline::LabelUnderlineStrikethroughMultiline()
     ttfConfig.underline     = true;
     ttfConfig.strikethrough = true;
 
-    const int count = 7;
+    const int count = 11;
     Label* labels[count];
 
     labels[0] = Label::createWithSystemFont("SystemFont TextVAlignment::TOP\nusing setTextColor(255, 0, 255, 100)",
@@ -3722,9 +3679,50 @@ LabelUnderlineStrikethroughMultiline::LabelUnderlineStrikethroughMultiline()
         Label::createWithTTF("TTF setTextColor(*RED*)\nwith multiline 1\nand a much more longer multiline 2", font, 14);
     labels[6]->setTextColor(Color32::RED);
 
+    TTFConfig ttfConf("fonts/arial.ttf", 40, GlyphCollection::DYNAMIC, nullptr, true);
+
+    // Glow SDF (GPU)
+    labels[7] = Label::createWithTTF(ttfConf, "Glow1", TextHAlignment::CENTER, s.width);
+    labels[7]->setPosition(Vec2(s.width / 2, s.height * 0.7));
+    labels[7]->setTextColor(Color32::GREEN);
+    labels[7]->enableGlow(Color32::YELLOW);
+    labels[7]->enableUnderline();
+    labels[7]->enableStrikethrough();
+
+    // Glow normal(CPU)
+    ttfConf.distanceFieldEnabled = false;
+    labels[8]                    = Label::createWithTTF(ttfConf, "Glow2", TextHAlignment::CENTER, s.width);
+    labels[8]->setPosition(Vec2(s.width / 2, s.height * 0.6));
+    labels[8]->setTextColor(Color32::GREEN);
+    labels[8]->enableGlow(Color32::YELLOW);
+    labels[8]->enableUnderline();
+    labels[8]->enableStrikethrough();
+
+    // Outline SDF(GPU)
+    ttfConf.distanceFieldEnabled = true;
+    ttfConf.outlineSize          = 2;
+    labels[9]                    = Label::createWithTTF(ttfConf, "Outline1", TextHAlignment::CENTER, s.width);
+    labels[9]->setPosition(Vec2(s.width / 2, s.height * 0.48));
+    labels[9]->setTextColor(Color32::RED);
+    labels[9]->enableOutline(Color32::BLUE);
+    labels[9]->enableUnderline();
+    labels[9]->enableStrikethrough();
+
+    // Outline normal(CPU by freetype2)
+    ttfConf.distanceFieldEnabled = false;
+    ttfConf.outlineSize          = 2;
+    labels[10]                    = Label::createWithTTF(ttfConf, "Outline2", TextHAlignment::CENTER, s.width);
+    labels[10]->setPosition(Vec2(s.width / 2, s.height * 0.36));
+    labels[10]->setTextColor(Color32::RED);
+    labels[10]->enableOutline(Color32::BLUE, 2);
+    labels[10]->enableUnderline();
+    labels[10]->enableStrikethrough();
+
+
     for (int i = 0; i < count; i++)
     {
-        labels[i]->setPosition(Vec2(labels[i]->getBoundingBox().getMaxX() + 10, s.height * 0.13f * (i + 1)));
+        if (i <7)
+            labels[i]->setPosition(Vec2(labels[i]->getBoundingBox().getMaxX() + 10, s.height * 0.13f * (i + 1)));
         labels[i]->enableUnderline();
         labels[i]->enableStrikethrough();
         addChild(labels[i]);
@@ -3789,10 +3787,7 @@ std::string LabelUnderlineStrikethroughMultiline::title() const
 std::string LabelUnderlineStrikethroughMultiline::subtitle() const
 {
     return "";
-    // Underline + Strikethrough + Color on TTF and BMfont with multiline ";
 }
-
-///
 
 LabelStrikethrough::LabelStrikethrough()
 {
