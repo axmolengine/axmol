@@ -718,7 +718,7 @@ private:
     // convenience: reset to defaults
     void resetAdvancedSettings()
     {
-        _thicknessScale        = 1.0f;
+        _thicknessScale        = 2.0f;
         _localScale            = Vec2(1.0f, 1.0f);
         _localCenter           = Vec2::ZERO;
         _localRotation         = 0.0f;
@@ -747,26 +747,6 @@ private:
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(DrawNode);
 
-public:
-    class AX_DLL Properties
-    {
-    public:
-
-            void setDefaultValues();
-
-            float factor{1.0f};  /// thickness scale factor
-
-            // transforming stuff
-            Vec2 scale;
-            Vec2 center;
-            float angle{0};
-            Vec2 position;
-
-            // Drawing flags
-            bool transform = false;
-            bool drawOrder = false;
-
-    } properties;
 };
 
 /** @} */

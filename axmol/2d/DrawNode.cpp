@@ -78,7 +78,7 @@ DrawNode::DrawNode()
 {
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
 
-    properties.setDefaultValues();
+    resetAdvancedSettings();
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     // TODO new-renderer: interface setupBuffer removal
@@ -730,7 +730,7 @@ void DrawNode::_drawPolygon(const Vec2* verts,
 
     if (outline)
     {
-        if (thickness != 1.0f || properties.drawOrder)
+        if (thickness != 1.0f || isPreserveDrawOrder())
         {
             vertex_count += 6 * (count - 1);
         }
@@ -766,8 +766,8 @@ void DrawNode::_drawPolygon(const Vec2* verts,
     }
     if (outline)
     {
-        float width = thickness * properties.factor * 0.25f;
-        if (thickness != 1.0f || properties.drawOrder)
+        float width = thickness * getThicknessScale() * 0.25f;
+        if (thickness != 1.0f || isPreserveDrawOrder())
         {
             for (unsigned int i = 1; i < (count); i++)
             {
@@ -877,7 +877,7 @@ void DrawNode::_drawPoly(const Vec2* verts,
                          float thickness,
                          bool isconvex)
 {
-    if (thickness == 1.0f && !properties.drawOrder)
+    if (thickness == 1.0f && !isPreserveDrawOrder())
     {
         auto _vertices = _transform(verts, count, closedPolygon);
 
@@ -911,7 +911,7 @@ void DrawNode::_drawSegment(const Vec2& from,
                             DrawNode::EndType etStart,
                             DrawNode::EndType etEnd)
 {
-    if (thickness == 1.0f && !properties.drawOrder)
+    if (thickness == 1.0f && !isPreserveDrawOrder())
     {
         _drawLine(from, to, color);  // fastest way to draw a line
     }
@@ -919,7 +919,7 @@ void DrawNode::_drawSegment(const Vec2& from,
     {
         Vec2 vertices[2] = {from, to};
         applyTransform(vertices, vertices, 2);
-        float width = thickness * properties.factor * 0.25f;
+        float width = thickness * getThicknessScale() * 0.25f;
 
         Vec2 a  = vertices[0];
         Vec2 b  = vertices[1];
@@ -1149,7 +1149,7 @@ void DrawNode::_drawPoints(const Vec2* position,
                            const Color& color,
                            const DrawNode::PointType pointType)
 {
-    if (properties.drawOrder == true)
+    if (isPreserveDrawOrder() == true)
     {
         float pointSize4 = pointSize * 0.25f;
         Vec2 vec2Size4   = Vec2(pointSize4, pointSize4);
@@ -1192,7 +1192,7 @@ void DrawNode::_drawPoint(const Vec2& position,
                           const Color& color,
                           const DrawNode::PointType pointType)
 {
-    if (properties.drawOrder == true)
+    if (isPreserveDrawOrder() == true)
     {
         float pointSize4 = pointSize * 0.25f;
         Vec2 vec2Size4   = Vec2(pointSize4, pointSize4);
@@ -1220,7 +1220,7 @@ void DrawNode::_drawPoint(const Vec2& position,
         return;
     }
 
-    if (properties.drawOrder == true)
+    if (isPreserveDrawOrder() == true)
     {
         float pointSize4 = pointSize * 0.25f;
         Vec2 origin      = position - Vec2(pointSize4, pointSize4);
@@ -1344,7 +1344,7 @@ tlx::pod_vector<Vec2> DrawNode::_transform(const Vec2* _vertices, unsigned int& 
     }
 
     tlx::pod_vector<Vec2> vert(count + closedCounter);
-    if (properties.transform == false)
+    if (isLocalTransformEnabled() == false)
     {
         memcpy(vert.data(), _vertices, count * sizeof(Vec2));
         if (closedCounter)
@@ -1366,13 +1366,13 @@ tlx::pod_vector<Vec2> DrawNode::_transform(const Vec2* _vertices, unsigned int& 
 
 void DrawNode::applyTransform(const Vec2* from, Vec2* to, unsigned int count)
 {
-    if (properties.transform == false)
+    if (isLocalTransformEnabled() == false)
         return;
 
-    auto scale    = properties.scale;
-    auto position = properties.position;
+    auto scale    = getLocalScale();
+    auto position = getLocalPosition();
 
-    if (properties.angle == 0.0f)
+    if (getLocalRotation() == 0.0f)
     {
         for (unsigned int i = 0; i < count; i++)
         {
@@ -1382,9 +1382,9 @@ void DrawNode::applyTransform(const Vec2* from, Vec2* to, unsigned int count)
     }
     else
     {
-        const float sinRot = sin(properties.angle);
-        const float cosRot = cos(properties.angle);
-        auto center        = properties.center;
+        const float sinRot = sin(getLocalRotation());
+        const float cosRot = cos(getLocalRotation());
+        auto center        = _localCenter;
 
         // https://stackoverflow.com/questions/2259476/rotating-a-point-about-another-point-2d
         for (unsigned int i = 0; i < count; i++)
@@ -1408,18 +1408,18 @@ void DrawNode::applyTransform(const Vec2* from, Vec2* to, unsigned int count)
     }
 }
 
-void DrawNode::Properties::setDefaultValues()
-{
-    auto fac = Director::getInstance()->getContentScaleFactor();
-    factor   = fac;
-
-    scale     = Vec2(1.0f, 1.0f);
-    center    = Vec2::ZERO;
-    angle     = 0;
-    position  = Vec2::ZERO;
-    transform = false;
-    drawOrder = false;
-}
+//void DrawNode::Properties::setDefaultValues()
+//{
+//    auto fac = Director::getInstance()->getContentScaleFactor();
+//    factor   = fac;
+//
+//    scale     = Vec2(1.0f, 1.0f);
+//    center    = Vec2::ZERO;
+//    angle     = 0;
+//    position  = Vec2::ZERO;
+//    transform = false;
+//    drawOrder = false;
+//}
 
 
 }  // namespace ax

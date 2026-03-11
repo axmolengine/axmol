@@ -95,10 +95,11 @@ public:
     void drawDirection(const ax::Vec2* vec, const int size, ax::Vec2 offset);
 
     float ns;     // drawNode->getScale;
-    ax::Vec2 ps;  // drawNode->properties.scale;
-    float pf;     // drawNode->properties.factor;
+    ax::Vec2 po;  // drawNode->_localPosition
+    ax::Vec2 ps;  // drawNode->_localScale
+    float pf;     // drawNode->_thicknessScale
     float thickness;
-    float pa;  // drawNode->properties.ange;
+    float pa;  // drawNode->_localRotation
     float as;  // angle start
     float ae;  // angle end
     bool drawOrder;
