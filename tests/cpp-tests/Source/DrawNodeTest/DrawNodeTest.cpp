@@ -3300,10 +3300,10 @@ DrawNodePolygonTest::DrawNodePolygonTest()
     drawNode->setScale(0.3f);
     drawNode->properties.position =Vec2(150, 590);
     drawNode->properties.scale ={0.4f, 0.4f};
-    drawNode->drawSolidPolygon(horse, sizeof(horse) / sizeof(horse[0]), Color::WHITE, 0.0f, Color::RED);
+    drawNode->drawSolidPolygon(horse, sizeof(horse) / sizeof(horse[0]), Color::WHITE, 3.0f, Color::RED);
     drawNode->properties.position =Vec2(30, 200);
     drawNode->properties.scale ={1.0f, 1.0f};
-    drawNode->drawPoly(horse, sizeof(horse) / sizeof(horse[0]), true, Color::GREEN);
+    drawNode->drawPoly(horse, sizeof(horse) / sizeof(horse[0]), true, Color::GREEN, 20.0f);
     drawNode->properties.position =Vec2(700, 220);
     drawNode->properties.scale ={0.1f, 0.1f};
     drawNode->drawSolidPolygon(spider, sizeof(spider) / sizeof(spider[0]), Color::YELLOW, 2.0f, Color::RED);
@@ -3314,7 +3314,8 @@ DrawNodePolygonTest::DrawNodePolygonTest()
     drawNode->properties.position =Vec2(1100, 160);
     drawNode->drawPoly(spider, sizeof(spider) / sizeof(spider[0]), true, Color::RED, true);
     drawNode->properties.scale ={0.7f, 0.7f};
-    drawNode->properties.position =Vec2(950, 400);
+    drawNode->properties.position =Vec2(1260, 340);
+    drawNode->properties.angle = 45;
     drawNode->drawSolidPolygon(spider, sizeof(spider) / sizeof(spider[0]), Color::YELLOW, 5.0f, Color::RED);
 }
 

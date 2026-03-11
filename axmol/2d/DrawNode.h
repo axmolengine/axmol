@@ -84,23 +84,6 @@ public:
         Butt,
     };
 
-    struct Properties
-    {
-        void setDefaultValues();
-
-        float factor{1.0f};  /// thickness scale factor
-
-        // transforming stuff
-        Vec2 scale;
-        Vec2 center;
-        float angle{0};
-        Vec2 position;
-
-        // Drawing flags
-        bool transform = false;
-        bool drawOrder = false;
-    } properties;
-
     /** creates and initialize a DrawNode node.
      *
      * @return Return an autorelease object.
@@ -678,6 +661,27 @@ private:
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(DrawNode);
+
+public:
+    class AX_DLL Properties
+    {
+    public:
+
+            void setDefaultValues();
+
+            float factor{1.0f};  /// thickness scale factor
+
+            // transforming stuff
+            Vec2 scale;
+            Vec2 center;
+            float angle{0};
+            Vec2 position;
+
+            // Drawing flags
+            bool transform = false;
+            bool drawOrder = false;
+
+    } properties;
 };
 
 /** @} */

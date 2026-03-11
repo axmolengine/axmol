@@ -1393,7 +1393,7 @@ void DrawNode::applyTransform(const Vec2* from, Vec2* to, unsigned int count)
             float x = from[i].x - center.x;
             float y = from[i].y - center.y;
 
-            // rotate point
+            // rotate point (counter clockwise)
             float rx = x * cosRot - y * sinRot;
             float ry = x * sinRot + y * cosRot;
 
