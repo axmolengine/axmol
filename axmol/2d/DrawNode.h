@@ -659,12 +659,8 @@ private:
 
     void applyTransform(const Vec2* from, Vec2* to, unsigned int count);
 
-
-
-    // Flat Properties members section
-
-    public:
-    // Accessors
+    /// Advanced settings
+public:
     float getThicknessScale() const { return _thicknessScale; }
     void setThicknessScale(float s)
     {
@@ -729,7 +725,7 @@ private:
         _trianglesDirty = _linesDirty = _pointsDirty = true;
     }
 
-protect:
+protected:
     // thickness scale (was factor)
     float _thicknessScale{1.0f};
 
@@ -746,7 +742,6 @@ protect:
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(DrawNode);
-
 };
 
 /** @} */

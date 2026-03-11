@@ -1408,18 +1408,4 @@ void DrawNode::applyTransform(const Vec2* from, Vec2* to, unsigned int count)
     }
 }
 
-//void DrawNode::Properties::setDefaultValues()
-//{
-//    auto fac = Director::getInstance()->getContentScaleFactor();
-//    factor   = fac;
-//
-//    scale     = Vec2(1.0f, 1.0f);
-//    center    = Vec2::ZERO;
-//    angle     = 0;
-//    position  = Vec2::ZERO;
-//    transform = false;
-//    drawOrder = false;
-//}
-
-
 }  // namespace ax
