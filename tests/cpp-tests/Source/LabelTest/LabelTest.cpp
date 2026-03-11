@@ -3711,17 +3711,16 @@ LabelUnderlineStrikethroughMultiline::LabelUnderlineStrikethroughMultiline()
     // Outline normal(CPU by freetype2)
     ttfConf.distanceFieldEnabled = false;
     ttfConf.outlineSize          = 2;
-    labels[10]                    = Label::createWithTTF(ttfConf, "Outline2", TextHAlignment::CENTER, s.width);
+    labels[10]                   = Label::createWithTTF(ttfConf, "Outline2", TextHAlignment::CENTER, s.width);
     labels[10]->setPosition(Vec2(s.width / 2, s.height * 0.36));
     labels[10]->setTextColor(Color32::RED);
     labels[10]->enableOutline(Color32::BLUE, 2);
     labels[10]->enableUnderline();
     labels[10]->enableStrikethrough();
 
-
     for (int i = 0; i < count; i++)
     {
-        if (i <7)
+        if (i < 7)
             labels[i]->setPosition(Vec2(labels[i]->getBoundingBox().getMaxX() + 10, s.height * 0.13f * (i + 1)));
         labels[i]->enableUnderline();
         labels[i]->enableStrikethrough();
