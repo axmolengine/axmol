@@ -87,17 +87,6 @@ public:
     struct Properties
     {
         void setDefaultValues();
-        //{
-        //    auto fac          = Director::getInstance()->getContentScaleFactor();
-        //    factor = fac;
-
-        //    scale = Vec2(1.0f, 1.0f);
-        //    center = Vec2::ZERO;
-        //    angle = 0;
-        //    position = Vec2::ZERO;
-        //    transform = false;
-        //    drawOrder = false;
-        //}
 
         float factor{1.0f};  /// thickness scale factor
 
