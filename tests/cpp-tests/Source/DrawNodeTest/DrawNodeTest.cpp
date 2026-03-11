@@ -1702,7 +1702,7 @@ DrawNodeMorphTest_Polygon::DrawNodeMorphTest_Polygon()
     for (size_t n = 0; n < 10; n++)
     {
         drawNodeArray[n] = DrawNode::create();
-        drawNodeArray[n]->setLocalTransformEnabled( true);
+        drawNodeArray[n]->setLocalTransformEnabled(true);
         addChild(drawNodeArray[n]);
         drawNodeArray[n]->setPosition(
             Vec2(AXRANDOM_MINUS1_1() * size.width / 4, AXRANDOM_MINUS1_1() * size.height / 4) + Vec2(100, 100));
@@ -1815,6 +1815,7 @@ string DrawNodeMorphTest_Polygon::subtitle() const
 
 DrawNodePictureTest::DrawNodePictureTest()
 {
+    ns = 0.4;
     scheduleUpdate();
 }
 
@@ -1822,7 +1823,7 @@ void DrawNodePictureTest::update(float dt)
 {
     DrawNodeBaseTest::update(dt);
 
-    static float rot = 0.1f;
+    static float rot = 0.0f;
     static int count = 0;
     static bool wait = false;
 
@@ -1830,8 +1831,8 @@ void DrawNodePictureTest::update(float dt)
 
     if (!wait)
     {
-        rot += 0.05;
-        if (rot >= 6)
+        rot += 5.0f;
+        if (rot >= 343)
         {
             rot = count = 0;
             wait        = true;
@@ -1865,7 +1866,7 @@ void DrawNodePictureTest::update(float dt)
         drawNode->setScale(ns);
         drawNode->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
         drawNode->setRotation(180);
-        drawNode->setLocalCenter(vertices[0]);
+        drawNode->setLocalPivot(vertices[0]);
         drawNode->setLocalRotation(rot);
         drawNode->drawPolygon(vertices, sph_cmb - 3, color, 0.f, Color::random().withAlpha(0.5f), true);
 
@@ -2686,14 +2687,14 @@ void DrawNodeMethodsTest::drawAll()
         drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color::GREEN, thickness);
         drawNode->setLocalPosition(Vec2(-100, -300));
         drawNode->setLocalRotation(pa);
-        drawNode->setLocalCenter(vertices1[0]);
+        drawNode->setLocalPivot(vertices1[0]);
         drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color::MAGENTA, thickness);
         drawNode->setLocalPosition(Vec2(200, 0));
         drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color::RED, thickness);
         drawNode->setLocalPosition(Vec2(0.0f, -200.0f));
         drawNode->setLocalRotation(rotation / 10.0f);
         drawNode->setLocalScale(Vec2(5.0f, 5.0f));
-        drawNode->setLocalCenter(vertices1[4]);
+        drawNode->setLocalPivot(vertices1[4]);
         drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color::BLUE, thickness);
         drawNode->setLocalRotation(rotation);
         drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color::YELLOW, thickness);
@@ -2712,7 +2713,7 @@ void DrawNodeMethodsTest::drawAll()
                               Color::YELLOW);
         drawNode->setLocalPosition(Vec2(-100, -300));
         drawNode->setLocalRotation(pa);
-        drawNode->setLocalCenter(vertices1[0]);
+        drawNode->setLocalPivot(vertices1[0]);
         drawNode->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color::MAGENTA, thickness,
                               Color::GRAY);
         drawNode->setLocalPosition(Vec2(200, 0));
@@ -2722,7 +2723,7 @@ void DrawNodeMethodsTest::drawAll()
         drawNode->setLocalPosition(Vec2(0.0f, -300.0f));
         drawNode->setLocalRotation(rotation / 10.0f);
         drawNode->setLocalScale(Vec2(2.0f, 2.0f));
-        drawNode->setLocalCenter(vertices1[4]);
+        drawNode->setLocalPivot(vertices1[4]);
         drawNode->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color::BLUE, thickness,
                               Color::WHITE);
         drawNode->setLocalRotation(rotation);
@@ -2886,7 +2887,7 @@ void DrawNodeMethodsTest::drawAll()
         drawNode->setLocalPosition(Vec2(0.0f, -300.0f));
         drawNode->setLocalRotation(rotation / 10.0f);
         drawNode->setLocalScale(Vec2(2.0f, 2.0f));
-        drawNode->setLocalCenter(vertices1[4]);
+        drawNode->setLocalPivot(vertices1[4]);
         drawNode->drawSolidPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color::BLUE);
         drawNode->setLocalRotation(rotation);
         drawNode->drawSolidPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color::YELLOW);
@@ -2919,29 +2920,29 @@ void DrawNodeMethodsTest::drawAll()
         Vec2 gear4 = {size.width - 200, size.height - 200};
 
         drawNode->setLocalRotation(rotation + 45);
-        drawNode->setLocalCenter(gear1);
+        drawNode->setLocalPivot(gear1);
         drawNode->drawStar(Vec2(gear1), 30, 60, 8, Color::BLUE, 4.0);
         drawNode->setLocalRotation(-rotation);
-        drawNode->setLocalCenter(gear2);
+        drawNode->setLocalPivot(gear2);
         drawNode->drawStar(gear2, 30, 60, 8, Color::GREEN, 4.0);
 
         drawNode->resetAdvancedSettings();
         drawNode->drawLine(gear2, gear1, Color::RED, thickness);  // line
-        drawNode->setLocalCenter(gear4);
+        drawNode->setLocalPivot(gear4);
         drawNode->setLocalRotation(rotation + 45);
         drawNode->drawStar(gear3, 30, 60, 18, Color::RED, 1.0);
         drawNode->drawLine(gear3, gear4, Color::YELLOW, thickness);  // line
         // drawNode->properties.setDefaultValues();
         drawNode->setLocalRotation(rotation - 45);
-        drawNode->setLocalCenter(gear4);
+        drawNode->setLocalPivot(gear4);
         drawNode->drawStar(gear4, 40, 60, 60, Color::GREEN, 1.0);
 
         drawNode->setLocalRotation(rotation);
-        drawNode->setLocalCenter(Vec2(-110, 250));
+        drawNode->setLocalPivot(Vec2(-110, 250));
         drawNode->drawStar(Vec2(-110, 250), 30, 70, 5, Color::GREEN, 1.0);
-        drawNode->setLocalCenter(Vec2(-150, 100));
+        drawNode->setLocalPivot(Vec2(-150, 100));
         drawNode->drawStar(Vec2(-150, 100), 80, 100, 40, Color::GREEN, 1.0);
-        drawNode->setLocalCenter(Vec2(-150, -100));
+        drawNode->setLocalPivot(Vec2(-150, -100));
         drawNode->drawStar(Vec2(-150, -100), 5, 70, 3, Color::GREEN, 1.0);
 
         drawNode->setLocalRotation(0);
@@ -2962,29 +2963,29 @@ void DrawNodeMethodsTest::drawAll()
         Vec2 gear4 = {size.width - 200, size.height - 200};
 
         drawNode->setLocalRotation(rotation + 45);
-        drawNode->setLocalCenter(gear1);
+        drawNode->setLocalPivot(gear1);
         drawNode->drawSolidStar(Vec2(gear1), 30, 60, 8, Color::BLUE, Color::YELLOW, 4.0);
         drawNode->setLocalRotation(-rotation);
-        drawNode->setLocalCenter(gear2);
+        drawNode->setLocalPivot(gear2);
         drawNode->drawSolidStar(gear2, 30, 60, 8, Color::GREEN, Color::YELLOW, 4.0);
 
         drawNode->resetAdvancedSettings();
         drawNode->drawLine(gear2, gear1, Color::RED, thickness);  // line
-        drawNode->setLocalCenter(gear4);
+        drawNode->setLocalPivot(gear4);
         drawNode->setLocalRotation(rotation + 45);
         drawNode->drawSolidStar(gear3, 30, 60, 18, Color::RED, Color::YELLOW, 1.0);
         drawNode->drawLine(gear3, gear4, Color::YELLOW, thickness);  // line
         drawNode->resetAdvancedSettings();
         drawNode->setLocalRotation(rotation - 45);
-        drawNode->setLocalCenter(gear4);
+        drawNode->setLocalPivot(gear4);
         drawNode->drawSolidStar(gear4, 40, 60, 60, Color::GREEN, Color::YELLOW, 1.0);
 
         drawNode->setLocalRotation(rotation);
-        drawNode->setLocalCenter(Vec2(-110, 250));
+        drawNode->setLocalPivot(Vec2(-110, 250));
         drawNode->drawSolidStar(Vec2(-110, 250), 30, 70, 5, Color::GREEN, Color::YELLOW, 1.0);
-        drawNode->setLocalCenter(Vec2(-150, 100));
+        drawNode->setLocalPivot(Vec2(-150, 100));
         drawNode->drawSolidStar(Vec2(-150, 100), 80, 100, 40, Color::GREEN, Color::YELLOW, 1.0);
-        drawNode->setLocalCenter(Vec2(-150, -100));
+        drawNode->setLocalPivot(Vec2(-150, -100));
         drawNode->drawSolidStar(Vec2(-150, -100), 5, 70, 3, Color::GREEN, Color::YELLOW, 1.0);
 
         drawNode->setLocalRotation(0);
@@ -3348,10 +3349,10 @@ DrawNodeCircleTest::DrawNodeCircleTest()
                              Color::BLUE, 3.0f);
     }
 
-    drawNode->setLocalCenter(Vec2(120, 150));
+    drawNode->setLocalPivot(Vec2(120, 150));
     for (int i = 0; i < 5; i++)
     {
-        drawNode->setLocalRotation(AX_DEGREES_TO_RADIANS(360 / 5 * i));
+        drawNode->setLocalRotation(360 / 5 * i);
         drawNode->drawSolidCircle(Vec2(120, 197), 10, 0, 36, 1.0f, 1.0f, Color::BLUE);
         drawNode->drawSolidCircle(Vec2(120, 215), 12, 0, 36, 1.0f, 1.0f, Color::BLUE);
         drawNode->drawSolidCircle(Vec2(120, 235), 16, 0, 36, 1.0f, 1.0f, Color::BLUE);
@@ -3514,7 +3515,6 @@ DrawNodeIssueTester::DrawNodeIssueTester()
     drawNode->drawCircle(Vec2(100, 100), 40, AX_DEGREES_TO_RADIANS(-90), 30, true, 1.0f, 1.0f, Color::GREEN, 6);
 
     drawNode->drawCircle(Vec2(0, 100), 40, AX_DEGREES_TO_RADIANS(-90), 30, false, 1.0f, 1.0f, Color::RED, 6);
-
 
     Label* labelSize[10];
     y = 0;

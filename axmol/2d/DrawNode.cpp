@@ -730,7 +730,7 @@ void DrawNode::_drawPolygon(const Vec2* verts,
 
     if (outline)
     {
-        if (thickness != 1.0f || isPreserveDrawOrder())
+        if (thickness != 1.0f || _preserveDrawOrder)
         {
             vertex_count += 6 * (count - 1);
         }
@@ -766,8 +766,8 @@ void DrawNode::_drawPolygon(const Vec2* verts,
     }
     if (outline)
     {
-        float width = thickness * getThicknessScale() * 0.25f;
-        if (thickness != 1.0f || isPreserveDrawOrder())
+        float width = thickness * _thicknessScale * 0.25f;
+        if (thickness != 1.0f || _preserveDrawOrder)
         {
             for (unsigned int i = 1; i < (count); i++)
             {
@@ -877,7 +877,7 @@ void DrawNode::_drawPoly(const Vec2* verts,
                          float thickness,
                          bool isconvex)
 {
-    if (thickness == 1.0f && !isPreserveDrawOrder())
+    if (thickness == 1.0f && !_preserveDrawOrder)
     {
         auto _vertices = _transform(verts, count, closedPolygon);
 
@@ -911,15 +911,15 @@ void DrawNode::_drawSegment(const Vec2& from,
                             DrawNode::EndType etStart,
                             DrawNode::EndType etEnd)
 {
-    if (thickness == 1.0f && !isPreserveDrawOrder())
+    if (thickness == 1.0f && !_preserveDrawOrder)
     {
         _drawLine(from, to, color);  // fastest way to draw a line
     }
     else
     {
         Vec2 vertices[2] = {from, to};
-        applyTransform(vertices, vertices, 2);
-        float width = thickness * getThicknessScale() * 0.25f;
+        applyLocalTransform(vertices, vertices, 2);
+        float width = thickness * _thicknessScale * 0.25f;
 
         Vec2 a  = vertices[0];
         Vec2 b  = vertices[1];
@@ -1034,7 +1034,7 @@ void DrawNode::_drawSegment(const Vec2& from,
 void DrawNode::_drawLine(const Vec2& from, const Vec2& to, const Color& color)
 {
     Vec2 vertices[2] = {from, to};
-    applyTransform(vertices, vertices, 2);
+    applyLocalTransform(vertices, vertices, 2);
 
     auto line   = expandBufferAndGetPointer(_lines, 2);
     _linesDirty = true;
@@ -1100,7 +1100,7 @@ void DrawNode::_drawColoredTriangle(const Vec2* vertices3, const Color* color3)
 {
     unsigned int vertex_count = 3;
     Vec2* _vertices3          = new Vec2[vertex_count];
-    applyTransform(vertices3, _vertices3, vertex_count);
+    applyLocalTransform(vertices3, _vertices3, vertex_count);
 
     auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, vertex_count));
     _trianglesDirty = true;
@@ -1149,7 +1149,7 @@ void DrawNode::_drawPoints(const Vec2* position,
                            const Color& color,
                            const DrawNode::PointType pointType)
 {
-    if (isPreserveDrawOrder() == true)
+    if (_preserveDrawOrder)
     {
         float pointSize4 = pointSize * 0.25f;
         Vec2 vec2Size4   = Vec2(pointSize4, pointSize4);
@@ -1192,7 +1192,7 @@ void DrawNode::_drawPoint(const Vec2& position,
                           const Color& color,
                           const DrawNode::PointType pointType)
 {
-    if (isPreserveDrawOrder() == true)
+    if (_preserveDrawOrder)
     {
         float pointSize4 = pointSize * 0.25f;
         Vec2 vec2Size4   = Vec2(pointSize4, pointSize4);
@@ -1216,17 +1216,6 @@ void DrawNode::_drawPoint(const Vec2& position,
         default:
             break;
         }
-
-        return;
-    }
-
-    if (isPreserveDrawOrder() == true)
-    {
-        float pointSize4 = pointSize * 0.25f;
-        Vec2 origin      = position - Vec2(pointSize4, pointSize4);
-        Vec2 destination = position + Vec2(pointSize4, pointSize4);
-        Vec2 _vertices[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y)};
-        _drawPolygon(_vertices, 4, color, color, false, 0.0f, true);
     }
     else
     {
@@ -1249,14 +1238,14 @@ void DrawNode::_drawPie(const Vec2& center,
                         DrawMode drawMode,
                         float thickness)
 {
-#define DEGREES 360
+#define CIRCLE_DEGREES 360
 
     // Not a real line!
     if (startAngle == endAngle)
         return;
 
     // Its a circle?
-    if (MAX((startAngle - endAngle), (endAngle - startAngle)) == DEGREES)
+    if (MAX((startAngle - endAngle), (endAngle - startAngle)) == CIRCLE_DEGREES)
     {
         switch (drawMode)
         {
@@ -1279,9 +1268,9 @@ void DrawNode::_drawPie(const Vec2& center,
     }
     else
     {
-        const float coef = 2.0f * (float)M_PI / DEGREES;
+        const float coef = 2.0f * (float)M_PI / CIRCLE_DEGREES;
 
-        tlx::pod_vector<Vec2> _vertices(DEGREES + 2);
+        tlx::pod_vector<Vec2> _vertices(CIRCLE_DEGREES + 2);
 
         int n        = 0;
         float rads   = 0.0f;
@@ -1292,7 +1281,7 @@ void DrawNode::_drawPie(const Vec2& center,
             std::swap(endAngle, startAngle);
         }
 
-        for (int i = 0; i <= DEGREES; i++)
+        for (int i = 0; i <= CIRCLE_DEGREES; i++)
         {
             if (startAngle <= i && endAngle >= i)
             {
@@ -1344,7 +1333,7 @@ tlx::pod_vector<Vec2> DrawNode::_transform(const Vec2* _vertices, unsigned int& 
     }
 
     tlx::pod_vector<Vec2> vert(count + closedCounter);
-    if (isLocalTransformEnabled() == false)
+    if (!_localTransformEnabled)
     {
         memcpy(vert.data(), _vertices, count * sizeof(Vec2));
         if (closedCounter)
@@ -1354,7 +1343,7 @@ tlx::pod_vector<Vec2> DrawNode::_transform(const Vec2* _vertices, unsigned int& 
         return vert;
     }
 
-    applyTransform(_vertices, vert.data(), count);
+    applyLocalTransform(_vertices, vert.data(), count);
 
     if (closedCounter)
     {
@@ -1364,46 +1353,42 @@ tlx::pod_vector<Vec2> DrawNode::_transform(const Vec2* _vertices, unsigned int& 
     return vert;
 }
 
-void DrawNode::applyTransform(const Vec2* from, Vec2* to, unsigned int count)
+void DrawNode::applyLocalTransform(const Vec2* from, Vec2* to, unsigned int count) const
 {
-    if (isLocalTransformEnabled() == false)
+    if (!_localTransformEnabled)
         return;
 
-    auto scale    = getLocalScale();
-    auto position = getLocalPosition();
-
-    if (getLocalRotation() == 0.0f)
+    if (_localRotationRad == 0.0f)
     {
         for (unsigned int i = 0; i < count; i++)
         {
-            to[i].x = from[i].x * scale.x + position.x;
-            to[i].y = from[i].y * scale.y + position.y;
+            to[i].x = from[i].x * _localScale.x + _localPosition.x;
+            to[i].y = from[i].y * _localScale.y + _localPosition.y;
         }
     }
     else
     {
-        const float sinRot = sin(getLocalRotation());
-        const float cosRot = cos(getLocalRotation());
-        auto center        = _localCenter;
+        const float sinRot = sin(_localRotationRad);
+        const float cosRot = cos(_localRotationRad);
 
         // https://stackoverflow.com/questions/2259476/rotating-a-point-about-another-point-2d
         for (unsigned int i = 0; i < count; i++)
         {
             // translate point to origin
-            float x = from[i].x - center.x;
-            float y = from[i].y - center.y;
+            float x = from[i].x - _localPivot.x;
+            float y = from[i].y - _localPivot.y;
 
             // rotate point (counter clockwise)
             float rx = x * cosRot - y * sinRot;
             float ry = x * sinRot + y * cosRot;
 
             // translate point back
-            x = rx + center.x;
-            y = ry + center.y;
+            x = rx + _localPivot.x;
+            y = ry + _localPivot.y;
 
             // scale and position
-            to[i].x = x * scale.x + position.x;
-            to[i].y = y * scale.y + position.y;
+            to[i].x = x * _localScale.x + _localPosition.x;
+            to[i].y = y * _localScale.y + _localPosition.y;
         }
     }
 }

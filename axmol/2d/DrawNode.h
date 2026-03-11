@@ -657,7 +657,7 @@ private:
      */
     tlx::pod_vector<Vec2> _transform(const Vec2* vertices, unsigned int& count, bool closedPolygon = false);
 
-    void applyTransform(const Vec2* from, Vec2* to, unsigned int count);
+    void applyLocalTransform(const Vec2* from, Vec2* to, unsigned int count) const;
 
     /// Advanced settings
 public:
@@ -682,17 +682,17 @@ public:
     }
     const Vec2& getLocalScale() const { return _localScale; }
 
-    void setLocalCenter(const Vec2& c)
+    void setLocalPivot(const Vec2& c)
     {
-        _localCenter    = c;
+        _localPivot     = c;
         _trianglesDirty = _linesDirty = true;
     }
-    const Vec2& getLocalCenter() const { return _localCenter; }
+    const Vec2& getLocalPivot() const { return _localPivot; }
 
     void setLocalRotation(float a)
     {
         _localRotation    = a;
-        _localRotationRad = _localRotation * M_PI / 180.0f;
+        _localRotationRad = AX_DEGREES_TO_RADIANS(_localRotation);
         _trianglesDirty = _linesDirty = true;
     }
     float getLocalRotation() const { return _localRotation; }
@@ -702,7 +702,7 @@ public:
         _localPosition  = p;
         _trianglesDirty = _linesDirty = true;
     }
-    Vec2 getLocalPosition() const { return _localPosition; }
+    const Vec2& getLocalPosition() const { return _localPosition; }
 
     void setPreserveDrawOrder(bool v)
     {
@@ -716,7 +716,7 @@ public:
     {
         _thicknessScale        = 1.0f;
         _localScale            = Vec2(1.0f, 1.0f);
-        _localCenter           = Vec2::ZERO;
+        _localPivot            = Vec2::ZERO;
         _localRotation         = 0.0f;
         _localRotationRad      = 0.0f;
         _localPosition         = Vec2::ZERO;
@@ -731,7 +731,7 @@ protected:
 
     // optional local transform applied to primitives when enabled
     Vec2 _localScale{1.0f, 1.0f};
-    Vec2 _localCenter{0.0f, 0.0f};
+    Vec2 _localPivot{0.0f, 0.0f};
     float _localRotation{0.0f};     // local rotation in degrees
     float _localRotationRad{0.0f};  // local rotation in radians (cached for efficiency)
     Vec2 _localPosition{0.0f, 0.0f};
