@@ -684,14 +684,14 @@ private:
         _localScale     = s;
         _trianglesDirty = _linesDirty = true;
     }
-    Vec2 getLocalScale() const { return _localScale; }
+    const Vec2& getLocalScale() const { return _localScale; }
 
     void setLocalCenter(const Vec2& c)
     {
         _localCenter    = c;
         _trianglesDirty = _linesDirty = true;
     }
-    Vec2 getLocalCenter() const { return _localCenter; }
+    const Vec2& getLocalCenter() const { return _localCenter; }
 
     void setLocalRotation(float a)
     {
@@ -729,7 +729,7 @@ private:
         _trianglesDirty = _linesDirty = _pointsDirty = true;
     }
 
-private:
+protect:
     // thickness scale (was factor)
     float _thicknessScale{1.0f};
 
