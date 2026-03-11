@@ -1523,7 +1523,7 @@ void Label::enableUnderline()
         _lineDrawNode = DrawNode::create();
         _lineDrawNode->setGlobalZOrder(getGlobalZOrder());
         _lineDrawNode->setOpacity(_displayedColor.a);
-        _lineDrawNode->setThicknessScale(_lineDrawNode->getThicknessScale() * 0.25f);  // 0.25f: Makes the line smaller
+        _lineDrawNode->setThicknessScale(_lineDrawNode->getThicknessScale() * 0.5f);  // 0.5f: Makes the line smaller
         addChild(_lineDrawNode, 100000);
     }
 }
@@ -1541,7 +1541,7 @@ void Label::enableStrikethrough()
         _lineDrawNode = DrawNode::create();
         _lineDrawNode->setGlobalZOrder(getGlobalZOrder());
         _lineDrawNode->setOpacity(_displayedColor.a);
-        _lineDrawNode->setThicknessScale(_lineDrawNode->getThicknessScale() * 0.25f);  // 0.25f: Makes the line smaller
+        _lineDrawNode->setThicknessScale(_lineDrawNode->getThicknessScale() * 0.5f);  // 0.5f: Makes the line smaller
         addChild(_lineDrawNode, 100000);
     }
 }

@@ -3515,6 +3515,20 @@ DrawNodeIssueTester::DrawNodeIssueTester()
 
     drawNode->drawCircle(Vec2(0, 100), 40, AX_DEGREES_TO_RADIANS(-90), 30, false, 1.0f, 1.0f, Color::RED, 6);
 
+
+    Label* labelSize[10];
+    y = 0;
+    for (int i = 0; i < 10; i++)
+    {
+        float fs     = (i + 1) * 3;
+        labelSize[i] = Label::createWithTTF("UNDERLINE/STRIKE...", "fonts/arial.ttf", fs);
+        labelSize[i]->setPosition(300, 300 - 50 - y);
+        y += (i + 2) * 3;
+        labelSize[i]->enableUnderline();
+        labelSize[i]->enableStrikethrough();
+        addChild(labelSize[i]);
+    }
+
     // scheduleUpdate();
 }
 

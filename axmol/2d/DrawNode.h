@@ -718,7 +718,7 @@ private:
     // convenience: reset to defaults
     void resetAdvancedSettings()
     {
-        _thicknessScale        = 2.0f;
+        _thicknessScale        = 1.0f;
         _localScale            = Vec2(1.0f, 1.0f);
         _localCenter           = Vec2::ZERO;
         _localRotation         = 0.0f;
