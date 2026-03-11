@@ -84,6 +84,34 @@ public:
         Butt,
     };
 
+    struct Properties
+    {
+        void setDefaultValues();
+        //{
+        //    auto fac          = Director::getInstance()->getContentScaleFactor();
+        //    factor = fac;
+
+        //    scale = Vec2(1.0f, 1.0f);
+        //    center = Vec2::ZERO;
+        //    angle = 0;
+        //    position = Vec2::ZERO;
+        //    transform = false;
+        //    drawOrder = false;
+        //}
+
+        float factor{1.0f};  /// thickness scale factor
+
+        // transforming stuff
+        Vec2 scale;
+        Vec2 center;
+        float angle{0};
+        Vec2 position;
+
+        // Drawing flags
+        bool transform = false;
+        bool drawOrder = false;
+    } properties;
+
     /** creates and initialize a DrawNode node.
      *
      * @return Return an autorelease object.
@@ -661,104 +689,6 @@ private:
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(DrawNode);
-
-public:
-    class AX_DLL Properties
-    {
-    public:
-        float factor;  /// thickness scale factor
-
-        // transforming stuff
-        Vec2 scale;
-        Vec2 center;
-        float rotation;
-        Vec2 position;
-
-        // Drawing flags
-        bool transform = false;
-        bool drawOrder = false;
-
-        /** Set the DrawNode drawOrder
-        *
-        * @param drawOrder. true/false = On/Off
-        * Its for performance there
-        * false = cocos2dx behaviour => faster but works only on 1.0f thickness
-
-        */
-        void setDrawOrder(bool dO) { drawOrder = dO; }
-
-        /** Get the DrawNode drawOrder
-         *
-         */
-        bool getDrawOrder() const { return drawOrder; }
-
-        /** Set the DrawNode transform
-         *
-         * @param transform. true/false = On/Off
-         *
-         */
-        void setTransform(bool t) { transform = t; }
-
-        /** Get the DrawNode transform
-         *
-         */
-        bool getTransform() const { return transform; }
-
-        /** Set the DrawNode scale for each drawing primitive after this.
-
-        */
-        void setScale(Vec2 s) { scale = s; }
-
-        /** Get the DrawNode scale for each drawing primitive after this.
-
-         */
-        const Vec2& getScale() const { return scale; }
-
-        /** Set the DrawNode rotation for each drawing primitive after this.
-
-        */
-        void setRotation(float r) { rotation = r; }
-
-        /** Get the DrawNode rotation for each drawing primitive after this.
-
-        */
-        float getRotation() const { return rotation; }
-
-        /** Set the DrawNode center of rotation for each drawing primitive after this.
-
-        */
-        void setCenter(Vec2 c) { center = c; }
-
-        /** Get the DrawNode center of rotation for each drawing primitive after this.
-
-        */
-        const Vec2& getCenter() const { return center; }
-
-        /** Set the DrawNode position for each drawing primitive after this.
-
-        */
-        void setPosition(Vec2 p) { position = p; }
-
-        /** Get the DrawNode position for drawing primitive.
-
-        */
-        const Vec2& getPosition() const { return position; }
-
-        /** Get the DrawNode factor for drawing primitive.
-
-        */
-        float getFactor() const { return factor; }
-        /** Get the DrawNode factor for drawing primitive.
-
-        */
-        void setFactor(float fac) { factor = fac; }
-
-        /** Set all default DrawNode properties.
-
-       */
-        void setDefaultValues();
-
-    } properties;
 };
 
 /** @} */

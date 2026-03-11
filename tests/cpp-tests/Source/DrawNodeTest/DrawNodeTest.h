@@ -98,7 +98,7 @@ public:
     ax::Vec2 ps;  // drawNode->properties.scale;
     float pf;     // drawNode->properties.factor;
     float thickness;
-    float pr;  // drawNode->properties.rotation();
+    float pa;  // drawNode->properties.ange;
     float as;  // angle start
     float ae;  // angle end
     bool drawOrder;

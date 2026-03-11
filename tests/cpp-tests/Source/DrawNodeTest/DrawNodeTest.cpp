@@ -1464,14 +1464,14 @@ DrawNodeBaseTest::DrawNodeBaseTest()
     if (!drawNode)
     {
         drawNode = DrawNode::create();
-        drawNode->properties.setTransform(true);
+        drawNode->properties.transform = true;
         addChild(drawNode);
 
         ns        = drawNode->getScale();
-        ps        = drawNode->properties.getScale();
-        pf        = drawNode->properties.getFactor();
+        ps        = drawNode->properties.scale;
+        pf        = drawNode->properties.factor;
         thickness = 1;
-        pr        = drawNode->properties.getRotation();
+        pa        = drawNode->properties.angle;
         as        = 0;
         ae        = 200;
         drawOrder = true;
@@ -1516,7 +1516,7 @@ void DrawNodeBaseTest::onDrawImGui()
 {
     if (flagGUI != -1)
     {
-        if (ImGui::Begin("DrawNode::properties Dialog"))
+        if (ImGui::Begin("DrawNode::properties. Dialog"))
         {
             if (flagGUI == 1)
             {
@@ -1538,7 +1538,7 @@ void DrawNodeBaseTest::onDrawImGui()
             float _ps[2] = {ps.x, ps.y};
             ImGui::DragFloat2("Scale", _ps);
             ps = Vec2(_ps[0], _ps[1]);
-            ImGui::SliderFloat("Rotation", &pr, 0.0f, 360.0f);
+            ImGui::SliderFloat("Angle", &pa, 0.0f, 360.0f);
 
             if (flagGUI == 2)
             {
@@ -1582,7 +1582,7 @@ DrawNodeMorphTest_SolidPolygon::DrawNodeMorphTest_SolidPolygon()
     for (size_t n = 0; n < 10; n++)
     {
         drawNodeArray[n] = DrawNode::create();
-        drawNodeArray[n]->properties.setTransform(true);
+        drawNodeArray[n]->properties.transform = true;
         addChild(drawNodeArray[n]);
         drawNodeArray[n]->setPosition(
             Vec2(AXRANDOM_MINUS1_1() * size.width / 4, AXRANDOM_MINUS1_1() * size.height / 4) + Vec2(100, 100));
@@ -1668,7 +1668,7 @@ void DrawNodeMorphTest_SolidPolygon::update(float dt)
             state[n] = !state[n];
         }
 
-        drawNodeArray[n]->properties.setScale(Vec2(0.5f, 0.5f));
+        drawNodeArray[n]->properties.scale = Vec2(0.5f, 0.5f);
         drawNodeArray[n]->drawSolidPolygon(verticesObjMorph[n], segments, color[n], thickness, Color::YELLOW);
     }
 }
@@ -1699,7 +1699,7 @@ DrawNodeMorphTest_Polygon::DrawNodeMorphTest_Polygon()
     for (size_t n = 0; n < 10; n++)
     {
         drawNodeArray[n] = DrawNode::create();
-        drawNodeArray[n]->properties.setTransform(true);
+        drawNodeArray[n]->properties.transform = true;
         addChild(drawNodeArray[n]);
         drawNodeArray[n]->setPosition(
             Vec2(AXRANDOM_MINUS1_1() * size.width / 4, AXRANDOM_MINUS1_1() * size.height / 4) + Vec2(100, 100));
@@ -1785,12 +1785,12 @@ void DrawNodeMorphTest_Polygon::update(float dt)
             state[n] = !state[n];
         }
 
-        drawNodeArray[n]->properties.setTransform(transform);
-        drawNodeArray[n]->properties.setDrawOrder(drawOrder);
-        drawNodeArray[n]->properties.setScale(ps);
-        drawNodeArray[n]->properties.setFactor(pf);
-        drawNodeArray[n]->properties.setRotation(pr);
-        drawNodeArray[n]->properties.setRotation(pr);
+        drawNodeArray[n]->properties.transform =transform;
+        drawNodeArray[n]->properties.drawOrder = drawOrder;
+        drawNodeArray[n]->properties.scale =ps;
+        drawNodeArray[n]->properties.factor =pf;
+        drawNodeArray[n]->properties.angle=pa;
+        drawNodeArray[n]->properties.angle=pa;
         drawNodeArray[n]->drawPoly(verticesObjMorph[n], segments, true, color[n], thickness);
     }
 }
@@ -1862,8 +1862,8 @@ void DrawNodePictureTest::update(float dt)
         drawNode->setScale(ns);
         drawNode->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
         drawNode->setRotation(180);
-        drawNode->properties.setCenter(vertices[0]);
-        drawNode->properties.setRotation(rot);
+        drawNode->properties.center =vertices[0];
+        drawNode->properties.angle=rot;
         drawNode->drawPolygon(vertices, sph_cmb - 3, color, 0.f, Color::random().withAlpha(0.5f), true);
 
         sph_la += sph_cmb;
@@ -1878,7 +1878,7 @@ string DrawNodePictureTest::title() const
 
 string DrawNodePictureTest::subtitle() const
 {
-    return "Properties (Rotation) Test";
+    return "properties. (Rotation) Test";
 }
 
 // orginal source from here: https://forum.lazarus.freepascal.org/index.php/topic,71851.0.html
@@ -1973,11 +1973,11 @@ void DrawNodeLineDrawTest::update(float dt)
 
     flagGUI = 0;
     drawNode->setScale(ns);
-    drawNode->properties.setScale(ps);
-    drawNode->properties.setFactor(pf);
-    drawNode->properties.setRotation(pr);
-    drawNode->properties.setDrawOrder(drawOrder);
-    drawNode->properties.setTransform(transform);
+    drawNode->properties.scale =ps;
+    drawNode->properties.factor =pf;
+    drawNode->properties.angle=pa;
+    drawNode->properties.drawOrder =drawOrder;
+    drawNode->properties.transform =transform;
 
     float segments   = 36.0f;
     int radius       = 100;
@@ -2412,30 +2412,30 @@ void DrawNodePieTest::update(float dt)
     drawNode->clear();
 
     drawNode->setScale(ns);
-    drawNode->properties.setScale(ps);
-    drawNode->properties.setFactor(pf);
-    drawNode->properties.setRotation(pr);
-    drawNode->properties.setDrawOrder(drawOrder);
-    drawNode->properties.setTransform(transform);
+    drawNode->properties.scale =ps;
+    drawNode->properties.factor =pf;
+    drawNode->properties.angle=pa;
+    drawNode->properties.drawOrder =drawOrder;
+    drawNode->properties.transform =transform;
 
     // Filled
-    drawNode->drawPie(VisibleRect::center() - Vec2(190.0f, -35.0f), 40, pr, as, ae, 1.0f, 1.0f, Color::RED, Color::BLUE,
+    drawNode->drawPie(VisibleRect::center() - Vec2(190.0f, -35.0f), 40, pa, as, ae, 1.0f, 1.0f, Color::RED, Color::BLUE,
                       drawNode->DrawMode::Fill, thickness);
 
     // Outlined
-    drawNode->drawPie(VisibleRect::center() - Vec2(95.0f, -35.0f), 40, pr, as, ae, 1.0f, 1.0f, Color(), Color::BLUE,
+    drawNode->drawPie(VisibleRect::center() - Vec2(95.0f, -35.0f), 40, pa, as, ae, 1.0f, 1.0f, Color(), Color::BLUE,
                       drawNode->DrawMode::Outline, thickness);
 
     // Line
-    drawNode->drawPie(VisibleRect::center() + Vec2(0.0f, 35.0f), 40, pr, as, ae, 1.0f, 1.0f, Color(), Color::BLUE,
+    drawNode->drawPie(VisibleRect::center() + Vec2(0.0f, 35.0f), 40, pa, as, ae, 1.0f, 1.0f, Color(), Color::BLUE,
                       drawNode->DrawMode::Line, thickness);
 
     //  Semi
-    drawNode->drawPie(VisibleRect::center() + Vec2(95.0f, 35.0f), 40, pr, as, ae, 1.0f, 1.0f, Color(), Color::BLUE,
+    drawNode->drawPie(VisibleRect::center() + Vec2(95.0f, 35.0f), 40, pa, as, ae, 1.0f, 1.0f, Color(), Color::BLUE,
                       drawNode->DrawMode::Semi, thickness);
 
     // Semi (Filled)
-    drawNode->drawPie(VisibleRect::center() + Vec2(190.0f, 35.0f), 40, pr, as, ae, 1.0f, 1.0f, Color::RED, Color::BLUE,
+    drawNode->drawPie(VisibleRect::center() + Vec2(190.0f, 35.0f), 40, pa, as, ae, 1.0f, 1.0f, Color::RED, Color::BLUE,
                       drawNode->DrawMode::Semi, thickness);
 }
 
@@ -2488,7 +2488,7 @@ void DrawNodeMethodsTest::onEnter()
 
 std::string DrawNodeMethodsTest::title() const
 {
-    return "DrawNode Properties Tests";
+    return "DrawNode properties. Tests";
 }
 
 string DrawNodeMethodsTest::subtitle() const
@@ -2508,11 +2508,11 @@ void DrawNodeMethodsTest::drawAll()
     drawNode->clear();
 
     drawNode->setScale(ns);
-    drawNode->properties.setScale(ps);
-    drawNode->properties.setFactor(pf);
-    drawNode->properties.setRotation(pr);
-    drawNode->properties.setDrawOrder(drawOrder);
-    drawNode->properties.setTransform(transform);
+    drawNode->properties.scale =ps;
+    drawNode->properties.factor =pf;
+    drawNode->properties.angle=pa;
+    drawNode->properties.drawOrder =drawOrder;
+    drawNode->properties.transform =transform;
 
     labelRound->setVisible(false);
     labelSquare->setVisible(false);
@@ -2565,7 +2565,7 @@ void DrawNodeMethodsTest::drawAll()
             Vec2 p2 = pts->getControlPointAtIndex(i++);
             Vec2 p3 = pts->getControlPointAtIndex(i);
 
-            drawNode->properties.setPosition(Vec2(-100, -100));
+            drawNode->properties.position =Vec2(-100, -100);
             drawNode->drawQuadBezier(p1, p2, p3, 30, Color::RED, thickness);
         }
 
@@ -2575,7 +2575,7 @@ void DrawNodeMethodsTest::drawAll()
             Vec2 p2 = pts2->getControlPointAtIndex(i++);
             Vec2 p3 = pts2->getControlPointAtIndex(i);
 
-            drawNode->properties.setPosition(Vec2(-100, -100));
+            drawNode->properties.position =Vec2(-100, -100);
             drawNode->drawQuadBezier(p1, p2, p3, 30, Color::GREEN, thickness);
         }
 
@@ -2597,7 +2597,7 @@ void DrawNodeMethodsTest::drawAll()
             Vec2 p2 = pts->getControlPointAtIndex(i++);
             Vec2 p3 = pts->getControlPointAtIndex(i++);
             Vec2 p4 = pts->getControlPointAtIndex(i);
-            drawNode->properties.setPosition(Vec2(-100, -100));
+            drawNode->properties.position =Vec2(-100, -100);
             drawNode->drawCubicBezier(p1, p2, p3, p4, 120, Color::RED, thickness);
         }
 
@@ -2607,7 +2607,7 @@ void DrawNodeMethodsTest::drawAll()
             Vec2 p2 = pts2->getControlPointAtIndex(i++);
             Vec2 p3 = pts2->getControlPointAtIndex(i++);
             Vec2 p4 = pts2->getControlPointAtIndex(i);
-            drawNode->properties.setPosition(Vec2(-100, -100));
+            drawNode->properties.position =Vec2(-100, -100);
             drawNode->drawCubicBezier(p1, p2, p3, p4, 120, Color::GREEN, thickness);
         }
 
@@ -2634,7 +2634,7 @@ void DrawNodeMethodsTest::drawAll()
         array2->addControlPoint(Vec2(size.width / 2, 80.0f));
         drawNode->drawCardinalSpline(array2, 5.0f, 120, Color::ORANGE, thickness);
 
-        drawNode->properties.setPosition(Vec2(-100, -100));
+        drawNode->properties.position =Vec2(-100, -100);
         drawNode->drawCardinalSpline(pts, 0.001f, 360, Color::RED, thickness);
         drawNode->drawCardinalSpline(pts2, 0.001f, 360, Color::GREEN, thickness);
 
@@ -2660,7 +2660,7 @@ void DrawNodeMethodsTest::drawAll()
         array->addControlPoint(Vec2(size.width / 2, size.height / 2));
         drawNode->drawCatmullRom(array, 20, Color::MAGENTA, thickness);
 
-        drawNode->properties.setPosition(Vec2(-100, -100));
+        drawNode->properties.position =Vec2(-100, -100);
         drawNode->drawCatmullRom(pts, 360, Color::RED, thickness);
         drawNode->drawCatmullRom(pts2, 360, Color::GREEN, thickness);
 
@@ -2669,7 +2669,7 @@ void DrawNodeMethodsTest::drawAll()
     case drawMethodes::Poly:
     {
         Vec2 vertices[5] = {{0.0f, 0.0f}, {50.0f, 50.0f}, {100.0f, 50.0f}, {100.0f, 100.0f}, {50.0f, 100.0f}};
-        drawNode->properties.setPosition(Vec2(-200, -300));
+        drawNode->properties.position =Vec2(-200, -300);
         drawNode->drawPoly(vertices, 5, false, Color::BLUE, thickness);
 
         Vec2 vertices2[3] = {{30.0f, 130.0f}, {30.0f, 230.0f}, {50.0f, 200.0f}};
@@ -2678,23 +2678,23 @@ void DrawNodeMethodsTest::drawAll()
         drawNode->properties.setDefaultValues();
         drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color::RED, thickness);
 
-        drawNode->properties.setPosition(Vec2(0, -300));
-        drawNode->properties.setRotation(pr);
+        drawNode->properties.position =Vec2(0, -300);
+        drawNode->properties.angle=pa;
         drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color::GREEN, thickness);
-        drawNode->properties.setPosition(Vec2(-100, -300));
-        drawNode->properties.setRotation(pr);
-        drawNode->properties.setCenter(vertices1[0]);
+        drawNode->properties.position =Vec2(-100, -300);
+        drawNode->properties.angle=pa;
+        drawNode->properties.center =vertices1[0];
         drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color::MAGENTA, thickness);
-        drawNode->properties.setPosition(Vec2(200, 0));
+        drawNode->properties.position =Vec2(200, 0);
         drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color::RED, thickness);
-        drawNode->properties.setPosition(Vec2(0.0f, -200.0f));
-        drawNode->properties.setRotation(rotation / 10.0f);
-        drawNode->properties.setScale(Vec2(5.0f, 5.0f));
-        drawNode->properties.setCenter(vertices1[4]);
+        drawNode->properties.position =Vec2(0.0f, -200.0f);
+        drawNode->properties.angle=rotation / 10.0f;
+        drawNode->properties.scale =Vec2(5.0f, 5.0f);
+        drawNode->properties.center =vertices1[4];
         drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color::BLUE, thickness);
-        drawNode->properties.setRotation(rotation);
+        drawNode->properties.angle=rotation;
         drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color::YELLOW, thickness);
-        drawNode->properties.setRotation(-rotation / 5);
+        drawNode->properties.angle=-rotation / 5;
         drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color::WHITE, thickness);
 
         drawNode->properties.setDefaultValues();
@@ -2703,30 +2703,30 @@ void DrawNodeMethodsTest::drawAll()
     }
     case drawMethodes::Polygon:
     {
-        drawNode->properties.setPosition(Vec2(0, -300));
-        drawNode->properties.setRotation(pr);
+        drawNode->properties.position =Vec2(0, -300);
+        drawNode->properties.angle=pa;
         drawNode->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color::GREEN, thickness,
                               Color::YELLOW);
-        drawNode->properties.setPosition(Vec2(-100, -300));
-        drawNode->properties.setRotation(pr);
-        drawNode->properties.setCenter(vertices1[0]);
+        drawNode->properties.position =Vec2(-100, -300);
+        drawNode->properties.angle=pa;
+        drawNode->properties.center =vertices1[0];
         drawNode->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color::MAGENTA, thickness,
                               Color::GRAY);
-        drawNode->properties.setPosition(Vec2(200, 0));
+        drawNode->properties.position =Vec2(200, 0);
         drawNode->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color::RED, thickness,
                               Color::YELLOW);
 
-        drawNode->properties.setPosition(Vec2(0.0f, -300.0f));
-        drawNode->properties.setRotation(rotation / 10.0f);
-        drawNode->properties.setScale(Vec2(2.0f, 2.0f));
-        drawNode->properties.setCenter(vertices1[4]);
+        drawNode->properties.position =Vec2(0.0f, -300.0f);
+        drawNode->properties.angle=rotation / 10.0f;
+        drawNode->properties.scale =Vec2(2.0f, 2.0f);
+        drawNode->properties.center =vertices1[4];
         drawNode->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color::BLUE, thickness,
                               Color::WHITE);
-        drawNode->properties.setRotation(rotation);
+        drawNode->properties.angle=rotation;
         drawNode->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color::YELLOW, thickness,
                               Color::GREEN);
         ;
-        drawNode->properties.setRotation(-rotation / 5);
+        drawNode->properties.angle=-rotation / 5;
         drawNode->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color::WHITE, thickness,
                               Color::YELLOW);
 
@@ -2777,8 +2777,8 @@ void DrawNodeMethodsTest::drawAll()
     case drawMethodes::Triangle:
     {
         static Color color3[] = {Color::GREEN, Color::BLUE, Color::RED};
-        drawNode->properties.setPosition(center);
-        //  drawNode->properties.setScale(Vec2(10, 10));
+        drawNode->properties.position =center;
+        //  drawNode->properties.scale =Vec2(10, 10));
 
         {
             drawNode->drawTriangle(Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 200,
@@ -2799,7 +2799,7 @@ void DrawNodeMethodsTest::drawAll()
         static Vec2 triangle[] = {Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 30,
                                   Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 30,
                                   Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 30};
-        drawNode->properties.setPosition(center);
+        drawNode->properties.position =center;
 
         {
 
@@ -2808,7 +2808,7 @@ void DrawNodeMethodsTest::drawAll()
                                         Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20, Color::RED, Color::BLUE,
                                         thickness);
 
-            drawNode->properties.setPosition(center - Vec2(200, 200));
+            drawNode->properties.position =center - Vec2(200, 200);
             drawNode->drawSolidTriangle(triangle, Color::GREEN, Color::BLUE, thickness);
         }
         break;
@@ -2878,16 +2878,16 @@ void DrawNodeMethodsTest::drawAll()
     case drawMethodes::SolidPoly:
     {
         Vec2 ppp = Vec2(AXRANDOM_MINUS1_1() * size.x / 2, AXRANDOM_MINUS1_1() * size.y / 2);
-        drawNode->properties.setPosition(Vec2(ppp));
+        drawNode->properties.position =Vec2(ppp);
 
-        drawNode->properties.setPosition(Vec2(0.0f, -300.0f));
-        drawNode->properties.setRotation(rotation / 10.0f);
-        drawNode->properties.setScale(Vec2(2.0f, 2.0f));
-        drawNode->properties.setCenter(vertices1[4]);
+        drawNode->properties.position =Vec2(0.0f, -300.0f);
+        drawNode->properties.angle=rotation / 10.0f;
+        drawNode->properties.scale =Vec2(2.0f, 2.0f);
+        drawNode->properties.center =vertices1[4];
         drawNode->drawSolidPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color::BLUE);
-        drawNode->properties.setRotation(rotation);
+        drawNode->properties.angle=rotation;
         drawNode->drawSolidPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color::YELLOW);
-        drawNode->properties.setRotation(-rotation / 5);
+        drawNode->properties.angle=-rotation / 5;
         drawNode->drawSolidPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color::WHITE);
 
         drawNode->properties.setDefaultValues();
@@ -2915,37 +2915,37 @@ void DrawNodeMethodsTest::drawAll()
         Vec2 gear3 = {200.f, 200.f};
         Vec2 gear4 = {size.width - 200, size.height - 200};
 
-        drawNode->properties.setRotation(rotation + 45);
-        drawNode->properties.setCenter(gear1);
+        drawNode->properties.angle=rotation + 45;
+        drawNode->properties.center =gear1;
         drawNode->drawStar(Vec2(gear1), 30, 60, 8, Color::BLUE, 4.0);
-        drawNode->properties.setRotation(-rotation);
-        drawNode->properties.setCenter(gear2);
+        drawNode->properties.angle=-rotation;
+        drawNode->properties.center =gear2;
         drawNode->drawStar(gear2, 30, 60, 8, Color::GREEN, 4.0);
 
         drawNode->properties.setDefaultValues();
         drawNode->drawLine(gear2, gear1, Color::RED, thickness);  // line
-        drawNode->properties.setCenter(gear4);
-        drawNode->properties.setRotation(rotation + 45);
+        drawNode->properties.center =gear4;
+        drawNode->properties.angle=rotation + 45;
         drawNode->drawStar(gear3, 30, 60, 18, Color::RED, 1.0);
         drawNode->drawLine(gear3, gear4, Color::YELLOW, thickness);  // line
         // drawNode->properties.setDefaultValues();
-        drawNode->properties.setRotation(rotation - 45);
-        drawNode->properties.setCenter(gear4);
+        drawNode->properties.angle=rotation - 45;
+        drawNode->properties.center =gear4;
         drawNode->drawStar(gear4, 40, 60, 60, Color::GREEN, 1.0);
 
-        drawNode->properties.setRotation(rotation);
-        drawNode->properties.setCenter(Vec2(-110, 250));
+        drawNode->properties.angle=rotation;
+        drawNode->properties.center =Vec2(-110, 250);
         drawNode->drawStar(Vec2(-110, 250), 30, 70, 5, Color::GREEN, 1.0);
-        drawNode->properties.setCenter(Vec2(-150, 100));
+        drawNode->properties.center =Vec2(-150, 100);
         drawNode->drawStar(Vec2(-150, 100), 80, 100, 40, Color::GREEN, 1.0);
-        drawNode->properties.setCenter(Vec2(-150, -100));
+        drawNode->properties.center =Vec2(-150, -100);
         drawNode->drawStar(Vec2(-150, -100), 5, 70, 3, Color::GREEN, 1.0);
 
-        drawNode->properties.setRotation(0);
+        drawNode->properties.angle=0;
         for (int i = 0; i < 10; i++)
         {
             Vec2 ppp = Vec2(AXRANDOM_MINUS1_1() * size.x / 2, AXRANDOM_MINUS1_1() * size.y / 2);
-            drawNode->properties.setPosition(Vec2(ppp));
+            drawNode->properties.position =Vec2(ppp);
             drawNode->drawStar(Vec2::ZERO, 40, 60, AXRANDOM_0_1() * 60 + 3,
                                Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), thickness));
         }
@@ -2958,37 +2958,37 @@ void DrawNodeMethodsTest::drawAll()
         Vec2 gear3 = {200.f, 200.f};
         Vec2 gear4 = {size.width - 200, size.height - 200};
 
-        drawNode->properties.setRotation(rotation + 45);
-        drawNode->properties.setCenter(gear1);
+        drawNode->properties.angle=rotation + 45;
+        drawNode->properties.center =gear1;
         drawNode->drawSolidStar(Vec2(gear1), 30, 60, 8, Color::BLUE, Color::YELLOW, 4.0);
-        drawNode->properties.setRotation(-rotation);
-        drawNode->properties.setCenter(gear2);
+        drawNode->properties.angle=-rotation;
+        drawNode->properties.center =gear2;
         drawNode->drawSolidStar(gear2, 30, 60, 8, Color::GREEN, Color::YELLOW, 4.0);
 
         drawNode->properties.setDefaultValues();
         drawNode->drawLine(gear2, gear1, Color::RED, thickness);  // line
-        drawNode->properties.setCenter(gear4);
-        drawNode->properties.setRotation(rotation + 45);
+        drawNode->properties.center =gear4;
+        drawNode->properties.angle=rotation + 45;
         drawNode->drawSolidStar(gear3, 30, 60, 18, Color::RED, Color::YELLOW, 1.0);
         drawNode->drawLine(gear3, gear4, Color::YELLOW, thickness);  // line
         drawNode->properties.setDefaultValues();
-        drawNode->properties.setRotation(rotation - 45);
-        drawNode->properties.setCenter(gear4);
+        drawNode->properties.angle=rotation - 45;
+        drawNode->properties.center =gear4;
         drawNode->drawSolidStar(gear4, 40, 60, 60, Color::GREEN, Color::YELLOW, 1.0);
 
-        drawNode->properties.setRotation(rotation);
-        drawNode->properties.setCenter(Vec2(-110, 250));
+        drawNode->properties.angle=rotation;
+        drawNode->properties.center =Vec2(-110, 250);
         drawNode->drawSolidStar(Vec2(-110, 250), 30, 70, 5, Color::GREEN, Color::YELLOW, 1.0);
-        drawNode->properties.setCenter(Vec2(-150, 100));
+        drawNode->properties.center =Vec2(-150, 100);
         drawNode->drawSolidStar(Vec2(-150, 100), 80, 100, 40, Color::GREEN, Color::YELLOW, 1.0);
-        drawNode->properties.setCenter(Vec2(-150, -100));
+        drawNode->properties.center =Vec2(-150, -100);
         drawNode->drawSolidStar(Vec2(-150, -100), 5, 70, 3, Color::GREEN, Color::YELLOW, 1.0);
 
-        drawNode->properties.setRotation(0);
+        drawNode->properties.angle=0;
         for (int i = 0; i < 10; i++)
         {
             Vec2 ppp = Vec2(AXRANDOM_MINUS1_1() * size.x / 2, AXRANDOM_MINUS1_1() * size.y / 2);
-            drawNode->properties.setPosition(Vec2(ppp));
+            drawNode->properties.position =Vec2(ppp);
             drawNode->drawSolidStar(Vec2::ZERO, 40, 60, AXRANDOM_0_1() * 60 + 3, Color::random().withAlpha(1.0f),
                                     Color::random().withAlpha(1.0f));
         }
@@ -3003,7 +3003,7 @@ void DrawNodeMethodsTest::drawAll()
 
 DrawNodeDrawInWrongOrder_Issue1888::DrawNodeDrawInWrongOrder_Issue1888()
 {
-    drawNode->properties.setDrawOrder(true);
+    drawNode->properties.drawOrder =true;
     scheduleUpdate();
 }
 
@@ -3074,7 +3074,7 @@ DrawNodeAxmolTest2::DrawNodeAxmolTest2()
     }
 
     drawNode = DrawNode::create();
-    drawNode->properties.setTransform(true);
+    drawNode->properties.transform =true;
     addChild(drawNode, 10);
 
     scheduleUpdate();
@@ -3131,7 +3131,7 @@ void DrawNodeAxmolTest2::update(float dt)
 
 void DrawNodeAxmolTest2::drawAllv2(DrawNode* drawNode, bool drawOrder)
 {
-    drawNode->properties.setDrawOrder(drawOrder);
+    drawNode->properties.drawOrder =drawOrder;
 
     drawNode->drawPoint(Vec2(size.width / 2 - 120, size.height / 2 - 120), 10,
                         Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
@@ -3296,25 +3296,25 @@ DrawNodePolygonTest::DrawNodePolygonTest()
 {
     ax::DrawNode* drawNode = ax::DrawNode::create();
     addChild(drawNode);
-    drawNode->properties.setTransform(true);
+    drawNode->properties.transform =true;
     drawNode->setScale(0.3f);
-    drawNode->properties.setPosition(Vec2(150, 590));
-    drawNode->properties.setScale({0.4f, 0.4f});
+    drawNode->properties.position =Vec2(150, 590);
+    drawNode->properties.scale ={0.4f, 0.4f};
     drawNode->drawSolidPolygon(horse, sizeof(horse) / sizeof(horse[0]), Color::WHITE, 0.0f, Color::RED);
-    drawNode->properties.setPosition(Vec2(30, 200));
-    drawNode->properties.setScale({1.0f, 1.0f});
+    drawNode->properties.position =Vec2(30, 200);
+    drawNode->properties.scale ={1.0f, 1.0f};
     drawNode->drawPoly(horse, sizeof(horse) / sizeof(horse[0]), true, Color::GREEN);
-    drawNode->properties.setPosition(Vec2(700, 220));
-    drawNode->properties.setScale({0.1f, 0.1f});
+    drawNode->properties.position =Vec2(700, 220);
+    drawNode->properties.scale ={0.1f, 0.1f};
     drawNode->drawSolidPolygon(spider, sizeof(spider) / sizeof(spider[0]), Color::YELLOW, 2.0f, Color::RED);
-    drawNode->properties.setScale({0.2f, 0.2f});
-    drawNode->properties.setPosition(Vec2(880, 200));
+    drawNode->properties.scale ={0.2f, 0.2f};
+    drawNode->properties.position =Vec2(880, 200);
     drawNode->drawPoly(spider, sizeof(spider) / sizeof(spider[0]), true, Color::RED);
-    drawNode->properties.setScale({0.4f, 0.4f});
-    drawNode->properties.setPosition(Vec2(1100, 160));
+    drawNode->properties.scale ={0.4f, 0.4f};
+    drawNode->properties.position =Vec2(1100, 160);
     drawNode->drawPoly(spider, sizeof(spider) / sizeof(spider[0]), true, Color::RED, true);
-    drawNode->properties.setScale({0.7f, 0.7f});
-    drawNode->properties.setPosition(Vec2(950, 400));
+    drawNode->properties.scale ={0.7f, 0.7f};
+    drawNode->properties.position =Vec2(950, 400);
     drawNode->drawSolidPolygon(spider, sizeof(spider) / sizeof(spider[0]), Color::YELLOW, 5.0f, Color::RED);
 }
 
@@ -3330,24 +3330,24 @@ std::string DrawNodePolygonTest::subtitle() const
 
 DrawNodeCircleTest::DrawNodeCircleTest()
 {
-    drawNode->properties.setPosition(Vec2(100, -10));
+    drawNode->properties.position =Vec2(100, -10);
     for (int i = 3; i <= 24; i++)
     {
         drawNode->drawCircle(center, 5 * i, AX_DEGREES_TO_RADIANS(90), i, false, 1.0f, 1.0f, Color::WHITE);
     }
     drawNode->drawCircle(center, 130, AX_DEGREES_TO_RADIANS(90), 48, false, 1.0f, 1.0f, Color::MAGENTA);
 
-    drawNode->properties.setPosition(Vec2(-10, 10));
+    drawNode->properties.position =Vec2(-10, 10);
     for (size_t i = 0; i < 3; i++)
     {
         drawNode->drawCircle(Vec2(120, 150), 85 - 18.8 * i, AX_DEGREES_TO_RADIANS(90), 5, false, 1.0f, 1.0f,
                              Color::BLUE, 3.0f);
     }
 
-    drawNode->properties.setCenter(Vec2(120, 150));
+    drawNode->properties.center =Vec2(120, 150);
     for (int i = 0; i < 5; i++)
     {
-        drawNode->properties.setRotation(AX_DEGREES_TO_RADIANS(360 / 5 * i));
+        drawNode->properties.angle=AX_DEGREES_TO_RADIANS(360 / 5 * i);
         drawNode->drawSolidCircle(Vec2(120, 197), 10, 0, 36, 1.0f, 1.0f, Color::BLUE);
         drawNode->drawSolidCircle(Vec2(120, 215), 12, 0, 36, 1.0f, 1.0f, Color::BLUE);
         drawNode->drawSolidCircle(Vec2(120, 235), 16, 0, 36, 1.0f, 1.0f, Color::BLUE);
@@ -3429,7 +3429,7 @@ void DrawNodeSolidCircleTest::showCircles()
         autoTestLabel->setString(std::to_string(duration.count()));
     }
 
-    drawNode->properties.setDrawOrder(true);
+    drawNode->properties.drawOrder =true;
     rect = {190, 205, 100, 30};
     //;   drawNode->drawSolidRect(rect, (fast) ? Color::GREEN : Color::RED);
 }
@@ -3450,7 +3450,7 @@ DrawNodeIssueTester::DrawNodeIssueTester()
                               Vec2(50.0f, 100.0f)};
     int verticesCount      = 5;
 
-    drawNode->properties.setPosition(Vec2(5, 150));
+    drawNode->properties.position =Vec2(5, 150);
     drawNode->drawPoly(vertices, verticesCount, false, Color::GREEN);
 
     auto draw = DrawNode::create();
@@ -3458,23 +3458,23 @@ DrawNodeIssueTester::DrawNodeIssueTester()
     draw->setPosition(70, 150);
     draw->drawPoly(vertices, verticesCount, false, Color::BLUE);
 
-    drawNode->properties.setPosition(Vec2(140, 150));
+    drawNode->properties.position =Vec2(140, 150);
 
     drawNode->drawPoly(vertices, verticesCount, false, Color::RED);
 
-    drawNode->properties.setPosition(Vec2(200, 150));
+    drawNode->properties.position =Vec2(200, 150);
 
     drawNode->drawPoly(vertices, verticesCount, false, Color::RED, 3);
     drawNode->drawPoly(vertices, verticesCount, false, Color::WHITE);
 
-    drawNode->properties.setPosition(Vec2(270, 150));
+    drawNode->properties.position =Vec2(270, 150);
 
     drawNode->drawPoly(vertices, verticesCount, false, Color(0.0f, 0.5f, 0.5f, 0.5f), 10);
     drawNode->drawPoly(vertices, verticesCount, false, Color::BLACK);
 
     float thick = 0.0f;
     float y     = -90.0f;
-    drawNode->properties.setPosition(Vec2(270, 100));
+    drawNode->properties.position =Vec2(270, 100);
     for (int i = 0; i < 32; i++)
     {
         thick += 0.5f;
@@ -3483,7 +3483,7 @@ DrawNodeIssueTester::DrawNodeIssueTester()
     }
     drawNode->drawPie(Vec2(-220, 150), 20, 0, 100, 300, 1, 1, Color(), Color::BLUE, DrawNode::DrawMode::Line, 10);
 
-    drawNode->properties.setPosition(Vec2(50, -100));
+    drawNode->properties.position =Vec2(50, -100);
     for (int i = 2; i < 30; i++)
     {
         drawNode->drawCircle(center, 5 * i, AX_DEGREES_TO_RADIANS(90), i, false, 1.0f, 1.0f,
@@ -3494,14 +3494,14 @@ DrawNodeIssueTester::DrawNodeIssueTester()
     int n         = 0;
     Vec2 pos      = {100, 210};
     float scale   = 3.0f;
-    drawNode->properties.setPosition(Vec2(-90, -160));
+    drawNode->properties.position =Vec2(-90, -160);
     for (size_t i = 0; i < sizeof(verticesFB) / sizeof(verticesFB[0]); i += 4)
     {
         drawNode->drawLine(Vec2(verticesFB[i] * scale, verticesFB[i + 1] * scale) + pos,
                            Vec2(verticesFB[i + 2] * scale, verticesFB[i + 3] * scale) + pos, Color::RED, 0.5f);
     }
 
-    drawNode->properties.setPosition(VisibleRect::center() - Vec2(100, 50));
+    drawNode->properties.position =VisibleRect::center() - Vec2(100, 50);
     drawNode->drawSolidCircle(Vec2::ZERO, 40, AX_DEGREES_TO_RADIANS(-90), 30, 1.0f, 1.0f, Color::GREEN, 6, Color::BLUE,
                               false);
     drawNode->drawSolidCircle(Vec2(100, 0), 40, AX_DEGREES_TO_RADIANS(-90), 30, 1.0f, 1.0f, Color::RED, 6, Color::BLUE,
@@ -3537,7 +3537,7 @@ string DrawNodeIssueTester::subtitle() const
 DrawNodeSpLinesTest::DrawNodeSpLinesTest()
 {
     drawNode = DrawNode::create();
-    drawNode->properties.setTransform(true);
+    drawNode->properties.transform =true;
     addChild(drawNode, 30);
 
     screen = Director::getInstance()->getVisibleSize();
@@ -3622,11 +3622,11 @@ DrawNodeSpLinesOpenClosedTest::DrawNodeSpLinesOpenClosedTest()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     drawNodeCP = DrawNode::create();
-    drawNodeCP->properties.setTransform(true);
+    drawNodeCP->properties.transform =true;
     addChild(drawNodeCP, 50);
 
     drawNode = DrawNode::create();
-    drawNode->properties.setTransform(true);
+    drawNode->properties.transform =true;
     addChild(drawNode, 30);
 
     screen = Director::getInstance()->getVisibleSize();
