@@ -233,6 +233,9 @@ namespace System
 }
 
 
+$Global:pwsh_ver = [Regex]::Match($PSVersionTable.PSVersion.ToString(), '(\d+\.)+(\*|\d+)').Value
+$Global:IsPwsh7OrLater = [VersionEx]$Global:pwsh_ver -ge [VersionEx]"7.0"
+
 function Global:ConvertFrom-Props {
     param(
         [Parameter(Mandatory = $true)]
@@ -266,4 +269,37 @@ function Global:ConvertTo-Props {
         $str_ret += "$($entry.Key)=$($entry.Value)`n"
     }
     return $str_ret
+}
+
+function Global:Get-NativeArchitecture {
+    $arch = $null
+    if ($Global:IsPwsh7OrLater) {
+        $arch = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLower()
+    }
+    else {
+        # refer to: https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor
+        try {
+            $processorInfo = Get-CimInstance -ClassName Win32_Processor -ErrorAction Stop | Select-Object -First 1
+
+            switch ($processorInfo.Architecture) {
+                0 { $arch = "x86" }   # 32-bit Intel/AMD
+                5 { $arch = "arm32" }   # 32-bit ARM
+                12 { $arch = "arm64" }   # treat ARM as arm64 target
+                9 { $arch = "x64" }   # 64-bit Intel/AMD
+                6 { $arch = "ia64" }   # Intel Itanium
+                default { $arch = "x86" }   # fallback
+            }
+        }
+        catch {
+            # Fallback: only 32/64 bit detection if WMI/CIM is not available
+            if ([System.Environment]::Is64BitOperatingSystem) {
+                $arch = "x64"
+            }
+            else {
+                $arch = "x86"
+            }
+        }
+    }
+
+    return $arch
 }

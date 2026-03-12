@@ -73,7 +73,7 @@
 
 ## FreeType
 - [![Upstream](https://img.shields.io/gitlab/v/tag/freetype/freetype?label=Upstream)](https://gitlab.freedesktop.org/freetype/freetype)
-- Version: 2.14.1
+- Version: 2.14.2
 - License: BSD-style (The FreeType Project)
 
 ## Glad
@@ -224,7 +224,7 @@
 
 ## robin-map
 - [![Upstream](https://img.shields.io/github/v/tag/Tessil/robin-map?label=Upstream)](https://github.com/Tessil/robin-map)
-- Version: 1.4.0 with modified for stl compatibility
+- Version: 1.4.1 with modified for stl compatibility
     - Modify `robin_map::iterator->second` to mutable same with `stl map/unordered_map`
     - Forward `robin_map::operator[]` key by `std::forward` same with `stl map/unordered_map`
     - Improve code compiler compatibility, i.g. `std::max` ==> `(std::max)`

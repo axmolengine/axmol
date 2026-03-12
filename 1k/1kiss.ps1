@@ -328,24 +328,14 @@ if ($options.xb.GetType() -eq [string]) {
     $options.xb = $options.xb.Split(' ')
 }
 
-[VersionEx]$pwsh_ver = [Regex]::Match($PSVersionTable.PSVersion.ToString(), '(\d+\.)+(\*|\d+)').Value
-if ([VersionEx]$pwsh_ver -lt [VersionEx]"7.0") {
+if (!$Global:IsPwsh7OrLater) {
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 }
 
 $osVerString = if ($IsWin) { "Microsoft Windows $($NtOSVersion.ToString())" } else { $PSVersionTable.OS }
 
 # arm64,x64
-# uname -m: arm64/aarch64,x86_64
-if ($IsWin) {
-    # refer: https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor
-    $__1k_archs = @{9="x64"; 12="arm64"}
-    $__1k_arch_code = [int](Get-CimInstance Win32_Processor)[0].Architecture
-    $1k.println("Host architecture code: $__1k_arch_code")
-    $HOST_CPU = $__1k_archs[$__1k_arch_code]
-} else {
-    $HOST_CPU = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLower()
-}
+$HOST_CPU = Get-NativeArchitecture
 
 $1k.println("PowerShell $pwsh_ver on $osVerString ($HOST_CPU)")
 

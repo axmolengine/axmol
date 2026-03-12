@@ -17,7 +17,7 @@ AC_CONFIG_SRCDIR([ftconfig.h.in])
 
 # Don't forget to update `docs/VERSIONS.TXT'!
 
-version_info='26:4:20'
+version_info='26:5:20'
 AC_SUBST([version_info])
 ft_version=`echo $version_info | tr : .`
 AC_SUBST([ft_version])
@@ -1112,20 +1112,25 @@ AC_SUBST([wl])
 AC_SUBST([build_libtool_libs])
 
 
-# changing LDFLAGS value should only be done after
-# lt_cv_prog_compiler_static_works test
+# We cannot use alternation (`\|`) in the `sed` regexp since it is not
+# portable.
 
 ftoption_set()
 {
-  regexp="-e \\\"s|.*#.*def.*$1\>.*|#define $1|\\\""
+  regexp="-e \\\"s|.*#.*def.*$1 .*|#define $1|\\\" \
+          -e \\\"s|.*#.*def.*$1\$|#define $1|\\\""
   FTOPTION_H_SED="$FTOPTION_H_SED $regexp"
 }
 
 ftoption_unset()
 {
-  regexp="-e \\\"s|.*#.*def.*$1\>.*|/* #undef $1 */|\\\""
+  regexp="-e \\\"s|.*#.*def.*$1 .*|/* #undef $1 */|\\\" \
+          -e \\\"s|.*#.*def.*$1\$|/* #undef $1 */|\\\""
   FTOPTION_H_SED="$FTOPTION_H_SED $regexp"
 }
+
+# Changing the `LDFLAGS` value should only be done after the
+# `lt_cv_prog_compiler_static_works` test.
 
 if test "$have_zlib" != no; then
   CFLAGS="$CFLAGS $ZLIB_CFLAGS"
