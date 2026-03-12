@@ -52886,6 +52886,34 @@ int lua_ax_base_DrawNode_drawTriangle(lua_State* tolua_S)
     }while(0);
     ok  = true;
     do {
+        if (argc == 5) {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawTriangle");
+
+            if (!ok) { break; }
+            ax::Vec2 arg1;
+            ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.DrawNode:drawTriangle");
+
+            if (!ok) { break; }
+            ax::Vec2 arg2;
+            ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.DrawNode:drawTriangle");
+
+            if (!ok) { break; }
+            ax::Color arg3;
+            ok &=luaval_to_color(tolua_S, 5, &arg3, "ax.DrawNode:drawTriangle");
+
+            if (!ok) { break; }
+            double arg4;
+            ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.DrawNode:drawTriangle");
+
+            if (!ok) { break; }
+            obj->drawTriangle(arg0, arg1, arg2, arg3, arg4);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do {
         if (argc == 2) {
             const ax::Vec2* arg0;
             ok &= luaval_to_object<const ax::Vec2>(tolua_S, 2, "ax.Vec2",&arg0, "ax.DrawNode:drawTriangle");
@@ -52896,6 +52924,26 @@ int lua_ax_base_DrawNode_drawTriangle(lua_State* tolua_S)
 
             if (!ok) { break; }
             obj->drawTriangle(arg0, arg1);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do {
+        if (argc == 3) {
+            const ax::Vec2* arg0;
+            ok &= luaval_to_object<const ax::Vec2>(tolua_S, 2, "ax.Vec2",&arg0, "ax.DrawNode:drawTriangle");
+
+            if (!ok) { break; }
+            ax::Color arg1;
+            ok &=luaval_to_color(tolua_S, 3, &arg1, "ax.DrawNode:drawTriangle");
+
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawTriangle");
+
+            if (!ok) { break; }
+            obj->drawTriangle(arg0, arg1, arg2);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -53287,6 +53335,732 @@ int lua_ax_base_DrawNode_isIsolated(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_DrawNode_getThicknessScale(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::DrawNode* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_DrawNode_getThicknessScale'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_getThicknessScale'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getThicknessScale();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:getThicknessScale",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_getThicknessScale'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_DrawNode_setThicknessScale(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::DrawNode* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_DrawNode_setThicknessScale'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.DrawNode:setThicknessScale");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_setThicknessScale'", nullptr);
+            return 0;
+        }
+        obj->setThicknessScale(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:setThicknessScale",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_setThicknessScale'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_DrawNode_isLocalTransformEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::DrawNode* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_DrawNode_isLocalTransformEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_isLocalTransformEnabled'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isLocalTransformEnabled();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:isLocalTransformEnabled",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_isLocalTransformEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_DrawNode_setLocalTransformEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::DrawNode* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_DrawNode_setLocalTransformEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.DrawNode:setLocalTransformEnabled");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_setLocalTransformEnabled'", nullptr);
+            return 0;
+        }
+        obj->setLocalTransformEnabled(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:setLocalTransformEnabled",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_setLocalTransformEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_DrawNode_setLocalScale(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::DrawNode* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_DrawNode_setLocalScale'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::Vec2 arg0;
+
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:setLocalScale");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_setLocalScale'", nullptr);
+            return 0;
+        }
+        obj->setLocalScale(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:setLocalScale",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_setLocalScale'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_DrawNode_getLocalScale(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::DrawNode* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_DrawNode_getLocalScale'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_getLocalScale'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getLocalScale();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:getLocalScale",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_getLocalScale'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_DrawNode_setLocalPivot(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::DrawNode* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_DrawNode_setLocalPivot'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::Vec2 arg0;
+
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:setLocalPivot");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_setLocalPivot'", nullptr);
+            return 0;
+        }
+        obj->setLocalPivot(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:setLocalPivot",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_setLocalPivot'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_DrawNode_getLocalPivot(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::DrawNode* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_DrawNode_getLocalPivot'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_getLocalPivot'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getLocalPivot();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:getLocalPivot",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_getLocalPivot'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_DrawNode_setLocalRotation(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::DrawNode* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_DrawNode_setLocalRotation'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.DrawNode:setLocalRotation");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_setLocalRotation'", nullptr);
+            return 0;
+        }
+        obj->setLocalRotation(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:setLocalRotation",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_setLocalRotation'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_DrawNode_getLocalRotation(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::DrawNode* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_DrawNode_getLocalRotation'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_getLocalRotation'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getLocalRotation();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:getLocalRotation",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_getLocalRotation'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_DrawNode_setLocalPosition(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::DrawNode* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_DrawNode_setLocalPosition'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::Vec2 arg0;
+
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:setLocalPosition");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_setLocalPosition'", nullptr);
+            return 0;
+        }
+        obj->setLocalPosition(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:setLocalPosition",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_setLocalPosition'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_DrawNode_getLocalPosition(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::DrawNode* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_DrawNode_getLocalPosition'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_getLocalPosition'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getLocalPosition();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:getLocalPosition",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_getLocalPosition'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_DrawNode_setPreserveDrawOrder(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::DrawNode* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_DrawNode_setPreserveDrawOrder'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.DrawNode:setPreserveDrawOrder");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_setPreserveDrawOrder'", nullptr);
+            return 0;
+        }
+        obj->setPreserveDrawOrder(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:setPreserveDrawOrder",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_setPreserveDrawOrder'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_DrawNode_isPreserveDrawOrder(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::DrawNode* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_DrawNode_isPreserveDrawOrder'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_isPreserveDrawOrder'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isPreserveDrawOrder();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:isPreserveDrawOrder",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_isPreserveDrawOrder'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_DrawNode_resetAdvancedSettings(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::DrawNode* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.DrawNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::DrawNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_DrawNode_resetAdvancedSettings'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_resetAdvancedSettings'", nullptr);
+            return 0;
+        }
+        obj->resetAdvancedSettings();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:resetAdvancedSettings",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_DrawNode_resetAdvancedSettings'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_DrawNode_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -53392,6 +54166,21 @@ int lua_register_ax_base_DrawNode(lua_State* tolua_S)
         tolua_function(tolua_S,"setBlendFunc",lua_ax_base_DrawNode_setBlendFunc);
         tolua_function(tolua_S,"setIsolated",lua_ax_base_DrawNode_setIsolated);
         tolua_function(tolua_S,"isIsolated",lua_ax_base_DrawNode_isIsolated);
+        tolua_function(tolua_S,"getThicknessScale",lua_ax_base_DrawNode_getThicknessScale);
+        tolua_function(tolua_S,"setThicknessScale",lua_ax_base_DrawNode_setThicknessScale);
+        tolua_function(tolua_S,"isLocalTransformEnabled",lua_ax_base_DrawNode_isLocalTransformEnabled);
+        tolua_function(tolua_S,"setLocalTransformEnabled",lua_ax_base_DrawNode_setLocalTransformEnabled);
+        tolua_function(tolua_S,"setLocalScale",lua_ax_base_DrawNode_setLocalScale);
+        tolua_function(tolua_S,"getLocalScale",lua_ax_base_DrawNode_getLocalScale);
+        tolua_function(tolua_S,"setLocalPivot",lua_ax_base_DrawNode_setLocalPivot);
+        tolua_function(tolua_S,"getLocalPivot",lua_ax_base_DrawNode_getLocalPivot);
+        tolua_function(tolua_S,"setLocalRotation",lua_ax_base_DrawNode_setLocalRotation);
+        tolua_function(tolua_S,"getLocalRotation",lua_ax_base_DrawNode_getLocalRotation);
+        tolua_function(tolua_S,"setLocalPosition",lua_ax_base_DrawNode_setLocalPosition);
+        tolua_function(tolua_S,"getLocalPosition",lua_ax_base_DrawNode_getLocalPosition);
+        tolua_function(tolua_S,"setPreserveDrawOrder",lua_ax_base_DrawNode_setPreserveDrawOrder);
+        tolua_function(tolua_S,"isPreserveDrawOrder",lua_ax_base_DrawNode_isPreserveDrawOrder);
+        tolua_function(tolua_S,"resetAdvancedSettings",lua_ax_base_DrawNode_resetAdvancedSettings);
         tolua_function(tolua_S,"create", lua_ax_base_DrawNode_create);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::DrawNode).name(); // rtti is literal storage
