@@ -1378,9 +1378,9 @@ void DrawNode::applyLocalTransform(const Vec2* from, Vec2* to, unsigned int coun
             float x = from[i].x - _localPivot.x;
             float y = from[i].y - _localPivot.y;
 
-            // rotate point (counter clockwise)
-            float rx = x * cosRot - y * sinRot;
-            float ry = x * sinRot + y * cosRot;
+            // rotate point (clockwise)
+            float rx = x * cosRot + y * sinRot;
+            float ry = -x * sinRot + y * cosRot;
 
             // translate point back
             x = rx + _localPivot.x;
