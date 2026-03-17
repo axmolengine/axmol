@@ -364,18 +364,20 @@ void PhysicsDemoLogoSmash::onEnter()
         }
         while (step > 0)
         {
-            float xJitter = 0.15 * frand();
-            float yJitter = 0.15 * frand();
+            if (colPos != 0)  // draw nothing if colPos is 0, otherwise draw a ball with the color of colorList[colPos !=0]
+            {
+                float xJitter = 0.15 * frand();
+                float yJitter = 0.15 * frand();
 
-            Node* ball = makeBall(
-                Vec2(2 * (x + xJitter) + VisibleRect::getVisibleRect().size.width / 4,
-                     (2 * (-y + yJitter) + VisibleRect::getVisibleRect().size.height / 2 + LOGO_HEIGHT_COLORED)),
-                0.95f, PhysicsMaterial(0.01f, 0.0f, 0.0f));
-            ball->setColor(colorList[colPos]);
-            auto physicsBody = ball->getPhysicsBody();
+                Node* ball = makeBall(
+                    Vec2(2 * (x + xJitter) + VisibleRect::getVisibleRect().size.width / 4,
+                            (2 * (-y + yJitter) + VisibleRect::getVisibleRect().size.height / 2 + LOGO_HEIGHT_COLORED)),
+                    0.95f, PhysicsMaterial(0.01f, 0.0f, 0.0f));
+                ball->setColor(colorList[colPos]);
+                auto physicsBody = ball->getPhysicsBody();
 
-            _ball->addChild(ball);
-
+                _ball->addChild(ball);
+            }
             x++;
             step--;
             if (x >= LOGO_WIDTH_COLORED)

@@ -1405,6 +1405,7 @@ static Vec2 spider[] = {
 
 DrawNodeTests::DrawNodeTests()
 {
+    ADD_TEST_CASE(DrawNodeThickness1Test);
     ADD_TEST_CASE(DrawNodeCircleTest);
     ADD_TEST_CASE(DrawNodeSolidCircleTest);
     ADD_TEST_CASE(DrawNodePolygonTest);
@@ -1516,7 +1517,7 @@ void DrawNodeBaseTest::onDrawImGui()
 {
     if (flagGUI != -1)
     {
-        if (ImGui::Begin("DrawNode::properties. Dialog"))
+        if (ImGui::Begin("DrawNode::AdvancedSettings Dialog"))
         {
             if (flagGUI == 1)
             {
@@ -1538,6 +1539,16 @@ void DrawNodeBaseTest::onDrawImGui()
             ImGui::Checkbox("drawOrder", &drawOrder);
             ImGui::SameLine();
             ImGui::Checkbox("transform", &transform);
+            ImGui::SameLine();
+            if (ImGui::Button("Reset AdvancedSettings"))
+            {
+                drawNode->resetAdvancedSettings();
+                drawOrder = drawNode->isPreserveDrawOrder();
+                transform = drawNode->isLocalTransformEnabled();
+                pa        = drawNode->getLocalRotation();
+                ps        = drawNode->getLocalScale();
+            }
+
             float _ps[2] = {ps.x, ps.y};
             ImGui::DragFloat2("Scale", _ps);
             ps = Vec2(_ps[0], _ps[1]);
@@ -3516,19 +3527,6 @@ DrawNodeIssueTester::DrawNodeIssueTester()
 
     drawNode->drawCircle(Vec2(0, 100), 40, AX_DEGREES_TO_RADIANS(-90), 30, false, 1.0f, 1.0f, Color::RED, 6);
 
-    Label* labelSize[10];
-    y = 0;
-    for (int i = 0; i < 10; i++)
-    {
-        float fs     = (i + 1) * 3;
-        labelSize[i] = Label::createWithTTF("UNDERLINE/STRIKE...", "fonts/arial.ttf", fs);
-        labelSize[i]->setPosition(300, 300 - 50 - y);
-        y += (i + 2) * 3;
-        labelSize[i]->enableUnderline();
-        labelSize[i]->enableStrikethrough();
-        addChild(labelSize[i]);
-    }
-
     // scheduleUpdate();
 }
 
@@ -3683,6 +3681,7 @@ DrawNodeSpLinesOpenClosedTest::DrawNodeSpLinesOpenClosedTest()
     this->addChild(cpLabel, 1);
 
     DrawNodeBaseTest::generateDataPoints();
+
     scheduleUpdate();
 }
 
@@ -3733,6 +3732,84 @@ void DrawNodeSpLinesOpenClosedTest::update(float dt)
     drawNode->drawCardinalSpline(array, 0.0f, static_cast<int>(points.size() * 20), Color::GREEN, 4.0f, true);
     drawNode->drawCardinalSpline(array, 0.0f, static_cast<int>(points.size() * 20), Color::RED, 4.0f, false);
 }
+
+
+DrawNodeThickness1Test::DrawNodeThickness1Test()
+{
+    // Label thickness test
+    Label* labelSize[10];
+    int y = 20;
+    for (int i = 0; i < 10; i++)
+    {
+        float fs     = (i + 1) * 3;
+        labelSize[i] = Label::createWithTTF("UNDERLINE/STRIKE...", "fonts/arial.ttf", fs);
+        labelSize[i]->setPosition(310, 300 - 50 - y);
+        y += (i + 2) * 3;
+        labelSize[i]->enableUnderline();
+        labelSize[i]->enableStrikethrough();
+        addChild(labelSize[i]);
+    }
+
+    // thickness 1
+    auto drawSR1 = DrawNode::create();
+    addChild(drawSR1, 10);
+    drawSR1->setPosition(Vec2(-180, -30));
+    drawSR1->drawSolidRect(Vec2(7, 7), Vec2(8, 8), Color(0.5, 1, 0.5, 1), 1.0f, Color(0, 1, 0, 1));
+    drawSR1->setScale(32);
+    drawSR1->setLocalScale({1, 1});
+    drawSR1->setThicknessScale(1);
+
+    auto drawR1 = DrawNode::create();
+    addChild(drawR1, 10);
+    drawR1->setPosition(Vec2(-105, -30));
+    drawR1->drawRect(Vec2(7, 7), Vec2(8, 8), Color(0, 1, 0, 1), 1.0f);
+    drawR1->setScale(32);
+    drawR1->setLocalScale({1, 1});
+    drawR1->setThicknessScale(1);
+
+    // thickness 2
+    auto drawSR2 = DrawNode::create();
+    addChild(drawSR2, 10);
+    drawSR2->setPosition(Vec2(-180, -100));
+    drawSR2->drawSolidRect(Vec2(7, 7), Vec2(8, 8), Color(0.5, 0.5, 1, 1), 1.0f, Color(0, 0, 1, 1));
+    drawSR2->setScale(32);
+    drawSR2->setLocalScale({1, 1});
+    drawSR2->setThicknessScale(2);
+
+    auto drawR2 = DrawNode::create();
+    addChild(drawR2, 10);
+    drawR2->setPreserveDrawOrder(true);
+    drawR2->setPosition(Vec2(-105, -100));
+    drawR2->drawRect(Vec2(7, 7), Vec2(8, 8), Color(0, 0, 1, 1), 1.0f);
+    drawR2->setScale(32);
+    drawR2->setLocalScale({1, 1});
+    drawR2->setThicknessScale(2);
+
+     scheduleUpdate();
+}
+
+void DrawNodeThickness1Test::onEnter()
+{
+    DrawNodeBaseTest::onEnter();
+}
+
+void DrawNodeThickness1Test::update(float dt)
+{
+
+}
+
+string DrawNodeThickness1Test::title() const
+{
+    return "Thickness=1.0 Test";
+}
+
+string DrawNodeThickness1Test::subtitle() const
+{
+    return "plus ax::Label underline/strikethrough test";
+}
+
+
+
 
 #if defined(AX_PLATFORM_PC)
 

@@ -362,15 +362,6 @@ public:
 
     void update(float dt) override;
     void onEnter() override;
-
-    void changeThreshold(Object* pSender, ax::ui::Slider::EventType type);
-    void changeLineWidth(Object* pSender, ax::ui::Slider::EventType type);
-
-private:
-    ax::Label* _lineWidthLabel;
-    float lineWidth = 0;
-    ax::Label* _thresholdLabel;
-    float threshold = 0;
 };
 
 class DrawNodeThicknessStressTest : public DrawNodeBaseTest
@@ -384,16 +375,6 @@ public:
     virtual std::string subtitle() const override;
 
     void update(float dt) override;
-    //  void onEnter() override;
-
-    void changeThreshold(Object* pSender, ax::ui::Slider::EventType type);
-    void changeLineWidth(Object* pSender, ax::ui::Slider::EventType type);
-
-private:
-    ax::Label* _lineWidthLabel;
-    float lineWidth = 0;
-    ax::Label* _thresholdLabel;
-    float threshold = 0;
 };
 
 class DrawNodeSpLinesTest : public DrawNodeBaseTest
@@ -489,6 +470,20 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
+};
+
+class DrawNodeThickness1Test : public DrawNodeBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeThickness1Test);
+
+    DrawNodeThickness1Test();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+
+    void update(float dt) override;
+    void onEnter() override;
 };
 
 #if defined(AX_PLATFORM_PC)
