@@ -3733,7 +3733,6 @@ void DrawNodeSpLinesOpenClosedTest::update(float dt)
     drawNode->drawCardinalSpline(array, 0.0f, static_cast<int>(points.size() * 20), Color::RED, 4.0f, false);
 }
 
-
 DrawNodeThickness1Test::DrawNodeThickness1Test()
 {
     // Label thickness test
@@ -3785,7 +3784,7 @@ DrawNodeThickness1Test::DrawNodeThickness1Test()
     drawR2->setLocalScale({1, 1});
     drawR2->setThicknessScale(2);
 
-     scheduleUpdate();
+    scheduleUpdate();
 }
 
 void DrawNodeThickness1Test::onEnter()
@@ -3793,10 +3792,7 @@ void DrawNodeThickness1Test::onEnter()
     DrawNodeBaseTest::onEnter();
 }
 
-void DrawNodeThickness1Test::update(float dt)
-{
-
-}
+void DrawNodeThickness1Test::update(float dt) {}
 
 string DrawNodeThickness1Test::title() const
 {
@@ -3807,9 +3803,6 @@ string DrawNodeThickness1Test::subtitle() const
 {
     return "plus ax::Label underline/strikethrough test";
 }
-
-
-
 
 #if defined(AX_PLATFORM_PC)
 
