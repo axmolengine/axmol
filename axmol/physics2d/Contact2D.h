@@ -27,7 +27,7 @@
 #pragma once
 
 #include "axmol/base/Config.h"
-#if defined(AX_ENABLE_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_2D)
 
 #    include "axmol/base/Object.h"
 #    include "axmol/math/Math.h"
@@ -38,9 +38,9 @@
 namespace ax
 {
 
-class PhysicsCollider;
-class PhysicsBody;
-class PhysicsWorld;
+class Collider2D;
+class Rigidbody2D;
+class PhysicsWorld2D;
 
 typedef struct AX_DLL PhysicsContactData
 {
@@ -65,7 +65,7 @@ typedef struct AX_DLL PhysicsContactData
  * It will created automatically when two shape contact with each other. And it will destroyed automatically when two
  shape separated.
  */
-class AX_DLL PhysicsContact : public EventCustom
+class AX_DLL Contact2D : public EventCustom
 {
 public:
     enum class EventCode
@@ -78,10 +78,10 @@ public:
     };
 
     /** Get contact shape A. */
-    PhysicsCollider* getShapeA() const { return _shapeA; }
+    Collider2D* getColliderA() const { return _colliderA; }
 
     /** Get contact shape B. */
-    PhysicsCollider* getShapeB() const { return _shapeB; }
+    Collider2D* getColliderB() const { return _colliderB; }
 
     /** Get contact data. */
     const PhysicsContactData* getContactData() const { return _contactData; }
@@ -109,14 +109,14 @@ public:
     EventCode getEventCode() const { return _eventCode; };
 
 private:
-    static PhysicsContact* construct(PhysicsCollider* a, PhysicsCollider* b);
-    bool init(PhysicsCollider* a, PhysicsCollider* b);
+    static Contact2D* obtain(Collider2D* a, Collider2D* b);
+    bool init(Collider2D* a, Collider2D* b);
 
     void setEventCode(EventCode eventCode) { _eventCode = eventCode; };
     bool isNotificationEnabled() const { return _notificationEnable; }
     void setNotificationEnable(bool enable) { _notificationEnable = enable; }
-    PhysicsWorld* getWorld() const { return _world; }
-    void setWorld(PhysicsWorld* world) { _world = world; }
+    PhysicsWorld2D* getWorld() const { return _world; }
+    void setWorld(PhysicsWorld2D* world) { _world = world; }
     void setResult(bool result) { _result = result; }
     bool resetResult()
     {
@@ -128,13 +128,13 @@ private:
     void generateContactData();
 
 private:
-    PhysicsContact();
-    ~PhysicsContact();
+    Contact2D();
+    ~Contact2D();
 
 private:
-    PhysicsWorld* _world;
-    PhysicsCollider* _shapeA;
-    PhysicsCollider* _shapeB;
+    PhysicsWorld2D* _world;
+    Collider2D* _colliderA;
+    Collider2D* _colliderB;
     EventCode _eventCode;
     bool _notificationEnable;
     bool _result;
@@ -146,7 +146,7 @@ private:
 
     friend class EventListenerPhysicsContact;
     friend struct PhysicsWorldCallback;
-    friend class PhysicsWorld;
+    friend class PhysicsWorld2D;
 };
 
 /**
@@ -224,30 +224,30 @@ protected:
      * It will be call when two body have contact.
      * if return false, it will not invoke callbacks.
      */
-    virtual bool hitTest(PhysicsCollider* shapeA, PhysicsCollider* shapeB);
+    virtual bool hitTest(Collider2D* shapeA, Collider2D* shapeB);
 
 public:
     /**
      * @brief It will called at two shapes start to contact, and only call it once.
      */
-    std::function<bool(PhysicsContact& contact)> onContactBegin;
+    std::function<bool(Contact2D& contact)> onContactBegin;
     /**
      * @brief Two shapes are touching during this step. Return false from the callback to make world ignore the
      * collision this step or true to process it normally. Additionally, you may override collision values, restitution,
      * or surface velocity values.
      */
-    std::function<bool(PhysicsContact& contact, PhysicsContactPreSolve& solve)> onContactPreSolve;
+    std::function<bool(Contact2D& contact, PhysicsContactPreSolve& solve)> onContactPreSolve;
     /**
      * @brief Two shapes are touching and their collision response has been processed. You can retrieve the collision
      * impulse or kinetic energy at this time if you want to use it to calculate sound volumes or damage amounts. See
      * cpArbiter for more info
      */
-    std::function<void(PhysicsContact& contact, const PhysicsContactPostSolve& solve)> onContactPostSolve;
+    std::function<void(Contact2D& contact, const PhysicsContactPostSolve& solve)> onContactPostSolve;
     /**
      * @brief It will called at two shapes separated, and only call it once.
      * onContactBegin and onContactSeparate will called in pairs.
      */
-    std::function<void(PhysicsContact& contact)> onContactSeparate;
+    std::function<void(Contact2D& contact)> onContactSeparate;
 
 protected:
     bool init();
@@ -257,7 +257,7 @@ protected:
     EventListenerPhysicsContact();
     virtual ~EventListenerPhysicsContact();
 
-    friend class PhysicsWorld;
+    friend class PhysicsWorld2D;
 };
 
 /** This event listener only be called when bodyA and bodyB have contacts. */
@@ -265,15 +265,15 @@ class AX_DLL EventListenerPhysicsContactWithBodies : public EventListenerPhysics
 {
 public:
     /** Create the listener. */
-    static EventListenerPhysicsContactWithBodies* create(PhysicsBody* bodyA, PhysicsBody* bodyB);
+    static EventListenerPhysicsContactWithBodies* create(Rigidbody2D* bodyA, Rigidbody2D* bodyB);
 
-    bool hitTest(PhysicsCollider* shapeA, PhysicsCollider* shapeB) override;
+    bool hitTest(Collider2D* shapeA, Collider2D* shapeB) override;
 
     EventListenerPhysicsContactWithBodies* clone() override;
 
 protected:
-    PhysicsBody* _a;
-    PhysicsBody* _b;
+    Rigidbody2D* _a;
+    Rigidbody2D* _b;
 
 protected:
     EventListenerPhysicsContactWithBodies();
@@ -285,14 +285,14 @@ class AX_DLL EventListenerPhysicsContactWithShapes : public EventListenerPhysics
 {
 public:
     /** Create the listener. */
-    static EventListenerPhysicsContactWithShapes* create(PhysicsCollider* shapeA, PhysicsCollider* shapeB);
+    static EventListenerPhysicsContactWithShapes* create(Collider2D* shapeA, Collider2D* shapeB);
 
-    bool hitTest(PhysicsCollider* shapeA, PhysicsCollider* shapeB) override;
+    bool hitTest(Collider2D* shapeA, Collider2D* shapeB) override;
     EventListenerPhysicsContactWithShapes* clone() override;
 
 protected:
-    PhysicsCollider* _a;
-    PhysicsCollider* _b;
+    Collider2D* _a;
+    Collider2D* _b;
 
 protected:
     EventListenerPhysicsContactWithShapes();
@@ -306,7 +306,7 @@ public:
     /** Create the listener. */
     static EventListenerPhysicsContactWithGroup* create(int group);
 
-    bool hitTest(PhysicsCollider* shapeA, PhysicsCollider* shapeB) override;
+    bool hitTest(Collider2D* shapeA, Collider2D* shapeB) override;
     EventListenerPhysicsContactWithGroup* clone() override;
 
 protected:
@@ -322,4 +322,4 @@ protected:
 
 }  // namespace ax
 
-#endif  // defined(AX_ENABLE_PHYSICS)
+#endif  // defined(AX_ENABLE_PHYSICS_2D)

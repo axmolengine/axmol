@@ -40,10 +40,6 @@
 #include "axmol/2d/ComponentContainer.h"
 #include "axmol/2d/Component.h"
 
-#if defined(AX_ENABLE_PHYSICS)
-#    include "axmol/physics/PhysicsBody.h"
-#endif
-
 namespace ax
 {
 
@@ -61,7 +57,7 @@ class Renderer;
 class Director;
 class Material;
 class Camera;
-class PhysicsBody;
+class Rigidbody2D;
 
 namespace rhi
 {
@@ -2027,25 +2023,15 @@ protected:
 
     rhi::ProgramState* _programState = nullptr;
 
-// Physics:remaining backwardly compatible
-#if defined(AX_ENABLE_PHYSICS)
-    PhysicsBody* _physicsBody;
+#if defined(AX_ENABLE_PHYSICS_2D)
+    // cache to speedup the access to physics body, as it's frequently used in physics world 2d
+    Rigidbody2D* _rigidbody2D{nullptr};
 
 public:
-    void setPhysicsBody(PhysicsBody* physicsBody)
-    {
-        if (_physicsBody != nullptr)
-        {
-            removeComponent(_physicsBody);
-        }
+    Rigidbody2D* getRigidbody2D() const { return _rigidbody2D; }
 
-        addComponent(physicsBody);
-    }
-    PhysicsBody* getPhysicsBody() const { return _physicsBody; }
-
-    friend class PhysicsBody;
+    friend class Rigidbody2D;
 #endif
-
     static int __attachedNodeCount;
 
 private:

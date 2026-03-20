@@ -29,7 +29,7 @@
 
 #include "../BaseTest.h"
 
-#if defined(AX_ENABLE_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_2D)
 
 DEFINE_TEST_SUITE(PhysicsTests);
 
@@ -47,15 +47,17 @@ public:
     void toggleDebugCallback(ax::Object* sender);
 
     ax::Sprite* addGrossiniAtPosition(ax::Vec2 p, float scale = 1.0);
-    ax::Sprite* makeBall(ax::Vec2 point, float radius, ax::PhysicsMaterial material = ax::PHYSICSBODY_MATERIAL_DEFAULT);
+    ax::Sprite* makeBall(ax::Vec2 point,
+                         float radius,
+                         const ax::PhysicsMaterial2D& material = ax::PHYSICS_MATERIAL_2D_DEFAULT);
     ax::Sprite* makeBox(ax::Vec2 point,
                         ax::Size size,
                         int color                    = 0,
-                        ax::PhysicsMaterial material = ax::PHYSICSBODY_MATERIAL_DEFAULT);
+                        const ax::PhysicsMaterial2D& material = ax::PHYSICS_MATERIAL_2D_DEFAULT);
     ax::Sprite* makeTriangle(ax::Vec2 point,
                              ax::Size size,
                              int color                    = 0,
-                             ax::PhysicsMaterial material = ax::PHYSICSBODY_MATERIAL_DEFAULT);
+                             const ax::PhysicsMaterial2D& material = ax::PHYSICS_MATERIAL_2D_DEFAULT);
 
     bool onTouchBegan(ax::Touch* touch, ax::Event* event);
     void onTouchMoved(ax::Touch* touch, ax::Event* event);
@@ -120,7 +122,7 @@ public:
 
     void changeModeCallback(ax::Object* sender);
 
-    bool anyRay(ax::PhysicsWorld& world, const ax::PhysicsRayCastInfo& info, void* data);
+    bool anyRay(ax::PhysicsWorld2D& world, const ax::PhysicsRayCastInfo& info, void* data);
 
 private:
     float _angle;
@@ -173,7 +175,7 @@ public:
     void onEnter() override;
     virtual std::string title() const override;
 
-    bool onContactBegin(ax::PhysicsContact& contact);
+    bool onContactBegin(ax::Contact2D& contact);
 };
 
 class PhysicsDemoSlice : public PhysicsDemo
@@ -185,8 +187,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    bool slice(ax::PhysicsWorld& world, const ax::PhysicsRayCastInfo& info, void* data);
-    void clipPoly(ax::PhysicsColliderPolygon* shape, ax::Vec2 normal, float distance);
+    bool slice(ax::PhysicsWorld2D& world, const ax::PhysicsRayCastInfo& info, void* data);
+    void clipPoly(ax::PolygonCollider2D* shape, ax::Vec2 normal, float distance);
 
     void onTouchEnded(ax::Touch* touch, ax::Event* event);
 
@@ -211,7 +213,7 @@ public:
 
     void onEnter() override;
     void resetTest();
-    bool onContactBegin(ax::PhysicsContact& contact);
+    bool onContactBegin(ax::Contact2D& contact);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
@@ -260,7 +262,7 @@ public:
 private:
     ax::Sprite* _nodeA;
     ax::Sprite* _nodeB;
-    ax::PhysicsBody* _body;
+    ax::Rigidbody2D* _body;
     ax::MenuItemFont* _button;
     bool _bodyInA;
 };
@@ -327,4 +329,4 @@ private:
     float _delayTime;
 };
 
-#endif  // #if defined(AX_ENABLE_PHYSICS)
+#endif  // #if defined(AX_ENABLE_PHYSICS_2D)

@@ -27,36 +27,33 @@
 #pragma once
 
 #include "axmol/base/Config.h"
-#if defined(AX_ENABLE_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_2D)
 
 #    include <list>
 #    include "axmol/base/Vector.h"
 #    include "axmol/math/Math.h"
-#    include "axmol/physics/PhysicsBody.h"
-
-struct cpSpace;
+#    include "axmol/physics2d/Rigidbody2D.h"
 
 namespace ax
 {
 
-class PhysicsBody;
-class PhysicsJoint;
-class PhysicsCollider;
-class PhysicsContact;
+class Rigidbody2D;
+class Joint2D;
+class Collider2D;
+class Contact2D;
 
 class Director;
 class Node;
 class Sprite;
 class Scene;
 class DrawNode;
-class PhysicsDebugDraw;
 class EventDispatcher;
 
-class PhysicsWorld;
+class PhysicsWorld2D;
 
 typedef struct PhysicsRayCastInfo
 {
-    PhysicsCollider* shape;
+    Collider2D* collider;
     Vec2 start;
     Vec2 end;  ///< in lua, it's name is "ended"
     Vec2 contact;
@@ -82,9 +79,9 @@ typedef struct PhysicsRayCastInfo
  * @param normal the normal vector at the point of intersection
  * @return true to continue, false to terminate
  */
-typedef std::function<bool(PhysicsWorld& world, const PhysicsRayCastInfo& info, void* data)> PhysicsRayCastCallbackFunc;
-typedef std::function<bool(PhysicsWorld&, PhysicsCollider&, void*)> PhysicsQueryRectCallbackFunc;
-typedef PhysicsQueryRectCallbackFunc PhysicsQueryPointCallbackFunc;
+using PhysicsRayCastCallback   = std::function<bool(PhysicsWorld2D& world, const PhysicsRayCastInfo& info, void* data)>;
+using PhysicsQueryRectCallback = std::function<bool(PhysicsWorld2D&, Collider2D&, void*)>;
+using PhysicsQueryPointCallback = PhysicsQueryRectCallback;
 
 /**
  * @addtogroup physics
@@ -94,12 +91,27 @@ typedef PhysicsQueryRectCallbackFunc PhysicsQueryPointCallbackFunc;
  */
 
 /**
- * @class PhysicsWorld CCPhysicsWorld.h
- * @brief An PhysicsWorld object simulates collisions and other physical properties. You do not create PhysicsWorld
+ * @class PhysicsWorld2D CCPhysicsWorld.h
+ * @brief An PhysicsWorld2D object simulates collisions and other physical properties. You do not create PhysicsWorld2D
  * objects directly; instead, you can get it from an Scene object.
  */
-class AX_DLL PhysicsWorld
+class AX_DLL PhysicsWorld2D
 {
+    friend class Node;
+    friend class Sprite;
+    friend class Scene;
+    friend class Director;
+    friend class Rigidbody2D;
+    friend class Collider2D;
+    friend class Joint2D;
+    friend struct PhysicsWorldCallback;
+
+protected:
+    PhysicsWorld2D();
+    virtual ~PhysicsWorld2D();
+    static PhysicsWorld2D* obtain(Scene* scene);
+    bool init(Scene* scene);
+
 public:
     static const int DEBUGDRAW_NONE;     ///< draw nothing
     static const int DEBUGDRAW_SHAPE;    ///< draw shapes
@@ -107,52 +119,23 @@ public:
     static const int DEBUGDRAW_CONTACT;  ///< draw contact
     static const int DEBUGDRAW_ALL;      ///< draw all
 
-public:
-    b2WorldId getB2World() const { return _b2World; }
-
-    /**
-     * Adds a joint to this physics world.
-     *
-     * This joint will be added to this physics world at next frame.
-     * @attention If this joint is already added to another physics world, it will be removed from that world first and
-     * then add to this world.
-     * @param   joint   A pointer to an existing PhysicsJoint object.
-     */
-    virtual void addJoint(PhysicsJoint* joint);
-
-    /**
-     * Remove a joint from this physics world.
-     *
-     * If this world is not locked, the joint is removed immediately, otherwise at next frame.
-     * If this joint is connected with a body, it will be removed from the body also.
-     * @param   joint   A pointer to an existing PhysicsJoint object.
-     * @param   destroy   true this joint will be destroyed after remove from this world, false otherwise.
-     */
-    virtual void removeJoint(PhysicsJoint* joint, bool destroy = true);
-
-    /**
-     * Remove all joints from this physics world.
-     *
-     * @attention This function is invoked in the destructor of this physics world, you do not use this api in common.
-     * @param   destroy   true all joints will be destroyed after remove from this world, false otherwise.
-     */
-    virtual void removeAllJoints(bool destroy = true);
+    b2WorldId internalHandle() const { return _b2World; }
 
     /**
      * Remove a body from this physics world.
      *
      * If this world is not locked, the body is removed immediately, otherwise at next frame.
      * @attention If this body has joints, those joints will be removed also.
-     * @param   body   A pointer to an existing PhysicsBody object.
+     * @param   body   A pointer to an existing Rigidbody2D object.
      */
-    virtual void removeBody(PhysicsBody* body);
+    virtual void removeBody(Rigidbody2D* body);
 
     /**
      * Remove body by tag.
      *
      * If this world is not locked, the object is removed immediately, otherwise at next frame.
      * @attention If this body has joints, those joints will be removed also.
-     * @param   tag   An integer number that identifies a PhysicsBody object.
+     * @param   tag   An integer number that identifies a Rigidbody2D object.
      */
     virtual void removeBody(int tag);
 
@@ -172,61 +155,91 @@ public:
      * @param   end   A Vec2 object contains the end position of the ray.
      * @param   data   User defined data, it is passed to func.
      */
-    void rayCast(PhysicsRayCastCallbackFunc func, const Vec2& start, const Vec2& end, void* data);
+    [[internal]] void rayCast(PhysicsRayCastCallback func, const Vec2& start, const Vec2& end, void* data);
+
+    /**f
+     * Enumerates all physics shapes whose bounding box overlaps the specified rectangle.
+     *
+     * Queries the physics world for shapes intersecting the given rect.
+     * For each overlapping shape, the provided callback function is invoked.
+     *
+     * @param func  Callback function executed for each overlapping shape.
+     * @param rect  Rectangle region (x, y, width, height) used for overlap testing.
+     * @param data  User-defined data passed to the callback.
+     */
+    [[internal]] void overlapBox(PhysicsQueryRectCallback func, const Rect& rect, void* data);
 
     /**
-     * Searches for physics shapes that contains in the rect.
+     * Returns the nearest physics shape whose bounding box overlaps the specified rectangle.
      *
-     * Query this physics world to find all shapes overlap rect.
-     * @param   func   Func is called for each shape whose bounding box overlaps rect.
-     * @param   rect   A Rect object contains a rectangle's x, y, width and height.
-     * @param   data   User defined data, it is passed to func.
+     * Queries the physics world at the given rect and finds the closest shape
+     * that intersects it. If no shape overlaps the rect, nullptr is returned.
+     *
+     * @param rect  Rectangle region (x, y, width, height) used for overlap testing.
+     * @return      Pointer to the nearest Collider2D overlapping the rect,
+     *              or nullptr if none were found.
      */
-    void queryRect(PhysicsQueryRectCallbackFunc func, const Rect& rect, void* data);
+    Collider2D* overlapBox(const Rect& rect) const;
 
     /**
-     * Searches for physics shapes that contains the point.
+     * Returns all physics shapes whose bounding box overlaps the specified rectangle.
      *
-     * @attention The point must lie inside a shape.
-     * @param   func   Func is called for each shape contains the point.
-     * @param   point   A Vec2 object contains the position of the point.
-     * @param   data   User defined data, it is passed to func.
+     * Queries the physics world and collects every shape intersecting the given rect
+     * into a vector.
+     *
+     * @param rect  Rectangle region (x, y, width, height) used for overlap testing.
+     * @return      A vector of Collider2D pointers representing all shapes
+     *              overlapping the rect.
      */
-    void queryPoint(PhysicsQueryPointCallbackFunc func, const Vec2& point, void* data);
+    Vector<Collider2D*> overlapBoxAll(const Rect& rect) const;
 
     /**
-     * Get physics shapes that contains the point.
+     * Enumerates all physics shapes that contain the specified point.
      *
-     * All shapes contains the point will be pushed in a Vector<PhysicsCollider*> object.
-     * @attention The point must lie inside a shape.
-     * @param   point   A Vec2 object contains the position of the point.
-     * @return A Vector<PhysicsCollider*> object contains all found PhysicsCollider pointer.
+     * Queries the physics world for shapes covering the given point.
+     * For each shape that contains the point, the provided callback function is invoked.
+     *
+     * @attention The point must lie inside at least one shape to trigger callbacks.
+     *
+     * @param func   Callback function executed for each shape containing the point.
+     * @param point  Position of the point to test.
+     * @param data   User-defined data passed to the callback.
      */
-    Vector<PhysicsCollider*> getShapes(const Vec2& point) const;
+    [[internal]] void overlapPoint(PhysicsQueryPointCallback func, const Vec2& point, void* data);
 
     /**
-     * Get the nearest physics shape that contains the point.
+     * Returns the nearest physics shape that contains the specified point.
      *
-     * Query this physics world at point and return the closest shape.
-     * @param   point   A Vec2 object contains the position of the point.
-     * @return A PhysicsCollider object pointer or nullptr if no shapes were found
+     * Queries the physics world at the given point and finds the closest shape
+     * that covers it. If no shape contains the point, nullptr is returned.
+     *
+     * @param point  Position of the point to test.
+     * @return       Pointer to the nearest Collider2D containing the point,
+     *               or nullptr if none were found.
      */
-    PhysicsCollider* getShape(const Vec2& point) const;
+    Collider2D* overlapPoint(const Vec2& point) const;
 
     /**
-     * Get all the bodies that in this physics world.
+     * Returns all physics shapes that contain the specified point.
      *
-     * @return A Vector<PhysicsBody*>& object contains all bodies in this physics world.
+     * Queries the physics world and collects every shape covering the given point
+     * into a vector.
+     *
+     * @attention The point must lie inside at least one shape to produce results.
+     *
+     * @param point  Position of the point to test.
+     * @return       A vector of Collider2D pointers representing all shapes
+     *               that contain the point.
      */
-    const Vector<PhysicsBody*>& getAllBodies() const;
+    Vector<Collider2D*> overlapPointAll(const Vec2& point) const;
 
     /**
      * Get a body by tag.
      *
-     * @param   tag   An integer number that identifies a PhysicsBody object.
-     * @return A PhysicsBody object pointer or nullptr if no shapes were found.
+     * @param   tag   An integer number that identifies a Rigidbody2D object.
+     * @return A Rigidbody2D object pointer or nullptr if no shapes were found.
      */
-    PhysicsBody* getBody(int tag) const;
+    Rigidbody2D* getBody(int tag) const;
 
     /**
      * Get a scene contain this physics world.
@@ -234,7 +247,7 @@ public:
      * @attention This value is initialized in constructor
      * @return A Scene object reference.
      */
-    Scene& getScene() const { return *_scene; }
+    Scene* getScene() const { return _scene; }
 
     /**
      * Get the gravity value of this physics world.
@@ -329,22 +342,11 @@ public:
     {
         if (updatesPerSecond > 0)
         {
-            _fixedRate = updatesPerSecond;
-            for (auto body : _bodies)
-            {
-                body->setFixedUpdate(true);
-            }
-        }
-        else
-        {
-            for (auto body : _bodies)
-            {
-                body->setFixedUpdate(false);
-            }
+            _fixedUpdateRate = updatesPerSecond;
         }
     }
     /** get the number of substeps */
-    int getFixedUpdateRate() const { return _fixedRate; }
+    int getFixedUpdateRate() const { return _fixedUpdateRate; }
 
     /**
      * set the callback which invoked before update of each object in physics world.
@@ -384,24 +386,19 @@ public:
     void step(float delta);
 
 protected:
-    static PhysicsWorld* construct(Scene* scene);
-    bool init();
-
-    virtual void addBody(PhysicsBody* body);
-
     virtual void update(float delta, bool userCall = false);
 
-    virtual bool collisionBeginCallback(PhysicsContact& contact);
-    virtual bool collisionPreSolveCallback(PhysicsContact& contact);
-    virtual void collisionPostSolveCallback(PhysicsContact& contact);
-    virtual void collisionSeparateCallback(PhysicsContact& contact);
+    virtual bool collisionBeginCallback(Contact2D& contact);
+    virtual bool collisionPreSolveCallback(Contact2D& contact);
+    virtual void collisionPostSolveCallback(Contact2D& contact);
+    virtual void collisionSeparateCallback(Contact2D& contact);
 
-    virtual void doRemoveBody(PhysicsBody* body);
-    virtual void doRemoveJoint(PhysicsJoint* joint);
-    virtual void addBodyOrDelay(PhysicsBody* body);
-    virtual void removeBodyOrDelay(PhysicsBody* body);
-    virtual void updateBodies();
-    virtual void updateJoints();
+    void beforeSimulation(Node* node,
+                          const Mat4& parentToWorldTransform,
+                          float nodeParentScaleX,
+                          float nodeParentScaleY,
+                          float parentRotation);
+    void afterSimulation(Node* node, const Mat4& parentToWorldTransform, float parentRotation);
 
 protected:
     Vec2 _gravity;
@@ -411,54 +408,24 @@ protected:
     int _updateRateCount;
     float _updateTime;
     int _substeps;
-    int _fixedRate;
+    int _fixedUpdateRate;
     b2WorldId _b2World;
     bool _isWorldLocked = false;
 
     bool _updateBodyTransform;
-    Vector<PhysicsBody*> _bodies;
-    std::list<PhysicsJoint*> _joints;
     Scene* _scene;
 
     bool _autoStep;
 
     EventDispatcher* _eventDispatcher;
 
-    Vector<PhysicsBody*> _delayAddBodies;
-    Vector<PhysicsBody*> _delayRemoveBodies;
-    std::vector<PhysicsJoint*> _delayAddJoints;
-    std::vector<PhysicsJoint*> _delayRemoveJoints;
-
     std::function<void()> _preUpdateCallback;
     std::function<void()> _postUpdateCallback;
-
-protected:
-    PhysicsWorld();
-    virtual ~PhysicsWorld();
-
-    void beforeSimulation(Node* node,
-                          const Mat4& parentToWorldTransform,
-                          float nodeParentScaleX,
-                          float nodeParentScaleY,
-                          float parentRotation);
-    void afterSimulation(Node* node, const Mat4& parentToWorldTransform, float parentRotation);
-
-    friend class Node;
-    friend class Sprite;
-    friend class Scene;
-    friend class Director;
-    friend class PhysicsBody;
-    friend class PhysicsCollider;
-    friend class PhysicsJoint;
-    friend struct PhysicsWorldCallback;
-    friend class PhysicsDebugDraw;
 };
-
-extern const float AX_DLL PHYSICS_INFINITY;
 
 /** @} */
 /** @} */
 
 }  // namespace ax
 
-#endif  // defined(AX_ENABLE_PHYSICS)
+#endif  // defined(AX_ENABLE_PHYSICS_2D)

@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "axmol/2d/Node.h"
 #include "axmol/2d/Scene.h"
 
-#if defined(AX_ENABLE_3D_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_3D)
 
 namespace ax
 {
@@ -127,7 +127,7 @@ void Physics3DComponent::onEnter()
     {
         auto scene = _owner->getScene();
         if (scene)
-            addToPhysicsWorld(scene->getPhysics3DWorld());
+            addToPhysicsWorld(scene->getPhysicsWorld3D());
     }
 }
 
@@ -249,4 +249,4 @@ void Physics3DComponent::syncNodeToPhysics()
 
 }  // namespace ax
 
-#endif  // defined(AX_ENABLE_3D_PHYSICS)
+#endif  // defined(AX_ENABLE_PHYSICS_3D)

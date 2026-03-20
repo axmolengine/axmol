@@ -35,11 +35,11 @@ THE SOFTWARE.
 #include "axmol/base/text_utils.h"
 #include "axmol/renderer/Renderer.h"
 
-#if defined(AX_ENABLE_PHYSICS)
-#    include "axmol/physics/PhysicsWorld.h"
+#if defined(AX_ENABLE_PHYSICS_2D)
+#    include "axmol/physics2d/PhysicsWorld2D.h"
 #endif
 
-#if defined(AX_ENABLE_3D_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_3D)
 #    include "axmol/physics3d/Physics3DWorld.h"
 #    include "axmol/physics3d/Physics3DComponent.h"
 #endif
@@ -66,8 +66,8 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-#if defined(AX_ENABLE_3D_PHYSICS)
-    AX_SAFE_RELEASE(_physics3DWorld);
+#if defined(AX_ENABLE_PHYSICS_3D)
+    AX_SAFE_RELEASE(_physicsWorld3D);
     AX_SAFE_RELEASE(_physics3dDebugCamera);
 #endif
 #if defined(AX_ENABLE_NAVMESH)
@@ -76,8 +76,8 @@ Scene::~Scene()
     _director->getEventDispatcher()->removeEventListener(_event);
     AX_SAFE_RELEASE(_event);
 
-#if defined(AX_ENABLE_PHYSICS)
-    delete _physicsWorld;
+#if defined(AX_ENABLE_PHYSICS_2D)
+    delete _physicsWorld2D;
 #endif
 
 #if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
@@ -233,8 +233,8 @@ void Scene::render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eye
         //        camera->setNodeToParentTransform(eyeCopy);
     }
 
-#if defined(AX_ENABLE_3D_PHYSICS)
-    if (_physics3DWorld && _physics3DWorld->isDebugDrawEnabled())
+#if defined(AX_ENABLE_PHYSICS_3D)
+    if (_physicsWorld3D && _physicsWorld3D->isDebugDrawEnabled())
     {
         Camera* physics3dDebugCamera = _physics3dDebugCamera != nullptr ? _physics3dDebugCamera : defaultCamera;
 
@@ -250,7 +250,7 @@ void Scene::render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eye
         physics3dDebugCamera->apply();
         physics3dDebugCamera->clearBackground();
 
-        _physics3DWorld->debugDraw(renderer);
+        _physicsWorld3D->debugDraw(renderer);
         renderer->render();
 
         _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
@@ -307,7 +307,7 @@ void Scene::removeAllChildren()
     }
 }
 
-#if defined(AX_ENABLE_3D_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_3D)
 void Scene::setPhysics3DDebugCamera(Camera* camera)
 {
     AX_SAFE_RETAIN(camera);
@@ -326,7 +326,7 @@ void Scene::setNavMeshDebugCamera(Camera* camera)
 
 #endif
 
-#if (defined(AX_ENABLE_PHYSICS) || defined(AX_ENABLE_3D_PHYSICS))
+#if (defined(AX_ENABLE_PHYSICS_2D) || defined(AX_ENABLE_PHYSICS_3D))
 
 Scene* Scene::createWithPhysics()
 {
@@ -351,8 +351,8 @@ bool Scene::initWithPhysics()
 
 bool Scene::initPhysicsWorld()
 {
-#    if defined(AX_ENABLE_PHYSICS)
-    _physicsWorld = PhysicsWorld::construct(this);
+#    if defined(AX_ENABLE_PHYSICS_2D)
+    _physicsWorld2D = PhysicsWorld2D::obtain(this);
 #    endif
 
     bool ret = false;
@@ -360,10 +360,10 @@ bool Scene::initPhysicsWorld()
     {
         this->setContentSize(_director->getCanvasSize());
 
-#    if defined(AX_ENABLE_3D_PHYSICS)
+#    if defined(AX_ENABLE_PHYSICS_3D)
         Physics3DWorldDes info;
-        AX_BREAK_IF(!(_physics3DWorld = Physics3DWorld::create(&info)));
-        _physics3DWorld->retain();
+        AX_BREAK_IF(!(_physicsWorld3D = Physics3DWorld::create(&info)));
+        _physicsWorld3D->retain();
 #    endif
 
         // success
@@ -374,18 +374,18 @@ bool Scene::initPhysicsWorld()
 
 #endif
 
-#if (defined(AX_ENABLE_PHYSICS) || defined(AX_ENABLE_3D_PHYSICS) || defined(AX_ENABLE_NAVMESH))
+#if (defined(AX_ENABLE_PHYSICS_2D) || defined(AX_ENABLE_PHYSICS_3D) || defined(AX_ENABLE_NAVMESH))
 void Scene::stepPhysicsAndNavigation(float deltaTime)
 {
-#    if defined(AX_ENABLE_PHYSICS)
-    if (_physicsWorld && _physicsWorld->isAutoStep())
-        _physicsWorld->update(deltaTime);
+#    if defined(AX_ENABLE_PHYSICS_2D)
+    if (_physicsWorld2D && _physicsWorld2D->isAutoStep())
+        _physicsWorld2D->update(deltaTime);
 #    endif
 
-#    if defined(AX_ENABLE_3D_PHYSICS)
-    if (_physics3DWorld)
+#    if defined(AX_ENABLE_PHYSICS_3D)
+    if (_physicsWorld3D)
     {
-        _physics3DWorld->stepSimulate(deltaTime);
+        _physicsWorld3D->stepSimulate(deltaTime);
     }
 #    endif
 #    if defined(AX_ENABLE_NAVMESH)

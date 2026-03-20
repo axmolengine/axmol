@@ -5,7 +5,7 @@
 
 namespace ax
 {
-struct PhysicsHelper
+struct PhysicsUtility2D
 {
     static Vec2 toVec2(const b2Vec2& v) { return Vec2{v.x, v.y}; }
 
@@ -32,6 +32,6 @@ struct PhysicsHelper
     }
 };
 
-using phlp = PhysicsHelper;
+using put2d = PhysicsUtility2D;
 
 }  // namespace ax

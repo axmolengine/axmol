@@ -225,133 +225,6 @@ tolua_lerror:
 
     return 0;
 }
-int axlua_physics_PhysicsWorld_queryRect(lua_State* tolua_S)
-{
-    int argc              = 0;
-    ax::PhysicsWorld* obj = nullptr;
-    bool ok               = true;
-
-#    if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#    endif
-
-#    if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S, 1, "ax.PhysicsWorld", 0, &tolua_err))
-        goto tolua_lerror;
-#    endif
-
-    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
-
-#    if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S, "invalid 'obj' in function 'axlua_physics_PhysicsWorld_queryRect'", NULL);
-        return 0;
-    }
-#    endif
-
-    argc = lua_gettop(tolua_S) - 1;
-    if (argc == 2)
-    {
-        std::function<bool(ax::PhysicsWorld&, ax::PhysicsCollider&, void*)> arg0;
-        ax::Rect arg1;
-        LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
-        auto stack           = LuaEngine::getInstance()->getLuaStack();
-        do
-        {
-            arg0 = [handler, stack](ax::PhysicsWorld& world, ax::PhysicsCollider& shape, void* data) -> bool {
-                auto Ls = stack->getLuaState();
-                tolua_pushusertype(Ls, (void*)(&world), getLuaTypeName(&world, "ax.PhysicsWorld"));
-                toluafix_pushusertype_object(Ls, shape._ID, &shape._luaID, (void*)(&shape), "ax.PhysicsCollider");
-                return stack->executeFunctionByHandler(handler, 2);
-            };
-        } while (0);
-
-        ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.PhysicsWorld:queryRect");
-        if (!ok)
-        {
-            stack->removeScriptHandler(handler);
-            return 0;
-        }
-        obj->queryRect(arg0, arg1, nullptr);
-        stack->removeScriptHandler(handler);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "queryRect", argc, 3);
-    return 0;
-
-#    if _AX_DEBUG >= 1
-tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'axlua_physics_PhysicsWorld_queryRect'.", &tolua_err);
-#    endif
-
-    return 0;
-}
-
-int axlua_physics_PhysicsWorld_queryPoint(lua_State* tolua_S)
-{
-    int argc              = 0;
-    ax::PhysicsWorld* obj = nullptr;
-    bool ok               = true;
-
-#    if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#    endif
-
-#    if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S, 1, "ax.PhysicsWorld", 0, &tolua_err))
-        goto tolua_lerror;
-#    endif
-
-    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
-
-#    if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S, "invalid 'obj' in function 'axlua_physics_PhysicsWorld_queryPoint'", NULL);
-        return 0;
-    }
-#    endif
-
-    argc = lua_gettop(tolua_S) - 1;
-    if (argc == 2)
-    {
-        std::function<bool(ax::PhysicsWorld&, ax::PhysicsCollider&, void*)> arg0;
-        ax::Vec2 arg1;
-        LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
-        auto stack           = LuaEngine::getInstance()->getLuaStack();
-        do
-        {
-            arg0 = [handler, stack](ax::PhysicsWorld& world, ax::PhysicsCollider& shape, void* data) -> bool {
-                auto Ls = stack->getLuaState();
-                tolua_pushusertype(Ls, (void*)(&world), getLuaTypeName(&world, "ax.PhysicsWorld"));
-                toluafix_pushusertype_object(Ls, shape._ID, &shape._luaID, (void*)(&shape), "ax.PhysicsCollider");
-                return stack->executeFunctionByHandler(handler, 2);
-            };
-            assert(false);
-        } while (0);
-        ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.PhysicsWorld:queryPoint");
-        if (!ok)
-        {
-            stack->removeScriptHandler(handler);
-            return 0;
-        }
-        obj->queryPoint(arg0, arg1, nullptr);
-        stack->removeScriptHandler(handler);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "queryPoint", argc, 3);
-    return 0;
-
-#    if _AX_DEBUG >= 1
-tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'axlua_physics_PhysicsWorld_queryPoint'.", &tolua_err);
-#    endif
-
-    return 0;
-}
 
 int axlua_physics_PhysicsBody_createPolygon(lua_State* tolua_S)
 {
@@ -1684,12 +1557,6 @@ int register_all_ax_physics_manual(lua_State* tolua_S)
         lua_pushstring(tolua_S, "getScene");
         lua_pushcfunction(tolua_S, axlua_physics_PhysicsWorld_getScene);
         lua_rawset(tolua_S, -3);
-        lua_pushstring(tolua_S, "queryPoint");
-        lua_pushcfunction(tolua_S, axlua_physics_PhysicsWorld_queryPoint);
-        lua_rawset(tolua_S, -3);
-        lua_pushstring(tolua_S, "queryRect");
-        lua_pushcfunction(tolua_S, axlua_physics_PhysicsWorld_queryRect);
-        lua_rawset(tolua_S, -3);
         lua_pushstring(tolua_S, "rayCast");
         lua_pushcfunction(tolua_S, axlua_physics_PhysicsWorld_rayCast);
         lua_rawset(tolua_S, -3);
@@ -1719,7 +1586,7 @@ int register_all_ax_physics_manual(lua_State* tolua_S)
     }
     lua_pop(tolua_S, 1);
 
-    tolua_constant(tolua_S, "PHYSICS_INFINITY", PHYSICS_INFINITY);
+    tolua_constant(tolua_S, "PHYSICS_INFINITY_2D", physics2d::Infinity);
 
     return 0;
 }

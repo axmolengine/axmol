@@ -3069,7 +3069,7 @@ tolua_lerror:
 }
 #endif
 
-#if defined(AX_ENABLE_3D_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_3D)
 #    include "axmol/physics3d/Physics3DWorld.h"
 int axlua_Scene_getPhysics3DWorld(lua_State* tolua_S)
 {
@@ -3181,7 +3181,7 @@ static void extendScene(lua_State* tolua_S)
 #if defined(AX_ENABLE_PHYSICS)
         tolua_function(tolua_S, "getPhysicsWorld", axlua_Scene_getPhysicsWorld);
 #endif
-#if defined(AX_ENABLE_3D_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_3D)
         tolua_function(tolua_S, "getPhysics3DWorld", axlua_Scene_getPhysics3DWorld);
         tolua_function(tolua_S, "setPhysics3DDebugCamera", axlua_Scene_setPhysics3DDebugCamera);
 #endif

@@ -176,14 +176,14 @@ cmake_dependent_option(AX_ENABLE_VLC_MEDIA "Enabling vlc media" OFF "(WIN32 AND 
 
 cmake_dependent_option(AX_ENABLE_WAYLAND "Enabling linux wayland" OFF "LINUX" OFF)
 
-option(AX_ENABLE_PHYSICS "Build Physics support" ON)
+option(AX_ENABLE_PHYSICS_2D "Build Physics2D support" ON)
 cmake_dependent_option(AX_ENABLE_MEDIA "Build media support" ON "AX_ENABLE_MFMEDIA OR AX_ENABLE_VLC_MEDIA OR APPLE OR ANDROID" OFF)
 option(AX_ENABLE_AUDIO "Build audio support" ON)
 option(AX_ENABLE_OPUS "Build with opus support" ON)
 option(AX_ENABLE_CONSOLE "Build axmol debug tool: console support" ON)
 
 option(AX_ENABLE_3D "Build 3D support" ON)
-cmake_dependent_option(AX_ENABLE_3D_PHYSICS "Build 3D Physics support" ON "AX_ENABLE_3D" OFF)
+cmake_dependent_option(AX_ENABLE_PHYSICS_3D "Build Physics3D support" ON "AX_ENABLE_3D" OFF)
 cmake_dependent_option(AX_ENABLE_NAVMESH "Build NavMesh support" ON "AX_ENABLE_3D" OFF)
 
 option(AX_ENABLE_VR "Build VR support" OFF)
@@ -209,7 +209,7 @@ option(AX_ENABLE_EXT_LIVE2D "Build extension Live2D" OFF)
 option(AX_ENABLE_EXT_EFFEKSEER "Build extension Effekseer" OFF)
 
 cmake_dependent_option(AX_ENABLE_EXT_PARTICLE3D "Build extension Particle3D" ${AX_EXT_HINT} "AX_ENABLE_3D" OFF)
-cmake_dependent_option(AX_ENABLE_EXT_PHYSICS_NODE "Build extension physics-nodes" ${AX_EXT_HINT} "AX_ENABLE_PHYSICS" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_PHYSICS_NODE "Build extension physics-nodes" ${AX_EXT_HINT} "AX_ENABLE_PHYSICS_2D" OFF)
 cmake_dependent_option(AX_ENABLE_EXT_INSPECTOR "Build extension Inspector" ${AX_EXT_HINT} "AX_ENABLE_EXT_IMGUI" OFF)
 cmake_dependent_option(AX_ENABLE_EXT_SDFGEN "Build extension SDFGen" ${AX_EXT_HINT} "AX_ENABLE_EXT_IMGUI" OFF)
 
@@ -271,11 +271,11 @@ endif()
 
 include(platform/CMakeLists.txt)
 
-if(AX_ENABLE_PHYSICS)
-  include(physics/CMakeLists.txt)
+if(AX_ENABLE_PHYSICS_2D)
+  include(physics2d/CMakeLists.txt)
 endif()
 
-if(AX_ENABLE_3D_PHYSICS)
+if(AX_ENABLE_PHYSICS_3D)
   include(physics3d/CMakeLists.txt)
 endif()
 
@@ -341,12 +341,12 @@ if(AX_ENABLE_3D)
   list(APPEND _AX_SRC ${_AX_3D_SRC})
 endif()
 
-if(AX_ENABLE_PHYSICS)
+if(AX_ENABLE_PHYSICS_2D)
   list(APPEND _AX_HEADER ${_AX_PHYSICS_HEADER})
   list(APPEND _AX_SRC ${_AX_PHYSICS_SRC})
 endif()
 
-if(AX_ENABLE_3D_PHYSICS)
+if(AX_ENABLE_PHYSICS_3D)
   list(APPEND _AX_HEADER ${_AX_PHYSICS3D_HEADER})
   list(APPEND _AX_SRC ${_AX_PHYSICS3D_SRC})
 endif()
@@ -438,9 +438,9 @@ ax_add_shader_target_for(${_AX_CORE_LIB} FILES ${_builtin_shaders} BUILTIN)
 
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MFMEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
-ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_PHYSICS)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_PHYSICS_2D)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_3D)
-ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_3D_PHYSICS)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_PHYSICS_3D)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_NAVMESH)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_AUDIO)

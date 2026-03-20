@@ -214,7 +214,7 @@ static void b2MakeSimplexCache( b2SimplexCache* cache, const b2Simplex* simplex 
 	}
 }
 
-static void b2ComputeSimplexWitnessPoints( b2Vec2* a, b2Vec2* b, const b2Simplex* s )
+static void b2ComputeWitnessPoints( const b2Simplex* s, b2Vec2* a, b2Vec2* b )
 {
 	switch ( s->count )
 	{
@@ -497,7 +497,7 @@ b2DistanceOutput b2ShapeDistance( const b2DistanceInput* input, b2SimplexCache* 
 		{
 			// Overlap
 			b2Vec2 localPointA, localPointB;
-			b2ComputeSimplexWitnessPoints( &localPointA, &localPointB, &simplex );
+			b2ComputeWitnessPoints( &simplex, &localPointA, &localPointB );
 			output.pointA = b2TransformPoint( input->transformA, localPointA );
 			output.pointB = b2TransformPoint( input->transformA, localPointB );
 			return output;
@@ -522,7 +522,7 @@ b2DistanceOutput b2ShapeDistance( const b2DistanceInput* input, b2SimplexCache* 
 
 			// Must return overlap due to invalid normal.
 			b2Vec2 localPointA, localPointB;
-			b2ComputeSimplexWitnessPoints( &localPointA, &localPointB, &simplex );
+			b2ComputeWitnessPoints( &simplex, &localPointA, &localPointB );
 			output.pointA = b2TransformPoint( input->transformA, localPointA );
 			output.pointB = b2TransformPoint( input->transformA, localPointB );
 			return output;
@@ -578,7 +578,7 @@ b2DistanceOutput b2ShapeDistance( const b2DistanceInput* input, b2SimplexCache* 
 	normal = b2RotateVector( input->transformA.q, normal );
 
 	b2Vec2 localPointA, localPointB;
-	b2ComputeSimplexWitnessPoints( &localPointA, &localPointB, &simplex );
+	b2ComputeWitnessPoints( &simplex, &localPointA, &localPointB );
 	output.normal = normal;
 	output.distance = b2Distance( localPointA, localPointB );
 	output.pointA = b2TransformPoint( input->transformA, localPointA );
@@ -590,7 +590,7 @@ b2DistanceOutput b2ShapeDistance( const b2DistanceInput* input, b2SimplexCache* 
 	b2MakeSimplexCache( cache, &simplex );
 
 	// Apply radii if requested
-	if ( input->useRadii && output.distance > 0.1f * B2_LINEAR_SLOP )
+	if ( input->useRadii )
 	{
 		float radiusA = input->proxyA.radius;
 		float radiusB = input->proxyB.radius;
@@ -631,7 +631,8 @@ b2CastOutput b2ShapeCast( const b2ShapeCastPairInput* input )
 	b2CastOutput output = { 0 };
 
 	int iteration = 0;
-	int maxIterations = 20;
+	const int maxIterations = 20;
+
 	for ( ; iteration < maxIterations; ++iteration )
 	{
 		output.iterations += 1;
@@ -650,7 +651,7 @@ b2CastOutput b2ShapeCast( const b2ShapeCastPairInput* input )
 				{
 					// Initial overlap
 					output.hit = true;
-					
+
 					// Compute a common point
 					b2Vec2 c1 = b2MulAdd( distanceOutput.pointA, input->proxyA.radius, distanceOutput.normal );
 					b2Vec2 c2 = b2MulAdd( distanceOutput.pointB, -input->proxyB.radius, distanceOutput.normal );
@@ -1160,8 +1161,6 @@ b2TOIOutput b2TimeOfImpact( const b2TOIInput* input )
 	float tMax = input->maxFraction;
 
 	float totalRadius = proxyA->radius + proxyB->radius;
-	// todo_erin consider different target
-	// float target = b2MaxFloat( B2_LINEAR_SLOP, totalRadius );
 	float target = b2MaxFloat( B2_LINEAR_SLOP, totalRadius - B2_LINEAR_SLOP );
 	float tolerance = 0.25f * B2_LINEAR_SLOP;
 	B2_ASSERT( target > tolerance );
@@ -1229,6 +1228,11 @@ b2TOIOutput b2TimeOfImpact( const b2TOIInput* input )
 #if B2_SNOOP_TOI_COUNTERS
 			b2_toiHitCount += 1;
 #endif
+			// Averaged hit point
+			b2Vec2 pA = b2MulAdd( distanceOutput.pointA, proxyA->radius, distanceOutput.normal );
+			b2Vec2 pB = b2MulAdd( distanceOutput.pointB, -proxyB->radius, distanceOutput.normal );
+			output.point = b2Lerp( pA, pB, 0.5f );
+			output.normal = distanceOutput.normal;
 			output.fraction = t1;
 			break;
 		}
@@ -1317,6 +1321,11 @@ b2TOIOutput b2TimeOfImpact( const b2TOIInput* input )
 #if B2_SNOOP_TOI_COUNTERS
 				b2_toiHitCount += 1;
 #endif
+				// Averaged hit point
+				b2Vec2 pA = b2MulAdd( distanceOutput.pointA, proxyA->radius, distanceOutput.normal );
+				b2Vec2 pB = b2MulAdd( distanceOutput.pointB, -proxyB->radius, distanceOutput.normal );
+				output.point = b2Lerp( pA, pB, 0.5f );
+				output.normal = distanceOutput.normal;
 				output.fraction = t1;
 				done = true;
 				break;
@@ -1397,6 +1406,11 @@ b2TOIOutput b2TimeOfImpact( const b2TOIInput* input )
 #if B2_SNOOP_TOI_COUNTERS
 			b2_toiFailedCount += 1;
 #endif
+			// Averaged hit point
+			b2Vec2 pA = b2MulAdd( distanceOutput.pointA, proxyA->radius, distanceOutput.normal );
+			b2Vec2 pB = b2MulAdd( distanceOutput.pointB, -proxyB->radius, distanceOutput.normal );
+			output.point = b2Lerp( pA, pB, 0.5f );
+			output.normal = distanceOutput.normal;
 			output.fraction = t1;
 			break;
 		}

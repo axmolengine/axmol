@@ -33,7 +33,7 @@
 #include "axmol/renderer/CustomCommand.h"
 #include "axmol/rhi/ProgramState.h"
 
-#if defined(AX_ENABLE_3D_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_3D)
 
 #    include "bullet/LinearMath/btIDebugDraw.h"
 
@@ -94,4 +94,4 @@ private:
 
 }  // namespace ax
 
-#endif  // defined(AX_ENABLE_3D_PHYSICS)
+#endif  // defined(AX_ENABLE_PHYSICS_3D)

@@ -76,11 +76,11 @@ void Car::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float hertz, f
 
 	b2WheelJointDef jointDef = b2DefaultWheelJointDef();
 
-	jointDef.bodyIdA = m_chassisId;
-	jointDef.bodyIdB = m_rearWheelId;
-	jointDef.localAxisA = b2Body_GetLocalVector( jointDef.bodyIdA, axis );
-	jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-	jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
+	jointDef.base.bodyIdA = m_chassisId;
+	jointDef.base.bodyIdB = m_rearWheelId;
+	jointDef.base.localFrameA.q = b2MakeRot( 0.5f * B2_PI );
+	jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+	jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
 	jointDef.motorSpeed = 0.0f;
 	jointDef.maxMotorTorque = torque;
 	jointDef.enableMotor = true;
@@ -92,11 +92,11 @@ void Car::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float hertz, f
 	m_rearAxleId = b2CreateWheelJoint( worldId, &jointDef );
 
 	pivot = b2Body_GetPosition( m_frontWheelId );
-	jointDef.bodyIdA = m_chassisId;
-	jointDef.bodyIdB = m_frontWheelId;
-	jointDef.localAxisA = b2Body_GetLocalVector( jointDef.bodyIdA, axis );
-	jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-	jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
+	jointDef.base.bodyIdA = m_chassisId;
+	jointDef.base.bodyIdB = m_frontWheelId;
+	jointDef.base.localFrameA.q = b2MakeRot( 0.5f * B2_PI );
+	jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+	jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
 	jointDef.motorSpeed = 0.0f;
 	jointDef.maxMotorTorque = torque;
 	jointDef.enableMotor = true;
@@ -112,8 +112,8 @@ void Car::Despawn()
 {
 	assert( m_isSpawned == true );
 
-	b2DestroyJoint( m_rearAxleId );
-	b2DestroyJoint( m_frontAxleId );
+	b2DestroyJoint( m_rearAxleId, false );
+	b2DestroyJoint( m_frontAxleId, false );
 	b2DestroyBody( m_rearWheelId );
 	b2DestroyBody( m_frontWheelId );
 	b2DestroyBody( m_chassisId );
@@ -225,11 +225,11 @@ void Truck::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float hertz,
 
 	b2WheelJointDef jointDef = b2DefaultWheelJointDef();
 
-	jointDef.bodyIdA = m_chassisId;
-	jointDef.bodyIdB = m_rearWheelId;
-	jointDef.localAxisA = b2Body_GetLocalVector( jointDef.bodyIdA, axis );
-	jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-	jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
+	jointDef.base.bodyIdA = m_chassisId;
+	jointDef.base.bodyIdB = m_rearWheelId;
+	jointDef.base.localFrameA.q = b2MakeRot( 0.5f * B2_PI );
+	jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+	jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
 	jointDef.motorSpeed = 0.0f;
 	jointDef.maxMotorTorque = torque;
 	jointDef.enableMotor = true;
@@ -241,11 +241,11 @@ void Truck::Spawn( b2WorldId worldId, b2Vec2 position, float scale, float hertz,
 	m_rearAxleId = b2CreateWheelJoint( worldId, &jointDef );
 
 	pivot = b2Body_GetPosition( m_frontWheelId );
-	jointDef.bodyIdA = m_chassisId;
-	jointDef.bodyIdB = m_frontWheelId;
-	jointDef.localAxisA = b2Body_GetLocalVector( jointDef.bodyIdA, axis );
-	jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-	jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
+	jointDef.base.bodyIdA = m_chassisId;
+	jointDef.base.bodyIdB = m_frontWheelId;
+	jointDef.base.localFrameA.q = b2MakeRot( 0.5f * B2_PI );
+	jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+	jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
 	jointDef.motorSpeed = 0.0f;
 	jointDef.maxMotorTorque = torque;
 	jointDef.enableMotor = true;
@@ -261,8 +261,8 @@ void Truck::Despawn()
 {
 	assert( m_isSpawned == true );
 
-	b2DestroyJoint( m_rearAxleId );
-	b2DestroyJoint( m_frontAxleId );
+	b2DestroyJoint( m_rearAxleId, false );
+	b2DestroyJoint( m_frontAxleId, false );
 	b2DestroyBody( m_rearWheelId );
 	b2DestroyBody( m_frontWheelId );
 	b2DestroyBody( m_chassisId );

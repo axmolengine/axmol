@@ -53,21 +53,22 @@ typedef struct b2Contact
 	// B2_NULL_INDEX when slot is free
 	int localIndex;
 
-	b2ContactEdge edges[2];
 	int shapeIdA;
 	int shapeIdB;
+	int contactId;
 
 	// A contact only belongs to an island if touching, otherwise B2_NULL_INDEX.
+	b2ContactEdge edges[2];
 	int islandPrev;
 	int islandNext;
 	int islandId;
 
-	int contactId;
-
 	// b2ContactFlags
 	uint32_t flags;
 
-	bool isMarked;
+	// This is monotonically advanced when a contact is allocated in this slot
+	// Used to check for invalid b2ContactId
+	uint32_t generation;
 } b2Contact;
 
 // Shifted to be distinct from b2ContactFlags
@@ -104,6 +105,7 @@ typedef struct b2ContactSim
 	int bodyIdB;
 #endif
 
+	// Transient body indices
 	int bodySimIndexA;
 	int bodySimIndexB;
 
@@ -137,11 +139,8 @@ void b2DestroyContact( b2World* world, b2Contact* contact, bool wakeBodies );
 
 b2ContactSim* b2GetContactSim( b2World* world, b2Contact* contact );
 
-
 bool b2UpdateContact( b2World* world, b2ContactSim* contactSim, b2Shape* shapeA, b2Transform transformA, b2Vec2 centerOffsetA,
 					  b2Shape* shapeB, b2Transform transformB, b2Vec2 centerOffsetB );
-
-b2Manifold b2ComputeManifold( b2Shape* shapeA, b2Transform transformA, b2Shape* shapeB, b2Transform transformB );
 
 B2_ARRAY_INLINE( b2Contact, b2Contact )
 B2_ARRAY_INLINE( b2ContactSim, b2ContactSim )

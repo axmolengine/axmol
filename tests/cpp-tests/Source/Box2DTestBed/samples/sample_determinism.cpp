@@ -23,8 +23,8 @@ public:
 	{
 		if ( m_context->restart == false )
 		{
-			m_context->camera.m_center = { 0.0f, 7.5f };
-			m_context->camera.m_zoom = 10.0f;
+			m_context->camera.center = { 0.0f, 7.5f };
+			m_context->camera.zoom = 10.0f;
 		}
 
 		m_data = CreateFallingHinges( m_worldId );
@@ -46,7 +46,7 @@ public:
 		}
 		else
 		{
-			DrawTextLine( "sleep step = %d, hash = 0x%08x", m_data.sleepStep, m_data.hash );
+			DrawTextLine( "sleep step = %d, hash = 0x%08X", m_data.sleepStep, m_data.hash );
 		}
 	}
 

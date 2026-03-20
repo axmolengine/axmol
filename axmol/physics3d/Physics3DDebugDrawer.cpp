@@ -35,7 +35,7 @@
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/Buffer.h"
 
-#if defined(AX_ENABLE_3D_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_3D)
 
 namespace ax
 {
@@ -161,4 +161,4 @@ void Physics3DDebugDrawer::clear()
 
 }  // namespace ax
 
-#endif  // defined(AX_ENABLE_3D_PHYSICS)
+#endif  // defined(AX_ENABLE_PHYSICS_3D)

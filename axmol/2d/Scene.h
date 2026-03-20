@@ -40,10 +40,10 @@ class BaseLight;
 class Renderer;
 class EventListenerCustom;
 class EventCustom;
-#if defined(AX_ENABLE_PHYSICS)
-class PhysicsWorld;
+#if defined(AX_ENABLE_PHYSICS_2D)
+class PhysicsWorld2D;
 #endif
-#if defined(AX_ENABLE_3D_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_3D)
 class Physics3DWorld;
 #endif
 #if defined(AX_ENABLE_NAVMESH)
@@ -151,20 +151,20 @@ protected:
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(Scene);
 
-#if (AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS))
+#if (AX_ENABLE_PHYSICS_2D || defined(AX_ENABLE_PHYSICS_3D))
 public:
-#    if defined(AX_ENABLE_PHYSICS)
+#    if defined(AX_ENABLE_PHYSICS_2D)
     /** Get the physics world of the scene.
      * @return The physics world of the scene.
      */
-    PhysicsWorld* getPhysicsWorld() const { return _physicsWorld; }
+    PhysicsWorld2D* getPhysicsWorld2D() const { return _physicsWorld2D; }
 #    endif
 
-#    if defined(AX_ENABLE_3D_PHYSICS)
+#    if defined(AX_ENABLE_PHYSICS_3D)
     /** Get the 3d physics world of the scene.
      * @return The 3d physics world of the scene.
      */
-    Physics3DWorld* getPhysics3DWorld() { return _physics3DWorld; }
+    Physics3DWorld* getPhysicsWorld3D() { return _physicsWorld3D; }
 
     /**
      * Set Physics3D debug draw camera.
@@ -182,17 +182,15 @@ public:
     virtual void fixedUpdate(float delta) {}
 
 protected:
-    void addChildToPhysicsWorld(Node* child);
-
-#    if defined(AX_ENABLE_PHYSICS)
-    PhysicsWorld* _physicsWorld = nullptr;
+#    if defined(AX_ENABLE_PHYSICS_2D)
+    PhysicsWorld2D* _physicsWorld2D = nullptr;
 #    endif
 
-#    if defined(AX_ENABLE_3D_PHYSICS)
-    Physics3DWorld* _physics3DWorld = nullptr;
+#    if defined(AX_ENABLE_PHYSICS_3D)
+    Physics3DWorld* _physicsWorld3D = nullptr;
     Camera* _physics3dDebugCamera   = nullptr;
 #    endif
-#endif  // (defined(AX_ENABLE_PHYSICS) || defined(AX_ENABLE_3D_PHYSICS))
+#endif  // (defined(AX_ENABLE_PHYSICS_2D) || defined(AX_ENABLE_PHYSICS_3D))
 
 #if defined(AX_ENABLE_NAVMESH)
 public:
@@ -210,7 +208,7 @@ protected:
     Camera* _navMeshDebugCamera = nullptr;
 #endif
 
-#if (defined(AX_ENABLE_PHYSICS) || defined(AX_ENABLE_3D_PHYSICS) || defined(AX_ENABLE_NAVMESH))
+#if (defined(AX_ENABLE_PHYSICS_2D) || defined(AX_ENABLE_PHYSICS_3D) || defined(AX_ENABLE_NAVMESH))
 public:
     void stepPhysicsAndNavigation(float deltaTime);
 #endif

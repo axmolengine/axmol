@@ -34,7 +34,9 @@ void CreateJointGrid( b2WorldId worldId )
 
 	b2Circle circle = { { 0.0f, 0.0f }, 0.4f };
 
-	b2RevoluteJointDef jd = b2DefaultRevoluteJointDef();
+	b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
+	jointDef.base.drawScale = 0.4f;
+
 	b2BodyDef bodyDef = b2DefaultBodyDef();
 
 	for ( int k = 0; k < N; ++k )
@@ -53,7 +55,7 @@ void CreateJointGrid( b2WorldId worldId )
 				bodyDef.type = b2_dynamicBody;
 			}
 
-			bodyDef.position = ( b2Vec2 ){ fk, -fi };
+			bodyDef.position = (b2Vec2){ fk, -fi };
 
 			b2BodyId body = b2CreateBody( worldId, &bodyDef );
 
@@ -61,20 +63,20 @@ void CreateJointGrid( b2WorldId worldId )
 
 			if ( i > 0 )
 			{
-				jd.bodyIdA = bodies[index - 1];
-				jd.bodyIdB = body;
-				jd.localAnchorA = ( b2Vec2 ){ 0.0f, -0.5f };
-				jd.localAnchorB = ( b2Vec2 ){ 0.0f, 0.5f };
-				b2CreateRevoluteJoint( worldId, &jd );
+				jointDef.base.bodyIdA = bodies[index - 1];
+				jointDef.base.bodyIdB = body;
+				jointDef.base.localFrameA.p = (b2Vec2){ 0.0f, -0.5f };
+				jointDef.base.localFrameB.p = (b2Vec2){ 0.0f, 0.5f };
+				b2CreateRevoluteJoint( worldId, &jointDef );
 			}
 
 			if ( k > 0 )
 			{
-				jd.bodyIdA = bodies[index - N];
-				jd.bodyIdB = body;
-				jd.localAnchorA = ( b2Vec2 ){ 0.5f, 0.0f };
-				jd.localAnchorB = ( b2Vec2 ){ -0.5f, 0.0f };
-				b2CreateRevoluteJoint( worldId, &jd );
+				jointDef.base.bodyIdA = bodies[index - N];
+				jointDef.base.bodyIdB = body;
+				jointDef.base.localFrameA.p = (b2Vec2){ 0.5f, 0.0f };
+				jointDef.base.localFrameB.p = (b2Vec2){ -0.5f, 0.0f };
+				b2CreateRevoluteJoint( worldId, &jointDef );
 			}
 
 			bodies[index++] = body;
@@ -92,7 +94,7 @@ void CreateLargePyramid( b2WorldId worldId )
 
 	{
 		b2BodyDef bodyDef = b2DefaultBodyDef();
-		bodyDef.position = ( b2Vec2 ){ 0.0f, -1.0f };
+		bodyDef.position = (b2Vec2){ 0.0f, -1.0f };
 		b2BodyId groundId = b2CreateBody( worldId, &bodyDef );
 
 		b2Polygon box = b2MakeBox( 100.0f, 1.0f );
@@ -102,15 +104,15 @@ void CreateLargePyramid( b2WorldId worldId )
 
 	b2BodyDef bodyDef = b2DefaultBodyDef();
 	bodyDef.type = b2_dynamicBody;
-	//bodyDef.enableSleep = false;
+	// bodyDef.enableSleep = false;
 
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
 	shapeDef.density = 1.0f;
 
-	float h = 0.5f;
-	b2Polygon box = b2MakeSquare( h );
+	float a = 0.5f;
+	b2Polygon box = b2MakeSquare( a );
 
-	float shift = 1.0f * h;
+	float shift = 1.0f * a;
 
 	for ( int i = 0; i < baseCount; ++i )
 	{
@@ -118,9 +120,9 @@ void CreateLargePyramid( b2WorldId worldId )
 
 		for ( int j = i; j < baseCount; ++j )
 		{
-			float x = ( i + 1.0f ) * shift + 2.0f * ( j - i ) * shift - h * baseCount;
+			float x = ( i + 1.0f ) * shift + 2.0f * ( j - i ) * shift - a * baseCount;
 
-			bodyDef.position = ( b2Vec2 ){ x, y };
+			bodyDef.position = (b2Vec2){ x, y };
 
 			b2BodyId bodyId = b2CreateBody( worldId, &bodyDef );
 			b2CreatePolygonShape( bodyId, &shapeDef, &box );
@@ -144,7 +146,7 @@ static void CreateSmallPyramid( b2WorldId worldId, int baseCount, float extent, 
 		for ( int j = i; j < baseCount; ++j )
 		{
 			float x = ( i + 1.0f ) * extent + 2.0f * ( j - i ) * extent + centerX - 0.5f;
-			bodyDef.position = ( b2Vec2 ){ x, y };
+			bodyDef.position = (b2Vec2){ x, y };
 
 			b2BodyId bodyId = b2CreateBody( worldId, &bodyDef );
 			b2CreatePolygonShape( bodyId, &shapeDef, &box );
@@ -245,11 +247,11 @@ void CreateRain( b2WorldId worldId )
 			float x = -0.5f * g_rainData.gridCount * g_rainData.gridSize;
 			for ( int j = 0; j <= g_rainData.gridCount; ++j )
 			{
-				b2Polygon box = b2MakeOffsetBox( 0.5f * width, 0.5f * height, ( b2Vec2 ){ x, y }, b2Rot_identity );
+				b2Polygon box = b2MakeOffsetBox( 0.5f * width, 0.5f * height, (b2Vec2){ x, y }, b2Rot_identity );
 				b2CreatePolygonShape( groundId, &shapeDef, &box );
 
-				//b2Segment segment = { { x - 0.5f * width, y }, { x + 0.5f * width, y } };
-				//b2CreateSegmentShape( groundId, &shapeDef, &segment );
+				// b2Segment segment = { { x - 0.5f * width, y }, { x + 0.5f * width, y } };
+				// b2CreateSegmentShape( groundId, &shapeDef, &segment );
 
 				x += g_rainData.gridSize;
 			}
@@ -352,11 +354,11 @@ void CreateSpinner( b2WorldId worldId )
 		b2Vec2 p = { 40.0f, 0.0f };
 		for ( int i = 0; i < SPINNER_POINT_COUNT; ++i )
 		{
-			points[i] = ( b2Vec2 ){ p.x, p.y + 32.0f };
+			points[i] = (b2Vec2){ p.x, p.y + 32.0f };
 			p = b2RotateVector( q, p );
 		}
 
-		b2SurfaceMaterial material = {0};
+		b2SurfaceMaterial material = { 0 };
 		material.friction = 0.1f;
 
 		b2ChainDef chainDef = b2DefaultChainDef();
@@ -372,7 +374,7 @@ void CreateSpinner( b2WorldId worldId )
 	{
 		b2BodyDef bodyDef = b2DefaultBodyDef();
 		bodyDef.type = b2_dynamicBody;
-		bodyDef.position = ( b2Vec2 ){ 0.0, 12.0f };
+		bodyDef.position = (b2Vec2){ 0.0, 12.0f };
 		bodyDef.enableSleep = false;
 
 		b2BodyId spinnerId = b2CreateBody( worldId, &bodyDef );
@@ -383,11 +385,12 @@ void CreateSpinner( b2WorldId worldId )
 		b2CreatePolygonShape( spinnerId, &shapeDef, &box );
 
 		float motorSpeed = 5.0f;
-		float maxMotorTorque = 40000.0f;
+		// float maxMotorTorque = 100.0f * 40000.0f;
+		float maxMotorTorque = FLT_MAX;
 		b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
-		jointDef.bodyIdA = groundId;
-		jointDef.bodyIdB = spinnerId;
-		jointDef.localAnchorA = bodyDef.position;
+		jointDef.base.bodyIdA = groundId;
+		jointDef.base.bodyIdB = spinnerId;
+		jointDef.base.localFrameA.p = bodyDef.position;
 		jointDef.enableMotor = true;
 		jointDef.motorSpeed = motorSpeed;
 		jointDef.maxMotorTorque = maxMotorTorque;
@@ -406,12 +409,12 @@ void CreateSpinner( b2WorldId worldId )
 	shapeDef.material.restitution = 0.1f;
 	shapeDef.density = 0.25f;
 
-	int bodyCount = BENCHMARK_DEBUG ? 499 : 3038;
+	int bodyCount = BENCHMARK_DEBUG ? 499 : 2 * 3038;
 
-	float x = -24.0f, y = 2.0f;
+	float x = -23.0f, y = 2.0f;
 	for ( int i = 0; i < bodyCount; ++i )
 	{
-		bodyDef.position = ( b2Vec2 ){ x, y };
+		bodyDef.position = (b2Vec2){ x, y };
 		b2BodyId bodyId = b2CreateBody( worldId, &bodyDef );
 
 		int remainder = i % 3;
@@ -428,12 +431,12 @@ void CreateSpinner( b2WorldId worldId )
 			b2CreatePolygonShape( bodyId, &shapeDef, &square );
 		}
 
-		x += 1.0f;
+		x += 0.5f;
 
-		if ( x > 24.0f )
+		if ( x >= 23.0f )
 		{
-			x = -24.0f;
-			y += 1.0f;
+			x = -23.0f;
+			y += 0.5f;
 		}
 	}
 }
@@ -443,7 +446,7 @@ float StepSpinner( b2WorldId worldId, int stepCount )
 	(void)worldId;
 	(void)stepCount;
 
-	return b2RevoluteJoint_GetAngle(g_spinnerData.spinnerId);
+	return b2RevoluteJoint_GetAngle( g_spinnerData.spinnerId );
 }
 
 void CreateSmash( b2WorldId worldId )
@@ -455,8 +458,8 @@ void CreateSmash( b2WorldId worldId )
 
 		b2BodyDef bodyDef = b2DefaultBodyDef();
 		bodyDef.type = b2_dynamicBody;
-		bodyDef.position = ( b2Vec2 ){ -20.0f, 0.0f };
-		bodyDef.linearVelocity = ( b2Vec2 ){ 40.0f, 0.0f };
+		bodyDef.position = (b2Vec2){ -20.0f, 0.0f };
+		bodyDef.linearVelocity = (b2Vec2){ 40.0f, 0.0f };
 		b2BodyId bodyId = b2CreateBody( worldId, &bodyDef );
 
 		b2ShapeDef shapeDef = b2DefaultShapeDef();
@@ -499,35 +502,34 @@ void CreateTumbler( b2WorldId worldId )
 	{
 		b2BodyDef bodyDef = b2DefaultBodyDef();
 		bodyDef.type = b2_dynamicBody;
-		bodyDef.position = ( b2Vec2 ){ 0.0f, 10.0f };
+		bodyDef.position = (b2Vec2){ 0.0f, 10.0f };
 		b2BodyId bodyId = b2CreateBody( worldId, &bodyDef );
 
 		b2ShapeDef shapeDef = b2DefaultShapeDef();
 		shapeDef.density = 50.0f;
 
 		b2Polygon polygon;
-		polygon = b2MakeOffsetBox( 0.5f, 10.0f, ( b2Vec2 ){ 10.0f, 0.0f }, b2Rot_identity );
+		polygon = b2MakeOffsetBox( 0.5f, 10.0f, (b2Vec2){ 10.0f, 0.0f }, b2Rot_identity );
 		b2CreatePolygonShape( bodyId, &shapeDef, &polygon );
-		polygon = b2MakeOffsetBox( 0.5f, 10.0f, ( b2Vec2 ){ -10.0f, 0.0f }, b2Rot_identity );
+		polygon = b2MakeOffsetBox( 0.5f, 10.0f, (b2Vec2){ -10.0f, 0.0f }, b2Rot_identity );
 		b2CreatePolygonShape( bodyId, &shapeDef, &polygon );
-		polygon = b2MakeOffsetBox( 10.0f, 0.5f, ( b2Vec2 ){ 0.0f, 10.0f }, b2Rot_identity );
+		polygon = b2MakeOffsetBox( 10.0f, 0.5f, (b2Vec2){ 0.0f, 10.0f }, b2Rot_identity );
 		b2CreatePolygonShape( bodyId, &shapeDef, &polygon );
-		polygon = b2MakeOffsetBox( 10.0f, 0.5f, ( b2Vec2 ){ 0.0f, -10.0f }, b2Rot_identity );
+		polygon = b2MakeOffsetBox( 10.0f, 0.5f, (b2Vec2){ 0.0f, -10.0f }, b2Rot_identity );
 		b2CreatePolygonShape( bodyId, &shapeDef, &polygon );
 
 		float motorSpeed = 25.0f;
 
-		b2RevoluteJointDef jd = b2DefaultRevoluteJointDef();
-		jd.bodyIdA = groundId;
-		jd.bodyIdB = bodyId;
-		jd.localAnchorA = ( b2Vec2 ){ 0.0f, 10.0f };
-		jd.localAnchorB = ( b2Vec2 ){ 0.0f, 0.0f };
-		jd.referenceAngle = 0.0f;
-		jd.motorSpeed = ( B2_PI / 180.0f ) * motorSpeed;
-		jd.maxMotorTorque = 1e8f;
-		jd.enableMotor = true;
+		b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
+		jointDef.base.bodyIdA = groundId;
+		jointDef.base.bodyIdB = bodyId;
+		jointDef.base.localFrameA.p = (b2Vec2){ 0.0f, 10.0f };
+		jointDef.base.localFrameB.p = (b2Vec2){ 0.0f, 0.0f };
+		jointDef.motorSpeed = ( B2_PI / 180.0f ) * motorSpeed;
+		jointDef.maxMotorTorque = 1e8f;
+		jointDef.enableMotor = true;
 
-		b2CreateRevoluteJoint( worldId, &jd );
+		b2CreateRevoluteJoint( worldId, &jointDef );
 	}
 
 	int gridCount = BENCHMARK_DEBUG ? 20 : 45;
@@ -544,7 +546,7 @@ void CreateTumbler( b2WorldId worldId )
 
 		for ( int j = 0; j < gridCount; ++j )
 		{
-			bodyDef.position = ( b2Vec2 ){ x, y };
+			bodyDef.position = (b2Vec2){ x, y };
 			b2BodyId bodyId = b2CreateBody( worldId, &bodyDef );
 
 			b2CreatePolygonShape( bodyId, &shapeDef, &polygon );
@@ -553,5 +555,131 @@ void CreateTumbler( b2WorldId worldId )
 		}
 
 		y += 0.4f;
+	}
+}
+
+void CreateWasher( b2WorldId worldId )
+{
+	bool kinematic = true;
+
+	b2BodyId groundId;
+	{
+		b2BodyDef bodyDef = b2DefaultBodyDef();
+		groundId = b2CreateBody( worldId, &bodyDef );
+	}
+
+	{
+		float motorSpeed = 25.0f;
+
+		b2BodyDef bodyDef = b2DefaultBodyDef();
+		bodyDef.position = (b2Vec2){ 0.0f, 10.0f };
+
+		if (kinematic == true)
+		{
+			bodyDef.type = b2_kinematicBody;
+			bodyDef.angularVelocity = ( B2_PI / 180.0f ) * motorSpeed;
+			bodyDef.linearVelocity = (b2Vec2){ 0.001f, -0.002f };
+		}
+		else
+		{
+			bodyDef.type = b2_dynamicBody;
+		}
+
+		b2BodyId bodyId = b2CreateBody( worldId, &bodyDef );
+
+		b2ShapeDef shapeDef = b2DefaultShapeDef();
+
+		float r0 = 14.0f;
+		float r1 = 16.0f;
+		float r2 = 18.0f;
+
+		float angle = B2_PI / 18.0f;
+		b2Rot q = { cosf( angle ), sinf(angle) };
+		b2Rot qo = { cosf( 0.1f * angle ), sinf(0.1f * angle) };
+		b2Vec2 u1 = { 1.0f, 0.0f };
+		for ( int i = 0; i < 36; ++i )
+		{
+			b2Vec2 u2;
+			if (i == 35)
+			{
+				u2 = (b2Vec2){ 1.0f, 0.0f };
+			}
+			else
+			{
+				u2 = b2RotateVector( q, u1 );
+			}
+
+			{
+				b2Vec2 a1 = b2InvRotateVector( qo, u1 );
+				b2Vec2 a2 = b2RotateVector( qo, u2 );
+
+				b2Vec2 p1 = b2MulSV( r1, a1 );
+				b2Vec2 p2 = b2MulSV( r2, a1 );
+				b2Vec2 p3 = b2MulSV( r1, a2 );
+				b2Vec2 p4 = b2MulSV( r2, a2 );
+
+				b2Vec2 points[4] = { p1, p2, p3, p4 };
+				b2Hull hull = b2ComputeHull( points, 4 );
+
+				b2Polygon polygon = b2MakePolygon( &hull, 0.0f );
+				b2CreatePolygonShape( bodyId, &shapeDef, &polygon );
+			}
+
+			if ( i % 9 == 0 )
+			{
+				b2Vec2 p1 = b2MulSV( r0, u1 );
+				b2Vec2 p2 = b2MulSV( r1, u1 );
+				b2Vec2 p3 = b2MulSV( r0, u2 );
+				b2Vec2 p4 = b2MulSV( r1, u2 );
+
+				b2Vec2 points[4] = { p1, p2, p3, p4 };
+				b2Hull hull = b2ComputeHull( points, 4 );
+
+				b2Polygon polygon = b2MakePolygon( &hull, 0.0f );
+				b2CreatePolygonShape( bodyId, &shapeDef, &polygon );
+			}
+
+			u1 = u2;
+		}
+
+		if ( kinematic == false )
+		{
+			b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = bodyId;
+			jointDef.base.localFrameA.p = (b2Vec2){ 0.0f, 10.0f };
+			jointDef.base.localFrameB.p = (b2Vec2){ 0.0f, 0.0f };
+			jointDef.motorSpeed = ( B2_PI / 180.0f ) * motorSpeed;
+			jointDef.maxMotorTorque = 1e8f;
+			jointDef.enableMotor = true;
+
+			b2CreateRevoluteJoint( worldId, &jointDef );
+		}
+	}
+
+	int gridCount = BENCHMARK_DEBUG ? 20 : 90;
+	float a = 0.1f;
+
+	b2Polygon polygon = b2MakeSquare( a );
+	b2BodyDef bodyDef = b2DefaultBodyDef();
+	bodyDef.type = b2_dynamicBody;
+	b2ShapeDef shapeDef = b2DefaultShapeDef();
+
+	float y = -1.1f * a * gridCount + 10.0f;
+	for ( int i = 0; i < gridCount; ++i )
+	{
+		float x = -1.1f * a * gridCount;
+
+		for ( int j = 0; j < gridCount; ++j )
+		{
+			bodyDef.position = (b2Vec2){ x, y };
+			b2BodyId bodyId = b2CreateBody( worldId, &bodyDef );
+
+			b2CreatePolygonShape( bodyId, &shapeDef, &polygon );
+
+			x += 2.1f * a;
+		}
+
+		y += 2.1f * a;
 	}
 }

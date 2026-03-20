@@ -9,7 +9,7 @@
 #include "core.h"
 #include "island.h"
 #include "joint.h"
-#include "world.h"
+#include "physics_world.h"
 
 #include <string.h>
 
@@ -61,6 +61,7 @@ void b2WakeSolverSet( b2World* world, int setIndex )
 
 		b2BodyState* state = b2BodyStateArray_Add( &awakeSet->bodyStates );
 		*state = b2_identityBodyState;
+		state->flags = body->flags;
 
 		// move non-touching contacts from disabled set to awake set
 		int contactKey = body->headContactKey;
@@ -149,8 +150,6 @@ void b2WakeSolverSet( b2World* world, int setIndex )
 
 	// destroy the sleeping set
 	b2DestroySolverSet( world, setIndex );
-
-	b2ValidateSolverSets( world );
 }
 
 void b2TrySleepIsland( b2World* world, int islandId )
@@ -520,7 +519,10 @@ void b2MergeSolverSets( b2World* world, int setId1, int setId2 )
 
 void b2TransferBody( b2World* world, b2SolverSet* targetSet, b2SolverSet* sourceSet, b2Body* body )
 {
-	B2_ASSERT( targetSet != sourceSet );
+	if (targetSet == sourceSet)
+	{
+		return;
+	}
 
 	int sourceIndex = body->localIndex;
 	b2BodySim* sourceSim = b2BodySimArray_Get( &sourceSet->bodySims, sourceIndex );
@@ -528,6 +530,9 @@ void b2TransferBody( b2World* world, b2SolverSet* targetSet, b2SolverSet* source
 	int targetIndex = targetSet->bodySims.count;
 	b2BodySim* targetSim = b2BodySimArray_Add( &targetSet->bodySims );
 	memcpy( targetSim, sourceSim, sizeof( b2BodySim ) );
+
+	// Clear transient body flags
+	targetSim->flags &= ~(b2_isFast | b2_isSpeedCapped | b2_hadTimeOfImpact);
 
 	// Remove body sim from solver set that owns it
 	int movedIndex = b2BodySimArray_RemoveSwap( &sourceSet->bodySims, sourceIndex );
@@ -549,6 +554,7 @@ void b2TransferBody( b2World* world, b2SolverSet* targetSet, b2SolverSet* source
 	{
 		b2BodyState* state = b2BodyStateArray_Add( &targetSet->bodyStates );
 		*state = b2_identityBodyState;
+		state->flags = body->flags;
 	}
 
 	body->setIndex = targetSet->setIndex;
@@ -557,7 +563,10 @@ void b2TransferBody( b2World* world, b2SolverSet* targetSet, b2SolverSet* source
 
 void b2TransferJoint( b2World* world, b2SolverSet* targetSet, b2SolverSet* sourceSet, b2Joint* joint )
 {
-	B2_ASSERT( targetSet != sourceSet );
+	if (targetSet == sourceSet)
+	{
+		return;
+	}
 
 	int localIndex = joint->localIndex;
 	int colorIndex = joint->colorIndex;

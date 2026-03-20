@@ -32,6 +32,7 @@
 class SampleDrawNode;
 class SampleEntry;
 class Sample;
+struct SampleDraw;
 
 DEFINE_TEST_SUITE(Box2DTestBedTests);
 
@@ -78,7 +79,9 @@ private:
     ax::EventListenerMouse* _mouseListener{};
 
     // Debug stuff
-    SampleDrawNode* _debugDrawNode{};
+    SampleDrawNode* _debugDrawNode{nullptr};
+
+    SampleDraw* _sampleDrawProxy{nullptr};
 };
 
 #endif

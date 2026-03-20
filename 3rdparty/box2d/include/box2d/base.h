@@ -50,10 +50,14 @@ typedef void* b2AllocFcn( unsigned int size, int alignment );
 
 /// Prototype for user free function
 /// @param mem the memory previously allocated through `b2AllocFcn`
-typedef void b2FreeFcn( void* mem );
+/// @param size the allocation size in bytes
+typedef void b2FreeFcn( void* mem, unsigned int size );
 
 /// Prototype for the user assert callback. Return 0 to skip the debugger break.
 typedef int b2AssertFcn( const char* condition, const char* fileName, int lineNumber );
+
+/// Prototype for user log callback. Used to log warnings.
+typedef void b2LogFcn( const char* message );
 
 /// This allows the user to override the allocation functions. These should be
 /// set during application startup.
@@ -62,9 +66,13 @@ B2_API void b2SetAllocator( b2AllocFcn* allocFcn, b2FreeFcn* freeFcn );
 /// @return the total bytes allocated by Box2D
 B2_API int b2GetByteCount( void );
 
-/// Override the default assert callback
+/// Override the default assert function
 /// @param assertFcn a non-null assert callback
 B2_API void b2SetAssertFcn( b2AssertFcn* assertFcn );
+
+/// Override the default log function
+/// @param logFcn a non-null log callback
+B2_API void b2SetLogFcn( b2LogFcn* logFcn );
 
 /// Version numbering scheme.
 /// See https://semver.org/

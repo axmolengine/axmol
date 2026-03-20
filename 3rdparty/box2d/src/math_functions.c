@@ -52,6 +52,16 @@ bool b2IsValidRotation( b2Rot q )
 	return b2IsNormalizedRot( q );
 }
 
+bool b2IsValidTransform(b2Transform t)
+{
+	if (b2IsValidVec2(t.p) == false)
+	{
+		return false;
+	}
+
+	return b2IsValidRotation( t.q );
+}
+
 bool b2IsValidPlane( b2Plane a )
 {
 	return b2IsValidVec2( a.normal ) && b2IsNormalized( a.normal ) && b2IsValidFloat( a.offset );
@@ -142,7 +152,7 @@ b2CosSin b2ComputeCosSin( float radians )
 	}
 
 	float mag = sqrtf( s * s + c * c );
-	float invMag = mag > 0.0 ? 1.0f / mag : 0.0f;
+	float invMag = mag > 0.0f ? 1.0f / mag : 0.0f;
 	b2CosSin cs = { c * invMag, s * invMag };
 	return cs;
 }

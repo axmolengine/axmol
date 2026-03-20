@@ -27,7 +27,7 @@
 #include "axmol/physics3d/Physics3D.h"
 #include "axmol/renderer/Renderer.h"
 
-#if defined(AX_ENABLE_3D_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_3D)
 
 namespace ax
 {
@@ -421,4 +421,4 @@ void Physics3DWorld::setGhostPairCallback()
 
 }  // namespace ax
 
-#endif  // defined(AX_ENABLE_3D_PHYSICS)
+#endif  // defined(AX_ENABLE_PHYSICS_3D)

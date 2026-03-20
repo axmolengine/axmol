@@ -5189,7 +5189,7 @@ int lua_ax_physics_PhysicsBody_setAngularDamping(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_physics_PhysicsBody_isResting(lua_State* tolua_S)
+int lua_ax_physics_PhysicsBody_isAwake(lua_State* tolua_S)
 {
     int argc = 0;
     ax::PhysicsBody* obj = nullptr;
@@ -5209,7 +5209,7 @@ int lua_ax_physics_PhysicsBody_isResting(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_isResting'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_isAwake'", nullptr);
         return 0;
     }
 #endif
@@ -5219,24 +5219,24 @@ int lua_ax_physics_PhysicsBody_isResting(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_isResting'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_isAwake'", nullptr);
             return 0;
         }
-        auto&& ret = obj->isResting();
+        auto&& ret = obj->isAwake();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsBody:isResting",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsBody:isAwake",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsBody_isResting'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsBody_isAwake'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_physics_PhysicsBody_setResting(lua_State* tolua_S)
+int lua_ax_physics_PhysicsBody_setAwake(lua_State* tolua_S)
 {
     int argc = 0;
     ax::PhysicsBody* obj = nullptr;
@@ -5256,7 +5256,7 @@ int lua_ax_physics_PhysicsBody_setResting(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setResting'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setAwake'", nullptr);
         return 0;
     }
 #endif
@@ -5266,22 +5266,22 @@ int lua_ax_physics_PhysicsBody_setResting(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.PhysicsBody:setResting");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.PhysicsBody:setAwake");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setResting'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setAwake'", nullptr);
             return 0;
         }
-        obj->setResting(arg0);
+        obj->setAwake(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsBody:setResting",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsBody:setAwake",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsBody_setResting'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsBody_setAwake'.",&tolua_err);
 #endif
 
     return 0;
@@ -6162,8 +6162,8 @@ int lua_register_ax_physics_PhysicsBody(lua_State* tolua_S)
         tolua_function(tolua_S,"setLinearDamping",lua_ax_physics_PhysicsBody_setLinearDamping);
         tolua_function(tolua_S,"getAngularDamping",lua_ax_physics_PhysicsBody_getAngularDamping);
         tolua_function(tolua_S,"setAngularDamping",lua_ax_physics_PhysicsBody_setAngularDamping);
-        tolua_function(tolua_S,"isResting",lua_ax_physics_PhysicsBody_isResting);
-        tolua_function(tolua_S,"setResting",lua_ax_physics_PhysicsBody_setResting);
+        tolua_function(tolua_S,"isAwake",lua_ax_physics_PhysicsBody_isAwake);
+        tolua_function(tolua_S,"setAwake",lua_ax_physics_PhysicsBody_setAwake);
         tolua_function(tolua_S,"isRotationEnabled",lua_ax_physics_PhysicsBody_isRotationEnabled);
         tolua_function(tolua_S,"setRotationEnable",lua_ax_physics_PhysicsBody_setRotationEnable);
         tolua_function(tolua_S,"isGravityEnabled",lua_ax_physics_PhysicsBody_isGravityEnabled);
@@ -7598,103 +7598,6 @@ int lua_ax_physics_PhysicsJoint_setTag(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_physics_PhysicsJoint_isEnabled(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsJoint* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJoint_isEnabled'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJoint_isEnabled'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->isEnabled();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsJoint:isEnabled",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJoint_isEnabled'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_physics_PhysicsJoint_setEnable(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsJoint* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJoint_setEnable'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
-    {
-        bool arg0;
-
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.PhysicsJoint:setEnable");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJoint_setEnable'", nullptr);
-            return 0;
-        }
-        obj->setEnable(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsJoint:setEnable",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJoint_setEnable'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_physics_PhysicsJoint_isCollisionEnabled(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7788,53 +7691,6 @@ int lua_ax_physics_PhysicsJoint_setCollisionEnable(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJoint_setCollisionEnable'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_physics_PhysicsJoint_removeFormWorld(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsJoint* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJoint_removeFormWorld'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJoint_removeFormWorld'", nullptr);
-            return 0;
-        }
-        obj->removeFormWorld();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsJoint:removeFormWorld",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJoint_removeFormWorld'.",&tolua_err);
 #endif
 
     return 0;
@@ -7953,11 +7809,8 @@ int lua_register_ax_physics_PhysicsJoint(lua_State* tolua_S)
         tolua_function(tolua_S,"getWorld",lua_ax_physics_PhysicsJoint_getWorld);
         tolua_function(tolua_S,"getTag",lua_ax_physics_PhysicsJoint_getTag);
         tolua_function(tolua_S,"setTag",lua_ax_physics_PhysicsJoint_setTag);
-        tolua_function(tolua_S,"isEnabled",lua_ax_physics_PhysicsJoint_isEnabled);
-        tolua_function(tolua_S,"setEnable",lua_ax_physics_PhysicsJoint_setEnable);
         tolua_function(tolua_S,"isCollisionEnabled",lua_ax_physics_PhysicsJoint_isCollisionEnabled);
         tolua_function(tolua_S,"setCollisionEnable",lua_ax_physics_PhysicsJoint_setCollisionEnable);
-        tolua_function(tolua_S,"removeFormWorld",lua_ax_physics_PhysicsJoint_removeFormWorld);
         tolua_function(tolua_S,"setMaxForce",lua_ax_physics_PhysicsJoint_setMaxForce);
         tolua_function(tolua_S,"getMaxForce",lua_ax_physics_PhysicsJoint_getMaxForce);
     tolua_endmodule(tolua_S);
@@ -8591,6 +8444,117 @@ int lua_register_ax_physics_PhysicsJointPin(lua_State* tolua_S)
     auto typeName = typeid(ax::PhysicsJointPin).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointPin";
     g_typeCast[typeName] = "ax.PhysicsJointPin";
+    return 1;
+}
+
+int lua_ax_physics_PhysicsJointMouse_setTarget(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PhysicsJointMouse* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointMouse",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PhysicsJointMouse*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointMouse_setTarget'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::Vec2 arg0;
+
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsJointMouse:setTarget");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointMouse_setTarget'", nullptr);
+            return 0;
+        }
+        obj->setTarget(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsJointMouse:setTarget",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointMouse_setTarget'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_physics_PhysicsJointMouse_instantiate(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.PhysicsJointMouse",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 3)
+    {
+        ax::PhysicsBody* arg0;
+        ax::PhysicsBody* arg1;
+        ax::Vec2 arg2;
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointMouse:instantiate");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointMouse:instantiate");
+        ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointMouse:instantiate");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointMouse_instantiate'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::PhysicsJointMouse::instantiate(arg0, arg1, arg2);
+        object_to_luaval<ax::PhysicsJointMouse>(tolua_S, "ax.PhysicsJointMouse",(ax::PhysicsJointMouse*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointMouse:instantiate",argc, 3);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointMouse_instantiate'.",&tolua_err);
+#endif
+    return 0;
+}
+static int lua_ax_physics_PhysicsJointMouse_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (PhysicsJointMouse)");
+    return 0;
+}
+
+int lua_register_ax_physics_PhysicsJointMouse(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.PhysicsJointMouse");
+    tolua_cclass(tolua_S,"PhysicsJointMouse","ax.PhysicsJointMouse","ax.PhysicsJoint",nullptr);
+
+    tolua_beginmodule(tolua_S,"PhysicsJointMouse");
+        tolua_function(tolua_S,"setTarget",lua_ax_physics_PhysicsJointMouse_setTarget);
+        tolua_function(tolua_S,"instantiate", lua_ax_physics_PhysicsJointMouse_instantiate);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::PhysicsJointMouse).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointMouse";
+    g_typeCast[typeName] = "ax.PhysicsJointMouse";
     return 1;
 }
 
@@ -11137,184 +11101,6 @@ int lua_ax_physics_PhysicsWorld_getB2World(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_physics_PhysicsWorld_addJoint(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsWorld* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_addJoint'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
-    {
-        ax::PhysicsJoint* arg0;
-
-        ok &= luaval_to_object<ax::PhysicsJoint>(tolua_S, 2, "ax.PhysicsJoint",&arg0, "ax.PhysicsWorld:addJoint");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_addJoint'", nullptr);
-            return 0;
-        }
-        obj->addJoint(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld:addJoint",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsWorld_addJoint'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_physics_PhysicsWorld_removeJoint(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsWorld* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_removeJoint'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
-    {
-        ax::PhysicsJoint* arg0;
-
-        ok &= luaval_to_object<ax::PhysicsJoint>(tolua_S, 2, "ax.PhysicsJoint",&arg0, "ax.PhysicsWorld:removeJoint");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_removeJoint'", nullptr);
-            return 0;
-        }
-        obj->removeJoint(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    if (argc == 2)
-    {
-        ax::PhysicsJoint* arg0;
-        bool arg1;
-
-        ok &= luaval_to_object<ax::PhysicsJoint>(tolua_S, 2, "ax.PhysicsJoint",&arg0, "ax.PhysicsWorld:removeJoint");
-
-        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.PhysicsWorld:removeJoint");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_removeJoint'", nullptr);
-            return 0;
-        }
-        obj->removeJoint(arg0, arg1);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld:removeJoint",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsWorld_removeJoint'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_physics_PhysicsWorld_removeAllJoints(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsWorld* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_removeAllJoints'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_removeAllJoints'", nullptr);
-            return 0;
-        }
-        obj->removeAllJoints();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    if (argc == 1)
-    {
-        bool arg0;
-
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.PhysicsWorld:removeAllJoints");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_removeAllJoints'", nullptr);
-            return 0;
-        }
-        obj->removeAllJoints(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld:removeAllJoints",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsWorld_removeAllJoints'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_physics_PhysicsWorld_removeBody(lua_State* tolua_S)
 {
     int argc = 0;
@@ -11417,7 +11203,7 @@ int lua_ax_physics_PhysicsWorld_removeAllBodies(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_physics_PhysicsWorld_getShapes(lua_State* tolua_S)
+int lua_ax_physics_PhysicsWorld_overlapBox(lua_State* tolua_S)
 {
     int argc = 0;
     ax::PhysicsWorld* obj = nullptr;
@@ -11437,7 +11223,7 @@ int lua_ax_physics_PhysicsWorld_getShapes(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_getShapes'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_overlapBox'", nullptr);
         return 0;
     }
 #endif
@@ -11445,29 +11231,29 @@ int lua_ax_physics_PhysicsWorld_getShapes(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        ax::Vec2 arg0;
+        ax::Rect arg0;
 
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsWorld:getShapes");
+        ok &= luaval_to_rect(tolua_S, 2, &arg0, "ax.PhysicsWorld:overlapBox");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_getShapes'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_overlapBox'", nullptr);
             return 0;
         }
-        auto&& ret = obj->getShapes(arg0);
-        axvector_to_luaval(tolua_S, ret);
+        auto&& ret = obj->overlapBox(arg0);
+        object_to_luaval<ax::PhysicsCollider>(tolua_S, "ax.PhysicsCollider",(ax::PhysicsCollider*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld:getShapes",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld:overlapBox",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsWorld_getShapes'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsWorld_overlapBox'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_physics_PhysicsWorld_getShape(lua_State* tolua_S)
+int lua_ax_physics_PhysicsWorld_overlapBoxAll(lua_State* tolua_S)
 {
     int argc = 0;
     ax::PhysicsWorld* obj = nullptr;
@@ -11487,7 +11273,57 @@ int lua_ax_physics_PhysicsWorld_getShape(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_getShape'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_overlapBoxAll'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::Rect arg0;
+
+        ok &= luaval_to_rect(tolua_S, 2, &arg0, "ax.PhysicsWorld:overlapBoxAll");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_overlapBoxAll'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->overlapBoxAll(arg0);
+        axvector_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld:overlapBoxAll",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsWorld_overlapBoxAll'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_physics_PhysicsWorld_overlapPoint(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PhysicsWorld* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_overlapPoint'", nullptr);
         return 0;
     }
 #endif
@@ -11497,22 +11333,72 @@ int lua_ax_physics_PhysicsWorld_getShape(lua_State* tolua_S)
     {
         ax::Vec2 arg0;
 
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsWorld:getShape");
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsWorld:overlapPoint");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_getShape'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_overlapPoint'", nullptr);
             return 0;
         }
-        auto&& ret = obj->getShape(arg0);
+        auto&& ret = obj->overlapPoint(arg0);
         object_to_luaval<ax::PhysicsCollider>(tolua_S, "ax.PhysicsCollider",(ax::PhysicsCollider*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld:getShape",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld:overlapPoint",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsWorld_getShape'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsWorld_overlapPoint'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_physics_PhysicsWorld_overlapPointAll(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PhysicsWorld* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_overlapPointAll'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::Vec2 arg0;
+
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsWorld:overlapPointAll");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_overlapPointAll'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->overlapPointAll(arg0);
+        axvector_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld:overlapPointAll",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsWorld_overlapPointAll'.",&tolua_err);
 #endif
 
     return 0;
@@ -12420,13 +12306,12 @@ int lua_register_ax_physics_PhysicsWorld(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"PhysicsWorld");
         tolua_function(tolua_S,"getB2World",lua_ax_physics_PhysicsWorld_getB2World);
-        tolua_function(tolua_S,"addJoint",lua_ax_physics_PhysicsWorld_addJoint);
-        tolua_function(tolua_S,"removeJoint",lua_ax_physics_PhysicsWorld_removeJoint);
-        tolua_function(tolua_S,"removeAllJoints",lua_ax_physics_PhysicsWorld_removeAllJoints);
         tolua_function(tolua_S,"removeBody",lua_ax_physics_PhysicsWorld_removeBody);
         tolua_function(tolua_S,"removeAllBodies",lua_ax_physics_PhysicsWorld_removeAllBodies);
-        tolua_function(tolua_S,"getShapes",lua_ax_physics_PhysicsWorld_getShapes);
-        tolua_function(tolua_S,"getShape",lua_ax_physics_PhysicsWorld_getShape);
+        tolua_function(tolua_S,"overlapBox",lua_ax_physics_PhysicsWorld_overlapBox);
+        tolua_function(tolua_S,"overlapBoxAll",lua_ax_physics_PhysicsWorld_overlapBoxAll);
+        tolua_function(tolua_S,"overlapPoint",lua_ax_physics_PhysicsWorld_overlapPoint);
+        tolua_function(tolua_S,"overlapPointAll",lua_ax_physics_PhysicsWorld_overlapPointAll);
         tolua_function(tolua_S,"getAllBodies",lua_ax_physics_PhysicsWorld_getAllBodies);
         tolua_function(tolua_S,"getBody",lua_ax_physics_PhysicsWorld_getBody);
         tolua_function(tolua_S,"getGravity",lua_ax_physics_PhysicsWorld_getGravity);
@@ -12478,6 +12363,7 @@ TOLUA_API int register_all_ax_physics(lua_State* tolua_S)
     lua_register_ax_physics_PhysicsJointFixed(tolua_S);
     lua_register_ax_physics_PhysicsJointLimit(tolua_S);
     lua_register_ax_physics_PhysicsJointPin(tolua_S);
+    lua_register_ax_physics_PhysicsJointMouse(tolua_S);
     lua_register_ax_physics_PhysicsJointDistance(tolua_S);
     lua_register_ax_physics_PhysicsJointSpring(tolua_S);
     lua_register_ax_physics_PhysicsJointGroove(tolua_S);

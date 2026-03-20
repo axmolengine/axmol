@@ -11,7 +11,7 @@
 
 ## Box2D
 - [![Upstream](https://img.shields.io/github/v/release/erincatto/box2d?label=Upstream)](https://github.com/erincatto/box2d)
-- Version: 3.1.1
+- Version: git-5778d74 (3.2.0 Until Mar 8, 2026)
 - License: MIT
 
 ## Bullet
@@ -37,7 +37,7 @@
 
 ## ConvertUTF
 - Upstream: https://github.com/llvm/llvm-project
-- Version: git 20451cb (until Aug.13 2022) without LLVM-specific wrappers of the functions
+- Version: git-20451cb (until Aug.13 2022) without LLVM-specific wrappers of the functions
 - License: Apache-2.0 WITH LLVM-exception
 
 ## curl

@@ -28,7 +28,7 @@
 #include "axmol/base/Config.h"
 #include "axmol/math/Math.h"
 
-#if defined(AX_ENABLE_3D_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_3D)
 
 #    include "axmol/physics3d/Physics3DShape.h"
 #    include "axmol/physics3d/PhysicsMeshRenderer.h"
@@ -62,4 +62,4 @@ btTransform convertMat4TobtTransform(const ax::Mat4& mat4);
 ax::Quaternion convertbtQuatToQuat(const btQuaternion& btQuat);
 btQuaternion convertQuatTobtQuat(const ax::Quaternion& quat);
 
-#endif  // defined(AX_ENABLE_3D_PHYSICS)
+#endif  // defined(AX_ENABLE_PHYSICS_3D)

@@ -26,7 +26,7 @@
 
 #include "axmol/physics3d/Physics3D.h"
 
-#if defined(AX_ENABLE_3D_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_3D)
 
 #    include "bullet/BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
 
@@ -215,4 +215,4 @@ bool Physics3DShape::initCompoundShape(const std::vector<std::pair<Physics3DShap
 
 }  // namespace ax
 
-#endif  // defined(AX_ENABLE_3D_PHYSICS)
+#endif  // defined(AX_ENABLE_PHYSICS_3D)

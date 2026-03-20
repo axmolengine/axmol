@@ -30,7 +30,7 @@
 #include "axmol/base/Object.h"
 #include "axmol/base/Config.h"
 
-#if defined(AX_ENABLE_3D_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_3D)
 
 class btDynamicsWorld;
 class btDefaultCollisionConfiguration;
@@ -179,4 +179,4 @@ protected:
 /// @}
 }  // namespace ax
 
-#endif  // defined(AX_ENABLE_3D_PHYSICS)
+#endif  // defined(AX_ENABLE_PHYSICS_3D)

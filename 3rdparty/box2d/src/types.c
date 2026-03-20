@@ -13,7 +13,7 @@ b2WorldDef b2DefaultWorldDef( void )
 	def.gravity.y = -10.0f;
 	def.hitEventThreshold = 1.0f * b2_lengthUnitsPerMeter;
 	def.restitutionThreshold = 1.0f * b2_lengthUnitsPerMeter;
-	def.maxContactPushSpeed = 3.0f * b2_lengthUnitsPerMeter;
+	def.contactSpeed = 3.0f * b2_lengthUnitsPerMeter;
 	def.contactHertz = 30.0;
 	def.contactDampingRatio = 10.0f;
 
@@ -143,9 +143,16 @@ b2DebugDraw b2DefaultDebugDraw( void )
 	draw.DrawCircleFcn = b2EmptyDrawCircle;
 	draw.DrawSolidCircleFcn = b2EmptyDrawSolidCircle;
 	draw.DrawSolidCapsuleFcn = b2EmptyDrawSolidCapsule;
-	draw.DrawSegmentFcn = b2EmptyDrawSegment;
+	draw.DrawLineFcn = b2EmptyDrawSegment;
 	draw.DrawTransformFcn = b2EmptyDrawTransform;
 	draw.DrawPointFcn = b2EmptyDrawPoint;
 	draw.DrawStringFcn = b2EmptyDrawString;
+
+	draw.drawingBounds.lowerBound = (b2Vec2){ -FLT_MAX, -FLT_MAX };
+	draw.drawingBounds.upperBound = (b2Vec2){ FLT_MAX, FLT_MAX };
+	draw.forceScale = 1.0f;
+	draw.jointScale = 1.0f;
+	draw.drawShapes = true;
+	
 	return draw;
 }

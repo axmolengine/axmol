@@ -25,7 +25,7 @@
  ****************************************************************************/
 #include "axmol/platform/PlatformConfig.h"
 #include "axmol/base/Config.h"
-#if defined(AX_ENABLE_3D_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_3D)
 #    include "lua-bindings/manual/physics3d/axlua_physics3d_manual.h"
 #    include "lua-bindings/auto/axlua_physics3d_auto.hpp"
 #    include "lua-bindings/manual/tolua_fix.h"

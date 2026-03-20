@@ -3,6 +3,8 @@
 
 #include "core.h"
 
+#include "box2d/math_functions.h"
+
 #if defined( B2_COMPILER_MSVC )
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
@@ -11,6 +13,7 @@
 #include <stdlib.h>
 #endif
 
+#include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -51,7 +54,7 @@ static int b2DefaultAssertFcn( const char* condition, const char* fileName, int 
 	return 1;
 }
 
-b2AssertFcn* b2AssertHandler = b2DefaultAssertFcn;
+static b2AssertFcn* b2AssertHandler = b2DefaultAssertFcn;
 
 void b2SetAssertFcn( b2AssertFcn* assertFcn )
 {
@@ -66,19 +69,42 @@ int b2InternalAssertFcn( const char* condition, const char* fileName, int lineNu
 }
 #endif
 
+static void b2DefaultLogFcn( const char* message )
+{
+	printf( "Box2D: %s\n", message );
+}
+
+b2LogFcn* b2LogHandler = b2DefaultLogFcn;
+
+void b2SetLogFcn( b2LogFcn* logFcn )
+{
+	B2_ASSERT( logFcn != NULL );
+	b2LogHandler = logFcn;
+}
+
+void b2Log( const char* format, ... )
+{
+	va_list args;
+	va_start( args, format );
+	char buffer[512];
+	vsnprintf( buffer, sizeof( buffer ), format, args );
+	b2LogHandler( buffer );
+	va_end( args );
+}
+
 b2Version b2GetVersion( void )
 {
 	return (b2Version){
 		.major = 3,
-		.minor = 1,
-		.revision = 1,
+		.minor = 2,
+		.revision = 0,
 	};
 }
 
 static b2AllocFcn* b2_allocFcn = NULL;
 static b2FreeFcn* b2_freeFcn = NULL;
 
-b2AtomicInt b2_byteCount;
+static b2AtomicInt b2_byteCount;
 
 void b2SetAllocator( b2AllocFcn* allocFcn, b2FreeFcn* freeFcn )
 {
@@ -146,7 +172,7 @@ void b2Free( void* mem, int size )
 
 	if ( b2_freeFcn != NULL )
 	{
-		b2_freeFcn( mem );
+		b2_freeFcn( mem, size );
 	}
 	else
 	{

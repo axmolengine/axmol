@@ -2152,7 +2152,7 @@ void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo& info)
     lua_newtable(L); /* L: table */
 
     lua_pushstring(L, "shape"); /* L: table key */
-    PhysicsCollider* shape = info.shape;
+    PhysicsCollider* shape = info.collider;
     if (shape == nullptr)
     {
         lua_pushnil(L);

@@ -161,7 +161,7 @@ endif()
 # libpng
 ax_add_3rd(png)
 
-if(AX_ENABLE_PHYSICS)
+if(AX_ENABLE_PHYSICS_2D)
   set(box2d_opts "BOX2D_BUILD_UNIT_TESTS OFF" "BOX2D_BUILD_TESTBED OFF")
   ax_add_3rd(box2d OPTIONS ${box2d_opts})
 endif()
@@ -185,7 +185,7 @@ if(AX_ENABLE_NAVMESH)
   ax_add_3rd(recast)
 endif()
 
-if(AX_ENABLE_3D_PHYSICS)
+if(AX_ENABLE_PHYSICS_3D)
   ax_add_3rd(bullet)
 endif()
 

@@ -15,7 +15,7 @@
 #include "core.h"
 #include "shape.h"
 #include "arena_allocator.h"
-#include "world.h"
+#include "physics_world.h"
 
 #include <stdbool.h>
 #include <string.h>
@@ -39,7 +39,7 @@ void b2CreateBroadPhase( b2BroadPhase* bp )
 	bp->moveResults = NULL;
 	bp->movePairs = NULL;
 	bp->movePairCapacity = 0;
-	b2AtomicStoreInt(&bp->movePairIndex, 0);
+	b2AtomicStoreInt( &bp->movePairIndex, 0 );
 	bp->pairSet = b2CreateSet( 32 );
 
 	for ( int i = 0; i < b2_bodyTypeCount; ++i )
@@ -187,11 +187,11 @@ static bool b2PairQueryCallback( int proxyId, uint64_t userData, void* context )
 	// b2ShapeDef::invokeContactCreation or when a static shape is modified.
 	// There can easily be scenarios where the static proxy is in the moveSet but the dynamic proxy is not.
 	// I could have some flag to indicate that there are any static bodies in the moveSet.
-	
+
 	// Is this proxy also moving?
-	if ( queryProxyType == b2_dynamicBody)
+	if ( queryProxyType == b2_dynamicBody )
 	{
-		if ( treeType == b2_dynamicBody && proxyKey < queryProxyKey)
+		if ( treeType == b2_dynamicBody && proxyKey < queryProxyKey )
 		{
 			bool moved = b2ContainsKey( &broadPhase->moveSet, proxyKey + 1 );
 			if ( moved )
@@ -265,15 +265,18 @@ static bool b2PairQueryCallback( int proxyId, uint64_t userData, void* context )
 	}
 
 	// Custom user filter
-	b2CustomFilterFcn* customFilterFcn = queryContext->world->customFilterFcn;
-	if ( customFilterFcn != NULL )
+	if ( shapeA->enableCustomFiltering || shapeB->enableCustomFiltering )
 	{
-		b2ShapeId idA = { shapeIdA + 1, world->worldId, shapeA->generation };
-		b2ShapeId idB = { shapeIdB + 1, world->worldId, shapeB->generation };
-		bool shouldCollide = customFilterFcn( idA, idB, queryContext->world->customFilterContext );
-		if ( shouldCollide == false )
+		b2CustomFilterFcn* customFilterFcn = queryContext->world->customFilterFcn;
+		if ( customFilterFcn != NULL )
 		{
-			return true;
+			b2ShapeId idA = { shapeIdA + 1, world->worldId, shapeA->generation };
+			b2ShapeId idB = { shapeIdB + 1, world->worldId, shapeB->generation };
+			bool shouldCollide = customFilterFcn( idA, idB, queryContext->world->customFilterContext );
+			if ( shouldCollide == false )
+			{
+				return true;
+			}
 		}
 	}
 
@@ -352,12 +355,14 @@ static void b2FindPairsTask( int startIndex, int endIndex, uint32_t threadIndex,
 		{
 			// consider using bits = groupIndex > 0 ? B2_DEFAULT_MASK_BITS : maskBits
 			queryContext.queryTreeType = b2_kinematicBody;
-			b2TreeStats statsKinematic = b2DynamicTree_Query( bp->trees + b2_kinematicBody, fatAABB, B2_DEFAULT_MASK_BITS, b2PairQueryCallback, &queryContext );
+			b2TreeStats statsKinematic = b2DynamicTree_Query( bp->trees + b2_kinematicBody, fatAABB, B2_DEFAULT_MASK_BITS,
+															  b2PairQueryCallback, &queryContext );
 			stats.nodeVisits += statsKinematic.nodeVisits;
 			stats.leafVisits += statsKinematic.leafVisits;
 
 			queryContext.queryTreeType = b2_staticBody;
-			b2TreeStats statsStatic = b2DynamicTree_Query( bp->trees + b2_staticBody, fatAABB, B2_DEFAULT_MASK_BITS, b2PairQueryCallback, &queryContext );
+			b2TreeStats statsStatic = b2DynamicTree_Query( bp->trees + b2_staticBody, fatAABB, B2_DEFAULT_MASK_BITS,
+														   b2PairQueryCallback, &queryContext );
 			stats.nodeVisits += statsStatic.nodeVisits;
 			stats.leafVisits += statsStatic.leafVisits;
 		}
@@ -365,7 +370,8 @@ static void b2FindPairsTask( int startIndex, int endIndex, uint32_t threadIndex,
 		// All proxies collide with dynamic proxies
 		// Using B2_DEFAULT_MASK_BITS so that b2Filter::groupIndex works.
 		queryContext.queryTreeType = b2_dynamicBody;
-		b2TreeStats statsDynamic = b2DynamicTree_Query( bp->trees + b2_dynamicBody, fatAABB, B2_DEFAULT_MASK_BITS, b2PairQueryCallback, &queryContext );
+		b2TreeStats statsDynamic =
+			b2DynamicTree_Query( bp->trees + b2_dynamicBody, fatAABB, B2_DEFAULT_MASK_BITS, b2PairQueryCallback, &queryContext );
 		stats.nodeVisits += statsDynamic.nodeVisits;
 		stats.leafVisits += statsDynamic.leafVisits;
 	}
@@ -393,16 +399,16 @@ void b2UpdateBroadPhasePairs( b2World* world )
 	bp->moveResults = b2AllocateArenaItem( alloc, moveCount * sizeof( b2MoveResult ), "move results" );
 	bp->movePairCapacity = 16 * moveCount;
 	bp->movePairs = b2AllocateArenaItem( alloc, bp->movePairCapacity * sizeof( b2MovePair ), "move pairs" );
-	b2AtomicStoreInt(&bp->movePairIndex, 0);
+	b2AtomicStoreInt( &bp->movePairIndex, 0 );
 
 #if B2_SNOOP_TABLE_COUNTERS
 	extern b2AtomicInt b2_probeCount;
-	b2AtomicStoreInt(&b2_probeCount, 0);
+	b2AtomicStoreInt( &b2_probeCount, 0 );
 #endif
 
 	int minRange = 64;
 	void* userPairTask = world->enqueueTaskFcn( &b2FindPairsTask, moveCount, minRange, world, world->userTaskContext );
-	if (userPairTask != NULL)
+	if ( userPairTask != NULL )
 	{
 		world->finishTaskFcn( userPairTask, world->userTaskContext );
 		world->taskCount += 1;

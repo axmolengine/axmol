@@ -12,19 +12,17 @@
 
 #include "box2d/types.h"
 
-enum b2SetType
-{
-	b2_staticSet = 0,
-	b2_disabledSet = 1,
-	b2_awakeSet = 2,
-	b2_firstSleepingSet = 3,
-};
-
 // Per thread task storage
 typedef struct b2TaskContext
 {
-	// These bits align with the b2ConstraintGraph::contactBlocks and signal a change in contact status
+	// Collect per thread sensor continuous hit events.
+	b2SensorHitArray sensorHits;
+
+	// These bits align with the contact id capacity and signal a change in contact status
 	b2BitSet contactStateBitSet;
+
+	// These bits align with the joint id capacity and signal a change in contact status
+	b2BitSet jointStateBitSet;
 
 	// Used to track bodies with shapes that have enlarged AABBs. This avoids having a bit array
 	// that is very large when there are many static shapes.
@@ -109,6 +107,16 @@ typedef struct b2World
 	int endEventArrayIndex;
 
 	b2ContactHitEventArray contactHitEvents;
+	b2JointEventArray jointEvents;
+
+	// todo consider deferred waking and impulses to make it possible
+	// to apply forces and impulses from multiple threads
+	// impulses must be deferred because sleeping bodies have no velocity state
+	// Problems:
+	// - multiple forces applied to the same body from multiple threads
+	// Deferred wake
+	//b2BitSet bodyWakeSet;
+	//b2ImpulseArray deferredImpulses;
 
 	// Used to track debug draw
 	b2BitSet debugBodySet;
@@ -132,7 +140,6 @@ typedef struct b2World
 	float hitEventThreshold;
 	float restitutionThreshold;
 	float maxLinearSpeed;
-	float maxContactPushSpeed;
 	float contactSpeed;
 	float contactHertz;
 	float contactDampingRatio;
@@ -159,7 +166,11 @@ typedef struct b2World
 	void* userData;
 
 	// Remember type step used for reporting forces and torques
+	// inverse sub-step
 	float inv_h;
+
+	// inverse full-step
+	float inv_dt;
 
 	int activeTaskCount;
 	int taskCount;
@@ -169,6 +180,7 @@ typedef struct b2World
 	bool enableSleep;
 	bool locked;
 	bool enableWarmStarting;
+	bool enableContactSoftening;
 	bool enableContinuous;
 	bool enableSpeculative;
 	bool inUse;
@@ -186,6 +198,7 @@ B2_ARRAY_INLINE( b2BodyMoveEvent, b2BodyMoveEvent )
 B2_ARRAY_INLINE( b2ContactBeginTouchEvent, b2ContactBeginTouchEvent )
 B2_ARRAY_INLINE( b2ContactEndTouchEvent, b2ContactEndTouchEvent )
 B2_ARRAY_INLINE( b2ContactHitEvent, b2ContactHitEvent )
+B2_ARRAY_INLINE( b2JointEvent, b2JointEvent )
 B2_ARRAY_INLINE( b2SensorBeginTouchEvent, b2SensorBeginTouchEvent )
 B2_ARRAY_INLINE( b2SensorEndTouchEvent, b2SensorEndTouchEvent )
 B2_ARRAY_INLINE( b2TaskContext, b2TaskContext )

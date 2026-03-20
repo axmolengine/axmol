@@ -27,33 +27,20 @@
 #pragma once
 
 #include "axmol/base/Config.h"
-#if defined(AX_ENABLE_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_2D)
 
+#    include "axmol/physics2d/PhysicsMaterial2D.h"
 #    include "axmol/base/Object.h"
 #    include "axmol/math/Math.h"
 #    include "box2d/box2d.h"
 
 #    include "axmol/tlx/vector.hpp"
+#    include <span>
 
 namespace ax
 {
 
-class PhysicsBody;
-
-typedef struct AX_DLL PhysicsMaterial
-{
-    float density;      ///< The density of the object.
-    float restitution;  ///< The bounciness of the physics body.
-    float friction;     ///< The roughness of the surface of a shape.
-
-    PhysicsMaterial() : density(0.0f), restitution(0.0f), friction(0.0f) {}
-
-    PhysicsMaterial(float aDensity, float aRestitution, float aFriction)
-        : density(aDensity), restitution(aRestitution), friction(aFriction)
-    {}
-} PhysicsMaterial;
-
-const PhysicsMaterial PHYSICSSHAPE_MATERIAL_DEFAULT;
+class Rigidbody2D;
 
 /**
  *  @addtogroup physics
@@ -64,11 +51,13 @@ const PhysicsMaterial PHYSICSSHAPE_MATERIAL_DEFAULT;
  */
 
 /**
- * @brief A shape for body. You do not create PhysicsWorld objects directly, instead, you can view PhysicsBody to see
+ * @brief A shape for body. You do not create PhysicsWorld2D objects directly, instead, you can view Rigidbody2D to see
  * how to create it.
  */
-class AX_DLL PhysicsCollider : public Object
+class AX_DLL Collider2D : public Object
 {
+    friend class Rigidbody2D;
+
 public:
     enum class Type
     {
@@ -102,9 +91,9 @@ public:
     /**
      * Get the body that this shape attaches.
      *
-     * @return A PhysicsBody object pointer.
+     * @return A Rigidbody2D object pointer.
      */
-    PhysicsBody* getBody() const { return _body; }
+    Rigidbody2D* getAttachedBody() const { return _attachedBody; }
 
     /**
      * Return this shape's type.
@@ -183,20 +172,20 @@ public:
     void setFriction(float friction, bool apply = true);
 
     /**
-     * Get this shape's PhysicsMaterial object.
+     * Get this shape's PhysicsMaterial2D object.
      *
-     * @return A PhysicsMaterial object reference.
+     * @return A PhysicsMaterial2D object reference.
      */
-    const PhysicsMaterial& getMaterial() const { return _material; }
+    const PhysicsMaterial2D& getMaterial() const { return _material; }
 
     /**
      * Set this shape's material.
      *
      * It will change the shape's mass, elasticity and friction.
      *
-     * @param material A PhysicsMaterial object.
+     * @param material A PhysicsMaterial2D object.
      */
-    void setMaterial(const PhysicsMaterial& material);
+    void setMaterial(const PhysicsMaterial2D& material);
     bool isSensor() const { return _sensor; }
 
     /**
@@ -268,7 +257,7 @@ public:
      * A mask that defines which categories of bodies cause intersection notifications with this physics body.
      *
      * When two bodies share the same space, each body's category mask is tested against the other body's contact mask
-     * by performing a logical AND operation. If either comparison results in a non-zero value, an PhysicsContact object
+     * by performing a logical AND operation. If either comparison results in a non-zero value, an Contact2D object
      * is created and passed to the physics world’s delegate. For best performance, only set bits in the contacts mask
      * for interactions you are interested in.
      * @param bitmask An integer number, the default value is 0x00000000 (all bits cleared).
@@ -319,62 +308,63 @@ public:
 
     void deatchFromBody();
 
-    // A deatched collider can't be re-attach to rigibody again
-    bool isDeatched() const;
+    // A attached collider can't be re-attach to rigibody again
+    bool isAttached() const;
 
 protected:
+    virtual bool attachToBody(Rigidbody2D* body) = 0;
+
     /** calculate the area of this shape */
     virtual float calculateArea() { return 0.0f; }
 
     virtual void setScale(float scaleX, float scaleY);
     virtual void updateScale();
+
+    void updatePolyScale();
+
     void addShape(b2ShapeId shape);
 
-protected:
-    PhysicsCollider(PhysicsBody* body);
-    virtual ~PhysicsCollider() = 0;
+    Collider2D(const PhysicsMaterial2D& material);
+    virtual ~Collider2D() = 0;
 
-protected:
-    PhysicsBody* _body;
+    Rigidbody2D* _attachedBody{nullptr};
 
     tlx::pod_vector<b2ShapeId> _b2Shapes;
 
-    Type _type;
+    Type _type{Type::UNKNOWN};
     float _area;
     bool _sensor;
     float _scaleX;
     float _scaleY;
     float _newScaleX;
     float _newScaleY;
-    PhysicsMaterial _material;
+    PhysicsMaterial2D _material;
     int _tag;
     int _categoryBitmask;
     int _collisionBitmask;
     int _contactTestBitmask;
     int _group;
 
-    friend class PhysicsWorld;
-    friend class PhysicsBody;
-    friend class PhysicsJoint;
-    friend class PhysicsDebugDraw;
+    friend class PhysicsWorld2D;
+    friend class Rigidbody2D;
+    friend class Joint2D;
 };
 
 /** A circle shape. */
-class AX_DLL PhysicsColliderCircle : public PhysicsCollider
+class AX_DLL CircleCollider2D : public Collider2D
 {
 public:
     /**
-     * Creates a PhysicsColliderCircle with specified value.
+     * Creates a CircleCollider2D with specified value.
      *
      * @param   radius A float number, it is the circle's radius.
-     * @param   material A PhysicsMaterial object, the default value is PHYSICSSHAPE_MATERIAL_DEFAULT.
+     * @param   material A PhysicsMaterial2D object, the default value is PHYSICS_MATERIAL_2D_DEFAULT.
      * @param   offset A Vec2 object, it is the offset from the body's center of gravity in body local coordinates.
-     * @return  An autoreleased PhysicsColliderCircle object pointer.
+     * @return  An autoreleased CircleCollider2D object pointer.
      */
-    static PhysicsColliderCircle* create(PhysicsBody* body,
-                                         float radius,
-                                         const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT,
-                                         const Vec2& offset              = Vec2(0.0f, 0.0f));
+    static CircleCollider2D* create(float radius,
+                                    const PhysicsMaterial2D& material = PHYSICS_MATERIAL_2D_DEFAULT,
+                                    const Vec2& offset                = Vec2(0.0f, 0.0f));
 
     /**
      * Calculate the area of a circle with specified radius.
@@ -399,45 +389,44 @@ public:
     Vec2 getOffset() override;
 
 protected:
-    bool init(float radius,
-              const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT,
-              const Vec2& offset              = Vec2::ZERO);
+    bool attachToBody(Rigidbody2D*) override;
+
     float calculateArea() override;
     void updateScale() override;
 
 protected:
-    PhysicsColliderCircle(PhysicsBody* body) : PhysicsCollider(body) {}
-    virtual ~PhysicsColliderCircle();
+    CircleCollider2D(const PhysicsMaterial2D& material, float radius, const Vec2& offset)
+        : Collider2D(material), _radius(radius), _offset(offset)
+    {}
+
+    float _radius{0};
+    Vec2 _offset;
 };
 
 /** A polygon shape. */
-class AX_DLL PhysicsColliderPolygon : public PhysicsCollider
+class AX_DLL PolygonCollider2D : public Collider2D
 {
 public:
     /**
-     * Creates a PhysicsColliderPolygon with specified value.
+     * Creates a PolygonCollider2D with specified value.
      *
      * @param   points A Vec2 object pointer, it is an array of Vec2.
-     * @param   count An integer number, contains the count of the points array.
-     * @param   material A PhysicsMaterial object, the default value is PHYSICSSHAPE_MATERIAL_DEFAULT.
+     * @param   material A PhysicsMaterial2D object, the default value is PHYSICS_MATERIAL_2D_DEFAULT.
      * @param   offset A Vec2 object, it is the offset from the body's center of gravity in body local coordinates.
-     * @return  An autoreleased PhysicsColliderPolygon object pointer.
+     * @return  An autoreleased PolygonCollider2D object pointer.
      */
-    static PhysicsColliderPolygon* create(PhysicsBody* body,
-                                          const Vec2* points,
-                                          int count,
-                                          const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT,
-                                          const Vec2& offset              = Vec2::ZERO,
-                                          float radius                    = 0.0f);
+    static PolygonCollider2D* create(std::span<const Vec2> points,
+                                     const PhysicsMaterial2D& material = PHYSICS_MATERIAL_2D_DEFAULT,
+                                     const Vec2& offset                = Vec2::ZERO,
+                                     float radius                      = 0.0f);
 
     /**
      * Calculate the area of a polygon with specified value.
      *
      * @param   points A Vec2 object pointer, it is an array of Vec2.
-     * @param   count An integer number, contains the count of the points array.
      * @return A float number.
      */
-    static float calculateArea(const Vec2* points, int count);
+    static float calculateArea(std::span<const Vec2> points);
 
     /**
      * Get a point of this polygon's points array.
@@ -469,36 +458,36 @@ public:
     Vec2 getCenter() override;
 
 protected:
-    bool init(const Vec2* points,
-              int count,
-              const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT,
-              const Vec2& offset              = Vec2::ZERO,
-              float radius                    = 0.0f);
+    bool attachToBody(Rigidbody2D*) override;
     float calculateArea() override;
     void updateScale() override;
 
 protected:
-    PhysicsColliderPolygon(PhysicsBody* body) : PhysicsCollider(body) {}
-    virtual ~PhysicsColliderPolygon();
+    PolygonCollider2D(const PhysicsMaterial2D& material, std::span<const Vec2> points, const Vec2& offset, float radius)
+        : Collider2D(material), _points(points.begin(), points.end()), _offset(offset), _radius(radius)
+    {}
+
+    std::vector<Vec2> _points;
+    Vec2 _offset;
+    float _radius{0};
 };
 
 /** A box shape. */
-class AX_DLL PhysicsColliderBox : public PhysicsColliderPolygon
+class AX_DLL BoxCollider2D : public Collider2D
 {
 public:
     /**
-     * Creates a PhysicsColliderBox with specified value.
+     * Creates a BoxCollider2D with specified value.
      *
      * @param   size The size contains this box's width and height.
-     * @param   material A PhysicsMaterial object, the default value is PHYSICSSHAPE_MATERIAL_DEFAULT.
+     * @param   material A PhysicsMaterial2D object, the default value is PHYSICS_MATERIAL_2D_DEFAULT.
      * @param   offset A Vec2 object, it is the offset from the body's center of gravity in body local coordinates.
-     * @return  An autoreleased PhysicsColliderBox object pointer.
+     * @return  An autoreleased BoxCollider2D object pointer.
      */
-    static PhysicsColliderBox* create(PhysicsBody* body,
-                                      const Vec2& size,
-                                      const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT,
-                                      const Vec2& offset              = Vec2::ZERO,
-                                      float radius                    = 0.0f);
+    static BoxCollider2D* create(const Vec2& size,
+                                 const PhysicsMaterial2D& material = PHYSICS_MATERIAL_2D_DEFAULT,
+                                 const Vec2& offset                = Vec2::ZERO,
+                                 float radius                      = 0.0f);
 
     /**
      * Get this box's width and height.
@@ -515,34 +504,36 @@ public:
     Vec2 getOffset() override { return getCenter(); }
 
 protected:
-    bool init(const Vec2& size,
-              const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT,
-              const Vec2& offset              = Vec2::ZERO,
-              float radius                    = 0.0f);
+    bool attachToBody(Rigidbody2D*) override;
+    void updateScale() override;
 
-protected:
-    PhysicsColliderBox(PhysicsBody* body) : PhysicsColliderPolygon(body) {}
-    virtual ~PhysicsColliderBox();
+    BoxCollider2D(const PhysicsMaterial2D& material,
+                  const Vec2& size,
+                  const Vec2& offset = Vec2::ZERO,
+                  float radius       = 0.0f)
+        : Collider2D(material), _size(size), _offset(offset), _radius(radius)
+    {}
+
+    Vec2 _size;
+    Vec2 _offset;
+    float _radius{0};
 };
 
 /** A segment shape. */
-class AX_DLL PhysicsColliderEdgeSegment : public PhysicsCollider
+class AX_DLL EdgeSegmentCollider2D : public Collider2D
 {
 public:
     /**
-     * Creates a PhysicsColliderEdgeSegment with specified value.
+     * Creates a EdgeSegmentCollider2D with specified value.
      *
      * @param   a It's the edge's begin position.
      * @param   b It's the edge's end position.
-     * @param   material A PhysicsMaterial object, the default value is PHYSICSSHAPE_MATERIAL_DEFAULT.
-     * @param   border It's a edge's border width.
-     * @return  An autoreleased PhysicsColliderEdgeSegment object pointer.
+     * @param   material A PhysicsMaterial2D object, the default value is PHYSICS_MATERIAL_2D_DEFAULT.
+     * @return  An autoreleased EdgeSegmentCollider2D object pointer.
      */
-    static PhysicsColliderEdgeSegment* create(PhysicsBody* body,
-                                              const Vec2& a,
-                                              const Vec2& b,
-                                              const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT,
-                                              float border                    = 1);
+    static EdgeSegmentCollider2D* create(const Vec2& a,
+                                         const Vec2& b,
+                                         const PhysicsMaterial2D& material = PHYSICS_MATERIAL_2D_DEFAULT);
 
     /**
      * Get this edge's begin position.
@@ -566,37 +557,31 @@ public:
     Vec2 getCenter() override;
 
 protected:
-    bool init(const Vec2& a,
-              const Vec2& b,
-              const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT,
-              float border                    = 1);
+    bool attachToBody(Rigidbody2D*) override;
     void updateScale() override;
 
 protected:
-    PhysicsColliderEdgeSegment(PhysicsBody* body) : PhysicsCollider(body) {}
-    virtual ~PhysicsColliderEdgeSegment();
+    EdgeSegmentCollider2D(const PhysicsMaterial2D& material, const Vec2& a, const Vec2& b)
+        : Collider2D(material), _pointA(a), _pointB(b)
+    {}
 
-    friend class PhysicsBody;
+    Vec2 _pointA;
+    Vec2 _pointB;
 };
 
 /** An edge polygon shape. */
-class AX_DLL PhysicsColliderEdgePolygon : public PhysicsCollider
+class AX_DLL EdgePolygonCollider2D : public Collider2D
 {
 public:
     /**
-     * Creates a PhysicsColliderEdgePolygon with specified value.
+     * Creates a EdgePolygonCollider2D with specified value.
      *
      * @param   points A Vec2 object pointer, it contains an array of points.
-     * @param   count An integer number, contains the count of the points array.
-     * @param   material A PhysicsMaterial object, the default value is PHYSICSSHAPE_MATERIAL_DEFAULT.
-     * @param   border It's a edge's border width.
-     * @return  An autoreleased PhysicsColliderEdgePolygon object pointer.
+     * @param   material A PhysicsMaterial2D object, the default value is PHYSICS_MATERIAL_2D_DEFAULT.
+     * @return  An autoreleased EdgePolygonCollider2D object pointer.
      */
-    static PhysicsColliderEdgePolygon* create(PhysicsBody* body,
-                                              const Vec2* points,
-                                              int count,
-                                              const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT,
-                                              float border                    = 1);
+    static EdgePolygonCollider2D* create(std::span<const Vec2> points,
+                                         const PhysicsMaterial2D& material = PHYSICS_MATERIAL_2D_DEFAULT);
 
     /**
      * Get this polygon's center position.
@@ -620,37 +605,33 @@ public:
     int getPointsCount() const;
 
 protected:
-    bool init(const Vec2* points,
-              int count,
-              const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT,
-              float border                    = 1);
+    bool attachToBody(Rigidbody2D*) override;
+
     void updateScale() override;
 
 protected:
-    PhysicsColliderEdgePolygon(PhysicsBody* body) : PhysicsCollider(body) {}
-    virtual ~PhysicsColliderEdgePolygon();
+    EdgePolygonCollider2D(const PhysicsMaterial2D& material, std::span<const Vec2> points)
+        : Collider2D(material), _points(points.begin(), points.end())
+    {}
 
-    friend class PhysicsBody;
+    std::vector<Vec2> _points;
 };
 
 /** An edge box shape. */
-class AX_DLL PhysicsColliderEdgeBox : public PhysicsColliderEdgePolygon
+class AX_DLL EdgeBoxCollider2D : public Collider2D
 {
 public:
     /**
-     * Creates a PhysicsColliderEdgeBox with specified value.
+     * Creates a EdgeBoxCollider2D with specified value.
      *
      * @param   size The size contains this box's width and height.
-     * @param   material A PhysicsMaterial object, the default value is PHYSICSSHAPE_MATERIAL_DEFAULT.
-     * @param   border It's a edge's border width.
+     * @param   material A PhysicsMaterial2D object, the default value is PHYSICS_MATERIAL_2D_DEFAULT.
      * @param   offset A Vec2 object, it is the offset from the body's center of gravity in body local coordinates.
-     * @return  An autoreleased PhysicsColliderEdgeBox object pointer.
+     * @return  An autoreleased EdgeBoxCollider2D object pointer.
      */
-    static PhysicsColliderEdgeBox* create(PhysicsBody* body,
-                                          const Vec2& size,
-                                          const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT,
-                                          float border                    = 0,
-                                          const Vec2& offset              = Vec2::ZERO);
+    static EdgeBoxCollider2D* create(const Vec2& size,
+                                     const PhysicsMaterial2D& material = PHYSICS_MATERIAL_2D_DEFAULT,
+                                     const Vec2& offset                = Vec2::ZERO);
 
     /**
      * Get this box's position offset.
@@ -660,36 +641,30 @@ public:
     Vec2 getOffset() override { return getCenter(); }
 
 protected:
-    bool init(const Vec2& size,
-              const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT,
-              float border                    = 1,
-              const Vec2& offset              = Vec2::ZERO);
+    bool attachToBody(Rigidbody2D*) override;
 
 protected:
-    PhysicsColliderEdgeBox(PhysicsBody* body) : PhysicsColliderEdgePolygon(body) {}
-    virtual ~PhysicsColliderEdgeBox();
+    EdgeBoxCollider2D(const PhysicsMaterial2D& material, const Vec2& size, const Vec2& offset)
+        : Collider2D(material), _size(size), _offset(offset)
+    {}
 
-    friend class PhysicsBody;
+    Vec2 _size;
+    Vec2 _offset;
 };
 
 /** A chain shape. */
-class AX_DLL PhysicsColliderEdgeChain : public PhysicsCollider
+class AX_DLL EdgeChainCollider2D : public Collider2D
 {
 public:
     /**
-     * Creates a PhysicsColliderEdgeChain with specified value.
+     * Creates a EdgeChainCollider2D with specified value.
      *
      * @param   points A Vec2 object pointer, it contains an array of points.
-     * @param   count An integer number, contains the count of the points array.
-     * @param   material A PhysicsMaterial object, the default value is PHYSICSSHAPE_MATERIAL_DEFAULT.
-     * @param   border It's a edge's border width.
-     * @return  An autoreleased PhysicsColliderEdgeChain object pointer.
+     * @param   material A PhysicsMaterial2D object, the default value is PHYSICS_MATERIAL_2D_DEFAULT.
+     * @return  An autoreleased EdgeChainCollider2D object pointer.
      */
-    static PhysicsColliderEdgeChain* create(PhysicsBody* body,
-                                            const Vec2* points,
-                                            int count,
-                                            const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT,
-                                            float border                    = 1);
+    static EdgeChainCollider2D* create(std::span<const Vec2> points,
+                                       const PhysicsMaterial2D& material = PHYSICS_MATERIAL_2D_DEFAULT);
 
     /**
      * Get this chain's center position.
@@ -713,17 +688,15 @@ public:
     int getPointsCount() const;
 
 protected:
-    bool init(const Vec2* points,
-              int count,
-              const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT,
-              float border                    = 1);
+    bool attachToBody(Rigidbody2D*) override;
     void updateScale() override;
 
 protected:
-    PhysicsColliderEdgeChain(PhysicsBody* body) : PhysicsCollider(body) {}
-    virtual ~PhysicsColliderEdgeChain();
+    EdgeChainCollider2D(const PhysicsMaterial2D& material, std::span<const Vec2> points)
+        : Collider2D(material), _points(points.begin(), points.end())
+    {}
 
-    friend class PhysicsBody;
+    std::vector<Vec2> _points;
 };
 
 /** @} */
@@ -731,4 +704,4 @@ protected:
 
 }  // namespace ax
 
-#endif  // defined(AX_ENABLE_PHYSICS)
+#endif  // defined(AX_ENABLE_PHYSICS_2D)

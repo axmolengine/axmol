@@ -16,6 +16,7 @@ typedef struct b2Hull b2Hull;
  * @brief Geometry types and algorithms
  *
  * Definitions of circles, capsules, segments, and polygons. Various algorithms to compute hulls, mass properties, and so on.
+ * Functions should take the shape as the first argument to assist editor auto-complete.
  * @{
  */
 
@@ -96,7 +97,7 @@ typedef struct b2MassData
 	/// The position of the shape's centroid relative to the shape's origin.
 	b2Vec2 center;
 
-	/// The rotational inertia of the shape about the local origin.
+	/// The rotational inertia of the shape about the shape center.
 	float rotationalInertia;
 } b2MassData;
 
@@ -246,38 +247,38 @@ B2_API b2AABB b2ComputePolygonAABB( const b2Polygon* shape, b2Transform transfor
 B2_API b2AABB b2ComputeSegmentAABB( const b2Segment* shape, b2Transform transform );
 
 /// Test a point for overlap with a circle in local space
-B2_API bool b2PointInCircle( b2Vec2 point, const b2Circle* shape );
+B2_API bool b2PointInCircle( const b2Circle* shape, b2Vec2 point );
 
 /// Test a point for overlap with a capsule in local space
-B2_API bool b2PointInCapsule( b2Vec2 point, const b2Capsule* shape );
+B2_API bool b2PointInCapsule( const b2Capsule* shape, b2Vec2 point );
 
 /// Test a point for overlap with a convex polygon in local space
-B2_API bool b2PointInPolygon( b2Vec2 point, const b2Polygon* shape );
+B2_API bool b2PointInPolygon( const b2Polygon* shape, b2Vec2 point );
 
-/// Ray cast versus circle shape in local space. Initial overlap is treated as a miss.
-B2_API b2CastOutput b2RayCastCircle( const b2RayCastInput* input, const b2Circle* shape );
+/// Ray cast versus circle shape in local space.
+B2_API b2CastOutput b2RayCastCircle( const b2Circle* shape, const b2RayCastInput* input );
 
-/// Ray cast versus capsule shape in local space. Initial overlap is treated as a miss.
-B2_API b2CastOutput b2RayCastCapsule( const b2RayCastInput* input, const b2Capsule* shape );
+/// Ray cast versus capsule shape in local space.
+B2_API b2CastOutput b2RayCastCapsule( const b2Capsule* shape, const b2RayCastInput* input );
 
 /// Ray cast versus segment shape in local space. Optionally treat the segment as one-sided with hits from
 /// the left side being treated as a miss.
-B2_API b2CastOutput b2RayCastSegment( const b2RayCastInput* input, const b2Segment* shape, bool oneSided );
+B2_API b2CastOutput b2RayCastSegment( const b2Segment* shape, const b2RayCastInput* input, bool oneSided );
 
-/// Ray cast versus polygon shape in local space. Initial overlap is treated as a miss.
-B2_API b2CastOutput b2RayCastPolygon( const b2RayCastInput* input, const b2Polygon* shape );
+/// Ray cast versus polygon shape in local space.
+B2_API b2CastOutput b2RayCastPolygon( const b2Polygon* shape, const b2RayCastInput* input );
 
-/// Shape cast versus a circle. Initial overlap is treated as a miss.
-B2_API b2CastOutput b2ShapeCastCircle( const b2ShapeCastInput* input, const b2Circle* shape );
+/// Shape cast versus a circle.
+B2_API b2CastOutput b2ShapeCastCircle(const b2Circle* shape,  const b2ShapeCastInput* input );
 
-/// Shape cast versus a capsule. Initial overlap is treated as a miss.
-B2_API b2CastOutput b2ShapeCastCapsule( const b2ShapeCastInput* input, const b2Capsule* shape );
+/// Shape cast versus a capsule.
+B2_API b2CastOutput b2ShapeCastCapsule( const b2Capsule* shape, const b2ShapeCastInput* input);
 
-/// Shape cast versus a line segment. Initial overlap is treated as a miss.
-B2_API b2CastOutput b2ShapeCastSegment( const b2ShapeCastInput* input, const b2Segment* shape );
+/// Shape cast versus a line segment.
+B2_API b2CastOutput b2ShapeCastSegment( const b2Segment* shape, const b2ShapeCastInput* input );
 
-/// Shape cast versus a convex polygon. Initial overlap is treated as a miss.
-B2_API b2CastOutput b2ShapeCastPolygon( const b2ShapeCastInput* input, const b2Polygon* shape );
+/// Shape cast versus a convex polygon.
+B2_API b2CastOutput b2ShapeCastPolygon( const b2Polygon* shape, const b2ShapeCastInput* input );
 
 /// A convex hull. Used to create convex polygons.
 /// @warning Do not modify these values directly, instead use b2ComputeHull()
@@ -449,7 +450,7 @@ typedef struct b2Sweep
 /// Evaluate the transform sweep at a specific time.
 B2_API b2Transform b2GetSweepTransform( const b2Sweep* sweep, float time );
 
-/// Input parameters for b2TimeOfImpact
+/// Time of impact input
 typedef struct b2TOIInput
 {
 	b2ShapeProxy proxyA; ///< The proxy for shape A
@@ -469,11 +470,20 @@ typedef enum b2TOIState
 	b2_toiStateSeparated
 } b2TOIState;
 
-/// Output parameters for b2TimeOfImpact.
+/// Time of impact output
 typedef struct b2TOIOutput
 {
-	b2TOIState state; ///< The type of result
-	float fraction;	  ///< The sweep time of the collision
+	/// The type of result
+	b2TOIState state;
+
+	/// The hit point
+	b2Vec2 point;
+
+	/// The hit normal
+	b2Vec2 normal;
+
+	/// The sweep time of the collision 
+	float fraction;
 } b2TOIOutput;
 
 /// Compute the upper bound on time before two shapes penetrate. Time is represented as
@@ -520,6 +530,8 @@ typedef struct b2ManifoldPoint
 
 	/// The total normal impulse applied across sub-stepping and restitution. This is important
 	/// to identify speculative contact points that had an interaction in the time step.
+	/// This includes the warm starting impulse, the sub-step delta impulse, and the restitution
+	/// impulse.
 	float totalNormalImpulse;
 
 	/// Relative normal velocity pre-solve. Used for hit events. If the normal impulse is
@@ -624,22 +636,22 @@ typedef struct b2DynamicTree
 	struct b2TreeNode* nodes;
 
 	/// The root index
-	int root;
+	int32_t root;
 
 	/// The number of nodes
-	int nodeCount;
+	int32_t nodeCount;
 
 	/// The allocated node space
-	int nodeCapacity;
+	int32_t nodeCapacity;
 
 	/// Node free list
-	int freeList;
+	int32_t freeList;
 
 	/// Number of proxies created
-	int proxyCount;
+	int32_t proxyCount;
 
 	/// Leaf indices for rebuild
-	int* leafIndices;
+	int32_t* leafIndices;
 
 	/// Leaf bounding boxes for rebuild
 	b2AABB* leafBoxes;
@@ -648,10 +660,10 @@ typedef struct b2DynamicTree
 	b2Vec2* leafCenters;
 
 	/// Bins for sorting during rebuild
-	int* binIndices;
+	int32_t* binIndices;
 
 	/// Allocated space for rebuilding
-	int rebuildCapacity;
+	int32_t rebuildCapacity;
 } b2DynamicTree;
 
 /// These are performance results returned by dynamic tree queries.
@@ -696,6 +708,12 @@ typedef bool b2TreeQueryCallbackFcn( int proxyId, uint64_t userData, void* conte
 ///	@return performance data
 B2_API b2TreeStats b2DynamicTree_Query( const b2DynamicTree* tree, b2AABB aabb, uint64_t maskBits,
 										b2TreeQueryCallbackFcn* callback, void* context );
+
+/// Query an AABB for overlapping proxies. The callback class is called for each proxy that overlaps the supplied AABB.
+/// No filtering is performed.
+///	@return performance data
+B2_API b2TreeStats b2DynamicTree_QueryAll( const b2DynamicTree* tree, b2AABB aabb, b2TreeQueryCallbackFcn* callback,
+										   void* context );
 
 /// This function receives clipped ray cast input for a proxy. The function
 /// returns the new ray fraction.

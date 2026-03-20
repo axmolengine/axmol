@@ -162,12 +162,12 @@ THE SOFTWARE.
 #include "axmol/renderer/TrianglesCommand.h"
 #include "axmol/renderer/Shaders.h"
 
-// physics
-#include "axmol/physics/PhysicsBody.h"
-#include "axmol/physics/PhysicsContact.h"
-#include "axmol/physics/PhysicsJoint.h"
-#include "axmol/physics/PhysicsCollider.h"
-#include "axmol/physics/PhysicsWorld.h"
+// physics2d
+#include "axmol/physics2d/Rigidbody2D.h"
+#include "axmol/physics2d/Contact2D.h"
+#include "axmol/physics2d/Joint2D.h"
+#include "axmol/physics2d/Collider2D.h"
+#include "axmol/physics2d/PhysicsWorld2D.h"
 
 // platform
 #include "axmol/platform/Common.h"

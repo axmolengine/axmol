@@ -23,11 +23,11 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "axmol/physics/PhysicsContact.h"
-#if defined(AX_ENABLE_PHYSICS)
+#include "axmol/physics2d/Contact2D.h"
+#if defined(AX_ENABLE_PHYSICS_2D)
 
-#    include "axmol/physics/PhysicsBody.h"
-#    include "axmol/physics/PhysicsHelper.h"
+#    include "axmol/physics2d/Rigidbody2D.h"
+#    include "axmol/physics2d/PhysicsUtility2D.h"
 #    include "axmol/base/EventCustom.h"
 
 namespace ax
@@ -35,11 +35,11 @@ namespace ax
 
 const char* PHYSICSCONTACT_EVENT_NAME = "PhysicsContactEvent";
 
-PhysicsContact::PhysicsContact()
+Contact2D::Contact2D()
     : EventCustom(PHYSICSCONTACT_EVENT_NAME)
     , _world(nullptr)
-    , _shapeA(nullptr)
-    , _shapeB(nullptr)
+    , _colliderA(nullptr)
+    , _colliderB(nullptr)
     , _eventCode(EventCode::NONE)
     , _notificationEnable(true)
     , _result(true)
@@ -49,15 +49,15 @@ PhysicsContact::PhysicsContact()
     , _preContactData(nullptr)
 {}
 
-PhysicsContact::~PhysicsContact()
+Contact2D::~Contact2D()
 {
     AX_SAFE_DELETE(_contactData);
     AX_SAFE_DELETE(_preContactData);
 }
 
-PhysicsContact* PhysicsContact::construct(PhysicsCollider* a, PhysicsCollider* b)
+Contact2D* Contact2D::obtain(Collider2D* a, Collider2D* b)
 {
-    PhysicsContact* contact = new PhysicsContact();
+    Contact2D* contact = new Contact2D();
     if (contact->init(a, b))
     {
         return contact;
@@ -67,14 +67,14 @@ PhysicsContact* PhysicsContact::construct(PhysicsCollider* a, PhysicsCollider* b
     return nullptr;
 }
 
-bool PhysicsContact::init(PhysicsCollider* a, PhysicsCollider* b)
+bool Contact2D::init(Collider2D* a, Collider2D* b)
 {
     do
     {
         AX_BREAK_IF(a == nullptr || b == nullptr);
 
-        _shapeA = a;
-        _shapeB = b;
+        _colliderA = a;
+        _colliderB = b;
 
         return true;
     } while (false);
@@ -82,7 +82,7 @@ bool PhysicsContact::init(PhysicsCollider* a, PhysicsCollider* b)
     return false;
 }
 
-void PhysicsContact::generateContactData()
+void Contact2D::generateContactData()
 {
     if (_contactInfo == nullptr)
     {
@@ -97,10 +97,10 @@ void PhysicsContact::generateContactData()
     _contactData->count = count;
     for (int i = 0; i < _contactData->count && i < PhysicsContactData::POINT_MAX; ++i)
     {
-        _contactData->points[i] = PhysicsHelper::toVec2(arb->manifold.points[i].point);
+        _contactData->points[i] = PhysicsUtility2D::toVec2(arb->manifold.points[i].point);
     }
 
-    _contactData->normal = _contactData->count > 0 ? PhysicsHelper::toVec2(arb->manifold.normal) : Vec2::ZERO;
+    _contactData->normal = _contactData->count > 0 ? PhysicsUtility2D::toVec2(arb->manifold.normal) : Vec2::ZERO;
 }
 
 // PhysicsContactPreSolve implementation
@@ -123,7 +123,7 @@ float PhysicsContactPreSolve::getFriction() const
 
 Vec2 PhysicsContactPreSolve::getSurfaceVelocity() const
 {
-    // return PhysicsHelper::cpv2vec2(cpArbiterGetSurfaceVelocity(static_cast<cpArbiter*>(_contactInfo)));
+    // return PhysicsUtility2D::cpv2vec2(cpArbiterGetSurfaceVelocity(static_cast<cpArbiter*>(_contactInfo)));
     return 0;  // FIXME
 }
 
@@ -142,7 +142,7 @@ void PhysicsContactPreSolve::setFriction(float friction)
 void PhysicsContactPreSolve::setSurfaceVelocity(const Vec2& velocity)
 {
     // FIXME
-    // cpArbiterSetSurfaceVelocity(static_cast<cpArbiter*>(_contactInfo), PhysicsHelper::vec22cpv(velocity));
+    // cpArbiterSetSurfaceVelocity(static_cast<cpArbiter*>(_contactInfo), PhysicsUtility2D::vec22cpv(velocity));
 }
 
 void PhysicsContactPreSolve::ignore()
@@ -173,7 +173,7 @@ float PhysicsContactPostSolve::getFriction() const
 Vec2 PhysicsContactPostSolve::getSurfaceVelocity() const
 {
     // FIXME
-    // return PhysicsHelper::cpv2vec2(cpArbiterGetSurfaceVelocity(static_cast<cpArbiter*>(_contactInfo)));
+    // return PhysicsUtility2D::cpv2vec2(cpArbiterGetSurfaceVelocity(static_cast<cpArbiter*>(_contactInfo)));
     return Vec2::ZERO;
 }
 
@@ -190,7 +190,7 @@ bool EventListenerPhysicsContact::init()
 
 void EventListenerPhysicsContact::onEvent(EventCustom* event)
 {
-    PhysicsContact* contact = dynamic_cast<PhysicsContact*>(event);
+    Contact2D* contact = dynamic_cast<Contact2D*>(event);
 
     if (contact == nullptr)
     {
@@ -199,11 +199,11 @@ void EventListenerPhysicsContact::onEvent(EventCustom* event)
 
     switch (contact->getEventCode())
     {
-    case PhysicsContact::EventCode::BEGIN:
+    case Contact2D::EventCode::BEGIN:
     {
         bool ret = true;
 
-        if (onContactBegin != nullptr && hitTest(contact->getShapeA(), contact->getShapeB()))
+        if (onContactBegin != nullptr && hitTest(contact->getColliderA(), contact->getColliderB()))
         {
             contact->generateContactData();
             ret = onContactBegin(*contact);
@@ -212,11 +212,11 @@ void EventListenerPhysicsContact::onEvent(EventCustom* event)
         contact->setResult(ret);
         break;
     }
-    case PhysicsContact::EventCode::PRESOLVE:
+    case Contact2D::EventCode::PRESOLVE:
     {
         bool ret = true;
 
-        if (onContactPreSolve != nullptr && hitTest(contact->getShapeA(), contact->getShapeB()))
+        if (onContactPreSolve != nullptr && hitTest(contact->getColliderA(), contact->getColliderB()))
         {
             PhysicsContactPreSolve solve(contact->_contactInfo);
             contact->generateContactData();
@@ -227,18 +227,18 @@ void EventListenerPhysicsContact::onEvent(EventCustom* event)
         contact->setResult(ret);
         break;
     }
-    case PhysicsContact::EventCode::POSTSOLVE:
+    case Contact2D::EventCode::POSTSOLVE:
     {
-        if (onContactPostSolve != nullptr && hitTest(contact->getShapeA(), contact->getShapeB()))
+        if (onContactPostSolve != nullptr && hitTest(contact->getColliderA(), contact->getColliderB()))
         {
             PhysicsContactPostSolve solve(contact->_contactInfo);
             onContactPostSolve(*contact, solve);
         }
         break;
     }
-    case PhysicsContact::EventCode::SEPARATE:
+    case Contact2D::EventCode::SEPARATE:
     {
-        if (onContactSeparate != nullptr && hitTest(contact->getShapeA(), contact->getShapeB()))
+        if (onContactSeparate != nullptr && hitTest(contact->getColliderA(), contact->getColliderB()))
         {
             onContactSeparate(*contact);
         }
@@ -265,7 +265,7 @@ EventListenerPhysicsContact* EventListenerPhysicsContact::create()
     return nullptr;
 }
 
-bool EventListenerPhysicsContact::hitTest(PhysicsCollider* /*shapeA*/, PhysicsCollider* /*shapeB*/)
+bool EventListenerPhysicsContact::hitTest(Collider2D* /*shapeA*/, Collider2D* /*shapeB*/)
 {
     return true;
 }
@@ -300,8 +300,8 @@ EventListenerPhysicsContact* EventListenerPhysicsContact::clone()
     return nullptr;
 }
 
-EventListenerPhysicsContactWithBodies* EventListenerPhysicsContactWithBodies::create(PhysicsBody* bodyA,
-                                                                                     PhysicsBody* bodyB)
+EventListenerPhysicsContactWithBodies* EventListenerPhysicsContactWithBodies::create(Rigidbody2D* bodyA,
+                                                                                     Rigidbody2D* bodyB)
 {
     EventListenerPhysicsContactWithBodies* obj = new EventListenerPhysicsContactWithBodies();
 
@@ -321,9 +321,10 @@ EventListenerPhysicsContactWithBodies::EventListenerPhysicsContactWithBodies() :
 
 EventListenerPhysicsContactWithBodies::~EventListenerPhysicsContactWithBodies() {}
 
-bool EventListenerPhysicsContactWithBodies::hitTest(PhysicsCollider* shapeA, PhysicsCollider* shapeB)
+bool EventListenerPhysicsContactWithBodies::hitTest(Collider2D* shapeA, Collider2D* shapeB)
 {
-    if ((shapeA->getBody() == _a && shapeB->getBody() == _b) || (shapeA->getBody() == _b && shapeB->getBody() == _a))
+    if ((shapeA->getAttachedBody() == _a && shapeB->getAttachedBody() == _b) ||
+        (shapeA->getAttachedBody() == _b && shapeB->getAttachedBody() == _a))
     {
         return true;
     }
@@ -353,8 +354,8 @@ EventListenerPhysicsContactWithShapes::EventListenerPhysicsContactWithShapes() :
 
 EventListenerPhysicsContactWithShapes::~EventListenerPhysicsContactWithShapes() {}
 
-EventListenerPhysicsContactWithShapes* EventListenerPhysicsContactWithShapes::create(PhysicsCollider* shapeA,
-                                                                                     PhysicsCollider* shapeB)
+EventListenerPhysicsContactWithShapes* EventListenerPhysicsContactWithShapes::create(Collider2D* shapeA,
+                                                                                     Collider2D* shapeB)
 {
     EventListenerPhysicsContactWithShapes* obj = new EventListenerPhysicsContactWithShapes();
 
@@ -370,7 +371,7 @@ EventListenerPhysicsContactWithShapes* EventListenerPhysicsContactWithShapes::cr
     return nullptr;
 }
 
-bool EventListenerPhysicsContactWithShapes::hitTest(PhysicsCollider* shapeA, PhysicsCollider* shapeB)
+bool EventListenerPhysicsContactWithShapes::hitTest(Collider2D* shapeA, Collider2D* shapeB)
 {
     if ((shapeA == _a && shapeB == _b) || (shapeA == _b && shapeB == _a))
     {
@@ -417,7 +418,7 @@ EventListenerPhysicsContactWithGroup* EventListenerPhysicsContactWithGroup::crea
     return nullptr;
 }
 
-bool EventListenerPhysicsContactWithGroup::hitTest(PhysicsCollider* shapeA, PhysicsCollider* shapeB)
+bool EventListenerPhysicsContactWithGroup::hitTest(Collider2D* shapeA, Collider2D* shapeB)
 {
     if (shapeA->getGroup() == _group || shapeB->getGroup() == _group)
     {
@@ -446,4 +447,4 @@ EventListenerPhysicsContactWithGroup* EventListenerPhysicsContactWithGroup::clon
 }
 
 }  // namespace ax
-#endif  // defined(AX_ENABLE_PHYSICS)
+#endif  // defined(AX_ENABLE_PHYSICS_2D)
