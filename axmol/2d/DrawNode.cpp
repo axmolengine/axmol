@@ -485,8 +485,7 @@ void DrawNode::drawRect(const Vec2& p1,
 
 void DrawNode::drawRect(const Vec2& origin, const Vec2& destination, const Color& color, float thickness)
 {
-    Vec2 line[5] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
-    _drawPoly(line, 5, false, color, thickness, true);
+    _drawRect( origin, destination, color, thickness);
 }
 
 void DrawNode::drawSegment(const Vec2& from,
@@ -530,8 +529,19 @@ void DrawNode::drawSolidRect(const Vec2& origin,
                              float thickness,
                              const Color& borderColor)
 {
-    Vec2 _vertices5[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
-    _drawPolygon(_vertices5, 5, fillColor, borderColor, false, thickness, true);
+    auto _origin = origin;
+    auto _destination = destination;
+    if (borderColor.a)
+    {
+        _origin += Vec2(thickness,thickness);
+        _destination -= Vec2(thickness, thickness);
+        _drawRect(origin, destination, fillColor, thickness);
+    }
+    _drawSegment(origin, destination, fillColor, thickness);
+    //    _drawFilledRect(_origin, _destination, borderColor);
+
+    //Vec2 _vertices5[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
+    //_drawPolygon(_vertices5, 5, fillColor, borderColor, false, thickness, true);
 }
 
 void DrawNode::drawSolidPoly(const Vec2* poli,
@@ -902,6 +912,48 @@ void DrawNode::_drawPoly(const Vec2* verts,
     {
         _drawPolygon(verts, count, Color(), color, closedPolygon, thickness, isconvex);
     }
+}
+
+void DrawNode::_drawRect(const Vec2& origin, const Vec2& destination, const Color& color, float thickness)
+{
+    if (thickness == 1.0f && !_preserveDrawOrder)
+    {
+        Vec2 line[5] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
+        _drawPoly(line, 5, false, color, thickness, true);
+     //   _drawLine(from, to, color);  // fastest way to draw a line
+    }
+    else
+    {
+        float width      = thickness * _thicknessScale * 0.25f * 0.5f;
+        float _thickness = thickness;// * 0.5f;
+        _drawSegment(Vec2(origin.x + width, destination.y), Vec2(destination.x - width, destination.y), color,
+                     _thickness, DrawNode::Butt, DrawNode::Butt);
+        _drawSegment(Vec2(origin.x + width, origin.y), Vec2(destination.x - width, origin.y), color,
+                     _thickness, DrawNode::Butt, DrawNode::Butt);
+        _drawSegment(destination, Vec2(destination.x, origin.y), color, _thickness, DrawNode::Square,
+                     DrawNode::Square);
+        _drawSegment(origin, Vec2(origin.x, destination.y), color, _thickness, DrawNode::Square, DrawNode::Square);
+    }
+}
+void DrawNode::_drawFilledRect(const Vec2& origin, const Vec2& destination, const Color& color)
+{
+    unsigned int vertex_count = 2 * 3;
+    auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, vertex_count));
+    _trianglesDirty = true;
+
+    auto _destination = (destination);
+
+
+     Vec2 n = ((origin - destination).getPerp()).getNormalized();
+
+
+    V2F_T2F_C4F a = {origin, Vec2::ZERO, color};
+    V2F_T2F_C4F b = {Vec2(origin.x, destination.y), Vec2::ZERO, color};
+    V2F_T2F_C4F c = {destination, Vec2::ZERO, color};
+    V2F_T2F_C4F d = {Vec2(destination.x, origin.y), Vec2::ZERO, color};
+
+    triangles[0] = {a, b, c};
+    triangles[1] = {a, c, d};
 }
 
 void DrawNode::_drawSegment(const Vec2& from,

@@ -616,6 +616,12 @@ private:
     // Internal function _drawLine
     void _drawLine(const Vec2& from, const Vec2& to, const Color& color);
 
+    // Internal function _drawRect
+    void _drawRect(const Vec2& origin, const Vec2& destination, const Color& color, float thickness = 1.0f);
+
+    // Internal function _drawFilledRect
+    void _drawFilledRect(const Vec2& origin, const Vec2& destination, const Color& color);
+
     // Internal function _drawSegment
     void _drawSegment(const Vec2& origin,
                       const Vec2& destination,

@@ -1467,16 +1467,19 @@ DrawNodeBaseTest::DrawNodeBaseTest()
         drawNode = DrawNode::create();
         drawNode->setLocalTransformEnabled(true);
         addChild(drawNode);
-
-        ns        = drawNode->getScale();
-        ps        = drawNode->getLocalScale();
-        pf        = drawNode->getThicknessScale();
-        thickness = 1;
-        pa        = drawNode->getLocalRotation();
-        as        = 0;
-        ae        = 200;
-        drawOrder = true;
-        transform = false;
+        drawNode->resetAdvancedSettings();
+        thickness         = 1;
+        _drawOrder        = drawNode->isPreserveDrawOrder();
+        _transform        = drawNode->isLocalTransformEnabled();
+        _nodeScale        = drawNode->getScale();
+        _localeScale      = drawNode->getLocalScale();
+        _localeThickScale = drawNode->getThicknessScale();
+        _localeRotation   = drawNode->getLocalRotation();
+        _angelStart       = 0;
+        _angelEnd         = 200;
+        _count            = 1;
+        _color            = 3;
+        _transparent      = false;
     }
 }
 
@@ -1517,49 +1520,75 @@ void DrawNodeBaseTest::onDrawImGui()
 {
     if (flagGUI != -1)
     {
-        if (ImGui::Begin("DrawNode::AdvancedSettings Dialog"))
+        if (ImGui::Begin("DrawNode::AdvancedSettings Dialog", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
         {
             if (flagGUI == 1)
             {
                 const char* items[drawMethodes::LAST];
                 int i = 0;
                 for (i; i < (drawMethodes::LAST); i++)
-                {
                     items[i] = drawMethods[i].c_str();
-                }
                 ImGui::Combo("##", &_currentSeletedItemIndex, items, i);
+                ImGui::SameLine();
+                if (ImGui::RadioButton("1", _count == 1))
+                    _count = 1;
+                ImGui::SameLine();
+                if (ImGui::RadioButton("10", _count == 10))
+                    _count = 10;
+                ImGui::SameLine();
+                if (ImGui::RadioButton("30", _count == 30))
+                    _count = 30;
+                ImGui::SameLine();
+                if (ImGui::RadioButton("100", _count == 100))
+                    _count = 100;
+                if (ImGui::RadioButton("RED", _color == 0))
+                    _color = 0;
+                ImGui::SameLine();
+                if (ImGui::RadioButton("GREEN", _color == 1))
+                    _color = 1;
+                ImGui::SameLine();
+                if (ImGui::RadioButton("BLUE", _color == 2))
+                    _color = 2;
+                ImGui::SameLine();
+                if (ImGui::RadioButton("Colorful", _color == 3))
+                    _color = 3;
+                ImGui::SameLine();
+                ImGui::Checkbox("Transparent", &_transparent);
             }
-            float _po[2] = {po.x, po.y};
-            ImGui::BeginDisabled();
-            ImGui::DragFloat2("Position", _po);
-            ImGui::EndDisabled();
+            ImGui::SliderFloat("Node::Scale", &_nodeScale, -10.0f, 10.0f);
             ImGui::SliderFloat("Thickness", &thickness, 0.0f, 10.0f);
-            ImGui::SliderFloat("Factor", &pf, 0.0f, 10.0f);
-            ImGui::SliderFloat("Node::Scale", &ns, 0.0f, 10.0f);
-            ImGui::Checkbox("drawOrder", &drawOrder);
+            ImGui::SliderFloat("Local Thickness Scale", &_localeThickScale, -10.0f, 10.0f);
+            ImGui::Checkbox("PreserveDrawOrder", &_drawOrder);
             ImGui::SameLine();
-            ImGui::Checkbox("transform", &transform);
+            ImGui::Checkbox("Local Transform", &_transform);
             ImGui::SameLine();
             if (ImGui::Button("Reset AdvancedSettings"))
             {
                 drawNode->resetAdvancedSettings();
-                drawOrder = drawNode->isPreserveDrawOrder();
-                transform = drawNode->isLocalTransformEnabled();
-                pa        = drawNode->getLocalRotation();
-                ps        = drawNode->getLocalScale();
+                _drawOrder      = drawNode->isPreserveDrawOrder();
+                _transform      = drawNode->isLocalTransformEnabled();
+                _localeRotation = drawNode->getLocalRotation();
+                _localeScale    = drawNode->getLocalScale();
             }
-
-            float _ps[2] = {ps.x, ps.y};
-            ImGui::DragFloat2("Scale", _ps);
-            ps = Vec2(_ps[0], _ps[1]);
-            ImGui::SliderFloat("Angle", &pa, 0.0f, 360.0f);
-
+            if (!_transform)
+                ImGui::BeginDisabled();
+            float _lo[2] = {_localePos.x, _localePos.y};
+            ImGui::DragFloat2("Local Position", _lo,1,0,500); // 500 enough for test
+            _localePos   = Vec2(_lo[0], _lo[1]);
+            float _lp[2] = {_localePivot.x, _localePivot.y};
+            ImGui::DragFloat2("Local Pivot", _lp, 1, 0, 500); // 500 enough for test
+            _localePivot = Vec2(_lp[0], _lp[1]);
+            float _ls[2] = {_localeScale.x, _localeScale.y};
+            ImGui::DragFloat2("Local Scale", _ls, 0.1f, -10.0f, 10.0f);
+            _localeScale = Vec2(_ls[0], _ls[1]);
+            ImGui::SliderFloat("Local Rotation", &_localeRotation, 0.0f, 360.0f);
+            if (!_transform)
+                ImGui::EndDisabled();  
             if (flagGUI == 2)
             {
-                ImGui::SliderFloat("Angle Start", &as, 0.0f, 360.0f);
-                ImGui::SliderFloat("Angle End", &ae, 0.0f, 360.0f);
+                ImGui::SliderFloat("Angle Start", &_angelStart, 0.0f, 360.0f);
+                ImGui::SliderFloat("Angle End", &_angelEnd, 0.0f, 360.0f);
             }
-
             ImGui::End();
         }
     }
@@ -1799,12 +1828,12 @@ void DrawNodeMorphTest_Polygon::update(float dt)
             state[n] = !state[n];
         }
 
-        drawNodeArray[n]->setLocalTransformEnabled(transform);
-        drawNodeArray[n]->setPreserveDrawOrder(drawOrder);
-        drawNodeArray[n]->setLocalScale(ps);
-        drawNodeArray[n]->setThicknessScale(pf);
-        drawNodeArray[n]->setLocalRotation(pa);
-        drawNodeArray[n]->setLocalRotation(pa);
+        drawNodeArray[n]->setLocalTransformEnabled(_transform);
+        drawNodeArray[n]->setPreserveDrawOrder(_drawOrder);
+        drawNodeArray[n]->setLocalScale(_localeScale);
+        drawNodeArray[n]->setThicknessScale(_localeThickScale);
+        drawNodeArray[n]->setLocalRotation(_localeRotation);
+        drawNodeArray[n]->setLocalRotation(_localeRotation);
         drawNodeArray[n]->drawPoly(verticesObjMorph[n], segments, true, color[n], thickness);
     }
 }
@@ -1826,7 +1855,7 @@ string DrawNodeMorphTest_Polygon::subtitle() const
 
 DrawNodePictureTest::DrawNodePictureTest()
 {
-    ns = 0.4;
+    _nodeScale = 0.4;
     scheduleUpdate();
 }
 
@@ -1874,7 +1903,7 @@ void DrawNodePictureTest::update(float dt)
             vertices[n - 3] = Vec2(sph_xx[sph_la + n], sph_yy[sph_la + n]);
         }
         drawNode->setPosition(Vec2(420, 280));
-        drawNode->setScale(ns);
+        drawNode->setScale(_nodeScale);
         drawNode->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
         drawNode->setRotation(180);
         drawNode->setLocalPivot(vertices[0]);
@@ -1987,12 +2016,12 @@ void DrawNodeLineDrawTest::update(float dt)
     drawNode->clear();
 
     flagGUI = 0;
-    drawNode->setScale(ns);
-    drawNode->setLocalScale(ps);
-    drawNode->setThicknessScale(pf);
-    drawNode->setLocalRotation(pa);
-    drawNode->setPreserveDrawOrder(drawOrder);
-    drawNode->setLocalTransformEnabled(transform);
+    drawNode->setScale(_nodeScale);
+    drawNode->setLocalScale(_localeScale);
+    drawNode->setThicknessScale(_localeThickScale);
+    drawNode->setLocalRotation(_localeRotation);
+    drawNode->setPreserveDrawOrder(_drawOrder);
+    drawNode->setLocalTransformEnabled(_transform);
 
     float segments   = 36.0f;
     int radius       = 100;
@@ -2426,32 +2455,32 @@ void DrawNodePieTest::update(float dt)
 
     drawNode->clear();
 
-    drawNode->setScale(ns);
-    drawNode->setLocalScale(ps);
-    drawNode->setThicknessScale(pf);
-    drawNode->setLocalRotation(pa);
-    drawNode->setPreserveDrawOrder(drawOrder);
-    drawNode->setLocalTransformEnabled(transform);
+    drawNode->setScale(_nodeScale);
+    drawNode->setLocalScale(_localeScale);
+    drawNode->setThicknessScale(_localeThickScale);
+    drawNode->setLocalRotation(_localeRotation);
+    drawNode->setPreserveDrawOrder(_drawOrder);
+    drawNode->setLocalTransformEnabled(_transform);
 
     // Filled
-    drawNode->drawPie(VisibleRect::center() - Vec2(190.0f, -35.0f), 40, pa, as, ae, 1.0f, 1.0f, Color::RED, Color::BLUE,
-                      drawNode->DrawMode::Fill, thickness);
+    drawNode->drawPie(VisibleRect::center() - Vec2(190.0f, -35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
+                      1.0f, Color::RED, Color::BLUE, drawNode->DrawMode::Fill, thickness);
 
     // Outlined
-    drawNode->drawPie(VisibleRect::center() - Vec2(95.0f, -35.0f), 40, pa, as, ae, 1.0f, 1.0f, Color(), Color::BLUE,
-                      drawNode->DrawMode::Outline, thickness);
+    drawNode->drawPie(VisibleRect::center() - Vec2(95.0f, -35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
+                      1.0f, Color(), Color::BLUE, drawNode->DrawMode::Outline, thickness);
 
     // Line
-    drawNode->drawPie(VisibleRect::center() + Vec2(0.0f, 35.0f), 40, pa, as, ae, 1.0f, 1.0f, Color(), Color::BLUE,
-                      drawNode->DrawMode::Line, thickness);
+    drawNode->drawPie(VisibleRect::center() + Vec2(0.0f, 35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
+                      1.0f, Color(), Color::BLUE, drawNode->DrawMode::Line, thickness);
 
     //  Semi
-    drawNode->drawPie(VisibleRect::center() + Vec2(95.0f, 35.0f), 40, pa, as, ae, 1.0f, 1.0f, Color(), Color::BLUE,
-                      drawNode->DrawMode::Semi, thickness);
+    drawNode->drawPie(VisibleRect::center() + Vec2(95.0f, 35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
+                      1.0f, Color(), Color::BLUE, drawNode->DrawMode::Semi, thickness);
 
     // Semi (Filled)
-    drawNode->drawPie(VisibleRect::center() + Vec2(190.0f, 35.0f), 40, pa, as, ae, 1.0f, 1.0f, Color::RED, Color::BLUE,
-                      drawNode->DrawMode::Semi, thickness);
+    drawNode->drawPie(VisibleRect::center() + Vec2(190.0f, 35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
+                      1.0f, Color::RED, Color::BLUE, drawNode->DrawMode::Semi, thickness);
 }
 
 void DrawNodePieTest::onEnter()
@@ -2474,7 +2503,7 @@ DrawNodeMethodsTest::DrawNodeMethodsTest()
     static const float BUTTON_WIDTH = 30;
     static float startPosX          = 0;
 
-    drawNode->setScale(ns);
+    drawNode->setScale(_nodeScale);
     drawNode->setPosition(center);
 
     labelRound = Label::createWithTTF("DrawNode::Round", "fonts/arial.ttf", 12);
@@ -2501,14 +2530,14 @@ void DrawNodeMethodsTest::onEnter()
     flagGUI = 1;
 }
 
-std::string DrawNodeMethodsTest::title() const
+string DrawNodeMethodsTest::title() const
 {
-    return "DrawNode properties. Tests";
+    return "draw<Primitive> Full Test";
 }
 
 string DrawNodeMethodsTest::subtitle() const
 {
-    return "Scale,Factor,Thickness,Rotation,DrawOrder,Transform";
+    return "Thickness,Scales,Rotation,Positions,DrawOrder,Transform";
 }
 
 void DrawNodeMethodsTest::drawAll()
@@ -2516,18 +2545,38 @@ void DrawNodeMethodsTest::drawAll()
     static float rotation = 0.1f;
     rotation += 0.1;
     if (rotation > 62.8f)
-    {
         rotation = 0.0f;
+
+    Color color = Color::WHITE;
+    switch (_color)
+    {
+    case 0:
+        color = Color::RED;
+        break;
+    case 1:
+        color = Color::GREEN;
+        break;
+    case 2:
+        color = Color::BLUE;
+        break;
+    case 3:
+        color = Color::random().withAlpha(1.0f);
+        break;
+    default:
+        break;
     }
+    if (_transparent)
+      color -= Color(0, 0, 0, 0.5f);
+
 
     drawNode->clear();
 
-    drawNode->setScale(ns);
-    drawNode->setLocalScale(ps);
-    drawNode->setThicknessScale(pf);
-    drawNode->setLocalRotation(pa);
-    drawNode->setPreserveDrawOrder(drawOrder);
-    drawNode->setLocalTransformEnabled(transform);
+    drawNode->setScale(_nodeScale);
+    drawNode->setLocalScale(_localeScale);
+    drawNode->setThicknessScale(_localeThickScale);
+    drawNode->setLocalRotation(_localeRotation);
+    drawNode->setPreserveDrawOrder(_drawOrder);
+    drawNode->setLocalTransformEnabled(_transform);
 
     labelRound->setVisible(false);
     labelSquare->setVisible(false);
@@ -2537,32 +2586,41 @@ void DrawNodeMethodsTest::drawAll()
     {
     case drawMethodes::Line:
     {
-        for (int i = 0; i < 30; i++)
+        for (int i = 0; i < _count; i++)
         {
             float yPos = -size.y / 2.5 + i * 11;
-            drawNode->drawLine(Vec2(-size.x / 2, yPos), Vec2(size.x - 50, yPos), Color::random().withAlpha(1.0f),
-                               thickness);
+            drawNode->drawLine(Vec2(-size.x / 2, yPos), Vec2(size.x - 50, yPos), color, thickness);
         }
 
         break;
     }
     case drawMethodes::Rect:
     {
-        Vec2 rec;
-        for (int i = 0; i < 100; i++)
+        // start settings
+        static float ts = 2.0f;
+        static float ss = 1.5f;
+
+        drawNode->setScale(ss);
+        drawNode->setPosition(80, 30);
+        drawNode->setThicknessScale(ts);
+        drawNode->setLocalPivot(Vec2(center.x * 0.5f * _localeScale.x, center.y * 0.5f * _localeScale.y));
+        drawNode->drawDot(drawNode->getLocalPivot(), 3, Color::RED);
+        for (int i = 0; i < _count; i++)
         {
-            rec = Vec2(i * 3, i * 3);
+            Vec2 rec = Vec2(i * 3, i * 3);
             drawNode->drawRect(center / 2 - rec, center / 2 + rec, Color::random().withAlpha(1.0f), thickness);
         }
+        ts = _localeThickScale;
+        ss = _nodeScale;
 
         break;
     }
     case drawMethodes::Circle:
     {
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < _count; i++)
         {
             drawNode->drawCircle(VisibleRect::center(), 3 * i, AX_DEGREES_TO_RADIANS(90), i, false, 1.0f, 1.0f,
-                                 Color::random().withAlpha(1.0f), thickness);
+                                 color, thickness);
         }
 
         break;
@@ -2694,10 +2752,10 @@ void DrawNodeMethodsTest::drawAll()
         drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color::RED, thickness);
 
         drawNode->setLocalPosition(Vec2(0, -300));
-        drawNode->setLocalRotation(pa);
+        drawNode->setLocalRotation(_localeRotation);
         drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color::GREEN, thickness);
         drawNode->setLocalPosition(Vec2(-100, -300));
-        drawNode->setLocalRotation(pa);
+        drawNode->setLocalRotation(_localeRotation);
         drawNode->setLocalPivot(vertices1[0]);
         drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color::MAGENTA, thickness);
         drawNode->setLocalPosition(Vec2(200, 0));
@@ -2719,11 +2777,11 @@ void DrawNodeMethodsTest::drawAll()
     case drawMethodes::Polygon:
     {
         drawNode->setLocalPosition(Vec2(0, -300));
-        drawNode->setLocalRotation(pa);
+        drawNode->setLocalRotation(_localeRotation);
         drawNode->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color::GREEN, thickness,
                               Color::YELLOW);
         drawNode->setLocalPosition(Vec2(-100, -300));
-        drawNode->setLocalRotation(pa);
+        drawNode->setLocalRotation(_localeRotation);
         drawNode->setLocalPivot(vertices1[0]);
         drawNode->drawPolygon(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), Color::MAGENTA, thickness,
                               Color::GRAY);
@@ -2753,26 +2811,26 @@ void DrawNodeMethodsTest::drawAll()
     }
     case drawMethodes::Dot:
     {
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < _count; i++)
         {
             drawNode->drawDot(Vec2(AXRANDOM_MINUS1_1() * 400 + 200, AXRANDOM_MINUS1_1() * 400), 20 + thickness,
-                              Color::random().withAlpha(1.0f));
+                              color);
         }
 
         break;
     }
     case drawMethodes::Point:
     {
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < _count; i++)
         {
             drawNode->drawPoint(Vec2(AXRANDOM_MINUS1_1() * 400 + 200, AXRANDOM_MINUS1_1() * 400), 30 + thickness,
-                                Color::random().withAlpha(1.0f));
+                                color);
         }
         break;
     }
     case drawMethodes::Points:
     {
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < _count; i++)
         {
             Vec2 pos        = Vec2(-100, -100) + Vec2(AXRANDOM_MINUS1_1() * VisibleRect::rightTop().x,
                                                       AXRANDOM_MINUS1_1() * VisibleRect::rightTop().y);
@@ -2785,7 +2843,7 @@ void DrawNodeMethodsTest::drawAll()
                                {70 + AXRANDOM_MINUS1_1() * VisibleRect::rightTop().x,
                                 70 + AXRANDOM_MINUS1_1() * VisibleRect::rightTop().y / 2}};
             drawNode->drawPoints(position, 4, 10 + 2 * thickness,
-                                 Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+                                 color);
         }
         break;
     }
@@ -2865,15 +2923,15 @@ void DrawNodeMethodsTest::drawAll()
 
         drawNode->drawSolidCircle(VisibleRect::center(), AXRANDOM_0_1() * 200,
                                   AX_DEGREES_TO_RADIANS(AXRANDOM_MINUS1_1() * 90), 10, 1.0f, 1.0f,
-                                  Color::random().withAlpha(1.0f), thickness, Color::random().withAlpha(1.0f));
+                                  color, thickness, Color::random().withAlpha(1.0f));
 
         drawNode->drawSolidCircle(VisibleRect::center() + pos, AXRANDOM_0_1() * 200,
                                   AX_DEGREES_TO_RADIANS(AXRANDOM_MINUS1_1() * 90), 10, 1.0f, 1.0f,
-                                  Color::random().withAlpha(1.0f), thickness, Color::random().withAlpha(1.0f));
+                                  color, thickness, Color::random().withAlpha(1.0f));
 
         drawNode->drawSolidCircle(VisibleRect::center() - pos, AXRANDOM_0_1() * 200,
                                   AX_DEGREES_TO_RADIANS(AXRANDOM_MINUS1_1() * 90), 10, 1.0f, 1.0f,
-                                  Color::random().withAlpha(1.0f), thickness, Color::random().withAlpha(1.0f));
+                                  color, thickness, Color::random().withAlpha(1.0f));
 
         // for (int i = 5; i > 1; i--)
         //{
@@ -2912,12 +2970,12 @@ void DrawNodeMethodsTest::drawAll()
     }
     case drawMethodes::SolidRect:
     {
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < _count; i++)
         {
             Vec2 pos = Vec2(-100, -100) + Vec2(AXRANDOM_MINUS1_1() * VisibleRect::rightTop().x,
                                                AXRANDOM_MINUS1_1() * VisibleRect::rightTop().y);
             drawNode->drawSolidRect(pos, pos + Vec2(20.0f * thickness, 20.0f * thickness),
-                                    Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f), thickness);
+                                    color, thickness);
         }
 
         break;
@@ -2957,7 +3015,7 @@ void DrawNodeMethodsTest::drawAll()
         drawNode->drawStar(Vec2(-150, -100), 5, 70, 3, Color::GREEN, 1.0);
 
         drawNode->setLocalRotation(0);
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < _count; i++)
         {
             Vec2 ppp = Vec2(AXRANDOM_MINUS1_1() * size.x / 2, AXRANDOM_MINUS1_1() * size.y / 2);
             drawNode->setLocalPosition(Vec2(ppp));
@@ -3000,7 +3058,7 @@ void DrawNodeMethodsTest::drawAll()
         drawNode->drawSolidStar(Vec2(-150, -100), 5, 70, 3, Color::GREEN, Color::YELLOW, 1.0);
 
         drawNode->setLocalRotation(0);
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < _count; i++)
         {
             Vec2 ppp = Vec2(AXRANDOM_MINUS1_1() * size.x / 2, AXRANDOM_MINUS1_1() * size.y / 2);
             drawNode->setLocalPosition(Vec2(ppp));
@@ -3022,12 +3080,12 @@ DrawNodeDrawInWrongOrder_Issue1888::DrawNodeDrawInWrongOrder_Issue1888()
     scheduleUpdate();
 }
 
-std::string DrawNodeDrawInWrongOrder_Issue1888::title() const
+string DrawNodeDrawInWrongOrder_Issue1888::title() const
 {
     return "Issue #1888: Drawing order";
 }
 
-std::string DrawNodeDrawInWrongOrder_Issue1888::subtitle() const
+string DrawNodeDrawInWrongOrder_Issue1888::subtitle() const
 {
     return "Red behind all. Green behind the blue/grey.\nRandom Points behind the squares. Blue is top.";
 }
@@ -3132,11 +3190,11 @@ void DrawNodeAxmolTest2::update(float dt)
     switch (selectedRadioButton)
     {
     case 0:
-        setSubtitleLabel("Axmol v2 drawOrder ON (T)");
+        setSubtitleLabel("Axmol v2 _drawOrder ON (T)");
         drawAllv2(drawNode, true);
         break;
     case 1:
-        setSubtitleLabel("Axmol v2 drawOrder OFF (T,P,L)");
+        setSubtitleLabel("Axmol v2 _drawOrder OFF (T,P,L)");
         drawAllv2(drawNode, false);
         break;
     default:
@@ -3144,9 +3202,9 @@ void DrawNodeAxmolTest2::update(float dt)
     }
 }
 
-void DrawNodeAxmolTest2::drawAllv2(DrawNode* drawNode, bool drawOrder)
+void DrawNodeAxmolTest2::drawAllv2(DrawNode* drawNode, bool _drawOrder)
 {
-    drawNode->setPreserveDrawOrder(drawOrder);
+    drawNode->setPreserveDrawOrder(_drawOrder);
 
     drawNode->drawPoint(Vec2(size.width / 2 - 120, size.height / 2 - 120), 10,
                         Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
@@ -3334,12 +3392,12 @@ DrawNodePolygonTest::DrawNodePolygonTest()
     drawNode->drawSolidPolygon(spider, sizeof(spider) / sizeof(spider[0]), Color::YELLOW, 5.0f, Color::RED);
 }
 
-std::string DrawNodePolygonTest::title() const
+string DrawNodePolygonTest::title() const
 {
     return "Polygon Test";
 }
 
-std::string DrawNodePolygonTest::subtitle() const
+string DrawNodePolygonTest::subtitle() const
 {
     return "";
 }
@@ -3370,12 +3428,12 @@ DrawNodeCircleTest::DrawNodeCircleTest()
     }
 }
 
-std::string DrawNodeCircleTest::title() const
+string DrawNodeCircleTest::title() const
 {
     return "Circle Test";
 }
 
-std::string DrawNodeCircleTest::subtitle() const
+string DrawNodeCircleTest::subtitle() const
 {
     return "Axmol,  '3...20', '48'-Corner";
 }
@@ -3386,7 +3444,7 @@ DrawNodeSolidCircleTest::DrawNodeSolidCircleTest()
 
     autoTestLabel     = Label::createWithTTF("Slow is on ", "fonts/arial.ttf", 16);
     auto autoTestItem = MenuItemLabel::create(autoTestLabel, [=](Object* sender) {
-        static std::string text = "Fast";
+        static string text = "Fast";
         if (fast)
         {
             fast = false;
@@ -3450,12 +3508,12 @@ void DrawNodeSolidCircleTest::showCircles()
     //;   drawNode->drawSolidRect(rect, (fast) ? Color::GREEN : Color::RED);
 }
 
-std::string DrawNodeSolidCircleTest::title() const
+string DrawNodeSolidCircleTest::title() const
 {
     return "SolidCircle Stress Test";
 }
 
-std::string DrawNodeSolidCircleTest::subtitle() const
+string DrawNodeSolidCircleTest::subtitle() const
 {
     return "10000 Circles";
 }
@@ -3579,12 +3637,12 @@ DrawNodeSpLinesTest::DrawNodeSpLinesTest()
     scheduleUpdate();
 }
 
-std::string DrawNodeSpLinesTest::title() const
+string DrawNodeSpLinesTest::title() const
 {
     return "Testing SpLines";
 }
 
-std::string DrawNodeSpLinesTest::subtitle() const
+string DrawNodeSpLinesTest::subtitle() const
 {
     return "";
 }
@@ -3699,12 +3757,12 @@ void DrawNodeSpLinesOpenClosedTest::onTouchesEnded(const std::vector<Touch*>& to
     }
 }
 
-std::string DrawNodeSpLinesOpenClosedTest::title() const
+string DrawNodeSpLinesOpenClosedTest::title() const
 {
     return "Testing open/closed SpLines";
 }
 
-std::string DrawNodeSpLinesOpenClosedTest::subtitle() const
+string DrawNodeSpLinesOpenClosedTest::subtitle() const
 {
     return "Tap screen to add (more) control points";
 }
@@ -3733,69 +3791,101 @@ void DrawNodeSpLinesOpenClosedTest::update(float dt)
     drawNode->drawCardinalSpline(array, 0.0f, static_cast<int>(points.size() * 20), Color::RED, 4.0f, false);
 }
 
-
 DrawNodeThickness1Test::DrawNodeThickness1Test()
 {
     // Label thickness test
-    Label* labelSize[10];
-    int y = 20;
-    for (int i = 0; i < 10; i++)
-    {
-        float fs     = (i + 1) * 3;
-        labelSize[i] = Label::createWithTTF("UNDERLINE/STRIKE...", "fonts/arial.ttf", fs);
-        labelSize[i]->setPosition(310, 300 - 50 - y);
-        y += (i + 2) * 3;
-        labelSize[i]->enableUnderline();
-        labelSize[i]->enableStrikethrough();
-        addChild(labelSize[i]);
-    }
+    // Label* labelSize[10];
+    // int y = 20;
+    // for (int i = 0; i < 10; i++)
+    //{
+    //    float fs     = (i + 1) * 3;
+    //    labelSize[i] = Label::createWithTTF("UNDERLINE/STRIKE...", "fonts/arial.ttf", fs);
+    //    labelSize[i]->setPosition(310, 300 - 50 - y);
+    //    y += (i + 2) * 3;
+    //    labelSize[i]->enableUnderline();
+    //    labelSize[i]->enableStrikethrough();
+    //    addChild(labelSize[i]);
+    //}
 
     // thickness 1
     auto drawSR1 = DrawNode::create();
     addChild(drawSR1, 10);
-    drawSR1->setPosition(Vec2(-180, -30));
-    drawSR1->drawSolidRect(Vec2(7, 7), Vec2(8, 8), Color(0.5, 1, 0.5, 1), 1.0f, Color(0, 1, 0, 1));
-    drawSR1->setScale(32);
-    drawSR1->setLocalScale({1, 1});
-    drawSR1->setThicknessScale(1);
+    drawSR1->setPosition(Vec2(0, 0));
+    drawSR1->drawSolidRect(Vec2(7, 7), Vec2(10, 10), Color(0.5f, 1, 0.5f, 0.5f), 5.0f, Color(0, 1, 0, 0.5f));
+    drawSR1->setScale(20);
 
-    auto drawR1 = DrawNode::create();
-    addChild(drawR1, 10);
-    drawR1->setPosition(Vec2(-105, -30));
-    drawR1->drawRect(Vec2(7, 7), Vec2(8, 8), Color(0, 1, 0, 1), 1.0f);
-    drawR1->setScale(32);
-    drawR1->setLocalScale({1, 1});
-    drawR1->setThicknessScale(1);
+    drawSR1->setLocalPosition(Vec2(240, 0));
+    drawSR1->drawSolidRect(Vec2(7, 7), Vec2(10, 10), Color(1.0f, 1, 0.5f, 0.5f), 2.0f, Color(0, 1, 0, 0.5f));
+    // drawSR1->setScale(20);
+    // drawSR1->setLocalScale({1, 1});
+    // drawSR1->setThicknessScale(1);
+
+    // auto drawR1 = DrawNode::create();
+    // addChild(drawR1, 10);
+    // drawR1->setPosition(Vec2(-105, -30));
+    // drawR1->drawRect(Vec2(7, 7), Vec2(8, 8), Color(0, 1, 0, 0.5f), 1.0f);
+    // drawR1->setScale(32);
+    // drawR1->setLocalScale({1, 1});
+    // drawR1->setThicknessScale(1);
+
+    //// thickness 2
+    // auto drawSR2 = DrawNode::create();
+    // addChild(drawSR2, 10);
+    // drawSR2->setPosition(Vec2(-180, -100));
+    // drawSR2->drawSolidRect(Vec2(7, 7), Vec2(8, 8), Color(0.5f, 0.5f, 1, 0.5f), 20.0f, Color(0, 0, 1, 0.5f));
+    // drawSR2->setScale(32);
+    // drawSR2->setLocalScale({1, 1});
+    // drawSR2->setThicknessScale(2);
+
+    // auto drawR2 = DrawNode::create();
+    // addChild(drawR2, 10);
+    // drawR2->setPreserveDrawOrder(false);
+    // drawR2->setPosition(Vec2(105,110));
+    // drawR2->drawRect(Vec2(7, 7), Vec2(30, 30), Color(0, 0, 1, 0.5f), 10.0f);
+
+    // auto drawR3 = DrawNode::create();
+    // addChild(drawR3, 10);
+    // drawR3->setPreserveDrawOrder(true);
+    // drawR3->setPosition(Vec2(105, 40));
+    // drawR3->drawRect(Vec2(7, 7), Vec2(50, 50), Color(0, 0, 1,0.5f), 30.0f);
+
+    // drawR2->setScale(32);
+    // drawR2->setLocalScale({1, 1});
+    // drawR2->setThicknessScale(2);
 
     // thickness 2
-    auto drawSR2 = DrawNode::create();
-    addChild(drawSR2, 10);
-    drawSR2->setPosition(Vec2(-180, -100));
-    drawSR2->drawSolidRect(Vec2(7, 7), Vec2(8, 8), Color(0.5, 0.5, 1, 1), 1.0f, Color(0, 0, 1, 1));
-    drawSR2->setScale(32);
-    drawSR2->setLocalScale({1, 1});
-    drawSR2->setThicknessScale(2);
+    drawNode->setPreserveDrawOrder(false);
+    ;
+    // drawNode->setPosition(Vec2(-180, -120));
+    drawNode->drawSolidRect(Vec2(7, 7), Vec2(80, 80), Color(1, 0.5, 0.5, 1), 1.0f, Color(1, 0, 1, 1));
+    // drawNode->setScale(32);
+    // drawNode->setLocalScale({1, 1});
 
-    auto drawR2 = DrawNode::create();
-    addChild(drawR2, 10);
-    drawR2->setPreserveDrawOrder(true);
-    drawR2->setPosition(Vec2(-105, -100));
-    drawR2->drawRect(Vec2(7, 7), Vec2(8, 8), Color(0, 0, 1, 1), 1.0f);
-    drawR2->setScale(32);
-    drawR2->setLocalScale({1, 1});
-    drawR2->setThicknessScale(2);
+    drawNode->setPreserveDrawOrder(true);
+    drawNode->setPosition(Vec2(-55, -120));
+    drawNode->drawRect(Vec2(7, 7), Vec2(8, 8), Color(1, 0, 0, 1), 1.0f);
+    // drawNode->setScale(32);
+    //  drawNode->setLocalScale({1, 1});
+    //   drawNode->setThicknessScale(2);
 
-     scheduleUpdate();
+    scheduleUpdate();
 }
 
 void DrawNodeThickness1Test::onEnter()
 {
     DrawNodeBaseTest::onEnter();
+    flagGUI = 0;
 }
 
 void DrawNodeThickness1Test::update(float dt)
 {
-
+    DrawNodeBaseTest::update(dt);
+    drawNode->setScale(_nodeScale);
+    drawNode->setLocalScale(_localeScale);
+    drawNode->setThicknessScale(_localeThickScale);
+    drawNode->setLocalRotation(_localeRotation);
+    drawNode->setPreserveDrawOrder(_drawOrder);
+    drawNode->setLocalTransformEnabled(_transform);
 }
 
 string DrawNodeThickness1Test::title() const
@@ -3807,9 +3897,6 @@ string DrawNodeThickness1Test::subtitle() const
 {
     return "plus ax::Label underline/strikethrough test";
 }
-
-
-
 
 #if defined(AX_PLATFORM_PC)
 
@@ -3847,12 +3934,12 @@ DrawNodePointTest::DrawNodePointTest()
     // scheduleUpdate();
 }
 
-std::string DrawNodePointTest::title() const
+string DrawNodePointTest::title() const
 {
     return "Performance: POINT";
 }
 
-std::string DrawNodePointTest::subtitle() const
+string DrawNodePointTest::subtitle() const
 {
     return "";
 }
@@ -3867,12 +3954,12 @@ CandyMixEeffect::CandyMixEeffect()
     scheduleUpdate();
 }
 
-std::string CandyMixEeffect::title() const
+string CandyMixEeffect::title() const
 {
     return "Performance: Candy Mix";
 }
 
-std::string CandyMixEeffect::subtitle() const
+string CandyMixEeffect::subtitle() const
 {
     return "";
 }
@@ -3941,5 +4028,5 @@ void CandyMixEeffect::update(float dt)
 #endif
 
 // #if defined(_WIN32)
-// #    pragma pop_macro("TRANSPARENT")
+// #    pragma pop_macro("TRANS_localeRotationRENT")
 // #endif
