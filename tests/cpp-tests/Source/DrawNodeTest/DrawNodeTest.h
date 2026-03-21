@@ -214,24 +214,6 @@ private:
     int segments = 40;
 };
 
-class DrawNodeThicknessTest : public DrawNodeBaseTest
-{
-public:
-    CREATE_FUNC(DrawNodeThicknessTest);
-
-    DrawNodeThicknessTest();
-
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
-
-    void update(float dt) override;
-    void onEnter() override;
-
-private:
-    ax::Label* _thicknessLabel;
-    float thickness = 1.0f;
-};
-
 class DrawNodeLineDrawTest : public DrawNodeBaseTest
 {
 public:
@@ -318,22 +300,6 @@ private:
     int selectedRadioButton;
 };
 
-class DrawNodeDrawInWrongOrder_Issue1888 : public DrawNodeBaseTest
-{
-public:
-    CREATE_FUNC(DrawNodeDrawInWrongOrder_Issue1888);
-
-    DrawNodeDrawInWrongOrder_Issue1888();
-
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
-    void update(float dt) override;
-
-private:
-    ax::Vec2* heart;
-    const int totalFrames = 240;
-};
-
 class DrawNodeAxmolTest2 : public DrawNodeBaseTest
 {
 public:
@@ -367,19 +333,6 @@ public:
 
     void update(float dt) override;
     void onEnter() override;
-};
-
-class DrawNodeThicknessStressTest : public DrawNodeBaseTest
-{
-public:
-    CREATE_FUNC(DrawNodeThicknessStressTest);
-
-    DrawNodeThicknessStressTest();
-
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
-
-    void update(float dt) override;
 };
 
 class DrawNodeSpLinesTest : public DrawNodeBaseTest
