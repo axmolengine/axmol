@@ -77,15 +77,35 @@ public:
         EDGEPOLYGEN = EDGEPOLYGON,
     };
 
-    enum CollisionBits
+    /*
+     * @see also b2Filter
+     *   @member categoryBits The collision category bits.
+     *   @member maskBits The collision mask bits.This states the categories that this shape would accept for collision.
+     *           For example, you may want your player to only collide with static objects and other players.
+     *           maskBits = Static | Player;
+     *   @member groupIndex Collision groups allow a certain group of objects to never collide (negative) or always
+     * collide (positive).
+     *
+     */
+    enum CategoryBits : uint64_t
     {
-        Static  = 0x00000001,
-        Dynamic = 0x00000002,
-        Debris  = 0x00000004,
-        Player  = 0x00000008,
+        Static  = 1,
+        Dynamic = 1 << 1,
+        Debris  = 1 << 2,
+        Player  = 1 << 3,
 
-        All = (~0u)
+        All = (~0llu)
     };
+
+    using CollisionBits   = CategoryBits;
+    using CollisionFilter = b2Filter;
+
+    static constexpr uint64_t DefaultCategoryBits = B2_DEFAULT_CATEGORY_BITS;
+    static constexpr uint64_t DefaultMaskBits     = B2_DEFAULT_MASK_BITS;
+    static constexpr uint64_t DefaultGroupIndex   = 0;
+
+    static constexpr CollisionFilter DefaultCollisionFilter =
+        CollisionFilter{DefaultCategoryBits, DefaultMaskBits, DefaultGroupIndex};
 
 public:
     /**
@@ -233,26 +253,7 @@ public:
      * @param count An integer number.
      * @return A Vec2 object.
      */
-    static Vec2 getPolygonCenter(const Vec2* points, int count);
-
-    /**
-     * Set a mask that defines which categories this physics body belongs to.
-     *
-     * Every physics body in a scene can be assigned to up to 32 different categories, each corresponding to a bit in
-     * the bit mask. You define the mask values used in your game. In conjunction with the collisionBitMask and
-     * contactTestBitMask properties, you define which physics bodies interact with each other and when your game is
-     * notified of these interactions.
-     * @param bitmask An integer number, the default value is 0xFFFFFFFF (all bits set).
-     */
-    void setCategoryBitmask(int bitmask) { _categoryBitmask = bitmask; }
-
-    /**
-     * Get a mask that defines which categories this physics body belongs to.
-     *
-     * @return An integer number.
-     */
-    int getCategoryBitmask() const { return _categoryBitmask; }
-
+    static Vec2 getPolygonCenter(std::span<const Vec2> points);
     /**
      * A mask that defines which categories of bodies cause intersection notifications with this physics body.
      *
@@ -260,16 +261,34 @@ public:
      * by performing a logical AND operation. If either comparison results in a non-zero value, an Contact2D object
      * is created and passed to the physics world’s delegate. For best performance, only set bits in the contacts mask
      * for interactions you are interested in.
-     * @param bitmask An integer number, the default value is 0x00000000 (all bits cleared).
+     * @param contactMaskBits An integer number, the default value is 0 (all bits cleared).
      */
-    void setContactTestBitmask(int bitmask) { _contactTestBitmask = bitmask; }
+    void setContactMaskBits(uint64_t contactMaskBits) { _contactMaskBits = contactMaskBits; }
 
     /**
      * Get a mask that defines which categories of bodies cause intersection notifications with this physics body.
      *
      * @return An integer number.
      */
-    int getContactTestBitmask() const { return _contactTestBitmask; }
+    uint64_t getContactMaskBits() const { return _contactMaskBits; }
+
+    /**
+     * Set a mask that defines which categories this physics body belongs to.
+     *
+     * Every physics body in a scene can be assigned to up to 64 different categories, each corresponding to a bit in
+     * the bit mask. You define the mask values used in your game. In conjunction with the collisionBits and
+     * contactTestBits properties, you define which physics bodies interact with each other and when your game is
+     * notified of these interactions.
+     * @param categoryBits An integer number, the default value is UINT64_MAX (all bits set).
+     */
+    void setCategoryBits(uint64_t categoryBits);
+
+    /**
+     * Get a mask that defines which categories this physics body belongs to.
+     *
+     * @return An integer number.
+     */
+    int getCategoryBits() const { return _collisionFilter.categoryBits; }
 
     /**
      * A mask that defines which categories of physics bodies can collide with this physics body.
@@ -279,32 +298,32 @@ public:
      * body is affected by the collision. Each body independently chooses whether it wants to be affected by the other
      * body. For example, you might use this to avoid collision calculations that would make negligible changes to a
      * body's velocity.
-     * @param bitmask An integer number, the default value is 0xFFFFFFFF (all bits set).
+     * @param maskBits An integer number, the default value is UINT64_MAX (all bits set).
      */
-    void setCollisionBitmask(int bitmask) { _collisionBitmask = bitmask; }
+    void setMaskBits(uint64_t maskBits);
 
     /**
      * Get a mask that defines which categories of physics bodies can collide with this physics body.
      *
      * @return An integer number.
      */
-    int getCollisionBitmask() const { return _collisionBitmask; }
+    uint64_t getMaskBits() const { return _collisionFilter.maskBits; }
 
     /**
      * Set the group of body.
      *
      * Collision groups let you specify an integral group index. You can have all fixtures with the same group index
      * always collide (positive index) or never collide (negative index).
-     * @param group An integer number, it have high priority than bit masks.
+     * @param groupIndex An integer number, it have high priority than bit masks.
      */
-    void setGroup(int group);
+    void setGroup(int groupIndex);
 
     /**
      * Get the group of body.
      *
      * @return An integer number.
      */
-    int getGroup() { return _group; }
+    int getGroup() const { return _collisionFilter.groupIndex; }
 
     void deatchFromBody();
 
@@ -312,6 +331,7 @@ public:
     bool isAttached() const;
 
 protected:
+    void applyFilter();
     virtual bool attachToBody(Rigidbody2D* body) = 0;
 
     /** calculate the area of this shape */
@@ -340,10 +360,10 @@ protected:
     float _newScaleY;
     PhysicsMaterial2D _material;
     int _tag;
-    int _categoryBitmask;
-    int _collisionBitmask;
-    int _contactTestBitmask;
-    int _group;
+
+    CollisionFilter _collisionFilter;
+
+    uint64_t _contactMaskBits;
 
     friend class PhysicsWorld2D;
     friend class Rigidbody2D;

@@ -122,31 +122,6 @@ public:
     b2WorldId internalHandle() const { return _b2World; }
 
     /**
-     * Remove a body from this physics world.
-     *
-     * If this world is not locked, the body is removed immediately, otherwise at next frame.
-     * @attention If this body has joints, those joints will be removed also.
-     * @param   body   A pointer to an existing Rigidbody2D object.
-     */
-    virtual void removeBody(Rigidbody2D* body);
-
-    /**
-     * Remove body by tag.
-     *
-     * If this world is not locked, the object is removed immediately, otherwise at next frame.
-     * @attention If this body has joints, those joints will be removed also.
-     * @param   tag   An integer number that identifies a Rigidbody2D object.
-     */
-    virtual void removeBody(int tag);
-
-    /**
-     * Remove all bodies from physics world.
-     *
-     * If this world is not locked, those body are removed immediately, otherwise at next frame.
-     */
-    virtual void removeAllBodies();
-
-    /**
      * Searches for physics shapes that intersects the ray.
      *
      * Query this physics world along the line segment from start to end.
@@ -232,14 +207,6 @@ public:
      *               that contain the point.
      */
     Vector<Collider2D*> overlapPointAll(const Vec2& point) const;
-
-    /**
-     * Get a body by tag.
-     *
-     * @param   tag   An integer number that identifies a Rigidbody2D object.
-     * @return A Rigidbody2D object pointer or nullptr if no shapes were found.
-     */
-    Rigidbody2D* getBody(int tag) const;
 
     /**
      * Get a scene contain this physics world.

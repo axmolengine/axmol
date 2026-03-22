@@ -65,7 +65,6 @@ Rigidbody2D::Rigidbody2D()
     , _linearDamping(0.0f)
     , _angularDamping(0.0f)
     , _angularVelocity(0.0f)
-    , _tag(0)
     , _rotationOffset(0)
     , _recordedRotation(0.0f)
     , _recordedAngle(0.0)
@@ -133,9 +132,7 @@ Rigidbody2D* Rigidbody2D::createPolygon(std::span<const Vec2> points,
     return body;
 }
 
-Rigidbody2D* Rigidbody2D::createEdgeSegment(const Vec2& a,
-                                            const Vec2& b,
-                                            const PhysicsMaterial2D& material)
+Rigidbody2D* Rigidbody2D::createEdgeSegment(const Vec2& a, const Vec2& b, const PhysicsMaterial2D& material)
 {
     Rigidbody2D* body = new Rigidbody2D();
     body->addCollider(EdgeSegmentCollider2D::create(a, b, material));
@@ -145,9 +142,7 @@ Rigidbody2D* Rigidbody2D::createEdgeSegment(const Vec2& a,
     return body;
 }
 
-Rigidbody2D* Rigidbody2D::createEdgeBox(const Vec2& size,
-                                        const PhysicsMaterial2D& material,
-                                        const Vec2& offset)
+Rigidbody2D* Rigidbody2D::createEdgeBox(const Vec2& size, const PhysicsMaterial2D& material, const Vec2& offset)
 {
     Rigidbody2D* body = new Rigidbody2D();
     body->addCollider(EdgeBoxCollider2D::create(size, material, offset));
@@ -156,8 +151,7 @@ Rigidbody2D* Rigidbody2D::createEdgeBox(const Vec2& size,
     return body;
 }
 
-Rigidbody2D* Rigidbody2D::createEdgePolygon(std::span<const Vec2> points,
-                                            const PhysicsMaterial2D& material)
+Rigidbody2D* Rigidbody2D::createEdgePolygon(std::span<const Vec2> points, const PhysicsMaterial2D& material)
 {
     Rigidbody2D* body = new Rigidbody2D();
     body->addCollider(EdgePolygonCollider2D::create(points, material));
@@ -166,8 +160,7 @@ Rigidbody2D* Rigidbody2D::createEdgePolygon(std::span<const Vec2> points,
     return body;
 }
 
-Rigidbody2D* Rigidbody2D::createEdgeChain(std::span<const Vec2> points,
-                                          const PhysicsMaterial2D& material)
+Rigidbody2D* Rigidbody2D::createEdgeChain(std::span<const Vec2> points, const PhysicsMaterial2D& material)
 {
     Rigidbody2D* body = new Rigidbody2D();
     body->addCollider(EdgeChainCollider2D::create(points, material));
@@ -179,7 +172,10 @@ Rigidbody2D* Rigidbody2D::createEdgeChain(std::span<const Vec2> points,
 bool Rigidbody2D::attachToWorld(PhysicsWorld2D* world)
 {
     if (isAttached())
+    {
+        setSleeping(false);
         return true;
+    }
 
     do
     {
@@ -611,39 +607,39 @@ void Rigidbody2D::setCollisionDetectionMode(CollisionDetectionMode mode)
         b2Body_SetBullet(_bodyId, mode == CollisionDetectionMode::Continuous);
 }
 
-void Rigidbody2D::setCategoryBitmask(int bitmask)
+void Rigidbody2D::setCategoryBits(uint64_t categoryBits)
 {
     for (auto&& collider : _colliders)
     {
-        collider->setCategoryBitmask(bitmask);
+        collider->setCategoryBits(categoryBits);
     }
 }
 
-int Rigidbody2D::getCategoryBitmask() const
+uint64_t Rigidbody2D::getCategoryBits() const
 {
     if (!_colliders.empty())
     {
-        return _colliders.front()->getCategoryBitmask();
+        return _colliders.front()->getCategoryBits();
     }
     else
     {
-        return UINT_MAX;
+        return UINT64_MAX;
     }
 }
 
-void Rigidbody2D::setContactTestBitmask(int bitmask)
+void Rigidbody2D::setContactMaskBits(uint64_t maskBits)
 {
     for (auto&& collider : _colliders)
     {
-        collider->setContactTestBitmask(bitmask);
+        collider->setContactMaskBits(maskBits);
     }
 }
 
-int Rigidbody2D::getContactTestBitmask() const
+uint64_t Rigidbody2D::getContactMaskBits() const
 {
     if (!_colliders.empty())
     {
-        return _colliders.front()->getContactTestBitmask();
+        return _colliders.front()->getContactMaskBits();
     }
     else
     {
@@ -651,19 +647,19 @@ int Rigidbody2D::getContactTestBitmask() const
     }
 }
 
-void Rigidbody2D::setCollisionBitmask(int bitmask)
+void Rigidbody2D::setCollisionMaskBits(int maskBits)
 {
     for (auto&& collider : _colliders)
     {
-        collider->setCollisionBitmask(bitmask);
+        collider->setMaskBits(maskBits);
     }
 }
 
-int Rigidbody2D::getCollisionBitmask() const
+int Rigidbody2D::getCollisionMaskBits() const
 {
     if (!_colliders.empty())
     {
-        return _colliders.front()->getCollisionBitmask();
+        return _colliders.front()->getMaskBits();
     }
     else
     {
@@ -671,11 +667,11 @@ int Rigidbody2D::getCollisionBitmask() const
     }
 }
 
-void Rigidbody2D::setGroup(int group)
+void Rigidbody2D::setGroup(int groupIndex)
 {
     for (auto&& collider : _colliders)
     {
-        collider->setGroup(group);
+        collider->setGroup(groupIndex);
     }
 }
 
@@ -699,6 +695,11 @@ void Rigidbody2D::setRotationOffset(float rotation)
         _rotationOffset = rotation;
         setRotation(rot);
     }
+}
+
+int Rigidbody2D::getTag() const
+{
+    return _owner ? _owner->getTag() : 0;
 }
 
 Vec2 Rigidbody2D::world2Local(const Vec2& point)
@@ -815,17 +816,16 @@ void Rigidbody2D::onExit()
 void Rigidbody2D::onAdd()
 {
     _owner->_rigidbody2D = this;
-
-    // component may be added after onEnter() has been invoked, so we should add
-    // this line to make sure physics body is added to physics world
-    attachToWorld();
+    if (isAttached())
+        setSleeping(false);
 }
 
 void Rigidbody2D::onRemove()
 {
     AXASSERT(_owner != nullptr, "_owner can't be nullptr");
 
-    detachFromWorld();
+    if (isAttached())
+        setSleeping(true);
 }
 
 }  // namespace ax

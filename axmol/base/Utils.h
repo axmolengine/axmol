@@ -80,7 +80,6 @@ int nextPOT(int value);
  * @param filename specify a filename where the snapshot is stored. This parameter can be either an absolute path or a
  * simple base filename ("hello.png" etc.), don't use a relative path containing directory names.("mydir/hello.png"
  * etc.).
- * @since v4.0 with axmol
  */
 AX_DLL void captureScreen(std::function<void(RefPtr<Image>)> imageCallback);
 
@@ -88,7 +87,6 @@ AX_DLL void captureScreen(std::function<void(RefPtr<Image>)> imageCallback);
  * @param startNode specify the snapshot Node. It should be ax::Scene
  * @param scale
  * @returns: return a Image, then can call saveToFile to save the image as "xxx.png or xxx.jpg".
- * @since v4.0 with axmol
  */
 AX_DLL void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallback, float scale = 1.0f);
 
@@ -99,7 +97,6 @@ AX_DLL void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imag
  * @param filename specify a filename where the snapshot is stored. This parameter can be either an absolute path or a
  * simple base filename ("hello.png" etc.), don't use a relative path containing directory names.("mydir/hello.png"
  * etc.).
- * @since v4.0
  */
 AX_DLL void captureScreen(std::function<void(bool, std::string_view)> afterCap, std::string_view filename);
 
@@ -110,9 +107,10 @@ AX_DLL void captureScreen(std::function<void(bool, std::string_view)> afterCap, 
  * @param node The node to find
  * @param name The name to search for, it supports c++ 11 expression
  * @return Array of Nodes that matches the name
- * @since v3.2
  */
 AX_DLL std::vector<Node*> findChildren(const Node& node, std::string_view name);
+
+#
 
 /** Same to ::atof, but strip the string, remain 7 numbers after '.' before call atof.
  * Why we need this? Because in android c++_static, atof ( and std::atof ) is unsupported for numbers have long decimal

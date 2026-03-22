@@ -65,10 +65,8 @@ Collider2D::Collider2D(const PhysicsMaterial2D& material)
     , _newScaleY(1.0f)
     , _material(material)
     , _tag(0)
-    , _categoryBitmask(UINT_MAX)
-    , _collisionBitmask(UINT_MAX)
-    , _contactTestBitmask(0)
-    , _group(0)
+    , _collisionFilter(DefaultCollisionFilter)
+    , _contactMaskBits(0)
 {}
 
 Collider2D::~Collider2D()
@@ -117,21 +115,6 @@ void Collider2D::setMaterial(const PhysicsMaterial2D& material)
 
         b2Body_ApplyMassFromShapes(_attachedBody->internalHandle());
     }
-}
-
-void Collider2D::setGroup(int group)
-{
-    if (group < 0)
-    {
-        const b2Filter filter{static_cast<uint64_t>(CollisionBits::All), static_cast<uint64_t>(CollisionBits::All),
-                              group};
-        for (auto&& shape : _b2Shapes)
-        {
-            // b2Shape_SetFilter(shape, filter);
-        }
-    }
-
-    _group = group;
 }
 
 bool Collider2D::containsPoint(const Vec2& point) const
@@ -212,7 +195,7 @@ void Collider2D::addShape(b2ShapeId shape)
     if (b2Shape_IsValid(shape))
     {
         b2Shape_SetUserData(shape, this);
-        // b2Shape_SetFilter(shape, b2Filter{(uint64_t)CollisionBits::All, (uint64_t)CollisionBits::All, _group});
+        b2Shape_SetFilter(shape, _collisionFilter);
         _b2Shapes.emplace_back(shape);
     }
 }
@@ -284,11 +267,50 @@ void Collider2D::recenterPoints(Vec2* points, int count, const Vec2& center)
     }
 }
 
-Vec2 Collider2D::getPolygonCenter(const Vec2* points, int count)
+Vec2 Collider2D::getPolygonCenter(std::span<const Vec2> points)
 {
-    auto centroid = b2CentroidForPoly(reinterpret_cast<const b2Vec2*>(points), count);
+    auto centroid = b2CentroidForPoly(reinterpret_cast<const b2Vec2*>(points.data()), static_cast<int>(points.size()));
 
     return PhysicsUtility2D::toVec2(centroid);
+}
+
+void Collider2D::setCategoryBits(uint64_t categoryBits)
+{
+    if (_collisionFilter.categoryBits == categoryBits)
+        return;
+
+    _collisionFilter.categoryBits = categoryBits;
+
+    applyFilter();
+}
+
+void Collider2D::setMaskBits(uint64_t maskBits)
+{
+    if (_collisionFilter.maskBits == maskBits)
+        return;
+
+    _collisionFilter.maskBits = maskBits;
+
+    applyFilter();
+}
+
+void Collider2D::setGroup(int groupIndex)
+{
+    if (_collisionFilter.groupIndex == groupIndex)
+        return;
+
+    _collisionFilter.groupIndex = groupIndex;
+
+    applyFilter();
+}
+
+void Collider2D::applyFilter()
+{
+    if (isAttached())
+    {
+        for (auto&& shape : _b2Shapes)
+            b2Shape_SetFilter(shape, _collisionFilter);
+    }
 }
 
 // CircleCollider2D

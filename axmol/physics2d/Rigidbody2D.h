@@ -297,15 +297,11 @@ public:
     Node* getNode() const { return _owner; }
 
     /**
-     * A mask that defines which categories this physics body belongs to.
+     * Return bitmask of first collider.
      *
-     * Every physics body in a scene can be assigned to up to 32 different categories, each corresponding to a bit in
-     * the bit mask. You define the mask values used in your game. In conjunction with the collisionBitMask and
-     * contactTestBitMask properties, you define which physics bodies interact with each other and when your game is
-     * notified of these interactions.
-     * @param bitmask An integer number, the default value is 0xFFFFFFFF (all bits set).
+     * @return If there is no collider in body, return default value. 0
      */
-    void setCategoryBitmask(int bitmask);
+    uint64_t getContactMaskBits() const;
 
     /**
      * A mask that defines which categories of bodies cause intersection notifications with this physics body.
@@ -314,9 +310,34 @@ public:
      * by performing a logical AND operation. If either comparison results in a non-zero value, an Contact2D object
      * is created and passed to the physics world’s delegate. For best performance, only set bits in the contacts mask
      * for interactions you are interested in.
-     * @param bitmask An integer number, the default value is 0x00000000 (all bits cleared).
+     * @param bitmask An integer number, the default value is 0 (all bits cleared).
      */
-    void setContactTestBitmask(int bitmask);
+    void setContactMaskBits(uint64_t maskBits);
+
+    /**
+     * Return bitmask of first collider.
+     *
+     * @return If there is no collider in body, return default value.(0xFFFFFFFF)
+     */
+    uint64_t getCategoryBits() const;
+
+    /**
+     * A mask that defines which categories this physics body belongs to.
+     *
+     * Every physics body in a scene can be assigned to up to 32 different categories, each corresponding to a bit in
+     * the bit mask. You define the mask values used in your game. In conjunction with the collisionBitMask and
+     * contactTestBitMask properties, you define which physics bodies interact with each other and when your game is
+     * notified of these interactions.
+     * @param categoryBits An integer number, the default value is UINT64_MAX (all bits set).
+     */
+    void setCategoryBits(uint64_t categoryBits);
+
+    /**
+     * Return bitmask of first collider.
+     *
+     * @return If there is no collider in body, return default value.(UINT64_MAX)
+     */
+    int getCollisionMaskBits() const;
 
     /**
      * A mask that defines which categories of physics bodies can collide with this physics body.
@@ -326,30 +347,9 @@ public:
      * body is affected by the collision. Each body independently chooses whether it wants to be affected by the other
      * body. For example, you might use this to avoid collision calculations that would make negligible changes to a
      * body's velocity.
-     * @param bitmask An integer number, the default value is 0xFFFFFFFF (all bits set).
+     * @param bitmask An integer number, the default value is UINT64_MAX (all bits set).
      */
-    void setCollisionBitmask(int bitmask);
-
-    /**
-     * Return bitmask of first collider.
-     *
-     * @return If there is no collider in body, return default value.(0xFFFFFFFF)
-     */
-    int getCategoryBitmask() const;
-
-    /**
-     * Return bitmask of first collider.
-     *
-     * @return If there is no collider in body, return default value.(0x00000000)
-     */
-    int getContactTestBitmask() const;
-
-    /**
-     * Return bitmask of first collider.
-     *
-     * @return If there is no collider in body, return default value.(0xFFFFFFFF)
-     */
-    int getCollisionBitmask() const;
+    void setCollisionMaskBits(int maskBits);
 
     /**
      * Set the group of body.
@@ -357,7 +357,7 @@ public:
      * Collision groups let you specify an integral group index. You can have all fixtures with the same group index
      * always collide (positive index) or never collide (negative index). It have high priority than bit masks.
      */
-    void setGroup(int group);
+    void setGroup(int groupIndex);
 
     /**
      * Return group of first collider.
@@ -464,11 +464,8 @@ public:
     /** Set the body is affected by the physics world's gravitational force or not. */
     void setGravityEnable(bool enable);
 
-    /** Get the body's tag. */
-    int getTag() const { return _tag; }
-
-    /** set the body's tag. */
-    void setTag(int tag) { _tag = tag; }
+    /** Get the body's owner tag. */
+    int getTag() const;
 
     /** Convert the world point to local. */
     Vec2 world2Local(const Vec2& point);
@@ -538,7 +535,6 @@ protected:
     float _angularDamping;
     Vec2 _linearVelocity;
     float _angularVelocity;
-    int _tag;
 
     Vec2 _positionOffset;
     float _rotationOffset;

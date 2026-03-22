@@ -230,8 +230,8 @@ bool PhysicsWorld2D::collisionBeginCallback(Contact2D& contact)
 #    endif
 
     // bitmask check
-    if ((colliderA->getCategoryBitmask() & colliderB->getContactTestBitmask()) == 0 ||
-        (colliderA->getContactTestBitmask() & colliderB->getCategoryBitmask()) == 0)
+    if ((colliderA->getCategoryBits() & colliderB->getContactMaskBits()) == 0 ||
+        (colliderA->getContactMaskBits() & colliderB->getCategoryBits()) == 0)
     {
         contact.setNotificationEnable(false);
     }
@@ -242,8 +242,8 @@ bool PhysicsWorld2D::collisionBeginCallback(Contact2D& contact)
     }
     else
     {
-        if ((colliderA->getCategoryBitmask() & colliderB->getCollisionBitmask()) == 0 ||
-            (colliderB->getCategoryBitmask() & colliderA->getCollisionBitmask()) == 0)
+        if ((colliderA->getCategoryBits() & colliderB->getMaskBits()) == 0 ||
+            (colliderB->getCategoryBits() & colliderA->getMaskBits()) == 0)
         {
             ret = false;
         }
@@ -450,26 +450,6 @@ bool PhysicsWorld2D::init(Scene* scene)
     return false;
 }
 
-void PhysicsWorld2D::removeBody(int tag) {}
-
-void PhysicsWorld2D::removeBody(Rigidbody2D* body)
-{
-    if (body->getWorld() != this)
-    {
-        AXLOGD("Physics Warning: this body doesn't belong to this world");
-        return;
-    }
-
-    body->_world = nullptr;
-}
-
-void PhysicsWorld2D::removeAllBodies() {}
-
-Rigidbody2D* PhysicsWorld2D::getBody(int tag) const
-{
-    return nullptr;
-}
-
 void PhysicsWorld2D::setGravity(const Vec2& gravity)
 {
     _gravity = gravity;
@@ -572,7 +552,6 @@ PhysicsWorld2D::PhysicsWorld2D()
 
 PhysicsWorld2D::~PhysicsWorld2D()
 {
-    removeAllBodies();
     if (b2World_IsValid(_b2World))
     {
         b2DestroyWorld(_b2World);
