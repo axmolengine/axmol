@@ -48,15 +48,17 @@ class Joint2D;
  */
 
 /**
- * A Rigidbody2D affect by physics2d.
+ * A Rigidbody2D affected by physics2d.
  *
  * It can attach one or more colliders.
- * If you create body with createXXX, it will automatically compute mass and moment with density your specified(which is
- * PHYSICS_MATERIAL_2D_DEFAULT by default, and the density value is 0.1f), and it based on the formula: mass = density
- * * area. If you create body with createEdgeXXX, the mass and moment will be physics2d::Infinity by default. And it's a
- * static body.
- * or static by use function setDynamic().
- * Note: box2d not allow change mass and moment dynamic
+ * By default, Box2D automatically computes mass and moment of inertia
+ * from the collider shapes and the specified density (default material
+ * PHYSICS_MATERIAL_2D_DEFAULT, density = 0.1f), using the formula:
+ * mass = density * area.
+ *
+ * You can also set a body static/dynamic via setDynamic().
+ *
+ * Note: Box2D does not allow changing mass or inertia dynamically once created.
  */
 class AX_DLL Rigidbody2D : public Component
 {
@@ -400,11 +402,24 @@ public:
      */
     void setBodyType(BodyType bodyType);
 
-    /** Get the body mass. */
-    float getMass() const;
+    bool isAutoMass() const { return _autoMass; }
+    void setAutoMass(bool bval);
 
-    /** Get the body moment of inertia. */
-    float getMoment() const;
+    /** Get the body mass. */
+    float getMass() const { return _mass; }
+
+    /** Set the body mass
+     * Override the body's mass properties. Normally this is computed automatically using the
+     *  shape geometry and density. This information is lost if a shape is added or removed or if the
+     *  body type changes.
+     */
+    void setMass(float mass);
+
+    /** Get the body moment of rotation inertia. */
+    float getMoment() const { return _moment; }
+
+    /** Set the body moment of rotation inertia. */
+    void setMoment(float moment);
 
     /** get linear damping. */
     float getLinearDamping() const { return _linearDamping; }
@@ -492,10 +507,11 @@ protected:
     void detachFromWorld();
 
     virtual void setPosition(float positionX, float positionY);
-
     virtual void setRotation(float rotation);
-
     virtual void setScale(float scaleX, float scaleY);
+
+    void setAutoMassDirty(bool bval) { _autoMassDirty = bval; }
+    void syncMassData();
 
     void updateDamping() { _isDamping = _linearDamping != 0.0f || _angularDamping != 0.0f; }
 
@@ -506,13 +522,13 @@ protected:
                           float rotation);
     void afterSimulation(const Mat4& parentToWorldTransform, float parentRotation);
 
-    void syncTransform();
-
-    void syncTransform(const Mat4& parentToWorldTransform,
-                                     const Mat4& nodeToWorldTransform,
-                                     float scaleX,
-                                     float scaleY,
-                                     float rotation);
+    /** Update trasnfrom from onwer node */
+    void updateTransform();
+    void forceUpdateTransform(const Mat4& parentToWorldTransform,
+                       const Mat4& nodeToWorldTransform,
+                       float scaleX,
+                       float scaleY,
+                       float rotation);
 
     Vector<Collider2D*> _colliders;
     PhysicsWorld2D* _world;
@@ -523,10 +539,16 @@ protected:
     bool _gravityEnabled;
     bool _isSleeping;
     bool _isDamping;
-    bool _autoSyncTransformComplete;
+    bool _autoMass;
+
+    // Marks mass data as dirty. When colliders are added or removed,
+    // the mass will be updated automatically. Box2D allows controlling
+    // this behavior at shape creation, but defaults to auto-update.
+    bool _autoMassDirty;
+
+    bool _transformDirty;
     CollisionDetectionMode _collisionDetection;
-    float _area;
-    float _density;
+    float _mass;
     float _moment;
     float _velocityLimit;
     float _angularVelocityLimit;

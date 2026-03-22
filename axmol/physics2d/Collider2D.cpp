@@ -57,7 +57,6 @@ static b2Vec2 b2CentroidForPoly(const b2Vec2* verts, const int count)
 
 Collider2D::Collider2D(const PhysicsMaterial2D& material)
     : _type(Type::UNKNOWN)
-    , _area(0.0f)
     , _sensor(false)
     , _scaleX(1.0f)
     , _scaleY(1.0f)
@@ -77,6 +76,7 @@ Collider2D::~Collider2D()
 bool Collider2D::attachToBody(Rigidbody2D* body)
 {
     _attachedBody = body;
+    applyMaterial();
     return true;
 }
 
@@ -100,20 +100,61 @@ bool Collider2D::isAttached() const
 
 void Collider2D::setMaterial(const PhysicsMaterial2D& material)
 {
-    setDensity(material.density, false);
-    setRestitution(material.restitution, false);
-    setFriction(material.friction, false);
+    _material = material;
 
-    if (isAttached())
+    applyMaterial();
+    _attachedBody->syncMassData();
+}
+
+void Collider2D::applyMaterial()
+{
+    if (!isAttached())
+        return;
+
+    for (auto shape : _b2Shapes)
+    {
+        b2Shape_SetDensity(shape, _material.density, false);
+        b2Shape_SetRestitution(shape, _material.restitution);
+        b2Shape_SetFriction(shape, _material.friction);
+    }
+
+    _attachedBody->setAutoMassDirty(true);
+}
+
+
+void Collider2D::setDensity(float density, bool apply)
+{
+    _material.density = std::clamp(density, physics2d::MinDensity, physics2d::MaxDensity);
+    if (apply)
+    {
+        if (_b2Shapes.empty())
+            return;
+        for (auto& shape : _b2Shapes)
+            b2Shape_SetDensity(shape, density, false);
+
+        _attachedBody->setAutoMassDirty(true);
+        _attachedBody->syncMassData();
+    }
+}
+
+void Collider2D::setRestitution(float restitution, bool apply)
+{
+    _material.restitution = std::clamp(restitution, 0.0f, physics2d::LargeClamp);
+    if (apply)
+    {
+        for (auto& shape : _b2Shapes)
+            b2Shape_SetRestitution(shape, restitution);
+    }
+}
+
+void Collider2D::setFriction(float friction, bool apply)
+{
+    _material.friction = std::clamp(friction, 0.0f, physics2d::LargeClamp);
+
+    if (apply && isAttached())
     {
         for (auto shape : _b2Shapes)
-        {
-            b2Shape_SetDensity(shape, material.density, false);
-            b2Shape_SetRestitution(shape, material.restitution);
-            b2Shape_SetFriction(shape, material.friction);
-        }
-
-        b2Body_ApplyMassFromShapes(_attachedBody->internalHandle());
+            b2Shape_SetFriction(shape, friction);
     }
 }
 
@@ -142,9 +183,6 @@ void Collider2D::setScale(float scaleX, float scaleY)
         _newScaleY = scaleY;
 
         updateScale();
-
-        // re-calculate area
-        _area = calculateArea();
     }
 }
 
@@ -197,47 +235,6 @@ void Collider2D::addShape(b2ShapeId shape)
         b2Shape_SetUserData(shape, this);
         b2Shape_SetFilter(shape, _collisionFilter);
         _b2Shapes.emplace_back(shape);
-    }
-}
-
-void Collider2D::setDensity(float density, bool apply)
-{
-    if (density < 0)
-    {
-        return;
-    }
-
-    _material.density = density;
-    if (apply)
-    {
-        for (auto& shape : _b2Shapes)
-            b2Shape_SetDensity(shape, density, false);
-
-        b2Body_ApplyMassFromShapes(_attachedBody->internalHandle());
-    }
-}
-
-void Collider2D::setRestitution(float restitution, bool apply)
-{
-    _material.restitution = restitution;
-    if (apply)
-    {
-        for (auto& shape : _b2Shapes)
-            b2Shape_SetDensity(shape, restitution, false);
-
-        b2Body_ApplyMassFromShapes(_attachedBody->internalHandle());
-    }
-}
-
-void Collider2D::setFriction(float friction, bool apply)
-{
-    _material.friction = friction;
-
-    if (apply && isAttached())
-    {
-        for (auto shape : _b2Shapes)
-            b2Shape_SetFriction(shape, friction);
-        b2Body_ApplyMassFromShapes(_attachedBody->internalHandle());
     }
 }
 
@@ -325,11 +322,10 @@ CircleCollider2D* CircleCollider2D::create(float radius,
 
 bool CircleCollider2D::attachToBody(Rigidbody2D* body)
 {
-    Collider2D::attachToBody(body);
 
     do
     {
-        if (_type == Type::CIRCLE)
+        if (isAttached())
             return true;
 
         _type = Type::CIRCLE;
@@ -338,32 +334,18 @@ bool CircleCollider2D::attachToBody(Rigidbody2D* body)
         shapeDef.isSensor = _sensor;
 
         b2Circle circle{PhysicsUtility2D::tob2Vec2(_offset), _radius};
-        auto shape = b2CreateCircleShape(_attachedBody->internalHandle(), &shapeDef, &circle);
+        auto shape = b2CreateCircleShape(body->internalHandle(), &shapeDef, &circle);
 
         AX_BREAK_IF(!b2Shape_IsValid(shape));
 
         addShape(shape);
 
-        _area = calculateArea();
+        Collider2D::attachToBody(body);
 
-        setMaterial(_material);
         return true;
     } while (false);
 
     return false;
-}
-
-float CircleCollider2D::calculateArea(float radius)
-{
-    return B2_PI * radius * radius;
-}
-
-float CircleCollider2D::calculateArea()
-{
-    if (!isAttached())
-        return 0.0f;
-    auto circle = b2Shape_GetCircle(_b2Shapes[0]);
-    return calculateArea(circle.radius);
 }
 
 float CircleCollider2D::getRadius() const
@@ -404,54 +386,27 @@ bool PolygonCollider2D::attachToBody(Rigidbody2D* body)
 {
     do
     {
-        Collider2D::attachToBody(body);
-
-        if (_type == Type::POLYGEN)
+        if (isAttached())
             return true;
+
         _type = Type::POLYGON;
 
         auto shapeDef     = b2DefaultShapeDef();
         shapeDef.isSensor = _sensor;
         auto hull         = b2ComputeHull(reinterpret_cast<const b2Vec2*>(_points.data()), _points.size());
         auto polygon      = b2MakeOffsetPolygon(&hull, PhysicsUtility2D::tob2Vec2(_offset), b2MakeRot(_radius));
-        auto shape        = b2CreatePolygonShape(_attachedBody->internalHandle(), &shapeDef, &polygon);
+        auto shape        = b2CreatePolygonShape(body->internalHandle(), &shapeDef, &polygon);
 
         AX_BREAK_IF(!b2Shape_IsValid(shape));
 
         addShape(shape);
 
-        _area = calculateArea();
-
-        setMaterial(_material);
+        Collider2D::attachToBody(body);
 
         return true;
     } while (false);
 
     return false;
-}
-
-float PolygonCollider2D::calculateArea(std::span<const Vec2> points)
-{
-    float area = 0.0f;
-    int count  = static_cast<int>(points.size());
-    for (int i = 0; i < count; ++i)
-    {
-        const auto& current = points[i];
-        const auto& next    = points[(i + 1) % count];
-        area += current.x * next.y - next.x * current.y;
-    }
-
-    return 0.5f * fabs(area);
-}
-
-float PolygonCollider2D::calculateArea()
-{
-    if (!isAttached())
-        return 0.0f;
-    auto polygon = b2Shape_GetPolygon(_b2Shapes[0]);
-    auto area =
-        calculateArea(std::span{reinterpret_cast<const Vec2*>(polygon.vertices), static_cast<size_t>(polygon.count)});
-    return area;
 }
 
 Vec2 PolygonCollider2D::getPoint(int i) const
@@ -500,9 +455,7 @@ bool BoxCollider2D::attachToBody(Rigidbody2D* body)
 {
     do
     {
-        Collider2D::attachToBody(body);
-
-        if (_type == Type::BOX)
+        if (isAttached())
             return true;
 
         _type = Type::BOX;
@@ -512,14 +465,12 @@ bool BoxCollider2D::attachToBody(Rigidbody2D* body)
         // !!!remark: should div 2 with b2MakeOffsetBox, otherwise, size will be double
         auto polygon =
             b2MakeOffsetBox(_size.x / 2, _size.y / 2, PhysicsUtility2D::tob2Vec2(_offset), b2MakeRot(_radius));
-        auto shape = b2CreatePolygonShape(_attachedBody->internalHandle(), &shapeDef, &polygon);
+        auto shape = b2CreatePolygonShape(body->internalHandle(), &shapeDef, &polygon);
         AX_BREAK_IF(!b2Shape_IsValid(shape));
 
         addShape(shape);
 
-        _area = calculateArea();
-
-        setMaterial(_material);
+        Collider2D::attachToBody(body);
 
         return true;
     } while (false);
@@ -554,22 +505,21 @@ bool EdgeSegmentCollider2D::attachToBody(Rigidbody2D* body)
 {
     do
     {
-        Collider2D::attachToBody(body);
-
-        if (_type == Type::EDGESEGMENT)
+        if (isAttached())
             return true;
+
         _type = Type::EDGESEGMENT;
 
         auto shapeDef     = b2DefaultShapeDef();
         shapeDef.isSensor = _sensor;
         b2Segment segment{PhysicsUtility2D::tob2Vec2(_pointA), PhysicsUtility2D::tob2Vec2(_pointB)};
-        auto shape = b2CreateSegmentShape(_attachedBody->internalHandle(), &shapeDef, &segment);
+        auto shape = b2CreateSegmentShape(body->internalHandle(), &shapeDef, &segment);
 
         AX_BREAK_IF(!b2Shape_IsValid(shape));
 
         addShape(shape);
 
-        setMaterial(_material);
+        Collider2D::attachToBody(body);
 
         return true;
     } while (false);
@@ -625,10 +575,9 @@ bool EdgeBoxCollider2D::attachToBody(Rigidbody2D* body)
 {
     do
     {
-        Collider2D::attachToBody(body);
-
-        if (_type == Type::EDGEBOX)
+        if (isAttached())
             return true;
+
         _type = Type::EDGEBOX;
 
         b2Vec2 vec[4] = {};
@@ -643,14 +592,14 @@ bool EdgeBoxCollider2D::attachToBody(Rigidbody2D* body)
         for (; i < 4; ++i)
         {
             b2Segment segment{vec[i], vec[(i + 1) % 4]};
-            auto shape = b2CreateSegmentShape(_attachedBody->internalHandle(), &shapeDef, &segment);
+            auto shape = b2CreateSegmentShape(body->internalHandle(), &shapeDef, &segment);
             AX_BREAK_IF(!b2Shape_IsValid(shape));
 
             addShape(shape);
         }
         AX_BREAK_IF(i < 4);
 
-        setMaterial(_material);
+        Collider2D::attachToBody(body);
 
         return true;
     } while (false);
@@ -671,10 +620,9 @@ bool EdgePolygonCollider2D::attachToBody(Rigidbody2D* body)
 {
     do
     {
-        Collider2D::attachToBody(body);
-
-        if (_type == Type::EDGEPOLYGON)
+        if (isAttached())
             return true;
+
         _type = Type::EDGEPOLYGON;
 
         auto shapeDef     = b2DefaultShapeDef();
@@ -686,7 +634,7 @@ bool EdgePolygonCollider2D::attachToBody(Rigidbody2D* body)
         {
             b2Segment segment{PhysicsUtility2D::tob2Vec2(_points[i]),
                               PhysicsUtility2D::tob2Vec2(_points[(i + 1) % count])};
-            auto shape = b2CreateSegmentShape(_attachedBody->internalHandle(), &shapeDef, &segment);
+            auto shape = b2CreateSegmentShape(body->internalHandle(), &shapeDef, &segment);
             AX_BREAK_IF(!b2Shape_IsValid(shape));
 
             addShape(shape);
@@ -694,7 +642,7 @@ bool EdgePolygonCollider2D::attachToBody(Rigidbody2D* body)
 
         AX_BREAK_IF(i < count);
 
-        setMaterial(_material);
+        Collider2D::attachToBody(body);
 
         return true;
     } while (false);
@@ -777,10 +725,9 @@ bool EdgeChainCollider2D::attachToBody(Rigidbody2D* body)
 {
     do
     {
-        Collider2D::attachToBody(body);
-
-        if (_type == Type::EDGECHAIN)
+        if (isAttached())
             return true;
+
         _type = Type::EDGECHAIN;
 
         auto shapeDef     = b2DefaultShapeDef();
@@ -790,7 +737,7 @@ bool EdgeChainCollider2D::attachToBody(Rigidbody2D* body)
         for (; i < count - 1; ++i)
         {
             b2Segment segment{PhysicsUtility2D::tob2Vec2(_points[i]), PhysicsUtility2D::tob2Vec2(_points[i + 1])};
-            auto shape = b2CreateSegmentShape(_attachedBody->internalHandle(), &shapeDef, &segment);
+            auto shape = b2CreateSegmentShape(body->internalHandle(), &shapeDef, &segment);
             AX_BREAK_IF(!b2Shape_IsValid(shape));
 
             addShape(shape);
@@ -798,7 +745,7 @@ bool EdgeChainCollider2D::attachToBody(Rigidbody2D* body)
 
         AX_BREAK_IF(i < count - 1);
 
-        setMaterial(_material);
+        Collider2D::attachToBody(body);
 
         return true;
     } while (false);

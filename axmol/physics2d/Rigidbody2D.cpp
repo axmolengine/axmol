@@ -55,13 +55,14 @@ Rigidbody2D::Rigidbody2D()
     , _gravityEnabled(true)
     , _isSleeping(false)
     , _isDamping(false)
-    , _autoSyncTransformComplete(false)
+    , _autoMass(true)
+    , _autoMassDirty(false)
+    , _transformDirty(true)
     , _collisionDetection(CollisionDetectionMode::Discrete)
-    , _area(0.0f)
-    , _density(0.0f)
-    , _moment(physics2d::DefaultMoment)
-    , _velocityLimit(physics2d::Infinity)
-    , _angularVelocityLimit(physics2d::Infinity)
+    , _mass(physics2d::MinMass)
+    , _moment(0.0f)
+    , _velocityLimit(physics2d::LargeClamp)
+    , _angularVelocityLimit(physics2d::LargeClamp)
     , _linearDamping(0.0f)
     , _angularDamping(0.0f)
     , _angularVelocity(0.0f)
@@ -198,11 +199,11 @@ bool Rigidbody2D::attachToWorld(PhysicsWorld2D* world)
         def.angularVelocity = _angularVelocity;
         def.angularDamping  = _angularDamping;
 
-        def.gravityScale = _gravityEnabled ? 1.0f : 0.0f;
-        def.isAwake      = !_isSleeping;
-        def.isBullet     = _collisionDetection == CollisionDetectionMode::Continuous;
-
-        def.userData = this;
+        def.gravityScale         = _gravityEnabled ? 1.0f : 0.0f;
+        def.isAwake              = !_isSleeping;
+        def.isBullet             = _collisionDetection == CollisionDetectionMode::Continuous;
+        def.motionLocks.angularZ = !_rotationEnabled;
+        def.userData             = this;
 
         _bodyId = b2CreateBody(_world->internalHandle(), &def);
         AX_BREAK_IF(!b2Body_IsValid(_bodyId));
@@ -214,6 +215,8 @@ bool Rigidbody2D::attachToWorld(PhysicsWorld2D* world)
         _ownerCenterOffset.x = 0.5f * contentSize.width;
         _ownerCenterOffset.y = 0.5f * contentSize.height;
         setRotationOffset(_owner->getRotation());
+
+        syncMassData();
 
         return true;
     } while (false);
@@ -273,31 +276,88 @@ void Rigidbody2D::setBodyType(BodyType bodyType)
     }
 }
 
-float Rigidbody2D::getMass() const
+void Rigidbody2D::setAutoMass(bool bval)
 {
-    return isAttached() ? b2Body_GetMass(_bodyId) : 0.0f;
+    if (_autoMass == bval)
+        return;
+
+    _autoMass = bval;
+
+    if (!isAttached())
+        return;
+
+    syncMassData();
 }
 
-float Rigidbody2D::getMoment() const
+void Rigidbody2D::setMass(float mass)
 {
-    return isAttached() ? b2Body_GetRotationalInertia(_bodyId) : 0.0f;
+    if (_autoMass)
+    {
+        AXLOGW("Rigidbody2D: Mass cannot be set on the rigid-body when it is using auto-mass.");
+        return;
+    }
+
+    _mass = std::clamp(mass, physics2d::MinMass, physics2d::MaxMass);
+    if (!isAttached())
+        return;
+
+    syncMassData();
+}
+
+void Rigidbody2D::setMoment(float moment)
+{
+    if (_autoMass)
+    {
+        AXLOGW("Rigidbody2D: Moment cannot be set on the rigid-body when it is using auto-mass.");
+        return;
+    }
+
+    _moment = std::clamp(moment, 0.0f, physics2d::LargeClamp);
+    if (!isAttached())
+        return;
+
+    syncMassData();
+}
+
+void Rigidbody2D::syncMassData()
+{
+    auto massData = b2Body_GetMassData(_bodyId);
+    if (_autoMass)
+    {
+        if (_autoMassDirty)
+        {
+            b2Body_ApplyMassFromShapes(_bodyId);
+            massData = b2Body_GetMassData(_bodyId);
+        }
+        _mass   = massData.mass;
+        _moment = massData.rotationalInertia;
+
+        _autoMassDirty = false;
+    }
+    else
+    {
+        massData.mass              = _mass;
+        massData.rotationalInertia = _moment;
+        b2Body_SetMassData(_bodyId, massData);
+
+        _autoMassDirty = true;
+    }
 }
 
 void Rigidbody2D::setRotationEnable(bool enable)
 {
-    if (_rotationEnabled != enable)
-    {
+    if (_rotationEnabled == enable)
+        return;
 
-        _rotationEnabled = enable;
+    _rotationEnabled = enable;
 
-        if (isAttached())
-        {
-            auto massData              = b2Body_GetMassData(_bodyId);
-            massData.rotationalInertia = enable ? _moment : physics2d::Infinity;
+    if (!isAttached())
+        return;
 
-            b2Body_SetMassData(_bodyId, massData);
-        }
-    }
+    auto motionLocks     = b2Body_GetMotionLocks(_bodyId);
+    const auto rotLocked = !enable;
+    if (motionLocks.angularZ != rotLocked)
+        b2Body_SetMotionLocks(_bodyId, motionLocks);
 }
 
 void Rigidbody2D::setGravityEnable(bool enable)
@@ -381,17 +441,13 @@ Collider2D* Rigidbody2D::addCollider(Collider2D* collider, bool addMassAndMoment
     // add collider to body
     if (_colliders.getIndex(collider) == -1)
     {
-        // calculate the area, mass, and density
-        // area must update before mass, because the density changes depend on it.
-        if (addMassAndMoment)
-        {
-            _area += collider->getArea();
-        }
+        _colliders.pushBack(collider);
 
         if (isAttached())
+        {
             collider->attachToBody(this);
-
-        _colliders.pushBack(collider);
+            syncMassData();
+        }
     }
 
     return collider;
@@ -546,13 +602,6 @@ void Rigidbody2D::removeCollider(Collider2D* collider, bool reduceMassAndMoment 
 {
     if (_colliders.getIndex(collider) != -1)
     {
-        // deduce the area, mass and moment
-        // area must update before mass, because the density changes depend on it.
-        if (reduceMassAndMoment)
-        {
-            _area -= collider->getArea();
-        }
-
         collider->deatchFromBody();
         _colliders.eraseObject(collider);
     }
@@ -562,13 +611,6 @@ void Rigidbody2D::removeAllColliders(bool reduceMassAndMoment /* = true*/)
 {
     for (auto&& collider : _colliders)
     {
-        // deduce the area, mass and moment
-        // area must update before mass, because the density changes depend on it.
-        if (reduceMassAndMoment)
-        {
-            _area -= collider->getArea();
-        }
-
         collider->deatchFromBody();
     }
 
@@ -726,20 +768,20 @@ float Rigidbody2D::getAngleRadians()
     return 0.0f;
 }
 
-void Rigidbody2D::syncTransform()
+void Rigidbody2D::updateTransform()
 {
-    if (_autoSyncTransformComplete)
+    if (!_transformDirty)
         return;
 
     auto parent = _owner->getParent();
     if (parent)
-        syncTransform(parent->getNodeToWorldTransform(), _owner->getNodeToWorldTransform(), _owner->getScaleX(),
-                      _owner->getScaleY(), _owner->getRotation());
+        forceUpdateTransform(parent->getNodeToWorldTransform(), _owner->getNodeToWorldTransform(), _owner->getScaleX(),
+                             _owner->getScaleY(), _owner->getRotation());
     else
-        syncTransform(Mat4::IDENTITY, _owner->getNodeToWorldTransform(), _owner->getScaleX(), _owner->getScaleY(),
-                      _owner->getRotation());
+        forceUpdateTransform(Mat4::IDENTITY, _owner->getNodeToWorldTransform(), _owner->getScaleX(),
+                             _owner->getScaleY(), _owner->getRotation());
 
-    _autoSyncTransformComplete = true;
+    _transformDirty = false;
 }
 
 void Rigidbody2D::beforeSimulation(const Mat4& parentToWorldTransform,
@@ -748,14 +790,14 @@ void Rigidbody2D::beforeSimulation(const Mat4& parentToWorldTransform,
                                    float scaleY,
                                    float rotation)
 {
-    syncTransform(parentToWorldTransform, nodeToWorldTransform, scaleX, scaleY, rotation);
+    forceUpdateTransform(parentToWorldTransform, nodeToWorldTransform, scaleX, scaleY, rotation);
 }
 
-void Rigidbody2D::syncTransform(const Mat4& parentToWorldTransform,
-                                const Mat4& nodeToWorldTransform,
-                                float scaleX,
-                                float scaleY,
-                                float rotation)
+void Rigidbody2D::forceUpdateTransform(const Mat4& parentToWorldTransform,
+                                       const Mat4& nodeToWorldTransform,
+                                       float scaleX,
+                                       float scaleY,
+                                       float rotation)
 {
     if (_recordScaleX != scaleX || _recordScaleY != scaleY)
     {
@@ -816,8 +858,14 @@ void Rigidbody2D::onExit()
 void Rigidbody2D::onAdd()
 {
     _owner->_rigidbody2D = this;
+
     if (isAttached())
+    {
         setSleeping(false);
+
+        _transformDirty = true;
+        updateTransform();
+    }
 }
 
 void Rigidbody2D::onRemove()
@@ -826,6 +874,8 @@ void Rigidbody2D::onRemove()
 
     if (isAttached())
         setSleeping(true);
+
+    _owner->_rigidbody2D = nullptr;
 }
 
 }  // namespace ax

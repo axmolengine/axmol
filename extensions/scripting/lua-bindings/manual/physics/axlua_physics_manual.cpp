@@ -1586,7 +1586,7 @@ int register_all_ax_physics_manual(lua_State* tolua_S)
     }
     lua_pop(tolua_S, 1);
 
-    tolua_constant(tolua_S, "PHYSICS_INFINITY_2D", physics2d::Infinity);
+    tolua_constant(tolua_S, "PHYSICS_INFINITY_2D", physics2d::LargeClamp);
 
     return 0;
 }

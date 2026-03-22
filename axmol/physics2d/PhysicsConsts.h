@@ -31,15 +31,13 @@ namespace ax::physics2d
 // pixels per meter
 inline constexpr float PixelsPerMeter = 10.0f;
 
-inline constexpr float Infinity = 1e5f * PixelsPerMeter;
+// same with B2_HUGE
+inline constexpr float LargeClamp = 1e5f * PixelsPerMeter;
 
 inline constexpr float LinearSlop = 0.005f;
 
 // (N)
 inline constexpr float MaxForce = 1e5f;  // |F| <= MaxForce
-
-// (N·m)
-inline constexpr float MaxTorque = 1e5f;  // |T| <= MaxTorque
 
 // (rad / deg)
 inline constexpr float MaxAngleDeg = 180.0f * 0.99f;  // Box2D v3 limit
@@ -47,14 +45,11 @@ inline constexpr float MaxAngleRad = 3.14159265359f * 0.99f;
 
 // (kg)
 inline constexpr float MaxMass = 1e6f;
-inline constexpr float MinMass = 0.f;
-
-// moment
-inline constexpr float DefaultMoment = 200.0f;
+inline constexpr float MinMass = 1e-3;
 
 // (kg/m²)
-inline constexpr float MaxDensity = 1e6f;
-inline constexpr float MinDensity = 1e-6f;
+inline constexpr float MaxDensity = 1e5f;
+inline constexpr float MinDensity = 0.0f;
 
 // (m/s)
 inline constexpr float MaxLinearVelocity  = 1e4f;

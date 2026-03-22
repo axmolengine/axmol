@@ -383,7 +383,7 @@ void PhysicsDemoLogoSmash::onEnter()
         index++;
     }
 
-    auto bullet = makeBall(Vec2(0.0f, 0.0f), 10, PhysicsMaterial2D(physics2d::Infinity, 0, 0));
+    auto bullet = makeBall(Vec2(0.0f, 0.0f), 10, PhysicsMaterial2D(physics2d::MaxDensity, 0, 0));
     bullet->getRigidbody2D()->setVelocity(Vec2(200.0f, 0.0f));
 
     bullet->setPosition(Vec2(-100.0f, VisibleRect::getVisibleRect().size.height / 2));
@@ -495,7 +495,7 @@ void PhysicsDemoPyramidStack::onEnter()
 
 void PhysicsDemoPyramidStack::updateOnce(float /*delta*/)
 {
-    auto ball = getChildByTag(100 & DRAG_BODYS_BITS);
+    auto ball = getChildByTag(100 | DRAG_BODYS_BITS);
     if (ball)
         ball->setScale(ball->getScale() * 3);
 }
@@ -1006,7 +1006,7 @@ void PhysicsDemoPump::onEnter()
     node->addComponent(nodeBody);
     nodeBody->setDynamic(false);
 
-    PhysicsMaterial2D staticMaterial(physics2d::Infinity, 0, 0.5f);
+    PhysicsMaterial2D staticMaterial(physics2d::MaxDensity, 0, 0.5f);
     nodeBody->addCollider(EdgeSegmentCollider2D::create(VisibleRect::leftTop() + Vec2(50, 0),
                                                         VisibleRect::leftTop() + Vec2(50, -130), staticMaterial));
     nodeBody->addCollider(EdgeSegmentCollider2D::create(VisibleRect::leftTop() + Vec2(190, 0),
@@ -1104,7 +1104,7 @@ void PhysicsDemoPump::update(float delta)
         }
     }
 
-    auto gear = getChildByTag(1 & DRAG_BODYS_BITS);
+    auto gear = getChildByTag(1);
     if (!gear)
         return;
 
@@ -1700,7 +1700,7 @@ void PhysicsSetGravityEnableTest::onEnter()
     addChild(box);
 
     auto ball = makeBall(Vec2(200, 200), 50);
-    ball->setTag(2 & DRAG_BODYS_BITS);
+    ball->setTag(2 | DRAG_BODYS_BITS);
     auto ballBody = ball->getRigidbody2D();
     ballBody->setGravityEnable(false);
     addChild(ball);
@@ -1710,10 +1710,14 @@ void PhysicsSetGravityEnableTest::onEnter()
 
 void PhysicsSetGravityEnableTest::onScheduleOnce(float /*delta*/)
 {
-    auto ball = getChildByTag(2 & DRAG_BODYS_BITS);
+    auto ball = getChildByTag(2 | DRAG_BODYS_BITS);
 
-    // TODO: implement Rigidbody2D::setMass
-    // ball->getRigidbody2D()->setMass
+    auto rigidbody = ball->getRigidbody2D();
+    if (rigidbody)
+    {
+        rigidbody->setAutoMass(true);
+        rigidbody->setMass(200);
+    }
 
     _physicsWorld2D->setGravity(Vec2(0, -98));
 }
@@ -1758,12 +1762,12 @@ void PhysicsDemoBug5482::onEnter()
 
     _nodeA = Sprite::create("Images/YellowSquare.png");
     _nodeA->setPosition(VisibleRect::center().x - 150, 100);
-    _nodeA->setTag(1 & DRAG_BODYS_BITS);
+    _nodeA->setTag(1 | DRAG_BODYS_BITS);
     this->addChild(_nodeA);
 
     _nodeB = Sprite::create("Images/YellowSquare.png");
     _nodeB->setPosition(VisibleRect::center().x + 150, 100);
-    _nodeB->setTag(2 & DRAG_BODYS_BITS);
+    _nodeB->setTag(2 | DRAG_BODYS_BITS);
     this->addChild(_nodeB);
 
     _body = Rigidbody2D::createBox(_nodeA->getContentSize());
@@ -1808,7 +1812,7 @@ std::string PhysicsDemoBug5482::title() const
 
 std::string PhysicsDemoBug5482::subtitle() const
 {
-    return "change physics body to the other.";
+    return "change rigid-body to the other.";
 }
 
 void PhysicsFixedUpdate::onEnter()
@@ -1899,7 +1903,7 @@ void PhysicsTransformTest::onEnter()
     _parentSprite->setScale(0.25);
     _parentSprite->addComponent(
         Rigidbody2D::createBox(_parentSprite->getContentSize(), PhysicsMaterial2D(0.1f, 1.0f, 0.0f)));
-    _parentSprite->setTag(1 & DRAG_BODYS_BITS);
+    _parentSprite->setTag(1 | DRAG_BODYS_BITS);
     _rootLayer->addChild(_parentSprite);
 
     auto leftBall = Sprite::create("Images/ball.png");
@@ -2021,7 +2025,7 @@ void PhysicsDemoPyramidStackFixedUpdate::onEnter()
     ball->setScale(1);
     auto body = Rigidbody2D::createCircle(10);
     ball->addComponent(body);
-    ball->setTag(100 & DRAG_BODYS_BITS);
+    ball->setTag(100 | DRAG_BODYS_BITS);
     ball->setPosition(VisibleRect::bottom() + Vec2(0.0f, 60.0f));
     this->addChild(ball);
 
@@ -2057,7 +2061,7 @@ void PhysicsDemoPyramidStackFixedUpdate::fixedUpdate(float delta)
     if (_delayTime >= 3.0f && !_isAddBall)
     {
         _isAddBall = true;
-        auto ball  = getChildByTag(100 & DRAG_BODYS_BITS);
+        auto ball  = getChildByTag(100 | DRAG_BODYS_BITS);
         if (ball)
             ball->setScale(ball->getScale() * 3);
     }

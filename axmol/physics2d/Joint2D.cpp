@@ -157,7 +157,7 @@ void Joint2D::configureBaseSettings(b2JointDef& jd)
     }
     else
     {
-        _attachedBody->syncTransform();
+        _attachedBody->updateTransform();
         localAnchorA = b2Body_GetLocalPoint(_attachedBody->internalHandle(), PhysicsUtility2D::tob2Vec2(_anchor));
     }
 
@@ -170,7 +170,7 @@ void Joint2D::configureBaseSettings(b2JointDef& jd)
 
         if (_connectedBody && _connectedBody->isAttached())
         {
-            _connectedBody->syncTransform();
+            _connectedBody->updateTransform();
             localAnchorB = b2Body_GetLocalPoint(_connectedBody->internalHandle(), worldAnchorA);
         }
         else
@@ -184,7 +184,7 @@ void Joint2D::configureBaseSettings(b2JointDef& jd)
 
         if (_connectedBody && _connectedBody->isAttached() && _anchorSpace == AnchorSpace::Parent)
         {
-            _connectedBody->syncTransform();
+            _connectedBody->updateTransform();
             localAnchorB = b2Body_GetLocalPoint(_connectedBody->internalHandle(), connectedAnchor);
         }
         else
@@ -196,12 +196,12 @@ void Joint2D::configureBaseSettings(b2JointDef& jd)
 
 float Joint2D::calcuateDistance(const b2Vec2& anchorA, const b2Vec2& anchorB)
 {
-    _attachedBody->syncTransform();
-    _connectedBody->syncTransform();
+    _attachedBody->updateTransform();
+    _connectedBody->updateTransform();
 
     const b2Vec2 worldAnchorA = b2Body_GetWorldPoint(_attachedBody->internalHandle(), anchorA);
     const b2Vec2 worldAnchorB = b2Body_GetWorldPoint(_connectedBody->internalHandle(), anchorB);
-    return std::clamp<float>(b2Length(b2Sub(worldAnchorB, worldAnchorA)), physics2d::LinearSlop, physics2d::Infinity);
+    return std::clamp<float>(b2Length(b2Sub(worldAnchorB, worldAnchorA)), physics2d::LinearSlop, physics2d::LargeClamp);
 }
 
 #    pragma endregion
@@ -265,7 +265,7 @@ DistanceJoint2D* DistanceJoint2D::create(Rigidbody2D* connectedBody)
 
 void DistanceJoint2D::setDamping(float damping)
 {
-    _damping = std::clamp(damping, physics2d::LinearSlop, physics2d::MaxTorque);
+    _damping = std::clamp(damping, physics2d::LinearSlop, physics2d::MaxForce);
     if (isAttached())
         b2DistanceJoint_SetSpringDampingRatio(_jointId, _damping);
 }
@@ -319,7 +319,7 @@ bool DistanceJoint2D::attachToBody()
 
 void DistanceJoint2D::setLength(float value)
 {
-    _restLength = std::clamp<float>(value, physics2d::LinearSlop, physics2d::Infinity);
+    _restLength = std::clamp<float>(value, physics2d::LinearSlop, physics2d::LargeClamp);
     if (isAttached())
         b2DistanceJoint_SetLength(_jointId, value);
 }
@@ -336,8 +336,8 @@ void DistanceJoint2D::setUseLimits(bool bval)
 
 void DistanceJoint2D::setLimits(const JointLengthLimit2D& limits)
 {
-    _limits.lowerValue = std::clamp(limits.lowerValue, physics2d::LinearSlop, physics2d::Infinity);
-    _limits.upperValue = std::clamp(limits.upperValue, physics2d::LinearSlop, physics2d::Infinity);
+    _limits.lowerValue = std::clamp(limits.lowerValue, physics2d::LinearSlop, physics2d::LargeClamp);
+    _limits.upperValue = std::clamp(limits.upperValue, physics2d::LinearSlop, physics2d::LargeClamp);
     if (_limits.lowerValue > _limits.upperValue)
         std::swap(_limits.lowerValue, _limits.upperValue);
 
@@ -825,10 +825,10 @@ MotorJoint2D::MotorJoint2D(Rigidbody2D* connectedBody) : Joint2D(connectedBody)
 
     _settings                 = b2DefaultMotorJointDef();
     _settings.maxSpringForce  = physics2d::MaxForce;
-    _settings.maxSpringTorque = physics2d::MaxTorque;
+    _settings.maxSpringTorque = physics2d::MaxForce;
 
     _settings.maxVelocityForce  = physics2d::MaxForce;
-    _settings.maxVelocityTorque = physics2d::MaxTorque;
+    _settings.maxVelocityTorque = physics2d::MaxForce;
 
     _settings.angularVelocity     = M_PI / 2.f;
     _settings.angularHertz        = 2.0f;

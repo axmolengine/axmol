@@ -123,13 +123,6 @@ public:
     Type getType() const { return _type; }
 
     /**
-     * Return this shape's area.
-     *
-     * @return A float number.
-     */
-    float getArea() const { return _area; }
-
-    /**
      * Set this shape's tag.
      *
      * @param tag An integer number that identifies a shape object.
@@ -332,10 +325,8 @@ public:
 
 protected:
     void applyFilter();
+    void applyMaterial();
     virtual bool attachToBody(Rigidbody2D* body) = 0;
-
-    /** calculate the area of this shape */
-    virtual float calculateArea() { return 0.0f; }
 
     virtual void setScale(float scaleX, float scaleY);
     virtual void updateScale();
@@ -352,7 +343,6 @@ protected:
     tlx::pod_vector<b2ShapeId> _b2Shapes;
 
     Type _type{Type::UNKNOWN};
-    float _area;
     bool _sensor;
     float _scaleX;
     float _scaleY;
@@ -387,14 +377,6 @@ public:
                                     const Vec2& offset                = Vec2(0.0f, 0.0f));
 
     /**
-     * Calculate the area of a circle with specified radius.
-     *
-     * @param radius A float number
-     * @return A float number
-     */
-    static float calculateArea(float radius);
-
-    /**
      * Get the circle's radius.
      *
      * @return A float number.
@@ -411,7 +393,6 @@ public:
 protected:
     bool attachToBody(Rigidbody2D*) override;
 
-    float calculateArea() override;
     void updateScale() override;
 
 protected:
@@ -479,7 +460,6 @@ public:
 
 protected:
     bool attachToBody(Rigidbody2D*) override;
-    float calculateArea() override;
     void updateScale() override;
 
 protected:

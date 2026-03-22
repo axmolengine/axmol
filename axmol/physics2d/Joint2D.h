@@ -58,7 +58,7 @@ struct JointAngleLimits2D
 struct JointLengthLimit2D
 {
     float lowerValue{physics2d::LinearSlop};
-    float upperValue{physics2d::Infinity};
+    float upperValue{physics2d::LargeClamp};
 };
 
 struct JointMotor2D
