@@ -422,14 +422,6 @@ public:
                                      float radius                      = 0.0f);
 
     /**
-     * Calculate the area of a polygon with specified value.
-     *
-     * @param   points A Vec2 object pointer, it is an array of Vec2.
-     * @return A float number.
-     */
-    static float calculateArea(std::span<const Vec2> points);
-
-    /**
      * Get a point of this polygon's points array.
      *
      * @param i A index of this polygon's points array.

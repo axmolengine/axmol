@@ -37,8 +37,11 @@ using namespace ax;
 
 PhysicsTests::PhysicsTests()
 {
-    // ADD_TEST_CASE(PhysicsDemoLogoSmash);
+    // Fast Test case, remove when ready to review
+    ADD_TEST_CASE(PhysicsDemoSlice);
     ADD_TEST_CASE(PhysicsDemoJoints);
+
+    // ADD_TEST_CASE(PhysicsDemoLogoSmash);
     ADD_TEST_CASE(PhysicsDemoPyramidStack);
     ADD_TEST_CASE(PhysicsDemoClickAdd);
     ADD_TEST_CASE(PhysicsDemoRayCast);
@@ -1224,6 +1227,7 @@ void PhysicsDemoSlice::onEnter()
     box->addComponent(Rigidbody2D::createPolygon(points));
     box->setPosition(VisibleRect::center());
     box->setTag(_sliceTag);
+    box->setName(fmt::format("slice-{}", ++_sliceId));
     addChild(box);
 }
 
@@ -1243,23 +1247,26 @@ bool PhysicsDemoSlice::slice(PhysicsWorld2D& /*world*/, const PhysicsRayCastInfo
         clipPoly(dynamic_cast<PolygonCollider2D*>(info.collider), normal, dist);
         clipPoly(dynamic_cast<PolygonCollider2D*>(info.collider), -normal, -dist);
 
-        info.collider->getAttachedBody()->removeFromWorld();
+        auto rigidbody = info.collider->getAttachedBody();
+        auto owner     = rigidbody->getOwner();
+        owner->removeFromParent();
+        // owner->removeComponent(rigidbody);
     }
 
     return true;
 }
 
-void PhysicsDemoSlice::clipPoly(PolygonCollider2D* shape, Vec2 normal, float distance)
+void PhysicsDemoSlice::clipPoly(PolygonCollider2D* collider, Vec2 normal, float distance)
 {
-    Rigidbody2D* body = shape->getAttachedBody();
-    int count         = shape->getPointsCount();
+    Rigidbody2D* body = collider->getAttachedBody();
+    int count         = collider->getPointsCount();
     int pointsCount   = 0;
 
     std::vector<Vec2> points(count + 1);
 
     for (int i = 0, j = count - 1; i < count; j = i, ++i)
     {
-        Vec2 a      = body->local2World(shape->getPoint(j));
+        Vec2 a      = body->local2World(collider->getPoint(j));
         float aDist = a.dot(normal) - distance;
 
         if (aDist < 0.0f)
@@ -1268,7 +1275,7 @@ void PhysicsDemoSlice::clipPoly(PolygonCollider2D* shape, Vec2 normal, float dis
             ++pointsCount;
         }
 
-        Vec2 b      = body->local2World(shape->getPoint(i));
+        Vec2 b      = body->local2World(collider->getPoint(i));
         float bDist = b.dot(normal) - distance;
 
         if (aDist * bDist < 0.0f)
@@ -1278,15 +1285,17 @@ void PhysicsDemoSlice::clipPoly(PolygonCollider2D* shape, Vec2 normal, float dis
             ++pointsCount;
         }
     }
-
-    Vec2 center          = Collider2D::getPolygonCenter(std::span{points.data(), static_cast<size_t>(pointsCount)});
+    points.resize(pointsCount);
+    Vec2 center          = Collider2D::getPolygonCenter(points);
     Node* node           = Node::create();
-    Rigidbody2D* polygon = Rigidbody2D::createPolygon(points, PHYSICS_MATERIAL_2D_DEFAULT, -center);
+    Rigidbody2D* polygon = Rigidbody2D::createPolygon(points,
+                                                      PHYSICS_MATERIAL_2D_DEFAULT, -center);
     node->setPosition(center);
     node->addComponent(polygon);
     polygon->setVelocity(body->getVelocityAtWorldPoint(center));
     polygon->setAngularVelocity(body->getAngularVelocity());
     node->setTag(_sliceTag);
+    node->setName(fmt::format("slice-{}", ++_sliceId));
     addChild(node);
 }
 
@@ -1693,7 +1702,7 @@ void PhysicsSetGravityEnableTest::onEnter()
     commonBox->getRigidbody2D()->setGravityEnable(true);
     addChild(commonBox);
 
-    auto box     = makeBox(Vec2(200, 100), Size(50, 50), 2);
+    auto box = makeBox(Vec2(200, 100), Size(50, 50), 2);
     box->setTag(DRAG_BODYS_BITS);
     auto boxBody = box->getRigidbody2D();
     boxBody->setGravityEnable(false);

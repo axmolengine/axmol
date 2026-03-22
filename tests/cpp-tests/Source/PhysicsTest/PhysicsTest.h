@@ -194,6 +194,7 @@ public:
 
 private:
     int _sliceTag;
+    int64_t _sliceId{0};
 };
 
 class PhysicsDemoBug3988 : public PhysicsDemo

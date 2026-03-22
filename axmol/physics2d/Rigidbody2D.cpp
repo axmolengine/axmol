@@ -619,7 +619,8 @@ void Rigidbody2D::removeAllColliders(bool reduceMassAndMoment /* = true*/)
 
 void Rigidbody2D::removeFromWorld()
 {
-    detachFromWorld();
+    if (_owner)
+        _owner->removeComponent(this);
 }
 
 void Rigidbody2D::setEnabled(bool enable)
