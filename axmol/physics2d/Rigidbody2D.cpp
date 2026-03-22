@@ -214,7 +214,6 @@ bool Rigidbody2D::attachToWorld(PhysicsWorld2D* world)
         auto contentSize     = _owner->getContentSize();
         _ownerCenterOffset.x = 0.5f * contentSize.width;
         _ownerCenterOffset.y = 0.5f * contentSize.height;
-        setRotationOffset(_owner->getRotation());
 
         syncMassData();
 

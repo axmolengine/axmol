@@ -38,9 +38,10 @@ using namespace ax;
 PhysicsTests::PhysicsTests()
 {
     // Fast Test case, remove when ready to review
-    ADD_TEST_CASE(PhysicsDemoPump);
 
-    // ADD_TEST_CASE(PhysicsDemoLogoSmash);
+    ADD_TEST_CASE(PhysicsDemoBug3988);
+
+    ADD_TEST_CASE(PhysicsDemoLogoSmash);
     ADD_TEST_CASE(PhysicsDemoPyramidStack);
     ADD_TEST_CASE(PhysicsDemoClickAdd);
     ADD_TEST_CASE(PhysicsDemoRayCast);
@@ -1760,7 +1761,7 @@ void PhysicsSetGravityEnableTest::onScheduleOnce(float /*delta*/)
     auto rigidbody = ball->getRigidbody2D();
     if (rigidbody)
     {
-        rigidbody->setAutoMass(true);
+        rigidbody->setAutoMass(false);
         rigidbody->setMass(200);
     }
 
