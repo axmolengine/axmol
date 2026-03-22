@@ -38,8 +38,7 @@ using namespace ax;
 PhysicsTests::PhysicsTests()
 {
     // Fast Test case, remove when ready to review
-
-    ADD_TEST_CASE(PhysicsContactTest);
+    ADD_TEST_CASE(PhysicsDemoOneWayPlatform);
 
     ADD_TEST_CASE(PhysicsDemoLogoSmash);
     ADD_TEST_CASE(PhysicsDemoPyramidStack);
@@ -1083,7 +1082,7 @@ void PhysicsDemoPump::onEnter()
 
     bgear->addComponent(PinJoint2D::create(bgear->getPosition(), worldBoxBody));
     auto motorJoint = MotorJoint2D::create(bgearBody);
-    motorJoint->setAngularVelocity(-M_PI_2);
+    motorJoint->setAngularVelocity(-90.0f);
     sgear->addComponent(motorJoint);
 
     // plugger
@@ -1226,16 +1225,25 @@ void PhysicsDemoOneWayPlatform::onEnter()
     ballBody->setVelocity(Vec2(0.0f, 150.0f));
     ball->setTag(DRAG_BODYS_BITS);
     ballBody->setContactMaskBits(0xFFFFFFFF);
+    ballBody->setPreSolveEnabled(true); // enable pre solve hook
     this->addChild(ball);
 
-    auto contactListener            = EventListenerPhysicsContactWithBodies::create(platformBody, ballBody);
-    contactListener->onContactBegin = AX_CALLBACK_1(PhysicsDemoOneWayPlatform::onContactBegin, this);
+    auto contactListener            = Contact2DListenerWithBodies::create(platformBody, ballBody);
+    contactListener->onContactPreSolve = AX_CALLBACK_1(PhysicsDemoOneWayPlatform::onContactPreSolve, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 }
 
-bool PhysicsDemoOneWayPlatform::onContactBegin(Contact2D& contact)
+bool PhysicsDemoOneWayPlatform::onContactPreSolve(Contact2D* contact)
 {
-    return contact.getContactData()->normal.y < 0;
+    // Axmol-3.0 physics2d is built on Box2D v3.
+    // In Box2D v3, the contact normal always points from shape A toward shape B.
+    // For a ball colliding with a one-way platform, a positive normal.y means
+    // the ball is above the platform (the normal points downward).
+    // In this case we return true to allow the collision.
+    // If normal.y <= 0, the ball is below the platform and the collision is ignored.
+    auto normalY = contact->getContactInfo().normal.y;
+
+    return normalY > 0;
 }
 
 std::string PhysicsDemoOneWayPlatform::title() const
@@ -1550,8 +1558,8 @@ void PhysicsContactTest::resetTest()
     wall->setPosition(VisibleRect::center());
     root->addChild(wall);
 
-    auto contactListener            = EventListenerPhysicsContact::create();
-    contactListener->onContactBegin = AX_CALLBACK_1(PhysicsContactTest::onContactBegin, this);
+    auto contactListener            = Contact2DListener::create();
+    contactListener->onContactPreSolve = AX_CALLBACK_1(PhysicsContactTest::onContactPreSolve, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
     // yellow box, will collide with itself and blue box.
@@ -1631,10 +1639,10 @@ void PhysicsContactTest::resetTest()
     }
 }
 
-bool PhysicsContactTest::onContactBegin(Contact2D& contact)
+bool PhysicsContactTest::onContactPreSolve(Contact2D* contact)
 {
-    Rigidbody2D* a    = contact.getColliderA()->getAttachedBody();
-    Rigidbody2D* b    = contact.getColliderB()->getAttachedBody();
+    Rigidbody2D* a    = contact->getColliderA()->getAttachedBody();
+    Rigidbody2D* b    = contact->getColliderB()->getAttachedBody();
     Rigidbody2D* body = (a->getCategoryBits() == 0x04 || a->getCategoryBits() == 0x08) ? a : b;
     AX_ASSERT(body->getCategoryBits() == 0x04 || body->getCategoryBits() == 0x08);
 
@@ -1677,7 +1685,7 @@ void PhysicsPositionRotationTest::onEnter()
     anchorNode->setTag(DRAG_BODYS_BITS);
     addChild(anchorNode);
 
-    anchorNode->getRigidbody2D()->setAngularVelocity(-5.0f);
+    anchorNode->getRigidbody2D()->setAngularVelocity(-286.0f);
 
     // parent test
     auto parent = Sprite::create("Images/YellowSquare.png");
@@ -1694,7 +1702,7 @@ void PhysicsPositionRotationTest::onEnter()
     leftBall->setTag(DRAG_BODYS_BITS);
     parent->addChild(leftBall);
 
-    parent->getRigidbody2D()->setAngularVelocity(5.0f);
+    parent->getRigidbody2D()->setAngularVelocity(286.0f);
 
     // offset position rotation test
     auto offsetPosNode = Sprite::create("Images/YellowSquare.png");
@@ -1706,7 +1714,7 @@ void PhysicsPositionRotationTest::onEnter()
     offsetPosNode->setTag(DRAG_BODYS_BITS);
     addChild(offsetPosNode);
 
-    offsetPosNode->getRigidbody2D()->setAngularVelocity(5.0f);
+    offsetPosNode->getRigidbody2D()->setAngularVelocity(286.0f);
 
     return;
 }

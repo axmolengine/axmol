@@ -93,6 +93,11 @@ void Joint2D::onEnter()
 
 void Joint2D::onExit()
 {
+    // before detach from body, restore body collision state
+    // OPTIMIZE: use a counter to stats disable collision times
+    if (!_collisionEnabled && isAttached())
+        _attachedBody->setCollisionEnabled(true);
+
     detachFromBody();
 }
 
@@ -146,6 +151,9 @@ void Joint2D::configureBaseSettings(b2JointDef& jd)
     jd.collideConnected = _collisionEnabled;
     jd.userData         = this;
     jd.drawScale        = _drawScale;
+
+    if (!_collisionEnabled)
+        _attachedBody->setCollisionEnabled(false);
 
     auto& localAnchorA = jd.localFrameA.p;
     auto& localAnchorB = jd.localFrameB.p;

@@ -58,6 +58,8 @@ static b2Vec2 b2CentroidForPoly(const b2Vec2* verts, const int count)
 Collider2D::Collider2D(const PhysicsMaterial2D& material)
     : _type(Type::UNKNOWN)
     , _sensor(false)
+    , _preSolveEnabled(false)
+    , _postSolveEnabled(false)
     , _scaleX(1.0f)
     , _scaleY(1.0f)
     , _newScaleX(1.0f)
@@ -84,18 +86,54 @@ void Collider2D::deatchFromBody()
 {
     if (!isAttached())
         return;
-    for (auto&& shape : _b2Shapes)
+    for (auto&& shape : _shapeIds)
     {
         if (b2Shape_IsValid(shape))
             b2DestroyShape(shape, true);
     }
-    _b2Shapes.clear();
+    _shapeIds.clear();
     _attachedBody = nullptr;
 }
 
 bool Collider2D::isAttached() const
 {
     return _attachedBody != nullptr;
+}
+
+b2ShapeDef Collider2D::prepareShapeDef() const
+{
+    auto shapeDef                 = b2DefaultShapeDef();
+    shapeDef.isSensor             = _sensor;
+    shapeDef.enablePreSolveEvents = _preSolveEnabled;
+    shapeDef.enableHitEvents      = _postSolveEnabled;
+    return shapeDef;
+}
+
+void Collider2D::setPreSolveEnabled(bool bval)
+{
+
+    if (_preSolveEnabled == bval)
+        return;
+    _preSolveEnabled = bval;
+
+    if (!isAttached())
+        return;
+
+    for (auto shapeId : _shapeIds)
+        b2Shape_EnablePreSolveEvents(shapeId, bval);
+}
+
+void Collider2D::setPostSolveEnabled(bool bval)
+{
+    if (_postSolveEnabled == bval)
+        return;
+    _postSolveEnabled = bval;
+
+    if (!isAttached())
+        return;
+
+    for (auto shapeId : _shapeIds)
+        b2Shape_EnableHitEvents(shapeId, bval);
 }
 
 void Collider2D::setMaterial(const PhysicsMaterial2D& material)
@@ -111,7 +149,7 @@ void Collider2D::applyMaterial()
     if (!isAttached())
         return;
 
-    for (auto shape : _b2Shapes)
+    for (auto shape : _shapeIds)
     {
         b2Shape_SetDensity(shape, _material.density, false);
         b2Shape_SetRestitution(shape, _material.restitution);
@@ -121,15 +159,14 @@ void Collider2D::applyMaterial()
     _attachedBody->setAutoMassDirty(true);
 }
 
-
 void Collider2D::setDensity(float density, bool apply)
 {
     _material.density = std::clamp(density, physics2d::MinDensity, physics2d::MaxDensity);
     if (apply)
     {
-        if (_b2Shapes.empty())
+        if (_shapeIds.empty())
             return;
-        for (auto& shape : _b2Shapes)
+        for (auto& shape : _shapeIds)
             b2Shape_SetDensity(shape, density, false);
 
         _attachedBody->setAutoMassDirty(true);
@@ -142,7 +179,7 @@ void Collider2D::setRestitution(float restitution, bool apply)
     _material.restitution = std::clamp(restitution, 0.0f, physics2d::LargeClamp);
     if (apply)
     {
-        for (auto& shape : _b2Shapes)
+        for (auto& shape : _shapeIds)
             b2Shape_SetRestitution(shape, restitution);
     }
 }
@@ -153,7 +190,7 @@ void Collider2D::setFriction(float friction, bool apply)
 
     if (apply && isAttached())
     {
-        for (auto shape : _b2Shapes)
+        for (auto shape : _shapeIds)
             b2Shape_SetFriction(shape, friction);
     }
 }
@@ -161,7 +198,7 @@ void Collider2D::setFriction(float friction, bool apply)
 bool Collider2D::containsPoint(const Vec2& point) const
 {
     auto b2pt = PhysicsUtility2D::tob2Vec2(point);
-    for (auto&& shape : _b2Shapes)
+    for (auto&& shape : _shapeIds)
     {
         if (b2Shape_TestPoint(shape, b2pt))
             return true;
@@ -197,7 +234,7 @@ void Collider2D::updatePolyScale()
     auto factorX = _newScaleX / _scaleX;
     auto factorY = _newScaleY / _scaleY;
 
-    auto shape   = _b2Shapes[0];
+    auto shape   = _shapeIds[0];
     auto polygon = b2Shape_GetPolygon(shape);
     auto count   = polygon.count;
     auto& verts  = polygon.vertices;
@@ -234,7 +271,7 @@ void Collider2D::addShape(b2ShapeId shape)
     {
         b2Shape_SetUserData(shape, this);
         b2Shape_SetFilter(shape, _collisionFilter);
-        _b2Shapes.emplace_back(shape);
+        _shapeIds.emplace_back(shape);
     }
 }
 
@@ -305,7 +342,7 @@ void Collider2D::applyFilter()
 {
     if (isAttached())
     {
-        for (auto&& shape : _b2Shapes)
+        for (auto&& shape : _shapeIds)
             b2Shape_SetFilter(shape, _collisionFilter);
     }
 }
@@ -330,9 +367,7 @@ bool CircleCollider2D::attachToBody(Rigidbody2D* body)
 
         _type = Type::CIRCLE;
 
-        auto shapeDef     = b2DefaultShapeDef();
-        shapeDef.isSensor = _sensor;
-
+        auto shapeDef = prepareShapeDef();
         b2Circle circle{PhysicsUtility2D::tob2Vec2(_offset), _radius};
         auto shape = b2CreateCircleShape(body->internalHandle(), &shapeDef, &circle);
 
@@ -350,23 +385,23 @@ bool CircleCollider2D::attachToBody(Rigidbody2D* body)
 
 float CircleCollider2D::getRadius() const
 {
-    return b2Shape_GetCircle(_b2Shapes[0]).radius;
+    return b2Shape_GetCircle(_shapeIds[0]).radius;
 }
 
 Vec2 CircleCollider2D::getOffset()
 {
-    return PhysicsUtility2D::toVec2(b2Shape_GetCircle(_b2Shapes[0]).center);
+    return PhysicsUtility2D::toVec2(b2Shape_GetCircle(_shapeIds[0]).center);
 }
 
 void CircleCollider2D::updateScale()
 {
     auto factor = std::abs(_newScaleX / _scaleX);
 
-    auto circle = b2Shape_GetCircle(_b2Shapes[0]);
+    auto circle = b2Shape_GetCircle(_shapeIds[0]);
     circle.center *= factor;
     circle.radius *= factor;
 
-    b2Shape_SetCircle(_b2Shapes[0], &circle);
+    b2Shape_SetCircle(_shapeIds[0], &circle);
 
     Collider2D::updateScale();
 }
@@ -391,11 +426,10 @@ bool PolygonCollider2D::attachToBody(Rigidbody2D* body)
 
         _type = Type::POLYGON;
 
-        auto shapeDef     = b2DefaultShapeDef();
-        shapeDef.isSensor = _sensor;
-        auto hull         = b2ComputeHull(reinterpret_cast<const b2Vec2*>(_points.data()), _points.size());
-        auto polygon      = b2MakeOffsetPolygon(&hull, PhysicsUtility2D::tob2Vec2(_offset), b2MakeRot(_radius));
-        auto shape        = b2CreatePolygonShape(body->internalHandle(), &shapeDef, &polygon);
+        auto shapeDef = prepareShapeDef();
+        auto hull     = b2ComputeHull(reinterpret_cast<const b2Vec2*>(_points.data()), _points.size());
+        auto polygon  = b2MakeOffsetPolygon(&hull, PhysicsUtility2D::tob2Vec2(_offset), b2MakeRot(_radius));
+        auto shape    = b2CreatePolygonShape(body->internalHandle(), &shapeDef, &polygon);
 
         AX_BREAK_IF(!b2Shape_IsValid(shape));
 
@@ -411,25 +445,25 @@ bool PolygonCollider2D::attachToBody(Rigidbody2D* body)
 
 Vec2 PolygonCollider2D::getPoint(int i) const
 {
-    auto polygon = b2Shape_GetPolygon(_b2Shapes[0]);
+    auto polygon = b2Shape_GetPolygon(_shapeIds[0]);
     return i < polygon.count ? PhysicsUtility2D::toVec2(polygon.vertices[i]) : Vec2::ZERO;
 }
 
 void PolygonCollider2D::getPoints(Vec2* outPoints) const
 {
-    auto polygon = b2Shape_GetPolygon(_b2Shapes[0]);
+    auto polygon = b2Shape_GetPolygon(_shapeIds[0]);
     memcpy(outPoints, polygon.vertices, sizeof(Vec2) * polygon.count);
 }
 
 int PolygonCollider2D::getPointsCount() const
 {
-    auto polygon = b2Shape_GetPolygon(_b2Shapes[0]);
+    auto polygon = b2Shape_GetPolygon(_shapeIds[0]);
     return polygon.count;
 }
 
 Vec2 PolygonCollider2D::getCenter()
 {
-    auto polygon = b2Shape_GetPolygon(_b2Shapes[0]);
+    auto polygon = b2Shape_GetPolygon(_shapeIds[0]);
 
     return PhysicsUtility2D::toVec2(polygon.centroid);
 }
@@ -460,8 +494,7 @@ bool BoxCollider2D::attachToBody(Rigidbody2D* body)
 
         _type = Type::BOX;
 
-        b2ShapeDef shapeDef = b2DefaultShapeDef();
-        shapeDef.isSensor   = _sensor;
+        b2ShapeDef shapeDef = prepareShapeDef();
         // !!!remark: should div 2 with b2MakeOffsetBox, otherwise, size will be double
         auto polygon =
             b2MakeOffsetBox(_size.x / 2, _size.y / 2, PhysicsUtility2D::tob2Vec2(_offset), b2MakeRot(_radius));
@@ -485,7 +518,7 @@ void BoxCollider2D::updateScale()
 
 Vec2 BoxCollider2D::getSize() const
 {
-    auto polygon = b2Shape_GetPolygon(_b2Shapes[0]);
+    auto polygon = b2Shape_GetPolygon(_shapeIds[0]);
     auto x       = b2Distance(polygon.vertices[1], polygon.vertices[2]);
     auto y       = b2Distance(polygon.vertices[0], polygon.vertices[1]);
     return PhysicsUtility2D::toVec2(b2Vec2{x, y});
@@ -510,8 +543,7 @@ bool EdgeSegmentCollider2D::attachToBody(Rigidbody2D* body)
 
         _type = Type::EDGESEGMENT;
 
-        auto shapeDef     = b2DefaultShapeDef();
-        shapeDef.isSensor = _sensor;
+        auto shapeDef = prepareShapeDef();
         b2Segment segment{PhysicsUtility2D::tob2Vec2(_pointA), PhysicsUtility2D::tob2Vec2(_pointB)};
         auto shape = b2CreateSegmentShape(body->internalHandle(), &shapeDef, &segment);
 
@@ -529,19 +561,19 @@ bool EdgeSegmentCollider2D::attachToBody(Rigidbody2D* body)
 
 Vec2 EdgeSegmentCollider2D::getPointA() const
 {
-    auto detail = b2Shape_GetSegment(_b2Shapes[0]);
+    auto detail = b2Shape_GetSegment(_shapeIds[0]);
     return PhysicsUtility2D::toVec2(detail.point1);
 }
 
 Vec2 EdgeSegmentCollider2D::getPointB() const
 {
-    auto detail = b2Shape_GetSegment(_b2Shapes[0]);
+    auto detail = b2Shape_GetSegment(_shapeIds[0]);
     return PhysicsUtility2D::toVec2(detail.point2);
 }
 
 Vec2 EdgeSegmentCollider2D::getCenter()
 {
-    auto detail = b2Shape_GetSegment(_b2Shapes[0]);
+    auto detail = b2Shape_GetSegment(_shapeIds[0]);
     return PhysicsUtility2D::toVec2((detail.point1 + detail.point2) * 0.5f);
 }
 
@@ -550,7 +582,7 @@ void EdgeSegmentCollider2D::updateScale()
     auto factorX = _newScaleX / _scaleX;
     auto factorY = _newScaleY / _scaleY;
 
-    auto shape  = _b2Shapes[0];
+    auto shape  = _shapeIds[0];
     auto detail = b2Shape_GetSegment(shape);
     detail.point1.x *= factorX;
     detail.point1.y *= factorY;
@@ -587,8 +619,7 @@ bool EdgeBoxCollider2D::attachToBody(Rigidbody2D* body)
         vec[3]        = PhysicsUtility2D::tob2Vec2(Vec2(-_size.width / 2 + _offset.x, +_size.height / 2 + _offset.y));
 
         int i               = 0;
-        b2ShapeDef shapeDef = b2DefaultShapeDef();
-        shapeDef.isSensor   = _sensor;
+        b2ShapeDef shapeDef = prepareShapeDef();
         for (; i < 4; ++i)
         {
             b2Segment segment{vec[i], vec[(i + 1) % 4]};
@@ -625,9 +656,7 @@ bool EdgePolygonCollider2D::attachToBody(Rigidbody2D* body)
 
         _type = Type::EDGEPOLYGON;
 
-        auto shapeDef     = b2DefaultShapeDef();
-        shapeDef.isSensor = _sensor;
-
+        auto shapeDef    = prepareShapeDef();
         int i            = 0;
         const auto count = static_cast<int>(_points.size());
         for (; i < count; ++i)
@@ -656,12 +685,12 @@ Vec2 EdgePolygonCollider2D::getCenter()
     // collect points then invoke b2CentroidForPoly
     b2Vec2 centroid{0.0f, 0.0f};
     float signedArea = 0.0f;
-    int count        = static_cast<int>(_b2Shapes.size());
+    int count        = static_cast<int>(_shapeIds.size());
 
     for (int i = 0; i < count; ++i)
     {
-        auto curSegment       = b2Shape_GetSegment(_b2Shapes[i]);
-        auto nextSegment      = b2Shape_GetSegment(_b2Shapes[(i + 1) % count]);
+        auto curSegment       = b2Shape_GetSegment(_shapeIds[i]);
+        auto nextSegment      = b2Shape_GetSegment(_shapeIds[(i + 1) % count]);
         const b2Vec2& current = curSegment.point1;
         const b2Vec2& next    = nextSegment.point1;
         float crossProduct    = b2Cross(current, next);
@@ -677,7 +706,7 @@ Vec2 EdgePolygonCollider2D::getCenter()
 void EdgePolygonCollider2D::getPoints(ax::Vec2* outPoints) const
 {
     int i = 0;
-    for (auto&& shape : _b2Shapes)
+    for (auto&& shape : _shapeIds)
     {
         auto& outPoint = outPoints[i++];
         auto segment   = b2Shape_GetSegment(shape);
@@ -689,7 +718,7 @@ void EdgePolygonCollider2D::getPoints(ax::Vec2* outPoints) const
 
 int EdgePolygonCollider2D::getPointsCount() const
 {
-    return static_cast<int>(_b2Shapes.size());
+    return static_cast<int>(_shapeIds.size());
 }
 
 // EdgeChainCollider2D
@@ -706,7 +735,7 @@ void EdgePolygonCollider2D::updateScale()
     auto factorX = _newScaleX / _scaleX;
     auto factorY = _newScaleY / _scaleY;
 
-    for (auto&& shape : _b2Shapes)
+    for (auto&& shape : _shapeIds)
     {
         auto segment = b2Shape_GetSegment(shape);
         auto& a      = segment.point1;
@@ -730,10 +759,9 @@ bool EdgeChainCollider2D::attachToBody(Rigidbody2D* body)
 
         _type = Type::EDGECHAIN;
 
-        auto shapeDef     = b2DefaultShapeDef();
-        shapeDef.isSensor = _sensor;
-        int i             = 0;
-        auto count        = static_cast<int>(_points.size());
+        auto shapeDef = prepareShapeDef();
+        int i         = 0;
+        auto count    = static_cast<int>(_points.size());
         for (; i < count - 1; ++i)
         {
             b2Segment segment{PhysicsUtility2D::tob2Vec2(_points[i]), PhysicsUtility2D::tob2Vec2(_points[i + 1])};
@@ -759,12 +787,12 @@ Vec2 EdgeChainCollider2D::getCenter()
     // collect points then invoke b2CentroidForPoly
     b2Vec2 centroid{0.0f, 0.0f};
     float signedArea = 0.0f;
-    int count        = static_cast<int>(_b2Shapes.size());
+    int count        = static_cast<int>(_shapeIds.size());
 
     for (int i = 0; i < count; ++i)
     {
-        auto curSegment       = b2Shape_GetSegment(_b2Shapes[i]);
-        auto nextSegment      = b2Shape_GetSegment(_b2Shapes[(i + 1) % count]);
+        auto curSegment       = b2Shape_GetSegment(_shapeIds[i]);
+        auto nextSegment      = b2Shape_GetSegment(_shapeIds[(i + 1) % count]);
         const b2Vec2& current = curSegment.point1;
         const b2Vec2& next    = i != (count - 1) ? nextSegment.point1 : nextSegment.point2;
         float crossProduct    = b2Cross(current, next);
@@ -780,17 +808,17 @@ Vec2 EdgeChainCollider2D::getCenter()
 void EdgeChainCollider2D::getPoints(Vec2* outPoints) const
 {
     int i = 0;
-    for (auto&& shape : _b2Shapes)
+    for (auto&& shape : _shapeIds)
     {
         outPoints[i++] = PhysicsUtility2D::toVec2(b2Shape_GetSegment(shape).point1);
     }
 
-    outPoints[i++] = PhysicsUtility2D::toVec2(b2Shape_GetSegment(_b2Shapes.back()).point2);
+    outPoints[i++] = PhysicsUtility2D::toVec2(b2Shape_GetSegment(_shapeIds.back()).point2);
 }
 
 int EdgeChainCollider2D::getPointsCount() const
 {
-    return static_cast<int>(_b2Shapes.size() + 1);
+    return static_cast<int>(_shapeIds.size() + 1);
 }
 
 void EdgeChainCollider2D::updateScale()
@@ -798,7 +826,7 @@ void EdgeChainCollider2D::updateScale()
     auto factorX = _newScaleX / _scaleX;
     auto factorY = _newScaleY / _scaleY;
 
-    for (auto&& shape : _b2Shapes)
+    for (auto&& shape : _shapeIds)
     {
         auto segment = b2Shape_GetSegment(shape);
         auto& a      = segment.point1;

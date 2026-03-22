@@ -3104,7 +3104,7 @@ int axlua_Scene_getPhysics3DWorld(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'axlua_Scene_getPhysics3DWorld'", nullptr);
             return 0;
         }
-        ax::Physics3DWorld* ret = obj->getPhysics3DWorld();
+        ax::Physics3DWorld* ret = obj->getPhysicsWorld3D();
         object_to_luaval<ax::Physics3DWorld>(tolua_S, "ax.Physics3DWorld", (ax::Physics3DWorld*)ret);
         return 1;
     }

@@ -104,7 +104,7 @@ class AX_DLL PhysicsWorld2D
     friend class Rigidbody2D;
     friend class Collider2D;
     friend class Joint2D;
-    friend struct PhysicsWorldCallback;
+    friend struct PhysicsQueryCallbacks2D;
 
 protected:
     PhysicsWorld2D();
@@ -119,7 +119,7 @@ public:
     static const int DEBUGDRAW_CONTACT;  ///< draw contact
     static const int DEBUGDRAW_ALL;      ///< draw all
 
-    b2WorldId internalHandle() const { return _b2World; }
+    b2WorldId internalHandle() const { return _worldId; }
 
     /**
      * Searches for physics shapes that intersects the ray.
@@ -355,10 +355,14 @@ public:
 protected:
     virtual void update(float delta, bool userCall = false);
 
-    virtual bool collisionBeginCallback(Contact2D& contact);
-    virtual bool collisionPreSolveCallback(Contact2D& contact);
-    virtual void collisionPostSolveCallback(Contact2D& contact);
-    virtual void collisionSeparateCallback(Contact2D& contact);
+    static bool handleCollisionPreSolve(b2ShapeId shapeIdA,
+                                    b2ShapeId shapeIdB,
+                                    b2Vec2 point,
+                                    b2Vec2 normal,
+                                    PhysicsWorld2D* world);
+
+    virtual bool onCollisionPreSolve(Contact2D* contact);
+    virtual void onCollisionPostSolve(Contact2D* contact);
 
     void beforeSimulation(Node* node,
                           const Mat4& parentToWorldTransform,
@@ -376,7 +380,7 @@ protected:
     float _updateTime;
     int _substeps;
     int _fixedUpdateRate;
-    b2WorldId _b2World;
+    b2WorldId _worldId;
     bool _isWorldLocked = false;
 
     bool _updateBodyTransform;

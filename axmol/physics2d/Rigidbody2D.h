@@ -299,6 +299,30 @@ public:
     Node* getNode() const { return _owner; }
 
     /**
+     * @brief Enable or disable PreSolve event handling for this Rigidbody2D.
+     *
+     * When enabled, the physics world will invoke the PreSolve callback
+     * for contacts involving this body. PreSolve is called before the
+     * solver processes the contact, allowing you to inspect or modify
+     * collision response (e.g., filtering, one-way platforms).
+     *
+     * @param bval True to enable PreSolve events, false to disable.
+     */
+    void setPreSolveEnabled(bool bval);
+
+    /**
+     * @brief Enable or disable PostSolve event handling for this Rigidbody2D.
+     *
+     * When enabled, the physics world will invoke the PostSolve (HitEvent)
+     * stage for contacts involving this body after the solver has finished.
+     * PostSolve provides access to the final impulses applied during collision
+     * resolution, useful for effects such as sound, particles, or damage.
+     *
+     * @param bval True to enable PostSolve events, false to disable.
+     */
+    void setPostSolveEnabled(bool bval);
+
+    /**
      * Return bitmask of first collider.
      *
      * @return If there is no collider in body, return default value. 0
@@ -525,16 +549,21 @@ protected:
     /** Update trasnfrom from onwer node */
     void updateTransform();
     void forceUpdateTransform(const Mat4& parentToWorldTransform,
-                       const Mat4& nodeToWorldTransform,
-                       float scaleX,
-                       float scaleY,
-                       float rotation);
+                              const Mat4& nodeToWorldTransform,
+                              float scaleX,
+                              float scaleY,
+                              float rotation);
+
+    bool isCollisionEnabled() const { return _collisionEnabled; }
+    void setCollisionEnabled(bool enabled) { _collisionEnabled = true; }
 
     Vector<Collider2D*> _colliders;
     PhysicsWorld2D* _world;
 
     b2BodyId _bodyId;
     BodyType _bodyType;
+
+    bool _collisionEnabled;
     bool _rotationEnabled;
     bool _gravityEnabled;
     bool _isSleeping;
@@ -551,7 +580,7 @@ protected:
     float _mass;
     float _moment;
     float _velocityLimit;         // in degrees
-    float _angularVelocityLimit; // in degrees
+    float _angularVelocityLimit;  // in degrees
 
     float _linearDamping;
     float _angularDamping;

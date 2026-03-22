@@ -33,27 +33,18 @@
 namespace ax
 {
 
-const char* PHYSICSCONTACT_EVENT_NAME = "PhysicsContactEvent";
+const char* CONTACT_2D_EVENT_NAME = "contact-2d-event";
 
 Contact2D::Contact2D()
-    : EventCustom(PHYSICSCONTACT_EVENT_NAME)
-    , _world(nullptr)
+    : EventCustom(CONTACT_2D_EVENT_NAME)
     , _colliderA(nullptr)
     , _colliderB(nullptr)
     , _eventCode(EventCode::NONE)
     , _notificationEnable(true)
     , _result(true)
-    , _data(nullptr)
-    , _contactInfo(nullptr)
-    , _contactData(nullptr)
-    , _preContactData(nullptr)
 {}
 
-Contact2D::~Contact2D()
-{
-    AX_SAFE_DELETE(_contactData);
-    AX_SAFE_DELETE(_preContactData);
-}
+Contact2D::~Contact2D() {}
 
 Contact2D* Contact2D::obtain(Collider2D* a, Collider2D* b)
 {
@@ -84,111 +75,44 @@ bool Contact2D::init(Collider2D* a, Collider2D* b)
 
 void Contact2D::generateContactData()
 {
-    if (_contactInfo == nullptr)
-    {
+    if (!_colliderA)
         return;
-    }
 
-    auto count         = b2Body_GetContactCapacity(b2_nullBodyId);  // FIXME
-    b2ContactData* arb = static_cast<b2ContactData*>(_contactInfo);
-    AX_SAFE_DELETE(_preContactData);
-    _preContactData     = _contactData;
-    _contactData        = new PhysicsContactData();
-    _contactData->count = count;
-    for (int i = 0; i < _contactData->count && i < PhysicsContactData::POINT_MAX; ++i)
+    // simple get 1 contact from bodyA
+    auto body = _colliderA->getAttachedBody();
+    if (!body->isAttached())
+        return;
+
+    auto bodyId       = body->internalHandle();
+    auto contactCount = b2Body_GetContactCapacity(bodyId);
+    if (contactCount <= 0)
+        return;
+
+    b2ContactData contactData;
+    if (b2Body_GetContactData(bodyId, &contactData, 1) != 1)
+        return;
+
+    _contactInfo.normal     = PhysicsUtility2D::toVec2(contactData.manifold.normal);
+    _contactInfo.pointCount = contactData.manifold.pointCount;
+    for (auto i = 0; i < contactData.manifold.pointCount && i < Contact2DInfo::POINT_MAX; ++i)
     {
-        _contactData->points[i] = PhysicsUtility2D::toVec2(arb->manifold.points[i].point);
+        _contactInfo.points[i].point          = PhysicsUtility2D::toVec2(contactData.manifold.points[i].point);
+        _contactInfo.points[i].normalImpulse  = contactData.manifold.points[i].normalImpulse;
+        _contactInfo.points[i].tangentImpulse = contactData.manifold.points[i].totalNormalImpulse;
     }
-
-    _contactData->normal = _contactData->count > 0 ? PhysicsUtility2D::toVec2(arb->manifold.normal) : Vec2::ZERO;
 }
 
-// PhysicsContactPreSolve implementation
-PhysicsContactPreSolve::PhysicsContactPreSolve(void* contactInfo) : _contactInfo(contactInfo) {}
+#    pragma region contact 2d listeners
+Contact2DListener::Contact2DListener() {}
 
-PhysicsContactPreSolve::~PhysicsContactPreSolve() {}
-
-float PhysicsContactPreSolve::getRestitution() const
-{
-    // return cpArbiterGetRestitution(static_cast<cpArbiter*>(_contactInfo));
-
-    return 0;  // FIXME
-}
-
-float PhysicsContactPreSolve::getFriction() const
-{
-    // return cpArbiterGetFriction(static_cast<cpArbiter*>(_contactInfo));
-    return 0;  // FIXME
-}
-
-Vec2 PhysicsContactPreSolve::getSurfaceVelocity() const
-{
-    // return PhysicsUtility2D::cpv2vec2(cpArbiterGetSurfaceVelocity(static_cast<cpArbiter*>(_contactInfo)));
-    return 0;  // FIXME
-}
-
-void PhysicsContactPreSolve::setRestitution(float restitution)
-{
-    // FIXME
-    // cpArbiterSetRestitution(static_cast<cpArbiter*>(_contactInfo), restitution);
-}
-
-void PhysicsContactPreSolve::setFriction(float friction)
-{
-    // FIXME
-    // cpArbiterSetFriction(static_cast<cpArbiter*>(_contactInfo), friction);
-}
-
-void PhysicsContactPreSolve::setSurfaceVelocity(const Vec2& velocity)
-{
-    // FIXME
-    // cpArbiterSetSurfaceVelocity(static_cast<cpArbiter*>(_contactInfo), PhysicsUtility2D::vec22cpv(velocity));
-}
-
-void PhysicsContactPreSolve::ignore()
-{
-    // FIXME
-    // cpArbiterIgnore(static_cast<cpArbiter*>(_contactInfo));
-}
-
-// PhysicsContactPostSolve implementation
-PhysicsContactPostSolve::PhysicsContactPostSolve(void* contactInfo) : _contactInfo(contactInfo) {}
-
-PhysicsContactPostSolve::~PhysicsContactPostSolve() {}
-
-float PhysicsContactPostSolve::getRestitution() const
-{
-    // FIXME
-    // return cpArbiterGetRestitution(static_cast<cpArbiter*>(_contactInfo));
-    return 0;
-}
-
-float PhysicsContactPostSolve::getFriction() const
-{
-    // FIXME
-    // return cpArbiterGetFriction(static_cast<cpArbiter*>(_contactInfo));
-    return 0;
-}
-
-Vec2 PhysicsContactPostSolve::getSurfaceVelocity() const
-{
-    // FIXME
-    // return PhysicsUtility2D::cpv2vec2(cpArbiterGetSurfaceVelocity(static_cast<cpArbiter*>(_contactInfo)));
-    return Vec2::ZERO;
-}
-
-EventListenerPhysicsContact::EventListenerPhysicsContact()
-    : onContactBegin(nullptr), onContactPreSolve(nullptr), onContactPostSolve(nullptr), onContactSeparate(nullptr)
-{}
-
-bool EventListenerPhysicsContact::init()
+bool Contact2DListener::init()
 {
     auto func = [this](EventCustom* event) -> void { onEvent(event); };
 
-    return EventListenerCustom::init(PHYSICSCONTACT_EVENT_NAME, func);
+    return EventListenerCustom::init(CONTACT_2D_EVENT_NAME, func);
 }
 
-void EventListenerPhysicsContact::onEvent(EventCustom* event)
+void Contact2DListener::onEvent(EventCustom* event)
 {
     Contact2D* contact = dynamic_cast<Contact2D*>(event);
 
@@ -199,29 +123,13 @@ void EventListenerPhysicsContact::onEvent(EventCustom* event)
 
     switch (contact->getEventCode())
     {
-    case Contact2D::EventCode::BEGIN:
-    {
-        bool ret = true;
-
-        if (onContactBegin != nullptr && hitTest(contact->getColliderA(), contact->getColliderB()))
-        {
-            contact->generateContactData();
-            ret = onContactBegin(*contact);
-        }
-
-        contact->setResult(ret);
-        break;
-    }
     case Contact2D::EventCode::PRESOLVE:
     {
         bool ret = true;
 
         if (onContactPreSolve != nullptr && hitTest(contact->getColliderA(), contact->getColliderB()))
         {
-            PhysicsContactPreSolve solve(contact->_contactInfo);
-            contact->generateContactData();
-
-            ret = onContactPreSolve(*contact, solve);
+            ret = onContactPreSolve(contact);
         }
 
         contact->setResult(ret);
@@ -231,16 +139,8 @@ void EventListenerPhysicsContact::onEvent(EventCustom* event)
     {
         if (onContactPostSolve != nullptr && hitTest(contact->getColliderA(), contact->getColliderB()))
         {
-            PhysicsContactPostSolve solve(contact->_contactInfo);
-            onContactPostSolve(*contact, solve);
-        }
-        break;
-    }
-    case Contact2D::EventCode::SEPARATE:
-    {
-        if (onContactSeparate != nullptr && hitTest(contact->getColliderA(), contact->getColliderB()))
-        {
-            onContactSeparate(*contact);
+            contact->generateContactData();
+            onContactPostSolve(contact);
         }
         break;
     }
@@ -249,11 +149,11 @@ void EventListenerPhysicsContact::onEvent(EventCustom* event)
     }
 }
 
-EventListenerPhysicsContact::~EventListenerPhysicsContact() {}
+Contact2DListener::~Contact2DListener() {}
 
-EventListenerPhysicsContact* EventListenerPhysicsContact::create()
+Contact2DListener* Contact2DListener::create()
 {
-    EventListenerPhysicsContact* obj = new EventListenerPhysicsContact();
+    Contact2DListener* obj = new Contact2DListener();
 
     if (obj->init())
     {
@@ -265,15 +165,14 @@ EventListenerPhysicsContact* EventListenerPhysicsContact::create()
     return nullptr;
 }
 
-bool EventListenerPhysicsContact::hitTest(Collider2D* /*shapeA*/, Collider2D* /*shapeB*/)
+bool Contact2DListener::hitTest(Collider2D* /*shapeA*/, Collider2D* /*shapeB*/)
 {
     return true;
 }
 
-bool EventListenerPhysicsContact::checkAvailable()
+bool Contact2DListener::checkAvailable()
 {
-    if (onContactBegin == nullptr && onContactPreSolve == nullptr && onContactPostSolve == nullptr &&
-        onContactSeparate == nullptr)
+    if (!onContactPreSolve && !onContactPostSolve)
     {
         AXASSERT(false, "Invalid PhysicsContactListener.");
         return false;
@@ -282,16 +181,14 @@ bool EventListenerPhysicsContact::checkAvailable()
     return true;
 }
 
-EventListenerPhysicsContact* EventListenerPhysicsContact::clone()
+Contact2DListener* Contact2DListener::clone()
 {
-    EventListenerPhysicsContact* obj = EventListenerPhysicsContact::create();
+    Contact2DListener* obj = Contact2DListener::create();
 
     if (obj != nullptr)
     {
-        obj->onContactBegin     = onContactBegin;
-        obj->onContactPreSolve  = onContactPreSolve;
+        obj->onContactPreSolve = onContactPreSolve;
         obj->onContactPostSolve = onContactPostSolve;
-        obj->onContactSeparate  = onContactSeparate;
 
         return obj;
     }
@@ -300,10 +197,9 @@ EventListenerPhysicsContact* EventListenerPhysicsContact::clone()
     return nullptr;
 }
 
-EventListenerPhysicsContactWithBodies* EventListenerPhysicsContactWithBodies::create(Rigidbody2D* bodyA,
-                                                                                     Rigidbody2D* bodyB)
+Contact2DListenerWithBodies* Contact2DListenerWithBodies::create(Rigidbody2D* bodyA, Rigidbody2D* bodyB)
 {
-    EventListenerPhysicsContactWithBodies* obj = new EventListenerPhysicsContactWithBodies();
+    Contact2DListenerWithBodies* obj = new Contact2DListenerWithBodies();
 
     if (obj->init())
     {
@@ -317,11 +213,11 @@ EventListenerPhysicsContactWithBodies* EventListenerPhysicsContactWithBodies::cr
     return nullptr;
 }
 
-EventListenerPhysicsContactWithBodies::EventListenerPhysicsContactWithBodies() : _a(nullptr), _b(nullptr) {}
+Contact2DListenerWithBodies::Contact2DListenerWithBodies() : _a(nullptr), _b(nullptr) {}
 
-EventListenerPhysicsContactWithBodies::~EventListenerPhysicsContactWithBodies() {}
+Contact2DListenerWithBodies::~Contact2DListenerWithBodies() {}
 
-bool EventListenerPhysicsContactWithBodies::hitTest(Collider2D* shapeA, Collider2D* shapeB)
+bool Contact2DListenerWithBodies::hitTest(Collider2D* shapeA, Collider2D* shapeB)
 {
     if ((shapeA->getAttachedBody() == _a && shapeB->getAttachedBody() == _b) ||
         (shapeA->getAttachedBody() == _b && shapeB->getAttachedBody() == _a))
@@ -332,16 +228,14 @@ bool EventListenerPhysicsContactWithBodies::hitTest(Collider2D* shapeA, Collider
     return false;
 }
 
-EventListenerPhysicsContactWithBodies* EventListenerPhysicsContactWithBodies::clone()
+Contact2DListenerWithBodies* Contact2DListenerWithBodies::clone()
 {
-    EventListenerPhysicsContactWithBodies* obj = EventListenerPhysicsContactWithBodies::create(_a, _b);
+    Contact2DListenerWithBodies* obj = Contact2DListenerWithBodies::create(_a, _b);
 
     if (obj != nullptr)
     {
-        obj->onContactBegin     = onContactBegin;
-        obj->onContactPreSolve  = onContactPreSolve;
+        obj->onContactPreSolve = onContactPreSolve;
         obj->onContactPostSolve = onContactPostSolve;
-        obj->onContactSeparate  = onContactSeparate;
 
         return obj;
     }
@@ -350,14 +244,13 @@ EventListenerPhysicsContactWithBodies* EventListenerPhysicsContactWithBodies::cl
     return nullptr;
 }
 
-EventListenerPhysicsContactWithShapes::EventListenerPhysicsContactWithShapes() : _a(nullptr), _b(nullptr) {}
+Contact2DListenerWithShapes::Contact2DListenerWithShapes() : _a(nullptr), _b(nullptr) {}
 
-EventListenerPhysicsContactWithShapes::~EventListenerPhysicsContactWithShapes() {}
+Contact2DListenerWithShapes::~Contact2DListenerWithShapes() {}
 
-EventListenerPhysicsContactWithShapes* EventListenerPhysicsContactWithShapes::create(Collider2D* shapeA,
-                                                                                     Collider2D* shapeB)
+Contact2DListenerWithShapes* Contact2DListenerWithShapes::create(Collider2D* shapeA, Collider2D* shapeB)
 {
-    EventListenerPhysicsContactWithShapes* obj = new EventListenerPhysicsContactWithShapes();
+    Contact2DListenerWithShapes* obj = new Contact2DListenerWithShapes();
 
     if (obj->init())
     {
@@ -371,7 +264,7 @@ EventListenerPhysicsContactWithShapes* EventListenerPhysicsContactWithShapes::cr
     return nullptr;
 }
 
-bool EventListenerPhysicsContactWithShapes::hitTest(Collider2D* shapeA, Collider2D* shapeB)
+bool Contact2DListenerWithShapes::hitTest(Collider2D* shapeA, Collider2D* shapeB)
 {
     if ((shapeA == _a && shapeB == _b) || (shapeA == _b && shapeB == _a))
     {
@@ -381,16 +274,14 @@ bool EventListenerPhysicsContactWithShapes::hitTest(Collider2D* shapeA, Collider
     return false;
 }
 
-EventListenerPhysicsContactWithShapes* EventListenerPhysicsContactWithShapes::clone()
+Contact2DListenerWithShapes* Contact2DListenerWithShapes::clone()
 {
-    EventListenerPhysicsContactWithShapes* obj = EventListenerPhysicsContactWithShapes::create(_a, _b);
+    Contact2DListenerWithShapes* obj = Contact2DListenerWithShapes::create(_a, _b);
 
     if (obj != nullptr)
     {
-        obj->onContactBegin     = onContactBegin;
         obj->onContactPreSolve  = onContactPreSolve;
         obj->onContactPostSolve = onContactPostSolve;
-        obj->onContactSeparate  = onContactSeparate;
 
         return obj;
     }
@@ -399,13 +290,13 @@ EventListenerPhysicsContactWithShapes* EventListenerPhysicsContactWithShapes::cl
     return nullptr;
 }
 
-EventListenerPhysicsContactWithGroup::EventListenerPhysicsContactWithGroup() : _group(0) {}
+Contact2DListenerWithGroup::Contact2DListenerWithGroup() : _group(0) {}
 
-EventListenerPhysicsContactWithGroup::~EventListenerPhysicsContactWithGroup() {}
+Contact2DListenerWithGroup::~Contact2DListenerWithGroup() {}
 
-EventListenerPhysicsContactWithGroup* EventListenerPhysicsContactWithGroup::create(int group)
+Contact2DListenerWithGroup* Contact2DListenerWithGroup::create(int group)
 {
-    EventListenerPhysicsContactWithGroup* obj = new EventListenerPhysicsContactWithGroup();
+    Contact2DListenerWithGroup* obj = new Contact2DListenerWithGroup();
 
     if (obj->init())
     {
@@ -418,7 +309,7 @@ EventListenerPhysicsContactWithGroup* EventListenerPhysicsContactWithGroup::crea
     return nullptr;
 }
 
-bool EventListenerPhysicsContactWithGroup::hitTest(Collider2D* shapeA, Collider2D* shapeB)
+bool Contact2DListenerWithGroup::hitTest(Collider2D* shapeA, Collider2D* shapeB)
 {
     if (shapeA->getGroup() == _group || shapeB->getGroup() == _group)
     {
@@ -428,16 +319,14 @@ bool EventListenerPhysicsContactWithGroup::hitTest(Collider2D* shapeA, Collider2
     return false;
 }
 
-EventListenerPhysicsContactWithGroup* EventListenerPhysicsContactWithGroup::clone()
+Contact2DListenerWithGroup* Contact2DListenerWithGroup::clone()
 {
-    EventListenerPhysicsContactWithGroup* obj = EventListenerPhysicsContactWithGroup::create(_group);
+    Contact2DListenerWithGroup* obj = Contact2DListenerWithGroup::create(_group);
 
     if (obj != nullptr)
     {
-        obj->onContactBegin     = onContactBegin;
-        obj->onContactPreSolve  = onContactPreSolve;
+        obj->onContactPreSolve = onContactPreSolve;
         obj->onContactPostSolve = onContactPostSolve;
-        obj->onContactSeparate  = onContactSeparate;
 
         return obj;
     }
@@ -445,6 +334,8 @@ EventListenerPhysicsContactWithGroup* EventListenerPhysicsContactWithGroup::clon
     AX_SAFE_DELETE(obj);
     return nullptr;
 }
+
+#    pragma endregion
 
 }  // namespace ax
 #endif  // defined(AX_ENABLE_PHYSICS_2D)

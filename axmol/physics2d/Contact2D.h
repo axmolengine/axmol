@@ -42,15 +42,32 @@ class Collider2D;
 class Rigidbody2D;
 class PhysicsWorld2D;
 
-typedef struct AX_DLL PhysicsContactData
+struct ManifoldPoint2D
 {
-    static const int POINT_MAX = 4;
-    Vec2 points[POINT_MAX];
-    int count;
-    Vec2 normal;
+    Vec2 point;
+    float normalImpulse{0};
+    float tangentImpulse{0};
+};
 
-    PhysicsContactData() : count(0) {}
-} PhysicsContactData;
+struct Contact2DInfo
+{
+    static constexpr int POINT_MAX = 2;  // Box2D 2D manifold supports up to 2 points
+
+    // Contact points in world coordinates.
+    // Each entry represents a collision point between two shapes.
+    // Simple collisions usually generate one point, while polygon vs polygon
+    // contacts may produce two points.
+    ManifoldPoint2D points[POINT_MAX];
+    int pointCount{0};
+
+    // Contact normal in world coordinates.
+    // Box2D convention: the normal always points from shape A toward shape B.
+    // Chipmunk convention: the normal points toward the first shape passed to the Arbiter.
+    // This means the same collision may yield opposite normal directions depending on engine.
+    // In Axmol we unify this by returning the Box2D normal (A->B), but contributors should be
+    // aware of the difference when porting logic from Chipmunk.
+    Vec2 normal;
+};
 
 /**
  * @addtogroup physics
@@ -67,14 +84,15 @@ typedef struct AX_DLL PhysicsContactData
  */
 class AX_DLL Contact2D : public EventCustom
 {
+    friend class Contact2DListener;
+    friend class PhysicsWorld2D;
+
 public:
     enum class EventCode
     {
         NONE,
-        BEGIN,
         PRESOLVE,
-        POSTSOLVE,
-        SEPARATE
+        POSTSOLVE, // not implement yet
     };
 
     /** Get contact shape A. */
@@ -83,40 +101,24 @@ public:
     /** Get contact shape B. */
     Collider2D* getColliderB() const { return _colliderB; }
 
-    /** Get contact data. */
-    const PhysicsContactData* getContactData() const { return _contactData; }
-
-    /** Get previous contact data */
-    const PhysicsContactData* getPreContactData() const { return _preContactData; }
-
-    /**
-     * Get data.
-     * @lua NA
-     */
-    void* getData() const { return _data; }
-
-    /**
-     * @brief Set data to contact.
-
-     * You must manage the memory yourself, Generally you can set data at contact begin, and destroy it at contact
-     separate.
-     *
-     * @lua NA
-     */
-    void setData(void* data) { _data = data; }
-
     /** Get the event code */
     EventCode getEventCode() const { return _eventCode; };
+
+    const Contact2DInfo& getContactInfo() const { return _contactInfo; }
 
 private:
     static Contact2D* obtain(Collider2D* a, Collider2D* b);
     bool init(Collider2D* a, Collider2D* b);
 
+    void setPointNormal(const Vec2& point, const Vec2& normal)
+    {
+        _contactInfo.points[0].point = point;
+        _contactInfo.pointCount      = 1;
+        _contactInfo.normal          = normal;
+    }
     void setEventCode(EventCode eventCode) { _eventCode = eventCode; };
     bool isNotificationEnabled() const { return _notificationEnable; }
     void setNotificationEnable(bool enable) { _notificationEnable = enable; }
-    PhysicsWorld2D* getWorld() const { return _world; }
-    void setWorld(PhysicsWorld2D* world) { _world = world; }
     void setResult(bool result) { _result = result; }
     bool resetResult()
     {
@@ -132,83 +134,20 @@ private:
     ~Contact2D();
 
 private:
-    PhysicsWorld2D* _world;
     Collider2D* _colliderA;
     Collider2D* _colliderB;
     EventCode _eventCode;
+    Contact2DInfo _contactInfo;
     bool _notificationEnable;
     bool _result;
-
-    void* _data;
-    void* _contactInfo;
-    PhysicsContactData* _contactData;
-    PhysicsContactData* _preContactData;
-
-    friend class EventListenerPhysicsContact;
-    friend struct PhysicsWorldCallback;
-    friend class PhysicsWorld2D;
-};
-
-/**
- * @brief Presolve value generated when onContactPreSolve called.
- */
-class AX_DLL PhysicsContactPreSolve
-{
-public:
-    /** Get restitution between two bodies.*/
-    float getRestitution() const;
-    /** Get friction between two bodies.*/
-    float getFriction() const;
-    /** Get surface velocity between two bodies.*/
-    Vec2 getSurfaceVelocity() const;
-    /** Set the restitution.*/
-    void setRestitution(float restitution);
-    /** Set the friction.*/
-    void setFriction(float friction);
-    /** Set the surface velocity.*/
-    void setSurfaceVelocity(const Vec2& velocity);
-    /** Ignore the rest of the contact presolve and postsolve callbacks. */
-    void ignore();
-
-private:
-    PhysicsContactPreSolve(void* contactInfo);
-    ~PhysicsContactPreSolve();
-
-private:
-    void* _contactInfo;
-
-    friend class EventListenerPhysicsContact;
-};
-
-/**
- * @brief Postsolve value generated when onContactPostSolve called.
- */
-class AX_DLL PhysicsContactPostSolve
-{
-public:
-    /** Get restitution between two bodies.*/
-    float getRestitution() const;
-    /** Get friction between two bodies.*/
-    float getFriction() const;
-    /** Get surface velocity between two bodies.*/
-    Vec2 getSurfaceVelocity() const;
-
-private:
-    PhysicsContactPostSolve(void* contactInfo);
-    ~PhysicsContactPostSolve();
-
-private:
-    void* _contactInfo;
-
-    friend class EventListenerPhysicsContact;
 };
 
 /** Contact listener. It will receive all the contact callbacks. */
-class AX_DLL EventListenerPhysicsContact : public EventListenerCustom
+class AX_DLL Contact2DListener : public EventListenerCustom
 {
 public:
     /** Create the listener. */
-    static EventListenerPhysicsContact* create();
+    static Contact2DListener* create();
 
     /** Check the listener is available.
 
@@ -217,7 +156,7 @@ public:
     bool checkAvailable() override;
 
     /** Clone an object from this listener.*/
-    EventListenerPhysicsContact* clone() override;
+    Contact2DListener* clone() override;
 
 protected:
     /**
@@ -228,93 +167,84 @@ protected:
 
 public:
     /**
-     * @brief It will called at two shapes start to contact, and only call it once.
-     */
-    std::function<bool(Contact2D& contact)> onContactBegin;
-    /**
      * @brief Two shapes are touching during this step. Return false from the callback to make world ignore the
      * collision this step or true to process it normally. Additionally, you may override collision values, restitution,
      * or surface velocity values.
      */
-    std::function<bool(Contact2D& contact, PhysicsContactPreSolve& solve)> onContactPreSolve;
+    std::function<bool(Contact2D* contact)> onContactPreSolve;
+
     /**
      * @brief Two shapes are touching and their collision response has been processed. You can retrieve the collision
-     * impulse or kinetic energy at this time if you want to use it to calculate sound volumes or damage amounts. See
-     * cpArbiter for more info
+     * impulse or kinetic energy at this time if you want to use it to calculate sound volumes or damage amounts.
      */
-    std::function<void(Contact2D& contact, const PhysicsContactPostSolve& solve)> onContactPostSolve;
-    /**
-     * @brief It will called at two shapes separated, and only call it once.
-     * onContactBegin and onContactSeparate will called in pairs.
-     */
-    std::function<void(Contact2D& contact)> onContactSeparate;
+    std::function<bool(Contact2D* contact)> onContactPostSolve;
 
 protected:
     bool init();
     void onEvent(EventCustom* event);
 
 protected:
-    EventListenerPhysicsContact();
-    virtual ~EventListenerPhysicsContact();
+    Contact2DListener();
+    virtual ~Contact2DListener();
 
     friend class PhysicsWorld2D;
 };
 
 /** This event listener only be called when bodyA and bodyB have contacts. */
-class AX_DLL EventListenerPhysicsContactWithBodies : public EventListenerPhysicsContact
+class AX_DLL Contact2DListenerWithBodies : public Contact2DListener
 {
 public:
     /** Create the listener. */
-    static EventListenerPhysicsContactWithBodies* create(Rigidbody2D* bodyA, Rigidbody2D* bodyB);
+    static Contact2DListenerWithBodies* create(Rigidbody2D* bodyA, Rigidbody2D* bodyB);
 
     bool hitTest(Collider2D* shapeA, Collider2D* shapeB) override;
 
-    EventListenerPhysicsContactWithBodies* clone() override;
+    Contact2DListenerWithBodies* clone() override;
 
 protected:
     Rigidbody2D* _a;
     Rigidbody2D* _b;
 
 protected:
-    EventListenerPhysicsContactWithBodies();
-    virtual ~EventListenerPhysicsContactWithBodies();
+    Contact2DListenerWithBodies();
+    virtual ~Contact2DListenerWithBodies();
 };
 
 /** This event listener only be called when shapeA and shapeB have contacts. */
-class AX_DLL EventListenerPhysicsContactWithShapes : public EventListenerPhysicsContact
+class AX_DLL Contact2DListenerWithShapes : public Contact2DListener
 {
 public:
     /** Create the listener. */
-    static EventListenerPhysicsContactWithShapes* create(Collider2D* shapeA, Collider2D* shapeB);
+    static Contact2DListenerWithShapes* create(Collider2D* shapeA, Collider2D* shapeB);
 
     bool hitTest(Collider2D* shapeA, Collider2D* shapeB) override;
-    EventListenerPhysicsContactWithShapes* clone() override;
+    Contact2DListenerWithShapes* clone() override;
 
 protected:
     Collider2D* _a;
     Collider2D* _b;
 
 protected:
-    EventListenerPhysicsContactWithShapes();
-    virtual ~EventListenerPhysicsContactWithShapes();
+    Contact2DListenerWithShapes();
+    virtual ~Contact2DListenerWithShapes();
 };
 
 /** This event listener only be called when shapeA or shapeB is in the group your specified */
-class AX_DLL EventListenerPhysicsContactWithGroup : public EventListenerPhysicsContact
+class AX_DLL Contact2DListenerWithGroup : public Contact2DListener
 {
 public:
     /** Create the listener. */
-    static EventListenerPhysicsContactWithGroup* create(int group);
+    static Contact2DListenerWithGroup* create(int group);
 
     bool hitTest(Collider2D* shapeA, Collider2D* shapeB) override;
-    EventListenerPhysicsContactWithGroup* clone() override;
+    Contact2DListenerWithGroup* clone() override;
 
 protected:
     int _group;
 
 protected:
-    EventListenerPhysicsContactWithGroup();
-    virtual ~EventListenerPhysicsContactWithGroup();
+    Contact2DListenerWithGroup();
+    virtual ~Contact2DListenerWithGroup();
 };
 
 /** @} */

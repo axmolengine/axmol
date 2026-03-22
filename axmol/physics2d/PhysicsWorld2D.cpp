@@ -100,7 +100,8 @@ struct PointQueryNearestResultContext
 };
 }  // namespace
 
-struct PhysicsWorldCallback
+#    pragma region PhysicsQueryCallbacks2D
+struct PhysicsQueryCallbacks2D
 {
     static float handleRayCast(b2ShapeId shapeId, b2Vec2 point, b2Vec2 normal, float fraction, void* context)
     {
@@ -154,8 +155,6 @@ struct PhysicsWorldCallback
         Collider2D* collider = static_cast<Collider2D*>(b2Shape_GetUserData(shape));
         AX_ASSERT(collider != nullptr);
 
-        bool continues = true;
-
         auto info = static_cast<PointQueryCallbackContext*>(context);
         if (b2Shape_TestPoint(shape, info->p))
         {
@@ -197,105 +196,9 @@ struct PhysicsWorldCallback
 
     static bool continues;
 };
+bool PhysicsQueryCallbacks2D::continues = true;
 
-bool PhysicsWorldCallback::continues = true;
-
-bool PhysicsWorld2D::collisionBeginCallback(Contact2D& contact)
-{
-    bool ret = true;
-
-    Collider2D* colliderA = contact.getColliderA();
-    Collider2D* colliderB = contact.getColliderB();
-    Rigidbody2D* bodyA    = colliderA->getAttachedBody();
-    Rigidbody2D* bodyB    = colliderB->getAttachedBody();
-
-#    if 0
-    auto&& jointsA          = bodyA->getJoints();
-
-    // check the joint is collision enable or not
-
-    for (Joint2D* joint : jointsA)
-    {
-        if (!joint->isCollisionEnabled())
-        {
-            Rigidbody2D* body = joint->getBodyA() == bodyA ? joint->getBodyB() : joint->getBodyA();
-
-            if (body == bodyB)
-            {
-                contact.setNotificationEnable(false);
-                return false;
-            }
-        }
-    }
-#    endif
-
-    // bitmask check
-    if ((colliderA->getCategoryBits() & colliderB->getContactMaskBits()) == 0 ||
-        (colliderA->getContactMaskBits() & colliderB->getCategoryBits()) == 0)
-    {
-        contact.setNotificationEnable(false);
-    }
-
-    if (colliderA->getGroup() != 0 && colliderA->getGroup() == colliderB->getGroup())
-    {
-        ret = colliderA->getGroup() > 0;
-    }
-    else
-    {
-        if ((colliderA->getCategoryBits() & colliderB->getMaskBits()) == 0 ||
-            (colliderB->getCategoryBits() & colliderA->getMaskBits()) == 0)
-        {
-            ret = false;
-        }
-    }
-
-    if (contact.isNotificationEnabled())
-    {
-        contact.setEventCode(Contact2D::EventCode::BEGIN);
-        contact.setWorld(this);
-        _eventDispatcher->dispatchEvent(&contact);
-    }
-
-    return ret ? contact.resetResult() : false;
-}
-
-bool PhysicsWorld2D::collisionPreSolveCallback(Contact2D& contact)
-{
-    if (!contact.isNotificationEnabled())
-    {
-        return true;
-    }
-
-    contact.setEventCode(Contact2D::EventCode::PRESOLVE);
-    contact.setWorld(this);
-    _eventDispatcher->dispatchEvent(&contact);
-
-    return contact.resetResult();
-}
-
-void PhysicsWorld2D::collisionPostSolveCallback(Contact2D& contact)
-{
-    if (!contact.isNotificationEnabled())
-    {
-        return;
-    }
-
-    contact.setEventCode(Contact2D::EventCode::POSTSOLVE);
-    contact.setWorld(this);
-    _eventDispatcher->dispatchEvent(&contact);
-}
-
-void PhysicsWorld2D::collisionSeparateCallback(Contact2D& contact)
-{
-    if (!contact.isNotificationEnabled())
-    {
-        return;
-    }
-
-    contact.setEventCode(Contact2D::EventCode::SEPARATE);
-    contact.setWorld(this);
-    _eventDispatcher->dispatchEvent(&contact);
-}
+#    pragma endregion
 
 void PhysicsWorld2D::rayCast(PhysicsRayCastCallback func, const Vec2& point1, const Vec2& point2, void* data)
 {
@@ -305,10 +208,10 @@ void PhysicsWorld2D::rayCast(PhysicsRayCastCallback func, const Vec2& point1, co
     {
         RayCastQueryCallbackContext context = {this, func, point1, point2, data};
 
-        auto translation                = point2 - point1;
-        PhysicsWorldCallback::continues = true;
-        b2World_CastRay(_b2World, PhysicsUtility2D::tob2Vec2(point1), PhysicsUtility2D::tob2Vec2(translation),
-                        b2DefaultQueryFilter(), PhysicsWorldCallback::handleRayCast, &context);
+        auto translation                   = point2 - point1;
+        PhysicsQueryCallbacks2D::continues = true;
+        b2World_CastRay(_worldId, PhysicsUtility2D::tob2Vec2(point1), PhysicsUtility2D::tob2Vec2(translation),
+                        b2DefaultQueryFilter(), PhysicsQueryCallbacks2D::handleRayCast, &context);
     }
 }
 
@@ -321,8 +224,8 @@ void PhysicsWorld2D::overlapBox(PhysicsQueryRectCallback func, const Rect& rect,
         BoxQueryCallbackContext context = {this, func, data};
 
         auto filter = b2DefaultQueryFilter();
-        b2World_OverlapAABB(_b2World, PhysicsUtility2D::tob2AABB(rect), b2DefaultQueryFilter(),
-                            PhysicsWorldCallback::handleBoxOverlap, &context);
+        b2World_OverlapAABB(_worldId, PhysicsUtility2D::tob2AABB(rect), b2DefaultQueryFilter(),
+                            PhysicsQueryCallbacks2D::handleBoxOverlap, &context);
     }
 }
 
@@ -332,8 +235,8 @@ Collider2D* PhysicsWorld2D::overlapBox(const Rect& rect) const
 
     BoxQueryNearestResultContext context = {&collider};
 
-    b2World_OverlapAABB(_b2World, PhysicsUtility2D::tob2AABB(rect), b2DefaultQueryFilter(),
-                        PhysicsWorldCallback::handlePointOverlapNearestResult, &context);
+    b2World_OverlapAABB(_worldId, PhysicsUtility2D::tob2AABB(rect), b2DefaultQueryFilter(),
+                        PhysicsQueryCallbacks2D::handlePointOverlapNearestResult, &context);
 
     return collider;
 }
@@ -344,8 +247,8 @@ Vector<Collider2D*> PhysicsWorld2D::overlapBoxAll(const Rect& rect) const
 
     BoxQueryResultContext context = {&arr};
 
-    b2World_OverlapAABB(_b2World, PhysicsUtility2D::tob2AABB(rect), b2DefaultQueryFilter(),
-                        PhysicsWorldCallback::handlePointOverlapResult, &context);
+    b2World_OverlapAABB(_worldId, PhysicsUtility2D::tob2AABB(rect), b2DefaultQueryFilter(),
+                        PhysicsQueryCallbacks2D::handlePointOverlapResult, &context);
 
     return arr;
 }
@@ -362,8 +265,10 @@ void PhysicsWorld2D::overlapPoint(PhysicsQueryPointCallback func, const Vec2& po
         aabb.lowerBound = context.p;
         aabb.upperBound = context.p;
 
-        auto filter = b2DefaultQueryFilter();
-        b2World_OverlapAABB(_b2World, aabb, b2DefaultQueryFilter(), PhysicsWorldCallback::handlePointOverlap, &context);
+        auto filter                        = b2DefaultQueryFilter();
+        PhysicsQueryCallbacks2D::continues = true;
+        b2World_OverlapAABB(_worldId, aabb, b2DefaultQueryFilter(), PhysicsQueryCallbacks2D::handlePointOverlap,
+                            &context);
     }
 }
 
@@ -378,8 +283,8 @@ Collider2D* PhysicsWorld2D::overlapPoint(const Vec2& point) const
     aabb.lowerBound = b2Sub(context.p, d);
     aabb.upperBound = b2Sub(context.p, d);
 
-    b2World_OverlapAABB(_b2World, aabb, b2DefaultQueryFilter(), PhysicsWorldCallback::handlePointOverlapNearestResult,
-                        &context);
+    b2World_OverlapAABB(_worldId, aabb, b2DefaultQueryFilter(),
+                        PhysicsQueryCallbacks2D::handlePointOverlapNearestResult, &context);
 
     return collider;
 }
@@ -395,7 +300,7 @@ Vector<Collider2D*> PhysicsWorld2D::overlapPointAll(const Vec2& point) const
     aabb.lowerBound = b2Sub(context.p, d);
     aabb.upperBound = b2Sub(context.p, d);
 
-    b2World_OverlapAABB(_b2World, aabb, b2DefaultQueryFilter(), PhysicsWorldCallback::handlePointOverlapResult,
+    b2World_OverlapAABB(_worldId, aabb, b2DefaultQueryFilter(), PhysicsQueryCallbacks2D::handlePointOverlapResult,
                         &context);
 
     return arr;
@@ -421,25 +326,17 @@ bool PhysicsWorld2D::init(Scene* scene)
         */
         b2SetLengthUnitsPerMeter(_PTMRatio);
 
-        auto def = b2DefaultWorldDef();
+        auto worldDef = b2DefaultWorldDef();
+
         // Realistic gravity is achieved by multiplying gravity by the length unit.
-        def.gravity = PhysicsUtility2D::tob2Vec2(_gravity * _PTMRatio);
+        worldDef.gravity          = PhysicsUtility2D::tob2Vec2(_gravity * _PTMRatio);
+        worldDef.enableSleep      = true;
+        worldDef.enableContinuous = true;
+        _worldId                  = b2CreateWorld(&worldDef);
 
-        _b2World = b2CreateWorld(&def);
+        AX_BREAK_IF(!b2World_IsValid(_worldId));
 
-        AX_BREAK_IF(!b2World_IsValid(_b2World));
-
-        // Do we want to let bodies sleep?
-        b2World_EnableSleeping(_b2World, true);
-        b2World_EnableContinuous(_b2World, true);
-
-        // TODO:
-        // cpCollisionHandler* handler = cpSpaceAddDefaultCollisionHandler(_cpSpace);
-        // handler->userData           = this;
-        // handler->beginFunc          = (cpCollisionBeginFunc)PhysicsWorldCallback::collisionBeginCallbackFunc;
-        // handler->preSolveFunc       = (cpCollisionPreSolveFunc)PhysicsWorldCallback::collisionPreSolveCallbackFunc;
-        // handler->postSolveFunc      = (cpCollisionPostSolveFunc)PhysicsWorldCallback::collisionPostSolveCallbackFunc;
-        // handler->separateFunc       = (cpCollisionSeparateFunc)PhysicsWorldCallback::collisionSeparateCallbackFunc;
+        b2World_SetPreSolveCallback(_worldId, (b2PreSolveFcn*)handleCollisionPreSolve, this);
 
         _scene           = scene;
         _eventDispatcher = scene->getEventDispatcher();
@@ -453,7 +350,7 @@ bool PhysicsWorld2D::init(Scene* scene)
 void PhysicsWorld2D::setGravity(const Vec2& gravity)
 {
     _gravity = gravity;
-    b2World_SetGravity(_b2World, PhysicsUtility2D::tob2Vec2(_gravity * _PTMRatio));
+    b2World_SetGravity(_worldId, PhysicsUtility2D::tob2Vec2(_gravity * _PTMRatio));
 }
 
 void PhysicsWorld2D::setSlopBias(float slop, float bias)
@@ -506,7 +403,7 @@ void PhysicsWorld2D::update(float delta, bool userCall /* = false*/)
 
     if (userCall || _fixedUpdateRate <= 0)
     {
-        b2World_Step(_b2World, delta, _substeps);
+        b2World_Step(_worldId, delta, _substeps);
     }
     else
     {
@@ -515,9 +412,11 @@ void PhysicsWorld2D::update(float delta, bool userCall /* = false*/)
         {
             _updateTime -= fixedStep;
             _scene->fixedUpdate(fixedStep);
-            b2World_Step(_b2World, fixedStep, _substeps);
+            b2World_Step(_worldId, fixedStep, _substeps);
         }
     }
+
+    auto contactData = b2World_GetContactEvents(_worldId);
 
     // Update physics position, should loop as the same sequence as node tree.
     // PhysicsWorld2D::afterSimulation() will depend on the sequence.
@@ -543,7 +442,7 @@ PhysicsWorld2D::PhysicsWorld2D()
     , _updateTime(0.0f)
     , _substeps(1)
     , _fixedUpdateRate(0)
-    , _b2World(b2_nullWorldId)
+    , _worldId(b2_nullWorldId)
     , _updateBodyTransform(false)
     , _scene(nullptr)
     , _autoStep(true)
@@ -552,9 +451,9 @@ PhysicsWorld2D::PhysicsWorld2D()
 
 PhysicsWorld2D::~PhysicsWorld2D()
 {
-    if (b2World_IsValid(_b2World))
+    if (b2World_IsValid(_worldId))
     {
-        b2DestroyWorld(_b2World);
+        b2DestroyWorld(_worldId);
     }
 }
 
@@ -599,6 +498,44 @@ void PhysicsWorld2D::setPostUpdateCallback(const std::function<void()>& callback
 void PhysicsWorld2D::setPreUpdateCallback(const std::function<void()>& callback)
 {
     _preUpdateCallback = callback;
+}
+
+bool PhysicsWorld2D::handleCollisionPreSolve(b2ShapeId shapeIdA,
+                                             b2ShapeId shapeIdB,
+                                             b2Vec2 point,
+                                             b2Vec2 normal,
+                                             PhysicsWorld2D* world)
+{
+    auto contact2D = Contact2D::obtain(static_cast<Collider2D*>(b2Shape_GetUserData(shapeIdA)),
+                                       static_cast<Collider2D*>(b2Shape_GetUserData(shapeIdB)));
+    contact2D->setPointNormal(PhysicsUtility2D::toVec2(point), PhysicsUtility2D::toVec2(normal));
+    bool ret       = world->onCollisionPreSolve(contact2D);
+    contact2D->release();
+    return ret;
+}
+
+bool PhysicsWorld2D::onCollisionPreSolve(Contact2D* contact)
+{
+    if (!contact->isNotificationEnabled())
+    {
+        return true;
+    }
+
+    contact->setEventCode(Contact2D::EventCode::PRESOLVE);
+    _eventDispatcher->dispatchEvent(contact);
+
+    return contact->resetResult();
+}
+
+void PhysicsWorld2D::onCollisionPostSolve(Contact2D* contact)
+{
+    if (!contact->isNotificationEnabled())
+    {
+        return;
+    }
+
+    contact->setEventCode(Contact2D::EventCode::POSTSOLVE);
+    _eventDispatcher->dispatchEvent(contact);
 }
 
 }  // namespace ax

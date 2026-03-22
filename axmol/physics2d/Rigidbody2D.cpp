@@ -51,6 +51,7 @@ Rigidbody2D::Rigidbody2D()
     : _world(nullptr)
     , _bodyId(b2_nullBodyId)
     , _bodyType(DynamicBody)
+    , _collisionEnabled(true)
     , _rotationEnabled(true)
     , _gravityEnabled(true)
     , _isSleeping(false)
@@ -577,9 +578,7 @@ Collider2D* Rigidbody2D::getCollider(int tag) const
     for (auto&& collider : _colliders)
     {
         if (collider->getTag() == tag)
-        {
             return collider;
-        }
     }
 
     return nullptr;
@@ -609,9 +608,7 @@ void Rigidbody2D::removeCollider(Collider2D* collider, bool reduceMassAndMoment 
 void Rigidbody2D::removeAllColliders(bool reduceMassAndMoment /* = true*/)
 {
     for (auto&& collider : _colliders)
-    {
         collider->deatchFromBody();
-    }
 
     _colliders.clear();
 }
@@ -652,81 +649,57 @@ void Rigidbody2D::setCollisionDetectionMode(CollisionDetectionMode mode)
 void Rigidbody2D::setCategoryBits(uint64_t categoryBits)
 {
     for (auto&& collider : _colliders)
-    {
         collider->setCategoryBits(categoryBits);
-    }
 }
 
 uint64_t Rigidbody2D::getCategoryBits() const
 {
-    if (!_colliders.empty())
-    {
-        return _colliders.front()->getCategoryBits();
-    }
-    else
-    {
-        return UINT64_MAX;
-    }
+    return !_colliders.empty() ? _colliders.front()->getCategoryBits() : UINT64_MAX;
+}
+
+void Rigidbody2D::setPreSolveEnabled(bool bval)
+{
+    for (auto&& collider : _colliders)
+        collider->setPreSolveEnabled(bval);
+}
+
+void Rigidbody2D::setPostSolveEnabled(bool bval)
+{
+    for (auto&& collider : _colliders)
+        collider->setPostSolveEnabled(bval);
 }
 
 void Rigidbody2D::setContactMaskBits(uint64_t maskBits)
 {
     for (auto&& collider : _colliders)
-    {
         collider->setContactMaskBits(maskBits);
-    }
 }
 
 uint64_t Rigidbody2D::getContactMaskBits() const
 {
-    if (!_colliders.empty())
-    {
-        return _colliders.front()->getContactMaskBits();
-    }
-    else
-    {
-        return 0x00000000;
-    }
+    return !_colliders.empty() ? _colliders.front()->getContactMaskBits() : 0;
 }
 
 void Rigidbody2D::setCollisionMaskBits(int maskBits)
 {
     for (auto&& collider : _colliders)
-    {
         collider->setMaskBits(maskBits);
-    }
 }
 
 int Rigidbody2D::getCollisionMaskBits() const
 {
-    if (!_colliders.empty())
-    {
-        return _colliders.front()->getMaskBits();
-    }
-    else
-    {
-        return UINT_MAX;
-    }
+    return !_colliders.empty() ? _colliders.front()->getMaskBits() : UINT_MAX;
 }
 
 void Rigidbody2D::setGroup(int groupIndex)
 {
     for (auto&& collider : _colliders)
-    {
         collider->setGroup(groupIndex);
-    }
 }
 
 int Rigidbody2D::getGroup() const
 {
-    if (!_colliders.empty())
-    {
-        return _colliders.front()->getGroup();
-    }
-    else
-    {
-        return 0;
-    }
+    return !_colliders.empty() ? _colliders.front()->getGroup() : 0;
 }
 
 void Rigidbody2D::setRotationOffset(float rotation)
