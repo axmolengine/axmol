@@ -1843,10 +1843,6 @@ void PhysicsDemoBug5482::changeBodyCallback(Object* /*sender*/)
         _body->getOwner()->removeComponent(_body);
     }
 
-    // very important to have always _body and sprite in sync (Fix: #712)
-    // TODO: make physics2d API rotation/angle same with Node in degrees
-    node->setRotation(AX_DEGREES_TO_RADIANS(_body->getRotation()));
-
     node->addComponent(_body);
     _bodyInA = !_bodyInA;
 }

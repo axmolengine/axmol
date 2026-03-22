@@ -371,7 +371,7 @@ public:
     /** get the body position. */
     Vec2 getPosition() const;
 
-    /** get the body rotation. */
+    /** get the body rotation in degrees. */
     float getRotation();
 
     /** set body position offset, it's the position witch relative to node */
@@ -380,10 +380,10 @@ public:
     /** get body position offset. */
     const Vec2& getPositionOffset() const { return _positionOffset; }
 
-    /** set body rotation offset, it's the rotation witch relative to node */
+    /** set body rotation offset in degrees, it's the rotation witch relative to node */
     void setRotationOffset(float rotation);
 
-    /** set the body rotation offset */
+    /** set the body rotation offset in degrees */
     float getRotationOffset() const { return _rotationOffset; }
 
     /**

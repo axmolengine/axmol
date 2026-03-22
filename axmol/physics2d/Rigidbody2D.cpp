@@ -372,7 +372,7 @@ void Rigidbody2D::setGravityEnable(bool enable)
 void Rigidbody2D::setRotation(float rotation)
 {
     _recordedRotation = rotation;
-    _recordedAngle    = -(rotation + _rotationOffset) * (M_PI / 180.0f);
+    _recordedAngle    = MathUtil::radians(-(rotation + _rotationOffset));
 
     if (isAttached())
         b2Body_SetTransform(_bodyId, b2Body_GetPosition(_bodyId), b2MakeRot(_recordedAngle));
@@ -427,7 +427,7 @@ float Rigidbody2D::getRotation()
     if (_recordedAngle != angle)
     {
         _recordedAngle    = angle;
-        _recordedRotation = -_recordedAngle * 180.0 / M_PI - _rotationOffset;
+        _recordedRotation = MathUtil::degrees(-_recordedAngle) - _rotationOffset;
     }
     return _recordedRotation;
 }
