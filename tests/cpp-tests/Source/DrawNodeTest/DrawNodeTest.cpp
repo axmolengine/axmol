@@ -1405,9 +1405,8 @@ static Vec2 spider[] = {
 
 DrawNodeTests::DrawNodeTests()
 {
-    ADD_TEST_CASE(DrawNodeThickness1Test);
     ADD_TEST_CASE(DrawNodeCircleTest);
-    ADD_TEST_CASE(DrawNodeSolidCircleTest);
+    // ADD_TEST_CASE(DrawNodeSolidCircleTest); //will be activate with DrawNode v3.0
     ADD_TEST_CASE(DrawNodePolygonTest);
 
     ADD_TEST_CASE(DrawNodeSpLinesTest);
@@ -1426,6 +1425,7 @@ DrawNodeTests::DrawNodeTests()
 
     ADD_TEST_CASE(DrawNodePieTest);
     ADD_TEST_CASE(DrawNodeLineDrawTest);
+    ADD_TEST_CASE(DrawNodeThickness1Test);
     ADD_TEST_CASE(DrawNodeIssueTester);
     ADD_TEST_CASE(DrawNodeMethodsTest);
 }
@@ -1612,74 +1612,76 @@ void DrawNodeBaseTest::drawDirection(const Vec2* vec, const int size, Vec2 offse
 
 DrawNodeMorphTest_SolidPolygon::DrawNodeMorphTest_SolidPolygon()
 {
-    const float coef = 2.0f * (float)M_PI / segments;
-    float scaleX     = 1.0f;
-    float scaleY     = 1.0f;
-
-    const float angle = 360 / segments;
-
-    for (size_t n = 0; n < 10; n++)
+    for (size_t n = 0; n < 100; n++)
     {
         drawNodeArray[n] = DrawNode::create();
-        drawNodeArray[n]->setLocalTransformEnabled(true);
         addChild(drawNodeArray[n]);
-        drawNodeArray[n]->setPosition(
-            Vec2(AXRANDOM_MINUS1_1() * size.width / 4, AXRANDOM_MINUS1_1() * size.height / 4) + Vec2(100, 100));
-        color[n] = Color::random().withAlpha(1.0f);
-        rad[n]   = 90 + AXRANDOM_0_1() * 10;
-        state[n] = (AXRANDOM_0_1() > 0.5f) ? false : true;
-
-        verticesObj1[n]     = new Vec2[segments];  // circle
-        verticesObj2[n]     = new Vec2[segments];  // square
+        verticesObj1[n]     = new Vec2[segments];
+        verticesObj2[n]     = new Vec2[segments];
         verticesObjMorph[n] = new Vec2[segments];
-
-        for (unsigned int i = 0; i < segments; i++)  //
-        {
-            float rads = i * coef + angle;
-            int radius = 150 + AXRANDOM_MINUS1_1() * 50;
-            if (n > 2)
-            {
-                verticesObj1[n][i].x = radius * cosf(rads) * scaleX + center.x + AXRANDOM_0_1() * 30;
-                verticesObj1[n][i].y = radius * sinf(rads) * scaleY + center.y + AXRANDOM_0_1() * 30;
-            }
-            else
-            {
-                verticesObj1[n][i].x = radius * cosf(rads) * scaleX + center.x;
-                verticesObj1[n][i].y = radius * sinf(rads) * scaleY + center.y;
-            }
-            verticesObjMorph[n][i] = verticesObj1[n][i];
-        }
-
-        // A verticesObj2 is a bunch of vertices along straight lines
-        int i       = 0;
-        float delta = segments / 4;
-        // Left side of verticesObj2
-        for (float y = 50; y > -50; y -= delta)
-        {
-            verticesObj2[n][i++] = center + Vec2(-50, y);
-        }
-        // top
-        for (float x = -50; x < 50; x += delta)
-        {
-            verticesObj2[n][i++] = center + Vec2(x, -50);
-        }
-        // Right side
-        for (float y = -50; y < 50; y += delta)
-        {
-            verticesObj2[n][i++] = center + Vec2(50, y);
-        }
-        // Bottom
-        for (float x = 50; x > -50; x -= delta)
-        {
-            verticesObj2[n][i++] = center + Vec2(x, 50);
-        }
     }
+
     scheduleUpdate();
 }
 void DrawNodeMorphTest_SolidPolygon::update(float dt)
 {
+    if (oldCount != _count)
+    {
+        for (size_t n = 0; n < oldCount; n++)
+            drawNodeArray[n]->clear();
 
-    for (int n = 0; n < 10; n++)
+        oldCount         = _count;
+        const float coef = 2.0f * (float)M_PI / segments;
+        float scaleX     = 1.0f;
+        float scaleY     = 1.0f;
+
+        const float angle = 360 / segments;
+        for (size_t n = 0; n < _count; n++)
+        {
+            drawNodeArray[n]->setPosition(Vec2(size.width / 32 + AXRANDOM_MINUS1_1() * size.width / 4,
+                                               size.height / 32 + AXRANDOM_MINUS1_1() * size.height / 4));
+            color[n] = Color::random().withAlpha(1.0f);
+            rad[n]   = 90 + AXRANDOM_0_1() * 10;
+            state[n] = (AXRANDOM_0_1() > 0.5f) ? false : true;
+
+            for (unsigned int i = 0; i < segments; i++)  //
+            {
+                float rads = i * coef + angle;
+                int radius = 150 + AXRANDOM_MINUS1_1() * 30;
+                if (n > 2)
+                {
+                    verticesObj1[n][i].x = radius * cosf(rads) * scaleX + center.x + AXRANDOM_0_1() * 20;
+                    verticesObj1[n][i].y = radius * sinf(rads) * scaleY + center.y + AXRANDOM_0_1() * 20;
+                }
+                else
+                {
+                    verticesObj1[n][i].x = radius * cosf(rads) * scaleX + center.x;
+                    verticesObj1[n][i].y = radius * sinf(rads) * scaleY + center.y;
+                }
+                verticesObjMorph[n][i] = verticesObj1[n][i];
+            }
+
+            // A verticesObj2 is a bunch of vertices along straight lines
+            int i       = 0;
+            float delta = segments / 4;
+            // Left side of verticesObj2
+            for (float y = 50; y > -50; y -= delta)
+                verticesObj2[n][i++] = center + Vec2(-50, y);
+
+            // top
+            for (float x = -50; x < 50; x += delta)
+                verticesObj2[n][i++] = center + Vec2(x, -50);
+
+            // Right side
+            for (float y = -50; y < 50; y += delta)
+                verticesObj2[n][i++] = center + Vec2(50, y);
+
+            // Bottom
+            for (float x = 50; x > -50; x -= delta)
+                verticesObj2[n][i++] = center + Vec2(x, 50);
+        }
+    }
+    for (int n = 0; n < _count; n++)
     {
         drawNodeArray[n]->clear();
 
@@ -1703,11 +1705,16 @@ void DrawNodeMorphTest_SolidPolygon::update(float dt)
         }
         // If all the vertices are close, switch shape
         if (totalDistance < 300.0)
-        {
             state[n] = !state[n];
-        }
 
-        drawNodeArray[n]->setLocalScale(Vec2(0.5f, 0.5f));
+        drawNodeArray[n]->setScale(_nodeScale);
+        drawNodeArray[n]->setLocalTransformEnabled(_transform);
+        drawNodeArray[n]->setPreserveDrawOrder(_drawOrder);
+        drawNodeArray[n]->setLocalScale(_localeScale);
+        drawNodeArray[n]->setThicknessScale(_localeThickScale);
+        drawNodeArray[n]->setLocalPosition(_localePos);
+        drawNodeArray[n]->setLocalPivot(_localePivot);
+        drawNodeArray[n]->setLocalRotation(_localeRotation);
         drawNodeArray[n]->drawSolidPolygon(verticesObjMorph[n], segments, color[n], thickness, Color::YELLOW);
     }
 }
@@ -1730,74 +1737,77 @@ string DrawNodeMorphTest_SolidPolygon::subtitle() const
 
 DrawNodeMorphTest_Polygon::DrawNodeMorphTest_Polygon()
 {
-    const float coef = 2.0f * (float)M_PI / segments;
-    float scaleX     = 1.0f;
-    float scaleY     = 1.0f;
-
-    const float angle = 360 / segments;
-
-    for (size_t n = 0; n < 10; n++)
+    for (size_t n = 0; n < 100; n++)
     {
         drawNodeArray[n] = DrawNode::create();
-        drawNodeArray[n]->setLocalTransformEnabled(true);
         addChild(drawNodeArray[n]);
-        drawNodeArray[n]->setPosition(
-            Vec2(AXRANDOM_MINUS1_1() * size.width / 4, AXRANDOM_MINUS1_1() * size.height / 4) + Vec2(100, 100));
-        color[n] = Color::random().withAlpha(1.0f);
-        rad[n]   = 90 + AXRANDOM_0_1() * 10;
-        state[n] = (AXRANDOM_0_1() > 0.5f) ? false : true;
-
-        verticesObj1[n]     = new Vec2[segments];  // circle
-        verticesObj2[n]     = new Vec2[segments];  // square
+        verticesObj1[n]     = new Vec2[segments];
+        verticesObj2[n]     = new Vec2[segments];
         verticesObjMorph[n] = new Vec2[segments];
-
-        for (unsigned int i = 0; i < segments; i++)  //
-        {
-            float rads = i * coef + angle;
-            int radius = 150 + AXRANDOM_MINUS1_1() * 50;
-            if (n > 2)
-            {
-                verticesObj1[n][i].x = radius * cosf(rads) * scaleX + center.x + AXRANDOM_0_1() * 30;
-                verticesObj1[n][i].y = radius * sinf(rads) * scaleY + center.y + AXRANDOM_0_1() * 30;
-            }
-            else
-            {
-                verticesObj1[n][i].x = radius * cosf(rads) * scaleX + center.x;
-                verticesObj1[n][i].y = radius * sinf(rads) * scaleY + center.y;
-            }
-            verticesObjMorph[n][i] = verticesObj1[n][i];
-        }
-
-        // A verticesObj2 is a bunch of vertices along straight lines
-        int i       = 0;
-        float delta = segments / 4;
-        // Left side of verticesObj2
-        for (float y = 50; y > -50; y -= delta)
-        {
-            verticesObj2[n][i++] = center + Vec2(-50, y);
-        }
-        // top
-        for (float x = -50; x < 50; x += delta)
-        {
-            verticesObj2[n][i++] = center + Vec2(x, -50);
-        }
-        // Right side
-        for (float y = -50; y < 50; y += delta)
-        {
-            verticesObj2[n][i++] = center + Vec2(50, y);
-        }
-        // Bottom
-        for (float x = 50; x > -50; x -= delta)
-        {
-            verticesObj2[n][i++] = center + Vec2(x, 50);
-        }
     }
 
     scheduleUpdate();
 }
 void DrawNodeMorphTest_Polygon::update(float dt)
 {
-    for (int n = 0; n < 10; n++)
+    if (oldCount != _count)
+    {
+        for (size_t n = 0; n < oldCount; n++)
+            drawNodeArray[n]->clear();
+
+        oldCount         = _count;
+        const float coef = 2.0f * (float)M_PI / segments;
+        float scaleX     = 1.0f;
+        float scaleY     = 1.0f;
+
+        const float angle = 360 / segments;
+        for (size_t n = 0; n < _count; n++)
+        {
+            drawNodeArray[n]->setPosition(Vec2(size.width / 32 + AXRANDOM_MINUS1_1() * size.width / 4,
+                                               size.height / 32 + AXRANDOM_MINUS1_1() * size.height / 4));
+            color[n] = Color::random().withAlpha(1.0f);
+            rad[n]   = 90 + AXRANDOM_0_1() * 10;
+            state[n] = (AXRANDOM_0_1() > 0.5f) ? false : true;
+
+            for (unsigned int i = 0; i < segments; i++)  //
+            {
+                float rads = i * coef + angle;
+                int radius = 150 + AXRANDOM_MINUS1_1() * 30;
+                if (n > 2)
+                {
+                    verticesObj1[n][i].x = radius * cosf(rads) * scaleX + center.x + AXRANDOM_0_1() * 20;
+                    verticesObj1[n][i].y = radius * sinf(rads) * scaleY + center.y + AXRANDOM_0_1() * 20;
+                }
+                else
+                {
+                    verticesObj1[n][i].x = radius * cosf(rads) * scaleX + center.x;
+                    verticesObj1[n][i].y = radius * sinf(rads) * scaleY + center.y;
+                }
+                verticesObjMorph[n][i] = verticesObj1[n][i];
+            }
+
+            // A verticesObj2 is a bunch of vertices along straight lines
+            int i       = 0;
+            float delta = segments / 4;
+            // Left side of verticesObj2
+            for (float y = 50; y > -50; y -= delta)
+                verticesObj2[n][i++] = center + Vec2(-50, y);
+
+            // top
+            for (float x = -50; x < 50; x += delta)
+                verticesObj2[n][i++] = center + Vec2(x, -50);
+
+            // Right side
+            for (float y = -50; y < 50; y += delta)
+                verticesObj2[n][i++] = center + Vec2(50, y);
+
+            // Bottom
+            for (float x = 50; x > -50; x -= delta)
+                verticesObj2[n][i++] = center + Vec2(x, 50);
+        }
+    }
+
+    for (int n = 0; n < _count; n++)
     {
         drawNodeArray[n]->clear();
 
@@ -1821,15 +1831,15 @@ void DrawNodeMorphTest_Polygon::update(float dt)
         }
         // If all the vertices are close, switch shape
         if (totalDistance < 300.0)
-        {
             state[n] = !state[n];
-        }
 
+        drawNodeArray[n]->setScale(_nodeScale);
         drawNodeArray[n]->setLocalTransformEnabled(_transform);
         drawNodeArray[n]->setPreserveDrawOrder(_drawOrder);
         drawNodeArray[n]->setLocalScale(_localeScale);
         drawNodeArray[n]->setThicknessScale(_localeThickScale);
-        drawNodeArray[n]->setLocalRotation(_localeRotation);
+        drawNodeArray[n]->setLocalPosition(_localePos);
+        drawNodeArray[n]->setLocalPivot(_localePivot);
         drawNodeArray[n]->setLocalRotation(_localeRotation);
         drawNodeArray[n]->drawPoly(verticesObjMorph[n], segments, true, color[n], thickness);
     }
@@ -1853,8 +1863,13 @@ string DrawNodeMorphTest_Polygon::subtitle() const
 
 DrawNodePictureTest::DrawNodePictureTest()
 {
-    _nodeScale = 0.4;
-    flagGUI    = 1;
+    drawNode->setPosition(Vec2(370, 240));
+    _nodeScale = 0.3f;
+    drawNode->setScale(_nodeScale);
+    drawNode->setRotation(180);
+    drawNode->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    drawNode->setScale(_nodeScale);
+    flagGUI = 1;
     scheduleUpdate();
 }
 
@@ -1862,23 +1877,7 @@ void DrawNodePictureTest::update(float dt)
 {
     DrawNodeBaseTest::update(dt);
 
-    static float rot = 0.0f;
-    static int count = 0;
-    static bool wait = false;
-
     drawNode->clear();
-
-    if (!wait)
-    {
-        rot += 5.0f;
-        if (rot >= 343)
-        {
-            rot = count = 0;
-            wait        = true;
-        }
-    }
-    else if (count++ > 30)
-        wait = false;
 
     float sph_xx[2326];
     float sph_yy[2326];
@@ -1902,13 +1901,15 @@ void DrawNodePictureTest::update(float dt)
 
         if ((sph_cmb - 3))
         {
-            drawNode->setPosition(Vec2(420, 280));
             drawNode->setScale(_nodeScale);
-            drawNode->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-            drawNode->setRotation(180);
-            drawNode->setLocalPivot(vertices[0]);
-            drawNode->setLocalRotation(rot);
-            drawNode->drawPolygon(vertices, sph_cmb - 3, color, 0.f, Color::random().withAlpha(0.5f), true);
+            drawNode->setLocalTransformEnabled(_transform);
+            drawNode->setPreserveDrawOrder(_drawOrder);
+            drawNode->setLocalScale(_localeScale);
+            drawNode->setThicknessScale(_localeThickScale);
+            drawNode->setLocalPosition(_localePos);
+            drawNode->setLocalPivot(_localePivot);
+            drawNode->setLocalRotation(_localeRotation);
+            drawNode->drawPolygon(vertices, sph_cmb - 3, color, thickness, Color::random().withAlpha(0.5f), true);
         }
         sph_la += sph_cmb;
         sph_cmb = sph_yy[sph_la];
@@ -2011,8 +2012,6 @@ DrawNodeLineDrawTest::DrawNodeLineDrawTest()
 
 void DrawNodeLineDrawTest::update(float dt)
 {
-    //  DrawNodeBaseTest::update(dt);
-
     drawNode->clear();
 
     flagGUI = 0;
@@ -2197,9 +2196,7 @@ void DrawNodeMethodsTest::drawAll()
     {
         float dd = _count * 10 * 0.5f;
         for (int i = 0; i < _count; i++)
-        {
             drawNode->drawLine(Vec2(100, center.y + dd - i * 10), Vec2(400, center.y + dd - i * 10), color, thickness);
-        }
 
         break;
     }
@@ -2380,19 +2377,15 @@ void DrawNodeMethodsTest::drawAll()
     case drawMethodes::Dot:
     {
         for (int i = 0; i < _count; i++)
-        {
             drawNode->drawDot(Vec2(AXRANDOM_MINUS1_1() * 400 + 200, AXRANDOM_MINUS1_1() * 400), 20 + thickness, color);
-        }
 
         break;
     }
     case drawMethodes::Point:
     {
         for (int i = 0; i < _count; i++)
-        {
             drawNode->drawPoint(Vec2(AXRANDOM_MINUS1_1() * 400 + 200, AXRANDOM_MINUS1_1() * 400), 30 + thickness,
                                 color);
-        }
         break;
     }
     case drawMethodes::Points:
@@ -2511,14 +2504,6 @@ void DrawNodeMethodsTest::drawAll()
         drawNode->drawStar(Vec2(-150, 100), 80, 100, 40, Color::GREEN, 1.0);
         drawNode->drawStar(Vec2(-150, -100), 5, 70, 3, Color::GREEN, 1.0);
 
-        // drawNode->setLocalRotation(0);
-        // for (int i = 0; i < _count; i++)
-        //{
-        //     Vec2 ppp = Vec2(AXRANDOM_MINUS1_1() * size.x / 2, AXRANDOM_MINUS1_1() * size.y / 2);
-        //     drawNode->setLocalPosition(Vec2(ppp));
-        //     drawNode->drawStar(Vec2::ZERO, 40, 60, AXRANDOM_0_1() * 60 + 3,
-        //                        Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), thickness));
-        // }
         break;
     }
     case drawMethodes::SolidStar:
@@ -2535,15 +2520,6 @@ void DrawNodeMethodsTest::drawAll()
         drawNode->drawSolidStar(Vec2(-110, 250), 30, 70, 5, Color::GREEN, Color::YELLOW, 1.0);
         drawNode->drawSolidStar(Vec2(-150, 100), 80, 100, 40, Color::GREEN, Color::YELLOW, 1.0);
         drawNode->drawSolidStar(Vec2(-150, -100), 5, 70, 3, Color::GREEN, Color::YELLOW, 1.0);
-
-        // drawNode->setLocalRotation(0);
-        // for (int i = 0; i < _count; i++)
-        //{
-        //     Vec2 ppp = Vec2(AXRANDOM_MINUS1_1() * size.x / 2, AXRANDOM_MINUS1_1() * size.y / 2);
-        //     drawNode->setLocalPosition(Vec2(ppp));
-        //     drawNode->drawSolidStar(Vec2::ZERO, 40, 60, AXRANDOM_0_1() * 60 + 3, Color::random().withAlpha(1.0f),
-        //                             Color::random().withAlpha(1.0f));
-        // }
 
         break;
     }
@@ -2614,20 +2590,18 @@ void DrawNodeAxmolTest2::update(float dt)
     DrawNodeBaseTest::update(dt);
 
     if (!drawNode || !drawNode)
-    {
         return;
-    }
 
     drawNode->clear();
 
     switch (selectedRadioButton)
     {
     case 0:
-        setSubtitleLabel("Axmol v2 _drawOrder ON (T)");
+        setSubtitleLabel("setPreserveDrawOrder(true) (T)");
         drawAllv2(drawNode, true);
         break;
     case 1:
-        setSubtitleLabel("Axmol v2 _drawOrder OFF (T,P,L)");
+        setSubtitleLabel("setPreserveDrawOrder(false) (T,P,L)");
         drawAllv2(drawNode, false);
         break;
     default:
@@ -2711,9 +2685,7 @@ void DrawNodeAxmolTest2::drawAllv2(DrawNode* drawNode, bool _drawOrder)
 
     // drawNode 10 circles
     for (int i = 0; i < 10; i++)
-    {
         drawNode->drawDot(Vec2(size.width / 2, size.height / 2), 10.f * (10 - i), Color::random().withAlpha(1.0f));
-    }
 
     // drawNode polygons
     Vec2 points[] = {Vec2(size.height / 4, 0.0f), Vec2(size.width, size.height / 5),
@@ -2780,9 +2752,7 @@ void DrawNodeAxmolTest2::drawAllv2(DrawNode* drawNode, bool _drawOrder)
                            Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
 
     for (int i = 0; i < 100; i++)
-    {
         drawNode->drawPoint(Vec2(i * 7.0f, 5.0f), (float)i / 5 + 1, Color::random().withAlpha(1.0f));
-    }
 
     drawNode->drawLine(Vec2(0.0f, size.height), Vec2(size.width, size.height - 20), Color::YELLOW);
     drawNode->drawLine(Vec2(0.0f, 0.0f), Vec2(size.width, size.height - 20), Color::YELLOW);
@@ -2790,7 +2760,7 @@ void DrawNodeAxmolTest2::drawAllv2(DrawNode* drawNode, bool _drawOrder)
 
 string DrawNodeAxmolTest2::title() const
 {
-    return "DrawNode Order test";
+    return "DrawNode PreserveDrawOrder";
 }
 
 string DrawNodeAxmolTest2::subtitle() const
@@ -2920,10 +2890,10 @@ void DrawNodeSolidCircleTest::showCircles()
                                            (VisibleRect::center().y - 50) * AXRANDOM_MINUS1_1());
 
         Color color = Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1() + 0.1f);
-        //  float radius = 10 + AXRANDOM_0_1() * 80;
+
         if (fast)
         {
-            //;       drawNode->drawSolidCircle(pos, radius, color);
+            drawNode->drawSolidCircle(pos, radius, 0, 36, color);  // will be changed with v3.0 drawNode->drawSolidCircle(pos, radius, color);
         }
         else
         {
@@ -2937,10 +2907,6 @@ void DrawNodeSolidCircleTest::showCircles()
     {
         autoTestLabel->setString(std::to_string(duration.count()));
     }
-
-    drawNode->setPreserveDrawOrder(true);
-    rect = {190, 205, 100, 30};
-    //;   drawNode->drawSolidRect(rect, (fast) ? Color::GREEN : Color::RED);
 }
 
 string DrawNodeSolidCircleTest::title() const
@@ -2958,6 +2924,8 @@ DrawNodeIssueTester::DrawNodeIssueTester()
     static Vec2 vertices[] = {Vec2(0.0f, 0.0f), Vec2(50.0f, 50.0f), Vec2(100.0f, 50.0f), Vec2(100.0f, 100.0f),
                               Vec2(50.0f, 100.0f)};
     int verticesCount      = 5;
+
+    drawNode->setLocalTransformEnabled(true);
 
     drawNode->setLocalPosition(Vec2(5, 150));
     drawNode->drawPoly(vertices, verticesCount, false, Color::GREEN);
@@ -3131,11 +3099,9 @@ DrawNodeSpLinesOpenClosedTest::DrawNodeSpLinesOpenClosedTest()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     drawNodeCP = DrawNode::create();
-    //   drawNodeCP->setLocalTransformEnabled(true);
     addChild(drawNodeCP, 50);
 
     drawNode = DrawNode::create();
-    //   drawNode->setLocalTransformEnabled(true);
     addChild(drawNode, 30);
 
     screen = Director::getInstance()->getVisibleSize();
@@ -3240,68 +3206,6 @@ DrawNodeThickness1Test::DrawNodeThickness1Test()
         labelSize[i]->enableStrikethrough();
         addChild(labelSize[i]);
     }
-
-    // thickness 1
-    auto drawSR1 = DrawNode::create();
-    addChild(drawSR1, 10);
-    drawSR1->setPosition(Vec2(0, 0));
-    drawSR1->drawSolidRect(Vec2(7, 7), Vec2(10, 10), Color(0.5f, 1, 0.5f, 0.5f), 5.0f, Color(0, 1, 0, 0.5f));
-    drawSR1->setScale(20);
-
-    drawSR1->setLocalPosition(Vec2(240, 0));
-    drawSR1->drawSolidRect(Vec2(7, 7), Vec2(10, 10), Color(1.0f, 1, 0.5f, 0.5f), 2.0f, Color(0, 1, 0, 0.5f));
-    // drawSR1->setScale(20);
-    // drawSR1->setLocalScale({1, 1});
-    // drawSR1->setThicknessScale(1);
-
-    // auto drawR1 = DrawNode::create();
-    // addChild(drawR1, 10);
-    // drawR1->setPosition(Vec2(-105, -30));
-    // drawR1->drawRect(Vec2(7, 7), Vec2(8, 8), Color(0, 1, 0, 0.5f), 1.0f);
-    // drawR1->setScale(32);
-    // drawR1->setLocalScale({1, 1});
-    // drawR1->setThicknessScale(1);
-
-    //// thickness 2
-    // auto drawSR2 = DrawNode::create();
-    // addChild(drawSR2, 10);
-    // drawSR2->setPosition(Vec2(-180, -100));
-    // drawSR2->drawSolidRect(Vec2(7, 7), Vec2(8, 8), Color(0.5f, 0.5f, 1, 0.5f), 20.0f, Color(0, 0, 1, 0.5f));
-    // drawSR2->setScale(32);
-    // drawSR2->setLocalScale({1, 1});
-    // drawSR2->setThicknessScale(2);
-
-    // auto drawR2 = DrawNode::create();
-    // addChild(drawR2, 10);
-    // drawR2->setPreserveDrawOrder(false);
-    // drawR2->setPosition(Vec2(105,110));
-    // drawR2->drawRect(Vec2(7, 7), Vec2(30, 30), Color(0, 0, 1, 0.5f), 10.0f);
-
-    // auto drawR3 = DrawNode::create();
-    // addChild(drawR3, 10);
-    // drawR3->setPreserveDrawOrder(true);
-    // drawR3->setPosition(Vec2(105, 40));
-    // drawR3->drawRect(Vec2(7, 7), Vec2(50, 50), Color(0, 0, 1,0.5f), 30.0f);
-
-    // drawR2->setScale(32);
-    // drawR2->setLocalScale({1, 1});
-    // drawR2->setThicknessScale(2);
-
-    // thickness 2
-    drawNode->setPreserveDrawOrder(false);
-    ;
-    // drawNode->setPosition(Vec2(-180, -120));
-    drawNode->drawSolidRect(Vec2(7, 7), Vec2(80, 80), Color(1, 0.5, 0.5, 1), 1.0f, Color(1, 0, 1, 1));
-    // drawNode->setScale(32);
-    // drawNode->setLocalScale({1, 1});
-
-    drawNode->setPreserveDrawOrder(true);
-    drawNode->setPosition(Vec2(-55, -120));
-    drawNode->drawRect(Vec2(7, 7), Vec2(8, 8), Color(1, 0, 0, 1), 1.0f);
-    // drawNode->setScale(32);
-    //  drawNode->setLocalScale({1, 1});
-    //   drawNode->setThicknessScale(2);
-
     scheduleUpdate();
 }
 
@@ -3314,22 +3218,25 @@ void DrawNodeThickness1Test::onEnter()
 void DrawNodeThickness1Test::update(float dt)
 {
     DrawNodeBaseTest::update(dt);
+
     drawNode->setScale(_nodeScale);
+    drawNode->setLocalTransformEnabled(_transform);
+    drawNode->setPreserveDrawOrder(_drawOrder);
     drawNode->setLocalScale(_localeScale);
     drawNode->setThicknessScale(_localeThickScale);
+    drawNode->setLocalPosition(_localePos);
+    drawNode->setLocalPivot(_localePivot);
     drawNode->setLocalRotation(_localeRotation);
-    drawNode->setPreserveDrawOrder(_drawOrder);
-    drawNode->setLocalTransformEnabled(_transform);
 }
 
 string DrawNodeThickness1Test::title() const
 {
-    return "Thickness=1.0 Test";
+    return "Side effect tests";
 }
 
 string DrawNodeThickness1Test::subtitle() const
 {
-    return "plus ax::Label underline/strikethrough test";
+    return "e.g. ax::Label underline/strikethrough test";
 }
 
 #if defined(AX_PLATFORM_PC)
@@ -3338,10 +3245,6 @@ DrawNodePointTest::DrawNodePointTest()
 {
     Vec2 visibleSize = Director::getInstance()->getVisibleSize();
 
-    // drawNode->clear();
-    // DrawNodeBaseTest::update(dt);
-
-    //    _subtitle = "please wait";
     Color color = Color::RED;
     int delta   = 10;
     int xx      = 0;
@@ -3365,7 +3268,6 @@ DrawNodePointTest::DrawNodePointTest()
         }
         yy++;
     }
-    // scheduleUpdate();
 }
 
 string DrawNodePointTest::title() const
@@ -3460,7 +3362,3 @@ void CandyMixEeffect::update(float dt)
     }
 }
 #endif
-
-// #if defined(_WIN32)
-// #    pragma pop_macro("TRANS_localeRotationRENT")
-// #endif

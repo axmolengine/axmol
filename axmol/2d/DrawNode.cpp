@@ -529,19 +529,8 @@ void DrawNode::drawSolidRect(const Vec2& origin,
                              float thickness,
                              const Color& borderColor)
 {
-    auto _origin = origin;
-    auto _destination = destination;
-    if (borderColor.a)
-    {
-        _origin += Vec2(thickness,thickness);
-        _destination -= Vec2(thickness, thickness);
-        _drawRect(origin, destination, fillColor, thickness);
-    }
-    _drawSegment(origin, destination, fillColor, thickness);
-    //    _drawFilledRect(_origin, _destination, borderColor);
-
-    //Vec2 _vertices5[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
-    //_drawPolygon(_vertices5, 5, fillColor, borderColor, false, thickness, true);
+    Vec2 _vertices5[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
+    _drawPolygon(_vertices5, 5, fillColor, borderColor, false, thickness, true);
 }
 
 void DrawNode::drawSolidPoly(const Vec2* poli,

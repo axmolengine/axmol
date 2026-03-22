@@ -129,7 +129,7 @@ protected:
 
     // DrawNode stuff
     ax::DrawNode* drawNode = nullptr;
-    ax::DrawNode* drawNodeArray[10];
+    ax::DrawNode* drawNodeArray[100]; // max 100
 
     // Window stuff
     ax::Vec2 origin;
@@ -181,12 +181,13 @@ public:
     void onEnter() override;
 
 private:
-    ax::Vec2* verticesObj1[10];
-    ax::Vec2* verticesObj2[10];
-    ax::Vec2* verticesObjMorph[10];
-    ax::Color color[10];
-    float rad[10];
-    bool state[10];
+    ax::Vec2* verticesObj1[100];
+    ax::Vec2* verticesObj2[100];
+    ax::Vec2* verticesObjMorph[100];
+    ax::Color color[100];
+    float rad[100];
+    bool state[100];
+    int oldCount = 0;
 
     int segments = 40;
 };
@@ -204,12 +205,13 @@ public:
     void onEnter() override;
 
 private:
-    ax::Vec2* verticesObj1[10];
-    ax::Vec2* verticesObj2[10];
-    ax::Vec2* verticesObjMorph[10];
-    ax::Color color[10];
-    float rad[10];
-    bool state[10];
+    ax::Vec2* verticesObj1[100];
+    ax::Vec2* verticesObj2[100];
+    ax::Vec2* verticesObjMorph[100];
+    ax::Color color[100];
+    float rad[100];
+    bool state[100];
+    int oldCount = 0;
 
     int segments = 40;
 };
