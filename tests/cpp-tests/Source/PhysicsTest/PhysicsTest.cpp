@@ -38,8 +38,7 @@ using namespace ax;
 PhysicsTests::PhysicsTests()
 {
     // Fast Test case, remove when ready to review
-    ADD_TEST_CASE(PhysicsDemoSlice);
-    ADD_TEST_CASE(PhysicsDemoJoints);
+    ADD_TEST_CASE(PhysicsDemoPump);
 
     // ADD_TEST_CASE(PhysicsDemoLogoSmash);
     ADD_TEST_CASE(PhysicsDemoPyramidStack);
@@ -1004,30 +1003,31 @@ void PhysicsDemoPump::onEnter()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
     scheduleUpdate();
 
-    auto node     = Node::create();
-    auto nodeBody = Rigidbody2D::create();
-    node->addComponent(nodeBody);
-    nodeBody->setDynamic(false);
+    auto worldBox     = Node::create();
+    auto worldBoxBody = Rigidbody2D::create();
+    worldBox->addComponent(worldBoxBody);
+    worldBoxBody->setDynamic(false);
 
     PhysicsMaterial2D staticMaterial(physics2d::MaxDensity, 0, 0.5f);
-    nodeBody->addCollider(EdgeSegmentCollider2D::create(VisibleRect::leftTop() + Vec2(50, 0),
-                                                        VisibleRect::leftTop() + Vec2(50, -130), staticMaterial));
-    nodeBody->addCollider(EdgeSegmentCollider2D::create(VisibleRect::leftTop() + Vec2(190, 0),
-                                                        VisibleRect::leftTop() + Vec2(100, -50), staticMaterial));
-    nodeBody->addCollider(EdgeSegmentCollider2D::create(VisibleRect::leftTop() + Vec2(100, -50),
-                                                        VisibleRect::leftTop() + Vec2(100, -90), staticMaterial));
-    nodeBody->addCollider(EdgeSegmentCollider2D::create(VisibleRect::leftTop() + Vec2(50, -130),
-                                                        VisibleRect::leftTop() + Vec2(100, -145), staticMaterial));
-    nodeBody->addCollider(EdgeSegmentCollider2D::create(VisibleRect::leftTop() + Vec2(100, -145),
-                                                        VisibleRect::leftBottom() + Vec2(100, 80), staticMaterial));
-    nodeBody->addCollider(EdgeSegmentCollider2D::create(VisibleRect::leftTop() + Vec2(150, -80),
-                                                        VisibleRect::leftBottom() + Vec2(150, 80), staticMaterial));
-    nodeBody->addCollider(EdgeSegmentCollider2D::create(VisibleRect::leftTop() + Vec2(150, -80),
-                                                        VisibleRect::rightTop() + Vec2(-100, -150), staticMaterial));
+    worldBoxBody->addCollider(EdgeSegmentCollider2D::create(VisibleRect::leftTop() + Vec2(50, 0),
+                                                            VisibleRect::leftTop() + Vec2(50, -130), staticMaterial));
+    worldBoxBody->addCollider(EdgeSegmentCollider2D::create(VisibleRect::leftTop() + Vec2(190, 0),
+                                                            VisibleRect::leftTop() + Vec2(100, -50), staticMaterial));
+    worldBoxBody->addCollider(EdgeSegmentCollider2D::create(VisibleRect::leftTop() + Vec2(100, -50),
+                                                            VisibleRect::leftTop() + Vec2(100, -90), staticMaterial));
+    worldBoxBody->addCollider(EdgeSegmentCollider2D::create(VisibleRect::leftTop() + Vec2(50, -130),
+                                                            VisibleRect::leftTop() + Vec2(100, -145), staticMaterial));
+    worldBoxBody->addCollider(EdgeSegmentCollider2D::create(VisibleRect::leftTop() + Vec2(100, -145),
+                                                            VisibleRect::leftBottom() + Vec2(100, 80), staticMaterial));
+    worldBoxBody->addCollider(EdgeSegmentCollider2D::create(VisibleRect::leftTop() + Vec2(150, -80),
+                                                            VisibleRect::leftBottom() + Vec2(150, 80), staticMaterial));
+    worldBoxBody->addCollider(EdgeSegmentCollider2D::create(
+        VisibleRect::leftTop() + Vec2(150, -80), VisibleRect::rightTop() + Vec2(-100, -150), staticMaterial));
 
-    nodeBody->setCategoryBits(0x01);
-    node->setPosition(Vec2::ZERO);
-    this->addChild(node);
+    worldBoxBody->setCategoryBits(0x01);
+    worldBox->setPosition(Vec2::ZERO);
+    this->addChild(worldBox);
+    worldBox->setName("world-box");
 
     // balls
     for (int i = 0; i < 6; ++i)
@@ -1035,6 +1035,7 @@ void PhysicsDemoPump::onEnter()
         auto ball = makeBall(VisibleRect::leftTop() + Vec2(75 + AXRANDOM_0_1() * 90, 0.0f), 22,
                              PhysicsMaterial2D(0.05f, 0.0f, 0.1f));
         ball->setTag(DRAG_BODYS_BITS);
+        ball->setName("ball");
         addChild(ball);
     }
 
@@ -1050,6 +1051,7 @@ void PhysicsDemoPump::onEnter()
     this->addChild(pump);
     pumpBody->setCategoryBits(0x02);
     pumpBody->setGravityEnable(false);
+    pump->setName("pump");
 
     // small gear
     auto sgearBody = Rigidbody2D::createCircle(44);
@@ -1057,47 +1059,82 @@ void PhysicsDemoPump::onEnter()
     sgearBody->setCollisionMaskBits(0x04);
     auto sgear = Node::create();
     sgear->setTag(1);
+    sgear->setName("small-gear");
     sgear->addComponent(sgearBody);
     sgear->setPosition(VisibleRect::leftBottom() + Vec2(125.0f, 0.0f));
     this->addChild(sgear);
 
-    //(PhysicsJointPin::instantiate(nodeBody, sgearBody, sgear->getPosition()));
-    //(PhysicsJointDistance::instantiate(pumpBody, sgearBody, Vec2(0.0f, 0.0f), Vec2(0.0f, -44.0f)));
+    sgear->addComponent(PinJoint2D::create(sgear->getPosition(), worldBoxBody));
+    auto distanceJoint = DistanceJoint2D::create(sgearBody);
+    distanceJoint->setConnectedAnchor(Vec2{0.0f, -44.0f});
+    pump->addComponent(distanceJoint);
 
     // big gear
     auto bgearBody = Rigidbody2D::createCircle(100);
     bgearBody->setCategoryBits(0x04);
     auto bgear = Node::create();
+    bgear->setTag(2);
+    bgear->setName("big-gear");
     bgear->addComponent(bgearBody);
     bgear->setPosition(VisibleRect::leftBottom() + Vec2(275.0f, 0.0f));
     this->addChild(bgear);
+    auto tag = bgear->getTag();
 
-    // (PhysicsJointPin::instantiate(bgearBody, nodeBody, bgear->getPosition()));
-    // (PhysicsJointGear::instantiate(sgearBody, bgearBody, (float)-M_PI_2, -2.0f));
+    bgear->addComponent(PinJoint2D::create(bgear->getPosition(), worldBoxBody));
+    auto motorJoint = MotorJoint2D::create(bgearBody);
+    motorJoint->setAngularVelocity(-M_PI_2);
+    sgear->addComponent(motorJoint);
 
     // plugger
     Vec2 seg[]     = {VisibleRect::leftTop() + Vec2(75, -120), VisibleRect::leftBottom() + Vec2(75, -100)};
     Vec2 segCenter = (seg[1] + seg[0]) / 2;
-    seg[1] -= segCenter;
-    seg[0] -= segCenter;
 
-    auto pluggerBody = Rigidbody2D::createEdgeSegment(seg[0], seg[1], PhysicsMaterial2D(0.01f, 0.0f, 0.5f));
+    Vec2 p0 = seg[0] - segCenter;
+    Vec2 p1 = seg[1] - segCenter;
+
+    float lineWidth = 20.0f;
+    Vec2 segDir     = p1 - p0;
+    Vec2 perpDir    = segDir.getPerp();
+    perpDir.normalize();
+
+    Vec2 offset = perpDir * (lineWidth / 2.0f);
+
+    Vec2 polygonVertices[] = {
+        p0 - offset,  // Bottom-left point
+        p1 - offset,  // Bottom-right point
+        p1 + offset,  // Top-right point
+        p0 + offset   // Top-left point
+    };
+
+    auto pluggerBody = Rigidbody2D::createPolygon(polygonVertices, PhysicsMaterial2D(0.01f, 0.0f, 0.5f));
     pluggerBody->setDynamic(true);
+    pluggerBody->setAutoMass(false);
+    pluggerBody->setMass(30);
+    pluggerBody->setMoment(100000);
     pluggerBody->setCategoryBits(0x02);
     auto plugger = Node::create();
+    plugger->setName("plugger");
     plugger->addComponent(pluggerBody);
     plugger->setPosition(segCenter);
     this->addChild(plugger);
 
     sgearBody->setCollisionMaskBits(0x04 | 0x01);
-    // (PhysicsJointPin::instantiate(nodeBody, pluggerBody, VisibleRect::leftBottom() + Vec2(75.0f, -90.0f)));
-    // (PhysicsJointDistance::instantiate(pluggerBody, sgearBody, Vec2::ZERO, Vec2(44.0f, 0.0f)));
+
+    auto pivotJoint = PinJoint2D::create(plugger->getPosition(), worldBoxBody);
+    pivotJoint->setMotor(JointMotor2D{});
+    plugger->addComponent(pivotJoint);
+    
+    distanceJoint = DistanceJoint2D::create(sgearBody);
+    distanceJoint->setConnectedAnchor(Vec2{44.0f, 0.0f});
+    plugger->addComponent(distanceJoint);
 }
 
 void PhysicsDemoPump::update(float delta)
 {
     for (const auto& child : getChildren())
     {
+        if (child->getTag() == -1)
+            continue;
         if ((child->getTag() & DRAG_BODYS_BITS) && child->getPosition().y < 0.0f)
         {
             child->setPosition(VisibleRect::leftTop() + Vec2(75 + AXRANDOM_0_1() * 90, 0.0f));
@@ -1249,8 +1286,8 @@ bool PhysicsDemoSlice::slice(PhysicsWorld2D& /*world*/, const PhysicsRayCastInfo
 
         auto rigidbody = info.collider->getAttachedBody();
         auto owner     = rigidbody->getOwner();
+        // remove rigidbody only also works, owner->removeComponent(rigidbody);
         owner->removeFromParent();
-        // owner->removeComponent(rigidbody);
     }
 
     return true;
@@ -1288,8 +1325,7 @@ void PhysicsDemoSlice::clipPoly(PolygonCollider2D* collider, Vec2 normal, float 
     points.resize(pointsCount);
     Vec2 center          = Collider2D::getPolygonCenter(points);
     Node* node           = Node::create();
-    Rigidbody2D* polygon = Rigidbody2D::createPolygon(points,
-                                                      PHYSICS_MATERIAL_2D_DEFAULT, -center);
+    Rigidbody2D* polygon = Rigidbody2D::createPolygon(points, PHYSICS_MATERIAL_2D_DEFAULT, -center);
     node->setPosition(center);
     node->addComponent(polygon);
     polygon->setVelocity(body->getVelocityAtWorldPoint(center));
