@@ -2893,7 +2893,8 @@ void DrawNodeSolidCircleTest::showCircles()
 
         if (fast)
         {
-            drawNode->drawSolidCircle(pos, radius, 0, 36, color);  // will be changed with v3.0 drawNode->drawSolidCircle(pos, radius, color);
+            drawNode->drawSolidCircle(
+                pos, radius, 0, 36, color);  // will be changed with v3.0 drawNode->drawSolidCircle(pos, radius, color);
         }
         else
         {

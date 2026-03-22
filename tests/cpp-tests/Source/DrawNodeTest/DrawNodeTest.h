@@ -94,19 +94,18 @@ public:
     virtual std::string title() const override;
     void drawDirection(const ax::Vec2* vec, const int size, ax::Vec2 offset);
 
-    
-    int _color;         // 
-    float _count;     //
+    int _color;    //
+    float _count;  //
     bool _transparent;
-    float _nodeScale;     // drawNode->getScale;
-    ax::Vec2 _localePos;  // drawNode->_localPosition
-    ax::Vec2 _localePivot;  // drawNode->_localPivot
-    ax::Vec2 _localeScale;  // drawNode->_localScale
-    float _localeThickScale;     // drawNode->_thicknessScale
+    float _nodeScale;         // drawNode->getScale;
+    ax::Vec2 _localePos;      // drawNode->_localPosition
+    ax::Vec2 _localePivot;    // drawNode->_localPivot
+    ax::Vec2 _localeScale;    // drawNode->_localScale
+    float _localeThickScale;  // drawNode->_thicknessScale
     float thickness;
     float _localeRotation;  // drawNode->_localRotation
-    float _angelStart;  // angle start
-    float _angelEnd;  // angle end
+    float _angelStart;      // angle start
+    float _angelEnd;        // angle end
     bool _drawOrder;
     bool _transform;
     int flagGUI        = -1;
@@ -129,7 +128,7 @@ protected:
 
     // DrawNode stuff
     ax::DrawNode* drawNode = nullptr;
-    ax::DrawNode* drawNodeArray[100]; // max 100
+    ax::DrawNode* drawNodeArray[100];  // max 100
 
     // Window stuff
     ax::Vec2 origin;

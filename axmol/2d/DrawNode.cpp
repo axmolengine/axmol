@@ -485,7 +485,7 @@ void DrawNode::drawRect(const Vec2& p1,
 
 void DrawNode::drawRect(const Vec2& origin, const Vec2& destination, const Color& color, float thickness)
 {
-    _drawRect( origin, destination, color, thickness);
+    _drawRect(origin, destination, color, thickness);
 }
 
 void DrawNode::drawSegment(const Vec2& from,
@@ -909,18 +909,17 @@ void DrawNode::_drawRect(const Vec2& origin, const Vec2& destination, const Colo
     {
         Vec2 line[5] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
         _drawPoly(line, 5, false, color, thickness, true);
-     //   _drawLine(from, to, color);  // fastest way to draw a line
+        //   _drawLine(from, to, color);  // fastest way to draw a line
     }
     else
     {
         float width      = thickness * _thicknessScale * 0.25f * 0.5f;
-        float _thickness = thickness;// * 0.5f;
+        float _thickness = thickness;  // * 0.5f;
         _drawSegment(Vec2(origin.x + width, destination.y), Vec2(destination.x - width, destination.y), color,
                      _thickness, DrawNode::Butt, DrawNode::Butt);
-        _drawSegment(Vec2(origin.x + width, origin.y), Vec2(destination.x - width, origin.y), color,
-                     _thickness, DrawNode::Butt, DrawNode::Butt);
-        _drawSegment(destination, Vec2(destination.x, origin.y), color, _thickness, DrawNode::Square,
-                     DrawNode::Square);
+        _drawSegment(Vec2(origin.x + width, origin.y), Vec2(destination.x - width, origin.y), color, _thickness,
+                     DrawNode::Butt, DrawNode::Butt);
+        _drawSegment(destination, Vec2(destination.x, origin.y), color, _thickness, DrawNode::Square, DrawNode::Square);
         _drawSegment(origin, Vec2(origin.x, destination.y), color, _thickness, DrawNode::Square, DrawNode::Square);
     }
 }
@@ -932,9 +931,7 @@ void DrawNode::_drawFilledRect(const Vec2& origin, const Vec2& destination, cons
 
     auto _destination = (destination);
 
-
-     Vec2 n = ((origin - destination).getPerp()).getNormalized();
-
+    Vec2 n = ((origin - destination).getPerp()).getNormalized();
 
     V2F_T2F_C4F a = {origin, Vec2::ZERO, color};
     V2F_T2F_C4F b = {Vec2(origin.x, destination.y), Vec2::ZERO, color};
