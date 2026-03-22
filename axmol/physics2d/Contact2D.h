@@ -92,7 +92,7 @@ public:
     {
         NONE,
         PRESOLVE,
-        POSTSOLVE, // not implement yet
+        POSTSOLVE,  // not implement yet
     };
 
     /** Get contact shape A. */

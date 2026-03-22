@@ -385,7 +385,7 @@ bool SpringJoint2D::attachToBody()
         configureBaseSettings(jointDef.base);
         if (_restLength < FLT_EPSILON)
             _restLength = calcuateDistance(jointDef.base.localFrameA.p, jointDef.base.localFrameB.p);
-        jointDef.length = _restLength;
+        jointDef.length       = _restLength;
         jointDef.enableSpring = true;
 
         _jointId = b2CreateDistanceJoint(_world->internalHandle(), &jointDef);

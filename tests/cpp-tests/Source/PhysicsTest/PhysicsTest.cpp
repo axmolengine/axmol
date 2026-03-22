@@ -1123,7 +1123,7 @@ void PhysicsDemoPump::onEnter()
     auto pivotJoint = PinJoint2D::create(plugger->getPosition(), worldBoxBody);
     pivotJoint->setMotor(JointMotor2D{});
     plugger->addComponent(pivotJoint);
-    
+
     distanceJoint = DistanceJoint2D::create(sgearBody);
     distanceJoint->setConnectedAnchor(Vec2{44.0f, 0.0f});
     plugger->addComponent(distanceJoint);
@@ -1225,10 +1225,10 @@ void PhysicsDemoOneWayPlatform::onEnter()
     ballBody->setVelocity(Vec2(0.0f, 150.0f));
     ball->setTag(DRAG_BODYS_BITS);
     ballBody->setContactMaskBits(0xFFFFFFFF);
-    ballBody->setPreSolveEnabled(true); // enable pre solve hook
+    ballBody->setPreSolveEnabled(true);  // enable pre solve hook
     this->addChild(ball);
 
-    auto contactListener            = Contact2DListenerWithBodies::create(platformBody, ballBody);
+    auto contactListener               = Contact2DListenerWithBodies::create(platformBody, ballBody);
     contactListener->onContactPreSolve = AX_CALLBACK_1(PhysicsDemoOneWayPlatform::onContactPreSolve, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 }
@@ -1558,7 +1558,7 @@ void PhysicsContactTest::resetTest()
     wall->setPosition(VisibleRect::center());
     root->addChild(wall);
 
-    auto contactListener            = Contact2DListener::create();
+    auto contactListener               = Contact2DListener::create();
     contactListener->onContactPreSolve = AX_CALLBACK_1(PhysicsContactTest::onContactPreSolve, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 

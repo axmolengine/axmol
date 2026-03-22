@@ -509,7 +509,7 @@ bool PhysicsWorld2D::handleCollisionPreSolve(b2ShapeId shapeIdA,
     auto contact2D = Contact2D::obtain(static_cast<Collider2D*>(b2Shape_GetUserData(shapeIdA)),
                                        static_cast<Collider2D*>(b2Shape_GetUserData(shapeIdB)));
     contact2D->setPointNormal(PhysicsUtility2D::toVec2(point), PhysicsUtility2D::toVec2(normal));
-    bool ret       = world->onCollisionPreSolve(contact2D);
+    bool ret = world->onCollisionPreSolve(contact2D);
     contact2D->release();
     return ret;
 }

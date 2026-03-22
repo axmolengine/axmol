@@ -187,7 +187,7 @@ Contact2DListener* Contact2DListener::clone()
 
     if (obj != nullptr)
     {
-        obj->onContactPreSolve = onContactPreSolve;
+        obj->onContactPreSolve  = onContactPreSolve;
         obj->onContactPostSolve = onContactPostSolve;
 
         return obj;
@@ -234,7 +234,7 @@ Contact2DListenerWithBodies* Contact2DListenerWithBodies::clone()
 
     if (obj != nullptr)
     {
-        obj->onContactPreSolve = onContactPreSolve;
+        obj->onContactPreSolve  = onContactPreSolve;
         obj->onContactPostSolve = onContactPostSolve;
 
         return obj;
@@ -325,7 +325,7 @@ Contact2DListenerWithGroup* Contact2DListenerWithGroup::clone()
 
     if (obj != nullptr)
     {
-        obj->onContactPreSolve = onContactPreSolve;
+        obj->onContactPreSolve  = onContactPreSolve;
         obj->onContactPostSolve = onContactPostSolve;
 
         return obj;

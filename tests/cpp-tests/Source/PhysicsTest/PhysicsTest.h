@@ -52,11 +52,11 @@ public:
                          const ax::PhysicsMaterial2D& material = ax::PHYSICS_MATERIAL_2D_DEFAULT);
     ax::Sprite* makeBox(ax::Vec2 point,
                         ax::Size size,
-                        int color                    = 0,
+                        int color                             = 0,
                         const ax::PhysicsMaterial2D& material = ax::PHYSICS_MATERIAL_2D_DEFAULT);
     ax::Sprite* makeTriangle(ax::Vec2 point,
                              ax::Size size,
-                             int color                    = 0,
+                             int color                             = 0,
                              const ax::PhysicsMaterial2D& material = ax::PHYSICS_MATERIAL_2D_DEFAULT);
 
     bool onTouchBegan(ax::Touch* touch, ax::Event* event);

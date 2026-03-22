@@ -356,10 +356,10 @@ protected:
     virtual void update(float delta, bool userCall = false);
 
     static bool handleCollisionPreSolve(b2ShapeId shapeIdA,
-                                    b2ShapeId shapeIdB,
-                                    b2Vec2 point,
-                                    b2Vec2 normal,
-                                    PhysicsWorld2D* world);
+                                        b2ShapeId shapeIdB,
+                                        b2Vec2 point,
+                                        b2Vec2 normal,
+                                        PhysicsWorld2D* world);
 
     virtual bool onCollisionPreSolve(Contact2D* contact);
     virtual void onCollisionPostSolve(Contact2D* contact);
