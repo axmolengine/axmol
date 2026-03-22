@@ -49,6 +49,7 @@ struct JointTranslationLimits2D
     float upperValue{0.0f};
 };
 
+// Joint Angle limits in degrees
 struct JointAngleLimits2D
 {
     float lowerValue{0.0f};
@@ -449,6 +450,7 @@ public:
      */
     static MotorJoint2D* create(Rigidbody2D* connectedBody = nullptr);
 
+    /** Set angular velocity in degrees */
     void setAngularVelocity(float val);
     void setAngularFrequency(float val);
     void setAngularDamping(float val);
@@ -457,7 +459,8 @@ public:
     void setLinearFrequency(float val);
     void setLinearDamping(float val);
 
-    float getAngularVelocity() const { return _settings.angularVelocity; }
+    /** Get angular velocity in degrees */
+    float getAngularVelocity() const { return MathUtil::degrees(_settings.angularVelocity); }
     float getAngularFrequency() const { return _settings.angularHertz; }
     float getAngularDamping() const { return _settings.angularDampingRatio; }
 

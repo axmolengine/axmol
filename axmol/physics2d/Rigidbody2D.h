@@ -262,7 +262,7 @@ public:
     virtual Vec2 getVelocity();
 
     /**
-     * Set the angular velocity of a body.
+     * Set the angular velocity in degrees of a body.
      *
      * @param velocity The angular velocity is set to this body.
      */
@@ -274,7 +274,7 @@ public:
     /** get the angular velocity of a body at a world point */
     virtual Vec2 getVelocityAtWorldPoint(const Vec2& point);
 
-    /** get the angular velocity of a body */
+    /** get the angular velocity in degrees of a body */
     virtual float getAngularVelocity();
 
     /** set the max of velocity */
@@ -283,10 +283,10 @@ public:
     /** get the max of velocity */
     virtual float getVelocityLimit();
 
-    /** set the max of angular velocity */
+    /** set the max of angular velocity in degrees */
     virtual void setAngularVelocityLimit(float limit);
 
-    /** get the max of angular velocity */
+    /** get the max of angular velocity in degrees */
     virtual float getAngularVelocityLimit();
 
     /** remove the body from the world it added to */
@@ -550,8 +550,8 @@ protected:
     CollisionDetectionMode _collisionDetection;
     float _mass;
     float _moment;
-    float _velocityLimit;
-    float _angularVelocityLimit;
+    float _velocityLimit;         // in degrees
+    float _angularVelocityLimit; // in degrees
 
     float _linearDamping;
     float _angularDamping;

@@ -837,7 +837,7 @@ MotorJoint2D::MotorJoint2D(Rigidbody2D* connectedBody) : Joint2D(connectedBody)
 
 void MotorJoint2D::setAngularVelocity(float val)
 {
-    _settings.angularVelocity = val;
+    _settings.angularVelocity = MathUtil::radians(val);
     if (isAttached())
         b2MotorJoint_SetAngularVelocity(_jointId, val);
 }

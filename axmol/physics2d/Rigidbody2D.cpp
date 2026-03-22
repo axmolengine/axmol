@@ -544,12 +544,12 @@ void Rigidbody2D::setAngularVelocity(float velocity)
 
     _angularVelocity = velocity;
     if (isAttached())
-        b2Body_SetAngularVelocity(_bodyId, velocity);
+        b2Body_SetAngularVelocity(_bodyId, MathUtil::radians(velocity));
 }
 
 float Rigidbody2D::getAngularVelocity()
 {
-    return isAttached() ? b2Body_GetAngularVelocity(_bodyId) : _angularVelocity;
+    return _angularVelocity;
 }
 
 void Rigidbody2D::setVelocityLimit(float limit)

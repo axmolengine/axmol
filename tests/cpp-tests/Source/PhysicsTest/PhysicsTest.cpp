@@ -39,7 +39,7 @@ PhysicsTests::PhysicsTests()
 {
     // Fast Test case, remove when ready to review
 
-    ADD_TEST_CASE(PhysicsDemoBug3988);
+    ADD_TEST_CASE(PhysicsContactTest);
 
     ADD_TEST_CASE(PhysicsDemoLogoSmash);
     ADD_TEST_CASE(PhysicsDemoPyramidStack);
