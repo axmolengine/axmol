@@ -416,7 +416,22 @@ void PhysicsWorld2D::update(float delta, bool userCall /* = false*/)
         }
     }
 
+    // Emulate PostSolve via hitEvent
     auto contactData = b2World_GetContactEvents(_worldId);
+    if (contactData.hitCount > 0)
+    {
+        for (int i = 0; i < contactData.hitCount; ++i)
+        {
+            auto& hitEvent = contactData.hitEvents[i];
+            auto contact2D = Contact2D::obtain(static_cast<Collider2D*>(b2Shape_GetUserData(hitEvent.shapeIdA)),
+                                               static_cast<Collider2D*>(b2Shape_GetUserData(hitEvent.shapeIdB)));
+            if (contact2D)
+            {
+                onCollisionPostSolve(contact2D);
+                contact2D->release();
+            }
+        }
+    }
 
     // Update physics position, should loop as the same sequence as node tree.
     // PhysicsWorld2D::afterSimulation() will depend on the sequence.

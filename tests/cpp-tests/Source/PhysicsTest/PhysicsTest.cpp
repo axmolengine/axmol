@@ -1226,10 +1226,12 @@ void PhysicsDemoOneWayPlatform::onEnter()
     ball->setTag(DRAG_BODYS_BITS);
     ballBody->setContactMaskBits(0xFFFFFFFF);
     ballBody->setPreSolveEnabled(true);  // enable pre solve hook
+    ballBody->setPostSolveEnabled(true);
     this->addChild(ball);
 
-    auto contactListener               = Contact2DListenerWithBodies::create(platformBody, ballBody);
-    contactListener->onContactPreSolve = AX_CALLBACK_1(PhysicsDemoOneWayPlatform::onContactPreSolve, this);
+    auto contactListener                = Contact2DListenerWithBodies::create(platformBody, ballBody);
+    contactListener->onContactPreSolve  = AX_CALLBACK_1(PhysicsDemoOneWayPlatform::onContactPreSolve, this);
+    contactListener->onContactPostSolve = AX_CALLBACK_1(PhysicsDemoOneWayPlatform::onContactPostSolve, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 }
 
@@ -1244,6 +1246,14 @@ bool PhysicsDemoOneWayPlatform::onContactPreSolve(Contact2D* contact)
     auto normalY = contact->getContactInfo().normal.y;
 
     return normalY > 0;
+}
+
+void PhysicsDemoOneWayPlatform::onContactPostSolve(ax::Contact2D* contact)
+{
+    auto& contactInfo = contact->getContactInfo();
+    if (contactInfo.pointCount > 0)
+        AXLOGI("hit point: ({}, {}), normalVelocity: {}", contactInfo.points[0].point.x, contactInfo.points[0].point.y,
+               contactInfo.points[0].normalVelocity);
 }
 
 std::string PhysicsDemoOneWayPlatform::title() const

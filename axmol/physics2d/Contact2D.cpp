@@ -98,7 +98,8 @@ void Contact2D::generateContactData()
     {
         _contactInfo.points[i].point          = PhysicsUtility2D::toVec2(contactData.manifold.points[i].point);
         _contactInfo.points[i].normalImpulse  = contactData.manifold.points[i].normalImpulse;
-        _contactInfo.points[i].tangentImpulse = contactData.manifold.points[i].totalNormalImpulse;
+        _contactInfo.points[i].tangentImpulse = contactData.manifold.points[i].tangentImpulse;
+        _contactInfo.points[i].normalVelocity = contactData.manifold.points[i].normalVelocity;
     }
 }
 

@@ -45,8 +45,16 @@ class PhysicsWorld2D;
 struct ManifoldPoint2D
 {
     Vec2 point;
+
+    /// The impulse along the manifold normal vector.
     float normalImpulse{0};
+
+    /// The friction impulse
     float tangentImpulse{0};
+
+    /// Relative normal velocity pre-solve. Used for hit events. If the normal impulse is
+    /// zero then there was no hit. Negative means shapes are approaching.
+    float normalVelocity{0};
 };
 
 struct Contact2DInfo
@@ -177,7 +185,7 @@ public:
      * @brief Two shapes are touching and their collision response has been processed. You can retrieve the collision
      * impulse or kinetic energy at this time if you want to use it to calculate sound volumes or damage amounts.
      */
-    std::function<bool(Contact2D* contact)> onContactPostSolve;
+    std::function<void(Contact2D* contact)> onContactPostSolve;
 
 protected:
     bool init();

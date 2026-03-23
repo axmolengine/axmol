@@ -176,6 +176,7 @@ public:
     virtual std::string title() const override;
 
     bool onContactPreSolve(ax::Contact2D* contact);
+    void onContactPostSolve(ax::Contact2D* contact);
 };
 
 class PhysicsDemoSlice : public PhysicsDemo
