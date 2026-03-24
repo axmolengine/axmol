@@ -344,20 +344,23 @@ void Rigidbody2D::syncMassData()
     }
 }
 
-void Rigidbody2D::setRotationEnable(bool enable)
+void Rigidbody2D::setRotationEnabled(bool enabled)
 {
-    if (_rotationEnabled == enable)
+    if (_rotationEnabled == enabled)
         return;
 
-    _rotationEnabled = enable;
+    _rotationEnabled = enabled;
 
     if (!isAttached())
         return;
 
     auto motionLocks     = b2Body_GetMotionLocks(_bodyId);
-    const auto rotLocked = !enable;
+    const auto rotLocked = !enabled;
     if (motionLocks.angularZ != rotLocked)
+    {
+        motionLocks.angularZ = rotLocked;
         b2Body_SetMotionLocks(_bodyId, motionLocks);
+    }
 }
 
 void Rigidbody2D::setGravityEnable(bool enable)

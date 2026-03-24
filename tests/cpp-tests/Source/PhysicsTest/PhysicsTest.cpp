@@ -37,9 +37,6 @@ using namespace ax;
 
 PhysicsTests::PhysicsTests()
 {
-    // Fast Test case, remove when ready to review
-    ADD_TEST_CASE(PhysicsDemoOneWayPlatform);
-
     ADD_TEST_CASE(PhysicsDemoLogoSmash);
     ADD_TEST_CASE(PhysicsDemoPyramidStack);
     ADD_TEST_CASE(PhysicsDemoClickAdd);
@@ -1753,8 +1750,16 @@ void PhysicsSetGravityEnableTest::onEnter()
 
     // common box
     auto commonBox = makeBox(Vec2(100, 100), Size(50, 50), 1);
-    commonBox->setTag(DRAG_BODYS_BITS);
-    commonBox->getRigidbody2D()->setGravityEnable(true);
+    commonBox->setTag(1 | DRAG_BODYS_BITS);
+    auto commonBoxBody = commonBox->getRigidbody2D();
+    commonBoxBody->setGravityEnable(true);
+    // Critical fix for Box2D physics behavior difference from Chipmunk in Axmol
+    // Box2D uses strict floating-point physics, which causes rectangular boxes to
+    // rotate / wobble / bounce sideways when landing vertically due to precision errors.
+    // Chipmunk automatically stabilizes rotation internally, but Box2D does not.
+    // This line disables rotation entirely to keep the body stable and eliminate side bouncing,
+    // making Box2D behave consistently with Chipmunk for stable platformer / object physics.
+    commonBoxBody->setRotationEnabled(false);
     addChild(commonBox);
 
     auto box = makeBox(Vec2(200, 100), Size(50, 50), 2);
@@ -1783,7 +1788,8 @@ void PhysicsSetGravityEnableTest::onScheduleOnce(float /*delta*/)
         rigidbody->setMass(200);
     }
 
-    _physicsWorld2D->setGravity(Vec2(0, -98));
+  // Unlike Chipmunk, Axmol v3 physics2d (Box2D-based) uses real-world gravity units MKS.
+    _physicsWorld2D->setGravity(Vec2(0, -9.8));
 }
 
 std::string PhysicsSetGravityEnableTest::title() const

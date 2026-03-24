@@ -495,7 +495,7 @@ public:
     bool isRotationEnabled() const { return _rotationEnabled; }
 
     /** Set the body is allow rotation or not */
-    void setRotationEnable(bool enable);
+    void setRotationEnabled(bool enabled);
 
     /** Whether this physics body is affected by the physics world's gravitational force. */
     bool isGravityEnabled() const { return _gravityEnabled; }
