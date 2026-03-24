@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/physics3d/Physics3D.h"
+#include "axmol/3d/physics/Physics3D.h"
 #include "axmol/base/text_utils.h"
 
 #if defined(AX_ENABLE_PHYSICS_3D)

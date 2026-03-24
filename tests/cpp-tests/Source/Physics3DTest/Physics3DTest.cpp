@@ -29,7 +29,7 @@
 
 #include "axmol/3d/Terrain.h"
 #include "axmol/3d/Bundle3D.h"
-#include "axmol/physics3d/Physics3D.h"
+#include "axmol/3d/physics/Physics3D.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 USING_NS_AX_EXT;
 using namespace ax;

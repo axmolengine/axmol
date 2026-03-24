@@ -24,12 +24,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/physics2d/Joint2D.h"
+#include "axmol/2d/physics/Joint2D.h"
 #if defined(AX_ENABLE_PHYSICS_2D)
 
-#    include "axmol/physics2d/Rigidbody2D.h"
-#    include "axmol/physics2d/PhysicsWorld2D.h"
-#    include "axmol/physics2d/PhysicsUtility2D.h"
+#    include "axmol/2d/physics/Rigidbody2D.h"
+#    include "axmol/2d/physics/PhysicsWorld2D.h"
+#    include "axmol/2d/physics/PhysicsUtility2D.h"
 #    include "axmol/2d/Node.h"
 
 #    include <numbers>

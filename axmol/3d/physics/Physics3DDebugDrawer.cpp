@@ -23,7 +23,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "axmol/physics3d/Physics3D.h"
+#include "axmol/3d/physics/Physics3D.h"
 #include <stddef.h>  // offsetof
 #include "axmol/base/Types.h"
 #include "axmol/base/Environment.h"

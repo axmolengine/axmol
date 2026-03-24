@@ -30,18 +30,18 @@
  Check whether applyForce need invoke PhysicsUtility2D::pixelsToMeters
 
  ****************************************************************************/
-#include "axmol/physics2d/Rigidbody2D.h"
+#include "axmol/2d/physics/Rigidbody2D.h"
 #if defined(AX_ENABLE_PHYSICS_2D)
 #    include <climits>
 #    include <algorithm>
 #    include <cmath>
 
 #    include "axmol/2d/Scene.h"
-#    include "axmol/physics2d/Collider2D.h"
-#    include "axmol/physics2d/Joint2D.h"
-#    include "axmol/physics2d/PhysicsWorld2D.h"
-#    include "axmol/physics2d/PhysicsUtility2D.h"
-#    include "axmol/physics2d/PhysicsConsts.h"
+#    include "axmol/2d/physics/Collider2D.h"
+#    include "axmol/2d/physics/Joint2D.h"
+#    include "axmol/2d/physics/PhysicsWorld2D.h"
+#    include "axmol/2d/physics/PhysicsUtility2D.h"
+#    include "axmol/2d/physics/PhysicsConsts.h"
 
 namespace ax
 {

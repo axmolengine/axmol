@@ -23,11 +23,11 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "axmol/physics2d/Contact2D.h"
+#include "axmol/2d/physics/Contact2D.h"
 #if defined(AX_ENABLE_PHYSICS_2D)
 
-#    include "axmol/physics2d/Rigidbody2D.h"
-#    include "axmol/physics2d/PhysicsUtility2D.h"
+#    include "axmol/2d/physics/Rigidbody2D.h"
+#    include "axmol/2d/physics/PhysicsUtility2D.h"
 #    include "axmol/base/EventCustom.h"
 
 namespace ax

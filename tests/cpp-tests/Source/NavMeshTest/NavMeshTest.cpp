@@ -26,8 +26,7 @@
  ****************************************************************************/
 
 #include "NavMeshTest.h"
-#include "axmol/physics3d/Physics3DWorld.h"
-#include "axmol/physics3d/Physics3D.h"
+#include "axmol/3d/physics/Physics3D.h"
 #include "axmol/3d/Bundle3D.h"
 #include "axmol/2d/Light.h"
 

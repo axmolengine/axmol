@@ -36,12 +36,12 @@ THE SOFTWARE.
 #include "axmol/renderer/Renderer.h"
 
 #if defined(AX_ENABLE_PHYSICS_2D)
-#    include "axmol/physics2d/PhysicsWorld2D.h"
+#    include "axmol/2d/physics/PhysicsWorld2D.h"
 #endif
 
 #if defined(AX_ENABLE_PHYSICS_3D)
-#    include "axmol/physics3d/Physics3DWorld.h"
-#    include "axmol/physics3d/Physics3DComponent.h"
+#    include "axmol/3d/physics/Physics3DWorld.h"
+#    include "axmol/3d/physics/Physics3DComponent.h"
 #endif
 
 #if defined(AX_ENABLE_NAVMESH)

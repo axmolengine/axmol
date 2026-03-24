@@ -163,11 +163,11 @@ THE SOFTWARE.
 #include "axmol/renderer/Shaders.h"
 
 // physics2d
-#include "axmol/physics2d/Rigidbody2D.h"
-#include "axmol/physics2d/Contact2D.h"
-#include "axmol/physics2d/Joint2D.h"
-#include "axmol/physics2d/Collider2D.h"
-#include "axmol/physics2d/PhysicsWorld2D.h"
+#include "axmol/2d/physics/Rigidbody2D.h"
+#include "axmol/2d/physics/Contact2D.h"
+#include "axmol/2d/physics/Joint2D.h"
+#include "axmol/2d/physics/Collider2D.h"
+#include "axmol/2d/physics/PhysicsWorld2D.h"
 
 // platform
 #include "axmol/platform/Common.h"

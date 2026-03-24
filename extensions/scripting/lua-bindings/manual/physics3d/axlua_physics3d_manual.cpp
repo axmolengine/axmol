@@ -31,7 +31,7 @@
 #    include "lua-bindings/manual/tolua_fix.h"
 #    include "lua-bindings/manual/LuaBasicConversions.h"
 #    include "lua-bindings/manual/LuaEngine.h"
-#    include "axmol/physics3d/Physics3D.h"
+#    include "axmol/3d/physics/Physics3D.h"
 
 bool luaval_to_Physics3DRigidBodyDes(lua_State* L, int lo, ax::Physics3DRigidBodyDes* outValue, const char* funcName)
 {

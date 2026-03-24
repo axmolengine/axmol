@@ -3070,7 +3070,7 @@ tolua_lerror:
 #endif
 
 #if defined(AX_ENABLE_PHYSICS_3D)
-#    include "axmol/physics3d/Physics3DWorld.h"
+#    include "axmol/3d/physics/Physics3DWorld.h"
 int axlua_Scene_getPhysics3DWorld(lua_State* tolua_S)
 {
     int argc       = 0;

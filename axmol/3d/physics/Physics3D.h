@@ -30,13 +30,13 @@
 
 #if defined(AX_ENABLE_PHYSICS_3D)
 
-#    include "axmol/physics3d/Physics3DShape.h"
-#    include "axmol/physics3d/PhysicsMeshRenderer.h"
-#    include "axmol/physics3d/Physics3DWorld.h"
-#    include "axmol/physics3d/Physics3DDebugDrawer.h"
-#    include "axmol/physics3d/Physics3DObject.h"
-#    include "axmol/physics3d/Physics3DComponent.h"
-#    include "axmol/physics3d/Physics3DConstraint.h"
+#    include "axmol/3d/physics/Physics3DShape.h"
+#    include "axmol/3d/physics/PhysicsMeshRenderer.h"
+#    include "axmol/3d/physics/Physics3DWorld.h"
+#    include "axmol/3d/physics/Physics3DDebugDrawer.h"
+#    include "axmol/3d/physics/Physics3DObject.h"
+#    include "axmol/3d/physics/Physics3DComponent.h"
+#    include "axmol/3d/physics/Physics3DConstraint.h"
 
 namespace ax
 {

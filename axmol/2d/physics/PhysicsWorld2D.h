@@ -32,7 +32,7 @@
 #    include <list>
 #    include "axmol/base/Vector.h"
 #    include "axmol/math/Math.h"
-#    include "axmol/physics2d/Rigidbody2D.h"
+#    include "axmol/2d/physics/Rigidbody2D.h"
 
 namespace ax
 {

@@ -28,8 +28,8 @@
 
 #include "axmol/base/Config.h"
 #include "axmol/3d/MeshRenderer.h"
-#include "axmol/physics3d/Physics3DObject.h"
-#include "axmol/physics3d/Physics3DComponent.h"
+#include "axmol/3d/physics/Physics3DObject.h"
+#include "axmol/3d/physics/Physics3DComponent.h"
 
 #if defined(AX_ENABLE_PHYSICS_3D)
 

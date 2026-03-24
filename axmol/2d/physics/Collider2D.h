@@ -29,7 +29,7 @@
 #include "axmol/base/Config.h"
 #if defined(AX_ENABLE_PHYSICS_2D)
 
-#    include "axmol/physics2d/PhysicsMaterial2D.h"
+#    include "axmol/2d/physics/PhysicsMaterial2D.h"
 #    include "axmol/base/Object.h"
 #    include "axmol/math/Math.h"
 #    include "box2d/box2d.h"

@@ -24,16 +24,16 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/physics2d/PhysicsWorld2D.h"
+#include "axmol/2d/physics/PhysicsWorld2D.h"
 #if defined(AX_ENABLE_PHYSICS_2D)
 #    include <algorithm>
 #    include <climits>
 
-#    include "axmol/physics2d/Rigidbody2D.h"
-#    include "axmol/physics2d/Collider2D.h"
-#    include "axmol/physics2d/Contact2D.h"
-#    include "axmol/physics2d/Joint2D.h"
-#    include "axmol/physics2d/PhysicsUtility2D.h"
+#    include "axmol/2d/physics/Rigidbody2D.h"
+#    include "axmol/2d/physics/Collider2D.h"
+#    include "axmol/2d/physics/Contact2D.h"
+#    include "axmol/2d/physics/Joint2D.h"
+#    include "axmol/2d/physics/PhysicsUtility2D.h"
 
 #    include "axmol/2d/DrawNode.h"
 #    include "axmol/2d/Scene.h"

@@ -32,7 +32,7 @@
 #    include "axmol/2d/Component.h"
 #    include "axmol/math/Math.h"
 #    include "axmol/base/Vector.h"
-#    include "axmol/physics2d/Collider2D.h"
+#    include "axmol/2d/physics/Collider2D.h"
 
 namespace ax
 {

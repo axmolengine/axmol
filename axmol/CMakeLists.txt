@@ -272,11 +272,11 @@ endif()
 include(platform/CMakeLists.txt)
 
 if(AX_ENABLE_PHYSICS_2D)
-  include(physics2d/CMakeLists.txt)
+  include(2d/physics/CMakeLists.txt)
 endif()
 
 if(AX_ENABLE_PHYSICS_3D)
-  include(physics3d/CMakeLists.txt)
+  include(3d/physics/CMakeLists.txt)
 endif()
 
 include(math/CMakeLists.txt)
