@@ -53,19 +53,18 @@ const int PhysicsWorld2D::DEBUGDRAW_ALL     = DEBUGDRAW_SHAPE | DEBUGDRAW_JOINT 
 
 namespace
 {
-struct RayCastQueryCallbackContext
+struct RayCastCallbackContext
 {
     PhysicsWorld2D* world;
-    PhysicsRayCastCallback func;
-    Vec2 p1;
-    Vec2 p2;
+    RayCastHitCallback2D func;
+    Ray2D ray;
     void* data;
 };
 
 struct BoxQueryCallbackContext
 {
     PhysicsWorld2D* world;
-    PhysicsQueryRectCallback func;
+    PhysicsQueryCallback2D func;
     void* data;
 };
 
@@ -82,7 +81,7 @@ struct BoxQueryNearestResultContext
 struct PointQueryCallbackContext
 {
     PhysicsWorld2D* world;
-    PhysicsQueryPointCallback func;
+    PhysicsQueryCallback2D func;
     b2Vec2 p;
     void* data;
 };
@@ -103,22 +102,22 @@ struct PointQueryNearestResultContext
 #    pragma region PhysicsQueryCallbacks2D
 struct PhysicsQueryCallbacks2D
 {
+    /*
+     * @return -1 to filter, 0 to terminate, fraction to clip the ray for closest hit, 1 to continue, see box2d
+     * b2CastResultFcn
+     */
     static float handleRayCast(b2ShapeId shapeId, b2Vec2 point, b2Vec2 normal, float fraction, void* context)
     {
-        if (!continues)
-            return fraction;
-
-        auto info = static_cast<RayCastQueryCallbackContext*>(context);
+        auto info = static_cast<RayCastCallbackContext*>(context);
 
         Collider2D* collider = static_cast<Collider2D*>(b2Shape_GetUserData(shapeId));
         AX_ASSERT(collider != nullptr);
 
-        PhysicsRayCastInfo callbackInfo = {
-            collider, info->p1, info->p2, PhysicsUtility2D::toVec2(point), PhysicsUtility2D::toVec2(normal), fraction};
+        RayCastHit2D hitInfo = {collider, PhysicsUtility2D::toVec2(point), PhysicsUtility2D::toVec2(normal), fraction};
 
-        continues = info->func(*info->world, callbackInfo, info->data);
+        bool continues = info->func(*info->world, hitInfo, info->data);
 
-        return fraction;
+        return continues ? 1 : 0;
     }
 
     static bool handleBoxOverlap(b2ShapeId shape, void* context)
@@ -155,14 +154,14 @@ struct PhysicsQueryCallbacks2D
         Collider2D* collider = static_cast<Collider2D*>(b2Shape_GetUserData(shape));
         AX_ASSERT(collider != nullptr);
 
+        bool continues = true;
+
         auto info = static_cast<PointQueryCallbackContext*>(context);
         if (b2Shape_TestPoint(shape, info->p))
         {
             b2Vec2 position = b2Body_GetPosition(collider->getAttachedBody()->internalHandle());
             if (b2Distance(info->p, position) <= 1e-6)
-            {
                 continues = info->func(*info->world, *collider, info->data);
-            }
         }
         return continues;
     }
@@ -174,9 +173,7 @@ struct PhysicsQueryCallbacks2D
 
         auto info = static_cast<PointQueryResultContext*>(context);
         if (b2Shape_TestPoint(shape, info->p))
-        {
             info->colliders->pushBack(collider);
-        }
         return true;
     }
 
@@ -193,29 +190,40 @@ struct PhysicsQueryCallbacks2D
         }
         return true;
     }
-
-    static bool continues;
 };
-bool PhysicsQueryCallbacks2D::continues = true;
 
 #    pragma endregion
 
-void PhysicsWorld2D::rayCast(PhysicsRayCastCallback func, const Vec2& point1, const Vec2& point2, void* data)
+void PhysicsWorld2D::rayCast(RayCastHitCallback2D func, const Ray2D& ray, void* data)
 {
     AXASSERT(func != nullptr, "func shouldn't be nullptr");
 
     if (func != nullptr)
     {
-        RayCastQueryCallbackContext context = {this, func, point1, point2, data};
-
-        auto translation                   = point2 - point1;
-        PhysicsQueryCallbacks2D::continues = true;
-        b2World_CastRay(_worldId, PhysicsUtility2D::tob2Vec2(point1), PhysicsUtility2D::tob2Vec2(translation),
+        RayCastCallbackContext context = {this, func, ray, data};
+        b2World_CastRay(_worldId, PhysicsUtility2D::tob2Vec2(ray.origin), PhysicsUtility2D::tob2Vec2(ray.translation),
                         b2DefaultQueryFilter(), PhysicsQueryCallbacks2D::handleRayCast, &context);
     }
 }
 
-void PhysicsWorld2D::overlapBox(PhysicsQueryRectCallback func, const Rect& rect, void* data)
+std::optional<RayCastHit2D> PhysicsWorld2D::rayCastClosest(const Ray2D& ray)
+{
+    auto castRet = b2World_CastRayClosest(_worldId, PhysicsUtility2D::tob2Vec2(ray.origin),
+                                          PhysicsUtility2D::tob2Vec2(ray.translation), b2DefaultQueryFilter());
+    std::optional<RayCastHit2D> ret;
+    if (castRet.hit)
+    {
+        ret.emplace();
+        ret->collider = static_cast<Collider2D*>(b2Shape_GetUserData(castRet.shapeId));
+        ret->normal   = PhysicsUtility2D::toVec2(castRet.normal);
+        ret->point    = PhysicsUtility2D::toVec2(castRet.point);
+        ret->fraction = castRet.fraction;
+    }
+
+    return ret;
+}
+
+void PhysicsWorld2D::overlapBox(PhysicsQueryCallback2D func, const Rect& rect, void* data)
 {
     AXASSERT(func != nullptr, "func shouldn't be nullptr");
 
@@ -253,7 +261,7 @@ Vector<Collider2D*> PhysicsWorld2D::overlapBoxAll(const Rect& rect) const
     return arr;
 }
 
-void PhysicsWorld2D::overlapPoint(PhysicsQueryPointCallback func, const Vec2& point, void* data)
+void PhysicsWorld2D::overlapPoint(PhysicsQueryCallback2D func, const Vec2& point, void* data)
 {
     AXASSERT(func != nullptr, "func shouldn't be nullptr");
 
@@ -265,8 +273,7 @@ void PhysicsWorld2D::overlapPoint(PhysicsQueryPointCallback func, const Vec2& po
         aabb.lowerBound = context.p;
         aabb.upperBound = context.p;
 
-        auto filter                        = b2DefaultQueryFilter();
-        PhysicsQueryCallbacks2D::continues = true;
+        auto filter = b2DefaultQueryFilter();
         b2World_OverlapAABB(_worldId, aabb, b2DefaultQueryFilter(), PhysicsQueryCallbacks2D::handlePointOverlap,
                             &context);
     }

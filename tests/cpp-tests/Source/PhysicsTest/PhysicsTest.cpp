@@ -28,7 +28,7 @@
 #if defined(AX_ENABLE_PHYSICS_2D)
 
 #    include <cmath>
-#    include "axmol/ui/CocosGUI.h"
+#    include "axmol/ui/axmol-ui.h"
 #    include "../testResource.h"
 
 #    include "physics-nodes/PhysicsDebugNode.h"
@@ -543,7 +543,7 @@ void PhysicsDemoRayCast::changeModeCallback(Object* sender)
         ((MenuItemFont*)sender)->setString("Change Mode(any)");
         break;
     case 1:
-        ((MenuItemFont*)sender)->setString("Change Mode(nearest)");
+        ((MenuItemFont*)sender)->setString("Change Mode(closest)");
         break;
     case 2:
         ((MenuItemFont*)sender)->setString("Change Mode(multiple)");
@@ -554,9 +554,9 @@ void PhysicsDemoRayCast::changeModeCallback(Object* sender)
     }
 }
 
-bool PhysicsDemoRayCast::anyRay(PhysicsWorld2D& /*world*/, const PhysicsRayCastInfo& info, void* data)
+bool PhysicsDemoRayCast::anyRay(PhysicsWorld2D& /*world*/, const RayCastHit2D& hitInfo, void* data)
 {
-    *((Vec2*)data) = info.contact;
+    *((Vec2*)data) = hitInfo.point;
     return false;
 }
 
@@ -571,12 +571,12 @@ void PhysicsDemoRayCast::update(float /*delta*/)
     _node = DrawNode::create();
     switch (_mode)
     {
-    case 0:
+    case 0: // any
     {
         Vec2 point3 = point2;
         auto func   = AX_CALLBACK_3(PhysicsDemoRayCast::anyRay, this);
 
-        _physicsWorld2D->rayCast(func, point1, point2, &point3);
+        _physicsWorld2D->rayCast(func, Ray2D::fromPoints(point1, point2), &point3);
         _node->drawSegment(point1, point3, 0.5f, STATIC_COLOR);
 
         if (point2 != point3)
@@ -587,22 +587,12 @@ void PhysicsDemoRayCast::update(float /*delta*/)
 
         break;
     }
-    case 1:
+    case 1: // closest
     {
         Vec2 point3                 = point2;
-        float friction              = 1.0f;
-        PhysicsRayCastCallback func = [&point3, &friction](PhysicsWorld2D& /*world*/, const PhysicsRayCastInfo& info,
-                                                           void* /*data*/) -> bool {
-            if (friction > info.fraction)
-            {
-                point3   = info.contact;
-                friction = info.fraction;
-            }
-
-            return true;
-        };
-
-        _physicsWorld2D->rayCast(func, point1, point2, nullptr);
+        auto castRet = _physicsWorld2D->rayCastClosest(Ray2D::fromPoints(point1, point2));
+        if (castRet)
+            point3 = castRet->point;
         _node->drawSegment(point1, point3, 1, STATIC_COLOR);
 
         if (point2 != point3)
@@ -613,23 +603,23 @@ void PhysicsDemoRayCast::update(float /*delta*/)
 
         break;
     }
-    case 2:
+    case 2: // mutliple
     {
 #    define MAX_MULTI_RAYCAST_NUM 5
         Vec2 points[MAX_MULTI_RAYCAST_NUM];
         int num = 0;
 
-        PhysicsRayCastCallback func = [&points, &num](PhysicsWorld2D& /*world*/, const PhysicsRayCastInfo& info,
+        RayCastHitCallback2D func = [&points, &num](PhysicsWorld2D& /*world*/, const RayCastHit2D& info,
                                                       void* /*data*/) -> bool {
             if (num < MAX_MULTI_RAYCAST_NUM)
             {
-                points[num++] = info.contact;
+                points[num++] = info.point;
             }
 
             return true;
         };
 
-        _physicsWorld2D->rayCast(func, point1, point2, nullptr);
+        _physicsWorld2D->rayCast(func, Ray2D::fromPoints(point1, point2), nullptr);
 
         _node->drawSegment(point1, point2, 1, STATIC_COLOR);
 
@@ -1282,23 +1272,24 @@ void PhysicsDemoSlice::onEnter()
     addChild(box);
 }
 
-bool PhysicsDemoSlice::slice(PhysicsWorld2D& /*world*/, const PhysicsRayCastInfo& info, void* /*data*/)
+bool PhysicsDemoSlice::slice(PhysicsWorld2D& /*world*/, const RayCastHit2D& hitInfo, void* data)
 {
-    if (info.collider->getAttachedBody()->getTag() != _sliceTag)
+    if (hitInfo.collider->getAttachedBody()->getTag() != _sliceTag)
     {
         return true;
     }
 
-    if (!info.collider->containsPoint(info.start) && !info.collider->containsPoint(info.end))
+    Ray2D* ray = static_cast<Ray2D*>(data);
+
+    if (!hitInfo.collider->containsPoint(ray->origin) && !hitInfo.collider->containsPoint(ray->endPoint()))
     {
-        Vec2 normal = info.end - info.start;
-        normal      = normal.getPerp().getNormalized();
-        float dist  = info.start.dot(normal);
+        auto normal = ray->translation.getPerp().getNormalized();
+        float dist  = ray->origin.dot(normal);
 
-        clipPoly(dynamic_cast<PolygonCollider2D*>(info.collider), normal, dist);
-        clipPoly(dynamic_cast<PolygonCollider2D*>(info.collider), -normal, -dist);
+        clipPoly(dynamic_cast<PolygonCollider2D*>(hitInfo.collider), normal, dist);
+        clipPoly(dynamic_cast<PolygonCollider2D*>(hitInfo.collider), -normal, -dist);
 
-        auto rigidbody = info.collider->getAttachedBody();
+        auto rigidbody = hitInfo.collider->getAttachedBody();
         auto owner     = rigidbody->getOwner();
         // remove rigidbody only also works, owner->removeComponent(rigidbody);
         owner->removeFromParent();
@@ -1352,7 +1343,9 @@ void PhysicsDemoSlice::clipPoly(PolygonCollider2D* collider, Vec2 normal, float 
 void PhysicsDemoSlice::onTouchEnded(Touch* touch, Event* /*event*/)
 {
     auto func = AX_CALLBACK_3(PhysicsDemoSlice::slice, this);
-    getPhysicsWorld2D()->rayCast(func, touch->getStartLocation(), touch->getLocation(), nullptr);
+
+    Ray2D ray = Ray2D::fromPoints(touch->getStartLocation(), touch->getLocation());
+    getPhysicsWorld2D()->rayCast(func, ray, &ray);
 }
 
 std::string PhysicsDemoSlice::title() const

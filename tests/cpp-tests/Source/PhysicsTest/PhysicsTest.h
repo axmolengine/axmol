@@ -122,7 +122,7 @@ public:
 
     void changeModeCallback(ax::Object* sender);
 
-    bool anyRay(ax::PhysicsWorld2D& world, const ax::PhysicsRayCastInfo& info, void* data);
+    bool anyRay(ax::PhysicsWorld2D& world, const ax::RayCastHit2D& info, void* data);
 
 private:
     float _angle;
@@ -188,7 +188,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    bool slice(ax::PhysicsWorld2D& world, const ax::PhysicsRayCastInfo& info, void* data);
+    bool slice(ax::PhysicsWorld2D& world, const ax::RayCastHit2D& info, void* data);
     void clipPoly(ax::PolygonCollider2D* shape, ax::Vec2 normal, float distance);
 
     void onTouchEnded(ax::Touch* touch, ax::Event* event);

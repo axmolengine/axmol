@@ -51,23 +51,37 @@ class EventDispatcher;
 
 class PhysicsWorld2D;
 
-typedef struct PhysicsRayCastInfo
+/// Represents a 2D ray defined by an origin point and a translation vector.
+/// @note Use fromPoints() to conveniently construct a ray from two points.
+///       The translation is computed as (end - start).
+struct Ray2D
+{
+    Vec2 origin;       ///< The starting point of the ray
+    Vec2 translation;  ///< The displacement vector from origin to destination
+
+    /** Returns the end point of the ray.
+     * @return The computed point (origin + translation)
+     */
+    Vec2 endPoint() const { return origin + translation; }
+
+    Ray2D(const Vec2& o, const Vec2& t) : origin(o), translation(t) {}
+
+    /** Construct a ray from two points.
+     * @param start The origin of the ray
+     * @param end   A point used to compute the translation (end - start)
+     * @return A Ray2D instance with origin and translation
+     */
+    static Ray2D fromPoints(const Vec2& start, const Vec2& end) { return Ray2D(start, end - start); }
+};
+
+struct RayCastHit2D
 {
     Collider2D* collider;
-    Vec2 start;
-    Vec2 end;  ///< in lua, it's name is "ended"
-    Vec2 contact;
+    Vec2 point;
     Vec2 normal;
-
-    // FIXME: correct thing to do is use `cpFloat` instead of float.
-    // but in order to do so, we should include "chipmunk_types.h"
-    // in Chipmunk v7.0, chipmunk_types includes all the mac types that
-    // conflicts with cocos2d Vec2, Point,... etc types. And all the CocosStudio
-    // lib will need to use the `ax::` namespace prefix. And it is easier to do this
-    // than change all the cocosstudio library (and also users code)
     float fraction;
-    void* data;
-} PhysicsRayCastInfo;
+    void* data{nullptr};
+};
 
 /**
  * @brief Called for each fixture found in the query. You control how the ray cast
@@ -79,9 +93,8 @@ typedef struct PhysicsRayCastInfo
  * @param normal the normal vector at the point of intersection
  * @return true to continue, false to terminate
  */
-using PhysicsRayCastCallback   = std::function<bool(PhysicsWorld2D& world, const PhysicsRayCastInfo& info, void* data)>;
-using PhysicsQueryRectCallback = std::function<bool(PhysicsWorld2D&, Collider2D&, void*)>;
-using PhysicsQueryPointCallback = PhysicsQueryRectCallback;
+using RayCastHitCallback2D   = std::function<bool(PhysicsWorld2D& world, const RayCastHit2D& hitInfo, void* data)>;
+using PhysicsQueryCallback2D = std::function<bool(PhysicsWorld2D&, Collider2D&, void*)>;
 
 /**
  * @addtogroup physics
@@ -130,7 +143,9 @@ public:
      * @param   end   A Vec2 object contains the end position of the ray.
      * @param   data   User defined data, it is passed to func.
      */
-    [[internal]] void rayCast(PhysicsRayCastCallback func, const Vec2& start, const Vec2& end, void* data);
+    [[internal]] void rayCast(RayCastHitCallback2D func, const Ray2D& ray, void* data = nullptr);
+
+    [[internal]] std::optional<RayCastHit2D> rayCastClosest(const Ray2D& ray);
 
     /**f
      * Enumerates all physics shapes whose bounding box overlaps the specified rectangle.
@@ -142,7 +157,7 @@ public:
      * @param rect  Rectangle region (x, y, width, height) used for overlap testing.
      * @param data  User-defined data passed to the callback.
      */
-    [[internal]] void overlapBox(PhysicsQueryRectCallback func, const Rect& rect, void* data);
+    [[internal]] void overlapBox(PhysicsQueryCallback2D func, const Rect& rect, void* data);
 
     /**
      * Returns the nearest physics shape whose bounding box overlaps the specified rectangle.
@@ -180,7 +195,7 @@ public:
      * @param point  Position of the point to test.
      * @param data   User-defined data passed to the callback.
      */
-    [[internal]] void overlapPoint(PhysicsQueryPointCallback func, const Vec2& point, void* data);
+    [[internal]] void overlapPoint(PhysicsQueryCallback2D func, const Vec2& point, void* data);
 
     /**
      * Returns the nearest physics shape that contains the specified point.
