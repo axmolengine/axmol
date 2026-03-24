@@ -325,24 +325,6 @@ public:
     /**
      * Return bitmask of first collider.
      *
-     * @return If there is no collider in body, return default value. 0
-     */
-    uint64_t getContactMaskBits() const;
-
-    /**
-     * A mask that defines which categories of bodies cause intersection notifications with this physics body.
-     *
-     * When two bodies share the same space, each body's category mask is tested against the other body's contact mask
-     * by performing a logical AND operation. If either comparison results in a non-zero value, an Contact2D object
-     * is created and passed to the physics world’s delegate. For best performance, only set bits in the contacts mask
-     * for interactions you are interested in.
-     * @param bitmask An integer number, the default value is 0 (all bits cleared).
-     */
-    void setContactMaskBits(uint64_t maskBits);
-
-    /**
-     * Return bitmask of first collider.
-     *
      * @return If there is no collider in body, return default value.(0xFFFFFFFF)
      */
     uint64_t getCategoryBits() const;

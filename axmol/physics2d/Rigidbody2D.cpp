@@ -672,17 +672,6 @@ void Rigidbody2D::setPostSolveEnabled(bool bval)
         collider->setPostSolveEnabled(bval);
 }
 
-void Rigidbody2D::setContactMaskBits(uint64_t maskBits)
-{
-    for (auto&& collider : _colliders)
-        collider->setContactMaskBits(maskBits);
-}
-
-uint64_t Rigidbody2D::getContactMaskBits() const
-{
-    return !_colliders.empty() ? _colliders.front()->getContactMaskBits() : 0;
-}
-
 void Rigidbody2D::setCollisionMaskBits(int maskBits)
 {
     for (auto&& collider : _colliders)
