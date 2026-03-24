@@ -571,7 +571,7 @@ void PhysicsDemoRayCast::update(float /*delta*/)
     _node = DrawNode::create();
     switch (_mode)
     {
-    case 0: // any
+    case 0:  // any
     {
         Vec2 point3 = point2;
         auto func   = AX_CALLBACK_3(PhysicsDemoRayCast::anyRay, this);
@@ -587,9 +587,9 @@ void PhysicsDemoRayCast::update(float /*delta*/)
 
         break;
     }
-    case 1: // closest
+    case 1:  // closest
     {
-        Vec2 point3                 = point2;
+        Vec2 point3  = point2;
         auto castRet = _physicsWorld2D->rayCastClosest(Ray2D::fromPoints(point1, point2));
         if (castRet)
             point3 = castRet->point;
@@ -603,14 +603,14 @@ void PhysicsDemoRayCast::update(float /*delta*/)
 
         break;
     }
-    case 2: // mutliple
+    case 2:  // mutliple
     {
 #    define MAX_MULTI_RAYCAST_NUM 5
         Vec2 points[MAX_MULTI_RAYCAST_NUM];
         int num = 0;
 
         RayCastHitCallback2D func = [&points, &num](PhysicsWorld2D& /*world*/, const RayCastHit2D& info,
-                                                      void* /*data*/) -> bool {
+                                                    void* /*data*/) -> bool {
             if (num < MAX_MULTI_RAYCAST_NUM)
             {
                 points[num++] = info.point;
