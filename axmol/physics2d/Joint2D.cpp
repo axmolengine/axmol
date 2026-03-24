@@ -1036,7 +1036,7 @@ bool TargetJoint2D::attachToBody()
 
         b2MassData massData = b2Body_GetMassData(_connectedBody->internalHandle());
         float g             = b2Length(b2World_GetGravity(_world->internalHandle()));
-        float mg            = massData.mass * g;
+        float mg            = massData.mass * std::max(g, 9.8f);
 
         jointDef.maxSpringForce = _maxForceScale * mg;
 

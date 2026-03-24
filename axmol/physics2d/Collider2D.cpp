@@ -67,7 +67,6 @@ Collider2D::Collider2D(const PhysicsMaterial2D& material)
     , _material(material)
     , _tag(0)
     , _collisionFilter(DefaultCollisionFilter)
-    , _contactMaskBits(0)
 {}
 
 Collider2D::~Collider2D()

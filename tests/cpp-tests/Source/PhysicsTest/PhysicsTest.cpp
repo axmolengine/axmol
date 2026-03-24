@@ -1214,14 +1214,12 @@ void PhysicsDemoOneWayPlatform::onEnter()
     auto platform     = makeBox(VisibleRect::center(), Size(200.0f, 50.0f));
     auto platformBody = platform->getRigidbody2D();
     platformBody->setDynamic(false);
-    platformBody->setContactMaskBits(0xFFFFFFFF);
     this->addChild(platform);
 
     auto ball     = makeBall(VisibleRect::center() - Vec2(0.0f, 50.0f), 20);
     auto ballBody = ball->getRigidbody2D();
     ballBody->setVelocity(Vec2(0.0f, 150.0f));
     ball->setTag(DRAG_BODYS_BITS);
-    ballBody->setContactMaskBits(0xFFFFFFFF);
     ballBody->setPreSolveEnabled(true);  // enable pre solve hook
     ballBody->setPostSolveEnabled(true);
     this->addChild(ball);
@@ -1583,7 +1581,6 @@ void PhysicsContactTest::resetTest()
         auto boxBody = box->getRigidbody2D();
         boxBody->setVelocity(velocity);
         boxBody->setCategoryBits(0x01);       // 0001
-        boxBody->setContactMaskBits(0x04);    // 0100
         boxBody->setCollisionMaskBits(0x03);  // 0011
         root->addChild(box);
     }
@@ -1602,7 +1599,6 @@ void PhysicsContactTest::resetTest()
         auto boxBody = box->getRigidbody2D();
         boxBody->setVelocity(velocity);
         boxBody->setCategoryBits(0x02);       // 0010
-        boxBody->setContactMaskBits(0x08);    // 1000
         boxBody->setCollisionMaskBits(0x01);  // 0001
         root->addChild(box);
     }
@@ -1621,8 +1617,7 @@ void PhysicsContactTest::resetTest()
         auto triangleBody = triangle->getRigidbody2D();
         triangleBody->setVelocity(velocity);
         triangleBody->setCategoryBits(0x04);       // 0100
-        triangleBody->setContactMaskBits(0x01);    // 0001
-        triangleBody->setCollisionMaskBits(0x06);  // 0110
+        triangleBody->setCollisionMaskBits(0x07);  // 0111
         root->addChild(triangle);
     }
 
@@ -1640,7 +1635,6 @@ void PhysicsContactTest::resetTest()
         auto triangleBody = triangle->getRigidbody2D();
         triangleBody->setVelocity(velocity);
         triangleBody->setCategoryBits(0x08);       // 1000
-        triangleBody->setContactMaskBits(0x02);    // 0010
         triangleBody->setCollisionMaskBits(0x01);  // 0001
         root->addChild(triangle);
     }

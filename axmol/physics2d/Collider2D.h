@@ -277,24 +277,6 @@ public:
     void setPostSolveEnabled(bool bval);
 
     /**
-     * A mask that defines which categories of bodies cause intersection notifications with this physics body.
-     *
-     * When two bodies share the same space, each body's category mask is tested against the other body's contact mask
-     * by performing a logical AND operation. If either comparison results in a non-zero value, an Contact2D object
-     * is created and passed to the physics world’s delegate. For best performance, only set bits in the contacts mask
-     * for interactions you are interested in.
-     * @param contactMaskBits An integer number, the default value is 0 (all bits cleared).
-     */
-    void setContactMaskBits(uint64_t contactMaskBits) { _contactMaskBits = contactMaskBits; }
-
-    /**
-     * Get a mask that defines which categories of bodies cause intersection notifications with this physics body.
-     *
-     * @return An integer number.
-     */
-    uint64_t getContactMaskBits() const { return _contactMaskBits; }
-
-    /**
      * Set a mask that defines which categories this physics body belongs to.
      *
      * Every physics body in a scene can be assigned to up to 64 different categories, each corresponding to a bit in
@@ -386,8 +368,6 @@ protected:
     int _tag;
 
     CollisionFilter _collisionFilter;
-
-    uint64_t _contactMaskBits;
 
     friend class PhysicsWorld2D;
     friend class Rigidbody2D;
