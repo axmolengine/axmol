@@ -1788,7 +1788,7 @@ void PhysicsSetGravityEnableTest::onScheduleOnce(float /*delta*/)
         rigidbody->setMass(200);
     }
 
-  // Unlike Chipmunk, Axmol v3 physics2d (Box2D-based) uses real-world gravity units MKS.
+    // Unlike Chipmunk, Axmol v3 physics2d (Box2D-based) uses real-world gravity units MKS.
     _physicsWorld2D->setGravity(Vec2(0, -9.8));
 }
 
