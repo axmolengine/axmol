@@ -16,6 +16,7 @@
 #include "jsmn.h"
 
 #include "box2d/box2d.h"
+#include "box2d/constants.h"
 #include "box2d/math_functions.h"
 
 #include <GLFW/glfw3.h>
@@ -72,63 +73,59 @@ static int jsoneq( const char* json, jsmntok_t* tok, const char* s )
 	return -1;
 }
 
-void DrawPolygonFcn(const b2Vec2* vertices, int vertexCount, b2HexColor color, void* context)
+void DrawPolygonFcn( const b2Vec2* vertices, int vertexCount, b2HexColor color, void* context )
 {
-    SampleContext* sampleContext = static_cast<SampleContext*>(context);
-    DrawPolygon(sampleContext->draw, vertices, vertexCount, color);
+	SampleContext* sampleContext = static_cast<SampleContext*>( context );
+	DrawPolygon( sampleContext->draw, vertices, vertexCount, color );
 }
 
-void DrawSolidPolygonFcn(b2Transform transform,
-                         const b2Vec2* vertices,
-                         int vertexCount,
-                         float radius,
-                         b2HexColor color,
-                         void* context)
+void DrawSolidPolygonFcn( b2Transform transform, const b2Vec2* vertices, int vertexCount, float radius, b2HexColor color,
+						  void* context )
 {
-    SampleContext* sampleContext = static_cast<SampleContext*>(context);
-    DrawSolidPolygon(sampleContext->draw, transform, vertices, vertexCount, radius, color);
+	SampleContext* sampleContext = static_cast<SampleContext*>( context );
+	DrawSolidPolygon( sampleContext->draw, transform, vertices, vertexCount, radius, color );
 }
 
-void DrawCircleFcn(b2Vec2 center, float radius, b2HexColor color, void* context)
+void DrawCircleFcn( b2Vec2 center, float radius, b2HexColor color, void* context )
 {
-    SampleContext* sampleContext = static_cast<SampleContext*>(context);
-    DrawCircle(sampleContext->draw, center, radius, color);
+	SampleContext* sampleContext = static_cast<SampleContext*>( context );
+	DrawCircle( sampleContext->draw, center, radius, color );
 }
 
-void DrawSolidCircleFcn(b2Transform transform, float radius, b2HexColor color, void* context)
+void DrawSolidCircleFcn( b2Transform transform, float radius, b2HexColor color, void* context )
 {
-    SampleContext* sampleContext = static_cast<SampleContext*>(context);
-    DrawSolidCircle(sampleContext->draw, transform, radius, color);
+	SampleContext* sampleContext = static_cast<SampleContext*>( context );
+	DrawSolidCircle( sampleContext->draw, transform, radius, color );
 }
 
-void DrawSolidCapsuleFcn(b2Vec2 p1, b2Vec2 p2, float radius, b2HexColor color, void* context)
+void DrawSolidCapsuleFcn( b2Vec2 p1, b2Vec2 p2, float radius, b2HexColor color, void* context )
 {
-    SampleContext* sampleContext = static_cast<SampleContext*>(context);
-    DrawSolidCapsule(sampleContext->draw, p1, p2, radius, color);
+	SampleContext* sampleContext = static_cast<SampleContext*>( context );
+	DrawSolidCapsule( sampleContext->draw, p1, p2, radius, color );
 }
 
-void DrawLineFcn(b2Vec2 p1, b2Vec2 p2, b2HexColor color, void* context)
+void DrawLineFcn( b2Vec2 p1, b2Vec2 p2, b2HexColor color, void* context )
 {
-    SampleContext* sampleContext = static_cast<SampleContext*>(context);
-    DrawLine(sampleContext->draw, p1, p2, color);
+	SampleContext* sampleContext = static_cast<SampleContext*>( context );
+	DrawLine( sampleContext->draw, p1, p2, color );
 }
 
-void DrawTransformFcn(b2Transform transform, void* context)
+void DrawTransformFcn( b2Transform transform, void* context )
 {
-    SampleContext* sampleContext = static_cast<SampleContext*>(context);
-    DrawTransform(sampleContext->draw, transform, 1.0f);
+	SampleContext* sampleContext = static_cast<SampleContext*>( context );
+	DrawTransform( sampleContext->draw, transform, 1.0f );
 }
 
-void DrawPointFcn(b2Vec2 p, float size, b2HexColor color, void* context)
+void DrawPointFcn( b2Vec2 p, float size, b2HexColor color, void* context )
 {
-    SampleContext* sampleContext = static_cast<SampleContext*>(context);
-    DrawPoint(sampleContext->draw, p, size, color);
+	SampleContext* sampleContext = static_cast<SampleContext*>( context );
+	DrawPoint( sampleContext->draw, p, size, color );
 }
 
-void DrawStringFcn(b2Vec2 p, const char* s, b2HexColor color, void* context)
+void DrawStringFcn( b2Vec2 p, const char* s, b2HexColor color, void* context )
 {
-    SampleContext* sampleContext = static_cast<SampleContext*>(context);
-    DrawWorldString(sampleContext->draw, &sampleContext->camera, p, color, s);
+	SampleContext* sampleContext = static_cast<SampleContext*>( context );
+	DrawWorldString( sampleContext->draw, &sampleContext->camera, p, color, s );
 }
 
 #define MAX_TOKENS 32
@@ -544,6 +541,15 @@ void Sample::Step()
 	b2World_EnableSleeping( m_worldId, m_context->enableSleep );
 	b2World_EnableWarmStarting( m_worldId, m_context->enableWarmStarting );
 	b2World_EnableContinuous( m_worldId, m_context->enableContinuous );
+
+	if (m_context->enableRecycling)
+	{
+		b2World_SetContactRecycleDistance( m_worldId, B2_CONTACT_RECYCLE_DISTANCE );
+	}
+	else
+	{
+		b2World_SetContactRecycleDistance( m_worldId, 0.0f );
+	}
 
 	for ( int i = 0; i < 1; ++i )
 	{
