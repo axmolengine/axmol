@@ -614,12 +614,12 @@ local function PhysicsDemoRayCast()
           if mode == 0 then
 	            local point3 = ax.p(point2.x, point2.y)
 	            local function func(world, info)
-		              point3 = info.contact
+		              point3 = info.point
 		              return false
 	            end
 
               ax.Director:getInstance():getRunningScene():getPhysicsWorld2D():rayCast(func, point1, point2)
-              drawNode:drawSegment(point1, point3, 1, STATIC_COLOR)
+              drawNode:drawSegment(point1, point3, 1.0, STATIC_COLOR)
 
               if point2.x ~= point3.x or point2.y ~= point3.y then
 	               drawNode:drawDot(point3, 2, ax.color(1.0, 1.0, 1.0, 1.0))
@@ -630,14 +630,14 @@ local function PhysicsDemoRayCast()
               local friction = 1.0
               local function func(world, info)
                   if friction > info.fraction then
-                      point3 = info.contact
+                      point3 = info.point
                       friction = info.fraction
 		              end
                   return true
               end
 
               ax.Director:getInstance():getRunningScene():getPhysicsWorld2D():rayCast(func, point1, point2)
-              drawNode:drawSegment(point1, point3, 1, STATIC_COLOR)
+              drawNode:drawSegment(point1, point3, 1.0, STATIC_COLOR)
 
               if point2.x ~= point3.x or point2.y ~= point3.y then
                   drawNode:drawDot(point3, 2, ax.color(1.0, 1.0, 1.0, 1.0))
@@ -647,12 +647,12 @@ local function PhysicsDemoRayCast()
 	            local points = {}
 
               local function func(world, info)
-                  points[#points + 1] = info.contact
+                  points[#points + 1] = info.point
                   return true
               end
 
               ax.Director:getInstance():getRunningScene():getPhysicsWorld2D():rayCast(func, point1, point2)
-              drawNode:drawSegment(point1, point2, 1, STATIC_COLOR)
+              drawNode:drawSegment(point1, point2, 1.0, STATIC_COLOR)
 
               for _, p in ipairs(points) do
                   drawNode:drawDot(p, 2, ax.color(1.0, 1.0, 1.0, 1.0))
@@ -739,7 +739,7 @@ local function PhysicsDemoActions()
     local sp2 = addGrossiniAtPosition(layer, ax.p(VisibleRect:left().x + 50, VisibleRect:left().y))
     local sp3 = addGrossiniAtPosition(layer, ax.p(VisibleRect:right().x - 20, VisibleRect:right().y))
     local sp4 = addGrossiniAtPosition(layer, ax.p(VisibleRect:leftTop().x + 50, VisibleRect:leftTop().y-50))
-    sp4:getRigidbody2D():setGravityEnable(false)
+    sp4:getRigidbody2D():setGravityEnabled(false)
 
 
     local actionTo = ax.JumpTo:create(2, ax.p(100,100), 50, 4)
@@ -815,49 +815,50 @@ local function PhysicsDemoPump()
 
     layer:scheduleUpdateWithPriorityLua(update, 0)
 
-    local node = ax.Node:create()
-    local body = ax.Rigidbody2D:create()
-    body:setDynamic(false)
+    local worldBox = ax.Node:create()
+    local worldBoxBody = ax.Rigidbody2D:create()
+    worldBoxBody:setDynamic(false)
 
     local staticMaterial = ax.PhysicsMaterial2D(ax.PHYSICS_INFINITY_2D, 0, 0.5)
-    body:addShape(ax.EdgeSegmentCollider2D:create(ax.p(VisibleRect:leftTop().x + 50,
+    worldBoxBody:addCollider(ax.EdgeSegmentCollider2D:create(ax.p(VisibleRect:leftTop().x + 50,
                                                          VisibleRect:leftTop().y),
                                                     ax.p(VisibleRect:leftTop().x + 50,
                                                         VisibleRect:leftTop().y-130),
                                                     staticMaterial))
-    body:addShape(ax.EdgeSegmentCollider2D:create(ax.p(VisibleRect:leftTop().x + 190,
+    worldBoxBody:addCollider(ax.EdgeSegmentCollider2D:create(ax.p(VisibleRect:leftTop().x + 190,
                                                          VisibleRect:leftTop().y),
                                                     ax.p(VisibleRect:leftTop().x + 100,
                                                          VisibleRect:leftTop().y-50),
                                                     staticMaterial))
-    body:addShape(ax.EdgeSegmentCollider2D:create(ax.p(VisibleRect:leftTop().x + 100,
+    worldBoxBody:addCollider(ax.EdgeSegmentCollider2D:create(ax.p(VisibleRect:leftTop().x + 100,
                                                          VisibleRect:leftTop().y-50),
                                                     ax.p(VisibleRect:leftTop().x + 100,
                                                          VisibleRect:leftTop().y-90),
                                                     staticMaterial))
-    body:addShape(ax.EdgeSegmentCollider2D:create(ax.p(VisibleRect:leftTop().x + 50,
+    worldBoxBody:addCollider(ax.EdgeSegmentCollider2D:create(ax.p(VisibleRect:leftTop().x + 50,
                                                          VisibleRect:leftTop().y-130),
                                                     ax.p(VisibleRect:leftTop().x + 100,
                                                          VisibleRect:leftTop().y-145),
                                                     staticMaterial))
-    body:addShape(ax.EdgeSegmentCollider2D:create(ax.p(VisibleRect:leftTop().x + 100,
+    worldBoxBody:addCollider(ax.EdgeSegmentCollider2D:create(ax.p(VisibleRect:leftTop().x + 100,
                                                          VisibleRect:leftTop().y-145),
                                                     ax.p(VisibleRect:leftBottom().x + 100,
                                                         VisibleRect:leftBottom().y + 80),
                                                     staticMaterial))
-    body:addShape(ax.EdgeSegmentCollider2D:create(ax.p(VisibleRect:leftTop().x + 150,
+    worldBoxBody:addCollider(ax.EdgeSegmentCollider2D:create(ax.p(VisibleRect:leftTop().x + 150,
                                                          VisibleRect:leftTop().y-80),
                                                     ax.p(VisibleRect:leftBottom().x + 150,
                                                          VisibleRect:leftBottom().y + 80),
                                                     staticMaterial))
-    body:addShape(ax.EdgeSegmentCollider2D:create(ax.p(VisibleRect:leftTop().x + 150,
+    worldBoxBody:addCollider(ax.EdgeSegmentCollider2D:create(ax.p(VisibleRect:leftTop().x + 150,
                                                          VisibleRect:leftTop().y-80),
                                                     ax.p(VisibleRect:rightTop().x -100,
                                                          VisibleRect:rightTop().y-150),
                                                     staticMaterial))
 
-    body:setCategoryBits(1)
+    worldBoxBody:setCategoryBits(1)
 
+    -- balls
     for _ in range(1, 6) do
         local ball = makeBall(layer,
                               ax.p(VisibleRect:leftTop().x + 75 + math.random() * 90,
@@ -868,8 +869,9 @@ local function PhysicsDemoPump()
         layer:addChild(ball)
     end
 
-    node:addComponent(body)
-    layer:addChild(node)
+    worldBox:setName('world-box')
+    worldBox:addComponent(worldBoxBody)
+    layer:addChild(worldBox)
 
     local vec =
     {
@@ -889,18 +891,25 @@ local function PhysicsDemoPump()
     layer:addChild(sgear)
     sgearB:setCategoryBits(4)
     sgearB:setCollisionMaskBits(4)
-    sgearB:setTag(1)
-    world:addJoint(ax.PinJoint2D:create(sgearB, ax.p(sgear:getPosition())))
+    sgear:setTag(1)
+    sgear:setName('small-gear')
+    -- pin small gear to body
+    sgear:addComponent(ax.PinJoint2D:create(ax.p(sgear:getPosition()), worldBoxBody))
 
 
     -- big gear
     local bgear = ax.Node:create()
+    bgear:setTag(2)
+    bgear:setName('big-gear')
     local bgearB = ax.Rigidbody2D:createCircle(100)
     bgear:addComponent(bgearB)
     bgear:setPosition(ax.p(VisibleRect:leftBottom().x + 275, VisibleRect:leftBottom().y))
     layer:addChild(bgear)
     bgearB:setCategoryBits(4)
-    world:addJoint(ax.PinJoint2D:instantiate(body, bgearB, ax.p(bgear:getPosition())))
+    bgear:addComponent(ax.PinJoint2D:create(ax.p(bgear:getPosition()), worldBoxBody))
+    local motorJoint = ax.MotorJoint2D:create(bgearB)
+    motorJoint:setAngularVelocity(-90)
+    sgear:addComponent(motorJoint)
 
 
     -- pump
@@ -914,7 +923,10 @@ local function PhysicsDemoPump()
     layer:addChild(pump)
     pumpB:setCategoryBits(2)
     pumpB:setGravityEnabled(false)
-    world:addJoint(ax.PhysicsJointDistance:instantiate(pumpB, sgearB, ax.p(0, 0), ax.p(0, -44)))
+    local distanceJoint = ax.DistanceJoint2D:create(sgearB, ax.p(0, 0), ax.p(0, -44))
+    distanceJoint:setConnectedAnchor(ax.p(0, -44))
+    pump:addComponent(distanceJoint)
+    pump:setName('pump')
 
     -- plugger
     local seg = {ax.p(VisibleRect:leftTop().x + 75, VisibleRect:leftTop().y-120),
@@ -933,14 +945,14 @@ local function PhysicsDemoPump()
     layer:addChild(plugger)
     pluggerB:setCategoryBits(2)
     sgearB:setCollisionMaskBits(5)
-    world:addJoint(ax.PhysicsJointPin:instantiate(body,
-                                                pluggerB,
-                                                ax.p(VisibleRect:leftBottom().x + 75,
-                                                     VisibleRect:leftBottom().y-90)))
-    world:addJoint(ax.PhysicsJointDistance:instantiate(pluggerB,
-                                                     sgearB,
-                                                     pluggerB:world2Local(ax.p(0,0)),
-                                                     ax.p(44, 0)))
+     
+    local pivotJoint = ax.PivotJoint2D:create(ax.p(plugger:getPosition()), worldBoxBody)
+    pivotJoint:setMotor(ax.vec2(0, 100000))
+    plugger:addComponent(pivotJoint)
+                 
+    distanceJoint = ax.DistanceJoint2D:create(sgearB)
+    distanceJoint:setConnectedAnchor(ax.vec2(44.0, 0))
+    plugger:addComponent(distanceJoint)
   end
 
   initWithLayer(layer, onEnter)
@@ -1375,7 +1387,7 @@ local function PhysicsPositionRotationTest()
       parent:setScale(0.25)
       local parentRigidbody2D = ax.Rigidbody2D:createBox(anchorNode:getContentSize())
       parent:addComponent(parentRigidbody2D)
-      parentRigidbody2D:setTag(DRAG_BODYS_TAG)
+      parent:setTag(DRAG_BODYS_TAG)
       layer:addChild(parent)
 
       local leftBall = ax.Sprite:create("Images/ball.png")
@@ -1428,15 +1440,14 @@ local function PhysicsSetGravityEnableTest()
 
     local box = makeBox(ax.p(200, 100), ax.size(50, 50), 2)
     local boxBody = box:getRigidbody2D()
-    boxBody:setTag(DRAG_BODYS_TAG)
-    boxBody:setGravityEnable(false)
+    box:setTag(DRAG_BODYS_TAG)
+    boxBody:setGravityEnabled(false)
     layer:addChild(box)
 
     local ball = makeBall(layer,ax.p(200,200),50)
-    ball:setTag(2)
+    ball:setTag(bit.bor(2, DRAG_BODYS_TAG))
     local ballBody = ball:getRigidbody2D()
-    ballBody:setTag(DRAG_BODYS_TAG)
-    ballBody:setGravityEnable(false)
+    ballBody:setGravityEnabled(false)
     layer:addChild(ball)
 
     local function onScheduleOnce()
@@ -1480,13 +1491,14 @@ local function PhysicsDemoBug5482()
     local _nodeA = ax.Sprite:create("Images/YellowSquare.png")
     _nodeA:setPosition(ax.p(VisibleRect:center().x-150,100))
     layer:addChild(_nodeA)
+    _nodeA:setTag(bit.bor(1, DRAG_BODYS_TAG))
 
     local _nodeB = ax.Sprite:create("Images/YellowSquare.png")
     _nodeB:setPosition(ax.p(VisibleRect:center().x+150,100))
     layer:addChild(_nodeB)
+    _nodeB:setTag(bit.bor(2, DRAG_BODYS_TAG))
 
     local _body = ax.Rigidbody2D:createBox(_nodeA:getContentSize())
-    _body:setTag(DRAG_BODYS_TAG)
     _body:retain()
 
     local _button = nil
@@ -1596,8 +1608,7 @@ local function PhysicsTransformTest()
     _parentSprite:setPosition(ax.p(200,100))
     _parentSprite:setScale(0.25)
     _parentSprite:addComponent(ax.Rigidbody2D:createBox(_parentSprite:getContentSize(),ax.PhysicsMaterial2D(0.1, 1.0, 0.0)))
-    _parentSprite:setTag(DRAG_BODYS_TAG)
-    _parentSprite:setTag(1)
+    _parentSprite:setTag(bit.bor(1, DRAG_BODYS_TAG))
     _rootLayer:addChild(_parentSprite)
 
     local leftBall = ax.Sprite:create("Images/ball.png")
@@ -1678,6 +1689,8 @@ function PhysicsTest()
 
    Helper.usePhysics = true
    Helper.createFunctionTable = {
+       PhysicsDemoRayCast,
+       
       PhysicsDemoLogoSmash,
       PhysicsDemoPyramidStack,
       PhysicsDemoClickAdd,

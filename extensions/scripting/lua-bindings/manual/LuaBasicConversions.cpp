@@ -2191,7 +2191,7 @@ void physics_raycastinfo_to_luaval(lua_State* L, const RayCastHit2D& info)
 
     lua_newtable(L); /* L: table */
 
-    lua_pushstring(L, "shape"); /* L: table key */
+    lua_pushstring(L, "collider"); /* L: table key */
     auto shape = info.collider;
     if (shape == nullptr)
     {
@@ -2201,7 +2201,7 @@ void physics_raycastinfo_to_luaval(lua_State* L, const RayCastHit2D& info)
     {
         int ID     = (int)(shape->_ID);
         int* luaID = &(shape->_luaID);
-        toluafix_pushusertype_object(L, ID, luaID, (void*)shape, "ax.PhysicsCollider");
+        toluafix_pushusertype_object(L, ID, luaID, (void*)shape, "ax.Collider2D");
     }
     lua_rawset(L, -3); /* table[key] = value, L: table */
 
