@@ -3,17 +3,17 @@
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,18 +27,16 @@
 
 #if defined(AX_ENABLE_PHYSICS_2D)
 
-#ifdef __cplusplus
+#    ifdef __cplusplus
 extern "C" {
-#endif
-#include "tolua++.h"
-#ifdef __cplusplus
+#    endif
+#    include "tolua++.h"
+#    ifdef __cplusplus
 }
-#endif
+#    endif
 
-
-#include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
+#    include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
 
 int register_all_ax_physics2d_manual(lua_State* tolua_S);
 
-#endif // defined(AX_ENABLE_PHYSICS)
-
+#endif  // defined(AX_ENABLE_PHYSICS)

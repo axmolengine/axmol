@@ -2205,7 +2205,6 @@ void physics_raycastinfo_to_luaval(lua_State* L, const RayCastHit2D& info)
     }
     lua_rawset(L, -3); /* table[key] = value, L: table */
 
-
     lua_pushstring(L, "point"); /* L: table key */
     vec2_to_luaval(L, info.point);
     lua_rawset(L, -3); /* table[key] = value, L: table */

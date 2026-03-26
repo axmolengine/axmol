@@ -46,7 +46,7 @@
 
 int axlua_physics2d_PhysicsWorld2D_getScene(lua_State* tolua_S)
 {
-    int argc              = 0;
+    int argc                = 0;
     ax::PhysicsWorld2D* obj = nullptr;
 
 #    if _AX_DEBUG >= 1
@@ -96,9 +96,9 @@ tolua_lerror:
 
 int axlua_physics2d_PhysicsWorld2D_rayCast(lua_State* tolua_S)
 {
-    int argc              = 0;
+    int argc                = 0;
     ax::PhysicsWorld2D* obj = nullptr;
-    bool ok               = true;
+    bool ok                 = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -281,7 +281,7 @@ tolua_lerror:
 
 int axlua_physics2d_PolygonCollider2D_getPoints(lua_State* tolua_S)
 {
-    int argc                        = 0;
+    int argc                   = 0;
     ax::PolygonCollider2D* obj = nullptr;
 
 #    if _AX_DEBUG >= 1
@@ -326,7 +326,7 @@ tolua_lerror:
 
 int axlua_physics2d_EdgePolygonCollider2D_getPoints(lua_State* tolua_S)
 {
-    int argc                            = 0;
+    int argc                       = 0;
     ax::EdgePolygonCollider2D* obj = nullptr;
 
 #    if _AX_DEBUG >= 1
@@ -371,7 +371,7 @@ tolua_lerror:
 
 int axlua_physics2d_EdgeChainCollider2D_getPoints(lua_State* tolua_S)
 {
-    int argc                          = 0;
+    int argc                     = 0;
     ax::EdgeChainCollider2D* obj = nullptr;
 
 #    if _AX_DEBUG >= 1
@@ -419,7 +419,7 @@ static int toaxlua_Contact2DListener_registerScriptHandler(lua_State* tolua_S)
     if (nullptr == tolua_S)
         return 0;
 
-    int argc                          = 0;
+    int argc                = 0;
     Contact2DListener* self = nullptr;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -431,8 +431,7 @@ static int toaxlua_Contact2DListener_registerScriptHandler(lua_State* tolua_S)
 #    if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_Contact2DListener_registerScriptHandler'\n",
-                    nullptr);
+        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_Contact2DListener_registerScriptHandler'\n", nullptr);
         return 0;
     }
 #    endif
