@@ -97,6 +97,16 @@ public:
         kAllCategoryBits = (~0llu)
     };
 
+    enum class EventBits : uint32_t
+    {
+        None     = 0,
+        PreSolve = 1 << 0,
+        Hit      = 1 << 1,
+        Contact  = 1 << 2,
+        Sensor   = 1 << 3,
+        AllBits  = PreSolve | Hit | Contact | Sensor
+    };
+
     using CollisionBits   = CategoryBits;
     using CollisionFilter = b2Filter;
 
@@ -199,12 +209,50 @@ public:
      * @param material A PhysicsMaterial2D object.
      */
     void setMaterial(const PhysicsMaterial2D& material);
+
+    /**
+     * @brief Check whether this collider is configured as a sensor.
+     *
+     * A sensor collider generates overlap events but never produces a collision response.
+     * Sensors are useful for detecting triggers, zones, or one-way interactions.
+     *
+     * @return True if this collider is a sensor, false otherwise.
+     */
     bool isSensor() const { return _sensor; }
 
     /**
-     * box2d v3 doesn't support modify sensor for shapes runtime once the shape is created
+     * @brief Enable or disable sensor behavior for this collider.
+     *
+     * A sensor collider generates overlap events but does not produce collision responses.
+     * This setting must be applied before the owning rigid-body component is added to a node,
+     * as sensor state cannot be modified at runtime afterward.
+     *
+     * @param sensor True to enable sensor behavior, false to disable.
      */
     void setSensor(bool sensor);
+
+    /**
+     * @brief Check whether one or more event types are enabled for this collider.
+     *
+     * This method verifies if the specified event bits are fully enabled in the collider.
+     * You can pass a single event (e.g., EventBits::PreSolve) or a combination of events
+     * (e.g., EventBits::PreSolve | EventBits::Contact).
+     *
+     * @param events The event bits to check.
+     * @return True if all specified events are enabled, false otherwise.
+     */
+    bool isEventEnabled(EventBits events) const;
+
+    /**
+     * @brief Enable or disable one or more event types for this collider.
+     *
+     * This method allows toggling specific event bits. You can enable or disable
+     * a single event or multiple events at once by combining flags.
+     *
+     * @param events The event bits to modify.
+     * @param enabled True to enable the specified events, false to disable them.
+     */
+    void setEventEnabled(EventBits events, bool enabled);
 
     /**
      * Get this shape's position offset.
@@ -247,34 +295,6 @@ public:
      * @return A Vec2 object.
      */
     static Vec2 getPolygonCenter(std::span<const Vec2> points);
-
-    bool isPreSolveEnabled() const { return _preSolveEnabled; }
-
-    /**
-     * @brief Enable or disable PreSolve event handling for this Collider2D.
-     *
-     * When enabled, the physics world will invoke the PreSolve callback
-     * for contacts involving this body. PreSolve is called before the
-     * solver processes the contact, allowing you to inspect or modify
-     * collision response (e.g., filtering, one-way platforms).
-     *
-     * @param bval True to enable PreSolve events, false to disable.
-     */
-    void setPreSolveEnabled(bool bval);
-
-    bool isPostSolveEnabled() const { return _preSolveEnabled; }
-
-    /**
-     * @brief Enable or disable PostSolve event handling for this Collider2D.
-     *
-     * When enabled, the physics world will invoke the PostSolve (HitEvent)
-     * stage for contacts involving this body after the solver has finished.
-     * PostSolve provides access to the final impulses applied during collision
-     * resolution, useful for effects such as sound, particles, or damage.
-     *
-     * @param bval True to enable PostSolve events, false to disable.
-     */
-    void setPostSolveEnabled(bool bval);
 
     /**
      * Set a mask that defines which categories this physics body belongs to.
@@ -358,8 +378,7 @@ protected:
 
     Type _type{Type::UNKNOWN};
     bool _sensor;
-    bool _preSolveEnabled;
-    bool _postSolveEnabled;
+    EventBits _eventBits;
     float _scaleX;
     float _scaleY;
     float _newScaleX;
@@ -373,6 +392,9 @@ protected:
     friend class Rigidbody2D;
     friend class Joint2D;
 };
+
+AX_ENABLE_BITMASK_OPS(Collider2D::EventBits);
+// AX_ENABLE_BITSHIFT_OPS(Collider2D::EventBits);
 
 /** A circle shape. */
 class AX_DLL CircleCollider2D : public Collider2D

@@ -132,7 +132,36 @@ public:
     static const int DEBUGDRAW_CONTACT;  ///< draw contact
     static const int DEBUGDRAW_ALL;      ///< draw all
 
+    using CollisionEventBits = Collider2D::EventBits;
+
     b2WorldId internalHandle() const { return _worldId; }
+
+    /**
+     * @brief Check whether specific collision events are globally enabled in this physics world.
+     *
+     * This method verifies if the given event bits are allowed by the world's global event mask.
+     * Even if a collider enables these events locally, they will only take effect if the world
+     * also permits them.
+     *
+     * @param events Collision event bits to check.
+     * @return True if all specified events are enabled globally, false otherwise.
+     */
+    bool isGlobalEventEnabled(CollisionEventBits events) const;
+
+    /**
+     * @brief Enable or disable specific collision events globally in this physics world.
+     *
+     * This modifies the world's global event mask by turning on or off the specified event bits.
+     * Colliders can only generate these events if they are enabled both locally and globally.
+     *
+     * @note This setting should be applied before any rigid-body components are added to nodes,
+     *       because global event state cannot be changed at runtime once rigidbodies are active.
+     *       By default, all global collision events are disabled (mask = 0).
+     *
+     * @param events Collision event bits to modify.
+     * @param enabled True to enable the specified events globally, false to disable them.
+     */
+    void setGlobalEventEnabled(CollisionEventBits events, bool enabled);
 
     /**
      * Searches for physics shapes that intersects the ray.
@@ -370,14 +399,14 @@ public:
 protected:
     virtual void update(float delta, bool userCall = false);
 
-    static bool handleCollisionPreSolve(b2ShapeId shapeIdA,
-                                        b2ShapeId shapeIdB,
-                                        b2Vec2 point,
-                                        b2Vec2 normal,
-                                        PhysicsWorld2D* world);
+    static bool handlePreSolve(b2ShapeId shapeIdA,
+                               b2ShapeId shapeIdB,
+                               b2Vec2 point,
+                               b2Vec2 normal,
+                               PhysicsWorld2D* world);
 
-    virtual bool onCollisionPreSolve(Contact2D* contact);
-    virtual void onCollisionPostSolve(Contact2D* contact);
+    virtual bool onPreSolve(Contact2D* contact);
+    virtual void dispatchContactEvents();
 
     void beforeSimulation(Node* node,
                           const Mat4& parentToWorldTransform,
@@ -387,6 +416,8 @@ protected:
     void afterSimulation(Node* node, const Mat4& parentToWorldTransform, float parentRotation);
 
 protected:
+    CollisionEventBits getGlobalEventBits() const { return _eventBits; }
+
     Vec2 _gravity;
     float _PTMRatio;
     float _speed;
@@ -395,13 +426,13 @@ protected:
     float _updateTime;
     int _substeps;
     int _fixedUpdateRate;
+    CollisionEventBits _eventBits;
     b2WorldId _worldId;
     bool _isWorldLocked = false;
-
     bool _updateBodyTransform;
-    Scene* _scene;
-
     bool _autoStep;
+
+    Scene* _scene;
 
     EventDispatcher* _eventDispatcher;
 

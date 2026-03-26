@@ -402,9 +402,8 @@ void Mesh::setMaterial(Material* material)
                     // AXASSERT(vertexInputs.size() <= attributeCount, "missing attribute data");
                 }
 #endif
-                // TODO
                 auto vertexInputBinding =
-                    VertexInputBinding::spawn(_meshIndexData, pass, &list[i], _instanceCount > 0 && _instancing);
+                    VertexInputBinding::fetch(_meshIndexData, pass, &list[i], _instanceCount > 0 && _instancing);
                 pass->setVertexInputBinding(vertexInputBinding);
                 i += 1;
             }

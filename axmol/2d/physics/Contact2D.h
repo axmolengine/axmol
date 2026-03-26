@@ -35,9 +35,10 @@
 #    include "axmol/base/Event.h"
 #    include "axmol/base/EventCustom.h"
 
+#    include "yasio/object_pool.hpp"
+
 namespace ax
 {
-
 class Collider2D;
 class Rigidbody2D;
 class PhysicsWorld2D;
@@ -95,12 +96,36 @@ class AX_DLL Contact2D : public EventCustom
     friend class Contact2DListener;
     friend class PhysicsWorld2D;
 
+    DEFINE_CONCURRENT_OBJECT_POOL_ALLOCATION(Contact2D, 128)
+
 public:
     enum class EventCode
     {
-        NONE,
-        PRESOLVE,
-        POSTSOLVE,  // not implement yet
+        None,
+
+        /**
+         * Synchronous callback triggered before the solver runs.
+         * Allows for manual contact modification (e.g., disabling collisions).
+         */
+        PreSolve,
+
+        /** Triggered when two shapes first start touching (Asynchronous). */
+        ContactBegin,
+
+        /** Triggered when two shapes stop touching (Asynchronous). */
+        ContactEnd,
+
+        /**
+         * Triggered on high-intensity impacts with impulse data (Asynchronous).
+         * Requires b2Shape_EnableHitEvents and a world hit threshold.
+         */
+        CollisionHit,
+
+        /** Triggered when a shape enters a sensor's detection area. */
+        SensorBegin,
+
+        /** Triggered when a shape leaves a sensor's detection area. */
+        SensorEnd,
     };
 
     /** Get contact shape A. */
@@ -125,8 +150,6 @@ private:
         _contactInfo.normal          = normal;
     }
     void setEventCode(EventCode eventCode) { _eventCode = eventCode; };
-    bool isNotificationEnabled() const { return _notificationEnable; }
-    void setNotificationEnable(bool enable) { _notificationEnable = enable; }
     void setResult(bool result) { _result = result; }
     bool resetResult()
     {
@@ -146,7 +169,6 @@ private:
     Collider2D* _colliderB;
     EventCode _eventCode;
     Contact2DInfo _contactInfo;
-    bool _notificationEnable;
     bool _result;
 };
 
@@ -179,13 +201,25 @@ public:
      * collision this step or true to process it normally. Additionally, you may override collision values, restitution,
      * or surface velocity values.
      */
-    std::function<bool(Contact2D* contact)> onContactPreSolve;
+    std::function<bool(Contact2D* contact)> onPreSolve;
+
+    std::function<void(Contact2D* contact)> onContactBegin;
+
+    /**
+     * @brief It will called at two shapes separated, and only call it once.
+     * onContactBegin and onContactSeparate will called in pairs.
+     */
+    std::function<void(Contact2D* contact)> onContactEnd;
 
     /**
      * @brief Two shapes are touching and their collision response has been processed. You can retrieve the collision
      * impulse or kinetic energy at this time if you want to use it to calculate sound volumes or damage amounts.
      */
-    std::function<void(Contact2D* contact)> onContactPostSolve;
+    std::function<void(Contact2D* contact)> onCollisionHit;
+
+    std::function<void(Contact2D* contact)> onSensorBegin;
+
+    std::function<void(Contact2D* contact)> onSensorEnd;
 
 protected:
     bool init();

@@ -1440,6 +1440,12 @@ void b2DrawJoint( b2DebugDraw* draw, b2World* world, b2Joint* joint )
 		return;
 	}
 
+    // axmol spec
+	if (joint->drawScale < FLT_EPSILON)
+	{
+		return;
+	}
+
 	b2JointSim* jointSim = b2GetJointSim( world, joint );
 
 	b2Transform transformA = b2GetBodyTransformQuick( world, bodyA );

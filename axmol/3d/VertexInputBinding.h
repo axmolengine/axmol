@@ -59,7 +59,7 @@ class AX_DLL VertexInputBinding : public Object
 {
 public:
     /**
-     * Spawn a VertexInputBinding with cache, autorelease
+     * Gets a cached VertexInputBinding
      *
      * If a VertexInputBinding matching the specified MeshVertexData and ProgramState already
      * exists, it will be returned. Otherwise, a new VertexInputBinding will
@@ -72,7 +72,7 @@ public:
      *
      * @return A VertexInputBinding for the requested parameters.
      */
-    static VertexInputBinding* spawn(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*, bool instancing);
+    static VertexInputBinding* fetch(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*, bool instancing);
 
     static void purgeCache();
 

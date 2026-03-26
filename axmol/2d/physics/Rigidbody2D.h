@@ -80,6 +80,8 @@ public:
         Continuous,
     };
 
+    using CollisionEventBits = Collider2D::EventBits;
+
     const static std::string_view COMPONENT_NAME;
 
     /**
@@ -299,28 +301,15 @@ public:
     Node* getNode() const { return _owner; }
 
     /**
-     * @brief Enable or disable PreSolve event handling for this Rigidbody2D.
+     * @brief Enable or disable one or more event types for this collider.
      *
-     * When enabled, the physics world will invoke the PreSolve callback
-     * for contacts involving this body. PreSolve is called before the
-     * solver processes the contact, allowing you to inspect or modify
-     * collision response (e.g., filtering, one-way platforms).
+     * This method allows toggling specific event bits. You can enable or disable
+     * a single event or multiple events at once by combining flags.
      *
-     * @param bval True to enable PreSolve events, false to disable.
+     * @param events The event bits to modify.
+     * @param enabled True to enable the specified events, false to disable them.
      */
-    void setPreSolveEnabled(bool bval);
-
-    /**
-     * @brief Enable or disable PostSolve event handling for this Rigidbody2D.
-     *
-     * When enabled, the physics world will invoke the PostSolve (HitEvent)
-     * stage for contacts involving this body after the solver has finished.
-     * PostSolve provides access to the final impulses applied during collision
-     * resolution, useful for effects such as sound, particles, or damage.
-     *
-     * @param bval True to enable PostSolve events, false to disable.
-     */
-    void setPostSolveEnabled(bool bval);
+    void setEventEnabled(CollisionEventBits events, bool enabled);
 
     /**
      * Return bitmask of first collider.

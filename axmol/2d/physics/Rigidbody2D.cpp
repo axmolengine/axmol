@@ -660,16 +660,10 @@ uint64_t Rigidbody2D::getCategoryBits() const
     return !_colliders.empty() ? _colliders.front()->getCategoryBits() : UINT64_MAX;
 }
 
-void Rigidbody2D::setPreSolveEnabled(bool bval)
+void Rigidbody2D::setEventEnabled(CollisionEventBits events, bool enabled)
 {
     for (auto&& collider : _colliders)
-        collider->setPreSolveEnabled(bval);
-}
-
-void Rigidbody2D::setPostSolveEnabled(bool bval)
-{
-    for (auto&& collider : _colliders)
-        collider->setPostSolveEnabled(bval);
+        collider->setEventEnabled(events, enabled);
 }
 
 void Rigidbody2D::setCollisionMaskBits(int maskBits)

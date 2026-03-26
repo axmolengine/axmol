@@ -18,7 +18,8 @@ endif()
 # Deterministic math
 # https://box2d.org/posts/2024/08/determinism/
 if (MINGW OR APPLE OR UNIX)
-	add_compile_options(-ffp-contract=off)
+  message(AUTHOR_WARNING "Compiling box2d with -ffp-contract=off for non-windows platform")
+  target_compile_options(${target_name} PRIVATE -ffp-contract=off)
 endif()
 
 # Atomics are still considered experimental in Visual Studio 17.8

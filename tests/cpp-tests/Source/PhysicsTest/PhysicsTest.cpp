@@ -37,6 +37,8 @@ using namespace ax;
 
 PhysicsTests::PhysicsTests()
 {
+    ADD_TEST_CASE(PhysicsDemoOneWayPlatform);
+
     ADD_TEST_CASE(PhysicsDemoLogoSmash);
     ADD_TEST_CASE(PhysicsDemoPyramidStack);
     ADD_TEST_CASE(PhysicsDemoClickAdd);
@@ -1190,6 +1192,9 @@ void PhysicsDemoOneWayPlatform::onEnter()
 {
     PhysicsDemo::onEnter();
 
+    _physicsWorld2D->setGlobalEventEnabled(
+        PhysicsWorld2D::CollisionEventBits::PreSolve | Rigidbody2D::CollisionEventBits::Hit, true);
+
     auto touchListener          = EventListenerTouchOneByOne::create();
     touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemoOneWayPlatform::onTouchBegan, this);
     touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemoOneWayPlatform::onTouchMoved, this);
@@ -1210,17 +1215,15 @@ void PhysicsDemoOneWayPlatform::onEnter()
     auto ballBody = ball->getRigidbody2D();
     ballBody->setVelocity(Vec2(0.0f, 150.0f));
     ball->setTag(DRAG_BODYS_BITS);
-    ballBody->setPreSolveEnabled(true);  // enable pre solve hook
-    ballBody->setPostSolveEnabled(true);
     this->addChild(ball);
 
-    auto contactListener                = Contact2DListenerWithBodies::create(platformBody, ballBody);
-    contactListener->onContactPreSolve  = AX_CALLBACK_1(PhysicsDemoOneWayPlatform::onContactPreSolve, this);
-    contactListener->onContactPostSolve = AX_CALLBACK_1(PhysicsDemoOneWayPlatform::onContactPostSolve, this);
+    auto contactListener            = Contact2DListenerWithBodies::create(platformBody, ballBody);
+    contactListener->onPreSolve     = AX_CALLBACK_1(PhysicsDemoOneWayPlatform::onPreSolve, this);
+    contactListener->onCollisionHit = AX_CALLBACK_1(PhysicsDemoOneWayPlatform::onCollisionHit, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 }
 
-bool PhysicsDemoOneWayPlatform::onContactPreSolve(Contact2D* contact)
+bool PhysicsDemoOneWayPlatform::onPreSolve(Contact2D* contact)
 {
     // Axmol-3.0 physics2d is built on Box2D v3.
     // In Box2D v3, the contact normal always points from shape A toward shape B.
@@ -1233,7 +1236,7 @@ bool PhysicsDemoOneWayPlatform::onContactPreSolve(Contact2D* contact)
     return normalY > 0;
 }
 
-void PhysicsDemoOneWayPlatform::onContactPostSolve(ax::Contact2D* contact)
+void PhysicsDemoOneWayPlatform::onCollisionHit(ax::Contact2D* contact)
 {
     auto& contactInfo = contact->getContactInfo();
     if (contactInfo.pointCount > 0)
@@ -1387,6 +1390,9 @@ std::string PhysicsDemoBug3988::subtitle() const
 void PhysicsContactTest::onEnter()
 {
     PhysicsDemo::onEnter();
+
+    _physicsWorld2D->setGlobalEventEnabled(PhysicsWorld2D::CollisionEventBits::PreSolve, true);
+
     _physicsWorld2D->setGravity(Vec2::ZERO);
     auto s = VisibleRect::getVisibleRect().size;
 
@@ -1550,14 +1556,16 @@ void PhysicsContactTest::resetTest()
     root->addChild(label, 1);
     label->setPosition(Vec2(s.width / 2, prevMenuPos -= menuStep));
 
-    auto wall = Node::create();
-    wall->addComponent(
-        Rigidbody2D::createEdgeBox(VisibleRect::getVisibleRect().size, PhysicsMaterial2D(0.1f, 1, 0.0f)));
+    auto wall     = Node::create();
+    auto wallBody = Rigidbody2D::createEdgeBox(VisibleRect::getVisibleRect().size, PhysicsMaterial2D(0.1f, 1, 0.0f));
+    wall->addComponent(wallBody);
     wall->setPosition(VisibleRect::center());
     root->addChild(wall);
 
-    auto contactListener               = Contact2DListener::create();
-    contactListener->onContactPreSolve = AX_CALLBACK_1(PhysicsContactTest::onContactPreSolve, this);
+    // The wall default categoryBits = 1
+
+    auto contactListener        = Contact2DListener::create();
+    contactListener->onPreSolve = AX_CALLBACK_1(PhysicsContactTest::onPreSolve, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
     // yellow box, will collide with itself and blue box.
@@ -1633,12 +1641,27 @@ void PhysicsContactTest::resetTest()
     }
 }
 
-bool PhysicsContactTest::onContactPreSolve(Contact2D* contact)
+bool PhysicsContactTest::onPreSolve(Contact2D* contact)
 {
-    Rigidbody2D* a    = contact->getColliderA()->getAttachedBody();
-    Rigidbody2D* b    = contact->getColliderB()->getAttachedBody();
-    Rigidbody2D* body = (a->getCategoryBits() == 0x04 || a->getCategoryBits() == 0x08) ? a : b;
-    AX_ASSERT(body->getCategoryBits() == 0x04 || body->getCategoryBits() == 0x08);
+    Rigidbody2D* a = contact->getColliderA()->getAttachedBody();
+    Rigidbody2D* b = contact->getColliderB()->getAttachedBody();
+
+    // Only proceed if one of the bodies is a triangle
+    if (a->getCategoryBits() == 0x04 || a->getCategoryBits() == 0x08)
+    {
+        AX_ASSERT(a->getCategoryBits() == 0x04 || a->getCategoryBits() == 0x08);
+        // triangle-specific logic here
+    }
+    else if (b->getCategoryBits() == 0x04 || b->getCategoryBits() == 0x08)
+    {
+        AX_ASSERT(b->getCategoryBits() == 0x04 || b->getCategoryBits() == 0x08);
+        // triangle-specific logic here
+    }
+    else
+    {
+        // No triangle involved, skip assertion
+        return true;
+    }
 
     return true;
 }

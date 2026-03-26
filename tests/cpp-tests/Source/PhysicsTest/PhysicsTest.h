@@ -175,8 +175,8 @@ public:
     void onEnter() override;
     virtual std::string title() const override;
 
-    bool onContactPreSolve(ax::Contact2D* contact);
-    void onContactPostSolve(ax::Contact2D* contact);
+    bool onPreSolve(ax::Contact2D* contact);
+    void onCollisionHit(ax::Contact2D* contact);
 };
 
 class PhysicsDemoSlice : public PhysicsDemo
@@ -215,7 +215,7 @@ public:
 
     void onEnter() override;
     void resetTest();
-    bool onContactPreSolve(ax::Contact2D* contact);
+    bool onPreSolve(ax::Contact2D* contact);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 

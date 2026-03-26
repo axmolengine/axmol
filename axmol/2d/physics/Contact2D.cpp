@@ -33,14 +33,13 @@
 namespace ax
 {
 
-const char* CONTACT_2D_EVENT_NAME = "contact-2d-event";
+const char* CONTACT_2D_EVENT_NAME = "contact-2d";
 
 Contact2D::Contact2D()
     : EventCustom(CONTACT_2D_EVENT_NAME)
     , _colliderA(nullptr)
     , _colliderB(nullptr)
-    , _eventCode(EventCode::NONE)
-    , _notificationEnable(true)
+    , _eventCode(EventCode::None)
     , _result(true)
 {}
 
@@ -124,24 +123,58 @@ void Contact2DListener::onEvent(EventCustom* event)
 
     switch (contact->getEventCode())
     {
-    case Contact2D::EventCode::PRESOLVE:
+    case Contact2D::EventCode::PreSolve:
     {
         bool ret = true;
 
-        if (onContactPreSolve != nullptr && hitTest(contact->getColliderA(), contact->getColliderB()))
+        if (onPreSolve != nullptr && hitTest(contact->getColliderA(), contact->getColliderB()))
         {
-            ret = onContactPreSolve(contact);
+            ret = onPreSolve(contact);
         }
 
         contact->setResult(ret);
         break;
     }
-    case Contact2D::EventCode::POSTSOLVE:
+    case Contact2D::EventCode::ContactBegin:
     {
-        if (onContactPostSolve != nullptr && hitTest(contact->getColliderA(), contact->getColliderB()))
+        if (onContactBegin != nullptr && hitTest(contact->getColliderA(), contact->getColliderB()))
         {
             contact->generateContactData();
-            onContactPostSolve(contact);
+            onContactBegin(contact);
+        }
+        break;
+    }
+    case Contact2D::EventCode::ContactEnd:
+    {
+        if (onContactEnd != nullptr && hitTest(contact->getColliderA(), contact->getColliderB()))
+        {
+            contact->generateContactData();
+            onContactEnd(contact);
+        }
+        break;
+    }
+    case Contact2D::EventCode::CollisionHit:
+    {
+        if (onCollisionHit != nullptr && hitTest(contact->getColliderA(), contact->getColliderB()))
+        {
+            contact->generateContactData();
+            onCollisionHit(contact);
+        }
+        break;
+    }
+    case Contact2D::EventCode::SensorBegin:
+    {
+        if (onContactEnd != nullptr && hitTest(contact->getColliderA(), contact->getColliderB()))
+        {
+            onContactEnd(contact);
+        }
+        break;
+    }
+    case Contact2D::EventCode::SensorEnd:
+    {
+        if (onCollisionHit != nullptr && hitTest(contact->getColliderA(), contact->getColliderB()))
+        {
+            onCollisionHit(contact);
         }
         break;
     }
@@ -173,9 +206,9 @@ bool Contact2DListener::hitTest(Collider2D* /*shapeA*/, Collider2D* /*shapeB*/)
 
 bool Contact2DListener::checkAvailable()
 {
-    if (!onContactPreSolve && !onContactPostSolve)
+    if (!onPreSolve && !onContactBegin && !onContactEnd && !onCollisionHit && !onSensorBegin && !onSensorEnd)
     {
-        AXASSERT(false, "Invalid PhysicsContactListener.");
+        AXASSERT(false, "Invalid Contact2DListener.");
         return false;
     }
 
@@ -188,8 +221,12 @@ Contact2DListener* Contact2DListener::clone()
 
     if (obj != nullptr)
     {
-        obj->onContactPreSolve  = onContactPreSolve;
-        obj->onContactPostSolve = onContactPostSolve;
+        obj->onPreSolve     = onPreSolve;
+        obj->onContactBegin = onContactBegin;
+        obj->onContactEnd   = onContactEnd;
+        obj->onCollisionHit = onCollisionHit;
+        obj->onSensorBegin  = onSensorBegin;
+        obj->onSensorEnd    = onSensorEnd;
 
         return obj;
     }
@@ -235,8 +272,12 @@ Contact2DListenerWithBodies* Contact2DListenerWithBodies::clone()
 
     if (obj != nullptr)
     {
-        obj->onContactPreSolve  = onContactPreSolve;
-        obj->onContactPostSolve = onContactPostSolve;
+        obj->onPreSolve     = onPreSolve;
+        obj->onContactBegin = onContactBegin;
+        obj->onContactEnd   = onContactEnd;
+        obj->onCollisionHit = onCollisionHit;
+        obj->onSensorBegin  = onSensorBegin;
+        obj->onSensorEnd    = onSensorEnd;
 
         return obj;
     }
@@ -281,8 +322,12 @@ Contact2DListenerWithShapes* Contact2DListenerWithShapes::clone()
 
     if (obj != nullptr)
     {
-        obj->onContactPreSolve  = onContactPreSolve;
-        obj->onContactPostSolve = onContactPostSolve;
+        obj->onPreSolve     = onPreSolve;
+        obj->onContactBegin = onContactBegin;
+        obj->onContactEnd   = onContactEnd;
+        obj->onCollisionHit = onCollisionHit;
+        obj->onSensorBegin  = onSensorBegin;
+        obj->onSensorEnd    = onSensorEnd;
 
         return obj;
     }
@@ -326,8 +371,12 @@ Contact2DListenerWithGroup* Contact2DListenerWithGroup::clone()
 
     if (obj != nullptr)
     {
-        obj->onContactPreSolve  = onContactPreSolve;
-        obj->onContactPostSolve = onContactPostSolve;
+        obj->onPreSolve     = onPreSolve;
+        obj->onContactBegin = onContactBegin;
+        obj->onContactEnd   = onContactEnd;
+        obj->onCollisionHit = onCollisionHit;
+        obj->onSensorBegin  = onSensorBegin;
+        obj->onSensorEnd    = onSensorEnd;
 
         return obj;
     }

@@ -194,6 +194,55 @@ struct PhysicsQueryCallbacks2D
 
 #    pragma endregion
 
+PhysicsWorld2D* PhysicsWorld2D::obtain(Scene* scene)
+{
+    auto world = new PhysicsWorld2D();
+    world->init(scene);
+    return world;
+}
+
+PhysicsWorld2D::PhysicsWorld2D()
+    : _gravity(Vec2(0.0f, -9.8f))
+    , _PTMRatio(10.0f)
+    , _speed(1.0f)
+    , _updateRate(1)
+    , _updateRateCount(0)
+    , _updateTime(0.0f)
+    , _substeps(1)
+    , _fixedUpdateRate(0)
+    , _eventBits(CollisionEventBits::None)
+    , _worldId(b2_nullWorldId)
+    , _updateBodyTransform(false)
+    , _scene(nullptr)
+    , _autoStep(true)
+    , _eventDispatcher(nullptr)
+{}
+
+PhysicsWorld2D::~PhysicsWorld2D()
+{
+    if (b2World_IsValid(_worldId))
+    {
+        b2DestroyWorld(_worldId);
+    }
+}
+
+bool PhysicsWorld2D::isGlobalEventEnabled(CollisionEventBits events) const
+{
+    return bitmask::only(_eventBits, events);
+}
+
+void PhysicsWorld2D::setGlobalEventEnabled(CollisionEventBits events, bool enabled)
+{
+    if (enabled)
+    {
+        _eventBits |= events;
+    }
+    else
+    {
+        _eventBits &= events;
+    }
+}
+
 void PhysicsWorld2D::rayCast(RayCastHitCallback2D func, const Ray2D& ray, void* data)
 {
     AXASSERT(func != nullptr, "func shouldn't be nullptr");
@@ -343,7 +392,7 @@ bool PhysicsWorld2D::init(Scene* scene)
 
         AX_BREAK_IF(!b2World_IsValid(_worldId));
 
-        b2World_SetPreSolveCallback(_worldId, (b2PreSolveFcn*)handleCollisionPreSolve, this);
+        b2World_SetPreSolveCallback(_worldId, (b2PreSolveFcn*)handlePreSolve, this);
 
         _scene           = scene;
         _eventDispatcher = scene->getEventDispatcher();
@@ -423,22 +472,7 @@ void PhysicsWorld2D::update(float delta, bool userCall /* = false*/)
         }
     }
 
-    // Emulate PostSolve via hitEvent
-    auto contactData = b2World_GetContactEvents(_worldId);
-    if (contactData.hitCount > 0)
-    {
-        for (int i = 0; i < contactData.hitCount; ++i)
-        {
-            auto& hitEvent = contactData.hitEvents[i];
-            auto contact2D = Contact2D::obtain(static_cast<Collider2D*>(b2Shape_GetUserData(hitEvent.shapeIdA)),
-                                               static_cast<Collider2D*>(b2Shape_GetUserData(hitEvent.shapeIdB)));
-            if (contact2D)
-            {
-                onCollisionPostSolve(contact2D);
-                contact2D->release();
-            }
-        }
-    }
+    dispatchContactEvents();
 
     // Update physics position, should loop as the same sequence as node tree.
     // PhysicsWorld2D::afterSimulation() will depend on the sequence.
@@ -446,37 +480,6 @@ void PhysicsWorld2D::update(float delta, bool userCall /* = false*/)
 
     if (_postUpdateCallback)
         _postUpdateCallback();  // fix #11154
-}
-
-PhysicsWorld2D* PhysicsWorld2D::obtain(Scene* scene)
-{
-    auto world = new PhysicsWorld2D();
-    world->init(scene);
-    return world;
-}
-
-PhysicsWorld2D::PhysicsWorld2D()
-    : _gravity(Vec2(0.0f, -9.8f))
-    , _PTMRatio(10.0f)
-    , _speed(1.0f)
-    , _updateRate(1)
-    , _updateRateCount(0)
-    , _updateTime(0.0f)
-    , _substeps(1)
-    , _fixedUpdateRate(0)
-    , _worldId(b2_nullWorldId)
-    , _updateBodyTransform(false)
-    , _scene(nullptr)
-    , _autoStep(true)
-    , _eventDispatcher(nullptr)
-{}
-
-PhysicsWorld2D::~PhysicsWorld2D()
-{
-    if (b2World_IsValid(_worldId))
-    {
-        b2DestroyWorld(_worldId);
-    }
 }
 
 void PhysicsWorld2D::beforeSimulation(Node* node,
@@ -522,42 +525,96 @@ void PhysicsWorld2D::setPreUpdateCallback(const std::function<void()>& callback)
     _preUpdateCallback = callback;
 }
 
-bool PhysicsWorld2D::handleCollisionPreSolve(b2ShapeId shapeIdA,
-                                             b2ShapeId shapeIdB,
-                                             b2Vec2 point,
-                                             b2Vec2 normal,
-                                             PhysicsWorld2D* world)
+void PhysicsWorld2D::dispatchContactEvents()
 {
-    auto contact2D = Contact2D::obtain(static_cast<Collider2D*>(b2Shape_GetUserData(shapeIdA)),
-                                       static_cast<Collider2D*>(b2Shape_GetUserData(shapeIdB)));
-    contact2D->setPointNormal(PhysicsUtility2D::toVec2(point), PhysicsUtility2D::toVec2(normal));
-    bool ret = world->onCollisionPreSolve(contact2D);
-    contact2D->release();
+    /**
+     * @brief Helper lambda to resolve Colliders from ShapeIds and manage the Contact2D lifecycle.
+     */
+    auto&& dispatch = [this](b2ShapeId idA, b2ShapeId idB, Contact2D::EventCode code) {
+        auto colliderA = static_cast<Collider2D*>(b2Shape_GetUserData(idA));
+        auto colliderB = static_cast<Collider2D*>(b2Shape_GetUserData(idB));
+
+        // Obtain and initialize the pooled event object
+        auto event = Contact2D::obtain(colliderA, colliderB);
+        if (event)
+        {
+            event->setEventCode(code);
+            _eventDispatcher->dispatchEvent(event);
+            event->release();
+        }
+    };
+
+    const b2ContactEvents contactData = b2World_GetContactEvents(_worldId);
+
+    if (bitmask::any(CollisionEventBits::Hit, _eventBits))
+    {
+        // Dispatch Collision Hit events (contains impulse/speed data)
+        for (int i = 0; i < contactData.hitCount; ++i)
+        {
+            auto& event = contactData.hitEvents[i];
+            dispatch(event.shapeIdA, event.shapeIdB, Contact2D::EventCode::CollisionHit);
+        }
+    }
+
+    if (bitmask::any(CollisionEventBits::Contact, _eventBits))
+    {
+        // Dispatch Contact Begin events
+        for (int i = 0; i < contactData.beginCount; ++i)
+        {
+            auto& event = contactData.beginEvents[i];
+            dispatch(event.shapeIdA, event.shapeIdB, Contact2D::EventCode::ContactBegin);
+        }
+
+        // Dispatch Contact End events
+        for (int i = 0; i < contactData.endCount; ++i)
+        {
+            auto& event = contactData.endEvents[i];
+            dispatch(event.shapeIdA, event.shapeIdB, Contact2D::EventCode::ContactEnd);
+        }
+    }
+
+    if (bitmask::any(CollisionEventBits::Sensor, _eventBits))
+    {
+        auto sensorEvents = b2World_GetSensorEvents(_worldId);
+
+        // Dispatch Sensor Begin events
+        for (int i = 0; i < sensorEvents.beginCount; ++i)
+        {
+            auto& event = sensorEvents.beginEvents[i];
+            dispatch(event.sensorShapeId, event.visitorShapeId, Contact2D::EventCode::SensorBegin);
+        }
+
+        // Dispatch Sensor End events
+        for (int i = 0; i < sensorEvents.endCount; ++i)
+        {
+            auto& event = sensorEvents.endEvents[i];
+            dispatch(event.sensorShapeId, event.visitorShapeId, Contact2D::EventCode::SensorEnd);
+        }
+    }
+}
+
+bool PhysicsWorld2D::handlePreSolve(b2ShapeId shapeIdA,
+                                    b2ShapeId shapeIdB,
+                                    b2Vec2 point,
+                                    b2Vec2 normal,
+                                    PhysicsWorld2D* world)
+{
+    auto event = Contact2D::obtain(static_cast<Collider2D*>(b2Shape_GetUserData(shapeIdA)),
+                                   static_cast<Collider2D*>(b2Shape_GetUserData(shapeIdB)));
+    event->setPointNormal(PhysicsUtility2D::toVec2(point), PhysicsUtility2D::toVec2(normal));
+    bool ret = world->onPreSolve(event);
+    event->release();
     return ret;
 }
 
-bool PhysicsWorld2D::onCollisionPreSolve(Contact2D* contact)
+bool PhysicsWorld2D::onPreSolve(Contact2D* contact)
 {
-    if (!contact->isNotificationEnabled())
-    {
-        return true;
-    }
+    // AXLOGD("onPreSolve: {}, {}", fmt::ptr(contact->getColliderA()), fmt::ptr(contact->getColliderB()));
 
-    contact->setEventCode(Contact2D::EventCode::PRESOLVE);
+    contact->setEventCode(Contact2D::EventCode::PreSolve);
     _eventDispatcher->dispatchEvent(contact);
 
     return contact->resetResult();
-}
-
-void PhysicsWorld2D::onCollisionPostSolve(Contact2D* contact)
-{
-    if (!contact->isNotificationEnabled())
-    {
-        return;
-    }
-
-    contact->setEventCode(Contact2D::EventCode::POSTSOLVE);
-    _eventDispatcher->dispatchEvent(contact);
 }
 
 }  // namespace ax
