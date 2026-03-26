@@ -96,7 +96,9 @@ class AX_DLL Contact2D : public EventCustom
     friend class Contact2DListener;
     friend class PhysicsWorld2D;
 
+#    ifndef _AX_GEN_SCRIPT_BINDINGS
     DEFINE_CONCURRENT_OBJECT_POOL_ALLOCATION(Contact2D, 128)
+#    endif
 
 public:
     enum class EventCode

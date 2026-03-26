@@ -418,8 +418,8 @@ bool luaval_to_blendfunc(lua_State* L, int lo, ax::BlendFunc* outValue, const ch
     return ok;
 }
 
-#if defined(AX_ENABLE_PHYSICS)
-bool luaval_to_physics_material(lua_State* L, int lo, PhysicsMaterial* outValue, const char* funcName)
+#if defined(AX_ENABLE_PHYSICS_2D)
+bool luaval_to_physics_material2d(lua_State* L, int lo, PhysicsMaterial2D* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
         return false;
@@ -454,7 +454,7 @@ bool luaval_to_physics_material(lua_State* L, int lo, PhysicsMaterial* outValue,
     }
     return ok;
 }
-#endif  // #if defined(AX_ENABLE_PHYSICS)
+#endif  // #if defined(AX_ENABLE_PHYSICS_2D)
 
 bool luaval_to_ssize_t(lua_State* L, int lo, ssize_t* outValue, const char* funcName)
 {
@@ -1536,6 +1536,46 @@ bool luaval_to_std_vector_int(lua_State* L, int lo, std::vector<int>* ret, const
     return ok;
 }
 
+bool luaval_to_std_vector_float2(lua_State* L, int lo, std::vector<Vec2>* ret, const char* funcName)
+{
+    if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
+        return false;
+
+    tolua_Error tolua_err;
+    bool ok = true;
+    if (!tolua_istable(L, lo, 0, &tolua_err))
+    {
+#if _AX_DEBUG >= 1
+        luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
+#endif
+        ok = false;
+    }
+
+    if (ok)
+    {
+        size_t len = lua_objlen(L, lo);
+        for (size_t i = 0; i < len; i++)
+        {
+            lua_pushnumber(L, i + 1);
+            lua_gettable(L, lo);
+            if (lua_istable(L, -1))
+            {
+                Vec2 outVec2;
+                luaval_to_vec2(L, -1, &outVec2, funcName);
+                ret->emplace_back(outVec2);
+            }
+            else
+            {
+                AXASSERT(false, "int type is needed");
+            }
+
+            lua_pop(L, 1);
+        }
+    }
+
+    return ok;
+}
+
 bool luaval_to_mesh_vertex_attrib(lua_State* L, int lo, ax::MeshVertexAttrib* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
@@ -2127,8 +2167,8 @@ int vec4_to_luaval(lua_State* L, const ax::Vec4& vec4)
     return 1;
 }
 
-#if defined(AX_ENABLE_PHYSICS)
-void physics_material_to_luaval(lua_State* L, const PhysicsMaterial& pm)
+#if defined(AX_ENABLE_PHYSICS_2D)
+void physics_material2d_to_luaval(lua_State* L, const PhysicsMaterial2D& pm)
 {
     if (nullptr == L)
         return;
@@ -2144,7 +2184,7 @@ void physics_material_to_luaval(lua_State* L, const PhysicsMaterial& pm)
     lua_rawset(L, -3);                             /* table[key] = value, L: table */
 }
 
-void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo& info)
+void physics_raycastinfo_to_luaval(lua_State* L, const RayCastHit2D& info)
 {
     if (NULL == L)
         return;
@@ -2152,7 +2192,7 @@ void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo& info)
     lua_newtable(L); /* L: table */
 
     lua_pushstring(L, "shape"); /* L: table key */
-    PhysicsCollider* shape = info.collider;
+    auto shape = info.collider;
     if (shape == nullptr)
     {
         lua_pushnil(L);
@@ -2165,16 +2205,9 @@ void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo& info)
     }
     lua_rawset(L, -3); /* table[key] = value, L: table */
 
-    lua_pushstring(L, "start"); /* L: table key */
-    vec2_to_luaval(L, info.start);
-    lua_rawset(L, -3); /* table[key] = value, L: table */
 
-    lua_pushstring(L, "ended"); /* L: table key */
-    vec2_to_luaval(L, info.end);
-    lua_rawset(L, -3); /* table[key] = value, L: table */
-
-    lua_pushstring(L, "contact"); /* L: table key */
-    vec2_to_luaval(L, info.contact);
+    lua_pushstring(L, "point"); /* L: table key */
+    vec2_to_luaval(L, info.point);
     lua_rawset(L, -3); /* table[key] = value, L: table */
 
     lua_pushstring(L, "normal"); /* L: table key */
@@ -2186,26 +2219,27 @@ void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo& info)
     lua_rawset(L, -3);                            /* table[key] = value, L: table */
 }
 
-void physics_contactdata_to_luaval(lua_State* L, const PhysicsContactData* data)
+void physics_contactdata_to_luaval(lua_State* L, const Contact2DInfo* data)
 {
     if (nullptr == L || nullptr == data)
         return;
 
     lua_newtable(L); /* L: table */
 
-    lua_pushstring(L, "points");
-    vec2_array_to_luaval(L, data->points, data->count);
-    lua_rawset(L, -3);
+    // TODO:
+    // lua_pushstring(L, "points");
+    // vec2_array_to_luaval(L, data->points, data->count);
+    // lua_rawset(L, -3);
 
     lua_pushstring(L, "normal");
     vec2_to_luaval(L, data->normal);
     lua_rawset(L, -3);
 
     lua_pushstring(L, "POINT_MAX");
-    lua_pushnumber(L, data->POINT_MAX);
+    lua_pushnumber(L, Contact2DInfo::POINT_MAX);
     lua_rawset(L, -3);
 }
-#endif  // #if defined(AX_ENABLE_PHYSICS)
+#endif  // #if defined(AX_ENABLE_PHYSICS_2D)
 
 void size_to_luaval(lua_State* L, const Size& sz)
 {
@@ -2817,6 +2851,23 @@ void vec3span_to_luaval(lua_State* L, std::span<const ax::Vec3> inValue)
     {
         lua_pushnumber(L, (lua_Number)index);
         vec3_to_luaval(L, value);
+        lua_rawset(L, -3);
+        ++index;
+    }
+}
+
+void vec2span_to_luaval(lua_State* L, std::span<const ax::Vec2> inValue)
+{
+    if (nullptr == L)
+        return;
+
+    lua_newtable(L);
+
+    int index = 1;
+    for (const ax::Vec2& value : inValue)
+    {
+        lua_pushnumber(L, (lua_Number)index);
+        vec2_to_luaval(L, value);
         lua_rawset(L, -3);
         ++index;
     }

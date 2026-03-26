@@ -25,7 +25,7 @@
 
 #pragma once
 
-#if defined(AX_ENABLE_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_2D)
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,7 +38,7 @@ extern "C" {
 
 #include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
 
-int register_all_ax_physics_manual(lua_State* tolua_S);
+int register_all_ax_physics2d_manual(lua_State* tolua_S);
 
 #endif // defined(AX_ENABLE_PHYSICS)
 

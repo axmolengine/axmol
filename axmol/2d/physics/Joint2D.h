@@ -34,6 +34,7 @@
 
 #    include "axmol/base/Object.h"
 #    include "axmol/math/Math.h"
+#    include "axmol/math/MathUtil.h"
 #    include "box2d/box2d.h"
 
 namespace ax

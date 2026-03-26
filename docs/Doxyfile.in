@@ -2401,7 +2401,8 @@ PREDEFINED             = "AX_PROPERTY_READONLY(varType, varName, funName)=protec
                          "NS_AX_EXT_BEGIN=namespace ax { namespace extension {" \
                          "NS_AX_EXT_END=}}" \
                          "USING_NS_AX_EXT=using namespace ax::extension" \
-                         "AX_USE_PHYSICS" \
+                         "AX_ENABLE_PHYSICS_2D" \
+                         "AX_ENABLE_PHYSICS_3D \
                          "AX_DEPRECATED_ATTRIBUTE" \
                          "AX_CONSTRUCTOR_ACCESS=protected" \
                          "protected=private" \
@@ -2415,7 +2416,6 @@ PREDEFINED             = "AX_PROPERTY_READONLY(varType, varName, funName)=protec
                          "_USRSTUDIODLL=" \
                          "TOLUA_API=extern" \
                          "AX_ENABLE_SCRIPT_BINDING=1" \
-                         "AX_USE_PHYSICS=1" \
                          "AX_PLATFORM_UNKNOWN=0" \
                          "AX_PLATFORM_WIN32=1" \
                          "AX_PLATFORM_WINUWP=2" \

@@ -49,8 +49,8 @@ extern "C" {
 #include "lua-bindings/auto/axlua_base_auto.hpp"
 #include "lua-bindings/manual/base/axlua_base_manual.hpp"
 #include "lua-bindings/manual/LuaBasicConversions.h"
-#include "lua-bindings/auto/axlua_physics_auto.hpp"
-#include "lua-bindings/manual/physics/axlua_physics_manual.hpp"
+#include "lua-bindings/auto/axlua_physics2d_auto.hpp"
+#include "lua-bindings/manual/physics2d/axlua_physics2d_manual.h"
 #include "lua-bindings/auto/axlua_rhi_auto.hpp"
 #include "axmol/base/ZipUtils.h"
 #include "axmol/platform/FileUtils.h"
@@ -223,9 +223,9 @@ bool LuaStack::init()
 
     tolua_luanode_open(_state);
     register_luanode_manual(_state);
-#if defined(AX_ENABLE_PHYSICS)
-    register_all_ax_physics(_state);
-    register_all_ax_physics_manual(_state);
+#if defined(AX_ENABLE_PHYSICS_2D)
+    register_all_ax_physics2d(_state);
+    register_all_ax_physics2d_manual(_state);
 #endif
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)

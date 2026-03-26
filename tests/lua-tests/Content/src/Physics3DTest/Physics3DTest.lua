@@ -78,7 +78,7 @@ function Physics3DTestDemo:onEnter()
     local scene = ax.Director:getInstance():getRunningScene()
     if nil ~= scene then
         self._physicsScene = scene
-        local physics3DWorld = scene:getPhysics3DWorld()
+        local physics3DWorld = scene:getPhysicsWorld3D()
         physics3DWorld:setDebugDrawEnable(false)
 
         local size = ax.Director:getInstance():getCanvasSize()
@@ -242,7 +242,7 @@ function Physics3DConstraintDemo:extend()
             nearP = self._camera:unproject(size, nearP, nearP)
             farP  = self._camera:unproject(size, farP, farP)
 
-            local physicsWorld = self._physicsScene:getPhysics3DWorld()
+            local physicsWorld = self._physicsScene:getPhysicsWorld3D()
             local hitResult = {}
             local ret = false
             ret, hitResult = physicsWorld:rayCast(nearP, farP, hitResult)
@@ -292,7 +292,7 @@ function Physics3DConstraintDemo:extend()
     listener:registerScriptHandler(function(touches, event)
 
         if self._constraint ~= nil then
-            self._physicsScene:getPhysics3DWorld():removePhysics3DConstraint(self._constraint)
+            self._physicsScene:getPhysicsWorld3D():removePhysics3DConstraint(self._constraint)
             self._constraint = nil
             return
         end
@@ -340,7 +340,7 @@ function Physics3DConstraintDemo:extend()
 
     self._physicsScene:setPhysics3DDebugCamera(self._camera)
 
-    local physicsWorld = self._physicsScene:getPhysics3DWorld()
+    local physicsWorld = self._physicsScene:getPhysicsWorld3D()
     --create point to point constraint
     local constraint = ax.Physics3DPointToPointConstraint:create(rigidBody, ax.vec3(2.5, 2.5, 2.5))
     physicsWorld:addPhysics3DConstraint(constraint)
