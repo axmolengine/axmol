@@ -37,8 +37,6 @@ using namespace ax;
 
 PhysicsTests::PhysicsTests()
 {
-    ADD_TEST_CASE(PhysicsDemoOneWayPlatform);
-
     ADD_TEST_CASE(PhysicsDemoLogoSmash);
     ADD_TEST_CASE(PhysicsDemoPyramidStack);
     ADD_TEST_CASE(PhysicsDemoClickAdd);
@@ -287,9 +285,9 @@ bool PhysicsDemo::onTouchBegan(Touch* touch, Event* event)
     if ((body->getTag() & DRAG_BODYS_BITS) != 0)
     {
         Node* mouse      = Node::create();
-        auto Rigidbody2D = Rigidbody2D::create();
-        Rigidbody2D->setDynamic(false);
-        mouse->addComponent(Rigidbody2D);
+        auto moseBody = Rigidbody2D::create();
+        moseBody->setDynamic(false);
+        mouse->addComponent(moseBody);
         this->addChild(mouse);
         auto joint = TargetJoint2D::create(location, body);
         joint->setMaxForceScale(100.0f);
@@ -310,7 +308,6 @@ void PhysicsDemo::onTouchMoved(Touch* touch, Event* /*event*/)
     if (it != _mouses.end())
     {
         auto mouseNode = it->second;
-        auto joint     = static_cast<TargetJoint2D*>(mouseNode->getComponent("TargetJoint2D"sv));
         mouseNode->setPosition(touch->getLocation());
     }
 }
@@ -692,7 +689,7 @@ void PhysicsDemoActions::onEnter()
     Sprite* sp2 = addGrossiniAtPosition(VisibleRect::left() + Vec2(50.0f, 0.0f));
     Sprite* sp3 = addGrossiniAtPosition(VisibleRect::right() - Vec2(20.0f, 0.0f));
     Sprite* sp4 = addGrossiniAtPosition(VisibleRect::leftTop() + Vec2(50.0f, -50.0f));
-    sp4->getRigidbody2D()->setGravityEnable(false);
+    sp4->getRigidbody2D()->setGravityEnabled(false);
 
     sp1->setTag(DRAG_BODYS_BITS);
     sp2->setTag(DRAG_BODYS_BITS);
@@ -863,7 +860,7 @@ void PhysicsDemoJoints::onEnter()
                 joint->setAnchor(sliderOrigin);
                 joint->setConnectedAnchor(connectedAnchor);
                 joint->setLimits({0.0f, sliderOrigin.distance(sliderTarget)});
-                joint->setAngle((sliderTarget - sliderOrigin).getAngle(), radians_tag{});
+                joint->setAngleInRadians((sliderTarget - sliderOrigin).getAngle());
 
                 sp1->addComponent(joint);
 
@@ -900,7 +897,7 @@ void PhysicsDemoJoints::onEnter()
                 sp2->setTag(DRAG_BODYS_BITS);
 
                 auto joint = WheelJoint2D::create(sp2Rigidbody2D);
-                joint->setMotor(JointMotor2D{60.0f});
+                joint->setMotor(JointMotor2D{60.0f, physics2d::MaxForce});
                 joint->setLimits({-1.0f, 1.0f});
                 sp1->addComponent(joint);
 
@@ -1039,7 +1036,7 @@ void PhysicsDemoPump::onEnter()
     pump->addComponent(pumpBody);
     this->addChild(pump);
     pumpBody->setCategoryBits(0x02);
-    pumpBody->setGravityEnable(false);
+    pumpBody->setGravityEnabled(false);
     pump->setName("pump");
 
     // small gear
@@ -1762,7 +1759,7 @@ void PhysicsSetGravityEnableTest::onEnter()
     auto commonBox = makeBox(Vec2(100, 100), Size(50, 50), 1);
     commonBox->setTag(1 | DRAG_BODYS_BITS);
     auto commonBoxBody = commonBox->getRigidbody2D();
-    commonBoxBody->setGravityEnable(true);
+    commonBoxBody->setGravityEnabled(true);
     // Critical fix for Box2D physics behavior difference from Chipmunk in Axmol
     // Box2D uses strict floating-point physics, which causes rectangular boxes to
     // rotate / wobble / bounce sideways when landing vertically due to precision errors.
@@ -1775,13 +1772,13 @@ void PhysicsSetGravityEnableTest::onEnter()
     auto box = makeBox(Vec2(200, 100), Size(50, 50), 2);
     box->setTag(DRAG_BODYS_BITS);
     auto boxBody = box->getRigidbody2D();
-    boxBody->setGravityEnable(false);
+    boxBody->setGravityEnabled(false);
     addChild(box);
 
     auto ball = makeBall(Vec2(200, 200), 50);
     ball->setTag(2 | DRAG_BODYS_BITS);
     auto ballBody = ball->getRigidbody2D();
-    ballBody->setGravityEnable(false);
+    ballBody->setGravityEnabled(false);
     addChild(ball);
 
     scheduleOnce(AX_SCHEDULE_SELECTOR(PhysicsSetGravityEnableTest::onScheduleOnce), 1.0);

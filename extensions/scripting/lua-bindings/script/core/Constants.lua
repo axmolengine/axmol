@@ -325,8 +325,7 @@ ax.EVENT_MOUSE                 = 4
 ax.EVENT_ACCELERATION          = 5
 ax.EVENT_CUSTOM                = 6
 
-ax.PHYSICSSHAPE_MATERIAL_DEFAULT = {density = 0.0, restitution = 0.5, friction = 0.5}
-ax.PHYSICSBODY_MATERIAL_DEFAULT = {density = 0.1, restitution = 0.5, friction = 0.5}
+ax.PHYSICS_MATERIAL_2D_DEFAULT = {density = 0.1, restitution = 0.5, friction = 0.5}
 ax.GLYPHCOLLECTION_DYNAMIC = 0
 ax.GLYPHCOLLECTION_NEHE    = 1
 ax.GLYPHCOLLECTION_ASCII   = 2

@@ -305,8 +305,8 @@ bool DistanceJoint2D::attachToBody()
         jointDef.enableSpring = _useLimits;
         if (jointDef.enableLimit)
         {
-            jointDef.minLength    = _limits.lowerValue;
-            jointDef.maxLength    = _limits.upperValue;
+            jointDef.minLength    = _limits.x;
+            jointDef.maxLength    = _limits.y;
             jointDef.dampingRatio = _damping;
         }
         else
@@ -344,14 +344,14 @@ void DistanceJoint2D::setUseLimits(bool bval)
 
 void DistanceJoint2D::setLimits(const JointLengthLimit2D& limits)
 {
-    _limits.lowerValue = std::clamp(limits.lowerValue, physics2d::LinearSlop, physics2d::LargeClamp);
-    _limits.upperValue = std::clamp(limits.upperValue, physics2d::LinearSlop, physics2d::LargeClamp);
-    if (_limits.lowerValue > _limits.upperValue)
-        std::swap(_limits.lowerValue, _limits.upperValue);
+    _limits.x = std::clamp(limits.x, physics2d::LinearSlop, physics2d::LargeClamp);
+    _limits.y = std::clamp(limits.y, physics2d::LinearSlop, physics2d::LargeClamp);
+    if (_limits.x > _limits.y)
+        std::swap(_limits.x, _limits.y);
 
     setUseLimits(true);
     if (isAttached())
-        b2DistanceJoint_SetLengthRange(_jointId, _limits.lowerValue, _limits.upperValue);
+        b2DistanceJoint_SetLengthRange(_jointId, _limits.x, _limits.x);
 }
 
 #    pragma endregion
@@ -476,10 +476,10 @@ bool SliderJoint2D::attachToBody()
         configureBaseSettings(jointDef.base);
         jointDef.enableMotor      = _useMotor;
         jointDef.enableLimit      = _useLimits;
-        jointDef.motorSpeed       = _motor.speed;
-        jointDef.maxMotorForce    = _motor.maxForce;
-        jointDef.lowerTranslation = _translationLimits.lowerValue;
-        jointDef.upperTranslation = _translationLimits.upperValue;
+        jointDef.motorSpeed       = _motor.x;
+        jointDef.maxMotorForce    = _motor.y;
+        jointDef.lowerTranslation = _translationLimits.x;
+        jointDef.upperTranslation = _translationLimits.y;
 
         jointDef.base.localFrameA.q = b2MakeRot(MathUtil::radians(_angle));
         jointDef.base.localFrameB.q = jointDef.base.localFrameA.q;
@@ -540,8 +540,8 @@ void SliderJoint2D::setMotor(const JointMotor2D& motor)
     setUseMotor(true);
     if (isAttached())
     {
-        b2PrismaticJoint_SetMotorSpeed(_jointId, motor.speed);
-        b2PrismaticJoint_SetMaxMotorForce(_jointId, motor.maxForce);
+        b2PrismaticJoint_SetMotorSpeed(_jointId, motor.x);
+        b2PrismaticJoint_SetMaxMotorForce(_jointId, motor.y);
     }
 }
 
@@ -550,7 +550,7 @@ void SliderJoint2D::setLimits(const JointTranslationLimits2D& limits)
     _translationLimits = limits;
     setUseLimits(true);
     if (isAttached())
-        b2PrismaticJoint_SetLimits(_jointId, _translationLimits.lowerValue, _translationLimits.upperValue);
+        b2PrismaticJoint_SetLimits(_jointId, _translationLimits.x, _translationLimits.y);
 }
 
 float SliderJoint2D::getJointTranslation() const
@@ -598,12 +598,12 @@ bool WheelJoint2D::attachToBody()
         configureBaseSettings(jointDef.base);
 
         jointDef.enableMotor    = _useMotor;
-        jointDef.motorSpeed     = MathUtil::radians(_motor.speed);
-        jointDef.maxMotorTorque = _motor.maxForce;
+        jointDef.motorSpeed     = MathUtil::radians(_motor.x);
+        jointDef.maxMotorTorque = _motor.y;
 
         jointDef.enableLimit      = _useLimits;
-        jointDef.lowerTranslation = _limits.lowerValue;
-        jointDef.upperTranslation = _limits.upperValue;
+        jointDef.lowerTranslation = _limits.x;
+        jointDef.upperTranslation = _limits.y;
 
         jointDef.hertz        = _stiffness;
         jointDef.dampingRatio = _damping;
@@ -638,8 +638,8 @@ void WheelJoint2D::setMotor(const JointMotor2D& motor)
     setUseMotor(true);
     if (isAttached())
     {
-        b2WheelJoint_SetMotorSpeed(_jointId, MathUtil::radians(motor.speed));
-        b2WheelJoint_SetMaxMotorTorque(_jointId, motor.maxForce);
+        b2WheelJoint_SetMotorSpeed(_jointId, MathUtil::radians(motor.x));
+        b2WheelJoint_SetMaxMotorTorque(_jointId, motor.y);
     }
 }
 
@@ -664,7 +664,7 @@ void WheelJoint2D::setLimits(const JointTranslationLimits2D& limits)
     if (isAttached())
     {
         b2WheelJoint_EnableLimit(_jointId, true);
-        b2WheelJoint_SetLimits(_jointId, _limits.lowerValue, _limits.upperValue);
+        b2WheelJoint_SetLimits(_jointId, _limits.x, _limits.y);
     }
 }
 
@@ -677,7 +677,7 @@ void WheelJoint2D::setStiffness(float hertz)
 
 float WheelJoint2D::getMotorTorque() const
 {
-    return isAttached() ? b2WheelJoint_GetMotorTorque(_jointId) : _motor.maxForce;
+    return isAttached() ? b2WheelJoint_GetMotorTorque(_jointId) : _motor.y;
 }
 
 #    pragma endregion
@@ -711,10 +711,10 @@ bool PivotJoint2D::attachToBody()
         jointDef.enableSpring   = _useSpring;
         jointDef.enableMotor    = _useMotor;
         jointDef.enableLimit    = _useLimits;
-        jointDef.motorSpeed     = MathUtil::radians(_motor.speed);
-        jointDef.maxMotorTorque = _motor.maxForce;
-        jointDef.lowerAngle     = MathUtil::radians(_angleLimits.lowerValue);
-        jointDef.upperAngle     = MathUtil::radians(_angleLimits.upperValue);
+        jointDef.motorSpeed     = MathUtil::radians(_motor.x);
+        jointDef.maxMotorTorque = _motor.y;
+        jointDef.lowerAngle     = MathUtil::radians(_angleLimits.x);
+        jointDef.upperAngle     = MathUtil::radians(_angleLimits.y);
         if (jointDef.lowerAngle > jointDef.upperAngle)
             std::swap(jointDef.lowerAngle, jointDef.upperAngle);
 
@@ -750,8 +750,8 @@ void PivotJoint2D::setMotor(const JointMotor2D& motor)
 
     if (isAttached())
     {
-        b2RevoluteJoint_SetMotorSpeed(_jointId, motor.speed);
-        b2RevoluteJoint_SetMaxMotorTorque(_jointId, motor.maxForce);
+        b2RevoluteJoint_SetMotorSpeed(_jointId, motor.x);
+        b2RevoluteJoint_SetMaxMotorTorque(_jointId, motor.y);
     }
 }
 
@@ -767,8 +767,8 @@ void PivotJoint2D::setLimits(const JointAngleLimits2D& limits)
     if (isAttached())
     {
         // Ensure limits are valid.
-        float lower = MathUtil::radians(_angleLimits.lowerValue);
-        float upper = MathUtil::radians(_angleLimits.upperValue);
+        float lower = MathUtil::radians(_angleLimits.x);
+        float upper = MathUtil::radians(_angleLimits.y);
         if (lower > upper)
             std::swap(lower, upper);
         b2RevoluteJoint_SetLimits(_jointId, lower, upper);

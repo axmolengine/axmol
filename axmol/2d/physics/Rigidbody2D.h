@@ -472,7 +472,7 @@ public:
     bool isGravityEnabled() const { return _gravityEnabled; }
 
     /** Set the body is affected by the physics world's gravitational force or not. */
-    void setGravityEnable(bool enable);
+    void setGravityEnabled(bool enable);
 
     /** Get the body's owner tag. */
     int getTag() const;

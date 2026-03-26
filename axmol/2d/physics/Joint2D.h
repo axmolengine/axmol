@@ -44,30 +44,20 @@ class Node;
 class Rigidbody2D;
 class PhysicsWorld2D;
 
-struct JointTranslationLimits2D
-{
-    float lowerValue{0.0f};
-    float upperValue{0.0f};
-};
+// default: x=0, y=0
+using JointTranslationLimits2D = Vec2;
 
-// Joint Angle limits in degrees
-struct JointAngleLimits2D
-{
-    float lowerValue{0.0f};
-    float upperValue{physics2d::MaxAngleDeg};
-};
+// Joint Angle limits in degrees,
+// default: x=0, y=physics2d::MaxAngleDeg
+using JointAngleLimits2D = Vec2;
 
-struct JointLengthLimit2D
-{
-    float lowerValue{physics2d::LinearSlop};
-    float upperValue{physics2d::LargeClamp};
-};
+// Joint Length
+// default: physics2d::LinearSlop, physics2d::LargeClamp
+using JointLengthLimit2D = Vec2;
 
-struct JointMotor2D
-{
-    float speed{0.0f};
-    float maxForce{physics2d::MaxForce};
-};
+// Joint Motor
+// default: x(speed)=0.0f, y(maxForce)=physics2d::MaxForce
+using JointMotor2D = Vec2;
 
 /**
  * @addtogroup physics
@@ -304,7 +294,7 @@ public:
     void setAngle(float angle);
 
     /** Sets angle in radians */
-    void setAngle(float angle, radians_tag) { setAngle(MathUtil::degrees(angle)); }
+    void setAngleInRadians(float angle) { setAngle(MathUtil::degrees(angle)); }
 
     bool isUseMotor() const { return _useMotor; }
     void setUseMotor(bool enable);

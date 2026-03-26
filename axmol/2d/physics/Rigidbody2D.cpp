@@ -363,7 +363,7 @@ void Rigidbody2D::setRotationEnabled(bool enabled)
     }
 }
 
-void Rigidbody2D::setGravityEnable(bool enable)
+void Rigidbody2D::setGravityEnabled(bool enable)
 {
     _gravityEnabled = enable;
 
