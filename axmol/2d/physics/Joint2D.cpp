@@ -58,13 +58,13 @@ bool Joint2D::attachToBody()
     _attachedBody = _owner->getRigidbody2D();
     if (!_attachedBody)
     {
-        AXLOGE("Joint2D::attachToBody: owner node does not have physics body");
+        AXLOGE("Joint2D({})::attachToBody: owner node does not have physics body", _name);
         return false;
     }
 
     if (!_attachedBody->attachToWorld())
     {
-        AXLOGE("Joint2D:attachToBody: attached body not ready");
+        AXLOGE("Joint2D({}):attachToBody: attached body not ready", _name);
         return false;
     }
 
@@ -72,14 +72,14 @@ bool Joint2D::attachToBody()
 
     if (!_connectedBody)
     {
-        AXLOGE("Joint2D::attachToBody: connected body is null");
+        AXLOGE("Joint2D({})::attachToBody: connected body is null", _name);
         return false;
     }
 
     // The connected body owner onEnter may not invoked, so we get physics world from attached body
     if (!_connectedBody->attachToWorld(_attachedBody->getWorld()))
     {
-        AXLOGE("Joint2D:attachToBody: connected body not ready");
+        AXLOGE("Joint2D({}):attachToBody: connected body not ready", _name);
         return false;
     }
 

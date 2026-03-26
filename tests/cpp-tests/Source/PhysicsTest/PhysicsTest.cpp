@@ -284,7 +284,7 @@ bool PhysicsDemo::onTouchBegan(Touch* touch, Event* event)
     auto body = collider->getAttachedBody();
     if ((body->getTag() & DRAG_BODYS_BITS) != 0)
     {
-        Node* mouse      = Node::create();
+        Node* mouse   = Node::create();
         auto moseBody = Rigidbody2D::create();
         moseBody->setDynamic(false);
         mouse->addComponent(moseBody);
@@ -1106,9 +1106,9 @@ void PhysicsDemoPump::onEnter()
 
     sgearBody->setCollisionMaskBits(0x04 | 0x01);
 
-    auto pivotJoint = PinJoint2D::create(plugger->getPosition(), worldBoxBody);
-    pivotJoint->setMotor(JointMotor2D{});
-    plugger->addComponent(pivotJoint);
+    auto pinJoint = PinJoint2D::create(plugger->getPosition(), worldBoxBody);
+    pinJoint->setMotor(JointMotor2D{});
+    plugger->addComponent(pinJoint);
 
     distanceJoint = DistanceJoint2D::create(sgearBody);
     distanceJoint->setConnectedAnchor(Vec2{44.0f, 0.0f});
@@ -1565,6 +1565,8 @@ void PhysicsContactTest::resetTest()
     contactListener->onPreSolve = AX_CALLBACK_1(PhysicsContactTest::onPreSolve, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
+    // all rigidbody should collide with the wall world box (categoryBits=1)
+
     // yellow box, will collide with itself and blue box.
     for (int i = 0; i < _yellowBoxNum; ++i)
     {
@@ -1578,8 +1580,8 @@ void PhysicsContactTest::resetTest()
         auto box     = makeBox(position, size, 1, PhysicsMaterial2D(0.1f, 1, 0.0f));
         auto boxBody = box->getRigidbody2D();
         boxBody->setVelocity(velocity);
-        boxBody->setCategoryBits(0x01);       // 0001
-        boxBody->setCollisionMaskBits(0x03);  // 0011
+        boxBody->setCategoryBits(2);       // 0b00010
+        boxBody->setCollisionMaskBits(7);  // 0b00111
         root->addChild(box);
     }
 
@@ -1596,8 +1598,8 @@ void PhysicsContactTest::resetTest()
         auto box     = makeBox(position, size, 2, PhysicsMaterial2D(0.1f, 1, 0.0f));
         auto boxBody = box->getRigidbody2D();
         boxBody->setVelocity(velocity);
-        boxBody->setCategoryBits(0x02);       // 0010
-        boxBody->setCollisionMaskBits(0x01);  // 0001
+        boxBody->setCategoryBits(4);       // 0b00100
+        boxBody->setCollisionMaskBits(5);  // 0b00101
         root->addChild(box);
     }
 
@@ -1614,8 +1616,8 @@ void PhysicsContactTest::resetTest()
         auto triangle     = makeTriangle(position, size, 1, PhysicsMaterial2D(0.1f, 1, 0.0f));
         auto triangleBody = triangle->getRigidbody2D();
         triangleBody->setVelocity(velocity);
-        triangleBody->setCategoryBits(0x04);       // 0100
-        triangleBody->setCollisionMaskBits(0x07);  // 0111
+        triangleBody->setCategoryBits(8);        // 0b01000
+        triangleBody->setCollisionMaskBits(13);  // 0b01101
         root->addChild(triangle);
     }
 
@@ -1632,33 +1634,32 @@ void PhysicsContactTest::resetTest()
         auto triangle     = makeTriangle(position, size, 2, PhysicsMaterial2D(0.1f, 1, 0.0f));
         auto triangleBody = triangle->getRigidbody2D();
         triangleBody->setVelocity(velocity);
-        triangleBody->setCategoryBits(0x08);       // 1000
-        triangleBody->setCollisionMaskBits(0x01);  // 0001
+        triangleBody->setCategoryBits(16);      // 0b10000
+        triangleBody->setCollisionMaskBits(3);  // 0b00011
         root->addChild(triangle);
     }
 }
 
 bool PhysicsContactTest::onPreSolve(Contact2D* contact)
 {
-    Rigidbody2D* a = contact->getColliderA()->getAttachedBody();
-    Rigidbody2D* b = contact->getColliderB()->getAttachedBody();
-
-    // Only proceed if one of the bodies is a triangle
-    if (a->getCategoryBits() == 0x04 || a->getCategoryBits() == 0x08)
-    {
-        AX_ASSERT(a->getCategoryBits() == 0x04 || a->getCategoryBits() == 0x08);
-        // triangle-specific logic here
-    }
-    else if (b->getCategoryBits() == 0x04 || b->getCategoryBits() == 0x08)
-    {
-        AX_ASSERT(b->getCategoryBits() == 0x04 || b->getCategoryBits() == 0x08);
-        // triangle-specific logic here
-    }
-    else
-    {
-        // No triangle involved, skip assertion
+    auto colA = contact->getColliderA();
+    auto colB = contact->getColliderB();
+    if (!colA || !colB)
         return true;
-    }
+
+    auto bodyA = colA->getAttachedBody();
+    auto bodyB = colB->getAttachedBody();
+    if (!bodyA || !bodyB)
+        return true;
+
+    auto catA  = bodyA->getCategoryBits();
+    auto catB  = bodyB->getCategoryBits();
+    auto maskA = bodyA->getCollisionMaskBits();
+    auto maskB = bodyB->getCollisionMaskBits();
+
+    bool a_allowed = (catA & maskB) != 0;
+    bool b_allowed = (catB & maskA) != 0;
+    AXASSERT(a_allowed && b_allowed, "onPreSolve: unexpected collision - category/mask mismatch");
 
     return true;
 }

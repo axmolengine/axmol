@@ -1409,6 +1409,142 @@ int lua_register_ax_physics2d_Collider2D(lua_State* tolua_S)
     return 1;
 }
 
+int lua_ax_physics2d_CircleCollider2D_getRadius(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::CircleCollider2D* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.CircleCollider2D",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::CircleCollider2D*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics2d_CircleCollider2D_getRadius'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_CircleCollider2D_getRadius'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getRadius();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CircleCollider2D:getRadius",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_CircleCollider2D_getRadius'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_physics2d_CircleCollider2D_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.CircleCollider2D",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        double arg0;
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.CircleCollider2D:create");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_CircleCollider2D_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::CircleCollider2D::create(arg0);
+        object_to_luaval<ax::CircleCollider2D>(tolua_S, "ax.CircleCollider2D",(ax::CircleCollider2D*)ret);
+        return 1;
+    }
+    if (argc == 2)
+    {
+        double arg0;
+        ax::PhysicsMaterial2D arg1;
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.CircleCollider2D:create");
+        ok &= luaval_to_physics_material2d(tolua_S, 3, &arg1, "ax.CircleCollider2D:create");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_CircleCollider2D_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::CircleCollider2D::create(arg0, arg1);
+        object_to_luaval<ax::CircleCollider2D>(tolua_S, "ax.CircleCollider2D",(ax::CircleCollider2D*)ret);
+        return 1;
+    }
+    if (argc == 3)
+    {
+        double arg0;
+        ax::PhysicsMaterial2D arg1;
+        ax::Vec2 arg2;
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.CircleCollider2D:create");
+        ok &= luaval_to_physics_material2d(tolua_S, 3, &arg1, "ax.CircleCollider2D:create");
+        ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.CircleCollider2D:create");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_CircleCollider2D_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::CircleCollider2D::create(arg0, arg1, arg2);
+        object_to_luaval<ax::CircleCollider2D>(tolua_S, "ax.CircleCollider2D",(ax::CircleCollider2D*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.CircleCollider2D:create",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_CircleCollider2D_create'.",&tolua_err);
+#endif
+    return 0;
+}
+static int lua_ax_physics2d_CircleCollider2D_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (CircleCollider2D)");
+    return 0;
+}
+
+int lua_register_ax_physics2d_CircleCollider2D(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.CircleCollider2D");
+    tolua_cclass(tolua_S,"CircleCollider2D","ax.CircleCollider2D","ax.Collider2D",nullptr);
+
+    tolua_beginmodule(tolua_S,"CircleCollider2D");
+        tolua_function(tolua_S,"getRadius",lua_ax_physics2d_CircleCollider2D_getRadius);
+        tolua_function(tolua_S,"create", lua_ax_physics2d_CircleCollider2D_create);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::CircleCollider2D).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.CircleCollider2D";
+    g_typeCast[typeName] = "ax.CircleCollider2D";
+    return 1;
+}
+
 int lua_ax_physics2d_PolygonCollider2D_getPoint(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1767,6 +1903,177 @@ int lua_register_ax_physics2d_BoxCollider2D(lua_State* tolua_S)
     auto typeName = typeid(ax::BoxCollider2D).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.BoxCollider2D";
     g_typeCast[typeName] = "ax.BoxCollider2D";
+    return 1;
+}
+
+int lua_ax_physics2d_EdgeSegmentCollider2D_getPointA(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::EdgeSegmentCollider2D* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.EdgeSegmentCollider2D",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::EdgeSegmentCollider2D*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics2d_EdgeSegmentCollider2D_getPointA'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_EdgeSegmentCollider2D_getPointA'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getPointA();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EdgeSegmentCollider2D:getPointA",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_EdgeSegmentCollider2D_getPointA'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_physics2d_EdgeSegmentCollider2D_getPointB(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::EdgeSegmentCollider2D* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.EdgeSegmentCollider2D",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::EdgeSegmentCollider2D*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics2d_EdgeSegmentCollider2D_getPointB'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_EdgeSegmentCollider2D_getPointB'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getPointB();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EdgeSegmentCollider2D:getPointB",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_EdgeSegmentCollider2D_getPointB'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_physics2d_EdgeSegmentCollider2D_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.EdgeSegmentCollider2D",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 2)
+    {
+        ax::Vec2 arg0;
+        ax::Vec2 arg1;
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.EdgeSegmentCollider2D:create");
+        ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.EdgeSegmentCollider2D:create");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_EdgeSegmentCollider2D_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::EdgeSegmentCollider2D::create(arg0, arg1);
+        object_to_luaval<ax::EdgeSegmentCollider2D>(tolua_S, "ax.EdgeSegmentCollider2D",(ax::EdgeSegmentCollider2D*)ret);
+        return 1;
+    }
+    if (argc == 3)
+    {
+        ax::Vec2 arg0;
+        ax::Vec2 arg1;
+        ax::PhysicsMaterial2D arg2;
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.EdgeSegmentCollider2D:create");
+        ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.EdgeSegmentCollider2D:create");
+        ok &= luaval_to_physics_material2d(tolua_S, 4, &arg2, "ax.EdgeSegmentCollider2D:create");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_EdgeSegmentCollider2D_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::EdgeSegmentCollider2D::create(arg0, arg1, arg2);
+        object_to_luaval<ax::EdgeSegmentCollider2D>(tolua_S, "ax.EdgeSegmentCollider2D",(ax::EdgeSegmentCollider2D*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.EdgeSegmentCollider2D:create",argc, 2);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_EdgeSegmentCollider2D_create'.",&tolua_err);
+#endif
+    return 0;
+}
+static int lua_ax_physics2d_EdgeSegmentCollider2D_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (EdgeSegmentCollider2D)");
+    return 0;
+}
+
+int lua_register_ax_physics2d_EdgeSegmentCollider2D(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.EdgeSegmentCollider2D");
+    tolua_cclass(tolua_S,"EdgeSegmentCollider2D","ax.EdgeSegmentCollider2D","ax.Collider2D",nullptr);
+
+    tolua_beginmodule(tolua_S,"EdgeSegmentCollider2D");
+        tolua_function(tolua_S,"getPointA",lua_ax_physics2d_EdgeSegmentCollider2D_getPointA);
+        tolua_function(tolua_S,"getPointB",lua_ax_physics2d_EdgeSegmentCollider2D_getPointB);
+        tolua_function(tolua_S,"create", lua_ax_physics2d_EdgeSegmentCollider2D_create);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::EdgeSegmentCollider2D).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EdgeSegmentCollider2D";
+    g_typeCast[typeName] = "ax.EdgeSegmentCollider2D";
     return 1;
 }
 
@@ -6031,7 +6338,7 @@ int lua_ax_physics2d_Contact2D_getContactInfo(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getContactInfo();
-        #pragma warning NO CONVERSION FROM NATIVE FOR Contact2DInfo;
+        physics_contact2dinfo_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Contact2D:getContactInfo",argc, 0);
@@ -6064,6 +6371,394 @@ int lua_register_ax_physics2d_Contact2D(lua_State* tolua_S)
     auto typeName = typeid(ax::Contact2D).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Contact2D";
     g_typeCast[typeName] = "ax.Contact2D";
+    return 1;
+}
+
+int lua_ax_physics2d_Contact2DListener_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Contact2DListener",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_Contact2DListener_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::Contact2DListener::create();
+        object_to_luaval<ax::Contact2DListener>(tolua_S, "ax.Contact2DListener",(ax::Contact2DListener*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Contact2DListener:create",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_Contact2DListener_create'.",&tolua_err);
+#endif
+    return 0;
+}
+static int lua_ax_physics2d_Contact2DListener_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (Contact2DListener)");
+    return 0;
+}
+
+int lua_register_ax_physics2d_Contact2DListener(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.Contact2DListener");
+    tolua_cclass(tolua_S,"Contact2DListener","ax.Contact2DListener","ax.EventListenerCustom",nullptr);
+
+    tolua_beginmodule(tolua_S,"Contact2DListener");
+        tolua_function(tolua_S,"create", lua_ax_physics2d_Contact2DListener_create);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::Contact2DListener).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Contact2DListener";
+    g_typeCast[typeName] = "ax.Contact2DListener";
+    return 1;
+}
+
+int lua_ax_physics2d_Contact2DListenerWithBodies_hitTest(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Contact2DListenerWithBodies* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Contact2DListenerWithBodies",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Contact2DListenerWithBodies*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics2d_Contact2DListenerWithBodies_hitTest'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2)
+    {
+        ax::Collider2D* arg0;
+        ax::Collider2D* arg1;
+
+        ok &= luaval_to_object<ax::Collider2D>(tolua_S, 2, "ax.Collider2D",&arg0, "ax.Contact2DListenerWithBodies:hitTest");
+
+        ok &= luaval_to_object<ax::Collider2D>(tolua_S, 3, "ax.Collider2D",&arg1, "ax.Contact2DListenerWithBodies:hitTest");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_Contact2DListenerWithBodies_hitTest'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->hitTest(arg0, arg1);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Contact2DListenerWithBodies:hitTest",argc, 2);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_Contact2DListenerWithBodies_hitTest'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_physics2d_Contact2DListenerWithBodies_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Contact2DListenerWithBodies",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 2)
+    {
+        ax::Rigidbody2D* arg0;
+        ax::Rigidbody2D* arg1;
+        ok &= luaval_to_object<ax::Rigidbody2D>(tolua_S, 2, "ax.Rigidbody2D",&arg0, "ax.Contact2DListenerWithBodies:create");
+        ok &= luaval_to_object<ax::Rigidbody2D>(tolua_S, 3, "ax.Rigidbody2D",&arg1, "ax.Contact2DListenerWithBodies:create");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_Contact2DListenerWithBodies_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::Contact2DListenerWithBodies::create(arg0, arg1);
+        object_to_luaval<ax::Contact2DListenerWithBodies>(tolua_S, "ax.Contact2DListenerWithBodies",(ax::Contact2DListenerWithBodies*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Contact2DListenerWithBodies:create",argc, 2);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_Contact2DListenerWithBodies_create'.",&tolua_err);
+#endif
+    return 0;
+}
+static int lua_ax_physics2d_Contact2DListenerWithBodies_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (Contact2DListenerWithBodies)");
+    return 0;
+}
+
+int lua_register_ax_physics2d_Contact2DListenerWithBodies(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.Contact2DListenerWithBodies");
+    tolua_cclass(tolua_S,"Contact2DListenerWithBodies","ax.Contact2DListenerWithBodies","ax.Contact2DListener",nullptr);
+
+    tolua_beginmodule(tolua_S,"Contact2DListenerWithBodies");
+        tolua_function(tolua_S,"hitTest",lua_ax_physics2d_Contact2DListenerWithBodies_hitTest);
+        tolua_function(tolua_S,"create", lua_ax_physics2d_Contact2DListenerWithBodies_create);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::Contact2DListenerWithBodies).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Contact2DListenerWithBodies";
+    g_typeCast[typeName] = "ax.Contact2DListenerWithBodies";
+    return 1;
+}
+
+int lua_ax_physics2d_Contact2DListenerWithShapes_hitTest(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Contact2DListenerWithShapes* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Contact2DListenerWithShapes",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Contact2DListenerWithShapes*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics2d_Contact2DListenerWithShapes_hitTest'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2)
+    {
+        ax::Collider2D* arg0;
+        ax::Collider2D* arg1;
+
+        ok &= luaval_to_object<ax::Collider2D>(tolua_S, 2, "ax.Collider2D",&arg0, "ax.Contact2DListenerWithShapes:hitTest");
+
+        ok &= luaval_to_object<ax::Collider2D>(tolua_S, 3, "ax.Collider2D",&arg1, "ax.Contact2DListenerWithShapes:hitTest");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_Contact2DListenerWithShapes_hitTest'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->hitTest(arg0, arg1);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Contact2DListenerWithShapes:hitTest",argc, 2);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_Contact2DListenerWithShapes_hitTest'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_physics2d_Contact2DListenerWithShapes_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Contact2DListenerWithShapes",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 2)
+    {
+        ax::Collider2D* arg0;
+        ax::Collider2D* arg1;
+        ok &= luaval_to_object<ax::Collider2D>(tolua_S, 2, "ax.Collider2D",&arg0, "ax.Contact2DListenerWithShapes:create");
+        ok &= luaval_to_object<ax::Collider2D>(tolua_S, 3, "ax.Collider2D",&arg1, "ax.Contact2DListenerWithShapes:create");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_Contact2DListenerWithShapes_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::Contact2DListenerWithShapes::create(arg0, arg1);
+        object_to_luaval<ax::Contact2DListenerWithShapes>(tolua_S, "ax.Contact2DListenerWithShapes",(ax::Contact2DListenerWithShapes*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Contact2DListenerWithShapes:create",argc, 2);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_Contact2DListenerWithShapes_create'.",&tolua_err);
+#endif
+    return 0;
+}
+static int lua_ax_physics2d_Contact2DListenerWithShapes_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (Contact2DListenerWithShapes)");
+    return 0;
+}
+
+int lua_register_ax_physics2d_Contact2DListenerWithShapes(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.Contact2DListenerWithShapes");
+    tolua_cclass(tolua_S,"Contact2DListenerWithShapes","ax.Contact2DListenerWithShapes","ax.Contact2DListener",nullptr);
+
+    tolua_beginmodule(tolua_S,"Contact2DListenerWithShapes");
+        tolua_function(tolua_S,"hitTest",lua_ax_physics2d_Contact2DListenerWithShapes_hitTest);
+        tolua_function(tolua_S,"create", lua_ax_physics2d_Contact2DListenerWithShapes_create);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::Contact2DListenerWithShapes).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Contact2DListenerWithShapes";
+    g_typeCast[typeName] = "ax.Contact2DListenerWithShapes";
+    return 1;
+}
+
+int lua_ax_physics2d_Contact2DListenerWithGroup_hitTest(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Contact2DListenerWithGroup* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Contact2DListenerWithGroup",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Contact2DListenerWithGroup*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics2d_Contact2DListenerWithGroup_hitTest'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2)
+    {
+        ax::Collider2D* arg0;
+        ax::Collider2D* arg1;
+
+        ok &= luaval_to_object<ax::Collider2D>(tolua_S, 2, "ax.Collider2D",&arg0, "ax.Contact2DListenerWithGroup:hitTest");
+
+        ok &= luaval_to_object<ax::Collider2D>(tolua_S, 3, "ax.Collider2D",&arg1, "ax.Contact2DListenerWithGroup:hitTest");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_Contact2DListenerWithGroup_hitTest'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->hitTest(arg0, arg1);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Contact2DListenerWithGroup:hitTest",argc, 2);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_Contact2DListenerWithGroup_hitTest'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_physics2d_Contact2DListenerWithGroup_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Contact2DListenerWithGroup",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        int arg0;
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Contact2DListenerWithGroup:create");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_Contact2DListenerWithGroup_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::Contact2DListenerWithGroup::create(arg0);
+        object_to_luaval<ax::Contact2DListenerWithGroup>(tolua_S, "ax.Contact2DListenerWithGroup",(ax::Contact2DListenerWithGroup*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Contact2DListenerWithGroup:create",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_Contact2DListenerWithGroup_create'.",&tolua_err);
+#endif
+    return 0;
+}
+static int lua_ax_physics2d_Contact2DListenerWithGroup_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (Contact2DListenerWithGroup)");
+    return 0;
+}
+
+int lua_register_ax_physics2d_Contact2DListenerWithGroup(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.Contact2DListenerWithGroup");
+    tolua_cclass(tolua_S,"Contact2DListenerWithGroup","ax.Contact2DListenerWithGroup","ax.Contact2DListener",nullptr);
+
+    tolua_beginmodule(tolua_S,"Contact2DListenerWithGroup");
+        tolua_function(tolua_S,"hitTest",lua_ax_physics2d_Contact2DListenerWithGroup_hitTest);
+        tolua_function(tolua_S,"create", lua_ax_physics2d_Contact2DListenerWithGroup_create);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::Contact2DListenerWithGroup).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Contact2DListenerWithGroup";
+    g_typeCast[typeName] = "ax.Contact2DListenerWithGroup";
     return 1;
 }
 
@@ -12854,13 +13549,19 @@ TOLUA_API int register_all_ax_physics2d(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"ax");
 
     lua_register_ax_physics2d_Collider2D(tolua_S);
+    lua_register_ax_physics2d_CircleCollider2D(tolua_S);
     lua_register_ax_physics2d_PolygonCollider2D(tolua_S);
     lua_register_ax_physics2d_BoxCollider2D(tolua_S);
+    lua_register_ax_physics2d_EdgeSegmentCollider2D(tolua_S);
     lua_register_ax_physics2d_EdgePolygonCollider2D(tolua_S);
     lua_register_ax_physics2d_EdgeBoxCollider2D(tolua_S);
     lua_register_ax_physics2d_EdgeChainCollider2D(tolua_S);
     lua_register_ax_physics2d_Rigidbody2D(tolua_S);
     lua_register_ax_physics2d_Contact2D(tolua_S);
+    lua_register_ax_physics2d_Contact2DListener(tolua_S);
+    lua_register_ax_physics2d_Contact2DListenerWithBodies(tolua_S);
+    lua_register_ax_physics2d_Contact2DListenerWithShapes(tolua_S);
+    lua_register_ax_physics2d_Contact2DListenerWithGroup(tolua_S);
     lua_register_ax_physics2d_Joint2D(tolua_S);
     lua_register_ax_physics2d_FixedJoint2D(tolua_S);
     lua_register_ax_physics2d_DistanceJoint2D(tolua_S);

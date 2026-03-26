@@ -432,12 +432,11 @@ protected:
     void updateScale() override;
 
 protected:
-    CircleCollider2D(const PhysicsMaterial2D& material, float radius, const Vec2& offset)
-        : Collider2D(material), _radius(radius), _offset(offset)
-    {}
+    CircleCollider2D(const PhysicsMaterial2D& material) : Collider2D(material) {}
 
-    float _radius{0};
-    Vec2 _offset;
+    void init(float radius, const Vec2& offset);
+
+    b2Circle _circle;
 };
 
 /** A polygon shape. */
@@ -491,13 +490,11 @@ protected:
     void updateScale() override;
 
 protected:
-    PolygonCollider2D(const PhysicsMaterial2D& material, std::span<const Vec2> points, const Vec2& offset, float radius)
-        : Collider2D(material), _points(points.begin(), points.end()), _offset(offset), _radius(radius)
-    {}
+    PolygonCollider2D(const PhysicsMaterial2D& material) : Collider2D(material) {}
 
-    std::vector<Vec2> _points;
-    Vec2 _offset;
-    float _radius{0};
+    bool init(std::span<const Vec2> points, const Vec2& offset, float radius);
+
+    b2Polygon _polygon;
 };
 
 /** A box shape. */
@@ -535,16 +532,11 @@ protected:
     bool attachToBody(Rigidbody2D*) override;
     void updateScale() override;
 
-    BoxCollider2D(const PhysicsMaterial2D& material,
-                  const Vec2& size,
-                  const Vec2& offset = Vec2::ZERO,
-                  float radius       = 0.0f)
-        : Collider2D(material), _size(size), _offset(offset), _radius(radius)
-    {}
+    BoxCollider2D(const PhysicsMaterial2D& material) : Collider2D(material) {}
 
-    Vec2 _size;
-    Vec2 _offset;
-    float _radius{0};
+    void init(const Vec2& size, const Vec2& offset, float radius);
+
+    b2Polygon _polygon;
 };
 
 /** A segment shape. */
@@ -589,12 +581,11 @@ protected:
     void updateScale() override;
 
 protected:
-    EdgeSegmentCollider2D(const PhysicsMaterial2D& material, const Vec2& a, const Vec2& b)
-        : Collider2D(material), _pointA(a), _pointB(b)
-    {}
+    EdgeSegmentCollider2D(const PhysicsMaterial2D& material) : Collider2D(material) {}
 
-    Vec2 _pointA;
-    Vec2 _pointB;
+    void init(const Vec2& a, const Vec2& b);
+
+    b2Segment _segment;
 };
 
 /** An edge polygon shape. */

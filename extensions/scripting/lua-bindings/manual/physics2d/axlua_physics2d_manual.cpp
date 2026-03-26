@@ -160,7 +160,7 @@ tolua_lerror:
     return 0;
 }
 
-int axlua_physics2d_PhysicsCollider_recenterPoints(lua_State* tolua_S)
+int axlua_physics2d_Collider2D_recenterPoints(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -170,7 +170,7 @@ int axlua_physics2d_PhysicsCollider_recenterPoints(lua_State* tolua_S)
 #    endif
 
 #    if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S, 1, "Collider2D", 0, &tolua_err))
+    if (!tolua_isusertable(tolua_S, 1, "ax.Collider2D", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
@@ -182,7 +182,7 @@ int axlua_physics2d_PhysicsCollider_recenterPoints(lua_State* tolua_S)
         int arg1 = 0;
         do
         {
-            ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "Collider2D:recenterPoints");
+            ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.Collider2D:recenterPoints");
             if (nullptr == arg0)
             {
                 LUA_PRECONDITION(arg0, "Invalid Native Object");
@@ -206,13 +206,13 @@ int axlua_physics2d_PhysicsCollider_recenterPoints(lua_State* tolua_S)
         ax::Vec2 arg2;
         do
         {
-            ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "Collider2D:recenterPoints");
+            ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.Collider2D:recenterPoints");
             if (nullptr == arg0)
             {
                 LUA_PRECONDITION(arg0, "Invalid Native Object");
             }
         } while (0);
-        ok &= luaval_to_vec2(tolua_S, 3, &arg2, "Collider2D:recenterPoints");
+        ok &= luaval_to_vec2(tolua_S, 3, &arg2, "ax.Collider2D:recenterPoints");
         if (!ok)
         {
             AX_SAFE_DELETE_ARRAY(arg0);
@@ -227,12 +227,12 @@ int axlua_physics2d_PhysicsCollider_recenterPoints(lua_State* tolua_S)
     return 0;
 #    if _AX_DEBUG >= 1
 tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'axlua_physics2d_PhysicsCollider_recenterPoints'.", &tolua_err);
+    tolua_error(tolua_S, "#ferror in function 'axlua_physics2d_Collider2D_recenterPoints'.", &tolua_err);
 #    endif
     return 0;
 }
 
-int axlua_physics2d_PhysicsCollider_getPolygonCenter(lua_State* tolua_S)
+int axlua_physics2d_Collider2D_getPolygonCenter(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -242,7 +242,7 @@ int axlua_physics2d_PhysicsCollider_getPolygonCenter(lua_State* tolua_S)
 #    endif
 
 #    if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S, 1, "Collider2D", 0, &tolua_err))
+    if (!tolua_isusertable(tolua_S, 1, "ax.Collider2D", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
@@ -254,7 +254,7 @@ int axlua_physics2d_PhysicsCollider_getPolygonCenter(lua_State* tolua_S)
         int arg1 = 0;
         do
         {
-            ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "Collider2D:getPolygonCenter");
+            ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.Collider2D:getPolygonCenter");
             if (nullptr == arg0)
             {
                 LUA_PRECONDITION(arg0, "Invalid Native Object");
@@ -274,7 +274,7 @@ int axlua_physics2d_PhysicsCollider_getPolygonCenter(lua_State* tolua_S)
     return 0;
 #    if _AX_DEBUG >= 1
 tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'axlua_physics2d_PhysicsCollider_getPolygonCenter'.", &tolua_err);
+    tolua_error(tolua_S, "#ferror in function 'axlua_physics2d_Collider2D_getPolygonCenter'.", &tolua_err);
 #    endif
     return 0;
 }
@@ -289,7 +289,7 @@ int axlua_physics2d_PolygonCollider2D_getPoints(lua_State* tolua_S)
 #    endif
 
 #    if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S, 1, "PolygonCollider2D", 0, &tolua_err))
+    if (!tolua_isusertype(tolua_S, 1, "ax.PolygonCollider2D", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
@@ -334,7 +334,7 @@ int axlua_physics2d_EdgePolygonCollider2D_getPoints(lua_State* tolua_S)
 #    endif
 
 #    if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S, 1, "EdgePolygonCollider2D", 0, &tolua_err))
+    if (!tolua_isusertype(tolua_S, 1, "ax.EdgePolygonCollider2D", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
@@ -379,7 +379,7 @@ int axlua_physics2d_EdgeChainCollider2D_getPoints(lua_State* tolua_S)
 #    endif
 
 #    if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S, 1, "EdgeChainCollider2D", 0, &tolua_err))
+    if (!tolua_isusertype(tolua_S, 1, "ax.EdgeChainCollider2D", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
@@ -451,21 +451,7 @@ static int toaxlua_Contact2DListener_registerScriptHandler(lua_State* tolua_S)
             static_cast<ScriptHandlerMgr::HandlerType>((int)tolua_tonumber(tolua_S, 3, 0));
         switch (type)
         {
-        case ScriptHandlerMgr::HandlerType::EVENT_PHYSICS_CONTACT_BEGIN:
-        {
-            ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
-
-            self->onContactBegin = [handler](Contact2D* contact) -> bool {
-                LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-                stack->pushObject(contact, "ax.Contact2D");
-                bool ret = stack->executeFunctionByHandler(handler, 1);
-                stack->clean();
-
-                return ret;
-            };
-        }
-        break;
-        case ScriptHandlerMgr::HandlerType::EVENT_PHYSICS_CONTACT_PRESOLVE:
+        case ScriptHandlerMgr::HandlerType::EVENT_PHYSICS_2D_PRESOLVE:
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
@@ -479,7 +465,33 @@ static int toaxlua_Contact2DListener_registerScriptHandler(lua_State* tolua_S)
             };
         }
         break;
-        case ScriptHandlerMgr::HandlerType::EVENT_PHYSICS_CONTACT_POSTSOLVE:
+        case ScriptHandlerMgr::HandlerType::EVENT_PHYSICS_2D_CONTACT_BEGIN:
+        {
+            ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
+
+            self->onContactBegin = [handler](Contact2D* contact) -> bool {
+                LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
+                stack->pushObject(contact, "ax.Contact2D");
+                bool ret = stack->executeFunctionByHandler(handler, 1);
+                stack->clean();
+
+                return ret;
+            };
+        }
+        break;
+        case ScriptHandlerMgr::HandlerType::EVENT_PHYSICS_2D_CONTACT_END:
+        {
+            ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
+
+            self->onContactEnd = [handler](Contact2D* contact) {
+                LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
+                stack->pushObject(contact, "ax.Contact2D");
+                stack->executeFunctionByHandler(handler, 1);
+                stack->clean();
+            };
+        }
+        break;
+        case ScriptHandlerMgr::HandlerType::EVENT_PHYSICS_2D_HIT:
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
@@ -491,11 +503,23 @@ static int toaxlua_Contact2DListener_registerScriptHandler(lua_State* tolua_S)
             };
         }
         break;
-        case ScriptHandlerMgr::HandlerType::EVENT_PHYSICS_CONTACT_SEPARATE:
+        case ScriptHandlerMgr::HandlerType::EVENT_PHYSICS_2D_SENSOR_BEGIN:
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onContactEnd = [handler](Contact2D* contact) {
+            self->onSensorBegin = [handler](Contact2D* contact) {
+                LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
+                stack->pushObject(contact, "ax.Contact2D");
+                stack->executeFunctionByHandler(handler, 1);
+                stack->clean();
+            };
+        }
+        break;
+        case ScriptHandlerMgr::HandlerType::EVENT_PHYSICS_2D_SENSOR_END:
+        {
+            ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
+
+            self->onSensorEnd = [handler](Contact2D* contact) {
                 LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
                 stack->pushObject(contact, "ax.Contact2D");
                 stack->executeFunctionByHandler(handler, 1);
@@ -521,23 +545,23 @@ tolua_lerror:
 
 int register_all_ax_physics2d_manual(lua_State* tolua_S)
 {
-    lua_pushstring(tolua_S, "Collider2D");
+    lua_pushstring(tolua_S, "ax.Collider2D");
     lua_rawget(tolua_S, LUA_REGISTRYINDEX);
     if (lua_istable(tolua_S, -1))
     {
         lua_pushstring(tolua_S, "recenterPoints");
-        lua_pushcfunction(tolua_S, axlua_physics2d_PhysicsCollider_recenterPoints);
+        lua_pushcfunction(tolua_S, axlua_physics2d_Collider2D_recenterPoints);
         lua_rawset(tolua_S, -3);
         lua_pushstring(tolua_S, "getPolygonCenter");
-        lua_pushcfunction(tolua_S, axlua_physics2d_PhysicsCollider_getPolygonCenter);
+        lua_pushcfunction(tolua_S, axlua_physics2d_Collider2D_getPolygonCenter);
         lua_rawset(tolua_S, -3);
         lua_pushstring(tolua_S, "getPolyonCenter");
-        lua_pushcfunction(tolua_S, axlua_physics2d_PhysicsCollider_getPolygonCenter);
+        lua_pushcfunction(tolua_S, axlua_physics2d_Collider2D_getPolygonCenter);
         lua_rawset(tolua_S, -3);
     }
     lua_pop(tolua_S, 1);
 
-    lua_pushstring(tolua_S, "PolygonCollider2D");
+    lua_pushstring(tolua_S, "ax.PolygonCollider2D");
     lua_rawget(tolua_S, LUA_REGISTRYINDEX);
     if (lua_istable(tolua_S, -1))
     {
@@ -547,7 +571,7 @@ int register_all_ax_physics2d_manual(lua_State* tolua_S)
     }
     lua_pop(tolua_S, 1);
 
-    lua_pushstring(tolua_S, "EdgePolygonCollider2D");
+    lua_pushstring(tolua_S, "ax.EdgePolygonCollider2D");
     lua_rawget(tolua_S, LUA_REGISTRYINDEX);
     if (lua_istable(tolua_S, -1))
     {
@@ -557,7 +581,7 @@ int register_all_ax_physics2d_manual(lua_State* tolua_S)
     }
     lua_pop(tolua_S, 1);
 
-    lua_pushstring(tolua_S, "EdgeChainCollider2D");
+    lua_pushstring(tolua_S, "ax.EdgeChainCollider2D");
     lua_rawget(tolua_S, LUA_REGISTRYINDEX);
     if (lua_istable(tolua_S, -1))
     {

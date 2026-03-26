@@ -522,7 +522,7 @@ int axlua_physics3d_Physics3DShape_createMesh(lua_State* L)
     {
         std::vector<Vec3> arg0;
         int arg1;
-        ok &= luaval_to_std_vector_vec3(L, 2, &arg0, "ax.Physics3DShape:createMesh");
+        ok &= luaval_to_std_vector_float3(L, 2, &arg0, "ax.Physics3DShape:createMesh");
         ok &= luaval_to_int(L, 3, (int*)&arg1, "ax.Physics3DShape:createMesh");
         if (!ok)
         {

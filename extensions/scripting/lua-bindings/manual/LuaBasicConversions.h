@@ -552,8 +552,6 @@ AX_LUA_DLL bool luaval_to_std_vector_string_view(lua_State* L,
  */
 bool luaval_to_std_vector_int(lua_State* L, int lo, std::vector<int>* ret, const char* funcName = "");
 
-bool luaval_to_std_vector_float2(lua_State* L, int lo, std::vector<Vec2>* ret, const char* funcName = "");
-
 /**
  * Get a pointer points to a ax::Map whose key/value pair is string value and T object from a Lua hash-map table in
  * the stack.
@@ -798,7 +796,7 @@ extern bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<ax::Vec2>* ret, const char* funcName = "");
+extern bool luaval_to_std_vector_float2(lua_State* L, int lo, std::vector<ax::Vec2>* ret, const char* funcName = "");
 
 /**
  * Get a pointer points to a std::vector<ax::Vec3> from a Lua array table in the stack.
@@ -809,7 +807,7 @@ extern bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<ax::Vec2
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<ax::Vec3>* ret, const char* funcName = "");
+extern bool luaval_to_std_vector_float3(lua_State* L, int lo, std::vector<ax::Vec3>* ret, const char* funcName = "");
 
 extern bool luaval_to_std_map_string_string(lua_State* L,
                                             int lo,
@@ -932,7 +930,7 @@ extern void physics_raycastinfo_to_luaval(lua_State* L, const ax::RayCastHit2D& 
  * @param L the current lua_State.
  * @param data a ax::PhysicsContactData object.
  */
-extern void physics_contactdata_to_luaval(lua_State* L, const ax::RayCastHit2D* data);
+extern void physics_contact2dinfo_to_luaval(lua_State* L, const ax::Contact2DInfo& info);
 #endif  // #if defined(AX_ENABLE_PHYSICS_2D)
 
 /**

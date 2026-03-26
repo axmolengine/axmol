@@ -1536,46 +1536,6 @@ bool luaval_to_std_vector_int(lua_State* L, int lo, std::vector<int>* ret, const
     return ok;
 }
 
-bool luaval_to_std_vector_float2(lua_State* L, int lo, std::vector<Vec2>* ret, const char* funcName)
-{
-    if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
-        return false;
-
-    tolua_Error tolua_err;
-    bool ok = true;
-    if (!tolua_istable(L, lo, 0, &tolua_err))
-    {
-#if _AX_DEBUG >= 1
-        luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
-#endif
-        ok = false;
-    }
-
-    if (ok)
-    {
-        size_t len = lua_objlen(L, lo);
-        for (size_t i = 0; i < len; i++)
-        {
-            lua_pushnumber(L, i + 1);
-            lua_gettable(L, lo);
-            if (lua_istable(L, -1))
-            {
-                Vec2 outVec2;
-                luaval_to_vec2(L, -1, &outVec2, funcName);
-                ret->emplace_back(outVec2);
-            }
-            else
-            {
-                AXASSERT(false, "int type is needed");
-            }
-
-            lua_pop(L, 1);
-        }
-    }
-
-    return ok;
-}
-
 bool luaval_to_mesh_vertex_attrib(lua_State* L, int lo, ax::MeshVertexAttrib* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
@@ -1867,7 +1827,7 @@ bool luaval_to_v3f_c4f_t2f(lua_State* L, int lo, ax::V3F_T2F_C4F* outValue, cons
     return ok;
 }
 
-bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<ax::Vec2>* ret, const char* funcName)
+bool luaval_to_std_vector_float2(lua_State* L, int lo, std::vector<ax::Vec2>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -1910,7 +1870,7 @@ bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<ax::Vec2>* ret,
     return ok;
 }
 
-bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<ax::Vec3>* ret, const char* funcName)
+bool luaval_to_std_vector_float3(lua_State* L, int lo, std::vector<ax::Vec3>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -2218,26 +2178,67 @@ void physics_raycastinfo_to_luaval(lua_State* L, const RayCastHit2D& info)
     lua_rawset(L, -3);                            /* table[key] = value, L: table */
 }
 
-void physics_contactdata_to_luaval(lua_State* L, const Contact2DInfo* data)
+void physics_contact2dinfo_to_luaval(lua_State* L, const Contact2DInfo& info)
 {
-    if (nullptr == L || nullptr == data)
+    if (nullptr == L)
         return;
 
     lua_newtable(L); /* L: table */
 
-    // TODO:
-    // lua_pushstring(L, "points");
-    // vec2_array_to_luaval(L, data->points, data->count);
-    // lua_rawset(L, -3);
-
+    // normal
     lua_pushstring(L, "normal");
-    vec2_to_luaval(L, data->normal);
+    vec2_to_luaval(L, info.normal);
     lua_rawset(L, -3);
 
+    // POINT_MAX
     lua_pushstring(L, "POINT_MAX");
     lua_pushnumber(L, Contact2DInfo::POINT_MAX);
     lua_rawset(L, -3);
+
+    // pointCount
+    lua_pushstring(L, "pointCount");
+    lua_pushnumber(L, info.pointCount);
+    lua_rawset(L, -3);
+
+    // points array
+    lua_pushstring(L, "points");
+    lua_newtable(L); /* L: table, points */
+
+    for (int i = 0; i < info.pointCount && i < Contact2DInfo::POINT_MAX; ++i)
+    {
+        const ManifoldPoint2D& mp = info.points[i];
+
+        lua_pushnumber(L, i + 1);  // key
+        lua_newtable(L);           // value (subtable)
+
+        // point
+        lua_pushstring(L, "point");
+        vec2_to_luaval(L, mp.point);
+        lua_rawset(L, -3);
+
+        // normalImpulse
+        lua_pushstring(L, "normalImpulse");
+        lua_pushnumber(L, mp.normalImpulse);
+        lua_rawset(L, -3);
+
+        // tangentImpulse
+        lua_pushstring(L, "tangentImpulse");
+        lua_pushnumber(L, mp.tangentImpulse);
+        lua_rawset(L, -3);
+
+        // normalVelocity
+        lua_pushstring(L, "normalVelocity");
+        lua_pushnumber(L, mp.normalVelocity);
+        lua_rawset(L, -3);
+
+        // set subtable into points[i]
+        lua_rawset(L, -3);
+    }
+
+    // set points table into root
+    lua_rawset(L, -3);
 }
+
 #endif  // #if defined(AX_ENABLE_PHYSICS_2D)
 
 void size_to_luaval(lua_State* L, const Size& sz)
