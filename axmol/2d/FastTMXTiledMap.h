@@ -28,7 +28,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/2d/TMXObjectGroup.h"
 
 namespace ax

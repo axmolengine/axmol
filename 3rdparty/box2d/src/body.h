@@ -8,12 +8,58 @@
 #include "box2d/math_functions.h"
 #include "box2d/types.h"
 
+// Length of body debug name
+#define B2_NAME_LENGTH 32
+
 typedef struct b2World b2World;
+
+enum b2BodyFlags
+{
+	// This body has fixed translation along the x-axis
+	b2_lockLinearX = 0x00000001,
+
+	// This body has fixed translation along the y-axis
+	b2_lockLinearY = 0x00000002,
+
+	// This body has fixed rotation
+	b2_lockAngularZ = 0x00000004,
+
+	// This flag is used for debug draw
+	b2_isFast = 0x00000008,
+
+	// This dynamic body does a final CCD pass against all body types, but not other bullets
+	b2_isBullet = 0x00000010,
+
+	// This body was speed capped in the current time step
+	b2_isSpeedCapped = 0x00000020,
+	
+	// This body had a time of impact event in the current time step
+	b2_hadTimeOfImpact = 0x00000040,
+
+	// This body has no limit on angular velocity
+	b2_allowFastRotation = 0x00000080,
+
+	// This body need's to have its AABB increased
+	b2_enlargeBounds = 0x00000100,
+
+	// This body is dynamic so the solver should write to it.
+	// This prevents writing to kinematic bodies that causes a multithreaded sharing
+	// cache coherence problem even when the values are not changing.
+	// Used for b2BodyState flags.
+	b2_dynamicFlag = 0x00000200,
+
+	// Flag to indicate the user has used the updateBodyMass option to defer mass
+	// computation but b2Body_ApplyMassFromShapes was not called before the world step.
+	b2_dirtyMass = 0x00000400,
+
+	// All lock flags
+	b2_allLocks = b2_lockAngularZ | b2_lockLinearX | b2_lockLinearY,
+};
 
 // Body organizational details that are not used in the solver.
 typedef struct b2Body
 {
-	char name[32];
+	char name[B2_NAME_LENGTH];
 
 	void* userData;
 
@@ -59,16 +105,17 @@ typedef struct b2Body
 
 	int id;
 
+	// b2BodyFlags
+	uint32_t flags;
+
 	b2BodyType type;
 
 	// This is monotonically advanced when a body is allocated in this slot
 	// Used to check for invalid b2BodyId
 	uint16_t generation;
 
+	// todo move into flags
 	bool enableSleep;
-	bool fixedRotation;
-	bool isSpeedCapped;
-	bool isMarked;
 } b2Body;
 
 // Body State
@@ -102,7 +149,10 @@ typedef struct b2BodyState
 {
 	b2Vec2 linearVelocity; // 8
 	float angularVelocity; // 4
-	int flags;			   // 4
+
+	// b2BodyFlags
+	// Important flags: locking, dynamic
+	uint32_t flags; // 4
 
 	// Using delta position reduces round-off error far from the origin
 	b2Vec2 deltaPosition; // 8
@@ -119,7 +169,6 @@ static const b2BodyState b2_identityBodyState = { { 0.0f, 0.0f }, 0.0f, 0, { 0.0
 // Transform data used for collision and solver preparation.
 typedef struct b2BodySim
 {
-	// todo better to have transform in sim or in base body? Try both!
 	// transform for body origin
 	b2Transform transform;
 
@@ -146,16 +195,11 @@ typedef struct b2BodySim
 	float angularDamping;
 	float gravityScale;
 
-	// body data can be moved around, the id is stable (used in b2BodyId)
+	// Index of b2Body
 	int bodyId;
 
-	// This flag is used for debug draw
-	bool isFast;
-
-	bool isBullet;
-	bool isSpeedCapped;
-	bool allowFastRotation;
-	bool enlargeAABB;
+	// b2BodyFlags
+	uint32_t flags;
 } b2BodySim;
 
 // Get a validated body from a world using an id.

@@ -40,7 +40,7 @@
 
 #include "axmol/base/Types.h"
 #include "axmol/base/Utils.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 
 namespace ax
 {

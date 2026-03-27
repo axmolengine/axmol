@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #include <vector>
 
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/base/Protocols.h"
 #include "axmol/renderer/TextureAtlas.h"
 #include "axmol/renderer/QuadCommand.h"

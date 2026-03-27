@@ -23,7 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "ComController.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 
 namespace cocostudio
 {

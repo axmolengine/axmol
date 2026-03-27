@@ -30,7 +30,7 @@
 #include "axmol/3d/MeshVertexIndexData.h"
 #include "axmol/3d/VertexInputBinding.h"
 #include "axmol/2d/Light.h"
-#include "axmol/2d/Scene.h"
+#include "axmol/scene/Scene.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/Environment.h"
@@ -402,9 +402,8 @@ void Mesh::setMaterial(Material* material)
                     // AXASSERT(vertexInputs.size() <= attributeCount, "missing attribute data");
                 }
 #endif
-                // TODO
                 auto vertexInputBinding =
-                    VertexInputBinding::spawn(_meshIndexData, pass, &list[i], _instanceCount > 0 && _instancing);
+                    VertexInputBinding::fetch(_meshIndexData, pass, &list[i], _instanceCount > 0 && _instancing);
                 pass->setVertexInputBinding(vertexInputBinding);
                 i += 1;
             }

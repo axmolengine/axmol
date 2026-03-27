@@ -300,21 +300,23 @@ ax.Handler.EVENT_MOUSE_UP         = 49
 ax.Handler.EVENT_MOUSE_MOVE       = 50
 ax.Handler.EVENT_MOUSE_SCROLL     = 51
 ax.Handler.EVENT_SPINE            = 52
-ax.Handler.EVENT_PHYSICS_CONTACT_BEGIN = 53
-ax.Handler.EVENT_PHYSICS_CONTACT_PRESOLVE = 54
-ax.Handler.EVENT_PHYSICS_CONTACT_POSTSOLVE = 55
-ax.Handler.EVENT_PHYSICS_CONTACT_SEPARATE = 56
-ax.Handler.EVENT_FOCUS = 57
-ax.Handler.EVENT_CONTROLLER_CONNECTED = 58
-ax.Handler.EVENT_CONTROLLER_DISCONNECTED = 59
-ax.Handler.EVENT_CONTROLLER_KEYDOWN = 60
-ax.Handler.EVENT_CONTROLLER_KEYUP = 61
-ax.Handler.EVENT_CONTROLLER_KEYREPEAT = 62
-ax.Handler.EVENT_CONTROLLER_AXIS = 63
-ax.Handler.EVENT_SPINE_ANIMATION_START = 64
-ax.Handler.EVENT_SPINE_ANIMATION_END = 65
-ax.Handler.EVENT_SPINE_ANIMATION_COMPLETE = 66
-ax.Handler.EVENT_SPINE_ANIMATION_EVENT = 67
+ax.Handler.EVENT_PHYSICS_2D_PRESOLVE = 53
+ax.Handler.EVENT_PHYSICS_2D_CONTACT_BEGIN = 54
+ax.Handler.EVENT_PHYSICS_2D_CONTACT_END = 55
+ax.Handler.EVENT_PHYSICS_2D_HIT = 56
+ax.Handler.EVENT_PHYSICS_2D_SENSOR_BEGIN = 57
+ax.Handler.EVENT_PHYSICS_2D_SENSOR_END = 58
+ax.Handler.EVENT_FOCUS = 59
+ax.Handler.EVENT_CONTROLLER_CONNECTED = 60
+ax.Handler.EVENT_CONTROLLER_DISCONNECTED = 61
+ax.Handler.EVENT_CONTROLLER_KEYDOWN = 62
+ax.Handler.EVENT_CONTROLLER_KEYUP = 63
+ax.Handler.EVENT_CONTROLLER_KEYREPEAT = 64
+ax.Handler.EVENT_CONTROLLER_AXIS = 65
+ax.Handler.EVENT_SPINE_ANIMATION_START = 66
+ax.Handler.EVENT_SPINE_ANIMATION_END = 67
+ax.Handler.EVENT_SPINE_ANIMATION_COMPLETE = 68
+ax.Handler.EVENT_SPINE_ANIMATION_EVENT = 69
 
 
 ax.EVENT_UNKNOWN = 0
@@ -325,12 +327,22 @@ ax.EVENT_MOUSE                 = 4
 ax.EVENT_ACCELERATION          = 5
 ax.EVENT_CUSTOM                = 6
 
-ax.PHYSICSSHAPE_MATERIAL_DEFAULT = {density = 0.0, restitution = 0.5, friction = 0.5}
-ax.PHYSICSBODY_MATERIAL_DEFAULT = {density = 0.1, restitution = 0.5, friction = 0.5}
+ax.PHYSICS_MATERIAL_2D_DEFAULT = {density = 0.1, restitution = 0.5, friction = 0.5}
 ax.GLYPHCOLLECTION_DYNAMIC = 0
 ax.GLYPHCOLLECTION_NEHE    = 1
 ax.GLYPHCOLLECTION_ASCII   = 2
 ax.GLYPHCOLLECTION_CUSTOM  = 3
+
+ax.physics2d = ax.physics2d or {}
+
+ax.physics2d.CollisionEventBits = {
+    None     = 0,
+    PreSolve = 1,
+    Hit      = 2,
+    Contact  = 4,
+    Sensor   = 8,
+    AllBits  = 15
+}
 
 ax.ResolutionPolicy =
 {

@@ -56,7 +56,7 @@ VertexInputBinding::~VertexInputBinding()
     AX_SAFE_RELEASE(_vertexLayout);
 }
 
-VertexInputBinding* VertexInputBinding::spawn(MeshIndexData* meshIndexData,
+VertexInputBinding* VertexInputBinding::fetch(MeshIndexData* meshIndexData,
                                               Pass* pass,
                                               MeshCommand* command,
                                               bool instancing)

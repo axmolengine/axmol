@@ -35,7 +35,7 @@
 #include "axmol/renderer/Shaders.h"
 #include "axmol/base/Director.h"
 #include "axmol/3d/MeshRenderer.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 
 namespace ax
 {

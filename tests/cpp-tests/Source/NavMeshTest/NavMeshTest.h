@@ -33,7 +33,7 @@
 
 DEFINE_TEST_SUITE(NavMeshTests);
 
-#if !defined(AX_ENABLE_NAVMESH) || !defined(AX_ENABLE_PHYSICS)
+#if !defined(AX_ENABLE_NAVMESH) || !defined(AX_ENABLE_PHYSICS_3D)
 class NavMeshDisabled : public TestCase
 {
 public:

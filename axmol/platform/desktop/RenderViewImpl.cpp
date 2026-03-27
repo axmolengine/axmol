@@ -42,7 +42,7 @@ The RenderViewImpl for win32,linux,macos,wasm
 #include "axmol/base/IMEDispatcher.h"
 #include "axmol/base/Utils.h"
 #include "axmol/base/text_utils.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #if AX_ICON_SET_SUPPORT
 #    include "axmol/platform/Image.h"
 #endif /* AX_ICON_SET_SUPPORT */

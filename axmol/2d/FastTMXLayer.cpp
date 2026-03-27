@@ -41,7 +41,7 @@ THE SOFTWARE.
 #include "axmol/base/Types.h"
 #include "axmol/2d/FastTMXTiledMap.h"
 #include "axmol/2d/Sprite.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/Shaders.h"

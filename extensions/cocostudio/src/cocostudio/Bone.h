@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "DecorativeDisplay.h"
 #include "DisplayManager.h"
 #include "CocosStudioExport.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/math/Math.h"
 
 namespace cocostudio

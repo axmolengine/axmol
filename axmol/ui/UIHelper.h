@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include <string>
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/ui/GUIExport.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 
 namespace ax
 {

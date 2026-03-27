@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include <doctest.h>
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/base/Map.h"
 
 using namespace ax;

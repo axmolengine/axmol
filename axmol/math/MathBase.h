@@ -70,6 +70,12 @@
 #    define USING_NS_AX_MATH
 #endif
 
+namespace ax
+{
+struct radians_tag
+{};
+}  // namespace ax
+
 /**
  * end of base group
  * @}

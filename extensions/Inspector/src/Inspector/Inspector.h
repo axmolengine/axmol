@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include "axmol/base/EventListenerCustom.h"
 #include "axmol/base/RefPtr.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 
 namespace ax
 {

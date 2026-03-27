@@ -34,7 +34,7 @@ def _check_ndk_root_env():
         sdkRoot = os.environ.get('ANDROID_HOME', None)
         for _, ndkVers, _ in os.walk("{0}{1}ndk".format(sdkRoot, os.path.sep)):
             for ndkVer in ndkVers:
-                if (ndkVer >= '23.2.8568313'):
+                if (ndkVer >= '27.3.13750724'):
                     ANDROID_NDK = "{0}{1}ndk{1}{2}".format(sdkRoot, os.path.sep, ndkVer)
                     break
             break
@@ -241,7 +241,7 @@ def main():
                     'ax_ui.ini' : ('ax_ui', 'axlua_ui_auto'), \
                     'ax_studio.ini' : ('ax_studio', 'axlua_studio_auto'), \
                     'ax_spine.ini' : ('ax_spine', 'axlua_spine_auto'), \
-                    'ax_physics.ini' : ('ax_physics', 'axlua_physics_auto'), \
+                    'ax_physics2d.ini' : ('ax_physics2d', 'axlua_physics2d_auto'), \
                     'ax_video.ini' : ('ax_video', 'axlua_video_auto'), \
                     'ax_controller.ini' : ('ax_controller', 'axlua_controller_auto'), \
                     'ax_3d.ini': ('ax_3d', 'axlua_3d_auto'), \

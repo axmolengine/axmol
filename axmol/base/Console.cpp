@@ -48,7 +48,7 @@
 #include "axmol/base/Scheduler.h"
 #include "axmol/platform/PlatformConfig.h"
 #include "axmol/base/Environment.h"
-#include "axmol/2d/Scene.h"
+#include "axmol/scene/Scene.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/base/Utils.h"

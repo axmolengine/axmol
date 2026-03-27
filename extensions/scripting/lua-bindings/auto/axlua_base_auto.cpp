@@ -12682,7 +12682,7 @@ int lua_ax_base_Node_initLayer(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Node_setPhysicsBody(lua_State* tolua_S)
+int lua_ax_base_Node_getRigidbody2D(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Node* obj = nullptr;
@@ -12702,57 +12702,7 @@ int lua_ax_base_Node_setPhysicsBody(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Node_setPhysicsBody'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
-    {
-        ax::PhysicsBody* arg0;
-
-        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.Node:setPhysicsBody");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setPhysicsBody'", nullptr);
-            return 0;
-        }
-        obj->setPhysicsBody(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:setPhysicsBody",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Node_setPhysicsBody'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Node_getPhysicsBody(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Node* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Node",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Node_getPhysicsBody'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Node_getRigidbody2D'", nullptr);
         return 0;
     }
 #endif
@@ -12762,19 +12712,19 @@ int lua_ax_base_Node_getPhysicsBody(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_getPhysicsBody'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_getRigidbody2D'", nullptr);
             return 0;
         }
-        auto&& ret = obj->getPhysicsBody();
-        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
+        auto&& ret = obj->getRigidbody2D();
+        object_to_luaval<ax::Rigidbody2D>(tolua_S, "ax.Rigidbody2D",(ax::Rigidbody2D*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:getPhysicsBody",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:getRigidbody2D",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Node_getPhysicsBody'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Node_getRigidbody2D'.",&tolua_err);
 #endif
 
     return 0;
@@ -13042,8 +12992,7 @@ int lua_register_ax_base_Node(lua_State* tolua_S)
         tolua_function(tolua_S,"resetChild",lua_ax_base_Node_resetChild);
         tolua_function(tolua_S,"init",lua_ax_base_Node_init);
         tolua_function(tolua_S,"initLayer",lua_ax_base_Node_initLayer);
-        tolua_function(tolua_S,"setPhysicsBody",lua_ax_base_Node_setPhysicsBody);
-        tolua_function(tolua_S,"getPhysicsBody",lua_ax_base_Node_getPhysicsBody);
+        tolua_function(tolua_S,"getRigidbody2D",lua_ax_base_Node_getRigidbody2D);
         tolua_function(tolua_S,"create", lua_ax_base_Node_create);
         tolua_function(tolua_S,"getAttachedNodeCount", lua_ax_base_Node_getAttachedNodeCount);
     tolua_endmodule(tolua_S);
@@ -22669,7 +22618,7 @@ int lua_ax_base_Scene_onProjectionChanged(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Scene_getPhysicsWorld(lua_State* tolua_S)
+int lua_ax_base_Scene_getPhysicsWorld2D(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Scene* obj = nullptr;
@@ -22689,7 +22638,7 @@ int lua_ax_base_Scene_getPhysicsWorld(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Scene_getPhysicsWorld'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Scene_getPhysicsWorld2D'", nullptr);
         return 0;
     }
 #endif
@@ -22699,19 +22648,19 @@ int lua_ax_base_Scene_getPhysicsWorld(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scene_getPhysicsWorld'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scene_getPhysicsWorld2D'", nullptr);
             return 0;
         }
-        auto&& ret = obj->getPhysicsWorld();
-        object_to_luaval<ax::PhysicsWorld>(tolua_S, "ax.PhysicsWorld",(ax::PhysicsWorld*)ret);
+        auto&& ret = obj->getPhysicsWorld2D();
+        object_to_luaval<ax::PhysicsWorld2D>(tolua_S, "ax.PhysicsWorld2D",(ax::PhysicsWorld2D*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:getPhysicsWorld",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:getPhysicsWorld2D",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scene_getPhysicsWorld'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scene_getPhysicsWorld2D'.",&tolua_err);
 #endif
 
     return 0;
@@ -23069,7 +23018,7 @@ int lua_register_ax_base_Scene(lua_State* tolua_S)
         tolua_function(tolua_S,"initWithSize",lua_ax_base_Scene_initWithSize);
         tolua_function(tolua_S,"setCameraOrderDirty",lua_ax_base_Scene_setCameraOrderDirty);
         tolua_function(tolua_S,"onProjectionChanged",lua_ax_base_Scene_onProjectionChanged);
-        tolua_function(tolua_S,"getPhysicsWorld",lua_ax_base_Scene_getPhysicsWorld);
+        tolua_function(tolua_S,"getPhysicsWorld2D",lua_ax_base_Scene_getPhysicsWorld2D);
         tolua_function(tolua_S,"initWithPhysics",lua_ax_base_Scene_initWithPhysics);
         tolua_function(tolua_S,"initPhysicsWorld",lua_ax_base_Scene_initPhysicsWorld);
         tolua_function(tolua_S,"fixedUpdate",lua_ax_base_Scene_fixedUpdate);

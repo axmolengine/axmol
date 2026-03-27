@@ -418,8 +418,8 @@ bool luaval_to_blendfunc(lua_State* L, int lo, ax::BlendFunc* outValue, const ch
     return ok;
 }
 
-#if defined(AX_ENABLE_PHYSICS)
-bool luaval_to_physics_material(lua_State* L, int lo, PhysicsMaterial* outValue, const char* funcName)
+#if defined(AX_ENABLE_PHYSICS_2D)
+bool luaval_to_physics_material2d(lua_State* L, int lo, PhysicsMaterial2D* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
         return false;
@@ -454,7 +454,7 @@ bool luaval_to_physics_material(lua_State* L, int lo, PhysicsMaterial* outValue,
     }
     return ok;
 }
-#endif  // #if defined(AX_ENABLE_PHYSICS)
+#endif  // #if defined(AX_ENABLE_PHYSICS_2D)
 
 bool luaval_to_ssize_t(lua_State* L, int lo, ssize_t* outValue, const char* funcName)
 {
@@ -1827,7 +1827,7 @@ bool luaval_to_v3f_c4f_t2f(lua_State* L, int lo, ax::V3F_T2F_C4F* outValue, cons
     return ok;
 }
 
-bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<ax::Vec2>* ret, const char* funcName)
+bool luaval_to_std_vector_float2(lua_State* L, int lo, std::vector<ax::Vec2>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -1870,7 +1870,7 @@ bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<ax::Vec2>* ret,
     return ok;
 }
 
-bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<ax::Vec3>* ret, const char* funcName)
+bool luaval_to_std_vector_float3(lua_State* L, int lo, std::vector<ax::Vec3>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -2127,8 +2127,8 @@ int vec4_to_luaval(lua_State* L, const ax::Vec4& vec4)
     return 1;
 }
 
-#if defined(AX_ENABLE_PHYSICS)
-void physics_material_to_luaval(lua_State* L, const PhysicsMaterial& pm)
+#if defined(AX_ENABLE_PHYSICS_2D)
+void physics_material2d_to_luaval(lua_State* L, const PhysicsMaterial2D& pm)
 {
     if (nullptr == L)
         return;
@@ -2144,15 +2144,15 @@ void physics_material_to_luaval(lua_State* L, const PhysicsMaterial& pm)
     lua_rawset(L, -3);                             /* table[key] = value, L: table */
 }
 
-void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo& info)
+void physics_raycastinfo_to_luaval(lua_State* L, const RayCastHit2D& info)
 {
     if (NULL == L)
         return;
 
     lua_newtable(L); /* L: table */
 
-    lua_pushstring(L, "shape"); /* L: table key */
-    PhysicsCollider* shape = info.shape;
+    lua_pushstring(L, "collider"); /* L: table key */
+    auto shape = info.collider;
     if (shape == nullptr)
     {
         lua_pushnil(L);
@@ -2161,20 +2161,12 @@ void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo& info)
     {
         int ID     = (int)(shape->_ID);
         int* luaID = &(shape->_luaID);
-        toluafix_pushusertype_object(L, ID, luaID, (void*)shape, "ax.PhysicsCollider");
+        toluafix_pushusertype_object(L, ID, luaID, (void*)shape, "ax.Collider2D");
     }
     lua_rawset(L, -3); /* table[key] = value, L: table */
 
-    lua_pushstring(L, "start"); /* L: table key */
-    vec2_to_luaval(L, info.start);
-    lua_rawset(L, -3); /* table[key] = value, L: table */
-
-    lua_pushstring(L, "ended"); /* L: table key */
-    vec2_to_luaval(L, info.end);
-    lua_rawset(L, -3); /* table[key] = value, L: table */
-
-    lua_pushstring(L, "contact"); /* L: table key */
-    vec2_to_luaval(L, info.contact);
+    lua_pushstring(L, "point"); /* L: table key */
+    vec2_to_luaval(L, info.point);
     lua_rawset(L, -3); /* table[key] = value, L: table */
 
     lua_pushstring(L, "normal"); /* L: table key */
@@ -2186,26 +2178,68 @@ void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo& info)
     lua_rawset(L, -3);                            /* table[key] = value, L: table */
 }
 
-void physics_contactdata_to_luaval(lua_State* L, const PhysicsContactData* data)
+void physics_contact2dinfo_to_luaval(lua_State* L, const Contact2DInfo& info)
 {
-    if (nullptr == L || nullptr == data)
+    if (nullptr == L)
         return;
 
     lua_newtable(L); /* L: table */
 
-    lua_pushstring(L, "points");
-    vec2_array_to_luaval(L, data->points, data->count);
-    lua_rawset(L, -3);
-
+    // normal
     lua_pushstring(L, "normal");
-    vec2_to_luaval(L, data->normal);
+    vec2_to_luaval(L, info.normal);
     lua_rawset(L, -3);
 
+    // POINT_MAX
     lua_pushstring(L, "POINT_MAX");
-    lua_pushnumber(L, data->POINT_MAX);
+    lua_pushnumber(L, Contact2DInfo::POINT_MAX);
+    lua_rawset(L, -3);
+
+    // pointCount
+    lua_pushstring(L, "pointCount");
+    lua_pushnumber(L, info.pointCount);
+    lua_rawset(L, -3);
+
+    // points array
+    lua_pushstring(L, "points");
+    lua_newtable(L); /* L: table, points */
+
+    for (int i = 0; i < info.pointCount && i < Contact2DInfo::POINT_MAX; ++i)
+    {
+        const ManifoldPoint2D& mp = info.points[i];
+
+        lua_pushnumber(L, i + 1);  // key
+        lua_newtable(L);           // value (subtable)
+
+        // point
+        lua_pushstring(L, "point");
+        vec2_to_luaval(L, mp.point);
+        lua_rawset(L, -3);
+
+        // normalImpulse
+        lua_pushstring(L, "normalImpulse");
+        lua_pushnumber(L, mp.normalImpulse);
+        lua_rawset(L, -3);
+
+        // tangentImpulse
+        lua_pushstring(L, "tangentImpulse");
+        lua_pushnumber(L, mp.tangentImpulse);
+        lua_rawset(L, -3);
+
+        // normalVelocity
+        lua_pushstring(L, "normalVelocity");
+        lua_pushnumber(L, mp.normalVelocity);
+        lua_rawset(L, -3);
+
+        // set subtable into points[i]
+        lua_rawset(L, -3);
+    }
+
+    // set points table into root
     lua_rawset(L, -3);
 }
-#endif  // #if defined(AX_ENABLE_PHYSICS)
+
+#endif  // #if defined(AX_ENABLE_PHYSICS_2D)
 
 void size_to_luaval(lua_State* L, const Size& sz)
 {
@@ -2817,6 +2851,23 @@ void vec3span_to_luaval(lua_State* L, std::span<const ax::Vec3> inValue)
     {
         lua_pushnumber(L, (lua_Number)index);
         vec3_to_luaval(L, value);
+        lua_rawset(L, -3);
+        ++index;
+    }
+}
+
+void vec2span_to_luaval(lua_State* L, std::span<const ax::Vec2> inValue)
+{
+    if (nullptr == L)
+        return;
+
+    lua_newtable(L);
+
+    int index = 1;
+    for (const ax::Vec2& value : inValue)
+    {
+        lua_pushnumber(L, (lua_Number)index);
+        vec2_to_luaval(L, value);
         lua_rawset(L, -3);
         ++index;
     }

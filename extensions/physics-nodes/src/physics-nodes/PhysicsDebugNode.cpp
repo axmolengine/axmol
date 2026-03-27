@@ -17,7 +17,7 @@
  */
 
 #include "PhysicsDebugNode.h"
-#include "axmol/physics/PhysicsHelper.h"
+#include "axmol/2d/physics/PhysicsUtility2D.h"
 
 #if defined(_WIN32)
 #    pragma push_macro("TRANSPARENT")
@@ -35,7 +35,7 @@ static void b2DrawPolygon(const b2Vec2* verts, int vertexCount, b2HexColor color
     {
         vec[i] = Vec2(verts[i].x * dn->getPTMRatio(), verts[i].y * dn->getPTMRatio()) + dn->getWorldOffset();
     }
-    dn->drawPolygon(vec, vertexCount, ax::Color::BLACK, 0.4f, PhysicsHelper::toColor(color));
+    dn->drawPolygon(vec, vertexCount, ax::Color::BLACK, 0.4f, PhysicsUtility2D::toColor(color));
 }
 
 /// Draw a solid closed polygon provided in CCW order.
@@ -58,7 +58,7 @@ static void b2DrawSolidPolygon(b2Transform t,
         auto pt = b2TransformPoint(t, verts[i]);
         vec[i]  = Vec2(pt.x * dn->getPTMRatio(), pt.y * dn->getPTMRatio()) + dn->getWorldOffset();
     }
-    auto color4f = PhysicsHelper::toColor(color);
+    auto color4f = PhysicsUtility2D::toColor(color);
     dn->drawPolygon(vec.data(), vertexCount, ax::Color(color4f.r / 2, color4f.g / 2, color4f.b / 2, color4f.a), 0.5f,
                     color4f);
 }
@@ -68,7 +68,7 @@ static void b2DrawSolidPolygon(b2Transform t,
 static void b2DrawCircle(b2Vec2 center, float radius, b2HexColor color, PhysicsDebugNode* dn)
 {
     dn->drawDot(Vec2(center.x * dn->getPTMRatio(), center.y * dn->getPTMRatio()) + dn->getWorldOffset(),
-                radius * dn->getPTMRatio(), PhysicsHelper::toColor(color));
+                radius * dn->getPTMRatio(), PhysicsUtility2D::toColor(color));
 }
 
 /// Draw a solid circle.
@@ -77,7 +77,7 @@ static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, Phy
 {
     auto center  = b2TransformPoint(t, b2Vec2_zero);
     Vec2 c       = {Vec2(center.x * dn->getPTMRatio(), center.y * dn->getPTMRatio()) + dn->getWorldOffset()};
-    auto color4f = PhysicsHelper::toColor(color);
+    auto color4f = PhysicsUtility2D::toColor(color);
 
     dn->drawDot(Vec2(center.x * dn->getPTMRatio(), center.y * dn->getPTMRatio()) + dn->getWorldOffset(),
                 radius * dn->getPTMRatio(), color4f);
@@ -95,11 +95,11 @@ static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, Phy
 
 /// Draw a line segment.
 // void (*DrawSegment)(b2Vec2 p1, b2Vec2 p2, b2HexColor color, void* context);
-static void b2DrawSegment(b2Vec2 p1, b2Vec2 p2, b2HexColor color, PhysicsDebugNode* dn)
+static void b2DrawLine(b2Vec2 p1, b2Vec2 p2, b2HexColor color, PhysicsDebugNode* dn)
 {
     dn->drawLine(Vec2(p1.x * dn->getPTMRatio(), p1.y * dn->getPTMRatio()) + dn->getWorldOffset(),
                  Vec2(p2.x * dn->getPTMRatio(), p2.y * dn->getPTMRatio()) + dn->getWorldOffset(),
-                 PhysicsHelper::toColor(color));
+                 PhysicsUtility2D::toColor(color));
 }
 
 /// Draw a transform. Choose your own length scale.
@@ -110,10 +110,10 @@ static void b2DrawTransform(b2Transform t, PhysicsDebugNode* dn)
     const float k_axisScale = 0.4f;
 
     p2 = p1 + k_axisScale * b2Rot_GetXAxis(t.q);
-    b2DrawSegment(p1, p2, b2HexColor::b2_colorRed, dn);
+    b2DrawLine(p1, p2, b2HexColor::b2_colorRed, dn);
 
     p2 = p1 + k_axisScale * b2Rot_GetYAxis(t.q);
-    b2DrawSegment(p1, p2, b2HexColor::b2_colorGreen, dn);
+    b2DrawLine(p1, p2, b2HexColor::b2_colorGreen, dn);
 }
 
 /// Draw a point.
@@ -121,7 +121,7 @@ static void b2DrawTransform(b2Transform t, PhysicsDebugNode* dn)
 static void b2DrawPoint(b2Vec2 p, float size, b2HexColor color, PhysicsDebugNode* dn)
 {
     dn->drawPoint(Vec2(p.x * dn->getPTMRatio(), p.y * dn->getPTMRatio()) + dn->getWorldOffset(), size,
-                  PhysicsHelper::toColor(color));
+                  PhysicsUtility2D::toColor(color));
 }
 
 bool PhysicsDebugNode::initWithWorld(b2WorldId worldId)
@@ -175,7 +175,7 @@ void PhysicsDebugNode::setBuiltinDrawFuncs()
     __b2_setfun(DrawSolidPolygon);
     __b2_setfun(DrawCircle);
     __b2_setfun(DrawSolidCircle);
-    __b2_setfun(DrawSegment);
+    __b2_setfun(DrawLine);
     __b2_setfun(DrawTransform);
     __b2_setfun(DrawPoint);
 #undef __b2_setfun

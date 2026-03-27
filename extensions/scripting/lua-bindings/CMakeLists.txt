@@ -23,6 +23,7 @@ set(lua_bindings_manual_headers
   manual/base/axlua_base_manual.hpp
   manual/AxluaLoader.h
   manual/LuaValue.h
+  manual/physics2d/axlua_physics2d_manual.h
   manual/physics3d/axlua_physics3d_manual.h
   manual/cocostudio/lua-cocostudio-conversions.h
   manual/cocostudio/CustomGUIReader.h
@@ -44,7 +45,7 @@ set(lua_bindings_manual_files
   manual/ComponentLua.cpp
   manual/base/LuaScriptHandlerMgr.cpp
   manual/base/axlua_base_manual.cpp
-  manual/physics/axlua_physics_manual.cpp
+  manual/physics2d/axlua_physics2d_manual.cpp
   manual/3d/axlua_3d_manual.cpp
   manual/cocostudio/CustomGUIReader.cpp
   manual/cocostudio/axlua_cocostudio_manual.cpp
@@ -78,7 +79,7 @@ set(lua_bindings_auto_headers
   auto/axlua_csloader_auto.hpp
   auto/axlua_physics3d_auto.hpp
   auto/axlua_ui_auto.hpp
-  auto/axlua_physics_auto.hpp
+  auto/axlua_physics2d_auto.hpp
   auto/axlua_extension_auto.hpp
   auto/axlua_rhi_auto.hpp
   auto/axlua_fairygui_auto.hpp
@@ -89,7 +90,7 @@ set(lua_bindings_auto_files
   auto/axlua_base_auto.cpp
   auto/axlua_controller_auto.cpp
   auto/axlua_extension_auto.cpp
-  auto/axlua_physics_auto.cpp
+  auto/axlua_physics2d_auto.cpp
   auto/axlua_spine_auto.cpp
   auto/axlua_studio_auto.cpp
   auto/axlua_csloader_auto.cpp

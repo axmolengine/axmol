@@ -41,7 +41,7 @@ using namespace ax;
 #include "axmol/tlx/vector.hpp"
 #include "axmol/tlx/utility.hpp"
 #include "axmol/base/EventType.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/platform/Image.h"
 #include "axmol/3d/shaderinfos.h"
 #include "axmol/base/Utils.h"

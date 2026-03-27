@@ -100,12 +100,14 @@ public:
         addTest("MotionStreak", []() { return new MotionStreakTests(); });
         addTest("Node", []() { return new NodeTests(); });
         addTest("Parallax", []() { return new ParallaxTests(); });
-        addTest("Particles", []() { return new ParticleTests(); });
-        addTest("Particle3D (PU)", []() { return new Particle3DTests(); });
-#if defined(AX_ENABLE_PHYSICS)
-        addTest("Physics", []() { return new PhysicsTests(); });
+        addTest("Particles2D", []() { return new ParticleTests(); });
+        addTest("Particle3D", []() { return new Particle3DTests(); });
+#if defined(AX_ENABLE_PHYSICS_2D)
+        addTest("Physics2D", []() { return new PhysicsTests(); });
 #endif
+#if defined(AX_ENABLE_PHYSICS_3D)
         addTest("Physics3D", []() { return new Physics3DTests(); });
+#endif
         addTest("RenderTexture", []() { return new RenderTextureTests(); });
         addTest("Scene", []() { return new SceneTests(); });
         addTest("Spine", []() { return new SpineTests(); });

@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/2d/AutoPolygon.h"
 #include "axmol/base/Object.h"
 #include "axmol/math/Math.h"

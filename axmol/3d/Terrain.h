@@ -27,8 +27,8 @@ THE SOFTWARE.
 
 #include <vector>
 
-#include "axmol/2d/Node.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Node.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/renderer/Texture2D.h"
 #include "axmol/renderer/MeshCommand.h"
 #include "axmol/renderer/CallbackCommand.h"

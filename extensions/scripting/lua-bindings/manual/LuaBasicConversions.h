@@ -38,10 +38,10 @@
 #include "axmol/3d/Bundle3D.h"
 #include "axmol/base/Value.h"
 #include "axmol/base/Types.h"
-#if defined(AX_ENABLE_PHYSICS)
-#    include "axmol/physics/PhysicsContact.h"
-#    include "axmol/physics/PhysicsJoint.h"
-#    include "axmol/physics/PhysicsWorld.h"
+#if defined(AX_ENABLE_PHYSICS_2D)
+#    include "axmol/2d/physics/Contact2D.h"
+#    include "axmol/2d/physics/Joint2D.h"
+#    include "axmol/2d/physics/PhysicsWorld2D.h"
 #endif
 #include "axmol/rhi/VertexLayout.h"
 #include "axmol/ui/GUIDefine.h"
@@ -257,10 +257,10 @@ extern bool luaval_to_color32(lua_State* L, int lo, Color32* outValue, const cha
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 extern bool luaval_to_color(lua_State* L, int lo, ax::Color* outValue, const char* funcName = "");
-#if defined(AX_ENABLE_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_2D)
 
 /**
- * Get a PhysicsMaterial object value from the given acceptable index of stack.
+ * Get a PhysicsMaterial2D object value from the given acceptable index of stack.
  * If the value at the given acceptable index of stack is a table it returns true, otherwise returns false.
  * If the table has the `density`,`restitution` and 'friction' keys and the corresponding values are not nil, this
  * function would assign the values to the corresponding members of outValue. Otherwise, the value of members of
@@ -272,8 +272,11 @@ extern bool luaval_to_color(lua_State* L, int lo, ax::Color* outValue, const cha
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_physics_material(lua_State* L, int lo, ax::PhysicsMaterial* outValue, const char* funcName = "");
-#endif  // #if defined(AX_ENABLE_PHYSICS)
+extern bool luaval_to_physics_material2d(lua_State* L,
+                                         int lo,
+                                         ax::PhysicsMaterial2D* outValue,
+                                         const char* funcName = "");
+#endif  // #if defined(AX_ENABLE_PHYSICS_2D)
 
 /**
  * If the value at the given acceptable index of stack is a table it returns true, otherwise returns false.
@@ -793,7 +796,7 @@ extern bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<ax::Vec2>* ret, const char* funcName = "");
+extern bool luaval_to_std_vector_float2(lua_State* L, int lo, std::vector<ax::Vec2>* ret, const char* funcName = "");
 
 /**
  * Get a pointer points to a std::vector<ax::Vec3> from a Lua array table in the stack.
@@ -804,7 +807,7 @@ extern bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<ax::Vec2
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<ax::Vec3>* ret, const char* funcName = "");
+extern bool luaval_to_std_vector_float3(lua_State* L, int lo, std::vector<ax::Vec3>* ret, const char* funcName = "");
 
 extern bool luaval_to_std_map_string_string(lua_State* L,
                                             int lo,
@@ -899,16 +902,16 @@ extern void color_to_luaval(lua_State* L, const ax::Color& cc);
 
 void std_thread_id_to_luaval(lua_State* L, const std::thread::id& value);
 
-#if defined(AX_ENABLE_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_2D)
 
 /**
- * Push a table converted from a ax::PhysicsMaterial object into the Lua stack.
+ * Push a table converted from a ax::PhysicsMaterial2D object into the Lua stack.
  * The format of table as follows: {density=numberValue1, restitution=numberValue2, friction=numberValue3}
  *
  * @param L the current lua_State.
  * @param pm a ax::PhysicsMaterial object.
  */
-extern void physics_material_to_luaval(lua_State* L, const PhysicsMaterial& pm);
+extern void physics_material2d_to_luaval(lua_State* L, const PhysicsMaterial2D& pm);
 
 /**
  * Push a table converted from a ax::PhysicsRayCastInfo object into the Lua stack.
@@ -918,7 +921,7 @@ extern void physics_material_to_luaval(lua_State* L, const PhysicsMaterial& pm);
  * @param L the current lua_State.
  * @param info a ax::PhysicsRayCastInfo object.
  */
-extern void physics_raycastinfo_to_luaval(lua_State* L, const ax::PhysicsRayCastInfo& info);
+extern void physics_raycastinfo_to_luaval(lua_State* L, const ax::RayCastHit2D& info);
 
 /**
  * Push a table converted from a ax::PhysicsContactData object into the Lua stack.
@@ -927,8 +930,8 @@ extern void physics_raycastinfo_to_luaval(lua_State* L, const ax::PhysicsRayCast
  * @param L the current lua_State.
  * @param data a ax::PhysicsContactData object.
  */
-extern void physics_contactdata_to_luaval(lua_State* L, const ax::PhysicsContactData* data);
-#endif  // #if defined(AX_ENABLE_PHYSICS)
+extern void physics_contact2dinfo_to_luaval(lua_State* L, const ax::Contact2DInfo& info);
+#endif  // #if defined(AX_ENABLE_PHYSICS_2D)
 
 /**
  * Push a table converted from a ax::AffineTransform object into the Lua stack.
@@ -1250,6 +1253,8 @@ void texParams_to_luaval(lua_State* L, const ax::Texture2D::TexParams& inValue);
  * @param inValue a std::vector<ax::Vec3> value.
  */
 void vec3span_to_luaval(lua_State* L, std::span<const ax::Vec3> inValue);
+
+void vec2span_to_luaval(lua_State* L, std::span<const ax::Vec2> inValue);
 
 /**
  * Push a Lua dict table converted from a std::map<std::string, std::string> into the Lua stack.

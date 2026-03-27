@@ -38,7 +38,7 @@ class Physics3DConstraint;
 
 DEFINE_TEST_SUITE(Physics3DTests);
 
-#if !defined(AX_ENABLE_3D_PHYSICS)
+#if !defined(AX_ENABLE_PHYSICS_3D)
 class Physics3DDemoDisabled : public TestCase
 {
 public:

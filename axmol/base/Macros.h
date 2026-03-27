@@ -82,11 +82,13 @@ extern bool AX_DLL ax_assert_script_compatible(const char* msg);
 
 /** @def AX_DEGREES_TO_RADIANS
  converts degrees to radians
+ Notice: deprecated: use MathUtils::radians(angle)
  */
 #define AX_DEGREES_TO_RADIANS(__ANGLE__) ((__ANGLE__) * 0.01745329252f)  // PI / 180
 
 /** @def AX_RADIANS_TO_DEGREES
  converts radians to degrees
+ Notice: deprecated: use MathUtils::degrees(angle)
  */
 #define AX_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) * 57.29577951f)  // PI * 180
 

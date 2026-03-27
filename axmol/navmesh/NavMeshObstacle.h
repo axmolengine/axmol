@@ -29,7 +29,7 @@
 #include "axmol/base/Config.h"
 #if defined(AX_ENABLE_NAVMESH)
 
-#    include "axmol/2d/Component.h"
+#    include "axmol/scene/Component.h"
 
 #    include "axmol/base/Object.h"
 #    include "axmol/math/Vec3.h"

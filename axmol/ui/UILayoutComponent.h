@@ -26,7 +26,7 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "axmol/2d/Component.h"
+#include "axmol/scene/Component.h"
 #include "axmol/ui/GUIExport.h"
 
 namespace ax

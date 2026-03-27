@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "box2d/math_functions.h"
+#include "box2d/base.h"
 
 // clang-format off
 
@@ -16,12 +16,6 @@
 	#define B2_DEBUG 0
 #else
 	#define B2_DEBUG 1
-#endif
-
-#if defined( BOX2D_VALIDATE ) && !defined( NDEBUG )
-	#define B2_VALIDATE 1
-#else
-	#define B2_VALIDATE 0
 #endif
 
 // Define platform
@@ -98,10 +92,12 @@
 	#define b2TracyCZoneC( ctx, color, active ) TracyCZoneC( ctx, color, active )
 	#define b2TracyCZoneNC( ctx, name, color, active ) TracyCZoneNC( ctx, name, color, active )
 	#define b2TracyCZoneEnd( ctx ) TracyCZoneEnd( ctx )
+	#define b2TracyCFrame TracyCFrameMark
 #else
 	#define b2TracyCZoneC( ctx, color, active )
 	#define b2TracyCZoneNC( ctx, name, color, active )
 	#define b2TracyCZoneEnd( ctx )
+	#define b2TracyCFrame
 #endif
 
 // clang-format on
@@ -139,6 +135,7 @@ typedef struct b2AtomicU32
 } b2AtomicU32;
 
 void* b2Alloc( int size );
+void* b2AllocZeroInit( int size );
 #define B2_ALLOC_STRUCT( type ) b2Alloc(sizeof(type))
 #define B2_ALLOC_ARRAY( count, type ) b2Alloc(count * sizeof(type))
 
@@ -147,3 +144,13 @@ void b2Free( void* mem, int size );
 #define B2_FREE_ARRAY( mem, count, type ) b2Free(mem, count * sizeof(type))
 
 void* b2GrowAlloc( void* oldMem, int oldSize, int newSize );
+void* b2GrowAllocZeroInit( void* oldMem, int oldSize, int newSize );
+
+void b2Log( const char* format, ... );
+
+typedef struct b2Mutex b2Mutex;
+
+b2Mutex* b2CreateMutex( void );
+void b2DestroyMutex( b2Mutex* m );
+void b2LockMutex( b2Mutex* m );
+void b2UnlockMutex( b2Mutex* m );

@@ -29,7 +29,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "axmol/2d/ActionManager.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/2d/Action.h"
 #include "axmol/base/Scheduler.h"
 #include "axmol/base/Macros.h"

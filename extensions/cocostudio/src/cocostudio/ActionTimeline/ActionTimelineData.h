@@ -1,7 +1,7 @@
 #pragma once
 
 #include "cocostudio/ComBase.h"
-#include "axmol/2d/Component.h"
+#include "axmol/scene/Component.h"
 #include "cocostudio/CocosStudioExport.h"
 #include "TimelineMacro.h"
 

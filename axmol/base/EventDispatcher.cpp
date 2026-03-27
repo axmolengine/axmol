@@ -38,10 +38,10 @@
      AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    include "axmol/base/EventListenerController.h"
 #endif
-#include "axmol/2d/Scene.h"
+#include "axmol/scene/Scene.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventType.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/2d/ProtectedNode.h"
 
 #define DUMP_LISTENER_ITEM_PRIORITY_INFO 0

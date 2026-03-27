@@ -25,13 +25,13 @@
  ****************************************************************************/
 #include "axmol/platform/PlatformConfig.h"
 #include "axmol/base/Config.h"
-#if defined(AX_ENABLE_3D_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_3D)
 #    include "lua-bindings/manual/physics3d/axlua_physics3d_manual.h"
 #    include "lua-bindings/auto/axlua_physics3d_auto.hpp"
 #    include "lua-bindings/manual/tolua_fix.h"
 #    include "lua-bindings/manual/LuaBasicConversions.h"
 #    include "lua-bindings/manual/LuaEngine.h"
-#    include "axmol/physics3d/Physics3D.h"
+#    include "axmol/3d/physics/Physics3D.h"
 
 bool luaval_to_Physics3DRigidBodyDes(lua_State* L, int lo, ax::Physics3DRigidBodyDes* outValue, const char* funcName)
 {
@@ -522,7 +522,7 @@ int axlua_physics3d_Physics3DShape_createMesh(lua_State* L)
     {
         std::vector<Vec3> arg0;
         int arg1;
-        ok &= luaval_to_std_vector_vec3(L, 2, &arg0, "ax.Physics3DShape:createMesh");
+        ok &= luaval_to_std_vector_float3(L, 2, &arg0, "ax.Physics3DShape:createMesh");
         ok &= luaval_to_int(L, 3, (int*)&arg1, "ax.Physics3DShape:createMesh");
         if (!ok)
         {

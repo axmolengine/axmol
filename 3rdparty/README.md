@@ -11,7 +11,7 @@
 
 ## Box2D
 - [![Upstream](https://img.shields.io/github/v/release/erincatto/box2d?label=Upstream)](https://github.com/erincatto/box2d)
-- Version: 3.1.1
+- Version: 3.2.0-04b0e92 (Until Mar 23, 2026) with PR [erincatto/box2d#1042](https://github.com/erincatto/box2d/pull/1042)
 - License: MIT
 
 ## Bullet
@@ -37,7 +37,7 @@
 
 ## ConvertUTF
 - Upstream: https://github.com/llvm/llvm-project
-- Version: git 20451cb (until Aug.13 2022) without LLVM-specific wrappers of the functions
+- Version: git-20451cb (until Aug.13 2022) without LLVM-specific wrappers of the functions
 - License: Apache-2.0 WITH LLVM-exception
 
 ## curl
@@ -57,7 +57,7 @@
 
 ## fast_float
 - [![Upstream](https://img.shields.io/github/v/release/fastfloat/fast_float?label=Upstream)](https://github.com/fastfloat/fast_float)
-- Version: 8.2.3
+- Version: 8.2.4
 - License: MIT
 
 ## flatbuffers
@@ -73,7 +73,7 @@
 
 ## FreeType
 - [![Upstream](https://img.shields.io/gitlab/v/tag/freetype/freetype?label=Upstream)](https://gitlab.freedesktop.org/freetype/freetype)
-- Version: 2.14.2
+- Version: 2.14.3
 - License: BSD-style (The FreeType Project)
 
 ## Glad
@@ -197,7 +197,7 @@
 
 ## png
 - [![Upstream](https://img.shields.io/github/v/tag/glennrp/libpng?label=Upstream)](https://github.com/glennrp/libpng)
-- Version: 1.6.55
+- Version: 1.6.56
 - License: PNG Reference Library License version 2
 
 ## poly2tri
@@ -232,7 +232,7 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 4.3.1
+- Version: 4.5.0
 - License: Apache-2.0
 
 ## stb (stb_image)

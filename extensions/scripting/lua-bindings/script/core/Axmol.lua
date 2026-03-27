@@ -409,8 +409,8 @@ function ax.AnimationFrameData( _texCoords, _delay, _size)
     return { texCoords = _texCoords, delay = _delay, size = _size }
 end
 
---PhysicsMaterial
-function ax.PhysicsMaterial(_density, _restitution, _friction)
+--PhysicsMaterial2D
+function ax.PhysicsMaterial2D(_density, _restitution, _friction)
     return { density = _density, restitution = _restitution, friction = _friction }
 end
 

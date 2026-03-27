@@ -31,7 +31,7 @@
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/rhi/ProgramState.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/3d/MeshRenderer.h"
 
 #if defined(_WIN32)

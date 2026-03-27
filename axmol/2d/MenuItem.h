@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include <functional>
 
 // axmol includes
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/base/Protocols.h"
 
 namespace ax

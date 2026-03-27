@@ -14,7 +14,6 @@ set(BOX2D_SOURCE_FILES
 	body.h
 	broad_phase.c
 	broad_phase.h
-	constants.h
 	constraint_graph.c
 	constraint_graph.h
 	contact.c
@@ -38,8 +37,9 @@ set(BOX2D_SOURCE_FILES
 	manifold.c
 	math_functions.c
 	motor_joint.c
-	mouse_joint.c
 	mover.c
+	physics_world.c
+	physics_world.h
 	prismatic_joint.c
 	revolute_joint.c
 	sensor.c
@@ -56,14 +56,13 @@ set(BOX2D_SOURCE_FILES
 	types.c
 	weld_joint.c
 	wheel_joint.c
-	world.c
-	world.h
 )
 
 set(BOX2D_API_FILES
 	../include/box2d/base.h
 	../include/box2d/box2d.h
 	../include/box2d/collision.h
+	../include/box2d/constants.h
 	../include/box2d/id.h
 	../include/box2d/math_functions.h
 	../include/box2d/types.h

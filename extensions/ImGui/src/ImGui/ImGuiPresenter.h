@@ -184,9 +184,9 @@ private:
         bool removing = false;
     };
 
-    ax::EventListener* _event1;
-    ax::EventListener* _event2;
-    ax::EventListener* _event3;
+    ax::EventListener* _event1{nullptr};
+    ax::EventListener* _event2{nullptr};
+    ax::EventListener* _event3{nullptr};
 
     std::unordered_map<uint32_t, ImGuiLoop> _renderLoops;
 

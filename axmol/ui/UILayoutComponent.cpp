@@ -25,7 +25,7 @@
  ****************************************************************************/
 #include "axmol/ui/UIPageView.h"
 #include "axmol/ui/UILayoutComponent.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/ui/GUIDefine.h"
 #include "axmol/ui/UIHelper.h"
 

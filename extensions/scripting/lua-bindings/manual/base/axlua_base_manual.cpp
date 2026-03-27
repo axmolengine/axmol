@@ -39,13 +39,13 @@
 #include "axmol/2d/ActionGrid.h"
 #include "axmol/2d/ActionInterval.h"
 #include "axmol/2d/AtlasNode.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/2d/Menu.h"
 #include "axmol/2d/MenuItem.h"
 #include "axmol/2d/MotionStreak.h"
 #include "axmol/2d/ParticleBatchNode.h"
 #include "axmol/2d/ParticleSystem.h"
-#include "axmol/2d/Scene.h"
+#include "axmol/scene/Scene.h"
 #include "axmol/2d/SpriteBatchNode.h"
 #include "axmol/2d/FastTMXLayer.h"
 #include "axmol/2d/FastTMXTiledMap.h"
@@ -3018,8 +3018,8 @@ tolua_lerror:
     return 0;
 }
 
-#if defined(AX_ENABLE_PHYSICS)
-int axlua_Scene_getPhysicsWorld(lua_State* tolua_S)
+#if defined(AX_ENABLE_PHYSICS_2D)
+int axlua_Scene_getPhysicsWorld2D(lua_State* tolua_S)
 {
     int argc       = 0;
     ax::Scene* obj = nullptr;
@@ -3052,8 +3052,8 @@ int axlua_Scene_getPhysicsWorld(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'axlua_Scene_getPhysicsWorld'", nullptr);
             return 0;
         }
-        ax::PhysicsWorld* ret = obj->getPhysicsWorld();
-        object_to_luaval<ax::PhysicsWorld>(tolua_S, "ax.PhysicsWorld", (ax::PhysicsWorld*)ret);
+        ax::PhysicsWorld2D* ret = obj->getPhysicsWorld2D();
+        object_to_luaval<ax::PhysicsWorld2D>(tolua_S, "ax.PhysicsWorld", (ax::PhysicsWorld2D*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:getPhysicsWorld", argc,
@@ -3069,8 +3069,8 @@ tolua_lerror:
 }
 #endif
 
-#if defined(AX_ENABLE_3D_PHYSICS)
-#    include "axmol/physics3d/Physics3DWorld.h"
+#if defined(AX_ENABLE_PHYSICS_3D)
+#    include "axmol/3d/physics/Physics3DWorld.h"
 int axlua_Scene_getPhysics3DWorld(lua_State* tolua_S)
 {
     int argc       = 0;
@@ -3104,7 +3104,7 @@ int axlua_Scene_getPhysics3DWorld(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'axlua_Scene_getPhysics3DWorld'", nullptr);
             return 0;
         }
-        ax::Physics3DWorld* ret = obj->getPhysics3DWorld();
+        ax::Physics3DWorld* ret = obj->getPhysicsWorld3D();
         object_to_luaval<ax::Physics3DWorld>(tolua_S, "ax.Physics3DWorld", (ax::Physics3DWorld*)ret);
         return 1;
     }
@@ -3178,12 +3178,12 @@ static void extendScene(lua_State* tolua_S)
     lua_rawget(tolua_S, LUA_REGISTRYINDEX);
     if (lua_istable(tolua_S, -1))
     {
-#if defined(AX_ENABLE_PHYSICS)
-        tolua_function(tolua_S, "getPhysicsWorld", axlua_Scene_getPhysicsWorld);
+#if defined(AX_ENABLE_PHYSICS_2D)
+        tolua_function(tolua_S, "getPhysicsWorld2D", axlua_Scene_getPhysicsWorld2D);
 #endif
-#if defined(AX_ENABLE_3D_PHYSICS)
-        tolua_function(tolua_S, "getPhysics3DWorld", axlua_Scene_getPhysics3DWorld);
-        tolua_function(tolua_S, "setPhysics3DDebugCamera", axlua_Scene_setPhysics3DDebugCamera);
+#if defined(AX_ENABLE_PHYSICS_3D)
+        tolua_function(tolua_S, "getPhysicsWorld3D", axlua_Scene_getPhysics3DWorld);
+        tolua_function(tolua_S, "setPhysicsDebugCamera3D", axlua_Scene_setPhysics3DDebugCamera);
 #endif
 
 #if defined(AX_ENABLE_NAVMESH)

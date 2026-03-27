@@ -38,12 +38,11 @@ jobs:
     # Reply start message when triggered by comment
     - name: Reply start message
       if: github.event_name == 'issue_comment'
-      uses: peter-evans/create-or-update-comment@v4
+      uses: peter-evans/create-or-update-comment@v5
       with:
         token: ${{ secrets.AX_BOT_TOKEN || github.token }}
-        issue-number: ${{ github.event.issue.number }}
-        body: |
-          👋 @${{ github.event.comment.user.login }} Command **/clang-format** received. Running code formatting, please wait...
+        comment-id: ${{ github.event.comment.id }}
+        reactions: eyes
 
     # Get PR info when triggered by a comment
     - name: Get PR info (for comment trigger)
@@ -95,7 +94,7 @@ jobs:
         Write-Host "head_repo=$head_repo, head_ref=$head_ref, lint_mode=$lint_mode"
 
     # Checkout correct branch
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         repository: ${{ steps.pp.outputs.head_repo }}
         ref: ${{ steps.pp.outputs.head_ref }}
@@ -140,7 +139,7 @@ jobs:
     - name: Create pull request
       if: ${{ steps.pp.outputs.lint_mode == 'create_pr' }}
       id: cpr
-      uses: peter-evans/create-pull-request@v7
+      uses: peter-evans/create-pull-request@v8
       with:
         token: ${{ secrets.AX_BOT_TOKEN || github.token }}
         push-to-fork: axmol-bot/axmol
@@ -171,7 +170,7 @@ jobs:
     # auto_commit mode (including comment trigger)
     - name: Commit clang-format changes to PR source branch
       if: ${{ steps.pp.outputs.lint_mode == 'auto_commit' }}
-      uses: EndBug/add-and-commit@v9
+      uses: EndBug/add-and-commit@v10
       with:
         author_name: axmol-bot
         author_email: 116471739+axmol-bot@users.noreply.github.com
@@ -182,21 +181,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.AX_BOT_TOKEN || github.token }}
 
-    # Reply finish message after auto_commit success
-    - name: Reply finish message
-      if: ${{ success() && steps.pp.outputs.lint_mode == 'auto_commit' && github.event_name == 'issue_comment' }}
-      uses: peter-evans/create-or-update-comment@v4
-      with:
-        token: ${{ secrets.AX_BOT_TOKEN || github.token }}
-        issue-number: ${{ github.event.issue.number }}
-        body: |
-          ✅ Formatting completed and changes have been committed to the PR branch: `${{ steps.pp.outputs.head_ref }}`.
-          @${{ github.event.comment.user.login }} please refresh to see the latest code.
-
     # Reply failure message if job fails
     - name: Reply failure message
       if: ${{ failure() && github.event_name == 'issue_comment' }}
-      uses: peter-evans/create-or-update-comment@v4
+      uses: peter-evans/create-or-update-comment@v5
       with:
         token: ${{ secrets.AX_BOT_TOKEN || github.token }}
         issue-number: ${{ github.event.issue.number }}

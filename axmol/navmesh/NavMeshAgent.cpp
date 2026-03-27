@@ -29,8 +29,8 @@
 
 #    include "axmol/navmesh/NavMesh.h"
 #    include "recast/DetourCrowd.h"
-#    include "axmol/2d/Node.h"
-#    include "axmol/2d/Scene.h"
+#    include "axmol/scene/Node.h"
+#    include "axmol/scene/Scene.h"
 #    include <algorithm>
 
 namespace ax

@@ -7,7 +7,7 @@ else()
   set(BUILD_CONFIG_DIR "")
 endif()
 
-macro(ax_link_ext EXTENSION_ENABLED LINKLIB)
+macro(ax_link_pred EXTENSION_ENABLED LINKLIB)
   if(${EXTENSION_ENABLED})
     list(APPEND LIBS ${LINKLIB})
 
@@ -69,9 +69,9 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
   endif()
 
   ax_config_pred(${APP_NAME} AX_ENABLE_MSEDGE_WEBVIEW2)
-  ax_config_pred(${APP_NAME} AX_ENABLE_PHYSICS)
+  ax_config_pred(${APP_NAME} AX_ENABLE_PHYSICS_2D)
   ax_config_pred(${APP_NAME} AX_ENABLE_3D)
-  ax_config_pred(${APP_NAME} AX_ENABLE_3D_PHYSICS)
+  ax_config_pred(${APP_NAME} AX_ENABLE_PHYSICS_3D)
   ax_config_pred(${APP_NAME} AX_ENABLE_NAVMESH)
   ax_config_pred(${APP_NAME} AX_ENABLE_MEDIA)
   ax_config_pred(${APP_NAME} AX_ENABLE_AUDIO)
@@ -172,26 +172,26 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     list(APPEND LIBS opus)
   endif()
 
-  ax_link_ext(AX_ENABLE_EXT_DRAGONBONES "DragonBones" "${AX_ROOT_DIR}/extensions/DragonBones/src")
-  ax_link_ext(AX_ENABLE_EXT_COCOSTUDIO "cocostudio" "${AX_ROOT_DIR}/extensions/cocostudio/src")
-  ax_link_ext(AX_ENABLE_EXT_ASSETMANAGER "assets-manager" "${AX_ROOT_DIR}/extensions/assets-manager/src")
-  ax_link_ext(AX_ENABLE_EXT_PARTICLE3D "particle3d" "${AX_ROOT_DIR}/extensions/Particle3D/src")
-  ax_link_ext(AX_ENABLE_EXT_INSPECTOR "Inspector" "${AX_ROOT_DIR}/extensions/Inspector/src")
-  ax_link_ext(AX_ENABLE_EXT_SDFGEN "SDFGen" "${AX_ROOT_DIR}/extensions/SDFGen/src")
-  ax_link_ext(AX_ENABLE_EXT_DRAWNODEEX "DrawNodeEx" "${AX_ROOT_DIR}/extensions/DrawNodeEx/src")
-  ax_link_ext(AX_ENABLE_EXT_GUI "GUI" "${AX_ROOT_DIR}/extensions/GUI/src")
-  ax_link_ext(AX_ENABLE_EXT_FAIRYGUI "fairygui" "${AX_ROOT_DIR}/extensions/fairygui/src")
-  ax_link_ext(AX_ENABLE_EXT_LIVE2D "Live2D" "${AX_ROOT_DIR}/extensions/Live2D/Framework/src")
-  ax_link_ext(AX_ENABLE_EXT_EFFEKSEER "EffekseerForCocos2d-x" "${AX_ROOT_DIR}/extensions/Effekseer")
-  ax_link_ext(AX_ENABLE_EXT_PHYSICS_NODE "physics-nodes" "${AX_ROOT_DIR}/extensions/physics-nodes/src")
-  ax_link_ext(AX_ENABLE_NAVMESH "recast" "${AX_ROOT_DIR}/3rdparty/recast")
-  ax_link_ext(AX_ENABLE_3D_PHYSICS "bullet" "${AX_ROOT_DIR}/3rdparty/bullet")
+  ax_link_pred(AX_ENABLE_EXT_DRAGONBONES "DragonBones" "${AX_ROOT_DIR}/extensions/DragonBones/src")
+  ax_link_pred(AX_ENABLE_EXT_COCOSTUDIO "cocostudio" "${AX_ROOT_DIR}/extensions/cocostudio/src")
+  ax_link_pred(AX_ENABLE_EXT_ASSETMANAGER "assets-manager" "${AX_ROOT_DIR}/extensions/assets-manager/src")
+  ax_link_pred(AX_ENABLE_EXT_PARTICLE3D "particle3d" "${AX_ROOT_DIR}/extensions/Particle3D/src")
+  ax_link_pred(AX_ENABLE_EXT_INSPECTOR "Inspector" "${AX_ROOT_DIR}/extensions/Inspector/src")
+  ax_link_pred(AX_ENABLE_EXT_SDFGEN "SDFGen" "${AX_ROOT_DIR}/extensions/SDFGen/src")
+  ax_link_pred(AX_ENABLE_EXT_DRAWNODEEX "DrawNodeEx" "${AX_ROOT_DIR}/extensions/DrawNodeEx/src")
+  ax_link_pred(AX_ENABLE_EXT_GUI "GUI" "${AX_ROOT_DIR}/extensions/GUI/src")
+  ax_link_pred(AX_ENABLE_EXT_FAIRYGUI "fairygui" "${AX_ROOT_DIR}/extensions/fairygui/src")
+  ax_link_pred(AX_ENABLE_EXT_LIVE2D "Live2D" "${AX_ROOT_DIR}/extensions/Live2D/Framework/src")
+  ax_link_pred(AX_ENABLE_EXT_EFFEKSEER "EffekseerForCocos2d-x" "${AX_ROOT_DIR}/extensions/Effekseer")
+  ax_link_pred(AX_ENABLE_EXT_PHYSICS_NODE "physics-nodes" "${AX_ROOT_DIR}/extensions/physics-nodes/src")
+  ax_link_pred(AX_ENABLE_NAVMESH "recast" "${AX_ROOT_DIR}/3rdparty/recast")
+  ax_link_pred(AX_ENABLE_PHYSICS_3D "bullet" "${AX_ROOT_DIR}/3rdparty/bullet")
 
-  ax_link_ext(AX_ENABLE_EXT_IMGUI "ImGui"
+  ax_link_pred(AX_ENABLE_EXT_IMGUI "ImGui"
     "${AX_ROOT_DIR}/extensions/ImGui/src" "${AX_ROOT_DIR}/extensions/ImGui/src/ImGui/imgui"
   )
 
-  ax_link_ext(AX_ENABLE_EXT_SPINE "spine"
+  ax_link_pred(AX_ENABLE_EXT_SPINE "spine"
     "${AX_ROOT_DIR}/extensions/spine/runtime/include" "${AX_ROOT_DIR}/extensions/spine/src"
   )
 

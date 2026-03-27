@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "axmol/platform/FileUtils.h"
 #include "axmol/ui/UIHelper.h"
 #include "axmol/base/text_utils.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 
 namespace ax
 {

@@ -27,7 +27,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "axmol/2d/ActionCamera.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/platform/StdC.h"
 
 namespace ax

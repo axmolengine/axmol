@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "axmol/ui/UIScale9Sprite.h"
 #include "axmol/ui/UIHelper.h"
 #include "axmol/2d/Sprite.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/renderer/Shaders.h"
 namespace ax
 {
