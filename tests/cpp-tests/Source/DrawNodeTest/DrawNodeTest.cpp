@@ -1868,7 +1868,6 @@ DrawNodePictureTest::DrawNodePictureTest()
     drawNode->setScale(_nodeScale);
     drawNode->setRotation(180);
     drawNode->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    drawNode->setScale(_nodeScale);
     flagGUI = 1;
     scheduleUpdate();
 }
