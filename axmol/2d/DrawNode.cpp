@@ -913,9 +913,10 @@ void DrawNode::_drawRect(const Vec2& origin, const Vec2& destination, const Colo
     }
     else
     {
-        // _drawSegment draws a line to the right and left of an imaginary line therefore 0.5f is needed + 0.25f for a correct thickness)
-        float width      = thickness * _thicknessScale * 0.25f *0.5f;
-        float _thickness = thickness; 
+        // _drawSegment draws a line to the right and left of an imaginary line therefore 0.5f is needed + 0.25f for a
+        // correct thickness)
+        float width      = thickness * _thicknessScale * 0.25f * 0.5f;
+        float _thickness = thickness;
         _drawSegment(Vec2(origin.x + width, destination.y), Vec2(destination.x - width, destination.y), color,
                      _thickness, DrawNode::Butt, DrawNode::Butt);
         _drawSegment(Vec2(origin.x + width, origin.y), Vec2(destination.x - width, origin.y), color, _thickness,

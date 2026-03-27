@@ -362,7 +362,7 @@ void PhysicsDemoLogoSmash::onEnter()
             {
                 float xJitter = 0.15 * frand();
                 float yJitter = 0.15 * frand();
-                
+
                 Node* ball = makeBall(
                     Vec2(2 * (x + xJitter) + VisibleRect::getVisibleRect().size.width / 4,
                          (2 * (-y + yJitter) + VisibleRect::getVisibleRect().size.height / 2 + LOGO_HEIGHT_COLORED)),
