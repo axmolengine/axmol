@@ -384,6 +384,8 @@ void PhysicsDemoLogoSmash::onEnter()
     }
     auto bullet = makeBall(Vec2(0.0f, 0.0f), 10, PhysicsMaterial2D(physics2d::MaxDensity, 0, 0));
     bullet->getRigidbody2D()->setVelocity(Vec2(200.0f, 0.0f));
+    bullet->setPosition(Vec2(-100.0f, VisibleRect::getVisibleRect().size.height / 2));
+    _ball->addChild(bullet);
 }
 
 std::string PhysicsDemoLogoSmash::title() const
