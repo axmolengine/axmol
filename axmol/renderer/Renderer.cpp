@@ -42,8 +42,8 @@
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/EventListenerCustom.h"
 #include "axmol/base/EventType.h"
-#include "axmol/2d/Camera.h"
-#include "axmol/2d/Scene.h"
+#include "axmol/scene/Camera.h"
+#include "axmol/scene/Scene.h"
 #include "xxhash/xxhash.h"
 
 #include "axmol/rhi/axmol-rhi.h"

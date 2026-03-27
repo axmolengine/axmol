@@ -26,10 +26,10 @@
  Code based GamePlay3D's Camera: http://gameplay3d.org
 
  ****************************************************************************/
-#include "axmol/2d/Camera.h"
-#include "axmol/2d/CameraBackgroundBrush.h"
+#include "axmol/scene/Camera.h"
+#include "axmol/scene/CameraBackgroundBrush.h"
 #include "axmol/platform/RenderView.h"
-#include "axmol/2d/Scene.h"
+#include "axmol/scene/Scene.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/QuadCommand.h"
 

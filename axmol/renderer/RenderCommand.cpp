@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "axmol/renderer/RenderCommand.h"
-#include "axmol/2d/Camera.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Camera.h"
+#include "axmol/scene/Node.h"
 #include "axmol/renderer/VertexLayoutManager.h"
 
 namespace ax

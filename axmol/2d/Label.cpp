@@ -35,7 +35,7 @@
 #include "axmol/2d/Sprite.h"
 #include "axmol/2d/SpriteBatchNode.h"
 #include "axmol/2d/DrawNode.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/base/text_utils.h"
 #include "axmol/base/Macros.h"
 #include "axmol/platform/FileUtils.h"

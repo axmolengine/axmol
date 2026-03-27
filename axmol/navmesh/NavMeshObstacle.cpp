@@ -28,8 +28,8 @@
 #if defined(AX_ENABLE_NAVMESH)
 
 #    include "axmol/navmesh/NavMesh.h"
-#    include "axmol/2d/Node.h"
-#    include "axmol/2d/Scene.h"
+#    include "axmol/scene/Node.h"
+#    include "axmol/scene/Scene.h"
 #    include "recast/DetourTileCache.h"
 
 namespace ax

@@ -30,7 +30,7 @@ THE SOFTWARE.
 #pragma once
 
 #include <string>
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 
 namespace ax
 {

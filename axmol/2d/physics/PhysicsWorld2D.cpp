@@ -36,7 +36,7 @@
 #    include "axmol/2d/physics/PhysicsUtility2D.h"
 
 #    include "axmol/2d/DrawNode.h"
-#    include "axmol/2d/Scene.h"
+#    include "axmol/scene/Scene.h"
 #    include "axmol/base/Director.h"
 #    include "axmol/base/EventDispatcher.h"
 #    include "axmol/base/EventCustom.h"

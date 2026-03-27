@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "axmol/base/EventListenerCustom.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/renderer/Renderer.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/rhi/DriverContext.h"
 #include "axmol/rhi/Texture.h"

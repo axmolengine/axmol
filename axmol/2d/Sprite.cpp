@@ -39,7 +39,7 @@ THE SOFTWARE.
 #include "axmol/renderer/Renderer.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/text_utils.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/ProgramState.h"

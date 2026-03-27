@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/ui/UILayoutComponent.h"
 #include "axmol/renderer/Shaders.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/2d/Sprite.h"
 #include "axmol/ui/UIScale9Sprite.h"
 

@@ -23,9 +23,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "axmol/2d/ComponentContainer.h"
-#include "axmol/2d/Component.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/ComponentContainer.h"
+#include "axmol/scene/Component.h"
+#include "axmol/scene/Node.h"
 
 namespace ax
 {

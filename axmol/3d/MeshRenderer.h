@@ -31,7 +31,7 @@
 #include "axmol/base/Vector.h"
 #include "axmol/base/Types.h"
 #include "axmol/base/Protocols.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/renderer/MeshCommand.h"
 #include "axmol/3d/Skeleton3D.h"  // needs to be included for lua-bindings
 #include "axmol/3d/AABB.h"

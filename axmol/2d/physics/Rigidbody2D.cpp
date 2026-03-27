@@ -36,7 +36,7 @@
 #    include <algorithm>
 #    include <cmath>
 
-#    include "axmol/2d/Scene.h"
+#    include "axmol/scene/Scene.h"
 #    include "axmol/2d/physics/Collider2D.h"
 #    include "axmol/2d/physics/Joint2D.h"
 #    include "axmol/2d/physics/PhysicsWorld2D.h"

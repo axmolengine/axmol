@@ -29,7 +29,7 @@
 #include "axmol/base/Config.h"
 #include "axmol/math/Math.h"
 
-#include "axmol/2d/Component.h"
+#include "axmol/scene/Component.h"
 
 #if defined(AX_ENABLE_PHYSICS_3D)
 

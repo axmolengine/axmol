@@ -27,7 +27,7 @@
 
 #include "MeshRendererTest.h"
 #include "DrawNode3D.h"
-#include "axmol/2d/CameraBackgroundBrush.h"
+#include "axmol/scene/CameraBackgroundBrush.h"
 #include "axmol/3d/MeshMaterial.h"
 #include "axmol/3d/MotionStreak3D.h"
 

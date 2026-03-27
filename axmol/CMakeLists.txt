@@ -263,6 +263,8 @@ configure_file(
 # cmake_dependent_option(AX_ENABLE_EARLY_FEATURES
 # "Build the tests when we are the root project" ON
 # "NOT (AX_GIT_BRANCH STREQUAL \"dev\")" OFF)
+
+include(scene/CMakeLists.txt)
 include(2d/CMakeLists.txt)
 
 if(AX_ENABLE_3D)
@@ -314,6 +316,7 @@ if(AX_ENABLE_VR)
 endif()
 
 set(_AX_HEADER axmol.h
+  ${_AX_SCENE_HEADER}
   ${_AX_2D_HEADER}
   ${_AX_PLATFORM_HEADER}
   ${_AX_MATH_HEADER}
@@ -326,6 +329,7 @@ set(_AX_HEADER axmol.h
 )
 
 set(_AX_SRC axmol.cpp
+  ${_AX_SCENE_SRC}
   ${_AX_2D_SRC}
   ${_AX_PLATFORM_SRC}
   ${_AX_MATH_SRC}

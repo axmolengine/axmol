@@ -25,8 +25,8 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "axmol/3d/physics/Physics3D.h"
-#include "axmol/2d/Node.h"
-#include "axmol/2d/Scene.h"
+#include "axmol/scene/Node.h"
+#include "axmol/scene/Scene.h"
 
 #if defined(AX_ENABLE_PHYSICS_3D)
 

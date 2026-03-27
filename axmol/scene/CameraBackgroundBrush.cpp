@@ -23,10 +23,10 @@
  THE SOFTWARE.
 
  ****************************************************************************/
-#include "axmol/2d/CameraBackgroundBrush.h"
+#include "axmol/scene/CameraBackgroundBrush.h"
 #include <stddef.h>  // offsetof
 #include "axmol/base/Types.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/base/Macros.h"
 #include "axmol/base/Utils.h"
 #include "axmol/base/Environment.h"

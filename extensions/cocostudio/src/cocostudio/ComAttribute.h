@@ -25,7 +25,7 @@ THE SOFTWARE.
 #pragma once
 
 #include "ComBase.h"
-#include "axmol/2d/Component.h"
+#include "axmol/scene/Component.h"
 #include "axmol/base/Value.h"
 #include "CocosStudioExport.h"
 

@@ -29,7 +29,7 @@ THE SOFTWARE.
 #pragma once
 
 #include <string>
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/2d/DrawNode.h"
 #include "axmol/base/Protocols.h"
 #include "axmol/renderer/TextureAtlas.h"

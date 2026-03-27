@@ -31,7 +31,7 @@
 #include "axmol/2d/ProtectedNode.h"
 
 #include "axmol/base/Director.h"
-#include "axmol/2d/Scene.h"
+#include "axmol/scene/Scene.h"
 
 namespace ax
 {

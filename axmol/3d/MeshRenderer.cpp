@@ -36,7 +36,7 @@
 #include "axmol/base/text_utils.h"
 #include "axmol/base/Utils.h"
 #include "axmol/2d/Light.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/base/Macros.h"
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/platform/FileUtils.h"

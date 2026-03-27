@@ -31,7 +31,7 @@
  */
 #pragma once
 
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/base/Protocols.h"
 #include "axmol/renderer/CustomCommand.h"
 

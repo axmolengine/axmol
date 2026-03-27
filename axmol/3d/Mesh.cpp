@@ -30,7 +30,7 @@
 #include "axmol/3d/MeshVertexIndexData.h"
 #include "axmol/3d/VertexInputBinding.h"
 #include "axmol/2d/Light.h"
-#include "axmol/2d/Scene.h"
+#include "axmol/scene/Scene.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/Environment.h"

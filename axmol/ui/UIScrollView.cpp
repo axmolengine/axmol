@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "axmol/platform/Device.h"
 #include "axmol/ui/UIScrollViewBar.h"
 #include "axmol/2d/TweenFunction.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 namespace ax
 {
 

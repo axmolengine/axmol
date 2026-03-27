@@ -30,8 +30,8 @@ THE SOFTWARE.
 #include "axmol/base/Touch.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/2d/Camera.h"
-#include "axmol/2d/Scene.h"
+#include "axmol/scene/Camera.h"
+#include "axmol/scene/Scene.h"
 #include "axmol/renderer/Renderer.h"
 
 namespace ax

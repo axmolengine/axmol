@@ -121,7 +121,7 @@ THE SOFTWARE.
 #include "axmol/2d/Menu.h"
 #include "axmol/2d/MenuItem.h"
 #include "axmol/2d/MotionStreak.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/2d/NodeGrid.h"
 #include "axmol/2d/ParticleBatchNode.h"
 #include "axmol/2d/ParticleExamples.h"
@@ -130,14 +130,14 @@ THE SOFTWARE.
 #include "axmol/2d/ProgressTimer.h"
 #include "axmol/2d/ProtectedNode.h"
 #include "axmol/2d/RenderTexture.h"
-#include "axmol/2d/Scene.h"
+#include "axmol/scene/Scene.h"
 #include "axmol/2d/Transition.h"
 #include "axmol/2d/TransitionPageTurn.h"
 #include "axmol/2d/TransitionProgress.h"
 
 // 2d utils
-#include "axmol/2d/Camera.h"
-#include "axmol/2d/CameraBackgroundBrush.h"
+#include "axmol/scene/Camera.h"
+#include "axmol/scene/CameraBackgroundBrush.h"
 #include "axmol/2d/Grid.h"
 #include "axmol/2d/Light.h"
 
@@ -236,8 +236,8 @@ THE SOFTWARE.
 #include "axmol/2d/FastTMXTiledMap.h"
 
 // component
-#include "axmol/2d/Component.h"
-#include "axmol/2d/ComponentContainer.h"
+#include "axmol/scene/Component.h"
+#include "axmol/scene/ComponentContainer.h"
 
 // 3d
 #include "axmol/3d/AABB.h"

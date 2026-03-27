@@ -28,7 +28,7 @@ THE SOFTWARE.
 #pragma once
 
 #include "axmol/renderer/CustomCommand.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/renderer/PipelineDesc.h"
 
 #include "axmol/tlx/vector.hpp"

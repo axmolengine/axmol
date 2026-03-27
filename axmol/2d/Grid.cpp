@@ -29,14 +29,14 @@ THE SOFTWARE.
 
 #include "axmol/base/Macros.h"
 #include "axmol/base/Utils.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/Texture2D.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/rhi/RenderTarget.h"
 #include "axmol/rhi/DriverContext.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 
 namespace ax
 {

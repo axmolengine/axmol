@@ -30,7 +30,7 @@
 #    include "axmol/2d/physics/Rigidbody2D.h"
 #    include "axmol/2d/physics/PhysicsWorld2D.h"
 #    include "axmol/2d/physics/PhysicsUtility2D.h"
-#    include "axmol/2d/Node.h"
+#    include "axmol/scene/Node.h"
 
 #    include <numbers>
 

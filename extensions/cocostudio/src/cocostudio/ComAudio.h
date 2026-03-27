@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 #include "ComBase.h"
 #include "axmol/base/Protocols.h"
-#include "axmol/2d/Component.h"
+#include "axmol/scene/Component.h"
 #include "CocosStudioExport.h"
 
 namespace cocostudio

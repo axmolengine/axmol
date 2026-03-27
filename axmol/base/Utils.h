@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 #include <vector>
 #include <string>
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/base/Macros.h"
 #include "axmol/base/RefPtr.h"
 #include "axmol/base/Data.h"

@@ -30,7 +30,7 @@
 #include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
 #include "axmol/base/EventListenerAcceleration.h"
 #include "axmol/base/EventListenerCustom.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 
 namespace ax
 {

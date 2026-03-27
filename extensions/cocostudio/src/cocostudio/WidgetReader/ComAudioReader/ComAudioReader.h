@@ -25,8 +25,8 @@
 #pragma once
 
 #include "axmol/base/Object.h"
-#include "axmol/2d/Component.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Component.h"
+#include "axmol/scene/Node.h"
 #include "cocostudio/CocosStudioExport.h"
 #include "cocostudio/WidgetReader/NodeReaderProtocol.h"
 

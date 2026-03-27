@@ -37,8 +37,8 @@
 #include "axmol/base/ScriptSupport.h"
 #include "axmol/math/AffineTransform.h"
 #include "axmol/math/Math.h"
-#include "axmol/2d/ComponentContainer.h"
-#include "axmol/2d/Component.h"
+#include "axmol/scene/ComponentContainer.h"
+#include "axmol/scene/Component.h"
 
 namespace ax
 {

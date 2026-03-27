@@ -29,7 +29,7 @@
 #include "axmol/base/Config.h"
 #if defined(AX_ENABLE_PHYSICS_2D)
 
-#    include "axmol/2d/Component.h"
+#    include "axmol/scene/Component.h"
 #    include "axmol/math/Math.h"
 #    include "axmol/base/Vector.h"
 #    include "axmol/2d/physics/Collider2D.h"

@@ -28,7 +28,7 @@ THE SOFTWARE.
  ****************************************************************************/
 #pragma once
 
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #if defined(AX_ENABLE_3D)
 #    include "axmol/3d/Frustum.h"
 #endif

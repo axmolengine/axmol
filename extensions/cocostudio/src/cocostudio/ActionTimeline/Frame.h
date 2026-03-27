@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include <string>
 #include "axmol/base/Object.h"
 #include "axmol/base/Vector.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/2d/Sprite.h"
 #include "axmol/2d/TweenFunction.h"
 #include "TimelineMacro.h"

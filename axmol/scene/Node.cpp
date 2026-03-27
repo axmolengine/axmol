@@ -28,7 +28,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 
 #include <algorithm>
 #include <string>
@@ -39,10 +39,10 @@ THE SOFTWARE.
 #include "axmol/base/Scheduler.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/text_utils.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/2d/ActionManager.h"
-#include "axmol/2d/Scene.h"
-#include "axmol/2d/Component.h"
+#include "axmol/scene/Scene.h"
+#include "axmol/scene/Component.h"
 #include "axmol/renderer/Material.h"
 #include "axmol/math/TransformUtils.h"
 #include "axmol/renderer/ProgramManager.h"

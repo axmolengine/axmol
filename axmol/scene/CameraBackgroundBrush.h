@@ -29,7 +29,6 @@
 #include "axmol/base/Types.h"
 #include "axmol/base/Object.h"
 #include "axmol/base/EventListenerCustom.h"
-#include "axmol/3d/Frustum.h"
 #include "axmol/renderer/QuadCommand.h"
 #include "axmol/renderer/CustomCommand.h"
 #include "axmol/renderer/GroupCommand.h"

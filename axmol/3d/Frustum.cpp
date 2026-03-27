@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "axmol/3d/Frustum.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 
 namespace ax
 {
