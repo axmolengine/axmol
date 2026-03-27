@@ -913,8 +913,9 @@ void DrawNode::_drawRect(const Vec2& origin, const Vec2& destination, const Colo
     }
     else
     {
-        float width      = thickness * _thicknessScale * 0.25f * 0.5f;
-        float _thickness = thickness;  // * 0.5f;
+        // _drawSegment draws a line to the right and left of an imaginary line therefore 0.5f is needed + 0.25f for a correct thickness)
+        float width      = thickness * _thicknessScale * 0.25f *0.5f 
+        float _thickness = thickness; 
         _drawSegment(Vec2(origin.x + width, destination.y), Vec2(destination.x - width, destination.y), color,
                      _thickness, DrawNode::Butt, DrawNode::Butt);
         _drawSegment(Vec2(origin.x + width, origin.y), Vec2(destination.x - width, origin.y), color, _thickness,
@@ -928,10 +929,6 @@ void DrawNode::_drawFilledRect(const Vec2& origin, const Vec2& destination, cons
     unsigned int vertex_count = 2 * 3;
     auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, vertex_count));
     _trianglesDirty = true;
-
-    auto _destination = (destination);
-
-    Vec2 n = ((origin - destination).getPerp()).getNormalized();
 
     V2F_T2F_C4F a = {origin, Vec2::ZERO, color};
     V2F_T2F_C4F b = {Vec2(origin.x, destination.y), Vec2::ZERO, color};
