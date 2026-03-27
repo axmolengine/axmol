@@ -358,29 +358,17 @@ void PhysicsDemoLogoSmash::onEnter()
         }
         while (step > 0)
         {
-<<<<<<< Improve_DrawNode_tests_plus_some_others
             if (colorList[colPos] != Color32::WHITE)
             {
                 float xJitter = 0.15 * frand();
                 float yJitter = 0.15 * frand();
-=======
-            float xJitter = 0.15 * frand();
-            float yJitter = 0.15 * frand();
-
-            Node* ball = makeBall(
-                Vec2(2 * (x + xJitter) + VisibleRect::getVisibleRect().size.width / 4,
-                     (2 * (-y + yJitter) + VisibleRect::getVisibleRect().size.height / 2 + LOGO_HEIGHT_COLORED)),
-                0.95f, PhysicsMaterial2D(0.01f, 0.0f, 0.0f));
-            ball->setColor(colorList[colPos]);
-            auto Rigidbody2D = ball->getRigidbody2D();
->>>>>>> dev
-
+                
                 Node* ball = makeBall(
                     Vec2(2 * (x + xJitter) + VisibleRect::getVisibleRect().size.width / 4,
                          (2 * (-y + yJitter) + VisibleRect::getVisibleRect().size.height / 2 + LOGO_HEIGHT_COLORED)),
                     0.95f, PhysicsMaterial(0.01f, 0.0f, 0.0f));
                 ball->setColor(colorList[colPos]);
-                auto physicsBody = ball->getPhysicsBody();
+                auto Rigidbody2D = ball->getRigidbody2D();
 
                 _ball->addChild(ball);
             }
@@ -394,17 +382,8 @@ void PhysicsDemoLogoSmash::onEnter()
         }
         index++;
     }
-
-<<<<<<< Improve_DrawNode_tests_plus_some_others
-    auto bullet = makeBall(Vec2(0.0f, 0.0f), 10, PhysicsMaterial(PHYSICS_INFINITY, 0, 0));
-    bullet->getPhysicsBody()->setVelocity(Vec2(200.0f, 0.0f));
-=======
     auto bullet = makeBall(Vec2(0.0f, 0.0f), 10, PhysicsMaterial2D(physics2d::MaxDensity, 0, 0));
     bullet->getRigidbody2D()->setVelocity(Vec2(200.0f, 0.0f));
-
->>>>>>> dev
-    bullet->setPosition(Vec2(-100.0f, VisibleRect::getVisibleRect().size.height / 2));
-    _ball->addChild(bullet);
 }
 
 std::string PhysicsDemoLogoSmash::title() const
