@@ -364,8 +364,7 @@ void PhysicsDemoLogoSmash::onEnter()
         }
         while (step > 0)
         {
-            if (colPos !=
-                0)  // draw nothing if colPos is 0, otherwise draw a ball with the color of colorList[colPos !=0]
+            if (colorList[colPos] != Color32::WHITE)
             {
                 float xJitter = 0.15 * frand();
                 float yJitter = 0.15 * frand();
@@ -392,9 +391,7 @@ void PhysicsDemoLogoSmash::onEnter()
 
     auto bullet = makeBall(Vec2(0.0f, 0.0f), 10, PhysicsMaterial(PHYSICS_INFINITY, 0, 0));
     bullet->getPhysicsBody()->setVelocity(Vec2(200.0f, 0.0f));
-
     bullet->setPosition(Vec2(-100.0f, VisibleRect::getVisibleRect().size.height / 2));
-
     _ball->addChild(bullet);
 }
 
