@@ -366,7 +366,7 @@ void PhysicsDemoLogoSmash::onEnter()
                 Node* ball = makeBall(
                     Vec2(2 * (x + xJitter) + VisibleRect::getVisibleRect().size.width / 4,
                          (2 * (-y + yJitter) + VisibleRect::getVisibleRect().size.height / 2 + LOGO_HEIGHT_COLORED)),
-                    0.95f, PhysicsMaterial(0.01f, 0.0f, 0.0f));
+                    0.95f, PhysicsMaterial2D(0.01f, 0.0f, 0.0f));
                 ball->setColor(colorList[colPos]);
                 auto Rigidbody2D = ball->getRigidbody2D();
 
