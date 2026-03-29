@@ -58,7 +58,8 @@ class ActionTimelineNode;
 }  // namespace timeline
 }  // namespace ax::ext
 
-namespace ax {
+namespace ax
+{
 
 typedef std::function<void(Object*)> ccNodeLoadCallback;
 

@@ -52,8 +52,9 @@ public:
     void setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* pCocoNode) override;
 
     /* flatbuffers refactoring */
-    flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
-                                                                         flatbuffers::FlatBufferBuilder* builder) override;
+    flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(
+        pugi::xml_node objectData,
+        flatbuffers::FlatBufferBuilder* builder) override;
     void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* widgetOptions) override;
     void setLayoutComponentPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* widgetOptions);
     ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* widgetOptions) override;

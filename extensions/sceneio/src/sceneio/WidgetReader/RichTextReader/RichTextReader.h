@@ -42,7 +42,8 @@ public:
     static RichTextReader* getInstance();
     static void destroyInstance();
 
-    flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
+    flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(
+        pugi::xml_node objectData,
         flatbuffers::FlatBufferBuilder* builder) override;
     void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* textBMFontOptions) override;
     ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* textBMFontOptions) override;

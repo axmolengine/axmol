@@ -89,7 +89,11 @@ bool BoneTweenController::init(Bone* bone)
     return bRet;
 }
 
-void BoneTweenController::play(MovementBoneData* movementBoneData, int durationTo, int durationTween, int loop, int tweenEasing)
+void BoneTweenController::play(MovementBoneData* movementBoneData,
+                               int durationTo,
+                               int durationTween,
+                               int loop,
+                               int tweenEasing)
 {
     AnimationController::play(durationTo, durationTween, loop, tweenEasing);
 

@@ -941,9 +941,9 @@ void ActionTimelineCache::loadEasingDataWithFlatBuffers(ext::timeline::Frame* fr
 
 ActionTimeline* ActionTimelineCache::createActionWithFlatBuffersForSimulator(std::string_view fileName)
 {
-    auto fbs = ax::ext::FlatBuffersSerialize::getInstance();
-    fbs->_isSimulator         = true;
-    auto builder              = fbs->createFlatBuffersWithXMLFileForSimulator(fileName);
+    auto fbs          = ax::ext::FlatBuffersSerialize::getInstance();
+    fbs->_isSimulator = true;
+    auto builder      = fbs->createFlatBuffersWithXMLFileForSimulator(fileName);
 
     auto csparsebinary = GetCSParseBinary(builder->GetBufferPointer());
     auto nodeAction    = csparsebinary->action();
@@ -990,4 +990,4 @@ ActionTimeline* ActionTimelineCache::createActionWithFlatBuffersForSimulator(std
     return action;
 }
 
-}  // namespace ax::ext
+}  // namespace ax::ext::timeline

@@ -471,9 +471,9 @@ void ArmatureController::setUserObject(Object* pUserObject)
 }
 
 void ArmatureController::frameEvent(Bone* bone,
-                                   std::string_view frameEventName,
-                                   int originFrameIndex,
-                                   int currentFrameIndex)
+                                    std::string_view frameEventName,
+                                    int originFrameIndex,
+                                    int currentFrameIndex)
 {
     if ((_frameEventTarget && _frameEventCallFunc) || _frameEventListener)
     {

@@ -42,7 +42,8 @@ public:
 
     void setPropsFromJsonDictionary(ax::ui::Widget* widget, const rapidjson::Value& options) override;
     void setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* pCocoNode) override;
-    flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
+    flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(
+        pugi::xml_node objectData,
         flatbuffers::FlatBufferBuilder* builder) override;
     void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* checkBoxOptions);
     ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* checkBoxOptions);

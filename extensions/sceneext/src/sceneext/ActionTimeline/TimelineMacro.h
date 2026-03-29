@@ -27,7 +27,7 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 #ifdef __cplusplus
 #    define NS_TIMELINE_BEGIN \
-        namespace ax::ext  \
+        namespace ax::ext     \
         {                     \
         namespace timeline    \
         {

@@ -43,8 +43,9 @@ public:
     static ComAudioReader* getInstance();
     static void destroyInstance();
 
-    flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
-                                                                         flatbuffers::FlatBufferBuilder* builder) override;
+    flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(
+        pugi::xml_node objectData,
+        flatbuffers::FlatBufferBuilder* builder) override;
     void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* comAudioOptions) override;
     ax::Component* createComAudioWithFlatBuffers(const flatbuffers::Table* comAudioOptions);
     ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions) override;

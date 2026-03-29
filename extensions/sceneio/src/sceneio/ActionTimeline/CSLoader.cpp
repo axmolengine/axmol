@@ -103,7 +103,8 @@ using namespace ax::ext::timeline;
 using namespace flatbuffers;
 /**/
 
-namespace ax {
+namespace ax
+{
 
 static const char* ClassName_Node        = "Node";
 static const char* ClassName_SubGraph    = "SubGraph";
@@ -908,13 +909,13 @@ Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
                 }
             });
 
-            AXASSERT(readerVersion >= writterVersion,
-                     fmt::format(
-                         "{}{}{}{}{}{}{}{}{}{}", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
-                         ") and the reader build id in your axmol(", loader->_csBuildID.c_str(),
-                         ") are not match.\n", "Please get the correct reader(build id ", csBuildId->c_str(), ")from ",
-                         "https://axmol.dev/", " and replace it in your axmol")
-                         .c_str());
+            AXASSERT(
+                readerVersion >= writterVersion,
+                fmt::format("{}{}{}{}{}{}{}{}{}{}", "The reader build id of your Cocos exported file(",
+                            csBuildId->c_str(), ") and the reader build id in your axmol(", loader->_csBuildID.c_str(),
+                            ") are not match.\n", "Please get the correct reader(build id ", csBuildId->c_str(),
+                            ")from ", "https://axmol.dev/", " and replace it in your axmol")
+                    .c_str());
         }
 
         // decode plist
@@ -1029,11 +1030,10 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
         });
 
         AXASSERT(readerVersion >= writterVersion,
-                 fmt::format(
-                     "{}{}{}{}{}{}{}{}{}{}", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
-                     ") and the reader build id in your axmol(", _csBuildID.c_str(), ") are not match.\n",
-                     "Please get the correct reader(build id ", csBuildId->c_str(), ")from ",
-                     "https://axmol.dev/", " and replace it in your axmol")
+                 fmt::format("{}{}{}{}{}{}{}{}{}{}", "The reader build id of your Cocos exported file(",
+                             csBuildId->c_str(), ") and the reader build id in your axmol(", _csBuildID.c_str(),
+                             ") are not match.\n", "Please get the correct reader(build id ", csBuildId->c_str(),
+                             ")from ", "https://axmol.dev/", " and replace it in your axmol")
                      .c_str());
 
         if (readerVersion < writterVersion)
@@ -1453,9 +1453,9 @@ Node* CSLoader::nodeWithFlatBuffersForSimulator(const flatbuffers::NodeTree* nod
         ext::timeline::ActionTimeline* action = nullptr;
         if (filePath != "" && FileUtils::getInstance()->isFileExist(filePath))
         {
-            node   = createNodeWithFlatBuffersForSimulator(filePath);
-            action = ext::timeline::ActionTimelineCache::getInstance()->createActionWithFlatBuffersForSimulator(
-                filePath);
+            node = createNodeWithFlatBuffersForSimulator(filePath);
+            action =
+                ext::timeline::ActionTimelineCache::getInstance()->createActionWithFlatBuffersForSimulator(filePath);
         }
         else
         {

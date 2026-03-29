@@ -30,4 +30,3 @@
 #ifndef SCNIO_API
 #    define SCNIO_API
 #endif
-

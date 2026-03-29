@@ -32,7 +32,6 @@
 #include "sceneext/ActionTimeline/ActionTimelineNode.h"
 #include "sceneio/ActionTimeline/CSLoader.h"
 
-
 int axlua_sceneio_CSLoader_createTimeline(lua_State* tolua_S)
 {
     int argc = 0;
@@ -60,8 +59,8 @@ int axlua_sceneio_CSLoader_createTimeline(lua_State* tolua_S)
                                                             (ax::ext::timeline::ActionTimeline*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axext.CSLoader:createTimeline", argc,
-               1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axext.CSLoader:createTimeline",
+               argc, 1);
     return 0;
 #if _AX_DEBUG >= 1
 tolua_lerror:
@@ -108,7 +107,8 @@ int axlua_sceneio_CSLoader_createNode(lua_State* tolua_S)
                 if (nullptr == ref)
                     return;
                 auto stack = LuaEngine::getInstance()->getLuaStack();
-                toluafix_pushusertype_object(stack->getLuaState(), ref->_ID, &(ref->_luaID), (void*)ref, "axext.Object");
+                toluafix_pushusertype_object(stack->getLuaState(), ref->_ID, &(ref->_luaID), (void*)ref,
+                                                    "axext.Object");
                 stack->executeFunctionByHandler(handler, 1);
             };
 
@@ -157,7 +157,6 @@ int register_all_ax_sceneio_manual(lua_State* L)
 
     return 0;
 }
-
 
 int register_sceneio_module(lua_State* L)
 {

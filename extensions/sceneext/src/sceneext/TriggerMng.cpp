@@ -411,9 +411,9 @@ void TriggerMng::addArmatureMovementCallBack(Armature* pAr, Object* pTarget, SEL
     if (iter == _movementDispatches->end())
     {
         amd = new ArmatureMovementDispatcher();
-        pAr->getAnimationController()->setMovementEventCallFunc(AX_CALLBACK_0(ArmatureMovementDispatcher::animationEvent, amd,
-                                                                    std::placeholders::_1, std::placeholders::_2,
-                                                                    std::placeholders::_3));
+        pAr->getAnimationController()->setMovementEventCallFunc(
+            AX_CALLBACK_0(ArmatureMovementDispatcher::animationEvent, amd, std::placeholders::_1, std::placeholders::_2,
+                          std::placeholders::_3));
         amd->addAnimationEventCallBack(pTarget, mecf);
         _movementDispatches->emplace(pAr, amd);
     }

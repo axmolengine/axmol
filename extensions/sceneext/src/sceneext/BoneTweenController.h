@@ -25,7 +25,6 @@ THE SOFTWARE.
 
 #pragma once
 
-
 #include "axmol/2d/TweenFunction.h"
 #include "sceneext/SceneExtMacros.h"
 #include "sceneext/AnimationController.h"
@@ -84,10 +83,7 @@ public:
      */
     virtual void play(MovementBoneData* movementBoneData, int durationTo, int durationTween, int loop, int tweenEasing);
 
-    inline void setArmatureController(ArmatureController* controller)
-    {
-        _animationController = controller;
-    }
+    inline void setArmatureController(ArmatureController* controller) { _animationController = controller; }
     inline ArmatureController* getArmatureController() const { return _animationController; }
 
     virtual void gotoAndPlay(int frameIndex);

@@ -70,7 +70,7 @@ static int axlua_ArmatureController_setMovementEventCallFunc(lua_State* L)
     if (nullptr == L)
         return 0;
 
-    int argc                = 0;
+    int argc                 = 0;
     ArmatureController* self = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -145,7 +145,7 @@ static int axlua_ArmatureController_setFrameEventCallFunc(lua_State* L)
     if (nullptr == L)
         return 0;
 
-    int argc                = 0;
+    int argc                 = 0;
     ArmatureController* self = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -332,7 +332,7 @@ static int axlua_extension_Bone_setIgnoreMovementBoneData(lua_State* L)
     if (nullptr == L)
         return 0;
 
-    int argc               = 0;
+    int argc            = 0;
     ax::ext::Bone* self = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -436,7 +436,7 @@ static int axlua_ActionTimeline_setFrameEventCallFunc(lua_State* L)
     if (nullptr == L)
         return 0;
 
-    int argc                                   = 0;
+    int argc                                = 0;
     ax::ext::timeline::ActionTimeline* self = nullptr;
 
 #if _AX_DEBUG >= 1

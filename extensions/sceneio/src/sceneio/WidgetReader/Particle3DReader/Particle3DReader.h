@@ -27,9 +27,9 @@
 
 #if defined(AX_ENABLE_EXT_PARTICLE3D)
 
-#include "sceneext/SceneExtMacros.h"
-#include "sceneext/WidgetReader/NodeReaderProtocol.h"
-#include "sceneext/WidgetReader/NodeReaderDefine.h"
+#    include "sceneext/SceneExtMacros.h"
+#    include "sceneext/WidgetReader/NodeReaderProtocol.h"
+#    include "sceneext/WidgetReader/NodeReaderDefine.h"
 
 namespace ax::ext
 {

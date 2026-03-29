@@ -42,8 +42,8 @@ bool UIScene::init()
         _uiLayer = Layer::create();
         addChild(_uiLayer);
 
-        _widget = dynamic_cast<Layout*>(
-            ext::GUIReader::getInstance()->widgetFromJsonFile("cocosui/UITest/UITest.json"));
+        _widget =
+            dynamic_cast<Layout*>(ext::GUIReader::getInstance()->widgetFromJsonFile("cocosui/UITest/UITest.json"));
         _uiLayer->addChild(_widget);
 
         Size screenSize = Director::getInstance()->getCanvasSize();

@@ -50,14 +50,13 @@ struct EasingData;
 struct BlendFrame;
 }  // namespace flatbuffers
 
-
 namespace ax::ext::timeline
 {
 class ActionTimeline;
 class Timeline;
 class Frame;
 
-}
+}  // namespace ax::ext::timeline
 
 namespace ax::ext::timeline
 {
@@ -134,4 +133,4 @@ protected:
     ax::StringMap<ActionTimeline*> _animationActions;
 };
 
-}  // namespace ax::ext
+}  // namespace ax::ext::timeline

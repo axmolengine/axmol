@@ -379,8 +379,7 @@ void WidgetReader::setAnchorPointForWidget(ax::ui::Widget* widget, const rapidjs
     }
 }
 
-void WidgetReader::setPropsFromBinary(ax::ui::Widget* widget,
-                                      ext::CocoLoader* cocoLoader, ext::stExpCocoNode* cocoNode)
+void WidgetReader::setPropsFromBinary(ax::ui::Widget* widget, ext::CocoLoader* cocoLoader, ext::stExpCocoNode* cocoNode)
 {
     stExpCocoNode* stChildArray = cocoNode->GetChildArray(cocoLoader);
 
