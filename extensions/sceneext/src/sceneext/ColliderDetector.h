@@ -51,7 +51,7 @@ public:
     virtual ~ColliderFilter() {}
 #if ENABLE_PHYSICS_BOX2D_DETECT
 public:
-    ColliderFilter(uint64_t categoryBits = 0x0001, uint64_t maskBits = 0xFFFF, uint64_t groupIndex = 0);
+    ColliderFilter(uint64_t categoryBits = 0x0001, uint64_t maskBits = 0xFFFF, int groupIndex = 0);
     void updateShape(b2ShapeId shape);
 
     virtual void setCategoryBits(uint64_t categoryBits) { _categoryBits = categoryBits; }
@@ -60,13 +60,13 @@ public:
     virtual void setMaskBits(uint64_t maskBits) { _maskBits = maskBits; }
     virtual uint64_t getMaskBits() const { return _maskBits; }
 
-    virtual void setGroupIndex(uint64_t groupIndex) { _groupIndex = groupIndex; }
-    virtual uint64_t getGroupIndex() const { return _groupIndex; }
+    virtual void setGroupIndex(int groupIndex) { _groupIndex = groupIndex; }
+    virtual int getGroupIndex() const { return _groupIndex; }
 
 protected:
     uint64_t _categoryBits;
     uint64_t _maskBits;
-    uint64_t _groupIndex;
+    int _groupIndex;
 #endif
 };
 

@@ -33,19 +33,17 @@ namespace ax::ext
 {
 
 #if ENABLE_PHYSICS_BOX2D_DETECT
-ColliderFilter::ColliderFilter(uint64_t categoryBits, uint64_t maskBits, uint64_t groupIndex)
+ColliderFilter::ColliderFilter(uint64_t categoryBits, uint64_t maskBits, int groupIndex)
     : _categoryBits(categoryBits), _maskBits(maskBits), _groupIndex(groupIndex)
 {}
 
 void ColliderFilter::updateShape(b2ShapeId shape)
 {
-    // TODO: adapt box2d-v3
-    // b2Filter filter;
-    // filter.categoryBits = _categoryBits;
-    // filter.groupIndex   = _groupIndex;
-    // filter.maskBits     = _maskBits;
-    //
-    // fixture->SetFilterData(filter);
+    if (b2Shape_IsValid(shape))
+    {
+        b2Filter filter{.categoryBits = _categoryBits, .maskBits = _maskBits, .groupIndex = _groupIndex};
+        b2Shape_SetFilter(shape, filter);
+    }
 }
 #endif
 
@@ -210,12 +208,12 @@ void ColliderDetector::setActive(bool active)
             for (auto&& object : _colliderBodyList)
             {
                 ColliderBody* colliderBody = (ColliderBody*)object;
-
-                // TODO: adapt box2d-v3
-                // b2Fixture* fixture         = colliderBody->getB2Fixture();
-                //
-                // _body->DestroyFixture(fixture);
-                // colliderBody->setB2Fixture(nullptr);
+                auto shape                 = colliderBody->getShape();
+                if (b2Shape_IsValid(shape))
+                {
+                    b2DestroyShape(shape, true);
+                    colliderBody->setShape(b2_nullShapeId);
+                }
             }
         }
     }
