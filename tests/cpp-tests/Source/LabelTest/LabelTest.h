@@ -981,8 +981,8 @@ public:
 
     ax::Label* _label1;
     ax::Label* _label2;
-    ax::scnio::ILocalizationManager* _localizationJson;
-    ax::scnio::ILocalizationManager* _localizationBin;
+    ax::ext::ILocalizationManager* _localizationJson;
+    ax::ext::ILocalizationManager* _localizationBin;
 };
 
 class LabelIssue15214 : public AtlasDemoNew

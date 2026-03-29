@@ -3831,10 +3831,10 @@ std::string LabelStrikethrough::subtitle() const
 
 LabelLocalizationTest::LabelLocalizationTest()
 {
-    _localizationJson = scnio::JsonLocalizationManager::getInstance();
+    _localizationJson = ext::JsonLocalizationManager::getInstance();
     _localizationJson->initLanguageData("configs/en-US.lang.json");
 
-    _localizationBin = scnio::BinLocalizationManager::getInstance();
+    _localizationBin = ext::BinLocalizationManager::getInstance();
     _localizationBin->initLanguageData("configs/ENGLISH.lang.csb");
 
     const float BUTTON_WIDTH = 100;
