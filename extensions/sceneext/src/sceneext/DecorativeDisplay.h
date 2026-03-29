@@ -69,7 +69,7 @@ public:
     }
     virtual DisplayData* getDisplayData() const { return _displayData; }
 
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     virtual void setColliderDetector(ColliderDetector* detector)
     {
         if (_colliderDetector != detector)
@@ -85,7 +85,7 @@ protected:
     ax::Node* _display;
     DisplayData* _displayData;
 
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     ColliderDetector* _colliderDetector;
 #endif
 };

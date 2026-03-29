@@ -432,7 +432,7 @@ ColliderDetector* Bone::getColliderDetector() const
     return nullptr;
 }
 
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT
+#if ENABLE_PHYSICS_BOX2D_DETECT
 void Bone::setColliderFilter(ColliderFilter* filter)
 {
     auto array = _displayManager->getDecorativeDisplayList();

@@ -536,7 +536,7 @@ Bone* Armature::getParentBone() const
     return _parentBone;
 }
 
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT
+#if ENABLE_PHYSICS_BOX2D_DETECT
 
 void Armature::setColliderFilter(ColliderFilter* filter)
 {
@@ -595,14 +595,14 @@ void Armature::drawContour()
 #endif
 
 #if ENABLE_PHYSICS_BOX2D_DETECT
-b2Body* Armature::getBody() const
+b2BodyId Armature::getBody() const
 {
     return _body;
 }
 
 void Armature::setBody(b2BodyId body)
 {
-    if (_body == body)
+    if (_body.index1 == body.index1 && _body.world0 == body.world0 && _body.generation == body.generation)
     {
         return;
     }

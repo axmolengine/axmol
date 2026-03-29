@@ -164,7 +164,7 @@ public:
      */
     virtual ColliderDetector* getColliderDetector() const;
 
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT
+#if ENABLE_PHYSICS_BOX2D_DETECT
     virtual void setColliderFilter(ColliderFilter* filter);
     virtual ColliderFilter* getColliderFilter();
 #endif

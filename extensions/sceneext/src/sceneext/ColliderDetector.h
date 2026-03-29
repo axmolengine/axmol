@@ -51,22 +51,22 @@ public:
     virtual ~ColliderFilter() {}
 #if ENABLE_PHYSICS_BOX2D_DETECT
 public:
-    ColliderFilter(uint16 categoryBits = 0x0001, uint16 maskBits = 0xFFFF, int16 groupIndex = 0);
+    ColliderFilter(uint64_t categoryBits = 0x0001, uint64_t maskBits = 0xFFFF, uint64_t groupIndex = 0);
     void updateShape(b2ShapeId shape);
 
-    virtual void setCategoryBits(uint16 categoryBits) { _categoryBits = categoryBits; }
-    virtual uint16 getCategoryBits() const { return _categoryBits; }
+    virtual void setCategoryBits(uint64_t categoryBits) { _categoryBits = categoryBits; }
+    virtual uint64_t getCategoryBits() const { return _categoryBits; }
 
-    virtual void setMaskBits(uint16 maskBits) { _maskBits = maskBits; }
-    virtual uint16 getMaskBits() const { return _maskBits; }
+    virtual void setMaskBits(uint64_t maskBits) { _maskBits = maskBits; }
+    virtual uint64_t getMaskBits() const { return _maskBits; }
 
-    virtual void setGroupIndex(int16 groupIndex) { _groupIndex = groupIndex; }
-    virtual int16 getGroupIndex() const { return _groupIndex; }
+    virtual void setGroupIndex(uint64_t groupIndex) { _groupIndex = groupIndex; }
+    virtual uint64_t getGroupIndex() const { return _groupIndex; }
 
 protected:
-    uint16 _categoryBits;
-    uint16 _maskBits;
-    int16 _groupIndex;
+    uint64_t _categoryBits;
+    uint64_t _maskBits;
+    uint64_t _groupIndex;
 #endif
 };
 
@@ -78,7 +78,7 @@ public:
 
     inline ContourData* getContourData() { return _contourData; }
 
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT
+#if ENABLE_PHYSICS_BOX2D_DETECT
     void setColliderFilter(ColliderFilter* filter);
     ColliderFilter* getColliderFilter();
 #endif
@@ -86,16 +86,18 @@ public:
 #if ENABLE_PHYSICS_BOX2D_DETECT
     virtual void setShape(b2ShapeId shape) { _shape = shape; }
     virtual b2ShapeId getShape() const { return _shape; }
-#elif ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+#    if ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     virtual const std::vector<ax::Vec2>& getCalculatedVertexList() const { return _calculatedVertexList; }
+#    endif
 #endif
 
 private:
 #if ENABLE_PHYSICS_BOX2D_DETECT
     b2ShapeId _shape{b2_nullShapeId};
     ColliderFilter* _filter;
-#elif ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+#    if ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     std::vector<ax::Vec2> _calculatedVertexList;
+#    endif
 #endif
 
     ContourData* _contourData;
@@ -136,7 +138,7 @@ public:
 
     const ax::Vector<ColliderBody*>& getColliderBodyList();
 
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT
+#if ENABLE_PHYSICS_BOX2D_DETECT
     virtual void setColliderFilter(ColliderFilter* filter);
     virtual ColliderFilter* getColliderFilter();
 #endif

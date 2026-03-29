@@ -100,7 +100,7 @@ void DisplayFactory::updateDisplay(Bone* bone, float dt, bool dirty)
     break;
     }
 
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     if (dirty)
     {
         DecorativeDisplay* decoDisplay = bone->getDisplayManager()->getCurrentDecorativeDisplay();
@@ -109,8 +109,8 @@ void DisplayFactory::updateDisplay(Bone* bone, float dt, bool dirty)
         {
             do
             {
-#    if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT
-                AX_BREAK_IF(!detector->getBody());
+#    if ENABLE_PHYSICS_BOX2D_DETECT
+                AX_BREAK_IF(!b2Body_IsValid(detector->getBody()));
 #    endif
 
                 Mat4 displayTransform  = display->getNodeToParentTransform();
@@ -204,7 +204,7 @@ void DisplayFactory::initSpriteDisplay(Bone* bone,
         skin->setAnchorPoint(Vec2(textureData->pivotX, textureData->pivotY));
     }
 
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     if (textureData && textureData->contourDataList.size() > 0)
     {
 

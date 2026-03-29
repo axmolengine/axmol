@@ -46,7 +46,7 @@ DecorativeDisplay* DecorativeDisplay::create()
 DecorativeDisplay::DecorativeDisplay() : _display(nullptr), _displayData(nullptr)
 
 {
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     _colliderDetector = nullptr;
 #endif
 }
@@ -56,7 +56,7 @@ DecorativeDisplay::~DecorativeDisplay(void)
     AX_SAFE_RELEASE_NULL(_displayData);
     AX_SAFE_RELEASE_NULL(_display);
 
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     AX_SAFE_RELEASE_NULL(_colliderDetector);
 #endif
 }

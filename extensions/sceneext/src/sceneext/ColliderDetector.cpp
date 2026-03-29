@@ -33,7 +33,7 @@ namespace ax::ext
 {
 
 #if ENABLE_PHYSICS_BOX2D_DETECT
-ColliderFilter::ColliderFilter(uint16 categoryBits, uint16 maskBits, int16 groupIndex)
+ColliderFilter::ColliderFilter(uint64_t categoryBits, uint64_t maskBits, uint64_t groupIndex)
     : _categoryBits(categoryBits), _maskBits(maskBits), _groupIndex(groupIndex)
 {}
 
@@ -54,11 +54,6 @@ ColliderBody::ColliderBody(ContourData* contourData) : _contourData(contourData)
 {
     AX_SAFE_RETAIN(_contourData);
     _filter = new ColliderFilter();
-
-#    if ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
-    _calculatedVertexList = Array::create();
-    AX_SAFE_RETAIN(_calculatedVertexList);
-#    endif
 }
 #elif ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
 ColliderBody::ColliderBody(ContourData* contourData) : _contourData(contourData)
@@ -114,7 +109,6 @@ ColliderDetector* ColliderDetector::create(Bone* bone)
 ColliderDetector::ColliderDetector() : _bone(nullptr), _active(false)
 {
 #if ENABLE_PHYSICS_BOX2D_DETECT
-    _body   = nullptr;
     _filter = nullptr;
 #endif
 }
@@ -205,7 +199,7 @@ void ColliderDetector::setActive(bool active)
     _active = active;
 
 #if ENABLE_PHYSICS_BOX2D_DETECT
-    if (_body)
+    if (b2Body_IsValid(_body))
     {
         if (active)
         {
@@ -249,7 +243,7 @@ void ColliderDetector::setColliderFilter(ColliderFilter* filter)
         colliderBody->setColliderFilter(filter);
 
 #    if ENABLE_PHYSICS_BOX2D_DETECT
-        if (colliderBody->getShape())
+        if (b2Shape_IsValid(colliderBody->getShape()))
         {
             colliderBody->getColliderFilter()->updateShape(colliderBody->getShape());
         }
@@ -277,11 +271,16 @@ void ColliderDetector::updateTransform(Mat4& t)
         ContourData* contourData   = colliderBody->getContourData();
 
 #if ENABLE_PHYSICS_BOX2D_DETECT
-        // TODO: adapt box2d-v3
-        // b2PolygonShape* shape = nullptr;
-        if (_body != nullptr)
+        b2ShapeId shape;
+        b2Polygon shapePolygon;
+        unsigned int mods = 0;
+        if (b2Body_IsValid(_body))
         {
-            // shape = (b2PolygonShape*)colliderBody->getB2Fixture()->GetShape();
+            shape = colliderBody->getShape();
+            if (b2Shape_IsValid(shape))
+            {
+                shapePolygon = b2Shape_GetPolygon(shape);
+            }
         }
 #endif
 
@@ -303,13 +302,20 @@ void ColliderDetector::updateTransform(Mat4& t)
 #endif
 
 #if ENABLE_PHYSICS_BOX2D_DETECT
-            if (shape != nullptr)
+            if (b2Shape_IsValid(shape) && i < shapePolygon.count)
             {
-                b2Vec2& bv = shape->m_vertices[i];
-                bv.Set(helpPoint.x / PT_RATIO, helpPoint.y / PT_RATIO);
+                b2Vec2& bv = shapePolygon.vertices[i];
+                bv.x       = helpPoint.x / PT_RATIO;
+                bv.y       = helpPoint.y / PT_RATIO;
+                ++mods;
             }
 #endif
         }
+
+#if ENABLE_PHYSICS_BOX2D_DETECT
+        if (mods)
+            b2Shape_SetPolygon(shape, &shapePolygon);
+#endif
     }
 }
 
@@ -319,7 +325,6 @@ void ColliderDetector::setBody(b2BodyId pBody)
 {
     _body = pBody;
 
-    // TODO: adapt box2d-v3
     for (auto&& object : _colliderBodyList)
     {
         ColliderBody* colliderBody = (ColliderBody*)object;
@@ -331,33 +336,38 @@ void ColliderDetector::setBody(b2BodyId pBody)
         int i = 0;
         for (auto&& v : contourData->vertexList)
         {
-            b2bv[i].Set(v.x / PT_RATIO, v.y / PT_RATIO);
+            b2bv[i] = b2Vec2{v.x / PT_RATIO, v.y / PT_RATIO};
             i++;
         }
 
-        b2PolygonShape polygon;
-        polygon.Set(b2bv, (int)contourData->vertexList.size());
+        auto hull = b2ComputeHull(b2bv, static_cast<int>(contourData->vertexList.size()));
+        if (!b2ValidateHull(&hull))
+        {
+            AXLOGW("ColliderDetector::setBody: invalid hull for contour data, ignore this contour data");
+            continue;
+        }
+
+        auto polygon                = b2MakeOffsetPolygon(&hull, b2Vec2_zero, b2Rot_identity);
+        auto shapeDef               = b2DefaultShapeDef();
+        shapeDef.isSensor           = true;
+        shapeDef.enableSensorEvents = true;
+        shapeDef.userData           = _bone;
 
         AX_SAFE_DELETE(b2bv);
+        auto oldShape = colliderBody->getShape();
+        if (b2Shape_IsValid(oldShape))
+            b2DestroyShape(oldShape, true);
 
-        b2FixtureDef fixtureDef;
-        fixtureDef.shape    = &polygon;
-        fixtureDef.isSensor = true;
-
-        b2Fixture* fixture = _body->CreateFixture(&fixtureDef);
-        fixture->SetUserData(_bone);
-
-        if (colliderBody->getB2Fixture() != nullptr)
+        auto shape = b2CreatePolygonShape(_body, &shapeDef, &polygon);
+        if (b2Shape_IsValid(shape))
         {
-            _body->DestroyFixture(colliderBody->getB2Fixture());
+            colliderBody->setShape(shape);
+            colliderBody->getColliderFilter()->updateShape(shape);
         }
-        colliderBody->setB2Fixture(fixture);
-
-        colliderBody->getColliderFilter()->updateShape(fixture);
     }
 }
 
-b2Body* ColliderDetector::getBody() const
+b2BodyId ColliderDetector::getBody() const
 {
     return _body;
 }
