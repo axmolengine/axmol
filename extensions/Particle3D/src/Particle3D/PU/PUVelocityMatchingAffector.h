@@ -32,7 +32,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUVelocityMatchingAffector : public PUAffector
+class AX_EXT_API PUVelocityMatchingAffector : public PUAffector
 {
 public:
     // Constants

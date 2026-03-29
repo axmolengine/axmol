@@ -25,8 +25,8 @@ set(lua_bindings_manual_headers
   manual/LuaValue.h
   manual/physics2d/axlua_physics2d_manual.h
   manual/physics3d/axlua_physics3d_manual.h
-  manual/cocostudio/lua-cocostudio-conversions.h
-  manual/cocostudio/CustomGUIReader.h
+  manual/sceneext/lua-sceneext-conversions.h
+  manual/sceneext/CustomGUIReader.h
   manual/ui/axlua_ui_manual.hpp
   manual/controller/axlua_controller_manual.hpp
   manual/fairygui/axlua_fairygui_manual.hpp
@@ -47,10 +47,10 @@ set(lua_bindings_manual_files
   manual/base/axlua_base_manual.cpp
   manual/physics2d/axlua_physics2d_manual.cpp
   manual/3d/axlua_3d_manual.cpp
-  manual/cocostudio/CustomGUIReader.cpp
-  manual/cocostudio/axlua_cocostudio_manual.cpp
-  manual/cocostudio/lua-cocostudio-conversions.cpp
-  manual/cocostudio/axlua_csloader_manual.cpp
+  manual/sceneext/CustomGUIReader.cpp
+  manual/sceneext/axlua_sceneext_manual.cpp
+  manual/sceneext/lua-sceneext-conversions.cpp
+  manual/sceneio/axlua_sceneio_manual.cpp
   manual/controller/axlua_controller_manual.cpp
   manual/extension/axlua_extension_manual.cpp
   manual/network/axlua_network_manual.cpp
@@ -73,10 +73,10 @@ set(lua_bindings_auto_headers
   auto/axlua_3d_auto.hpp
   auto/axlua_controller_auto.hpp
   auto/axlua_spine_auto.hpp
-  auto/axlua_studio_auto.hpp
+  auto/axlua_sceneext_auto.hpp
+  auto/axlua_sceneio_auto.hpp
   auto/axlua_base_auto.hpp
   auto/axlua_navmesh_auto.hpp
-  auto/axlua_csloader_auto.hpp
   auto/axlua_physics3d_auto.hpp
   auto/axlua_ui_auto.hpp
   auto/axlua_physics2d_auto.hpp
@@ -92,8 +92,8 @@ set(lua_bindings_auto_files
   auto/axlua_extension_auto.cpp
   auto/axlua_physics2d_auto.cpp
   auto/axlua_spine_auto.cpp
-  auto/axlua_studio_auto.cpp
-  auto/axlua_csloader_auto.cpp
+  auto/axlua_sceneext_auto.cpp
+  auto/axlua_sceneio_auto.cpp
   auto/axlua_ui_auto.cpp
   auto/axlua_audioengine_auto.cpp
   auto/axlua_physics3d_auto.cpp
@@ -227,7 +227,8 @@ target_include_directories(${_AX_LUA_LIB}
   PRIVATE manual/platform/android/jni
   PRIVATE ${ax_root}/extensions/spine/runtime/include
   PRIVATE ${ax_root}/extensions/spine/src
-  PRIVATE ${ax_root}/extensions/cocostudio/src
+  PRIVATE ${ax_root}/extensions/sceneext/src
+  PRIVATE ${ax_root}/extensions/sceneio/src
   PRIVATE ${ax_root}/extensions/fairygui/src
   PRIVATE ${ax_root}/extensions/fairygui/src/fairygui
   PRIVATE ${ax_root}/extensions/Particle3D/src
@@ -235,7 +236,7 @@ target_include_directories(${_AX_LUA_LIB}
 )
 
 if(BUILD_SHARED_LIBS)
-  target_compile_definitions(${_AX_LUA_LIB} PRIVATE CCS_DLLIMPORT)
+  target_compile_definitions(${_AX_LUA_LIB} PRIVATE SCNIO_DLLIMPORT SCNEXT_DLLIMPORT)
 endif()
 
 if(WINRT)

@@ -30,7 +30,7 @@
 #include "extensions/GUI/src/GUI/ControlExtension/Control.h"
 #include "lua-bindings/manual/base/axlua_base_manual.hpp"
 #include "lua-bindings/manual/extension/axlua_extension_manual.h"
-#include "lua-bindings/manual/cocostudio/axlua_cocostudio_manual.hpp"
+#include "lua-bindings/manual/sceneext/axlua_sceneext_manual.hpp"
 #include "lua-bindings/manual/ui/axlua_ui_manual.hpp"
 #include "axmol/2d/MenuItem.h"
 #include "axmol/base/Director.h"
@@ -961,7 +961,7 @@ int LuaEngine::handleArmatureWrapper(ScriptHandlerMgr::HandlerType type, void* d
     {
         LuaArmatureMovementEventData* movementData = static_cast<LuaArmatureMovementEventData*>(wrapperData->eventData);
 
-        _stack->pushObject(movementData->objTarget, "ccs.Armature");
+        _stack->pushObject(movementData->objTarget, "axext.Armature");
         _stack->pushInt(movementData->movementType);
         _stack->pushString(movementData->movementID.c_str());
         _stack->executeFunctionByHandler(handler, 3);
@@ -971,7 +971,7 @@ int LuaEngine::handleArmatureWrapper(ScriptHandlerMgr::HandlerType type, void* d
     {
         LuaArmatureFrameEventData* frameData = static_cast<LuaArmatureFrameEventData*>(wrapperData->eventData);
 
-        _stack->pushObject(frameData->objTarget, "ccs.Bone");
+        _stack->pushObject(frameData->objTarget, "axext.Bone");
         _stack->pushString(frameData->frameEventName.c_str());
         _stack->pushInt(frameData->originFrameIndex);
         _stack->pushInt(frameData->currentFrameIndex);

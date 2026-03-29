@@ -38,7 +38,7 @@ namespace ax
 struct PUParticle3D;
 class PUParticleSystem3D;
 
-class AX_EX_DLL PUAffector : public Particle3DAffector
+class AX_EXT_API PUAffector : public Particle3DAffector
 {
     friend class PUParticleSystem3D;
 

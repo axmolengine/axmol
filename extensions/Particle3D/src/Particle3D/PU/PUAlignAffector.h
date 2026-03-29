@@ -31,7 +31,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUAlignAffector : public PUAffector
+class AX_EXT_API PUAlignAffector : public PUAffector
 {
 public:
     // Constants

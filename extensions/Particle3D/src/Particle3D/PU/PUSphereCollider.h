@@ -33,7 +33,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUSphereCollider : public PUBaseCollider
+class AX_EXT_API PUSphereCollider : public PUBaseCollider
 {
 public:
     // Constants

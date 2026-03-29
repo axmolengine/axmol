@@ -43,7 +43,7 @@ NS_AX_EXT_BEGIN
  * @{
  */
 
-class AX_EX_DLL ControlSlider : public Control
+class AX_EXT_API ControlSlider : public Control
 {
 public:
     /**

@@ -32,7 +32,7 @@
 namespace ax
 {
 struct PUParticle3D;
-class AX_EX_DLL PUParticle3DInterParticleCollider : public PUBaseCollider
+class AX_EXT_API PUParticle3DInterParticleCollider : public PUBaseCollider
 {
 public:
     enum InterParticleCollisionResponse

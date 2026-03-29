@@ -25,7 +25,7 @@
 #include "extensions/axmol-ext.h"
 #include "UIScene.h"
 #include "UISceneManager.h"
-#include "cocostudio/SGUIReader.h"
+#include "sceneext/SGUIReader.h"
 #include "CocosGUIScene.h"
 
 using namespace ax;
@@ -43,7 +43,7 @@ bool UIScene::init()
         addChild(_uiLayer);
 
         _widget = dynamic_cast<Layout*>(
-            cocostudio::GUIReader::getInstance()->widgetFromJsonFile("cocosui/UITest/UITest.json"));
+            scnio::GUIReader::getInstance()->widgetFromJsonFile("cocosui/UITest/UITest.json"));
         _uiLayer->addChild(_widget);
 
         Size screenSize = Director::getInstance()->getCanvasSize();

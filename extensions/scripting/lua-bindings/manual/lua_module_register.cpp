@@ -27,7 +27,8 @@
 #include "lua-bindings/manual/lua_module_register.h"
 
 #include "lua-bindings/manual/network/axlua_network_manual.h"
-#include "lua-bindings/manual/cocostudio/axlua_cocostudio_manual.hpp"
+#include "lua-bindings/manual/sceneext/axlua_sceneext_manual.hpp"
+#include "lua-bindings/manual/sceneio/axlua_sceneio_manual.hpp"
 #include "lua-bindings/manual/extension/axlua_extension_manual.h"
 #include "lua-bindings/manual/ui/axlua_ui_manual.hpp"
 #include "lua-bindings/manual/spine/axlua_spine_manual.hpp"
@@ -59,14 +60,15 @@ int lua_module_register(lua_State* L)
 {
     // Don't change the module register order unless you know what your are doing
     register_network_module(L);
-    register_cocostudio_module(L);
+    register_sceneext_module(L);
+    register_sceneio_module(L);
     register_ui_module(L);
     register_extension_module(L);
     // TODO arnold
 #if defined(AX_ENABLE_EXT_SPINE)
     register_spine_module(L);
 #endif  // defined(AX_ENABLE_EXT_SPINE)
-    register_cocos3d_module(L);
+    register_ax_3d_module(L);
     register_audioengine_module(L);
 #if defined(AX_ENABLE_PHYSICS_3D)
     register_physics3d_module(L);

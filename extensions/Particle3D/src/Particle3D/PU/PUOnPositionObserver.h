@@ -37,7 +37,7 @@ namespace ax
 
 struct PUParticle3D;
 class PUParticleSystem3D;
-class AX_EX_DLL PUOnPositionObserver : public PUObserver
+class AX_EXT_API PUOnPositionObserver : public PUObserver
 {
 public:
     // Constants

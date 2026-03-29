@@ -42,7 +42,7 @@ NS_AX_EXT_BEGIN
  */
 
 /** @class ControlPotentiometer Potentiometer control for Cocos2D. */
-class AX_EX_DLL ControlPotentiometer : public Control
+class AX_EXT_API ControlPotentiometer : public Control
 {
 public:
     /**

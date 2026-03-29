@@ -38,7 +38,7 @@ namespace ax
 struct PUParticle3D;
 class PUParticleSystem3D;
 
-class AX_EX_DLL PUOnCountObserver : public PUObserver
+class AX_EXT_API PUOnCountObserver : public PUObserver
 {
 protected:
     unsigned int _count;

@@ -63,7 +63,7 @@ typedef struct
  * @{
  */
 
-class AX_EX_DLL ControlUtils
+class AX_EXT_API ControlUtils
 {
 public:
     /**

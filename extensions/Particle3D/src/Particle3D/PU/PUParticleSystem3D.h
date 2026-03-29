@@ -56,7 +56,7 @@ enum PUComponentType
     CT_OBSERVER
 };
 
-struct AX_EX_DLL PUParticle3D : public Particle3D
+struct AX_EXT_API PUParticle3D : public Particle3D
 {
     static float DEFAULT_TTL;
     static float DEFAULT_MASS;
@@ -204,7 +204,7 @@ struct AX_EX_DLL PUParticle3D : public Particle3D
     // float depthInWorld;
 };
 
-class AX_EX_DLL PUParticleSystem3D : public ParticleSystem3D
+class AX_EXT_API PUParticleSystem3D : public ParticleSystem3D
 {
 public:
     typedef tlx::string_map<ParticlePool> ParticlePoolMap;

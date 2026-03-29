@@ -40,6 +40,7 @@ struct null_mutex {
 template <typename _Ty, typename _Mutex = ::yasio::null_mutex>
 class object_pool : protected detail::object_pool {
 public:
+  using detail::object_pool::cleanup;
   using detail::object_pool::purge;
   object_pool(size_t _ElemCount = 128) : detail::object_pool(::tlx::aligned_storage_size<_Ty>::value, _ElemCount) {}
 

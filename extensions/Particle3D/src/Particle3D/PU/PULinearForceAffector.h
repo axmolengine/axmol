@@ -32,7 +32,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PULinearForceAffector : public PUBaseForceAffector
+class AX_EXT_API PULinearForceAffector : public PUBaseForceAffector
 {
 public:
     static PULinearForceAffector* create();

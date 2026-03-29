@@ -46,10 +46,10 @@ enum PUAbstractNodeType
     ANT_VARIABLE_SET,
     ANT_VARIABLE_ACCESS
 };
-class AX_EX_DLL PUAbstractNode;
+class AX_EXT_API PUAbstractNode;
 typedef std::list<PUAbstractNode*> PUAbstractNodeList;
 
-class AX_EX_DLL PUAbstractNode
+class AX_EXT_API PUAbstractNode
 {
 public:
     std::string file;
@@ -70,7 +70,7 @@ public:
 };
 
 /** This specific abstract node represents a script object */
-class AX_EX_DLL PUObjectAbstractNode : public PUAbstractNode
+class AX_EXT_API PUObjectAbstractNode : public PUAbstractNode
 {
 private:
     tlx::string_map<std::string> _env;
@@ -96,7 +96,7 @@ public:
 };
 
 /** This abstract node represents a script property */
-class AX_EX_DLL PUPropertyAbstractNode : public PUAbstractNode
+class AX_EXT_API PUPropertyAbstractNode : public PUAbstractNode
 {
 public:
     std::string name;
@@ -111,7 +111,7 @@ public:
 };
 
 /** This is an abstract node which cannot be broken down further */
-class AX_EX_DLL PUAtomAbstractNode : public PUAbstractNode
+class AX_EXT_API PUAtomAbstractNode : public PUAbstractNode
 {
 public:
     std::string value;
@@ -126,8 +126,8 @@ private:
     void parseNumber() const;
 };
 
-class AX_EX_DLL PUParticleSystem3D;
-class AX_EX_DLL PUScriptCompiler
+class AX_EXT_API PUParticleSystem3D;
+class AX_EXT_API PUScriptCompiler
 {
 
 private:

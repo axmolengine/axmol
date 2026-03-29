@@ -24,7 +24,6 @@
 
 #include "ParticleTest.h"
 #include "../testResource.h"
-#include "cocostudio/CocosStudioExtension.h"
 
 using namespace ax;
 

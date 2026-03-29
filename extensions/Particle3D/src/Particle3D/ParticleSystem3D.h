@@ -42,7 +42,7 @@ class Particle3DEmitter;
 class Particle3DAffector;
 class Particle3DRender;
 
-struct AX_EX_DLL Particle3D
+struct AX_EXT_API Particle3D
 {
     Particle3D();
     virtual ~Particle3D();
@@ -61,7 +61,7 @@ struct AX_EX_DLL Particle3D
 };
 
 template <typename T>
-class AX_EX_DLL DataPool
+class AX_EXT_API DataPool
 {
 public:
     typedef typename std::list<T*> PoolList;
@@ -157,7 +157,7 @@ private:
 
 typedef DataPool<Particle3D> ParticlePool;
 
-class AX_EX_DLL ParticleSystem3D : public Node, public BlendProtocol
+class AX_EXT_API ParticleSystem3D : public Node, public BlendProtocol
 {
 public:
     enum class State

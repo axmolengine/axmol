@@ -37,7 +37,7 @@ namespace ax
 
 struct PUParticle3D;
 class PUParticleSystem3D;
-class AX_EX_DLL PUOnExpireObserver : public PUObserver
+class AX_EXT_API PUOnExpireObserver : public PUObserver
 {
 protected:
 public:

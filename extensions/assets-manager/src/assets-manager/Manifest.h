@@ -58,7 +58,7 @@ struct ManifestAsset
 
 typedef tlx::string_map<DownloadUnit> DownloadUnits;
 
-class AX_EX_DLL Manifest : public Object
+class AX_EXT_API Manifest : public Object
 {
 public:
     friend class AssetsManagerEx;

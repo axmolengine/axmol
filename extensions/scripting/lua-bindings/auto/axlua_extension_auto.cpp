@@ -6,7 +6,7 @@
 int lua_ax_extension_ScrollView_initWithViewSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15,10 +15,10 @@ int lua_ax_extension_ScrollView_initWithViewSize(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -33,7 +33,7 @@ int lua_ax_extension_ScrollView_initWithViewSize(lua_State* tolua_S)
     {
         ax::Size arg0;
 
-        ok &= luaval_to_size(tolua_S, 2, &arg0, "ax.ScrollView:initWithViewSize");
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "axext.ScrollView:initWithViewSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_initWithViewSize'", nullptr);
@@ -48,9 +48,9 @@ int lua_ax_extension_ScrollView_initWithViewSize(lua_State* tolua_S)
         ax::Size arg0;
         ax::Node* arg1;
 
-        ok &= luaval_to_size(tolua_S, 2, &arg0, "ax.ScrollView:initWithViewSize");
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "axext.ScrollView:initWithViewSize");
 
-        ok &= luaval_to_object<ax::Node>(tolua_S, 3, "ax.Node",&arg1, "ax.ScrollView:initWithViewSize");
+        ok &= luaval_to_object<ax::Node>(tolua_S, 3, "ax.Node",&arg1, "axext.ScrollView:initWithViewSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_initWithViewSize'", nullptr);
@@ -60,7 +60,7 @@ int lua_ax_extension_ScrollView_initWithViewSize(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:initWithViewSize",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:initWithViewSize",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -73,7 +73,7 @@ int lua_ax_extension_ScrollView_initWithViewSize(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_setContentOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -82,10 +82,10 @@ int lua_ax_extension_ScrollView_setContentOffset(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -100,7 +100,7 @@ int lua_ax_extension_ScrollView_setContentOffset(lua_State* tolua_S)
     {
         ax::Vec2 arg0;
 
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.ScrollView:setContentOffset");
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axext.ScrollView:setContentOffset");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setContentOffset'", nullptr);
@@ -115,9 +115,9 @@ int lua_ax_extension_ScrollView_setContentOffset(lua_State* tolua_S)
         ax::Vec2 arg0;
         bool arg1;
 
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.ScrollView:setContentOffset");
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axext.ScrollView:setContentOffset");
 
-        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.ScrollView:setContentOffset");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "axext.ScrollView:setContentOffset");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setContentOffset'", nullptr);
@@ -127,7 +127,7 @@ int lua_ax_extension_ScrollView_setContentOffset(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setContentOffset",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:setContentOffset",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -140,7 +140,7 @@ int lua_ax_extension_ScrollView_setContentOffset(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_getContentOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -149,10 +149,10 @@ int lua_ax_extension_ScrollView_getContentOffset(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -174,7 +174,7 @@ int lua_ax_extension_ScrollView_getContentOffset(lua_State* tolua_S)
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:getContentOffset",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:getContentOffset",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -187,7 +187,7 @@ int lua_ax_extension_ScrollView_getContentOffset(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_setContentOffsetInDuration(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -196,10 +196,10 @@ int lua_ax_extension_ScrollView_setContentOffsetInDuration(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -215,9 +215,9 @@ int lua_ax_extension_ScrollView_setContentOffsetInDuration(lua_State* tolua_S)
         ax::Vec2 arg0;
         double arg1;
 
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.ScrollView:setContentOffsetInDuration");
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axext.ScrollView:setContentOffsetInDuration");
 
-        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ScrollView:setContentOffsetInDuration");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "axext.ScrollView:setContentOffsetInDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setContentOffsetInDuration'", nullptr);
@@ -227,7 +227,7 @@ int lua_ax_extension_ScrollView_setContentOffsetInDuration(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setContentOffsetInDuration",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:setContentOffsetInDuration",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -240,7 +240,7 @@ int lua_ax_extension_ScrollView_setContentOffsetInDuration(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_stopAnimatedContentOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -249,10 +249,10 @@ int lua_ax_extension_ScrollView_stopAnimatedContentOffset(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -274,7 +274,7 @@ int lua_ax_extension_ScrollView_stopAnimatedContentOffset(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:stopAnimatedContentOffset",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:stopAnimatedContentOffset",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -287,16 +287,16 @@ int lua_ax_extension_ScrollView_stopAnimatedContentOffset(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_setZoomScale(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!obj)
     {
@@ -308,11 +308,11 @@ int lua_ax_extension_ScrollView_setZoomScale(lua_State* tolua_S)
     do {
         if (argc == 2) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScrollView:setZoomScale");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "axext.ScrollView:setZoomScale");
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.ScrollView:setZoomScale");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "axext.ScrollView:setZoomScale");
 
             if (!ok) { break; }
             obj->setZoomScale(arg0, arg1);
@@ -324,7 +324,7 @@ int lua_ax_extension_ScrollView_setZoomScale(lua_State* tolua_S)
     do {
         if (argc == 1) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScrollView:setZoomScale");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "axext.ScrollView:setZoomScale");
 
             if (!ok) { break; }
             obj->setZoomScale(arg0);
@@ -333,7 +333,7 @@ int lua_ax_extension_ScrollView_setZoomScale(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.ScrollView:setZoomScale",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "axext.ScrollView:setZoomScale",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -346,7 +346,7 @@ int lua_ax_extension_ScrollView_setZoomScale(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_getZoomScale(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -355,10 +355,10 @@ int lua_ax_extension_ScrollView_getZoomScale(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -380,7 +380,7 @@ int lua_ax_extension_ScrollView_getZoomScale(lua_State* tolua_S)
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:getZoomScale",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:getZoomScale",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -393,7 +393,7 @@ int lua_ax_extension_ScrollView_getZoomScale(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_setZoomScaleInDuration(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -402,10 +402,10 @@ int lua_ax_extension_ScrollView_setZoomScaleInDuration(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -421,9 +421,9 @@ int lua_ax_extension_ScrollView_setZoomScaleInDuration(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScrollView:setZoomScaleInDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axext.ScrollView:setZoomScaleInDuration");
 
-        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ScrollView:setZoomScaleInDuration");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "axext.ScrollView:setZoomScaleInDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setZoomScaleInDuration'", nullptr);
@@ -433,7 +433,7 @@ int lua_ax_extension_ScrollView_setZoomScaleInDuration(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setZoomScaleInDuration",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:setZoomScaleInDuration",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -446,7 +446,7 @@ int lua_ax_extension_ScrollView_setZoomScaleInDuration(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_setMinScale(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -455,10 +455,10 @@ int lua_ax_extension_ScrollView_setMinScale(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -473,7 +473,7 @@ int lua_ax_extension_ScrollView_setMinScale(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScrollView:setMinScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axext.ScrollView:setMinScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setMinScale'", nullptr);
@@ -483,7 +483,7 @@ int lua_ax_extension_ScrollView_setMinScale(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setMinScale",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:setMinScale",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -496,7 +496,7 @@ int lua_ax_extension_ScrollView_setMinScale(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_setMaxScale(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -505,10 +505,10 @@ int lua_ax_extension_ScrollView_setMaxScale(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -523,7 +523,7 @@ int lua_ax_extension_ScrollView_setMaxScale(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScrollView:setMaxScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axext.ScrollView:setMaxScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setMaxScale'", nullptr);
@@ -533,7 +533,7 @@ int lua_ax_extension_ScrollView_setMaxScale(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setMaxScale",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:setMaxScale",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -546,7 +546,7 @@ int lua_ax_extension_ScrollView_setMaxScale(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_minContainerOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -555,10 +555,10 @@ int lua_ax_extension_ScrollView_minContainerOffset(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -580,7 +580,7 @@ int lua_ax_extension_ScrollView_minContainerOffset(lua_State* tolua_S)
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:minContainerOffset",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:minContainerOffset",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -593,7 +593,7 @@ int lua_ax_extension_ScrollView_minContainerOffset(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_maxContainerOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -602,10 +602,10 @@ int lua_ax_extension_ScrollView_maxContainerOffset(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -627,7 +627,7 @@ int lua_ax_extension_ScrollView_maxContainerOffset(lua_State* tolua_S)
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:maxContainerOffset",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:maxContainerOffset",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -640,7 +640,7 @@ int lua_ax_extension_ScrollView_maxContainerOffset(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_isNodeVisible(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -649,10 +649,10 @@ int lua_ax_extension_ScrollView_isNodeVisible(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -667,7 +667,7 @@ int lua_ax_extension_ScrollView_isNodeVisible(lua_State* tolua_S)
     {
         ax::Node* arg0;
 
-        ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.ScrollView:isNodeVisible");
+        ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "axext.ScrollView:isNodeVisible");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_isNodeVisible'", nullptr);
@@ -677,7 +677,7 @@ int lua_ax_extension_ScrollView_isNodeVisible(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:isNodeVisible",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:isNodeVisible",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -690,7 +690,7 @@ int lua_ax_extension_ScrollView_isNodeVisible(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_pause(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -699,10 +699,10 @@ int lua_ax_extension_ScrollView_pause(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -717,7 +717,7 @@ int lua_ax_extension_ScrollView_pause(lua_State* tolua_S)
     {
         ax::Object* arg0;
 
-        ok &= luaval_to_object<ax::Object>(tolua_S, 2, "ax.Object",&arg0, "ax.ScrollView:pause");
+        ok &= luaval_to_object<ax::Object>(tolua_S, 2, "ax.Object",&arg0, "axext.ScrollView:pause");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_pause'", nullptr);
@@ -727,7 +727,7 @@ int lua_ax_extension_ScrollView_pause(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:pause",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:pause",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -740,7 +740,7 @@ int lua_ax_extension_ScrollView_pause(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_resume(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -749,10 +749,10 @@ int lua_ax_extension_ScrollView_resume(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -767,7 +767,7 @@ int lua_ax_extension_ScrollView_resume(lua_State* tolua_S)
     {
         ax::Object* arg0;
 
-        ok &= luaval_to_object<ax::Object>(tolua_S, 2, "ax.Object",&arg0, "ax.ScrollView:resume");
+        ok &= luaval_to_object<ax::Object>(tolua_S, 2, "ax.Object",&arg0, "axext.ScrollView:resume");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_resume'", nullptr);
@@ -777,7 +777,7 @@ int lua_ax_extension_ScrollView_resume(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:resume",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:resume",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -790,7 +790,7 @@ int lua_ax_extension_ScrollView_resume(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_setTouchEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -799,10 +799,10 @@ int lua_ax_extension_ScrollView_setTouchEnabled(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -817,7 +817,7 @@ int lua_ax_extension_ScrollView_setTouchEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ScrollView:setTouchEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axext.ScrollView:setTouchEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setTouchEnabled'", nullptr);
@@ -827,7 +827,7 @@ int lua_ax_extension_ScrollView_setTouchEnabled(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setTouchEnabled",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:setTouchEnabled",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -840,7 +840,7 @@ int lua_ax_extension_ScrollView_setTouchEnabled(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_isTouchEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -849,10 +849,10 @@ int lua_ax_extension_ScrollView_isTouchEnabled(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -874,7 +874,7 @@ int lua_ax_extension_ScrollView_isTouchEnabled(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:isTouchEnabled",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:isTouchEnabled",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -887,7 +887,7 @@ int lua_ax_extension_ScrollView_isTouchEnabled(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_setSwallowTouches(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -896,10 +896,10 @@ int lua_ax_extension_ScrollView_setSwallowTouches(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -914,7 +914,7 @@ int lua_ax_extension_ScrollView_setSwallowTouches(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ScrollView:setSwallowTouches");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axext.ScrollView:setSwallowTouches");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setSwallowTouches'", nullptr);
@@ -924,7 +924,7 @@ int lua_ax_extension_ScrollView_setSwallowTouches(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setSwallowTouches",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:setSwallowTouches",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -937,7 +937,7 @@ int lua_ax_extension_ScrollView_setSwallowTouches(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_isDragging(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -946,10 +946,10 @@ int lua_ax_extension_ScrollView_isDragging(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -971,7 +971,7 @@ int lua_ax_extension_ScrollView_isDragging(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:isDragging",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:isDragging",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -984,7 +984,7 @@ int lua_ax_extension_ScrollView_isDragging(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_isTouchMoved(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -993,10 +993,10 @@ int lua_ax_extension_ScrollView_isTouchMoved(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -1018,7 +1018,7 @@ int lua_ax_extension_ScrollView_isTouchMoved(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:isTouchMoved",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:isTouchMoved",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1031,7 +1031,7 @@ int lua_ax_extension_ScrollView_isTouchMoved(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_isBounceable(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1040,10 +1040,10 @@ int lua_ax_extension_ScrollView_isBounceable(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -1065,7 +1065,7 @@ int lua_ax_extension_ScrollView_isBounceable(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:isBounceable",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:isBounceable",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1078,7 +1078,7 @@ int lua_ax_extension_ScrollView_isBounceable(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_setBounceable(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1087,10 +1087,10 @@ int lua_ax_extension_ScrollView_setBounceable(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -1105,7 +1105,7 @@ int lua_ax_extension_ScrollView_setBounceable(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ScrollView:setBounceable");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axext.ScrollView:setBounceable");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setBounceable'", nullptr);
@@ -1115,7 +1115,7 @@ int lua_ax_extension_ScrollView_setBounceable(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setBounceable",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:setBounceable",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1128,7 +1128,7 @@ int lua_ax_extension_ScrollView_setBounceable(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_getViewSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1137,10 +1137,10 @@ int lua_ax_extension_ScrollView_getViewSize(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -1162,7 +1162,7 @@ int lua_ax_extension_ScrollView_getViewSize(lua_State* tolua_S)
         size_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:getViewSize",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:getViewSize",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1175,7 +1175,7 @@ int lua_ax_extension_ScrollView_getViewSize(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_setViewSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1184,10 +1184,10 @@ int lua_ax_extension_ScrollView_setViewSize(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -1202,7 +1202,7 @@ int lua_ax_extension_ScrollView_setViewSize(lua_State* tolua_S)
     {
         ax::Size arg0;
 
-        ok &= luaval_to_size(tolua_S, 2, &arg0, "ax.ScrollView:setViewSize");
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "axext.ScrollView:setViewSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setViewSize'", nullptr);
@@ -1212,7 +1212,7 @@ int lua_ax_extension_ScrollView_setViewSize(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setViewSize",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:setViewSize",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1225,7 +1225,7 @@ int lua_ax_extension_ScrollView_setViewSize(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_getContainer(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1234,10 +1234,10 @@ int lua_ax_extension_ScrollView_getContainer(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -1259,7 +1259,7 @@ int lua_ax_extension_ScrollView_getContainer(lua_State* tolua_S)
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:getContainer",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:getContainer",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1272,7 +1272,7 @@ int lua_ax_extension_ScrollView_getContainer(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_setContainer(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1281,10 +1281,10 @@ int lua_ax_extension_ScrollView_setContainer(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -1299,7 +1299,7 @@ int lua_ax_extension_ScrollView_setContainer(lua_State* tolua_S)
     {
         ax::Node* arg0;
 
-        ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.ScrollView:setContainer");
+        ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "axext.ScrollView:setContainer");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setContainer'", nullptr);
@@ -1309,7 +1309,7 @@ int lua_ax_extension_ScrollView_setContainer(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setContainer",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:setContainer",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1322,7 +1322,7 @@ int lua_ax_extension_ScrollView_setContainer(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_getDirection(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1331,10 +1331,10 @@ int lua_ax_extension_ScrollView_getDirection(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -1356,7 +1356,7 @@ int lua_ax_extension_ScrollView_getDirection(lua_State* tolua_S)
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:getDirection",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:getDirection",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1369,7 +1369,7 @@ int lua_ax_extension_ScrollView_getDirection(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_setDirection(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1378,10 +1378,10 @@ int lua_ax_extension_ScrollView_setDirection(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -1394,9 +1394,9 @@ int lua_ax_extension_ScrollView_setDirection(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        ax::extension::ScrollView::Direction arg0;
+        ax::ext::ScrollView::Direction arg0;
 
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ScrollView:setDirection");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axext.ScrollView:setDirection");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setDirection'", nullptr);
@@ -1406,7 +1406,7 @@ int lua_ax_extension_ScrollView_setDirection(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setDirection",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:setDirection",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1419,7 +1419,7 @@ int lua_ax_extension_ScrollView_setDirection(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_updateInset(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1428,10 +1428,10 @@ int lua_ax_extension_ScrollView_updateInset(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -1453,7 +1453,7 @@ int lua_ax_extension_ScrollView_updateInset(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:updateInset",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:updateInset",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1466,7 +1466,7 @@ int lua_ax_extension_ScrollView_updateInset(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_isClippingToBounds(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1475,10 +1475,10 @@ int lua_ax_extension_ScrollView_isClippingToBounds(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -1500,7 +1500,7 @@ int lua_ax_extension_ScrollView_isClippingToBounds(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:isClippingToBounds",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:isClippingToBounds",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1513,7 +1513,7 @@ int lua_ax_extension_ScrollView_isClippingToBounds(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_setClippingToBounds(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1522,10 +1522,10 @@ int lua_ax_extension_ScrollView_setClippingToBounds(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -1540,7 +1540,7 @@ int lua_ax_extension_ScrollView_setClippingToBounds(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ScrollView:setClippingToBounds");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axext.ScrollView:setClippingToBounds");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setClippingToBounds'", nullptr);
@@ -1550,7 +1550,7 @@ int lua_ax_extension_ScrollView_setClippingToBounds(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:setClippingToBounds",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:setClippingToBounds",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1563,7 +1563,7 @@ int lua_ax_extension_ScrollView_setClippingToBounds(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_onTouchBegan(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1572,10 +1572,10 @@ int lua_ax_extension_ScrollView_onTouchBegan(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -1591,9 +1591,9 @@ int lua_ax_extension_ScrollView_onTouchBegan(lua_State* tolua_S)
         ax::Touch* arg0;
         ax::Event* arg1;
 
-        ok &= luaval_to_object<ax::Touch>(tolua_S, 2, "ax.Touch",&arg0, "ax.ScrollView:onTouchBegan");
+        ok &= luaval_to_object<ax::Touch>(tolua_S, 2, "ax.Touch",&arg0, "axext.ScrollView:onTouchBegan");
 
-        ok &= luaval_to_object<ax::Event>(tolua_S, 3, "ax.Event",&arg1, "ax.ScrollView:onTouchBegan");
+        ok &= luaval_to_object<ax::Event>(tolua_S, 3, "ax.Event",&arg1, "axext.ScrollView:onTouchBegan");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_onTouchBegan'", nullptr);
@@ -1603,7 +1603,7 @@ int lua_ax_extension_ScrollView_onTouchBegan(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:onTouchBegan",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:onTouchBegan",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1616,7 +1616,7 @@ int lua_ax_extension_ScrollView_onTouchBegan(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_onTouchMoved(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1625,10 +1625,10 @@ int lua_ax_extension_ScrollView_onTouchMoved(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -1644,9 +1644,9 @@ int lua_ax_extension_ScrollView_onTouchMoved(lua_State* tolua_S)
         ax::Touch* arg0;
         ax::Event* arg1;
 
-        ok &= luaval_to_object<ax::Touch>(tolua_S, 2, "ax.Touch",&arg0, "ax.ScrollView:onTouchMoved");
+        ok &= luaval_to_object<ax::Touch>(tolua_S, 2, "ax.Touch",&arg0, "axext.ScrollView:onTouchMoved");
 
-        ok &= luaval_to_object<ax::Event>(tolua_S, 3, "ax.Event",&arg1, "ax.ScrollView:onTouchMoved");
+        ok &= luaval_to_object<ax::Event>(tolua_S, 3, "ax.Event",&arg1, "axext.ScrollView:onTouchMoved");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_onTouchMoved'", nullptr);
@@ -1656,7 +1656,7 @@ int lua_ax_extension_ScrollView_onTouchMoved(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:onTouchMoved",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:onTouchMoved",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1669,7 +1669,7 @@ int lua_ax_extension_ScrollView_onTouchMoved(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_onTouchEnded(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1678,10 +1678,10 @@ int lua_ax_extension_ScrollView_onTouchEnded(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -1697,9 +1697,9 @@ int lua_ax_extension_ScrollView_onTouchEnded(lua_State* tolua_S)
         ax::Touch* arg0;
         ax::Event* arg1;
 
-        ok &= luaval_to_object<ax::Touch>(tolua_S, 2, "ax.Touch",&arg0, "ax.ScrollView:onTouchEnded");
+        ok &= luaval_to_object<ax::Touch>(tolua_S, 2, "ax.Touch",&arg0, "axext.ScrollView:onTouchEnded");
 
-        ok &= luaval_to_object<ax::Event>(tolua_S, 3, "ax.Event",&arg1, "ax.ScrollView:onTouchEnded");
+        ok &= luaval_to_object<ax::Event>(tolua_S, 3, "ax.Event",&arg1, "axext.ScrollView:onTouchEnded");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_onTouchEnded'", nullptr);
@@ -1709,7 +1709,7 @@ int lua_ax_extension_ScrollView_onTouchEnded(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:onTouchEnded",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:onTouchEnded",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1722,7 +1722,7 @@ int lua_ax_extension_ScrollView_onTouchEnded(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_onTouchCancelled(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1731,10 +1731,10 @@ int lua_ax_extension_ScrollView_onTouchCancelled(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -1750,9 +1750,9 @@ int lua_ax_extension_ScrollView_onTouchCancelled(lua_State* tolua_S)
         ax::Touch* arg0;
         ax::Event* arg1;
 
-        ok &= luaval_to_object<ax::Touch>(tolua_S, 2, "ax.Touch",&arg0, "ax.ScrollView:onTouchCancelled");
+        ok &= luaval_to_object<ax::Touch>(tolua_S, 2, "ax.Touch",&arg0, "axext.ScrollView:onTouchCancelled");
 
-        ok &= luaval_to_object<ax::Event>(tolua_S, 3, "ax.Event",&arg1, "ax.ScrollView:onTouchCancelled");
+        ok &= luaval_to_object<ax::Event>(tolua_S, 3, "ax.Event",&arg1, "axext.ScrollView:onTouchCancelled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_onTouchCancelled'", nullptr);
@@ -1762,7 +1762,7 @@ int lua_ax_extension_ScrollView_onTouchCancelled(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:onTouchCancelled",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:onTouchCancelled",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1775,7 +1775,7 @@ int lua_ax_extension_ScrollView_onTouchCancelled(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_updateTweenAction(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1784,10 +1784,10 @@ int lua_ax_extension_ScrollView_updateTweenAction(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -1803,9 +1803,9 @@ int lua_ax_extension_ScrollView_updateTweenAction(lua_State* tolua_S)
         double arg0;
         std::string_view arg1;
 
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScrollView:updateTweenAction");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axext.ScrollView:updateTweenAction");
 
-        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.ScrollView:updateTweenAction");
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axext.ScrollView:updateTweenAction");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_updateTweenAction'", nullptr);
@@ -1815,7 +1815,7 @@ int lua_ax_extension_ScrollView_updateTweenAction(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:updateTweenAction",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:updateTweenAction",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1828,7 +1828,7 @@ int lua_ax_extension_ScrollView_updateTweenAction(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_hasVisibleParents(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1837,10 +1837,10 @@ int lua_ax_extension_ScrollView_hasVisibleParents(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -1862,7 +1862,7 @@ int lua_ax_extension_ScrollView_hasVisibleParents(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:hasVisibleParents",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:hasVisibleParents",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1881,7 +1881,7 @@ int lua_ax_extension_ScrollView_create(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.ScrollView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S)-1;
@@ -1889,8 +1889,8 @@ int lua_ax_extension_ScrollView_create(lua_State* tolua_S)
     do {
         if (argc == 0)
         {
-            ax::extension::ScrollView* ret = ax::extension::ScrollView::create();
-            object_to_luaval<ax::extension::ScrollView>(tolua_S, "ax.ScrollView",(ax::extension::ScrollView*)ret);
+            ax::ext::ScrollView* ret = ax::ext::ScrollView::create();
+            object_to_luaval<ax::ext::ScrollView>(tolua_S, "axext.ScrollView",(ax::ext::ScrollView*)ret);
             return 1;
         }
     } while (0);
@@ -1899,10 +1899,10 @@ int lua_ax_extension_ScrollView_create(lua_State* tolua_S)
         if (argc == 1)
         {
             ax::Size arg0;
-            ok &= luaval_to_size(tolua_S, 2, &arg0, "ax.ScrollView:create");
+            ok &= luaval_to_size(tolua_S, 2, &arg0, "axext.ScrollView:create");
             if (!ok) { break; }
-            ax::extension::ScrollView* ret = ax::extension::ScrollView::create(arg0);
-            object_to_luaval<ax::extension::ScrollView>(tolua_S, "ax.ScrollView",(ax::extension::ScrollView*)ret);
+            ax::ext::ScrollView* ret = ax::ext::ScrollView::create(arg0);
+            object_to_luaval<ax::ext::ScrollView>(tolua_S, "axext.ScrollView",(ax::ext::ScrollView*)ret);
             return 1;
         }
     } while (0);
@@ -1911,18 +1911,18 @@ int lua_ax_extension_ScrollView_create(lua_State* tolua_S)
         if (argc == 2)
         {
             ax::Size arg0;
-            ok &= luaval_to_size(tolua_S, 2, &arg0, "ax.ScrollView:create");
+            ok &= luaval_to_size(tolua_S, 2, &arg0, "axext.ScrollView:create");
             if (!ok) { break; }
             ax::Node* arg1;
-            ok &= luaval_to_object<ax::Node>(tolua_S, 3, "ax.Node",&arg1, "ax.ScrollView:create");
+            ok &= luaval_to_object<ax::Node>(tolua_S, 3, "ax.Node",&arg1, "axext.ScrollView:create");
             if (!ok) { break; }
-            ax::extension::ScrollView* ret = ax::extension::ScrollView::create(arg0, arg1);
-            object_to_luaval<ax::extension::ScrollView>(tolua_S, "ax.ScrollView",(ax::extension::ScrollView*)ret);
+            ax::ext::ScrollView* ret = ax::ext::ScrollView::create(arg0, arg1);
+            object_to_luaval<ax::ext::ScrollView>(tolua_S, "axext.ScrollView",(ax::ext::ScrollView*)ret);
             return 1;
         }
     } while (0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.ScrollView:create",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "axext.ScrollView:create",argc, 1);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
@@ -1933,7 +1933,7 @@ int lua_ax_extension_ScrollView_create(lua_State* tolua_S)
 int lua_ax_extension_ScrollView_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::ScrollView* obj = nullptr;
+    ax::ext::ScrollView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1950,14 +1950,14 @@ int lua_ax_extension_ScrollView_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::extension::ScrollView();
+        obj = new ax::ext::ScrollView();
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.ScrollView");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axext.ScrollView");
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ScrollView:ScrollView",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:ScrollView",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1975,8 +1975,8 @@ static int lua_ax_extension_ScrollView_finalize(lua_State* tolua_S)
 
 int lua_register_ax_extension_ScrollView(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.ScrollView");
-    tolua_cclass(tolua_S,"ScrollView","ax.ScrollView","ax.Layer",nullptr);
+    tolua_usertype(tolua_S,"axext.ScrollView");
+    tolua_cclass(tolua_S,"ScrollView","axext.ScrollView","ax.Layer",nullptr);
 
     tolua_beginmodule(tolua_S,"ScrollView");
         tolua_function(tolua_S,"new",lua_ax_extension_ScrollView_constructor);
@@ -2019,16 +2019,16 @@ int lua_register_ax_extension_ScrollView(lua_State* tolua_S)
         tolua_function(tolua_S,"hasVisibleParents",lua_ax_extension_ScrollView_hasVisibleParents);
         tolua_function(tolua_S,"create", lua_ax_extension_ScrollView_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::extension::ScrollView).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.ScrollView";
-    g_typeCast[typeName] = "ax.ScrollView";
+    auto typeName = typeid(ax::ext::ScrollView).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axext.ScrollView";
+    g_typeCast[typeName] = "axext.ScrollView";
     return 1;
 }
 
 int lua_ax_extension_TableViewCell_getIdx(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::TableViewCell* obj = nullptr;
+    ax::ext::TableViewCell* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2037,10 +2037,10 @@ int lua_ax_extension_TableViewCell_getIdx(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.TableViewCell",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.TableViewCell",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::TableViewCell*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::TableViewCell*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -2062,7 +2062,7 @@ int lua_ax_extension_TableViewCell_getIdx(lua_State* tolua_S)
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableViewCell:getIdx",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.TableViewCell:getIdx",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2075,7 +2075,7 @@ int lua_ax_extension_TableViewCell_getIdx(lua_State* tolua_S)
 int lua_ax_extension_TableViewCell_setIdx(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::TableViewCell* obj = nullptr;
+    ax::ext::TableViewCell* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2084,10 +2084,10 @@ int lua_ax_extension_TableViewCell_setIdx(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.TableViewCell",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.TableViewCell",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::TableViewCell*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::TableViewCell*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -2102,7 +2102,7 @@ int lua_ax_extension_TableViewCell_setIdx(lua_State* tolua_S)
     {
         ssize_t arg0;
 
-        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ax.TableViewCell:setIdx");
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "axext.TableViewCell:setIdx");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableViewCell_setIdx'", nullptr);
@@ -2112,7 +2112,7 @@ int lua_ax_extension_TableViewCell_setIdx(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableViewCell:setIdx",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.TableViewCell:setIdx",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2125,7 +2125,7 @@ int lua_ax_extension_TableViewCell_setIdx(lua_State* tolua_S)
 int lua_ax_extension_TableViewCell_reset(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::TableViewCell* obj = nullptr;
+    ax::ext::TableViewCell* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2134,10 +2134,10 @@ int lua_ax_extension_TableViewCell_reset(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.TableViewCell",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.TableViewCell",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::TableViewCell*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::TableViewCell*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -2159,7 +2159,7 @@ int lua_ax_extension_TableViewCell_reset(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableViewCell:reset",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.TableViewCell:reset",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2179,7 +2179,7 @@ int lua_ax_extension_TableViewCell_create(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.TableViewCell",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axext.TableViewCell",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -2191,11 +2191,11 @@ int lua_ax_extension_TableViewCell_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableViewCell_create'", nullptr);
             return 0;
         }
-        auto&& ret = ax::extension::TableViewCell::create();
-        object_to_luaval<ax::extension::TableViewCell>(tolua_S, "ax.TableViewCell",(ax::extension::TableViewCell*)ret);
+        auto&& ret = ax::ext::TableViewCell::create();
+        object_to_luaval<ax::ext::TableViewCell>(tolua_S, "axext.TableViewCell",(ax::ext::TableViewCell*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.TableViewCell:create",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axext.TableViewCell:create",argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
@@ -2206,7 +2206,7 @@ int lua_ax_extension_TableViewCell_create(lua_State* tolua_S)
 int lua_ax_extension_TableViewCell_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::TableViewCell* obj = nullptr;
+    ax::ext::TableViewCell* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2223,14 +2223,14 @@ int lua_ax_extension_TableViewCell_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableViewCell_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::extension::TableViewCell();
+        obj = new ax::ext::TableViewCell();
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.TableViewCell");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axext.TableViewCell");
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableViewCell:TableViewCell",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.TableViewCell:TableViewCell",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2248,8 +2248,8 @@ static int lua_ax_extension_TableViewCell_finalize(lua_State* tolua_S)
 
 int lua_register_ax_extension_TableViewCell(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.TableViewCell");
-    tolua_cclass(tolua_S,"TableViewCell","ax.TableViewCell","ax.Node",nullptr);
+    tolua_usertype(tolua_S,"axext.TableViewCell");
+    tolua_cclass(tolua_S,"TableViewCell","axext.TableViewCell","ax.Node",nullptr);
 
     tolua_beginmodule(tolua_S,"TableViewCell");
         tolua_function(tolua_S,"new",lua_ax_extension_TableViewCell_constructor);
@@ -2258,16 +2258,16 @@ int lua_register_ax_extension_TableViewCell(lua_State* tolua_S)
         tolua_function(tolua_S,"reset",lua_ax_extension_TableViewCell_reset);
         tolua_function(tolua_S,"create", lua_ax_extension_TableViewCell_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::extension::TableViewCell).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.TableViewCell";
-    g_typeCast[typeName] = "ax.TableViewCell";
+    auto typeName = typeid(ax::ext::TableViewCell).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axext.TableViewCell";
+    g_typeCast[typeName] = "axext.TableViewCell";
     return 1;
 }
 
 int lua_ax_extension_TableView_initWithViewSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::TableView* obj = nullptr;
+    ax::ext::TableView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2276,10 +2276,10 @@ int lua_ax_extension_TableView_initWithViewSize(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.TableView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::TableView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -2294,7 +2294,7 @@ int lua_ax_extension_TableView_initWithViewSize(lua_State* tolua_S)
     {
         ax::Size arg0;
 
-        ok &= luaval_to_size(tolua_S, 2, &arg0, "ax.TableView:initWithViewSize");
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "axext.TableView:initWithViewSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_initWithViewSize'", nullptr);
@@ -2309,9 +2309,9 @@ int lua_ax_extension_TableView_initWithViewSize(lua_State* tolua_S)
         ax::Size arg0;
         ax::Node* arg1;
 
-        ok &= luaval_to_size(tolua_S, 2, &arg0, "ax.TableView:initWithViewSize");
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "axext.TableView:initWithViewSize");
 
-        ok &= luaval_to_object<ax::Node>(tolua_S, 3, "ax.Node",&arg1, "ax.TableView:initWithViewSize");
+        ok &= luaval_to_object<ax::Node>(tolua_S, 3, "ax.Node",&arg1, "axext.TableView:initWithViewSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_initWithViewSize'", nullptr);
@@ -2321,7 +2321,7 @@ int lua_ax_extension_TableView_initWithViewSize(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:initWithViewSize",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.TableView:initWithViewSize",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2334,7 +2334,7 @@ int lua_ax_extension_TableView_initWithViewSize(lua_State* tolua_S)
 int lua_ax_extension_TableView_setVerticalFillOrder(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::TableView* obj = nullptr;
+    ax::ext::TableView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2343,10 +2343,10 @@ int lua_ax_extension_TableView_setVerticalFillOrder(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.TableView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::TableView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -2359,9 +2359,9 @@ int lua_ax_extension_TableView_setVerticalFillOrder(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        ax::extension::TableView::VerticalFillOrder arg0;
+        ax::ext::TableView::VerticalFillOrder arg0;
 
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.TableView:setVerticalFillOrder");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axext.TableView:setVerticalFillOrder");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_setVerticalFillOrder'", nullptr);
@@ -2371,7 +2371,7 @@ int lua_ax_extension_TableView_setVerticalFillOrder(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:setVerticalFillOrder",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.TableView:setVerticalFillOrder",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2384,7 +2384,7 @@ int lua_ax_extension_TableView_setVerticalFillOrder(lua_State* tolua_S)
 int lua_ax_extension_TableView_getVerticalFillOrder(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::TableView* obj = nullptr;
+    ax::ext::TableView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2393,10 +2393,10 @@ int lua_ax_extension_TableView_getVerticalFillOrder(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.TableView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::TableView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -2418,7 +2418,7 @@ int lua_ax_extension_TableView_getVerticalFillOrder(lua_State* tolua_S)
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:getVerticalFillOrder",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.TableView:getVerticalFillOrder",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2431,7 +2431,7 @@ int lua_ax_extension_TableView_getVerticalFillOrder(lua_State* tolua_S)
 int lua_ax_extension_TableView_updateCellAtIndex(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::TableView* obj = nullptr;
+    ax::ext::TableView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2440,10 +2440,10 @@ int lua_ax_extension_TableView_updateCellAtIndex(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.TableView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::TableView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -2458,7 +2458,7 @@ int lua_ax_extension_TableView_updateCellAtIndex(lua_State* tolua_S)
     {
         ssize_t arg0;
 
-        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ax.TableView:updateCellAtIndex");
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "axext.TableView:updateCellAtIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_updateCellAtIndex'", nullptr);
@@ -2468,7 +2468,7 @@ int lua_ax_extension_TableView_updateCellAtIndex(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:updateCellAtIndex",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.TableView:updateCellAtIndex",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2481,7 +2481,7 @@ int lua_ax_extension_TableView_updateCellAtIndex(lua_State* tolua_S)
 int lua_ax_extension_TableView_insertCellAtIndex(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::TableView* obj = nullptr;
+    ax::ext::TableView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2490,10 +2490,10 @@ int lua_ax_extension_TableView_insertCellAtIndex(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.TableView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::TableView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -2508,7 +2508,7 @@ int lua_ax_extension_TableView_insertCellAtIndex(lua_State* tolua_S)
     {
         ssize_t arg0;
 
-        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ax.TableView:insertCellAtIndex");
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "axext.TableView:insertCellAtIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_insertCellAtIndex'", nullptr);
@@ -2518,7 +2518,7 @@ int lua_ax_extension_TableView_insertCellAtIndex(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:insertCellAtIndex",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.TableView:insertCellAtIndex",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2531,7 +2531,7 @@ int lua_ax_extension_TableView_insertCellAtIndex(lua_State* tolua_S)
 int lua_ax_extension_TableView_removeCellAtIndex(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::TableView* obj = nullptr;
+    ax::ext::TableView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2540,10 +2540,10 @@ int lua_ax_extension_TableView_removeCellAtIndex(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.TableView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::TableView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -2558,7 +2558,7 @@ int lua_ax_extension_TableView_removeCellAtIndex(lua_State* tolua_S)
     {
         ssize_t arg0;
 
-        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ax.TableView:removeCellAtIndex");
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "axext.TableView:removeCellAtIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_removeCellAtIndex'", nullptr);
@@ -2568,7 +2568,7 @@ int lua_ax_extension_TableView_removeCellAtIndex(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:removeCellAtIndex",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.TableView:removeCellAtIndex",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2581,7 +2581,7 @@ int lua_ax_extension_TableView_removeCellAtIndex(lua_State* tolua_S)
 int lua_ax_extension_TableView_reloadData(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::TableView* obj = nullptr;
+    ax::ext::TableView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2590,10 +2590,10 @@ int lua_ax_extension_TableView_reloadData(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.TableView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::TableView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -2615,7 +2615,7 @@ int lua_ax_extension_TableView_reloadData(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:reloadData",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.TableView:reloadData",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2628,7 +2628,7 @@ int lua_ax_extension_TableView_reloadData(lua_State* tolua_S)
 int lua_ax_extension_TableView_dequeueCell(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::TableView* obj = nullptr;
+    ax::ext::TableView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2637,10 +2637,10 @@ int lua_ax_extension_TableView_dequeueCell(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.TableView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::TableView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -2659,10 +2659,10 @@ int lua_ax_extension_TableView_dequeueCell(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->dequeueCell();
-        object_to_luaval<ax::extension::TableViewCell>(tolua_S, "ax.TableViewCell",(ax::extension::TableViewCell*)ret);
+        object_to_luaval<ax::ext::TableViewCell>(tolua_S, "axext.TableViewCell",(ax::ext::TableViewCell*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:dequeueCell",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.TableView:dequeueCell",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2675,7 +2675,7 @@ int lua_ax_extension_TableView_dequeueCell(lua_State* tolua_S)
 int lua_ax_extension_TableView_cellAtIndex(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::TableView* obj = nullptr;
+    ax::ext::TableView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2684,10 +2684,10 @@ int lua_ax_extension_TableView_cellAtIndex(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.TableView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::TableView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -2702,17 +2702,17 @@ int lua_ax_extension_TableView_cellAtIndex(lua_State* tolua_S)
     {
         ssize_t arg0;
 
-        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ax.TableView:cellAtIndex");
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "axext.TableView:cellAtIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_cellAtIndex'", nullptr);
             return 0;
         }
         auto&& ret = obj->cellAtIndex(arg0);
-        object_to_luaval<ax::extension::TableViewCell>(tolua_S, "ax.TableViewCell",(ax::extension::TableViewCell*)ret);
+        object_to_luaval<ax::ext::TableViewCell>(tolua_S, "axext.TableViewCell",(ax::ext::TableViewCell*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:cellAtIndex",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.TableView:cellAtIndex",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2725,7 +2725,7 @@ int lua_ax_extension_TableView_cellAtIndex(lua_State* tolua_S)
 int lua_ax_extension_TableView_scrollViewDidScroll(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::TableView* obj = nullptr;
+    ax::ext::TableView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2734,10 +2734,10 @@ int lua_ax_extension_TableView_scrollViewDidScroll(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.TableView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::TableView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -2750,9 +2750,9 @@ int lua_ax_extension_TableView_scrollViewDidScroll(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        ax::extension::ScrollView* arg0;
+        ax::ext::ScrollView* arg0;
 
-        ok &= luaval_to_object<ax::extension::ScrollView>(tolua_S, 2, "ax.ScrollView",&arg0, "ax.TableView:scrollViewDidScroll");
+        ok &= luaval_to_object<ax::ext::ScrollView>(tolua_S, 2, "axext.ScrollView",&arg0, "axext.TableView:scrollViewDidScroll");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_scrollViewDidScroll'", nullptr);
@@ -2762,7 +2762,7 @@ int lua_ax_extension_TableView_scrollViewDidScroll(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:scrollViewDidScroll",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.TableView:scrollViewDidScroll",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2775,7 +2775,7 @@ int lua_ax_extension_TableView_scrollViewDidScroll(lua_State* tolua_S)
 int lua_ax_extension_TableView_scrollViewDidZoom(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::TableView* obj = nullptr;
+    ax::ext::TableView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2784,10 +2784,10 @@ int lua_ax_extension_TableView_scrollViewDidZoom(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.TableView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::TableView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -2800,9 +2800,9 @@ int lua_ax_extension_TableView_scrollViewDidZoom(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        ax::extension::ScrollView* arg0;
+        ax::ext::ScrollView* arg0;
 
-        ok &= luaval_to_object<ax::extension::ScrollView>(tolua_S, 2, "ax.ScrollView",&arg0, "ax.TableView:scrollViewDidZoom");
+        ok &= luaval_to_object<ax::ext::ScrollView>(tolua_S, 2, "axext.ScrollView",&arg0, "axext.TableView:scrollViewDidZoom");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_scrollViewDidZoom'", nullptr);
@@ -2812,7 +2812,7 @@ int lua_ax_extension_TableView_scrollViewDidZoom(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:scrollViewDidZoom",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.TableView:scrollViewDidZoom",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2825,7 +2825,7 @@ int lua_ax_extension_TableView_scrollViewDidZoom(lua_State* tolua_S)
 int lua_ax_extension_TableView__updateContentSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::TableView* obj = nullptr;
+    ax::ext::TableView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2834,10 +2834,10 @@ int lua_ax_extension_TableView__updateContentSize(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.TableView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.TableView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::TableView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::TableView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -2859,7 +2859,7 @@ int lua_ax_extension_TableView__updateContentSize(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:_updateContentSize",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.TableView:_updateContentSize",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2872,7 +2872,7 @@ int lua_ax_extension_TableView__updateContentSize(lua_State* tolua_S)
 int lua_ax_extension_TableView_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::TableView* obj = nullptr;
+    ax::ext::TableView* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2889,14 +2889,14 @@ int lua_ax_extension_TableView_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::extension::TableView();
+        obj = new ax::ext::TableView();
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.TableView");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axext.TableView");
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TableView:TableView",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.TableView:TableView",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2914,8 +2914,8 @@ static int lua_ax_extension_TableView_finalize(lua_State* tolua_S)
 
 int lua_register_ax_extension_TableView(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.TableView");
-    tolua_cclass(tolua_S,"TableView","ax.TableView","ax.ScrollView",nullptr);
+    tolua_usertype(tolua_S,"axext.TableView");
+    tolua_cclass(tolua_S,"TableView","axext.TableView","axext.ScrollView",nullptr);
 
     tolua_beginmodule(tolua_S,"TableView");
         tolua_function(tolua_S,"new",lua_ax_extension_TableView_constructor);
@@ -2932,16 +2932,16 @@ int lua_register_ax_extension_TableView(lua_State* tolua_S)
         tolua_function(tolua_S,"scrollViewDidZoom",lua_ax_extension_TableView_scrollViewDidZoom);
         tolua_function(tolua_S,"_updateContentSize",lua_ax_extension_TableView__updateContentSize);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::extension::TableView).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.TableView";
-    g_typeCast[typeName] = "ax.TableView";
+    auto typeName = typeid(ax::ext::TableView).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axext.TableView";
+    g_typeCast[typeName] = "axext.TableView";
     return 1;
 }
 
 int lua_ax_extension_AssetsManager_checkUpdate(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManager* obj = nullptr;
+    ax::ext::AssetsManager* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2950,10 +2950,10 @@ int lua_ax_extension_AssetsManager_checkUpdate(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -2975,7 +2975,7 @@ int lua_ax_extension_AssetsManager_checkUpdate(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:checkUpdate",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManager:checkUpdate",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2988,7 +2988,7 @@ int lua_ax_extension_AssetsManager_checkUpdate(lua_State* tolua_S)
 int lua_ax_extension_AssetsManager_update(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManager* obj = nullptr;
+    ax::ext::AssetsManager* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2997,10 +2997,10 @@ int lua_ax_extension_AssetsManager_update(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -3022,7 +3022,7 @@ int lua_ax_extension_AssetsManager_update(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:update",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManager:update",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3035,7 +3035,7 @@ int lua_ax_extension_AssetsManager_update(lua_State* tolua_S)
 int lua_ax_extension_AssetsManager_getPackageUrl(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManager* obj = nullptr;
+    ax::ext::AssetsManager* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3044,10 +3044,10 @@ int lua_ax_extension_AssetsManager_getPackageUrl(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -3069,7 +3069,7 @@ int lua_ax_extension_AssetsManager_getPackageUrl(lua_State* tolua_S)
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:getPackageUrl",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManager:getPackageUrl",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3082,7 +3082,7 @@ int lua_ax_extension_AssetsManager_getPackageUrl(lua_State* tolua_S)
 int lua_ax_extension_AssetsManager_setPackageUrl(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManager* obj = nullptr;
+    ax::ext::AssetsManager* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3091,10 +3091,10 @@ int lua_ax_extension_AssetsManager_setPackageUrl(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -3109,7 +3109,7 @@ int lua_ax_extension_AssetsManager_setPackageUrl(lua_State* tolua_S)
     {
         const char* arg0;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.AssetsManager:setPackageUrl"); arg0 = arg0_tmp.c_str();
+        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "axext.AssetsManager:setPackageUrl"); arg0 = arg0_tmp.c_str();
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManager_setPackageUrl'", nullptr);
@@ -3119,7 +3119,7 @@ int lua_ax_extension_AssetsManager_setPackageUrl(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:setPackageUrl",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManager:setPackageUrl",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3132,7 +3132,7 @@ int lua_ax_extension_AssetsManager_setPackageUrl(lua_State* tolua_S)
 int lua_ax_extension_AssetsManager_getVersionFileUrl(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManager* obj = nullptr;
+    ax::ext::AssetsManager* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3141,10 +3141,10 @@ int lua_ax_extension_AssetsManager_getVersionFileUrl(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -3166,7 +3166,7 @@ int lua_ax_extension_AssetsManager_getVersionFileUrl(lua_State* tolua_S)
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:getVersionFileUrl",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManager:getVersionFileUrl",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3179,7 +3179,7 @@ int lua_ax_extension_AssetsManager_getVersionFileUrl(lua_State* tolua_S)
 int lua_ax_extension_AssetsManager_setVersionFileUrl(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManager* obj = nullptr;
+    ax::ext::AssetsManager* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3188,10 +3188,10 @@ int lua_ax_extension_AssetsManager_setVersionFileUrl(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -3206,7 +3206,7 @@ int lua_ax_extension_AssetsManager_setVersionFileUrl(lua_State* tolua_S)
     {
         const char* arg0;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.AssetsManager:setVersionFileUrl"); arg0 = arg0_tmp.c_str();
+        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "axext.AssetsManager:setVersionFileUrl"); arg0 = arg0_tmp.c_str();
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManager_setVersionFileUrl'", nullptr);
@@ -3216,7 +3216,7 @@ int lua_ax_extension_AssetsManager_setVersionFileUrl(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:setVersionFileUrl",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManager:setVersionFileUrl",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3229,7 +3229,7 @@ int lua_ax_extension_AssetsManager_setVersionFileUrl(lua_State* tolua_S)
 int lua_ax_extension_AssetsManager_getVersion(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManager* obj = nullptr;
+    ax::ext::AssetsManager* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3238,10 +3238,10 @@ int lua_ax_extension_AssetsManager_getVersion(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -3263,7 +3263,7 @@ int lua_ax_extension_AssetsManager_getVersion(lua_State* tolua_S)
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:getVersion",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManager:getVersion",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3276,7 +3276,7 @@ int lua_ax_extension_AssetsManager_getVersion(lua_State* tolua_S)
 int lua_ax_extension_AssetsManager_deleteVersion(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManager* obj = nullptr;
+    ax::ext::AssetsManager* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3285,10 +3285,10 @@ int lua_ax_extension_AssetsManager_deleteVersion(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -3310,7 +3310,7 @@ int lua_ax_extension_AssetsManager_deleteVersion(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:deleteVersion",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManager:deleteVersion",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3323,7 +3323,7 @@ int lua_ax_extension_AssetsManager_deleteVersion(lua_State* tolua_S)
 int lua_ax_extension_AssetsManager_getStoragePath(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManager* obj = nullptr;
+    ax::ext::AssetsManager* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3332,10 +3332,10 @@ int lua_ax_extension_AssetsManager_getStoragePath(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -3357,7 +3357,7 @@ int lua_ax_extension_AssetsManager_getStoragePath(lua_State* tolua_S)
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:getStoragePath",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManager:getStoragePath",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3370,7 +3370,7 @@ int lua_ax_extension_AssetsManager_getStoragePath(lua_State* tolua_S)
 int lua_ax_extension_AssetsManager_setStoragePath(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManager* obj = nullptr;
+    ax::ext::AssetsManager* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3379,10 +3379,10 @@ int lua_ax_extension_AssetsManager_setStoragePath(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -3397,7 +3397,7 @@ int lua_ax_extension_AssetsManager_setStoragePath(lua_State* tolua_S)
     {
         const char* arg0;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.AssetsManager:setStoragePath"); arg0 = arg0_tmp.c_str();
+        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "axext.AssetsManager:setStoragePath"); arg0 = arg0_tmp.c_str();
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManager_setStoragePath'", nullptr);
@@ -3407,7 +3407,7 @@ int lua_ax_extension_AssetsManager_setStoragePath(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:setStoragePath",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManager:setStoragePath",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3420,7 +3420,7 @@ int lua_ax_extension_AssetsManager_setStoragePath(lua_State* tolua_S)
 int lua_ax_extension_AssetsManager_setConnectionTimeout(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManager* obj = nullptr;
+    ax::ext::AssetsManager* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3429,10 +3429,10 @@ int lua_ax_extension_AssetsManager_setConnectionTimeout(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -3447,7 +3447,7 @@ int lua_ax_extension_AssetsManager_setConnectionTimeout(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.AssetsManager:setConnectionTimeout");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axext.AssetsManager:setConnectionTimeout");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManager_setConnectionTimeout'", nullptr);
@@ -3457,7 +3457,7 @@ int lua_ax_extension_AssetsManager_setConnectionTimeout(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:setConnectionTimeout",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManager:setConnectionTimeout",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3470,7 +3470,7 @@ int lua_ax_extension_AssetsManager_setConnectionTimeout(lua_State* tolua_S)
 int lua_ax_extension_AssetsManager_getConnectionTimeout(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManager* obj = nullptr;
+    ax::ext::AssetsManager* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3479,10 +3479,10 @@ int lua_ax_extension_AssetsManager_getConnectionTimeout(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -3504,7 +3504,7 @@ int lua_ax_extension_AssetsManager_getConnectionTimeout(lua_State* tolua_S)
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:getConnectionTimeout",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManager:getConnectionTimeout",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3524,7 +3524,7 @@ int lua_ax_extension_AssetsManager_create(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axext.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -3537,9 +3537,9 @@ int lua_ax_extension_AssetsManager_create(lua_State* tolua_S)
         std::function<void (int)> arg3;
         std::function<void (int)> arg4;
         std::function<void ()> arg5;
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.AssetsManager:create"); arg0 = arg0_tmp.c_str();
-        std::string arg1_tmp; ok &= luaval_to_std_string(tolua_S, 3, &arg1_tmp, "ax.AssetsManager:create"); arg1 = arg1_tmp.c_str();
-        std::string arg2_tmp; ok &= luaval_to_std_string(tolua_S, 4, &arg2_tmp, "ax.AssetsManager:create"); arg2 = arg2_tmp.c_str();
+        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "axext.AssetsManager:create"); arg0 = arg0_tmp.c_str();
+        std::string arg1_tmp; ok &= luaval_to_std_string(tolua_S, 3, &arg1_tmp, "axext.AssetsManager:create"); arg1 = arg1_tmp.c_str();
+        std::string arg2_tmp; ok &= luaval_to_std_string(tolua_S, 4, &arg2_tmp, "axext.AssetsManager:create"); arg2 = arg2_tmp.c_str();
         do {
         	// Lambda binding for lua is not supported.
             assert(false);
@@ -3560,11 +3560,11 @@ int lua_ax_extension_AssetsManager_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManager_create'", nullptr);
             return 0;
         }
-        auto&& ret = ax::extension::AssetsManager::create(arg0, arg1, arg2, arg3, arg4, arg5);
-        object_to_luaval<ax::extension::AssetsManager>(tolua_S, "ax.AssetsManager",(ax::extension::AssetsManager*)ret);
+        auto&& ret = ax::ext::AssetsManager::create(arg0, arg1, arg2, arg3, arg4, arg5);
+        object_to_luaval<ax::ext::AssetsManager>(tolua_S, "axext.AssetsManager",(ax::ext::AssetsManager*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AssetsManager:create",argc, 6);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axext.AssetsManager:create",argc, 6);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
@@ -3575,7 +3575,7 @@ int lua_ax_extension_AssetsManager_create(lua_State* tolua_S)
 int lua_ax_extension_AssetsManager_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManager* obj = nullptr;
+    ax::ext::AssetsManager* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3592,28 +3592,28 @@ int lua_ax_extension_AssetsManager_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManager_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::extension::AssetsManager();
+        obj = new ax::ext::AssetsManager();
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.AssetsManager");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axext.AssetsManager");
         return 1;
     }
     if (argc == 1)
     {
         const char* arg0;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.AssetsManager:AssetsManager"); arg0 = arg0_tmp.c_str();
+        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "axext.AssetsManager:AssetsManager"); arg0 = arg0_tmp.c_str();
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManager_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::extension::AssetsManager(arg0);
+        obj = new ax::ext::AssetsManager(arg0);
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.AssetsManager");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axext.AssetsManager");
         return 1;
     }
     if (argc == 2)
@@ -3621,19 +3621,19 @@ int lua_ax_extension_AssetsManager_constructor(lua_State* tolua_S)
         const char* arg0;
         const char* arg1;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.AssetsManager:AssetsManager"); arg0 = arg0_tmp.c_str();
+        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "axext.AssetsManager:AssetsManager"); arg0 = arg0_tmp.c_str();
 
-        std::string arg1_tmp; ok &= luaval_to_std_string(tolua_S, 3, &arg1_tmp, "ax.AssetsManager:AssetsManager"); arg1 = arg1_tmp.c_str();
+        std::string arg1_tmp; ok &= luaval_to_std_string(tolua_S, 3, &arg1_tmp, "axext.AssetsManager:AssetsManager"); arg1 = arg1_tmp.c_str();
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManager_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::extension::AssetsManager(arg0, arg1);
+        obj = new ax::ext::AssetsManager(arg0, arg1);
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.AssetsManager");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axext.AssetsManager");
         return 1;
     }
     if (argc == 3)
@@ -3642,24 +3642,24 @@ int lua_ax_extension_AssetsManager_constructor(lua_State* tolua_S)
         const char* arg1;
         const char* arg2;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.AssetsManager:AssetsManager"); arg0 = arg0_tmp.c_str();
+        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "axext.AssetsManager:AssetsManager"); arg0 = arg0_tmp.c_str();
 
-        std::string arg1_tmp; ok &= luaval_to_std_string(tolua_S, 3, &arg1_tmp, "ax.AssetsManager:AssetsManager"); arg1 = arg1_tmp.c_str();
+        std::string arg1_tmp; ok &= luaval_to_std_string(tolua_S, 3, &arg1_tmp, "axext.AssetsManager:AssetsManager"); arg1 = arg1_tmp.c_str();
 
-        std::string arg2_tmp; ok &= luaval_to_std_string(tolua_S, 4, &arg2_tmp, "ax.AssetsManager:AssetsManager"); arg2 = arg2_tmp.c_str();
+        std::string arg2_tmp; ok &= luaval_to_std_string(tolua_S, 4, &arg2_tmp, "axext.AssetsManager:AssetsManager"); arg2 = arg2_tmp.c_str();
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManager_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::extension::AssetsManager(arg0, arg1, arg2);
+        obj = new ax::ext::AssetsManager(arg0, arg1, arg2);
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.AssetsManager");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axext.AssetsManager");
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:AssetsManager",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManager:AssetsManager",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3677,8 +3677,8 @@ static int lua_ax_extension_AssetsManager_finalize(lua_State* tolua_S)
 
 int lua_register_ax_extension_AssetsManager(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.AssetsManager");
-    tolua_cclass(tolua_S,"AssetsManager","ax.AssetsManager","ax.Node",nullptr);
+    tolua_usertype(tolua_S,"axext.AssetsManager");
+    tolua_cclass(tolua_S,"AssetsManager","axext.AssetsManager","ax.Node",nullptr);
 
     tolua_beginmodule(tolua_S,"AssetsManager");
         tolua_function(tolua_S,"new",lua_ax_extension_AssetsManager_constructor);
@@ -3696,16 +3696,16 @@ int lua_register_ax_extension_AssetsManager(lua_State* tolua_S)
         tolua_function(tolua_S,"getConnectionTimeout",lua_ax_extension_AssetsManager_getConnectionTimeout);
         tolua_function(tolua_S,"create", lua_ax_extension_AssetsManager_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::extension::AssetsManager).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.AssetsManager";
-    g_typeCast[typeName] = "ax.AssetsManager";
+    auto typeName = typeid(ax::ext::AssetsManager).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axext.AssetsManager";
+    g_typeCast[typeName] = "axext.AssetsManager";
     return 1;
 }
 
 int lua_ax_extension_EventAssetsManagerEx_getEventCode(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::EventAssetsManagerEx* obj = nullptr;
+    ax::ext::EventAssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3714,10 +3714,10 @@ int lua_ax_extension_EventAssetsManagerEx_getEventCode(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -3739,7 +3739,7 @@ int lua_ax_extension_EventAssetsManagerEx_getEventCode(lua_State* tolua_S)
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:getEventCode",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.EventAssetsManagerEx:getEventCode",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3752,7 +3752,7 @@ int lua_ax_extension_EventAssetsManagerEx_getEventCode(lua_State* tolua_S)
 int lua_ax_extension_EventAssetsManagerEx_getCURLECode(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::EventAssetsManagerEx* obj = nullptr;
+    ax::ext::EventAssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3761,10 +3761,10 @@ int lua_ax_extension_EventAssetsManagerEx_getCURLECode(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -3786,7 +3786,7 @@ int lua_ax_extension_EventAssetsManagerEx_getCURLECode(lua_State* tolua_S)
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:getCURLECode",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.EventAssetsManagerEx:getCURLECode",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3799,7 +3799,7 @@ int lua_ax_extension_EventAssetsManagerEx_getCURLECode(lua_State* tolua_S)
 int lua_ax_extension_EventAssetsManagerEx_getCURLMCode(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::EventAssetsManagerEx* obj = nullptr;
+    ax::ext::EventAssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3808,10 +3808,10 @@ int lua_ax_extension_EventAssetsManagerEx_getCURLMCode(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -3833,7 +3833,7 @@ int lua_ax_extension_EventAssetsManagerEx_getCURLMCode(lua_State* tolua_S)
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:getCURLMCode",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.EventAssetsManagerEx:getCURLMCode",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3846,7 +3846,7 @@ int lua_ax_extension_EventAssetsManagerEx_getCURLMCode(lua_State* tolua_S)
 int lua_ax_extension_EventAssetsManagerEx_getMessage(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::EventAssetsManagerEx* obj = nullptr;
+    ax::ext::EventAssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3855,10 +3855,10 @@ int lua_ax_extension_EventAssetsManagerEx_getMessage(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -3880,7 +3880,7 @@ int lua_ax_extension_EventAssetsManagerEx_getMessage(lua_State* tolua_S)
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:getMessage",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.EventAssetsManagerEx:getMessage",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3893,7 +3893,7 @@ int lua_ax_extension_EventAssetsManagerEx_getMessage(lua_State* tolua_S)
 int lua_ax_extension_EventAssetsManagerEx_getAssetId(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::EventAssetsManagerEx* obj = nullptr;
+    ax::ext::EventAssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3902,10 +3902,10 @@ int lua_ax_extension_EventAssetsManagerEx_getAssetId(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -3927,7 +3927,7 @@ int lua_ax_extension_EventAssetsManagerEx_getAssetId(lua_State* tolua_S)
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:getAssetId",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.EventAssetsManagerEx:getAssetId",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3940,7 +3940,7 @@ int lua_ax_extension_EventAssetsManagerEx_getAssetId(lua_State* tolua_S)
 int lua_ax_extension_EventAssetsManagerEx_getAssetsManagerEx(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::EventAssetsManagerEx* obj = nullptr;
+    ax::ext::EventAssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3949,10 +3949,10 @@ int lua_ax_extension_EventAssetsManagerEx_getAssetsManagerEx(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -3971,10 +3971,10 @@ int lua_ax_extension_EventAssetsManagerEx_getAssetsManagerEx(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getAssetsManagerEx();
-        object_to_luaval<ax::extension::AssetsManagerEx>(tolua_S, "ax.AssetsManagerEx",(ax::extension::AssetsManagerEx*)ret);
+        object_to_luaval<ax::ext::AssetsManagerEx>(tolua_S, "axext.AssetsManagerEx",(ax::ext::AssetsManagerEx*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:getAssetsManagerEx",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.EventAssetsManagerEx:getAssetsManagerEx",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3987,7 +3987,7 @@ int lua_ax_extension_EventAssetsManagerEx_getAssetsManagerEx(lua_State* tolua_S)
 int lua_ax_extension_EventAssetsManagerEx_getPercent(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::EventAssetsManagerEx* obj = nullptr;
+    ax::ext::EventAssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3996,10 +3996,10 @@ int lua_ax_extension_EventAssetsManagerEx_getPercent(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -4021,7 +4021,7 @@ int lua_ax_extension_EventAssetsManagerEx_getPercent(lua_State* tolua_S)
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:getPercent",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.EventAssetsManagerEx:getPercent",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4034,7 +4034,7 @@ int lua_ax_extension_EventAssetsManagerEx_getPercent(lua_State* tolua_S)
 int lua_ax_extension_EventAssetsManagerEx_getPercentByFile(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::EventAssetsManagerEx* obj = nullptr;
+    ax::ext::EventAssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4043,10 +4043,10 @@ int lua_ax_extension_EventAssetsManagerEx_getPercentByFile(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -4068,7 +4068,7 @@ int lua_ax_extension_EventAssetsManagerEx_getPercentByFile(lua_State* tolua_S)
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:getPercentByFile",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.EventAssetsManagerEx:getPercentByFile",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4081,7 +4081,7 @@ int lua_ax_extension_EventAssetsManagerEx_getPercentByFile(lua_State* tolua_S)
 int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::EventAssetsManagerEx* obj = nullptr;
+    ax::ext::EventAssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4094,191 +4094,191 @@ int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
     if (argc == 3)
     {
         std::string_view arg0;
-        ax::extension::AssetsManagerEx* arg1;
-        ax::extension::EventAssetsManagerEx::EventCode arg2;
+        ax::ext::AssetsManagerEx* arg1;
+        ax::ext::EventAssetsManagerEx::EventCode arg2;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_object<ax::ext::AssetsManagerEx>(tolua_S, 3, "axext.AssetsManagerEx",&arg1, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2);
+        obj = new ax::ext::EventAssetsManagerEx(arg0, arg1, arg2);
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventAssetsManagerEx");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axext.EventAssetsManagerEx");
         return 1;
     }
     if (argc == 4)
     {
         std::string_view arg0;
-        ax::extension::AssetsManagerEx* arg1;
-        ax::extension::EventAssetsManagerEx::EventCode arg2;
+        ax::ext::AssetsManagerEx* arg1;
+        ax::ext::EventAssetsManagerEx::EventCode arg2;
         double arg3;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_object<ax::ext::AssetsManagerEx>(tolua_S, 3, "axext.AssetsManagerEx",&arg1, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3);
+        obj = new ax::ext::EventAssetsManagerEx(arg0, arg1, arg2, arg3);
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventAssetsManagerEx");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axext.EventAssetsManagerEx");
         return 1;
     }
     if (argc == 5)
     {
         std::string_view arg0;
-        ax::extension::AssetsManagerEx* arg1;
-        ax::extension::EventAssetsManagerEx::EventCode arg2;
+        ax::ext::AssetsManagerEx* arg1;
+        ax::ext::EventAssetsManagerEx::EventCode arg2;
         double arg3;
         double arg4;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_object<ax::ext::AssetsManagerEx>(tolua_S, 3, "axext.AssetsManagerEx",&arg1, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4);
+        obj = new ax::ext::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4);
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventAssetsManagerEx");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axext.EventAssetsManagerEx");
         return 1;
     }
     if (argc == 6)
     {
         std::string_view arg0;
-        ax::extension::AssetsManagerEx* arg1;
-        ax::extension::EventAssetsManagerEx::EventCode arg2;
+        ax::ext::AssetsManagerEx* arg1;
+        ax::ext::EventAssetsManagerEx::EventCode arg2;
         double arg3;
         double arg4;
         std::string_view arg5;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_object<ax::ext::AssetsManagerEx>(tolua_S, 3, "axext.AssetsManagerEx",&arg1, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5);
+        obj = new ax::ext::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5);
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventAssetsManagerEx");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axext.EventAssetsManagerEx");
         return 1;
     }
     if (argc == 7)
     {
         std::string_view arg0;
-        ax::extension::AssetsManagerEx* arg1;
-        ax::extension::EventAssetsManagerEx::EventCode arg2;
+        ax::ext::AssetsManagerEx* arg1;
+        ax::ext::EventAssetsManagerEx::EventCode arg2;
         double arg3;
         double arg4;
         std::string_view arg5;
         std::string_view arg6;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_object<ax::ext::AssetsManagerEx>(tolua_S, 3, "axext.AssetsManagerEx",&arg1, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+        obj = new ax::ext::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventAssetsManagerEx");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axext.EventAssetsManagerEx");
         return 1;
     }
     if (argc == 8)
     {
         std::string_view arg0;
-        ax::extension::AssetsManagerEx* arg1;
-        ax::extension::EventAssetsManagerEx::EventCode arg2;
+        ax::ext::AssetsManagerEx* arg1;
+        ax::ext::EventAssetsManagerEx::EventCode arg2;
         double arg3;
         double arg4;
         std::string_view arg5;
         std::string_view arg6;
         int arg7;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_object<ax::ext::AssetsManagerEx>(tolua_S, 3, "axext.AssetsManagerEx",&arg1, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int(tolua_S, 9, &arg7, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 9, &arg7, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+        obj = new ax::ext::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventAssetsManagerEx");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axext.EventAssetsManagerEx");
         return 1;
     }
     if (argc == 9)
     {
         std::string_view arg0;
-        ax::extension::AssetsManagerEx* arg1;
-        ax::extension::EventAssetsManagerEx::EventCode arg2;
+        ax::ext::AssetsManagerEx* arg1;
+        ax::ext::EventAssetsManagerEx::EventCode arg2;
         double arg3;
         double arg4;
         std::string_view arg5;
@@ -4286,36 +4286,36 @@ int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
         int arg7;
         int arg8;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_object<ax::ext::AssetsManagerEx>(tolua_S, 3, "axext.AssetsManagerEx",&arg1, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int(tolua_S, 9, &arg7, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 9, &arg7, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int(tolua_S, 10, &arg8, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 10, &arg8, "axext.EventAssetsManagerEx:EventAssetsManagerEx");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+        obj = new ax::ext::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventAssetsManagerEx");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axext.EventAssetsManagerEx");
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:EventAssetsManagerEx",argc, 3);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.EventAssetsManagerEx:EventAssetsManagerEx",argc, 3);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4333,8 +4333,8 @@ static int lua_ax_extension_EventAssetsManagerEx_finalize(lua_State* tolua_S)
 
 int lua_register_ax_extension_EventAssetsManagerEx(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.EventAssetsManagerEx");
-    tolua_cclass(tolua_S,"EventAssetsManagerEx","ax.EventAssetsManagerEx","ax.EventCustom",nullptr);
+    tolua_usertype(tolua_S,"axext.EventAssetsManagerEx");
+    tolua_cclass(tolua_S,"EventAssetsManagerEx","axext.EventAssetsManagerEx","ax.EventCustom",nullptr);
 
     tolua_beginmodule(tolua_S,"EventAssetsManagerEx");
         tolua_function(tolua_S,"new",lua_ax_extension_EventAssetsManagerEx_constructor);
@@ -4347,16 +4347,16 @@ int lua_register_ax_extension_EventAssetsManagerEx(lua_State* tolua_S)
         tolua_function(tolua_S,"getPercent",lua_ax_extension_EventAssetsManagerEx_getPercent);
         tolua_function(tolua_S,"getPercentByFile",lua_ax_extension_EventAssetsManagerEx_getPercentByFile);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::extension::EventAssetsManagerEx).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventAssetsManagerEx";
-    g_typeCast[typeName] = "ax.EventAssetsManagerEx";
+    auto typeName = typeid(ax::ext::EventAssetsManagerEx).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axext.EventAssetsManagerEx";
+    g_typeCast[typeName] = "axext.EventAssetsManagerEx";
     return 1;
 }
 
 int lua_ax_extension_Manifest_isVersionLoaded(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::Manifest* obj = nullptr;
+    ax::ext::Manifest* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4365,10 +4365,10 @@ int lua_ax_extension_Manifest_isVersionLoaded(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::Manifest*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -4390,7 +4390,7 @@ int lua_ax_extension_Manifest_isVersionLoaded(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Manifest:isVersionLoaded",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.Manifest:isVersionLoaded",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4403,7 +4403,7 @@ int lua_ax_extension_Manifest_isVersionLoaded(lua_State* tolua_S)
 int lua_ax_extension_Manifest_isLoaded(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::Manifest* obj = nullptr;
+    ax::ext::Manifest* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4412,10 +4412,10 @@ int lua_ax_extension_Manifest_isLoaded(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::Manifest*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -4437,7 +4437,7 @@ int lua_ax_extension_Manifest_isLoaded(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Manifest:isLoaded",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.Manifest:isLoaded",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4450,7 +4450,7 @@ int lua_ax_extension_Manifest_isLoaded(lua_State* tolua_S)
 int lua_ax_extension_Manifest_getPackageUrl(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::Manifest* obj = nullptr;
+    ax::ext::Manifest* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4459,10 +4459,10 @@ int lua_ax_extension_Manifest_getPackageUrl(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::Manifest*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -4484,7 +4484,7 @@ int lua_ax_extension_Manifest_getPackageUrl(lua_State* tolua_S)
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Manifest:getPackageUrl",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.Manifest:getPackageUrl",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4497,7 +4497,7 @@ int lua_ax_extension_Manifest_getPackageUrl(lua_State* tolua_S)
 int lua_ax_extension_Manifest_getManifestFileUrl(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::Manifest* obj = nullptr;
+    ax::ext::Manifest* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4506,10 +4506,10 @@ int lua_ax_extension_Manifest_getManifestFileUrl(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::Manifest*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -4531,7 +4531,7 @@ int lua_ax_extension_Manifest_getManifestFileUrl(lua_State* tolua_S)
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Manifest:getManifestFileUrl",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.Manifest:getManifestFileUrl",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4544,7 +4544,7 @@ int lua_ax_extension_Manifest_getManifestFileUrl(lua_State* tolua_S)
 int lua_ax_extension_Manifest_getVersionFileUrl(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::Manifest* obj = nullptr;
+    ax::ext::Manifest* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4553,10 +4553,10 @@ int lua_ax_extension_Manifest_getVersionFileUrl(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::Manifest*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -4578,7 +4578,7 @@ int lua_ax_extension_Manifest_getVersionFileUrl(lua_State* tolua_S)
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Manifest:getVersionFileUrl",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.Manifest:getVersionFileUrl",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4591,7 +4591,7 @@ int lua_ax_extension_Manifest_getVersionFileUrl(lua_State* tolua_S)
 int lua_ax_extension_Manifest_getVersion(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::Manifest* obj = nullptr;
+    ax::ext::Manifest* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4600,10 +4600,10 @@ int lua_ax_extension_Manifest_getVersion(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::Manifest*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -4625,7 +4625,7 @@ int lua_ax_extension_Manifest_getVersion(lua_State* tolua_S)
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Manifest:getVersion",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.Manifest:getVersion",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4638,7 +4638,7 @@ int lua_ax_extension_Manifest_getVersion(lua_State* tolua_S)
 int lua_ax_extension_Manifest_getSearchPaths(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::Manifest* obj = nullptr;
+    ax::ext::Manifest* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4647,10 +4647,10 @@ int lua_ax_extension_Manifest_getSearchPaths(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::Manifest*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -4672,7 +4672,7 @@ int lua_ax_extension_Manifest_getSearchPaths(lua_State* tolua_S)
         strspan_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Manifest:getSearchPaths",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.Manifest:getSearchPaths",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4690,8 +4690,8 @@ static int lua_ax_extension_Manifest_finalize(lua_State* tolua_S)
 
 int lua_register_ax_extension_Manifest(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.Manifest");
-    tolua_cclass(tolua_S,"Manifest","ax.Manifest","ax.Object",nullptr);
+    tolua_usertype(tolua_S,"axext.Manifest");
+    tolua_cclass(tolua_S,"Manifest","axext.Manifest","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Manifest");
         tolua_function(tolua_S,"isVersionLoaded",lua_ax_extension_Manifest_isVersionLoaded);
@@ -4702,16 +4702,16 @@ int lua_register_ax_extension_Manifest(lua_State* tolua_S)
         tolua_function(tolua_S,"getVersion",lua_ax_extension_Manifest_getVersion);
         tolua_function(tolua_S,"getSearchPaths",lua_ax_extension_Manifest_getSearchPaths);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::extension::Manifest).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Manifest";
-    g_typeCast[typeName] = "ax.Manifest";
+    auto typeName = typeid(ax::ext::Manifest).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axext.Manifest";
+    g_typeCast[typeName] = "axext.Manifest";
     return 1;
 }
 
 int lua_ax_extension_AssetsManagerEx_checkUpdate(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManagerEx* obj = nullptr;
+    ax::ext::AssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4720,10 +4720,10 @@ int lua_ax_extension_AssetsManagerEx_checkUpdate(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -4745,7 +4745,7 @@ int lua_ax_extension_AssetsManagerEx_checkUpdate(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:checkUpdate",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManagerEx:checkUpdate",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4758,7 +4758,7 @@ int lua_ax_extension_AssetsManagerEx_checkUpdate(lua_State* tolua_S)
 int lua_ax_extension_AssetsManagerEx_update(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManagerEx* obj = nullptr;
+    ax::ext::AssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4767,10 +4767,10 @@ int lua_ax_extension_AssetsManagerEx_update(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -4792,7 +4792,7 @@ int lua_ax_extension_AssetsManagerEx_update(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:update",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManagerEx:update",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4805,7 +4805,7 @@ int lua_ax_extension_AssetsManagerEx_update(lua_State* tolua_S)
 int lua_ax_extension_AssetsManagerEx_downloadFailedAssets(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManagerEx* obj = nullptr;
+    ax::ext::AssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4814,10 +4814,10 @@ int lua_ax_extension_AssetsManagerEx_downloadFailedAssets(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -4839,7 +4839,7 @@ int lua_ax_extension_AssetsManagerEx_downloadFailedAssets(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:downloadFailedAssets",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManagerEx:downloadFailedAssets",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4852,7 +4852,7 @@ int lua_ax_extension_AssetsManagerEx_downloadFailedAssets(lua_State* tolua_S)
 int lua_ax_extension_AssetsManagerEx_getState(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManagerEx* obj = nullptr;
+    ax::ext::AssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4861,10 +4861,10 @@ int lua_ax_extension_AssetsManagerEx_getState(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -4886,7 +4886,7 @@ int lua_ax_extension_AssetsManagerEx_getState(lua_State* tolua_S)
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:getState",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManagerEx:getState",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4899,7 +4899,7 @@ int lua_ax_extension_AssetsManagerEx_getState(lua_State* tolua_S)
 int lua_ax_extension_AssetsManagerEx_getStoragePath(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManagerEx* obj = nullptr;
+    ax::ext::AssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4908,10 +4908,10 @@ int lua_ax_extension_AssetsManagerEx_getStoragePath(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -4933,7 +4933,7 @@ int lua_ax_extension_AssetsManagerEx_getStoragePath(lua_State* tolua_S)
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:getStoragePath",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManagerEx:getStoragePath",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4946,7 +4946,7 @@ int lua_ax_extension_AssetsManagerEx_getStoragePath(lua_State* tolua_S)
 int lua_ax_extension_AssetsManagerEx_getLocalManifest(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManagerEx* obj = nullptr;
+    ax::ext::AssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4955,10 +4955,10 @@ int lua_ax_extension_AssetsManagerEx_getLocalManifest(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -4977,10 +4977,10 @@ int lua_ax_extension_AssetsManagerEx_getLocalManifest(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getLocalManifest();
-        object_to_luaval<ax::extension::Manifest>(tolua_S, "ax.Manifest",(ax::extension::Manifest*)ret);
+        object_to_luaval<ax::ext::Manifest>(tolua_S, "axext.Manifest",(ax::ext::Manifest*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:getLocalManifest",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManagerEx:getLocalManifest",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4993,7 +4993,7 @@ int lua_ax_extension_AssetsManagerEx_getLocalManifest(lua_State* tolua_S)
 int lua_ax_extension_AssetsManagerEx_getRemoteManifest(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManagerEx* obj = nullptr;
+    ax::ext::AssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5002,10 +5002,10 @@ int lua_ax_extension_AssetsManagerEx_getRemoteManifest(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -5024,10 +5024,10 @@ int lua_ax_extension_AssetsManagerEx_getRemoteManifest(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getRemoteManifest();
-        object_to_luaval<ax::extension::Manifest>(tolua_S, "ax.Manifest",(ax::extension::Manifest*)ret);
+        object_to_luaval<ax::ext::Manifest>(tolua_S, "axext.Manifest",(ax::ext::Manifest*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:getRemoteManifest",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManagerEx:getRemoteManifest",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -5040,7 +5040,7 @@ int lua_ax_extension_AssetsManagerEx_getRemoteManifest(lua_State* tolua_S)
 int lua_ax_extension_AssetsManagerEx_getMaxConcurrentTask(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManagerEx* obj = nullptr;
+    ax::ext::AssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5049,10 +5049,10 @@ int lua_ax_extension_AssetsManagerEx_getMaxConcurrentTask(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -5074,7 +5074,7 @@ int lua_ax_extension_AssetsManagerEx_getMaxConcurrentTask(lua_State* tolua_S)
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:getMaxConcurrentTask",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManagerEx:getMaxConcurrentTask",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -5087,7 +5087,7 @@ int lua_ax_extension_AssetsManagerEx_getMaxConcurrentTask(lua_State* tolua_S)
 int lua_ax_extension_AssetsManagerEx_setMaxConcurrentTask(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManagerEx* obj = nullptr;
+    ax::ext::AssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5096,10 +5096,10 @@ int lua_ax_extension_AssetsManagerEx_setMaxConcurrentTask(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -5114,7 +5114,7 @@ int lua_ax_extension_AssetsManagerEx_setMaxConcurrentTask(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.AssetsManagerEx:setMaxConcurrentTask");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axext.AssetsManagerEx:setMaxConcurrentTask");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManagerEx_setMaxConcurrentTask'", nullptr);
@@ -5124,7 +5124,7 @@ int lua_ax_extension_AssetsManagerEx_setMaxConcurrentTask(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:setMaxConcurrentTask",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManagerEx:setMaxConcurrentTask",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -5137,7 +5137,7 @@ int lua_ax_extension_AssetsManagerEx_setMaxConcurrentTask(lua_State* tolua_S)
 int lua_ax_extension_AssetsManagerEx_setVersionCompareHandle(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManagerEx* obj = nullptr;
+    ax::ext::AssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5146,10 +5146,10 @@ int lua_ax_extension_AssetsManagerEx_setVersionCompareHandle(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -5178,7 +5178,7 @@ int lua_ax_extension_AssetsManagerEx_setVersionCompareHandle(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:setVersionCompareHandle",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManagerEx:setVersionCompareHandle",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -5191,7 +5191,7 @@ int lua_ax_extension_AssetsManagerEx_setVersionCompareHandle(lua_State* tolua_S)
 int lua_ax_extension_AssetsManagerEx_setVerifyCallback(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManagerEx* obj = nullptr;
+    ax::ext::AssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5200,10 +5200,10 @@ int lua_ax_extension_AssetsManagerEx_setVerifyCallback(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -5216,7 +5216,7 @@ int lua_ax_extension_AssetsManagerEx_setVerifyCallback(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        std::function<bool (std::string_view, ax::extension::ManifestAsset)> arg0;
+        std::function<bool (std::string_view, ax::ext::ManifestAsset)> arg0;
 
         do {
         	// Lambda binding for lua is not supported.
@@ -5232,7 +5232,7 @@ int lua_ax_extension_AssetsManagerEx_setVerifyCallback(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:setVerifyCallback",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManagerEx:setVerifyCallback",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -5252,7 +5252,7 @@ int lua_ax_extension_AssetsManagerEx_create(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axext.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -5261,18 +5261,18 @@ int lua_ax_extension_AssetsManagerEx_create(lua_State* tolua_S)
     {
         std::string_view arg0;
         std::string_view arg1;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AssetsManagerEx:create");
-        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.AssetsManagerEx:create");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axext.AssetsManagerEx:create");
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axext.AssetsManagerEx:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManagerEx_create'", nullptr);
             return 0;
         }
-        auto&& ret = ax::extension::AssetsManagerEx::create(arg0, arg1);
-        object_to_luaval<ax::extension::AssetsManagerEx>(tolua_S, "ax.AssetsManagerEx",(ax::extension::AssetsManagerEx*)ret);
+        auto&& ret = ax::ext::AssetsManagerEx::create(arg0, arg1);
+        object_to_luaval<ax::ext::AssetsManagerEx>(tolua_S, "axext.AssetsManagerEx",(ax::ext::AssetsManagerEx*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AssetsManagerEx:create",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axext.AssetsManagerEx:create",argc, 2);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
@@ -5283,7 +5283,7 @@ int lua_ax_extension_AssetsManagerEx_create(lua_State* tolua_S)
 int lua_ax_extension_AssetsManagerEx_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::AssetsManagerEx* obj = nullptr;
+    ax::ext::AssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5298,22 +5298,22 @@ int lua_ax_extension_AssetsManagerEx_constructor(lua_State* tolua_S)
         std::string_view arg0;
         std::string_view arg1;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AssetsManagerEx:AssetsManagerEx");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axext.AssetsManagerEx:AssetsManagerEx");
 
-        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.AssetsManagerEx:AssetsManagerEx");
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axext.AssetsManagerEx:AssetsManagerEx");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManagerEx_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::extension::AssetsManagerEx(arg0, arg1);
+        obj = new ax::ext::AssetsManagerEx(arg0, arg1);
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.AssetsManagerEx");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axext.AssetsManagerEx");
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:AssetsManagerEx",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.AssetsManagerEx:AssetsManagerEx",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -5331,8 +5331,8 @@ static int lua_ax_extension_AssetsManagerEx_finalize(lua_State* tolua_S)
 
 int lua_register_ax_extension_AssetsManagerEx(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.AssetsManagerEx");
-    tolua_cclass(tolua_S,"AssetsManagerEx","ax.AssetsManagerEx","ax.Object",nullptr);
+    tolua_usertype(tolua_S,"axext.AssetsManagerEx");
+    tolua_cclass(tolua_S,"AssetsManagerEx","axext.AssetsManagerEx","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"AssetsManagerEx");
         tolua_function(tolua_S,"new",lua_ax_extension_AssetsManagerEx_constructor);
@@ -5349,16 +5349,16 @@ int lua_register_ax_extension_AssetsManagerEx(lua_State* tolua_S)
         tolua_function(tolua_S,"setVerifyCallback",lua_ax_extension_AssetsManagerEx_setVerifyCallback);
         tolua_function(tolua_S,"create", lua_ax_extension_AssetsManagerEx_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::extension::AssetsManagerEx).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.AssetsManagerEx";
-    g_typeCast[typeName] = "ax.AssetsManagerEx";
+    auto typeName = typeid(ax::ext::AssetsManagerEx).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axext.AssetsManagerEx";
+    g_typeCast[typeName] = "axext.AssetsManagerEx";
     return 1;
 }
 
 int lua_ax_extension_EventListenerAssetsManagerEx_init(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::EventListenerAssetsManagerEx* obj = nullptr;
+    ax::ext::EventListenerAssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5367,10 +5367,10 @@ int lua_ax_extension_EventListenerAssetsManagerEx_init(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventListenerAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"axext.EventListenerAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::extension::EventListenerAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ext::EventListenerAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
@@ -5383,10 +5383,10 @@ int lua_ax_extension_EventListenerAssetsManagerEx_init(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2)
     {
-        const ax::extension::AssetsManagerEx* arg0;
-        std::function<void (ax::extension::EventAssetsManagerEx *)> arg1;
+        const ax::ext::AssetsManagerEx* arg0;
+        std::function<void (ax::ext::EventAssetsManagerEx *)> arg1;
 
-        ok &= luaval_to_object<const ax::extension::AssetsManagerEx>(tolua_S, 2, "ax.AssetsManagerEx",&arg0, "ax.EventListenerAssetsManagerEx:init");
+        ok &= luaval_to_object<const ax::ext::AssetsManagerEx>(tolua_S, 2, "axext.AssetsManagerEx",&arg0, "axext.EventListenerAssetsManagerEx:init");
 
         do {
         	// Lambda binding for lua is not supported.
@@ -5402,7 +5402,7 @@ int lua_ax_extension_EventListenerAssetsManagerEx_init(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerAssetsManagerEx:init",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.EventListenerAssetsManagerEx:init",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -5415,7 +5415,7 @@ int lua_ax_extension_EventListenerAssetsManagerEx_init(lua_State* tolua_S)
 int lua_ax_extension_EventListenerAssetsManagerEx_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::extension::EventListenerAssetsManagerEx* obj = nullptr;
+    ax::ext::EventListenerAssetsManagerEx* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5432,14 +5432,14 @@ int lua_ax_extension_EventListenerAssetsManagerEx_constructor(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventListenerAssetsManagerEx_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::extension::EventListenerAssetsManagerEx();
+        obj = new ax::ext::EventListenerAssetsManagerEx();
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventListenerAssetsManagerEx");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axext.EventListenerAssetsManagerEx");
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerAssetsManagerEx:EventListenerAssetsManagerEx",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.EventListenerAssetsManagerEx:EventListenerAssetsManagerEx",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -5457,16 +5457,16 @@ static int lua_ax_extension_EventListenerAssetsManagerEx_finalize(lua_State* tol
 
 int lua_register_ax_extension_EventListenerAssetsManagerEx(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.EventListenerAssetsManagerEx");
-    tolua_cclass(tolua_S,"EventListenerAssetsManagerEx","ax.EventListenerAssetsManagerEx","ax.EventListenerCustom",nullptr);
+    tolua_usertype(tolua_S,"axext.EventListenerAssetsManagerEx");
+    tolua_cclass(tolua_S,"EventListenerAssetsManagerEx","axext.EventListenerAssetsManagerEx","ax.EventListenerCustom",nullptr);
 
     tolua_beginmodule(tolua_S,"EventListenerAssetsManagerEx");
         tolua_function(tolua_S,"new",lua_ax_extension_EventListenerAssetsManagerEx_constructor);
         tolua_function(tolua_S,"init",lua_ax_extension_EventListenerAssetsManagerEx_init);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::extension::EventListenerAssetsManagerEx).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventListenerAssetsManagerEx";
-    g_typeCast[typeName] = "ax.EventListenerAssetsManagerEx";
+    auto typeName = typeid(ax::ext::EventListenerAssetsManagerEx).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axext.EventListenerAssetsManagerEx";
+    g_typeCast[typeName] = "axext.EventListenerAssetsManagerEx";
     return 1;
 }
 

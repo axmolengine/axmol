@@ -41,7 +41,7 @@ class PUParticleSystem3D;
 /**
  * 3d particle emitter
  */
-class AX_EX_DLL PUEmitter : public Particle3DEmitter
+class AX_EXT_API PUEmitter : public Particle3DEmitter
 {
     friend class PUParticleSystem3D;
 

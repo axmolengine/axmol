@@ -34,7 +34,7 @@ NS_AX_EXT_BEGIN
 
 class AssetsManagerEx;
 
-class AX_EX_DLL EventAssetsManagerEx : public ax::EventCustom
+class AX_EXT_API EventAssetsManagerEx : public ax::EventCustom
 {
 public:
     friend class AssetsManagerEx;

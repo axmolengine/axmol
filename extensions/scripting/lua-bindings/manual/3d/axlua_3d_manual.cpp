@@ -2380,7 +2380,7 @@ int lua_register_axis_3d_Ray(lua_State* L)
     return 1;
 }
 
-int register_all_cocos3d_manual_class(lua_State* L)
+int register_all_ax_3d_manual_class(lua_State* L)
 {
     tolua_module(L, "ax", 0);
     tolua_beginmodule(L, "ax");
@@ -2392,14 +2392,14 @@ int register_all_cocos3d_manual_class(lua_State* L)
     return 0;
 }
 
-int register_cocos3d_module(lua_State* L)
+int register_ax_3d_module(lua_State* L)
 {
     lua_getglobal(L, "_G");
     if (lua_istable(L, -1))  // stack:...,_G,
     {
         register_all_ax_3d(L);
         register_all_ax_3d_manual(L);
-        register_all_cocos3d_manual_class(L);
+        register_all_ax_3d_manual_class(L);
     }
     lua_pop(L, 1);
 

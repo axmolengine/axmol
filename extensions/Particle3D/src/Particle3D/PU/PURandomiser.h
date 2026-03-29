@@ -32,7 +32,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PURandomiser : public PUAffector
+class AX_EXT_API PURandomiser : public PUAffector
 {
 public:
     // Constants

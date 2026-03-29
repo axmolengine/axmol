@@ -33,7 +33,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUTextureRotator : public PUAffector
+class AX_EXT_API PUTextureRotator : public PUAffector
 {
 public:
     // Constants

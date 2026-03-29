@@ -33,7 +33,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUBaseForceAffectorTranslator : public PUScriptTranslator
+class AX_EXT_API PUBaseForceAffectorTranslator : public PUScriptTranslator
 {
 public:
     PUBaseForceAffectorTranslator();

@@ -39,7 +39,7 @@ struct PUParticle3D;
 class PUObserver;
 class PUParticleSystem3D;
 
-class AX_EX_DLL PUDoAffectorEventHandler : public PUEventHandler
+class AX_EXT_API PUDoAffectorEventHandler : public PUEventHandler
 {
 public:
     // Constants

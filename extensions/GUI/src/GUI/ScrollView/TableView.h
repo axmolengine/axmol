@@ -44,7 +44,7 @@ class TableView;
 /**
  * Sole purpose of this delegate is to single touch event in this version.
  */
-class AX_EX_DLL TableViewDelegate : public ScrollViewDelegate
+class AX_EXT_API TableViewDelegate : public ScrollViewDelegate
 {
 public:
     /**
@@ -89,7 +89,7 @@ public:
 /**
  * Data source that governs table backend data.
  */
-class AX_EX_DLL TableViewDataSource
+class AX_EXT_API TableViewDataSource
 {
 public:
     /**
@@ -131,7 +131,7 @@ public:
  *
  * This is a very basic, minimal implementation to bring UITableView-like component into cocos2d world.
  */
-class AX_EX_DLL TableView : public ScrollView, public ScrollViewDelegate
+class AX_EXT_API TableView : public ScrollView, public ScrollViewDelegate
 {
 public:
     enum class VerticalFillOrder

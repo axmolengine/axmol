@@ -59,7 +59,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUAffectorManager
+class AX_EXT_API PUAffectorManager
 {
 public:
     static PUAffectorManager* Instance();

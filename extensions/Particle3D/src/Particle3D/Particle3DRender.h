@@ -49,7 +49,7 @@ class Texture2D;
 /**
  * 3d particle render
  */
-class AX_EX_DLL Particle3DRender : public Object
+class AX_EXT_API Particle3DRender : public Object
 {
     friend class ParticleSystem3D;
 
@@ -91,7 +91,7 @@ protected:
 };
 
 // particle render for quad
-class AX_EX_DLL Particle3DQuadRender : public Particle3DRender
+class AX_EXT_API Particle3DQuadRender : public Particle3DRender
 {
 public:
     static Particle3DQuadRender* create(std::string_view texFile = "");
@@ -135,7 +135,7 @@ protected:
 };
 
 // particle renderer using MeshRenderer
-class AX_EX_DLL Particle3DModelRender : public Particle3DRender
+class AX_EXT_API Particle3DModelRender : public Particle3DRender
 {
 public:
     static Particle3DModelRender* create(std::string_view modelFile, std::string_view texFile = "");

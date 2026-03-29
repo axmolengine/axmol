@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 # This script is used to generate luabinding glue codes.
-# Android ndk version must be ndk-r9b.
+# Android ndk version must be ndk-27d.
 
 
 import argparse
@@ -124,7 +124,7 @@ def main():
         g_ndk_root = _check_ndk_root_env()
 
     if not os.path.isdir(g_ndk_root):
-        print("The ndk-r23c root not specified, please specifiy via --ndk_root '/path/to/ndk'")
+        print("The ndk-27d root not specified, please specifiy via --ndk_root '/path/to/ndk'")
         sys.exit(1)
 
     # del the " in the path
@@ -239,14 +239,14 @@ def main():
                     'ax_rhi.ini' : ('ax_rhi', 'axlua_rhi_auto'), \
                     'ax_extension.ini' : ('ax_extension', 'axlua_extension_auto'), \
                     'ax_ui.ini' : ('ax_ui', 'axlua_ui_auto'), \
-                    'ax_studio.ini' : ('ax_studio', 'axlua_studio_auto'), \
+                    'ax_sceneext.ini' : ('ax_sceneext', 'axlua_sceneext_auto'), \
+                    'ax_sceneio.ini' : ('ax_sceneio', 'axlua_sceneio_auto'), \
                     'ax_spine.ini' : ('ax_spine', 'axlua_spine_auto'), \
                     'ax_physics2d.ini' : ('ax_physics2d', 'axlua_physics2d_auto'), \
                     'ax_video.ini' : ('ax_video', 'axlua_video_auto'), \
                     'ax_controller.ini' : ('ax_controller', 'axlua_controller_auto'), \
                     'ax_3d.ini': ('ax_3d', 'axlua_3d_auto'), \
                     'ax_audioengine.ini': ('ax_audioengine', 'axlua_audioengine_auto'), \
-                    'ax_csloader.ini' : ('ax_csloader', 'axlua_csloader_auto'), \
                     'ax_webview.ini' : ('ax_webview', 'axlua_webview_auto'), \
                     'ax_physics3d.ini' : ('ax_physics3d', 'axlua_physics3d_auto'), \
                     'ax_navmesh.ini' : ('ax_navmesh', 'axlua_navmesh_auto'), \

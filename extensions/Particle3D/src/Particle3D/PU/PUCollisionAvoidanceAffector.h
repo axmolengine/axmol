@@ -31,7 +31,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUCollisionAvoidanceAffector : public PUAffector
+class AX_EXT_API PUCollisionAvoidanceAffector : public PUAffector
 {
 public:
     // Constants

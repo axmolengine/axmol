@@ -31,7 +31,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUPositionEmitter : public PUEmitter
+class AX_EXT_API PUPositionEmitter : public PUEmitter
 {
 public:
     // Constants

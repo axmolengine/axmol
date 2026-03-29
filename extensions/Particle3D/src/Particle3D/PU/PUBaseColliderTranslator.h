@@ -33,7 +33,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUBaseColliderTranslator : public PUScriptTranslator
+class AX_EXT_API PUBaseColliderTranslator : public PUScriptTranslator
 {
 public:
     PUBaseColliderTranslator();

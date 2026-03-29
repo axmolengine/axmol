@@ -37,7 +37,7 @@ struct Particle3D;
 /**
  * 3d particle emitter
  */
-class AX_EX_DLL Particle3DEmitter : public Object
+class AX_EXT_API Particle3DEmitter : public Object
 {
     friend class ParticleSystem3D;
 

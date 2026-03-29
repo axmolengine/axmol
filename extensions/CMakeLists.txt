@@ -17,7 +17,7 @@ function(setup_ax_extension_config target_name)
   target_link_libraries(${target_name} ${opt_LINK_SCOPE} ${_AX_CORE_LIB})
 
   if(BUILD_SHARED_LIBS)
-    target_compile_definitions(${target_name} PRIVATE AX_EX_DLLEXPORT INTERFACE AX_EX_DLLIMPORT)
+    target_compile_definitions(${target_name} PRIVATE AX_EXT_EXPORTS INTERFACE AX_EXT_IMPORTS)
   endif()
 
   set_target_properties(${target_name}
@@ -93,32 +93,13 @@ if(AX_ENABLE_EXT_IMGUI)
   endif()
 endif()
 
-if(AX_ENABLE_EXT_COCOSTUDIO)
-  add_subdirectory(cocostudio)
+option(AX_ENABLE_EXT_SCENEEXT "Whether enable extension: sceneext" ON)
+if(AX_ENABLE_EXT_SCENEEXT)
+    add_subdirectory(sceneext)
+endif()
 
-  if(AX_ENABLE_EXT_SPINE)
-    target_compile_definitions(cocostudio PRIVATE AX_ENABLE_EXT_SPINE=1)
-
-    if(BUILD_SHARED_LIBS)
-      target_link_libraries(cocostudio spine particle3d)
-    else()
-      target_include_directories(cocostudio
-        PUBLIC ${CMAKE_CURRENT_LIST_DIR}/spine/runtime/include
-        PUBLIC ${CMAKE_CURRENT_LIST_DIR}/spine/src
-        PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Particle3D/src
-      )
-    endif()
-  endif()
-
-  if(AX_ENABLE_EXT_DRAGONBONES)
-    target_compile_definitions(cocostudio PRIVATE AX_ENABLE_EXT_DRAGONBONES=1)
-
-    if(BUILD_SHARED_LIBS)
-      target_link_libraries(cocostudio DragonBones)
-    else()
-      target_include_directories(cocostudio PUBLIC ${CMAKE_CURRENT_LIST_DIR}/DragonBones/src)
-    endif()
-  endif()
+if(AX_ENABLE_EXT_SCENEIO AND AX_ENABLE_EXT_SCENEEXT)
+  add_subdirectory(sceneio)
 endif()
 
 if(AX_ENABLE_EXT_LIVE2D)
