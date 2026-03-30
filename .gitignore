@@ -211,9 +211,9 @@ tools/external
 # ignore lua-tests res folder which is copy from cpp-tests
 tests/lua-tests/res/
 
-extensions/ccsrt21
-extensions/ccsrt20
-extensions/ccsrt19
+extensions/sceneio21
+extensions/sceneio20
+extensions/sceneio19
 extensions/fonteng
 
 tools/bindings-generator/clang/prebuilt/*
