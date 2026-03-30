@@ -7774,6 +7774,103 @@ int lua_ax_sceneext_Bone_getColliderDetector(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_sceneext_Bone_setColliderFilter(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ext::Bone* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axext.Bone",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ext::Bone*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_sceneext_Bone_setColliderFilter'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::ext::ColliderFilter* arg0;
+
+        ok &= luaval_to_object<ax::ext::ColliderFilter>(tolua_S, 2, "axext.ColliderFilter",&arg0, "axext.Bone:setColliderFilter");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_sceneext_Bone_setColliderFilter'", nullptr);
+            return 0;
+        }
+        obj->setColliderFilter(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.Bone:setColliderFilter",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_sceneext_Bone_setColliderFilter'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_sceneext_Bone_getColliderFilter(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ext::Bone* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axext.Bone",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ext::Bone*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_sceneext_Bone_getColliderFilter'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_sceneext_Bone_getColliderFilter'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getColliderFilter();
+        object_to_luaval<ax::ext::ColliderFilter>(tolua_S, "axext.ColliderFilter",(ax::ext::ColliderFilter*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.Bone:getColliderFilter",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_sceneext_Bone_getColliderFilter'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_sceneext_Bone_setBoneData(lua_State* tolua_S)
 {
     int argc = 0;
@@ -8609,6 +8706,8 @@ int lua_register_ax_sceneext_Bone(lua_State* tolua_S)
         tolua_function(tolua_S,"getDisplayRenderNode",lua_ax_sceneext_Bone_getDisplayRenderNode);
         tolua_function(tolua_S,"getDisplayRenderNodeType",lua_ax_sceneext_Bone_getDisplayRenderNodeType);
         tolua_function(tolua_S,"getColliderDetector",lua_ax_sceneext_Bone_getColliderDetector);
+        tolua_function(tolua_S,"setColliderFilter",lua_ax_sceneext_Bone_setColliderFilter);
+        tolua_function(tolua_S,"getColliderFilter",lua_ax_sceneext_Bone_getColliderFilter);
         tolua_function(tolua_S,"setBoneData",lua_ax_sceneext_Bone_setBoneData);
         tolua_function(tolua_S,"getBoneData",lua_ax_sceneext_Bone_getBoneData);
         tolua_function(tolua_S,"setArmature",lua_ax_sceneext_Bone_setArmature);
@@ -10537,6 +10636,56 @@ int lua_ax_sceneext_Armature_getArmatureTransformDirty(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_sceneext_Armature_setColliderFilter(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ext::Armature* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axext.Armature",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ext::Armature*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_sceneext_Armature_setColliderFilter'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::ext::ColliderFilter* arg0;
+
+        ok &= luaval_to_object<ax::ext::ColliderFilter>(tolua_S, 2, "axext.ColliderFilter",&arg0, "axext.Armature:setColliderFilter");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_sceneext_Armature_setColliderFilter'", nullptr);
+            return 0;
+        }
+        obj->setColliderFilter(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.Armature:setColliderFilter",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_sceneext_Armature_setColliderFilter'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_sceneext_Armature_setArmatureData(lua_State* tolua_S)
 {
     int argc = 0;
@@ -11047,6 +11196,7 @@ int lua_register_ax_sceneext_Armature(lua_State* tolua_S)
         tolua_function(tolua_S,"setAnimationController",lua_ax_sceneext_Armature_setAnimationController);
         tolua_function(tolua_S,"getAnimationController",lua_ax_sceneext_Armature_getAnimationController);
         tolua_function(tolua_S,"getArmatureTransformDirty",lua_ax_sceneext_Armature_getArmatureTransformDirty);
+        tolua_function(tolua_S,"setColliderFilter",lua_ax_sceneext_Armature_setColliderFilter);
         tolua_function(tolua_S,"setArmatureData",lua_ax_sceneext_Armature_setArmatureData);
         tolua_function(tolua_S,"getArmatureData",lua_ax_sceneext_Armature_getArmatureData);
         tolua_function(tolua_S,"setParentBone",lua_ax_sceneext_Armature_setParentBone);
@@ -18740,9 +18890,9 @@ int lua_ax_sceneext_ColorFrame_setAlpha(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        bool arg0;
+        uint16_t arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axextColorFrame:setAlpha");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axextColorFrame:setAlpha");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_sceneext_ColorFrame_setAlpha'", nullptr);
