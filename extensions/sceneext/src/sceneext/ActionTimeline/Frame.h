@@ -315,7 +315,7 @@ public:
 
     void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     Frame* clone() override;
-    inline void setAlpha(bool alpha) { _color.a = alpha; }
+    inline void setAlpha(uint8_t alpha) { _color.a = alpha; }
     inline void setColor(const ax::Color32& color) { _color = color; }
     inline const ax::Color32& getColor() const { return _color; }
 
