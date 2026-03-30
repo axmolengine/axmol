@@ -86,13 +86,12 @@ void ObjectFactory::destroyInstance()
     AX_SAFE_DELETE(_sharedFactory);
 }
 
-Object* ObjectFactory::createObject(std::string_view name)
+Object* ObjectFactory::createObject(std::string_view className)
 {
     Object* o = nullptr;
     do
     {
-        // const TInfo t = _typeMap[name.data];
-        auto it = _typeMap.find(name);
+        auto it = _typeMap.find(className);
         if (it == _typeMap.end())
             break;
         auto& t = it->second;
@@ -112,6 +111,11 @@ Object* ObjectFactory::createObject(std::string_view name)
 void ObjectFactory::registerType(const TInfo& t)
 {
     _typeMap.emplace(t._class, t);
+}
+
+void ObjectFactory::unregisterType(std::string_view className)
+{
+    _typeMap.erase(className);
 }
 
 }  // namespace ax

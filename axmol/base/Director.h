@@ -582,6 +582,8 @@ protected:
     std::stack<Mat4> _textureMatrixStack;
     std::stack<Mat4> _projectionMatrixStack;
 
+    static Director* s_SharedDirector;
+
     /** Scheduler associated with this director
      @since v2.0
      */

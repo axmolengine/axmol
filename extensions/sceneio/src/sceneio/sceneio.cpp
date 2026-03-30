@@ -1,5 +1,6 @@
 
 #include "sceneio/sceneio.h"
+#include "axmol/axmolver.h"
 
 #include "sceneio/WidgetReader/NodeReader/NodeReader.h"
 #include "sceneio/WidgetReader/SingleNodeReader/SingleNodeReader.h"
@@ -30,8 +31,53 @@
 
 namespace ax::ext
 {
-SCNIO_API void shutdownSceneIO()
+SCNIO_API bool __isSceneIOReady = false;
+
+SCNIO_API void initializeSceneIO()
 {
+    if (__isSceneIOReady)
+        return;
+    __isSceneIOReady = true;
+
+    ObjectFactory* factoryCreate = ObjectFactory::getInstance();
+
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(ButtonReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(CheckBoxReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(SliderReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(ImageViewReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(LoadingBarReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(TextAtlasReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(TextReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(TextBMFontReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(TextFieldReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(LayoutReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(PageViewReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(ScrollViewReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(ListViewReader));
+}
+
+SCNIO_API void cleanupSceneIO()
+{
+    if (!__isSceneIOReady)
+        return;
+    __isSceneIOReady = false;
+
+    ObjectFactory* factoryCreate = ObjectFactory::getInstance();
+
+    factoryCreate->unregisterType(_AXSTR(ButtonReader));
+    factoryCreate->unregisterType(_AXSTR(CheckBoxReader));
+    factoryCreate->unregisterType(_AXSTR(SliderReader));
+    factoryCreate->unregisterType(_AXSTR(ImageViewReader));
+    factoryCreate->unregisterType(_AXSTR(LoadingBarReader));
+    factoryCreate->unregisterType(_AXSTR(TextAtlasReader));
+    factoryCreate->unregisterType(_AXSTR(TextReader));
+    factoryCreate->unregisterType(_AXSTR(TextBMFontReader));
+    factoryCreate->unregisterType(_AXSTR(TextFieldReader));
+    factoryCreate->unregisterType(_AXSTR(LayoutReader));
+    factoryCreate->unregisterType(_AXSTR(PageViewReader));
+    factoryCreate->unregisterType(_AXSTR(ScrollViewReader));
+    factoryCreate->unregisterType(_AXSTR(ListViewReader));
+
     NodeReader::destroyInstance();
     SingleNodeReader::destroyInstance();
     SpriteReader::destroyInstance();

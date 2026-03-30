@@ -81,23 +81,18 @@ public:
 #if ENABLE_PHYSICS_BOX2D_DETECT
     void setColliderFilter(ColliderFilter* filter);
     ColliderFilter* getColliderFilter();
-#endif
-
-#if ENABLE_PHYSICS_BOX2D_DETECT
     virtual void setShape(b2ShapeId shape) { _shape = shape; }
     virtual b2ShapeId getShape() const { return _shape; }
-#    if ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+#elif ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     virtual const std::vector<ax::Vec2>& getCalculatedVertexList() const { return _calculatedVertexList; }
-#    endif
 #endif
 
 private:
 #if ENABLE_PHYSICS_BOX2D_DETECT
     b2ShapeId _shape{b2_nullShapeId};
     ColliderFilter* _filter;
-#    if ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+#elif ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     std::vector<ax::Vec2> _calculatedVertexList;
-#    endif
 #endif
 
     ContourData* _contourData;

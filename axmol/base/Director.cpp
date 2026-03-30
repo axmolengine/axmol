@@ -78,11 +78,6 @@ THE SOFTWARE.
 
 namespace ax
 {
-// FIXME: it should be a Director ivar. Move it there once support for multiple directors is added
-
-// singleton stuff
-static Director* s_SharedDirector = nullptr;
-
 #define kDefaultFPS 60  // 60 frames per second
 
 std::string_view Director::EVENT_BEFORE_SET_NEXT_SCENE = "director_before_set_next_scene"sv;
@@ -111,6 +106,8 @@ static constexpr std::string_view kWindowPlatformNameMap[] = {
     "Web"sv,
 };
 // clang-format on
+
+Director* Director::s_SharedDirector = nullptr;
 
 Director* Director::getInstance()
 {

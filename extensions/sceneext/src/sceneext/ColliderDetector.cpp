@@ -145,7 +145,7 @@ void ColliderDetector::addContourData(ContourData* contourData)
     _colliderBodyList.pushBack(colliderBody);
     colliderBody->release();
 
-#if ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+#if !ENABLE_PHYSICS_BOX2D_DETECT && ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     std::vector<Vec2>& calculatedVertexList = colliderBody->_calculatedVertexList;
 
     unsigned long num = contourData->vertexList.size();
@@ -285,7 +285,7 @@ void ColliderDetector::updateTransform(Mat4& t)
         unsigned long num         = contourData->vertexList.size();
         std::vector<ax::Vec2>& vs = contourData->vertexList;
 
-#if ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+#if !ENABLE_PHYSICS_BOX2D_DETECT && ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
         std::vector<ax::Vec2>& cvs = colliderBody->_calculatedVertexList;
 #endif
 
@@ -293,11 +293,6 @@ void ColliderDetector::updateTransform(Mat4& t)
         {
             helpPoint.setPoint(vs.at(i).x, vs.at(i).y);
             helpPoint = PointApplyTransform(helpPoint, t);
-
-#if ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
-            cvs.at(i).x = helpPoint.x;
-            cvs.at(i).y = helpPoint.y;
-#endif
 
 #if ENABLE_PHYSICS_BOX2D_DETECT
             if (b2Shape_IsValid(shape) && i < shapePolygon.count)
@@ -307,6 +302,9 @@ void ColliderDetector::updateTransform(Mat4& t)
                 bv.y       = helpPoint.y / PT_RATIO;
                 ++mods;
             }
+#elif ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+            cvs.at(i).x = helpPoint.x;
+            cvs.at(i).y = helpPoint.y;
 #endif
         }
 
