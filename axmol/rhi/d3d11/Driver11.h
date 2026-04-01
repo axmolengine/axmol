@@ -154,7 +154,7 @@ protected:
 private:
     void initializeAdapter();
     void initializeDevice();
-    HRESULT createD3DDevice(int requestDriverType, int createFlags);
+    HRESULT createD3DDevice(int requestDriverType, int createFlags, std::span<const D3D_FEATURE_LEVEL> featureLevels);
 
     bool checkFormatSupport(DXGI_FORMAT format);
 
@@ -165,7 +165,6 @@ private:
     ComPtr<IDXGIAdapter> _dxgiAdapter;
 
     DXGI_ADAPTER_DESC _adapterDesc{};
-
     D3D_FEATURE_LEVEL _featureLevel{};
 
     // FeatureSet _featureSet = FeatureSet::Unknown;

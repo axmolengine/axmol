@@ -88,8 +88,6 @@ static uint32_t FindMaxMsaaSamples(ID3D11Device* device, DXGI_FORMAT format)
 }
 }  // namespace
 
-static D3D_FEATURE_LEVEL DEFAULT_FEATURE_LEVELS[] = {D3D_FEATURE_LEVEL_11_1, D3D_FEATURE_LEVEL_11_0};
-
 DriverImpl::DriverImpl() {}
 
 bool DriverImpl::init()
@@ -160,6 +158,11 @@ void DriverImpl::initializeDevice()
 
     ComPtr<IDXGIFactory2> factory2;
     hr = _dxgiFactory->QueryInterface(IID_PPV_ARGS(&factory2));
+
+    constexpr D3D_FEATURE_LEVEL DEFAULT_FEATURE_LEVELS[] = {D3D_FEATURE_LEVEL_11_1, D3D_FEATURE_LEVEL_11_0,
+                                                            D3D_FEATURE_LEVEL_10_1};
+    std::span<const D3D_FEATURE_LEVEL> featureLevels(DEFAULT_FEATURE_LEVELS);
+
     if (!factory2)
     {
         // On Windows 7 RTM or Windows 7 SP1 without the Platform Update (KB2670838),
@@ -167,13 +170,12 @@ void DriverImpl::initializeDevice()
         // will result in E_INVALIDARG. To maintain compatibility, we must fall back
         // to 11_0 as the highest feature level and include 10_1 in the list to ensure
         // device creation succeeds on these systems.
-        DEFAULT_FEATURE_LEVELS[0] = D3D_FEATURE_LEVEL_11_0;
-        DEFAULT_FEATURE_LEVELS[1] = D3D_FEATURE_LEVEL_10_1;
+        featureLevels = featureLevels.subspan(1);  // Skip D3D_FEATURE_LEVEL_11_1
     }
 
     if (isDebugLayer) [[unlikely]]
     {
-        hr = createD3DDevice(D3D_DRIVER_TYPE_HARDWARE, debugFlags);
+        hr = createD3DDevice(D3D_DRIVER_TYPE_HARDWARE, debugFlags, featureLevels);
         if (SUCCEEDED(hr))
             return;
 
@@ -189,7 +191,7 @@ void DriverImpl::initializeDevice()
     }
 
 L_ReleaseRuntime:
-    hr = createD3DDevice(D3D_DRIVER_TYPE_HARDWARE, releaseFlags);
+    hr = createD3DDevice(D3D_DRIVER_TYPE_HARDWARE, releaseFlags, featureLevels);
     if (hr == DXGI_ERROR_UNSUPPORTED) [[unlikely]]
     {
     L_WarpRuntime:
@@ -198,7 +200,7 @@ L_ReleaseRuntime:
         // otherwise D3D11CreateDevice will return E_INVALIDARG when both
         // a non-null adapter and a non-matching driver type are specified.
         _dxgiAdapter.Reset();
-        hr = createD3DDevice(D3D_DRIVER_TYPE_WARP, releaseFlags);
+        hr = createD3DDevice(D3D_DRIVER_TYPE_WARP, releaseFlags, featureLevels);
     }
 
     if (SUCCEEDED(hr))
@@ -269,19 +271,21 @@ void DriverImpl::initializeAdapter()
     _dxgiAdapter = std::move(bestAdapter);
 }
 
-HRESULT DriverImpl::createD3DDevice(int requestDriverType, int createFlags)
+HRESULT DriverImpl::createD3DDevice(int requestDriverType,
+                                    int createFlags,
+                                    std::span<const D3D_FEATURE_LEVEL> featureLevels)
 {
     if (_dxgiAdapter)
         requestDriverType = D3D_DRIVER_TYPE_UNKNOWN;
-    return ::D3D11CreateDevice(_dxgiAdapter.Get(),                  // Adapter
-                               (D3D_DRIVER_TYPE)requestDriverType,  // Driver Type
-                               nullptr,                             // Software
-                               createFlags,                         // Flags
-                               DEFAULT_FEATURE_LEVELS,              // Feature Levels
-                               ARRAYSIZE(DEFAULT_FEATURE_LEVELS),   // Num Feature Levels
-                               D3D11_SDK_VERSION,                   // SDK Version
-                               &_device,                            // Device
-                               &_featureLevel,                      // Feature Level
+    return ::D3D11CreateDevice(_dxgiAdapter.Get(),                       // Adapter
+                               (D3D_DRIVER_TYPE)requestDriverType,       // Driver Type
+                               nullptr,                                  // Software
+                               createFlags,                              // Flags
+                               featureLevels.data(),                     // Feature Levels
+                               static_cast<UINT>(featureLevels.size()),  // Num Feature Levels
+                               D3D11_SDK_VERSION,                        // SDK Version
+                               &_device,                                 // Device
+                               &_featureLevel,                           // Feature Level
                                &_context);
 }
 
@@ -373,11 +377,17 @@ IUnknown* DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage s
 
     IUnknown* shader{nullptr};
     if (stage == ShaderStage::VERTEX)
-        hr = _device->CreateVertexShader(outBlob->GetBufferPointer(), outBlob->GetBufferSize(), nullptr,
-                                         (ID3D11VertexShader**)&shader);
+    {
+        ID3D11VertexShader* vs = nullptr;
+        hr     = _device->CreateVertexShader(outBlob->GetBufferPointer(), outBlob->GetBufferSize(), nullptr, &vs);
+        shader = vs;
+    }
     else
-        hr = _device->CreatePixelShader(outBlob->GetBufferPointer(), outBlob->GetBufferSize(), nullptr,
-                                        (ID3D11PixelShader**)&shader);
+    {
+        ID3D11PixelShader* ps = nullptr;
+        hr     = _device->CreatePixelShader(outBlob->GetBufferPointer(), outBlob->GetBufferSize(), nullptr, &ps);
+        shader = ps;
+    }
 
     if (!shader)
     {
