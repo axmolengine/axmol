@@ -229,6 +229,8 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
         ComPtr<IDXGIFactory5> factory5;
         if (SUCCEEDED(factory.As(&factory5)))
             factory5->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &_allowTearing, sizeof(_allowTearing));
+
+        // Axmol-v3 D3D11 doesn't support change vsync runtime, so don't enable tearing if vsync is on.
         _swapChainFlags = _allowTearing && !contextAttrs.vsync ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0;
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
