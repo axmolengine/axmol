@@ -101,6 +101,16 @@ bool DriverImpl::init()
         _AXASSERT_HR(
             hr = _device->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(dxgiDevice.GetAddressOf())));
         _AXASSERT_HR(hr = dxgiDevice->GetAdapter(&_dxgiAdapter));
+
+        // Refresh factory pointer from adapter to ensure consistency.
+        // Using the factory obtained via GetParent guarantees it matches the adapter
+        // bound to the device. Without this, creating a swapchain may fail with
+        // DXGI_ERROR_INVALID_CALL(0x887A0001) if the factory and adapter come from different DXGI instances.
+        _AXASSERT_HR(
+            hr = _dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), (void**)_dxgiFactory.ReleaseAndGetAddressOf()));
+
+        // Optionally query for DXGI 1.2+ factory (IDXGIFactory2) to enable modern features
+        _dxgiFactory->QueryInterface(IID_PPV_ARGS(_dxgiFactory2.ReleaseAndGetAddressOf()));
     }
 
     LARGE_INTEGER version;
@@ -151,12 +161,12 @@ void DriverImpl::initializeDevice()
 
     const bool isDebugLayer = Application::getContextAttrs().debugLayerEnabled;
 
-    HRESULT hr = _dxgiFactory->QueryInterface(IID_PPV_ARGS(&_dxgiFactory2));
-
     constexpr D3D_FEATURE_LEVEL DEFAULT_FEATURE_LEVELS[] = {D3D_FEATURE_LEVEL_11_1, D3D_FEATURE_LEVEL_11_0,
                                                             D3D_FEATURE_LEVEL_10_1};
     std::span<const D3D_FEATURE_LEVEL> featureLevels(DEFAULT_FEATURE_LEVELS);
 
+    // It's ok to check whether DXGI 1.2 is supported at here
+    HRESULT hr = _dxgiFactory->QueryInterface(IID_PPV_ARGS(&_dxgiFactory2));
     if (!_dxgiFactory2)
     {
         // On Windows 7 RTM or Windows 7 SP1 without the Platform Update (KB2670838),
