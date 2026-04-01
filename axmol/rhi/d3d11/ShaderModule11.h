@@ -33,7 +33,7 @@ namespace ax::rhi::d3d11
  * @{
  */
 
-struct SLCReflectContext;
+class DriverImpl;
 
 /**
  * @brief A D3D11-based ShaderModule implementation
@@ -42,15 +42,13 @@ struct SLCReflectContext;
 class ShaderModuleImpl : public ShaderModule
 {
 public:
-    ShaderModuleImpl(ID3D11Device* device, ShaderStage stage, Data& data);
+    ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, Data& data);
     ~ShaderModuleImpl();
 
     IUnknown* internalHandle() const { return _shader; }
     ID3DBlob* getShaderBlob() const { return _blob; }
 
 private:
-    void compileShader(ID3D11Device* device);
-
     IUnknown* _shader = nullptr;
     ID3DBlob* _blob   = nullptr;
 };

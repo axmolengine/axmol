@@ -160,7 +160,7 @@ protected:
     UINT _textureBounds{0};
 
     UINT _swapChainFlags{0};
-    UINT _syncInterval{1};
+    UINT _syncInterval{0};
     UINT _presentFlags{0};
     BOOL _allowTearing{FALSE};
 

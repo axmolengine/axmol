@@ -44,11 +44,6 @@ namespace ax::rhi::d3d11
 class DriverImpl : public DriverBase
 {
 public:
-    static constexpr D3D_FEATURE_LEVEL DEFAULT_REATURE_LEVELS[2] = {
-        D3D_FEATURE_LEVEL_11_1,
-        D3D_FEATURE_LEVEL_11_0,
-    };
-
     /// @name Constructor, Destructor and Initializers
     DriverImpl();
     ~DriverImpl();
@@ -142,6 +137,8 @@ public:
 
     const ComPtr<IDXGIFactory>& getDXGIFactory() const { return _dxgiFactory; }
     const ComPtr<IDXGIAdapter>& getDXGIAdapter() const { return _dxgiAdapter; }
+
+    IUnknown* compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, ID3DBlob*& outBlob);
 
 protected:
     /**

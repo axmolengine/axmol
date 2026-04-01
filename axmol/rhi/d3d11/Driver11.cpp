@@ -35,6 +35,7 @@
 #include "axmol/base/Logging.h"
 #include "axmol/platform/Application.h"
 #include "ntcvt/ntcvt.hpp"
+#include <dxgi1_2.h>
 
 #pragma comment(lib, "D3D11.lib")
 #pragma comment(lib, "DXGI.lib")
@@ -86,6 +87,8 @@ static uint32_t FindMaxMsaaSamples(ID3D11Device* device, DXGI_FORMAT format)
     return best;
 }
 }  // namespace
+
+static D3D_FEATURE_LEVEL DEFAULT_FEATURE_LEVELS[] = {D3D_FEATURE_LEVEL_11_1, D3D_FEATURE_LEVEL_11_0};
 
 DriverImpl::DriverImpl() {}
 
@@ -155,6 +158,19 @@ void DriverImpl::initializeDevice()
     HRESULT hr              = E_FAIL;
     const bool isDebugLayer = Application::getContextAttrs().debugLayerEnabled;
 
+    ComPtr<IDXGIFactory2> factory2;
+    hr = _dxgiFactory->QueryInterface(IID_PPV_ARGS(&factory2));
+    if (!factory2)
+    {
+        // On Windows 7 RTM or Windows 7 SP1 without the Platform Update (KB2670838),
+        // D3D_FEATURE_LEVEL_11_1 is not supported. Passing 11_1 to D3D11CreateDevice
+        // will result in E_INVALIDARG. To maintain compatibility, we must fall back
+        // to 11_0 as the highest feature level and include 10_1 in the list to ensure
+        // device creation succeeds on these systems.
+        DEFAULT_FEATURE_LEVELS[0] = D3D_FEATURE_LEVEL_11_0;
+        DEFAULT_FEATURE_LEVELS[1] = D3D_FEATURE_LEVEL_10_1;
+    }
+
     if (isDebugLayer) [[unlikely]]
     {
         hr = createD3DDevice(D3D_DRIVER_TYPE_HARDWARE, debugFlags);
@@ -185,7 +201,9 @@ L_ReleaseRuntime:
         hr = createD3DDevice(D3D_DRIVER_TYPE_WARP, releaseFlags);
     }
 
-    if (FAILED(hr)) [[unlikely]]
+    if (SUCCEEDED(hr))
+        AXLOGI("D3D11 Feature level: 0x{:04x}", static_cast<int>(_featureLevel));
+    else
         dxutils::fatalError("initializeDevice"sv, hr);
 }
 
@@ -259,8 +277,8 @@ HRESULT DriverImpl::createD3DDevice(int requestDriverType, int createFlags)
                                (D3D_DRIVER_TYPE)requestDriverType,  // Driver Type
                                nullptr,                             // Software
                                createFlags,                         // Flags
-                               DEFAULT_REATURE_LEVELS,              // Feature Levels
-                               ARRAYSIZE(DEFAULT_REATURE_LEVELS),   // Num Feature Levels
+                               DEFAULT_FEATURE_LEVELS,              // Feature Levels
+                               ARRAYSIZE(DEFAULT_FEATURE_LEVELS),   // Num Feature Levels
                                D3D11_SDK_VERSION,                   // SDK Version
                                &_device,                            // Device
                                &_featureLevel,                      // Feature Level
@@ -320,7 +338,54 @@ Program* DriverImpl::createProgram(Data vsData, Data fsData)
 
 ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, Data& chunk)
 {
-    return new ShaderModuleImpl(_device, stage, chunk);
+    return new ShaderModuleImpl(this, stage, chunk);
+}
+
+IUnknown* DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, ID3DBlob*& outBlob)
+{
+    ComPtr<ID3DBlob> errorBlob;
+    UINT flags = D3DCOMPILE_OPTIMIZATION_LEVEL2 | D3DCOMPILE_ENABLE_STRICTNESS;
+#if !defined(NDEBUG)
+    flags |= D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
+#endif
+
+    const char* stageProfile{nullptr};
+    if (_featureLevel >= D3D_FEATURE_LEVEL_11_0)
+    {
+        stageProfile = (stage == ShaderStage::VERTEX) ? "vs_5_0" : "ps_5_0";
+    }
+    else
+    {
+        stageProfile = (stage == ShaderStage::VERTEX) ? "vs_4_1" : "ps_4_1";
+    }
+
+    HRESULT hr = D3DCompile(shaderCode.data(), shaderCode.size(), nullptr, nullptr, nullptr, "main", stageProfile,
+                            flags, 0, &outBlob, &errorBlob);
+    if (FAILED(hr))
+    {
+        std::string_view errorDetail =
+            errorBlob ? std::string_view((const char*)errorBlob->GetBufferPointer(), errorBlob->GetBufferSize())
+                      : "Unknown compile error"sv;
+        AXLOGE("axmol:ERROR: Failed to compile shader, hr:{},{}", hr, errorDetail);
+        AXASSERT(false, "Shader compile failed!");
+        return nullptr;
+    }
+
+    IUnknown* shader{nullptr};
+    if (stage == ShaderStage::VERTEX)
+        hr = _device->CreateVertexShader(outBlob->GetBufferPointer(), outBlob->GetBufferSize(), nullptr,
+                                         (ID3D11VertexShader**)&shader);
+    else
+        hr = _device->CreatePixelShader(outBlob->GetBufferPointer(), outBlob->GetBufferSize(), nullptr,
+                                        (ID3D11PixelShader**)&shader);
+
+    if (!shader)
+    {
+        AXLOGE("axmol:ERROR: Failed to create shader, hr:{}", hr);
+        AXASSERT(false, "Shader compile failed!");
+    }
+
+    return shader;
 }
 
 SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
@@ -410,7 +475,8 @@ std::string DriverImpl::getVendor() const
 std::string DriverImpl::getRenderer() const
 {
     auto desc = ntcvt::from_chars(_adapterDesc.Description);
-    return fmt::format("{} D3D11 vs_5_0 ps_5_0", desc);
+    return _featureLevel >= D3D_FEATURE_LEVEL_11_0 ? fmt::format("{} D3D11 vs_5_0 ps_5_0", desc)
+                                                   : fmt::format("{} D3D11 vs_4_1 ps_4_1", desc);
 }
 
 /**
@@ -435,7 +501,7 @@ std::string DriverImpl::getVersion() const
 
 std::string DriverImpl::getShaderVersion() const
 {
-    return "D3D11 HLSL vs_5_0 ps_5_0"s;
+    return _featureLevel >= D3D_FEATURE_LEVEL_11_0 ? "D3D11 HLSL vs_5_0 ps_5_0"s : "D3D10 HLSL vs_4_1 ps_4_1"s;
 }
 
 /**
