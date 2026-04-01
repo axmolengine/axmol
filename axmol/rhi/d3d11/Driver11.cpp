@@ -98,10 +98,89 @@ bool DriverImpl::init()
 
     if (powerPreferrence != PowerPreference::Auto)
         selectAdapter(powerPreferrence);
-    initializeDevice();
+    initializeDevice(contextAttrs.debugLayerEnabled);
 
-    HRESULT hr{E_FAIL};
-    if (!_dxgiAdapter)
+    return true;
+}
+
+DriverImpl::~DriverImpl()
+{
+    SafeRelease(_context);
+
+    ComPtr<ID3D11Debug> debug;
+    _device->QueryInterface(IID_PPV_ARGS(&debug));
+
+    SafeRelease(_device);
+
+    _dxgiAdapter.Reset();
+    _dxgiFactory2.Reset();
+    _dxgiFactory.Reset();
+
+    if (debug)
+        debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+}
+
+void DriverImpl::initializeDevice(bool requestDebugLayer)
+{
+    constexpr UINT releaseFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+    constexpr UINT debugFlags   = releaseFlags | D3D11_CREATE_DEVICE_DEBUG;
+
+    constexpr D3D_FEATURE_LEVEL DEFAULT_FEATURE_LEVELS[] = {D3D_FEATURE_LEVEL_11_1, D3D_FEATURE_LEVEL_11_0,
+                                                            D3D_FEATURE_LEVEL_10_1};
+    std::span<const D3D_FEATURE_LEVEL> featureLevels(DEFAULT_FEATURE_LEVELS);
+
+    // It's ok to check whether DXGI 1.2 is supported at here
+    HRESULT hr = _dxgiFactory->QueryInterface(IID_PPV_ARGS(&_dxgiFactory2));
+    if (!_dxgiFactory2)
+    {
+        // On Windows 7 RTM or Windows 7 SP1 without the Platform Update (KB2670838),
+        // D3D_FEATURE_LEVEL_11_1 is not supported. Passing 11_1 to D3D11CreateDevice
+        // will result in E_INVALIDARG. To maintain compatibility, we must fall back
+        // to 11_0 as the highest feature level and include 10_1 in the list to ensure
+        // device creation succeeds on these systems.
+        featureLevels = featureLevels.subspan(1);  // Skip D3D_FEATURE_LEVEL_11_1
+    }
+
+    if (requestDebugLayer) [[unlikely]]
+    {
+        hr = createD3DDevice(D3D_DRIVER_TYPE_HARDWARE, debugFlags, featureLevels);
+        if (SUCCEEDED(hr))
+            goto L_DeviceCreated;
+
+        if (hr != DXGI_ERROR_UNSUPPORTED)
+        {
+            AXLOGI("Failed creating Debug D3D11 device - falling back to release runtime.");
+            goto L_ReleaseRuntime;
+        }
+        else
+        {
+            goto L_WarpRuntime;
+        }
+    }
+
+L_ReleaseRuntime:
+    hr = createD3DDevice(D3D_DRIVER_TYPE_HARDWARE, releaseFlags, featureLevels);
+    if (hr == DXGI_ERROR_UNSUPPORTED) [[unlikely]]
+    {
+    L_WarpRuntime:
+        AXLOGI("Failed creating hardware D3D11 device - falling back to software runtime.");
+        // Reset adapter to null before using D3D_DRIVER_TYPE_WARP,
+        // otherwise D3D11CreateDevice will return E_INVALIDARG when both
+        // a non-null adapter and a non-matching driver type are specified.
+        _dxgiAdapter.Reset();
+        hr = createD3DDevice(D3D_DRIVER_TYPE_WARP, releaseFlags, featureLevels);
+    }
+
+    if (FAILED(hr))
+    {
+        dxutils::fatalError("initializeDevice"sv, hr);
+        return;
+    }
+
+L_DeviceCreated:
+    AXLOGI("D3D11 Feature level: 0x{:04x}", static_cast<int>(_featureLevel));
+
+    if (!_dxgiAdapter)  // adapter not selected or was reset to null, query from device
     {
         ComPtr<IDXGIDevice> dxgiDevice;
         _AXASSERT_HR(
@@ -132,91 +211,11 @@ bool DriverImpl::init()
     }
     _dxgiAdapter->GetDesc(&_adapterDesc);
 
-    _caps.maxAttributes = D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT;  // 16
-
-    _caps.maxTextureUnits = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;  // 128
-
-    _caps.maxTextureSize = EstimateMaxTexSize(_device->GetFeatureLevel());
-
+    // Device caps
+    _caps.maxAttributes     = D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT;     // 16
+    _caps.maxTextureUnits   = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;  // 128
+    _caps.maxTextureSize    = EstimateMaxTexSize(_device->GetFeatureLevel());
     _caps.maxSamplesAllowed = static_cast<int32_t>(FindMaxMsaaSamples(_device, DXGI_FORMAT_R8G8B8A8_UNORM));
-
-    return true;
-}
-
-DriverImpl::~DriverImpl()
-{
-    SafeRelease(_context);
-
-    ComPtr<ID3D11Debug> debug;
-    _device->QueryInterface(IID_PPV_ARGS(&debug));
-
-    SafeRelease(_device);
-
-    _dxgiAdapter.Reset();
-    _dxgiFactory2.Reset();
-    _dxgiFactory.Reset();
-
-    if (debug)
-        debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
-}
-
-void DriverImpl::initializeDevice()
-{
-    constexpr UINT releaseFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
-    constexpr UINT debugFlags   = releaseFlags | D3D11_CREATE_DEVICE_DEBUG;
-
-    const bool isDebugLayer = Application::getContextAttrs().debugLayerEnabled;
-
-    constexpr D3D_FEATURE_LEVEL DEFAULT_FEATURE_LEVELS[] = {D3D_FEATURE_LEVEL_11_1, D3D_FEATURE_LEVEL_11_0,
-                                                            D3D_FEATURE_LEVEL_10_1};
-    std::span<const D3D_FEATURE_LEVEL> featureLevels(DEFAULT_FEATURE_LEVELS);
-
-    // It's ok to check whether DXGI 1.2 is supported at here
-    HRESULT hr = _dxgiFactory->QueryInterface(IID_PPV_ARGS(&_dxgiFactory2));
-    if (!_dxgiFactory2)
-    {
-        // On Windows 7 RTM or Windows 7 SP1 without the Platform Update (KB2670838),
-        // D3D_FEATURE_LEVEL_11_1 is not supported. Passing 11_1 to D3D11CreateDevice
-        // will result in E_INVALIDARG. To maintain compatibility, we must fall back
-        // to 11_0 as the highest feature level and include 10_1 in the list to ensure
-        // device creation succeeds on these systems.
-        featureLevels = featureLevels.subspan(1);  // Skip D3D_FEATURE_LEVEL_11_1
-    }
-
-    if (isDebugLayer) [[unlikely]]
-    {
-        hr = createD3DDevice(D3D_DRIVER_TYPE_HARDWARE, debugFlags, featureLevels);
-        if (SUCCEEDED(hr))
-            return;
-
-        if (hr != DXGI_ERROR_UNSUPPORTED)
-        {
-            AXLOGI("Failed creating Debug D3D11 device - falling back to release runtime.");
-            goto L_ReleaseRuntime;
-        }
-        else
-        {
-            goto L_WarpRuntime;
-        }
-    }
-
-L_ReleaseRuntime:
-    hr = createD3DDevice(D3D_DRIVER_TYPE_HARDWARE, releaseFlags, featureLevels);
-    if (hr == DXGI_ERROR_UNSUPPORTED) [[unlikely]]
-    {
-    L_WarpRuntime:
-        AXLOGI("Failed creating hardware D3D11 device - falling back to software runtime.");
-        // Reset adapter to null before using D3D_DRIVER_TYPE_WARP,
-        // otherwise D3D11CreateDevice will return E_INVALIDARG when both
-        // a non-null adapter and a non-matching driver type are specified.
-        _dxgiAdapter.Reset();
-        hr = createD3DDevice(D3D_DRIVER_TYPE_WARP, releaseFlags, featureLevels);
-    }
-
-    if (SUCCEEDED(hr))
-        AXLOGI("D3D11 Feature level: 0x{:04x}", static_cast<int>(_featureLevel));
-    else
-        dxutils::fatalError("initializeDevice"sv, hr);
 }
 
 void DriverImpl::selectAdapter(PowerPreference powerPreference)

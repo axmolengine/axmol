@@ -155,7 +155,7 @@ protected:
 
 private:
     void selectAdapter(PowerPreference powerPreference);
-    void initializeDevice();
+    void initializeDevice(bool requestDebugLayer);
     HRESULT createD3DDevice(int requestDriverType, int createFlags, std::span<const D3D_FEATURE_LEVEL> featureLevels);
 
     bool checkFormatSupport(DXGI_FORMAT format);
