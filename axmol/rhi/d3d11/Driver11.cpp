@@ -91,7 +91,13 @@ DriverImpl::DriverImpl() {}
 
 bool DriverImpl::init()
 {
-    initializeAdapter();
+    _AXASSERT_HR(CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)&_dxgiFactory));
+
+    auto& contextAttrs          = Application::getContextAttrs();
+    const auto powerPreferrence = contextAttrs.powerPreference;
+
+    if (powerPreferrence != PowerPreference::Auto)
+        selectAdapter(powerPreferrence);
     initializeDevice();
 
     HRESULT hr{E_FAIL};
@@ -213,17 +219,8 @@ L_ReleaseRuntime:
         dxutils::fatalError("initializeDevice"sv, hr);
 }
 
-void DriverImpl::initializeAdapter()
+void DriverImpl::selectAdapter(PowerPreference powerPreference)
 {
-    auto& contextAttrs          = Application::getContextAttrs();
-    const auto powerPreferrence = contextAttrs.powerPreference;
-
-    if (powerPreferrence == PowerPreference::Auto)
-        return;
-
-    if (FAILED(CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)&_dxgiFactory)))
-        return;
-
     ComPtr<IDXGIAdapter> bestAdapter;
     int bestScore = std::numeric_limits<int>::min();
 
@@ -251,15 +248,15 @@ void DriverImpl::initializeAdapter()
             score += 500;  // Lower base score for integrated GPU
 
         // 2. Adjust score based on PowerPreference
-        if (powerPreferrence == PowerPreference::HighPerformance && isDiscrete)
+        if (powerPreference == PowerPreference::HighPerformance && isDiscrete)
             score += 500;
-        else if (powerPreferrence == PowerPreference::LowPower && !isDiscrete)
+        else if (powerPreference == PowerPreference::LowPower && !isDiscrete)
             score += 500;
 
         // 3. Adjust score based on VRAM size
-        if (powerPreferrence == PowerPreference::HighPerformance)
+        if (powerPreference == PowerPreference::HighPerformance)
             score += static_cast<int>(desc.DedicatedVideoMemory / (1024 * 1024));  // More VRAM = higher score
-        else if (powerPreferrence == PowerPreference::LowPower)
+        else if (powerPreference == PowerPreference::LowPower)
             score -= static_cast<int>(desc.DedicatedVideoMemory / (1024 * 1024));  // Less VRAM = higher score
 
         // Keep the adapter with the highest score

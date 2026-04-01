@@ -154,7 +154,7 @@ protected:
     void destroySampler(SamplerHandle& h) override;
 
 private:
-    void initializeAdapter();
+    void selectAdapter(PowerPreference powerPreference);
     void initializeDevice();
     HRESULT createD3DDevice(int requestDriverType, int createFlags, std::span<const D3D_FEATURE_LEVEL> featureLevels);
 
