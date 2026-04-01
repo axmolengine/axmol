@@ -206,8 +206,9 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
     auto context         = driver->getContext();
     ID3D11Device* device = driver->getDevice();
 
-    auto& factory = driver->getDXGIFactory();
-    auto& adapter = driver->getDXGIAdapter();
+    auto& factory  = driver->getDXGIFactory();
+    auto& factory2 = driver->getDXGIFactory2();
+    auto& adapter  = driver->getDXGIAdapter();
 
     ComPtr<IDXGISwapChain> swapChain;
     HRESULT hr = 0;
@@ -222,8 +223,6 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
     // Try create swapchain, we prefer DXGI 1.2 but support fallback to DXGI 1.1 for win32 apps
     do
     {
-        ComPtr<IDXGIFactory2> factory2;
-        hr = factory->QueryInterface(IID_PPV_ARGS(&factory2));
         AX_BREAK_IF(!factory2);
 
         // Check allow tearing feature support and set swapchain flags

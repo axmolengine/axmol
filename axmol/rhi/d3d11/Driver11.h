@@ -27,6 +27,7 @@
 #include "axmol/rhi/DXUtils.h"
 #include "axmol/rhi/DriverFactory.h"
 #include <d3d11.h>
+#include <dxgi1_2.h>
 #include <optional>
 
 namespace ax::rhi::d3d11
@@ -136,6 +137,7 @@ public:
     inline ID3D11DeviceContext* getContext() const { return _context; }
 
     const ComPtr<IDXGIFactory>& getDXGIFactory() const { return _dxgiFactory; }
+    const ComPtr<IDXGIFactory2>& getDXGIFactory2() const { return _dxgiFactory2; }
     const ComPtr<IDXGIAdapter>& getDXGIAdapter() const { return _dxgiAdapter; }
 
     IUnknown* compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, ID3DBlob*& outBlob);
@@ -162,6 +164,8 @@ private:
     ID3D11DeviceContext* _context = nullptr;
 
     ComPtr<IDXGIFactory> _dxgiFactory;
+    ComPtr<IDXGIFactory2> _dxgiFactory2;  // DXGI 1.2 factory, used for creating swapchain on Windows 8 and above, may
+                                          // be null on Windows 7
     ComPtr<IDXGIAdapter> _dxgiAdapter;
 
     DXGI_ADAPTER_DESC _adapterDesc{};

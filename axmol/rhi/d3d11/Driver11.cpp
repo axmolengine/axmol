@@ -35,7 +35,6 @@
 #include "axmol/base/Logging.h"
 #include "axmol/platform/Application.h"
 #include "ntcvt/ntcvt.hpp"
-#include <dxgi1_2.h>
 
 #pragma comment(lib, "D3D11.lib")
 #pragma comment(lib, "DXGI.lib")
@@ -101,11 +100,7 @@ bool DriverImpl::init()
         ComPtr<IDXGIDevice> dxgiDevice;
         _AXASSERT_HR(
             hr = _device->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(dxgiDevice.GetAddressOf())));
-
         _AXASSERT_HR(hr = dxgiDevice->GetAdapter(&_dxgiAdapter));
-
-        _AXASSERT_HR(
-            hr = _dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), (void**)_dxgiFactory.ReleaseAndGetAddressOf()));
     }
 
     LARGE_INTEGER version;
@@ -142,6 +137,7 @@ DriverImpl::~DriverImpl()
     SafeRelease(_device);
 
     _dxgiAdapter.Reset();
+    _dxgiFactory2.Reset();
     _dxgiFactory.Reset();
 
     if (debug)
@@ -153,17 +149,15 @@ void DriverImpl::initializeDevice()
     constexpr UINT releaseFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
     constexpr UINT debugFlags   = releaseFlags | D3D11_CREATE_DEVICE_DEBUG;
 
-    HRESULT hr              = E_FAIL;
     const bool isDebugLayer = Application::getContextAttrs().debugLayerEnabled;
 
-    ComPtr<IDXGIFactory2> factory2;
-    hr = _dxgiFactory->QueryInterface(IID_PPV_ARGS(&factory2));
+    HRESULT hr = _dxgiFactory->QueryInterface(IID_PPV_ARGS(&_dxgiFactory2));
 
     constexpr D3D_FEATURE_LEVEL DEFAULT_FEATURE_LEVELS[] = {D3D_FEATURE_LEVEL_11_1, D3D_FEATURE_LEVEL_11_0,
                                                             D3D_FEATURE_LEVEL_10_1};
     std::span<const D3D_FEATURE_LEVEL> featureLevels(DEFAULT_FEATURE_LEVELS);
 
-    if (!factory2)
+    if (!_dxgiFactory2)
     {
         // On Windows 7 RTM or Windows 7 SP1 without the Platform Update (KB2670838),
         // D3D_FEATURE_LEVEL_11_1 is not supported. Passing 11_1 to D3D11CreateDevice
@@ -378,15 +372,19 @@ IUnknown* DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage s
     IUnknown* shader{nullptr};
     if (stage == ShaderStage::VERTEX)
     {
-        ID3D11VertexShader* vs = nullptr;
-        hr     = _device->CreateVertexShader(outBlob->GetBufferPointer(), outBlob->GetBufferSize(), nullptr, &vs);
-        shader = vs;
+        ComPtr<ID3D11VertexShader> vs;
+        hr = _device->CreateVertexShader(outBlob->GetBufferPointer(), outBlob->GetBufferSize(), nullptr,
+                                         vs.GetAddressOf());
+        if (SUCCEEDED(hr))
+            shader = vs.Detach();
     }
     else
     {
-        ID3D11PixelShader* ps = nullptr;
-        hr     = _device->CreatePixelShader(outBlob->GetBufferPointer(), outBlob->GetBufferSize(), nullptr, &ps);
-        shader = ps;
+        ComPtr<ID3D11PixelShader> ps;
+        hr = _device->CreatePixelShader(outBlob->GetBufferPointer(), outBlob->GetBufferSize(), nullptr,
+                                        ps.GetAddressOf());
+        if (SUCCEEDED(hr))
+            shader = ps.Detach();
     }
 
     if (!shader)
