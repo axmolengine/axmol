@@ -68,7 +68,8 @@ public:
      * @note '&' characters are escaped by doubling ('&&') to avoid mnemonic interpretation.
      * @note If overflow == 2, the font size may be reduced iteratively until the text fits.
      * @note When stroke is enabled, glyph outlines are converted into geometry and drawn with
-     *       both stroke and fill. When shadow is enabled, a simple offset shadow is drawn first.
+     * @note When stroke is enabled, glyph outlines are converted into geometry and drawn with
+     *       both stroke and fill.
      * @note Alignment is handled by DirectWrite layout; origin is adjusted only for bounding box placement.
      */
     bool drawText(std::string_view text,
