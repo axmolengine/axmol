@@ -2637,15 +2637,15 @@ FontDefinition Label::_getFontDefinition() const
     if (_fontAtlas && !_fontAtlas->getFontName().empty())
         fontName = _fontAtlas->getFontName();
 
-    systemFontDef._fontName              = fontName;
-    systemFontDef._fontSize              = _systemFontSize;
-    systemFontDef._alignment             = _hAlignment;
-    systemFontDef._vertAlignment         = _vAlignment;
-    systemFontDef._dimensions.width      = _labelWidth == 0.f ? _maxLineWidth : _labelWidth;
-    systemFontDef._dimensions.height     = _labelHeight;
-    systemFontDef._fontFillColor         = _textColor32;
-    systemFontDef._enableWrap            = _enableWrap;
-    systemFontDef._overflow              = (int)_overflow;
+    systemFontDef._fontName          = fontName;
+    systemFontDef._fontSize          = _systemFontSize;
+    systemFontDef._alignment         = _hAlignment;
+    systemFontDef._vertAlignment     = _vAlignment;
+    systemFontDef._dimensions.width  = _labelWidth == 0.f ? _maxLineWidth : _labelWidth;
+    systemFontDef._dimensions.height = _labelHeight;
+    systemFontDef._fontFillColor     = _textColor32;
+    systemFontDef._enableWrap        = _enableWrap;
+    systemFontDef._overflow          = (int)_overflow;
 
     if (_currLabelEffect == LabelEffect::OUTLINE && _outlineSize > 0.f)
     {

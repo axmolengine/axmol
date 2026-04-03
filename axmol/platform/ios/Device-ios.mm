@@ -611,19 +611,19 @@ Data Device::getTextureDataForText(std::string_view text,
 
     do
     {
-        tImageInfo info          = {0};
-        info.width               = textDefinition._dimensions.width;
-        info.height              = textDefinition._dimensions.height;
-        info.hasStroke           = textDefinition._stroke._strokeEnabled;
-        info.strokeColorR        = textDefinition._stroke._strokeColor.r / 255.0f;
-        info.strokeColorG        = textDefinition._stroke._strokeColor.g / 255.0f;
-        info.strokeColorB        = textDefinition._stroke._strokeColor.b / 255.0f;
-        info.strokeColorA        = textDefinition._stroke._strokeColor.a / 255.0f;
-        info.strokeSize          = textDefinition._stroke._strokeSize;
-        info.tintColorR          = textDefinition._fontFillColor.r / 255.0f;
-        info.tintColorG          = textDefinition._fontFillColor.g / 255.0f;
-        info.tintColorB          = textDefinition._fontFillColor.b / 255.0f;
-        info.tintColorA          = textDefinition._fontFillColor.a / 255.0f;
+        tImageInfo info   = {0};
+        info.width        = textDefinition._dimensions.width;
+        info.height       = textDefinition._dimensions.height;
+        info.hasStroke    = textDefinition._stroke._strokeEnabled;
+        info.strokeColorR = textDefinition._stroke._strokeColor.r / 255.0f;
+        info.strokeColorG = textDefinition._stroke._strokeColor.g / 255.0f;
+        info.strokeColorB = textDefinition._stroke._strokeColor.b / 255.0f;
+        info.strokeColorA = textDefinition._stroke._strokeColor.a / 255.0f;
+        info.strokeSize   = textDefinition._stroke._strokeSize;
+        info.tintColorR   = textDefinition._fontFillColor.r / 255.0f;
+        info.tintColorG   = textDefinition._fontFillColor.g / 255.0f;
+        info.tintColorB   = textDefinition._fontFillColor.b / 255.0f;
+        info.tintColorA   = textDefinition._fontFillColor.a / 255.0f;
 
         if (!_initWithString(text, align, textDefinition._fontName.c_str(), textDefinition._fontSize, &info,
                              textDefinition._enableWrap, textDefinition._overflow))

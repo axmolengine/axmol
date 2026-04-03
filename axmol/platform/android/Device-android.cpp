@@ -122,11 +122,10 @@ public:
         if (!methodInfo.env->CallStaticBooleanMethod(
                 methodInfo.classID, methodInfo.methodID, strArray, jstrFont, textDefinition._fontSize,
                 textDefinition._fontFillColor.r, textDefinition._fontFillColor.g, textDefinition._fontFillColor.b,
-                textDefinition._fontFillColor.a, eAlignMask, nWidth, nHeight,
-                textDefinition._stroke._strokeEnabled, textDefinition._stroke._strokeColor.r,
-                textDefinition._stroke._strokeColor.g, textDefinition._stroke._strokeColor.b,
-                textDefinition._stroke._strokeColor.a, textDefinition._stroke._strokeSize, textDefinition._enableWrap,
-                textDefinition._overflow))
+                textDefinition._fontFillColor.a, eAlignMask, nWidth, nHeight, textDefinition._stroke._strokeEnabled,
+                textDefinition._stroke._strokeColor.r, textDefinition._stroke._strokeColor.g,
+                textDefinition._stroke._strokeColor.b, textDefinition._stroke._strokeColor.a,
+                textDefinition._stroke._strokeSize, textDefinition._enableWrap, textDefinition._overflow))
         {
             return false;
         }
