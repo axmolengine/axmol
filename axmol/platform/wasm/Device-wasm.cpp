@@ -64,9 +64,17 @@ Data Device::getTextureDataForText(std::string_view text,
                                    int& height,
                                    bool& hasPremultipliedAlpha)
 {
-    char color[10];
-    fmt::format_to_z(color, "#{:02x}{:02x}{:02x}{:02x}", textDefinition._fontFillColor.r,
-                     textDefinition._fontFillColor.g, textDefinition._fontFillColor.b, textDefinition._fontFillColor.a);
+    char colorHex[10] = {0};
+    auto& fillColor   = textDefinition._fontFillColor;
+    fmt::format_to_z(colorHex, "#{:02x}{:02x}{:02x}{:02x}", fillColor.r, fillColor.g, fillColor.b, fillColor.a);
+
+    char strokeColorHex[64] = {0};
+    if (textDefinition._stroke._strokeEnabled)
+    {
+        auto& strokeColor = textDefinition._stroke._strokeColor;
+        fmt::format_to_z(strokeColorHex, "#{:02x}{:02x}{:02x}", strokeColor.r, strokeColor.g, strokeColor.b);
+    }
+
     // clang-format off
     unsigned char* ptr = (unsigned char*)EM_ASM_PTR({
         var lines = UTF8ToString($0).split("\n");
@@ -76,6 +84,9 @@ Data Device::getTextureDataForText(std::string_view text,
         var dimWidth = $4;
         var dimHeight = $5;
         var align = $6;
+        var strokeEnabled = $7;
+        var strokeSize = $8;
+        var strokeColor = UTF8ToString($9);
 
         // use shared canvas
         var canvas = Module.axmolSharedCanvas = Module.axmolSharedCanvas || document.createElement("canvas");
@@ -138,9 +149,17 @@ Data Device::getTextureDataForText(std::string_view text,
         canvas.height = canvasHeight;
 
         context.clearRect(0, 0, canvasWidth, canvasHeight);
+
+        // after setting canvas width/height, the context state will be reset, so we need to set them again
         context.font = fontSize + "px " + fontName;
         context.fillStyle = color;
         context.textBaseline = "alphabetic";
+
+        strokeEnabled = strokeEnabled && strokeSize > 0;
+        if (strokeEnabled) {
+            context.lineWidth = strokeSize;
+            context.strokeStyle = strokeColor;
+        }
 
         // vertical top
         var offsetY = 0;
@@ -164,6 +183,9 @@ Data Device::getTextureDataForText(std::string_view text,
             }
             // use align left by default, offsetX remains 0
             var baselineY = offsetY + linesAscent[i];
+            if (strokeEnabled) {
+                context.strokeText(lines[i], offsetX, baselineY);
+            }
             context.fillText(lines[i], offsetX, baselineY);
             offsetY += lineH;
         }
@@ -174,7 +196,9 @@ Data Device::getTextureDataForText(std::string_view text,
         var buffer = new Uint8Array(Module.HEAPU8.buffer, ptr, data.byteLength);
         buffer.set(data);
         return ptr;
-    }, text.data(), textDefinition._fontName.c_str(), textDefinition._fontSize, color, textDefinition._dimensions.width, textDefinition._dimensions.height, align);
+    }, text.data(), textDefinition._fontName.c_str(), textDefinition._fontSize, colorHex,
+       textDefinition._dimensions.width, textDefinition._dimensions.height, align,
+       textDefinition._stroke._strokeEnabled, textDefinition._stroke._strokeSize, strokeColorHex);
 
     width = EM_ASM_INT({
         return Module.axmolSharedCanvas.width;

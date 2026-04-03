@@ -2659,15 +2659,6 @@ FontDefinition Label::_getFontDefinition() const
         systemFontDef._stroke._strokeEnabled = false;
     }
 
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID) && (AX_TARGET_PLATFORM != AX_PLATFORM_IOS) && \
-    (AX_TARGET_PLATFORM != AX_PLATFORM_WIN32)
-    if (systemFontDef._stroke._strokeEnabled)
-    {
-        AXLOGE("Stroke Currently only supported on iO, Android and Windows");
-    }
-    systemFontDef._stroke._strokeEnabled = false;
-#endif
-
     return systemFontDef;
 }
 
