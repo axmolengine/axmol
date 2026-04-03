@@ -68,11 +68,12 @@ Data Device::getTextureDataForText(std::string_view text,
     auto& fillColor   = textDefinition._fontFillColor;
     fmt::format_to_z(colorHex, "#{:02x}{:02x}{:02x}{:02x}", fillColor.r, fillColor.g, fillColor.b, fillColor.a);
 
-    char strokeColorHex[64] = {0};
+    char strokeColorHex[10] = {0};
     if (textDefinition._stroke._strokeEnabled)
     {
         auto& strokeColor = textDefinition._stroke._strokeColor;
-        fmt::format_to_z(strokeColorHex, "#{:02x}{:02x}{:02x}", strokeColor.r, strokeColor.g, strokeColor.b);
+        fmt::format_to_z(strokeColorHex, "#{:02x}{:02x}{:02x}{:02x}", strokeColor.r, strokeColor.g, strokeColor.b,
+                         strokeColor.a);
     }
 
     // clang-format off
