@@ -503,7 +503,7 @@ void FastTMXLayer::updateTotalQuads()
         _tileToQuadIndex.resize(int(_layerSize.width * _layerSize.height), -1);
         _indicesVertexZOffsets.clear();
 
-        auto color = Color32::WHITE;
+        auto color = getDisplayedColor();//Color32::WHITE;
         color.a    = getDisplayedOpacity();
 
         if (_texture->hasPremultipliedAlpha())
@@ -681,6 +681,12 @@ Sprite* FastTMXLayer::getTileAt(const Vec2& tileCoordinate)
         }
     }
     return tile;
+}
+
+bool FastTMXLayer::isCoordinateInLayer(const Vec2& tileCoordinate)
+{
+     return tileCoordinate.x < _layerSize.width && tileCoordinate.y < _layerSize.height && tileCoordinate.x >= 0 &&
+                 tileCoordinate.y >= 0;
 }
 
 int FastTMXLayer::getTileGIDAt(const Vec2& tileCoordinate, TMXTileFlags* flags /* = nullptr*/)

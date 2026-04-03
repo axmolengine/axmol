@@ -38,6 +38,11 @@ ApplicationBase::~ApplicationBase()
     Director::destroyInstance();
 }
 
+std::string ApplicationBase::getProgramDir()
+{
+    return _programDir;
+}
+
 void ApplicationBase::applicationScreenSizeChanged(int newWidth, int newHeight) {}
 
 }  // namespace ax

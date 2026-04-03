@@ -122,9 +122,17 @@ TMXTilesetInfo* FastTMXTiledMap::tilesetForLayer(TMXLayerInfo* layerInfo, TMXMap
     Vec2 size      = layerInfo->_layerSize;
     auto& tilesets = mapInfo->getTilesets();
 
+    if(tilesets.size() > 0)
+    {
+    //    return tilesets[0];
+    }
+
     for (auto iter = tilesets.crbegin(), iterCrend = tilesets.crend(); iter != iterCrend; ++iter)
     {
         TMXTilesetInfo* tilesetInfo = *iter;
+        auto tilesetTex = _director->getTextureCache()->addImage(tilesetInfo->_sourceImage);
+        int tilesetTileCount = (tilesetTex->getContentSize().width / tilesetInfo->_tileSize.width) * (tilesetTex->getContentSize().height / tilesetInfo->_tileSize.height);
+        //printf("tilesetTileCount:%d\n", tilesetTileCount);
         if (tilesetInfo)
         {
             for (int y = 0; y < size.height; y++)
@@ -145,7 +153,8 @@ TMXTilesetInfo* FastTMXTiledMap::tilesetForLayer(TMXLayerInfo* layerInfo, TMXMap
                     {
                         // Optimization: quick return
                         // if the layer is invalid (more than 1 tileset per layer) an AXASSERT will be thrown later
-                        if ((gid & kTMXFlippedMask) >= static_cast<uint32_t>(tilesetInfo->_firstGid))
+                        if ((gid & kTMXFlippedMask) >= static_cast<uint32_t>(tilesetInfo->_firstGid) &&
+                            gid < tilesetInfo->_firstGid + tilesetTileCount)
                         {
                             return tilesetInfo;
                         }
@@ -156,7 +165,7 @@ TMXTilesetInfo* FastTMXTiledMap::tilesetForLayer(TMXLayerInfo* layerInfo, TMXMap
     }
 
     // If all the tiles are 0, return empty tileset
-    AXLOGW("axmol: Warning: TMX Layer '{}' has no tiles", layerInfo->_name);
+    //printf("axmol: Warning: TMX Layer '{%s}' has no tiles", layerInfo->_name.c_str());
     return nullptr;
 }
 

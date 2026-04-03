@@ -197,4 +197,23 @@ Animation* Animation::clone() const
     return a;
 }
 
+AnimationFrame *Animation::getFrameAtTime(float currentTime, bool loop)
+{
+    if(loop)
+    {
+        currentTime = fmod(currentTime, _totalDelayUnits);
+    }
+    float total = 0.0f;
+    for(auto frame : _frames)
+    {
+        float delay = frame->getDelayUnits();
+        if(currentTime < total + delay)
+        {
+            return frame;
+        }
+        total += delay;
+    }
+    return _frames[_frames.size() - 1];
+}
+
 }  // namespace ax

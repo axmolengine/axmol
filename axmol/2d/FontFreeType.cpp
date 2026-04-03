@@ -502,6 +502,21 @@ unsigned char* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
         outHeight = _fontFace->glyph->bitmap.rows;
         ret       = _fontFace->glyph->bitmap.buffer;
 
+        //auto ret2 = new unsigned char[outWidth * outHeight];
+
+        
+        for(int i = 0; i < outWidth * outHeight; i++)
+        {
+            if(ret[i] < 128)
+            {
+                ret[i] = 0;
+            }else
+            {
+                ret[i] = 255;
+            }
+        }
+        
+
         if (_outlineSize > 0 && outWidth > 0 && outHeight > 0)
         {
             sharedBitmapData = false;

@@ -292,6 +292,8 @@ public:
                                  float delayPerUnit,
                                  unsigned int loops);
 
+    AnimationFrame *getFrameAtTime(float currentTime, bool loop);
+
 protected:
     /** total Delay units of the Animation. */
     float _totalDelayUnits;

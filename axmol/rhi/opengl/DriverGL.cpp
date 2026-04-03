@@ -226,7 +226,7 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     glGenSamplers(1, &sampler);
 
     // --- Minification filter (min + mip) ---
-    GLenum minFilterGL{GL_LINEAR};
+    GLenum minFilterGL{GL_NEAREST};
     if (desc.minFilter != SamplerFilter::MIN_NEAREST)
     {
         switch (desc.mipFilter)

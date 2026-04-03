@@ -115,7 +115,9 @@ Node::Node()
     , _componentContainer(nullptr)
     , _displayedColor(Color32::WHITE)
     , _realColor(Color32::WHITE)
-    , _childFollowCameraMask(false)
+    , _cascadeColorEnabled(false)
+    , _cascadeOpacityEnabled(false)
+    , _childFollowCameraMask(true)
     , _cascadeMode(0)
     , _cameraMask(1)
     , _onEnterCallback(nullptr)
@@ -602,6 +604,20 @@ ssize_t Node::getChildrenCount() const
 bool Node::isVisible() const
 {
     return _visible;
+}
+
+bool Node::isVisibleInHierarchy() const
+{
+    auto node = this;
+    while(node != NULL)
+    {
+        if(!node->isVisible())
+        {
+            return false;
+        }
+        node = node->getParent();
+    }
+    return true;
 }
 
 /// isVisible setter

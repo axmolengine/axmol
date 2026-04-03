@@ -110,6 +110,8 @@ public:
      */
     virtual ~FastTMXLayer();
 
+    bool isCoordinateInLayer(const Vec2& tileCoordinate);
+
     /** Returns the tile gid at a given tile coordinate. It also returns the tile flags.
      *
      * @param tileCoordinate The tile coordinate.

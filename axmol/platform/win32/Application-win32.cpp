@@ -34,6 +34,11 @@ THE SOFTWARE.
 
 #include "yasio/wtimer_hres.hpp"
 
+#include <windows.h>
+#include <stdio.h>
+#include <Shlwapi.h>
+#pragma comment(lib, "Shlwapi.lib")
+
 #include "ntcvt/ntcvt.hpp"
 /**
 @brief    This function change the PVRFrame show/hide setting in register.
@@ -61,9 +66,24 @@ Application::~Application()
     sm_pSharedApplication = nullptr;
 }
 
+//static 
+
 int Application::run()
 {
     PVRFrameEnableControlWindow(false);
+
+    {
+        TCHAR iniFileFolderPath[_MAX_PATH];
+        memset(iniFileFolderPath, NULL, _countof(iniFileFolderPath));
+        size_t nNum = GetModuleFileName(NULL, iniFileFolderPath, _countof(iniFileFolderPath));
+        PathRemoveFileSpec(iniFileFolderPath);
+
+        std::wstring_view u16pathsv{iniFileFolderPath, nNum};
+        //u16pathsv.remove_suffix(u16pathsv.length() - u16pathsv.find_last_of('\\') - 1);
+        _programDir = ntcvt::from_chars(u16pathsv);
+        std::replace(_programDir.begin(), _programDir.end(), '\\', '/');
+        //_programDir = "xxxxx";
+    }
 
     ///////////////////////////////////////////////////////////////////////////
     /////////////// changing timer resolution
