@@ -23,6 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "axmol/platform/win32/DWriteTextRenderer.h"
 #include "axmol/platform/win32/ComPtr.h"
+#include "axmol/2d/Label.h"
 #include "ntcvt/ntcvt.hpp"
 #include <windowsx.h>
 #include <algorithm>
@@ -90,8 +91,10 @@ public:
 
     ~GlyphRunToGeometryTextRenderer()
     {
+        for (auto g : _geometries)
+            SafeRelease(g);
+        SafeRelease(_geometryGroup);
         SafeRelease(_d2dFactory);
-        SafeRelease(_geometry);
     }
 
     // IUnknown
@@ -117,33 +120,40 @@ public:
         return newCount;
     }
 
-    ID2D1Geometry* getGeometry() const { return _geometry; }
+    ID2D1Geometry* fetchGeometryGroup()
+    {
+        if (!_geometries.empty())
+        {
+            _d2dFactory->CreateGeometryGroup(D2D1_FILL_MODE_WINDING, _geometries.data(), (UINT)_geometries.size(),
+                                             &_geometryGroup);
+        }
+        return _geometryGroup;
+    }
 
-    IFACEMETHOD(DrawGlyphRun)(void* /*clientDrawingContext*/,
-                              FLOAT baselineOriginX,
-                              FLOAT baselineOriginY,
-                              DWRITE_MEASURING_MODE /*measuringMode*/,
+    IFACEMETHOD(DrawGlyphRun)(void*,
+                              FLOAT x,
+                              FLOAT y,
+                              DWRITE_MEASURING_MODE,
                               const DWRITE_GLYPH_RUN* glyphRun,
-                              const DWRITE_GLYPH_RUN_DESCRIPTION* /*glyphRunDescription*/,
-                              IUnknown* /*clientDrawingEffect*/)
+                              const DWRITE_GLYPH_RUN_DESCRIPTION*,
+                              IUnknown*)
     {
         if (!glyphRun || !glyphRun->fontFace)
             return E_FAIL;
 
         ID2D1PathGeometry* pathGeom = nullptr;
         HRESULT hr                  = _d2dFactory->CreatePathGeometry(&pathGeom);
-        if (FAILED(hr) || !pathGeom)
+        if (FAILED(hr))
             return hr;
 
         ID2D1GeometrySink* sink = nullptr;
         hr                      = pathGeom->Open(&sink);
-        if (FAILED(hr) || !sink)
+        if (FAILED(hr))
         {
             pathGeom->Release();
             return hr;
         }
 
-        // Write glyph outline into sink
         hr = glyphRun->fontFace->GetGlyphRunOutline(
             glyphRun->fontEmSize, glyphRun->glyphIndices, glyphRun->glyphAdvances, glyphRun->glyphOffsets,
             glyphRun->glyphCount, glyphRun->isSideways, glyphRun->bidiLevel % 2, sink);
@@ -153,38 +163,11 @@ public:
 
         if (SUCCEEDED(hr))
         {
-            // Apply baseline origin transform for this glyph run
-            D2D1::Matrix3x2F transform            = D2D1::Matrix3x2F::Translation(baselineOriginX, baselineOriginY);
+            D2D1::Matrix3x2F transform            = D2D1::Matrix3x2F::Translation(x, y);
             ID2D1TransformedGeometry* transformed = nullptr;
             if (SUCCEEDED(_d2dFactory->CreateTransformedGeometry(pathGeom, transform, &transformed)))
             {
-                // Combine with existing geometry if needed
-                if (_geometry)
-                {
-                    ID2D1PathGeometry* combined = nullptr;
-                    if (SUCCEEDED(_d2dFactory->CreatePathGeometry(&combined)))
-                    {
-                        ID2D1GeometrySink* sinkCombined = nullptr;
-                        if (SUCCEEDED(combined->Open(&sinkCombined)))
-                        {
-                            _geometry->Simplify(D2D1_GEOMETRY_SIMPLIFICATION_OPTION_CUBICS_AND_LINES, nullptr,
-                                                sinkCombined);
-                            transformed->Simplify(D2D1_GEOMETRY_SIMPLIFICATION_OPTION_CUBICS_AND_LINES, nullptr,
-                                                  sinkCombined);
-                            sinkCombined->Close();
-                            sinkCombined->Release();
-                            _geometry->Release();
-                            _geometry = combined;
-                        }
-                        else
-                            combined->Release();
-                    }
-                    transformed->Release();
-                }
-                else
-                {
-                    _geometry = transformed;
-                }
+                _geometries.push_back(transformed);
             }
         }
 
@@ -227,9 +210,10 @@ public:
     }
 
 private:
-    LONG _refCount = 1;
-    ID2D1Geometry* _geometry{nullptr};  // unified geometry for all glyph runs
+    LONG _refCount{1};
     ID2D1Factory* _d2dFactory;
+    std::vector<ID2D1Geometry*> _geometries;
+    ID2D1GeometryGroup* _geometryGroup{nullptr};
 };
 
 DWriteTextRenderer::DWriteTextRenderer()
@@ -241,14 +225,10 @@ DWriteTextRenderer::DWriteTextRenderer()
 DWriteTextRenderer::~DWriteTextRenderer()
 {
     releaseRenderTarget();
-    if (_textFormat)
-        _textFormat->Release();
-    if (_dwriteFactory)
-        _dwriteFactory->Release();
-    if (_d2dFactory)
-        _d2dFactory->Release();
-    if (_wicFactory)
-        _wicFactory->Release();
+    SafeRelease(_textFormat);
+    SafeRelease(_dwriteFactory);
+    SafeRelease(_d2dFactory);
+    SafeRelease(_wicFactory);
     CoUninitialize();
 }
 
@@ -420,7 +400,7 @@ bool DWriteTextRenderer::drawText(std::string_view text,
     };
 
     // Handle overflow == 2 (shrink font to fit)
-    if (textDefinition._overflow == 2 && extent.cx > 0 && extent.cy > 0) [[unlikely]]
+    if (textDefinition._overflow == (int)Label::Overflow::SHRINK && extent.cx > 0 && extent.cy > 0) [[unlikely]]
     {
         int low     = 1;
         int high    = textDefinition._fontSize;
@@ -512,8 +492,7 @@ bool DWriteTextRenderer::drawText(std::string_view text,
     {
         GlyphRunToGeometryTextRenderer* geomRenderer = new GlyphRunToGeometryTextRenderer(_d2dFactory);
         textLayout->Draw(nullptr, geomRenderer, 0.0f, 0.0f);
-
-        ID2D1Geometry* geom = geomRenderer->getGeometry();
+        ID2D1Geometry* geom = geomRenderer->fetchGeometryGroup();
         if (geom)
         {
             D2D1::Matrix3x2F transform = D2D1::Matrix3x2F::Translation(origin.x, origin.y);
