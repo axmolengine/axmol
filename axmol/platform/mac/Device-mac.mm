@@ -378,9 +378,11 @@ static bool _initWithString(std::string_view text,
                                                          green:stroke._strokeColor.g / 255.0
                                                           blue:stroke._strokeColor.b / 255.0
                                                          alpha:stroke._strokeColor.a / 255.0];
-            NSNumber* strokeSize               = [NSNumber numberWithFloat:stroke._strokeSize / size * 100.0];
+            NSFont* finalFont = [stringWithAttributes attribute:NSFontAttributeName atIndex:0 effectiveRange:nil];
+            int finalFontSize = [finalFont pointSize];
+            NSNumber* strokeSize               = [NSNumber numberWithFloat:stroke._strokeSize / finalFontSize * 100.0];
             NSDictionary* tokenAttributesDict2 = [NSDictionary
-                dictionaryWithObjectsAndKeys:foregroundColor, NSForegroundColorAttributeName, font, NSFontAttributeName,
+                dictionaryWithObjectsAndKeys:foregroundColor, NSForegroundColorAttributeName, finalFont, NSFontAttributeName,
                                              paragraphStyle, NSParagraphStyleAttributeName, strokeSize,
                                              NSStrokeWidthAttributeName, strokeColor, NSStrokeColorAttributeName, nil];
             NSAttributedString* strokeString =

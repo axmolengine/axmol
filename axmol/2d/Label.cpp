@@ -2644,7 +2644,6 @@ FontDefinition Label::_getFontDefinition() const
     systemFontDef._dimensions.width      = _labelWidth == 0.f ? _maxLineWidth : _labelWidth;
     systemFontDef._dimensions.height     = _labelHeight;
     systemFontDef._fontFillColor         = _textColor32;
-    systemFontDef._shadow._shadowEnabled = false;
     systemFontDef._enableWrap            = _enableWrap;
     systemFontDef._overflow              = (int)_overflow;
 

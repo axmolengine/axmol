@@ -368,15 +368,11 @@ void Device::setAccelerometerInterval(float interval)
 #endif
 }
 
-typedef struct
+struct tImageInfo
 {
     unsigned int height;
     unsigned int width;
     bool isPremultipliedAlpha;
-    bool hasShadow;
-    CGSize shadowOffset;
-    float shadowBlur;
-    float shadowOpacity;
     bool hasStroke;
     float strokeColorR;
     float strokeColorG;
@@ -389,8 +385,7 @@ typedef struct
     float tintColorA;
 
     unsigned char* data;
-
-} tImageInfo;
+};
 
 static CGSize _calculateStringSize(NSAttributedString* str,
                                    id font,
@@ -619,11 +614,6 @@ Data Device::getTextureDataForText(std::string_view text,
         tImageInfo info          = {0};
         info.width               = textDefinition._dimensions.width;
         info.height              = textDefinition._dimensions.height;
-        info.hasShadow           = textDefinition._shadow._shadowEnabled;
-        info.shadowOffset.width  = textDefinition._shadow._shadowOffset.width;
-        info.shadowOffset.height = textDefinition._shadow._shadowOffset.height;
-        info.shadowBlur          = textDefinition._shadow._shadowBlur;
-        info.shadowOpacity       = textDefinition._shadow._shadowOpacity;
         info.hasStroke           = textDefinition._stroke._strokeEnabled;
         info.strokeColorR        = textDefinition._stroke._strokeColor.r / 255.0f;
         info.strokeColorG        = textDefinition._stroke._strokeColor.g / 255.0f;

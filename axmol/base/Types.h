@@ -411,21 +411,6 @@ struct AX_DLL AnimationFrameData
  types used for defining fonts properties (i.e. font name, size, stroke or shadow)
  */
 
-/** @struct FontShadow
- * Shadow attributes.
- */
-struct AX_DLL FontShadow
-{
-    /// shadow x and y offset
-    Vec2 _shadowOffset;
-    /// shadow blurriness
-    float _shadowBlur = 0.f;
-    /// shadow opacity
-    float _shadowOpacity = 0.f;
-    /// true if shadow enabled
-    bool _shadowEnabled = false;
-};
-
 /** @struct FontStroke
  * Stroke attributes.
  */
@@ -456,8 +441,6 @@ struct AX_DLL FontDefinition
     Vec2 _dimensions = Vec2::ZERO;
     /// font color
     Color32 _fontFillColor = Color32::WHITE;
-    /// font shadow
-    FontShadow _shadow;
     /// font stroke
     FontStroke _stroke;
     /// enable text wrap

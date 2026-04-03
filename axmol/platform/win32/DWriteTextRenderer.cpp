@@ -472,21 +472,6 @@ bool DWriteTextRenderer::drawText(std::string_view text,
         _renderTarget->CreateSolidColorBrush(toD2DColor(textDefinition._stroke._strokeColor), &strokeBrush);
     }
 
-    // If shadow is enabled, draw simple offset shadow first (shadow handled elsewhere if needed)
-    if (textDefinition._shadow._shadowEnabled)
-    {
-        // simple offset shadow: draw layout at offset with shadow color
-        D2D1_POINT_2F shadowOrigin        = {origin.x + textDefinition._shadow._shadowOffset.x,
-                                             origin.y + textDefinition._shadow._shadowOffset.y};
-        ID2D1SolidColorBrush* shadowBrush = nullptr;
-        _renderTarget->CreateSolidColorBrush(toD2DColor(textDefinition._fontFillColor), &shadowBrush);
-        if (shadowBrush)
-        {
-            _renderTarget->DrawTextLayout(shadowOrigin, textLayout, shadowBrush);
-            shadowBrush->Release();
-        }
-    }
-
     // If stroke requested, build geometry and draw outline (and fill)
     if (needStroke)
     {

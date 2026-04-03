@@ -95,7 +95,6 @@ static bool createStringTextureData(std::string_view text,
     textDef._dimensions.width *= contentScaleFactor;
     textDef._dimensions.height *= contentScaleFactor;
     textDef._stroke._strokeSize *= contentScaleFactor;
-    textDef._shadow._shadowEnabled = false;
 
     outData = Device::getTextureDataForText(text, textDef, align, imageWidth, imageHeight, premultipliedAlpha);
     if (outData.isNull())
@@ -430,7 +429,6 @@ bool Texture2D::initWithString(std::string_view text,
 {
     FontDefinition tempDef;
 
-    tempDef._shadow._shadowEnabled = false;
     tempDef._stroke._strokeEnabled = false;
 
     tempDef._fontName      = fontName;
