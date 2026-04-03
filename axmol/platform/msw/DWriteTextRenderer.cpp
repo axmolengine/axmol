@@ -274,12 +274,9 @@ bool DWriteTextRenderer::setFont(std::wstring_view fontName, int nSize, bool ena
         DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, newSize, L"", &_textFormat);
     if (FAILED(hr))
     {
-        // Fallback to Segoe UI
-        hr = _dwriteFactory->CreateTextFormat(
-            L"Segoe UI", nullptr, enableBold ? DWRITE_FONT_WEIGHT_BOLD : DWRITE_FONT_WEIGHT_NORMAL,
-            DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, newSize, L"", &_textFormat);
-        if (FAILED(hr))
-            return false;
+        AXLOGW("Failed to create text format for font '{}': hr=0x{:08X}", ntcvt::from_chars(fontName),
+               static_cast<UINT>(hr));
+        return false;
     }
 
     _fontName = fontName;
@@ -514,7 +511,7 @@ bool DWriteTextRenderer::drawText(std::string_view text,
         HRESULT hr         = _wicBitmap->CopyPixels(&rcCopy, rowPitch, (UINT)outData.size(), outData.data());
         if (FAILED(hr))
         {
-            AXLOGW("Failed to copy pixels from WIC bitmap: hr=0x%08X", hr);
+            AXLOGW("Failed to copy pixels from WIC bitmap: hr=0x{:08X}", static_cast<UINT>(hr));
         }
     }
 
