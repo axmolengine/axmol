@@ -329,8 +329,7 @@ bool DWriteTextRenderer::createRenderTarget(int width,
     _renderTarget->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE);
 
     // Create solid color brush (white, will be multiplied by text color later)
-    auto& fillColor = textDefinition._fontFillColor;
-    hr              = _renderTarget->CreateSolidColorBrush(toD2DColor(textDefinition._fontFillColor), &_textBrush);
+    hr = _renderTarget->CreateSolidColorBrush(toD2DColor(textDefinition._fontFillColor), &_textBrush);
     if (FAILED(hr))
     {
         releaseRenderTarget();
@@ -462,6 +461,7 @@ bool DWriteTextRenderer::drawText(std::string_view text,
     // Draw text
     _renderTarget->BeginDraw();
     _renderTarget->Clear(D2D1::ColorF(0, 0, 0, 0));  // transparent background
+    _textBrush->SetColor(toD2DColor(textDefinition._fontFillColor));
 
     // Using zero drawing origin based on alignment
     constexpr D2D1_POINT_2F origin = {0, 0};
@@ -513,11 +513,11 @@ bool DWriteTextRenderer::drawText(std::string_view text,
     if (ok)
     {
         WICRect rcCopy = {0, 0, _bitmapWidth, _bitmapHeight};
-        outData.resize(_bitmapWidth * _bitmapHeight * 4);
+        outData.resize(static_cast<size_t>(_bitmapWidth) * _bitmapHeight * 4);
 
-        constexpr int bpp = 32;
-        UINT rowPitch     = (_bitmapWidth * bpp + 7) / 8;
-        HRESULT hr        = _wicBitmap->CopyPixels(&rcCopy, rowPitch, (UINT)outData.size(), outData.data());
+        constexpr UINT bpp = 32;
+        UINT rowPitch      = (_bitmapWidth * bpp + 7) / 8;
+        HRESULT hr         = _wicBitmap->CopyPixels(&rcCopy, rowPitch, (UINT)outData.size(), outData.data());
         if (FAILED(hr))
         {
             AXLOGW("Failed to copy pixels from WIC bitmap: hr=0x%08X", hr);

@@ -2329,7 +2329,7 @@ void fontdefinition_to_luaval(lua_State* L, const FontDefinition& inValue)
     lua_rawset(L, -3);                                     /* table[key] = value, L: table */
 
     // Stroke
-    lua_pushstring(L, "shadowEnabled");                 /* L: table key */
+    lua_pushstring(L, "strokeEnabled");                 /* L: table key */
     lua_pushboolean(L, inValue._stroke._strokeEnabled); /* L: table key value*/
     lua_rawset(L, -3);                                  /* table[key] = value, L: table */
 
