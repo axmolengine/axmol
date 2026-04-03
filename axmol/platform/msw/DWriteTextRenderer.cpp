@@ -391,6 +391,8 @@ bool DWriteTextRenderer::drawText(std::string_view text,
     // Handle overflow == 2 (shrink font to fit)
     if (textDefinition._overflow == (int)Label::Overflow::SHRINK && extent.cx > 0 && extent.cy > 0) [[unlikely]]
     {
+        const DWRITE_TEXT_RANGE entireRange{0, (UINT32)wtext.size()};
+
         int low     = 1;
         int high    = textDefinition._fontSize;
         int bestFit = high;
@@ -399,7 +401,7 @@ bool DWriteTextRenderer::drawText(std::string_view text,
         {
             int mid = (low + high) / 2;
 
-            hr = textLayout->SetFontSize(mid, DWRITE_TEXT_RANGE{0, (UINT32)wtext.size()});
+            hr = textLayout->SetFontSize(mid, entireRange);
             AX_BREAK_IF(FAILED(hr));
 
             hr = textLayout->GetMetrics(&metrics);
@@ -415,7 +417,7 @@ bool DWriteTextRenderer::drawText(std::string_view text,
                 high = mid - 1;
             }
         }
-        hr = textLayout->SetFontSize(bestFit, DWRITE_TEXT_RANGE{0, (UINT32)wtext.size()});
+        hr = textLayout->SetFontSize(bestFit, entireRange);
         if (SUCCEEDED(hr))
             hr = textLayout->GetMetrics(&metrics);
     }
