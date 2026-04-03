@@ -30,7 +30,7 @@
 #include "axmol/renderer/RenderState.h"
 #include "axmol/renderer/TextureCube.h"
 #include "axmol/renderer/Shaders.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 
 namespace ax
 {

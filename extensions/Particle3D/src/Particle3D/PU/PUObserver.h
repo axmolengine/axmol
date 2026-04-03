@@ -46,7 +46,7 @@ enum PUComparisionOperator
     CO_GREATER_THAN
 };
 
-class AX_EX_DLL PUObserver : public Object
+class AX_EXT_API PUObserver : public Object
 {
     friend class PUParticleSystem3D;
 

@@ -27,6 +27,7 @@
 
 #include "axmol/base/Event.h"
 #include <vector>
+#include <span>
 
 /**
  * @addtogroup base
@@ -81,7 +82,7 @@ public:
      *
      * @param touches A given touches vector.
      */
-    void setTouches(const std::vector<Touch*>& touches) { _touches = touches; };
+    void setTouches(std::span<Touch* const> touches) { _touches.assign(touches.begin(), touches.end()); };
 
 private:
     EventCode _eventCode;

@@ -109,7 +109,7 @@ Data Device::getTextureDataForText(std::string_view text,
             var ascent = (typeof metrics.actualBoundingBoxAscent === "number") ? metrics.actualBoundingBoxAscent : fontSize * 0.8;
             var descent = (typeof metrics.actualBoundingBoxDescent === "number") ? metrics.actualBoundingBoxDescent : fontSize * 0.2;
             var lineHeight = ascent + descent;
-			// if the line text only contains white space chars, the lineHeight will be 0, 
+			// if the line text only contains white space chars, the lineHeight will be 0,
 			// so we re-calculate lineHeight by representative text, i.e. 'M' or 'Hg'
             if (lineHeight == 0) {
                 measureDefault();
@@ -126,13 +126,13 @@ Data Device::getTextureDataForText(std::string_view text,
             totalHeight += lineHeight;
         }
 
-        // if dimensions are specified, use them to limit the height
-        if (dimHeight > 0) {
-            totalHeight = dimHeight;
-        }
-
         var canvasWidth = Math.ceil(maxWidth);
         var canvasHeight = Math.ceil(totalHeight);
+
+        // if dimensions are specified, use them to limit the height
+        if (dimHeight > 0) {
+            canvasHeight = Math.ceil(dimHeight);
+        }
 
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;

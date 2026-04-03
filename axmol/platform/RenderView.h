@@ -49,6 +49,8 @@ class Scene;
 class Renderer;
 class Director;
 
+using SurfaceHandle = rhi::SurfaceHandle;
+
 /** There are some Resolution Policy for Adapt to the screen. */
 enum class ResolutionPolicy
 {
@@ -362,7 +364,7 @@ public:
      *
      * @param filelist The array contains icons.
      */
-    virtual void setIcon(const std::vector<std::string_view>& filelist) const {};
+    virtual void setIcon(std::span<const std::string_view> filelist) const {};
 
     /** Set default window icon (implemented for windows and linux).
      * On windows it will use icon from .exe file (if included).
@@ -424,7 +426,7 @@ public:
      *   macOS: NSGLContext*
      *   iOS/tvOS: EARenderView*
      */
-    virtual void* getNativeDisplay() const { return nullptr; }
+    virtual SurfaceHandle getNativeDisplay() const { return nullptr; }
 
     /**
      * @brief Get the Window Platform object

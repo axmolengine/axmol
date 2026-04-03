@@ -51,7 +51,7 @@ GGraph::GGraph() : _shape(nullptr),
 
 GGraph::~GGraph()
 {
-    AX_SAFE_DELETE(_cornerRadius);
+    AX_SAFE_DELETE_ARRAY(_cornerRadius);
     AX_SAFE_DELETE(_polygonPoints);
     AX_SAFE_DELETE(_distances);
 }

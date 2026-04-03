@@ -25,7 +25,7 @@
  ****************************************************************************/
 #pragma once
 
-#if defined(AX_ENABLE_3D_PHYSICS)
+#if defined(AX_ENABLE_PHYSICS_3D)
 
 #    include "tolua++.h"
 
@@ -47,4 +47,4 @@ TOLUA_API int register_physics3d_module(lua_State* L);
 // end group
 /// @}
 
-#endif  // #if AX_ENABLE_3D_PHYSICS
+#endif  // #if AX_ENABLE_PHYSICS_3D

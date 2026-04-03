@@ -162,7 +162,7 @@ protected:
     It is also possible to define whether more particles emit on larger faces.
 */
 
-class AX_EX_DLL PUMeshSurfaceEmitter : public PUEmitter
+class AX_EXT_API PUMeshSurfaceEmitter : public PUEmitter
 {
 public:
     // Constants

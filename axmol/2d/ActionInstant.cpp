@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 #include "axmol/2d/ActionInstant.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/2d/Sprite.h"
 
 namespace ax

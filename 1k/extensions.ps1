@@ -1,3 +1,14 @@
+# PowerShell 5.x No builtin variable: $IsWindows
+if ($Global:__1k_ext_imported) { return }
+
+$Global:__1k_ext_imported = $true
+
+$Global:IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
+
+if ($Global:IsWin) {
+    $Global:NtOSVersion = [System.Environment]::OSVersion.Version
+}
+
 # The System.Version compare not relex: [Version]'1.0' -eq [Version]'1.0.0' == false
 # So provide a spec VersionEx make [VersionEx]'1.0' -eq [VersionEx]'1.0.0' == true available
 if (-not ([System.Management.Automation.PSTypeName]'System.VersionEx').Type) {
@@ -22,7 +33,7 @@ namespace System
         public int Revision { get { return _Revision; } }
 
         int DefaultFormatFieldCount { get { return (_Build > 0 || _Revision > 0) ? (_Revision > 0 ? 4 : 3) : 2; } }
- 
+
         public VersionEx() { }
 
         public VersionEx(string version)
@@ -34,7 +45,7 @@ namespace System
             _Revision = v.Revision;
         }
 
-        public VersionEx(System.Version version) { 
+        public VersionEx(System.Version version) {
             _Major = version.Major;
             _Minor = version.Minor;
             _Build = Math.Max(version.Build, 0);
@@ -222,15 +233,18 @@ namespace System
 }
 
 
-function ConvertFrom-Props {
+$Global:pwsh_ver = [Regex]::Match($PSVersionTable.PSVersion.ToString(), '(\d+\.)+(\*|\d+)').Value
+$Global:IsPwsh7OrLater = [VersionEx]$Global:pwsh_ver -ge [VersionEx]"7.0"
+
+function Global:ConvertFrom-Props {
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $InputObject
     )
 
     $props = @{}
 
-    foreach($_ in $InputObject) {
+    foreach ($_ in $InputObject) {
         if ($_ -match "^#.*$") {
             continue
         }
@@ -244,9 +258,9 @@ function ConvertFrom-Props {
     return $props
 }
 
-function ConvertTo-Props {
+function Global:ConvertTo-Props {
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $InputObject
     )
 
@@ -255,4 +269,37 @@ function ConvertTo-Props {
         $str_ret += "$($entry.Key)=$($entry.Value)`n"
     }
     return $str_ret
+}
+
+function Global:Get-NativeArchitecture {
+    $arch = $null
+    if ($Global:IsPwsh7OrLater) {
+        $arch = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLower()
+    }
+    else {
+        # refer to: https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor
+        try {
+            $processorInfo = Get-CimInstance -ClassName Win32_Processor -ErrorAction Stop | Select-Object -First 1
+
+            switch ($processorInfo.Architecture) {
+                0 { $arch = "x86" }   # 32-bit Intel/AMD
+                5 { $arch = "arm32" }   # 32-bit ARM
+                12 { $arch = "arm64" }   # treat ARM as arm64 target
+                9 { $arch = "x64" }   # 64-bit Intel/AMD
+                6 { $arch = "ia64" }   # Intel Itanium
+                default { $arch = "x86" }   # fallback
+            }
+        }
+        catch {
+            # Fallback: only 32/64 bit detection if WMI/CIM is not available
+            if ([System.Environment]::Is64BitOperatingSystem) {
+                $arch = "x64"
+            }
+            else {
+                $arch = "x86"
+            }
+        }
+    }
+
+    return $arch
 }

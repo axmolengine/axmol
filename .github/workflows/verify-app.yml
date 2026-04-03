@@ -14,14 +14,14 @@ on:
 
 run-name: verify-app-pr${{ inputs.pr_id }}
 
-# env:
-#   pr_id: '${{ inputs.pr_id }}'
+env:
+  GH_XCODE_VER: '16.4'
 
 jobs:
   win32:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         ref: 'refs/pull/${{ inputs.pr_id }}/merge'
     - name: Build
@@ -34,7 +34,7 @@ jobs:
     # build uwp debug avoid github CI fail with memory issue
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         ref: 'refs/pull/${{ inputs.pr_id }}/merge'
     - name: Build
@@ -46,7 +46,7 @@ jobs:
   win32-clang:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         ref: 'refs/pull/${{ inputs.pr_id }}/merge'
     - name: Build
@@ -58,7 +58,7 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         ref: 'refs/pull/${{ inputs.pr_id }}/merge'
     - name: Install deps
@@ -70,11 +70,15 @@ jobs:
         axmol new HelloCpp
         axmol -d HelloCpp
   osx-arm64:
-    runs-on: macos-latest
+    runs-on: macos-15
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         ref: 'refs/pull/${{ inputs.pr_id }}/merge'
+    - uses: maxim-lobanov/setup-xcode@v1
+      id: setup-xcode
+      with:
+        xcode-version: '${{ env.GH_XCODE_VER }}'
     - name: Build
       shell: pwsh
       run: |
@@ -82,11 +86,15 @@ jobs:
         axmol new HelloCpp
         axmol -d HelloCpp
   osx-x64:
-    runs-on: macos-13
+    runs-on: macos-15-intel
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         ref: 'refs/pull/${{ inputs.pr_id }}/merge'
+    - uses: maxim-lobanov/setup-xcode@v1
+      id: setup-xcode
+      with:
+        xcode-version: '${{ env.GH_XCODE_VER }}'
     - name: Build
       shell: pwsh
       run: |
@@ -96,7 +104,7 @@ jobs:
   android:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         ref: 'refs/pull/${{ inputs.pr_id }}/merge'
     - name: Build
@@ -104,9 +112,9 @@ jobs:
       run: |
         ./setup.ps1
         axmol new HelloCpp
-        axmol -p android -d HelloCpp
+        axmol -p android -d HelloCpp -xc "-DAX_RENDER_API=vk;gl"
   ios:
-    runs-on: macos-latest
+    runs-on: macos-15
     strategy:
       matrix:
         target_os:
@@ -115,9 +123,13 @@ jobs:
     env:
       TARGET_OS: ${{ matrix.target_os }}
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         ref: 'refs/pull/${{ inputs.pr_id }}/merge'
+    - uses: maxim-lobanov/setup-xcode@v1
+      id: setup-xcode
+      with:
+        xcode-version: '${{ env.GH_XCODE_VER }}'
     - name: Build
       shell: pwsh
       run: |
@@ -127,7 +139,7 @@ jobs:
   wasm:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         ref: 'refs/pull/${{ inputs.pr_id }}/merge'
     - name: Build

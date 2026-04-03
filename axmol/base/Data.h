@@ -49,7 +49,7 @@ public:
     const uint8_t* data() const { return _impl.data(); }
     uint8_t* data() { return _impl.data(); }
 
-    operator yasio::byte_buffer&() { return _impl; }
+    operator tlx::byte_buffer&() { return _impl; }
 
     /**
      * This parameter is defined for convenient reference if a null Data object is needed.
@@ -154,7 +154,7 @@ public:
     unsigned char* takeBuffer(ssize_t* size);
 
 private:
-    mutable axstd::byte_buffer _impl;
+    mutable tlx::byte_buffer _impl;
 };
 
 }  // namespace ax

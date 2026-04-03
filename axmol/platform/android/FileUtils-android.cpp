@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include "yasio/string_view.hpp"
+#include "yasio/tlx/string_view.hpp"
 
 #define LOG_TAG                   "FileUtils-android.cpp"
 #define LOGD(...)                 __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
@@ -227,16 +227,12 @@ int64_t FileUtilsAndroid::getFileSize(std::string_view filepath) const
 
     if (FileUtilsAndroid::assetmanager)
     {
-        std::string_view path;
-        std::string relativePath;
-        if (cxx20::starts_with(filepath, _defaultResRootPath))
+        if (tlx::starts_with(filepath, _defaultResRootPath))
         {
-            path = relativePath = filepath.substr(_defaultResRootPath.size());
+            filepath = filepath.substr(_defaultResRootPath.size());
         }
-        else
-            path = filepath;
 
-        AAsset* asset = AAssetManager_open(FileUtilsAndroid::assetmanager, path.data(), AASSET_MODE_UNKNOWN);
+        AAsset* asset = AAssetManager_open(FileUtilsAndroid::assetmanager, filepath.data(), AASSET_MODE_UNKNOWN);
         if (asset)
         {
             size = AAsset_getLength(asset);

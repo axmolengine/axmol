@@ -26,7 +26,7 @@
 #include "../testResource.h"
 #include "axmol/axmol.h"
 #include "axmol/renderer/Shaders.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 
 using namespace ax;
 USING_NS_AX_EXT;

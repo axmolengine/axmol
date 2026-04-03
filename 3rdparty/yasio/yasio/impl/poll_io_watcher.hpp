@@ -6,7 +6,7 @@
 // Copyright (c) 2012-2025 HALX99 (halx99 at live dot com)
 #ifndef YASIO__POLL_IO_WATCHER_HPP
 #define YASIO__POLL_IO_WATCHER_HPP
-#include "yasio/pod_vector.hpp"
+#include "yasio/tlx/vector.hpp"
 #include "yasio/impl/socket.hpp"
 #include "yasio/impl/select_interrupter.hpp"
 
@@ -77,7 +77,7 @@ protected:
     }
     return underlying_events;
   }
-  static void pollfd_mod(yasio::pod_vector<pollfd>& fdset, socket_native_type fd, int add_events, int remove_events)
+  static void pollfd_mod(tlx::vector<pollfd>& fdset, socket_native_type fd, int add_events, int remove_events)
   {
     auto it = std::find_if(fdset.begin(), fdset.end(), [fd](const pollfd& pfd) { return pfd.fd == fd; });
     if (it != fdset.end())
@@ -96,8 +96,8 @@ protected:
   }
 
 protected:
-  yasio::pod_vector<pollfd> events_;
-  yasio::pod_vector<pollfd> revents_;
+  tlx::vector<pollfd> events_;
+  tlx::vector<pollfd> revents_;
 
   select_interrupter interrupter_;
 };

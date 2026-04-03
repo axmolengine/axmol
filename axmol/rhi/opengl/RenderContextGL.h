@@ -98,7 +98,7 @@ public:
      */
     void updatePipelineState(const RenderTarget* rt,
                              const PipelineDesc& descriptor,
-                             PrimitiveGroup primitiveGroup) override;
+                             PrimitiveType primitiveType) override;
 
     /**
      * Fixed-function state
@@ -140,49 +140,11 @@ public:
      */
     void setInstanceBuffer(Buffer* buffer) override;
 
-    /**
-     * Draw primitives without an index list.
-     * @param primitiveType The type of primitives that elements are assembled into.
-     * @param start For each instance, the first index to draw
-     * @param count For each instance, the number of indexes to draw
-     * @see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`
-     */
-    void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe = false) override;
+    void drawArrays(std::size_t start, std::size_t count, bool wireframe = false) override;
+    void drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool wireframe = false) override;
 
-    void drawArraysInstanced(PrimitiveType primitiveType,
-                             std::size_t start,
-                             std::size_t count,
-                             int instanceCount,
-                             bool wireframe = false) override;
-
-    /**
-     * Draw primitives with an index list.
-     * @param primitiveType The type of primitives that elements are assembled into.
-     * @param indexType The type if indexes, either 16 bit integer or 32 bit integer.
-     * @param count The number of indexes to read from the index buffer for each instance.
-     * @param offset Byte offset within indexBuffer to start reading indexes from.
-     * @see `setIndexBuffer(Buffer* buffer)`
-     * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
-     */
-    void drawElements(PrimitiveType primitiveType,
-                      IndexFormat indexType,
-                      std::size_t count,
-                      std::size_t offset,
-                      bool wireframe = false) override;
-
-    /**
-     * Draw primitives with an index list instanced.
-     * @param primitiveType The type of primitives that elements are assembled into.
-     * @param indexType The type if indexes, either 16 bit integer or 32 bit integer.
-     * @param count The number of indexes to read from the index buffer for each instance.
-     * @param offset Byte offset within indexBuffer to start reading indexes from.
-     * @param instance Count of
-     * instances to draw at once.
-     * @see `setIndexBuffer(Buffer* buffer)`
-     * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
-     */
-    void drawElementsInstanced(PrimitiveType primitiveType,
-                               IndexFormat indexType,
+    void drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool wireframe = false) override;
+    void drawElementsInstanced(IndexFormat indexType,
                                std::size_t count,
                                std::size_t offset,
                                int instanceCount,
@@ -233,7 +195,9 @@ protected:
     RenderPipelineImpl* _renderPipeline           = nullptr;
     CullMode _cullMode                            = CullMode::NONE;
     DepthStencilStateImpl* _depthStencilStateImpl = nullptr;
+    GLenum _primitiveType                         = GL_TRIANGLES;
     Viewport _viewport;
+
     GLboolean _alphaTestEnabled = false;
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY

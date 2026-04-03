@@ -5,7 +5,7 @@
 
 #include "box2d/id.h"
 #include "box2d/types.h"
-#include "settings.h"
+#include "draw.h"
 
 #define ARRAY_COUNT( A ) (int)( sizeof( A ) / sizeof( A[0] ) )
 
@@ -14,41 +14,52 @@ namespace enki
 class TaskScheduler;
 };
 
-#ifdef NDEBUG
-constexpr bool g_sampleDebug = false;
-#else
-constexpr bool g_sampleDebug = true;
-#endif
+struct ImFont;
 
-constexpr int k_maxContactPoints = 12 * 2048;
-
-struct ContactPoint
+struct SampleContext
 {
-	b2ShapeId shapeIdA;
-	b2ShapeId shapeIdB;
-	b2Vec2 normal;
-	b2Vec2 position;
-	bool persisted;
-	float normalImpulse;
-	float tangentImpulse;
-	float separation;
-	int constraintIndex;
-	int color;
+	void Save();
+	void Load();
+
+	struct GLFWwindow* window = nullptr;
+	SampleCamera camera; // axmol spec
+    SampleDraw* draw; // axmol spec
+	float uiScale = 1.0f;
+	float hertz = 60.0f;
+	int subStepCount = 4;
+	int workerCount = 1;
+	bool restart = false;
+	bool pause = false;
+	bool singleStep = false;
+	bool drawCounters = false;
+	bool drawProfile = false;
+	bool enableWarmStarting = true;
+	bool enableContinuous = true;
+	bool enableRecycling = true;
+	bool enableSleep = true;
+	bool showUI = true;
+	bool frameTime = false;
+
+	// These are persisted
+	int sampleIndex = 0;
+
+	b2DebugDraw debugDraw;
+	ImFont* regularFont;
+	ImFont* mediumFont;
+	ImFont* largeFont;
 };
 
 class Sample
 {
 public:
-	explicit Sample( Settings& settings );
+	explicit Sample( SampleContext* context );
 	virtual ~Sample();
 
 	void CreateWorld( );
 
-	void DrawTitle( const char* string );
-	virtual void Step( Settings& settings );
-	virtual void UpdateGui()
-	{
-	}
+	void ResetText();
+	virtual void Step( );
+	virtual void UpdateGui();
 	virtual void Keyboard( int )
 	{
 	}
@@ -57,6 +68,7 @@ public:
 	virtual void MouseMove( b2Vec2 p );
 
 	void DrawTextLine( const char* text, ... );
+	void DrawColoredTextLine( b2HexColor color, const char* text, ... );
 	void ResetProfile();
 	void ShiftOrigin( b2Vec2 newOrigin );
 
@@ -68,26 +80,45 @@ public:
 
 	static constexpr int m_maxTasks = 64;
 	static constexpr int m_maxThreads = 64;
+	static constexpr int m_profileCapacity = 512;
 
-	const Settings* m_settings;
+#ifdef NDEBUG
+	static constexpr bool m_isDebug = false;
+#else
+	static constexpr bool m_isDebug = true;
+#endif
+
+	SampleContext* m_context;
+	SampleCamera* m_camera; // axmol spec
+	SampleDraw* m_draw; // axmol spec
+
 	enki::TaskScheduler* m_scheduler;
 	class SampleTask* m_tasks;
 	int m_taskCount;
 	int m_threadCount;
 
-	b2BodyId m_groundBodyId;
+	b2BodyId m_mouseBodyId;
 
-	// DestructionListener m_destructionListener;
-	int m_textLine;
 	b2WorldId m_worldId;
 	b2JointId m_mouseJointId;
+	b2Vec2 m_mousePoint;
+	float m_mouseForceScale;
 	int m_stepCount;
+	int m_textLine;
 	int m_textIncrement;
+
+	b2Profile m_profiles[m_profileCapacity];
+	int m_currentProfileIndex;
+	uint64_t m_profileReadIndex;
+	uint64_t m_profileWriteIndex;
+
 	b2Profile m_maxProfile;
 	b2Profile m_totalProfile;
+
+	bool m_didStep;
 };
 
-typedef Sample* SampleCreateFcn( Settings& settings );
+typedef Sample* SampleCreateFcn( SampleContext* context );
 
 int RegisterSample( const char* category, const char* name, SampleCreateFcn* fcn );
 

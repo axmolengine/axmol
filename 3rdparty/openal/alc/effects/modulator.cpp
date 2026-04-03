@@ -26,12 +26,13 @@
 #include <cstdint>
 #include <cstdlib>
 #include <functional>
+#include <numbers>
+#include <ranges>
+#include <span>
 #include <variant>
 
 #include "alc/effects/base.h"
-#include "alnumbers.h"
 #include "alnumeric.h"
-#include "alspan.h"
 #include "core/ambidefs.h"
 #include "core/bufferline.h"
 #include "core/context.h"
@@ -40,6 +41,7 @@
 #include "core/effectslot.h"
 #include "core/filters/biquad.h"
 #include "core/mixer.h"
+#include "gsl/gsl"
 #include "intrusive_ptr.h"
 #include "opthelpers.h"
 
@@ -47,25 +49,24 @@ struct BufferStorage;
 
 namespace {
 
-using uint = unsigned int;
-
 struct SinFunc {
-    static auto Get(uint index, float scale) noexcept(noexcept(std::sin(0.0f))) -> float
-    { return std::sin(static_cast<float>(index) * scale); }
+    static
+    auto Get(unsigned const index, float const scale) noexcept(noexcept(std::sin(0.0f))) -> float
+    { return std::sin(gsl::narrow_cast<float>(index) * scale); }
 };
 
 struct SawFunc {
-    static constexpr auto Get(uint index, float scale) noexcept -> float
-    { return static_cast<float>(index)*scale - 1.0f; }
+    static constexpr auto Get(unsigned const index, const float scale) noexcept -> float
+    { return gsl::narrow_cast<float>(index)*scale - 1.0f; }
 };
 
 struct SquareFunc {
-    static constexpr auto Get(uint index, float scale) noexcept -> float
-    { return float(static_cast<float>(index)*scale < 0.5f)*2.0f - 1.0f; }
+    static constexpr auto Get(unsigned const index, const float scale) noexcept -> float
+    { return gsl::narrow_cast<float>(gsl::narrow_cast<float>(index)*scale < 0.5f)*2.0f - 1.0f; }
 };
 
 struct OneFunc {
-    static constexpr auto Get(uint, float) noexcept -> float
+    static constexpr auto Get(unsigned const, const float) noexcept -> float
     { return 1.0f; }
 };
 
@@ -73,15 +74,15 @@ struct OneFunc {
 struct ModulatorState final : public EffectState {
     std::variant<OneFunc,SinFunc,SawFunc,SquareFunc> mSampleGen;
 
-    uint mIndex{0};
-    uint mRange{1};
+    unsigned mIndex{0};
+    unsigned mRange{1};
     float mIndexScale{0.0f};
 
     alignas(16) FloatBufferLine mModSamples{};
     alignas(16) FloatBufferLine mBuffer{};
 
     struct OutParams {
-        uint mTargetChannel{InvalidChannelIndex};
+        unsigned mTargetChannel{InvalidChannelIndex.c_val};
 
         BiquadFilter mFilter;
 
@@ -92,27 +93,23 @@ struct ModulatorState final : public EffectState {
 
 
     void deviceUpdate(const DeviceBase *device, const BufferStorage *buffer) override;
-    void update(const ContextBase *context, const EffectSlot *slot, const EffectProps *props,
+    void update(const ContextBase *context, const EffectSlotBase *slot, const EffectProps *props,
         const EffectTarget target) override;
-    void process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn,
-        const al::span<FloatBufferLine> samplesOut) override;
+    void process(const size_t samplesToDo, const std::span<const FloatBufferLine> samplesIn,
+        const std::span<FloatBufferLine> samplesOut) override;
 };
 
 void ModulatorState::deviceUpdate(const DeviceBase*, const BufferStorage*)
 {
-    for(auto &e : mChans)
-    {
-        e.mTargetChannel = InvalidChannelIndex;
-        e.mFilter.clear();
-        e.mCurrentGain = 0.0f;
-    }
+    mChans.fill(OutParams{});
 }
 
-void ModulatorState::update(const ContextBase *context, const EffectSlot *slot,
+void ModulatorState::update(const ContextBase *context, const EffectSlotBase *slot,
     const EffectProps *props_, const EffectTarget target)
 {
     auto &props = std::get<ModulatorProps>(*props_);
-    const DeviceBase *device{context->mDevice};
+    auto const device = al::get_not_null(context->mDevice);
+    auto const samplerate = static_cast<float>(device->mSampleRate);
 
     /* The effective frequency will be adjusted to have a whole number of
      * samples per cycle (at 48khz, that allows 8000, 6857.14, 6000, 5333.33,
@@ -121,12 +118,10 @@ void ModulatorState::update(const ContextBase *context, const EffectSlot *slot,
      * but that may need a more efficient sin function since it needs to do
      * many iterations per sample.
      */
-    const float samplesPerCycle{props.Frequency > 0.0f
-        ? static_cast<float>(device->mSampleRate)/props.Frequency + 0.5f
-        : 1.0f};
-    const uint range{static_cast<uint>(std::clamp(samplesPerCycle, 1.0f,
-        static_cast<float>(device->mSampleRate)))};
-    mIndex = static_cast<uint>(uint64_t{mIndex} * range / mRange);
+    const auto samplesPerCycle = props.Frequency > 0.0f
+        ? samplerate/props.Frequency + 0.5f : 1.0f;
+    const auto range = static_cast<unsigned>(std::clamp(samplesPerCycle, 1.0f, samplerate));
+    mIndex = static_cast<unsigned>((u64{mIndex} * u64{range} / u64{mRange}).c_val);
     mRange = range;
 
     if(mRange == 1)
@@ -136,7 +131,7 @@ void ModulatorState::update(const ContextBase *context, const EffectSlot *slot,
     }
     else if(props.Waveform == ModulatorWaveform::Sinusoid)
     {
-        mIndexScale = al::numbers::pi_v<float>*2.0f / static_cast<float>(mRange);
+        mIndexScale = std::numbers::pi_v<float>*2.0f / static_cast<float>(mRange);
         mSampleGen.emplace<SinFunc>();
     }
     else if(props.Waveform == ModulatorWaveform::Sawtooth)
@@ -155,40 +150,45 @@ void ModulatorState::update(const ContextBase *context, const EffectSlot *slot,
         mSampleGen.emplace<SquareFunc>();
     }
 
-    float f0norm{props.HighPassCutoff / static_cast<float>(device->mSampleRate)};
-    f0norm = std::clamp(f0norm, 1.0f/512.0f, 0.49f);
+    const auto f0norm = std::clamp(props.HighPassCutoff / samplerate, 1.0f/512.0f, 0.49f);
     /* Bandwidth value is constant in octaves. */
     mChans[0].mFilter.setParamsFromBandwidth(BiquadType::HighPass, f0norm, 1.0f, 0.75f);
-    for(size_t i{1u};i < slot->Wet.Buffer.size();++i)
-        mChans[i].mFilter.copyParamsFrom(mChans[0].mFilter);
+    std::ranges::for_each(mChans | std::views::take(slot->Wet.Buffer.size()) | std::views::drop(1),
+        [&other=mChans[0].mFilter](BiquadFilter &filter)
+    { filter.copyParamsFrom(other); }, &OutParams::mFilter);
 
     mOutTarget = target.Main->Buffer;
-    auto set_channel = [this](size_t idx, uint outchan, float outgain)
+    target.Main->setAmbiMixParams(slot->Wet, slot->Gain,
+        [this](usize const idx, u8 const outchan, float const outgain)
     {
-        mChans[idx].mTargetChannel = outchan;
+        mChans[idx].mTargetChannel = outchan.c_val;
         mChans[idx].mTargetGain = outgain;
-    };
-    target.Main->setAmbiMixParams(slot->Wet, slot->Gain, set_channel);
+    });
 }
 
-void ModulatorState::process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn, const al::span<FloatBufferLine> samplesOut)
+void ModulatorState::process(const size_t samplesToDo,
+    const std::span<const FloatBufferLine> samplesIn, const std::span<FloatBufferLine> samplesOut)
 {
     ASSUME(samplesToDo > 0);
 
-    std::visit([this,samplesToDo](auto&& type)
+    std::visit([this,samplesToDo]<typename T>(T&& type [[maybe_unused]])
     {
-        const uint range{mRange};
-        const float scale{mIndexScale};
-        uint index{mIndex};
+        using Modulator = std::remove_cvref_t<T>;
+        const auto range = mRange;
+        const auto scale = mIndexScale;
+        auto index = mIndex;
 
         ASSUME(range > 1);
 
-        for(size_t i{0};i < samplesToDo;)
+        auto moditer = mModSamples.begin();
+        for(auto i = 0_uz;i < samplesToDo;)
         {
-            size_t rem{std::min(samplesToDo-i, size_t{range-index})};
-            do {
-                mModSamples[i++] = type.Get(index++, scale);
-            } while(--rem);
+            const auto rem = std::min(static_cast<unsigned>(samplesToDo-i), range-index);
+            moditer = std::ranges::transform(std::views::iota(index, index+rem), moditer,
+                [scale](unsigned const idx) { return Modulator::Get(idx, scale); }).out;
+
+            i += rem;
+            index += rem;
             if(index == range)
                 index = 0;
         }
@@ -196,19 +196,19 @@ void ModulatorState::process(const size_t samplesToDo, const al::span<const Floa
     }, mSampleGen);
 
     auto chandata = mChans.begin();
-    for(const auto &input : samplesIn)
+    std::ranges::for_each(samplesIn, [&,this](const FloatConstBufferSpan input)
     {
         if(const size_t outidx{chandata->mTargetChannel}; outidx != InvalidChannelIndex)
         {
-            chandata->mFilter.process(al::span{input}.first(samplesToDo), mBuffer);
-            std::transform(mBuffer.cbegin(), mBuffer.cbegin()+samplesToDo, mModSamples.cbegin(),
-                mBuffer.begin(), std::multiplies<>{});
+            chandata->mFilter.process(std::span{input}.first(samplesToDo), mBuffer);
+            std::ranges::transform(mBuffer | std::views::take(samplesToDo), mModSamples,
+                mBuffer.begin(), std::multiplies{});
 
-            MixSamples(al::span{mBuffer}.first(samplesToDo), samplesOut[outidx],
+            MixSamples(std::span{mBuffer}.first(samplesToDo), samplesOut[outidx],
                 chandata->mCurrentGain, chandata->mTargetGain, std::min(samplesToDo, 64_uz));
         }
         ++chandata;
-    }
+    });
 }
 
 
@@ -219,8 +219,8 @@ struct ModulatorStateFactory final : public EffectStateFactory {
 
 } // namespace
 
-EffectStateFactory *ModulatorStateFactory_getFactory()
+auto ModulatorStateFactory_getFactory() -> gsl::not_null<EffectStateFactory*>
 {
     static ModulatorStateFactory ModulatorFactory{};
-    return &ModulatorFactory;
+    return gsl::make_not_null(&ModulatorFactory);
 }

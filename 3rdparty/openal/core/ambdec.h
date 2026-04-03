@@ -2,13 +2,15 @@
 #define CORE_AMBDEC_H
 
 #include <array>
-#include <memory>
 #include <optional>
+#include <span>
 #include <string>
+#include <string_view>
 #include <vector>
 
-#include "alspan.h"
+#include "expected.hpp"
 #include "core/ambidefs.h"
+#include "opthelpers.h"
 
 /* Helpers to read .ambdec configuration files. */
 
@@ -43,14 +45,14 @@ struct AmbDecConf {
 
     /* Unused when FreqBands == 1 */
     std::array<float,MaxAmbiOrder+1> LFOrderGain{};
-    al::span<CoeffArray> LFMatrix;
+    std::span<CoeffArray> LFMatrix;
 
     std::array<float,MaxAmbiOrder+1> HFOrderGain{};
-    al::span<CoeffArray> HFMatrix;
+    std::span<CoeffArray> HFMatrix;
 
-    ~AmbDecConf();
+    NOINLINE ~AmbDecConf() = default;
 
-    std::optional<std::string> load(const char *fname) noexcept;
+    auto load(const std::string_view fname) noexcept -> al::expected<std::monostate,std::string>;
 };
 
 #endif /* CORE_AMBDEC_H */

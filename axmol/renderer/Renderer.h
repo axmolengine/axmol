@@ -43,8 +43,9 @@
 namespace ax
 {
 
-using CullMode = rhi::CullMode;
-using Winding  = rhi::Winding;
+using CullMode      = rhi::CullMode;
+using Winding       = rhi::Winding;
+using SurfaceHandle = rhi::SurfaceHandle;
 
 namespace rhi
 {
@@ -430,6 +431,8 @@ public:
 
     CallbackCommand* nextCallbackCommand();
 
+    void setFrameBufferOnly(bool);
+
 protected:
     friend class Director;
     friend class GroupCommand;
@@ -501,7 +504,7 @@ protected:
 
     void popStateBlock();
 
-    void updateSurface(void* surface, uint32_t width, uint32_t height);
+    void updateSurface(SurfaceHandle surface, uint32_t width, uint32_t height);
 
     rhi::RenderPipeline* _renderPipeline = nullptr;
 
@@ -558,6 +561,8 @@ protected:
     // the flag for checking whether renderer is rendering
     bool _isRendering      = false;
     bool _isDepthTestFor2D = false;
+
+    bool _isModernRHI = false;
 
     GroupCommandManager* _groupCommandManager = nullptr;
 

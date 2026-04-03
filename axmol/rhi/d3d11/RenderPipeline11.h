@@ -43,13 +43,13 @@ class RenderPipelineImpl : public RenderPipeline
 {
 public:
     RenderPipelineImpl(ID3D11Device* device, ID3D11DeviceContext* context) : _device(device), _context(context) {}
-    void update(const RenderTarget*, const PipelineDesc& desc) override;
+    void update(const RenderTarget*, const PipelineDesc& desc);
 
 private:
     ID3D11Device* _device         = nullptr;
     ID3D11DeviceContext* _context = nullptr;
 
-    axstd::hash_map<uint32_t, ComPtr<ID3D11BlendState>> _blendCache;
+    tlx::hash_map<uint32_t, ComPtr<ID3D11BlendState>> _blendCache;
 };
 
 /** @} */

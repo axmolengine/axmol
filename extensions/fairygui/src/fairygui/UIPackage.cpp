@@ -10,12 +10,10 @@ using namespace ax;
 
 using namespace std;
 
-const string UIPackage::URL_PREFIX = "ui://";
+const std::string UIPackage::URL_PREFIX = "ui://";
 int UIPackage::_constructing = 0;
 std::string UIPackage::_branch;
 std::unordered_map<std::string, std::string> UIPackage::_vars;
-
-const unsigned char* emptyTextureData = new unsigned char[16]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 std::unordered_map<std::string, UIPackage*> UIPackage::_packageInstById;
 std::unordered_map<std::string, UIPackage*> UIPackage::_packageInstByName;
@@ -95,14 +93,8 @@ UIPackage* UIPackage::addPackage(const string& assetPath)
     if (it != _packageInstById.end())
         return it->second;
 
-    if (_emptyTexture == nullptr)
-    {
-        Image* emptyImage = new Image();
-        emptyImage->initWithRawData(emptyTextureData, 16, 2, 2, 4, false);
-        _emptyTexture = new Texture2D();
-        _emptyTexture->initWithImage(emptyImage);
-        delete emptyImage;
-    }
+    if (!_emptyTexture)
+        _emptyTexture = Director::getInstance()->getTextureCache()->getWhiteTexture();
 
     Data data;
 
@@ -603,23 +595,14 @@ void* UIPackage::getItemAsset(PackageItem* item)
 void UIPackage::loadAtlas(PackageItem* item)
 {
     Image* image = new Image();
-#if COCOS2D_VERSION < 0x00031702
-    Image::setPNGPremultipliedAlphaEnabled(false);
-#endif
     if (!image->initWithImageFile(item->file))
     {
         item->texture = _emptyTexture;
         _emptyTexture->retain();
         delete image;
-#if COCOS2D_VERSION < 0x00031702
-        Image::setPNGPremultipliedAlphaEnabled(true);
-#endif
         AXLOGW("FairyGUI: texture '{}' not found in {}", item->file, _name);
         return;
     }
-#if COCOS2D_VERSION < 0x00031702
-    Image::setPNGPremultipliedAlphaEnabled(true);
-#endif
 
     auto checkAlphaFile = [item]() {
         string alphaFilePath;

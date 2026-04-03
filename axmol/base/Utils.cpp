@@ -47,6 +47,7 @@ THE SOFTWARE.
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/renderer/RenderState.h"
 #include "axmol/rhi/PixelBufferDesc.h"
+#include "axmol/rhi/DriverContext.h"
 
 #include "axmol/platform/Image.h"
 #include "axmol/platform/FileUtils.h"
@@ -57,7 +58,7 @@ THE SOFTWARE.
 #include "axmol/tlx/byte_buffer.hpp"
 #include "axmol/tlx/charconv.hpp"
 #include "axmol/tlx/utility.hpp"
-#include "yasio/string_view.hpp"
+#include "yasio/tlx/string_view.hpp"
 
 using namespace std::string_view_literals;
 
@@ -106,13 +107,9 @@ void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
     auto eventDispatcher = director->getEventDispatcher();
 
     // !!!Metal: needs setFrameBufferOnly before draw
-#if AX_RENDER_API == AX_RENDER_API_MTL
-    s_captureScreenListener =
-        eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [=](EventCustom* /*event*/) {
-#else
-    s_captureScreenListener =
-        eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_DRAW, [=](EventCustom* /*event*/) {
-#endif
+    const auto eventName = rhi::DriverContext::isMetal() ? Director::EVENT_BEFORE_DRAW : Director::EVENT_AFTER_DRAW;
+
+    s_captureScreenListener = eventDispatcher->addCustomEventListener(eventName, [=](EventCustom* /*event*/) {
         eventDispatcher->removeEventListener(s_captureScreenListener);
         s_captureScreenListener = nullptr;
         // !!!GL: AFTER_DRAW and BEFORE_END_FRAME
@@ -230,7 +227,7 @@ double atof(std::string_view str)
         return 0.0;
 
     double ret{0.0};
-    axstd::from_chars(str.data(), str.data() + str.size(), ret);
+    tlx::from_chars(str.data(), str.data() + str.size(), ret);
     return ret;
 }
 
@@ -296,14 +293,15 @@ Rect getCascadeBoundingBox(Node* node)
     return cbb;
 }
 
-Sprite* createSpriteFromBase64Cached(const char* base64String, const char* key)
+Sprite* createSpriteFromBase64Cached(std::string_view base64String, std::string_view key)
 {
     Texture2D* texture = Director::getInstance()->getTextureCache()->getTextureForKey(key);
 
     if (texture == nullptr)
     {
         unsigned char* decoded;
-        int length = base64Decode((const unsigned char*)base64String, (unsigned int)strlen(base64String), &decoded);
+        int length =
+            base64Decode((const unsigned char*)base64String.data(), (unsigned int)base64String.size(), &decoded);
 
         Image* image     = new Image();
         bool imageResult = image->initWithImageData(decoded, length, true);
@@ -324,10 +322,10 @@ Sprite* createSpriteFromBase64Cached(const char* base64String, const char* key)
     return sprite;
 }
 
-Sprite* createSpriteFromBase64(const char* base64String)
+Sprite* createSpriteFromBase64(std::string_view base64String)
 {
     unsigned char* decoded;
-    int length = base64Decode((const unsigned char*)base64String, (unsigned int)strlen(base64String), &decoded);
+    int length = base64Decode((const unsigned char*)base64String.data(), (unsigned int)base64String.size(), &decoded);
 
     Image* image     = new Image();
     bool imageResult = image->initWithImageData(decoded, length, decoded);
@@ -709,7 +707,7 @@ std::string bin2hex(std::string_view binary /*charstring also regard as binary i
     char high;
     size_t len = binary.length();
 
-    bool delim_needed = delim != -1 || delim == ' ';
+    bool delim_needed = delim != -1;
 
     std::string result;
     result.reserve((len << 1) + (delim_needed ? len : 0) + (prefix ? (len << 1) : 0));
@@ -818,12 +816,12 @@ AX_DLL std::string&& filePathToUrl(std::string&& path)
     {
         if (path[0] == '/')
             path.insert(0, LOCAL_FILE_URL_PREFIX.data(), LOCAL_FILE_URL_PREFIX.length() - 1);
-        else if (!cxx20::ic::starts_with(path, LOCAL_FILE_URL_PREFIX))
+        else if (!tlx::ic::starts_with(path, LOCAL_FILE_URL_PREFIX))
         {
 #if !defined(__ANDROID__)
             path.insert(0, LOCAL_FILE_URL_PREFIX.data(), LOCAL_FILE_URL_PREFIX.length());
 #else
-            if (!cxx20::starts_with(path, "assets/"sv))  // not android asset
+            if (!tlx::starts_with(path, "assets/"sv))  // not android asset
                 path.insert(0, LOCAL_FILE_URL_PREFIX.data(), LOCAL_FILE_URL_PREFIX.length());
             else
                 path.replace(0, "assets/"sv.length(), "file:///android_asset/");
@@ -848,24 +846,23 @@ AX_DLL std::string base64Encode(const void* in, size_t inlen)
          *
          */
 
-        axstd::resize_and_overrite(ret, n,
-                                   [in, inlen](char* out, size_t) { return ax::base64::encode(out, in, inlen); });
+        tlx::resize_and_overrite(ret, n, [in, inlen](char* out, size_t) { return ax::base64::encode(out, in, inlen); });
 
         return ret;
     }
     return std::string{};
 }
 
-AX_DLL yasio::byte_buffer base64Decode(std::string_view s)
+AX_DLL tlx::byte_buffer base64Decode(std::string_view s)
 {
     size_t n = ax::base64::decoded_size(s.length());
     if (n > 0)
     {
-        axstd::byte_buffer ret;
+        tlx::byte_buffer ret;
         ret.resize_and_overwrite(n, [&s](uint8_t* out, size_t) { return ax::base64::decode(out, s.data(), s.size()); });
         return ret;
     }
-    return yasio::byte_buffer{};
+    return tlx::byte_buffer{};
 }
 
 int base64Encode(const unsigned char* in, unsigned int inLength, char** out)
@@ -932,7 +929,7 @@ inline bool expect(const char*& p, const char* end, char c)
 inline bool parse_float(const char*& p, const char* end, float& out)
 {
     skip_ws(p, end);
-    auto fc = axstd::from_chars(p, end, out);
+    auto fc = tlx::from_chars(p, end, out);
     if (fc.ec != std::errc{}) [[unlikely]]
         return false;
     p = fc.ptr;

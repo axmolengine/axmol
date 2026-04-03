@@ -56,7 +56,7 @@ public:
     /**
      * @private
      */
-    axstd::string_map<std::vector<DisplayData*>> displays;
+    tlx::string_map<std::vector<DisplayData*>> displays;
     /**
      * @private
      */
@@ -80,7 +80,7 @@ public:
     std::vector<DisplayData*>* getDisplays(std::string_view slotName) { return mapFindB(displays, slotName); }
 
 public:  // For WebAssembly. TODO parent
-    const axstd::string_map<std::vector<DisplayData*>>& getSlotDisplays() const { return displays; }
+    const tlx::string_map<std::vector<DisplayData*>>& getSlotDisplays() const { return displays; }
 };
 
 DRAGONBONES_NAMESPACE_END

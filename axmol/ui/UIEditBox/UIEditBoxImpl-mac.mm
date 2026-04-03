@@ -72,9 +72,12 @@ void EditBoxImplMac::createNativeControl(const ax::Rect& frame)
     this->setNativeVisible(false);
 }
 
-NSFont* EditBoxImplMac::constructFont(const char* fontName, int fontSize)
+NSFont* EditBoxImplMac::constructFont(std::string_view fontName, int fontSize)
 {
-    NSString* fntName  = [NSString stringWithUTF8String:fontName];
+    // [NSString stringWithUTF8String:fontName.data()];
+    NSString* fntName  = [[NSString alloc] initWithBytes:fontName.data()
+                                                 length:fontName.length()
+                                               encoding:NSUTF8StringEncoding];
     fntName            = [[fntName lastPathComponent] stringByDeletingPathExtension];
     float retinaFactor = _inRetinaMode ? 2.0f : 1.0f;
     auto renderView    = ax::Director::getInstance()->getRenderView();
@@ -90,36 +93,28 @@ NSFont* EditBoxImplMac::constructFont(const char* fontName, int fontSize)
         fontSize = fontSize * scaleFactor / retinaFactor;
     }
 
-    NSFont* textFont = nil;
-    if (strlen(fontName) == 0)
+    NSFont* textFont = [NSFont fontWithName:fntName size:fontSize];
+    if (textFont == nil)
     {
         textFont = [NSFont systemFontOfSize:fontSize];
-    }
-    else
-    {
-        textFont = [NSFont fontWithName:fntName size:fontSize];
-        if (textFont == nil)
-        {
-            textFont = [NSFont systemFontOfSize:fontSize];
-        }
     }
 
     return textFont;
 }
 
-void EditBoxImplMac::setNativeFont(const char* pFontName, int fontSize)
+void EditBoxImplMac::setNativeFont(std::string_view fontName, int fontSize)
 {
-    NSFont* textFont = constructFont(pFontName, fontSize);
+    NSFont* textFont = constructFont(fontName, fontSize);
     [_sysEdit setFont:textFont];
 }
 
-void EditBoxImplMac::setNativePlaceholderFont(const char* pFontName, int fontSize)
+void EditBoxImplMac::setNativePlaceholderFont(std::string_view fontName, int fontSize)
 {
-    NSFont* textFont = constructFont(pFontName, fontSize);
+    NSFont* textFont = constructFont(fontName, fontSize);
 
     if (!textFont)
     {
-        AXLOGW("Font not found: {}", pFontName);
+        AXLOGW("Font not found: {}", fontName);
         return;
     }
     [_sysEdit setPlaceholderFont:textFont];
@@ -177,15 +172,16 @@ bool EditBoxImplMac::isEditing()
     return [_sysEdit isEditState] ? true : false;
 }
 
-void EditBoxImplMac::setNativeText(const char* pText)
+void EditBoxImplMac::setNativeText(std::string_view text)
 {
-    NSString* text = [NSString stringWithUTF8String:pText];
-    [_sysEdit setText:text];
+    NSString* nsText = [[NSString alloc] initWithBytes:text.data() length:text.length() encoding:NSUTF8StringEncoding];
+    [_sysEdit setText:nsText];
 }
 
-void EditBoxImplMac::setNativePlaceHolder(const char* pText)
+void EditBoxImplMac::setNativePlaceHolder(std::string_view text)
 {
-    [_sysEdit setPlaceHolder:pText];
+    NSString* nsText = [[NSString alloc] initWithBytes:text.data() length:text.length() encoding:NSUTF8StringEncoding];
+    [_sysEdit setPlaceHolder:nsText];
 }
 
 void EditBoxImplMac::setNativeVisible(bool visible)
@@ -203,7 +199,7 @@ void EditBoxImplMac::updateNativeFrame(const ax::Rect& rect)
     [_sysEdit updateFrame:CGRectMake(rect.origin.x, screenPosY, rect.size.width, rect.size.height)];
 }
 
-const char* EditBoxImplMac::getNativeDefaultFontName()
+std::string_view EditBoxImplMac::getNativeDefaultFontName()
 {
     return [[_sysEdit getDefaultFontName] UTF8String];
 }

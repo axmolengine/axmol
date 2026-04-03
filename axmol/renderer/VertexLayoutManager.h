@@ -23,7 +23,7 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/vector.hpp"
 #include "axmol/tlx/hlookup.hpp"
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/rhi/VertexLayout.h"
@@ -41,21 +41,22 @@ public:
     static void destroyInstance();
 
     VertexLayoutManager();
+    ~VertexLayoutManager();
 
     /**
-     * @brief acquire builtin vertex layout
+     * @brief Gets builtin vertex layout
      *
      * @param kind
      * @return VertexLayout*
      */
-    VertexLayout* acquireBuiltinVertexLayout(VertexLayoutKind kind);
+    VertexLayout* getBuiltinVertexLayout(VertexLayoutKind kind);
 
     /**
-     * @brief acquire vertex layout by desc
+     * @brief Gets vertex layout by desc
      *
      * @return VertexLayout*
      */
-    VertexLayout* acquireVertexLayout(VertexLayoutDesc&&);
+    VertexLayout* getVertexLayout(VertexLayoutDesc&&);
 
     /**
      * @brief Remove unused vertex layout
@@ -71,10 +72,10 @@ public:
     VertexLayoutDesc allocateVertexLayoutDesc();
 
 private:
-    VertexLayout* acquireBuiltinVertexLayout(VertexLayoutKind kind, rhi::Program* prog);
+    VertexLayout* getBuiltinVertexLayout(VertexLayoutKind kind, rhi::Program* prog);
 
-    axstd::pod_vector<VertexLayout*> _builtinVertexLayouts;
-    axstd::hash_map<uint32_t, VertexLayout*> _customVertexLayouts;
+    tlx::pod_vector<VertexLayout*> _builtinVertexLayouts;
+    tlx::hash_map<uint32_t, VertexLayout*> _customVertexLayouts;
 
     std::vector<VertexLayoutDesc> _vertexLayoutDescPool;
 };

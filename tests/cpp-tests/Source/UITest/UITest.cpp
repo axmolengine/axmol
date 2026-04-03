@@ -24,9 +24,11 @@
 
 #include "UITest.h"
 #include "CocoStudioGUITest/CocosGUIScene.h"
+#include "sceneio/sceneio.h"
 
 UITests::UITests()
 {
+    ax::ext::initializeSceneIO();
     addTest("GUI Dynamic Create Test", []() { return new GUIDynamicCreateTests; });
 }
 

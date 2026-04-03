@@ -28,10 +28,9 @@ THE SOFTWARE.
 
 #include "axmol/platform/PlatformMacros.h"
 #include <string>
-
+#include <string_view>
 #include <unordered_map>
 #include "mio/mio.hpp"
-#include "yasio/string_view.hpp"
 #include "axmol/platform/FileStream.h"
 
 /**
@@ -225,7 +224,7 @@ public:
     **   key: 16bytes key
     **   iv: 16bytes iv
     */
-    virtual void setEncryptEnabled(bool enabled, cxx17::string_view key, cxx17::string_view iv);
+    virtual void setEncryptEnabled(bool enabled, std::string_view key, std::string_view iv);
 
     /*
      *  Mark encrypt function as virtual, default use AES cfb128 encrypt/decrypt
@@ -259,7 +258,7 @@ protected:
     void updateValueForKey(std::string_view key, std::string_view value);
 
 protected:
-    axstd::string_map<std::string> _values;
+    tlx::string_map<std::string> _values;
 
     static UserDefault* _userDefault;
     static std::string _userDefaultFileName;

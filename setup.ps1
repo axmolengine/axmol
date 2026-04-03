@@ -3,14 +3,15 @@
 # PowerShell Param statement : every line must end in #\ except the last line must with <#\
 # And, you can't use backticks in this section        #\
 # refer https://gist.github.com/ryanmaclean/a1f3135f49c1ab3fa7ec958ac3f8babe #\
-param( [switch]$updateAdt                    #\
+param( [switch]$updateAdt,                    #\
+    [string]$gradleMirror #\
 )                                                <#\
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `
 #vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 # Bash Start ------------------------------------------------------------
 scriptdir="`dirname "${BASH_SOURCE[0]}"`"
 if ! command -v pwsh > /dev/null; then
-    $scriptdir/1k/install-pwsh.sh
+    $scriptdir/1k/pwshi.sh
 fi
 pwsh $scriptdir/setup.ps1 "$@"
 # Bash End --------------------------------------------------------------
@@ -45,26 +46,27 @@ function mkdirs([string]$path) {
 }
 
 if ($pwsh_ver -lt [VersionEx]'5.0') {
+    $ErrorActionPreference = 'Stop'
+
     # try setup WMF5.1, require reboot, try run setup.ps1 several times
-    Write-Host "Installing WMF5.1 ..."
-    $osVer = [System.Environment]::OSVersion.Version
-    
-    if ($osVer.Major -ne 6) {
-        throw "Unsupported OSVersion: $($osVer.ToString())"
+    Write-Host "Configuring WMF5.1 ..."
+
+    if ($NtOSVersion.Major -ne 6) {
+        throw "Unsupported OSVersion: $($NtOSVersion.ToString())"
     }
-    if ($osVer.Minor -ne 1 -and $osVer -ne 3) {
+    if ($NtOSVersion.Minor -ne 1 -and $NtOSVersion -ne 3) {
         throw "Only win7 SP1 or win8 supported"
     }
-    
-    $is_win7 = $osVer.Minor -eq 1
-    
+
+    $is_win7 = $NtOSVersion.Minor -eq 1
+
     # [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 5.1 non-win10
-    
+
     $prefix = Join-Path (Get-Location).Path 'tmp'
-    
+
     mkdirs $prefix
     $curl = (New-Object Net.WebClient)
-    
+
     # .net 4.5.2 prereq by WMF5.1
     $pkg_out = Join-Path $prefix 'NDP452-KB2901907-x86-x64-AllOS-ENU.exe'
     if (!(Test-Path $pkg_out -PathType Leaf)) {
@@ -75,7 +77,7 @@ if ($pwsh_ver -lt [VersionEx]'5.0') {
         }
     }
     .\tmp\NDP452-KB2901907-x86-x64-AllOS-ENU.exe /q /norestart
-    
+
     # WMF5.1: https://learn.microsoft.com/en-us/powershell/scripting/windows-powershell/wmf/setup/install-configure?view=powershell-7.3&source=recommendations#download-and-install-the-wmf-51-package
     if ($is_win7) {
         $wmf_pkg = 'Win7AndW2K8R2-KB3191566-x64.zip'
@@ -83,7 +85,7 @@ if ($pwsh_ver -lt [VersionEx]'5.0') {
     else {
         $wmf_pkg = 'Win8.1AndW2K12R2-KB3191564-x64.msu'
     }
-    
+
     $pkg_out = Join-Path $prefix "$wmf_pkg"
     if (!(Test-Path $pkg_out -PathType Leaf)) {
         Write-Host "Downloading $pkg_out ..."
@@ -109,14 +111,37 @@ if ($pwsh_ver -lt [VersionEx]'5.0') {
         wusa.exe $pkg_out /quiet /norestart
     }
 
-    throw "PowerShell 5.0+ required, installed is: $pwsh_ver, after install WMF5.1 and restart computer, try again"
+    echo "Configure WMF5.1 success, please retart your computer to finish installation and try again"
+    exit 0
+}
+
+# Check Windows 10 developer mode
+if ($IsWin) {
+    if ($NtOSVersion.Major -ge 10) {
+
+        $IsDevMode = (Get-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock -ErrorAction SilentlyContinue).AllowDevelopmentWithoutDevLicense -eq 1
+
+        if ($IsDevMode) {
+            Write-Output 'axmol: Developer Mode is enabled on this Windows 10+ device.'
+        }
+        else {
+            Write-Warning 'axmol: Developer Mode is currently disabled on this Windows 10+ device.'
+            Write-Warning 'axmol:   Some features (such as creating symbolic links without admin rights) may not work.'
+            Write-Output  'axmol:   Opening the Developer Mode settings page. Please enable it and run this script again.'
+            Start-Process "ms-settings:developers"
+            exit 0
+        }
+
+    }
+    else {
+        Write-Warning 'axmol:  Your system version is below Windows 10.'
+        Write-Warning 'axmol:    Windows 7 / 8.1 do not support Developer Mode and require admin rights for symbolic links.'
+        Write-Warning 'axmol:    Upgrading to Windows 10 or later is strongly recommended.'
+    }
 }
 
 # powershell 7 require mark as global explicit if want access in function via $Global:xxx
 $Global:AX_CLI_ROOT = Join-Path $AX_ROOT 'tools/cmdline'
-
-# https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_environment_variables
-$IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
 
 if ($IsWin) {
     if ("$env:AX_ROOT" -ne "$AX_ROOT") {
@@ -134,19 +159,19 @@ if ($IsWin) {
             $oldCmdRoot = $cmdRootTmp
         }
     }
-    
+
     function RefreshPath ($strPathList) {
-        if ($strPathList) { 
+        if ($strPathList) {
             $pathList = [System.Collections.ArrayList]($strPathList.Split(';', [System.StringSplitOptions]::RemoveEmptyEntries))
         }
-        else { 
-            $pathList = New-Object System.Collections.ArrayList 
+        else {
+            $pathList = New-Object System.Collections.ArrayList
         }
-        
+
         if ($Global:oldCmdRoot) {
             $pathList.Remove($Global:oldCmdRoot)
         }
-        
+
         if ($Global:isMeInPath) {
             if ($pathList[0] -ne $Global:AX_CLI_ROOT) {
                 $pathList.Remove($Global:AX_CLI_ROOT)
@@ -158,11 +183,11 @@ if ($IsWin) {
         }
         return $pathList -join ';'
     }
-    
+
     if (!$isMeInPath -or $oldCmdRoot) {
         # Add cmdline bin to User PATH
         $strPathList = [Environment]::GetEnvironmentVariable('PATH', 'User')
-        $strPathList = RefreshPath $strPathList 
+        $strPathList = RefreshPath $strPathList
         [Environment]::SetEnvironmentVariable('PATH', $strPathList, 'User')
 
         # Re-eval env:PATH to system + users
@@ -170,12 +195,18 @@ if ($IsWin) {
     }
 
     $execPolicy = powershell -Command 'Get-ExecutionPolicy'
-    if ($execPolicy -ne 'Bypass') {
-        println "Setting system installed powershell execution policy '$execPolicy'==>'Bypass', please click 'YES' on UAC dialog"
-        Start-Process powershell -ArgumentList '-Command "Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force"' -WindowStyle Hidden -Wait -Verb runas
+    if ($pwsh_ver.Major -gt 5) {
+        $execPolicy = powershell -Command 'Get-ExecutionPolicy'
+        if ($execPolicy -ne 'Bypass') {
+            println "Setting system installed powershell execution policy '$execPolicy'==>'Bypass', please click 'YES' on UAC dialog"
+            Start-Process powershell -ArgumentList '-Command "Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force"' -WindowStyle Hidden -Wait -Verb runas
+        }
+        else {
+            println "Nice, the system installed powershell execution policy is '$execPolicy'"
+        }
     }
     else {
-        println "Nice, the system installed powershell execution policy is '$execPolicy'"
+        println "Axmol setup.ps1 is running under the system-installed PowerShell with execution policy: $execPolicy"
     }
 }
 else {
@@ -257,53 +288,47 @@ else {
         # for terminal
         if ("$env:SHELL" -like '*/zsh') {
             updateUnixProfile ~/.zshrc
-        } else {
+        }
+        else {
             updateUnixProfile ~/.bash_profile
         }
         # for GUI apps, android studio can find AX_ROOT
         launchctl setenv AX_ROOT $env:AX_ROOT
-    } elseif($IsLinux) {
+    }
+    elseif ($IsLinux) {
         # determine distro
-        if ($(Get-Command 'dpkg' -ErrorAction SilentlyContinue)) {
-            $LinuxDistro = 'Debian'
-        }
-        elseif ($(Get-Command 'pacman' -ErrorAction SilentlyContinue)) {
-            $LinuxDistro = 'Arch'
-        }
-        else {
-            $LinuxDistro = 'Linux'
-        }
+        $LinuxDistro = (Get-Content /etc/os-release | Where-Object { $_ -match '^ID=' }) -replace '^ID="?', '' -replace '"?$', ''
+        println "Detected Linux Distro: $LinuxDistro"
 
         # preferred ~/.profile to ensure GUI apps and terminal works
         updateUnixProfile ~/.profile
 
-        # ~/.profile not read by bash(1), if ~/.bash_profile or ~/.bash_login
-        if (Test-Path ~/.bash_profile -PathType Leaf) {
-            if ("$env:SHELL" -like '*/zsh') {
-                updateUnixProfile ~/.zshrc
-            } else {
+        if ("$env:SHELL" -like '*/zsh') {
+            updateUnixProfile ~/.zshrc
+        }
+        else {
+            # ~/.profile not read by bash(1), if ~/.bash_profile or ~/.bash_login exists, for example: wsl
+            if ((Test-Path ~/.bash_profile -PathType Leaf) -or (Test-Path ~/.bash_login -PathType Leaf)) {
                 updateUnixProfile ~/.bashrc
             }
         }
 
-        Write-Host "Are you continue install linux dependencies for axmol? (y/N) " -NoNewline
+        Write-Host "Install Axmol Linux dependencies (one-time)? (y/N) " -NoNewline
         $answer = Read-Host
         if ($answer -like 'y*') {
-            if ($LinuxDistro -eq 'Debian') {
+            if (($LinuxDistro -eq 'debian') -or ($LinuxDistro -eq 'ubuntu')) {
                 println "It will take few minutes"
                 $os_name = $PSVersionTable.OS
-                $os_ver = [Regex]::Match($os_name, '(\d+\.)+(\*|\d+)(\-[a-z0-9]+)?').Value
-                if (($os_name -match 'Ubuntu' -and [VersionEx]$os_ver -ge [VersionEx]'24.04') -or 
-                ($os_name -match 'Debian' -and [VersionEx]$os_ver -ge [VersionEx]'13')) {
+                $os_ver = [Regex]::Match($os_name, '\d+(\.\d+)*(-[a-z0-9]+)?').Value
+                if (($os_name -match 'Ubuntu' -and [VersionEx]$os_ver -ge [VersionEx]'24.04') -or
+                    ($os_name -match 'Debian' -and [VersionEx]$os_ver -ge [VersionEx]'13')) {
                     $webkit2gtk_dev = 'libwebkit2gtk-4.1-dev'
                 }
                 else {
                     $webkit2gtk_dev = 'libwebkit2gtk-4.0-dev'
                 }
 
-                sudo apt update
-                # for vm, libxxf86vm-dev also required
-
+                sudo apt-get update
                 $DEPENDS = @()
 
                 $DEPENDS += 'libx11-dev'
@@ -329,11 +354,16 @@ else {
                 $DEPENDS += 'libwayland-dev', 'wayland-protocols', 'libwayland-cursor0', 'libwayland-egl1', 'libwayland-egl-backend-dev', 'libegl1-mesa-dev', 'libgl1-mesa-dev'
 
                 # if vlc encouter codec error, install
-                # sudo apt install ubuntu-restricted-extras
+                # sudo apt-get install ubuntu-restricted-extras
                 println "Install packages: $DEPENDS ..."
-                sudo apt install --allow-unauthenticated --yes $DEPENDS > /dev/null
+                if ("$env:GITHUB_ACTIONS" -eq 'true') {
+                    sudo apt-get install --allow-unauthenticated --yes $DEPENDS > /dev/null
+                }
+                else {
+                    sudo apt-get install --allow-unauthenticated --yes $DEPENDS
+                }
             }
-            elseif ($LinuxDistro -eq 'Arch') {
+            elseif ($LinuxDistro -eq 'arch') {
                 $mirror_list = [System.IO.File]::ReadAllText('/etc/pacman.d/mirrorlist')
                 $tsinghua_mirror = 'https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch'
                 if (!$mirror_list.Contains($tsinghua_mirror)) {
@@ -352,7 +382,7 @@ else {
                     'git',
                     'cmake',
                     'make',
-                    'libx11', 
+                    'libx11',
                     'libxrandr',
                     'libxinerama',
                     'libxcursor',
@@ -367,8 +397,18 @@ else {
                 )
                 sudo pacman -S --needed --noconfirm @DEPENDS
             }
+            elseif($LinuxDistro -eq 'fedora') {
+                $DEPENDS = @(
+                    "gcc",
+                    "g++",
+                    "libX11-devel",
+                    "gtk3-devel",
+                    "libXxf86vm-devel"
+                )
+                sudo dnf install -y --setopt=install_weak_deps=False @DEPENDS
+            }
             else {
-                println "Warning: current Linux distro isn't officially supported by axmol community"
+                println "Warning: current Linux distro: $LinuxDistro isn't officially supported by axmol community, you need install dependencies manually"
             }
         }
     }
@@ -400,13 +440,18 @@ if ($updateAdt) {
         $gradle_tag = "v$gradleVer"
     }
 
+    if (!$gradleMirror) { $gradleMirror = 'origin' }
+
+    $gradle_url = devtool_url 'gradle' $gradleVer -mirror $gradleMirror
+    $gradle_url = $gradle_url.Replace(':', "\:")
+
     $gradle_settings_file = Join-Path $aproj_source_gradle_wrapper 'gradle-wrapper.properties'
     $settings_lines = Get-Content $gradle_settings_file
     $settings_lines[0] = "#$current_time"
-    for($i = 1; $i -lt $settings_lines.Count; ++$i) {
+    for ($i = 1; $i -lt $settings_lines.Count; ++$i) {
         $line_text = $settings_lines[$i]
         if ($line_text -match '^distributionUrl\s*=.*') {
-            $settings_lines[$i] = [Regex]::Replace($line_text, 'gradle-.+-bin.zip', "gradle-$gradleVer-bin.zip")
+            $settings_lines[$i] = "distributionUrl=$gradle_url"
             break
         }
     }
@@ -449,7 +494,7 @@ if ($updateAdt) {
     update_agp('templates/common')
     foreach ($testName in $testList) {
         update_gradle_for_test($testName)
-        update_agp_for_test($testName) 
+        update_agp_for_test($testName)
     }
 }
 

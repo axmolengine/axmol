@@ -30,12 +30,12 @@
 #include <sstream>
 
 std::unordered_map<uintptr_t, const char*> g_luaType;
-std::unordered_map<cxx17::string_view, const char*> g_typeCast;
+std::unordered_map<std::string_view, const char*> g_typeCast;
 
 #if _AX_DEBUG >= 1
 void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const char* funcName)
 {
-    if (NULL == L || NULL == err || NULL == msg || 0 == strlen(msg))
+    if (NULL == L || NULL == err || NULL == msg || !*msg)
         return;
 
     if (msg[0] == '#')
@@ -229,7 +229,7 @@ bool luaval_to_std_string(lua_State* L, int lo, std::string* outValue, const cha
     return ok;
 }
 
-bool luaval_to_std_string_view(lua_State* L, int lo, cxx17::string_view* outValue, const char* funcName)
+bool luaval_to_std_string_view(lua_State* L, int lo, std::string_view* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
         return false;
@@ -249,7 +249,7 @@ bool luaval_to_std_string_view(lua_State* L, int lo, cxx17::string_view* outValu
     {
         size_t size;
         auto rawString = lua_tolstring(L, lo, &size);
-        *outValue      = cxx17::string_view(rawString, size);
+        *outValue      = std::string_view(rawString, size);
     }
 
     return ok;
@@ -418,8 +418,8 @@ bool luaval_to_blendfunc(lua_State* L, int lo, ax::BlendFunc* outValue, const ch
     return ok;
 }
 
-#if defined(AX_ENABLE_PHYSICS)
-bool luaval_to_physics_material(lua_State* L, int lo, PhysicsMaterial* outValue, const char* funcName)
+#if defined(AX_ENABLE_PHYSICS_2D)
+bool luaval_to_physics_material2d(lua_State* L, int lo, PhysicsMaterial2D* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
         return false;
@@ -454,7 +454,7 @@ bool luaval_to_physics_material(lua_State* L, int lo, PhysicsMaterial* outValue,
     }
     return ok;
 }
-#endif  // #if defined(AX_ENABLE_PHYSICS)
+#endif  // #if defined(AX_ENABLE_PHYSICS_2D)
 
 bool luaval_to_ssize_t(lua_State* L, int lo, ssize_t* outValue, const char* funcName)
 {
@@ -1059,7 +1059,7 @@ bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, ax::ValueVector* 
             {
                 lua_pop(L, 1);
                 ValueMap dictVal;
-                if (luaval_to_ccvaluemap(L, i + 2, &dictVal))
+                if (luaval_to_valuemap(L, i + 2, &dictVal))
                 {
                     ret->emplace_back(Value(dictVal));
                 }
@@ -1068,7 +1068,7 @@ bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, ax::ValueVector* 
             {
                 lua_pop(L, 1);
                 ValueVector arrVal;
-                if (luaval_to_ccvaluevector(L, i + 2, &arrVal))
+                if (luaval_to_valuevector(L, i + 2, &arrVal))
                 {
                     ret->emplace_back(Value(arrVal));
                 }
@@ -1103,7 +1103,7 @@ bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, ax::ValueVector* 
     return true;
 }
 
-bool luaval_to_ccvalue(lua_State* L, int lo, ax::Value* ret, const char* funcName)
+bool luaval_to_value(lua_State* L, int lo, ax::Value* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret)
         return false;
@@ -1121,7 +1121,7 @@ bool luaval_to_ccvalue(lua_State* L, int lo, ax::Value* ret, const char* funcNam
         {
             lua_pop(L, 1);
             ValueMap dictVal;
-            if (luaval_to_ccvaluemap(L, lo, &dictVal))
+            if (luaval_to_valuemap(L, lo, &dictVal))
             {
                 *ret = Value(dictVal);
             }
@@ -1130,7 +1130,7 @@ bool luaval_to_ccvalue(lua_State* L, int lo, ax::Value* ret, const char* funcNam
         {
             lua_pop(L, 1);
             ValueVector arrVal;
-            if (luaval_to_ccvaluevector(L, lo, &arrVal))
+            if (luaval_to_valuevector(L, lo, &arrVal))
             {
                 *ret = Value(arrVal);
             }
@@ -1159,7 +1159,7 @@ bool luaval_to_ccvalue(lua_State* L, int lo, ax::Value* ret, const char* funcNam
 
     return ok;
 }
-bool luaval_to_ccvaluemap(lua_State* L, int lo, ax::ValueMap* ret, const char* funcName)
+bool luaval_to_valuemap(lua_State* L, int lo, ax::ValueMap* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret)
         return false;
@@ -1201,7 +1201,7 @@ bool luaval_to_ccvaluemap(lua_State* L, int lo, ax::ValueMap* ret, const char* f
                     {
                         lua_pop(L, 1);
                         ValueMap dictVal;
-                        if (luaval_to_ccvaluemap(L, lua_gettop(L), &dictVal))
+                        if (luaval_to_valuemap(L, lua_gettop(L), &dictVal))
                         {
                             dict[stringKey] = Value(dictVal);
                         }
@@ -1210,7 +1210,7 @@ bool luaval_to_ccvaluemap(lua_State* L, int lo, ax::ValueMap* ret, const char* f
                     {
                         lua_pop(L, 1);
                         ValueVector arrVal;
-                        if (luaval_to_ccvaluevector(L, lua_gettop(L), &arrVal))
+                        if (luaval_to_valuevector(L, lua_gettop(L), &arrVal))
                         {
                             dict[stringKey] = Value(arrVal);
                         }
@@ -1246,7 +1246,7 @@ bool luaval_to_ccvaluemap(lua_State* L, int lo, ax::ValueMap* ret, const char* f
 
     return ok;
 }
-bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, ax::ValueMapIntKey* ret, const char* funcName)
+bool luaval_to_valuemapintkey(lua_State* L, int lo, ax::ValueMapIntKey* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret)
         return false;
@@ -1289,7 +1289,7 @@ bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, ax::ValueMapIntKey* ret, c
                     {
                         lua_pop(L, 1);
                         ValueMap dictVal;
-                        if (luaval_to_ccvaluemap(L, lua_gettop(L), &dictVal))
+                        if (luaval_to_valuemap(L, lua_gettop(L), &dictVal))
                         {
                             dict[intKey] = Value(dictVal);
                         }
@@ -1298,7 +1298,7 @@ bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, ax::ValueMapIntKey* ret, c
                     {
                         lua_pop(L, 1);
                         ValueVector arrVal;
-                        if (luaval_to_ccvaluevector(L, lua_gettop(L), &arrVal))
+                        if (luaval_to_valuevector(L, lua_gettop(L), &arrVal))
                         {
                             dict[intKey] = Value(arrVal);
                         }
@@ -1334,7 +1334,7 @@ bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, ax::ValueMapIntKey* ret, c
 
     return ok;
 }
-bool luaval_to_ccvaluevector(lua_State* L, int lo, ax::ValueVector* ret, const char* funcName)
+bool luaval_to_valuevector(lua_State* L, int lo, ax::ValueVector* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret)
         return false;
@@ -1370,7 +1370,7 @@ bool luaval_to_ccvaluevector(lua_State* L, int lo, ax::ValueVector* ret, const c
                 {
                     lua_pop(L, 1);
                     ValueMap dictVal;
-                    if (luaval_to_ccvaluemap(L, lua_gettop(L), &dictVal))
+                    if (luaval_to_valuemap(L, lua_gettop(L), &dictVal))
                     {
                         ret->emplace_back(Value(dictVal));
                     }
@@ -1379,7 +1379,7 @@ bool luaval_to_ccvaluevector(lua_State* L, int lo, ax::ValueVector* ret, const c
                 {
                     lua_pop(L, 1);
                     ValueVector arrVal;
-                    if (luaval_to_ccvaluevector(L, lua_gettop(L), &arrVal))
+                    if (luaval_to_valuevector(L, lua_gettop(L), &arrVal))
                     {
                         ret->emplace_back(Value(arrVal));
                     }
@@ -1827,7 +1827,7 @@ bool luaval_to_v3f_c4f_t2f(lua_State* L, int lo, ax::V3F_T2F_C4F* outValue, cons
     return ok;
 }
 
-bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<ax::Vec2>* ret, const char* funcName)
+bool luaval_to_std_vector_float2(lua_State* L, int lo, std::vector<ax::Vec2>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -1870,7 +1870,7 @@ bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<ax::Vec2>* ret,
     return ok;
 }
 
-bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<ax::Vec3>* ret, const char* funcName)
+bool luaval_to_std_vector_float3(lua_State* L, int lo, std::vector<ax::Vec3>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -2127,8 +2127,8 @@ int vec4_to_luaval(lua_State* L, const ax::Vec4& vec4)
     return 1;
 }
 
-#if defined(AX_ENABLE_PHYSICS)
-void physics_material_to_luaval(lua_State* L, const PhysicsMaterial& pm)
+#if defined(AX_ENABLE_PHYSICS_2D)
+void physics_material2d_to_luaval(lua_State* L, const PhysicsMaterial2D& pm)
 {
     if (nullptr == L)
         return;
@@ -2144,15 +2144,15 @@ void physics_material_to_luaval(lua_State* L, const PhysicsMaterial& pm)
     lua_rawset(L, -3);                             /* table[key] = value, L: table */
 }
 
-void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo& info)
+void physics_raycastinfo_to_luaval(lua_State* L, const RayCastHit2D& info)
 {
     if (NULL == L)
         return;
 
     lua_newtable(L); /* L: table */
 
-    lua_pushstring(L, "shape"); /* L: table key */
-    PhysicsCollider* shape = info.shape;
+    lua_pushstring(L, "collider"); /* L: table key */
+    auto shape = info.collider;
     if (shape == nullptr)
     {
         lua_pushnil(L);
@@ -2161,20 +2161,12 @@ void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo& info)
     {
         int ID     = (int)(shape->_ID);
         int* luaID = &(shape->_luaID);
-        toluafix_pushusertype_object(L, ID, luaID, (void*)shape, "ax.PhysicsCollider");
+        toluafix_pushusertype_object(L, ID, luaID, (void*)shape, "ax.Collider2D");
     }
     lua_rawset(L, -3); /* table[key] = value, L: table */
 
-    lua_pushstring(L, "start"); /* L: table key */
-    vec2_to_luaval(L, info.start);
-    lua_rawset(L, -3); /* table[key] = value, L: table */
-
-    lua_pushstring(L, "ended"); /* L: table key */
-    vec2_to_luaval(L, info.end);
-    lua_rawset(L, -3); /* table[key] = value, L: table */
-
-    lua_pushstring(L, "contact"); /* L: table key */
-    vec2_to_luaval(L, info.contact);
+    lua_pushstring(L, "point"); /* L: table key */
+    vec2_to_luaval(L, info.point);
     lua_rawset(L, -3); /* table[key] = value, L: table */
 
     lua_pushstring(L, "normal"); /* L: table key */
@@ -2186,26 +2178,68 @@ void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo& info)
     lua_rawset(L, -3);                            /* table[key] = value, L: table */
 }
 
-void physics_contactdata_to_luaval(lua_State* L, const PhysicsContactData* data)
+void physics_contact2dinfo_to_luaval(lua_State* L, const Contact2DInfo& info)
 {
-    if (nullptr == L || nullptr == data)
+    if (nullptr == L)
         return;
 
     lua_newtable(L); /* L: table */
 
-    lua_pushstring(L, "points");
-    vec2_array_to_luaval(L, data->points, data->count);
-    lua_rawset(L, -3);
-
+    // normal
     lua_pushstring(L, "normal");
-    vec2_to_luaval(L, data->normal);
+    vec2_to_luaval(L, info.normal);
     lua_rawset(L, -3);
 
+    // POINT_MAX
     lua_pushstring(L, "POINT_MAX");
-    lua_pushnumber(L, data->POINT_MAX);
+    lua_pushnumber(L, Contact2DInfo::POINT_MAX);
+    lua_rawset(L, -3);
+
+    // pointCount
+    lua_pushstring(L, "pointCount");
+    lua_pushnumber(L, info.pointCount);
+    lua_rawset(L, -3);
+
+    // points array
+    lua_pushstring(L, "points");
+    lua_newtable(L); /* L: table, points */
+
+    for (int i = 0; i < info.pointCount && i < Contact2DInfo::POINT_MAX; ++i)
+    {
+        const ManifoldPoint2D& mp = info.points[i];
+
+        lua_pushnumber(L, i + 1);  // key
+        lua_newtable(L);           // value (subtable)
+
+        // point
+        lua_pushstring(L, "point");
+        vec2_to_luaval(L, mp.point);
+        lua_rawset(L, -3);
+
+        // normalImpulse
+        lua_pushstring(L, "normalImpulse");
+        lua_pushnumber(L, mp.normalImpulse);
+        lua_rawset(L, -3);
+
+        // tangentImpulse
+        lua_pushstring(L, "tangentImpulse");
+        lua_pushnumber(L, mp.tangentImpulse);
+        lua_rawset(L, -3);
+
+        // normalVelocity
+        lua_pushstring(L, "normalVelocity");
+        lua_pushnumber(L, mp.normalVelocity);
+        lua_rawset(L, -3);
+
+        // set subtable into points[i]
+        lua_rawset(L, -3);
+    }
+
+    // set points table into root
     lua_rawset(L, -3);
 }
-#endif  // #if defined(AX_ENABLE_PHYSICS)
+
+#endif  // #if defined(AX_ENABLE_PHYSICS_2D)
 
 void size_to_luaval(lua_State* L, const Size& sz)
 {
@@ -2365,7 +2399,7 @@ void fontdefinition_to_luaval(lua_State* L, const FontDefinition& inValue)
     lua_rawset(L, -3);                                          /* table[key] = value, L: table */
 }
 
-void ccvalue_to_luaval(lua_State* L, const ax::Value& inValue)
+void value_to_luaval(lua_State* L, const ax::Value& inValue)
 {
     const Value& obj = inValue;
     switch (obj.getTypeFamily())
@@ -2384,19 +2418,19 @@ void ccvalue_to_luaval(lua_State* L, const ax::Value& inValue)
         lua_pushstring(L, obj.asStringRef().data());
         break;
     case Value::Type::VECTOR:
-        ccvaluevector_to_luaval(L, obj.asValueVector());
+        valuespan_to_luaval(L, obj.asValueVector());
         break;
     case Value::Type::MAP:
-        ccvaluemap_to_luaval(L, obj.asValueMap());
+        valuemap_to_luaval(L, obj.asValueMap());
         break;
     case Value::Type::INT_KEY_MAP:
-        ccvaluemapintkey_to_luaval(L, obj.asIntKeyMap());
+        valuemapintkey_to_luaval(L, obj.asIntKeyMap());
         break;
     default:
         break;
     }
 }
-void ccvaluemap_to_luaval(lua_State* L, const ax::ValueMap& inValue)
+void valuemap_to_luaval(lua_State* L, const ax::ValueMap& inValue)
 {
     lua_newtable(L);
 
@@ -2441,21 +2475,21 @@ void ccvaluemap_to_luaval(lua_State* L, const ax::ValueMap& inValue)
         case Value::Type::VECTOR:
         {
             lua_pushstring(L, key.c_str());
-            ccvaluevector_to_luaval(L, obj.asValueVector());
+            valuespan_to_luaval(L, obj.asValueVector());
             lua_rawset(L, -3);
         }
         break;
         case Value::Type::MAP:
         {
             lua_pushstring(L, key.c_str());
-            ccvaluemap_to_luaval(L, obj.asValueMap());
+            valuemap_to_luaval(L, obj.asValueMap());
             lua_rawset(L, -3);
         }
         break;
         case Value::Type::INT_KEY_MAP:
         {
             lua_pushstring(L, key.c_str());
-            ccvaluemapintkey_to_luaval(L, obj.asIntKeyMap());
+            valuemapintkey_to_luaval(L, obj.asIntKeyMap());
             lua_rawset(L, -3);
         }
         break;
@@ -2464,7 +2498,7 @@ void ccvaluemap_to_luaval(lua_State* L, const ax::ValueMap& inValue)
         }
     }
 }
-void ccvaluemapintkey_to_luaval(lua_State* L, const ax::ValueMapIntKey& inValue)
+void valuemapintkey_to_luaval(lua_State* L, const ax::ValueMapIntKey& inValue)
 {
     lua_newtable(L);
 
@@ -2513,21 +2547,21 @@ void ccvaluemapintkey_to_luaval(lua_State* L, const ax::ValueMapIntKey& inValue)
         case Value::Type::VECTOR:
         {
             lua_pushstring(L, key.c_str());
-            ccvaluevector_to_luaval(L, obj.asValueVector());
+            valuespan_to_luaval(L, obj.asValueVector());
             lua_rawset(L, -3);
         }
         break;
         case Value::Type::MAP:
         {
             lua_pushstring(L, key.c_str());
-            ccvaluemap_to_luaval(L, obj.asValueMap());
+            valuemap_to_luaval(L, obj.asValueMap());
             lua_rawset(L, -3);
         }
         break;
         case Value::Type::INT_KEY_MAP:
         {
             lua_pushstring(L, key.c_str());
-            ccvaluemapintkey_to_luaval(L, obj.asIntKeyMap());
+            valuemapintkey_to_luaval(L, obj.asIntKeyMap());
             lua_rawset(L, -3);
         }
         break;
@@ -2536,7 +2570,7 @@ void ccvaluemapintkey_to_luaval(lua_State* L, const ax::ValueMapIntKey& inValue)
         }
     }
 }
-void ccvaluevector_to_luaval(lua_State* L, const ax::ValueVector& inValue)
+void valuespan_to_luaval(lua_State* L, std::span<const Value> inValue)
 {
     lua_newtable(L);
 
@@ -2584,7 +2618,7 @@ void ccvaluevector_to_luaval(lua_State* L, const ax::ValueVector& inValue)
         case Value::Type::VECTOR:
         {
             lua_pushnumber(L, (lua_Number)index);
-            ccvaluevector_to_luaval(L, obj.asValueVector());
+            valuespan_to_luaval(L, obj.asValueVector());
             lua_rawset(L, -3);
             ++index;
         }
@@ -2592,7 +2626,7 @@ void ccvaluevector_to_luaval(lua_State* L, const ax::ValueVector& inValue)
         case Value::Type::MAP:
         {
             lua_pushnumber(L, (lua_Number)index);
-            ccvaluemap_to_luaval(L, obj.asValueMap());
+            valuemap_to_luaval(L, obj.asValueMap());
             lua_rawset(L, -3);
             ++index;
         }
@@ -2600,7 +2634,7 @@ void ccvaluevector_to_luaval(lua_State* L, const ax::ValueVector& inValue)
         case Value::Type::INT_KEY_MAP:
         {
             lua_pushnumber(L, (lua_Number)index);
-            ccvaluemapintkey_to_luaval(L, obj.asIntKeyMap());
+            valuemapintkey_to_luaval(L, obj.asIntKeyMap());
             lua_rawset(L, -3);
             ++index;
         }
@@ -2695,7 +2729,7 @@ void mesh_vertex_attrib_to_luaval(lua_State* L, const ax::MeshVertexAttrib& inVa
     lua_rawset(L, -3);
 }
 
-void ccvector_std_string_to_luaval(lua_State* L, const std::vector<std::string>& inValue)
+void strspan_to_luaval(lua_State* L, std::span<const std::string> inValue)
 {
     if (nullptr == L)
         return;
@@ -2704,16 +2738,16 @@ void ccvector_std_string_to_luaval(lua_State* L, const std::vector<std::string>&
 
     int index = 1;
 
-    for (std::string_view value : inValue)
+    for (auto& str : inValue)
     {
         lua_pushnumber(L, (lua_Number)index);
-        lua_pushlstring(L, value.data(), value.length());
+        lua_pushlstring(L, str.c_str(), str.length());
         lua_rawset(L, -3);
         ++index;
     }
 }
 
-void ccvector_int_to_luaval(lua_State* L, const std::vector<int>& inValue)
+void intspan_to_luaval(lua_State* L, std::span<const int> inValue)
 {
     if (nullptr == L)
         return;
@@ -2730,7 +2764,7 @@ void ccvector_int_to_luaval(lua_State* L, const std::vector<int>& inValue)
     }
 }
 
-void ccvector_float_to_luaval(lua_State* L, const std::vector<float>& inValue)
+void floatspan_to_luaval(lua_State* L, std::span<const float> inValue)
 {
     if (nullptr == L)
         return;
@@ -2747,7 +2781,7 @@ void ccvector_float_to_luaval(lua_State* L, const std::vector<float>& inValue)
     }
 }
 
-void ccvector_ushort_to_luaval(lua_State* L, const std::vector<unsigned short>& inValue)
+void ushortspan_to_luaval(lua_State* L, std::span<unsigned short> inValue)
 {
     if (nullptr == L)
         return;
@@ -2805,7 +2839,7 @@ void texParams_to_luaval(lua_State* L, const ax::Texture2D::TexParams& inValue)
     lua_rawset(L, -3);
 }
 
-void std_vector_vec3_to_luaval(lua_State* L, const std::vector<ax::Vec3>& inValue)
+void vec3span_to_luaval(lua_State* L, std::span<const ax::Vec3> inValue)
 {
     if (nullptr == L)
         return;
@@ -2817,6 +2851,23 @@ void std_vector_vec3_to_luaval(lua_State* L, const std::vector<ax::Vec3>& inValu
     {
         lua_pushnumber(L, (lua_Number)index);
         vec3_to_luaval(L, value);
+        lua_rawset(L, -3);
+        ++index;
+    }
+}
+
+void vec2span_to_luaval(lua_State* L, std::span<const ax::Vec2> inValue)
+{
+    if (nullptr == L)
+        return;
+
+    lua_newtable(L);
+
+    int index = 1;
+    for (const ax::Vec2& value : inValue)
+    {
+        lua_pushnumber(L, (lua_Number)index);
+        vec2_to_luaval(L, value);
         lua_rawset(L, -3);
         ++index;
     }
@@ -2837,7 +2888,7 @@ void std_map_string_string_to_luaval(lua_State* L, const std::map<std::string, s
     }
 }
 
-bool luaval_to_std_map_string_string(lua_State* L, int lo, axstd::string_map<std::string>* ret, const char* funcName)
+bool luaval_to_std_map_string_string(lua_State* L, int lo, tlx::string_map<std::string>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -2943,7 +2994,7 @@ bool luaval_to_samplerDesc(lua_State* L, int pos, ax::rhi::SamplerDesc& output, 
     return true;
 }
 
-bool luaval_to_stageUniformLocation(lua_State* L, int pos, ax::rhi::StageUniformLocation& loc, const char* message)
+bool luaval_to_uniformLocation(lua_State* L, int pos, ax::rhi::UniformLocation& loc, const char* message)
 {
     if (L == nullptr)
         return false;
@@ -2969,10 +3020,28 @@ bool luaval_to_stageUniformLocation(lua_State* L, int pos, ax::rhi::StageUniform
     loc.offset = int(lua_tointeger(L, -1));
     lua_pop(L, 1);
 
+    lua_pushstring(L, "cpuOffset");
+    lua_gettable(L, pos);
+    if (lua_isnil(L, -1))
+    {
+        AXASSERT(false, "invalidate UniformLocation value");
+    }
+    loc.cpuOffset = int(lua_tointeger(L, -1));
+    lua_pop(L, 1);
+
+    lua_pushstring(L, "runtimeLocation");
+    lua_gettable(L, pos);
+    if (lua_isnil(L, -1))
+    {
+        AXASSERT(false, "invalidate UniformLocation value");
+    }
+    loc.runtimeLocation = int(lua_tointeger(L, -1));
+    lua_pop(L, 1);
+
     return true;
 }
 
-void stageUniformLocation_to_luaval(lua_State* L, const ax::rhi::StageUniformLocation& loc)
+void uniformLocation_to_luaval(lua_State* L, const ax::rhi::UniformLocation& loc)
 {
     if (L == nullptr)
         return;
@@ -2986,51 +3055,17 @@ void stageUniformLocation_to_luaval(lua_State* L, const ax::rhi::StageUniformLoc
     lua_pushstring(L, "offset");
     lua_pushinteger(L, loc.offset);
     lua_rawset(L, -3);
-}
 
-bool luaval_to_uniformLocation(lua_State* L, int pos, ax::rhi::UniformLocation& loc, const char* message)
-{
-    if (L == nullptr)
-        return false;
-
-    lua_pushstring(L, "vertStage");
-    lua_gettable(L, pos);
-    if (lua_isnil(L, -1))
-    {
-        AXASSERT(false, "invalidate UniformLocation value");
-    }
-    luaval_to_stageUniformLocation(L, -1, loc.stages[1], "");
-    lua_pop(L, 1);
-
-    lua_pushstring(L, "fragStage");
-    lua_gettable(L, pos);
-    if (lua_isnil(L, -1))
-    {
-        AXASSERT(false, "invalidate UniformLocation value");
-    }
-    luaval_to_stageUniformLocation(L, -1, loc.stages[0], "");
-    lua_pop(L, 1);
-
-    return true;
-}
-
-void uniformLocation_to_luaval(lua_State* L, const ax::rhi::UniformLocation& loc)
-{
-    if (L == nullptr)
-        return;
-
-    lua_newtable(L);
-
-    lua_pushstring(L, "vertStage");
-    stageUniformLocation_to_luaval(L, loc.stages[1]);
+    lua_pushstring(L, "cpuOffset");
+    lua_pushinteger(L, loc.cpuOffset);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "fragStage");
-    stageUniformLocation_to_luaval(L, loc.stages[0]);
+    lua_pushstring(L, "runtimeLocation");
+    lua_pushinteger(L, loc.runtimeLocation);
     lua_rawset(L, -3);
 }
 
-void program_activeattrs_to_luaval(lua_State* L, const axstd::string_map<ax::rhi::VertexInputDesc>& attrs)
+void program_activeattrs_to_luaval(lua_State* L, const tlx::string_map<ax::rhi::VertexInputDesc>& attrs)
 {
     if (L == nullptr)
         return;
@@ -3056,7 +3091,7 @@ void program_activeattrs_to_luaval(lua_State* L, const axstd::string_map<ax::rhi
         lua_rawset(L, -3);
 
         lua_pushstring(L, "format");
-        lua_pushinteger(L, p.second.format);
+        lua_pushinteger(L, p.second.varType);
         lua_rawset(L, -3);
 
         lua_pushstring(L, p.first.c_str());

@@ -46,31 +46,31 @@ public:
      */
     virtual ~EditBoxImpl() {}
 
-    virtual bool initWithSize(const Size& size)                          = 0;
-    virtual void setFont(const char* pFontName, int fontSize)            = 0;
-    virtual void setFontColor(const Color32& color)                      = 0;
-    virtual void setPlaceholderFont(const char* pFontName, int fontSize) = 0;
-    virtual void setPlaceholderFontColor(const Color32& color)           = 0;
-    virtual void setInputMode(EditBox::InputMode inputMode)              = 0;
-    virtual void setInputFlag(EditBox::InputFlag inputFlag)              = 0;
-    virtual void setMaxLength(int maxLength)                             = 0;
-    virtual int getMaxLength()                                           = 0;
-    virtual void setTextHorizontalAlignment(TextHAlignment alignment)    = 0;
-    virtual void setReturnType(EditBox::KeyboardReturnType returnType)   = 0;
-    virtual bool isEditing()                                             = 0;
+    virtual bool initWithSize(const Size& size)                              = 0;
+    virtual void setFont(std::string_view fontName, int fontSize)            = 0;
+    virtual void setFontColor(const Color32& color)                          = 0;
+    virtual void setPlaceholderFont(std::string_view fontName, int fontSize) = 0;
+    virtual void setPlaceholderFontColor(const Color32& color)               = 0;
+    virtual void setInputMode(EditBox::InputMode inputMode)                  = 0;
+    virtual void setInputFlag(EditBox::InputFlag inputFlag)                  = 0;
+    virtual void setMaxLength(int maxLength)                                 = 0;
+    virtual int getMaxLength()                                               = 0;
+    virtual void setTextHorizontalAlignment(TextHAlignment alignment)        = 0;
+    virtual void setReturnType(EditBox::KeyboardReturnType returnType)       = 0;
+    virtual bool isEditing()                                                 = 0;
 
-    virtual void setText(const char* pText)        = 0;
-    virtual const char* getText()                  = 0;
-    virtual void setPlaceHolder(const char* pText) = 0;
-    virtual const char* getPlaceHolder()           = 0;
+    virtual void setText(std::string_view text)        = 0;
+    virtual std::string_view getText()                 = 0;
+    virtual void setPlaceHolder(std::string_view text) = 0;
+    virtual std::string_view getPlaceHolder()          = 0;
 
-    virtual const char* getFontName()     = 0;
-    virtual int getFontSize()             = 0;
-    virtual const Color32& getFontColor() = 0;
+    virtual std::string_view getFontName() = 0;
+    virtual int getFontSize()              = 0;
+    virtual const Color32& getFontColor()  = 0;
 
-    virtual const char* getPlaceholderFontName()     = 0;
-    virtual int getPlaceholderFontSize()             = 0;
-    virtual const Color32& getPlaceholderFontColor() = 0;
+    virtual std::string_view getPlaceholderFontName() = 0;
+    virtual int getPlaceholderFontSize()              = 0;
+    virtual const Color32& getPlaceholderFontColor()  = 0;
 
     virtual EditBox::InputMode getInputMode()           = 0;
     virtual EditBox::InputFlag getInputFlag()           = 0;

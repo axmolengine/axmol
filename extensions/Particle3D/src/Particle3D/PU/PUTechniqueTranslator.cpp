@@ -30,8 +30,7 @@
 namespace ax
 {
 
-PUTechniqueTranslator::PUTechniqueTranslator()  //: mTechnique(0)
-{}
+PUTechniqueTranslator::PUTechniqueTranslator() : _system(nullptr) {}
 PUTechniqueTranslator::~PUTechniqueTranslator() {}
 
 void PUTechniqueTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode* node)

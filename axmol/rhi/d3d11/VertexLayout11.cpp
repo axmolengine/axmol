@@ -79,9 +79,9 @@ void VertexLayoutImpl::apply(ID3D11DeviceContext* context, Program* program) con
     if (!_d3dVL)
     {
         auto progImpl = static_cast<ProgramImpl*>(program);
-        auto device   = static_cast<DriverImpl*>(DriverBase::getInstance())->getDevice();
+        auto device   = static_cast<DriverImpl*>(axdrv)->getDevice();
 
-        axstd::pod_vector<D3D11_INPUT_ELEMENT_DESC> inputElements;
+        tlx::pod_vector<D3D11_INPUT_ELEMENT_DESC> inputElements;
 
         auto& bindings = getBindings();
         inputElements.reserve(bindings.size());

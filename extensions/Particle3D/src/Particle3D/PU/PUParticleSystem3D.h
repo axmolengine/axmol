@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/base/Protocols.h"
 #include "axmol/math/Math.h"
 #include "Particle3D/ParticleSystem3D.h"
@@ -56,7 +56,7 @@ enum PUComponentType
     CT_OBSERVER
 };
 
-struct AX_EX_DLL PUParticle3D : public Particle3D
+struct AX_EXT_API PUParticle3D : public Particle3D
 {
     static float DEFAULT_TTL;
     static float DEFAULT_MASS;
@@ -204,10 +204,10 @@ struct AX_EX_DLL PUParticle3D : public Particle3D
     // float depthInWorld;
 };
 
-class AX_EX_DLL PUParticleSystem3D : public ParticleSystem3D
+class AX_EXT_API PUParticleSystem3D : public ParticleSystem3D
 {
 public:
-    typedef axstd::string_map<ParticlePool> ParticlePoolMap;
+    typedef tlx::string_map<ParticlePool> ParticlePoolMap;
 
     static const float DEFAULT_WIDTH;
     static const float DEFAULT_HEIGHT;

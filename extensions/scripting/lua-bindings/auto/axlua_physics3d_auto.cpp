@@ -1,6 +1,6 @@
 #include "lua-bindings/auto/axlua_physics3d_auto.hpp"
-#if defined(AX_ENABLE_3D_PHYSICS)
-#include "axmol/physics3d/Physics3D.h"
+#if defined(AX_ENABLE_PHYSICS_3D)
+#include "axmol/3d/physics/Physics3D.h"
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
 

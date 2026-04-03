@@ -49,6 +49,10 @@ add_library(${target_name} STATIC
   ${libpng_intel_sources}
 )
 
+if(LINUX)
+  target_compile_options(${target_name} PRIVATE -fvisibility=hidden)
+endif()
+
 # cmake builtin FindPNG.cmake detect cached variable PNG_PNG_INCLUDE_DIR
 set(PNG_PNG_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "png include dir" FORCE)
 

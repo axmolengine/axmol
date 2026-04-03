@@ -33,15 +33,15 @@ using namespace ax;
 #include <stddef.h>  // offsetof
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/Shaders.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/rhi/Program.h"
 #include "axmol/rhi/Buffer.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/Types.h"
-#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/vector.hpp"
 #include "axmol/tlx/utility.hpp"
 #include "axmol/base/EventType.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/platform/Image.h"
 #include "axmol/3d/shaderinfos.h"
 #include "axmol/base/Utils.h"
@@ -1314,9 +1314,9 @@ void Terrain::Chunk::updateIndicesLOD()
 
 void Terrain::Chunk::calculateAABB()
 {
-    axstd::pod_vector<Vec3> pos;
-    axstd::resize_and_transform(_originalVertices.begin(), _originalVertices.end(), pos,
-                                [](const auto& it) { return it._position; });
+    tlx::pod_vector<Vec3> pos;
+    tlx::resize_and_transform(_originalVertices.begin(), _originalVertices.end(), pos,
+                              [](const auto& it) { return it._position; });
     _aabb.updateMinMax(&pos[0], pos.size());
 }
 

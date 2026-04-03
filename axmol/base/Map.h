@@ -30,7 +30,9 @@
 
 #include "axmol/base/Macros.h"
 #include "axmol/base/Object.h"
+#include "axmol/tlx/type_traits.hpp"
 #include "axmol/tlx/hlookup.hpp"
+#include <span>
 #include <vector>
 
 /**
@@ -301,18 +303,6 @@ public:
      *        Member type 'K' is the type of the keys for the elements in the container,
      *        defined in Map<K, V> as an alias of its first template parameter (Key).
      */
-    // size_t erase(const K& k)
-    //{
-    //     auto iter = _data.find(k);
-    //     if (iter != _data.end())
-    //     {
-    //         iter->second->release();
-    //         _data.erase(iter);
-    //         return 1;
-    //     }
-    //     return 0;
-    // }
-
     template <typename _K2>
     size_t erase(const _K2& k)
     {
@@ -333,6 +323,12 @@ public:
      */
     template <typename _K2>
     void erase(const std::vector<_K2>& keys)
+    {
+        erase_range(keys);
+    }
+
+    template <typename _Range>
+    void erase_range(_Range&& keys)
     {
         for (const auto& key : keys)
         {
@@ -435,7 +431,7 @@ protected:
 };
 
 template <typename _Valty>
-using StringMap = Map<std::string, _Valty, axstd::string_hash, axstd::equal_to>;
+using StringMap = Map<std::string, _Valty, tlx::string_hash, tlx::equal_to>;
 
 }  // namespace ax
 // end group

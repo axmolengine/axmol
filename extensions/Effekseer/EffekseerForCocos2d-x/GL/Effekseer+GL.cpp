@@ -1,10 +1,11 @@
 #include "../EffekseerForCocos2d-x.h"
-#if AX_RENDER_API == AX_RENDER_API_GL
+#if AX_ENABLE_GL
+
+#include "axmol/rhi/opengl/TextureGL.h"
 
 #include "../../EffekseerRendererCommon/ModelLoader.h"
 #include "../../EffekseerRendererGL/EffekseerRendererGL.h"
 #include "../../EffekseerRendererGL/EffekseerRenderer/EffekseerRendererGL.MaterialLoader.h"
-#include "axmol/rhi/opengl/TextureGL.h"
 
 namespace efk {
 

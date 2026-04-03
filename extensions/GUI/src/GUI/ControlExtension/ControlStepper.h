@@ -42,7 +42,7 @@ NS_AX_EXT_BEGIN
  * @{
  */
 
-class AX_EX_DLL ControlStepper : public Control
+class AX_EXT_API ControlStepper : public Control
 {
 public:
     enum class Part

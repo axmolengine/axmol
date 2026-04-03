@@ -32,7 +32,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUParticleFollower : public PUAffector
+class AX_EXT_API PUParticleFollower : public PUAffector
 {
 public:
     // Constants

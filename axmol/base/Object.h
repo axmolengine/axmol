@@ -70,23 +70,10 @@ public:
     template <class T>
     static bool assign(T*& target, T* newValue)
     {
-        if (newValue)
-            newValue->retain();
-        if (target)
-            target->release();
-        bool ret = target != newValue;
-        target   = newValue;
-        return ret;
-    }
-
-    /*
-     * Take ownership newValue without retain
-     */
-    template <class T>
-    static bool adopt(T*& target, T* newValue)
-    {
         if (target != newValue)
         {
+            if (newValue)
+                newValue->retain();
             if (target)
                 target->release();
             target = newValue;
@@ -146,6 +133,30 @@ protected:
      * The Object's reference count is 1 after construction.
      */
     Object();
+
+    /**
+     * @brief Virtual cleanup hook function called before object destruction (prior to ~Object()).
+     *
+     * This protected virtual method serves as a dedicated resource cleanup interface, designed to
+     * solve the C++ pitfall where calling virtual functions within a destructor fails to invoke
+     * subclass-specific implementations (polymorphism is disabled during destructor execution).
+     *
+     * Unlike destructors, this method is invoked while the object (including all subclass components)
+     * is still fully intact and its polymorphic behavior is fully functional. Subclasses can override
+     * this method to implement custom resource release logic (e.g., deallocating dynamic memory,
+     * closing file handles, releasing engine resources) that would otherwise be unsafe or ineffective
+     * if placed in a subclass destructor's virtual function call chain.
+     *
+     * @note This method is automatically invoked by Object::release() when the reference count
+     *       (_referenceCount) reaches 0, immediately before the object is deleted via `delete this`.
+     *       It is not intended to be called directly from external code (protected access control)
+     *       to avoid invalid resource cleanup or double-free issues.
+     * @note Subclasses overriding this method should ensure to call the base class implementation
+     *       (Object::dispose()) at the appropriate time to guarantee complete cleanup of the
+     *       inheritance hierarchy.
+     * @see Object::release() The method that triggers this cleanup hook when reference count is zero.
+     */
+    virtual void dispose();
 
 public:
     /**

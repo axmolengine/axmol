@@ -48,7 +48,7 @@ NS_AX_EXT_BEGIN
  * @{
  */
 
-class AX_EX_DLL ControlColourPicker : public Control
+class AX_EXT_API ControlColourPicker : public Control
 {
 public:
     static ControlColourPicker* create();

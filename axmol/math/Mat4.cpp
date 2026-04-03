@@ -26,6 +26,7 @@
 #include "axmol/math/Quaternion.h"
 #include "axmol/math/MathUtil.h"
 #include "axmol/base/Macros.h"
+#include "axmol/rhi/DriverContext.h"
 
 NS_AX_MATH_BEGIN
 
@@ -119,11 +120,12 @@ void Mat4::createPerspective(float fieldOfView, float aspectRatio, float zNearPl
     dst->m[11] = -1.0f;
     dst->m[14] = -2.0f * zFarPlane * zNearPlane * f_n;
 
-// https://metashapes.com/blog/opengl-metal-projection-matrix-problem/
-#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_VK
-    dst->m[10] = -(zFarPlane)*f_n;
-    dst->m[14] = -(zFarPlane * zNearPlane) * f_n;
-#endif
+    if (rhi::DriverContext::isMetal())
+    {
+        // https://metashapes.com/blog/opengl-metal-projection-matrix-problem/
+        dst->m[10] = -zFarPlane * f_n;
+        dst->m[14] = -(zFarPlane * zNearPlane) * f_n;
+    }
 }
 
 void Mat4::createOrthographic(float width, float height, float zNearPlane, float zFarPlane, Mat4* dst)
@@ -156,11 +158,12 @@ void Mat4::createOrthographicOffCenter(float left,
     dst->m[14] = (zNearPlane + zFarPlane) / (zNearPlane - zFarPlane);
     dst->m[15] = 1;
 
-//// https://metashapes.com/blog/opengl-metal-projection-matrix-problem/
-#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_VK
-    dst->m[10] = 1 / (zNearPlane - zFarPlane);
-    dst->m[14] = zNearPlane / (zNearPlane - zFarPlane);
-#endif
+    //// https://metashapes.com/blog/opengl-metal-projection-matrix-problem/
+    if (rhi::DriverContext::isMetal())
+    {
+        dst->m[10] = 1 / (zNearPlane - zFarPlane);
+        dst->m[14] = zNearPlane / (zNearPlane - zFarPlane);
+    }
 }
 
 void Mat4::createBillboard(const Vec3& objectPosition,

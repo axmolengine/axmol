@@ -26,7 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "axmol/2d/Menu.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/Touch.h"
 #include "axmol/base/EventListenerTouch.h"
@@ -141,7 +141,6 @@ bool Menu::initWithArray(const Vector<MenuItem*>& arrayOfItems)
 
         // enable cascade color and opacity on menus
         setCascadeColorEnabled(true);
-        setCascadeOpacityEnabled(true);
 
         auto touchListener = EventListenerTouchOneByOne::create();
         touchListener->setSwallowTouches(true);

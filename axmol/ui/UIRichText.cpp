@@ -31,7 +31,6 @@
 #include <locale>
 #include <algorithm>
 #include <regex>
-#include <ranges>
 
 #include "axmol/platform/FileUtils.h"
 #include "axmol/platform/Application.h"
@@ -45,6 +44,7 @@
 #include "axmol/ui/UIHelper.h"
 
 #include "axmol/tlx/format.hpp"
+#include "axmol/tlx/utility.hpp"
 #include "axmol/platform/SAXParser.h"
 
 using namespace ax;
@@ -377,7 +377,7 @@ private:
         RichText::VisitEnterHandler handleVisitEnter;
         RichText::VisitExitHandler handleVisitExit;
     };
-    typedef axstd::string_map<TagBehavior> TagTables;
+    typedef tlx::string_map<TagBehavior> TagTables;
 
     static TagTables _tagTables;
 
@@ -1181,8 +1181,8 @@ void MyXMLVisitor::setTagDescription(std::string_view tag,
                                      RichText::VisitExitHandler&& handleVisitExit)
 {
     // MyXMLVisitor::_tagTables[tag] = {isFontElement, std::move(handleVisitEnter), std::move(handleVisitExit)};
-    axstd::set_item(MyXMLVisitor::_tagTables, tag,
-                    TagBehavior{isFontElement, std::move(handleVisitEnter), std::move(handleVisitExit)});
+    tlx::set_item(MyXMLVisitor::_tagTables, tag,
+                  TagBehavior{isFontElement, std::move(handleVisitEnter), std::move(handleVisitExit)});
 }
 
 void MyXMLVisitor::removeTagDescription(std::string_view tag)
@@ -1193,7 +1193,7 @@ void MyXMLVisitor::removeTagDescription(std::string_view tag)
 ValueMap MyXMLVisitor::tagAttrMapWithXMLElement(const char** attrs)
 {
     ValueMap tagAttrValueMap;
-    for (const char** attr = attrs; *attr != nullptr; attr = (attrs += 2))
+    for (const char** attr = attrs; *attr != nullptr; attr += 2)
     {
         if (attr[0] && attr[1])
         {
@@ -1203,47 +1203,47 @@ ValueMap MyXMLVisitor::tagAttrMapWithXMLElement(const char** attrs)
     return tagAttrValueMap;
 }
 
-const std::string RichText::KEY_VERTICAL_SPACE("KEY_VERTICAL_SPACE");
-const std::string RichText::KEY_WRAP_MODE("KEY_WRAP_MODE");
-const std::string RichText::KEY_HORIZONTAL_ALIGNMENT("KEY_HORIZONTAL_ALIGNMENT");
-const std::string RichText::KEY_VERTICAL_ALIGNMENT("KEY_VERTICAL_ALIGNMENT");
-const std::string RichText::KEY_FONT_COLOR_STRING("KEY_FONT_COLOR_STRING");
-const std::string RichText::KEY_FONT_SIZE("KEY_FONT_SIZE");
-const std::string RichText::KEY_FONT_SMALL("KEY_FONT_SMALL");
-const std::string RichText::KEY_FONT_BIG("KEY_FONT_BIG");
-const std::string RichText::KEY_FONT_FACE("KEY_FONT_FACE");
-const std::string RichText::KEY_TEXT_BOLD("KEY_TEXT_BOLD");
-const std::string RichText::KEY_TEXT_ITALIC("KEY_TEXT_ITALIC");
-const std::string RichText::KEY_TEXT_LINE("KEY_TEXT_LINE");
-const std::string RichText::VALUE_TEXT_LINE_NONE("VALUE_TEXT_LINE_NONE");
-const std::string RichText::VALUE_TEXT_LINE_DEL("VALUE_TEXT_LINE_DEL");
-const std::string RichText::VALUE_TEXT_LINE_UNDER("VALUE_TEXT_LINE_UNDER");
-const std::string RichText::KEY_TEXT_STYLE("KEY_TEXT_STYLE");
-const std::string RichText::VALUE_TEXT_STYLE_NONE("VALUE_TEXT_STYLE_NONE");
-const std::string RichText::VALUE_TEXT_STYLE_OUTLINE("VALUE_TEXT_STYLE_OUTLINE");
-const std::string RichText::VALUE_TEXT_STYLE_SHADOW("VALUE_TEXT_STYLE_SHADOW");
-const std::string RichText::VALUE_TEXT_STYLE_GLOW("VALUE_TEXT_STYLE_GLOW");
-const std::string RichText::KEY_TEXT_OUTLINE_COLOR("KEY_TEXT_OUTLINE_COLOR");
-const std::string RichText::KEY_TEXT_OUTLINE_SIZE("KEY_TEXT_OUTLINE_SIZE");
-const std::string RichText::KEY_TEXT_SHADOW_COLOR("KEY_TEXT_SHADOW_COLOR");
-const std::string RichText::KEY_TEXT_SHADOW_OFFSET_WIDTH("KEY_TEXT_SHADOW_OFFSET_WIDTH");
-const std::string RichText::KEY_TEXT_SHADOW_OFFSET_HEIGHT("KEY_TEXT_SHADOW_OFFSET_HEIGHT");
-const std::string RichText::KEY_TEXT_SHADOW_BLUR_RADIUS("KEY_TEXT_SHADOW_BLUR_RADIUS");
-const std::string RichText::KEY_TEXT_GLOW_COLOR("KEY_TEXT_GLOW_COLOR");
-const std::string RichText::KEY_URL("KEY_URL");
-const std::string RichText::KEY_ANCHOR_FONT_COLOR_STRING("KEY_ANCHOR_FONT_COLOR_STRING");
-const std::string RichText::KEY_ANCHOR_TEXT_BOLD("KEY_ANCHOR_TEXT_BOLD");
-const std::string RichText::KEY_ANCHOR_TEXT_ITALIC("KEY_ANCHOR_TEXT_ITALIC");
-const std::string RichText::KEY_ANCHOR_TEXT_LINE("KEY_ANCHOR_TEXT_LINE");
-const std::string RichText::KEY_ANCHOR_TEXT_STYLE("KEY_ANCHOR_TEXT_STYLE");
-const std::string RichText::KEY_ANCHOR_TEXT_OUTLINE_COLOR("KEY_ANCHOR_TEXT_OUTLINE_COLOR");
-const std::string RichText::KEY_ANCHOR_TEXT_OUTLINE_SIZE("KEY_ANCHOR_TEXT_OUTLINE_SIZE");
-const std::string RichText::KEY_ANCHOR_TEXT_SHADOW_COLOR("KEY_ANCHOR_TEXT_SHADOW_COLOR");
-const std::string RichText::KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH("KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH");
-const std::string RichText::KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT("KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT");
-const std::string RichText::KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS("KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS");
-const std::string RichText::KEY_ANCHOR_TEXT_GLOW_COLOR("KEY_ANCHOR_TEXT_GLOW_COLOR");
-const std::string RichText::KEY_ID("KEY_ID");
+const std::string_view RichText::KEY_VERTICAL_SPACE("KEY_VERTICAL_SPACE"sv);
+const std::string_view RichText::KEY_WRAP_MODE("KEY_WRAP_MODE"sv);
+const std::string_view RichText::KEY_HORIZONTAL_ALIGNMENT("KEY_HORIZONTAL_ALIGNMENT"sv);
+const std::string_view RichText::KEY_VERTICAL_ALIGNMENT("KEY_VERTICAL_ALIGNMENT"sv);
+const std::string_view RichText::KEY_FONT_COLOR_STRING("KEY_FONT_COLOR_STRING"sv);
+const std::string_view RichText::KEY_FONT_SIZE("KEY_FONT_SIZE"sv);
+const std::string_view RichText::KEY_FONT_SMALL("KEY_FONT_SMALL"sv);
+const std::string_view RichText::KEY_FONT_BIG("KEY_FONT_BIG"sv);
+const std::string_view RichText::KEY_FONT_FACE("KEY_FONT_FACE"sv);
+const std::string_view RichText::KEY_TEXT_BOLD("KEY_TEXT_BOLD"sv);
+const std::string_view RichText::KEY_TEXT_ITALIC("KEY_TEXT_ITALIC"sv);
+const std::string_view RichText::KEY_TEXT_LINE("KEY_TEXT_LINE"sv);
+const std::string_view RichText::VALUE_TEXT_LINE_NONE("VALUE_TEXT_LINE_NONE"sv);
+const std::string_view RichText::VALUE_TEXT_LINE_DEL("VALUE_TEXT_LINE_DEL"sv);
+const std::string_view RichText::VALUE_TEXT_LINE_UNDER("VALUE_TEXT_LINE_UNDER"sv);
+const std::string_view RichText::KEY_TEXT_STYLE("KEY_TEXT_STYLE"sv);
+const std::string_view RichText::VALUE_TEXT_STYLE_NONE("VALUE_TEXT_STYLE_NONE"sv);
+const std::string_view RichText::VALUE_TEXT_STYLE_OUTLINE("VALUE_TEXT_STYLE_OUTLINE"sv);
+const std::string_view RichText::VALUE_TEXT_STYLE_SHADOW("VALUE_TEXT_STYLE_SHADOW"sv);
+const std::string_view RichText::VALUE_TEXT_STYLE_GLOW("VALUE_TEXT_STYLE_GLOW"sv);
+const std::string_view RichText::KEY_TEXT_OUTLINE_COLOR("KEY_TEXT_OUTLINE_COLOR"sv);
+const std::string_view RichText::KEY_TEXT_OUTLINE_SIZE("KEY_TEXT_OUTLINE_SIZE"sv);
+const std::string_view RichText::KEY_TEXT_SHADOW_COLOR("KEY_TEXT_SHADOW_COLOR"sv);
+const std::string_view RichText::KEY_TEXT_SHADOW_OFFSET_WIDTH("KEY_TEXT_SHADOW_OFFSET_WIDTH"sv);
+const std::string_view RichText::KEY_TEXT_SHADOW_OFFSET_HEIGHT("KEY_TEXT_SHADOW_OFFSET_HEIGHT"sv);
+const std::string_view RichText::KEY_TEXT_SHADOW_BLUR_RADIUS("KEY_TEXT_SHADOW_BLUR_RADIUS"sv);
+const std::string_view RichText::KEY_TEXT_GLOW_COLOR("KEY_TEXT_GLOW_COLOR"sv);
+const std::string_view RichText::KEY_URL("KEY_URL"sv);
+const std::string_view RichText::KEY_ANCHOR_FONT_COLOR_STRING("KEY_ANCHOR_FONT_COLOR_STRING"sv);
+const std::string_view RichText::KEY_ANCHOR_TEXT_BOLD("KEY_ANCHOR_TEXT_BOLD"sv);
+const std::string_view RichText::KEY_ANCHOR_TEXT_ITALIC("KEY_ANCHOR_TEXT_ITALIC"sv);
+const std::string_view RichText::KEY_ANCHOR_TEXT_LINE("KEY_ANCHOR_TEXT_LINE"sv);
+const std::string_view RichText::KEY_ANCHOR_TEXT_STYLE("KEY_ANCHOR_TEXT_STYLE"sv);
+const std::string_view RichText::KEY_ANCHOR_TEXT_OUTLINE_COLOR("KEY_ANCHOR_TEXT_OUTLINE_COLOR"sv);
+const std::string_view RichText::KEY_ANCHOR_TEXT_OUTLINE_SIZE("KEY_ANCHOR_TEXT_OUTLINE_SIZE"sv);
+const std::string_view RichText::KEY_ANCHOR_TEXT_SHADOW_COLOR("KEY_ANCHOR_TEXT_SHADOW_COLOR"sv);
+const std::string_view RichText::KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH("KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH"sv);
+const std::string_view RichText::KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT("KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT"sv);
+const std::string_view RichText::KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS("KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS"sv);
+const std::string_view RichText::KEY_ANCHOR_TEXT_GLOW_COLOR("KEY_ANCHOR_TEXT_GLOW_COLOR"sv);
+const std::string_view RichText::KEY_ID("KEY_ID"sv);
 
 RichText::RichText() : _formatTextDirty(true), _leftSpaceWidth(0.0f)
 {
@@ -1612,25 +1612,25 @@ Color32 RichText::getAnchorTextGlowColor32()
 
 void RichText::setDefaults(const ValueMap& defaults)
 {
-    const auto setDefaultString = [this, defaults](const std::string& key) -> void {
+    const auto setDefaultString = [this, defaults](std::string_view key) -> void {
         if (auto&& itr = defaults.find(key); itr != defaults.end())
         {
             _defaults[key] = itr->second.asString();
         }
     };
-    const auto setDefaultInt = [this, defaults](const std::string& key) -> void {
+    const auto setDefaultInt = [this, defaults](std::string_view key) -> void {
         if (auto&& itr = defaults.find(key); itr != defaults.end())
         {
             _defaults[key] = itr->second.asInt();
         }
     };
-    const auto setDefaultFloat = [this, defaults](const std::string& key) -> void {
+    const auto setDefaultFloat = [this, defaults](std::string_view key) -> void {
         if (auto&& itr = defaults.find(key); itr != defaults.end())
         {
             _defaults[key] = itr->second.asFloat();
         }
     };
-    const auto setDefaultBool = [this, defaults](const std::string& key) -> void {
+    const auto setDefaultBool = [this, defaults](std::string_view key) -> void {
         if (auto&& itr = defaults.find(key); itr != defaults.end())
         {
             _defaults[key] = itr->second.asBool();
@@ -1666,7 +1666,7 @@ ValueMap RichText::getDefaults() const
 
 static inline bool parseHexDigit(uint8_t& out, const char* p, int n)
 {
-    auto ret = axstd::from_chars(p, p + n, out, 16);
+    auto ret = tlx::from_chars(p, p + n, out, 16);
     return ret.ec == std::errc{};
 }
 
@@ -2107,8 +2107,8 @@ void RichText::handleTextRenderer(std::string_view text,
         }
         ++realLines;
 
-        size_t splitParts = 0;
-        std::string_view lineText{subrgn};
+        size_t splitParts         = 0;
+        std::string_view lineText = tlx::to_string_view(subrgn);
         textSpan.reset(lineText);
         while (!textSpan.empty())
         {

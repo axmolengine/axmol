@@ -34,7 +34,6 @@ elseif(WINDOWS)
   if(NOT WINRT)
     set(_AX_PLATFORM_SPECIFIC_HEADER
       platform/win32/Application-win32.h
-      platform/win32/GL-win32.h
       platform/win32/FileUtils-win32.h
       platform/win32/StdC-win32.h
     )
@@ -99,12 +98,11 @@ elseif(APPLE)
       platform/ios/AxmolViewController.mm
     )
 
-    if(AX_RENDER_API STREQUAL "gl")
+    if(AX_ENABLE_GL)
       set(_AX_PLATFORM_SPECIFIC_HEADER
         ${_AX_PLATFORM_SPECIFIC_HEADER}
         platform/ios/ES3Renderer-ios.h
         platform/ios/ESRenderer-ios.h
-        platform/ios/GL-ios.h
         platform/ios/OpenGL_Internal-ios.h
       )
       set(_AX_PLATFORM_SPECIFIC_SRC
@@ -125,7 +123,6 @@ elseif(LINUX)
 
   set(_AX_PLATFORM_SPECIFIC_HEADER
     platform/linux/Application-linux.h
-    platform/linux/GL-linux.h
     platform/linux/StdC-linux.h
     platform/linux/FileUtils-linux.h
   )
@@ -139,7 +136,6 @@ elseif(EMSCRIPTEN)
   include_directories("${_AX_ROOT}/3rdparty/angle/_x/include")
   set(_AX_PLATFORM_SPECIFIC_HEADER
     platform/wasm/Application-wasm.h
-    platform/wasm/GL-wasm.h
     platform/wasm/StdC-wasm.h
     platform/wasm/FileUtils-wasm.h
   )

@@ -31,7 +31,7 @@
 namespace ax
 {
 //-----------------------------------------------------------------------
-PUDynamicAttribute::PUDynamicAttribute() {}
+PUDynamicAttribute::PUDynamicAttribute() : _type(DynamicAttributeType::DAT_FIXED), _valueChangedExternally(false) {}
 //-----------------------------------------------------------------------
 PUDynamicAttribute::~PUDynamicAttribute() {}
 //-----------------------------------------------------------------------
@@ -214,7 +214,6 @@ float PUDynamicAttributeCurved::getValue(float x)
             return (*it1).y;
         }
     }
-    break;
 
     case IT_SPLINE:
     {
@@ -225,7 +224,6 @@ float PUDynamicAttributeCurved::getValue(float x)
         float fraction = x / _range;
         return (_spline.interpolate(fraction < 1.0f ? fraction : 1.0f)).y;
     }
-    break;
     }
 
     return 0;
@@ -328,18 +326,7 @@ PUDynamicAttributeCurved* PUDynamicAttributeCurved::clone()
 }
 
 //-----------------------------------------------------------------------
-PUDynamicAttributeOscillate::PUDynamicAttributeOscillate()
-    : _oscillationType(PUDynamicAttributeOscillate::OSCT_SINE)
-    , _frequency(1.0f)
-    , _phase(0.0f)
-    , _base(0.0f)
-    , _amplitude(1.0f)
-{
-    _type = PUDynamicAttribute::DAT_OSCILLATE;
-}
-//-----------------------------------------------------------------------
-PUDynamicAttributeOscillate::PUDynamicAttributeOscillate(
-    const PUDynamicAttributeOscillate& /*dynamicAttributeOscillate*/)
+PUDynamicAttributeOscillate::PUDynamicAttributeOscillate() : _oscillationType(PUDynamicAttributeOscillate::OSCT_SINE)
 {
     _type = PUDynamicAttribute::DAT_OSCILLATE;
 }
@@ -401,10 +388,7 @@ float PUDynamicAttributeOscillate::getValue(float x)
     switch (_oscillationType)
     {
     case OSCT_SINE:
-    {
         return _base + _amplitude * sin(_phase + _frequency * x * M_PI * 2.0f);
-    }
-    break;
     case OSCT_SQUARE:
     {
         float val = sin(_phase + _frequency * x * M_PI * 2.0f);
@@ -412,7 +396,6 @@ float PUDynamicAttributeOscillate::getValue(float x)
             val = val > 0 ? 1 : -1;
         return _base + _amplitude * val;
     }
-    break;
     }
 
     return 0;

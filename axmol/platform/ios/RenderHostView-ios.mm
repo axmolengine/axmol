@@ -60,15 +60,20 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #import "axmol/base/IMEDispatcher.h"
 #import "axmol/platform/ios/InputView-ios.h"
 
-#if AX_RENDER_API == AX_RENDER_API_MTL
+#if AX_ENABLE_MTL
 #    import <Metal/Metal.h>
 #    import "axmol/rhi/metal/DriverMTL.h"
 #    import "axmol/rhi/metal/UtilsMTL.h"
-#else
+#endif
+#if AX_ENABLE_GL
 #    import "axmol/platform/ios/RenderViewImpl-ios.h"
 #    import "axmol/platform/ios/ES3Renderer-ios.h"
 #    import "axmol/platform/ios/OpenGL_Internal-ios.h"
 #endif
+
+#include "axmol/rhi/DriverContext.h"
+
+using namespace ax::rhi;
 
 // CLASS IMPLEMENTATIONS:
 
@@ -85,7 +90,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 @synthesize backingSize = backingSize_;
 @synthesize pixelFormat = pixelformat_, depthFormat = depthFormat_;
-#if AX_RENDER_API == AX_RENDER_API_GL
+#if AX_ENABLE_GL
 @synthesize context = context_;
 #endif
 @synthesize multiSampling            = multiSampling_;
@@ -101,10 +106,12 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 
 + (Class)layerClass
 {
-#if AX_RENDER_API == AX_RENDER_API_MTL
+#if AX_ENABLE_MTL && !AX_ENABLE_GL
     return [CAMetalLayer class];
-#else
+#elif !AX_ENABLE_MTL && AX_ENABLE_GL
     return [CAEAGLLayer class];
+#else
+    return DriverContext::isMetal() ? [CAMetalLayer class] : [CAEAGLLayer class];
 #endif
 }
 
@@ -177,6 +184,8 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
          multiSampling:(BOOL)sampling
        numberOfSamples:(unsigned int)nSamples
 {
+    DriverContext::makeCurrentDriver();
+
     if ((self = [super initWithFrame:frame]))
     {
         self.textInputView = [[TextInputView alloc] initWithFrame:frame];
@@ -188,22 +197,26 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
             self.contentScaleFactor = [[UIScreen mainScreen] scale];
         }
 
-#if AX_RENDER_API == AX_RENDER_API_MTL
-        AX_UNUSED_PARAM(format);
-        AX_UNUSED_PARAM(depth);
-        AX_UNUSED_PARAM(sharegroup);
-#else
-        pixelformat_        = format;
-        depthFormat_        = depth;
-        multiSampling_      = sampling;
-        requestedSamples_   = nSamples;
-        preserveBackbuffer_ = retained;
-        if (![self setupSurfaceWithSharegroup:sharegroup])
+        if (DriverContext::isMetal())
         {
-            [self release];
-            return nil;
+            AX_UNUSED_PARAM(format);
+            AX_UNUSED_PARAM(depth);
+            AX_UNUSED_PARAM(sharegroup);
         }
-#endif
+        else
+        {
+            pixelformat_        = format;
+            depthFormat_        = depth;
+            multiSampling_      = sampling;
+            requestedSamples_   = nSamples;
+            preserveBackbuffer_ = retained;
+            if (![self setupSurfaceWithSharegroup:sharegroup])
+            {
+                [self release];
+                return nil;
+            }
+            DriverContext::activateCurrentDriver();
+        }
     }
 
     return self;
@@ -214,31 +227,34 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
     if ((self = [super initWithCoder:aDecoder]))
     {
         self.textInputView = [[TextInputView alloc] initWithCoder:aDecoder];
-#if AX_RENDER_API == AX_RENDER_API_MTL
-        backingSize_ = [self bounds].size;
-#else
-        CAEAGLLayer* eaglLayer = (CAEAGLLayer*)[self layer];
-
-        pixelformat_      = (int)ax::PixelFormat::RGB565;
-        depthFormat_      = (int)ax::PixelFormat::D24S8;
-        multiSampling_    = NO;
-        requestedSamples_ = 0;
-        backingSize_      = [eaglLayer bounds].size;
-
-        if (![self setupSurfaceWithSharegroup:nil])
+        if (DriverContext::isMetal())
         {
-            [self release];
-            return nil;
+            backingSize_ = [self bounds].size;
         }
-#endif
+        else
+        {
+            CAEAGLLayer* eaglLayer = (CAEAGLLayer*)[self layer];
+
+            pixelformat_      = (int)ax::PixelFormat::RGB565;
+            depthFormat_      = (int)ax::PixelFormat::D24S8;
+            multiSampling_    = NO;
+            requestedSamples_ = 0;
+            backingSize_      = [eaglLayer bounds].size;
+
+            if (![self setupSurfaceWithSharegroup:nil])
+            {
+                [self release];
+                return nil;
+            }
+        }
     }
 
     return self;
 }
 
-#if AX_RENDER_API == AX_RENDER_API_GL
 - (BOOL)setupSurfaceWithSharegroup:(void*)sharegroup
 {
+#if AX_ENABLE_GL
     CAEAGLLayer* eaglLayer = (CAEAGLLayer*)self.layer;
 
     NSString* platformPF =
@@ -272,15 +288,17 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 
     CHECK_GL_ERROR();
 
+#endif
+
     return YES;
 }
-#endif
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];  // remove keyboard notification
-#if AX_RENDER_API == AX_RENDER_API_GL
-    [renderer_ release];
+#if AX_ENABLE_GL
+    if (DriverContext::isOpenGL())
+        [renderer_ release];
 #endif
     [self.textInputView release];
     [super dealloc];
@@ -294,15 +312,19 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 
     savedBounds_              = [self bounds];
     self.textInputView.bounds = savedBounds_;
-#if AX_RENDER_API == AX_RENDER_API_MTL
-    backingSize_ = savedBounds_.size;
-    backingSize_.width *= self.contentScaleFactor;
-    backingSize_.height *= self.contentScaleFactor;
-#else
-    [renderer_ resizeFromLayer:(CAEAGLLayer*)self.layer];
-    backingSize_ = [renderer_ backingSize];
+    if (DriverContext::isMetal())
+    {
+        backingSize_ = savedBounds_.size;
+        backingSize_.width *= self.contentScaleFactor;
+        backingSize_.height *= self.contentScaleFactor;
+    }
+    else
+    {
+#if AX_ENABLE_GL
+        [renderer_ resizeFromLayer:(CAEAGLLayer*)self.layer];
+        backingSize_ = [renderer_ backingSize];
 #endif
-
+    }
     auto renderView = director->getRenderView();
     if (renderView)
         renderView->updateRenderSurface(backingSize_.width, backingSize_.height, ax::RenderView::AllUpdates);
@@ -314,11 +336,14 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 
 - (void)swapBuffers
 {
-#if AX_RENDER_API == AX_RENDER_API_GL
+#if AX_ENABLE_GL
     // IMPORTANT:
     // - preconditions
     //    -> context_ MUST be the OpenGL context
     //    -> renderbuffer_ must be the RENDER BUFFER
+
+    if (DriverContext::isMetal())
+        return;
 
 #    ifdef __IPHONE_4_0
 

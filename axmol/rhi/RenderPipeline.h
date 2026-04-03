@@ -42,9 +42,6 @@ class RenderTarget;
  */
 class RenderPipeline : public ax::Object
 {
-public:
-    virtual void update(const RenderTarget*, const PipelineDesc& desc) = 0;
-
 protected:
     virtual ~RenderPipeline() = default;
 };

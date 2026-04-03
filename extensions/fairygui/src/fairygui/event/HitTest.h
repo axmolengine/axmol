@@ -12,6 +12,7 @@ class ByteBuffer;
 class IHitTest
 {
 public:
+    virtual ~IHitTest() {}
     virtual bool hitTest(GComponent* obj, const ax::Vec2& localPoint)
     {
         return true;

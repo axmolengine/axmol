@@ -16,6 +16,8 @@ const int OPTION_AUTO_STOP_AT_END = 4;
 
 class TValueBase
 {
+public:
+    virtual ~TValueBase() {}
 };
 
 class TValue_Visible : public TValueBase

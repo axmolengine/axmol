@@ -37,7 +37,7 @@ using namespace ax;
 
 - (UIViewController*)createRootViewController
 {
-    return [[AxmolViewController alloc] initWithNibName:nil bundle:nil];
+    return [[AxmolViewController alloc] init];
 }
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions

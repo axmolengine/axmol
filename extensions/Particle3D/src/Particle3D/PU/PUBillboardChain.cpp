@@ -33,8 +33,8 @@
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/rhi/Buffer.h"
-#include "axmol/rhi/DriverBase.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/rhi/DriverContext.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/3d/MeshRenderer.h"
 
 namespace ax
@@ -157,15 +157,14 @@ void PUBillboardChain::setupBuffers()
         AX_SAFE_RELEASE_NULL(_vertexBuffer);
         AX_SAFE_RELEASE_NULL(_indexBuffer);
 
-        size_t stride = sizeof(V3F_T2F_C4F);
-        _vertexBuffer = rhi::DriverBase::getInstance()->createBuffer(
-            stride * _chainElementList.size() * 2, rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
+        size_t stride  = sizeof(V3F_T2F_C4F);
+        _vertexBuffer  = axdrv->createBuffer(stride * _chainElementList.size() * 2, rhi::BufferType::VERTEX,
+                                             rhi::BufferUsage::DYNAMIC);
         V3F_T2F_C4F vi = {Vec3(0.0f, 0.0f, 0.0f), Vec2(0.0f, 0.0f), Color::WHITE};
         _vertices.resize(_chainElementList.size() * 2, vi);
 
-        _indexBuffer =
-            rhi::DriverBase::getInstance()->createBuffer(_chainCount * _maxElementsPerChain * 6 * sizeof(uint16_t),
-                                                         rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
+        _indexBuffer = axdrv->createBuffer(_chainCount * _maxElementsPerChain * 6 * sizeof(uint16_t),
+                                           rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
 
         _indices.resize(_chainCount * _maxElementsPerChain * 6, 0);
 

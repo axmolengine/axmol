@@ -38,7 +38,7 @@
 #    include "axmol/media/MediaEngine.h"
 #    include "axmol/ui/UIButton.h"
 #    include "axmol/ui/UILayout.h"
-#    include "yasio/byte_buffer.hpp"
+#    include "axmol/tlx/byte_buffer.hpp"
 //-----------------------------------------------------------------------------------------------------------
 
 using namespace ax;
@@ -380,10 +380,10 @@ struct PrivateVideoContext
 
 std::unique_ptr<MediaEngineFactory> _meFactory = MediaEngineFactory::create();
 
-const char* BODY_IMAGE_1_PIXEL_HEIGHT =
-    "iVBORw0KGgoAAAANSUhEUgAAAAwAAAABCAMAAADdNb8LAAAAA1BMVEX///+nxBvIAAAACklEQVR4AWNABgAADQABYc2cpAAAAABJRU5ErkJggg==";
+static constexpr std::string_view BODY_IMAGE_1_PIXEL_HEIGHT =
+    "iVBORw0KGgoAAAANSUhEUgAAAAwAAAABCAMAAADdNb8LAAAAA1BMVEX///+nxBvIAAAACklEQVR4AWNABgAADQABYc2cpAAAAABJRU5ErkJggg=="sv;
 
-const char* BODY_IMAGE_1_PIXEL_HEIGHT_KEY = "/__bodyImage";
+static constexpr std::string_view BODY_IMAGE_1_PIXEL_HEIGHT_KEY = "/__bodyImage"sv;
 
 constexpr auto TIMELINE_BAR_HEIGHT = 12.f;
 
@@ -517,12 +517,15 @@ void createMediaControlTexture()
             Vec2(border + (i * panelW) + (i * gap) + (panelW / 2.f), imageSize.height - border - (panelH / 2.f));
         item.second(midPoint);
 
-#    if AX_RENDER_API == AX_RENDER_API_GL
-        g_mediaControlTextureRegions[item.first] =
-            Rect(border + (panelW * i) + (gap * i), imageSize.height - border - panelH, panelW, panelH);
-#    else  // For Metal renderer
-        g_mediaControlTextureRegions[item.first] = Rect(border + (panelW * i) + (gap * i), border, panelW, panelH);
-#    endif
+        if (rhi::DriverContext::isOpenGL())
+        {
+            g_mediaControlTextureRegions[item.first] =
+                Rect(border + (panelW * i) + (gap * i), imageSize.height - border - panelH, panelW, panelH);
+        }
+        else
+        {
+            g_mediaControlTextureRegions[item.first] = Rect(border + (panelW * i) + (gap * i), border, panelW, panelH);
+        }
 
         ++i;
     }

@@ -14,7 +14,7 @@
 
 #    include "ntcvt/ntcvt.hpp"
 #    include "axmol/media/MFUtils.h"
-#    include "yasio/string_view.hpp"
+#    include "yasio/tlx/string_view.hpp"
 
 #    include "axmol/tlx/format.hpp"
 
@@ -343,7 +343,7 @@ void MfMediaEngine::OnMediaEngineEvent(uint32_t meEvent)
                 USHORT errorCode = error->GetErrorCode();
                 HRESULT hr       = error->GetExtendedErrorCode();
                 char buff[128]   = {};
-                fmt::format_to_z(buff, "ERROR: Media Foundation Event Error {} ({:08X})\n", errorCode,
+                fmt::format_to_z(buff, "ERROR: Media Foundation Event Error {} (0x{:08x})\n", errorCode,
                                  static_cast<unsigned int>(hr));
                 OutputDebugStringA(buff);
             }

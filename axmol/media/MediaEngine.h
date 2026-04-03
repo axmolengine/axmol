@@ -45,8 +45,8 @@
 #include <memory>
 #include <chrono>
 
-#include "yasio/string_view.hpp"
-#include "yasio/byte_buffer.hpp"
+#include "yasio/tlx/string_view.hpp"
+#include "axmol/tlx/byte_buffer.hpp"
 
 using namespace std::string_view_literals;
 

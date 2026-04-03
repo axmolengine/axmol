@@ -7,7 +7,7 @@
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
+ copies of the Software, and to permit persons to whom the Software are
  furnished to do so, subject to the following conditions:
 
  The above copyright notice and this permission notice shall be included in
@@ -23,9 +23,91 @@
  ****************************************************************************/
 #include "axmol/rhi/vulkan/BufferVK.h"
 #include "axmol/rhi/vulkan/DriverVK.h"
+#include "axmol/rhi/vulkan/UtilsVK.h"
+#include "axmol/rhi/RHITypes.h"  // MAX_INFLIGHT_BUFFER
 
 namespace ax::rhi::vk
 {
+// Determine priority based on buffer usage
+static float evalMemoryPriority(VkMemoryPropertyFlags properties, VkBufferUsageFlags usage)
+{
+    // Highest priority for GPU-written resources
+    if (usage & (VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT))
+    {
+        return 1.0f;  // Highest priority for GPU storage
+    }
+
+    // Medium priority for frequently accessed resources
+    if (usage &
+        (VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT))
+    {
+        return 0.75f;
+    }
+
+    // Lower priority for CPU-written staging buffers
+    if (properties & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
+    {
+        return 0.25f;  // Lower priority for host-visible memory
+    }
+
+    return 0.5f;  // Default medium priority
+}
+
+// Determine VMA memory usage based on buffer usage and memory properties
+static VmaMemoryUsage getVmaMemoryUsage(BufferUsage usage, VkMemoryPropertyFlags memoryProps)
+{
+    switch (usage)
+    {
+    case BufferUsage::DYNAMIC:  // GPU read, CPU write
+        return VMA_MEMORY_USAGE_AUTO_PREFER_HOST;
+
+    case BufferUsage::STATIC:  // GPU read/write, updated via staging
+        return VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE;
+
+    case BufferUsage::IMMUTABLE:  // GPU read, must provide initial data
+        return VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE;
+
+    default:
+        // Fallback based on memory properties
+        if (memoryProps & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
+        {
+            return VMA_MEMORY_USAGE_AUTO_PREFER_HOST;
+        }
+        else
+        {
+            return VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE;
+        }
+    }
+}
+
+// Determine VMA allocation flags based on buffer usage
+static VmaAllocationCreateFlags getVmaAllocationFlags(BufferUsage usage, VkBufferUsageFlags bufferUsage)
+{
+    VmaAllocationCreateFlags flags = 0;
+
+    switch (usage)
+    {
+    case BufferUsage::DYNAMIC:
+        // For dynamic buffers that are frequently written by CPU, use sequential write optimization
+        flags |= VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT;
+        // Keep memory mapped for faster updates
+        flags |= VMA_ALLOCATION_CREATE_MAPPED_BIT;
+        break;
+
+    case BufferUsage::STATIC:
+    case BufferUsage::IMMUTABLE:
+        // Static/immutable buffers are typically device-local, no special flags needed
+        break;
+    }
+
+    // For staging buffers (transfer source), optimize for sequential writes
+    if (bufferUsage & VK_BUFFER_USAGE_TRANSFER_SRC_BIT)
+    {
+        flags |= VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT;
+    }
+
+    return flags;
+}
 
 // BufferUsage -> VkBufferUsageFlags / VkMemoryPropertyFlags
 static void translateUsage(BufferUsage in, VkBufferUsageFlags& outUsage, VkMemoryPropertyFlags& outMemProps)
@@ -67,7 +149,7 @@ static VkBufferUsageFlags translateBindFlag(BufferType t)
         return VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
 
     case BufferType::PIXEL_PACK_BUFFER:
-        // read backbuffer，map as staging or copy target
+        // read backbuffer, map as staging or copy target
         return VK_BUFFER_USAGE_TRANSFER_DST_BIT;
 
     default:
@@ -93,52 +175,148 @@ BufferImpl::BufferImpl(DriverImpl* driver, std::size_t size, BufferType type, Bu
     if (initial && size)
         _defaultData.assign(static_cast<const uint8_t*>(initial), static_cast<const uint8_t*>(initial) + size);
 
+    // Create native buffers (single or per-frame backings depending on memory properties)
     if (usage != BufferUsage::IMMUTABLE || initial)
         createNativeBuffer(initial);
 }
 
 BufferImpl::~BufferImpl()
 {
-    if (_buffer != VK_NULL_HANDLE)
-        _driver->queueDisposal(_buffer, _lastFenceValue);
-    if (_memory != VK_NULL_HANDLE)
-        _driver->queueDisposal(_memory, _lastFenceValue);
+    // Clean up all VMA allocations
+    auto& vmaAllocator = _driver->getVmaAllocator();
+
+    // If per-frame dynamic backings were created, dispose all of them
+    if (!_dynamicBuffers.empty())
+    {
+        for (size_t i = 0; i < _dynamicBuffers.size(); ++i)
+        {
+            if (_dynamicBuffers[i] != VK_NULL_HANDLE && _dynamicMemories[i] != nullptr)
+            {
+                _driver->disposeBuffer(_dynamicBuffers[i], _lastFenceValue);
+                _driver->disposeVmaMemory(_dynamicMemories[i], _lastFenceValue);
+            }
+        }
+    }
+    else
+    {
+        // Single buffer allocation
+        if (_buffer != VK_NULL_HANDLE && _memory != nullptr)
+        {
+            _driver->disposeBuffer(_buffer, _lastFenceValue);
+            _driver->disposeVmaMemory(_memory, _lastFenceValue);
+        }
+    }
 }
 
 /* -------------------------------------------------- createNativeBuffer */
 void BufferImpl::createNativeBuffer(const void* initial)
 {
-    VkBufferCreateInfo bufferInfo{};
-    bufferInfo.sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    bufferInfo.size        = _capacity;
-    bufferInfo.usage       = _usageFlags;
-    bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    auto device       = _driver->getDevice();
+    auto vmaAllocator = _driver->getVmaAllocator();
 
-    auto device = _driver->getDevice();
-    if (vkCreateBuffer(device, &bufferInfo, nullptr, &_buffer) != VK_SUCCESS)
+    // If host-visible memory is requested (dynamic usage), allocate per-frame backings
+    if (_memoryProperties & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
     {
-        AXLOGE("Failed to create VkBuffer, size={}, alignedSize={}", _size, _capacity);
-        assert(false && "Failed to create VkBuffer");
+        // Create MAX_FRAMES_IN_FLIGHT separate host-visible buffers to avoid CPU overwriting GPU-in-flight data.
+        _dynamicBuffers.resize(MAX_FRAMES_IN_FLIGHT, VK_NULL_HANDLE);
+        _dynamicMemories.resize(MAX_FRAMES_IN_FLIGHT, nullptr);
+        _dynamicMappedData.resize(MAX_FRAMES_IN_FLIGHT, nullptr);
+
+        // Setup VMA allocation parameters for dynamic buffers
+        VmaAllocationCreateInfo allocCreateInfo = {};
+        allocCreateInfo.usage                   = getVmaMemoryUsage(_usage, _memoryProperties);
+        allocCreateInfo.flags                   = getVmaAllocationFlags(_usage, _usageFlags);
+
+        // Set memory priority if supported
+        if (_driver->isMemoryPrioritySupported())
+        {
+            allocCreateInfo.priority = evalMemoryPriority(_memoryProperties, _usageFlags);
+        }
+
+        for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+        {
+            VkBufferCreateInfo bufferInfo{};
+            bufferInfo.sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+            bufferInfo.size        = _capacity;
+            bufferInfo.usage       = _usageFlags;
+            bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+            VmaAllocationInfo allocationInfo{};
+            VkResult res = vmaCreateBuffer(vmaAllocator, &bufferInfo, &allocCreateInfo, &_dynamicBuffers[i],
+                                           &_dynamicMemories[i], &allocationInfo);
+            VK_REQUIRE(res, "vmaCreateBuffer failed");
+
+            // Store mapped pointer if allocation is mapped
+            if (allocCreateInfo.flags & VMA_ALLOCATION_CREATE_MAPPED_BIT)
+            {
+                _dynamicMappedData[i] = allocationInfo.pMappedData;
+            }
+        }
+
+        // Set active handle to nothing yet (will lazily switch on first write)
+        _buffer            = VK_NULL_HANDLE;
+        _memory            = nullptr;
+        _currentMappedData = nullptr;
+        _currentFrameIndex = -1;
+    }
+    else
+    {
+        // Single device-local buffer (static/immutable)
+        VkBufferCreateInfo bufferInfo{};
+        bufferInfo.sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        bufferInfo.size        = _capacity;
+        bufferInfo.usage       = _usageFlags;
+        bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+        // Setup VMA allocation parameters for static buffers
+        VmaAllocationCreateInfo allocCreateInfo = {};
+        allocCreateInfo.usage                   = getVmaMemoryUsage(_usage, _memoryProperties);
+        allocCreateInfo.flags                   = getVmaAllocationFlags(_usage, _usageFlags);
+
+        // Set memory priority if supported
+        if (_driver->isMemoryPrioritySupported())
+        {
+            allocCreateInfo.priority = evalMemoryPriority(_memoryProperties, _usageFlags);
+        }
+
+        VmaAllocationInfo allocationInfo{};
+        VkResult res =
+            vmaCreateBuffer(vmaAllocator, &bufferInfo, &allocCreateInfo, &_buffer, &_memory, &allocationInfo);
+        VK_REQUIRE(res, "vmaCreateBuffer failed");
     }
 
-    VkMemoryRequirements memReq;
-    vkGetBufferMemoryRequirements(device, _buffer, &memReq);
-
-    VkMemoryAllocateInfo allocInfo{};
-    allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    allocInfo.allocationSize  = memReq.size;
-    allocInfo.memoryTypeIndex = _driver->findMemoryType(memReq.memoryTypeBits, _memoryProperties);
-
-    if (vkAllocateMemory(device, &allocInfo, nullptr, &_memory) != VK_SUCCESS)
-    {
-        AXLOGE("Failed to allocate VkDeviceMemory");
-        assert(false && "Failed to allocate VkDeviceMemory");
-    }
-
-    vkBindBufferMemory(device, _buffer, _memory, 0);
-
+    // If initial data provided, write into the current backing
     if (initial)
         updateData(initial, _capacity);
+}
+
+/* -------------------------------------------------- updateIndex
+   Lazy switch to the backing buffer corresponding to the current frame index
+   provided by DriverImpl. This avoids O(N) per-frame iteration and performs
+   the switch only when the buffer is actually updated.
+*/
+void BufferImpl::updateIndex()
+{
+    // Only applicable if we have multiple dynamic backings
+    if (_dynamicBuffers.empty())
+        return;
+
+    // DriverImpl is expected to provide a frame index in range [0, MAX_FRAMES_IN_FLIGHT)
+    int frameIndex = _driver->getFrameIndex();
+
+    // If current backing already corresponds to this frame, nothing to do.
+    if (_currentFrameIndex == frameIndex)
+        return;
+
+    // Sanity-check: ensure index fits our backing array.
+    AXASSERT(frameIndex >= 0 && frameIndex < static_cast<int>(_dynamicBuffers.size()),
+             "frame index out of range for dynamic buffers");
+
+    // Switch active handles to the frame-specific backing
+    _currentFrameIndex = frameIndex;
+    _buffer            = _dynamicBuffers[frameIndex];
+    _memory            = _dynamicMemories[frameIndex];
+    _currentMappedData = _dynamicMappedData[frameIndex];
 }
 
 /* -------------------------------------------------- updateData */
@@ -155,44 +333,66 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
 {
     assert(data && (offset + size <= _capacity));
 
-    auto device = _driver->getDevice();
+    auto device       = _driver->getDevice();
+    auto vmaAllocator = _driver->getVmaAllocator();
+
+    // If this buffer has host-visible per-frame backings, ensure we are
+    // writing to the backing designated for the current frame.
+    if (!_dynamicBuffers.empty())
+    {
+        updateIndex();
+    }
 
     if (_memoryProperties & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
     {
         // Host visible memory: directly map and copy
-        void* mapped = nullptr;
-        vkMapMemory(device, _memory, offset, size, 0, &mapped);
-        std::memcpy(static_cast<uint8_t*>(mapped), data, size);
-        vkUnmapMemory(device, _memory);
+        if (_currentMappedData)
+        {
+            // If memory is already persistently mapped, use the mapped pointer
+            std::memcpy(static_cast<uint8_t*>(_currentMappedData) + offset, data, size);
+
+            // Flush the memory range if needed (VMA handles this automatically for mapped allocations)
+            vmaFlushAllocation(vmaAllocator, _memory, offset, size);
+        }
+        else
+        {
+            VkResult res =
+                vmaCopyMemoryToAllocation(vmaAllocator, static_cast<const uint8_t*>(data), _memory, offset, size);
+            VK_REQUIRE(res, "vmaCopyMemoryToAllocation failed");
+        }
     }
     else
     {
         // Device local memory: use staging buffer + isolate commands
-        VkBuffer stagingBuf;
-        VkDeviceMemory stagingMem;
+        VkBuffer stagingBuffer          = VK_NULL_HANDLE;
+        VmaAllocation stagingAllocation = VK_NULL_HANDLE;
 
-        // Create staging buffer
-        VkBufferCreateInfo bufInfo{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
-        bufInfo.size        = size;
-        bufInfo.usage       = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
-        bufInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-        vkCreateBuffer(device, &bufInfo, nullptr, &stagingBuf);
+        // Create staging buffer with VMA
+        VkBufferCreateInfo bufferInfo{};
+        bufferInfo.sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        bufferInfo.size        = size;
+        bufferInfo.usage       = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+        bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-        // Allocate staging memory (host visible + coherent)
-        VkMemoryRequirements memReq{};
-        vkGetBufferMemoryRequirements(device, stagingBuf, &memReq);
-        VkMemoryAllocateInfo allocInfo{VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO};
-        allocInfo.allocationSize  = memReq.size;
-        allocInfo.memoryTypeIndex = _driver->findMemoryType(
-            memReq.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-        vkAllocateMemory(device, &allocInfo, nullptr, &stagingMem);
-        vkBindBufferMemory(device, stagingBuf, stagingMem, 0);
+        VmaAllocationCreateInfo allocCreateInfo = {};
+        allocCreateInfo.usage                   = VMA_MEMORY_USAGE_AUTO_PREFER_HOST;
+        allocCreateInfo.flags =
+            VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT | VMA_ALLOCATION_CREATE_MAPPED_BIT;
 
-        // Map staging memory and copy data
-        void* mapped = nullptr;
-        vkMapMemory(device, stagingMem, 0, size, 0, &mapped);
-        std::memcpy(mapped, data, size);
-        vkUnmapMemory(device, stagingMem);
+        // Low priority for staging buffers
+        if (_driver->isMemoryPrioritySupported())
+        {
+            allocCreateInfo.priority = 0.1f;
+        }
+
+        VmaAllocationInfo allocationInfo{};
+        VkResult res = vmaCreateBuffer(vmaAllocator, &bufferInfo, &allocCreateInfo, &stagingBuffer, &stagingAllocation,
+                                       &allocationInfo);
+        VK_REQUIRE(res, "vmaCreateBuffer failed");
+
+        // Copy data to staging buffer using VMA's convenient function
+        res = vmaCopyMemoryToAllocation(vmaAllocator, data, stagingAllocation, 0, size);
+        VK_REQUIRE(res, "vmaCopyMemoryToAllocation failed");
 
         // Record copy command
         auto submission = _driver->startIsolateSubmission();
@@ -200,12 +400,11 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
         copyRegion.srcOffset = 0;
         copyRegion.dstOffset = offset;
         copyRegion.size      = size;
-        vkCmdCopyBuffer(submission.cmd, stagingBuf, _buffer, 1, &copyRegion);
+        vkCmdCopyBuffer(submission.cmd, stagingBuffer, _buffer, 1, &copyRegion);
         _driver->finishIsolateSubmission(submission);
 
-        // Destroy staging resources
-        vkDestroyBuffer(device, stagingBuf, nullptr);
-        vkFreeMemory(device, stagingMem, nullptr);
+        // Destroy staging buffer using VMA
+        vmaDestroyBuffer(vmaAllocator, stagingBuffer, stagingAllocation);
     }
 
     // Update default stored data

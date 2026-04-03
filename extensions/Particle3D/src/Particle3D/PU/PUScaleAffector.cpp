@@ -202,16 +202,15 @@ void PUScaleAffector::updatePUAffector(PUParticle3D* particle, float deltaTime)
     // for (auto&& iter : _particleSystem->getParticles())
     {
         // PUParticle3D *particle = iter;
-        float ds        = 0;
-        float width     = 0;
-        float height    = 0;
-        float depth     = 0;
-        float dimension = 0;  // Added in V1.4
+        float width  = 0;
+        float height = 0;
+        float depth  = 0;
 
         if (_dynScaleXYZSet)
         {
-            ds = calculateScale(_dynScaleXYZ, particle) * deltaTime * calculateAffectSpecialisationFactor(particle);
-            dimension = particle->width + ds * _affectorScale.x;
+            auto ds =
+                calculateScale(_dynScaleXYZ, particle) * deltaTime * calculateAffectSpecialisationFactor(particle);
+            auto dimension = particle->width + ds * _affectorScale.x;
             if (dimension > 0)
             {
                 width = dimension;
@@ -232,8 +231,8 @@ void PUScaleAffector::updatePUAffector(PUParticle3D* particle, float deltaTime)
         {
             if (_dynScaleXSet)
             {
-                ds        = calculateScale(_dynScaleX, particle) * deltaTime;
-                dimension = particle->width + ds * _affectorScale.x;
+                auto ds        = calculateScale(_dynScaleX, particle) * deltaTime;
+                auto dimension = particle->width + ds * _affectorScale.x;
                 if (dimension > 0)
                 {
                     width = dimension;
@@ -241,8 +240,8 @@ void PUScaleAffector::updatePUAffector(PUParticle3D* particle, float deltaTime)
             }
             if (_dynScaleYSet)
             {
-                ds        = calculateScale(_dynScaleY, particle) * deltaTime;
-                dimension = particle->height + ds * _affectorScale.y;
+                auto ds        = calculateScale(_dynScaleY, particle) * deltaTime;
+                auto dimension = particle->height + ds * _affectorScale.y;
                 if (dimension > 0)
                 {
                     height = dimension;
@@ -250,8 +249,8 @@ void PUScaleAffector::updatePUAffector(PUParticle3D* particle, float deltaTime)
             }
             if (_dynScaleZSet)
             {
-                ds        = calculateScale(_dynScaleZ, particle) * deltaTime;
-                dimension = particle->depth + ds * _affectorScale.z;
+                auto ds        = calculateScale(_dynScaleZ, particle) * deltaTime;
+                auto dimension = particle->depth + ds * _affectorScale.z;
                 if (dimension > 0)
                 {
                     depth = dimension;

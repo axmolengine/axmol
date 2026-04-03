@@ -5,76 +5,97 @@
 
 #include <array>
 #include <atomic>
-#include <cstddef>
 #include <cstdint>
 #include <string_view>
 #include <utility>
+#include <variant>
 
 #include "AL/al.h"
-#include "AL/alc.h"
 
 #include "alc/inprogext.h"
 #include "almalloc.h"
 #include "alnumeric.h"
 #include "core/buffer_storage.h"
+#include "gsl/gsl"
+#include "intrusive_ptr.h"
 #include "vector.h"
 
 #if ALSOFT_EAX
-enum class EaxStorage : uint8_t {
+enum class EaxStorage : u8::value_t {
     Automatic,
     Accessible,
     Hardware
 };
 #endif // ALSOFT_EAX
 
+namespace al {
 
-struct ALbuffer : public BufferStorage {
-    ALbitfieldSOFT Access{0u};
+struct Context;
 
-    al::vector<std::byte,16> mDataStorage;
+struct Buffer : BufferStorage {
+    ALbitfieldSOFT mAccess{0u};
 
-    ALuint OriginalSize{0};
+    std::variant<al::vector<u8, 16>,
+        al::vector<i16, 16>,
+        al::vector<i32, 16>,
+        al::vector<f32, 16>,
+        al::vector<f64, 16>,
+        al::vector<MulawSample, 16>,
+        al::vector<AlawSample, 16>,
+        al::vector<IMA4Data, 16>,
+        al::vector<MSADPCMData, 16>> mDataStorage;
 
-    ALuint UnpackAlign{0};
-    ALuint PackAlign{0};
-    ALuint UnpackAmbiOrder{1};
+    ALuint mOriginalSize{0u};
 
-    ALbitfieldSOFT MappedAccess{0u};
-    ALsizei MappedOffset{0};
-    ALsizei MappedSize{0};
+    ALuint mUnpackAlign{0u};
+    ALuint mPackAlign{0u};
+    ALuint mUnpackAmbiOrder{1u};
+
+    ALuint mMappedAccess{0u};
+    ALint mMappedOffset{0};
+    ALint mMappedSize{0};
 
     ALuint mLoopStart{0u};
     ALuint mLoopEnd{0u};
 
-    /* Number of times buffer was attached to a source (deletion can only occur when 0) */
-    std::atomic<ALuint> ref{0u};
+    std::atomic<ALuint> mRef{0u};
 
     /* Self ID */
-    ALuint id{0};
+    ALuint mId{0u};
 
-    static void SetName(ALCcontext *context, ALuint id, std::string_view name);
+    auto inc_ref() noexcept { return mRef.fetch_add(1, std::memory_order_acq_rel)+1; }
+    auto dec_ref() noexcept { return mRef.fetch_sub(1, std::memory_order_acq_rel)-1; }
+    auto newReference() noexcept
+    {
+        mRef.fetch_add(1, std::memory_order_acq_rel);
+        return al::intrusive_ptr{this};
+    }
+
+    static void SetName(gsl::not_null<al::Context*> context, ALuint id, std::string_view name);
 
     DISABLE_ALLOC
 
 #if ALSOFT_EAX
-    EaxStorage eax_x_ram_mode{EaxStorage::Automatic};
-    bool eax_x_ram_is_hardware{};
+    EaxStorage mEaxXRamMode{EaxStorage::Automatic};
+    bool mEaxXRamIsHardware{};
 #endif // ALSOFT_EAX
 };
 
+} /* namespace al */
+
 struct BufferSubList {
-    uint64_t FreeMask{~0_u64};
-    gsl::owner<std::array<ALbuffer,64>*> Buffers{nullptr};
+    u64 mFreeMask{~0_u64};
+    gsl::owner<std::array<al::Buffer,64>*> mBuffers{nullptr};
 
     BufferSubList() noexcept = default;
     BufferSubList(const BufferSubList&) = delete;
-    BufferSubList(BufferSubList&& rhs) noexcept : FreeMask{rhs.FreeMask}, Buffers{rhs.Buffers}
-    { rhs.FreeMask = ~0_u64; rhs.Buffers = nullptr; }
+    BufferSubList(BufferSubList&& rhs) noexcept : mFreeMask{rhs.mFreeMask}, mBuffers{rhs.mBuffers}
+    { rhs.mFreeMask = ~0_u64; rhs.mBuffers = nullptr; }
     ~BufferSubList();
 
     BufferSubList& operator=(const BufferSubList&) = delete;
     BufferSubList& operator=(BufferSubList&& rhs) noexcept
-    { std::swap(FreeMask, rhs.FreeMask); std::swap(Buffers, rhs.Buffers); return *this; }
+    { std::swap(mFreeMask, rhs.mFreeMask); std::swap(mBuffers, rhs.mBuffers); return *this; }
 };
 
 #endif

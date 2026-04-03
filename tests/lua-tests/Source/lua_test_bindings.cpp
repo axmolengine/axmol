@@ -171,8 +171,8 @@ bool DrawNode3D::init()
         desc.addAttrib(iter->first, &iter->second, rhi::VertexFormat::UBYTE4, sizeof(Vec3), true);
     }
     desc.endLayout();
-    _vertexLayout = axvlm->acquireVertexLayout(std::move(desc));
 
+    Object::assign(_vertexLayout, axvlm->getVertexLayout(std::move(desc)));
     _customCommand.setWeakPSVL(_programState, _vertexLayout);
 
     _customCommand.createVertexBuffer(sizeof(V3F_C4B), INITIAL_VERTEX_BUFFER_LENGTH,
@@ -676,7 +676,7 @@ int axlua_ValueTypeJudgeInTable_create(lua_State* L)
     if (argc == 1)
     {
         ax::ValueMap arg0;
-        ok &= luaval_to_ccvaluemap(L, 2, &arg0, "ax.ValueTypeJudgeInTable:create");
+        ok &= luaval_to_valuemap(L, 2, &arg0, "ax.ValueTypeJudgeInTable:create");
         if (!ok)
             return 0;
         ax::ValueTypeJudgeInTable* ret = ax::ValueTypeJudgeInTable::create(arg0);

@@ -110,7 +110,7 @@ class Data;
     Properties* spriteTexture = properties->getNamespace("spriteTexture");
 
     // Get the values of known texture properties out of the namespace.
-    const char* fileName = spriteTexture->getString("fileName");
+    std::string_view fileName = spriteTexture->getString("fileName");
     int width = spriteTexture->getInt("width");
     int height = spriteTexture->getInt("height");
 
@@ -127,14 +127,14 @@ class Data;
     void printProperties(Properties* properties)
     {
         // Print the name and ID of the current namespace.
-        const char* spacename = properties->getNamespace();
-        const char* id = properties->getId();
+        std::string_view spacename = properties->getNamespace();
+        std::string_view id = properties->getId();
         GP_WARN("Namespace: %s  ID: %s\n{", spacename, id);
 
         // Print all properties in this namespace.
-        const char* name = properties->getNextProperty();
-        const char* value = NULL;
-        while (name != NULL)
+        std::string_view name = properties->getNextProperty();
+        std::string_view value;
+        while (!name.empty())
         {
             value = properties->getString(name);
             GP_WARN("%s = %s", name, value);
@@ -144,7 +144,7 @@ class Data;
 
         // Print the properties of every namespace within this one.
         Properties* space = properties->getNextNamespace();
-        while (space != NULL)
+        while (space != nullptr)
         {
             printProperties(space);
             space = properties->getNextNamespace();
@@ -159,6 +159,8 @@ class Data;
  */
 class AX_DLL Properties
 {
+    struct InputStreamView;
+
 public:
     /**
      * Data types supported by the properties class.
@@ -198,9 +200,9 @@ public:
      * retrieved using any of the get methods in this class, passing NULL for
      // the property name.
      *
-     * @return The name of the next property, or NULL if there are no properties remaining.
+     * @return The name of the next property, or empty if there are no properties remaining.
      */
-    const char* getNextProperty();
+    std::string_view getNextProperty();
 
     /**
      * Get the next namespace.
@@ -234,7 +236,7 @@ public:
      *
      * @return The name of this Property's namespace.
      */
-    const char* getNamespace() const;
+    std::string_view getNamespace() const;
 
     /**
      * Get the ID of this Property's namespace. The ID should be a unique identifier,
@@ -251,16 +253,16 @@ public:
      *
      * @return True if the property exists, false otherwise.
      */
-    bool exists(const char* name) const;
+    bool exists(std::string_view name) const;
 
     /**
      * Returns the type of a property.
      *
-     * @param name The name of the property to interpret, or NULL to return the current property's type.
+     * @param name The name of the property to interpret, or empty to return the current property's type.
      *
      * @return The type of the property.
      */
-    Type getType(const char* name = NULL) const;
+    Type getType(std::string_view name = ""sv) const;
 
     /**
      * Get the value of the given property as a string. This can always be retrieved,
@@ -271,7 +273,7 @@ public:
      *
      * @return The value of the given property as a string, or the empty string if no property with that name exists.
      */
-    const char* getString(const char* name = NULL, const char* defaultValue = NULL) const;
+    std::string_view getString(std::string_view name = ""sv, std::string_view defaultValue = ""sv) const;
 
     /**
      * Sets the value of the property with the specified name.
@@ -289,18 +291,18 @@ public:
      *
      * @return True if the property was set, false otherwise.
      */
-    bool setString(const char* name, const char* value);
+    bool setString(std::string_view name, std::string_view value);
 
     /**
      * Interpret the value of the given property as a boolean.
      *
-     * @param name The name of the property to interpret, or NULL to return the current property's value.
+     * @param name The name of the property to interpret, or empty to return the current property's value.
      * @param defaultValue the default value to return if the specified property does not exist within the properties
      * file.
      *
      * @return true if the property exists and its value is "true", otherwise false.
      */
-    bool getBool(const char* name = NULL, bool defaultValue = false) const;
+    bool getBool(std::string_view name = ""sv, bool defaultValue = false) const;
 
     /**
      * Interpret the value of the given property as an integer.
@@ -312,7 +314,7 @@ public:
      * @return The value of the given property interpreted as an integer.
      *   Zero if the property does not exist or could not be scanned.
      */
-    int getInt(const char* name = NULL) const;
+    int getInt(std::string_view name = ""sv) const;
 
     /**
      * Interpret the value of the given property as a floating-point number.
@@ -324,7 +326,7 @@ public:
      * @return The value of the given property interpreted as a float.
      *   Zero if the property does not exist or could not be scanned.
      */
-    float getFloat(const char* name = NULL) const;
+    float getFloat(std::string_view name = ""sv) const;
 
     /**
      * Interpret the value of the given property as a Matrix.
@@ -337,7 +339,7 @@ public:
      *
      * @return True on success, false if the property does not exist or could not be scanned.
      */
-    bool getMat4(const char* name, Mat4* out) const;
+    bool getMat4(std::string_view name, Mat4* out) const;
 
     /**
      * Interpret the value of the given property as a Vector2.
@@ -350,7 +352,7 @@ public:
      *
      * @return True on success, false if the property does not exist or could not be scanned.
      */
-    bool getVec2(const char* name, Vec2* out) const;
+    bool getVec2(std::string_view name, Vec2* out) const;
 
     /**
      * Interpret the value of the given property as a Vector3.
@@ -363,7 +365,7 @@ public:
      *
      * @return True on success, false if the property does not exist or could not be scanned.
      */
-    bool getVec3(const char* name, Vec3* out) const;
+    bool getVec3(std::string_view name, Vec3* out) const;
 
     /**
      * Interpret the value of the given property as a Vector4.
@@ -376,7 +378,7 @@ public:
      *
      * @return True on success, false if the property does not exist or could not be scanned.
      */
-    bool getVec4(const char* name, Vec4* out) const;
+    bool getVec4(std::string_view name, Vec4* out) const;
 
     /**
      * Interpret the value of the given property as a Quaternion specified as an axis angle.
@@ -389,7 +391,7 @@ public:
      *
      * @return True on success, false if the property does not exist or could not be scanned.
      */
-    bool getQuaternionFromAxisAngle(const char* name, Quaternion* out) const;
+    bool getQuaternionFromAxisAngle(std::string_view name, Quaternion* out) const;
 
     /**
      * Interpret the value of the given property as an RGBA color in hex and write this color to a Vector4.
@@ -403,7 +405,7 @@ public:
      *
      * @return True on success, false if the property does not exist or could not be scanned.
      */
-    bool getColor(const char* name, Color* out) const;
+    bool getColor(std::string_view name, Color* out) const;
 
     /**
      * Gets the file path for the given property if the file exists.
@@ -418,7 +420,7 @@ public:
      *
      * @script{ignore}
      */
-    bool getPath(const char* name, std::string* path) const;
+    bool getPath(std::string_view name, std::string* path) const;
 
     /**
      * Returns the value of a variable that is set in this Properties object.
@@ -430,7 +432,7 @@ public:
      *
      * @return The value of the specified variable, or defaultValue if not found.
      */
-    const char* getVariable(const char* name, const char* defaultValue = NULL) const;
+    std::string_view getVariable(std::string_view name, std::string_view defaultValue = ""sv) const;
 
     /**
      * Sets the value of the specified variable.
@@ -438,7 +440,7 @@ public:
      * @param name Name of the variable to set.
      * @param value The value to set.
      */
-    void setVariable(const char* name, const char* value);
+    void setVariable(std::string_view name, std::string_view value);
 
     /**
      * Attempts to parse the specified string as a Vector2 value.
@@ -450,7 +452,7 @@ public:
      *
      * @return True if a valid Vector2 was parsed, false otherwise.
      */
-    static bool parseVec2(const char* str, Vec2* out);
+    static bool parseVec2(std::string_view str, Vec2* out);
 
     /**
      * Attempts to parse the specified string as a Vector3 value.
@@ -462,7 +464,7 @@ public:
      *
      * @return True if a valid Vector3 was parsed, false otherwise.
      */
-    static bool parseVec3(const char* str, Vec3* out);
+    static bool parseVec3(std::string_view str, Vec3* out);
 
     /**
      * Attempts to parse the specified string as a Vector4 value.
@@ -474,7 +476,7 @@ public:
      *
      * @return True if a valid Vector4 was parsed, false otherwise.
      */
-    static bool parseVec4(const char* str, Vec4* out);
+    static bool parseVec4(std::string_view str, Vec4* out);
 
     /**
      * Attempts to parse the specified string as an axis-angle value.
@@ -490,7 +492,7 @@ public:
      *
      * @return True if a valid axis-angle was parsed, false otherwise.
      */
-    static bool parseAxisAngle(const char* str, Quaternion* out);
+    static bool parseAxisAngle(std::string_view str, Quaternion* out);
 
     /**
      * Attempts to parse the specified string as an RGBA color value.
@@ -500,7 +502,7 @@ public:
      *
      * @return True if a valid RGBA color was parsed, false otherwise.
      */
-    static bool parseColor(const char* str, Color* out);
+    static bool parseColor(std::string_view str, Color* out);
 
 private:
     /**
@@ -523,27 +525,20 @@ private:
      *
      * @param stream The stream used for reading the properties from file.
      */
-    Properties(Data* data, ssize_t* dataIdx);
+    Properties(InputStreamView* isv);
     Properties(const Properties& copy);
 
     /**
      * Constructor. Read from the beginning of namespace specified.
      */
-    Properties(Data* data,
-               ssize_t* dataIdx,
+    Properties(InputStreamView* context,
                std::string_view name,
-               const char* id,
-               const char* parentID,
+               std::string_view id,
+               std::string_view parentID,
                Properties* parent);
 
     // Data manipulation methods
-    void readProperties();
-    void skipWhiteSpace();
-    char* trimWhiteSpace(char* str);
-    signed char readChar();
-    char* readLine(char* output, int num);
-    bool seekFromCurrent(int offset);
-    bool eof();
+    void readProperties(InputStreamView* isv);
 
     // Called after createNonRefCounted(); copies info from parents into derived namespaces.
     void resolveInheritance(std::string_view id = std::string_view{});
@@ -560,10 +555,6 @@ private:
     /**
      * Reads the next character from the Data. Returns EOF if the end of the Data is reached.
      */
-
-    // XXX: hack in order to simulate GamePlay's Stream with Cocos2d's Data
-    ssize_t* _dataIdx;
-    Data* _data;
 
     std::string _namespace;
     std::string _id;

@@ -107,9 +107,9 @@ bool FileUtilsLinux::init()
         xdgConfigPath = xdg_config_path;
     }
     _writablePath = xdgConfigPath;
-    _writablePath += "/";
+    _writablePath += '/';
     _writablePath += s_exeName;
-    _writablePath += "/";
+    _writablePath += '/';
 
     bool ret = FileUtils::init();
 

@@ -33,7 +33,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUPathFollower : public PUAffector
+class AX_EXT_API PUPathFollower : public PUAffector
 {
 public:
     static PUPathFollower* create();

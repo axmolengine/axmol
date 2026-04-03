@@ -53,7 +53,7 @@ void Texture::zeroTexData()
         auto size    = w * h * _bitsPerPixel / 8;
         assert(size > 0);
 
-        axstd::byte_buffer blackPixels;
+        tlx::byte_buffer blackPixels;
         blackPixels.resize(size, 0);
 
         updateData(blackPixels.data(), w, h, 0, 0);

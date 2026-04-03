@@ -35,65 +35,14 @@
 #include <spine/Extension.h>
 #include <stddef.h>// offsetof
 
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/renderer/Shaders.h"
 #include "xxhash.h"
 
 USING_NS_AX;
-#define EVENT_AFTER_DRAW_RESET_POSITION "director_after_draw"
 #define INITIAL_SIZE (2000)
 #define MAX_VERTICES 64000
 #define MAX_INDICES 64000
-
-namespace {
-
-	static ax::retain_ptr<rhi::ProgramState> __twoColorProgramState;
-    static ax::retain_ptr<rhi::VertexLayout> __twoColorVertexLayout;
-	rhi::UniformLocation __locPMatrix;
-	rhi::UniformLocation __locTexture;
-
-	static void updateProgramStateLayout(ProgramState* programState, rhi::VertexLayout*& layout)
-    {
-		__locPMatrix = programState->getUniformLocation("u_PMatrix");
-		__locTexture = programState->getUniformLocation("u_tex0");
-
-		auto locPosition = programState->getVertexInputDesc("a_position");
-        auto locTexcoord = programState->getVertexInputDesc("a_texCoord");
-        auto locColor    = programState->getVertexInputDesc("a_color");
-        auto locColor2   = programState->getVertexInputDesc("a_color2");
-
-        auto layoutDesc = axvlm->allocateVertexLayoutDesc();
-        layoutDesc.startLayout(4);
-        layoutDesc.addAttrib("a_position", locPosition, rhi::VertexFormat::FLOAT3,
-                                     offsetof(spine::V3F_C4B_C4B_T2F, position), false);
-        layoutDesc.addAttrib("a_color", locColor, rhi::VertexFormat::UBYTE4,
-                                     offsetof(spine::V3F_C4B_C4B_T2F, color), true);
-        layoutDesc.addAttrib("a_color2", locColor2, rhi::VertexFormat::UBYTE4,
-                                     offsetof(spine::V3F_C4B_C4B_T2F, color2), true);
-        layoutDesc.addAttrib("a_texCoord", locTexcoord, rhi::VertexFormat::FLOAT2,
-                                     offsetof(spine::V3F_C4B_C4B_T2F, texCoord), false);
-        layoutDesc.endLayout();
-
-        layout = axvlm->acquireVertexLayout(std::move(layoutDesc));
-	}
-
-	static void initTwoColorProgramState()
-        {
-		if (__twoColorProgramState) {
-			return;
-		}
-		auto program       = ProgramManager::getInstance()->loadProgram("custom/spineTwoColorTint_vs",
-                                                                                      "custom/spineTwoColorTint_fs");
-		auto *programState = new rhi::ProgramState(program);
-
-        rhi::VertexLayout* layout{nullptr};
-        updateProgramStateLayout(programState, layout);
-        __twoColorVertexLayout.reset(layout, axstd::adopt_object);
-
-		__twoColorProgramState.reset(programState, axstd::adopt_object);
-	}
-
-}// namespace
 
 namespace spine {
 
@@ -101,16 +50,14 @@ namespace spine {
 		_type = RenderCommand::Type::CUSTOM_COMMAND;
 	}
 
-	void TwoColorTrianglesCommand::init(float globalOrder, axmol::Texture2D *texture, axmol::rhi::ProgramState *programState, BlendFunc blendType, const TwoColorTriangles &triangles, const Mat4 &mv, uint32_t flags) {
-
-		updateCommandPipelineDescriptor(programState);
-		const axmol::Mat4 &projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-
-		auto finalMatrix = projectionMat * mv;
-
-		_programState->setUniform(_locPMatrix, finalMatrix.m, sizeof(finalMatrix.m));
-		_programState->setTexture(_locTexture, 0, texture->getRHITexture());
-
+	void TwoColorTrianglesCommand::init(float globalOrder,
+                                            axmol::Texture2D* texture,
+                                            axmol::rhi::ProgramState* programState,
+                                            BlendFunc blendType,
+                                            const TwoColorTriangles& triangles,
+                                            const Mat4& mv,
+                                            uint32_t flags)
+        {
 
 		RenderCommand::init(globalOrder, mv, flags);
 
@@ -124,65 +71,25 @@ namespace spine {
 		_mv = mv;
 
 		if (_blendType.src != blendType.src || _blendType.dst != blendType.dst ||
-			_texture != texture->getRHITexture() || _pipelineDesc.programState != _programState) {
+                    _texture != texture->getRHITexture() || _pipelineDesc.programState != programState)
+        {
 			_texture = texture->getRHITexture();
 			_blendType = blendType;
-
-			_prog = _programState->getProgram();
 
 			auto &blendDescriptor = _pipelineDesc.blendDesc;
 			blendDescriptor.blendEnabled = true;
 			blendDescriptor.sourceRGBBlendFactor = blendDescriptor.sourceAlphaBlendFactor = blendType.src;
 			blendDescriptor.destinationRGBBlendFactor = blendDescriptor.destinationAlphaBlendFactor = blendType.dst;
 
-			generateMaterialID();
+			generateMaterialID(programState->getProgram());
 		}
-	}
-
-
-	void TwoColorTrianglesCommand::updateCommandPipelineDescriptor(axmol::rhi::ProgramState *programState) {
-		// OPTIMIZE ME: all commands belong a same Node should share a same programState like SkeletonBatch
-		if (!__twoColorProgramState) {
-			initTwoColorProgramState();
-		}
-
-		bool needsUpdateStateLayout = false;
-		if (programState != nullptr) {
-			if (_programState != programState) {
-				AX_SAFE_RELEASE(_programState);
-				_programState = programState;// Because the programState belong to Node, so no need to clone
-				AX_SAFE_RETAIN(_programState);
-				needsUpdateStateLayout = true;
-			}
-		} else {
-			needsUpdateStateLayout = _programState != nullptr && _programState->getProgram() != __twoColorProgramState->getProgram();
-			AX_SAFE_RELEASE(_programState);
-			_programState = __twoColorProgramState->clone();
-		}
-
-		AXASSERT(_programState, "programState should not be null");
-
-		if (needsUpdateStateLayout) {
-            AX_SAFE_RELEASE_NULL(_vertexLayout);
-			updateProgramStateLayout(_programState, _vertexLayout);
-        }
-        else
-        {
-            Object::assign(_vertexLayout, __twoColorVertexLayout.get());
-        }
-        
-		_locPMatrix = __locPMatrix;
-        _locTexture = __locTexture;
-
-        setWeakPSVL(_programState, _vertexLayout);
 	}
 
 	TwoColorTrianglesCommand::~TwoColorTrianglesCommand() {
-		AX_SAFE_RELEASE_NULL(_programState);
-        AX_SAFE_RELEASE_NULL(_vertexLayout);
 	}
 
-	void TwoColorTrianglesCommand::generateMaterialID() {
+	void TwoColorTrianglesCommand::generateMaterialID(void* prog)
+    {
 		// do not batch if using custom uniforms (since we cannot batch) it
 
 
@@ -202,7 +109,7 @@ namespace spine {
 		hashMe.texture = _texture;
 		hashMe.src = _blendType.src;
 		hashMe.dst = _blendType.dst;
-		hashMe.prog = _prog;
+        hashMe.prog    = prog;
 		_materialID = XXH32((const void *) &hashMe, sizeof(hashMe), 0);
 	}
 
@@ -222,17 +129,21 @@ namespace spine {
 	}
 
 
-	static SkeletonTwoColorBatch *instance = nullptr;
+	static SkeletonTwoColorBatch *s_TwoColorInstance = nullptr;
 
 	SkeletonTwoColorBatch *SkeletonTwoColorBatch::getInstance() {
-		if (!instance) instance = new SkeletonTwoColorBatch();
-		return instance;
+        if (!s_TwoColorInstance)
+        {
+            s_TwoColorInstance = new SkeletonTwoColorBatch();
+        }
+        return s_TwoColorInstance;
 	}
 
 	void SkeletonTwoColorBatch::destroyInstance() {
-		if (instance) {
-			delete instance;
-			instance = nullptr;
+        if (s_TwoColorInstance)
+        {
+            delete s_TwoColorInstance;
+            s_TwoColorInstance = nullptr;
 		}
 	}
 
@@ -244,20 +155,60 @@ namespace spine {
 
 		reset();
 
-		// callback after drawing is finished so we can clear out the batch state
-		// for the next frame
-		Director::getInstance()->getEventDispatcher()->addCustomEventListener(EVENT_AFTER_DRAW_RESET_POSITION, [this](EventCustom *eventCustom) {
-			this->update(0);
-		});
+        auto program          = ProgramManager::getInstance()->loadProgram("custom/spineTwoColorTint_vs",
+                                                                                   "custom/spineTwoColorTint_fs");
+        _twoColorProgramState = new rhi::ProgramState(program);
+
+        _locPMatrix = _twoColorProgramState->getUniformLocation("u_PMatrix");
+        _locTexture = _twoColorProgramState->getUniformLocation("u_tex0");
+
+        auto locPosition = _twoColorProgramState->getVertexInputDesc("a_position");
+        auto locTexcoord = _twoColorProgramState->getVertexInputDesc("a_texCoord");
+        auto locColor    = _twoColorProgramState->getVertexInputDesc("a_color");
+        auto locColor2   = _twoColorProgramState->getVertexInputDesc("a_color2");
+
+        auto layoutDesc = axvlm->allocateVertexLayoutDesc();
+        layoutDesc.startLayout(4);
+        layoutDesc.addAttrib("a_position", locPosition, rhi::VertexFormat::FLOAT3,
+                                offsetof(spine::V3F_C4B_C4B_T2F, position), false);
+        layoutDesc.addAttrib("a_color", locColor, rhi::VertexFormat::UBYTE4,
+                                offsetof(spine::V3F_C4B_C4B_T2F, color), true);
+        layoutDesc.addAttrib("a_color2", locColor2, rhi::VertexFormat::UBYTE4,
+                                offsetof(spine::V3F_C4B_C4B_T2F, color2), true);
+        layoutDesc.addAttrib("a_texCoord", locTexcoord, rhi::VertexFormat::FLOAT2,
+                                offsetof(spine::V3F_C4B_C4B_T2F, texCoord), false);
+        layoutDesc.endLayout();
+
+        Object::assign(_twoColorVertexLayout, axvlm->getVertexLayout(std::move(layoutDesc)));
+
+        auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+
+        // callback after drawing is finished so we can clear out the batch state
+        // for the next frame
+        _event1 = eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_DRAW,
+                                                [](EventCustom*) { s_TwoColorInstance->update(0); });
+
+        _event2 = eventDispatcher->addCustomEventListener(Director::EVENT_DESTROY,
+                                                [](EventCustom*) { SkeletonTwoColorBatch::destroyInstance(); });
 	}
 
 	SkeletonTwoColorBatch::~SkeletonTwoColorBatch() {
-		Director::getInstance()->getEventDispatcher()->removeCustomEventListeners(EVENT_AFTER_DRAW_RESET_POSITION);
+        auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+        eventDispatcher->removeEventListener(_event1);
+        eventDispatcher->removeEventListener(_event2);
+        for (auto& command : _commandsPool)
+        {
+            if (command)
+            {
+                auto pipelinePS = command->unsafePS();
+                assert(!pipelinePS || pipelinePS->getReferenceCount() == 1);
+                delete command;
+            }
+        }
+        _commandsPool.clear();
 
-		for (unsigned int i = 0; i < _commandsPool.size(); i++) {
-			delete _commandsPool[i];
-			_commandsPool[i] = nullptr;
-		}
+        AX_SAFE_RELEASE_NULL(_twoColorProgramState);
+        AX_SAFE_RELEASE_NULL(_twoColorVertexLayout);
 
 		delete[] _vertexBuffer;
 		delete[] _indexBuffer;
@@ -315,8 +266,35 @@ namespace spine {
 	}
 
 	TwoColorTrianglesCommand *SkeletonTwoColorBatch::addCommand(axmol::Renderer *renderer, float globalOrder, axmol::Texture2D *texture, rhi::ProgramState *programState, axmol::BlendFunc blendType, const TwoColorTriangles &triangles, const axmol::Mat4 &mv, uint32_t flags) {
-		TwoColorTrianglesCommand *command = nextFreeCommand();
-		command->init(globalOrder, texture, programState, blendType, triangles, mv, flags);
+        TwoColorTrianglesCommand *command = nextFreeCommand();
+
+        auto pipelinePS = command->unsafePS();
+        if (programState != nullptr)
+        {
+            if (pipelinePS != programState)
+            {
+                Object::assign(pipelinePS, programState); // Node owned the programState, don't need clone
+            }
+        }
+        else
+        {
+            pipelinePS = _twoColorProgramState->clone(); // Unlike other clone methods, this function does not use autorelease
+        }
+
+        AXASSERT(pipelinePS, "programState should not be null");
+
+        const axmol::Mat4& projectionMat =
+        Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+
+        auto finalMatrix = projectionMat * mv;
+
+        pipelinePS->setUniform(_locPMatrix, finalMatrix.m, sizeof(finalMatrix.m));
+        pipelinePS->setTexture(_locTexture, 0, texture->getRHITexture());
+
+		command->init(globalOrder, texture, pipelinePS, blendType, triangles, mv, flags);
+
+        command->setOwnPSVL(pipelinePS, _twoColorVertexLayout, RenderCommand::ADOPT_FLAG_PS);
+
 		command->updateVertexAndIndexBuffer(renderer, triangles.verts, triangles.vertCount, triangles.indices, triangles.indexCount);
 		renderer->addCommand(command);
 		return command;

@@ -44,8 +44,6 @@ struct RootSignatureEntry
     Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSig;
 
     // RootParameter indices
-    UINT vsUboRootIndex   = UINT_MAX;
-    UINT fsUboRootIndex   = UINT_MAX;
     UINT srvRootIndex     = UINT_MAX;
     UINT samplerRootIndex = UINT_MAX;
 };
@@ -78,10 +76,12 @@ public:
         _primitiveGroup                   = primitiveGroup;
     }
 
-    void update(const RenderTarget*, const PipelineDesc& desc) override;
+    void update(const RenderTarget*, const PipelineDesc& desc);
 
     ID3D12PipelineState* getPipelineState() const { return _activePSO.Get(); }
     RootSignatureEntry* getRootSignature() const { return _activeRootSignature; }
+
+    void removeCachedObjects(Program* key);
 
 private:
     void initializePipelineDefaults();
@@ -104,8 +104,10 @@ private:
     RootSignatureEntry* _activeRootSignature{nullptr};
     ComPtr<ID3D12PipelineState> _activePSO;
 
-    axstd::hash_map<uintptr_t, ComPtr<ID3D12PipelineState>> _psoCache;
-    axstd::hash_map<uintptr_t, RootSignatureEntry> _rootSigCache;
+    tlx::hash_map<uintptr_t, ComPtr<ID3D12PipelineState>> _psoCache;
+    tlx::hash_map<uint64_t, RootSignatureEntry> _rootSigCache;
+
+    tlx::hash_map<uint64_t, uintptr_t> _programToPSOMap;
 };
 
 }  // namespace ax::rhi::d3d12

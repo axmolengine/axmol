@@ -10,6 +10,7 @@ on:
       - '**/*.md.in'
       - 'docs/**'
       - '.github/workflows/publish.yml'
+      - '.github/workflows/debian.yml'
       - 'tools/ci/make-pkg.ps1'
   pull_request:
     types: [opened, synchronize, reopened]
@@ -29,6 +30,7 @@ on:
 
 env:
   __1K_CXXSTD: '${{ inputs.cxxstd }}'
+  GH_XCODE_VER: '16.4'
 
 run-name: 'build@c++${{ inputs.cxxstd || 23 }}'
 
@@ -36,7 +38,7 @@ jobs:
   win32-ogl:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - name: Build
       shell: pwsh
       run: |
@@ -48,7 +50,7 @@ jobs:
         ./setup.ps1
         axmol new HelloCpp
         axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build' -O3
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: windows_ogl_x64
         path: |
@@ -56,7 +58,7 @@ jobs:
   win32-d3d11:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - name: Build
       shell: pwsh
       run: |
@@ -67,7 +69,7 @@ jobs:
         ./setup.ps1
         axmol new HelloCpp
         axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build' -O3
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: windows_d3d11_x64
         path: |
@@ -75,7 +77,7 @@ jobs:
   win32-d3d12:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - name: Build
       shell: pwsh
       run: |
@@ -86,7 +88,7 @@ jobs:
         ./setup.ps1
         axmol new HelloCpp
         axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build' -O3
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: windows_d3d12_x64
         path: |
@@ -94,7 +96,7 @@ jobs:
   win32-vk:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - name: Build
       shell: pwsh
       run: |
@@ -105,15 +107,30 @@ jobs:
         ./setup.ps1
         axmol new HelloCpp
         axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build' -O3
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: windows_vk_x64
         path: |
           build/bin/cpp-tests/**/*
+  win32-arm64:
+    runs-on: windows-11-arm
+    steps:
+    - uses: actions/checkout@v6
+    - name: Build
+      shell: pwsh
+      run: |
+        .\tools\cmdline\axmol -p win32 -a arm64 -xc '-DAX_RENDER_API=vk' -O3
+        .\tools\cmdline\axmol run -p win32 -a arm64 -t unit-tests -O3
+    - name: Check prebuilt workflow
+      shell: pwsh
+      run: |
+        ./setup.ps1
+        axmol new HelloCpp
+        axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build' -O3
   winuwp-ogl:
         runs-on: windows-latest
         steps:
-        - uses: actions/checkout@v5
+        - uses: actions/checkout@v6
 
         - name: Build
           shell: pwsh
@@ -121,15 +138,23 @@ jobs:
   winuwp-d3d11:
         runs-on: windows-latest
         steps:
-        - uses: actions/checkout@v5
+        - uses: actions/checkout@v6
 
         - name: Build
           shell: pwsh
           run: .\tools\cmdline\axmol -p winuwp -a x64 -O3 -xc '-DAX_RENDER_API=d3d11'
+  winuwp-d3d12:
+        runs-on: windows-latest
+        steps:
+        - uses: actions/checkout@v6
+
+        - name: Build
+          shell: pwsh
+          run: .\tools\cmdline\axmol -p winuwp -a x64 -O3 -xc '-DAX_RENDER_API=d3d12'
   win32-clang-ogl:
         runs-on: windows-latest
         steps:
-        - uses: actions/checkout@v5
+        - uses: actions/checkout@v6
 
         - name: Build
           shell: pwsh
@@ -137,14 +162,14 @@ jobs:
   win32-dll-ogl:
         runs-on: windows-latest
         steps:
-        - uses: actions/checkout@v5
+        - uses: actions/checkout@v6
         - name: Build
           shell: pwsh
           run: .\tools\cmdline\axmol -p win32 -a x64 -dll
-  linux:
+  linux-ogl:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - name: Install dependencies
       run: |
@@ -157,7 +182,7 @@ jobs:
   linux-vk:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - name: Install dependencies
       run: |
@@ -167,19 +192,38 @@ jobs:
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p linux -a x64 -t 'cpp-tests,lua-tests' -xc '-DAX_RENDER_API=vk'
-  osx-arm64:
-    runs-on: macos-latest
+  linux-arm64:
+    runs-on: ubuntu-24.04-arm
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
+    - name: Install dependencies
+      run: |
+        AX_ROOT=`pwd`
+        echo -e "y" | pwsh $AX_ROOT/setup.ps1
+
+    - name: Build
+      shell: pwsh
+      run: ./tools/cmdline/axmol -p linux -a arm64 -t 'cpp-tests,lua-tests' && ./tools/cmdline/axmol run -p linux -a arm64 -t unit-tests -wait
+  osx-arm64:
+    runs-on: macos-15
+    steps:
+    - uses: actions/checkout@v6
+    - uses: maxim-lobanov/setup-xcode@v1
+      id: setup-xcode
+      with:
+        xcode-version: '${{ env.GH_XCODE_VER }}'
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p osx -a arm64 && ./tools/cmdline/axmol run -p osx -a arm64 -t unit-tests
   osx-x64:
-    runs-on: macos-latest
+    runs-on: macos-15-intel
     steps:
-    - uses: actions/checkout@v5
-
+    - uses: actions/checkout@v6
+    - uses: maxim-lobanov/setup-xcode@v1
+      id: setup-xcode
+      with:
+        xcode-version: '${{ env.GH_XCODE_VER }}'
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p osx -a x64
@@ -195,37 +239,21 @@ jobs:
     env:
       BUILD_ARCH: ${{ matrix.arch }}
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - name: Build
       shell: pwsh
       run: |
         $AX_ROOT = $(Get-Location).Path
-        ./tools/cmdline/axmol -p android -a $env:BUILD_ARCH
-    - uses: actions/upload-artifact@v4
+        ./tools/cmdline/axmol -p android -a $env:BUILD_ARCH -xc "-DAX_RENDER_API=vk;gl"
+    - uses: actions/upload-artifact@v6
       with:
         name: android_${{ matrix.arch }}
         path: |
           templates/**/*.apk
           tests/**/*.apk
-  android-vk:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v5
-
-    - name: Build
-      shell: pwsh
-      run: |
-        $AX_ROOT = $(Get-Location).Path
-        ./tools/cmdline/axmol -p android -a arm64 -xc '-DAX_RENDER_API=vk'
-    - uses: actions/upload-artifact@v4
-      with:
-        name: android_arm64_vk
-        path: |
-          templates/**/*.apk
-          tests/**/*.apk
-  ios:
-    runs-on: macos-latest
+  ios-sim-x64:
+    runs-on: macos-15
     strategy:
       matrix:
         target_os:
@@ -234,35 +262,50 @@ jobs:
     env:
       TARGET_OS: ${{ matrix.target_os }}
     steps:
-    - uses: actions/checkout@v5
-
+    - uses: actions/checkout@v6
+    - uses: maxim-lobanov/setup-xcode@v1
+      id: setup-xcode
+      with:
+        xcode-version: '${{ env.GH_XCODE_VER }}'
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p $env:TARGET_OS -a 'x64'
+  ios-sim-arm64:
+    runs-on: macos-15
+    strategy:
+      matrix:
+        target_os:
+          - ios
+          - tvos
+    env:
+      TARGET_OS: ${{ matrix.target_os }}
+    steps:
+    - uses: actions/checkout@v6
+    - uses: maxim-lobanov/setup-xcode@v1
+      id: setup-xcode
+      with:
+        xcode-version: '${{ env.GH_XCODE_VER }}'
+    - name: Build
+      shell: pwsh
+      # axmol cmdline can't guess ios arm64 as simulator, so need specify by option '-sdk'
+      run: ./tools/cmdline/axmol -p $env:TARGET_OS -a 'arm64' -sdk 'simulator'
   wasm:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p wasm -O3 -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON,-DAX_WASM_THREADS=8,-DAX_ENABLE_VR=ON' -j2 -t 'cpp-tests,fairygui-tests,lua-tests'
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: wasm
         path: build_wasm/bin/**/*
         if-no-files-found: error
-    - name: Repository Dispatch
-      if: ${{ github.repository == 'axmolengine/axmol' && github.event_name != 'pull_request' }}
-      uses: peter-evans/repository-dispatch@v3
-      with:
-        token: ${{ secrets.AX_TRIGGER_SITE_TOKEN }}
-        repository: axmolengine/axmol.dev
-        event-type: forward-push
   wasm64:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - name: Build
       shell: pwsh

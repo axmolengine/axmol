@@ -32,7 +32,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUBaseForceAffector : public PUAffector
+class AX_EXT_API PUBaseForceAffector : public PUAffector
 {
 public:
     enum ForceApplication

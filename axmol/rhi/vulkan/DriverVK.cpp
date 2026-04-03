@@ -31,8 +31,10 @@
 #include "axmol/rhi/vulkan/RenderPipelineVK.h"
 #include "axmol/rhi/vulkan/DepthStencilStateVK.h"
 #include "axmol/rhi/vulkan/VertexLayoutVK.h"
+#include "axmol/rhi/vulkan/UtilsVK.h"
+#include "axmol/rhi/DriverFactory.h"
 #include "axmol/rhi/RHIUtils.h"
-
+#include "axmol/tlx/hash.hpp"
 #include "axmol/base/Logging.h"
 
 #include <algorithm>
@@ -41,20 +43,9 @@
 
 namespace ax::rhi
 {
-DriverBase* DriverBase::getInstance()
+std::unique_ptr<DriverBase> VulkanDriverFactory::create()
 {
-    if (!_instance)
-    {
-        _instance = new vk::DriverImpl();
-        static_cast<vk::DriverImpl*>(_instance)->init();
-    }
-
-    return _instance;
-}
-
-void DriverBase::destroyInstance()
-{
-    AX_SAFE_DELETE(_instance);
+    return std::make_unique<vk::DriverImpl>();
 }
 }  // namespace ax::rhi
 
@@ -104,7 +95,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL vkDebugCallback(VkDebugUtilsMessageSeverit
     return VK_FALSE;
 }
 
-static std::pair<VkPhysicalDevice, uint32_t> resolveAdapter(const axstd::pod_vector<VkPhysicalDevice>& devices,
+static std::pair<VkPhysicalDevice, uint32_t> resolveAdapter(const tlx::pod_vector<VkPhysicalDevice>& devices,
                                                             VkInstance instance,
                                                             PowerPreference pref)
 {
@@ -208,7 +199,7 @@ DriverImpl::~DriverImpl()
 {
     AX_SAFE_RELEASE_NULL(_currentRenderContext);
 
-    cleanPendingResources();
+    destroyStaleResources();
 
     if (_commandPool)
     {
@@ -220,19 +211,33 @@ DriverImpl::~DriverImpl()
         vkDestroySurfaceKHR(_factory, _surface, nullptr);
     if (_debugMessenger)
         vkDestroyDebugUtilsMessengerEXT(_factory, _debugMessenger, nullptr);
+    if (_vmaAllocator)
+        vmaDestroyAllocator(_vmaAllocator);
     if (_device)
         vkDestroyDevice(_device, nullptr);
     if (_factory)
         vkDestroyInstance(_factory, nullptr);
 }
 
-void DriverImpl::init()
+bool DriverImpl::init()
 {
     // Load basic Vulkan functions without instance/device
-    gladLoaderLoadVulkan(nullptr, nullptr, nullptr);
+    auto gladVulkanVer = gladLoaderLoadVulkan(nullptr, nullptr, nullptr);
+    AXLOGI("axmol: vulkan gladVulkanVer: {}.{}", GLAD_VERSION_MAJOR(gladVulkanVer), GLAD_VERSION_MINOR(gladVulkanVer));
 
-    initializeFactory();
-    initializeDevice();
+    VK_VERIFY_EXPR(gladVulkanVer != 0, "Vulkan is not supported on this device!");
+
+    if (GLAD_VERSION_MAJOR(gladVulkanVer) < 1 || GLAD_VERSION_MINOR(gladVulkanVer) < 1)
+    {
+        AXLOGW("Axmol requires vulkan-1.1");
+        return false;
+    }
+
+    if (!initializeFactory())
+        return false;
+
+    if (!initializeDevice())
+        return false;
 
     // Load remaining Vulkan functions with instance/device
     gladLoaderLoadVulkan(_factory, _physical, _device);
@@ -245,36 +250,43 @@ void DriverImpl::init()
         }
     }
 
-    // Query device properties and capabilities
-    VkPhysicalDeviceProperties props{};
-    vkGetPhysicalDeviceProperties(_physical, &props);
+    // Vma allocator
+    VmaAllocatorCreateInfo allocatorCreateInfo = {};
+    allocatorCreateInfo.flags                  = VMA_ALLOCATOR_CREATE_EXT_MEMORY_BUDGET_BIT;
+    allocatorCreateInfo.vulkanApiVersion       = _apiVersion;
+    allocatorCreateInfo.physicalDevice         = _physical;
+    allocatorCreateInfo.device                 = _device;
+    allocatorCreateInfo.instance               = _factory;
+    allocatorCreateInfo.pVulkanFunctions       = nullptr;
 
-    _vendor   = RHIUtils::vendorToString(props.vendorID);
-    _renderer = props.deviceName;
-    _version  = fmt::format("Vulkan-{}.{}.{}", VK_VERSION_MAJOR(props.apiVersion), VK_VERSION_MINOR(props.apiVersion),
-                            VK_VERSION_PATCH(props.apiVersion));
-    _shaderVersion = "SPIR-V 1.x";
+    if (_vkCaps.memoryPrioritySupported)
+        allocatorCreateInfo.flags |= VMA_ALLOCATOR_CREATE_EXT_MEMORY_PRIORITY_BIT;
+    VK_VERIFY(vmaCreateAllocator(&allocatorCreateInfo, &_vmaAllocator), "vmaCreateAllocator fail");
 
-    _caps.maxAttributes     = static_cast<int32_t>(MAX_VERTEX_ATTRIBS);  // pipeline-defined
-    _caps.maxTextureUnits   = 32;  // conservative default; descriptor count varies per layout
-    _caps.maxTextureSize    = static_cast<int32_t>(props.limits.maxImageDimension2D);
-    _caps.maxSamplesAllowed = static_cast<int32_t>(props.limits.framebufferColorSampleCounts);
+    return true;
 }
 
-void DriverImpl::initializeFactory()
+bool DriverImpl::initializeFactory()
 {
     auto& contextAttrs = Application::getContextAttrs();
 
-    VkApplicationInfo appInfo{};
-    appInfo.sType              = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    appInfo.pApplicationName   = "Axmol";
-    appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-    appInfo.pEngineName        = "Axmol3";
-    appInfo.engineVersion      = VK_MAKE_VERSION(1, 0, 0);
-    appInfo.apiVersion         = VK_API_VERSION_1_3;  // axmol requires vulkan-1.3
+    // vkEnumerateInstanceVersion is available since Vulkan 1.1; while Axmol can initialize on Android 7/8 devices
+    // limited to Vulkan 1.0, that version is known to be buggy. For maximum compatibility, GLES is recommended
+    // until dynamic RHI support is available.
+    _apiVersion = vkEnumerateInstanceVersion ? VK_API_VERSION_1_1 : VK_API_VERSION_1_0;
+
+    constexpr auto engineVersion = VK_MAKE_VERSION(AX_VERSION_MAJOR, AX_VERSION_MINOR, AX_VERSION_PATCH);
+    VkApplicationInfo appInfo{
+        .sType              = VK_STRUCTURE_TYPE_APPLICATION_INFO,
+        .pApplicationName   = "Axmol3",
+        .applicationVersion = engineVersion,
+        .pEngineName        = "Axmol3",
+        .engineVersion      = engineVersion,
+        .apiVersion         = _apiVersion,
+    };
 
     // Collect required extensions
-    axstd::pod_vector<const char*> extensions;
+    tlx::pod_vector<const char*> extensions;
     extensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
@@ -291,7 +303,7 @@ void DriverImpl::initializeFactory()
     else
     {
         AXLOGE("Unsupported window platform: neither WAYLAND_DISPLAY nor DISPLAY found");
-        assert(false);
+        return false;
     }
 #endif
 
@@ -330,67 +342,152 @@ void DriverImpl::initializeFactory()
 
     // Instance layers/extensions are platform-dependent; keep minimal for core init
     VkResult vr = vkCreateInstance(&createInfo, nullptr, &_factory);
-    AXASSERT(vr == VK_SUCCESS && _factory != VK_NULL_HANDLE, "vkCreateInstance failed");
+    VK_VERIFY(vr, "vkCreateInstance failed");
+
+    return true;
 }
 
-void DriverImpl::initializeDevice()
+bool DriverImpl::initializeDevice()
 {
     auto& contextAttrs = Application::getContextAttrs();
 
-    // Select a physical device
+    // Enumerate physical devices
     uint32_t count = 0;
     vkEnumeratePhysicalDevices(_factory, &count, nullptr);
-    AXASSERT(count > 0, "No Vulkan physical devices found");
+    VK_VERIFY_EXPR(count > 0, "No Vulkan physical devices found");
 
-    axstd::pod_vector<VkPhysicalDevice> devices(count);
+    tlx::pod_vector<VkPhysicalDevice> devices(count);
     vkEnumeratePhysicalDevices(_factory, &count, devices.data());
 
     auto [physical, graphicsQueueFamily] = resolveAdapter(devices, _factory, contextAttrs.powerPreference);
-    AXASSERT(physical != VK_NULL_HANDLE && graphicsQueueFamily != UINT32_MAX, "No available GPU");
+    VK_VERIFY_EXPR(physical != VK_NULL_HANDLE && graphicsQueueFamily != UINT32_MAX, "No available GPU");
     _physical            = physical;
     _graphicsQueueFamily = graphicsQueueFamily;
 
-    // validate dynamicPrimitiveTopologyUnrestricted supported
-    // FIXME: if dynamicPrimitiveTopologyUnrestricted, fallback to baked InputAssemblyState?
-    VkPhysicalDeviceExtendedDynamicState3PropertiesEXT dynState3Props{
-        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_3_PROPERTIES_EXT};
+    // Enumerate available device extensions
+    uint32_t extCount = 0;
+    vkEnumerateDeviceExtensionProperties(_physical, nullptr, &extCount, nullptr);
+    std::vector<VkExtensionProperties> availableExts(extCount);
+    vkEnumerateDeviceExtensionProperties(_physical, nullptr, &extCount, availableExts.data());
 
-    VkPhysicalDeviceProperties2 props2{.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2,
-                                       .pNext = &dynState3Props};
+    _supportedExtensions.reserve(availableExts.size());
 
-    vkGetPhysicalDeviceProperties2(_physical, &props2);
-    AXLOGI("axmol: vulkan dynamicPrimitiveTopologyUnrestricted={}",
-           dynState3Props.dynamicPrimitiveTopologyUnrestricted);
-
-    /*
-     * https://vulkan.lunarg.com/doc/view/1.4.328.1/windows/antora/spec/latest/chapters/drawing.html#VUID-vkCmdDraw-dynamicPrimitiveTopologyUnrestricted-07500
-     */
-    axstd::pod_vector<const char*> deviceExtensions;
-    deviceExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
-    deviceExtensions.push_back(VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME);
-
-    // enable extended dynamic state
-    VkPhysicalDeviceExtendedDynamicStateFeaturesEXT extDynState{
-        .sType                = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_FEATURES_EXT,
-        .extendedDynamicState = VK_TRUE};
-
-    VkPhysicalDeviceExtendedDynamicState2FeaturesEXT extDynState2{
-        .sType                 = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT,
-        .extendedDynamicState2 = VK_TRUE};
-
-    VkPhysicalDeviceExtendedDynamicState3FeaturesEXT extDynState3{
-        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_3_FEATURES_EXT};
-
-    // Chain features
-    if (dynState3Props.dynamicPrimitiveTopologyUnrestricted)
+    AXLOGI("axmol: available device extensions:");
+    for (auto& ext : availableExts)
     {
-        extDynState.pNext  = &extDynState2;
-        extDynState2.pNext = &extDynState3;
-        deviceExtensions.push_back(VK_EXT_EXTENDED_DYNAMIC_STATE_2_EXTENSION_NAME);
-        deviceExtensions.push_back(VK_EXT_EXTENDED_DYNAMIC_STATE_3_EXTENSION_NAME);
+        AXLOGI("    {}", ext.extensionName);
+        const auto key = tlx::hash32_str(ext.extensionName);
+        _supportedExtensions.insert(key);
     }
 
-    // queue create info
+    // Helper to require extension and log availability
+    tlx::pod_vector<const char*> deviceExtensions;
+
+    // Always require swapchain
+    VK_VERIFY_EXPR(hasExtension(VK_KHR_SWAPCHAIN_EXTENSION_NAME), "VK_KHR_swapchain extension is required");
+    deviceExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+
+    // Android device not support extended dynamic state
+    if (hasExtension(VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME))
+    {
+        _vkCaps.extendedDynamicStateSupported = true;
+        deviceExtensions.push_back(VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME);
+        AXLOGI("axmol: VK_EXT_extended_dynamic_state extension supported");
+    }
+    else
+    {
+        AXLOGW("axmol: VK_EXT_extended_dynamic_state extension not supported, fallback to baked InputAssemblyState");
+    }
+
+    if (hasExtension(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME))
+    {
+        _vkCaps.memoryPrioritySupported = true;
+        deviceExtensions.push_back(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME);
+        AXLOGI("axmol: VK_EXT_memory_priority extension supported");
+    }
+
+    // Query device properties and capabilities
+    VkPhysicalDeviceProperties props{};
+    vkGetPhysicalDeviceProperties(_physical, &props);
+
+    _vendor        = RHIUtils::vendorToString(props.vendorID);
+    _renderer      = props.deviceName;
+    _version       = fmt::format("Vulkan-{}.{}.{}", VK_API_VERSION_MAJOR(props.apiVersion),
+                                 VK_API_VERSION_MINOR(props.apiVersion), VK_API_VERSION_PATCH(props.apiVersion));
+    _shaderVersion = "SPIR-V 1.x";
+
+    _caps.maxAttributes     = static_cast<int32_t>(MAX_VERTEX_ATTRIBS);  // pipeline-defined
+    _caps.maxTextureUnits   = 32;  // conservative default; descriptor count varies per layout
+    _caps.maxTextureSize    = static_cast<int32_t>(props.limits.maxImageDimension2D);
+    _caps.maxSamplesAllowed = static_cast<int32_t>(props.limits.framebufferColorSampleCounts);
+
+    // Query device properties
+    VkPhysicalDeviceProperties2 props2{};
+    props2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+    // Optional: query extended dynamic state 3 properties only if extension is supported
+    VkPhysicalDeviceExtendedDynamicState3PropertiesEXT dynState3Props{};
+    if (hasExtension(VK_EXT_EXTENDED_DYNAMIC_STATE_3_EXTENSION_NAME))
+    {
+        dynState3Props.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_3_PROPERTIES_EXT;
+        props2.pNext         = &dynState3Props;
+    }
+
+    // Choose correct function pointer
+    if (VK_VERSION_MAJOR(props.apiVersion) > 1 ||
+        (VK_VERSION_MAJOR(props.apiVersion) == 1 && VK_VERSION_MINOR(props.apiVersion) >= 1))
+    {
+        // Vulkan 1.1+, core function
+        vkGetPhysicalDeviceProperties2(_physical, &props2);
+    }
+    else if (hasExtension(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
+    {
+        // Vulkan 1.0 + extension
+        vkGetPhysicalDeviceProperties2KHR(_physical, &props2);
+    }
+    else
+    {
+        // Fallback: Vulkan 1.0 without extension -> only vkGetPhysicalDeviceProperties available
+        props2.properties = props;  // copy into props2 for consistency
+    }
+
+    AXLOGI("axmol: Vulkan device={}, driverVersion={}.{}", props2.properties.deviceName,
+           VK_VERSION_MAJOR(props2.properties.driverVersion), VK_VERSION_MINOR(props2.properties.driverVersion));
+
+    // Prepare feature chain for extended dynamic state
+    VkPhysicalDeviceExtendedDynamicStateFeaturesEXT extDynState{};
+    extDynState.sType                = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_FEATURES_EXT;
+    extDynState.extendedDynamicState = VK_TRUE;
+
+    VkPhysicalDeviceExtendedDynamicState2FeaturesEXT extDynState2{};
+    VkPhysicalDeviceExtendedDynamicState3FeaturesEXT extDynState3{};
+
+    // Enable extended dynamic state chain only if extensions are supported
+    if (dynState3Props.dynamicPrimitiveTopologyUnrestricted &&
+        hasExtension(VK_EXT_EXTENDED_DYNAMIC_STATE_2_EXTENSION_NAME) &&
+        hasExtension(VK_EXT_EXTENDED_DYNAMIC_STATE_3_EXTENSION_NAME))
+    {
+        deviceExtensions.push_back(VK_EXT_EXTENDED_DYNAMIC_STATE_2_EXTENSION_NAME);
+        deviceExtensions.push_back(VK_EXT_EXTENDED_DYNAMIC_STATE_3_EXTENSION_NAME);
+
+        _vkCaps.dynamicPrimitiveTopologyUnrestricted = true;
+
+        extDynState2.sType                 = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT;
+        extDynState2.extendedDynamicState2 = VK_TRUE;
+        extDynState.pNext                  = &extDynState2;
+
+        extDynState3.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_3_FEATURES_EXT;
+        extDynState2.pNext = &extDynState3;
+
+        AXLOGI("axmol: Extended Dynamic State 2/3 enabled");
+    }
+    else
+    {
+        AXLOGW(
+            "axmol: dynamicPrimitiveTopologyUnrestricted not supported or extensions missing, fallback to baked "
+            "InputAssemblyState");
+    }
+
+    // Queue creation info
     float priority = 1.0f;
     VkDeviceQueueCreateInfo qinfo{};
     qinfo.sType            = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
@@ -398,6 +495,7 @@ void DriverImpl::initializeDevice()
     qinfo.queueCount       = 1;
     qinfo.pQueuePriorities = &priority;
 
+    // Device creation info
     VkDeviceCreateInfo dinfo{};
     dinfo.sType                   = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     dinfo.queueCreateInfoCount    = 1;
@@ -406,32 +504,36 @@ void DriverImpl::initializeDevice()
     dinfo.enabledExtensionCount   = deviceExtensions.size();
     dinfo.ppEnabledExtensionNames = deviceExtensions.data();
 
-    // device features
+    // Query device features
     VkPhysicalDeviceFeatures deviceFeatures{};
     vkGetPhysicalDeviceFeatures(_physical, &deviceFeatures);
+    AXLOGI("axmol: samplerAnisotropy supported={}", deviceFeatures.samplerAnisotropy);
 
-    bool samplerAnisotropy = deviceFeatures.samplerAnisotropy;
-    if (samplerAnisotropy)
+    if (deviceFeatures.samplerAnisotropy)
     {
+        _vkCaps.samplerAnisotropySupported = true;
         memset(&deviceFeatures, 0, sizeof(deviceFeatures));
         deviceFeatures.samplerAnisotropy = VK_TRUE;
         dinfo.pEnabledFeatures           = &deviceFeatures;
     }
 
+    // Create logical device
     VkResult vr = vkCreateDevice(_physical, &dinfo, nullptr, &_device);
-    AXASSERT(vr == VK_SUCCESS && _device != VK_NULL_HANDLE, "vkCreateDevice failed");
+    VK_VERIFY(vr, "vkCreateDevice failed");
 
     vkGetDeviceQueue(_device, _graphicsQueueFamily, 0, &_graphicsQueue);
-    AXASSERT(_graphicsQueue != VK_NULL_HANDLE, "vkGetDeviceQueue graphics failed");
+    VK_VERIFY_EXPR(_graphicsQueue != VK_NULL_HANDLE, "vkGetDeviceQueue graphics failed");
 
-    // create _transientCommandPool
+    // Create transient command pool
     VkCommandPoolCreateInfo poolInfo{};
     poolInfo.sType            = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     poolInfo.queueFamilyIndex = _graphicsQueueFamily;
     poolInfo.flags            = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT | VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
     vr = vkCreateCommandPool(_device, &poolInfo, nullptr, &_commandPool);
-    AXASSERT(vr == VK_SUCCESS && _commandPool != VK_NULL_HANDLE, "vkCreateCommandPool failed for transient pool");
+    VK_VERIFY(vr, "vkCreateCommandPool failed for transient pool");
+
+    return true;
 }
 
 bool DriverImpl::recreateSurface(const SurfaceCreateInfo& info)
@@ -461,7 +563,7 @@ bool DriverImpl::recreateSurface(const SurfaceCreateInfo& info)
         }
     }
 
-    AXASSERT(_presentQueueFamily != UINT32_MAX, "No present queue family found");
+    VK_REQUIRE_EXPR(_presentQueueFamily != UINT32_MAX, "No present queue family found");
 
     if (_presentQueueFamily == _graphicsQueueFamily)
     {
@@ -470,7 +572,7 @@ bool DriverImpl::recreateSurface(const SurfaceCreateInfo& info)
     else
     {
         vkGetDeviceQueue(_device, _presentQueueFamily, 0, &_presentQueue);
-        AXASSERT(_presentQueue != VK_NULL_HANDLE, "vkGetDeviceQueue present failed");
+        VK_REQUIRE_EXPR(_presentQueue != VK_NULL_HANDLE, "vkGetDeviceQueue present failed");
     }
 
     if (oldSurface)
@@ -479,9 +581,9 @@ bool DriverImpl::recreateSurface(const SurfaceCreateInfo& info)
     return true;
 }
 
-RenderContext* DriverImpl::createRenderContext(void* surfaceContext)
+RenderContext* DriverImpl::createRenderContext(SurfaceHandle surface)
 {
-    auto context = new RenderContextImpl(this, static_cast<VkSurfaceKHR>(surfaceContext));
+    auto context = new RenderContextImpl(this, surface);
     Object::assign(_currentRenderContext, context);
     return context;
 }
@@ -499,9 +601,8 @@ Texture* DriverImpl::createTexture(const TextureDesc& descriptor)
 RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
 {
     auto rt = new RenderTargetImpl(this, false);
-    RenderTarget::ColorAttachment colors{{colorAttachment, 0}};
-    rt->setColorAttachment(colors);
-    rt->setDepthStencilAttachment(depthStencilAttachment);
+    rt->setColorTexture(colorAttachment);
+    rt->setDepthStencilTexture(depthStencilAttachment);
     return rt;
 }
 
@@ -512,23 +613,26 @@ DepthStencilState* DriverImpl::createDepthStencilState()
 
 RenderPipeline* DriverImpl::createRenderPipeline()
 {
-    return new RenderPipelineImpl(_device);
+    return new RenderPipelineImpl(this);
 }
 
-Program* DriverImpl::createProgram(std::string_view vertexShader, std::string_view fragmentShader)
+Program* DriverImpl::createProgram(Data vsData, Data fsData)
 {
-    return new ProgramImpl(vertexShader, fragmentShader);
+    return new ProgramImpl(vsData, fsData);
 }
 
-ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, std::string_view source)
+ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, Data& chunk)
 {
-    return new ShaderModuleImpl(_device, stage, source);
+    return new ShaderModuleImpl(_device, stage, chunk);
 }
 
 SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
 {
     VkSamplerCreateInfo info{};
     info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+
+    if (desc.anisotropy > 0 && !isSamplerAnisotropySupported())
+        return nullptr;
 
     // Filter mapping
     const bool minLinear = ((int)desc.minFilter & (int)SamplerFilter::MIN_LINEAR) != 0;
@@ -588,7 +692,7 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
 
     // Anisotropy
     info.anisotropyEnable = (desc.minFilter == SamplerFilter::MIN_ANISOTROPIC) ? VK_TRUE : VK_FALSE;
-    info.maxAnisotropy    = (desc.anisotropy > 0 ? static_cast<float>(desc.anisotropy) : 1.0f);
+    info.maxAnisotropy    = static_cast<float>(std::clamp(desc.anisotropy + 1u, 1u, 16u));
 
     info.borderColor             = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
     info.unnormalizedCoordinates = VK_FALSE;
@@ -598,16 +702,16 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
 
     VkSampler sampler{};
     VkResult vr = vkCreateSampler(_device, &info, nullptr, &sampler);
-    AXASSERT(vr == VK_SUCCESS, "vkCreateSampler failed");
-    return sampler;
+    VK_REQUIRE(vr, "vkCreateSampler failed");
+    return SamplerHandle(sampler);
 }
 
 void DriverImpl::destroySampler(SamplerHandle& h)
 {  // sampler is cached, so don't need queue
     if (h)
     {
-        vkDestroySampler(_device, (VkSampler)h, nullptr);
-        h = VK_NULL_HANDLE;
+        vkDestroySampler(_device, static_cast<VkSampler>(h), nullptr);
+        h = nullptr;
     }
 }
 
@@ -692,7 +796,7 @@ uint32_t DriverImpl::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags p
         if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties)
             return i;
     }
-    AXASSERT(false, "failed to find suitable memory type!");
+    VK_ABORT("failed to find suitable memory type!");
     return 0;
 }
 
@@ -707,7 +811,7 @@ VkResult DriverImpl::allocateCommandBuffers(VkCommandBuffer* cmds, uint32_t coun
     allocInfo.commandBufferCount = count;
 
     VkResult res = vkAllocateCommandBuffers(_device, &allocInfo, cmds);
-    AXASSERT(res == VK_SUCCESS && *cmds != VK_NULL_HANDLE, "vkAllocateCommandBuffers failed");
+    VK_REQUIRE(res, "vkAllocateCommandBuffers failed");
     return res;
 }
 
@@ -719,8 +823,8 @@ void DriverImpl::freeCommandBuffers(VkCommandBuffer* cmds, uint32_t count)
 
 IsolateSubmission DriverImpl::allocateIsolateSubmission()
 {
-    VkCommandBuffer cmd{nullptr};
-    VkFence fence{nullptr};
+    VkCommandBuffer cmd{VK_NULL_HANDLE};
+    VkFence fence{VK_NULL_HANDLE};
 
     allocateCommandBuffers(&cmd, 1);
 
@@ -728,7 +832,7 @@ IsolateSubmission DriverImpl::allocateIsolateSubmission()
                                           .flags = VK_FENCE_CREATE_SIGNALED_BIT};
 
     auto res = vkCreateFence(_device, &fenceInfo, nullptr, &fence);
-    AXASSERT(res == VK_SUCCESS && cmd != VK_NULL_HANDLE, "vkCreateFence failed");
+    VK_REQUIRE(res, "vkCreateFence failed");
 
     return IsolateSubmission{cmd, fence};
 }
@@ -753,15 +857,15 @@ void DriverImpl::beginRecordingIsolateSubmission(const IsolateSubmission& submis
         vkResetFences(_device, 1, &submission.fence);
 
     auto res = vkBeginCommandBuffer(submission.cmd, &beginInfo);
-    AXASSERT(res == VK_SUCCESS, "vkBeginCommandBuffer failed");
+    VK_REQUIRE(res, "vkBeginCommandBuffer failed");
 }
 
 void DriverImpl::commitIsolateSubmission(const IsolateSubmission& submission)
 {
-    AXASSERT(submission.cmd != VK_NULL_HANDLE, "endSingleTimeCommands called with null cmd");
+    VK_REQUIRE_EXPR(submission.cmd != VK_NULL_HANDLE, "endSingleTimeCommands called with null cmd");
 
     VkResult res = vkEndCommandBuffer(submission.cmd);
-    AXASSERT(res == VK_SUCCESS, "vkEndCommandBuffer failed");
+    VK_REQUIRE(res, "vkEndCommandBuffer failed");
 
     VkSubmitInfo submitInfo{};
     submitInfo.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -769,13 +873,13 @@ void DriverImpl::commitIsolateSubmission(const IsolateSubmission& submission)
     submitInfo.pCommandBuffers    = &submission.cmd;
 
     res = vkQueueSubmit(_graphicsQueue, 1, &submitInfo, submission.fence);
-    AXASSERT(res == VK_SUCCESS, "vkQueueSubmit failed");
+    VK_REQUIRE(res, "vkQueueSubmit failed");
 
     // wait for this fence (only this submission)
     if (submission.fence)
     {
         res = vkWaitForFences(_device, 1, &submission.fence, VK_TRUE, UINT64_MAX);
-        AXASSERT(res == VK_SUCCESS, "vkWaitForFences failed");
+        VK_REQUIRE(res, "vkWaitForFences failed");
     }
 }
 
@@ -784,32 +888,42 @@ void DriverImpl::destroyFramebuffer(VkFramebuffer fb)
     vkDestroyFramebuffer(_device, fb, nullptr);
 }
 
-void DriverImpl::destroyRenderPass(VkRenderPass rp)
+void DriverImpl::destroyRenderPass(VkRenderPass key)
 {
-    vkDestroyRenderPass(_device, rp, nullptr);
     if (_currentRenderContext)
-        _currentRenderContext->removeCachedPipelines(rp);
+        _currentRenderContext->removeCachedPipelineObjects(key);
+    vkDestroyRenderPass(_device, key, nullptr);
 }
 
-void DriverImpl::queueDisposal(VkSampler sampler, uint64_t fenceValue)
+void DriverImpl::removeCachedPipelineObjects(Program* key)
+{
+    if (_currentRenderContext)
+        _currentRenderContext->removeCachedPipelineObjects(key);
+}
+
+void DriverImpl::disposeSampler(VkSampler sampler, uint64_t fenceValue)
 {
     queueDisposalInternal({.type = DisposableResource::Type::Sampler, .sampler = sampler, .fenceValue = fenceValue});
 }
-void DriverImpl::queueDisposal(VkImage image, uint64_t fenceValue)
+
+void DriverImpl::disposeImage(VkImage image, uint64_t fenceValue)
 {
     queueDisposalInternal({.type = DisposableResource::Type::Image, .image = image, .fenceValue = fenceValue});
 }
-void DriverImpl::queueDisposal(VkImageView view, uint64_t fenceValue)
+
+void DriverImpl::disposeImageView(VkImageView view, uint64_t fenceValue)
 {
     queueDisposalInternal({.type = DisposableResource::Type::ImageView, .view = view, .fenceValue = fenceValue});
 }
-void DriverImpl::queueDisposal(VkBuffer buffer, uint64_t fenceValue)
+
+void DriverImpl::disposeBuffer(VkBuffer buffer, uint64_t fenceValue)
 {
     queueDisposalInternal({.type = DisposableResource::Type::Buffer, .buffer = buffer, .fenceValue = fenceValue});
 }
-void DriverImpl::queueDisposal(VkDeviceMemory memory, uint64_t fenceValue)
+
+void DriverImpl::disposeVmaMemory(VmaAllocation memory, uint64_t fenceValue)
 {
-    queueDisposalInternal({.type = DisposableResource::Type::Memory, .memory = memory, .fenceValue = fenceValue});
+    queueDisposalInternal({.type = DisposableResource::Type::VmaMemory, .vmaMemory = memory, .fenceValue = fenceValue});
 }
 
 void DriverImpl::queueDisposalInternal(DisposableResource&& disposal)
@@ -824,7 +938,7 @@ void DriverImpl::processDisposalQueue(uint64_t completedFenceValue)
         for (size_t i = 0; i < _disposalQueue.size();)
         {
             auto& res = _disposalQueue[i];
-            if ((res.fenceValue <= completedFenceValue) != 0)
+            if ((res.fenceValue <= completedFenceValue))
             {
                 switch (res.type)
                 {
@@ -837,11 +951,11 @@ void DriverImpl::processDisposalQueue(uint64_t completedFenceValue)
                 case DisposableResource::Type::Buffer:
                     vkDestroyBuffer(_device, res.buffer, nullptr);
                     break;
-                case DisposableResource::Type::Memory:
-                    vkFreeMemory(_device, res.memory, nullptr);
-                    break;
                 case DisposableResource::Type::Sampler:
                     vkDestroySampler(_device, res.sampler, nullptr);
+                    break;
+                case DisposableResource::Type::VmaMemory:
+                    vmaFreeMemory(_vmaAllocator, res.vmaMemory);
                     break;
                 }
 
@@ -856,7 +970,7 @@ void DriverImpl::processDisposalQueue(uint64_t completedFenceValue)
     }
 }
 
-void DriverImpl::cleanPendingResources()
+void DriverImpl::destroyStaleResources()
 {
     if (!_disposalQueue.empty())
     {
@@ -865,73 +979,10 @@ void DriverImpl::cleanPendingResources()
     }
 }
 
-// Rebuild swapchain attachments from a swapchain image handle.
-// Note: swapchainImage must be a VkImage (provided as void* to keep signature parity).
-void DriverImpl::rebuildSwapchainAttachments(const axstd::pod_vector<VkImage>& images,
-                                             const axstd::pod_vector<VkImageView>& imageViews,
-                                             const VkExtent2D& extent,
-                                             PixelFormat imagePF)
+bool DriverImpl::hasExtension(std::string_view extName) const
 {
-    // Destroy previous attachments
-    destroySwapchainAttachments();
-
-    if (images.empty() || imageViews.empty())
-        return;
-
-    TextureDesc colorDesc{};
-    colorDesc.textureType  = TextureType::TEXTURE_2D;
-    colorDesc.width        = static_cast<uint16_t>(extent.width);
-    colorDesc.height       = static_cast<uint16_t>(extent.height);
-    colorDesc.arraySize    = 1;
-    colorDesc.mipLevels    = 1;
-    colorDesc.pixelFormat  = imagePF;
-    colorDesc.textureUsage = TextureUsage::RENDER_TARGET;
-
-    for (auto i = 0; i < images.size(); ++i)
-    {
-        VkImage swapchainImage = images[i];
-        VkImageView imageView  = imageViews[i];
-        // Wrap the swapchain VkImage as TextureImpl (color attachment)
-        // Important: TextureImpl(VkImage) does not own the image memory; it should create a VkImageView for sampling.
-        auto colorTex = new TextureImpl(this, swapchainImage, imageView);
-        // Update descriptor (sampler, mip info, etc.). The TextureImpl should create view if missing.
-        colorTex->updateTextureDesc(colorDesc);
-        _swapchainColorAttachments.push_back(colorTex);
-    }
-
-    // Create a matching depth-stencil attachment
-    _swapchainDepthStencilAttachment = createDepthStencilAttachment(this, extent);
-}
-
-void DriverImpl::destroySwapchainAttachments()
-{
-    if (!_swapchainColorAttachments.empty())
-    {
-        for (auto tex : _swapchainColorAttachments)
-            delete tex;
-        _swapchainColorAttachments.clear();
-    }
-    if (_swapchainDepthStencilAttachment)
-    {
-        delete _swapchainDepthStencilAttachment;
-        _swapchainDepthStencilAttachment = nullptr;
-    }
-}
-
-// Getters for default attachments
-void DriverImpl::setSwapchainCurrentImageIndex(uint32_t imageIndex)
-{
-    _currentSwapchainImageIndex = imageIndex;
-}
-
-TextureImpl* DriverImpl::getSwapchainColorAttachment()
-{
-    return _swapchainColorAttachments[_currentSwapchainImageIndex];
-}
-
-TextureImpl* DriverImpl::getSwapchainDepthStencilAttachment()
-{
-    return _swapchainDepthStencilAttachment;
+    const auto key = tlx::hash32_bytes(extName.data(), extName.size());
+    return _supportedExtensions.contains(key);
 }
 
 }  // namespace ax::rhi::vk

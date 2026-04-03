@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "axmol/rhi/ShaderCache.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 
 #include "xxhash/xxhash.h"
 
@@ -47,31 +47,32 @@ void ShaderCache::destroyInstance()
 
 ShaderCache::~ShaderCache()
 {
-    purge();
+    removeAllShaders();
 }
 
-void ShaderCache::purge()
+void ShaderCache::removeAllShaders()
 {
     for (auto& [_, shaderModule] : _cachedShaders)
     {
         AX_SAFE_RELEASE(shaderModule);
     }
+    _cachedShaders.clear();
     AXLOGV("purging ShaderCache");
 }
 
-rhi::ShaderModule* ShaderCache::acquireVertexShaderModule(std::string_view shaderSource)
+rhi::ShaderModule* ShaderCache::acquireVertexShaderModule(Data& shaderSource)
 {
     return acquireShaderModule(rhi::ShaderStage::VERTEX, shaderSource);
 }
 
-rhi::ShaderModule* ShaderCache::acquireFragmentShaderModule(std::string_view shaderSource)
+rhi::ShaderModule* ShaderCache::acquireFragmentShaderModule(Data& shaderSource)
 {
     return acquireShaderModule(rhi::ShaderStage::FRAGMENT, shaderSource);
 }
 
-rhi::ShaderModule* ShaderCache::acquireShaderModule(rhi::ShaderStage stage, std::string_view shaderSource)
+rhi::ShaderModule* ShaderCache::acquireShaderModule(rhi::ShaderStage stage, Data& data)
 {
-    const auto key  = XXH64(shaderSource.data(), shaderSource.size(), 0);
+    const auto key  = XXH64(data.data(), data.size(), 0);
     const auto iter = _cachedShaders.find(key);
 
     if (_cachedShaders.end() != iter)
@@ -80,8 +81,7 @@ rhi::ShaderModule* ShaderCache::acquireShaderModule(rhi::ShaderStage stage, std:
         return iter->second;
     }
 
-    ShaderModule* const shader = axdrv->createShaderModule(stage, shaderSource);
-
+    ShaderModule* const shader = axdrv->createShaderModule(stage, data);
     shader->setHashValue(key);
     _cachedShaders.emplace(key, shader);
 
@@ -107,5 +107,13 @@ void ShaderCache::removeUnusedShader()
         }
     }
 }
+
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+void ShaderCache::recompileAll()
+{
+    for (auto& [_, shaderModule] : _cachedShaders)
+        shaderModule->recompileShader();
+}
+#endif
 
 }  // namespace ax::rhi

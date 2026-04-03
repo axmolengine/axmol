@@ -65,8 +65,8 @@ rhi::ProgramState* initPipelineDesc(ax::CustomCommand& command,
                    offsetof(V2F_T2F_C4F, color), false);
     desc.endLayout();
 
-    command.setOwnPSVL(programState, axvlm->acquireVertexLayout(std::forward<VertexLayoutDesc>(desc)),
-                       RenderCommand::ADOPT_FLAG_ALL);
+    command.setOwnPSVL(programState, axvlm->getVertexLayout(std::forward<VertexLayoutDesc>(desc)),
+                       RenderCommand::ADOPT_FLAG_PS);
 
     if (ridal)
     {
@@ -237,7 +237,7 @@ void ProgressTimer::updateDisplayedOpacity(uint8_t parentOpacity)
     updateColor();
     updateProgress();
 
-    if (_cascadeOpacityEnabled)
+    if (isCascadeOpacityEnabled())
     {
         _sprite->updateDisplayedOpacity(_displayedColor.a);
 

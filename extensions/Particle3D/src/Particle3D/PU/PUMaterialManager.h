@@ -33,7 +33,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUMaterial : public Object
+class AX_EXT_API PUMaterial : public Object
 {
 public:
     PUMaterial();
@@ -55,7 +55,7 @@ public:
     rhi::SamplerAddressMode wrapMode;
 };
 
-class AX_EX_DLL PUMaterialCache
+class AX_EXT_API PUMaterialCache
 {
 public:
     PUMaterialCache();

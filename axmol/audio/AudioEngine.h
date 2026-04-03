@@ -492,10 +492,10 @@ protected:
     static std::unordered_map<AUDIO_ID, AudioInfo> _audioIDInfoMap;
 
     // audio file path,audio IDs
-    static axstd::string_map<std::list<AUDIO_ID>> _audioPathIDMap;
+    static tlx::string_map<std::list<AUDIO_ID>> _audioPathIDMap;
 
     // profileName,ProfileHelper
-    static axstd::string_map<ProfileHelper> _audioPathProfileHelperMap;
+    static tlx::string_map<ProfileHelper> _audioPathProfileHelperMap;
 
     static unsigned int _maxInstances;
 

@@ -119,84 +119,79 @@ function(ax_add_shader_target target_name)
     string(TOLOWER "${FILE_EXT}" FILE_EXT)
 
     set(SC_DEFINES "")
-
-    # silent when compile shader success
     set(SC_FLAGS "--silent" "--err-format=msvc")
-
-    # shader lang
     set(SC_PROFILE "")
+    set(CROSS_ARGS_LIST "")
 
-    if(AX_RENDER_API STREQUAL "gl")
+    # GL / GLES
+    if(AX_ENABLE_GL)
       if(AX_GLES_PROFILE)
-        # version 300 es
-        set(OUT_LANG "ESSL")
         if(AX_GLES_PROFILE GREATER_EQUAL 300)
           set(SC_PROFILE "300")
-          set(SC_DEFINES "AXSLC_TARGET_GLES")
+          set(CROSS_SC_DEFINES "AXSLC_TARGET_GLES")
         else()
-          # GLSL2 use glsl100 syntax es profile aka essl100
           set(SC_PROFILE "100")
-          set(SC_DEFINES "AXSLC_TARGET_GLES2")
+          set(CROSS_SC_DEFINES "AXSLC_TARGET_GLES2")
         endif()
-        set(SC_DEFINES "AXSLC_TARGET_GLSL,${SC_DEFINES}")
-        list(APPEND SC_FLAGS "--lang=gles" "--profile=${SC_PROFILE}")
+        set(CROSS_SC_DEFINES "AXSLC_TARGET_GLSL,${CROSS_SC_DEFINES}")
+        list(APPEND CROSS_ARGS_LIST "--lang=gles --profile=${SC_PROFILE} --defines=${CROSS_SC_DEFINES}")
       else()
-        # version 330
-        set(OUT_LANG "GLSL")
         set(SC_PROFILE "330")
-        set(SC_DEFINES "AXSLC_TARGET_GLSL")
-        list(APPEND SC_FLAGS "--lang=glsl" "--profile=${SC_PROFILE}")
+        set(CROSS_SC_DEFINES "AXSLC_TARGET_GLSL")
+        list(APPEND CROSS_ARGS_LIST "--lang=glsl --profile=${SC_PROFILE} --defines=${CROSS_SC_DEFINES}")
       endif()
-    elseif(AX_RENDER_API MATCHES "d3d")
-      set(OUT_LANG "HLSL")
-      if(AX_RENDER_API STREQUAL "d3d12")
-        set(SC_PROFILE "51") # D3D12 HLSL 5.1
-      else()
-        set(SC_PROFILE "50") # D3D11 HLSL 5.0
-      endif()
-      set(SC_DEFINES "AXSLC_TARGET_HLSL")
-      list(APPEND SC_FLAGS "--lang=hlsl" "--profile=${SC_PROFILE}")
-    elseif(AX_RENDER_API STREQUAL "mtl")
-      set(OUT_LANG "MSL")
-      set(SC_DEFINES "AXSLC_TARGET_MSL")
-      list(APPEND SC_FLAGS "--lang=msl")
-    elseif(AX_RENDER_API STREQUAL "vk")
-      set(OUT_LANG "SPIRV")
-      set(SC_DEFINES "AXSLC_TARGET_SPIRV")
-      set(SC_PROFILE "130")
-      list(APPEND SC_FLAGS "--lang=spirv" "--profile=${SC_PROFILE}")
-    else()
-      message(FATAL_ERROR "Unsupported AX_RENDER_API=${AX_RENDER_API}")
     endif()
+
+    # D3D11
+    if(AX_ENABLE_D3D11)
+      set(SC_PROFILE "50")
+      set(CROSS_SC_DEFINES "AXSLC_TARGET_HLSL")
+      list(APPEND CROSS_ARGS_LIST "--lang=hlsl --profile=${SC_PROFILE} --defines=${CROSS_SC_DEFINES}")
+    endif()
+
+    # D3D12
+    if(AX_ENABLE_D3D12)
+      set(SC_PROFILE "51")
+      set(CROSS_SC_DEFINES "AXSLC_TARGET_HLSL")
+      list(APPEND CROSS_ARGS_LIST "--lang=hlsl --profile=${SC_PROFILE} --defines=${CROSS_SC_DEFINES}")
+    endif()
+
+    # Metal
+    if(AX_ENABLE_MTL)
+      set(CROSS_SC_DEFINES "AXSLC_TARGET_MSL")
+      list(APPEND CROSS_ARGS_LIST "--lang=msl --defines=${CROSS_SC_DEFINES}")
+    endif()
+
+    # Vulkan / SPIR-V
+    if(AX_ENABLE_VK)
+      set(SC_PROFILE "100")
+      set(CROSS_SC_DEFINES "AXSLC_TARGET_SPIRV")
+      list(APPEND CROSS_ARGS_LIST "--lang=spirv --profile=${SC_PROFILE} --defines=${CROSS_SC_DEFINES}")
+    endif()
+
+    # Join all cross args
+    string(JOIN "&" CROSS_ARGS ${CROSS_ARGS_LIST})
 
     # no-suffix since 1.18.1 released by axmolengine
     list(APPEND SC_FLAGS "--no-suffix")
 
-    # The follow flags was separated from --automap since axslcc-1.13.1, many exists shaders not specify it binding index for uniform blocks,
-    # so add auto map bindings suppress errors for exists shaders. in future if we migrate all
-    # shaders, these flags can be removed
-    # Note: axmol only use binding_index=0 for uniform blocks because axmol limit support per-uniform-block/per-stage
-    list(APPEND SC_FLAGS "--auto-map-bindings")
-    list(APPEND SC_FLAGS "--auto-map-locations")
+    # auto-map bindings/locations
+    list(APPEND SC_FLAGS "--auto-map-bindings" "--auto-map-locations")
 
     # defines
     get_source_file_property(SOURCE_SC_DEFINES ${SC_FILE} AXSLCC_DEFINES)
-
     if(NOT(SOURCE_SC_DEFINES STREQUAL "NOTFOUND"))
       set(SC_DEFINES "${SC_DEFINES},${SOURCE_SC_DEFINES}")
     endif()
-
     if(SC_DEFINES)
-      list(APPEND SC_FLAGS "\"--defines=${SC_DEFINES}\"")
+      list(APPEND SC_FLAGS "--defines=${SC_DEFINES}")
     endif()
 
     # includes
     get_source_file_property(INC_DIRS ${SC_FILE} AXSLCC_INCLUDE_DIRS)
-
     if(INC_DIRS STREQUAL "NOTFOUND")
       set(INC_DIRS "")
     endif()
-
     list(APPEND INC_DIRS "${_AX_ROOT}/axmol/renderer/shaders")
     list(APPEND SC_FLAGS "--include-dirs=${INC_DIRS}")
 
@@ -204,10 +199,8 @@ function(ax_add_shader_target target_name)
       list(APPEND SC_FLAGS "--cvar=shader_rt_${FILE_NAME}")
     endif()
 
-    # use --sgs --refelect for non-gl render apis
-    if(NOT AX_RENDER_API MATCHES "gl")
-      list(APPEND SC_FLAGS "--sgs" "--reflect")
-    endif()
+    # use --sgs --reflect for all render apis
+    list(APPEND SC_FLAGS "--sgs" "--reflect")
 
     # input
     if(${FILE_EXT} IN_LIST AXSLCC_FRAG_SOURCE_FILE_EXTENSIONS)
@@ -217,56 +210,50 @@ function(ax_add_shader_target target_name)
       set(SC_TYPE "vs")
       list(APPEND SC_FLAGS "--vert=${SC_FILE}")
     else()
-      message(FATAL_ERROR "Invalid shader source, the file extesion must be one of .frag;.vert")
+      message(FATAL_ERROR "Invalid shader source, the file extension must be one of .frag;.vert")
     endif()
 
     # output
     set(OUT_DIR ${AXSLCC_OUT_DIR})
-
     if(NOT opt_BUILTIN)
       set(OUT_DIR "${OUT_DIR}/custom")
     endif()
-
     if(NOT(IS_DIRECTORY ${OUT_DIR}))
       file(MAKE_DIRECTORY ${OUT_DIR})
     endif()
 
     set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${SC_TYPE}")
-
     file(TO_CMAKE_PATH "${SC_OUTPUT}" SC_OUTPUT)
-    set(SC_COMMENT "[${OUT_LANG}${SC_PROFILE}] Compiling shader ${SC_FILE} to ${SC_OUTPUT} ...")
+    set(SC_COMMENT "[${AX_RENDER_API}] Compiling shader ${SC_FILE} to ${SC_OUTPUT} ...")
 
     get_source_file_property(SOURCE_SC_OUTPUT1 ${SC_FILE} AXSLCC_OUTPUT1)
-
-    string(REPLACE ";" " " FULL_COMMAND_LINE "${AXSLCC_EXE};${SC_FLAGS} ...")
 
     if(SOURCE_SC_OUTPUT1 STREQUAL "NOTFOUND") # single output
       list(APPEND SC_FLAGS "--output=${SC_OUTPUT}")
       set_source_files_properties(${SC_FILE} DIRECTORY ${CMAKE_BINARY_DIR} PROPERTIES AXSLCC_OUTPUT ${SC_OUTPUT})
       add_custom_command(
-        MAIN_DEPENDENCY ${SC_FILE} OUTPUT ${SC_OUTPUT} COMMAND ${AXSLCC_EXE} ${SC_FLAGS}
+        MAIN_DEPENDENCY ${SC_FILE} OUTPUT ${SC_OUTPUT} COMMAND ${AXSLCC_EXE} ${SC_FLAGS} "--cross-args=${CROSS_ARGS}"
         COMMENT "${SC_COMMENT}"
+        VERBATIM
       )
       list(APPEND compiled_shaders ${SC_OUTPUT})
     else() # dual outputs
       set(SC_DEFINES1 "${SC_DEFINES},${SOURCE_SC_OUTPUT1}")
-
       set(SC_FLAGS1 ${SC_FLAGS})
-      list(REMOVE_ITEM SC_FLAGS1 "\"--defines=${SC_DEFINES}\"")
-      list(APPEND SC_FLAGS1 "\"--defines=${SC_DEFINES1}\"")
+      list(REMOVE_ITEM SC_FLAGS1 "--defines=${SC_DEFINES}")
+      list(APPEND SC_FLAGS1 "--defines=${SC_DEFINES1}")
 
       list(APPEND SC_FLAGS "--output=${SC_OUTPUT}")
-
       set(SC_OUTPUT1 "${SC_OUTPUT}_1")
       list(APPEND SC_FLAGS1 "--output=${SC_OUTPUT1}")
-      string(REPLACE ";" " " FULL_COMMAND_LINE1 "${AXSLCC_EXE};${SC_FLAGS1} ...")
-      set_source_files_properties(${SC_FILE} DIRECTORY ${CMAKE_BINARY_DIR} PROPERTIES AXSLCC_OUTPUT "${SC_OUTPUT};${SC_OUTPUT1}")
+
       add_custom_command(
         MAIN_DEPENDENCY ${SC_FILE}
         OUTPUT ${SC_OUTPUT} ${SC_OUTPUT1}
-        COMMAND ${AXSLCC_EXE} ${SC_FLAGS}
-        COMMAND ${AXSLCC_EXE} ${SC_FLAGS1}
+        COMMAND ${AXSLCC_EXE} ${SC_FLAGS} "--cross-args=${CROSS_ARGS}"
+        COMMAND ${AXSLCC_EXE} ${SC_FLAGS1} "--cross-args=${CROSS_ARGS}"
         COMMENT "${SC_COMMENT}"
+        VERBATIM
       )
       list(APPEND compiled_shaders ${SC_OUTPUT} ${SC_OUTPUT1})
     endif()

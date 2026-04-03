@@ -63,23 +63,12 @@ int Application::run()
         return -1;
     }
 
-#if AX_RENDER_API == AX_RENDER_API_VK
-    auto director = Director::getInstance();
-    std::thread t([director] {
-        do
-        {
-            director->renderFrame();
-        } while (sm_pSharedApplication != nullptr);
-    });
-    t.detach();
-#endif
-
     return 0;
 }
 
 void Application::setAnimationInterval(float interval)
 {
-    JniHelper::callStaticVoidMethod("dev/axmol/lib/AxmolRenderer", "setAnimationInterval", interval);
+    JniHelper::callStaticVoidMethod("dev/axmol/lib/AxmolPlayer", "setAnimationInterval", interval);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -95,7 +84,10 @@ const char* Application::getCurrentLanguageCode()
 {
     static char code[3]  = {0};
     std::string language = JniHelper::callStaticStringMethod(applicationHelperClassName, "getCurrentLanguage");
-    strncpy(code, language.c_str(), 2);
+    if (language.length() < 2)
+        return "en";
+    code[0] = language[0];
+    code[1] = language[1];
     code[2] = '\0';
     return code;
 }

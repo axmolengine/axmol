@@ -68,8 +68,8 @@ public:
     bool autoSearch;
 
 protected:
-    axstd::string_map<DragonBonesData*> _dragonBonesDataMap;
-    axstd::string_map<std::vector<TextureAtlasData*>> _textureAtlasDataMap;
+    tlx::string_map<DragonBonesData*> _dragonBonesDataMap;
+    tlx::string_map<std::vector<TextureAtlasData*>> _textureAtlasDataMap;
     DragonBones* _dragonBones;
     DataParser* _dataParser;
 
@@ -548,14 +548,14 @@ public:
     /**
      * @private
      */
-    inline const axstd::string_map<std::vector<TextureAtlasData*>>& getAllTextureAtlasData() const
+    inline const tlx::string_map<std::vector<TextureAtlasData*>>& getAllTextureAtlasData() const
     {
         return _textureAtlasDataMap;
     }
     /**
      * @private
      */
-    inline const axstd::string_map<DragonBonesData*>& getAllDragonBonesData() const { return _dragonBonesDataMap; }
+    inline const tlx::string_map<DragonBonesData*>& getAllDragonBonesData() const { return _dragonBonesDataMap; }
     /**
      * - An Worldclock instance updated by engine.
      * @version DragonBones 5.7

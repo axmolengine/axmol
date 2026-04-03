@@ -190,9 +190,14 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dictionary,
     if (dictionary["frames"].getType() != ax::Value::Type::MAP)
         return;
 
-    auto spriteSheet    = std::make_shared<SpriteSheet>();
-    spriteSheet->format = getFormat();
-    spriteSheet->path   = plist;
+    auto spriteSheet = cache.getSpriteSheet(plist);
+    if (!spriteSheet)
+    {
+        // create a new sprite sheet
+        spriteSheet         = std::make_shared<SpriteSheet>();
+        spriteSheet->format = getFormat();
+        spriteSheet->path   = plist;
+    }
 
     auto& framesDict = dictionary["frames"].asValueMap();
     int format       = 0;

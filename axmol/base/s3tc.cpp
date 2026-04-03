@@ -34,7 +34,7 @@ static void s3tc_decode_block(uint8_t** blockData,
                               S3TCDecodeFlag decodeFlag)
 {
     unsigned int colorValue0 = 0, colorValue1 = 0, initAlpha = (!oneBitAlphaFlag * 255u) << 24;
-    unsigned int rb0 = 0, rb1 = 0, rb2 = 0, rb3 = 0, g0 = 0, g1 = 0, g2 = 0, g3 = 0;
+    unsigned int rb0, rb1, rb2, rb3, g0, g1, g2, g3;
 
     uint32_t colors[4], pixelsIndex = 0;
 
@@ -97,7 +97,7 @@ static void s3tc_decode_block(uint8_t** blockData,
             alphaArray[6] = (alphaArray[0] * 2 + alphaArray[1] * 5) / 7;
             alphaArray[7] = (alphaArray[0] * 1 + alphaArray[1] * 6) / 7;
         }
-        else if (alphaArray[0] < alphaArray[1])
+        else
         {
             alphaArray[2] = (alphaArray[0] * 4 + alphaArray[1] * 1) / 5;
             alphaArray[3] = (alphaArray[0] * 3 + alphaArray[1] * 2) / 5;

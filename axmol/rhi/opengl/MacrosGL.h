@@ -29,24 +29,24 @@
 #if !defined(_AX_DEBUG) || _AX_DEBUG == 0
 #    define CHECK_GL_ERROR_DEBUG()
 #else
-#    define CHECK_GL_ERROR_DEBUG()                                                                        \
-        do                                                                                                \
-        {                                                                                                 \
-            GLenum __error = glGetError();                                                                \
-            if (__error)                                                                                  \
-            {                                                                                             \
-                AXLOGE("OpenGL error 0x{:04X} in {} {} {}\n", __error, __FILE__, __FUNCTION__, __LINE__); \
-            }                                                                                             \
+#    define CHECK_GL_ERROR_DEBUG()                                                                         \
+        do                                                                                                 \
+        {                                                                                                  \
+            GLenum __error = glGetError();                                                                 \
+            if (__error)                                                                                   \
+            {                                                                                              \
+                AXLOGE("OpenGL error 0x{:04X} in {}({}) {}\n", __error, __FILE__, __LINE__, __FUNCTION__); \
+            }                                                                                              \
         } while (false)
-#    define CHECK_GL_ERROR_ABORT()                                                                        \
-        do                                                                                                \
-        {                                                                                                 \
-            GLenum __error = glGetError();                                                                \
-            if (__error)                                                                                  \
-            {                                                                                             \
-                AXLOGE("OpenGL error 0x{:04X} in {} {} {}\n", __error, __FILE__, __FUNCTION__, __LINE__); \
-                assert(false);                                                                            \
-            }                                                                                             \
+#    define CHECK_GL_ERROR_ABORT()                                                                         \
+        do                                                                                                 \
+        {                                                                                                  \
+            GLenum __error = glGetError();                                                                 \
+            if (__error)                                                                                   \
+            {                                                                                              \
+                AXLOGE("OpenGL error 0x{:04X} in {}({}) {}\n", __error, __FILE__, __LINE__, __FUNCTION__); \
+                assert(false);                                                                             \
+            }                                                                                              \
         } while (false)
 #endif
 

@@ -23,14 +23,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 
 #include "axmol/rhi/VertexLayout.h"
 
 namespace ax::rhi
 {
-
-DriverBase* DriverBase::_instance = nullptr;
 
 VertexLayout* DriverBase::createVertexLayout(VertexLayoutDesc&& desc)
 {

@@ -39,6 +39,8 @@ namespace ax::rhi::mtl
  * @{
  */
 
+class RenderTargetImpl;
+
 /**
  * Create and compile a new MTLRenderPipelineState object synchronously.
  */
@@ -51,7 +53,7 @@ public:
      */
     RenderPipelineImpl(id<MTLDevice> mtlDevice);
     ~RenderPipelineImpl();
-    void update(const RenderTarget* renderTarget, const PipelineDesc&) override;
+    void update(const RenderTarget* renderTarget, const PipelineDesc&);
 
     /**
      * Get a MTLRenderPipelineState object.
@@ -62,20 +64,14 @@ public:
 private:
     void setVertexLayout(MTLRenderPipelineDescriptor*, const PipelineDesc&);
     void setBlendState(MTLRenderPipelineColorAttachmentDescriptor*, const BlendDesc&);
-    void setShaderModules(const PipelineDesc&);
-    void setBlendStateAndFormat(const BlendDesc&);
-    void chooseAttachmentFormat(const RenderTarget* renderTarget,
-                                PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT],
-                                PixelFormat&);
+    void setShaderModules(Program*);
+    void setBlendStateAndFormat(const BlendDesc&, const RenderTargetImpl* rt);
 
     id<MTLRenderPipelineState> _mtlRenderPipelineState = nil;
     id<MTLDevice> _mtlDevice                           = nil;
 
-    MTLRenderPipelineDescriptor* _mtlRenderPipelineDesc      = nil;
-    PixelFormat _colorAttachmentsFormat[MAX_COLOR_ATTCHMENT] = {PixelFormat::NONE};
-    PixelFormat _depthStencilPF                              = PixelFormat::NONE;
-
-    axstd::hash_map<uint32_t, id<MTLRenderPipelineState>> _mtlStateCache;
+    MTLRenderPipelineDescriptor* _mtlRenderPipelineDesc = nil;
+    tlx::hash_map<uint32_t, id<MTLRenderPipelineState>> _mtlStateCache;
 };
 
 // end of _metal group

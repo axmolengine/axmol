@@ -47,7 +47,7 @@ SOFTWARE.
 #  include <Mswsock.h>
 #  include <Mstcpip.h>
 #  include <Ws2tcpip.h>
-#  if defined(YASIO_NT_COMPAT_GAI)
+#  if NTDDI_VERSION < NTDDI_VISTA
 #    include <Wspiapi.h>
 #  endif
 #  if YASIO__HAS_UDS

@@ -20,6 +20,7 @@
 ![issues](https://img.shields.io/github/issues/axmolengine/axmol?style=plastic)
 ![forks](https://img.shields.io/github/forks/axmolengine/axmol?style=plastic)
 ![stars](https://img.shields.io/github/stars/axmolengine/axmol?style=plastic)
+![G-Star](https://atomgit.com/axmol/axmol/star/badge.svg)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/axmolengine/axmol?style=plastic)  
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/axmolengine/axmol/pulls)
@@ -33,17 +34,21 @@
 
 ## 📢 分支说明
 
-> **重要提示**  
-> - **`dev` 分支**：作为 **v3** 版本的开发分支，处于持续开发与变更阶段，可能包含不稳定或实验性功能。  
-> - **`release/2.x` 分支**：作为 **生产环境稳定分支**，建议在正式项目中使用该分支，以确保稳定性与兼容性。  
+> **重要提示**
+> - **`dev` 分支**：作为 **v3** 版本的开发分支，处于持续开发与变更阶段，可能包含不稳定或实验性功能。**各类PR（新功能、功能增强、非关键bug修复等）均优先提交至该分支**，仅v2 LTS版本的关键修复可例外。
+> - **`release/2.x` 分支**：已进入**稳定维护阶段**，**2.11.x 为 v2 系列最后一个 LTS 长期支持版本**；该分支仅接收关键bug修复与安全补丁，依旧是生产环境的推荐分支，可保障正式项目的稳定性与兼容性。
 >
-> 如需参与 v3 开发或测试新特性，请使用 `dev` 分支；如需在生产环境部署，请使用 `release/2.x` 分支。
+> 如需参与 v3 版本开发、测试新特性，或提交非关键修复类PR，请使用 `dev` 分支；生产环境部署仍可使用 `release/2.x` 分支，享受LTS版本的稳定维护保障。
+>
+> ⚠️ **请勿向 `release/2.x` 分支的PR中执行全文件 `clang-format` 格式化，或进行大规模代码排版调整操作；同时，非关键的功能开发、功能增强类PR也请勿提交至该分支。**
+> 大规模格式化改动会显著增加代码合并冲突，提升代码审查的难度并消耗额外时间；而基于该分支的LTS维护定位，非关键类PR也无法被接受。
+> 任何违反上述规则的PR **将不会被接收**。
 
 ***
 
 ## ⚡️构建
 
-* 下载: [官方最新发布](https://github.com/axmolengine/axmol/releases) / [SourceForge 镜像](https://sourceforge.net/projects/axmol-engine.mirror) / [Gitee 镜像仓库](https://gitee.com/simdsoft/axmol)
+* 下载: [官方最新发布](https://github.com/axmolengine/axmol/releases) / [AtomGit 镜像仓库](https://atomgit.com/axmol/axmol) / [SourceForge 镜像](https://sourceforge.net/projects/axmol-engine.mirror) / [Gitee 镜像仓库](https://gitee.com/simdsoft/axmol)
 * [如何安装](docs/DevSetup.md)
 
 如果你有一个 Cocos2d-x 项目, 可以很容易迁移到 Axmol。 我们准备了 [迁移指导](https://github.com/axmolengine/axmol/wiki/Cocos2d%E2%80%90x-migration-guide)。
@@ -73,28 +78,31 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 
 **渲染后端**:
 
+* Vulkan: Windows, Linux, Android (axmol-v3 版本新增)
+* D3D12: Windows and UWP (axmol-v3 版本新增)
+* D3D11: Windows and UWP (axmol-v3 版本新增)
 * Metal： macOS、iOS、tvOS
 * OpenGL 3.3+： Linux、macOS、Win32
 * OpenGL ES 2.0+： Android
 * OpenGL ES 3.0+： iOS
 * ANGLE GLES 3.0+： Win32、 UWP
 * WebGL 2.0 (OpenGL ES 3.0): WASM
-* D3D11 for Win32 and UWP (axmol-v3 版本新增)
 
 **支持架构**:
 
 * iOS、tvOS (x64, arm64)
 * Android (x86, x64, armv7, arm64)
-* Windows (x86, x64)
-* Linux (x64)
+* Windows (x86, x64, arm64)
+* Linux (x64, arm64)
 * OSX (x64, arm64)
 * UWP (x64, arm64)
 * Wasm32, Wasm64(axmo-v3 版本新增)
 
+*注意: Axmol v3 开始提供对 Linux 和 Windows 的 arm64 构建支持*
+
 **支持2D物理引擎** ([更多相关信息](https://github.com/axmolengine/axmol/wiki/2D-Physics-Engines-informations)):
 
 * Box2D
-* ~~Chipmunk2D~~  (已从 `dev` (axmol-v3) 分支移除)
 
 **支持3D物理引擎**:
 
@@ -115,6 +123,8 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 
 一些亮点:
 
+- **新增 Vulkan 渲染后端支持** (axmol-v3)
+- **新增 D3D12 渲染后端支持** (axmol-v3)
 - **新增 D3D11 渲染后端支持** (axmol-v3)
 - **新增桌面平台 Windows/Linux/WebAssembly 高分屏(HiDPI) 支持** (axmol-v3)
 - **图形驱动升级：GLES3.0、OpenGL3.3核心模式支持，3D模型实例化渲染支持，全新跨平台 Shader 工作流**。

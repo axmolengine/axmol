@@ -400,18 +400,23 @@ bool AssetsManager::uncompress()
     {
         // Get info about current file.
         unz_file_info fileInfo;
-        char fileName[MAX_FILENAME];
-        if (unzGetCurrentFileInfo(zipfile, &fileInfo, fileName, MAX_FILENAME, nullptr, 0, nullptr, 0) != UNZ_OK)
+        char pszFileName[MAX_FILENAME];
+        if (unzGetCurrentFileInfo(zipfile, &fileInfo, pszFileName, MAX_FILENAME, nullptr, 0, nullptr, 0) != UNZ_OK)
         {
             AXLOGD("can not read file info");
             unzClose(zipfile);
             return false;
         }
 
-        const string fullPath = _storagePath + fileName;
+        std::string_view fileName{pszFileName, static_cast<size_t>(fileInfo.size_filename)};
+
+        std::string fullPath;
+        fullPath.reserve(_storagePath.size() + fileName.size());
+        fullPath += _storagePath;
+        fullPath += fileName;
 
         // Check if this entry is a directory or a file.
-        const size_t filenameLength = strlen(fileName);
+        const size_t filenameLength = fileName.size();
         if (fileName[filenameLength - 1] == '/')
         {
             // Entry is a directory, so create it.
@@ -428,15 +433,17 @@ bool AssetsManager::uncompress()
             // There are not directory entry in some case.
             // So we need to test whether the file directory exists when uncompressing file entry
             //, if does not exist then create directory
-            const string fileNameStr(fileName);
-
             size_t startIndex = 0;
 
-            size_t index = fileNameStr.find('/', startIndex);
+            size_t index = fileName.find('/', startIndex);
 
+            std::string dir;
             while (index != std::string::npos)
             {
-                const string dir = _storagePath + fileNameStr.substr(0, index);
+                dir.clear();
+                dir.reserve(_storagePath.size() + index);
+                dir += _storagePath;
+                dir += fileName.substr(0, index);
 
                 auto fsOut = FileUtils::getInstance()->openFileStream(dir, FileStream::Mode::READ);
                 if (!fsOut)
@@ -459,7 +466,7 @@ bool AssetsManager::uncompress()
 
                 startIndex = index + 1;
 
-                index = fileNameStr.find('/', startIndex);
+                index = fileName.find('/', startIndex);
             }
 
             // Entry is a file, so extract it.

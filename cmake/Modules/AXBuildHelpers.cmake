@@ -6,6 +6,29 @@ if(NOT PWSH_PROG)
   message(FATAL_ERROR "Please install it https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell, and run CMake again.")
 endif()
 
+if (WASM)
+  set(AX_WASM_SHELL_FILE "${_AX_ROOT}/axmol/platform/wasm/shell_minimal.html" CACHE STRING "The path of wasm shell file")
+  set(_AX_WASM_EXPORTS "_main,_axmol_webglcontextlost,_axmol_webglcontextrestored,_axmol_hdoc_visibilitychange,_axmol_onwebclickcallback")
+
+  # option: AX_WASM_ENABLE_DEVTOOLS
+  option(AX_WASM_ENABLE_DEVTOOLS "Enable wasm devtools" ON)
+  if(AX_WASM_ENABLE_DEVTOOLS)
+    string(APPEND _AX_WASM_EXPORTS ",_axmol_dev_pause,_axmol_dev_resume,_axmol_dev_step")
+  endif()
+  set(AX_WASM_EXPORTS "${_AX_WASM_EXPORTS}" CACHE STRING "" FORCE)
+
+  # option: AX_WASM_ASSETS_PRELOAD_FILE
+  option(AX_WASM_ASSETS_PRELOAD_FILE "Assets are preloaded into IndexedDB from .data file" ON)
+  if(AX_WASM_ASSETS_PRELOAD_FILE)
+    set(AX_WASM_ASSETS_LINKER_FLAG "--preload-file" CACHE STRING "" FORCE)
+  else()
+    set(AX_WASM_ASSETS_LINKER_FLAG "--embed-file" CACHE STRING "" FORCE)
+  endif()
+
+  # option: AX_WASM_GENERATE_SYMBOL_FILE
+  option(AX_WASM_GENERATE_SYMBOL_FILE "Symbols file for WASM is generated" OFF)
+endif()
+
 # copy resource `FILES` and `FOLDERS` to TARGET_FILE_DIR/Resources
 function(ax_sync_target_res ax_target)
   set(options SYM_LINK)
@@ -40,7 +63,7 @@ function(ax_sync_target_res ax_target)
 endfunction()
 
 if(NOT COMMAND set_xcode_property)
-  # This little macro lets you set any XCode specific property, from ios.toolchain.cmake
+  # This little macro lets you set any Xcode specific property, from ios.toolchain.cmake
   function(set_xcode_property TARGET XCODE_PROPERTY XCODE_VALUE)
     set_property(TARGET ${TARGET} PROPERTY XCODE_ATTRIBUTE_${XCODE_PROPERTY} ${XCODE_VALUE})
   endfunction(set_xcode_property)
@@ -211,10 +234,10 @@ function(ax_sync_target_dlls ax_target)
     )
   endif()
 
-  if(AX_GLES_PROFILE OR AX_RENDER_API MATCHES "d3d")
+  if(AX_GLES_PROFILE OR AX_ENABLE_D3D12 OR AX_ENABLE_D3D11)
     find_windows_sdk_bin(_winsdk_bin_dir ${ARCH_ALIAS})
     list(APPEND all_depend_dlls "${_winsdk_bin_dir}/d3dcompiler_47.dll")
-    if(AX_RENDER_API STREQUAL "d3d12")
+    if(AX_ENABLE_D3D12)
       list(APPEND all_depend_dlls "${_winsdk_bin_dir}/dxcompiler.dll")
     endif()
   endif()
@@ -493,6 +516,16 @@ function(ax_setup_app_config app_name)
     # output macOS/iOS .app
     set_target_properties(${app_name} PROPERTIES MACOSX_BUNDLE 1)
 
+    set_target_properties(${app_name} PROPERTIES
+      XCODE_ATTRIBUTE_SKIP_INSTALL "NO"
+      XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym"
+      XCODE_ATTRIBUTE_GCC_GENERATE_DEBUGGING_SYMBOLS "YES"
+      XCODE_ATTRIBUTE_DEPLOYMENT_POSTPROCESSING "YES"
+      XCODE_ATTRIBUTE_ENABLE_STDEBUG_INFORMATION_FORMAT "dwarf-with-dsym"
+      # XCODE_ATTRIBUTE_STRIP_STYLE "debugging"
+      XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "$(inherited)"
+    )
+
     # set codesign
     if(IOS AND(NOT("${CMAKE_OSX_SYSROOT}" MATCHES ".*simulator.*")))
       set_xcode_property(${app_name} CODE_SIGNING_REQUIRED "YES")
@@ -545,7 +578,7 @@ function(ax_setup_app_config app_name)
   if(XCODE AND AX_ENABLE_AUDIO AND ALSOFT_OSX_FRAMEWORK)
     # Embedded soft_oal embedded framework
     # XCODE_LINK_BUILD_PHASE_MODE BUILT_ONLY
-    # ???Xcode limition: XCODE_EMBED_FRAMEWORKS_CODE_SIGN_ON_COPY works for first app
+    # !Please use latest cmake to avoid strange issue, at least cmake 4.0.0+
     message(STATUS "Embedding framework soft_oal to ${app_name}...")
     set_target_properties(${app_name} PROPERTIES
       XCODE_LINK_BUILD_PHASE_MODE KNOWN_LOCATION
@@ -553,6 +586,25 @@ function(ax_setup_app_config app_name)
       XCODE_EMBED_FRAMEWORKS_CODE_SIGN_ON_COPY ON
       XCODE_EMBED_FRAMEWORKS_REMOVE_HEADERS_ON_COPY ON
     )
+
+    # Detecting Xcode version
+    execute_process(
+      COMMAND xcodebuild -version
+      OUTPUT_VARIABLE XCODE_VERSION_RAW
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    string(REGEX MATCH "Xcode ([0-9]+\\.[0-9]+)" _match "${XCODE_VERSION_RAW}")
+    set(XCODE_VERSION "${CMAKE_MATCH_1}")
+
+    message(STATUS "Detected Xcode version: ${XCODE_VERSION}")
+    if(XCODE_VERSION VERSION_LESS_EQUAL "14.2")
+      message(STATUS
+        "Detected Xcode ${XCODE_VERSION} (<= 14.2): "
+        "manually adding framework search path: ${CMAKE_BINARY_DIR}/build/<CONFIG>")
+      set(_AX_FRAMEWORK_OUT_DIR "${CMAKE_BINARY_DIR}/build")
+      set_property(TARGET ${app_name} APPEND PROPERTY
+        XCODE_ATTRIBUTE_FRAMEWORK_SEARCH_PATHS "\"${_AX_FRAMEWORK_OUT_DIR}/$<CONFIG>\"")
+    endif()
   endif()
 
   # auto looking app shaders source dir and add to axslcc compile-list
@@ -592,25 +644,12 @@ function(ax_setup_app_config app_name)
         get_target_compiled_shaders(all_compiled_shaders ${app_name})
         ax_target_embed_compiled_shaders(${app_name} ${rt_output} FILES ${all_compiled_shaders})
       else()
-        # --preload-file
         # refer to: https://emscripten.org/docs/porting/files/packaging_files.html
-        target_link_options(${app_name} PRIVATE "--preload-file" ${AXSLCC_OUT_DIR}@axslc/)
+        target_link_options(${app_name} PRIVATE ${AX_WASM_ASSETS_LINKER_FLAG} ${AXSLCC_OUT_DIR}@axslc/)
       endif()
     endif()
   endif()
 endfunction()
-
-set(AX_WASM_SHELL_FILE "${_AX_ROOT}/axmol/platform/wasm/shell_minimal.html" CACHE STRING "The path of wasm shell file")
-
-option(AX_WASM_ENABLE_DEVTOOLS "Enable wasm devtools" ON)
-
-set(_AX_WASM_EXPORTS "_main,_axmol_webglcontextlost,_axmol_webglcontextrestored,_axmol_hdoc_visibilitychange,_axmol_onwebclickcallback")
-
-if(AX_WASM_ENABLE_DEVTOOLS)
-  string(APPEND _AX_WASM_EXPORTS ",_axmol_dev_pause,_axmol_dev_resume,_axmol_dev_step")
-endif()
-
-set(AX_WASM_EXPORTS "${_AX_WASM_EXPORTS}" CACHE STRING "" FORCE)
 
 # stupid & pitfall: function not emcc not output .html
 macro(ax_setup_app_props app_name)
@@ -642,12 +681,16 @@ macro(ax_setup_app_props app_name)
     # string(APPEND EMSCRIPTEN_LINK_FLAGS " -s SEPARATE_DWARF_URL=http://127.0.0.1:6931/${app_name}.debug.wasm")
     # string(APPEND EMSCRIPTEN_LINK_FLAGS " -gseparate-dwarf=${CMAKE_BINARY_DIR}/bin/${app_name}/${app_name}.debug.wasm")
     # string(APPEND EMSCRIPTEN_LINK_FLAGS " -gsplit-dwarf")
+    if(AX_WASM_GENERATE_SYMBOL_FILE)
+      string(APPEND EMSCRIPTEN_LINK_FLAGS " -g --emit-symbol-map")
+    endif()
+
     if(NOT DEFINED _APP_RES_FOLDER)
       set(_APP_RES_FOLDER "${_APP_SOURCE_DIR}/Content")
     endif()
 
     foreach(FOLDER IN LISTS _APP_RES_FOLDER)
-      string(APPEND EMSCRIPTEN_LINK_FLAGS " --preload-file ${FOLDER}/@/")
+      string(APPEND EMSCRIPTEN_LINK_FLAGS " ${AX_WASM_ASSETS_LINKER_FLAG} ${FOLDER}/@/")
     endforeach()
 
     set_target_properties(${app_name} PROPERTIES LINK_FLAGS "${EMSCRIPTEN_LINK_FLAGS}")
@@ -690,11 +733,14 @@ macro(ax_setup_winrt_sources)
     )
 
     # GLES on ANGLE
-    if(AX_RENDER_API STREQUAL "gl")
+    if(AX_ENABLE_GL)
       list(APPEND prebuilt_dlls
         ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
         ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
       )
+    endif()
+    if(AX_ENABLE_D3D12)
+      list(APPEND prebuilt_dlls "${_winsdk_bin_dir}/dxcompiler.dll")
     endif()
   endif()
 
@@ -714,7 +760,7 @@ macro(ax_setup_winrt_sources)
     ${_AX_ROOT}/axmol/platform/winrt/xaml/AxmolRenderer.cpp
   )
 
-  if(AX_RENDER_API STREQUAL "gl")
+  if(AX_ENABLE_GL)
     list(APPEND PLATFORM_SOURCES
       ${_AX_ROOT}/axmol/platform/winrt/xaml/EGLSurfaceProvider.h
       ${_AX_ROOT}/axmol/platform/winrt/xaml/EGLSurfaceProvider.cpp
@@ -898,6 +944,14 @@ endfunction()
 macro(ax_config_pred target_name pred)
   if(${pred})
     target_compile_definitions(${target_name} PUBLIC ${pred}=1)
+  endif()
+endmacro()
+
+macro(ax_config_pred1 target_name pred)
+  if(${pred})
+    target_compile_definitions(${target_name} PUBLIC ${pred}=1)
+  else()
+    target_compile_definitions(${target_name} PUBLIC ${pred}=0)
   endif()
 endmacro()
 

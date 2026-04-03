@@ -31,7 +31,6 @@
 #include "axmol/rhi/d3d11/RenderPipeline11.h"
 #include "axmol/rhi/d3d11/DepthStencilState11.h"
 #include "axmol/rhi/d3d11/VertexLayout11.h"
-#include "axmol/rhi/d3d11/Utils11.h"
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/base/Logging.h"
 #include "axmol/platform/Application.h"
@@ -42,21 +41,9 @@
 
 namespace ax::rhi
 {
-
-DriverBase* DriverBase::getInstance()
+std::unique_ptr<DriverBase> D3D11DriverFactory::create()
 {
-    if (!_instance)
-    {
-        _instance = new d3d11::DriverImpl();
-        static_cast<d3d11::DriverImpl*>(_instance)->init();
-    }
-
-    return _instance;
-}
-
-void DriverBase::destroyInstance()
-{
-    AX_SAFE_DELETE(_instance);
+    return std::make_unique<d3d11::DriverImpl>();
 }
 }  // namespace ax::rhi
 
@@ -102,22 +89,113 @@ static uint32_t FindMaxMsaaSamples(ID3D11Device* device, DXGI_FORMAT format)
 
 DriverImpl::DriverImpl() {}
 
-void DriverImpl::init()
+bool DriverImpl::init()
 {
-    initializeAdapter();
-    initializeDevice();
+    _AXASSERT_HR(CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)&_dxgiFactory));
 
-    HRESULT hr{E_FAIL};
-    if (!_dxgiAdapter)
+    auto& contextAttrs          = Application::getContextAttrs();
+    const auto powerPreferrence = contextAttrs.powerPreference;
+
+    if (powerPreferrence != PowerPreference::Auto)
+        selectAdapter(powerPreferrence);
+    initializeDevice(contextAttrs.debugLayerEnabled);
+
+    return true;
+}
+
+DriverImpl::~DriverImpl()
+{
+    SafeRelease(_context);
+
+    ComPtr<ID3D11Debug> debug;
+    _device->QueryInterface(IID_PPV_ARGS(&debug));
+
+    SafeRelease(_device);
+
+    _dxgiAdapter.Reset();
+    _dxgiFactory2.Reset();
+    _dxgiFactory.Reset();
+
+    if (debug)
+        debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+}
+
+void DriverImpl::initializeDevice(bool requestDebugLayer)
+{
+    constexpr UINT releaseFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+    constexpr UINT debugFlags   = releaseFlags | D3D11_CREATE_DEVICE_DEBUG;
+
+    constexpr D3D_FEATURE_LEVEL DEFAULT_FEATURE_LEVELS[] = {D3D_FEATURE_LEVEL_11_1, D3D_FEATURE_LEVEL_11_0,
+                                                            D3D_FEATURE_LEVEL_10_1};
+    std::span<const D3D_FEATURE_LEVEL> featureLevels(DEFAULT_FEATURE_LEVELS);
+
+    // It's ok to check whether DXGI 1.2 is supported at here
+    HRESULT hr = _dxgiFactory->QueryInterface(IID_PPV_ARGS(&_dxgiFactory2));
+    if (!_dxgiFactory2)
+    {
+        // On Windows 7 RTM or Windows 7 SP1 without the Platform Update (KB2670838),
+        // D3D_FEATURE_LEVEL_11_1 is not supported. Passing 11_1 to D3D11CreateDevice
+        // will result in E_INVALIDARG. To maintain compatibility, we must fall back
+        // to 11_0 as the highest feature level and include 10_1 in the list to ensure
+        // device creation succeeds on these systems.
+        featureLevels = featureLevels.subspan(1);  // Skip D3D_FEATURE_LEVEL_11_1
+    }
+
+    if (requestDebugLayer) [[unlikely]]
+    {
+        hr = createD3DDevice(D3D_DRIVER_TYPE_HARDWARE, debugFlags, featureLevels);
+        if (SUCCEEDED(hr))
+            goto L_DeviceCreated;
+
+        if (hr != DXGI_ERROR_UNSUPPORTED)
+        {
+            AXLOGI("Failed creating Debug D3D11 device - falling back to release runtime.");
+            goto L_ReleaseRuntime;
+        }
+        else
+        {
+            goto L_WarpRuntime;
+        }
+    }
+
+L_ReleaseRuntime:
+    hr = createD3DDevice(D3D_DRIVER_TYPE_HARDWARE, releaseFlags, featureLevels);
+    if (hr == DXGI_ERROR_UNSUPPORTED) [[unlikely]]
+    {
+    L_WarpRuntime:
+        AXLOGI("Failed creating hardware D3D11 device - falling back to software runtime.");
+        // Reset adapter to null before using D3D_DRIVER_TYPE_WARP,
+        // otherwise D3D11CreateDevice will return E_INVALIDARG when both
+        // a non-null adapter and a non-matching driver type are specified.
+        _dxgiAdapter.Reset();
+        hr = createD3DDevice(D3D_DRIVER_TYPE_WARP, releaseFlags, featureLevels);
+    }
+
+    if (FAILED(hr))
+    {
+        dxutils::fatalError("initializeDevice"sv, hr);
+        return;
+    }
+
+L_DeviceCreated:
+    AXLOGI("D3D11 Feature level: 0x{:04x}", static_cast<int>(_featureLevel));
+
+    if (!_dxgiAdapter)  // adapter not selected or was reset to null, query from device
     {
         ComPtr<IDXGIDevice> dxgiDevice;
         _AXASSERT_HR(
             hr = _device->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(dxgiDevice.GetAddressOf())));
-
         _AXASSERT_HR(hr = dxgiDevice->GetAdapter(&_dxgiAdapter));
 
+        // Refresh factory pointer from adapter to ensure consistency.
+        // Using the factory obtained via GetParent guarantees it matches the adapter
+        // bound to the device. Without this, creating a swapchain may fail with
+        // DXGI_ERROR_INVALID_CALL(0x887A0001) if the factory and adapter come from different DXGI instances.
         _AXASSERT_HR(
             hr = _dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), (void**)_dxgiFactory.ReleaseAndGetAddressOf()));
+
+        // Optionally query for DXGI 1.2+ factory (IDXGIFactory2) to enable modern features
+        _dxgiFactory->QueryInterface(IID_PPV_ARGS(_dxgiFactory2.ReleaseAndGetAddressOf()));
     }
 
     LARGE_INTEGER version;
@@ -133,84 +211,15 @@ void DriverImpl::init()
     }
     _dxgiAdapter->GetDesc(&_adapterDesc);
 
-    _caps.maxAttributes = D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT;  // 16
-
-    _caps.maxTextureUnits = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;  // 128
-
-    _caps.maxTextureSize = EstimateMaxTexSize(_device->GetFeatureLevel());
-
+    // Device caps
+    _caps.maxAttributes     = D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT;     // 16
+    _caps.maxTextureUnits   = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;  // 128
+    _caps.maxTextureSize    = EstimateMaxTexSize(_device->GetFeatureLevel());
     _caps.maxSamplesAllowed = static_cast<int32_t>(FindMaxMsaaSamples(_device, DXGI_FORMAT_R8G8B8A8_UNORM));
 }
 
-DriverImpl::~DriverImpl()
+void DriverImpl::selectAdapter(PowerPreference powerPreference)
 {
-    SafeRelease(_context);
-
-    ComPtr<ID3D11Debug> debug;
-    _device->QueryInterface(IID_PPV_ARGS(&debug));
-
-    SafeRelease(_device);
-
-    _dxgiAdapter.Reset();
-    _dxgiFactory.Reset();
-
-    if (debug)
-        debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
-}
-
-void DriverImpl::initializeDevice()
-{
-    constexpr UINT releaseFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
-    constexpr UINT debugFlags   = releaseFlags | D3D11_CREATE_DEVICE_DEBUG;
-
-    HRESULT hr              = E_FAIL;
-    const bool isDebugLayer = Application::getContextAttrs().debugLayerEnabled;
-
-    if (isDebugLayer) [[unlikely]]
-    {
-        hr = createD3DDevice(D3D_DRIVER_TYPE_HARDWARE, debugFlags);
-        if (SUCCEEDED(hr))
-            return;
-
-        if (hr != DXGI_ERROR_UNSUPPORTED)
-        {
-            AXLOGI("Failed creating Debug D3D11 device - falling back to release runtime.");
-            goto L_ReleaseRuntime;
-        }
-        else
-        {
-            goto L_WarpRuntime;
-        }
-    }
-
-L_ReleaseRuntime:
-    hr = createD3DDevice(D3D_DRIVER_TYPE_HARDWARE, releaseFlags);
-    if (hr == DXGI_ERROR_UNSUPPORTED) [[unlikely]]
-    {
-    L_WarpRuntime:
-        AXLOGI("Failed creating hardware D3D11 device - falling back to software runtime.");
-        // Reset adapter to null before using D3D_DRIVER_TYPE_WARP,
-        // otherwise D3D11CreateDevice will return E_INVALIDARG when both
-        // a non-null adapter and a non-matching driver type are specified.
-        _dxgiAdapter.Reset();
-        hr = createD3DDevice(D3D_DRIVER_TYPE_WARP, releaseFlags);
-    }
-
-    if (FAILED(hr)) [[unlikely]]
-        dxutils::fatalError("initializeDevice"sv, hr);
-}
-
-void DriverImpl::initializeAdapter()
-{
-    auto& contextAttrs          = Application::getContextAttrs();
-    const auto powerPreferrence = contextAttrs.powerPreference;
-
-    if (powerPreferrence == PowerPreference::Auto)
-        return;
-
-    if (FAILED(CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)&_dxgiFactory)))
-        return;
-
     ComPtr<IDXGIAdapter> bestAdapter;
     int bestScore = std::numeric_limits<int>::min();
 
@@ -238,15 +247,15 @@ void DriverImpl::initializeAdapter()
             score += 500;  // Lower base score for integrated GPU
 
         // 2. Adjust score based on PowerPreference
-        if (powerPreferrence == PowerPreference::HighPerformance && isDiscrete)
+        if (powerPreference == PowerPreference::HighPerformance && isDiscrete)
             score += 500;
-        else if (powerPreferrence == PowerPreference::LowPower && !isDiscrete)
+        else if (powerPreference == PowerPreference::LowPower && !isDiscrete)
             score += 500;
 
         // 3. Adjust score based on VRAM size
-        if (powerPreferrence == PowerPreference::HighPerformance)
+        if (powerPreference == PowerPreference::HighPerformance)
             score += static_cast<int>(desc.DedicatedVideoMemory / (1024 * 1024));  // More VRAM = higher score
-        else if (powerPreferrence == PowerPreference::LowPower)
+        else if (powerPreference == PowerPreference::LowPower)
             score -= static_cast<int>(desc.DedicatedVideoMemory / (1024 * 1024));  // Less VRAM = higher score
 
         // Keep the adapter with the highest score
@@ -262,25 +271,27 @@ void DriverImpl::initializeAdapter()
     _dxgiAdapter = std::move(bestAdapter);
 }
 
-HRESULT DriverImpl::createD3DDevice(int requestDriverType, int createFlags)
+HRESULT DriverImpl::createD3DDevice(int requestDriverType,
+                                    int createFlags,
+                                    std::span<const D3D_FEATURE_LEVEL> featureLevels)
 {
     if (_dxgiAdapter)
         requestDriverType = D3D_DRIVER_TYPE_UNKNOWN;
-    return ::D3D11CreateDevice(_dxgiAdapter.Get(),                  // Adapter
-                               (D3D_DRIVER_TYPE)requestDriverType,  // Driver Type
-                               nullptr,                             // Software
-                               createFlags,                         // Flags
-                               DEFAULT_REATURE_LEVELS,              // Feature Levels
-                               ARRAYSIZE(DEFAULT_REATURE_LEVELS),   // Num Feature Levels
-                               D3D11_SDK_VERSION,                   // SDK Version
-                               &_device,                            // Device
-                               &_featureLevel,                      // Feature Level
+    return ::D3D11CreateDevice(_dxgiAdapter.Get(),                       // Adapter
+                               (D3D_DRIVER_TYPE)requestDriverType,       // Driver Type
+                               nullptr,                                  // Software
+                               createFlags,                              // Flags
+                               featureLevels.data(),                     // Feature Levels
+                               static_cast<UINT>(featureLevels.size()),  // Num Feature Levels
+                               D3D11_SDK_VERSION,                        // SDK Version
+                               &_device,                                 // Device
+                               &_featureLevel,                           // Feature Level
                                &_context);
 }
 
-RenderContext* DriverImpl::createRenderContext(void* surfaceContext)
+RenderContext* DriverImpl::createRenderContext(SurfaceHandle surface)
 {
-    return new RenderContextImpl(this, surfaceContext);
+    return new RenderContextImpl(this, surface);
 }
 
 Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial)
@@ -300,10 +311,9 @@ Texture* DriverImpl::createTexture(const TextureDesc& descriptor)
 
 RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthAttachment)
 {
-    auto renderTarget = new RenderTargetImpl(_device, false);
-    RenderTarget::ColorAttachment colors{{colorAttachment, 0}};
-    renderTarget->setColorAttachment(colors);
-    renderTarget->setDepthStencilAttachment(depthAttachment);
+    auto renderTarget = new RenderTargetImpl(this, false);
+    renderTarget->setColorTexture(colorAttachment);
+    renderTarget->setDepthStencilTexture(depthAttachment);
     return renderTarget;
 }
 
@@ -325,14 +335,71 @@ RenderPipeline* DriverImpl::createRenderPipeline()
     return new RenderPipelineImpl(_device, _context);
 }
 
-Program* DriverImpl::createProgram(std::string_view vertexShader, std::string_view fragmentShader)
+Program* DriverImpl::createProgram(Data vsData, Data fsData)
 {
-    return new ProgramImpl(vertexShader, fragmentShader);
+    return new ProgramImpl(vsData, fsData);
 }
 
-ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, std::string_view source)
+ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, Data& chunk)
 {
-    return new ShaderModuleImpl(_device, stage, source);
+    return new ShaderModuleImpl(this, stage, chunk);
+}
+
+IUnknown* DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, ID3DBlob*& outBlob)
+{
+    ComPtr<ID3DBlob> errorBlob;
+    UINT flags = D3DCOMPILE_OPTIMIZATION_LEVEL2 | D3DCOMPILE_ENABLE_STRICTNESS;
+#if !defined(NDEBUG)
+    flags |= D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
+#endif
+
+    const char* stageProfile{nullptr};
+    if (_featureLevel >= D3D_FEATURE_LEVEL_11_0)
+    {
+        stageProfile = (stage == ShaderStage::VERTEX) ? "vs_5_0" : "ps_5_0";
+    }
+    else
+    {
+        stageProfile = (stage == ShaderStage::VERTEX) ? "vs_4_1" : "ps_4_1";
+    }
+
+    HRESULT hr = D3DCompile(shaderCode.data(), shaderCode.size(), nullptr, nullptr, nullptr, "main", stageProfile,
+                            flags, 0, &outBlob, &errorBlob);
+    if (FAILED(hr))
+    {
+        std::string_view errorDetail =
+            errorBlob ? std::string_view((const char*)errorBlob->GetBufferPointer(), errorBlob->GetBufferSize())
+                      : "Unknown compile error"sv;
+        AXLOGE("axmol:ERROR: Failed to compile shader, hr:{},{}", hr, errorDetail);
+        AXASSERT(false, "Shader compile failed!");
+        return nullptr;
+    }
+
+    IUnknown* shader{nullptr};
+    if (stage == ShaderStage::VERTEX)
+    {
+        ComPtr<ID3D11VertexShader> vs;
+        hr = _device->CreateVertexShader(outBlob->GetBufferPointer(), outBlob->GetBufferSize(), nullptr,
+                                         vs.GetAddressOf());
+        if (SUCCEEDED(hr))
+            shader = vs.Detach();
+    }
+    else
+    {
+        ComPtr<ID3D11PixelShader> ps;
+        hr = _device->CreatePixelShader(outBlob->GetBufferPointer(), outBlob->GetBufferSize(), nullptr,
+                                        ps.GetAddressOf());
+        if (SUCCEEDED(hr))
+            shader = ps.Detach();
+    }
+
+    if (!shader)
+    {
+        AXLOGE("axmol:ERROR: Failed to create shader, hr:{}", hr);
+        AXASSERT(false, "Shader compile failed!");
+    }
+
+    return shader;
 }
 
 SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
@@ -343,7 +410,7 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     if (desc.minFilter == SamplerFilter::MIN_ANISOTROPIC)
     {
         sd.Filter        = D3D11_FILTER_ANISOTROPIC;
-        sd.MaxAnisotropy = desc.anisotropy ? desc.anisotropy : 1;
+        sd.MaxAnisotropy = std::clamp(desc.anisotropy + 1u, 1u, 16u);
     }
     else
     {
@@ -388,12 +455,14 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
 
     ID3D11SamplerState* sampler{nullptr};
     _device->CreateSamplerState(&sd, &sampler);
-    return sampler;
+    return SamplerHandle(sampler);
 }
 
 void DriverImpl::destroySampler(SamplerHandle& h)
 {
-    SafeRelease(reinterpret_cast<ID3D11SamplerState*&>(h));
+    auto samplerState = static_cast<ID3D11SamplerState*>(h);
+    SafeRelease(samplerState);
+    h = nullptr;
 }
 
 VertexLayout* DriverImpl::createVertexLayout(VertexLayoutDesc&& desc)
@@ -420,7 +489,8 @@ std::string DriverImpl::getVendor() const
 std::string DriverImpl::getRenderer() const
 {
     auto desc = ntcvt::from_chars(_adapterDesc.Description);
-    return fmt::format("{} D3D11 vs_5_0 ps_5_0", desc);
+    return _featureLevel >= D3D_FEATURE_LEVEL_11_0 ? fmt::format("{} D3D11 vs_5_0 ps_5_0", desc)
+                                                   : fmt::format("{} D3D11 vs_4_1 ps_4_1", desc);
 }
 
 /**
@@ -445,7 +515,7 @@ std::string DriverImpl::getVersion() const
 
 std::string DriverImpl::getShaderVersion() const
 {
-    return "D3D11 HLSL vs_5_0 ps_5_0"s;
+    return _featureLevel >= D3D_FEATURE_LEVEL_11_0 ? "D3D11 HLSL vs_5_0 ps_5_0"s : "D3D10 HLSL vs_4_1 ps_4_1"s;
 }
 
 /**

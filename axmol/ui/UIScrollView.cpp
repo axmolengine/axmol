@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "axmol/platform/Device.h"
 #include "axmol/ui/UIScrollViewBar.h"
 #include "axmol/2d/TweenFunction.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 namespace ax
 {
 
@@ -144,7 +144,6 @@ void ScrollView::initRenderer()
     _innerContainer = Layout::create();
     _innerContainer->setColor(Color32::WHITE);
     _innerContainer->setCascadeColorEnabled(true);
-    _innerContainer->setCascadeOpacityEnabled(true);
     addProtectedChild(_innerContainer, 1, 1);
 }
 

@@ -209,7 +209,7 @@ public:
      *
      * @return The full path of the file.
      */
-    std::string getTextureFilePath(Texture2D* texture) const;
+    const std::string& getTextureFilePath(Texture2D* texture) const;
 
     /** Reload texture from a new file.
      * This function is mainly for editor, won't suggest use it in game for performance reason.
@@ -256,7 +256,7 @@ protected:
 
     int _outstandingTaskCount;
 
-    axstd::string_map<Texture2D*> _textures;
+    tlx::string_map<Texture2D*> _textures;
 
     static std::string s_etc1AlphaFileSuffix;
 };

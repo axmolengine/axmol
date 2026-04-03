@@ -45,7 +45,7 @@ public:
      * @param stage Specifies whether is vertex shader or fragment shader.
      * @param source Specifies shader source.
      */
-    ShaderModuleImpl(ShaderStage stage, std::string_view source);
+    ShaderModuleImpl(ShaderStage stage, Data& data);
     ~ShaderModuleImpl();
 
     /**
@@ -54,8 +54,10 @@ public:
      */
     inline GLuint getShader() const { return _shader; }
 
-private:
-    void compileShader(ShaderStage stage, std::string_view source);
+protected:
+    void recompileShader() override;
+
+    void compileShader();
     void deleteShader();
 
     GLuint _shader = 0;

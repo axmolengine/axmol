@@ -39,7 +39,6 @@ THE SOFTWARE.
 #include "axmol/renderer/QuadCommand.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/ProgramState.h"
-#include "axmol/rhi/DriverBase.h"
 
 namespace ax
 {
@@ -124,7 +123,7 @@ void SpriteBatchNode::setUniformLocation()
 void SpriteBatchNode::setVertexLayout()
 {
     AXASSERT(_programState, "programState should not be nullptr");
-    Object::adopt(_vertexLayout, axvlm->acquireBuiltinVertexLayout(rhi::VertexLayoutKind::Sprite));
+    Object::assign(_vertexLayout, axvlm->getBuiltinVertexLayout(rhi::VertexLayoutKind::Sprite));
 }
 
 bool SpriteBatchNode::setProgramState(rhi::ProgramState* programState, bool ownPS /* = false*/)
@@ -327,7 +326,7 @@ void SpriteBatchNode::updateAtlasIndex(Sprite* sprite, ssize_t* curIndex)
     auto& array = sprite->getChildren();
     auto count  = array.size();
 
-    ssize_t oldIndex = 0;
+    ssize_t oldIndex;
 
     if (count == 0)
     {

@@ -111,8 +111,9 @@ UploadSpan UploadBufferAllocator::allocBytes(uint64_t size, uint64_t alignment)
 
 UploadSpan UploadBufferAllocator::allocTextureFootprint(uint64_t totalBytes)
 {
-    // Texture footprints should be aligned to 256 (row pitch requirement).
-    return allocBytes(totalBytes, 256);
+    // Texture footprints should be aligned to 512 aka D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT (row pitch requirement).
+    // Otherwise, will lead crash on old display card e.g. NVIDIA GeForce GTX 850M
+    return allocBytes(totalBytes, D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT);
 }
 
 UploadSpan UploadBufferAllocator::allocFromRing(uint64_t size, uint64_t alignment)

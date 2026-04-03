@@ -137,29 +137,17 @@ static MTLCullMode toMTLCullMode(CullMode mode)
     }
 }
 
-static MTLRenderPassDescriptor* toMTLRenderPassDesc(const RenderTarget* rt, const RenderPassDesc& desc)
-{
-    MTLRenderPassDescriptor* mtlDesc = [MTLRenderPassDescriptor renderPassDescriptor];
-
-    auto rtMTL = static_cast<const RenderTargetImpl*>(rt);
-    rtMTL->applyRenderPassAttachments(desc, mtlDesc);
-    return mtlDesc;
-}
-
 }  // namespace
 
-CAMetalLayer* RenderContextImpl::_mtlLayer              = nil;
-id<CAMetalDrawable> RenderContextImpl::_currentDrawable = nil;
-
-RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
+RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
 {
-    _frameBoundarySemaphore = dispatch_semaphore_create(MAX_INFLIGHT_BUFFER);
+    _frameBoundarySemaphore = dispatch_semaphore_create(MAX_FRAMES_IN_FLIGHT);
     auto mtlDevice          = driver->getMTLDevice();
     _mtlCmdQueue            = driver->getMTLCmdQueue();
     auto& contextAttrs      = Application::getContextAttrs();
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
     CGSize fbSize;
-    NSView* contentView = (id)surfaceContext;
+    NSView* contentView = static_cast<NSView*>(surface);
     @autoreleasepool
     {
         const NSRect contentRect = [contentView frame];
@@ -177,7 +165,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
     _mtlLayer.displaySyncEnabled = contextAttrs.vsync;
     [contentView setLayer:_mtlLayer];
 #else
-    UIView* view              = (id)surfaceContext;
+    UIView* view              = static_cast<UIView*>(surface);
     _mtlLayer                 = (CAMetalLayer*)[view layer];
     _mtlLayer.device          = mtlDevice;
     _mtlLayer.pixelFormat     = MTLPixelFormatBGRA8Unorm;
@@ -189,9 +177,8 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
     _mtlLayer.drawableSize = fbSize;
 #endif
 
-    _screenRT = new RenderTargetImpl(true);
-
-    UtilsMTL::updateDefaultDepthStencilAttachment(_mtlLayer);
+    _screenRT = new RenderTargetImpl(this);
+    _screenRT->rebuildSwapchainAttachments();
 }
 
 RenderContextImpl::~RenderContextImpl()
@@ -210,10 +197,10 @@ RenderContextImpl::~RenderContextImpl()
     dispatch_semaphore_signal(_frameBoundarySemaphore);
 }
 
-bool RenderContextImpl::updateSurface(void* /*surface*/, uint32_t width, uint32_t height)
+bool RenderContextImpl::updateSurface(SurfaceHandle /*surface*/, uint32_t width, uint32_t height)
 {
     [_mtlLayer setDrawableSize:CGSizeMake(width, height)];
-    UtilsMTL::updateDefaultDepthStencilAttachment(_mtlLayer);
+    _screenRT->rebuildSwapchainAttachments();
     return true;
 }
 
@@ -225,6 +212,18 @@ void RenderContextImpl::setDepthStencilState(DepthStencilState* depthStencilStat
 void RenderContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
 {
     Object::assign(_renderPipeline, static_cast<RenderPipelineImpl*>(renderPipeline));
+}
+
+id<CAMetalDrawable> RenderContextImpl::acquireDrawable()
+{
+    if (_currentDrawable)
+        return _currentDrawable;
+    return (_currentDrawable = [_mtlLayer nextDrawable]);
+}
+
+void RenderContextImpl::releaseDrawable()
+{
+    _currentDrawable = nil;
 }
 
 bool RenderContextImpl::beginFrame()
@@ -259,7 +258,10 @@ void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const Render
         _mtlRenderEncoder = nil;
     }
 
-    auto mtlDesc        = toMTLRenderPassDesc(renderTarget, renderPassDesc);
+    MTLRenderPassDescriptor* mtlDesc = [MTLRenderPassDescriptor renderPassDescriptor];
+    auto rtMTL                       = static_cast<RenderTargetImpl*>(_currentRT);
+    rtMTL->applyRenderPassAttachments(renderPassDesc, mtlDesc);
+
     _renderTargetWidth  = (unsigned int)mtlDesc.colorAttachments[0].texture.width;
     _renderTargetHeight = (unsigned int)mtlDesc.colorAttachments[0].texture.height;
     _mtlRenderEncoder   = [_currentCmdBuffer renderCommandEncoderWithDescriptor:mtlDesc];
@@ -274,9 +276,10 @@ void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 
 void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
                                             const PipelineDesc& desc,
-                                            PrimitiveGroup primitiveGroup)
+                                            PrimitiveType primitiveType)
 {
-    RenderContext::updatePipelineState(rt, desc, primitiveGroup);
+    _primitiveType = toMTLPrimitive(primitiveType);
+    RenderContext::updatePipelineState(rt, desc, primitiveType);
     _renderPipeline->update(rt, desc);
     [_mtlRenderEncoder setRenderPipelineState:_renderPipeline->getMTLRenderPipelineState()];
 }
@@ -330,51 +333,39 @@ void RenderContextImpl::setIndexBuffer(Buffer* buffer)
     [_mtlIndexBuffer retain];
 }
 
-void RenderContextImpl::drawArrays(PrimitiveType primitiveType,
-                                   std::size_t start,
-                                   std::size_t count,
-                                   bool wireframe /* unused */)
+void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool wireframe /* unused */)
 {
     prepareDrawing();
-    [_mtlRenderEncoder drawPrimitives:toMTLPrimitive(primitiveType) vertexStart:start vertexCount:count];
+    [_mtlRenderEncoder drawPrimitives:_primitiveType vertexStart:start vertexCount:count];
 }
 
-void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
-                                            std::size_t start,
+void RenderContextImpl::drawArraysInstanced(std::size_t start,
                                             std::size_t count,
                                             int instanceCount,
                                             bool wireframe /* unused */)
 {
     prepareDrawing();
-    [_mtlRenderEncoder drawPrimitives:toMTLPrimitive(primitiveType)
-                          vertexStart:start
-                          vertexCount:count
-                        instanceCount:instanceCount];
+    [_mtlRenderEncoder drawPrimitives:_primitiveType vertexStart:start vertexCount:count instanceCount:instanceCount];
 }
 
-void RenderContextImpl::drawElements(PrimitiveType primitiveType,
-                                     IndexFormat indexType,
-                                     std::size_t count,
-                                     std::size_t offset,
-                                     bool /* wireframe */)
+void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool /* wireframe */)
 {
     prepareDrawing();
-    [_mtlRenderEncoder drawIndexedPrimitives:toMTLPrimitive(primitiveType)
+    [_mtlRenderEncoder drawIndexedPrimitives:_primitiveType
                                   indexCount:count
                                    indexType:toMTLIndexType(indexType)
                                  indexBuffer:_mtlIndexBuffer
                            indexBufferOffset:offset];
 }
 
-void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
-                                              IndexFormat indexType,
+void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
                                               std::size_t count,
                                               std::size_t offset,
                                               int instanceCount,
                                               bool /* wireframe */)
 {
     prepareDrawing();
-    [_mtlRenderEncoder drawIndexedPrimitives:toMTLPrimitive(primitiveType)
+    [_mtlRenderEncoder drawIndexedPrimitives:_primitiveType
                                   indexCount:count
                                    indexType:toMTLIndexType(indexType)
                                  indexBuffer:_mtlIndexBuffer
@@ -406,9 +397,8 @@ void RenderContextImpl::endFrame()
     [_mtlRenderEncoder release];
     _mtlRenderEncoder = nil;
 
-    auto currentDrawable = getCurrentDrawable();
-    [_currentCmdBuffer presentDrawable:currentDrawable];
-    _drawableTexture = currentDrawable.texture;
+    auto drawable = acquireDrawable();
+    [_currentCmdBuffer presentDrawable:drawable];
     [_currentCmdBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
       // GPU work is complete
       // Signal the semaphore to start the CPU work
@@ -417,7 +407,7 @@ void RenderContextImpl::endFrame()
 
     flush();
 
-    resetCurrentDrawable();
+    releaseDrawable();
     [_autoReleasePool drain];
 }
 
@@ -456,13 +446,14 @@ void RenderContextImpl::flushCaptureCommands()
         [_currentCmdBuffer waitUntilCompleted];
 
         PixelBufferDesc screenPixelData;
+        auto drawableTexture = acquireDrawable().texture;
         for (auto& cb : _captureCallbacks)
         {
             if (cb.first == nil)
             {  // screen capture
                 if (!screenPixelData)
                 {
-                    readPixels(_drawableTexture, 0, 0, [_drawableTexture width], [_drawableTexture height],
+                    readPixels(drawableTexture, 0, 0, [drawableTexture width], [drawableTexture height],
                                screenPixelData);
                     // screen framebuffer copied, restore screen framebuffer only to true
                     setFrameBufferOnly(true);
@@ -534,16 +525,26 @@ void RenderContextImpl::setUniformBuffer() const
         for (auto& cb : callbackUniforms)
             cb.second(_programState, cb.first);
 
-        auto vertexUB = _programState->getVertexUniformBuffer();
-        if (!vertexUB.empty())
+        auto& cpuBuffer = _programState->getUniformBuffer();
+        if (cpuBuffer.empty())
+            return;
+        const auto bufferPtr = cpuBuffer.data();
+        for (auto& uboInfo : _programState->getActiveUniformBlockInfos())
         {
-            [_mtlRenderEncoder setVertexBytes:vertexUB.data() length:vertexUB.size() atIndex:VS_UBO_BINDING_INDEX];
-        }
-
-        auto fragUB = _programState->getFragmentUniformBuffer();
-        if (!fragUB.empty())
-        {
-            [_mtlRenderEncoder setFragmentBytes:fragUB.data() length:fragUB.size() atIndex:FS_UBO_BINDING_INDEX];
+            switch (uboInfo.stage)
+            {
+            case ShaderStage::VERTEX:
+                [_mtlRenderEncoder setVertexBytes:bufferPtr + uboInfo.cpuOffset
+                                           length:uboInfo.sizeBytes
+                                          atIndex:VS_UBO_BINDING_INDEX];
+                break;
+            case ShaderStage::FRAGMENT:
+                [_mtlRenderEncoder setFragmentBytes:bufferPtr + uboInfo.cpuOffset
+                                             length:uboInfo.sizeBytes
+                                            atIndex:FS_UBO_BINDING_INDEX];
+                break;
+            default:;
+            }
         }
     }
 }
@@ -575,6 +576,7 @@ void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float w
         scissorRect.width  = _renderTargetWidth;
         scissorRect.height = _renderTargetHeight;
     }
+
     [_mtlRenderEncoder setScissorRect:scissorRect];
 }
 
@@ -594,7 +596,7 @@ void RenderContextImpl::readPixels(id<MTLTexture> texture,
                                                                                            width:texWidth
                                                                                           height:texHeight
                                                                                        mipmapped:NO];
-    id<MTLDevice> device              = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLDevice();
+    id<MTLDevice> device              = static_cast<DriverImpl*>(axdrv)->getMTLDevice();
     id<MTLTexture> readPixelsTexture  = [device newTextureWithDescriptor:textureDesc];
 
     auto oneOffBuffer = [_mtlCmdQueue commandBuffer];
@@ -635,19 +637,6 @@ void RenderContextImpl::readPixels(id<MTLTexture> texture,
 void RenderContextImpl::setFrameBufferOnly(bool frameBufferOnly)
 {
     [_mtlLayer setFramebufferOnly:frameBufferOnly];
-}
-
-id<CAMetalDrawable> RenderContextImpl::getCurrentDrawable()
-{
-    if (!_currentDrawable)
-        _currentDrawable = [_mtlLayer nextDrawable];
-
-    return _currentDrawable;
-}
-
-void RenderContextImpl::resetCurrentDrawable()
-{
-    _currentDrawable = nil;
 }
 
 }  // namespace ax::rhi::mtl

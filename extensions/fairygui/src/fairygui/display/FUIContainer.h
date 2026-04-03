@@ -19,17 +19,6 @@ public:
     ax::Rect _clippingOldRect;
     ax::Rect _clippingRect;
     bool _clippingRectDirty;
-
-#if COCOS2D_VERSION >= 0x00040000
-#if !defined(AX_VERSION)
-    ax::GroupCommand _groupCommand;
-#endif
-    //ax::CallbackCommand _beforeVisitCmdScissor;
-    //ax::CallbackCommand _afterVisitCmdScissor;
-#else
-    ax::CustomCommand _beforeVisitCmdScissor;
-    ax::CustomCommand _afterVisitCmdScissor;
-#endif
 };
 
 class StencilClippingSupport
@@ -39,20 +28,7 @@ public:
 
     ax::Node* _stencil;
     ax::StencilStateManager* _stencilStateManager;
-#if !defined(AX_VERSION)
-    ax::GroupCommand _groupCommand;
-#endif
-#if COCOS2D_VERSION >= 0x00040000
     ax::rhi::ProgramState* _originStencilProgram;
-    //ax::CallbackCommand _beforeVisitCmd;
-    //ax::CallbackCommand _afterDrawStencilCmd;
-    //ax::CallbackCommand _afterVisitCmd;
-#else
-    ax::GLProgram* _originStencilProgram;
-    ax::CustomCommand _beforeVisitCmd;
-    ax::CustomCommand _afterDrawStencilCmd;
-    ax::CustomCommand _afterVisitCmd;
-#endif
 };
 
 class FUIContainer : public ax::Node
@@ -92,12 +68,10 @@ private:
     RectClippingSupport* _rectClippingSupport;
     StencilClippingSupport* _stencilClippingSupport;
 
-#if COCOS2D_VERSION >= 0x00040000
     void setProgramStateRecursively(Node* node, ax::rhi::ProgramState* programState);
     void restoreAllProgramStates();
 
     std::unordered_map<Node*, ax::rhi::ProgramState*> _originalStencilProgramState;
-#endif
 };
 
 //internal use

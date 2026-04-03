@@ -31,7 +31,7 @@
 namespace ax
 {
 
-class AX_EX_DLL CCPUBoxEmitter : public PUEmitter
+class AX_EXT_API CCPUBoxEmitter : public PUEmitter
 {
 public:
     // Constants

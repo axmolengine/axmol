@@ -24,6 +24,8 @@
 #include "axmol/rhi/d3d12/Buffer12.h"
 #include "axmol/rhi/d3d12/Driver12.h"
 #include "axmol/base/Logging.h"
+#include <algorithm>
+#include <limits>
 
 namespace ax::rhi::d3d12
 {
@@ -95,8 +97,22 @@ BufferImpl::BufferImpl(DriverImpl* driver, std::size_t size, BufferType type, Bu
 
 BufferImpl::~BufferImpl()
 {
-    if (_resource)
-        _driver->queueDisposal(_resource.Detach(), _lastFenceValue);
+    // If we allocated per-frame dynamic upload resources, detach and queue disposal for each.
+    if (!_dynamicResources.empty())
+    {
+        for (auto& r : _dynamicResources)
+        {
+            // Detach and transfer ownership to disposal queue
+            ID3D12Resource* raw = r.Detach();
+            if (raw)
+                _driver->queueDisposal(raw, _lastFenceValue);
+        }
+    }
+    else
+    {
+        if (_resource)
+            _driver->queueDisposal(_resource.Detach(), _lastFenceValue);
+    }
 }
 
 /* -------------------------------------------------- createNativeBuffer */
@@ -127,17 +143,63 @@ void BufferImpl::createNativeBuffer(const void* initial)
     D3D12_RESOURCE_STATES initState =
         (_heapType == D3D12_HEAP_TYPE_UPLOAD) ? D3D12_RESOURCE_STATE_GENERIC_READ : D3D12_RESOURCE_STATE_COMMON;
 
-    HRESULT hr = device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &desc, initState, nullptr,
-                                                 IID_PPV_ARGS(&_resource));
-    AXASSERT(SUCCEEDED(hr), "Failed to create ID3D12Resource buffer");
+    // If using UPLOAD heap for dynamic buffers, allocate per-frame upload resources
+    if (_heapType == D3D12_HEAP_TYPE_UPLOAD)
+    {
+        _dynamicResources.resize(MAX_FRAMES_IN_FLIGHT);
+        for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+        {
+            ComPtr<ID3D12Resource> res;
+            HRESULT hr = device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &desc, initState, nullptr,
+                                                         IID_PPV_ARGS(&res));
+            AXASSERT(SUCCEEDED(hr), "Failed to create upload buffer for dynamic backing");
+            _dynamicResources[i] = res;
+        }
 
-    // AXLOGD("BufferImpl: Created resource: {} for {}", fmt::ptr(_resource.Get()), fmt::ptr(this));
+        // leave _resource empty; we'll lazily switch to the proper per-frame resource on first write
+        _resource.Reset();
+        _currentFrameIndex = -1;
+        _resourceState     = initState;
+    }
+    else
+    {
+        // Single device-local resource
+        HRESULT hr = device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &desc, initState, nullptr,
+                                                     IID_PPV_ARGS(&_resource));
+        AXASSERT(SUCCEEDED(hr), "Failed to create ID3D12Resource buffer");
 
-    _resourceState = initState;
+        _resourceState = initState;
+    }
 
     // Initialize data if provided
     if (initial)
         updateData(initial, _size);
+}
+
+/* -------------------------------------------------- updateIndex
+   Lazy switch to the per-frame upload resource corresponding to the current
+   frame index obtained from DriverImpl. Avoids iterating all buffers each frame.
+*/
+void BufferImpl::updateIndex()
+{
+    if (_dynamicResources.empty())
+        return;
+
+    // driver->getFrameIndex() returns an int in [0, MAX_FRAMES_IN_FLIGHT)
+    int frame = _driver->getFrameIndex();
+
+    // If already switched to this frame's backing, nothing to do
+    if (_currentFrameIndex == frame)
+        return;
+
+    // Sanity-check
+    AXASSERT(frame >= 0 && frame < MAX_FRAMES_IN_FLIGHT, "Driver returned frame index out of expected range");
+
+    // Switch active resource to the frame-specific upload resource
+    _currentFrameIndex = frame;
+    _resource          = _dynamicResources[frame];
+    // resource state is known to be GENERIC_READ for upload heap
+    _resourceState = D3D12_RESOURCE_STATE_GENERIC_READ;
 }
 
 /* -------------------------------------------------- updateData */
@@ -156,18 +218,24 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
 
     if (_heapType == D3D12_HEAP_TYPE_UPLOAD)
     {
-        // Host visible: map and copy directly
+        // For upload heap (dynamic), ensure we are writing to the per-frame upload resource.
+        updateIndex();
+
+        // Map and copy directly to the upload resource corresponding to current frame
+        ID3D12Resource* res = _resource.Get();
+        AXASSERT(res != nullptr, "Dynamic upload resource not set");
+
         void* mapped = nullptr;
-        D3D12_RANGE readRange{0, 0};  // we don't intend to read
-        HRESULT hr = _resource->Map(0, &readRange, &mapped);
+        D3D12_RANGE readRange{0, 0};  // We don't intend to read from the resource
+        HRESULT hr = res->Map(0, &readRange, &mapped);
         AXASSERT(SUCCEEDED(hr), "Failed to map upload buffer");
         std::memcpy(static_cast<uint8_t*>(mapped) + offset, data, size);
         D3D12_RANGE written{offset, offset + size};
-        _resource->Unmap(0, &written);
+        res->Unmap(0, &written);
     }
     else
     {
-        // Device local: use upload heap + CopyBufferRegion via command list
+        // Device local: use upload allocator + copy via command list
         copyFromUploadBuffer(data, offset, size);
     }
 
@@ -187,7 +255,7 @@ void BufferImpl::copyFromUploadBuffer(const void* data, std::size_t offset, std:
 
     // Allocate upload memory from allocator
     auto allocator = _driver->getUploadBufferAllocator();  // raw pointer
-    auto span      = allocator->allocBytes(size);          // 256 alignment for safety
+    auto span      = allocator->allocBytes(size, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
 
     // Copy data into upload memory
     std::memcpy(span.cpuPtr, data, size);

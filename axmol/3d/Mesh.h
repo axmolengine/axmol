@@ -79,7 +79,7 @@ public:
     static Mesh* create(const std::vector<float>& vertices,
                         int perVertexSizeInFloat,
                         const IndexArray& indices,
-                        const axstd::pod_vector<MeshVertexAttrib>& attribs);
+                        const tlx::pod_vector<MeshVertexAttrib>& attribs);
 
     /**
      * create mesh
@@ -281,9 +281,9 @@ protected:
     void resetLightUniformValues();
     void setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigned int lightmask);
     void bindMeshCommand();
-    axstd::hash_map<NTextureData::Usage, Texture2D*> _textures;  // textures that submesh is using
-    MeshSkin* _skin;                                             // skin
-    bool _visible;                                               // is the submesh visible
+    tlx::hash_map<NTextureData::Usage, Texture2D*> _textures;  // textures that submesh is using
+    MeshSkin* _skin;                                           // skin
+    bool _visible;                                             // is the submesh visible
 
     bool _instancing;
     rhi::Buffer* _instanceTransformBuffer;
@@ -303,7 +303,7 @@ protected:
     Material* _material;
     AABB _aabb;
     std::function<void()> _visibleChanged;
-    axstd::string_map<std::vector<MeshCommand>> _meshCommands;
+    tlx::string_map<std::vector<MeshCommand>> _meshCommands;
 
     /// light parameters
     std::vector<Vec3> _dirLightUniformColorValues;

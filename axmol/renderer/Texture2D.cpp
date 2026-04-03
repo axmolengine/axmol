@@ -43,10 +43,11 @@ THE SOFTWARE.
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/NinePatchImageParser.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/RHIUtils.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/renderer/Renderer.h"
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
@@ -329,9 +330,9 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
     if (!pfd.bpp)
     {
         AXLOGW("WARNING: unsupported pixelformat: {:x}", (uint32_t)desc.pixelFormat);
-#if AX_RENDER_API == AX_RENDER_API_MTL
-        AXASSERT(false, "pixeformat not found in _pixelFormatInfoTables, register required!");
-#endif
+        if (rhi::DriverContext::isMetal())
+            AXASSERT(false, "pixeformat not found in _pixelFormatInfoTables, register required!");
+
         return false;
     }
 
@@ -346,53 +347,53 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
         return false;
     }
 
-// !override renderFormat since some render format by RHI
-#if AX_RENDER_API == AX_RENDER_API_MTL
-    switch (renderFormat)
+    // !override renderFormat since some render format by RHI
+    const auto driverType = rhi::DriverContext::currentDriverType();
+    if (driverType == rhi::DriverType::Metal)
     {
-#    if (AX_TARGET_PLATFORM != AX_PLATFORM_IOS || TARGET_OS_SIMULATOR)
-    // packed 16 bits pixels only available on iOS
-    case PixelFormat::RGB565:
-    case PixelFormat::RGB5A1:
-    case PixelFormat::RGBA4:
-#    endif
-    case PixelFormat::RGB8:
-        // Note: conversion to RGBA8 will happends
-        renderFormat = PixelFormat::RGBA8;
-        break;
-    default:
-        break;
-    }
-#elif AX_RENDER_API == AX_RENDER_API_D3D11 || AX_RENDER_API == AX_RENDER_API_D3D12 || AX_RENDER_API == AX_RENDER_API_VK
-    switch (renderFormat)
-    {
-    case PixelFormat::RGB8:
-        // Note: conversion to RGBA8 will happends
-        renderFormat = PixelFormat::RGBA8;
-        break;
-    default:
-        break;
-    }
+        switch (renderFormat)
+        {
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_IOS || TARGET_OS_SIMULATOR)
+        // packed 16 bits pixels only available on iOS
+        case PixelFormat::RGB565:
+        case PixelFormat::RGB5A1:
+        case PixelFormat::RGBA4:
 #endif
-
-#if AX_RENDER_API != AX_RENDER_API_GL
-    switch (renderFormat)
-    {
-#    if (AX_RENDER_API == AX_RENDER_API_MTL && (AX_TARGET_PLATFORM != AX_PLATFORM_IOS || TARGET_OS_SIMULATOR)) || \
-        AX_RENDER_API == AX_RENDER_API_D3D11 || AX_RENDER_API == AX_RENDER_API_D3D12
-    // packed 16 bits pixels only available on iOS, vulkan
-    case PixelFormat::RGB565:
-    case PixelFormat::RGB5A1:
-    case PixelFormat::RGBA4:
-#    endif
-    case PixelFormat::RGB8:
-        // Note: conversion to RGBA8 will happends
-        renderFormat = PixelFormat::RGBA8;
-        break;
-    default:
-        break;
+        case PixelFormat::RGB8:
+            // Note: conversion to RGBA8 will happends
+            renderFormat = PixelFormat::RGBA8;
+            break;
+        default:
+            break;
+        }
     }
-#endif
+    else if (driverType == rhi::DriverType::D3D11 || driverType == rhi::DriverType::D3D12)
+    {
+        switch (renderFormat)
+        {
+        // packed 16 bits pixels only available on iOS, vulkan
+        case PixelFormat::RGB565:
+        case PixelFormat::RGB5A1:
+        case PixelFormat::RGBA4:
+        case PixelFormat::RGB8:
+            renderFormat = PixelFormat::RGBA8;
+            break;
+        default:
+            break;
+        }
+    }
+    else if (driverType == rhi::DriverType::Vulkan)
+    {
+        switch (renderFormat)
+        {
+        case PixelFormat::RGB8:
+            // Note: conversion to RGBA8 will happends
+            renderFormat = PixelFormat::RGBA8;
+            break;
+        default:
+            break;
+        }
+    }
 
     _originalPF  = desc.pixelFormat;
     _contentSize = Vec2((float)desc.width, (float)desc.height);

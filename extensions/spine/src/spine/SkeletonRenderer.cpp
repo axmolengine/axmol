@@ -36,8 +36,6 @@ using namespace ax;
 namespace spine {
 
 	namespace {
-		AxmolTextureLoader textureLoader;
-
 		int computeTotalCoordCount(Skeleton &skeleton, int startSlotIndex, int endSlotIndex);
 		axmol::Rect computeBoundingRect(const float *coords, int vertexCount);
 		void interleaveCoordinates(float *dst, const float *src, int vertexCount, int dstStride);
@@ -96,9 +94,6 @@ namespace spine {
 		_skeleton->setToSetupPose();
 		_skeleton->updateWorldTransform(Physics_Update);
 	}
-
-	void SkeletonRenderer::setupGLProgramState(bool /*twoColorTintEnabled*/) {
-		}
 
 	void SkeletonRenderer::setSkeletonData(SkeletonData *skeletonData, bool ownsSkeletonData) {
 		_skeleton = new (__FILE__, __LINE__) Skeleton(skeletonData);
@@ -167,7 +162,7 @@ namespace spine {
 	}
 
 	void SkeletonRenderer::initWithJsonFile(const std::string &skeletonDataFile, const std::string &atlasFile, float scale) {
-		_atlas = new (__FILE__, __LINE__) Atlas(atlasFile.c_str(), &textureLoader, true);
+		_atlas = new (__FILE__, __LINE__) Atlas(atlasFile.c_str(), AxmolTextureLoader::getInstance(), true);
 		AXASSERT(_atlas, "Error reading atlas file.");
 
 		_attachmentLoader = new (__FILE__, __LINE__) AxmolAtlasAttachmentLoader(_atlas);
@@ -199,7 +194,7 @@ namespace spine {
 	}
 
 	void SkeletonRenderer::initWithBinaryFile(const std::string &skeletonDataFile, const std::string &atlasFile, float scale) {
-		_atlas = new (__FILE__, __LINE__) Atlas(atlasFile.c_str(), &textureLoader, true);
+ 		_atlas = new (__FILE__, __LINE__) Atlas(atlasFile.c_str(), AxmolTextureLoader::getInstance(), true);
 		AXASSERT(_atlas, "Error reading atlas file.");
 
 		_attachmentLoader = new (__FILE__, __LINE__) AxmolAtlasAttachmentLoader(_atlas);
@@ -672,7 +667,6 @@ namespace spine {
 
 	void SkeletonRenderer::setTwoColorTint(bool enabled) {
 		_twoColorTint = enabled;
-		setupGLProgramState(enabled);
 	}
 
 	bool SkeletonRenderer::isTwoColorTint() {

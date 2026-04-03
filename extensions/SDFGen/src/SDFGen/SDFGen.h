@@ -17,6 +17,8 @@ public:
     static SDFGen* getInstance();
     static void destroyInstance();
 
+    ~SDFGen();
+
     void open(ax::Scene* = nullptr);
     void close();
 

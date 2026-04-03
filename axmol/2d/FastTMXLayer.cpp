@@ -41,11 +41,11 @@ THE SOFTWARE.
 #include "axmol/base/Types.h"
 #include "axmol/2d/FastTMXTiledMap.h"
 #include "axmol/2d/Sprite.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/Shaders.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/rhi/Buffer.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/text_utils.h"
@@ -1021,9 +1021,7 @@ TMXTileAnimTask::TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation
     _frameCount   = static_cast<uint32_t>(_animation->_frames.size());
     _tilePosition = tilePos;
     _flag         = flag;
-    std::stringstream ss;
-    ss << "TickAnimOnTilePos(" << _tilePosition.x << "," << _tilePosition.y << ")";
-    _key = ss.str();
+    _key          = fmt::format("TickAnimOnTilePos({},{})", _tilePosition.x, _tilePosition.y);
 }
 
 void TMXTileAnimTask::tickAndScheduleNext(float dt)

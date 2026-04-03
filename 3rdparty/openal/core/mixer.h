@@ -3,33 +3,39 @@
 
 #include <array>
 #include <cmath>
-#include <cstddef>
+#include <span>
 
-#include "alspan.h"
+#include "alnumeric.h"
 #include "ambidefs.h"
 #include "bufferline.h"
 #include "opthelpers.h"
 
 struct MixParams;
 
-/* Mixer functions that handle one input and multiple output channels. */
-using MixerOutFunc = void(*)(const al::span<const float> InSamples,
-    const al::span<FloatBufferLine> OutBuffer, const al::span<float> CurrentGains,
-    const al::span<const float> TargetGains, const std::size_t Counter, const std::size_t OutPos);
+void Mix_C(std::span<float const> InSamples, std::span<FloatBufferLine> OutBuffer,
+    std::span<float> CurrentGains, std::span<float const> TargetGains, usize Counter,
+    usize OutPos);
+void Mix_C(std::span<float const> InSamples, std::span<float> OutBuffer, float &CurrentGain,
+    float TargetGain, usize Counter);
 
-DECL_HIDDEN extern MixerOutFunc MixSamplesOut;
-inline void MixSamples(const al::span<const float> InSamples,
-    const al::span<FloatBufferLine> OutBuffer, const al::span<float> CurrentGains,
-    const al::span<const float> TargetGains, const std::size_t Counter, const std::size_t OutPos)
+/* Mixer functions that handle one input and multiple output channels. */
+using MixerOutFunc = void(*)(std::span<float const> InSamples,
+    std::span<FloatBufferLine> OutBuffer, std::span<float> CurrentGains,
+    std::span<float const> TargetGains, usize Counter, usize OutPos);
+
+inline constinit auto MixSamplesOut = MixerOutFunc{Mix_C};
+inline void MixSamples(std::span<float const> const InSamples,
+    std::span<FloatBufferLine> const OutBuffer, std::span<float> const CurrentGains,
+    std::span<float const> const TargetGains, usize const Counter, usize const OutPos)
 { MixSamplesOut(InSamples, OutBuffer, CurrentGains, TargetGains, Counter, OutPos); }
 
 /* Mixer functions that handle one input and one output channel. */
-using MixerOneFunc = void(*)(const al::span<const float> InSamples,const al::span<float> OutBuffer,
-    float &CurrentGain, const float TargetGain, const std::size_t Counter);
+using MixerOneFunc = void(*)(std::span<float const> InSamples, std::span<float> OutBuffer,
+    float &CurrentGain, float TargetGain, usize Counter);
 
-DECL_HIDDEN extern MixerOneFunc MixSamplesOne;
-inline void MixSamples(const al::span<const float> InSamples, const al::span<float> OutBuffer,
-    float &CurrentGain, const float TargetGain, const std::size_t Counter)
+inline constinit auto MixSamplesOne = MixerOneFunc{Mix_C};
+inline void MixSamples(std::span<float const> const InSamples, std::span<float> const OutBuffer,
+    float &CurrentGain, float const TargetGain, usize const Counter)
 { MixSamplesOne(InSamples, OutBuffer, CurrentGain, TargetGain, Counter); }
 
 
@@ -47,8 +53,7 @@ inline void MixSamples(const al::span<const float> InSamples, const al::span<flo
  * The components are ordered such that OpenAL's X, Y, and Z are the first,
  * second, and third parameters respectively -- simply negate X and Z.
  */
-std::array<float,MaxAmbiChannels> CalcAmbiCoeffs(const float y, const float z, const float x,
-    const float spread);
+std::array<float,MaxAmbiChannels> CalcAmbiCoeffs(float y, float z, float x, float spread);
 
 /**
  * CalcDirectionCoeffs
@@ -57,8 +62,8 @@ std::array<float,MaxAmbiChannels> CalcAmbiCoeffs(const float y, const float z, c
  * vector must be normalized (unit length), and the spread is the angular width
  * of the sound (0...tau).
  */
-inline std::array<float,MaxAmbiChannels> CalcDirectionCoeffs(const al::span<const float,3> dir,
-    const float spread)
+inline auto CalcDirectionCoeffs(const std::span<const float,3> dir, const float spread)
+    -> std::array<float,MaxAmbiChannels>
 {
     /* Convert from OpenAL coords to Ambisonics. */
     return CalcAmbiCoeffs(-dir[0], dir[1], -dir[2], spread);
@@ -70,7 +75,8 @@ inline std::array<float,MaxAmbiChannels> CalcDirectionCoeffs(const al::span<cons
  * Calculates ambisonic coefficients based on an OpenAL direction vector. The
  * vector must be normalized (unit length).
  */
-constexpr std::array<float,MaxAmbiChannels> CalcDirectionCoeffs(const al::span<const float,3> dir)
+constexpr auto CalcDirectionCoeffs(const std::span<const float,3> dir)
+    -> std::array<float,MaxAmbiChannels>
 {
     /* Convert from OpenAL coords to Ambisonics. */
     return CalcAmbiCoeffs(-dir[0], dir[1], -dir[2]);
@@ -83,8 +89,8 @@ constexpr std::array<float,MaxAmbiChannels> CalcDirectionCoeffs(const al::span<c
  * azimuth and elevation parameters are in radians, going right and up
  * respectively.
  */
-inline std::array<float,MaxAmbiChannels> CalcAngleCoeffs(const float azimuth,
-    const float elevation, const float spread)
+inline auto CalcAngleCoeffs(const float azimuth, const float elevation, const float spread)
+    -> std::array<float,MaxAmbiChannels>
 {
     const float x{-std::sin(azimuth) * std::cos(elevation)};
     const float y{ std::sin(elevation)};
@@ -102,7 +108,7 @@ inline std::array<float,MaxAmbiChannels> CalcAngleCoeffs(const float azimuth,
  * coeffs are a 'slice' of a transform matrix for the input channel, used to
  * scale and orient the sound samples.
  */
-void ComputePanGains(const MixParams *mix, const al::span<const float,MaxAmbiChannels> coeffs,
-    const float ingain, const al::span<float,MaxAmbiChannels> gains);
+void ComputePanGains(const MixParams *mix, const std::span<const float,MaxAmbiChannels> coeffs,
+    const float ingain, const std::span<float,MaxAmbiChannels> gains);
 
 #endif /* CORE_MIXER_H */

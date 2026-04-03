@@ -1,12 +1,12 @@
 #ifndef AL_THREADS_H
 #define AL_THREADS_H
 
+#include <bit>
 #include <cstdint>
 #include <stdexcept>
 #include <type_traits>
 
 #ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 #elif defined(__STDC_NO_THREADS__) || !__has_include(<threads.h>)
@@ -18,7 +18,6 @@
 #include <threads.h>
 #endif
 
-#include "albit.h"
 
 namespace al {
 
@@ -38,9 +37,9 @@ class tss {
                 return static_cast<void*>(value);
         }
         else if constexpr(sizeof(T) == sizeof(void*))
-            return al::bit_cast<void*>(value);
+            return std::bit_cast<void*>(value);
         else if constexpr(std::is_integral_v<T>)
-            return al::bit_cast<void*>(static_cast<std::uintptr_t>(value));
+            return std::bit_cast<void*>(static_cast<std::uintptr_t>(value));
     }
 
     [[nodiscard]]
@@ -49,9 +48,9 @@ class tss {
         if constexpr(std::is_pointer_v<T>)
             return static_cast<T>(ptr);
         else if constexpr(sizeof(T) == sizeof(void*))
-            return al::bit_cast<T>(ptr);
+            return std::bit_cast<T>(ptr);
         else if constexpr(std::is_integral_v<T>)
-            return static_cast<T>(al::bit_cast<std::uintptr_t>(ptr));
+            return static_cast<T>(std::bit_cast<std::uintptr_t>(ptr));
     }
 
 #ifdef _WIN32
@@ -86,19 +85,19 @@ public:
 public:
     tss()
     {
-        if(int res{pthread_key_create(&mTss, nullptr)}; res != 0)
+        if(const auto res = pthread_key_create(&mTss, nullptr); res != 0)
             throw std::runtime_error{"al::tss::tss()"};
     }
     explicit tss(const T &init) : tss{}
     {
-        if(int res{pthread_setspecific(mTss, to_ptr(init))}; res != 0)
+        if(const auto res = pthread_setspecific(mTss, to_ptr(init)); res != 0)
             throw std::runtime_error{"al::tss::tss(T)"};
     }
     ~tss() { pthread_key_delete(mTss); }
 
     void set(const T &value) const
     {
-        if(int res{pthread_setspecific(mTss, to_ptr(value))}; res != 0)
+        if(const auto res = pthread_setspecific(mTss, to_ptr(value)); res != 0)
             throw std::runtime_error{"al::tss::set(T)"};
     }
 
@@ -112,19 +111,19 @@ public:
 public:
     tss()
     {
-        if(int res{tss_create(&mTss, nullptr)}; res != thrd_success)
+        if(const auto res = tss_create(&mTss, nullptr); res != thrd_success)
             throw std::runtime_error{"al::tss::tss()"};
     }
     explicit tss(const T &init) : tss{}
     {
-        if(int res{tss_set(mTss, to_ptr(init))}; res != thrd_success)
+        if(const auto res = tss_set(mTss, to_ptr(init)); res != thrd_success)
             throw std::runtime_error{"al::tss::tss(T)"};
     }
     ~tss() { tss_delete(mTss); }
 
     void set(const T &value) const
     {
-        if(int res{tss_set(mTss, to_ptr(value))}; res != thrd_success)
+        if(const auto res = tss_set(mTss, to_ptr(value)); res != thrd_success)
             throw std::runtime_error{"al::tss::set(T)"};
     }
 

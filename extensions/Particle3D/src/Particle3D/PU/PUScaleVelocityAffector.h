@@ -33,7 +33,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUScaleVelocityAffector : public PUAffector
+class AX_EXT_API PUScaleVelocityAffector : public PUAffector
 {
 public:
     // Constants

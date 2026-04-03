@@ -31,7 +31,7 @@
 
 #if (defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                             \
     (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
-     AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+     (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX && defined(AX_HAVE_WEBKIT2GTK)))
 /**
  * @addtogroup ui
  * @{

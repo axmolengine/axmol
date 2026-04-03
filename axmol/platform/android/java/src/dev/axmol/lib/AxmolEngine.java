@@ -115,10 +115,7 @@ public class AxmolEngine {
     // The OBB file
     private static ZipResourceFile sOBBFile = null;
 
-//    public static final int RENDER_API_GL  = 1;
-//    public static final int RENDER_API_MTL = 2;
-//    public static final int RENDER_API_D3D = 3;
-    public static final int RENDER_API_VK  = 4;
+    public static final int RENDER_API_VK  = 3;
 
     public static boolean sNativePaused = false;
 
@@ -127,9 +124,8 @@ public class AxmolEngine {
     // ===========================================================
 
     public static void runOnAxmolThread(final Runnable r) {
-        nativeRunOnAxmolThread(r);
+        ((AxmolActivity)sActivity).runOnAxmolThread(r);
     }
-
     public static void runOnUiThread(final Runnable r) {
         sActivity.runOnUiThread(r);
     }

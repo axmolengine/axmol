@@ -41,32 +41,16 @@ namespace text_utils
 
 std::string_view ltrim(std::string_view s)
 {
-    if (!s.empty())
-    {
-        auto first = s.data();
-        auto last  = first + s.length();
-        while (first < last && std::isspace(*first))
-        {
-            ++first;
-        }
-        return std::string_view{first, static_cast<size_t>(last - first)};
-    }
-    return s;
+    size_t i = 0;
+    while (i < s.size() && std::isspace(static_cast<unsigned char>(s[i])))
+        ++i;
+    return s.substr(i);
 }
 
 std::string_view rtrim(std::string_view s)
 {
-    if (!s.empty())
-    {
-        auto first  = s.data();
-        auto last   = first + s.length();
-        auto rfirst = last - 1;
-        while (rfirst > first && std::isspace(*rfirst))
-        {
-            --rfirst;
-        }
-        return std::string_view{first, static_cast<size_t>(rfirst + 1 - first)};
-    }
+    while (!s.empty() && std::isspace(static_cast<unsigned char>(s.back())))
+        s.remove_suffix(1);
     return s;
 }
 
@@ -76,7 +60,7 @@ std::string_view rtrim(std::string_view s)
  *
  * Return value: the index of the last character that is not c.
  * */
-unsigned int getIndexOfLastNotChar16(const std::vector<char16_t>& str, char16_t c)
+unsigned int getIndexOfLastNotChar16(std::span<const char16_t> str, char16_t c)
 {
     int len = static_cast<int>(str.size());
 

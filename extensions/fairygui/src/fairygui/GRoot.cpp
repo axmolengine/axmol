@@ -31,10 +31,6 @@ THE SOFTWARE.
 NS_FGUI_BEGIN
 using namespace ax;
 
-#if COCOS2D_VERSION < 0x00040000
-using namespace ax::experimental;
-#endif
-
 GRoot* GRoot::_inst = nullptr;
 bool GRoot::_soundEnabled = true;
 float GRoot::_soundVolumeScale = 1.0f;

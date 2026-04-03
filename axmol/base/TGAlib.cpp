@@ -113,7 +113,7 @@ static bool tgaLoadRLEImageData(unsigned char* buffer, uint32_t bufSize, tImageT
 {
     unsigned int mode, total, i, index = 0;
     unsigned char aux[4], runlength = 0;
-    unsigned int skip = 0, flag = 0;
+    unsigned int skip, flag         = 0;
     size_t step = (sizeof(unsigned char) + sizeof(signed short)) * 6;
 
     // mode equal the number of components for each pixel

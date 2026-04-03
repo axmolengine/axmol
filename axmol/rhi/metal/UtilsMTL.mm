@@ -30,9 +30,6 @@
 
 namespace ax::rhi::mtl
 {
-
-id<MTLTexture> UtilsMTL::_defaultDepthStencilAttachmentTexture = nil;
-
 namespace
 {
 MTLPixelFormat getSupportedDepthStencilFormat()
@@ -132,28 +129,6 @@ void UtilsMTL::initGPUTextureFormats()
     info.fmt   = getSupportedDepthStencilFormat();
 }
 
-id<MTLTexture> UtilsMTL::getDefaultDepthStencilTexture()
-{
-    return _defaultDepthStencilAttachmentTexture;
-}
-
-void UtilsMTL::updateDefaultDepthStencilAttachment(CAMetalLayer* layer)
-{
-    if (_defaultDepthStencilAttachmentTexture != nil)
-    {
-        [_defaultDepthStencilAttachmentTexture release];
-    }
-
-    MTLTextureDescriptor* textureDesc     = [[MTLTextureDescriptor alloc] init];
-    textureDesc.width                     = layer.drawableSize.width;
-    textureDesc.height                    = layer.drawableSize.height;
-    textureDesc.pixelFormat               = s_textureFormats[(int)PixelFormat::D24S8].fmt;
-    textureDesc.resourceOptions           = MTLResourceStorageModePrivate;
-    textureDesc.usage                     = MTLTextureUsageRenderTarget;
-    _defaultDepthStencilAttachmentTexture = [layer.device newTextureWithDescriptor:textureDesc];
-    [textureDesc release];
-}
-
 MTLPixelFormat UtilsMTL::getDefaultColorAttachmentPixelFormat()
 {
     return MTLPixelFormatBGRA8Unorm;
@@ -175,7 +150,7 @@ MTLPixelFormat UtilsMTL::toMTLPixelFormat(PixelFormat textureFormat)
 
 void UtilsMTL::generateMipmaps(id<MTLTexture> texture)
 {
-    auto cmdQueue = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLCmdQueue();
+    auto cmdQueue = static_cast<DriverImpl*>(axdrv)->getMTLCmdQueue();
     @autoreleasepool
     {
         auto oneOffBuffer                        = [cmdQueue commandBuffer];

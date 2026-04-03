@@ -27,7 +27,7 @@
 #include "RendererTest.h"
 #include <chrono>
 #include <sstream>
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 
 namespace
 {
@@ -66,7 +66,7 @@ public:
     void reset() { _durations.clear(); }
 
 private:
-    axstd::string_map<int64_t> _durations;
+    tlx::string_map<int64_t> _durations;
 };
 
 NewRendererTests::NewRendererTests()

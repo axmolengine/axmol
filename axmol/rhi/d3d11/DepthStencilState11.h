@@ -50,7 +50,7 @@ public:
 
 private:
     ID3D11Device* _device = nullptr;  // weak ref
-    axstd::hash_map<uint32_t, ComPtr<ID3D11DepthStencilState>> _stateCache;
+    tlx::hash_map<uint32_t, ComPtr<ID3D11DepthStencilState>> _stateCache;
 
     ComPtr<ID3D11DepthStencilState> _activeState;
     ComPtr<ID3D11DepthStencilState> _disableState;

@@ -32,6 +32,7 @@
 
 #include "axmol/axmol.h"
 #include "axmol/rhi/ProgramState.h"
+#include "axmol/rhi/VertexLayout.h"
 #include <spine/spine.h>
 #include <vector>
 
@@ -87,16 +88,10 @@ namespace spine {
 		bool isForceFlush() { return _forceFlush; };
 
 	protected:
-		void generateMaterialID();
+		void generateMaterialID(void* prog);
 		uint32_t _materialID;
 
-
-		void *_prog = nullptr;
 		axmol::rhi::Texture *_texture = nullptr;
-		axmol::rhi::ProgramState *_programState = nullptr;
-        axmol::rhi::VertexLayout* _vertexLayout = nullptr;
-		axmol::rhi::UniformLocation _locPMatrix;
-		axmol::rhi::UniformLocation _locTexture;
 
 		axmol::BlendFunc _blendType;
 		TwoColorTriangles _triangles;
@@ -134,6 +129,9 @@ namespace spine {
 
 		TwoColorTrianglesCommand *nextFreeCommand();
 
+        ax::EventListener* _event1{nullptr};
+        ax::EventListener* _event2{nullptr};
+
 		// pool of commands
 		std::vector<TwoColorTrianglesCommand *> _commandsPool;
 		uint32_t _nextFreeCommand;
@@ -145,6 +143,11 @@ namespace spine {
 		// pool of indices
 		Vector<unsigned short> _indices;
 
+
+        ax::rhi::ProgramState* _twoColorProgramState{nullptr};
+        ax::rhi::VertexLayout* _twoColorVertexLayout{nullptr};
+        ax::rhi::UniformLocation _locPMatrix{};
+        ax::rhi::UniformLocation _locTexture{};
 
 		// VBO handles & attribute locations
 		V3F_C4B_C4B_T2F *_vertexBuffer;

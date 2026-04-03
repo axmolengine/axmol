@@ -599,7 +599,7 @@ void ax::NavMesh::findPath(const Vec3& start, const Vec3& end, std::vector<Vec3>
                     // dtVcopy(&m_smoothPath[m_nsmoothPath * 3], iterPos);
                     // m_nsmoothPath++;
                     pathPoints.emplace_back(Vec3(iterPos[0], iterPos[1], iterPos[2]));
-                    nsmoothPath++;
+                    // nsmoothPath++;
                 }
                 break;
             }

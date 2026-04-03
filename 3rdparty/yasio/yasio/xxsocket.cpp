@@ -36,7 +36,7 @@ SOFTWARE.
 #  include "yasio/xxsocket.hpp"
 #endif
 
-#include "yasio/utils.hpp"
+#include "yasio/tlx/chrono.hpp"
 
 #if !defined(_WIN32)
 #  include "yasio/impl/ifaddrs.hpp"
@@ -718,9 +718,9 @@ int xxsocket::send_n(socket_native_type s, const void* buf, int len, std::chrono
     if (n == -1 && xxsocket::not_send_error(error))
     {
       // Wait upto <timeout> for the blocking to subside.
-      auto start    = yasio::highp_clock();
+      auto start    = tlx::highp_clock();
       int const rtn = handle_write_ready(s, wtimeout);
-      wtimeout -= std::chrono::microseconds(yasio::highp_clock() - start);
+      wtimeout -= std::chrono::microseconds(tlx::highp_clock() - start);
 
       // Did select() succeed?
       if (rtn != -1 && wtimeout.count() > 0)
@@ -768,9 +768,9 @@ int xxsocket::recv_n(socket_native_type s, void* buf, int len, std::chrono::micr
     if (n == -1 && xxsocket::not_recv_error(error))
     {
       // Wait upto <timeout> for the blocking to subside.
-      auto start    = yasio::highp_clock();
+      auto start    = tlx::highp_clock();
       int const rtn = handle_read_ready(s, wtimeout);
-      wtimeout -= std::chrono::microseconds(yasio::highp_clock() - start);
+      wtimeout -= std::chrono::microseconds(tlx::highp_clock() - start);
 
       // Did select() succeed?
       if (rtn != -1 && wtimeout.count() > 0)
@@ -834,9 +834,9 @@ int xxsocket::select(socket_native_type s, fd_set* readfds, fd_set* writefds, fd
 
     timeval waitd_tv = {static_cast<decltype(timeval::tv_sec)>(wtimeout.count() / std::micro::den),
                         static_cast<decltype(timeval::tv_usec)>(wtimeout.count() % std::micro::den)};
-    long long start  = highp_clock();
+    long long start  = tlx::highp_clock();
     n                = ::select(static_cast<int>(s + 1), readfds, writefds, exceptfds, &waitd_tv);
-    wtimeout -= std::chrono::microseconds(highp_clock() - start);
+    wtimeout -= std::chrono::microseconds(tlx::highp_clock() - start);
 
     if (n < 0 && xxsocket::get_last_errno() == EINTR)
     {
@@ -944,7 +944,7 @@ unsigned int xxsocket::tcp_rtt() const { return xxsocket::tcp_rtt(this->fd); }
 unsigned int xxsocket::tcp_rtt(socket_native_type s)
 {
 #if defined(_WIN32)
-#  if defined(NTDDI_WIN10_RS2) && NTDDI_VERSION >= NTDDI_WIN10_RS2
+#  if YASIO__OS_NT10_RS2
   TCP_INFO_v0 info;
   DWORD tcpi_ver = 0, bytes_transferred = 0;
   int status = WSAIoctl(s, SIO_TCP_INFO,
@@ -1033,6 +1033,21 @@ const char* xxsocket::strerror_r(int error, char* buf, size_t buflen)
   }
   strncpy(buf, YASIO_NO_ERROR, (std::min)(YASIO_NO_ERROR_SZ, buflen));
   return buf;
+}
+
+void xxsocket::update_connect_context(socket_native_type s, std::error_code& ec)
+{
+#if defined(_WIN32)
+  if (!ec)
+  {
+    // Need to set the SO_UPDATE_CONNECT_CONTEXT option so that getsockname
+    // and getpeername will work on the connected socket.
+    // socket_ops::state_type state        = 0;
+    const int so_update_connect_context = 0x7010;
+    if (xxsocket::set_optval(s, SOL_SOCKET, so_update_connect_context, nullptr, 0) < 0)
+      ec = std::error_code(::WSAGetLastError(), std::system_category());
+  }
+#endif
 }
 
 const char* xxsocket::gai_strerror(int error)

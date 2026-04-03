@@ -10,7 +10,7 @@
 #include "Type/csmVector.hpp"
 #include "Model/CubismModel.hpp"
 #include <float.h>
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 
 using namespace ax;
 
@@ -657,7 +657,7 @@ void CubismRendererProfile_Cocos2dx::Save()
     // _lastColorBuffer  = nullptr; // unused
     _lastRenderTarget = GetCocos2dRenderer()->getRenderTarget();
 	//_lastRenderTargetFlag = _lastRenderTarget->getTargetFlags();
-	_lastColorBuffer  = _lastRenderTarget->_color[0].texture;
+    _lastColorBuffer   = _lastRenderTarget->_color.size() > 0 ? _lastRenderTarget->_color[0].texture : nullptr;
 	_lastDepthBuffer = _lastRenderTarget->_depthStencil.texture;
 	_lastStencilBuffer = _lastRenderTarget->_depthStencil.texture;
     _lastViewport = csmRectF(GetCocos2dRenderer()->getViewport().x, GetCocos2dRenderer()->getViewport().y, GetCocos2dRenderer()->getViewport().w, GetCocos2dRenderer()->getViewport().h);
@@ -681,8 +681,8 @@ void CubismRendererProfile_Cocos2dx::Restore()
         cmd->init(0);
 
         auto restoringRT = _lastRenderTarget;
-		restoringRT->setColorAttachment(_lastColorBuffer);
-		restoringRT->setDepthStencilAttachment(_lastDepthBuffer);
+        restoringRT->setColorTexture(_lastColorBuffer);
+		restoringRT->setDepthStencilTexture(_lastDepthBuffer);
 		// restoringRT->setTargetFlags(_lastRenderTargetFlag);
         cmd->func        = [=]() -> void {
             GetCocos2dRenderer()->setRenderTarget(restoringRT);
@@ -1124,7 +1124,7 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
                           sizeof(csmFloat32) * 2, false);
         layoutDesc.endLayout();
 
-        layout = axvlm->acquireVertexLayout(std::move(layoutDesc));
+        layout = axvlm->getVertexLayout(std::move(layoutDesc));
 
         // チャンネル
         const csmInt32 channelNo = renderer->GetClippingContextBufferForMask()->_layoutChannelNo;
@@ -1200,7 +1200,7 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
 
         layoutDesc.endLayout();
 
-        layout = axvlm->acquireVertexLayout(std::move(layoutDesc));
+        layout = axvlm->getVertexLayout(std::move(layoutDesc));
 
         if (masked)
         {
@@ -1233,7 +1233,7 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
 
     blendDescriptor->blendEnabled = true;
     if (needInit)
-        cmd->setOwnPSVL(programState, layout, RenderCommand::ADOPT_FLAG_ALL);
+        cmd->setOwnPSVL(programState, layout, RenderCommand::ADOPT_FLAG_PS);
 }
 
 ax::rhi::Program* CubismShader_Cocos2dx::LoadShaderProgram(const csmChar* vertShaderPath,

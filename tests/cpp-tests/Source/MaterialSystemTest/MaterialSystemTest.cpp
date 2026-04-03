@@ -479,8 +479,8 @@ std::string Material_parsePerformance::subtitle() const
 static void printProperties(Properties* properties, int indent)
 {
     // Print the name and ID of the current namespace.
-    const char* spacename = properties->getNamespace();
-    const char* id        = properties->getId().data();
+    auto spacename = properties->getNamespace();
+    auto id        = properties->getId();
     char chindent[64];
     int i = 0;
     for (i = 0; i < indent * 2; i++)
@@ -490,9 +490,9 @@ static void printProperties(Properties* properties, int indent)
     AXLOGD("{}Namespace: {}  ID: {}\n{}{{", chindent, spacename, id, chindent);
 
     // Print all properties in this namespace.
-    const char* name  = properties->getNextProperty();
-    const char* value = nullptr;
-    while (name != nullptr)
+    auto name = properties->getNextProperty();
+    std::string_view value;
+    while (!name.empty())
     {
         value = properties->getString(name);
         AXLOGD("{}{} = {}", chindent, name, value);

@@ -29,7 +29,7 @@
 
 #include <mutex>
 
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
 
@@ -54,7 +54,7 @@ class AssetsManagerDelegateProtocol;
  *  The updated package should be a zip file. And there should be a file named
  *  version in the server, which contains version code.
  */
-class AX_EX_DLL AssetsManager : public Node
+class AX_EXT_API AssetsManager : public Node
 {
 public:
     enum class ErrorCode

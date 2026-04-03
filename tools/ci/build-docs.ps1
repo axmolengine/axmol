@@ -2,7 +2,7 @@
 # Can runs on Windows,Linux
 param(
     $site_dist = $null,
-    $min_ver = '2.4' # The minimum version to build docs
+    $min_ver = '2.6' # The minimum version to build docs
 )
 
 $ErrorActionPreference = 'Stop'
@@ -50,7 +50,7 @@ if (!(Test-Path "$prefix" -PathType Container)) {
 }
 
 function setup_doxygen() {
-    $doxygen_ver = '1.14.0'
+    $doxygen_ver = '1.16.1'
 
     $doxygen_pkg_name = if ($isWin) { "doxygen-$doxygen_ver.windows.x64.bin.zip" } else { "doxygen-$doxygen_ver.linux.bin.tar.gz" }
     $doxygen_pkg_path = Join-Path $prefix $doxygen_pkg_name
@@ -142,26 +142,43 @@ function  configure_file($infile, $outfile, $vars) {
 # key   (doc_ver)
 # value (head_ref)
 $release_tags = $(git tag)
-$ver_map = @{}
 
-$ver_map['latest'] = $latest_branch
+$comparer = [System.Collections.Generic.Comparer[Version]]::Create({
+        param($x, $y)
+        $y.CompareTo($x)
+    })
+
+$ver_map = New-Object 'System.Collections.Generic.SortedDictionary[Version,Version]' ($comparer)
 
 foreach ($item in $release_tags) {
     if ([Regex]::Match($item, '^v[0-9]+\.[0-9]+\.[0-9]+$').Success) {
-        $doc_ver = $($item.Split('.')[0..1] -join '.').TrimStart('v')
-        if ($doc_ver -lt $min_ver) {
+        $ver = [version]$item.TrimStart('v')
+        $doc_ver = [version]"$($ver.Major).$($ver.Minor)"
+        if ($doc_ver -lt [version]$min_ver) {
             continue
         }
-        $ver_map[$doc_ver] = $item
+        if (!$ver_map.ContainsKey($doc_ver)) {
+            $ver_map.Add($doc_ver, $ver)
+        }
+        elseif ($ver_map[$doc_ver] -lt $ver) {
+            $ver_map[$doc_ver] = $ver
+        }
     }
 }
 
-$ver_list = $ver_map.GetEnumerator() | Sort-Object Key -Descending | ForEach-Object {
-    [PSCustomObject]@{
-        doc_ver  = $_.Key
-        head_ref = $_.Value
-    }
+$ver_list = New-Object System.Collections.ArrayList($ver_map.Count + 1)
+$null = $ver_list.Add([PSCustomObject]@{
+        doc_ver  = 'latest'
+        head_ref = $latest_branch
+    })
+foreach ($item in $ver_map.GetEnumerator()) {
+    $full_ver = [version]$item.Value
+    $null = $ver_list.Add([PSCustomObject]@{
+            doc_ver  = [string]$item.Key
+            head_ref = "v$full_ver"
+        })
 }
+
 $ver_list | Format-Table doc_ver, head_ref -AutoSize
 
 $menu_ver_list = ($ver_list | ForEach-Object { "'$($_.doc_ver)'" }) -join ','

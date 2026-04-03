@@ -31,7 +31,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUSphereSurfaceEmitter : public PUEmitter
+class AX_EXT_API PUSphereSurfaceEmitter : public PUEmitter
 {
 public:
     // Constants

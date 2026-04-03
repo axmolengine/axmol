@@ -29,11 +29,14 @@ THE SOFTWARE.
 #include "axmol/base/Macros.h"
 #include "axmol/platform/android/jni/JniHelper.h"
 
-#if AX_RENDER_API == AX_RENDER_API_GL
+#if AX_ENABLE_GL
 #    include "axmol/platform/GL.h"
-#else
+#endif
+#if AX_ENABLE_VK
 #    include "axmol/rhi/vulkan/DriverVK.h"
 #endif
+
+#include "axmol/rhi/DriverContext.h"
 
 #include <stdlib.h>
 #include <android/log.h>
@@ -94,7 +97,7 @@ void* RenderViewImpl::getNativeWindow() const
     return _nativeWindow;
 }
 
-void* RenderViewImpl::getNativeDisplay() const
+SurfaceHandle RenderViewImpl::getNativeDisplay() const
 {
     return _nativeDisplay;
 }
@@ -106,22 +109,17 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
 {
     updateRenderSurface(rect.size.width, rect.size.height, SurfaceUpdateFlag::AllUpdatesSilently);
 
-#if AX_RENDER_API == AX_RENDER_API_GL
-    auto glesVer = gladLoaderLoadGLES2();
-    if (glesVer)
-        AXLOGI("Load GLES success, version: {}", glesVer);
-    else
-        throw std::runtime_error("Load GLES fail");
-#else
-    recreateVkSurface(false);
-#endif
+    if (rhi::DriverContext::isOpenGL())
+        rhi::DriverContext::activateCurrentDriver();
+    else if (rhi::DriverContext::isVulkan())
+        recreateVkSurface(false);
 
     return true;
 }
 
-#if AX_RENDER_API == AX_RENDER_API_VK
 void RenderViewImpl::recreateVkSurface(bool needUpdateRenderSurface)
 {
+#if AX_ENABLE_VK
     auto _createSurface = [](VkInstance inst, void* window, VkSurfaceKHR* surface) {
         VkAndroidSurfaceCreateInfoKHR createInfo{VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR};
         createInfo.window = (ANativeWindow*)window;
@@ -132,6 +130,16 @@ void RenderViewImpl::recreateVkSurface(bool needUpdateRenderSurface)
                                                 .width      = static_cast<int>(_windowSize.width),
                                                 .height     = static_cast<int>(_windowSize.height),
                                                 .createFunc = _createSurface};
+    if (!createInfo.window)
+    {
+        AXLOGE("recreateVkSurface: ANativeWindow is null, skip");
+        return;
+    }
+    if (createInfo.width == 0 || createInfo.height == 0)
+    {
+        AXLOGW("recreateVkSurface: window size is 0, skip");
+        return;
+    }
     auto driver = static_cast<ax::rhi::vk::DriverImpl*>(axdrv);
     bool ok     = driver->recreateSurface(createInfo);
     if (!ok)
@@ -143,8 +151,8 @@ void RenderViewImpl::recreateVkSurface(bool needUpdateRenderSurface)
 
     if (needUpdateRenderSurface)
         updateRenderSurface(_windowSize.width, _windowSize.height, SurfaceUpdateFlag::AllUpdates);
-}
 #endif
+}
 
 bool RenderViewImpl::initWithFullScreen(std::string_view viewName)
 {
@@ -201,7 +209,7 @@ Rect RenderViewImpl::getSafeAreaRect() const
     float insetLeft   = 0.0f;
     float insetRight  = 0.0f;
 
-    static axstd::pod_vector<int32_t> cornerRadii =
+    static tlx::pod_vector<int32_t> cornerRadii =
         JniHelper::callStaticIntArrayMethod("dev/axmol/lib/AxmolEngine", "getDeviceCornerRadii");
 
     if (isScreenRound)
@@ -291,7 +299,7 @@ Rect RenderViewImpl::getSafeAreaRect() const
     if (isCutoutEnabled)
     {
         // screen with enabled cutout area (ex. Google Pixel 3 XL, Huawei P20, Asus ZenFone 5, etc)
-        static axstd::pod_vector<int32_t> safeInsets =
+        static tlx::pod_vector<int32_t> safeInsets =
             JniHelper::callStaticIntArrayMethod("dev/axmol/lib/AxmolEngine", "getSafeInsets");
 
         if (safeInsets.size() >= 4)

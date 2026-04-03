@@ -1,6 +1,4 @@
 /****************************************************************************
- Copyright (c) 2010-2011 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
@@ -27,15 +25,12 @@ package dev.axmol.lib;
 
 import android.app.Activity;
 import android.content.Context;
-import android.opengl.GLSurfaceView;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -43,10 +38,6 @@ import android.widget.FrameLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.CountDownLatch;
-
-import javax.microedition.khronos.egl.EGL10;
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.egl.EGLDisplay;
 
 public class AxmolPlayer extends FrameLayout {
     // ===========================================================
@@ -59,8 +50,20 @@ public class AxmolPlayer extends FrameLayout {
     private final static int HANDLER_CLOSE_IME_KEYBOARD = 3;
 
     // ===========================================================
+    // Constants
+    // ===========================================================
+
+    private final static long NANOSECONDSPERSECOND = 1000000000L;
+    private final static long NANOSECONDSPERMICROSECOND = 1000000L;
+
+    // The final animation interval which is used in 'onDrawFrame'
+    private static long sAnimationInterval = (long) (1.0f / 60f * AxmolPlayer.NANOSECONDSPERSECOND);
+    private static long FPS_CONTROL_THRESHOLD = (long) (1.0f / 1200.0f * AxmolPlayer.NANOSECONDSPERSECOND);
+
+    // ===========================================================
     // Fields
     // ===========================================================
+    private long mLastTickInNanoSeconds;
 
     public static int sScreenWidth = 960;
     public static int sScreenHeight = 640;
@@ -73,12 +76,12 @@ public class AxmolPlayer extends FrameLayout {
     private AxmolEditBox mEditBox;
     private TextInputListener mTextInputListener;
 
-    private SurfaceView mSurfaceView; // GLSurfaceView or SurfaceView
+    private AxmolRenderHost mRenderHost; // GLSurfaceView or SurfaceView
 
     private boolean mSoftKeyboardShown = false;
     private boolean mMultipleTouchEnabled = true;
 
-    private  boolean mEnableForceDoLayout = false;
+    private boolean mEnableForceDoLayout = false;
 
     private boolean mIsVulkan = false;
 
@@ -88,6 +91,9 @@ public class AxmolPlayer extends FrameLayout {
 
     private WebViewHelper mWebViewHelper = null;
     private EditBoxHelper mEditBoxHelper = null;
+
+    private int mLastSurfaceWidth = 0;
+    private int mLastSurfaceHeight = 0;
 
     public boolean isSoftKeyboardShown() {
         return mSoftKeyboardShown;
@@ -101,8 +107,12 @@ public class AxmolPlayer extends FrameLayout {
         return mMultipleTouchEnabled;
     }
 
-    public void setEnableForceDoLayout(boolean flag){
+    public void setEnableForceDoLayout(boolean flag) {
         mEnableForceDoLayout = flag;
+    }
+
+    public AxmolEditBox getEditText() {
+        return this.mEditBox;
     }
 
     // ===========================================================
@@ -189,59 +199,75 @@ public class AxmolPlayer extends FrameLayout {
             initGLView(ctx);
         }
 
-        if(mWebViewHelper == null){
+        if (mWebViewHelper == null) {
             mWebViewHelper = new WebViewHelper(this);
         }
 
-        if(mEditBoxHelper == null){
+        if (mEditBoxHelper == null) {
             mEditBoxHelper = new EditBoxHelper(this);
         }
     }
 
     private void initGLView(Context ctx) {
-        GLSurfaceView glView = new GLSurfaceView(ctx);
-
-        final int[] glContextAttrs = AxmolEngine.nativeGetGLContextAttrs();
-        AxmolEGLConfigChooser chooser = new AxmolEGLConfigChooser(glContextAttrs);
-        glView.setEGLConfigChooser(chooser);
-
-        glView.setEGLContextClientVersion(2);
-        glView.setFocusableInTouchMode(true);
-        glView.setPreserveEGLContextOnPause(true);
-
-        // only valid for GLES
-        AxmolRenderer mRenderer = new AxmolRenderer(this);
-        glView.setRenderer(mRenderer);
-
-        mSurfaceView = glView;
-        addView(mSurfaceView);
+        AxmolSurfaceViewGL surfaceView = new AxmolSurfaceViewGL(this);
+        mRenderHost = surfaceView;
+        addView(surfaceView);
     }
 
     private void initVulkanView(Context ctx) {
-        SurfaceView vkView = new SurfaceView(ctx);
-        vkView.getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                onNativeSurfaceCreated(holder.getSurface());
-            }
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                AxmolPlayer.nativeOnSurfaceChanged(width, height);
-            }
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-            }
-        });
-        mSurfaceView = vkView;
-        addView(mSurfaceView);
+        AxmolSurfaceViewVK surfaceView = new AxmolSurfaceViewVK(this);
+        mRenderHost = surfaceView;
+        addView(surfaceView);
     }
 
-    public Surface getSurface() {
-        return mSurfaceView.getHolder().getSurface();
+    // ===========================================================
+    // Render loop controller methods
+    // ===========================================================
+
+    @SuppressWarnings("unused")
+    public static void setAnimationInterval(float interval) {
+        sAnimationInterval = (long) (interval * NANOSECONDSPERSECOND);
     }
 
-    public AxmolEditBox getEditText() {
-        return this.mEditBox;
+    public void onDrawFrame() {
+        /*
+         * Render time MUST be counted in, or the FPS will slower than appointed.
+         */
+        nativeRenderFrame();
+        /*
+         * No need to use algorithm in default(60,90,120... FPS) situation,
+         * since onDrawFrame() was called by system 60 times per second by default.
+         */
+        if (sAnimationInterval > FPS_CONTROL_THRESHOLD) {
+            final long interval = System.nanoTime() - this.mLastTickInNanoSeconds;
+
+            if (interval < sAnimationInterval) {
+                try {
+                    Thread.sleep((sAnimationInterval - interval) / NANOSECONDSPERMICROSECOND);
+                } catch (final Exception e) {
+                }
+            }
+
+            this.mLastTickInNanoSeconds = System.nanoTime();
+        }
+    }
+
+    public void onSurfaceCreated(Surface surface) {
+        this.mLastTickInNanoSeconds = System.nanoTime();
+        boolean isWarmStart = !mSurfaceCreated;
+        mSurfaceCreated = true;
+        AxmolPlayer.nativeOnSurfaceCreated(surface, sScreenWidth, sScreenHeight, isWarmStart);
+        if (!sNativeInitialized) {
+            sNativeInitialized = true;
+        }
+    }
+
+    public void onSurfaceChanged(int width, int height) {
+        if (mLastSurfaceWidth != width || mLastSurfaceHeight != height) {
+            mLastSurfaceWidth = width;
+            mLastSurfaceHeight = height;
+            nativeOnSurfaceChanged(width, height);
+        }
     }
 
     // ===========================================================
@@ -268,7 +294,7 @@ public class AxmolPlayer extends FrameLayout {
     @SuppressWarnings("unused")
     public static void openIMEKeyboard() {
         AxmolPlayer player = getInstance();
-        if(player == null) return;
+        if (player == null) return;
         final Message msg = new Message();
         msg.what = HANDLER_OPEN_IME_KEYBOARD;
         msg.obj = player.getContentText();
@@ -306,11 +332,11 @@ public class AxmolPlayer extends FrameLayout {
         final float[] xs = new float[pointerNumber];
         final float[] ys = new float[pointerNumber];
 
-        if (mSoftKeyboardShown){
-            InputMethodManager imm = (InputMethodManager)this.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            View view = ((Activity)this.getContext()).getCurrentFocus();
+        if (mSoftKeyboardShown) {
+            InputMethodManager imm = (InputMethodManager) this.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            View view = ((Activity) this.getContext()).getCurrentFocus();
             if (null != view) {
-                imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
             this.requestFocus();
             mSoftKeyboardShown = false;
@@ -442,7 +468,7 @@ public class AxmolPlayer extends FrameLayout {
 
         /*
         if (BuildConfig.DEBUG) {
-            AxmolGLSurfaceView.dumpMotionEvent(pMotionEvent);
+            AxmolSurfaceViewGL.dumpMotionEvent(pMotionEvent);
         }
         */
         return true;
@@ -452,7 +478,7 @@ public class AxmolPlayer extends FrameLayout {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        if(!this.isInEditMode()) {
+        if (!this.isInEditMode()) {
             sScreenWidth = w;
             sScreenHeight = h;
         }
@@ -510,53 +536,54 @@ public class AxmolPlayer extends FrameLayout {
     // Pause/Resume
     // ===========================================================
 
-    public void onPause()
-    {
-        if (mSurfaceView != null) {
-            if(!mIsVulkan)
-                ((GLSurfaceView)mSurfaceView).onPause();
-        }
+    public void onPause() {
+        mRenderHost.onPause();
     }
 
-    public void onResume()
-    {
-        if (mSurfaceView != null) {
-            if(!mIsVulkan)
-                ((GLSurfaceView)mSurfaceView).onResume();
-        }
+    public void onResume() {
+        mRenderHost.onResume();
     }
 
     public void handleOnResume() {
-        if (AxmolEngine.sNativePaused) {
-            AxmolPlayer.nativeOnResume();
-            AxmolEngine.sNativePaused = false;
-        }
+        mRenderHost.setRenderMode(AxmolRenderHost.RENDERMODE_CONTINUOUSLY);
 
-        if (mSurfaceView != null) {
-            if(!mIsVulkan)
-                ((GLSurfaceView)mSurfaceView).setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-        }
+        AxmolEngine.runOnAxmolThread(new Runnable() {
+            @Override
+            public void run() {
+                if (AxmolEngine.sNativePaused) {
+                    AxmolPlayer.nativeOnResume();
+                    AxmolEngine.sNativePaused = false;
+                }
+            }
+        });
     }
 
     public void handleOnPause() {
-        if (mSurfaceView != null) {
-            if(!mIsVulkan)
-                ((GLSurfaceView)mSurfaceView).setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-        }
-        if (sNativeInitialized) {
-            mNativePauseComplete = new CountDownLatch(1);
-            /**
-             * onPause may be invoked before onSurfaceCreated,
-             * and engine will be initialized correctly after
-             * onSurfaceCreated is invoked. Can not invoke any
-             * native method before onSurfaceCreated is invoked
-             */
+        mRenderHost.setRenderMode(AxmolRenderHost.RENDERMODE_WHEN_DIRTY);
 
-            AxmolPlayer.nativeOnPause();
-            AxmolEngine.sNativePaused = true;
+        mNativePauseComplete = new CountDownLatch(1);
 
-            mNativePauseComplete.countDown();
-        }
+        AxmolEngine.runOnAxmolThread(new Runnable() {
+            @Override
+            public void run() {
+                if (sNativeInitialized) {
+                    /**
+                     * onPause may be invoked before onSurfaceCreated,
+                     * and engine will be initialized correctly after
+                     * onSurfaceCreated is invoked. Can not invoke any
+                     * native method before onSurfaceCreated is invoked
+                     */
+                    AxmolPlayer.nativeOnPause();
+                    AxmolEngine.sNativePaused = true;
+                }
+
+                mNativePauseComplete.countDown();
+            }
+        });
+    }
+
+    public void queueEvent(Runnable r) {
+        mRenderHost.queueEvent(r);
     }
 
     public void waitForPauseToComplete() {
@@ -572,11 +599,11 @@ public class AxmolPlayer extends FrameLayout {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        if(mEnableForceDoLayout){
+        if (mEnableForceDoLayout) {
             /*This is a hot-fix for some android devices which don't do layout when the main window
-            * is paned. We refresh the layout in 24 frames per seconds.
-            * When the editBox is lose focus or when user begin to type, the do layout is disabled.
-            */
+             * is paned. We refresh the layout in 24 frames per seconds.
+             * When the editBox is lose focus or when user begin to type, the do layout is disabled.
+             */
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -620,123 +647,34 @@ public class AxmolPlayer extends FrameLayout {
     //     Log.d(TAG, sb.toString());
     // }
 
-    // ===========================================================
-    // Inner and Anonymous Classes
-    // ===========================================================
-
-    private class AxmolEGLConfigChooser implements GLSurfaceView.EGLConfigChooser
-    {
-        private int[] mConfigAttributes;
-        private  final int EGL_OPENGL_ES2_BIT = 0x04;
-        private  final int EGL_OPENGL_ES3_BIT = 0x40;
-        public AxmolEGLConfigChooser(int redSize, int greenSize, int blueSize, int alphaSize, int depthSize, int stencilSize, int multisamplingCount)
-        {
-            mConfigAttributes = new int[] {redSize, greenSize, blueSize, alphaSize, depthSize, stencilSize, multisamplingCount};
-        }
-        public AxmolEGLConfigChooser(int[] attributes)
-        {
-            mConfigAttributes = attributes;
-        }
-
-        @Override
-        public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display)
-        {
-            int[][] EGLAttributes = {
-                {
-                    // GL ES 2 with user set
-                    EGL10.EGL_RED_SIZE, mConfigAttributes[0],
-                    EGL10.EGL_GREEN_SIZE, mConfigAttributes[1],
-                    EGL10.EGL_BLUE_SIZE, mConfigAttributes[2],
-                    EGL10.EGL_ALPHA_SIZE, mConfigAttributes[3],
-                    EGL10.EGL_DEPTH_SIZE, mConfigAttributes[4],
-                    EGL10.EGL_STENCIL_SIZE, mConfigAttributes[5],
-                    EGL10.EGL_SAMPLE_BUFFERS, (mConfigAttributes[6] > 0) ? 1 : 0,
-                    EGL10.EGL_SAMPLES, mConfigAttributes[6],
-                    EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-                    EGL10.EGL_NONE
-                },
-                {
-                    // GL ES 2 with user set 16 bit depth buffer
-                    EGL10.EGL_RED_SIZE, mConfigAttributes[0],
-                    EGL10.EGL_GREEN_SIZE, mConfigAttributes[1],
-                    EGL10.EGL_BLUE_SIZE, mConfigAttributes[2],
-                    EGL10.EGL_ALPHA_SIZE, mConfigAttributes[3],
-                    EGL10.EGL_DEPTH_SIZE, mConfigAttributes[4] >= 24 ? 16 : mConfigAttributes[4],
-                    EGL10.EGL_STENCIL_SIZE, mConfigAttributes[5],
-                    EGL10.EGL_SAMPLE_BUFFERS, (mConfigAttributes[6] > 0) ? 1 : 0,
-                    EGL10.EGL_SAMPLES, mConfigAttributes[6],
-                    EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-                    EGL10.EGL_NONE
-                },
-                {
-                    // GL ES 2 with user set 16 bit depth buffer without multisampling
-                    EGL10.EGL_RED_SIZE, mConfigAttributes[0],
-                    EGL10.EGL_GREEN_SIZE, mConfigAttributes[1],
-                    EGL10.EGL_BLUE_SIZE, mConfigAttributes[2],
-                    EGL10.EGL_ALPHA_SIZE, mConfigAttributes[3],
-                    EGL10.EGL_DEPTH_SIZE, mConfigAttributes[4] >= 24 ? 16 : mConfigAttributes[4],
-                    EGL10.EGL_STENCIL_SIZE, mConfigAttributes[5],
-                    EGL10.EGL_SAMPLE_BUFFERS, 0,
-                    EGL10.EGL_SAMPLES, 0,
-                    EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-                    EGL10.EGL_NONE
-                },
-                {
-                    // GL ES 2 by default
-                    EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-                    EGL10.EGL_NONE
-                }
-            };
-
-            EGLConfig result = null;
-            for (int[] eglAtribute : EGLAttributes) {
-                result = this.doChooseConfig(egl, display, eglAtribute);
-                if (result != null)
-                    return result;
-            }
-
-            Log.e(Context.DEVICE_POLICY_SERVICE, "Can not select an EGLConfig for rendering.");
-            return null;
-        }
-
-        private EGLConfig doChooseConfig(EGL10 egl, EGLDisplay display, int[] attributes) {
-            EGLConfig[] configs = new EGLConfig[1];
-            int[] matchedConfigNum = new int[1];
-            boolean result = egl.eglChooseConfig(display, attributes, configs, 1, matchedConfigNum);
-            if (result && matchedConfigNum[0] > 0) {
-                return configs[0];
-            }
-            return null;
-        }
-    }
 
     // ===========================================================
     // Native methods for AxmolPlayer
     // ===========================================================
 
-    public void onNativeSurfaceCreated(Surface surface) {
-        boolean isWarmStart = !mSurfaceCreated;
-        mSurfaceCreated = true;
-        AxmolPlayer.nativeOnSurfaceCreated(surface, sScreenWidth, sScreenHeight, isWarmStart);
-        if(!sNativeInitialized) {
-            sNativeInitialized = true;
-        }
-    }
-
     public static native void nativeRenderFrame();
+
     public static native void nativeOnResume();
+
     public static native void nativeOnPause();
 
     public static native String nativeGetContentText();
+
     public static native void nativeInsertText(String text);
+
     public static native void nativeDeleteBackward(int numChars);
 
     public static native void nativeTouchesBegin(final int id, final float x, final float y);
+
     public static native void nativeTouchesEnd(final int id, final float x, final float y);
+
     public static native void nativeTouchesMove(final int[] ids, final float[] xs, final float[] ys);
+
     public static native void nativeTouchesCancel(final int[] ids, final float[] xs, final float[] ys);
-    public static native boolean nativeKeyEvent(final int keyCode,boolean isPressed);
+
+    public static native boolean nativeKeyEvent(final int keyCode, boolean isPressed);
 
     public static native void nativeOnSurfaceCreated(Object surface, final int width, final int height, boolean isWarmStart);
+
     public static native void nativeOnSurfaceChanged(final int width, final int height);
 }

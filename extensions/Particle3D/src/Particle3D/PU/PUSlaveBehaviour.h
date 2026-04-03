@@ -39,7 +39,7 @@ namespace ax
 struct PUParticle3D;
 class PUParticleSystem3D;
 
-class AX_EX_DLL PUSlaveBehaviour : public PUBehaviour
+class AX_EXT_API PUSlaveBehaviour : public PUBehaviour
 {
 public:
     static PUSlaveBehaviour* create();

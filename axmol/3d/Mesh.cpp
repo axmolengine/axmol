@@ -30,7 +30,7 @@
 #include "axmol/3d/MeshVertexIndexData.h"
 #include "axmol/3d/VertexInputBinding.h"
 #include "axmol/2d/Light.h"
-#include "axmol/2d/Scene.h"
+#include "axmol/scene/Scene.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/Environment.h"
@@ -200,7 +200,7 @@ Mesh* Mesh::create(const std::vector<float>& positions,
 {
     int perVertexSizeInFloat = 0;
     std::vector<float> vertices;
-    axstd::pod_vector<MeshVertexAttrib> attribs;
+    tlx::pod_vector<MeshVertexAttrib> attribs;
 
     MeshVertexAttrib att;
     att.type = rhi::VertexFormat::FLOAT3;
@@ -259,7 +259,7 @@ Mesh* Mesh::create(const std::vector<float>& positions,
 Mesh* Mesh::create(const std::vector<float>& vertices,
                    int /*perVertexSizeInFloat*/,
                    const IndexArray& indices,
-                   const axstd::pod_vector<MeshVertexAttrib>& attribs)
+                   const tlx::pod_vector<MeshVertexAttrib>& attribs)
 {
     MeshData meshdata;
     meshdata.attribs = attribs;
@@ -402,9 +402,8 @@ void Mesh::setMaterial(Material* material)
                     // AXASSERT(vertexInputs.size() <= attributeCount, "missing attribute data");
                 }
 #endif
-                // TODO
                 auto vertexInputBinding =
-                    VertexInputBinding::spawn(_meshIndexData, pass, &list[i], _instanceCount > 0 && _instancing);
+                    VertexInputBinding::fetch(_meshIndexData, pass, &list[i], _instanceCount > 0 && _instancing);
                 pass->setVertexInputBinding(vertexInputBinding);
                 i += 1;
             }

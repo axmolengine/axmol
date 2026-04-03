@@ -92,8 +92,8 @@ private:
 
     std::string _videoCodecMimeType;
 
-    yasio::byte_buffer _frameBuffer1;  // for write
-    yasio::byte_buffer _frameBuffer2;  // for read
+    tlx::byte_buffer _frameBuffer1;  // for write
+    tlx::byte_buffer _frameBuffer2;  // for read
     mutable std::mutex _frameBuffer1Mtx;
 };
 

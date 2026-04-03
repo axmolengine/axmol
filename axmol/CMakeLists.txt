@@ -32,7 +32,7 @@
 # include_guard (GLOBAL)
 
 # The version number
-set(_AX_VERSION 2.8)
+set(_AX_VERSION 3.0)
 
 if(NOT DEFINED _AX_CORE_LIB)
   set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol engine lib name")
@@ -50,69 +50,118 @@ endif()
 
 include(CMakeDependentOption)
 
-set(AX_RENDER_API "auto" CACHE STRING "Specify axmol graphics render API")
+# check linux system libraries
+if(LINUX)
+  find_package(X11 REQUIRED)
 
-# Determine AX_RENDER_API
+  # including GTK3.0 and WebKit2Gtk4.x
+  find_package(PkgConfig REQUIRED)
+  pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+
+  set(_webkit2gtk_vers "4.1;4.0")
+
+  foreach(_ver ${_webkit2gtk_vers})
+    pkg_check_modules(WEBKIT2GTK webkit2gtk-${_ver})
+
+    if(WEBKIT2GTK_LIBRARY_DIRS)
+      break()
+    endif()
+  endforeach()
+endif()
+
+set(AX_RENDER_API "auto" CACHE STRING "Specify axmol graphics render API (semicolon separated list)")
+
+if(APPLE)
+  # macOS / iOS
+  set(_ax_valid_apis mtl gl)   # Metal + optional GL (desktop macOS)
+elseif(WIN32)
+  # Windows
+  set(_ax_valid_apis d3d11 d3d12 vk gl)
+elseif(ANDROID)
+  # Android
+  set(_ax_valid_apis vk gl)
+elseif(LINUX)
+  # Linux
+  set(_ax_valid_apis vk gl)
+elseif(WASM)
+  # WebAssembly
+  set(_ax_valid_apis gl)
+else()
+  # Fallback
+  set(_ax_valid_apis gl)
+endif()
+
+# Parse AX_RENDER_API into list
 if(AX_RENDER_API STREQUAL "auto")
   if(APPLE)
     set(AX_RENDER_API "mtl" CACHE STRING "" FORCE)
   else()
     set(AX_RENDER_API "gl" CACHE STRING "" FORCE)
   endif()
-else()
-  if(AX_RENDER_API STREQUAL "mtl")
-    if(NOT APPLE) # non-apple platforms, invalid api specified, fallback to gl
-      set(AX_RENDER_API "gl" CACHE STRING "" FORCE)
-    endif()
-    elseif(AX_RENDER_API MATCHES "d3d")
-        if(NOT WIN32)
-        if(APPLE)
-            set(AX_RENDER_API "mtl" CACHE STRING "" FORCE)
-        else()
-            set(AX_RENDER_API "gl" CACHE STRING "" FORCE)
-        endif()
-        endif()
-    elseif(AX_RENDER_API STREQUAL "vk")
-        if(APPLE)
-        set(AX_RENDER_API "mtl" CACHE STRING "" FORCE)
-    endif()
-  endif()
 endif()
 
-set(_RENDER_NOTICE "AX_RENDER_API=${AX_RENDER_API}")
+string(REPLACE "," " " AX_RENDER_API_LIST "${AX_RENDER_API}")
+separate_arguments(AX_RENDER_API_LIST)
 
-# Determine AX_GLES_PROFILE
-if(AX_RENDER_API STREQUAL "gl")
-  if(WIN32 OR ANDROID OR IOS OR TVOS OR WASM)
-    set(_GLES_PROFILE 300)
-  else()
-    set(_GLES_PROFILE 0)
+# Remove duplicates
+list(REMOVE_DUPLICATES AX_RENDER_API_LIST)
+
+# Validate and set macros
+foreach(api IN LISTS _ax_valid_apis)
+  string(TOUPPER ${api} api)
+  set(AX_ENABLE_${api} 0 CACHE BOOL "" FORCE) # default all to 0
+endforeach()
+
+foreach(api IN LISTS AX_RENDER_API_LIST)
+  if(NOT api IN_LIST _ax_valid_apis)
+    message(FATAL_ERROR "Invalid RHI backend: ${api}. Valid values: ${_ax_valid_apis}")
   endif()
+  string(TOUPPER ${api} api)
+  set(AX_ENABLE_${api} 1 CACHE BOOL "" FORCE)
+endforeach()
 
-  if(_GLES_PROFILE)
-    set(AX_GLES_PROFILE ${_GLES_PROFILE} CACHE STRING "")
+# Platform forced disables
+if(APPLE)
+  set(AX_ENABLE_D3D11 0 CACHE BOOL "" FORCE)
+  set(AX_ENABLE_D3D12 0 CACHE BOOL "" FORCE)
+  set(AX_ENABLE_VK 0 CACHE BOOL "" FORCE)
+elseif(WIN32)
+  set(AX_ENABLE_MTL 0 CACHE BOOL "" FORCE)
+elseif(ANDROID OR LINUX)
+  set(AX_ENABLE_D3D11 0 CACHE BOOL "" FORCE)
+  set(AX_ENABLE_D3D12 0 CACHE BOOL "" FORCE)
+  set(AX_ENABLE_MTL 0 CACHE BOOL "" FORCE)
+endif()
 
-    if(AX_GLES_PROFILE LESS _GLES_PROFILE)
-      if(WINRT OR NOT WIN32)
-        set(AX_GLES_PROFILE ${_GLES_PROFILE} CACHE STRING "" FORCE)
-        message(AUTHOR_WARNING "Forcing GLES profile to ${_GLES_PROFILE} for OpenGL ES")
-      else()
-        # Win32 Desktop Apps can use desktop gl, so disable gles profile
-        unset(AX_GLES_PROFILE CACHE)
+if(AX_ENABLE_GL)
+  if(MACOSX OR LINUX)
+    # Desktop OpenGL, no GLES profile needed
+    unset(AX_GLES_PROFILE CACHE)
+  else()
+    set(_GLES_MIN_PROFILE 300)
+    set(AX_GLES_PROFILE ${_GLES_MIN_PROFILE} CACHE STRING "")
+    if(WIN32 AND NOT WINRT)
+      # Win32 desktop OpenGL allows GLES profile = 0
+      if(AX_GLES_PROFILE GREATER 0 AND AX_GLES_PROFILE LESS _GLES_MIN_PROFILE)
+        set(AX_GLES_PROFILE ${_GLES_MIN_PROFILE} CACHE STRING "" FORCE)
+        message(AUTHOR_WARNING "AX_GLES_PROFILE was too low; forced to ${_GLES_MIN_PROFILE}")
+      endif()
+    else() # Win32 desktop OpenGL allows GLES profile = 0
+      # These platforms require GLES profile >= 300
+      if(NOT AX_GLES_PROFILE OR AX_GLES_PROFILE LESS _GLES_MIN_PROFILE)
+        set(AX_GLES_PROFILE ${_GLES_MIN_PROFILE} CACHE STRING "" FORCE)
+        message(AUTHOR_WARNING "AX_GLES_PROFILE was too low; forced to ${_GLES_MIN_PROFILE}")
       endif()
     endif()
-  else() # Force disable GLES due to platform not support
-    unset(AX_GLES_PROFILE CACHE)
   endif()
-else()
-  unset(AX_GLES_PROFILE CACHE)
 endif()
 
+# Render notice
+set(_RENDER_NOTICE "AX_RENDER_API=${AX_RENDER_API_LIST}")
 if(AX_GLES_PROFILE)
   string(APPEND _RENDER_NOTICE ", AX_GLES_PROFILE=${AX_GLES_PROFILE}")
 endif()
-
-message(AUTHOR_WARNING "${_RENDER_NOTICE}")
+message(STATUS "${_RENDER_NOTICE}")
 
 if(LINUX)
   include(CheckIncludeFile)
@@ -127,21 +176,21 @@ cmake_dependent_option(AX_ENABLE_VLC_MEDIA "Enabling vlc media" OFF "(WIN32 AND 
 
 cmake_dependent_option(AX_ENABLE_WAYLAND "Enabling linux wayland" OFF "LINUX" OFF)
 
-option(AX_ENABLE_PHYSICS "Build Physics support" ON)
+option(AX_ENABLE_PHYSICS_2D "Build Physics2D support" ON)
 cmake_dependent_option(AX_ENABLE_MEDIA "Build media support" ON "AX_ENABLE_MFMEDIA OR AX_ENABLE_VLC_MEDIA OR APPLE OR ANDROID" OFF)
 option(AX_ENABLE_AUDIO "Build audio support" ON)
 option(AX_ENABLE_OPUS "Build with opus support" ON)
 option(AX_ENABLE_CONSOLE "Build axmol debug tool: console support" ON)
 
 option(AX_ENABLE_3D "Build 3D support" ON)
-cmake_dependent_option(AX_ENABLE_3D_PHYSICS "Build 3D Physics support" ON "AX_ENABLE_3D" OFF)
+cmake_dependent_option(AX_ENABLE_PHYSICS_3D "Build Physics3D support" ON "AX_ENABLE_3D" OFF)
 cmake_dependent_option(AX_ENABLE_NAVMESH "Build NavMesh support" ON "AX_ENABLE_3D" OFF)
 
 option(AX_ENABLE_VR "Build VR support" OFF)
 
 option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
 option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
-option(AX_CORE_PROFILE "Whether strip deprecated features" OFF)
+option(AX_CORE_PROFILE "Whether strip deprecated features" ON)
 
 # default value for axmol extensions modules to Build
 # total supported extensions count: 13
@@ -153,14 +202,14 @@ option(AX_ENABLE_EXT_GUI "Build extension GUI" ${AX_EXT_HINT})
 option(AX_ENABLE_EXT_ASSETMANAGER "Build extension asset-manager" ${AX_EXT_HINT})
 option(AX_ENABLE_EXT_SPINE "Build extension spine" ${AX_EXT_HINT})
 option(AX_ENABLE_EXT_DRAGONBONES "Build extension DragonBones" ${AX_EXT_HINT})
-option(AX_ENABLE_EXT_COCOSTUDIO "Build extension cocostudio" ${AX_EXT_HINT})
+option(AX_ENABLE_EXT_SCENEIO "Build extension sceneio (aka cocostudio)" ${AX_EXT_HINT})
 option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ${AX_EXT_HINT})
+option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ${AX_EXT_HINT})
 option(AX_ENABLE_EXT_LIVE2D "Build extension Live2D" OFF)
 option(AX_ENABLE_EXT_EFFEKSEER "Build extension Effekseer" OFF)
 
 cmake_dependent_option(AX_ENABLE_EXT_PARTICLE3D "Build extension Particle3D" ${AX_EXT_HINT} "AX_ENABLE_3D" OFF)
-cmake_dependent_option(AX_ENABLE_EXT_PHYSICS_NODE "Build extension physics-nodes" ${AX_EXT_HINT} "AX_ENABLE_PHYSICS" OFF)
-cmake_dependent_option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ${AX_EXT_HINT} "NOT IOS AND NOT WINRT" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_PHYSICS_NODE "Build extension physics-nodes" ${AX_EXT_HINT} "AX_ENABLE_PHYSICS_2D" OFF)
 cmake_dependent_option(AX_ENABLE_EXT_INSPECTOR "Build extension Inspector" ${AX_EXT_HINT} "AX_ENABLE_EXT_IMGUI" OFF)
 cmake_dependent_option(AX_ENABLE_EXT_SDFGEN "Build extension SDFGen" ${AX_EXT_HINT} "AX_ENABLE_EXT_IMGUI" OFF)
 
@@ -214,6 +263,8 @@ configure_file(
 # cmake_dependent_option(AX_ENABLE_EARLY_FEATURES
 # "Build the tests when we are the root project" ON
 # "NOT (AX_GIT_BRANCH STREQUAL \"dev\")" OFF)
+
+include(scene/CMakeLists.txt)
 include(2d/CMakeLists.txt)
 
 if(AX_ENABLE_3D)
@@ -222,12 +273,12 @@ endif()
 
 include(platform/CMakeLists.txt)
 
-if(AX_ENABLE_PHYSICS)
-  include(physics/CMakeLists.txt)
+if(AX_ENABLE_PHYSICS_2D)
+  include(2d/physics/CMakeLists.txt)
 endif()
 
-if(AX_ENABLE_3D_PHYSICS)
-  include(physics3d/CMakeLists.txt)
+if(AX_ENABLE_PHYSICS_3D)
+  include(3d/physics/CMakeLists.txt)
 endif()
 
 include(math/CMakeLists.txt)
@@ -265,6 +316,7 @@ if(AX_ENABLE_VR)
 endif()
 
 set(_AX_HEADER axmol.h
+  ${_AX_SCENE_HEADER}
   ${_AX_2D_HEADER}
   ${_AX_PLATFORM_HEADER}
   ${_AX_MATH_HEADER}
@@ -277,6 +329,7 @@ set(_AX_HEADER axmol.h
 )
 
 set(_AX_SRC axmol.cpp
+  ${_AX_SCENE_SRC}
   ${_AX_2D_SRC}
   ${_AX_PLATFORM_SRC}
   ${_AX_MATH_SRC}
@@ -292,12 +345,12 @@ if(AX_ENABLE_3D)
   list(APPEND _AX_SRC ${_AX_3D_SRC})
 endif()
 
-if(AX_ENABLE_PHYSICS)
+if(AX_ENABLE_PHYSICS_2D)
   list(APPEND _AX_HEADER ${_AX_PHYSICS_HEADER})
   list(APPEND _AX_SRC ${_AX_PHYSICS_SRC})
 endif()
 
-if(AX_ENABLE_3D_PHYSICS)
+if(AX_ENABLE_PHYSICS_3D)
   list(APPEND _AX_HEADER ${_AX_PHYSICS3D_HEADER})
   list(APPEND _AX_SRC ${_AX_PHYSICS3D_SRC})
 endif()
@@ -389,9 +442,9 @@ ax_add_shader_target_for(${_AX_CORE_LIB} FILES ${_builtin_shaders} BUILTIN)
 
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MFMEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
-ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_PHYSICS)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_PHYSICS_2D)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_3D)
-ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_3D_PHYSICS)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_PHYSICS_3D)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_NAVMESH)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_AUDIO)
@@ -399,6 +452,16 @@ ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_CONSOLE)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_VR)
 ax_config_pred(${_AX_CORE_LIB} AX_CORE_PROFILE)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_WAYLAND)
+
+ax_config_pred1(${_AX_CORE_LIB} AX_ENABLE_D3D11)
+ax_config_pred1(${_AX_CORE_LIB} AX_ENABLE_D3D12)
+ax_config_pred1(${_AX_CORE_LIB} AX_ENABLE_GL)
+ax_config_pred1(${_AX_CORE_LIB} AX_ENABLE_VK)
+ax_config_pred1(${_AX_CORE_LIB} AX_ENABLE_MTL)
+
+if(LINUX AND WEBKIT2GTK_FOUND)
+  target_compile_definitions(${_AX_CORE_LIB} PUBLIC AX_HAVE_WEBKIT2GTK=1)
+endif()
 
 # add base macro define and compile options
 use_ax_compile_define(${_AX_CORE_LIB})
@@ -434,7 +497,7 @@ if(WINDOWS)
   # cppwinrt or webview2 require nuget
   if(WINDOWS_STORE OR AX_ENABLE_MSEDGE_WEBVIEW2)
     find_program(NUGET_EXE NAMES nuget
-      PATHS ${_AX_ROOT}/tools/external/nuget)
+      PATHS "$ENV{AX_ROOT}/tools/external/nuget")
 
     if(NOT NUGET_EXE)
       message("NUGET.EXE not found.")
@@ -542,29 +605,29 @@ if(ANDROID)
       target_link_libraries(${_AX_CORE_LIB} ${AX_LUA_ENGINE})
     endif()
   endif()
-endif()
-
-if(LINUX)
-  find_package(X11 REQUIRED)
+elseif(LINUX)
   target_include_directories(${_AX_CORE_LIB} PUBLIC "${X11_X11_INCLUDE_PATH}")
 
-  # X11 gets linked by cmake/Modules/AXLinkHelpers.cmake
-
-  # including GTK3.0 and WebKit2Gtk4.x
-  find_package(PkgConfig REQUIRED)
-  pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
-
-  set(_webkit2gtk_vers "4.1;4.0")
-
-  foreach(_ver ${_webkit2gtk_vers})
-    pkg_check_modules(WEBKIT2GTK webkit2gtk-${_ver})
-
-    if(WEBKIT2GTK_LIBRARY_DIRS)
-      break()
+  # remove system freetype2 due to we already embed freetype
+  set(_gtk_includes "")
+  set(_filtered_freetype FALSE)
+  foreach(dir IN LISTS GTK3_INCLUDE_DIRS)
+    if(NOT dir MATCHES "freetype2")
+      list(APPEND _gtk_includes "${dir}")
+    else()
+      set(_filtered_freetype TRUE)
     endif()
   endforeach()
 
-  target_include_directories(${_AX_CORE_LIB} PUBLIC ${GTK3_INCLUDE_DIRS} ${WEBKIT2GTK_INCLUDE_DIRS})
-  target_link_directories(${_AX_CORE_LIB} PRIVATE ${GTK3_LIBRARY_DIRS} ${WEBKIT2GTK_LIBRARY_DIRS})
-  target_link_libraries(${_AX_CORE_LIB} ${GTK3_LIBRARIES} ${WEBKIT2GTK_LIBRARIES})
+  if(_filtered_freetype)
+    message(STATUS "GTK3: filtered out system freetype include directory")
+  endif()
+
+  target_include_directories(${_AX_CORE_LIB} PUBLIC ${_gtk_includes})
+  target_link_directories(${_AX_CORE_LIB} PRIVATE ${GTK3_LIBRARY_DIRS})
+
+  if(WEBKIT2GTK_FOUND)
+    target_include_directories(${_AX_CORE_LIB} PUBLIC ${WEBKIT2GTK_INCLUDE_DIRS})
+    target_link_libraries(${_AX_CORE_LIB} ${WEBKIT2GTK_LIBRARIES})
+  endif()
 endif()

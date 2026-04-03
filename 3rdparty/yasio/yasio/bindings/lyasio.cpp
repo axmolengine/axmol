@@ -39,7 +39,7 @@ enum
 };
 
 template <typename _Stream>
-static void obstream_write_v(_Stream* obs, cxx17::string_view val, int length_field_bits)
+static void obstream_write_v(_Stream* obs, std::string_view val, int length_field_bits)
 {
   // default: Use variant length of length field, just like .net BinaryWriter.Write(String),
   // see:
@@ -58,7 +58,7 @@ static void obstream_write_v(_Stream* obs, cxx17::string_view val, int length_fi
   }
 };
 template <typename _Stream>
-static cxx17::string_view ibstream_read_v(_Stream* ibs, int length_field_bits)
+static std::string_view ibstream_read_v(_Stream* ibs, int length_field_bits)
 {
   // default: Use variant length of length field, just like .net BinaryReader.ReadString,
   // see:
@@ -113,21 +113,21 @@ static void register_obstream(sol::table& lib, const char* usertype)
       "write_f16", &_Stream::template write<fp16_t>,
 #  endif
       "write_f", &_Stream::template write<float>, "write_lf", &_Stream::template write<double>, "write_v",
-      [](_Stream* obs, cxx17::string_view sv, sol::variadic_args args) {
+      [](_Stream* obs, std::string_view sv, sol::variadic_args args) {
         int lfl = -1;
         if (args.size() > 0)
           lfl = static_cast<int>(args[0]);
         return obstream_write_v<_Stream>(obs, sv, lfl);
       },
-      "write_bytes", static_cast<void (_Stream::*)(cxx17::string_view)>(&_Stream::write_bytes), "length", &_Stream::length, "to_string",
-      [](_Stream* obs) { return cxx17::string_view(obs->data(), obs->length()); }, "save", &_Stream::save);
+      "write_bytes", static_cast<void (_Stream::*)(std::string_view)>(&_Stream::write_bytes), "length", &_Stream::length, "to_string",
+      [](_Stream* obs) { return std::string_view(obs->data(), obs->length()); }, "save", &_Stream::save);
 }
 
 template <typename _Stream, typename _StreamView, typename _OStream>
 static void register_ibstream(sol::table& lib, const char* usertype)
 {
   lib.new_usertype<_Stream>(
-      usertype, sol::constructors<_Stream(), _Stream(yasio::sbyte_buffer), _Stream(const _OStream*)>(), "load", &_Stream::load, "read_ix",
+      usertype, sol::constructors<_Stream(), _Stream(tlx::sbyte_buffer), _Stream(const _OStream*)>(), "load", &_Stream::load, "read_ix",
       &_Stream::template read_ix<int64_t>, "read_bool", &_Stream::template read<bool>, "read_i8", &_Stream::template read<int8_t>, "read_i16",
       &_Stream::template read<int16_t>, "read_i32", &_Stream::template read<int32_t>, "read_i64", &_Stream::template read<int64_t>, "read_u8",
       &_Stream::template read<uint8_t>, "read_u16", &_Stream::template read<uint16_t>, "read_u32", &_Stream::template read<uint32_t>, "read_u64",
@@ -142,8 +142,8 @@ static void register_ibstream(sol::table& lib, const char* usertype)
           lfl = static_cast<int>(args[0]);
         return ibstream_read_v<_Stream>(ibs, lfl);
       },
-      "read_bytes", static_cast<cxx17::string_view (_Stream::*)(int)>(&_Stream::read_bytes), "seek", &_StreamView::seek, "length", &_StreamView::length,
-      "to_string", [](_Stream* ibs) { return cxx17::string_view(ibs->data(), ibs->length()); });
+      "read_bytes", static_cast<std::string_view (_Stream::*)(int)>(&_Stream::read_bytes), "seek", &_StreamView::seek, "length", &_StreamView::length,
+      "to_string", [](_Stream* ibs) { return std::string_view(ibs->data(), ibs->length()); });
 }
 } // namespace lyasio
 
@@ -170,11 +170,11 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
         switch (buffer_type)
         {
           case lyasio::BUFFER_RAW:
-            return sol::make_object(L, cxx17::string_view{packet_data(pkt), packet_len(pkt)});
+            return sol::make_object(L, std::string_view{packet_data(pkt), packet_len(pkt)});
           case lyasio::BUFFER_FAST:
-            return sol::make_object(L, cxx14::make_unique<yasio::fast_ibstream>(forward_packet((packet_t &&) pkt)));
+            return sol::make_object(L, std::make_unique<yasio::fast_ibstream>(forward_packet((packet_t &&) pkt)));
           default:
-            return sol::make_object(L, cxx14::make_unique<yasio::ibstream>(forward_packet((packet_t &&) pkt)));
+            return sol::make_object(L, std::make_unique<yasio::ibstream>(forward_packet((packet_t &&) pkt)));
         }
       },
       "cindex", &io_event::cindex, "transport", &io_event::transport
@@ -192,13 +192,13 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
                           std::vector<io_hostent> hosts;
                           auto host = channel_eps["host"];
                           if (host.valid())
-                            hosts.push_back(io_hostent(host.get<cxx17::string_view>(), channel_eps["port"]));
+                            hosts.push_back(io_hostent(host.get<std::string_view>(), channel_eps["port"]));
                           else
                           {
                             for (auto item : channel_eps)
                             {
                               auto ep = item.second.as<sol::table>();
-                              hosts.push_back(io_hostent(ep["host"].get<cxx17::string_view>(), ep["port"]));
+                              hosts.push_back(io_hostent(ep["host"].get<std::string_view>(), ep["port"]));
                             }
                           }
                           return new (&uninitialized_memory)
@@ -258,16 +258,16 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
       sol::overload(static_cast<void (io_service::*)(transport_handle_t)>(&io_service::close), static_cast<void (io_service::*)(int)>(&io_service::close)),
       "write",
       sol::overload(
-          [](io_service* service, transport_handle_t transport, cxx17::string_view s) {
-            return service->write(transport, yasio::sbyte_buffer{s.data(), s.data() + s.length()});
+          [](io_service* service, transport_handle_t transport, std::string_view s) {
+            return service->write(transport, tlx::sbyte_buffer{s.data(), s.data() + s.length()});
           },
           [](io_service* service, transport_handle_t transport, yasio::obstream* obs) { return service->write(transport, std::move(obs->buffer())); }),
       "write_to",
       sol::overload(
-          [](io_service* service, transport_handle_t transport, cxx17::string_view s, cxx17::string_view ip, u_short port) {
-            return service->write_to(transport, yasio::sbyte_buffer{s.data(), s.data() + s.length()}, ip::endpoint{ip.data(), port});
+          [](io_service* service, transport_handle_t transport, std::string_view s, std::string_view ip, u_short port) {
+            return service->write_to(transport, tlx::sbyte_buffer{s.data(), s.data() + s.length()}, ip::endpoint{ip.data(), port});
           },
-          [](io_service* service, transport_handle_t transport, yasio::obstream* obs, cxx17::string_view ip, u_short port) {
+          [](io_service* service, transport_handle_t transport, yasio::obstream* obs, std::string_view ip, u_short port) {
             return service->write_to(transport, std::move(obs->buffer()), ip::endpoint{ip.data(), port});
           }),
       "native_ptr", [](io_service* service) { return (void*)service; });
@@ -280,8 +280,8 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
   lyasio::register_ibstream<ibstream, ibstream_view, obstream>(yasio_lib, "ibstream");
   lyasio::register_ibstream<fast_ibstream, fast_ibstream_view, fast_obstream>(yasio_lib, "fast_ibstream");
 
-  yasio_lib["highp_clock"] = &highp_clock<yasio::steady_clock_t>;
-  yasio_lib["highp_time"]  = &highp_clock<yasio::system_clock_t>;
+  yasio_lib["highp_clock"] = &tlx::highp_clock<tlx::steady_clock_t>;
+  yasio_lib["highp_time"]  = &tlx::highp_clock<tlx::system_clock_t>;
 
   yasio_lib["unwrap_ptr"] = [](lua_State* L) -> int {
     auto& pkt  = *(packet_t*)lua_touserdata(L, 1);
@@ -371,11 +371,11 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
 /// customize the type conversion from/to lua
 namespace kaguya
 {
-// cxx17::string_view
+// std::string_view
 template <>
-struct lua_type_traits<cxx17::string_view> {
-  typedef cxx17::string_view get_type;
-  typedef cxx17::string_view push_type;
+struct lua_type_traits<std::string_view> {
+  typedef std::string_view get_type;
+  typedef std::string_view push_type;
 
   static bool strictCheckType(lua_State* l, int index) { return lua_type(l, index) == LUA_TSTRING; }
   static bool checkType(lua_State* l, int index) { return lua_isstring(l, index) != 0; }
@@ -383,7 +383,7 @@ struct lua_type_traits<cxx17::string_view> {
   {
     size_t size        = 0;
     const char* buffer = lua_tolstring(l, index, &size);
-    return cxx17::string_view(buffer, size);
+    return std::string_view(buffer, size);
   }
   static int push(lua_State* l, push_type s)
   {
@@ -527,15 +527,15 @@ static void register_obstream(kaguya::LuaTable& lib, const char* usertype, const
           .addFunction("write_f", &_BaseStream::template write<float>)
           .addFunction("write_lf", &_BaseStream::template write<double>)
           .addStaticFunction("write_v",
-                             [](_BaseStream* obs, cxx17::string_view sv, kaguya::VariadicArgType args) {
+                             [](_BaseStream* obs, std::string_view sv, kaguya::VariadicArgType args) {
                                int lfl = -1;
                                if (args.size() > 0)
                                  lfl = static_cast<int>(args[0]);
                                return lyasio::obstream_write_v(obs, sv, lfl);
                              })
-          .addFunction("write_bytes", static_cast<void (_BaseStream::*)(cxx17::string_view)>(&_BaseStream::write_bytes))
+          .addFunction("write_bytes", static_cast<void (_BaseStream::*)(std::string_view)>(&_BaseStream::write_bytes))
           .addFunction("length", &_BaseStream::length)
-          .addStaticFunction("to_string", [](_BaseStream* obs) { return cxx17::string_view(obs->data(), obs->length()); }));
+          .addStaticFunction("to_string", [](_BaseStream* obs) { return std::string_view(obs->data(), obs->length()); }));
   // ##-- obstream
   lib[usertype].setClass(userclass);
 }
@@ -565,10 +565,10 @@ static void register_ibstream(kaguya::LuaTable& lib, const char* usertype, const
                                                     length_field_bits = static_cast<int>(args[0]);
                                                   return lyasio::ibstream_read_v(ibs, length_field_bits);
                                                 })
-                             .addFunction("read_bytes", static_cast<cxx17::string_view (_StreamView::*)(int)>(&_StreamView::read_bytes))
+                             .addFunction("read_bytes", static_cast<std::string_view (_StreamView::*)(int)>(&_StreamView::read_bytes))
                              .addFunction("seek", &_StreamView::seek)
                              .addFunction("length", &_StreamView::length)
-                             .addStaticFunction("to_string", [](_StreamView* ibs) { return cxx17::string_view(ibs->data(), ibs->length()); }));
+                             .addStaticFunction("to_string", [](_StreamView* ibs) { return std::string_view(ibs->data(), ibs->length()); }));
 
   // ##-- ibstream
   lib[usertype].setClass(userclass);
@@ -602,8 +602,8 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
                                                         [](io_event* ev) {
                                                           auto& pkt = ev->packet();
                                                           if (is_packet_empty(pkt))
-                                                            return cxx17::string_view{""};
-                                                          return cxx17::string_view{packet_data(pkt), packet_len(pkt)};
+                                                            return std::string_view{""};
+                                                          return std::string_view{packet_data(pkt), packet_len(pkt)};
                                                         })
                                      .addStaticFunction("fast_packet",
                                                         [](io_event* ev) {
@@ -652,16 +652,16 @@ end
                                   static_cast<void (io_service::*)(int)>(&io_service::close))
           .addOverloadedFunctions(
               "write",
-              [](io_service* service, transport_handle_t transport, cxx17::string_view s) {
+              [](io_service* service, transport_handle_t transport, std::string_view s) {
                 return service->write(transport, yasio::sbyte_buffer(s.data(), s.data() + s.length()));
               },
               [](io_service* service, transport_handle_t transport, yasio::obstream* obs) { return service->write(transport, std::move(obs->buffer())); })
           .addOverloadedFunctions(
               "write_to",
-              [](io_service* service, transport_handle_t transport, cxx17::string_view s, cxx17::string_view ip, u_short port) {
+              [](io_service* service, transport_handle_t transport, std::string_view s, std::string_view ip, u_short port) {
                 return service->write_to(transport, yasio::sbyte_buffer(s.data(), s.data() + s.length()), ip::endpoint{ip.data(), port});
               },
-              [](io_service* service, transport_handle_t transport, yasio::obstream* obs, cxx17::string_view ip, u_short port) {
+              [](io_service* service, transport_handle_t transport, yasio::obstream* obs, std::string_view ip, u_short port) {
                 return service->write_to(transport, std::move(obs->buffer()), ip::endpoint{ip.data(), port});
               })
           .addStaticFunction("set_option",

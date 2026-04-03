@@ -39,7 +39,7 @@
 #    include "axmol/ui/UIHelper.h"
 #    include "axmol/base/Director.h"
 #    include "axmol/platform/FileUtils.h"
-#    include "yasio/string_view.hpp"
+#    include "yasio/tlx/string_view.hpp"
 
 namespace ax
 {
@@ -91,20 +91,24 @@ void EditBoxImplAndroid::createNativeControl(const Rect& frame)
     s_allEditBoxes[_editBoxIndex] = this;
 }
 
-void EditBoxImplAndroid::setNativeFont(const char* pFontName, int fontSize)
+void EditBoxImplAndroid::setNativeFont(std::string_view fontName, int fontSize)
 {
-    auto director            = ax::Director::getInstance();
-    auto renderView          = director->getRenderView();
-    auto isFontFileExists    = ax::FileUtils::getInstance()->isFileExist(pFontName);
-    std::string realFontPath = pFontName;
+    auto director         = ax::Director::getInstance();
+    auto renderView       = director->getRenderView();
+    auto isFontFileExists = ax::FileUtils::getInstance()->isFileExist(fontName);
+
+    std::string realFontPath;
     if (isFontFileExists)
     {
-        realFontPath = ax::FileUtils::getInstance()->fullPathForFilename(pFontName);
-        using namespace cxx17;  // for cxx17::string_view literal
-        if (cxx20::starts_with(cxx17::string_view{realFontPath}, "assets/"_sv))
+        auto realFontPath = ax::FileUtils::getInstance()->fullPathForFilename(fontName);
+        if (tlx::starts_with(std::string_view{realFontPath}, "assets/"sv))
         {
             realFontPath = realFontPath.substr(sizeof("assets/") - 1);  // Chop out the 'assets/' portion of the path.
         }
+    }
+    else
+    {
+        realFontPath = fontName;
     }
     JniHelper::callStaticVoidMethod(editBoxClassName, "setFont", _editBoxIndex, realFontPath,
                                     (float)fontSize * renderView->getScaleX());
@@ -116,7 +120,7 @@ void EditBoxImplAndroid::setNativeFontColor(const Color32& color)
                                     (int)color.b, (int)color.a);
 }
 
-void EditBoxImplAndroid::setNativePlaceholderFont(const char* pFontName, int fontSize)
+void EditBoxImplAndroid::setNativePlaceholderFont(std::string_view /*fontName*/, int /*fontSize*/)
 {
     AXLOGD("Warning! You can't change Android Hint fontName and fontSize");
 }
@@ -158,14 +162,14 @@ bool EditBoxImplAndroid::isEditing()
     return false;
 }
 
-void EditBoxImplAndroid::setNativeText(const char* pText)
+void EditBoxImplAndroid::setNativeText(std::string_view text)
 {
-    JniHelper::callStaticVoidMethod(editBoxClassName, "setText", _editBoxIndex, pText);
+    JniHelper::callStaticVoidMethod(editBoxClassName, "setText", _editBoxIndex, text);
 }
 
-void EditBoxImplAndroid::setNativePlaceHolder(const char* pText)
+void EditBoxImplAndroid::setNativePlaceHolder(std::string_view text)
 {
-    JniHelper::callStaticVoidMethod(editBoxClassName, "setPlaceHolderText", _editBoxIndex, pText);
+    JniHelper::callStaticVoidMethod(editBoxClassName, "setPlaceHolderText", _editBoxIndex, text);
 }
 
 void EditBoxImplAndroid::setNativeVisible(bool visible)
@@ -216,9 +220,9 @@ void editBoxEditingDidEnd(int index, std::string_view text, int action)
     }
 }
 
-const char* EditBoxImplAndroid::getNativeDefaultFontName()
+std::string_view EditBoxImplAndroid::getNativeDefaultFontName()
 {
-    return "sans-serif";
+    return "sans-serif"sv;
 }
 
 }  // namespace ui

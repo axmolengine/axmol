@@ -421,34 +421,34 @@ public:
 
     /**
      * Set the text entered in the edit box.
-     * @param pText The given text.
+     * @param text The given text.
      */
-    void setText(const char* pText);
+    void setText(std::string_view text);
 
     /**
      * Get the text entered in the edit box.
      * @return The text entered in the edit box.
      */
-    const char* getText() const;
+    std::string_view getText() const;
 
     /**
      * Set the font. Only system font is allowed.
-     * @param pFontName The font name.
+     * @param fontName The font name.
      * @param fontSize The font size.
      */
-    void setFont(const char* pFontName, int fontSize);
+    void setFont(std::string_view fontName, int fontSize);
 
     /**
      * Set the font name. Only system font is allowed.
-     * @param pFontName The font name.
+     * @param fontName The font name.
      */
-    void setFontName(const char* pFontName);
+    void setFontName(std::string_view fontName);
 
     /**
      * Get the font name.
      * @return The font name.
      */
-    const char* getFontName() const;
+    std::string_view getFontName() const;
 
     /**
      * Set the font size.
@@ -474,22 +474,22 @@ public:
 
     /**
      * Set the placeholder's font. Only system font is allowed.
-     * @param pFontName The font name.
+     * @param fontName The font name.
      * @param fontSize The font size.
      */
-    void setPlaceholderFont(const char* pFontName, int fontSize);
+    void setPlaceholderFont(std::string_view fontName, int fontSize);
 
     /**
      * Set the placeholder's font name. only system font is allowed.
-     * @param pFontName The font name.
+     * @param fontName The font name.
      */
-    void setPlaceholderFontName(const char* pFontName);
+    void setPlaceholderFontName(std::string_view fontName);
 
     /**
      * Get the placeholder's font name. only system font is allowed.
      * @return The font name.
      */
-    const char* getPlaceholderFontName() const;
+    std::string_view getPlaceholderFontName() const;
 
     /**
      * Set the placeholder's font size.
@@ -516,15 +516,15 @@ public:
     /**
      * Set a text in the edit box that acts as a placeholder when an
      * edit box is empty.
-     * @param pText The given text.
+     * @param text The given text.
      */
-    void setPlaceHolder(const char* pText);
+    void setPlaceHolder(std::string_view text);
 
     /**
      * Get a text in the edit box that acts as a placeholder when an
      * edit box is empty.
      */
-    const char* getPlaceHolder() const;
+    std::string_view getPlaceHolder() const;
 
     /**
      * Set the input mode of the edit box.

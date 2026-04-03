@@ -38,7 +38,7 @@
 namespace ax
 {
 
-axstd::string_map<FontAtlas*> FontAtlasCache::_atlasMap;
+tlx::string_map<FontAtlas*> FontAtlasCache::_atlasMap;
 
 void FontAtlasCache::purgeCachedData()
 {

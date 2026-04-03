@@ -31,7 +31,6 @@ THE SOFTWARE.
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/platform/android/jni/JniHelper.h"
-#include "axmol/rhi/opengl/DriverGL.h"
 
 #include <android/log.h>
 #include <android/api-level.h>
@@ -77,13 +76,6 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
     axmol_android_app_init(JniHelper::getEnv());
 
     return JNI_VERSION_1_4;
-}
-
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnSurfaceChanged(JNIEnv*, jclass, jint w, jint h)
-{
-    auto renderView = ax::Director::getInstance()->getRenderView();
-    if (renderView)
-        renderView->updateRenderSurface(w, h, ax::RenderView::AllUpdates);
 }
 }
 #undef LOGD

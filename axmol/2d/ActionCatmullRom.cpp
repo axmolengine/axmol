@@ -34,7 +34,7 @@
  */
 #include "axmol/base/Macros.h"
 #include "axmol/2d/ActionCatmullRom.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 
 #include <iterator>
 

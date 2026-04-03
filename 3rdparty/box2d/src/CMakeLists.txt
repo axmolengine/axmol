@@ -14,13 +14,13 @@ set(BOX2D_SOURCE_FILES
 	body.h
 	broad_phase.c
 	broad_phase.h
-	constants.h
 	constraint_graph.c
 	constraint_graph.h
 	contact.c
 	contact.h
 	contact_solver.c
 	contact_solver.h
+	container.h
 	core.c
 	core.h
 	ctz.h
@@ -38,8 +38,9 @@ set(BOX2D_SOURCE_FILES
 	manifold.c
 	math_functions.c
 	motor_joint.c
-	mouse_joint.c
 	mover.c
+	physics_world.c
+	physics_world.h
 	prismatic_joint.c
 	revolute_joint.c
 	sensor.c
@@ -56,14 +57,13 @@ set(BOX2D_SOURCE_FILES
 	types.c
 	weld_joint.c
 	wheel_joint.c
-	world.c
-	world.h
 )
 
 set(BOX2D_API_FILES
 	../include/box2d/base.h
 	../include/box2d/box2d.h
 	../include/box2d/collision.h
+	../include/box2d/constants.h
 	../include/box2d/id.h
 	../include/box2d/math_functions.h
 	../include/box2d/types.h
@@ -92,11 +92,14 @@ set_target_properties(box2d PROPERTIES
 	C_STANDARD 17
     C_STANDARD_REQUIRED YES
     C_EXTENSIONS YES
-	COMPILE_WARNING_AS_ERROR ON
     VERSION ${PROJECT_VERSION}
     SOVERSION ${PROJECT_VERSION_MAJOR}
 	DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX}
 )
+
+if (BOX2D_COMPILE_WARNING_AS_ERROR)
+	set_target_properties(box2d PROPERTIES COMPILE_WARNING_AS_ERROR ON)
+endif()
 
 if (BOX2D_PROFILE)
 	target_compile_definitions(box2d PRIVATE BOX2D_PROFILE)
@@ -160,24 +163,22 @@ elseif (MINGW)
 	endif()
 elseif (APPLE)
 	message(STATUS "Box2D on Apple")
-	target_compile_options(box2d PRIVATE -Wmissing-prototypes -Wall -Wextra -pedantic -Werror)
+	target_compile_options(box2d PRIVATE -Wmissing-prototypes -Wall -Wextra -pedantic)
 elseif (EMSCRIPTEN)
 	message(STATUS "Box2D on Emscripten")
-	if (BOX2D_DISABLE_SIMD OFF)
+	if (NOT BOX2D_DISABLE_SIMD)
 		target_compile_options(box2d PRIVATE -msimd128 -msse2)
 	endif()
 elseif (UNIX)
 	message(STATUS "Box2D using Unix")
-	target_compile_options(box2d PRIVATE -Wmissing-prototypes -Wall -Wextra -pedantic -Werror -Wno-unused-value)
+	target_compile_options(box2d PRIVATE -Wmissing-prototypes -Wall -Wextra -pedantic -Wno-unused-value)
 	if ("${CMAKE_HOST_SYSTEM_PROCESSOR}" STREQUAL "aarch64")
 		# raspberry pi
 		# -mfpu=neon
 		# target_compile_options(box2d PRIVATE)
 	else()
-		# x64
 		if (BOX2D_AVX2)
 			message(STATUS "Box2D using AVX2")
-			# FMA -mfma -mavx -march=native
 			target_compile_definitions(box2d PRIVATE BOX2D_AVX2)
 			target_compile_options(box2d PRIVATE -mavx2)
 		else()
@@ -213,7 +214,7 @@ include(CMakePackageConfigHelpers)
 
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/box2dConfigVersion.cmake"
-  VERSION ${BOX2D_VERSION}
+  VERSION ${box2d_VERSION}
   COMPATIBILITY SameMajorVersion
 )
 

@@ -160,11 +160,13 @@ void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
  */
 void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
                                             const PipelineDesc& desc,
-                                            PrimitiveGroup primitiveGroup)
+                                            PrimitiveType primitiveType)
 {
-    RenderContext::updatePipelineState(rt, desc, primitiveGroup);
+    RenderContext::updatePipelineState(rt, desc, primitiveType);
 
     _renderPipeline->update(rt, desc);
+
+    _primitiveType = UtilsGL::toGLPrimitiveType(primitiveType);
 }
 
 void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
@@ -215,7 +217,7 @@ void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
     _instanceBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe)
+void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -223,9 +225,9 @@ void RenderContextImpl::drawArrays(PrimitiveType primitiveType, std::size_t star
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #else
     if (wireframe)
-        primitiveType = PrimitiveType::LINE;
+        _primitiveType = GL_LINES;
 #endif
-    glDrawArrays(UtilsGL::toGLPrimitiveType(primitiveType), start, count);
+    glDrawArrays(_primitiveType, start, count);
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -233,11 +235,7 @@ void RenderContextImpl::drawArrays(PrimitiveType primitiveType, std::size_t star
     cleanResources();
 }
 
-void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
-                                            std::size_t start,
-                                            std::size_t count,
-                                            int instanceCount,
-                                            bool wireframe)
+void RenderContextImpl::drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -245,9 +243,9 @@ void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #else
     if (wireframe)
-        primitiveType = PrimitiveType::LINE;
+        _primitiveType = GL_LINES;
 #endif
-    glDrawArraysInstanced(UtilsGL::toGLPrimitiveType(primitiveType), start, count, instanceCount);
+    glDrawArraysInstanced(_primitiveType, start, count, instanceCount);
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -255,11 +253,7 @@ void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
     cleanResources();
 }
 
-void RenderContextImpl::drawElements(PrimitiveType primitiveType,
-                                     IndexFormat indexType,
-                                     std::size_t count,
-                                     std::size_t offset,
-                                     bool wireframe)
+void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -267,11 +261,10 @@ void RenderContextImpl::drawElements(PrimitiveType primitiveType,
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #else
     if (wireframe)
-        primitiveType = PrimitiveType::LINE;
+        _primitiveType = GL_LINES;
 #endif
     __state->bindBuffer(BufferType::ELEMENT_ARRAY_BUFFER, _indexBuffer->internalHandle());
-    glDrawElements(UtilsGL::toGLPrimitiveType(primitiveType), count, UtilsGL::toGLIndexType(indexType),
-                   (GLvoid*)offset);
+    glDrawElements(_primitiveType, count, UtilsGL::toGLIndexType(indexType), (GLvoid*)offset);
     CHECK_GL_ERROR_DEBUG();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe)
@@ -280,8 +273,7 @@ void RenderContextImpl::drawElements(PrimitiveType primitiveType,
     cleanResources();
 }
 
-void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
-                                              IndexFormat indexType,
+void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
                                               std::size_t count,
                                               std::size_t offset,
                                               int instanceCount,
@@ -293,11 +285,10 @@ void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #else
     if (wireframe)
-        primitiveType = PrimitiveType::LINE;
+        _primitiveType = GL_LINES;
 #endif
     __state->bindBuffer(BufferType::ELEMENT_ARRAY_BUFFER, _indexBuffer->internalHandle());
-    glDrawElementsInstanced(UtilsGL::toGLPrimitiveType(primitiveType), count, UtilsGL::toGLIndexType(indexType),
-                            (GLvoid*)offset, instanceCount);
+    glDrawElementsInstanced(_primitiveType, count, UtilsGL::toGLIndexType(indexType), (GLvoid*)offset, instanceCount);
     CHECK_GL_ERROR_DEBUG();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe)
@@ -358,10 +349,12 @@ void RenderContextImpl::bindUniforms(ProgramImpl* program) const
         for (auto&& cb : callbacks)
             cb.second(_programState, cb.first);
 
-        auto&& buffer = _programState->getUniformBuffer();
+        auto& buffer = _programState->getUniformBuffer();
         program->bindUniformBuffers(buffer.data(), buffer.size());
 
-        for (const auto& [location, bindingSet] : _programState->getTextureBindingSets())
+        CHECK_GL_ERROR_DEBUG();
+
+        for (const auto& [_, bindingSet] : _programState->getTextureBindingSets())
         {
             auto& slots          = bindingSet.slots;
             auto& texs           = bindingSet.texs;
@@ -369,22 +362,20 @@ void RenderContextImpl::bindUniforms(ProgramImpl* program) const
             if (!arraySize) [[unlikely]]
                 continue;
 
-#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-            auto loc = bindingSet.loc;
-#else
-            auto loc = location;
-#endif
             if (arraySize == 1)
             {  // perform bind for 'uniform sampler2D u_tex;' or 'uniform sampler2DArray u_texs;'
                 static_cast<TextureImpl*>(texs[0])->apply(slots[0]);
-                glUniform1i(loc, slots[0]);
+                glUniform1i(bindingSet.runtimeLocation, slots[0]);
             }
             else
             {  // perform bind for 'uniform sampler2D u_details[4];' in shader
                 for (size_t i = 0; i < arraySize; ++i)
                     static_cast<TextureImpl*>(texs[i])->apply(slots[i]);
-                glUniform1iv(loc, static_cast<GLsizei>(arraySize), static_cast<const GLint*>(slots.data()));
+                glUniform1iv(bindingSet.runtimeLocation, static_cast<GLsizei>(arraySize),
+                             static_cast<const GLint*>(slots.data()));
             }
+
+            CHECK_GL_ERROR_DEBUG();
         }
     }
 }
@@ -449,7 +440,7 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
     glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     auto buffer_ptr = (uint8_t*)glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, bufferSize, GL_MAP_READ_BIT);
 #else
-    axstd::byte_buffer buffer(static_cast<size_t>(bufferSize), 0);
+    tlx::byte_buffer buffer(static_cast<size_t>(bufferSize), 0);
     auto buffer_ptr = buffer.data();
     glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer_ptr);
 #endif
@@ -482,7 +473,7 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
 #if AX_HAVE_MAP_BUFFER_RANGE
             pbd._data.copy(buffer_ptr, static_cast<ssize_t>(bufferSize));
 #else
-            static_cast<axstd::byte_buffer&>(pbd._data).swap(buffer);
+            static_cast<tlx::byte_buffer&>(pbd._data).swap(buffer);
 #endif
         }
     }

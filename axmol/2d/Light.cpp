@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "axmol/2d/Light.h"
-#include "axmol/2d/Scene.h"
+#include "axmol/scene/Scene.h"
 
 namespace ax
 {

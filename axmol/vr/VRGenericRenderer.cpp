@@ -32,8 +32,8 @@
 #include "axmol/renderer/Renderer.h"
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/base/Director.h"
-#include "axmol/2d/Scene.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Scene.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/2d/Sprite.h"
 #include "axmol/platform/RenderView.h"
 
@@ -314,7 +314,7 @@ void VRGenericRenderer::setupProgram()
 
     desc.endLayout();
 
-    _vertexLayout = axvlm->acquireVertexLayout(std::move(desc));
+    Object::assign(_vertexLayout, axvlm->getVertexLayout(std::move(desc)));
 
     _leftEyeCmd.setWeakPSVL(_programState, _vertexLayout);
     _rightEyeCmd.setWeakPSVL(_programState, _vertexLayout);

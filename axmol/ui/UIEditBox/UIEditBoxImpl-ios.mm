@@ -91,9 +91,9 @@ void EditBoxImplIOS::doAnimationWhenKeyboardMove(float duration, float distance)
     }
 }
 
-void EditBoxImplIOS::setNativeFont(const char* pFontName, int fontSize)
+void EditBoxImplIOS::setNativeFont(std::string_view fontName, int fontSize)
 {
-    UIFont* textFont = constructFont(pFontName, fontSize);
+    UIFont* textFont = constructFont(fontName, fontSize);
     if (textFont != nil)
     {
         [_systemControl setFont:textFont];
@@ -108,9 +108,9 @@ void EditBoxImplIOS::setNativeFontColor(const Color32& color)
                                                alpha:color.a / 255.f];
 }
 
-void EditBoxImplIOS::setNativePlaceholderFont(const char* pFontName, int fontSize)
+void EditBoxImplIOS::setNativePlaceholderFont(std::string_view fontName, int fontSize)
 {
-    UIFont* textFont = constructFont(pFontName, fontSize);
+    UIFont* textFont = constructFont(fontName, fontSize);
     if (textFont != nil)
     {
         [_systemControl setPlaceholderFont:textFont];
@@ -145,7 +145,7 @@ NSString* removeSiriString(NSString* str)
     return [str stringByReplacingOccurrencesOfString:siriString withString:@""];
 }
 
-const char* EditBoxImplIOS::getText()
+std::string_view EditBoxImplIOS::getText()
 {
     return [removeSiriString(_systemControl.text) UTF8String];
 }
@@ -160,18 +160,19 @@ void EditBoxImplIOS::setNativeTextHorizontalAlignment(ax::TextHAlignment alignme
     [_systemControl setTextHorizontalAlignment:alignment];
 }
 
-void EditBoxImplIOS::setNativeText(const char* pText)
+void EditBoxImplIOS::setNativeText(std::string_view text)
 {
-    NSString* nsText = [NSString stringWithUTF8String:pText];
+    NSString* nsText = [[NSString alloc] initWithBytes:text.data() length:text.length() encoding:NSUTF8StringEncoding];
     if ([nsText compare:_systemControl.text] != NSOrderedSame)
     {
         _systemControl.text = nsText;
     }
 }
 
-void EditBoxImplIOS::setNativePlaceHolder(const char* pText)
+void EditBoxImplIOS::setNativePlaceHolder(std::string_view text)
 {
-    [_systemControl setPlaceHolder:[NSString stringWithUTF8String:pText]];
+    NSString* nsText = [[NSString alloc] initWithBytes:text.data() length:text.length() encoding:NSUTF8StringEncoding];
+    [_systemControl setPlaceHolder:nsText];
 }
 
 void EditBoxImplIOS::setNativeVisible(bool visible)
@@ -190,10 +191,9 @@ void EditBoxImplIOS::updateNativeFrame(const Rect& rect)
                                            rect.size.height / factor)];
 }
 
-const char* EditBoxImplIOS::getNativeDefaultFontName()
+std::string_view EditBoxImplIOS::getNativeDefaultFontName()
 {
-    const char* pDefaultFontName = [[_systemControl getDefaultFontName] UTF8String];
-    return pDefaultFontName;
+    return [[_systemControl getDefaultFontName] UTF8String];
 }
 
 void EditBoxImplIOS::nativeOpenKeyboard()
@@ -207,14 +207,15 @@ void EditBoxImplIOS::nativeCloseKeyboard()
     [_systemControl closeKeyboard];
 }
 
-UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
+UIFont* EditBoxImplIOS::constructFont(std::string_view fontName, int fontSize)
 {
-    AXASSERT(fontName != nullptr, "fontName can't be nullptr");
+    AXASSERT(!fontName.empty(), "fontName can't be nullptr");
     auto hostView      = static_cast<RenderHostView*>(ax::Director::getInstance()->getRenderView()->getNativeDisplay());
     float retinaFactor = hostView.contentScaleFactor;
-    NSString* fntName  = [NSString stringWithUTF8String:fontName];
-
-    fntName = [[fntName lastPathComponent] stringByDeletingPathExtension];
+    NSString* fntName  = [[NSString alloc] initWithBytes:fontName.data()
+                                                 length:fontName.length()
+                                               encoding:NSUTF8StringEncoding];
+    fntName            = [[fntName lastPathComponent] stringByDeletingPathExtension];
 
     auto renderView   = ax::Director::getInstance()->getRenderView();
     float scaleFactor = renderView->getScaleX();
@@ -228,16 +229,8 @@ UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
         fontSize = fontSize * scaleFactor / retinaFactor;
     }
 
-    UIFont* textFont = nil;
-    if (strlen(fontName) > 0)
-    {
-        textFont = [UIFont fontWithName:fntName size:fontSize];
-        if (textFont == nil)
-        {
-            textFont = [UIFont systemFontOfSize:fontSize];
-        }
-    }
-    else
+    UIFont* textFont = [UIFont fontWithName:fntName size:fontSize];
+    if (textFont == nil)
     {
         textFont = [UIFont systemFontOfSize:fontSize];
     }

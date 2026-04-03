@@ -155,7 +155,7 @@ function axmol_deploy() {
     }
     elseif ($TARGET_OS -eq 'ios' -or $TARGET_OS -eq 'tvos') {
         if ($options.a -eq 'x64') {
-            $ios_app_path = Join-Path $BUILD_DIR "bin/$cmake_target/$optimize_flag/$cmake_target.app"
+            $ios_app_path = Join-Path $BUILD_DIR "build/$optimize_flag/$cmake_target.app"
             $ios_bundle_id = get_bundle_id($ios_app_path)
 
             println 'Finding avaiable simualtor ...'
@@ -222,7 +222,7 @@ function axmol_run() {
         }
     }
     elseif ($TARGET_OS -eq 'osx') {
-        $launch_macapp = Join-Path $BUILD_DIR "bin/$cmake_target/$optimize_flag/$cmake_target.app/Contents/MacOS/$cmake_target"
+        $launch_macapp = Join-Path $BUILD_DIR "build/$optimize_flag/$cmake_target.app/Contents/MacOS/$cmake_target"
         & $launch_macapp
     }
     elseif ($TARGET_OS -eq 'linux') {

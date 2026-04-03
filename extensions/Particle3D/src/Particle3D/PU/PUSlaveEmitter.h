@@ -32,7 +32,7 @@
 namespace ax
 {
 // FIXME
-class AX_EX_DLL PUSlaveEmitter : public PUEmitter, public PUListener
+class AX_EXT_API PUSlaveEmitter : public PUEmitter, public PUListener
 {
 public:
     static PUSlaveEmitter* create();

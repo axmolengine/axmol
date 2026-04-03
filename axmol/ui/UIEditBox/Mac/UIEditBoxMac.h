@@ -63,13 +63,13 @@
 - (void)setInputFlag:(ax::ui::EditBox::InputFlag)inputFlag;
 - (void)setReturnType:(ax::ui::EditBox::KeyboardReturnType)returnType;
 - (void)setTextHorizontalAlignment:(ax::TextHAlignment)alignment;
-- (void)setPlaceHolder:(const char*)text;
+- (void)setPlaceHolder:(NSString*)text;
 - (void)setVisible:(BOOL)visible;
 - (void)setTextColor:(NSColor*)color;
 - (void)setFont:(NSFont*)font;
 - (void)setPlaceholderFontColor:(NSColor*)color;
 - (void)setPlaceholderFont:(NSFont*)font;
 - (void)setText:(NSString*)text;
-- (const char*)getText;
+- (NSString*)getText;
 
 @end

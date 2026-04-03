@@ -24,15 +24,43 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include <mach/mach_time.h>
 
 #import "axmol/platform/ios/DirectorCaller-ios.h"
-
-#import <Foundation/Foundation.h>
-#import <OpenGLES/EAGL.h>
-
-#import "axmol/base/Director.h"
 #import "axmol/platform/ios/RenderHostView-ios.h"
+#import "axmol/base/Director.h"
+
+#include <mach/mach_time.h>
+
+#if AX_ENABLE_GL
+#    import <OpenGLES/EAGL.h>
+#endif
+
+#include <span>
+#include <cmath>
+#include <algorithm>
+
+// refer to:
+// https://developer.apple.com/documentation/quartzcore/optimizing-iphone-and-ipad-apps-to-support-promotion-displays?language=objc
+static constexpr int kAllowedFpsArray[]               = {30, 60, 120};
+static constexpr std::span<const int> kAllowedFpsSpan = kAllowedFpsArray;
+
+static int normalizeInterval(double& interval)
+{
+    int value           = static_cast<int>(1 / interval);
+    int framesPerSecond = *std::min_element(kAllowedFpsSpan.begin(), kAllowedFpsSpan.end(), [value](int a, int b) {
+        return std::abs(value - a) < std::abs(value - b);
+    });
+
+    const auto maxFPS = [[UIScreen mainScreen] maximumFramesPerSecond];
+    if (framesPerSecond > maxFPS)
+    {
+        framesPerSecond = static_cast<int>(maxFPS);
+    }
+
+    interval = 1 / framesPerSecond;
+
+    return framesPerSecond;
+}
 
 static id s_sharedDirectorCaller;
 
@@ -46,6 +74,7 @@ static id s_sharedDirectorCaller;
 @implementation CCDirectorCaller
 
 @synthesize interval;
+@synthesize framesPerSecond;
 
 + (id)sharedDirectorCaller
 {
@@ -79,7 +108,7 @@ static id s_sharedDirectorCaller;
                    name:UIApplicationWillResignActiveNotification
                  object:nil];
 
-        self.interval = 1;
+        self.interval = 1 / 60.f;
     }
     return self;
 }
@@ -87,7 +116,7 @@ static id s_sharedDirectorCaller;
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [displayLink release];
+    [self stopMainLoop];
     [super dealloc];
 }
 
@@ -96,7 +125,7 @@ static id s_sharedDirectorCaller;
     // initialize initLastDisplayTime, or the dt will be invalid when
     // - the app is lauched
     // - the app resumes from background
-    [self initLastDisplayTime];
+    [self updateLastDisplayTime];
 
     isAppActive = YES;
 }
@@ -111,27 +140,37 @@ static id s_sharedDirectorCaller;
     // Director::setAnimationInterval() is called, we should invalidate it first
     [self stopMainLoop];
 
-    displayLink = [NSClassFromString(@"CADisplayLink") displayLinkWithTarget:self selector:@selector(doCaller:)];
-    [displayLink setFrameInterval:self.interval];
+    displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(doCaller:)];
+
+    if (@available(iOS 15.0, *))
+    {
+        displayLink.preferredFrameRateRange = (CAFrameRateRange){.minimum = static_cast<float>(kAllowedFpsSpan.front()),
+                                                                 .maximum = static_cast<float>(kAllowedFpsSpan.back()),
+                                                                 .preferred = static_cast<float>(self.framesPerSecond)};
+    }
+    else
+    {
+        displayLink.preferredFramesPerSecond = self.framesPerSecond;
+    }
+
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 - (void)stopMainLoop
 {
-    [displayLink invalidate];
-    displayLink = nil;
+    if (displayLink != nil)
+    {
+        [displayLink invalidate];
+        displayLink = nil;
+    }
 }
 
 - (void)setAnimationInterval:(double)intervalNew
 {
-    // Director::setAnimationInterval() is called, we should invalidate it first
-    [self stopMainLoop];
+    self.framesPerSecond = normalizeInterval(intervalNew);
+    self.interval        = intervalNew;
 
-    self.interval = 60.0 * intervalNew;
-
-    displayLink = [NSClassFromString(@"CADisplayLink") displayLinkWithTarget:self selector:@selector(doCaller:)];
-    [displayLink setFrameInterval:self.interval];
-    [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [self startMainLoop];
 }
 
 - (void)doCaller:(id)sender
@@ -152,14 +191,14 @@ static id s_sharedDirectorCaller;
     }
 }
 
-- (void)initLastDisplayTime
+- (void)updateLastDisplayTime
 {
     struct mach_timebase_info timeBaseInfo;
     mach_timebase_info(&timeBaseInfo);
     CGFloat clockFrequency = (CGFloat)timeBaseInfo.denom / (CGFloat)timeBaseInfo.numer;
     clockFrequency *= 1000000000.0;
     // convert absolute time to seconds and should minus one frame time interval
-    lastDisplayTime = (mach_absolute_time() / clockFrequency) - ((1.0 / 60) * self.interval);
+    lastDisplayTime = (mach_absolute_time() / clockFrequency) - self.interval;
 }
 
 @end

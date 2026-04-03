@@ -1,6 +1,6 @@
 # iOS.cmake
 #
-# Copyright (C) 2014-2025 by
+# Copyright (C) 2014-2026 by
 # David Turner, Robert Wilhelm, and Werner Lemberg.
 #
 # Written by David Wimsey <david@wimsey.us>

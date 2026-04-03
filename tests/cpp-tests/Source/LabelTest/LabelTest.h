@@ -30,7 +30,7 @@
 #include "axmol/renderer/CustomCommand.h"
 #include "axmol/ui/CocosGUI.h"
 #include "extensions/axmol-ext.h"
-#include "cocostudio/LocalizationManager.h"
+#include "sceneio/LocalizationManager.h"
 
 DEFINE_TEST_SUITE(NewLabelTests);
 
@@ -981,8 +981,8 @@ public:
 
     ax::Label* _label1;
     ax::Label* _label2;
-    cocostudio::ILocalizationManager* _localizationJson;
-    cocostudio::ILocalizationManager* _localizationBin;
+    ax::ext::ILocalizationManager* _localizationJson;
+    ax::ext::ILocalizationManager* _localizationBin;
 };
 
 class LabelIssue15214 : public AtlasDemoNew

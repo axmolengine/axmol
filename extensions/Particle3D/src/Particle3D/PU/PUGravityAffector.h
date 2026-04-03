@@ -32,7 +32,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUGravityAffector : public PUAffector
+class AX_EXT_API PUGravityAffector : public PUAffector
 {
 public:
     // Constants

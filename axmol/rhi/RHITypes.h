@@ -28,17 +28,37 @@
 #include <stdint.h>
 #include <assert.h>
 #include <string>
+#include <bit>
 #include "axmol/tlx/bitmask.hpp"
 
-#define MAX_COLOR_ATTCHMENT 4
-
-#define MAX_INFLIGHT_BUFFER 3
-
-#define AX_ARRAYSIZE(A)     (sizeof(A) / sizeof((A)[0]))
+#define AX_ARRAYSIZE(A) (sizeof(A) / sizeof((A)[0]))
 
 namespace ax::rhi
 {
 using namespace std::string_view_literals;
+
+inline constexpr int MAX_FRAMES_IN_FLIGHT = 3;
+
+enum class DriverType
+{
+    Auto = -1,
+    OpenGL,  // GL or GLES
+    D3D11,
+    D3D12,
+    Vulkan,
+    Metal,
+    Count
+};
+
+struct DefaultDriverPriority
+{
+    static constexpr int Null   = 0;
+    static constexpr int OpenGL = 70;
+    static constexpr int D3D11  = 80;
+    static constexpr int Vulkan = 90;
+    static constexpr int D3D12  = 100;
+    static constexpr int Metal  = 100;
+};
 
 enum class BufferUsage : uint32_t
 {
@@ -59,7 +79,7 @@ enum class BufferType : uint32_t
     UNIFORM = UNIFORM_BUFFER
 };
 
-enum class ShaderStage
+enum class ShaderStage : int16_t
 {
     UNKNOWN  = -1,
     FRAGMENT = 0,
@@ -261,25 +281,27 @@ AX_ENABLE_BITSHIFT_OPS(ColorWriteMask)
 /**
  * Bitmask for selecting render buffers
  */
-enum class TargetBufferFlags : uint8_t
+enum class TargetBufferFlags : uint32_t
 {
-    NONE              = 0x0u,    //!< No buffer selected.
-    COLOR0            = 0x1u,    //!< Color buffer selected.
-    COLOR1            = 0x2u,    //!< Color buffer selected.
-    COLOR2            = 0x4u,    //!< Color buffer selected.
-    COLOR3            = 0x8u,    //!< Color buffer selected.
-    COLOR             = COLOR0,  //!< \deprecated
-    COLOR_ALL         = COLOR0 | COLOR1 | COLOR2 | COLOR3,
-    DEPTH             = 0x10u,                       //!< Depth buffer selected.
-    STENCIL           = 0x20u,                       //!< Stencil buffer selected.
+    NONE              = 0x0u,     //!< No buffer selected.
+    COLOR0            = 1u,       //!< Color buffer selected.
+    COLOR1            = 1u << 1,  //!< Color buffer selected.
+    COLOR2            = 1u << 2,  //!< Color buffer selected.
+    COLOR3            = 1u << 3,  //!< Color buffer selected.
+    COLOR             = COLOR0,   //!< \deprecated
+    COLOR_ALL         = 0x3FFFFFFFu,
+    DEPTH             = 1u << 30,                    //!< Depth buffer selected.
+    STENCIL           = 1u << 31,                    //!< Stencil buffer selected.
     DEPTH_AND_STENCIL = DEPTH | STENCIL,             //!< depth and stencil buffer selected.
     ALL               = COLOR_ALL | DEPTH | STENCIL  //!< Color, depth and stencil buffer selected.
 };
 AX_ENABLE_BITMASK_OPS(TargetBufferFlags)
 
+inline constexpr uint32_t MAX_COLOR_COUNT = std::popcount((uint32_t)TargetBufferFlags::COLOR_ALL);
+
 inline TargetBufferFlags getMRTColorFlag(size_t index) noexcept
 {
-    assert(index < 4);
+    assert(index < 30);
     return TargetBufferFlags(1u << index);
 }
 
@@ -379,7 +401,7 @@ struct SamplerDesc
     SamplerAddressMode tAddressMode : 2 = SamplerAddressMode::CLAMP;
     SamplerAddressMode wAddressMode : 2 = SamplerAddressMode::CLAMP;
     CompareFunc compareFunc : 4         = CompareFunc::NEVER;
-    uint32_t anisotropy : 4             = 1;
+    uint32_t anisotropy : 4             = 0;
     uint32_t reserved : 12              = 0;
 };
 static_assert(sizeof(SamplerDesc) == 4, "incompatible type: SamplerDesc");
@@ -428,7 +450,61 @@ struct SamplerIndex
     };
 };
 
-using SamplerHandle = void*;
+union Handle64
+{
+    void* ptr;
+    uint64_t u64;
+
+    constexpr Handle64() : u64(0) {}
+    constexpr Handle64(std::nullptr_t) : u64(0) {}
+    constexpr Handle64(void* p) : ptr(p) {}
+    constexpr Handle64(uint64_t v) : u64(v) {}
+    constexpr Handle64(const Handle64&) = default;
+    constexpr Handle64(Handle64&&)      = default;
+
+    Handle64& operator=(std::nullptr_t)
+    {
+        reset();
+        return *this;
+    }
+    Handle64& operator=(void* p)
+    {
+        ptr = p;
+        return *this;
+    }
+    Handle64& operator=(uint64_t v)
+    {
+        u64 = v;
+        return *this;
+    }
+    Handle64& operator=(const Handle64&) = default;
+    Handle64& operator=(Handle64&&)      = default;
+
+    template <typename _Ty>
+    constexpr explicit operator _Ty() const
+    {
+        using _Uty = std::remove_cv_t<std::remove_reference_t<_Ty>>;
+        if constexpr (std::is_pointer_v<_Uty>)
+            return static_cast<_Ty>(ptr);
+        else
+            return static_cast<_Ty>(u64);
+    }
+
+    template <typename _Ty>
+    constexpr bool operator==(_Ty&& rhs) const
+    {
+        using _Uty = std::remove_cv_t<std::remove_reference_t<_Ty>>;
+        if constexpr (std::is_pointer_v<_Uty>)
+            return static_cast<_Uty>(ptr) == rhs;
+        else
+            return static_cast<_Uty>(u64) == rhs;
+    }
+
+    constexpr void reset() { u64 = 0; }
+};
+
+using SurfaceHandle = Handle64;
+using SamplerHandle = Handle64;
 
 /**
  * Store texture description.
@@ -467,18 +543,36 @@ struct BlendDesc
 
 struct UniformInfo
 {
-    uint16_t count        = 0;   // element count
-    uint16_t sampler_slot = 0;   // sampler slot
-    int location          = -1;  // see also @StageUniformLocation
+    // Stable location from axslcc reflection.
+    // Used as the unified binding key across all rendering backends.
+    int16_t location = -1;
 
-    // in opengl, type means uniform data type, i.e. GL_FLOAT_VEC2, while in metal type means data basic type, i.e.
-    // float
-    unsigned int type         = 0;
-    unsigned int size         = 0;  // element size
-    unsigned int bufferOffset = 0;
+    // Runtime location used by the active backend.
+    // - On GL: this is the result of glGetUniformLocation().
+    // - On non-GL backends: nativeLocation == location (no runtime lookup needed).
+    int16_t runtimeLocation = -1;
+
+    // Byte offset inside UBO/constant buffer.
+    // -1 indicates this uniform is not part of a UBO.
+    int32_t offset    = -1;  // offset inside the block
+    int32_t cpuOffset = -1;  // absolute offset in CPU buffer
+
+    // Internal uniform type (16-bit enum).
+    // Represents the logical shader type (float, vec4, mat4, sampler2D, ...).
+    uint16_t varType = 0;
+
+    // Size in bytes
+    // Always <= 65535.
+    uint16_t sizeBytes = 0;
+
+    // Number of array elements (1 for non-array uniforms).
+    uint16_t count = 0;
+
+    // axslcc-provided sampler slot index (for combined image samplers).
+    uint16_t samplerSlot = 0;
 };
 
-struct StageUniformLocation
+struct UniformLocation
 {
     /*
      * gl: base_offset
@@ -486,45 +580,27 @@ struct StageUniformLocation
      * metal: binding_index
      * vulkan: binding_index
      */
-    int location = -1;
-    int offset   = -1;
+    int16_t location        = -1;  // stable axslcc location
+    int16_t runtimeLocation = -1;  // backend runtime location
+
+    int offset    = -1;
+    int cpuOffset = -1;
 
     operator bool() const { return location != -1; }
-    bool operator==(const StageUniformLocation& other) const
+    bool operator==(const UniformLocation& other) const { return location == other.location && offset == other.offset; }
+
+    void reset()
     {
-        return location == other.location && offset == other.offset;
+        location        = -1;
+        runtimeLocation = -1;
+        offset          = -1;
+        cpuOffset       = -1;
     }
 };
 
-struct UniformLocation
+struct UniformLocationHash
 {
-    UniformLocation() = default;
-    UniformLocation(StageUniformLocation&& s0, StageUniformLocation&& s1)
-    {
-        stages[0] = s0;
-        stages[1] = s1;
-    }
-
-    /*
-     * OpenGL(ES): all uniform linked to stages[0]
-     * Other APIs: stages[0] for fragment shader, stages[1] for vertex shader
-     */
-    StageUniformLocation stages[2];
-
-    operator bool() const { return stages[0] || stages[1]; }
-    void reset()
-    {
-        stages[0] = {};
-        stages[1] = {};
-    }
-    bool operator==(const UniformLocation& other) const
-    {
-        return stages[0] == other.stages[0] && stages[1] == other.stages[1];
-    }
-    std::size_t operator()(const UniformLocation&) const  // used as a hash function
-    {
-        return size_t(stages[0].location) ^ size_t(stages[1].location << 16);
-    }
+    size_t operator()(UniformLocation const& u) const noexcept { return std::size_t(u.location); }
 };
 
 // vertex input descriptor in vertex shader
@@ -537,7 +613,7 @@ struct VertexInputDesc
     // vulkan: binding_index
     int location = -1;
     int count    = 0;
-    int format   = 0;
+    int varType  = 0;
 };
 
 /// built-in uniform name

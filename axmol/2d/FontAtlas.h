@@ -70,7 +70,7 @@ public:
     static const int CacheTextureWidth;
     static const int CacheTextureHeight;
     static const char* CMD_RESET_FONTATLAS;
-    static void loadFontAtlas(std::string_view fontatlasFile, axstd::string_map<FontAtlas*>& outAtlasMap);
+    static void loadFontAtlas(std::string_view fontatlasFile, tlx::string_map<FontAtlas*>& outAtlasMap);
     /**
      */
     FontAtlas(Font* theFont);
@@ -145,7 +145,7 @@ protected:
 
     void updateTextureContent(rhi::PixelFormat format, int startY);
 
-    axstd::flat_set<char32_t> _newChars;
+    tlx::flat_set<char32_t> _newChars;
 
     std::unordered_map<unsigned int, Texture2D*> _atlasTextures;
     std::unordered_map<char32_t, FontLetterDefinition> _letterDefinitions;

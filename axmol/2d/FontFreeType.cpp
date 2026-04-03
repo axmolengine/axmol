@@ -46,7 +46,7 @@ namespace ax
 
 FT_Library FontFreeType::_FTlibrary;
 bool FontFreeType::_FTInitialized           = false;
-bool FontFreeType::_streamParsingEnabled    = true;
+bool FontFreeType::_streamParsingEnabled    = false;
 bool FontFreeType::_doNativeBytecodeHinting = true;
 bool FontFreeType::_globalSDFEnabled        = false;
 const int FontFreeType::DistanceMapSpread   = 6;
@@ -68,7 +68,7 @@ typedef struct _DataRef
     unsigned int referenceCount = 0;
 } DataRef;
 
-static axstd::string_map<DataRef> s_cacheFontData;
+static tlx::string_map<DataRef> s_cacheFontData;
 
 // ------ freetype2 stream parsing support ---
 static unsigned long ft_stream_read_callback(FT_Stream stream,
@@ -427,8 +427,6 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
                                             const GlyphResolution*& outFallbackRes,
                                             bool& sharedBitmapData)
 {
-    unsigned char* ret = nullptr;
-
     // @remark: glyphIndex=0 means charactor is mssing on current font face
     auto glyphIndex = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(charCode));
     if (glyphIndex == 0)
@@ -565,9 +563,9 @@ unsigned char* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
 
                 auto px = outlineMinX - blendImageMinX;
                 auto py = blendImageMaxY - outlineMaxY;
-                for (int x = 0; x < outlineWidth; ++x)
+                for (int y = 0; y < outlineHeight; ++y)
                 {
-                    for (int y = 0; y < outlineHeight; ++y)
+                    for (int x = 0; x < outlineWidth; ++x)
                     {
                         index                 = px + x + ((py + y) * blendWidth);
                         index2                = x + (y * outlineWidth);
@@ -577,9 +575,9 @@ unsigned char* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
 
                 px = glyphMinX - blendImageMinX;
                 py = blendImageMaxY - glyphMaxY;
-                for (int x = 0; x < outWidth; ++x)
+                for (int y = 0; y < outHeight; ++y)
                 {
-                    for (int y = 0; y < outHeight; ++y)
+                    for (int x = 0; x < outWidth; ++x)
                     {
                         index                     = px + x + ((y + py) * blendWidth);
                         index2                    = x + (y * outWidth);

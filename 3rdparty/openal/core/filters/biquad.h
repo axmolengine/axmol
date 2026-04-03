@@ -2,12 +2,12 @@
 #define CORE_FILTERS_BIQUAD_H
 
 #include <algorithm>
+#include <array>
 #include <cmath>
-#include <cstddef>
-#include <utility>
+#include <numbers>
+#include <span>
 
-#include "alnumbers.h"
-#include "alspan.h"
+#include "alnumeric.h"
 
 
 /* Filters implementation is based on the "Cookbook formulae for audio
@@ -37,16 +37,20 @@ enum class BiquadType {
     BandPass,
 };
 
-template<typename Real>
-class BiquadFilterR {
+class BiquadFilter {
+protected:
+    struct Coefficients {
+        /* Transfer function coefficients "b" (numerator) */
+        float mB0{1.0f}, mB1{0.0f}, mB2{0.0f};
+        /* Transfer function coefficients "a" (denominator; a0 is pre-applied). */
+        float mA1{0.0f}, mA2{0.0f};
+    };
     /* Last two delayed components for direct form II. */
-    Real mZ1{0}, mZ2{0};
-    /* Transfer function coefficients "b" (numerator) */
-    Real mB0{1}, mB1{0}, mB2{0};
-    /* Transfer function coefficients "a" (denominator; a0 is pre-applied). */
-    Real mA1{0}, mA2{0};
+    float mZ1{0.0f}, mZ2{0.0f};
+    Coefficients mCoeffs;
 
-    void setParams(BiquadType type, Real f0norm, Real gain, Real rcpQ);
+    static auto SetParams(BiquadType type, float f0norm, float gain, float rcpQ,
+        Coefficients &coeffs) -> bool;
 
     /**
      * Calculates the rcpQ (i.e. 1/Q) coefficient for shelving filters, using
@@ -54,8 +58,8 @@ class BiquadFilterR {
      * \param gain 0 < gain
      * \param slope 0 < slope <= 1
      */
-    static Real rcpQFromSlope(Real gain, Real slope)
-    { return std::sqrt((gain + Real{1}/gain)*(Real{1}/slope - Real{1}) + Real{2}); }
+    static auto rcpQFromSlope(float const gain, float const slope) -> float
+    { return std::sqrt((gain + 1.0f/gain)*(1.0f/slope - 1.0f) + 2.0f); }
 
     /**
      * Calculates the rcpQ (i.e. 1/Q) coefficient for filters, using the
@@ -63,14 +67,14 @@ class BiquadFilterR {
      * \param f0norm 0 < f0norm < 0.5.
      * \param bandwidth 0 < bandwidth
      */
-    static Real rcpQFromBandwidth(Real f0norm, Real bandwidth)
+    static auto rcpQFromBandwidth(float const f0norm, float const bandwidth) -> float
     {
-        const Real w0{al::numbers::pi_v<Real>*Real{2} * f0norm};
-        return 2.0f*std::sinh(std::log(Real{2})/Real{2}*bandwidth*w0/std::sin(w0));
+        const auto w0 = std::numbers::pi_v<float>*2.0f * f0norm;
+        return 2.0f*std::sinh(std::log(2.0f)/2.0f*bandwidth*w0/std::sin(w0));
     }
 
 public:
-    void clear() noexcept { mZ1 = mZ2 = Real{0}; }
+    void clear() noexcept { mZ1 = mZ2 = 0.0f; }
 
     /**
      * Sets the filter state for the specified filter type and its parameters.
@@ -84,9 +88,86 @@ public:
      * the Shelf and Peaking filter types.
      * \param slope Slope steepness of the transition band.
      */
-    void setParamsFromSlope(BiquadType type, Real f0norm, Real gain, Real slope)
+    void setParamsFromSlope(BiquadType const type, float const f0norm, float gain,
+        float const slope)
     {
-        gain = std::max<Real>(gain, 0.001f); /* Limit -60dB */
+        gain = std::max(gain, 0.001f); /* Limit -60dB */
+        SetParams(type, f0norm, gain, rcpQFromSlope(gain, slope), mCoeffs);
+    }
+
+    /**
+     * Sets the filter state for the specified filter type and its parameters.
+     *
+     * \param type The type of filter to apply.
+     * \param f0norm The normalized reference frequency (ref / sample_rate).
+     * This is the center point for the Shelf, Peaking, and BandPass filter
+     * types, or the cutoff frequency for the LowPass and HighPass filter
+     * types.
+     * \param gain The gain for the reference frequency response. Only used by
+     * the Shelf and Peaking filter types.
+     * \param bandwidth Normalized bandwidth of the transition band.
+     */
+    void setParamsFromBandwidth(BiquadType const type, float const f0norm, float const gain,
+        float const bandwidth)
+    { SetParams(type, f0norm, gain, rcpQFromBandwidth(f0norm, bandwidth), mCoeffs); }
+
+    void copyParamsFrom(BiquadFilter const &other) noexcept
+    { mCoeffs = other.mCoeffs; }
+
+    void process(std::span<float const> src, std::span<float> dst);
+    /** Processes this filter and the other at the same time. */
+    void dualProcess(BiquadFilter &other, std::span<float const> src, std::span<float> dst);
+
+    /* Rather hacky. It's just here to support "manual" processing. */
+    [[nodiscard]] auto getComponents() const noexcept -> std::array<float, 2> { return {mZ1,mZ2}; }
+    void setComponents(float const z1, float const z2) noexcept { mZ1 = z1; mZ2 = z2; }
+    [[nodiscard]] auto processOne(float const in, float &z1, float &z2) const noexcept -> float
+    {
+        const auto out = in*mCoeffs.mB0 + z1;
+        z1 = in*mCoeffs.mB1 - out*mCoeffs.mA1 + z2;
+        z2 = in*mCoeffs.mB2 - out*mCoeffs.mA2;
+        return out;
+    }
+};
+
+class BiquadInterpFilter : protected BiquadFilter {
+    Coefficients mTargetCoeffs;
+    int mCounter{-1};
+
+    void setParams(BiquadType type, float f0norm, float gain, float rcpQ);
+
+public:
+    void reset() noexcept
+    {
+        BiquadFilter::clear();
+        mTargetCoeffs = Coefficients{};
+        mCoeffs = mTargetCoeffs;
+        mCounter = -1;
+    }
+
+    void clear() noexcept
+    {
+        BiquadFilter::clear();
+        mCoeffs = mTargetCoeffs;
+        mCounter = 0;
+    }
+
+    /**
+     * Sets the filter state for the specified filter type and its parameters.
+     *
+     * \param type The type of filter to apply.
+     * \param f0norm The normalized reference frequency (ref / sample_rate).
+     * This is the center point for the Shelf, Peaking, and BandPass filter
+     * types, or the cutoff frequency for the LowPass and HighPass filter
+     * types.
+     * \param gain The gain for the reference frequency response. Only used by
+     * the Shelf and Peaking filter types.
+     * \param slope Slope steepness of the transition band.
+     */
+    void setParamsFromSlope(BiquadType const type, float const f0norm, float gain,
+        float const slope)
+    {
+        gain = std::max(gain, 0.001f); /* Limit -60dB */
         setParams(type, f0norm, gain, rcpQFromSlope(gain, slope));
     }
 
@@ -102,44 +183,30 @@ public:
      * the Shelf and Peaking filter types.
      * \param bandwidth Normalized bandwidth of the transition band.
      */
-    void setParamsFromBandwidth(BiquadType type, Real f0norm, Real gain, Real bandwidth)
+    void setParamsFromBandwidth(BiquadType const type, float const f0norm, float const gain,
+        float const bandwidth)
     { setParams(type, f0norm, gain, rcpQFromBandwidth(f0norm, bandwidth)); }
 
-    void copyParamsFrom(const BiquadFilterR &other)
-    {
-        mB0 = other.mB0;
-        mB1 = other.mB1;
-        mB2 = other.mB2;
-        mA1 = other.mA1;
-        mA2 = other.mA2;
-    }
+    void copyParamsFrom(const BiquadInterpFilter &other) noexcept;
 
-    void process(const al::span<const Real> src, const al::span<Real> dst);
+    void process(std::span<float const> src, std::span<float> dst);
     /** Processes this filter and the other at the same time. */
-    void dualProcess(BiquadFilterR &other, const al::span<const Real> src,
-        const al::span<Real> dst);
-
-    /* Rather hacky. It's just here to support "manual" processing. */
-    [[nodiscard]] auto getComponents() const noexcept -> std::array<Real,2> { return {{mZ1,mZ2}}; }
-    void setComponents(Real z1, Real z2) noexcept { mZ1 = z1; mZ2 = z2; }
-    [[nodiscard]] auto processOne(const Real in, Real &z1, Real &z2) const noexcept -> Real
-    {
-        const Real out{in*mB0 + z1};
-        z1 = in*mB1 - out*mA1 + z2;
-        z2 = in*mB2 - out*mA2;
-        return out;
-    }
+    void dualProcess(BiquadInterpFilter &other, std::span<float const> src, std::span<float> dst);
 };
 
-template<typename Real>
-struct DualBiquadR {
-    BiquadFilterR<Real> &f0, &f1;
 
-    void process(const al::span<const Real> src, const al::span<Real> dst)
+struct DualBiquad {
+    BiquadFilter &f0, &f1;
+
+    void process(std::span<float const> const src, std::span<float> const dst) const
     { f0.dualProcess(f1, src, dst); }
 };
 
-using BiquadFilter = BiquadFilterR<float>;
-using DualBiquad = DualBiquadR<float>;
+struct DualBiquadInterp {
+    BiquadInterpFilter &f0, &f1;
+
+    void process(std::span<float const> const src, std::span<float> const dst) const
+    { f0.dualProcess(f1, src, dst); }
+};
 
 #endif /* CORE_FILTERS_BIQUAD_H */

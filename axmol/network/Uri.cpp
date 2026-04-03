@@ -44,9 +44,7 @@ namespace
 template <typename T>
 std::string toString(T arg)
 {
-    std::stringstream ss;
-    ss << arg;
-    return ss.str();
+    return fmt::to_string(arg);
 }
 
 std::string submatch(const std::smatch& m, int idx)
@@ -372,38 +370,44 @@ const std::vector<std::pair<std::string, std::string>>& Uri::getQueryParams()
 
 std::string Uri::toString() const
 {
-    std::stringstream ss;
+    std::string ret;
+    ret.reserve(_scheme.size() + _username.size() + _password.size() + _host.size() + _path.size() + _query.size() +
+                _fragment.size() + 32);
+
     if (_hasAuthority)
     {
-        ss << _scheme << "://";
+        fmt::format_to(std::back_inserter(ret), "{}://", _scheme);
+
         if (!_password.empty())
         {
-            ss << _username << ":" << _password << "@";
+            fmt::format_to(std::back_inserter(ret), "{}:{}@", _username, _password);
         }
         else if (!_username.empty())
         {
-            ss << _username << "@";
+            fmt::format_to(std::back_inserter(ret), "{}@", _username);
         }
-        ss << _host;
+        fmt::format_to(std::back_inserter(ret), "{}", _host);
+
         if (_isCustomPort)
         {
-            ss << ":" << _port;
+            fmt::format_to(std::back_inserter(ret), ":{}", _port);
         }
     }
     else
     {
-        ss << _scheme << ":";
+        fmt::format_to(std::back_inserter(ret), "{}:", _scheme);
     }
-    ss << _path;
+    fmt::format_to(std::back_inserter(ret), "{}", _path);
+
     if (!_query.empty())
     {
-        ss << "?" << _query;
+        fmt::format_to(std::back_inserter(ret), "?{}", _query);
     }
     if (!_fragment.empty())
     {
-        ss << "#" << _fragment;
+        fmt::format_to(std::back_inserter(ret), "#{}", _fragment);
     }
-    return ss.str();
+    return ret;
 }
 
 }  // namespace network

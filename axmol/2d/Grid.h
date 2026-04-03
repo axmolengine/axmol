@@ -38,8 +38,6 @@ namespace ax
 {
 
 class Texture2D;
-// class Grabber;
-// class GLProgram;
 class Node;
 
 namespace rhi

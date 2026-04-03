@@ -191,7 +191,7 @@ protected:
     bool parsePass(Technique* technique, Properties* properties);
     bool parseShader(Pass* pass, Properties* properties);
     bool parseSampler(rhi::ProgramState* programState, Properties* properties);
-    bool parseUniform(rhi::ProgramState* programState, Properties* properties, const char* uniformName);
+    bool parseUniform(rhi::ProgramState* programState, Properties* properties, std::string_view uniformName);
     bool parseRenderState(RenderState::StateBlock* state, Properties* properties);
 
     // material name
@@ -208,7 +208,7 @@ protected:
     // weak reference
     Node* _target = nullptr;
 
-    axstd::string_map<int> _textureSlots;
+    tlx::string_map<int> _textureSlots;
     int _textureSlotIndex = 0;
 
     bool _isTransparent = false;  // is this mesh transparent.

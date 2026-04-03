@@ -27,7 +27,6 @@
 #include "axmol/rhi/SamplerCache.h"
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/base/Logging.h"
-#include <glad/vulkan.h>
 #include <cassert>
 #include <cstring>
 #include <algorithm>
@@ -39,9 +38,26 @@ namespace ax::rhi::vk
 static constexpr uint32_t LEVEL_INITIAL_CAPS = 16;
 static constexpr uint32_t LAYER_INITIAL_CAPS = 8;
 
+static constexpr VkMemoryPriorityAllocateInfoEXT IMAGE_MEMORY_PRIORITY_ALLOC_INFO{
+    .sType    = VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT,
+    .pNext    = nullptr,
+    .priority = 1.0f};
+
 // ------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------
+static bool isLargeTexture(uint32_t width, uint32_t height, uint32_t mipLevels)
+{
+    // Estimate texture size
+    VkDeviceSize estimatedSize = width * height * 4;  // RGBA8 approximation
+
+    // Apply mipmap factor (approx 1.33x for full mip chain)
+    if (mipLevels > 1)
+        estimatedSize = estimatedSize * 4 / 3;
+
+    // Consider dedicated allocation for textures larger than 64MB
+    return estimatedSize > (64 * 1024 * 1024);
+}
 
 // Check if offset is block-aligned (required by spec for compressed subresource updates).
 static inline bool isBlockAligned(uint32_t x, uint32_t y, uint32_t blockW, uint32_t blockH)
@@ -141,18 +157,18 @@ void TextureHandle::destroy(DriverImpl* driver, uint64_t fenceValue)
 {
     if (view != VK_NULL_HANDLE)
     {
-        driver->queueDisposal(view, fenceValue);
+        driver->disposeImageView(view, fenceValue);
         view = VK_NULL_HANDLE;
     }
     if (image != VK_NULL_HANDLE)
     {
-        driver->queueDisposal(image, fenceValue);
+        driver->disposeImage(image, fenceValue);
         image = VK_NULL_HANDLE;
     }
-    if (memory != VK_NULL_HANDLE)
+    if (vmaMemory != VK_NULL_HANDLE)
     {
-        driver->queueDisposal(memory, fenceValue);
-        memory = VK_NULL_HANDLE;
+        driver->disposeVmaMemory(vmaMemory, fenceValue);
+        vmaMemory = VK_NULL_HANDLE;
     }
 }
 
@@ -219,7 +235,7 @@ void TextureImpl::updateSamplerDesc(const SamplerDesc& sampler)
 {
     _desc.samplerDesc = sampler;
 
-    _sampler = (VkSampler)SamplerCache::getInstance()->getSampler(sampler);
+    _sampler = static_cast<VkSampler>(SamplerCache::getInstance()->getSampler(sampler));
     assert(_sampler && "Gets vkCreateSampler failed");
 }
 
@@ -271,30 +287,19 @@ void TextureImpl::updateSubData(int xoffset,
     bufInfo.usage       = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
     bufInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-    auto device  = _driver->getDevice();
-    VkResult res = vkCreateBuffer(device, &bufInfo, nullptr, &stagingBuffer);
-    assert(res == VK_SUCCESS && "vkCreateBuffer (staging) failed");
+    auto device = _driver->getDevice();
 
-    VkMemoryRequirements bufMemReq{};
-    vkGetBufferMemoryRequirements(device, stagingBuffer, &bufMemReq);
-
-    VkMemoryAllocateInfo bufAlloc{};
-    bufAlloc.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    bufAlloc.allocationSize  = bufMemReq.size;
-    bufAlloc.memoryTypeIndex = _driver->findMemoryType(
-        bufMemReq.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-    res = vkAllocateMemory(device, &bufAlloc, nullptr, &stagingMemory);
-    assert(res == VK_SUCCESS && "vkAllocateMemory (staging) failed");
-
-    vkBindBufferMemory(device, stagingBuffer, stagingMemory, 0);
-
-    // Copy user data into staging buffer
-    void* mapped = nullptr;
-    res          = vkMapMemory(device, stagingMemory, 0, uploadSize, 0, &mapped);
-    assert(res == VK_SUCCESS && "vkMapMemory failed");
-    std::memcpy(mapped, data, static_cast<size_t>(uploadSize));
-    vkUnmapMemory(device, stagingMemory);
+    VmaAllocation allocation{};
+    VmaAllocationCreateInfo vmaAllocCreateInfo{};
+    vmaAllocCreateInfo.flags =
+        VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT | VMA_ALLOCATION_CREATE_MAPPED_BIT;
+    vmaAllocCreateInfo.usage = VMA_MEMORY_USAGE_AUTO;
+    if (_driver->isMemoryPrioritySupported())
+        vmaAllocCreateInfo.priority = 1.0f;
+    auto res = vmaCreateBuffer(_driver->getVmaAllocator(), &bufInfo, &vmaAllocCreateInfo, &stagingBuffer, &allocation,
+                               nullptr);
+    VK_REQUIRE(res, "vkCreateBuffer (staging) failed");
+    res = vmaCopyMemoryToAllocation(_driver->getVmaAllocator(), data, allocation, 0, static_cast<size_t>(uploadSize));
 
     // Record transfer commands
     auto submission = _driver->startIsolateSubmission();
@@ -341,8 +346,7 @@ void TextureImpl::updateSubData(int xoffset,
 
     _driver->finishIsolateSubmission(submission);
 
-    vkDestroyBuffer(device, stagingBuffer, nullptr);
-    vkFreeMemory(device, stagingMemory, nullptr);
+    vmaDestroyBuffer(_driver->getVmaAllocator(), stagingBuffer, allocation);
 }
 
 // ------------------------------------------------------------
@@ -479,38 +483,42 @@ void TextureImpl::updateCompressedSubData(int xoffset,
                           info.blockHeight) &&
            "Compressed upload offsets must be block-aligned");
 
-    // Create staging buffer sized to the compressed region.
-    VkBuffer stagingBuffer       = VK_NULL_HANDLE;
-    VkDeviceMemory stagingMemory = VK_NULL_HANDLE;
+    // Create staging buffer using VMA
+    VkBuffer stagingBuffer          = VK_NULL_HANDLE;
+    VmaAllocation stagingAllocation = VK_NULL_HANDLE;
+    VkBufferCreateInfo bufferInfo{};
+    bufferInfo.sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bufferInfo.size        = expectedSize;
+    bufferInfo.usage       = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+    bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-    VkBufferCreateInfo bufInfo{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
-    bufInfo.size        = expectedSize;
-    bufInfo.usage       = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
-    bufInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    // Configure VMA allocation for staging buffer
+    VmaAllocationCreateInfo allocCreateInfo = {};
+    allocCreateInfo.usage                   = VMA_MEMORY_USAGE_AUTO_PREFER_HOST;      // Prefer host-visible memory
+    allocCreateInfo.flags = VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |  // Optimized for sequential writes
+                            VMA_ALLOCATION_CREATE_MAPPED_BIT;                         // Keep memory persistently mapped
 
-    VkDevice device = _driver->getDevice();
-    VkResult res    = vkCreateBuffer(device, &bufInfo, nullptr, &stagingBuffer);
-    assert(res == VK_SUCCESS && "vkCreateBuffer (staging) failed");
+    // For staging buffers, we can use lower priority since they're temporary
+    if (_driver->isMemoryPrioritySupported())
+    {
+        allocCreateInfo.priority = 0.1f;  // Low priority for staging memory
+    }
 
-    VkMemoryRequirements memReq{};
-    vkGetBufferMemoryRequirements(device, stagingBuffer, &memReq);
+    // Use dedicated allocation for very large staging buffers
+    if (expectedSize > 16 * 1024 * 1024)
+    {  // 16MB threshold
+        allocCreateInfo.flags |= VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT;
+    }
 
-    VkMemoryAllocateInfo allocInfo{VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO};
-    allocInfo.allocationSize  = memReq.size;
-    allocInfo.memoryTypeIndex = _driver->findMemoryType(
-        memReq.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+    VkDevice device           = _driver->getDevice();
+    VmaAllocator vmaAllocator = _driver->getVmaAllocator();  // Assume driver provides VMA allocator
 
-    res = vkAllocateMemory(device, &allocInfo, nullptr, &stagingMemory);
-    assert(res == VK_SUCCESS && "vkAllocateMemory (staging) failed");
+    VkResult res =
+        vmaCreateBuffer(vmaAllocator, &bufferInfo, &allocCreateInfo, &stagingBuffer, &stagingAllocation, nullptr);
+    VK_REQUIRE(res, "vmaCreateBuffer (staging) failed");
 
-    vkBindBufferMemory(device, stagingBuffer, stagingMemory, 0);
-
-    // Upload compressed bytes into staging memory as tightly packed.
-    void* mapped = nullptr;
-    res          = vkMapMemory(device, stagingMemory, 0, expectedSize, 0, &mapped);
-    assert(res == VK_SUCCESS && "vkMapMemory failed");
-    std::memcpy(mapped, data, static_cast<size_t>(expectedSize));
-    vkUnmapMemory(device, stagingMemory);
+    res = vmaCopyMemoryToAllocation(vmaAllocator, data, stagingAllocation, 0, expectedSize);
+    VK_REQUIRE(res, "vmaCopyMemoryToAllocation failed");
 
     // Record commands: transition destination subresource to TRANSFER_DST_OPTIMAL, copy, then to
     // SHADER_READ_ONLY_OPTIMAL.
@@ -559,8 +567,8 @@ void TextureImpl::updateCompressedSubData(int xoffset,
 
     _driver->finishIsolateSubmission(cmd);
 
-    vkDestroyBuffer(device, stagingBuffer, nullptr);
-    vkFreeMemory(device, stagingMemory, nullptr);
+    // Destroy staging buffer using VMA
+    vmaDestroyBuffer(vmaAllocator, stagingBuffer, stagingAllocation);
 }
 
 // ------------------------------------------------------------
@@ -604,6 +612,8 @@ void TextureImpl::ensureNativeTexture()
     imageInfo.format        = vkFmt;
     imageInfo.tiling        = VK_IMAGE_TILING_OPTIMAL;
     imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+
+    // Set image usage flags
     imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
     if (_desc.textureUsage == TextureUsage::RENDER_TARGET)
     {
@@ -619,23 +629,31 @@ void TextureImpl::ensureNativeTexture()
     imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
     imageInfo.samples     = VK_SAMPLE_COUNT_1_BIT;
 
-    auto device = _driver->getDevice();
+    auto device       = _driver->getDevice();
+    auto vmaAllocator = _driver->getVmaAllocator();  // Assume driver provides VMA allocator
 
-    VkResult res = vkCreateImage(device, &imageInfo, nullptr, &_nativeTexture.image);
-    assert(res == VK_SUCCESS && "vkCreateImage failed");
+    // Use VMA to create image and allocate memory in one step
+    VmaAllocationCreateInfo allocCreateInfo = {};
 
-    VkMemoryRequirements memReq{};
-    vkGetImageMemoryRequirements(device, _nativeTexture.image, &memReq);
+    // Textures are typically device-local (GPU only)
+    allocCreateInfo.usage = VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE;
 
-    VkMemoryAllocateInfo allocInfo{};
-    allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    allocInfo.allocationSize  = memReq.size;
-    allocInfo.memoryTypeIndex = _driver->findMemoryType(memReq.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+    // Set priority for memory allocation (optional)
+    if (_driver->isMemoryPrioritySupported())
+    {
+        // VMA 7.0+ uses priority field directly
+        allocCreateInfo.priority = 1.0f;  // High priority for textures
+    }
 
-    res = vkAllocateMemory(device, &allocInfo, nullptr, &_nativeTexture.memory);
-    assert(res == VK_SUCCESS && "vkAllocateMemory failed");
+    // Optional: Dedicated allocation for large textures
+    if (isLargeTexture(_desc.width, _desc.height, mipLevels))
+        allocCreateInfo.flags |= VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT;
 
-    vkBindImageMemory(device, _nativeTexture.image, _nativeTexture.memory, 0);
+    VmaAllocationInfo allocationInfo{};
+    VkResult res = vmaCreateImage(vmaAllocator, &imageInfo, &allocCreateInfo, &_nativeTexture.image,
+                                  &_nativeTexture.vmaMemory, &allocationInfo);
+
+    VK_REQUIRE(res, "vmaCreateImage failed");
 
     // Create image view
     VkImageViewCreateInfo viewInfo{};
@@ -666,7 +684,7 @@ void TextureImpl::ensureNativeTexture()
     viewInfo.subresourceRange.layerCount     = arrayLayers;
 
     res = vkCreateImageView(device, &viewInfo, nullptr, &_nativeTexture.view);
-    assert(res == VK_SUCCESS && "vkCreateImageView failed");
+    VK_REQUIRE(res, "vkCreateImageView failed");
 }
 
 }  // namespace ax::rhi::vk

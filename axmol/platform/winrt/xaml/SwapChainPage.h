@@ -35,7 +35,7 @@
 #include <winrt/Windows.UI.Xaml.Markup.h>
 #include <winrt/Windows.Devices.Input.h>
 
-#if AX_RENDER_API == AX_RENDER_API_GL
+#if AX_ENABLE_GL
 #    include "axmol/platform/winrt/xaml/EGLSurfaceProvider.h"
 #endif
 
@@ -70,7 +70,7 @@ public:
 
     void CreateInput();
 
-#if AX_RENDER_API == AX_RENDER_API_GL
+#if AX_ENABLE_GL
     EGLSurfaceProvider* m_eglSurfaceProvider{nullptr};
     EGLSurface m_eglSurface{EGL_NO_SURFACE};  // This surface is associated with a swapChainPanel on the page
     Concurrency::critical_section m_eglSurfaceCriticalSection{};
@@ -108,6 +108,8 @@ public:
     bool m_deviceLost;
     bool m_visible;
     bool m_cursorVisible;
+    bool m_fallbackGL{false};
+
     Windows::Graphics::Display::DisplayOrientations m_orientation;
 
     std::mutex m_sleepMutex;

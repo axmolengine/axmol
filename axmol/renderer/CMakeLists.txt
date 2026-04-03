@@ -20,6 +20,7 @@ set(_AX_RENDERER_HEADER
   renderer/ProgramManager.h
   renderer/ProgramStateRegistry.h
   renderer/Shaders.h
+  renderer/VertexLayoutManager.h
 )
 
 set(_AX_RENDERER_SRC
@@ -42,4 +43,5 @@ set(_AX_RENDERER_SRC
   renderer/ProgramManager.cpp
   renderer/ProgramStateRegistry.cpp
   renderer/Shaders.cpp
+  renderer/VertexLayoutManager.cpp
 )

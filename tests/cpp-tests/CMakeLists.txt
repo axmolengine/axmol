@@ -363,7 +363,7 @@ if(AX_ENABLE_MEDIA)
     Source/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.cpp)
 endif()
 
-if(ANDROID OR IOS OR LINUX OR(WINDOWS AND AX_ENABLE_MSEDGE_WEBVIEW2))
+if(ANDROID OR IOS OR (LINUX AND WEBKIT2GTK_FOUND) OR(WINDOWS AND AX_ENABLE_MSEDGE_WEBVIEW2))
   list(APPEND GAME_HEADER
     Source/UITest/CocoStudioGUITest/UIWebViewTest/UIWebViewTest.h
   )
@@ -395,6 +395,7 @@ if(AX_ENABLE_EXT_IMGUI)
   list(APPEND GAME_HEADER Source/ImGuiTest/ImGuiTest.h)
   list(APPEND GAME_SOURCE Source/ImGuiTest/ImGuiTest.cpp)
 
+  # Box2DTestBed is only works on PC platforms, because it requires glfw which is not available on mobile platforms
   if((WINDOWS OR MACOSX OR LINUX OR WASM) AND(NOT WINRT))
     file(GLOB_RECURSE BOX2D_TESTBED_SOURCES Source/Box2DTestBed/*.h;Source/Box2DTestBed/*.cpp;Source/Box2DTestBed/*.c)
     list(APPEND GAME_SOURCE ${BOX2D_TESTBED_SOURCES})

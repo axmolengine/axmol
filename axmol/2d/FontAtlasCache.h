@@ -79,7 +79,7 @@ public:
     static void unloadFontAtlasTTF(std::string_view fontFileName);
 
 private:
-    static axstd::string_map<FontAtlas*> _atlasMap;
+    static tlx::string_map<FontAtlas*> _atlasMap;
 };
 
 }  // namespace ax

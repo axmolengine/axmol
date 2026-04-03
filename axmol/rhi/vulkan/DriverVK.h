@@ -23,12 +23,14 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 #include <glad/vulkan.h>
+#include <vk_mem_alloc.h>
 #include <optional>
 #include <string>
 #include <mutex>
 #include <deque>
+#include "axmol/tlx/flat_set.hpp"
 
 namespace ax::rhi::vk
 {
@@ -45,7 +47,7 @@ struct DisposableResource
         Image,
         ImageView,
         Buffer,
-        Memory
+        VmaMemory,
     };
     Type type;
     union
@@ -54,7 +56,7 @@ struct DisposableResource
         VkImage image;
         VkImageView view;
         VkBuffer buffer;
-        VkDeviceMemory memory;
+        VmaAllocation vmaMemory;
     };
 
     uint64_t fenceValue;
@@ -77,6 +79,14 @@ struct SurfaceCreateInfo
     CreateSurfaceFunc createFunc{};
 };
 
+struct VulkanCaps
+{
+    bool extendedDynamicStateSupported{false};
+    bool dynamicPrimitiveTopologyUnrestricted{false};
+    bool samplerAnisotropySupported{false};
+    bool memoryPrioritySupported{false};
+};
+
 class DriverImpl : public DriverBase
 {
     friend class RenderContextImpl;
@@ -90,20 +100,22 @@ public:
     DriverImpl();
     ~DriverImpl();
 
-    void init();
+    bool init() override;
+
+    DriverType type() override { return DriverType::Vulkan; }
 
     bool recreateSurface(const SurfaceCreateInfo& info);
     VkSurfaceKHR getSurface() const { return _surface; }
 
     const VkExtent2D& getSurfaceInitialExtent() const { return _surfaceInitalExtent; }
 
-    RenderContext* createRenderContext(void* surfaceContext) override;
+    RenderContext* createRenderContext(SurfaceHandle surface) override;
     Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial) override;
     Texture* createTexture(const TextureDesc& descriptor) override;
     RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
     DepthStencilState* createDepthStencilState() override;
     RenderPipeline* createRenderPipeline() override;
-    Program* createProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
+    Program* createProgram(Data vsData, Data fsData) override;
     VertexLayout* createVertexLayout(VertexLayoutDesc&& desc) override;
 
     std::string getVendor() const override;
@@ -113,7 +125,7 @@ public:
 
     bool checkForFeatureSupported(FeatureType feature) override;
 
-    void cleanPendingResources() override;
+    void destroyStaleResources() override;
 
     VkPhysicalDevice getPhysical() const { return _physical; }
     VkDevice getDevice() const { return _device; }
@@ -151,47 +163,50 @@ public:
 
     void destroyFramebuffer(VkFramebuffer);
     void destroyRenderPass(VkRenderPass);
+    void removeCachedPipelineObjects(Program* key);
 
-    void queueDisposal(VkImage image, uint64_t fenceValue);
-    void queueDisposal(VkImageView view, uint64_t fenceValue);
-    void queueDisposal(VkBuffer buffer, uint64_t fenceValue);
-    void queueDisposal(VkDeviceMemory memory, uint64_t fenceValue);
-    void queueDisposal(VkSampler sampler, uint64_t fenceValue);
+    void disposeImage(VkImage image, uint64_t fenceValue);
+    void disposeImageView(VkImageView view, uint64_t fenceValue);
+    void disposeSampler(VkSampler sampler, uint64_t fenceValue);
+    void disposeBuffer(VkBuffer buffer, uint64_t fenceValue);
+    void disposeVmaMemory(VmaAllocation memory, uint64_t fenceValue);
 
     void processDisposalQueue(uint64_t completedFenceValue);
 
-    void rebuildSwapchainAttachments(const axstd::pod_vector<VkImage>& images,
-                                     const axstd::pod_vector<VkImageView>&,
-                                     const VkExtent2D&,
-                                     PixelFormat imagePF);
-
-    void destroySwapchainAttachments();
-
-    void setSwapchainCurrentImageIndex(uint32_t imageIndex);
-
-    // Get the current swapchain color attachment by recorded swapchain image index
-    TextureImpl* getSwapchainColorAttachment();
-
-    // Get the current swapchain depth-stencil attachment
-    TextureImpl* getSwapchainDepthStencilAttachment();
-
     void waitForGPU() override { vkDeviceWaitIdle(_device); }
+
+    bool hasExtension(std::string_view extName) const override;
+
+    bool isExtendedDynamicStateSupported() const { return _vkCaps.extendedDynamicStateSupported; }
+    bool isDynamicPrimitiveTopologyUnrestricted() const { return _vkCaps.dynamicPrimitiveTopologyUnrestricted; }
+    bool isSamplerAnisotropySupported() const { return _vkCaps.samplerAnisotropySupported; }
+    bool isMemoryPrioritySupported() const { return _vkCaps.memoryPrioritySupported; }
+
+    void setFrameIndex(int index) { _frameIndex = index; }
+    int getFrameIndex() const { return _frameIndex; }
+
+    VmaAllocator& getVmaAllocator() { return _vmaAllocator; }
 
 protected:
     void queueDisposalInternal(DisposableResource&& res);
-    ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
+    ShaderModule* createShaderModule(ShaderStage stage, Data& chunk) override;
     SamplerHandle createSampler(const SamplerDesc& desc) override;
     void destroySampler(SamplerHandle& h) override;
 
 private:
-    void initializeFactory();
-    void initializeDevice();
+    bool initializeFactory();
+    bool initializeDevice();
+
+    tlx::flat_set<uint32_t> _supportedExtensions;
+
+    VulkanCaps _vkCaps;
 
     RenderContextImpl* _currentRenderContext{nullptr};
 
     VkDebugUtilsMessengerCreateInfoEXT _debugCreateInfo{};
     VkDebugUtilsMessengerEXT _debugMessenger{VK_NULL_HANDLE};
 
+    uint32_t _apiVersion{0};
     VkInstance _factory{VK_NULL_HANDLE};
     VkPhysicalDevice _physical{VK_NULL_HANDLE};
     VkDevice _device{VK_NULL_HANDLE};
@@ -205,20 +220,19 @@ private:
     VkCommandPool _commandPool{VK_NULL_HANDLE};
     std::mutex _commandPoolMutex;
 
-    axstd::pod_vector<DisposableResource> _disposalQueue;
+    VmaAllocator _vmaAllocator{VK_NULL_HANDLE};
+
+    tlx::pod_vector<DisposableResource> _disposalQueue;
 
     uint32_t _graphicsQueueFamily{0};
     uint32_t _presentQueueFamily{0};
+
+    int _frameIndex{0};
 
     std::string _vendor;
     std::string _renderer;
     std::string _version;
     std::string _shaderVersion;
-
-    // store and provide swapchain render target attachments
-    axstd::pod_vector<TextureImpl*> _swapchainColorAttachments;
-    uint32_t _currentSwapchainImageIndex          = 0;
-    TextureImpl* _swapchainDepthStencilAttachment = nullptr;
 };
 
 }  // namespace ax::rhi::vk

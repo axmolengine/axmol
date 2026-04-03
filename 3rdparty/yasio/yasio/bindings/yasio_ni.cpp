@@ -156,7 +156,7 @@ YASIO_NI_API void yasio_set_option(void* service_ptr, int opt, const char* pszAr
   std::string strArgs = pszArgs;
   std::array<cxx17::string_view, YASIO_MAX_OPTION_ARGC> args;
   int argc = 0;
-  yasio::split_if(&strArgs.front(), ';', [&](char* s, char* e) {
+  tlx::split_if(&strArgs.front(), ';', [&](char* s, char* e) {
     if (e) {
         *e           = '\0'; // to c style string
         args[argc++] = cxx17::string_view(s, e - s);

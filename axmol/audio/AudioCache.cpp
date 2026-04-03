@@ -193,10 +193,9 @@ void AudioCache::readDataTask(unsigned int selfId)
             if (*_isDestroyed)
                 break;
 
-            uint32_t frames = 0;
             while (!*_isDestroyed && _framesRead < originalTotalFrames)
             {
-                frames = (std::min)(framesToReadOnce, remainingFrames);
+                auto frames = (std::min)(framesToReadOnce, remainingFrames);
                 if (_framesRead + frames > originalTotalFrames)
                 {
                     frames = originalTotalFrames - _framesRead;

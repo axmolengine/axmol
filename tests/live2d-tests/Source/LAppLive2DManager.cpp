@@ -19,7 +19,7 @@
 
 //cocos2d
 #include "axmol/base/Director.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 
 using namespace Csm;
 using namespace LAppDefine;

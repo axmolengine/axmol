@@ -45,7 +45,7 @@ const int FontAtlas::CacheTextureWidth     = 512;
 const int FontAtlas::CacheTextureHeight    = 512;
 const char* FontAtlas::CMD_RESET_FONTATLAS = "__ax_RESET_FONTATLAS";
 
-void FontAtlas::loadFontAtlas(std::string_view fontatlasFile, axstd::string_map<FontAtlas*>& outAtlasMap)
+void FontAtlas::loadFontAtlas(std::string_view fontatlasFile, tlx::string_map<FontAtlas*>& outAtlasMap)
 {
     using namespace ::simdjson;
 
@@ -109,7 +109,7 @@ void FontAtlas::loadFontAtlas(std::string_view fontatlasFile, axstd::string_map<
         catch (std::exception& ex)
         {
             fontAtlas->release();
-            throw ex;  // rethrow
+            throw;  // rethrow
         }
     }
     catch (std::exception& ex)
@@ -319,7 +319,7 @@ bool FontAtlas::findNewCharacters(const std::u32string& u32Text)
 
     if (_letterDefinitions.empty())
     {
-        std::copy(u32Text.begin(), u32Text.end(), std::inserter(_newChars, _newChars.end()));
+        _newChars.insert(u32Text.begin(), u32Text.end());
     }
     else
     {

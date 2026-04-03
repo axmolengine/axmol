@@ -26,6 +26,7 @@
 #include "axmol/rhi/opengl/DriverGL.h"
 #include "axmol/rhi/opengl/UtilsGL.h"
 #include "axmol/rhi/opengl/MacrosGL.h"
+#include "axmol/rhi/opengl/BufferGL.h"
 
 /**
  * Vertex attribute binding (glVertexAttribBinding/Format) path is currently incomplete.

@@ -126,17 +126,96 @@ THE SOFTWARE.
 // render configure
 //////////////////////////////////////////////////////////////////////////
 
-#define AX_RENDER_API_GL    1
-#define AX_RENDER_API_MTL   2
-#define AX_RENDER_API_D3D11 3
-#define AX_RENDER_API_VK    4
-#define AX_RENDER_API_D3D12 5
+// Default all RHI macros to 0
+#ifndef AX_ENABLE_GL
+#    define AX_ENABLE_GL 0
+#endif
+#ifndef AX_ENABLE_VK
+#    define AX_ENABLE_VK 0
+#endif
+#ifndef AX_ENABLE_D3D11
+#    define AX_ENABLE_D3D11 0
+#endif
+#ifndef AX_ENABLE_D3D12
+#    define AX_ENABLE_D3D12 0
+#endif
+#ifndef AX_ENABLE_MTL
+#    define AX_ENABLE_MTL 0
+#endif
 
-#ifndef AX_RENDER_API
-#    if defined(__APPLE__)
-#        define AX_RENDER_API AX_RENDER_API_MTL
-#    else
-#        define AX_RENDER_API AX_RENDER_API_GL
+// Helper macro: check if user already enabled any RHI
+#define AX_HAS_USER_RHI (AX_ENABLE_GL || AX_ENABLE_VK || AX_ENABLE_D3D11 || AX_ENABLE_D3D12 || AX_ENABLE_MTL)
+
+// Platform defaults + forced disable
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
+// Force disable unsupported
+#    undef AX_ENABLE_MTL
+#    define AX_ENABLE_MTL 0
+// WinRT also disables Vulkan
+#    if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
+#        undef AX_ENABLE_VK
+#        define AX_ENABLE_VK 0
+#    endif
+// Default fallback if user didn't specify
+#    if !AX_HAS_USER_RHI
+#        undef AX_ENABLE_GL
+#        define AX_ENABLE_GL 1
+#    endif
+
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+// Force disable unsupported
+#    undef AX_ENABLE_D3D11
+#    define AX_ENABLE_D3D11 0
+#    undef AX_ENABLE_D3D12
+#    define AX_ENABLE_D3D12 0
+#    undef AX_ENABLE_MTL
+#    define AX_ENABLE_MTL 0
+// Default fallback
+#    if !AX_HAS_USER_RHI
+#        undef AX_ENABLE_GL
+#        define AX_ENABLE_GL 1
+#    endif
+
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+// Force disable unsupported
+#    undef AX_ENABLE_D3D11
+#    define AX_ENABLE_D3D11 0
+#    undef AX_ENABLE_D3D12
+#    define AX_ENABLE_D3D12 0
+#    undef AX_ENABLE_MTL
+#    define AX_ENABLE_MTL 0
+// Default fallback
+#    if !AX_HAS_USER_RHI
+#        undef AX_ENABLE_GL
+#        define AX_ENABLE_GL 1
+#    endif
+
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_OSX || AX_TARGET_PLATFORM == AX_PLATFORM_IOS
+// Force disable unsupported
+#    undef AX_ENABLE_D3D11
+#    define AX_ENABLE_D3D11 0
+#    undef AX_ENABLE_D3D12
+#    define AX_ENABLE_D3D12 0
+#    undef AX_ENABLE_VK
+#    define AX_ENABLE_VK 0
+// Default fallback
+#    if !AX_HAS_USER_RHI
+#        undef AX_ENABLE_MTL
+#        define AX_ENABLE_MTL 1
+#    endif
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_WASM
+#    undef AX_ENABLE_D3D11
+#    define AX_ENABLE_D3D11 0
+#    undef AX_ENABLE_D3D12
+#    define AX_ENABLE_D3D12 0
+#    undef AX_ENABLE_VK
+#    define AX_ENABLE_VK 0
+#    undef AX_ENABLE_MTL
+#    define AX_ENABLE_MTL 0
+// Default fallback
+#    if !AX_HAS_USER_RHI
+#        undef AX_ENABLE_GL
+#        define AX_ENABLE_GL 1
 #    endif
 #endif
 
@@ -154,9 +233,8 @@ THE SOFTWARE.
 // mac/iOS/android use system builtin GL/GLES, not ANGLE
 // Windows: use ANGLE GLES
 #ifndef AX_GLES_PROFILE
-#    if defined(__ANDROID__) || defined(_WIN32) || \
-        (AX_RENDER_API == AX_RENDER_API_GL &&      \
-         (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_TVOS))
+#    if AX_ENABLE_GL && (defined(__ANDROID__) || defined(_WIN32) || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
+                         AX_TARGET_PLATFORM == AX_PLATFORM_TVOS)
 #        define AX_GLES_PROFILE 300
 #    else
 #        define AX_GLES_PROFILE 0

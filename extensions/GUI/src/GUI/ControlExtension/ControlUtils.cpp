@@ -41,7 +41,7 @@ Sprite* ControlUtils::addSpriteToTargetWithPosAndAnchor(const char* spriteName, 
     return sprite;
 }
 
-HSV ControlUtils::HSVfromRGB(RGBA value)
+HSV ControlUtils::HSVfromRGB(const RGBA& value)
 {
     HSV out;
     double min, max, delta;
@@ -85,7 +85,7 @@ HSV ControlUtils::HSVfromRGB(RGBA value)
     return out;
 }
 
-RGBA ControlUtils::RGBfromHSV(HSV value)
+RGBA ControlUtils::RGBfromHSV(const HSV& value)
 {
     double hh, p, q, t, ff;
     int i;

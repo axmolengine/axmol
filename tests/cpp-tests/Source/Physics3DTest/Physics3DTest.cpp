@@ -29,7 +29,7 @@
 
 #include "axmol/3d/Terrain.h"
 #include "axmol/3d/Bundle3D.h"
-#include "axmol/physics3d/Physics3D.h"
+#include "axmol/3d/physics/Physics3D.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 USING_NS_AX_EXT;
 using namespace ax;
@@ -56,7 +56,7 @@ static ax::Scene* physicsScene = nullptr;
 
 Physics3DTests::Physics3DTests()
 {
-#if !defined(AX_ENABLE_3D_PHYSICS)
+#if !defined(AX_ENABLE_PHYSICS_3D)
     ADD_TEST_CASE(Physics3DDemoDisabled);
 #else
     ADD_TEST_CASE(BasicPhysics3DDemo);
@@ -68,11 +68,11 @@ Physics3DTests::Physics3DTests()
 #endif
 };
 
-#if !defined(AX_ENABLE_3D_PHYSICS)
+#if !defined(AX_ENABLE_PHYSICS_3D)
 void Physics3DDemoDisabled::onEnter()
 {
     TTFConfig ttfConfig("fonts/arial.ttf", 16);
-    auto label = Label::createWithTTF(ttfConfig, "Should enable AX_ENABLE_3D_PHYSICS\n to run this test case");
+    auto label = Label::createWithTTF(ttfConfig, "Should enable AX_ENABLE_PHYSICS_3D\n to run this test case");
 
     auto size = Director::getInstance()->getCanvasSize();
     label->setPosition(Vec2(size.width / 2, size.height / 2));
@@ -99,7 +99,7 @@ bool Physics3DTestDemo::init()
 
     if (initWithPhysics())
     {
-        getPhysics3DWorld()->setDebugDrawEnable(false);
+        getPhysicsWorld3D()->setDebugDrawEnable(false);
 
         physicsScene = this;
         Size size    = Director::getInstance()->getCanvasSize();
@@ -118,14 +118,14 @@ bool Physics3DTestDemo::init()
         TTFConfig ttfConfig("fonts/arial.ttf", 10);
         auto label    = Label::createWithTTF(ttfConfig, "DebugDraw OFF");
         auto menuItem = MenuItemLabel::create(label, [this, label](Object* /*sender*/) {
-            if (getPhysics3DWorld()->isDebugDrawEnabled())
+            if (getPhysicsWorld3D()->isDebugDrawEnabled())
             {
-                getPhysics3DWorld()->setDebugDrawEnable(false);
+                getPhysicsWorld3D()->setDebugDrawEnable(false);
                 label->setString("DebugDraw OFF");
             }
             else
             {
-                getPhysics3DWorld()->setDebugDrawEnable(true);
+                getPhysicsWorld3D()->setDebugDrawEnable(true);
                 label->setString("DebugDraw ON");
             }
         });
@@ -429,7 +429,7 @@ bool Physics3DConstraintDemo::init()
 
     // create point to point constraint
     Physics3DConstraint* constraint = Physics3DPointToPointConstraint::create(rigidBody, Vec3(2.5f, 2.5f, 2.5f));
-    physicsScene->getPhysics3DWorld()->addPhysics3DConstraint(constraint);
+    physicsScene->getPhysicsWorld3D()->addPhysics3DConstraint(constraint);
 
     // create hinge constraint
     rbDes.mass  = 1.0f;
@@ -447,7 +447,7 @@ bool Physics3DConstraintDemo::init()
     component->syncNodeToPhysics();
     rigidBody->setAngularVelocity(Vec3(0, 3, 0));
     constraint = Physics3DHingeConstraint::create(rigidBody, Vec3(4.f, 4.f, 0.5f), Vec3(0.f, 1.f, 0.f));
-    physicsScene->getPhysics3DWorld()->addPhysics3DConstraint(constraint);
+    physicsScene->getPhysicsWorld3D()->addPhysics3DConstraint(constraint);
 
     // create slider constraint
     rbDes.mass  = 1.0f;
@@ -484,7 +484,7 @@ bool Physics3DConstraintDemo::init()
     frameInA.m[13] = -5.f;
     frameInB.m[13] = 5.f;
     constraint     = Physics3DSliderConstraint::create(rigidBody, rigidBodyB, frameInA, frameInB, false);
-    physicsScene->getPhysics3DWorld()->addPhysics3DConstraint(constraint);
+    physicsScene->getPhysicsWorld3D()->addPhysics3DConstraint(constraint);
     ((Physics3DSliderConstraint*)constraint)->setLowerLinLimit(-5.f);
     ((Physics3DSliderConstraint*)constraint)->setUpperLinLimit(5.f);
 
@@ -507,7 +507,7 @@ bool Physics3DConstraintDemo::init()
     frameInA.m[13] = -10.f;
     frameInA.m[14] = 0.f;
     constraint     = Physics3DConeTwistConstraint::create(rigidBody, frameInA);
-    physicsScene->getPhysics3DWorld()->addPhysics3DConstraint(constraint, true);
+    physicsScene->getPhysicsWorld3D()->addPhysics3DConstraint(constraint, true);
     ((Physics3DConeTwistConstraint*)constraint)
         ->setLimit(AX_DEGREES_TO_RADIANS(10), AX_DEGREES_TO_RADIANS(10), AX_DEGREES_TO_RADIANS(40));
 
@@ -526,7 +526,7 @@ bool Physics3DConstraintDemo::init()
     component->syncNodeToPhysics();
     frameInA.setIdentity();
     constraint = Physics3D6DofConstraint::create(rigidBody, frameInA, false);
-    physicsScene->getPhysics3DWorld()->addPhysics3DConstraint(constraint);
+    physicsScene->getPhysicsWorld3D()->addPhysics3DConstraint(constraint);
     ((Physics3D6DofConstraint*)constraint)->setAngularLowerLimit(Vec3(0, 0, 0));
     ((Physics3D6DofConstraint*)constraint)->setAngularUpperLimit(Vec3(0, 0, 0));
     ((Physics3D6DofConstraint*)constraint)->setLinearLowerLimit(Vec3(-10, 0, 0));
@@ -549,7 +549,7 @@ void Physics3DConstraintDemo::onTouchesBegan(const std::vector<ax::Touch*>& touc
         _camera->unproject(size, &farP, &farP);
 
         Physics3DWorld::HitResult result;
-        bool ret = physicsScene->getPhysics3DWorld()->rayCast(nearP, farP, &result);
+        bool ret = physicsScene->getPhysicsWorld3D()->rayCast(nearP, farP, &result);
         if (ret && result.hitObj->getObjType() == Physics3DObject::PhysicsObjType::RIGID_BODY)
         {
             auto mat = result.hitObj->getWorldTransform().getInversed();
@@ -558,7 +558,7 @@ void Physics3DConstraintDemo::onTouchesBegan(const std::vector<ax::Touch*>& touc
 
             _constraint =
                 Physics3DPointToPointConstraint::create(static_cast<Physics3DRigidBody*>(result.hitObj), position);
-            physicsScene->getPhysics3DWorld()->addPhysics3DConstraint(_constraint, true);
+            physicsScene->getPhysicsWorld3D()->addPhysics3DConstraint(_constraint, true);
             _pickingDistance = (result.hitPosition - nearP).length();
             event->stopPropagation();
             return;
@@ -591,7 +591,7 @@ void Physics3DConstraintDemo::onTouchesEnded(const std::vector<ax::Touch*>& touc
 {
     if (_constraint)
     {
-        physicsScene->getPhysics3DWorld()->removePhysics3DConstraint(_constraint);
+        physicsScene->getPhysicsWorld3D()->removePhysics3DConstraint(_constraint);
         _constraint = nullptr;
         event->stopPropagation();
         return;

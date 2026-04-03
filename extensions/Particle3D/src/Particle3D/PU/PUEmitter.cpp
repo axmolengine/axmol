@@ -837,10 +837,9 @@ void PUEmitter::initParticleDimensions(PUParticle3D* particle)
     if (_dynParticleAllDimensionsSet || _dynParticleWidthSet || _dynParticleHeightSet || _dynParticleDepthSet)
     {
         // Set all dimensions equal ...
-        float extend = 0;
         if (_dynParticleAllDimensionsSet && _dynParticleAllDimensions)
         {
-            extend = _dynamicAttributeHelper.calculate(
+            auto extend = _dynamicAttributeHelper.calculate(
                 _dynParticleAllDimensions,
                 (static_cast<PUParticleSystem3D*>(_particleSystem))->getTimeElapsedSinceStart());
             particle->setOwnDimensions(_emitterScale.x * extend, _emitterScale.y * extend, _emitterScale.z * extend);

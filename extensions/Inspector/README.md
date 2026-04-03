@@ -7,7 +7,9 @@
 
 ## Usage
 
-call `openForScene(ax::Scene*)` in your `onEnter` overload and `close` in your `onExit` overload. Dont forget to call Scene methods.
+call `openForScene(ax::Scene*)` in your `onEnter` overload and `close` in your `onExit` overload.
+Dont forget to call Scene methods.
+
 ```cpp
 #include "Inspector/Inspector.h"
 

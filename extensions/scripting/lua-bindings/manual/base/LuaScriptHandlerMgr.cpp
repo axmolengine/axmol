@@ -31,6 +31,8 @@
 #include "lua-bindings/manual/LuaStack.h"
 #include "lua-bindings/manual/LuaValue.h"
 #include "lua-bindings/manual/LuaEngine.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
 
 using namespace ax;
 

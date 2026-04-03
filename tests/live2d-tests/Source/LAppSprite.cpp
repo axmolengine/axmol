@@ -84,7 +84,7 @@ void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
     blendDescriptor->blendEnabled = true;
 
     if (needInit)
-        cmd->setOwnPSVL(programState, axvlm->acquireVertexLayout(std::move(desc)),
+        cmd->setOwnPSVL(programState, axvlm->getVertexLayout(std::move(desc)),
                         RenderCommand::ADOPT_FLAG_ALL);
 
     // モデルの描画

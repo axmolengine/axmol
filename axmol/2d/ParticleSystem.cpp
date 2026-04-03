@@ -374,6 +374,7 @@ void ParticleSystem::deallocOpacityFadeInMem()
     _isOpacityFadeInAllocated = false;
 }
 
+// @return true if succeed in allocating
 bool ParticleSystem::allocScaleInMem()
 {
     if (!_isScaleInAllocated)
@@ -635,7 +636,7 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_
                     if (dataLen != 0)
                     {
                         // if it fails, try to get it from the base64-gzipped data
-                        yasio::byte_buffer buffer = utils::base64Decode(textureData);
+                        auto buffer = utils::base64Decode(textureData);
                         AXASSERT(!buffer.empty(), "CCParticleSystem: error decoding textureImageData");
                         AX_BREAK_IF(buffer.empty());
 
@@ -647,7 +648,7 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_
                         // Director::getInstance()->getTextureCache()->addUIImage()
                         image                   = new Image();
                         const auto imageDataLen = deflated.size();
-                        bool isOK = image->initWithImageData(deflated.release_pointer(), imageDataLen, true);
+                        bool isOK               = image->initWithImageData(deflated.detach_abi(), imageDataLen, true);
                         AXASSERT(isOK, "CCParticleSystem: error init image with Data");
                         AX_BREAK_IF(!isOK);
 
@@ -944,8 +945,10 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
     SET_DELTA_COLOR(_particleData.colorB, _particleData.deltaColorB);
     SET_DELTA_COLOR(_particleData.colorA, _particleData.deltaColorA);
 
+    // Should skip these initialization when OpacityFadeIn or ScaleFadeIn is 0, otherwise
+    // particles would fail to show up.
     // opacity fade in
-    if (_isOpacityFadeInAllocated)
+    if (_isOpacityFadeInAllocated && _spawnFadeIn + _spawnFadeInVar > 0)
     {
         for (int i = start; i < _particleCount; ++i)
         {
@@ -955,7 +958,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
     }
 
     // scale fade in
-    if (_isScaleInAllocated)
+    if (_isScaleInAllocated && _spawnScaleIn + _spawnScaleInVar > 0)
     {
         for (int i = start; i < _particleCount; ++i)
         {
@@ -1536,7 +1539,9 @@ void ParticleSystem::resetSystem()
 {
     _isActive = true;
     _elapsed  = 0;
-    std::fill_n(_particleData.timeToLive, _particleCount, 0.0F);
+    // Setting _particleCount to zero could prevent Out-of-Range exception when updating
+    // particle's loop animation after calling setTotalParticle().
+    _particleCount = 0;
 }
 
 bool ParticleSystem::isFull()
@@ -2097,7 +2102,10 @@ void ParticleSystem::useHSV(bool hsv)
 
 void ParticleSystem::setSpawnFadeIn(float time)
 {
-    if (time != 0.0F && !allocOpacityFadeInMem())
+    // Modification is allowed when:
+    //  - memory hasn't been allocated, time != 0.0F and allocation has done successfully; OR
+    //  - memory has allocated.
+    if (!_isOpacityFadeInAllocated && (time == 0.0F || !allocOpacityFadeInMem()))
         return;
 
     _spawnFadeIn = time;
@@ -2105,7 +2113,7 @@ void ParticleSystem::setSpawnFadeIn(float time)
 
 void ParticleSystem::setSpawnFadeInVar(float time)
 {
-    if (time != 0.0F && !allocOpacityFadeInMem())
+    if (!_isOpacityFadeInAllocated && (time == 0.0F || !allocOpacityFadeInMem()))
         return;
 
     _spawnFadeInVar = time;
@@ -2113,7 +2121,7 @@ void ParticleSystem::setSpawnFadeInVar(float time)
 
 void ParticleSystem::setSpawnScaleIn(float time)
 {
-    if (time != 0.0F && !allocScaleInMem())
+    if (!_isScaleInAllocated && (time == 0.0F || !allocScaleInMem()))
         return;
 
     _spawnScaleIn = time;
@@ -2121,7 +2129,7 @@ void ParticleSystem::setSpawnScaleIn(float time)
 
 void ParticleSystem::setSpawnScaleInVar(float time)
 {
-    if (time != 0.0F && !allocScaleInMem())
+    if (!_isScaleInAllocated && (time == 0.0F || !allocScaleInMem()))
         return;
 
     _spawnScaleInVar = time;

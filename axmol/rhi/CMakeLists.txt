@@ -17,8 +17,9 @@ set(_AX_RHI_HEADER
   rhi/ShaderModule.h
   rhi/Texture.h
   rhi/VertexLayout.h
-  renderer/VertexLayoutManager.h
   rhi/SamplerCache.h
+  rhi/DriverFactory.h
+  rhi/DriverContext.h
 )
 
 set(_AX_RHI_SRC
@@ -29,15 +30,16 @@ set(_AX_RHI_SRC
   rhi/Texture.cpp
   rhi/RHIUtils.cpp
   rhi/VertexLayout.cpp
-  renderer/VertexLayoutManager.cpp
   rhi/Program.cpp
   rhi/ProgramState.cpp
+  rhi/RenderTarget.cpp
   rhi/ShaderCache.cpp
   rhi/RenderPassDesc.cpp
   rhi/SamplerCache.cpp
+  rhi/DriverContext.cpp
 )
 
-if(AX_RENDER_API STREQUAL "gl")
+if(AX_ENABLE_GL)
   list(APPEND _AX_RHI_HEADER
     rhi/opengl/OpenGLState.h
     rhi/opengl/BufferGL.h
@@ -68,7 +70,9 @@ if(AX_RENDER_API STREQUAL "gl")
     rhi/opengl/RenderTargetGL.cpp
     rhi/opengl/VertexLayoutGL.cpp
   )
-elseif(AX_RENDER_API STREQUAL "mtl")
+endif()
+
+if(AX_ENABLE_MTL)
   list(APPEND _AX_RHI_HEADER
     rhi/metal/BufferMTL.h
     rhi/metal/BufferManager.h
@@ -96,7 +100,9 @@ elseif(AX_RENDER_API STREQUAL "mtl")
     rhi/metal/UtilsMTL.mm
     rhi/metal/ProgramMTL.mm
   )
-elseif(AX_RENDER_API STREQUAL "d3d11")
+endif()
+
+if(AX_ENABLE_D3D11)
     list(APPEND _AX_RHI_HEADER
     rhi/d3d11/Buffer11.h
     rhi/d3d11/RenderContext11.h
@@ -106,7 +112,6 @@ elseif(AX_RENDER_API STREQUAL "d3d11")
     rhi/d3d11/RenderPipeline11.h
     rhi/d3d11/ShaderModule11.h
     rhi/d3d11/Texture11.h
-    rhi/d3d11/Utils11.h
     rhi/d3d11/Program11.h
     rhi/d3d11/VertexLayout11.h
     rhi/DXUtils.h
@@ -121,12 +126,13 @@ elseif(AX_RENDER_API STREQUAL "d3d11")
     rhi/d3d11/RenderPipeline11.cpp
     rhi/d3d11/ShaderModule11.cpp
     rhi/d3d11/Texture11.cpp
-    rhi/d3d11/Utils11.cpp
     rhi/d3d11/Program11.cpp
     rhi/d3d11/VertexLayout11.cpp
     rhi/DXUtils.cpp
   )
-elseif(AX_RENDER_API STREQUAL "d3d12")
+endif()
+
+if(AX_ENABLE_D3D12)
     list(APPEND _AX_RHI_HEADER
     rhi/d3d12/Buffer12.h
     rhi/d3d12/RenderContext12.h
@@ -158,7 +164,9 @@ elseif(AX_RENDER_API STREQUAL "d3d12")
     rhi/d3d12/UploadBufferAllocator12.cpp
     rhi/DXUtils.cpp
   )
-elseif(AX_RENDER_API STREQUAL "vk")
+endif()
+
+if(AX_ENABLE_VK)
     list(APPEND _AX_RHI_HEADER
     rhi/vulkan/BufferVK.h
     rhi/vulkan/RenderContextVK.h
@@ -188,4 +196,8 @@ elseif(AX_RENDER_API STREQUAL "vk")
     rhi/vulkan/VertexLayoutVK.cpp
     rhi/vulkan/SemaphorePoolVK.cpp
   )
+endif()
+
+if(APPLE)
+  set_source_files_properties(rhi/DriverContext.cpp PROPERTIES LANGUAGE OBJCXX)
 endif()

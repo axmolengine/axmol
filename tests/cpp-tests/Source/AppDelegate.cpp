@@ -2,6 +2,7 @@
  Copyright (c) 2013      cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -27,12 +28,11 @@
 #include <string>
 #include "AppDelegate.h"
 
-#include "axmol/axmol.h"
 #include "controller.h"
 #include "BaseTest.h"
 #include "extensions/axmol-ext.h"
-
-#include <charconv>
+#include "axmol/rhi/DriverContext.h"
+#include "axmol/tlx/charconv.hpp"
 #include <system_error>
 
 using namespace ax;
@@ -41,17 +41,17 @@ AppDelegate::AppDelegate() : _testController(nullptr) {}
 
 AppDelegate::~AppDelegate()
 {
-
     AXLOGI("AppDelegate::~AppDelegate");
-    // SimpleAudioEngine::end();
-    // TODO: minggo
-    //  cocostudio::ArmatureDataManager::destroyInstance();
 }
 
 // if you want a different context, modify the value of contextAttrs
 // it will affect all platforms
 void AppDelegate::initContextAttrs()
 {
+    // set vulkan min android api level, 31 for Android 12
+    // refer: https://developer.android.com/tools/releases/platforms
+    rhi::DriverContext::setVulkanMinAndroidApiLevel(31);
+
     // set app context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
     // powerPreference only affect when RHI backend is D3D11, D3D12, Vulkan
     ContextAttrs contextAttrs = {.debugLayerEnabled = false, .powerPreference = PowerPreference::HighPerformance};
@@ -135,7 +135,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     auto&& oldSearchPaths = fileUtils->getSearchPaths();
     std::copy(oldSearchPaths.begin(), oldSearchPaths.end(), std::back_inserter(searchPaths));
-    fileUtils->setSearchPaths(searchPaths);
+    fileUtils->setSearchPaths(std::move(searchPaths));
 
     renderView->setDesignResolutionSize(g_designSize.width, g_designSize.height, ResolutionPolicy::SHOW_ALL);
 
@@ -151,8 +151,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     int autotest                   = 0;
     if (autotest_env)
     {
-        const std::from_chars_result r =
-            std::from_chars(autotest_env, autotest_env + std::strlen(autotest_env), autotest);
+        const tlx::from_chars_result r = tlx::from_chars(std::string_view{autotest_env}, autotest);
         if (r.ec != std::errc{})
             AXLOGW("Could not parse AXMOL_START_AUTOTEST: {}.", std::make_error_code(r.ec).message());
     }

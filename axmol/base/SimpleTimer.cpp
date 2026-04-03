@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 #include "axmol/base/SimpleTimer.h"
 #include "yasio/object_pool.hpp"
-#include "yasio/ref_ptr.hpp"
+#include "axmol/tlx/memory.hpp"
 #include "axmol/base/Director.h"
 #include "axmol/base/Scheduler.h"
 
@@ -59,7 +59,7 @@ static const uintptr_t STIMER_TARGET_SCRIPT = STIMER_TARGET_NATIVE - 1;
 
 struct TimerObject
 {
-    TimerObject(vcallback_t&& callback) : callback_(std::move(callback)), referenceCount_(1) {}
+    explicit TimerObject(vcallback_t&& callback) : callback_(std::move(callback)), referenceCount_(1) {}
 
     vcallback_t callback_;
     static uintptr_t s_timerId;
@@ -74,7 +74,7 @@ TIMER_ID loop(unsigned int n, float interval, vcallback_t callback, bool bNative
 {
     if (n > 0 && interval >= 0)
     {
-        yasio::ref_ptr<TimerObject> timerObj(new TimerObject(std::move(callback)));
+        tlx::retain_ptr<TimerObject> timerObj(new TimerObject(std::move(callback)), tlx::adopt_object);
 
         auto timerId = reinterpret_cast<TIMER_ID>(++TimerObject::s_timerId);
 
@@ -94,7 +94,7 @@ TIMER_ID delay(float delay, vcallback_t callback, bool bNative)
 {
     if (delay > 0)
     {
-        yasio::ref_ptr<TimerObject> timerObj(new TimerObject(std::move(callback)));
+        tlx::retain_ptr<TimerObject> timerObj(new TimerObject(std::move(callback)), tlx::adopt_object);
         auto timerId = reinterpret_cast<TIMER_ID>(++TimerObject::s_timerId);
 
         std::string key = fmt::format("STMR#{}", fmt::ptr(timerId));

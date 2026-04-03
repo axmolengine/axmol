@@ -26,7 +26,11 @@
 
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/base/Object.h"
+#include "axmol/tlx/hlookup.hpp"
+#include "axmol/tlx/vector.hpp"
+#include "axmol/base/Data.h"
 
+#include <span>
 #include <string>
 
 namespace ax::rhi
@@ -37,32 +41,6 @@ namespace ax::rhi
  * @{
  */
 
-enum Uniform : uint32_t
-{
-    MVP_MATRIX,
-    TEXTURE,
-    TEXTURE1,
-    TEXTURE2,
-    TEXTURE3,
-    TEXT_COLOR,
-    EFFECT_COLOR,
-    EFFECT_WIDTH,
-    LABEL_PASS,
-    UNIFORM_COUNT  // Maximum uniforms
-};
-
-enum VertexInputKind : uint32_t
-{
-    POSITION,
-    COLOR,
-    TEXCOORD,
-    TEXCOORD1,
-    TEXCOORD2,
-    TEXCOORD3,
-    NORMAL,
-    INSTANCE,
-    VIK_COUNT  //
-};
 /**
  * Create shader.
  */
@@ -77,14 +55,27 @@ public:
 
     uint64_t getHashValue() const { return _hash; }
 
+    inline const Data& getChunkData() const { return _chunkData; }
+
+    uint32_t getStageOffset() const { return _stageOffset; }
+
 protected:
-    ShaderModule(ShaderStage stage);
+    ShaderModule(ShaderStage stage, Data& data);
     virtual ~ShaderModule();
     void setHashValue(uint64_t hash) { _hash = hash; }
+
+    virtual void recompileShader() {};
+
+    void parseShaderCode();
 
     friend class ShaderCache;
     ShaderStage _stage = ShaderStage::VERTEX;
     uint64_t _hash     = 0;
+
+    Data _chunkData;               // owns the axslcc chunk
+    std::span<uint8_t> _codeSpan;  // view into parsed shader code
+
+    uint32_t _stageOffset{0};
 };
 
 // end of _rhi group

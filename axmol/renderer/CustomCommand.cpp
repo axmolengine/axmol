@@ -25,7 +25,7 @@
 #include "axmol/renderer/CustomCommand.h"
 #include "axmol/renderer/TextureAtlas.h"
 #include "axmol/rhi/Buffer.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/base/Utils.h"
 #include <stddef.h>
 

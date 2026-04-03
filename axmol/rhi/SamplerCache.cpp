@@ -22,23 +22,23 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "axmol/rhi/SamplerCache.h"
-#include "axmol/rhi/DriverBase.h"
-#include "yasio/singleton.hpp"
+#include "axmol/rhi/DriverContext.h"
+#include "axmol/tlx/singleton.hpp"
 
 namespace ax::rhi
 {
 SamplerCache* SamplerCache::getInstance()
 {
-    return yasio::singleton<SamplerCache>::instance();
+    return tlx::singleton<SamplerCache>::instance();
 }
 void SamplerCache::destroyInstance()
 {
-    yasio::singleton<SamplerCache>::destroy();
+    tlx::singleton<SamplerCache>::destroy();
 }
 
 SamplerCache::SamplerCache()
 {
-    _driver = DriverBase::getInstance();
+    _driver = axdrv;
 
     createBuiltinSamplers();
 }
@@ -48,7 +48,7 @@ SamplerCache::~SamplerCache()
     removeAllSamplers();
 }
 
-void SamplerCache::invalidateAll()
+void SamplerCache::rebuild()
 {
     removeAllSamplers();
 
@@ -61,7 +61,7 @@ void SamplerCache::removeAllSamplers()
 
     for (auto& [_, sampler] : _customSamplers)
         _driver->destroySampler(sampler);
-    for (auto sampler : _builtinSamplers)
+    for (auto&& sampler : _builtinSamplers)
         _driver->destroySampler(sampler);
 
     _customSamplers.clear();
@@ -194,7 +194,7 @@ void SamplerCache::createBuiltinSamplers()
         d.minFilter  = SamplerFilter::MIN_ANISOTROPIC;
         d.magFilter  = SamplerFilter::MAG_LINEAR;
         d.mipFilter  = SamplerFilter::MIP_LINEAR;
-        d.anisotropy = 16;
+        d.anisotropy = 0xF;
 
         d.sAddressMode = SamplerAddressMode::CLAMP;
         createBuiltinSampler(SamplerIndex::AnisoClamp, d);

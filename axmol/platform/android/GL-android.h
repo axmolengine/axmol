@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 #include "axmol/platform/PlatformConfig.h"
 
-#include "glad/gl.h"
+#include "glad/gles2.h"
 
 #undef GL_DEPTH_STENCIL
 #undef GL_DEPTH24_STENCIL8

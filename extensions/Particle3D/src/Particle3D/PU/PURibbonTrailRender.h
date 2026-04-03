@@ -71,7 +71,7 @@ public:
 };
 
 // particle render for quad
-class AX_EX_DLL PURibbonTrailRender : public PURender, public PUListener
+class AX_EXT_API PURibbonTrailRender : public PURender, public PUListener
 {
 public:
     // Constants

@@ -4,16 +4,14 @@
 #include <array>
 #include <bitset>
 #include <memory>
+#include <span>
 
 #include "alnumeric.h"
-#include "alspan.h"
+#include "altypes.hpp"
 #include "bufferline.h"
-#include "opthelpers.h"
 #include "vector.h"
 
 struct SlidingHold;
-
-using uint = unsigned int;
 
 
 /* General topology and basic automation was based on the following paper:
@@ -26,7 +24,7 @@ using uint = unsigned int;
  *
  *   http://c4dm.eecs.qmul.ac.uk/audioengineering/compressors/
  */
-class SIMDALIGN Compressor {
+class Compressor {
     struct AutoFlags {
         bool Knee : 1;
         bool Attack : 1;
@@ -36,7 +34,7 @@ class SIMDALIGN Compressor {
     };
     AutoFlags mAuto{};
 
-    uint mLookAhead{0};
+    unsigned mLookAhead{0};
 
     float mPreGain{0.0f};
     float mPostGain{0.0f};
@@ -64,37 +62,38 @@ class SIMDALIGN Compressor {
     float mLastAttack{0.0f};
     float mLastGainDev{0.0f};
 
-    Compressor() = default;
+    void gainCompressor(unsigned SamplesToDo);
 
-    void linkChannels(const uint SamplesToDo, const al::span<const FloatBufferLine> OutBuffer);
-    void crestDetector(const uint SamplesToDo);
-    void peakDetector(const uint SamplesToDo);
-    void peakHoldDetector(const uint SamplesToDo);
-    void gainCompressor(const uint SamplesToDo);
-    void signalDelay(const uint SamplesToDo, const al::span<FloatBufferLine> OutBuffer);
-
+    struct PrivateToken { };
 public:
     enum {
         AutoKnee, AutoAttack, AutoRelease, AutoPostGain, AutoDeclip, FlagsCount
     };
     using FlagBits = std::bitset<FlagsCount>;
 
+    Compressor() = delete;
+    explicit Compressor(PrivateToken);
     ~Compressor();
-    void process(const uint SamplesToDo, al::span<FloatBufferLine> InOut);
-    [[nodiscard]] auto getLookAhead() const noexcept -> uint { return mLookAhead; }
+
+    Compressor(const Compressor&) = delete;
+    auto operator=(const Compressor&) -> Compressor& = delete;
+
+    void process(unsigned SamplesToDo, std::span<FloatBufferLine> InOut);
+    [[nodiscard]] auto getLookAhead() const noexcept -> unsigned { return mLookAhead; }
 
     /**
      * The compressor is initialized with the following settings:
      *
      * \param NumChans      Number of channels to process.
      * \param SampleRate    Sample rate to process.
-     * \param AutoKnee      Whether to automate the knee width parameter.
-     * \param AutoAttack    Whether to automate the attack time parameter.
-     * \param AutoRelease   Whether to automate the release time parameter.
-     * \param AutoPostGain  Whether to automate the make-up (post) gain
-     *        parameter.
-     * \param AutoDeclip    Whether to automate clipping reduction. Ignored
-     *        when not automating make-up gain.
+     * \param AutoFlags     Flags to automate specific parameters:
+     *                      AutoKnee - automate the knee width parameter
+     *                      AutoAttack - automate the attack time parameter
+     *                      AutoRelease - automate the release time parameter
+     *                      AutoPostGain - automate the make-up (post) gain
+     *                                     parameter
+     *                      AutoDeclip - automate clipping reduction. Ignored
+     *                                   when not automating make-up gain
      * \param LookAheadTime Look-ahead time (in seconds).
      * \param HoldTime      Peak hold-time (in seconds).
      * \param PreGainDb     Gain applied before detection (in dB).
@@ -109,10 +108,10 @@ public:
      * \param ReleaseTime   Release time (in seconds). Acts as a maximum when
      *        automating release time.
      */
-    static std::unique_ptr<Compressor> Create(const size_t NumChans, const float SampleRate,
-        const FlagBits autoflags, const float LookAheadTime, const float HoldTime,
-        const float PreGainDb, const float PostGainDb, const float ThresholdDb, const float Ratio,
-        const float KneeDb, const float AttackTime, const float ReleaseTime);
+    static auto Create(const size_t NumChans, const float SampleRate, const FlagBits AutoFlags,
+        const float LookAheadTime, const float HoldTime, const float PreGainDb,
+        const float PostGainDb, const float ThresholdDb, const float Ratio, const float KneeDb,
+        const float AttackTime, const float ReleaseTime) -> std::unique_ptr<Compressor>;
 };
 using CompressorPtr = std::unique_ptr<Compressor>;
 

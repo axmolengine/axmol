@@ -108,14 +108,12 @@ void Data::fastSet(uint8_t* bytes, const ssize_t size)
 {
     AXASSERT(size >= 0, "fastSet size should be non-negative");
     // AXASSERT(bytes, "bytes should not be nullptr");
-    (void)_impl.release_pointer();  // forget internal pointer
     _impl.attach_abi(bytes, size);
 }
 
 void Data::clear()
 {
     _impl.clear();
-    _impl.shrink_to_fit();
 }
 
 uint8_t* Data::takeBuffer(ssize_t* size)
@@ -123,7 +121,7 @@ uint8_t* Data::takeBuffer(ssize_t* size)
     auto buffer = getBytes();
     if (size)
         *size = getSize();
-    return _impl.release_pointer();
+    return _impl.detach_abi();
 }
 
 }  // namespace ax

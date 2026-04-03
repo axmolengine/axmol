@@ -7,7 +7,7 @@
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
+ copies of the Software, and to permit persons to whom the Software are
  furnished to do so, subject to the following conditions:
 
  The above copyright notice and this permission notice shall be included in
@@ -26,9 +26,10 @@
 #include <vector>
 #include <cassert>
 #include <glad/vulkan.h>
-
+#include <vk_mem_alloc.h>
 #include "axmol/rhi/Buffer.h"
 #include "axmol/tlx/byte_buffer.hpp"
+#include "axmol/rhi/RHITypes.h"  // for MAX_INFLIGHT_BUFFER
 
 namespace ax::rhi::vk
 {
@@ -72,12 +73,28 @@ public:
 private:
     void createNativeBuffer(const void* initial);
 
-    axstd::byte_buffer _defaultData;
+    // If this buffer is created as DYNAMIC (host visible), we support
+    // per-frame backing: allocate MAX_INFLIGHT_BUFFER backing buffers and switch
+    // among them based on the frame index provided by DriverImpl.
+    void updateIndex();  // lazy switch to current frame backing
+
+    tlx::byte_buffer _defaultData;
     bool _needDefaultStoredData = false;
 
     DriverImpl* _driver{nullptr};
+
+    // Current active handle (may point to one of _dynamicBuffers or the single static buffer)
     VkBuffer _buffer{VK_NULL_HANDLE};
-    VkDeviceMemory _memory{VK_NULL_HANDLE};
+    VmaAllocation _memory{VK_NULL_HANDLE};
+    void* _currentMappedData{nullptr};
+
+    // When dynamic backing is used we keep all backings here
+    tlx::pod_vector<VkBuffer> _dynamicBuffers;
+    tlx::pod_vector<VmaAllocation> _dynamicMemories;
+    tlx::pod_vector<void*> _dynamicMappedData;
+
+    int _currentFrameIndex{0};
+    uint32_t _lastSeenFrame{UINT32_MAX};
 
     VkBufferUsageFlags _usageFlags{VK_BUFFER_USAGE_VERTEX_BUFFER_BIT};
     VkMemoryPropertyFlags _memoryProperties{VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT};

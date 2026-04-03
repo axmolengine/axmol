@@ -32,6 +32,7 @@
 #include <string.h>
 #include <string>
 #include <vector>
+#include <span>
 
 namespace ax
 {
@@ -92,7 +93,7 @@ public:
     void writeFile();
     void setCookieFileName(std::string_view fileName);
 
-    const std::vector<CookieInfo>* getCookies() const;
+    std::span<const CookieInfo> getCookies() const;
     const CookieInfo* getMatchCookie(const Uri& uri) const;
     void updateOrAddCookie(CookieInfo* cookie);
 

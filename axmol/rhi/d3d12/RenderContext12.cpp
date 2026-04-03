@@ -44,8 +44,7 @@
 namespace ax::rhi::d3d12
 {
 
-static constexpr DXGI_FORMAT AX_SWAPCHAIN_FORMAT = DXGI_FORMAT_R8G8B8A8_UNORM;
-static constexpr UINT MAX_ALLOW_DRAW_CALLS       = 2000;
+static constexpr UINT MAX_ALLOW_DRAW_CALLS = 2000;
 
 static constexpr D3D12_PRIMITIVE_TOPOLOGY PrimitiveTypeToD3DTopology[] = {
     /* POINT          */ D3D_PRIMITIVE_TOPOLOGY_POINTLIST,
@@ -59,6 +58,20 @@ static constexpr D3D12_PRIMITIVE_TOPOLOGY PrimitiveTypeToD3DTopology[] = {
 inline D3D12_PRIMITIVE_TOPOLOGY toD3DTopology(PrimitiveType type)
 {
     return PrimitiveTypeToD3DTopology[static_cast<uint32_t>(type)];
+}
+
+static constexpr rhi::PrimitiveGroup kPrimitiveTypeToGroup[] = {
+    /* POINT          */ rhi::PrimitiveGroup::Point,
+    /* LINE           */ rhi::PrimitiveGroup::Line,
+    /* LINE_LOOP      */ rhi::PrimitiveGroup::Line,
+    /* LINE_STRIP     */ rhi::PrimitiveGroup::Line,
+    /* TRIANGLE       */ rhi::PrimitiveGroup::Triangle,
+    /* TRIANGLE_STRIP */ rhi::PrimitiveGroup::Triangle,
+};
+
+static inline rhi::PrimitiveGroup toPrimitiveGroup(PrimitiveType type)
+{
+    return kPrimitiveTypeToGroup[static_cast<uint32_t>(type)];
 }
 
 // Helper: map IndexFormat to DXGI_FORMAT
@@ -179,7 +192,7 @@ uint64_t GPUFence::wait() const
     return completeFenceValue;
 }
 
-RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext) : _driver(driver)
+RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface) : _driver(driver)
 {
     _device        = driver->getDevice();
     _graphicsQueue = driver->getGraphicsQueue();
@@ -217,7 +230,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext) :
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     RECT clientRect;
-    HWND hwnd = (HWND)surfaceContext;
+    HWND hwnd = static_cast<HWND>(surface);
     GetClientRect(hwnd, &clientRect);
     _screenWidth  = clientRect.right - clientRect.left;
     _screenHeight = clientRect.bottom - clientRect.top;
@@ -225,7 +238,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext) :
     DXGI_SWAP_CHAIN_DESC1 desc1 = {};
     desc1.Width                 = _screenWidth;
     desc1.Height                = _screenHeight;
-    desc1.Format                = AX_SWAPCHAIN_FORMAT;
+    desc1.Format                = DEFAULT_SWAPCHAIN_FORMAT;
     desc1.SampleDesc.Count      = 1;
     desc1.BufferUsage           = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     desc1.BufferCount           = SWAPCHAIN_BUFFER_COUNT;
@@ -247,7 +260,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext) :
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WINUWP
     do
     {
-        ComPtr<IUnknown> surfaceHold = reinterpret_cast<IUnknown*>(surfaceContext);
+        ComPtr<IUnknown> surfaceHold(static_cast<IUnknown*>(surface));
         ComPtr<ISwapChainPanel> swapChainPanel;
         hr = surfaceHold.As(&swapChainPanel);
         AX_BREAK_IF(FAILED(hr));
@@ -293,7 +306,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext) :
             desc1.Width  = static_cast<UINT>(panelSize.Width);
             desc1.Height = static_cast<UINT>(panelSize.Height);
         }
-        desc1.Format           = AX_SWAPCHAIN_FORMAT;
+        desc1.Format           = DEFAULT_SWAPCHAIN_FORMAT;
         desc1.SampleDesc.Count = 1;
         desc1.BufferUsage      = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         desc1.BufferCount      = SWAPCHAIN_BUFFER_COUNT;
@@ -342,7 +355,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext) :
     _screenRT = new RenderTargetImpl(driver, true);
 
     // Build swapchain attachments for screen RT
-    _screenRT->rebuildAttachmentsForSwapchain(_swapchain.Get(), _screenWidth, _screenHeight);
+    _screenRT->rebuildSwapchainBuffers(_swapchain.Get(), _screenWidth, _screenHeight);
 
     createUniformRingBuffers(1 * 1024 * 1024);  // 1 MB per frame
 
@@ -418,7 +431,7 @@ void RenderContextImpl::createDescriptorHeaps()
     }
 }
 
-bool RenderContextImpl::updateSurface(void* /*surface*/, uint32_t width, uint32_t height)
+bool RenderContextImpl::updateSurface(SurfaceHandle /*surface*/, uint32_t width, uint32_t height)
 {
     // For D3D12, surface is HWND; if resized, mark for swapchain resize
     if (_screenWidth == width && _screenHeight == height)
@@ -450,7 +463,7 @@ uint64_t RenderContextImpl::getCompletedFenceValue() const
 bool RenderContextImpl::beginFrame()
 {
     // Wait fence of current frame
-    auto& currentFence   = _inflightFences[_currentFrame];
+    auto& currentFence   = _inflightFences[_frameIndex];
     _completedFenceValue = currentFence.wait();
     _driver->processDisposalQueue(_completedFenceValue);
 
@@ -467,40 +480,33 @@ bool RenderContextImpl::beginFrame()
     {
         auto rtImpl = static_cast<RenderTargetImpl*>(_screenRT);
 
-        // Release references to the swapchain back buffer for we can ResizeBuffers
-        rtImpl->invalidate();
-
-        _driver->cleanPendingResources();
-
-        _swapchain->ResizeBuffers(SWAPCHAIN_BUFFER_COUNT, _screenWidth, _screenHeight, AX_SWAPCHAIN_FORMAT,
-                                  _swapchainFlags);
-        rtImpl->rebuildAttachmentsForSwapchain(_swapchain.Get(), _screenWidth, _screenHeight);
+        rtImpl->rebuildSwapchainBuffers(_swapchain.Get(), _screenWidth, _screenHeight, _swapchainFlags);
 
         _swapchainDirty = false;
     }
 
     // Reset offsets at the start of each frame
-    _srvOffset[_currentFrame] = 0;
+    _srvOffset[_frameIndex] = 0;
 
-    resetUniformRingForCurrentFrame(_currentFrame);
+    resetUniformRingForCurrentFrame(_frameIndex);
 
-    _currentImageIndex = _swapchain->GetCurrentBackBufferIndex();
+    _imageIndex = _swapchain->GetCurrentBackBufferIndex();
 
     // Reset allocator and command list
-    HRESULT hr = _commandAllocators[_currentFrame]->Reset();
+    HRESULT hr = _commandAllocators[_frameIndex]->Reset();
     AXASSERT(SUCCEEDED(hr), "CommandAllocator Reset failed");
-    _currentCmdList = _commandLists[_currentFrame].Get();
-    hr              = _currentCmdList->Reset(_commandAllocators[_currentFrame].Get(), nullptr);
+    _currentCmdList = _commandLists[_frameIndex].Get();
+    hr              = _currentCmdList->Reset(_commandAllocators[_frameIndex].Get(), nullptr);
     AXASSERT(SUCCEEDED(hr), "CommandList Reset failed");
 
     _boundRootSig = nullptr;
     _boundPSO     = nullptr;
 
-    bitmask::set(_inFlightDynamicDirtyBits[_currentFrame], PIPELINE_REQUIRED_DYNAMIC_BITS);
+    bitmask::set(_inFlightDynamicDirtyBits[_frameIndex], PIPELINE_REQUIRED_DYNAMIC_BITS);
 
     // Sets descriptor heaps
     auto samplerHeap               = _driver->getSamplerHeap();
-    auto srvHeap                   = _srvHeaps[_currentFrame].Get();
+    auto srvHeap                   = _srvHeaps[_frameIndex].Get();
     ID3D12DescriptorHeap* heaps[2] = {srvHeap, samplerHeap};
     _currentCmdList->SetDescriptorHeaps(2, heaps);
 
@@ -526,7 +532,7 @@ void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const Render
     _renderTargetHeight  = colorAttachment->getDesc().height;
 
     // Bind RTV/DSV and clear according to flags
-    rtImpl->beginRenderPass(_currentCmdList, descriptor, _renderTargetWidth, _renderTargetHeight, _currentImageIndex);
+    rtImpl->beginRenderPass(_currentCmdList, descriptor, _renderTargetWidth, _renderTargetHeight, _imageIndex);
 
     rtImpl->setLastFenceValue(_frameFenceValue);
 }
@@ -534,7 +540,7 @@ void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const Render
 void RenderContextImpl::endRenderPass()
 {
     // Reset cached state objects
-    static_cast<RenderTargetImpl*>(_currentRT)->endRenderPass(_currentCmdList, _currentImageIndex);
+    static_cast<RenderTargetImpl*>(_currentRT)->endRenderPass(_currentCmdList, _imageIndex);
 
     _programState = nullptr;
     _vertexLayout = nullptr;
@@ -554,29 +560,30 @@ void RenderContextImpl::endFrame()
 
     // Present
     hr = _swapchain->Present(_syncInterval, _presentFlags);
-    AXASSERT(SUCCEEDED(hr), "SwapChain Present failed");
-
-#ifdef NDEBUG
-    (void)hr;
-#else
     if (FAILED(hr))
     {
         if (hr == DXGI_ERROR_DEVICE_REMOVED)
         {
             HRESULT reason = _device->GetDeviceRemovedReason();
-            AXLOGD("D3D12 Device remove reason: {}", reason);
+            AXLOGE("D3D12 Device remove reason: {}", reason);
         }
-        // else if (hr == DXGI_ERROR_WAS_STILL_DRAWING)
+        else
+        {
+            AXLOGE("SwapChain Present failed: hr=0x{:X}", hr);
+        }
+
+        std::abort();
     }
-#endif
 
     // Signal fence for this frame
-    auto& currentFence = _inflightFences[_currentFrame];
+    auto& currentFence = _inflightFences[_frameIndex];
     _graphicsQueue->Signal(currentFence.handle, currentFence.value);
 
     // Next frame index
-    _currentFrame = (_currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
-    _inFrame      = false;
+    _frameIndex = (_frameIndex + 1) % MAX_FRAMES_IN_FLIGHT;
+
+    _driver->setFrameIndex(_frameIndex);
+    _inFrame = false;
 }
 
 void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
@@ -682,22 +689,22 @@ void RenderContextImpl::setStencilReferenceValue(uint32_t value)
 
 void RenderContextImpl::applyPendingDynamicStates()
 {
-    if (bitmask::any(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::StencilRef))
+    if (bitmask::any(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::StencilRef))
     {
         _currentCmdList->OMSetStencilRef(_stencilReferenceValue);
-        bitmask::clear(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::StencilRef);
+        bitmask::clear(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::StencilRef);
     }
 
-    if (bitmask::any(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::Viewport))
+    if (bitmask::any(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::Viewport))
     {
         _currentCmdList->RSSetViewports(1, &_cachedViewport);
-        bitmask::clear(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::Viewport);
+        bitmask::clear(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::Viewport);
     }
 
-    if (bitmask::any(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::Scissor))
+    if (bitmask::any(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::Scissor))
     {
         _currentCmdList->RSSetScissorRects(1, &_cachedScissor);
-        bitmask::clear(_inFlightDynamicDirtyBits[_currentFrame], DynamicStateBits::Scissor);
+        bitmask::clear(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::Scissor);
     }
 }
 
@@ -709,12 +716,15 @@ void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 
 void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
                                             const PipelineDesc& pipelineDesc,
-                                            PrimitiveGroup primitiveGroup)
+                                            PrimitiveType primitiveType)
 {
-    RenderContext::updatePipelineState(rt, pipelineDesc, primitiveGroup);
+    RenderContext::updatePipelineState(rt, pipelineDesc, primitiveType);
     AXASSERT(_renderPipeline, "RenderPipelineImpl not set");
-    _renderPipeline->prepareUpdate(_depthStencilState, _cachedCullMode, _cachedFrontCounterClockwise, primitiveGroup);
+    _renderPipeline->prepareUpdate(_depthStencilState, _cachedCullMode, _cachedFrontCounterClockwise,
+                                   toPrimitiveGroup(primitiveType));
     _renderPipeline->update(rt, pipelineDesc);
+
+    _currentCmdList->IASetPrimitiveTopology(toD3DTopology(primitiveType));
 
     // Bind PSO & RootSignature
     uint32_t dirtyFlags = 0;
@@ -770,48 +780,32 @@ void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
     _instanceBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::drawArrays(PrimitiveType primitiveType,
-                                   std::size_t start,
-                                   std::size_t count,
-                                   bool /*wireframe*/)
+void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool /*wireframe*/)
 {
     AXASSERT(_renderPipeline && _vertexBuffer, "Pipeline and vertex buffer must be set");
 
     prepareDrawing(_currentCmdList);
 
-    // Set primitive topology
-    _currentCmdList->IASetPrimitiveTopology(toD3DTopology(primitiveType));
-    // Draw
     _currentCmdList->DrawInstanced(static_cast<UINT>(count), 1, static_cast<UINT>(start), 0);
 }
 
-void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
-                                            std::size_t start,
-                                            std::size_t count,
-                                            int instanceCount,
-                                            bool /*wireframe*/)
+void RenderContextImpl::drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool /*wireframe*/)
 {
     AXASSERT(_renderPipeline && _vertexBuffer, "Pipeline and vertex buffer must be set");
 
     prepareDrawing(_currentCmdList);
-
-    _currentCmdList->IASetPrimitiveTopology(toD3DTopology(primitiveType));
 
     _currentCmdList->DrawInstanced(static_cast<UINT>(count), static_cast<UINT>(instanceCount), static_cast<UINT>(start),
                                    0);
 }
 
-void RenderContextImpl::drawElements(PrimitiveType primitiveType,
-                                     IndexFormat indexType,
-                                     std::size_t count,
-                                     std::size_t offset,
-                                     bool /*wireframe*/)
+void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool /*wireframe*/)
 {
     AXASSERT(_renderPipeline && _vertexBuffer && _indexBuffer, "Pipeline, vertex and index buffers must be set");
 
-    _currentCmdList->IASetPrimitiveTopology(toD3DTopology(primitiveType));
-
     prepareDrawing(_currentCmdList);
+
+    _indexBuffer->setLastFenceValue(_frameFenceValue);
 
     // IB
     D3D12_INDEX_BUFFER_VIEW ibv{};
@@ -823,8 +817,7 @@ void RenderContextImpl::drawElements(PrimitiveType primitiveType,
     _currentCmdList->DrawIndexedInstanced(static_cast<UINT>(count), 1, 0, 0, 0);
 }
 
-void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
-                                              IndexFormat indexType,
+void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
                                               std::size_t count,
                                               std::size_t offset,
                                               int instanceCount,
@@ -834,7 +827,7 @@ void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
 
     prepareDrawing(_currentCmdList);
 
-    _currentCmdList->IASetPrimitiveTopology(toD3DTopology(primitiveType));
+    _indexBuffer->setLastFenceValue(_frameFenceValue);
 
     // IB
     D3D12_INDEX_BUFFER_VIEW ibv{};
@@ -884,26 +877,19 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     }
 
     // bind ubos
-    // VS UBO
-    auto vsData = _programState->getVertexUniformBuffer();
-    if (!vsData.empty())
+    const auto& cpuBuffer = _programState->getUniformBuffer();
+    if (!cpuBuffer.empty())
     {
-        auto s = allocateUniformSlice(_currentFrame, vsData.size());
-        std::memcpy(s.cpuPtr, vsData.data(), vsData.size());
-        _currentCmdList->SetGraphicsRootConstantBufferView(rootSigInfo->vsUboRootIndex, s.gpuVA);
-    }
-
-    // FS UBO
-    auto fsData = _programState->getFragmentUniformBuffer();
-    if (!fsData.empty())
-    {
-        auto s = allocateUniformSlice(_currentFrame, fsData.size());
-        std::memcpy(s.cpuPtr, fsData.data(), fsData.size());
-        _currentCmdList->SetGraphicsRootConstantBufferView(rootSigInfo->fsUboRootIndex, s.gpuVA);
+        for (auto& uboInfo : _programState->getActiveUniformBlockInfos())
+        {
+            auto s = allocateUniformSlice(_frameIndex, uboInfo.sizeBytes);
+            ::memcpy(s.cpuPtr, cpuBuffer.data() + uboInfo.cpuOffset, uboInfo.sizeBytes);
+            _currentCmdList->SetGraphicsRootConstantBufferView(uboInfo.binding, s.gpuVA);
+        }
     }
 
     // --- bind textures ---
-    auto srvHeap = _srvHeaps[_currentFrame].Get();
+    auto srvHeap = _srvHeaps[_frameIndex].Get();
 
     // CPU start handles
     auto srvCpuStart = srvHeap->GetCPUDescriptorHandleForHeapStart();
@@ -912,7 +898,7 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     auto& textureBindingSets = _programState->getTextureBindingSets();
     if (!textureBindingSets.empty())
     {
-        const auto bindingStart = _srvOffset[_currentFrame];
+        const auto bindingStart = _srvOffset[_frameIndex];
 
         // Copy descriptors for each texture in the binding set
         int maxSlot = -1;
@@ -942,7 +928,7 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
         _currentCmdList->SetGraphicsRootDescriptorTable(rootSigInfo->srvRootIndex, srvGpuStart);
 
         // Advance offsets for the next batch
-        _srvOffset[_currentFrame] = bindingStart + static_cast<UINT>(maxSlot + 1);
+        _srvOffset[_frameIndex] = bindingStart + static_cast<UINT>(maxSlot + 1);
     }
 }
 
@@ -1164,6 +1150,12 @@ void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
     }
 
     callback(pbd);
+}
+
+void RenderContextImpl::removeCachedPipelineObjects(Program* key)
+{
+    if (_renderPipeline)
+        _renderPipeline->removeCachedObjects(key);
 }
 
 }  // namespace ax::rhi::d3d12

@@ -26,9 +26,10 @@
 #include "axmol/rhi/Texture.h"
 #include "axmol/base/EventListenerCustom.h"
 #include <glad/vulkan.h>
+#include <vk_mem_alloc.h>
 
 #include <vector>
-#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/vector.hpp"
 
 namespace ax::rhi::vk
 {
@@ -49,7 +50,7 @@ struct TextureHandle
     friend class TextureImpl;
     VkImage image{VK_NULL_HANDLE};
     VkImageView view{VK_NULL_HANDLE};
-    VkDeviceMemory memory{VK_NULL_HANDLE};
+    VmaAllocation vmaMemory{VK_NULL_HANDLE};
 
     explicit operator bool() const { return image != VK_NULL_HANDLE; }
 
@@ -58,10 +59,10 @@ private:
 
     TextureHandle detach()
     {
-        auto ret = *this;
-        image    = VK_NULL_HANDLE;
-        view     = VK_NULL_HANDLE;
-        memory   = VK_NULL_HANDLE;
+        auto ret  = *this;
+        image     = VK_NULL_HANDLE;
+        view      = VK_NULL_HANDLE;
+        vmaMemory = VK_NULL_HANDLE;
         return ret;
     }
 };
@@ -99,7 +100,7 @@ public:
     }
 
 private:
-    std::vector<axstd::pod_vector<VkImageLayout>> _layouts;
+    std::vector<tlx::pod_vector<VkImageLayout>> _layouts;
 };
 
 /**

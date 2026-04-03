@@ -28,7 +28,7 @@
 
 #include "axmol/ui/UIWebView/UIWebViewImpl-linux.h"
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX) && defined(AX_HAVE_WEBKIT2GTK)
 
 #    include <sys/stat.h>
 #    include <chrono>  // chrono_literals

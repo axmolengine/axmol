@@ -37,7 +37,7 @@ namespace ax
 
 struct PUParticle3D;
 class PUParticleSystem3D;
-class AX_EX_DLL PUOnEventFlagObserver : public PUObserver
+class AX_EXT_API PUOnEventFlagObserver : public PUObserver
 {
 protected:
     unsigned int _eventFlag;

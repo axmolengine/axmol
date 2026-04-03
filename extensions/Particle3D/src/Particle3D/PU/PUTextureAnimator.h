@@ -32,7 +32,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUTextureAnimator : public PUAffector
+class AX_EXT_API PUTextureAnimator : public PUAffector
 {
 public:
     enum TextureAnimationType

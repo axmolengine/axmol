@@ -26,10 +26,13 @@
 #include <type_traits>
 #include <memory>
 #include <string_view>
-
+#include <ranges>
+#include <iterator>
+#include <string.h>
+#include <assert.h>
 #include "axmol/tlx/feature_test.hpp"
 
-namespace axstd
+namespace tlx
 {
 
 template <typename, typename = void>
@@ -77,11 +80,15 @@ inline auto resize_and_transform(const _InIt _First, const _InIt _Last, _OutCont
     return std::transform(_First, _Last, _Dest.begin(), _Func);
 }
 
-template<typename _SeqCont, typename _Operation>
-inline void resize_and_overrite(_SeqCont& cont, size_t size, _Operation op) {
-    if constexpr (has_resize_and_overwrite<_SeqCont>::value) {
+template <typename _SeqCont, typename _Operation>
+inline void resize_and_overrite(_SeqCont& cont, size_t size, _Operation op)
+{
+    if constexpr (has_resize_and_overwrite<_SeqCont>::value)
+    {
         cont.resize_and_overwrite(size, op);
-    } else {
+    }
+    else
+    {
         cont.resize(size);
         const auto ret = op(cont.data(), size);
         if (ret < size)
@@ -89,92 +96,61 @@ inline void resize_and_overrite(_SeqCont& cont, size_t size, _Operation op) {
     }
 }
 
-template <typename _CStr, typename _Fn>
-inline void split_cb(_CStr s, size_t slen, typename std::remove_pointer<_CStr>::type delim, _Fn&& func)
+// Convert a subrange into a std::string_view.
+// Requirements:
+// 1. The subrange must originate from contiguous memory (e.g. a split_view of std::string or std::string_view).
+// 2. &*subrgn.begin() is used to obtain a pointer to the first element.
+// 3. std::ranges::distance(subrgn) is used to compute the length.
+// 4. No copy is performed; the returned string_view references the original buffer.
+// 5. If the subrange comes from a non‑contiguous container (like std::list), this is undefined behavior.
+template <typename _Subrgn>
+inline std::string_view to_string_view(_Subrgn&& subrgn)
 {
-    auto _Start = s;  // the start of every string
-    auto _Ptr   = s;  // source string iterator
-    auto _End   = s + slen;
-    while ((_Ptr = strchr(_Ptr, delim)))
-    {
-        if (_Ptr >= _End)
-            break;
-
-        if (_Start <= _Ptr)
-            func(_Start, _Ptr);
-        _Start = _Ptr + 1;
-        ++_Ptr;
-    }
-    if (_Start <= _End)
-        func(_Start, _End);
+    return std::string_view{std::ranges::data(subrgn), static_cast<size_t>(std::ranges::size(subrgn))};
 }
 
-template <typename _CStr, typename _Fty>
-inline void split_of_cb(_CStr s, size_t slen, typename std::remove_const<_CStr>::type const delims, _Fty&& func)
+/**
+ * @brief Safely copy a string into a fixed-size C-style buffer.
+ *
+ * Copies characters from the source string into the destination buffer,
+ * ensuring that the destination is always null-terminated. At most
+ * (buffer_size - 1) characters are copied, so truncation may occur if
+ * the source string is longer than the destination capacity.
+ *
+ * @param dest       Destination buffer (C-style string).
+ * @param destSize   Size of the destination buffer in characters.
+ * @param src        Source string to copy (std::string_view).
+ *
+ * @return The number of characters actually copied into the destination
+ *         (excluding the terminating null character).
+ *
+ * @note This function behaves similarly to BSD's strlcpy, but returns
+ *       the number of characters copied rather than the full source length.
+ *       Callers can detect truncation by comparing the return value with
+ *       src.size().
+ *
+ * Example:
+ *   char buf[16];
+ *   size_t copied = tlx::strlcpy(buf, sizeof(buf), "Hello, world!");
+ *   // buf contains "Hello, world!" truncated if necessary.
+ */
+template <size_t _N>
+inline size_t strlcpy(char (&dest)[_N], std::string_view src)
 {
-    auto _Start = s;  // the start of every string
-    auto _Ptr   = s;  // source string iterator
-    auto _End   = s + slen;
-    auto _Delim = *delims;
-    while ((_Ptr = strpbrk(_Ptr, delims)))
-    {
-        if (_Ptr >= _End)
-            break;
-
-        if (_Start <= _Ptr)
-        {
-            func(_Start, _Ptr, _Delim);
-            _Delim = *_Ptr;
-        }
-        _Start = _Ptr + 1;
-        ++_Ptr;
-    }
-    if (_Start <= _End)
-        func(_Start, _End, _Delim);
+    static_assert(_N > 0, "Destination buffer size must be greater than zero.");
+    size_t copy_len = (std::min)(src.size(), _N - 1);
+    ::memcpy(dest, src.data(), copy_len);
+    dest[copy_len] = '\0';
+    return copy_len;
 }
 
-template <typename _Fn>
-inline void split_cb(std::string_view s, char delim, _Fn&& func)
+inline size_t strlcpy(char* dest, size_t destSize, std::string_view src)
 {
-    split_cb(s.data(), s.length(), delim, std::move(func));
+    assert(destSize > 1);
+    size_t copy_len = (std::min)(src.size(), destSize - 1);
+    ::memcpy(dest, src.data(), copy_len);
+    dest[copy_len] = '\0';
+    return copy_len;
 }
 
-template <typename _Fn>
-inline void split_of_cb(std::string_view s, const char* delims, _Fn&& func)
-{
-    split_of_cb(s.data(), s.length(), delims, std::move(func));
-}
-
-template <typename _Elem, typename _Pred, typename _Fn>
-inline void splitpath_cb(_Elem* s, _Pred&& pred, _Fn&& func)  // will convert '\\' to '/'
-{
-    _Elem* _Start = s;  // the start of every string
-    _Elem* _Ptr   = s;  // source string iterator
-    while (pred(_Ptr))
-    {
-        if ('\\' == *_Ptr || '/' == *_Ptr)
-        {
-            if (_Ptr != _Start)
-            {
-                auto _Ch        = *_Ptr;
-                *_Ptr           = '\0';
-                bool should_brk = func(s);
-#if defined(_WIN32)
-                *_Ptr = '\\';
-#else  // For unix linux like system.
-                *_Ptr = '/';
-#endif
-                if (should_brk)
-                    return;
-            }
-            _Start = _Ptr + 1;
-        }
-        ++_Ptr;
-    }
-    if (_Start < _Ptr)
-    {
-        func(s);
-    }
-}
-
-}  // namespace axstd
+}  // namespace tlx

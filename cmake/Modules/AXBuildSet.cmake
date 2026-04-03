@@ -32,15 +32,9 @@ if(ANDROID)
 endif()
 
 # import minimal axslcc.cmake for shader compiler support
-# the function: ax_add_shader_target avaiable from it
-file(TO_CMAKE_PATH "${_AX_ROOT}/tools/external/axslcc" _AXSLCC_PATH)
-file(TO_CMAKE_PATH "$ENV{AX_ROOT}/tools/external/axslcc" _AXSLCC_PATH_ENV)
+# the function: ax_target_compile_shaders avaiable from it
+file(TO_CMAKE_PATH "$ENV{AX_ROOT}/tools/external/axslcc" _AXSLCC_PATH)
 set(AXSLCC_FIND_PROG_ROOT "${_AXSLCC_PATH}")
-
-if(NOT _AXSLCC_PATH STREQUAL _AXSLCC_PATH_ENV)
-  message(AUTHOR_WARNING "Add engine ${_AXSLCC_PATH_ENV} as additional path to find axlscc for isolate project")
-  list(APPEND AXSLCC_FIND_PROG_ROOT "${_AXSLCC_PATH_ENV}")
-endif()
 
 include(AXSLCC)
 
@@ -55,7 +49,7 @@ include(AXBuildHelpers)
 # config libraries dependence
 include(AXConfigDepend)
 
-message(AUTHOR_WARNING "CMAKE_VERSION:" ${CMAKE_VERSION})
+message(STATUS "CMAKE_VERSION:" ${CMAKE_VERSION})
 message(STATUS "CMAKE_HOST_SYSTEM_NAME:" ${CMAKE_HOST_SYSTEM_NAME})
 message(STATUS "CMAKE_SYSTEM_NAME:" ${CMAKE_SYSTEM_NAME})
 message(STATUS "CMAKE_GENERATOR_PLATFORM:" ${CMAKE_GENERATOR_PLATFORM})

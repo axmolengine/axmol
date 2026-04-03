@@ -63,7 +63,7 @@ typedef struct
  * @{
  */
 
-class AX_EX_DLL ControlUtils
+class AX_EXT_API ControlUtils
 {
 public:
     /**
@@ -73,11 +73,11 @@ public:
     /**
      * @lua NA
      */
-    static HSV HSVfromRGB(RGBA value);
+    static HSV HSVfromRGB(const RGBA& value);
     /**
      * @lua NA
      */
-    static RGBA RGBfromHSV(HSV value);
+    static RGBA RGBfromHSV(const HSV& value);
     /**
      * @lua NA
      */

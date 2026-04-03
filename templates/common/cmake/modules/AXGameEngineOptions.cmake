@@ -21,11 +21,11 @@
 # set(AX_ENABLE_3D ON CACHE BOOL "Build 3D support" FORCE)
 # These depend on AX_EXT_HINT & AX_ENABLE_3D
 # set(AX_ENABLE_EXT_PARTICLE3D ON CACHE BOOL "Build extension Particle3D" FORCE)
-# set(AX_ENABLE_3D_PHYSICS ON CACHE BOOL "Build Physics3D support" FORCE)
+# set(AX_ENABLE_PHYSICS_3D ON CACHE BOOL "Build Physics3D support" FORCE)
 # set(AX_ENABLE_NAVMESH ON CACHE BOOL "Build NavMesh support" FORCE)
 
-# Physics Support - - default: ON
-# set(AX_ENABLE_PHYSICS ON CACHE BOOL "Build Physics support" FORCE)
+# Physics 2D Support - - default: ON
+# set(AX_ENABLE_PHYSICS_2D ON CACHE BOOL "Build Physics support" FORCE)
 # These depend on AX_EXT_HINT & AX_ENABLE_PHYSICS
 # set(AX_ENABLE_EXT_PHYSICS_NODE ON CACHE BOOL "Build extension physics-nodes" FORCE)
 

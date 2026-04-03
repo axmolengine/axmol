@@ -136,31 +136,23 @@ Application* Application::getInstance()
 const char* Application::getCurrentLanguageCode()
 {
     static char code[3] = {0};
-    char* pLanguageName = getenv("LANG");
-    if (!pLanguageName)
+    const char* first   = getenv("LANG");
+    if (!first)
         return "en";
-    strtok(pLanguageName, "_");
-    if (!pLanguageName)
+    auto last = strchr(first, '_');
+    if (!last || (last - first) < 2)
         return "en";
-    strncpy(code, pLanguageName, 2);
+    code[0] = first[0];
+    code[1] = first[1];
     code[2] = '\0';
     return code;
 }
 
 LanguageType Application::getCurrentLanguage()
 {
-    char* pLanguageName = getenv("LANG");
-    if (!pLanguageName)
-    {
-        return LanguageType::ENGLISH;
-    }
-    strtok(pLanguageName, "_");
-    if (!pLanguageName)
-    {
-        return LanguageType::ENGLISH;
-    }
+    auto langCode = getCurrentLanguageCode();
 
-    return utils::getLanguageTypeByISO2(pLanguageName);
+    return utils::getLanguageTypeByISO2(langCode);
 }
 
 }  // namespace ax

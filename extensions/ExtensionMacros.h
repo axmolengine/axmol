@@ -28,9 +28,16 @@
 #define NS_AX_EXT_BEGIN \
     namespace ax        \
     {                   \
-    namespace extension \
+    namespace ext       \
     {
 #define NS_AX_EXT_END \
     }                 \
     }
-#define USING_NS_AX_EXT using namespace ax::extension
+#define USING_NS_AX_EXT using namespace ax::ext
+
+namespace ax
+{
+namespace ext
+{}
+namespace extension = ext;
+}  // namespace ax

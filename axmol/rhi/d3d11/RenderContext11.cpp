@@ -26,9 +26,10 @@
 #include "axmol/rhi/d3d11/RenderPipeline11.h"
 #include "axmol/rhi/d3d11/DepthStencilState11.h"
 #include "axmol/rhi/d3d11/Buffer11.h"
-#include "axmol/rhi/d3d11/Utils11.h"
 #include "axmol/rhi/d3d11/Program11.h"
 #include "axmol/rhi/d3d11/VertexLayout11.h"
+#include "axmol/rhi/d3d11/Texture11.h"
+#include "axmol/rhi/DriverContext.h"
 #include <dxgi1_2.h>
 #include <dxgi1_3.h>
 #include <dxgi1_5.h>
@@ -47,7 +48,7 @@
 
 namespace ax::rhi::d3d11
 {
-static D3D11_PRIMITIVE_TOPOLOGY toD3DPrimitiveTopology(PrimitiveType type, bool wireframe)
+static D3D11_PRIMITIVE_TOPOLOGY toD3DPrimitiveTopology(PrimitiveType type)
 {
     switch (type)
     {
@@ -84,9 +85,9 @@ static DXGI_FORMAT toDXGIFormat(IndexFormat format)
 typedef LONG(WINAPI* PFN_RtlVerifyVersionInfo)(OSVERSIONINFOEXW*, ULONG, ULONGLONG);
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
-static BOOL _axmolIsWindows10BuildOrGreaterWin32(WORD build)
+static BOOL _axmolIsWindowsVersionOrGreaterWin32(WORD major, WORD minor, WORD build)
 {
-    OSVERSIONINFOEXW osvi = {sizeof(osvi), 10, 0, build};
+    OSVERSIONINFOEXW osvi = {sizeof(osvi), major, minor, build};
     DWORD mask            = VER_MAJORVERSION | VER_MINORVERSION | VER_BUILDNUMBER;
     ULONGLONG cond        = VerSetConditionMask(0, VER_MAJORVERSION, VER_GREATER_EQUAL);
     cond                  = VerSetConditionMask(cond, VER_MINORVERSION, VER_GREATER_EQUAL);
@@ -99,6 +100,9 @@ static BOOL _axmolIsWindows10BuildOrGreaterWin32(WORD build)
         (PFN_RtlVerifyVersionInfo)GetProcAddress(GetModuleHandleW(L"ntdll"), "RtlVerifyVersionInfo");
     return RtlVerifyVersionInfo(&osvi, mask, cond) == 0;
 }
+
+#    define axmolIsWindows10OrGreater() \
+        _axmolIsWindowsVersionOrGreaterWin32(HIBYTE(_WIN32_WINNT_WIN10), LOBYTE(_WIN32_WINNT_WIN10), 0)
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
 
 using ICoreDispatcher    = ABI::Windows::UI::Core::ICoreDispatcher;
@@ -191,11 +195,9 @@ static HRESULT runOnUIThread(const ComPtr<ICoreDispatcher>& dispatcher, _Fty&& f
 }
 #endif
 
-static constexpr DXGI_FORMAT _AX_SWAPCHAIN_FORMAT = DXGI_FORMAT_R8G8B8A8_UNORM;
-
-RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
+RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
 {
-    _driverImpl   = driver;
+    _driver       = driver;
     _d3d11Context = driver->getContext();
 
     auto& contextAttrs = Application::getContextAttrs();
@@ -204,14 +206,167 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
     auto context         = driver->getContext();
     ID3D11Device* device = driver->getDevice();
 
-    auto& factory = driver->getDXGIFactory();
-    auto& adapter = driver->getDXGIAdapter();
+    auto& factory  = driver->getDXGIFactory();
+    auto& factory2 = driver->getDXGIFactory2();
+    auto& adapter  = driver->getDXGIAdapter();
 
-    // Check allow tearing feature support and set swapchain flags
-    ComPtr<IDXGIFactory5> factory5;
-    if (SUCCEEDED(factory.As(&factory5)))
-        factory5->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &_allowTearing, sizeof(_allowTearing));
-    _swapChainFlags = _allowTearing ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0;
+    ComPtr<IDXGISwapChain> swapChain;
+    HRESULT hr = 0;
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+    RECT clientRect;
+    auto hwnd = static_cast<HWND>(surface);
+    GetClientRect(hwnd, &clientRect);
+    _screenWidth  = clientRect.right - clientRect.left;
+    _screenHeight = clientRect.bottom - clientRect.top;
+#endif
+
+    // Try create swapchain, we prefer DXGI 1.2 but support fallback to DXGI 1.1 for win32 apps
+    do
+    {
+        AX_BREAK_IF(!factory2);
+
+        // Check allow tearing feature support and set swapchain flags
+        ComPtr<IDXGIFactory5> factory5;
+        if (SUCCEEDED(factory.As(&factory5)))
+            factory5->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &_allowTearing, sizeof(_allowTearing));
+
+        // Axmol-v3 D3D11 doesn't support change vsync runtime, so don't enable tearing if vsync is on.
+        _swapChainFlags = _allowTearing && !contextAttrs.vsync ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0;
+
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+        DXGI_SWAP_CHAIN_DESC1 desc1 = {};
+        desc1.Width                 = _screenWidth;
+        desc1.Height                = _screenHeight;
+        desc1.Format                = DEFAULT_SWAPCHAIN_FORMAT;
+        desc1.SampleDesc.Count      = 1;  // Flip not support MSAA
+        desc1.BufferUsage           = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+        desc1.BufferCount           = 2;
+        desc1.Flags                 = _swapChainFlags;
+
+        // Choose swapchain effect by OS version
+        // DXGI_SWAP_EFFECT_FLIP_DISCARD:
+        //   Best performance, recommended on Windows 10 and later.
+        //   Officially supported starting with Windows 10.
+        // DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL:
+        //   Official documentation states this is supported beginning with Windows 8.
+        //   However, Windows 7 SP1 with the Platform Update (KB2670838) silently
+        //   upgrades DXGI to version 1.2. This update is not explicitly mentioned
+        //   in the API docs, but it brings hidden support for Flip Sequential.
+        //   Evidence: dxgi.dll version changes from 6.1.x (Win7 base) to 6.2.x,
+        //   and IDXGIFactory2 becomes available. Without the Platform Update,
+        //   attempting to create a Flip Sequential swapchain on Win7 will fail
+        //   with DXGI_ERROR_INVALID_CALL.
+        // DXGI_SWAP_EFFECT_SEQUENTIAL / DISCARD (Blt model):
+        //   The only swap effects available on vanilla Windows 7 (no Platform Update).
+        //   Use these as a fallback when Flip modes are not supported.
+        // refer to: https://learn.microsoft.com/en-us/windows/win32/api/dxgi/ne-dxgi-dxgi_swap_effect
+        desc1.SwapEffect =
+            axmolIsWindows10OrGreater() ? DXGI_SWAP_EFFECT_FLIP_DISCARD : DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+
+        DXGI_SWAP_CHAIN_FULLSCREEN_DESC fsDesc = {};
+        fsDesc.Windowed                        = TRUE;
+
+        ComPtr<IDXGISwapChain1> swapChain1;
+        hr = factory2->CreateSwapChainForHwnd(device, hwnd, &desc1, &fsDesc, nullptr, &swapChain1);
+        if (SUCCEEDED(hr))
+        {
+            factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER);
+            swapChain1.As(&swapChain);
+        }
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_WINUWP
+        // ISwapChainPanel
+        ComPtr<IUnknown> surfaceHold{static_cast<IUnknown*>(surface)};
+        ComPtr<ISwapChainPanel> swapChainPanel;
+        hr = surfaceHold.As(&swapChainPanel);
+        AX_BREAK_IF(FAILED(hr));
+
+        // dispatcher
+        ComPtr<IDependencyObject> swapChainPanelDependencyObject;
+        hr = swapChainPanel.As(&swapChainPanelDependencyObject);
+        AX_BREAK_IF(FAILED(hr));
+
+        ComPtr<ICoreDispatcher> dispatcher;
+        hr = swapChainPanelDependencyObject->get_Dispatcher(dispatcher.GetAddressOf());
+        AX_BREAK_IF(FAILED(hr));
+
+        // ISwapChainPanelNative
+        ComPtr<ISwapChainPanelNative> swapChainPanelNative;
+        hr = swapChainPanel.As(&swapChainPanelNative);
+        AX_BREAK_IF(FAILED(hr));
+
+        ABI::Windows::Foundation::Size panelSize;
+        ComPtr<IUIElement> uiElement;
+        hr = swapChainPanel.As(&uiElement);
+        AX_BREAK_IF(FAILED(hr));
+        Vec2 renderScale;
+        hr = runOnUIThread(dispatcher, [&panelSize, &renderScale, uiElement, swapChainPanel] {
+            HRESULT hr1 = uiElement->get_RenderSize(&panelSize);
+            if (FAILED(hr1))
+                return hr1;
+            hr1 = swapChainPanel->get_CompositionScaleX(&renderScale.x);
+            if (FAILED(hr1))
+                return hr1;
+            hr1 = swapChainPanel->get_CompositionScaleY(&renderScale.y);
+            return hr1;
+        });
+        AX_BREAK_IF(FAILED(hr));
+
+        // create swapchain
+        // The swapchain size can't be zero for WinRT, maybe SwapChainPanel::ActualWidth/Height * DPI
+        DXGI_SWAP_CHAIN_DESC1 desc1 = {};
+        if (_renderScaleMode == RenderScaleMode::Physical)
+        {
+            desc1.Width  = static_cast<UINT>(panelSize.Width * renderScale.x);
+            desc1.Height = static_cast<UINT>(panelSize.Height * renderScale.y);
+        }
+        else
+        {
+            desc1.Width  = static_cast<UINT>(panelSize.Width);
+            desc1.Height = static_cast<UINT>(panelSize.Height);
+        }
+        desc1.Format           = DEFAULT_SWAPCHAIN_FORMAT;
+        desc1.SampleDesc.Count = 1;  // Flip not support MSAA
+        desc1.BufferUsage      = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+        desc1.BufferCount      = 2;
+
+        desc1.Scaling    = DXGI_SCALING_STRETCH;
+        desc1.AlphaMode  = DXGI_ALPHA_MODE_IGNORE;
+        desc1.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+        desc1.Flags      = _swapChainFlags;
+
+        ComPtr<IDXGISwapChain1> swapChain1;
+        hr = factory2->CreateSwapChainForComposition(device, &desc1, nullptr, &swapChain1);
+        AX_BREAK_IF(FAILED(hr));
+        swapChain1.As(&swapChain);
+
+        hr = runOnUIThread(dispatcher, [swapChainPanelNative, swapChain1] {
+            return swapChainPanelNative->SetSwapChain(swapChain1.Get());
+        });
+
+        AX_BREAK_IF(FAILED(hr));
+
+        DXGI_SWAP_CHAIN_DESC1 actualDesc = {};
+        swapChain1->GetDesc1(&actualDesc);
+
+        if (_renderScaleMode == RenderScaleMode::Physical)
+        {
+            // Setup a scale matrix for the swap chain
+            DXGI_MATRIX_3X2_F scaleMatrix = {};
+            scaleMatrix._11               = 1 / renderScale.x;
+            scaleMatrix._22               = 1 / renderScale.y;
+
+            ComPtr<IDXGISwapChain2> swapChain2;
+            hr = swapChain1.As(&swapChain2);
+            AX_BREAK_IF(FAILED(hr));
+
+            hr = swapChain2->SetMatrixTransform(&scaleMatrix);
+            AX_BREAK_IF(FAILED(hr));
+        }
+
+        _screenWidth  = actualDesc.Width;
+        _screenHeight = actualDesc.Height;
+#endif
+    } while (false);
 
     // control vsync
     if (contextAttrs.vsync)
@@ -227,60 +382,23 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
             _presentFlags |= DXGI_PRESENT_ALLOW_TEARING;
     }
 
-    // Try create swapchain, we prefer DXGI 1.2 but support fallback to DXGI 1.1
-    ComPtr<IDXGISwapChain> swapChain;
-    ComPtr<IDXGIFactory2> factory2;
-    HRESULT hr = factory->QueryInterface(IID_PPV_ARGS(&factory2));
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
-    RECT clientRect;
-    auto hwnd = (HWND)surfaceContext;
-    GetClientRect(hwnd, &clientRect);
-    _screenWidth  = clientRect.right - clientRect.left;
-    _screenHeight = clientRect.bottom - clientRect.top;
-
-    if (factory2)
-    {
-        // DXGI 1.2+ support Flip mode
-        DXGI_SWAP_CHAIN_DESC1 desc1 = {};
-        desc1.Width                 = _screenWidth;
-        desc1.Height                = _screenHeight;
-        desc1.Format                = _AX_SWAPCHAIN_FORMAT;
-        desc1.SampleDesc.Count      = 1;  // Flip not support MSAA
-        desc1.BufferUsage           = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        desc1.BufferCount           = 2;
-        desc1.Flags                 = _swapChainFlags;
-
-        // choolse swapchain by OS version
-        if (_axmolIsWindows10BuildOrGreaterWin32(0))
-        {  // Win10+
-            desc1.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-        }
-        else
-        {  // Win8 / Win7+PlatformUpdate
-            desc1.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
-        }
-
-        DXGI_SWAP_CHAIN_FULLSCREEN_DESC fsDesc = {};
-        fsDesc.Windowed                        = TRUE;
-
-        ComPtr<IDXGISwapChain1> swapChain1;
-        hr = factory2->CreateSwapChainForHwnd(device, hwnd, &desc1, &fsDesc, nullptr, &swapChain1);
-        if (SUCCEEDED(hr))
-        {
-            factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER);
-            swapChain1.As(&swapChain);
-        }
-    }
-
-    // Fallback to blt mode if flip mode fail
+    // Fallback to DXGI 1.1 blt mode if flip mode fail
     if (!swapChain)
     {
+        // Note: Windows 7 RTM/SP1 without Platform Update doesn't support Flip mode, but it does support blt mode. So
+        // we can fallback to blt mode for better compatibility.
+        AXLOGW("CreateSwapChain: Fallback to DXGI 1.1 blt mode (vsync disabled to avoid frame stall)");
+
+        // Force disable vsync on DXGI 1.1 (Win7 RTM/SP1) to avoid severe frame stall
+        _syncInterval = 0;
+
         DXGI_SWAP_CHAIN_DESC scDesc               = {};
-        scDesc.BufferCount                        = 1;
+        scDesc.BufferCount                        = 2;
         scDesc.BufferDesc.Width                   = _screenWidth;
         scDesc.BufferDesc.Height                  = _screenHeight;
-        scDesc.BufferDesc.Format                  = _AX_SWAPCHAIN_FORMAT;
-        scDesc.BufferDesc.RefreshRate.Numerator   = 60;
+        scDesc.BufferDesc.Format                  = DEFAULT_SWAPCHAIN_FORMAT;
+        scDesc.BufferDesc.RefreshRate.Numerator   = 0;
         scDesc.BufferDesc.RefreshRate.Denominator = 1;
         scDesc.BufferUsage                        = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         scDesc.OutputWindow                       = hwnd;
@@ -288,119 +406,19 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, void* surfaceContext)
         scDesc.SampleDesc.Quality                 = 0;
         scDesc.Windowed                           = TRUE;
         scDesc.SwapEffect                         = DXGI_SWAP_EFFECT_DISCARD;
-        scDesc.Flags                              = _swapChainFlags;
+        scDesc.Flags                              = 0;
 
         hr = factory->CreateSwapChain(device, &scDesc, &swapChain);
-    }
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_WINUWP
-    if (factory2)
-    {
-        do
-        {
-            // ISwapChainPanel
-            ComPtr<IUnknown> surfaceHold = reinterpret_cast<IUnknown*>(surfaceContext);
-            ComPtr<ISwapChainPanel> swapChainPanel;
-            hr = surfaceHold.As(&swapChainPanel);
-            AX_BREAK_IF(FAILED(hr));
-
-            // dispatcher
-            ComPtr<IDependencyObject> swapChainPanelDependencyObject;
-            hr = swapChainPanel.As(&swapChainPanelDependencyObject);
-            AX_BREAK_IF(FAILED(hr));
-
-            ComPtr<ICoreDispatcher> dispatcher;
-            hr = swapChainPanelDependencyObject->get_Dispatcher(dispatcher.GetAddressOf());
-            AX_BREAK_IF(FAILED(hr));
-
-            // ISwapChainPanelNative
-            ComPtr<ISwapChainPanelNative> swapChainPanelNative;
-            hr = swapChainPanel.As(&swapChainPanelNative);
-            AX_BREAK_IF(FAILED(hr));
-
-            ABI::Windows::Foundation::Size panelSize;
-            ComPtr<IUIElement> uiElement;
-            hr = swapChainPanel.As(&uiElement);
-            AX_BREAK_IF(FAILED(hr));
-            Vec2 renderScale;
-            hr = runOnUIThread(dispatcher, [&panelSize, &renderScale, uiElement, swapChainPanel] {
-                HRESULT hr1 = uiElement->get_RenderSize(&panelSize);
-                if (FAILED(hr1))
-                    return hr1;
-                hr1 = swapChainPanel->get_CompositionScaleX(&renderScale.x);
-                if (FAILED(hr1))
-                    return hr1;
-                hr1 = swapChainPanel->get_CompositionScaleY(&renderScale.y);
-                return hr1;
-            });
-            AX_BREAK_IF(FAILED(hr));
-
-            // create swapchain
-            // The swapchain size can't be zero for WinRT, maybe SwapChainPanel::ActualWidth/Height * DPI
-            DXGI_SWAP_CHAIN_DESC1 desc1 = {};
-            if (_renderScaleMode == RenderScaleMode::Physical)
-            {
-                desc1.Width  = static_cast<UINT>(panelSize.Width * renderScale.x);
-                desc1.Height = static_cast<UINT>(panelSize.Height * renderScale.y);
-            }
-            else
-            {
-                desc1.Width  = static_cast<UINT>(panelSize.Width);
-                desc1.Height = static_cast<UINT>(panelSize.Height);
-            }
-            desc1.Format           = _AX_SWAPCHAIN_FORMAT;
-            desc1.SampleDesc.Count = 1;  // Flip not support MSAA
-            desc1.BufferUsage      = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-            desc1.BufferCount      = 2;
-
-            desc1.Scaling    = DXGI_SCALING_STRETCH;
-            desc1.AlphaMode  = DXGI_ALPHA_MODE_IGNORE;
-            desc1.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-            desc1.Flags      = _swapChainFlags;
-
-            ComPtr<IDXGISwapChain1> swapChain1;
-            hr = factory2->CreateSwapChainForComposition(device, &desc1, nullptr, &swapChain1);
-            AX_BREAK_IF(FAILED(hr));
-            swapChain1.As(&swapChain);
-
-            hr = runOnUIThread(dispatcher, [swapChainPanelNative, swapChain1] {
-                return swapChainPanelNative->SetSwapChain(swapChain1.Get());
-            });
-
-            AX_BREAK_IF(FAILED(hr));
-
-            DXGI_SWAP_CHAIN_DESC1 actualDesc = {};
-            swapChain1->GetDesc1(&actualDesc);
-
-            if (_renderScaleMode == RenderScaleMode::Physical)
-            {
-                // Setup a scale matrix for the swap chain
-                DXGI_MATRIX_3X2_F scaleMatrix = {};
-                scaleMatrix._11               = 1 / renderScale.x;
-                scaleMatrix._22               = 1 / renderScale.y;
-
-                ComPtr<IDXGISwapChain2> swapChain2;
-                hr = swapChain1.As(&swapChain2);
-                AX_BREAK_IF(FAILED(hr));
-
-                hr = swapChain2->SetMatrixTransform(&scaleMatrix);
-                AX_BREAK_IF(FAILED(hr));
-            }
-
-            _screenWidth  = actualDesc.Width;
-            _screenHeight = actualDesc.Height;
-        } while (false);
     }
 #endif
 
     if (FAILED(hr))
         dxutils::fatalError("CreateSwapChain", hr);
 
+    // Final swapchain setup
     _swapChain = swapChain.Detach();
-
-    _screenRT = new RenderTargetImpl(device, true);
-
-    _screenRT->rebuildAttachmentsForSwapchain(_swapChain, _screenWidth, _screenHeight);
-
+    _screenRT  = new RenderTargetImpl(_driver, true);
+    _screenRT->rebuildSwapchainBuffers(_swapChain, _screenWidth, _screenHeight);
     _nullSRVs.reserve(8);
 }
 
@@ -418,9 +436,9 @@ RenderContextImpl::~RenderContextImpl()
         _rasterState.Reset();
 }
 
-bool RenderContextImpl::updateSurface(void* /*surface*/, uint32_t width, uint32_t height)
+bool RenderContextImpl::updateSurface(SurfaceHandle /*surface*/, uint32_t width, uint32_t height)
 {
-    if (!_swapChain || !_driverImpl || !_screenRT)
+    if (!_swapChain || !_driver || !_screenRT)
         return false;
 
     // Since the window size can be zero when minimized, delay rebuilding until it returns to normal state
@@ -433,13 +451,7 @@ bool RenderContextImpl::updateSurface(void* /*surface*/, uint32_t width, uint32_
         return true;
 
     // Resize swapchain buffers
-    _screenRT->invalidate();
-
-    HRESULT hr = _swapChain->ResizeBuffers(0, width, height, _AX_SWAPCHAIN_FORMAT, _swapChainFlags);
-
-    _screenRT->rebuildAttachmentsForSwapchain(_swapChain, width, height);
-
-    if (FAILED(hr))
+    if (!_screenRT->rebuildSwapchainBuffers(_swapChain, width, height, _swapChainFlags))
         return false;
 
     _screenWidth  = width;
@@ -503,10 +515,12 @@ void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 
 void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
                                             const PipelineDesc& desc,
-                                            PrimitiveGroup primitiveGroup)
+                                            PrimitiveType primitiveType)
 {
-    RenderContext::updatePipelineState(rt, desc, primitiveGroup);
+    RenderContext::updatePipelineState(rt, desc, primitiveType);
     _renderPipeline->update(rt, desc);
+
+    _d3d11Context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType));
 }
 
 void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
@@ -519,7 +533,7 @@ void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h
     viewport.MinDepth       = 0.0f;
     viewport.MaxDepth       = 1.0f;
 
-    _driverImpl->getContext()->RSSetViewports(1, &viewport);
+    _driver->getContext()->RSSetViewports(1, &viewport);
 }
 
 void RenderContextImpl::setCullMode(CullMode mode)
@@ -607,7 +621,7 @@ void RenderContextImpl::updateRasterizerState()
     desc.DepthClipEnable = TRUE;
     desc.ScissorEnable   = _rasterDesc.scissorEnable ? TRUE : FALSE;
 
-    _AXASSERT_HR(_driverImpl->getDevice()->CreateRasterizerState(&desc, _rasterState.ReleaseAndGetAddressOf()));
+    _AXASSERT_HR(_driver->getDevice()->CreateRasterizerState(&desc, _rasterState.ReleaseAndGetAddressOf()));
     _d3d11Context->RSSetState(_rasterState.Get());
     _rasterDesc.dirtyFlags = 0;
 }
@@ -645,30 +659,20 @@ void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
     _instanceBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe)
+void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool /*wireframe*/)
 {
     prepareDrawing();
-    _d3d11Context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType, wireframe));
     _d3d11Context->Draw(static_cast<UINT>(count), static_cast<UINT>(start));
 }
 
-void RenderContextImpl::drawArraysInstanced(PrimitiveType primitiveType,
-                                            std::size_t start,
-                                            std::size_t count,
-                                            int instanceCount,
-                                            bool wireframe)
+void RenderContextImpl::drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool /*wireframe*/)
 {
     prepareDrawing();
-    _d3d11Context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType, wireframe));
     _d3d11Context->DrawInstanced(static_cast<UINT>(count), static_cast<UINT>(instanceCount), static_cast<UINT>(start),
                                  0);
 }
 
-void RenderContextImpl::drawElements(PrimitiveType primitiveType,
-                                     IndexFormat indexType,
-                                     std::size_t count,
-                                     std::size_t offset,
-                                     bool wireframe)
+void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool /*wireframe*/)
 {
     prepareDrawing();
 
@@ -681,16 +685,14 @@ void RenderContextImpl::drawElements(PrimitiveType primitiveType,
     const UINT indexCount = static_cast<UINT>(count);
 
     _d3d11Context->IASetIndexBuffer(_indexBuffer->internalHandle(), dxgiFmt, 0);
-    _d3d11Context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType, wireframe));
     _d3d11Context->DrawIndexed(indexCount, startIndex, 0);
 }
 
-void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
-                                              IndexFormat indexType,
+void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
                                               std::size_t count,
                                               std::size_t offset,
                                               int instanceCount,
-                                              bool wireframe)
+                                              bool /*wireframe*/)
 {
     prepareDrawing();
 
@@ -703,8 +705,6 @@ void RenderContextImpl::drawElementsInstanced(PrimitiveType primitiveType,
     const UINT indexCount = static_cast<UINT>(count);
 
     _d3d11Context->IASetIndexBuffer(_indexBuffer->internalHandle(), dxgiFmt, 0);
-
-    _d3d11Context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType, wireframe));
     _d3d11Context->DrawIndexedInstanced(static_cast<UINT>(count), static_cast<UINT>(instanceCount), startIndex, 0, 0);
 }
 
@@ -731,7 +731,7 @@ void RenderContextImpl::prepareDrawing()
     assert(_programState);
     updateRasterizerState();
 
-    auto context = _driverImpl->getContext();
+    auto context = _driver->getContext();
 
     auto& callbackUniforms = _programState->getCallbackUniforms();
     for (auto& cb : callbackUniforms)
@@ -739,10 +739,7 @@ void RenderContextImpl::prepareDrawing()
 
     // bind shader
     auto program = static_cast<ProgramImpl*>(_programState->getProgram());
-    _d3d11Context->VSSetShader(static_cast<ID3D11VertexShader*>(program->getVertexShader()->internalHandle()), nullptr,
-                               0);
-    _d3d11Context->PSSetShader(static_cast<ID3D11PixelShader*>(program->getFragmentShader()->internalHandle()), nullptr,
-                               0);
+    program->apply(context);
 
     // bind vertex layout
     auto vertexLayoutImpl = static_cast<VertexLayoutImpl*>(_vertexLayout);
@@ -767,15 +764,8 @@ void RenderContextImpl::prepareDrawing()
         _d3d11Context->IASetVertexBuffers(0, 2, vbs, strides, offsets);
     }
 
-    // bind vertex uniform buffer
-    auto vertUB = _programState->getVertexUniformBuffer();
-    if (!vertUB.empty())
-        program->bindVertexUniformBuffer(_d3d11Context, vertUB.data(), vertUB.size(), VS_UBO_BINDING_INDEX);
-
-    // bind fragment uniform Buffer
-    auto fragUB = _programState->getFragmentUniformBuffer();
-    if (!fragUB.empty())
-        program->bindFragmentUniformBuffer(_d3d11Context, fragUB.data(), fragUB.size(), FS_UBO_BINDING_INDEX);
+    auto& cpuBuffer = _programState->getUniformBuffer();
+    program->bindUniformBuffers(_d3d11Context, cpuBuffer.data(), cpuBuffer.size());
 
     // bind texture
     _textureBounds = 0;
@@ -808,7 +798,7 @@ void RenderContextImpl::endFrame()
     {
         if (hr == DXGI_ERROR_DEVICE_REMOVED)
         {
-            auto device    = static_cast<DriverImpl*>(DriverBase::getInstance())->getDevice();
+            auto device    = static_cast<DriverImpl*>(axdrv)->getDevice();
             HRESULT reason = device->GetDeviceRemovedReason();
             AXLOGD("D3D11 Device remove reason: {}", reason);
         }
@@ -857,7 +847,7 @@ void RenderContextImpl::readPixels(RenderTarget* rt, UINT x, UINT y, UINT width,
     auto tex = static_cast<RenderTargetImpl*>(rt)->getColorAttachment(0).texure;
     assert(tex);
 
-    ID3D11Device* device = _driverImpl->getDevice();
+    ID3D11Device* device = _driver->getDevice();
 
     // D3D11_CPU_ACCESS_READ not allow as render target color attachment
     // so we need create a staging texture for CPU read

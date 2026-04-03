@@ -1288,7 +1288,7 @@ int lua_ax_fairygui_UIEventDispatcher_dispatchEvent(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_ccvalue(tolua_S, 4, &arg2, "fgui.UIEventDispatcher:dispatchEvent");
+        ok &= luaval_to_value(tolua_S, 4, &arg2, "fgui.UIEventDispatcher:dispatchEvent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_UIEventDispatcher_dispatchEvent'", nullptr);
@@ -1377,7 +1377,7 @@ int lua_ax_fairygui_UIEventDispatcher_bubbleEvent(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_ccvalue(tolua_S, 4, &arg2, "fgui.UIEventDispatcher:bubbleEvent");
+        ok &= luaval_to_value(tolua_S, 4, &arg2, "fgui.UIEventDispatcher:bubbleEvent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_UIEventDispatcher_bubbleEvent'", nullptr);
@@ -5321,7 +5321,7 @@ int lua_ax_fairygui_GObject_getCustomData(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getCustomData();
-        ccvalue_to_luaval(tolua_S, ret);
+        value_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GObject:getCustomData",argc, 0);
@@ -5364,7 +5364,7 @@ int lua_ax_fairygui_GObject_setCustomData(lua_State* tolua_S)
     {
         ax::Value arg0;
 
-        ok &= luaval_to_ccvalue(tolua_S, 2, &arg0, "fgui.GObject:setCustomData");
+        ok &= luaval_to_value(tolua_S, 2, &arg0, "fgui.GObject:setCustomData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setCustomData'", nullptr);
@@ -6635,7 +6635,7 @@ int lua_ax_fairygui_GObject_getProp(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getProp(arg0);
-        ccvalue_to_luaval(tolua_S, ret);
+        value_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GObject:getProp",argc, 1);
@@ -6681,7 +6681,7 @@ int lua_ax_fairygui_GObject_setProp(lua_State* tolua_S)
 
         ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GObject:setProp");
 
-        ok &= luaval_to_ccvalue(tolua_S, 3, &arg1, "fgui.GObject:setProp");
+        ok &= luaval_to_value(tolua_S, 3, &arg1, "fgui.GObject:setProp");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setProp'", nullptr);
@@ -9953,7 +9953,7 @@ int lua_ax_fairygui_GTextField_getTemplateVars(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getTemplateVars();
-        ccvaluemap_to_luaval(tolua_S, *ret);
+        valuemap_to_luaval(tolua_S, *ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GTextField:getTemplateVars",argc, 0);
@@ -9996,7 +9996,7 @@ int lua_ax_fairygui_GTextField_setTemplateVars(lua_State* tolua_S)
     {
         ax::ValueMap* arg0;
 
-        ok &= luaval_to_ccvaluemap(tolua_S, 2, arg0, "fgui.GTextField:setTemplateVars");
+        ok &= luaval_to_valuemap(tolua_S, 2, arg0, "fgui.GTextField:setTemplateVars");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTextField_setTemplateVars'", nullptr);
@@ -10049,7 +10049,7 @@ int lua_ax_fairygui_GTextField_setVar(lua_State* tolua_S)
 
         ok &= luaval_to_std_string(tolua_S, 2,&arg0, "fgui.GTextField:setVar");
 
-        ok &= luaval_to_ccvalue(tolua_S, 3, &arg1, "fgui.GTextField:setVar");
+        ok &= luaval_to_value(tolua_S, 3, &arg1, "fgui.GTextField:setVar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTextField_setVar'", nullptr);
@@ -17206,7 +17206,7 @@ int lua_ax_fairygui_Transition_setValue(lua_State* tolua_S)
 
         ok &= luaval_to_std_string(tolua_S, 2,&arg0, "fgui.Transition:setValue");
 
-        ok &= luaval_to_ccvaluevector(tolua_S, 3, &arg1, "fgui.Transition:setValue");
+        ok &= luaval_to_valuevector(tolua_S, 3, &arg1, "fgui.Transition:setValue");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_Transition_setValue'", nullptr);
@@ -18356,7 +18356,7 @@ int lua_ax_fairygui_GComponent_getChildren(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getChildren();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GComponent:getChildren",argc, 0);
@@ -19009,7 +19009,7 @@ int lua_ax_fairygui_GComponent_getControllers(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getControllers();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GComponent:getControllers",argc, 0);
@@ -19303,7 +19303,7 @@ int lua_ax_fairygui_GComponent_getTransitions(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getTransitions();
-        ccvector_to_luaval(tolua_S, ret);
+        axvector_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GComponent:getTransitions",argc, 0);
@@ -24842,7 +24842,7 @@ int lua_ax_fairygui_GComboBox_getItems(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getItems();
-        ccvector_std_string_to_luaval(tolua_S, ret);
+        strspan_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GComboBox:getItems",argc, 0);
@@ -24889,7 +24889,7 @@ int lua_ax_fairygui_GComboBox_getIcons(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getIcons();
-        ccvector_std_string_to_luaval(tolua_S, ret);
+        strspan_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GComboBox:getIcons",argc, 0);
@@ -24936,7 +24936,7 @@ int lua_ax_fairygui_GComboBox_getValues(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getValues();
-        ccvector_std_string_to_luaval(tolua_S, ret);
+        strspan_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GComboBox:getValues",argc, 0);
@@ -30914,7 +30914,7 @@ int lua_ax_fairygui_DragDropManager_startDrag(lua_State* tolua_S)
 
         ok &= luaval_to_std_string(tolua_S, 2,&arg0, "fgui.DragDropManager:startDrag");
 
-        ok &= luaval_to_ccvalue(tolua_S, 3, &arg1, "fgui.DragDropManager:startDrag");
+        ok &= luaval_to_value(tolua_S, 3, &arg1, "fgui.DragDropManager:startDrag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_DragDropManager_startDrag'", nullptr);
@@ -30932,7 +30932,7 @@ int lua_ax_fairygui_DragDropManager_startDrag(lua_State* tolua_S)
 
         ok &= luaval_to_std_string(tolua_S, 2,&arg0, "fgui.DragDropManager:startDrag");
 
-        ok &= luaval_to_ccvalue(tolua_S, 3, &arg1, "fgui.DragDropManager:startDrag");
+        ok &= luaval_to_value(tolua_S, 3, &arg1, "fgui.DragDropManager:startDrag");
 
         ok &= luaval_to_int(tolua_S, 4, &arg2, "fgui.DragDropManager:startDrag");
         if(!ok)
@@ -31898,7 +31898,7 @@ int lua_ax_fairygui_GTweener_setUserData(lua_State* tolua_S)
     {
         ax::Value arg0;
 
-        ok &= luaval_to_ccvalue(tolua_S, 2, &arg0, "fgui.GTweener:setUserData");
+        ok &= luaval_to_value(tolua_S, 2, &arg0, "fgui.GTweener:setUserData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTweener_setUserData'", nullptr);
@@ -32002,7 +32002,7 @@ int lua_ax_fairygui_GTweener_getUserData(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getUserData();
-        ccvalue_to_luaval(tolua_S, ret);
+        value_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GTweener:getUserData",argc, 0);

@@ -26,8 +26,7 @@
  ****************************************************************************/
 
 #include "NavMeshTest.h"
-#include "axmol/physics3d/Physics3DWorld.h"
-#include "axmol/physics3d/Physics3D.h"
+#include "axmol/3d/physics/Physics3D.h"
 #include "axmol/3d/Bundle3D.h"
 #include "axmol/2d/Light.h"
 
@@ -41,7 +40,7 @@ struct AgentUserData
 
 NavMeshTests::NavMeshTests()
 {
-#if !defined(AX_ENABLE_NAVMESH) || !defined(AX_ENABLE_PHYSICS)
+#if !defined(AX_ENABLE_NAVMESH) || !defined(AX_ENABLE_PHYSICS_3D)
     ADD_TEST_CASE(NavMeshDisabled);
 #else
     ADD_TEST_CASE(NavMeshBasicTestDemo);
@@ -49,7 +48,7 @@ NavMeshTests::NavMeshTests()
 #endif
 };
 
-#if !defined(AX_ENABLE_NAVMESH) || !defined(AX_ENABLE_PHYSICS)
+#if !defined(AX_ENABLE_NAVMESH) || !defined(AX_ENABLE_PHYSICS_3D)
 void NavMeshDisabled::onEnter()
 {
     TTFConfig ttfConfig("fonts/arial.ttf", 16);
@@ -138,7 +137,7 @@ void NavMeshBaseTestDemo::onTouchesEnded(const std::vector<ax::Touch*>& touches,
 
 void NavMeshBaseTestDemo::initScene()
 {
-    getPhysics3DWorld()->setDebugDrawEnable(false);
+    getPhysicsWorld3D()->setDebugDrawEnable(false);
     // create mesh
     std::vector<Vec3> trianglesList = Bundle3D::getTrianglesList("NavMesh/scene.obj");
 
@@ -295,7 +294,7 @@ void NavMeshBasicTestDemo::touchesEnded(const std::vector<ax::Touch*>& touches, 
         _camera->unproject(size, &farP, &farP);
 
         Physics3DWorld::HitResult result;
-        getPhysics3DWorld()->rayCast(nearP, farP, &result);
+        getPhysicsWorld3D()->rayCast(nearP, farP, &result);
         moveAgents(result.hitPosition);
     }
 }
@@ -334,7 +333,7 @@ void NavMeshBasicTestDemo::onEnter()
     NavMeshBaseTestDemo::onEnter();
 
     Physics3DWorld::HitResult result;
-    getPhysics3DWorld()->rayCast(Vec3(0.0f, 50.0f, 0.0f), Vec3(0.0f, -50.0f, 0.0f), &result);
+    getPhysicsWorld3D()->rayCast(Vec3(0.0f, 50.0f, 0.0f), Vec3(0.0f, -50.0f, 0.0f), &result);
     createAgent(result.hitPosition);
 }
 
@@ -359,7 +358,7 @@ bool NavMeshAdvanceTestDemo::init()
         float x = ax::random(-50.0f, 50.0f);
         float z = ax::random(-50.0f, 50.0f);
         Physics3DWorld::HitResult result;
-        getPhysics3DWorld()->rayCast(Vec3(x, 50.0f, z), Vec3(x, -50.0f, z), &result);
+        getPhysicsWorld3D()->rayCast(Vec3(x, 50.0f, z), Vec3(x, -50.0f, z), &result);
         createObstacle(result.hitPosition);
     });
     menuItem0->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
@@ -369,7 +368,7 @@ bool NavMeshAdvanceTestDemo::init()
         float x = ax::random(-50.0f, 50.0f);
         float z = ax::random(-50.0f, 50.0f);
         Physics3DWorld::HitResult result;
-        getPhysics3DWorld()->rayCast(Vec3(x, 50.0f, z), Vec3(x, -50.0f, z), &result);
+        getPhysicsWorld3D()->rayCast(Vec3(x, 50.0f, z), Vec3(x, -50.0f, z), &result);
         createAgent(result.hitPosition);
     });
     menuItem1->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
@@ -402,7 +401,7 @@ void NavMeshAdvanceTestDemo::onEnter()
     NavMeshBaseTestDemo::onEnter();
 
     Physics3DWorld::HitResult result;
-    getPhysics3DWorld()->rayCast(Vec3(0.0f, 50.0f, 0.0f), Vec3(0.0f, -50.0f, 0.0f), &result);
+    getPhysicsWorld3D()->rayCast(Vec3(0.0f, 50.0f, 0.0f), Vec3(0.0f, -50.0f, 0.0f), &result);
     createAgent(result.hitPosition);
 }
 
@@ -431,7 +430,7 @@ void NavMeshAdvanceTestDemo::touchesEnded(const std::vector<ax::Touch*>& touches
         _camera->unproject(size, &farP, &farP);
 
         Physics3DWorld::HitResult result;
-        getPhysics3DWorld()->rayCast(nearP, farP, &result);
+        getPhysicsWorld3D()->rayCast(nearP, farP, &result);
         moveAgents(result.hitPosition);
     }
 }

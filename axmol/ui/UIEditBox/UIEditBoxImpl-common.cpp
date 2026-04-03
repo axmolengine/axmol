@@ -90,7 +90,7 @@ bool EditBoxImplCommon::initWithSize(const Vec2& size)
 
 void EditBoxImplCommon::initInactiveLabels(const Vec2& size)
 {
-    const char* pDefaultFontName = this->getNativeDefaultFontName();
+    std::string_view defaultFontName = this->getNativeDefaultFontName();
 
     _label = Label::create();
     _label->setAnchorPoint(Vec2(0.0f, 1.0f));
@@ -106,8 +106,8 @@ void EditBoxImplCommon::initInactiveLabels(const Vec2& size)
     _labelPlaceHolder->setGlobalZOrder(_editBox->getGlobalZOrder());
     _editBox->addChild(_labelPlaceHolder, kLabelZOrder);
 
-    setFont(pDefaultFontName, size.height * 2 / 3);
-    setPlaceholderFont(pDefaultFontName, size.height * 2 / 3);
+    setFont(defaultFontName, size.height * 2 / 3);
+    setPlaceholderFont(defaultFontName, size.height * 2 / 3);
 }
 
 void EditBoxImplCommon::placeInactiveLabels(const Vec2& size)
@@ -136,18 +136,18 @@ void EditBoxImplCommon::placeInactiveLabels(const Vec2& size)
     }
 }
 
-void EditBoxImplCommon::setInactiveText(const char* pText)
+void EditBoxImplCommon::setInactiveText(std::string_view text)
 {
     if (EditBox::InputFlag::PASSWORD == _editBoxInputFlag)
     {
         std::string passwordString;
-        for (size_t i = 0, len = strlen(pText); i < len; ++i)
+        for (size_t i = 0, len = text.length(); i < len; ++i)
             passwordString.append(PASSWORD_CHAR);
         _label->setString(passwordString);
     }
     else
     {
-        _label->setString(pText);
+        _label->setString(text);
     }
     // Clip the text width to fit to the text box
     const auto maxSize = applyPadding(_editBox->getContentSize());
@@ -158,22 +158,22 @@ void EditBoxImplCommon::setInactiveText(const char* pText)
     }
 }
 
-void EditBoxImplCommon::setFont(const char* pFontName, int fontSize)
+void EditBoxImplCommon::setFont(std::string_view fontName, int fontSize)
 {
-    _fontName = pFontName;
+    _fontName = fontName;
     _fontSize = fontSize;
-    this->setNativeFont(pFontName, fontSize * _label->getNodeToWorldAffineTransform().a);
-    // edit by bixniaojiao
-    if (FileUtils::getInstance()->isFileExist(pFontName))
+    this->setNativeFont(fontName, fontSize * _label->getNodeToWorldAffineTransform().a);
+
+    if (FileUtils::getInstance()->isFileExist(fontName))
     {
-        TTFConfig ttfConfig(pFontName, fontSize);
+        TTFConfig ttfConfig(fontName, fontSize);
         _label->setTTFConfig(ttfConfig);
     }
     else
     {
         if (!_fontName.empty())
         {
-            _label->setSystemFontName(pFontName);
+            _label->setSystemFontName(fontName);
         }
         if (fontSize > 0)
         {
@@ -189,22 +189,22 @@ void EditBoxImplCommon::setFontColor(const Color32& color)
     _label->setTextColor(color);
 }
 
-void EditBoxImplCommon::setPlaceholderFont(const char* pFontName, int fontSize)
+void EditBoxImplCommon::setPlaceholderFont(std::string_view fontName, int fontSize)
 {
-    _placeholderFontName = pFontName;
+    _placeholderFontName = fontName;
     _placeholderFontSize = fontSize;
-    this->setNativePlaceholderFont(pFontName, fontSize * _labelPlaceHolder->getNodeToWorldAffineTransform().a);
-    // edit by bixniaojiao
-    if (FileUtils::getInstance()->isFileExist(pFontName))
+    this->setNativePlaceholderFont(fontName, fontSize * _labelPlaceHolder->getNodeToWorldAffineTransform().a);
+
+    if (FileUtils::getInstance()->isFileExist(fontName))
     {
-        TTFConfig ttfConfig(pFontName, fontSize);
+        TTFConfig ttfConfig(fontName, fontSize);
         _labelPlaceHolder->setTTFConfig(ttfConfig);
     }
     else
     {
-        if (!_fontName.empty())
+        if (!_placeholderFontName.empty())
         {
-            _labelPlaceHolder->setSystemFontName(pFontName);
+            _labelPlaceHolder->setSystemFontName(fontName);
         }
         if (fontSize > 0)
         {
@@ -254,7 +254,7 @@ void EditBoxImplCommon::setReturnType(EditBox::KeyboardReturnType returnType)
 
 void EditBoxImplCommon::refreshInactiveText()
 {
-    setInactiveText(_text.c_str());
+    setInactiveText(_text);
 
     refreshLabelAlignment();
     if (!_editingMode)
@@ -278,24 +278,18 @@ void EditBoxImplCommon::refreshLabelAlignment()
     _labelPlaceHolder->setHorizontalAlignment(_alignment);
 }
 
-void EditBoxImplCommon::setText(const char* text)
+void EditBoxImplCommon::setText(std::string_view text)
 {
-    if (nullptr != text)
-    {
-        this->setNativeText(text);
-        _text = text;
-        refreshInactiveText();
-    }
+    this->setNativeText(text);
+    _text = text;
+    refreshInactiveText();
 }
 
-void EditBoxImplCommon::setPlaceHolder(const char* pText)
+void EditBoxImplCommon::setPlaceHolder(std::string_view text)
 {
-    if (pText != NULL)
-    {
-        _placeHolder = pText;
-        this->setNativePlaceHolder(pText);
-        _labelPlaceHolder->setString(_placeHolder);
-    }
+    _placeHolder = text;
+    this->setNativePlaceHolder(text);
+    _labelPlaceHolder->setString(_placeHolder);
 }
 
 void EditBoxImplCommon::setVisible(bool visible)
@@ -343,11 +337,8 @@ void EditBoxImplCommon::draw(Renderer* /*renderer*/, const Mat4& /*transform*/, 
 
 void EditBoxImplCommon::onEnter(void)
 {
-    const char* pText = getText();
-    if (pText)
-    {
-        setInactiveText(pText);
-    }
+    std::string_view text = getText();
+    setInactiveText(text);
 }
 
 void EditBoxImplCommon::openKeyboard()
@@ -387,7 +378,7 @@ void EditBoxImplCommon::editBoxEditingDidBegin()
 #if AX_ENABLE_SCRIPT_BINDING
     if (NULL != _editBox && 0 != _editBox->getScriptEditBoxHandler())
     {
-        ax::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "began", _editBox);
+        ax::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "began"sv, _editBox);
         ax::ScriptEvent event(ax::kCommonEvent, (void*)&data);
         ax::ScriptEngineManager::sendEventToLua(event);
     }
@@ -409,11 +400,10 @@ void EditBoxImplCommon::editBoxEditingDidEnd(std::string_view text, EditBoxDeleg
 #if AX_ENABLE_SCRIPT_BINDING
     if (_editBox != nullptr && 0 != _editBox->getScriptEditBoxHandler())
     {
-        ax::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "ended", _editBox);
+        ax::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "ended"sv, _editBox);
         ax::ScriptEvent event(ax::kCommonEvent, (void*)&data);
         ax::ScriptEngineManager::sendEventToLua(event);
-        memset(data.eventName, 0, sizeof(data.eventName));
-        strncpy(data.eventName, "return", sizeof(data.eventName));
+        tlx::strlcpy(data.eventName, "return"sv);
         event.data = (void*)&data;
         ax::ScriptEngineManager::sendEventToLua(event);
     }
@@ -438,7 +428,7 @@ void EditBoxImplCommon::editBoxEditingChanged(std::string_view text)
 #if AX_ENABLE_SCRIPT_BINDING
     if (NULL != _editBox && 0 != _editBox->getScriptEditBoxHandler())
     {
-        ax::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "changed", _editBox);
+        ax::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "changed"sv, _editBox);
         ax::ScriptEvent event(ax::kCommonEvent, (void*)&data);
         ax::ScriptEngineManager::sendEventToLua(event);
     }

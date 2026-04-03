@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "axmol/platform/winrt/WinRTUtils.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/EventMouse.h"
+#include "axmol/rhi/DriverContext.h"
 #include <future>
 
 #include <winrt/Windows.UI.Xaml.Controls.h>
@@ -172,7 +173,7 @@ void* RenderViewImpl::getNativeWindow() const
     return winrt::get_unknown(m_panel.get());
 }
 
-void* RenderViewImpl::getNativeDisplay() const
+SurfaceHandle RenderViewImpl::getNativeDisplay() const
 {
     return winrt::get_unknown(m_panel.get());
 }
@@ -564,11 +565,10 @@ void RenderViewImpl::handleWindowResized()
 
 void RenderViewImpl::updateRenderScale()
 {
-#if AX_RENDER_API == AX_RENDER_API_D3D11 || AX_RENDER_API == AX_RENDER_API_D3D12
-    _renderScale = m_dpi / 96.0f;
-#else
-    _renderScale = 1.0f;
-#endif
+    if (!rhi::DriverContext::isOpenGL())
+        _renderScale = m_dpi / 96.0f;
+    else
+        _renderScale = 1.0f;
 }
 
 // CoreWindow manage logic window size = physics size / dpiScale,

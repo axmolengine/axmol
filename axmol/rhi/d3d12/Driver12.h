@@ -23,11 +23,13 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/rhi/d3d12/DescriptorHeapAllocator12.h"
 #include "axmol/rhi/d3d12/UploadBufferAllocator12.h"
 #include "axmol/rhi/d3d12/ShaderModule12.h"
 #include "axmol/rhi/DXUtils.h"
+#include "axmol/rhi/DriverFactory.h"
+#include "axmol/tlx/byte_buffer.hpp"
 #include <d3d12.h>
 #include <dxgi1_4.h>
 #include <optional>
@@ -37,6 +39,8 @@
 #include <functional>
 #include <array>
 
+// Note: d3dcompiler_47.dll also works well in HLSL shader model 5.1
+// DXC requires shader model 6.0
 #include <dxcapi.h>
 
 namespace ax::rhi
@@ -113,18 +117,19 @@ public:
     DriverImpl();
     ~DriverImpl();
 
-    void init();
+    bool init() override;
+    DriverType type() override { return DriverType::D3D12; }
 
-    RenderContext* createRenderContext(void* surfaceContext) override;
+    RenderContext* createRenderContext(SurfaceHandle surface) override;
     Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial) override;
     Texture* createTexture(const TextureDesc& descriptor) override;
     RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
     DepthStencilState* createDepthStencilState() override;
     RenderPipeline* createRenderPipeline() override;
-    Program* createProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
+    Program* createProgram(Data vsData, Data fsData) override;
     VertexLayout* createVertexLayout(VertexLayoutDesc&& desc) override;
 
-    ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
+    ShaderModule* createShaderModule(ShaderStage stage, Data&) override;
     SamplerHandle createSampler(const SamplerDesc& desc) override;
     void destroySampler(SamplerHandle&) override;
 
@@ -135,7 +140,7 @@ public:
 
     bool checkForFeatureSupported(FeatureType feature) override;
 
-    void cleanPendingResources() override;
+    void destroyStaleResources() override;
 
     ID3D12Device* getDevice() const { return _device.Get(); }
     ID3D12CommandQueue* getGraphicsQueue() const { return _gfxQueue.Get(); }
@@ -168,7 +173,7 @@ public:
     UINT getSrvDescriptorStride() const { return _srvDescriptorStride; }
     UINT getSamplerDescriptorStride() const { return _samplerDescriptorStride; }
 
-    bool compileShader(std::string_view shaderSource, ShaderStage stage, D3D12BlobHandle& outHandle);
+    bool compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, D3D12BlobHandle& outHandle);
 
     void queueDisposal(ID3D12Resource*, uint64_t fenceValue);
     void queueDisposal(DescriptorHandle* handle, DisposableResource::Type type, uint64_t fenceValue);
@@ -176,6 +181,11 @@ public:
     void processDisposalQueue(uint64_t completeFence);
 
     void waitForGPU() override;
+
+    void setFrameIndex(int index) { _frameIndex = index; }
+    int getFrameIndex() const { return _frameIndex; }
+
+    void removeCachedPipelineObjects(Program* key);
 
 protected:
     void queueDisposalInternal(DisposableResource&& res);
@@ -186,8 +196,8 @@ private:
     void createDescriptorAllocators();
 
     bool checkFormatSupport(DXGI_FORMAT format);
+    bool detectDXCAvailability();
 
-private:
     RenderContextImpl* _currentRenderContext{nullptr};
 
     ComPtr<IDXGIFactory4> _dxgiFactory;
@@ -226,7 +236,9 @@ private:
     ComPtr<IDxcCompiler> _dxcCompiler;
     std::vector<LPCWSTR> _dxcArguments;
 
-    std::string _shaderCompileBuffer;
+    bool _dxcAvailable{false};
+
+    tlx::byte_buffer _shaderCompileBuffer;
 
     // lazy init helpers
     void ensureMipmapPipeline(bool isArray);
@@ -236,6 +248,8 @@ private:
     ComPtr<ID3D12PipelineState> _mipmapPSO2D;
     ComPtr<ID3D12PipelineState> _mipmapPSOArray;
     ComPtr<ID3D12DescriptorHeap> _mipmapSrvHeap;
+
+    int _frameIndex{0};
 };
 
 }  // namespace ax::rhi::d3d12

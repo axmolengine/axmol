@@ -11,6 +11,7 @@ on:
       - 'docs/**'
       - '.github/workflows/publish.yml'
       - 'tools/ci/make-pkg.ps1'
+      - '.github/workflows/debian.yml'
 
   workflow_dispatch:
 jobs:
@@ -18,12 +19,12 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - name: Setup Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v6
       with:
-        python-version: '3.11.5'
+        python-version: '3.12.10' # python-3.12 is last release that support axmol traditional binding generator
 
     - name: Genbindings
       run: tools\ci\genbindings.ps1
@@ -31,7 +32,7 @@ jobs:
     - name: Create pull request
       if: ${{ env.BINDING_NO_CHANGES != 'true' }}
       id: cpr
-      uses: peter-evans/create-pull-request@v7
+      uses: peter-evans/create-pull-request@v8
       with:
         token: ${{ secrets.AX_BOT_TOKEN }}
         push-to-fork: axmol-bot/axmol

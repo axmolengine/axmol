@@ -30,10 +30,9 @@ THE SOFTWARE.
 #include "axmol/base/Touch.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/2d/Camera.h"
-#include "axmol/2d/Scene.h"
+#include "axmol/scene/Camera.h"
+#include "axmol/scene/Scene.h"
 #include "axmol/renderer/Renderer.h"
-#include "axmol/rhi/DriverBase.h"
 
 namespace ax
 {
@@ -311,24 +310,20 @@ void RenderView::handleTouchesBegin(int num, intptr_t ids[], float xs[], float y
     if (!_interactive)
         return;
 
-    intptr_t id     = 0;
-    float x         = 0.0f;
-    float y         = 0.0f;
-    int unusedIndex = 0;
     EventTouch touchEvent;
 
     for (int i = 0; i < num; ++i)
     {
-        id = ids[i];
-        x  = xs[i];
-        y  = ys[i];
+        auto id = ids[i];
+        auto x  = xs[i];
+        auto y  = ys[i];
 
         auto iter = g_touchIdReorderMap.find(id);
 
         // it is a new touch
         if (iter == g_touchIdReorderMap.end())
         {
-            unusedIndex = getUnUsedIndex();
+            auto unusedIndex = getUnUsedIndex();
 
             // The touches is more than MAX_TOUCHES ?
             if (unusedIndex == -1)
@@ -368,20 +363,15 @@ void RenderView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys
     if (!_interactive)
         return;
 
-    intptr_t id    = 0;
-    float x        = 0.0f;
-    float y        = 0.0f;
-    float force    = 0.0f;
-    float maxForce = 0.0f;
     EventTouch touchEvent;
 
     for (int i = 0; i < num; ++i)
     {
-        id       = ids[i];
-        x        = xs[i];
-        y        = ys[i];
-        force    = fs ? fs[i] : 0.0f;
-        maxForce = ms ? ms[i] : 0.0f;
+        auto id        = ids[i];
+        float x        = xs[i];
+        float y        = ys[i];
+        float force    = fs ? fs[i] : 0.0f;
+        float maxForce = ms ? ms[i] : 0.0f;
 
         auto iter = g_touchIdReorderMap.find(id);
         if (iter == g_touchIdReorderMap.end())
@@ -423,16 +413,13 @@ void RenderView::handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode,
                                             float xs[],
                                             float ys[])
 {
-    intptr_t id = 0;
-    float x     = 0.0f;
-    float y     = 0.0f;
     EventTouch touchEvent;
 
     for (int i = 0; i < num; ++i)
     {
-        id = ids[i];
-        x  = xs[i];
-        y  = ys[i];
+        auto id = ids[i];
+        auto x  = xs[i];
+        auto y  = ys[i];
 
         auto iter = g_touchIdReorderMap.find(id);
         if (iter == g_touchIdReorderMap.end())
@@ -511,10 +498,10 @@ float RenderView::getScaleY() const
 
 void RenderView::onSurfaceResized()
 {
-    AXLOGD("RenderView::onSurfaceResized");
-
     int screenWidth  = static_cast<uint32_t>(_renderSize.width);
     int screenHeight = static_cast<uint32_t>(_renderSize.height);
+
+    AXLOGD("RenderView::onSurfaceResized: ({}x{})", screenWidth, screenHeight);
 
     auto renderer = Director::getInstance()->getRenderer();
     if (renderer)

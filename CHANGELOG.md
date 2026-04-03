@@ -1,3 +1,92 @@
+# axmol-2.11.3 (Feb 23, 2026)
+
+## Bug fixes
+
+- Fix cmake symlink path in gradle by @halx99
+- Fix Downloader storage issue, new options for wasm by @AlexandreK38 in [#3049](https://github.com/axmolengine/axmol/pull/3049)
+- Fix chipmunk2D debug draw issues, resize designSize, removed DrawInfo by @aismann in [#3050](https://github.com/axmolengine/axmol/pull/3050)
+- Fix omitted AudioEngine AudioProfile parameter in play2d by @theSlyest in [#3065](https://github.com/axmolengine/axmol/pull/3065)
+
+# axmol-2.11.2 (Jan 15, 2026)
+
+## Bug fixes
+
+- Fix a regression introduced by 2.8.0 that AxmolViewController lifecycle methods are not invoked on iOS by @halx99 in [#3026](https://github.com/axmolengine/axmol/pull/3026)
+
+## Improvements
+
+- Resolved a compile warning caused by a macOS OpenAL bundle ID mismatch by @halx99
+
+
+# axmol-2.11.1 (Dec 31, 2025)
+
+## Significant changes relative to 2.11.0
+
+- Disable `streamParsingEnabled` by default (true -> false) @halx99
+- Add debian-12+ build support by @halx99 in [#2956](https://github.com/axmolengine/axmol/pull/2956)
+
+## Bug fixes
+
+- Fix android assets missing when build first time by @halx99 in [#2975](https://github.com/axmolengine/axmol/pull/2975)
+- Fix partial cleanup issue by reusing existing SpriteSheet by @suhailmalik07 in [#2978](https://github.com/axmolengine/axmol/pull/2978)
+- Fix fairygui memory issues by @halx99
+
+## Improvements
+
+- Improve build system: No longer create ninja symlink into cmake bin dir by @halx99 in [#2976](https://github.com/axmolengine/axmol/pull/2976)
+- Refactor `DevSetup.md` for clarity and consistency by @halx99
+- Use `apt-get` insetad `apt` in axmol cmdline tool scripts by @halx99
+- Use binary search to find fitting font size for labels shrinking on overflow by @j-jorge in [#2960](https://github.com/axmolengine/axmol/pull/2960)
+
+## SDK & Tools updates
+
+- Android appcompat: `1.7.0` => `1.7.1`
+- Android guava: `33.3.1` => `33.5.0`
+
+## 3rdparty updates
+
+- clipper2: 1.5.4 => 2.0.1
+
+
+# axmol-2.11.0 Dec.19 2025
+
+## Bug fixes
+
+- Fix audio stop blocking on iOS during active phone calls by @halx99 in [#2950](https://github.com/axmolengine/axmol/pull/2950)
+- Fix WebSocket close code byte order for [#2889](https://github.com/axmolengine/axmol/issues/2889) by @halx99
+- Fix Xcode 14.2 compatibility linking issue by @halx99
+- Fix `build-docs.ps1` failing to build 2.10.x by @halx99
+- Fix `AX_USE_ALSOFT` definition by @halx99 in [#2912](https://github.com/axmolengine/axmol/pull/2912)
+- Fix compile error when `AX_CORE_PROFILE` is defined by @crazyhappygame in [#2910](https://github.com/axmolengine/axmol/pull/2910)
+- Fix luabinding generator not working due to missing `clang-ver.ps1` by @halx99
+- Fix isolated Axmol apps unable to find NuGet program for [#2926](https://github.com/axmolengine/axmol/issues/2926) by @halx99
+- Fix various Particle System bugs by @WUCJ638 in [#2935](https://github.com/axmolengine/axmol/pull/2935)
+
+## Improvements
+
+- Allow overriding `FileUtils::getWritablePath()` on Linux by @j-jorge in [#2906](https://github.com/axmolengine/axmol/pull/2906)
+- CI: Stop generating Axmol BS package by @halx99
+- CI: Relax map-diff CHECK condition in unit-tests to avoid flaky CI failures by @halx99
+- CI: Improve macOS runners and build commands by @halx99
+- Add `Node::getHashOfName()` by @j-jorge in [#2907](https://github.com/axmolengine/axmol/pull/2907)
+- Lock `axslcc` version to `1.9.6` for Axmol 2.x by @halx99
+- Minor performance-related improvements in FontFreeType by @j-jorge
+- Delete pending `AsyncStruct`s when `TextureCache` loading thread is destroyed by @j-jorge in [#2911](https://github.com/axmolengine/axmol/pull/2911)
+
+## SDK & Tools updates
+
+- cmake: 4.2.0 => 4.2.1
+- jdk: 17.0.15 => 17.0.17
+- webview2: 1.0.3595.46 => 1.0.3650.58
+
+## 3rdparty updates
+
+- c-ares: 1.34.5 => 1.34.6
+- jpeg-turbo: 3.1.2 => 3.1.3
+- libpng: 1.6.50 => 1.6.53
+- luajit: 2.1-68354f4 => 2.1-7152e15
+
+
 # axmol-2.10.0 Nov.27 2025
 
 ## Significant changes relative to 2.9.1
@@ -29,14 +118,14 @@
 
 ## SDK & Tools updates
 
-- cmake: 4.1.1 → 4.2.0 (required for VS2026 support)  
-- gradle: 9.2.0 → 9.2.1  
-- webview2: 1.0.3537.50 → 1.0.3595.46  
+- cmake: 4.1.1 => 4.2.0 (required for VS2026 support)
+- gradle: 9.2.0 => 9.2.1
+- webview2: 1.0.3537.50 => 1.0.3595.46
 
 ## 3rdparty updates
 
-- curl: 8.16.0 → 8.17.0  
-- luajit: 2.1-871db2c → 2.1-68354f4  
+- curl: 8.16.0 => 8.17.0
+- luajit: 2.1-871db2c => 2.1-68354f4
 
 ## Community News
 
@@ -441,7 +530,7 @@ across different devices and orientations.
 
 ## 3rdparty updates
 
-- cares: 1.34.4 => 1.34.5
+- c-ares: 1.34.4 => 1.34.5
 - Clipper2: 1.5.2 => 1.5.3
 - doctest: 2.4.11 => 2.4.12
 - fmtlib: 11.1.4 => 11.2.0

@@ -414,8 +414,11 @@ void Inspector::close()
     _target        = nullptr;
 
     auto presenter = ImGuiPresenter::getInstance();
-    presenter->removeRenderLoop("#insp");
-    presenter->clearFonts();
+    if (presenter)
+    {
+        presenter->removeRenderLoop("#insp");
+        presenter->clearFonts();
+    }
 }
 
 bool Inspector::addPropertyHandler(std::string_view handlerId, std::unique_ptr<InspectPropertyHandler> handler)

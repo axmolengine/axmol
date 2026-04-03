@@ -8,7 +8,6 @@
 #include "human.h"
 #include "random.h"
 #include "sample.h"
-#include "settings.h"
 
 #include "box2d/box2d.h"
 #include "box2d/math_functions.h"
@@ -25,13 +24,13 @@ public:
 		e_maxCount = 10
 	};
 
-	explicit DistanceJoint( Settings& settings )
-		: Sample( settings )
+	explicit DistanceJoint( SampleContext* context )
+		: Sample( context )
 	{
-		if ( settings.restart == false )
+		if ( m_context->restart == false )
 		{
-			g_camera.m_center = { 0.0f, 12.0f };
-			g_camera.m_zoom = 25.0f * 0.35f;
+			m_context->camera.center = { 0.0f, 12.0f };
+			m_context->camera.zoom = 25.0f * 0.35f;
 		}
 
 		{
@@ -40,11 +39,13 @@ public:
 		}
 
 		m_count = 0;
-		m_hertz = 2.0f;
+		m_hertz = 5.0f;
 		m_dampingRatio = 0.5f;
 		m_length = 1.0f;
 		m_minLength = m_length;
 		m_maxLength = m_length;
+		m_tensionForce = 2000.0f;
+		m_compressionForce = 100.0f;
 		m_enableSpring = false;
 		m_enableLimit = false;
 
@@ -59,10 +60,9 @@ public:
 
 	void CreateScene( int newCount )
 	{
-		// Must destroy joints before bodies
 		for ( int i = 0; i < m_count; ++i )
 		{
-			b2DestroyJoint( m_jointIds[i] );
+			b2DestroyJoint( m_jointIds[i], false );
 			m_jointIds[i] = b2_nullJointId;
 		}
 
@@ -86,6 +86,8 @@ public:
 		jointDef.hertz = m_hertz;
 		jointDef.dampingRatio = m_dampingRatio;
 		jointDef.length = m_length;
+		jointDef.lowerSpringForce = -m_tensionForce;
+		jointDef.upperSpringForce = m_compressionForce;
 		jointDef.minLength = m_minLength;
 		jointDef.maxLength = m_maxLength;
 		jointDef.enableSpring = m_enableSpring;
@@ -96,17 +98,17 @@ public:
 		{
 			b2BodyDef bodyDef = b2DefaultBodyDef();
 			bodyDef.type = b2_dynamicBody;
-			bodyDef.angularDamping = 0.1f;
+			bodyDef.angularDamping = 1.0f;
 			bodyDef.position = { m_length * ( i + 1.0f ), yOffset };
 			m_bodyIds[i] = b2CreateBody( m_worldId, &bodyDef );
 			b2CreateCircleShape( m_bodyIds[i], &shapeDef, &circle );
 
 			b2Vec2 pivotA = { m_length * i, yOffset };
 			b2Vec2 pivotB = { m_length * ( i + 1.0f ), yOffset };
-			jointDef.bodyIdA = prevBodyId;
-			jointDef.bodyIdB = m_bodyIds[i];
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivotA );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivotB );
+			jointDef.base.bodyIdA = prevBodyId;
+			jointDef.base.bodyIdB = m_bodyIds[i];
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivotA );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivotB );
 			m_jointIds[i] = b2CreateDistanceJoint( m_worldId, &jointDef );
 
 			prevBodyId = m_bodyIds[i];
@@ -115,12 +117,13 @@ public:
 
 	void UpdateGui() override
 	{
-		float height = 240.0f;
-		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
-		ImGui::SetNextWindowSize( ImVec2( 180.0f, height ) );
+		float fontSize = ImGui::GetFontSize();
+		float height = 20.0f * fontSize;
+		ImGui::SetNextWindowPos( { 0.5f * fontSize, m_camera->height - height - 2.0f * fontSize }, ImGuiCond_Once );
+		ImGui::SetNextWindowSize( { 18.0f * fontSize, height } );
 
 		ImGui::Begin( "Distance Joint", nullptr, ImGuiWindowFlags_NoResize );
-		ImGui::PushItemWidth( 100.0f );
+		ImGui::PushItemWidth( 10.0f * fontSize );
 
 		if ( ImGui::SliderFloat( "Length", &m_length, 0.1f, 4.0f, "%3.1f" ) )
 		{
@@ -142,6 +145,24 @@ public:
 
 		if ( m_enableSpring )
 		{
+			if ( ImGui::SliderFloat( "Tension", &m_tensionForce, 0.0f, 4000.0f ) )
+			{
+				for ( int i = 0; i < m_count; ++i )
+				{
+					b2DistanceJoint_SetSpringForceRange( m_jointIds[i], -m_tensionForce, m_compressionForce );
+					b2Joint_WakeBodies( m_jointIds[i] );
+				}
+			}
+
+			if ( ImGui::SliderFloat( "Compression", &m_compressionForce, 0.0f, 200.0f ) )
+			{
+				for ( int i = 0; i < m_count; ++i )
+				{
+					b2DistanceJoint_SetSpringForceRange( m_jointIds[i], -m_tensionForce, m_compressionForce );
+					b2Joint_WakeBodies( m_jointIds[i] );
+				}
+			}
+
 			if ( ImGui::SliderFloat( "Hertz", &m_hertz, 0.0f, 15.0f, "%3.1f" ) )
 			{
 				for ( int i = 0; i < m_count; ++i )
@@ -201,9 +222,9 @@ public:
 		ImGui::End();
 	}
 
-	static Sample* Create( Settings& settings )
+	static Sample* Create( SampleContext* context )
 	{
-		return new DistanceJoint( settings );
+		return new DistanceJoint( context );
 	}
 
 	b2BodyId m_groundId;
@@ -213,6 +234,8 @@ public:
 	float m_hertz;
 	float m_dampingRatio;
 	float m_length;
+	float m_tensionForce;
+	float m_compressionForce;
 	float m_minLength;
 	float m_maxLength;
 	bool m_enableSpring;
@@ -224,18 +247,16 @@ static int sampleDistanceJoint = RegisterSample( "Joints", "Distance Joint", Dis
 /// This test shows how to use a motor joint. A motor joint
 /// can be used to animate a dynamic body. With finite motor forces
 /// the body can be blocked by collision with other bodies.
-/// By setting the correction factor to zero, the motor joint acts
-/// like top-down dry friction.
 class MotorJoint : public Sample
 {
 public:
-	explicit MotorJoint( Settings& settings )
-		: Sample( settings )
+	explicit MotorJoint( SampleContext* context )
+		: Sample( context )
 	{
-		if ( settings.restart == false )
+		if ( m_context->restart == false )
 		{
-			g_camera.m_center = { 0.0f, 7.0f };
-			g_camera.m_zoom = 25.0f * 0.4f;
+			m_context->camera.center = { 0.0f, 7.0f };
+			m_context->camera.zoom = 25.0f * 0.4f;
 		}
 
 		b2BodyId groundId;
@@ -247,61 +268,94 @@ public:
 			b2CreateSegmentShape( groundId, &shapeDef, &segment );
 		}
 
+		m_transform = { .p = { 0.0f, 8.0f }, .q = b2Rot_identity };
+
+		// Define a target body
+		{
+			b2BodyDef bodyDef = b2DefaultBodyDef();
+			bodyDef.type = b2_kinematicBody;
+			bodyDef.position = m_transform.p;
+			m_targetId = b2CreateBody( m_worldId, &bodyDef );
+		}
+
 		// Define motorized body
 		{
 			b2BodyDef bodyDef = b2DefaultBodyDef();
 			bodyDef.type = b2_dynamicBody;
-			bodyDef.position = { 0.0f, 8.0f };
+			bodyDef.position = m_transform.p;
 			m_bodyId = b2CreateBody( m_worldId, &bodyDef );
 
 			b2Polygon box = b2MakeBox( 2.0f, 0.5f );
 			b2ShapeDef shapeDef = b2DefaultShapeDef();
-			shapeDef.density = 1.0f;
 			b2CreatePolygonShape( m_bodyId, &shapeDef, &box );
 
-			m_maxForce = 500.0f;
+			m_maxForce = 5000.0f;
 			m_maxTorque = 500.0f;
-			m_correctionFactor = 0.3f;
 
 			b2MotorJointDef jointDef = b2DefaultMotorJointDef();
-			jointDef.bodyIdA = groundId;
-			jointDef.bodyIdB = m_bodyId;
-			jointDef.maxForce = m_maxForce;
-			jointDef.maxTorque = m_maxTorque;
-			jointDef.correctionFactor = m_correctionFactor;
+			jointDef.base.bodyIdA = m_targetId;
+			jointDef.base.bodyIdB = m_bodyId;
+			jointDef.linearHertz = 4.0f;
+			jointDef.linearDampingRatio = 0.7f;
+			jointDef.angularHertz = 4.0f;
+			jointDef.angularDampingRatio = 0.7f;
+			jointDef.maxSpringForce = m_maxForce;
+			jointDef.maxSpringTorque = m_maxTorque;
 
 			m_jointId = b2CreateMotorJoint( m_worldId, &jointDef );
 		}
 
-		m_go = true;
+		// Define spring body
+		{
+			b2BodyDef bodyDef = b2DefaultBodyDef();
+			bodyDef.type = b2_dynamicBody;
+			bodyDef.position = { -2.0f, 2.0f };
+			b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
+
+			b2Polygon box = b2MakeSquare( 0.5f );
+			b2ShapeDef shapeDef = b2DefaultShapeDef();
+			b2CreatePolygonShape( bodyId, &shapeDef, &box );
+
+			b2MotorJointDef jointDef = b2DefaultMotorJointDef();
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = bodyId;
+			jointDef.base.localFrameA.p = b2Add( bodyDef.position, { 0.25f, 0.25f } );
+			jointDef.base.localFrameB.p = { 0.25f, 0.25f };
+			jointDef.linearHertz = 7.5f;
+			jointDef.linearDampingRatio = 0.7f;
+			jointDef.angularHertz = 7.5f;
+			jointDef.angularDampingRatio = 0.7f;
+			jointDef.maxSpringForce = 500.0f;
+			jointDef.maxSpringTorque = 10.0f;
+
+			b2CreateMotorJoint( m_worldId, &jointDef );
+		}
+
+		m_speed = 1.0f;
 		m_time = 0.0f;
 	}
 
 	void UpdateGui() override
 	{
+		float fontSize = ImGui::GetFontSize();
 		float height = 180.0f;
-		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
+		ImGui::SetNextWindowPos( ImVec2( 0.5f * fontSize, m_camera->height - height - 2.0f * fontSize ), ImGuiCond_Once );
 		ImGui::SetNextWindowSize( ImVec2( 240.0f, height ) );
 
 		ImGui::Begin( "Motor Joint", nullptr, ImGuiWindowFlags_NoResize );
 
-		if ( ImGui::Checkbox( "Go", &m_go ) )
+		if ( ImGui::SliderFloat( "Speed", &m_speed, -5.0f, 5.0f, "%.0f" ) )
 		{
 		}
 
-		if ( ImGui::SliderFloat( "Max Force", &m_maxForce, 0.0f, 1000.0f, "%.0f" ) )
+		if ( ImGui::SliderFloat( "Max Force", &m_maxForce, 0.0f, 10000.0f, "%.0f" ) )
 		{
-			b2MotorJoint_SetMaxForce( m_jointId, m_maxForce );
+			b2MotorJoint_SetMaxSpringForce( m_jointId, m_maxForce );
 		}
 
-		if ( ImGui::SliderFloat( "Max Torque", &m_maxTorque, 0.0f, 1000.0f, "%.0f" ) )
+		if ( ImGui::SliderFloat( "Max Torque", &m_maxTorque, 0.0f, 10000.0f, "%.0f" ) )
 		{
-			b2MotorJoint_SetMaxTorque( m_jointId, m_maxTorque );
-		}
-
-		if ( ImGui::SliderFloat( "Correction", &m_correctionFactor, 0.0f, 1.0f, "%.1f" ) )
-		{
-			b2MotorJoint_SetCorrectionFactor( m_jointId, m_correctionFactor );
+			b2MotorJoint_SetMaxSpringTorque( m_jointId, m_maxTorque );
 		}
 
 		if ( ImGui::Button( "Apply Impulse" ) )
@@ -312,62 +366,190 @@ public:
 		ImGui::End();
 	}
 
-	void Step( Settings& settings ) override
+	void Step() override
 	{
-		if ( m_go && settings.hertz > 0.0f )
+		float timeStep = m_context->hertz > 0.0f ? 1.0f / m_context->hertz : 0.0f;
+
+		if ( m_context->pause )
 		{
-			m_time += 1.0f / settings.hertz;
+			if ( m_context->singleStep == false )
+			{
+				timeStep = 0.0f;
+			}
 		}
 
-		b2Vec2 linearOffset;
-		linearOffset.x = 6.0f * sinf( 2.0f * m_time );
-		linearOffset.y = 8.0f + 4.0f * sinf( 1.0f * m_time );
+		if ( timeStep > 0.0f )
+		{
+			m_time += m_speed * timeStep;
 
-		float angularOffset = B2_PI * sinf( -0.5f * m_time );
+			b2Vec2 linearOffset;
+			linearOffset.x = 6.0f * sinf( 2.0f * m_time );
+			linearOffset.y = 8.0f + 4.0f * sinf( 1.0f * m_time );
 
-		b2MotorJoint_SetLinearOffset( m_jointId, linearOffset );
-		b2MotorJoint_SetAngularOffset( m_jointId, angularOffset );
+			float angularOffset = 2.0f * m_time;
+			m_transform = { linearOffset, b2MakeRot( angularOffset ) };
 
-		b2Transform transform = { linearOffset, b2MakeRot( angularOffset ) };
-		g_draw.DrawTransform( transform );
+			bool wake = true;
+			b2Body_SetTargetTransform( m_targetId, m_transform, timeStep, wake );
+		}
 
-		Sample::Step( settings );
+		DrawTransform( m_draw, m_transform, 1.0f );
+
+		Sample::Step();
 
 		b2Vec2 force = b2Joint_GetConstraintForce( m_jointId );
 		float torque = b2Joint_GetConstraintTorque( m_jointId );
 
-		g_draw.DrawString( 5, m_textLine, "force = {%3.f, %3.f}, torque = %3.f", force.x, force.y, torque );
-		m_textLine += 15;
+		DrawTextLine( "force = {%3.f, %3.f}, torque = %3.f", force.x, force.y, torque );
 	}
 
-	static Sample* Create( Settings& settings )
+	static Sample* Create( SampleContext* context )
 	{
-		return new MotorJoint( settings );
+		return new MotorJoint( context );
 	}
 
+	b2BodyId m_targetId;
 	b2BodyId m_bodyId;
 	b2JointId m_jointId;
+	b2Transform m_transform;
 	float m_time;
+	float m_speed;
 	float m_maxForce;
 	float m_maxTorque;
-	float m_correctionFactor;
-	bool m_go;
 };
 
 static int sampleMotorJoint = RegisterSample( "Joints", "Motor Joint", MotorJoint::Create );
+
+class TopDownFriction : public Sample
+{
+public:
+	explicit TopDownFriction( SampleContext* context )
+		: Sample( context )
+	{
+		if ( m_context->restart == false )
+		{
+			m_context->camera.center = { 0.0f, 7.0f };
+			m_context->camera.zoom = 25.0f * 0.4f;
+		}
+
+		b2BodyId groundId;
+		{
+			b2BodyDef bodyDef = b2DefaultBodyDef();
+			groundId = b2CreateBody( m_worldId, &bodyDef );
+			b2ShapeDef shapeDef = b2DefaultShapeDef();
+			b2Segment segment = { { -10.0f, 0.0f }, { 10.0f, 0.0f } };
+			b2CreateSegmentShape( groundId, &shapeDef, &segment );
+
+			segment = { { -10.0f, 0.0f }, { -10.0f, 20.0f } };
+			b2CreateSegmentShape( groundId, &shapeDef, &segment );
+
+			segment = { { 10.0f, 0.0f }, { 10.0f, 20.0f } };
+			b2CreateSegmentShape( groundId, &shapeDef, &segment );
+
+			segment = { { -10.0f, 20.0f }, { 10.0f, 20.0f } };
+			b2CreateSegmentShape( groundId, &shapeDef, &segment );
+		}
+
+		b2MotorJointDef jointDef = b2DefaultMotorJointDef();
+		jointDef.base.bodyIdA = groundId;
+		jointDef.base.collideConnected = true;
+		jointDef.maxVelocityForce = 10.0f;
+		jointDef.maxVelocityTorque = 10.0f;
+
+		b2Capsule capsule = { { -0.25f, 0.0f }, { 0.25f, 0.0f }, 0.25f };
+		b2Circle circle = { { 0.0f, 0.0f }, 0.35f };
+		b2Polygon square = b2MakeSquare( 0.35f );
+
+		b2BodyDef bodyDef = b2DefaultBodyDef();
+		bodyDef.type = b2_dynamicBody;
+		bodyDef.gravityScale = 0.0f;
+		b2ShapeDef shapeDef = b2DefaultShapeDef();
+		shapeDef.material.restitution = 0.8f;
+
+		int n = 10;
+		float x = -5.0f, y = 15.0f;
+		for ( int i = 0; i < n; ++i )
+		{
+			for ( int j = 0; j < n; ++j )
+			{
+				bodyDef.position = { x, y };
+				b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
+
+				int remainder = ( n * i + j ) % 4;
+				if ( remainder == 0 )
+				{
+					b2CreateCapsuleShape( bodyId, &shapeDef, &capsule );
+				}
+				else if ( remainder == 1 )
+				{
+					b2CreateCircleShape( bodyId, &shapeDef, &circle );
+				}
+				else if ( remainder == 2 )
+				{
+					b2CreatePolygonShape( bodyId, &shapeDef, &square );
+				}
+				else
+				{
+					b2Polygon poly = RandomPolygon( 0.75f );
+					poly.radius = 0.1f;
+					b2CreatePolygonShape( bodyId, &shapeDef, &poly );
+				}
+
+				jointDef.base.bodyIdB = bodyId;
+				b2CreateMotorJoint( m_worldId, &jointDef );
+
+				x += 1.0f;
+			}
+
+			x = -5.0f;
+			y -= 1.0f;
+		}
+	}
+
+	void UpdateGui() override
+	{
+		float fontSize = ImGui::GetFontSize();
+		float height = 180.0f;
+		ImGui::SetNextWindowPos( ImVec2( 0.5f * fontSize, m_camera->height - height - 2.0f * fontSize ), ImGuiCond_Once );
+		ImGui::SetNextWindowSize( ImVec2( 240.0f, height ) );
+
+		ImGui::Begin( "Top Down Friction", nullptr, ImGuiWindowFlags_NoResize );
+
+		if ( ImGui::Button( "Explode" ) )
+		{
+			b2ExplosionDef def = b2DefaultExplosionDef();
+			def.position = { 0.0f, 10.0f };
+			def.radius = 10.0f;
+			def.falloff = 5.0f;
+			def.impulsePerLength = 10.0f;
+			b2World_Explode( m_worldId, &def );
+
+			DrawCircle( m_draw, def.position, 10.0f, b2_colorWhite );
+		}
+
+		ImGui::End();
+	}
+
+	static Sample* Create( SampleContext* context )
+	{
+		return new TopDownFriction( context );
+	}
+};
+
+static int sampleTopDownFriction = RegisterSample( "Joints", "Top Down Friction", TopDownFriction::Create );
 
 // This sample shows how to use a filter joint to prevent collision between two bodies.
 // This is more specific than shape filters. It also shows that sleeping is coupled by the filter joint.
 class FilterJoint : public Sample
 {
 public:
-	explicit FilterJoint( Settings& settings )
-		: Sample( settings )
+	explicit FilterJoint( SampleContext* context )
+		: Sample( context )
 	{
-		if ( settings.restart == false )
+		if ( m_context->restart == false )
 		{
-			g_camera.m_center = { 0.0f, 7.0f };
-			g_camera.m_zoom = 25.0f * 0.4f;
+			m_context->camera.center = { 0.0f, 7.0f };
+			m_context->camera.zoom = 25.0f * 0.4f;
 		}
 
 		{
@@ -394,16 +576,16 @@ public:
 			b2CreatePolygonShape( bodyId2, &shapeDef, &box );
 
 			b2FilterJointDef jointDef = b2DefaultFilterJointDef();
-			jointDef.bodyIdA = bodyId1;
-			jointDef.bodyIdB = bodyId2;
+			jointDef.base.bodyIdA = bodyId1;
+			jointDef.base.bodyIdB = bodyId2;
 
 			b2CreateFilterJoint( m_worldId, &jointDef );
 		}
 	}
 
-	static Sample* Create( Settings& settings )
+	static Sample* Create( SampleContext* context )
 	{
-		return new FilterJoint( settings );
+		return new FilterJoint( context );
 	}
 };
 
@@ -412,13 +594,13 @@ static int sampleFilterJoint = RegisterSample( "Joints", "Filter Joint", FilterJ
 class RevoluteJoint : public Sample
 {
 public:
-	explicit RevoluteJoint( Settings& settings )
-		: Sample( settings )
+	explicit RevoluteJoint( SampleContext* context )
+		: Sample( context )
 	{
-		if ( settings.restart == false )
+		if ( m_context->restart == false )
 		{
-			g_camera.m_center = { 0.0f, 15.5f };
-			g_camera.m_zoom = 25.0f * 0.7f;
+			m_context->camera.center = { 0.0f, 15.5f };
+			m_context->camera.zoom = 25.0f * 0.7f;
 		}
 
 		b2BodyId groundId = b2_nullBodyId;
@@ -434,10 +616,11 @@ public:
 		}
 
 		m_enableSpring = false;
-		m_enableLimit = true;
+		m_enableLimit = false;
 		m_enableMotor = false;
-		m_hertz = 1.0f;
+		m_hertz = 2.0f;
 		m_dampingRatio = 0.5f;
+		m_targetDegrees = 45.0f;
 		m_motorSpeed = 1.0f;
 		m_motorTorque = 1000.0f;
 
@@ -455,22 +638,25 @@ public:
 
 			b2Vec2 pivot = { -10.0f, 20.5f };
 			b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
-			jointDef.bodyIdA = groundId;
-			jointDef.bodyIdB = bodyId;
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = bodyId;
+			jointDef.base.localFrameA.q = b2MakeRot( 0.5f * B2_PI );
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
+			jointDef.targetAngle = B2_PI * m_targetDegrees / 180.0f;
 			jointDef.enableSpring = m_enableSpring;
 			jointDef.hertz = m_hertz;
 			jointDef.dampingRatio = m_dampingRatio;
 			jointDef.motorSpeed = m_motorSpeed;
 			jointDef.maxMotorTorque = m_motorTorque;
 			jointDef.enableMotor = m_enableMotor;
-			jointDef.referenceAngle = 0.5f * B2_PI;
 			jointDef.lowerAngle = -0.5f * B2_PI;
-			jointDef.upperAngle = 0.75f * B2_PI;
+			jointDef.upperAngle = 0.05f * B2_PI;
 			jointDef.enableLimit = m_enableLimit;
 
 			m_jointId1 = b2CreateRevoluteJoint( m_worldId, &jointDef );
+
+			b2Joint_SetConstraintTuning( m_jointId1, 60.0f, 20.0f );
 		}
 
 		{
@@ -501,12 +687,12 @@ public:
 
 			b2Vec2 pivot = { 19.0f, 10.0f };
 			b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
-			jointDef.bodyIdA = groundId;
-			jointDef.bodyIdB = body;
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = body;
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
 			jointDef.lowerAngle = -0.25f * B2_PI;
-			jointDef.upperAngle = 0.5f * B2_PI;
+			jointDef.upperAngle = 0.0f * B2_PI;
 			jointDef.enableLimit = true;
 			jointDef.enableMotor = true;
 			jointDef.motorSpeed = 0.0f;
@@ -518,9 +704,10 @@ public:
 
 	void UpdateGui() override
 	{
-		float height = 220.0f;
-		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
-		ImGui::SetNextWindowSize( ImVec2( 240.0f, height ) );
+		float fontSize = ImGui::GetFontSize();
+		float height = 8.0f * fontSize;
+		ImGui::SetNextWindowPos( { 0.5f * fontSize, m_camera->height - height - 2.0f * fontSize }, ImGuiCond_Once );
+		ImGui::SetNextWindowSize( { 8.0f * fontSize, height } );
 
 		ImGui::Begin( "Revolute Joint", nullptr, ImGuiWindowFlags_NoResize );
 
@@ -559,7 +746,7 @@ public:
 
 		if ( m_enableSpring )
 		{
-			if ( ImGui::SliderFloat( "Hertz", &m_hertz, 0.0f, 10.0f, "%.1f" ) )
+			if ( ImGui::SliderFloat( "Hertz", &m_hertz, 0.0f, 30.0f, "%.1f" ) )
 			{
 				b2RevoluteJoint_SetSpringHertz( m_jointId1, m_hertz );
 				b2Joint_WakeBodies( m_jointId1 );
@@ -570,31 +757,34 @@ public:
 				b2RevoluteJoint_SetSpringDampingRatio( m_jointId1, m_dampingRatio );
 				b2Joint_WakeBodies( m_jointId1 );
 			}
+
+			if ( ImGui::SliderFloat( "Degrees", &m_targetDegrees, -180.0f, 180.0f, "%.0f" ) )
+			{
+				b2RevoluteJoint_SetTargetAngle( m_jointId1, B2_PI * m_targetDegrees / 180.0f );
+				b2Joint_WakeBodies( m_jointId1 );
+			}
 		}
 
 		ImGui::End();
 	}
 
-	void Step( Settings& settings ) override
+	void Step() override
 	{
-		Sample::Step( settings );
+		Sample::Step();
 
 		float angle1 = b2RevoluteJoint_GetAngle( m_jointId1 );
-		g_draw.DrawString( 5, m_textLine, "Angle (Deg) 1 = %2.1f", angle1 );
-		m_textLine += m_textIncrement;
+		DrawTextLine( "Angle (Deg) 1 = %2.1f", angle1 );
 
 		float torque1 = b2RevoluteJoint_GetMotorTorque( m_jointId1 );
-		g_draw.DrawString( 5, m_textLine, "Motor Torque 1 = %4.1f", torque1 );
-		m_textLine += m_textIncrement;
+		DrawTextLine( "Motor Torque 1 = %4.1f", torque1 );
 
 		float torque2 = b2RevoluteJoint_GetMotorTorque( m_jointId2 );
-		g_draw.DrawString( 5, m_textLine, "Motor Torque 2 = %4.1f", torque2 );
-		m_textLine += m_textIncrement;
+		DrawTextLine( "Motor Torque 2 = %4.1f", torque2 );
 	}
 
-	static Sample* Create( Settings& settings )
+	static Sample* Create( SampleContext* context )
 	{
-		return new RevoluteJoint( settings );
+		return new RevoluteJoint( context );
 	}
 
 	b2BodyId m_ball;
@@ -604,6 +794,7 @@ public:
 	float m_motorTorque;
 	float m_hertz;
 	float m_dampingRatio;
+	float m_targetDegrees;
 	bool m_enableSpring;
 	bool m_enableMotor;
 	bool m_enableLimit;
@@ -614,13 +805,13 @@ static int sampleRevolute = RegisterSample( "Joints", "Revolute", RevoluteJoint:
 class PrismaticJoint : public Sample
 {
 public:
-	explicit PrismaticJoint( Settings& settings )
-		: Sample( settings )
+	explicit PrismaticJoint( SampleContext* context )
+		: Sample( context )
 	{
-		if ( settings.restart == false )
+		if ( m_context->restart == false )
 		{
-			g_camera.m_center = { 0.0f, 8.0f };
-			g_camera.m_zoom = 25.0f * 0.5f;
+			m_context->camera.center = { 0.0f, 8.0f };
+			m_context->camera.zoom = 25.0f * 0.5f;
 		}
 
 		b2BodyId groundId;
@@ -636,6 +827,7 @@ public:
 		m_motorForce = 25.0f;
 		m_hertz = 1.0f;
 		m_dampingRatio = 0.5f;
+		m_translation = 0.0f;
 
 		{
 			b2BodyDef bodyDef = b2DefaultBodyDef();
@@ -651,11 +843,13 @@ public:
 			// b2Vec2 axis = b2Normalize({1.0f, 0.0f});
 			b2Vec2 axis = b2Normalize( { 1.0f, 1.0f } );
 			b2PrismaticJointDef jointDef = b2DefaultPrismaticJointDef();
-			jointDef.bodyIdA = groundId;
-			jointDef.bodyIdB = bodyId;
-			jointDef.localAxisA = b2Body_GetLocalVector( jointDef.bodyIdA, axis );
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = bodyId;
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameA.q = b2MakeRotFromUnitVector( axis );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
+			jointDef.base.localFrameB.q = b2MakeRotFromUnitVector( axis );
+			jointDef.base.drawScale = 2.0f;
 			jointDef.motorSpeed = m_motorSpeed;
 			jointDef.maxMotorForce = m_motorForce;
 			jointDef.enableMotor = m_enableMotor;
@@ -672,8 +866,9 @@ public:
 
 	void UpdateGui() override
 	{
-		float height = 220.0f;
-		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
+		float fontSize = ImGui::GetFontSize();
+		float height = 240.0f;
+		ImGui::SetNextWindowPos( ImVec2( 0.5f * fontSize, m_camera->height - height - 2.0f * fontSize ), ImGuiCond_Once );
 		ImGui::SetNextWindowSize( ImVec2( 240.0f, height ) );
 
 		ImGui::Begin( "Prismatic Joint", nullptr, ImGuiWindowFlags_NoResize );
@@ -724,31 +919,34 @@ public:
 				b2PrismaticJoint_SetSpringDampingRatio( m_jointId, m_dampingRatio );
 				b2Joint_WakeBodies( m_jointId );
 			}
+
+			if ( ImGui::SliderFloat( "Translation", &m_translation, -15.0f, 15.0f, "%.1f" ) )
+			{
+				b2PrismaticJoint_SetTargetTranslation( m_jointId, m_translation );
+				b2Joint_WakeBodies( m_jointId );
+			}
 		}
 
 		ImGui::End();
 	}
 
-	void Step( Settings& settings ) override
+	void Step() override
 	{
-		Sample::Step( settings );
+		Sample::Step();
 
 		float force = b2PrismaticJoint_GetMotorForce( m_jointId );
-		g_draw.DrawString( 5, m_textLine, "Motor Force = %4.1f", force );
-		m_textLine += m_textIncrement;
+		DrawTextLine( "Motor Force = %4.1f", force );
 
 		float translation = b2PrismaticJoint_GetTranslation( m_jointId );
-		g_draw.DrawString( 5, m_textLine, "Translation = %4.1f", translation );
-		m_textLine += m_textIncrement;
+		DrawTextLine( "Translation = %4.1f", translation );
 
 		float speed = b2PrismaticJoint_GetSpeed( m_jointId );
-		g_draw.DrawString( 5, m_textLine, "Speed = %4.8f", speed );
-		m_textLine += m_textIncrement;
+		DrawTextLine( "Speed = %4.8f", speed );
 	}
 
-	static Sample* Create( Settings& settings )
+	static Sample* Create( SampleContext* context )
 	{
-		return new PrismaticJoint( settings );
+		return new PrismaticJoint( context );
 	}
 
 	b2JointId m_jointId;
@@ -756,6 +954,7 @@ public:
 	float m_motorForce;
 	float m_hertz;
 	float m_dampingRatio;
+	float m_translation;
 	bool m_enableSpring;
 	bool m_enableMotor;
 	bool m_enableLimit;
@@ -766,13 +965,13 @@ static int samplePrismatic = RegisterSample( "Joints", "Prismatic", PrismaticJoi
 class WheelJoint : public Sample
 {
 public:
-	explicit WheelJoint( Settings& settings )
-		: Sample( settings )
+	explicit WheelJoint( SampleContext* context )
+		: Sample( context )
 	{
-		if ( settings.restart == false )
+		if ( m_context->restart == false )
 		{
-			g_camera.m_center = { 0.0f, 10.0f };
-			g_camera.m_zoom = 25.0f * 0.15f;
+			m_context->camera.center = { 0.0f, 10.0f };
+			m_context->camera.zoom = 25.0f * 0.15f;
 		}
 
 		b2BodyId groundId;
@@ -790,42 +989,41 @@ public:
 		m_hertz = 1.0f;
 		m_dampingRatio = 0.7f;
 
-		{
-			b2BodyDef bodyDef = b2DefaultBodyDef();
-			bodyDef.position = { 0.0f, 10.25f };
-			bodyDef.type = b2_dynamicBody;
-			b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
+		b2BodyDef bodyDef = b2DefaultBodyDef();
+		bodyDef.position = { 0.0f, 10.25f };
+		bodyDef.type = b2_dynamicBody;
+		b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
 
-			b2ShapeDef shapeDef = b2DefaultShapeDef();
-			b2Capsule capsule = { { 0.0f, -0.5f }, { 0.0f, 0.5f }, 0.5f };
-			b2CreateCapsuleShape( bodyId, &shapeDef, &capsule );
+		b2ShapeDef shapeDef = b2DefaultShapeDef();
+		b2Capsule capsule = { { 0.0f, -0.5f }, { 0.0f, 0.5f }, 0.5f };
+		b2CreateCapsuleShape( bodyId, &shapeDef, &capsule );
 
-			b2Vec2 pivot = { 0.0f, 10.0f };
-			b2Vec2 axis = b2Normalize( { 1.0f, 1.0f } );
-			b2WheelJointDef jointDef = b2DefaultWheelJointDef();
-			jointDef.bodyIdA = groundId;
-			jointDef.bodyIdB = bodyId;
-			jointDef.localAxisA = b2Body_GetLocalVector( jointDef.bodyIdA, axis );
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
-			jointDef.motorSpeed = m_motorSpeed;
-			jointDef.maxMotorTorque = m_motorTorque;
-			jointDef.enableMotor = m_enableMotor;
-			jointDef.lowerTranslation = -3.0f;
-			jointDef.upperTranslation = 3.0f;
-			jointDef.enableLimit = m_enableLimit;
-			jointDef.hertz = m_hertz;
-			jointDef.dampingRatio = m_dampingRatio;
+		b2Vec2 pivot = { 0.0f, 10.0f };
+		b2Vec2 axis = b2Normalize( { 1.0f, 1.0f } );
+		b2WheelJointDef jointDef = b2DefaultWheelJointDef();
+		jointDef.base.bodyIdA = groundId;
+		jointDef.base.bodyIdB = bodyId;
+		jointDef.base.localFrameA.q = b2MakeRotFromUnitVector( axis );
+		jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+		jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
+		jointDef.motorSpeed = m_motorSpeed;
+		jointDef.maxMotorTorque = m_motorTorque;
+		jointDef.enableMotor = m_enableMotor;
+		jointDef.lowerTranslation = -3.0f;
+		jointDef.upperTranslation = 3.0f;
+		jointDef.enableLimit = m_enableLimit;
+		jointDef.hertz = m_hertz;
+		jointDef.dampingRatio = m_dampingRatio;
 
-			m_jointId = b2CreateWheelJoint( m_worldId, &jointDef );
-		}
+		m_jointId = b2CreateWheelJoint( m_worldId, &jointDef );
 	}
 
 	void UpdateGui() override
 	{
-		float height = 220.0f;
-		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
-		ImGui::SetNextWindowSize( ImVec2( 240.0f, height ) );
+		float fontSize = ImGui::GetFontSize();
+		float height = 15.0f * fontSize;
+		ImGui::SetNextWindowPos( ImVec2( 0.5f * fontSize, m_camera->height - height - 2.0f * fontSize ), ImGuiCond_Once );
+		ImGui::SetNextWindowSize( ImVec2( 18.0f * fontSize, height ) );
 
 		ImGui::Begin( "Wheel Joint", nullptr, ImGuiWindowFlags_NoResize );
 
@@ -873,18 +1071,17 @@ public:
 		ImGui::End();
 	}
 
-	void Step( Settings& settings ) override
+	void Step() override
 	{
-		Sample::Step( settings );
+		Sample::Step();
 
 		float torque = b2WheelJoint_GetMotorTorque( m_jointId );
-		g_draw.DrawString( 5, m_textLine, "Motor Torque = %4.1f", torque );
-		m_textLine += m_textIncrement;
+		DrawTextLine( "Motor Torque = %4.1f", torque );
 	}
 
-	static Sample* Create( Settings& settings )
+	static Sample* Create( SampleContext* context )
 	{
-		return new WheelJoint( settings );
+		return new WheelJoint( context );
 	}
 
 	b2JointId m_jointId;
@@ -903,12 +1100,12 @@ static int sampleWheel = RegisterSample( "Joints", "Wheel", WheelJoint::Create )
 class Bridge : public Sample
 {
 public:
-	explicit Bridge( Settings& settings )
-		: Sample( settings )
+	explicit Bridge( SampleContext* context )
+		: Sample( context )
 	{
-		if ( settings.restart == false )
+		if ( m_context->restart == false )
 		{
-			g_camera.m_zoom = 25.0f * 2.5f;
+			m_context->camera.zoom = 25.0f * 2.5f;
 		}
 
 		b2BodyId groundId = b2_nullBodyId;
@@ -918,15 +1115,25 @@ public:
 		}
 
 		{
+			m_constraintHertz = 60.0f;
+			m_constraintDampingRatio = 0.0f;
+			m_springHertz = 2.0f;
+			m_springDampingRatio = 0.7f;
+			m_frictionTorque = 200.0f;
+
 			b2Polygon box = b2MakeBox( 0.5f, 0.125f );
 
 			b2ShapeDef shapeDef = b2DefaultShapeDef();
 			shapeDef.density = 20.0f;
 
 			b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
+			jointDef.enableMotor = true;
+			jointDef.maxMotorTorque = m_frictionTorque;
+			jointDef.enableSpring = true;
+			jointDef.hertz = m_springHertz;
+			jointDef.dampingRatio = m_springDampingRatio;
+
 			int jointIndex = 0;
-			m_frictionTorque = 200.0f;
-			m_gravityScale = 1.0f;
 
 			float xbase = -80.0f;
 
@@ -938,28 +1145,26 @@ public:
 				bodyDef.position = { xbase + 0.5f + 1.0f * i, 20.0f };
 				bodyDef.linearDamping = 0.1f;
 				bodyDef.angularDamping = 0.1f;
+
 				m_bodyIds[i] = b2CreateBody( m_worldId, &bodyDef );
+
 				b2CreatePolygonShape( m_bodyIds[i], &shapeDef, &box );
 
 				b2Vec2 pivot = { xbase + 1.0f * i, 20.0f };
-				jointDef.bodyIdA = prevBodyId;
-				jointDef.bodyIdB = m_bodyIds[i];
-				jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-				jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
-				jointDef.enableMotor = true;
-				jointDef.maxMotorTorque = m_frictionTorque;
+				jointDef.base.bodyIdA = prevBodyId;
+				jointDef.base.bodyIdB = m_bodyIds[i];
+				jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+				jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
 				m_jointIds[jointIndex++] = b2CreateRevoluteJoint( m_worldId, &jointDef );
 
 				prevBodyId = m_bodyIds[i];
 			}
 
 			b2Vec2 pivot = { xbase + 1.0f * m_count, 20.0f };
-			jointDef.bodyIdA = prevBodyId;
-			jointDef.bodyIdB = groundId;
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
-			jointDef.enableMotor = true;
-			jointDef.maxMotorTorque = m_frictionTorque;
+			jointDef.base.bodyIdA = prevBodyId;
+			jointDef.base.bodyIdB = groundId;
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
 			m_jointIds[jointIndex++] = b2CreateRevoluteJoint( m_worldId, &jointDef );
 
 			assert( jointIndex == m_count + 1 );
@@ -999,15 +1204,16 @@ public:
 
 	void UpdateGui() override
 	{
-		float height = 80.0f;
-		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
-		ImGui::SetNextWindowSize( ImVec2( 240.0f, height ) );
+		float fontSize = ImGui::GetFontSize();
+		float height = 180.0f;
+		ImGui::SetNextWindowPos( ImVec2( 0.5f * fontSize, m_camera->height - height - 2.0f * fontSize ), ImGuiCond_Once );
+		ImGui::SetNextWindowSize( ImVec2( 320.0f, height ) );
 
 		ImGui::Begin( "Bridge", nullptr, ImGuiWindowFlags_NoResize );
 
-		// Slider takes half the window
-		ImGui::PushItemWidth( ImGui::GetWindowWidth() * 0.5f );
-		bool updateFriction = ImGui::SliderFloat( "Joint Friction", &m_frictionTorque, 0.0f, 1000.0f, "%2.f" );
+		ImGui::PushItemWidth( ImGui::GetWindowWidth() * 0.6f );
+
+		bool updateFriction = ImGui::SliderFloat( "Joint Friction", &m_frictionTorque, 0.0f, 10000.0f, "%2.f" );
 		if ( updateFriction )
 		{
 			for ( int i = 0; i <= m_count; ++i )
@@ -1016,27 +1222,56 @@ public:
 			}
 		}
 
-		if ( ImGui::SliderFloat( "Gravity scale", &m_gravityScale, -1.0f, 1.0f, "%.1f" ) )
+		if ( ImGui::SliderFloat( "Spring hertz", &m_springHertz, 0.0f, 30.0f, "%.0f" ) )
 		{
-			for ( int i = 0; i < m_count; ++i )
+			for ( int i = 0; i <= m_count; ++i )
 			{
-				b2Body_SetGravityScale( m_bodyIds[i], m_gravityScale );
+				b2RevoluteJoint_SetSpringHertz( m_jointIds[i], m_springHertz );
 			}
 		}
+
+		if ( ImGui::SliderFloat( "Spring damping", &m_springDampingRatio, 0.0f, 2.0f, "%.1f" ) )
+		{
+			for ( int i = 0; i <= m_count; ++i )
+			{
+				b2RevoluteJoint_SetSpringDampingRatio( m_jointIds[i], m_springDampingRatio );
+			}
+		}
+
+		if ( ImGui::SliderFloat( "Constraint hertz", &m_constraintHertz, 15.0f, 240.0f, "%.0f" ) )
+		{
+			for ( int i = 0; i <= m_count; ++i )
+			{
+				b2Joint_SetConstraintTuning( m_jointIds[i], m_constraintHertz, m_constraintDampingRatio );
+			}
+		}
+
+		if ( ImGui::SliderFloat( "Constraint damping", &m_constraintDampingRatio, 0.0f, 10.0f, "%.1f" ) )
+		{
+			for ( int i = 0; i <= m_count; ++i )
+			{
+				b2Joint_SetConstraintTuning( m_jointIds[i], m_constraintHertz, m_constraintDampingRatio );
+			}
+		}
+
+		ImGui::PopItemWidth();
 
 		ImGui::End();
 	}
 
-	static Sample* Create( Settings& settings )
+	static Sample* Create( SampleContext* context )
 	{
-		return new Bridge( settings );
+		return new Bridge( context );
 	}
 
 	static constexpr int m_count = 160;
 	b2BodyId m_bodyIds[m_count];
 	b2JointId m_jointIds[m_count + 1];
 	float m_frictionTorque;
-	float m_gravityScale;
+	float m_constraintHertz;
+	float m_constraintDampingRatio;
+	float m_springHertz;
+	float m_springDampingRatio;
 };
 
 static int sampleBridgeIndex = RegisterSample( "Joints", "Bridge", Bridge::Create );
@@ -1044,13 +1279,13 @@ static int sampleBridgeIndex = RegisterSample( "Joints", "Bridge", Bridge::Creat
 class BallAndChain : public Sample
 {
 public:
-	explicit BallAndChain( Settings& settings )
-		: Sample( settings )
+	explicit BallAndChain( SampleContext* context )
+		: Sample( context )
 	{
-		if ( settings.restart == false )
+		if ( m_context->restart == false )
 		{
-			g_camera.m_center = { 0.0f, -8.0f };
-			g_camera.m_zoom = 27.5f;
+			m_context->camera.center = { 0.0f, -8.0f };
+			m_context->camera.zoom = 27.5f;
 		}
 
 		b2BodyId groundId = b2_nullBodyId;
@@ -1067,7 +1302,8 @@ public:
 
 			b2ShapeDef shapeDef = b2DefaultShapeDef();
 			shapeDef.density = 20.0f;
-
+			shapeDef.filter.categoryBits = 0x1;
+			shapeDef.filter.maskBits = 0x2;
 			b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
 
 			int jointIndex = 0;
@@ -1082,12 +1318,14 @@ public:
 				b2CreateCapsuleShape( bodyId, &shapeDef, &capsule );
 
 				b2Vec2 pivot = { ( 2.0f * i ) * hx, m_count * hx };
-				jointDef.bodyIdA = prevBodyId;
-				jointDef.bodyIdB = bodyId;
-				jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-				jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
-				// jointDef.enableMotor = true;
+				jointDef.base.bodyIdA = prevBodyId;
+				jointDef.base.bodyIdB = bodyId;
+				jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+				jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
+				jointDef.enableMotor = true;
 				jointDef.maxMotorTorque = m_frictionTorque;
+				jointDef.enableSpring = i > 0;
+				jointDef.hertz = 4.0f;
 				m_jointIds[jointIndex++] = b2CreateRevoluteJoint( m_worldId, &jointDef );
 
 				prevBodyId = bodyId;
@@ -1098,17 +1336,21 @@ public:
 			b2BodyDef bodyDef = b2DefaultBodyDef();
 			bodyDef.type = b2_dynamicBody;
 			bodyDef.position = { ( 1.0f + 2.0f * m_count ) * hx + circle.radius - hx, m_count * hx };
-
 			b2BodyId bodyId = b2CreateBody( m_worldId, &bodyDef );
+
+			shapeDef.filter.categoryBits = 0x2;
+			shapeDef.filter.maskBits = 0x1;
 			b2CreateCircleShape( bodyId, &shapeDef, &circle );
 
 			b2Vec2 pivot = { ( 2.0f * m_count ) * hx, m_count * hx };
-			jointDef.bodyIdA = prevBodyId;
-			jointDef.bodyIdB = bodyId;
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
+			jointDef.base.bodyIdA = prevBodyId;
+			jointDef.base.bodyIdB = bodyId;
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
 			jointDef.enableMotor = true;
 			jointDef.maxMotorTorque = m_frictionTorque;
+			jointDef.enableSpring = true;
+			jointDef.hertz = 4.0f;
 			m_jointIds[jointIndex++] = b2CreateRevoluteJoint( m_worldId, &jointDef );
 			assert( jointIndex == m_count + 1 );
 		}
@@ -1116,8 +1358,9 @@ public:
 
 	void UpdateGui() override
 	{
+		float fontSize = ImGui::GetFontSize();
 		float height = 60.0f;
-		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
+		ImGui::SetNextWindowPos( ImVec2( 0.5f * fontSize, m_camera->height - height - 2.0f * fontSize ), ImGuiCond_Once );
 		ImGui::SetNextWindowSize( ImVec2( 240.0f, height ) );
 
 		ImGui::Begin( "Ball and Chain", nullptr, ImGuiWindowFlags_NoResize );
@@ -1134,9 +1377,9 @@ public:
 		ImGui::End();
 	}
 
-	static Sample* Create( Settings& settings )
+	static Sample* Create( SampleContext* context )
 	{
-		return new BallAndChain( settings );
+		return new BallAndChain( context );
 	}
 
 	static constexpr int m_count = 30;
@@ -1156,13 +1399,13 @@ public:
 		e_count = 8
 	};
 
-	explicit Cantilever( Settings& settings )
-		: Sample( settings )
+	explicit Cantilever( SampleContext* context )
+		: Sample( context )
 	{
-		if ( settings.restart == false )
+		if ( m_context->restart == false )
 		{
-			g_camera.m_center = { 0.0f, 0.0f };
-			g_camera.m_zoom = 25.0f * 0.35f;
+			m_context->camera.center = { 0.0f, 0.0f };
+			m_context->camera.zoom = 25.0f * 0.35f;
 		}
 
 		b2BodyId groundId = b2_nullBodyId;
@@ -1198,16 +1441,19 @@ public:
 				b2CreateCapsuleShape( m_bodyIds[i], &shapeDef, &capsule );
 
 				b2Vec2 pivot = { ( 2.0f * i ) * hx, 0.0f };
-				jointDef.bodyIdA = prevBodyId;
-				jointDef.bodyIdB = m_bodyIds[i];
-				jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-				jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
+				jointDef.base.bodyIdA = prevBodyId;
+				jointDef.base.bodyIdB = m_bodyIds[i];
+				jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+				jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
 				jointDef.linearHertz = m_linearHertz;
 				jointDef.linearDampingRatio = m_linearDampingRatio;
 				jointDef.angularHertz = m_angularHertz;
 				jointDef.angularDampingRatio = m_angularDampingRatio;
-				jointDef.collideConnected = m_collideConnected;
+				jointDef.base.collideConnected = m_collideConnected;
 				m_jointIds[i] = b2CreateWeldJoint( m_worldId, &jointDef );
+
+				// Experimental tuning
+				b2Joint_SetConstraintTuning( m_jointIds[i], 120.0f, 10.0f );
 
 				prevBodyId = m_bodyIds[i];
 			}
@@ -1218,12 +1464,13 @@ public:
 
 	void UpdateGui() override
 	{
-		float height = 180.0f;
-		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
-		ImGui::SetNextWindowSize( ImVec2( 240.0f, height ) );
+		float fontSize = ImGui::GetFontSize();
+		float height = 14.0f * fontSize;
+		ImGui::SetNextWindowPos( ImVec2( 0.5f * fontSize, m_camera->height - height - 2.0f * fontSize ), ImGuiCond_Once );
+		ImGui::SetNextWindowSize( ImVec2( 19.0f * fontSize, height ) );
 
 		ImGui::Begin( "Cantilever", nullptr, ImGuiWindowFlags_NoResize );
-		ImGui::PushItemWidth( 100.0f );
+		ImGui::PushItemWidth( 8.0f * fontSize );
 
 		if ( ImGui::SliderFloat( "Linear Hertz", &m_linearHertz, 0.0f, 20.0f, "%.0f" ) )
 		{
@@ -1277,18 +1524,17 @@ public:
 		ImGui::End();
 	}
 
-	void Step( Settings& settings ) override
+	void Step() override
 	{
-		Sample::Step( settings );
+		Sample::Step();
 
 		b2Vec2 tipPosition = b2Body_GetPosition( m_tipId );
-		g_draw.DrawString( 5, m_textLine, "tip-y = %.2f", tipPosition.y );
-		m_textLine += m_textIncrement;
+		DrawTextLine( "tip-y = %.2f", tipPosition.y );
 	}
 
-	static Sample* Create( Settings& settings )
+	static Sample* Create( SampleContext* context )
 	{
-		return new Cantilever( settings );
+		return new Cantilever( context );
 	}
 
 	float m_linearHertz;
@@ -1304,8 +1550,8 @@ public:
 
 static int sampleCantileverIndex = RegisterSample( "Joints", "Cantilever", Cantilever::Create );
 
-// This test ensures joints work correctly with bodies that have fixed rotation
-class FixedRotation : public Sample
+// This test ensures joints work correctly with bodies that have motion locks
+class MotionLocks : public Sample
 {
 public:
 	enum
@@ -1313,49 +1559,28 @@ public:
 		e_count = 6
 	};
 
-	explicit FixedRotation( Settings& settings )
-		: Sample( settings )
+	explicit MotionLocks( SampleContext* context )
+		: Sample( context )
 	{
-		if ( settings.restart == false )
+		if ( m_context->restart == false )
 		{
-			g_camera.m_center = { 0.0f, 8.0f };
-			g_camera.m_zoom = 25.0f * 0.7f;
+			m_context->camera.center = { 0.0f, 8.0f };
+			m_context->camera.zoom = 25.0f * 0.7f;
 		}
 
 		b2BodyDef bodyDef = b2DefaultBodyDef();
-		m_groundId = b2CreateBody( m_worldId, &bodyDef );
-		m_fixedRotation = true;
+		b2BodyId groundId = b2CreateBody( m_worldId, &bodyDef );
+
+		m_motionLocks = { false, false, true };
 
 		for ( int i = 0; i < e_count; ++i )
 		{
 			m_bodyIds[i] = b2_nullBodyId;
-			m_jointIds[i] = b2_nullJointId;
-		}
-
-		CreateScene();
-	}
-
-	void CreateScene()
-	{
-		for ( int i = 0; i < e_count; ++i )
-		{
-			if ( B2_IS_NON_NULL( m_jointIds[i] ) )
-			{
-				b2DestroyJoint( m_jointIds[i] );
-				m_jointIds[i] = b2_nullJointId;
-			}
-
-			if ( B2_IS_NON_NULL( m_bodyIds[i] ) )
-			{
-				b2DestroyBody( m_bodyIds[i] );
-				m_bodyIds[i] = b2_nullBodyId;
-			}
 		}
 
 		b2Vec2 position = { -12.5f, 10.0f };
-		b2BodyDef bodyDef = b2DefaultBodyDef();
 		bodyDef.type = b2_dynamicBody;
-		bodyDef.fixedRotation = m_fixedRotation;
+		bodyDef.motionLocks = m_motionLocks;
 
 		b2Polygon box = b2MakeBox( 1.0f, 1.0f );
 
@@ -1374,12 +1599,12 @@ public:
 			b2Vec2 pivot1 = { position.x, position.y + 1.0f + length };
 			b2Vec2 pivot2 = { position.x, position.y + 1.0f };
 			b2DistanceJointDef jointDef = b2DefaultDistanceJointDef();
-			jointDef.bodyIdA = m_groundId;
-			jointDef.bodyIdB = m_bodyIds[index];
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot1 );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot2 );
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = m_bodyIds[index];
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot1 );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot2 );
 			jointDef.length = length;
-			m_jointIds[index] = b2CreateDistanceJoint( m_worldId, &jointDef );
+			b2CreateDistanceJoint( m_worldId, &jointDef );
 		}
 
 		position.x += 5.0f;
@@ -1395,12 +1620,12 @@ public:
 			b2CreatePolygonShape( m_bodyIds[index], &shapeDef, &box );
 
 			b2MotorJointDef jointDef = b2DefaultMotorJointDef();
-			jointDef.bodyIdA = m_groundId;
-			jointDef.bodyIdB = m_bodyIds[index];
-			jointDef.linearOffset = position;
-			jointDef.maxForce = 200.0f;
-			jointDef.maxTorque = 20.0f;
-			m_jointIds[index] = b2CreateMotorJoint( m_worldId, &jointDef );
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = m_bodyIds[index];
+			jointDef.base.localFrameA.p = position;
+			jointDef.maxVelocityForce = 200.0f;
+			jointDef.maxVelocityTorque = 200.0f;
+			b2CreateMotorJoint( m_worldId, &jointDef );
 		}
 
 		position.x += 5.0f;
@@ -1417,12 +1642,11 @@ public:
 
 			b2Vec2 pivot = { position.x - 1.0f, position.y };
 			b2PrismaticJointDef jointDef = b2DefaultPrismaticJointDef();
-			jointDef.bodyIdA = m_groundId;
-			jointDef.bodyIdB = m_bodyIds[index];
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
-			jointDef.localAxisA = b2Body_GetLocalVector( jointDef.bodyIdA, { 1.0f, 0.0f } );
-			m_jointIds[index] = b2CreatePrismaticJoint( m_worldId, &jointDef );
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = m_bodyIds[index];
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
+			b2CreatePrismaticJoint( m_worldId, &jointDef );
 		}
 
 		position.x += 5.0f;
@@ -1439,11 +1663,11 @@ public:
 
 			b2Vec2 pivot = { position.x - 1.0f, position.y };
 			b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
-			jointDef.bodyIdA = m_groundId;
-			jointDef.bodyIdB = m_bodyIds[index];
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
-			m_jointIds[index] = b2CreateRevoluteJoint( m_worldId, &jointDef );
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = m_bodyIds[index];
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
+			b2CreateRevoluteJoint( m_worldId, &jointDef );
 		}
 
 		position.x += 5.0f;
@@ -1460,15 +1684,15 @@ public:
 
 			b2Vec2 pivot = { position.x - 1.0f, position.y };
 			b2WeldJointDef jointDef = b2DefaultWeldJointDef();
-			jointDef.bodyIdA = m_groundId;
-			jointDef.bodyIdB = m_bodyIds[index];
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = m_bodyIds[index];
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
 			jointDef.angularHertz = 1.0f;
 			jointDef.angularDampingRatio = 0.5f;
 			jointDef.linearHertz = 1.0f;
 			jointDef.linearDampingRatio = 0.5f;
-			m_jointIds[index] = b2CreateWeldJoint( m_worldId, &jointDef );
+			b2CreateWeldJoint( m_worldId, &jointDef );
 		}
 
 		position.x += 5.0f;
@@ -1485,11 +1709,10 @@ public:
 
 			b2Vec2 pivot = { position.x - 1.0f, position.y };
 			b2WheelJointDef jointDef = b2DefaultWheelJointDef();
-			jointDef.bodyIdA = m_groundId;
-			jointDef.bodyIdB = m_bodyIds[index];
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
-			jointDef.localAxisA = b2Body_GetLocalVector( jointDef.bodyIdA, { 1.0f, 0.0f } );
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = m_bodyIds[index];
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
 			jointDef.hertz = 1.0f;
 			jointDef.dampingRatio = 0.7f;
 			jointDef.lowerTranslation = -1.0f;
@@ -1498,7 +1721,7 @@ public:
 			jointDef.enableMotor = true;
 			jointDef.maxMotorTorque = 10.0f;
 			jointDef.motorSpeed = 1.0f;
-			m_jointIds[index] = b2CreateWheelJoint( m_worldId, &jointDef );
+			b2CreateWheelJoint( m_worldId, &jointDef );
 		}
 
 		position.x += 5.0f;
@@ -1507,35 +1730,58 @@ public:
 
 	void UpdateGui() override
 	{
-		float height = 60.0f;
-		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
-		ImGui::SetNextWindowSize( ImVec2( 180.0f, height ) );
+		float fontSize = ImGui::GetFontSize();
+		float height = 8.0f * fontSize;
+		ImGui::SetNextWindowPos( ImVec2( 0.5f * fontSize, m_camera->height - height - 2.0f * fontSize ), ImGuiCond_Once );
+		ImGui::SetNextWindowSize( ImVec2( 14.0f * fontSize, height ) );
 
-		ImGui::Begin( "Fixed Rotation", nullptr, ImGuiWindowFlags_NoResize );
+		ImGui::Begin( "Motion Locks", nullptr, ImGuiWindowFlags_NoResize );
 
-		if ( ImGui::Checkbox( "Fixed Rotation", &m_fixedRotation ) )
+		if ( ImGui::Checkbox( "Lock Linear X", &m_motionLocks.linearX ) )
 		{
 			for ( int i = 0; i < e_count; ++i )
 			{
-				b2Body_SetFixedRotation( m_bodyIds[i], m_fixedRotation );
+				b2Body_SetMotionLocks( m_bodyIds[i], m_motionLocks );
+				b2Body_SetAwake( m_bodyIds[i], true );
+			}
+		}
+
+		if ( ImGui::Checkbox( "Lock Linear Y", &m_motionLocks.linearY ) )
+		{
+			for ( int i = 0; i < e_count; ++i )
+			{
+				b2Body_SetMotionLocks( m_bodyIds[i], m_motionLocks );
+				b2Body_SetAwake( m_bodyIds[i], true );
+			}
+		}
+
+		if ( ImGui::Checkbox( "Lock Angular Z", &m_motionLocks.angularZ ) )
+		{
+			for ( int i = 0; i < e_count; ++i )
+			{
+				b2Body_SetMotionLocks( m_bodyIds[i], m_motionLocks );
+				b2Body_SetAwake( m_bodyIds[i], true );
 			}
 		}
 
 		ImGui::End();
+
+		if ( glfwGetKey( m_context->window, GLFW_KEY_L ) == GLFW_PRESS )
+		{
+			b2Body_ApplyLinearImpulseToCenter( m_bodyIds[0], { 100.0f, 0.0f }, true );
+		}
 	}
 
-	static Sample* Create( Settings& settings )
+	static Sample* Create( SampleContext* context )
 	{
-		return new FixedRotation( settings );
+		return new MotionLocks( context );
 	}
 
-	b2BodyId m_groundId;
 	b2BodyId m_bodyIds[e_count];
-	b2JointId m_jointIds[e_count];
-	bool m_fixedRotation;
+	b2MotionLocks m_motionLocks;
 };
 
-static int sampleFixedRotation = RegisterSample( "Joints", "Fixed Rotation", FixedRotation::Create );
+static int sampleMotionLocks = RegisterSample( "Joints", "Motion Locks", MotionLocks::Create );
 
 // This sample shows how to break joints when the internal reaction force becomes large.
 class BreakableJoint : public Sample
@@ -1546,13 +1792,13 @@ public:
 		e_count = 6
 	};
 
-	explicit BreakableJoint( Settings& settings )
-		: Sample( settings )
+	explicit BreakableJoint( SampleContext* context )
+		: Sample( context )
 	{
-		if ( settings.restart == false )
+		if ( m_context->restart == false )
 		{
-			g_camera.m_center = { 0.0f, 8.0f };
-			g_camera.m_zoom = 25.0f * 0.7f;
+			m_context->camera.center = { 0.0f, 8.0f };
+			m_context->camera.zoom = 25.0f * 0.7f;
 		}
 
 		b2BodyDef bodyDef = b2DefaultBodyDef();
@@ -1587,12 +1833,12 @@ public:
 			b2Vec2 pivot1 = { position.x, position.y + 1.0f + length };
 			b2Vec2 pivot2 = { position.x, position.y + 1.0f };
 			b2DistanceJointDef jointDef = b2DefaultDistanceJointDef();
-			jointDef.bodyIdA = groundId;
-			jointDef.bodyIdB = bodyId;
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot1 );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot2 );
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = bodyId;
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot1 );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot2 );
 			jointDef.length = length;
-			jointDef.collideConnected = true;
+			jointDef.base.collideConnected = true;
 			m_jointIds[index] = b2CreateDistanceJoint( m_worldId, &jointDef );
 		}
 
@@ -1608,12 +1854,12 @@ public:
 			b2CreatePolygonShape( bodyId, &shapeDef, &box );
 
 			b2MotorJointDef jointDef = b2DefaultMotorJointDef();
-			jointDef.bodyIdA = groundId;
-			jointDef.bodyIdB = bodyId;
-			jointDef.linearOffset = position;
-			jointDef.maxForce = 1000.0f;
-			jointDef.maxTorque = 20.0f;
-			jointDef.collideConnected = true;
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = bodyId;
+			jointDef.base.localFrameA.p = position;
+			jointDef.maxVelocityForce = 1000.0f;
+			jointDef.maxVelocityTorque = 20.0f;
+			jointDef.base.collideConnected = true;
 			m_jointIds[index] = b2CreateMotorJoint( m_worldId, &jointDef );
 		}
 
@@ -1630,12 +1876,11 @@ public:
 
 			b2Vec2 pivot = { position.x - 1.0f, position.y };
 			b2PrismaticJointDef jointDef = b2DefaultPrismaticJointDef();
-			jointDef.bodyIdA = groundId;
-			jointDef.bodyIdB = bodyId;
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
-			jointDef.localAxisA = b2Body_GetLocalVector( jointDef.bodyIdA, { 1.0f, 0.0f } );
-			jointDef.collideConnected = true;
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = bodyId;
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
+			jointDef.base.collideConnected = true;
 			m_jointIds[index] = b2CreatePrismaticJoint( m_worldId, &jointDef );
 		}
 
@@ -1652,11 +1897,11 @@ public:
 
 			b2Vec2 pivot = { position.x - 1.0f, position.y };
 			b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
-			jointDef.bodyIdA = groundId;
-			jointDef.bodyIdB = bodyId;
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
-			jointDef.collideConnected = true;
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = bodyId;
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
+			jointDef.base.collideConnected = true;
 			m_jointIds[index] = b2CreateRevoluteJoint( m_worldId, &jointDef );
 		}
 
@@ -1673,15 +1918,11 @@ public:
 
 			b2Vec2 pivot = { position.x - 1.0f, position.y };
 			b2WeldJointDef jointDef = b2DefaultWeldJointDef();
-			jointDef.bodyIdA = groundId;
-			jointDef.bodyIdB = bodyId;
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
-			jointDef.angularHertz = 2.0f;
-			jointDef.angularDampingRatio = 0.5f;
-			jointDef.linearHertz = 2.0f;
-			jointDef.linearDampingRatio = 0.5f;
-			jointDef.collideConnected = true;
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = bodyId;
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
+			jointDef.base.collideConnected = true;
 			m_jointIds[index] = b2CreateWeldJoint( m_worldId, &jointDef );
 		}
 
@@ -1698,11 +1939,10 @@ public:
 
 			b2Vec2 pivot = { position.x - 1.0f, position.y };
 			b2WheelJointDef jointDef = b2DefaultWheelJointDef();
-			jointDef.bodyIdA = groundId;
-			jointDef.bodyIdB = bodyId;
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
-			jointDef.localAxisA = b2Body_GetLocalVector( jointDef.bodyIdA, { 1.0f, 0.0f } );
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = bodyId;
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
 			jointDef.hertz = 1.0f;
 			jointDef.dampingRatio = 0.7f;
 			jointDef.lowerTranslation = -1.0f;
@@ -1711,7 +1951,7 @@ public:
 			jointDef.enableMotor = true;
 			jointDef.maxMotorTorque = 10.0f;
 			jointDef.motorSpeed = 1.0f;
-			jointDef.collideConnected = true;
+			jointDef.base.collideConnected = true;
 			m_jointIds[index] = b2CreateWheelJoint( m_worldId, &jointDef );
 		}
 
@@ -1723,8 +1963,9 @@ public:
 
 	void UpdateGui() override
 	{
+		float fontSize = ImGui::GetFontSize();
 		float height = 100.0f;
-		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
+		ImGui::SetNextWindowPos( ImVec2( 0.5f * fontSize, m_camera->height - height - 2.0f * fontSize ), ImGuiCond_Once );
 		ImGui::SetNextWindowSize( ImVec2( 240.0f, height ) );
 
 		ImGui::Begin( "Breakable Joint", nullptr, ImGuiWindowFlags_NoResize );
@@ -1740,7 +1981,7 @@ public:
 		ImGui::End();
 	}
 
-	void Step( Settings& settings ) override
+	void Step() override
 	{
 		for ( int i = 0; i < e_count; ++i )
 		{
@@ -1752,22 +1993,22 @@ public:
 			b2Vec2 force = b2Joint_GetConstraintForce( m_jointIds[i] );
 			if ( b2LengthSquared( force ) > m_breakForce * m_breakForce )
 			{
-				b2DestroyJoint( m_jointIds[i] );
+				b2DestroyJoint( m_jointIds[i], true );
 				m_jointIds[i] = b2_nullJointId;
 			}
 			else
 			{
-				b2Vec2 point = b2Joint_GetLocalAnchorA( m_jointIds[i] );
-				g_draw.DrawString( point, "(%.1f, %.1f)", force.x, force.y );
+				b2Transform localFrame = b2Joint_GetLocalFrameA( m_jointIds[i] );
+				DrawWorldString( m_draw, m_camera, localFrame.p, b2_colorWhite, "(%.1f, %.1f)", force.x, force.y );
 			}
 		}
 
-		Sample::Step( settings );
+		Sample::Step();
 	}
 
-	static Sample* Create( Settings& settings )
+	static Sample* Create( SampleContext* context )
 	{
-		return new BreakableJoint( settings );
+		return new BreakableJoint( context );
 	}
 
 	b2JointId m_jointIds[e_count];
@@ -1776,17 +2017,246 @@ public:
 
 static int sampleBreakableJoint = RegisterSample( "Joints", "Breakable", BreakableJoint::Create );
 
+// This sample shows how to measure joint separation. This is the unresolved constraint error.
+class JointSeparation : public Sample
+{
+public:
+	enum
+	{
+		e_count = 5
+	};
+
+	explicit JointSeparation( SampleContext* context )
+		: Sample( context )
+	{
+		if ( m_context->restart == false )
+		{
+			m_context->camera.center = { 0.0f, 8.0f };
+			m_context->camera.zoom = 25.0f;
+		}
+
+		b2BodyDef bodyDef = b2DefaultBodyDef();
+		b2BodyId groundId = b2CreateBody( m_worldId, &bodyDef );
+
+		b2ShapeDef shapeDef = b2DefaultShapeDef();
+		b2Segment segment = { { -40.0f, 0.0f }, { 40.0f, 0.0f } };
+		b2CreateSegmentShape( groundId, &shapeDef, &segment );
+
+		b2Vec2 position = { -20.0f, 10.0f };
+		bodyDef.type = b2_dynamicBody;
+		bodyDef.enableSleep = false;
+
+		b2Polygon box = b2MakeBox( 1.0f, 1.0f );
+
+		int index = 0;
+
+		// distance joint
+		{
+			assert( index < e_count );
+
+			bodyDef.position = position;
+			m_bodyIds[index] = b2CreateBody( m_worldId, &bodyDef );
+			b2CreatePolygonShape( m_bodyIds[index], &shapeDef, &box );
+
+			float length = 2.0f;
+			b2Vec2 pivot1 = { position.x, position.y + 1.0f + length };
+			b2Vec2 pivot2 = { position.x, position.y + 1.0f };
+			b2DistanceJointDef jointDef = b2DefaultDistanceJointDef();
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = m_bodyIds[index];
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot1 );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot2 );
+			jointDef.length = length;
+			jointDef.base.collideConnected = true;
+			m_jointIds[index] = b2CreateDistanceJoint( m_worldId, &jointDef );
+		}
+
+		position.x += 10.0f;
+		++index;
+
+		// prismatic joint
+		{
+			assert( index < e_count );
+
+			bodyDef.position = position;
+			m_bodyIds[index] = b2CreateBody( m_worldId, &bodyDef );
+			b2CreatePolygonShape( m_bodyIds[index], &shapeDef, &box );
+
+			b2Vec2 pivot = { position.x - 1.0f, position.y };
+			b2PrismaticJointDef jointDef = b2DefaultPrismaticJointDef();
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = m_bodyIds[index];
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
+			jointDef.base.collideConnected = true;
+			m_jointIds[index] = b2CreatePrismaticJoint( m_worldId, &jointDef );
+		}
+
+		position.x += 10.0f;
+		++index;
+
+		// revolute joint
+		{
+			assert( index < e_count );
+
+			bodyDef.position = position;
+			m_bodyIds[index] = b2CreateBody( m_worldId, &bodyDef );
+			b2CreatePolygonShape( m_bodyIds[index], &shapeDef, &box );
+
+			b2Vec2 pivot = { position.x - 1.0f, position.y };
+			b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = m_bodyIds[index];
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
+			jointDef.base.collideConnected = true;
+			m_jointIds[index] = b2CreateRevoluteJoint( m_worldId, &jointDef );
+		}
+
+		position.x += 10.0f;
+		++index;
+
+		// weld joint
+		{
+			assert( index < e_count );
+
+			bodyDef.position = position;
+			m_bodyIds[index] = b2CreateBody( m_worldId, &bodyDef );
+			b2CreatePolygonShape( m_bodyIds[index], &shapeDef, &box );
+
+			b2Vec2 pivot = { position.x - 1.0f, position.y };
+			b2WeldJointDef jointDef = b2DefaultWeldJointDef();
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = m_bodyIds[index];
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
+			jointDef.base.collideConnected = true;
+			m_jointIds[index] = b2CreateWeldJoint( m_worldId, &jointDef );
+		}
+
+		position.x += 10.0f;
+		++index;
+
+		// wheel joint
+		{
+			assert( index < e_count );
+
+			bodyDef.position = position;
+			m_bodyIds[index] = b2CreateBody( m_worldId, &bodyDef );
+			b2CreatePolygonShape( m_bodyIds[index], &shapeDef, &box );
+
+			b2Vec2 pivot = { position.x - 1.0f, position.y };
+			b2WheelJointDef jointDef = b2DefaultWheelJointDef();
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = m_bodyIds[index];
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
+			jointDef.hertz = 1.0f;
+			jointDef.dampingRatio = 0.7f;
+			jointDef.lowerTranslation = -1.0f;
+			jointDef.upperTranslation = 1.0f;
+			jointDef.enableLimit = true;
+			jointDef.enableMotor = true;
+			jointDef.maxMotorTorque = 10.0f;
+			jointDef.motorSpeed = 1.0f;
+			jointDef.base.collideConnected = true;
+			m_jointIds[index] = b2CreateWheelJoint( m_worldId, &jointDef );
+		}
+
+		m_impulse = 500.0f;
+		m_jointHertz = 60.0f;
+		m_jointDampingRatio = 2.0f;
+	}
+
+	void UpdateGui() override
+	{
+		float fontSize = ImGui::GetFontSize();
+		float height = 14.0f * fontSize;
+		ImGui::SetNextWindowPos( { 0.5f * fontSize, m_camera->height - height - 2.0f * fontSize }, ImGuiCond_Once );
+		ImGui::SetNextWindowSize( { 20.0f * fontSize, height } );
+
+		ImGui::Begin( "Joint Separation", nullptr, ImGuiWindowFlags_NoResize );
+
+		b2Vec2 gravity = b2World_GetGravity( m_worldId );
+		if ( ImGui::SliderFloat( "gravity", &gravity.y, -500.0f, 500.0f, "%.0f" ) )
+		{
+			b2World_SetGravity( m_worldId, gravity );
+		}
+
+		if ( ImGui::Button( "impulse" ) )
+		{
+			for ( int i = 0; i < e_count; ++i )
+			{
+				b2Vec2 p = b2Body_GetWorldPoint( m_bodyIds[i], { 1.0f, 1.0f } );
+				b2Body_ApplyLinearImpulse( m_bodyIds[i], { m_impulse, -m_impulse }, p, true );
+			}
+		}
+
+		ImGui::SliderFloat( "magnitude", &m_impulse, 0.0f, 1000.0f, "%.0f" );
+
+		if ( ImGui::SliderFloat( "hertz", &m_jointHertz, 15.0f, 120.0f, "%.0f" ) )
+		{
+			for ( int i = 0; i < e_count; ++i )
+			{
+				b2Joint_SetConstraintTuning( m_jointIds[i], m_jointHertz, m_jointDampingRatio );
+			}
+		}
+
+		if ( ImGui::SliderFloat( "damping", &m_jointDampingRatio, 0.0f, 10.0f, "%.1f" ) )
+		{
+			for ( int i = 0; i < e_count; ++i )
+			{
+				b2Joint_SetConstraintTuning( m_jointIds[i], m_jointHertz, m_jointDampingRatio );
+			}
+		}
+
+		ImGui::End();
+	}
+
+	void Step() override
+	{
+		for ( int i = 0; i < e_count; ++i )
+		{
+			if ( B2_IS_NULL( m_jointIds[i] ) )
+			{
+				continue;
+			}
+
+			float linear = b2Joint_GetLinearSeparation( m_jointIds[i] );
+			float angular = b2Joint_GetAngularSeparation( m_jointIds[i] );
+			b2Transform localFrame = b2Joint_GetLocalFrameA( m_jointIds[i] );
+			DrawWorldString( m_draw, m_camera, localFrame.p, b2_colorWhite, "%.2f m, %.1f deg", linear,
+							 180.0f * angular / B2_PI );
+		}
+
+		Sample::Step();
+	}
+
+	static Sample* Create( SampleContext* context )
+	{
+		return new JointSeparation( context );
+	}
+
+	b2BodyId m_bodyIds[e_count];
+	b2JointId m_jointIds[e_count];
+	float m_impulse;
+	float m_jointHertz;
+	float m_jointDampingRatio;
+};
+
+static int sampleJointSeparation = RegisterSample( "Joints", "Separation", JointSeparation::Create );
+
 // This shows how you can implement a constraint outside of Box2D
 class UserConstraint : public Sample
 {
 public:
-	explicit UserConstraint( Settings& settings )
-		: Sample( settings )
+	explicit UserConstraint( SampleContext* context )
+		: Sample( context )
 	{
-		if ( settings.restart == false )
+		if ( m_context->restart == false )
 		{
-			g_camera.m_center = { 3.0f, -1.0f };
-			g_camera.m_zoom = 25.0f * 0.15f;
+			m_context->camera.center = { 3.0f, -1.0f };
+			m_context->camera.zoom = 25.0f * 0.15f;
 		}
 
 		b2Polygon box = b2MakeBox( 1.0f, 0.5f );
@@ -1806,25 +2276,25 @@ public:
 		m_impulses[1] = 0.0f;
 	}
 
-	void Step( Settings& settings ) override
+	void Step() override
 	{
-		Sample::Step( settings );
+		Sample::Step();
 
 		b2Transform axes = b2Transform_identity;
-		g_draw.DrawTransform( axes );
+		DrawTransform( m_draw, axes, 1.0f );
 
-		if ( settings.pause )
+		if ( m_context->pause )
 		{
 			return;
 		}
 
-		float timeStep = settings.hertz > 0.0f ? 1.0f / settings.hertz : 0.0f;
+		float timeStep = m_context->hertz > 0.0f ? 1.0f / m_context->hertz : 0.0f;
 		if ( timeStep == 0.0f )
 		{
 			return;
 		}
 
-		float invTimeStep = settings.hertz;
+		float invTimeStep = m_context->hertz;
 
 		static float hertz = 3.0f;
 		static float zeta = 0.7f;
@@ -1858,12 +2328,12 @@ public:
 			float C = length - slackLength;
 			if ( C < 0.0f || length < 0.001f )
 			{
-				g_draw.DrawSegment( anchorA, anchorB, b2_colorLightCyan );
+				DrawLine( m_draw, anchorA, anchorB, b2_colorLightCyan );
 				m_impulses[i] = 0.0f;
 				continue;
 			}
 
-			g_draw.DrawSegment( anchorA, anchorB, b2_colorViolet );
+			DrawLine( m_draw, anchorA, anchorB, b2_colorViolet );
 			b2Vec2 axis = b2Normalize( deltaAnchor );
 
 			b2Vec2 rB = b2Sub( anchorB, pB );
@@ -1884,13 +2354,12 @@ public:
 		b2Body_SetLinearVelocity( m_bodyId, vB );
 		b2Body_SetAngularVelocity( m_bodyId, omegaB );
 
-		g_draw.DrawString( 5, m_textLine, "forces = %g, %g", m_impulses[0] * invTimeStep, m_impulses[1] * invTimeStep );
-		m_textLine += m_textIncrement;
+		DrawTextLine( "forces = %g, %g", m_impulses[0] * invTimeStep, m_impulses[1] * invTimeStep );
 	}
 
-	static Sample* Create( Settings& settings )
+	static Sample* Create( SampleContext* context )
 	{
-		return new UserConstraint( settings );
+		return new UserConstraint( context );
 	}
 
 	b2BodyId m_bodyId;
@@ -1903,14 +2372,14 @@ static int sampleUserConstraintIndex = RegisterSample( "Joints", "User Constrain
 class Driving : public Sample
 {
 public:
-	explicit Driving( Settings& settings )
-		: Sample( settings )
+	explicit Driving( SampleContext* context )
+		: Sample( context )
 	{
-		if ( settings.restart == false )
+		if ( m_context->restart == false )
 		{
-			g_camera.m_center.y = 5.0f;
-			g_camera.m_zoom = 25.0f * 0.4f;
-			settings.drawJoints = false;
+			m_context->camera.center.y = 5.0f;
+			m_context->camera.zoom = 25.0f * 0.4f;
+			m_context->debugDraw.drawJoints = false;
 		}
 
 		b2BodyId groundId;
@@ -1986,10 +2455,10 @@ public:
 
 			b2Vec2 pivot = bodyDef.position;
 			b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
-			jointDef.bodyIdA = groundId;
-			jointDef.bodyIdB = bodyId;
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = bodyId;
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
 			jointDef.lowerAngle = -8.0f * B2_PI / 180.0f;
 			jointDef.upperAngle = 8.0f * B2_PI / 180.0f;
 			jointDef.enableLimit = true;
@@ -2014,20 +2483,20 @@ public:
 				b2CreateCapsuleShape( bodyId, &shapeDef, &capsule );
 
 				b2Vec2 pivot = { 160.0f + 2.0f * i, -0.125f };
-				jointDef.bodyIdA = prevBodyId;
-				jointDef.bodyIdB = bodyId;
-				jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-				jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
+				jointDef.base.bodyIdA = prevBodyId;
+				jointDef.base.bodyIdB = bodyId;
+				jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+				jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
 				b2CreateRevoluteJoint( m_worldId, &jointDef );
 
 				prevBodyId = bodyId;
 			}
 
 			b2Vec2 pivot = { 160.0f + 2.0f * N, -0.125f };
-			jointDef.bodyIdA = prevBodyId;
-			jointDef.bodyIdB = groundId;
-			jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-			jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
+			jointDef.base.bodyIdA = prevBodyId;
+			jointDef.base.bodyIdB = groundId;
+			jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+			jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
 			jointDef.enableMotor = true;
 			jointDef.maxMotorTorque = 50.0f;
 			b2CreateRevoluteJoint( m_worldId, &jointDef );
@@ -2080,13 +2549,14 @@ public:
 
 	void UpdateGui() override
 	{
-		float height = 140.0f;
-		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
-		ImGui::SetNextWindowSize( ImVec2( 200.0f, height ) );
+		float fontSize = ImGui::GetFontSize();
+		float height = 10.0f * fontSize;
+		ImGui::SetNextWindowPos( { 0.5f * fontSize, m_camera->height - height - 2.0f * fontSize }, ImGuiCond_Once );
+		ImGui::SetNextWindowSize( { 16.0f * fontSize, height } );
 
 		ImGui::Begin( "Driving", nullptr, ImGuiWindowFlags_NoResize );
 
-		ImGui::PushItemWidth( 100.0f );
+		ImGui::PushItemWidth( 8.0f * fontSize );
 		if ( ImGui::SliderFloat( "Spring Hertz", &m_hertz, 0.0f, 20.0f, "%.0f" ) )
 		{
 			m_car.SetHertz( m_hertz );
@@ -2111,43 +2581,41 @@ public:
 		ImGui::End();
 	}
 
-	void Step( Settings& settings ) override
+	void Step() override
 	{
-		if ( glfwGetKey( g_mainWindow, GLFW_KEY_A ) == GLFW_PRESS )
+		if ( glfwGetKey( m_context->window, GLFW_KEY_A ) == GLFW_PRESS )
 		{
 			m_throttle = 1.0f;
 			m_car.SetSpeed( m_speed );
 		}
 
-		if ( glfwGetKey( g_mainWindow, GLFW_KEY_S ) == GLFW_PRESS )
+		if ( glfwGetKey( m_context->window, GLFW_KEY_S ) == GLFW_PRESS )
 		{
 			m_throttle = 0.0f;
 			m_car.SetSpeed( 0.0f );
 		}
 
-		if ( glfwGetKey( g_mainWindow, GLFW_KEY_D ) == GLFW_PRESS )
+		if ( glfwGetKey( m_context->window, GLFW_KEY_D ) == GLFW_PRESS )
 		{
 			m_throttle = -1.0f;
 			m_car.SetSpeed( -m_speed );
 		}
 
-		g_draw.DrawString( 5, m_textLine, "Keys: left = a, brake = s, right = d" );
-		m_textLine += m_textIncrement;
+		DrawTextLine( "Keys: left = a, brake = s, right = d" );
 
 		b2Vec2 linearVelocity = b2Body_GetLinearVelocity( m_car.m_chassisId );
 		float kph = linearVelocity.x * 3.6f;
-		g_draw.DrawString( 5, m_textLine, "speed in kph: %.2g", kph );
-		m_textLine += m_textIncrement;
+		DrawTextLine( "speed in kph: %.2g", kph );
 
 		b2Vec2 carPosition = b2Body_GetPosition( m_car.m_chassisId );
-		g_camera.m_center.x = carPosition.x;
+		m_context->camera.center.x = carPosition.x;
 
-		Sample::Step( settings );
+		Sample::Step();
 	}
 
-	static Sample* Create( Settings& settings )
+	static Sample* Create( SampleContext* context )
 	{
-		return new Driving( settings );
+		return new Driving( context );
 	}
 
 	Car m_car;
@@ -2164,16 +2632,16 @@ static int sampleDriving = RegisterSample( "Joints", "Driving", Driving::Create 
 class Ragdoll : public Sample
 {
 public:
-	explicit Ragdoll( Settings& settings )
-		: Sample( settings )
+	explicit Ragdoll( SampleContext* context )
+		: Sample( context )
 	{
-		if ( settings.restart == false )
+		if ( m_context->restart == false )
 		{
-			g_camera.m_center = { 0.0f, 12.0f };
-			g_camera.m_zoom = 16.0f;
+			m_context->camera.center = { 0.0f, 12.0f };
+			m_context->camera.zoom = 16.0f;
 
-			// g_camera.m_center = { 0.0f, 26.0f };
-			// g_camera.m_zoom = 1.0f;
+			// m_context->camera.m_center = { 0.0f, 26.0f };
+			// m_context->camera.m_zoom = 1.0f;
 		}
 
 		{
@@ -2191,23 +2659,26 @@ public:
 		m_human = {};
 
 		Spawn();
+
+		b2World_SetContactTuning( m_worldId, 240.0f, 0.0f, 2.0f );
 	}
 
 	void Spawn()
 	{
 		CreateHuman( &m_human, m_worldId, { 0.0f, 25.0f }, 1.0f, m_jointFrictionTorque, m_jointHertz, m_jointDampingRatio, 1,
 					 nullptr, false );
-		Human_ApplyRandomAngularImpulse( &m_human, 10.0f );
+		// Human_ApplyRandomAngularImpulse( &m_human, 10.0f );
 	}
 
 	void UpdateGui() override
 	{
-		float height = 140.0f;
-		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
-		ImGui::SetNextWindowSize( ImVec2( 180.0f, height ) );
+		float fontSize = ImGui::GetFontSize();
+		float height = 10.0f * fontSize;
+		ImGui::SetNextWindowPos( { 0.5f * fontSize, m_camera->height - height - 2.0f * fontSize }, ImGuiCond_Once );
+		ImGui::SetNextWindowSize( { 14.0f * fontSize, height } );
 
 		ImGui::Begin( "Ragdoll", nullptr, ImGuiWindowFlags_NoResize );
-		ImGui::PushItemWidth( 100.0f );
+		ImGui::PushItemWidth( 8.0f * fontSize );
 
 		if ( ImGui::SliderFloat( "Friction", &m_jointFrictionTorque, 0.0f, 1.0f, "%3.2f" ) )
 		{
@@ -2233,9 +2704,9 @@ public:
 		ImGui::End();
 	}
 
-	static Sample* Create( Settings& settings )
+	static Sample* Create( SampleContext* context )
 	{
-		return new Ragdoll( settings );
+		return new Ragdoll( context );
 	}
 
 	Human m_human;
@@ -2249,13 +2720,13 @@ static int sampleRagdoll = RegisterSample( "Joints", "Ragdoll", Ragdoll::Create 
 class SoftBody : public Sample
 {
 public:
-	explicit SoftBody( Settings& settings )
-		: Sample( settings )
+	explicit SoftBody( SampleContext* context )
+		: Sample( context )
 	{
-		if ( settings.restart == false )
+		if ( m_context->restart == false )
 		{
-			g_camera.m_center = { 0.0f, 5.0f };
-			g_camera.m_zoom = 25.0f * 0.25f;
+			m_context->camera.center = { 0.0f, 5.0f };
+			m_context->camera.zoom = 25.0f * 0.25f;
 		}
 
 		{
@@ -2269,9 +2740,9 @@ public:
 		m_donut.Create( m_worldId, { 0.0f, 10.0f }, 2.0f, 0, false, nullptr );
 	}
 
-	static Sample* Create( Settings& settings )
+	static Sample* Create( SampleContext* context )
 	{
-		return new SoftBody( settings );
+		return new SoftBody( context );
 	}
 
 	Donut m_donut;
@@ -2282,13 +2753,13 @@ static int sampleDonut = RegisterSample( "Joints", "Soft Body", SoftBody::Create
 class DoohickeyFarm : public Sample
 {
 public:
-	explicit DoohickeyFarm( Settings& settings )
-		: Sample( settings )
+	explicit DoohickeyFarm( SampleContext* context )
+		: Sample( context )
 	{
-		if ( settings.restart == false )
+		if ( m_context->restart == false )
 		{
-			g_camera.m_center = { 0.0f, 5.0f };
-			g_camera.m_zoom = 25.0f * 0.35f;
+			m_context->camera.center = { 0.0f, 5.0f };
+			m_context->camera.zoom = 25.0f * 0.35f;
 		}
 
 		{
@@ -2312,14 +2783,14 @@ public:
 		}
 	}
 
-	void Step( Settings& settings ) override
+	void Step() override
 	{
-		Sample::Step( settings );
+		Sample::Step();
 	}
 
-	static Sample* Create( Settings& settings )
+	static Sample* Create( SampleContext* context )
 	{
-		return new DoohickeyFarm( settings );
+		return new DoohickeyFarm( context );
 	}
 };
 
@@ -2328,17 +2799,17 @@ static int sampleDoohickey = RegisterSample( "Joints", "Doohickey", DoohickeyFar
 class ScissorLift : public Sample
 {
 public:
-	explicit ScissorLift( Settings& settings )
-		: Sample( settings )
+	explicit ScissorLift( SampleContext* context )
+		: Sample( context )
 	{
-		if ( settings.restart == false )
+		if ( m_context->restart == false )
 		{
-			g_camera.m_center = { 0.0f, 9.0f };
-			g_camera.m_zoom = 25.0f * 0.4f;
+			m_context->camera.center = { 0.0f, 9.0f };
+			m_context->camera.zoom = 25.0f * 0.4f;
 		}
 
 		// Need 8 sub-steps for smoother operation
-		settings.subStepCount = 8;
+		m_context->subStepCount = 8;
 
 		b2BodyId groundId;
 		{
@@ -2366,6 +2837,9 @@ public:
 		b2BodyId linkId1;
 		int N = 3;
 
+		float constraintDampingRatio = 20.0f;
+		float constraintHertz = 240.0f;
+
 		for ( int i = 0; i < N; ++i )
 		{
 			bodyDef.position = { 0.0f, y };
@@ -2387,13 +2861,13 @@ public:
 			b2RevoluteJointDef revoluteDef = b2DefaultRevoluteJointDef();
 
 			// left pin
-			revoluteDef.bodyIdA = baseId1;
-			revoluteDef.bodyIdB = bodyId1;
-			revoluteDef.localAnchorA = baseAnchor1;
-			revoluteDef.localAnchorB = { -2.5f, 0.0f };
-			revoluteDef.enableMotor = false;
-			revoluteDef.maxMotorTorque = 1.0f;
-			revoluteDef.collideConnected = ( i == 0 ) ? true : false;
+			revoluteDef.base.bodyIdA = baseId1;
+			revoluteDef.base.bodyIdB = bodyId1;
+			revoluteDef.base.localFrameA.p = baseAnchor1;
+			revoluteDef.base.localFrameB.p = { -2.5f, 0.0f };
+			revoluteDef.base.collideConnected = ( i == 0 ) ? true : false;
+			revoluteDef.base.constraintDampingRatio = constraintDampingRatio;
+			revoluteDef.base.constraintHertz = constraintHertz;
 
 			b2CreateRevoluteJoint( m_worldId, &revoluteDef );
 
@@ -2401,37 +2875,38 @@ public:
 			if ( i == 0 )
 			{
 				b2WheelJointDef wheelDef = b2DefaultWheelJointDef();
-				wheelDef.bodyIdA = baseId2;
-				wheelDef.bodyIdB = bodyId2;
-				wheelDef.localAxisA = { 1.0f, 0.0f };
-				wheelDef.localAnchorA = baseAnchor2;
-				wheelDef.localAnchorB = { 2.5f, 0.0f };
+				wheelDef.base.bodyIdA = baseId2;
+				wheelDef.base.bodyIdB = bodyId2;
+				wheelDef.base.localFrameA.p = baseAnchor2;
+				wheelDef.base.localFrameB.p = { 2.5f, 0.0f };
 				wheelDef.enableSpring = false;
-				wheelDef.collideConnected = true;
+				wheelDef.base.collideConnected = true;
+				wheelDef.base.constraintDampingRatio = constraintDampingRatio;
+				wheelDef.base.constraintHertz = constraintHertz;
 
 				b2CreateWheelJoint( m_worldId, &wheelDef );
 			}
 			else
 			{
-				revoluteDef.bodyIdA = baseId2;
-				revoluteDef.bodyIdB = bodyId2;
-				revoluteDef.localAnchorA = baseAnchor2;
-				revoluteDef.localAnchorB = { 2.5f, 0.0f };
-				revoluteDef.enableMotor = false;
-				revoluteDef.maxMotorTorque = 1.0f;
-				revoluteDef.collideConnected = false;
+				revoluteDef.base.bodyIdA = baseId2;
+				revoluteDef.base.bodyIdB = bodyId2;
+				revoluteDef.base.localFrameA.p = baseAnchor2;
+				revoluteDef.base.localFrameB.p = { 2.5f, 0.0f };
+				revoluteDef.base.collideConnected = false;
+				revoluteDef.base.constraintDampingRatio = constraintDampingRatio;
+				revoluteDef.base.constraintHertz = constraintHertz;
 
 				b2CreateRevoluteJoint( m_worldId, &revoluteDef );
 			}
 
 			// middle pin
-			revoluteDef.bodyIdA = bodyId1;
-			revoluteDef.bodyIdB = bodyId2;
-			revoluteDef.localAnchorA = { 0.0f, 0.0f };
-			revoluteDef.localAnchorB = { 0.0f, 0.0f };
-			revoluteDef.enableMotor = false;
-			revoluteDef.maxMotorTorque = 1.0f;
-			revoluteDef.collideConnected = false;
+			revoluteDef.base.bodyIdA = bodyId1;
+			revoluteDef.base.bodyIdB = bodyId2;
+			revoluteDef.base.localFrameA.p = { 0.0f, 0.0f };
+			revoluteDef.base.localFrameB.p = { 0.0f, 0.0f };
+			revoluteDef.base.collideConnected = false;
+			revoluteDef.base.constraintDampingRatio = constraintDampingRatio;
+			revoluteDef.base.constraintHertz = constraintHertz;
 
 			b2CreateRevoluteJoint( m_worldId, &revoluteDef );
 
@@ -2451,24 +2926,25 @@ public:
 
 		// left pin
 		b2RevoluteJointDef revoluteDef = b2DefaultRevoluteJointDef();
-		revoluteDef.bodyIdA = platformId;
-		revoluteDef.bodyIdB = baseId1;
-		revoluteDef.localAnchorA = { -2.5f, -0.4f };
-		revoluteDef.localAnchorB = baseAnchor1;
-		revoluteDef.enableMotor = false;
-		revoluteDef.maxMotorTorque = 1.0f;
-		revoluteDef.collideConnected = true;
+		revoluteDef.base.bodyIdA = platformId;
+		revoluteDef.base.bodyIdB = baseId1;
+		revoluteDef.base.localFrameA.p = { -2.5f, -0.4f };
+		revoluteDef.base.localFrameB.p = baseAnchor1;
+		revoluteDef.base.collideConnected = true;
+		revoluteDef.base.constraintDampingRatio = constraintDampingRatio;
+		revoluteDef.base.constraintHertz = constraintHertz;
 		b2CreateRevoluteJoint( m_worldId, &revoluteDef );
 
 		// right pin
 		b2WheelJointDef wheelDef = b2DefaultWheelJointDef();
-		wheelDef.bodyIdA = platformId;
-		wheelDef.bodyIdB = baseId2;
-		wheelDef.localAxisA = { 1.0f, 0.0f };
-		wheelDef.localAnchorA = { 2.5f, -0.4f };
-		wheelDef.localAnchorB = baseAnchor2;
+		wheelDef.base.bodyIdA = platformId;
+		wheelDef.base.bodyIdB = baseId2;
+		wheelDef.base.localFrameA.p = { 2.5f, -0.4f };
+		wheelDef.base.localFrameB.p = baseAnchor2;
 		wheelDef.enableSpring = false;
-		wheelDef.collideConnected = true;
+		wheelDef.base.collideConnected = true;
+		wheelDef.base.constraintDampingRatio = constraintDampingRatio;
+		wheelDef.base.constraintHertz = constraintHertz;
 		b2CreateWheelJoint( m_worldId, &wheelDef );
 
 		m_enableMotor = false;
@@ -2476,10 +2952,10 @@ public:
 		m_motorForce = 2000.0f;
 
 		b2DistanceJointDef distanceDef = b2DefaultDistanceJointDef();
-		distanceDef.bodyIdA = groundId;
-		distanceDef.bodyIdB = linkId1;
-		distanceDef.localAnchorA = { -2.5f, 0.2f };
-		distanceDef.localAnchorB = { 0.5f, 0.0f };
+		distanceDef.base.bodyIdA = groundId;
+		distanceDef.base.bodyIdB = linkId1;
+		distanceDef.base.localFrameA.p = { -2.5f, 0.2f };
+		distanceDef.base.localFrameB.p = { 0.5f, 0.0f };
 		distanceDef.enableSpring = true;
 		distanceDef.minLength = 0.2f;
 		distanceDef.maxLength = 5.5f;
@@ -2495,8 +2971,9 @@ public:
 
 	void UpdateGui() override
 	{
+		float fontSize = ImGui::GetFontSize();
 		float height = 140.0f;
-		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 50.0f ), ImGuiCond_Once );
+		ImGui::SetNextWindowPos( ImVec2( 0.5f * fontSize, m_camera->height - height - 2.0f * fontSize ), ImGuiCond_Once );
 		ImGui::SetNextWindowSize( ImVec2( 240.0f, height ) );
 
 		ImGui::Begin( "Scissor Lift", nullptr, ImGuiWindowFlags_NoResize );
@@ -2522,14 +2999,14 @@ public:
 		ImGui::End();
 	}
 
-	void Step( Settings& settings ) override
+	void Step() override
 	{
-		Sample::Step( settings );
+		Sample::Step();
 	}
 
-	static Sample* Create( Settings& settings )
+	static Sample* Create( SampleContext* context )
 	{
-		return new ScissorLift( settings );
+		return new ScissorLift( context );
 	}
 
 	b2JointId m_liftJointId;
@@ -2543,13 +3020,14 @@ static int sampleScissorLift = RegisterSample( "Joints", "Scissor Lift", Scissor
 class GearLift : public Sample
 {
 public:
-	explicit GearLift( Settings& settings )
-		: Sample( settings )
+	explicit GearLift( SampleContext* context )
+		: Sample( context )
 	{
-		if ( settings.restart == false )
+		if ( m_context->restart == false )
 		{
-			g_camera.m_center = { 0.0f, 6.0f };
-			g_camera.m_zoom = 7.0f;
+			m_context->camera.center = { 0.0f, 6.0f };
+			m_context->camera.zoom = 7.0f;
+			m_context->debugDraw.drawJoints = false;
 		}
 
 		b2BodyId groundId;
@@ -2591,7 +3069,7 @@ public:
 		float linkCount = 40;
 		float doorHalfHeight = 1.5f;
 
-		b2Vec2 gearPosition1 = { -4.25f, 10.25f };
+		b2Vec2 gearPosition1 = { -4.25f, 9.75f };
 		b2Vec2 gearPosition2 = gearPosition1 + b2Vec2{ 2.0f, 1.0f };
 		b2Vec2 linkAttachPosition = gearPosition2 + b2Vec2{ gearRadius + 2.0f * toothHalfWidth + toothRadius, 0.0f };
 		b2Vec2 doorPosition = linkAttachPosition - b2Vec2{ 0.0f, 2.0f * linkCount * linkHalfLength + doorHalfHeight };
@@ -2632,10 +3110,10 @@ public:
 			m_motorSpeed = 0.0f;
 			m_enableMotor = true;
 
-			revoluteDef.bodyIdA = groundId;
-			revoluteDef.bodyIdB = bodyId;
-			revoluteDef.localAnchorA = b2Body_GetLocalPoint( groundId, position );
-			revoluteDef.localAnchorB = b2Vec2_zero;
+			revoluteDef.base.bodyIdA = groundId;
+			revoluteDef.base.bodyIdB = bodyId;
+			revoluteDef.base.localFrameA.p = b2Body_GetLocalPoint( groundId, position );
+			revoluteDef.base.localFrameB.p = b2Vec2_zero;
 			revoluteDef.enableMotor = m_enableMotor;
 			revoluteDef.maxMotorTorque = m_motorTorque;
 			revoluteDef.motorSpeed = m_motorSpeed;
@@ -2676,13 +3154,13 @@ public:
 
 			b2RevoluteJointDef revoluteDef = b2DefaultRevoluteJointDef();
 
-			revoluteDef.bodyIdA = groundId;
-			revoluteDef.bodyIdB = followerId;
-			revoluteDef.localAnchorA = b2Body_GetLocalPoint( groundId, position );
-			revoluteDef.localAnchorB = b2Vec2_zero;
+			revoluteDef.base.bodyIdA = groundId;
+			revoluteDef.base.bodyIdB = followerId;
+			revoluteDef.base.localFrameA.p = b2Body_GetLocalPoint( groundId, position );
+			revoluteDef.base.localFrameA.q = b2MakeRot( 0.25f * B2_PI );
+			revoluteDef.base.localFrameB.p = b2Vec2_zero;
 			revoluteDef.enableMotor = true;
 			revoluteDef.maxMotorTorque = 0.5f;
-			revoluteDef.referenceAngle = 0.25f * B2_PI;
 			revoluteDef.lowerAngle = -0.3f * B2_PI;
 			revoluteDef.upperAngle = 0.8f * B2_PI;
 			revoluteDef.enableLimit = true;
@@ -2715,10 +3193,11 @@ public:
 				b2CreateCapsuleShape( bodyId, &shapeDef, &capsule );
 
 				b2Vec2 pivot = { position.x, position.y + linkHalfLength };
-				jointDef.bodyIdA = prevBodyId;
-				jointDef.bodyIdB = bodyId;
-				jointDef.localAnchorA = b2Body_GetLocalPoint( jointDef.bodyIdA, pivot );
-				jointDef.localAnchorB = b2Body_GetLocalPoint( jointDef.bodyIdB, pivot );
+				jointDef.base.bodyIdA = prevBodyId;
+				jointDef.base.bodyIdB = bodyId;
+				jointDef.base.localFrameA.p = b2Body_GetLocalPoint( jointDef.base.bodyIdA, pivot );
+				jointDef.base.localFrameB.p = b2Body_GetLocalPoint( jointDef.base.bodyIdB, pivot );
+				jointDef.base.drawScale = 0.2f;
 				b2CreateRevoluteJoint( m_worldId, &jointDef );
 
 				position.y -= 2.0f * linkHalfLength;
@@ -2744,25 +3223,27 @@ public:
 			{
 				b2Vec2 pivot = doorPosition + b2Vec2{ 0.0f, doorHalfHeight };
 				b2RevoluteJointDef revoluteDef = b2DefaultRevoluteJointDef();
-				revoluteDef.bodyIdA = lastLinkId;
-				revoluteDef.bodyIdB = bodyId;
-				revoluteDef.localAnchorA = b2Body_GetLocalPoint( lastLinkId, pivot );
-				revoluteDef.localAnchorB = { 0.0f, doorHalfHeight };
+				revoluteDef.base.bodyIdA = lastLinkId;
+				revoluteDef.base.bodyIdB = bodyId;
+				revoluteDef.base.localFrameA.p = b2Body_GetLocalPoint( lastLinkId, pivot );
+				revoluteDef.base.localFrameB.p = { 0.0f, doorHalfHeight };
 				revoluteDef.enableMotor = true;
 				revoluteDef.maxMotorTorque = 0.05f;
 				b2CreateRevoluteJoint( m_worldId, &revoluteDef );
 			}
 
 			{
+				b2Vec2 localAxis = { 0.0f, 1.0f };
 				b2PrismaticJointDef jointDef = b2DefaultPrismaticJointDef();
-				jointDef.bodyIdA = groundId;
-				jointDef.bodyIdB = bodyId;
-				jointDef.localAnchorA = b2Body_GetLocalPoint( groundId, doorPosition );
-				jointDef.localAnchorB = b2Vec2_zero;
-				jointDef.localAxisA = { 0.0f, 1.0f };
+				jointDef.base.bodyIdA = groundId;
+				jointDef.base.bodyIdB = bodyId;
+				jointDef.base.localFrameA.p = b2Body_GetLocalPoint( groundId, doorPosition );
+				jointDef.base.localFrameA.q = b2MakeRotFromUnitVector( localAxis );
+				jointDef.base.localFrameB.p = b2Vec2_zero;
+				jointDef.base.localFrameB.q = b2MakeRotFromUnitVector( localAxis );
 				jointDef.maxMotorForce = 0.2f;
 				jointDef.enableMotor = true;
-				jointDef.collideConnected = true;
+				jointDef.base.collideConnected = true;
 				b2CreatePrismaticJoint( m_worldId, &jointDef );
 			}
 		}
@@ -2803,8 +3284,9 @@ public:
 
 	void UpdateGui() override
 	{
+		float fontSize = ImGui::GetFontSize();
 		float height = 120.0f;
-		ImGui::SetNextWindowPos( ImVec2( 10.0f, g_camera.m_height - height - 25.0f ), ImGuiCond_Once );
+		ImGui::SetNextWindowPos( ImVec2( 0.5f * fontSize, m_camera->height - height - 25.0f ), ImGuiCond_Once );
 		ImGui::SetNextWindowSize( ImVec2( 240.0f, height ) );
 
 		ImGui::Begin( "Gear Lift", nullptr, ImGuiWindowFlags_NoResize );
@@ -2830,28 +3312,28 @@ public:
 		ImGui::End();
 	}
 
-	void Step( Settings& settings ) override
+	void Step() override
 	{
-		if ( glfwGetKey( g_mainWindow, GLFW_KEY_A ) )
+		if ( glfwGetKey( m_context->window, GLFW_KEY_A ) )
 		{
-			m_motorSpeed = b2MaxFloat(-0.3f, m_motorSpeed - 0.01f);
+			m_motorSpeed = b2MaxFloat( -0.3f, m_motorSpeed - 0.01f );
 			b2RevoluteJoint_SetMotorSpeed( m_driverId, m_motorSpeed );
 			b2Joint_WakeBodies( m_driverId );
 		}
 
-		if ( glfwGetKey( g_mainWindow, GLFW_KEY_D ) )
+		if ( glfwGetKey( m_context->window, GLFW_KEY_D ) )
 		{
 			m_motorSpeed = b2MinFloat( 0.3f, m_motorSpeed + 0.01f );
 			b2RevoluteJoint_SetMotorSpeed( m_driverId, m_motorSpeed );
 			b2Joint_WakeBodies( m_driverId );
 		}
 
-		Sample::Step( settings );
+		Sample::Step();
 	}
 
-	static Sample* Create( Settings& settings )
+	static Sample* Create( SampleContext* context )
 	{
-		return new GearLift( settings );
+		return new GearLift( context );
 	}
 
 	b2JointId m_driverId;
@@ -2861,3 +3343,198 @@ public:
 };
 
 static int sampleGearLift = RegisterSample( "Joints", "Gear Lift", GearLift::Create );
+
+// A top down door
+class Door : public Sample
+{
+public:
+	explicit Door( SampleContext* context )
+		: Sample( context )
+	{
+		if ( m_context->restart == false )
+		{
+			m_context->camera.center = { 0.0f, 0.0f };
+			m_context->camera.zoom = 4.0f;
+		}
+
+		b2BodyId groundId = b2_nullBodyId;
+		{
+			b2BodyDef bodyDef = b2DefaultBodyDef();
+			bodyDef.position = { 0.0f, 0.0f };
+			groundId = b2CreateBody( m_worldId, &bodyDef );
+		}
+
+		m_enableLimit = true;
+		m_impulse = 50000.0f;
+		m_translationError = 0.0f;
+		m_jointHertz = 240.0f;
+		m_jointDampingRatio = 1.0f;
+
+		{
+			b2BodyDef bodyDef = b2DefaultBodyDef();
+			bodyDef.type = b2_dynamicBody;
+			bodyDef.position = { 0.0f, 1.5f };
+			bodyDef.gravityScale = 0.0f;
+
+			m_doorId = b2CreateBody( m_worldId, &bodyDef );
+
+			b2ShapeDef shapeDef = b2DefaultShapeDef();
+			shapeDef.density = 1000.0f;
+
+			b2Polygon box = b2MakeBox( 0.1f, 1.5f );
+			b2CreatePolygonShape( m_doorId, &shapeDef, &box );
+
+			b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
+			jointDef.base.bodyIdA = groundId;
+			jointDef.base.bodyIdB = m_doorId;
+			jointDef.base.localFrameA.p = { 0.0f, 0.0f };
+			jointDef.base.localFrameB.p = { 0.0f, -1.5f };
+			jointDef.base.constraintHertz = m_jointHertz;
+			jointDef.base.constraintDampingRatio = m_jointDampingRatio;
+			jointDef.targetAngle = 0.0f;
+			jointDef.enableSpring = true;
+			jointDef.hertz = 1.0f;
+			jointDef.dampingRatio = 0.5f;
+			jointDef.motorSpeed = 0.0f;
+			jointDef.maxMotorTorque = 0.0f;
+			jointDef.enableMotor = false;
+			jointDef.lowerAngle = -0.5f * B2_PI;
+			jointDef.upperAngle = 0.5f * B2_PI;
+			jointDef.enableLimit = m_enableLimit;
+
+			m_jointId = b2CreateRevoluteJoint( m_worldId, &jointDef );
+		}
+	}
+
+	void UpdateGui() override
+	{
+		float fontSize = ImGui::GetFontSize();
+		float height = 220.0f;
+		ImGui::SetNextWindowPos( ImVec2( 0.5f * fontSize, m_camera->height - height - 2.0f * fontSize ), ImGuiCond_Once );
+		ImGui::SetNextWindowSize( ImVec2( 240.0f, height ) );
+
+		ImGui::Begin( "Door", nullptr, ImGuiWindowFlags_NoResize );
+
+		if ( ImGui::Button( "impulse" ) )
+		{
+			b2Vec2 p = b2Body_GetWorldPoint( m_doorId, { 0.0f, 1.5f } );
+			b2Body_ApplyLinearImpulse( m_doorId, { m_impulse, 0.0f }, p, true );
+			m_translationError = 0.0f;
+		}
+
+		ImGui::SliderFloat( "magnitude", &m_impulse, 1000.0f, 100000.0f, "%.0f" );
+
+		if ( ImGui::Checkbox( "limit", &m_enableLimit ) )
+		{
+			b2RevoluteJoint_EnableLimit( m_jointId, m_enableLimit );
+		}
+
+		if ( ImGui::SliderFloat( "hertz", &m_jointHertz, 15.0f, 480.0f, "%.0f" ) )
+		{
+			b2Joint_SetConstraintTuning( m_jointId, m_jointHertz, m_jointDampingRatio );
+		}
+
+		if ( ImGui::SliderFloat( "damping", &m_jointDampingRatio, 0.0f, 10.0f, "%.1f" ) )
+		{
+			b2Joint_SetConstraintTuning( m_jointId, m_jointHertz, m_jointDampingRatio );
+		}
+
+		ImGui::End();
+	}
+
+	void Step() override
+	{
+		Sample::Step();
+
+		b2Vec2 p = b2Body_GetWorldPoint( m_doorId, { 0.0f, 1.5f } );
+		DrawPoint( m_draw, p, 5.0f, b2_colorDarkKhaki );
+
+		float translationError = b2Joint_GetLinearSeparation( m_jointId );
+		m_translationError = b2MaxFloat( m_translationError, translationError );
+
+		DrawTextLine( "translation error = %g", m_translationError );
+	}
+
+	static Sample* Create( SampleContext* context )
+	{
+		return new Door( context );
+	}
+
+	b2BodyId m_doorId;
+	b2JointId m_jointId;
+	float m_impulse;
+	float m_translationError;
+	float m_jointHertz;
+	float m_jointDampingRatio;
+	bool m_enableLimit;
+};
+
+static int sampleDoor = RegisterSample( "Joints", "Door", Door::Create );
+
+class ScaleRagdoll : public Sample
+{
+public:
+	explicit ScaleRagdoll( SampleContext* context )
+		: Sample( context )
+	{
+		if ( m_context->restart == false )
+		{
+			m_context->camera.center = { 0.0f, 4.5f };
+			m_context->camera.zoom = 6.0f;
+		}
+
+		{
+			b2BodyDef bodyDef = b2DefaultBodyDef();
+			b2BodyId groundId = b2CreateBody( m_worldId, &bodyDef );
+			b2ShapeDef shapeDef = b2DefaultShapeDef();
+
+			b2Polygon box = b2MakeOffsetBox( 20.0f, 1.0f, { 0.0f, -1.0f }, b2Rot_identity );
+			b2CreatePolygonShape( groundId, &shapeDef, &box );
+		}
+
+		m_scale = 1.0f;
+
+		m_human = {};
+
+		Spawn();
+	}
+
+	void Spawn()
+	{
+		float jointFrictionTorque = 0.03f;
+		float jointHertz = 1.0f;
+		float jointDampingRatio = 0.5f;
+		CreateHuman( &m_human, m_worldId, { 0.0f, 5.0f }, m_scale, jointFrictionTorque, jointHertz, jointDampingRatio, 1, nullptr,
+					 false );
+		Human_ApplyRandomAngularImpulse( &m_human, 10.0f );
+	}
+
+	void UpdateGui() override
+	{
+		float fontSize = ImGui::GetFontSize();
+		float height = 4.0f * fontSize;
+		ImGui::SetNextWindowPos( { 0.5f * fontSize, m_camera->height - height - 2.0f * fontSize }, ImGuiCond_Once );
+		ImGui::SetNextWindowSize( { 20.0f * fontSize, height } );
+
+		ImGui::Begin( "Scale Ragdoll", nullptr, ImGuiWindowFlags_NoResize );
+		ImGui::PushItemWidth( 15.0f * fontSize );
+
+		if ( ImGui::SliderFloat( "Scale", &m_scale, 0.1f, 10.0f, "%3.2f", ImGuiSliderFlags_ClampOnInput ) )
+		{
+			Human_SetScale( &m_human, m_scale );
+		}
+
+		ImGui::PopItemWidth();
+		ImGui::End();
+	}
+
+	static Sample* Create( SampleContext* context )
+	{
+		return new ScaleRagdoll( context );
+	}
+
+	Human m_human;
+	float m_scale;
+};
+
+static int sampleScaleRagdoll = RegisterSample( "Joints", "Scale Ragdoll", ScaleRagdoll::Create );

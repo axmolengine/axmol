@@ -10,18 +10,45 @@ NS_FGUI_BEGIN
 class FUIRichText;
 class HtmlElement;
 class GObject;
+class GLoader;
+
+class HtmlObjectContext
+{
+public:
+    static HtmlObjectContext* getInstance();
+    static void destroyInstance();
+
+    GObject* acquireObject(const std::string& src, std::string_view dedicatedResourceHint);
+
+    GLoader* acquireLoader();
+
+    void recycleObject(GObject* obj);
+    void recycleLoader(GObject* loader);
+
+    bool isLoaderPoolEmpty() const;
+
+    std::string buttonResource;
+    std::string inputResource;
+    std::string selectResource;
+    bool usePool = true;
+
+protected:
+    GObjectPool objectPool;
+    ax::Vector<GObject*> loaderPool;
+    ax::EventListener* _beforeGfxDestroyListener{nullptr};
+
+    static HtmlObjectContext* s_htmlObjContext;
+
+    HtmlObjectContext();
+    ~HtmlObjectContext();
+
+    HtmlObjectContext(const HtmlObjectContext&)            = delete;
+    HtmlObjectContext& operator=(const HtmlObjectContext&) = delete;
+};
 
 class HtmlObject
 {
 public:
-    static std::string buttonResource;
-    static std::string inputResource;
-    static std::string selectResource;
-    static bool usePool;
-
-    static GObjectPool objectPool;
-    static ax::Vector<GObject*> loaderPool;
-
     HtmlObject();
     virtual ~HtmlObject();
 

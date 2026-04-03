@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 #include "axmol/2d/Action.h"
 #include "axmol/2d/ActionInterval.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/text_utils.h"
 

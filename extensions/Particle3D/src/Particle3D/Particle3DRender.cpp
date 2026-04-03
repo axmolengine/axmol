@@ -31,11 +31,11 @@
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/rhi/Buffer.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/base/Director.h"
 #include "axmol/3d/MeshRenderer.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 
 namespace ax
 {
@@ -80,8 +80,8 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
     if (_vertexBuffer == nullptr)
     {
         size_t stride = sizeof(V3F_T2F_C4F);
-        _vertexBuffer = rhi::DriverBase::getInstance()->createBuffer(
-            stride * 4 * particleSystem->getParticleQuota(), rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
+        _vertexBuffer = axdrv->createBuffer(stride * 4 * particleSystem->getParticleQuota(), rhi::BufferType::VERTEX,
+                                            rhi::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
             AXLOGD("Particle3DQuadRender::render create vertex buffer failed");
@@ -91,9 +91,8 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
 
     if (_indexBuffer == nullptr)
     {
-        _indexBuffer =
-            rhi::DriverBase::getInstance()->createBuffer(sizeof(uint16_t) * 6 * particleSystem->getParticleQuota(),
-                                                         rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
+        _indexBuffer = axdrv->createBuffer(sizeof(uint16_t) * 6 * particleSystem->getParticleQuota(),
+                                           rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)
         {
             AXLOGD("Particle3DQuadRender::render create index buffer failed");

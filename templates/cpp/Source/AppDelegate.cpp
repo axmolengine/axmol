@@ -63,6 +63,15 @@ void AppDelegate::initContextAttrs()
     contextAttrs.renderScaleMode = RenderScaleMode::Physical;
 #endif
     setContextAttrs(contextAttrs);
+
+    // Sets preferred orientation
+    const auto orientations = Device::getSupportedOrientations();
+    if (bitmask::any(orientations, Device::OrientationMask::Landscape) &&
+        bitmask::any(orientations, Device::OrientationMask::ReverseLandscape))
+        Device::setPreferredOrientation(Device::Orientation::SensorLandscape);
+    else if (bitmask::any(orientations, Device::OrientationMask::Portrait) &&
+             bitmask::any(orientations, Device::OrientationMask::ReversePortrait))
+        Device::setPreferredOrientation(Device::Orientation::SensorPortrait);
 }
 
 bool AppDelegate::applicationDidFinishLaunching()

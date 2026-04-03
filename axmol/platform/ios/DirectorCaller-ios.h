@@ -27,14 +27,17 @@
 #pragma once
 
 #import <Foundation/Foundation.h>
+#import <QuartzCore/CADisplayLink.h>
 
 @interface CCDirectorCaller : NSObject {
-    id displayLink;
-    int interval;
+    CADisplayLink* displayLink;
+    double interval;
+    int framesPerSecond;
     BOOL isAppActive;
     CFTimeInterval lastDisplayTime;
 }
-@property(readwrite) int interval;
+@property(readwrite) double interval;
+@property(readwrite) int framesPerSecond;
 - (void)startMainLoop;
 - (void)stopMainLoop;
 - (void)doCaller:(id)sender;

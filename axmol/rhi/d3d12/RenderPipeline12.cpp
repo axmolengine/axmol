@@ -85,7 +85,7 @@ static inline D3D12_BLEND toD3DBlendFactorAlpha(BlendFactor f)
 
 static inline uintptr_t makePSOKey(const rhi::BlendDesc& blendDesc,
                                    const DepthStencilStateImpl* dsState,
-                                   void* program,
+                                   uint64_t programId,
                                    uint32_t vlHash,
                                    D3D12_RASTERIZER_DESC& rs,
                                    PrimitiveGroup primitiveGroup)
@@ -96,14 +96,14 @@ static inline uintptr_t makePSOKey(const rhi::BlendDesc& blendDesc,
         {
             rhi::BlendDesc blend{};
             uintptr_t dsHash;
-            void* prog;
+            uint64_t progId;
         };
-        HashMe hashMe{.blend = blendDesc, .dsHash = dsState->getHash(), .prog = program};
+        HashMe hashMe{.blend = blendDesc, .dsHash = dsState->getHash(), .progId = programId};
         const auto rasterComp =
             ((uint32_t)primitiveGroup << 16) | (rs.CullMode << 8) | (rs.FrontCounterClockwise ? 1 : 0);
         const auto seed = (uint64_t)vlHash << 32 | (uint64_t)rasterComp;
 
-        return axstd::hash_bytes(&hashMe, sizeof(hashMe), seed);
+        return tlx::hash_bytes(&hashMe, sizeof(hashMe), seed);
     }
     else
     {
@@ -111,14 +111,14 @@ static inline uintptr_t makePSOKey(const rhi::BlendDesc& blendDesc,
         {
             rhi::BlendDesc blend{};
             uintptr_t dsHash;
-            void* prog;
+            uint64_t progId;
             uint32_t vlHash;
         };
-        HashMe hashMe{.blend = blendDesc, .dsHash = dsState->getHash(), .prog = program, .vlHash = vlHash};
+        HashMe hashMe{.blend = blendDesc, .dsHash = dsState->getHash(), .progId = programId, .vlHash = vlHash};
         const auto rasterComp =
             ((uint32_t)primitiveGroup << 16) | (rs.CullMode << 8) | (rs.FrontCounterClockwise ? 1 : 0);
 
-        return axstd::hash_bytes(&hashMe, sizeof(hashMe), rasterComp);
+        return tlx::hash_bytes(&hashMe, sizeof(hashMe), rasterComp);
     }
 }
 
@@ -195,8 +195,8 @@ void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc)
 
 void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
 {
-    uintptr_t progKey = reinterpret_cast<uintptr_t>(program);
-    if (auto it = _rootSigCache.find(progKey); it != _rootSigCache.end())
+    auto progId = program->getProgramId();
+    if (auto it = _rootSigCache.find(progId); it != _rootSigCache.end())
     {
         _activeRootSignature = &it->second;
         return;
@@ -206,19 +206,30 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
 
     UINT rootIndex = 0;
 
-    axstd::pod_vector<D3D12_ROOT_PARAMETER> rootParams;
+    tlx::pod_vector<D3D12_ROOT_PARAMETER> rootParams;
     rootParams.reserve(4);  // VS UBO, FS UBO, FS SRV table, FS Sampler table
 
-    auto vs = program->getVertexShader();
-    auto fs = program->getFragmentShader();
+    for (auto& uboInfo : program->getActiveUniformBlockInfos())
+    {
+        D3D12_ROOT_PARAMETER& param     = rootParams.emplace_back();
+        param.ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
+        param.Descriptor.ShaderRegister = uboInfo.binding;  // usually 0
+        param.Descriptor.RegisterSpace  = SET_INDEX_UBO;    // map Vulkan set -> D3D12 space
+        param.ShaderVisibility =
+            uboInfo.stage == ShaderStage::VERTEX ? D3D12_SHADER_VISIBILITY_VERTEX : D3D12_SHADER_VISIBILITY_PIXEL;
+
+        // hack: rootIndex must match the uboInfo.binding
+        assert(rootIndex == uboInfo.binding);
+        rootIndex++;
+    }
 
     // --- FS SRVs (textures) -> descriptor table, space = SET_INDEX_SRV ---
-    axstd::pod_vector<D3D12_DESCRIPTOR_RANGE> srvRanges;
+    tlx::pod_vector<D3D12_DESCRIPTOR_RANGE> srvRanges;
 
     // --- Sampler descriptor table (global heap) ---
     D3D12_DESCRIPTOR_RANGE samplerRange{};
 
-    auto& fsSamplers = fs->getActiveSamplerInfos();
+    auto& fsSamplers = program->getActiveTextureInfos();
     if (!fsSamplers.empty())
     {
         samplerRange.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
@@ -234,20 +245,20 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
         entry.samplerRootIndex                           = rootIndex++;
 
         uint16_t maxSamplerSlot = 0;
-        for (auto& smp : fsSamplers)
+        for (auto& [_, smp] : fsSamplers)
         {
             // In Vulkan, sampler2D is a combined image sampler.
             // In D3D12 we only process texture, sampler is in global heap
             // --- SRV range (texture part) ---
             D3D12_DESCRIPTOR_RANGE& srvRange           = srvRanges.emplace_back();
             srvRange.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-            srvRange.NumDescriptors                    = smp.count;      // number of textures
-            srvRange.BaseShaderRegister                = smp.location;   // t#
+            srvRange.NumDescriptors                    = smp->count;     // number of textures
+            srvRange.BaseShaderRegister                = smp->location;  // t#
             srvRange.RegisterSpace                     = SET_INDEX_SRV;  // match Vulkan set
             srvRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-            if (maxSamplerSlot < smp.sampler_slot)
-                maxSamplerSlot = smp.sampler_slot;
+            if (maxSamplerSlot < smp->samplerSlot)
+                maxSamplerSlot = smp->samplerSlot;
         }
 
         samplerRange.NumDescriptors = maxSamplerSlot + 1;
@@ -259,30 +270,6 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
         srvParam.DescriptorTable.pDescriptorRanges   = srvRanges.data();
         srvParam.ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
         entry.srvRootIndex                           = rootIndex++;
-    }
-
-    // --- VS UBO at b0 (space = SET_INDEX_UBO) ---
-    auto& vs_ubs = vs->getActiveUniformBlockInfos();
-    if (!vs_ubs.empty())
-    {
-        D3D12_ROOT_PARAMETER& param     = rootParams.emplace_back();
-        param.ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-        param.Descriptor.ShaderRegister = vs_ubs[0].binding;  // usually 0
-        param.Descriptor.RegisterSpace  = SET_INDEX_UBO;      // map Vulkan set -> D3D12 space
-        param.ShaderVisibility          = D3D12_SHADER_VISIBILITY_VERTEX;
-        entry.vsUboRootIndex            = rootIndex++;
-    }
-
-    // --- FS UBO at b1 (space = SET_INDEX_UBO) ---
-    auto& fs_ubs = fs->getActiveUniformBlockInfos();
-    if (!fs_ubs.empty())
-    {
-        D3D12_ROOT_PARAMETER& param     = rootParams.emplace_back();
-        param.ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-        param.Descriptor.ShaderRegister = fs_ubs[0].binding;  // usually 1
-        param.Descriptor.RegisterSpace  = SET_INDEX_UBO;
-        param.ShaderVisibility          = D3D12_SHADER_VISIBILITY_PIXEL;
-        entry.fsUboRootIndex            = rootIndex++;
     }
 
     // --- finalize root signature ---
@@ -302,14 +289,14 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
     AXASSERT(SUCCEEDED(hr), "Failed to create root signature");
 
     entry.rootSig        = std::move(rootSig);
-    _activeRootSignature = &_rootSigCache.emplace(progKey, std::move(entry)).first->second;
+    _activeRootSignature = &_rootSigCache.emplace(progId, std::move(entry)).first->second;
 }
 
 void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, ProgramImpl* program)
 {
-    uintptr_t key =
-        makePSOKey(desc.blendDesc, _dsState, program, desc.vertexLayout->getHash(), _rasterDesc, _primitiveGroup);
-    auto it = _psoCache.find(key);
+    const auto progId = program->getProgramId();
+    auto key = makePSOKey(desc.blendDesc, _dsState, progId, desc.vertexLayout->getHash(), _rasterDesc, _primitiveGroup);
+    auto it  = _psoCache.find(key);
     if (it != _psoCache.end())
     {
         _activePSO = it->second;
@@ -319,9 +306,8 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, Progra
     static constexpr D3D12_PRIMITIVE_TOPOLOGY_TYPE kPrimitiveTopologyTypes[] = {D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT,
                                                                                 D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE,
                                                                                 D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE};
-
-    auto vsBlob = program->getVSBlob();
-    auto psBlob = program->getPSBlob();
+    auto vsBlob                                                              = program->getVSBlob();
+    auto psBlob                                                              = program->getPSBlob();
 
     auto& vi = static_cast<VertexLayoutImpl*>(desc.vertexLayout)->getD3D12InputLayout();
 
@@ -342,10 +328,37 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, Progra
 
     Microsoft::WRL::ComPtr<ID3D12PipelineState> pso;
     HRESULT hr = _driver->getDevice()->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pso));
-    AXASSERT(SUCCEEDED(hr), "Failed to create PSO");
+    if (FAILED(hr))
+    {
+        AXLOGE("Failed to create PSO, hr=0x{:08x}", static_cast<unsigned>(hr));
+        AXASSERT(false, "Failed to create PSO");
+    }
 
     _activePSO = pso;
     _psoCache.emplace(key, pso);
+    _programToPSOMap.emplace(progId, key);
+}
+
+void RenderPipelineImpl::removeCachedObjects(Program* key)
+{
+    auto progId = key->getProgramId();
+    if (auto it = _rootSigCache.find(progId); it != _rootSigCache.end())
+        _rootSigCache.erase(it);
+
+    auto range = _programToPSOMap.equal_range(progId);
+    if (range.first != range.second)
+    {
+        for (auto it = range.first; it != range.second; ++it)
+        {
+            auto pipelineKey = it->second;
+            auto pipelineIt  = _psoCache.find(pipelineKey);
+            if (pipelineIt != _psoCache.end())
+            {
+                _psoCache.erase(pipelineIt);
+            }
+        }
+        _programToPSOMap.erase(range.first, range.second);
+    }
 }
 
 }  // namespace ax::rhi::d3d12

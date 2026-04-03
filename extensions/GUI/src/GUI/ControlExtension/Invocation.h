@@ -48,7 +48,7 @@ NS_AX_EXT_BEGIN
 
 #define cccontrol_selector(_SELECTOR) static_cast<ax::extension::Control::Handler>(&_SELECTOR)
 
-class AX_EX_DLL Invocation : public Object
+class AX_EXT_API Invocation : public Object
 {
 public:
     /**

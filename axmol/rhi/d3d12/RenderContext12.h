@@ -72,7 +72,6 @@ struct GPUFence
 class RenderContextImpl : public RenderContext
 {
 public:
-    static constexpr int MAX_FRAMES_IN_FLIGHT   = 2;
     static constexpr int SWAPCHAIN_BUFFER_COUNT = 3;
 
     static constexpr uint32_t VI_BINDING_INDEX            = 0;
@@ -86,12 +85,12 @@ public:
         DynamicStateBits::Viewport | DynamicStateBits::Scissor | DynamicStateBits::StencilRef |
         DynamicStateBits::CullMode | DynamicStateBits::FrontFace;
 
-    RenderContextImpl(DriverImpl* driver, void* surfaceContext);
+    RenderContextImpl(DriverImpl* driver, SurfaceHandle surface);
     ~RenderContextImpl() override;
 
     RenderTarget* getScreenRenderTarget() const override { return (RenderTarget*)_screenRT; }
 
-    bool updateSurface(void* surface, uint32_t width, uint32_t height) override;
+    bool updateSurface(SurfaceHandle surface, uint32_t width, uint32_t height) override;
 
     void setDepthStencilState(DepthStencilState* depthStencilState) override;
     void setRenderPipeline(RenderPipeline* renderPipeline) override;
@@ -101,7 +100,7 @@ public:
     void updateDepthStencilState(const DepthStencilDesc& descriptor) override;
     void updatePipelineState(const RenderTarget* rt,
                              const PipelineDesc& pipelineDesc,
-                             PrimitiveGroup primitiveGroup) override;
+                             PrimitiveType primitiveType) override;
 
     void setViewport(int x, int y, unsigned int w, unsigned int h) override;
     void setCullMode(CullMode mode) override;
@@ -112,19 +111,10 @@ public:
     void setIndexBuffer(Buffer* buffer) override;
     void setInstanceBuffer(Buffer* buffer) override;
 
-    void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe) override;
-    void drawArraysInstanced(PrimitiveType primitiveType,
-                             std::size_t start,
-                             std::size_t count,
-                             int instanceCount,
-                             bool wireframe) override;
-    void drawElements(PrimitiveType primitiveType,
-                      IndexFormat indexType,
-                      std::size_t count,
-                      std::size_t offset,
-                      bool wireframe) override;
-    void drawElementsInstanced(PrimitiveType primitiveType,
-                               IndexFormat indexType,
+    void drawArrays(std::size_t start, std::size_t count, bool wireframe) override;
+    void drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool wireframe) override;
+    void drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool wireframe) override;
+    void drawElementsInstanced(IndexFormat indexType,
                                std::size_t count,
                                std::size_t offset,
                                int instanceCount,
@@ -139,9 +129,9 @@ public:
 
     void setStencilReferenceValue(uint32_t value) override;
 
-    uint32_t getCurrentFrame() const { return _currentFrame; }
-
     uint64_t getCompletedFenceValue() const override;
+
+    void removeCachedPipelineObjects(Program* key);
 
 private:
     void createCommandObjects();
@@ -155,8 +145,10 @@ private:
 
     void markDynamicStateDirty(DynamicStateBits bits) noexcept
     {
-        bitmask::set(_inFlightDynamicDirtyBits[0], bits);
-        bitmask::set(_inFlightDynamicDirtyBits[1], bits);
+        auto&& apply = [this, bits]<std::size_t... _Idx>(std::index_sequence<_Idx...>) {
+            (bitmask::set(_inFlightDynamicDirtyBits[_Idx], bits), ...);
+        };
+        apply(std::make_index_sequence<MAX_FRAMES_IN_FLIGHT>{});
     }
 
     void applyPendingDynamicStates();
@@ -187,9 +179,9 @@ private:
     ID3D12RootSignature* _boundRootSig{nullptr};
     ID3D12PipelineState* _boundPSO{nullptr};  // weak pointer
 
-    uint32_t _currentImageIndex{0};
+    uint32_t _imageIndex{0};
+    int _frameIndex{0};
 
-    uint32_t _currentFrame{0};
     uint32_t _renderTargetWidth{0};
     uint32_t _renderTargetHeight{0};
     uint32_t _screenWidth{0};

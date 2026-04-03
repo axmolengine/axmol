@@ -35,7 +35,7 @@
 #include "axmol/base/Object.h"
 #include "axmol/base/Macros.h"
 
-#include "yasio/byte_buffer.hpp"
+#include "axmol/tlx/byte_buffer.hpp"
 
 #include "axmol/network/ConcurrentRefCountedBase.h"
 
@@ -210,7 +210,6 @@ public:
      * @param callback the HttpCompleteCallback function.
      */
     void setCompleteCallback(const HttpCompleteCallback& callback) { _pCallback = callback; }
-    AX_DEPRECATED(2.9) void setResponseCallback(const HttpCompleteCallback& callback) { setCompleteCallback(callback); }
 
     /**
      * Get HttpCompleteCallback callback function.
@@ -219,7 +218,6 @@ public:
      */
 
     const HttpCompleteCallback& getCompleteCallback() const { return _pCallback; }
-    AX_DEPRECATED(2.9) const HttpCompleteCallback& getCallback() const { return getCompleteCallback(); }
 
     /**
      * @brief Set the data callback for handling received data chunks.
@@ -267,7 +265,15 @@ public:
      *
      * @param headers The string vector of custom-defined headers.
      */
-    void setHeaders(const std::vector<std::string>& headers) { _headers = headers; }
+    template <typename _Range>
+    void setHeaders(_Range&& headers)
+    {
+        if constexpr (std::is_same_v<std::remove_cvref_t<_Range>, std::vector<std::string>> &&
+                      std::is_rvalue_reference_v<decltype(headers)>)
+            _headers = std::move(headers);
+        else
+            _headers.assign(std::begin(headers), std::end(headers));
+    }
 
     /**
      * Get custom headers.
@@ -276,7 +282,15 @@ public:
      */
     const std::vector<std::string>& getHeaders() const { return _headers; }
 
-    void setHosts(std::vector<std::string> hosts) { _hosts = std::move(hosts); }
+    template <typename _Range>
+    void setHosts(_Range&& hosts)
+    {
+        if constexpr (std::is_same_v<std::remove_cvref_t<_Range>, std::vector<std::string>> &&
+                      std::is_rvalue_reference_v<decltype(hosts)>)
+            _hosts = std::move(hosts);
+        else
+            _hosts.assign(std::begin(hosts), std::end(hosts));
+    }
     const std::vector<std::string>& getHosts() const { return _hosts; }
 
 private:
@@ -301,7 +315,7 @@ protected:
     // properties
     Type _requestType;                 /// kHttpRequestGet, kHttpRequestPost or other enums
     std::string _url;                  /// target url that this request is sent to
-    yasio::sbyte_buffer _requestData;  /// used for POST
+    tlx::sbyte_buffer _requestData;    /// used for POST
     std::string _tag;                  /// user defined tag, to identify different requests in response callback
     ccHttpRequestCallback _pCallback;  /// C++11 style callbacks
     HttpDataCallback _pDataCallback;

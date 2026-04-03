@@ -627,7 +627,7 @@ int lua_ax_fairygui_EventContext_getDataValue(lua_State* tolua_S)
             return 0;
         }
         const cocos2d::Value& ret = obj->getDataValue();
-        ccvalue_to_luaval(tolua_S, ret);
+        value_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.EventContext:getDataValue",

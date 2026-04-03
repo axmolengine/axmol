@@ -35,8 +35,7 @@ THE SOFTWARE.
 #include <sys/stat.h>
 
 #include "ntcvt/ntcvt.hpp"
-
-#include "axmol/tlx/utility.hpp"
+#include "axmol/tlx/split.hpp"
 
 namespace ax
 {
@@ -189,21 +188,24 @@ std::string FileUtilsWin32::getNativeWritableAbsolutePath() const
         // Get local app data directory, e.g. C:\Documents and Settings\username\Local Settings\Application Data
         if (SUCCEEDED(SHGetFolderPathW(nullptr, CSIDL_LOCAL_APPDATA, nullptr, SHGFP_TYPE_CURRENT, app_data_path)))
         {
-            std::wstring ret(app_data_path);
+            retPath = app_data_path;
 
             // Adding executable filename, e.g. C:\Documents and Settings\username\Local Settings\Application
             // Data\MyGame.exe
-            ret += base_name;
+            retPath += base_name;
 
             // Remove ".exe" extension, e.g. C:\Documents and Settings\username\Local Settings\Application Data\MyGame
-            ret = ret.substr(0, ret.rfind(L"."));
+            auto pos = retPath.find_last_of(L'.');
+            if (pos != std::string::npos)
+                retPath.resize(pos);
 
-            ret += L"\\";
+            retPath += '\\';
 
             // Create directory
-            if (SUCCEEDED(SHCreateDirectoryExW(nullptr, ret.c_str(), nullptr)))
+            auto hr = SHCreateDirectoryExW(nullptr, retPath.c_str(), nullptr);
+            if (FAILED(hr)) [[unlikely]]
             {
-                retPath = ret;
+                retPath.clear();
             }
         }
     }
@@ -213,7 +215,9 @@ std::string FileUtilsWin32::getNativeWritableAbsolutePath() const
         retPath = full_path;
 
         // remove xxx.exe
-        retPath = retPath.substr(0, retPath.rfind(L"\\") + 1);
+        auto pos = retPath.find_last_of('\\');
+        if (pos != std::string::npos)
+            retPath.resize(pos + 1);
     }
 
     return convertPathFormatToUnixStyle(ntcvt::from_chars(retPath));
@@ -273,8 +277,8 @@ bool FileUtilsWin32::createDirectories(std::string_view dirPath) const
     bool fail = false;
     if ((GetFileAttributesW(path.c_str())) == INVALID_FILE_ATTRIBUTES)
     {
-        axstd::splitpath_cb(&path.front(), [](wchar_t* ptr) { return *ptr != '\0'; },
-                            [&dirPath, &fail](const wchar_t* subpath) {
+        tlx::split_path(&path.front(), [](wchar_t* ptr) { return *ptr != '\0'; },
+                        [&dirPath, &fail](const wchar_t* subpath) {
             auto attribs = GetFileAttributesW(subpath);
             if (attribs == INVALID_FILE_ATTRIBUTES)
             {

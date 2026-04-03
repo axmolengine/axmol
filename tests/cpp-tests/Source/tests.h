@@ -29,7 +29,7 @@
 #include "Box2DTest/Box2dTest.h"
 #include "feature-detect.h"
 
-#if AX_ENABLE_EXT_IMGUI && AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID
+#if AX_ENABLE_EXT_IMGUI && defined(AX_PLATFORM_PC)
 #    include "Box2DTestBed/Box2DTestBed.h"
 #endif
 
@@ -71,7 +71,9 @@
 #include "CurrentLanguageTest/CurrentLanguageTest.h"
 #include "DataVisitorTest/DataVisitorTest.h"
 #include "NetworkTest/NetworkTest.h"
-#include "DrawNodeTest/DrawNodeTest.h"
+#if AX_ENABLE_EXT_IMGUI
+#    include "DrawNodeTest/DrawNodeTest.h"
+#endif
 #include "EffectsAdvancedTest/EffectsAdvancedTest.h"
 #include "EffectsTest/EffectsTest.h"
 #include "ExtensionsTest/ExtensionsTest.h"

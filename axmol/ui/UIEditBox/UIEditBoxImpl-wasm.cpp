@@ -99,9 +99,8 @@ void EditBoxImplWasm::createNativeControl(const Rect& frame)
     this->createEditCtrl(ax::ui::EditBox::InputMode::ANY);
 }
 
-void EditBoxImplWasm::setNativeFont(const char* pFontName, int fontSize)
+void EditBoxImplWasm::setNativeFont(std::string_view /*fontName*/, int fontSize)
 {
-    // 设置编辑框文本大小
     EM_ASM(
         {
             var input = Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input");
@@ -110,17 +109,17 @@ void EditBoxImplWasm::setNativeFont(const char* pFontName, int fontSize)
         fontSize);
 }
 
-void EditBoxImplWasm::setNativeFontColor(const Color32& color)
+void EditBoxImplWasm::setNativeFontColor(const Color32& /*color*/)
 {
     // not implemented yet
 }
 
-void EditBoxImplWasm::setNativePlaceholderFont(const char* pFontName, int fontSize)
+void EditBoxImplWasm::setNativePlaceholderFont(std::string_view /*fontName*/, int /*fontSize*/)
 {
     // not implemented yet
 }
 
-void EditBoxImplWasm::setNativePlaceholderFontColor(const Color32& color)
+void EditBoxImplWasm::setNativePlaceholderFontColor(const Color32& /*color*/)
 {
     // not implemented yet
 }
@@ -138,17 +137,17 @@ void EditBoxImplWasm::setNativeReturnType(EditBox::KeyboardReturnType returnType
 
 void EditBoxImplWasm::setNativeTextHorizontalAlignment(TextHAlignment alignment) {}
 
-void EditBoxImplWasm::setNativeText(const char* pText)
+void EditBoxImplWasm::setNativeText(std::string_view text)
 {
     EM_ASM(
         {
             var input = Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input");
-            input.value                         = UTF8ToString($0);
+            input.value                         = UTF8ToString($0, $1);
         },
-        pText);
+        text.data(), static_cast<int>(text.size()));
 }
 
-void EditBoxImplWasm::setNativePlaceHolder(const char* pText)
+void EditBoxImplWasm::setNativePlaceHolder(std::string_view /*text*/)
 {
     // not implemented yet
 }
@@ -215,9 +214,9 @@ void EditBoxImplWasm::updateNativeFrame(const Rect& rect)
         rect.origin.x, rect.origin.y, rect.size.x, rect.size.y);
 }
 
-const char* EditBoxImplWasm::getNativeDefaultFontName()
+std::string_view EditBoxImplWasm::getNativeDefaultFontName()
 {
-    return "Arial";
+    return "Arial"sv;
 }
 
 void EditBoxImplWasm::nativeOpenKeyboard()
@@ -226,15 +225,17 @@ void EditBoxImplWasm::nativeOpenKeyboard()
 
     this->editBoxEditingDidBegin();
 
+    auto text = this->getText();
+
     EM_ASM(
         {
             var input = Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input");
             // sync input value from native and focus
-            input.value     = UTF8ToString($0);
-            input.maxlength = $1 != -1 ? $1 : undefined;
+            input.value     = UTF8ToString($0, $1);
+            input.maxlength = $2 != -1 ? $2 : undefined;
             input.focus();
         },
-        this->getText(), (int)_maxLength);
+        text.data(), (int)text.size(), (int)_maxLength);
 
     auto rect = ui::Helper::convertBoundingBoxToScreen(_editBox);
     this->updateNativeFrame(rect);
@@ -322,7 +323,7 @@ void EditBoxImplWasm::createEditCtrl(EditBox::InputMode inputMode)
 {
     EM_ASM({ Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input"); });
     this->setNativeFont(this->getNativeDefaultFontName(), this->_fontSize);
-    this->setNativeText(this->_text.c_str());
+    this->setNativeText(this->_text);
 }
 
 }  // namespace ui

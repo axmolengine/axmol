@@ -46,10 +46,10 @@ enum PUAbstractNodeType
     ANT_VARIABLE_SET,
     ANT_VARIABLE_ACCESS
 };
-class AX_EX_DLL PUAbstractNode;
+class AX_EXT_API PUAbstractNode;
 typedef std::list<PUAbstractNode*> PUAbstractNodeList;
 
-class AX_EX_DLL PUAbstractNode
+class AX_EXT_API PUAbstractNode
 {
 public:
     std::string file;
@@ -70,10 +70,10 @@ public:
 };
 
 /** This specific abstract node represents a script object */
-class AX_EX_DLL PUObjectAbstractNode : public PUAbstractNode
+class AX_EXT_API PUObjectAbstractNode : public PUAbstractNode
 {
 private:
-    axstd::string_map<std::string> _env;
+    tlx::string_map<std::string> _env;
 
 public:
     std::string name, cls;
@@ -92,11 +92,11 @@ public:
     void addVariable(std::string_view name);
     void setVariable(std::string_view name, std::string_view value);
     std::pair<bool, std::string> getVariable(std::string_view name) const;
-    const axstd::string_map<std::string>& getVariables() const;
+    const tlx::string_map<std::string>& getVariables() const;
 };
 
 /** This abstract node represents a script property */
-class AX_EX_DLL PUPropertyAbstractNode : public PUAbstractNode
+class AX_EXT_API PUPropertyAbstractNode : public PUAbstractNode
 {
 public:
     std::string name;
@@ -111,7 +111,7 @@ public:
 };
 
 /** This is an abstract node which cannot be broken down further */
-class AX_EX_DLL PUAtomAbstractNode : public PUAbstractNode
+class AX_EXT_API PUAtomAbstractNode : public PUAbstractNode
 {
 public:
     std::string value;
@@ -126,12 +126,12 @@ private:
     void parseNumber() const;
 };
 
-class AX_EX_DLL PUParticleSystem3D;
-class AX_EX_DLL PUScriptCompiler
+class AX_EXT_API PUParticleSystem3D;
+class AX_EXT_API PUScriptCompiler
 {
 
 private:
-    axstd::string_map<PUAbstractNodeList>::iterator compile(const PUConcreteNodeList& nodes, std::string_view file);
+    tlx::string_map<PUAbstractNodeList>::iterator compile(const PUConcreteNodeList& nodes, std::string_view file);
     // is it excluded?//
     bool isNameExcluded(std::string_view cls, PUAbstractNode* parent);
 
@@ -156,7 +156,7 @@ private:
     void visit(PUConcreteNode* node);
 
 private:
-    axstd::string_map<PUAbstractNodeList> _compiledScripts;
+    tlx::string_map<PUAbstractNodeList> _compiledScripts;
     PUAbstractNode* _current;
     PUAbstractNodeList* _nodes;
     PUParticleSystem3D* _PUParticleSystem3D;

@@ -24,6 +24,7 @@
 
 #import "axmol/platform/ios/AxmolViewController.h"
 #import "axmol/platform/ios/RenderHostView-ios.h"
+#import "axmol/platform/ios/RenderViewImpl-ios.h"
 #include "axmol/platform/Device.h"
 #include "axmol/platform/Application.h"
 #include "axmol/base/Director.h"
@@ -44,9 +45,24 @@ customization that is not appropriate for viewDidLoad.
 */
 
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
-// - (void)loadView
-// {
-// }
+- (void)loadView
+{
+    // create platform render view
+    auto r                   = [[UIScreen mainScreen] bounds];
+    RenderHostView* hostView = [RenderHostView viewWithFrame:r
+                                                 pixelFormat:(int)RenderViewImpl::_pixelFormat
+                                                 depthFormat:(int)RenderViewImpl::_depthFormat
+                                          preserveBackbuffer:NO
+                                                  sharegroup:nil
+                                               multiSampling:RenderViewImpl::_multisamplingCount > 0 ? YES : NO
+                                             numberOfSamples:RenderViewImpl::_multisamplingCount];
+
+    // Not available on tvOS
+#if !defined(AX_TARGET_OS_TVOS)
+    [hostView setMultipleTouchEnabled:YES];
+#endif
+    self.view = hostView;
+}
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad

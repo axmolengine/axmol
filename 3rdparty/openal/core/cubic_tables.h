@@ -8,15 +8,15 @@
 #include "opthelpers.h"
 
 
-struct SIMDALIGN CubicTable {
+struct CubicTable {
     std::array<CubicCoefficients,CubicPhaseCount> mTable{};
 };
 
-struct GaussianTable : CubicTable { GaussianTable(); };
+struct GaussianTable : CubicTable { GaussianTable() noexcept; };
 inline const GaussianTable gGaussianFilter;
 
-struct SplineTable : CubicTable { SplineTable(); };
-inline const SplineTable gSplineFilter;
+struct SplineTable : CubicTable { consteval SplineTable() noexcept; };
+DECL_HIDDEN extern constinit const SplineTable gSplineFilter;
 
 
 struct CubicFilter {
@@ -26,7 +26,7 @@ struct CubicFilter {
 
     std::array<float,sTableSteps*2 + 1> mFilter{};
 
-    CubicFilter();
+    CubicFilter() noexcept;
 
     [[nodiscard]] constexpr
     auto getCoeff0(std::size_t i) const noexcept -> float { return mFilter[sTableSteps+i]; }

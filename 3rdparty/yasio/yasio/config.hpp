@@ -88,12 +88,6 @@ SOFTWARE.
 // #define YASIO_ENABLE_UDS 1
 
 /*
-** Uncomment or add compiler flag -DYASIO_NT_COMPAT_GAI for compatible with Windows XP
-** see: https://docs.microsoft.com/en-us/windows/win32/api/ws2tcpip/nf-ws2tcpip-getaddrinfo
-*/
-// #define YASIO_NT_COMPAT_GAI 1
-
-/*
 ** Uncomment or add compiler flag -DYASIO_NT_XHRES_TIMER to forcing use undocumented NT API to setup high-resolution timer
 */
 // #define YASIO_NT_XHRES_TIMER 1

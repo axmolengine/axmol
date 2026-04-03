@@ -51,7 +51,7 @@ NS_AX_EXT_BEGIN
  */
 
 /** @class ControlButton Button control for Cocos2D. */
-class AX_EX_DLL ControlButton : public Control
+class AX_EXT_API ControlButton : public Control
 {
 public:
     static ControlButton* create();

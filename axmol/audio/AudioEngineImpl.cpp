@@ -44,6 +44,10 @@ static ALCdevice* s_ALDevice           = nullptr;
 static ALCcontext* s_ALContext         = nullptr;
 static ax::AudioEngineImpl* s_instance = nullptr;
 
+#if defined(__APPLE__)
+bool __axmolAudioSessionInterrupted = false;
+#endif
+
 namespace ax
 {
 static void pauseAudioDevice()
@@ -122,15 +126,14 @@ static void resumeAudioDevice()
 
 - (void)handleInterruption:(NSNotification*)notification
 {
-    static bool isAudioSessionInterrupted = false;
-    static bool resumeOnBecomingActive    = false;
+    static bool resumeOnBecomingActive = false;
 
     if ([notification.name isEqualToString:AVAudioSessionInterruptionNotification])
     {
         NSInteger reason = [[[notification userInfo] objectForKey:AVAudioSessionInterruptionTypeKey] integerValue];
         if (reason == AVAudioSessionInterruptionTypeBegan)
         {
-            isAudioSessionInterrupted = true;
+            __axmolAudioSessionInterrupted = true;
 
             AXLOGD("AVAudioSessionInterruptionTypeBegan, alcMakeContextCurrent(nullptr)");
 
@@ -139,7 +142,7 @@ static void resumeAudioDevice()
         }
         else if (reason == AVAudioSessionInterruptionTypeEnded)
         {
-            isAudioSessionInterrupted = false;
+            __axmolAudioSessionInterrupted = false;
 
             if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive)
             {
@@ -174,7 +177,7 @@ static void resumeAudioDevice()
         if (resumeOnBecomingActive)
         {
             resumeOnBecomingActive = false;
-            if (!isAudioSessionInterrupted)
+            if (!__axmolAudioSessionInterrupted)
                 ax::pauseAudioDevice();
 
             AXLOGD("UIApplicationDidBecomeActiveNotification, resume audio device");
@@ -189,7 +192,7 @@ static void resumeAudioDevice()
 
             ax::resumeAudioDevice();
         }
-        else if (isAudioSessionInterrupted)
+        else if (__axmolAudioSessionInterrupted)
         {
             AXLOGD("Audio session is still interrupted!");
         }
@@ -851,7 +854,7 @@ void AudioEngineImpl::stop(AUDIO_ID audioID)
         return;
 
     auto player = iter->second;
-    player->destroy();
+    player->stop();
 
     // Call '_updatePlayersState' method to cleanup immediately since the schedule may be cancelled without any
     // notification.
@@ -863,7 +866,7 @@ void AudioEngineImpl::stopAll()
     std::lock_guard<std::recursive_mutex> lck(_threadMutex);
     for (auto&& player : _audioPlayers)
     {
-        player.second->destroy();
+        player.second->stop();
     }
     // Note: Don't set the flag to false here, it should be set in 'update' function.
     // Otherwise, the state got from alSourceState may be wrong

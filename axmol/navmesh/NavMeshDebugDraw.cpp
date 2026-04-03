@@ -28,7 +28,7 @@
 #    include <stddef.h>  // offsetof
 #    include "axmol/base/Types.h"
 #    include "axmol/rhi/ProgramState.h"
-#    include "axmol/rhi/DriverBase.h"
+#    include "axmol/rhi/DriverContext.h"
 #    include "axmol/renderer/Renderer.h"
 #    include "axmol/renderer/RenderState.h"
 #    include "axmol/renderer/Shaders.h"

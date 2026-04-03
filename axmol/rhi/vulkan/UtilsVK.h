@@ -28,6 +28,63 @@
 #include <glad/vulkan.h>
 #include <utility>
 
+// Helper to log Vulkan error with context
+#define VK_LOG_ERROR(mesg, detail) \
+    AXLOGE("axmol vulkan: {} - {} in {} {} line {}", mesg, detail, __FILE__, __FUNCTION__, __LINE__)
+
+#define VK_ABORT(mesg)          \
+    do                          \
+    {                           \
+        VK_LOG_ERROR(mesg, ""); \
+        std::abort();           \
+    } while (false)
+
+// Boolean expression: return false
+#define VK_VERIFY_EXPR(expr, mesg)     \
+    do                                 \
+    {                                  \
+        if (!(expr))                   \
+        {                              \
+            VK_LOG_ERROR(mesg, #expr); \
+            return false;              \
+        }                              \
+    } while (false)
+
+// Vulkan result: return false
+#define VK_VERIFY(vkRet, mesg)                                                                       \
+    do                                                                                               \
+    {                                                                                                \
+        static_assert(!std::is_same_v<bool, decltype(vkRet)>, "The type of vkRet must be VKResult"); \
+        if ((vkRet) != VK_SUCCESS)                                                                   \
+        {                                                                                            \
+            VK_LOG_ERROR(mesg, fmt::format("error code {}", static_cast<int>(vkRet)));               \
+            return false;                                                                            \
+        }                                                                                            \
+    } while (false)
+
+// Boolean expression: abort
+#define VK_REQUIRE_EXPR(expr, mesg)    \
+    do                                 \
+    {                                  \
+        if (!(expr))                   \
+        {                              \
+            VK_LOG_ERROR(mesg, #expr); \
+            std::abort();              \
+        }                              \
+    } while (false)
+
+// Vulkan result: abort
+#define VK_REQUIRE(vkRet, mesg)                                                                      \
+    do                                                                                               \
+    {                                                                                                \
+        static_assert(!std::is_same_v<bool, decltype(vkRet)>, "The type of vkRet must be VKResult"); \
+        if ((vkRet) != VK_SUCCESS)                                                                   \
+        {                                                                                            \
+            VK_LOG_ERROR(mesg, fmt::format("error code {}", static_cast<int>(vkRet)));               \
+            std::abort();                                                                            \
+        }                                                                                            \
+    } while (false)
+
 namespace ax::rhi::vk
 {
 /**

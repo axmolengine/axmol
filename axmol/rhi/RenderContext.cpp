@@ -35,7 +35,7 @@ RenderContext::~RenderContext() {}
 
 void RenderContext::updatePipelineState(const RenderTarget* rt,
                                         const PipelineDesc& desc,
-                                        PrimitiveGroup /*primitiveGroup*/)
+                                        PrimitiveType /*primitiveType*/)
 {
     _programState = desc.programState;
     _vertexLayout = desc.vertexLayout;
@@ -49,7 +49,7 @@ void RenderContext::setStencilReferenceValue(uint32_t value)
     _stencilReferenceValue = value;
 }
 
-bool RenderContext::updateSurface(void* /*surface*/, uint32_t /*width*/, uint32_t /*height*/)
+bool RenderContext::updateSurface(SurfaceHandle /*surface*/, uint32_t /*width*/, uint32_t /*height*/)
 {
     return true;
 }

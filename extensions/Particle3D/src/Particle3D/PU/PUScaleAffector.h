@@ -33,7 +33,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUScaleAffector : public PUAffector
+class AX_EXT_API PUScaleAffector : public PUAffector
 {
 public:
     // Constants

@@ -31,8 +31,6 @@
 #include <algorithm>
 
 #include "../testResource.h"
-#include "cocostudio/CocosStudioExtension.h"
-
 #include "axmol/tlx/format.hpp"
 
 using namespace ax;

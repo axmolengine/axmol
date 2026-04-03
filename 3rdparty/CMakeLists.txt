@@ -65,7 +65,6 @@ endif()
 add_library(3rdparty INTERFACE)
 
 set(_1kfetch_cache_dir "${_AX_ROOT}/cache" CACHE STRING "" FORCE)
-set(_1kfetch_manifest "${_AX_ROOT}/manifest.json" CACHE STRING "" FORCE)
 
 # fetch prebuilts of 1kdist and git sources
 include(${_AX_ROOT}/1k/fetch.cmake)
@@ -111,30 +110,17 @@ function(ax_add_3rd source_dir)
       add_dependencies(3rdparty ${tgt})
     endif()
 
-    get_target_property(is_imported_lib ${tgt} IMPORTED)
+    if(NOT (tgt_type STREQUAL "INTERFACE_LIBRARY"))
+      set_target_properties(${tgt} PROPERTIES
+        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" # Windows/Linux/macOS, .a, .lib
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin" # Windows .dll, .exe
+        FOLDER "3rdparty"
+      )
 
-    if (NOT is_imported_lib)
-      if(tgt_type STREQUAL "SHARED_LIBRARY")
-        if(LINUX)
-          set_target_properties(${tgt} PROPERTIES
-            ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-            LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"        
-            FOLDER "3rdparty"
-          )
-        else()      
-          set_target_properties(${tgt} PROPERTIES
-            ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"         
-            FOLDER "3rdparty"
-          )
-        endif()
-      elseif(NOT(tgt_type STREQUAL "INTERFACE_LIBRARY"))
+      get_target_property(_apple_framework ${tgt} MACOSX_FRAMEWORK_NAME)
+      if(NOT _apple_framework)
         set_target_properties(${tgt} PROPERTIES
-          ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-          LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-          RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-          FOLDER "3rdparty"
+          LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" # .so, .dylib, windows imported .lib
         )
       endif()
     endif()
@@ -175,7 +161,7 @@ endif()
 # libpng
 ax_add_3rd(png)
 
-if(AX_ENABLE_PHYSICS)
+if(AX_ENABLE_PHYSICS_2D)
   set(box2d_opts "BOX2D_BUILD_UNIT_TESTS OFF" "BOX2D_BUILD_TESTBED OFF")
   ax_add_3rd(box2d OPTIONS ${box2d_opts})
 endif()
@@ -199,7 +185,7 @@ if(AX_ENABLE_NAVMESH)
   ax_add_3rd(recast)
 endif()
 
-if(AX_ENABLE_3D_PHYSICS)
+if(AX_ENABLE_PHYSICS_3D)
   ax_add_3rd(bullet)
 endif()
 
@@ -207,7 +193,7 @@ if(AX_WITH_JPEG AND NOT WINRT AND NOT EMSCRIPTEN)
   ax_add_3rd(jpeg-turbo)
 endif()
 
-ax_add_3rd(openssl TARGETS OpenSSL::SSL)
+ax_add_3rd(openssl TARGETS OpenSSL::SSL OpenSSL::Crypto)
 
 if(AX_WITH_WEBP)
   ax_add_3rd(webp)
@@ -261,6 +247,11 @@ if(AX_ENABLE_AUDIO)
       "ALSOFT_UTILS OFF"
       "ALSOFT_EXAMPLES OFF"
       "ALSOFT_INSTALL OFF"
+      "ALSOFT_INSTALL_CONFIG OFF"
+      "ALSOFT_INSTALL_HRTF_DATA OFF"
+      "ALSOFT_INSTALL_AMBDEC_PRESETS OFF"
+      "ALSOFT_INSTALL_UTILS OFF"
+      "ALSOFT_ENABLE_MODULES OFF"
     )
 
     if(AX_USE_ALSOFT_STATIC)
@@ -283,7 +274,8 @@ if(AX_ENABLE_AUDIO)
         "ALSOFT_BACKEND_SNDIO OFF"
         "ALSOFT_BACKEND_JACK OFF"
         "ALSOFT_BACKEND_PORTAUDIO OFF"
-        "ALSOFT_BACKEND_SDL2 OFF")
+        "ALSOFT_BACKEND_SDL2 OFF"
+        )
       set(ALSOFT_RTKIT OFF CACHE BOOL "Enable RTKit support" FORCE)
     elseif(WINDOWS)
       list(APPEND alsoft_opts "ALSOFT_BACKEND_WASAPI ON" "ALSOFT_BACKEND_WAVE OFF" "ALSOFT_BACKEND_DSOUND OFF" "ALSOFT_BACKEND_WINMM OFF")
@@ -327,7 +319,7 @@ if(AX_ENABLE_AUDIO)
 endif()
 
 if(WINDOWS OR LINUX OR ANDROID OR WASM)
-  if(AX_RENDER_API STREQUAL "gl" OR AX_RENDER_API STREQUAL "vk")
+  if(AX_ENABLE_VK OR AX_ENABLE_GL)
     ax_add_3rd(glad)
   endif()
 endif()

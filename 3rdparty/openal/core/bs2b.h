@@ -25,9 +25,10 @@
 #define CORE_BS2B_H
 
 #include <array>
-#include <cstddef>
+#include <span>
 
-#include "alspan.h"
+#include "bufferline.h"
+
 
 namespace Bs2b {
 
@@ -45,7 +46,7 @@ enum {
     DefaultCLevel = HighECLevel
 };
 
-struct bs2b {
+struct bs2b_processor {
     int level{}; /* Crossfeed level */
     int srate{}; /* Sample rate (Hz) */
 
@@ -83,7 +84,11 @@ struct bs2b {
     /* Clear buffer */
     void clear();
 
-    void cross_feed(const al::span<float> Left, const al::span<float> Right);
+    void cross_feed(const std::span<float> Left, const std::span<float> Right);
+};
+
+struct bs2b : public bs2b_processor {
+    std::array<FloatBufferLine,2> mStorage{};
 };
 
 } // namespace Bs2b

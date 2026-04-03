@@ -39,11 +39,11 @@ THE SOFTWARE.
 #include "axmol/renderer/Renderer.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/text_utils.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/ProgramState.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 
 namespace ax
 {
@@ -365,6 +365,10 @@ Sprite::~Sprite()
 // MARK: texture
 void Sprite::setTexture(std::string_view filename)
 {
+    if (_renderMode == RenderMode::POLYGON)
+        _polyInfo.setFilename(""sv);
+
+    _renderMode        = RenderMode::QUAD;
     Texture2D* texture = _director->getTextureCache()->addImage(filename);
     setTexture(texture);
     _unflippedOffsetPositionFromCenter = Vec2::ZERO;
@@ -378,7 +382,7 @@ void Sprite::setTexture(std::string_view filename)
 void Sprite::setVertexLayout()
 {
     AXASSERT(_programState, "programState should not be nullptr");
-    Object::adopt(_vertexLayout, axvlm->acquireBuiltinVertexLayout(VertexLayoutKind::Sprite));
+    Object::assign(_vertexLayout, axvlm->getBuiltinVertexLayout(VertexLayoutKind::Sprite));
 }
 
 void Sprite::setProgramState(uint32_t type)
@@ -1315,10 +1319,11 @@ void Sprite::setScaleX(float scaleX)
 
 void Sprite::setScaleY(float scaleY)
 {
-#if AX_RENDER_API == AX_RENDER_API_MTL
-    if (_texture && _texture->isRenderTarget())
-        scaleY = std::abs(scaleY);
-#endif
+    if (rhi::DriverContext::isMetal())
+    {
+        if (_texture && _texture->isRenderTarget())
+            scaleY = std::abs(scaleY);
+    }
     Node::setScaleY(scaleY);
     SET_DIRTY_RECURSIVELY();
 }

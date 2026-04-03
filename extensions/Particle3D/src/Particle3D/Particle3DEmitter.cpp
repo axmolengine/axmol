@@ -28,7 +28,7 @@
 namespace ax
 {
 
-Particle3DEmitter::Particle3DEmitter() : _particleSystem(nullptr), _isEnabled(true) {}
+Particle3DEmitter::Particle3DEmitter() : _particleSystem(nullptr), _emitRate(1), _isEnabled(true) {}
 
 Particle3DEmitter::~Particle3DEmitter()
 {

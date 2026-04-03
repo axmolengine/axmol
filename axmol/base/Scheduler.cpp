@@ -343,20 +343,20 @@ void Scheduler::unschedule(std::string_view key, void* target)
     }
 }
 
-void Scheduler::priorityIn(axstd::pod_vector<SchedHandle*>& list,
+void Scheduler::priorityIn(tlx::pod_vector<SchedHandle*>& list,
                            const ccSchedulerFunc& callback,
                            void* target,
                            int priority,
                            bool paused)
 {
     auto sched = new SchedHandle(&list, callback, target, priority, paused);
-    axstd::insert_sorted(list, sched,
-                         [](const SchedHandle* lhs, const SchedHandle* rhs) { return lhs->priority < rhs->priority; });
+    tlx::ordered_insert(list, sched,
+                        [](const SchedHandle* lhs, const SchedHandle* rhs) { return lhs->priority < rhs->priority; });
 
     _schedIndexMap.emplace(target, sched);
 }
 
-void Scheduler::appendIn(axstd::pod_vector<SchedHandle*>& list,
+void Scheduler::appendIn(tlx::pod_vector<SchedHandle*>& list,
                          const ccSchedulerFunc& callback,
                          void* target,
                          bool paused)
@@ -385,14 +385,14 @@ void Scheduler::activeWaitList()
         else if (sched->priority > 0)
         {
             sched->owner = &_updatesPosList;
-            axstd::insert_sorted(_updatesPosList, sched, [](const SchedHandle* lhs, const SchedHandle* rhs) {
+            tlx::ordered_insert(_updatesPosList, sched, [](const SchedHandle* lhs, const SchedHandle* rhs) {
                 return lhs->priority < rhs->priority;
             });
         }
         else
         {
             sched->owner = &_updatesNegList;
-            axstd::insert_sorted(_updatesNegList, sched, [](const SchedHandle* lhs, const SchedHandle* rhs) {
+            tlx::ordered_insert(_updatesNegList, sched, [](const SchedHandle* lhs, const SchedHandle* rhs) {
                 return lhs->priority < rhs->priority;
             });
         }
@@ -474,7 +474,7 @@ void Scheduler::unscheduleUpdate(void* target)
 
         if (!_indexMapLocked)
         {
-            axstd::erase(*sched->owner, sched);
+            tlx::erase(*sched->owner, sched);
             delete sched;
         }
         else
@@ -500,7 +500,7 @@ void Scheduler::unscheduleAllWithMinPriority(int minPriority)
         unscheduleAllForTarget(timerIt);
     }
 
-    axstd::pod_vector<void*> targets;
+    tlx::pod_vector<void*> targets;
 
     for (auto&& entry : _waitList)
     {
@@ -822,7 +822,7 @@ void Scheduler::update(float dt)
     // delete all updates that are removed in update
     for (auto&& sched : _updateDeleteVector)
     {
-        axstd::erase(*sched->owner, sched);
+        tlx::erase(*sched->owner, sched);
         delete sched;
     }
 

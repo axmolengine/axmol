@@ -47,7 +47,7 @@ class Program;
 class VertexLayout;
 
 class SamplerCache;
-
+class DriverContext;
 struct VertexLayoutDesc;
 
 enum class FeatureType : uint32_t
@@ -85,26 +85,26 @@ struct DriverCaps
  */
 class AX_DLL DriverBase
 {
-public:
-    struct Caps
-    {};
     friend class ShaderCache;
     friend class SamplerCache;
+    friend class DriverContext;
 
-    /**
-     * Returns a shared instance of the DriverBase.
-     */
-    static DriverBase* getInstance();
-    static void destroyInstance();
+protected:
+    virtual bool init()       = 0;
+    virtual DriverType type() = 0;
 
+public:
     virtual ~DriverBase() = default;
 
     /**
-     * New a Render Context object, not auto released.
-     * @param surfaceContext, current is win32 HWND or IUnkown*(swapChainPanel)
-     * @return A RenderContext object.
+     * Create a RenderContext (not auto‑released).
+     * @param surfaceHandle Platform-specific surface:
+     *        - Win32: HWND
+     *        - UWP: IUnknown* (SwapChainPanel)
+     *        - Vulkan: VkSurfaceKHR
+     * @return RenderContext instance
      */
-    virtual RenderContext* createRenderContext(void* surfaceContext) = 0;
+    virtual RenderContext* createRenderContext(SurfaceHandle surface) = 0;
 
     /**
      * New a Buffer object, not auto released.
@@ -138,11 +138,11 @@ public:
 
     /**
      * Create an auto released Program.
-     * @param vertexShader Specifes this is a vertex shader source.
-     * @param fragmentShader Specifes this is a fragment shader source.
+     * @param vsData Specifes this is a vertex shader data.
+     * @param fsData Specifes this is a fragment shader data.
      * @return A Program instance.
      */
-    virtual Program* createProgram(std::string_view vsSource, std::string_view fsSource) = 0;
+    virtual Program* createProgram(Data vsData, Data fsData) = 0;
 
     virtual VertexLayout* createVertexLayout(VertexLayoutDesc&& desc);
 
@@ -210,7 +210,7 @@ public:
      */
     inline int getMaxSamplesAllowed() const { return _caps.maxSamplesAllowed; }
 
-    virtual void cleanPendingResources() {}
+    virtual void destroyStaleResources() {}
 
     virtual void waitForGPU() {};
 
@@ -218,22 +218,17 @@ protected:
     /**
      * New a shaderModule, not auto released.
      * @param stage Specifies whether is vertex shader or fragment shader.
-     * @param source Specifies shader source.
+     * @param chunk Specifies shader chunk.
      * @return A ShaderModule object.
      */
-    virtual ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) = 0;
+    virtual ShaderModule* createShaderModule(ShaderStage stage, Data& chunk) = 0;
 
     virtual SamplerHandle createSampler(const SamplerDesc& desc) = 0;
     virtual void destroySampler(SamplerHandle&)                  = 0;
 
     DriverCaps _caps;
-
-private:
-    static DriverBase* _instance;
 };
 
 // end of _rhi group
 /// @}
 }  // namespace ax::rhi
-
-#define axdrv ax::rhi::DriverBase::getInstance()

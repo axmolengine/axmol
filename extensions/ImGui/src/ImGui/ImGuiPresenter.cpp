@@ -24,24 +24,16 @@ THE SOFTWARE.
 
 #include "ImGuiPresenter.h"
 #include <assert.h>
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-#    include "backends/imgui_impl_android.h"
-#else
+#if defined(AX_PLATFORM_PC)
 #    include "backends/imgui_impl_glfw.h"
+#else
+#    include "backends/imgui_impl_axmol_sw.h"
 #endif
-
 #include "backends/imgui_impl_axmol.h"
-
 #include "imgui_internal.h"
 #include "misc/freetype/imgui_freetype.h"
 
 #include "xxhash.h"
-
-#if defined(AX_PLATFORM_PC) && AX_RENDER_API == AX_RENDER_API_GL
-#    define AX_IMGUI_ENABLE_MULTI_VIEWPORT 1
-#else
-#    define AX_IMGUI_ENABLE_MULTI_VIEWPORT 0
-#endif
 
 NS_AX_EXT_BEGIN
 
@@ -171,7 +163,7 @@ class ImGuiSceneEventTracker : public ImGuiEventTracker
 public:
     bool initWithScene(Scene* scene)
     {
-#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
+#if defined(AX_PLATFORM_PC)
         _trackLayer = utils::newInstance<Node>(&Node::initLayer);
 
         // note: when at the first click to focus the window, this will not take effect
@@ -180,11 +172,14 @@ public:
         listener->onTouchBegan = [this](Touch* touch, Event*) -> bool { return ImGui::GetIO().WantCaptureMouse; };
         _trackLayer->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, _trackLayer);
 
-        // add by halx99
-        auto stopAnyMouse  = [=](EventMouse* event) -> bool { return ImGui::GetIO().WantCaptureMouse; };
+        // capture mouse events
+        auto captureMouse  = [=](EventMouse* event) -> bool { return ImGui::GetIO().WantCaptureMouse; };
         auto mouseListener = EventListenerMouse::create();
         mouseListener->setSwallowMouse(true);
-        mouseListener->onMouseDown = mouseListener->onMouseUp = stopAnyMouse;
+        mouseListener->onMouseDown   = captureMouse;
+        mouseListener->onMouseUp     = captureMouse;
+        mouseListener->onMouseMove   = captureMouse;
+        mouseListener->onMouseScroll = captureMouse;
         _trackLayer->getEventDispatcher()->addEventListenerWithSceneGraphPriority(mouseListener, _trackLayer);
         scene->addChild(_trackLayer, INT_MAX);
 #endif
@@ -209,7 +204,7 @@ public:
 
     ~ImGuiSceneEventTracker() override
     {
-#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
+#if defined(AX_PLATFORM_PC)
         if (_trackLayer)
         {
             if (_trackLayer->getParent())
@@ -230,7 +225,7 @@ class ImGuiGlobalEventTracker : public ImGuiEventTracker
 public:
     bool init()
     {
-#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
+#if defined(AX_PLATFORM_PC)
         // note: when at the first click to focus the window, this will not take effect
 
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
@@ -240,11 +235,14 @@ public:
         _touchListener->onTouchBegan = [this](Touch* touch, Event*) -> bool { return ImGui::GetIO().WantCaptureMouse; };
         eventDispatcher->addEventListenerWithFixedPriority(_touchListener, highestPriority);
 
-        // add by halx99
-        auto stopAnyMouse = [=](EventMouse* event) -> bool { return ImGui::GetIO().WantCaptureMouse; };
+        // capture mouse events
+        auto captureMouse = [=](EventMouse* event) -> bool { return ImGui::GetIO().WantCaptureMouse; };
         _mouseListener    = utils::newInstance<EventListenerMouse>();
         _mouseListener->setSwallowMouse(true);
-        _mouseListener->onMouseDown = _mouseListener->onMouseUp = stopAnyMouse;
+        _mouseListener->onMouseDown   = captureMouse;
+        _mouseListener->onMouseUp     = captureMouse;
+        _mouseListener->onMouseMove   = captureMouse;
+        _mouseListener->onMouseScroll = captureMouse;
         eventDispatcher->addEventListenerWithFixedPriority(_mouseListener, highestPriority);
 #endif
         return true;
@@ -252,7 +250,7 @@ public:
 
     ~ImGuiGlobalEventTracker() override
     {
-#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
+#if defined(AX_PLATFORM_PC)
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
         eventDispatcher->removeEventListener(_mouseListener);
         eventDispatcher->removeEventListener(_touchListener);
@@ -267,28 +265,25 @@ public:
 };
 
 static ImGuiPresenter* _instance = nullptr;
-std::function<void(ImGuiPresenter*)> ImGuiPresenter::_onInit;
-
 ImGuiPresenter* ImGuiPresenter::getInstance()
 {
-    if (_instance == nullptr)
+    if (_instance)
     {
-        _instance = new ImGuiPresenter();
-        _instance->init();
-        if (_onInit)
-            _onInit(_instance);
+        if (!_instance->_pendingDestroy)
+            return _instance;
+        return nullptr;
     }
+
+    _instance = new ImGuiPresenter();
+    _instance->init();
+
     return _instance;
 }
 
 void ImGuiPresenter::destroyInstance()
 {
     if (_instance)
-    {
-        _instance->cleanup();
-        delete _instance;
-        _instance = nullptr;
-    }
+        _instance->_pendingDestroy = true;
 }
 
 void ImGuiPresenter::init()
@@ -297,13 +292,14 @@ void ImGuiPresenter::init()
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
-    (void)io;
+
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
     // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  // Enable Docking
 
-#if AX_IMGUI_ENABLE_MULTI_VIEWPORT
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport / Platform Windows
+#if defined(AX_PLATFORM_PC)
+    if (rhi::DriverContext::isOpenGL())
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport / Platform Windows
 #endif
     // io.ConfigViewportsNoAutoMerge = true;
     // io.ConfigViewportsNoTaskBarIcon = true;
@@ -327,11 +323,11 @@ void ImGuiPresenter::init()
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    ImGui_ImplAndroid_InitForAxmol(Director::getInstance()->getRenderView(), true);
-#else
+#if defined(AX_PLATFORM_PC)
     auto window = static_cast<RenderViewImpl*>(Director::getInstance()->getRenderView())->getWindow();
     ImGui_ImplGlfw_InitForAxmol(window, true);
+#else
+    ImGui_ImplAxmolSW_Init(Director::getInstance()->getRenderView(), true);
 #endif
     ImGui_ImplAxmol_Init();
 
@@ -340,22 +336,32 @@ void ImGuiPresenter::init()
     ImGui::StyleColorsClassic();
 
     auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-    eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [this](EventCustom*) { beginFrame(); });
-    eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [this](EventCustom*) { endFrame(); });
+    _event1 =
+        eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [this](EventCustom*) { beginFrame(); });
+    _event2 =
+        eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [this](EventCustom*) { endFrame(); });
+    _event3 = eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_GFX_DROP, [](EventCustom*) {
+        if (_instance)
+        {
+            _instance->cleanup();
+            AX_SAFE_DELETE(_instance);
+        }
+    });
 }
 
 void ImGuiPresenter::cleanup()
 {
     auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-    eventDispatcher->removeCustomEventListeners(Director::EVENT_AFTER_VISIT);
-    eventDispatcher->removeCustomEventListeners(Director::EVENT_BEFORE_DRAW);
+    eventDispatcher->removeEventListener(_event1);
+    eventDispatcher->removeEventListener(_event2);
+    eventDispatcher->removeEventListener(_event3);
 
     ImGui_ImplAxmol_SetUpdateFontsFunc(nullptr, nullptr);
     ImGui_ImplAxmol_Shutdown();
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    ImGui_ImplAndroid_Shutdown();
-#else
+#if defined(AX_PLATFORM_PC)
     ImGui_ImplGlfw_Shutdown();
+#else
+    ImGui_ImplAxmolSW_Shutdown();
 #endif
 
     ImGui::DestroyContext();
@@ -368,11 +374,9 @@ void ImGuiPresenter::cleanup()
         }
         _renderLoops.clear();
     }
-}
 
-void ImGuiPresenter::setOnInit(const std::function<void(ImGuiPresenter*)>& callBack)
-{
-    _onInit = callBack;
+    _usedObjs.clear();
+    _objsRefIdMap.clear();
 }
 
 void ImGuiPresenter::updateFonts(void* ud)
@@ -463,14 +467,22 @@ void ImGuiPresenter::beginFrame()
         Director::getInstance()->end();
         return;
     }
+    if (_pendingDestroy)
+    {
+        cleanup();
+        delete this;
+        if (_instance == this)
+            _instance = nullptr;
+        return;
+    }
     if (!_renderLoops.empty())
     {
         // create frame
         ImGui_ImplAxmol_NewFrame();
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-        ImGui_ImplAndroid_NewFrame();
-#else
+#if defined(AX_PLATFORM_PC)
         ImGui_ImplGlfw_NewFrame();
+#else
+        ImGui_ImplAxmolSW_NewFrame();
 #endif
         ImGui::NewFrame();
 

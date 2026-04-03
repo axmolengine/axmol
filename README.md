@@ -20,6 +20,7 @@ Please [visit our Wiki](https://github.com/axmolengine/axmol/wiki) to know more 
 ![issues](https://img.shields.io/github/issues/axmolengine/axmol?style=plastic)
 ![forks](https://img.shields.io/github/forks/axmolengine/axmol?style=plastic)
 ![stars](https://img.shields.io/github/stars/axmolengine/axmol?style=plastic)
+![G-Star](https://atomgit.com/axmol/axmol/star/badge.svg)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/axmolengine/axmol?style=plastic)  
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/axmolengine/axmol/pulls)
@@ -34,16 +35,20 @@ Please [visit our Wiki](https://github.com/axmolengine/axmol/wiki) to know more 
 ## 📢 Branches
 
 > **Important Notice**  
-> - **`dev` branch**: Serves as the **v3** development branch. It is under active development and may contain unstable or experimental features.  
-> - **`release/2.x` branch**: Serves as the **stable production branch**. It is recommended for production use to ensure stability and compatibility.  
+> - **`dev` branch**: Serves as the **v3** development branch. It is under active development and may contain unstable or experimental features. PRs for new features, enhancements, or bug fixes (unless critical for v2 LTS) should be submitted to this branch **as the primary target**.
+> - **`release/2.x` branch**: Has entered the **stable maintenance phase** (2.11.x will be the final v2 LTS release). This branch is reserved for critical bug fixes and security patches only to ensure production stability.
 >
-> Use the `dev` branch if you want to contribute to v3 development or test new features. For production deployment, please use the `release/2.x` branch.
+> Use the `dev` branch if you want to contribute to v3 development, test new features, or submit non-critical bug fixes. For production deployment, continue to use the `release/2.x` branch for stability and compatibility.  
+>
+> ⚠️ **Do not submit PRs to the `release/2.x` branch that apply full-file `clang-format` or large-scale reformatting changes.**  
+> Such changes significantly increase merge conflicts and make code review unnecessarily difficult, consuming additional time. Additionally, non-critical feature/enhancement PRs targeting `release/2.x` will not be accepted given its LTS maintenance status.  
+> Any PRs violating these rules **will not be accepted**.
 
 ***
 
 ## ⚡️Building
 
-* Download it: [Latest Release](https://github.com/axmolengine/axmol/releases) / [SourceForge Mirror](https://sourceforge.net/projects/axmol-engine.mirror) / [Gitee Mirror](https://gitee.com/simdsoft/axmol) 
+* Download it: [Latest Release](https://github.com/axmolengine/axmol/releases) / [AtomGit Mirror](https://atomgit.com/axmol/axmol) / [SourceForge Mirror](https://sourceforge.net/projects/axmol-engine.mirror) / [Gitee Mirror](https://gitee.com/simdsoft/axmol)
 * [How to install](docs/DevSetup.md)
 
 If you have a Cocos2d-x project, migrating to Axmol Engine is easy. We have prepared a [Migration Guide](https://github.com/axmolengine/axmol/wiki/Cocos2d%E2%80%90x-migration-guide).
@@ -70,26 +75,30 @@ Axmol Engine has iterated and improved over the Cocos2d-x v4.0 base. Now is fast
 * Lua
 
 **Renderer RHI**:
+
+* Vulkan for Windows, Linux, Android (since axmol-v3)
+* D3D12 for Windows and UWP (since axmol-v3)
+* D3D11 for Windows and UWP (since axmol-v3)
 * Metal for macOS, iOS and tvOS
-* OpenGL 3.3+ for Linux, macOS and Win32
+* OpenGL 3.3+ for Linux, macOS and Windows
 * OpenGL ES 2.0+ for Android
 * OpenGL ES 3.0+ for iOS and tvOS
-* ANGLE GLES 3.0+ for Win32 and UWP
+* ANGLE GLES 3.0+ for Windows and UWP
 * WebGL 2.0 (OpenGL ES 3.0): WASM
-* D3D11 for Win32 and UWP (since axmol-v3)
 
 **Architectures**:
 * iOS/tvOS (x64, arm64)
 * Android (x86, x64, armv7, arm64)
-* Windows (x86, x64)
-* Linux (x64)
+* Windows (x86, x64, arm64)
+* Linux (x64, arm64)
 * OSX (x64, arm64)
 * UWP (x64, arm64)
 * Wasm32, Wasm64(since axmol-v3)
 
+*Note: The arm64 build support for Linux and Windows has been available since Axmol v3.*
+
 **Supported 2D physics engines** ([more info here](https://github.com/axmolengine/axmol/wiki/2D-Physics-Engines-Information)):
 * Box2D
-* ~~Chipmunk2D~~ (Removed in `dev` (v3))
 
 **Supported 3D physics engines**:
 * Bullet Physics SDK
@@ -108,6 +117,8 @@ Axmol Engine has iterated and improved over the Cocos2d-x v4.0 base. Now is fast
 
 Some highlights:
 
+- Added **Vulkan** render support (axmol-v3)
+- Added **D3D12** render support (axmol-v3)
 - Added **D3D11** render support (axmol-v3)
 - **Add HiDPI support for Windows/Linux/WebAssembly desktop platforms** (axmol-v3)
 - **New MediaPlayer**: render video as texture2D using MediaEngine. [More info in our Wiki](https://github.com/axmolengine/axmol/wiki/Media-Player).

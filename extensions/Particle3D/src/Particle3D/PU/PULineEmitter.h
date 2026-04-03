@@ -32,7 +32,7 @@ namespace ax
 {
 
 struct PUParticle3D;
-class AX_EX_DLL PULineEmitter : public PUEmitter
+class AX_EXT_API PULineEmitter : public PUEmitter
 {
 public:
     // Constants

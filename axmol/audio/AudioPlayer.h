@@ -50,7 +50,7 @@ public:
     AudioPlayer();
     ~AudioPlayer();
 
-    void destroy();
+    void stop();
 
     // queue buffer related stuff
     bool setTime(float time);
@@ -77,7 +77,7 @@ protected:
     float _pitch{0.0f};
     bool _loop{false};
 
-    bool _isDestroyed{false};
+    bool _stopping{false};
     bool _removeByAudioEngine{false};
     bool _ready{false};
     ALuint _alSource{0};

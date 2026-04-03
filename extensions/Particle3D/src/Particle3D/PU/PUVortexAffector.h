@@ -33,7 +33,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUVortexAffector : public PUAffector
+class AX_EXT_API PUVortexAffector : public PUAffector
 {
 public:
     // Constants

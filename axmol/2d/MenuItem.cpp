@@ -189,7 +189,6 @@ bool MenuItemLabel::initWithLabel(Node* label, const ccMenuCallback& callback)
     this->setLabel(label);
 
     setCascadeColorEnabled(true);
-    setCascadeOpacityEnabled(true);
 
     return true;
 }
@@ -514,7 +513,6 @@ bool MenuItemSprite::initWithNormalSprite(Node* normalSprite,
     }
 
     setCascadeColorEnabled(true);
-    setCascadeOpacityEnabled(true);
 
     return true;
 }
@@ -796,7 +794,6 @@ bool MenuItemToggle::initWithItem(MenuItem* item)
     this->setSelectedIndex(0);
 
     setCascadeColorEnabled(true);
-    setCascadeOpacityEnabled(true);
 
     return true;
 }

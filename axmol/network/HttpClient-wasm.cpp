@@ -30,7 +30,7 @@
 #include <queue>
 #include "axmol/base/Director.h"
 #include "axmol/platform/FileUtils.h"
-#include "yasio/string_view.hpp"
+#include "yasio/tlx/string_view.hpp"
 
 #if EMSCRIPTEN
 #    include <emscripten/fetch.h>
@@ -210,7 +210,7 @@ void HttpClient::processResponse(HttpResponse* response, bool isAlone)
         size_t pos = header.find(":");
         if (pos != std::string::npos)
         {
-            if (cxx20::ic::starts_with(header, "user-agent"))
+            if (tlx::ic::starts_with(header, "user-agent"))
             {
                 AXLOGW("Ignore user-agent for wasm to avoid cause error: Refused to set unsafe header \"User-Agent\"");
                 continue;
@@ -250,7 +250,7 @@ void HttpClient::processResponse(HttpResponse* response, bool isAlone)
 void HttpClient::onRequestComplete(emscripten_fetch_t* fetch)
 {
     fetchUserData* userData = reinterpret_cast<fetchUserData*>(fetch->userData);
-    axstd::retain_ptr<HttpResponse> response{userData->response, axstd::adopt_object};
+    tlx::retain_ptr<HttpResponse> response{userData->response, tlx::adopt_object};
     HttpRequest* request = response->getHttpRequest();
 
     // get response
@@ -273,7 +273,7 @@ void HttpClient::onRequestComplete(emscripten_fetch_t* fetch)
     if (_httpClient)
     {
         // call back
-        const ccHttpRequestCallback& callback = request->getCallback();
+        const auto& callback = request->getCompleteCallback();
         if (callback)
             callback(_httpClient, response);
         response.reset();

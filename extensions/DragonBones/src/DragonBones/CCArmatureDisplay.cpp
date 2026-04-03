@@ -170,11 +170,7 @@ bool DBCCSprite::_checkVisibility(const ax::Mat4& transform, const ax::Size& siz
 void DBCCSprite::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
 {
 #if AX_USE_CULLING
-#    if COCOS2D_VERSION >= 0x00031400
     const auto& rect = _polyInfo.getRect();
-#    else
-    const auto& rect = _polyInfo.rect;
-#    endif
 
     // Don't do calculate the culling if the transform was not updated
     auto visitingCamera = ax::Camera::getVisitingCamera();
@@ -193,12 +189,7 @@ void DBCCSprite::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_
     if (_insideBounds)
 #endif
     {
-#if COCOS2D_VERSION >= 0x00040000
         _trianglesCommand.init(_globalZOrder, _texture, _blendFunc, _polyInfo.triangles, transform, flags);
-#else
-        _trianglesCommand.init(_globalZOrder, _texture->getName(), getGLProgramState(), _blendFunc, _polyInfo.triangles,
-                               transform, flags);
-#endif
         renderer->addCommand(&_trianglesCommand);
 
 #if AX_SPRITE_DEBUG_DRAW

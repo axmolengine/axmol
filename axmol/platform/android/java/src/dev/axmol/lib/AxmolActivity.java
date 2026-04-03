@@ -242,9 +242,13 @@ public abstract class AxmolActivity extends AppCompatActivity implements AxmolEn
         this.mHandler.sendMessage(msg);
     }
 
-    @Deprecated
-    public void runOnAxmolThread(final Runnable runnable) {
-        AxmolEngine.runOnAxmolThread(runnable);
+    public void runOnAxmolThread(final Runnable r) {
+        if(mPlayer != null) {
+            mPlayer.queueEvent(r);
+        }
+        else {
+            Log.e(TAG, "runOnAxmolThread fail, mPlayer is null");
+        }
     }
 
     @Override

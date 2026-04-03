@@ -34,7 +34,7 @@
 #include "axmol/base/Director.h"
 #include "axmol/3d/MeshRenderer.h"
 #include "axmol/3d/Mesh.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include <sstream>
 
 namespace ax
@@ -230,12 +230,6 @@ void PURibbonTrailRender::prepare()
     if (!_childNode)
     {
         // Create a childnode if not created earlier
-        std::stringstream ss;
-        ss << this;
-        std::string childNodeNodeName = "ParticleUniverse" + ss.str();
-        //_childNode =
-        // mParentTechnique->getParentSystem()->getParentSceneNode()->createChildSceneNode(childNodeNodeName);
-        //_childNode->setInheritOrientation(false);
         auto parent = _particleSystem->getParent();
         if (parent)
         {

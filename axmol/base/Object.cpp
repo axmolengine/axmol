@@ -78,6 +78,8 @@ Object::~Object()
 #endif
 }
 
+void Object::dispose() {}
+
 void Object::retain()
 {
     AXASSERT(_referenceCount > 0, "reference count should be greater than 0");
@@ -91,6 +93,7 @@ void Object::release()
 
     if (_referenceCount == 0)
     {
+        dispose();
 #if defined(_AX_DEBUG) && (_AX_DEBUG > 0)
         auto poolManager = PoolManager::getInstance();
         if (!poolManager->getCurrentPool()->isClearing() && poolManager->isObjectInPools(this))

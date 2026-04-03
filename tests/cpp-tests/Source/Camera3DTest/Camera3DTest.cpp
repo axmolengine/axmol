@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "testResource.h"
 #include "axmol/ui/UISlider.h"
 #include "axmol/platform/FileUtils.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/tlx/format.hpp"
 
 using namespace ax;

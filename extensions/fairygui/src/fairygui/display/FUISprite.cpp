@@ -100,24 +100,7 @@ void FUISprite::setScaleByTile(bool value)
 
 void FUISprite::setGrayed(bool value)
 {
-#if defined(AX_VERSION)
     Sprite::setProgramState(value ? rhi::ProgramType::GRAY_SCALE : rhi::ProgramType::POSITION_TEXTURE_COLOR);
-#elif COCOS2D_VERSION >= 0x00040000
-    auto isETC1 = getTexture() && getTexture()->getAlphaTextureName();
-    if (value) {
-        Sprite::updateShaders(positionTextureColor_vert, (isETC1)?etc1Gray_frag:grayScale_frag);
-    } else {
-        Sprite::updateShaders(positionTextureColor_vert, (isETC1)?etc1_frag:positionTextureColor_frag);
-    }
-#else
-    GLProgramState* glState = nullptr;
-    if (value)
-        glState = GLProgramState::getOrCreateWithGLProgramName(GLProgram::SHADER_NAME_POSITION_GRAYSCALE, getTexture());
-    else
-        glState = GLProgramState::getOrCreateWithGLProgramName(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_NO_MVP, getTexture());
-
-    setGLProgramState(glState);
-#endif
 }
 
 void FUISprite::setFillMethod(FillMethod value)
@@ -493,10 +476,7 @@ void FUISprite::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t
         Sprite::draw(renderer, transform, flags);
     else
     {
-#if COCOS2D_VERSION >= 0x00040000
         setMVPMatrixUniform();
-#endif
-
 #if AX_USE_CULLING
         // Don't calculate the culling if the transform was not updated
         auto visitingCamera = Camera::getVisitingCamera();
@@ -518,9 +498,6 @@ void FUISprite::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t
         {
             _trianglesCommand.init(_globalZOrder,
                                    _texture,
-#if COCOS2D_VERSION < 0x00040000
-                                   getGLProgramState(),
-#endif
                                    _blendFunc,
                                    _fillTriangles,
                                    transform,

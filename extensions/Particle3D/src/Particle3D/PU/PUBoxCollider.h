@@ -31,7 +31,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUBoxCollider : public PUBaseCollider
+class AX_EXT_API PUBoxCollider : public PUBaseCollider
 {
 public:
     static const float DEFAULT_WIDTH;

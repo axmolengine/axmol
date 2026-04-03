@@ -29,7 +29,7 @@ THE SOFTWARE.
 #pragma once
 
 #include <unordered_map>
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/2d/TMXXMLParser.h"
 #include "axmol/renderer/CustomCommand.h"
 

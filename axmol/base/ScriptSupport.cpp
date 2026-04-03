@@ -29,7 +29,7 @@
 #if AX_ENABLE_SCRIPT_BINDING
 
 #    include "axmol/base/Scheduler.h"
-#    include "axmol/2d/Node.h"
+#    include "axmol/scene/Node.h"
 
 bool AX_DLL ax_assert_script_compatible(const char* msg)
 {

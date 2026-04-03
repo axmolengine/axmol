@@ -31,6 +31,7 @@
 #include "axmol/base/Touch.h"
 #include "axmol/base/EventTouch.h"
 #include "axmol/base/EventKeyboard.h"
+#include "axmol/tlx/utility.hpp"
 #include <map>
 #include <string>
 #include <list>
@@ -478,25 +479,28 @@ struct CommonScriptData
      *
      * @lua NA
      */
-    CommonScriptData(int inHandler, const char* inName, Object* inSource = nullptr, const char* inClassName = nullptr)
+    CommonScriptData(int inHandler,
+                     std::string_view inName,
+                     Object* inSource             = nullptr,
+                     std::string_view inClassName = ""sv)
         : handler(inHandler), eventSource(inSource)
     {
-        if (nullptr == inName)
+        if (inName.empty())
         {
             memset(eventName, 0, sizeof(eventName));
         }
         else
         {
-            strncpy(eventName, inName, sizeof(eventName));
+            tlx::strlcpy(eventName, inName);
         }
 
-        if (nullptr == inClassName)
+        if (inClassName.empty())
         {
             memset(eventSourceClassName, 0, sizeof(eventSourceClassName));
         }
         else
         {
-            strncpy(eventSourceClassName, inClassName, 64);
+            tlx::strlcpy(eventSourceClassName, inClassName);
         }
     }
 };

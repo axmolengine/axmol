@@ -328,11 +328,9 @@ void PUObserver::copyAttributesTo(PUObserver* observer)
     observer->_originalEnabledSet        = _originalEnabledSet;
 
     // Copy event handlers
-    size_t i                     = 0;
-    PUEventHandler* eventHandler = 0;
-    for (i = 0; i < getNumEventHandlers(); ++i)
+    for (size_t i = 0; i < getNumEventHandlers(); ++i)
     {
-        eventHandler = getEventHandler(i);
+        auto eventHandler = getEventHandler(i);
         PUEventHandler* clonedEventHandler =
             PUEventHandlerManager::Instance()->createEventHandler(eventHandler->getEventHandlerType());
         eventHandler->copyAttributesTo(clonedEventHandler);

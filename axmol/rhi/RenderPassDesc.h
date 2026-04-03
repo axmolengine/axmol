@@ -57,8 +57,6 @@ struct RenderPassFlags
      * Discarded buffers' content becomes invalid, they must not be read from again.
      */
     TargetBufferFlags discardEnd{TargetBufferFlags::NONE};
-
-    uint8_t padding{0};
 };
 
 /**

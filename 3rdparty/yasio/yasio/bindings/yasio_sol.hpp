@@ -31,33 +31,33 @@ SOFTWARE.
 #  include "sol2/sol.hpp" // sol2-2.x
 #endif
 
-// use cxx17::string_view workaround with std::string_view
+// use std::string_view workaround with std::string_view
 #if !YASIO__HAS_CXX17
 namespace sol
 {
 namespace stack
 {
 template <>
-struct pusher<cxx17::string_view> {
-  static int push(lua_State* L, const cxx17::string_view& str)
+struct pusher<std::string_view> {
+  static int push(lua_State* L, const std::string_view& str)
   {
     lua_pushlstring(L, !str.empty() ? str.c_str() : "", str.length());
     return 1;
   }
 };
 template <>
-struct getter<cxx17::string_view> {
-  static cxx17::string_view get(lua_State* L, int index, record& tracking)
+struct getter<std::string_view> {
+  static std::string_view get(lua_State* L, int index, record& tracking)
   {
     tracking.use(1); // THIS IS THE ONLY BIT THAT CHANGES
     size_t len    = 0;
     const char* s = lua_tolstring(L, index, &len);
-    return cxx17::string_view(s, len);
+    return std::string_view(s, len);
   }
 };
 } // namespace stack
 template <>
-struct lua_type_of<cxx17::string_view> : std::integral_constant<type, type::string> {};
+struct lua_type_of<std::string_view> : std::integral_constant<type, type::string> {};
 } // namespace sol
 #endif
 

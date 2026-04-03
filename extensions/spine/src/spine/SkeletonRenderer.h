@@ -130,7 +130,6 @@ namespace spine {
 
 	protected:
 		void setSkeletonData(SkeletonData *skeletonData, bool ownsSkeletonData);
-		void setupGLProgramState(bool twoColorTintEnabled);
 		virtual void drawDebug(axmol::Renderer *renderer, const axmol::Mat4 &transform, uint32_t transformFlags);
 
 		bool _ownsSkeletonData;
@@ -147,7 +146,7 @@ namespace spine {
 		bool _debugBones;
 		bool _debugMeshes;
 		bool _debugBoundingRect;
-		SkeletonClipping *_clipper;		
+		SkeletonClipping *_clipper;
 		axmol::Rect _boundingRect;
 
 		int _startSlotIndex;

@@ -38,7 +38,7 @@ namespace ax
 struct PUParticle3D;
 class PUParticleSystem3D;
 
-class AX_EX_DLL PUDoScaleEventHandler : public PUEventHandler
+class AX_EXT_API PUDoScaleEventHandler : public PUEventHandler
 {
 public:
     enum ScaleType

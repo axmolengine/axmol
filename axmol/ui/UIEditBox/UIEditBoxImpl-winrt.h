@@ -131,9 +131,9 @@ public:
 
     bool isEditing() override { return _system_control.get()->isEditing(); }
     void createNativeControl(const Rect& frame) override {}
-    void setNativeFont(const char* pFontName, int fontSize) override;
+    void setNativeFont(std::string_view fontName, int fontSize) override;
     void setNativeFontColor(const Color32& color) override;
-    void setNativePlaceholderFont(const char* pFontName, int fontSize) override
+    void setNativePlaceholderFont(std::string_view fontName, int fontSize) override
     {
         AXLOGD("Warning! You can't change WinRT placeholder font");
     }
@@ -148,14 +148,14 @@ public:
         AXLOGD("Warning! You can't change WinRT return type");
     }
     virtual void setNativeTextHorizontalAlignment(ax::TextHAlignment alignment);
-    void setNativeText(const char* pText) override;
-    void setNativePlaceHolder(const char* pText) override
+    void setNativeText(std::string_view text) override;
+    void setNativePlaceHolder(std::string_view text) override
     {
         AXLOGD("Warning! You can't change WinRT placeholder text");
     }
     void setNativeVisible(bool visible) override;
     void updateNativeFrame(const Rect& rect) override;  // TODO
-    const char* getNativeDefaultFontName() override { return "Segoe UI"; }
+    std::string_view getNativeDefaultFontName() override { return "Segoe UI"; }
     virtual void nativeOpenKeyboard();
     void nativeCloseKeyboard() override;
     void setNativeMaxLength(int maxLength) override;

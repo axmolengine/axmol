@@ -9,7 +9,7 @@
   - AX_ENABLE_HTTP: whether enable http client, default: `TRUE`
   - AX_ENABLE_WEBSOCKET: whether enable websockets client, default: `TRUE`
   - AX_ENABLE_3D: whether to enable 3D support, default: `TRUE`
-  - AX_ENABLE_3D_PHYSICS: whether to enable 3D physics support, default: `TRUE`
+  - AX_ENABLE_PHYSICS_3D: whether to enable physics3d support, default: `TRUE`
   - AX_ENABLE_NAVMESH: whether to enable NavMesh support default: `TRUE`
   - AX_ENABLE_MEDIA: whether to enable media support, default: `TRUE`
   - AX_ENABLE_AUDIO: whether to enable audio support, default: `TRUE`
@@ -36,7 +36,8 @@
   - AX_ENABLE_EXT_JSONDEFAULT: the UserDefault based on json, default: `FALSE`
   - AX_ENABLE_EXT_LUA: the lua extension, default: `TRUE`
 - AX_WITH_XXX: usually user don't need care it
-- AX_RENDER_API: specify render api: gl, mtl, d3d, default: `auto`
+- AX_RENDER_API: specify render api, valid values are: `auto`, `gl`, `mtl`, `d3d11`, `d3d12`, `vk`, default: `auto`.  
+  You may also specify multiple APIs separated by semicolons, e.g. "-DAX_RENDER_API=vk;gl" This will enable both Vulkan and OpenGL backends in the build.
 - AX_GLES_PROFILE: specify GLES profile version, only works when selected render api is `gl`, default: `300`, valid value `300`, `310`
 - AX_CORE_PROFILE: whether strip all deprecated features, default `FALSE`, Setting this to `TRUE` before upgrading your game project helps ensure compatibility with future Axmol versions.
 - AX_ISA_LEVEL: specifiy SIMD Instructions Acceleration Level: 0~4, 0: disabled, 1: SSE2, 2: SSE4.1/NEON, 3: SSE4.2, 4: AVX2, default: 2
@@ -51,6 +52,8 @@ default is: `navigator.hardwareConcurrency`
 - AX_WASM_INITIAL_MEMORY: set the wasm initial memory size, default `1024MB`
 - AX_WASM_ISA_SIMD: specify the wasm simd intrinsics type, default `none`, supports `sse`, `neon`, note the `wasm-simd` not support by axmol yet
 - AX_WASM_TIMING_USE_TIMEOUT: force the wasm emscripten loop timing to use `Timeout` with FPS value of `Application::setAnimationInterval` (app still run on focus lost), default is `FALSE` with timing `requestAnimationFrame` (no run on focus lost). See https://emscripten.org/docs/api_reference/emscripten.h.html#c.emscripten_set_main_loop_timing
+- AX_WASM_ASSETS_PRELOAD_FILE: Whether enable to bundle the assets to a .data file and preload them into an IndexedDB cache at first launch (`--preload-file`), otherwise bundle them into the wasm file itself and don't use the IndexedDB at all (`--embed-file`)", default `TRUE`
+- AX_WASM_GENERATE_SYMBOL_FILE: Generate a symbol file for the built wasm file, default `FALSE`
 
 ## The options for axmol apps
 

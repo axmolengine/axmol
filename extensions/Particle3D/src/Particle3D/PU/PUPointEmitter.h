@@ -31,7 +31,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUPointEmitter : public PUEmitter
+class AX_EXT_API PUPointEmitter : public PUEmitter
 {
 public:
     static PUPointEmitter* create();

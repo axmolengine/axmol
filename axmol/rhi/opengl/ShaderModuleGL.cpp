@@ -32,9 +32,9 @@
 namespace ax::rhi::gl
 {
 
-ShaderModuleImpl::ShaderModuleImpl(ShaderStage stage, std::string_view source) : ShaderModule(stage)
+ShaderModuleImpl::ShaderModuleImpl(ShaderStage stage, Data& data) : ShaderModule(stage, data)
 {
-    compileShader(stage, source);
+    compileShader();
 }
 
 ShaderModuleImpl::~ShaderModuleImpl()
@@ -42,15 +42,21 @@ ShaderModuleImpl::~ShaderModuleImpl()
     deleteShader();
 }
 
-void ShaderModuleImpl::compileShader(ShaderStage stage, std::string_view source)
+void ShaderModuleImpl::recompileShader()
 {
-    GLenum shaderType       = stage == ShaderStage::VERTEX ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER;
-    const GLchar* sourcePtr = reinterpret_cast<const GLchar*>(source.data());
-    _shader                 = glCreateShader(shaderType);
+    compileShader();
+}
+
+void ShaderModuleImpl::compileShader()
+{
+    GLenum shaderType = _stage == ShaderStage::VERTEX ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER;
+    _shader           = glCreateShader(shaderType);
     if (!_shader)
         return;
 
-    glShaderSource(_shader, 1, &sourcePtr, nullptr);
+    const GLchar* sourcePtr = reinterpret_cast<const GLchar*>(_codeSpan.data());
+    GLint sourceLen         = static_cast<GLint>(_codeSpan.size());
+    glShaderSource(_shader, 1, &sourcePtr, &sourceLen);
     glCompileShader(_shader);
 
     GLint status = 0;
@@ -62,9 +68,10 @@ void ShaderModuleImpl::compileShader(ShaderStage stage, std::string_view source)
 
         if (logLength > 1)
         {
-            auto errorLog = axstd::make_unique_for_overwrite<char[]>(static_cast<size_t>(logLength));
+            auto errorLog = tlx::make_unique_for_overwrite<char[]>(static_cast<size_t>(logLength));
             glGetShaderInfoLog(_shader, logLength, nullptr, (GLchar*)errorLog.get());
-            AXLOGE("axmol:ERROR: Failed to compile shader, detail: {}\n{}", errorLog.get(), source.data());
+            AXLOGE("axmol:ERROR: Failed to compile shader, detail: {}\n{}", errorLog.get(),
+                   std::string_view{reinterpret_cast<char*>(_codeSpan.data()), _codeSpan.size()});
         }
         else
         {

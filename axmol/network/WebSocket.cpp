@@ -184,7 +184,7 @@ struct WebSocketProtocol
         if (fin)
             flags |= WS_FIN;
         auto frame_size = websocket_calc_frame_size((websocket_flags)flags, len);
-        yasio::sbyte_buffer sb;
+        tlx::sbyte_buffer sb;
         sb.resize(frame_size);
         websocket_build_frame(sb.data(), (websocket_flags)flags, mask, buf, len);
         return ws._service->write(ws._transport, std::move(sb));  // write(sendbuf_.base, frame_size);
@@ -364,7 +364,7 @@ int WebSocket::on_frame_body(websocket_parser* parser, const char* at, size_t le
         websocket_parser_decode(const_cast<char*>(at), at, length, parser);
 
     std::unique_lock<std::recursive_mutex> lck(ws->_receivedDataMtx);
-    ws->_receivedData.append(at, at + length);
+    ws->_receivedData.extend(at, at + length);
     return 0;
 }
 

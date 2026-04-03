@@ -35,21 +35,18 @@ THE SOFTWARE.
 #include "axmol/base/EventListenerCustom.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/renderer/Renderer.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/renderer/TextureCache.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/rhi/Texture.h"
 #include "axmol/rhi/RenderTarget.h"
-#if AX_RENDER_API == AX_RENDER_API_GL
-#    include "axmol/rhi/opengl/RenderContextGL.h"
-#endif
 
 namespace ax
 {
 
 void RenderTexture::applySpriteFlippedY(Sprite* sp)
 {
-    sp->setFlippedY(AX_RENDER_API == AX_RENDER_API_GL);
+    sp->setFlippedY(rhi::DriverContext::isOpenGL());
 }
 
 // implementation RenderTexture
@@ -237,15 +234,14 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         }
         else
         {
-            _renderTarget =
-                axdrv->createRenderTarget(_colorTexture ? _colorTexture->getRHITexture() : nullptr,
-                                          _depthStencilTexture ? _depthStencilTexture->getRHITexture() : nullptr);
+            _renderTarget = axdrv->createRenderTarget(
+                _colorTexture->getRHITexture(), _depthStencilTexture ? _depthStencilTexture->getRHITexture() : nullptr);
         }
 
-        _renderTarget->setColorAttachment(_colorTexture ? _colorTexture->getRHITexture() : nullptr);
+        _renderTarget->setColorTexture(_colorTexture->getRHITexture());
 
         auto depthStencilTexture = _depthStencilTexture ? _depthStencilTexture->getRHITexture() : nullptr;
-        _renderTarget->setDepthStencilAttachment(depthStencilTexture);
+        _renderTarget->setDepthStencilTexture(depthStencilTexture);
 
         clearColorAttachment();
 
@@ -551,13 +547,6 @@ void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, b
     if ((nullptr == _colorTexture))
         return;
 
-    const Vec2& s = _colorTexture->getContentSizeInPixels();
-
-    // to get the image size to save
-    //        if the saving image domain exceeds the buffer texture domain,
-    //        it should be cut
-    int savedBufferWidth       = (int)s.width;
-    int savedBufferHeight      = (int)s.height;
     bool hasPremultipliedAlpha = _colorTexture->hasPremultipliedAlpha();
 
     auto callback = [hasPremultipliedAlpha, imageCallback](const rhi::PixelBufferDesc& pbd) {

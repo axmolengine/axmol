@@ -35,7 +35,7 @@
 #    include "axmol/ui/UIWebView/UIWebViewImpl-win32.h"
 #    include "axmol/ui/UIWebView/UIWebView-inl.h"
 
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX) && defined(AX_HAVE_WEBKIT2GTK)
 
 #    include "axmol/ui/UIWebView/UIWebViewImpl-linux.h"
 #    include "axmol/ui/UIWebView/UIWebView-inl.h"

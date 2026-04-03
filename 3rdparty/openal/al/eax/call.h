@@ -1,9 +1,11 @@
 #ifndef EAX_EAX_CALL_INCLUDED
 #define EAX_EAX_CALL_INCLUDED
 
+#include <span>
+#include <string_view>
+
 #include "AL/al.h"
 #include "alnumeric.h"
-#include "alspan.h"
 #include "api.h"
 #include "fx_slot_index.h"
 
@@ -39,8 +41,8 @@ public:
     [[nodiscard]] auto get_property_al_name() const noexcept -> ALuint { return mPropertySourceId; }
     [[nodiscard]] auto get_fx_slot_index() const noexcept -> EaxFxSlotIndex { return mFxSlotIndex; }
 
-    template<typename TException, typename TValue>
-    [[nodiscard]] auto get_value() const -> TValue&
+    template<typename TValue>
+    [[nodiscard]] auto load() const -> TValue&
     {
         if(mPropertyBufferSize < sizeof(TValue))
             fail_too_small();
@@ -49,7 +51,7 @@ public:
     }
 
     template<typename TValue>
-    [[nodiscard]] auto get_values(size_t max_count) const -> al::span<TValue>
+    [[nodiscard]] auto as_span(size_t max_count=~0_uz) const -> std::span<TValue>
     {
         if(max_count == 0 || mPropertyBufferSize < sizeof(TValue))
             fail_too_small();
@@ -59,15 +61,9 @@ public:
     }
 
     template<typename TValue>
-    [[nodiscard]] auto get_values() const -> al::span<TValue>
+    auto store(const TValue &value) const -> void
     {
-        return get_values<TValue>(~0_uz);
-    }
-
-    template<typename TException, typename TValue>
-    auto set_value(const TValue& value) const -> void
-    {
-        get_value<TException, TValue>() = value;
+        load<TValue>() = value;
     }
 
 private:
@@ -75,14 +71,14 @@ private:
     int mVersion{};
     EaxFxSlotIndex mFxSlotIndex{};
     EaxCallPropertySetId mPropertySetId{EaxCallPropertySetId::none};
-    bool mIsDeferred;
+    bool mIsDeferred{};
 
     const ALuint mPropertyId;
     const ALuint mPropertySourceId;
     ALvoid*const mPropertyBuffer;
     const ALuint mPropertyBufferSize;
 
-    [[noreturn]] static void fail(const char* message);
+    [[noreturn]] static void fail(const std::string_view message);
     [[noreturn]] static void fail_too_small();
 }; // EaxCall
 

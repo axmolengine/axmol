@@ -55,8 +55,8 @@ TEST_SUITE("base/UTF8")
 
         auto encoded = utils::base64Encode(__utf8Code, sizeof(__utf8Code));
 
-        yasio::byte_buffer bb;
-        axstd::resize_and_overrite(bb, 10, [](uint8_t* out, size_t sz) {
+        tlx::byte_buffer bb;
+        tlx::resize_and_overrite(bb, 10, [](uint8_t* out, size_t sz) {
             memset(out, '1', sz);
             return sz;
         });

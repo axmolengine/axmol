@@ -39,7 +39,7 @@ struct PUParticle3D;
 class PUObserver;
 class PUParticleSystem3D;
 
-class AX_EX_DLL PUEventHandler : public Object
+class AX_EXT_API PUEventHandler : public Object
 {
 public:
     /** Todo

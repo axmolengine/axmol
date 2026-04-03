@@ -7,6 +7,7 @@
 #include "alc/context.h"
 #include "alnumeric.h"
 #include "effects.h"
+#include "gsl/gsl"
 
 #if ALSOFT_EAX
 #include "al/eax/effect.h"
@@ -17,27 +18,26 @@
 
 namespace {
 
-constexpr EffectProps genDefaultProps() noexcept
+consteval auto genDefaultProps() noexcept -> EffectProps
 {
-    DistortionProps props{};
-    props.Edge = AL_DISTORTION_DEFAULT_EDGE;
-    props.Gain = AL_DISTORTION_DEFAULT_GAIN;
-    props.LowpassCutoff = AL_DISTORTION_DEFAULT_LOWPASS_CUTOFF;
-    props.EQCenter = AL_DISTORTION_DEFAULT_EQCENTER;
-    props.EQBandwidth = AL_DISTORTION_DEFAULT_EQBANDWIDTH;
-    return props;
+    return DistortionProps{
+        .Edge = AL_DISTORTION_DEFAULT_EDGE,
+        .Gain = AL_DISTORTION_DEFAULT_GAIN,
+        .LowpassCutoff = AL_DISTORTION_DEFAULT_LOWPASS_CUTOFF,
+        .EQCenter = AL_DISTORTION_DEFAULT_EQCENTER,
+        .EQBandwidth = AL_DISTORTION_DEFAULT_EQBANDWIDTH};
 }
 
 } // namespace
 
-const EffectProps DistortionEffectProps{genDefaultProps()};
+constinit const EffectProps DistortionEffectProps(genDefaultProps());
 
-void DistortionEffectHandler::SetParami(ALCcontext *context, DistortionProps&, ALenum param, int)
+void DistortionEffectHandler::SetParami(al::Context *context, DistortionProps&, ALenum param, int)
 { context->throw_error(AL_INVALID_ENUM, "Invalid distortion integer property {:#04x}", as_unsigned(param)); }
-void DistortionEffectHandler::SetParamiv(ALCcontext *context, DistortionProps&, ALenum param, const int*)
+void DistortionEffectHandler::SetParamiv(al::Context *context, DistortionProps&, ALenum param, const int*)
 { context->throw_error(AL_INVALID_ENUM, "Invalid distortion integer-vector property {:#04x}", as_unsigned(param)); }
 
-void DistortionEffectHandler::SetParamf(ALCcontext *context, DistortionProps &props, ALenum param, float val)
+void DistortionEffectHandler::SetParamf(al::Context *context, DistortionProps &props, ALenum param, float val)
 {
     switch(param)
     {
@@ -75,15 +75,15 @@ void DistortionEffectHandler::SetParamf(ALCcontext *context, DistortionProps &pr
     context->throw_error(AL_INVALID_ENUM, "Invalid distortion float property {:#04x}",
         as_unsigned(param));
 }
-void DistortionEffectHandler::SetParamfv(ALCcontext *context, DistortionProps &props, ALenum param, const float *vals)
+void DistortionEffectHandler::SetParamfv(al::Context *context, DistortionProps &props, ALenum param, const float *vals)
 { SetParamf(context, props, param, *vals); }
 
-void DistortionEffectHandler::GetParami(ALCcontext *context, const DistortionProps&, ALenum param, int*)
+void DistortionEffectHandler::GetParami(al::Context *context, const DistortionProps&, ALenum param, int*)
 { context->throw_error(AL_INVALID_ENUM, "Invalid distortion integer property {:#04x}", as_unsigned(param)); }
-void DistortionEffectHandler::GetParamiv(ALCcontext *context, const DistortionProps&, ALenum param, int*)
+void DistortionEffectHandler::GetParamiv(al::Context *context, const DistortionProps&, ALenum param, int*)
 { context->throw_error(AL_INVALID_ENUM, "Invalid distortion integer-vector property {:#04x}", as_unsigned(param)); }
 
-void DistortionEffectHandler::GetParamf(ALCcontext *context, const DistortionProps &props, ALenum param, float *val)
+void DistortionEffectHandler::GetParamf(al::Context *context, const DistortionProps &props, ALenum param, float *val)
 {
     switch(param)
     {
@@ -97,7 +97,7 @@ void DistortionEffectHandler::GetParamf(ALCcontext *context, const DistortionPro
     context->throw_error(AL_INVALID_ENUM, "Invalid distortion float property {:#04x}",
         as_unsigned(param));
 }
-void DistortionEffectHandler::GetParamfv(ALCcontext *context, const DistortionProps &props, ALenum param, float *vals)
+void DistortionEffectHandler::GetParamfv(al::Context *context, const DistortionProps &props, ALenum param, float *vals)
 { GetParamf(context, props, param, vals); }
 
 
@@ -107,7 +107,7 @@ namespace {
 using DistortionCommitter = EaxCommitter<EaxDistortionCommitter>;
 
 struct EdgeValidator {
-    void operator()(float flEdge) const
+    void operator()(float const flEdge) const
     {
         eax_validate_range<DistortionCommitter::Exception>(
             "Edge",
@@ -118,7 +118,7 @@ struct EdgeValidator {
 }; // EdgeValidator
 
 struct GainValidator {
-    void operator()(long lGain) const
+    void operator()(eax_long const lGain) const
     {
         eax_validate_range<DistortionCommitter::Exception>(
             "Gain",
@@ -129,7 +129,7 @@ struct GainValidator {
 }; // GainValidator
 
 struct LowPassCutOffValidator {
-    void operator()(float flLowPassCutOff) const
+    void operator()(float const flLowPassCutOff) const
     {
         eax_validate_range<DistortionCommitter::Exception>(
             "Low-pass Cut-off",
@@ -140,7 +140,7 @@ struct LowPassCutOffValidator {
 }; // LowPassCutOffValidator
 
 struct EqCenterValidator {
-    void operator()(float flEQCenter) const
+    void operator()(float const flEQCenter) const
     {
         eax_validate_range<DistortionCommitter::Exception>(
             "EQ Center",
@@ -151,7 +151,7 @@ struct EqCenterValidator {
 }; // EqCenterValidator
 
 struct EqBandwidthValidator {
-    void operator()(float flEQBandwidth) const
+    void operator()(float const flEQBandwidth) const
     {
         eax_validate_range<DistortionCommitter::Exception>(
             "EQ Bandwidth",
@@ -174,50 +174,41 @@ struct AllValidator {
 
 } // namespace
 
-template<>
-struct DistortionCommitter::Exception : public EaxException {
-    explicit Exception(const char *message) : EaxException{"EAX_DISTORTION_EFFECT", message}
+template<> /* NOLINTNEXTLINE(clazy-copyable-polymorphic) Exceptions must be copyable. */
+struct DistortionCommitter::Exception final : EaxException {
+    explicit Exception(const std::string_view message)
+        : EaxException{"EAX_DISTORTION_EFFECT", message}
     { }
 };
 
-template<>
-[[noreturn]] void DistortionCommitter::fail(const char *message)
-{
-    throw Exception{message};
-}
+template<> [[noreturn]]
+void DistortionCommitter::fail(const std::string_view message)
+{ throw Exception{message}; }
 
-bool EaxDistortionCommitter::commit(const EAXDISTORTIONPROPERTIES &props)
+auto EaxDistortionCommitter::commit(const EAXDISTORTIONPROPERTIES &props) const -> bool
 {
     if(auto *cur = std::get_if<EAXDISTORTIONPROPERTIES>(&mEaxProps); cur && *cur == props)
         return false;
 
     mEaxProps = props;
-    mAlProps = [&]{
-        DistortionProps ret{};
-        ret.Edge = props.flEdge;
-        ret.Gain = level_mb_to_gain(static_cast<float>(props.lGain));
-        ret.LowpassCutoff = props.flLowPassCutOff;
-        ret.EQCenter = props.flEQCenter;
-        ret.EQBandwidth = props.flEdge;
-        return ret;
-    }();
+    mAlProps = DistortionProps{
+        .Edge = props.flEdge,
+        .Gain = level_mb_to_gain(gsl::narrow_cast<float>(props.lGain)),
+        .LowpassCutoff = props.flLowPassCutOff,
+        .EQCenter = props.flEQCenter,
+        .EQBandwidth = props.flEdge};
 
     return true;
 }
 
 void EaxDistortionCommitter::SetDefaults(EaxEffectProps &props)
 {
-    static constexpr EAXDISTORTIONPROPERTIES defprops{[]
-    {
-        EAXDISTORTIONPROPERTIES ret{};
-        ret.flEdge = EAXDISTORTION_DEFAULTEDGE;
-        ret.lGain = EAXDISTORTION_DEFAULTGAIN;
-        ret.flLowPassCutOff = EAXDISTORTION_DEFAULTLOWPASSCUTOFF;
-        ret.flEQCenter = EAXDISTORTION_DEFAULTEQCENTER;
-        ret.flEQBandwidth = EAXDISTORTION_DEFAULTEQBANDWIDTH;
-        return ret;
-    }()};
-    props = defprops;
+    props = EAXDISTORTIONPROPERTIES{
+        .flEdge = EAXDISTORTION_DEFAULTEDGE,
+        .lGain = EAXDISTORTION_DEFAULTGAIN,
+        .flLowPassCutOff = EAXDISTORTION_DEFAULTLOWPASSCUTOFF,
+        .flEQCenter = EAXDISTORTION_DEFAULTEQCENTER,
+        .flEQBandwidth = EAXDISTORTION_DEFAULTEQBANDWIDTH};
 }
 
 void EaxDistortionCommitter::Get(const EaxCall &call, const EAXDISTORTIONPROPERTIES &props)
@@ -225,12 +216,12 @@ void EaxDistortionCommitter::Get(const EaxCall &call, const EAXDISTORTIONPROPERT
     switch(call.get_property_id())
     {
     case EAXDISTORTION_NONE: break;
-    case EAXDISTORTION_ALLPARAMETERS: call.set_value<Exception>(props); break;
-    case EAXDISTORTION_EDGE: call.set_value<Exception>(props.flEdge); break;
-    case EAXDISTORTION_GAIN: call.set_value<Exception>(props.lGain); break;
-    case EAXDISTORTION_LOWPASSCUTOFF: call.set_value<Exception>(props.flLowPassCutOff); break;
-    case EAXDISTORTION_EQCENTER: call.set_value<Exception>(props.flEQCenter); break;
-    case EAXDISTORTION_EQBANDWIDTH: call.set_value<Exception>(props.flEQBandwidth); break;
+    case EAXDISTORTION_ALLPARAMETERS: call.store(props); break;
+    case EAXDISTORTION_EDGE: call.store(props.flEdge); break;
+    case EAXDISTORTION_GAIN: call.store(props.lGain); break;
+    case EAXDISTORTION_LOWPASSCUTOFF: call.store(props.flLowPassCutOff); break;
+    case EAXDISTORTION_EQCENTER: call.store(props.flEQCenter); break;
+    case EAXDISTORTION_EQBANDWIDTH: call.store(props.flEQBandwidth); break;
     default: fail_unknown_property_id();
     }
 }

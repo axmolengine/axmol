@@ -1,0 +1,39 @@
+# This workflow require self-hosted by @halx99 personal machine, so only support trigger manually
+name: debian
+
+on:
+  push:
+    branches:
+      - dev
+      - release/*
+    paths:
+      - '.github/workflows/debian.yml'
+  workflow_dispatch:
+    inputs:
+      cxxstd:
+        # actions run ID
+        description: 'Please input cxxstd, example: 20'
+        # Default value if no value is explicitly provided
+        default: '20'
+        # Input has to be provided for the workflow to run
+        required: false
+
+env:
+  __1K_CXXSTD: '${{ inputs.cxxstd }}'
+
+run-name: 'build@c++${{ inputs.cxxstd || 20 }}'
+
+jobs:
+  debian-ogl:
+    runs-on: debian-12
+    steps:
+    - uses: actions/checkout@v6
+
+    - name: Install dependencies
+      run: |
+        AX_ROOT=`pwd`
+        echo -e "y" | pwsh $AX_ROOT/setup.ps1
+
+    - name: Build
+      shell: pwsh
+      run: ./tools/cmdline/axmol -p linux -a x64 -t 'cpp-tests,lua-tests' && ./tools/cmdline/axmol run -p linux -a x64 -t unit-tests -wait

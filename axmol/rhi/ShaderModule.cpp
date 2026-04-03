@@ -23,17 +23,110 @@
  ****************************************************************************/
 
 #include "axmol/rhi/ShaderModule.h"
+#include "axmol/rhi/axslc-spec.h"
+#include "yasio/ibstream.hpp"
 
 namespace ax::rhi
 {
+using namespace ::axslc;
+
+static bool matchLang(int currentLang, int currentProfile, int lang, int profile)
+{
+    if (currentLang == ShaderLang::SHADER_LANG_HLSL)
+        return currentLang == lang && currentProfile == profile;
+
+    return currentLang == lang;
+}
 
 ShaderStage ShaderModule::getShaderStage() const
 {
     return _stage;
 }
 
-ShaderModule::ShaderModule(ShaderStage stage) : _stage(stage) {}
+ShaderModule::ShaderModule(ShaderStage stage, Data& data) : _stage(stage)
+{
+    _chunkData = std::move(data);
+    parseShaderCode();
+}
 
 ShaderModule::~ShaderModule() {}
+
+void ShaderModule::parseShaderCode(void)
+{
+    yasio::fast_ibstream_view ibs(_chunkData.data(), _chunkData.size());
+    uint32_t fourccId = ibs.read<uint32_t>();
+    if (fourccId != SC_CHUNK)
+    {
+        assert(false && "axmol: Not valid axslcc shader chunk");
+        return;
+    }
+    // since 3.3.0, it should be match the whole shader data size
+    auto sc_size = ibs.read<uint32_t>();
+    struct sc_chunk chunk;
+    ibs.read_bytes(&chunk, static_cast<int>(sizeof(chunk)));
+    if (chunk.major < 3 || chunk.minor < 4)
+    {
+        AXLOGE(
+            "The axslcc shader chunk version too old: found {}.{}, required >= 3.4, "
+            "Please update/recompile the shader.",
+            chunk.major, chunk.minor);
+        assert(false && "axmol: Shader version too old");
+    }
+
+    // find target entry
+    const auto driverType        = DriverContext::currentDriverType();
+    const auto currentShaderLang = DriverContext::currentShaderLang();
+    const auto currentProfileVer = DriverContext::currentShaderProfile();
+
+    for (int i = 0; i < chunk.num_targets; ++i)
+    {
+        auto lang        = ibs.read<int>();
+        auto profile_ver = ibs.read<int>();
+        if (matchLang(currentShaderLang, currentProfileVer, lang, profile_ver))
+        {
+            _stageOffset = ibs.read<uint32_t>();
+            break;
+        }
+        else
+            ibs.advance(static_cast<ptrdiff_t>(sizeof(uint32_t)));
+    }
+    if (!_stageOffset)
+    {
+        AXLOGE("Can't find stag chunk, lang={}, profile_ver={}", currentShaderLang, currentProfileVer);
+        assert(false && "axmol: Can't find stag chunk");
+    }
+
+    ibs.seek(_stageOffset, SEEK_SET);
+
+    fourccId = ibs.read<uint32_t>();
+    if (fourccId != SC_CHUNK_STAG)
+    {
+        assert(false);
+        return;  // error
+    }
+    auto stage_size       = ibs.read<uint32_t>();  // stage_size
+    auto stage_id         = ibs.read<uint32_t>();  // stage_id
+    ShaderStage ref_stage = (ShaderStage)-1;
+    if (stage_id == SC_STAGE_VERTEX)
+        ref_stage = ShaderStage::VERTEX;
+    else if (stage_id == SC_STAGE_FRAGMENT)
+        ref_stage = ShaderStage::FRAGMENT;
+
+    assert(ref_stage == _stage && "Shader stage mismatch in axslc chunk");
+
+    fourccId = ibs.read<uint32_t>();
+    if (fourccId == SC_CHUNK_CODE || fourccId == SC_CHUNK_DATA)
+    {
+        // Expecting SPIR-V binary blob from axslc, not text
+        const int codeLen           = ibs.read<int>();
+        std::string_view shaderCode = ibs.read_bytes(codeLen);
+        _codeSpan                   = std::span{(uint8_t*)shaderCode.data(), shaderCode.size()};
+    }
+    else
+    {
+        AXLOGE("axmol: No code/data chunk (SC_CHUNK_CODE/SC_CHUNK_DATA) found for shader stage.");
+        assert(false);
+    }
+}
 
 }  // namespace ax::rhi

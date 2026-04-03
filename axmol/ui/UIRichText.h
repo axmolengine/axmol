@@ -387,47 +387,49 @@ public:
     typedef std::function<std::pair<ValueMap, RichElement*>(const ValueMap& tagAttrValueMap)> VisitEnterHandler;
     typedef std::function<RichElement*()> VisitExitHandler;
 
-    static const std::string KEY_VERTICAL_SPACE;                   /*!< key of vertical space */
-    static const std::string KEY_WRAP_MODE;                        /*!< key of per word, or per char */
-    static const std::string KEY_HORIZONTAL_ALIGNMENT;             /*!< key of left, right, or center */
-    static const std::string KEY_VERTICAL_ALIGNMENT;               /*!< key of left, right, or center */
-    static const std::string KEY_FONT_COLOR_STRING;                /*!< key of font color */
-    static const std::string KEY_FONT_SIZE;                        /*!< key of font size */
-    static const std::string KEY_FONT_SMALL;                       /*!< key of font size small */
-    static const std::string KEY_FONT_BIG;                         /*!< key of font size big */
-    static const std::string KEY_FONT_FACE;                        /*!< key of font name */
-    static const std::string KEY_TEXT_BOLD;                        /*!< key of text bold */
-    static const std::string KEY_TEXT_ITALIC;                      /*!< key of text italic */
-    static const std::string KEY_TEXT_LINE;                        /*!< key of line style */
-    static const std::string VALUE_TEXT_LINE_NONE;                 /*!< value of none */
-    static const std::string VALUE_TEXT_LINE_DEL;                  /*!< value of strikethrough line */
-    static const std::string VALUE_TEXT_LINE_UNDER;                /*!< value of underline */
-    static const std::string KEY_TEXT_STYLE;                       /*!< key of effect style */
-    static const std::string VALUE_TEXT_STYLE_NONE;                /*!< value of none */
-    static const std::string VALUE_TEXT_STYLE_OUTLINE;             /*!< value of outline */
-    static const std::string VALUE_TEXT_STYLE_SHADOW;              /*!< value of shadow */
-    static const std::string VALUE_TEXT_STYLE_GLOW;                /*!< value of glow */
-    static const std::string KEY_TEXT_OUTLINE_COLOR;               /*!< key of outline color */
-    static const std::string KEY_TEXT_OUTLINE_SIZE;                /*!< key of outline size */
-    static const std::string KEY_TEXT_SHADOW_COLOR;                /*!< key of shadow color */
-    static const std::string KEY_TEXT_SHADOW_OFFSET_WIDTH;         /*!< key of shadow offset (width) */
-    static const std::string KEY_TEXT_SHADOW_OFFSET_HEIGHT;        /*!< key of shadow offset (height) */
-    static const std::string KEY_TEXT_SHADOW_BLUR_RADIUS;          /*!< key of shadow blur radius */
-    static const std::string KEY_TEXT_GLOW_COLOR;                  /*!< key of glow color */
-    static const std::string KEY_URL;                              /*!< key of url */
-    static const std::string KEY_ANCHOR_FONT_COLOR_STRING;         /*!< key of font color of anchor tag */
-    static const std::string KEY_ANCHOR_TEXT_BOLD;                 /*!< key of text bold of anchor tag */
-    static const std::string KEY_ANCHOR_TEXT_ITALIC;               /*!< key of text italic of anchor tag */
-    static const std::string KEY_ANCHOR_TEXT_LINE;                 /*!< key of line style of anchor tag */
-    static const std::string KEY_ANCHOR_TEXT_STYLE;                /*!< key of effect style of anchor tag */
-    static const std::string KEY_ANCHOR_TEXT_OUTLINE_COLOR;        /*!< key of outline color of anchor tag */
-    static const std::string KEY_ANCHOR_TEXT_OUTLINE_SIZE;         /*!< key of outline size of anchor tag */
-    static const std::string KEY_ANCHOR_TEXT_SHADOW_COLOR;         /*!< key of shadow color of anchor tag */
-    static const std::string KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH;  /*!< key of shadow offset (width) of anchor tag */
-    static const std::string KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT; /*!< key of shadow offset (height) of anchor tag */
-    static const std::string KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS;   /*!< key of shadow blur radius of anchor tag */
-    static const std::string KEY_ANCHOR_TEXT_GLOW_COLOR;           /*!< key of glow color of anchor tag */
-    static const std::string KEY_ID;                               /*!< key of id */
+    static const std::string_view KEY_VERTICAL_SPACE;            /*!< key of vertical space */
+    static const std::string_view KEY_WRAP_MODE;                 /*!< key of per word, or per char */
+    static const std::string_view KEY_HORIZONTAL_ALIGNMENT;      /*!< key of left, right, or center */
+    static const std::string_view KEY_VERTICAL_ALIGNMENT;        /*!< key of left, right, or center */
+    static const std::string_view KEY_FONT_COLOR_STRING;         /*!< key of font color */
+    static const std::string_view KEY_FONT_SIZE;                 /*!< key of font size */
+    static const std::string_view KEY_FONT_SMALL;                /*!< key of font size small */
+    static const std::string_view KEY_FONT_BIG;                  /*!< key of font size big */
+    static const std::string_view KEY_FONT_FACE;                 /*!< key of font name */
+    static const std::string_view KEY_TEXT_BOLD;                 /*!< key of text bold */
+    static const std::string_view KEY_TEXT_ITALIC;               /*!< key of text italic */
+    static const std::string_view KEY_TEXT_LINE;                 /*!< key of line style */
+    static const std::string_view VALUE_TEXT_LINE_NONE;          /*!< value of none */
+    static const std::string_view VALUE_TEXT_LINE_DEL;           /*!< value of strikethrough line */
+    static const std::string_view VALUE_TEXT_LINE_UNDER;         /*!< value of underline */
+    static const std::string_view KEY_TEXT_STYLE;                /*!< key of effect style */
+    static const std::string_view VALUE_TEXT_STYLE_NONE;         /*!< value of none */
+    static const std::string_view VALUE_TEXT_STYLE_OUTLINE;      /*!< value of outline */
+    static const std::string_view VALUE_TEXT_STYLE_SHADOW;       /*!< value of shadow */
+    static const std::string_view VALUE_TEXT_STYLE_GLOW;         /*!< value of glow */
+    static const std::string_view KEY_TEXT_OUTLINE_COLOR;        /*!< key of outline color */
+    static const std::string_view KEY_TEXT_OUTLINE_SIZE;         /*!< key of outline size */
+    static const std::string_view KEY_TEXT_SHADOW_COLOR;         /*!< key of shadow color */
+    static const std::string_view KEY_TEXT_SHADOW_OFFSET_WIDTH;  /*!< key of shadow offset (width) */
+    static const std::string_view KEY_TEXT_SHADOW_OFFSET_HEIGHT; /*!< key of shadow offset (height) */
+    static const std::string_view KEY_TEXT_SHADOW_BLUR_RADIUS;   /*!< key of shadow blur radius */
+    static const std::string_view KEY_TEXT_GLOW_COLOR;           /*!< key of glow color */
+    static const std::string_view KEY_URL;                       /*!< key of url */
+    static const std::string_view KEY_ANCHOR_FONT_COLOR_STRING;  /*!< key of font color of anchor tag */
+    static const std::string_view KEY_ANCHOR_TEXT_BOLD;          /*!< key of text bold of anchor tag */
+    static const std::string_view KEY_ANCHOR_TEXT_ITALIC;        /*!< key of text italic of anchor tag */
+    static const std::string_view KEY_ANCHOR_TEXT_LINE;          /*!< key of line style of anchor tag */
+    static const std::string_view KEY_ANCHOR_TEXT_STYLE;         /*!< key of effect style of anchor tag */
+    static const std::string_view KEY_ANCHOR_TEXT_OUTLINE_COLOR; /*!< key of outline color of anchor tag */
+    static const std::string_view KEY_ANCHOR_TEXT_OUTLINE_SIZE;  /*!< key of outline size of anchor tag */
+    static const std::string_view KEY_ANCHOR_TEXT_SHADOW_COLOR;  /*!< key of shadow color of anchor tag */
+    static const std::string_view
+        KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH; /*!< key of shadow offset (width) of anchor tag */
+    static const std::string_view
+        KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT; /*!< key of shadow offset (height) of anchor tag */
+    static const std::string_view KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS; /*!< key of shadow blur radius of anchor tag */
+    static const std::string_view KEY_ANCHOR_TEXT_GLOW_COLOR;         /*!< key of glow color of anchor tag */
+    static const std::string_view KEY_ID;                             /*!< key of id */
 
     /**
      * @brief Default constructor.

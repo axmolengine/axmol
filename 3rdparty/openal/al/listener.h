@@ -7,16 +7,18 @@
 
 #include "almalloc.h"
 
+namespace al {
 
-struct ALlistener {
-    std::array<float,3> Position{{0.0f, 0.0f, 0.0f}};
-    std::array<float,3> Velocity{{0.0f, 0.0f, 0.0f}};
-    std::array<float,3> OrientAt{{0.0f, 0.0f, -1.0f}};
-    std::array<float,3> OrientUp{{0.0f, 1.0f, 0.0f}};
-    float Gain{1.0f};
+struct Listener {
+    std::array<float, 3> mPosition{{0.0f, 0.0f, 0.0f}};
+    std::array<float, 3> mVelocity{{0.0f, 0.0f, 0.0f}};
+    std::array<float, 3> mOrientAt{{0.0f, 0.0f, -1.0f}};
+    std::array<float, 3> mOrientUp{{0.0f, 1.0f, 0.0f}};
+    float mGain{1.0f};
     float mMetersPerUnit{AL_DEFAULT_METERS_PER_UNIT};
 
     DISABLE_ALLOC
 };
 
+} /* namespace al */
 #endif

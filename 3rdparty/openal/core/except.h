@@ -5,24 +5,28 @@
 #include <string>
 #include <type_traits>
 
+#include "opthelpers.h"
+
 
 namespace al {
 
+/* NOLINTNEXTLINE(clazy-copyable-polymorphic) Exceptions must be copyable. */
 class base_exception : public std::exception {
     std::string mMessage;
 
 public:
     base_exception() = default;
-    template<typename T, std::enable_if_t<std::is_constructible_v<std::string,T>,bool> = true>
+    template<typename T> requires(std::is_constructible_v<std::string,T>)
     explicit base_exception(T&& msg) : mMessage{std::forward<T>(msg)} { }
     base_exception(const base_exception&) = default;
     base_exception(base_exception&&) = default;
-    ~base_exception() override;
+    NOINLINE ~base_exception() override = default;
 
-    auto operator=(const base_exception&) -> base_exception& = default;
-    auto operator=(base_exception&&) -> base_exception& = default;
+    auto operator=(const base_exception&) & -> base_exception& = default;
+    auto operator=(base_exception&&) & -> base_exception& = default;
 
-    [[nodiscard]] auto what() const noexcept -> const char* override { return mMessage.c_str(); }
+    [[nodiscard]] auto what() const noexcept LIFETIMEBOUND -> const char* override
+    { return mMessage.c_str(); }
 };
 
 } // namespace al

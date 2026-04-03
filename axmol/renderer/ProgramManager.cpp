@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "axmol/renderer/ProgramManager.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/rhi/ShaderModule.h"
 #include "axmol/renderer/VertexLayoutManager.h"
 #include "axmol/renderer/Shaders.h"
@@ -64,7 +64,6 @@ int ProgramManager::chooseSpriteProgramType(rhi::PixelFormat pixelFormat)
     case PixelFormat::RGBA8:
         return rhi::ProgramType::POSITION_TEXTURE_COLOR;
     default:
-        AXLOGW("Warning: chooseSpriteProgramType() unhandled pixel format {}", (int)pixelFormat);
         return rhi::ProgramType::POSITION_TEXTURE_COLOR;
     }
 }
@@ -78,9 +77,9 @@ ProgramManager::~ProgramManager()
 {
     XXH64_freeState(_programIdGen);
 
-    for (auto&& program : _cachedPrograms)
+    for (auto& [_, program] : _cachedPrograms)
     {
-        AX_SAFE_RELEASE(program.second);
+        AX_SAFE_RELEASE(program);
     }
     AXLOGD("deallocing ProgramManager: {}", fmt::ptr(this));
     rhi::ShaderCache::destroyInstance();
@@ -225,9 +224,9 @@ Program* ProgramManager::loadProgram(std::string_view vsName,
     auto fileUtils  = FileUtils::getInstance();
     auto vertFile   = fileUtils->fullPathForFilename(vsName);
     auto fragFile   = fileUtils->fullPathForFilename(fsName);
-    auto vertSource = fileUtils->getStringFromFile(vertFile);
-    auto fragSource = fileUtils->getStringFromFile(fragFile);
-    auto program    = axdrv->createProgram(vertSource, fragSource);
+    auto vertSource = fileUtils->getDataFromFile(vertFile);
+    auto fragSource = fileUtils->getDataFromFile(fragFile);
+    auto program    = axdrv->createProgram(std::move(vertSource), std::move(fragSource));
 
     if (program)
     {
@@ -236,7 +235,7 @@ Program* ProgramManager::loadProgram(std::string_view vsName,
         program->setProgramIds(progType, progId);
         if ((unsigned int)vlk < (unsigned int)VertexLayoutKind::Count)
         {
-            auto layout = axvlm->acquireBuiltinVertexLayout(vlk, program);
+            auto layout = axvlm->getBuiltinVertexLayout(vlk, program);
             program->setVertexLayout(layout);
         }
         _cachedPrograms.emplace(progId, program);

@@ -32,19 +32,92 @@ THE SOFTWARE.
 NS_FGUI_BEGIN
 using namespace ax;
 
-using namespace std;
+static bool s_isGfxDidDrop = false;
 
-std::string HtmlObject::buttonResource;
-std::string HtmlObject::inputResource;
-std::string HtmlObject::selectResource;
-bool HtmlObject::usePool = true;
-
-GObjectPool HtmlObject::objectPool;
-ax::Vector<GObject*> HtmlObject::loaderPool;
-
-HtmlObject::HtmlObject() :_ui(nullptr), _hidden(false)
+HtmlObjectContext* HtmlObjectContext::s_htmlObjContext;
+HtmlObjectContext* HtmlObjectContext::getInstance()
 {
+    if (s_htmlObjContext) [[likely]]
+        return s_htmlObjContext;
+
+    if (s_isGfxDidDrop)
+        return nullptr;
+
+    s_htmlObjContext = new HtmlObjectContext();
+    return s_htmlObjContext;
 }
+
+void HtmlObjectContext::destroyInstance()
+{
+    if (s_htmlObjContext)
+    {
+        delete s_htmlObjContext;
+        s_htmlObjContext = nullptr;
+    }
+}
+
+HtmlObjectContext::HtmlObjectContext()
+{
+    _beforeGfxDestroyListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(
+        Director::EVENT_BEFORE_GFX_DROP, [](EventCustom*) {
+        s_isGfxDidDrop = true;
+        HtmlObjectContext::destroyInstance();
+    });
+}
+
+HtmlObjectContext::~HtmlObjectContext()
+{
+    Director::getInstance()->getEventDispatcher()->removeEventListener(_beforeGfxDestroyListener);
+}
+
+void HtmlObjectContext::recycleObject(GObject* obj)
+{
+    this->objectPool.returnObject(obj);
+}
+
+void HtmlObjectContext::recycleLoader(GObject* loader)
+{
+    this->loaderPool.pushBack(loader);
+}
+
+GObject* HtmlObjectContext::acquireObject(const std::string& src, std::string_view dedicatedResourceHint)
+{
+    GObject* obj;
+    if (!src.empty())
+        obj = this->objectPool.getObject(src);
+    else
+    {
+        if (!dedicatedResourceHint.empty())
+            AXLOGW("Set HtmlObject.{} first", dedicatedResourceHint);
+        obj = GComponent::create();
+    }
+    obj->retain();
+    return obj;
+}
+
+GLoader* HtmlObjectContext::acquireLoader()
+{
+    GLoader* loader;
+    if (!isLoaderPoolEmpty())
+    {
+        loader = (GLoader*)this->loaderPool.back();
+        loader->retain();
+        this->loaderPool.popBack();
+    }
+    else
+    {
+        loader = GLoader::create();
+        loader->retain();
+    }
+    return loader;
+}
+
+bool HtmlObjectContext::isLoaderPoolEmpty() const
+{
+    return this->loaderPool.empty();
+}
+
+HtmlObject::HtmlObject() : _element(nullptr), _owner(nullptr), _ui(nullptr), _hidden(false) {}
 
 HtmlObject::~HtmlObject()
 {
@@ -52,12 +125,14 @@ HtmlObject::~HtmlObject()
     {
         destroy();
 
-        if (usePool)
+        auto context = HtmlObjectContext::getInstance();
+
+        if (context && context->usePool)
         {
             if (!_ui->getResourceURL().empty())
-                objectPool.returnObject(_ui);
+                context->recycleObject(_ui);
             else if (dynamic_cast<GLoader*>(_ui) != nullptr)
-                loaderPool.pushBack(_ui);
+                context->recycleLoader(_ui);
         }
     }
 
@@ -66,7 +141,7 @@ HtmlObject::~HtmlObject()
 
 void HtmlObject::create(FUIRichText* owner, HtmlElement* element)
 {
-    _owner = owner;
+    _owner   = owner;
     _element = element;
 
     switch (element->type)
@@ -77,7 +152,7 @@ void HtmlObject::create(FUIRichText* owner, HtmlElement* element)
 
     case HtmlElement::Type::INPUT:
     {
-        string type = element->getString("type");
+        std::string type = element->getString("type");
         transform(type.begin(), type.end(), type.begin(), ::tolower);
         if (type == "button" || type == "submit")
             createButton();
@@ -108,15 +183,11 @@ void HtmlObject::destroy()
 
 void HtmlObject::createCommon()
 {
-    string src = _element->getString("src");
-    if (!src.empty())
-        _ui = objectPool.getObject(src);
-    else
-        _ui = GComponent::create();
+    std::string src = _element->getString("src");
 
-    _ui->retain();
+    _ui = HtmlObjectContext::getInstance()->acquireObject(src, ""sv);
 
-    int width = _element->getInt("width", _ui->sourceSize.width);
+    int width  = _element->getInt("width", _ui->sourceSize.width);
     int height = _element->getInt("height", _ui->sourceSize.height);
 
     _ui->setSize(width, height);
@@ -126,35 +197,24 @@ void HtmlObject::createCommon()
 
 void HtmlObject::createImage()
 {
-    int width = 0;
-    int height = 0;
-    string src = _element->getString("src");
-    if (!src.empty()) {
+    int width       = 0;
+    int height      = 0;
+    std::string src = _element->getString("src");
+    if (!src.empty())
+    {
         PackageItem* pi = UIPackage::getItemByURL(src);
         if (pi)
         {
-            width = pi->width;
+            width  = pi->width;
             height = pi->height;
         }
     }
 
-    width = _element->getInt("width", width);
+    width  = _element->getInt("width", width);
     height = _element->getInt("height", height);
 
-    GLoader* loader;
-    if (!loaderPool.empty())
-    {
-        loader = (GLoader*)loaderPool.back();
-        loader->retain();
-        loaderPool.popBack();
-    }
-    else
-    {
-        loader = GLoader::create();
-        loader->retain();
-    }
-
-    _ui = loader;
+    GLoader* loader = HtmlObjectContext::getInstance()->acquireLoader();
+    _ui             = loader;
 
     loader->setSize(width, height);
     loader->setFill(LoaderFillType::SCALE_FREE);
@@ -163,23 +223,17 @@ void HtmlObject::createImage()
 
 void HtmlObject::createButton()
 {
-    if (!buttonResource.empty())
-        _ui = objectPool.getObject(buttonResource);
-    else
-    {
-        _ui = GComponent::create();
-        AXLOGW("Set HtmlObject.buttonResource first");
-    }
+    auto context = HtmlObjectContext::getInstance();
 
-    _ui->retain();
+    _ui = context->acquireObject(context->buttonResource, "buttonResource"sv);
 
-    int width = _element->getInt("width", _ui->sourceSize.width);
+    int width  = _element->getInt("width", _ui->sourceSize.width);
     int height = _element->getInt("height", _ui->sourceSize.height);
 
     _ui->setSize(width, height);
     _ui->setText(_element->getString("value"));
 
-    GButton *button = dynamic_cast<GButton*>(_ui);
+    GButton* button = dynamic_cast<GButton*>(_ui);
     if (button != nullptr)
     {
         button->setSelected(_element->getString("checked") == "true");
@@ -188,21 +242,15 @@ void HtmlObject::createButton()
 
 void HtmlObject::createInput()
 {
-    if (!inputResource.empty())
-        _ui = objectPool.getObject(inputResource);
-    else
-    {
-        _ui = GComponent::create();
-        AXLOGW("Set HtmlObject.inputResource first");
-    }
+    auto context = HtmlObjectContext::getInstance();
 
-    _ui->retain();
+    _ui = context->acquireObject(context->inputResource, "inputResource"sv);
 
-    string type = _element->getString("type");
-    transform(type.begin(), type.end(), type.begin(), ::tolower);
+    std::string type = _element->getString("type");
+    std::transform(type.begin(), type.end(), type.begin(), ::tolower);
     _hidden = type == "hidden";
 
-    int width = _element->getInt("width");
+    int width  = _element->getInt("width");
     int height = _element->getInt("height");
 
     if (width == 0)
@@ -218,7 +266,7 @@ void HtmlObject::createInput()
     _ui->setSize(width, height);
     _ui->setText(_element->getString("value"));
 
-    GLabel *label = dynamic_cast<GLabel*>(_ui);
+    GLabel* label = dynamic_cast<GLabel*>(_ui);
     if (label != nullptr)
     {
         GTextInput* input = dynamic_cast<GTextInput*>(label->getTextField());
@@ -231,17 +279,11 @@ void HtmlObject::createInput()
 
 void HtmlObject::createSelect()
 {
-    if (!selectResource.empty())
-        _ui = objectPool.getObject(selectResource);
-    else
-    {
-        _ui = GComponent::create();
-        AXLOGW("Set HtmlObject.selectResource first");
-    }
+    auto context = HtmlObjectContext::getInstance();
 
-    _ui->retain();
+    _ui = context->acquireObject(context->selectResource, "selectResource"sv);
 
-    int width = _element->getInt("width", _ui->sourceSize.width);
+    int width  = _element->getInt("width", _ui->sourceSize.width);
     int height = _element->getInt("height", _ui->sourceSize.height);
 
     _ui->setSize(width, height);
@@ -249,7 +291,7 @@ void HtmlObject::createSelect()
     GComboBox* comboBox = dynamic_cast<GComboBox*>(_ui);
     if (comboBox != nullptr)
     {
-        auto& items = _element->getArray("items");
+        auto& items  = _element->getArray("items");
         auto& values = _element->getArray("values");
         comboBox->getItems().clear();
         comboBox->getValues().clear();

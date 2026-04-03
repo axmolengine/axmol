@@ -46,7 +46,7 @@ THE SOFTWARE.
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/RenderState.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/base/UserDefault.h"
 #include "axmol/base/Utils.h"
 #include "axmol/base/FPSImages.h"
@@ -68,6 +68,7 @@ THE SOFTWARE.
 #endif
 
 #include "axmol/rhi/SamplerCache.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/renderer/VertexLayoutManager.h"
 
 #if defined(AX_ENABLE_3D)
@@ -77,22 +78,36 @@ THE SOFTWARE.
 
 namespace ax
 {
-// FIXME: it should be a Director ivar. Move it there once support for multiple directors is added
-
-// singleton stuff
-static Director* s_SharedDirector = nullptr;
-
 #define kDefaultFPS 60  // 60 frames per second
 
-const char* Director::EVENT_BEFORE_SET_NEXT_SCENE = "director_before_set_next_scene";
-const char* Director::EVENT_AFTER_SET_NEXT_SCENE  = "director_after_set_next_scene";
-const char* Director::EVENT_PROJECTION_CHANGED    = "director_projection_changed";
-const char* Director::EVENT_AFTER_DRAW            = "director_after_draw";
-const char* Director::EVENT_AFTER_VISIT           = "director_after_visit";
-const char* Director::EVENT_BEFORE_UPDATE         = "director_before_update";
-const char* Director::EVENT_AFTER_UPDATE          = "director_after_update";
-const char* Director::EVENT_RESET                 = "director_reset";
-const char* Director::EVENT_BEFORE_DRAW           = "director_before_draw";
+std::string_view Director::EVENT_BEFORE_SET_NEXT_SCENE = "director_before_set_next_scene"sv;
+std::string_view Director::EVENT_AFTER_SET_NEXT_SCENE  = "director_after_set_next_scene"sv;
+std::string_view Director::EVENT_PROJECTION_CHANGED    = "director_projection_changed"sv;
+std::string_view Director::EVENT_AFTER_DRAW            = "director_after_draw"sv;
+std::string_view Director::EVENT_AFTER_VISIT           = "director_after_visit"sv;
+std::string_view Director::EVENT_BEFORE_UPDATE         = "director_before_update"sv;
+std::string_view Director::EVENT_AFTER_UPDATE          = "director_after_update"sv;
+std::string_view Director::EVENT_BEFORE_DRAW           = "director_before_draw"sv;
+std::string_view Director::EVENT_RESET                 = "director_reset"sv;
+std::string_view Director::EVENT_DESTROY               = "director_destroy"sv;
+std::string_view Director::EVENT_BEFORE_GFX_DROP       = "director_before_gfx_drop"sv;
+std::string_view Director::EVENT_AFTER_GFX_DROP        = "director_after_gfx_drop"sv;
+
+// clang-format off
+static constexpr std::string_view kWindowPlatformNameMap[] = {
+    "Unknown"sv,
+    "Win32"sv,
+    "CoreWindow"sv,
+    "Cocoa"sv,
+    "X11"sv,
+    "Wayland"sv,
+    "UIKit"sv,
+    "Android"sv,
+    "Web"sv,
+};
+// clang-format on
+
+Director* Director::s_SharedDirector = nullptr;
 
 Director* Director::getInstance()
 {
@@ -152,7 +167,17 @@ bool Director::init()
     _eventAfterUpdate->setUserData(this);
     _eventProjectionChanged = new EventCustom(EVENT_PROJECTION_CHANGED);
     _eventProjectionChanged->setUserData(this);
+
     _eventResetDirector = new EventCustom(EVENT_RESET);
+    _eventResetDirector->setUserData(this);
+    _eventDestroyDirector = new EventCustom(EVENT_DESTROY);
+    _eventDestroyDirector->setUserData(this);
+
+    _eventBeforeGfxDrop = new EventCustom(EVENT_BEFORE_GFX_DROP);
+    _eventBeforeGfxDrop->setUserData(this);
+    _eventAfterGfxDrop = new EventCustom(EVENT_AFTER_GFX_DROP);
+    _eventAfterGfxDrop->setUserData(this);
+
     // init TextureCache
     initTextureCache();
     initMatrixStack();
@@ -163,10 +188,11 @@ bool Director::init()
     // listen the event that renderer was recreated on Android/WP8
     _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
         _isStatusLabelUpdated = true;  // Force recreation of textures
-        rhi::SamplerCache::getInstance()->invalidateAll();
+        rhi::SamplerCache::getInstance()->rebuild();
+        rhi::ShaderCache::getInstance()->recompileAll();
     });
 
-    _eventDispatcher->addEventListenerWithFixedPriority(_rendererRecreatedListener, -1);
+    _eventDispatcher->addEventListenerWithFixedPriority(_rendererRecreatedListener, -2);
 #endif
 
     return true;
@@ -176,17 +202,15 @@ Director::~Director()
 {
     AXLOGD("deallocing Director: {}", fmt::ptr(this));
 
+    _eventDispatcher->dispatchEvent(_eventDestroyDirector);
+
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _eventDispatcher->removeEventListener(_rendererRecreatedListener);
     _rendererRecreatedListener = nullptr;
 #endif
 
-#if AX_ENABLE_SCRIPT_BINDING
-    // !!!ScriptEngine instance depends on _scheduler, so must dtor before _scheduler
-    ScriptEngineManager::destroyInstance();
-#endif
-
     AX_SAFE_RELEASE(_scheduler);
+
     AX_SAFE_RELEASE(_actionManager);
 
     AX_SAFE_RELEASE(_beforeSetNextScene);
@@ -198,19 +222,29 @@ Director::~Director()
     AX_SAFE_RELEASE(_eventAfterVisit);
     AX_SAFE_RELEASE(_eventProjectionChanged);
     AX_SAFE_RELEASE(_eventResetDirector);
+    AX_SAFE_RELEASE(_eventDestroyDirector);
+    AX_SAFE_RELEASE(_eventBeforeGfxDrop);
+    AX_SAFE_RELEASE(_eventAfterGfxDrop);
 #ifdef AX_ENABLE_CONSOLE
     delete _console;
 #endif
+
+    _eventDispatcher->removeAllEventListeners();
     AX_SAFE_RELEASE(_eventDispatcher);
 
     Environment::destroyInstance();
     ObjectFactory::destroyInstance();
     QuadCommand::destroyIsolatedIndices();
 
-    /** clean auto release pool. */
-    PoolManager::destroyInstance();
+#if AX_ENABLE_SCRIPT_BINDING
+    // !!!All ax::Object instances depends on ScriptEngineManager when script bind enabled
+    ScriptEngineManager::destroyInstance();
+#endif
 
     AX_SAFE_DELETE(_jobSystem);
+
+    /** clean auto release pool. */
+    PoolManager::destroyInstance();
 
     s_SharedDirector = nullptr;
 }
@@ -307,7 +341,7 @@ void Director::drawScene()
 
     if (_runningScene)
     {
-#if (defined(AX_ENABLE_PHYSICS) || defined(AX_ENABLE_3D_PHYSICS) || defined(AX_ENABLE_NAVMESH))
+#if (defined(AX_ENABLE_PHYSICS_2D) || defined(AX_ENABLE_PHYSICS_3D) || defined(AX_ENABLE_NAVMESH))
         _runningScene->stepPhysicsAndNavigation(_deltaTime);
 #endif
         // clear draw stats
@@ -364,7 +398,7 @@ void Director::calculateDeltaTime()
     // new delta time. Re-fixed issue #1277
     if (_nextDeltaTimeZero)
     {
-        _deltaTime         = 0;
+        _deltaTime         = 1e-6f;
         _nextDeltaTimeZero = false;
         _lastUpdate        = std::chrono::steady_clock::now();
     }
@@ -377,7 +411,7 @@ void Director::calculateDeltaTime()
             _deltaTime  = std::chrono::duration_cast<std::chrono::microseconds>(now - _lastUpdate).count() / 1000000.0f;
             _lastUpdate = now;
         }
-        _deltaTime = MAX(0, _deltaTime);
+        _deltaTime = MAX(1e-6f, _deltaTime);
     }
 
 #if defined(_AX_DEBUG) && _AX_DEBUG
@@ -393,6 +427,7 @@ float Director::getDeltaTime() const
 {
     return _deltaTime;
 }
+
 void Director::setRenderView(RenderView* renderView)
 {
     AXASSERT(renderView, "opengl view should not be null");
@@ -402,6 +437,8 @@ void Director::setRenderView(RenderView* renderView)
         // Environment. Gather GPU info
         auto env = Environment::getInstance();
         env->gatherGPUInfo();
+        auto windowPlatformName = kWindowPlatformNameMap[static_cast<int>(renderView->getWindowPlatform())];
+        env->setValue("window.platform", Value{windowPlatformName});
         AXLOGI("{}\n", env->getInfo());
 
         if (_renderView)
@@ -419,10 +456,7 @@ void Director::setRenderView(RenderView* renderView)
             setRenderDefaults();
         }
 
-        if (_eventDispatcher)
-        {
-            _eventDispatcher->setEnabled(true);
-        }
+        _eventDispatcher->setEnabled(true);
     }
 }
 
@@ -1042,8 +1076,7 @@ void Director::reset()
     _runningScene = nullptr;
     _nextScene    = nullptr;
 
-    if (_eventDispatcher)
-        _eventDispatcher->dispatchEvent(_eventResetDirector);
+    _eventDispatcher->dispatchEvent(_eventResetDirector);
 
 #if defined(AX_ENABLE_AUDIO)
     // Fix github issue: https://github.com/axmolengine/axmol/issues/550
@@ -1053,12 +1086,6 @@ void Director::reset()
 
     // cleanup scheduler
     getScheduler()->unscheduleAll();
-
-    // Remove all events
-    if (_eventDispatcher)
-    {
-        _eventDispatcher->removeAllEventListeners();
-    }
 
     if (_notificationNode)
     {
@@ -1105,9 +1132,7 @@ void Director::reset()
     SpriteFrameCache::destroyInstance();
     FileUtils::destroyInstance();
 
-    VertexLayoutManager::destroyInstance();
     ProgramStateRegistry::destroyInstance();
-    ProgramManager::destroyInstance();
 
     // axmol specific data structures
     UserDefault::destroyInstance();
@@ -1116,7 +1141,7 @@ void Director::reset()
     destroyTextureCache();
 
 #if defined(AX_ENABLE_3D)
-    VertexInputBinding::clearCache();
+    VertexInputBinding::purgeCache();
     MeshDataCache::destroyInstance();
     MeshMaterial::releaseBuiltInMaterial();
     MeshMaterial::releaseCachedMaterial();
@@ -1129,11 +1154,15 @@ void Director::cleanupDirector()
 {
     reset();
 
+    _eventDispatcher->dispatchEvent(_eventBeforeGfxDrop);
+
     // If any graphics resources not cleanup or leaked, will crash on linux when destroy graphics context,
     // so we should cleanup any graphics resources.
     AX_SAFE_DELETE(_renderer);
+
     ProgramManager::destroyInstance();
-    rhi::DriverBase::destroyInstance();
+    VertexLayoutManager::destroyInstance();
+    rhi::DriverContext::destroyCurrentDriver();
 
     // OpenGL view
     if (_renderView)
@@ -1141,6 +1170,8 @@ void Director::cleanupDirector()
         _renderView->end();
         _renderView = nullptr;
     }
+
+    _eventDispatcher->dispatchEvent(_eventAfterGfxDrop);
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
     utils::killCurrentProcess();
@@ -1254,20 +1285,13 @@ void Director::resume()
 #endif
 
     _paused    = false;
-    _deltaTime = 0;
+    _deltaTime = 1e-6f;
     // fix issue #3509, skip one fps to avoid incorrect time calculation.
     setNextDeltaTimeZero(true);
 }
 
 void Director::updateFrameRate()
 {
-    //    static const float FPS_FILTER = 0.1f;
-    //    static float prevDeltaTime = 0.016f; // 60FPS
-    //
-    //    float dt = _deltaTime * FPS_FILTER + (1.0f-FPS_FILTER) * prevDeltaTime;
-    //    prevDeltaTime = dt;
-    //    _frameRate = 1.0f/dt;
-
     // Frame rate should be the real value of current frame.
     _frameRate = 1.0f / _deltaTime;
 }
@@ -1372,8 +1396,7 @@ void Director::createStatsLabel()
     bool isOK    = image->initWithImageData(data, dataLength, false);
     if (!isOK)
     {
-        if (image)
-            delete image;
+        delete image;
         AXLOGE("{}", "Fails: init fps_images");
         return;
     }
@@ -1545,6 +1568,9 @@ void Director::setActionManager(ActionManager* actionManager)
 
 void Director::setEventDispatcher(EventDispatcher* dispatcher)
 {
+    assert(dispatcher);
+    if (!dispatcher)
+        return;
     if (_eventDispatcher != dispatcher)
     {
         AX_SAFE_RETAIN(dispatcher);

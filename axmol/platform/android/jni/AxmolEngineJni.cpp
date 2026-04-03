@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "axmol/platform/android/jni/JniHelper.h"
 #include "axmol/platform/android/FileUtils-android.h"
 #include "axmol/platform/Application.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/base/EventType.h"
 #include "axmol/base/EventCustom.h"
 #include "axmol/base/EventDispatcher.h"
@@ -61,6 +62,8 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeInit(JNIEnv* env,
 
     auto app = ax::Application::getInstance();
     app->initContextAttrs();
+
+    rhi::DriverContext::makeCurrentDriver();
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeSetEditTextDialogResult(JNIEnv* env,
@@ -100,7 +103,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeCall0(JNIEnv* env, j
 
 JNIEXPORT int JNICALL Java_dev_axmol_lib_AxmolEngine_nativeGetRenderAPI(JNIEnv* env, jclass)
 {
-    return AX_RENDER_API;
+    return (int)rhi::DriverContext::currentDriverType();
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeRunOnAxmolThread(JNIEnv* env, jclass, jobject runnable)

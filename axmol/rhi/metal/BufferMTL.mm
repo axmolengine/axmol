@@ -38,8 +38,8 @@ BufferImpl::BufferImpl(id<MTLDevice> mtlDevice,
 {
     if (BufferUsage::DYNAMIC == usage)
     {
-        NSMutableArray* mutableDynamicDataBuffers = [NSMutableArray arrayWithCapacity:MAX_INFLIGHT_BUFFER];
-        for (int i = 0; i < MAX_INFLIGHT_BUFFER; ++i)
+        NSMutableArray* mutableDynamicDataBuffers = [NSMutableArray arrayWithCapacity:MAX_FRAMES_IN_FLIGHT];
+        for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
         {
             // Create a new buffer with enough capacity to store one instance of the dynamic buffer data
             id<MTLBuffer> dynamicDataBuffer = [mtlDevice newBufferWithLength:size options:MTLResourceStorageModeShared];
@@ -104,7 +104,7 @@ void BufferImpl::updateIndex()
 {
     if (BufferUsage::DYNAMIC == _usage && !_indexUpdated)
     {
-        _currentFrameIndex = (_currentFrameIndex + 1) % MAX_INFLIGHT_BUFFER;
+        _currentFrameIndex = (_currentFrameIndex + 1) % MAX_FRAMES_IN_FLIGHT;
         _mtlBuffer         = _dynamicDataBuffers[_currentFrameIndex];
         _indexUpdated      = true;
     }

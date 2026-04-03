@@ -24,8 +24,8 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "UIRichTextTest.h"
-#include "cocostudio/ArmatureDataManager.h"
-#include "cocostudio/Armature.h"
+#include "sceneext/ArmatureDataManager.h"
+#include "sceneext/Armature.h"
 
 using namespace ax;
 using namespace ax::ui;

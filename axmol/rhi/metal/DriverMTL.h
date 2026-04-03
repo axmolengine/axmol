@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 #import <Metal/Metal.h>
 #import <QuartzCore/CAMetalLayer.h>
 
@@ -96,12 +96,15 @@ public:
     DriverImpl();
     ~DriverImpl();
 
+    bool init() override;
+    DriverType type() override { return DriverType::Metal; }
+
     /// @name Setters & Getters
     /**
      * New a RenderContext object.
      * @return A RenderContext object.
      */
-    RenderContext* createRenderContext(void*) override;
+    RenderContext* createRenderContext(SurfaceHandle) override;
 
     /**
      * New a Buffer object.
@@ -135,13 +138,7 @@ public:
      */
     RenderPipeline* createRenderPipeline() override;
 
-    /**
-     * New a Program, not auto release.
-     * @param vertexShader Specifes this is a vertex shader source.
-     * @param fragmentShader Specifes this is a fragment shader source.
-     * @return A Program instance.
-     */
-    Program* createProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
+    Program* createProgram(Data vsData, Data fsData) override;
 
     /**
      * Get a MTLDevice object.
@@ -172,6 +169,8 @@ public:
      */
     std::string getVersion() const override;
 
+    std::string getShaderVersion() const override;
+
     /**
      * Check if feature supported by Metal.
      * @param feature Specify feature to be query.
@@ -182,13 +181,7 @@ public:
     static bool supportD24S8() { return _isDepth24Stencil8PixelFormatSupported; }
 
 protected:
-    /**
-     * New a shaderModule.
-     * @param stage Specifies whether is vertex shader or fragment shader.
-     * @param source Specifies shader source.
-     * @return A ShaderModule object.
-     */
-    ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
+    ShaderModule* createShaderModule(ShaderStage stage, Data& chunk) override;
 
     SamplerHandle createSampler(const SamplerDesc& desc) override;
     void destroySampler(SamplerHandle& sampler) override;

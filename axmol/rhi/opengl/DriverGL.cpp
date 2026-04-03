@@ -35,42 +35,23 @@
 #include "axmol/rhi/opengl/MacrosGL.h"
 #include "axmol/rhi/opengl/VertexLayoutGL.h"
 
-#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/vector.hpp"
 #include "axmol/tlx/utility.hpp"
 #include "axmol/tlx/format.hpp"
-#include "xxhash/xxhash.h"
+#include "axmol/tlx/hash.hpp"
 
-#if !defined(GL_COMPRESSED_RGBA8_ETC2_EAC)
-#    define GL_COMPRESSED_RGBA8_ETC2_EAC 0x9278
+#if defined(GLAD_GL) || defined(GLAD_GLES2)
+#    define _AX_USE_GLAD 1
+#else
+#    define _AX_USE_GLAD 0
 #endif
 
-#if !defined(GL_COMPRESSED_RGBA_ASTC_4x4)
-#    define GL_COMPRESSED_RGBA_ASTC_4x4 0x93B0
+#if _AX_USE_GLAD && AX_GLES_PROFILE && !defined(GLAD_GLES2_USE_SYSTEM_EGL)
+#    include "glad/egl.h"
 #endif
-
-namespace ax::rhi
-{
-DriverBase* DriverBase::getInstance()
-{
-    if (!_instance)
-        _instance = new gl::DriverImpl();
-
-    return _instance;
-}
-
-void DriverBase::destroyInstance()
-{
-    AX_SAFE_DELETE(_instance);
-}
-}  // namespace ax::rhi
 
 namespace ax::rhi::gl
 {
-
-static inline uint32_t hashString(std::string_view str)
-{
-    return !str.empty() ? XXH32(str.data(), str.length(), 0) : 0;
-}
 
 template <typename _Fty>
 static void GL_EnumAllExtensions(_Fty&& func)
@@ -85,51 +66,67 @@ static void GL_EnumAllExtensions(_Fty&& func)
     }
 }
 
-DriverImpl::DriverImpl()
+#if _AX_USE_GLAD
+static bool loadGL()
 {
+#    if AX_GLES_PROFILE
+#        if !defined(GLAD_GLES2_USE_SYSTEM_EGL)
+    gladLoaderLoadEGL(EGL_DEFAULT_DISPLAY);
+#        endif
+    return !!gladLoaderLoadGLES2();
+#    else
+    return !!gladLoaderLoadGL();
+#    endif
+}
+#endif
+
+DriverImpl::DriverImpl() {}
+
+DriverImpl::~DriverImpl()
+{
+    if (_sharedVAO)
+        glDeleteVertexArrays(1, &_sharedVAO);
+}
+
+bool DriverImpl::init()
+{
+#if _AX_USE_GLAD
+    if (!loadGL())
+        throw std::runtime_error("OpenGL init failed, context not ready");
+#endif
+
     /// driver info
     auto pszVersion = (char const*)glGetString(GL_VERSION);
-    if (pszVersion)
-    {
-        auto hint   = strstr(pszVersion, "OpenGL ES");
-        _verInfo.es = !!hint;
-        if (_verInfo.es)
-        {
-            _verInfo.major = hint[10] - '0';
-            _verInfo.minor = hint[12] - '0';
-        }
-        else
-        {
-            _verInfo.major = (pszVersion[0] - '0');
-            _verInfo.minor = (pszVersion[2] - '0');
-        }
+    if (!pszVersion)
+        throw std::runtime_error("OpenGL init failed, version is null");
 
-        _version = pszVersion;
+    _verInfo.es = !!AX_GLES_PROFILE;
+    auto hint   = strstr(pszVersion, "OpenGL ES");
+    if (hint)
+    {
+        _verInfo.major = hint[10] - '0';
+        _verInfo.minor = hint[12] - '0';
     }
     else
     {
-        _version = "null";
+        _verInfo.major = (pszVersion[0] - '0');
+        _verInfo.minor = (pszVersion[2] - '0');
     }
 
-    // check OpenGL version at first
-    constexpr int REQUIRED_GLES_MAJOR = (AX_GLES_PROFILE / AX_GLES_PROFILE_DEN);
-    if ((!_verInfo.es && (_verInfo.major < 3 || (_verInfo.major == 3 && _verInfo.minor < 3))) ||
-        (_verInfo.es && _verInfo.major < REQUIRED_GLES_MAJOR))
+    _version = pszVersion;
+
+#if !AX_GLES_PROFILE
+    // check Desktop GL version at first
+    if (_verInfo.major < 3 || (_verInfo.major == 3 && _verInfo.minor < 3))
     {
-#if AX_GLES_PROFILE == 0
         auto msg = fmt::format(
             "OpeGL 3.3+ is required. Current version:{} incompatible (update driver or make current context).",
             _version);
-#else
-        auto msg = fmt::format(
-            "OpeGL ES {}.{}+ is required. Current version:{} incompatible (update driver or make current context).",
-            REQUIRED_GLES_MAJOR, AX_GLES_PROFILE % AX_GLES_PROFILE, _version);
-#endif
         AXLOGE("{}", msg);
-        showAlert(msg, "OpenGL init failed", AlertStyle::RequireSync);
-        utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
-        return;
+        showAlert(msg, "OpenGL init failed, version too old", AlertStyle::RequireSync);
+        throw std::runtime_error("OpenGL init failed, version too old");
     }
+#endif
 
     // caps
     glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &_caps.maxAttributes);
@@ -138,12 +135,12 @@ DriverImpl::DriverImpl()
 
     // exts
     GL_EnumAllExtensions([this](const std::string_view& ext) {
-        const auto key = hashString(ext);
+        const auto key = tlx::hash32_str(ext);
         _glExtensions.insert(key);
     });
 
     // texture compressions
-    axstd::pod_vector<GLint> formats;
+    tlx::pod_vector<GLint> formats;
     GLint numFormats{0};
     glGetIntegerv(GL_NUM_COMPRESSED_TEXTURE_FORMATS, &numFormats);
     if (numFormats > 0)
@@ -167,6 +164,13 @@ DriverImpl::DriverImpl()
     //     supported");
     // }
 
+#ifdef GL_TEXTURE_MAX_ANISOTROPY_EXT
+    if (hasExtension("GL_EXT_texture_filter_anisotropic"))
+    {
+        glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &_cap.maxAnisotropy);
+    }
+#endif
+
     // default FBO
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_defaultFBO);
 
@@ -178,12 +182,8 @@ DriverImpl::DriverImpl()
     __state->bindVertexArray(_sharedVAO);
 
     CHECK_GL_ERROR_DEBUG();
-}
 
-DriverImpl::~DriverImpl()
-{
-    if (_sharedVAO)
-        glDeleteVertexArrays(1, &_sharedVAO);
+    return true;
 }
 
 GLint DriverImpl::getDefaultFBO() const
@@ -191,7 +191,7 @@ GLint DriverImpl::getDefaultFBO() const
     return _defaultFBO;
 }
 
-RenderContext* DriverImpl::createRenderContext(void*)
+RenderContext* DriverImpl::createRenderContext(SurfaceHandle)
 {
     return new RenderContextImpl(this);
 }
@@ -210,15 +210,14 @@ RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* 
 {
     auto rtGL = new RenderTargetImpl(this, false);
     rtGL->bindFrameBuffer();
-    RenderTarget::ColorAttachment colors{{colorAttachment, 0}};
-    rtGL->setColorAttachment(colors);
-    rtGL->setDepthStencilAttachment(depthStencilAttachment);
+    rtGL->setColorTexture(colorAttachment);
+    rtGL->setDepthStencilTexture(depthStencilAttachment);
     return rtGL;
 }
 
-ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, std::string_view source)
+ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, Data& data)
 {
-    return new ShaderModuleImpl(stage, source);
+    return new ShaderModuleImpl(stage, data);
 }
 
 SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
@@ -271,7 +270,7 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
             return GL_MIRRORED_REPEAT;
         case SamplerAddressMode::CLAMP:
             return GL_CLAMP_TO_EDGE;
-#if defined(GL_CLAMP_TO_BORDER_EXT)
+#if defined(GL_CLAMP_TO_BORDER_EXT) && !defined(__EMSCRIPTEN__)
         case SamplerAddressMode::BORDER:
             return GL_CLAMP_TO_BORDER_EXT;
 #endif
@@ -283,7 +282,7 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     glSamplerParameteri(sampler, GL_TEXTURE_WRAP_T, toGLWrap(desc.tAddressMode));
     glSamplerParameteri(sampler, GL_TEXTURE_WRAP_R, toGLWrap(desc.wAddressMode));
 
-#if defined(GL_TEXTURE_BORDER_COLOR_EXT)
+#if defined(GL_TEXTURE_BORDER_COLOR_EXT) && !defined(__EMSCRIPTEN__)
     // --- Border color ---
     if (desc.sAddressMode == SamplerAddressMode::BORDER || desc.tAddressMode == SamplerAddressMode::BORDER ||
         desc.wAddressMode == SamplerAddressMode::BORDER)
@@ -334,30 +333,22 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     }
 
     // --- Anisotropy ---
-#ifdef GL_TEXTURE_MAX_ANISOTROPY_EXT
-    if (desc.anisotropy > 1)
+    if (desc.anisotropy > 0 && _cap.maxAnisotropy > 1.0f)
     {
-        GLfloat aniso    = static_cast<GLfloat>(desc.anisotropy);
-        GLfloat maxAniso = 0.0f;
-        glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAniso);
-        if (maxAniso > 0.0f)
-        {
-            if (aniso > maxAniso)
-                aniso = maxAniso;
-            glSamplerParameterf(sampler, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
-        }
+        GLfloat aniso = std::clamp(static_cast<GLfloat>(desc.anisotropy + 1), 1.0f, _cap.maxAnisotropy);
+        glSamplerParameterf(sampler, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
     }
-#endif
 
-    return reinterpret_cast<SamplerHandle>(static_cast<uintptr_t>(sampler));
+    return static_cast<uint64_t>(sampler);
 }
 
 void DriverImpl::destroySampler(SamplerHandle& h)
 {
     if (h)
     {
-        GLuint sampler = static_cast<GLuint>(reinterpret_cast<uintptr_t>(h));
+        GLuint sampler = static_cast<GLuint>(h);
         __state->deleteSampler(sampler);
+        h = nullptr;
     }
 }
 
@@ -371,9 +362,9 @@ RenderPipeline* DriverImpl::createRenderPipeline()
     return new RenderPipelineImpl();
 }
 
-Program* DriverImpl::createProgram(std::string_view vertexShader, std::string_view fragmentShader)
+Program* DriverImpl::createProgram(Data vsData, Data fsData)
 {
-    return new ProgramImpl(vertexShader, fragmentShader);
+    return new ProgramImpl(vsData, fsData);
 }
 
 VertexLayout* DriverImpl::createVertexLayout(VertexLayoutDesc&& desc)
@@ -407,7 +398,7 @@ static GLuint compileShader(GLenum shaderType, const GLchar* source)
 
     if (logLength > 1)
     {
-        auto errorLog = axstd::make_unique_for_overwrite<char[]>(static_cast<size_t>(logLength));
+        auto errorLog = tlx::make_unique_for_overwrite<char[]>(static_cast<size_t>(logLength));
         glGetShaderInfoLog(shader, logLength, nullptr, static_cast<GLchar*>(errorLog.get()));
         AXLOGE("axmol:ERROR: Failed to compile shader, detail: {}\n{}", errorLog.get(), source);
     }
@@ -688,7 +679,7 @@ bool DriverImpl::checkForFeatureSupported(FeatureType feature)
 
 bool DriverImpl::hasExtension(std::string_view searchName) const
 {
-    const auto key = hashString(searchName);
+    const auto key = tlx::hash32_str(searchName);
     return _glExtensions.find(key) != _glExtensions.end();
 }
 

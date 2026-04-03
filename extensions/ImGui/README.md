@@ -69,11 +69,9 @@ public:
 ```
 More about use imgui widgets, please see: https://github.com/ocornut/imgui
 
-## Tested devices
+## Supported platforms
 
-* win32
-* macOS
-* Android
+All platforms supported by axmol.
 
 ## Notes
 

@@ -76,7 +76,7 @@ public:
 };
 
 // particle render for quad
-class AX_EX_DLL PUBeamRender : public PURender, public PUListener
+class AX_EXT_API PUBeamRender : public PURender, public PUListener
 {
 public:
     // Constants

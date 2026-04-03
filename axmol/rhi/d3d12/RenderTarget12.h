@@ -28,10 +28,12 @@
 #include "axmol/rhi/d3d12/Texture12.h"
 #include <d3d12.h>
 #include <dxgi1_5.h>
-#include <array>
+#include <optional>
 
 namespace ax::rhi::d3d12
 {
+static constexpr DXGI_FORMAT DEFAULT_SWAPCHAIN_FORMAT = DXGI_FORMAT_R8G8B8A8_UNORM;
+
 class DriverImpl;
 
 /**
@@ -40,17 +42,14 @@ class DriverImpl;
 class RenderTargetImpl : public RenderTarget
 {
 public:
-    enum
-    {
-        DepthViewIndex = MAX_COLOR_ATTCHMENT,
-    };
-
     using Attachment = TextureImpl*;
 
     RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget);
     ~RenderTargetImpl();
 
-    void invalidate();
+    void cleanupResources() override;
+
+    void setColorTexture(Texture* texture, int level = 0, int index = 0) override;
 
     // Begin a render pass using this target
     void beginRenderPass(ID3D12GraphicsCommandList* cmd,
@@ -64,7 +63,10 @@ public:
     Attachment getColorAttachment(int index) const;
     Attachment getDepthStencilAttachment() const;
 
-    void rebuildAttachmentsForSwapchain(IDXGISwapChain4* swapchain, uint32_t width, uint32_t height);
+    bool rebuildSwapchainBuffers(IDXGISwapChain4* swapchain,
+                                 uint32_t width,
+                                 uint32_t height,
+                                 std::optional<UINT> swapchainFlags = std::nullopt);
 
     void setLastFenceValue(uint64_t fenceValue) { _lastFenceValue = fenceValue; }
     uint64_t getLastFenceValue() const { return _lastFenceValue; }
@@ -73,11 +75,11 @@ private:
     uint64_t _lastFenceValue{0};
     DriverImpl* _driver{nullptr};
 
-    std::array<d3d12::DescriptorHandle*, MAX_COLOR_ATTCHMENT> _rtvsDescriptors{};
+    tlx::inlined_vector<d3d12::DescriptorHandle*, INITIAL_COLOR_CAPACITY> _rtvsDescriptors{};
     DescriptorHandle* _dsvDescriptor{};
 
     // Current attachment descriptors
-    std::array<D3D12_CPU_DESCRIPTOR_HANDLE, MAX_COLOR_ATTCHMENT> _rtvHandles{};
+    tlx::inlined_vector<D3D12_CPU_DESCRIPTOR_HANDLE, INITIAL_COLOR_CAPACITY> _rtvHandles{};
     D3D12_CPU_DESCRIPTOR_HANDLE _dsvHandle{};
 
     uint32_t _numRTVs{0};

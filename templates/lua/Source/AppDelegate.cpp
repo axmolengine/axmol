@@ -59,6 +59,15 @@ void AppDelegate::initContextAttrs()
     // uncomment if your app need adapt high DPI scale monitors
     // contextAttrs.renderScaleMode = RenderScaleMode::Physical;
     setContextAttrs(contextAttrs);
+
+    // Sets preferred orientation
+    const auto orientations = Device::getSupportedOrientations();
+    if (bitmask::any(orientations, Device::OrientationMask::Landscape) &&
+        bitmask::any(orientations, Device::OrientationMask::ReverseLandscape))
+        Device::setPreferredOrientation(Device::Orientation::SensorLandscape);
+    else if (bitmask::any(orientations, Device::OrientationMask::Portrait) &&
+             bitmask::any(orientations, Device::OrientationMask::ReversePortrait))
+        Device::setPreferredOrientation(Device::Orientation::SensorPortrait);
 }
 
 bool AppDelegate::applicationDidFinishLaunching()

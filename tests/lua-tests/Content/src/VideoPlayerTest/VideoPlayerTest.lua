@@ -11,7 +11,7 @@ local function VideoPlayerTest()
 
     ax.MenuItemFont:setFontSize(16)
 
-    widget = ccs.GUIReader:getInstance():widgetFromJsonFile("cocosui/UITest/UITest.json")
+    widget = axext.GUIReader:getInstance():widgetFromJsonFile("cocosui/UITest/UITest.json")
     layer:addChild(widget)
 
     local videoStateLabel = ax.Label:createWithSystemFont("IDLE","Arial",16)

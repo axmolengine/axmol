@@ -164,9 +164,9 @@
     [self.textInput removeFromSuperview];
 }
 
-- (const char*)getText
+- (NSString*)getText
 {
-    return [self.textInput.axui_text UTF8String];
+    return self.textInput.axui_text;
 }
 
 - (void)controlTextDidBeginEditing:(NSNotification*)notification
@@ -180,7 +180,7 @@
 {
     _editState = NO;
 
-    getEditBoxImplMac()->editBoxEditingDidEnd([self getText], [self getEndAction:notification]);
+    getEditBoxImplMac()->editBoxEditingDidEnd([[self getText] UTF8String], [self getEndAction:notification]);
 }
 
 - (void)setMaxLength:(int)length
@@ -193,7 +193,7 @@
  */
 - (void)controlTextDidChange:(NSNotification*)notification
 {
-    getEditBoxImplMac()->editBoxEditingChanged([self getText]);
+    getEditBoxImplMac()->editBoxEditingChanged([[self getText] UTF8String]);
 }
 
 - (NSString*)getDefaultFontName
@@ -280,9 +280,9 @@
     self.textInput.axui_alignment = static_cast<NSTextAlignment>(alignment);
 }
 
-- (void)setPlaceHolder:(const char*)text
+- (void)setPlaceHolder:(NSString*)text
 {
-    self.textInput.axui_placeholder = [NSString stringWithUTF8String:text];
+    self.textInput.axui_placeholder = text;
 }
 
 - (void)setVisible:(BOOL)visible
@@ -330,7 +330,7 @@
 {
     _editState = NO;
 
-    getEditBoxImplMac()->editBoxEditingDidEnd([self getText], [self getEndAction:notification]);
+    getEditBoxImplMac()->editBoxEditingDidEnd([[self getText] UTF8String], [self getEndAction:notification]);
 }
 
 - (ax::ui::EditBoxDelegate::EditBoxEndAction)getEndAction:(NSNotification*)notification
@@ -356,7 +356,7 @@
 {
     NSTextView* textView = notification.object;
 
-    const char* inputText = [textView.string UTF8String];
+    std::string_view inputText{[textView.string UTF8String]};
 
     getEditBoxImplMac()->editBoxEditingChanged(inputText);
 }

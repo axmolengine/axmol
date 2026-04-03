@@ -27,7 +27,7 @@
 #pragma once
 
 #include "extensions/ExtensionMacros.h"
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "extensions/ExtensionExport.h"
 
 /**
@@ -39,7 +39,7 @@ NS_AX_EXT_BEGIN
 /**
  * Abstract class for SWTableView cell node
  */
-class AX_EX_DLL TableViewCell : public Node
+class AX_EXT_API TableViewCell : public Node
 {
 public:
     CREATE_FUNC(TableViewCell);

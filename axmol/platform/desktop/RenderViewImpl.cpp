@@ -42,24 +42,28 @@ The RenderViewImpl for win32,linux,macos,wasm
 #include "axmol/base/IMEDispatcher.h"
 #include "axmol/base/Utils.h"
 #include "axmol/base/text_utils.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #if AX_ICON_SET_SUPPORT
 #    include "axmol/platform/Image.h"
 #endif /* AX_ICON_SET_SUPPORT */
 
 #include "axmol/renderer/Renderer.h"
 
-#if AX_RENDER_API == AX_RENDER_API_MTL
+#if AX_ENABLE_MTL
 #    include <Metal/Metal.h>
 #    include "axmol/rhi/metal/DriverMTL.h"
 #    include "axmol/rhi/metal/UtilsMTL.h"
-#elif AX_RENDER_API == AX_RENDER_API_GL
+#endif
+#if AX_ENABLE_GL
 #    include "axmol/rhi/opengl/DriverGL.h"
 #    include "axmol/rhi/opengl/MacrosGL.h"
 #    include "axmol/rhi/opengl/OpenGLState.h"
-#elif AX_RENDER_API == AX_RENDER_API_VK
+#endif
+#if AX_ENABLE_VK
 #    include "axmol/rhi/vulkan/DriverVK.h"
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+
+#include "axmol/rhi/DriverContext.h"
 
 /** glfw3native.h */
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
@@ -103,6 +107,9 @@ The RenderViewImpl for win32,linux,macos,wasm
 
 namespace ax
 {
+
+using namespace rhi;
+
 #if defined(__EMSCRIPTEN__)
 struct IVec2
 {
@@ -451,25 +458,23 @@ void* RenderViewImpl::getNativeWindow() const
 #endif
 }
 
-void* RenderViewImpl::getNativeDisplay() const
+SurfaceHandle RenderViewImpl::getNativeDisplay() const
 {
-#if AX_RENDER_API == AX_RENDER_API_VK
-    return _vkSurface;
-#else
-#    if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+    auto driverType = DriverContext::currentDriverType();
+    if (driverType == DriverType::Vulkan)
+        return _vkSurface;
+
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     return glfwGetWin32Window(_mainWindow);
-#    elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-#        if AX_RENDER_API == AX_RENDER_API_MTL
-    return (void*)glfwGetCocoaView(_mainWindow);
-#        else
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
+    return driverType == DriverType::Metal ? (void*)glfwGetCocoaView(_mainWindow)
+                                           : (void*)glfwGetNSGLContext(_mainWindow);
     return (void*)glfwGetNSGLContext(_mainWindow);
-#        endif
-#    elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
     int platform = glfwGetPlatform();
     return platform == GLFW_PLATFORM_WAYLAND ? (void*)glfwGetWaylandDisplay() : (void*)glfwGetX11Display();
-#    else
+#else
     return nullptr;
-#    endif
 #endif
 }
 
@@ -557,20 +562,27 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 
     Vec2 requestWinSize = rect.size * windowZoomFactor;
 
-#if AX_RENDER_API == AX_RENDER_API_GL
-#    if AX_GLES_PROFILE
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-    glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, AX_GLES_PROFILE / AX_GLES_PROFILE_DEN);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-#    else
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);  // We want OpenGL 3.3
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // We don't want the old OpenGL
-#    endif
-#else  // Other Graphics driver, don't create gl context.
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+    // Try to initialize a high-performance graphics driver first.
+    // If any of the high-performance APIs (D3D11/D3D12/Vulkan/Metal) are enabled,
+    // the runtime will attempt initialization in the default priority order.
+    // If all attempts fail, OpenGL will then be explicitly selected as the fallback.
+    DriverContext::makeCurrentDriver();
+    const auto fallbackGL = DriverContext::isOpenGL();
+    if (fallbackGL)
+    {
+#if AX_GLES_PROFILE
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+        glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, AX_GLES_PROFILE / AX_GLES_PROFILE_DEN);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+#else
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);  // We want OpenGL 3.3
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // We don't want the old OpenGL
 #endif
+    }
+    else  // Other Graphics driver, don't create gl context.
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
     auto& contextAttrs = Application::getContextAttrs();
 
@@ -584,18 +596,12 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 
     glfwWindowHint(GLFW_SAMPLES, contextAttrs.multisamplingCount);
 
-    glfwWindowHint(GLFW_VISIBLE, contextAttrs.visible);
+    const auto requireShowByUser = contextAttrs.visible;
+    glfwWindowHint(GLFW_VISIBLE, false);
     glfwWindowHint(GLFW_DECORATED, contextAttrs.decorated);
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
     glfwWindowHintPointer(GLFW_WIN32_HWND_PARENT, contextAttrs.windowParent);
-#endif
-
-#if AX_RENDER_API != AX_RENDER_API_GL
-    // Init GPU device by driver for non-opengl RHI
-    // Initialize the D3D driver before creating the window to avoid a brief white flash
-    // caused by driver initialization stutter (hundreds of milliseconds) after the window appears.
-    axdrv;
 #endif
 
     _renderScaleMode = contextAttrs.renderScaleMode;
@@ -627,16 +633,18 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 
     glfwSetWindowSizeLimits(_mainWindow, 1, 1, GLFW_DONT_CARE, GLFW_DONT_CARE);
 
-#if AX_RENDER_API == AX_RENDER_API_GL
-    glfwMakeContextCurrent(_mainWindow);
+#if AX_ENABLE_GL
+    if (fallbackGL)
+    {
+        glfwMakeContextCurrent(_mainWindow);
+        DriverContext::activateCurrentDriver();
 
-#    if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
-    loadGL();
-#    endif
-    // Init driver after load GL
-    axdrv;
-    glfwSetWindowUserPointer(_mainWindow, rhi::gl::__state);
+        glfwSetWindowUserPointer(_mainWindow, gl::__state);
+    }
 #endif
+
+    if (requireShowByUser)
+        glfwShowWindow(_mainWindow);
 
     /*
      *  Note that the created window and context may differ from what you requested,
@@ -653,20 +661,23 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
     updateRenderSurface(fbWidth, fbHeight, SurfaceUpdateFlag::RenderSizeChanged | SurfaceUpdateFlag::SilentUpdate);
 
-#if AX_RENDER_API == AX_RENDER_API_VK
-    auto _createSurface = [](VkInstance inst, void* window, VkSurfaceKHR* surface) {
-        return glfwCreateWindowSurface(inst, static_cast<GLFWwindow*>(window), nullptr, surface);
-    };
-    auto driver = static_cast<ax::rhi::vk::DriverImpl*>(axdrv);
-    const rhi::vk::SurfaceCreateInfo createInfo{
-        .window = _mainWindow, .width = fbWidth, .height = fbHeight, .createFunc = _createSurface};
-    bool ok = driver->recreateSurface(createInfo);
-    if (!ok)
+#if AX_ENABLE_VK
+    if (DriverContext::isVulkan())
     {
-        AXLOGE("Failed to create Vulkan window surface.");
-        return false;
+        auto _createSurface = [](VkInstance inst, void* window, VkSurfaceKHR* surface) {
+            return glfwCreateWindowSurface(inst, static_cast<GLFWwindow*>(window), nullptr, surface);
+        };
+        auto driver = static_cast<vk::DriverImpl*>(axdrv);
+        const vk::SurfaceCreateInfo createInfo{
+            .window = _mainWindow, .width = fbWidth, .height = fbHeight, .createFunc = _createSurface};
+        bool ok = driver->recreateSurface(createInfo);
+        if (!ok)
+        {
+            AXLOGE("Failed to create Vulkan window surface.");
+            return false;
+        }
+        _vkSurface = driver->getSurface();
     }
-    _vkSurface = driver->getSurface();
 #endif
 
     int w, h;
@@ -681,16 +692,20 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     emscripten_set_orientationchange_callback(this, EM_TRUE, GLFWEventHandler::onWebOrientationChangeCallback);
     emscripten_set_fullscreenchange_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, this, EM_TRUE, GLFWEventHandler::onWebFullscreenCallback);
 
-    _isTouchDevice = !!EM_ASM_INT(return (('ontouchstart' in window) ||
-        (navigator.maxTouchPoints > 0) ||
-        (navigator.msMaxTouchPoints > 0)) ? 1 : 0;
+    _isTouchDevice = !!EM_ASM_INT(
+        return window.matchMedia('(pointer: coarse)').matches && !window.matchMedia('(any-hover: hover)').matches;
     );
+    const auto maxTouchPoints = EM_ASM_INT(
+        return navigator.maxTouchPoints;
+    );
+    AXLOGI("RenderViewImpl::initWithRect: isTouchDevice: {}, maxTouchPoints: {}", _isTouchDevice, maxTouchPoints);
     if (_isTouchDevice)
     {
-        emscripten_set_touchstart_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
-        emscripten_set_touchend_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
-        emscripten_set_touchmove_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
-        emscripten_set_touchcancel_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
+        const auto eventTarget = EMSCRIPTEN_EVENT_TARGET_WINDOW;
+        emscripten_set_touchstart_callback(eventTarget, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
+        emscripten_set_touchend_callback(eventTarget, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
+        emscripten_set_touchmove_callback(eventTarget, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
+        emscripten_set_touchcancel_callback(eventTarget, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
     }
     else
     {
@@ -713,22 +728,25 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     glfwSetWindowFocusCallback(_mainWindow, GLFWEventHandler::onGLFWWindowFocusCallback);
     glfwSetWindowCloseCallback(_mainWindow, GLFWEventHandler::onGLFWWindowCloseCallback);
 
-#if AX_RENDER_API == AX_RENDER_API_GL
+#if AX_ENABLE_GL
+    if (fallbackGL)
+    {
 #    if !defined(__EMSCRIPTEN__)
-    glfwSwapInterval(contextAttrs.vsync ? 1 : 0);
+        glfwSwapInterval(contextAttrs.vsync ? 1 : 0);
 #    endif
-    // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
+        // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
 #    if !AX_GLES_PROFILE
-    // Enable point size by default.
+        // Enable point size by default.
 #        if defined(GL_VERSION_2_0)
-    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+        glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 #        else
-    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE_ARB);
+        glEnable(GL_VERTEX_PROGRAM_POINT_SIZE_ARB);
 #        endif
-    if (contextAttrs.multisamplingCount > 0)
-        glEnable(GL_MULTISAMPLE);
+        if (contextAttrs.multisamplingCount > 0)
+            glEnable(GL_MULTISAMPLE);
 #    endif
-    CHECK_GL_ERROR_DEBUG();
+        CHECK_GL_ERROR_DEBUG();
+    }
 #endif
     return true;
 }
@@ -785,9 +803,7 @@ bool RenderViewImpl::isGfxContextReady()
 
 void RenderViewImpl::end()
 {
-#if AX_RENDER_API == AX_RENDER_API_VK
     _vkSurface = nullptr;
-#endif
 
     if (_mainWindow)
     {
@@ -800,8 +816,8 @@ void RenderViewImpl::end()
 
 void RenderViewImpl::swapBuffers()
 {
-#if AX_RENDER_API == AX_RENDER_API_GL
-    if (_mainWindow)
+#if AX_ENABLE_GL
+    if (_mainWindow && DriverContext::isOpenGL())
         glfwSwapBuffers(_mainWindow);
 #endif
 }
@@ -824,15 +840,15 @@ void RenderViewImpl::setIMEKeyboardState(bool /*bOpen*/) {}
 #if AX_ICON_SET_SUPPORT
 void RenderViewImpl::setIcon(std::string_view filename) const
 {
-    this->setIcon(std::vector<std::string_view>{filename});
+    this->setIcon({filename});
 }
 
-void RenderViewImpl::setIcon(const std::vector<std::string_view>& filelist) const
+void RenderViewImpl::setIcon(std::span<const std::string_view> filelist) const
 {
     if (filelist.empty())
         return;
     std::vector<Image*> icons;
-    for (auto const& filename : filelist)
+    for (auto& filename : filelist)
     {
         Image* icon = new Image();
         if (icon->initWithImageFile(filename))
@@ -1452,127 +1468,6 @@ void RenderViewImpl::onGLFWWindowCloseCallback(GLFWwindow* window)
         glfwSetWindowShouldClose(window, 0);
     }
 }
-
-#if AX_TARGET_PLATFORM != AX_PLATFORM_MAC && AX_RENDER_API == AX_RENDER_API_GL
-static bool loadFboExtensions()
-{
-    // If the current opengl driver doesn't have framebuffers methods, check if an extension exists
-    if (glGenFramebuffers == nullptr)
-    {
-        auto driver = axdrv;
-        AXLOGW("OpenGL: glGenFramebuffers is nullptr, try to detect an extension");
-        if (driver->hasExtension("ARB_framebuffer_object"sv))
-        {
-            AXLOGI("OpenGL: ARB_framebuffer_object is supported");
-
-            glIsRenderbuffer      = (PFNGLISRENDERBUFFERPROC)glfwGetProcAddress("glIsRenderbuffer");
-            glBindRenderbuffer    = (PFNGLBINDRENDERBUFFERPROC)glfwGetProcAddress("glBindRenderbuffer");
-            glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC)glfwGetProcAddress("glDeleteRenderbuffers");
-            glGenRenderbuffers    = (PFNGLGENRENDERBUFFERSPROC)glfwGetProcAddress("glGenRenderbuffers");
-            glRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC)glfwGetProcAddress("glRenderbufferStorage");
-            glGetRenderbufferParameteriv =
-                (PFNGLGETRENDERBUFFERPARAMETERIVPROC)glfwGetProcAddress("glGetRenderbufferParameteriv");
-            glIsFramebuffer          = (PFNGLISFRAMEBUFFERPROC)glfwGetProcAddress("glIsFramebuffer");
-            glBindFramebuffer        = (PFNGLBINDFRAMEBUFFERPROC)glfwGetProcAddress("glBindFramebuffer");
-            glDeleteFramebuffers     = (PFNGLDELETEFRAMEBUFFERSPROC)glfwGetProcAddress("glDeleteFramebuffers");
-            glGenFramebuffers        = (PFNGLGENFRAMEBUFFERSPROC)glfwGetProcAddress("glGenFramebuffers");
-            glCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSPROC)glfwGetProcAddress("glCheckFramebufferStatus");
-            glFramebufferTexture1D   = (PFNGLFRAMEBUFFERTEXTURE1DPROC)glfwGetProcAddress("glFramebufferTexture1D");
-            glFramebufferTexture2D   = (PFNGLFRAMEBUFFERTEXTURE2DPROC)glfwGetProcAddress("glFramebufferTexture2D");
-            glFramebufferTexture3D   = (PFNGLFRAMEBUFFERTEXTURE3DPROC)glfwGetProcAddress("glFramebufferTexture3D");
-            glFramebufferRenderbuffer =
-                (PFNGLFRAMEBUFFERRENDERBUFFERPROC)glfwGetProcAddress("glFramebufferRenderbuffer");
-            glGetFramebufferAttachmentParameteriv = (PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC)glfwGetProcAddress(
-                "glGetFramebufferAttachmentParameteriv");
-            glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC)glfwGetProcAddress("glGenerateMipmap");
-        }
-        else if (driver->hasExtension("EXT_framebuffer_object"sv))
-        {
-            AXLOGI("OpenGL: EXT_framebuffer_object is supported");
-            glIsRenderbuffer      = (PFNGLISRENDERBUFFERPROC)glfwGetProcAddress("glIsRenderbufferEXT");
-            glBindRenderbuffer    = (PFNGLBINDRENDERBUFFERPROC)glfwGetProcAddress("glBindRenderbufferEXT");
-            glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC)glfwGetProcAddress("glDeleteRenderbuffersEXT");
-            glGenRenderbuffers    = (PFNGLGENRENDERBUFFERSPROC)glfwGetProcAddress("glGenRenderbuffersEXT");
-            glRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC)glfwGetProcAddress("glRenderbufferStorageEXT");
-            glGetRenderbufferParameteriv =
-                (PFNGLGETRENDERBUFFERPARAMETERIVPROC)glfwGetProcAddress("glGetRenderbufferParameterivEXT");
-            glIsFramebuffer      = (PFNGLISFRAMEBUFFERPROC)glfwGetProcAddress("glIsFramebufferEXT");
-            glBindFramebuffer    = (PFNGLBINDFRAMEBUFFERPROC)glfwGetProcAddress("glBindFramebufferEXT");
-            glDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSPROC)glfwGetProcAddress("glDeleteFramebuffersEXT");
-            glGenFramebuffers    = (PFNGLGENFRAMEBUFFERSPROC)glfwGetProcAddress("glGenFramebuffersEXT");
-            glCheckFramebufferStatus =
-                (PFNGLCHECKFRAMEBUFFERSTATUSPROC)glfwGetProcAddress("glCheckFramebufferStatusEXT");
-            glFramebufferTexture1D = (PFNGLFRAMEBUFFERTEXTURE1DPROC)glfwGetProcAddress("glFramebufferTexture1DEXT");
-            glFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DPROC)glfwGetProcAddress("glFramebufferTexture2DEXT");
-            glFramebufferTexture3D = (PFNGLFRAMEBUFFERTEXTURE3DPROC)glfwGetProcAddress("glFramebufferTexture3DEXT");
-            glFramebufferRenderbuffer =
-                (PFNGLFRAMEBUFFERRENDERBUFFERPROC)glfwGetProcAddress("glFramebufferRenderbufferEXT");
-            glGetFramebufferAttachmentParameteriv = (PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC)glfwGetProcAddress(
-                "glGetFramebufferAttachmentParameterivEXT");
-            glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC)glfwGetProcAddress("glGenerateMipmapEXT");
-        }
-        else if (driver->hasExtension("GL_ANGLE_framebuffer_blit"sv))
-        {
-            AXLOGI("OpenGL: GL_ANGLE_framebuffer_object is supported");
-
-            glIsRenderbuffer      = (PFNGLISRENDERBUFFERPROC)glfwGetProcAddress("glIsRenderbufferOES");
-            glBindRenderbuffer    = (PFNGLBINDRENDERBUFFERPROC)glfwGetProcAddress("glBindRenderbufferOES");
-            glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC)glfwGetProcAddress("glDeleteRenderbuffersOES");
-            glGenRenderbuffers    = (PFNGLGENRENDERBUFFERSPROC)glfwGetProcAddress("glGenRenderbuffersOES");
-            glRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC)glfwGetProcAddress("glRenderbufferStorageOES");
-            // glGetRenderbufferParameteriv =
-            // (PFNGLGETRENDERBUFFERPARAMETERIVPROC)glfwGetProcAddress("glGetRenderbufferParameterivOES");
-            glIsFramebuffer      = (PFNGLISFRAMEBUFFERPROC)glfwGetProcAddress("glIsFramebufferOES");
-            glBindFramebuffer    = (PFNGLBINDFRAMEBUFFERPROC)glfwGetProcAddress("glBindFramebufferOES");
-            glDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSPROC)glfwGetProcAddress("glDeleteFramebuffersOES");
-            glGenFramebuffers    = (PFNGLGENFRAMEBUFFERSPROC)glfwGetProcAddress("glGenFramebuffersOES");
-            glCheckFramebufferStatus =
-                (PFNGLCHECKFRAMEBUFFERSTATUSPROC)glfwGetProcAddress("glCheckFramebufferStatusOES");
-            glFramebufferRenderbuffer =
-                (PFNGLFRAMEBUFFERRENDERBUFFERPROC)glfwGetProcAddress("glFramebufferRenderbufferOES");
-            glFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DPROC)glfwGetProcAddress("glFramebufferTexture2DOES");
-            glGetFramebufferAttachmentParameteriv = (PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC)glfwGetProcAddress(
-                "glGetFramebufferAttachmentParameterivOES");
-            glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC)glfwGetProcAddress("glGenerateMipmapOES");
-        }
-        else
-        {
-            AXLOGE("OpenGL: No framebuffers extension is supported");
-            AXLOGE("OpenGL: Any call to Fbo will crash!");
-            return false;
-        }
-    }
-    return true;
-}
-
-// helper
-bool RenderViewImpl::loadGL()
-{
-#    if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
-
-    // glad: load all OpenGL function pointers
-    // ---------------------------------------
-#        if !AX_GLES_PROFILE
-    if (!gladLoadGL(glfwGetProcAddress))
-    {
-        AXLOGE("glad: Failed to Load GL");
-        return false;
-    }
-#        else
-    if (!gladLoadGLES2(glfwGetProcAddress))
-    {
-        AXLOGE("glad: Failed to Load GLES2");
-        return false;
-    }
-#        endif
-
-    loadFboExtensions();
-#    endif  // (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
-
-    return true;
-}
-
-#endif
 
 }  // namespace ax
 

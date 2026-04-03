@@ -77,17 +77,17 @@ public:
 
     virtual std::string operator()(std::string_view matId,
                                    std::vector<material_t>& materials,
-                                   axstd::string_map<int>& matMap) = 0;
+                                   tlx::string_map<int>& matMap) = 0;
 };
 
 class MaterialFileReader : public MaterialReader
 {
 public:
-    MaterialFileReader(std::string_view mtl_basepath) : m_mtlBasePath(mtl_basepath) {}
+    explicit MaterialFileReader(std::string_view mtl_basepath) : m_mtlBasePath(mtl_basepath) {}
     virtual ~MaterialFileReader() {}
     virtual std::string operator()(std::string_view matId,
                                    std::vector<material_t>& materials,
-                                   axstd::string_map<int>& matMap);
+                                   tlx::string_map<int>& matMap);
 
 private:
     std::string m_mtlBasePath;
@@ -113,5 +113,5 @@ std::string LoadObj(std::vector<shape_t>& shapes,        // [output]
 
 /// Loads materials into std::map
 /// Returns an empty string if successful
-std::string LoadMtl(axstd::string_map<int>& material_map, std::vector<material_t>& materials, std::istream& inStream);
+std::string LoadMtl(tlx::string_map<int>& material_map, std::vector<material_t>& materials, std::istream& inStream);
 }  // namespace tinyobj

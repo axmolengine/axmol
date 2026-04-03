@@ -24,7 +24,7 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/renderer/GroupCommand.h"
 #include "axmol/renderer/CustomCommand.h"
 

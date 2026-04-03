@@ -26,7 +26,6 @@
 #include "axmol/rhi/RenderTarget.h"
 #include "axmol/rhi/vulkan/TextureVK.h"
 #include <glad/vulkan.h>
-#include <array>
 
 namespace ax::rhi::vk
 {
@@ -34,21 +33,20 @@ class DriverImpl;
 class RenderTargetImpl : public RenderTarget
 {
 public:
-    enum
-    {
-        DepthViewIndex = MAX_COLOR_ATTCHMENT,
-    };
-
     using Attachment = TextureImpl*;
 
     RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget);
     ~RenderTargetImpl();
 
     // Destroy the current live framebuffer and mark attachments dirty
-    void invalidate();
+    void cleanupResources() override;
 
     // Begin a render pass using this target
-    void beginRenderPass(VkCommandBuffer cmd, const RenderPassDesc& desc, uint32_t width, uint32_t height);
+    void beginRenderPass(VkCommandBuffer cmd,
+                         const RenderPassDesc& desc,
+                         uint32_t width,
+                         uint32_t height,
+                         uint32_t imageIndex);
 
     void endRenderPass(VkCommandBuffer cmd);
 
@@ -59,29 +57,44 @@ public:
 
     VkRenderPass getVkRenderPass() const { return _renderPass; }
 
+    void rebuildSwapchainAttachments(const tlx::pod_vector<VkImage>& images,
+                                     const VkExtent2D&,
+                                     PixelFormat imagePF,
+                                     VkFormat surfaceFormat);
+
+    void setColorTexture(Texture* texture, int level = 0, int index = 0) override;
+
+    uint32_t getColorAttachmentCount() const { return _numMRT; }
+
 private:
-    void updateRenderPass(const RenderPassDesc& desc);
-    void updateFramebuffer(VkCommandBuffer cmd);
+    void updateRenderPass(const RenderPassDesc& desc, uint32_t imageIndex);
+    void updateFramebuffer(VkCommandBuffer cmd, uint32_t imageIndex);
 
     void prepareAttachmentsForRendering(VkCommandBuffer cmd);
 
     DriverImpl* _driver{nullptr};
 
     // Current attachment views for building renderpass/framebuffer
-    std::array<VkImageView, MAX_COLOR_ATTCHMENT + 1> _attachmentViews{};
-    std::array<TextureImpl*, MAX_COLOR_ATTCHMENT + 1> _attachmentTexPtrs;
-    uint64_t _attachmentViewsHash{0};
+    tlx::inlined_vector<VkImageView, INITIAL_COLOR_CAPACITY + 1> _attachmentViews{};
 
-    axstd::pod_vector<VkClearValue> _clearValues;
+    // Seed values used to compute framebuffer/render pass hash per swapchain image
+    // only used for screen render target
+    tlx::inlined_vector<uint64_t, INITIAL_COLOR_CAPACITY> _renderHashSeeds{};
+
+    tlx::pod_vector<VkClearValue> _clearValues;
+
+    uint32_t _numMRT{0};  // number of color attachments, used for render pass creation
+
+    uint64_t _activeHashSeed{0};
 
     VkRenderPass _renderPass{VK_NULL_HANDLE};    // active render pass
     VkFramebuffer _framebuffer{VK_NULL_HANDLE};  // active framebuffer
 
-    // Caches keyed by (desc hash, attachment views hash)
-    axstd::hash_map<uintptr_t, VkRenderPass> _renderPassCache;
-    axstd::hash_map<uintptr_t, VkFramebuffer> _framebufferCache;
+    tlx::pod_vector<VkImageView> _swapchainImageViews;
 
-    bool _attachmentsDirty{true};
+    // Caches keyed by (desc hash, attachment views hash)
+    tlx::hash_map<uint64_t, VkRenderPass> _renderPassCache;
+    tlx::hash_map<uint64_t, VkFramebuffer> _framebufferCache;
 };
 
 }  // namespace ax::rhi::vk

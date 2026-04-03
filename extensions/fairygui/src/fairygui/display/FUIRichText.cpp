@@ -130,10 +130,10 @@ FUIRichText::FUIRichText() :
 
 FUIRichText::~FUIRichText()
 {
-    for (auto &it : _elements)
+    for (auto &it : _controls)
         delete it;
 
-    for (auto &it : _controls)
+    for (auto &it : _elements)
         delete it;
 }
 

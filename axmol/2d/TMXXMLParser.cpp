@@ -38,8 +38,9 @@ THE SOFTWARE.
 #include "axmol/base/Utils.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/tlx/utility.hpp"
+#include "axmol/tlx/split.hpp"
 #include <ranges>
-#include <charconv>
+#include "axmol/tlx/charconv.hpp"
 
 namespace ax
 {
@@ -178,30 +179,25 @@ TMXMapInfo::~TMXMapInfo()
 
 bool TMXMapInfo::parseXMLString(std::string_view xmlString)
 {
-    size_t len = xmlString.size();
-    if (len <= 0)
+    if (xmlString.empty())
         return false;
 
     SAXParser parser;
 
-    if (false == parser.init("UTF-8"))
-    {
+    if (!parser.init("UTF-8"))
         return false;
-    }
 
     parser.setDelegator(this);
 
-    return parser.parse(xmlString.data(), len, SAXParser::ParseOption::TRIM_WHITESPACE);
+    return parser.parse(xmlString.data(), xmlString.size(), SAXParser::ParseOption::TRIM_WHITESPACE);
 }
 
 bool TMXMapInfo::parseXMLFile(std::string_view xmlFilename)
 {
     SAXParser parser;
 
-    if (false == parser.init("UTF-8"))
-    {
+    if (!parser.init("UTF-8"))
         return false;
-    }
 
     parser.setDelegator(this);
 
@@ -462,7 +458,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
             Vec2 layerSize      = layer->_layerSize;
             auto tilesAmount    = static_cast<size_t>(layerSize.width * layerSize.height);
 
-            layer->_tiles = (uint32_t*)axstd::pod_vector<uint32_t>(tilesAmount, 0U).release_pointer();
+            layer->_tiles = (uint32_t*)tlx::pod_vector<uint32_t>(tilesAmount, 0U).detach_abi();
         }
         else if (encoding == "base64")
         {
@@ -606,16 +602,15 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
             const auto offsetX = static_cast<int>(objectGroup->getPositionOffset().x);
             const auto offsetY = static_cast<int>(objectGroup->getPositionOffset().y);
             // std::views::split 2~3x faster than std::getline
-            for (auto pt : std::views::split(value, ' '))
+            for (auto&& pt : std::views::split(value, ' '))
             {
-                std::string_view citem{pt.data(), pt.size()};
                 int idx = 0;
                 ValueMap pointDict;
-                for (auto subrgn : std::views::split(pt, ','))
+                for (auto&& subrgn : std::views::split(pt, ','))
                 {
-                    int axisVal = 0;
-                    std::string_view word(subrgn.data());
-                    std::from_chars(word.data(), word.data() + word.length(), axisVal, 10);
+                    int axisVal           = 0;
+                    std::string_view word = tlx::to_string_view(subrgn);
+                    tlx::from_chars(word.data(), word.data() + word.length(), axisVal, 10);
                     switch (idx++)
                     {
                     case 0:
@@ -650,14 +645,15 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
 
             const auto offsetX = static_cast<int>(objectGroup->getPositionOffset().x);
             const auto offsetY = static_cast<int>(objectGroup->getPositionOffset().y);
-            for (auto pt : std::views::split(value, ' '))
+            for (auto&& pt : std::views::split(value, ' '))
             {
                 int idx = 0;
                 ValueMap pointDict;
-                for (auto pt_axis : std::views::split(pt, ','))
+                for (auto&& pt_axis : std::views::split(pt, ','))
                 {
-                    int axisVal = 0;
-                    std::from_chars(pt_axis.data(), pt_axis.data() + pt_axis.size(), axisVal, 10);
+                    int axisVal           = 0;
+                    std::string_view word = tlx::to_string_view(pt_axis);
+                    tlx::from_chars(word.data(), word.data() + word.size(), axisVal, 10);
                     switch (idx++)
                     {
                     case 0:
@@ -728,11 +724,11 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
                     return;
                 }
 
-                layer->_tiles = reinterpret_cast<uint32_t*>(buffer.release_pointer());
+                layer->_tiles = reinterpret_cast<uint32_t*>(buffer.detach_abi());
             }
             else
             {
-                layer->_tiles = reinterpret_cast<uint32_t*>(buffer.release_pointer());
+                layer->_tiles = reinterpret_cast<uint32_t*>(buffer.detach_abi());
             }
 
             tmxMapInfo->setCurrentString("");
@@ -742,19 +738,19 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
 
             tmxMapInfo->setStoringCharacters(false);
-            auto currentString = tmxMapInfo->getCurrentString();
+            std::string_view currentString = tmxMapInfo->getCurrentString();
 
-            axstd::pod_vector<uint32_t> tileGids;
-            axstd::split_cb(currentString, '\n', [&tileGids](const char* first, const char* last) {
-                axstd::split_cb(std::string_view{first, static_cast<size_t>(last - first)}, ',',
-                                [&tileGids](const char* _first, const char* _last) {
+            tlx::pod_vector<uint32_t> tileGids;
+            tlx::split(currentString, '\n', [&tileGids](const char* first, const char* last) {
+                tlx::split(std::string_view{first, static_cast<size_t>(last - first)}, ',',
+                           [&tileGids](const char* _first, const char* _last) {
                     unsigned int gid{0};
-                    std::from_chars(_first, _last, gid);
+                    tlx::from_chars(_first, _last, gid);
                     tileGids.push_back(gid);
                 });
             });
 
-            layer->_tiles = tileGids.release_pointer();
+            layer->_tiles = tileGids.detach_abi();
 
             tmxMapInfo->setCurrentString("");
         }

@@ -23,28 +23,30 @@
  ****************************************************************************/
 #include "axmol/rhi/d3d11/RenderTarget11.h"
 #include "axmol/rhi/d3d11/Texture11.h"
-#include "axmol/rhi/d3d11/Utils11.h"
+#include "axmol/rhi/d3d11/Driver11.h"
 #include "axmol/rhi/DXUtils.h"
 
 namespace ax::rhi::d3d11
 {
-RenderTargetImpl::RenderTargetImpl(ID3D11Device* device, bool defaultRenderTarget)
-    : _device(device), RenderTarget(defaultRenderTarget)
+RenderTargetImpl::RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget)
+    : _driver(driver), _device(driver->getDevice()), RenderTarget(defaultRenderTarget)
 {}
 
-RenderTargetImpl::~RenderTargetImpl()
-{
-    invalidate();
-}
+RenderTargetImpl::~RenderTargetImpl() {}
 
-void RenderTargetImpl::invalidate()
+void RenderTargetImpl::cleanupResources()
 {
     for (auto& rtv : _rtvs)
         SafeRelease(rtv);
-
     SafeRelease(_dsv);
 
-    _dirtyFlags = TargetBufferFlags::ALL;
+    RenderTarget::cleanupResources();
+}
+
+void RenderTargetImpl::setColorTexture(Texture* texture, int level, int index)
+{
+    RenderTarget::setColorTexture(texture, level, index);
+    _rtvs.resize(_color.size());
 }
 
 void RenderTargetImpl::beginRenderPass(ID3D11DeviceContext* context)
@@ -78,8 +80,9 @@ void RenderTargetImpl::beginRenderPass(ID3D11DeviceContext* context)
         {
             if (bitmask::any(_dirtyFlags, TargetBufferFlags::COLOR_ALL))
             {  // color attachments
-                _rtvCuont = 0;
-                for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+                _rtvCuont             = 0;
+                const auto colorCount = _color.size();
+                for (size_t i = 0; i < colorCount; ++i)
                 {
                     if (bitmask::any(_dirtyFlags, getMRTColorFlag(i)))
                     {
@@ -116,11 +119,27 @@ void RenderTargetImpl::beginRenderPass(ID3D11DeviceContext* context)
     context->OMSetRenderTargets(_rtvCuont, _rtvs.data(), _dsv);
 }
 
-void RenderTargetImpl::rebuildAttachmentsForSwapchain(IDXGISwapChain* swapchain, uint32_t width, uint32_t height)
+bool RenderTargetImpl::rebuildSwapchainBuffers(IDXGISwapChain* swapchain,
+                                               uint32_t width,
+                                               uint32_t height,
+                                               std::optional<UINT> swapchainFlags)
 {
-    /// rebuild color attachment: texture
-    AX_SAFE_RELEASE(_color[0].texture);
+    cleanupResources();
 
+    if (swapchainFlags)
+    {
+        HRESULT hr = swapchain->ResizeBuffers(0, width, height, DEFAULT_SWAPCHAIN_FORMAT, swapchainFlags.value());
+        if (FAILED(hr))
+        {
+            AXLOGE("D3D11: swapchain ResizeBuffers failed: {}", hr);
+            return false;
+        }
+    }
+
+    _color.resize(1);
+    _rtvs.resize(1);
+
+    /// rebuild color attachment: texture
     ComPtr<ID3D11Texture2D> backBuffer;
     _AXASSERT_HR(swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)backBuffer.GetAddressOf()));
     _color[0].texture = new TextureImpl(_device, backBuffer.Get());
@@ -130,9 +149,6 @@ void RenderTargetImpl::rebuildAttachmentsForSwapchain(IDXGISwapChain* swapchain,
     assert(fmtSupport & D3D11_FORMAT_SUPPORT_DEPTH_STENCIL);
 
     /// rebuild depth-stencil attachment: texture
-    AX_SAFE_RELEASE(_depthStencil.texture);
-    SafeRelease(_dsv);
-
     D3D11_TEXTURE2D_DESC depthDesc = {};
     depthDesc.Width                = width;
     depthDesc.Height               = height;
@@ -149,6 +165,8 @@ void RenderTargetImpl::rebuildAttachmentsForSwapchain(IDXGISwapChain* swapchain,
     _depthStencil.texture = new TextureImpl(_device, depthStencilTexture.Get());
 
     _dirtyFlags = TargetBufferFlags::ALL;
+
+    return true;
 }
 
 RenderTargetImpl::Attachment RenderTargetImpl::getColorAttachment(int index) const

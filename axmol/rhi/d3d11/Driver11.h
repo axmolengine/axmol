@@ -23,10 +23,11 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 #include "axmol/rhi/DXUtils.h"
-
+#include "axmol/rhi/DriverFactory.h"
 #include <d3d11.h>
+#include <dxgi1_2.h>
 #include <optional>
 
 namespace ax::rhi::d3d11
@@ -44,23 +45,19 @@ namespace ax::rhi::d3d11
 class DriverImpl : public DriverBase
 {
 public:
-    static constexpr D3D_FEATURE_LEVEL DEFAULT_REATURE_LEVELS[2] = {
-        D3D_FEATURE_LEVEL_11_1,
-        D3D_FEATURE_LEVEL_11_0,
-    };
-
     /// @name Constructor, Destructor and Initializers
     DriverImpl();
     ~DriverImpl();
 
-    void init();
+    bool init() override;
+    DriverType type() override { return DriverType::D3D11; }
 
     /// @name Setters & Getters
     /**
      * Create a RenderContext object.
      * @return A RenderContext object.
      */
-    RenderContext* createRenderContext(void* surfaceContext) override;
+    RenderContext* createRenderContext(SurfaceHandle surface) override;
 
     /**
      * Create a Buffer object.
@@ -95,12 +92,12 @@ public:
     RenderPipeline* createRenderPipeline() override;
 
     /**
-     * Create a Program, not auto release.
-     * @param vertexShader Specifes this is a vertex shader source.
-     * @param fragmentShader Specifes this is a fragment shader source.
+     * Create an auto released Program.
+     * @param vsData Specifes this is a vertex shader data.
+     * @param fsData Specifes this is a fragment shader data.
      * @return A Program instance.
      */
-    Program* createProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
+    Program* createProgram(Data vsData, Data fsData) override;
 
     VertexLayout* createVertexLayout(VertexLayoutDesc&& desc) override;
 
@@ -140,23 +137,26 @@ public:
     inline ID3D11DeviceContext* getContext() const { return _context; }
 
     const ComPtr<IDXGIFactory>& getDXGIFactory() const { return _dxgiFactory; }
+    const ComPtr<IDXGIFactory2>& getDXGIFactory2() const { return _dxgiFactory2; }
     const ComPtr<IDXGIAdapter>& getDXGIAdapter() const { return _dxgiAdapter; }
+
+    IUnknown* compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, ID3DBlob*& outBlob);
 
 protected:
     /**
      * Create a shaderModule.
      * @param stage Specifies whether is vertex shader or fragment shader.
-     * @param source Specifies shader source.
+     * @param chunk Specifies shader chunk.
      * @return A ShaderModule object.
      */
-    ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
+    ShaderModule* createShaderModule(ShaderStage stage, Data& chunk) override;
     SamplerHandle createSampler(const SamplerDesc& desc) override;
     void destroySampler(SamplerHandle& h) override;
 
 private:
-    void initializeAdapter();
-    void initializeDevice();
-    HRESULT createD3DDevice(int requestDriverType, int createFlags);
+    void selectAdapter(PowerPreference powerPreference);
+    void initializeDevice(bool requestDebugLayer);
+    HRESULT createD3DDevice(int requestDriverType, int createFlags, std::span<const D3D_FEATURE_LEVEL> featureLevels);
 
     bool checkFormatSupport(DXGI_FORMAT format);
 
@@ -164,10 +164,11 @@ private:
     ID3D11DeviceContext* _context = nullptr;
 
     ComPtr<IDXGIFactory> _dxgiFactory;
+    ComPtr<IDXGIFactory2> _dxgiFactory2;  // DXGI 1.2 factory, used for creating swapchain on Windows 8 and above, may
+                                          // be null on Windows 7
     ComPtr<IDXGIAdapter> _dxgiAdapter;
 
     DXGI_ADAPTER_DESC _adapterDesc{};
-
     D3D_FEATURE_LEVEL _featureLevel{};
 
     // FeatureSet _featureSet = FeatureSet::Unknown;

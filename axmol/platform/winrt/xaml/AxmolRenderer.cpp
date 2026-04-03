@@ -19,10 +19,14 @@
  */
 
 #include "axmol/platform/winrt/xaml/AxmolRenderer.h"
-#include "AppDelegate.h"
 #include "axmol/platform/winrt/RenderViewImpl-winrt.h"
 #include "axmol/platform/Application.h"
 #include "axmol/renderer/TextureCache.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventType.h"
+#include "axmol/base/EventCustom.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/rhi/DriverContext.h"
 
 // These are used by the shader compilation methods.
 #include <vector>
@@ -34,11 +38,6 @@ using namespace Windows::UI::Xaml::Controls;
 using namespace Windows::Graphics::Display;
 using namespace ax;
 
-namespace
-{
-std::unique_ptr<AppDelegate> appDelegate;
-}
-
 AxmolRenderer::AxmolRenderer(int width,
                              int height,
                              float dpi,
@@ -46,9 +45,7 @@ AxmolRenderer::AxmolRenderer(int width,
                              CoreDispatcher const& dispatcher,
                              Panel const& panel)
     : m_width(width), m_height(height), m_dpi(dpi), m_dispatcher(dispatcher), m_panel(panel), m_orientation(orientation)
-{
-    appDelegate.reset(new AppDelegate());
-}
+{}
 
 AxmolRenderer::~AxmolRenderer() {}
 
@@ -60,8 +57,6 @@ void AxmolRenderer::Resume()
     auto renderView = static_cast<RenderViewImpl*>(director->getRenderView());
     if (!renderView)
     {
-        appInstance->initContextAttrs();
-
         renderView = RenderViewImpl::create("axmol3");
         renderView->setPanel(m_panel);
         renderView->SetDPI(m_dpi);

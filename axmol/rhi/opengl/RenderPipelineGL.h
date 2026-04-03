@@ -51,7 +51,7 @@ public:
     RenderPipelineImpl() = default;
     ~RenderPipelineImpl();
 
-    void update(const RenderTarget*, const PipelineDesc& pipelineDesc) override;
+    void update(const RenderTarget*, const PipelineDesc& pipelineDesc);
     /**
      * Get program instance.
      * @return Program instance.

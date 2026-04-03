@@ -55,11 +55,9 @@ public:
     WindowPlatform getWindowPlatform() const override { return WindowPlatform::Android; }
 
     void* getNativeWindow() const override;
-    void* getNativeDisplay() const override;
+    SurfaceHandle getNativeDisplay() const override;
 
-#if AX_RENDER_API == AX_RENDER_API_VK
-    void recreateVkSurface(bool needUpdateRenderSurface);
-#endif
+    [[internal]] void recreateVkSurface(bool needUpdateRenderSurface);
 
 protected:
     RenderViewImpl();

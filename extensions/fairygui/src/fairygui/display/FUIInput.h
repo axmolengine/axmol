@@ -16,8 +16,8 @@ public:
     FUIInput();
     virtual ~FUIInput();
     
-    std::string getText() const;
-    void setText(const std::string& value);
+    std::string_view getText() const;
+    void setText(std::string_view value);
 
     TextFormat* getTextFormat() const { return _textFormat; }
     void applyTextFormat();

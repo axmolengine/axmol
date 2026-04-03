@@ -2,7 +2,6 @@
 param(
     $uri, # the pkg uri
     $prefix, # the prefix to store
-    $manifest_file = $null,
     $name = $null,
     $version = $null, # version hint
     $revision = $null, # revision hint
@@ -113,19 +112,24 @@ else {
 if (!$url) {
     # fetch package from manifest config
     $lib_src = Join-Path $prefix $name
-    $mirror = if (!(Test-Path (Join-Path $PSScriptRoot '.gitee') -PathType Leaf)) { 'github' } else { 'gitee' }
-    $url_base = @{'github' = 'https://github.com/'; 'gitee' = 'https://gitee.com/' }[$mirror]
-
-    $manifest_map = ConvertFrom-Json (Get-Content $manifest_file -raw)
+    $active_mirror_file = Join-Path $PSScriptRoot '.active-mirror'
+    if (Test-Path $active_mirror_file -PathType Leaf) {
+        $active_mirror = Get-Content $active_mirror_file
+    }
+    else {
+        $active_mirror = 'origin'
+    }
+    $mirrors_conf = ConvertFrom-Json (Get-Content $(Join-Path $PSScriptRoot 'mirrors.json') -raw)
 
     if (!$version) {
-        $version_map = $manifest_map.versions
-        $version = $version_map.PSObject.Properties[$name].Value
+        . (Join-Path $PSScriptRoot 'extensions.ps1')
+        $versions = ConvertFrom-Props (Get-Content $(Join-Path $PSScriptRoot 'build.profiles'))
+        $version = $versions[$name]
     }
     if ($version) {
-        $url_path = $manifest_map.mirrors.PSObject.Properties[$mirror].Value.PSObject.Properties[$name].Value
-        if ($url_path) {
-            $url = "$url_base/$url_path"
+        $repo_url = $mirrors_conf.dependencies.$name.mirrors.$active_mirror
+        if ($repo_url) {
+            $url = $repo_url
             if (!$url.EndsWith('.git')) { $url += '.git' }
         }
     }
@@ -167,7 +171,7 @@ Set-Variable -Name "${name}_src" -Value $lib_src -Scope global
 
 $sentry = Join-Path $lib_src '_1kiss'
 
-$is_rev_mod = $false # indicate whether rev already modfied or updated
+$is_ref_mod = $false # indicate whether ref updated
 # if sentry file missing, re-clone
 if (!(Test-Path $sentry -PathType Leaf)) {
     if (Test-Path $lib_src -PathType Container) {
@@ -183,7 +187,7 @@ if (!(Test-Path $sentry -PathType Leaf)) {
         throw "fetch.ps1: fetch content from $url failed"
     }
 
-    $is_rev_mod = $true
+    $is_ref_mod = $true
 }
 
 # re-check does valid local git repo
@@ -211,7 +215,7 @@ if ($is_git_repo) {
         }
     }
 
-    if ($old_rev_hash -ne $new_rev_hash) {
+    $checkout_revision = {
         git -C $lib_src checkout -- .
         git -C $lib_src checkout $revision 1>$null
         if ($LASTEXITCODE -ne 0) {
@@ -222,16 +226,30 @@ if ($is_git_repo) {
             throw "fetch.ps1: cur_rev_hash($cur_rev_hash) != new_rev_hash($new_rev_hash)"
         }
 
-        $is_rev_mod = $true
+        return $cur_rev_hash
+    }
+
+    if ($old_rev_hash -ne $new_rev_hash) {
+        $cur_rev_hash = &$checkout_revision
+        $is_ref_mod = $true
     }
 
     $branch_name = $(git -C $lib_src branch --show-current)
-    if ($branch_name -and $pull_branch) {
-        git -C $lib_src pull
-        $new_rev_hash = $(git -C $lib_src rev-parse HEAD)
-        if ($cur_rev_hash -ne $new_rev_hash) {
-            $cur_rev_hash = $new_rev_hash
-            $is_rev_mod = $true
+    if ($branch_name) {
+        if ($pull_branch) {
+            git -C $lib_src pull
+            $new_rev_hash = $(git -C $lib_src rev-parse HEAD)
+            if ($cur_rev_hash -ne $new_rev_hash) {
+                $cur_rev_hash = $new_rev_hash
+                $is_ref_mod = $true
+            }
+        }
+
+        # if current in branch, but the branch name doesn't match the revision hint, checkout to revision
+        if ($branch_name -ne $revision) {
+            $cur_rev_hash = &$checkout_revision
+            $is_ref_mod = $true
+            $branch_name = $null
         }
     }
 }
@@ -239,7 +257,7 @@ if ($is_git_repo) {
 # whether the repo use gn build system?
 $is_gn = Test-Path (Join-Path $lib_src '.gn') -PathType Leaf
 
-if ($is_rev_mod) {
+if ($is_ref_mod) {
     $sentry_content = "ver: $version"
     if ($is_git_repo) {
         if ((Test-Path (Join-Path $lib_src '.gitmodules') -PathType Leaf)) {

@@ -313,6 +313,7 @@ void _glfwPollMonitorsCocoa(void)
                _glfw.monitorCount * sizeof(_GLFWmonitor*));
     }
 
+    NSArray* screens = [NSScreen screens];
     for (uint32_t i = 0;  i < displayCount;  i++)
     {
         if (CGDisplayIsAsleep(displays[i]))
@@ -320,8 +321,8 @@ void _glfwPollMonitorsCocoa(void)
 
         const uint32_t unitNumber = CGDisplayUnitNumber(displays[i]);
         NSScreen* screen = nil;
-
-        for (screen in [NSScreen screens])
+        
+        for (screen in screens)
         {
             NSNumber* screenNumber = [screen deviceDescription][@"NSScreenNumber"];
 
@@ -330,6 +331,10 @@ void _glfwPollMonitorsCocoa(void)
             //       switching
             if (CGDisplayUnitNumber([screenNumber unsignedIntValue]) == unitNumber)
                 break;
+        }
+        
+        if (screen == nil) {
+            screen = [[NSScreen screens] firstObject];
         }
 
         // HACK: Compare unit numbers instead of display IDs to work around

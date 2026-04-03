@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "axmol/base/EventCustom.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/DriverContext.h"
 
 namespace ax
 {
@@ -328,7 +328,7 @@ const Value& Environment::getValue(std::string_view key, const Value& defaultVal
 
 void Environment::setValue(std::string_view key, const Value& value)
 {
-    axstd::set_item(_valueDict, key, value);  // _valueDict[key] = value;
+    tlx::set_item(_valueDict, key, value);  // _valueDict[key] = value;
 }
 
 //

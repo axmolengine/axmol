@@ -29,6 +29,7 @@
 #include "axmol/platform/ios/RenderHostView-ios.h"
 #include "axmol/platform/ios/DirectorCaller-ios.h"
 #include "axmol/platform/ios/RenderViewImpl-ios.h"
+#include "axmol/platform/ios/AxmolViewController.h"
 #include "axmol/platform/Application.h"
 #include "axmol/platform/Device.h"
 #include "axmol/base/Touch.h"
@@ -150,11 +151,7 @@ void RenderViewImpl::choosePixelFormats()
 
 RenderViewImpl::RenderViewImpl() {}
 
-RenderViewImpl::~RenderViewImpl()
-{
-    // auto hostView = (__bridge RenderHostView*) _hostViewHandle;
-    //[hostView release];
-}
+RenderViewImpl::~RenderViewImpl() {}
 
 bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
                                   const Rect& rect,
@@ -166,28 +163,6 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
 
     // create platform window
     _hostWindowHandle = [[UIWindow alloc] initWithFrame:r];
-
-    // create platform render view
-    RenderHostView* hostView = [RenderHostView viewWithFrame:r
-                                                 pixelFormat:(int)_pixelFormat
-                                                 depthFormat:(int)_depthFormat
-                                          preserveBackbuffer:NO
-                                                  sharegroup:nil
-                                               multiSampling:_multisamplingCount > 0 ? YES : NO
-                                             numberOfSamples:_multisamplingCount];
-
-    // Not available on tvOS
-#if !defined(AX_TARGET_OS_TVOS)
-    [hostView setMultipleTouchEnabled:YES];
-#endif
-    const auto size               = resolveViewSizeToOrientation([hostView bounds].size);
-    const auto backingScaleFactor = [hostView contentScaleFactor];
-
-    // simply set renderSize, renderSize to framebufferSize with renderScale=1.0
-    updateRenderSurface(size.width * backingScaleFactor, size.height * backingScaleFactor,
-                        SurfaceUpdateFlag::AllUpdatesSilently);
-
-    _hostViewHandle = hostView;
 
     return true;
 }
@@ -216,13 +191,11 @@ void RenderViewImpl::setMultipleTouchEnabled(bool enabled)
 void RenderViewImpl::showWindow(void* viewController)
 {
     auto window     = (__bridge UIWindow*)_hostWindowHandle;
-    auto controller = (__bridge UIViewController*)viewController;
+    auto controller = (__bridge AxmolViewController*)viewController;
 
 #if !defined(AX_TARGET_OS_TVOS)
     controller.extendedLayoutIncludesOpaqueBars = YES;
 #endif
-    auto view       = (__bridge RenderHostView*)_hostViewHandle;
-    controller.view = view;
 
     // Set RootViewController to window
     if ([[UIDevice currentDevice].systemVersion floatValue] < 6.0)
@@ -236,7 +209,20 @@ void RenderViewImpl::showWindow(void* viewController)
         [window setRootViewController:controller];
     }
 
+    // Calling makeKeyAndVisible triggers the AxmolViewController lifecycle:
+    // loadView -> viewDidLoad -> viewWillAppear
     [window makeKeyAndVisible];
+
+    // After lifecycle completes, controller.view is initialized with RenderHostView
+    auto hostView   = controller.view;
+    _hostViewHandle = controller.view;
+
+    const auto size               = resolveViewSizeToOrientation([hostView bounds].size);
+    const auto backingScaleFactor = [hostView contentScaleFactor];
+
+    // simply set renderSize, renderSize to framebufferSize with renderScale=1.0
+    updateRenderSurface(size.width * backingScaleFactor, size.height * backingScaleFactor,
+                        SurfaceUpdateFlag::AllUpdatesSilently);
 
 #if !defined(AX_TARGET_OS_TVOS)
     [controller prefersStatusBarHidden];

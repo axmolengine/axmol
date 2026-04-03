@@ -31,12 +31,12 @@ THE SOFTWARE.
 #include "axmol/platform/Common.h"
 #include "axmol/platform/RenderView.h"
 #include "axmol/base/EventMouse.h"
-#if AX_RENDER_API == AX_RENDER_API_VK
+#if AX_ENABLE_VK
 #    include "glad/vulkan.h"
 #endif
 #include "GLFW/glfw3.h"
 #if defined(__EMSCRIPTEN__)
-#    include "axmol/tlx/pod_vector.hpp"
+#    include "axmol/tlx/vector.hpp"
 struct EmscriptenMouseEvent;
 struct EmscriptenTouchEvent;
 struct EmscriptenFullscreenChangeEvent;
@@ -113,7 +113,7 @@ public:
 
 #if AX_ICON_SET_SUPPORT
     void setIcon(std::string_view filename) const override;
-    void setIcon(const std::vector<std::string_view>& filelist) const override;
+    void setIcon(std::span<const std::string_view> filelist) const override;
     void setDefaultIcon() const override;
 #endif /* AX_ICON_SET_SUPPORT */
 
@@ -130,7 +130,7 @@ public:
     float getRenderScale() const override { return _renderScale; }
 
     void* getNativeWindow() const override;
-    void* getNativeDisplay() const override;
+    SurfaceHandle getNativeDisplay() const override;
     WindowPlatform getWindowPlatform() const override;
 
     void setViewName(std::string_view viewName) override;
@@ -142,9 +142,6 @@ protected:
     bool initWithRect(std::string_view viewName, const Rect& rect, float zoomFactor, bool resizable);
     bool initWithFullScreen(std::string_view viewName);
     bool initWithFullscreen(std::string_view viewname, const GLFWvidmode& videoMode, GLFWmonitor* monitor);
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)  // Windows, Linux: use glad to loadGL
-    bool loadGL();
-#endif
 
     // GLFW callbacks
     void onGLFWError(int errorID, const char* errorDesc);
@@ -193,16 +190,15 @@ protected:
 
     GLFWwindow* _mainWindow;
     GLFWmonitor* _monitor;
-#if AX_RENDER_API == AX_RENDER_API_VK
-    VkSurfaceKHR _vkSurface{nullptr};
-#endif
+
+    void* _vkSurface{nullptr};
 
     std::string _glfwError;
 
 #if defined(__EMSCRIPTEN__)
-    axstd::pod_vector<intptr_t> _touchesId;
-    axstd::pod_vector<float> _touchesX;
-    axstd::pod_vector<float> _touchesY;
+    tlx::pod_vector<intptr_t> _touchesId;
+    tlx::pod_vector<float> _touchesX;
+    tlx::pod_vector<float> _touchesY;
 #endif
 
     float _mouseX{0.0f};

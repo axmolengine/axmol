@@ -26,8 +26,6 @@
 #include "axmol/rhi/vulkan/RenderPipelineVK.h"
 #include <glad/vulkan.h>
 
-#define _AX_USE_DESCRIPTOR_CACHE 1
-
 namespace ax::rhi::vk
 {
 class BufferImpl;
@@ -43,9 +41,17 @@ enum class DynamicStateBits : uint32_t
     Viewport   = 1 << 0,
     Scissor    = 1 << 1,
     StencilRef = 1 << 2,
-    CullMode   = 1 << 3,
-    FrontFace  = 1 << 4,
 };
+AX_ENABLE_BITMASK_OPS(DynamicStateBits);
+
+enum class ExtendedDynamicStateBits : uint32_t
+{
+    None              = 0,
+    CullMode          = 1 << 0,
+    FrontFace         = 1 << 1,
+    PrimitiveTopology = 1 << 2,
+};
+AX_ENABLE_BITMASK_OPS(ExtendedDynamicStateBits);
 
 struct GPUFence
 {
@@ -56,13 +62,14 @@ struct GPUFence
     uint64_t fenceValue{0};
 };
 
-AX_ENABLE_BITMASK_OPS(DynamicStateBits);
-
 class RenderContextImpl : public RenderContext
 {
-    static constexpr DynamicStateBits PIPELINE_REQUIRED_DYNAMIC_BITS =
-        DynamicStateBits::Viewport | DynamicStateBits::Scissor | DynamicStateBits::StencilRef |
-        DynamicStateBits::CullMode | DynamicStateBits::FrontFace;
+    static constexpr DynamicStateBits PIPELINE_ALL_DYNAMIC_BITS =
+        DynamicStateBits::Viewport | DynamicStateBits::Scissor | DynamicStateBits::StencilRef;
+
+    static constexpr ExtendedDynamicStateBits PIPELINE_ALL_EXTENDED_DYNAMIC_BITS =
+        ExtendedDynamicStateBits::CullMode | ExtendedDynamicStateBits::FrontFace |
+        ExtendedDynamicStateBits::PrimitiveTopology;
 
 public:
     // Maximum number of VkCommandBuffer handles managed simultaneously by VulkanCommands.
@@ -81,14 +88,13 @@ public:
 
     static constexpr int VS_UBO_BINDING_INDEX = 0;
     static constexpr int FS_UBO_BINDING_INDEX = 1;
-    static constexpr int MAX_FRAMES_IN_FLIGHT = RenderPipelineImpl::MAX_FRAMES_IN_FLIGHT;
 
-    RenderContextImpl(DriverImpl* driver, VkSurfaceKHR surface);
+    RenderContextImpl(DriverImpl* driver, SurfaceHandle surface);
     ~RenderContextImpl() override;
 
     RenderTarget* getScreenRenderTarget() const override { return (RenderTarget*)_screenRT; }
 
-    bool updateSurface(void* surface, uint32_t width, uint32_t height) override;
+    bool updateSurface(SurfaceHandle surface, uint32_t width, uint32_t height) override;
 
     void setDepthStencilState(DepthStencilState* depthStencilState) override;
     void setRenderPipeline(RenderPipeline* renderPipeline) override;
@@ -96,7 +102,7 @@ public:
     bool beginFrame() override;
     void beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& descriptor) override;
     void updateDepthStencilState(const DepthStencilDesc& descriptor) override;
-    void updatePipelineState(const RenderTarget* rt, const PipelineDesc& descriptor, PrimitiveGroup) override;
+    void updatePipelineState(const RenderTarget* rt, const PipelineDesc& descriptor, PrimitiveType) override;
 
     void setViewport(int x, int y, unsigned int w, unsigned int h) override;
     void setCullMode(CullMode mode) override;
@@ -107,19 +113,10 @@ public:
     void setIndexBuffer(Buffer* buffer) override;
     void setInstanceBuffer(Buffer* buffer) override;
 
-    void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe) override;
-    void drawArraysInstanced(PrimitiveType primitiveType,
-                             std::size_t start,
-                             std::size_t count,
-                             int instanceCount,
-                             bool wireframe) override;
-    void drawElements(PrimitiveType primitiveType,
-                      IndexFormat indexType,
-                      std::size_t count,
-                      std::size_t offset,
-                      bool wireframe) override;
-    void drawElementsInstanced(PrimitiveType primitiveType,
-                               IndexFormat indexType,
+    void drawArrays(std::size_t start, std::size_t count, bool wireframe) override;
+    void drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool wireframe) override;
+    void drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool wireframe) override;
+    void drawElementsInstanced(IndexFormat indexType,
                                std::size_t count,
                                std::size_t offset,
                                int instanceCount,
@@ -136,9 +133,8 @@ public:
 
     void prepareDrawing();
 
-    void removeCachedPipelines(VkRenderPass rp);
-
-    uint32_t getCurrentFrame() const { return _currentFrame; }
+    void removeCachedPipelineObjects(VkRenderPass key);
+    void removeCachedPipelineObjects(Program* key);
 
     uint64_t getCompletedFenceValue() const override;
 
@@ -153,19 +149,17 @@ private:
     };
     bool handleSwapchainResult(VkResult result, SwapchainOp op, uint32_t prevSemaphoreIndex);
 
-#if !_AX_USE_DESCRIPTOR_CACHE
-    void createDescriptorPool();
-#endif
-
-    void readPixelsInternal(RenderTarget* rt,
-                            bool preserveAxisHint,
-                            std::function<void(const PixelBufferDesc&)>& callback);
+    void doReadPixels(RenderTarget* rt, bool preserveAxisHint, std::function<void(const PixelBufferDesc&)>& callback);
 
     void markDynamicStateDirty(DynamicStateBits bits) noexcept
     {
-        bitmask::set(_inFlightDynamicDirtyBits[0], bits);
-        bitmask::set(_inFlightDynamicDirtyBits[1], bits);
+        auto&& apply = [this, bits]<std::size_t... _Idx>(std::index_sequence<_Idx...>) {
+            (bitmask::set(_inFlightDynamicDirtyBits[_Idx], bits), ...);
+        };
+        apply(std::make_index_sequence<MAX_FRAMES_IN_FLIGHT>{});
     }
+
+    void markExtendedDynamicStateDirty(ExtendedDynamicStateBits bits) noexcept;
 
     void applyPendingDynamicStates();
 
@@ -177,33 +171,30 @@ private:
     VkQueue _presentQueue{VK_NULL_HANDLE};
 
     VkSwapchainKHR _swapchain{VK_NULL_HANDLE};
-    uint32_t _currentImageIndex{0};  // current swapchain image index
 
     VkCommandPool _commandPool{VK_NULL_HANDLE};
 
-    axstd::pod_vector<VkImage> _swapchainImages;
-    axstd::pod_vector<VkImageView> _swapchainImageViews;
+    tlx::pod_vector<VkImage> _swapchainImages;
 
-    uint32_t _semaphoreIndex{0};
+    uint32_t _imageIndex{0};
+    int _frameIndex{0};
 
-    uint32_t _currentFrame{0};
     std::array<DynamicStateBits, MAX_FRAMES_IN_FLIGHT> _inFlightDynamicDirtyBits{DynamicStateBits::None};
+    std::array<ExtendedDynamicStateBits, MAX_FRAMES_IN_FLIGHT> _inFlightExtendedDynamicDirtyBits{
+        ExtendedDynamicStateBits::None};
     std::array<VkCommandBuffer, MAX_FRAMES_IN_FLIGHT> _commandBuffers;
     std::array<GPUFence, MAX_FRAMES_IN_FLIGHT> _inFlightFences{};
 
     uint64_t _completedFenceValue{0};
     uint64_t _frameFenceValue{0};
 
-#if !_AX_USE_DESCRIPTOR_CACHE
-    std::array<VkDescriptorPool, MAX_FRAMES_IN_FLIGHT> _descriptorPools{};
-#endif
-    std::array<axstd::pod_vector<RenderPipelineImpl::DescriptorState>, MAX_FRAMES_IN_FLIGHT> _inFlightDescriptorStates;
+    std::array<tlx::pod_vector<DescriptorState*>, MAX_FRAMES_IN_FLIGHT> _inFlightDescriptorStates;
 
-    axstd::pod_vector<VkSemaphore> _acquireCompleteSemaphores;
-    axstd::pod_vector<VkSemaphore> _renderFinishedSemaphores;
+    tlx::pod_vector<VkSemaphore> _presentCompleteSemaphores;
+    tlx::pod_vector<VkSemaphore> _renderFinishedSemaphores;
 
-    axstd::pod_vector<VkWriteDescriptorSet> _descriptorWritesPerFrame;
-    axstd::pod_vector<VkDescriptorImageInfo> _descriptorImageInfosPerFrame;
+    tlx::pod_vector<VkWriteDescriptorSet> _descriptorWritesPerFrame;
+    tlx::pod_vector<VkDescriptorImageInfo> _descriptorImageInfosPerFrame;
 
     VkCommandBuffer _currentCmdBuffer{VK_NULL_HANDLE};  // weak pointer
 
@@ -260,8 +251,10 @@ private:
 
     VkViewport _cachedViewport{};
     VkRect2D _cachedScissor{};
-    VkCullModeFlags _cachedCullMode{VK_CULL_MODE_NONE};
-    VkFrontFace _cachedFrontFace{VK_FRONT_FACE_COUNTER_CLOCKWISE};
+
+    ExtendedDynamicState _extendedDynamicState{};
+
+    tlx::inlined_vector<VkDescriptorBufferInfo, 2> _descriptorBufferInfos;
 
     bool _scissorEnabled{false};
 
@@ -269,6 +262,6 @@ private:
     bool _inFrame{false};
     bool _suboptimal{false};
 
-    uint32_t _lastError{0};
+    VkResult _lastError{VK_SUCCESS};
 };
 }  // namespace ax::rhi::vk

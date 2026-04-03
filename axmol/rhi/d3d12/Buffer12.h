@@ -30,6 +30,7 @@
 #include "axmol/rhi/DXUtils.h"
 #include "axmol/rhi/Buffer.h"
 #include "axmol/tlx/byte_buffer.hpp"
+#include "axmol/rhi/RHITypes.h"  // for MAX_FRAMES_IN_FLIGHT
 
 namespace ax::rhi::d3d12
 {
@@ -50,6 +51,9 @@ class RenderContextImpl;
  * Notes:
  * - STATIC/IMMUTABLE live in DEFAULT heap, written via upload buffer + command list copy
  * - DYNAMIC lives in UPLOAD heap, mapped for CPU writes
+ *
+ * For dynamic buffers we allocate per-frame backing in the UPLOAD heap to avoid CPU
+ * overwriting GPU-in-flight memory when multiple frames are in flight.
  */
 class BufferImpl final : public Buffer
 {
@@ -72,17 +76,25 @@ private:
     void copyFromUploadBuffer(const void* data, std::size_t offset, std::size_t size);
     static std::size_t alignTo(std::size_t value, std::size_t alignment);
 
+    // For dynamic (UPLOAD heap) buffers we allocate per-frame ComPtr<ID3D12Resource>
+    // and lazily switch to the one matching the current frame index retrieved from DriverImpl.
+    void updateIndex();  // lazy switch to current frame backing
+
 private:
-    axstd::byte_buffer _defaultData;
+    tlx::byte_buffer _defaultData;
     bool _needDefaultStoredData = false;
 
     DriverImpl* _driver{nullptr};
 
-    ComPtr<ID3D12Resource> _resource;  // main GPU buffer
+    ComPtr<ID3D12Resource> _resource;                       // main GPU buffer for static/default case or convenience
+    std::vector<ComPtr<ID3D12Resource>> _dynamicResources;  // per-frame upload resources for DYNAMIC
 
     D3D12_HEAP_TYPE _heapType{D3D12_HEAP_TYPE_DEFAULT};
     D3D12_RESOURCE_STATES _resourceState{D3D12_RESOURCE_STATE_COMMON};
     D3D12_RESOURCE_FLAGS _resourceFlags{D3D12_RESOURCE_FLAG_NONE};
+
+    // When using per-frame dynamic backings, current frame index (sentinel -1 = not set)
+    int _currentFrameIndex{-1};
 };
 
 /** @} */

@@ -92,6 +92,16 @@ public:
      */
     static float lerp(float from, float to, float alpha);
 
+    static constexpr float radians(float degrees)
+    {
+        return degrees * 0.01745329252f;  // PI / 180
+    }
+
+    static constexpr float degrees(float radians)
+    {
+        return radians * 57.29577951f;  // PI * 180
+    }
+
 private:
     // Indicates that if neon is enabled
     static bool isNeon32Enabled();

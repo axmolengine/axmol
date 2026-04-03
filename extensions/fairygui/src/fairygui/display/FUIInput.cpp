@@ -35,19 +35,19 @@ FUIInput::~FUIInput()
     delete _textFormat;
 }
 
-std::string FUIInput::getText() const
+std::string_view FUIInput::getText() const
 {
     return ui::EditBox::getText();
 }
 
-void FUIInput::setText(const std::string & value)
+void FUIInput::setText(std::string_view value)
 {
-    ui::EditBox::setText(value.c_str());
+    ui::EditBox::setText(value);
 }
 
 void FUIInput::applyTextFormat()
 {
-    setFontName(UIConfig::getRealFontName(_textFormat->face).c_str());
+    setFontName(UIConfig::getRealFontName(_textFormat->face));
     setFontSize(_textFormat->fontSize);
     setPlaceholderFontSize(_textFormat->fontSize);
     setFontColor(_textFormat->color);
@@ -78,11 +78,7 @@ void FUIInput::setKeyboardType(int value)
 
 void FUIInput::openKeyboard()
 {
-#if COCOS2D_VERSION >= 0x00031700
     EditBox::openKeyboard();
-#else
-    touchDownAction(this, ax::ui::Widget::TouchEventType::ENDED);
-#endif
 }
 
 void FUIInput::continueInit()

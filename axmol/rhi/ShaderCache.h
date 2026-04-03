@@ -51,26 +51,30 @@ public:
     ~ShaderCache();
 
     /** purges the cache. It releases the retained instance. */
-    void purge();
+    void removeAllShaders();
 
     /**
      * Create a vertex shader module and add it to cache.
      * If it is created before, then just return the cached shader module.
-     * @param shaderSource The source code of the shader.
+     * @param payload The shader payload with reflected information.
      */
-    rhi::ShaderModule* acquireVertexShaderModule(std::string_view shaderSource);
+    rhi::ShaderModule* acquireVertexShaderModule(Data& payload);
 
     /**
      * Create a fragment shader module.
      * If it is created before, then just return the cached shader module.
-     * @param shaderSource The source code of the shader.
+     * @param payload The shader payload with reflected information.
      */
-    rhi::ShaderModule* acquireFragmentShaderModule(std::string_view shaderSource);
+    rhi::ShaderModule* acquireFragmentShaderModule(Data& payload);
 
     /**
      * Remove all unused shaders.
      */
     void removeUnusedShader();
+
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+    void recompileAll();
+#endif
 
 protected:
     /**
@@ -81,7 +85,7 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    rhi::ShaderModule* acquireShaderModule(rhi::ShaderStage stage, std::string_view shaderSource);
+    rhi::ShaderModule* acquireShaderModule(rhi::ShaderStage stage, Data& payload);
 
     std::unordered_map<uint64_t, rhi::ShaderModule*> _cachedShaders;
 };

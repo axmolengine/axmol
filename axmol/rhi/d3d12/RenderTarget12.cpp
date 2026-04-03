@@ -35,31 +35,19 @@ RenderTargetImpl::RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget)
         _dirtyFlags = TargetBufferFlags::ALL;
 }
 
-RenderTargetImpl::~RenderTargetImpl()
+RenderTargetImpl::~RenderTargetImpl() {}
+
+void RenderTargetImpl::cleanupResources()
 {
     _driver->waitForGPU();
-    invalidate();
-}
-
-void RenderTargetImpl::invalidate()
-{
-    _dirtyFlags = TargetBufferFlags::ALL;
-
-    for (auto i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+    // RTVs
+    for (auto i = 0; i < _rtvsDescriptors.size(); ++i)
     {
-        if (_rtvsDescriptors[i])
-        {
-            _driver->queueDisposal(_rtvsDescriptors[i], DisposableResource::Type::RenderTargetView, _lastFenceValue);
-            _rtvsDescriptors[i] = nullptr;
-            _rtvHandles[i].ptr  = 0;
-        }
-        if (_color[i].texture)
-        {
-            _color[i].texture->release();
-            _color[i].texture = nullptr;
-        }
+        _driver->queueDisposal(_rtvsDescriptors[i], DisposableResource::Type::RenderTargetView, _lastFenceValue);
     }
+    _rtvsDescriptors.clear();
 
+    // DSV
     if (_dsvDescriptor)
     {
         _driver->queueDisposal(_dsvDescriptor, DisposableResource::Type::DepthStencilView, _lastFenceValue);
@@ -67,11 +55,14 @@ void RenderTargetImpl::invalidate()
         _dsvHandle.ptr = 0;
     }
 
-    if (_depthStencil)
-    {
-        _depthStencil.texture->release();
-        _depthStencil.texture = nullptr;
-    }
+    RenderTarget::cleanupResources();
+}
+
+void RenderTargetImpl::setColorTexture(Texture* texture, int level, int index)
+{
+    RenderTarget::setColorTexture(texture, level, index);
+    _rtvsDescriptors.resize(_color.size());
+    _rtvHandles.resize(_color.size());
 }
 
 void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
@@ -80,12 +71,14 @@ void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
                                        uint32_t height,
                                        uint32_t imageIndex)
 {
+    const auto colorCount = _color.size();
+
     if (_dirtyFlags != TargetBufferFlags::NONE)
     {
         auto device = _driver->getDevice();
 
         // --- Handle user-defined render targets (MRT) ---
-        for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+        for (size_t i = 0; i < colorCount; ++i)
         {
             if (!bitmask::any(_dirtyFlags, getMRTColorFlag(i)))
                 continue;
@@ -143,7 +136,7 @@ void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
         {
             // Count active color attachments
             _numRTVs = 0;
-            for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+            for (size_t i = 0; i < colorCount; ++i)
             {
                 if (_color[i])
                     ++_numRTVs;
@@ -192,7 +185,7 @@ void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
         pRTVs = _rtvHandles.data();
 
         // Clear color attachments if requested
-        for (auto i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+        for (auto i = 0; i < colorCount; ++i)
         {
             TextureImpl* texImpl = static_cast<TextureImpl*>(_color[i].texture);
             if (!texImpl)
@@ -229,9 +222,9 @@ void RenderTargetImpl::endRenderPass(ID3D12GraphicsCommandList* cmd, uint32_t im
     }
     else
     {
-        for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
+        for (auto& color : _color)
         {
-            TextureImpl* texImpl = static_cast<TextureImpl*>(_color[i].texture);
+            TextureImpl* texImpl = static_cast<TextureImpl*>(color.texture);
             if (!texImpl)
                 break;
 
@@ -240,31 +233,41 @@ void RenderTargetImpl::endRenderPass(ID3D12GraphicsCommandList* cmd, uint32_t im
     }
 }
 
-void RenderTargetImpl::rebuildAttachmentsForSwapchain(IDXGISwapChain4* swapchain, uint32_t width, uint32_t height)
+bool RenderTargetImpl::rebuildSwapchainBuffers(IDXGISwapChain4* swapchain,
+                                               uint32_t width,
+                                               uint32_t height,
+                                               std::optional<UINT> swapchainFlags)
 {
     if (!_defaultRenderTarget)
     {
         AXLOGW("Attempted to rebuild swapchain attachments on a non-default render target.");
-        return;
+        return false;
     }
 
-    static_assert(MAX_COLOR_ATTCHMENT >= RenderContextImpl::SWAPCHAIN_BUFFER_COUNT,
+    static_assert(INITIAL_COLOR_CAPACITY >= RenderContextImpl::SWAPCHAIN_BUFFER_COUNT,
                   "RenderTargetImpl color attachment array too small for swapchain buffers");
 
-    // destroy existing attachments if any
-    for (int i = 0; i < RenderContextImpl::SWAPCHAIN_BUFFER_COUNT; ++i)
-    {
-        if (_color[i].texture)
-            AX_SAFE_RELEASE_NULL(_color[i].texture);
-    }
+    // Release references to the swapchain back buffer for we can ResizeBuffers
+    cleanupResources();
 
-    if (_depthStencil.texture)
+    if (swapchainFlags)
     {
-        AX_SAFE_RELEASE_NULL(_depthStencil.texture);
+        _driver->destroyStaleResources();
+        auto hr = swapchain->ResizeBuffers(RenderContextImpl::SWAPCHAIN_BUFFER_COUNT, width, height,
+                                           DEFAULT_SWAPCHAIN_FORMAT, swapchainFlags.value());
+        if (FAILED(hr))
+        {
+            AXLOGE("D3D12: swapchain ResizeBuffers failed: {}", hr);
+            return false;
+        }
     }
 
     // Create color attachments wrapping swapchain buffers
     const UINT colorAttachmentCount = RenderContextImpl::SWAPCHAIN_BUFFER_COUNT;
+    _color.resize(colorAttachmentCount);
+    _rtvsDescriptors.resize(colorAttachmentCount);
+    _rtvHandles.resize(colorAttachmentCount);
+
     for (UINT i = 0; i < colorAttachmentCount; ++i)
     {
         Microsoft::WRL::ComPtr<ID3D12Resource> backBuffer;
@@ -298,6 +301,8 @@ void RenderTargetImpl::rebuildAttachmentsForSwapchain(IDXGISwapChain4* swapchain
     _depthStencil.level   = 0;
 
     _dirtyFlags = TargetBufferFlags::ALL;
+
+    return true;
 }
 
 RenderTargetImpl::Attachment RenderTargetImpl::getColorAttachment(int index) const

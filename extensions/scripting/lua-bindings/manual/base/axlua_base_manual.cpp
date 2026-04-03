@@ -39,13 +39,13 @@
 #include "axmol/2d/ActionGrid.h"
 #include "axmol/2d/ActionInterval.h"
 #include "axmol/2d/AtlasNode.h"
-#include "axmol/2d/Camera.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/2d/Menu.h"
 #include "axmol/2d/MenuItem.h"
 #include "axmol/2d/MotionStreak.h"
 #include "axmol/2d/ParticleBatchNode.h"
 #include "axmol/2d/ParticleSystem.h"
-#include "axmol/2d/Scene.h"
+#include "axmol/scene/Scene.h"
 #include "axmol/2d/SpriteBatchNode.h"
 #include "axmol/2d/FastTMXLayer.h"
 #include "axmol/2d/FastTMXTiledMap.h"
@@ -64,6 +64,30 @@
 #include "axmol/platform/RenderView.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/renderer/Shaders.h"
+
+#ifndef LUAJIT_VERSION
+#    include <lspec.h>
+
+class LuaStringBufferAdapter : public ResizableBuffer
+{
+    lua_State* _state;
+    size_t _size{0};
+    bool _filled{false};
+
+public:
+    bool is_filled() const { return _filled; }
+    explicit LuaStringBufferAdapter(lua_State* state) : _state(state) {}
+    void resize_and_overwrite(size_t num_of_bytes, std::function<size_t(void*, size_t)> op) override
+    {
+        _size = op(lua_pushistring(_state, num_of_bytes), num_of_bytes);
+
+        _filled = true;
+    }
+    size_t size_in_bytes() const override { return _size; }
+    static size_t count_element(size_t num_of_bytes) { num_of_bytes; }
+};
+
+#endif
 
 void LuaNode::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
 {
@@ -913,7 +937,7 @@ int axlua_Sequence_create(lua_State* tolua_S)
 
         if (1 == argc && tolua_istable(tolua_S, 2, 0, &tolua_err))
         {
-            luaval_to_ccvector(tolua_S, 2, &array, "ax.Sequence:create");
+            luaval_to_axvector(tolua_S, 2, &array, "ax.Sequence:create");
         }
         else
         {
@@ -1762,7 +1786,7 @@ static int axlua_Spawn_create(lua_State* tolua_S)
 
         if (1 == argc && tolua_istable(tolua_S, 2, 0, &tolua_err))
         {
-            luaval_to_ccvector(tolua_S, 2, &array, "ax.Spawn:create");
+            luaval_to_axvector(tolua_S, 2, &array, "ax.Spawn:create");
         }
         else
         {
@@ -2637,7 +2661,7 @@ static int toaxlua_LayerMultiplex_create(lua_State* tolua_S)
 
     if (argc > 0)
     {
-        if (luavals_variadic_to_ccvector(tolua_S, argc, &arg0))
+        if (luavals_variadic_to_axvector(tolua_S, argc, &arg0))
         {
             LayerMultiplex* tolua_ret = LayerMultiplex::createWithArray(arg0);
             int nID                   = (tolua_ret) ? (int)tolua_ret->_ID : -1;
@@ -2662,7 +2686,57 @@ tolua_lerror:
     return 0;
 #endif
 }
+int lua_ax_base_FileUtils_setSearchPaths(lua_State* tolua_S)
+{
+    int argc           = 0;
+    ax::FileUtils* obj = nullptr;
+    bool ok            = true;
 
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S, 1, "ax.FileUtils", 0, &tolua_err))
+        goto tolua_lerror;
+#endif
+
+    obj = (ax::FileUtils*)tolua_tousertype(tolua_S, 1, 0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S, "invalid 'obj' in function 'lua_ax_base_FileUtils_setSearchPaths'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+    if (argc == 1)
+    {
+        std::vector<std::string_view> arg0;
+
+        ok &= luaval_to_std_vector_string_view(tolua_S, 2, &arg0, "ax.FileUtils:setSearchPaths");
+        if (!ok)
+        {
+            tolua_error(tolua_S, "invalid arguments in function 'lua_ax_base_FileUtils_setSearchPaths'", nullptr);
+            return 0;
+        }
+        obj->setSearchPaths(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:setSearchPaths",
+               argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+tolua_lerror:
+    tolua_error(tolua_S, "#ferror in function 'lua_ax_base_FileUtils_setSearchPaths'.", &tolua_err);
+#endif
+
+    return 0;
+}
 static int toaxlua_FileUtils_getStringFromFile(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
@@ -2692,14 +2766,20 @@ static int toaxlua_FileUtils_getStringFromFile(lua_State* tolua_S)
 
     if (1 == argc)
     {
-        const char* arg0;
-        std::string arg0_tmp;
-        ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.FileUtils:getStringFromFile");
-        arg0 = arg0_tmp.c_str();
+        std::string_view arg0;
+        ok = luaval_to_std_string_view(tolua_S, 2, &arg0, "ax.FileUtils:getStringFromFile");
         if (ok)
         {
+#ifndef LUAJIT_VERSION
+            LuaStringBufferAdapter adapter(tolua_S);
+            FileUtils::getInstance()->getContents(arg0, &adapter);
+            if (!adapter.is_filled()) [[unlikely]]
+                lua_pushliteral(tolua_S, "");
+#else
             std::string content = FileUtils::getInstance()->getStringFromFile(arg0);
+
             lua_pushlstring(tolua_S, content.c_str(), content.size());
+#endif
             return 1;
         }
     }
@@ -2744,18 +2824,23 @@ static int toaxlua_FileUtils_getDataFromFile(lua_State* tolua_S)
 
     if (1 == argc)
     {
-        const char* arg0;
-        std::string arg0_tmp;
-        ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.FileUtils:getDataFromFile");
-        arg0 = arg0_tmp.c_str();
+        std::string_view arg0;
+        ok = luaval_to_std_string_view(tolua_S, 2, &arg0, "ax.FileUtils:getDataFromFile");
         if (ok)
         {
+#ifndef LUAJIT_VERSION
+            LuaStringBufferAdapter adapter(tolua_S);
+            FileUtils::getInstance()->getContents(arg0, &adapter);
+            if (!adapter.is_filled()) [[unlikely]]
+                lua_pushnil(tolua_S);
+#else
             auto data = FileUtils::getInstance()->getDataFromFile(arg0);
             if (!data.isNull())
                 lua_pushlstring(tolua_S, reinterpret_cast<const char*>(data.getBytes()),
                                 static_cast<size_t>(data.getSize()));
             else
                 lua_pushnil(tolua_S);
+#endif
             return 1;
         }
     }
@@ -2933,8 +3018,8 @@ tolua_lerror:
     return 0;
 }
 
-#if defined(AX_ENABLE_PHYSICS)
-int axlua_Scene_getPhysicsWorld(lua_State* tolua_S)
+#if defined(AX_ENABLE_PHYSICS_2D)
+int axlua_Scene_getPhysicsWorld2D(lua_State* tolua_S)
 {
     int argc       = 0;
     ax::Scene* obj = nullptr;
@@ -2967,8 +3052,8 @@ int axlua_Scene_getPhysicsWorld(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'axlua_Scene_getPhysicsWorld'", nullptr);
             return 0;
         }
-        ax::PhysicsWorld* ret = obj->getPhysicsWorld();
-        object_to_luaval<ax::PhysicsWorld>(tolua_S, "ax.PhysicsWorld", (ax::PhysicsWorld*)ret);
+        ax::PhysicsWorld2D* ret = obj->getPhysicsWorld2D();
+        object_to_luaval<ax::PhysicsWorld2D>(tolua_S, "ax.PhysicsWorld", (ax::PhysicsWorld2D*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:getPhysicsWorld", argc,
@@ -2984,8 +3069,8 @@ tolua_lerror:
 }
 #endif
 
-#if defined(AX_ENABLE_3D_PHYSICS)
-#    include "axmol/physics3d/Physics3DWorld.h"
+#if defined(AX_ENABLE_PHYSICS_3D)
+#    include "axmol/3d/physics/Physics3DWorld.h"
 int axlua_Scene_getPhysics3DWorld(lua_State* tolua_S)
 {
     int argc       = 0;
@@ -3019,7 +3104,7 @@ int axlua_Scene_getPhysics3DWorld(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'axlua_Scene_getPhysics3DWorld'", nullptr);
             return 0;
         }
-        ax::Physics3DWorld* ret = obj->getPhysics3DWorld();
+        ax::Physics3DWorld* ret = obj->getPhysicsWorld3D();
         object_to_luaval<ax::Physics3DWorld>(tolua_S, "ax.Physics3DWorld", (ax::Physics3DWorld*)ret);
         return 1;
     }
@@ -3093,12 +3178,12 @@ static void extendScene(lua_State* tolua_S)
     lua_rawget(tolua_S, LUA_REGISTRYINDEX);
     if (lua_istable(tolua_S, -1))
     {
-#if defined(AX_ENABLE_PHYSICS)
-        tolua_function(tolua_S, "getPhysicsWorld", axlua_Scene_getPhysicsWorld);
+#if defined(AX_ENABLE_PHYSICS_2D)
+        tolua_function(tolua_S, "getPhysicsWorld2D", axlua_Scene_getPhysicsWorld2D);
 #endif
-#if defined(AX_ENABLE_3D_PHYSICS)
-        tolua_function(tolua_S, "getPhysics3DWorld", axlua_Scene_getPhysics3DWorld);
-        tolua_function(tolua_S, "setPhysics3DDebugCamera", axlua_Scene_setPhysics3DDebugCamera);
+#if defined(AX_ENABLE_PHYSICS_3D)
+        tolua_function(tolua_S, "getPhysicsWorld3D", axlua_Scene_getPhysics3DWorld);
+        tolua_function(tolua_S, "setPhysicsDebugCamera3D", axlua_Scene_setPhysics3DDebugCamera);
 #endif
 
 #if defined(AX_ENABLE_NAVMESH)
@@ -3550,8 +3635,8 @@ int axlua_Sprite_create(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            std::string arg0;
-            ok &= luaval_to_std_string(tolua_S, 2, &arg0, "ax.Sprite:create");
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2, &arg0, "ax.Sprite:create");
             if (!ok)
             {
                 break;
@@ -3592,8 +3677,8 @@ int axlua_Sprite_create(lua_State* tolua_S)
     {
         if (argc == 2)
         {
-            std::string arg0;
-            ok &= luaval_to_std_string(tolua_S, 2, &arg0, "ax.Sprite:create");
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2, &arg0, "ax.Sprite:create");
             if (!ok)
             {
                 break;
@@ -3657,6 +3742,10 @@ static void extendFileUtils(lua_State* tolua_S)
 
         lua_pushstring(tolua_S, "getDataFromFile");
         lua_pushcfunction(tolua_S, toaxlua_FileUtils_getDataFromFile);
+        lua_rawset(tolua_S, -3);
+
+        lua_pushstring(tolua_S, "setSearchPaths");
+        lua_pushcfunction(tolua_S, lua_ax_base_FileUtils_setSearchPaths);
         lua_rawset(tolua_S, -3);
     }
     lua_pop(tolua_S, 1);
@@ -4992,13 +5081,13 @@ static int axlua_Label_createWithTTF00(lua_State* L)
         }
 #endif
         TTFConfig ttfConfig("");
-        std::string text = "";
+        std::string_view text = ""sv;
 
         ok &= luaval_to_ttfconfig(L, 2, &ttfConfig, "ax.Label:createWithTTF");
         if (!ok)
             return 0;
 
-        ok &= luaval_to_std_string(L, 3, &text, "ax.Label:createWithTTF");
+        ok &= luaval_to_std_string_view(L, 3, &text, "ax.Label:createWithTTF");
         if (!ok)
             return 0;
 
@@ -5042,10 +5131,10 @@ static int axlua_Label_createWithTTF01(lua_State* L)
         }
         else
         {
-            std::string text     = tolua_tostring(L, 2, "");
-            std::string fontFile = tolua_tostring(L, 3, "");
-            float fontSize       = (float)tolua_tonumber(L, 4, 0);
-            ax::Size dimensions  = ax::Size::ZERO;
+            std::string_view text     = axlua_tosv(L, 2);
+            std::string_view fontFile = axlua_tosv(L, 3);
+            float fontSize            = (float)tolua_tonumber(L, 4, 0);
+            ax::Size dimensions       = ax::Size::ZERO;
             if (lua_istable(L, 5))
             {
                 luaval_to_size(L, 5, &dimensions, "ax.Label:createWithTTF");
@@ -5109,7 +5198,7 @@ static int axlua_TMXTiledMap_getPropertiesForGID(lua_State* tolua_S)
         if (!ok)
             return 0;
         ax::Value ret = obj->getPropertiesForGID(arg0);
-        ccvalue_to_luaval(tolua_S, ret);
+        value_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",
@@ -5779,8 +5868,8 @@ int axlua_Properties_createNonRefCounted(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        std::string arg0;
-        ok &= luaval_to_std_string(tolua_S, 2, &arg0, "ax.Properties:createNonRefCounted");
+        std::string_view arg0;
+        ok &= luaval_to_std_string_view(tolua_S, 2, &arg0, "ax.Properties:createNonRefCounted");
         if (!ok)
         {
             tolua_error(tolua_S, "invalid arguments in function 'axlua_Properties_createNonRefCounted'", nullptr);
@@ -5949,8 +6038,8 @@ int axlua_set_PolygonInfo_filename(lua_State* tolua_S)
 
     if (1 == argc)
     {
-        std::string outFilename;
-        luaval_to_std_string(tolua_S, 2, &outFilename);
+        std::string_view outFilename;
+        luaval_to_std_string_view(tolua_S, 2, &outFilename);
         self->setFilename(outFilename);
         return 0;
     }
@@ -5989,7 +6078,7 @@ int axlua_get_PipelineDescriptor_programState(lua_State* tolua_S)
         return 0;
     }
 #endif
-    tolua_pushusertype(tolua_S, obj->programState, "axrhi.ProgramState");
+    tolua_pushusertype(tolua_S, obj->programState, "axr.ProgramState");
     return 1;
 
 #if _AX_DEBUG >= 1
@@ -6024,7 +6113,7 @@ int axlua_set_PipelineDescriptor_programState(lua_State* tolua_S)
     if (1 == argc)
     {
         ax::rhi::ProgramState* programState = nullptr;
-        luaval_to_object<ax::rhi::ProgramState>(tolua_S, 2, "axrhi.ProgramState", &programState,
+        luaval_to_object<ax::rhi::ProgramState>(tolua_S, 2, "axr.ProgramState", &programState,
                                                 "axlua_set_PipelineDescriptor_programState");
         self->programState = programState;
         return 0;
@@ -6080,7 +6169,7 @@ static int axlua_rhi_ProgramState_getUniformLocation(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S, 1, "axrhi.ProgramState", 0, &tolua_err))
+    if (!tolua_isusertype(tolua_S, 1, "axr.ProgramState", 0, &tolua_err))
         goto tolua_lerror;
 #endif
     obj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S, 1, 0);
@@ -6098,8 +6187,8 @@ static int axlua_rhi_ProgramState_getUniformLocation(lua_State* tolua_S)
         {
             if (lua_isstring(tolua_S, -1))
             {
-                std::string arg0;
-                ok &= luaval_to_std_string(tolua_S, 2, &arg0, "axrhi.ProgramState:getUniformLocation");
+                std::string_view arg0;
+                ok &= luaval_to_std_string_view(tolua_S, 2, &arg0, "axr.ProgramState:getUniformLocation");
 
                 if (!ok)
                 {
@@ -6112,7 +6201,7 @@ static int axlua_rhi_ProgramState_getUniformLocation(lua_State* tolua_S)
             else if (lua_isnumber(tolua_S, -1))
             {
                 ax::rhi::Uniform arg0;
-                ok &= luaval_to_int(tolua_S, 2, (int*)&arg0, "axrhi.ProgramState:getUniformLocation");
+                ok &= luaval_to_int(tolua_S, 2, (int*)&arg0, "axr.ProgramState:getUniformLocation");
 
                 if (!ok)
                 {
@@ -6126,7 +6215,7 @@ static int axlua_rhi_ProgramState_getUniformLocation(lua_State* tolua_S)
     } while (0);
 
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",
-               "axrhi.ProgramState:getUniformLocation", argc, 1);
+               "axr.ProgramState:getUniformLocation", argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -6145,7 +6234,7 @@ static int axlua_ProgramState_setUniform(lua_State* tolua_S)
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_isusertype(tolua_S, 1, "axrhi.ProgramState", 0, &tolua_err))
+    if (!tolua_isusertype(tolua_S, 1, "axr.ProgramState", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
@@ -6170,7 +6259,7 @@ static int axlua_ProgramState_setUniform(lua_State* tolua_S)
         }
         else if (lua_istable(tolua_S, 2))
         {
-            ok &= luaval_to_uniformLocation(tolua_S, 2, location, "axrhi.ProgramState:setUniform");
+            ok &= luaval_to_uniformLocation(tolua_S, 2, location, "axr.ProgramState:setUniform");
         }
 
         if (ok & lua_istable(tolua_S, 3))
@@ -6205,7 +6294,7 @@ tolua_lerror:
 
 static void extendProgramState(lua_State* tolua_S)
 {
-    // lua_pushstring(tolua_S, "axrhi.ProgramState");
+    // lua_pushstring(tolua_S, "axr.ProgramState");
     // lua_rawget(tolua_S, LUA_REGISTRYINDEX);
 
     tolua_beginmodule(tolua_S, "axrhi");
@@ -6238,8 +6327,8 @@ int axlua_AutoPolygon_generatePolygon(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        std::string arg0;
-        ok &= luaval_to_std_string(tolua_S, 2, &arg0, "ax.AutoPolygon:generatePolygon");
+        std::string_view arg0;
+        ok &= luaval_to_std_string_view(tolua_S, 2, &arg0, "ax.AutoPolygon:generatePolygon");
         if (!ok)
         {
             tolua_error(tolua_S, "invalid arguments in function 'axlua_AutoPolygon_generatePolygon'", nullptr);
@@ -6252,9 +6341,9 @@ int axlua_AutoPolygon_generatePolygon(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        std::string arg0;
+        std::string_view arg0;
         ax::Rect arg1;
-        ok &= luaval_to_std_string(tolua_S, 2, &arg0, "ax.AutoPolygon:generatePolygon");
+        ok &= luaval_to_std_string_view(tolua_S, 2, &arg0, "ax.AutoPolygon:generatePolygon");
         ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.AutoPolygon:generatePolygon");
         if (!ok)
         {
@@ -6268,10 +6357,10 @@ int axlua_AutoPolygon_generatePolygon(lua_State* tolua_S)
     }
     if (argc == 3)
     {
-        std::string arg0;
+        std::string_view arg0;
         ax::Rect arg1;
         double arg2;
-        ok &= luaval_to_std_string(tolua_S, 2, &arg0, "ax.AutoPolygon:generatePolygon");
+        ok &= luaval_to_std_string_view(tolua_S, 2, &arg0, "ax.AutoPolygon:generatePolygon");
         ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.AutoPolygon:generatePolygon");
         ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.AutoPolygon:generatePolygon");
         if (!ok)
@@ -6286,11 +6375,11 @@ int axlua_AutoPolygon_generatePolygon(lua_State* tolua_S)
     }
     if (argc == 4)
     {
-        std::string arg0;
+        std::string_view arg0;
         ax::Rect arg1;
         double arg2;
         double arg3;
-        ok &= luaval_to_std_string(tolua_S, 2, &arg0, "ax.AutoPolygon:generatePolygon");
+        ok &= luaval_to_std_string_view(tolua_S, 2, &arg0, "ax.AutoPolygon:generatePolygon");
         ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.AutoPolygon:generatePolygon");
         ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.AutoPolygon:generatePolygon");
         ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.AutoPolygon:generatePolygon");
@@ -6593,11 +6682,10 @@ static int axlua_utils_getFileMD5Hash(lua_State* tolua_S)
     else
 #endif
     {
-        std::string filename  = tolua_tocppstring(tolua_S, 2, "");
-        uint32_t bufferSize   = tolua_tonumber(tolua_S, 3, 0);
-        std::string hexOutput = ax::utils::getFileMD5Hash(filename, bufferSize);
+        std::string_view filename = axlua_tosv(tolua_S, 2);
+        uint32_t bufferSize       = tolua_tonumber(tolua_S, 3, 0);
+        std::string hexOutput     = ax::utils::getFileMD5Hash(filename, bufferSize);
         lua_pushlstring(tolua_S, hexOutput.c_str(), hexOutput.size());
-        // delete[] hexOutput;
         return 1;
     }
 #if _AX_DEBUG >= 1
@@ -6616,11 +6704,10 @@ static int axlua_utils_getStringMD5Hash(lua_State* tolua_S)
     else
 #endif
     {
-        std::string str       = tolua_tocppstring(tolua_S, 2, "");
-        std::string hexOutput = ax::utils::getStringMD5Hash(std::string_view{str});
+        std::string_view str  = axlua_tosv(tolua_S, 2);
+        std::string hexOutput = ax::utils::getStringMD5Hash(str);
 
         lua_pushlstring(tolua_S, hexOutput.c_str(), hexOutput.size());
-        // delete[] hexOutput;
         return 1;
     }
 #if _AX_DEBUG >= 1
@@ -6639,15 +6726,10 @@ static int axlua_utils_base64Encode(lua_State* tolua_S)
     else
 #endif
     {
-        std::string str = tolua_tocppstring(tolua_S, 2, "");
-        char* out;
-        unsigned char* in;
-        in                    = (unsigned char*)str.c_str();
-        unsigned int inLength = str.size();
-        int len               = ax::utils::base64Encode(in, (unsigned int)inLength, &out);
+        std::string_view str = axlua_tosv(tolua_S, 2);
+        auto base64_str      = ax::utils::base64Encode(std::span{str});
 
-        lua_pushlstring(tolua_S, out, len);
-        // delete[] hexOutput;
+        lua_pushlstring(tolua_S, base64_str.c_str(), base64_str.size());
         return 1;
     }
 #if _AX_DEBUG >= 1
@@ -6666,14 +6748,10 @@ static int axlua_utils_base64Decode(lua_State* tolua_S)
     else
 #endif
     {
-        std::string base64String = tolua_tocppstring(tolua_S, 2, "");
+        std::string_view base64String = axlua_tosv(tolua_S, 2);
 
-        unsigned char* decoded;
-        int length    = ax::utils::base64Decode((const unsigned char*)base64String.c_str(),
-                                                (unsigned int)base64String.size(), &decoded);
-        const char* d = (const char*)decoded;
-        lua_pushlstring(tolua_S, d, length);
-        // delete[] hexOutput;
+        auto plainText = utils::base64Decode(base64String);
+        lua_pushlstring(tolua_S, reinterpret_cast<const char*>(plainText.data()), plainText.size());
         return 1;
     }
 #if _AX_DEBUG >= 1

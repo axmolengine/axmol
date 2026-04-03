@@ -31,7 +31,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUFlockCenteringAffector : public PUAffector
+class AX_EXT_API PUFlockCenteringAffector : public PUAffector
 {
 public:
     static PUFlockCenteringAffector* create();

@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include "axmol/2d/Node.h"
+#include "axmol/scene/Node.h"
 #include "axmol/renderer/CustomCommand.h"
 #include "axmol/renderer/QuadCommand.h"
 #include "axmol/2d/FontAtlas.h"
@@ -757,7 +757,9 @@ protected:
     void rescaleWithOriginalFontSize();
 
     void updateLabelLetters();
-    virtual bool alignText();
+    void alignText();
+    bool tryTextPlacement(float fontSize);
+    void updateBatchNode();
     void computeAlignmentOffset();
     bool computeHorizontalKernings(const std::u32string& stringToRender);
 

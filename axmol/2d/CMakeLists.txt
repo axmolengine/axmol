@@ -10,8 +10,6 @@ set(_AX_2D_HEADER
   2d/ParticleExamples.h
   2d/Sprite.h
   2d/AnchoredSprite.h
-  2d/Node.h
-  2d/ComponentContainer.h
   2d/ActionProgressTimer.h
   2d/TweenFunction.h
   2d/Light.h
@@ -24,14 +22,12 @@ set(_AX_2D_HEADER
   2d/TMXXMLParser.h
   2d/ActionInstant.h
   2d/Label.h
-  2d/Component.h
   2d/LabelAtlas.h
   2d/ActionCatmullRom.h
   2d/ActionGrid.h
   2d/ParticleBatchNode.h
   2d/ClippingRectangleNode.h
   2d/ActionEase.h
-  2d/Scene.h
   2d/ProtectedNode.h
   2d/TextFieldTTF.h
   2d/AnimationCache.h
@@ -40,7 +36,6 @@ set(_AX_2D_HEADER
   2d/Font.h
   2d/ParticleSystemQuad.h
   2d/ActionGrid3D.h
-  2d/CameraBackgroundBrush.h
   2d/FastTMXTiledMap.h
   2d/MenuItem.h
   2d/FontFNT.h
@@ -63,9 +58,6 @@ set(_AX_2D_HEADER
   2d/MotionStreak.h
   2d/Menu.h
   2d/DrawNode.h
-
-  # 2d/TMXLayer.h
-  2d/Camera.h
   2d/ParallaxNode.h
   2d/SpriteSheetLoader.h
   2d/PlistSpriteSheetLoader.h
@@ -90,12 +82,8 @@ set(_AX_2D_SRC
   2d/AnimationCache.cpp
   2d/Animation.cpp
   2d/AtlasNode.cpp
-  2d/Camera.cpp
-  2d/CameraBackgroundBrush.cpp
   2d/ClippingNode.cpp
   2d/ClippingRectangleNode.cpp
-  2d/ComponentContainer.cpp
-  2d/Component.cpp
   2d/DrawNode.cpp
   2d/FastTMXLayer.cpp
   2d/FastTMXTiledMap.cpp
@@ -113,7 +101,6 @@ set(_AX_2D_SRC
   2d/Menu.cpp
   2d/MenuItem.cpp
   2d/MotionStreak.cpp
-  2d/Node.cpp
   2d/NodeGrid.cpp
   2d/ParallaxNode.cpp
   2d/ParticleBatchNode.cpp
@@ -123,7 +110,6 @@ set(_AX_2D_SRC
   2d/ProgressTimer.cpp
   2d/ProtectedNode.cpp
   2d/RenderTexture.cpp
-  2d/Scene.cpp
   2d/SpriteBatchNode.cpp
   2d/Sprite.cpp
   2d/AnchoredSprite.cpp

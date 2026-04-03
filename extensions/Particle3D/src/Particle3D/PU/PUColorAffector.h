@@ -33,7 +33,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PUColorAffector : public PUAffector
+class AX_EXT_API PUColorAffector : public PUAffector
 {
 public:
     typedef std::map<float, Color> ColorMap;

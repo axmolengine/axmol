@@ -64,8 +64,7 @@ bool Ray::intersects(const AABB& box, float* distance) const
         {
             // Substitute t back into ray and check bounds and dist
             hitpoint = rayorig + raydir * t;
-            if (hitpoint.y >= min.y && hitpoint.y <= max.y && hitpoint.z >= min.z && hitpoint.z <= max.z &&
-                (!hit || t < lowt))
+            if (hitpoint.y >= min.y && hitpoint.y <= max.y && hitpoint.z >= min.z && hitpoint.z <= max.z)
             {
                 hit  = true;
                 lowt = t;

@@ -54,10 +54,26 @@ public:
     static void setFontEngine(IFontEngine*);
 
     /**
-     * @remark: if you want enable stream parsing, you need do one of follow steps
-     *          a. disable .ttf compress on .apk, see:
-     *             https://simdsoft.com/notes/#build-apk-config-nocompress-file-type-at-appbuildgradle
-     *          b. uncomporess .ttf to disk by yourself.
+     * @brief Enable or disable stream-based font parsing in FontFreeType.
+     *
+     * Controls whether FontFreeType uses stream parsing when loading font files.
+     * - When enabled (`true`), font data is parsed incrementally as it is read,
+     *   reducing peak memory usage for very large font files.
+     * - When disabled (`false`), the entire font file is loaded into memory
+     *   before parsing, which is simpler but may cause high memory consumption.
+     *
+     * @param bEnabled Pass `true` to enable stream parsing, or `false` to disable it.
+     *
+     * @note Stream parsing is recommended for large font files to avoid keeping
+     *       the full file content resident in memory. For small fonts, disabling
+     *       may simplify debugging and slightly improve performance.
+     *
+     * @warning To enable stream parsing, ensure that font files are not compressed
+     *          in your application package. For example, on Android:
+     *          1. Disable `.ttf` compression in the APK (see:
+     *             https://learn.simdsoft.com/notes/#build-apk-config-nocompress-file-type-at-appbuildgradle)
+     *          2. Or manually uncompress `.ttf` files to disk before use.
+     * @default By default, `_streamParsingEnabled` is set to `false`.
      */
     static void setStreamParsingEnabled(bool bEnabled) { _streamParsingEnabled = bEnabled; }
     static bool isStreamParsingEnabled() { return _streamParsingEnabled; }

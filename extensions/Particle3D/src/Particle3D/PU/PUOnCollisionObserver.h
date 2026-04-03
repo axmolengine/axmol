@@ -36,7 +36,7 @@ namespace ax
 {
 
 struct PUParticle3D;
-class AX_EX_DLL PUOnCollisionObserver : public PUObserver
+class AX_EXT_API PUOnCollisionObserver : public PUObserver
 {
 public:
     static PUOnCollisionObserver* create();

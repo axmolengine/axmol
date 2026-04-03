@@ -23,7 +23,6 @@
  ****************************************************************************/
 #include "axmol/rhi/d3d11/Texture11.h"
 #include "axmol/rhi/d3d11/Driver11.h"
-#include "axmol/rhi/d3d11/Utils11.h"
 #include "axmol/rhi/DXUtils.h"
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/rhi/SamplerCache.h"
@@ -199,7 +198,7 @@ void TextureImpl::updateSubData(int xoffset,
     auto rowPitch   = RHIUtils::computeRowPitch(_desc.pixelFormat, static_cast<uint32_t>(width));
     UINT slicePitch = rowPitch * static_cast<UINT>(height);
 
-    auto context     = static_cast<DriverImpl*>(DriverBase::getInstance())->getContext();
+    auto context     = static_cast<DriverImpl*>(axdrv)->getContext();
     UINT subresource = D3D11CalcSubresource(level, layerIndex, _desc.mipLevels);
     context->UpdateSubresource(_nativeTexture, subresource, &box, data, rowPitch, slicePitch);
 
@@ -227,7 +226,7 @@ void TextureImpl::updateCompressedSubData(int xoffset,
     box.bottom = static_cast<UINT>(yoffset + height);
     box.back   = 1;
 
-    auto context     = static_cast<DriverImpl*>(DriverBase::getInstance())->getContext();
+    auto context     = static_cast<DriverImpl*>(axdrv)->getContext();
     UINT subresource = D3D11CalcSubresource(level, layerIndex, _desc.mipLevels);
     context->UpdateSubresource(_nativeTexture, subresource, &box, data, 0, 0);
 
@@ -240,7 +239,7 @@ void TextureImpl::updateFaceData(TextureCubeFace side, const void* data)
     assert(_desc.textureType == TextureType::TEXTURE_CUBE);
     ensureNativeTexture();
 
-    auto context = static_cast<DriverImpl*>(DriverBase::getInstance())->getContext();
+    auto context = static_cast<DriverImpl*>(axdrv)->getContext();
 
     //-------------------------------------------------------------------
     // 1. compute SubResource： = 6 * (mip-levels)

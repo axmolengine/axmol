@@ -59,9 +59,25 @@ public:
         DEFAULT_FONT_SIZE = 13  // see imgui.cpp
     };
 
+    /**
+     * @brief Returns the singleton instance of ImGuiPresenter.
+     *
+     * If the instance does not exist, it will be created and initialized.
+     * If the instance has been marked for destruction (_pendingDestroy == true),
+     * this function returns nullptr instead of a valid pointer.
+     *
+     * @return Pointer to the ImGuiPresenter instance, or nullptr if pending destroy.
+     */
     static ImGuiPresenter* getInstance();
+
+    /**
+     * @brief Marks the singleton instance for destruction.
+     *
+     * This does not immediately delete the object; it only sets
+     * the _pendingDestroy flag to true. After this call,
+     * getInstance() will return nullptr.
+     */
     static void destroyInstance();
-    static void setOnInit(const std::function<void(ImGuiPresenter*)>& callBack);
 
     /// deprecated use enableDPIScale instead
     float scaleAllByDPI(float userScale = 1.0f) { return enableDPIScale(userScale); }
@@ -161,14 +177,16 @@ private:
     void endFrame();
 
 private:
-    static std::function<void(ImGuiPresenter*)> _onInit;
-
     struct ImGuiLoop
     {
         ImGuiEventTracker* tracker;
         std::function<void()> func;
         bool removing = false;
     };
+
+    ax::EventListener* _event1{nullptr};
+    ax::EventListener* _event2{nullptr};
+    ax::EventListener* _event3{nullptr};
 
     std::unordered_map<uint32_t, ImGuiLoop> _renderLoops;
 
@@ -180,9 +198,17 @@ private:
 
     int64_t _beginFrames = 0;
 
-    axstd::string_map<float> _fontsInfoMap;
+    tlx::string_map<float> _fontsInfoMap;
 
-    bool _purgeNextLoop = false;
+    bool _purgeNextLoop = false;  // whether invoke director->end at next loop
+
+    // _pendingDestroy: mark for delayed destruction.
+    // ImGuiPresenter cannot be destroyed immediately inside callbacks,
+    // because ImGui_ImplGlfw may still access backend data.
+    // We defer cleanup + delete until endFrame(), ensuring safe destruction.
+    // If getInstance() is called while pendingDestroy, the old instance
+    // will be cleaned up and a new one created to avoid ImGui context assertion.
+    bool _pendingDestroy = false;  // whether destroy self at next frame
 };
 
 NS_AX_EXT_END

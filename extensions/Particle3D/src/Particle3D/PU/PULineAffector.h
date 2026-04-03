@@ -32,7 +32,7 @@
 namespace ax
 {
 
-class AX_EX_DLL PULineAffector : public PUAffector
+class AX_EXT_API PULineAffector : public PUAffector
 {
 public:
     // Constants

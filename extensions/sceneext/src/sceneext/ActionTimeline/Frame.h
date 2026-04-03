@@ -1,0 +1,427 @@
+/****************************************************************************
+Copyright (c) 2013 cocos2d-x.org
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+https://axmol.dev/
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+
+#pragma once
+
+#include <string>
+#include "axmol/base/Object.h"
+#include "axmol/base/Vector.h"
+#include "axmol/scene/Node.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/2d/TweenFunction.h"
+#include "sceneext/ActionTimeline/TimelineMacro.h"
+#include "sceneext/SceneExtMacros.h"
+
+NS_TIMELINE_BEGIN
+
+class Timeline;
+class ActionTimeline;
+
+class SCNEXT_API Frame : public ax::Object
+{
+public:
+    virtual void setFrameIndex(unsigned int frameIndex) { _frameIndex = frameIndex; }
+    virtual unsigned int getFrameIndex() const { return _frameIndex; }
+
+    virtual void setTimeline(Timeline* timeline) { _timeline = timeline; }
+    virtual Timeline* getTimeline() const { return _timeline; }
+
+    virtual void setNode(ax::Node* node) { _node = node; }
+    virtual ax::Node* getNode() const { return _node; }
+
+    virtual void setTween(bool tween) { _tween = tween; }
+    virtual bool isTween() const { return _tween; }
+
+    virtual void setTweenType(const ax::tweenfunc::TweenType& tweenType) { _tweenType = tweenType; }
+    virtual ax::tweenfunc::TweenType getTweenType() const { return _tweenType; }
+
+    // !to make easing with params, need setTweenType(TweenType::CUSTOM_EASING)
+    virtual void setEasingParams(const std::vector<float>& easingParams);
+    virtual const std::vector<float>& getEasingParams() const;
+
+    virtual bool isEnterWhenPassed() { return _enterWhenPassed; }
+
+    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) = 0;
+    virtual void apply(float percent);
+
+    virtual Frame* clone() = 0;
+
+protected:
+    Frame();
+    virtual ~Frame();
+
+    virtual void onApply(float percent) {};
+    // update percent depends _tweenType, and return the Calculated percent
+    virtual float tweenPercent(float percent);
+
+    virtual void emitEvent();
+    virtual void cloneProperty(Frame* frame);
+
+protected:
+    unsigned int _frameIndex;
+    bool _tween;
+    bool _enterWhenPassed;
+
+    ax::tweenfunc::TweenType _tweenType;
+    std::vector<float> _easingParam;
+    Timeline* _timeline;
+    ax::Node* _node;
+};
+
+class SCNEXT_API VisibleFrame : public Frame
+{
+public:
+    static VisibleFrame* create();
+
+    VisibleFrame();
+
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
+
+    inline void setVisible(bool visible) { _visible = visible; }
+    inline bool isVisible() const { return _visible; }
+
+protected:
+    bool _visible;
+};
+
+class SCNEXT_API TextureFrame : public Frame
+{
+public:
+    static TextureFrame* create();
+
+    TextureFrame();
+
+    void setNode(ax::Node* node) override;
+
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
+
+    inline void setTextureName(std::string_view textureName) { _textureName = textureName; }
+    inline std::string_view getTextureName() const { return _textureName; }
+
+protected:
+    ax::Sprite* _sprite;
+    std::string _textureName;
+};
+
+class SCNEXT_API RotationFrame : public Frame
+{
+public:
+    static RotationFrame* create();
+
+    RotationFrame();
+
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
+
+    inline void setRotation(float rotation) { _rotation = rotation; }
+    inline float getRotation() const { return _rotation; }
+
+protected:
+    void onApply(float percent) override;
+
+    float _rotation;
+    float _betwennRotation;
+};
+
+class SCNEXT_API SkewFrame : public Frame
+{
+public:
+    static SkewFrame* create();
+
+    SkewFrame();
+
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
+
+    inline void setSkewX(float skewx) { _skewX = skewx; }
+    inline float getSkewX() const { return _skewX; }
+
+    inline void setSkewY(float skewy) { _skewY = skewy; }
+    inline float getSkewY() const { return _skewY; }
+
+protected:
+    void onApply(float percent) override;
+
+    float _skewX;
+    float _skewY;
+    float _betweenSkewX;
+    float _betweenSkewY;
+};
+
+class SCNEXT_API RotationSkewFrame : public SkewFrame
+{
+public:
+    static RotationSkewFrame* create();
+
+    RotationSkewFrame();
+
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
+
+protected:
+    void onApply(float percent) override;
+};
+
+class SCNEXT_API PositionFrame : public Frame
+{
+public:
+    static PositionFrame* create();
+
+    PositionFrame();
+
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
+
+    inline void setPosition(const ax::Point& position) { _position = position; }
+    inline ax::Point getPosition() const { return _position; }
+
+    inline void setX(float x) { _position.x = x; }
+    inline void setY(float y) { _position.y = y; }
+
+    inline float getX() const { return _position.x; }
+    inline float getY() const { return _position.y; }
+
+protected:
+    void onApply(float percent) override;
+
+    ax::Point _position;
+    float _betweenX;
+    float _betweenY;
+};
+
+class SCNEXT_API ScaleFrame : public Frame
+{
+public:
+    static ScaleFrame* create();
+
+    ScaleFrame();
+
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
+
+    inline void setScale(float scale)
+    {
+        _scaleX = scale;
+        _scaleY = scale;
+    }
+
+    inline void setScaleX(float scaleX) { _scaleX = scaleX; }
+    inline float getScaleX() const { return _scaleX; }
+
+    inline void setScaleY(float scaleY) { _scaleY = scaleY; }
+    inline float getScaleY() const { return _scaleY; }
+
+protected:
+    void onApply(float percent) override;
+
+    float _scaleX;
+    float _scaleY;
+    float _betweenScaleX;
+    float _betweenScaleY;
+};
+
+class SCNEXT_API AnchorPointFrame : public Frame
+{
+public:
+    static AnchorPointFrame* create();
+
+    AnchorPointFrame();
+
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
+
+    inline void setAnchorPoint(const ax::Point& point) { _anchorPoint = point; }
+    inline ax::Point getAnchorPoint() const { return _anchorPoint; }
+
+protected:
+    void onApply(float percent) override;
+
+    ax::Vec2 _betweenAnchorPoint;
+    ax::Vec2 _anchorPoint;
+};
+
+enum InnerActionType
+{
+    LoopAction,
+    NoLoopAction,
+    SingleFrame
+};
+
+class SCNEXT_API InnerActionFrame : public Frame
+{
+public:
+    static const std::string AnimationAllName;
+
+    static InnerActionFrame* create();
+    InnerActionFrame();
+
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
+
+    inline void setInnerActionType(InnerActionType type) { _innerActionType = type; }
+    inline InnerActionType getInnerActionType() const { return _innerActionType; }
+
+    inline void setEnterWithName(bool isEnterWithName) { _enterWithName = isEnterWithName; }
+
+    void setStartFrameIndex(int frameIndex);
+    inline int getStartFrameIndex() const { return _startFrameIndex; }
+
+    void setEndFrameIndex(int frameIndex);
+    inline int getEndFrameIndex() const { return _endFrameIndex; }
+
+    void setAnimationName(std::string_view animationNamed);
+
+    inline void setSingleFrameIndex(int frameIndex) { _singleFrameIndex = frameIndex; }
+    inline int getSingleFrameIndex() const { return _singleFrameIndex; }
+
+protected:
+    InnerActionType _innerActionType;
+    int _startFrameIndex;
+    int _endFrameIndex;
+    int _singleFrameIndex;
+    std::string _animationName;
+    bool _enterWithName;
+};
+
+class SCNEXT_API ColorFrame : public Frame
+{
+public:
+    static ColorFrame* create();
+    ColorFrame();
+
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
+    inline void setAlpha(uint8_t alpha) { _color.a = alpha; }
+    inline void setColor(const ax::Color32& color) { _color = color; }
+    inline const ax::Color32& getColor() const { return _color; }
+
+protected:
+    void onApply(float percent) override;
+
+    ax::Color32 _color;
+
+    int _betweenRed;
+    int _betweenGreen;
+    int _betweenBlue;
+};
+
+class SCNEXT_API AlphaFrame : public Frame
+{
+public:
+    static AlphaFrame* create();
+    AlphaFrame();
+
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
+
+    inline void setAlpha(uint8_t alpha) { _alpha = alpha; }
+    inline uint8_t getAlpha() const { return _alpha; }
+
+protected:
+    void onApply(float percent) override;
+
+    uint8_t _alpha;
+    int _betweenAlpha;
+};
+
+class SCNEXT_API EventFrame : public Frame
+{
+public:
+    static EventFrame* create();
+    void init();
+
+    EventFrame();
+
+    void setNode(ax::Node* node) override;
+
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
+
+    inline void setEvent(std::string_view event) { _event = event; }
+    inline std::string_view getEvent() const { return _event; }
+
+protected:
+    std::string _event;
+    ActionTimeline* _action;
+};
+
+class SCNEXT_API ZOrderFrame : public Frame
+{
+public:
+    static ZOrderFrame* create();
+
+    ZOrderFrame();
+
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
+
+    inline void setZOrder(int zorder) { _zorder = zorder; }
+    inline int getZOrder() const { return _zorder; }
+
+protected:
+    int _zorder;
+};
+
+class SCNEXT_API BlendFuncFrame : public Frame
+{
+public:
+    static BlendFuncFrame* create();
+
+    BlendFuncFrame();
+
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
+
+    inline ax::BlendFunc getBlendFunc() const { return _blendFunc; }
+    inline void setBlendFunc(ax::BlendFunc blendFunc) { _blendFunc = blendFunc; }
+
+protected:
+    ax::BlendFunc _blendFunc;
+};
+
+class SCNEXT_API PlayableFrame : public Frame
+{
+public:
+    static PlayableFrame* create();
+
+    PlayableFrame();
+
+    void onEnter(Frame* nextFrame, int currentFrameINdex) override;
+    Frame* clone() override;
+
+    inline std::string getPlayableAct() const { return _playableAct; }
+    // @param playact, express the interface in PlayableProtocol, should be "start"  or "stop"
+    inline void setPlayableAct(std::string playact) { _playableAct = playact; }
+
+    static const std::string PLAYABLE_EXTENTION;
+
+private:
+    std::string _playableAct;  // express the interface in PlayableProtocol
+    static const std::string START_ACT;
+    static const std::string STOP_ACT;
+};
+NS_TIMELINE_END

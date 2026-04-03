@@ -4,9 +4,9 @@
 #include "body.h"
 #include "core.h"
 #include "joint.h"
+#include "physics_world.h"
 #include "solver.h"
 #include "solver_set.h"
-#include "world.h"
 
 // needed for dll export
 #include "box2d/box2d.h"
@@ -146,11 +146,14 @@ float b2WheelJoint_GetMaxMotorTorque( b2JointId jointId )
 
 b2Vec2 b2GetWheelJointForce( b2World* world, b2JointSim* base )
 {
-	b2WheelJoint* joint = &base->wheelJoint;
+	int idA = base->bodyIdA;
+	b2Transform transformA = b2GetBodyTransform( world, idA );
 
-	// This is a frame behind
-	b2Vec2 axisA = joint->axisA;
+	b2Vec2 localAxisA = b2RotateVector( base->localFrameA.q, (b2Vec2){ 1.0f, 0.0f } );
+	b2Vec2 axisA = b2RotateVector( transformA.q, localAxisA );
 	b2Vec2 perpA = b2LeftPerp( axisA );
+
+	b2WheelJoint* joint = &base->wheelJoint;
 
 	float perpForce = world->inv_h * joint->perpImpulse;
 	float axialForce = world->inv_h * ( joint->springImpulse + joint->lowerImpulse - joint->upperImpulse );
@@ -218,19 +221,20 @@ void b2PrepareWheelJoint( b2JointSim* base, b2StepContext* context )
 	joint->indexA = bodyA->setIndex == b2_awakeSet ? localIndexA : B2_NULL_INDEX;
 	joint->indexB = bodyB->setIndex == b2_awakeSet ? localIndexB : B2_NULL_INDEX;
 
-	b2Rot qA = bodySimA->transform.q;
-	b2Rot qB = bodySimB->transform.q;
+	// Compute joint anchor frames with world space rotation, relative to center of mass
+	joint->frameA.q = b2MulRot( bodySimA->transform.q, base->localFrameA.q );
+	joint->frameA.p = b2RotateVector( bodySimA->transform.q, b2Sub( base->localFrameA.p, bodySimA->localCenter ) );
+	joint->frameB.q = b2MulRot( bodySimB->transform.q, base->localFrameB.q );
+	joint->frameB.p = b2RotateVector( bodySimB->transform.q, b2Sub( base->localFrameB.p, bodySimB->localCenter ) );
 
-	joint->anchorA = b2RotateVector( qA, b2Sub( base->localOriginAnchorA, bodySimA->localCenter ) );
-	joint->anchorB = b2RotateVector( qB, b2Sub( base->localOriginAnchorB, bodySimB->localCenter ) );
-	joint->axisA = b2RotateVector( qA, joint->localAxisA );
+	// Compute the initial center delta. Incremental position updates are relative to this.
 	joint->deltaCenter = b2Sub( bodySimB->center, bodySimA->center );
 
-	b2Vec2 rA = joint->anchorA;
-	b2Vec2 rB = joint->anchorB;
+	b2Vec2 rA = joint->frameA.p;
+	b2Vec2 rB = joint->frameB.p;
 
 	b2Vec2 d = b2Add( joint->deltaCenter, b2Sub( rB, rA ) );
-	b2Vec2 axisA = joint->axisA;
+	b2Vec2 axisA = b2RotateVector( joint->frameA.q, (b2Vec2){ 1.0f, 0.0f } );
 	b2Vec2 perpA = b2LeftPerp( axisA );
 
 	// perpendicular constraint (keep wheel on line)
@@ -279,11 +283,12 @@ void b2WarmStartWheelJoint( b2JointSim* base, b2StepContext* context )
 	b2BodyState* stateA = joint->indexA == B2_NULL_INDEX ? &dummyState : context->states + joint->indexA;
 	b2BodyState* stateB = joint->indexB == B2_NULL_INDEX ? &dummyState : context->states + joint->indexB;
 
-	b2Vec2 rA = b2RotateVector( stateA->deltaRotation, joint->anchorA );
-	b2Vec2 rB = b2RotateVector( stateB->deltaRotation, joint->anchorB );
+	b2Vec2 rA = b2RotateVector( stateA->deltaRotation, joint->frameA.p );
+	b2Vec2 rB = b2RotateVector( stateB->deltaRotation, joint->frameB.p );
 
 	b2Vec2 d = b2Add( b2Add( b2Sub( stateB->deltaPosition, stateA->deltaPosition ), joint->deltaCenter ), b2Sub( rB, rA ) );
-	b2Vec2 axisA = b2RotateVector( stateA->deltaRotation, joint->axisA );
+	b2Vec2 axisA = b2RotateVector( joint->frameA.q, (b2Vec2){ 1.0f, 0.0f } );
+	axisA = b2RotateVector( stateA->deltaRotation, axisA );
 	b2Vec2 perpA = b2LeftPerp( axisA );
 
 	float a1 = b2Cross( b2Add( d, rA ), axisA );
@@ -297,10 +302,17 @@ void b2WarmStartWheelJoint( b2JointSim* base, b2StepContext* context )
 	float LA = axialImpulse * a1 + joint->perpImpulse * s1 + joint->motorImpulse;
 	float LB = axialImpulse * a2 + joint->perpImpulse * s2 + joint->motorImpulse;
 
-	stateA->linearVelocity = b2MulSub( stateA->linearVelocity, mA, P );
-	stateA->angularVelocity -= iA * LA;
-	stateB->linearVelocity = b2MulAdd( stateB->linearVelocity, mB, P );
-	stateB->angularVelocity += iB * LB;
+	if ( stateA->flags & b2_dynamicFlag )
+	{
+		stateA->linearVelocity = b2MulSub( stateA->linearVelocity, mA, P );
+		stateA->angularVelocity -= iA * LA;
+	}
+
+	if ( stateB->flags & b2_dynamicFlag )
+	{
+		stateB->linearVelocity = b2MulAdd( stateB->linearVelocity, mB, P );
+		stateB->angularVelocity += iB * LB;
+	}
 }
 
 void b2SolveWheelJoint( b2JointSim* base, b2StepContext* context, bool useBias )
@@ -328,11 +340,12 @@ void b2SolveWheelJoint( b2JointSim* base, b2StepContext* context, bool useBias )
 	bool fixedRotation = ( iA + iB == 0.0f );
 
 	// current anchors
-	b2Vec2 rA = b2RotateVector( stateA->deltaRotation, joint->anchorA );
-	b2Vec2 rB = b2RotateVector( stateB->deltaRotation, joint->anchorB );
+	b2Vec2 rA = b2RotateVector( stateA->deltaRotation, joint->frameA.p );
+	b2Vec2 rB = b2RotateVector( stateB->deltaRotation, joint->frameB.p );
 
 	b2Vec2 d = b2Add( b2Add( b2Sub( stateB->deltaPosition, stateA->deltaPosition ), joint->deltaCenter ), b2Sub( rB, rA ) );
-	b2Vec2 axisA = b2RotateVector( stateA->deltaRotation, joint->axisA );
+	b2Vec2 axisA = b2RotateVector( joint->frameA.q, (b2Vec2){ 1.0f, 0.0f } );
+	axisA = b2RotateVector( stateA->deltaRotation, axisA );
 	float translation = b2Dot( axisA, d );
 
 	float a1 = b2Cross( b2Add( d, rA ), axisA );
@@ -391,9 +404,9 @@ void b2SolveWheelJoint( b2JointSim* base, b2StepContext* context, bool useBias )
 			}
 			else if ( useBias )
 			{
-				bias = context->jointSoftness.biasRate * C;
-				massScale = context->jointSoftness.massScale;
-				impulseScale = context->jointSoftness.impulseScale;
+				bias = base->constraintSoftness.biasRate * C;
+				massScale = base->constraintSoftness.massScale;
+				impulseScale = base->constraintSoftness.impulseScale;
 			}
 
 			float Cdot = b2Dot( axisA, b2Sub( vB, vA ) ) + a2 * wB - a1 * wA;
@@ -429,9 +442,9 @@ void b2SolveWheelJoint( b2JointSim* base, b2StepContext* context, bool useBias )
 			}
 			else if ( useBias )
 			{
-				bias = context->jointSoftness.biasRate * C;
-				massScale = context->jointSoftness.massScale;
-				impulseScale = context->jointSoftness.impulseScale;
+				bias = base->constraintSoftness.biasRate * C;
+				massScale = base->constraintSoftness.massScale;
+				impulseScale = base->constraintSoftness.impulseScale;
 			}
 
 			// sign flipped on Cdot
@@ -463,9 +476,9 @@ void b2SolveWheelJoint( b2JointSim* base, b2StepContext* context, bool useBias )
 		if ( useBias )
 		{
 			float C = b2Dot( perpA, d );
-			bias = context->jointSoftness.biasRate * C;
-			massScale = context->jointSoftness.massScale;
-			impulseScale = context->jointSoftness.impulseScale;
+			bias = base->constraintSoftness.biasRate * C;
+			massScale = base->constraintSoftness.massScale;
+			impulseScale = base->constraintSoftness.impulseScale;
 		}
 
 		float s1 = b2Cross( b2Add( d, rA ), perpA );
@@ -485,10 +498,17 @@ void b2SolveWheelJoint( b2JointSim* base, b2StepContext* context, bool useBias )
 		wB += iB * LB;
 	}
 
-	stateA->linearVelocity = vA;
-	stateA->angularVelocity = wA;
-	stateB->linearVelocity = vB;
-	stateB->angularVelocity = wB;
+	if ( stateA->flags & b2_dynamicFlag )
+	{
+		stateA->linearVelocity = vA;
+		stateA->angularVelocity = wA;
+	}
+
+	if ( stateB->flags & b2_dynamicFlag )
+	{
+		stateB->linearVelocity = vB;
+		stateB->angularVelocity = wB;
+	}
 }
 
 #if 0
@@ -514,15 +534,15 @@ void b2WheelJoint_Dump()
 }
 #endif
 
-void b2DrawWheelJoint( b2DebugDraw* draw, b2JointSim* base, b2Transform transformA, b2Transform transformB )
+void b2DrawWheelJoint( b2DebugDraw* draw, b2JointSim* base, b2Transform transformA, b2Transform transformB, float drawScale )
 {
 	B2_ASSERT( base->type == b2_wheelJoint );
 
 	b2WheelJoint* joint = &base->wheelJoint;
 
-	b2Vec2 pA = b2TransformPoint( transformA, base->localOriginAnchorA );
-	b2Vec2 pB = b2TransformPoint( transformB, base->localOriginAnchorB );
-	b2Vec2 axis = b2RotateVector( transformA.q, joint->localAxisA );
+	b2Transform frameA = b2MulTransforms( transformA, base->localFrameA );
+	b2Transform frameB = b2MulTransforms( transformB, base->localFrameB );
+	b2Vec2 axisA = b2RotateVector( frameA.q, (b2Vec2){ 1.0f, 0.0f } );
 
 	b2HexColor c1 = b2_colorGray;
 	b2HexColor c2 = b2_colorGreen;
@@ -530,22 +550,24 @@ void b2DrawWheelJoint( b2DebugDraw* draw, b2JointSim* base, b2Transform transfor
 	b2HexColor c4 = b2_colorDimGray;
 	b2HexColor c5 = b2_colorBlue;
 
-	draw->DrawSegmentFcn( pA, pB, c5, draw->context );
+	draw->DrawLineFcn( frameA.p, frameB.p, c5, draw->context );
 
 	if ( joint->enableLimit )
 	{
-		b2Vec2 lower = b2MulAdd( pA, joint->lowerTranslation, axis );
-		b2Vec2 upper = b2MulAdd( pA, joint->upperTranslation, axis );
-		b2Vec2 perp = b2LeftPerp( axis );
-		draw->DrawSegmentFcn( lower, upper, c1, draw->context );
-		draw->DrawSegmentFcn( b2MulSub( lower, 0.1f, perp ), b2MulAdd( lower, 0.1f, perp ), c2, draw->context );
-		draw->DrawSegmentFcn( b2MulSub( upper, 0.1f, perp ), b2MulAdd( upper, 0.1f, perp ), c3, draw->context );
+		b2Vec2 lower = b2MulAdd( frameA.p, joint->lowerTranslation, axisA );
+		b2Vec2 upper = b2MulAdd( frameA.p, joint->upperTranslation, axisA );
+		b2Vec2 perp = b2LeftPerp( axisA );
+		draw->DrawLineFcn( lower, upper, c1, draw->context );
+		draw->DrawLineFcn( b2MulSub( lower, 0.1f * drawScale, perp ), b2MulAdd( lower, 0.1f * drawScale, perp ), c2,
+							  draw->context );
+		draw->DrawLineFcn( b2MulSub( upper, 0.1f * drawScale, perp ), b2MulAdd( upper, 0.1f * drawScale, perp ), c3,
+							  draw->context );
 	}
 	else
 	{
-		draw->DrawSegmentFcn( b2MulSub( pA, 1.0f, axis ), b2MulAdd( pA, 1.0f, axis ), c1, draw->context );
+		draw->DrawLineFcn( b2MulSub( frameA.p, 1.0f, axisA ), b2MulAdd( frameA.p, 1.0f, axisA ), c1, draw->context );
 	}
 
-	draw->DrawPointFcn( pA, 5.0f, c1, draw->context );
-	draw->DrawPointFcn( pB, 5.0f, c4, draw->context );
+	draw->DrawPointFcn( frameA.p, 5.0f, c1, draw->context );
+	draw->DrawPointFcn( frameB.p, 5.0f, c4, draw->context );
 }

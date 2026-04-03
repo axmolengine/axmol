@@ -24,8 +24,9 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/rhi/DriverBase.h"
 #include "axmol/platform/GL.h"
+#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/DriverFactory.h"
 #include "axmol/rhi/opengl/OpenGLState.h"
 #include "axmol/tlx/hlookup.hpp"
 
@@ -41,6 +42,7 @@ struct DriverCapImpl
     bool textureCompressionAstc{false};
     bool textureCompressionEtc2{false};
     bool vertexAttribBinding{false};
+    float maxAnisotropy{0.0f};
 };
 
 /**
@@ -51,6 +53,10 @@ class DriverImpl : public DriverBase
 public:
     DriverImpl();
     ~DriverImpl();
+
+    bool init() override;
+
+    DriverType type() override { return DriverType::OpenGL; }
 
     /* The vertex data buffers binding index start, the axslcc(SPIRV-Cross)
      */
@@ -67,7 +73,7 @@ public:
      * Create a RenderContext object, not auto released.
      * @return A RenderContext object.
      */
-    RenderContext* createRenderContext(void*) override;
+    RenderContext* createRenderContext(SurfaceHandle) override;
 
     /**
      * New a Buffer object, not auto released.
@@ -104,7 +110,7 @@ public:
      * @param fragmentShader Specifes this is a fragment shader source.
      * @return A Program instance.
      */
-    Program* createProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
+    Program* createProgram(Data vsData, Data fsData) override;
 
     VertexLayout* createVertexLayout(VertexLayoutDesc&&) override;
 
@@ -161,7 +167,7 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
+    ShaderModule* createShaderModule(ShaderStage stage, Data& source) override;
 
     SamplerHandle createSampler(const SamplerDesc& desc) override;
     void destroySampler(SamplerHandle&) override;

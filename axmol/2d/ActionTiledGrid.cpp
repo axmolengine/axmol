@@ -620,11 +620,9 @@ void TurnOffTiles::startWithTarget(Node* target)
 void TurnOffTiles::update(float time)
 {
     unsigned int l = (unsigned int)(time * (float)_tilesCount);
-
-    unsigned int t = 0;
     for (unsigned int i = 0; i < _tilesCount; i++)
     {
-        t = _tilesOrder[i];
+        const auto t = _tilesOrder[i];
         // needs integer value
         unsigned int x = (unsigned int)(t / _gridSize.height);
         Vec2 tilePos((float)x, (float)(t % (unsigned int)_gridSize.height));

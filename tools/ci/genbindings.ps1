@@ -10,24 +10,9 @@ if (($stage -band 1)) {
     Push-Location $AX_ROOT
     ## setup ndk
     . ./setup.ps1 -p android
+    echo "$ndk_root=$ndk_root"
     axmol -c
     Pop-Location
-
-    $pip_cmd = @('pip3', 'pip')[$IsWin]
-    $python_cmd = @('python3', 'python')[$IsWin]
-
-    if($IsLinux -and $LinuxDistro -eq 'Debian') 
-    {
-        sudo apt install python3-yaml python3-cheetah
-    }
-    else 
-    {
-        &$pip_cmd install PyYAML Cheetah3
-    }
-
-    echo "after setup py_ver: $(&$python_cmd -V), PATH=$env:PATH"
-
-    echo "$ndk_root=$ndk_root"
 
     ## setup llvm libclang.dll
     $llvm_ver_pred = $manifest['llvm'].Split('~')
@@ -55,7 +40,7 @@ if (($stage -band 1)) {
         $llvm_pkg = "llvm-$llvm_ver.7z"
 
         $prefix = Join-Path $AX_ROOT "cache/devtools"
-        $llvm_url = devtool_url $llvm_pkg
+        $llvm_url = devtool_url 'libclang' $llvm_ver
         $llvm_out = Join-Path $prefix $llvm_pkg
 
         $1k.mkdirs($prefix)
@@ -65,6 +50,21 @@ if (($stage -band 1)) {
         $1k.mkdirs($lib_dir)
         Copy-Item "$prefix/llvm-$llvm_ver/lib/$suffix" -Destination $lib_path
     }
+
+    # setup python pip extensions
+    $pip_cmd = @('pip3', 'pip')[$IsWin]
+    $python_cmd = @('python3', 'python')[$IsWin]
+
+    if($IsLinux -and $LinuxDistro -eq 'Debian') 
+    {
+        sudo apt-get install -y python3-yaml python3-cheetah
+    }
+    else 
+    {
+        &$pip_cmd install PyYAML Cheetah3
+    }
+
+    echo "after setup py_ver: $(&$python_cmd -V), PATH=$env:PATH"
 
     ## ensure $env:AX_ROOT/axmol/axmolver.h exists
     echo "AX_ROOT=$AX_ROOT"

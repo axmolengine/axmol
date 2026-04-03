@@ -122,6 +122,15 @@ project.afterEvaluate {
         def variantName = variant.name.capitalize()
         def copyTask = tasks.named("copy${variantName}ContentToAssets")
 
+        // !!!IMPORTANT: This copy task must depend on the native build task.
+        // Without this dependency, the copy step may run before native libraries
+        // are built, resulting in incomplete or outdated assets being packaged
+        // into the APK. Do not remove or modify this dependency, as it ensures
+        // the correct build order: native build -> copy assets -> merge assets -> AAB/APK.
+        copyTask.configure {
+            dependsOn(tasks.named("externalNativeBuild${variantName}"))
+        }
+
         tasks.named("merge${variantName}Assets").configure {
             dependsOn(copyTask)
         }
