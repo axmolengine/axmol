@@ -91,7 +91,8 @@ static bool createStringTextureData(std::string_view text,
 
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID) && (AX_TARGET_PLATFORM != AX_PLATFORM_IOS) && \
     (AX_TARGET_PLATFORM != AX_PLATFORM_WIN32)
-    AXASSERT(textDefinition._stroke._strokeEnabled == false, "Currently stroke only supported on iOS and Android!");
+    AXASSERT(textDefinition._stroke._strokeEnabled == false,
+             "Currently stroke only supported on iOS, Android and Windows!");
 #endif
 
     auto textDef            = textDefinition;

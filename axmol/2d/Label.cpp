@@ -2663,7 +2663,7 @@ FontDefinition Label::_getFontDefinition() const
     (AX_TARGET_PLATFORM != AX_PLATFORM_WIN32)
     if (systemFontDef._stroke._strokeEnabled)
     {
-        AXLOGE("Stroke Currently only supported on iOS and Android!");
+        AXLOGE("Stroke Currently only supported on iO, Android and Windows");
     }
     systemFontDef._stroke._strokeEnabled = false;
 #endif

@@ -176,6 +176,8 @@ public:
                             _geometry->Release();
                             _geometry = combined;
                         }
+                        else
+                            combined->Release();
                     }
                     transformed->Release();
                 }
@@ -379,70 +381,96 @@ bool DWriteTextRenderer::drawText(std::string_view text,
     if (!setFont(textDefinition._fontName, textDefinition._fontSize, false))
         return false;
 
-    // Convert text to UTF-16 and escape '&' characters
+    // Convert text to UTF-16
     std::wstring wtext = ntcvt::from_chars(text, CP_UTF8);
     if (wtext.empty())
         return false;
 
     // Create text layout
     IDWriteTextLayout* textLayout = nullptr;
-    float maxWidth                = (extent.cx > 0) ? (float)extent.cx : FLT_MAX;
-    float maxHeight               = (extent.cy > 0) ? (float)extent.cy : FLT_MAX;
-    HRESULT hr = _dwriteFactory->CreateTextLayout(wtext.c_str(), (UINT32)wtext.size(), _textFormat, maxWidth, maxHeight,
-                                                  &textLayout);
-    if (FAILED(hr))
-        return false;
+    const float maxWidth          = (extent.cx > 0) ? (float)extent.cx : FLT_MAX;
+    const float maxHeight         = (extent.cy > 0) ? (float)extent.cy : FLT_MAX;
+    const auto wrapMode = textDefinition._enableWrap ? DWRITE_WORD_WRAPPING_WRAP : DWRITE_WORD_WRAPPING_NO_WRAP;
 
-    // Set alignment
+    // Parse text alignment
     DWRITE_TEXT_ALIGNMENT hAlign;
     DWRITE_PARAGRAPH_ALIGNMENT vAlign;
     parseNativeTextAlign(align, hAlign, vAlign);
-    textLayout->SetTextAlignment(hAlign);
-    textLayout->SetParagraphAlignment(vAlign);
 
-    // Set wrapping
-    textLayout->SetWordWrapping(textDefinition._enableWrap ? DWRITE_WORD_WRAPPING_WRAP : DWRITE_WORD_WRAPPING_NO_WRAP);
-
-    // Get actual metrics
     DWRITE_TEXT_METRICS metrics;
-    hr = textLayout->GetMetrics(&metrics);
-    if (FAILED(hr))
-    {
-        textLayout->Release();
-        return false;
-    }
+    HRESULT hr{S_OK};
+
+    auto&& recreateTextLayout = [&](float width, float height) -> HRESULT {
+        SafeRelease(textLayout);
+
+        hr = _dwriteFactory->CreateTextLayout(wtext.c_str(), (UINT32)wtext.size(), _textFormat, width, height,
+                                              &textLayout);
+        if (FAILED(hr))
+            return hr;
+        textLayout->SetTextAlignment(hAlign);
+        textLayout->SetParagraphAlignment(vAlign);
+        textLayout->SetWordWrapping(wrapMode);
+        hr = textLayout->GetMetrics(&metrics);
+        if (FAILED(hr))
+        {
+            SafeRelease(textLayout);
+            return hr;
+        }
+        return S_OK;
+    };
 
     // Handle overflow == 2 (shrink font to fit)
-    if (textDefinition._overflow == 2 && extent.cx > 0 && extent.cy > 0)
+    if (textDefinition._overflow == 2 && extent.cx > 0 && extent.cy > 0) [[unlikely]]
     {
-        int newFontSize = textDefinition._fontSize;
-        while ((metrics.width > maxWidth || metrics.height > maxHeight) && newFontSize > 0)
+        int low     = 1;
+        int high    = textDefinition._fontSize;
+        int bestFit = high;
+
+        while (low <= high)
         {
-            newFontSize--;
-            setFont(textDefinition._fontName, newFontSize, _bold);
-            textLayout->Release();
-            hr = _dwriteFactory->CreateTextLayout(wtext.c_str(), (UINT32)wtext.size(), _textFormat, maxWidth, maxHeight,
-                                                  &textLayout);
+            int mid = (low + high) / 2;
+            setFont(textDefinition._fontName, mid, _bold);
+
+            hr = recreateTextLayout(maxWidth, maxHeight);
             if (FAILED(hr))
                 break;
-            textLayout->SetTextAlignment(hAlign);
-            textLayout->SetParagraphAlignment(vAlign);
-            textLayout->SetWordWrapping(textDefinition._enableWrap ? DWRITE_WORD_WRAPPING_WRAP
-                                                                   : DWRITE_WORD_WRAPPING_NO_WRAP);
-            hr = textLayout->GetMetrics(&metrics);
-            if (FAILED(hr))
-                break;
+
+            if (metrics.width <= maxWidth && metrics.height <= maxHeight)
+            {
+                bestFit = mid;
+                low     = mid + 1;
+            }
+            else
+            {
+                high = mid - 1;
+            }
         }
-        if (newFontSize <= 0)
-        {
-            textLayout->Release();
-            return false;
-        }
+
+        setFont(textDefinition._fontName, bestFit, _bold);
+        hr = recreateTextLayout(maxWidth, maxHeight);
     }
+    else
+    {
+        hr = recreateTextLayout(maxWidth, maxHeight);
+    }
+
+    if (FAILED(hr))
+        return false;
 
     // Determine final render size
     int renderWidth  = (extent.cx > 0) ? extent.cx : (int)ceil(metrics.width);
     int renderHeight = (extent.cy > 0) ? extent.cy : (int)ceil(metrics.height);
+
+    if (extent.cx <= 0 && extent.cy <= 0)
+        hr = recreateTextLayout(renderWidth, renderHeight);
+    else if (extent.cx <= 0)
+        hr = recreateTextLayout(renderWidth, maxHeight);
+    else if (extent.cy <= 0)
+        hr = recreateTextLayout(maxWidth, renderHeight);
+
+    if (FAILED(hr))
+        return false;
+
     if (!createRenderTarget(renderWidth, renderHeight, textDefinition, hasPremultipliedAlpha))
     {
         textLayout->Release();
@@ -457,11 +485,10 @@ bool DWriteTextRenderer::drawText(std::string_view text,
     constexpr D2D1_POINT_2F origin = {0, 0};
 
     // If stroke enabled, create stroke brush
-    ID2D1SolidColorBrush* strokeBrush = nullptr;
+    ID2D1SolidColorBrush* strokeBrush{nullptr};
     bool needStroke = textDefinition._stroke._strokeEnabled && textDefinition._stroke._strokeSize > 0.0f;
     if (needStroke)
     {
-        strokeBrush = nullptr;
         _renderTarget->CreateSolidColorBrush(toD2DColor(textDefinition._stroke._strokeColor), &strokeBrush);
     }
 
