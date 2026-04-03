@@ -68,7 +68,6 @@ public:
      * @note '&' characters are escaped by doubling ('&&') to avoid mnemonic interpretation.
      * @note If overflow == 2, the font size may be reduced iteratively until the text fits.
      * @note When stroke is enabled, glyph outlines are converted into geometry and drawn with
-     * @note When stroke is enabled, glyph outlines are converted into geometry and drawn with
      *       both stroke and fill.
      * @note Alignment is handled by DirectWrite layout; origin is adjusted only for bounding box placement.
      */
