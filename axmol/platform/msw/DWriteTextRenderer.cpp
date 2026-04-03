@@ -23,7 +23,6 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "axmol/platform/msw/DWriteTextRenderer.h"
 #include "axmol/platform/msw/ComPtr.h"
-#include "axmol/2d/Label.h"
 #include "ntcvt/ntcvt.hpp"
 #include <algorithm>
 #include <cstring>
@@ -389,7 +388,11 @@ bool DWriteTextRenderer::drawText(std::string_view text,
     textLayout->SetWordWrapping(wrapMode);
 
     // Handle overflow == 2 (shrink font to fit)
-    if (textDefinition._overflow == (int)Label::Overflow::SHRINK && extent.cx > 0 && extent.cy > 0) [[unlikely]]
+    enum OverflowMode
+    {
+        SHRINK = 2,
+    };
+    if (textDefinition._overflow == OverflowMode::SHRINK && extent.cx > 0 && extent.cy > 0) [[unlikely]]
     {
         const DWRITE_TEXT_RANGE entireRange{0, (UINT32)wtext.size()};
 
