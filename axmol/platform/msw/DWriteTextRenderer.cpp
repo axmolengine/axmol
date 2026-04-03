@@ -369,10 +369,10 @@ bool DWriteTextRenderer::drawText(std::string_view text,
         return false;
 
     // Create text layout
-    IDWriteTextLayout* textLayout = nullptr;
-    const float maxWidth          = (extent.cx > 0) ? (float)extent.cx : 32767.f;
-    const float maxHeight         = (extent.cy > 0) ? (float)extent.cy : 32767.f;
-    const auto wrapMode = textDefinition._enableWrap ? DWRITE_WORD_WRAPPING_WRAP : DWRITE_WORD_WRAPPING_NO_WRAP;
+    ComPtr<IDWriteTextLayout> textLayout;
+    const float maxWidth  = (extent.cx > 0) ? (float)extent.cx : 32767.f;
+    const float maxHeight = (extent.cy > 0) ? (float)extent.cy : 32767.f;
+    const auto wrapMode   = textDefinition._enableWrap ? DWRITE_WORD_WRAPPING_WRAP : DWRITE_WORD_WRAPPING_NO_WRAP;
 
     // Parse text alignment
     DWRITE_TEXT_ALIGNMENT hAlign;
@@ -380,26 +380,13 @@ bool DWriteTextRenderer::drawText(std::string_view text,
     parseNativeTextAlign(align, hAlign, vAlign);
 
     DWRITE_TEXT_METRICS metrics;
-    HRESULT hr{S_OK};
-
-    auto&& recreateTextLayout = [&](float width, float height) -> HRESULT {
-        SafeRelease(textLayout);
-
-        hr = _dwriteFactory->CreateTextLayout(wtext.c_str(), (UINT32)wtext.size(), _textFormat, width, height,
-                                              &textLayout);
-        if (FAILED(hr))
-            return hr;
-        textLayout->SetTextAlignment(hAlign);
-        textLayout->SetParagraphAlignment(vAlign);
-        textLayout->SetWordWrapping(wrapMode);
-        hr = textLayout->GetMetrics(&metrics);
-        if (FAILED(hr))
-        {
-            SafeRelease(textLayout);
-            return hr;
-        }
-        return S_OK;
-    };
+    HRESULT hr = _dwriteFactory->CreateTextLayout(wtext.c_str(), (UINT32)wtext.size(), _textFormat, maxWidth, maxHeight,
+                                                  textLayout.GetAddressOf());
+    if (FAILED(hr))
+        return false;
+    textLayout->SetTextAlignment(hAlign);
+    textLayout->SetParagraphAlignment(vAlign);
+    textLayout->SetWordWrapping(wrapMode);
 
     // Handle overflow == 2 (shrink font to fit)
     if (textDefinition._overflow == (int)Label::Overflow::SHRINK && extent.cx > 0 && extent.cy > 0) [[unlikely]]
@@ -411,11 +398,12 @@ bool DWriteTextRenderer::drawText(std::string_view text,
         while (low <= high)
         {
             int mid = (low + high) / 2;
-            setFont(fontName, mid, _bold);
 
-            hr = recreateTextLayout(maxWidth, maxHeight);
-            if (FAILED(hr))
-                break;
+            hr = textLayout->SetFontSize(mid, DWRITE_TEXT_RANGE{0, (UINT32)wtext.size()});
+            AX_BREAK_IF(FAILED(hr));
+
+            hr = textLayout->GetMetrics(&metrics);
+            AX_BREAK_IF(FAILED(hr));
 
             if (metrics.width <= maxWidth && metrics.height <= maxHeight)
             {
@@ -427,13 +415,13 @@ bool DWriteTextRenderer::drawText(std::string_view text,
                 high = mid - 1;
             }
         }
-
-        setFont(fontName, bestFit, _bold);
-        hr = recreateTextLayout(maxWidth, maxHeight);
+        hr = textLayout->SetFontSize(bestFit, DWRITE_TEXT_RANGE{0, (UINT32)wtext.size()});
+        if (SUCCEEDED(hr))
+            hr = textLayout->GetMetrics(&metrics);
     }
     else
     {
-        hr = recreateTextLayout(maxWidth, maxHeight);
+        hr = textLayout->GetMetrics(&metrics);
     }
 
     if (FAILED(hr))
@@ -442,21 +430,23 @@ bool DWriteTextRenderer::drawText(std::string_view text,
     // Determine final render size
     int renderWidth  = (extent.cx > 0) ? extent.cx : (int)ceil(metrics.widthIncludingTrailingWhitespace);
     int renderHeight = (extent.cy > 0) ? extent.cy : (int)ceil(metrics.height);
+
     if (extent.cx <= 0 && extent.cy <= 0)
-        hr = recreateTextLayout(static_cast<float>(renderWidth), static_cast<float>(renderHeight));
+    {
+        hr = textLayout->SetMaxWidth(static_cast<float>(renderWidth));
+        if (SUCCEEDED(hr))
+            hr = textLayout->SetMaxHeight(static_cast<float>(renderHeight));
+    }
     else if (extent.cx <= 0)
-        hr = recreateTextLayout(static_cast<float>(renderWidth), maxHeight);
+        hr = textLayout->SetMaxWidth(static_cast<float>(renderWidth));
     else if (extent.cy <= 0)
-        hr = recreateTextLayout(maxWidth, static_cast<float>(renderHeight));
+        hr = textLayout->SetMaxHeight(static_cast<float>(renderHeight));
 
     if (FAILED(hr))
         return false;
 
     if (!createRenderTarget(renderWidth, renderHeight, textDefinition, hasPremultipliedAlpha))
-    {
-        textLayout->Release();
         return false;
-    }
 
     // Draw text
     _renderTarget->BeginDraw();
@@ -472,7 +462,7 @@ bool DWriteTextRenderer::drawText(std::string_view text,
     // If stroke requested, build geometry and draw outline (and fill)
     if (!strokeEnabled)  // Normal fill
     {
-        _renderTarget->DrawTextLayout(origin, textLayout, _textBrush);
+        _renderTarget->DrawTextLayout(origin, textLayout.Get(), _textBrush);
     }
     else  // Fill with stroke(outline) effect
     {
@@ -506,7 +496,6 @@ bool DWriteTextRenderer::drawText(std::string_view text,
     // Update output size
     extent.cx = renderWidth;
     extent.cy = renderHeight;
-    textLayout->Release();
 
     // Copy pixel data from WIC bitmap to output buffer (32-bit BGRA, premultiplied alpha)
     bool ok = SUCCEEDED(hr);
