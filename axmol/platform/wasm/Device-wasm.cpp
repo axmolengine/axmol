@@ -121,8 +121,8 @@ Data Device::getTextureDataForText(std::string_view text,
             var ascent = (typeof metrics.actualBoundingBoxAscent === "number") ? metrics.actualBoundingBoxAscent : fontSize * 0.8;
             var descent = (typeof metrics.actualBoundingBoxDescent === "number") ? metrics.actualBoundingBoxDescent : fontSize * 0.2;
             var lineHeight = ascent + descent;
-			// if the line text only contains white space chars, the lineHeight will be 0,
-			// so we re-calculate lineHeight by representative text, i.e. 'M' or 'Hg'
+            // if the line text only contains white space chars, the lineHeight will be 0,
+            // so we re-calculate lineHeight by representative text, i.e. 'M' or 'Hg'
             if (lineHeight == 0) {
                 measureDefault();
                 ascent = defaultAscent;
