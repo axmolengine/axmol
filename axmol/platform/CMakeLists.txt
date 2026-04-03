@@ -36,6 +36,7 @@ elseif(WINDOWS)
       platform/win32/Application-win32.h
       platform/win32/FileUtils-win32.h
       platform/win32/StdC-win32.h
+      platform/win32/DWriteTextRenderer.h
     )
     set(_AX_PLATFORM_SPECIFIC_SRC
       platform/win32/StdC-win32.cpp
@@ -43,6 +44,7 @@ elseif(WINDOWS)
       platform/win32/Common-win32.cpp
       platform/win32/Application-win32.cpp
       platform/win32/Device-win32.cpp
+      platform/win32/DWriteTextRenderer.cpp
     )
   else()
     file(GLOB _AX_PLATFORM_SPECIFIC_HEADER platform/winrt/*.h)

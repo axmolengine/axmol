@@ -84,6 +84,7 @@ public:
 
 NewLabelTests::NewLabelTests()
 {
+
     ADD_TEST_CASE(LabelOutlineAndGlowTest);
     ADD_TEST_CASE(LabelTTFDistanceField);
     ADD_TEST_CASE(LabelTitleButtonTTFDistanceField);
@@ -3220,7 +3221,7 @@ LabelSystemFontTest::LabelSystemFontTest()
     _label->setSystemFontName("Hiragino Sans GB");
     _label->setSystemFontSize(20);
     _label->enableOutline(Color32::RED, 1.0);
-    _label->setString("This is a very\n 我爱你中国\n long sentence");
+    _label->setString("& This is a very\n 我爱你中国\n long sentence");
     _labelType = 2;
 
     auto stepper = (ControlStepper*)this->getChildByName("stepper");
