@@ -218,7 +218,7 @@ private:
 
 DWriteTextRenderer::DWriteTextRenderer()
 {
-    std::ignore = CoInitialize(nullptr);
+    std::ignore = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
     initialize();
 }
 
