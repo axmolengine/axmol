@@ -584,6 +584,8 @@ public:
      */
     virtual bool isVisible() const;
 
+    bool isVisibleInHierarchy() const;
+
     /**
      * Sets the rotation (angle) of the node in degrees.
      *

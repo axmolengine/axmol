@@ -625,6 +625,9 @@ std::string FileUtils::fullPathForFilename(std::string_view filename) const
     {
         fullpath = this->getPathForFilename(filename, searchIt);
 
+        //printf("FileUtils::fullPathForFilename() searchIt:%s\n", searchIt.c_str());
+        //printf("FileUtils::fullPathForFilename() fullpath:%s\n", fullpath.c_str());
+
         if (!fullpath.empty())
         {
             // Using the filename passed in as key.
@@ -635,7 +638,7 @@ std::string FileUtils::fullPathForFilename(std::string_view filename) const
 
     if (isPopupNotify())
     {
-        AXLOGD("fullPathForFilename: No file found at {}. Possible missing file.", filename);
+        printf("fullPathForFilename: No file found at %s. Possible missing file.\n", filename.data());
     }
 
     // The file wasn't found, return empty string.
@@ -803,6 +806,8 @@ void FileUtils::addSearchPath(std::string_view searchpath, const bool front)
     }
 #endif  // AX_NO_DUP_SEARCH_PATH
 
+    //printf("FileUtils::addSearchPath path:%s\n", path.c_str());
+
     if (front)
     {
         _originalSearchPaths.insert(_originalSearchPaths.begin(), std::string{searchpath});
@@ -828,7 +833,13 @@ std::string FileUtils::getFullPathForFilenameWithinDirectory(std::string_view di
     // if the file doesn't exist, return an empty string
 
     if (isFileExistInternal(ret))
+    {
         return ret;
+    }
+    else
+    {
+        //printf("getFullPathForFilenameWithinDirectory() ret:%s\n", ret.c_str());
+    }
     return std::string{};
 }
 

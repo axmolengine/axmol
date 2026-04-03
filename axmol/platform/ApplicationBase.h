@@ -152,6 +152,8 @@ public:
      */
     virtual bool openURL(std::string_view url) = 0;
 
+    std::string getProgramDir();
+
     static void setContextAttrs(const ContextAttrs& attrs) { _contextAttrs = attrs; }
 
     static const ContextAttrs& getContextAttrs() { return _contextAttrs; }
@@ -171,6 +173,8 @@ protected:
     virtual void applicationScreenSizeChanged(int newWidth, int newHeight);
 
     static ContextAttrs _contextAttrs;
+
+    std::string _programDir;
 };
 
 using ApplicationProtocol = ApplicationBase;

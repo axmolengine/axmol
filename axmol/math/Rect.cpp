@@ -78,6 +78,30 @@ void Rect::merge(const Rect& rect)
     setRect(minX, minY, maxX - minX, maxY - minY);
 }
 
+bool Rect::intersectsSegment(const Vec2& a, const Vec2& b, Vec2 &hitPos)
+{
+    struct Segment
+    {
+        Vec2 a, b;
+    };
+    std::vector<Segment> rectSegments = {
+        {origin, origin + Vec2(size.width, 0.0f)},
+        {origin + Vec2(0.0f, size.height), origin + Vec2(size.width, 0.0f)},
+        {origin, origin + Vec2(0.0f, size.height)},
+        {origin + Vec2(size.width, 0.0f), origin + Vec2(0.0f, size.height)},
+    };
+    for(auto &rectSegment : rectSegments)
+    {
+        float S, T;
+        if(Vec2::isLineIntersect(a, b, rectSegment.a, rectSegment.b, &S, &T))
+        {
+            hitPos = a + (b - a) * S;
+            return true;
+        }
+    }
+    return false;
+}
+
 Rect Rect::unionWithRect(const Rect& rect) const
 {
     float thisLeftX   = origin.x;

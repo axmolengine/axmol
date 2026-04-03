@@ -1804,6 +1804,8 @@ void RichText::formatText(bool force)
                     }
                     label->setTextColor(Color32(elmtText->_color));
 
+                    label->setAdditionalKerning(1.0f);
+
                     label->setName(elmtText->_id);
 
                     elementRenderer = label;
@@ -2146,6 +2148,8 @@ void RichText::handleTextRenderer(std::string_view text,
                 textRenderer->setName(id);
                 isFirstLabel = false;
             }
+
+            textRenderer->setAdditionalKerning(1.0f);
 
             // textRendererWidth will get 0.0f, when we've got glError: 0x0501 in Label::getContentSize
             // It happens when currentText is very very long so that can't generate a texture

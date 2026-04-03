@@ -39,6 +39,24 @@ THE SOFTWARE.
 namespace ax
 {
 
+static std::map<int, Controller::Key> glfwPadButtonToControllerKeyMap =
+{
+    {GLFW_GAMEPAD_BUTTON_DPAD_DOWN, Controller::Key::BUTTON_DPAD_DOWN},
+    {GLFW_GAMEPAD_BUTTON_DPAD_UP, Controller::Key::BUTTON_DPAD_UP},
+    {GLFW_GAMEPAD_BUTTON_DPAD_LEFT, Controller::Key::BUTTON_DPAD_LEFT},
+    {GLFW_GAMEPAD_BUTTON_DPAD_RIGHT, Controller::Key::BUTTON_DPAD_RIGHT},
+    {GLFW_GAMEPAD_BUTTON_A, Controller::Key::BUTTON_A},
+    {GLFW_GAMEPAD_BUTTON_B, Controller::Key::BUTTON_B},
+    {GLFW_GAMEPAD_BUTTON_X, Controller::Key::BUTTON_X},
+    {GLFW_GAMEPAD_BUTTON_Y, Controller::Key::BUTTON_Y},
+    {GLFW_GAMEPAD_BUTTON_LEFT_THUMB, Controller::Key::BUTTON_LEFT_THUMBSTICK},
+    {GLFW_GAMEPAD_BUTTON_LEFT_BUMPER, Controller::Key::BUTTON_LEFT_SHOULDER},
+    {GLFW_GAMEPAD_BUTTON_RIGHT_THUMB, Controller::Key::BUTTON_RIGHT_THUMBSTICK},
+    {GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER, Controller::Key::BUTTON_RIGHT_SHOULDER},
+    {GLFW_GAMEPAD_BUTTON_START, Controller::Key::BUTTON_START},
+    {GLFW_GAMEPAD_BUTTON_GUIDE, Controller::Key::BUTTON_SELECT},
+};
+
 class AX_DLL ControllerImpl
 {
 public:
@@ -4218,6 +4236,8 @@ public:
         controller->_deviceName = deviceName;
         Controller::s_allController.emplace_back(controller);
 
+
+
         // Check if we already have an available input controller profile. If so, attach it it to the controller.
         for (const auto& it : s_controllerProfiles)
         {
@@ -4264,6 +4284,18 @@ public:
 
                 break;
             }
+        }
+
+        AXLOGD("ControllerImpl: profile count: {}", s_controllerProfiles.size());
+
+        if (controller->_buttonInputMap.empty() || controller->_axisInputMap.empty())
+        {
+            AXLOGD("ControllerImpl: use default controler profile.");
+
+            auto profile = s_controllerProfiles["Xbox 360 Controller"];
+
+            controller->_buttonInputMap = profile.first;
+            controller->_axisInputMap   = profile.second;
         }
 
 // Show a warning if the controller input profile is non-existent:
@@ -4350,8 +4382,27 @@ public:
             {
                 auto controller = Controller::getControllerByDeviceId(deviceId);
 
+                GLFWgamepadstate state;
+
+                if (glfwGetGamepadState(deviceId, &state))
+                {
+                    for(auto it : glfwPadButtonToControllerKeyMap)
+                    {
+                        if (state.buttons[it.first])
+                        {
+                             ControllerImpl::onButtonEvent(deviceId, it.second, true, 0, false);
+                        }
+                        else
+                        {
+                            ControllerImpl::onButtonEvent(deviceId, it.second, false, 0, false);
+                        }
+                    }
+                }
+
+                 int count;
+                /*
                 // Poll game controller button presses
-                int count;
+               
                 const unsigned char* buttonArray = glfwGetJoystickButtons(deviceId, &count);
                 for (int i = 0; i < count; ++i)
                 {
@@ -4364,6 +4415,7 @@ public:
                     }
                     ControllerImpl::onButtonEvent(deviceId, keyCode, buttonArray[i] == GLFW_PRESS, 0, false);
                 }
+                */
 
                 // Poll game controller joystick axis
                 const float* axisArray = glfwGetJoystickAxes(deviceId, &count);
@@ -4397,6 +4449,8 @@ std::map<std::string, std::pair<std::unordered_map<int, int>, std::unordered_map
 
 void Controller::startDiscoveryController()
 {
+    ControllerImpl::getInstance();
+
     // Check for existing josyticks and register them as ax::Controller:
     for (int deviceId = GLFW_JOYSTICK_1; deviceId <= GLFW_JOYSTICK_LAST; ++deviceId)
     {

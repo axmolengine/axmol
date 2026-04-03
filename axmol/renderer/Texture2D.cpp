@@ -403,7 +403,7 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
 
     desc.pixelFormat = renderFormat;
 
-    chooseSamplerDesc(true, desc.mipLevels != 1, desc.samplerDesc);
+    chooseSamplerDesc(false, desc.mipLevels != 1, desc.samplerDesc);
     _rhiTexture = static_cast<rhi::Texture*>(axdrv->createTexture(desc));
 
     updateData(subDatas, renderFormat, compressed);

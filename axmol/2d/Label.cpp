@@ -1672,7 +1672,7 @@ void Label::createShadowSpriteForSystemFont(const FontDefinition& fontDef)
         _shadowNode->setPosition(_shadowOffset.width, _shadowOffset.height);
 
         _shadowNode->retain();
-        _shadowNode->updateDisplayedColor(_displayedColor);
+        //_shadowNode->updateDisplayedColor(_displayedColor);
     }
 }
 
@@ -2446,7 +2446,7 @@ void Label::updateDisplayedColor(const Color32& parentColor)
 
     if (_shadowNode)
     {
-        _shadowNode->updateDisplayedColor(_displayedColor);
+        //_shadowNode->updateDisplayedColor(_displayedColor);
     }
 
     if (_lineDrawNode)

@@ -367,9 +367,16 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
         }
         else
         {
+            ValueMap tileProperties;
+            tileProperties["id"] = attributeDict["id"].asInt();
+            if(attributeDict.contains("type"))
+            {
+                tileProperties["type"] = attributeDict["type"];
+            }
+
             TMXTilesetInfo* info = tmxMapInfo->getTilesets().back();
             tmxMapInfo->setParentGID(info->_firstGid + attributeDict["id"].asInt());
-            tmxMapInfo->getTileProperties()[tmxMapInfo->getParentGID()] = Value(ValueMap());
+            tmxMapInfo->getTileProperties()[tmxMapInfo->getParentGID()] = tileProperties;
             tmxMapInfo->setParentElement(TMXPropertyTile);
         }
     }

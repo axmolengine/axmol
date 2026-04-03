@@ -161,8 +161,12 @@ public:
      * @lua NA
      */
     Rect unionWithRect(const Rect& rect) const;
+
     /**Compute the min rect which can contain this and rect, assign it to this.*/
     void merge(const Rect& rect);
+
+    bool intersectsSegment(const Vec2& a, const Vec2& b, Vec2 &hitPos);
+
     /**An empty Rect.*/
     static const Rect ZERO;
 };
