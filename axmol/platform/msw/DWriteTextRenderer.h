@@ -34,14 +34,16 @@ THE SOFTWARE.
 namespace ax
 {
 
+/**
+ * Internal helper class for rendering text using DirectWrite and Direct2D.
+ */
 class DWriteTextRenderer
 {
 public:
+    static DWriteTextRenderer& sharedTextRenderer();
+
     DWriteTextRenderer();
     ~DWriteTextRenderer();
-
-    // Set font name, size, and bold style
-    bool setFont(std::string_view fontName, int nSize = 0, bool enableBold = false);
 
     /**
      * @brief Render UTF-8 text into a WIC bitmap and return its pixel data.
@@ -78,6 +80,7 @@ public:
 
 private:
     bool initialize();
+    bool setFont(std::wstring_view fontName, int nSize = 0, bool enableBold = false);
     bool createRenderTarget(int width, int height, const FontDefinition& textDefinition, bool& premultipliedAlpha);
     void releaseRenderTarget();
 

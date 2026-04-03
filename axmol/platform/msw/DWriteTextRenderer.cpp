@@ -21,11 +21,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "axmol/platform/win32/DWriteTextRenderer.h"
-#include "axmol/platform/win32/ComPtr.h"
+#include "axmol/platform/msw/DWriteTextRenderer.h"
+#include "axmol/platform/msw/ComPtr.h"
 #include "axmol/2d/Label.h"
 #include "ntcvt/ntcvt.hpp"
-#include <windowsx.h>
 #include <algorithm>
 #include <cstring>
 
@@ -216,6 +215,12 @@ private:
     ID2D1GeometryGroup* _geometryGroup{nullptr};
 };
 
+DWriteTextRenderer& DWriteTextRenderer::sharedTextRenderer()
+{
+    static DWriteTextRenderer instance;
+    return instance;
+}
+
 DWriteTextRenderer::DWriteTextRenderer()
 {
     std::ignore = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
@@ -249,29 +254,24 @@ bool DWriteTextRenderer::initialize()
     return true;
 }
 
-bool DWriteTextRenderer::setFont(std::string_view fontName, int nSize, bool enableBold)
+bool DWriteTextRenderer::setFont(std::wstring_view fontName, int nSize, bool enableBold)
 {
     if (!_initialized)
         return false;
-    std::wstring wFontName = ntcvt::from_chars(fontName);
-    if (wFontName.empty())
-        wFontName = L"Segoe UI";  // fallback system font
+    if (fontName.empty())
+        fontName = L"Segoe UI"sv;  // fallback system font
     float newSize = (nSize > 0) ? (float)nSize : 16.0f;
 
     // Skip if no change
-    if (_textFormat && _fontName == wFontName && _fontSize == newSize && _bold == enableBold)
+    if (_textFormat && _fontName == fontName && _fontSize == newSize && _bold == enableBold)
         return true;
 
     // Release old text format
-    if (_textFormat)
-    {
-        _textFormat->Release();
-        _textFormat = nullptr;
-    }
+    SafeRelease(_textFormat);
 
     // Create new IDWriteTextFormat
     HRESULT hr = _dwriteFactory->CreateTextFormat(
-        wFontName.c_str(), nullptr, enableBold ? DWRITE_FONT_WEIGHT_BOLD : DWRITE_FONT_WEIGHT_NORMAL,
+        fontName.data(), nullptr, enableBold ? DWRITE_FONT_WEIGHT_BOLD : DWRITE_FONT_WEIGHT_NORMAL,
         DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, newSize, L"", &_textFormat);
     if (FAILED(hr))
     {
@@ -283,7 +283,7 @@ bool DWriteTextRenderer::setFont(std::string_view fontName, int nSize, bool enab
             return false;
     }
 
-    _fontName = wFontName;
+    _fontName = fontName;
     _fontSize = newSize;
     _bold     = enableBold;
     return true;
@@ -304,23 +304,24 @@ bool DWriteTextRenderer::createRenderTarget(int width,
 
     releaseRenderTarget();
 
-    // Create WIC bitmap
-    HRESULT hr = _wicFactory->CreateBitmap(width, height,
-                                           GUID_WICPixelFormat32bppPBGRA,  // premultiplied BGRA required by D2D
-                                           WICBitmapCacheOnDemand, &_wicBitmap);
+    // Create a pixel format and initial its format
+    // and alphaMode fields.
+    // https://docs.microsoft.com/en-gb/windows/win32/direct2d/supported-pixel-formats-and-alpha-modes#supported-formats-for-id2d1devicecontext
+    D2D1_PIXEL_FORMAT pixelFormat = D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED);
+
+    D2D1_RENDER_TARGET_PROPERTIES props = D2D1::RenderTargetProperties();
+    props.pixelFormat                   = pixelFormat;
+
+    HRESULT hr =
+        _wicFactory->CreateBitmap(width, height, GUID_WICPixelFormat32bppPBGRA, WICBitmapCacheOnLoad, &_wicBitmap);
     if (FAILED(hr))
         return false;
 
     // Create D2D render target from WIC bitmap
-    hr = _d2dFactory->CreateWicBitmapRenderTarget(
-        _wicBitmap,
-        D2D1::RenderTargetProperties(D2D1_RENDER_TARGET_TYPE_DEFAULT,
-                                     D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)),
-        &_renderTarget);
+    hr = _d2dFactory->CreateWicBitmapRenderTarget(_wicBitmap, props, &_renderTarget);
     if (FAILED(hr))
     {
-        _wicBitmap->Release();
-        _wicBitmap = nullptr;
+        SafeRelease(_wicBitmap);
         return false;
     }
 
@@ -358,7 +359,9 @@ bool DWriteTextRenderer::drawText(std::string_view text,
 {
     if (!_initialized || text.empty())
         return false;
-    if (!setFont(textDefinition._fontName, textDefinition._fontSize, false))
+
+    auto fontName = ntcvt::from_chars(textDefinition._fontName, CP_UTF8);
+    if (!setFont(fontName, textDefinition._fontSize, false))
         return false;
 
     // Convert text to UTF-16
@@ -368,8 +371,8 @@ bool DWriteTextRenderer::drawText(std::string_view text,
 
     // Create text layout
     IDWriteTextLayout* textLayout = nullptr;
-    const float maxWidth          = (extent.cx > 0) ? (float)extent.cx : FLT_MAX;
-    const float maxHeight         = (extent.cy > 0) ? (float)extent.cy : FLT_MAX;
+    const float maxWidth          = (extent.cx > 0) ? (float)extent.cx : 32767.f;
+    const float maxHeight         = (extent.cy > 0) ? (float)extent.cy : 32767.f;
     const auto wrapMode = textDefinition._enableWrap ? DWRITE_WORD_WRAPPING_WRAP : DWRITE_WORD_WRAPPING_NO_WRAP;
 
     // Parse text alignment
@@ -409,7 +412,7 @@ bool DWriteTextRenderer::drawText(std::string_view text,
         while (low <= high)
         {
             int mid = (low + high) / 2;
-            setFont(textDefinition._fontName, mid, _bold);
+            setFont(fontName, mid, _bold);
 
             hr = recreateTextLayout(maxWidth, maxHeight);
             if (FAILED(hr))
@@ -426,7 +429,7 @@ bool DWriteTextRenderer::drawText(std::string_view text,
             }
         }
 
-        setFont(textDefinition._fontName, bestFit, _bold);
+        setFont(fontName, bestFit, _bold);
         hr = recreateTextLayout(maxWidth, maxHeight);
     }
     else
@@ -438,15 +441,14 @@ bool DWriteTextRenderer::drawText(std::string_view text,
         return false;
 
     // Determine final render size
-    int renderWidth  = (extent.cx > 0) ? extent.cx : (int)ceil(metrics.width);
+    int renderWidth  = (extent.cx > 0) ? extent.cx : (int)ceil(metrics.widthIncludingTrailingWhitespace);
     int renderHeight = (extent.cy > 0) ? extent.cy : (int)ceil(metrics.height);
-
     if (extent.cx <= 0 && extent.cy <= 0)
-        hr = recreateTextLayout(renderWidth, renderHeight);
+        hr = recreateTextLayout(static_cast<float>(renderWidth), static_cast<float>(renderHeight));
     else if (extent.cx <= 0)
-        hr = recreateTextLayout(renderWidth, maxHeight);
+        hr = recreateTextLayout(static_cast<float>(renderWidth), maxHeight);
     else if (extent.cy <= 0)
-        hr = recreateTextLayout(maxWidth, renderHeight);
+        hr = recreateTextLayout(maxWidth, static_cast<float>(renderHeight));
 
     if (FAILED(hr))
         return false;
@@ -466,15 +468,16 @@ bool DWriteTextRenderer::drawText(std::string_view text,
 
     // If stroke enabled, create stroke brush
     ID2D1SolidColorBrush* strokeBrush{nullptr};
-    bool needStroke = textDefinition._stroke._strokeEnabled && textDefinition._stroke._strokeSize > 0.0f;
-    if (needStroke)
+    const bool strokeEnabled = textDefinition._stroke._strokeEnabled && textDefinition._stroke._strokeSize > 0.0f;
+    // If stroke requested, build geometry and draw outline (and fill)
+    if (!strokeEnabled)  // Normal fill
+    {
+        _renderTarget->DrawTextLayout(origin, textLayout, _textBrush);
+    }
+    else  // Fill with stroke(outline) effect
     {
         _renderTarget->CreateSolidColorBrush(toD2DColor(textDefinition._stroke._strokeColor), &strokeBrush);
-    }
 
-    // If stroke requested, build geometry and draw outline (and fill)
-    if (needStroke)
-    {
         GlyphRunToGeometryTextRenderer* geomRenderer = new GlyphRunToGeometryTextRenderer(_d2dFactory);
         textLayout->Draw(nullptr, geomRenderer, 0.0f, 0.0f);
         ID2D1Geometry* geom = geomRenderer->fetchGeometryGroup();
@@ -493,17 +496,12 @@ bool DWriteTextRenderer::drawText(std::string_view text,
         }
 
         geomRenderer->Release();
-    }
-    else
-    {
-        // Normal fill
-        _renderTarget->DrawTextLayout(origin, textLayout, _textBrush);
+
+        // Release temporaries
+        SafeRelease(strokeBrush);
     }
 
     hr = _renderTarget->EndDraw();
-
-    // Release temporaries
-    SafeRelease(strokeBrush);
 
     // Update output size
     extent.cx = renderWidth;
@@ -514,22 +512,16 @@ bool DWriteTextRenderer::drawText(std::string_view text,
     bool ok = SUCCEEDED(hr);
     if (ok)
     {
-        WICRect rcLock       = {0, 0, _bitmapWidth, _bitmapHeight};
-        IWICBitmapLock* lock = nullptr;
-        HRESULT hr           = _wicBitmap->Lock(&rcLock, WICBitmapLockRead, &lock);
+        WICRect rcCopy = {0, 0, _bitmapWidth, _bitmapHeight};
+        outData.resize(_bitmapWidth * _bitmapHeight * 4);
+
+        constexpr int bpp = 32;
+        UINT rowPitch     = (_bitmapWidth * bpp + 7) / 8;
+        HRESULT hr        = _wicBitmap->CopyPixels(&rcCopy, rowPitch, (UINT)outData.size(), outData.data());
         if (FAILED(hr))
-            return false;
-
-        UINT bufferSize = 0;
-        BYTE* pixels    = nullptr;
-        hr              = lock->GetDataPointer(&bufferSize, &pixels);
-        if (SUCCEEDED(hr) && pixels && bufferSize >= (UINT)(_bitmapWidth * _bitmapHeight * 4))
         {
-            outData.resize(bufferSize);
-            memcpy(outData.data(), pixels, bufferSize);
+            AXLOGW("Failed to copy pixels from WIC bitmap: hr=0x%08X", hr);
         }
-
-        lock->Release();
     }
 
     return ok;

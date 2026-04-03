@@ -2,7 +2,7 @@
 #include "axmol/rhi/RHITypes.h"
 #include <dxgi.h>
 #include <d3dcommon.h>
-#include "axmol/platform/win32/ComPtr.h"
+#include "axmol/platform/msw/ComPtr.h"
 
 namespace ax::rhi::dxutils
 {

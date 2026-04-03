@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "axmol/platform/Device.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/platform/StdC.h"
-#include "axmol/platform/win32/DWriteTextRenderer.h"
+#include "axmol/platform/msw/DWriteTextRenderer.h"
 #include "ntcvt/ntcvt.hpp"
 
 namespace ax
@@ -43,11 +43,11 @@ Data Device::getTextureDataForText(std::string_view text,
     Data ret;
     do
     {
-        static DWriteTextRenderer renderer;
+        auto& textRenderer = DWriteTextRenderer::sharedTextRenderer();
 
         SIZE size = {(LONG)textDefinition._dimensions.width, (LONG)textDefinition._dimensions.height};
-        if (!renderer.drawText(text, textDefinition, static_cast<unsigned int>(align), hasPremultipliedAlpha, size,
-                               ret))
+        if (!textRenderer.drawText(text, textDefinition, static_cast<unsigned int>(align), hasPremultipliedAlpha, size,
+                                   ret))
             break;
 
         width  = size.cx;
