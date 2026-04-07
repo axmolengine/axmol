@@ -77,7 +77,7 @@
 
 - (void)setTextInput:(NSView<AXUITextInput>*)textInput
 {
-    if (_textInput == textInput)
+    if (textInput && _textInput == textInput)
     {
         return;
     }
