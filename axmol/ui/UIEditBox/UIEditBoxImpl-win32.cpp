@@ -290,8 +290,8 @@ void EditBoxImplWin::setNativeVisible(bool visible)
 
 void EditBoxImplWin::updateNativeFrame(const Rect& rect)
 {
-    ::SetWindowPos(_hwndEdit, HWND_NOTOPMOST, rect.origin.x, rect.origin.y, rect.size.width, rect.size.height,
-                   SWP_NOZORDER);
+    ::SetWindowPos(_hwndEdit, HWND_NOTOPMOST, static_cast<int>(rect.origin.x), static_cast<int>(rect.origin.y),
+                   static_cast<int>(rect.size.width), static_cast<int>(rect.size.height), SWP_NOZORDER);
 }
 
 std::string_view EditBoxImplWin::getNativeDefaultFontName()

@@ -191,7 +191,24 @@ Rect Helper::convertBoundingBoxToScreen(Node* node)
 {
     auto director   = Director::getInstance();
     auto renderView = director->getRenderView();
-    auto winSize    = renderView->getWindowSize();
+
+    float scaleX = renderView->getScaleX();
+    float scaleY = renderView->getScaleY();
+
+    const auto windowPlatform  = renderView->getWindowPlatform();
+    const auto renderScaleMode = Application::getContextAttrs().renderScaleMode;
+#if defined(AX_PLATFORM_PC)
+    Size winSize = renderView->getNativeWindowSize();
+    if (renderScaleMode == RenderScaleMode::Physical &&
+        (windowPlatform == WindowPlatform::Web || windowPlatform == WindowPlatform::X11))
+    {
+        auto renderScale = renderView->getRenderScale();
+        scaleX /= renderScale;
+        scaleY /= renderScale;
+    }
+#else
+    Size winSize = renderView->getWindowSize();
+#endif
 
     auto canvasSize = director->getCanvasSize();
     auto leftBottom = node->convertToWorldSpace(Point::ZERO);
@@ -199,10 +216,10 @@ Rect Helper::convertBoundingBoxToScreen(Node* node)
     auto contentSize = node->getContentSize();
     auto rightTop    = node->convertToWorldSpace(Point(contentSize.width, contentSize.height));
 
-    auto uiLeft   = winSize.width / 2 + (leftBottom.x - canvasSize.width / 2) * renderView->getScaleX();
-    auto uiTop    = winSize.height / 2 - (rightTop.y - canvasSize.height / 2) * renderView->getScaleY();
-    auto uiWidth  = (rightTop.x - leftBottom.x) * renderView->getScaleX();
-    auto uiHeight = (rightTop.y - leftBottom.y) * renderView->getScaleY();
+    auto uiLeft   = winSize.width / 2 + (leftBottom.x - canvasSize.width / 2) * scaleX;
+    auto uiTop    = winSize.height / 2 - (rightTop.y - canvasSize.height / 2) * scaleY;
+    auto uiWidth  = (rightTop.x - leftBottom.x) * scaleX;
+    auto uiHeight = (rightTop.y - leftBottom.y) * scaleY;
 
     return Rect(uiLeft, uiTop, uiWidth, uiHeight);
 }
