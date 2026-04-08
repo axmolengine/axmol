@@ -515,6 +515,13 @@ void UIEditBoxImplWinrt::nativeOpenKeyboard()
     _system_control->setPosition(rect.origin.x, rect.origin.y);
     _system_control->setSize(rect.size.width, rect.size.height);
 
+    auto renderView  = ax::Director::getInstance()->getRenderView();
+    auto fontScale   = renderView->getScaleY();
+    auto renderScale = renderView->getRenderScale();
+    if (renderScale > 0)
+        fontScale /= renderScale;
+    _system_control->setFontSize(_fontSize * fontScale);
+
     // .. and open
     _system_control->openKeyboard();
 }

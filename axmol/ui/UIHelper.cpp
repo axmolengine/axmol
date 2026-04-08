@@ -203,8 +203,11 @@ Rect Helper::convertBoundingBoxToScreen(Node* node)
         (windowPlatform != WindowPlatform::Win32 && windowPlatform != WindowPlatform::X11))
     {
         auto renderScale = renderView->getRenderScale();
-        scaleX /= renderScale;
-        scaleY /= renderScale;
+        if (renderScale > 0.f)
+        {
+            scaleX /= renderScale;
+            scaleY /= renderScale;
+        }
     }
 #else
     Size winSize = renderView->getWindowSize();
