@@ -566,7 +566,8 @@ void RenderViewImpl::handleWindowResized()
 void RenderViewImpl::updateRenderScale()
 {
     if (!rhi::DriverContext::isOpenGL())
-        _renderScale = m_dpi / 96.0f;
+        _renderScale =
+            Application::getContextAttrs().renderScaleMode == RenderScaleMode::Physical ? m_dpi / 96.0f : 1.0f;
     else
         _renderScale = 1.0f;
 }
