@@ -29,7 +29,7 @@
 #include "Box2DTest/Box2dTest.h"
 #include "feature-detect.h"
 
-#if AX_ENABLE_EXT_IMGUI && defined(AX_PLATFORM_PC)
+#if AX_ENABLE_EXT_IMGUI && defined(AX_PLATFORM_GLFW)
 #    include "Box2DTestBed/Box2DTestBed.h"
 #endif
 

@@ -197,7 +197,7 @@ Rect Helper::convertBoundingBoxToScreen(Node* node)
 
     const auto windowPlatform  = renderView->getWindowPlatform();
     const auto renderScaleMode = Application::getContextAttrs().renderScaleMode;
-#if defined(AX_PLATFORM_PC) || AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
+#if defined(AX_PLATFORM_PC)
     Size winSize = renderView->getNativeWindowSize();
     if (renderScaleMode == RenderScaleMode::Physical &&
         (windowPlatform != WindowPlatform::Win32 && windowPlatform != WindowPlatform::X11))

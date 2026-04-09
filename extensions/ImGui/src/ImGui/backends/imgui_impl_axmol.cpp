@@ -2,7 +2,7 @@
 
 #include "axmol/base/Director.h"
 #include "axmol/base/Data.h"
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_GLFW)
 #    include "axmol/platform/RenderViewImpl.h"
 #endif
 #include "axmol/rhi/Program.h"
@@ -470,7 +470,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderPlatform()
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
 
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_GLFW)
         // restore context
         if (rhi::DriverContext::isOpenGL())
         {
@@ -638,7 +638,7 @@ static void ImGui_ImplAxmol_ShutdownMultiViewportSupport()
     ImGui::DestroyPlatformWindows();
 }
 
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_GLFW)
 IMGUI_IMPL_API void ImGui_ImplAxmol_SetViewResolution(float width, float height)
 {
     // Resize (expand) window

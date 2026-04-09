@@ -55,7 +55,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     if (!renderView)
     {
         std::string title = "Unit Tests";
-#ifdef AX_PLATFORM_PC
+#ifdef AX_PLATFORM_GLFW
         renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y), 1.0F, true);
 #else
         renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y));
@@ -66,7 +66,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     director->setStatsDisplay(true);
 
 #ifdef AX_PLATFORM_PC
-    director->setAnimationInterval(1.0f / glfwGetVideoMode(glfwGetPrimaryMonitor())->refreshRate);
+    director->setAnimationInterval(1.0f / Device::getDisplayRefreshRate());
 #else
     director->setAnimationInterval(1.0f / 60);
 #endif

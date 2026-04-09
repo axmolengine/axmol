@@ -38,7 +38,7 @@ THE SOFTWARE.
 #include "axmol/scene/Scene.h"
 #include "axmol/math/Math.h"
 #include "axmol/platform/RenderView.h"
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_GLFW)
 #    include "concurrentqueue/concurrentqueue.h"
 #endif
 #ifdef AX_ENABLE_CONSOLE
@@ -546,7 +546,7 @@ protected:
      */
     void setCanvasSize(const Vec2& canvasSize);
 
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_GLFW)
     void processOperations();
 #endif
 
@@ -692,7 +692,7 @@ protected:
     /* axmol thread id */
     std::thread::id _axmol_thread_id;
 
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_GLFW)
     /* axmol priority operations in render thread for PC platforms */
     moodycamel::ConcurrentQueue<std::function<void()>> _operations;
 #endif

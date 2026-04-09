@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 #include "ImGuiPresenter.h"
 #include <assert.h>
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_GLFW)
 #    include "backends/imgui_impl_glfw.h"
 #else
 #    include "backends/imgui_impl_axmol_sw.h"
@@ -163,7 +163,7 @@ class ImGuiSceneEventTracker : public ImGuiEventTracker
 public:
     bool initWithScene(Scene* scene)
     {
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_GLFW)
         _trackLayer = utils::newInstance<Node>(&Node::initLayer);
 
         // note: when at the first click to focus the window, this will not take effect
@@ -204,7 +204,7 @@ public:
 
     ~ImGuiSceneEventTracker() override
     {
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_GLFW)
         if (_trackLayer)
         {
             if (_trackLayer->getParent())
@@ -225,7 +225,7 @@ class ImGuiGlobalEventTracker : public ImGuiEventTracker
 public:
     bool init()
     {
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_GLFW)
         // note: when at the first click to focus the window, this will not take effect
 
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
@@ -250,7 +250,7 @@ public:
 
     ~ImGuiGlobalEventTracker() override
     {
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_GLFW)
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
         eventDispatcher->removeEventListener(_mouseListener);
         eventDispatcher->removeEventListener(_touchListener);
@@ -297,7 +297,7 @@ void ImGuiPresenter::init()
     // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  // Enable Docking
 
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_GLFW)
     if (rhi::DriverContext::isOpenGL())
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport / Platform Windows
 #endif
@@ -323,7 +323,7 @@ void ImGuiPresenter::init()
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_GLFW)
     auto window = static_cast<RenderViewImpl*>(Director::getInstance()->getRenderView())->getWindow();
     ImGui_ImplGlfw_InitForAxmol(window, true);
 #else
@@ -358,7 +358,7 @@ void ImGuiPresenter::cleanup()
 
     ImGui_ImplAxmol_SetUpdateFontsFunc(nullptr, nullptr);
     ImGui_ImplAxmol_Shutdown();
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_GLFW)
     ImGui_ImplGlfw_Shutdown();
 #else
     ImGui_ImplAxmolSW_Shutdown();
@@ -479,7 +479,7 @@ void ImGuiPresenter::beginFrame()
     {
         // create frame
         ImGui_ImplAxmol_NewFrame();
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_GLFW)
         ImGui_ImplGlfw_NewFrame();
 #else
         ImGui_ImplAxmolSW_NewFrame();

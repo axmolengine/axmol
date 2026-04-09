@@ -64,7 +64,7 @@ public:
 
         // Box2DTestBed is only works on PC platforms, because it requires glfw which is not available on mobile
         // platforms
-#if AX_ENABLE_EXT_IMGUI && defined(AX_PLATFORM_PC)
+#if AX_ENABLE_EXT_IMGUI && defined(AX_PLATFORM_GLFW)
         addTest("Box2D - TestBed", []() { return new Box2DTestBedTests(); });
 #endif
         addTest("Bugs", []() { return new BugsTests(); });
