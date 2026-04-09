@@ -30,7 +30,7 @@
 namespace ax
 {
 
-const std::string EventListenerKeyboard::LISTENER_ID = "__ax_keyboard";
+const std::string_view EventListenerKeyboard::LISTENER_ID = "__ax_keyboard"sv;
 
 bool EventListenerKeyboard::checkAvailable()
 {

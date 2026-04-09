@@ -32,7 +32,7 @@
 namespace ax
 {
 
-const std::string EventListenerController::LISTENER_ID = "__ax_controller";
+const std::string_view EventListenerController::LISTENER_ID = "__ax_controller"sv;
 
 EventListenerController* EventListenerController::create()
 {

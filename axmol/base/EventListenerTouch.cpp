@@ -34,7 +34,7 @@
 namespace ax
 {
 
-const std::string EventListenerTouchOneByOne::LISTENER_ID = "__ax_touch_one_by_one";
+const std::string_view EventListenerTouchOneByOne::LISTENER_ID = "__ax_touch_one_by_one"sv;
 
 EventListenerTouchOneByOne::EventListenerTouchOneByOne()
     : onTouchBegan(nullptr)
@@ -120,7 +120,7 @@ EventListenerTouchOneByOne* EventListenerTouchOneByOne::clone()
 
 /////////
 
-const std::string EventListenerTouchAllAtOnce::LISTENER_ID = "__ax_touch_all_at_once";
+const std::string_view EventListenerTouchAllAtOnce::LISTENER_ID = "__ax_touch_all_at_once"sv;
 
 EventListenerTouchAllAtOnce::EventListenerTouchAllAtOnce()
     : onTouchesBegan(nullptr), onTouchesMoved(nullptr), onTouchesEnded(nullptr), onTouchesCancelled(nullptr)

@@ -55,6 +55,8 @@ class AX_DLL RenderViewImpl : public RenderView
     friend class ::AxmolRenderer;
 
 public:
+    static const std::string_view EVENT_WINDOW_RESIZED;
+
     static RenderViewImpl* create(std::string_view viewName);
     static RenderViewImpl* createWithRect(std::string_view viewName,
                                           const Rect& rect,
@@ -152,14 +154,15 @@ protected:
     RenderViewImpl();
     ~RenderViewImpl() override;
 
+    AX_DISALLOW_COPY_AND_ASSIGN(RenderViewImpl);
+
     bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor);
     bool initWithFullScreen(std::string_view viewName);
 
+    static RenderViewImpl* s_renderView;
+
     bool _supportTouch;
     bool _isCursorVisible;
-
-private:
-    AX_DISALLOW_COPY_AND_ASSIGN(RenderViewImpl);
 
     void OnRendering();
 

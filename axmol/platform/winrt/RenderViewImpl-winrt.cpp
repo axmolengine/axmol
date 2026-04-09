@@ -48,7 +48,9 @@ THE SOFTWARE.
 namespace ax
 {
 
-static RenderViewImpl* s_renderView = nullptr;
+RenderViewImpl* RenderViewImpl::s_renderView = nullptr;
+
+const std::string_view RenderViewImpl::EVENT_WINDOW_RESIZED    = "_ax_window_resized"sv;
 
 static EventMouse::MouseButton checkMouseButton(Windows::UI::Core::PointerEventArgs const& args)
 {
@@ -561,6 +563,9 @@ void RenderViewImpl::handleWindowResized()
 {
     updateRenderSurface(m_width, m_height, SurfaceUpdateFlag::WindowSizeChanged);
     updateRenderSurface(m_width * _renderScale, m_height * _renderScale, SurfaceUpdateFlag::RenderSizeChanged);
+
+    Size size(m_width, m_height);
+    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_RESIZED, &size);
 }
 
 void RenderViewImpl::updateRenderScale()

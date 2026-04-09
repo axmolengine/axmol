@@ -43,7 +43,7 @@ namespace ax
 class AX_DLL EventListenerAcceleration : public EventListener
 {
 public:
-    static const std::string LISTENER_ID;
+    static const std::string_view LISTENER_ID;
 
     /** Create a acceleration EventListener.
      *
