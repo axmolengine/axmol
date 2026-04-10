@@ -50,7 +50,7 @@ namespace ax
 
 RenderViewImpl* RenderViewImpl::s_renderView = nullptr;
 
-const std::string_view RenderViewImpl::EVENT_WINDOW_RESIZED    = "_ax_window_resized"sv;
+const std::string_view RenderViewImpl::EVENT_WINDOW_RESIZED = "_ax_window_resized"sv;
 
 static EventMouse::MouseButton checkMouseButton(Windows::UI::Core::PointerEventArgs const& args)
 {
