@@ -228,10 +228,7 @@ public:
 
         _touchListener = utils::newInstance<EventListenerTouchOneByOne>();
         _touchListener->setSwallowTouches(true);
-        _touchListener->onTouchBegan = [this](Touch* touch, Event*) -> bool {
-            auto& imIo = ImGui::GetIO();
-            return imIo.WantCaptureMouse;
-        };
+        _touchListener->onTouchBegan = [this](Touch* touch, Event*) -> bool { return ImGui::GetIO().WantCaptureMouse; };
         eventDispatcher->addEventListenerWithFixedPriority(_touchListener, highestPriority);
 
         // capture mouse events
