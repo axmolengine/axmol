@@ -636,7 +636,8 @@ public class AxmolEngine {
         final int[] safeInsets = new int[]{0, 0, 0, 0};
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             Window window = sActivity.getWindow();
-            DisplayCutout displayCutout = window.getDecorView().getRootWindowInsets().getDisplayCutout();
+            WindowInsets rootWindowInsets = window.getDecorView().getRootWindowInsets();
+            DisplayCutout displayCutout = rootWindowInsets != null ? rootWindowInsets.getDisplayCutout() : null;
             // Judge whether it is cutouts (aka notch) screen phone by judge cutout equle to null
             if (displayCutout != null) {
                 List<Rect> rects = displayCutout.getBoundingRects();
@@ -665,6 +666,7 @@ public class AxmolEngine {
             Window window = sActivity.getWindow();
             View view = window.getDecorView();
             WindowInsets insets = view.getRootWindowInsets();
+            if (insets == null) return radii;
             android.view.RoundedCorner topLeft = insets.getRoundedCorner(android.view.RoundedCorner.POSITION_TOP_LEFT);
             android.view.RoundedCorner topRight = insets.getRoundedCorner(android.view.RoundedCorner.POSITION_TOP_RIGHT);
             android.view.RoundedCorner bottomLeft = insets.getRoundedCorner(android.view.RoundedCorner.POSITION_BOTTOM_LEFT);
