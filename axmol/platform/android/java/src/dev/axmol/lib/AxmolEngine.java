@@ -143,6 +143,7 @@ public class AxmolEngine {
     public static void init(final AppCompatActivity activity) {
         sActivity = activity;
         AxmolEngine.sAxmolEngineListener = (AxmolEngineListener)activity;
+
         if (!sInited) {
 
             PackageManager pm = activity.getPackageManager();
@@ -634,8 +635,8 @@ public class AxmolEngine {
     public static int[] getSafeInsets() {
         final int[] safeInsets = new int[]{0, 0, 0, 0};
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            Window cocosWindow = sActivity.getWindow();
-            DisplayCutout displayCutout = cocosWindow.getDecorView().getRootWindowInsets().getDisplayCutout();
+            Window window = sActivity.getWindow();
+            DisplayCutout displayCutout = window.getDecorView().getRootWindowInsets().getDisplayCutout();
             // Judge whether it is cutouts (aka notch) screen phone by judge cutout equle to null
             if (displayCutout != null) {
                 List<Rect> rects = displayCutout.getBoundingRects();
@@ -661,8 +662,8 @@ public class AxmolEngine {
     public static int[] getDeviceCornerRadii() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             final int[] radii = new int[]{0, 0, 0, 0};
-            Window cocosWindow = sActivity.getWindow();
-            View view = cocosWindow.getDecorView();
+            Window window = sActivity.getWindow();
+            View view = window.getDecorView();
             WindowInsets insets = view.getRootWindowInsets();
             android.view.RoundedCorner topLeft = insets.getRoundedCorner(android.view.RoundedCorner.POSITION_TOP_LEFT);
             android.view.RoundedCorner topRight = insets.getRoundedCorner(android.view.RoundedCorner.POSITION_TOP_RIGHT);
