@@ -234,13 +234,13 @@ void ImGui_ImplAxmolSW_NewFrame()
     IM_ASSERT(bd != nullptr && "Did you call ImGui_ImplAxmolSW_InitForXXX()?");
 
     // Setup display size (every frame to accommodate for window resizing)
-    auto renderView       = bd->Window;
-    auto& renderSize       = renderView->getRenderSize();
-    auto& winSize          = renderView->getWindowSize();
+    auto renderView  = bd->Window;
+    auto winSize     = renderView->getWindowSize();
+    auto renderScale = renderView->getRenderScale();
 
-    io.DisplaySize = ImVec2((float)renderSize.width, (float)renderSize.height);
+    io.DisplaySize = ImVec2((float)winSize.width, (float)winSize.height);
     if (winSize.width > 0 && winSize.height > 0)
-        io.DisplayFramebufferScale = ImVec2((float)renderSize.width / winSize.width, (float)renderSize.height / winSize.height);
+        io.DisplayFramebufferScale = ImVec2(renderScale, renderScale);
 
     // Setup time step
     auto now            = std::chrono::high_resolution_clock::now();
