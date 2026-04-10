@@ -37,6 +37,3 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_SetUpdateFontsFunc(ImGuiImplAxmolUpdateFonts
 
 // Sets Device objects dirty
 IMGUI_IMPL_API void ImGui_ImplAxmol_MarkFontsDirty();
-
-// Sets the required view resolution for the UI
-IMGUI_IMPL_API void ImGui_ImplAxmol_SetViewResolution(float width, float height);

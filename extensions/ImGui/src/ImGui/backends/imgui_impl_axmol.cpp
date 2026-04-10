@@ -638,13 +638,4 @@ static void ImGui_ImplAxmol_ShutdownMultiViewportSupport()
     ImGui::DestroyPlatformWindows();
 }
 
-#if defined(AX_PLATFORM_GLFW)
-IMGUI_IMPL_API void ImGui_ImplAxmol_SetViewResolution(float width, float height)
-{
-    // Resize (expand) window
-    auto* view = (ax::RenderViewImpl*)ax::Director::getInstance()->getRenderView();
-    view->setWindowed(width, height);
-}
-#endif
-
 //-----------------------------------------------------------------------------
