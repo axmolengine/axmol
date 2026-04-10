@@ -205,9 +205,14 @@ public:
      */
     virtual void setCursorVisible(bool /*isVisible*/) {}
 
-    /** Get render scale.
+    /** Get axmol render scale.
      *
      * @return The render scale fbSize/windowSize aka backing scale factor
+     *
+     * Notes:
+     * - On mobile platforms, this value is always 1.0f (no DPI scaling).
+     * - On PC platforms, when renderScaleMode == Physical, this value usually
+     *   reflects the monitor's DPI scaling factor (e.g. Windows HiDPI).
      */
     virtual float getRenderScale() const { return 1.0f; }
 

@@ -240,11 +240,6 @@ bool RenderViewImpl::isGfxContextReady()
     return _hostViewHandle != nullptr;
 }
 
-float RenderViewImpl::getRenderScale() const
-{
-    return [(__bridge RenderHostView*)_hostViewHandle contentScaleFactor];
-}
-
 void RenderViewImpl::end()
 {
     [CCDirectorCaller destroy];
