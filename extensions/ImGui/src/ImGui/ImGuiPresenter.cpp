@@ -560,6 +560,7 @@ bool ImGuiPresenter::addRenderLoop(std::string_view id, std::function<void()> fu
     auto& imLoop = iter->second;
     imLoop.func  = std::move(func);
 #if defined(AX_PLATFORM_GLFW)
+    AX_SAFE_DELETE(imLoop.tracker);
     imLoop.tracker = tracker;
 #endif
 

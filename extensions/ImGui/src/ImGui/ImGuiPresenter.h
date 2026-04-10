@@ -181,7 +181,7 @@ private:
     struct ImGuiLoop
     {
 #if defined(AX_PLATFORM_GLFW)
-        ImGuiEventTracker* tracker;
+        ImGuiEventTracker* tracker{nullptr};
 #endif
         std::function<void()> func;
         bool removing = false;
