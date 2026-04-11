@@ -219,7 +219,7 @@ FontFreeType::~FontFreeType()
             FT_Done_Face(_fontFace);
     }
 
-    delete _fontStream;
+    AX_SAFE_DELETE(_fontStream);
 
     auto iter = s_cacheFontData.find(_fontName);
     if (iter != s_cacheFontData.end())
@@ -238,26 +238,35 @@ bool FontFreeType::initWithFontPath(std::string_view fontPath, int faceSize)
         auto fullPath = FileUtils::getInstance()->fullPathForFilename(fontPath);
         if (fullPath.empty())
             return false;
-
-        auto fs = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::READ);
-        if (!fs)
+        FT_Error error = 0;
+        if (FileUtils::isAbsolutePathInternal(fullPath))
         {
-            return false;
+            error = FT_New_Face(getFTLibrary(), fullPath.c_str(), 0, &face);
+        }
+        else
+        {
+            auto fs = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::READ);
+            if (!fs)
+            {
+                return false;
+            }
+
+            FT_Stream fts           = new FT_StreamRec();
+            fts->read               = ft_stream_read_callback;
+            fts->close              = ft_stream_close_callback;
+            fts->size               = static_cast<unsigned long>(fs->size());
+            fts->descriptor.pointer = fs.release();  // transfer ownership to FT_Open_Face
+
+            FT_Open_Args args = {};
+            args.flags        = FT_OPEN_STREAM;
+            args.stream       = fts;
+
+            _fontStream = fts;
+
+            error = FT_Open_Face(getFTLibrary(), &args, 0, &face);
         }
 
-        FT_Stream fts           = new FT_StreamRec();
-        fts->read               = ft_stream_read_callback;
-        fts->close              = ft_stream_close_callback;
-        fts->size               = static_cast<unsigned long>(fs->size());
-        fts->descriptor.pointer = fs.release();  // transfer ownership to FT_Open_Face
-
-        FT_Open_Args args = {};
-        args.flags        = FT_OPEN_STREAM;
-        args.stream       = fts;
-
-        _fontStream = fts;
-
-        if (FT_Open_Face(getFTLibrary(), &args, 0, &face))
+        if (error)
             return false;
     }
     else

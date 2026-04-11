@@ -73,7 +73,7 @@
 
 ## FreeType
 - [![Upstream](https://img.shields.io/gitlab/v/tag/freetype/freetype?label=Upstream)](https://gitlab.freedesktop.org/freetype/freetype)
-- Version: 2.14.3
+- Version: 2.14.3, with modifications in ftsystem.c to support UTF-8 Windows paths
 - License: BSD-style (The FreeType Project)
 
 ## Glad
@@ -85,7 +85,7 @@
 
 ## glfw
 - [![Upstream](https://img.shields.io/github/v/release/glfw/glfw?label=Upstream)](https://github.com/glfw/glfw)
-- Version: 3.4 with modified for create as win32 child window support
+- Version: 3.4, with modified for create as win32 child window support
 - License: zlib
 
 ## ghc (iOS < 13 ONLY)
@@ -121,7 +121,7 @@
   
 - sol2
   - [![Upstream](https://img.shields.io/github/v/tag/ThePhD/sol2?label=Upstream)](https://github.com/ThePhD/sol2)
-  - Version: 3.5.0 with modified for lua-5.5 support
+  - Version: 3.5.0, with modified for lua-5.5 support
   - License: MIT
 
 - luajit
@@ -146,7 +146,7 @@
 
 ## minimp3
 - Upstream: https://github.com/lieff/minimp3
-- Version: git afb604c(318) with modified for UWP apps support
+- Version: git afb604c(318), with modified for UWP apps support
 - License: CC0-1.0
 
 ## mio
@@ -219,12 +219,12 @@
 
 ## recast
 - Upstream: [![Upstream](https://img.shields.io/github/v/tag/recastnavigation/recastnavigation?label=Upstream)](https://github.com/recastnavigation/recastnavigation) 
-- Version: 1.6.0 with dtCrowd::getEditableAgentAnim
+- Version: 1.6.0, with dtCrowd::getEditableAgentAnim
 - License: zlib
 
 ## robin-map
 - [![Upstream](https://img.shields.io/github/v/tag/Tessil/robin-map?label=Upstream)](https://github.com/Tessil/robin-map)
-- Version: 1.4.1 with modified for stl compatibility
+- Version: 1.4.1, with modified for stl compatibility
     - Modify `robin_map::iterator->second` to mutable same with `stl map/unordered_map`
     - Forward `robin_map::operator[]` key by `std::forward` same with `stl map/unordered_map`
     - Improve code compiler compatibility, i.g. `std::max` ==> `(std::max)`
@@ -242,7 +242,7 @@
 
 ## unzip (minizip-1.2)
 - Upstream: https://github.com/simdsoft/mz12
-- Version: 1.2 with bugfixs & improvements
+- Version: 1.2, with bugfixs & improvements
 - License: zlib
 
 ## webp

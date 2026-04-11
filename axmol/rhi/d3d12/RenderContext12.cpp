@@ -33,7 +33,7 @@
 #include "axmol/base/Logging.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
-#    include "axmol/platform/winrt/ThreadUtils.h"
+#    include "axmol/platform/winrt/SwapChainPanelUtil.h"
 #endif
 
 namespace ax::rhi::d3d12
@@ -163,39 +163,13 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface) 
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WINUWP
     do
     {
-        ComPtr<IUnknown> surfaceHold(static_cast<IUnknown*>(surface));
-        ComPtr<winrt::ISwapChainPanel> swapChainPanel;
-        hr = surfaceHold.As(&swapChainPanel);
-        AX_BREAK_IF(FAILED(hr));
+        // Wrap the raw COM pointer into a C++/WinRT runtime class
+        winrt::SwapChainPanel swapChainPanel{static_cast<IUnknown*>(surface.ptr), winrt::take_ownership_from_abi};
+        auto dispatcher = swapChainPanel.Dispatcher();
+        winrt::Size panelSize;
+        winrt::Vector2 renderScale;
 
-        ComPtr<winrt::IDependencyObject> swapChainPanelDependencyObject;
-        hr = swapChainPanel.As(&swapChainPanelDependencyObject);
-        AX_BREAK_IF(FAILED(hr));
-
-        ComPtr<winrt::ICoreDispatcher> dispatcher;
-        hr = swapChainPanelDependencyObject->get_Dispatcher(dispatcher.GetAddressOf());
-        AX_BREAK_IF(FAILED(hr));
-
-        ComPtr<ISwapChainPanelNative> swapChainPanelNative;
-        hr = swapChainPanel.As(&swapChainPanelNative);
-        AX_BREAK_IF(FAILED(hr));
-
-        ABI::Windows::Foundation::Size panelSize;
-        ComPtr<winrt::IUIElement> uiElement;
-        hr = swapChainPanel.As(&uiElement);
-        AX_BREAK_IF(FAILED(hr));
-
-        Vec2 renderScale;
-        hr = winrt::runOnUIThread(dispatcher, [&panelSize, &renderScale, uiElement, swapChainPanel] {
-            HRESULT hr1 = uiElement->get_RenderSize(&panelSize);
-            if (FAILED(hr1))
-                return hr1;
-            hr1 = swapChainPanel->get_CompositionScaleX(&renderScale.x);
-            if (FAILED(hr1))
-                return hr1;
-            hr1 = swapChainPanel->get_CompositionScaleY(&renderScale.y);
-            return hr1;
-        });
+        hr = winrt::GetSwapChainPanelRenderMetrics(swapChainPanel, dispatcher, panelSize, renderScale);
         AX_BREAK_IF(FAILED(hr));
 
         DXGI_SWAP_CHAIN_DESC1 desc1 = {};
@@ -223,8 +197,10 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface) 
         AX_BREAK_IF(FAILED(hr));
         swapchain1.As(&swapchain);
 
-        hr = winrt::runOnUIThread(dispatcher, [swapChainPanelNative, swapchain1] {
-            return swapChainPanelNative->SetSwapChain(swapchain1.Get());
+        hr = winrt::RunOnUIThreadSync(dispatcher, [&swapChainPanel, swapchain1] {
+            auto hr0 = swapChainPanel.as<ISwapChainPanelNative>()->SetSwapChain(swapchain1.Get());
+            if (FAILED(hr0))
+                throw winrt::hresult_error(hr0);
         });
         AX_BREAK_IF(FAILED(hr));
 
