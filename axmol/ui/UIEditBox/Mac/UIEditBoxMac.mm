@@ -87,15 +87,12 @@
         [_textInput retain];  // retain new input view
 
         // migrate properties from old input if available
-        if (oldInput != nil)
-        {
-            _textInput.axui_textColor   = oldInput.axui_textColor ?: [NSColor whiteColor];
-            _textInput.axui_text        = oldInput.axui_text ?: @"";
-            _textInput.axui_placeholder = oldInput.axui_placeholder ?: @"";
-            _textInput.axui_font = oldInput.axui_font ?: [NSFont systemFontOfSize:self.frameRect.size.height * 3 / 2];
-            _textInput.axui_maxLength = getEditBoxImplMac()->getMaxLength();
-            _textInput.axui_alignment = oldInput.axui_alignment;
-        }
+        _textInput.axui_alignment   = oldInput.axui_alignment;
+        _textInput.axui_textColor   = oldInput.axui_textColor ?: [NSColor whiteColor];
+        _textInput.axui_text        = oldInput.axui_text ?: @"";
+        _textInput.axui_placeholder = oldInput.axui_placeholder ?: @"";
+        _textInput.axui_font        = oldInput.axui_font ?: [NSFont systemFontOfSize:self.frameRect.size.height * 1.5f];
+        _textInput.axui_maxLength   = getEditBoxImplMac()->getMaxLength();
 
         // basic UI setup
         [_textInput performSelector:@selector(setTextColor:) withObject:_textInput.axui_textColor];
