@@ -45,7 +45,7 @@ inline constexpr float MaxAngleRad = 3.14159265359f * 0.99f;
 
 // (kg)
 inline constexpr float MaxMass = 1e6f;
-inline constexpr float MinMass = 1e-3;
+inline constexpr float MinMass = 1e-3f;
 
 // (kg/m²)
 inline constexpr float MaxDensity = 1e5f;

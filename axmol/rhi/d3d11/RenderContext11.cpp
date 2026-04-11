@@ -180,7 +180,9 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
         }
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WINUWP
         // Wrap the raw COM pointer into a C++/WinRT runtime class
-        winrt::SwapChainPanel swapChainPanel{static_cast<IUnknown*>(surface.ptr), winrt::take_ownership_from_abi};
+        winrt::SwapChainPanel swapChainPanel{nullptr};
+        winrt::copy_from_abi(swapChainPanel, surface.ptr);
+
         auto dispatcher = swapChainPanel.Dispatcher();
         winrt::Size panelSize;
         winrt::Vector2 renderScale;

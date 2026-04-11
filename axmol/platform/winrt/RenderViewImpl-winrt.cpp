@@ -165,19 +165,19 @@ void RenderViewImpl::setDispatcher(winrt::agile_ref<Windows::UI::Core::CoreDispa
     m_dispatcher = dispatcher;
 }
 
-void RenderViewImpl::setPanel(winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> panel)
+void RenderViewImpl::setPanel(winrt::agile_ref<Windows::UI::Xaml::Controls::SwapChainPanel> panel)
 {
     m_panel = panel;
 }
 
 void* RenderViewImpl::getNativeWindow() const
 {
-    return winrt::get_unknown(m_panel.get());
+    return winrt::get_abi(m_panel.get());
 }
 
 SurfaceHandle RenderViewImpl::getNativeDisplay() const
 {
-    return winrt::get_unknown(m_panel.get());
+    return winrt::get_abi(m_panel.get());
 }
 
 void RenderViewImpl::setIMEKeyboardState(bool bOpen)

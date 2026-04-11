@@ -87,8 +87,8 @@ public:
     void setDispatcher(winrt::agile_ref<Windows::UI::Core::CoreDispatcher> dispatcher);
     winrt::agile_ref<Windows::UI::Core::CoreDispatcher> getDispatcher() const { return m_dispatcher; }
 
-    void setPanel(winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> panel);
-    winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> getPanel() { return m_panel; }
+    void setPanel(winrt::agile_ref<Windows::UI::Xaml::Controls::SwapChainPanel> panel);
+    winrt::agile_ref<Windows::UI::Xaml::Controls::SwapChainPanel> getPanel() { return m_panel; }
 
     void OnPointerPressed(Windows::UI::Core::PointerEventArgs const& args);
     void OnPointerMoved(Windows::UI::Core::PointerEventArgs const& args);
@@ -201,7 +201,7 @@ protected:
     std::function<void(AsyncOperation, void*)> mQueueOperationCb;
 
     winrt::agile_ref<Windows::UI::Core::CoreDispatcher> m_dispatcher;
-    winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> m_panel;
+    winrt::agile_ref<Windows::UI::Xaml::Controls::SwapChainPanel> m_panel;
 
     KeyBoardWinRT m_keyboard;
 

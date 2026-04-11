@@ -103,8 +103,8 @@ private:
     // The actual edit box, however, could be a TextBox, PasswordBox, or a SearchBox (not yet implemented)
     Windows::UI::Xaml::Controls::Control _textBox = nullptr;
 
-    winrt::agile_ref<Windows::UI::Core::CoreDispatcher> m_dispatcher = nullptr;
-    winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> m_panel     = nullptr;
+    winrt::agile_ref<Windows::UI::Core::CoreDispatcher> m_dispatcher      = nullptr;
+    winrt::agile_ref<Windows::UI::Xaml::Controls::SwapChainPanel> m_panel = nullptr;
     Concurrency::critical_section _critical_section;
 
     winrt::delegate<Windows::Foundation::IInspectable const&, winrt::hstring const&> _beginHandler  = nullptr;
