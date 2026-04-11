@@ -28,6 +28,7 @@
   /* memory mapping and allocation includes and definitions */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <malloc.h>
 
 
   /**************************************************************************
@@ -275,7 +276,7 @@
     if ( !len || !lpFileNameW )
     {
       FT_ERROR(( "FT_Stream_Open: cannot convert file name to LPWSTR\n" ));
-      return INVALID_HANDLE_VALUE;
+      return FT_THROW( Cannot_Open_Resource );
     }
     
     /* now it is safe to do the translation */
