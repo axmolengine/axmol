@@ -36,27 +36,6 @@ using ::winrt::Windows::UI::Core::CoreDispatcherPriority;
 using ::winrt::Windows::UI::Core::DispatchedHandler;
 
 template <typename _Fty>
-inline static auto RunOnUIThread(const CoreDispatcher& dispatcher, _Fty&& func)
-{
-    std::exception_ptr exception;
-
-    // Create DispatcherHandler that captures func
-    DispatchedHandler handler = [&]() {
-        try
-        {
-            func();
-        }
-        catch (...)
-        {
-            exception = std::current_exception();
-        }
-    };
-
-    // Schedule execution on UI thread
-    return dispatcher.RunAsync(CoreDispatcherPriority::Normal, handler);
-}
-
-template <typename _Fty>
 inline static HRESULT RunOnUIThreadSync(const CoreDispatcher& dispatcher, _Fty&& func)
 {
     // Check if already on UI thread
