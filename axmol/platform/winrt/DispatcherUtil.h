@@ -71,7 +71,8 @@ inline static HRESULT RunOnUIThreadSync(const CoreDispatcher& dispatcher, _Fty&&
     std::exception_ptr exception;
 
     // Create DispatcherHandler that captures func
-    DispatchedHandler handler = [&]() {
+    // Create DispatcherHandler that captures func by move and exception by reference
+    DispatchedHandler handler = [func = std::forward<_Fty>(func), &exception]() mutable {
         try
         {
             func();
