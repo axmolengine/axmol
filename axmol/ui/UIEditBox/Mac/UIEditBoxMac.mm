@@ -79,45 +79,45 @@
 {
     if (_textInput == textInput)
         return;
-    
+
     NSView<AXUITextInput>* oldInput = _textInput;
-    _textInput = textInput;
+    _textInput                      = textInput;
     if (_textInput != nil)
     {
-        [_textInput retain]; // retain new input view
-        
+        [_textInput retain];  // retain new input view
+
         // migrate properties from old input if available
         if (oldInput != nil)
         {
             _textInput.axui_textColor   = oldInput.axui_textColor ?: [NSColor whiteColor];
             _textInput.axui_text        = oldInput.axui_text ?: @"";
             _textInput.axui_placeholder = oldInput.axui_placeholder ?: @"";
-            _textInput.axui_font        = oldInput.axui_font ?: [NSFont systemFontOfSize:self.frameRect.size.height * 3 / 2];
-            _textInput.axui_maxLength   = getEditBoxImplMac()->getMaxLength();
-            _textInput.axui_alignment   = oldInput.axui_alignment;
+            _textInput.axui_font = oldInput.axui_font ?: [NSFont systemFontOfSize:self.frameRect.size.height * 3 / 2];
+            _textInput.axui_maxLength = getEditBoxImplMac()->getMaxLength();
+            _textInput.axui_alignment = oldInput.axui_alignment;
         }
-        
+
         // basic UI setup
         [_textInput performSelector:@selector(setTextColor:) withObject:_textInput.axui_textColor];
         [_textInput performSelector:@selector(setBackgroundColor:) withObject:[NSColor clearColor]];
-        
+
         if (![_textInput isKindOfClass:[NSTextView class]])
         {
             [_textInput performSelector:@selector(setBordered:) withObject:nil];
         }
         _textInput.hidden     = NO;
         _textInput.wantsLayer = YES;
-        
+
         // set delegate and flags
         [_textInput axui_setDelegate:self];
         [self setInputFlag:self.dataInputMode];
         [self setReturnType:self.keyboardReturnType];
     }
-    
+
     if (oldInput != nil)
     {
-        [oldInput removeFromSuperview]; // detach old view
-        [oldInput release];             // release old view
+        [oldInput removeFromSuperview];  // detach old view
+        [oldInput release];              // release old view
     }
 }
 
