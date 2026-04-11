@@ -35,9 +35,9 @@ using winrt::Windows::UI::Xaml::Controls::ISwapChainPanel;
 using winrt::Windows::UI::Xaml::Controls::SwapChainPanel;
 
 inline static HRESULT GetSwapChainPanelRenderMetrics(SwapChainPanel& swapChainPanel,
-                                        const CoreDispatcher& dispatcher,
-                                        Size& windowSize,
-                                        Vector2& renderScale)
+                                                     const CoreDispatcher& dispatcher,
+                                                     Size& windowSize,
+                                                     Vector2& renderScale)
 {
     try
     {

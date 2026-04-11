@@ -38,7 +38,7 @@
 #include "axmol/platform/Application.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
-#include "axmol/platform/winrt/SwapChainPanelUtil.h"
+#    include "axmol/platform/winrt/SwapChainPanelUtil.h"
 #endif
 
 namespace ax::rhi::d3d11
