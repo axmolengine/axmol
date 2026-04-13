@@ -146,14 +146,16 @@ public:
                                   Rect& outRect,
                                   int& xAdvance,
                                   const GlyphResolution*& fallbackRes,
-                                  bool& sharedBitmapData);
+                                  bool& sharedBitmapData,
+                                    bool isMono);
 
     unsigned char* getGlyphBitmapByIndex(unsigned int glyphIndex,
                                          int& outWidth,
                                          int& outHeight,
                                          Rect& outRect,
                                          int& xAdvance,
-                                         bool& sharedBitmapData);
+                                         bool& sharedBitmapData,
+                                        bool isMono);
 
     int getFontAscender() const;
     const char* getFontFamily() const;
@@ -201,6 +203,7 @@ private:
     int _ascender;
     int _descender;
     int _lineHeight;
+    bool _isMono = true;
 
     GlyphCollection _usedGlyphs;
     std::string _customGlyphs;

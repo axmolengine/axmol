@@ -113,6 +113,12 @@ bool FastTMXLayer::initWithTilesetInfo(TMXTilesetInfo* tilesetInfo, TMXLayerInfo
     return true;
 }
 
+void FastTMXLayer::setColor(const Color32& color)
+{
+    Node::setColor(color);
+    _quadsDirty = true;
+}
+
 FastTMXLayer::FastTMXLayer() {}
 
 FastTMXLayer::~FastTMXLayer()
@@ -136,7 +142,7 @@ void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
 
     auto cam = Camera::getVisitingCamera();
     if (flags != 0 || _dirty || _quadsDirty ||
-        !_cameraPositionDirty.fuzzyEquals(cam->getPosition(), _tileSet->_tileSize.x) ||
+        !_cameraPositionDirty.fuzzyEquals(cam->getPosition(), _tileSet->_tileSize.x * 0.2f) ||
         _cameraZoomDirty != cam->getZoom())
     {
         _cameraPositionDirty = cam->getPosition();
@@ -144,7 +150,8 @@ void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
         Vec2 s                       = _director->getVisibleSize();
         const Vec2& anchor           = getAnchorPoint();
         auto rect                    = Rect(cam->getPositionX() - s.width * zoom * (anchor.x == 0.0f ? 0.5f : anchor.x),
-                                            cam->getPositionY() - s.height * zoom * (anchor.y == 0.0f ? 0.5f : anchor.y), s.width * zoom,
+                                            cam->getPositionY() - s.height * zoom * (anchor.y == 0.0f ? 0.5f : anchor.y),
+                                            s.width * zoom,
                                             s.height * zoom);
 
         Mat4 inv = transform;

@@ -425,7 +425,8 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
                                             Rect& outRect,
                                             int& xAdvance,
                                             const GlyphResolution*& outFallbackRes,
-                                            bool& sharedBitmapData)
+                                            bool& sharedBitmapData,
+                                            bool isMono)
 {
     // @remark: glyphIndex=0 means charactor is mssing on current font face
     auto glyphIndex = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(charCode));
@@ -465,7 +466,7 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
         }
     }
 
-    return getGlyphBitmapByIndex(glyphIndex, outWidth, outHeight, outRect, xAdvance, sharedBitmapData);
+    return getGlyphBitmapByIndex(glyphIndex, outWidth, outHeight, outRect, xAdvance, sharedBitmapData, isMono);
 }
 
 unsigned char* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
@@ -473,7 +474,8 @@ unsigned char* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
                                                    int& outHeight,
                                                    Rect& outRect,
                                                    int& xAdvance,
-                                                   bool& sharedBitmapData)
+                                                   bool& sharedBitmapData,
+                                                    bool isMono)
 {
     unsigned char* ret = nullptr;
 
@@ -502,20 +504,33 @@ unsigned char* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
         outHeight = _fontFace->glyph->bitmap.rows;
         ret       = _fontFace->glyph->bitmap.buffer;
 
-        //auto ret2 = new unsigned char[outWidth * outHeight];
-
-        
-        for(int i = 0; i < outWidth * outHeight; i++)
+        if(isMono)
         {
-            if(ret[i] < 128)
+            for(int i = 0; i < outWidth * outHeight; i++)
             {
-                ret[i] = 0;
-            }else
-            {
-                ret[i] = 255;
+                if(ret[i] < 128)
+                {
+                    ret[i] = 0;
+                }else
+                {
+                    ret[i] = 255;
+                }
             }
         }
-        
+        else
+        {
+            for(int i = 0; i < outWidth * outHeight; i++)
+            {
+                if(ret[i] < 80)
+                {
+                    ret[i] = 0;
+                }else
+                {
+                    ret[i] = 255;
+                }
+            }
+            //auto ret2 = new unsigned char[outWidth * outHeight];
+        }
 
         if (_outlineSize > 0 && outWidth > 0 && outHeight > 0)
         {

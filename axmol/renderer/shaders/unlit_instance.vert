@@ -8,7 +8,6 @@ layout (location = TEXCOORD0) out vec2 v_texCoord;
 layout(std140, binding = 0, set = 0, binding = 0) uniform vs_ub {
     mat4 u_MVPMatrix;
 };
-
 void main(void)
 {
     gl_Position = u_MVPMatrix * a_instance * a_position;

@@ -363,7 +363,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
         {
             const GlyphResolution* res{nullptr};
             bitmap = charRenderer->getGlyphBitmap(charCode, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance, res,
-                                                  sharedBitmapData);
+                                                  sharedBitmapData, !_antialiasEnabled);
             if (!bitmap && res)
             {
                 auto fallbackIt = _missingFallbackFonts.find(res->faceInfo.family);
@@ -382,7 +382,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
                 {
                     unsigned int glyphIndex = res->glyphIndex;
                     bitmap = charRenderer->getGlyphBitmapByIndex(glyphIndex, bitmapWidth, bitmapHeight, tempRect,
-                                                                 tempDef.xAdvance, sharedBitmapData);
+                                                                 tempDef.xAdvance, sharedBitmapData, !_antialiasEnabled);
                     _missingGlyphFallbackFonts.emplace(charCode, std::make_pair(charRenderer, glyphIndex));
                 }
             }
@@ -392,7 +392,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
             charRenderer            = missingIt->second.first;
             unsigned int glyphIndex = missingIt->second.second;
             bitmap = charRenderer->getGlyphBitmapByIndex(glyphIndex, bitmapWidth, bitmapHeight, tempRect,
-                                                         tempDef.xAdvance, sharedBitmapData);
+                                                         tempDef.xAdvance, sharedBitmapData, !_antialiasEnabled);
         }
 
         if (bitmap && bitmapWidth > 0 && bitmapHeight > 0)

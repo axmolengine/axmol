@@ -298,6 +298,7 @@ public:
 
     bool initWithTilesetInfo(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
 
+    void setColor(const Color32& color) override;
 protected:
     void setOpacity(uint8_t opacity) override;
 
