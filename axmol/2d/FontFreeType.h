@@ -156,15 +156,15 @@ public:
     int* getHorizontalKerningForTextUTF32(const std::u32string& text, int& outNumLetters) const override;
 
     uint8_t* getGlyphBitmap(char32_t charCode,
-                                  GlyphSize& glyphSize,
-                                  GlyphMetrics& glyphMetrics,
-                                  const GlyphResolution*& fallbackRes,
-                                  bool& sharedBitmapData);
+                            GlyphSize& glyphSize,
+                            GlyphMetrics& glyphMetrics,
+                            const GlyphResolution*& fallbackRes,
+                            bool& sharedBitmapData);
 
     uint8_t* getGlyphBitmapByIndex(unsigned int glyphIndex,
-                                         GlyphSize& glyphSize,
-                                         GlyphMetrics& glyphMetrics,
-                                         bool& sharedBitmapData);
+                                   GlyphSize& glyphSize,
+                                   GlyphMetrics& glyphMetrics,
+                                   bool& sharedBitmapData);
 
     int getFontAscender() const;
     const char* getFontFamily() const;
@@ -174,7 +174,7 @@ public:
     int getFontMaxHeight() const override { return _lineHeight; }
 
     std::string_view getGlyphCollection() const;
-    
+
     static void releaseFont(std::string_view fontName);
 
     static FT_Library getFTLibrary();

@@ -319,7 +319,7 @@ bool FontFreeType::initWithFace(FT_Face face)
             if (FT_Set_Char_Size(face, 0, units, dpi, dpi))
                 break;
         }
-        
+
         std::string_view font_format = FT_Get_Font_Format(face);
 
         // Notes:
@@ -509,7 +509,7 @@ uint8_t* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
         glyphMetrics.horiBearingX = static_cast<float>(metrics.horiBearingX >> 6);
         glyphMetrics.horiBearingY = static_cast<float>(metrics.horiBearingY >> 6);
         glyphMetrics.xAdvance     = static_cast<int>(metrics.horiAdvance >> 6);
-        
+
         if (_outlineSize > 0 && glyphSize.width > 0 && glyphSize.height > 0) [[unlikely]]
         {
             sharedBitmapData       = false;

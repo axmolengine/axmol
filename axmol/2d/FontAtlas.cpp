@@ -422,9 +422,9 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
 
             // Calculate tempDef offsets (based on tempRect)
             letterDef.validDefinition = true;
-   
-            letterDef.width  = glyphMetrics.bboxWidth + letterExtend;
-            letterDef.height = glyphMetrics.bboxHeight + letterExtend;
+
+            letterDef.width   = glyphMetrics.bboxWidth + letterExtend;
+            letterDef.height  = glyphMetrics.bboxHeight + letterExtend;
             letterDef.offsetX = glyphMetrics.horiBearingX - adjustForDistanceMap - adjustForExtend;
             letterDef.offsetY = _fontAscender - glyphMetrics.horiBearingY - adjustForDistanceMap - adjustForExtend;
 
