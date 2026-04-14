@@ -33188,6 +33188,79 @@ int lua_ax_base_FileUtils_isDirectoryExistInternal(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_FileUtils_copyFile(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::FileUtils* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.FileUtils",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_FileUtils_copyFile'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2)
+    {
+        std::string_view arg0;
+        std::string_view arg1;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:copyFile");
+
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.FileUtils:copyFile");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_copyFile'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->copyFile(arg0, arg1);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    if (argc == 3)
+    {
+        std::string_view arg0;
+        std::string_view arg1;
+        long long arg2;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:copyFile");
+
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.FileUtils:copyFile");
+
+        ok &= luaval_to_long_long(tolua_S, 4, &arg2, "ax.FileUtils:copyFile");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_copyFile'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->copyFile(arg0, arg1, arg2);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:copyFile",argc, 2);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FileUtils_copyFile'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_FileUtils_getInstance(lua_State* tolua_S)
 {
     int argc = 0;
@@ -33523,6 +33596,7 @@ int lua_register_ax_base_FileUtils(lua_State* tolua_S)
         tolua_function(tolua_S,"listFilesRecursively",lua_ax_base_FileUtils_listFilesRecursively);
         tolua_function(tolua_S,"isFileExistInternal",lua_ax_base_FileUtils_isFileExistInternal);
         tolua_function(tolua_S,"isDirectoryExistInternal",lua_ax_base_FileUtils_isDirectoryExistInternal);
+        tolua_function(tolua_S,"copyFile",lua_ax_base_FileUtils_copyFile);
         tolua_function(tolua_S,"getInstance", lua_ax_base_FileUtils_getInstance);
         tolua_function(tolua_S,"destroyInstance", lua_ax_base_FileUtils_destroyInstance);
         tolua_function(tolua_S,"writeBinaryToFile", lua_ax_base_FileUtils_writeBinaryToFile);
