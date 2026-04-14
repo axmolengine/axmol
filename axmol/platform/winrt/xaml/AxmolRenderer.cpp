@@ -43,7 +43,7 @@ AxmolRenderer::AxmolRenderer(int width,
                              float dpi,
                              DisplayOrientations orientation,
                              CoreDispatcher const& dispatcher,
-                             Panel const& panel)
+                             SwapChainPanel const& panel)
     : m_width(width), m_height(height), m_dpi(dpi), m_dispatcher(dispatcher), m_panel(panel), m_orientation(orientation)
 {}
 

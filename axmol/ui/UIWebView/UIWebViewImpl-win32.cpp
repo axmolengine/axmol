@@ -671,7 +671,7 @@ void Win32WebControl::lazyInit()
     const auto style = GetWindowLong(hwnd, GWL_STYLE);
     SetWindowLong(hwnd, GWL_STYLE, style | WS_CLIPCHILDREN);
 
-    std::ignore = CoInitialize(NULL);
+    std::ignore = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 #    endif
 }
 

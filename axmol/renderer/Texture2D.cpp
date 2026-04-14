@@ -89,17 +89,12 @@ static bool createStringTextureData(std::string_view text,
         return false;
     }
 
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID) && (AX_TARGET_PLATFORM != AX_PLATFORM_IOS)
-    AXASSERT(textDefinition._stroke._strokeEnabled == false, "Currently stroke only supported on iOS and Android!");
-#endif
-
     auto textDef            = textDefinition;
     auto contentScaleFactor = AX_CONTENT_SCALE_FACTOR();
     textDef._fontSize *= contentScaleFactor;
     textDef._dimensions.width *= contentScaleFactor;
     textDef._dimensions.height *= contentScaleFactor;
     textDef._stroke._strokeSize *= contentScaleFactor;
-    textDef._shadow._shadowEnabled = false;
 
     outData = Device::getTextureDataForText(text, textDef, align, imageWidth, imageHeight, premultipliedAlpha);
     if (outData.isNull())
@@ -434,7 +429,6 @@ bool Texture2D::initWithString(std::string_view text,
 {
     FontDefinition tempDef;
 
-    tempDef._shadow._shadowEnabled = false;
     tempDef._stroke._strokeEnabled = false;
 
     tempDef._fontName      = fontName;

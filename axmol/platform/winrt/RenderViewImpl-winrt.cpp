@@ -48,7 +48,9 @@ THE SOFTWARE.
 namespace ax
 {
 
-static RenderViewImpl* s_renderView = nullptr;
+RenderViewImpl* RenderViewImpl::s_renderView = nullptr;
+
+const std::string_view RenderViewImpl::EVENT_WINDOW_RESIZED = "_ax_window_resized"sv;
 
 static EventMouse::MouseButton checkMouseButton(Windows::UI::Core::PointerEventArgs const& args)
 {
@@ -163,19 +165,19 @@ void RenderViewImpl::setDispatcher(winrt::agile_ref<Windows::UI::Core::CoreDispa
     m_dispatcher = dispatcher;
 }
 
-void RenderViewImpl::setPanel(winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> panel)
+void RenderViewImpl::setPanel(winrt::agile_ref<Windows::UI::Xaml::Controls::SwapChainPanel> panel)
 {
     m_panel = panel;
 }
 
 void* RenderViewImpl::getNativeWindow() const
 {
-    return winrt::get_unknown(m_panel.get());
+    return winrt::get_abi(m_panel.get());
 }
 
 SurfaceHandle RenderViewImpl::getNativeDisplay() const
 {
-    return winrt::get_unknown(m_panel.get());
+    return winrt::get_abi(m_panel.get());
 }
 
 void RenderViewImpl::setIMEKeyboardState(bool bOpen)
@@ -561,12 +563,17 @@ void RenderViewImpl::handleWindowResized()
 {
     updateRenderSurface(m_width, m_height, SurfaceUpdateFlag::WindowSizeChanged);
     updateRenderSurface(m_width * _renderScale, m_height * _renderScale, SurfaceUpdateFlag::RenderSizeChanged);
+
+    Size size(m_width, m_height);
+    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_RESIZED, &size);
 }
 
 void RenderViewImpl::updateRenderScale()
 {
     if (!rhi::DriverContext::isOpenGL())
-        _renderScale = m_dpi / 96.0f;
+        _renderScale = Application::getContextAttrs().renderScaleMode == RenderScaleMode::Physical
+                           ? (m_dpi > 0 ? m_dpi / 96.0f /* 96.0f: Standard DPI baseline */ : 1.0f)
+                           : 1.0f;
     else
         _renderScale = 1.0f;
 }

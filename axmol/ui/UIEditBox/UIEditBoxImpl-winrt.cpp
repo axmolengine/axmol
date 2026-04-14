@@ -30,6 +30,7 @@
 #include "axmol/platform/PlatformConfig.h"
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
 #    include "axmol/ui/UIEditBox/UIEditBoxImpl-winrt.h"
+#    include "axmol/ui/UIHelper.h"
 #    include "axmol/platform/winrt/WinRTUtils.h"
 #    include "axmol/platform/winrt/RenderViewImpl-winrt.h"
 #    include "axmol/2d/FontFreeType.h"
@@ -236,8 +237,8 @@ void EditBoxWinRT::openKeyboard()
         }
 
         // Position the text box
-        canvas.SetLeft(_textBox, _rect.X);
-        canvas.SetTop(_textBox, _rect.Y - XAML_TOP_PADDING);
+        canvas.SetLeft(_textBox, _position.X);
+        canvas.SetTop(_textBox, _position.Y - XAML_TOP_PADDING);
 
         _setTexVerticalAlignment(_textBox);
         _setPadding(_textBox);
@@ -382,14 +383,16 @@ void EditBoxWinRT::setInputScope(TextBox textBox)
     textBox.InputScope(inputScope);
 }
 
-void EditBoxWinRT::setPosition(Windows::Foundation::Rect const& rect)
+void EditBoxWinRT::setPosition(float x, float y)
 {
-    _rect = rect;
+    _position.X = x;
+    _position.Y = y;
 }
 
-void EditBoxWinRT::setSize(Windows::Foundation::Size const& size)
+void EditBoxWinRT::setSize(float width, float height)
 {
-    _size = size;
+    _size.Width  = width;
+    _size.Height = height;
 }
 
 void EditBoxWinRT::setText(winrt::hstring const& text)
@@ -507,28 +510,18 @@ void UIEditBoxImplWinrt::nativeOpenKeyboard()
 {
     // Update the text
     _system_control->setText(PlatformStringFromString(getText()));
-    // Size
-    auto renderView = ax::Director::getInstance()->getRenderView();
-    auto transform  = _editBox->getNodeToWorldTransform();
-    ax::Vec3 scale;
-    transform.getScale(&scale);
-    Windows::Foundation::Size xamlSize = {_editBox->getContentSize().width * renderView->getScaleX() * scale.x,
-                                          _editBox->getContentSize().height * renderView->getScaleY() * scale.y};
-    _system_control->setSize(xamlSize);
-    _system_control->setFontSize(_fontSize * ax::Director::getInstance()->getRenderView()->getScaleY() /** scale.y*/);
-    // Position
-    auto directorInstance = ax::Director::getInstance();
-    auto winSize          = renderView->getWindowSize();
-    auto canvasSize       = directorInstance->getCanvasSize();
-    auto leftBottom       = _editBox->convertToWorldSpace(ax::Point::ZERO);
-    auto rightTop =
-        _editBox->convertToWorldSpace(ax::Point(_editBox->getContentSize().width, _editBox->getContentSize().height));
-    Windows::Foundation::Rect rect;
-    rect.X      = winSize.width / 2 + (leftBottom.x - canvasSize.width / 2) * renderView->getScaleX();
-    rect.Y      = winSize.height / 2 - (rightTop.y - canvasSize.height / 2) * renderView->getScaleY();
-    rect.Width  = (rightTop.x - leftBottom.x) * renderView->getScaleX();
-    rect.Height = (rightTop.y - leftBottom.y) * renderView->getScaleY();
-    _system_control->setPosition(rect);
+
+    auto rect = ui::Helper::convertBoundingBoxToScreen(_editBox);
+    _system_control->setPosition(rect.origin.x, rect.origin.y);
+    _system_control->setSize(rect.size.width, rect.size.height);
+
+    auto renderView  = ax::Director::getInstance()->getRenderView();
+    auto fontScale   = renderView->getScaleY();
+    auto renderScale = renderView->getRenderScale();
+    if (renderScale > 0)
+        fontScale /= renderScale;
+    _system_control->setFontSize(_fontSize * fontScale);
+
     // .. and open
     _system_control->openKeyboard();
 }

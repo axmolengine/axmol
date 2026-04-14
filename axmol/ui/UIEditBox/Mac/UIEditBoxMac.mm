@@ -78,37 +78,44 @@
 - (void)setTextInput:(NSView<AXUITextInput>*)textInput
 {
     if (_textInput == textInput)
-    {
         return;
-    }
 
-    // Migrate properties
-    textInput.axui_textColor   = _textInput.axui_textColor ?: [NSColor whiteColor];
-    textInput.axui_text        = _textInput.axui_text ?: @"";
-    textInput.axui_placeholder = _textInput.axui_placeholder ?: @"";
-    textInput.axui_font        = _textInput.axui_font ?: [NSFont systemFontOfSize:self.frameRect.size.height * 3 / 2];
-    textInput.axui_maxLength   = getEditBoxImplMac()->getMaxLength();
-    textInput.axui_alignment   = _textInput.axui_alignment;
-
-    [_textInput removeFromSuperview];
-    [_textInput release];
-
-    _textInput = [textInput retain];
-
-    [_textInput performSelector:@selector(setTextColor:) withObject:_textInput.axui_textColor];
-    [_textInput performSelector:@selector(setBackgroundColor:) withObject:[NSColor clearColor]];
-
-    if (![_textInput isKindOfClass:[NSTextView class]])
+    NSView<AXUITextInput>* oldInput = _textInput;
+    _textInput                      = textInput;
+    if (_textInput != nil)
     {
-        [_textInput performSelector:@selector(setBordered:) withObject:nil];
+        [_textInput retain];  // retain new input view
+
+        // migrate properties from old input if available
+        _textInput.axui_alignment   = oldInput.axui_alignment;
+        _textInput.axui_textColor   = oldInput.axui_textColor ?: [NSColor whiteColor];
+        _textInput.axui_text        = oldInput.axui_text ?: @"";
+        _textInput.axui_placeholder = oldInput.axui_placeholder ?: @"";
+        _textInput.axui_font        = oldInput.axui_font ?: [NSFont systemFontOfSize:self.frameRect.size.height * 1.5f];
+        _textInput.axui_maxLength   = getEditBoxImplMac()->getMaxLength();
+
+        // basic UI setup
+        [_textInput performSelector:@selector(setTextColor:) withObject:_textInput.axui_textColor];
+        [_textInput performSelector:@selector(setBackgroundColor:) withObject:[NSColor clearColor]];
+
+        if (![_textInput isKindOfClass:[NSTextView class]] && [_textInput respondsToSelector:@selector(setBordered:)])
+        {
+            [(id)_textInput setBordered:NO];
+        }
+        _textInput.hidden     = NO;
+        _textInput.wantsLayer = YES;
+
+        // set delegate and flags
+        [_textInput axui_setDelegate:self];
+        [self setInputFlag:self.dataInputMode];
+        [self setReturnType:self.keyboardReturnType];
     }
-    _textInput.hidden     = NO;
-    _textInput.wantsLayer = YES;
 
-    [_textInput axui_setDelegate:self];
-
-    [self setInputFlag:self.dataInputMode];
-    [self setReturnType:self.keyboardReturnType];
+    if (oldInput != nil)
+    {
+        [oldInput removeFromSuperview];  // detach old view
+        [oldInput release];              // release old view
+    }
 }
 
 - (void)updateFrame:(CGRect)rect

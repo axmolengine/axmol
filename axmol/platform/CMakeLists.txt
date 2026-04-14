@@ -49,6 +49,15 @@ elseif(WINDOWS)
     file(GLOB _AX_PLATFORM_SPECIFIC_SRC platform/winrt/*.cpp)
   endif()
 
+  list(APPEND _AX_PLATFORM_SPECIFIC_HEADER
+    platform/msw/ComPtr.h
+    platform/msw/DWriteTextRenderer.h
+  )
+
+  list(APPEND _AX_PLATFORM_SPECIFIC_SRC
+    platform/msw/DWriteTextRenderer.cpp
+  )
+
 elseif(APPLE)
   set(_AX_PLATFORM_SPECIFIC_HEADER
     platform/apple/FileUtils-apple.h

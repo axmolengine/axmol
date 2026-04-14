@@ -45,7 +45,7 @@ class Event;
 class AX_DLL EventListenerMouse : public EventListener
 {
 public:
-    static const std::string LISTENER_ID;
+    static const std::string_view LISTENER_ID;
 
     /** Create a mouse event listener.
      *

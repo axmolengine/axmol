@@ -151,7 +151,18 @@ public abstract class AxmolActivity extends AppCompatActivity implements AxmolEn
             return;
         }
 
+        Window window = this.getWindow();
+        // Enable rendering into the cutout area
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            WindowManager.LayoutParams lp = window.getAttributes();
+            lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+            window.setAttributes(lp);
+        }
+
         this.hideVirtualButton();
+
+        // Input mode
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         onLoadNativeLibraries();
 
@@ -162,9 +173,6 @@ public abstract class AxmolActivity extends AppCompatActivity implements AxmolEn
 
         mPlayer = new AxmolPlayer(this);
         setContentView(mPlayer);
-
-        Window window = this.getWindow();
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         // Audio configuration
         this.setVolumeControlStream(AudioManager.STREAM_MUSIC);

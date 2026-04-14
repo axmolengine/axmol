@@ -339,11 +339,8 @@
       FT_Bool     test_cr;
 
 
-      parser->root.cursor = parser->base_dict;
-      parser->root.limit  = parser->base_dict + parser->base_len;
-
-      cur   = parser->root.cursor;
-      limit = parser->root.limit;
+      parser->root.cursor = cur;
+      parser->root.limit  = limit;
 
       while ( cur < limit )
       {

@@ -201,7 +201,7 @@ public:
      * This method attempts to switch the screen orientation to the specified value.
      * If the orientation is supported by the platform (as declared in Info.plist or AndroidManifest),
      * the system will rotate and lock to that orientation.
-     * Use Orientation::Auto to unlock and allow automatic rotation.
+     * Use Orientation::Unknown to unlock and allow automatic rotation.
      *
      * @param orientation The desired screen orientation. Use Orientation::Auto to reset.
      * @since axmol-2.9.0

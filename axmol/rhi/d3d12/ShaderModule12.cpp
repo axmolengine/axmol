@@ -24,7 +24,7 @@
 // refer: https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-semantics
 #include "axmol/rhi/d3d12/ShaderModule12.h"
 #include "axmol/rhi/d3d12/Driver12.h"
-#include "axmol/platform/win32/ComPtr.h"
+#include "axmol/platform/msw/ComPtr.h"
 #include "axmol/base/Logging.h"
 
 namespace ax::rhi::d3d12

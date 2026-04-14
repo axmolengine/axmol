@@ -85,8 +85,8 @@ public:
                                        const FontDefinition& textDefinition)
     {
         JniMethodInfo methodInfo;
-        if (!JniHelper::getStaticMethodInfo(methodInfo, "dev.axmol.lib.BitmapHelper", "createTextBitmapShadowStroke",
-                                            "([BLjava/lang/String;IIIIIIIIZFFFFZIIIIFZI)Z"))
+        if (!JniHelper::getStaticMethodInfo(methodInfo, "dev.axmol.lib.BitmapHelper", "createTextBitmapWithStroke",
+                                            "([BLjava/lang/String;IIIIIIIIZIIIIFZI)Z"))
         {
             AXLOGE("{} {}: error to get methodInfo", __FILE__, __LINE__);
             return false;
@@ -122,13 +122,10 @@ public:
         if (!methodInfo.env->CallStaticBooleanMethod(
                 methodInfo.classID, methodInfo.methodID, strArray, jstrFont, textDefinition._fontSize,
                 textDefinition._fontFillColor.r, textDefinition._fontFillColor.g, textDefinition._fontFillColor.b,
-                textDefinition._fontFillColor.a, eAlignMask, nWidth, nHeight, textDefinition._shadow._shadowEnabled,
-                textDefinition._shadow._shadowOffset.width, -textDefinition._shadow._shadowOffset.height,
-                textDefinition._shadow._shadowBlur, textDefinition._shadow._shadowOpacity,
-                textDefinition._stroke._strokeEnabled, textDefinition._stroke._strokeColor.r,
-                textDefinition._stroke._strokeColor.g, textDefinition._stroke._strokeColor.b,
-                textDefinition._stroke._strokeColor.a, textDefinition._stroke._strokeSize, textDefinition._enableWrap,
-                textDefinition._overflow))
+                textDefinition._fontFillColor.a, eAlignMask, nWidth, nHeight, textDefinition._stroke._strokeEnabled,
+                textDefinition._stroke._strokeColor.r, textDefinition._stroke._strokeColor.g,
+                textDefinition._stroke._strokeColor.b, textDefinition._stroke._strokeColor.a,
+                textDefinition._stroke._strokeSize, textDefinition._enableWrap, textDefinition._overflow))
         {
             return false;
         }

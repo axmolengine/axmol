@@ -409,11 +409,6 @@ void PhysicsWorld2D::setGravity(const Vec2& gravity)
     b2World_SetGravity(_worldId, PhysicsUtility2D::tob2Vec2(_gravity * _PTMRatio));
 }
 
-void PhysicsWorld2D::setSlopBias(float slop, float bias)
-{
-    // NOTE: NOT SUPPORT
-}
-
 void PhysicsWorld2D::setSubsteps(int steps)
 {
     if (steps > 0)

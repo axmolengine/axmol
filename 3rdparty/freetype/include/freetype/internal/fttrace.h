@@ -120,6 +120,11 @@ FT_TRACE_DEF( cidload )
 FT_TRACE_DEF( cidobjs )
 FT_TRACE_DEF( cidparse )
 
+  /* HVF driver component */
+FT_TRACE_DEF( hvfdrv )
+FT_TRACE_DEF( hvfobjs )
+FT_TRACE_DEF( hvfload )
+
   /* Windows font component */
 FT_TRACE_DEF( winfnt )
 

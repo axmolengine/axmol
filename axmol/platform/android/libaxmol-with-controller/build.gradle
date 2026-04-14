@@ -14,6 +14,7 @@ android {
     sourceSets.main {
         aidl.srcDir "../java/src"
         java.srcDirs = ['../java/src','../ControllerManualAdapter/src']
+        res.srcDir "../res"
         manifest.srcFile "AndroidManifest.xml"
     }
 

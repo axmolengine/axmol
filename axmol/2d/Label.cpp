@@ -2637,16 +2637,15 @@ FontDefinition Label::_getFontDefinition() const
     if (_fontAtlas && !_fontAtlas->getFontName().empty())
         fontName = _fontAtlas->getFontName();
 
-    systemFontDef._fontName              = fontName;
-    systemFontDef._fontSize              = _systemFontSize;
-    systemFontDef._alignment             = _hAlignment;
-    systemFontDef._vertAlignment         = _vAlignment;
-    systemFontDef._dimensions.width      = _labelWidth == 0.f ? _maxLineWidth : _labelWidth;
-    systemFontDef._dimensions.height     = _labelHeight;
-    systemFontDef._fontFillColor         = _textColor32;
-    systemFontDef._shadow._shadowEnabled = false;
-    systemFontDef._enableWrap            = _enableWrap;
-    systemFontDef._overflow              = (int)_overflow;
+    systemFontDef._fontName          = fontName;
+    systemFontDef._fontSize          = _systemFontSize;
+    systemFontDef._alignment         = _hAlignment;
+    systemFontDef._vertAlignment     = _vAlignment;
+    systemFontDef._dimensions.width  = _labelWidth == 0.f ? _maxLineWidth : _labelWidth;
+    systemFontDef._dimensions.height = _labelHeight;
+    systemFontDef._fontFillColor     = _textColor32;
+    systemFontDef._enableWrap        = _enableWrap;
+    systemFontDef._overflow          = (int)_overflow;
 
     if (_currLabelEffect == LabelEffect::OUTLINE && _outlineSize > 0.f)
     {
@@ -2658,14 +2657,6 @@ FontDefinition Label::_getFontDefinition() const
     {
         systemFontDef._stroke._strokeEnabled = false;
     }
-
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID) && (AX_TARGET_PLATFORM != AX_PLATFORM_IOS)
-    if (systemFontDef._stroke._strokeEnabled)
-    {
-        AXLOGE("Stroke Currently only supported on iOS and Android!");
-    }
-    systemFontDef._stroke._strokeEnabled = false;
-#endif
 
     return systemFontDef;
 }

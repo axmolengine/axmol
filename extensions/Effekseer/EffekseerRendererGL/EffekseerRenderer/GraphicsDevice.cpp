@@ -1567,7 +1567,7 @@ void GraphicsDevice::BeginRenderPass(Effekseer::Backend::RenderPassRef& renderPa
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-#if !defined(EMSCRIPTEN) && !defined(__EFFEKSEER_RENDERER_GLES2__) && !defined(__EFFEKSEER_RENDERER_GL2__) && !defined(__EFFEKSEER_RENDERER_GLES3__)
+#if !defined(__EMSCRIPTEN__) && !defined(__EFFEKSEER_RENDERER_GLES2__) && !defined(__EFFEKSEER_RENDERER_GL2__) && !defined(__EFFEKSEER_RENDERER_GLES3__)
 		glDrawBuffer(GL_BACK);
 #endif
 	}

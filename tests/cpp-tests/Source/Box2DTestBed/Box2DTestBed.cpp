@@ -90,7 +90,10 @@ Box2DTestBedTests::Box2DTestBedTests()
 
     s_context.Load();
 
-    ImGuiPresenter::getInstance()->setViewResolution(s_context.camera.width, s_context.camera.height);
+#if defined(AX_PLATFORM_GLFW)
+    static_cast<RenderViewImpl*>(Director::getInstance()->getRenderView())
+        ->setWindowed(s_context.camera.width, s_context.camera.height);
+#endif
 
     SortTests();
 

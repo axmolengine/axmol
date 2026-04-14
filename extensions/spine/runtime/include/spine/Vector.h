@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated July 28, 2023. Replaces all prior versions.
+ * Last updated April 5, 2025. Replaces all prior versions.
  *
- * Copyright (c) 2013-2023, Esoteric Software LLC
+ * Copyright (c) 2013-2025, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software or
- * otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,8 +23,8 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
- * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #ifndef Spine_Vector_h
@@ -39,6 +39,9 @@ namespace spine {
 	template<typename T>
 	class SP_API Vector : public SpineObject {
 	public:
+		using size_type = size_t;
+		using value_type = T;
+
 		Vector() : _size(0), _capacity(0), _buffer(NULL) {
 		}
 
@@ -77,13 +80,21 @@ namespace spine {
 			size_t oldSize = _size;
 			_size = newSize;
 			if (_capacity < newSize) {
-				_capacity = (int) (_size * 1.75f);
+				if (_capacity == 0) {
+					_capacity = _size;
+				} else {
+					_capacity = (int) (_size * 1.75f);
+				}
 				if (_capacity < 8) _capacity = 8;
 				_buffer = spine::SpineExtension::realloc<T>(_buffer, _capacity, __FILE__, __LINE__);
 			}
 			if (oldSize < _size) {
 				for (size_t i = oldSize; i < _size; i++) {
 					construct(_buffer + i, defaultValue);
+				}
+			} else {
+				for (size_t i = _size; i < oldSize; i++) {
+					destroy(_buffer + i);
 				}
 			}
 		}
@@ -110,14 +121,14 @@ namespace spine {
 			}
 		}
 
-		inline void addAll(Vector<T> &inValue) {
+		inline void addAll(const Vector<T> &inValue) {
 			ensureCapacity(this->size() + inValue.size());
 			for (size_t i = 0; i < inValue.size(); i++) {
 				add(inValue[i]);
 			}
 		}
 
-		inline void clearAndAddAll(Vector<T> &inValue) {
+		inline void clearAndAddAll(const Vector<T> &inValue) {
 			this->clear();
 			this->addAll(inValue);
 		}
@@ -164,6 +175,12 @@ namespace spine {
 			return _buffer[inIndex];
 		}
 
+		inline const T &operator[](size_t inIndex) const {
+			assert(inIndex < _size);
+
+			return _buffer[inIndex];
+		}
+
 		inline friend bool operator==(Vector<T> &lhs, Vector<T> &rhs) {
 			if (lhs.size() != rhs.size()) {
 				return false;
@@ -180,6 +197,13 @@ namespace spine {
 
 		inline friend bool operator!=(Vector<T> &lhs, Vector<T> &rhs) {
 			return !(lhs == rhs);
+		}
+
+		Vector &operator=(const Vector &inVector) {
+			if (this != &inVector) {
+				clearAndAddAll(inVector);
+			}
+			return *this;
 		}
 
 		inline T *buffer() {
@@ -215,7 +239,6 @@ namespace spine {
 			buffer->~T();
 		}
 
-		// Vector &operator=(const Vector &inVector) {};
 	};
 }
 

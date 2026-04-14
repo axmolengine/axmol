@@ -32,7 +32,7 @@
 namespace ax
 {
 
-const std::string EventListenerFocus::LISTENER_ID = "__ax_focus_event";
+const std::string_view EventListenerFocus::LISTENER_ID = "__ax_focus_event"sv;
 
 EventListenerFocus::EventListenerFocus() : onFocusChanged(nullptr) {}
 

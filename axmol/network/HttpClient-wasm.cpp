@@ -32,10 +32,8 @@
 #include "axmol/platform/FileUtils.h"
 #include "yasio/tlx/string_view.hpp"
 
-#if EMSCRIPTEN
-#    include <emscripten/fetch.h>
-#    include <emscripten.h>
-#endif
+#include <emscripten/fetch.h>
+#include <emscripten.h>
 
 namespace ax
 {

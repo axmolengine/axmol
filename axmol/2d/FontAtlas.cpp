@@ -343,10 +343,11 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
 
     const int adjustForDistanceMap = _letterPadding / 2;
     const int adjustForExtend      = _letterEdgeExtend / 2;
+    const int letterExtend         = _letterPadding + _letterEdgeExtend;
 
-    int bitmapWidth = 0, bitmapHeight = 0;
-    Rect tempRect;
-    FontLetterDefinition tempDef{};
+    GlyphSize glyphSize{};
+    GlyphMetrics glyphMetrics{};
+    FontLetterDefinition letterDef{.rotated = false};
 
     auto pixelFormat     = _pixelFormat;
     int startY           = static_cast<int>(_currentPageOrigY);
@@ -362,27 +363,25 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
         if (missingIt == _missingGlyphFallbackFonts.end())
         {
             const GlyphResolution* res{nullptr};
-            bitmap = charRenderer->getGlyphBitmap(charCode, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance, res,
-                                                  sharedBitmapData);
+            bitmap = charRenderer->getGlyphBitmap(charCode, glyphSize, glyphMetrics, res, sharedBitmapData);
             if (!bitmap && res)
             {
-                auto fallbackIt = _missingFallbackFonts.find(res->faceInfo.family);
+                auto fallbackIt = _missingFallbackFonts.find(res->family);
                 if (fallbackIt != _missingFallbackFonts.end())
                 {
                     charRenderer = fallbackIt->second;
                 }
                 else
                 {
-                    charRenderer = FontFreeType::createFallbackFont(res->faceInfo, _fontFreeType);
+                    charRenderer = FontFreeType::createFallbackFont(*res, _fontFreeType);
                     if (charRenderer)
-                        _missingFallbackFonts.insert(res->faceInfo.family, charRenderer);
+                        _missingFallbackFonts.insert(res->family, charRenderer);
                 }
 
                 if (charRenderer)
                 {
                     unsigned int glyphIndex = res->glyphIndex;
-                    bitmap = charRenderer->getGlyphBitmapByIndex(glyphIndex, bitmapWidth, bitmapHeight, tempRect,
-                                                                 tempDef.xAdvance, sharedBitmapData);
+                    bitmap = charRenderer->getGlyphBitmapByIndex(glyphIndex, glyphSize, glyphMetrics, sharedBitmapData);
                     _missingGlyphFallbackFonts.emplace(charCode, std::make_pair(charRenderer, glyphIndex));
                 }
             }
@@ -391,16 +390,14 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
         {  // Found fallback font for missing characters, getGlyphBitmap without fallback
             charRenderer            = missingIt->second.first;
             unsigned int glyphIndex = missingIt->second.second;
-            bitmap = charRenderer->getGlyphBitmapByIndex(glyphIndex, bitmapWidth, bitmapHeight, tempRect,
-                                                         tempDef.xAdvance, sharedBitmapData);
+            bitmap = charRenderer->getGlyphBitmapByIndex(glyphIndex, glyphSize, glyphMetrics, sharedBitmapData);
         }
 
-        if (bitmap && bitmapWidth > 0 && bitmapHeight > 0)
+        if (bitmap && glyphSize.width > 0 && glyphSize.height > 0)
         {
             // Calculate occupied area using actual bitmap size
-            const int glyphWidth  = bitmapWidth + _letterPadding + _letterEdgeExtend;
-            const int glyphHeight = bitmapHeight + _letterPadding + _letterEdgeExtend;
-
+            const int glyphWidth  = glyphSize.width + letterExtend;
+            const int glyphHeight = glyphSize.height + letterExtend;
             // Not enough width in current line → wrap to next line
             if (_currentPageOrigX + glyphWidth > _width)
             {
@@ -424,21 +421,22 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
             }
 
             // Calculate tempDef offsets (based on tempRect)
-            tempDef.validDefinition = true;
-            tempDef.width           = tempRect.size.width + _letterPadding + _letterEdgeExtend;
-            tempDef.height          = tempRect.size.height + _letterPadding + _letterEdgeExtend;
-            tempDef.offsetX         = tempRect.origin.x - adjustForDistanceMap - adjustForExtend;
-            tempDef.offsetY         = _fontAscender + tempRect.origin.y - adjustForDistanceMap - adjustForExtend;
+            letterDef.validDefinition = true;
+
+            letterDef.width   = glyphMetrics.bboxWidth + letterExtend;
+            letterDef.height  = glyphMetrics.bboxHeight + letterExtend;
+            letterDef.offsetX = glyphMetrics.horiBearingX - adjustForDistanceMap - adjustForExtend;
+            letterDef.offsetY = _fontAscender - glyphMetrics.horiBearingY - adjustForDistanceMap - adjustForExtend;
 
             // Render glyph into the current page
             charRenderer->renderCharAt(_currentPageData, static_cast<int>(_currentPageOrigX) + adjustForExtend,
-                                       static_cast<int>(_currentPageOrigY) + adjustForExtend, bitmap, bitmapWidth,
-                                       bitmapHeight, _width, _height);
+                                       static_cast<int>(_currentPageOrigY) + adjustForExtend, bitmap, glyphSize.width,
+                                       glyphSize.height, _width, _height);
 
             // Record glyph position and page
-            tempDef.U         = _currentPageOrigX;
-            tempDef.V         = _currentPageOrigY;
-            tempDef.textureID = _currentPage;
+            letterDef.U         = _currentPageOrigX;
+            letterDef.V         = _currentPageOrigY;
+            letterDef.textureID = _currentPage;
 
             // Update line height and X pointer (leave 1 pixel spacing between glyphs)
             _currLineHeight = std::max(glyphHeight, _currLineHeight);
@@ -448,26 +446,26 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
             pageUploadEndY = std::max<int>(pageUploadEndY, _currentPageOrigY + _currLineHeight);
 
             // Convert pixel dimensions to points
-            tempDef.width /= _scaleFactor;
-            tempDef.height /= _scaleFactor;
-            tempDef.U /= _scaleFactor;
-            tempDef.V /= _scaleFactor;
-            tempDef.rotated = false;
+            letterDef.width /= _scaleFactor;
+            letterDef.height /= _scaleFactor;
+            letterDef.U /= _scaleFactor;
+            letterDef.V /= _scaleFactor;
         }
         else
         {
-            tempDef.validDefinition = !!tempDef.xAdvance;
-            tempDef.width = tempDef.height = tempDef.U = tempDef.V = 0;
-            tempDef.offsetX = tempDef.offsetY = 0;
-            tempDef.textureID                 = 0;
-            tempDef.rotated                   = false;
+            letterDef.validDefinition = !!glyphMetrics.xAdvance;
+            letterDef.width = letterDef.height = letterDef.U = letterDef.V = 0;
+            letterDef.offsetX = letterDef.offsetY = 0;
+            letterDef.textureID                   = 0;
             _currentPageOrigX += 1;
         }
+
+        letterDef.xAdvance = glyphMetrics.xAdvance;
 
         if (!sharedBitmapData && bitmap)
             delete[] bitmap;
 
-        _letterDefinitions[charCode] = tempDef;
+        _letterDefinitions[charCode] = letterDef;
     }
 
     // Handle remaining upload for the current page (from startY to max written Y)
@@ -482,7 +480,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
 void FontAtlas::updateTextureContent(rhi::PixelFormat format, int startY)
 {
     // Calculate the starting data pointer
-    auto data = _currentPageData + ((_width * (int)startY) << _strideShift);
+    auto data = _currentPageData + ((static_cast<ptrdiff_t>(_width) * startY) << _strideShift);
 
     // Calculate the actual upload height: from startY to _currentPageOrigY + _currLineHeight
     int uploadHeight = (int)_currentPageOrigY + _currLineHeight - startY;

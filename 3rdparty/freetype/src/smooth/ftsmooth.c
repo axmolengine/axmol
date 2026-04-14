@@ -151,7 +151,7 @@
 
     params.clip_box.xMin = 0;
     params.clip_box.yMin = 0;
-    params.clip_box.xMax = bitmap->width;
+    params.clip_box.xMax = bitmap->width / 3;
     params.clip_box.yMax = bitmap->rows;
 
     if ( bitmap->pitch < 0 )

@@ -85,17 +85,6 @@ $main_pkg_compress_args = @{
     Prefix           = "axmol-$version"
 }
 
-$bs_pkg_file_name = "axmol-bs-$version.zip"
-$bs_pkg_file_path = $(Join-Path $AX_ROOT $bs_pkg_file_name)
-$bs_pkg_compress_args = @{
-    Path             = @("$AX_ROOT/1k", "$AX_ROOT/setup.ps1", "$AX_ROOT/axmol/axmolver.h.in", "$AX_ROOT/tools/cmdline")
-    CompressionLevel = 'Optimal'
-    DestinationPath  = $bs_pkg_file_path
-    RelativeBasePath = $AX_ROOT
-    Exclude          = $excludes
-    Prefix           = "axmol-bs-$version"
-}
-
 function Compress-ArchiveEx() {
     param(
         $Path,
@@ -362,12 +351,6 @@ else {
 
 # save release note
 New-Item -Path $release_note -ItemType File -Value $release_note_content -Force
-
-# create axmol build system package
-Write-Host "Creating build system package $bs_pkg_file_path ..."
-$total= Compress-ArchiveEx @bs_pkg_compress_args -Force
-$bs_md5_digest = (Get-FileHash $bs_pkg_file_path -Algorithm MD5).Hash.ToLower()
-Write-Host "Create build system package $bs_pkg_file_path done, ${total} files found, MD5: $bs_md5_digest"
 
 # create main package
 Write-Host "Creating main package $pkg_file_path ..."

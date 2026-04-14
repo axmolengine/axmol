@@ -723,6 +723,7 @@
       /* note that `glyf' or `CFF2' have precedence */
       if ( face->goto_table( face, TTAG_glyf, stream, 0 ) &&
            face->goto_table( face, TTAG_CFF2, stream, 0 ) &&
+           face->goto_table( face, TTAG_hvgl, stream, 0 ) &&
            !face->goto_table( face, TTAG_CFF, stream, 0 ) )
         num_instances = 0;
 

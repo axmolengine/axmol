@@ -55,7 +55,6 @@ struct ImGui_ImplAxmolSW_Data
     // ImGui_ImplAxmolSW_Data()   { memset(this, 0, sizeof(*this)); }
 
     // axmol spec data
-    Vec2 ViewResolution = Vec2(1920, 1080);
     ImVec2 LastValidMousePos;
     EventListener* TouchListener = nullptr;
 
@@ -235,14 +234,13 @@ void ImGui_ImplAxmolSW_NewFrame()
     IM_ASSERT(bd != nullptr && "Did you call ImGui_ImplAxmolSW_InitForXXX()?");
 
     // Setup display size (every frame to accommodate for window resizing)
-    int32_t window_width  = bd->ViewResolution.width;
-    int32_t window_height = bd->ViewResolution.height;
-    int display_width     = bd->Window->getWindowSize().width;
-    int display_height    = bd->Window->getWindowSize().height;
+    auto renderView  = bd->Window;
+    auto winSize     = renderView->getWindowSize();
+    auto renderScale = renderView->getRenderScale();
 
-    io.DisplaySize = ImVec2((float)window_width, (float)window_height);
-    if (window_width > 0 && window_height > 0)
-        io.DisplayFramebufferScale = ImVec2((float)display_width / window_width, (float)display_height / window_height);
+    io.DisplaySize = ImVec2((float)winSize.width, (float)winSize.height);
+    if (winSize.width > 0 && winSize.height > 0)
+        io.DisplayFramebufferScale = ImVec2(renderScale, renderScale);
 
     // Setup time step
     auto now            = std::chrono::high_resolution_clock::now();
@@ -250,13 +248,6 @@ void ImGui_ImplAxmolSW_NewFrame()
     double current_time = std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count() / 1e9;
     io.DeltaTime        = bd->Time > 0.0 ? (float)(current_time - bd->Time) : (float)(1.0f / 60.0f);
     bd->Time            = current_time;
-}
-
-// @imgui_impl_axmol.h
-IMGUI_IMPL_API void ImGui_ImplAxmol_SetViewResolution(float width, float height)
-{
-    auto bd = ImGui_ImplAxmolSW_GetBackendData();
-    bd->ViewResolution.set(width, height);
 }
 
 #if defined(__clang__)

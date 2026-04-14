@@ -766,8 +766,7 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, FontDefinition* outValue, co
         TextHAlignment defaultTextAlignment  = TextHAlignment::LEFT;
         TextVAlignment defaultTextVAlignment = TextVAlignment::TOP;
 
-        // by default shadow and stroke are off
-        outValue->_shadow._shadowEnabled = false;
+        // by default stroke is off
         outValue->_stroke._strokeEnabled = false;
 
         // white text by default
@@ -806,45 +805,6 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, FontDefinition* outValue, co
         if (!lua_isnil(L, -1))
         {
             luaval_to_size(L, lua_gettop(L), &outValue->_dimensions);
-        }
-        lua_pop(L, 1);
-
-        lua_pushstring(L, "shadowEnabled");
-        lua_gettable(L, lo);
-        if (!lua_isnil(L, -1))
-        {
-            luaval_to_boolean(L, -1, &outValue->_shadow._shadowEnabled);
-            if (outValue->_shadow._shadowEnabled)
-            {
-                // default shadow values
-                outValue->_shadow._shadowOffset  = Size(5, 5);
-                outValue->_shadow._shadowBlur    = 1;
-                outValue->_shadow._shadowOpacity = 1;
-            }
-
-            lua_pushstring(L, "shadowOffset");
-            lua_gettable(L, lo);
-            if (!lua_isnil(L, -1))
-            {
-                luaval_to_size(L, lua_gettop(L), &outValue->_shadow._shadowOffset);
-            }
-            lua_pop(L, 1);
-
-            lua_pushstring(L, "shadowBlur");
-            lua_gettable(L, lo);
-            if (!lua_isnil(L, -1))
-            {
-                outValue->_shadow._shadowBlur = (float)lua_tonumber(L, -1);
-            }
-            lua_pop(L, 1);
-
-            lua_pushstring(L, "shadowOpacity");
-            lua_gettable(L, lo);
-            if (!lua_isnil(L, -1))
-            {
-                outValue->_shadow._shadowOpacity = (float)lua_tonumber(L, -1);
-            }
-            lua_pop(L, 1);
         }
         lua_pop(L, 1);
 
@@ -2368,25 +2328,8 @@ void fontdefinition_to_luaval(lua_State* L, const FontDefinition& inValue)
     size_to_luaval(L, inValue._dimensions);                /* L: table key value*/
     lua_rawset(L, -3);                                     /* table[key] = value, L: table */
 
-    // Shadow
-    lua_pushstring(L, "shadowEnabled");                 /* L: table key */
-    lua_pushboolean(L, inValue._shadow._shadowEnabled); /* L: table key value*/
-    lua_rawset(L, -3);                                  /* table[key] = value, L: table */
-
-    lua_pushstring(L, "shadowOffset");                /* L: table key */
-    size_to_luaval(L, inValue._shadow._shadowOffset); /* L: table key value*/
-    lua_rawset(L, -3);                                /* table[key] = value, L: table */
-
-    lua_pushstring(L, "shadowBlur");                            /* L: table key */
-    lua_pushnumber(L, (lua_Number)inValue._shadow._shadowBlur); /* L: table key value*/
-    lua_rawset(L, -3);                                          /* table[key] = value, L: table */
-
-    lua_pushstring(L, "shadowOpacity");                            /* L: table key */
-    lua_pushnumber(L, (lua_Number)inValue._shadow._shadowOpacity); /* L: table key value*/
-    lua_rawset(L, -3);                                             /* table[key] = value, L: table */
-
     // Stroke
-    lua_pushstring(L, "shadowEnabled");                 /* L: table key */
+    lua_pushstring(L, "strokeEnabled");                 /* L: table key */
     lua_pushboolean(L, inValue._stroke._strokeEnabled); /* L: table key value*/
     lua_rawset(L, -3);                                  /* table[key] = value, L: table */
 

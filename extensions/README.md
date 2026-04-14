@@ -23,7 +23,7 @@
 ## ImGui
 
 - [![Upstream](https://img.shields.io/github/v/release/ocornut/imgui?label=Upstream)](https://github.com/ocornut/imgui)
-- Version: 1.92.6-docking
+- Version: 1.92.7-docking
 - License: MIT
   
 ## Inspector
@@ -90,5 +90,5 @@
 ## spine
 
 - Upstream: https://github.com/EsotericSoftware/spine-runtimes
-- Version: 4.2-0f8a707 (Until Mar.5 2025) with changes to adapte axmol
+- Version: 4.2-2bf6a5c (Until Apr.1 2026) with changes to adapte axmol
 - License: Spine Runtimes License

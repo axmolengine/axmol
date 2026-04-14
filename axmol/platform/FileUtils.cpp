@@ -895,6 +895,68 @@ std::unique_ptr<IFileStream> FileUtils::openFileStream(std::string_view filePath
     return fs.open(filePath, mode) ? std::make_unique<FileStream>(std::move(fs)) : nullptr;
 }
 
+bool FileUtils::copyFile(std::string_view sourcePath, std::string_view destinationPath, int64_t bufferSize)
+{
+    auto srcFs = openFileStream(sourcePath, IFileStream::Mode::READ);
+    if (!srcFs)
+    {
+        AXLOGW("FileUtils::copyFile failed, can't open sourcePath: {}", sourcePath);
+        return false;
+    }
+
+    std::unique_ptr<IFileStream> destFs{nullptr};
+
+    if (isAbsolutePathInternal(destinationPath))
+    {
+        destFs = openFileStream(destinationPath, IFileStream::Mode::WRITE);
+    }
+    else
+    {
+        std::string fullpath = getWritablePath();
+        fullpath += destinationPath;
+        destFs = openFileStream(fullpath, IFileStream::Mode::WRITE);
+    }
+    if (!destFs)
+    {
+        AXLOGW("FileUtils::copyFile failed, can't open destinationPath: {}", sourcePath);
+        return false;
+    }
+
+    auto srcFileSize = srcFs->size();
+    if (srcFileSize <= 0)
+        return true;
+
+    destFs->resize(srcFileSize);
+
+    if (bufferSize <= 0)
+        bufferSize = srcFileSize;
+
+    tlx::byte_buffer buffer(bufferSize);
+
+    int64_t totalCopied = 0;
+    do
+    {
+        unsigned int toRead = static_cast<unsigned int>(std::min(bufferSize, srcFileSize - totalCopied));
+        int readBytes       = srcFs->read(buffer.data(), toRead);
+        if (readBytes <= 0)
+        {
+            AXLOGW("FileUtils::copyFile failed, read error at offset {}", totalCopied);
+            return false;
+        }
+
+        int writtenBytes = destFs->write(buffer.data(), readBytes);
+        if (writtenBytes != readBytes)
+        {
+            AXLOGW("FileUtils::copyFile failed, write error at offset {}", totalCopied);
+            return false;
+        }
+
+        totalCopied += readBytes;
+    } while (totalCopied < srcFileSize);
+
+    return true;
+}
+
 /* !!!Notes for c++fs
  a. ios: require ios 13.0+, currently use ghc as workaround in lower ios 13.0- devices
  b. android: require ndk-r22+

@@ -312,7 +312,7 @@ public:
      *
      * @return An integer number.
      */
-    int getCategoryBits() const { return _collisionFilter.categoryBits; }
+    uint64_t getCategoryBits() const { return _collisionFilter.categoryBits; }
 
     /**
      * A mask that defines which categories of physics bodies can collide with this physics body.

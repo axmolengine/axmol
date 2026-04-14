@@ -32,7 +32,7 @@
 
 ## ConcurrentQueue
 - [![Upstream](https://img.shields.io/github/v/tag/cameron314/concurrentqueue?label=Upstream)](https://github.com/cameron314/concurrentqueue)
-- Version: 1.0.4
+- Version: 1.0.5
 - License: BSL-1.0
 
 ## ConvertUTF
@@ -73,7 +73,9 @@
 
 ## FreeType
 - [![Upstream](https://img.shields.io/gitlab/v/tag/freetype/freetype?label=Upstream)](https://gitlab.freedesktop.org/freetype/freetype)
-- Version: 2.14.3
+- Version: 2.14.3-a6d4860 (Until Apr 12, 2026), with modifications:
+  - ftsystem.c: Use UTF-8 instead ACP for Windows paths
+  - hvfload.c: Fix glyph->metrics.height too-small(=4) issue
 - License: BSD-style (The FreeType Project)
 
 ## Glad
@@ -85,7 +87,7 @@
 
 ## glfw
 - [![Upstream](https://img.shields.io/github/v/release/glfw/glfw?label=Upstream)](https://github.com/glfw/glfw)
-- Version: 3.4 with modified for create as win32 child window support
+- Version: 3.4, with modified for create as win32 child window support
 - License: zlib
 
 ## ghc (iOS < 13 ONLY)
@@ -100,7 +102,7 @@
 
 ## jpeg-turbo
 - [![Upstream](https://img.shields.io/github/v/release/libjpeg-turbo/libjpeg-turbo?label=Upstream)](https://github.com/libjpeg-turbo/libjpeg-turbo)
-- Version: 3.1.4
+- Version: 3.1.4.1
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp
@@ -121,12 +123,12 @@
   
 - sol2
   - [![Upstream](https://img.shields.io/github/v/tag/ThePhD/sol2?label=Upstream)](https://github.com/ThePhD/sol2)
-  - Version: 3.5.0 with modified for lua-5.5 support
+  - Version: 3.5.0, with modified for lua-5.5 support
   - License: MIT
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-659a616
+  - Version: 2.1-18b087c
   - License: MIT
 
 - tolua
@@ -146,7 +148,7 @@
 
 ## minimp3
 - Upstream: https://github.com/lieff/minimp3
-- Version: git afb604c(318) with modified for UWP apps support
+- Version: git afb604c(318), with modified for UWP apps support
 - License: CC0-1.0
 
 ## mio
@@ -192,12 +194,12 @@
 
 ## OpenSSL
 - [![Upstream](https://img.shields.io/github/v/release/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
-- Version: 3.0.19
+- Version: 3.0.20
 - License: Apache-2.0
 
 ## png
 - [![Upstream](https://img.shields.io/github/v/tag/glennrp/libpng?label=Upstream)](https://github.com/glennrp/libpng)
-- Version: 1.6.56
+- Version: 1.6.57
 - License: PNG Reference Library License version 2
 
 ## poly2tri
@@ -219,12 +221,12 @@
 
 ## recast
 - Upstream: [![Upstream](https://img.shields.io/github/v/tag/recastnavigation/recastnavigation?label=Upstream)](https://github.com/recastnavigation/recastnavigation) 
-- Version: 1.6.0 with dtCrowd::getEditableAgentAnim
+- Version: 1.6.0, with dtCrowd::getEditableAgentAnim
 - License: zlib
 
 ## robin-map
 - [![Upstream](https://img.shields.io/github/v/tag/Tessil/robin-map?label=Upstream)](https://github.com/Tessil/robin-map)
-- Version: 1.4.1 with modified for stl compatibility
+- Version: 1.4.1, with modified for stl compatibility
     - Modify `robin_map::iterator->second` to mutable same with `stl map/unordered_map`
     - Forward `robin_map::operator[]` key by `std::forward` same with `stl map/unordered_map`
     - Improve code compiler compatibility, i.g. `std::max` ==> `(std::max)`
@@ -232,7 +234,7 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 4.5.0
+- Version: 4.6.1
 - License: Apache-2.0
 
 ## stb (stb_image)
@@ -242,7 +244,7 @@
 
 ## unzip (minizip-1.2)
 - Upstream: https://github.com/simdsoft/mz12
-- Version: 1.2 with bugfixs & improvements
+- Version: 1.2, with bugfixs & improvements
 - License: zlib
 
 ## webp

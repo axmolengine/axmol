@@ -66,7 +66,7 @@ public:
         CUSTOM
     };
 
-    typedef std::string ListenerID;
+    using ListenerID = std::string_view;
 
     /**
      * Constructor

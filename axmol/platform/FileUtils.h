@@ -614,6 +614,29 @@ public:
      */
     virtual std::unique_ptr<IFileStream> openFileStream(std::string_view filePath, IFileStream::Mode mode) const;
 
+    /**
+     * @brief Copy a file from source to destination.
+     *
+     * This function copies the contents of a file located at @p sourcePath
+     * to a new file at @p destinationPath.
+     *
+     * @param sourcePath Path to the source file (must exist and be readable).
+     * @param destinationPath Path to the destination file (must be writable).
+     * @param bufferSize Size of the buffer used for copying.
+     *        - If set to -1, no buffer is used (direct copy), which is suitable for small files.
+     *        - If set to a positive value, a buffer of that size (in bytes) is allocated
+     *          to improve performance for larger files.
+     *
+     * @note Destination path handling rules:
+     *       - Absolute path: must point to a writable location on disk.
+     *         If a file already exists at that location, it may be overwritten.
+     *       - Relative path: will be resolved against the engine's writablePath.
+     *       - In both cases, the caller must ensure that the parent directory
+     *         of the destination path exists.
+     *
+     */
+    bool copyFile(std::string_view sourcePath, std::string_view destinationPath, int64_t bufferSize = -1);
+
 protected:
     /**
      * @brief update

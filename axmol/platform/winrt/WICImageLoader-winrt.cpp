@@ -30,7 +30,7 @@ obtained from https://directxtk.codeplex.com
 ****************************************************************************/
 #include "axmol/platform/winrt/WICImageLoader-winrt.h"
 #include "axmol/platform/winrt/WinRTUtils.h"
-#include "axmol/platform/win32/ComPtr.h"
+#include "axmol/platform/msw/ComPtr.h"
 #include "ntcvt/ntcvt.hpp"
 
 namespace ax

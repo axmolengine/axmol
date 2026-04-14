@@ -1,0 +1,13 @@
+<resources>
+    <style name="AxmolTheme.Fullscreen" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+    </style>
+    <style name="AxmolTheme.Dark.Fullscreen" parent="AxmolTheme.Fullscreen">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+    <style name="AxmolTheme.Light.Fullscreen" parent="AxmolTheme.Fullscreen">
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+</resources>

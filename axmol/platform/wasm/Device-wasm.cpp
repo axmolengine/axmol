@@ -64,92 +64,138 @@ Data Device::getTextureDataForText(std::string_view text,
                                    int& height,
                                    bool& hasPremultipliedAlpha)
 {
-    char color[10];
-    fmt::format_to_z(color, "#{:02x}{:02x}{:02x}{:02x}", textDefinition._fontFillColor.r,
-                     textDefinition._fontFillColor.g, textDefinition._fontFillColor.b, textDefinition._fontFillColor.a);
+    char colorHex[10] = {0};
+    auto& fillColor   = textDefinition._fontFillColor;
+    fmt::format_to_z(colorHex, "#{:02x}{:02x}{:02x}{:02x}", fillColor.r, fillColor.g, fillColor.b, fillColor.a);
+
+    char strokeColorHex[10] = {0};
+    if (textDefinition._stroke._strokeEnabled)
+    {
+        auto& strokeColor = textDefinition._stroke._strokeColor;
+        fmt::format_to_z(strokeColorHex, "#{:02x}{:02x}{:02x}{:02x}", strokeColor.r, strokeColor.g, strokeColor.b,
+                         strokeColor.a);
+    }
+
     // clang-format off
     unsigned char* ptr = (unsigned char*)EM_ASM_PTR({
         var lines = UTF8ToString($0).split("\n");
         var fontName = UTF8ToString($1);
-        var fontSize = $2;
+        var finalFontSize = $2;
         var color = UTF8ToString($3);
         var dimWidth = $4;
         var dimHeight = $5;
         var align = $6;
+        var strokeEnabled = $7;
+        var strokeSize = $8;
+        var strokeColor = UTF8ToString($9);
+        var overflow = $10;
 
         // use shared canvas
         var canvas = Module.axmolSharedCanvas = Module.axmolSharedCanvas || document.createElement("canvas");
         var context = canvas.getContext('2d', { willReadFrequently: true });
-        context.font = fontSize + "px " + fontName;
         // use alphabetic baseline for text rendering
         context.textBaseline = "alphabetic";
 
         var linesWidth = [];
         var linesAscent = [];
         var linesDescent = [];
-        var totalHeight = 0;
-        var maxWidth = dimWidth > 0 ? dimWidth : 0;
-
+        var textWidth = 0;
+        var textHeight = 0;
         var defaultAscent = 0;
         var defaultDescent = 0;
 
-        var measureDefault = ()=> {
-            if (defaultAscent == 0 && defaultDescent == 0) {
-                var metrics = context.measureText('M'); // or Hg
-                defaultAscent = (typeof metrics.actualBoundingBoxAscent === "number") ? metrics.actualBoundingBoxAscent : fontSize * 0.8;
-                defaultDescent = (typeof metrics.actualBoundingBoxDescent === "number") ? metrics.actualBoundingBoxDescent : fontSize * 0.2;
+        var resetMetrics = ()=> {
+            linesWidth.length = 0;
+            linesAscent.length = 0;
+            linesDescent.length = 0;
+            textWidth = 0;
+            textHeight = 0;
+            defaultAscent = 0;
+            defaultDescent = 0;
+        };
+
+        var measureLayout = (fontSize, shouldCollectMetrics) => {
+            context.font = fontSize + "px " + fontName;
+
+            let metrics = context.measureText('M'); // or Hg
+            defaultAscent = (typeof metrics.actualBoundingBoxAscent === "number") ? metrics.actualBoundingBoxAscent : fontSize * 0.8;
+            defaultDescent = (typeof metrics.actualBoundingBoxDescent === "number") ? metrics.actualBoundingBoxDescent : fontSize * 0.2;
+
+            // compute per line metrics
+            for (var i = 0; i < lines.length; i++) {
+                metrics = context.measureText(lines[i]);
+                let lineWidth = metrics.width;
+                // if browser not support actualBoundingBoxAscent/descent, use fallback values
+                let ascent = (typeof metrics.actualBoundingBoxAscent === "number") ? metrics.actualBoundingBoxAscent : fontSize * 0.8;
+                let descent = (typeof metrics.actualBoundingBoxDescent === "number") ? metrics.actualBoundingBoxDescent : fontSize * 0.2;
+                let lineHeight = ascent + descent;
+                // if the line text only contains white space chars, the lineHeight will be 0,
+                // so we re-calculate lineHeight by representative text, i.e. 'M' or 'Hg'
+                if (lineHeight == 0) {
+                    ascent = defaultAscent;
+                    descent = defaultDescent;
+                    lineHeight = ascent + descent;
+                }
+                if (shouldCollectMetrics) {
+                    linesWidth.push(lineWidth);
+                    linesAscent.push(ascent);
+                    linesDescent.push(descent);
+                }
+                if (lineWidth > textWidth) {
+                    textWidth = lineWidth;
+                }
+                textHeight += lineHeight;
             }
         };
 
-        // compute per line metrics
-        for (var i = 0; i < lines.length; i++) {
-            var metrics = context.measureText(lines[i]);
-            var lineWidth = metrics.width;
-            // if browser not support actualBoundingBoxAscent/descent, use fallback values
-            var ascent = (typeof metrics.actualBoundingBoxAscent === "number") ? metrics.actualBoundingBoxAscent : fontSize * 0.8;
-            var descent = (typeof metrics.actualBoundingBoxDescent === "number") ? metrics.actualBoundingBoxDescent : fontSize * 0.2;
-            var lineHeight = ascent + descent;
-			// if the line text only contains white space chars, the lineHeight will be 0,
-			// so we re-calculate lineHeight by representative text, i.e. 'M' or 'Hg'
-            if (lineHeight == 0) {
-                measureDefault();
-                ascent = defaultAscent;
-                descent = defaultDescent;
-                lineHeight = ascent + descent;
+        // SHRINK mode: binary search for best fitting font size
+        if (overflow === 2 && dimWidth > 0 && dimHeight > 0) {
+            let low = 1;
+            let high = finalFontSize;
+            let bestFit = finalFontSize;
+            while (low <= high) {
+                let mid = Math.floor((low + high) / 2);
+                measureLayout(mid, false);
+                if (textWidth <= dimWidth && textHeight <= dimHeight) {
+                    bestFit = mid;
+                    low = mid + 1;
+                } else {
+                    high = mid - 1;
+                }
+                resetMetrics();
             }
-            linesWidth.push(lineWidth);
-            linesAscent.push(ascent);
-            linesDescent.push(descent);
-            if (dimWidth <= 0 && lineWidth > maxWidth) {
-                maxWidth = lineWidth;
-            }
-            totalHeight += lineHeight;
+            finalFontSize = bestFit;
         }
 
-        var canvasWidth = Math.ceil(maxWidth);
-        var canvasHeight = Math.ceil(totalHeight);
+        measureLayout(finalFontSize, true);
 
-        // if dimensions are specified, use them to limit the height
-        if (dimHeight > 0) {
-            canvasHeight = Math.ceil(dimHeight);
-        }
+        var renderWidth = dimWidth > 0 ? Math.ceil(dimWidth) : Math.ceil(textWidth);
+        var renderHeight = dimHeight > 0 ? Math.ceil(dimHeight) : Math.ceil(textHeight);
 
-        canvas.width = canvasWidth;
-        canvas.height = canvasHeight;
+        canvas.width = renderWidth;
+        canvas.height = renderHeight;
 
-        context.clearRect(0, 0, canvasWidth, canvasHeight);
-        context.font = fontSize + "px " + fontName;
+        context.clearRect(0, 0, renderWidth, renderHeight);
+
+        // after setting canvas width/height, the context state will be reset, so we need to set them again
+        context.font = finalFontSize + "px " + fontName;
         context.fillStyle = color;
         context.textBaseline = "alphabetic";
+
+        strokeEnabled = strokeEnabled && strokeSize > 0;
+        if (strokeEnabled) {
+            context.lineWidth = strokeSize;
+            context.strokeStyle = strokeColor;
+        }
 
         // vertical top
         var offsetY = 0;
         if ((align & 0xf0) === 0x30) {
             // vertical center align
-            offsetY = (canvasHeight - totalHeight) / 2;
+            offsetY = (renderHeight - textHeight) / 2;
         } else if ((align & 0xf0) === 0x20) {
             // bottom align
-            offsetY = canvasHeight - totalHeight;
+            offsetY = renderHeight - textHeight;
         }
 
         // draw each line of text
@@ -158,23 +204,29 @@ Data Device::getTextureDataForText(std::string_view text,
             // horizontal left
             var offsetX = 0;
             if ((align & 0x0f) === 0x03) {
-                offsetX = (canvasWidth - linesWidth[i]) / 2;
+                offsetX = (renderWidth - linesWidth[i]) / 2;
             } else if ((align & 0x0f) === 0x02) {
-                offsetX = canvasWidth - linesWidth[i];
+                offsetX = renderWidth - linesWidth[i];
             }
             // use align left by default, offsetX remains 0
             var baselineY = offsetY + linesAscent[i];
+            if (strokeEnabled) {
+                context.strokeText(lines[i], offsetX, baselineY);
+            }
             context.fillText(lines[i], offsetX, baselineY);
             offsetY += lineH;
         }
 
         // get pixel data from the canvas
-        var data = context.getImageData(0, 0, canvasWidth, canvasHeight).data;
+        var data = context.getImageData(0, 0, renderWidth, renderHeight).data;
         var ptr = _malloc(data.byteLength);
         var buffer = new Uint8Array(Module.HEAPU8.buffer, ptr, data.byteLength);
         buffer.set(data);
         return ptr;
-    }, text.data(), textDefinition._fontName.c_str(), textDefinition._fontSize, color, textDefinition._dimensions.width, textDefinition._dimensions.height, align);
+    }, text.data(), textDefinition._fontName.c_str(), textDefinition._fontSize, colorHex,
+       textDefinition._dimensions.width, textDefinition._dimensions.height, align,
+       textDefinition._stroke._strokeEnabled, textDefinition._stroke._strokeSize, strokeColorHex,
+       textDefinition._overflow);
 
     width = EM_ASM_INT({
         return Module.axmolSharedCanvas.width;

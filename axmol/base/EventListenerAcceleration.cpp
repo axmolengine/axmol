@@ -31,7 +31,7 @@
 namespace ax
 {
 
-const std::string EventListenerAcceleration::LISTENER_ID = "__ax_acceleration";
+const std::string_view EventListenerAcceleration::LISTENER_ID = "__ax_acceleration"sv;
 
 EventListenerAcceleration::EventListenerAcceleration() {}
 

@@ -1066,7 +1066,12 @@ function setup_cmake($skipOS = $false) {
         $cmake_url = devtool_url 'cmake' $cmake_ver
         $cmake_pkg_filename = Split-Path $cmake_url -Leaf
         $cmake_pkg_path = Join-Path $install_prefix $cmake_pkg_filename
-        $cmake_pkg_name = [System.IO.Path]::GetFileNameWithoutExtension($cmake_pkg_filename)
+        if ($cmake_pkg_filename.EndsWith('.tar.gz')) {
+            $cmake_pkg_name = $cmake_pkg_filename.SubString(0, $cmake_pkg_filename.Length - 7)
+        }
+        else {
+            $cmake_pkg_name = [System.IO.Path]::GetFileNameWithoutExtension($cmake_pkg_filename)
+        }
         $cmake_dir = Join-Path $install_prefix $cmake_pkg_name
         if ($IsMacOS) {
             $cmake_app_contents = Join-Path $cmake_dir 'CMake.app/Contents'
@@ -1078,6 +1083,12 @@ function setup_cmake($skipOS = $false) {
             else {
                 fetch_pkg $cmake_url
             }
+        }
+
+        if ($IsMacOS -and !$1k.isdir($cmake_dir)) {
+            # tar.gz packages expand to a plain directory name, which may differ from
+            # simple GetFileNameWithoutExtension() output when multiple extensions exist.
+            $cmake_dir = (Get-ChildItem -Path $install_prefix -Directory -Filter "cmake-$cmake_ver-macos-*" | Select-Object -First 1).FullName
         }
 
         if ($1k.isdir($cmake_dir)) {

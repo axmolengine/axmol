@@ -14,7 +14,7 @@ extern "C" {
 struct GLFWwindow;
 }
 
-typedef void (*ImGuiImplAxmolUpdateFontsFn)(void* userdata);
+typedef void (*ImGuiImplAxmolRebuildFontsFn)(void* userdata);
 
 IMGUI_IMPL_API void ImGui_ImplAxmol_Init();
 IMGUI_IMPL_API void ImGui_ImplAxmol_Shutdown();
@@ -33,10 +33,7 @@ IMGUI_IMPL_API bool ImGui_ImplAxmol_CreateDeviceObjects();
 IMGUI_IMPL_API void ImGui_ImplAxmol_DestroyDeviceObjects();
 
 // Sets custom font atlas builder function
-IMGUI_IMPL_API void ImGui_ImplAxmol_SetUpdateFontsFunc(ImGuiImplAxmolUpdateFontsFn func, void* userdata);
+IMGUI_IMPL_API void ImGui_ImplAxmol_SetRebuildFontsFunc(ImGuiImplAxmolRebuildFontsFn func, void* userdata);
 
 // Sets Device objects dirty
 IMGUI_IMPL_API void ImGui_ImplAxmol_MarkFontsDirty();
-
-// Sets the required view resolution for the UI
-IMGUI_IMPL_API void ImGui_ImplAxmol_SetViewResolution(float width, float height);

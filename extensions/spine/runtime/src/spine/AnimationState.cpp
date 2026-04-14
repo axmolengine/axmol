@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated July 28, 2023. Replaces all prior versions.
+ * Last updated April 5, 2025. Replaces all prior versions.
  *
- * Copyright (c) 2013-2023, Esoteric Software LLC
+ * Copyright (c) 2013-2025, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software or
- * otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,8 +23,8 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
- * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #include <spine/AnimationState.h>
@@ -164,7 +164,12 @@ void TrackEntry::setMixDuration(float inValue) { _mixDuration = inValue; }
 
 void TrackEntry::setMixDuration(float mixDuration, float delay) {
 	_mixDuration = mixDuration;
-	if (_previous && delay <= 0) delay += _previous->getTrackComplete() - mixDuration;
+	if (delay <= 0) {
+		if (_previous != nullptr)
+			delay = MathUtil::max(delay + _previous->getTrackComplete() - mixDuration, 0.0f);
+		else
+			delay = 0;
+	}
 	this->_delay = delay;
 }
 
@@ -606,10 +611,11 @@ TrackEntry *AnimationState::addAnimation(size_t trackIndex, Animation *animation
 	if (last == NULL) {
 		setCurrent(trackIndex, entry, true);
 		_queue->drain();
+		if (delay < 0) delay = 0;
 	} else {
 		last->_next = entry;
 		entry->_previous = last;
-		if (delay <= 0) delay += last->getTrackComplete() - entry->_mixDuration;
+		if (delay <= 0) delay = MathUtil::max(delay + last->getTrackComplete() - entry->_mixDuration, 0.0f);
 	}
 
 	entry->_delay = delay;
@@ -625,7 +631,7 @@ TrackEntry *AnimationState::setEmptyAnimation(size_t trackIndex, float mixDurati
 
 TrackEntry *AnimationState::addEmptyAnimation(size_t trackIndex, float mixDuration, float delay) {
 	TrackEntry *entry = addAnimation(trackIndex, AnimationState::getEmptyAnimation(), false, delay);
-	if (delay <= 0) entry->_delay += entry->_mixDuration - mixDuration;
+	if (delay <= 0) entry->_delay = MathUtil::max(entry->_delay + entry->_mixDuration - mixDuration, 0.0f);
 	entry->_mixDuration = mixDuration;
 	entry->_trackEnd = mixDuration;
 	return entry;
@@ -794,18 +800,16 @@ bool AnimationState::updateMixingFrom(TrackEntry *to, float delta) {
 	from->_animationLast = from->_nextAnimationLast;
 	from->_trackLast = from->_nextTrackLast;
 
-	if (to->_nextTrackLast != -1) {                             // The from entry was applied at least once.
-		bool discard = to->_mixTime == 0 && from->_mixTime == 0;// Discard the from entry when neither have advanced yet.
-		if (to->_mixTime >= to->_mixDuration || discard) {
-			// Require totalAlpha == 0 to ensure mixing is complete or the transition is a single frame or discarded.
-			if (from->_totalAlpha == 0 || to->_mixDuration == 0 || discard) {
-				to->_mixingFrom = from->_mixingFrom;
-				if (from->_mixingFrom) from->_mixingFrom->_mixingTo = to;
-				to->_interruptAlpha = from->_interruptAlpha;
-				_queue->end(from);
-			}
-			return finished;
+	// The from entry was applied at least once and the mix is complete.
+	if (to->_nextTrackLast != -1 && to->_mixTime >= to->_mixDuration) {
+		// Mixing is complete for all entries before the from entry or the mix is instantaneous.
+		if (from->_totalAlpha == 0 || to->_mixDuration == 0) {
+			to->_mixingFrom = from->_mixingFrom;
+			if (from->_mixingFrom) from->_mixingFrom->_mixingTo = to;
+			to->_interruptAlpha = from->_interruptAlpha;
+			_queue->end(from);
 		}
+		return finished;
 	}
 
 	from->_trackTime += delta * from->_timeScale;

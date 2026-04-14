@@ -38,7 +38,7 @@ public:
                   float dpi,
                   Windows::Graphics::Display::DisplayOrientations orientation,
                   Windows::UI::Core::CoreDispatcher const& dispatcher,
-                  Windows::UI::Xaml::Controls::Panel const& panel);
+                  Windows::UI::Xaml::Controls::SwapChainPanel const& panel);
     AxmolRenderer(const AxmolRenderer&) = delete;
     ~AxmolRenderer();
     void SetQueueOperationCb(std::function<void(ax::AsyncOperation, void*)> op);
@@ -58,6 +58,6 @@ private:
     float m_dpi;
 
     winrt::agile_ref<Windows::UI::Core::CoreDispatcher> m_dispatcher;
-    winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> m_panel;
+    winrt::agile_ref<Windows::UI::Xaml::Controls::SwapChainPanel> m_panel;
     Windows::Graphics::Display::DisplayOrientations m_orientation;
 };

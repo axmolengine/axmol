@@ -397,6 +397,7 @@ std::string PhysicsDemoLogoSmash::title() const
 
 PhysicsDemoClickAdd::~PhysicsDemoClickAdd()
 {
+    Device::setPreferredOrientation(Device::Orientation::SensorLandscape);
     Device::setAccelerometerEnabled(false);
 }
 
@@ -418,6 +419,8 @@ void PhysicsDemoClickAdd::onEnter()
     this->addChild(node);
 
     addGrossiniAtPosition(VisibleRect::center());
+
+    Device::setPreferredOrientation(Device::Orientation::Landscape);
 }
 
 std::string PhysicsDemoClickAdd::subtitle() const

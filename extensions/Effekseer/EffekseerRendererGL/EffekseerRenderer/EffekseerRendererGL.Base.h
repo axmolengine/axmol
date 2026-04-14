@@ -70,7 +70,7 @@ class TextureLoader;
 #else
 #define GLCheckError()
 #endif
-#elif EMSCRIPTEN
+#elif defined(__EMSCRIPTEN__)
 #ifndef NDEBUG
 #define GLCheckError()                                                                                                       \
 	{                                                                                                                        \

@@ -99,9 +99,9 @@ void DriverContext::makeCurrentDriver()
 
     for (auto& f : factories)
     {
-        auto driver = f->create();
-        if (contextAttrs.driverPreference != DriverPreference::Auto && driver->type() != contextAttrs.driverPreference)
+        if (contextAttrs.driverPreference != DriverPreference::Auto && f->type() != contextAttrs.driverPreference)
             continue;
+        auto driver = f->create();
         if (driver->init())
         {
             _currentDriverType = driver->type();

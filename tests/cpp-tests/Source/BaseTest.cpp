@@ -171,7 +171,7 @@ void TestList::runThisTest()
      */
 
     RenderViewImpl* renderView = (RenderViewImpl*)Director::getInstance()->getRenderView();
-#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
+#if defined(AX_PLATFORM_GLFW)
     renderView->setWindowed(g_resourceSize.width, g_resourceSize.height);
 #endif
 

@@ -26,7 +26,7 @@
 
 #include "axmol/network/Downloader.h"
 
-#if EMSCRIPTEN
+#if defined(__EMSCRIPTEN__)
 #    include "axmol/network/Downloader-wasm.h"
 #    define DownloaderImpl DownloaderEmscripten
 #else

@@ -656,12 +656,11 @@
     FT_UInt   num_contours = 0;
 
     FT_UInt     count      = border->num_points;
-    FT_Vector*  point      = border->points;
     FT_Byte*    tags       = border->tags;
     FT_Int      in_contour = 0;
 
 
-    for ( ; count > 0; count--, num_points++, point++, tags++ )
+    for ( ; count > 0; count--, num_points++, tags++ )
     {
       if ( tags[0] & FT_STROKE_TAG_BEGIN )
       {

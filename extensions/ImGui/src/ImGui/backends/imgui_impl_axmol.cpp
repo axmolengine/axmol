@@ -2,7 +2,7 @@
 
 #include "axmol/base/Director.h"
 #include "axmol/base/Data.h"
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_GLFW)
 #    include "axmol/platform/RenderViewImpl.h"
 #endif
 #include "axmol/rhi/Program.h"
@@ -129,8 +129,8 @@ struct ImGui_ImplAxmol_Data
     // axmol spec data, TODO: new type: ImGui_ImplAxmol_Data
     std::chrono::steady_clock::time_point LastFrameTime{};
 
-    ImGuiImplAxmolUpdateFontsFn UpdateFontsFunc = nullptr;
-    void* UpdateFontsFuncUserData               = nullptr;
+    ImGuiImplAxmolRebuildFontsFn RebuildFontsFunc = nullptr;
+    void* RebuildFontsFuncUserData                = nullptr;
     bool FontsDirty                             = false;
 
     ProgramInfoData ProgramInfo{};
@@ -335,8 +335,8 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_NewFrame()
     if (bd->FontsDirty)
     {
         // since imgui-1.92.0, rebuild font atlas at here
-        if (bd->UpdateFontsFunc)
-            bd->UpdateFontsFunc(bd->UpdateFontsFuncUserData);
+        if (bd->RebuildFontsFunc)
+            bd->RebuildFontsFunc(bd->RebuildFontsFuncUserData);
 
         bd->FontsDirty = false;
     }
@@ -470,7 +470,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderPlatform()
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
 
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_GLFW)
         // restore context
         if (rhi::DriverContext::isOpenGL())
         {
@@ -597,11 +597,11 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_DestroyDeviceObjects()
             ImGui_ImplAxmol_DestroyTexture(tex);
 }
 
-IMGUI_IMPL_API void ImGui_ImplAxmol_SetUpdateFontsFunc(ImGuiImplAxmolUpdateFontsFn func, void* userdata)
+IMGUI_IMPL_API void ImGui_ImplAxmol_SetRebuildFontsFunc(ImGuiImplAxmolRebuildFontsFn func, void* userdata)
 {
     auto bd                     = ImGui_ImplAxmol_GetBackendData();
-    bd->UpdateFontsFunc         = func;
-    bd->UpdateFontsFuncUserData = userdata;
+    bd->RebuildFontsFunc         = func;
+    bd->RebuildFontsFuncUserData = userdata;
 }
 
 IMGUI_IMPL_API void ImGui_ImplAxmol_MarkFontsDirty()
@@ -637,14 +637,5 @@ static void ImGui_ImplAxmol_ShutdownMultiViewportSupport()
 {
     ImGui::DestroyPlatformWindows();
 }
-
-#if defined(AX_PLATFORM_PC)
-IMGUI_IMPL_API void ImGui_ImplAxmol_SetViewResolution(float width, float height)
-{
-    // Resize (expand) window
-    auto* view = (ax::RenderViewImpl*)ax::Director::getInstance()->getRenderView();
-    view->setWindowed(width, height);
-}
-#endif
 
 //-----------------------------------------------------------------------------

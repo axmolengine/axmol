@@ -29,7 +29,7 @@
 namespace ax
 {
 
-const std::string EventListenerMouse::LISTENER_ID = "__ax_mouse";
+const std::string_view EventListenerMouse::LISTENER_ID = "__ax_mouse"sv;
 
 bool EventListenerMouse::checkAvailable()
 {

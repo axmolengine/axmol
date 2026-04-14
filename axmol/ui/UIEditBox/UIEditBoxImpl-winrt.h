@@ -61,8 +61,8 @@ public:
     void setInputMode(int inputMode);
     void setTextHorizontalAlignment(int alignment);
     void setMaxLength(int maxLength);
-    void setPosition(Windows::Foundation::Rect const& rect);
-    void setSize(Windows::Foundation::Size const& size);
+    void setPosition(float x, float y);
+    void setSize(float width, float height);
     void setText(winrt::hstring const& text);
     void setVisible(bool visible);
 
@@ -85,7 +85,7 @@ private:
     void _setPadding(Windows::UI::Xaml::Controls::Control editBox);
 
     // Properties
-    Windows::Foundation::Rect _rect;
+    Windows::Foundation::Point _position;
     Windows::Foundation::Size _size;
     Windows::UI::Color _color{0xFF, 0xFF, 0xFF, 0xFF};
     winrt::hstring _initialText;
@@ -103,8 +103,8 @@ private:
     // The actual edit box, however, could be a TextBox, PasswordBox, or a SearchBox (not yet implemented)
     Windows::UI::Xaml::Controls::Control _textBox = nullptr;
 
-    winrt::agile_ref<Windows::UI::Core::CoreDispatcher> m_dispatcher = nullptr;
-    winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> m_panel     = nullptr;
+    winrt::agile_ref<Windows::UI::Core::CoreDispatcher> m_dispatcher      = nullptr;
+    winrt::agile_ref<Windows::UI::Xaml::Controls::SwapChainPanel> m_panel = nullptr;
     Concurrency::critical_section _critical_section;
 
     winrt::delegate<Windows::Foundation::IInspectable const&, winrt::hstring const&> _beginHandler  = nullptr;

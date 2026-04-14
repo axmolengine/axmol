@@ -46,7 +46,7 @@ class Controller;
 class AX_DLL EventListenerController : public EventListener
 {
 public:
-    static const std::string LISTENER_ID;
+    static const std::string_view LISTENER_ID;
 
     /** Create a controller event listener.
      *

@@ -24,7 +24,7 @@
 // refer: https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-semantics
 #include "axmol/rhi/d3d11/ShaderModule11.h"
 #include "axmol/rhi/d3d11/Driver11.h"
-#include "axmol/platform/win32/ComPtr.h"
+#include "axmol/platform/msw/ComPtr.h"
 #include "axmol/base/Logging.h"
 
 #pragma comment(lib, "d3dcompiler.lib")

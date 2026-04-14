@@ -36,7 +36,10 @@ THE SOFTWARE.
 
 NS_AX_EXT_BEGIN
 
+#if defined(AX_PLATFORM_GLFW)
 class ImGuiEventTracker;
+#endif
+
 class ImGuiPresenter
 {
     friend class ImGuiRenderer;
@@ -94,8 +97,6 @@ public:
     float getContentZoomFactor() const { return getMainScale(); }
 
     float getMainScale() const { return _mainScale; }
-
-    void setViewResolution(float width, float height);
 
     /// <summary>
     /// Add ImGui font with contentZoomFactor
@@ -169,7 +170,7 @@ public:
     int objectRef(Object* p);
 
 private:
-    static void updateFonts(void*);
+    static void rebuildCustomFonts(void*);
 
     // perform draw ImGui stubs
     void beginFrame();
@@ -179,7 +180,9 @@ private:
 private:
     struct ImGuiLoop
     {
-        ImGuiEventTracker* tracker;
+#if defined(AX_PLATFORM_GLFW)
+        ImGuiEventTracker* tracker{nullptr};
+#endif
         std::function<void()> func;
         bool removing = false;
     };
@@ -198,7 +201,8 @@ private:
 
     int64_t _beginFrames = 0;
 
-    tlx::string_map<float> _fontsInfoMap;
+    tlx::string_map<float> _customFontSpecs;
+    tlx::string_map<ImFont*> _customLoadedFonts;
 
     bool _purgeNextLoop = false;  // whether invoke director->end at next loop
 

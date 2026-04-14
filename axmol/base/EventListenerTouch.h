@@ -46,7 +46,7 @@ class Touch;
 class AX_DLL EventListenerTouchOneByOne : public EventListener
 {
 public:
-    static const std::string LISTENER_ID;
+    static const std::string_view LISTENER_ID;
 
     /** Create a one by one touch event listener.
      */
@@ -98,7 +98,7 @@ private:
 class AX_DLL EventListenerTouchAllAtOnce : public EventListener
 {
 public:
-    static const std::string LISTENER_ID;
+    static const std::string_view LISTENER_ID;
 
     /** Create a all at once event listener.
      *
