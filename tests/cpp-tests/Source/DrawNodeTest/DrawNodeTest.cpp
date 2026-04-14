@@ -1406,7 +1406,7 @@ static Vec2 spider[] = {
 DrawNodeTests::DrawNodeTests()
 {
     ADD_TEST_CASE(DrawNodeCircleTest);
-    // ADD_TEST_CASE(DrawNodeSolidCircleTest); //will be activate with DrawNode v3.0
+    ADD_TEST_CASE(DrawNodeSolidCircleTest); //will be activate with DrawNode v3.0
     ADD_TEST_CASE(DrawNodePolygonTest);
 
     ADD_TEST_CASE(DrawNodeSpLinesTest);
@@ -2844,25 +2844,35 @@ string DrawNodeCircleTest::subtitle() const
 
 DrawNodeSolidCircleTest::DrawNodeSolidCircleTest()
 {
+    static string text = "drawSolidCircle (fast)";
+    
     showCircles();
 
-    autoTestLabel     = Label::createWithTTF("Slow is on ", "fonts/arial.ttf", 16);
+    autoTestLabel     = Label::createWithTTF(text, "fonts/arial.ttf", 16);
     auto autoTestItem = MenuItemLabel::create(autoTestLabel, [=](Object* sender) {
-        static string text = "Fast";
-        if (fast)
-        {
-            fast = false;
-            text = "Slow is on";
+        primitive        = (primitive + 1) % 4;
 
-            showCircles();
-        }
-        else
+        switch (primitive)
         {
-            fast = true;
-            text = "Fast is on";
-            showCircles();
+            case 0:
+                text = "drawSolidCircle (fast)";
+                break;
+            case 1:
+                text = "drawSolidCircle";
+                break;
+            case 2:
+                text = "drawCircle (fast)";
+                break;
+            case 3:
+                text = "drawCircle";
+                break;
+                break;
+        default:
+            break;
         }
-        //  autoTestLabel->setString(text);
+        autoTestLabel->setString(text);
+        showCircles();
+
         rect = autoTestLabel->getBoundingBox();
     });
 
@@ -2875,29 +2885,32 @@ DrawNodeSolidCircleTest::DrawNodeSolidCircleTest()
 
 void DrawNodeSolidCircleTest::showCircles()
 {
-    static float radius = 20;
+    static float radius = 1;
     drawNode->clear();
 
     auto start = std::chrono::high_resolution_clock::now();
-    for (int i = 0; i < 10000; i++)
+    for (int i = 0; i < objects; i++)
     {
         Vec2 pos = VisibleRect::center() + Vec2((VisibleRect::center().x - 50) * AXRANDOM_MINUS1_1(),
                                                 (VisibleRect::center().y - 50) * AXRANDOM_MINUS1_1());
-        drawNode->drawSolidCircle(pos, radius, 0, 36,
-                                  Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1() + 0.1f));
-        pos = VisibleRect::center() + Vec2((VisibleRect::center().x - 50) * AXRANDOM_MINUS1_1(),
-                                           (VisibleRect::center().y - 50) * AXRANDOM_MINUS1_1());
-
         Color color = Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1() + 0.1f);
 
-        if (fast)
+        switch (primitive)
         {
-            drawNode->drawSolidCircle(
-                pos, radius, 0, 36, color);  // will be changed with v3.0 drawNode->drawSolidCircle(pos, radius, color);
-        }
-        else
-        {
-            drawNode->drawSolidCircle(pos, radius, 0, 36, color);
+        case 0:
+            drawNode->drawSolidCircle(pos, radius, color);  
+            break;
+        case 1:
+            drawNode->drawSolidCircle(pos, radius, 0, 48, color);
+            break;
+        case 2:
+            drawNode->drawCircle(pos, radius, color, 10);
+            break;
+        case 3:
+            drawNode->drawCircle(pos, radius, 0, 48, false, color, 10);
+            break;
+        default:
+            break;
         }
     }
     auto end = std::chrono::high_resolution_clock::now();
@@ -2905,7 +2918,10 @@ void DrawNodeSolidCircleTest::showCircles()
     AXLOGD("Duration: {}", duration.count());
     if (autoTestLabel)
     {
-        autoTestLabel->setString(std::to_string(duration.count()));
+        auto st = std::to_string(duration.count());
+        st.append(" : ");
+        st.append(autoTestLabel->getString());
+        autoTestLabel->setString(st);
     }
 }
 
@@ -2916,7 +2932,9 @@ string DrawNodeSolidCircleTest::title() const
 
 string DrawNodeSolidCircleTest::subtitle() const
 {
-    return "10000 Circles";
+    std::string subsstring = std::to_string(objects);
+    subsstring.append(" Circles");
+    return subsstring;
 }
 
 DrawNodeIssueTester::DrawNodeIssueTester()

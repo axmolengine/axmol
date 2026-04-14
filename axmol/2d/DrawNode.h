@@ -202,6 +202,15 @@ public:
                     const Color& color,
                     float thickness = 1.0f);
 
+    /** Draws a (fast) circle given the center, radius.
+     *
+     * @param center The circle center point.
+     * @param radius The circle rotate of radiu
+     * @param color Set the circle color.
+     * @param thickness  (default 1.0f)
+     */
+    void drawCircle(const Vec2& center, float radius, const Color& color, float thickness = 1.0f);
+
     /** Draws a star given the center, radiusI, radiusO and number of segments.
      *
      * @param center The circle center point.
@@ -391,6 +400,8 @@ public:
      * @param color The solid circle color.
      */
     void drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, const Color& color);
+    void drawSolidCircle(const Vec2& center, float radius, const Color& fillColor, float angle);
+    void drawSolidCircle(const Vec2& center, float radius, const Color& color);
 
     /** Draws a pie given the center, radius, angle, start angle, end angle  and number of segments.
      * @param center The circle center point.
@@ -549,6 +560,7 @@ protected:
     void updateBlendState(CustomCommand& cmd);
     void updateUniforms(const Mat4& transform, CustomCommand& cmd);
 
+    bool _trianglesStripDirty : 1 = false;
     bool _trianglesDirty : 1 = false;
     bool _pointsDirty : 1    = false;
     bool _linesDirty : 1     = false;
@@ -557,14 +569,18 @@ protected:
 
     BlendFunc _blendFunc;
 
+    CustomCommand _customCommandTriangleStrip;
     CustomCommand _customCommandTriangle;
     CustomCommand _customCommandPoint;
     CustomCommand _customCommandLine;
 
+    tlx::pod_vector<V2F_T2F_C4F> _trianglesStrip;
     tlx::pod_vector<V2F_T2F_C4F> _triangles;
     tlx::pod_vector<V2F_T2F_C4F> _points;
     tlx::pod_vector<V2F_T2F_C4F> _lines;
-
+    
+    Vec2* _verticesCircle = nullptr;  // avoid cos/sin and frequently allocation when drawing circle and ellipse
+    int _segments         = 36;       // default segments used for circle and ellipse
 private:
     // Internal function _drawPoint
     void _drawPoint(const Vec2& position,
@@ -642,6 +658,15 @@ private:
                      const Color& fillColor,
                      bool solid,
                      float thickness = 1.0f);
+
+    // Internal function _drawCircle
+    void _drawCircle(const Vec2& center, float radius, const Color& color, float thickness);
+
+    // Internal function _drawSolidCircle
+    void _drawSolidCircle(const Vec2& center, float radius, const Color& color);
+
+    // Internal function _drawPhysicsCircle
+    void _drawPhysicsCircle(const Vec2& center, float radius, const Color& color, Vec2& vec2);
 
     // Internal function _drawPie
     void _drawPie(const Vec2& center,

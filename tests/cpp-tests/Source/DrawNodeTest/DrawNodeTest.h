@@ -368,11 +368,14 @@ public:
     DrawNodeSolidCircleTest();
     void showCircles();
 
+
+    int objects = 100;
+
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
 private:
-    bool fast;
+    int primitive = 0;
     std::chrono::microseconds duration;
     ax::Label* autoTestLabel = nullptr;
     ax::Rect rect;
