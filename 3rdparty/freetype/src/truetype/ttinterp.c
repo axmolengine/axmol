@@ -1104,7 +1104,7 @@
   /* documentation is in freetype.h */
 
   static __inline FT_Int32
-  TT_MulFixi14_i386( FT_Int32  a,
+  TT_MulFix14_i386( FT_Int32  a,
                      FT_Int32  b )
   {
     FT_Int32  result;

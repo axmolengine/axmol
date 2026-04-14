@@ -33,6 +33,21 @@
 namespace ax
 {
 
+struct GlyphSize
+{
+    int width{0};
+    int height{0};
+};
+
+struct GlyphMetrics
+{
+    float bboxWidth{0};
+    float bboxHeight{0};
+    float horiBearingX{0};
+    float horiBearingY{0};
+    int xAdvance{0};
+};
+
 /**
  * @addtogroup _2d
  * @{
@@ -121,7 +136,7 @@ public:
     /**
      * create fallback font with font face info & mainFont
      */
-    static FontFreeType* createFallbackFont(const FontFaceInfo& faceInfo, FontFreeType* mainFont);
+    static FontFreeType* createFallbackFont(const GlyphResolution& glyphResolution, FontFreeType* mainFont);
 
     static void shutdownFreeType();
 
@@ -129,10 +144,10 @@ public:
 
     float getOutlineSize() const { return _outlineSize; }
 
-    void renderCharAt(unsigned char* dest,
+    void renderCharAt(uint8_t* dest,
                       int posX,
                       int posY,
-                      unsigned char* bitmap,
+                      uint8_t* bitmap,
                       int bitmapWidth,
                       int bitmapHeight,
                       int atlasWidth,
@@ -140,19 +155,15 @@ public:
 
     int* getHorizontalKerningForTextUTF32(const std::u32string& text, int& outNumLetters) const override;
 
-    unsigned char* getGlyphBitmap(char32_t charCode,
-                                  int& outWidth,
-                                  int& outHeight,
-                                  Rect& outRect,
-                                  int& xAdvance,
+    uint8_t* getGlyphBitmap(char32_t charCode,
+                                  GlyphSize& glyphSize,
+                                  GlyphMetrics& glyphMetrics,
                                   const GlyphResolution*& fallbackRes,
                                   bool& sharedBitmapData);
 
-    unsigned char* getGlyphBitmapByIndex(unsigned int glyphIndex,
-                                         int& outWidth,
-                                         int& outHeight,
-                                         Rect& outRect,
-                                         int& xAdvance,
+    uint8_t* getGlyphBitmapByIndex(unsigned int glyphIndex,
+                                         GlyphSize& glyphSize,
+                                         GlyphMetrics& glyphMetrics,
                                          bool& sharedBitmapData);
 
     int getFontAscender() const;
@@ -163,7 +174,7 @@ public:
     int getFontMaxHeight() const override { return _lineHeight; }
 
     std::string_view getGlyphCollection() const;
-
+    
     static void releaseFont(std::string_view fontName);
 
     static FT_Library getFTLibrary();
@@ -178,25 +189,26 @@ private:
 
     static bool initFreeType();
 
-    FontFreeType(bool distanceFieldEnabled = false, float outline = 0);
+    FontFreeType(std::string_view fontName, int faceSize, bool distanceFieldEnabled = false, float outline = 0);
     virtual ~FontFreeType();
 
-    bool initWithFontPath(std::string_view fontPath, int faceSize);
-
-    bool initWithFontFace(FT_Face face, std::string_view fontPath, int faceSize);
+    bool init();
+    bool initWithFace(FT_Face face);
 
     int getHorizontalKerningForChars(uint64_t firstChar, uint64_t secondChar) const;
-    unsigned char* getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox);
+    uint8_t* getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox);
 
     void setGlyphCollection(GlyphCollection glyphs, std::string_view customGlyphs);
 
-    FT_Face _fontFace;
-    FT_Stream _fontStream;
-    FT_Stroker _stroker;
+    FT_Face _ftFace;
+    FT_Size _ftSize;
+    FT_Stroker _ftStroker;
+    FT_Stream _ftStream;
 
-    std::string _fontName;
+    std::string _fontName;  // font family or path
     int _faceSize;
     bool _distanceFieldEnabled;
+    bool _ownFontFace;
     float _outlineSize;
     int _ascender;
     int _descender;

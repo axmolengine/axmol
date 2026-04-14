@@ -320,6 +320,22 @@ FT_BEGIN_HEADER
 
   /**************************************************************************
    *
+   * HVF support.
+   *
+   *   FreeType can use Apple's HVF (Hierarchical Variable Font) library
+   *   to render glyphs from fonts containing 'hvgl' tables.
+   *
+   *   Define this macro if you want to enable this 'feature'.
+   *
+   *   If you use a build system like cmake or the `configure` script,
+   *   options set by those programs have precedence, overwriting the value
+   *   here with the configured one.
+   */
+/* #define FT_CONFIG_OPTION_HVF */
+
+
+  /**************************************************************************
+   *
    * Brotli support.
    *
    *   FreeType uses the Brotli library to provide support for decompressing

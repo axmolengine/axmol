@@ -556,6 +556,41 @@ if test x"$with_brotli" = xyes -a "$have_brotli" = no; then
   AC_MSG_ERROR([brotli support requested but library not found])
 fi
 
+# check for HVF support
+
+# HVF support detection with platform-specific handling
+case "$host" in
+  *-apple-darwin*|*-apple-macos*)
+    # Apple platforms: Check for HVF headers in SDK
+    # (available macOS 15.4+, iOS 18.4+)
+    AC_CHECK_HEADER([hvf/Scaler.h], [
+      # Are we using clang for runtime availability checking?
+      if test "x$GCC" = xyes && $CC --version | grep clang > /dev/null; then
+        # Enable HVF runtime availability checking
+        CFLAGS="$CFLAGS -DHVF_RUNTIME_AVAILABLE=1"
+        have_hvf="yes (Apple platform with clang and HVF SDK)"
+      else
+        # Allow building without runtime availability checking
+        have_hvf="yes (Apple platform with HVF SDK, no runtime checking)"
+      fi
+      # Add dylib linkage for HVF (it's a dylib, not a framework)
+      hvf_reqpriv=
+      hvf_libspriv="-lhvf"
+      hvf_libsstaticconf="$hvf_libspriv"
+      HVF_CFLAGS=""
+      HVF_LIBS="$hvf_libspriv"
+    ], [
+      have_hvf="no"
+    ])
+    ;;
+  *)
+    have_hvf="no"
+    hvf_reqpriv=
+    hvf_libspriv=
+    hvf_libsstaticconf=
+    ;;
+esac
+
 
 # Checks for the demo programs.
 #
@@ -1044,7 +1079,8 @@ PKGCONFIG_REQUIRES_PRIVATE="$zlib_reqpriv,     \
                             $bzip2_reqpriv,    \
                             $libpng_reqpriv,   \
                             $harfbuzz_reqpriv, \
-                            $brotli_reqpriv"
+                            $brotli_reqpriv,   \
+                            $hvf_reqpriv"
 # beautify
 PKGCONFIG_REQUIRES_PRIVATE=`echo "$PKGCONFIG_REQUIRES_PRIVATE" \
                             | sed -e 's/^  *//'      \
@@ -1060,6 +1096,7 @@ PKGCONFIG_LIBS_PRIVATE="$zlib_libspriv     \
                         $libpng_libspriv   \
                         $harfbuzz_libspriv \
                         $brotli_libspriv   \
+                        $hvf_libspriv      \
                         $ft2_extra_libs"
 # beautify
 PKGCONFIG_LIBS_PRIVATE=`echo "$PKGCONFIG_LIBS_PRIVATE"  \
@@ -1073,6 +1110,7 @@ LIBSSTATIC_CONFIG="-lfreetype               \
                    $libpng_libsstaticconf   \
                    $harfbuzz_libsstaticconf \
                    $brotli_libsstaticconf   \
+                   $hvf_libsstaticconf      \
                    $ft2_extra_libs"
 # remove -L/usr/lib and -L/usr/lib64 since `freetype-config' adds them later
 # on if necessary; also beautify
@@ -1172,6 +1210,13 @@ if test "$have_brotli" != no; then
 else
   ftoption_unset FT_CONFIG_OPTION_USE_BROTLI
 fi
+if test "$have_hvf" != no; then
+  CFLAGS="$CFLAGS $HVF_CFLAGS"
+  LDFLAGS="$LDFLAGS $HVF_LIBS"
+  ftoption_set FT_CONFIG_OPTION_HVF
+else
+  ftoption_unset FT_CONFIG_OPTION_HVF
+fi
 
 if test "$have_pthread" != no; then
   CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
@@ -1212,6 +1257,7 @@ Library configuration:
   libpng:        $have_libpng
   harfbuzz:      $have_harfbuzz
   brotli:        $have_brotli
+  hvf:           $have_hvf
   pthread:       $have_pthread
 ])
 

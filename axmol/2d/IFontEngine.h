@@ -33,6 +33,7 @@ typedef struct FT_StreamRec_* FT_Stream;
 typedef struct FT_FaceRec_* FT_Face;
 typedef struct FT_StrokerRec_* FT_Stroker;
 typedef struct FT_BBox_ FT_BBox;
+typedef struct FT_SizeRec_* FT_Size;
 
 namespace ax
 {
@@ -41,20 +42,13 @@ namespace ax
  * @addtogroup _2d
  * @{
  */
-
-struct FontFaceInfo
-{
-    std::string_view family;
-    std::string_view path;
-    int faceIndex{-1};
-};
-
 struct GlyphResolution
 {
     static constexpr unsigned InvalidGlyph = std::numeric_limits<unsigned>::max();
 
-    FontFaceInfo faceInfo;
     unsigned glyphIndex{InvalidGlyph};
+    std::string_view family;  // weak reference to face->family_name
+    FT_Face face{nullptr};
 };
 
 class IFontEngine
