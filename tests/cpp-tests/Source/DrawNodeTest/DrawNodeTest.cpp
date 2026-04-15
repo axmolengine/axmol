@@ -2479,13 +2479,17 @@ void DrawNodeMethodsTest::drawAll()
     }
     case drawMethodes::SolidRect:
     {
-        for (int i = 0; i < _count; i++)
-        {
-            Vec2 pos = Vec2(-100, -100) + Vec2(AXRANDOM_MINUS1_1() * VisibleRect::rightTop().x,
-                                               AXRANDOM_MINUS1_1() * VisibleRect::rightTop().y);
-            drawNode->drawSolidRect(pos, pos + Vec2(20.0f * thickness, 20.0f * thickness), color, thickness);
-        }
+        for (int i = 5; i > 1; i--)
+            drawNode->drawSolidRect(center - Vec2(20.0f*i * thickness, 20.0f*i * thickness),
+                                    center + Vec2(20.0f*i * thickness, 20.0f*i * thickness), color, thickness);
 
+
+        //parent node scale : 32 node scale : 1 Properties scale : 1 Properties factor : 1
+        drawNode->setScale(32);
+        drawNode->setLocalScale(ax::Vec2(1.0, 1.0));
+        drawNode->setThicknessScale(1.0f);
+        drawNode->drawSolidRect({7, 7}, {8, 8}, {0, 0, 0, 1}, 1.0f, {1, 0, 0, 1});
+        drawNode->setScale(1.0);
         break;
     }
     case drawMethodes::Star:
@@ -3283,6 +3287,13 @@ DrawNodePointTest::DrawNodePointTest()
     }
 
     scheduleUpdate();
+}
+
+DrawNodePointTest::~DrawNodePointTest()
+{
+    delete[] grid;
+    delete[] nextGrid;
+    delete[] age;
 }
 
 string DrawNodePointTest::title() const
