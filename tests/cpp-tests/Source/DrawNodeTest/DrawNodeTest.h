@@ -368,7 +368,6 @@ public:
     DrawNodeSolidCircleTest();
     void showCircles();
 
-
     int objects = 100;
 
     virtual std::string title() const override;
@@ -450,6 +449,8 @@ public:
 
 #if defined(AX_PLATFORM_PC)
 
+const int GRID_W = 800;
+const int GRID_H = 600;
 class DrawNodePointTest : public DrawNodeBaseTest
 {
 public:
@@ -461,6 +462,15 @@ public:
     virtual std::string subtitle() const override;
 
     void update(float dt) override;
+
+    int visibleSizeX;
+    int visibleSizeY;
+
+    bool* grid;
+    bool* nextGrid;
+    int* age;
+    ax::Color color[10];
+    tlx::pod_vector<ax::Vec2> arrea[10];
 };
 
 class CandyMixEeffect : public DrawNodeBaseTest

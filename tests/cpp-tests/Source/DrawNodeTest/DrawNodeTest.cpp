@@ -1406,7 +1406,7 @@ static Vec2 spider[] = {
 DrawNodeTests::DrawNodeTests()
 {
     ADD_TEST_CASE(DrawNodeCircleTest);
-    ADD_TEST_CASE(DrawNodeSolidCircleTest); //will be activate with DrawNode v3.0
+    ADD_TEST_CASE(DrawNodeSolidCircleTest);  // will be activate with DrawNode v3.0
     ADD_TEST_CASE(DrawNodePolygonTest);
 
     ADD_TEST_CASE(DrawNodeSpLinesTest);
@@ -2845,28 +2845,28 @@ string DrawNodeCircleTest::subtitle() const
 DrawNodeSolidCircleTest::DrawNodeSolidCircleTest()
 {
     static string text = "drawSolidCircle (fast)";
-    
+
     showCircles();
 
     autoTestLabel     = Label::createWithTTF(text, "fonts/arial.ttf", 16);
     auto autoTestItem = MenuItemLabel::create(autoTestLabel, [=](Object* sender) {
-        primitive        = (primitive + 1) % 4;
+        primitive = (primitive + 1) % 4;
 
         switch (primitive)
         {
-            case 0:
-                text = "drawSolidCircle (fast)";
-                break;
-            case 1:
-                text = "drawSolidCircle";
-                break;
-            case 2:
-                text = "drawCircle (fast)";
-                break;
-            case 3:
-                text = "drawCircle";
-                break;
-                break;
+        case 0:
+            text = "drawSolidCircle (fast)";
+            break;
+        case 1:
+            text = "drawSolidCircle";
+            break;
+        case 2:
+            text = "drawCircle (fast)";
+            break;
+        case 3:
+            text = "drawCircle";
+            break;
+            break;
         default:
             break;
         }
@@ -2885,20 +2885,20 @@ DrawNodeSolidCircleTest::DrawNodeSolidCircleTest()
 
 void DrawNodeSolidCircleTest::showCircles()
 {
-    static float radius = 1;
+    static float radius = 20;
     drawNode->clear();
 
     auto start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < objects; i++)
     {
-        Vec2 pos = VisibleRect::center() + Vec2((VisibleRect::center().x - 50) * AXRANDOM_MINUS1_1(),
-                                                (VisibleRect::center().y - 50) * AXRANDOM_MINUS1_1());
+        Vec2 pos    = VisibleRect::center() + Vec2((VisibleRect::center().x - 50) * AXRANDOM_MINUS1_1(),
+                                                   (VisibleRect::center().y - 50) * AXRANDOM_MINUS1_1());
         Color color = Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1() + 0.1f);
 
         switch (primitive)
         {
         case 0:
-            drawNode->drawSolidCircle(pos, radius, color);  
+            drawNode->drawSolidCircle(pos, radius, color);
             break;
         case 1:
             drawNode->drawSolidCircle(pos, radius, 0, 48, color);
@@ -3261,44 +3261,115 @@ string DrawNodeThickness1Test::subtitle() const
 
 DrawNodePointTest::DrawNodePointTest()
 {
-    Vec2 visibleSize = Director::getInstance()->getVisibleSize();
+    ax::Vec2 visibleSize = Director::getInstance()->getVisibleSize();
+    visibleSizeX         = static_cast<int>(visibleSize.x * 2);
+    visibleSizeY         = static_cast<int>(visibleSize.y * 2);
 
-    Color color = Color::RED;
-    int delta   = 10;
-    int xx      = 0;
-    int yy      = 0;
-    for (unsigned int y = 0; y < visibleSize.height; y += delta)
+    grid     = new bool[visibleSizeX * visibleSizeY];
+    nextGrid = new bool[visibleSizeX * visibleSizeY];
+    age      = new int[visibleSizeX * visibleSizeY];
+    for (int x = 0; x < visibleSizeX; x++)
     {
-        color = Color::RED;
-        if (y % 3 == 0)
+        for (int y = 0; y < visibleSizeY; y++)
         {
-            color = Color::BLUE;
+            int idx   = x + y * visibleSizeX;
+            grid[idx] = (rand() % 2 == 0);
+            age[idx]  = 0;
         }
-        for (unsigned int x = 0; x < visibleSize.width; x += delta)
-        {
-            if (x % 4 == 0)
-            {
-                color = Color::RED;
-            }
-            Vec2 pos = {(float)x + delta / 2, (float)y + delta / 2};
-            drawNode->drawPoint(pos, delta - 1, color, ax::DrawNode::Circle);
-            xx++;
-        }
-        yy++;
     }
+    for (int i = 0; i < 10; i++)
+    {
+        color[i] = Color(AXRANDOM_0_1() + 0.1f, 1.0f - AXRANDOM_0_1() + 0.1f, AXRANDOM_0_1() + 0.1f, 1.0f);
+    }
+
+    scheduleUpdate();
 }
 
 string DrawNodePointTest::title() const
 {
-    return "Performance: POINT";
+    return "Performance: drawPoints";
 }
 
 string DrawNodePointTest::subtitle() const
 {
-    return "";
+    return "\"Conway’s Game of Life\"";
 }
 
-void DrawNodePointTest::update(float dt) {}
+void DrawNodePointTest::update(float dt)
+{
+    for (int i = 0; i < 100; i++)
+    {
+        int idx   = AXRANDOM_0_1() * (visibleSizeX - 1) + AXRANDOM_0_1() * (visibleSizeY - 1) * visibleSizeX;
+        grid[idx] = true;
+        age[idx]  = 0;
+    }
+
+    for (int x = 0; x < visibleSizeX; x++)
+    {
+        for (int y = 0; y < visibleSizeY; y++)
+        {
+            int alive = 0;
+            for (int dx = -1; dx <= 1; dx++)
+                for (int dy = -1; dy <= 1; dy++)
+                    if (!(dx == 0 && dy == 0))
+                    {
+                        int nx = x + dx;
+                        int ny = y + dy;
+                        if (nx >= 0 && nx < visibleSizeX && ny >= 0 && ny < visibleSizeY)
+                            alive += grid[nx + ny * visibleSizeX];
+                    }
+            int idx      = x + y * visibleSizeX;
+            bool current = grid[idx];
+
+            if (current && (alive < 2 || alive > 3))
+                nextGrid[idx] = false;
+            else if (!current && alive == 3)
+                nextGrid[idx] = true;
+            else
+                nextGrid[idx] = current;
+
+            if (nextGrid[idx])
+                age[idx]++;
+            else
+                age[idx] = 0;
+        }
+    }
+
+    // swap buffers
+    memcpy(grid, nextGrid, visibleSizeX * visibleSizeY * sizeof(bool));
+
+    for (int x = 0; x < visibleSizeX; x++)
+    {
+        for (int y = 0; y < visibleSizeY; y++)
+        {
+            int idx = x + y * visibleSizeX;
+            if (!grid[idx])
+                continue;
+
+            float t = std::min(age[idx] / 20.0f, 1.0f);  // clamp 0..1
+            int tt  = round(t * 9);                      // quantize to 10 steps to reduce overdraw
+                                                         //  tt      = std::min(tt, 9);
+            arrea[tt].emplace_back(ax::Vec2((float)x, (float)y));
+        }
+    }
+
+    drawNode->clear();
+    //  AXLOGD("------------------");
+    for (int i = 0; i < 10; i++)
+    {
+        if (arrea[i].size() == 0)
+            continue;
+
+        // AXLOGD("arrea[{}].size():  {}", i, arrea[i].size());
+        ax::Vec2* points = new ax::Vec2[arrea[i].size()];
+        for (int n = 0; n < arrea[i].size(); n++)
+            points[n] = arrea[i][n] * 2;
+
+        drawNode->drawPoints(points, arrea[i].size(), 4, color[i]);
+        delete[] points;
+        arrea[i].clear();
+    }
+}
 
 CandyMixEeffect::CandyMixEeffect()
 {
