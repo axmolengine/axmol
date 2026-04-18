@@ -110,6 +110,8 @@ bool FastTMXLayer::initWithTilesetInfo(TMXTilesetInfo* tilesetInfo, TMXLayerInfo
     _useAutomaticVertexZ = false;
     _vertexZvalue        = 0;
 
+    scheduleUpdate();
+
     return true;
 }
 
@@ -973,6 +975,14 @@ void FastTMXLayer::setupTileSprite(Sprite* sprite, const Vec2& pos, uint32_t gid
     }
 }
 
+void FastTMXLayer::update(float delta)
+{
+    if(_tileAnimManager != NULL && _tileAnimManager->isRunning())
+    {
+        _tileAnimManager->update(delta);
+    }
+}
+
 std::string FastTMXLayer::getDescription() const
 {
     return fmt::format("<FastTMXLayer | tag = {}, size = {},{}>", _tag, (int)_mapTileSize.width,
@@ -1021,6 +1031,14 @@ void TMXTileAnimManager::stopAll()
     }
 }
 
+void TMXTileAnimManager::update(float delta)
+{
+    for (auto&& task : _tasks)
+    {
+        task->update(delta);
+    }
+}
+
 TMXTileAnimTask::TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flag)
 {
     _layer        = layer;
@@ -1033,21 +1051,33 @@ TMXTileAnimTask::TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation
 
 void TMXTileAnimTask::tickAndScheduleNext(float dt)
 {
-    setCurrFrame();
-    _layer->getParent()->scheduleOnce(AX_CALLBACK_1(TMXTileAnimTask::tickAndScheduleNext, this),
-                                      _animation->_frames[_currentFrame]._duration / 1000.0f, _key);
+    //setCurrFrame();
+    //_layer->getParent()->scheduleOnce(AX_CALLBACK_1(TMXTileAnimTask::tickAndScheduleNext, this),
+    //                                  _animation->_frames[_currentFrame]._duration / 1000.0f, _key);
 }
 
 void TMXTileAnimTask::start()
 {
     _isRunning = true;
-    tickAndScheduleNext(0.0f);
+    setCurrFrame();
+    //tickAndScheduleNext(0.0f);
 }
 
 void TMXTileAnimTask::stop()
 {
     _isRunning = false;
     _layer->getParent()->unschedule(_key);
+}
+
+void TMXTileAnimTask::update(float delta)
+{
+    double oldTime = _elapsedTime;
+    _elapsedTime += delta;
+    float interval = _animation->_frames[_currentFrame]._duration / 1000.0f;
+    if((int)(_elapsedTime / interval) > (int)(oldTime / interval))
+    {
+        setCurrFrame();
+    }
 }
 
 void TMXTileAnimTask::setCurrFrame()

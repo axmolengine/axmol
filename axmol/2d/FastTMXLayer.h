@@ -282,6 +282,7 @@ public:
     //
     // Override
     //
+    void update(float delta) override;
     std::string getDescription() const override;
     void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     void removeChild(Node* child, bool cleanup = true) override;
@@ -404,6 +405,7 @@ public:
     void start();
     /** stop the animation task */
     void stop();
+    void update(float delta);
     bool isRunning() const { return _isRunning; }
 
 protected:
@@ -427,6 +429,7 @@ protected:
     uint32_t _currentFrame = 0;
     uint32_t _nextFrame    = 0;
     uint32_t _frameCount   = 0;
+    double _elapsedTime = 0.0;
 };
 
 /** @brief TMXTileAnimManager controls all tile animation of a layer.
@@ -441,6 +444,10 @@ public:
     void startAll();
     /** stop all tile animations */
     void stopAll();
+
+    bool isRunning(){ return _started; }
+
+    void update(float delta);
 
     /** get vector of tasks */
     const Vector<TMXTileAnimTask*>& getTasks() const { return _tasks; }
