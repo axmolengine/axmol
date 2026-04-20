@@ -52,6 +52,7 @@ elseif(WINDOWS)
   list(APPEND _AX_PLATFORM_SPECIFIC_HEADER
     platform/msw/ComPtr.h
     platform/msw/DWriteTextRenderer.h
+    platform/msw/Device-msw.cpp
   )
 
   list(APPEND _AX_PLATFORM_SPECIFIC_SRC

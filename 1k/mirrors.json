@@ -51,7 +51,7 @@
         "windows-x64": "ninja-win.zip",
         "linux-x64": "ninja-linux.zip",
         "linux-arm64": "ninja-linux-aarch64.zip",
-        "macos-x64": "ninja-mac.zip"
+        "macos": "ninja-mac.zip"
       },
       "mirrors": "https://github.com/ninja-build/ninja/releases/download/v${ver}/"
     },

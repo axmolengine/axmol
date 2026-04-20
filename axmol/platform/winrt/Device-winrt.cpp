@@ -39,8 +39,6 @@ THE SOFTWARE.
 #    include "axmol/platform/FileUtils.h"
 #    include "axmol/platform/winrt/WinRTUtils.h"
 #    include "axmol/platform/winrt/RenderViewImpl-winrt.h"
-#    include "axmol/platform/msw/DWriteTextRenderer.h"
-
 #    include <winrt/Windows.Devices.Sensors.h>
 
 using namespace winrt;
@@ -198,31 +196,6 @@ void Device::setAccelerometerInterval(float interval)
     {
         AXLOGW("Device::setAccelerometerInterval: accelerometer not enabled.");
     }
-}
-
-Data Device::getTextureDataForText(std::string_view text,
-                                   const FontDefinition& textDefinition,
-                                   TextAlign align,
-                                   int& width,
-                                   int& height,
-                                   bool& hasPremultipliedAlpha)
-{
-    Data ret;
-    do
-    {
-        auto& textRenderer = DWriteTextRenderer::sharedTextRenderer();
-
-        SIZE size = {(LONG)textDefinition._dimensions.width, (LONG)textDefinition._dimensions.height};
-        if (!textRenderer.drawText(text, textDefinition, static_cast<unsigned int>(align), hasPremultipliedAlpha, size,
-                                   ret))
-            break;
-
-        width  = size.cx;
-        height = size.cy;
-
-    } while (0);
-
-    return ret;
 }
 
 void Device::setKeepScreenOn(bool /*value*/) {}

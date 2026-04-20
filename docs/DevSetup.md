@@ -145,7 +145,7 @@ To generate an AAB instead of an APK, simply add the **`-aab`** option.
 - **Android SDK/NDK**: `setup.ps1 -p android` installs the minimum NDK version — **r23d** for `axmol-v2`, and **r27d** for `axmol-v3`.
 - **Linux**: Use **VSCode** with the **C++** and **CMake Tools** extensions for the best development experience.  
   👉 Ensure your system has **GCC/G++** and **CMake** installed (Ubuntu 22.04+, Debian 12+, ArchLinux recommended).
-- **WASM Debugging**: Default emsdk version is `3.1.73`. Use Chrome DevTools for debugging.
+- **WASM Debugging**: Use Chrome DevTools for debugging.
 
 ---
 
