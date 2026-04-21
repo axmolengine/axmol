@@ -76,7 +76,7 @@ set(APP_SOURCES
 )
 
 if(LINUX OR MACOSX OR WINDOWS)
-  option(_AX_TESTS "Enable doctest" ON)
+  option(_AX_TESTS "Enable doctest" OFF)
 endif()
 
 if(_AX_TESTS)
