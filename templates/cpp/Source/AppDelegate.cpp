@@ -32,6 +32,10 @@
 #    include "audio/AudioEngine.h"
 #endif
 
+#if _AX_TESTS
+#   include "doctest/doctest.h"
+#endif
+
 using namespace ax;
 
 static ax::Size designResolutionSize = ax::Size(1280, 720);
@@ -79,11 +83,13 @@ bool AppDelegate::applicationDidFinishLaunching()
     renderView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height,
                                     ResolutionPolicy::SHOW_ALL);
 
+#if !_AX_TESTS
     // create a scene. it's an autorelease object
     auto scene = utils::createInstance<MainScene>();
 
     // run
     director->runWithScene(scene);
+#endif
 
     return true;
 }
@@ -109,3 +115,34 @@ void AppDelegate::applicationWillEnterForeground()
 }
 
 void AppDelegate::applicationWillQuit() {}
+
+#if _AX_TESTS
+int AppDelegate::run(int argc, char** argv) {
+    AXLOGI("Running unit tests...\n");
+    fflush(stdout);
+    AXLOGI("Default resource path: {}\n", FileUtils::getInstance()->getDefaultResourceRootPath());
+    AXLOGI("Writable path: {}\n", FileUtils::getInstance()->getWritablePath());
+    {
+        for (auto& path : FileUtils::getInstance()->getSearchPaths())
+            AXLOGI("Search path: {}\n", path);
+    }
+    fflush(stdout);
+
+    ax::Director::getInstance()->init();
+
+    doctest::Context context;
+
+    //context.addFilter("test-case-exclude", "*math*"); // exclude test cases with "math" in their name
+    //context.setOption("abort-after", 5);              // stop test execution after 5 failed assertions
+
+    //context.setOption("order-by", "name");            // sort the test cases by their name
+
+    context.applyCommandLine(argc, argv);
+
+    // overrides
+    context.setOption("no-breaks", true);             // don't break in the debugger when assertions fail
+
+    int res = context.run(); // run
+    return res;
+}
+#endif

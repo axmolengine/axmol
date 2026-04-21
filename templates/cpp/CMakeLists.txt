@@ -75,10 +75,42 @@ set(APP_SOURCES
   ${GAME_SOURCE}
 )
 
+if(LINUX OR MACOSX OR WINDOWS)
+  option(_AX_TESTS "Enable doctest" ON)
+endif()
+
+if(_AX_TESTS)
+  set(TEST_TARGET_NAME "${APP_NAME}_test")
+
+  file(GLOB_RECURSE TEST_HEADER CONFIGURE_DEPENDS
+    Tests/*.h Tests/*.hpp
+  )
+  list(APPEND TEST_HEADER ${GAME_HEADER})
+
+  file(GLOB_RECURSE TEST_SOURCE CONFIGURE_DEPENDS
+    Tests/*.cpp Tests/*.c
+  )
+
+  set(TEST_TARGET_SOURCES
+    ${APP_SOURCES}
+    ${TEST_HEADER}
+    ${TEST_SOURCE}
+  )
+
+ set(TEST_INC_DIRS
+   "${CMAKE_CURRENT_SOURCE_DIR}/Tests"
+   "${CMAKE_CURRENT_SOURCE_DIR}/Source"
+ )
+endif()
+
 include(AXGameTargetSetup)
 
 # mark app resources, resource will be copy auto after mark
 ax_setup_app_config(${APP_NAME})
+
+if(_AX_TESTS)
+  ax_setup_app_config(${TEST_TARGET_NAME} CONSOLE)
+endif()
 
 # Add any libraries you need to link to the project after this point
 
