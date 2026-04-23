@@ -58,7 +58,12 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
     return result;
 }
 #else
-int main(int, char**) {
+int main(int argc, char** argv) {
+#if _AX_TESTS
+    AppDelegate app;
+    return app.run(argc, argv);
+#endif
+
     auto result = axmol_main();
 
 #if AX_OBJECT_LEAK_DETECTION

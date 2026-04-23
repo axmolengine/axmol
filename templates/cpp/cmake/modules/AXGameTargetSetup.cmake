@@ -16,3 +16,15 @@ if(NOT _AX_USE_PREBUILT)
 endif()
 
 target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
+
+if (_AX_TESTS)
+  add_executable(${TEST_TARGET_NAME} ${TEST_TARGET_SOURCES})
+
+  if(NOT _AX_USE_PREBUILT)
+    target_link_libraries(${TEST_TARGET_NAME} ${_AX_CORE_LIB})
+  endif()
+
+  target_include_directories(${TEST_TARGET_NAME} PRIVATE ${TEST_INC_DIRS})
+  target_link_libraries(${TEST_TARGET_NAME} doctest)
+  target_compile_definitions(${TEST_TARGET_NAME} PRIVATE _AX_TESTS=1)
+endif()

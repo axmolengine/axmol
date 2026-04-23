@@ -23,3 +23,14 @@ if(_AX_USE_PREBUILT) # support windows and linux
 endif()
 
 ax_setup_app_props(${APP_NAME})
+
+if (_AX_TESTS)
+  ax_get_resource_path(APP_RES_DIR ${TEST_TARGET_NAME})
+  ax_sync_target_res(${TEST_TARGET_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${content_folder} SYM_LINK 1)
+
+  if(_AX_USE_PREBUILT) # support windows and linux
+    use_ax_compile_define(${TEST_TARGET_NAME})
+
+    ax_link_cxx_prebuilt(${TEST_TARGET_NAME} ${_AX_ROOT} ${AX_PREBUILT_DIR})
+  endif()
+endif()
