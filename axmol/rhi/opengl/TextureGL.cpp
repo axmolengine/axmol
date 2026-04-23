@@ -84,50 +84,9 @@ void TextureImpl::updateSamplerDesc(const SamplerDesc& desc)
     this->_nativeSampler = static_cast<GLuint>(SamplerCache::getInstance()->getSampler(desc));
 }
 
-void TextureImpl::ensureNativeTexture(size_t imageSize)
-{
-    bool initial = !_nativeTexture;
-
-    if (initial)
-        glGenTextures(1, &_nativeTexture);
-
-    __state->bindTexture(_nativeDesc.target, _nativeTexture);
-
-    if (initial)
-    {  // allocate texture storage for we can use glTexSubImageXXX later
-
-        updateSamplerDesc(_desc.samplerDesc);
-
-        // we must allocate texture storage for GL_TEXTURE_2D_ARRAY
-        if (_desc.arraySize > 1)
-        {
-            if (_nativeDesc.type != 0)
-                glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, _nativeDesc.internalFormat, _desc.width, _desc.height,
-                             _desc.arraySize, 0, _nativeDesc.format, _nativeDesc.type, nullptr);
-            else
-                glCompressedTexImage3D(GL_TEXTURE_2D_ARRAY, 0, _nativeDesc.internalFormat, _desc.width, _desc.height,
-                                       _desc.arraySize, 0, imageSize * _desc.arraySize, nullptr);
-        }
-        else if (_desc.arraySize == 1)
-        {
-            // if (_nativeDesc.type != 0)
-            //     glTexImage2D(GL_TEXTURE_2D, 0, _nativeDesc.internalFormat, _desc.width, _desc.height, 0,
-            //                  _nativeDesc.format, _nativeDesc.type, nullptr);
-            // else
-            //     glCompressedTexImage2D(GL_TEXTURE_2D, 0, _nativeDesc.internalFormat, _desc.width, _desc.height, 0,
-            //                            imageSize, nullptr);
-        }
-        else
-        {
-            AXLOGE("TextureDesc arraySize can't be 0");
-        }
-        CHECK_GL_ERROR_DEBUG();
-    }
-}
-
 void TextureImpl::updateData(const void* data, int width, int height, int level, int layerIndex)
 {
-    if (!_nativeTexture && _desc.arraySize == 1)
+    if (_desc.arraySize == 1)
     {
         ensureNativeTexture();
 
@@ -155,9 +114,9 @@ void TextureImpl::updateCompressedData(const void* data,
                                        int level,
                                        int layerIndex)
 {
-    if (!_nativeTexture && _desc.arraySize == 1)
+    if (_desc.arraySize == 1)
     {
-        ensureNativeTexture(dataSize);
+        ensureNativeTexture();
 
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -194,8 +153,11 @@ void TextureImpl::updateSubData(int xoffset,
         glTexSubImage2D(GL_TEXTURE_2D, level, xoffset, yoffset, width, height, _nativeDesc.format, _nativeDesc.type,
                         data);
     else
-        glTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, layerIndex, width, height, 1,
-                        _nativeDesc.internalFormat, _nativeDesc.type, data);
+    {
+        ensureLevelStorage(level);
+        glTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, layerIndex, width, height, 1, _nativeDesc.format,
+                        _nativeDesc.type, data);
+    }
 
     CHECK_GL_ERROR_DEBUG();
 }
@@ -210,7 +172,7 @@ void TextureImpl::updateCompressedSubData(int xoffset,
                                           int layerIndex)
 {
     assert(_desc.textureType == TextureType::TEXTURE_2D);
-    ensureNativeTexture(dataSize);
+    ensureNativeTexture();
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -218,8 +180,11 @@ void TextureImpl::updateCompressedSubData(int xoffset,
         glCompressedTexSubImage2D(GL_TEXTURE_2D, level, xoffset, yoffset, width, height, _nativeDesc.internalFormat,
                                   static_cast<GLsizei>(dataSize), data);
     else
+    {
+        ensureLevelStorage(level);
         glCompressedTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, layerIndex, width, height, 1,
                                   _nativeDesc.internalFormat, static_cast<GLsizei>(dataSize), data);
+    }
     CHECK_GL_ERROR_DEBUG();
 }
 
@@ -239,6 +204,50 @@ void TextureImpl::updateFaceData(TextureCubeFace side, const void* data)
 
     if (shouldGenMipmaps())
         generateMipmaps();
+}
+
+void TextureImpl::ensureNativeTexture()
+{
+    bool initial = !_nativeTexture;
+
+    if (initial)
+        glGenTextures(1, &_nativeTexture);
+
+    __state->bindTexture(_nativeDesc.target, _nativeTexture);
+
+    if (initial)
+    {
+        updateSamplerDesc(_desc.samplerDesc);
+        _allocatedLevelsBits = 0;
+    }
+}
+
+void TextureImpl::ensureLevelStorage(int level)
+{
+    // 32: max supported mipmap levels
+    assert(level >= 0 && level < 32);
+    if ((_allocatedLevelsBits & (1u << level)))
+        return;
+
+    int width  = static_cast<int>((std::max)(1u, static_cast<uint32_t>(_desc.width) >> level));
+    int height = static_cast<int>((std::max)(1u, static_cast<uint32_t>(_desc.height) >> level));
+
+    if (_nativeDesc.type != 0)  // Uncompressed
+    {
+        glTexImage3D(GL_TEXTURE_2D_ARRAY, level, _nativeDesc.internalFormat, width, height, _desc.arraySize, 0,
+                     _nativeDesc.format, _nativeDesc.type, nullptr);
+    }
+    else  // Compressed
+    {
+        auto imageSize = RHIUtils::computeDataSize(_desc.pixelFormat, width, height);
+        glCompressedTexImage3D(GL_TEXTURE_2D_ARRAY, level, _nativeDesc.internalFormat, width, height, _desc.arraySize,
+                               0, static_cast<GLsizei>(imageSize * _desc.arraySize), nullptr);
+    }
+
+    // 4. Mark this level as allocated in the bitmask
+    _allocatedLevelsBits |= (1u << level);
+
+    CHECK_GL_ERROR_DEBUG();
 }
 
 void TextureImpl::apply(int slot) const
