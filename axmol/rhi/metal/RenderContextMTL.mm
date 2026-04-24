@@ -549,10 +549,10 @@ void RenderContextImpl::setUniformBuffer() const
     }
 }
 
-void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float width, float height)
+void RenderContextImpl::setScissorRect(bool enabled, float x, float y, float width, float height)
 {
     MTLScissorRect scissorRect;
-    if (isEnabled)
+    if (enabled)
     {
         y                  = _renderTargetHeight - height - y;
         int minX           = std::clamp((int)x, 0, (int)_renderTargetWidth);

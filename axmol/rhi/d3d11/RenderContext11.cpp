@@ -404,25 +404,12 @@ void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
     _d3d11Context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType));
 }
 
-void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
-{
-    D3D11_VIEWPORT viewport = {};
-    viewport.TopLeftX       = static_cast<FLOAT>(x);
-    viewport.TopLeftY       = static_cast<FLOAT>(y);
-    viewport.Width          = static_cast<FLOAT>(w);
-    viewport.Height         = static_cast<FLOAT>(h);
-    viewport.MinDepth       = 0.0f;
-    viewport.MaxDepth       = 1.0f;
-
-    _driver->getContext()->RSSetViewports(1, &viewport);
-}
-
 void RenderContextImpl::setCullMode(CullMode mode)
 {
     if (_rasterDesc.cullMode != mode)
     {
         _rasterDesc.cullMode = mode;
-        _rasterDesc.dirtyFlags |= RF_CULL_MODE;
+        _dirtyStateFlags |= RenderStateFlag::RasterDesc;
     }
 }
 
@@ -431,15 +418,29 @@ void RenderContextImpl::setWinding(Winding winding)
     if (_rasterDesc.winding != winding)
     {
         _rasterDesc.winding = winding;
-        _rasterDesc.dirtyFlags |= RF_WINDING;
+        _dirtyStateFlags |= RenderStateFlag::RasterDesc;
     }
 }
 
-void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float width, float height)
+void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
+{
+    D3D11_VIEWPORT vp = {.MinDepth = 0.0f, .MaxDepth = 1.0f};
+    vp.TopLeftX       = static_cast<FLOAT>(x);
+    vp.TopLeftY       = static_cast<FLOAT>(y);
+    vp.Width          = static_cast<FLOAT>(w);
+    vp.Height         = static_cast<FLOAT>(h);
+    if (dxutils::viewportsDiffer(_viewport, vp))
+    {
+        _viewport = vp;
+        _dirtyStateFlags |= RenderStateFlag::Viewport;
+    }
+}
+
+void RenderContextImpl::setScissorRect(bool enabled, float x, float y, float width, float height)
 {
     D3D11_RECT rect{};
 
-    if (isEnabled)
+    if (enabled)
     {
         const float rtW = static_cast<float>(_renderTargetWidth);
         const float rtH = static_cast<float>(_renderTargetHeight);
@@ -468,43 +469,60 @@ void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float w
         rect.bottom = _renderTargetHeight;
     }
 
-    if (_rasterDesc.scissorEnable != isEnabled)
+    if (_rasterDesc.scissorEnable != enabled)
     {
-        _rasterDesc.scissorEnable = isEnabled;
-        _rasterDesc.dirtyFlags |= RF_SCISSOR;
+        _rasterDesc.scissorEnable = enabled;
+        _dirtyStateFlags |= RenderStateFlag::RasterDesc;
     }
 
-    _d3d11Context->RSSetScissorRects(1, &rect);
+    if (_scissorRect != rect)
+    {
+        _scissorRect = rect;
+        _dirtyStateFlags |= RenderStateFlag::ScissorRect;
+    }
 }
 
-void RenderContextImpl::updateRasterizerState()
+void RenderContextImpl::applyRenderStates()
 {
-    if (!_rasterDesc.dirtyFlags && _rasterState)
-        return;
-    D3D11_RASTERIZER_DESC desc = {};
-    desc.FillMode              = D3D11_FILL_SOLID;
-
-    switch (_rasterDesc.cullMode)
+    if (bitmask::any(RenderStateFlag::Viewport, _dirtyStateFlags))
     {
-    case CullMode::NONE:
-        desc.CullMode = D3D11_CULL_NONE;
-        break;
-    case CullMode::BACK:
-        desc.CullMode = D3D11_CULL_BACK;
-        break;
-    case CullMode::FRONT:
-        desc.CullMode = D3D11_CULL_FRONT;
-        break;
+        _d3d11Context->RSSetViewports(1, &_viewport);
+        _dirtyStateFlags &= ~RenderStateFlag::Viewport;
     }
 
-    desc.FrontCounterClockwise = (_rasterDesc.winding == Winding::COUNTER_CLOCK_WISE);
+    if (bitmask::any(RenderStateFlag::ScissorRect, _dirtyStateFlags))
+    {
+        _d3d11Context->RSSetScissorRects(1, &_scissorRect);
+        _dirtyStateFlags &= ~RenderStateFlag::ScissorRect;
+    }
 
-    desc.DepthClipEnable = TRUE;
-    desc.ScissorEnable   = _rasterDesc.scissorEnable ? TRUE : FALSE;
+    if (bitmask::any(RenderStateFlag::RasterDesc, _dirtyStateFlags))
+    {
+        D3D11_RASTERIZER_DESC desc = {};
+        desc.FillMode              = D3D11_FILL_SOLID;
 
-    _AXASSERT_HR(_driver->getDevice()->CreateRasterizerState(&desc, _rasterState.ReleaseAndGetAddressOf()));
-    _d3d11Context->RSSetState(_rasterState.Get());
-    _rasterDesc.dirtyFlags = 0;
+        switch (_rasterDesc.cullMode)
+        {
+        case CullMode::NONE:
+            desc.CullMode = D3D11_CULL_NONE;
+            break;
+        case CullMode::BACK:
+            desc.CullMode = D3D11_CULL_BACK;
+            break;
+        case CullMode::FRONT:
+            desc.CullMode = D3D11_CULL_FRONT;
+            break;
+        }
+
+        desc.FrontCounterClockwise = (_rasterDesc.winding == Winding::COUNTER_CLOCK_WISE);
+
+        desc.DepthClipEnable = TRUE;
+        desc.ScissorEnable   = _rasterDesc.scissorEnable ? TRUE : FALSE;
+
+        _AXASSERT_HR(_driver->getDevice()->CreateRasterizerState(&desc, _rasterState.ReleaseAndGetAddressOf()));
+        _d3d11Context->RSSetState(_rasterState.Get());
+        _dirtyStateFlags &= ~RenderStateFlag::RasterDesc;
+    }
 }
 
 void RenderContextImpl::setVertexBuffer(Buffer* buffer)
@@ -610,7 +628,7 @@ void RenderContextImpl::endRenderPass()
 void RenderContextImpl::prepareDrawing()
 {
     assert(_programState);
-    updateRasterizerState();
+    applyRenderStates();
 
     auto context = _driver->getContext();
 

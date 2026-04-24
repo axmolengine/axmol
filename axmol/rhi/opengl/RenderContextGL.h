@@ -160,13 +160,7 @@ public:
      */
     void endFrame() override;
 
-    /**
-     * Fixed-function state
-     * @param x, y Specifies the lower left corner of the scissor box
-     * @param wdith Specifies the width of the scissor box
-     * @param height Specifies the height of the scissor box
-     */
-    void setScissorRect(bool isEnabled, float x, float y, float width, float height) override;
+    void setScissorRect(bool enabled, float x, float y, float width, float height) override;
 
     void readPixels(RenderTarget* rt,
                     bool preserveAxisHint,

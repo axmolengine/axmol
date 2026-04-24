@@ -872,7 +872,7 @@ void Renderer::beginRenderPass()
     _context->setViewport(_viewport.x, _viewport.y, _viewport.width, _viewport.height);
     _context->setCullMode(_cullMode);
     _context->setWinding(_winding);
-    _context->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y,
+    _context->setScissorRect(_scissorState.enabled, _scissorState.rect.x, _scissorState.rect.y,
                              _scissorState.rect.width, _scissorState.rect.height);
 }
 
@@ -954,12 +954,12 @@ ClearFlag Renderer::getClearFlag() const
 
 void Renderer::setScissorTest(bool enabled)
 {
-    _scissorState.isEnabled = enabled;
+    _scissorState.enabled = enabled;
 }
 
 bool Renderer::getScissorTest() const
 {
-    return _scissorState.isEnabled;
+    return _scissorState.enabled;
 }
 
 const ScissorRect& Renderer::getScissorRect() const

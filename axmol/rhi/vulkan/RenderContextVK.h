@@ -107,7 +107,7 @@ public:
     void setViewport(int x, int y, unsigned int w, unsigned int h) override;
     void setCullMode(CullMode mode) override;
     void setWinding(Winding winding) override;
-    void setScissorRect(bool isEnabled, float x, float y, float width, float height) override;
+    void setScissorRect(bool enabled, float x, float y, float width, float height) override;
 
     void setVertexBuffer(Buffer* buffer) override;
     void setIndexBuffer(Buffer* buffer) override;
@@ -255,8 +255,6 @@ private:
     ExtendedDynamicState _extendedDynamicState{};
 
     tlx::inlined_vector<VkDescriptorBufferInfo, 2> _descriptorBufferInfos;
-
-    bool _scissorEnabled{false};
 
     bool _swapchainDirty{false};
     bool _inFrame{false};

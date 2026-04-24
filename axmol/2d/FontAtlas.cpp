@@ -398,7 +398,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
             // Calculate occupied area using actual bitmap size
             const int glyphWidth  = glyphSize.width + letterExtend;
             const int glyphHeight = glyphSize.height + letterExtend;
-            // Not enough width in current line → wrap to next line
+            // Not enough width in current line -> wrap to next line
             if (_currentPageOrigX + glyphWidth > _width)
             {
                 _currentPageOrigY += _currLineHeight;
@@ -406,7 +406,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
                 _currentPageOrigX = 0;
             }
 
-            // Not enough height → upload current page and start a new page
+            // Not enough height -> upload current page and start a new page
             if (_currentPageOrigY + glyphHeight > _height)
             {
                 // Upload the written region of the current page (startY..pageUploadEndY)

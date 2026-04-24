@@ -39,19 +39,20 @@ class DepthStencilStateImpl;
 class RenderPipelineImpl;
 class RenderTargetImpl;
 
-enum RasterFlag
+enum class RenderStateFlag : uint32_t
 {
-    RF_CULL_MODE = 1,
-    RF_WINDING   = 1 << 1,
-    RF_SCISSOR   = 1 << 2
+    None        = 0,
+    RasterDesc  = 1,
+    Viewport    = 1 << 1,
+    ScissorRect = 1 << 2,
 };
+AX_ENABLE_BITMASK_OPS(RenderStateFlag);
 
 struct RasterStateDesc
 {
     CullMode cullMode{CullMode::BACK};
     Winding winding{Winding::CLOCK_WISE};
     bool scissorEnable{FALSE};
-    unsigned int dirtyFlags{0};
 };
 
 /**
@@ -124,7 +125,7 @@ public:
 
     void endFrame() override;
 
-    void setScissorRect(bool isEnabled, float x, float y, float width, float height) override;
+    void setScissorRect(bool enabled, float x, float y, float width, float height) override;
 
     void readPixels(RenderTarget* rt,
                     bool preserveAxisHint,
@@ -133,7 +134,7 @@ public:
 protected:
     void readPixels(RenderTarget* rt, UINT x, UINT y, UINT width, UINT height, PixelBufferDesc& pbd);
 
-    void updateRasterizerState();
+    void applyRenderStates();
 
     void prepareDrawing();
 
@@ -145,6 +146,8 @@ protected:
     ID3D11Texture2D* _depthStencilTexture{nullptr};
     ComPtr<ID3D11RasterizerState> _rasterState{nullptr};
     RasterStateDesc _rasterDesc{};
+    D3D11_RECT _scissorRect{};
+    D3D11_VIEWPORT _viewport{.MinDepth = 0.0f, .MaxDepth = 1.0f};
     BufferImpl* _vertexBuffer{nullptr};
     BufferImpl* _indexBuffer{nullptr};
     BufferImpl* _instanceBuffer{nullptr};
@@ -163,6 +166,10 @@ protected:
     UINT _syncInterval{0};
     UINT _presentFlags{0};
     BOOL _allowTearing{FALSE};
+
+    // Initialize with RenderStateFlag::RasterDesc to ensure a rasterizer state is created and bound at
+    // least once before the first draw.
+    RenderStateFlag _dirtyStateFlags{RenderStateFlag::RasterDesc};
 
     RenderScaleMode _renderScaleMode{};
 };
