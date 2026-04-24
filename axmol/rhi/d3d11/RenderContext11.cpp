@@ -429,7 +429,7 @@ void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h
     vp.TopLeftY       = static_cast<FLOAT>(y);
     vp.Width          = static_cast<FLOAT>(w);
     vp.Height         = static_cast<FLOAT>(h);
-    if (dxutils::viewportsDiffer(_viewport, vp))
+    if (!dxutils::viewportsEqual(_viewport, vp))
     {
         _viewport = vp;
         _dirtyStateFlags |= RenderStateFlag::Viewport;
@@ -475,7 +475,7 @@ void RenderContextImpl::setScissorRect(bool enabled, float x, float y, float wid
         _dirtyStateFlags |= RenderStateFlag::RasterDesc;
     }
 
-    if (_scissorRect != rect)
+    if (!dxutils::rectsEqual(_scissorRect, rect))
     {
         _scissorRect = rect;
         _dirtyStateFlags |= RenderStateFlag::ScissorRect;

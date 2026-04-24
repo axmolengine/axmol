@@ -249,7 +249,7 @@ private:
     uint32_t _screenWidth{0};
     uint32_t _screenHeight{0};
 
-    VkViewport _cachedViewport{};
+    VkViewport _cachedViewport{.minDepth = 0.0f, .maxDepth = 1.0f};
     VkRect2D _cachedScissor{};
 
     ExtendedDynamicState _extendedDynamicState{};

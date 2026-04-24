@@ -84,11 +84,6 @@ static DXGI_FORMAT toDxgiIndexFormat(IndexFormat fmt)
     }
 }
 
-inline bool operator!=(const D3D12_RECT& a, const D3D12_RECT& b)
-{
-    return a.left != b.left || a.top != b.top || a.right != b.right || a.bottom != b.bottom;
-}
-
 uint64_t GPUFence::wait() const
 {
     const auto completeFenceValue = this->handle->GetCompletedValue();
@@ -485,7 +480,7 @@ void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h
     vp.Height   = static_cast<float>(h);
 
     // Avoid redundant state if equal
-    if (dxutils::viewportsDiffer(_cachedViewport, vp))
+    if (!dxutils::viewportsEqual(_cachedViewport, vp))
     {
         _cachedViewport = vp;
         markDynamicStateDirty(DynamicStateBits::Viewport);
@@ -516,7 +511,7 @@ void RenderContextImpl::setScissorRect(bool enabled, float x, float y, float wid
         rect.bottom = static_cast<LONG>(_renderTargetHeight);
     }
 
-    if (_cachedScissor != rect)
+    if (!dxutils::rectsEqual(_cachedScissor, rect))
     {
         _cachedScissor = rect;
         markDynamicStateDirty(DynamicStateBits::Scissor);

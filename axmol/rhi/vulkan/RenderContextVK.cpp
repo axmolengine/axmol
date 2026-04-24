@@ -97,8 +97,7 @@ static VkIndexType toVkIndexType(IndexFormat fmt)
 inline bool operator==(const VkViewport& a, const VkViewport& b)
 {
     return MathUtil::fuzzyEquals(a.x, b.x) && MathUtil::fuzzyEquals(a.y, b.y) &&
-           MathUtil::fuzzyEquals(a.width, b.width) && MathUtil::fuzzyEquals(a.height, b.height) &&
-           MathUtil::fuzzyEquals(a.minDepth, b.minDepth) && MathUtil::fuzzyEquals(a.maxDepth, b.maxDepth);
+           MathUtil::fuzzyEquals(a.width, b.width) && MathUtil::fuzzyEquals(a.height, b.height);
 }
 
 inline bool operator==(const VkRect2D& a, const VkRect2D& b)
@@ -758,14 +757,12 @@ void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h
     if (w == 0 || h == 0)
         return;
 
-    VkViewport vp{};
+    VkViewport vp{.minDepth = 0.0f, .maxDepth = 1.0f};
 
-    vp.x        = static_cast<float>(x);
-    vp.y        = static_cast<float>(y + h);
-    vp.width    = static_cast<float>(w);
-    vp.height   = -static_cast<float>(h);
-    vp.minDepth = 0.0f;
-    vp.maxDepth = 1.0f;
+    vp.x      = static_cast<float>(x);
+    vp.y      = static_cast<float>(y + h);
+    vp.width  = static_cast<float>(w);
+    vp.height = -static_cast<float>(h);
 
     if (vp != _cachedViewport)
     {

@@ -53,11 +53,17 @@ DXGI_FORMAT getUAVCompatibleFormat(DXGI_FORMAT format);
 void fatalError(std::string_view op, HRESULT hr);
 
 template <typename _Viewport>
-inline bool viewportsDiffer(const _Viewport& a, const _Viewport& b)
+inline bool viewportsEqual(const _Viewport& a, const _Viewport& b)
 {  // we don't compare minDepth and maxDepth because they are always 0.0f and 1.0f in axmol, and comparing them may
    // cause redundant state changes due to precision loss
-    return !MathUtil::fuzzyEquals(a.TopLeftX, b.TopLeftX) || !MathUtil::fuzzyEquals(a.TopLeftY, b.TopLeftY) ||
-           !MathUtil::fuzzyEquals(a.Width, b.Width) || !MathUtil::fuzzyEquals(a.Height, b.Height);
+    return MathUtil::fuzzyEquals(a.TopLeftX, b.TopLeftX) && MathUtil::fuzzyEquals(a.TopLeftY, b.TopLeftY) &&
+           MathUtil::fuzzyEquals(a.Width, b.Width) && MathUtil::fuzzyEquals(a.Height, b.Height);
+}
+
+template <typename _Rect>
+inline bool rectsEqual(const _Rect& a, const _Rect& b)
+{
+    return a.left == b.left && a.top == b.top && a.right == b.right && a.bottom == b.bottom;
 }
 
 }  // namespace ax::rhi::dxutils
