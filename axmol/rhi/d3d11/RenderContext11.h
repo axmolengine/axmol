@@ -48,12 +48,14 @@ enum class RenderStateFlag : uint32_t
 };
 AX_ENABLE_BITMASK_OPS(RenderStateFlag);
 
-struct RasterStateDesc
+struct alignas(4) RasterStateDesc
 {
     CullMode cullMode{CullMode::BACK};
     Winding winding{Winding::CLOCK_WISE};
     bool scissorEnable{FALSE};
+    uint8_t padding{0};
 };
+static_assert(sizeof(RasterStateDesc) == sizeof(uint32_t), "RasterStateDesc size must be 4 bytes");
 
 /**
  * @brief A D3D11-based RenderContext implementation
@@ -144,7 +146,6 @@ protected:
     RenderTargetImpl* _screenRT{nullptr};
     IDXGISwapChain* _swapChain{nullptr};
     ID3D11Texture2D* _depthStencilTexture{nullptr};
-    ComPtr<ID3D11RasterizerState> _rasterState{nullptr};
     RasterStateDesc _rasterDesc{};
     D3D11_RECT _scissorRect{};
     D3D11_VIEWPORT _viewport{.MinDepth = 0.0f, .MaxDepth = 1.0f};
@@ -166,6 +167,8 @@ protected:
     UINT _syncInterval{0};
     UINT _presentFlags{0};
     BOOL _allowTearing{FALSE};
+
+    tlx::hash_map<uint32_t, ID3D11RasterizerState*> _rasterStateCache;
 
     // Initialize with RenderStateFlag::RasterDesc to ensure a rasterizer state is created and bound at
     // least once before the first draw.
