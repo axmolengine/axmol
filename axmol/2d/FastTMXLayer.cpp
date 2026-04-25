@@ -705,7 +705,7 @@ int FastTMXLayer::getTileGIDAt(const Vec2& tileCoordinate, TMXTileFlags* flags /
              "TMXLayer: invalid position");
     AXASSERT(_tiles, "TMXLayer: the tiles map has been released");
 
-    int idx = static_cast<int>(((int)tileCoordinate.x + (int)tileCoordinate.y * _layerSize.width));
+    uint32_t idx = static_cast<uint32_t>(((int)tileCoordinate.x + (int)tileCoordinate.y * _layerSize.width));
 
     // Bits on the far end of the 32-bit global tile ID are used for tile flags
     int tile = _tiles[idx];
@@ -721,6 +721,8 @@ int FastTMXLayer::getTileGIDAt(const Vec2& tileCoordinate, TMXTileFlags* flags /
     {
         *flags = (TMXTileFlags)(tile & kTMXFlipedAll);
     }
+
+    //printf("getTileGIDAt() tile:%d idx:%d\n", tile, idx);
 
     return (tile & kTMXFlippedMask);
 }
@@ -772,8 +774,12 @@ void FastTMXLayer::removeTileAt(const Vec2& tileCoordinate)
 
     if (gid)
     {
+        //printf("FastTMXLayer::removeTileAt() gid:%d\n", gid);
 
-        int z = (int)tileCoordinate.x + (int)(tileCoordinate.y * _layerSize.width);
+        uint32_t z = static_cast<uint32_t>(((int)tileCoordinate.x + (int)tileCoordinate.y * _layerSize.width));
+
+        //printf("FastTMXLayer::removeTileAt tileCoordinate x:%f y:%f\n", tileCoordinate.x, tileCoordinate.y);
+        //printf("FastTMXLayer::removeTileAt z:%d\n", z);
 
         // remove tile from GID map
         setFlaggedTileGIDByIndex(z, 0);
@@ -784,13 +790,27 @@ void FastTMXLayer::removeTileAt(const Vec2& tileCoordinate)
         {
             this->removeChild(it->second.first);
         }
+
+        //auto tileSize = getMapTileSize();
+        Vec2 tileCoordinateTileSizeAdjusted((int)(tileCoordinate.x), (int)(tileCoordinate.y));
+        ///printf("tileCoordinate.y:%f\n", tileCoordinateTileSizeAdjusted.y);
+        //tileCoordinateTileSizeAdjusted.y = getLayerSize().y - tileCoordinateTileSizeAdjusted.y - 1.0f;
+       // printf("getLayerSize().y:%f\n", getLayerSize().y);
+        if(_tileAnimManager != NULL)
+        {
+            _tileAnimManager->deleteTaskAtPos(tileCoordinateTileSizeAdjusted);
+        }
     }
 }
 
 void FastTMXLayer::setFlaggedTileGIDByIndex(int index, uint32_t gid)
 {
-    if (gid == _tiles[index])
+    int currentGid = (_tiles[index] & kTMXFlippedMask);
+    if (gid == currentGid)
+    {
+        printf("astTMXLayer::setFlaggedTileGIDByIndex() AAAAAAAA gid=%d index=%d currentGid:%d\n", gid, index, currentGid);
         return;
+    }
     _tiles[index] = gid;
     _quadsDirty   = true;
     _dirty        = true;
@@ -875,13 +895,16 @@ void FastTMXLayer::setTileGID(int gid, const Vec2& tileCoordinate, TMXTileFlags 
     int currentGID = getTileGIDAt(tileCoordinate, &currentFlags);
 
     if (currentGID == gid && currentFlags == flags)
+    {
         return;
+    }
 
     const uint32_t gidAndFlags = gid | flags;
 
     // setting gid=0 is equal to remove the tile
     if (gid == 0)
     {
+        printf("FastTMXLayer::setTileGID 2\n");
         removeTileAt(tileCoordinate);
     }
     // empty tile. create a new one
@@ -1039,6 +1062,20 @@ void TMXTileAnimManager::update(float delta)
     }
 }
 
+void TMXTileAnimManager::deleteTaskAtPos(const Vec2& tilePos)
+{
+    for(auto it = _tasks.begin(); it != _tasks.end(); it++)
+    {
+        if((*it)->getTilePosition().distance(tilePos) <= 0.1f)
+        {
+            printf("TMXTileAnimManager::deleteTaskAtPos() AAAA\n");
+            //delete (*it);
+            _tasks.erase(it);
+            return;
+        }
+    }
+}
+
 TMXTileAnimTask::TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flag)
 {
     _layer        = layer;
@@ -1078,6 +1115,11 @@ void TMXTileAnimTask::update(float delta)
     {
         setCurrFrame();
     }
+}
+
+Vec2 TMXTileAnimTask::getTilePosition()
+{
+    return _tilePosition;
 }
 
 void TMXTileAnimTask::setCurrFrame()

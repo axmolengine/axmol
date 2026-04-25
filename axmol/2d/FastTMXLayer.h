@@ -407,6 +407,7 @@ public:
     void stop();
     void update(float delta);
     bool isRunning() const { return _isRunning; }
+    Vec2 getTilePosition();
 
 protected:
     /** tile flag */
@@ -448,6 +449,8 @@ public:
     bool isRunning(){ return _started; }
 
     void update(float delta);
+
+    void deleteTaskAtPos(const Vec2& tilePos);
 
     /** get vector of tasks */
     const Vector<TMXTileAnimTask*>& getTasks() const { return _tasks; }

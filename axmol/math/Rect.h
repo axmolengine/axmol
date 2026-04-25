@@ -126,6 +126,12 @@ public:
     {
         return origin.y + size.y;
     }
+
+    Vec2 getCenter() const
+    {
+        return Vec2(origin.x + size.x * 0.5f, origin.y + size.y * 0.5f);
+    }
+
     /**
     Compare two rects.
      */
