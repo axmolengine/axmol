@@ -52,7 +52,7 @@ struct alignas(4) RasterStateDesc
 {
     CullMode cullMode{CullMode::BACK};
     Winding winding{Winding::CLOCK_WISE};
-    bool scissorEnable{FALSE};
+    bool scissorEnable{false};
     uint8_t padding{0};
 };
 static_assert(sizeof(RasterStateDesc) == sizeof(uint32_t), "RasterStateDesc size must be 4 bytes");

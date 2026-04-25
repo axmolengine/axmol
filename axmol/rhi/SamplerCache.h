@@ -63,7 +63,7 @@ private:
     tlx::pod_vector<SamplerHandle> _builtinSamplers;
     tlx::hash_map<SamplerIndex::enum_type, SamplerHandle> _customSamplers;
 
-    tlx::hash_map<uint32_t, uint32_t> _samplersRegsitry;  // sampler desc => sampler index registry
+    tlx::hash_map<uint32_t, uint32_t> _samplersRegistry;  // sampler desc => sampler index registry
 
     DriverBase* _driver{nullptr};
 
