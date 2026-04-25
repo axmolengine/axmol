@@ -499,7 +499,7 @@ void RenderContextImpl::applyRenderStates()
 
     if (bitmask::any(RenderStateFlag::RasterDesc, _dirtyStateFlags))
     {
-        auto& key = *static_cast<uint32_t*>((void*)&_rasterDesc);
+        auto& key = *reinterpret_cast<uint32_t*>(&_rasterDesc);
         auto it   = _rasterStateCache.find(key);
         ID3D11RasterizerState* rasterState{nullptr};
         if (it != _rasterStateCache.end()) [[likely]]
