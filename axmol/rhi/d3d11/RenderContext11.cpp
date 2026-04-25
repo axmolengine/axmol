@@ -312,9 +312,6 @@ RenderContextImpl::~RenderContextImpl()
     AX_SAFE_RELEASE_NULL(_renderPipeline);
 
     SafeRelease(_swapChain);
-
-    for (auto& [_, state] : _rasterStateCache)
-        state->Release();
     _rasterStateCache.clear();
 }
 
@@ -499,14 +496,9 @@ void RenderContextImpl::applyRenderStates()
 
     if (bitmask::any(RenderStateFlag::RasterDesc, _dirtyStateFlags))
     {
-        auto& key = *reinterpret_cast<uint32_t*>(&_rasterDesc);
-        auto it   = _rasterStateCache.find(key);
-        ID3D11RasterizerState* rasterState{nullptr};
-        if (it != _rasterStateCache.end()) [[likely]]
-        {
-            rasterState = it->second;
-        }
-        else
+        const auto key = std::bit_cast<uint32_t>(_rasterDesc);
+        auto it        = _rasterStateCache.find(key);
+        if (it == _rasterStateCache.end()) [[unlikely]]
         {
             D3D11_RASTERIZER_DESC desc = {};
             desc.FillMode              = D3D11_FILL_SOLID;
@@ -529,12 +521,12 @@ void RenderContextImpl::applyRenderStates()
             desc.DepthClipEnable = TRUE;
             desc.ScissorEnable   = _rasterDesc.scissorEnable ? TRUE : FALSE;
 
-            _AXASSERT_HR(_driver->getDevice()->CreateRasterizerState(&desc, &rasterState));
-
-            _rasterStateCache.emplace(key, rasterState);
+            ComPtr<ID3D11RasterizerState> state;
+            _AXASSERT_HR(_driver->getDevice()->CreateRasterizerState(&desc, state.GetAddressOf()));
+            it = _rasterStateCache.emplace(key, std::move(state)).first;
         }
-        _d3d11Context->RSSetState(rasterState);
 
+        _d3d11Context->RSSetState(it->second.Get());
         _dirtyStateFlags &= ~RenderStateFlag::RasterDesc;
     }
 }

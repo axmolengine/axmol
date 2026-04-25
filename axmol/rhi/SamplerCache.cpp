@@ -78,7 +78,7 @@ SamplerIndex::enum_type SamplerCache::registerSampler(const SamplerDesc& desc)
         throw std::runtime_error("sampler registry is full");
     }
 
-    auto key = *reinterpret_cast<const uint32_t*>(&desc);
+    auto key = std::bit_cast<uint32_t>(desc);
     auto it  = _samplersRegsitry.find(key);
     if (it != _samplersRegsitry.end())
         return static_cast<SamplerIndex::enum_type>(it->second);
@@ -251,7 +251,7 @@ void SamplerCache::createBuiltinSampler(uint32_t samplerIndex, const SamplerDesc
 {
     _builtinSamplers[samplerIndex] = _driver->createSampler(desc);
 
-    auto key = *reinterpret_cast<const uint32_t*>(&desc);
+    auto key = std::bit_cast<uint32_t>(desc);
     _samplersRegsitry.emplace(key, samplerIndex);
 }
 

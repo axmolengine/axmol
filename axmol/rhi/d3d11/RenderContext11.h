@@ -168,7 +168,7 @@ protected:
     UINT _presentFlags{0};
     BOOL _allowTearing{FALSE};
 
-    tlx::hash_map<uint32_t, ID3D11RasterizerState*> _rasterStateCache;
+    tlx::hash_map<uint32_t, ComPtr<ID3D11RasterizerState>> _rasterStateCache;
 
     // Initialize with RenderStateFlag::RasterDesc to ensure a rasterizer state is created and bound at
     // least once before the first draw.
