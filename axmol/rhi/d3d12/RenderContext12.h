@@ -105,7 +105,7 @@ public:
     void setViewport(int x, int y, unsigned int w, unsigned int h) override;
     void setCullMode(CullMode mode) override;
     void setWinding(Winding winding) override;
-    void setScissorRect(bool isEnabled, float x, float y, float width, float height) override;
+    void setScissorRect(bool enabled, float x, float y, float width, float height) override;
 
     void setVertexBuffer(Buffer* buffer) override;
     void setIndexBuffer(Buffer* buffer) override;
@@ -236,7 +236,7 @@ private:
 
     std::vector<std::function<void(uint64_t)>> _frameCompletionOps;
 
-    D3D12_VIEWPORT _cachedViewport{};
+    D3D12_VIEWPORT _cachedViewport{.MinDepth = 0.0f, .MaxDepth = 1.0f};
     D3D12_RECT _cachedScissor{};
     D3D12_CULL_MODE _cachedCullMode{D3D12_CULL_MODE_NONE};
     BOOL _cachedFrontCounterClockwise{FALSE};

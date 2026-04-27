@@ -34,6 +34,7 @@
 #include "axmol/rhi/vulkan/SemaphorePoolVK.h"
 #include "axmol/rhi/DriverContext.h"
 #include "axmol/base/Logging.h"
+#include "axmol/math/MathUtil.h"
 
 #include <glad/vulkan.h>
 #include <cassert>
@@ -93,16 +94,10 @@ static VkIndexType toVkIndexType(IndexFormat fmt)
     }
 }
 
-inline bool nearlyEqual(float a, float b, float eps = 1e-6f)
-{
-    return std::fabs(a - b) < eps;
-}
-
 inline bool operator==(const VkViewport& a, const VkViewport& b)
 {
-    return nearlyEqual(a.x, b.x) && nearlyEqual(a.y, b.y) && nearlyEqual(a.width, b.width) &&
-           nearlyEqual(a.height, b.height) && nearlyEqual(a.minDepth, b.minDepth) &&
-           nearlyEqual(a.maxDepth, b.maxDepth);
+    return MathUtil::fuzzyEquals(a.x, b.x) && MathUtil::fuzzyEquals(a.y, b.y) &&
+           MathUtil::fuzzyEquals(a.width, b.width) && MathUtil::fuzzyEquals(a.height, b.height);
 }
 
 inline bool operator==(const VkRect2D& a, const VkRect2D& b)
@@ -762,14 +757,12 @@ void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h
     if (w == 0 || h == 0)
         return;
 
-    VkViewport vp{};
+    VkViewport vp{.minDepth = 0.0f, .maxDepth = 1.0f};
 
-    vp.x        = static_cast<float>(x);
-    vp.y        = static_cast<float>(y + h);
-    vp.width    = static_cast<float>(w);
-    vp.height   = -static_cast<float>(h);
-    vp.minDepth = 0.0f;
-    vp.maxDepth = 1.0f;
+    vp.x      = static_cast<float>(x);
+    vp.y      = static_cast<float>(y + h);
+    vp.width  = static_cast<float>(w);
+    vp.height = -static_cast<float>(h);
 
     if (vp != _cachedViewport)
     {
@@ -778,10 +771,10 @@ void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h
     }
 }
 
-void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float width, float height)
+void RenderContextImpl::setScissorRect(bool enabled, float x, float y, float width, float height)
 {
     VkRect2D rect{};
-    if (isEnabled)
+    if (enabled)
     {
         const float rtW = static_cast<float>(_renderTargetWidth);
         const float rtH = static_cast<float>(_renderTargetHeight);
@@ -794,8 +787,8 @@ void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float w
 
         rect.offset.x      = minX;
         rect.offset.y      = static_cast<int32_t>(rtH) - maxY;  // filp Y
-        rect.extent.width  = static_cast<uint32_t>(std::max(0, maxX - minX));
-        rect.extent.height = static_cast<uint32_t>(std::max(0, maxY - minY));
+        rect.extent.width  = static_cast<uint32_t>((std::max)(0, maxX - minX));
+        rect.extent.height = static_cast<uint32_t>((std::max)(0, maxY - minY));
     }
     else
     {
@@ -803,10 +796,9 @@ void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float w
         rect.extent = {_renderTargetWidth, _renderTargetHeight};
     }
 
-    if (_scissorEnabled != isEnabled || _cachedScissor != rect)
+    if (_cachedScissor != rect)
     {
-        _scissorEnabled = isEnabled;
-        _cachedScissor  = rect;
+        _cachedScissor = rect;
         markDynamicStateDirty(DynamicStateBits::Scissor);
     }
 }

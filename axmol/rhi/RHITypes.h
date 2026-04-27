@@ -319,14 +319,14 @@ enum class DepthStencilFlags : unsigned int
 AX_ENABLE_BITMASK_OPS(DepthStencilFlags)
 AX_ENABLE_BITSHIFT_OPS(DepthStencilFlags)
 
-enum class CullMode : uint32_t
+enum class CullMode : uint8_t
 {
-    NONE  = 0x00000000,
-    BACK  = 0x00000001,
-    FRONT = 0x00000002
+    NONE  = 0x00,
+    BACK  = 0x01,
+    FRONT = 0x02
 };
 
-enum class Winding : uint32_t
+enum class Winding : uint8_t
 {
     CLOCK_WISE,
     COUNTER_CLOCK_WISE

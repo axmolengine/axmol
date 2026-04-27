@@ -1,4 +1,4 @@
-/* auto-generated on 2026-04-17 11:03:09 -0400. version 4.6.2 Do not edit! */
+/* auto-generated on 2026-04-17 17:22:06 -0400. version 4.6.3 Do not edit! */
 /* including simdjson.h:  */
 /* begin file simdjson.h */
 #ifndef SIMDJSON_H
@@ -2538,7 +2538,7 @@ namespace std {
 #define SIMDJSON_SIMDJSON_VERSION_H
 
 /** The version of simdjson being used (major.minor.revision) */
-#define SIMDJSON_VERSION "4.6.2"
+#define SIMDJSON_VERSION "4.6.3"
 
 namespace simdjson {
 enum {
@@ -2553,7 +2553,7 @@ enum {
   /**
    * The revision (major.minor.REVISION) of simdjson being used.
    */
-  SIMDJSON_VERSION_REVISION = 2
+  SIMDJSON_VERSION_REVISION = 3
 };
 } // namespace simdjson
 
@@ -65074,8 +65074,6 @@ public:
   static simdjson_inline bool release_parser();
 
 private:
-  friend bool release_parser();
-  friend ondemand::parser& get_parser();
   /** Get the thread-local parser instance, allocates it if needed */
   static simdjson_inline simdjson_warn_unused std::unique_ptr<ondemand::parser>& get_parser_instance();
   /** Get the thread-local parser instance, it might be null */
@@ -72626,7 +72624,7 @@ simdjson_inline simdjson_warn_unused ondemand::parser& parser::get_parser() {
   return *parser::get_parser_instance();
 }
 
-simdjson_inline bool release_parser() {
+simdjson_inline bool parser::release_parser() {
   auto &parser_instance = parser::get_threadlocal_parser_if_exists();
   if (parser_instance) {
     parser_instance.reset();
@@ -78446,8 +78444,6 @@ public:
   static simdjson_inline bool release_parser();
 
 private:
-  friend bool release_parser();
-  friend ondemand::parser& get_parser();
   /** Get the thread-local parser instance, allocates it if needed */
   static simdjson_inline simdjson_warn_unused std::unique_ptr<ondemand::parser>& get_parser_instance();
   /** Get the thread-local parser instance, it might be null */
@@ -85998,7 +85994,7 @@ simdjson_inline simdjson_warn_unused ondemand::parser& parser::get_parser() {
   return *parser::get_parser_instance();
 }
 
-simdjson_inline bool release_parser() {
+simdjson_inline bool parser::release_parser() {
   auto &parser_instance = parser::get_threadlocal_parser_if_exists();
   if (parser_instance) {
     parser_instance.reset();
@@ -92305,8 +92301,6 @@ public:
   static simdjson_inline bool release_parser();
 
 private:
-  friend bool release_parser();
-  friend ondemand::parser& get_parser();
   /** Get the thread-local parser instance, allocates it if needed */
   static simdjson_inline simdjson_warn_unused std::unique_ptr<ondemand::parser>& get_parser_instance();
   /** Get the thread-local parser instance, it might be null */
@@ -99857,7 +99851,7 @@ simdjson_inline simdjson_warn_unused ondemand::parser& parser::get_parser() {
   return *parser::get_parser_instance();
 }
 
-simdjson_inline bool release_parser() {
+simdjson_inline bool parser::release_parser() {
   auto &parser_instance = parser::get_threadlocal_parser_if_exists();
   if (parser_instance) {
     parser_instance.reset();
@@ -106164,8 +106158,6 @@ public:
   static simdjson_inline bool release_parser();
 
 private:
-  friend bool release_parser();
-  friend ondemand::parser& get_parser();
   /** Get the thread-local parser instance, allocates it if needed */
   static simdjson_inline simdjson_warn_unused std::unique_ptr<ondemand::parser>& get_parser_instance();
   /** Get the thread-local parser instance, it might be null */
@@ -113716,7 +113708,7 @@ simdjson_inline simdjson_warn_unused ondemand::parser& parser::get_parser() {
   return *parser::get_parser_instance();
 }
 
-simdjson_inline bool release_parser() {
+simdjson_inline bool parser::release_parser() {
   auto &parser_instance = parser::get_threadlocal_parser_if_exists();
   if (parser_instance) {
     parser_instance.reset();
@@ -120138,8 +120130,6 @@ public:
   static simdjson_inline bool release_parser();
 
 private:
-  friend bool release_parser();
-  friend ondemand::parser& get_parser();
   /** Get the thread-local parser instance, allocates it if needed */
   static simdjson_inline simdjson_warn_unused std::unique_ptr<ondemand::parser>& get_parser_instance();
   /** Get the thread-local parser instance, it might be null */
@@ -127690,7 +127680,7 @@ simdjson_inline simdjson_warn_unused ondemand::parser& parser::get_parser() {
   return *parser::get_parser_instance();
 }
 
-simdjson_inline bool release_parser() {
+simdjson_inline bool parser::release_parser() {
   auto &parser_instance = parser::get_threadlocal_parser_if_exists();
   if (parser_instance) {
     parser_instance.reset();
@@ -134429,8 +134419,6 @@ public:
   static simdjson_inline bool release_parser();
 
 private:
-  friend bool release_parser();
-  friend ondemand::parser& get_parser();
   /** Get the thread-local parser instance, allocates it if needed */
   static simdjson_inline simdjson_warn_unused std::unique_ptr<ondemand::parser>& get_parser_instance();
   /** Get the thread-local parser instance, it might be null */
@@ -141981,7 +141969,7 @@ simdjson_inline simdjson_warn_unused ondemand::parser& parser::get_parser() {
   return *parser::get_parser_instance();
 }
 
-simdjson_inline bool release_parser() {
+simdjson_inline bool parser::release_parser() {
   auto &parser_instance = parser::get_threadlocal_parser_if_exists();
   if (parser_instance) {
     parser_instance.reset();
@@ -148194,8 +148182,6 @@ public:
   static simdjson_inline bool release_parser();
 
 private:
-  friend bool release_parser();
-  friend ondemand::parser& get_parser();
   /** Get the thread-local parser instance, allocates it if needed */
   static simdjson_inline simdjson_warn_unused std::unique_ptr<ondemand::parser>& get_parser_instance();
   /** Get the thread-local parser instance, it might be null */
@@ -155746,7 +155732,7 @@ simdjson_inline simdjson_warn_unused ondemand::parser& parser::get_parser() {
   return *parser::get_parser_instance();
 }
 
-simdjson_inline bool release_parser() {
+simdjson_inline bool parser::release_parser() {
   auto &parser_instance = parser::get_threadlocal_parser_if_exists();
   if (parser_instance) {
     parser_instance.reset();
@@ -161982,8 +161968,6 @@ public:
   static simdjson_inline bool release_parser();
 
 private:
-  friend bool release_parser();
-  friend ondemand::parser& get_parser();
   /** Get the thread-local parser instance, allocates it if needed */
   static simdjson_inline simdjson_warn_unused std::unique_ptr<ondemand::parser>& get_parser_instance();
   /** Get the thread-local parser instance, it might be null */
@@ -169534,7 +169518,7 @@ simdjson_inline simdjson_warn_unused ondemand::parser& parser::get_parser() {
   return *parser::get_parser_instance();
 }
 
-simdjson_inline bool release_parser() {
+simdjson_inline bool parser::release_parser() {
   auto &parser_instance = parser::get_threadlocal_parser_if_exists();
   if (parser_instance) {
     parser_instance.reset();
@@ -175774,8 +175758,6 @@ public:
   static simdjson_inline bool release_parser();
 
 private:
-  friend bool release_parser();
-  friend ondemand::parser& get_parser();
   /** Get the thread-local parser instance, allocates it if needed */
   static simdjson_inline simdjson_warn_unused std::unique_ptr<ondemand::parser>& get_parser_instance();
   /** Get the thread-local parser instance, it might be null */
@@ -183326,7 +183308,7 @@ simdjson_inline simdjson_warn_unused ondemand::parser& parser::get_parser() {
   return *parser::get_parser_instance();
 }
 
-simdjson_inline bool release_parser() {
+simdjson_inline bool parser::release_parser() {
   auto &parser_instance = parser::get_threadlocal_parser_if_exists();
   if (parser_instance) {
     parser_instance.reset();

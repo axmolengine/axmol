@@ -131,7 +131,7 @@ struct ImGui_ImplAxmol_Data
 
     ImGuiImplAxmolRebuildFontsFn RebuildFontsFunc = nullptr;
     void* RebuildFontsFuncUserData                = nullptr;
-    bool FontsDirty                             = false;
+    bool FontsDirty                               = false;
 
     ProgramInfoData ProgramInfo{};
     Mat4 Projection;
@@ -409,12 +409,8 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
                 {
                     // Apply scissor/clipping rectangle
                     ImGui_ImplAxmol_PostCommand([=]() {
-                        if (rhi::DriverContext::isD3D12())
-                            renderer->setScissorRect(clip_rect.x, clip_rect.y, clip_rect.z - clip_rect.x,
-                                                     clip_rect.w - clip_rect.y);
-                        else
-                            renderer->setScissorRect(clip_rect.x, fb_height - clip_rect.w, clip_rect.z - clip_rect.x,
-                                                     clip_rect.w - clip_rect.y);
+                        renderer->setScissorRect(clip_rect.x, fb_height - clip_rect.w, clip_rect.z - clip_rect.x,
+                                                 clip_rect.w - clip_rect.y);
                     });
 
                     auto bd = ImGui_ImplAxmol_GetBackendData();
@@ -599,7 +595,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_DestroyDeviceObjects()
 
 IMGUI_IMPL_API void ImGui_ImplAxmol_SetRebuildFontsFunc(ImGuiImplAxmolRebuildFontsFn func, void* userdata)
 {
-    auto bd                     = ImGui_ImplAxmol_GetBackendData();
+    auto bd                      = ImGui_ImplAxmol_GetBackendData();
     bd->RebuildFontsFunc         = func;
     bd->RebuildFontsFuncUserData = userdata;
 }

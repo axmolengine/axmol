@@ -66,7 +66,7 @@ void SamplerCache::removeAllSamplers()
 
     _customSamplers.clear();
     _builtinSamplers.clear();
-    _samplersRegsitry.clear();
+    _samplersRegistry.clear();
 
     _nextSamplerIndex = 0;
 }
@@ -78,16 +78,16 @@ SamplerIndex::enum_type SamplerCache::registerSampler(const SamplerDesc& desc)
         throw std::runtime_error("sampler registry is full");
     }
 
-    auto key = *reinterpret_cast<const uint32_t*>(&desc);
-    auto it  = _samplersRegsitry.find(key);
-    if (it != _samplersRegsitry.end())
+    auto key = std::bit_cast<uint32_t>(desc);
+    auto it  = _samplersRegistry.find(key);
+    if (it != _samplersRegistry.end())
         return static_cast<SamplerIndex::enum_type>(it->second);
 
     auto samplerIndex  = _nextSamplerIndex++;
     auto samplerHandle = _driver->createSampler(desc);
     _customSamplers.emplace(static_cast<SamplerIndex::enum_type>(samplerIndex), samplerHandle);
 
-    _samplersRegsitry.emplace(key, samplerIndex);
+    _samplersRegistry.emplace(key, samplerIndex);
 
     return static_cast<SamplerIndex::enum_type>(samplerIndex);
 }
@@ -251,8 +251,8 @@ void SamplerCache::createBuiltinSampler(uint32_t samplerIndex, const SamplerDesc
 {
     _builtinSamplers[samplerIndex] = _driver->createSampler(desc);
 
-    auto key = *reinterpret_cast<const uint32_t*>(&desc);
-    _samplersRegsitry.emplace(key, samplerIndex);
+    auto key = std::bit_cast<uint32_t>(desc);
+    _samplersRegistry.emplace(key, samplerIndex);
 }
 
 }  // namespace ax::rhi

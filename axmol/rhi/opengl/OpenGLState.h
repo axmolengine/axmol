@@ -205,11 +205,8 @@ struct AX_DLL OpenGLState
     void disableDepthTest() { try_disable(GL_DEPTH_TEST, _depthTest); }
     void enableBlend() { try_enable(GL_BLEND, _blend); }
     void disableBlend() { try_disable(GL_BLEND, _blend); }
-    void enableScissor(GLint x, GLint y, GLsizei width, GLsizei height)
-    {
-        try_enable(GL_SCISSOR_TEST, _scissor);
-        glScissor(x, y, width, height);
-    }
+    void enableScissor() { try_enable(GL_SCISSOR_TEST, _scissor); }
+    void setScissor(GLint x, GLint y, GLsizei width, GLsizei height) { glScissor(x, y, width, height); }
     void disableScissor() { try_disable(GL_SCISSOR_TEST, _scissor); }
     void lineWidth(float v) { try_call(glLineWidth, _lineWidth, v); }
     void bindFrameBuffer(GLuint v) { try_callu(glBindFramebuffer, GL_FRAMEBUFFER, _frameBufferBind, v); }

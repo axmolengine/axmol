@@ -51,6 +51,7 @@ struct PixelFormatDesc
 
 const PixelFormatDesc& getFormatDesc(PixelFormat format);
 uint32_t computeRowPitch(PixelFormat format, uint32_t width);
+uint32_t computeDataSize(PixelFormat format, uint32_t width, uint32_t height);
 inline uint8_t getBitsPerPixel(PixelFormat format)
 {
     return getFormatDesc(format).bpp;

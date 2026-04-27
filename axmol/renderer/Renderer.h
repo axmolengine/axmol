@@ -579,7 +579,7 @@ protected:
     struct ScissorState
     {
         ScissorRect rect;
-        bool isEnabled = false;
+        bool enabled{false};
     };
     ScissorState _scissorState;
 

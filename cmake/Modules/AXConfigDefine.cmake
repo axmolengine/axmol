@@ -8,7 +8,7 @@ define_property(TARGET
 )
 
 if(WINDOWS)
-  cmake_minimum_required(VERSION 3.27...4.1)
+  cmake_minimum_required(VERSION 3.27...4.3)
   cmake_policy(SET CMP0141 NEW)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<$<CONFIG:Debug,RelWithDebInfo>:Embedded>")
 
@@ -63,6 +63,18 @@ message(STATUS "CMAKE_C_STANDARD=${CMAKE_C_STANDARD}")
 
 if(NOT DEFINED CMAKE_C_STANDARD_REQUIRED)
   set(CMAKE_C_STANDARD_REQUIRED ON)
+endif()
+
+if(FULL_MSVC)
+  include(CheckCXXCompilerFlag)
+  check_cxx_compiler_flag("/std:c++23" _AX_MSVC_SUPPORTS_STABLE_CXX23)
+  if(_AX_MSVC_SUPPORTS_STABLE_CXX23)
+    set(CMAKE_CXX23_STANDARD_COMPILE_OPTION "/std:c++23")
+    set(CMAKE_CXX23_EXTENSION_COMPILE_OPTION "/std:c++23")
+  elseif(MSVC_VERSION GREATER_EQUAL 1943)
+    set(CMAKE_CXX23_STANDARD_COMPILE_OPTION "/std:c++23preview")
+    set(CMAKE_CXX23_STANDARD_COMPILE_OPTION "/std:c++23preview")
+  endif()
 endif()
 
 # config c++ standard, minimal require c++23

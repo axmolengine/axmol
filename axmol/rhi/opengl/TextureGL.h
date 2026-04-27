@@ -152,14 +152,32 @@ public:
      */
     void apply(int slot) const;
 
-    void ensureNativeTexture(size_t imageSize = 0);
+    void ensureNativeTexture();
+
+    /**
+     * @brief Allocate GPU storage for a specific mipmap level of a texture array.
+     *
+     * Ensures that the given mipmap level has valid storage before updating
+     * with glTexSubImage3D, preventing GL_INVALID_OPERATION (0x502).
+     *
+     * @note For GL_TEXTURE_ARRAY (arraySize > 1):
+     *       - Updating array elements must use glSubXXX with the `zoffset` parameter.
+     *       - glSubXXX requires that storage for the target mipmap level
+     *         be allocated in advance.
+     *
+     * @param level          Mipmap level index to allocate.
+     */
+    void ensureLevelStorage(int level);
 
 private:
     void configureUnpackAlignment(unsigned int width);
 
     NativeTextureDesc _nativeDesc{};
     GLuint _nativeTexture{0};
-    GLuint _nativeSampler{0};  // weak ref
+    GLuint _nativeSampler{0};  // weak
+
+    // Bitmask to track allocated mipmap levels for texture array (up to 32 levels)
+    uint32_t _allocatedLevelsBits{0};
 };
 
 // end of _opengl group

@@ -242,6 +242,9 @@ void IsolateSubmission::waitGPU()
 
 void IsolateSubmission::release()
 {
+    if (!cmdList)
+        return;
+
     waitGPU();
 
     fence.Reset();

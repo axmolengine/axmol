@@ -118,6 +118,21 @@ uint32_t computeRowPitch(PixelFormat format, uint32_t width)
     return 0;
 }
 
+uint32_t computeDataSize(PixelFormat format, uint32_t width, uint32_t height)
+{
+    if (AX_UNLIKELY(format >= PixelFormat::COUNT))
+        return 0;
+    const auto& desc = s_pixelFormatDescriptors[(uint32_t)format];
+
+    uint32_t numBlocksX = (width + desc.blockWidth - 1) / desc.blockWidth;
+    numBlocksX          = (std::max)(numBlocksX, (uint32_t)desc.minBlockX);
+
+    uint32_t numBlocksY = (height + desc.blockHeight - 1) / desc.blockHeight;
+    numBlocksY          = (std::max)(numBlocksY, (uint32_t)desc.minBlockY);
+
+    return numBlocksX * numBlocksY * desc.blockSize;
+}
+
 //////////////////////////////////////////////////////////////////////////
 // convertor function
 

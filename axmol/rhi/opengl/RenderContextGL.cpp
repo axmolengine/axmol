@@ -78,6 +78,15 @@ void RenderContextImpl::beginRenderPass(RenderTarget* rt, const RenderPassDesc& 
 
     auto clearFlags = descriptor.flags.clear;
 
+    // Disable scissor test before clearing in OpenGL.
+    // In OpenGL, glClear is affected by the current scissor state, unlike other RHIs
+    // (D3D, Metal, Vulkan) where clears always apply to the full render target.
+    // To ensure consistent cross-platform behavior, we temporarily disable scissor
+    // here so that beginRenderPass clears the entire framebuffer regardless of any
+    // previously set scissor rect.
+    // @see also: issue #1627, #3123
+    __state->disableScissor();
+
     // set clear color, depth and stencil
     GLbitfield mask = 0;
     if (bitmask::any(clearFlags, TargetBufferFlags::COLOR))
@@ -386,12 +395,17 @@ void RenderContextImpl::cleanResources()
     _vertexLayout = nullptr;
 }
 
-void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float width, float height)
+void RenderContextImpl::setScissorRect(bool enabled, float x, float y, float width, float height)
 {
-    if (isEnabled)
-        __state->enableScissor(x, y, width, height);
+    if (enabled)
+    {
+        __state->setScissor(x, y, width, height);
+        __state->enableScissor();
+    }
     else
+    {
         __state->disableScissor();
+    }
 }
 
 void RenderContextImpl::readPixels(RenderTarget* rt,

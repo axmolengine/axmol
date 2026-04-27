@@ -31,6 +31,7 @@
 #include "axmol/rhi/d3d12/Buffer12.h"
 #include "axmol/rhi/d3d12/Texture12.h"
 #include "axmol/base/Logging.h"
+#include "axmol/math/MathUtil.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
 #    include "axmol/platform/winrt/SwapChainPanelUtil.h"
@@ -472,40 +473,35 @@ void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h
     if (w == 0 || h == 0)
         return;
 
-    D3D12_VIEWPORT vp{};
+    D3D12_VIEWPORT vp{.MinDepth = 0.0f, .MaxDepth = 1.0f};
     vp.TopLeftX = static_cast<float>(x);
     vp.TopLeftY = static_cast<float>(y);
     vp.Width    = static_cast<float>(w);
     vp.Height   = static_cast<float>(h);
-    vp.MinDepth = 0.0f;
-    vp.MaxDepth = 1.0f;
 
     // Avoid redundant state if equal
-    const bool same = vp.TopLeftX == _cachedViewport.TopLeftX && vp.TopLeftY == _cachedViewport.TopLeftY &&
-                      vp.Width == _cachedViewport.Width && vp.Height == _cachedViewport.Height &&
-                      vp.MinDepth == _cachedViewport.MinDepth && vp.MaxDepth == _cachedViewport.MaxDepth;
-
-    if (!same)
+    if (!dxutils::viewportsEqual(_cachedViewport, vp))
     {
         _cachedViewport = vp;
         markDynamicStateDirty(DynamicStateBits::Viewport);
     }
 }
 
-void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float width, float height)
+void RenderContextImpl::setScissorRect(bool enabled, float x, float y, float width, float height)
 {
     D3D12_RECT rect{};
-    if (isEnabled)
+    if (enabled)
     {
-        const LONG minX = static_cast<LONG>(std::max(0.f, x));
-        const LONG minY = static_cast<LONG>(std::max(0.f, y));
-        const LONG maxX = static_cast<LONG>(std::min<float>(x + width, static_cast<float>(_renderTargetWidth)));
-        const LONG maxY = static_cast<LONG>(std::min<float>(y + height, static_cast<float>(_renderTargetHeight)));
-
-        rect.left   = minX;
-        rect.top    = minY;
-        rect.right  = std::max<LONG>(minX, maxX);
-        rect.bottom = std::max<LONG>(minY, maxY);
+        const float rtW = static_cast<float>(_renderTargetWidth);
+        const float rtH = static_cast<float>(_renderTargetHeight);
+        const LONG l    = static_cast<LONG>(std::clamp(x, 0.f, rtW));
+        const LONG r    = static_cast<LONG>(std::clamp(x + width, 0.f, rtW));
+        const LONG t    = static_cast<LONG>(std::clamp(rtH - (y + height), 0.f, rtH));
+        const LONG b    = static_cast<LONG>(std::clamp(rtH - y, 0.f, rtH));
+        rect.left       = (std::min)(l, r);
+        rect.top        = (std::min)(t, b);
+        rect.right      = (std::max)(l, r);
+        rect.bottom     = (std::max)(t, b);
     }
     else
     {
@@ -515,13 +511,9 @@ void RenderContextImpl::setScissorRect(bool isEnabled, float x, float y, float w
         rect.bottom = static_cast<LONG>(_renderTargetHeight);
     }
 
-    const bool changed = rect.left != _cachedScissor.left || rect.top != _cachedScissor.top ||
-                         rect.right != _cachedScissor.right || rect.bottom != _cachedScissor.bottom;
-
-    if (changed)
+    if (!dxutils::rectsEqual(_cachedScissor, rect))
     {
         _cachedScissor = rect;
-
         markDynamicStateDirty(DynamicStateBits::Scissor);
     }
 }

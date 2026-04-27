@@ -32,11 +32,11 @@ function println($message) { Write-Host "axmol: $message" }
 # import VersionEx
 . (Join-Path $PSScriptRoot '1k/extensions.ps1')
 
-[VersionEx]$pwsh_ver = [Regex]::Match($PSVersionTable.PSVersion.ToString(), '(\d+\.)+(\*|\d+)').Value
+[VersionEx]$pwshVersion = $pwsh_ver
 
 function mkdirs([string]$path) {
     if (!(Test-Path $path -PathType Container)) {
-        if ($pwsh_ver -ge [VersionEx]'5.0') {
+        if ($pwshVersion -ge [VersionEx]'5.0') {
             New-Item $path -ItemType Directory 1>$null
         }
         else {
@@ -45,7 +45,7 @@ function mkdirs([string]$path) {
     }
 }
 
-if ($pwsh_ver -lt [VersionEx]'5.0') {
+if ($pwshVersion -lt [VersionEx]'5.0') {
     $ErrorActionPreference = 'Stop'
 
     # try setup WMF5.1, require reboot, try run setup.ps1 several times
@@ -195,7 +195,7 @@ if ($IsWin) {
     }
 
     $execPolicy = powershell -Command 'Get-ExecutionPolicy'
-    if ($pwsh_ver.Major -gt 5) {
+    if ($pwshVersion.Major -gt 5) {
         $execPolicy = powershell -Command 'Get-ExecutionPolicy'
         if ($execPolicy -ne 'Bypass') {
             println "Setting system installed powershell execution policy '$execPolicy'==>'Bypass', please click 'YES' on UAC dialog"

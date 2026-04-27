@@ -23,6 +23,7 @@
 
 #pragma once
 
+#include <cmath>
 #include "axmol/math/MathBase.h"
 
 namespace ax
@@ -101,6 +102,8 @@ public:
     {
         return radians * 57.29577951f;  // PI * 180
     }
+
+    static inline bool fuzzyEquals(float a, float b, float eps = 1e-5) { return std::abs(a - b) <= eps; }
 
 private:
     // Indicates that if neon is enabled

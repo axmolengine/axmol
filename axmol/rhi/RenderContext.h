@@ -220,7 +220,7 @@ public:
      * @param wdith Specifies the width of the scissor box
      * @param height Specifies the height of the scissor box
      */
-    virtual void setScissorRect(bool isEnabled, float x, float y, float width, float height) = 0;
+    virtual void setScissorRect(bool enabled, float x, float y, float width, float height) = 0;
 
     /**
      * Read pixels from the specified render target.

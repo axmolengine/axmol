@@ -587,16 +587,6 @@ function(ax_setup_app_config app_name)
       XCODE_EMBED_FRAMEWORKS_REMOVE_HEADERS_ON_COPY ON
     )
 
-    # Detecting Xcode version
-    execute_process(
-      COMMAND xcodebuild -version
-      OUTPUT_VARIABLE XCODE_VERSION_RAW
-      OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-    string(REGEX MATCH "Xcode ([0-9]+\\.[0-9]+)" _match "${XCODE_VERSION_RAW}")
-    set(XCODE_VERSION "${CMAKE_MATCH_1}")
-
-    message(STATUS "Detected Xcode version: ${XCODE_VERSION}")
     if(XCODE_VERSION VERSION_LESS_EQUAL "14.2")
       message(STATUS
         "Detected Xcode ${XCODE_VERSION} (<= 14.2): "
