@@ -1623,7 +1623,11 @@ function preprocess_win() {
             elseif ($TOOLCHAIN_VER -match '^\d+\.\d+$') {
                 $toolsetInfo = Get-VsToolsetFromMsvcVersion $TOOLCHAIN_VER
                 $outputOptions += '-T', "$($toolsetInfo.toolset),version=$TOOLCHAIN_VER"
-                $Script:cmake_generator = "Visual Studio $($toolsetInfo.vsVer) $($toolsetInfo.vsYear)"
+                # Specifying a CMake generator requires multiple Visual Studio versions 
+                # (e.g., "Visual Studio $($toolsetInfo.vsVer) $($toolsetInfo.vsYear)").
+                # If no generator is specified, CMake will automatically select the latest 
+                # available version, so only the newest Visual Studio (e.g., VS2026) needs to be installed.
+                # $Script:cmake_generator = "Visual Studio $($toolsetInfo.vsVer) $($toolsetInfo.vsYear)"
             }
             # refer: https://cmake.org/cmake/help/latest/variable/CMAKE_GENERATOR_PLATFORM.html
             if ($options.sdk) {
