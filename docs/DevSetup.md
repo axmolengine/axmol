@@ -23,8 +23,11 @@
 
 ### 2. **Install Compiler Toolchain**
 
-- **Windows**: Install **Visual Studio 2022 or 2026** with the **`Desktop development with C++`** workload.  
-  - For UWP development, also enable the **`WinUI application development tools`** workload and include the optional component **`C++ Universal Windows Platform tools`**.
+- **Windows**  
+  - Install **Visual Studio 2022 (version 17.9 or higher)** or **Visual Studio 2026**.  
+  - Enable the **`Desktop development with C++`** workload.  
+  - For UWP development, also enable the **`WinUI application development tools`** workload and include the optional component **`C++ Universal Windows Platform tools`**.  
+  - **MSVC Toolset Requirement**: Must install **MSVC v14.39 or higher**.  
 
 - **macOS**:
   - For `axmol-v2`: Install **Xcode 14.2 or later** — note that Xcode 14.2 is only supported on **macOS 12.5 ~ macOS 13.x**.  
