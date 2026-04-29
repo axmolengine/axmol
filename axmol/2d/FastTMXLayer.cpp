@@ -1068,8 +1068,6 @@ void TMXTileAnimManager::deleteTaskAtPos(const Vec2& tilePos)
     {
         if((*it)->getTilePosition().distance(tilePos) <= 0.1f)
         {
-            printf("TMXTileAnimManager::deleteTaskAtPos() AAAA\n");
-            //delete (*it);
             _tasks.erase(it);
             return;
         }

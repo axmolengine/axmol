@@ -84,6 +84,8 @@ bool Rect::intersectsSegment(const Vec2& a, const Vec2& b, Vec2 &hitPos)
     {
         Vec2 a, b;
     };
+    Vec2 hitPos2;
+    float minDistance = FLT_MAX;
     std::vector<Segment> rectSegments = {
         {origin, origin + Vec2(size.width, 0.0f)},
         {origin + Vec2(0.0f, size.height), origin + Vec2(size.width, 0.0f)},
@@ -95,11 +97,16 @@ bool Rect::intersectsSegment(const Vec2& a, const Vec2& b, Vec2 &hitPos)
         float S, T;
         if(Vec2::isLineIntersect(a, b, rectSegment.a, rectSegment.b, &S, &T))
         {
-            hitPos = a + (b - a) * S;
-            return true;
+            hitPos2 = a + (b - a) * S;
+            float distance = hitPos2.distance(a);
+            if(distance < minDistance)
+            {
+                hitPos = hitPos2;
+                minDistance = distance;
+            }
         }
     }
-    return false;
+    return minDistance < FLT_MAX;
 }
 
 Rect Rect::unionWithRect(const Rect& rect) const

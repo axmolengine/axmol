@@ -28,6 +28,7 @@
 
 #include "axmol/2d/Font.h"
 #include "axmol/2d/IFontEngine.h"
+#include <freetype/ftbitmap.h>
 #include <string>
 
 namespace ax
@@ -188,7 +189,8 @@ private:
     bool initWithFontFace(FT_Face face, std::string_view fontPath, int faceSize);
 
     int getHorizontalKerningForChars(uint64_t firstChar, uint64_t secondChar) const;
-    unsigned char* getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox);
+    unsigned char* getGlyphBitmapBufferWithOutline(unsigned int glyphIndex, FT_BBox& bbox);
+    bool getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox, FT_Bitmap &bmp);
 
     void setGlyphCollection(GlyphCollection glyphs, std::string_view customGlyphs);
 
