@@ -1676,16 +1676,16 @@ namespace std
 template <class _Myvec>
 struct pointer_traits<_TLX sequence_const_iterator<_Myvec>> {
   using pointer         = _TLX sequence_const_iterator<_Myvec>;
-  using element_type    = const pointer::value_type;
-  using difference_type = pointer::difference_type;
+  using element_type    = const typename pointer::value_type;
+  using difference_type = typename pointer::difference_type;
 
   static constexpr element_type* to_address(const pointer _Iter) noexcept { return std::to_address(_Iter._Ptr); }
 };
 template <class _Myvec>
 struct pointer_traits<_TLX sequence_iterator<_Myvec>> {
   using pointer         = _TLX sequence_iterator<_Myvec>;
-  using element_type    = pointer::value_type;
-  using difference_type = pointer::difference_type;
+  using element_type    = typename pointer::value_type;
+  using difference_type = typename pointer::difference_type;
 
   static constexpr element_type* to_address(const pointer _Iter) noexcept { return std::to_address(_Iter._Ptr); }
 };
