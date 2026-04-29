@@ -541,24 +541,16 @@ bool WICImageLoader::encodeImageData(std::string_view path,
 
 IWICImagingFactory* WICImageLoader::getWICFactory()
 {
-    if (NULL == _wicFactory)
+    if (!_wicFactory)
     {
-        HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
-
-        if (SUCCEEDED(hr))
-        {
-            hr = CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_IWICImagingFactory,
-                                  (LPVOID*)&_wicFactory);
-        }
-        else
-        {
-            AXLOGE("CoInitializeEx fail:{}", hr);
-            assert(false);
-        }
-
+        auto hr = CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_IWICImagingFactory,
+                                   (LPVOID*)&_wicFactory);
         if (FAILED(hr))
         {
             SafeRelease(_wicFactory);
+
+            AXLOGE("Create WICFactory fail:0x{:08X}", static_cast<UINT>(hr));
+            assert(false);
         }
     }
 

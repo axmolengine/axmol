@@ -388,9 +388,9 @@ auto MakeDecoderView(al::Device const *const device, AmbDecConf const *const con
 {
     auto ret = DecoderView{};
 
-    decoder.mOrder = (conf->ChanMask > Ambi3OrderMask) ? 4_u8 :
-        (conf->ChanMask > Ambi2OrderMask) ? 3_u8 :
-        (conf->ChanMask > Ambi1OrderMask) ? 2_u8 : 1_u8;
+    decoder.mOrder = (conf->ChanMask > Ambi3OrderMask) ? u8::make_from(4) : (conf->ChanMask > Ambi2OrderMask)
+            ? u8::make_from(3) : (conf->ChanMask > Ambi1OrderMask)
+            ? u8::make_from(2) : u8::make_from(1);
     decoder.m3DMode = (conf->ChanMask&AmbiPeriphonicMask) ? Periphonic : Pantaphonic;
 
     switch(conf->CoeffScale)

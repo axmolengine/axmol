@@ -858,13 +858,13 @@ protected:
 
   YASIO__DECL int do_read(int revent, int& error, tlx::highp_time_t& wait_duration) override;
 
-  YASIO__DECL bool do_write(highp_time_t& wait_duration) override;
+  YASIO__DECL bool do_write(tlx::highp_time_t& wait_duration) override;
 
   YASIO__DECL int handle_input(char* buf, int len, int& error, tlx::highp_time_t& wait_duration) override;
 
   int interval() const { return kcp_->interval * std::milli::den; }
 
-  sbyte_buffer rawbuf_; // the low level raw buffer
+  tlx::sbyte_buffer rawbuf_; // the low level raw buffer
   ikcpcb* kcp_{nullptr};
   IUINT32 expire_time_{0}; // the next expire time(ms) to call ikcp_update
   std::function<int(const void*, int, const ip::endpoint*, int&)> underlaying_write_cb_;

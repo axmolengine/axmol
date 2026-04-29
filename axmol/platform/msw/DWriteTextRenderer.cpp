@@ -222,7 +222,6 @@ DWriteTextRenderer& DWriteTextRenderer::sharedTextRenderer()
 
 DWriteTextRenderer::DWriteTextRenderer()
 {
-    std::ignore = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
     initialize();
 }
 
@@ -233,7 +232,6 @@ DWriteTextRenderer::~DWriteTextRenderer()
     SafeRelease(_dwriteFactory);
     SafeRelease(_d2dFactory);
     SafeRelease(_wicFactory);
-    CoUninitialize();
 }
 
 bool DWriteTextRenderer::initialize()

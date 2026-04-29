@@ -207,6 +207,9 @@ if(EMSCRIPTEN)
   # fix build fail on windows host when cmake invoking emscan-deps (raise unknown options)
   list(APPEND _ax_link_opts  "-ljpeg")
 
+  list(APPEND _ax_compile_opts "-fwasm-exceptions")
+  list(APPEND _ax_link_opts "-fwasm-exceptions")
+
   # list(APPEND _ax_link_opts "-sASSERTIONS=1")
 
   set(AX_WASM_THREADS "4" CACHE STRING "Wasm threads count")

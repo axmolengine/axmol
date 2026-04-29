@@ -75,6 +75,14 @@ Application::~Application()
 
 int Application::run()
 {
+    // On WinUWP/WinRT builds, the axmol rendering thread is not the UI main thread.
+    // COM is expected to run in MTA (COINIT_MULTITHREADED) for this worker thread.
+    // Unlike Win32, the rendering thread here does not own a native window handle.
+    // Instead, it renders into a swap chain surface that is created and managed
+    // by the UI main thread's CoreWindow. All UI-related COM components (e.g. WebView2)
+    // must therefore be initialized and message-pumped on the main UI thread.
+    std::ignore = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+
     // Initialize instance and axmol.
     if (!applicationDidFinishLaunching())
     {
