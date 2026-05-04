@@ -73,10 +73,10 @@
       "artifacts": {
         "windows-x64": "microsoft-jdk-${ver}-windows-x64.zip",
         "windows-arm64": "microsoft-jdk-${ver}-windows-aarch64.zip",
-        "linux-x64": "microsoft-jdk-${ver}-linux-x64.zip",
-        "linux-arm64": "microsoft-jdk-${ver}-linux-aarch64.zip",
-        "macos-x64": "microsoft-jdk-${ver}-macOS-x64.zip",
-        "macos-arm64": "microsoft-jdk-${ver}-macOS-aarch64.zip"
+        "linux-x64": "microsoft-jdk-${ver}-linux-x64.tar.gz",
+        "linux-arm64": "microsoft-jdk-${ver}-linux-aarch64.tar.gz",
+        "macos-x64": "microsoft-jdk-${ver}-macOS-x64.tar.gz",
+        "macos-arm64": "microsoft-jdk-${ver}-macOS-aarch64.tar.gz"
       },
       "mirrors": "https://aka.ms/download-jdk/"
     },

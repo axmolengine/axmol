@@ -34,7 +34,7 @@ llvm=21.1.8
 # region platform:android
 
 # The microsoft openjdk, @axmol-cmdline
-jdk=17.0.10~17.0.18+
+jdk=17.0.10~17.0.19+
 
 # The android cmdline-tools aka sdkmanager, as stable as possible
 cmdlinetools=19.0
