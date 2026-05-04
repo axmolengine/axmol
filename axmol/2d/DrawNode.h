@@ -663,7 +663,7 @@ private:
     void _drawSolidCircle(const Vec2& center, float radius, const Color& color);
 
     // Internal function _drawPhysicsCircle
-    void _drawPhysicsCircle(const Vec2& center, float radius, const Color& color, Vec2& vec2, bool type = 1);
+    void _drawPhysicsCircle(const Vec2& center, float radius, const Color& color, Vec2& vec2, bool type = 0);
 
     // Internal function _drawPie
     void _drawPie(const Vec2& center,
