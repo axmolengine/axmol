@@ -560,7 +560,6 @@ protected:
     void updateBlendState(CustomCommand& cmd);
     void updateUniforms(const Mat4& transform, CustomCommand& cmd);
 
-    bool _trianglesStripDirty : 1 = false;
     bool _trianglesDirty : 1 = false;
     bool _pointsDirty : 1    = false;
     bool _linesDirty : 1     = false;
@@ -569,12 +568,10 @@ protected:
 
     BlendFunc _blendFunc;
 
-    CustomCommand _customCommandTriangleStrip;
     CustomCommand _customCommandTriangle;
     CustomCommand _customCommandPoint;
     CustomCommand _customCommandLine;
 
-    tlx::pod_vector<V2F_T2F_C4F> _trianglesStrip;
     tlx::pod_vector<V2F_T2F_C4F> _triangles;
     tlx::pod_vector<V2F_T2F_C4F> _points;
     tlx::pod_vector<V2F_T2F_C4F> _lines;

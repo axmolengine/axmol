@@ -2479,9 +2479,14 @@ void DrawNodeMethodsTest::drawAll()
     }
     case drawMethodes::SolidRect:
     {
-        for (int i = 5; i > 1; i--)
-            drawNode->drawSolidRect(center - Vec2(20.0f*i * thickness, 20.0f*i * thickness),
-                                    center + Vec2(20.0f*i * thickness, 20.0f*i * thickness), color, thickness);
+        //for (int i = 5; i > 1; i--)
+        //    drawNode->drawSolidRect(center - Vec2(20.0f*i * thickness, 20.0f*i * thickness),
+        //                            center + Vec2(20.0f*i * thickness, 20.0f*i * thickness), color, thickness);
+        for (int i = _count; i > 0; i--)
+        {
+            drawNode->drawSolidRect(center - Vec2(10.0f*i * thickness, 10.0f*i * thickness),
+                center + Vec2(10.0f*i/10 * thickness, 10.0f*i/10 * thickness), color, thickness);
+        }
 
 
         //parent node scale : 32 node scale : 1 Properties scale : 1 Properties factor : 1
