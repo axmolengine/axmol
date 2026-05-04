@@ -916,10 +916,9 @@ void FastTMXLayer::setupTileSprite(Sprite* sprite, const Vec2& pos, uint32_t gid
     // fix issue #1283 too;  put the anchor in the middle for ease of rotation.
     sprite->setAnchorPoint(Vec2(0.5f, 0.5f));
     const float csf = AX_CONTENT_SCALE_FACTOR();
-    const float spriteTileOffsetX = _tileSet->_tileOffset.x / csf;
-    const float spriteTileOffsetY = -_tileSet->_tileOffset.y / csf;
-    sprite->setPosition(tempPosAt.x + std::roundf(tempSpriteContentSize.height / 2) + spriteTileOffsetX,
-                        tempPosAt.y + std::roundf(tempSpriteContentSize.width / 2)  + spriteTileOffsetY);
+    const Vec2 tileOffset(_tileSet->_tileOffset.x / csf, -_tileSet->_tileOffset.y / csf);
+    sprite->setPosition(tempPosAt.x + std::roundf(tempSpriteContentSize.height / 2) + tileOffset.x,
+                        tempPosAt.y + std::roundf(tempSpriteContentSize.width / 2)  + tileOffset.y);
 
     // issue 1264, flip can be undone as well
     sprite->setFlippedX(false);
