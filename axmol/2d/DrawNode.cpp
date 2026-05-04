@@ -114,7 +114,7 @@ DrawNode::~DrawNode()
     freeShaderInternal(_customCommandTriangle);
     freeShaderInternal(_customCommandPoint);
     freeShaderInternal(_customCommandLine);
-    delete[] _verticesCircle;
+    AX_SAFE_DELETE(_verticesCircle);
 }
 
 DrawNode* DrawNode::create()
@@ -1242,8 +1242,6 @@ void DrawNode::_drawCircle(const Vec2& center, float radius, const Color& color,
     _localTransformEnabled = _lt;
     _localScale            = _ls;
     _localPosition         = _lp;
-
-    //  AX_SAFE_DELETE_ARRAY(_vertices);
 }
 
 void DrawNode::_drawColoredTriangle(const Vec2* vertices3, const Color* color3)

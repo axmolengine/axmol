@@ -2875,7 +2875,6 @@ DrawNodeSolidCircleTest::DrawNodeSolidCircleTest()
         case 3:
             text = "drawCircle";
             break;
-            break;
         default:
             break;
         }
