@@ -553,6 +553,7 @@ void DrawNode::drawSolidRect(const Vec2& origin,
 {
     Vec2 _vertices5[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
     _drawPolygon(_vertices5, 5, fillColor, borderColor, false, thickness, true);
+    _drawRect(origin, destination, borderColor, thickness); // fix issue 3094
 }
 
 void DrawNode::drawSolidPoly(const Vec2* poli,

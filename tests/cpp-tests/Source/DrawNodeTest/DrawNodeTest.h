@@ -433,18 +433,20 @@ public:
     virtual std::string subtitle() const override;
 };
 
-class DrawNodeThickness1Test : public DrawNodeBaseTest
+class DrawNodeSideEffectTest : public DrawNodeBaseTest
 {
 public:
-    CREATE_FUNC(DrawNodeThickness1Test);
+    CREATE_FUNC(DrawNodeSideEffectTest);
 
-    DrawNodeThickness1Test();
+    DrawNodeSideEffectTest();
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
     void update(float dt) override;
     void onEnter() override;
+
+    ax::DrawNode* issue3094;
 };
 
 #if defined(AX_PLATFORM_PC)
@@ -470,8 +472,9 @@ public:
     bool* grid;
     bool* nextGrid;
     int* age;
-    ax::Color color[10];
-    tlx::pod_vector<ax::Vec2> arrea[10];
+    static const int colorCount = 10;
+    ax::Color color[colorCount];
+    tlx::pod_vector<ax::Vec2> arrea[colorCount];
 };
 
 class CandyMixEeffect : public DrawNodeBaseTest
@@ -490,8 +493,5 @@ public:
 private:
     std::vector<ax::Vec2> points;
     ax::PointArray* array;
-
-    ax::ui::RadioButtonGroup* _radioButtonGroup;
-    int selectedRadioButton;
 };
 #endif

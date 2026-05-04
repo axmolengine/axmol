@@ -1425,7 +1425,7 @@ DrawNodeTests::DrawNodeTests()
 
     ADD_TEST_CASE(DrawNodePieTest);
     ADD_TEST_CASE(DrawNodeLineDrawTest);
-    ADD_TEST_CASE(DrawNodeThickness1Test);
+    ADD_TEST_CASE(DrawNodeSideEffectTest);
     ADD_TEST_CASE(DrawNodeIssueTester);
     ADD_TEST_CASE(DrawNodeMethodsTest);
 }
@@ -1863,12 +1863,12 @@ string DrawNodeMorphTest_Polygon::subtitle() const
 
 DrawNodePictureTest::DrawNodePictureTest()
 {
+    flagGUI = 0;
     drawNode->setPosition(Vec2(370, 240));
     _nodeScale = 0.3f;
     drawNode->setScale(_nodeScale);
     drawNode->setRotation(180);
     drawNode->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    flagGUI = 1;
     scheduleUpdate();
 }
 
@@ -3213,7 +3213,7 @@ void DrawNodeSpLinesOpenClosedTest::update(float dt)
     drawNode->drawCardinalSpline(array, 0.0f, static_cast<int>(points.size() * 20), Color::RED, 4.0f, false);
 }
 
-DrawNodeThickness1Test::DrawNodeThickness1Test()
+DrawNodeSideEffectTest::DrawNodeSideEffectTest()
 {
     //  Label thickness test
     Label* labelSize[10];
@@ -3228,16 +3228,18 @@ DrawNodeThickness1Test::DrawNodeThickness1Test()
         labelSize[i]->enableStrikethrough();
         addChild(labelSize[i]);
     }
+    issue3094 = DrawNode::create();
+    addChild(issue3094);
     scheduleUpdate();
 }
 
-void DrawNodeThickness1Test::onEnter()
+void DrawNodeSideEffectTest::onEnter()
 {
     DrawNodeBaseTest::onEnter();
-    flagGUI = 0;
+    flagGUI = -1;
 }
 
-void DrawNodeThickness1Test::update(float dt)
+void DrawNodeSideEffectTest::update(float dt)
 {
     DrawNodeBaseTest::update(dt);
 
@@ -3249,16 +3251,27 @@ void DrawNodeThickness1Test::update(float dt)
     drawNode->setLocalPosition(_localePos);
     drawNode->setLocalPivot(_localePivot);
     drawNode->setLocalRotation(_localeRotation);
+
+    issue3094->clear();
+    issue3094->setPreserveDrawOrder(false);
+    issue3094->setLocalTransformEnabled(true);
+    issue3094->setLocalPosition(Vec2(-5,-1));
+    issue3094->setScale(32);
+    issue3094->drawSolidRect({7,7},{8,8},{0,0,1,1},1.0f,{1,0,0,1});
+    issue3094->setLocalTransformEnabled(true);
+    issue3094->setPreserveDrawOrder(true);
+    issue3094->setLocalPosition(Vec2(-3,-1));
+    issue3094->drawSolidRect({7,7},{8,8},{0,0,1,1},1.0f,{0,1,0,1});
 }
 
-string DrawNodeThickness1Test::title() const
+string DrawNodeSideEffectTest::title() const
 {
     return "Side effect tests";
 }
 
-string DrawNodeThickness1Test::subtitle() const
+string DrawNodeSideEffectTest::subtitle() const
 {
-    return "e.g. ax::Label underline/strikethrough test";
+    return "e.g. Issue 3094; ax::Label underline/strikethrough test";
 }
 
 #if defined(AX_PLATFORM_PC)
@@ -3266,8 +3279,8 @@ string DrawNodeThickness1Test::subtitle() const
 DrawNodePointTest::DrawNodePointTest()
 {
     ax::Vec2 visibleSize = Director::getInstance()->getVisibleSize();
-    visibleSizeX         = static_cast<int>(visibleSize.x * 2);
-    visibleSizeY         = static_cast<int>(visibleSize.y * 2);
+    visibleSizeX         = static_cast<int>(visibleSize.x / 2);
+    visibleSizeY         = static_cast<int>(visibleSize.y / 2);
 
     grid     = new bool[visibleSizeX * visibleSizeY];
     nextGrid = new bool[visibleSizeX * visibleSizeY];
@@ -3281,7 +3294,7 @@ DrawNodePointTest::DrawNodePointTest()
             age[idx]  = 0;
         }
     }
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < colorCount; i++)
     {
         color[i] = Color(AXRANDOM_0_1() + 0.1f, 1.0f - AXRANDOM_0_1() + 0.1f, AXRANDOM_0_1() + 0.1f, 1.0f);
     }
@@ -3308,11 +3321,15 @@ string DrawNodePointTest::subtitle() const
 
 void DrawNodePointTest::update(float dt)
 {
-    for (int i = 0; i < 100; i++)
+    if (1)  // Inject "new life" each iteration (yes=1/no=0)
     {
-        int idx   = AXRANDOM_0_1() * (visibleSizeX - 1) + AXRANDOM_0_1() * (visibleSizeY - 1) * visibleSizeX;
-        grid[idx] = true;
-        age[idx]  = 0;
+        int life = 1; // How much life every iteration? (good values: 1-10)
+        for (int i = 0; i < life; i++)  
+        {
+            int idx   = AXRANDOM_0_1() * (visibleSizeX - 1) + AXRANDOM_0_1() * (visibleSizeY - 1) * visibleSizeX;
+            grid[idx] = true;
+            age[idx]  = 0;
+        }
     }
 
     for (int x = 0; x < visibleSizeX; x++)
@@ -3358,20 +3375,17 @@ void DrawNodePointTest::update(float dt)
                 continue;
 
             float t = std::min(age[idx] / 20.0f, 1.0f);  // clamp 0..1
-            int tt  = round(t * 9);                      // quantize to 10 steps to reduce overdraw
-                                                         //  tt      = std::min(tt, 9);
+            int tt  = round(t * 9);                      // quantize to 10 (0-9) steps to reduce overdraw
             arrea[tt].emplace_back(ax::Vec2((float)x, (float)y));
         }
     }
 
     drawNode->clear();
-    //  AXLOGD("------------------");
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < colorCount; i++)
     {
         if (arrea[i].size() == 0)
             continue;
 
-        // AXLOGD("arrea[{}].size():  {}", i, arrea[i].size());
         ax::Vec2* points = new ax::Vec2[arrea[i].size()];
         for (int n = 0; n < arrea[i].size(); n++)
             points[n] = arrea[i][n] * 2;
