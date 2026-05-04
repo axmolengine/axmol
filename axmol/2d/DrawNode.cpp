@@ -83,7 +83,7 @@ DrawNode::DrawNode()
     if (!_verticesCircle)
     {
         _verticesCircle   = new Vec2[_segments + 2];
-        const int _radius = 100;
+        const int _radius = 100;  // 100 seems to be a good default radius
         const float coef  = 2 * (float)M_PI / _segments;
         float rsX         = _radius * 1;
         float rsY         = _radius * 1;
@@ -1095,10 +1095,10 @@ void DrawNode::_drawSegment(const Vec2& from,
     }
 }
 
-void DrawNode::_drawPhysicsCircle(const Vec2& center, float radius, const Color& color, Vec2& vec)
+void DrawNode::_drawPhysicsCircle(const Vec2& center, float radius, const Color& color, Vec2& vec, bool type)
 {
     Color fillColor = Color(1.0f - color.r, 1.0f - color.g, 1.0f - color.b, 1.0f);
-    if (0)
+    if (type)
     {
         auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, 6));
         _trianglesDirty = true;
