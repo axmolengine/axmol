@@ -352,6 +352,7 @@ protected:
     void updateVertexBuffer();
     void updateIndexBuffers();
     void updatePrimitives();
+    void recomputeMaxTileSize();
 
     //! name of the layer
     std::string _layerName;
@@ -401,6 +402,9 @@ protected:
     bool _dirty = true;
 
     rhi::Buffer* _vertexBuffer = nullptr;
+
+    /** Maximum tile size across all batches, in pixels. Cached at batch-change time. */
+    Vec2 _maxTileSize;
 
     float _alphaFuncValue = 0.f;
 };

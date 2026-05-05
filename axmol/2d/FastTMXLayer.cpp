@@ -125,6 +125,7 @@ bool FastTMXLayer::initWithTilesets(const std::vector<TMXTilesetInfo*>& tilesets
     this->tileToNodeTransform();
     _useAutomaticVertexZ = false;
     _vertexZvalue        = 0;
+    recomputeMaxTileSize();
     return true;
 }
 
@@ -152,27 +153,40 @@ void FastTMXLayer::setTileSet(TMXTilesetInfo* info)
 {
     if (!info)
         return;
-    if (_batches.empty())
+
+    for (auto& batch : _batches)
     {
-        TilesetBatch batch;
-        batch.tilesetInfo = info;
-        AX_SAFE_RETAIN(batch.tilesetInfo);
-        batch.texture = _director->getTextureCache()->addImage(info->_sourceImage);
-        if (batch.texture)
-            batch.texture->retain();
-        _batches.push_back(std::move(batch));
+        AX_SAFE_RELEASE(batch.tilesetInfo);
+        AX_SAFE_RELEASE(batch.texture);
+        AX_SAFE_RELEASE(batch.indexBuffer);
+        for (auto& [_, cmd] : batch.customCommands)
+        {
+            cmd->releasePSVL();
+            delete cmd;
+        }
     }
-    else
-    {
-        AX_SAFE_RETAIN(info);
-        AX_SAFE_RELEASE(_batches[0].tilesetInfo);
-        _batches[0].tilesetInfo = info;
-        AX_SAFE_RELEASE(_batches[0].texture);
-        _batches[0].texture = _director->getTextureCache()->addImage(info->_sourceImage);
-        if (_batches[0].texture)
-            _batches[0].texture->retain();
-    }
+    _batches.clear();
+
+    TilesetBatch batch;
+    batch.tilesetInfo = info;
+    AX_SAFE_RETAIN(batch.tilesetInfo);
+    batch.texture = _director->getTextureCache()->addImage(info->_sourceImage);
+    if (batch.texture)
+        batch.texture->retain();
+    _batches.push_back(std::move(batch));
+
     _quadsDirty = true;
+    recomputeMaxTileSize();
+}
+
+void FastTMXLayer::recomputeMaxTileSize()
+{
+    _maxTileSize = Vec2::ZERO;
+    for (auto& batch : _batches)
+    {
+        _maxTileSize.x = std::max(_maxTileSize.x, batch.tilesetInfo->_tileSize.x);
+        _maxTileSize.y = std::max(_maxTileSize.y, batch.tilesetInfo->_tileSize.y);
+    }
 }
 
 int FastTMXLayer::batchIndexForGID(uint32_t gid) const
@@ -236,16 +250,9 @@ void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
 
 void FastTMXLayer::updateTiles(const Rect& culledRect)
 {
-    Rect visibleTiles = Rect(culledRect.origin, culledRect.size);
-    Vec2 mapTileSize  = AX_SIZE_PIXELS_TO_POINTS(_mapTileSize);
-    // Use the largest tile size across all batches so oversized sprites are never clipped early.
-    Vec2 maxTileSizePx;
-    for (auto& batch : _batches)
-    {
-        maxTileSizePx.x = std::max(maxTileSizePx.x, batch.tilesetInfo->_tileSize.x);
-        maxTileSizePx.y = std::max(maxTileSizePx.y, batch.tilesetInfo->_tileSize.y);
-    }
-    Vec2 tileSize            = AX_SIZE_PIXELS_TO_POINTS(maxTileSizePx);
+    Rect visibleTiles        = Rect(culledRect.origin, culledRect.size);
+    Vec2 mapTileSize         = AX_SIZE_PIXELS_TO_POINTS(_mapTileSize);
+    Vec2 tileSize            = AX_SIZE_PIXELS_TO_POINTS(_maxTileSize);
     Mat4 nodeToTileTransform = _tileToNodeTransform.getInversed();
     // transform to tile
     visibleTiles = RectApplyTransform(visibleTiles, nodeToTileTransform);
@@ -600,13 +607,26 @@ void FastTMXLayer::updateTotalQuads()
         batch.indicesVertexZOffsets.clear();
     }
 
-    // Precompute per-batch premultiplied colors (most maps use one format, but handle both).
     const float csf   = AX_CONTENT_SCALE_FACTOR();
     const uint8_t opa = getDisplayedOpacity();
 
-    auto makeColor = [&](bool premul) -> Color32 {
-        Color32 c = Color32::WHITE;
-        c.a       = opa;
+    // Per-batch constants: precomputed once per tileset, looked up by batch index in the tile loop.
+    struct BatchCache
+    {
+        Vec2 tileSize;
+        Vec2 tileOffset;
+        Vec2 texSize;
+        float ptx;
+        float pty;
+        Color32 color;
+    };
+    std::vector<BatchCache> batchCache(_batches.size());
+    for (int i = 0; i < static_cast<int>(_batches.size()); ++i)
+    {
+        auto* ts          = _batches[i].tilesetInfo;
+        const bool premul = _batches[i].texture && _batches[i].texture->hasPremultipliedAlpha();
+        Color32 c         = Color32::WHITE;
+        c.a               = opa;
         if (premul)
         {
             const float a = opa / 255.0f;
@@ -614,8 +634,19 @@ void FastTMXLayer::updateTotalQuads()
             c.g           = static_cast<uint8_t>(c.g * a);
             c.b           = static_cast<uint8_t>(c.b * a);
         }
-        return c;
-    };
+        batchCache[i] = {AX_SIZE_PIXELS_TO_POINTS(ts->_tileSize),
+                         Vec2(ts->_tileOffset.x / csf, -ts->_tileOffset.y / csf),
+                         ts->_imageSize,
+                         1.0f / ts->_imageSize.width,
+                         1.0f / ts->_imageSize.height,
+                         c};
+    }
+
+    // Cache the last resolved batch index and its GID range to skip re-scanning for
+    // consecutive tiles from the same tileset, which is the common case in clustered maps.
+    int cachedBi      = -1;
+    uint32_t cachedLo = 0;
+    uint32_t cachedHi = 0;
 
     int quadIndex = 0;
     for (int y = 0; y < _layerSize.height; ++y)
@@ -627,23 +658,34 @@ void FastTMXLayer::updateTotalQuads()
             if (tileGID == 0)
                 continue;
 
-            int bi = batchIndexForGID(tileGID);
+            const uint32_t bareGID = tileGID & kTMXFlippedMask;
+            int bi;
+            if (cachedBi >= 0 && bareGID >= cachedLo && bareGID < cachedHi)
+            {
+                bi = cachedBi;
+            }
+            else
+            {
+                bi = batchIndexForGID(tileGID);
+                if (bi >= 0)
+                {
+                    cachedBi = bi;
+                    cachedLo = static_cast<uint32_t>(_batches[bi].tilesetInfo->_firstGid);
+                    cachedHi = (bi > 0) ? static_cast<uint32_t>(_batches[bi - 1].tilesetInfo->_firstGid) : UINT32_MAX;
+                }
+            }
             if (bi < 0)
                 continue;
-
-            auto& batch = _batches[bi];
-            auto* ts    = batch.tilesetInfo;
 
             _tileToQuadIndex[tileIndex]   = quadIndex;
             _tilesetBatchIndex[tileIndex] = bi;
 
-            auto& quad = _totalQuads[quadIndex];
+            auto& quad     = _totalQuads[quadIndex];
+            auto& batch    = _batches[bi];
+            const auto& bc = batchCache[bi];
 
             Vec3 nodePos(float(x), float(y), 0);
             _tileToNodeTransform.transformPoint(&nodePos);
-
-            const Vec2 tileSize   = AX_SIZE_PIXELS_TO_POINTS(ts->_tileSize);
-            const Vec2 tileOffset = Vec2(ts->_tileOffset.x / csf, -ts->_tileOffset.y / csf);
 
             int zPos    = getVertexZForPos(Vec2((float)x, (float)y));
             float z     = (float)zPos;
@@ -658,17 +700,17 @@ void FastTMXLayer::updateTotalQuads()
             float left, right, top, bottom;
             if (tileGID & kTMXTileDiagonalFlag)
             {
-                left   = nodePos.x + tileOffset.x;
-                right  = nodePos.x + tileSize.height + tileOffset.x;
-                bottom = nodePos.y + tileSize.width + tileOffset.y;
-                top    = nodePos.y + tileOffset.y;
+                left   = nodePos.x + bc.tileOffset.x;
+                right  = nodePos.x + bc.tileSize.height + bc.tileOffset.x;
+                bottom = nodePos.y + bc.tileSize.width + bc.tileOffset.y;
+                top    = nodePos.y + bc.tileOffset.y;
             }
             else
             {
-                left   = nodePos.x + tileOffset.x;
-                right  = nodePos.x + tileSize.width + tileOffset.x;
-                bottom = nodePos.y + tileSize.height + tileOffset.y;
-                top    = nodePos.y + tileOffset.y;
+                left   = nodePos.x + bc.tileOffset.x;
+                right  = nodePos.x + bc.tileSize.width + bc.tileOffset.x;
+                bottom = nodePos.y + bc.tileSize.height + bc.tileOffset.y;
+                top    = nodePos.y + bc.tileOffset.y;
             }
             if (tileGID & kTMXTileVerticalFlag)
                 std::swap(top, bottom);
@@ -691,24 +733,19 @@ void FastTMXLayer::updateTotalQuads()
                 quad.tr.position = {right, top, z};
             }
 
-            // UV coords (tileset-specific)
-            const Vec2 texSize = ts->_imageSize;
-            Rect tileTexture   = ts->getRectForGID(tileGID);
-            // One-pixel inset in UV space to avoid texture-atlas bleeding.
-            const float ptx     = 1.0f / texSize.width;
-            const float pty     = 1.0f / texSize.height;
-            const float uleft   = tileTexture.origin.x / texSize.width;
-            const float uright  = uleft + tileTexture.size.width / texSize.width;
-            const float ubottom = tileTexture.origin.y / texSize.height;
-            const float utop    = ubottom + tileTexture.size.height / texSize.height;
+            // UV coords — only the per-tile rect lookup stays inside the loop.
+            Rect tileTexture    = batch.tilesetInfo->getRectForGID(tileGID);
+            const float uleft   = tileTexture.origin.x / bc.texSize.width;
+            const float uright  = uleft + tileTexture.size.width / bc.texSize.width;
+            const float ubottom = tileTexture.origin.y / bc.texSize.height;
+            const float utop    = ubottom + tileTexture.size.height / bc.texSize.height;
 
-            quad.bl.texCoord = {uleft + ptx, ubottom + pty};
-            quad.br.texCoord = {uright - ptx, ubottom + pty};
-            quad.tl.texCoord = {uleft + ptx, utop - pty};
-            quad.tr.texCoord = {uright - ptx, utop - pty};
+            quad.bl.texCoord = {uleft + bc.ptx, ubottom + bc.pty};
+            quad.br.texCoord = {uright - bc.ptx, ubottom + bc.pty};
+            quad.tl.texCoord = {uleft + bc.ptx, utop - bc.pty};
+            quad.tr.texCoord = {uright - bc.ptx, utop - bc.pty};
 
-            const Color32 color = makeColor(batch.texture && batch.texture->hasPremultipliedAlpha());
-            quad.bl.color = quad.br.color = quad.tl.color = quad.tr.color = color;
+            quad.bl.color = quad.br.color = quad.tl.color = quad.tr.color = bc.color;
 
             ++quadIndex;
         }
