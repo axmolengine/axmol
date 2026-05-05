@@ -68,7 +68,6 @@ class FastTMXLayer;
  * - Properties can be assigned to the Map, Layer, Object Group, and Object.
 
  * Limitations:
- * - It only supports one tileset per layer.
  * - Embedded images are not supported.
  * - It only supports the XML format (the JSON format is not supported).
 

@@ -86,6 +86,8 @@ bool FastTMXTiledMap::initWithXML(std::string_view tmxString, std::string_view r
     setContentSize(Vec2::ZERO);
 
     TMXMapInfo* mapInfo = TMXMapInfo::createWithXML(tmxString, resourcePath);
+    if (!mapInfo)
+        return false;
 
     AXASSERT(!mapInfo->getTilesets().empty(), "FastTMXTiledMap: Map not found. Please check the filename.");
     buildWithMapInfo(mapInfo, allowInvisibleLayers);
@@ -119,24 +121,27 @@ FastTMXLayer* FastTMXTiledMap::parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* m
 
 std::vector<TMXTilesetInfo*> FastTMXTiledMap::tilesetsForLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo)
 {
-    Vec2 size      = layerInfo->_layerSize;
-    auto& tilesets = mapInfo->getTilesets();
+    Vec2 size         = layerInfo->_layerSize;
+    auto& tilesets    = mapInfo->getTilesets();
+    const int tsCount = static_cast<int>(tilesets.size());
 
-    // Collect every tileset whose GID range is referenced by at least one tile in this layer.
-    // tilesets is ordered ascending by firstGid; we iterate in reverse (highest firstGid first)
-    // so we can do a quick descending scan matching the same order used by batchIndexForGID.
+    // Collect every tileset whose GID range [firstGid, nextFirstGid) is referenced by this layer.
+    // Iterate descending so the result is already in the order batchIndexForGID expects.
     std::vector<TMXTilesetInfo*> used;
-    for (auto iter = tilesets.crbegin(); iter != tilesets.crend(); ++iter)
+    for (int i = tsCount - 1; i >= 0; --i)
     {
-        TMXTilesetInfo* ts = *iter;
+        TMXTilesetInfo* ts = tilesets[i];
         if (!ts)
             continue;
-        for (int y = 0; y < size.height; ++y)
+        const uint32_t lo = static_cast<uint32_t>(ts->_firstGid);
+        // Upper bound: next tileset's firstGid, or the maximum GID value if this is the last.
+        const uint32_t hi = (i + 1 < tsCount) ? static_cast<uint32_t>(tilesets[i + 1]->_firstGid) : UINT32_MAX;
+        for (int y = 0; y < static_cast<int>(size.height); ++y)
         {
-            for (int x = 0; x < size.width; ++x)
+            for (int x = 0; x < static_cast<int>(size.width); ++x)
             {
-                uint32_t gid = layerInfo->_tiles[static_cast<int>(x + size.width * y)] & kTMXFlippedMask;
-                if (gid != 0 && gid >= static_cast<uint32_t>(ts->_firstGid))
+                uint32_t gid = layerInfo->_tiles[x + static_cast<int>(size.width) * y] & kTMXFlippedMask;
+                if (gid >= lo && gid < hi)
                 {
                     used.push_back(ts);
                     goto next_tileset;
@@ -149,7 +154,7 @@ std::vector<TMXTilesetInfo*> FastTMXTiledMap::tilesetsForLayer(TMXLayerInfo* lay
     if (used.empty())
         AXLOGW("axmol: Warning: TMX Layer '{}' has no tiles", layerInfo->_name);
 
-    // Result is already in descending firstGid order (we iterated tilesets reverse).
+    // Result is in descending firstGid order (matches batchIndexForGID scan direction).
     return used;
 }
 

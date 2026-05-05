@@ -67,17 +67,17 @@ class Buffer;
 struct TilesetBatch
 {
     TMXTilesetInfo* tilesetInfo = nullptr;
-    Texture2D*      texture     = nullptr;
-    rhi::Buffer*    indexBuffer = nullptr;
+    Texture2D* texture          = nullptr;
+    rhi::Buffer* indexBuffer    = nullptr;
 
 #ifdef AX_FAST_TILEMAP_32_BIT_INDICES
-    std::vector<unsigned int>   indices;
+    std::vector<unsigned int> indices;
 #else
     std::vector<unsigned short> indices;
 #endif
 
-    std::map<int, int>                   indicesVertexZOffsets;
-    std::unordered_map<int, int>         indicesVertexZNumber;
+    std::map<int, int> indicesVertexZOffsets;
+    std::unordered_map<int, int> indicesVertexZNumber;
     std::unordered_map<int, CustomCommand*> customCommands;
 
     rhi::UniformLocation mvpMatrixLocation;
@@ -132,7 +132,8 @@ public:
 
     /** Creates a FastTMXLayer with multiple tilesets (one layer may reference tiles from several tilesets). */
     static FastTMXLayer* create(const std::vector<TMXTilesetInfo*>& tilesets,
-                                TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
+                                TMXLayerInfo* layerInfo,
+                                TMXMapInfo* mapInfo);
     /**
      */
     FastTMXLayer();
@@ -247,10 +248,7 @@ public:
      *
      * @return Tileset information for the layer.
      */
-    TMXTilesetInfo* getTileSet() const
-    {
-        return _batches.empty() ? nullptr : _batches[0].tilesetInfo;
-    }
+    TMXTilesetInfo* getTileSet() const { return _batches.empty() ? nullptr : _batches[0].tilesetInfo; }
 
     /** Set the tileset information for the layer (updates the primary batch). */
     void setTileSet(TMXTilesetInfo* info);
@@ -321,8 +319,7 @@ public:
     TMXTileAnimManager* getTileAnimManager() const { return _tileAnimManager; }
 
     bool initWithTilesetInfo(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
-    bool initWithTilesets(const std::vector<TMXTilesetInfo*>& tilesets,
-                          TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
+    bool initWithTilesets(const std::vector<TMXTilesetInfo*>& tilesets, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
 
     /** Returns the batch index owning the given GID, or -1 if the GID is empty/unknown. */
     int batchIndexForGID(uint32_t gid) const;
@@ -397,7 +394,7 @@ protected:
     /** data for rendering */
     bool _quadsDirty          = true;
     Vec2 _cameraPositionDirty = {INFINITY, INFINITY};
-    float _cameraZoomDirty;
+    float _cameraZoomDirty    = NAN;
 
     std::vector<int> _tileToQuadIndex;
     std::vector<V3F_T2F_C4B_Quad> _totalQuads;
