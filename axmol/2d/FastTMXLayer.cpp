@@ -497,6 +497,9 @@ void FastTMXLayer::updateTotalQuads()
     {
         Vec2 tileSize = AX_SIZE_PIXELS_TO_POINTS(_tileSet->_tileSize);
         Vec2 texSize  = _tileSet->_imageSize;
+        // Tiled stores tileoffset in screen-space pixels (y-down); convert to Axmol node-space (y-up).
+        const float csf       = AX_CONTENT_SCALE_FACTOR();
+        const Vec2 tileOffset = Vec2(_tileSet->_tileOffset.x / csf, -_tileSet->_tileOffset.y / csf);
         _tileToQuadIndex.clear();
         _totalQuads.resize(int(_layerSize.width * _layerSize.height));
         _indices.resize(6 * int(_layerSize.width * _layerSize.height));
@@ -548,17 +551,17 @@ void FastTMXLayer::updateTotalQuads()
                 // vertices
                 if (tileGID & kTMXTileDiagonalFlag)
                 {
-                    left   = nodePos.x;
-                    right  = nodePos.x + tileSize.height;
-                    bottom = nodePos.y + tileSize.width;
-                    top    = nodePos.y;
+                    left   = nodePos.x + tileOffset.x;
+                    right  = nodePos.x + tileSize.height + tileOffset.x;
+                    bottom = nodePos.y + tileSize.width + tileOffset.y;
+                    top    = nodePos.y + tileOffset.y;
                 }
                 else
                 {
-                    left   = nodePos.x;
-                    right  = nodePos.x + tileSize.width;
-                    bottom = nodePos.y + tileSize.height;
-                    top    = nodePos.y;
+                    left   = nodePos.x + tileOffset.x;
+                    right  = nodePos.x + tileSize.width + tileOffset.x;
+                    bottom = nodePos.y + tileSize.height + tileOffset.y;
+                    top    = nodePos.y + tileOffset.y;
                 }
 
                 if (tileGID & kTMXTileVerticalFlag)
@@ -912,8 +915,10 @@ void FastTMXLayer::setupTileSprite(Sprite* sprite, const Vec2& pos, uint32_t gid
 
     // fix issue #1283 too;  put the anchor in the middle for ease of rotation.
     sprite->setAnchorPoint(Vec2(0.5f, 0.5f));
-    sprite->setPosition(tempPosAt.x + std::roundf(tempSpriteContentSize.height / 2),
-                        tempPosAt.y + std::roundf(tempSpriteContentSize.width / 2));
+    const float csf = AX_CONTENT_SCALE_FACTOR();
+    const Vec2 tileOffset(_tileSet->_tileOffset.x / csf, -_tileSet->_tileOffset.y / csf);
+    sprite->setPosition(tempPosAt.x + std::roundf(tempSpriteContentSize.height / 2) + tileOffset.x,
+                        tempPosAt.y + std::roundf(tempSpriteContentSize.width / 2) + tileOffset.y);
 
     // issue 1264, flip can be undone as well
     sprite->setFlippedX(false);
