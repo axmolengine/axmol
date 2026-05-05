@@ -28,6 +28,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
+#include <vector>
 #include "axmol/scene/Node.h"
 #include "axmol/2d/TMXObjectGroup.h"
 
@@ -233,6 +234,8 @@ public:
 
 protected:
     FastTMXLayer* parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
+    /** Returns all tilesets that contribute tiles to the given layer, sorted descending by firstGid. */
+    std::vector<TMXTilesetInfo*> tilesetsForLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
     TMXTilesetInfo* tilesetForLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
     void buildWithMapInfo(TMXMapInfo* mapInfo, bool ignoreInvisibleLayers);
 
