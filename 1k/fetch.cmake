@@ -6,8 +6,8 @@
 cmake_minimum_required(VERSION 3.23...4.2)
 
 # ## 1kdist url
-find_program(PWSH_PROG NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
-find_program(GIT_PROG NAMES git NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
+find_program(PWSH_EXECUTABLE NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
+find_program(GIT_EXECUTABLE NAMES git NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
 
 function(_1kfetch_init)
   if(NOT _1kfetch_cache_dir)
@@ -15,12 +15,12 @@ function(_1kfetch_init)
     set(_1kfetch_cache_dir "${_1kfetch_cache_dir}" CACHE STRING "" FORCE)
   endif()
 
-  if(NOT EXISTS ${PWSH_PROG}) # try again
-    unset(PWSH_PROG CACHE)
-    find_program(PWSH_PROG NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
+  if(NOT EXISTS ${PWSH_EXECUTABLE}) # try again
+    unset(PWSH_EXECUTABLE CACHE)
+    find_program(PWSH_EXECUTABLE NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
   endif()
 
-  execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/resolv-url.ps1
+  execute_process(COMMAND ${PWSH_EXECUTABLE} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/resolv-url.ps1
     -name "1kdist"
     OUTPUT_VARIABLE _1kdist_url
     RESULT_VARIABLE _1kdist_error
@@ -117,7 +117,7 @@ function(_1kfetch uri)
       list(APPEND _fetch_args -pull_branch)
     endif()
 
-    execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1
+    execute_process(COMMAND ${PWSH_EXECUTABLE} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fetch.ps1
       ${_fetch_args}
       RESULT_VARIABLE _errorcode
     )
@@ -155,15 +155,15 @@ function(_1kfetch_fast uri)
   string(PREPEND _url "https://github.com/")
 
   if(NOT EXISTS "${_sentry_file}")
-    execute_process(COMMAND ${GIT_PROG} clone --progress ${_url} "${_pkg_store}" RESULT_VARIABLE _errorcode)
+    execute_process(COMMAND ${GIT_EXECUTABLE} clone --progress ${_url} "${_pkg_store}" RESULT_VARIABLE _errorcode)
     file(WRITE "${_sentry_file}" "ver: ${_version}")
   endif()
 
   if(EXISTS "${_sentry_file}")
-    execute_process(COMMAND ${GIT_PROG} -C ${_pkg_store} checkout ${_version} RESULT_VARIABLE _errorcode)
+    execute_process(COMMAND ${GIT_EXECUTABLE} -C ${_pkg_store} checkout ${_version} RESULT_VARIABLE _errorcode)
 
     if(_errorcode)
-      execute_process(COMMAND ${GIT_PROG} -C ${_pkg_store} checkout v${_version} RESULT_VARIABLE _errorcode)
+      execute_process(COMMAND ${GIT_EXECUTABLE} -C ${_pkg_store} checkout v${_version} RESULT_VARIABLE _errorcode)
     endif()
   else()
     message(FATAL_ERROR "fetch repo ${uri} fail, try again")
@@ -210,7 +210,7 @@ endfunction()
 function(_1klink src dest)
   file(TO_NATIVE_PATH "${src}" _srcDir)
   file(TO_NATIVE_PATH "${dest}" _dstDir)
-  execute_process(COMMAND ${PWSH_PROG} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fsync.ps1 -s "${_srcDir}" -d "${_dstDir}" -l 1)
+  execute_process(COMMAND ${PWSH_EXECUTABLE} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/fsync.ps1 -s "${_srcDir}" -d "${_dstDir}" -l 1)
 endfunction()
 
 function(_1kparse_option OPTION)
@@ -264,7 +264,7 @@ macro(_1kperf_end tag)
   message(STATUS "[${_fetch_end_msec}ms][1kperf] end of ${tag}, cost: ${_fetch_cost_msec}ms")
 endmacro()
 
-if(PWSH_PROG)
+if(PWSH_EXECUTABLE)
   _1kfetch_init()
 else()
   message(AUTHOR_WARNING "fetch.cmake: PowerShell is missing, the fetch functions not work, please install from https://github.com/PowerShell/PowerShell/releases")

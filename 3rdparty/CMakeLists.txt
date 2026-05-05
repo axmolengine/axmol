@@ -265,7 +265,8 @@ if(AX_ENABLE_AUDIO)
         set(OBOE_SOURCE "${oboe_SOURCE_DIR}" CACHE STRING "Source directory for Oboe." FORCE)
       endif()
 
-      list(APPEND alsoft_opts "ALSOFT_RTKIT OFF"
+      list(APPEND alsoft_opts
+        "ALSOFT_RTKIT OFF"
         "ALSOFT_BACKEND_PIPEWIRE OFF"
         "ALSOFT_BACKEND_PULSEAUDIO OFF"
         "ALSOFT_BACKEND_ALSA OFF"
@@ -275,22 +276,17 @@ if(AX_ENABLE_AUDIO)
         "ALSOFT_BACKEND_JACK OFF"
         "ALSOFT_BACKEND_PORTAUDIO OFF"
         "ALSOFT_BACKEND_SDL2 OFF"
-        )
-      set(ALSOFT_RTKIT OFF CACHE BOOL "Enable RTKit support" FORCE)
-    elseif(WINDOWS)
-      list(APPEND alsoft_opts "ALSOFT_BACKEND_WASAPI ON" "ALSOFT_BACKEND_WAVE OFF" "ALSOFT_BACKEND_DSOUND OFF" "ALSOFT_BACKEND_WINMM OFF")
-    elseif(WASM)
-      list(APPEND alsoft_opts "ALSOFT_BACKEND_SDL2 ON" "ALSOFT_REQUIRE_SDL2 ON")
-      find_program(embuilder_script embuilder.ps1)
-      message(STATUS "Building wasm sdl2 port ...")
-      execute_process(
-        COMMAND ${PWSH_PROG} ${embuilder_script} build sdl2
-        WORKING_DIRECTORY ${_AX_ROOT}
-        RESULT_VARIABLE _ret
-        OUTPUT_VARIABLE _out
-        ERROR_VARIABLE  _err
       )
-      message(STATUS "Build wasm sdl2 port done: ${_ret}")
+    elseif(WINDOWS)
+      list(APPEND alsoft_opts 
+        "ALSOFT_RTKIT OFF"
+        "ALSOFT_BACKEND_WASAPI ON"
+        "ALSOFT_BACKEND_WAVE OFF"
+        "ALSOFT_BACKEND_DSOUND OFF"
+        "ALSOFT_BACKEND_WINMM OFF"
+      )
+    elseif(APPLE)
+      list(APPEND alsoft_opts "ALSOFT_RTKIT OFF")
     endif()
 
     if(WINRT)
