@@ -108,7 +108,10 @@ static bool canShapeAutoCalculateInertia(JPH::RefConst<JPH::Shape>& shape)
     return type != JPH::EShapeSubType::Mesh && type != JPH::EShapeSubType::Triangle;
 }
 
-static bool tryBuildMassProperties(Collider3D* collider, float mass, const Vec3& inertia, JPH::MassProperties& outMassProperties)
+static bool tryBuildMassProperties(Collider3D* collider,
+                                   float mass,
+                                   const Vec3& inertia,
+                                   JPH::MassProperties& outMassProperties)
 {
     if (!collider)
         return false;
@@ -359,7 +362,7 @@ void Rigidbody3D::invalidate()
     _bodyID = JPH::BodyID{};
     if (_collider)
         _collider->setAttachedBody(nullptr);
-    _world  = nullptr;
+    _world = nullptr;
 }
 
 void Rigidbody3D::setTransformInPhysics(const Vec3& translateInPhysics, const Quaternion& rotInPhysics)

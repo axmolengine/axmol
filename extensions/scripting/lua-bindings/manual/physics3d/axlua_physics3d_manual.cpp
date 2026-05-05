@@ -358,7 +358,6 @@ tolua_lerror:
 #    endif
 }
 
-
 void extendCollider3D(lua_State* L)
 {
     lua_pushstring(L, "ax.Collider3D");
