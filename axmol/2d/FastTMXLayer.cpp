@@ -498,8 +498,8 @@ void FastTMXLayer::updateTotalQuads()
         Vec2 tileSize = AX_SIZE_PIXELS_TO_POINTS(_tileSet->_tileSize);
         Vec2 texSize  = _tileSet->_imageSize;
         // Tiled stores tileoffset in screen-space pixels (y-down); convert to Axmol node-space (y-up).
-        const float csf        = AX_CONTENT_SCALE_FACTOR();
-        const Vec2  tileOffset = Vec2(_tileSet->_tileOffset.x / csf, -_tileSet->_tileOffset.y / csf);
+        const float csf       = AX_CONTENT_SCALE_FACTOR();
+        const Vec2 tileOffset = Vec2(_tileSet->_tileOffset.x / csf, -_tileSet->_tileOffset.y / csf);
         _tileToQuadIndex.clear();
         _totalQuads.resize(int(_layerSize.width * _layerSize.height));
         _indices.resize(6 * int(_layerSize.width * _layerSize.height));
@@ -553,13 +553,13 @@ void FastTMXLayer::updateTotalQuads()
                 {
                     left   = nodePos.x + tileOffset.x;
                     right  = nodePos.x + tileSize.height + tileOffset.x;
-                    bottom = nodePos.y + tileSize.width  + tileOffset.y;
+                    bottom = nodePos.y + tileSize.width + tileOffset.y;
                     top    = nodePos.y + tileOffset.y;
                 }
                 else
                 {
                     left   = nodePos.x + tileOffset.x;
-                    right  = nodePos.x + tileSize.width  + tileOffset.x;
+                    right  = nodePos.x + tileSize.width + tileOffset.x;
                     bottom = nodePos.y + tileSize.height + tileOffset.y;
                     top    = nodePos.y + tileOffset.y;
                 }
@@ -918,7 +918,7 @@ void FastTMXLayer::setupTileSprite(Sprite* sprite, const Vec2& pos, uint32_t gid
     const float csf = AX_CONTENT_SCALE_FACTOR();
     const Vec2 tileOffset(_tileSet->_tileOffset.x / csf, -_tileSet->_tileOffset.y / csf);
     sprite->setPosition(tempPosAt.x + std::roundf(tempSpriteContentSize.height / 2) + tileOffset.x,
-                        tempPosAt.y + std::roundf(tempSpriteContentSize.width / 2)  + tileOffset.y);
+                        tempPosAt.y + std::roundf(tempSpriteContentSize.width / 2) + tileOffset.y);
 
     // issue 1264, flip can be undone as well
     sprite->setFlippedX(false);
