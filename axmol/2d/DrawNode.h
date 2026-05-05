@@ -575,7 +575,7 @@ protected:
     tlx::pod_vector<V2F_T2F_C4F> _triangles;
     tlx::pod_vector<V2F_T2F_C4F> _points;
     tlx::pod_vector<V2F_T2F_C4F> _lines;
-    
+
     Vec2* _verticesCircle = nullptr;  // avoid cos/sin and frequently allocation when drawing circle and ellipse
     int _segments         = 36;       // default segments used for circle and ellipse
 private:

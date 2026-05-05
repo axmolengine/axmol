@@ -89,7 +89,7 @@ DrawNode::DrawNode()
         float rsY         = _radius * 1;
         for (unsigned int i = 0; i < _segments; i++)
         {
-            float rads     = i * coef;
+            float rads           = i * coef;
             _verticesCircle[i].x = rsX * cosf(rads);
             _verticesCircle[i].y = rsY * sinf(rads);
         }
@@ -553,7 +553,7 @@ void DrawNode::drawSolidRect(const Vec2& origin,
 {
     Vec2 _vertices5[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y), origin};
     _drawPolygon(_vertices5, 5, fillColor, borderColor, false, thickness, true);
-    _drawRect(origin, destination, borderColor, thickness); // fix issue 3094
+    _drawRect(origin, destination, borderColor, thickness);  // fix issue 3094
 }
 
 void DrawNode::drawSolidPoly(const Vec2* poli,
@@ -1228,7 +1228,6 @@ void DrawNode::_drawCircle(const Vec2& center,
     AX_SAFE_DELETE_ARRAY(_vertices);
 }
 
-
 // Draw a faster circle
 void DrawNode::_drawCircle(const Vec2& center, float radius, const Color& color, float thickness)
 {
@@ -1237,7 +1236,7 @@ void DrawNode::_drawCircle(const Vec2& center, float radius, const Color& color,
     Vec2 _lp               = _localPosition;
     _localTransformEnabled = true;
     _localScale            = {radius / 100, radius / 100};
-    _localPosition = center;
+    _localPosition         = center;
     _drawPoly(_verticesCircle, _segments + 1, false, color, thickness, true);
     _localTransformEnabled = _lt;
     _localScale            = _ls;

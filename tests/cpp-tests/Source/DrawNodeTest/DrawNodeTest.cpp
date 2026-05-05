@@ -2479,17 +2479,17 @@ void DrawNodeMethodsTest::drawAll()
     }
     case drawMethodes::SolidRect:
     {
-        //for (int i = 5; i > 1; i--)
-        //    drawNode->drawSolidRect(center - Vec2(20.0f*i * thickness, 20.0f*i * thickness),
-        //                            center + Vec2(20.0f*i * thickness, 20.0f*i * thickness), color, thickness);
+        // for (int i = 5; i > 1; i--)
+        //     drawNode->drawSolidRect(center - Vec2(20.0f*i * thickness, 20.0f*i * thickness),
+        //                             center + Vec2(20.0f*i * thickness, 20.0f*i * thickness), color, thickness);
         for (int i = _count; i > 0; i--)
         {
-            drawNode->drawSolidRect(center - Vec2(10.0f*i * thickness, 10.0f*i * thickness),
-                center + Vec2(10.0f*i/10 * thickness, 10.0f*i/10 * thickness), color, thickness);
+            drawNode->drawSolidRect(center - Vec2(10.0f * i * thickness, 10.0f * i * thickness),
+                                    center + Vec2(10.0f * i / 10 * thickness, 10.0f * i / 10 * thickness), color,
+                                    thickness);
         }
 
-
-        //parent node scale : 32 node scale : 1 Properties scale : 1 Properties factor : 1
+        // parent node scale : 32 node scale : 1 Properties scale : 1 Properties factor : 1
         drawNode->setScale(32);
         drawNode->setLocalScale(ax::Vec2(1.0, 1.0));
         drawNode->setThicknessScale(1.0f);
@@ -3259,13 +3259,13 @@ void DrawNodeSideEffectTest::update(float dt)
     issue3094->clear();
     issue3094->setPreserveDrawOrder(false);
     issue3094->setLocalTransformEnabled(true);
-    issue3094->setLocalPosition(Vec2(-5,-1));
+    issue3094->setLocalPosition(Vec2(-5, -1));
     issue3094->setScale(32);
-    issue3094->drawSolidRect({7,7},{8,8},{0,0,1,1},1.0f,{1,0,0,1});
+    issue3094->drawSolidRect({7, 7}, {8, 8}, {0, 0, 1, 1}, 1.0f, {1, 0, 0, 1});
     issue3094->setLocalTransformEnabled(true);
     issue3094->setPreserveDrawOrder(true);
-    issue3094->setLocalPosition(Vec2(-3,-1));
-    issue3094->drawSolidRect({7,7},{8,8},{0,0,1,1},1.0f,{0,1,0,1});
+    issue3094->setLocalPosition(Vec2(-3, -1));
+    issue3094->drawSolidRect({7, 7}, {8, 8}, {0, 0, 1, 1}, 1.0f, {0, 1, 0, 1});
 }
 
 string DrawNodeSideEffectTest::title() const
@@ -3327,8 +3327,8 @@ void DrawNodePointTest::update(float dt)
 {
     if (1)  // Inject "new life" each iteration (yes=1/no=0)
     {
-        int life = 1; // How much life every iteration? (good values: 1-10)
-        for (int i = 0; i < life; i++)  
+        int life = 1;  // How much life every iteration? (good values: 1-10)
+        for (int i = 0; i < life; i++)
         {
             int idx   = AXRANDOM_0_1() * (visibleSizeX - 1) + AXRANDOM_0_1() * (visibleSizeY - 1) * visibleSizeX;
             grid[idx] = true;
