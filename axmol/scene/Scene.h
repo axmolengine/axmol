@@ -44,7 +44,7 @@ class EventCustom;
 class PhysicsWorld2D;
 #endif
 #if defined(AX_ENABLE_PHYSICS_3D)
-class Physics3DWorld;
+class PhysicsWorld3D;
 #endif
 #if defined(AX_ENABLE_NAVMESH)
 class NavMesh;
@@ -124,10 +124,15 @@ public:
 
     void setCameraOrderDirty() { _cameraOrderDirty = true; }
 
-    void onProjectionChanged(EventCustom* event);
+    /**
+     * @brief Set a camera to be used for debug drawing (physics, navigation, etc.).
+     * @param camera The camera to use for debug rendering.
+     */
+    void setDebugCamera(Camera* camera);
 
 private:
     void initDefaultCamera();
+    void onProjectionChanged(EventCustom* event);
 
 protected:
     friend class Node;
@@ -141,9 +146,16 @@ protected:
 
     /* weak ref, default camera created by scene, at _cameras[0], Caution! the default camera can not be added to
      _cameras before onEnter is called. */
-    Camera* _defaultCamera = nullptr;
+    Camera* _defaultCamera{nullptr};
+
+    /**
+     * @brief Set a camera to be used for debug drawing (physics, navigation, etc.).
+     * @param camera The camera to use for debug rendering.
+     */
+    Camera* _debugCamera{nullptr};
+
     /* indicates if the order is dirty and if so then it needs sorting */
-    bool _cameraOrderDirty = true;
+    bool _cameraOrderDirty{true};
     EventListenerCustom* _event;
 
     std::vector<BaseLight*> _lights;
@@ -164,12 +176,7 @@ public:
     /** Get the 3d physics world of the scene.
      * @return The 3d physics world of the scene.
      */
-    Physics3DWorld* getPhysicsWorld3D() { return _physicsWorld3D; }
-
-    /**
-     * Set Physics3D debug draw camera.
-     */
-    void setPhysics3DDebugCamera(Camera* camera);
+    PhysicsWorld3D* getPhysicsWorld3D() { return _physicsWorld3D; }
 #    endif
 
     /** Create a scene with physics.
@@ -187,8 +194,7 @@ protected:
 #    endif
 
 #    if defined(AX_ENABLE_PHYSICS_3D)
-    Physics3DWorld* _physicsWorld3D = nullptr;
-    Camera* _physics3dDebugCamera   = nullptr;
+    PhysicsWorld3D* _physicsWorld3D = nullptr;
 #    endif
 #endif  // (defined(AX_ENABLE_PHYSICS_2D) || defined(AX_ENABLE_PHYSICS_3D))
 
@@ -198,14 +204,9 @@ public:
     void setNavMesh(NavMesh* navMesh);
     /** get navigation mesh */
     NavMesh* getNavMesh() const { return _navMesh; }
-    /**
-     * Set NavMesh debug draw camera.
-     */
-    void setNavMeshDebugCamera(Camera* camera);
 
 protected:
-    NavMesh* _navMesh           = nullptr;
-    Camera* _navMeshDebugCamera = nullptr;
+    NavMesh* _navMesh = nullptr;
 #endif
 
 #if (defined(AX_ENABLE_PHYSICS_2D) || defined(AX_ENABLE_PHYSICS_3D) || defined(AX_ENABLE_NAVMESH))

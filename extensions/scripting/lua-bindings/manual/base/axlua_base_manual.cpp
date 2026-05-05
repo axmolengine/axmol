@@ -1612,57 +1612,6 @@ tolua_lerror:
 
 #if defined(AX_ENABLE_NAVMESH)
 #    include "axmol/navmesh/NavMesh.h"
-int axlua_Scene_setNavMeshDebugCamera(lua_State* tolua_S)
-{
-    int argc       = 0;
-    ax::Scene* obj = nullptr;
-    bool ok        = true;
-
-#    if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#    endif
-
-#    if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S, 1, "ax.Scene", 0, &tolua_err))
-        goto tolua_lerror;
-#    endif
-
-    obj = (ax::Scene*)tolua_tousertype(tolua_S, 1, 0);
-
-#    if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S, "invalid 'obj' in function 'axlua_Scene_setNavMeshDebugCamera'", nullptr);
-        return 0;
-    }
-#    endif
-
-    argc = lua_gettop(tolua_S) - 1;
-    if (argc == 1)
-    {
-        ax::Camera* arg0;
-
-        ok &= luaval_to_object<ax::Camera>(tolua_S, 2, "ax.Camera", &arg0, "ax.Scene:setNavMeshDebugCamera");
-        if (!ok)
-        {
-            tolua_error(tolua_S, "invalid arguments in function 'axlua_Scene_setNavMeshDebugCamera'", nullptr);
-            return 0;
-        }
-        obj->setNavMeshDebugCamera(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:setNavMeshDebugCamera",
-               argc, 1);
-    return 0;
-
-#    if _AX_DEBUG >= 1
-tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'axlua_Scene_setNavMeshDebugCamera'.", &tolua_err);
-#    endif
-
-    return 0;
-}
 int axlua_Scene_setNavMesh(lua_State* tolua_S)
 {
     int argc       = 0;
@@ -3070,8 +3019,8 @@ tolua_lerror:
 #endif
 
 #if defined(AX_ENABLE_PHYSICS_3D)
-#    include "axmol/3d/physics/Physics3DWorld.h"
-int axlua_Scene_getPhysics3DWorld(lua_State* tolua_S)
+#    include "axmol/physics/3d/PhysicsWorld3D.h"
+int axlua_Scene_getPhysicsWorld3D(lua_State* tolua_S)
 {
     int argc       = 0;
     ax::Scene* obj = nullptr;
@@ -3091,7 +3040,7 @@ int axlua_Scene_getPhysics3DWorld(lua_State* tolua_S)
 #    if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'obj' in function 'axlua_Scene_getPhysics3DWorld'", nullptr);
+        tolua_error(tolua_S, "invalid 'obj' in function 'axlua_Scene_getPhysicsWorld3D'", nullptr);
         return 0;
     }
 #    endif
@@ -3101,75 +3050,25 @@ int axlua_Scene_getPhysics3DWorld(lua_State* tolua_S)
     {
         if (!ok)
         {
-            tolua_error(tolua_S, "invalid arguments in function 'axlua_Scene_getPhysics3DWorld'", nullptr);
+            tolua_error(tolua_S, "invalid arguments in function 'axlua_Scene_getPhysicsWorld3D'", nullptr);
             return 0;
         }
-        ax::Physics3DWorld* ret = obj->getPhysicsWorld3D();
-        object_to_luaval<ax::Physics3DWorld>(tolua_S, "ax.Physics3DWorld", (ax::Physics3DWorld*)ret);
+        ax::PhysicsWorld3D* ret = obj->getPhysicsWorld3D();
+        object_to_luaval<ax::PhysicsWorld3D>(tolua_S, "ax.PhysicsWorld3D", (ax::PhysicsWorld3D*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:getPhysics3DWorld", argc,
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:getPhysicsWorld3D", argc,
                0);
     return 0;
 
 #    if _AX_DEBUG >= 1
 tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'axlua_Scene_getPhysics3DWorld'.", &tolua_err);
+    tolua_error(tolua_S, "#ferror in function 'axlua_Scene_getPhysicsWorld3D'.", &tolua_err);
 #    endif
 
     return 0;
 }
 
-int axlua_Scene_setPhysics3DDebugCamera(lua_State* tolua_S)
-{
-    int argc       = 0;
-    ax::Scene* obj = nullptr;
-    bool ok        = true;
-
-#    if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#    endif
-
-#    if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S, 1, "ax.Scene", 0, &tolua_err))
-        goto tolua_lerror;
-#    endif
-
-    obj = (ax::Scene*)tolua_tousertype(tolua_S, 1, 0);
-
-#    if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S, "invalid 'obj' in function 'axlua_Scene_setPhysics3DDebugCamera'", nullptr);
-        return 0;
-    }
-#    endif
-
-    argc = lua_gettop(tolua_S) - 1;
-    if (argc == 1)
-    {
-#    if _AX_DEBUG >= 1
-        if (!tolua_isusertype(tolua_S, 2, "ax.Camera", 0, &tolua_err))
-        {
-            goto tolua_lerror;
-        }
-#    endif
-
-        ax::Camera* camera = (ax::Camera*)tolua_tousertype(tolua_S, 2, 0);
-        obj->setPhysics3DDebugCamera(camera);
-        return 0;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:setPhysics3DDebugCamera",
-               argc, 0);
-    return 0;
-
-#    if _AX_DEBUG >= 1
-tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'axlua_Scene_setPhysics3DDebugCamera'.", &tolua_err);
-#    endif
-
-    return 0;
-}
 #endif
 
 static void extendScene(lua_State* tolua_S)
@@ -3182,12 +3081,10 @@ static void extendScene(lua_State* tolua_S)
         tolua_function(tolua_S, "getPhysicsWorld2D", axlua_Scene_getPhysicsWorld2D);
 #endif
 #if defined(AX_ENABLE_PHYSICS_3D)
-        tolua_function(tolua_S, "getPhysicsWorld3D", axlua_Scene_getPhysics3DWorld);
-        tolua_function(tolua_S, "setPhysicsDebugCamera3D", axlua_Scene_setPhysics3DDebugCamera);
+        tolua_function(tolua_S, "getPhysicsWorld3D", axlua_Scene_getPhysicsWorld3D);
 #endif
 
 #if defined(AX_ENABLE_NAVMESH)
-        tolua_function(tolua_S, "setNavMeshDebugCamera", axlua_Scene_setNavMeshDebugCamera);
         tolua_function(tolua_S, "setNavMesh", axlua_Scene_setNavMesh);
         tolua_function(tolua_S, "getNavMesh", axlua_Scene_getNavMesh);
 #endif

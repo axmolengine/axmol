@@ -30,97 +30,93 @@ THE SOFTWARE.
 namespace ax
 {
 
+static void eraseUnordered(tlx::pod_vector<Component*>& comps, tlx::pod_vector<Component*>::iterator& it)
+{
+    // swap with last and pop_back
+    if (it != comps.end() - 1)
+        *it = comps.back();
+    comps.pop_back();
+}
+
 ComponentContainer::ComponentContainer(Node* node) : _owner(node) {}
 
 ComponentContainer::~ComponentContainer() {}
 
-Component* ComponentContainer::get(std::string_view name) const
+Component* ComponentContainer::query(std::string_view name) const
 {
-    Component* ret = nullptr;
-
-    auto it = _componentMap.find(name);
-    if (it != _componentMap.end())
-    {
-        ret = it->second;
-    }
-
-    return ret;
+    return this->query([name](Component* com) { return com->getName() == name; });
 }
 
-bool ComponentContainer::add(Component* com)
+Component* ComponentContainer::query(const std::function<bool(Component*)>& pred) const
+{
+
+    auto it = std::find_if(_components.begin(), _components.end(), pred);
+    return it != _components.end() ? *it : nullptr;
+}
+
+bool ComponentContainer::add(Component* comp)
 {
     bool ret = false;
-    AXASSERT(com != nullptr, "Component must be non-nil");
-    AXASSERT(com->getOwner() == nullptr, "Component already added. It can't be added again");
-    do
+    AXASSERT(comp != nullptr, "Component must be non-nil");
+    if (!comp->getOwner())
     {
-        auto componentName = com->getName();
+        attachComponent(comp);
+        _components.push_back(comp);
+        return true;
+    }
 
-        if (_componentMap.find(componentName) != _componentMap.end())
-        {
-            AXASSERT(false, "ComponentContainer already have this kind of component");
-            break;
-        }
-        tlx::set_item(_componentMap, componentName, com);  //_componentMap[componentName] = com;
-        com->retain();
-        com->setOwner(_owner);
-        com->onAdd();
-
-        ret = true;
-    } while (0);
-    return ret;
+    AXLOGW("Component already added. It can't be added again"sv);
+    return false;
 }
 
 bool ComponentContainer::remove(std::string_view componentName)
 {
-    bool ret = false;
-    do
+    auto it = std::find_if(_components.begin(), _components.end(),
+                           [componentName](Component* comp) { return comp->getName() == componentName; });
+    if (it != _components.end())
     {
-        auto iter = _componentMap.find(componentName);
-        AX_BREAK_IF(iter == _componentMap.end());
-
-        auto component = iter->second;
-        _componentMap.erase(componentName);
-
-        component->onRemove();
-        component->setOwner(nullptr);
-        component->release();
-
-        ret = true;
-    } while (0);
-
-    return ret;
+        auto comp = *it;
+        detachComponent(comp);
+        eraseUnordered(_components, it);
+        return true;
+    }
+    return false;
 }
 
-bool ComponentContainer::remove(Component* com)
+bool ComponentContainer::remove(Component* comp)
 {
-    return remove(com->getName());
+    auto it = std::find(_components.begin(), _components.end(), comp);
+    if (it != _components.end())
+    {
+        detachComponent(comp);
+        eraseUnordered(_components, it);
+        return true;
+    }
+    return false;
 }
 
 void ComponentContainer::removeAll()
 {
-    if (!_componentMap.empty())
+    if (!_components.empty())
     {
-        for (auto&& iter : _componentMap)
+        for (auto&& comp : _components)
         {
-            iter.second->onRemove();
-            iter.second->setOwner(nullptr);
-            iter.second->release();
+            detachComponent(comp);
         }
 
-        _componentMap.clear();
+        _components.clear();
         _owner->unscheduleUpdate();
     }
 }
 
 void ComponentContainer::visit(float delta)
 {
-    if (!_componentMap.empty())
+    if (!_components.empty())
     {
         AX_SAFE_RETAIN(_owner);
-        for (auto&& iter : _componentMap)
+        for (auto&& comp : _components)
         {
-            iter.second->update(delta);
+            comp->update(delta);
         }
         AX_SAFE_RELEASE(_owner);
     }
@@ -128,18 +124,32 @@ void ComponentContainer::visit(float delta)
 
 void ComponentContainer::onEnter()
 {
-    for (auto&& iter : _componentMap)
+    for (auto&& comp : _components)
     {
-        iter.second->onEnter();
+        comp->onEnter();
     }
 }
 
 void ComponentContainer::onExit()
 {
-    for (auto&& iter : _componentMap)
+    for (auto&& comp : _components)
     {
-        iter.second->onExit();
+        comp->onExit();
     }
+}
+
+void ComponentContainer::attachComponent(Component* comp)
+{
+    comp->retain();
+    comp->setOwner(_owner);
+    comp->onAdd();
+}
+
+void ComponentContainer::detachComponent(Component* comp)
+{
+    comp->onRemove();
+    comp->setOwner(nullptr);
+    comp->release();
 }
 
 }  // namespace ax

@@ -157,6 +157,18 @@ public:
     ax::rhi::PrimitiveType getPrimitiveType() const { return _drawPrimitive; }
 
     /**
+     * @brief Enables transparent rendering with double-sided faces.
+     *
+     * This convenience method configures the material to render as transparent
+     * and disables face culling, allowing both front and back faces to be drawn.
+     * It is useful for objects such as foliage, glass, or thin surfaces where
+     * both sides should be visible.
+     *
+     * @note Internally sets transparency to true and cull face side to NONE.
+     */
+    void enableTransparentDoubleSided();
+
+    /**
      * Enable material transparent rendering.
      * WARNING: depth testing will not work.
      */

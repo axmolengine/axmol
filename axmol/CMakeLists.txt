@@ -272,15 +272,9 @@ if(AX_ENABLE_3D)
 endif()
 
 include(platform/CMakeLists.txt)
-
-if(AX_ENABLE_PHYSICS_2D)
-  include(2d/physics/CMakeLists.txt)
+if(AX_ENABLE_PHYSICS_2D OR AX_ENABLE_PHYSICS_3D)
+    include(physics/CMakeLists.txt)
 endif()
-
-if(AX_ENABLE_PHYSICS_3D)
-  include(3d/physics/CMakeLists.txt)
-endif()
-
 include(math/CMakeLists.txt)
 
 if(AX_ENABLE_NAVMESH)
@@ -345,14 +339,9 @@ if(AX_ENABLE_3D)
   list(APPEND _AX_SRC ${_AX_3D_SRC})
 endif()
 
-if(AX_ENABLE_PHYSICS_2D)
+if(AX_ENABLE_PHYSICS_2D OR AX_ENABLE_PHYSICS_3D)
   list(APPEND _AX_HEADER ${_AX_PHYSICS_HEADER})
   list(APPEND _AX_SRC ${_AX_PHYSICS_SRC})
-endif()
-
-if(AX_ENABLE_PHYSICS_3D)
-  list(APPEND _AX_HEADER ${_AX_PHYSICS3D_HEADER})
-  list(APPEND _AX_SRC ${_AX_PHYSICS3D_SRC})
 endif()
 
 if(AX_ENABLE_NAVMESH)

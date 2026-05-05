@@ -186,7 +186,41 @@ if(AX_ENABLE_NAVMESH)
 endif()
 
 if(AX_ENABLE_PHYSICS_3D)
-  ax_add_3rd(bullet)
+  set(jolt_opts "DEBUG_RENDERER_IN_DISTRIBUTION ON")
+  if (AX_ISA_LEVEL LESS_EQUAL 1)
+    list(APPEND jolt_opts
+       "USE_SSE4_1 OFF"
+       "USE_SSE4_2 OFF"
+       "USE_AVX OFF"
+       "USE_AVX2 OFF"
+       "USE_AVX512 OFF"
+    )
+  elseif(AX_ISA_LEVEL EQUAL 2)
+    list(APPEND jolt_opts
+       "USE_SSE4_1 ON"
+       "USE_SSE4_2 OFF"
+       "USE_AVX OFF"
+       "USE_AVX2 OFF"
+       "USE_AVX512 OFF"
+    )
+  elseif(AX_ISA_LEVEL EQUAL 3)
+    list(APPEND jolt_opts
+       "USE_SSE4_1 ON"
+       "USE_SSE4_2 ON"
+       "USE_AVX OFF"
+       "USE_AVX2 OFF"
+       "USE_AVX512 OFF"
+    )
+  elseif(AX_ISA_LEVEL EQUAL 4)
+    list(APPEND jolt_opts
+       "USE_SSE4_1 ON"
+       "USE_SSE4_2 ON"
+       "USE_AVX ON"
+       "USE_AVX2 ON"
+       "USE_AVX512 OFF"
+    )
+  endif()
+  ax_add_3rd(jolt TARGETS Jolt OPTIONS ${jolt_opts})
 endif()
 
 if(AX_WITH_JPEG AND NOT WINRT AND NOT EMSCRIPTEN)

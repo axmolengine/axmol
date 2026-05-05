@@ -29,6 +29,7 @@ THE SOFTWARE.
 
 #include "axmol/base/Map.h"
 #include <string>
+#include "axmol/tlx/vector.hpp"
 
 namespace ax
 {
@@ -51,21 +52,26 @@ public:
 
     /**
      */
-    Component* get(std::string_view name) const;
+    Component* query(std::string_view name) const;
+    Component* query(const std::function<bool(Component*)>& pred) const;
 
     bool add(Component* com);
     bool remove(std::string_view name);
-    bool remove(Component* com);
+    bool remove(Component* comp);
     void removeAll();
     void visit(float delta);
 
     void onEnter();
     void onExit();
 
-    bool isEmpty() const { return _componentMap.empty(); }
+    bool isEmpty() const { return _components.empty(); }
+
+protected:
+    void attachComponent(Component* comp);
+    void detachComponent(Component* comp);
 
 private:
-    tlx::string_map<Component*> _componentMap;
+    tlx::pod_vector<Component*> _components;
     Node* _owner;
 
     friend class Node;

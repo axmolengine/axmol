@@ -92,7 +92,7 @@ end
 function NavMeshBaseTestDemo:onEnter()
     local hitResult = {}
     local ret = false
-    local physicsWorld = self:getPhysics3DWorld()
+    local physicsWorld = self:getPhysicsWorld3D()
     ret, hitResult = physicsWorld:rayCast(ax.vec3(0.0, 50.0, 0.0), ax.vec3(0.0, -50.0, 0.0), hitResult)
     self:createAgent(hitResult.hitPosition)
 end
@@ -110,25 +110,21 @@ function NavMeshBaseTestDemo:extend()
 end
 
 function NavMeshBaseTestDemo:initScene()
-    self:getPhysics3DWorld():setDebugDrawEnable(false)
+    self:getPhysicsWorld3D():setDebugDrawEnabled(false)
 
     local trianglesList = ax.Bundle3D:getTrianglesList("NavMesh/scene.obj")
 
-    local rbDes = {}
-    rbDes.mass = 0.0
-    rbDes.shape = ax.Physics3DShape:createMesh(trianglesList, math.floor(#trianglesList / 3))
-    local rigidBody = ax.Physics3DRigidBody:create(rbDes)
-    local component = ax.Physics3DComponent:create(rigidBody)
     local sprite = ax.Sprite3D:create("NavMesh/scene.obj")
-    sprite:addComponent(component)
+    local rigidBody = ax.Rigidbody3D:create(ax.MeshCollider3D:create(trianglesList), 0.0)
+    sprite:addComponent(rigidBody)
     sprite:setCameraMask(ax.CameraFlag.USER1)
     self:addChild(sprite)
-    self:setPhysics3DDebugCamera(self._camera)
+    self:setDebugCamera(self._camera)
 
     local navMesh = ax.NavMesh:create("NavMesh/all_tiles_tilecache.bin", "NavMesh/geomset.txt")
-    navMesh:setDebugDrawEnable(true)
+    navMesh:setDebugDrawEnabled(true)
     self:setNavMesh(navMesh)
-    self:setNavMeshDebugCamera(self._camera)
+    self:setDebugCamera(self._camera)
 
     local ambientLight = ax.AmbientLight:create(ax.color32(64, 64, 64))
     ambientLight:setCameraMask(ax.CameraFlag.USER1)
@@ -263,7 +259,7 @@ function NavMeshBasicTestDemo:registerTouchEvent()
         if not self._needMoveAgents then
             return
         end
-        local physicsWorld = self:getPhysics3DWorld()
+        local physicsWorld = self:getPhysicsWorld3D()
         if #touches > 0 then
             local touch = touches[1]
             local location = touch:getLocationInView()
@@ -294,7 +290,7 @@ function NavMeshBasicTestDemo:extend()
     menuItem:registerScriptTapHandler(function (tag, sender)
         local scene = ax.Director:getInstance():getRunningScene()
         local enabledDebug = not scene:getNavMesh():isDebugDrawEnabled()
-        scene:getNavMesh():setDebugDrawEnable(enabledDebug)
+        scene:getNavMesh():setDebugDrawEnabled(enabledDebug)
 
         if enabledDebug then
             debugLabel:setString("DebugDraw ON")
@@ -349,7 +345,7 @@ function NavMeshAdvanceTestDemo:registerTouchEvent()
         if not self._needMoveAgents then
             return
         end
-        local physicsWorld = self:getPhysics3DWorld()
+        local physicsWorld = self:getPhysicsWorld3D()
         if #touches > 0 then
             local touch = touches[1]
             local location = touch:getLocationInView()
@@ -384,7 +380,7 @@ function NavMeshAdvanceTestDemo:extend()
 
         local hitResult = {}
         local ret = false
-        ret, hitResult = scene:getPhysics3DWorld():rayCast(ax.vec3(x, 50.0, z), ax.vec3(x, -50.0, z), hitResult)
+        ret, hitResult = scene:getPhysicsWorld3D():rayCast(ax.vec3(x, 50.0, z), ax.vec3(x, -50.0, z), hitResult)
         self:createObstacle(hitResult.hitPosition)
     end)
     menuItem0:setAnchorPoint(ax.p(0.0, 1.0))
@@ -399,7 +395,7 @@ function NavMeshAdvanceTestDemo:extend()
 
         local hitResult = {}
         local ret    = false
-        ret, hitResult = scene:getPhysics3DWorld():rayCast(ax.vec3(x, 50.0, z), ax.vec3(x, -50.0, z), hitResult)
+        ret, hitResult = scene:getPhysicsWorld3D():rayCast(ax.vec3(x, 50.0, z), ax.vec3(x, -50.0, z), hitResult)
         self:createAgent(hitResult.hitPosition)
     end)
     menuItem1:setAnchorPoint(ax.p(0.0, 1.0))
@@ -410,7 +406,7 @@ function NavMeshAdvanceTestDemo:extend()
     menuItem2:registerScriptTapHandler(function (tag, sender)
         local scene = ax.Director:getInstance():getRunningScene()
         local enabledDebug = not scene:getNavMesh():isDebugDrawEnabled()
-        scene:getNavMesh():setDebugDrawEnable(enabledDebug)
+        scene:getNavMesh():setDebugDrawEnabled(enabledDebug)
 
         if enabledDebug then
             debugLabel:setString("DebugDraw ON")
@@ -443,3 +439,4 @@ function NavMeshTest()
 
     return scene
 end
+

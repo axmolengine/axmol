@@ -101,7 +101,7 @@ Axmol Engine has iterated and improved over the Cocos2d-x v4.0 base. Now is fast
 * Box2D
 
 **Supported 3D physics engines**:
-* Bullet Physics SDK
+* JoltPhysics
 
 **Included extensions**:
 * FairyGUI

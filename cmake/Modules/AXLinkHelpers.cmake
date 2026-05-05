@@ -85,6 +85,10 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     target_compile_definitions(${APP_NAME} PRIVATE AX_DLLIMPORT=1)
   endif()
 
+  if(AX_ENABLE_PHYSICS_3D)
+    target_compile_definitions(${APP_NAME} PRIVATE JPH_DEBUG_RENDERER=1)
+  endif()
+
   target_include_directories(${APP_NAME}
     PRIVATE ${AX_ROOT_DIR}/3rdparty/lua
     PRIVATE ${AX_ROOT_DIR}/extensions/scripting
@@ -186,7 +190,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
   ax_link_pred(AX_ENABLE_EXT_EFFEKSEER "EffekseerForCocos2d-x" "${AX_ROOT_DIR}/extensions/Effekseer")
   ax_link_pred(AX_ENABLE_EXT_PHYSICS_NODE "physics-nodes" "${AX_ROOT_DIR}/extensions/physics-nodes/src")
   ax_link_pred(AX_ENABLE_NAVMESH "recast" "${AX_ROOT_DIR}/3rdparty/recast")
-  ax_link_pred(AX_ENABLE_PHYSICS_3D "bullet" "${AX_ROOT_DIR}/3rdparty/bullet")
+  ax_link_pred(AX_ENABLE_PHYSICS_3D "Jolt" "${AX_ROOT_DIR}/3rdparty/jolt")
 
   ax_link_pred(AX_ENABLE_EXT_IMGUI "ImGui"
     "${AX_ROOT_DIR}/extensions/ImGui/src" "${AX_ROOT_DIR}/extensions/ImGui/src/ImGui/imgui"

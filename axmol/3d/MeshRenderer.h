@@ -209,6 +209,20 @@ public:
      */
     Material* getMaterial(int meshIndex = 0) const;
 
+    /**
+     * @brief Retrieve the material of a specific sub-mesh.
+     *
+     * Provides safe access to the material of a child MeshRenderer at the given
+     * sub-mesh index. This avoids direct casting and hard-coded child lookups.
+     *
+     * @param subMeshIndex Index of the sub-mesh (child MeshRenderer).
+     * @param materialIndex Index of the material within the sub-mesh (default is 0).
+     * @return Pointer to the requested Material, or nullptr if not found.
+     *
+     * @note Performs bounds checking and dynamic casting internally.
+     */
+    Material* getSubMeshMaterial(size_t subMeshIndex, size_t materialIndex = 0);
+
     /** Get list of meshes used in this mesh renderer. */
     const Vector<Mesh*>& getMeshes() const { return _meshes; }
 

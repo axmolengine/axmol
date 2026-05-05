@@ -414,24 +414,25 @@ tolua_lerror:
     return 0;
 }
 
-static int toaxlua_Contact2DListener_registerScriptHandler(lua_State* tolua_S)
+static int toaxlua_ContactEventListener2D_registerScriptHandler(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
         return 0;
 
-    int argc                = 0;
-    Contact2DListener* self = nullptr;
+    int argc                     = 0;
+    ContactEventListener2D* self = nullptr;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_isusertype(tolua_S, 1, "ax.Contact2DListener", 0, &tolua_err))
+    if (!tolua_isusertype(tolua_S, 1, "ax.ContactEventListener2D", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
-    self = static_cast<Contact2DListener*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ContactEventListener2D*>(tolua_tousertype(tolua_S, 1, 0));
 #    if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_Contact2DListener_registerScriptHandler'\n", nullptr);
+        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_ContactEventListener2D_registerScriptHandler'\n",
+                    nullptr);
         return 0;
     }
 #    endif
@@ -451,27 +452,13 @@ static int toaxlua_Contact2DListener_registerScriptHandler(lua_State* tolua_S)
             static_cast<ScriptHandlerMgr::HandlerType>((int)tolua_tonumber(tolua_S, 3, 0));
         switch (type)
         {
-        case ScriptHandlerMgr::HandlerType::EVENT_PHYSICS_2D_PRESOLVE:
-        {
-            ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
-
-            self->onPreSolve = [handler](Contact2D* contact) -> bool {
-                LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-                stack->pushObject(contact, "ax.Contact2D");
-                bool ret = stack->executeFunctionByHandler(handler, 1);
-                stack->clean();
-
-                return ret;
-            };
-        }
-        break;
         case ScriptHandlerMgr::HandlerType::EVENT_PHYSICS_2D_CONTACT_BEGIN:
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onContactBegin = [handler](Contact2D* contact) -> bool {
+            self->onContactBegin = [handler](ContactEvent2D* event) -> bool {
                 LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-                stack->pushObject(contact, "ax.Contact2D");
+                stack->pushObject(event, "ax.ContactEvent2D");
                 bool ret = stack->executeFunctionByHandler(handler, 1);
                 stack->clean();
 
@@ -483,9 +470,9 @@ static int toaxlua_Contact2DListener_registerScriptHandler(lua_State* tolua_S)
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onContactEnd = [handler](Contact2D* contact) {
+            self->onContactEnd = [handler](ContactEvent2D* event) {
                 LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-                stack->pushObject(contact, "ax.Contact2D");
+                stack->pushObject(event, "ax.ContactEvent2D");
                 stack->executeFunctionByHandler(handler, 1);
                 stack->clean();
             };
@@ -495,10 +482,10 @@ static int toaxlua_Contact2DListener_registerScriptHandler(lua_State* tolua_S)
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onCollisionHit = [handler](Contact2D* contact) {
+            self->onCollisionHit = [handler](ContactEvent2D* event) {
                 LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-                stack->pushObject(contact, "ax.Contact2D");
-                stack->executeFunctionByHandler(handler, 2);
+                stack->pushObject(event, "ax.ContactEvent2D");
+                stack->executeFunctionByHandler(handler, 1);
                 stack->clean();
             };
         }
@@ -507,9 +494,9 @@ static int toaxlua_Contact2DListener_registerScriptHandler(lua_State* tolua_S)
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onSensorBegin = [handler](Contact2D* contact) {
+            self->onSensorBegin = [handler](ContactEvent2D* event) {
                 LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-                stack->pushObject(contact, "ax.Contact2D");
+                stack->pushObject(event, "ax.ContactEvent2D");
                 stack->executeFunctionByHandler(handler, 1);
                 stack->clean();
             };
@@ -519,9 +506,9 @@ static int toaxlua_Contact2DListener_registerScriptHandler(lua_State* tolua_S)
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onSensorEnd = [handler](Contact2D* contact) {
+            self->onSensorEnd = [handler](ContactEvent2D* event) {
                 LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-                stack->pushObject(contact, "ax.Contact2D");
+                stack->pushObject(event, "ax.ContactEvent2D");
                 stack->executeFunctionByHandler(handler, 1);
                 stack->clean();
             };
@@ -619,15 +606,15 @@ int register_all_ax_physics2d_manual(lua_State* tolua_S)
     }
     lua_pop(tolua_S, 1);
 
-    lua_pushstring(tolua_S, "ax.Contact2DListener");
+    lua_pushstring(tolua_S, "ax.ContactEventListener2D");
     lua_rawget(tolua_S, LUA_REGISTRYINDEX);
     if (lua_istable(tolua_S, -1))
     {
-        tolua_function(tolua_S, "registerScriptHandler", toaxlua_Contact2DListener_registerScriptHandler);
+        tolua_function(tolua_S, "registerScriptHandler", toaxlua_ContactEventListener2D_registerScriptHandler);
     }
     lua_pop(tolua_S, 1);
 
-    tolua_constant(tolua_S, "PHYSICS_INFINITY_2D", physics2d::LargeClamp);
+    tolua_constant(tolua_S, "PHYSICS_INFINITY_2D", phconsts::LinearHuge);
 
     return 0;
 }

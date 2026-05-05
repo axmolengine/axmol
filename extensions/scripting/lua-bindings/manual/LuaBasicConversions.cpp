@@ -381,6 +381,47 @@ bool luaval_to_vec4(lua_State* L, int lo, ax::Vec4* outValue, const char* funcNa
     return ok;
 }
 
+bool luaval_to_quat(lua_State* L, int lo, ax::Quaternion* outValue, const char* funcName)
+{
+    if (nullptr == L || nullptr == outValue)
+        return false;
+
+    bool ok = true;
+
+    tolua_Error tolua_err;
+    if (!tolua_istable(L, lo, 0, &tolua_err))
+    {
+#if _AX_DEBUG >= 1
+        luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
+#endif
+        ok = false;
+    }
+
+    if (ok)
+    {
+        lua_pushstring(L, "x");
+        lua_gettable(L, lo);
+        outValue->x = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
+        lua_pop(L, 1);
+
+        lua_pushstring(L, "y");
+        lua_gettable(L, lo);
+        outValue->y = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
+        lua_pop(L, 1);
+
+        lua_pushstring(L, "z");
+        lua_gettable(L, lo);
+        outValue->z = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
+        lua_pop(L, 1);
+
+        lua_pushstring(L, "w");
+        lua_gettable(L, lo);
+        outValue->w = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
+        lua_pop(L, 1);
+    }
+    return ok;
+}
+
 bool luaval_to_blendfunc(lua_State* L, int lo, ax::BlendFunc* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
@@ -455,6 +496,324 @@ bool luaval_to_physics_material2d(lua_State* L, int lo, PhysicsMaterial2D* outVa
     return ok;
 }
 #endif  // #if defined(AX_ENABLE_PHYSICS_2D)
+
+#if defined(AX_ENABLE_PHYSICS_3D)
+namespace
+{
+int lua_table_abs_index(lua_State* L, int index)
+{
+    return index < 0 ? lua_gettop(L) + index + 1 : index;
+}
+
+bool luaval_to_float_field(lua_State* L, int tableIndex, const char* field, float* outValue)
+{
+    lua_pushstring(L, field);
+    lua_gettable(L, tableIndex);
+    if (!lua_isnil(L, -1))
+    {
+        if (!lua_isnumber(L, -1))
+        {
+            lua_pop(L, 1);
+            return false;
+        }
+        *outValue = static_cast<float>(lua_tonumber(L, -1));
+    }
+    lua_pop(L, 1);
+    return true;
+}
+
+bool luaval_to_vec3_field(lua_State* L, int tableIndex, const char* field, Vec3* outValue, const char* funcName)
+{
+    lua_pushstring(L, field);
+    lua_gettable(L, tableIndex);
+    if (!lua_isnil(L, -1))
+    {
+        if (!luaval_to_vec3(L, lua_gettop(L), outValue, funcName))
+        {
+            lua_pop(L, 1);
+            return false;
+        }
+    }
+    lua_pop(L, 1);
+    return true;
+}
+
+bool luaval_to_physics_actor_field(lua_State* L,
+                                   int tableIndex,
+                                   const char* field,
+                                   PhysicsActor** outValue,
+                                   const char* funcName)
+{
+    lua_pushstring(L, field);
+    lua_gettable(L, tableIndex);
+    if (lua_isnil(L, -1))
+    {
+        *outValue = nullptr;
+        lua_pop(L, 1);
+        return true;
+    }
+
+    bool ok = luaval_to_object<PhysicsActor>(L, lua_gettop(L), "ax.PhysicsActor", outValue, funcName);
+    lua_pop(L, 1);
+    return ok;
+}
+
+bool luaval_to_contact_point_3d(lua_State* L, int lo, ContactInfo3D::ContactPoint* outValue, const char* funcName)
+{
+    if (nullptr == outValue || !lua_istable(L, lo))
+        return false;
+
+    const int tableIndex = lua_table_abs_index(L, lo);
+    bool ok              = true;
+    ok &= luaval_to_vec3_field(L, tableIndex, "pointA", &outValue->pointA, funcName);
+    ok &= luaval_to_vec3_field(L, tableIndex, "pointB", &outValue->pointB, funcName);
+    return ok;
+}
+
+bool luaval_to_contact_points_3d(lua_State* L, int tableIndex, ContactInfo3D* outValue, const char* funcName)
+{
+    lua_pushstring(L, "points");
+    lua_gettable(L, tableIndex);
+    if (lua_isnil(L, -1))
+    {
+        lua_pop(L, 1);
+        return true;
+    }
+
+    if (!lua_istable(L, -1))
+    {
+        lua_pop(L, 1);
+        return false;
+    }
+
+    const int pointsIndex = lua_gettop(L);
+    const auto count      = lua_objlen(L, pointsIndex);
+    outValue->points.clear();
+    for (size_t i = 1; i <= count; ++i)
+    {
+        lua_rawgeti(L, pointsIndex, static_cast<int>(i));
+        ContactInfo3D::ContactPoint point;
+        if (!luaval_to_contact_point_3d(L, lua_gettop(L), &point, funcName))
+        {
+            lua_pop(L, 2);
+            return false;
+        }
+        outValue->points.push_back(point);
+        lua_pop(L, 1);
+    }
+
+    lua_pop(L, 1);
+    return true;
+}
+
+void push_number_field(lua_State* L, const char* field, float value)
+{
+    lua_pushstring(L, field);
+    lua_pushnumber(L, static_cast<lua_Number>(value));
+    lua_rawset(L, -3);
+}
+
+void push_vec3_field(lua_State* L, const char* field, const Vec3& value)
+{
+    lua_pushstring(L, field);
+    vec3_to_luaval(L, value);
+    lua_rawset(L, -3);
+}
+
+void push_physics_actor_field(lua_State* L, const char* field, PhysicsActor* actor)
+{
+    lua_pushstring(L, field);
+    object_to_luaval<PhysicsActor>(L, getLuaTypeName(actor, "ax.PhysicsActor"), actor);
+    lua_rawset(L, -3);
+}
+}  // namespace
+
+bool luaval_to_twist_limits(lua_State* L, int lo, TwistLimits* outValue, const char* funcName)
+{
+    if (nullptr == L || nullptr == outValue)
+        return false;
+
+    bool ok = true;
+
+    tolua_Error tolua_err;
+    if (!tolua_istable(L, lo, 0, &tolua_err))
+    {
+#    if _AX_DEBUG >= 1
+        luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
+#    endif
+        ok = false;
+    }
+
+    if (ok)
+    {
+        const int tableIndex = lua_table_abs_index(L, lo);
+        ok &= luaval_to_float_field(L, tableIndex, "swingSpan1", &outValue->swingSpan1);
+        ok &= luaval_to_float_field(L, tableIndex, "swingSpan2", &outValue->swingSpan2);
+        ok &= luaval_to_float_field(L, tableIndex, "twistSpan", &outValue->twistSpan);
+    }
+
+    return ok;
+}
+
+bool luaval_to_six_dof_limits(lua_State* L, int lo, SixDofLimits* outValue, const char* funcName)
+{
+    if (nullptr == L || nullptr == outValue)
+        return false;
+
+    bool ok = true;
+
+    tolua_Error tolua_err;
+    if (!tolua_istable(L, lo, 0, &tolua_err))
+    {
+#    if _AX_DEBUG >= 1
+        luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
+#    endif
+        ok = false;
+    }
+
+    if (ok)
+    {
+        const int tableIndex = lua_table_abs_index(L, lo);
+        ok &= luaval_to_vec3_field(L, tableIndex, "lower", &outValue->lower, funcName);
+        ok &= luaval_to_vec3_field(L, tableIndex, "upper", &outValue->upper, funcName);
+    }
+
+    return ok;
+}
+
+bool luaval_to_physics_material(lua_State* L, int lo, PhysicsMaterial* outValue, const char* funcName)
+{
+    if (nullptr == L || nullptr == outValue)
+        return false;
+
+    bool ok = true;
+
+    tolua_Error tolua_err;
+    if (!tolua_istable(L, lo, 0, &tolua_err))
+    {
+#    if _AX_DEBUG >= 1
+        luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
+#    endif
+        ok = false;
+    }
+
+    if (ok)
+    {
+        const int tableIndex = lua_table_abs_index(L, lo);
+        ok &= luaval_to_float_field(L, tableIndex, "friction", &outValue->friction);
+        ok &= luaval_to_float_field(L, tableIndex, "restitution", &outValue->restitution);
+    }
+
+    return ok;
+}
+
+bool luaval_to_joint_spring(lua_State* L, int lo, JointSpring* outValue, const char* funcName)
+{
+    if (nullptr == L || nullptr == outValue)
+        return false;
+
+    bool ok = true;
+
+    tolua_Error tolua_err;
+    if (!tolua_istable(L, lo, 0, &tolua_err))
+    {
+#    if _AX_DEBUG >= 1
+        luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
+#    endif
+        ok = false;
+    }
+
+    if (ok)
+    {
+        const int tableIndex = lua_table_abs_index(L, lo);
+        ok &= luaval_to_float_field(L, tableIndex, "frequency", &outValue->frequency);
+        ok &= luaval_to_float_field(L, tableIndex, "damping", &outValue->damping);
+    }
+
+    return ok;
+}
+
+bool luaval_to_joint_motor(lua_State* L, int lo, JointMotor* outValue, const char* funcName)
+{
+    if (nullptr == L || nullptr == outValue)
+        return false;
+
+    bool ok = true;
+
+    tolua_Error tolua_err;
+    if (!tolua_istable(L, lo, 0, &tolua_err))
+    {
+#    if _AX_DEBUG >= 1
+        luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
+#    endif
+        ok = false;
+    }
+
+    if (ok)
+    {
+        const int tableIndex = lua_table_abs_index(L, lo);
+        ok &= luaval_to_float_field(L, tableIndex, "targetVelocity", &outValue->targetVelocity);
+        ok &= luaval_to_float_field(L, tableIndex, "maxForce", &outValue->maxForce);
+    }
+
+    return ok;
+}
+
+bool luaval_to_joint_limits(lua_State* L, int lo, ax::JointLimits* outValue, const char* funcName)
+{
+    if (nullptr == L || nullptr == outValue)
+        return false;
+
+    bool ok = true;
+
+    tolua_Error tolua_err;
+    if (!tolua_istable(L, lo, 0, &tolua_err))
+    {
+#    if _AX_DEBUG >= 1
+        luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
+#    endif
+        ok = false;
+    }
+
+    if (ok)
+    {
+        const int tableIndex = lua_table_abs_index(L, lo);
+        ok &= luaval_to_float_field(L, tableIndex, "lower", &outValue->lower);
+        ok &= luaval_to_float_field(L, tableIndex, "upper", &outValue->upper);
+    }
+
+    return ok;
+}
+
+bool luaval_to_contact_info_3d(lua_State* L, int lo, ContactInfo3D* outValue, const char* funcName)
+{
+    if (nullptr == L || nullptr == outValue)
+        return false;
+
+    bool ok = true;
+
+    tolua_Error tolua_err;
+    if (!tolua_istable(L, lo, 0, &tolua_err))
+    {
+#    if _AX_DEBUG >= 1
+        luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
+#    endif
+        ok = false;
+    }
+
+    if (ok)
+    {
+        const int tableIndex = lua_table_abs_index(L, lo);
+        ok &= luaval_to_physics_actor_field(L, tableIndex, "actorA", &outValue->actorA, funcName);
+        ok &= luaval_to_physics_actor_field(L, tableIndex, "actorB", &outValue->actorB, funcName);
+        ok &= luaval_to_vec3_field(L, tableIndex, "normal", &outValue->normal, funcName);
+        outValue->points.clear();
+        ok &= luaval_to_contact_points_3d(L, tableIndex, outValue, funcName);
+    }
+
+    return ok;
+}
+#endif  // #if defined(AX_ENABLE_PHYSICS_3D)
 
 bool luaval_to_ssize_t(lua_State* L, int lo, ssize_t* outValue, const char* funcName)
 {
@@ -2087,6 +2446,34 @@ int vec4_to_luaval(lua_State* L, const ax::Vec4& vec4)
     return 1;
 }
 
+int quat_to_luaval(lua_State* L, const ax::Quaternion& quat)
+{
+    lua_createtable(L, 4, 0);              /* L: table */
+    lua_pushnumber(L, (lua_Number)quat.x); /* L: table key value*/
+    lua_rawseti(L, -2, 1);                 /* table[key] = value, L: table */
+    lua_pushnumber(L, (lua_Number)quat.y); /* L: table key value*/
+    lua_rawseti(L, -2, 2);
+    lua_pushnumber(L, (lua_Number)quat.z); /* L: table key value*/
+    lua_rawseti(L, -2, 3);
+    lua_pushnumber(L, (lua_Number)quat.w); /* L: table key value*/
+    lua_rawseti(L, -2, 4);
+
+    int top = lua_gettop(L);
+    luaL_getmetatable(L, "_vec4mt");
+    if (!lua_istable(L, -1))
+    {
+        lua_settop(L, top);  // restore stack
+        luaL_newmetatable(L, "_vec4mt");
+        lua_pushcfunction(L, vec4_index);
+        lua_setfield(L, -2, "__index");
+        lua_pushcfunction(L, vec4_newindex);
+        lua_setfield(L, -2, "__newindex");
+    }
+    lua_setmetatable(L, -2);
+
+    return 1;
+}
+
 #if defined(AX_ENABLE_PHYSICS_2D)
 void physics_material2d_to_luaval(lua_State* L, const PhysicsMaterial2D& pm)
 {
@@ -2138,7 +2525,7 @@ void physics_raycastinfo_to_luaval(lua_State* L, const RayCastHit2D& info)
     lua_rawset(L, -3);                            /* table[key] = value, L: table */
 }
 
-void physics_contact2dinfo_to_luaval(lua_State* L, const Contact2DInfo& info)
+void physics_contactinfo2d_to_luaval(lua_State* L, const ContactInfo2D& info)
 {
     if (nullptr == L)
         return;
@@ -2152,7 +2539,7 @@ void physics_contact2dinfo_to_luaval(lua_State* L, const Contact2DInfo& info)
 
     // POINT_MAX
     lua_pushstring(L, "POINT_MAX");
-    lua_pushnumber(L, Contact2DInfo::POINT_MAX);
+    lua_pushnumber(L, ContactInfo2D::POINT_MAX);
     lua_rawset(L, -3);
 
     // pointCount
@@ -2164,7 +2551,7 @@ void physics_contact2dinfo_to_luaval(lua_State* L, const Contact2DInfo& info)
     lua_pushstring(L, "points");
     lua_newtable(L); /* L: table, points */
 
-    for (int i = 0; i < info.pointCount && i < Contact2DInfo::POINT_MAX; ++i)
+    for (int i = 0; i < info.pointCount && i < ContactInfo2D::POINT_MAX; ++i)
     {
         const ManifoldPoint2D& mp = info.points[i];
 
@@ -2200,6 +2587,94 @@ void physics_contact2dinfo_to_luaval(lua_State* L, const Contact2DInfo& info)
 }
 
 #endif  // #if defined(AX_ENABLE_PHYSICS_2D)
+
+#if defined(AX_ENABLE_PHYSICS_3D)
+void twist_limits_to_luaval(lua_State* L, const TwistLimits& limits)
+{
+    if (nullptr == L)
+        return;
+
+    lua_newtable(L);
+    push_number_field(L, "swingSpan1", limits.swingSpan1);
+    push_number_field(L, "swingSpan2", limits.swingSpan2);
+    push_number_field(L, "twistSpan", limits.twistSpan);
+}
+
+void six_dof_limits_to_luaval(lua_State* L, const SixDofLimits& limits)
+{
+    if (nullptr == L)
+        return;
+
+    lua_newtable(L);
+    push_vec3_field(L, "lower", limits.lower);
+    push_vec3_field(L, "upper", limits.upper);
+}
+
+void physics_material_to_luaval(lua_State* L, const PhysicsMaterial& material)
+{
+    if (nullptr == L)
+        return;
+
+    lua_newtable(L);
+    push_number_field(L, "friction", material.friction);
+    push_number_field(L, "restitution", material.restitution);
+}
+
+void joint_spring_to_luaval(lua_State* L, const JointSpring& spring)
+{
+    if (nullptr == L)
+        return;
+
+    lua_newtable(L);
+    push_number_field(L, "frequency", spring.frequency);
+    push_number_field(L, "damping", spring.damping);
+}
+
+void joint_motor_to_luaval(lua_State* L, const JointMotor& motor)
+{
+    if (nullptr == L)
+        return;
+
+    lua_newtable(L);
+    push_number_field(L, "targetVelocity", motor.targetVelocity);
+    push_number_field(L, "maxForce", motor.maxForce);
+}
+
+void joint_limits_to_luaval(lua_State* L, const ax::JointLimits& limits)
+{
+    if (nullptr == L)
+        return;
+
+    lua_newtable(L);
+    push_number_field(L, "lower", limits.lower);
+    push_number_field(L, "upper", limits.upper);
+}
+
+void contact_info_3d_to_luaval(lua_State* L, const ContactInfo3D& info)
+{
+    if (nullptr == L)
+        return;
+
+    lua_newtable(L);
+
+    push_physics_actor_field(L, "actorA", info.actorA);
+    push_physics_actor_field(L, "actorB", info.actorB);
+    push_vec3_field(L, "normal", info.normal);
+
+    lua_pushstring(L, "points");
+    lua_newtable(L);
+    int index = 1;
+    for (const auto& point : info.points)
+    {
+        lua_pushnumber(L, index++);
+        lua_newtable(L);
+        push_vec3_field(L, "pointA", point.pointA);
+        push_vec3_field(L, "pointB", point.pointB);
+        lua_rawset(L, -3);
+    }
+    lua_rawset(L, -3);
+}
+#endif  // #if defined(AX_ENABLE_PHYSICS_3D)
 
 void size_to_luaval(lua_State* L, const Size& sz)
 {

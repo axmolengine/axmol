@@ -46,7 +46,7 @@ public:
 
     void toggleDebugCallback(ax::Object* sender);
 
-    ax::Sprite* addGrossiniAtPosition(ax::Vec2 p, float scale = 1.0);
+    ax::Sprite* addGrossiniAtPosition(ax::Vec2 p, float scale = 1.0, bool allowDrag = true);
     ax::Sprite* makeBall(ax::Vec2 point,
                          float radius,
                          const ax::PhysicsMaterial2D& material = ax::PHYSICS_MATERIAL_2D_DEFAULT);
@@ -175,8 +175,8 @@ public:
     void onEnter() override;
     virtual std::string title() const override;
 
-    bool onPreSolve(ax::Contact2D* contact);
-    void onCollisionHit(ax::Contact2D* contact);
+    bool onPreSolve(const ax::ContactInfo2D& info);
+    void onCollisionHit(ax::ContactEvent2D* contact);
 };
 
 class PhysicsDemoSlice : public PhysicsDemo
@@ -215,7 +215,7 @@ public:
 
     void onEnter() override;
     void resetTest();
-    bool onPreSolve(ax::Contact2D* contact);
+    bool onPreSolve(const ax::ContactInfo2D& info);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 

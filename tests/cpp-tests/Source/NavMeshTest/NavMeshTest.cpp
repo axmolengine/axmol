@@ -26,7 +26,7 @@
  ****************************************************************************/
 
 #include "NavMeshTest.h"
-#include "axmol/3d/physics/Physics3D.h"
+#include "axmol/physics/physics-3d.h"
 #include "axmol/3d/Bundle3D.h"
 #include "axmol/2d/Light.h"
 
@@ -137,26 +137,20 @@ void NavMeshBaseTestDemo::onTouchesEnded(const std::vector<ax::Touch*>& touches,
 
 void NavMeshBaseTestDemo::initScene()
 {
-    getPhysicsWorld3D()->setDebugDrawEnable(false);
+    setDebugCamera(_camera);
+
+    _physicsWorld3D->setDebugDrawEnabled(false);
     // create mesh
     std::vector<Vec3> trianglesList = Bundle3D::getTrianglesList("NavMesh/scene.obj");
 
-    Physics3DRigidBodyDes rbDes;
-    rbDes.mass     = 0.0f;
-    rbDes.shape    = Physics3DShape::createMesh(&trianglesList[0], (int)trianglesList.size() / 3);
-    auto rigidBody = Physics3DRigidBody::create(&rbDes);
-    auto component = Physics3DComponent::create(rigidBody);
-    auto mesh      = MeshRenderer::create("NavMesh/scene.obj");
-    mesh->addComponent(component);
+    auto mesh = MeshRenderer::create("NavMesh/scene.obj");
+    mesh->addComponent(Rigidbody3D::create(MeshCollider3D::create(trianglesList)));
     mesh->setCameraMask((unsigned short)CameraFlag::USER1);
     this->addChild(mesh);
-    setPhysics3DDebugCamera(_camera);
 
     auto navMesh = NavMesh::create("NavMesh/all_tiles_tilecache.bin", "NavMesh/geomset.txt");
-    navMesh->setDebugDrawEnable(true);
+    navMesh->setDebugDrawEnabled(true);
     setNavMesh(navMesh);
-    setNavMeshDebugCamera(_camera);
-
     auto ambientLight = AmbientLight::create(Color32(64, 64, 64));
     ambientLight->setCameraMask((unsigned short)CameraFlag::USER1);
     this->addChild(ambientLight);
@@ -293,7 +287,7 @@ void NavMeshBasicTestDemo::touchesEnded(const std::vector<ax::Touch*>& touches, 
         _camera->unproject(size, &nearP, &nearP);
         _camera->unproject(size, &farP, &farP);
 
-        Physics3DWorld::HitResult result;
+        PhysicsWorld3D::HitResult result;
         getPhysicsWorld3D()->rayCast(nearP, farP, &result);
         moveAgents(result.hitPosition);
     }
@@ -309,7 +303,7 @@ bool NavMeshBasicTestDemo::init()
     _debugLabel->retain();
     auto menuItem1 = MenuItemLabel::create(_debugLabel, [this](Object*) {
         bool enabledDebug = !getNavMesh()->isDebugDrawEnabled();
-        getNavMesh()->setDebugDrawEnable(enabledDebug);
+        getNavMesh()->setDebugDrawEnabled(enabledDebug);
         if (enabledDebug)
         {
             _debugLabel->setString("Debug Draw ON");
@@ -332,7 +326,7 @@ void NavMeshBasicTestDemo::onEnter()
 {
     NavMeshBaseTestDemo::onEnter();
 
-    Physics3DWorld::HitResult result;
+    PhysicsWorld3D::HitResult result;
     getPhysicsWorld3D()->rayCast(Vec3(0.0f, 50.0f, 0.0f), Vec3(0.0f, -50.0f, 0.0f), &result);
     createAgent(result.hitPosition);
 }
@@ -357,7 +351,7 @@ bool NavMeshAdvanceTestDemo::init()
     auto menuItem0 = MenuItemLabel::create(_obstacleLabel, [this](Object*) {
         float x = ax::random(-50.0f, 50.0f);
         float z = ax::random(-50.0f, 50.0f);
-        Physics3DWorld::HitResult result;
+        PhysicsWorld3D::HitResult result;
         getPhysicsWorld3D()->rayCast(Vec3(x, 50.0f, z), Vec3(x, -50.0f, z), &result);
         createObstacle(result.hitPosition);
     });
@@ -367,7 +361,7 @@ bool NavMeshAdvanceTestDemo::init()
     auto menuItem1 = MenuItemLabel::create(_agentLabel, [this](Object*) {
         float x = ax::random(-50.0f, 50.0f);
         float z = ax::random(-50.0f, 50.0f);
-        Physics3DWorld::HitResult result;
+        PhysicsWorld3D::HitResult result;
         getPhysicsWorld3D()->rayCast(Vec3(x, 50.0f, z), Vec3(x, -50.0f, z), &result);
         createAgent(result.hitPosition);
     });
@@ -376,7 +370,7 @@ bool NavMeshAdvanceTestDemo::init()
 
     auto menuItem2 = MenuItemLabel::create(_debugLabel, [this](Object*) {
         bool enabledDebug = !getNavMesh()->isDebugDrawEnabled();
-        getNavMesh()->setDebugDrawEnable(enabledDebug);
+        getNavMesh()->setDebugDrawEnabled(enabledDebug);
         if (enabledDebug)
         {
             _debugLabel->setString("Debug Draw ON");
@@ -400,7 +394,7 @@ void NavMeshAdvanceTestDemo::onEnter()
 {
     NavMeshBaseTestDemo::onEnter();
 
-    Physics3DWorld::HitResult result;
+    PhysicsWorld3D::HitResult result;
     getPhysicsWorld3D()->rayCast(Vec3(0.0f, 50.0f, 0.0f), Vec3(0.0f, -50.0f, 0.0f), &result);
     createAgent(result.hitPosition);
 }
@@ -429,7 +423,7 @@ void NavMeshAdvanceTestDemo::touchesEnded(const std::vector<ax::Touch*>& touches
         _camera->unproject(size, &nearP, &nearP);
         _camera->unproject(size, &farP, &farP);
 
-        Physics3DWorld::HitResult result;
+        PhysicsWorld3D::HitResult result;
         getPhysicsWorld3D()->rayCast(nearP, farP, &result);
         moveAgents(result.hitPosition);
     }
