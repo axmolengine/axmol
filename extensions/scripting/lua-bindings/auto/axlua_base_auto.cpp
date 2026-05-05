@@ -51702,7 +51702,51 @@ int lua_ax_base_DrawNode_drawCircle(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.DrawNode:drawCircle",argc, 8);
+    do {
+        if (argc == 3) {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            double arg1;
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            ax::Color arg2;
+            ok &=luaval_to_color(tolua_S, 4, &arg2, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            obj->drawCircle(arg0, arg1, arg2);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do {
+        if (argc == 4) {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            double arg1;
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            ax::Color arg2;
+            ok &=luaval_to_color(tolua_S, 4, &arg2, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            double arg3;
+            ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            obj->drawCircle(arg0, arg1, arg2, arg3);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.DrawNode:drawCircle",argc, 3);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -52426,7 +52470,51 @@ int lua_ax_base_DrawNode_drawSolidCircle(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.DrawNode:drawSolidCircle",argc, 5);
+    do {
+        if (argc == 4) {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            double arg1;
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            ax::Color arg2;
+            ok &=luaval_to_color(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            double arg3;
+            ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            obj->drawSolidCircle(arg0, arg1, arg2, arg3);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do {
+        if (argc == 3) {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            double arg1;
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            ax::Color arg2;
+            ok &=luaval_to_color(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            obj->drawSolidCircle(arg0, arg1, arg2);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.DrawNode:drawSolidCircle",argc, 3);
     return 0;
 
 #if _AX_DEBUG >= 1
