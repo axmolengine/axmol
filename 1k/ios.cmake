@@ -128,15 +128,14 @@ else()
   set(CMAKE_XCODE_ATTRIBUTE_ENABLE_BITCODE "NO")
 endif()
 
-# Set find path mode properly for cross-compiling
-# refer to: https://discourse.cmake.org/t/find-package-stops-working-when-cmake-system-name-ios/4609/6
-# BUT: CMAKE_FIND_ROOT_PATH is preferred for additional search directories when cross-compiling
-# set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE BOTH CACHE STRING "")
-# set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH CACHE STRING "")
-# set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH CACHE STRING "")
-
-# by default, we want find host program only when cross-compiling
-set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER CACHE STRING "")
+# Configure find path mode for cross-compiling:
+# - Use host tools only when cross-compiling (find_program).
+# - Restrict package, library, and path lookups to CMAKE_FIND_ROOT_PATH when cross-compiling.
+# Reference: https://cmake.org/cmake/help/book/mastering-cmake/chapter/Cross%20Compiling%20With%20CMake.html
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER CACHE STRING "" FORCE)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY CACHE STRING "" FORCE)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY CACHE STRING "" FORCE)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY CACHE STRING "" FORCE)
 
 # Sets CMAKE_SYSTEM_PROCESSOR properly
 if(ARCHS MATCHES "((arm64|arm64e|x86_64)(^|;|, )?)+")

@@ -282,7 +282,8 @@ if(AX_ENABLE_AUDIO)
         set(OBOE_SOURCE "${oboe_SOURCE_DIR}" CACHE STRING "Source directory for Oboe." FORCE)
       endif()
 
-      list(APPEND alsoft_opts "ALSOFT_RTKIT OFF"
+      list(APPEND alsoft_opts
+        "ALSOFT_RTKIT OFF"
         "ALSOFT_BACKEND_PIPEWIRE OFF"
         "ALSOFT_BACKEND_PULSEAUDIO OFF"
         "ALSOFT_BACKEND_ALSA OFF"
@@ -292,10 +293,17 @@ if(AX_ENABLE_AUDIO)
         "ALSOFT_BACKEND_JACK OFF"
         "ALSOFT_BACKEND_PORTAUDIO OFF"
         "ALSOFT_BACKEND_SDL2 OFF"
-        )
-      set(ALSOFT_RTKIT OFF CACHE BOOL "Enable RTKit support" FORCE)
+      )
     elseif(WINDOWS)
-      list(APPEND alsoft_opts "ALSOFT_BACKEND_WASAPI ON" "ALSOFT_BACKEND_WAVE OFF" "ALSOFT_BACKEND_DSOUND OFF" "ALSOFT_BACKEND_WINMM OFF")
+      list(APPEND alsoft_opts 
+        "ALSOFT_RTKIT OFF"
+        "ALSOFT_BACKEND_WASAPI ON"
+        "ALSOFT_BACKEND_WAVE OFF"
+        "ALSOFT_BACKEND_DSOUND OFF"
+        "ALSOFT_BACKEND_WINMM OFF"
+      )
+    elseif(APPLE)
+      list(APPEND alsoft_opts "ALSOFT_RTKIT OFF")
     endif()
 
     if(WINRT)
