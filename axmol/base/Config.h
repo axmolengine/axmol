@@ -318,8 +318,8 @@ THE SOFTWARE.
  * 1 = DrawNode 3.0 faster drawPhysicsCircle
  * 0 = DrawNode 2.0 drawLine methode (slower)
  */
-#ifndef AX_DRAWNODE_FAST_PYSICSCIRCLE
-#    define AX_DRAWNODE_FAST_PYSICSCIRCLE 1
+#ifndef AX_DRAWNODE_FAST_PHYSICSCIRCLE
+#    define AX_DRAWNODE_FAST_PHYSICSCIRCLE 1
 #endif
 
 /// @name namespace ax
