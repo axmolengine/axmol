@@ -58,7 +58,7 @@ min_sdk=21
 
 # The gradle version, @setup.ps1
 # as latest as possible
-gradle=9.4.1
+gradle=9.5.0
 
 # The android gradle plugin, @setup.ps1
 # as stable as possible, match with build-tools,android-studio
@@ -66,7 +66,7 @@ agp=8.13.2
 
 # The android build-tools, @axmol-cmdline @gradle
 # as stable as possible, match with agp,android-studio
-buildtools=35.0.0
+buildtools=36.0.0
 
 # The android studio, @hint
 # as latest as possible, but match with agp, build-tools
@@ -75,8 +75,8 @@ androidstudio=2025.1.3+
 # The android dependencies managed by @gradle
 appcompat=1.7.1
 media3=1.2.1
-annotation=1.9.1
-guava=33.5.0
+annotation=1.10.0
+guava=33.6.0
 
 # --- endregion
 
@@ -88,7 +88,7 @@ guava=33.5.0
 # - since emsdk-4.0.0+ can't be debugging via chrome properly on windows (macos and linux no this issue), since emsdk 5.0.0, issue resolved
 # - axmol can build with emsdk-3.1.73+
 # - please use emsdk-3.1.73/5.0.0+ if you want debug axmol wasm app properly
-emsdk=3.1.73~5.0.6+
+emsdk=3.1.73~5.0.7+
 
 # --- endregion
 

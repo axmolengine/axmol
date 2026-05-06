@@ -72,7 +72,7 @@ android {
             jniDebuggable false
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             if (project.hasProperty("KEY_STORE_FILE")) {
                 signingConfig signingConfigs.release
             } else {
@@ -91,26 +91,6 @@ android {
     }
 }
 
-android.applicationVariants.configureEach { variant ->
-    def variantName = variant.name.capitalize()
-    tasks.register("copy${variantName}ContentToAssets") {
-        doFirst {
-            delete "${projectDir}/build/assets"
-        }
-        doLast {
-            copy {
-                from "${projectDir}/../../Content"
-                into "${projectDir}/build/assets"
-                exclude "**/*.gz"
-            }
-            copy {
-                from "${projectDir}/build/runtime/axslc"
-                into "${projectDir}/build/assets/axslc"
-            }
-        }
-    }
-}
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':libaxmol')
@@ -119,22 +99,4 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompat_ver"
 }
 
-project.afterEvaluate {
-    android.applicationVariants.configureEach { variant ->
-        def variantName = variant.name.capitalize()
-        def copyTask = tasks.named("copy${variantName}ContentToAssets")
-
-        // !!!IMPORTANT: This copy task must depend on the native build task.
-        // Without this dependency, the copy step may run before native libraries
-        // are built, resulting in incomplete or outdated assets being packaged
-        // into the APK. Do not remove or modify this dependency, as it ensures
-        // the correct build order: native build -> copy assets -> merge assets -> AAB/APK.
-        copyTask.configure {
-            dependsOn(tasks.named("externalNativeBuild${variantName}"))
-        }
-
-        tasks.named("merge${variantName}Assets").configure {
-            dependsOn(copyTask)
-        }
-    }
-}
+AxmolUtils.setupCopyAssets(project)

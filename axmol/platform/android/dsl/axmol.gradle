@@ -90,7 +90,7 @@ class VersionComparator implements Comparator<String> {
 }
 
 class AxmolUtils {
-
+    
     @SuppressWarnings('unused')
     static Map<String, String> resolveBuildProfiles(project) {
         def profiles = loadProfiles(project, true)
@@ -108,7 +108,7 @@ class AxmolUtils {
         def cmdlineSdkRoot = Paths.get("${System.env.ANDROID_HOME}").toAbsolutePath().toString()
         if (!new File(cmdlineSdkRoot).isDirectory()) {
             cmdlineSdkRoot = null
-            println("Warning: the cmdline preferred env ANDROID_HOME not set, strongly recommended to set it, on macOS, you can use 'launchctl setenv ANDROID_HOME path/to/android/sdk'")
+            println("[axmol] Warning: the cmdline preferred env ANDROID_HOME not set, strongly recommended to set it, on macOS, you can use 'launchctl setenv ANDROID_HOME path/to/android/sdk'")
         }
 
         def sdkRoot = null
@@ -116,7 +116,7 @@ class AxmolUtils {
         try {
             localProps.load(project.rootProject.file("local.properties").newDataInputStream())
             sdkRoot = localProps.getProperty("sdk.dir")
-            println("Using sdk.dir=$sdkRoot from local.properties")
+            println("[axmol] Using sdk.dir=$sdkRoot from local.properties")
         }
         catch(ignored) {
         }
@@ -127,7 +127,7 @@ class AxmolUtils {
         }
 
         if (sdkRoot != cmdlineSdkRoot) {
-            println("Warning: the sdk.dir in local.properties is differrent with cmdline preferred: $cmdlineSdkRoot, if you encounter issue: ndk not found, ensure they are same, then re-run 'setup.ps1 -p android' and retry")
+            println("[axmol] Warning: the sdk.dir in local.properties is differrent with cmdline preferred: $cmdlineSdkRoot, if you encounter issue: ndk not found, ensure they are same, then re-run 'setup.ps1 -p android' and retry")
         }
 
         // ndkVer,ndkPath,cmakeVer,cmakeOptions(AX_USE_XXX, AX_ENABLE_XXX, AX_ENABLE_EXT_XXX),cmakeDir<nullable>
@@ -137,13 +137,13 @@ class AxmolUtils {
         generateCMakeOptions(project, buildProfiles)
 
         // dump build profiles
-        println("---------- :${project.rootProject.name} build profiles ----------")
+        println("[axmol] ---------- :${project.rootProject.name} build profiles ----------")
 
         buildProfiles.each { key, value ->
-            println("${key}=${value}")
+            println("[axmol] ${key}=${value}")
         }
 
-        println("========== :${project.rootProject.name} build profiles ==========")
+        println("[axmol] ========== :${project.rootProject.name} build profiles ==========")
 
         return buildProfiles
     }
@@ -286,7 +286,7 @@ class AxmolUtils {
         def verifiedVer = null
         def verifiedPath = null
         for(ninjaDir in ninjaBinDirs) {
-            println "Verifying ninja version in ${ninjaDir}"
+            println "[axmol] Verifying ninja version in ${ninjaDir}"
             def programPath =  "$ninjaDir${File.separator}ninja${getExecutableSuffix()}"
             verifiedVer = verifyProgramVer("ninja", programPath, ninjaVer, allowNewerNinja)
             if(verifiedVer != null) {
@@ -296,7 +296,7 @@ class AxmolUtils {
         }
 
         if(verifiedVer == null) {
-            throw new Exception("No suitable ninja found, required $ninjaVer, please run setup.ps1 and try again")
+            throw new Exception("[axmol] No suitable ninja found, required $ninjaVer, please run setup.ps1 and try again")
         }
 
         buildProfiles['ninjaPath'] = verifiedPath
@@ -353,12 +353,16 @@ class AxmolUtils {
 
         // find in cmakeBinDirs
         def verifiedVer = null
+        def verifiedBinDir = null
         def index = 0
         for(item in cmakeBinDirs) {
-            println "Verifying cmake version in ${item}"
-            def pgoramPath = "$item${File.separator}cmake${getExecutableSuffix()}"
-            verifiedVer = verifyProgramVer("cmake", pgoramPath, cmakeVer, allowNewerCMake)
-            if(verifiedVer != null) {
+            println "[axmol] Verifying cmake version in ${item}"
+            def currentBinDir = "$item${File.separator}"
+            def programPath = "${currentBinDir}cmake${getExecutableSuffix()}"
+            def currentVer = verifyProgramVer("cmake", programPath, cmakeVer, allowNewerCMake)
+            if(currentVer != null) {
+                verifiedVer = currentVer
+                verifiedBinDir = currentBinDir
                 break
             }
             ++index
@@ -370,13 +374,33 @@ class AxmolUtils {
 
         buildProfiles['cmakeVer'] = verifiedVer
 
+        if (isAndroidStudio()) {
+            def ninjaPath = buildProfiles['ninjaPath']
+            def cmakeNinjaPath = "${verifiedBinDir}ninja${getExecutableSuffix()}"
+            def cmakeNinjaFile = new File(cmakeNinjaPath)
+
+            if (!cmakeNinjaFile.exists()) {
+                println("[axmol] Create symlink ${cmakeNinjaFile} ==> ${ninjaPath} ...")
+                try {
+                    createSymbolicLink(cmakeNinjaFile, new File(ninjaPath))
+                } catch (Exception ex) {
+                    // Provide a clear and actionable error message
+                    throw new Exception(
+                        "Failed to create Ninja symlink at ${cmakeNinjaFile}. " +
+                            "Please ensure Ninja is installed and available on PATH or in SDK CMake/bin. " +
+                            "Details: ${ex.message}", ex
+                    )
+                }
+            }
+        }
+
         // Create symlink at sdk cmake when using fallback cmake in axmol engine
         // Only present for compatibility purpose, may remove in future axmol releases
         if (index == (cmakeBinDirs.size() - 1)) {
             def symlinkDir = joinPath(sdkRoot, 'cmake', buildProfiles['cmakeVer'])
             def symlinkDirFile = new File(symlinkDir)
             if (!symlinkDirFile.exists()) {
-                println "Creating symlink ${symlinkDir} ==> ${fallbackCMakeDir} ..."
+                println "[axmol] Creating symlink ${symlinkDir} ==> ${fallbackCMakeDir} ..."
 
                 def parentDir = symlinkDirFile.parentFile
                 if(!parentDir.exists()) {
@@ -385,7 +409,7 @@ class AxmolUtils {
 
                 createSymbolicLink(symlinkDirFile, new File(fallbackCMakeDir))
             } else {
-                println "The symlinkd ${symlinkDir} ==> ${fallbackCMakeDir} exist"
+                println "[axmol] The symlinkd ${symlinkDir} ==> ${fallbackCMakeDir} exist"
             }
         }
     }
@@ -404,7 +428,9 @@ class AxmolUtils {
         def androidProjDir = project.projectDir.toString().replaceAll("\\\\", "/")
         def ninjaPath = buildProfiles['ninjaPath'].replaceAll("\\\\", "/")
         options.add('"-DCMAKE_FIND_ROOT_PATH="')
-        options.add("\"-DCMAKE_MAKE_PROGRAM=${ninjaPath}\"")
+        if (!isAndroidStudio()) {
+            options.add("\"-DCMAKE_MAKE_PROGRAM=${ninjaPath}\"")
+        }
         options.add('"-DANDROID_STL=c++_shared"')
         options.add('"-DANDROID_TOOLCHAIN=clang"')
         options.add('"-DANDROID_ARM_NEON=TRUE"')
@@ -425,7 +451,7 @@ class AxmolUtils {
             propertiesFile.withInputStream {sourceProps.load(it) }
             def foundNdkVer = sourceProps['Pkg.Revision']
             if (foundNdkVer.startsWith(ndkVer)) {
-                println("Using found ndk (revision=$foundNdkVer,path=$ndkDir), require=$ndkVer")
+                println("[axmol] Using found ndk (revision=$foundNdkVer,path=$ndkDir), require=$ndkVer")
                 buildProfiles['ndkVer'] = foundNdkVer
                 buildProfiles['ndkPath'] = ndkDir
                 return true
@@ -449,22 +475,22 @@ class AxmolUtils {
                 String canonVer = extractVersionFromOutput(br.readLine())
                 def ret = compareVersion(canonVer, requiredVer)
                 if (ret == 0) {
-                    println("Using found ${programName} ($canonVer,path=$programPath)")
+                    println("[axmol] Using found ${programName} ($canonVer,path=$programPath)")
                     verifiedVer = canonVer
                 }
                 else if(ret > 0) {
                     if(allowNewerVer) {
-                        println("Using found newer ${programName} (version=$canonVer,path=$programPath), (minimum required is: ${requiredVer})")
+                        println("[axmol] Using found newer ${programName} (version=$canonVer,path=$programPath), (minimum required is: ${requiredVer})")
                         verifiedVer = canonVer
                     }
                     else {
-                        println("The ${programName} ${requiredVer} is required, but $canonVer found!")
+                        println("[axmol] The ${programName} ${requiredVer} is required, but $canonVer found!")
                     }
                 }
             }
         }
         catch(Exception ex) {
-            println("Execute ${programName} failed: " + ex.message)
+            println("[axmol] Execute ${programName} failed: " + ex.message)
         }
 
         return verifiedVer
@@ -503,21 +529,119 @@ class AxmolUtils {
             return matcher.group(1)
         }
 
-        throw new RuntimeException("Could not extract version from output: ${output}")
+        throw new RuntimeException("[axmol] Could not extract version from output: ${output}")
     }
 
-    static void createSymbolicLink(File linkDir, File targetDir) {
+    static void createSymbolicLink(File link, File target) {
         if (isWindows()) {
-            def command = ["cmd", "/c", "mklink", "/J", linkDir, targetDir]
+            def command
+            if (target.isDirectory()) {
+                // On Windows: use Junction (/J) for directories
+                command = ["cmd", "/c", "mklink", "/J", link.absolutePath, target.absolutePath]
+            } else {
+                // On Windows: use regular symbolic link for files
+                command = ["cmd", "/c", "mklink", link.absolutePath, target.absolutePath]
+            }
             def proc = command.execute()
             proc.waitFor()
             if (proc.exitValue() != 0) {
-                println "Create Junction fail: ${proc.err.text}"
+                // Print error message if mklink fails
+                throw new Exception("[axmol] Failed to create symbolic link: ${proc.err.text}")
             }
         } else {
-            Files.createSymbolicLink(linkDir.toPath(), targetDir.toPath())
+            // On Unix-like systems: Java NIO supports both files and directories
+            Files.createSymbolicLink(link.toPath(), target.toPath())
         }
     }
+
+    static boolean isAndroidStudio() {
+        return System.getProperty("idea.active") != null
+    }
+
+   /**
+    * Setup copy-assets tasks for axmol engine.
+    * Stage 1: Register tasks via androidComponents (AGP 8/9 compatible).
+    * Stage 2: Configure dependencies within project.afterEvaluate.
+    */
+    static void setupCopyAssets(Project project) {
+        def androidComponents = project.extensions.findByName("androidComponents")
+
+        if (androidComponents != null) {
+            // --- STAGE 1: Register Tasks ---
+            androidComponents.onVariants(androidComponents.selector().all()) { variant ->
+                def variantName = variant.name.capitalize()
+                def copyTaskName = "copy${variantName}ContentToAssets"
+                
+                def outputAssetsDir = project.file("${project.projectDir}/build/assets")
+                def contentSrcDir = project.file("${project.projectDir}/../../Content")
+                def axslcSrcDir = project.file("${project.projectDir}/build/runtime/axslc")
+
+                project.tasks.register(copyTaskName) {
+                    group = "axmol"
+                    // Declare inputs/outputs to help Gradle understand task ordering
+                    inputs.dir(contentSrcDir)
+                    if (axslcSrcDir.exists()) inputs.dir(axslcSrcDir)
+                    outputs.dir(outputAssetsDir)
+
+                    doLast {
+                        // 1. Copy Content
+                        project.copy {
+                            from contentSrcDir
+                            into outputAssetsDir
+                            exclude "**/*.gz"
+                        }
+                        // 2. Copy axslc with physical check
+                        if (axslcSrcDir.exists() && axslcSrcDir.list()?.length > 0) {
+                            project.copy {
+                                from axslcSrcDir
+                                into "${outputAssetsDir}/axslc"
+                            }
+                        } else {
+                            // Fail the build if native build didn't produce files
+                            throw new org.gradle.api.GradleException(
+                                "[axmol] Error: axslc folder is empty or missing at ${axslcSrcDir}. " +
+                                "Native build may have failed or output path is incorrect."
+                            )
+                        }
+                    }
+                }
+
+                // Register assets directory to sourceSets so AGP packages it
+                project.android.sourceSets.named(variant.name).configure {
+                    assets.srcDir(outputAssetsDir)
+                }
+            }
+        } else {
+            throw new org.gradle.api.GradleException("[axmol] Error: 'androidComponents' extension not found.")
+        }
+
+        // --- STAGE 2: Wire Dependencies & Strict Validation (Safe Hook) ---
+        // !!!IMPORTANT: This copy task must depend on the native build task.
+        // Without this dependency, the copy step may run before native libraries
+        // are built, resulting in incomplete or outdated assets being packaged
+        // into the APK. The correct build order is:
+        // native build -> copy assets -> merge assets -> AAB/APK.
+        // Note: externalNativeBuildXXX tasks are only registered after
+        // project.afterEvaluate. Therefore, dependency wiring must be done
+        // inside afterEvaluate to ensure tasks exist and are correctly linked.
+        project.afterEvaluate {
+            // We iterate through registered copy tasks to perform the strict check
+            project.tasks.matching { it.name.startsWith("copy") && it.name.endsWith("ContentToAssets") }.all { copyTask ->
+                // Extract variant name from task name (e.g., "copyDebugContentToAssets" -> "Debug")
+                def variantName = copyTask.name.replaceFirst(/^copy/, '').replaceFirst(/ContentToAssets$/, '')
+                println "Configuring dependency for ${copyTask.name}, variantName:${variantName}"
+
+                copyTask.configure {
+                    dependsOn(project.tasks.named("externalNativeBuild${variantName}"))
+                }
+
+                project.tasks.named("merge${variantName}Assets").configure {
+                    dependsOn(copyTask)
+                }
+            }
+        }
+    }
+
 }
 
 ext.AxmolUtils = AxmolUtils
