@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2011-2024 Arm Limited
+// Copyright 2011-2025 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -163,9 +163,7 @@ void unpack_weights(
  */
 static float error_color_nan()
 {
-	if32 v;
-	v.u = 0xFFFFE000U;
-	return v.f;
+	return astc::uint_as_float(0xFFFFE000u);
 }
 
 /* See header for documentation. */

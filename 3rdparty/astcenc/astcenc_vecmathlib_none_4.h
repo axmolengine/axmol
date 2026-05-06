@@ -1056,8 +1056,10 @@ ASTCENC_SIMD_INLINE float float16_to_float(uint16_t a)
  */
 ASTCENC_SIMD_INLINE vint4 float_as_int(vfloat4 a)
 {
+	static_assert(sizeof(int) == sizeof(float), "int must be 32-bit");
+
 	vint4 r;
-	std::memcpy(r.m, a.m, 4 * 4);
+	std::memcpy(r.m, a.m, 4 * sizeof(int));
 	return r;
 }
 
@@ -1071,7 +1073,7 @@ ASTCENC_SIMD_INLINE vint4 float_as_int(vfloat4 a)
 ASTCENC_SIMD_INLINE vfloat4 int_as_float(vint4 a)
 {
 	vfloat4 r;
-	std::memcpy(r.m, a.m, 4 * 4);
+	std::memcpy(r.m, a.m, 4 * sizeof(float));
 	return r;
 }
 

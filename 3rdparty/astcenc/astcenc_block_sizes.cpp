@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2011-2025 Arm Limited
+// Copyright 2011-2026 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -260,7 +260,9 @@ static void init_decimation_info_2d(
 	unsigned int texels_per_block = x_texels * y_texels;
 	unsigned int weights_per_block = x_weights * y_weights;
 
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 	uint8_t max_texel_count_of_weight = 0;
+#endif
 
 	promise(weights_per_block > 0);
 	promise(texels_per_block > 0);
@@ -316,7 +318,9 @@ static void init_decimation_info_2d(
 					wb.texels_of_weight[qweight[i]][wb.texel_count_of_weight[qweight[i]]] = static_cast<uint8_t>(texel);
 					wb.texel_weights_of_weight[qweight[i]][wb.texel_count_of_weight[qweight[i]]] = static_cast<uint8_t>(weight[i]);
 					wb.texel_count_of_weight[qweight[i]]++;
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 					max_texel_count_of_weight = astc::max(max_texel_count_of_weight, wb.texel_count_of_weight[qweight[i]]);
+#endif
 				}
 			}
 		}
@@ -331,7 +335,9 @@ static void init_decimation_info_2d(
 		for (unsigned int j = 0; j < wb.weight_count_of_texel[i]; j++)
 		{
 			di.texel_weight_contribs_int_tr[j][i] = wb.weights_of_texel[i][j];
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 			di.texel_weight_contribs_float_tr[j][i] = static_cast<float>(wb.weights_of_texel[i][j]) * (1.0f / WEIGHTS_TEXEL_SUM);
+#endif
 			di.texel_weights_tr[j][i] = wb.grid_weights_of_texel[i][j];
 		}
 
@@ -339,13 +345,16 @@ static void init_decimation_info_2d(
 		for (unsigned int j = wb.weight_count_of_texel[i]; j < 4; j++)
 		{
 			di.texel_weight_contribs_int_tr[j][i] = 0;
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 			di.texel_weight_contribs_float_tr[j][i] = 0.0f;
+#endif
 			di.texel_weights_tr[j][i] = 0;
 		}
 	}
 
 	di.max_texel_weight_count = max_texel_weight_count;
 
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 	for (unsigned int i = 0; i < weights_per_block; i++)
 	{
 		unsigned int texel_count_wt = wb.texel_count_of_weight[i];
@@ -382,6 +391,7 @@ static void init_decimation_info_2d(
 			di.weights_texel_contribs_tr[j][i] = 0.0f;
 		}
 	}
+#endif
 
 	// Initialize array tail so we can over-fetch with SIMD later to avoid loop tails
 	size_t texels_per_block_simd = round_up_to_simd_multiple_vla(texels_per_block);
@@ -391,12 +401,15 @@ static void init_decimation_info_2d(
 
 		for (size_t j = 0; j < 4; j++)
 		{
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 			di.texel_weight_contribs_float_tr[j][i] = 0;
+#endif
 			di.texel_weights_tr[j][i] = 0;
 			di.texel_weight_contribs_int_tr[j][i] = 0;
 		}
 	}
 
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 	// Initialize array tail so we can over-fetch with SIMD later to avoid loop tails
 	// Match last texel in active lane in SIMD group, for better gathers
 	unsigned int last_texel_count_wt = wb.texel_count_of_weight[weights_per_block - 1];
@@ -413,6 +426,7 @@ static void init_decimation_info_2d(
 			di.weights_texel_contribs_tr[j][i] = 0.0f;
 		}
 	}
+#endif
 
 	di.texel_count = static_cast<uint8_t>(texels_per_block);
 	di.weight_count = static_cast<uint8_t>(weights_per_block);
@@ -446,7 +460,9 @@ static void init_decimation_info_3d(
 	unsigned int texels_per_block = x_texels * y_texels * z_texels;
 	unsigned int weights_per_block = x_weights * y_weights * z_weights;
 
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 	uint8_t max_texel_count_of_weight = 0;
+#endif
 
 	promise(weights_per_block > 0);
 	promise(texels_per_block > 0);
@@ -571,7 +587,9 @@ static void init_decimation_info_3d(
 						wb.texels_of_weight[qweight[i]][wb.texel_count_of_weight[qweight[i]]] = static_cast<uint8_t>(texel);
 						wb.texel_weights_of_weight[qweight[i]][wb.texel_count_of_weight[qweight[i]]] = static_cast<uint8_t>(weight[i]);
 						wb.texel_count_of_weight[qweight[i]]++;
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 						max_texel_count_of_weight = astc::max(max_texel_count_of_weight, wb.texel_count_of_weight[qweight[i]]);
+#endif
 					}
 				}
 			}
@@ -588,20 +606,25 @@ static void init_decimation_info_3d(
 		for (unsigned int j = 0; j < 4; j++)
 		{
 			di.texel_weight_contribs_int_tr[j][i] = 0;
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 			di.texel_weight_contribs_float_tr[j][i] = 0.0f;
+#endif
 			di.texel_weights_tr[j][i] = 0;
 		}
 
 		for (unsigned int j = 0; j < wb.weight_count_of_texel[i]; j++)
 		{
 			di.texel_weight_contribs_int_tr[j][i] = wb.weights_of_texel[i][j];
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 			di.texel_weight_contribs_float_tr[j][i] = static_cast<float>(wb.weights_of_texel[i][j]) * (1.0f / WEIGHTS_TEXEL_SUM);
+#endif
 			di.texel_weights_tr[j][i] = wb.grid_weights_of_texel[i][j];
 		}
 	}
 
 	di.max_texel_weight_count = max_texel_weight_count;
 
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 	for (unsigned int i = 0; i < weights_per_block; i++)
 	{
 		unsigned int texel_count_wt = wb.texel_count_of_weight[i];
@@ -638,6 +661,7 @@ static void init_decimation_info_3d(
 			di.weights_texel_contribs_tr[j][i] = 0.0f;
 		}
 	}
+#endif
 
 	// Initialize array tail so we can over-fetch with SIMD later to avoid loop tails
 	size_t texels_per_block_simd = round_up_to_simd_multiple_vla(texels_per_block);
@@ -647,12 +671,15 @@ static void init_decimation_info_3d(
 
 		for (size_t j = 0; j < 4; j++)
 		{
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 			di.texel_weight_contribs_float_tr[j][i] = 0;
+#endif
 			di.texel_weights_tr[j][i] = 0;
 			di.texel_weight_contribs_int_tr[j][i] = 0;
 		}
 	}
 
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 	// Initialize array tail so we can over-fetch with SIMD later to avoid loop tails
 	// Match last texel in active lane in SIMD group, for better gathers
 	int last_texel_count_wt = wb.texel_count_of_weight[weights_per_block - 1];
@@ -669,6 +696,7 @@ static void init_decimation_info_3d(
 			di.weights_texel_contribs_tr[j][i] = 0.0f;
 		}
 	}
+#endif
 
 	di.texel_count = static_cast<uint8_t>(texels_per_block);
 	di.weight_count = static_cast<uint8_t>(weights_per_block);
@@ -677,6 +705,7 @@ static void init_decimation_info_3d(
 	di.weight_z = static_cast<uint8_t>(z_weights);
 }
 
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 /**
  * @brief Assign the texels to use for kmeans clustering.
  *
@@ -723,6 +752,7 @@ static void assign_kmeans_texels(
 		}
 	}
 }
+#endif
 
 /**
  * @brief Allocate a single 2D decimation table entry.
@@ -973,8 +1003,10 @@ static void construct_block_size_descriptor_2d(
 		bsd.decimation_modes[i].refprec_2planes = 0;
 	}
 
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 	// Determine the texels to use for kmeans clustering.
 	assign_kmeans_texels(bsd);
+#endif
 
 	delete wb;
 }
@@ -1155,8 +1187,10 @@ static void construct_block_size_descriptor_3d(
 	bsd.block_mode_count_1plane_2plane_selected = bm_counts[0] + bm_counts[1];
 	bsd.block_mode_count_all = bm_counts[0] + bm_counts[1];
 
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 	// Determine the texels to use for kmeans clustering.
 	assign_kmeans_texels(bsd);
+#endif
 
 	delete wb;
 }

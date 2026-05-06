@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2011-2024 Arm Limited
+// Copyright 2011-2026 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -30,6 +30,7 @@
 #endif
 #include <cstdlib>
 #include <limits>
+#include <type_traits>
 
 #include "astcenc.h"
 #include "astcenc_mathlib.h"
@@ -381,6 +382,7 @@ struct decimation_info
 	 */
 	ASTCENC_ALIGNAS uint8_t texel_weight_contribs_int_tr[4][BLOCK_MAX_TEXELS];
 
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 	/**
 	 * @brief The bilinear contribution of the N weights that are interpolated for each texel.
 	 * Value is between 0 and 1, stored transposed to improve vectorization.
@@ -407,6 +409,7 @@ struct decimation_info
 	 * Value is between 0 and 1, stored transposed to improve vectorization.
 	 */
 	float texel_contrib_for_weight[BLOCK_MAX_TEXELS][BLOCK_MAX_WEIGHTS];
+#endif
 };
 
 /**
@@ -598,6 +601,7 @@ struct block_size_descriptor
 	 */
 	uint16_t partitioning_packed_index[3][BLOCK_MAX_PARTITIONINGS];
 
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 	/** @brief The active texels for k-means partition selection. */
 	uint8_t kmeans_texels[BLOCK_MAX_KMEANS_TEXELS];
 
@@ -621,6 +625,7 @@ struct block_size_descriptor
 	 * Indexed by remapped index, not physical index.
 	 */
 	uint64_t coverage_bitmaps_4[BLOCK_MAX_PARTITIONINGS][4];
+#endif
 
 	/**
 	 * @brief Get the block mode structure for index @c block_mode.
@@ -1213,8 +1218,11 @@ struct astcenc_contexti
 	/** @brief The thread count supported by this context. */
 	unsigned int thread_count;
 
+	/** @brief Is this context the owner of @c bsd, or is it a child inheriting it. */
+	bool owns_bsd;
+
 	/** @brief The block size descriptor this context was created with. */
-	block_size_descriptor* bsd;
+	const block_size_descriptor* bsd;
 
 	/*
 	 * Fields below here are not needed in a decompress-only build, but some remain as they are
@@ -2212,9 +2220,9 @@ template<typename T>
 void aligned_free(T* ptr)
 {
 #if defined(_WIN32)
-	_aligned_free(ptr);
+	_aligned_free(const_cast<typename std::remove_const<T>::type *>(ptr));
 #else
-	free(ptr);
+	free(const_cast<typename std::remove_const<T>::type *>(ptr));
 #endif
 }
 
