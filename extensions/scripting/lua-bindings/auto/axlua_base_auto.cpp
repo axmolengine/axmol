@@ -111239,11 +111239,163 @@ int lua_ax_base_FastTMXLayer_initWithTilesetInfo(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_FastTMXLayer_initWithTilesets(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::FastTMXLayer* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.FastTMXLayer",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_FastTMXLayer_initWithTilesets'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 3)
+    {
+        std::vector<ax::TMXTilesetInfo *const> arg0;
+        ax::TMXLayerInfo* arg1;
+        ax::TMXMapInfo* arg2;
+
+        ok &= luaval_to_object<std::vector<ax::TMXTilesetInfo const>>(tolua_S, 2, "std::vector<ax::TMXTilesetInfo *const>",&arg0, "ax.FastTMXLayer:initWithTilesets");
+
+        ok &= luaval_to_object<ax::TMXLayerInfo>(tolua_S, 3, "ax.TMXLayerInfo",&arg1, "ax.FastTMXLayer:initWithTilesets");
+
+        ok &= luaval_to_object<ax::TMXMapInfo>(tolua_S, 4, "ax.TMXMapInfo",&arg2, "ax.FastTMXLayer:initWithTilesets");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXLayer_initWithTilesets'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->initWithTilesets(arg0, arg1, arg2);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FastTMXLayer:initWithTilesets",argc, 3);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FastTMXLayer_initWithTilesets'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_FastTMXLayer_batchIndexForGID(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::FastTMXLayer* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.FastTMXLayer",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_FastTMXLayer_batchIndexForGID'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        unsigned int arg0;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.FastTMXLayer:batchIndexForGID");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXLayer_batchIndexForGID'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->batchIndexForGID(arg0);
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FastTMXLayer:batchIndexForGID",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FastTMXLayer_batchIndexForGID'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_FastTMXLayer_getBatches(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::FastTMXLayer* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.FastTMXLayer",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_FastTMXLayer_getBatches'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXLayer_getBatches'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getBatches();
+        object_to_luaval<std::vector<ax::TilesetBatch>&>(tolua_S, "std::vector<ax::TilesetBatch>",(std::vector<ax::TilesetBatch>&)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FastTMXLayer:getBatches",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FastTMXLayer_getBatches'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_FastTMXLayer_create(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
-
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -111252,26 +111404,45 @@ int lua_ax_base_FastTMXLayer_create(lua_State* tolua_S)
     if (!tolua_isusertable(tolua_S,1,"ax.FastTMXLayer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    argc = lua_gettop(tolua_S) - 1;
+    argc = lua_gettop(tolua_S)-1;
 
-    if (argc == 3)
-    {
-        ax::TMXTilesetInfo* arg0;
-        ax::TMXLayerInfo* arg1;
-        ax::TMXMapInfo* arg2;
-        ok &= luaval_to_object<ax::TMXTilesetInfo>(tolua_S, 2, "ax.TMXTilesetInfo",&arg0, "ax.FastTMXLayer:create");
-        ok &= luaval_to_object<ax::TMXLayerInfo>(tolua_S, 3, "ax.TMXLayerInfo",&arg1, "ax.FastTMXLayer:create");
-        ok &= luaval_to_object<ax::TMXMapInfo>(tolua_S, 4, "ax.TMXMapInfo",&arg2, "ax.FastTMXLayer:create");
-        if(!ok)
+    do {
+        if (argc == 3)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXLayer_create'", nullptr);
-            return 0;
+            std::vector<ax::TMXTilesetInfo *const> arg0;
+            ok &= luaval_to_object<std::vector<ax::TMXTilesetInfo const>>(tolua_S, 2, "std::vector<ax::TMXTilesetInfo *const>",&arg0, "ax.FastTMXLayer:create");
+            if (!ok) { break; }
+            ax::TMXLayerInfo* arg1;
+            ok &= luaval_to_object<ax::TMXLayerInfo>(tolua_S, 3, "ax.TMXLayerInfo",&arg1, "ax.FastTMXLayer:create");
+            if (!ok) { break; }
+            ax::TMXMapInfo* arg2;
+            ok &= luaval_to_object<ax::TMXMapInfo>(tolua_S, 4, "ax.TMXMapInfo",&arg2, "ax.FastTMXLayer:create");
+            if (!ok) { break; }
+            ax::FastTMXLayer* ret = ax::FastTMXLayer::create(arg0, arg1, arg2);
+            object_to_luaval<ax::FastTMXLayer>(tolua_S, "ax.FastTMXLayer",(ax::FastTMXLayer*)ret);
+            return 1;
         }
-        auto&& ret = ax::FastTMXLayer::create(arg0, arg1, arg2);
-        object_to_luaval<ax::FastTMXLayer>(tolua_S, "ax.FastTMXLayer",(ax::FastTMXLayer*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.FastTMXLayer:create",argc, 3);
+    } while (0);
+    ok  = true;
+    do {
+        if (argc == 3)
+        {
+            ax::TMXTilesetInfo* arg0;
+            ok &= luaval_to_object<ax::TMXTilesetInfo>(tolua_S, 2, "ax.TMXTilesetInfo",&arg0, "ax.FastTMXLayer:create");
+            if (!ok) { break; }
+            ax::TMXLayerInfo* arg1;
+            ok &= luaval_to_object<ax::TMXLayerInfo>(tolua_S, 3, "ax.TMXLayerInfo",&arg1, "ax.FastTMXLayer:create");
+            if (!ok) { break; }
+            ax::TMXMapInfo* arg2;
+            ok &= luaval_to_object<ax::TMXMapInfo>(tolua_S, 4, "ax.TMXMapInfo",&arg2, "ax.FastTMXLayer:create");
+            if (!ok) { break; }
+            ax::FastTMXLayer* ret = ax::FastTMXLayer::create(arg0, arg1, arg2);
+            object_to_luaval<ax::FastTMXLayer>(tolua_S, "ax.FastTMXLayer",(ax::FastTMXLayer*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.FastTMXLayer:create",argc, 3);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
@@ -111352,6 +111523,9 @@ int lua_register_ax_base_FastTMXLayer(lua_State* tolua_S)
         tolua_function(tolua_S,"hasTileAnimation",lua_ax_base_FastTMXLayer_hasTileAnimation);
         tolua_function(tolua_S,"getTileAnimManager",lua_ax_base_FastTMXLayer_getTileAnimManager);
         tolua_function(tolua_S,"initWithTilesetInfo",lua_ax_base_FastTMXLayer_initWithTilesetInfo);
+        tolua_function(tolua_S,"initWithTilesets",lua_ax_base_FastTMXLayer_initWithTilesets);
+        tolua_function(tolua_S,"batchIndexForGID",lua_ax_base_FastTMXLayer_batchIndexForGID);
+        tolua_function(tolua_S,"getBatches",lua_ax_base_FastTMXLayer_getBatches);
         tolua_function(tolua_S,"create", lua_ax_base_FastTMXLayer_create);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::FastTMXLayer).name(); // rtti is literal storage
