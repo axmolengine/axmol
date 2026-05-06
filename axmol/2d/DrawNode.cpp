@@ -1095,10 +1095,10 @@ void DrawNode::_drawSegment(const Vec2& from,
     }
 }
 
-void DrawNode::_drawPhysicsCircle(const Vec2& center, float radius, const Color& color, Vec2& vec)
+void DrawNode::_drawSolidCircle(const Vec2& center, float radius, const Color& color, Vec2& vec)
 {
     Color fillColor = Color(1.0f - color.r, 1.0f - color.g, 1.0f - color.b, 1.0f);
-#ifdef AX_DRAWNODE_FAST_PHYSICSCIRCLE
+#ifdef AX_DRAWNODE_FAST_LINE2CENTER
         auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, 9));
         _trianglesDirty = true;
 
@@ -1130,10 +1130,10 @@ void DrawNode::_drawPhysicsCircle(const Vec2& center, float radius, const Color&
 
         line[0] = {center, Vec2::ZERO, fillColor};
         line[1] = {center + vec * radius, Vec2::ZERO, fillColor};
-#endif // AX_DRAWNODE_FAST_PHYSICSCIRCLE    
+#endif // AX_DRAWNODE_FAST_LINE2CENTER    
 }
 
-void DrawNode::drawPhysicsCircle(const Vec2& center, float radius, const Color& color, float angle)
+void DrawNode::drawSolidCircle(const Vec2& center, float radius, const Color& color, float angle)
 {
     Vec2 vec = {-1, 0};
     if (angle != 0.0f)
@@ -1142,7 +1142,7 @@ void DrawNode::drawPhysicsCircle(const Vec2& center, float radius, const Color& 
         Vec2 _angle = {cosf(aa), sinf(aa)};
         vec         = {_angle.x, _angle.y};
     }
-    _drawPhysicsCircle(center, radius, color, vec);
+    _drawSolidCircle(center, radius, color, vec);
 }
 
 void DrawNode::_drawSolidCircle(const Vec2& center, float radius, const Color& fillColor, const Color& borderColor, float thickness)

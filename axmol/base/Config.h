@@ -314,12 +314,12 @@ THE SOFTWARE.
 #    define AX_DRAWNODE_PRE_CALCULATING_RADIUS 100
 #endif
 
- /** @def AX_DRAWNODE_FAST_PYSICSCIRCLE
- * 1 = DrawNode 3.0 faster drawPhysicsCircle
+ /** @def AX_DRAWNODE_FAST_LINE2CENTER
+ * 1 = DrawNode 3.0 faster drawSolidCircle with "line2Center"
  * 0 = DrawNode 2.0 drawLine methode (slower)
  */
 #ifndef AX_DRAWNODE_FAST_PHYSICSCIRCLE
-#    define AX_DRAWNODE_FAST_PHYSICSCIRCLE 1
+#    define AX_DRAWNODE_FAST_LINE2CENTER 1
 #endif
 
 /// @name namespace ax
