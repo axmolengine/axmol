@@ -1962,7 +1962,7 @@ void Node::updateTransform()
 Component* Node::getComponent(std::string_view name)
 {
     if (_componentContainer)
-        return _componentContainer->get(name);
+        return _componentContainer->query(name);
 
     return nullptr;
 }

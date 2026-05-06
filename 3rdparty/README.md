@@ -14,12 +14,6 @@
 - Version: 3.2.0-4996f6e (Until Mar 29, 2026)
 - License: MIT
 
-## Bullet
-- [![Upstream](https://img.shields.io/github/v/release/bulletphysics/bullet3?label=Upstream)](https://github.com/bulletphysics/bullet3)
-- Version: 3.25
-- License: zlib
-- Update method: Compare `axmol/3rdparty/bullet` with `bullet3/src`
-
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
 - Version: 1.34.6
@@ -99,6 +93,11 @@
 - [![Upstream](https://img.shields.io/github/v/release/mapbox/jni.hpp?label=Upstream)](https://github.com/mapbox/jni.hpp)
 - Version: v4.0.0
 - License: MIT-like
+
+## JoltPhysics
+- [![Upstream](https://img.shields.io/github/v/release/jrouwe/JoltPhysics?label=Upstream)](https://github.com/jrouwe/JoltPhysics)
+- Version: v5.5.0
+- License: MIT
 
 ## jpeg-turbo
 - [![Upstream](https://img.shields.io/github/v/release/libjpeg-turbo/libjpeg-turbo?label=Upstream)](https://github.com/libjpeg-turbo/libjpeg-turbo)

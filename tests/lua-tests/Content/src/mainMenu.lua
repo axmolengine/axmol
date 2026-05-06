@@ -192,7 +192,7 @@ function CreateTestMenu()
             end
         end
 
-        if obj.name == "Physics3DTest" and nil == ax.Physics3DComponent then
+        if obj.name == "Physics3DTest" and nil == ax.Rigidbody3D then
             testMenuItem:setEnabled(false)
         end
 

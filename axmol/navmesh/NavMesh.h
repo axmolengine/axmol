@@ -70,7 +70,7 @@ public:
     void debugDraw(Renderer* renderer);
 
     /** Enable debug draw or disable. */
-    void setDebugDrawEnable(bool enable);
+    void setDebugDrawEnabled(bool enable);
 
     /** Check enabled debug draw. */
     bool isDebugDrawEnabled() const;

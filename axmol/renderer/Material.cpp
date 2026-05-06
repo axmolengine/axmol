@@ -485,6 +485,12 @@ std::string_view Material::getName() const
     return _name;
 }
 
+void Material::enableTransparentDoubleSided()
+{
+    setTransparent(true);
+    getStateBlock().setCullFaceSide(CullFaceSide::NONE);
+}
+
 void Material::setTransparent(bool value)
 {
     _isTransparent = value;

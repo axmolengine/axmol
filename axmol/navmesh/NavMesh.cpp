@@ -462,7 +462,7 @@ bool NavMesh::isDebugDrawEnabled() const
     return _isDebugDrawEnabled;
 }
 
-void NavMesh::setDebugDrawEnable(bool enable)
+void NavMesh::setDebugDrawEnabled(bool enable)
 {
     _isDebugDrawEnabled = enable;
 }

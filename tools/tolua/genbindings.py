@@ -243,12 +243,12 @@ def main():
                     'ax_sceneio.ini' : ('ax_sceneio', 'axlua_sceneio_auto'), \
                     'ax_spine.ini' : ('ax_spine', 'axlua_spine_auto'), \
                     'ax_physics2d.ini' : ('ax_physics2d', 'axlua_physics2d_auto'), \
+                    'ax_physics3d.ini' : ('ax_physics3d', 'axlua_physics3d_auto'), \
                     'ax_video.ini' : ('ax_video', 'axlua_video_auto'), \
                     'ax_controller.ini' : ('ax_controller', 'axlua_controller_auto'), \
                     'ax_3d.ini': ('ax_3d', 'axlua_3d_auto'), \
                     'ax_audioengine.ini': ('ax_audioengine', 'axlua_audioengine_auto'), \
                     'ax_webview.ini' : ('ax_webview', 'axlua_webview_auto'), \
-                    'ax_physics3d.ini' : ('ax_physics3d', 'axlua_physics3d_auto'), \
                     'ax_navmesh.ini' : ('ax_navmesh', 'axlua_navmesh_auto'), \
                     'ax_fairygui.ini' : ('ax_fairygui', 'axlua_fairygui_auto'), \
                     }
@@ -256,16 +256,20 @@ def main():
         generator_py = '%s/generator.py' % cxx_generator_root
 
         global g_debug_mode
-        for key in cmd_args.keys():
-            args = cmd_args[key]
-            cfg = '%s/%s' % (tolua_root, key)
-            print('Generating bindings for %s...' % (key[:-4]))
-            if not g_debug_mode:
-                command = '"%s" %s %s -s %s -t %s -o %s -n %s' % (python_bin, generator_py, cfg, args[0], target, output_dir, args[1])
-                print(command)
-                _run_cmd(command)
-            else:
-                generate_one(cfg, args[0], target, output_dir, args[1])
+        # generator.py resolves userconf.ini from the current working directory.
+        # Run the generator from tools/tolua so it consistently picks up the file
+        # we just generated above regardless of where genbindings.py is invoked.
+        with _pushd(tolua_root):
+            for key in cmd_args.keys():
+                args = cmd_args[key]
+                cfg = '%s/%s' % (tolua_root, key)
+                print('Generating bindings for %s...' % (key[:-4]))
+                if not g_debug_mode:
+                    command = '"%s" %s %s -s %s -t %s -o %s -n %s' % (python_bin, generator_py, cfg, args[0], target, output_dir, args[1])
+                    print(command)
+                    _run_cmd(command)
+                else:
+                    generate_one(cfg, args[0], target, output_dir, args[1])
 
         print('---------------------------------')
         print('Generating lua bindings succeeds.')

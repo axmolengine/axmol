@@ -186,7 +186,34 @@ if(AX_ENABLE_NAVMESH)
 endif()
 
 if(AX_ENABLE_PHYSICS_3D)
-  ax_add_3rd(bullet)
+  set(jolt_opts "DEBUG_RENDERER_IN_DISTRIBUTION ON")
+
+  set(USE_SSE4_1_OPT "USE_SSE4_1 OFF")
+  set(USE_SSE4_2_OPT "USE_SSE4_2 OFF")
+  set(USE_AVX_OPT "USE_AVX OFF")
+  set(USE_AVX2_OPT "USE_AVX2 OFF")
+  set(USE_AVX512_OPT "USE_AVX512 OFF")
+
+  if (AX_ISA_LEVEL GREATER_EQUAL 2)
+    set(USE_SSE4_1_OPT "USE_SSE4_1 ON")
+  endif()
+  if (AX_ISA_LEVEL GREATER_EQUAL 3)
+    set(USE_SSE4_2_OPT "USE_SSE4_2 ON")
+  endif()
+  if (AX_ISA_LEVEL GREATER_EQUAL 4)
+    set(USE_AVX_OPT "USE_AVX ON")
+    set(USE_AVX2_OPT "USE_AVX2 ON")
+    set(USE_AVX512_OPT "USE_AVX2 ON")
+  endif()
+
+  list(APPEND jolt_opts
+    ${USE_SSE4_1_OPT}
+    ${USE_SSE4_2_OPT}
+    ${USE_AVX_OPT}
+    ${USE_AVX2_OPT}
+    ${USE_AVX512_OPT}
+  )
+  ax_add_3rd(jolt TARGETS Jolt OPTIONS ${jolt_opts})
 endif()
 
 if(AX_WITH_JPEG AND NOT WINRT AND NOT EMSCRIPTEN)
@@ -278,7 +305,7 @@ if(AX_ENABLE_AUDIO)
         "ALSOFT_BACKEND_SDL2 OFF"
       )
     elseif(WINDOWS)
-      list(APPEND alsoft_opts 
+      list(APPEND alsoft_opts
         "ALSOFT_RTKIT OFF"
         "ALSOFT_BACKEND_WASAPI ON"
         "ALSOFT_BACKEND_WAVE OFF"

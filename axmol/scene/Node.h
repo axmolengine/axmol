@@ -1625,6 +1625,13 @@ public:
     void setAdditionalTransform(const Mat4& additionalTransform);
     void setAdditionalTransform(const AffineTransform& additionalTransform);
 
+    template <typename _Ty>
+    _Ty* getComponent() const
+    {
+        return static_cast<_Ty*>(
+            _componentContainer->query([](Component* comp) -> bool { return dynamic_cast<_Ty*>(comp); }));
+    }
+
     /// @} end of Coordinate Converters
 
     /// @{
@@ -2037,6 +2044,12 @@ public:
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(Node);
 };
+
+template <typename _Ty>
+inline _Ty* Component::getComponent() const
+{
+    return _owner ? _owner->template getComponent<_Ty>() : nullptr;
+}
 
 /**
  * This is a helper function, checks a GL screen point is in content rectangle space.

@@ -36,12 +36,11 @@ THE SOFTWARE.
 #include "axmol/renderer/Renderer.h"
 
 #if defined(AX_ENABLE_PHYSICS_2D)
-#    include "axmol/2d/physics/PhysicsWorld2D.h"
+#    include "axmol/physics/2d/PhysicsWorld2D.h"
 #endif
 
 #if defined(AX_ENABLE_PHYSICS_3D)
-#    include "axmol/3d/physics/Physics3DWorld.h"
-#    include "axmol/3d/physics/Physics3DComponent.h"
+#    include "axmol/physics/3d/PhysicsWorld3D.h"
 #endif
 
 #if defined(AX_ENABLE_NAVMESH)
@@ -52,10 +51,9 @@ namespace ax
 {
 
 Scene::Scene()
-    : _event(_director->getEventDispatcher()->addCustomEventListener(
-          Director::EVENT_PROJECTION_CHANGED,
-          std::bind(&Scene::onProjectionChanged, this, std::placeholders::_1)))
 {
+    _event = (_director->getEventDispatcher()->addCustomEventListener(
+        Director::EVENT_PROJECTION_CHANGED, std::bind(&Scene::onProjectionChanged, this, std::placeholders::_1)));
     _event->retain();
 
     _ignoreAnchorPointForPosition = true;
@@ -66,9 +64,10 @@ Scene::Scene()
 
 Scene::~Scene()
 {
+    AX_SAFE_RELEASE(_debugCamera);
+
 #if defined(AX_ENABLE_PHYSICS_3D)
-    AX_SAFE_RELEASE(_physicsWorld3D);
-    AX_SAFE_RELEASE(_physics3dDebugCamera);
+    PhysicsWorld3D::release(_physicsWorld3D);
 #endif
 #if defined(AX_ENABLE_NAVMESH)
     AX_SAFE_RELEASE(_navMesh);
@@ -181,6 +180,11 @@ const std::vector<Camera*>& Scene::getCameras()
     return _cameras;
 }
 
+void Scene::setDebugCamera(Camera* camera)
+{
+    Object::assign(_debugCamera, camera);
+}
+
 void Scene::render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eyeProjection)
 {
     Camera* defaultCamera = nullptr;
@@ -218,10 +222,8 @@ void Scene::render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eye
         // visit the scene
         visit(renderer, transform, 0);
 #if defined(AX_ENABLE_NAVMESH)
-        if (_navMesh && _navMeshDebugCamera == camera)
-        {
+        if (_navMesh)
             _navMesh->debugDraw(renderer);
-        }
 #endif
 
         renderer->render();
@@ -233,26 +235,32 @@ void Scene::render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eye
         //        camera->setNodeToParentTransform(eyeCopy);
     }
 
-#if defined(AX_ENABLE_PHYSICS_3D)
-    if (_physicsWorld3D && _physicsWorld3D->isDebugDrawEnabled())
+#if defined(AX_ENABLE_PHYSICS_3D) || defined(AX_ENABLE_NAVMESH)
+    if (_debugCamera) [[unlikely]]
     {
-        Camera* physics3dDebugCamera = _physics3dDebugCamera != nullptr ? _physics3dDebugCamera : defaultCamera;
-
+        // prepare draw
         if (eyeProjection)
-            physics3dDebugCamera->setAdditionalProjection(*eyeProjection *
-                                                          physics3dDebugCamera->getProjectionMatrix().getInversed());
-
-        physics3dDebugCamera->setAdditionalTransform(eyeTransform.getInversed());
+            _debugCamera->setAdditionalProjection(*eyeProjection * _debugCamera->getProjectionMatrix().getInversed());
+        _debugCamera->setAdditionalTransform(eyeTransform.getInversed());
         _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-        _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION,
-                              physics3dDebugCamera->getViewProjectionMatrix());
+        _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, _debugCamera->getViewProjectionMatrix());
 
-        physics3dDebugCamera->apply();
-        physics3dDebugCamera->clearBackground();
+        _debugCamera->apply();
+        _debugCamera->clearBackground();
 
-        _physicsWorld3D->debugDraw(renderer);
+        // draw
+#    if defined(AX_ENABLE_NAVMESH)
+        if (_navMesh)
+            _navMesh->debugDraw(renderer);
+#    endif
+
+#    if defined(AX_ENABLE_PHYSICS_3D)
+        if (_physicsWorld3D)
+            _physicsWorld3D->debugDraw(renderer);
+#    endif
+
+        // post draw
         renderer->render();
-
         _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     }
 #endif
@@ -307,25 +315,6 @@ void Scene::removeAllChildren()
     }
 }
 
-#if defined(AX_ENABLE_PHYSICS_3D)
-void Scene::setPhysics3DDebugCamera(Camera* camera)
-{
-    AX_SAFE_RETAIN(camera);
-    AX_SAFE_RELEASE(_physics3dDebugCamera);
-    _physics3dDebugCamera = camera;
-}
-#endif
-
-#if defined(AX_ENABLE_NAVMESH)
-void Scene::setNavMeshDebugCamera(Camera* camera)
-{
-    AX_SAFE_RETAIN(camera);
-    AX_SAFE_RELEASE(_navMeshDebugCamera);
-    _navMeshDebugCamera = camera;
-}
-
-#endif
-
 #if (defined(AX_ENABLE_PHYSICS_2D) || defined(AX_ENABLE_PHYSICS_3D))
 
 Scene* Scene::createWithPhysics()
@@ -361,9 +350,7 @@ bool Scene::initPhysicsWorld()
         this->setContentSize(_director->getCanvasSize());
 
 #    if defined(AX_ENABLE_PHYSICS_3D)
-        Physics3DWorldDes info;
-        AX_BREAK_IF(!(_physicsWorld3D = Physics3DWorld::create(&info)));
-        _physicsWorld3D->retain();
+        _physicsWorld3D = PhysicsWorld3D::obtain(this);
 #    endif
 
         // success

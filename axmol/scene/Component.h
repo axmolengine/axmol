@@ -32,9 +32,6 @@ THE SOFTWARE.
 
 namespace ax
 {
-
-class Node;
-
 enum
 {
     kComponentOnEnter,
@@ -43,6 +40,8 @@ enum
     kComponentOnRemove,
     kComponentOnUpdate
 };
+
+class Node;
 
 class AX_DLL Component : public Object
 {
@@ -72,6 +71,9 @@ public:
     virtual void onExit();
     virtual void onAdd();
     virtual void onRemove();
+
+    template <typename _Ty>
+    _Ty* getComponent() const;
 
     /**
      */

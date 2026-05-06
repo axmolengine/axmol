@@ -1,6 +1,6 @@
 #include "./draw.h"
 #include "VisibleRect.h"
-#include "axmol/2d/physics/PhysicsUtility2D.h"
+#include "axmol/physics/2d/PhysicsUtility2D.h"
 #include "imgui.h"
 #include "sample.h"
 
@@ -185,7 +185,7 @@ void DrawBounds(SampleDraw* draw, b2AABB aabb, b2HexColor color)
 
 void DrawScreenString(SampleDraw* draw, float x, float y, b2HexColor color, const char* string, ...)
 {
-    auto rgbaColor = PhysicsUtility2D::toColor(color);
+    auto rgbaColor = b2util::cast(color);
 
     va_list arg;
     va_start(arg, string);
@@ -210,7 +210,7 @@ void DrawWorldString(SampleDraw* draw, SampleCamera* camera, b2Vec2 p, b2HexColo
                  ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_AlwaysAutoResize |
                      ImGuiWindowFlags_NoScrollbar);
     ImGui::SetCursorPos(ImVec2(ps.x, ps.y));
-    auto rgbaColor = PhysicsUtility2D::toColor(color);
+    auto rgbaColor = b2util::cast(color);
     ImGui::TextColoredV(ImColor(rgbaColor.r, rgbaColor.g, rgbaColor.b, rgbaColor.a), string, arg);
     ImGui::End();
     va_end(arg);
@@ -242,7 +242,7 @@ static void b2DrawCircle(b2Vec2 center, float radius, b2HexColor color, SampleDr
 {
     auto ratio  = context->getPTMRatio();
     auto offset = context->getWorldOffset();
-    context->AddCircle(CircleData{PhysicsUtility2D::toColor(color),
+    context->AddCircle(CircleData{b2util::cast(color),
                                   b2Vec2{center.x * ratio + offset.x, center.y * ratio + offset.y}, radius * ratio});
 }
 
@@ -252,8 +252,7 @@ static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, Sam
     // m_circles.push_back({{transform.p.x, transform.p.y, transform.q.c, transform.q.s}, radius, rgba});
     auto ratio  = context->getPTMRatio();
     auto offset = context->getWorldOffset();
-    context->AddCircle({{t.p.x * ratio + offset.x, t.p.y * ratio + offset.y, t.q.c, t.q.s},
-                        PhysicsUtility2D::toColor(color),
+    context->AddCircle({{t.p.x * ratio + offset.x, t.p.y * ratio + offset.y, t.q.c, t.q.s}, b2util::cast(color),
                         radius * ratio});
 }
 
@@ -273,11 +272,11 @@ static void b2DrawSolidCapsule(b2Vec2 pt1, b2Vec2 pt2, float radius, b2HexColor 
 
     b2Vec2 axis = {d.x / length, d.y / length};
     b2Transform transform;
-    transform.p   = PhysicsUtility2D::tob2Vec2(0.5f * (p1 + p2));
+    transform.p   = b2util::cast(0.5f * (p1 + p2));
     transform.q.c = axis.x;
     transform.q.s = axis.y;
 
-    auto rgba = PhysicsUtility2D::toColor(c);
+    auto rgba = b2util::cast(c);
 
     context->AddCapsule({{transform.p.x + offset.x, transform.p.y + offset.y, transform.q.c, transform.q.s},
                          rgba,

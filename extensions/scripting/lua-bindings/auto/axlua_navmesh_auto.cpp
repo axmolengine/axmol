@@ -2136,7 +2136,7 @@ int lua_ax_navmesh_NavMesh_debugDraw(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_navmesh_NavMesh_setDebugDrawEnable(lua_State* tolua_S)
+int lua_ax_navmesh_NavMesh_setDebugDrawEnabled(lua_State* tolua_S)
 {
     int argc = 0;
     ax::NavMesh* obj = nullptr;
@@ -2156,7 +2156,7 @@ int lua_ax_navmesh_NavMesh_setDebugDrawEnable(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_navmesh_NavMesh_setDebugDrawEnable'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_navmesh_NavMesh_setDebugDrawEnabled'", nullptr);
         return 0;
     }
 #endif
@@ -2166,22 +2166,22 @@ int lua_ax_navmesh_NavMesh_setDebugDrawEnable(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.NavMesh:setDebugDrawEnable");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.NavMesh:setDebugDrawEnabled");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMesh_setDebugDrawEnable'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMesh_setDebugDrawEnabled'", nullptr);
             return 0;
         }
-        obj->setDebugDrawEnable(arg0);
+        obj->setDebugDrawEnabled(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMesh:setDebugDrawEnable",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMesh:setDebugDrawEnabled",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_navmesh_NavMesh_setDebugDrawEnable'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_navmesh_NavMesh_setDebugDrawEnabled'.",&tolua_err);
 #endif
 
     return 0;
@@ -2523,7 +2523,7 @@ int lua_register_ax_navmesh_NavMesh(lua_State* tolua_S)
         tolua_function(tolua_S,"new",lua_ax_navmesh_NavMesh_constructor);
         tolua_function(tolua_S,"update",lua_ax_navmesh_NavMesh_update);
         tolua_function(tolua_S,"debugDraw",lua_ax_navmesh_NavMesh_debugDraw);
-        tolua_function(tolua_S,"setDebugDrawEnable",lua_ax_navmesh_NavMesh_setDebugDrawEnable);
+        tolua_function(tolua_S,"setDebugDrawEnabled",lua_ax_navmesh_NavMesh_setDebugDrawEnabled);
         tolua_function(tolua_S,"isDebugDrawEnabled",lua_ax_navmesh_NavMesh_isDebugDrawEnabled);
         tolua_function(tolua_S,"addNavMeshAgent",lua_ax_navmesh_NavMesh_addNavMeshAgent);
         tolua_function(tolua_S,"removeNavMeshAgent",lua_ax_navmesh_NavMesh_removeNavMeshAgent);

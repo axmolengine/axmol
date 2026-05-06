@@ -22568,7 +22568,7 @@ int lua_ax_base_Scene_setCameraOrderDirty(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Scene_onProjectionChanged(lua_State* tolua_S)
+int lua_ax_base_Scene_setDebugCamera(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Scene* obj = nullptr;
@@ -22588,7 +22588,7 @@ int lua_ax_base_Scene_onProjectionChanged(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Scene_onProjectionChanged'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Scene_setDebugCamera'", nullptr);
         return 0;
     }
 #endif
@@ -22596,24 +22596,24 @@ int lua_ax_base_Scene_onProjectionChanged(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        ax::EventCustom* arg0;
+        ax::Camera* arg0;
 
-        ok &= luaval_to_object<ax::EventCustom>(tolua_S, 2, "ax.EventCustom",&arg0, "ax.Scene:onProjectionChanged");
+        ok &= luaval_to_object<ax::Camera>(tolua_S, 2, "ax.Camera",&arg0, "ax.Scene:setDebugCamera");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scene_onProjectionChanged'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scene_setDebugCamera'", nullptr);
             return 0;
         }
-        obj->onProjectionChanged(arg0);
+        obj->setDebugCamera(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:onProjectionChanged",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:setDebugCamera",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scene_onProjectionChanged'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scene_setDebugCamera'.",&tolua_err);
 #endif
 
     return 0;
@@ -23017,7 +23017,7 @@ int lua_register_ax_base_Scene(lua_State* tolua_S)
         tolua_function(tolua_S,"render",lua_ax_base_Scene_render);
         tolua_function(tolua_S,"initWithSize",lua_ax_base_Scene_initWithSize);
         tolua_function(tolua_S,"setCameraOrderDirty",lua_ax_base_Scene_setCameraOrderDirty);
-        tolua_function(tolua_S,"onProjectionChanged",lua_ax_base_Scene_onProjectionChanged);
+        tolua_function(tolua_S,"setDebugCamera",lua_ax_base_Scene_setDebugCamera);
         tolua_function(tolua_S,"getPhysicsWorld2D",lua_ax_base_Scene_getPhysicsWorld2D);
         tolua_function(tolua_S,"initWithPhysics",lua_ax_base_Scene_initWithPhysics);
         tolua_function(tolua_S,"initPhysicsWorld",lua_ax_base_Scene_initPhysicsWorld);
@@ -97207,6 +97207,53 @@ int lua_ax_base_Material_getPrimitiveType(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Material_enableTransparentDoubleSided(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Material* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Material",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Material*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Material_enableTransparentDoubleSided'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Material_enableTransparentDoubleSided'", nullptr);
+            return 0;
+        }
+        obj->enableTransparentDoubleSided();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Material:enableTransparentDoubleSided",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Material_enableTransparentDoubleSided'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Material_setTransparent(lua_State* tolua_S)
 {
     int argc = 0;
@@ -97535,6 +97582,7 @@ int lua_register_ax_base_Material(lua_State* tolua_S)
         tolua_function(tolua_S,"getRenderState",lua_ax_base_Material_getRenderState);
         tolua_function(tolua_S,"setPrimitiveType",lua_ax_base_Material_setPrimitiveType);
         tolua_function(tolua_S,"getPrimitiveType",lua_ax_base_Material_getPrimitiveType);
+        tolua_function(tolua_S,"enableTransparentDoubleSided",lua_ax_base_Material_enableTransparentDoubleSided);
         tolua_function(tolua_S,"setTransparent",lua_ax_base_Material_setTransparent);
         tolua_function(tolua_S,"isTransparent",lua_ax_base_Material_isTransparent);
         tolua_function(tolua_S,"setForce2DQueue",lua_ax_base_Material_setForce2DQueue);

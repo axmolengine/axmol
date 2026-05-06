@@ -74,6 +74,14 @@ namespace ax
 {
 struct radians_tag
 {};
+
+struct bvec3
+{
+    bool x{false};
+    bool y{false};
+    bool z{false};
+};
+
 }  // namespace ax
 
 /**
