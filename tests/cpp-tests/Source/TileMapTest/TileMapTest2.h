@@ -363,4 +363,47 @@ public:
     void onTouchBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
 };
 
+// Multi-tileset support tests
+
+/** Loads a single-tileset map and verifies each layer has exactly one batch — backward-compat check. */
+class TMXMultiTilesetBackwardCompatTest : public TileDemoNew
+{
+public:
+    CREATE_FUNC(TMXMultiTilesetBackwardCompatTest);
+    TMXMultiTilesetBackwardCompatTest();
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+/** Tests batchIndexForGID and getBatches() return sane values on a loaded map. */
+class TMXMultiTilesetBatchApiTest : public TileDemoNew
+{
+public:
+    CREATE_FUNC(TMXMultiTilesetBatchApiTest);
+    TMXMultiTilesetBatchApiTest();
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+/** Calls setTileSet on a layer and verifies all prior batches are replaced by exactly one new batch. */
+class TMXMultiTilesetSetTileSetTest : public TileDemoNew
+{
+public:
+    CREATE_FUNC(TMXMultiTilesetSetTileSetTest);
+    TMXMultiTilesetSetTileSetTest();
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+class MultiTileSetsTestNew : public TileDemoNew
+{
+public:
+    CREATE_FUNC(MultiTileSetsTestNew);
+    MultiTileSetsTestNew();
+    virtual std::string title() const override;
+
+    ax::FastTMXTiledMap* map{nullptr};
+    bool _animStarted = true;
+};
+
 #endif

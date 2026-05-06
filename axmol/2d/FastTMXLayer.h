@@ -28,7 +28,9 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
+#include <span>
 #include <unordered_map>
+#include <vector>
 #include "axmol/scene/Node.h"
 #include "axmol/2d/TMXXMLParser.h"
 #include "axmol/renderer/CustomCommand.h"
@@ -57,6 +59,32 @@ class Buffer;
  * !!! uncomment if you want reduce bandwidth of GPU, then the tiled layer size will be limited to 128x128
  */
 #define AX_FAST_TILEMAP_32_BIT_INDICES 1
+
+/**
+ * Per-tileset rendering batch used by FastTMXLayer.
+ * Holds the index buffer, draw commands, and tileset metadata for one tileset
+ * contributing tiles to a layer. The shared vertex buffer lives in FastTMXLayer.
+ */
+struct TilesetBatch
+{
+    TMXTilesetInfo* tilesetInfo = nullptr;
+    Texture2D* texture          = nullptr;
+    rhi::Buffer* indexBuffer    = nullptr;
+
+#ifdef AX_FAST_TILEMAP_32_BIT_INDICES
+    std::vector<unsigned int> indices;
+#else
+    std::vector<unsigned short> indices;
+#endif
+
+    std::map<int, int> indicesVertexZOffsets;
+    std::unordered_map<int, int> indicesVertexZNumber;
+    std::unordered_map<int, CustomCommand*> customCommands;
+
+    rhi::UniformLocation mvpMatrixLocation;
+    rhi::UniformLocation textureLocation;
+    rhi::UniformLocation alphaValueLocation;
+};
 
 /** @brief FastTMXLayer represents the TMX layer.
 
@@ -102,6 +130,11 @@ public:
      * @return Return an autorelease object.
      */
     static FastTMXLayer* create(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
+
+    /** Creates a FastTMXLayer with multiple tilesets (one layer may reference tiles from several tilesets). */
+    static FastTMXLayer* create(std::span<TMXTilesetInfo* const> tilesets,
+                                TMXLayerInfo* layerInfo,
+                                TMXMapInfo* mapInfo);
     /**
      */
     FastTMXLayer();
@@ -216,18 +249,10 @@ public:
      *
      * @return Tileset information for the layer.
      */
-    TMXTilesetInfo* getTileSet() const { return _tileSet; }
+    TMXTilesetInfo* getTileSet() const { return _batches.empty() ? nullptr : _batches[0].tilesetInfo; }
 
-    /** Set the tileset information for the layer.
-     *
-     * @param info The new tileset information for the layer.
-     */
-    void setTileSet(TMXTilesetInfo* info)
-    {
-        AX_SAFE_RETAIN(info);
-        AX_SAFE_RELEASE(_tileSet);
-        _tileSet = info;
-    }
+    /** Set the tileset information for the layer (updates the primary batch). */
+    void setTileSet(TMXTilesetInfo* info);
 
     /** Layer orientation, which is the same as the map orientation.
      *
@@ -295,6 +320,13 @@ public:
     TMXTileAnimManager* getTileAnimManager() const { return _tileAnimManager; }
 
     bool initWithTilesetInfo(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
+    bool initWithTilesets(std::span<TMXTilesetInfo* const> tilesets, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
+
+    /** Returns the batch index owning the given GID, or -1 if the GID is empty/unknown. */
+    int batchIndexForGID(uint32_t gid) const;
+
+    /** Read-only access to all tileset batches (needed by TMXTileAnimManager). */
+    const std::vector<TilesetBatch>& getBatches() const { return _batches; }
 
 protected:
     void setOpacity(uint8_t opacity) override;
@@ -319,8 +351,9 @@ protected:
     int getTileIndexByPos(int x, int y) const { return x + y * (int)_layerSize.width; }
 
     void updateVertexBuffer();
-    void updateIndexBuffer();
+    void updateIndexBuffers();
     void updatePrimitives();
+    void recomputeMaxTileSize();
 
     //! name of the layer
     std::string _layerName;
@@ -331,8 +364,8 @@ protected:
     Vec2 _mapTileSize;
     /** pointer to the map of tiles */
     uint32_t* _tiles = nullptr;
-    /** Tileset information for the layer */
-    TMXTilesetInfo* _tileSet = nullptr;
+    /** All tileset batches for this layer (one per tileset used, sorted descending by firstGid). */
+    std::vector<TilesetBatch> _batches;
     /** Layer orientation, which is the same as the map orientation */
     int _layerOrientation = FAST_TMX_ORIENTATION_ORTHO;
     int _staggerAxis      = TMXStaggerAxis_Y;
@@ -345,7 +378,8 @@ protected:
     /** pointer to the tile animation manager of this layer */
     TMXTileAnimManager* _tileAnimManager = nullptr;
 
-    Texture2D* _texture = nullptr;
+    /** Maps tile-flat-index → batch index in _batches (-1 for empty tiles). Parallel to _tileToQuadIndex. */
+    std::vector<int> _tilesetBatchIndex;
 
     /** container for sprite children. map<index, pair<sprite, gid> > */
     std::map<int, std::pair<Sprite*, uint32_t>> _spriteContainer;
@@ -362,28 +396,18 @@ protected:
     /** data for rendering */
     bool _quadsDirty          = true;
     Vec2 _cameraPositionDirty = {INFINITY, INFINITY};
-    float _cameraZoomDirty;
+    float _cameraZoomDirty    = NAN;
 
     std::vector<int> _tileToQuadIndex;
     std::vector<V3F_T2F_C4B_Quad> _totalQuads;
-#ifdef AX_FAST_TILEMAP_32_BIT_INDICES
-    std::vector<unsigned int> _indices;
-#else
-    std::vector<unsigned short> _indices;
-#endif
-    std::map<int /*vertexZ*/, int /*offset to _indices by quads*/> _indicesVertexZOffsets;
-    std::unordered_map<int /*vertexZ*/, int /*number to quads*/> _indicesVertexZNumber;
     bool _dirty = true;
 
     rhi::Buffer* _vertexBuffer = nullptr;
-    rhi::Buffer* _indexBuffer  = nullptr;
+
+    /** Maximum tile size across all batches, in pixels. Cached at batch-change time. */
+    Vec2 _maxTileSize;
 
     float _alphaFuncValue = 0.f;
-    std::unordered_map<int, CustomCommand*> _customCommands;
-
-    rhi::UniformLocation _mvpMatrixLocaiton;
-    rhi::UniformLocation _textureLocation;
-    rhi::UniformLocation _alphaValueLocation;
 };
 
 /** @brief TMXTileAnimTask represents the frame-tick task of an animated tile.

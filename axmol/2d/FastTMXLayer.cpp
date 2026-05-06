@@ -37,6 +37,7 @@ THE SOFTWARE.
 
  */
 #include "axmol/2d/FastTMXLayer.h"
+#include <span>
 #include <stddef.h>  // offsetof
 #include "axmol/base/Types.h"
 #include "axmol/2d/FastTMXTiledMap.h"
@@ -61,8 +62,15 @@ const int FastTMXLayer::FAST_TMX_ORIENTATION_ISO   = 2;
 // FastTMXLayer - init & alloc & dealloc
 FastTMXLayer* FastTMXLayer::create(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo)
 {
+    return tilesetInfo ? create(std::span<TMXTilesetInfo* const>{&tilesetInfo, 1}, layerInfo, mapInfo) : nullptr;
+}
+
+FastTMXLayer* FastTMXLayer::create(std::span<TMXTilesetInfo* const> tilesets,
+                                   TMXLayerInfo* layerInfo,
+                                   TMXMapInfo* mapInfo)
+{
     FastTMXLayer* ret = new FastTMXLayer();
-    if (ret->initWithTilesetInfo(tilesetInfo, layerInfo, mapInfo))
+    if (ret->initWithTilesets(tilesets, layerInfo, mapInfo))
     {
         ret->autorelease();
         return ret;
@@ -73,11 +81,34 @@ FastTMXLayer* FastTMXLayer::create(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* la
 
 bool FastTMXLayer::initWithTilesetInfo(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo)
 {
-
     if (tilesetInfo)
     {
-        _texture = _director->getTextureCache()->addImage(tilesetInfo->_sourceImage);
-        _texture->retain();
+        TMXTilesetInfo* ts[] = {tilesetInfo};
+        return initWithTilesets(ts, layerInfo, mapInfo);
+    }
+    return initWithTilesets({}, layerInfo, mapInfo);
+}
+
+bool FastTMXLayer::initWithTilesets(std::span<TMXTilesetInfo* const> tilesets,
+                                    TMXLayerInfo* layerInfo,
+                                    TMXMapInfo* mapInfo)
+{
+    if (!layerInfo || !mapInfo)
+        return false;
+
+    auto* cache = _director->getTextureCache();
+    _batches.reserve(tilesets.size());
+    for (auto* ts : tilesets)
+    {
+        if (!ts)
+            continue;
+        TilesetBatch batch;
+        batch.tilesetInfo = ts;
+        AX_SAFE_RETAIN(batch.tilesetInfo);
+        batch.texture = cache->addImage(ts->_sourceImage);
+        if (batch.texture)
+            batch.texture->retain();
+        _batches.push_back(std::move(batch));
     }
 
     // layerInfo
@@ -88,28 +119,21 @@ bool FastTMXLayer::initWithTilesetInfo(TMXTilesetInfo* tilesetInfo, TMXLayerInfo
     setOpacity(layerInfo->_opacity);
     setProperties(layerInfo->getProperties());
 
-    // tilesetInfo
-    _tileSet = tilesetInfo;
-    AX_SAFE_RETAIN(_tileSet);
-
     // mapInfo
     _mapTileSize      = mapInfo->getTileSize();
     _layerOrientation = mapInfo->getOrientation();
     _staggerAxis      = mapInfo->getStaggerAxis();
     _staggerIndex     = mapInfo->getStaggerIndex();
 
-    // offset (after layer orientation is set);
     Vec2 offset = this->calculateLayerOffset(layerInfo->_offset);
     this->setPosition(AX_POINT_PIXELS_TO_POINTS(offset));
-
     this->setContentSize(
         AX_SIZE_PIXELS_TO_POINTS(Vec2(_layerSize.width * _mapTileSize.width, _layerSize.height * _mapTileSize.height)));
 
     this->tileToNodeTransform();
-
     _useAutomaticVertexZ = false;
     _vertexZvalue        = 0;
-
+    recomputeMaxTileSize();
     return true;
 }
 
@@ -117,26 +141,85 @@ FastTMXLayer::FastTMXLayer() {}
 
 FastTMXLayer::~FastTMXLayer()
 {
-    AX_SAFE_RELEASE(_tileSet);
-    AX_SAFE_RELEASE(_texture);
+    AX_SAFE_RELEASE(_tileAnimManager);
+    for (auto& batch : _batches)
+    {
+        AX_SAFE_RELEASE(batch.tilesetInfo);
+        AX_SAFE_RELEASE(batch.texture);
+        AX_SAFE_RELEASE(batch.indexBuffer);
+        for (auto& [_, cmd] : batch.customCommands)
+        {
+            cmd->releasePSVL();
+            delete cmd;
+        }
+    }
     AX_SAFE_FREE(_tiles);
     AX_SAFE_RELEASE(_vertexBuffer);
-    AX_SAFE_RELEASE(_indexBuffer);
+}
 
-    for (auto& [_, cmd] : _customCommands)
+void FastTMXLayer::setTileSet(TMXTilesetInfo* info)
+{
+    if (!info)
+        return;
+
+    for (auto& batch : _batches)
     {
-        cmd->releasePSVL();
-        delete cmd;
+        AX_SAFE_RELEASE(batch.tilesetInfo);
+        AX_SAFE_RELEASE(batch.texture);
+        AX_SAFE_RELEASE(batch.indexBuffer);
+        for (auto& [_, cmd] : batch.customCommands)
+        {
+            cmd->releasePSVL();
+            delete cmd;
+        }
     }
+    _batches.clear();
+
+    TilesetBatch batch;
+    batch.tilesetInfo = info;
+    AX_SAFE_RETAIN(batch.tilesetInfo);
+    batch.texture = _director->getTextureCache()->addImage(info->_sourceImage);
+    if (batch.texture)
+        batch.texture->retain();
+    _batches.push_back(std::move(batch));
+
+    _quadsDirty = true;
+    recomputeMaxTileSize();
+}
+
+void FastTMXLayer::recomputeMaxTileSize()
+{
+    _maxTileSize = Vec2::ZERO;
+    for (auto& batch : _batches)
+    {
+        _maxTileSize.x = std::max(_maxTileSize.x, batch.tilesetInfo->_tileSize.x);
+        _maxTileSize.y = std::max(_maxTileSize.y, batch.tilesetInfo->_tileSize.y);
+    }
+}
+
+int FastTMXLayer::batchIndexForGID(uint32_t gid) const
+{
+    const uint32_t bareGID = gid & kTMXFlippedMask;
+    if (bareGID == 0)
+        return -1;
+    // _batches is sorted descending by firstGid — first match wins.
+    for (int i = 0; i < (int)_batches.size(); ++i)
+    {
+        if (bareGID >= static_cast<uint32_t>(_batches[i].tilesetInfo->_firstGid))
+            return i;
+    }
+    return -1;
 }
 
 void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
     updateTotalQuads();
 
-    auto cam = Camera::getVisitingCamera();
-    if (flags != 0 || _dirty || _quadsDirty ||
-        !_cameraPositionDirty.fuzzyEquals(cam->getPosition(), _tileSet->_tileSize.x) ||
+    const float refTileX = _batches.empty() ? 1.0f : _batches[0].tilesetInfo->_tileSize.x;
+    auto cam             = Camera::getVisitingCamera();
+    if (!cam)
+        return;
+    if (flags != 0 || _dirty || _quadsDirty || !_cameraPositionDirty.fuzzyEquals(cam->getPosition(), refTileX) ||
         _cameraZoomDirty != cam->getZoom())
     {
         _cameraPositionDirty = cam->getPosition();
@@ -152,21 +235,25 @@ void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
         rect = RectApplyTransform(rect, inv);
 
         updateTiles(rect);
-        updateIndexBuffer();
+        updateIndexBuffers();
         updatePrimitives();
         _dirty = false;
     }
 
     const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     Mat4 finalMat             = projectionMat * _modelViewTransform;
-    for (const auto& [_, cmd] : _customCommands)
+    // Submit batches lowest-firstGid first so base/terrain tiles (low GIDs) draw behind
+    // overlay/object tiles (high GIDs) that share the same vertexZ.
+    for (auto it = _batches.rbegin(); it != _batches.rend(); ++it)
     {
-        if (cmd->getIndexDrawCount() > 0)
+        for (const auto& [_, cmd] : it->customCommands)
         {
-            auto ps                = cmd->unsafePS();
-            auto mvpmatrixLocation = ps->getUniformLocation("u_MVPMatrix");
-            ps->setUniform(mvpmatrixLocation, finalMat.m, sizeof(finalMat.m));
-            renderer->addCommand(cmd);
+            if (cmd->getIndexDrawCount() > 0)
+            {
+                // All commands in a batch share the same program, so the cached location is valid.
+                cmd->unsafePS()->setUniform(it->mvpMatrixLocation, finalMat.m, sizeof(finalMat.m));
+                renderer->addCommand(cmd);
+            }
         }
     }
 }
@@ -175,7 +262,7 @@ void FastTMXLayer::updateTiles(const Rect& culledRect)
 {
     Rect visibleTiles        = Rect(culledRect.origin, culledRect.size);
     Vec2 mapTileSize         = AX_SIZE_PIXELS_TO_POINTS(_mapTileSize);
-    Vec2 tileSize            = AX_SIZE_PIXELS_TO_POINTS(_tileSet->_tileSize);
+    Vec2 tileSize            = AX_SIZE_PIXELS_TO_POINTS(_maxTileSize);
     Mat4 nodeToTileTransform = _tileToNodeTransform.getInversed();
     // transform to tile
     visibleTiles = RectApplyTransform(visibleTiles, nodeToTileTransform);
@@ -221,11 +308,11 @@ void FastTMXLayer::updateTiles(const Rect& culledRect)
         // AXASSERT(0, "TMX invalid value");
     }
 
-    _indicesVertexZNumber.clear();
-
-    for (const auto& iter : _indicesVertexZOffsets)
+    for (auto& batch : _batches)
     {
-        _indicesVertexZNumber[iter.first] = iter.second;
+        batch.indicesVertexZNumber.clear();
+        for (const auto& [vz, offset] : batch.indicesVertexZOffsets)
+            batch.indicesVertexZNumber[vz] = offset;
     }
 
     int yBegin = static_cast<int>(std::max(0.f, visibleTiles.origin.y - tilesOverY));
@@ -243,66 +330,89 @@ void FastTMXLayer::updateTiles(const Rect& culledRect)
             if (_tiles[tileIndex] == 0)
                 continue;
 
+            int bi = _tilesetBatchIndex[tileIndex];
+            if (bi < 0)
+                continue;
+            auto& batch = _batches[bi];
+
             int vertexZ = getVertexZForPos(Vec2((float)x, (float)y));
-            auto iter   = _indicesVertexZNumber.find(vertexZ);
-            int offset  = iter->second;
+            auto iter   = batch.indicesVertexZNumber.find(vertexZ);
+            if (iter == batch.indicesVertexZNumber.end())
+                continue;
+            int offset = iter->second;
             iter->second++;
 
-            auto quadIndex           = static_cast<decltype(_indices)::value_type>(_tileToQuadIndex[tileIndex]);
-            _indices[6 * offset + 0] = quadIndex * 4 + 0;
-            _indices[6 * offset + 1] = quadIndex * 4 + 1;
-            _indices[6 * offset + 2] = quadIndex * 4 + 2;
-            _indices[6 * offset + 3] = quadIndex * 4 + 3;
-            _indices[6 * offset + 4] = quadIndex * 4 + 2;
-            _indices[6 * offset + 5] = quadIndex * 4 + 1;
+            auto quadIndex = static_cast<decltype(batch.indices)::value_type>(_tileToQuadIndex[tileIndex]);
+            batch.indices[6 * offset + 0] = quadIndex * 4 + 0;
+            batch.indices[6 * offset + 1] = quadIndex * 4 + 1;
+            batch.indices[6 * offset + 2] = quadIndex * 4 + 2;
+            batch.indices[6 * offset + 3] = quadIndex * 4 + 3;
+            batch.indices[6 * offset + 4] = quadIndex * 4 + 2;
+            batch.indices[6 * offset + 5] = quadIndex * 4 + 1;
 
         }  // for x
     }  // for y
 
-    for (const auto& iter : _indicesVertexZOffsets)
+    for (auto& batch : _batches)
     {
-        _indicesVertexZNumber[iter.first] -= iter.second;
-        if (_indicesVertexZNumber[iter.first] == 0)
+        for (const auto& [vz, offset] : batch.indicesVertexZOffsets)
         {
-            _indicesVertexZNumber.erase(iter.first);
+            batch.indicesVertexZNumber[vz] -= offset;
+            if (batch.indicesVertexZNumber[vz] == 0)
+                batch.indicesVertexZNumber.erase(vz);
         }
     }
 }
 
 void FastTMXLayer::updateVertexBuffer()
 {
+    if (_totalQuads.empty())
+        return;
     unsigned int vertexBufferSize = (unsigned int)(sizeof(V3F_T2F_C4B) * _totalQuads.size() * 4);
     if (!_vertexBuffer)
     {
-        _vertexBuffer = axdrv->createBuffer(vertexBufferSize, rhi::BufferType::VERTEX, rhi::BufferUsage::STATIC);
+        // Allocate for the maximum possible tile count so the buffer never needs to be
+        // recreated when setTileGID adds tiles that were absent on the first draw.
+        // Recreating the buffer would also invalidate existing CustomCommand references.
+        const unsigned int maxSize = (unsigned int)(sizeof(V3F_T2F_C4B) * _layerSize.width * _layerSize.height * 4);
+        _vertexBuffer              = axdrv->createBuffer(maxSize, rhi::BufferType::VERTEX, rhi::BufferUsage::STATIC);
     }
     _vertexBuffer->updateData(&_totalQuads[0], vertexBufferSize);
 }
 
-void FastTMXLayer::updateIndexBuffer()
+void FastTMXLayer::updateIndexBuffers()
 {
-    auto indexBufferSize = (sizeof(decltype(_indices)::value_type) * _indices.size());
-    if (!_indexBuffer)
+    for (auto& batch : _batches)
     {
-        _indexBuffer = axdrv->createBuffer(indexBufferSize, rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
+        if (batch.indices.empty())
+            continue;
+        const auto size = sizeof(decltype(batch.indices)::value_type) * batch.indices.size();
+        // Recreate the buffer if the tile count grew beyond its allocated capacity.
+        if (batch.indexBuffer && size > batch.indexBuffer->getCapacity())
+        {
+            AX_SAFE_RELEASE(batch.indexBuffer);
+            batch.indexBuffer = nullptr;
+        }
+        if (!batch.indexBuffer)
+            batch.indexBuffer = axdrv->createBuffer(size, rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
+        batch.indexBuffer->updateData(batch.indices.data(), size);
     }
-    _indexBuffer->updateData(&_indices[0], indexBufferSize);
 }
 
 // FastTMXLayer - setup Tiles
 void FastTMXLayer::setupTiles()
 {
-    // Optimization: quick hack that sets the image size on the tileset
-    _tileSet->_imageSize = _texture->getContentSizeInPixels();
+    float maxTileHeight = 0.f;
+    for (auto& batch : _batches)
+    {
+        if (batch.texture)
+        {
+            batch.tilesetInfo->_imageSize = batch.texture->getContentSizeInPixels();
+            batch.texture->setAliasTexParameters();
+        }
+        maxTileHeight = std::max(maxTileHeight, batch.tilesetInfo->_tileSize.height);
+    }
 
-    // By default all the tiles are aliased
-    // pros: easier to render
-    // cons: difficult to scale / rotate / etc.
-    _texture->setAliasTexParameters();
-
-    // CFByteOrder o = CFByteOrderGetCurrent();
-
-    // Parse axmol properties
     this->parseInternalProperties();
 
     auto& screenSize = _director->getCanvasSize();
@@ -312,9 +422,7 @@ void FastTMXLayer::setupTiles()
     case FAST_TMX_ORIENTATION_ORTHO:
         _screenGridSize.width  = ceil(screenSize.width / _mapTileSize.width) + 1;
         _screenGridSize.height = ceil(screenSize.height / _mapTileSize.height) + 1;
-
-        // tiles could be bigger than the grid, add additional rows if needed
-        _screenGridSize.height += _tileSet->_tileSize.height / _mapTileSize.height;
+        _screenGridSize.height += maxTileHeight / _mapTileSize.height;
         break;
     case FAST_TMX_ORIENTATION_ISO:
         _screenGridSize.width  = ceil(screenSize.width / _mapTileSize.width) + 2;
@@ -328,7 +436,12 @@ void FastTMXLayer::setupTiles()
 
     _screenTileCount = (int)(_screenGridSize.width * _screenGridSize.height);
 
-    if (!_tileSet->_animationInfo.empty())
+    // Check any batch for animation info.
+    bool hasAnyAnim = false;
+    for (auto& batch : _batches)
+        hasAnyAnim = hasAnyAnim || !batch.tilesetInfo->_animationInfo.empty();
+
+    if (hasAnyAnim)
     {
         /// FastTMXLayer: anim support
         for (int y = 0; y < _layerSize.height; y++)
@@ -373,10 +486,10 @@ void FastTMXLayer::setupTiles()
                 // FIXME:: gid == 0 --> empty tile
                 if (gid != 0)
                 {
-                    if (_tileSet->_animationInfo.find(gid) != _tileSet->_animationInfo.end())
-                    {
+                    int bi = batchIndexForGID(gid);
+                    if (bi >= 0 && _batches[bi].tilesetInfo->_animationInfo.find(gid) !=
+                                       _batches[bi].tilesetInfo->_animationInfo.end())
                         _animTileCoord[gid].emplace_back(TMXTileAnimFlag{Vec2(newX, y), flags});
-                    }
                 }
             }
         }
@@ -425,62 +538,64 @@ Mat4 FastTMXLayer::tileToNodeTransform()
 
 void FastTMXLayer::updatePrimitives()
 {
-
-    for (auto& e : _customCommands)
+    for (auto& batch : _batches)
     {
-        e.second->setIndexDrawInfo(0, 0);
-    }
+        for (auto& [_, cmd] : batch.customCommands)
+            cmd->setIndexDrawInfo(0, 0);
 
-    auto blendfunc =
-        _texture->hasPremultipliedAlpha() ? BlendFunc::ALPHA_PREMULTIPLIED : BlendFunc::ALPHA_NON_PREMULTIPLIED;
-    for (const auto& iter : _indicesVertexZNumber)
-    {
-        int start = _indicesVertexZOffsets.at(iter.first);
+        if (!batch.texture || !batch.indexBuffer)
+            continue;
 
-        auto commandIter = _customCommands.find(iter.first);
-        if (_customCommands.end() == commandIter)
+        auto blendfunc = batch.texture->hasPremultipliedAlpha() ? BlendFunc::ALPHA_PREMULTIPLIED
+                                                                : BlendFunc::ALPHA_NON_PREMULTIPLIED;
+        for (const auto& [vertexZ, count] : batch.indicesVertexZNumber)
         {
-            auto command = new CustomCommand();
-            command->setVertexBuffer(_vertexBuffer);
+            int start = batch.indicesVertexZOffsets.at(vertexZ);
+
+            auto cmdIt = batch.customCommands.find(vertexZ);
+            if (cmdIt == batch.customCommands.end())
+            {
+                auto* command = new CustomCommand();
+                command->setVertexBuffer(_vertexBuffer);
 
 #ifdef AX_FAST_TILEMAP_32_BIT_INDICES
-            CustomCommand::IndexFormat indexFormat = CustomCommand::IndexFormat::U_INT;
+                CustomCommand::IndexFormat indexFormat = CustomCommand::IndexFormat::U_INT;
 #else
-            CustomCommand::IndexFormat indexFormat = CustomCommand::IndexFormat::U_SHORT;
+                CustomCommand::IndexFormat indexFormat = CustomCommand::IndexFormat::U_SHORT;
 #endif
-            command->setIndexBuffer(_indexBuffer, indexFormat);
+                command->setIndexBuffer(batch.indexBuffer, indexFormat);
+                command->setIndexDrawInfo(start * 6, count * 6);
 
-            command->setIndexDrawInfo(start * 6, iter.second * 6);
+                ProgramState* ps{nullptr};
+                VertexLayout* vl{nullptr};
+                if (_useAutomaticVertexZ)
+                {
+                    auto* program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
+                    ps            = new rhi::ProgramState(program);
+                    vl            = program->getVertexLayout();
+                    batch.alphaValueLocation = ps->getUniformLocation("u_alpha_value");
+                    ps->setUniform(batch.alphaValueLocation, &_alphaFuncValue, sizeof(_alphaFuncValue));
+                }
+                else
+                {
+                    auto* program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR);
+                    ps            = new rhi::ProgramState(program);
+                    vl            = program->getVertexLayout();
+                }
 
-            ProgramState* ps{nullptr};
-            VertexLayout* vl{nullptr};
-            if (_useAutomaticVertexZ)
-            {
-                auto* program       = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
-                ps                  = new rhi::ProgramState(program);
-                vl                  = program->getVertexLayout();
-                _alphaValueLocation = ps->getUniformLocation("u_alpha_value");
-                ps->setUniform(_alphaValueLocation, &_alphaFuncValue, sizeof(_alphaFuncValue));
+                command->setOwnPSVL(ps, vl, RenderCommand::ADOPT_FLAG_PS);
+
+                batch.mvpMatrixLocation = ps->getUniformLocation("u_MVPMatrix");
+                batch.textureLocation   = ps->getUniformLocation("u_tex0");
+                ps->setTexture(batch.textureLocation, 0, batch.texture->getRHITexture());
+                command->init(_globalZOrder, blendfunc);
+
+                batch.customCommands[vertexZ] = command;
             }
             else
             {
-                auto* program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR);
-                ps            = new rhi::ProgramState(program);
-                vl            = program->getVertexLayout();
+                cmdIt->second->setIndexDrawInfo(start * 6, count * 6);
             }
-
-            command->setOwnPSVL(ps, vl, RenderCommand::ADOPT_FLAG_PS);
-
-            _mvpMatrixLocaiton = ps->getUniformLocation("u_MVPMatrix");
-            _textureLocation   = ps->getUniformLocation("u_tex0");
-            ps->setTexture(_textureLocation, 0, _texture->getRHITexture());
-            command->init(_globalZOrder, blendfunc);
-
-            _customCommands[iter.first] = command;
-        }
-        else
-        {
-            commandIter->second->setIndexDrawInfo(start * 6, iter.second * 6);
         }
     }
 }
@@ -493,153 +608,183 @@ void FastTMXLayer::setOpacity(uint8_t opacity)
 
 void FastTMXLayer::updateTotalQuads()
 {
-    if (_quadsDirty)
+    if (!_quadsDirty)
+        return;
+
+    const int tileCount = (int)(_layerSize.width * _layerSize.height);
+    _tileToQuadIndex.assign(tileCount, -1);
+    _tilesetBatchIndex.assign(tileCount, -1);
+    _totalQuads.resize(tileCount);
+
+    for (auto& batch : _batches)
     {
-        Vec2 tileSize = AX_SIZE_PIXELS_TO_POINTS(_tileSet->_tileSize);
-        Vec2 texSize  = _tileSet->_imageSize;
-        // Tiled stores tileoffset in screen-space pixels (y-down); convert to Axmol node-space (y-up).
-        const float csf       = AX_CONTENT_SCALE_FACTOR();
-        const Vec2 tileOffset = Vec2(_tileSet->_tileOffset.x / csf, -_tileSet->_tileOffset.y / csf);
-        _tileToQuadIndex.clear();
-        _totalQuads.resize(int(_layerSize.width * _layerSize.height));
-        _indices.resize(6 * int(_layerSize.width * _layerSize.height));
-        _tileToQuadIndex.resize(int(_layerSize.width * _layerSize.height), -1);
-        _indicesVertexZOffsets.clear();
+        batch.indicesVertexZOffsets.clear();
+    }
 
-        auto color = Color32::WHITE;
-        color.a    = getDisplayedOpacity();
+    const float csf   = AX_CONTENT_SCALE_FACTOR();
+    const uint8_t opa = getDisplayedOpacity();
 
-        if (_texture->hasPremultipliedAlpha())
+    // Per-batch constants: precomputed once per tileset, looked up by batch index in the tile loop.
+    struct BatchCache
+    {
+        Vec2 tileSize;
+        Vec2 tileOffset;
+        Vec2 texSize;
+        float ptx;
+        float pty;
+        Color32 color;
+    };
+    std::vector<BatchCache> batchCache(_batches.size());
+    for (int i = 0; i < static_cast<int>(_batches.size()); ++i)
+    {
+        auto* ts          = _batches[i].tilesetInfo;
+        const bool premul = _batches[i].texture && _batches[i].texture->hasPremultipliedAlpha();
+        Color32 c         = Color32::WHITE;
+        c.a               = opa;
+        if (premul)
         {
-            auto alpha = color.a / 255.0f;
-            color.r    = static_cast<uint8_t>(color.r * alpha);
-            color.g    = static_cast<uint8_t>(color.g * alpha);
-            color.b    = static_cast<uint8_t>(color.b * alpha);
+            const float a = opa / 255.0f;
+            c.r           = static_cast<uint8_t>(c.r * a);
+            c.g           = static_cast<uint8_t>(c.g * a);
+            c.b           = static_cast<uint8_t>(c.b * a);
         }
+        batchCache[i] = {AX_SIZE_PIXELS_TO_POINTS(ts->_tileSize),
+                         Vec2(ts->_tileOffset.x / csf, -ts->_tileOffset.y / csf),
+                         ts->_imageSize,
+                         1.0f / ts->_imageSize.width,
+                         1.0f / ts->_imageSize.height,
+                         c};
+    }
 
-        int quadIndex = 0;
-        for (int y = 0; y < _layerSize.height; ++y)
+    // Cache the last resolved batch index and its GID range to skip re-scanning for
+    // consecutive tiles from the same tileset, which is the common case in clustered maps.
+    int cachedBi      = -1;
+    uint32_t cachedLo = 0;
+    uint32_t cachedHi = 0;
+
+    int quadIndex = 0;
+    for (int y = 0; y < _layerSize.height; ++y)
+    {
+        for (int x = 0; x < _layerSize.width; ++x)
         {
-            for (int x = 0; x < _layerSize.width; ++x)
+            int tileIndex    = getTileIndexByPos(x, y);
+            uint32_t tileGID = _tiles[tileIndex];
+            if (tileGID == 0)
+                continue;
+
+            const uint32_t bareGID = tileGID & kTMXFlippedMask;
+            int bi;
+            if (cachedBi >= 0 && bareGID >= cachedLo && bareGID < cachedHi)
             {
-                int tileIndex = getTileIndexByPos(x, y);
-                int tileGID   = _tiles[tileIndex];
-
-                if (tileGID == 0)
-                    continue;
-
-                _tileToQuadIndex[tileIndex] = quadIndex;
-
-                auto& quad = _totalQuads[quadIndex];
-
-                Vec3 nodePos(float(x), float(y), 0);
-                _tileToNodeTransform.transformPoint(&nodePos);
-
-                float left, right, top, bottom, z;
-
-                int zPos  = getVertexZForPos(Vec2((float)x, (float)y));
-                z         = (float)zPos;
-                auto iter = _indicesVertexZOffsets.find(zPos);
-                if (iter == _indicesVertexZOffsets.end())
-                {
-                    _indicesVertexZOffsets[zPos] = 1;
-                }
-                else
-                {
-                    iter->second++;
-                }
-                // vertices
-                if (tileGID & kTMXTileDiagonalFlag)
-                {
-                    left   = nodePos.x + tileOffset.x;
-                    right  = nodePos.x + tileSize.height + tileOffset.x;
-                    bottom = nodePos.y + tileSize.width + tileOffset.y;
-                    top    = nodePos.y + tileOffset.y;
-                }
-                else
-                {
-                    left   = nodePos.x + tileOffset.x;
-                    right  = nodePos.x + tileSize.width + tileOffset.x;
-                    bottom = nodePos.y + tileSize.height + tileOffset.y;
-                    top    = nodePos.y + tileOffset.y;
-                }
-
-                if (tileGID & kTMXTileVerticalFlag)
-                    std::swap(top, bottom);
-                if (tileGID & kTMXTileHorizontalFlag)
-                    std::swap(left, right);
-
-                if (tileGID & kTMXTileDiagonalFlag)
-                {
-                    // FIXME: not working correctly
-                    quad.bl.position.x = left;
-                    quad.bl.position.y = bottom;
-                    quad.bl.position.z = z;
-                    quad.br.position.x = left;
-                    quad.br.position.y = top;
-                    quad.br.position.z = z;
-                    quad.tl.position.x = right;
-                    quad.tl.position.y = bottom;
-                    quad.tl.position.z = z;
-                    quad.tr.position.x = right;
-                    quad.tr.position.y = top;
-                    quad.tr.position.z = z;
-                }
-                else
-                {
-                    quad.bl.position.x = left;
-                    quad.bl.position.y = bottom;
-                    quad.bl.position.z = z;
-                    quad.br.position.x = right;
-                    quad.br.position.y = bottom;
-                    quad.br.position.z = z;
-                    quad.tl.position.x = left;
-                    quad.tl.position.y = top;
-                    quad.tl.position.z = z;
-                    quad.tr.position.x = right;
-                    quad.tr.position.y = top;
-                    quad.tr.position.z = z;
-                }
-
-                // texcoords
-                Rect tileTexture = _tileSet->getRectForGID(tileGID);
-                left             = (tileTexture.origin.x / texSize.width);
-                right            = left + (tileTexture.size.width / texSize.width);
-                bottom           = (tileTexture.origin.y / texSize.height);
-                top              = bottom + (tileTexture.size.height / texSize.height);
-
-                // issue#1085 OpenGL sub-pixel horizontal-vertical lines pixel-tolerance fix.
-                float ptx = 1.0 / (_tileSet->_imageSize.x * tileSize.x);
-                float pty = 1.0 / (_tileSet->_imageSize.y * tileSize.y);
-
-                quad.bl.texCoord.u = left + ptx;
-                quad.bl.texCoord.v = bottom + pty;
-                quad.br.texCoord.u = right - ptx;
-                quad.br.texCoord.v = bottom + pty;
-                quad.tl.texCoord.u = left + ptx;
-                quad.tl.texCoord.v = top - pty;
-                quad.tr.texCoord.u = right - ptx;
-                quad.tr.texCoord.v = top - pty;
-
-                quad.bl.color = color;
-                quad.br.color = color;
-                quad.tl.color = color;
-                quad.tr.color = color;
-
-                ++quadIndex;
+                bi = cachedBi;
             }
+            else
+            {
+                bi = batchIndexForGID(tileGID);
+                if (bi >= 0)
+                {
+                    cachedBi = bi;
+                    cachedLo = static_cast<uint32_t>(_batches[bi].tilesetInfo->_firstGid);
+                    cachedHi = (bi > 0) ? static_cast<uint32_t>(_batches[bi - 1].tilesetInfo->_firstGid) : UINT32_MAX;
+                }
+            }
+            if (bi < 0)
+                continue;
+
+            _tileToQuadIndex[tileIndex]   = quadIndex;
+            _tilesetBatchIndex[tileIndex] = bi;
+
+            auto& quad     = _totalQuads[quadIndex];
+            auto& batch    = _batches[bi];
+            const auto& bc = batchCache[bi];
+
+            Vec3 nodePos(float(x), float(y), 0);
+            _tileToNodeTransform.transformPoint(&nodePos);
+
+            int zPos    = getVertexZForPos(Vec2((float)x, (float)y));
+            float z     = (float)zPos;
+            auto& vzMap = batch.indicesVertexZOffsets;
+            auto vzIt   = vzMap.find(zPos);
+            if (vzIt == vzMap.end())
+                vzMap[zPos] = 1;
+            else
+                vzIt->second++;
+
+            // vertex positions
+            float left, right, top, bottom;
+            if (tileGID & kTMXTileDiagonalFlag)
+            {
+                left   = nodePos.x + bc.tileOffset.x;
+                right  = nodePos.x + bc.tileSize.height + bc.tileOffset.x;
+                bottom = nodePos.y + bc.tileSize.width + bc.tileOffset.y;
+                top    = nodePos.y + bc.tileOffset.y;
+            }
+            else
+            {
+                left   = nodePos.x + bc.tileOffset.x;
+                right  = nodePos.x + bc.tileSize.width + bc.tileOffset.x;
+                bottom = nodePos.y + bc.tileSize.height + bc.tileOffset.y;
+                top    = nodePos.y + bc.tileOffset.y;
+            }
+            if (tileGID & kTMXTileVerticalFlag)
+                std::swap(top, bottom);
+            if (tileGID & kTMXTileHorizontalFlag)
+                std::swap(left, right);
+
+            if (tileGID & kTMXTileDiagonalFlag)
+            {
+                // FIXME: not working correctly
+                quad.bl.position = {left, bottom, z};
+                quad.br.position = {left, top, z};
+                quad.tl.position = {right, bottom, z};
+                quad.tr.position = {right, top, z};
+            }
+            else
+            {
+                quad.bl.position = {left, bottom, z};
+                quad.br.position = {right, bottom, z};
+                quad.tl.position = {left, top, z};
+                quad.tr.position = {right, top, z};
+            }
+
+            // UV coords — only the per-tile rect lookup stays inside the loop.
+            Rect tileTexture    = batch.tilesetInfo->getRectForGID(tileGID);
+            const float uleft   = tileTexture.origin.x / bc.texSize.width;
+            const float uright  = uleft + tileTexture.size.width / bc.texSize.width;
+            const float ubottom = tileTexture.origin.y / bc.texSize.height;
+            const float utop    = ubottom + tileTexture.size.height / bc.texSize.height;
+
+            quad.bl.texCoord = {uleft + bc.ptx, ubottom + bc.pty};
+            quad.br.texCoord = {uright - bc.ptx, ubottom + bc.pty};
+            quad.tl.texCoord = {uleft + bc.ptx, utop - bc.pty};
+            quad.tr.texCoord = {uright - bc.ptx, utop - bc.pty};
+
+            quad.bl.color = quad.br.color = quad.tl.color = quad.tr.color = bc.color;
+
+            ++quadIndex;
         }
+    }
+
+    _totalQuads.resize(quadIndex);
+
+    // Convert per-batch vertexZ counts into cumulative start offsets, then size index arrays.
+    for (auto& batch : _batches)
+    {
+        int batchTileCount = 0;
+        for (auto& [_, cnt] : batch.indicesVertexZOffsets)
+            batchTileCount += cnt;
+        batch.indices.resize(6 * batchTileCount);
 
         int offset = 0;
-        for (auto&& vertexZOffset : _indicesVertexZOffsets)
+        for (auto& [_, val] : batch.indicesVertexZOffsets)
         {
-            std::swap(offset, vertexZOffset.second);
-            offset += vertexZOffset.second;
+            std::swap(offset, val);
+            offset += val;
         }
-        updateVertexBuffer();
-
-        _quadsDirty = false;
     }
+
+    updateVertexBuffer();
+    _quadsDirty = false;
 }
 
 // removing / getting tiles
@@ -667,9 +812,13 @@ Sprite* FastTMXLayer::getTileAt(const Vec2& tileCoordinate)
         else
         {
             // tile not created yet. create it
-            Rect rect = _tileSet->getRectForGID(gid);
-            rect      = AX_RECT_PIXELS_TO_POINTS(rect);
-            tile      = Sprite::createWithTexture(_texture, rect);
+            int bi = batchIndexForGID(gid);
+            if (bi < 0)
+                return nullptr;
+            auto& tileBatch = _batches[bi];
+            Rect rect       = tileBatch.tilesetInfo->getRectForGID(gid);
+            rect            = AX_RECT_PIXELS_TO_POINTS(rect);
+            tile            = Sprite::createWithTexture(tileBatch.texture, rect);
 
             setupTileSprite(tile, tileCoordinate, gid | flags);
 
@@ -857,7 +1006,7 @@ void FastTMXLayer::setTileGID(int gid, const Vec2& tileCoordinate, TMXTileFlags 
                  tileCoordinate.y >= 0,
              "TMXLayer: invalid position");
     AXASSERT(_tiles, "TMXLayer: the tiles map has been released");
-    AXASSERT(gid == 0 || gid >= _tileSet->_firstGid, "TMXLayer: invalid gid");
+    AXASSERT(gid == 0 || batchIndexForGID(gid) >= 0, "TMXLayer: invalid gid");
 
     TMXTileFlags currentFlags;
     int currentGID = getTileGIDAt(tileCoordinate, &currentFlags);
@@ -886,8 +1035,11 @@ void FastTMXLayer::setTileGID(int gid, const Vec2& tileCoordinate, TMXTileFlags 
         if (it != _spriteContainer.end())
         {
             Sprite* sprite = it->second.first;
-            Rect rect      = _tileSet->getRectForGID(gid);
+            int bi         = batchIndexForGID(gid);
+            Rect rect      = (bi >= 0) ? _batches[bi].tilesetInfo->getRectForGID(gid) : Rect::ZERO;
             rect           = AX_RECT_PIXELS_TO_POINTS(rect);
+            if (bi >= 0 && _batches[bi].texture)
+                sprite->setTexture(_batches[bi].texture);
 
             sprite->setTextureRect(rect, false, rect.size);
             this->reorderChild(sprite, z);
@@ -915,10 +1067,12 @@ void FastTMXLayer::setupTileSprite(Sprite* sprite, const Vec2& pos, uint32_t gid
 
     // fix issue #1283 too;  put the anchor in the middle for ease of rotation.
     sprite->setAnchorPoint(Vec2(0.5f, 0.5f));
-    const float csf = AX_CONTENT_SCALE_FACTOR();
-    const Vec2 tileOffset(_tileSet->_tileOffset.x / csf, -_tileSet->_tileOffset.y / csf);
-    sprite->setPosition(tempPosAt.x + std::roundf(tempSpriteContentSize.height / 2) + tileOffset.x,
-                        tempPosAt.y + std::roundf(tempSpriteContentSize.width / 2) + tileOffset.y);
+    int bi                        = batchIndexForGID(gid);
+    const Vec2 tileOff            = (bi >= 0) ? _batches[bi].tilesetInfo->_tileOffset : Vec2::ZERO;
+    const float spriteTileOffsetX = tileOff.x / AX_CONTENT_SCALE_FACTOR();
+    const float spriteTileOffsetY = -tileOff.y / AX_CONTENT_SCALE_FACTOR();
+    sprite->setPosition(tempPosAt.x + std::roundf(tempSpriteContentSize.height / 2) + spriteTileOffsetX,
+                        tempPosAt.y + std::roundf(tempSpriteContentSize.width / 2) + spriteTileOffsetY);
 
     // issue 1264, flip can be undone as well
     sprite->setFlippedX(false);
@@ -976,10 +1130,13 @@ TMXTileAnimManager::TMXTileAnimManager(FastTMXLayer* layer)
     _layer = layer;
     for (const auto& p : *_layer->getAnimTileCoord())
     {
+        int bi = _layer->batchIndexForGID(p.first);
+        if (bi < 0)
+            continue;
+        TMXTileAnimInfo* animInfo = _layer->getBatches()[bi].tilesetInfo->_animationInfo.at(p.first);
         for (auto&& tile : p.second)
         {
-            _tasks.pushBack(TMXTileAnimTask::create(_layer, _layer->getTileSet()->_animationInfo.at(p.first),
-                                                    tile._tilePos, tile._flag));
+            _tasks.pushBack(TMXTileAnimTask::create(_layer, animInfo, tile._tilePos, tile._flag));
         }
     }
 }
@@ -1026,8 +1183,11 @@ TMXTileAnimTask::TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation
 void TMXTileAnimTask::tickAndScheduleNext(float dt)
 {
     setCurrFrame();
-    _layer->getParent()->scheduleOnce(AX_CALLBACK_1(TMXTileAnimTask::tickAndScheduleNext, this),
-                                      _animation->_frames[_currentFrame]._duration / 1000.0f, _key);
+    auto* parent = _layer->getParent();
+    if (!parent)
+        return;
+    parent->scheduleOnce(AX_CALLBACK_1(TMXTileAnimTask::tickAndScheduleNext, this),
+                         _animation->_frames[_currentFrame]._duration / 1000.0f, _key);
 }
 
 void TMXTileAnimTask::start()
@@ -1038,8 +1198,10 @@ void TMXTileAnimTask::start()
 
 void TMXTileAnimTask::stop()
 {
-    _isRunning = false;
-    _layer->getParent()->unschedule(_key);
+    _isRunning   = false;
+    auto* parent = _layer->getParent();
+    if (parent)
+        parent->unschedule(_key);
 }
 
 void TMXTileAnimTask::setCurrFrame()

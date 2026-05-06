@@ -28,6 +28,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
+#include <vector>
 #include "axmol/scene/Node.h"
 #include "axmol/2d/TMXObjectGroup.h"
 
@@ -67,7 +68,6 @@ class FastTMXLayer;
  * - Properties can be assigned to the Map, Layer, Object Group, and Object.
 
  * Limitations:
- * - It only supports one tileset per layer.
  * - Embedded images are not supported.
  * - It only supports the XML format (the JSON format is not supported).
 
@@ -233,6 +233,8 @@ public:
 
 protected:
     FastTMXLayer* parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
+    /** Returns all tilesets that contribute tiles to the given layer, sorted descending by firstGid. */
+    std::vector<TMXTilesetInfo*> tilesetsForLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
     TMXTilesetInfo* tilesetForLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
     void buildWithMapInfo(TMXMapInfo* mapInfo, bool ignoreInvisibleLayers);
 
