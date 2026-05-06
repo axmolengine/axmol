@@ -361,7 +361,11 @@ void FastTMXLayer::updateVertexBuffer()
     unsigned int vertexBufferSize = (unsigned int)(sizeof(V3F_T2F_C4B) * _totalQuads.size() * 4);
     if (!_vertexBuffer)
     {
-        _vertexBuffer = axdrv->createBuffer(vertexBufferSize, rhi::BufferType::VERTEX, rhi::BufferUsage::STATIC);
+        // Allocate for the maximum possible tile count so the buffer never needs to be
+        // recreated when setTileGID adds tiles that were absent on the first draw.
+        // Recreating the buffer would also invalidate existing CustomCommand references.
+        const unsigned int maxSize = (unsigned int)(sizeof(V3F_T2F_C4B) * _layerSize.width * _layerSize.height * 4);
+        _vertexBuffer              = axdrv->createBuffer(maxSize, rhi::BufferType::VERTEX, rhi::BufferUsage::STATIC);
     }
     _vertexBuffer->updateData(&_totalQuads[0], vertexBufferSize);
 }
