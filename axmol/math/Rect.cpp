@@ -88,9 +88,9 @@ bool Rect::intersectsSegment(const Vec2& a, const Vec2& b, Vec2 &hitPos)
     float minDistance = FLT_MAX;
     std::vector<Segment> rectSegments = {
         {origin, origin + Vec2(size.width, 0.0f)},
-        {origin + Vec2(0.0f, size.height), origin + Vec2(size.width, 0.0f)},
+        {origin + Vec2(0.0f, size.height), origin + Vec2(size.width, size.height)},
+        {origin + Vec2(size.width, 0.0f), origin + Vec2(size.width, size.height)},
         {origin, origin + Vec2(0.0f, size.height)},
-        {origin + Vec2(size.width, 0.0f), origin + Vec2(0.0f, size.height)},
     };
     for(auto &rectSegment : rectSegments)
     {

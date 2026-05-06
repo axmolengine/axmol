@@ -72,6 +72,9 @@ static Texture2D::TexParams chooseTexParams(spine::AtlasPage& page)
         texParams.mipFilter = rhi::SamplerFilter::MIP_LINEAR;
         break;
     }
+
+    texParams.magFilter = rhi::SamplerFilter::MAG_NEAREST;
+    /*
     switch (page.magFilter)
     {
     case TextureFilter_Linear:
@@ -81,11 +84,12 @@ static Texture2D::TexParams chooseTexParams(spine::AtlasPage& page)
         texParams.magFilter = rhi::SamplerFilter::MAG_NEAREST;
         break;
     }
+    */
 
     texParams.sAddressMode = page.uWrap == TextureWrap_ClampToEdge ? rhi::SamplerAddressMode::CLAMP_TO_EDGE
                                                                    : rhi::SamplerAddressMode::REPEAT;
     texParams.tAddressMode = page.vWrap == TextureWrap_ClampToEdge ? rhi::SamplerAddressMode::CLAMP_TO_EDGE
-                                                                   : rhi::SamplerAddressMode::REPEAT;
+                                                                    : rhi::SamplerAddressMode::REPEAT;
     return texParams;
 }
 
