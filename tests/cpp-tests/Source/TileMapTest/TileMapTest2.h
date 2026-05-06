@@ -395,4 +395,15 @@ public:
     virtual std::string subtitle() const override;
 };
 
+class MultiTileSetsTestNew : public TileDemoNew
+{
+public:
+    CREATE_FUNC(MultiTileSetsTestNew);
+    MultiTileSetsTestNew();
+    virtual std::string title() const override;
+
+    ax::FastTMXTiledMap* map{nullptr};
+    bool _animStarted = true;
+};
+
 #endif

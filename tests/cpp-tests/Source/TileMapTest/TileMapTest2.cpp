@@ -71,6 +71,7 @@ FastTileMapTests::FastTileMapTests()
     ADD_TEST_CASE(TMXMultiTilesetBackwardCompatTest);
     ADD_TEST_CASE(TMXMultiTilesetBatchApiTest);
     ADD_TEST_CASE(TMXMultiTilesetSetTileSetTest);
+    ADD_TEST_CASE(MultiTileSetsTestNew);
 }
 
 TileDemoNew::TileDemoNew()
@@ -1564,4 +1565,19 @@ std::string TMXMultiTilesetSetTileSetTest::title() const
 std::string TMXMultiTilesetSetTileSetTest::subtitle() const
 {
     return "setTileSet must leave exactly 1 batch (see console)";
+}
+
+MultiTileSetsTestNew::MultiTileSetsTestNew()
+{
+    map = FastTMXTiledMap::create("TileMaps/multi-tileset-test.tmx");
+    addChild(map, 0, kTagTileMap);
+    map->setScale(2);
+
+    Size AX_UNUSED s = map->getContentSize();
+    AXLOGD("ContentSize: {}, {}", s.width, s.height);
+}
+
+std::string MultiTileSetsTestNew::title() const
+{
+    return "multiple tilesets in one layer.";
 }
