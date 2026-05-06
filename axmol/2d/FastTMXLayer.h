@@ -28,6 +28,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
+#include <span>
 #include <unordered_map>
 #include <vector>
 #include "axmol/scene/Node.h"
@@ -131,7 +132,7 @@ public:
     static FastTMXLayer* create(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
 
     /** Creates a FastTMXLayer with multiple tilesets (one layer may reference tiles from several tilesets). */
-    static FastTMXLayer* create(const std::vector<TMXTilesetInfo*>& tilesets,
+    static FastTMXLayer* create(std::span<TMXTilesetInfo* const> tilesets,
                                 TMXLayerInfo* layerInfo,
                                 TMXMapInfo* mapInfo);
     /**
@@ -319,7 +320,7 @@ public:
     TMXTileAnimManager* getTileAnimManager() const { return _tileAnimManager; }
 
     bool initWithTilesetInfo(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
-    bool initWithTilesets(const std::vector<TMXTilesetInfo*>& tilesets, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
+    bool initWithTilesets(std::span<TMXTilesetInfo* const> tilesets, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
 
     /** Returns the batch index owning the given GID, or -1 if the GID is empty/unknown. */
     int batchIndexForGID(uint32_t gid) const;

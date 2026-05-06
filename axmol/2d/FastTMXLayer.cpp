@@ -37,6 +37,7 @@ THE SOFTWARE.
 
  */
 #include "axmol/2d/FastTMXLayer.h"
+#include <span>
 #include <stddef.h>  // offsetof
 #include "axmol/base/Types.h"
 #include "axmol/2d/FastTMXTiledMap.h"
@@ -61,10 +62,10 @@ const int FastTMXLayer::FAST_TMX_ORIENTATION_ISO   = 2;
 // FastTMXLayer - init & alloc & dealloc
 FastTMXLayer* FastTMXLayer::create(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo)
 {
-    return tilesetInfo ? create(std::vector<TMXTilesetInfo*>{tilesetInfo}, layerInfo, mapInfo) : nullptr;
+    return tilesetInfo ? create(std::span<TMXTilesetInfo* const>{&tilesetInfo, 1}, layerInfo, mapInfo) : nullptr;
 }
 
-FastTMXLayer* FastTMXLayer::create(const std::vector<TMXTilesetInfo*>& tilesets,
+FastTMXLayer* FastTMXLayer::create(std::span<TMXTilesetInfo* const> tilesets,
                                    TMXLayerInfo* layerInfo,
                                    TMXMapInfo* mapInfo)
 {
@@ -80,11 +81,15 @@ FastTMXLayer* FastTMXLayer::create(const std::vector<TMXTilesetInfo*>& tilesets,
 
 bool FastTMXLayer::initWithTilesetInfo(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo)
 {
-    return initWithTilesets(tilesetInfo ? std::vector<TMXTilesetInfo*>{tilesetInfo} : std::vector<TMXTilesetInfo*>{},
-                            layerInfo, mapInfo);
+    if (tilesetInfo)
+    {
+        TMXTilesetInfo* ts[] = {tilesetInfo};
+        return initWithTilesets(ts, layerInfo, mapInfo);
+    }
+    return initWithTilesets({}, layerInfo, mapInfo);
 }
 
-bool FastTMXLayer::initWithTilesets(const std::vector<TMXTilesetInfo*>& tilesets,
+bool FastTMXLayer::initWithTilesets(std::span<TMXTilesetInfo* const> tilesets,
                                     TMXLayerInfo* layerInfo,
                                     TMXMapInfo* mapInfo)
 {
