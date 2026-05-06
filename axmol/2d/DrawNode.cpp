@@ -1159,10 +1159,10 @@ void DrawNode::_drawSolidCircle(const Vec2& center, float radius, const Color& f
     triangles[0]  = {a, b, c};
     triangles[1]  = {a, c, d};
 
-    V2F_T2F_C4F a = {Vec2(center.x - radius, center.y - radius), Vec2(-1.0f, -1.0f), fillColor};
-    V2F_T2F_C4F b = {Vec2(center.x - radius, center.y + radius), Vec2(-1.0f, 1.0f), fillColor};
-    V2F_T2F_C4F c = {Vec2(center.x + radius, center.y + radius), Vec2(1.0f, 1.0f), fillColor};
-    V2F_T2F_C4F d = {Vec2(center.x + radius, center.y - radius), Vec2(1.0f, -1.0f), fillColor};
+    a = {Vec2(center.x - radius, center.y - radius), Vec2(-1.0f, -1.0f), fillColor};
+    b = {Vec2(center.x - radius, center.y + radius), Vec2(-1.0f, 1.0f), fillColor};
+    c = {Vec2(center.x + radius, center.y + radius), Vec2(1.0f, 1.0f), fillColor};
+    d = {Vec2(center.x + radius, center.y - radius), Vec2(1.0f, -1.0f), fillColor};
     triangles[2]  = {a, b, c};
     triangles[3]  = {a, c, d};
 }
