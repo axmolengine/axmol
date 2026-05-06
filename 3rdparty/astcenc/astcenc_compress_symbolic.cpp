@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2011-2025 Arm Limited
+// Copyright 2011-2026 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -430,7 +430,6 @@ static float compress_symbolic_block_for_partition_1plane(
 	//     * Compute number of bits needed for the quantized weights
 	//     * Generate an optimized set of quantized weights
 	//     * Compute quantization errors for the mode
-
 
 	static const int8_t free_bits_for_partition_count[4] {
 		115 - 4, 111 - 4 - PARTITION_INDEX_BITS, 108 - 4 - PARTITION_INDEX_BITS, 105 - 4 - PARTITION_INDEX_BITS
@@ -1304,8 +1303,11 @@ void compress_block(
 		    1, 0,  scb, tmpbuf, QUANT_32);
 
 		// Record the quant level so we can use the filter later searches
-		const auto& bm = bsd.get_block_mode(scb.block_mode);
-		quant_limit = bm.get_weight_quant_mode();
+		if (scb.block_type != SYM_BTYPE_ERROR)
+		{
+			const auto& bm = bsd.get_block_mode(scb.block_mode);
+			quant_limit = bm.get_weight_quant_mode();
+		}
 
 		best_errorvals_for_pcount[0] = astc::min(best_errorvals_for_pcount[0], errorval);
 		if (errorval < (error_threshold * errorval_mult[i]))

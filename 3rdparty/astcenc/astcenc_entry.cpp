@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2011-2025 Arm Limited
+// Copyright 2011-2026 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -136,19 +136,19 @@ static const std::array<astcenc_preset_config, 6> preset_configs_low {{
 /**
  * @brief Validate CPU floating point meets assumptions made in the codec.
  *
- * The codec is written with the assumption that a float threaded through the @c if32 union will be
- * stored and reloaded as a 32-bit IEEE-754 float with round-to-nearest rounding. This is always the
- * case in an IEEE-754 compliant system, however not every system or compilation mode is actually
- * IEEE-754 compliant. This normally fails if the code is compiled with fast math enabled.
+ * The codec is written with the assumption that float bit patterns are valid
+ * IEEE754 values that are stored and reloaded with round-to-nearest rounding.
+ * This is always the case in an IEEE-754 compliant system, however not every
+ * system or compilation mode is actually IEEE-754 compliant. This normally
+ * fails if the code is compiled with fast math enabled, for example.
  *
- * @return Return @c ASTCENC_SUCCESS if validated, otherwise an error on failure.
+ * @return Return @c ASTCENC_SUCCESS if validated, an error on failure.
  */
 static astcenc_error validate_cpu_float()
 {
-	if32 p;
 	volatile float xprec_testval = 2.51f;
-	p.f = xprec_testval + 12582912.0f;
-	float q = p.f - 12582912.0f;
+	float store = xprec_testval + 12582912.0f;
+	float q = store - 12582912.0f;
 
 	if (q != 3.0f)
 	{
@@ -657,10 +657,10 @@ astcenc_error astcenc_config_init(
 astcenc_error astcenc_context_alloc(
 	const astcenc_config* configp,
 	unsigned int thread_count,
-	astcenc_context** context
+	astcenc_context** context,
+	const astcenc_context* parent_context
 ) {
 	astcenc_error status;
-	const astcenc_config& config = *configp;
 
 	status = validate_cpu_float();
 	if (status != ASTCENC_SUCCESS)
@@ -674,17 +674,31 @@ astcenc_error astcenc_context_alloc(
 	}
 
 #if defined(ASTCENC_DIAGNOSTICS)
-	// Force single threaded compressor use in diagnostic mode.
+	// Force single threaded compressor use in diagnostic mode
 	if (thread_count != 1)
 	{
 		return ASTCENC_ERR_BAD_PARAM;
 	}
 #endif
 
+	// Exactly one of config or parent_context must be set
+	bool has_config = configp != nullptr;
+	bool has_parent = parent_context != nullptr;
+	if (!(has_config ^ has_parent))
+	{
+		return ASTCENC_ERR_BAD_PARAM;
+	}
+
+	if (has_parent)
+	{
+		configp = &parent_context->context.config;
+	}
+
+	const astcenc_config& config = *configp;
 	astcenc_context* ctxo = new astcenc_context;
 	astcenc_contexti* ctx = &ctxo->context;
 	ctx->thread_count = thread_count;
-	ctx->config = config;
+	ctx->config = *configp;
 	ctx->working_buffers = nullptr;
 
 	// These are allocated per-compress, as they depend on image size
@@ -698,19 +712,30 @@ astcenc_error astcenc_context_alloc(
 		return status;
 	}
 
-	ctx->bsd = aligned_malloc<block_size_descriptor>(sizeof(block_size_descriptor), ASTCENC_VECALIGN);
-	if (!ctx->bsd)
+	if (!parent_context)
 	{
-		delete ctxo;
-		return ASTCENC_ERR_OUT_OF_MEM;
-	}
+		block_size_descriptor* bsd = aligned_malloc<block_size_descriptor>(sizeof(block_size_descriptor), ASTCENC_VECALIGN);
+		if (!bsd)
+		{
+			delete ctxo;
+			return ASTCENC_ERR_OUT_OF_MEM;
+		}
 
-	bool can_omit_modes = static_cast<bool>(config.flags & ASTCENC_FLG_SELF_DECOMPRESS_ONLY);
-	init_block_size_descriptor(config.block_x, config.block_y, config.block_z,
-	                           can_omit_modes,
-	                           config.tune_partition_count_limit,
-	                           static_cast<float>(config.tune_block_mode_limit) / 100.0f,
-	                           *ctx->bsd);
+		bool can_omit_modes = static_cast<bool>(config.flags & ASTCENC_FLG_SELF_DECOMPRESS_ONLY);
+		init_block_size_descriptor(config.block_x, config.block_y, config.block_z,
+		                           can_omit_modes,
+		                           config.tune_partition_count_limit,
+		                           static_cast<float>(config.tune_block_mode_limit) / 100.0f,
+		                           *bsd);
+
+		ctx->owns_bsd = true;
+		ctx->bsd = bsd;
+	}
+	else
+	{
+		ctx->owns_bsd = false;
+		ctx->bsd = parent_context->context.bsd;
+	}
 
 #if !defined(ASTCENC_DECOMPRESS_ONLY)
 	// Do setup only needed by compression
@@ -732,7 +757,10 @@ astcenc_error astcenc_context_alloc(
 		              "compression_working_buffers size must be multiple of vector alignment");
 		if (!ctx->working_buffers)
 		{
-			aligned_free<block_size_descriptor>(ctx->bsd);
+			if (ctx->owns_bsd)
+			{
+				aligned_free<const block_size_descriptor>(ctx->bsd);
+			}
 			delete ctxo;
 			*context = nullptr;
 			return ASTCENC_ERR_OUT_OF_MEM;
@@ -769,7 +797,10 @@ void astcenc_context_free(
 	{
 		astcenc_contexti* ctx = &ctxo->context;
 		aligned_free<compression_working_buffers>(ctx->working_buffers);
-		aligned_free<block_size_descriptor>(ctx->bsd);
+		if (ctx->owns_bsd)
+		{
+			aligned_free<const block_size_descriptor>(ctx->bsd);
+		}
 #if defined(ASTCENC_DIAGNOSTICS)
 		delete ctx->trace_log;
 #endif
@@ -1271,7 +1302,7 @@ astcenc_error astcenc_get_block_info(
 	physical_to_symbolic(*ctx->bsd, data, scb);
 
 	// Fetch the appropriate partition and decimation tables
-	block_size_descriptor& bsd = *ctx->bsd;
+	const block_size_descriptor& bsd = *ctx->bsd;
 
 	// Start from a clean slate
 	memset(info, 0, sizeof(*info));

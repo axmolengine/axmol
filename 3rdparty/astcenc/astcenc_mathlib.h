@@ -26,6 +26,7 @@
 #include <cassert>
 #include <cstdint>
 #include <cmath>
+#include <cstring>
 
 #ifndef ASTCENC_POPCNT
   #if defined(__POPCNT__)
@@ -122,14 +123,6 @@
   have an option based on SSE intrinsics and therefore provide an obvious route
   to future vectorization.
 ============================================================================ */
-
-// Union for manipulation of float bit patterns
-typedef union
-{
-	uint32_t u;
-	int32_t s;
-	float f;
-} if32;
 
 // These are namespaced to avoid colliding with C standard library functions.
 namespace astc
@@ -359,9 +352,10 @@ static inline int flt2int_rd(float v)
  */
 static inline int float_as_int(float v)
 {
-	union { int a; float b; } u;
-	u.b = v;
-	return u.a;
+	// Future: Can use std:bit_cast with C++20
+	int iv;
+	std::memcpy(&iv, &v, sizeof(float));
+	return iv;
 }
 
 /**
@@ -373,9 +367,70 @@ static inline int float_as_int(float v)
  */
 static inline float int_as_float(int v)
 {
-	union { int a; float b; } u;
-	u.a = v;
-	return u.b;
+	// Future: Can use std:bit_cast with C++20
+	float fv;
+	std::memcpy(&fv, &v, sizeof(int));
+	return fv;
+}
+
+/**
+ * @brief SP float bit-interpreted as an unsigned integer.
+ *
+ * @param v   The value to bitcast.
+ *
+ * @return The converted value.
+ */
+static inline unsigned int float_as_uint(float v)
+{
+	// Future: Can use std:bit_cast with C++20
+	unsigned int iv;
+	std::memcpy(&iv, &v, sizeof(float));
+	return iv;
+}
+
+/**
+ * @brief Unsigned integer bit-interpreted as an SP float.
+ *
+ * @param v   The value to bitcast.
+ *
+ * @return The converted value.
+ */
+static inline float uint_as_float(unsigned int v)
+{
+	// Future: Can use std:bit_cast with C++20
+	float fv;
+	std::memcpy(&fv, &v, sizeof(unsigned int));
+	return fv;
+}
+
+/**
+ * @brief Signed int bit-interpreted as an unsigned integer.
+ *
+ * @param v   The value to bitcast.
+ *
+ * @return The converted value.
+ */
+static inline unsigned int int_as_uint(int v)
+{
+	// Future: Can use std:bit_cast with C++20
+	unsigned int uv;
+	std::memcpy(&uv, &v, sizeof(int));
+	return uv;
+}
+
+/**
+ * @brief Unsigned integer bit-interpreted as a signed integer.
+ *
+ * @param v   The value to bitcast.
+ *
+ * @return The converted value.
+ */
+static inline int uint_as_int(unsigned int v)
+{
+	// Future: Can use std:bit_cast with C++20git p
+	int sv;
+	std::memcpy(&sv, &v, sizeof(unsigned int));
+	return sv;
 }
 
 /**
@@ -412,11 +467,10 @@ static inline float sqrt(float v)
  */
 static inline float frexp(float v, int* expo)
 {
-	if32 p;
-	p.f = v;
-	*expo = ((p.u >> 23) & 0xFF) - 126;
-	p.u = (p.u & 0x807fffff) | 0x3f000000;
-	return p.f;
+	unsigned int iv = astc::float_as_uint(v);
+	*expo = ((iv >> 23) & 0xFF) - 126;
+	iv = (iv & 0x807fffff) | 0x3f000000;
+	return astc::uint_as_float(iv);
 }
 
 /**

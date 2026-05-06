@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2011-2023 Arm Limited
+// Copyright 2011-2026 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -280,6 +280,11 @@ static bool generate_one_partition_info_entry(
 	unsigned int partition_remap_index,
 	partition_info& pi
 ) {
+#if defined(ASTCENC_DECOMPRESS_ONLY)
+	// Suppress unused parameter warning
+	(void)partition_remap_index;
+#endif
+
 	int texels_per_block = bsd.texel_count;
 	bool small_block = texels_per_block < 32;
 
@@ -337,6 +342,15 @@ static bool generate_one_partition_info_entry(
 	// Populate the partition index
 	pi.partition_index = static_cast<uint16_t>(partition_index);
 
+	for (unsigned int i = 0; i < BLOCK_MAX_PARTITIONS; i++)
+	{
+		pi.partition_texel_count[i] = static_cast<uint8_t>(counts[i]);
+	}
+
+	// Valid partitionings have texels in all of the requested partitions
+	bool valid = pi.partition_count == partition_count;
+
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 	// Populate the coverage bitmaps for 2/3/4 partitions
 	uint64_t* bitmaps { nullptr };
 	if (partition_count == 2)
@@ -351,14 +365,6 @@ static bool generate_one_partition_info_entry(
 	{
 		bitmaps = bsd.coverage_bitmaps_4[partition_remap_index];
 	}
-
-	for (unsigned int i = 0; i < BLOCK_MAX_PARTITIONS; i++)
-	{
-		pi.partition_texel_count[i] = static_cast<uint8_t>(counts[i]);
-	}
-
-	// Valid partitionings have texels in all of the requested partitions
-	bool valid = pi.partition_count == partition_count;
 
 	if (bitmaps)
 	{
@@ -375,6 +381,7 @@ static bool generate_one_partition_info_entry(
 			bitmaps[pi.partition_of_texel[idx]] |= 1ULL << i;
 		}
 	}
+#endif
 
 	return valid;
 }
