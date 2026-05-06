@@ -318,7 +318,7 @@ THE SOFTWARE.
  * 1 = DrawNode 3.0 faster drawSolidCircle with "line2Center"
  * 0 = DrawNode 2.0 drawLine methode (slower)
  */
-#ifndef AX_DRAWNODE_FAST_PHYSICSCIRCLE
+#ifndef AX_DRAWNODE_FAST_LINE2CENTER
 #    define AX_DRAWNODE_FAST_LINE2CENTER 1
 #endif
 
