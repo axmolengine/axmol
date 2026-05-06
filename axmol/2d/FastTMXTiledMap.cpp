@@ -111,6 +111,8 @@ FastTMXLayer* FastTMXTiledMap::parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* m
         return nullptr;
 
     FastTMXLayer* layer = FastTMXLayer::create(tilesets, layerInfo, mapInfo);
+    if (!layer)
+        return nullptr;
 
     // tell the layerinfo to release the ownership of the tiles map.
     layerInfo->_ownTiles = false;
@@ -135,7 +137,8 @@ std::vector<TMXTilesetInfo*> FastTMXTiledMap::tilesetsForLayer(TMXLayerInfo* lay
             continue;
         const uint32_t lo = static_cast<uint32_t>(ts->_firstGid);
         // Upper bound: next tileset's firstGid, or the maximum GID value if this is the last.
-        const uint32_t hi = (i + 1 < tsCount) ? static_cast<uint32_t>(tilesets[i + 1]->_firstGid) : UINT32_MAX;
+        const uint32_t hi =
+            (i + 1 < tsCount && tilesets[i + 1]) ? static_cast<uint32_t>(tilesets[i + 1]->_firstGid) : UINT32_MAX;
         for (int y = 0; y < static_cast<int>(size.height); ++y)
         {
             for (int x = 0; x < static_cast<int>(size.width); ++x)

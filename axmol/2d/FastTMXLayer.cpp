@@ -88,6 +88,9 @@ bool FastTMXLayer::initWithTilesets(const std::vector<TMXTilesetInfo*>& tilesets
                                     TMXLayerInfo* layerInfo,
                                     TMXMapInfo* mapInfo)
 {
+    if (!layerInfo || !mapInfo)
+        return false;
+
     auto* cache = _director->getTextureCache();
     _batches.reserve(tilesets.size());
     for (auto* ts : tilesets)
@@ -209,6 +212,8 @@ void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
 
     const float refTileX = _batches.empty() ? 1.0f : _batches[0].tilesetInfo->_tileSize.x;
     auto cam             = Camera::getVisitingCamera();
+    if (!cam)
+        return;
     if (flags != 0 || _dirty || _quadsDirty || !_cameraPositionDirty.fuzzyEquals(cam->getPosition(), refTileX) ||
         _cameraZoomDirty != cam->getZoom())
     {
@@ -1173,8 +1178,11 @@ TMXTileAnimTask::TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation
 void TMXTileAnimTask::tickAndScheduleNext(float dt)
 {
     setCurrFrame();
-    _layer->getParent()->scheduleOnce(AX_CALLBACK_1(TMXTileAnimTask::tickAndScheduleNext, this),
-                                      _animation->_frames[_currentFrame]._duration / 1000.0f, _key);
+    auto* parent = _layer->getParent();
+    if (!parent)
+        return;
+    parent->scheduleOnce(AX_CALLBACK_1(TMXTileAnimTask::tickAndScheduleNext, this),
+                         _animation->_frames[_currentFrame]._duration / 1000.0f, _key);
 }
 
 void TMXTileAnimTask::start()
@@ -1185,8 +1193,10 @@ void TMXTileAnimTask::start()
 
 void TMXTileAnimTask::stop()
 {
-    _isRunning = false;
-    _layer->getParent()->unschedule(_key);
+    _isRunning   = false;
+    auto* parent = _layer->getParent();
+    if (parent)
+        parent->unschedule(_key);
 }
 
 void TMXTileAnimTask::setCurrFrame()
