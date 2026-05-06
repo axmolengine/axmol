@@ -300,6 +300,28 @@ THE SOFTWARE.
 #    define AX_REDUCE_PAUSED_CPU_USAGE 0
 #endif
 
+ /** @def AX_DRAWNODE_PRE_CALCULATING_VERTICES
+ * Performance optimizations for circle rendering in DrawNode by pre-calculating vertices 
+ */
+#ifndef AX_DRAWNODE_PRE_CALCULATING_VERTICES
+#    define AX_DRAWNODE_PRE_CALCULATING_VERTICES 36
+#endif
+
+ /** @def AX_DRAWNODE_PRE_CALCULATING_RADIUS
+ * Default radius for performance optimizations for circle rendering in DrawNode by pre-calculating vertices 
+ */
+#ifndef AX_DRAWNODE_PRE_CALCULATING_RADIUS
+#    define AX_DRAWNODE_PRE_CALCULATING_RADIUS 100
+#endif
+
+ /** @def AX_DRAWNODE_FAST_PYSICSCIRCLE
+ * 1 = DrawNode 3.0 faster drawPhysicsCircle
+ * 0 = DrawNode 2.0 drawLine methode (slower)
+ */
+#ifndef AX_DRAWNODE_FAST_PYSICSCIRCLE
+#    define AX_DRAWNODE_FAST_PYSICSCIRCLE 1
+#endif
+
 /// @name namespace ax
 /// @{
 #ifdef __cplusplus

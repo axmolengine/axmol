@@ -1406,7 +1406,7 @@ static Vec2 spider[] = {
 DrawNodeTests::DrawNodeTests()
 {
     ADD_TEST_CASE(DrawNodeCircleTest);
-    ADD_TEST_CASE(DrawNodeSolidCircleTest);  // will be activate with DrawNode v3.0
+    ADD_TEST_CASE(DrawNodeSolidCircleTest);
     ADD_TEST_CASE(DrawNodePolygonTest);
 
     ADD_TEST_CASE(DrawNodeSpLinesTest);
@@ -1415,7 +1415,7 @@ DrawNodeTests::DrawNodeTests()
 
 #if defined(AX_PLATFORM_PC)
     ADD_TEST_CASE(CandyMixEeffect);
-    ADD_TEST_CASE(DrawNodePointTest);
+    ADD_TEST_CASE(DrawNodeGameOfLifeTest);
 #endif
 
     ADD_TEST_CASE(DrawNodePictureTest);
@@ -1552,20 +1552,24 @@ void DrawNodeBaseTest::onDrawImGui()
                 ImGui::Checkbox("Transparent", &_transparent);
             }
             ImGui::SliderFloat("Node::Scale", &_nodeScale, -10.0f, 10.0f);
+            ImGui::SameLine();
+            if (ImGui::Button("Default Values"))
+            {
+                _nodeScale = 1.0f;
+                _localeThickScale = 1.0f;
+                thickness = 1.0f;
+                drawNode->resetAdvancedSettings();
+                _drawOrder      = drawNode->isPreserveDrawOrder();
+                _transform      = drawNode->isLocalTransformEnabled();
+                _localeRotation = 1.0f;
+                _localeScale    = Vec2::ONE;
+                _localePivot    = center; 
+            }
             ImGui::SliderFloat("Thickness", &thickness, 0.0f, 10.0f);
             ImGui::SliderFloat("Local Thickness Scale", &_localeThickScale, -10.0f, 10.0f);
             ImGui::Checkbox("PreserveDrawOrder", &_drawOrder);
             ImGui::SameLine();
             ImGui::Checkbox("Local Transform", &_transform);
-            ImGui::SameLine();
-            if (ImGui::Button("Reset AdvancedSettings"))
-            {
-                drawNode->resetAdvancedSettings();
-                _drawOrder      = drawNode->isPreserveDrawOrder();
-                _transform      = drawNode->isLocalTransformEnabled();
-                _localeRotation = drawNode->getLocalRotation();
-                _localeScale    = drawNode->getLocalScale();
-            }
             if (!_transform)
                 ImGui::BeginDisabled();
             float _lo[2] = {_localePos.x, _localePos.y};
@@ -3280,7 +3284,7 @@ string DrawNodeSideEffectTest::subtitle() const
 
 #if defined(AX_PLATFORM_PC)
 
-DrawNodePointTest::DrawNodePointTest()
+DrawNodeGameOfLifeTest::DrawNodeGameOfLifeTest()
 {
     ax::Vec2 visibleSize = Director::getInstance()->getVisibleSize();
     visibleSizeX         = static_cast<int>(visibleSize.x / 2);
@@ -3306,24 +3310,24 @@ DrawNodePointTest::DrawNodePointTest()
     scheduleUpdate();
 }
 
-DrawNodePointTest::~DrawNodePointTest()
+DrawNodeGameOfLifeTest::~DrawNodeGameOfLifeTest()
 {
     delete[] grid;
     delete[] nextGrid;
     delete[] age;
 }
 
-string DrawNodePointTest::title() const
+string DrawNodeGameOfLifeTest::title() const
 {
     return "Performance: drawPoints";
 }
 
-string DrawNodePointTest::subtitle() const
+string DrawNodeGameOfLifeTest::subtitle() const
 {
     return "\"Conway’s Game of Life\"";
 }
 
-void DrawNodePointTest::update(float dt)
+void DrawNodeGameOfLifeTest::update(float dt)
 {
     if (1)  // Inject "new life" each iteration (yes=1/no=0)
     {

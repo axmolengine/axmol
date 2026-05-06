@@ -453,13 +453,13 @@ public:
 
 const int GRID_W = 800;
 const int GRID_H = 600;
-class DrawNodePointTest : public DrawNodeBaseTest
+class DrawNodeGameOfLifeTest : public DrawNodeBaseTest
 {
 public:
-    CREATE_FUNC(DrawNodePointTest);
+    CREATE_FUNC(DrawNodeGameOfLifeTest);
 
-    DrawNodePointTest();
-    ~DrawNodePointTest();
+    DrawNodeGameOfLifeTest();
+    ~DrawNodeGameOfLifeTest();
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
