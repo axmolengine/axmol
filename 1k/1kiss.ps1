@@ -1309,7 +1309,12 @@ function setup_android_sdk() {
         $1k.println("Using android sdk dir from env:ANDROID_SDK_ROOT: $selected_sdk_root")
     }
     else {
-        $selected_sdk_root = Join-Path $install_prefix 'adt/sdk'
+        $old_sdk_root = Join-Path $install_prefix 'adt/sdk'
+        $selected_sdk_root = Join-Path $install_prefix 'android-sdk'
+        if ((Test-Path $old_sdk_root -PathType Container) -and !(Test-Path $selected_sdk_root -PathType Container))
+        {
+            Move-Item -Path $old_sdk_root -Destination $selected_sdk_root
+        }
         $1k.println("Using android sdk dir from axmol external: $selected_sdk_root")
     }
 
