@@ -2,6 +2,14 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.regex.Pattern
 import java.util.stream.Stream
+import org.gradle.api.DefaultTask
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
+import org.gradle.api.tasks.TaskAction
 
 class VersionComparator implements Comparator<String> {
 
@@ -83,6 +91,46 @@ class VersionComparator implements Comparator<String> {
 
     protected boolean isSnapshot(String version) {
         SNAPSHOT_SUFFIXES.any { String it -> version?.endsWith(it) }
+    }
+}
+
+abstract class AxmolCopyContentToAssetsTask extends DefaultTask {
+    @InputDirectory
+    @PathSensitive(PathSensitivity.RELATIVE)
+    abstract DirectoryProperty getContentSrcDir()
+
+    @Optional
+    @InputDirectory
+    @PathSensitive(PathSensitivity.RELATIVE)
+    abstract DirectoryProperty getAxslcSrcDir()
+
+    @OutputDirectory
+    abstract DirectoryProperty getOutputAssetsDir()
+
+    @TaskAction
+    void copyContentToAssets() {
+        def outputAssetsDirFile = outputAssetsDir.get().asFile
+        def contentSrcDirFile = contentSrcDir.get().asFile
+        def axslcSrcDirFile = axslcSrcDir.get().asFile
+
+        project.copy {
+            from contentSrcDirFile
+            into outputAssetsDirFile
+            exclude "**/*.gz"
+        }
+
+        if (axslcSrcDirFile.exists() && axslcSrcDirFile.list()?.length > 0) {
+            project.copy {
+                from axslcSrcDirFile
+                into new File(outputAssetsDirFile, "axslc")
+            }
+        } else {
+            // Fail the build if native build didn't produce files
+            throw new GradleException(
+                "[axmol] Error: axslc folder is empty or missing at ${axslcSrcDirFile}. " +
+                    "Native build may have failed or output path is incorrect."
+            )
+        }
     }
 }
 
@@ -590,48 +638,42 @@ class AxmolUtils {
         def androidComponents = project.extensions.findByName("androidComponents")
 
         if (androidComponents != null) {
+            def outputAssetsDir = project.layout.buildDirectory.dir("assets")
+            def outputAssetsDirFile = outputAssetsDir.get().asFile
+
+            // Older Axmol app templates register build/assets as a normal source-set
+            // assets directory. Remove that exact static entry because it is generated
+            // by copyContentToAssets; otherwise AGP lint tasks read it without the
+            // task dependency carried by addGeneratedSourceDirectory.
+            project.android.sourceSets.configureEach { sourceSet ->
+                def filteredAssetsSrcDirs = sourceSet.assets.srcDirs.findAll {
+                    it.canonicalFile != outputAssetsDirFile.canonicalFile
+                }
+                if (filteredAssetsSrcDirs.size() != sourceSet.assets.srcDirs.size()) {
+                    sourceSet.assets.setSrcDirs(filteredAssetsSrcDirs)
+                }
+            }
+
             // --- STAGE 1: Register Tasks ---
             androidComponents.onVariants(androidComponents.selector().all()) { variant ->
                 def variantName = variant.name.capitalize()
                 def copyTaskName = "copy${variantName}ContentToAssets"
 
-                def outputAssetsDir = project.file("${project.projectDir}/build/assets")
-                def contentSrcDir = project.file("${project.projectDir}/../../Content")
-                def axslcSrcDir = project.file("${project.projectDir}/build/runtime/axslc")
+                def contentSrcDirProvider = project.layout.projectDirectory.dir("../../Content")
+                def axslcSrcDirProvider = project.layout.buildDirectory.dir("runtime/axslc")
 
-                project.tasks.register(copyTaskName) {
-                    group = "axmol"
-                    // Declare inputs/outputs to help Gradle understand task ordering
-                    inputs.dir(contentSrcDir)
-                    inputs.dir(axslcSrcDir)
-                    outputs.dir(outputAssetsDir)
-
-                    doLast {
-                        // 1. Copy Content
-                        project.copy {
-                            from contentSrcDir
-                            into outputAssetsDir
-                            exclude "**/*.gz"
-                        }
-                        // 2. Copy axslc with physical check
-                        if (axslcSrcDir.exists() && axslcSrcDir.list()?.length > 0) {
-                            project.copy {
-                                from axslcSrcDir
-                                into "${outputAssetsDir}/axslc"
-                            }
-                        } else {
-                            // Fail the build if native build didn't produce files
-                            throw new GradleException(
-                                "[axmol] Error: axslc folder is empty or missing at ${axslcSrcDir}. " +
-                                    "Native build may have failed or output path is incorrect."
-                            )
-                        }
-                    }
+                def copyTaskProvider = project.tasks.register(copyTaskName, AxmolCopyContentToAssetsTask) { task ->
+                    task.group = "axmol"
+                    task.contentSrcDir.set(contentSrcDirProvider)
+                    task.axslcSrcDir.set(axslcSrcDirProvider)
+                    task.outputAssetsDir.set(outputAssetsDir)
                 }
 
-                // Register assets directory to sourceSets so AGP packages it
-                project.android.sourceSets.named(variant.name).configure {
-                    assets.srcDir(outputAssetsDir)
+                // Register build/assets as a generated assets directory. This lets AGP
+                // propagate copyTaskProvider as the producer to every assets consumer,
+                // including lint model/analyze tasks on Gradle 9 validation.
+                variant.sources.assets.addGeneratedSourceDirectory(copyTaskProvider) {
+                    it.outputAssetsDir
                 }
             }
         } else {
