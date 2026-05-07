@@ -102,16 +102,24 @@ class AxmolUtils {
             cmakeVer = project.properties.__1K_CMAKE_VERSION
 
         // Detecting sdkRoot
-        def _1k_env = new Properties()
-        try {
-            _1k_env.load(new File(Paths.get("${getEngineRoot()}/1k/.env").toUri()).newDataInputStream())
+        Map<String, String> _1k_env = new HashMap<>();
+        try (BufferedReader br = Files.newBufferedReader(Paths.get(getEngineRoot(), "1k/.env"))) {
+            br.lines()
+            .filter(line -> !line.trim().isEmpty() && !line.startsWith("#"))
+            .forEach(line -> {
+                int idx = line.indexOf('=')
+                if (idx > 0) {
+                    String key = line.substring(0, idx).trim()
+                    String value = line.substring(idx + 1).trim()
+                    _1k_env.put(key, value);
+                }
+            })
         }
-        catch (ignored) {
-        }
-        def cmdlineSdkRoot = _1k_env.getProperty('android_sdk_root')
+
+        def cmdlineSdkRoot = _1k_env.get('android_sdk_root')
         if (!new File(cmdlineSdkRoot).isDirectory()) {
+            println("[axmol] Warning: android_sdk_root: ${cmdlineSdkRoot} not found in 1k/.env, please re-run './setup.ps1 -p android'")
             cmdlineSdkRoot = null
-            println("[axmol] Warning: android_sdk_root not found in 1k/.env, please re-run './setup.ps1 -p android'")
         }
 
         def sdkRoot = null
@@ -641,20 +649,15 @@ class AxmolUtils {
         // inside afterEvaluate to ensure tasks exist and are correctly linked.
         project.afterEvaluate {
             // We iterate through registered copy tasks to perform the strict check
-            project.tasks.matching { it.name.startsWith("externalNativeBuild") }.configureEach { nativeTask ->
-                // Extract variant name from task name (e.g., "externalNativeBuildDebug" -> "Debug")
-                def variantName = nativeTask.name.replaceFirst(/^externalNativeBuild/, '')
-                def copyTask = project.tasks.named("copy${variantName}ContentToAssets")
-                println "[axmol] Configuring dependency for ${copyTask.name}, variantName:${variantName}"
-
-                copyTask.configure {
-                    dependsOn(project.tasks.named(nativeTask))
-                }
-
-                project.tasks.named("merge${variantName}Assets").configure {
-                    dependsOn(copyTask)
-                }
-            }
+           project.tasks.matching { it.name.startsWith("copy") && it.name.endsWith("ContentToAssets") }.all { copyTask ->
+                // Extract variant name from task name (e.g., "copyDebugContentToAssets" -> "Debug")
+                def variantName = copyTask.name.replaceFirst(/^copy/, '').replaceFirst(/ContentToAssets$/, '')
+                def mergeTask = project.tasks.findByName("merge${variantName}Assets") // builtin task
+                def nativeTask = project.tasks.findByName("externalNativeBuild${variantName}") // buitlin task
+                println "[axmol] Configuring task dependency: ${mergeTask.name} --> ${copyTask.name} --> ${nativeTask.name}"
+                copyTask.dependsOn(nativeTask)
+                mergeTask.dependsOn(copyTask)
+           }
         }
     }
 

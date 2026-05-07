@@ -1633,9 +1633,9 @@ function preprocess_win() {
             elseif ($TOOLCHAIN_VER -match '^\d+\.\d+$') {
                 $toolsetInfo = Get-VsToolsetFromMsvcVersion $TOOLCHAIN_VER
                 $outputOptions += '-T', "$($toolsetInfo.toolset),version=$TOOLCHAIN_VER"
-                # Specifying a CMake generator requires multiple Visual Studio versions 
+                # Specifying a CMake generator requires multiple Visual Studio versions
                 # (e.g., "Visual Studio $($toolsetInfo.vsVer) $($toolsetInfo.vsYear)").
-                # If no generator is specified, CMake will automatically select the latest 
+                # If no generator is specified, CMake will automatically select the latest
                 # available version, so only the newest Visual Studio (e.g., VS2026) needs to be installed.
                 # $Script:cmake_generator = "Visual Studio $($toolsetInfo.vsVer) $($toolsetInfo.vsYear)"
             }
@@ -2113,8 +2113,8 @@ if (!$setupOnly) {
             $build_tool = (Get-Command $options.xt).Source
             $build_tool_dir = Split-Path $build_tool -Parent
             Push-Location $build_tool_dir
+            $build_task = @('assemble', 'bundle')[$options.aab]
             if (!$configOnly) {
-                $build_task = @('assemble', 'bundle')[$options.aab]
                 if ($optimize_flag -eq 'Debug') {
                     & $build_tool ${build_task}Debug $CONFIG_ALL_OPTIONS | Out-Host
                 }
@@ -2124,9 +2124,11 @@ if (!$setupOnly) {
             }
             else {
                 if ($optimize_flag -eq 'Debug') {
+                    & $build_tool ${build_task}Debug $CONFIG_ALL_OPTIONS --dry-run | Out-Host
                     & $build_tool configureCMakeDebug prepareKotlinBuildScriptModel $CONFIG_ALL_OPTIONS | Out-Host
                 }
                 else {
+                    & $build_tool ${build_task}Release $CONFIG_ALL_OPTIONS --dry-run | Out-Host
                     & $build_tool configureCMakeRelWithDebInfo prepareKotlinBuildScriptModel $CONFIG_ALL_OPTIONS | Out-Host
                 }
             }
