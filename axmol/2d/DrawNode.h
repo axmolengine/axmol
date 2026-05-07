@@ -577,7 +577,7 @@ protected:
     tlx::pod_vector<V2F_T2F_C4F> _lines;
 
     Vec2* _verticesCircle = nullptr;  // avoid cos/sin and frequently allocation when drawing circle and ellipse
-    int _segments         = AX_DRAWNODE_PRE_CALCULATING_VERTICES;       // default segments used for circle and ellipse
+    int _segments         = AX_DRAWNODE_PRE_CALCULATING_VERTICES;  // default segments used for circle and ellipse
 private:
     // Internal function _drawPoint
     void _drawPoint(const Vec2& position,
@@ -663,7 +663,11 @@ private:
     void _drawSolidCircle(const Vec2& center, float radius, const Color& color);
 
     // Internal function _drawSolidCircle
-    void _drawSolidCircle(const Vec2& center, float radius, const Color& fillColor, const Color& borderColor, float thickness);
+    void _drawSolidCircle(const Vec2& center,
+                          float radius,
+                          const Color& fillColor,
+                          const Color& borderColor,
+                          float thickness);
 
     // Internal function _drawSolidCircle
     void _drawSolidCircle(const Vec2& center, float radius, const Color& color, Vec2& vec2);

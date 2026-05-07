@@ -1555,15 +1555,15 @@ void DrawNodeBaseTest::onDrawImGui()
             ImGui::SameLine();
             if (ImGui::Button("Default Values"))
             {
-                _nodeScale = 1.0f;
+                _nodeScale        = 1.0f;
                 _localeThickScale = 1.0f;
-                thickness = 1.0f;
+                thickness         = 1.0f;
                 drawNode->resetAdvancedSettings();
                 _drawOrder      = drawNode->isPreserveDrawOrder();
                 _transform      = drawNode->isLocalTransformEnabled();
                 _localeRotation = 1.0f;
                 _localeScale    = Vec2::ONE;
-                _localePivot    = center; 
+                _localePivot    = center;
             }
             ImGui::SliderFloat("Thickness", &thickness, 0.0f, 10.0f);
             ImGui::SliderFloat("Local Thickness Scale", &_localeThickScale, -10.0f, 10.0f);
