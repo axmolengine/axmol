@@ -29,7 +29,7 @@ class VersionComparator implements Comparator<String> {
                 nums1 = tokens*.toInteger()
             }
             catch (NumberFormatException e) {
-                throw new Exception("Cannot compare versions, left side [$o1] is invalid: ${e.message}")
+                throw new GradleException("Cannot compare versions, left side [$o1] is invalid: ${e.message}")
             }
             def nums2
             try {
@@ -38,7 +38,7 @@ class VersionComparator implements Comparator<String> {
                 nums2 = tokens*.toInteger()
             }
             catch (NumberFormatException e) {
-                throw new Exception("Cannot compare versions, right side [$o2] is invalid: ${e.message}")
+                throw new GradleException("Cannot compare versions, right side [$o2] is invalid: ${e.message}")
             }
             boolean bigRight = nums2.size() > nums1.size()
             boolean bigLeft = nums1.size() > nums2.size()
@@ -165,9 +165,8 @@ class AxmolUtils {
         }
 
         def cmdlineSdkRoot = _1k_env.get('android_sdk_root')
-        if (!new File(cmdlineSdkRoot).isDirectory()) {
-            println("[axmol] Warning: android_sdk_root: ${cmdlineSdkRoot} not found in 1k/.env, please re-run './setup.ps1 -p android'")
-            cmdlineSdkRoot = null
+        if (cmdlineSdkRoot == null || !new File(cmdlineSdkRoot).isDirectory()) {
+            throw new GradleException("[axmol] Error: android_sdk_root: ${cmdlineSdkRoot} not found in 1k/.env, please re-run './setup.ps1 -p android'")
         }
 
         def sdkRoot = null
@@ -196,7 +195,7 @@ class AxmolUtils {
             sdkRoot = cmdlineSdkRoot
         }
         if (sdkRoot == null) {
-            throw new Exception("Couldn't find android sdk in both local.properties and axmol/1k/.env. Specify path in local.properties or re-run './setup.ps1 -p android'")
+            throw new GradleException("Couldn't find android sdk in both local.properties and axmol/1k/.env. Specify path in local.properties or re-run './setup.ps1 -p android'")
         }
 
         if (sdkRoot != cmdlineSdkRoot) {
@@ -268,7 +267,7 @@ class AxmolUtils {
             }
             catch (Exception ex) {
                 ex.printStackTrace()
-                throw new Exception("Missing axmol project file: $axprojFile")
+                throw new GradleException("Missing axmol project file: $axprojFile")
             }
         }
 
@@ -336,7 +335,7 @@ class AxmolUtils {
             }
         }
 
-        throw new Exception("No installed ndk found, required $ndkVer.*, sdkRoot: $sdkRoot")
+        throw new GradleException("No installed ndk found, required $ndkVer.*, sdkRoot: $sdkRoot")
     }
 
 
@@ -369,7 +368,7 @@ class AxmolUtils {
         }
 
         if (verifiedVer == null) {
-            throw new Exception("[axmol] No suitable ninja found, required $ninjaVer, please run setup.ps1 and try again")
+            throw new GradleException("[axmol] No suitable ninja found, required $ninjaVer, please run setup.ps1 and try again")
         }
 
         buildProfiles['ninjaPath'] = verifiedPath
@@ -442,7 +441,7 @@ class AxmolUtils {
         }
 
         if (verifiedVer == null) {
-            throw new Exception("No suitable cmake found, required $cmakeVer, please run setup.ps1 and try again")
+            throw new GradleException("No suitable cmake found, required $cmakeVer, please run setup.ps1 and try again")
         }
 
         buildProfiles['cmakeVer'] = verifiedVer
@@ -600,7 +599,7 @@ class AxmolUtils {
             return matcher.group(1)
         }
 
-        throw new RuntimeException("[axmol] Could not extract version from output: ${output}")
+        throw new GradleException("[axmol] Could not extract version from output: ${output}")
     }
 
     static void createSymbolicLink(File link, File target) {
@@ -617,7 +616,7 @@ class AxmolUtils {
             proc.waitFor()
             if (proc.exitValue() != 0) {
                 // Print error message if mklink fails
-                throw new Exception("[axmol] Failed to create symbolic link: ${proc.err.text}")
+                throw new GradleException("[axmol] Failed to create symbolic link: ${proc.err.text}")
             }
         } else {
             // On Unix-like systems: Java NIO supports both files and directories
