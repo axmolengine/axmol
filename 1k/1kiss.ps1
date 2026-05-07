@@ -500,13 +500,18 @@ else {
 $1k.println("proj_dir=$((Get-Location).Path), install_prefix=$install_prefix")
 
 # 1kdist
-$sentry_file = Join-Path $PSScriptRoot '.active-mirror'
+$Script:1k_env_file = Join-Path $PSScriptRoot '.env'
 
-if ($1k.isfile($sentry_file)) {
-    $Script:ACTIVE_MIRROR = Get-Content $sentry_file
+if ($1k.isfile($1k_env_file)) {
+    $Script:1k_env = ConvertFrom-Props (Get-Content $1k_env_file)
 }
 else {
-    $Script:ACTIVE_MIRROR = 'origin'
+    $Script:1k_env = @{
+        'active_mirror' = 'origin'
+        'android_sdk_root' = ''
+    }
+    $1k_env_str = Global:ConvertTo-Props $Script:1k_env
+    [System.IO.File]::WriteAllText($1k_env_file, $1k_env_str)
 }
 
 $mirrors_conf_file = Join-Path $PSScriptRoot 'mirrors.json'
@@ -523,7 +528,7 @@ function devtool_url($name, $ver = $null, $mirror = $null) {
         $base_url = $tool_info.mirrors
     }
     else {
-        if (!$mirror) { $mirror = $Script:ACTIVE_MIRROR }
+        if (!$mirror) { $mirror = $Script:1k_env.active_mirror }
         $base_url = $tool_info.mirrors.$mirror
     }
 
@@ -1876,6 +1881,13 @@ elseif ($Global:is_android) {
     # Note: github action vm also have follow env vars
     $env:ANDROID_NDK_HOME = $ndk_root
     $env:ANDROID_NDK_ROOT = $ndk_root
+
+    if ($Script:1k_env.android_sdk_root -ne $sdk_root)
+    {
+        $Script:1k_env['android_sdk_root'] = $sdk_root
+        $1k_env_str = ConvertTo-Props $Script:1k_env
+        [System.IO.File]::WriteAllText($1k_env_file, $1k_env_str)
+    }
 
     $ndk_host = @('windows', 'linux', 'darwin')[$HOST_OS_INT]
     $env:ANDROID_NDK_BIN = Join-Path $ndk_root "toolchains/llvm/prebuilt/$ndk_host-x86_64/bin"

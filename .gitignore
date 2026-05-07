@@ -236,3 +236,5 @@ tests/*-tests/build_*
 release_note_draft.txt
 
 *.hprof
+
+.env

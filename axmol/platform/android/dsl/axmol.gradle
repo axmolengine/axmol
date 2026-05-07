@@ -102,10 +102,16 @@ class AxmolUtils {
             cmakeVer = project.properties.__1K_CMAKE_VERSION
 
         // Detecting sdkRoot
-        def cmdlineSdkRoot = Paths.get("${System.env.ANDROID_HOME}").toAbsolutePath().toString()
+        def _1k_env = new Properties()
+        try {
+            _1k_env.load(new File(Paths.get("${getEngineRoot()}/1k/.env").toUri()).newDataInputStream())
+        }
+        catch (ignored) {
+        }
+        def cmdlineSdkRoot = _1k_env.getProperty('android_sdk_root')
         if (!new File(cmdlineSdkRoot).isDirectory()) {
             cmdlineSdkRoot = null
-            println("[axmol] Warning: the cmdline preferred env ANDROID_HOME not set, strongly recommended to set it, on macOS, you can use 'launchctl setenv ANDROID_HOME path/to/android/sdk'")
+            println("[axmol] Warning: android_sdk_root not found in 1k/.env, please re-run './setup.ps1 -p android'")
         }
 
         def sdkRoot = null
@@ -134,7 +140,7 @@ class AxmolUtils {
             sdkRoot = cmdlineSdkRoot
         }
         if (sdkRoot == null) {
-            throw new Exception("Couldn't find android sdk. Specify path in local.properties or system env ANDROID_HOME")
+            throw new Exception("Couldn't find android sdk in both local.properties and axmol/1k/.env. Specify path in local.properties or re-run './setup.ps1 -p android'")
         }
 
         if (sdkRoot != cmdlineSdkRoot) {
