@@ -50,7 +50,7 @@ ndk=r27d
 
 # The android target sdk version, @gradle
 # as latest as possible
-target_sdk=36
+target_sdk=37
 
 # The android min sdk version, @gradle
 # as min as possible
@@ -62,15 +62,15 @@ gradle=9.5.0
 
 # The android gradle plugin, @setup.ps1
 # as stable as possible, match with build-tools,android-studio
-agp=8.13.2
+agp=9.2.1
 
 # The android build-tools, @axmol-cmdline @gradle
 # as stable as possible, match with agp,android-studio
-buildtools=36.0.0
+buildtools=37.0.0
 
 # The android studio, @hint
-# as latest as possible, but match with agp, build-tools
-androidstudio=2025.1.3+
+# as latest as possible
+androidstudio=2025.3.4+
 
 # The android dependencies managed by @gradle
 appcompat=1.7.1

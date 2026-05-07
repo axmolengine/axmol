@@ -1457,7 +1457,14 @@ function setup_android_sdk() {
     }
 
     if (!$ndkOnly) {
-        $sdk_comps_list = 'platform-tools', "platforms/android-$($manifest['target_sdk'])", "build-tools/$($manifest['buildtools'])"
+        $sdk_api_level = $manifest['target_sdk']
+        $parts = $sdk_api_level.Split('.')
+        $major = [int]$parts[0]
+        if (($major -ge 37) -and ($parts.Count -lt 2)) {
+            $sdk_api_level = "$major.0"
+        }
+
+        $sdk_comps_list = 'platform-tools', "platforms/android-$sdk_api_level", "build-tools/$($manifest['buildtools'])"
         foreach ($comp in $sdk_comps_list) {
             if (!$1k.isfile("$sdk_root/$comp/source.properties") -or $updateAdt) {
                 $sdk_comps += $comp.Replace('/', ';')

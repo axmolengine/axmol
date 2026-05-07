@@ -207,8 +207,8 @@ class AxmolUtils {
 
         // ndkVer,ndkPath,cmakeVer,cmakeOptions(AX_USE_XXX, AX_ENABLE_XXX, AX_ENABLE_EXT_XXX),cmakeDir<nullable>
         resolveNDK(sdkRoot, ndkVer, buildProfiles)
-        resolveNinja(ninjaVer, buildProfiles)
         resolveCMake(sdkRoot, cmakeVer, buildProfiles)
+        resolveNinja(ninjaVer, buildProfiles)
         generateCMakeOptions(project, buildProfiles)
 
         // dump build profiles
@@ -231,7 +231,7 @@ class AxmolUtils {
         }
 
         buildProfiles['minSdk'] = profiles['min_sdk']
-        buildProfiles['targetSdk'] = profiles['target_sdk']
+        buildProfiles['targetSdk'] = profiles['target_sdk'].toString().split('\\.')[0]
         buildProfiles['packageName'] = profiles['package_name']
         buildProfiles['appcompat'] = profiles['appcompat']
         buildProfiles['media3'] = profiles['media3']
@@ -351,27 +351,57 @@ class AxmolUtils {
 
         def ninjaBinDirs = []
 
+        def isFirstInSystemPath = false
+
         def ninjaBinDir = findExecutableDirInPath("ninja${getExecutableSuffix()}")
         if (ninjaBinDir != null) {
+            println "[axmol] found ninja in system path: ${ninjaBinDir}"
             ninjaBinDirs.add(ninjaBinDir)
+            isFirstInSystemPath = true
         }
         ninjaBinDir = joinPath(Paths.get("${getEngineRoot()}").toAbsolutePath().toString(), 'tools', 'external', 'ninja')
         ninjaBinDirs.add(ninjaBinDir)
 
         def verifiedVer = null
         def verifiedPath = null
+        def verifiedIndex = -1
+        def curIndex = 0
         for (ninjaDir in ninjaBinDirs) {
             println "[axmol] Verifying ninja version in ${ninjaDir}"
             def programPath = "$ninjaDir${File.separator}ninja${getExecutableSuffix()}"
-            verifiedVer = verifyProgramVer("ninja", programPath, ninjaVer, allowNewerNinja)
-            if (verifiedVer != null) {
+            def currentVer = verifyProgramVer("ninja", programPath, ninjaVer, allowNewerNinja)
+            if (currentVer != null) {
+                verifiedVer = currentVer
                 verifiedPath = programPath
+                verifiedIndex = curIndex
                 break
             }
+            ++curIndex
         }
 
         if (verifiedVer == null) {
             throw new GradleException("[axmol] No suitable ninja found, required $ninjaVer, please run setup.ps1 and try again")
+        }
+
+        if (isInsideAndroidStudio() && (verifiedIndex != 0 || !isFirstInSystemPath)) {
+            def ninjaPath = buildProfiles['ninjaPath']
+            def cmakeBinDir = buildProfiles['cmakeBinDir']
+            def cmakeNinjaPath = "${cmakeBinDir}${File.separator}ninja${getExecutableSuffix()}"
+            def cmakeNinjaFile = new File(cmakeNinjaPath)
+
+            if (!cmakeNinjaFile.exists()) {
+                println("[axmol] Create symlink ${cmakeNinjaFile} ==> ${ninjaPath} ...")
+                try {
+                    createSymbolicLink(cmakeNinjaFile, new File(ninjaPath))
+                } catch (Exception ex) {
+                    // Provide a clear and actionable error message
+                    throw new Exception(
+                        "Failed to create Ninja symlink at ${cmakeNinjaFile}. " +
+                            "Please ensure Ninja is installed and available on PATH or in SDK CMake/bin. " +
+                            "Details: ${ex.message}", ex
+                    )
+                }
+            }
         }
 
         buildProfiles['ninjaPath'] = verifiedPath
@@ -432,8 +462,8 @@ class AxmolUtils {
         def index = 0
         for (item in cmakeBinDirs) {
             println "[axmol] Verifying cmake version in ${item}"
-            def currentBinDir = "$item${File.separator}"
-            def programPath = "${currentBinDir}cmake${getExecutableSuffix()}"
+            def currentBinDir = "$item"
+            def programPath = "${currentBinDir}${File.separator}cmake${getExecutableSuffix()}"
             def currentVer = verifyProgramVer("cmake", programPath, cmakeVer, allowNewerCMake)
             if (currentVer != null) {
                 verifiedVer = currentVer
@@ -448,26 +478,7 @@ class AxmolUtils {
         }
 
         buildProfiles['cmakeVer'] = verifiedVer
-
-        if (isAndroidStudio()) {
-            def ninjaPath = buildProfiles['ninjaPath']
-            def cmakeNinjaPath = "${verifiedBinDir}ninja${getExecutableSuffix()}"
-            def cmakeNinjaFile = new File(cmakeNinjaPath)
-
-            if (!cmakeNinjaFile.exists()) {
-                println("[axmol] Create symlink ${cmakeNinjaFile} ==> ${ninjaPath} ...")
-                try {
-                    createSymbolicLink(cmakeNinjaFile, new File(ninjaPath))
-                } catch (Exception ex) {
-                    // Provide a clear and actionable error message
-                    throw new Exception(
-                        "Failed to create Ninja symlink at ${cmakeNinjaFile}. " +
-                            "Please ensure Ninja is installed and available on PATH or in SDK CMake/bin. " +
-                            "Details: ${ex.message}", ex
-                    )
-                }
-            }
-        }
+        buildProfiles['cmakeBinDir'] = verifiedBinDir
 
         // Create symlink at sdk cmake when using fallback cmake in axmol engine
         // Only present for compatibility purpose, may remove in future axmol releases
@@ -503,7 +514,7 @@ class AxmolUtils {
         def androidProjDir = project.projectDir.toString().replaceAll("\\\\", "/")
         def ninjaPath = buildProfiles['ninjaPath'].replaceAll("\\\\", "/")
         options.add('"-DCMAKE_FIND_ROOT_PATH="')
-        if (!isAndroidStudio()) {
+        if (!isInsideAndroidStudio()) {
             options.add("\"-DCMAKE_MAKE_PROGRAM=${ninjaPath}\"")
         }
         options.add('"-DANDROID_STL=c++_shared"')
@@ -627,7 +638,7 @@ class AxmolUtils {
         }
     }
 
-    static boolean isAndroidStudio() {
+    static boolean isInsideAndroidStudio() {
         return System.getProperty("idea.active") != null
     }
 
