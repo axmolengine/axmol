@@ -109,16 +109,28 @@ class AxmolUtils {
         }
 
         def sdkRoot = null
+        def localPropsFile = project.rootProject.file('local.properties')
         Properties localProps = new Properties()
         try {
-            localProps.load(project.rootProject.file("local.properties").newDataInputStream())
-            sdkRoot = localProps.getProperty("sdk.dir")
+            localProps.load(localPropsFile.newDataInputStream())
+            sdkRoot = localProps.getProperty('sdk.dir')
             println("[axmol] Using sdk.dir=$sdkRoot from local.properties")
         }
         catch (ignored) {
         }
 
-        if (sdkRoot == null) {
+        if (sdkRoot == null || !new File(sdkRoot).exists()) {
+            // sdk in local.properties unavailable, fallback to cmdlineSdkRoot
+            println "sdk in local.properties unavailable, fallback to cmdline preferred: $cmdlineSdkRoot"
+            localProps.setProperty("sdk.dir", cmdlineSdkRoot)
+            try {
+                localPropsFile.withOutputStream { stream ->
+                    localProps.store(stream, null)
+                }
+            }
+            catch (IOException ex) {
+                System.err.println("Failed to update local.properties: " + ex.getMessage());
+            }
             sdkRoot = cmdlineSdkRoot
         }
         if (sdkRoot == null) {
@@ -627,7 +639,7 @@ class AxmolUtils {
                 // Extract variant name from task name (e.g., "externalNativeBuildDebug" -> "Debug")
                 def variantName = nativeTask.name.replaceFirst(/^externalNativeBuild/, '')
                 def copyTask = project.tasks.named("copy${variantName}ContentToAssets")
-                println "Configuring dependency for ${copyTask.name}, variantName:${variantName}"
+                println "[axmol] Configuring dependency for ${copyTask.name}, variantName:${variantName}"
 
                 copyTask.configure {
                     dependsOn(project.tasks.named(nativeTask))
