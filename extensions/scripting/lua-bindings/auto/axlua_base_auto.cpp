@@ -27302,6 +27302,85 @@ int lua_ax_base_Director_getContentScaleFactor(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Director_runAsync(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Director* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Director",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Director_runAsync'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        std::function<void ()> arg0;
+
+        do {
+        	// Lambda binding for lua is not supported.
+            assert(false);
+        } while(0)
+        ;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_runAsync'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->runAsync(arg0);
+        object_to_luaval<ax::JobHandle>(tolua_S, "ax.JobHandle",(ax::JobHandle)ret);
+        return 1;
+    }
+    if (argc == 2)
+    {
+        std::function<void ()> arg0;
+        std::function<void ()> arg1;
+
+        do {
+        	// Lambda binding for lua is not supported.
+            assert(false);
+        } while(0)
+        ;
+
+        do {
+        	// Lambda binding for lua is not supported.
+            assert(false);
+        } while(0)
+        ;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_runAsync'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->runAsync(arg0, arg1);
+        object_to_luaval<ax::JobHandle>(tolua_S, "ax.JobHandle",(ax::JobHandle)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:runAsync",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_runAsync'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Director_getScheduler(lua_State* tolua_S)
 {
     int argc = 0;
@@ -28408,6 +28487,7 @@ int lua_register_ax_base_Director(lua_State* tolua_S)
         tolua_function(tolua_S,"getClearColor",lua_ax_base_Director_getClearColor);
         tolua_function(tolua_S,"setContentScaleFactor",lua_ax_base_Director_setContentScaleFactor);
         tolua_function(tolua_S,"getContentScaleFactor",lua_ax_base_Director_getContentScaleFactor);
+        tolua_function(tolua_S,"runAsync",lua_ax_base_Director_runAsync);
         tolua_function(tolua_S,"getScheduler",lua_ax_base_Director_getScheduler);
         tolua_function(tolua_S,"setScheduler",lua_ax_base_Director_setScheduler);
         tolua_function(tolua_S,"getActionManager",lua_ax_base_Director_getActionManager);
