@@ -54,7 +54,7 @@ target_sdk=37
 
 # The android min sdk version, @gradle
 # as min as possible
-min_sdk=21
+min_sdk=23
 
 # The gradle version, @setup.ps1
 # as latest as possible
@@ -74,7 +74,7 @@ androidstudio=2025.3.4+
 
 # The android dependencies managed by @gradle
 appcompat=1.7.1
-media3=1.2.1
+media3=1.10.0
 annotation=1.10.0
 guava=33.6.0
 

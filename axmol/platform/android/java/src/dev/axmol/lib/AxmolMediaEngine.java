@@ -55,7 +55,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @UnstableApi @SuppressWarnings("unused")
-public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.Listener, MediaCodecVideoRenderer.VideoFrameProcessor, VideoFrameMetadataListener {
+public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.Listener, ByteBufferVideoRenderer.VideoFrameProcessor, VideoFrameMetadataListener {
     // The native media events, match with MEMediaEventType
     public static final int EVENT_PLAYING = 0;
     public static final int EVENT_PAUSED = 1;
@@ -105,10 +105,11 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
     public static final String TAG = "AxmolMediaEngine";
     public static Context sContext = null;
     private ExoPlayer mPlayer;
-    private MediaCodecVideoRenderer mVideoRenderer;
+    private ByteBufferVideoRenderer mVideoRenderer;
     private MediaFormat mOutputFormat;
     private boolean mAutoPlay = false;
     private boolean mLooping = false;
+    private volatile boolean mPlayWhenReady = false;
     private long mNativeObj = 0; // native object address for send event to C++, weak ref
 
     private boolean mPlaybackEnded = false;
@@ -163,7 +164,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         long allowedVideoJoiningTimeMs,
         ArrayList<Renderer> out) {
         out.add(
-            new MediaCodecVideoRenderer(
+            new ByteBufferVideoRenderer(
                 context,
                 getCodecAdapterFactory(),
                 mediaCodecSelector,
@@ -176,6 +177,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
 
     public void setAutoPlay(boolean bAutoPlay) {
         mAutoPlay = bAutoPlay;
+        mPlayWhenReady = bAutoPlay;
     }
 
     /**
@@ -198,13 +200,15 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
                         .createMediaSource(MediaItem.fromUri(Uri.parse(sourceUri)));
 
                 mPlayer = new ExoPlayer.Builder(sContext, mediaEngine).build();
-                mVideoRenderer = (MediaCodecVideoRenderer) mPlayer.getRenderer(0); // the first must be video renderer
+                mVideoRenderer = (ByteBufferVideoRenderer) mPlayer.getRenderer(0); // the first must be video renderer
                 mVideoRenderer.setOutput(mediaEngine);
                 mPlayer.setVideoFrameMetadataListener(mediaEngine);
                 mPlayer.addListener(mediaEngine);
                 mPlayer.setMediaSource(mediaSource);
+                mPlaybackEnded = false;
+                mPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
                 mPlayer.prepare();
-                mPlayer.setRepeatMode(mLooping ? Player.REPEAT_MODE_ALL : Player.REPEAT_MODE_OFF);
+                mPlayWhenReady = mAutoPlay;
                 mPlayer.setPlayWhenReady(mAutoPlay);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -218,6 +222,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         if (mPlayer != null) {
             final ExoPlayer player = mPlayer;
             mPlayer = null;
+            mPlayWhenReady = false;
             final AxmolMediaEngine mediaEngine = this;
             AxmolEngine.runOnUiThread(() -> {
                 mVideoRenderer.setOutput(null);
@@ -236,7 +241,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
             if (mPlayer == null) return false;
             AxmolEngine.runOnUiThread(() -> {
                 if (mPlayer != null)
-                    mPlayer.setRepeatMode(mLooping ? Player.REPEAT_MODE_ALL : Player.REPEAT_MODE_OFF);
+                    mPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
             });
         }
         return true;
@@ -256,8 +261,10 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         if (mPlayer == null) return false;
 
         AxmolEngine.runOnUiThread(() -> {
-            if (mPlayer != null)
+            if (mPlayer != null) {
+                mPlaybackEnded = false;
                 mPlayer.seekTo((long) (fSeekTimeInSec * 1000));
+            }
         });
         return true;
     }
@@ -266,15 +273,15 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         if (mPlayer == null) return false;
         AxmolEngine.runOnUiThread(() -> {
             if (mPlayer != null) {
-                if (!mPlaybackEnded && mState.compareAndSet(STATE_STOPPED, STATE_PREPARING)) // TO-CHECK: can't reply after playback stopped
-                {
-                    /**
-                     * The player is used in a way that may benefit from foreground mode.
-                     * For this to be true, the same player instance must be used to play multiple pieces of content,
-                     * and there must be gaps between the playbacks (i.e. Player.stop() is called to halt one playback,
-                     * and prepare(com.google.android.exoplayer2.source.MediaSource) is called some time later to start a new one).
-                     */
+                mPlayWhenReady = true;
+                mPlaybackEnded = false;
+
+                int playbackState = mPlayer.getPlaybackState();
+                boolean restartingFromStopped = mState.compareAndSet(STATE_STOPPED, STATE_PREPARING);
+                if (playbackState == Player.STATE_IDLE) {
                     mPlayer.prepare();
+                }
+                if (restartingFromStopped || playbackState == Player.STATE_ENDED) {
                     mPlayer.seekTo(0);
                 }
                 mPlayer.play();
@@ -286,8 +293,10 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
     public boolean pause() {
         if (mPlayer == null) return false;
         AxmolEngine.runOnUiThread(() -> {
-            if (mPlayer != null)
+            if (mPlayer != null) {
+                mPlayWhenReady = false;
                 mPlayer.pause();
+            }
         });
         return true;
     }
@@ -296,6 +305,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         if (mPlayer == null) return false;
         AxmolEngine.runOnUiThread(() -> {
             if (mPlayer != null) {
+                mPlayWhenReady = false;
                 mPlayer.stop();
                 nativeStoreDuration(mNativeObj, 0.0);
             }
@@ -409,20 +419,29 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
      */
     @Override
     public void processVideoFrame(MediaCodecAdapter codec, int index, long presentationTimeUs) {
-        if (mState.get() != STATE_PLAYING) {
+        if (mPlayWhenReady && mState.get() != STATE_PLAYING) {
             mPlaybackEnded = false;
             mState.set(STATE_PLAYING);
             nativeEvent(EVENT_PLAYING);
         }
 
+        if (mNativeObj == 0) {
+            return;
+        }
+
         ByteBuffer tmpBuffer = codec.getOutputBuffer(index);
+        if (tmpBuffer == null) {
+            return;
+        }
         nativeStoreLastVideoSample(mNativeObj, tmpBuffer, tmpBuffer.remaining());
 
         AxmolEngine.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(mPlayer != null)
-                    nativeStoreCurrentTime(mNativeObj, mPlayer.getCurrentPosition() / 1000.0);
+                if (mPlayer != null) {
+                    long currentPositionMs = mPlayer.getCurrentPosition();
+                    nativeStoreCurrentTime(mNativeObj, currentPositionMs / 1000.0);
+                }
             }
         });
     }
@@ -437,10 +456,13 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
                 public void run() {
                     if (mPlayer == null) return;
                     int playbackState = mPlayer.getPlaybackState();
-                    if (playbackState == Player.STATE_READY || playbackState == Player.STATE_BUFFERING) {
+                    if (!mPlayer.getPlayWhenReady()
+                        && (playbackState == Player.STATE_READY || playbackState == Player.STATE_BUFFERING)) {
+                        mPlayWhenReady = false;
                         mState.set(STATE_PAUSED);
                         nativeEvent(EVENT_PAUSED);
                     } else if (playbackState == Player.STATE_IDLE && mState.get() != STATE_STOPPED) {
+                        if (isLoopPlaybackActive()) return;
                         mState.set(STATE_STOPPED);
                         nativeEvent(EVENT_STOPPED);
                     }
@@ -470,8 +492,24 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
                 });
                 break;
             case Player.STATE_ENDED:
+                if (isLoopPlaybackActive()) {
+                    AxmolEngine.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            restartLoopAfterEnded();
+                        }
+                    });
+                    break;
+                }
                 mPlaybackEnded = true;
+                mPlayWhenReady = false;
+                mState.set(STATE_STOPPED);
+                nativeEvent(EVENT_STOPPED);
+                break;
             case Player.STATE_IDLE:
+                if (isLoopPlaybackActive()) {
+                    break;
+                }
                 mState.set(STATE_STOPPED);
                 nativeEvent(EVENT_STOPPED);
                 break;
@@ -509,5 +547,18 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         if (mNativeObj != 0 && mPlayer != null) {
             nativeFireEvent(mNativeObj, event);
         }
+    }
+
+    private boolean isLoopPlaybackActive() {
+        return mLooping && mPlayWhenReady && mPlayer != null;
+    }
+
+    private void restartLoopAfterEnded() {
+        if (!isLoopPlaybackActive()) return;
+
+        mPlaybackEnded = false;
+        mState.set(STATE_PLAYING);
+        mPlayer.seekTo(0);
+        mPlayer.play();
     }
 }
