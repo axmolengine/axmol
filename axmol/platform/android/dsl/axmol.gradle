@@ -154,18 +154,25 @@ class AxmolUtils {
 
         // Detecting sdkRoot
         Map<String, String> _1k_env = new HashMap<>();
-        try (BufferedReader br = Files.newBufferedReader(Paths.get(getEngineRoot(), "1k/.env"))) {
-            br.lines()
-                .filter(line -> !line.trim().isEmpty() && !line.startsWith("#"))
-                .forEach(line -> {
-                    int idx = line.indexOf('=')
-                    if (idx > 0) {
-                        String key = line.substring(0, idx).trim()
-                        String value = line.substring(idx + 1).trim()
-                        _1k_env.put(key, value);
-                    }
-                })
+        File envFile = new File(getEngineRoot(), "1k/.env")
+        if (!envFile.exists()) {
+            throw new GradleException(
+                "Missing .env file at: ${envFile.absolutePath}\n" +
+                    "Please ensure the file exists or re-run setup.ps1 -p android"
+            )
         }
+        envFile.eachLine { line ->
+            line = line.trim()
+            if (line && !line.startsWith("#")) {
+                def parts = line.split("=", 2)
+                if (parts.length == 2) {
+                    def key = parts[0].trim()
+                    def value = parts[1].trim()
+                    _1k_env[key] = value
+                }
+            }
+        }
+
 
         def cmdlineSdkRoot = _1k_env.get('android_sdk_root')
         if (cmdlineSdkRoot == null || !new File(cmdlineSdkRoot).isDirectory()) {
