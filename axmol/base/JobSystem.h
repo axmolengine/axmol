@@ -56,39 +56,6 @@ public:
     virtual const char* name() { return "axmol"; }
 };
 
-class JobThreadTask
-{
-    friend class JobSystem;
-
-public:
-    enum class State
-    {
-        Idle,
-        Inprogress,
-        RequestCancel,
-    };
-    virtual ~JobThreadTask() {}
-    bool isInprogress() const { return _taskState.load(std::memory_order_acquire) == State::Inprogress; }
-    bool isIdle() const { return _taskState.load(std::memory_order_acquire) == State::Idle; }
-    bool isRequestCancel() const { return _taskState.load(std::memory_order_acquire) == State::RequestCancel; }
-    void cancel()
-    {
-        if (isInprogress())
-            _taskState.store(State::RequestCancel, std::memory_order_release);
-    }
-
-    JobThreadData* getThreadData() const { return _threadData.load(std::memory_order_acquire); }
-
-protected:
-    void setState(State state) { _taskState.store(state, std::memory_order_release); }
-    void setThreadData(JobThreadData* threadData) { _threadData.store(threadData, std::memory_order_release); }
-
-    virtual void execute() {}
-
-    std::atomic<State> _taskState{State::Idle};
-    std::atomic<JobThreadData*> _threadData{nullptr};
-};
-
 enum class JobStatus
 {
     /// The job has been accepted by the queue but has not started.
@@ -143,8 +110,6 @@ public:
      * @return false if the handle is invalid, otherwise true.
      */
     bool requestCancel() const;
-    /// Alias for requestCancel().
-    bool cancel() const { return requestCancel(); }
     /// Block until the job reaches Completed, Canceled, or Failed.
     void wait() const;
     /// Block until the job reaches a terminal state or until the timeout expires.
@@ -159,6 +124,62 @@ private:
     std::shared_ptr<JobState> _state;
 };
 
+struct CancellationState
+{
+    std::atomic_bool cancelRequested{false};
+};
+
+/**
+ * @brief Read-only cancellation signal observed by background jobs.
+ *
+ * A CancellationToken is usually captured by one or more queued jobs. Jobs should periodically call
+ * isCancellationRequested() and return voluntarily when it becomes true.
+ *
+ * @note Cancellation is cooperative. The token does not interrupt a running thread or remove queued work by itself.
+ */
+class CancellationToken
+{
+public:
+    CancellationToken() = default;
+
+    /// Returns true if this token is linked to a CancellationSource.
+    bool valid() const { return static_cast<bool>(_state); }
+
+    /// Returns true after the linked CancellationSource has requested cancellation.
+    bool isCancellationRequested() const { return _state && _state->cancelRequested.load(std::memory_order_acquire); }
+
+private:
+    friend class CancellationSource;
+
+    explicit CancellationToken(std::shared_ptr<CancellationState> state) : _state(std::move(state)) {}
+
+    std::shared_ptr<CancellationState> _state;
+};
+
+/**
+ * @brief Controller used to request cancellation for one or more jobs.
+ *
+ * External code owns the source and passes token() to jobs that belong to the same logical operation. Calling
+ * requestCancel() notifies all linked tokens.
+ */
+class CancellationSource
+{
+public:
+    CancellationSource() : _state(std::make_shared<CancellationState>()) {}
+
+    /// Returns a token linked to this source.
+    CancellationToken token() const { return CancellationToken(_state); }
+
+    /// Requests cooperative cancellation for all linked tokens.
+    void requestCancel() const { _state->cancelRequested.store(true, std::memory_order_release); }
+
+    /// Returns true after cancellation has been requested.
+    bool isCancellationRequested() const { return _state->cancelRequested.load(std::memory_order_acquire); }
+
+private:
+    std::shared_ptr<CancellationState> _state;
+};
+
 /**
  * @brief Thread-pool based background job system used by Axmol.
  *
@@ -166,8 +187,8 @@ private:
  * available. If the platform or configuration creates the JobSystem with no workers, jobs run synchronously on the
  * caller thread with a main-thread JobThreadData fallback.
  *
- * The preferred entry point is enqueue(std::function<void()>). Use enqueue(std::function<void(JobThreadData*)>) when a
- * job needs per-worker data, and enqueue(std::shared_ptr<JobThreadTask>) for legacy task-object code.
+ * The preferred entry point is enqueue(std::function<void()>). Use enqueue(std::function<void(JobThreadData*)>) only
+ * when a job needs per-worker context initialized by JobThreadData.
  *
  * @note JobSystem is intentionally a low-level background execution API. For the common "run work in the background,
  *       then continue on the Axmol thread" pattern, prefer Director::runAsync().
@@ -183,12 +204,15 @@ public:
     ~JobSystem();
 
     /**
-     * @brief Get the number of worker threads owned by this JobSystem.
+     * @brief Enqueue a regular background job.
      *
-     * @return The number of background worker threads actually created. Returns 0 when the JobSystem is using the
-     *         synchronous fallback path.
+     * This is the default overload for fire-and-forget work. Keep the returned handle only when native code needs to
+     * observe completion, wait for the job, or request cooperative cancellation.
+     *
+     * @param task Function executed by the JobSystem.
+     * @return A handle that can be ignored, polled, waited, or used for cooperative cancellation.
      */
-    int getWorkerCount() const { return _workerCount; }
+    JobHandle enqueue(std::function<void()> task);
 
     /**
      * @brief Enqueue a job that receives the worker thread's JobThreadData.
@@ -203,27 +227,12 @@ public:
     JobHandle enqueue(std::function<void(JobThreadData*)> task);
 
     /**
-     * @brief Enqueue a regular background job.
+     * @brief Get the number of worker threads owned by this JobSystem.
      *
-     * This is the default overload for fire-and-forget work. Keep the returned handle only when native code needs to
-     * observe completion, wait for the job, or request cooperative cancellation.
-     *
-     * @param task Function executed by the JobSystem.
-     * @return A handle that can be ignored, polled, waited, or used for cooperative cancellation.
+     * @return The number of background worker threads actually created. Returns 0 when the JobSystem is using the
+     *         synchronous fallback path.
      */
-    JobHandle enqueue(std::function<void()> task);
-
-    /**
-     * @brief Enqueue a JobThreadTask object.
-     *
-     * This overload preserves the legacy JobThreadTask model for code that stores task state in a polymorphic task
-     * object. New code should generally prefer the std::function overloads and keep the returned JobHandle when
-     * observation is needed.
-     *
-     * @param task Task object whose execute() method is invoked by the JobSystem.
-     * @return A handle that observes the submitted task.
-     */
-    JobHandle enqueue(std::shared_ptr<JobThreadTask> task);
+    int getWorkerCount() const { return _workerCount; }
 
 protected:
     void init(const std::span<std::shared_ptr<JobThreadData>>& tdds);

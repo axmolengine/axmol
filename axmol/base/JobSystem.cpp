@@ -291,6 +291,14 @@ JobSystem::~JobSystem()
     delete _mainThreadData;
 }
 
+JobHandle JobSystem::enqueue(std::function<void()> task)
+{
+    if (!task)
+        return {};
+
+    return enqueue([task = std::move(task)](JobThreadData*) { task(); });
+}
+
 JobHandle JobSystem::enqueue(std::function<void(JobThreadData*)> task)
 {
     if (_executor)
@@ -309,52 +317,6 @@ JobHandle JobSystem::enqueue(std::function<void(JobThreadData*)> task)
     {
         task(_mainThreadData);
         state->setStatus(JobStatus::Completed);
-    }
-    catch (...)
-    {
-        state->setException(std::current_exception());
-        state->setStatus(JobStatus::Failed);
-    }
-    return handle;
-}
-
-JobHandle JobSystem::enqueue(std::function<void()> task)
-{
-    if (!task)
-        return {};
-
-    auto taskw = [task = std::move(task)](JobThreadData*) { task(); };
-    return enqueue(std::move(taskw));
-}
-
-JobHandle JobSystem::enqueue(std::shared_ptr<JobThreadTask> task)
-{
-    auto state  = std::make_shared<JobState>();
-    auto handle = JobHandle(state);
-    auto taskw  = [task = std::move(task), handle, state](JobThreadData* thread_data) {
-        if (!task || task->isRequestCancel() || handle.isCancelRequested())
-            return;
-
-        task->setThreadData(thread_data);
-        task->setState(JobThreadTask::State::Inprogress);
-        task->execute();
-        if (task->isRequestCancel() || handle.isCancelRequested())
-        {
-            state->cancelRequested.store(true, std::memory_order_release);
-            task->setState(JobThreadTask::State::RequestCancel);
-            return;
-        }
-        task->setState(JobThreadTask::State::Idle);
-    };
-    if (_executor)
-        return _executor->enqueue(std::move(taskw), std::move(state));
-
-    state->setStatus(JobStatus::Running);
-    try
-    {
-        taskw(_mainThreadData);
-        state->setStatus(state->cancelRequested.load(std::memory_order_acquire) ? JobStatus::Canceled
-                                                                                : JobStatus::Completed);
     }
     catch (...)
     {
