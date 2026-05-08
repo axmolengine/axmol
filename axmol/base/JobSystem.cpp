@@ -24,14 +24,13 @@
  ****************************************************************************/
 
 #include "axmol/base/JobSystem.h"
-#include "axmol/base/Director.h"
+#include "axmol/base/Logging.h"
 #include "yasio/thread_name.hpp"
 
 #include <queue>
 #include <thread>
 #include <mutex>
 #include <condition_variable>
-#include <future>
 #include <functional>
 #include <stdexcept>
 
@@ -41,6 +40,106 @@
 
 namespace ax
 {
+
+struct JobState
+{
+    std::atomic<JobStatus> status{JobStatus::Queued};
+    std::atomic_bool cancelRequested{false};
+    std::exception_ptr exception;
+    mutable std::mutex mutex;
+    mutable std::condition_variable condition;
+
+    void setStatus(JobStatus value)
+    {
+        {
+            std::lock_guard<std::mutex> lock(mutex);
+            status.store(value, std::memory_order_release);
+        }
+        condition.notify_all();
+    }
+
+    void setException(std::exception_ptr value)
+    {
+        std::lock_guard<std::mutex> lock(mutex);
+        exception = value;
+    }
+};
+
+static bool isDoneStatus(JobStatus status)
+{
+    return status == JobStatus::Completed || status == JobStatus::Canceled || status == JobStatus::Failed;
+}
+
+JobHandle::JobHandle(std::shared_ptr<JobState> state) : _state(std::move(state)) {}
+
+bool JobHandle::valid() const
+{
+    return static_cast<bool>(_state);
+}
+
+bool JobHandle::isDone() const
+{
+    return _state && isDoneStatus(_state->status.load(std::memory_order_acquire));
+}
+
+bool JobHandle::isRunning() const
+{
+    return _state && _state->status.load(std::memory_order_acquire) == JobStatus::Running;
+}
+
+bool JobHandle::isCancelRequested() const
+{
+    return _state && _state->cancelRequested.load(std::memory_order_acquire);
+}
+
+JobStatus JobHandle::status() const
+{
+    return _state ? _state->status.load(std::memory_order_acquire) : JobStatus::Canceled;
+}
+
+std::exception_ptr JobHandle::exception() const
+{
+    if (!_state)
+        return nullptr;
+
+    std::lock_guard<std::mutex> lock(_state->mutex);
+    return _state->exception;
+}
+
+bool JobHandle::requestCancel() const
+{
+    if (!_state)
+        return false;
+
+    _state->cancelRequested.store(true, std::memory_order_release);
+    auto expected = JobStatus::Queued;
+    if (_state->status.compare_exchange_strong(expected, JobStatus::Canceled, std::memory_order_acq_rel))
+        _state->condition.notify_all();
+
+    return true;
+}
+
+void JobHandle::wait() const
+{
+    if (!_state)
+        return;
+
+    std::unique_lock<std::mutex> lock(_state->mutex);
+    _state->condition.wait(lock, [state = _state] {
+        return isDoneStatus(state->status.load(std::memory_order_acquire));
+    });
+}
+
+bool JobHandle::waitFor(std::chrono::milliseconds timeout) const
+{
+    if (!_state)
+        return true;
+
+    std::unique_lock<std::mutex> lock(_state->mutex);
+    return _state->condition.wait_for(lock, timeout, [state = _state] {
+        return isDoneStatus(state->status.load(std::memory_order_acquire));
+    });
+}
 
 #pragma region JobExecutor
 class JobExecutor
@@ -69,15 +168,30 @@ public:
                 thread_data->finz();
             });
     }
-    template <class F, class... Args>
-    auto enqueue(F&& f, Args&&... args) -> std::future<typename std::invoke_result<F(Args...)>::type>
+
+    JobHandle enqueue(std::function<void(JobThreadData*)> task, std::shared_ptr<JobState> state = nullptr)
     {
-        using return_type = typename std::invoke_result<F(Args...)>::type;
+        if (!state)
+            state = std::make_shared<JobState>();
 
-        auto task = std::make_shared<std::packaged_task<return_type(size_t)>>(
-            std::bind(std::forward<F>(f), std::placeholders::_1, std::forward<Args>(args)...));
+        auto taskw = [state, task = std::move(task)](JobThreadData* thread_data) mutable {
+            auto expected = JobStatus::Queued;
+            if (!state->status.compare_exchange_strong(expected, JobStatus::Running, std::memory_order_acq_rel))
+                return;
+            state->condition.notify_all();
 
-        std::future<return_type> res = task->get_future();
+            try
+            {
+                task(thread_data);
+                state->setStatus(state->cancelRequested.load(std::memory_order_acquire) ? JobStatus::Canceled
+                                                                                        : JobStatus::Completed);
+            }
+            catch (...)
+            {
+                state->setException(std::current_exception());
+                state->setStatus(JobStatus::Failed);
+            }
+        };
         {
             std::unique_lock<std::mutex> lock(queue_mutex);
 
@@ -85,28 +199,12 @@ public:
             if (stop)
                 throw std::runtime_error("enqueue on stopped executor");
 
-            tasks.emplace([task](JobThreadData* thread_data) { (*task)(thread_data); });
+            tasks.emplace(std::move(taskw));
         }
         condition.notify_one();
-        return res;
+        return JobHandle(state);
     }
 
-    template <class F, class... Args>
-    void enqueue_v(F&& f, Args&&... args)
-    {
-        auto task = std::bind(std::forward<F>(f), std::placeholders::_1, std::forward<Args>(args)...);
-
-        {
-            std::unique_lock<std::mutex> lock(queue_mutex);
-
-            // don't allow enqueueing after stopping the pool
-            if (stop)
-                throw std::runtime_error("enqueue on stopped executor");
-
-            tasks.emplace(std::move(task));
-        }
-        condition.notify_one();
-    }
     ~JobExecutor()
     {
         {
@@ -194,52 +292,77 @@ JobSystem::~JobSystem()
     delete _mainThreadData;
 }
 
-void JobSystem::enqueue_v(std::function<void(JobThreadData*)> task)
+JobHandle JobSystem::enqueue(std::function<void(JobThreadData*)> task)
 {
     if (_executor)
-        _executor->enqueue_v(std::move(task));
-    else
+        return _executor->enqueue(std::move(task));
+
+    auto state = std::make_shared<JobState>();
+    auto handle = JobHandle(state);
+    if (handle.isCancelRequested())
+    {
+        state->setStatus(JobStatus::Canceled);
+        return handle;
+    }
+
+    state->setStatus(JobStatus::Running);
+    try
+    {
         task(_mainThreadData);
+        state->setStatus(JobStatus::Completed);
+    }
+    catch (...)
+    {
+        state->setException(std::current_exception());
+        state->setStatus(JobStatus::Failed);
+    }
+    return handle;
 }
 
-void JobSystem::enqueue(std::function<void()> task)
-{
-    if (_executor)
-        this->enqueue(task, nullptr);
-    else
-        task();
-}
-
-void JobSystem::enqueue(std::shared_ptr<JobThreadTask> task)
-{
-    auto taskw = [task](JobThreadData* thread_data) {
-        if (!task->isRequestCancel())
-        {
-            task->setThreadData(thread_data);
-            task->setState(JobThreadTask::State::Inprogress);
-            task->execute();
-            task->setState(JobThreadTask::State::Idle);
-        }
-    };
-    if (_executor)
-        _executor->enqueue_v(std::move(taskw));
-    else
-        taskw(_mainThreadData);
-}
-
-void JobSystem::enqueue(std::function<void()> task, std::function<void()> done)
+JobHandle JobSystem::enqueue(std::function<void()> task)
 {
     if (!task)
-        return;
-    auto taskw = [task_ = std::move(task), done_ = std::move(done)](JobThreadData*) {
-        task_();
-        if (done_)
-            Director::getInstance()->getScheduler()->runOnAxmolThread(done_);
+        return {};
+
+    auto taskw = [task = std::move(task)](JobThreadData*) { task(); };
+    return enqueue(std::move(taskw));
+}
+
+JobHandle JobSystem::enqueue(std::shared_ptr<JobThreadTask> task)
+{
+    auto state  = std::make_shared<JobState>();
+    auto handle = JobHandle(state);
+    auto taskw  = [task = std::move(task), handle, state](JobThreadData* thread_data) {
+        if (!task || task->isRequestCancel() || handle.isCancelRequested())
+            return;
+
+        task->setThreadData(thread_data);
+        task->setState(JobThreadTask::State::Inprogress);
+        task->execute();
+        if (task->isRequestCancel() || handle.isCancelRequested())
+        {
+            state->cancelRequested.store(true, std::memory_order_release);
+            task->setState(JobThreadTask::State::RequestCancel);
+            return;
+        }
+        task->setState(JobThreadTask::State::Idle);
     };
     if (_executor)
-        _executor->enqueue_v(taskw);
-    else
+        return _executor->enqueue(std::move(taskw), std::move(state));
+
+    state->setStatus(JobStatus::Running);
+    try
+    {
         taskw(_mainThreadData);
+        state->setStatus(state->cancelRequested.load(std::memory_order_acquire) ? JobStatus::Canceled
+                                                                                : JobStatus::Completed);
+    }
+    catch (...)
+    {
+        state->setException(std::current_exception());
+        state->setStatus(JobStatus::Failed);
+    }
+    return handle;
 }
 
 #pragma endregion

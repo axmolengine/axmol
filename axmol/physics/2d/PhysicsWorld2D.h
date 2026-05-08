@@ -30,6 +30,7 @@
 #if defined(AX_ENABLE_PHYSICS_2D)
 
 #    include <list>
+#    include <memory>
 #    include "axmol/base/Vector.h"
 #    include "axmol/math/Math.h"
 #    include "axmol/physics/2d/Rigidbody2D.h"
@@ -50,6 +51,7 @@ class DrawNode;
 class EventDispatcher;
 
 class PhysicsWorld2D;
+struct PhysicsWorld2DJobContext;
 
 /// Represents a 2D ray defined by an origin point and a translation vector.
 /// @note Use fromPoints() to conveniently construct a ray from two points.
@@ -446,6 +448,7 @@ protected:
     Scene* _scene;
 
     EventDispatcher* _eventDispatcher;
+    std::unique_ptr<PhysicsWorld2DJobContext> _jobContext;
 
     std::function<void()> _preUpdateCallback;
     std::function<void()> _postUpdateCallback;

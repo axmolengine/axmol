@@ -27,6 +27,8 @@
 #include "axmol/physics/2d/PhysicsWorld2D.h"
 #if defined(AX_ENABLE_PHYSICS_2D)
 #    include <algorithm>
+#    include <array>
+#    include <atomic>
 #    include <climits>
 
 #    include "axmol/physics/2d/Rigidbody2D.h"
@@ -40,6 +42,8 @@
 #    include "axmol/base/Director.h"
 #    include "axmol/base/EventDispatcher.h"
 #    include "axmol/base/EventCustom.h"
+#    include "axmol/base/JobSystem.h"
+#    include "box2d/constants.h"
 
 namespace ax
 {
@@ -198,6 +202,68 @@ struct PhysicsQueryCallbacks2D
     }
 };
 
+struct PhysicsWorld2DJobSlot
+{
+    ax::JobHandle job;
+    std::atomic_bool inUse{false};
+};
+
+struct PhysicsWorld2DJobContext
+{
+    JobSystem* jobSystem{nullptr};
+    std::array<PhysicsWorld2DJobSlot, B2_MAX_TASKS> slots;
+
+    PhysicsWorld2DJobSlot* acquireSlot()
+    {
+        for (auto& slot : slots)
+        {
+            bool expected = false;
+            if (slot.inUse.compare_exchange_strong(expected, true, std::memory_order_acq_rel))
+                return &slot;
+        }
+        return nullptr;
+    }
+
+    void releaseSlot(PhysicsWorld2DJobSlot* slot)
+    {
+        if (!slot)
+            return;
+
+        slot->job = {};
+        slot->inUse.store(false, std::memory_order_release);
+    }
+};
+
+static void* b2EnqueueTask(b2TaskCallback* task, void* taskContext, void* userContext)
+{
+    auto context = static_cast<PhysicsWorld2DJobContext*>(userContext);
+    auto slot    = context->acquireSlot();
+    AXASSERT(slot != nullptr, "Box2D job slot pool exhausted");
+    if (!slot)
+    {
+        if (task)
+            task(taskContext);
+        return nullptr;
+    }
+
+    slot->job = context->jobSystem->enqueue([task, taskContext] {
+        if (task)
+            task(taskContext);
+    });
+    return slot;
+}
+
+static void b2FinishTask(void* userTask, void* userContext)
+{
+    auto context = static_cast<PhysicsWorld2DJobContext*>(userContext);
+    auto slot    = static_cast<PhysicsWorld2DJobSlot*>(userTask);
+    if (!slot)
+        return;
+
+    slot->job.wait();
+    context->releaseSlot(slot);
+}
+
 #    pragma endregion
 
 PhysicsWorld2D* PhysicsWorld2D::obtain(Scene* scene)
@@ -222,6 +288,7 @@ PhysicsWorld2D::PhysicsWorld2D()
     , _scene(nullptr)
     , _autoStep(true)
     , _eventDispatcher(nullptr)
+    , _jobContext(std::make_unique<PhysicsWorld2DJobContext>())
 {}
 
 PhysicsWorld2D::~PhysicsWorld2D()
@@ -394,6 +461,13 @@ bool PhysicsWorld2D::init(Scene* scene)
         b2SetLengthUnitsPerMeter(_PTMRatio);
 
         auto worldDef = b2DefaultWorldDef();
+
+        _jobContext->jobSystem = Director::getInstance()->getJobSystem();
+
+        worldDef.workerCount     = 2;
+        worldDef.enqueueTask     = b2EnqueueTask;
+        worldDef.finishTask      = b2FinishTask;
+        worldDef.userTaskContext = _jobContext.get();
 
         // Realistic gravity is achieved by multiplying gravity by the length unit.
         worldDef.gravity          = b2util::cast(_gravity * _PTMRatio);

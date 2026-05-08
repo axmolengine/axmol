@@ -58,6 +58,7 @@ THE SOFTWARE.
 #include "axmol/base/AutoreleasePool.h"
 #include "axmol/base/Environment.h"
 #include "axmol/base/ObjectFactory.h"
+#include "axmol/base/RefPtr.h"
 #include "axmol/platform/Application.h"
 #if defined(AX_ENABLE_AUDIO)
 #    include "axmol/audio/AudioEngine.h"
@@ -1554,6 +1555,19 @@ void Director::setScheduler(Scheduler* scheduler)
         AX_SAFE_RELEASE(_scheduler);
         _scheduler = scheduler;
     }
+}
+
+JobHandle Director::runAsync(std::function<void()> task, std::function<void()> done)
+{
+    if (!task)
+        return {};
+
+    RefPtr<Scheduler> scheduler(_scheduler);
+    return _jobSystem->enqueue([task = std::move(task), done = std::move(done), scheduler = std::move(scheduler)]() mutable {
+        task();
+        if (done)
+            scheduler->runOnAxmolThread(std::move(done));
+    });
 }
 
 void Director::setActionManager(ActionManager* actionManager)

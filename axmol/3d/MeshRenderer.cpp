@@ -115,7 +115,7 @@ void MeshRenderer::createAsync(std::string_view modelPath,
     meshRenderer->_asyncLoadParam.nodeDatas         = new NodeDatas();
 
     auto director = Director::getInstance();
-    director->getJobSystem()->enqueue([director, meshRenderer] {
+    director->runAsync([meshRenderer] {
         auto& loadParam  = meshRenderer->_asyncLoadParam;
         loadParam.result = meshRenderer->loadFromFile(loadParam.modelFullPath, loadParam.nodeDatas, loadParam.meshdatas,
                                                       loadParam.materialdatas);

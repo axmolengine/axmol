@@ -563,7 +563,7 @@ void AssetsManagerEx::decompressDownloadedZip(std::string_view customId, std::st
         delete dataInner;
     };
 
-    Director::getInstance()->getJobSystem()->enqueue([this, asyncData]() {
+    Director::getInstance()->runAsync([this, asyncData]() {
         // Decompress all compressed files
         if (decompress(asyncData->zipFile))
         {
