@@ -83,8 +83,6 @@ public class AxmolPlayer extends FrameLayout {
 
     private boolean mEnableForceDoLayout = false;
 
-    private boolean mIsVulkan = false;
-
     private boolean mSurfaceCreated = false;
 
     private CountDownLatch mNativePauseComplete;
@@ -95,6 +93,7 @@ public class AxmolPlayer extends FrameLayout {
     private int mLastSurfaceWidth = 0;
     private int mLastSurfaceHeight = 0;
 
+    @SuppressWarnings("unused")
     public boolean isSoftKeyboardShown() {
         return mSoftKeyboardShown;
     }
@@ -103,6 +102,7 @@ public class AxmolPlayer extends FrameLayout {
         this.mSoftKeyboardShown = softKeyboardShown;
     }
 
+    @SuppressWarnings("unused")
     public boolean isMultipleTouchEnabled() {
         return mMultipleTouchEnabled;
     }
@@ -132,7 +132,7 @@ public class AxmolPlayer extends FrameLayout {
 
     protected void initView(Context ctx) {
 
-        mIsVulkan = AxmolEngine.nativeGetRenderAPI() == AxmolEngine.RENDER_API_VK;
+        boolean isVulkan = AxmolEngine.nativeGetRenderAPI() == AxmolEngine.RENDER_API_VK;
 
         // FrameLayout
         LayoutParams frameParams = new LayoutParams(
@@ -193,7 +193,7 @@ public class AxmolPlayer extends FrameLayout {
         });
 
         // Decide backend
-        if (mIsVulkan) {
+        if (isVulkan) {
             initVulkanView(ctx);
         } else {
             initGLView(ctx);

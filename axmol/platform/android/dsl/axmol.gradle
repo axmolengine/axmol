@@ -156,15 +156,15 @@ class AxmolUtils {
         Map<String, String> _1k_env = new HashMap<>();
         try (BufferedReader br = Files.newBufferedReader(Paths.get(getEngineRoot(), "1k/.env"))) {
             br.lines()
-            .filter(line -> !line.trim().isEmpty() && !line.startsWith("#"))
-            .forEach(line -> {
-                int idx = line.indexOf('=')
-                if (idx > 0) {
-                    String key = line.substring(0, idx).trim()
-                    String value = line.substring(idx + 1).trim()
-                    _1k_env.put(key, value);
-                }
-            })
+                .filter(line -> !line.trim().isEmpty() && !line.startsWith("#"))
+                .forEach(line -> {
+                    int idx = line.indexOf('=')
+                    if (idx > 0) {
+                        String key = line.substring(0, idx).trim()
+                        String value = line.substring(idx + 1).trim()
+                        _1k_env.put(key, value);
+                    }
+                })
         }
 
         def cmdlineSdkRoot = _1k_env.get('android_sdk_root')
@@ -242,11 +242,20 @@ class AxmolUtils {
     }
 
     private static getEngineRoot() {
-        def axRoot = System.getProperty("AX_ROOT");
-        if (axRoot == null) {
-            axRoot = System.getenv("AX_ROOT");
+        def axmolRoot = System.getProperty("AX_ROOT");
+        if (axmolRoot == null) {
+            axmolRoot = System.getenv("AX_ROOT");
         }
-        return axRoot;
+        if (axmolRoot == null) {
+            throw new GradleException(
+                "Missing environment variable 'AX_ROOT'.\n" +
+                    "Please run: setup.ps1 -p android\n" +
+                    "Or set AX_ROOT manually, e.g.:\n" +
+                    "  set AX_ROOT=C:\\path\\to\\axmol (Windows)\n" +
+                    "  export AX_ROOT=/path/to/axmol (macOS/Linux)"
+            )
+        }
+        return axmolRoot;
     }
 
     private static Properties loadProfiles(project, isAxmolAppProj) {
@@ -395,7 +404,7 @@ class AxmolUtils {
                     createSymbolicLink(cmakeNinjaFile, new File(ninjaPath))
                 } catch (Exception ex) {
                     // Provide a clear and actionable error message
-                    throw new Exception(
+                    throw new GradleException(
                         "Failed to create Ninja symlink at ${cmakeNinjaFile}. " +
                             "Please ensure Ninja is installed and available on PATH or in SDK CMake/bin. " +
                             "Details: ${ex.message}", ex
@@ -708,7 +717,7 @@ class AxmolUtils {
         // inside afterEvaluate to ensure tasks exist and are correctly linked.
         project.afterEvaluate {
             // We iterate through registered copy tasks to perform the strict check
-           project.tasks.matching { it.name.startsWith("copy") && it.name.endsWith("ContentToAssets") }.all { copyTask ->
+            project.tasks.matching { it.name.startsWith("copy") && it.name.endsWith("ContentToAssets") }.all { copyTask ->
                 // Extract variant name from task name (e.g., "copyDebugContentToAssets" -> "Debug")
                 def variantName = copyTask.name.replaceFirst(/^copy/, '').replaceFirst(/ContentToAssets$/, '')
                 def mergeTask = project.tasks.findByName("merge${variantName}Assets") // builtin task
@@ -716,7 +725,7 @@ class AxmolUtils {
                 println "[axmol] Configuring task dependency: ${mergeTask.name} --> ${copyTask.name} --> ${nativeTask.name}"
                 copyTask.dependsOn(nativeTask)
                 mergeTask.dependsOn(copyTask)
-           }
+            }
         }
     }
 
