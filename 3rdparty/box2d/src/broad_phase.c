@@ -9,11 +9,11 @@
 
 #include "aabb.h"
 #include "arena_allocator.h"
-#include "array.h"
 #include "atomic.h"
 #include "body.h"
 #include "contact.h"
 #include "core.h"
+#include "parallel_for.h"
 #include "physics_world.h"
 #include "shape.h"
 
@@ -24,7 +24,7 @@
 
 // static FILE* s_file = NULL;
 
-void b2CreateBroadPhase( b2BroadPhase* bp )
+void b2CreateBroadPhase( b2BroadPhase* bp, const b2Capacity* capacity )
 {
 	_Static_assert( b2_bodyTypeCount == 3, "must be three body types" );
 
@@ -34,18 +34,22 @@ void b2CreateBroadPhase( b2BroadPhase* bp )
 	//	fprintf(s_file, "============\n\n");
 	// }
 
-	bp->moveSet = b2CreateSet( 16 );
-	bp->moveArray = b2IntArray_Create( 16 );
+	bp->moveSet = b2CreateSet( b2MaxInt( 16, 2 * capacity->dynamicShapeCount ) );
+	b2Array_CreateN( bp->moveArray, b2MaxInt( 16, capacity->dynamicShapeCount ) );
 	bp->moveResults = NULL;
 	bp->movePairs = NULL;
 	bp->movePairCapacity = 0;
 	b2AtomicStoreInt( &bp->movePairIndex, 0 );
-	bp->pairSet = b2CreateSet( 32 );
+	bp->pairSet = b2CreateSet( b2MaxInt( 32, 2 * capacity->contactCount ) );
 
-	for ( int i = 0; i < b2_bodyTypeCount; ++i )
-	{
-		bp->trees[i] = b2DynamicTree_Create();
-	}
+	int staticCapacity = b2MaxInt( 16, capacity->staticShapeCount );
+	bp->trees[b2_staticBody] = b2DynamicTree_Create( staticCapacity );
+
+	int kinematicCapacity = 16;
+	bp->trees[b2_kinematicBody] = b2DynamicTree_Create( kinematicCapacity );
+
+	int dynamicCapacity = b2MaxInt( 16, capacity->dynamicShapeCount );
+	bp->trees[b2_dynamicBody] = b2DynamicTree_Create( dynamicCapacity );
 }
 
 void b2DestroyBroadPhase( b2BroadPhase* bp )
@@ -56,7 +60,7 @@ void b2DestroyBroadPhase( b2BroadPhase* bp )
 	}
 
 	b2DestroySet( &bp->moveSet );
-	b2IntArray_Destroy( &bp->moveArray );
+	b2Array_Destroy( bp->moveArray );
 	b2DestroySet( &bp->pairSet );
 
 	memset( bp, 0, sizeof( b2BroadPhase ) );
@@ -81,7 +85,7 @@ static inline void b2UnBufferMove( b2BroadPhase* bp, int proxyKey )
 		{
 			if ( bp->moveArray.data[i] == proxyKey )
 			{
-				b2IntArray_RemoveSwap( &bp->moveArray, i );
+				b2Array_RemoveSwap( bp->moveArray, i );
 				break;
 			}
 		}
@@ -234,8 +238,8 @@ static bool b2PairQueryCallback( int proxyId, uint64_t userData, void* context )
 
 	b2World* world = queryContext->world;
 
-	b2Shape* shapeA = b2ShapeArray_Get( &world->shapes, shapeIdA );
-	b2Shape* shapeB = b2ShapeArray_Get( &world->shapes, shapeIdB );
+	b2Shape* shapeA = b2Array_Get( world->shapes, shapeIdA );
+	b2Shape* shapeB = b2Array_Get( world->shapes, shapeIdB );
 
 	int bodyIdA = shapeA->bodyId;
 	int bodyIdB = shapeB->bodyId;
@@ -264,8 +268,8 @@ static bool b2PairQueryCallback( int proxyId, uint64_t userData, void* context )
 	}
 
 	// Does a joint override collision?
-	b2Body* bodyA = b2BodyArray_Get( &world->bodies, bodyIdA );
-	b2Body* bodyB = b2BodyArray_Get( &world->bodies, bodyIdB );
+	b2Body* bodyA = b2Array_Get( world->bodies, bodyIdA );
+	b2Body* bodyB = b2Array_Get( world->bodies, bodyIdB );
 	if ( b2ShouldBodiesCollide( world, bodyA, bodyB ) == false )
 	{
 		return true;
@@ -324,11 +328,11 @@ b2TreeStats b2_kinematicStats;
 b2TreeStats b2_staticStats;
 #endif
 
-static void b2FindPairsTask( int startIndex, int endIndex, uint32_t threadIndex, void* context )
+static void b2FindPairsTask( int startIndex, int endIndex, int workerIndex, void* context )
 {
-	b2TracyCZoneNC( pair_task, "Pair", b2_colorMediumSlateBlue, true );
+	B2_UNUSED( workerIndex );
 
-	B2_UNUSED( threadIndex );
+	b2TracyCZoneNC( pair_task, "Pair", b2_colorMediumSlateBlue, true );
 
 	b2World* world = context;
 	b2BroadPhase* bp = &world->broadPhase;
@@ -392,16 +396,13 @@ static void b2FindPairsTask( int startIndex, int endIndex, uint32_t threadIndex,
 	b2TracyCZoneEnd( pair_task );
 }
 
-static void b2UpdateTreesTask( int startIndex, int endIndex, uint32_t threadIndex, void* context )
+static void b2UpdateTreesTask( void* context )
 {
-	B2_UNUSED( startIndex );
-	B2_UNUSED( endIndex );
-	B2_UNUSED( threadIndex );
-
 	b2TracyCZoneNC( tree_task, "Rebuild BVH", b2_colorFireBrick, true );
 
 	b2World* world = context;
-	b2BroadPhase_RebuildTrees( &world->broadPhase );
+	b2DynamicTree_Rebuild( world->broadPhase.trees + b2_dynamicBody, false );
+	b2DynamicTree_Rebuild( world->broadPhase.trees + b2_kinematicBody, false );
 
 	b2TracyCZoneEnd( tree_task );
 }
@@ -420,14 +421,14 @@ void b2UpdateBroadPhasePairs( b2World* world )
 
 	b2TracyCZoneNC( update_pairs, "Find Pairs", b2_colorMediumSlateBlue, true );
 
-	b2ArenaAllocator* alloc = &world->arena;
+	b2Stack* alloc = &world->stack;
 
 	// todo these could be in the step context
-	bp->moveResults = b2AllocateArenaItem( alloc, moveCount * sizeof( b2MoveResult ), "move results" );
+	bp->moveResults = b2StackAlloc( alloc, moveCount * sizeof( b2MoveResult ), "move results" );
 
 	// This capacity can be exceeded if there are many overlapping pairs (e.g. all shapes at the origin)
-	bp->movePairCapacity = 8 * moveCount;
-	bp->movePairs = b2AllocateArenaItem( alloc, bp->movePairCapacity * sizeof( b2MovePair ), "move pairs" );
+	bp->movePairCapacity = 32 * moveCount;
+	bp->movePairs = b2StackAlloc( alloc, bp->movePairCapacity * sizeof( b2MovePair ), "move pairs" );
 	b2AtomicStoreInt( &bp->movePairIndex, 0 );
 
 #if B2_SNOOP_TABLE_COUNTERS
@@ -436,20 +437,23 @@ void b2UpdateBroadPhasePairs( b2World* world )
 #endif
 
 	int minRange = 64;
-	void* userPairTask = world->enqueueTaskFcn( &b2FindPairsTask, moveCount, minRange, world, world->userTaskContext );
-	if ( userPairTask != NULL )
-	{
-		world->finishTaskFcn( userPairTask, world->userTaskContext );
-		world->taskCount += 1;
-	}
+	b2ParallelFor( world, &b2FindPairsTask, moveCount, minRange, world );
 
 	b2TracyCZoneNC( create_contacts, "Create Contacts", b2_colorCoral, true );
 
 	// Task that can be done in parallel with the narrow-phase
 	// - rebuild the collision tree for dynamic and kinematic bodies to keep their query performance good
-	world->userTreeTask = world->enqueueTaskFcn( &b2UpdateTreesTask, 1, 1, world, world->userTaskContext );
-	world->taskCount += 1;
-	world->activeTaskCount += world->userTreeTask == NULL ? 0 : 1;
+	if (world->taskCount < B2_MAX_TASKS)
+	{
+		world->userTreeTask = world->enqueueTaskFcn( &b2UpdateTreesTask, world, world->userTaskContext );
+		world->taskCount += 1;
+		world->activeTaskCount += world->userTreeTask == NULL ? 0 : 1;
+	}
+	else
+	{
+		world->userTreeTask = NULL;
+		b2UpdateTreesTask( world );
+	}
 
 	// Single-threaded work
 	// - Clear move flags
@@ -469,8 +473,8 @@ void b2UpdateBroadPhasePairs( b2World* world )
 			//	fprintf(s_file, "%d %d\n", shapeIdA, shapeIdB);
 			// }
 
-			b2Shape* shapeA = b2ShapeArray_Get( &world->shapes, shapeIdA );
-			b2Shape* shapeB = b2ShapeArray_Get( &world->shapes, shapeIdB );
+			b2Shape* shapeA = b2Array_Get( world->shapes, shapeIdA );
+			b2Shape* shapeB = b2Array_Get( world->shapes, shapeIdB );
 
 			b2CreateContact( world, shapeA, shapeB );
 
@@ -502,12 +506,12 @@ void b2UpdateBroadPhasePairs( b2World* world )
 	// }
 
 	// Reset move buffer
-	b2IntArray_Clear( &bp->moveArray );
+	b2Array_Clear( bp->moveArray );
 	b2ClearSet( &bp->moveSet );
 
-	b2FreeArenaItem( alloc, bp->movePairs );
+	b2StackFree( alloc, bp->movePairs );
 	bp->movePairs = NULL;
-	b2FreeArenaItem( alloc, bp->moveResults );
+	b2StackFree( alloc, bp->moveResults );
 	bp->moveResults = NULL;
 
 	b2ValidateSolverSets( world );
@@ -526,12 +530,6 @@ bool b2BroadPhase_TestOverlap( const b2BroadPhase* bp, int proxyKeyA, int proxyK
 	b2AABB aabbA = b2DynamicTree_GetAABB( bp->trees + typeIndexA, proxyIdA );
 	b2AABB aabbB = b2DynamicTree_GetAABB( bp->trees + typeIndexB, proxyIdB );
 	return b2AABB_Overlaps( aabbA, aabbB );
-}
-
-void b2BroadPhase_RebuildTrees( b2BroadPhase* bp )
-{
-	b2DynamicTree_Rebuild( bp->trees + b2_dynamicBody, false );
-	b2DynamicTree_Rebuild( bp->trees + b2_kinematicBody, false );
 }
 
 int b2BroadPhase_GetShapeIndex( b2BroadPhase* bp, int proxyKey )

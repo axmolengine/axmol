@@ -11,6 +11,14 @@
 #define b2DeclareArray( T )                                                                                                      \
 	typedef struct b2DynamicArray_##T                                                                                            \
 	{                                                                                                                            \
+		struct T* data;                                                                                                          \
+		int count;                                                                                                               \
+		int capacity;                                                                                                            \
+	} b2DynamicArray_##T
+
+#define b2DeclareArrayNative( T )                                                                                                \
+	typedef struct b2DynamicArray_##T                                                                                            \
+	{                                                                                                                            \
 		T* data;                                                                                                                 \
 		int count;                                                                                                               \
 		int capacity;                                                                                                            \
@@ -18,8 +26,8 @@
 
 // Define an array.
 // It may be zero initialized:
-// b2ArrayC(int) myArray = { 0 };
-#define b2ArrayC( T ) b2DynamicArray_##T
+// b2Array(int) myArray = { 0 };
+#define b2Array( T ) b2DynamicArray_##T
 
 // Alternative to zero initialization
 #define b2Array_Create( a )                                                                                                      \
@@ -71,6 +79,15 @@
 	}                                                                                                                            \
 	while ( 0 )
 
+#define b2Array_ResizeAndSetZero( a, n )                                                                                         \
+	do                                                                                                                           \
+	{                                                                                                                            \
+		b2Array_Reserve( a, n );                                                                                                 \
+		memset( ( a ).data, 0, ( n ) * sizeof( *( a ).data ) );                                                                  \
+		( a ).count = ( n );                                                                                                     \
+	}                                                                                                                            \
+	while ( 0 )
+
 // Push a new element by value
 #define b2Array_Push( a, value )                                                                                                 \
 	do                                                                                                                           \
@@ -90,7 +107,7 @@
 	while ( 0 )
 
 // Get a pointer to an element
-#define b2Array_Get( a, index ) ( B2_ASSERT( 0 <= index && index < ( a ).count ), ( a ).data + index )
+#define b2Array_Get( a, index ) ( B2_ASSERT( 0 <= (index) && (index) < ( a ).count ), ( a ).data + (index) )
 
 // Create a new uninitialized element and return a pointer to it
 #define b2Array_Emplace( a ) ( b2EmplaceHelper( (void**)&( a ).data, &( a ).count, &( a ).capacity, sizeof( *( a ).data ) ) )
@@ -129,3 +146,14 @@ B2_INLINE int b2RemoveHelper( void* data, int* count, int index, int elementSize
 
 	return B2_NULL_INDEX;
 }
+
+#define b2Array_Clear( a ) \
+	do                     \
+	{                      \
+		( a ).count = 0;   \
+	}                      \
+	while ( 0 )
+
+#define b2Array_ByteCount( a ) ( ( a ).capacity * (int)sizeof( *( a ).data ) )
+
+b2DeclareArrayNative( int );

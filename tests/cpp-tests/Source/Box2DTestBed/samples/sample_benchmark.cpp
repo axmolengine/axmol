@@ -4,8 +4,8 @@
 #include "benchmarks.h"
 #include "draw.h"
 #include "human.h"
-#include "random.h"
 #include "sample.h"
+#include "utils.h"
 
 #include "box2d/box2d.h"
 #include "box2d/math_functions.h"
@@ -427,6 +427,30 @@ public:
 
 static int benchmarkBarrel24 = RegisterSample( "Benchmark", "Barrel 2.4", BenchmarkBarrel24::Create );
 
+class BenchmarkCompounds : public Sample
+{
+public:
+	explicit BenchmarkCompounds( SampleContext* context )
+		: Sample( context )
+	{
+		if ( m_context->restart == false )
+		{
+			m_context->camera.center = { 0.0f, 50.0f };
+			m_context->camera.zoom = 25.0f * 2.2f;
+			m_context->enableSleep = false;
+		}
+
+		CreateCompounds( m_worldId );
+	}
+
+	static Sample* Create( SampleContext* context )
+	{
+		return new BenchmarkCompounds( context );
+	}
+};
+
+static int benchmarkCompounds = RegisterSample( "Benchmark", "Compounds", BenchmarkCompounds::Create );
+
 class BenchmarkTumbler : public Sample
 {
 public:
@@ -463,6 +487,14 @@ public:
 		}
 
 		CreateWasher( m_worldId );
+	}
+
+	void Step() override
+	{
+		Sample::Step();
+
+		b2ContactEvents events = b2World_GetContactEvents( m_worldId );
+		DrawTextLine( "hits = %d", events.hitCount );
 	}
 
 	static Sample* Create( SampleContext* context )
@@ -587,6 +619,8 @@ public:
 
 	void UpdateGui() override
 	{
+		Sample::UpdateGui();
+
 		float fontSize = ImGui::GetFontSize();
 		float height = 8.5f * fontSize;
 		ImGui::SetNextWindowPos( ImVec2( 0.5f * fontSize, m_camera->height - height - 2.0f * fontSize ), ImGuiCond_Once );
@@ -704,13 +738,19 @@ public:
 		CreateManyPyramids( m_worldId );
 	}
 
+	static b2Capacity GetCapacity()
+	{
+		return GetManyPyramidsCapacity();
+	}
+
 	static Sample* Create( SampleContext* context )
 	{
 		return new BenchmarkManyPyramids( context );
 	}
 };
 
-static int benchmarkManyPyramids = RegisterSample( "Benchmark", "Many Pyramids", BenchmarkManyPyramids::Create );
+static int benchmarkManyPyramids =
+	RegisterSampleWithCapacity( "Benchmark", "Many Pyramids", BenchmarkManyPyramids::Create, BenchmarkManyPyramids::GetCapacity );
 
 class BenchmarkCreateDestroy : public Sample
 {
@@ -1007,10 +1047,10 @@ public:
 
 static int sampleSmash = RegisterSample( "Benchmark", "Smash", BenchmarkSmash::Create );
 
-class BenchmarkCompound : public Sample
+class BenchmarkLargeCompounds : public Sample
 {
 public:
-	explicit BenchmarkCompound( SampleContext* context )
+	explicit BenchmarkLargeCompounds( SampleContext* context )
 		: Sample( context )
 	{
 		if ( m_context->restart == false )
@@ -1101,11 +1141,11 @@ public:
 
 	static Sample* Create( SampleContext* context )
 	{
-		return new BenchmarkCompound( context );
+		return new BenchmarkLargeCompounds( context );
 	}
 };
 
-static int sampleCompound = RegisterSample( "Benchmark", "Compound", BenchmarkCompound::Create );
+static int sampleLargeCompounds = RegisterSample( "Benchmark", "Large Compounds", BenchmarkLargeCompounds::Create );
 
 class BenchmarkKinematic : public Sample
 {

@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "array.h"
 #include "container.h"
 
 #include <stdbool.h>
@@ -12,8 +11,6 @@
 typedef struct b2Contact b2Contact;
 typedef struct b2Joint b2Joint;
 typedef struct b2World b2World;
-
-b2DeclareArray( int );
 
 // Cached contact data stored in the island for fast contiguous iteration.
 // Avoids touching b2Contact during union-find in b2SplitIsland.
@@ -67,22 +64,26 @@ typedef struct b2Island
 
 	// I tried using a stack array for this but the data pointer goes out of
 	// sync when the world island array grows.
-	b2ArrayC( int ) bodies;
+	b2Array( int ) bodies;
 
 	// Contacts and joints that belong to this island. May connect to static
 	// bodies not in the island.
 	// Each link has the two body ids so that b2SplitIsland's union-find pass
 	// never needs to touch b2Contact/b2Joint.
-	b2ArrayC( b2ContactLink ) contacts;
-	b2ArrayC( b2JointLink ) joints;
+	b2Array( b2ContactLink ) contacts;
+	b2Array( b2JointLink ) joints;
 
 } b2Island;
+
+b2DeclareArray( b2Island );
 
 // This is used to move islands across solver sets
 typedef struct b2IslandSim
 {
 	int islandId;
 } b2IslandSim;
+
+b2DeclareArray( b2IslandSim );
 
 b2Island* b2CreateIsland( b2World* world, int setIndex );
 void b2DestroyIsland( b2World* world, int islandId );
@@ -100,8 +101,7 @@ void b2LinkJoint( b2World* world, b2Joint* joint );
 void b2UnlinkJoint( b2World* world, b2Joint* joint );
 
 void b2SplitIsland( b2World* world, int baseId );
-void b2SplitIslandTask( int startIndex, int endIndex, uint32_t threadIndex, void* context );
+void b2SplitIslandTask( void* context );
 
 void b2ValidateIsland( b2World* world, int islandId );
 
-B2_ARRAY_INLINE( b2IslandSim, b2IslandSim )

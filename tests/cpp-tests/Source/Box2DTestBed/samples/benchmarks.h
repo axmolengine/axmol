@@ -3,6 +3,7 @@
 #pragma once
 
 #include "box2d/id.h"
+#include "box2d/types.h"
 
 #include <stdbool.h>
 
@@ -16,6 +17,7 @@ extern "C"
 void CreateJointGrid( b2WorldId worldId );
 void CreateLargePyramid( b2WorldId worldId );
 void CreateManyPyramids( b2WorldId worldId );
+b2Capacity GetManyPyramidsCapacity( void );
 void CreateRain( b2WorldId worldId );
 float StepRain( b2WorldId worldId, int stepCount );
 void CreateSpinner( b2WorldId worldId );
@@ -25,6 +27,7 @@ void CreateTumbler( b2WorldId worldId );
 void CreateWasher( b2WorldId worldId );
 void CreateJunkyard( b2WorldId worldId );
 float StepJunkyard( b2WorldId worldId, int stepCount );
+void CreateCompounds( b2WorldId worldId );
 
 #ifdef __cplusplus
 }

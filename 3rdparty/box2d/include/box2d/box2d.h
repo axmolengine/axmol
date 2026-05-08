@@ -181,6 +181,9 @@ B2_API b2Profile b2World_GetProfile( b2WorldId worldId );
 /// Get world counters and sizes
 B2_API b2Counters b2World_GetCounters( b2WorldId worldId );
 
+/// Get max capacity. This can be used with b2WorldDef to avoid run-time allocations and copies
+B2_API b2Capacity b2World_GetMaxCapacity( b2WorldId worldId );
+
 /// Set the user data pointer.
 B2_API void b2World_SetUserData( b2WorldId worldId, void* userData );
 
@@ -192,6 +195,12 @@ B2_API void b2World_SetFrictionCallback( b2WorldId worldId, b2FrictionCallback* 
 
 /// Set the restitution callback. Passing NULL resets to default.
 B2_API void b2World_SetRestitutionCallback( b2WorldId worldId, b2RestitutionCallback* callback );
+
+/// Set the worker count. Must be between in the range [1, B2_MAX_WORKERS]
+B2_API void b2World_SetWorkerCount( b2WorldId worldId, int count );
+
+/// Get the worker count.
+B2_API int b2World_GetWorkerCount( b2WorldId worldId );
 
 /// Dump memory stats to box2d_memory.txt
 B2_API void b2World_DumpMemoryStats( b2WorldId worldId );

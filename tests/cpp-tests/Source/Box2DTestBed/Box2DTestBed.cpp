@@ -31,8 +31,9 @@
 
 #include "Box2DTestBed.h"
 #include "samples/sample.h"
-#include "samples/TaskScheduler.h"
 #include "axmol/platform/RenderView.h"
+
+#include "box2d/constants.h"
 
 using namespace ax;
 USING_NS_AX_EXT;
@@ -323,7 +324,7 @@ void Box2DTestBed::renderSamples()
     m_sample->Step();
 
     /// BEGIN UpdateUI
-    int maxWorkers  = enki::GetNumHardwareThreads();
+    int maxWorkers  = B2_MAX_WORKERS;
     float menuWidth = 180.0f * Device::getPixelRatio();
     if (s_context.showUI)
     {

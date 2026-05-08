@@ -3,17 +3,15 @@
 
 #pragma once
 
-#include "array.h"
 #include "bitset.h"
+#include "contact.h"
+#include "joint.h"
 #include "box2d/constants.h"
 
 #include "box2d/types.h"
 
 typedef struct b2Body b2Body;
-typedef struct b2ContactSim b2ContactSim;
 typedef struct b2Contact b2Contact;
-typedef struct b2JointSim b2JointSim;
-typedef struct b2Joint b2Joint;
 typedef struct b2StepContext b2StepContext;
 typedef struct b2World b2World;
 
@@ -38,8 +36,8 @@ typedef struct b2GraphColor
 	b2BitSet bodySet;
 
 	// cache friendly arrays
-	b2ContactSimArray contactSims;
-	b2JointSimArray jointSims;
+	b2Array( b2ContactSim ) contactSims;
+	b2Array( b2JointSim ) jointSims;
 
 	// transient
 	union
@@ -47,6 +45,9 @@ typedef struct b2GraphColor
 		struct b2ContactConstraintWide* wideConstraints;
 		struct b2ContactConstraint* overflowConstraints;
 	};
+
+	int wideConstraintCount;
+
 } b2GraphColor;
 
 typedef struct b2ConstraintGraph
@@ -55,7 +56,7 @@ typedef struct b2ConstraintGraph
 	b2GraphColor colors[B2_GRAPH_COLOR_COUNT];
 } b2ConstraintGraph;
 
-void b2CreateGraph( b2ConstraintGraph* graph, int bodyCapacity );
+void b2CreateGraph( b2ConstraintGraph* graph, const b2Capacity* capacity );
 void b2DestroyGraph( b2ConstraintGraph* graph );
 
 void b2AddContactToGraph( b2World* world, b2ContactSim* contactSim, b2Contact* contact );
@@ -64,5 +65,3 @@ void b2RemoveContactFromGraph( b2World* world, int bodyIdA, int bodyIdB, int col
 b2JointSim* b2CreateJointInGraph( b2World* world, b2Joint* joint );
 void b2AddJointToGraph( b2World* world, b2JointSim* jointSim, b2Joint* joint );
 void b2RemoveJointFromGraph( b2World* world, int bodyIdA, int bodyIdB, int colorIndex, int localIndex );
-
-extern b2HexColor b2_graphColors[B2_GRAPH_COLOR_COUNT];

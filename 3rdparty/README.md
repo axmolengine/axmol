@@ -11,7 +11,7 @@
 
 ## Box2D
 - [![Upstream](https://img.shields.io/github/v/release/erincatto/box2d?label=Upstream)](https://github.com/erincatto/box2d)
-- Version: 3.2.0-4996f6e (Until Mar 29, 2026)
+- Version: 3.2.0-8c65dcb (Until May 1, 2026)
 - License: MIT
 
 ## c-ares

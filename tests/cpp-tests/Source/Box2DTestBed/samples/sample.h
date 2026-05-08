@@ -9,11 +9,6 @@
 
 #define ARRAY_COUNT( A ) (int)( sizeof( A ) / sizeof( A[0] ) )
 
-namespace enki
-{
-class TaskScheduler;
-};
-
 struct ImFont;
 
 struct SampleContext
@@ -42,7 +37,7 @@ struct SampleContext
 
 	// These are persisted
 	int sampleIndex = 0;
-
+	b2Capacity capacity;
 	b2DebugDraw debugDraw;
 	ImFont* regularFont;
 	ImFont* mediumFont;
@@ -78,7 +73,7 @@ public:
 	friend class BoundaryListener;
 	friend class ContactListener;
 
-	static constexpr int m_maxTasks = 64;
+	static constexpr int m_maxTasks = 512;
 	static constexpr int m_maxThreads = 64;
 	static constexpr int m_profileCapacity = 512;
 
@@ -91,11 +86,6 @@ public:
 	SampleContext* m_context;
 	SampleCamera* m_camera; // axmol spec
 	SampleDraw* m_draw; // axmol spec
-
-	enki::TaskScheduler* m_scheduler;
-	class SampleTask* m_tasks;
-	int m_taskCount;
-	int m_threadCount;
 
 	b2BodyId m_mouseBodyId;
 
@@ -112,21 +102,23 @@ public:
 	uint64_t m_profileReadIndex;
 	uint64_t m_profileWriteIndex;
 
-	b2Profile m_maxProfile;
 	b2Profile m_totalProfile;
 
 	bool m_didStep;
 };
 
 typedef Sample* SampleCreateFcn( SampleContext* context );
+typedef b2Capacity SampleCapacityFcn( void );
 
 int RegisterSample( const char* category, const char* name, SampleCreateFcn* fcn );
+int RegisterSampleWithCapacity( const char* category, const char* name, SampleCreateFcn* fcn, SampleCapacityFcn* capacityFcn );
 
 struct SampleEntry
 {
 	const char* category;
 	const char* name;
 	SampleCreateFcn* createFcn;
+	SampleCapacityFcn* capacityFcn;
 };
 
 #define MAX_SAMPLES 256

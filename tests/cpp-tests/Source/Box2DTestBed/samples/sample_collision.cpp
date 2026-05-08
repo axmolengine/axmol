@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: MIT
 
 #include "draw.h"
-#include "random.h"
 #include "sample.h"
+#include "utils.h"
 
 #include "box2d/box2d.h"
 #include "box2d/collision.h"
@@ -12,7 +12,7 @@
 #include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <imgui_internal.h>
-//#include <stdlib.h>
+// #include <stdlib.h>
 
 class ShapeDistance : public Sample
 {
@@ -521,7 +521,7 @@ public:
 
 		float y = -4.0f;
 
-		m_tree = b2DynamicTree_Create();
+		m_tree = b2DynamicTree_Create( 16 );
 
 		const b2Vec2 aabbMargin = { 0.1f, 0.1f };
 
@@ -3257,7 +3257,7 @@ public:
 		}
 #endif
 
-		//m_box = b2MakeOffsetBox( 0.5f, 0.5f, { 0.0f, 0.0f }, b2Rot_identity );
+		// m_box = b2MakeOffsetBox( 0.5f, 0.5f, { 0.0f, 0.0f }, b2Rot_identity );
 		m_box = b2MakeBox( 8.984375f, 0.5f );
 
 #if 0
