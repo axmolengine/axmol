@@ -37,7 +37,7 @@ llvm=21.1.8
 jdk=17.0.10~17.0.19+
 
 # The android cmdline-tools aka sdkmanager, as stable as possible
-cmdlinetools=19.0
+cmdlinetools=20.0
 
 # The android ndk version
 # as stable as possible @setup.ps1 @gradle @axmol-cmdline
