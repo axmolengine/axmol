@@ -209,7 +209,7 @@ class AxmolUtils {
         }
 
         if (sdkRoot != cmdlineSdkRoot) {
-            println("[axmol] Warning: the sdk.dir in local.properties is differrent with cmdline preferred: $cmdlineSdkRoot, if you encounter issue: ndk not found, ensure they are same, then re-run 'setup.ps1 -p android' and retry")
+            println("⚠️[axmol] Warning: the sdk.dir in local.properties is differrent with cmdline preferred: $cmdlineSdkRoot, if you encounter issue: ndk not found, ensure they are same, then re-run 'setup.ps1 -p android' and retry")
         }
 
         // ndkVer,ndkPath,cmakeVer,cmakeOptions(AX_USE_XXX, AX_ENABLE_XXX, AX_ENABLE_EXT_XXX),cmakeDir<nullable>
@@ -729,11 +729,13 @@ class AxmolUtils {
                 def variantName = copyTask.name.replaceFirst(/^copy/, '').replaceFirst(/ContentToAssets$/, '')
                 def mergeTask = project.tasks.findByName("merge${variantName}Assets") // builtin task
                 def nativeTask = project.tasks.findByName("externalNativeBuild${variantName}") // buitlin task
-                if (mergeTask == null || nativeTask == null) {
-                    throw new GradleException("[axmol] Error: Could not find merge or native build task for variant ${variantName}")
+                if (mergeTask != null && nativeTask != null) {
+                    copyTask.dependsOn(nativeTask)
+                    mergeTask.dependsOn(copyTask)
                 }
-                copyTask.dependsOn(nativeTask)
-                mergeTask.dependsOn(copyTask)
+                else {
+                    println("⚠️[axmol] Warning: Could not find merge or native build task for variant ${variantName}")
+                }
             }
         }
     }
