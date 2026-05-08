@@ -279,6 +279,7 @@ JobSystem::JobSystem(std::span<std::shared_ptr<JobThreadData>> tdds)
 void JobSystem::init(const std::span<std::shared_ptr<JobThreadData>>& tdds)
 {
     _mainThreadData = new MainThreadData();
+    _workerCount    = static_cast<int>(tdds.size());
     if (!tdds.empty())
         _executor = new JobExecutor(tdds);
 }

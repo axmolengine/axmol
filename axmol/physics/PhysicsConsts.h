@@ -54,4 +54,8 @@ inline constexpr float MaxAngularVelocity = 1e4f;
 // damping
 inline constexpr float MaxDamping = 1e3f;
 
+// preferred worker counts
+inline constexpr int PreferredWorkers2D = 2;
+inline constexpr int PreferredWorkers3D = 4;
+
 }  // namespace ax::phconsts

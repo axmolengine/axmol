@@ -462,11 +462,15 @@ bool PhysicsWorld2D::init(Scene* scene)
 
         auto worldDef = b2DefaultWorldDef();
 
-        _jobContext->jobSystem = Director::getInstance()->getJobSystem();
+        auto jobSystem         = Director::getInstance()->getJobSystem();
+        _jobContext->jobSystem = jobSystem;
 
-        worldDef.workerCount     = 2;
-        worldDef.enqueueTask     = b2EnqueueTask;
-        worldDef.finishTask      = b2FinishTask;
+        worldDef.workerCount = (std::min)(jobSystem->getWorkerCount(), phconsts::PreferredWorkers2D);
+        if (worldDef.workerCount > 0)
+        {
+            worldDef.enqueueTask = b2EnqueueTask;
+            worldDef.finishTask  = b2FinishTask;
+        }
         worldDef.userTaskContext = _jobContext.get();
 
         // Realistic gravity is achieved by multiplying gravity by the length unit.

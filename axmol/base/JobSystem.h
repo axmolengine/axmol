@@ -183,6 +183,14 @@ public:
     ~JobSystem();
 
     /**
+     * @brief Get the number of worker threads owned by this JobSystem.
+     *
+     * @return The number of background worker threads actually created. Returns 0 when the JobSystem is using the
+     *         synchronous fallback path.
+     */
+    int getWorkerCount() const { return _workerCount; }
+
+    /**
      * @brief Enqueue a job that receives the worker thread's JobThreadData.
      *
      * Use this overload for jobs that need per-worker context initialized by JobThreadData::init(), such as renderer,
@@ -223,6 +231,7 @@ protected:
 private:
     JobExecutor* _executor{nullptr};
     JobThreadData* _mainThreadData{nullptr};
+    int _workerCount{0};
 };
 
 // end of base group
