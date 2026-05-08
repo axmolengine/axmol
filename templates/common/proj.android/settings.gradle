@@ -9,6 +9,6 @@ if (folder.exists()) {
 
 include ':libaxmol'
 project(':libaxmol').projectDir = new File(Paths.get("${System.properties.AX_ROOT}/axmol/platform/android/libaxmol").toUri())
-include ':axmolapp'
-project(':axmolapp').projectDir = new File(settingsDir, 'app')
+include ':app'
+project(':app').projectDir = new File(settingsDir, 'app')
 rootProject.name = "Dummy"
