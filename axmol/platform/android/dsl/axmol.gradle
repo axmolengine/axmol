@@ -729,7 +729,9 @@ class AxmolUtils {
                 def variantName = copyTask.name.replaceFirst(/^copy/, '').replaceFirst(/ContentToAssets$/, '')
                 def mergeTask = project.tasks.findByName("merge${variantName}Assets") // builtin task
                 def nativeTask = project.tasks.findByName("externalNativeBuild${variantName}") // buitlin task
-                println "[axmol] Configuring task dependency: ${mergeTask.name} --> ${copyTask.name} --> ${nativeTask.name}"
+                if (mergeTask == null || nativeTask == null) {
+                    throw new GradleException("[axmol] Error: Could not find merge or native build task for variant ${variantName}")
+                }
                 copyTask.dependsOn(nativeTask)
                 mergeTask.dependsOn(copyTask)
             }
