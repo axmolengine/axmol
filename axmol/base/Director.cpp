@@ -1563,7 +1563,8 @@ JobHandle Director::runAsync(std::function<void()> task, std::function<void()> d
         return {};
 
     RefPtr<Scheduler> scheduler(_scheduler);
-    return _jobSystem->enqueue([task = std::move(task), done = std::move(done), scheduler = std::move(scheduler)]() mutable {
+    return _jobSystem->enqueue(
+        [task = std::move(task), done = std::move(done), scheduler = std::move(scheduler)]() mutable {
         task();
         if (done)
             scheduler->runOnAxmolThread(std::move(done));

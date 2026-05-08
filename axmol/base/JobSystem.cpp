@@ -125,9 +125,8 @@ void JobHandle::wait() const
         return;
 
     std::unique_lock<std::mutex> lock(_state->mutex);
-    _state->condition.wait(lock, [state = _state] {
-        return isDoneStatus(state->status.load(std::memory_order_acquire));
-    });
+    _state->condition.wait(lock,
+                           [state = _state] { return isDoneStatus(state->status.load(std::memory_order_acquire)); });
 }
 
 bool JobHandle::waitFor(std::chrono::milliseconds timeout) const
@@ -136,9 +135,8 @@ bool JobHandle::waitFor(std::chrono::milliseconds timeout) const
         return true;
 
     std::unique_lock<std::mutex> lock(_state->mutex);
-    return _state->condition.wait_for(lock, timeout, [state = _state] {
-        return isDoneStatus(state->status.load(std::memory_order_acquire));
-    });
+    return _state->condition.wait_for(
+        lock, timeout, [state = _state] { return isDoneStatus(state->status.load(std::memory_order_acquire)); });
 }
 
 #pragma region JobExecutor
@@ -297,7 +295,7 @@ JobHandle JobSystem::enqueue(std::function<void(JobThreadData*)> task)
     if (_executor)
         return _executor->enqueue(std::move(task));
 
-    auto state = std::make_shared<JobState>();
+    auto state  = std::make_shared<JobState>();
     auto handle = JobHandle(state);
     if (handle.isCancelRequested())
     {

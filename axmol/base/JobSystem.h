@@ -113,7 +113,8 @@ enum class JobStatus
  *       and return by itself.
  * @warning Avoid calling wait() from a JobSystem worker thread when the waited job may be queued behind the current
  *          worker. The current executor does not steal queued work while waiting.
- * @warning This is a native C++ synchronization object. It is not intended to be exposed directly to scripting bindings.
+ * @warning This is a native C++ synchronization object. It is not intended to be exposed directly to scripting
+ * bindings.
  */
 class AX_API JobHandle
 {
@@ -136,8 +137,8 @@ public:
     /**
      * @brief Request cooperative cancellation.
      *
-     * If the job is still queued, it is marked Canceled and will not execute. If it is already running, the job function
-     * must observe cancellation through its own captured state or through this handle and return voluntarily.
+     * If the job is still queued, it is marked Canceled and will not execute. If it is already running, the job
+     * function must observe cancellation through its own captured state or through this handle and return voluntarily.
      *
      * @return false if the handle is invalid, otherwise true.
      */
@@ -161,9 +162,9 @@ private:
 /**
  * @brief Thread-pool based background job system used by Axmol.
  *
- * JobSystem owns a small worker pool and executes submitted jobs off the Axmol thread when worker threads are available.
- * If the platform or configuration creates the JobSystem with no workers, jobs run synchronously on the caller thread
- * with a main-thread JobThreadData fallback.
+ * JobSystem owns a small worker pool and executes submitted jobs off the Axmol thread when worker threads are
+ * available. If the platform or configuration creates the JobSystem with no workers, jobs run synchronously on the
+ * caller thread with a main-thread JobThreadData fallback.
  *
  * The preferred entry point is enqueue(std::function<void()>). Use enqueue(std::function<void(JobThreadData*)>) when a
  * job needs per-worker data, and enqueue(std::shared_ptr<JobThreadTask>) for legacy task-object code.

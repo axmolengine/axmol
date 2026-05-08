@@ -247,7 +247,9 @@ void PhysicsWorld3D::release(PhysicsWorld3D* world)
 
 PhysicsWorld3D::PhysicsWorld3D()
     : _tempAllocator(16 * 1024 * 1024)
-    , _jobSystem(JPH::cMaxPhysicsJobs, JPH::cMaxPhysicsBarriers, std::clamp(std::thread::hardware_concurrency(), 1u, 4u))
+    , _jobSystem(JPH::cMaxPhysicsJobs,
+                 JPH::cMaxPhysicsBarriers,
+                 std::clamp(std::thread::hardware_concurrency(), 1u, 4u))
     , _debugDrawer(nullptr)
 {}
 
