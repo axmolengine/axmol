@@ -36,7 +36,19 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolMediaEngine_nativeFireEvent(JNIEn
     mediaEngine->_fireMediaEvent((ax::MEMediaEventType)arg1);
 }
 
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolMediaEngine_nativeStoreVideoMeta(JNIEnv* env,
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolMediaEngine_nativeSetDuration(JNIEnv* env,
+                                                                               jclass,
+                                                                               jlong pME,
+                                                                               double duration)
+{
+    auto mediaEngine = (ax::AndroidMediaEngine*)((uintptr_t)pME);
+    if (!mediaEngine)
+        return;
+
+    mediaEngine->_setDuration(duration);
+}
+
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolMediaEngine_nativeSetVideoMeta(JNIEnv* env,
                                                                                 jclass,
                                                                                 jlong pME,
                                                                                 int outputX,
@@ -51,14 +63,15 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolMediaEngine_nativeStoreVideoMeta(
     if (!mediaEngine)
         return;
 
-    mediaEngine->_storeVideoMeta(outputX, outputY, videoX, videoY, cbcrOffset, rotation, videoPF);
+    mediaEngine->_setVideoMeta(outputX, outputY, videoX, videoY, cbcrOffset, rotation, videoPF);
 }
 
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolMediaEngine_nativeStoreLastVideoSample(JNIEnv* env,
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolMediaEngine_nativeProcessVideoFrame(JNIEnv* env,
                                                                                       jclass,
                                                                                       jlong pME,
                                                                                       jobject sampleBuffer,
-                                                                                      int sampleLen)
+                                                                                      int sampleLen,
+                                                                                      jlong presentationTimeUs)
 {
     auto mediaEngine = (ax::AndroidMediaEngine*)((uintptr_t)pME);
     if (!mediaEngine)
@@ -66,31 +79,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolMediaEngine_nativeStoreLastVideoS
 
     auto sampleData = static_cast<uint8_t*>(env->GetDirectBufferAddress(sampleBuffer));
 
-    mediaEngine->_storeLastVideoSample(sampleData, sampleLen);
-}
-
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolMediaEngine_nativeStoreDuration(JNIEnv* env,
-                                                                               jclass,
-                                                                               jlong pME,
-                                                                               double duration)
-{
-    auto mediaEngine = (ax::AndroidMediaEngine*)((uintptr_t)pME);
-    if (!mediaEngine)
-        return;
-
-    mediaEngine->_storeDuration(duration);
-}
-
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolMediaEngine_nativeStoreCurrentTime(JNIEnv* env,
-                                                                                  jclass,
-                                                                                  jlong pME,
-                                                                                  double currentTime)
-{
-    auto mediaEngine = (ax::AndroidMediaEngine*)((uintptr_t)pME);
-    if (!mediaEngine)
-        return;
-
-    mediaEngine->_storeCurrentTime(currentTime);
+    mediaEngine->_processVideoFrame(sampleData, sampleLen, presentationTimeUs);
 }
 }
 
@@ -188,7 +177,7 @@ bool AndroidMediaEngine::transferVideoFrame()
     return false;
 }
 
-void AndroidMediaEngine::_storeVideoMeta(int outputX,
+void AndroidMediaEngine::_setVideoMeta(int outputX,
                                          int outputY,
                                          int videoX,
                                          int videoY,
@@ -203,10 +192,12 @@ void AndroidMediaEngine::_storeVideoMeta(int outputX,
     _videoPF       = videoPF;
 }
 
-void AndroidMediaEngine::_storeLastVideoSample(const uint8_t* buf, size_t len)
+void AndroidMediaEngine::_processVideoFrame(const uint8_t* sampleData, size_t sampleLen, int64_t presentationTimeUs)
 {
+    _currentTime = presentationTimeUs / 1000000.0;
+
     std::unique_lock<std::mutex> lck(_frameBuffer1Mtx);
-    _frameBuffer1.assign(buf, buf + len);
+    _frameBuffer1.assign(sampleData, sampleData + sampleLen);
 }
 
 }  // namespace ax

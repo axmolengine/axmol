@@ -61,10 +61,10 @@ public:
         if (_onMediaEvent)
             _onMediaEvent(event);
     }
-    void _storeDuration(double duration) { _duration = duration; }
-    void _storeCurrentTime(double currentTime) { _currentTime = currentTime; }
-    void _storeLastVideoSample(const uint8_t* buf, size_t len);
-    void _storeVideoMeta(int outputX, int outputY, int videoX, int videoY, int cbcrOffset, int rotation, int videoPF);
+    void _setDuration(double duration) { _duration = duration; }
+    void _setVideoMeta(int outputX, int outputY, int videoX, int videoY, int cbcrOffset, int rotation, int videoPF);
+
+    void _processVideoFrame(const uint8_t* sampleData, size_t sampleLen, int64_t presentationTimeUs);
 
 private:
     void* context{};  // java object strong-refs
@@ -81,8 +81,8 @@ private:
     tlx::byte_buffer _frameBuffer2;  // for read
     mutable std::mutex _frameBuffer1Mtx;
 
-    double _currentTime{};
-    double _duration{};
+    double _currentTime{}; // current time in seconds
+    double _duration{}; // duration in seconds
 };
 
 struct AndroidMediaEngineFactory : public MediaEngineFactory
