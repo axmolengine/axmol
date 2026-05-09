@@ -227,7 +227,7 @@ public class AxmolMediaPlayer extends DefaultRenderersFactory implements Player.
             mPlayWhenReady = false;
             final AxmolMediaPlayer mediaPlayer = this;
             AxmolEngine.runOnUiThread(() -> {
-                if (mVideoRenderer) {
+                if (mVideoRenderer != null) {
                     mVideoRenderer.setOutput(null);
                 }
                 player.removeListener(mediaPlayer);
