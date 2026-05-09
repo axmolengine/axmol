@@ -185,7 +185,7 @@ public class AxmolMediaPlayer extends DefaultRenderersFactory implements Player.
             return false;
         mState.set(STATE_PREPARING);
 
-        final AxmolMediaPlayer mediaEngine = this;
+        final AxmolMediaPlayer mediaPlayer = this;
         AxmolEngine.runOnUiThread(() -> {
             try {
                 DataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(mContext);
@@ -193,11 +193,19 @@ public class AxmolMediaPlayer extends DefaultRenderersFactory implements Player.
                     new ProgressiveMediaSource.Factory(dataSourceFactory)
                         .createMediaSource(MediaItem.fromUri(Uri.parse(sourceUri)));
 
-                mPlayer = new ExoPlayer.Builder(mContext, mediaEngine).build();
-                mVideoRenderer = (ByteBufferVideoRenderer) mPlayer.getRenderer(0); // the first must be video renderer
-                mVideoRenderer.setOutput(mediaEngine);
-                mPlayer.setVideoFrameMetadataListener(mediaEngine);
-                mPlayer.addListener(mediaEngine);
+                mPlayer = new ExoPlayer.Builder(mContext, mediaPlayer).build();
+                for (int i = 0; i < mPlayer.getRendererCount(); i++) {
+                    Renderer renderer = mPlayer.getRenderer(i);
+                    if (renderer instanceof ByteBufferVideoRenderer) {
+                        mVideoRenderer = (ByteBufferVideoRenderer) renderer;
+                        break;
+                    }
+                }
+                if (mVideoRenderer != null) {
+                    mVideoRenderer.setOutput(mediaPlayer);
+                }
+                mPlayer.setVideoFrameMetadataListener(mediaPlayer);
+                mPlayer.addListener(mediaPlayer);
                 mPlayer.setMediaSource(mediaSource);
                 mPlaybackEnded = false;
                 mPlayer.setRepeatMode(mLooping ? Player.REPEAT_MODE_ALL : Player.REPEAT_MODE_OFF);
@@ -404,7 +412,7 @@ public class AxmolMediaPlayer extends DefaultRenderersFactory implements Player.
             nativeSetVideoMeta(mNativeObj, outputX, outputY, videoX, videoY, cbcrOffset, rotation, videoPF);
 
             Log.d(TAG, String.format("Input format:%s, outputDim:%dx%d, videoDim:%dx%d, cbcrOffset:%d, frameSizeBytes:%d",
-                mVideoRenderer.getCodecName(),
+                mVideoRenderer != null ? mVideoRenderer.getCodecName() : "unknown",
                 outputX, outputY,
                 videoX, videoY,
                 cbcrOffset, frameSizeBytes));

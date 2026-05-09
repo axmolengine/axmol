@@ -26,7 +26,7 @@
 #if defined(__ANDROID__)
 #    include "axmol/media/MediaEngine.h"
 
-#include <jni.h>
+#    include <jni.h>
 
 namespace ax
 {

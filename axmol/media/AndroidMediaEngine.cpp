@@ -78,8 +78,8 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolMediaPlayer_nativeProcessVideoFra
         return;
 
     auto sampleData = static_cast<uint8_t*>(env->GetDirectBufferAddress(sampleBuffer));
-
-    mediaEngine->_processVideoFrame(sampleData, sampleLen, presentationTimeUs);
+    if (sampleData)
+        mediaEngine->_processVideoFrame(sampleData, sampleLen, presentationTimeUs);
 }
 }
 
@@ -90,7 +90,10 @@ static const char* className = "dev.axmol.lib.AxmolMediaPlayer";
 
 AndroidMediaEngine::AndroidMediaEngine()
 {
-    // create java object
+    // Create Java MediaPlayer and take ownership of the global reference.
+    // Note: JniHelper::callStaticObjectMethod returns a jobject that has been
+    // promoted to a GlobalRef (via NewGlobalRef). Do NOT call NewGlobalRef again;
+    // ensure DeleteGlobalRef(_mediaPlayer) is called during native teardown.
     _mediaPlayer = JniHelper::callStaticObjectMethod(className, "createMediaPlayer", (jlong)(uintptr_t)this);
 }
 AndroidMediaEngine::~AndroidMediaEngine()
@@ -147,7 +150,8 @@ bool AndroidMediaEngine::isPlaybackEnded() const
 }
 MEMediaState AndroidMediaEngine::getState() const
 {
-    return _mediaPlayer ? (MEMediaState)JniHelper::callIntMethod(className, "getState", _mediaPlayer) : MEMediaState::Closed;
+    return _mediaPlayer ? (MEMediaState)JniHelper::callIntMethod(className, "getState", _mediaPlayer)
+                        : MEMediaState::Closed;
 }
 
 bool AndroidMediaEngine::transferVideoFrame()
