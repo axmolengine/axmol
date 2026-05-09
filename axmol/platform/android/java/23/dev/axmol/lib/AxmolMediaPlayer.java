@@ -227,7 +227,9 @@ public class AxmolMediaPlayer extends DefaultRenderersFactory implements Player.
             mPlayWhenReady = false;
             final AxmolMediaPlayer mediaPlayer = this;
             AxmolEngine.runOnUiThread(() -> {
-                mVideoRenderer.setOutput(null);
+                if (mVideoRenderer) {
+                    mVideoRenderer.setOutput(null);
+                }
                 player.removeListener(mediaPlayer);
                 player.stop();
                 player.release();
@@ -369,8 +371,6 @@ public class AxmolMediaPlayer extends DefaultRenderersFactory implements Player.
                     videoPF = VIDEO_PF_NV12;
                     Log.w(TAG, String.format("Unsupported color format: %d, video render may incorrect!", colorFormat));
             }
-
-            // String codec = format.getString(MediaFormat.KEY_CODECS_STRING);
 
             // output dim
             int outputX = format.getInteger(MediaFormat.KEY_WIDTH);
