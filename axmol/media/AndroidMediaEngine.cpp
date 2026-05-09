@@ -37,9 +37,9 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolMediaEngine_nativeFireEvent(JNIEn
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolMediaEngine_nativeSetDuration(JNIEnv* env,
-                                                                               jclass,
-                                                                               jlong pME,
-                                                                               double duration)
+                                                                             jclass,
+                                                                             jlong pME,
+                                                                             double duration)
 {
     auto mediaEngine = (ax::AndroidMediaEngine*)((uintptr_t)pME);
     if (!mediaEngine)
@@ -49,15 +49,15 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolMediaEngine_nativeSetDuration(JNI
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolMediaEngine_nativeSetVideoMeta(JNIEnv* env,
-                                                                                jclass,
-                                                                                jlong pME,
-                                                                                int outputX,
-                                                                                int outputY,
-                                                                                int videoX,
-                                                                                int videoY,
-                                                                                int cbcrOffset,
-                                                                                int rotation,
-                                                                                int videoPF)
+                                                                              jclass,
+                                                                              jlong pME,
+                                                                              int outputX,
+                                                                              int outputY,
+                                                                              int videoX,
+                                                                              int videoY,
+                                                                              int cbcrOffset,
+                                                                              int rotation,
+                                                                              int videoPF)
 {
     auto mediaEngine = (ax::AndroidMediaEngine*)((uintptr_t)pME);
     if (!mediaEngine)
@@ -67,11 +67,11 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolMediaEngine_nativeSetVideoMeta(JN
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolMediaEngine_nativeProcessVideoFrame(JNIEnv* env,
-                                                                                      jclass,
-                                                                                      jlong pME,
-                                                                                      jobject sampleBuffer,
-                                                                                      int sampleLen,
-                                                                                      jlong presentationTimeUs)
+                                                                                   jclass,
+                                                                                   jlong pME,
+                                                                                   jobject sampleBuffer,
+                                                                                   int sampleLen,
+                                                                                   jlong presentationTimeUs)
 {
     auto mediaEngine = (ax::AndroidMediaEngine*)((uintptr_t)pME);
     if (!mediaEngine)
@@ -178,12 +178,12 @@ bool AndroidMediaEngine::transferVideoFrame()
 }
 
 void AndroidMediaEngine::_setVideoMeta(int outputX,
-                                         int outputY,
-                                         int videoX,
-                                         int videoY,
-                                         int cbcrOffset,
-                                         int rotation,
-                                         int videoPF)
+                                       int outputY,
+                                       int videoX,
+                                       int videoY,
+                                       int cbcrOffset,
+                                       int rotation,
+                                       int videoPF)
 {
     _outputDim.set(outputX, outputY);
     _videoDim.set(videoX, videoY);

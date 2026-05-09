@@ -81,8 +81,8 @@ private:
     tlx::byte_buffer _frameBuffer2;  // for read
     mutable std::mutex _frameBuffer1Mtx;
 
-    double _currentTime{}; // current time in seconds
-    double _duration{}; // duration in seconds
+    double _currentTime{};  // current time in seconds
+    double _duration{};     // duration in seconds
 };
 
 struct AndroidMediaEngineFactory : public MediaEngineFactory
