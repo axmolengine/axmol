@@ -72,7 +72,7 @@ public class ByteBufferVideoRenderer
     private static final long MAX_EARLY_US_THRESHOLD = 50_000;
 
     @Nullable
-    private VideoFrameProcessor output;
+    private volatile VideoFrameProcessor output;
     @Nullable
     private VideoFrameMetadataListener frameMetadataListener;
     // Mirrors MediaCodecVideoRenderer's private codecMaxValues field because this renderer provides

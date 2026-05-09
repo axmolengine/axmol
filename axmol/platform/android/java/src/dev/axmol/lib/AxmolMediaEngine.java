@@ -108,7 +108,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
     private ExoPlayer mPlayer;
     private ByteBufferVideoRenderer mVideoRenderer;
     private MediaFormat mOutputFormat;
-    private long mNativeObj = 0; // native object address for send event to C++, weak ref
+    private volatile long mNativeObj = 0; // native object address for send event to C++, weak ref
     private boolean mAutoPlay = false;
     private boolean mLooping = false;
     private volatile boolean mPlayWhenReady = false;
