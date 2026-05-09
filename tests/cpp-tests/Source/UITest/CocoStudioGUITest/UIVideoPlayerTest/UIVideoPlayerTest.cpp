@@ -179,7 +179,7 @@ void VideoPlayerTest::menuOnlineVideoCallback(Object* sender)
 {
     if (_videoPlayer)
     {
-        _videoPlayer->setURL("https://storage.googleapis.com/exoplayer-test-media-1/mp4/android-screens-25s.mp4");
+        _videoPlayer->setURL("https://storage.googleapis.com/exoplayer-test-media-1/mp4/android-screens-10s.mp4");
         _videoPlayer->play();
     }
 }

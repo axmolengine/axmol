@@ -107,12 +107,11 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
     private ExoPlayer mPlayer;
     private ByteBufferVideoRenderer mVideoRenderer;
     private MediaFormat mOutputFormat;
+    private long mNativeObj = 0; // native object address for send event to C++, weak ref
     private boolean mAutoPlay = false;
     private boolean mLooping = false;
     private volatile boolean mPlayWhenReady = false;
-    private long mNativeObj = 0; // native object address for send event to C++, weak ref
-
-    private boolean mPlaybackEnded = false;
+    private volatile boolean mPlaybackEnded = false;
     private AtomicInteger mState = new AtomicInteger(STATE_CLOSED);
 
     /**
@@ -206,7 +205,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
                 mPlayer.addListener(mediaEngine);
                 mPlayer.setMediaSource(mediaSource);
                 mPlaybackEnded = false;
-                mPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
+                mPlayer.setRepeatMode(mLooping ? Player.REPEAT_MODE_ALL : Player.REPEAT_MODE_OFF);
                 mPlayer.prepare();
                 mPlayWhenReady = mAutoPlay;
                 mPlayer.setPlayWhenReady(mAutoPlay);
@@ -241,7 +240,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
             if (mPlayer == null) return false;
             AxmolEngine.runOnUiThread(() -> {
                 if (mPlayer != null)
-                    mPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
+                    mPlayer.setRepeatMode(mLooping ? Player.REPEAT_MODE_ALL : Player.REPEAT_MODE_OFF);
             });
         }
         return true;
@@ -435,15 +434,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         }
         nativeStoreLastVideoSample(mNativeObj, tmpBuffer, tmpBuffer.remaining());
 
-        AxmolEngine.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mPlayer != null) {
-                    long currentPositionMs = mPlayer.getCurrentPosition();
-                    nativeStoreCurrentTime(mNativeObj, currentPositionMs / 1000.0);
-                }
-            }
-        });
+        nativeStoreCurrentTime(mNativeObj, presentationTimeUs /  1000000.0);
     }
 
     @Override
@@ -492,26 +483,26 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
                 });
                 break;
             case Player.STATE_ENDED:
-                if (isLoopPlaybackActive()) {
-                    AxmolEngine.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            restartLoopAfterEnded();
-                        }
-                    });
-                    break;
+                if (!isLoopPlaybackActive()) {
+                    mPlaybackEnded = true;
+                    mPlayWhenReady = false;
+                    mState.set(STATE_STOPPED);
+                    nativeEvent(EVENT_STOPPED);
                 }
-                mPlaybackEnded = true;
-                mPlayWhenReady = false;
-                mState.set(STATE_STOPPED);
-                nativeEvent(EVENT_STOPPED);
+                else {
+//                    AxmolEngine.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            restartLoopAfterEnded();
+//                        }
+//                    });
+                }
                 break;
             case Player.STATE_IDLE:
-                if (isLoopPlaybackActive()) {
-                    break;
+                if (!isLoopPlaybackActive()) {
+                    mState.set(STATE_STOPPED);
+                    nativeEvent(EVENT_STOPPED);
                 }
-                mState.set(STATE_STOPPED);
-                nativeEvent(EVENT_STOPPED);
                 break;
             default:
                 ;
