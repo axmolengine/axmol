@@ -36,6 +36,8 @@
 namespace spine {
 
 	class AttachmentVertices;
+    class SkeletonTwoColorBatch;
+    class SkeletonBatch;
 
 	/* Draws a skeleton. */
 	class SP_API SkeletonRenderer : public axmol::Node, public axmol::BlendProtocol {
@@ -126,6 +128,9 @@ namespace spine {
 		void initWithBinaryFile(const std::string &skeletonDataFile, Atlas *atlas, float scale = 1);
 		void initWithBinaryFile(const std::string &skeletonDataFile, const std::string &atlasFile, float scale = 1);
 
+        void setCustomBatch(SkeletonBatch *batch, SkeletonTwoColorBatch *twoColorBatch);
+        ax::ProgramState *getSpineProgramState();
+
 		virtual void initialize();
 
 	protected:
@@ -148,6 +153,8 @@ namespace spine {
 		bool _debugBoundingRect;
 		SkeletonClipping *_clipper;
 		axmol::Rect _boundingRect;
+        SkeletonTwoColorBatch *customTwoColorBatch = NULL;
+        SkeletonBatch *customBatch = NULL;
 
 		int _startSlotIndex;
 		int _endSlotIndex;

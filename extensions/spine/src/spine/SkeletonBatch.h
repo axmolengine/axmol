@@ -55,11 +55,14 @@ namespace spine {
 		void deallocateIndices(uint32_t numVertices);
 		axmol::TrianglesCommand *addCommand(axmol::Renderer *renderer, float globalOrder, axmol::Texture2D *texture, axmol::rhi::ProgramState *programState, axmol::BlendFunc blendType, const axmol::TrianglesCommand::Triangles &triangles, const axmol::Mat4 &mv, uint32_t flags);
 
-		axmol::rhi::ProgramState* updateCommandPipelinePS(SkeletonCommand* command, axmol::rhi::ProgramState* programState);
+		axmol::rhi::ProgramState* updateCommandPipelinePS(SkeletonCommand* command, axmol::rhi::ProgramState* programState, bool needCopy);
 
-	protected:
-		SkeletonBatch();
+        SkeletonBatch();
 		virtual ~SkeletonBatch();
+
+        void changeProgram(ax::Program *program);
+        ax::ProgramState *getSpineProgramState();
+	protected:
 
 		void reset();
 
@@ -81,6 +84,8 @@ namespace spine {
 		Vector<unsigned short> _indices;
 
         ax::EventListener* _afterDrawListener{nullptr};
+
+        bool useCustomProgram = false;
 	};
 
 }// namespace spine

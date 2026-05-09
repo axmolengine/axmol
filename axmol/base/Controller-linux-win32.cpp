@@ -27,6 +27,7 @@ THE SOFTWARE.
  ****************************************************************************/
 
 #include "axmol/base/Controller.h"
+#include "axmol/platform/FileUtils.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    include <functional>
@@ -4196,6 +4197,18 @@ public:
 
         // Add the controller profile to the map
         s_controllerProfiles.insert(std::make_pair(deviceName, std::make_pair(buttonInputMap, axisInputMap)));
+
+        // This is necessary to support the latest gamepads.
+        auto gamepadMappingsDataText = FileUtils::getInstance()->getStringFromFile("gamecontrollerdb.txt");
+        int result = glfwUpdateGamepadMappings(gamepadMappingsDataText.c_str());
+        if(result == GLFW_TRUE)
+        {
+            printf("glfwUpdateGamepadMappings() Succeeded.\n");
+        }
+        else
+        {
+            printf("!!ERROR glfwUpdateGamepadMappings() Failed.\n");
+        }
     }
 
     ~ControllerImpl()
