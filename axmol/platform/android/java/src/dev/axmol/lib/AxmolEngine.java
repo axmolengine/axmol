@@ -139,12 +139,12 @@ public class AxmolEngine {
         });
     }
 
-    private static boolean sInited = false;
+    private static boolean sInitialized = false;
     public static void init(final AppCompatActivity activity) {
         sActivity = activity;
         AxmolEngine.sAxmolEngineListener = (AxmolEngineListener)activity;
 
-        if (!sInited) {
+        if (!sInitialized) {
 
             PackageManager pm = activity.getPackageManager();
             boolean isSupportLowLatency = pm.hasSystemFeature(PackageManager.FEATURE_AUDIO_LOW_LATENCY);
@@ -157,13 +157,11 @@ public class AxmolEngine {
             AxmolEngine.sAssetManager = activity.getAssets();
             AxmolEngine.nativeInit((Context)activity, AxmolEngine.sAssetManager);
 
-            AxmolMediaEngine.setContext(activity);
-
             BitmapHelper.setContext(activity);
 
             AxmolEngine.sVibrateService = (Vibrator)activity.getSystemService(Context.VIBRATOR_SERVICE);
 
-            sInited = true;
+            sInitialized = true;
         }
     }
 
@@ -219,6 +217,8 @@ public class AxmolEngine {
     public static AppCompatActivity getActivity() {
         return sActivity;
     }
+
+    public static Context getApplicationContext() { return sActivity != null ? sActivity.getApplicationContext() : null; }
 
     public static void addOnActivityResultListener(OnActivityResultListener listener) {
         onActivityResultListeners.add(listener);

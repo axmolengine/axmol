@@ -30,8 +30,8 @@ import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.media3.common.Format;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.PlaybackException;
@@ -56,7 +56,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @UnstableApi
 @SuppressWarnings("unused")
-public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.Listener, ByteBufferVideoRenderer.VideoFrameProcessor, VideoFrameMetadataListener {
+public class AxmolMediaPlayer extends DefaultRenderersFactory implements Player.Listener, ByteBufferVideoRenderer.VideoFrameProcessor, VideoFrameMetadataListener {
     // The native media events, match with MEMediaEventType
     public static final int EVENT_PLAYING = 0;
     public static final int EVENT_PAUSED = 1;
@@ -103,10 +103,10 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
      * COLOR_FormatYUV420Planar (yyyyyyyy uu vv)     (YUV420p)
      * COLOR_FormatYUV422SemiPlanar (Y0 U0 Y1 V0)    (YUY2)
      */
-    public static final String TAG = "AxmolMediaEngine";
-    public static Context sContext = null;
+    public static final String TAG = "AxmolMediaPlayer";
+    private Context mContext;
     private ExoPlayer mPlayer;
-    private ByteBufferVideoRenderer mVideoRenderer;
+    private volatile ByteBufferVideoRenderer mVideoRenderer;
     private MediaFormat mOutputFormat;
     private volatile long mNativeObj = 0; // native object address for send event to C++, weak ref
     private boolean mAutoPlay = false;
@@ -125,39 +125,36 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
 
     public static native void nativeProcessVideoFrame(long nativeObj, ByteBuffer sampleData, int sampleLen, long presentationTimeUs);
 
-    public static void setContext(AppCompatActivity activity) {
-        sContext = activity.getApplicationContext();
-    }
-
     @SuppressWarnings("unused")
-    public static Object createMediaEngine() {
-        return new AxmolMediaEngine(sContext);
+    public static Object createMediaPlayer(long nativeObj) {
+        return new AxmolMediaPlayer(AxmolEngine.getApplicationContext(), nativeObj);
     }
 
     /**
      * @param context A {@link Context}.
      */
-    public AxmolMediaEngine(Context context) {
+    public AxmolMediaPlayer(Context context, long nativeObject) {
         super(context);
+
+        mContext = context;
+        mNativeObj = nativeObject;
         setAllowedVideoJoiningTimeMs(0);
     }
 
     @SuppressWarnings("unused")
-    public void bindNativeObject(long nativeObj) {
-        mNativeObj = nativeObj;
-        if (nativeObj == 0) { // when unbind nativeObj, we should ensure close player
-            close();
-        }
+    public void dispose() {
+        mNativeObj = 0;
+        close();
     }
 
     @Override
     protected void buildVideoRenderers(
-        Context context,
+        @NonNull Context context,
         @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode,
-        MediaCodecSelector mediaCodecSelector,
+        @NonNull MediaCodecSelector mediaCodecSelector,
         boolean enableDecoderFallback,
-        Handler eventHandler,
-        VideoRendererEventListener eventListener,
+        @NonNull Handler eventHandler,
+        @NonNull VideoRendererEventListener eventListener,
         long allowedVideoJoiningTimeMs,
         ArrayList<Renderer> out) {
         out.add(
@@ -188,15 +185,15 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
             return false;
         mState.set(STATE_PREPARING);
 
-        final AxmolMediaEngine mediaEngine = this;
+        final AxmolMediaPlayer mediaEngine = this;
         AxmolEngine.runOnUiThread(() -> {
             try {
-                DataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(sContext);
+                DataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(mContext);
                 MediaSource mediaSource =
                     new ProgressiveMediaSource.Factory(dataSourceFactory)
                         .createMediaSource(MediaItem.fromUri(Uri.parse(sourceUri)));
 
-                mPlayer = new ExoPlayer.Builder(sContext, mediaEngine).build();
+                mPlayer = new ExoPlayer.Builder(mContext, mediaEngine).build();
                 mVideoRenderer = (ByteBufferVideoRenderer) mPlayer.getRenderer(0); // the first must be video renderer
                 mVideoRenderer.setOutput(mediaEngine);
                 mPlayer.setVideoFrameMetadataListener(mediaEngine);
@@ -220,12 +217,13 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
             final ExoPlayer player = mPlayer;
             mPlayer = null;
             mPlayWhenReady = false;
-            final AxmolMediaEngine mediaEngine = this;
+            final AxmolMediaPlayer mediaPlayer = this;
             AxmolEngine.runOnUiThread(() -> {
                 mVideoRenderer.setOutput(null);
-                player.removeListener(mediaEngine);
+                player.removeListener(mediaPlayer);
                 player.stop();
                 player.release();
+                mVideoRenderer = null;
                 mState.set(STATE_CLOSED);
             });
         }

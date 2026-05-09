@@ -26,6 +26,8 @@
 #if defined(__ANDROID__)
 #    include "axmol/media/MediaEngine.h"
 
+#include <jni.h>
+
 namespace ax
 {
 
@@ -67,7 +69,7 @@ public:
     void _processVideoFrame(const uint8_t* sampleData, size_t sampleLen, int64_t presentationTimeUs);
 
 private:
-    void* context{};  // java object strong-refs
+    jobject _mediaPlayer{nullptr};  // java object strong-refs
     std::function<void(MEMediaEventType)> _onMediaEvent;
     std::function<void(const MEVideoFrame&)> _onVideoFrame;
 
