@@ -53,7 +53,7 @@ ndk=r27d
 target_sdk=37
 
 # The android min sdk version, @gradle
-# as min as possible
+# as min as possible, min_sdk<23 supported, but deprecated
 min_sdk=23
 
 # The gradle version, @setup.ps1

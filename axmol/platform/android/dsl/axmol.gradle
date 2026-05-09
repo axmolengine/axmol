@@ -237,6 +237,8 @@ class AxmolUtils {
             profiles = loadProfiles(project, false)
         }
 
+        def minSdk = profiles['min_sdk'].toInteger()
+
         buildProfiles['minSdk'] = profiles['min_sdk']
         buildProfiles['targetSdk'] = profiles['target_sdk'].toString().split('\\.')[0]
         buildProfiles['packageName'] = profiles['package_name']
@@ -244,6 +246,10 @@ class AxmolUtils {
         buildProfiles['media3'] = profiles['media3']
         buildProfiles['annotation'] = profiles['annotation']
         buildProfiles['guava'] = profiles['guava']
+
+        if (minSdk < 23) {
+            buildProfiles['media3'] = '1.2.1'
+        }
 
         return buildProfiles
     }

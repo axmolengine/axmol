@@ -23,6 +23,13 @@ android {
         manifest.srcFile "AndroidManifest.xml"
     }
 
+    if (minSdk.toInteger() >= 23) {
+        sourceSets.main.java.srcDirs += '../java/23'
+    }
+    else {
+        sourceSets.main.java.srcDirs += '../java/21'
+    }
+
     buildTypes {
         release {
             minifyEnabled true

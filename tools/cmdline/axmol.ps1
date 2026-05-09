@@ -148,6 +148,10 @@ function axmol_deploy() {
         [XML]$androidManifest = Get-Content $androidManifestFile
         $androidActivity = $androidManifest.manifest.application.activity.name
 
+        $adb_cmd = find_cmd 'adb'
+        if (!$adb_cmd) {
+            $1k.addpath("$env:ANDROID_HOME/platform-tools", $false)
+        }
         adb install -t -r $apkFullPath
         if ($?) {
             println "Deploy $cmake_target done: $androidAppId/$androidActivity"
