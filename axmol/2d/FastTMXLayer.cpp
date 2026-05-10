@@ -651,8 +651,8 @@ void FastTMXLayer::updateTotalQuads()
         batchCache[i] = {AX_SIZE_PIXELS_TO_POINTS(ts->_tileSize),
                          Vec2(ts->_tileOffset.x / csf, -ts->_tileOffset.y / csf),
                          ts->_imageSize,
-                         1.0f / ts->_imageSize.width,
-                         1.0f / ts->_imageSize.height,
+                         0.0f,
+                         0.0f,
                          c};
     }
 
