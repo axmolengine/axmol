@@ -78,7 +78,7 @@ void Rect::merge(const Rect& rect)
     setRect(minX, minY, maxX - minX, maxY - minY);
 }
 
-bool Rect::intersectsSegment(const Vec2& a, const Vec2& b, Vec2 &hitPos)
+bool Rect::intersectsSegment(const Vec2& a, const Vec2& b, Vec2 &hitPos) const
 {
     struct Segment
     {
@@ -95,9 +95,9 @@ bool Rect::intersectsSegment(const Vec2& a, const Vec2& b, Vec2 &hitPos)
     for(auto &rectSegment : rectSegments)
     {
         float S, T;
-        if(Vec2::isLineIntersect(a, b, rectSegment.a, rectSegment.b, &S, &T))
+        if(Vec2::isSegmentIntersect(a, b, rectSegment.a, rectSegment.b))
         {
-            hitPos2 = a + (b - a) * S;
+            hitPos2 = Vec2::getIntersectPoint(a, b, rectSegment.a, rectSegment.b);
             float distance = hitPos2.distance(a);
             if(distance < minDistance)
             {
