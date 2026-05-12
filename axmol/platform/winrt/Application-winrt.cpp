@@ -39,6 +39,8 @@ THE SOFTWARE.
 #include <winrt/Windows.System.UserProfile.h>
 #include <winrt/Windows.Foundation.Collections.h>
 
+#include <combaseapi.h>
+
 using namespace Windows::UI::Core;
 using namespace Windows::Foundation;
 
