@@ -24,7 +24,6 @@
 
 #include <cstdlib>
 #include <cstdio>
-#include <memory.h>
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -33,17 +32,16 @@
 #include <algorithm>
 #include <array>
 #include <atomic>
+#include <cstddef>
 #include <ranges>
 #include <string>
 #include <thread>
 #include <vector>
 
-#include "alformat.hpp"
 #include "alnumeric.h"
 #include "althrd_setname.h"
 #include "core/device.h"
 #include "core/helpers.h"
-#include "core/logging.h"
 #include "gsl/gsl"
 #include "ringbuffer.h"
 #include "strutils.hpp"
@@ -51,6 +49,12 @@
 
 #ifndef WAVE_FORMAT_IEEE_FLOAT
 #define WAVE_FORMAT_IEEE_FLOAT  0x0003
+#endif
+
+#if HAVE_CXXMODULES
+import logging;
+#else
+#include "core/logging.h"
 #endif
 
 namespace {
@@ -177,7 +181,7 @@ FORCE_ALIGN void WinMMPlayback::mixerProc()
         mWritable.wait(0, std::memory_order_acquire);
         auto todo = mWritable.load(std::memory_order_acquire);
 
-        auto widx = usize{mIdx};
+        auto widx = std::size_t{mIdx};
         while(todo > 0)
         {
             auto &waveHdr = mWaveBuffer[widx];
@@ -367,7 +371,7 @@ struct WinMMCapture final : public BackendBase {
     void start() override;
     void stop() override;
     void captureSamples(std::span<std::byte> outbuffer) override;
-    auto availableSamples() -> usize override;
+    auto availableSamples() -> std::size_t override;
 
     std::atomic<unsigned> mReadable{0u};
     unsigned mIdx{0u};
@@ -414,7 +418,7 @@ void WinMMCapture::captureProc()
         mReadable.wait(0, std::memory_order_acquire);
         auto todo = mReadable.load(std::memory_order_acquire);
 
-        auto widx = usize{mIdx};
+        auto widx = std::size_t{mIdx};
         while(todo > 0)
         {
             auto &waveHdr = mWaveBuffer[widx];
@@ -502,7 +506,7 @@ void WinMMCapture::open(std::string_view name)
 
     // Allocate circular memory buffer for the captured audio
     // Make sure circular buffer is at least 100ms in size
-    auto const CapturedDataSize = std::max<usize>(mDevice->mBufferSize,
+    auto const CapturedDataSize = std::max<std::size_t>(mDevice->mBufferSize,
         BufferSize*mWaveBuffer.size());
 
     mRing = RingBuffer<std::byte>::Create(CapturedDataSize, mFormat.nBlockAlign, false);
@@ -563,7 +567,7 @@ void WinMMCapture::stop()
 void WinMMCapture::captureSamples(std::span<std::byte> outbuffer)
 { std::ignore = mRing->read(outbuffer); }
 
-auto WinMMCapture::availableSamples() -> usize
+auto WinMMCapture::availableSamples() -> std::size_t
 { return mRing->readSpace(); }
 
 } // namespace

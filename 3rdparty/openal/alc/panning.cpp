@@ -22,7 +22,6 @@
 
 #include <algorithm>
 #include <array>
-#include <bitset>
 #include <charconv>
 #include <chrono>
 #include <cmath>
@@ -40,9 +39,9 @@
 
 #include "AL/alext.h"
 
-#include "alc/context.h"
 #include "alnumeric.h"
 #include "alstring.h"
+#include "altypes.hpp"
 #include "alu.h"
 #include "core/ambdec.h"
 #include "core/ambidefs.h"
@@ -56,16 +55,25 @@
 #include "core/filters/splitter.h"
 #include "core/front_stablizer.h"
 #include "core/hrtf.h"
-#include "core/logging.h"
 #include "core/mixer/hrtfdefs.h"
 #include "core/tsmefilter.hpp"
 #include "core/uhjfilter.h"
 #include "device.h"
 #include "flexarray.h"
-#include "gsl/gsl"
 #include "intrusive_ptr.h"
 #include "opthelpers.h"
-#include "vector.h"
+
+#if HAVE_CXXMODULES
+import alc.context;
+import format.types;
+import gsl;
+import logging;
+#else
+#include "alc/context.hpp"
+#include "alformattypes.hpp"
+#include "core/logging.h"
+#include "gsl/gsl"
+#endif
 
 
 namespace {
@@ -149,7 +157,8 @@ auto GetScalingName(DevAmbiScaling const scaling) noexcept -> std::string_view
 
 
 [[nodiscard]]
-auto CreateStablizer(usize const outchans, unsigned const srate) -> std::unique_ptr<FrontStablizer>
+auto CreateStablizer(std::size_t const outchans, unsigned const srate)
+    -> std::unique_ptr<FrontStablizer>
 {
     auto stablizer = FrontStablizer::Create(outchans);
 
@@ -162,7 +171,8 @@ auto CreateStablizer(usize const outchans, unsigned const srate) -> std::unique_
     return stablizer;
 }
 
-void AllocChannels(al::Device *const device, usize const main_chans, usize const real_chans)
+void AllocChannels(al::Device *const device, std::size_t const main_chans,
+    std::size_t const real_chans)
 {
     TRACE("Channel config, Main: {}, Real: {}", main_chans, real_chans);
 
@@ -194,10 +204,10 @@ enum SpatialMode : bool {
     Periphonic /* 3D */
 };
 
-template<DecoderMode Mode, usize N>
+template<DecoderMode Mode, std::size_t N>
 struct DecoderConfig;
 
-template<usize N>
+template<std::size_t N>
 struct DecoderConfig<SingleBand, N> {
     u8 mOrder{};
     SpatialMode m3DMode{};
@@ -207,7 +217,7 @@ struct DecoderConfig<SingleBand, N> {
     std::array<ChannelCoeffs, N> mCoeffs{};
 };
 
-template<usize N>
+template<std::size_t N>
 struct DecoderConfig<DualBand, N> {
     u8 mOrder{};
     SpatialMode m3DMode{};
@@ -230,7 +240,7 @@ struct DecoderConfig<DualBand, 0> {
     std::span<float const> mOrderGainLF;
     std::span<ChannelCoeffs const> mCoeffsLF;
 
-    template<usize N>
+    template<std::size_t N>
     auto operator=(const DecoderConfig<SingleBand,N> &rhs) & noexcept -> DecoderConfig&
     {
         mOrder = rhs.mOrder;
@@ -244,7 +254,7 @@ struct DecoderConfig<DualBand, 0> {
         return *this;
     }
 
-    template<usize N>
+    template<std::size_t N>
     auto operator=(const DecoderConfig<DualBand,N> &rhs) & noexcept -> DecoderConfig&
     {
         mOrder = rhs.mOrder;
@@ -307,7 +317,7 @@ void InitDistanceComp(al::Device *const device, std::span<Channel const> const c
     for(auto chidx = 0_uz;chidx < channels.size();++chidx)
     {
         const auto ch = channels[chidx];
-        const auto idx = usize{device->RealOut.ChannelIndex[ch].c_val};
+        const auto idx = device->RealOut.ChannelIndex[ch].as<usize>().c_val;
         if(idx == InvalidChannelIndex)
             continue;
 
@@ -388,9 +398,9 @@ auto MakeDecoderView(al::Device const *const device, AmbDecConf const *const con
 {
     auto ret = DecoderView{};
 
-    decoder.mOrder = (conf->ChanMask > Ambi3OrderMask) ? u8::make_from(4) : (conf->ChanMask > Ambi2OrderMask)
-            ? u8::make_from(3) : (conf->ChanMask > Ambi1OrderMask)
-            ? u8::make_from(2) : u8::make_from(1);
+    decoder.mOrder = (conf->ChanMask > Ambi3OrderMask) ? 4_u8 :
+        (conf->ChanMask > Ambi2OrderMask) ? 3_u8 :
+        (conf->ChanMask > Ambi1OrderMask) ? 2_u8 : 1_u8;
     decoder.m3DMode = (conf->ChanMask&AmbiPeriphonicMask) ? Periphonic : Pantaphonic;
 
     switch(conf->CoeffScale)
@@ -751,14 +761,15 @@ auto InitPanning(al::Device *const device, bool const hqdec=false, bool const st
         }
     }
 
-    const auto ambicount = usize{(decoder.m3DMode == Periphonic)
-        ? AmbiChannelsFromOrder(decoder.mOrder.c_val) : Ambi2DChannelsFromOrder(decoder.mOrder.c_val)};
+    const auto ambicount = (decoder.m3DMode == Periphonic)
+        ? AmbiChannelsFromOrder(decoder.mOrder.c_val)
+        : Ambi2DChannelsFromOrder(decoder.mOrder.c_val);
     const auto dual_band = hqdec && !decoder.mCoeffsLF.empty();
     auto chancoeffs = std::vector<ChannelDec>{};
     auto chancoeffslf = std::vector<ChannelDec>{};
     for(const auto i : std::views::iota(0_uz, decoder.mChannels.size()))
     {
-        const auto idx = usize{device->RealOut.ChannelIndex[decoder.mChannels[i]].c_val};
+        const auto idx = device->RealOut.ChannelIndex[decoder.mChannels[i]].as<usize>().c_val;
         if(idx == InvalidChannelIndex)
         {
             ERR("Failed to find {} channel in device",
@@ -803,7 +814,7 @@ auto InitPanning(al::Device *const device, bool const hqdec=false, bool const st
         /* Only enable the stablizer if the decoder does not output to the
          * front-center channel.
          */
-        const auto cidx = usize{device->RealOut.ChannelIndex[FrontCenter].c_val};
+        const auto cidx = device->RealOut.ChannelIndex[FrontCenter].as<usize>().c_val;
         auto hasfc = false;
         if(cidx < chancoeffs.size())
         {
@@ -1297,7 +1308,7 @@ void aluInitRenderer(al::Device *const device, int const hrtf_id,
      * the device is headphones, try to enable it.
      */
     if(stereomode.value_or(StereoEncoding::Default) == StereoEncoding::Hrtf
-        || (!stereomode && device->Flags.test(DirectEar)))
+        || (!stereomode && device->mFlags.test(DeviceFlag::DirectEar)))
     {
         if(device->mHrtfList.empty())
             device->enumerateHrtfs();
@@ -1368,10 +1379,10 @@ void aluInitRenderer(al::Device *const device, int const hrtf_id,
                 std::tie(proc, ftype) = init_encoder(UhjEncoderIIR::Tag{});
                 break;
             case UhjQualityType::FIR256:
-                std::tie(proc, ftype) = init_encoder(UhjEncoder<UhjLength256>::Tag{});
+                std::tie(proc, ftype) = init_encoder(UhjEncoder256::Tag{});
                 break;
             case UhjQualityType::FIR512:
-                std::tie(proc, ftype) = init_encoder(UhjEncoder<UhjLength512>::Tag{});
+                std::tie(proc, ftype) = init_encoder(UhjEncoder512::Tag{});
                 break;
             }
             Ensures(proc != nullptr);
@@ -1391,10 +1402,10 @@ void aluInitRenderer(al::Device *const device, int const hrtf_id,
                     std::tie(proc, ftype) = init_encoder(TsmeEncoderIIR::Tag{});
                     break;
                 case TsmeQualityType::FIR256:
-                    std::tie(proc, ftype) = init_encoder(TsmeEncoder<TsmeLength256>::Tag{});
+                    std::tie(proc, ftype) = init_encoder(TsmeEncoder256::Tag{});
                     break;
                 case TsmeQualityType::FIR512:
-                    std::tie(proc, ftype) = init_encoder(TsmeEncoder<TsmeLength512>::Tag{});
+                    std::tie(proc, ftype) = init_encoder(TsmeEncoder512::Tag{});
                     break;
             }
             Ensures(proc != nullptr);

@@ -17,7 +17,14 @@
 #include "fmt/ranges.h"
 #include "gsl/gsl"
 #include "hrtf.h"
+
+#if HAVE_CXXMODULES
+import format.types;
+import logging;
+#else
+#include "alformattypes.hpp"
 #include "logging.h"
+#endif
 
 
 namespace {
@@ -166,7 +173,7 @@ auto readle(std::istream &data) -> T
     alignas(T) auto ret = std::array<char,sizeof(T)>{};
     if(!data.read(ret.data(), num_bits/8))
     {
-        if constexpr(al::strong_number<T>)
+        if constexpr(al::strict_number<T>)
             return T{gsl::narrow_cast<typename T::value_t>(EOF)};
         else
             return gsl::narrow_cast<T>(EOF);

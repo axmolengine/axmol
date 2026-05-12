@@ -27,6 +27,7 @@
 #include <bit>
 #include <cerrno>
 #include <chrono>
+#include <cstddef>
 #include <cstring>
 #include <exception>
 #include <fstream>
@@ -36,14 +37,17 @@
 #include <vector>
 
 #include "alc/alconfig.h"
-#include "alnumeric.h"
 #include "alstring.h"
 #include "althrd_setname.h"
 #include "core/device.h"
-#include "core/logging.h"
 #include "filesystem.h"
 #include "gsl/gsl"
-#include "strutils.hpp"
+
+#if HAVE_CXXMODULES
+import logging;
+#else
+#include "core/logging.h"
+#endif
 
 
 namespace {
@@ -151,8 +155,8 @@ void WaveBackend::mixerProc()
 
     althrd_setname(GetMixerThreadName());
 
-    auto const frameStep = usize{mDevice->channelsFromFmt()};
-    auto const frameSize = usize{mDevice->frameSizeFromFmt()};
+    auto const frameStep = std::size_t{mDevice->channelsFromFmt()};
+    auto const frameSize = std::size_t{mDevice->frameSizeFromFmt()};
 
     auto done = 0_i64;
     auto start = std::chrono::steady_clock::now();
@@ -334,19 +338,19 @@ auto WaveBackend::reset() -> bool
         // 16-bit val, format type id (extensible: 0xFFFE)
         fwrite16le(0xFFFE_u16, mFile);
         // 16-bit val, channel count
-        fwrite16le(u16::make_from(channels), mFile);
+        fwrite16le(u16::from(channels), mFile);
         // 32-bit val, frequency
         fwrite32le(u32{mDevice->mSampleRate}, mFile);
         // 32-bit val, bytes per second
         fwrite32le(u32{mDevice->mSampleRate * channels * bytes}, mFile);
         // 16-bit val, frame size
-        fwrite16le(u16::make_from(channels * bytes), mFile);
+        fwrite16le(u16::from(channels * bytes), mFile);
         // 16-bit val, bits per sample
-        fwrite16le(u16::make_from(bytes * 8), mFile);
+        fwrite16le(u16::from(bytes * 8), mFile);
         // 16-bit val, extra byte count
         fwrite16le(22_u16, mFile);
         // 16-bit val, valid bits per sample
-        fwrite16le(u16::make_from(bytes * 8), mFile);
+        fwrite16le(u16::from(bytes * 8), mFile);
         // 32-bit val, channel mask
         fwrite32le(u32{chanmask}, mFile);
         // 16 byte GUID, sub-type format
@@ -442,7 +446,7 @@ auto WaveBackend::reset() -> bool
 
     setDefaultWFXChannelOrder();
 
-    mBuffer.resize(usize{mDevice->frameSizeFromFmt()} * mDevice->mUpdateSize);
+    mBuffer.resize(std::size_t{mDevice->frameSizeFromFmt()} * mDevice->mUpdateSize);
 
     return true;
 }
@@ -474,9 +478,9 @@ void WaveBackend::stop()
             if(!mCAFOutput)
             {
                 if(mFile.seekp(4)) // 'WAVE' header len
-                    fwrite32le(u32::make_from(size-8), mFile);
+                    fwrite32le(u32::from(size-8), mFile);
                 if(mFile.seekp(mDataStart-4)) // 'data' header len
-                    fwrite32le(u32::make_from(dataLen), mFile);
+                    fwrite32le(u32::from(dataLen), mFile);
             }
             else
             {

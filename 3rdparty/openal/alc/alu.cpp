@@ -27,10 +27,7 @@
 #include <array>
 #include <atomic>
 #include <cmath>
-#include <cstdarg>
 #include <cstddef>
-#include <cstdint>
-#include <cstdio>
 #include <cstdlib>
 #include <functional>
 #include <iterator>
@@ -119,8 +116,8 @@ auto NfcScale = 1.0f;
 
 using HrtfDirectMixerFunc = void(*)(FloatBufferSpan LeftOut, FloatBufferSpan RightOut,
     std::span<FloatBufferLine const> InSamples, std::span<f32x2> AccumSamples,
-    std::span<float, BufferLineSize> TempBuf, std::span<HrtfChannelState> ChanState, usize IrSize,
-    usize SamplesToDo);
+    std::span<float, BufferLineSize> TempBuf, std::span<HrtfChannelState> ChanState,
+    std::size_t IrSize, std::size_t SamplesToDo);
 
 constinit auto MixDirectHrtf = HrtfDirectMixerFunc{MixDirectHrtf_C};
 
@@ -141,17 +138,18 @@ auto SelectHrtfMixer() -> HrtfDirectMixerFunc
 
 
 void BsincPrepare(unsigned const increment, BsincState *const state, BSincTable const *const table)
+    noexcept NONBLOCKING
 {
-    auto si = usize{BSincScaleCount - 1};
+    auto si = std::size_t{BSincScaleCount - 1};
     auto sf = 0.0_f32;
 
     if(increment > MixerFracOne)
     {
-        sf = MixerFracOne/f32::make_from(increment) - table->scaleBase;
-        sf = std::max(0.0_f32, BSincScaleCount*sf*table->scaleRange - 1.0f);
+        sf = float{MixerFracOne}/f32::from(increment) - table->scaleBase;
+        sf = std::max(0.0_f32, float{BSincScaleCount}*sf*table->scaleRange - 1.0f);
 
         si = float2uint(sf.c_val);
-        sf -= f32::make_from(si);
+        sf -= f32::from(si);
         /* The interpolation factor is fit to this diagonally-symmetric curve
          * to reduce the transition ripple caused by interpolating different
          * scales of the sinc function.
@@ -161,12 +159,13 @@ void BsincPrepare(unsigned const increment, BsincState *const state, BSincTable 
 
     state->sf = sf.c_val;
     state->m = table->m[si];
-    state->l = (state->m/2) - 1;
+    state->l = (state->m/2u) - 1u;
     state->filter = table->Tab.subspan(table->filterOffset[si].c_val);
 }
 
 [[nodiscard]]
-auto SelectResampler(Resampler const resampler, unsigned const increment) -> ResamplerFunc
+auto SelectResampler(Resampler const resampler, unsigned const increment) noexcept NONBLOCKING
+    -> ResamplerFunc
 {
     switch(resampler)
     {
@@ -252,7 +251,7 @@ void aluInit(CompatFlagBitset const flags, float const nfcscale)
 
 
 auto PrepareResampler(Resampler const resampler, unsigned const increment,
-    InterpState *const state) -> ResamplerFunc
+    InterpState *const state) noexcept NONBLOCKING -> ResamplerFunc
 {
     switch(resampler)
     {
@@ -282,12 +281,12 @@ auto PrepareResampler(Resampler const resampler, unsigned const increment,
 }
 
 
-void DeviceBase::Process(AmbiDecPostProcess const &proc, usize const SamplesToDo) const
+void DeviceBase::Process(AmbiDecPostProcess const &proc, std::size_t const SamplesToDo) const
 {
     proc.mAmbiDecoder->process(RealOut.Buffer, Dry.Buffer, SamplesToDo);
 }
 
-void DeviceBase::Process(HrtfPostProcess const &proc, usize const SamplesToDo)
+void DeviceBase::Process(HrtfPostProcess const &proc, std::size_t const SamplesToDo)
 {
     /* HRTF is stereo output only. */
     auto const lidx = RealOut.ChannelIndex[FrontLeft];
@@ -298,7 +297,7 @@ void DeviceBase::Process(HrtfPostProcess const &proc, usize const SamplesToDo)
         proc.mHrtfState->mIrSize, SamplesToDo);
 }
 
-void DeviceBase::Process(UhjPostProcess const &proc, usize const SamplesToDo)
+void DeviceBase::Process(UhjPostProcess const &proc, std::size_t const SamplesToDo)
 {
     /* UHJ is stereo output only. */
     auto const lidx = RealOut.ChannelIndex[FrontLeft];
@@ -312,7 +311,7 @@ void DeviceBase::Process(UhjPostProcess const &proc, usize const SamplesToDo)
             std::span{Dry.Buffer[2]}.first(SamplesToDo)}});
 }
 
-void DeviceBase::Process(TsmePostProcess const &proc, usize const SamplesToDo)
+void DeviceBase::Process(TsmePostProcess const &proc, std::size_t const SamplesToDo)
 {
     /* TSME is stereo output only. */
     auto const lidx = RealOut.ChannelIndex[FrontLeft];
@@ -327,12 +326,12 @@ void DeviceBase::Process(TsmePostProcess const &proc, usize const SamplesToDo)
             std::span{Dry.Buffer[3]}.first(SamplesToDo)}});
 }
 
-void DeviceBase::Process(StablizerPostProcess const &proc, usize const SamplesToDo)
+void DeviceBase::Process(StablizerPostProcess const &proc, std::size_t const SamplesToDo)
 {
     /* Decode with front image stabilization. */
-    auto const lidx = usize{RealOut.ChannelIndex[FrontLeft].c_val};
-    auto const ridx = usize{RealOut.ChannelIndex[FrontRight].c_val};
-    auto const cidx = usize{RealOut.ChannelIndex[FrontCenter].c_val};
+    auto const lidx = std::size_t{RealOut.ChannelIndex[FrontLeft].c_val};
+    auto const ridx = std::size_t{RealOut.ChannelIndex[FrontRight].c_val};
+    auto const cidx = std::size_t{RealOut.ChannelIndex[FrontCenter].c_val};
 
     /* Move the existing direct L/R signal out so it doesn't get processed by
      * the stabilizer.
@@ -405,7 +404,7 @@ void DeviceBase::Process(StablizerPostProcess const &proc, usize const SamplesTo
     }
 }
 
-void DeviceBase::Process(Bs2bPostProcess const &proc, usize const SamplesToDo)
+void DeviceBase::Process(Bs2bPostProcess const &proc, std::size_t const SamplesToDo)
 {
     /* BS2B is stereo output only. */
     auto const lidx = RealOut.ChannelIndex[FrontLeft];
@@ -459,7 +458,7 @@ void UpsampleBFormatTransform(
     std::span<std::array<float, MaxAmbiChannels>,MaxAmbiChannels> const output,
     std::span<std::array<float, MaxAmbiChannels> const> const upsampler,
     std::span<std::array<float, MaxAmbiChannels> const,MaxAmbiChannels> const rotator,
-    usize const ambi_order)
+    std::size_t const ambi_order)
 {
     auto const num_chans = AmbiChannelsFromOrder(ambi_order);
     std::ranges::fill(output | std::views::take(upsampler.size()) | std::views::join, 0.0f);
@@ -729,7 +728,7 @@ auto ScaleAzimuthFront3_2(std::array<float, 3> pos) -> std::array<float, 3>
  * followed by the third-order coefficients, etc.
  */
 [[nodiscard]]
-constexpr auto CalcRotatorSize(usize const l) noexcept -> usize
+constexpr auto CalcRotatorSize(std::size_t const l) noexcept -> std::size_t
 {
     if(l >= 2)
         return (l*2 + 1)*(l*2 + 1) + CalcRotatorSize(l-1);
@@ -805,16 +804,18 @@ void AmbiRotator(AmbiRotateMatrix &matrix, int const order)
     static constexpr auto P = [](isize const i, isize const l, isize const a, isize const n,
         usize const last_base, AmbiRotateMatrix const &R)
     {
-        auto const ri1 =  R[ 1+2][gsl::narrow_cast<usize>(i+2_z)];
-        auto const rim1 = R[-1+2][gsl::narrow_cast<usize>(i+2_z)];
-        auto const ri0 =  R[ 0+2][gsl::narrow_cast<usize>(i+2_z)];
+        auto const ip2 = (i+2_z).reinterpret_as<usize>().c_val;
+        auto const ri1 =  R[ 1+2][ip2];
+        auto const rim1 = R[-1+2][ip2];
+        auto const ri0 =  R[ 0+2][ip2];
 
-        auto const x = last_base + gsl::narrow_cast<usize>(a+l-1);
+        auto const lm1 = (l-1_z).reinterpret_as<usize>().c_val;
+        auto const x = (last_base + lm1 + a.reinterpret_as<usize>()).c_val;
         if(n == -l)
-            return ri1*R[last_base][x] + rim1*R[last_base + gsl::narrow_cast<usize>(l-1_z)*2][x];
+            return ri1*R[last_base.c_val][x] + rim1*R[last_base.c_val + lm1*2][x];
         if(n == l)
-            return ri1*R[last_base + gsl::narrow_cast<usize>(l-1_z)*2][x] - rim1*R[last_base][x];
-        return ri0*R[last_base + gsl::narrow_cast<usize>(l-1_z+n)][x];
+            return ri1*R[last_base.c_val + lm1*2][x] - rim1*R[last_base.c_val][x];
+        return ri0*R[(last_base + lm1 + n.reinterpret_as<usize>()).c_val][x];
     };
 
     static constexpr auto U = [](isize const l, isize const m, isize const n,
@@ -857,7 +858,7 @@ void AmbiRotator(AmbiRotateMatrix &matrix, int const order)
     auto coeffs = RotatorCoeffArray.mCoeffs.cbegin();
     auto base_idx = 4_uz;
     auto last_base = 1_uz;
-    for(auto const l : std::views::iota(2, order+1))
+    for(auto const l : std::views::iota(2_isize, isize{order}+1))
     {
         auto y = base_idx;
         for(auto const n : std::views::iota(-l, l+1))
@@ -882,7 +883,7 @@ void AmbiRotator(AmbiRotateMatrix &matrix, int const order)
             ++y;
         }
         last_base = base_idx;
-        base_idx += gsl::narrow_cast<usize>(l)*2_uz + 1;
+        base_idx += (l*2 + 1).reinterpret_as<usize>().c_val;
     }
 }
 /* End ambisonic rotation helpers. */
@@ -936,7 +937,7 @@ void CalcAmbisonicPanning(Voice *const voice, float const xpos, float const ypos
             voice->mChans[0].mDryParams.NFCtrlFilter.adjust(w0);
         }
 
-        voice->mFlags.set(VoiceHasNfc);
+        voice->mFlags.set(VoiceFlag::HasNfc);
     }
 
     /* Panning a B-Format sound toward some direction is easy. Just pan the
@@ -1050,7 +1051,7 @@ void CalcAmbisonicPanning(Voice *const voice, float const xpos, float const ypos
 
     for(const auto c : std::views::iota(0_uz, index_map.size()))
     {
-        auto const acn = usize{index_map[c].c_val};
+        auto const acn = std::size_t{index_map[c].c_val};
         auto const scale = scales[acn] * coverage;
 
         /* For channel 0, combine the B-Format signal (scaled according to the
@@ -1332,7 +1333,7 @@ void CalcNormalPanning(Voice *const voice, float const xpos, float const ypos, f
             for(auto &chanparams : voice->mChans | std::views::take(chans.size()))
                 chanparams.mDryParams.NFCtrlFilter.adjust(w0);
 
-            voice->mFlags.set(VoiceHasNfc);
+            voice->mFlags.set(VoiceFlag::HasNfc);
         }
 
         if(voice->mFmtChannels == FmtMono && !props.mPanningEnabled)
@@ -1419,7 +1420,7 @@ void CalcNormalPanning(Voice *const voice, float const xpos, float const ypos, f
             for(auto &chanparams : voice->mChans | std::views::take(chans.size()))
                 chanparams.mDryParams.NFCtrlFilter.adjust(w0);
 
-            voice->mFlags.set(VoiceHasNfc);
+            voice->mFlags.set(VoiceFlag::HasNfc);
         }
 
         /* With no distance, spread is only meaningful for 3D mono sources
@@ -1574,7 +1575,7 @@ void CalcPanningAndFilters(Voice *const voice, float const xpos, float const ypo
         return {props.DirectChannels, {}};
     });
 
-    voice->mFlags.reset(VoiceHasHrtf).reset(VoiceHasNfc);
+    voice->mFlags.reset(VoiceFlag::HasHrtf).reset(VoiceFlag::HasNfc);
     if(auto *const decoder = voice->mDecoder.get())
         decoder->mWidthControl = std::min(props.EnhWidth, 0.7f);
 
@@ -1602,7 +1603,7 @@ void CalcPanningAndFilters(Voice *const voice, float const xpos, float const ypo
             sendslots, device);
 
         voice->mDuplicateMono = voice->mFmtChannels == FmtMono && props.mPanningEnabled;
-        voice->mFlags.set(VoiceHasHrtf);
+        voice->mFlags.set(VoiceFlag::HasHrtf);
     }
     else
     {
@@ -2135,7 +2136,7 @@ void ProcessVoiceChanges(ContextBase *const ctx)
             }
             oldvoice->mPendingChange.store(false, std::memory_order_release);
         }
-        if(sendevt && enabledevt.test(al::to_underlying(AsyncEnableBits::SourceState)))
+        if(sendevt && enabledevt.test(AsyncEnableBits::SourceState))
             SendSourceStateEvent(ctx, cur->mSourceID, cur->mState);
 
         next = cur->mNext.load(std::memory_order_acquire);
@@ -2257,7 +2258,7 @@ void ProcessContexts(DeviceBase const *const device, unsigned const SamplesToDo)
 }
 
 
-void ApplyDistanceComp(std::span<FloatBufferLine> const Samples, usize const SamplesToDo,
+void ApplyDistanceComp(std::span<FloatBufferLine> const Samples, std::size_t const SamplesToDo,
     std::span<DistanceComp::ChanData const, MaxOutputChannels> const chandata)
 {
     ASSUME(SamplesToDo > 0);
@@ -2291,7 +2292,7 @@ void ApplyDistanceComp(std::span<FloatBufferLine> const Samples, usize const Sam
 }
 
 void ApplyDither(std::span<FloatBufferLine> const Samples, unsigned *const dither_seed,
-    float const quant_scale, usize const SamplesToDo)
+    float const quant_scale, std::size_t const SamplesToDo)
 {
     static constexpr auto invRNGRange = 1.0 / std::numeric_limits<unsigned>::max();
     ASSUME(SamplesToDo > 0);
@@ -2345,7 +2346,7 @@ template<> [[nodiscard]] auto SampleConv(float const val) noexcept -> u8
 
 template<typename T>
 void Write(std::span<FloatBufferLine const> const InBuffer, void *const OutBuffer,
-    usize const Offset, usize const SamplesToDo, usize const FrameStep)
+    std::size_t const Offset, std::size_t const SamplesToDo, std::size_t const FrameStep)
 {
     ASSUME(FrameStep > 0);
     ASSUME(SamplesToDo > 0);
@@ -2376,7 +2377,7 @@ void Write(std::span<FloatBufferLine const> const InBuffer, void *const OutBuffe
 
 template<typename T>
 void Write(std::span<FloatBufferLine const> const InBuffer, std::span<void*const> const OutBuffers,
-    usize const Offset, usize const SamplesToDo)
+    std::size_t const Offset, std::size_t const SamplesToDo)
 {
     ASSUME(SamplesToDo > 0);
 
@@ -2463,7 +2464,7 @@ void DeviceBase::renderSamples(std::span<void*const> const outBuffers, unsigned 
 }
 
 void DeviceBase::renderSamples(void *const outBuffer, unsigned const numSamples,
-    usize const frameStep)
+    std::size_t const frameStep)
 {
     auto mixer_mode = FPUCtl{};
     auto total = 0u;

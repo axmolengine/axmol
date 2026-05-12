@@ -26,7 +26,6 @@
 #include <algorithm>
 #include <array>
 #include <atomic>
-#include <bitset>
 #include <chrono>
 #include <cmath>
 #include <cstring>
@@ -37,23 +36,27 @@
 #include <span>
 #include <string>
 #include <string_view>
-#include <sys/types.h>
 #include <utility>
 #include <vector>
 
 #include "alc/alconfig.h"
-#include "alformat.hpp"
 #include "alnumeric.h"
 #include "base.h"
 #include "core/devformat.h"
 #include "core/device.h"
-#include "core/logging.h"
 #include "dynload.h"
-#include "gsl/gsl"
 #include "opthelpers.h"
 #include "strutils.hpp"
 
 #include <pulse/pulseaudio.h>
+
+#if HAVE_CXXMODULES
+import gsl;
+import logging;
+#else
+#include "core/logging.h"
+#include "gsl/gsl"
+#endif
 
 
 namespace {
@@ -699,7 +702,7 @@ struct PulsePlayback final : BackendBase {
 
     void bufferAttrCallback(pa_stream *stream) noexcept;
     void streamStateCallback(pa_stream *stream) const noexcept;
-    void streamWriteCallback(pa_stream *stream, usize nbytes) const noexcept;
+    void streamWriteCallback(pa_stream *stream, size_t nbytes) const noexcept;
     void sinkInfoCallback(pa_context *context, const pa_sink_info *info, int eol) noexcept;
     void sinkNameCallback(pa_context *context, const pa_sink_info *info, int eol) noexcept;
     void streamMovedCallback(pa_stream *stream) noexcept;
@@ -748,7 +751,7 @@ void PulsePlayback::streamStateCallback(pa_stream *const stream) const noexcept
     mMainloop.signal();
 }
 
-void PulsePlayback::streamWriteCallback(pa_stream *const stream, usize nbytes) const noexcept
+void PulsePlayback::streamWriteCallback(pa_stream *const stream, size_t nbytes) const noexcept
 {
     do {
         auto free_func = pa_free_cb_t{nullptr};
@@ -801,7 +804,7 @@ void PulsePlayback::sinkInfoCallback(pa_context*, pa_sink_info const *const info
     { return pa_channel_map_superset(&info->channel_map, &chanmap.map); });
     if(chaniter != chanmaps.end())
     {
-        if(!mDevice->Flags.test(ChannelsRequest))
+        if(!mDevice->mFlags.test(DeviceFlag::ChannelsRequest))
             mDevice->FmtChans = chaniter->fmt;
         mIs51Rear = chaniter->is_51rear;
     }
@@ -815,7 +818,7 @@ void PulsePlayback::sinkInfoCallback(pa_context*, pa_sink_info const *const info
 
     if(info->active_port)
         TRACE("Active port: {} ({})", info->active_port->name, info->active_port->description);
-    mDevice->Flags.set(DirectEar, (info->active_port
+    mDevice->mFlags.set(DeviceFlag::DirectEar, (info->active_port
         && info->active_port->name == "analog-output-headphones"sv));
 }
 
@@ -937,7 +940,7 @@ auto PulsePlayback::reset() -> bool
         flags |= PA_STREAM_ADJUST_LATENCY;
     }
     if(GetConfigValueBool(mDevice->mDeviceName, "pulse", "fix-rate", false)
-        || !mDevice->Flags.test(FrequencyRequest))
+        || !mDevice->mFlags.test(DeviceFlag::FrequencyRequest))
         flags |= PA_STREAM_FIX_RATE;
 
     auto chanmap = pa_channel_map{};
@@ -1072,7 +1075,7 @@ void PulsePlayback::start()
         pa_stream_write(mStream, buf, todo, pa_xfree, 0, PA_SEEK_RELATIVE);
     }
 
-    static constexpr auto stream_write = [](pa_stream *const stream, usize const nbytes,
+    static constexpr auto stream_write = [](pa_stream *const stream, size_t const nbytes,
         void *const pdata) noexcept
     { return static_cast<PulsePlayback*>(pdata)->streamWriteCallback(stream, nbytes); };
     pa_stream_set_write_callback(mStream, stream_write, this);
@@ -1138,7 +1141,7 @@ struct PulseCapture final : public BackendBase {
     void start() override;
     void stop() override;
     void captureSamples(std::span<std::byte> outbuffer) override;
-    auto availableSamples() -> usize override;
+    auto availableSamples() -> std::size_t override;
     auto getClockLatency() -> ClockLatency override;
 
     PulseMainloop mMainloop;
@@ -1146,10 +1149,10 @@ struct PulseCapture final : public BackendBase {
     std::optional<std::string> mDeviceId{std::nullopt};
 
     std::span<const std::byte> mCapBuffer;
-    usize mHoleLength{0};
-    usize mPacketLength{0};
+    std::size_t mHoleLength{0};
+    std::size_t mPacketLength{0};
 
-    usize mLastReadable{0};
+    std::size_t mLastReadable{0};
     std::byte mSilentVal{};
 
     pa_buffer_attr mAttr{};
@@ -1360,7 +1363,7 @@ void PulseCapture::captureSamples(std::span<std::byte> outbuffer)
         }
 
         auto *capbuf = cvoidp{};
-        auto caplen = usize{};
+        auto caplen = size_t{};
         if(pa_stream_peek(mStream, &capbuf, &caplen) < 0) [[unlikely]]
         {
             mDevice->handleDisconnect("Failed retrieving capture samples: {}",
@@ -1380,7 +1383,7 @@ void PulseCapture::captureSamples(std::span<std::byte> outbuffer)
         std::ranges::fill(outbuffer, mSilentVal);
 }
 
-auto PulseCapture::availableSamples() -> usize
+auto PulseCapture::availableSamples() -> std::size_t
 {
     auto readable = std::max(mCapBuffer.size(), mHoleLength);
 
@@ -1582,9 +1585,6 @@ auto PulseBackendFactory::queryEventSupport(alc::EventType const eventType, Back
     case alc::EventType::DeviceRemoved:
     case alc::EventType::DefaultDeviceChanged:
         return alc::EventSupport::FullSupport;
-
-    case alc::EventType::Count:
-        break;
     }
     return alc::EventSupport::NoSupport;
 }

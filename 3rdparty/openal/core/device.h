@@ -3,7 +3,6 @@
 
 #include <array>
 #include <atomic>
-#include <bitset>
 #include <chrono>
 #include <concepts>
 #include <functional>
@@ -18,15 +17,17 @@
 #include "alnumeric.h"
 #include "ambidefs.h"
 #include "atomic.h"
+#include "bitset.hpp"
 #include "bufferline.h"
+#include "decoderbase.hpp"
 #include "devformat.h"
+#include "encoderbase.hpp"
 #include "filters/nfc.h"
 #include "flexarray.h"
 #include "gsl/gsl"
 #include "intrusive_ptr.h"
 #include "mixer/hrtfdefs.h"
 #include "resampler_limits.h"
-#include "uhjfilter.h"
 #include "vector.h"
 
 class BFormatDec;
@@ -80,7 +81,7 @@ struct InputRemixMap {
 
 
 class DistanceComp {
-    explicit DistanceComp(usize const count) : mSamples{count} { }
+    explicit DistanceComp(std::size_t const count) : mSamples{count} { }
 
 public:
     /* Maximum delay in samples for speaker distance compensation. */
@@ -94,14 +95,14 @@ public:
     std::array<ChanData, MaxOutputChannels> mChannels{};
     al::FlexArray<float, 16> mSamples;
 
-    static auto Create(usize const numsamples) -> std::unique_ptr<DistanceComp>
+    static auto Create(std::size_t const numsamples) -> std::unique_ptr<DistanceComp>
     { return std::unique_ptr<DistanceComp>{new(FamCount{numsamples}) DistanceComp{numsamples}}; }
 
     DEF_FAM_NEWDEL(DistanceComp, mSamples)
 };
 
 
-constexpr auto InvalidChannelIndex = ~0_u8;
+inline constexpr auto InvalidChannelIndex = ~0_u8;
 
 struct BFChannelConfig {
     float Scale;
@@ -122,7 +123,7 @@ struct MixParams {
      * destination channel is InvalidChannelIndex, the given source channel is
      * not used for output.
      */
-    template<std::invocable<usize, u8, float> F>
+    template<std::invocable<std::size_t, u8, float> F>
     void setAmbiMixParams(MixParams const &inmix, float const gainbase, F func) const
     {
         auto const numIn = inmix.Buffer.size();
@@ -191,7 +192,7 @@ using PostProcess = std::variant<std::monostate,
     Bs2bPostProcess>;
 
 
-enum {
+enum class DeviceFlag : u8::value_t {
     // Frequency was requested by the app or config file
     FrequencyRequest,
     // Channel configuration was requested by the app or config file
@@ -211,7 +212,7 @@ enum {
      */
     Virtualization,
 
-    DeviceFlagsCount
+    MaxValue = Virtualization
 };
 
 enum class DeviceState : u8::value_t {
@@ -244,7 +245,7 @@ struct DeviceBase {
     DevAmbiScaling mAmbiScale{DevAmbiScaling::Default};
 
     // Device flags
-    std::bitset<DeviceFlagsCount> Flags;
+    al::bitset<DeviceFlag> mFlags;
     DeviceState mDeviceState{DeviceState::Unprepared};
 
     unsigned NumAuxSends{};
@@ -275,7 +276,7 @@ struct DeviceBase {
     AmbiRotateMatrix mAmbiRotateMatrix2{};
 
     /* Temp storage used for mixer processing. */
-    static constexpr auto MixerLineSize = usize{BufferLineSize + DecoderBase::sMaxPadding};
+    static constexpr auto MixerLineSize = std::size_t{BufferLineSize + DecoderBase::sMaxPadding};
     static constexpr auto MixerChannelsMax = 25_uz;
     alignas(16) std::array<float, MixerLineSize*MixerChannelsMax> mSampleData{};
     alignas(16) std::array<float, MixerLineSize+MaxResamplerPadding> mResampleData{};
@@ -382,16 +383,16 @@ struct DeviceBase {
             + mClockBaseSec.load(std::memory_order_relaxed) + ns;
     }
 
-    static void Process(std::monostate const&, usize const) { }
-    void Process(AmbiDecPostProcess const &proc, usize SamplesToDo) const;
-    void Process(HrtfPostProcess const &proc, usize SamplesToDo);
-    void Process(UhjPostProcess const &proc, usize SamplesToDo);
-    void Process(TsmePostProcess const &proc, usize SamplesToDo);
-    void Process(StablizerPostProcess const &proc, usize SamplesToDo);
-    void Process(Bs2bPostProcess const &proc, usize SamplesToDo);
+    static void Process(std::monostate const&, std::size_t const) { }
+    void Process(AmbiDecPostProcess const &proc, std::size_t SamplesToDo) const;
+    void Process(HrtfPostProcess const &proc, std::size_t SamplesToDo);
+    void Process(UhjPostProcess const &proc, std::size_t SamplesToDo);
+    void Process(TsmePostProcess const &proc, std::size_t SamplesToDo);
+    void Process(StablizerPostProcess const &proc, std::size_t SamplesToDo);
+    void Process(Bs2bPostProcess const &proc, std::size_t SamplesToDo);
 
     void renderSamples(std::span<void*const> outBuffers, unsigned numSamples);
-    void renderSamples(void *outBuffer, unsigned numSamples, usize frameStep);
+    void renderSamples(void *outBuffer, unsigned numSamples, std::size_t frameStep);
 
     /* Caller must lock the device state, and the mixer must not be running. */
     void doDisconnect(std::string&& msg);

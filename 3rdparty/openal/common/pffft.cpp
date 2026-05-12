@@ -62,9 +62,7 @@
 #include <bit>
 #include <cmath>
 #include <cstdint>
-#include <cstdio>
 #include <cstdlib>
-#include <cstring>
 #include <memory>
 #include <new>
 #include <numbers>
@@ -73,7 +71,7 @@
 #include <vector>
 
 #include "almalloc.h"
-#include "alnumeric.h"
+#include "altypes.hpp"
 #include "fmt/core.h"
 #include "fmt/ranges.h"
 #include "gsl/gsl"
@@ -149,54 +147,9 @@ force_inline void vtranspose4(v4sf &x0, v4sf &x1, v4sf &x2, v4sf &x3) noexcept
 }
 
 /*
- * SSE1 support macros
- */
-#elif defined(__x86_64__) || defined(__SSE__) || defined(_M_X64) || \
-    (defined(_M_IX86_FP) && _M_IX86_FP >= 1)
-
-#include <xmmintrin.h>
-using v4sf = __m128;
-/* 4 floats by simd vector -- this is pretty much hardcoded in the preprocess/
- * finalize functions anyway so you will have to work if you want to enable AVX
- * with its 256-bit vectors.
- */
-constexpr auto SimdSize = 4u;
-force_inline auto vzero() noexcept -> v4sf { return _mm_setzero_ps(); }
-force_inline auto vmul(v4sf a, v4sf b) noexcept -> v4sf { return _mm_mul_ps(a, b); }
-force_inline auto vadd(v4sf a, v4sf b) noexcept -> v4sf { return _mm_add_ps(a, b); }
-force_inline auto vmadd(v4sf a, v4sf b, v4sf c) noexcept -> v4sf
-{ return _mm_add_ps(_mm_mul_ps(a,b), c); }
-force_inline auto vsub(v4sf a, v4sf b) noexcept -> v4sf { return _mm_sub_ps(a, b); }
-force_inline auto ld_ps1(float a) noexcept -> v4sf { return _mm_set1_ps(a); }
-
-force_inline auto vset4(float a, float b, float c, float d) noexcept -> v4sf
-{ return _mm_setr_ps(a, b, c, d); }
-force_inline auto vinsert0(const v4sf v, const float a) noexcept -> v4sf
-{ return _mm_move_ss(v, _mm_set_ss(a)); }
-force_inline auto vextract0(v4sf v) noexcept -> float
-{ return _mm_cvtss_f32(v); }
-
-force_inline auto vswaphl(v4sf a, v4sf b) noexcept -> v4sf
-{ return _mm_shuffle_ps(b, a, _MM_SHUFFLE(3,2,1,0)); }
-
-force_inline void interleave2(const v4sf in1, const v4sf in2, v4sf &out1, v4sf &out2) noexcept
-{
-    out1 = _mm_unpacklo_ps(in1, in2);
-    out2 = _mm_unpackhi_ps(in1, in2);
-}
-force_inline void uninterleave2(v4sf in1, v4sf in2, v4sf &out1, v4sf &out2) noexcept
-{
-    out1 = _mm_shuffle_ps(in1, in2, _MM_SHUFFLE(2,0,2,0));
-    out2 = _mm_shuffle_ps(in1, in2, _MM_SHUFFLE(3,1,3,1));
-}
-
-force_inline void vtranspose4(v4sf &x0, v4sf &x1, v4sf &x2, v4sf &x3) noexcept
-{ _MM_TRANSPOSE4_PS(x0, x1, x2, x3); }
-
-/*
  * ARM NEON support macros
  */
-#elif defined(__ARM_NEON) || defined(__aarch64__) || defined(__arm64) || defined(_M_ARM64)
+#elif defined(__ARM_NEON) || defined(__aarch64__) || defined(__arm64) || defined(_M_ARM64) || defined(_M_ARM64EC)
 
 #include <arm_neon.h>
 using v4sf = float32x4_t;
@@ -255,6 +208,51 @@ force_inline void vtranspose4(v4sf &x0, v4sf &x1, v4sf &x2, v4sf &x3) noexcept
     x2 = u1_.val[0];
     x3 = u1_.val[1];
 }
+
+/*
+ * SSE1 support macros
+ */
+#elif defined(__x86_64__) || defined(__SSE__) || defined(_M_X64) || \
+    (defined(_M_IX86_FP) && _M_IX86_FP >= 1)
+
+#include <xmmintrin.h>
+using v4sf = __m128;
+/* 4 floats by simd vector -- this is pretty much hardcoded in the preprocess/
+ * finalize functions anyway so you will have to work if you want to enable AVX
+ * with its 256-bit vectors.
+ */
+constexpr auto SimdSize = 4u;
+force_inline auto vzero() noexcept -> v4sf { return _mm_setzero_ps(); }
+force_inline auto vmul(v4sf a, v4sf b) noexcept -> v4sf { return _mm_mul_ps(a, b); }
+force_inline auto vadd(v4sf a, v4sf b) noexcept -> v4sf { return _mm_add_ps(a, b); }
+force_inline auto vmadd(v4sf a, v4sf b, v4sf c) noexcept -> v4sf
+{ return _mm_add_ps(_mm_mul_ps(a,b), c); }
+force_inline auto vsub(v4sf a, v4sf b) noexcept -> v4sf { return _mm_sub_ps(a, b); }
+force_inline auto ld_ps1(float a) noexcept -> v4sf { return _mm_set1_ps(a); }
+
+force_inline auto vset4(float a, float b, float c, float d) noexcept -> v4sf
+{ return _mm_setr_ps(a, b, c, d); }
+force_inline auto vinsert0(const v4sf v, const float a) noexcept -> v4sf
+{ return _mm_move_ss(v, _mm_set_ss(a)); }
+force_inline auto vextract0(v4sf v) noexcept -> float
+{ return _mm_cvtss_f32(v); }
+
+force_inline auto vswaphl(v4sf a, v4sf b) noexcept -> v4sf
+{ return _mm_shuffle_ps(b, a, _MM_SHUFFLE(3,2,1,0)); }
+
+force_inline void interleave2(const v4sf in1, const v4sf in2, v4sf &out1, v4sf &out2) noexcept
+{
+    out1 = _mm_unpacklo_ps(in1, in2);
+    out2 = _mm_unpackhi_ps(in1, in2);
+}
+force_inline void uninterleave2(v4sf in1, v4sf in2, v4sf &out1, v4sf &out2) noexcept
+{
+    out1 = _mm_shuffle_ps(in1, in2, _MM_SHUFFLE(2,0,2,0));
+    out2 = _mm_shuffle_ps(in1, in2, _MM_SHUFFLE(3,1,3,1));
+}
+
+force_inline void vtranspose4(v4sf &x0, v4sf &x1, v4sf &x2, v4sf &x3) noexcept
+{ _MM_TRANSPOSE4_PS(x0, x1, x2, x3); }
 
 /*
  * Generic GCC vector macros
@@ -1388,31 +1386,30 @@ auto decompose(unsigned const n, const std::span<unsigned, 15> ifac,
 
 void rffti1_ps(unsigned const n, float *wa, std::span<unsigned, 15> const ifac)
 {
-    static constexpr std::array ntryh{4u, 2u, 3u, 5u};
+    static constexpr auto ntryh = std::array{4u, 2u, 3u, 5u};
 
-    const auto nf = usize{decompose(n, ifac, ntryh)};
-    const auto argh = 2.0*std::numbers::pi / n;
-    auto is = 0_uz;
-    auto nfm1 = nf - 1_uz;
-    auto l1 = 1_uz;
+    auto const nfm1 = usize{decompose(n, ifac, ntryh)} - 1;
+    auto const argh = 2.0_f64*std::numbers::pi / n;
+    auto is = 0_usize;
+    auto l1 = 1_usize;
     for(auto k1 = 0_uz;k1 < nfm1;++k1)
     {
-        const auto ip = size_t{ifac[k1+2]};
+        const auto ip = usize{ifac[k1+2]};
         const auto l2 = l1 * ip;
         const auto ido = n / l2;
         const auto ipm = ip - 1;
-        auto ld = 0_uz;
+        auto ld = 0_usize;
         for(auto j = 0_uz;j < ipm;++j)
         {
-            auto i = is;
+            auto i = is.c_val;
             ld += l1;
-            const auto argld = gsl::narrow_cast<double>(ld)*argh;
+            const auto argld = ld.reinterpret_as<f64>() * argh;
             auto fi = 0.0;
             for(auto ii = 2_uz;ii < ido;ii += 2)
             {
                 fi += 1.0;
-                wa[i++] = gsl::narrow_cast<float>(std::cos(fi*argld));
-                wa[i++] = gsl::narrow_cast<float>(std::sin(fi*argld));
+                wa[i++] = cos(fi*argld).cast_to<f32>().c_val;
+                wa[i++] = sin(fi*argld).cast_to<f32>().c_val;
             }
             is += ido;
         }
@@ -1425,30 +1422,30 @@ void cffti1_ps(unsigned const n, float *wa, std::span<unsigned, 15> const ifac)
     static constexpr auto ntryh = std::array{5u, 3u, 4u, 2u};
 
     const auto nf = usize{decompose(n, ifac, ntryh)};
-    const auto argh = 2.0*std::numbers::pi / n;
+    const auto argh = 2.0_f64*std::numbers::pi / n;
     auto i = 1_uz;
-    auto l1 = 1_uz;
+    auto l1 = 1_usize;
     for(auto k1 = 0_uz;k1 < nf;++k1)
     {
-        const auto ip = size_t{ifac[k1+2]};
+        const auto ip = usize{ifac[k1+2]};
         const auto l2 = l1 * ip;
         const auto ido = n / l2;
         const auto idot = ido + ido + 2_uz;
         const auto ipm = ip - 1_uz;
-        auto ld = 0_uz;
+        auto ld = 0_usize;
         for(auto j = 0_uz;j < ipm;++j)
         {
-            auto i1 = i;
+            auto const i1 = i;
             wa[i-1] = 1.0f;
             wa[i] = 0.0f;
             ld += l1;
-            const auto argld = gsl::narrow_cast<double>(ld)*argh;
+            const auto argld = ld.reinterpret_as<f64>()*argh;
             auto fi = 0.0;
             for(auto ii = 3_uz;ii < idot;ii += 2)
             {
                 fi += 1.0;
-                wa[++i] = gsl::narrow_cast<float>(std::cos(fi*argld));
-                wa[++i] = gsl::narrow_cast<float>(std::sin(fi*argld));
+                wa[++i] = cos(fi*argld).reinterpret_as<f32>().c_val;
+                wa[++i] = sin(fi*argld).reinterpret_as<f32>().c_val;
             }
             if(ip > 5)
             {

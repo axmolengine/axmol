@@ -23,8 +23,6 @@
 #include "effect.h"
 
 #include <algorithm>
-#include <bit>
-#include <cstring>
 #include <iterator>
 #include <memory>
 #include <mutex>
@@ -32,7 +30,6 @@
 #include <numeric>
 #include <span>
 #include <string_view>
-#include <type_traits>
 #include <unordered_map>
 #include <utility>
 #include <variant>
@@ -44,17 +41,24 @@
 #include "AL/efx.h"
 
 #include "al/effects/effects.h"
-#include "alc/context.h"
 #include "alc/device.h"
 #include "alc/inprogext.h"
 #include "almalloc.h"
 #include "alnumeric.h"
 #include "alstring.h"
 #include "core/except.h"
-#include "core/logging.h"
 #include "direct_defs.h"
-#include "gsl/gsl"
 #include "opthelpers.h"
+
+#if HAVE_CXXMODULES
+import alc.context;
+import gsl;
+import logging;
+#else
+#include "alc/context.hpp"
+#include "core/logging.h"
+#include "gsl/gsl"
+#endif
 
 
 constinit const std::array<EffectList,16> gEffectList{{
@@ -143,9 +147,9 @@ void InitEffectParams(al::Effect *const effect, ALenum const type) noexcept
 [[nodiscard]]
 auto EnsureEffects(gsl::not_null<al::Device*> const device, usize const needed) noexcept -> bool
 try {
-    auto count = std::accumulate(device->EffectList.cbegin(), device->EffectList.cend(), 0_uz,
+    auto count = std::accumulate(device->EffectList.cbegin(), device->EffectList.cend(), 0_usize,
         [](usize const cur, const EffectSubList &sublist) noexcept -> usize
-        { return cur + sublist.mFreeMask.popcount().c_val; });
+        { return cur + sublist.mFreeMask.popcount(); });
 
     while(needed > count)
     {
@@ -170,7 +174,7 @@ auto AllocEffect(gsl::not_null<al::Device*> const device) noexcept -> gsl::not_n
     auto const sublist = std::ranges::find_if(device->EffectList,
         [](EffectSubList const &slist) { return slist.mFreeMask != 0; });
     auto const lidx = gsl::narrow_cast<ALuint>(std::distance(device->EffectList.begin(), sublist));
-    auto const slidx = gsl::narrow_cast<ALuint>(sublist->mFreeMask.countr_zero().c_val);
+    auto const slidx = sublist->mFreeMask.countr_zero().c_val;
     ASSUME(slidx < 64);
 
     auto effect = gsl::make_not_null(std::construct_at(
@@ -223,7 +227,7 @@ auto LookupEffect(gsl::not_null<al::Context*> const context, ALuint const id)
 }
 
 
-void alGenEffects(gsl::not_null<al::Context*> context, ALsizei n, ALuint *effects) noexcept
+void alGenEffects_(gsl::not_null<al::Context*> context, ALsizei n, ALuint *effects) noexcept
 try {
     if(n < 0)
         context->throw_error(AL_INVALID_VALUE, "Generating {} effects", n);
@@ -245,7 +249,7 @@ catch(std::exception &e) {
     ERR("Caught exception: {}", e.what());
 }
 
-void alDeleteEffects(gsl::not_null<al::Context*> context, ALsizei n, const ALuint *effects)
+void alDeleteEffects_(gsl::not_null<al::Context*> context, ALsizei n, const ALuint *effects)
     noexcept
 try {
     if(n < 0)
@@ -273,7 +277,7 @@ catch(std::exception &e) {
     ERR("Caught exception: {}", e.what());
 }
 
-auto alIsEffect(gsl::not_null<al::Context*> context, ALuint effect) noexcept -> ALboolean
+auto alIsEffect_(gsl::not_null<al::Context*> context, ALuint effect) noexcept -> ALboolean
 {
     auto const device = al::get_not_null(context->mALDevice);
     auto effectlock = std::lock_guard{device->EffectLock};
@@ -283,7 +287,7 @@ auto alIsEffect(gsl::not_null<al::Context*> context, ALuint effect) noexcept -> 
 }
 
 
-void alEffecti(gsl::not_null<al::Context*> context, ALuint effect, ALenum param, ALint value)
+void alEffecti_(gsl::not_null<al::Context*> context, ALuint effect, ALenum param, ALint value)
     noexcept
 try {
     auto const device = al::get_not_null(context->mALDevice);
@@ -319,13 +323,13 @@ catch(std::exception &e) {
     ERR("Caught exception: {}", e.what());
 }
 
-void alEffectiv(gsl::not_null<al::Context*> context, ALuint effect, ALenum param,
+void alEffectiv_(gsl::not_null<al::Context*> context, ALuint effect, ALenum param,
     const ALint *values) noexcept
 try {
     switch(param)
     {
     case AL_EFFECT_TYPE:
-        alEffecti(context, effect, param, *values);
+        alEffecti_(context, effect, param, *values);
         return;
     }
 
@@ -347,7 +351,7 @@ catch(std::exception &e) {
     ERR("Caught exception: {}", e.what());
 }
 
-void alEffectf(gsl::not_null<al::Context*> context, ALuint effect, ALenum param, ALfloat value)
+void alEffectf_(gsl::not_null<al::Context*> context, ALuint effect, ALenum param, ALfloat value)
     noexcept
 try {
     auto const device = al::get_not_null(context->mALDevice);
@@ -368,7 +372,7 @@ catch(std::exception &e) {
     ERR("Caught exception: {}", e.what());
 }
 
-void alEffectfv(gsl::not_null<al::Context*> context, ALuint effect, ALenum param,
+void alEffectfv_(gsl::not_null<al::Context*> context, ALuint effect, ALenum param,
     const ALfloat *values) noexcept
 try {
     auto const device = al::get_not_null(context->mALDevice);
@@ -389,7 +393,7 @@ catch(std::exception &e) {
     ERR("Caught exception: {}", e.what());
 }
 
-void alGetEffecti(gsl::not_null<al::Context*> context, ALuint effect, ALenum param, ALint *value)
+void alGetEffecti_(gsl::not_null<al::Context*> context, ALuint effect, ALenum param, ALint *value)
     noexcept
 try {
     auto const device = al::get_not_null(context->mALDevice);
@@ -414,13 +418,13 @@ catch(std::exception &e) {
     ERR("Caught exception: {}", e.what());
 }
 
-void alGetEffectiv(gsl::not_null<al::Context*> context, ALuint effect, ALenum param, ALint *values)
-    noexcept
+void alGetEffectiv_(gsl::not_null<al::Context*> context, ALuint effect, ALenum param,
+    ALint *values) noexcept
 try {
     switch(param)
     {
     case AL_EFFECT_TYPE:
-        alGetEffecti(context, effect, param, values);
+        alGetEffecti_(context, effect, param, values);
         return;
     }
 
@@ -442,8 +446,8 @@ catch(std::exception &e) {
     ERR("Caught exception: {}", e.what());
 }
 
-void alGetEffectf(gsl::not_null<al::Context*> context, ALuint effect, ALenum param, ALfloat *value)
-    noexcept
+void alGetEffectf_(gsl::not_null<al::Context*> context, ALuint effect, ALenum param,
+    ALfloat *value) noexcept
 try {
     auto const device = al::get_not_null(context->mALDevice);
     auto effectlock = std::lock_guard{device->EffectLock};
@@ -463,7 +467,7 @@ catch(std::exception &e) {
     ERR("Caught exception: {}", e.what());
 }
 
-void alGetEffectfv(gsl::not_null<al::Context*> context, ALuint effect, ALenum param,
+void alGetEffectfv_(gsl::not_null<al::Context*> context, ALuint effect, ALenum param,
     ALfloat *values) noexcept
 try {
     auto const device = al::get_not_null(context->mALDevice);
@@ -486,18 +490,18 @@ catch(std::exception &e) {
 
 } // namespace
 
-AL_API DECL_FUNC2(void, alGenEffects, ALsizei,n, ALuint*,effects)
-AL_API DECL_FUNC2(void, alDeleteEffects, ALsizei,n, const ALuint*,effects)
-AL_API DECL_FUNC1(ALboolean, alIsEffect, ALuint,effect)
+DECL_FUNC(AL_API, void, alGenEffects, ALsizei,n, ALuint*,effects)
+DECL_FUNC(AL_API, void, alDeleteEffects, ALsizei,n, const ALuint*,effects)
+DECL_FUNC(AL_API, ALboolean, alIsEffect, ALuint,effect)
 
-AL_API DECL_FUNC3(void, alEffecti, ALuint,effect, ALenum,param, ALint,value)
-AL_API DECL_FUNC3(void, alEffectiv, ALuint,effect, ALenum,param, const ALint*,values)
-AL_API DECL_FUNC3(void, alEffectf, ALuint,effect, ALenum,param, ALfloat,value)
-AL_API DECL_FUNC3(void, alEffectfv, ALuint,effect, ALenum,param, const ALfloat*,values)
-AL_API DECL_FUNC3(void, alGetEffecti, ALuint,effect, ALenum,param, ALint*,value)
-AL_API DECL_FUNC3(void, alGetEffectiv, ALuint,effect, ALenum,param, ALint*,values)
-AL_API DECL_FUNC3(void, alGetEffectf, ALuint,effect, ALenum,param, ALfloat*,value)
-AL_API DECL_FUNC3(void, alGetEffectfv, ALuint,effect, ALenum,param, ALfloat*,values)
+DECL_FUNC(AL_API, void, alEffecti, ALuint,effect, ALenum,param, ALint,value)
+DECL_FUNC(AL_API, void, alEffectiv, ALuint,effect, ALenum,param, const ALint*,values)
+DECL_FUNC(AL_API, void, alEffectf, ALuint,effect, ALenum,param, ALfloat,value)
+DECL_FUNC(AL_API, void, alEffectfv, ALuint,effect, ALenum,param, const ALfloat*,values)
+DECL_FUNC(AL_API, void, alGetEffecti, ALuint,effect, ALenum,param, ALint*,value)
+DECL_FUNC(AL_API, void, alGetEffectiv, ALuint,effect, ALenum,param, ALint*,values)
+DECL_FUNC(AL_API, void, alGetEffectf, ALuint,effect, ALenum,param, ALfloat*,value)
+DECL_FUNC(AL_API, void, alGetEffectfv, ALuint,effect, ALenum,param, ALfloat*,values)
 
 
 void InitEffect(al::Effect *const effect)

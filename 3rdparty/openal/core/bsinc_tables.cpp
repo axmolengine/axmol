@@ -31,7 +31,7 @@ namespace {
  * starts with the largest value and accumulates successively smaller values,
  * compounding the rounding and precision error), but it's good enough.
  */
-template<al::weak_number T, al::strong_floating_point U>
+template<al::weak_number T, al::strict_floating_point U>
 constexpr auto cyl_bessel_i(T nu, U x) -> U
 {
     if(nu != T{0})
@@ -138,7 +138,7 @@ struct BSincHeader {
             a_ += (a_.cast_to<f64>() != a[si]) ? 1_u32 : 0_u32;
             m[si] = a_ * 2_u32;
 
-            total_size += 4_uz * BSincPhaseCount * ((m[si]+3_u32) & ~3_u32).c_val;
+            total_size += 4_usize * BSincPhaseCount * ((m[si]+3_u32) & ~3_u32);
         }
     }
 };
@@ -157,9 +157,9 @@ constexpr auto bsinc48_hdr = BSincHeader{80, 47, 1};
 
 template<const BSincHeader &hdr>
 struct BSincFilterArray {
-    alignas(16) std::array<float, hdr.total_size> mTable{};
+    alignas(16) std::array<float, hdr.total_size.c_val> mTable;
 
-    BSincFilterArray() noexcept
+    BSincFilterArray() noexcept : mTable{}
     {
         static constexpr auto BSincPointsMax = (hdr.m[0]+3u).c_val & ~3u;
         static_assert(BSincPointsMax <= MaxResamplerPadding, "MaxResamplerPadding is too small");
@@ -179,7 +179,7 @@ struct BSincFilterArray {
             const auto l = floor(m*0.5_f64) - 1.0_f64;
             const auto o = size_t{BSincPointsMax-m.c_val} / 2u;
             const auto scale = lerp(hdr.scaleBase, 1.0_f64,
-                f64::make_from(si+1u)/f64{BSincScaleCount});
+                f64::from(si+1u)/f64{BSincScaleCount});
 
             /* Calculate an appropriate cutoff frequency. An explanation may be
              * in order here.
@@ -235,19 +235,19 @@ struct BSincFilterArray {
              * transition band is not fully wrapped at this scale and the
              * cutoff doesn't need adjustment.
              */
-            const auto max_cutoff = (0.5_f64 - hdr.scaleBase)*scale;
+            const auto max_cutoff = (0.5 - hdr.scaleBase)*scale;
             const auto width = hdr.scaleBase * std::max(hdr.scaleLimit, scale);
-            const auto cutoff2 = std::min(max_cutoff, (scale - width)*0.5_f64) * 2.0_f64;
+            const auto cutoff2 = std::min(max_cutoff, (scale - width)*0.5) * 2.0;
 
-            for(const auto pi : std::views::iota(0_uz, BSincPhaseCount))
+            for(const auto pi : std::views::iota(0_u32, BSincPhaseCount))
             {
-                const auto phase = l + f64::make_from(pi)/f64{BSincPhaseCount};
+                const auto phase = l + pi.as<f64>()/BSincPhaseCount;
 
-                for(const auto i : std::views::iota(0_uz, m))
+                for(const auto i : std::views::iota(0_u32, m))
                 {
-                    const auto x = f64::make_from(i) - phase;
-                    filter[si][pi][o+i] = Kaiser(hdr.beta, x/a, besseli_0_beta) * cutoff2 *
-                        Sinc(cutoff2*x);
+                    const auto x = i - phase;
+                    filter[si][pi.c_val][o+i.c_val] = Kaiser(hdr.beta, x/a, besseli_0_beta)
+                        * cutoff2 * Sinc(cutoff2*x);
                 }
             }
         }
@@ -359,7 +359,7 @@ constexpr auto GenerateBSincTable(const T &filter) noexcept -> BSincTable
         ret.m[i] = (hdr.m[i]+3u) & ~3u;
     ret.filterOffset[0] = 0;
     for(const auto i : std::views::iota(1_uz, BSincScaleCount))
-        ret.filterOffset[i] = ret.filterOffset[i-1] + ret.m[i-1]*4*BSincPhaseCount;
+        ret.filterOffset[i] = ret.filterOffset[i-1] + ret.m[i-1]*4u*BSincPhaseCount;
     ret.Tab = filter.getTable();
     return ret;
 }

@@ -23,10 +23,7 @@
 #include "jack.h"
 
 #include <array>
-#include <cstdlib>
-#include <cstdio>
 #include <cstring>
-#include <memory.h>
 #include <memory>
 #include <mutex>
 #include <ranges>
@@ -40,7 +37,6 @@
 #include "althrd_setname.h"
 #include "core/device.h"
 #include "core/helpers.h"
-#include "core/logging.h"
 #include "dynload.h"
 #include "gsl/gsl"
 #include "opthelpers.h"
@@ -48,6 +44,12 @@
 
 #include <jack/jack.h>
 #include <jack/ringbuffer.h>
+
+#if HAVE_CXXMODULES
+import logging;
+#else
+#include "core/logging.h"
+#endif
 
 
 namespace {
@@ -365,7 +367,7 @@ int JackPlayback::process(jack_nframes_t numframes) noexcept
     {
         auto const data = mRing->getReadVector();
 
-        const auto outlen = usize{numframes / mDevice->mUpdateSize};
+        const auto outlen = std::size_t{numframes / mDevice->mUpdateSize};
         const auto updates1 = std::min(data[0].size() / mRing->getElemSize(), outlen);
         const auto updates2 = std::min(data[1].size() / mRing->getElemSize(), outlen - updates1);
 
@@ -519,8 +521,8 @@ bool JackPlayback::reset()
     mDevice->FmtType = DevFmtFloat;
 
     try {
-        const auto numchans = usize{mDevice->channelsFromFmt()};
-        std::ranges::for_each(std::views::iota(0_uz, numchans), [this](usize const idx)
+        const auto numchans = std::size_t{mDevice->channelsFromFmt()};
+        std::ranges::for_each(std::views::iota(0_uz, numchans), [this](std::size_t const idx)
         {
             auto const name = al::format("channel_{}", idx);
             auto &newport = mPort.emplace_back();
@@ -611,7 +613,7 @@ void JackPlayback::start()
         mDevice->mBufferSize = (bufsize+1) * mDevice->mUpdateSize;
 
         mRing = RingBuffer<float>::Create(bufsize,
-            usize{mDevice->mUpdateSize} * mDevice->channelsFromFmt(), true);
+            std::size_t{mDevice->mUpdateSize} * mDevice->channelsFromFmt(), true);
 
         try {
             mPlaying.store(true, std::memory_order_release);

@@ -270,6 +270,7 @@ if(AX_ENABLE_AUDIO)
   # The openal-soft(LGPL 2.1)
   if(NOT EMSCRIPTEN)
     set(alsoft_opts
+      "ALSOFT_ENABLE_MODULES OFF"
       "ALSOFT_DLOPEN OFF"
       "ALSOFT_UTILS OFF"
       "ALSOFT_EXAMPLES OFF"

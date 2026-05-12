@@ -34,6 +34,7 @@
 #include <array>
 #include <bit>
 #include <cctype>
+#include <cstdint>
 #include <cstdlib>
 #include <fstream>
 #include <istream>
@@ -48,7 +49,6 @@
 #include "alnumeric.h"
 #include "alstring.h"
 #include "core/helpers.h"
-#include "core/logging.h"
 #include "filesystem.h"
 #include "fmt/ranges.h"
 #include "gsl/gsl"
@@ -60,6 +60,12 @@
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Foundation.Collections.h>
 using namespace winrt;
+#endif
+
+#if HAVE_CXXMODULES
+import logging;
+#else
+#include "core/logging.h"
 #endif
 
 namespace {
@@ -188,7 +194,7 @@ void LoadConfigFromFile(std::istream &f)
 
     auto curSection = std::string{};
     auto buffer = std::string{};
-    auto linenum = 0_uz;
+    auto linenum = std::size_t{0};
 
     while(std::getline(f, buffer))
     {

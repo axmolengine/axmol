@@ -4,7 +4,6 @@
 #include "event.h"
 
 #include <atomic>
-#include <bitset>
 #include <exception>
 #include <mutex>
 #include <optional>
@@ -19,19 +18,25 @@
 #include "AL/al.h"
 #include "AL/alext.h"
 
-#include "alc/context.h"
 #include "alformat.hpp"
 #include "alnumeric.h"
 #include "core/async_event.h"
-#include "core/context.h"
 #include "core/effects/base.h"
+#include "core/context.h"
 #include "core/except.h"
-#include "core/logging.h"
 #include "direct_defs.h"
-#include "gsl/gsl"
 #include "intrusive_ptr.h"
-#include "opthelpers.h"
 #include "ringbuffer.h"
+
+#if HAVE_CXXMODULES
+import alc.context;
+import gsl;
+import logging;
+#else
+#include "alc/context.hpp"
+#include "core/logging.h"
+#include "gsl/gsl"
+#endif
 
 
 namespace {
@@ -73,8 +78,7 @@ auto EventThread(gsl::not_null<al::Context*> const context) -> void
                 },
                 [context,enabledevts](AsyncSourceStateEvent const &evt)
                 {
-                    if(!context->mEventCb
-                        || !enabledevts.test(al::to_underlying(AsyncEnableBits::SourceState)))
+                    if(!context->mEventCb || !enabledevts.test(AsyncEnableBits::SourceState))
                         return;
 
                     auto state = ALuint{};
@@ -106,8 +110,7 @@ auto EventThread(gsl::not_null<al::Context*> const context) -> void
                 },
                 [context,enabledevts](AsyncBufferCompleteEvent const &evt)
                 {
-                    if(!context->mEventCb
-                        || !enabledevts.test(al::to_underlying(AsyncEnableBits::BufferCompleted)))
+                    if(!context->mEventCb || !enabledevts.test(AsyncEnableBits::BufferCompleted))
                         return;
 
                     const auto msg = al::format("{} buffer{} completed", evt.mCount,
@@ -117,8 +120,7 @@ auto EventThread(gsl::not_null<al::Context*> const context) -> void
                 },
                 [context,enabledevts](AsyncDisconnectEvent const &evt)
                 {
-                    if(!context->mEventCb
-                        || !enabledevts.test(al::to_underlying(AsyncEnableBits::Disconnected)))
+                    if(!context->mEventCb || !enabledevts.test(AsyncEnableBits::Disconnected))
                         return;
 
                     context->mEventCb(AL_EVENT_TYPE_DISCONNECTED_SOFT, 0, 0,
@@ -144,7 +146,7 @@ constexpr auto GetEventType(ALenum const etype) noexcept -> std::optional<AsyncE
 }
 
 
-void alEventControlSOFT(gsl::not_null<al::Context*> const context, ALsizei const count,
+void alEventControlSOFT_(gsl::not_null<al::Context*> const context, ALsizei const count,
     ALenum const *const types, ALboolean const enable) noexcept
 try {
     if(count < 0)
@@ -161,7 +163,7 @@ try {
         if(!etype)
             context->throw_error(AL_INVALID_ENUM, "Invalid event type {:#04x}",
                 as_unsigned(evttype));
-        flags.set(al::to_underlying(*etype));
+        flags.set(*etype);
     });
 
     if(enable)
@@ -194,8 +196,8 @@ catch(std::exception &e) {
     ERR("Caught exception: {}", e.what());
 }
 
-void alEventCallbackSOFT(gsl::not_null<al::Context*> const context, ALEVENTPROCSOFT const callback,
-    void *const userParam) noexcept
+void alEventCallbackSOFT_(gsl::not_null<al::Context*> const context,
+    ALEVENTPROCSOFT const callback, void *const userParam) noexcept
 try {
     auto const eventlock = std::lock_guard{context->mEventCbLock};
     context->mEventCb = callback;
@@ -245,5 +247,5 @@ void StopEventThrd(al::Context *ctx)
     ctx->mEventThread.join();
 }
 
-AL_API DECL_FUNCEXT3(void, alEventControl,SOFT, ALsizei,count, const ALenum*,types, ALboolean,enable)
-AL_API DECL_FUNCEXT2(void, alEventCallback,SOFT, ALEVENTPROCSOFT,callback, void*,userParam)
+DECL_FUNCEXT(AL_API, void, alEventControl,SOFT, ALsizei,count, const ALenum*,types, ALboolean,enable)
+DECL_FUNCEXT(AL_API, void, alEventCallback,SOFT, ALEVENTPROCSOFT,callback, void*,userParam)

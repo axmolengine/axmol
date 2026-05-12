@@ -43,6 +43,11 @@
 #include "core/mixer/defs.h"
 #include "intrusive_ptr.h"
 
+#if HAVE_CXXMODULES
+import window.hann;
+#else
+#include "hann_window.hpp"
+#endif
 
 struct BufferStorage;
 
@@ -76,31 +81,13 @@ alignas(16) constexpr std::array<std::array<float, NumLines>, NumLines> A2B{{
 
 using complex_d = std::complex<double>;
 
-constexpr auto HilSize = 1024_uz;
-constexpr auto HilHalfSize = HilSize >> 1;
-constexpr auto OversampleFactor = 4_uz;
+constexpr auto HilSize = 1024u;
+constexpr auto OversampleFactor = 4u;
 
 static_assert(HilSize%OversampleFactor == 0, "Factor must be a clean divisor of the size");
-constexpr auto HilStep{HilSize / OversampleFactor};
+constexpr auto HilStep = HilSize / OversampleFactor;
 
-/* Define a Hann window, used to filter the HIL input and output. */
-struct Windower {
-    alignas(16) std::array<double,HilSize> mData{};
-
-    Windower() noexcept
-    {
-        static constexpr auto scale = std::numbers::pi / double{HilSize};
-        /* Create lookup table of the Hann window for the desired size. */
-        std::ranges::transform(std::views::iota(0u, unsigned{HilHalfSize}), mData.begin(),
-            [](unsigned const i) -> float
-        {
-            const auto val = std::sin((i+0.5) * scale);
-            return static_cast<float>(val * val);
-        });
-        std::ranges::copy(mData | std::views::take(HilHalfSize), mData.rbegin());
-    }
-};
-const Windower gWindow{};
+auto &gWindow = gHannWindow<HilSize>;
 
 
 struct FshifterState final : public EffectState {
@@ -222,7 +209,7 @@ void FshifterState::update(const ContextBase *context, const EffectSlotBase *slo
 
     mOutTarget = target.Main->Buffer;
     target.Main->setAmbiMixParams(slot->Wet, slot->Gain,
-        [this](usize const idx, u8 const outchan, float const outgain)
+        [this](std::size_t const idx, u8 const outchan, float const outgain)
     {
         if(idx < mChans.size())
         {
@@ -287,16 +274,16 @@ void FshifterState::process(const size_t samplesToDo,
         {
             /* Real signal windowing and store in Analytic buffer */
             const auto [_, windowiter, analyticiter] = std::ranges::transform(
-                chandata.mInFIFO | std::views::drop(mPos), gWindow.mData, mAnalytic.begin(),
+                chandata.mInFIFO | std::views::drop(mPos), gWindow, mAnalytic.begin(),
                 std::multiplies{});
             std::ranges::transform(chandata.mInFIFO.begin(), chandata.mInFIFO.end(), windowiter,
-                gWindow.mData.end(), analyticiter, std::multiplies{});
+                gWindow.end(), analyticiter, std::multiplies{});
 
             /* Processing signal by Discrete Hilbert Transform (analytical signal). */
             complex_hilbert(mAnalytic);
 
             /* Windowing and add to output accumulator */
-            std::ranges::transform(mAnalytic, gWindow.mData, mAnalytic.begin(),
+            std::ranges::transform(mAnalytic, gWindow, mAnalytic.begin(),
                 [](const complex_d &a, const double w)  { return 2.0/OversampleFactor*w*a; });
 
             const auto accumrange = chandata.mOutputAccum | std::views::drop(mPos);

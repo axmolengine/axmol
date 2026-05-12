@@ -1,5 +1,5 @@
-#ifndef ALC_CONTEXT_H
-#define ALC_CONTEXT_H
+#ifndef ALC_CONTEXT_HPP
+#define ALC_CONTEXT_HPP
 
 #include "config.h"
 
@@ -204,35 +204,14 @@ private:
 
     void init();
 
-    /* Thread-local current context. */
-    static inline thread_local Context *sLocalContext{};
-
-    /* Thread-local context handling. This handles attempting to release the
-     * context which may have been left current when the thread is destroyed.
-     */
-    class ThreadCtx {
-    public:
-        ThreadCtx() = default;
-        ThreadCtx(const ThreadCtx&) = delete;
-        auto operator=(const ThreadCtx&) -> ThreadCtx& = delete;
-
-        ~ThreadCtx();
-        /* NOLINTBEGIN(readability-convert-member-functions-to-static)
-         * This should be non-static to invoke construction of the thread-local
-         * sThreadContext, so that it's destructor gets run at thread exit to
-         * clear sLocalContext (which isn't a member variable to make read
-         * access efficient).
-         */
-        void set(Context *ctx) const noexcept { sLocalContext = ctx; }
-        /* NOLINTEND(readability-convert-member-functions-to-static) */
-    };
-    static thread_local ThreadCtx sThreadContext;
-
     friend ContextDeleter;
 
 public:
+    /* Thread-local current context. */
+    static inline thread_local Context *sLocalContext{};
+
     static Context *getThreadContext() noexcept { return sLocalContext; }
-    static void setThreadContext(Context *context) noexcept { sThreadContext.set(context); }
+    static void setThreadContext(Context *context) noexcept;
 
     /* Default effect that applies to sources that don't have an effect on send 0. */
     static Effect sDefaultEffect;
@@ -243,11 +222,11 @@ public:
 
     void eaxUninitialize() noexcept;
 
-    ALenum eax_eax_set(const GUID *property_set_id, ALuint property_id, ALuint property_source_id,
-        ALvoid *property_value, ALuint property_value_size);
+    ALenum eax_eax_set(AL_GUID const *property_set_id, ALuint property_id,
+        ALuint property_source_id, ALvoid *property_value, ALuint property_value_size);
 
-    ALenum eax_eax_get(const GUID *property_set_id, ALuint property_id, ALuint property_source_id,
-        ALvoid *property_value, ALuint property_value_size);
+    ALenum eax_eax_get(AL_GUID const *property_set_id, ALuint property_id,
+        ALuint property_source_id, ALvoid *property_value, ALuint property_value_size);
 
     void eaxSetLastError() noexcept;
 
@@ -302,7 +281,7 @@ private:
     };
 
     struct Eax4PrimaryFxSlotIdValidator {
-        void operator()(const GUID& guidPrimaryFXSlotID) const
+        void operator()(AL_GUID const& guidPrimaryFXSlotID) const
         {
             if(guidPrimaryFXSlotID != EAX_NULL_GUID &&
                 guidPrimaryFXSlotID != EAXPROPERTYID_EAX40_FXSlot0 &&
@@ -359,7 +338,7 @@ private:
     };
 
     struct Eax5PrimaryFxSlotIdValidator {
-        void operator()(const GUID& guidPrimaryFXSlotID) const
+        void operator()(AL_GUID const& guidPrimaryFXSlotID) const
         {
             if(guidPrimaryFXSlotID != EAX_NULL_GUID &&
                 guidPrimaryFXSlotID != EAXPROPERTYID_EAX50_FXSlot0 &&
@@ -472,7 +451,7 @@ private:
      * value, and updates a dirty flag.
      */
     template<typename TValidator>
-    void eax_defer(const EaxCall &call, auto &state, usize const dirty_bit, auto member)
+    void eax_defer(const EaxCall &call, auto &state, std::size_t const dirty_bit, auto member)
     {
         static_assert(std::invocable<decltype(member), decltype(state.i)>);
         using TMemberResult = std::invoke_result_t<decltype(member), decltype(state.i)>;
@@ -487,7 +466,7 @@ private:
     }
 
     void eax_context_commit_property(auto &state, std::bitset<eax_dirty_bit_count> &dst_df,
-        usize const dirty_bit, std::invocable<decltype(mEax)> auto member) noexcept
+        std::size_t const dirty_bit, std::invocable<decltype(mEax)> auto member) noexcept
     {
         if(mEaxDf.test(dirty_bit))
         {
@@ -558,16 +537,20 @@ auto GetContextRef() noexcept -> ContextRef;
 
 void UpdateContextProps(al::Context *context);
 
+namespace al {
+
+inline auto verify_context(ALCcontext *context) -> gsl::not_null<al::Context*>
+{
+    /* TODO: A debug/non-optimized build should essentially do
+     * al::get_not_null(VerifyContext(context)) to ensure the ALCcontext handle
+     * is valid, not just non-null.
+     */
+    /* NOLINTNEXTLINE(cppcoreguidelines-pro-type-static-cast-downcast) */
+    return gsl::make_not_null(static_cast<al::Context*>(context));
+}
+
+}
 
 inline constinit auto TrapALError = false;
 
-
-#if ALSOFT_EAX
-auto AL_APIENTRY EAXSet(const GUID *property_set_id, ALuint property_id,
-    ALuint source_id, ALvoid *value, ALuint value_size) noexcept -> ALenum;
-
-auto AL_APIENTRY EAXGet(const GUID *property_set_id, ALuint property_id,
-    ALuint source_id, ALvoid *value, ALuint value_size) noexcept -> ALenum;
-#endif // ALSOFT_EAX
-
-#endif /* ALC_CONTEXT_H */
+#endif /* ALC_CONTEXT_HPP */

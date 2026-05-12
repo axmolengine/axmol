@@ -5,7 +5,6 @@
 
 #include <algorithm>
 #include <array>
-#include <cctype>
 #include <cmath>
 #include <cstddef>
 #include <cstdio>
@@ -34,9 +33,14 @@
 #include "helpers.h"
 #include "hrtf_loader.hpp"
 #include "hrtf_resource.hpp"
-#include "logging.h"
 #include "mixer/hrtfdefs.h"
 #include "polyphase_resampler.h"
+
+#if HAVE_CXXMODULES
+import logging;
+#else
+#include "logging.h"
+#endif
 
 
 namespace {
@@ -134,7 +138,7 @@ class databuf final : public std::streambuf {
         if(pos < 0 || pos > egptr()-eback())
             return traits_type::eof();
 
-        setg(eback(), eback()+gsl::narrow_cast<usize>(pos), egptr());
+        setg(eback(), eback()+gsl::narrow_cast<std::size_t>(pos), egptr());
         return pos;
     }
 
@@ -201,9 +205,9 @@ void HrtfStore::getCoeffs(float const elevation, float const azimuth, float cons
 
     /* Calculate the elevation indices. */
     auto const elev0 = CalcEvIndex(field->evCount.c_val, elevation);
-    auto const elev1_idx = usize{std::min(elev0.idx+1u, field->evCount.c_val-1u)};
-    auto const ir0offset = usize{mElev[ebase + elev0.idx].irOffset.c_val};
-    auto const ir1offset = usize{mElev[ebase + elev1_idx].irOffset.c_val};
+    auto const elev1_idx = std::size_t{std::min(elev0.idx+1u, field->evCount.c_val-1u)};
+    auto const ir0offset = mElev[ebase + elev0.idx].irOffset.as<usize>().c_val;
+    auto const ir1offset = mElev[ebase + elev1_idx].irOffset.as<usize>().c_val;
 
     /* Calculate azimuth indices. */
     auto const az0 = CalcAzIndex(mElev[ebase + elev0.idx].azCount.c_val, azimuth);
@@ -226,16 +230,16 @@ void HrtfStore::getCoeffs(float const elevation, float const azimuth, float cons
         (     elev0.blend) * (     az1.blend) * dirfact};
 
     /* Calculate the blended HRIR delays. */
-    auto d = gsl::narrow_cast<float>(mDelays[idx[0]][0].c_val)*blend[0]
-        + gsl::narrow_cast<float>(mDelays[idx[1]][0].c_val)*blend[1]
-        + gsl::narrow_cast<float>(mDelays[idx[2]][0].c_val)*blend[2]
-        + gsl::narrow_cast<float>(mDelays[idx[3]][0].c_val)*blend[3];
+    auto d = (mDelays[idx[0]][0].as<f32>()*blend[0]
+        + mDelays[idx[1]][0].as<f32>()*blend[1]
+        + mDelays[idx[2]][0].as<f32>()*blend[2]
+        + mDelays[idx[3]][0].as<f32>()*blend[3]).c_val;
     delays[0] = fastf2u(d * float{1.0f/HrirDelayFracOne});
 
-    d = gsl::narrow_cast<float>(mDelays[idx[0]][1].c_val)*blend[0]
-        + gsl::narrow_cast<float>(mDelays[idx[1]][1].c_val)*blend[1]
-        + gsl::narrow_cast<float>(mDelays[idx[2]][1].c_val)*blend[2]
-        + gsl::narrow_cast<float>(mDelays[idx[3]][1].c_val)*blend[3];
+    d = (mDelays[idx[0]][1].as<f32>()*blend[0]
+        + mDelays[idx[1]][1].as<f32>()*blend[1]
+        + mDelays[idx[2]][1].as<f32>()*blend[2]
+        + mDelays[idx[3]][1].as<f32>()*blend[3]).c_val;
     delays[1] = fastf2u(d * float{1.0f/HrirDelayFracOne});
 
     /* Calculate the blended HRIR coefficients. */
@@ -254,7 +258,7 @@ void HrtfStore::getCoeffs(float const elevation, float const azimuth, float cons
 }
 
 
-auto DirectHrtfState::Create(usize const num_chans) -> std::unique_ptr<DirectHrtfState>
+auto DirectHrtfState::Create(std::size_t const num_chans) -> std::unique_ptr<DirectHrtfState>
 { return std::unique_ptr<DirectHrtfState>{new(FamCount{num_chans}) DirectHrtfState{num_chans}}; }
 
 void DirectHrtfState::build(HrtfStore const *const Hrtf, unsigned const irSize,
@@ -275,7 +279,7 @@ void DirectHrtfState::build(HrtfStore const *const Hrtf, unsigned const irSize,
 
     std::ranges::transform(std::views::iota(0_uz, mChannels.size()), (mChannels
         | std::views::transform(&HrtfChannelState::mHfScale)).begin(),
-        [AmbiOrderHFGain](usize const idx)
+        [AmbiOrderHFGain](std::size_t const idx)
     {
         auto const order = AmbiIndex::OrderFromChannel[idx];
         return AmbiOrderHFGain[order.c_val];
@@ -588,8 +592,7 @@ try {
         std::ranges::transform(new_delays, (delays | std::views::join).begin(),
             [delay_scale](float const fdelay) -> u8
         {
-            return u8::make_from(al::saturate_cast<u8::value_t>(
-                float2int(fdelay*delay_scale + 0.5f)));
+            return u8::from(al::saturate_cast<u8::value_t>(float2int(fdelay*delay_scale + 0.5f)));
         });
 
         /* Scale the IR size for the new sample rate and update the stored

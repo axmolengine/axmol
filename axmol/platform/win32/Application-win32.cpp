@@ -35,6 +35,8 @@ THE SOFTWARE.
 #include "yasio/wtimer_hres.hpp"
 
 #include "ntcvt/ntcvt.hpp"
+#include <combaseapi.h>
+
 /**
 @brief    This function change the PVRFrame show/hide setting in register.
 @param  bEnable If true show the PVRFrame window, otherwise hide.

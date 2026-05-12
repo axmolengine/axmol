@@ -49,7 +49,6 @@
 #include "althrd_setname.h"
 #include "core/device.h"
 #include "core/helpers.h"
-#include "core/logging.h"
 #include "gsl/gsl"
 #include "ringbuffer.h"
 
@@ -76,6 +75,12 @@
  */
 #ifdef __FreeBSD__
 #define ALC_OSS_DEVNODE_TRUC
+#endif
+
+#if HAVE_CXXMODULES
+import logging;
+#else
+#include "core/logging.h"
 #endif
 
 namespace {
@@ -286,8 +291,8 @@ void OSSPlayback::mixerProc()
     SetRTPriority();
     althrd_setname(GetMixerThreadName());
 
-    const auto frame_step = usize{mDevice->channelsFromFmt()};
-    const auto frame_size = usize{mDevice->frameSizeFromFmt()};
+    const auto frame_step = std::size_t{mDevice->channelsFromFmt()};
+    const auto frame_size = std::size_t{mDevice->frameSizeFromFmt()};
 
     while(!mKillNow.load(std::memory_order_acquire)
         && mDevice->Connected.load(std::memory_order_acquire))
@@ -327,7 +332,7 @@ void OSSPlayback::mixerProc()
                 break;
             }
 
-            write_buf = write_buf.subspan(gsl::narrow_cast<usize>(wrote));
+            write_buf = write_buf.subspan(gsl::narrow_cast<std::size_t>(wrote));
         }
     }
 }
@@ -424,7 +429,7 @@ auto OSSPlayback::reset() -> bool
 
     setDefaultChannelOrder();
 
-    mMixData.resize(usize{mDevice->mUpdateSize} * mDevice->frameSizeFromFmt());
+    mMixData.resize(std::size_t{mDevice->mUpdateSize} * mDevice->frameSizeFromFmt());
 
     return true;
 }
@@ -462,7 +467,7 @@ struct OSSCapture final : BackendBase {
     void start() override;
     void stop() override;
     void captureSamples(std::span<std::byte> outbuffer) override;
-    auto availableSamples() -> usize override;
+    auto availableSamples() -> std::size_t override;
 
     FileHandle mFd;
 
@@ -480,7 +485,7 @@ void OSSCapture::recordProc() const
     SetRTPriority();
     althrd_setname(GetRecordThreadName());
 
-    auto const frame_size = usize{mDevice->frameSizeFromFmt()};
+    auto const frame_size = std::size_t{mDevice->frameSizeFromFmt()};
     while(!mKillNow.load(std::memory_order_acquire))
     {
         auto pollitem = pollfd{};
@@ -512,7 +517,7 @@ void OSSCapture::recordProc() const
                 mDevice->handleDisconnect("Failed reading capture samples: {}", errstr);
                 break;
             }
-            mRing->writeAdvance(gsl::narrow_cast<usize>(amt) / frame_size);
+            mRing->writeAdvance(gsl::narrow_cast<std::size_t>(amt) / frame_size);
         }
     }
 }
@@ -621,7 +626,7 @@ void OSSCapture::stop()
 void OSSCapture::captureSamples(std::span<std::byte> outbuffer)
 { std::ignore = mRing->read(outbuffer); }
 
-auto OSSCapture::availableSamples() -> usize
+auto OSSCapture::availableSamples() -> std::size_t
 { return mRing->readSpace(); }
 
 } // namespace

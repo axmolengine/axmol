@@ -46,10 +46,15 @@
 #include "althrd_setname.h"
 #include "core/device.h"
 #include "core/helpers.h"
-#include "core/logging.h"
 #include "gsl/gsl"
 
 #include <sys/audioio.h>
+
+#if HAVE_CXXMODULES
+import logging;
+#else
+#include "core/logging.h"
+#endif
 
 
 namespace {
@@ -94,8 +99,8 @@ int SolarisBackend::mixerProc()
     SetRTPriority();
     althrd_setname(GetMixerThreadName());
 
-    auto const frame_step = usize{mDevice->channelsFromFmt()};
-    auto const frame_size = usize{mDevice->frameSizeFromFmt()};
+    auto const frame_step = std::size_t{mDevice->channelsFromFmt()};
+    auto const frame_size = std::size_t{mDevice->frameSizeFromFmt()};
 
     while(!mKillNow.load(std::memory_order_acquire)
         && mDevice->Connected.load(std::memory_order_acquire))
@@ -133,7 +138,7 @@ int SolarisBackend::mixerProc()
                 break;
             }
 
-            buffer = buffer.subspan(gsl::narrow<usize>(wrote));
+            buffer = buffer.subspan(gsl::narrow<std::size_t>(wrote));
         }
     }
 
@@ -231,7 +236,7 @@ bool SolarisBackend::reset()
 
     setDefaultChannelOrder();
 
-    mBuffer.resize(mDevice->mUpdateSize * usize{frame_size});
+    mBuffer.resize(mDevice->mUpdateSize * std::size_t{frame_size});
     std::ranges::fill(mBuffer, std::byte{});
 
     return true;
