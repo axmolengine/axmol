@@ -392,8 +392,8 @@ void FastTMXLayer::updateIndexBuffers()
             // Pre-allocate at maximum possible size so the buffer never needs to be
             // recreated when setTileGID adds tiles. Recreating would invalidate existing
             // CustomCommand references (same reasoning as the vertex buffer).
-            const auto maxSize = sizeof(decltype(batch.indices)::value_type) * 6 *
-                                 static_cast<size_t>(_layerSize.width * _layerSize.height);
+            const auto maxSize = sizeof(decltype(batch.indices)::value_type) * 6 /* 6 indices per quad */ *
+                                 static_cast<size_t>(_layerSize.width) * static_cast<size_t>(_layerSize.height);
             batch.indexBuffer = axdrv->createBuffer(maxSize, rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
         }
         batch.indexBuffer->updateData(batch.indices.data(), size);
