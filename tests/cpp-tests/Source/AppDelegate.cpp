@@ -45,7 +45,7 @@ static DriverPreference parseDriverPreference(std::span<const std::string_view> 
     for (int i = 1; i < args.size(); ++i)
     {
         std::string_view arg = args[i];
-        if (arg.rfind("--force-", 0) == 0)
+        if (arg.starts_with("--force-"))
         {
             std::string_view backend = arg.substr(8);
             if (backend == "opengl" || backend == "gles")
