@@ -46,10 +46,10 @@ public:
     CommandLineArgs()  = default;
     ~CommandLineArgs() = default;
 
-    CommandLineArgs(const CommandLineArgs& ) = delete;
-    CommandLineArgs& operator=(const CommandLineArgs& ) = delete;
-    CommandLineArgs(CommandLineArgs&& ) = delete;
-    CommandLineArgs& operator=(CommandLineArgs&& ) = delete;
+    CommandLineArgs(const CommandLineArgs&)            = delete;
+    CommandLineArgs& operator=(const CommandLineArgs&) = delete;
+    CommandLineArgs(CommandLineArgs&&)                 = delete;
+    CommandLineArgs& operator=(CommandLineArgs&&)      = delete;
 
     // Safe owning builders (recommended)
     void buildFromArgv(int argc, char** argv);  // assume argv is UTF-8, copy into internal storage
