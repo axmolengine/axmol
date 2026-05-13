@@ -81,7 +81,8 @@ TextureCache::~TextureCache()
     for (auto&& texture : _textures)
         texture.second->release();
 
-    _loadingJob = JobHandle{};
+    // the waitForQuit must invoked before dtor
+    assert(!_loadingJob);
 }
 
 std::string TextureCache::getDescription() const
@@ -784,14 +785,19 @@ const std::string& TextureCache::getTextureFilePath(ax::Texture2D* texture) cons
 
 void TextureCache::waitForQuit()
 {
-    // notify sub thread to quick
-    std::unique_lock<std::mutex> ul(_requestMutex);
-    _sleepCondition.notify_one();
-    ul.unlock();
+    if (_loadingJob)
+    {
+        _loadingJob.requestCancel();
 
-    _loadingJob.requestCancel();
-    _loadingJob.wait();
-    _loadingJob = JobHandle{};
+        {
+            // notify sub thread to quick
+            std::unique_lock<std::mutex> ul(_requestMutex);
+            _sleepCondition.notify_one();
+        }
+
+        _loadingJob.wait();
+        _loadingJob = JobHandle{};
+    }
 
     for (auto s : _requestQueue)
         delete s;
