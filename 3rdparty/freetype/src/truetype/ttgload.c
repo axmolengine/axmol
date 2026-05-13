@@ -345,8 +345,8 @@
     FT_Byte*        limit      = load->limit;
     FT_GlyphLoader  gloader    = load->gloader;
     FT_Outline*     outline    = &gloader->current.outline;
-    FT_Int          n_contours = load->n_contours;
-    FT_Int          n_points;
+    FT_UInt         n_contours = (FT_UInt)load->n_contours;
+    FT_UInt         n_points;
     FT_UShort       n_ins;
 
     FT_Byte         *flag, *flag_limit;
@@ -354,7 +354,6 @@
     FT_Vector       *vec, *vec_limit;
     FT_Pos          x, y;
     FT_UShort       *cont, *cont_limit;
-    FT_Int          last;
 
 
     /* check that we can add the contours to the glyph */
@@ -363,27 +362,25 @@
       goto Fail;
 
     /* check space for contours array + instructions count */
-    if ( n_contours >= 0xFFF || p + 2 * n_contours + 2 > limit )
+    if ( n_contours >= 0xFFFU || p + 2 * n_contours + 2 > limit )
       goto Invalid_Outline;
 
     /* reading the contours' endpoints & number of points */
     cont       = outline->contours;
     cont_limit = cont + n_contours;
 
-    last = -1;
+    n_points = 0;
     for ( ; cont < cont_limit; cont++ )
     {
       *cont = FT_NEXT_USHORT( p );
 
-      if ( *cont <= last )
+      if ( *cont < n_points )
         goto Invalid_Outline;
 
-      last = *cont;
+      n_points = *cont + 1U;
     }
 
-    n_points = last + 1;
-
-    FT_TRACE5(( "  # of points: %d\n", n_points ));
+    FT_TRACE5(( "  # of points: %u\n", n_points ));
 
     /* note that we will add four phantom points later */
     error = FT_GLYPHLOADER_CHECK_POINTS( gloader, n_points + 4, 0 );

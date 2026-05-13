@@ -67,9 +67,8 @@
 
 ## FreeType
 - [![Upstream](https://img.shields.io/gitlab/v/tag/freetype/freetype?label=Upstream)](https://gitlab.freedesktop.org/freetype/freetype)
-- Version: 2.14.3-a6d4860 (Until Apr 12, 2026), with modifications:
+- Version: 2.14.3-c39ca391 (Until May 13, 2026), with modifications:
   - ftsystem.c: Use UTF-8 instead ACP for Windows paths
-  - hvfload.c: Fix glyph->metrics.height too-small(=4) issue
 - License: BSD-style (The FreeType Project)
 
 ## Glad

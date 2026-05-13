@@ -2517,11 +2517,7 @@
   Render_Glyph( RAS_ARG )
   {
     FT_Error  error;
-    Long      buffer[FT_MAX_BLACK_POOL];
 
-
-    ras.buff     = buffer;
-    ras.sizeBuff = (&buffer)[1]; /* Points to right after buffer. */
 
     Set_High_Precision( RAS_VARS ras.outline.flags &
                                  FT_OUTLINE_HIGH_PRECISION );
@@ -2665,6 +2661,9 @@
     const FT_Outline*  outline    = (const FT_Outline*)params->source;
     const FT_Bitmap*   target_map = params->target;
 
+    FT_ULong  estimate;
+    int       ret;
+
 #ifndef FT_STATIC_RASTER
     black_TWorker  worker[1];
 #endif
@@ -2712,7 +2711,36 @@
     if ( ras.bPitch > 0 )
       ras.bOrigin += ras.bTop * ras.bPitch;
 
-    return Render_Glyph( RAS_VAR );
+    /* allocate memory based on empirical estimate from CJK fonts */
+    estimate = ( ras.bTop + ras.bRight ) * 8UL +
+               80UL * sizeof ( TProfile ) / sizeof ( Long );
+    if ( estimate > FT_MAX_BLACK_POOL )
+    {
+      FT_Error   error;
+      FT_Memory  memory = (FT_Memory)((black_PRaster)raster)->memory;
+
+
+      if ( FT_QNEW_ARRAY( ras.buff, estimate ) )
+        ret = error;
+      else
+      {
+        ras.sizeBuff = ras.buff + estimate;
+        ret = Render_Glyph( RAS_VAR );
+        FT_FREE( ras.buff );
+      }
+    }
+    else
+    {
+      Long  buffer[FT_MAX_BLACK_POOL];  /* stack allocation */
+
+
+      ras.buff     = buffer;
+      ras.sizeBuff = (&buffer)[1]; /* Points to right after buffer. */
+
+      ret = Render_Glyph( RAS_VAR );
+    }
+
+    return ret;
   }
 
 

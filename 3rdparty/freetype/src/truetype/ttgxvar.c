@@ -4025,13 +4025,13 @@
   /* modeled after `af_iup_shift' */
 
   static void
-  tt_delta_shift( int         p1,
-                  int         p2,
-                  int         ref,
+  tt_delta_shift( FT_UInt     p1,
+                  FT_UInt     p2,
+                  FT_UInt     ref,
                   FT_Vector*  in_points,
                   FT_Vector*  out_points )
   {
-    int        p;
+    FT_UInt    p;
     FT_Vector  delta;
 
 
@@ -4062,14 +4062,14 @@
   /* modeled after `af_iup_interp', `_iup_worker_interpolate', and   */
   /* `Ins_IUP' with spec differences in handling ill-defined cases.  */
   static void
-  tt_delta_interpolate( int         p1,
-                        int         p2,
-                        int         ref1,
-                        int         ref2,
+  tt_delta_interpolate( FT_UInt     p1,
+                        FT_UInt     p2,
+                        FT_UInt     ref1,
+                        FT_UInt     ref2,
                         FT_Vector*  in_points,
                         FT_Vector*  out_points )
   {
-    int  p, i;
+    FT_UInt  p, i;
 
     FT_Pos  out, in1, in2, out1, out2, d1, d2;
 
@@ -4135,24 +4135,18 @@
                          FT_Vector*   in_points,
                          FT_Bool*     has_delta )
   {
-    FT_Int  first_point;
-    FT_Int  end_point;
+    FT_UInt  first_point;
+    FT_UInt  end_point;
 
-    FT_Int  first_delta;
-    FT_Int  cur_delta;
+    FT_UInt  first_delta;
+    FT_UInt  cur_delta;
 
-    FT_Int    point;
-    FT_Short  contour;
+    FT_UInt  point;
+    FT_UInt  contour;
 
 
-    /* ignore empty outlines */
-    if ( !outline->n_contours )
-      return;
-
-    contour = 0;
-    point   = 0;
-
-    do
+    for ( point = 0, contour = 0;
+          contour < outline->n_contours; contour++ )
     {
       end_point   = outline->contours[contour];
       first_point = point;
@@ -4213,9 +4207,7 @@
                                   out_points );
         }
       }
-      contour++;
-
-    } while ( contour < outline->n_contours );
+    }
   }
 
 

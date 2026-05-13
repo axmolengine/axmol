@@ -68,11 +68,14 @@
    *
    * This renderer has the following advantages:
    *
-   * - It doesn't need an intermediate bitmap.  Instead, one can supply a
-   *   callback function that will be called by the renderer to draw gray
-   *   spans on any target surface.  You can thus do direct composition on
-   *   any kind of bitmap, provided that you give the renderer the right
-   *   callback.
+   * - It doesn't need an intermediate bitmap.  Instead,  linked lists
+   *   of cells (pixels visited by an outline) are stored, which requires
+   *   less memory and can be maintained on the stack for small glyphs.
+   *
+   * - One can supply a callback function that will be called by the
+   *   renderer to draw gray spans on any target surface.  You can thus
+   *   do direct composition on any kind of bitmap, provided that you give
+   *   the renderer the right callback.
    *
    * - A perfect anti-aliaser, i.e., it computes the _exact_ coverage on
    *   each pixel cell by straight segments.
@@ -464,7 +467,10 @@ typedef ptrdiff_t  FT_PtrDist;
 
   } TPixmap;
 
-  /* maximum number of gray cells in the buffer */
+  /* Maximum number of gray cells in the stack buffer;  */
+  /* for example, a buffer of 680 cells can accommodate */
+  /* a glyph with the taxicab perimeter of 680 pixels.  */
+  /* A larger buffer can be allocated when necessary.   */
 #if FT_RENDER_POOL_SIZE > 2048
 #define FT_MAX_GRAY_POOL  ( FT_RENDER_POOL_SIZE / sizeof ( TCell ) )
 #else
@@ -492,9 +498,10 @@ typedef ptrdiff_t  FT_PtrDist;
     TCoord  count_ey;        /* same as (max_ey - min_ey) */
 
     int         error;       /* pool overflow exception                  */
+    PCell       buffer;      /* buffer                                   */
+    PCell       cell_null;   /* last cell, used as dumpster and limit    */
     PCell       cell;        /* current cell                             */
     PCell       cell_free;   /* call allocation next free slot           */
-    PCell       cell_null;   /* last cell, used as dumpster and limit    */
 
     PCell*      ycells;      /* array of cell linked-lists; one per      */
                              /* vertical coordinate in the current band  */
@@ -1861,10 +1868,6 @@ typedef ptrdiff_t  FT_PtrDist;
   static int
   gray_convert_glyph( RAS_ARG )
   {
-    TCell    buffer[FT_MAX_GRAY_POOL];
-    size_t   height = (size_t)( ras.cbox.yMax - ras.cbox.yMin );
-    size_t   n = FT_MAX_GRAY_POOL / 8;
-    TCoord   y;
     TCoord   bands[32];  /* enough to accommodate bisections */
     TCoord*  band;
 
@@ -1873,89 +1876,74 @@ typedef ptrdiff_t  FT_PtrDist;
 
 
     /* Initialize the null cell at the end of the poll. */
-    ras.cell_null        = buffer + FT_MAX_GRAY_POOL - 1;
     ras.cell_null->x     = CELL_MAX_X_VALUE;
     ras.cell_null->area  = 0;
     ras.cell_null->cover = 0;
     ras.cell_null->next  = NULL;
 
     /* set up vertical bands */
-    ras.ycells     = (PCell*)buffer;
+    ras.ycells = (PCell*)ras.buffer;
 
-    if ( height > n )
+    ras.min_ex = ras.cbox.xMin;
+    ras.max_ex = ras.cbox.xMax;
+
+    band    = bands;
+    band[1] = ras.cbox.yMin;
+    band[0] = ras.cbox.yMax;
+
+    do
     {
-      /* two divisions rounded up */
-      n       = ( height + n - 1 ) / n;
-      height  = ( height + n - 1 ) / n;
-    }
+      size_t  n;
+      TCoord  i;
 
-    for ( y = ras.cbox.yMin; y < ras.cbox.yMax; )
-    {
-      ras.min_ey = y;
-      y         += height;
-      ras.max_ey = FT_MIN( y, ras.cbox.yMax );
 
+      ras.min_ey   = band[1];
+      ras.max_ey   = band[0];
       ras.count_ey = ras.max_ey - ras.min_ey;
 
-      band    = bands;
-      band[1] = ras.cbox.xMin;
-      band[0] = ras.cbox.xMax;
+      /* memory management: zero out and skip ycells */
+      for ( i = 0; i < ras.count_ey; ++i )
+        ras.ycells[i] = ras.cell_null;
 
-      do
+      n = ( (size_t)ras.count_ey * sizeof ( PCell ) + sizeof ( TCell ) - 1 )
+            / sizeof ( TCell );
+
+      ras.cell_free = ras.buffer + n;
+      ras.cell      = ras.cell_null;
+      ras.error     = Smooth_Err_Ok;
+
+      error     = gray_convert_glyph_inner( RAS_VAR_ continued );
+      continued = 1;
+
+      if ( !error )
       {
-        TCoord  i;
+        if ( ras.render_span )  /* for FT_RASTER_FLAG_DIRECT only */
+          gray_sweep_direct( RAS_VAR );
+        else
+          gray_sweep( RAS_VAR );
+        band--;
+        continue;
+      }
+      else if ( error != Smooth_Err_Raster_Overflow )
+        goto Exit;
 
+      /* render pool overflow; we will reduce the render band by half */
+      i = ( band[0] - band[1] ) >> 1;
 
-        ras.min_ex = band[1];
-        ras.max_ex = band[0];
+      /* this should never happen even with tiny rendering pool */
+      if ( i == 0 )
+      {
+        FT_TRACE7(( "gray_convert_glyph: rotten glyph\n" ));
+        error = FT_THROW( Raster_Overflow );
+        goto Exit;
+      }
 
-        /* memory management: zero out and skip ycells */
-        for ( i = 0; i < ras.count_ey; ++i )
-          ras.ycells[i] = ras.cell_null;
-
-        n = ( (size_t)ras.count_ey * sizeof ( PCell ) + sizeof ( TCell ) - 1 )
-              / sizeof ( TCell );
-
-        ras.cell_free = buffer + n;
-        ras.cell      = ras.cell_null;
-        ras.error     = Smooth_Err_Ok;
-
-        error     = gray_convert_glyph_inner( RAS_VAR_ continued );
-        continued = 1;
-
-        if ( !error )
-        {
-          if ( ras.render_span )  /* for FT_RASTER_FLAG_DIRECT only */
-            gray_sweep_direct( RAS_VAR );
-          else
-            gray_sweep( RAS_VAR );
-          band--;
-          continue;
-        }
-        else if ( error != Smooth_Err_Raster_Overflow )
-          goto Exit;
-
-        /* render pool overflow; we will reduce the render band by half */
-        i = ( band[0] - band[1] ) >> 1;
-
-        /* this should never happen even with tiny rendering pool */
-        if ( i == 0 )
-        {
-          FT_TRACE7(( "gray_convert_glyph: rotten glyph\n" ));
-          error = FT_THROW( Raster_Overflow );
-          goto Exit;
-        }
-
-        band++;
-        band[1]  = band[0];
-        band[0] += i;
-      } while ( band >= bands );
-    }
+      band++;
+      band[1]  = band[0];
+      band[0] += i;
+    } while ( band >= bands );
 
   Exit:
-    ras.cell   = ras.cell_free = ras.cell_null = NULL;
-    ras.ycells = NULL;
-
     return error;
   }
 
@@ -1964,6 +1952,9 @@ typedef ptrdiff_t  FT_PtrDist;
   gray_raster_render( FT_Raster                raster,
                       const FT_Raster_Params*  params )
   {
+    FT_ULong  estimate;
+    int       ret;
+
     const FT_Outline*  outline    = (const FT_Outline*)params->source;
     const FT_Bitmap*   target_map = params->target;
 
@@ -2039,7 +2030,36 @@ typedef ptrdiff_t  FT_PtrDist;
     if ( ras.cbox.xMin >= ras.cbox.xMax || ras.cbox.yMin >= ras.cbox.yMax )
       return Smooth_Err_Ok;
 
-    return gray_convert_glyph( RAS_VAR );
+    /* allocate memory based on empirical estimate from CJK fonts */
+    estimate = ( ras.cbox.xMax - ras.cbox.xMin +
+                 ras.cbox.yMax - ras.cbox.yMin ) * 10UL;
+    if ( estimate > FT_MAX_GRAY_POOL )
+    {
+      FT_Error   error;
+      FT_Memory  memory = (FT_Memory)((gray_PRaster)raster)->memory;
+
+
+      if ( FT_QNEW_ARRAY( ras.buffer, estimate ) )
+        ret = error;
+      else
+      {
+        ras.cell_null = ras.buffer + estimate - 1;
+        ret = gray_convert_glyph( RAS_VAR );
+        FT_FREE( ras.buffer );
+      }
+    }
+    else
+    {
+      TCell  buffer[FT_MAX_GRAY_POOL];  /* stack allocation */
+
+
+      ras.buffer    = buffer;
+      ras.cell_null = ras.buffer + FT_MAX_GRAY_POOL - 1;
+
+      ret = gray_convert_glyph( RAS_VAR );
+    }
+
+    return ret;
   }
 
 
