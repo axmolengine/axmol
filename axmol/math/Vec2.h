@@ -139,7 +139,7 @@ public:
     /**
      * Adds the elements of the specified vector to this one.
      *
-     * @param v The vector to add.
+     * @param val The vector to add.
      */
     void add(const Vec2& val)
     {
@@ -193,7 +193,7 @@ public:
      * distance between different vectors), it is advised to use
      * this method instead of distance.
      *
-     * @param v The other vector.
+     * @param val The other vector.
      *
      * @return The squared distance between this vector and v.
      *
@@ -209,7 +209,7 @@ public:
     /**
      * Returns the dot product of this vector and the specified vector.
      *
-     * @param v The vector to compute the dot product with.
+     * @param val The vector to compute the dot product with.
      *
      * @return The dot product.
      */
@@ -409,7 +409,7 @@ public:
      *
      * Note: this does not modify this vector.
      *
-     * @param v The vector to add.
+     * @param val The vector to add.
      * @return The vector sum.
      */
     Vec2 operator+(const Vec2& val) const
@@ -422,7 +422,7 @@ public:
     /**
      * Adds the given vector to this vector.
      *
-     * @param v The vector to add.
+     * @param val The vector to add.
      * @return This vector, after the addition occurs.
      */
     Vec2& operator+=(const Vec2& val)
@@ -436,7 +436,7 @@ public:
      *
      * Note: this does not modify this vector.
      *
-     * @param v The vector to add.
+     * @param val The vector to add.
      * @return The vector sum.
      */
     Vec2 operator-(const Vec2& val) const
@@ -449,7 +449,7 @@ public:
     /**
      * Subtracts the given vector from this vector.
      *
-     * @param v The vector to subtract.
+     * @param val The vector to subtract.
      * @return This vector, after the subtraction occurs.
      */
     Vec2& operator-=(const Vec2& val)
@@ -512,7 +512,7 @@ public:
     /**
      * Determines if this vector is less than the given vector.
      *
-     * @param v The vector to compare against.
+     * @param val The vector to compare against.
      *
      * @return True if this vector is less than the given vector, false otherwise.
      */
@@ -528,7 +528,7 @@ public:
     /**
      * Determines if this vector is greater than the given vector.
      *
-     * @param v The vector to compare against.
+     * @param val The vector to compare against.
      *
      * @return True if this vector is greater than the given vector, false otherwise.
      */
@@ -544,7 +544,7 @@ public:
     /**
      * Determines if this vector is equal to the given vector.
      *
-     * @param v The vector to compare against.
+     * @param val The vector to compare against.
      *
      * @return True if this vector is equal to the given vector, false otherwise.
      */
@@ -553,7 +553,7 @@ public:
     /**
      * Determines if this vector is not equal to the given vector.
      *
-     * @param v The vector to compare against.
+     * @param val The vector to compare against.
      *
      * @return True if this vector is not equal to the given vector, false otherwise.
      */
