@@ -66,10 +66,6 @@ public:
     bool empty() const noexcept;
     std::string_view operator[](size_t i) const noexcept;
 
-    // Convenience helper: find flag value by prefix (e.g. prefix="--force-" returns "vulkan" for "--force-vulkan")
-    // Returns empty string if not found
-    std::string_view findFlagValue(std::string_view prefix) const;
-
     // Debug / introspection: whether this object owns internal storage
     bool ownsStorage() const noexcept;
 

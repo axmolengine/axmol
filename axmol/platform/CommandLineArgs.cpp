@@ -150,18 +150,6 @@ std::string_view CommandLineArgs::operator[](size_t i) const noexcept
     return _views[i];
 }
 
-std::string_view CommandLineArgs::findFlagValue(std::string_view prefix) const
-{
-    for (auto sv : _views)
-    {
-        if (sv.size() >= prefix.size() && sv.substr(0, prefix.size()) == prefix)
-        {
-            return sv.substr(prefix.size());  // view into existing storage
-        }
-    }
-    return {};  // empty view if not found
-}
-
 bool CommandLineArgs::ownsStorage() const noexcept
 {
     return _ownsStorage;
