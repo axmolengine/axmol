@@ -73,7 +73,7 @@ void CommandLineArgs::buildFromWargv(int argc, wchar_t** wargv)
     _storage.reserve(static_cast<size_t>(argc));
     for (int i = 0; i < argc; ++i)
     {
-        _storage.emplace_back(ntcvt::from_chars(wargv[i]));
+        _storage.emplace_back(wargv[i] ? ntcvt::from_chars(wargv[i]) : std::string{});
     }
     rebuildViews();
     _ownsStorage = true;
