@@ -561,18 +561,33 @@ bool GRoot::initWithScene(ax::Scene* scene, int zOrder)
     _inputProcessor->setCaptureCallback(AX_CALLBACK_1(GRoot::onTouchEvent, this));
 
 #if defined(AX_PLATFORM_PC) && AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
-    _windowSizeListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(RenderViewImpl::EVENT_WINDOW_RESIZED, AX_CALLBACK_0(GRoot::onWindowSizeChanged, this));
+    _windowSizeListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(RenderViewImpl::EVENT_WINDOW_RESIZED, AX_CALLBACK_1(GRoot::onWindowSizeChanged, this));
 #endif
-    onWindowSizeChanged();
+
+    // Fixed by WUCJ638:
+    // Directly copy the code in onWindowSizeChanged(), would
+    // get rid of the cost of calling function.
+    /*onWindowSizeChanged*/{
+        const ax::Size& rs = Director::getInstance()->getRenderView()->getDesignResolutionSize();
+        setSize(rs.width, rs.height);
+
+        // updateContentScaleLevel();
+    }
+
 
     scene->addChild(_displayObject, zOrder);
 
     return true;
 }
 
-void GRoot::onWindowSizeChanged()
+// Fixed by WUCJ638:
+// Window failed to resize because
+// > const ax::Size& rs =...
+// will return the old size of the window.
+// Parameter could receive the new size of the window.
+void GRoot::onWindowSizeChanged(ax::EventCustom* e)
 {
-    const ax::Size& rs = Director::getInstance()->getRenderView()->getDesignResolutionSize();
+    const ax::Size& rs = *static_cast<ax::Size*>(e->getUserData());
     setSize(rs.width, rs.height);
 
     updateContentScaleLevel();
