@@ -189,6 +189,7 @@
   - Linking `fmt::fmt` instead `alsoft::fmt`
   - Exclude target `alsoft::excommon`
   - Fix `al::char_as_u8/al::u8_as_char` in `common/alstring.hpp` with compiler flag: `-fno-char8_t` or `/Zc:char8_t-`
+  - Disable non‑standard [[clang::nonblocking]] attribute on Win32 to avoid compiler compatibility issues
 - License: LGPL-2.1
 
 ## OpenSSL
