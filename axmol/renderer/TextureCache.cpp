@@ -72,7 +72,7 @@ std::string TextureCache::checkETC1AlphaFile(std::string_view path)
     return FileUtils::getInstance()->isFileExist(ret) ? ret : std::string{};
 }
 
-TextureCache::TextureCache() : _loadingThread(nullptr), _needQuit(false), _outstandingTaskCount(0) {}
+TextureCache::TextureCache() : _loadingJob(), _outstandingTaskCount(0) {}
 
 TextureCache::~TextureCache()
 {
@@ -81,7 +81,7 @@ TextureCache::~TextureCache()
     for (auto&& texture : _textures)
         texture.second->release();
 
-    AX_SAFE_DELETE(_loadingThread);
+    _loadingJob = JobHandle{};
 }
 
 std::string TextureCache::getDescription() const
@@ -213,11 +213,10 @@ void TextureCache::addImageAsync(std::string_view path,
     }
 
     // lazy init
-    if (_loadingThread == nullptr)
+    if (!_loadingJob)
     {
         // create a new thread to load images
-        _needQuit      = false;
-        _loadingThread = new std::thread(&TextureCache::loadImage, this);
+        _loadingJob = Director::getInstance()->getJobSystem()->enqueue([this]() { loadImage(); });
     }
 
     if (0 == _outstandingTaskCount)
@@ -269,7 +268,7 @@ void TextureCache::unbindAllImageAsync()
 void TextureCache::loadImage()
 {
     ImageLoadTask* task = nullptr;
-    while (!_needQuit)
+    while (!_loadingJob.isCancelRequested())
     {
         std::unique_lock<std::mutex> ul(_requestMutex);
         // pop an AsyncStruct from request queue
@@ -285,7 +284,7 @@ void TextureCache::loadImage()
 
         if (nullptr == task)
         {
-            if (_needQuit)
+            if (_loadingJob.isCancelRequested())
             {
                 break;
             }
@@ -450,9 +449,9 @@ Texture2D* TextureCache::getDummyTexture()
 #else
     unsigned char texls[] = {255, 0, 0, 255};  // 1*1 red picture
 #endif
-    Image* image        = new Image();  // Notes: andorid: VolatileTextureMgr traits image as dynmaic object
-    bool AX_UNUSED isOK = image->initWithRawData(texls, sizeof(texls), 1, 1, sizeof(unsigned char));
-    texture             = this->addImage(image, key);
+    Image* image = new Image();  // Notes: andorid: VolatileTextureMgr traits image as dynmaic object
+    image->initWithRawData(texls, sizeof(texls), 1, 1, sizeof(unsigned char));
+    texture = this->addImage(image, key);
     image->release();
     return texture;
 }
@@ -550,7 +549,7 @@ void TextureCache::parseNinePatchImage(ax::Image* image, ax::Texture2D* texture,
 {
     if (NinePatchImageParser::isNinePatchImage(path))
     {
-        Rect frameRect = Rect(0, 0, image->getWidth(), image->getHeight());
+        Rect frameRect = Rect(0, 0, static_cast<float>(image->getWidth()), static_cast<float>(image->getHeight()));
         NinePatchImageParser parser(image, frameRect, false);
         texture->addSpriteFrameCapInset(nullptr, parser.parseCapInset());
     }
@@ -787,11 +786,12 @@ void TextureCache::waitForQuit()
 {
     // notify sub thread to quick
     std::unique_lock<std::mutex> ul(_requestMutex);
-    _needQuit = true;
     _sleepCondition.notify_one();
     ul.unlock();
-    if (_loadingThread)
-        _loadingThread->join();
+
+    _loadingJob.requestCancel();
+    _loadingJob.wait();
+    _loadingJob = JobHandle{};
 
     for (auto s : _requestQueue)
         delete s;

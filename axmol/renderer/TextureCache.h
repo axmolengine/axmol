@@ -40,6 +40,7 @@ THE SOFTWARE.
 #include "axmol/base/Object.h"
 #include "axmol/renderer/Texture2D.h"
 #include "axmol/platform/Image.h"
+#include "axmol/base/JobSystem.h"
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
 #    include <list>
@@ -232,7 +233,7 @@ public:
 protected:
     struct ImageLoadTask;
 
-    std::thread* _loadingThread;
+    JobHandle _loadingJob;
 
     // Queue of tasks that have been requested but not yet completed.
     // Maintained only on the main thread (never accessed from worker threads).
@@ -251,8 +252,6 @@ protected:
     std::mutex _responseMutex;
 
     std::condition_variable _sleepCondition;
-
-    bool _needQuit;
 
     int _outstandingTaskCount;
 

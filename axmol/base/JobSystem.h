@@ -115,6 +115,8 @@ public:
     /// Block until the job reaches a terminal state or until the timeout expires.
     bool waitFor(std::chrono::milliseconds timeout) const;
 
+    explicit operator bool() const { return !!_state; }
+
 private:
     friend class JobExecutor;
     friend class JobSystem;
@@ -209,10 +211,10 @@ public:
      * This is the default overload for fire-and-forget work. Keep the returned handle only when native code needs to
      * observe completion, wait for the job, or request cooperative cancellation.
      *
-     * @param task Function executed by the JobSystem.
+     * @param jobFunc Function executed by the JobSystem.
      * @return A handle that can be ignored, polled, waited, or used for cooperative cancellation.
      */
-    JobHandle enqueue(std::function<void()> task);
+    JobHandle enqueue(std::function<void()> jobFunc);
 
     /**
      * @brief Enqueue a job that receives the worker thread's JobThreadData.
@@ -220,11 +222,11 @@ public:
      * Use this overload for jobs that need per-worker context initialized by JobThreadData::init(), such as renderer,
      * decoder, or platform resources that should be reused by a worker thread.
      *
-     * @param task Function executed by the JobSystem. In the synchronous fallback path, it receives the main-thread
+     * @param jobFunc Function executed by the JobSystem. In the synchronous fallback path, it receives the main-thread
      *             JobThreadData instance.
      * @return A handle that can be ignored, polled, waited, or used for cooperative cancellation.
      */
-    JobHandle enqueue(std::function<void(JobThreadData*)> task);
+    JobHandle enqueue(std::function<void(JobThreadData*)> jobFunc);
 
     /**
      * @brief Get the number of worker threads owned by this JobSystem.

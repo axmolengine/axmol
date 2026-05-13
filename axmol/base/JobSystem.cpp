@@ -154,11 +154,11 @@ public:
                     std::function<void(JobThreadData*)> task;
                     {
                         std::unique_lock<std::mutex> lock(this->queue_mutex);
-                        this->condition.wait(lock, [this] { return this->stop || !this->tasks.empty(); });
-                        if (this->stop && this->tasks.empty())
+                        this->condition.wait(lock, [this] { return this->stop || !this->job_queue.empty(); });
+                        if (this->stop && this->job_queue.empty())
                             break;
-                        task = std::move(this->tasks.front());
-                        this->tasks.pop();
+                        task = std::move(this->job_queue.front());
+                        this->job_queue.pop();
                     }
 
                     task(thread_data.get());
@@ -167,12 +167,12 @@ public:
             });
     }
 
-    JobHandle enqueue(std::function<void(JobThreadData*)> task, std::shared_ptr<JobState> state = nullptr)
+    JobHandle enqueue(std::function<void(JobThreadData*)> jobFunc, std::shared_ptr<JobState> state = nullptr)
     {
         if (!state)
             state = std::make_shared<JobState>();
 
-        auto taskw = [state, task = std::move(task)](JobThreadData* thread_data) mutable {
+        auto wrapped_job = [state, jobFunc = std::move(jobFunc)](JobThreadData* thread_data) mutable {
             auto expected = JobStatus::Queued;
             if (!state->status.compare_exchange_strong(expected, JobStatus::Running, std::memory_order_acq_rel))
                 return;
@@ -180,7 +180,7 @@ public:
 
             try
             {
-                task(thread_data);
+                jobFunc(thread_data);
                 state->setStatus(state->cancelRequested.load(std::memory_order_acquire) ? JobStatus::Canceled
                                                                                         : JobStatus::Completed);
             }
@@ -197,7 +197,7 @@ public:
             if (stop)
                 throw std::runtime_error("enqueue on stopped executor");
 
-            tasks.emplace(std::move(taskw));
+            job_queue.emplace(std::move(wrapped_job));
         }
         condition.notify_one();
         return JobHandle(state);
@@ -219,7 +219,7 @@ private:
     std::vector<std::thread> workers;
 
     // the task queue
-    std::queue<std::function<void(JobThreadData*)>> tasks;
+    std::queue<std::function<void(JobThreadData*)>> job_queue;
 
     // synchronization
     std::mutex queue_mutex;
@@ -291,18 +291,18 @@ JobSystem::~JobSystem()
     delete _mainThreadData;
 }
 
-JobHandle JobSystem::enqueue(std::function<void()> task)
+JobHandle JobSystem::enqueue(std::function<void()> jobFunc)
 {
-    if (!task)
+    if (!jobFunc)
         return {};
 
-    return enqueue([task = std::move(task)](JobThreadData*) { task(); });
+    return enqueue([jobFunc = std::move(jobFunc)](JobThreadData*) { jobFunc(); });
 }
 
-JobHandle JobSystem::enqueue(std::function<void(JobThreadData*)> task)
+JobHandle JobSystem::enqueue(std::function<void(JobThreadData*)> jobFunc)
 {
     if (_executor)
-        return _executor->enqueue(std::move(task));
+        return _executor->enqueue(std::move(jobFunc));
 
     auto state  = std::make_shared<JobState>();
     auto handle = JobHandle(state);
@@ -315,7 +315,7 @@ JobHandle JobSystem::enqueue(std::function<void(JobThreadData*)> task)
     state->setStatus(JobStatus::Running);
     try
     {
-        task(_mainThreadData);
+        jobFunc(_mainThreadData);
         state->setStatus(JobStatus::Completed);
     }
     catch (...)
