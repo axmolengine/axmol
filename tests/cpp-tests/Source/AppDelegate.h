@@ -30,6 +30,14 @@
 
 #include "axmol/platform/Application.h"
 #include "axmol/base/Types.h"
+#include <span>
+#include <string>
+#include <string_view>
+
+namespace ax
+{
+class CommandLineArgs;
+}
 
 class TestController;
 /**
@@ -82,6 +90,8 @@ public:
 
 private:
     TestController* _testController;
+
+    int launch(const ax::CommandLineArgs& args);
 
     ax::DriverPreference _driverPreference = ax::DriverPreference::Auto;
 };

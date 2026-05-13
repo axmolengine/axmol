@@ -129,29 +129,29 @@ void Vec4::add(const Vec4& v1, const Vec4& v2, Vec4* dst)
     dst->w = v1.w + v2.w;
 }
 
-float Vec4::distance(const Vec4& v) const
+float Vec4::distance(const Vec4& val) const
 {
-    float dx = v.x - x;
-    float dy = v.y - y;
-    float dz = v.z - z;
-    float dw = v.w - w;
+    float dx = val.x - x;
+    float dy = val.y - y;
+    float dz = val.z - z;
+    float dw = val.w - w;
 
     return std::sqrt(dx * dx + dy * dy + dz * dz + dw * dw);
 }
 
-float Vec4::distanceSquared(const Vec4& v) const
+float Vec4::distanceSquared(const Vec4& val) const
 {
-    float dx = v.x - x;
-    float dy = v.y - y;
-    float dz = v.z - z;
-    float dw = v.w - w;
+    float dx = val.x - x;
+    float dy = val.y - y;
+    float dz = val.z - z;
+    float dw = val.w - w;
 
     return (dx * dx + dy * dy + dz * dz + dw * dw);
 }
 
-float Vec4::dot(const Vec4& v) const
+float Vec4::dot(const Vec4& val) const
 {
-    return (x * v.x + y * v.y + z * v.z + w * v.w);
+    return (x * val.x + y * val.y + z * val.z + w * val.w);
 }
 
 float Vec4::dot(const Vec4& v1, const Vec4& v2)
@@ -190,9 +190,9 @@ void Vec4::normalize()
 
 Vec4 Vec4::getNormalized() const
 {
-    Vec4 v(*this);
-    v.normalize();
-    return v;
+    Vec4 val(*this);
+    val.normalize();
+    return val;
 }
 
 void Vec4::subtract(const Vec4& v1, const Vec4& v2, Vec4* dst)

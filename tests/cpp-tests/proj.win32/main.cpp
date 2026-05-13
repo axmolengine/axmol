@@ -26,6 +26,7 @@
 #include "main.h"
 #include "AppDelegate.h"
 #include "axmol/platform/Application.h"
+#include "axmol/platform/CommandLineArgs.h"
 
 #include <tchar.h>
 
@@ -34,7 +35,7 @@
 
 using namespace ax;
 
-#if defined(_UNICODE) && !defined(_CONSOLE)
+#if !defined(_CONSOLE) && defined(_UNICODE)
 static int axmol_main(int argc, wchar_t** argv)
 #else
 static int axmol_main(int argc, char** argv)

@@ -33,42 +33,18 @@
 #include "extensions/axmol-ext.h"
 #include "axmol/rhi/DriverContext.h"
 #include "axmol/tlx/charconv.hpp"
+#include "axmol/platform/CommandLineArgs.h"
 #include <system_error>
 
 using namespace ax;
 
 AppDelegate::AppDelegate() : _testController(nullptr) {}
 
-#if defined(_WIN32) && defined(_UNICODE) && !defined(_CONSOLE)
-static DriverPreference parseDriverPreference(int argc, wchar_t** argv)
+static DriverPreference parseDriverPreference(std::span<const std::string_view> args)
 {
-    for (int i = 1; i < argc; ++i)
+    for (int i = 1; i < args.size(); ++i)
     {
-        std::wstring_view arg = argv[i];
-        if (arg.rfind(L"--force-", 0) == 0)
-        {
-            std::wstring_view backend = arg.substr(8);
-            if (backend == L"opengl" || backend == L"gles")
-                return DriverPreference::OpenGL;
-            if (backend == L"d3d11")
-                return DriverPreference::D3D11;
-            if (backend == L"d3d12")
-                return DriverPreference::D3D12;
-            if (backend == L"vulkan")
-                return DriverPreference::Vulkan;
-            if (backend == L"metal")
-                return DriverPreference::Metal;
-        }
-    }
-    return DriverPreference::Auto;
-}
-
-#else
-static DriverPreference parseDriverPreference(int argc, char** argv)
-{
-    for (int i = 1; i < argc; ++i)
-    {
-        std::string_view arg = argv[i];
+        std::string_view arg = args[i];
         if (arg.rfind("--force-", 0) == 0)
         {
             std::string_view backend = arg.substr(8);
@@ -86,7 +62,6 @@ static DriverPreference parseDriverPreference(int argc, char** argv)
     }
     return DriverPreference::Auto;
 }
-#endif
 
 AppDelegate::~AppDelegate()
 {
@@ -95,13 +70,25 @@ AppDelegate::~AppDelegate()
 
 #if defined(_WIN32) && defined(_UNICODE) && !defined(_CONSOLE)
 int AppDelegate::launch(int argc, wchar_t** argv)
-#else
-void AppDelegate::launch(int argc, char** argv)
-#endif
 {
-    _driverPreference = parseDriverPreference(argc, argv);
+    CommandLineArgs args;
+    args.buildFromWargv(argc, argv);
+    return launch(args);
+}
+#else
+int AppDelegate::launch(int argc, char** argv)
+{
+    CommandLineArgs args;
+    args.buildViewsFromArgv(argc, argv);
+    return launch(args);
+}
+#endif
 
-    return this->run();
+int AppDelegate::launch(const ax::CommandLineArgs& args)
+{
+    _driverPreference = parseDriverPreference(args.views());
+
+    return run();
 }
 
 // if you want a different context, modify the value of contextAttrs

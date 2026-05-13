@@ -727,12 +727,12 @@ struct RectI
     {
         return this->x == v.x && this->y == v.y && this->width == v.width && this->height == v.height;
     }
-    inline RectI& set(int x, int y, int w, int h)
+    inline RectI& set(int x1, int y1, int w1, int h1)
     {
-        this->x      = x;
-        this->y      = y;
-        this->width  = w;
-        this->height = h;
+        this->x      = x1;
+        this->y      = y1;
+        this->width  = w1;
+        this->height = h1;
         return *this;
     }
 };

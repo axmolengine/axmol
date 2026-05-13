@@ -141,10 +141,10 @@ void Vec2::clamp(const Vec2& v, const Vec2& min, const Vec2& max, Vec2* dst)
         dst->y = max.y;
 }
 
-float Vec2::distance(const Vec2& v) const
+float Vec2::distance(const Vec2& val) const
 {
-    float dx = v.x - x;
-    float dy = v.y - y;
+    float dx = val.x - x;
+    float dy = val.y - y;
 
     return std::sqrt(dx * dx + dy * dy);
 }
@@ -178,9 +178,9 @@ void Vec2::normalize()
 
 Vec2 Vec2::getNormalized() const
 {
-    Vec2 v(*this);
-    v.normalize();
-    return v;
+    Vec2 val(*this);
+    val.normalize();
+    return val;
 }
 
 void Vec2::rotate(const Vec2& point, float angle)

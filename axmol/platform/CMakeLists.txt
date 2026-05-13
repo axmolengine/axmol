@@ -185,6 +185,7 @@ set(_AX_PLATFORM_HEADER
   platform/StdC.h
   platform/IFileStream.h
   platform/FileStream.h
+  platform/CommandLineArgs.h
 )
 
 set(_AX_PLATFORM_SRC
@@ -195,4 +196,5 @@ set(_AX_PLATFORM_SRC
   platform/Image.cpp
   platform/FileStream.cpp
   platform/ApplicationBase.cpp
+  platform/CommandLineArgs.cpp
 )
