@@ -44,7 +44,7 @@ inline auto char_as_u8(const std::string_view str LIFETIMEBOUND) -> std::string_
 inline auto u8_as_char(const std::string_view str LIFETIMEBOUND) -> std::string_view
 { return str; }
 #else
-inline auto char_as_u8(const std::string_view str LIFETIMEBOUND) -> std::string_view
+inline auto char_as_u8(const std::string_view str LIFETIMEBOUND) -> std::u8string_view
 { return std::u8string_view{reinterpret_cast<const char8_t*>(str.data()), str.size()}; }
 
 inline auto u8_as_char(const std::u8string_view str LIFETIMEBOUND) -> std::string_view
