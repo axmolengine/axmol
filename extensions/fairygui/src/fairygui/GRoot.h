@@ -71,7 +71,7 @@ protected:
 
 private:
     bool initWithScene(ax::Scene* scene, int zOrder);
-    void onWindowSizeChanged();
+    void onWindowSizeChanged(ax::EventCustom* e);
     void createModalLayer();
     void adjustModalLayer();
     void closePopup(GObject* target);
