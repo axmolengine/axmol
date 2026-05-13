@@ -39,9 +39,69 @@ using namespace ax;
 
 AppDelegate::AppDelegate() : _testController(nullptr) {}
 
+#if defined(_WIN32) && defined(_UNICODE) && !defined(_CONSOLE)
+static DriverPreference parseDriverPreference(int argc, wchar_t** argv)
+{
+    for (int i = 1; i < argc; ++i)
+    {
+        std::wstring_view arg = argv[i];
+        if (arg.rfind(L"--force-", 0) == 0)
+        {
+            std::wstring_view backend = arg.substr(8);
+            if (backend == L"opengl" || backend == L"gles")
+                return DriverPreference::OpenGL;
+            if (backend == L"d3d11")
+                return DriverPreference::D3D11;
+            if (backend == L"d3d12")
+                return DriverPreference::D3D12;
+            if (backend == L"vulkan")
+                return DriverPreference::Vulkan;
+            if (backend == L"metal")
+                return DriverPreference::Metal;
+        }
+    }
+    return DriverPreference::Auto;
+}
+
+#else
+static DriverPreference parseDriverPreference(int argc, char** argv)
+{
+    for (int i = 1; i < argc; ++i)
+    {
+        std::string_view arg = argv[i];
+        if (arg.rfind("--force-", 0) == 0)
+        {
+            std::string_view backend = arg.substr(8);
+            if (backend == "opengl" || backend == "gles")
+                return DriverPreference::OpenGL;
+            if (backend == "d3d11")
+                return DriverPreference::D3D11;
+            if (backend == "d3d12")
+                return DriverPreference::D3D12;
+            if (backend == "vulkan")
+                return DriverPreference::Vulkan;
+            if (backend == "metal")
+                return DriverPreference::Metal;
+        }
+    }
+    return DriverPreference::Auto;
+}
+#endif
+
 AppDelegate::~AppDelegate()
 {
     AXLOGI("AppDelegate::~AppDelegate");
+}
+
+#if defined(_WIN32) && defined(_UNICODE) && !defined(_CONSOLE)
+int AppDelegate::launch(int argc, wchar_t** argv)
+#else
+void AppDelegate::launch(int argc, char** argv)
+#endif
+{
+    _driverPreference = parseDriverPreference(argc, argv);
+
+    return this->run();
 }
 
 // if you want a different context, modify the value of contextAttrs
@@ -59,6 +119,8 @@ void AppDelegate::initContextAttrs()
     // V-Sync is enabled by default since axmol 2.2.
     // Uncomment to disable V-Sync and unlock FPS.
     // contextAttrs.vsync = false;
+
+    contextAttrs.driverPreference = _driverPreference;
 
     // Enable high-DPI scaling support (non-win32 platforms only)
     // Note: on win32, cpp-tests keep the default render mode to ensure consistent performance benchmarks

@@ -35,15 +35,14 @@ env:
 run-name: 'build@c++${{ inputs.cxxstd || 23 }}'
 
 jobs:
-  win32-ogl:
+  win32:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v6
     - name: Build
       shell: pwsh
       run: |
-        .\tools\cmdline\axmol -p win32 -a x64 -O3
-        .\tools\cmdline\axmol run -p win32 -a x64 -t unit-tests -O3
+        .\tools\cmdline\axmol -p win32 -a x64 -xc '-DAX_RENDER_API=d3d11;d3d12;gl;vk' -O3
     - name: Check prebuilt workflow
       shell: pwsh
       run: |
@@ -52,64 +51,7 @@ jobs:
         axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build' -O3
     - uses: actions/upload-artifact@v6
       with:
-        name: windows_ogl_x64
-        path: |
-          build/bin/cpp-tests/**/*
-  win32-d3d11:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v6
-    - name: Build
-      shell: pwsh
-      run: |
-        .\tools\cmdline\axmol -p win32 -a x64 -xc '-DAX_RENDER_API=d3d11' -O3
-    - name: Check prebuilt workflow
-      shell: pwsh
-      run: |
-        ./setup.ps1
-        axmol new HelloCpp
-        axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build' -O3
-    - uses: actions/upload-artifact@v6
-      with:
-        name: windows_d3d11_x64
-        path: |
-          build/bin/cpp-tests/**/*
-  win32-d3d12:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v6
-    - name: Build
-      shell: pwsh
-      run: |
-        .\tools\cmdline\axmol -p win32 -a x64 -xc '-DAX_RENDER_API=d3d12' -O3
-    - name: Check prebuilt workflow
-      shell: pwsh
-      run: |
-        ./setup.ps1
-        axmol new HelloCpp
-        axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build' -O3
-    - uses: actions/upload-artifact@v6
-      with:
-        name: windows_d3d12_x64
-        path: |
-          build/bin/cpp-tests/**/*
-  win32-vk:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v6
-    - name: Build
-      shell: pwsh
-      run: |
-        .\tools\cmdline\axmol -p win32 -a x64 -xc '-DAX_RENDER_API=vk' -O3
-    - name: Check prebuilt workflow
-      shell: pwsh
-      run: |
-        ./setup.ps1
-        axmol new HelloCpp
-        axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build' -O3
-    - uses: actions/upload-artifact@v6
-      with:
-        name: windows_vk_x64
+        name: windows_x64
         path: |
           build/bin/cpp-tests/**/*
   win32-arm64:
@@ -119,7 +61,7 @@ jobs:
     - name: Build
       shell: pwsh
       run: |
-        .\tools\cmdline\axmol -p win32 -a arm64 -xc '-DAX_RENDER_API=vk' -O3
+        .\tools\cmdline\axmol -p win32 -a arm64 -xc '-DAX_RENDER_API=d3d11;d3d12;gl;vk' -O3
         .\tools\cmdline\axmol run -p win32 -a arm64 -t unit-tests -O3
     - name: Check prebuilt workflow
       shell: pwsh
@@ -127,46 +69,30 @@ jobs:
         ./setup.ps1
         axmol new HelloCpp
         axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build' -O3
-  winuwp-ogl:
+  winuwp:
         runs-on: windows-latest
         steps:
         - uses: actions/checkout@v6
 
         - name: Build
           shell: pwsh
-          run: .\tools\cmdline\axmol -p winuwp -a x64 -O3
-  winuwp-d3d11:
+          run: .\tools\cmdline\axmol -p winuwp -a x64 -O3 -xc '-DAX_RENDER_API=d3d11;d3d12;gl'
+  win32-clang:
         runs-on: windows-latest
         steps:
         - uses: actions/checkout@v6
 
         - name: Build
           shell: pwsh
-          run: .\tools\cmdline\axmol -p winuwp -a x64 -O3 -xc '-DAX_RENDER_API=d3d11'
-  winuwp-d3d12:
-        runs-on: windows-latest
-        steps:
-        - uses: actions/checkout@v6
-
-        - name: Build
-          shell: pwsh
-          run: .\tools\cmdline\axmol -p winuwp -a x64 -O3 -xc '-DAX_RENDER_API=d3d12'
-  win32-clang-ogl:
-        runs-on: windows-latest
-        steps:
-        - uses: actions/checkout@v6
-
-        - name: Build
-          shell: pwsh
-          run: .\tools\cmdline\axmol -p win32 -a 'x64' -cc clang -O3
-  win32-dll-ogl:
+          run: .\tools\cmdline\axmol -p win32 -a 'x64' -cc clang -O3 -xc '-DAX_RENDER_API=d3d11;d3d12;gl;vk'
+  win32-dll:
         runs-on: windows-latest
         steps:
         - uses: actions/checkout@v6
         - name: Build
           shell: pwsh
-          run: .\tools\cmdline\axmol -p win32 -a x64 -dll
-  linux-ogl:
+          run: .\tools\cmdline\axmol -p win32 -a x64 -dll -xc '-DAX_RENDER_API=d3d11;d3d12;gl;vk'
+  linux:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
@@ -178,20 +104,7 @@ jobs:
 
     - name: Build
       shell: pwsh
-      run: ./tools/cmdline/axmol -p linux -a x64 -t 'cpp-tests,lua-tests' && ./tools/cmdline/axmol run -p linux -a x64 -t unit-tests -wait
-  linux-vk:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v6
-
-    - name: Install dependencies
-      run: |
-        AX_ROOT=`pwd`
-        echo -e "y" | pwsh $AX_ROOT/setup.ps1
-
-    - name: Build
-      shell: pwsh
-      run: ./tools/cmdline/axmol -p linux -a x64 -t 'cpp-tests,lua-tests' -xc '-DAX_RENDER_API=vk'
+      run: ./tools/cmdline/axmol -p linux -a x64 -t 'cpp-tests,lua-tests' -xc '-DAX_RENDER_API=vk;gl' && ./tools/cmdline/axmol run -p linux -a x64 -t unit-tests -wait
   linux-arm64:
     runs-on: ubuntu-24.04-arm
     steps:
@@ -204,7 +117,7 @@ jobs:
 
     - name: Build
       shell: pwsh
-      run: ./tools/cmdline/axmol -p linux -a arm64 -t 'cpp-tests,lua-tests' && ./tools/cmdline/axmol run -p linux -a arm64 -t unit-tests -wait
+      run: ./tools/cmdline/axmol -p linux -a arm64 -t 'cpp-tests,lua-tests' -xc '-DAX_RENDER_API=vk;gl' && ./tools/cmdline/axmol run -p linux -a arm64 -t unit-tests -wait
   osx-arm64:
     runs-on: macos-15
     steps:

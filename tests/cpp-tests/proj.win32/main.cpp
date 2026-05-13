@@ -27,16 +27,22 @@
 #include "AppDelegate.h"
 #include "axmol/platform/Application.h"
 
+#include <tchar.h>
+
 // Uncomment to enable win32 console
 #define USE_WIN32_CONSOLE
 
 using namespace ax;
 
-static int axmol_main()
+#if defined(_UNICODE) && !defined(_CONSOLE)
+static int axmol_main(int argc, wchar_t** argv)
+#else
+static int axmol_main(int argc, char** argv)
+#endif
 {
     // create the application instance
     AppDelegate app;
-    return Application::getInstance()->run();
+    return app.launch(argc, argv);
 }
 
 #if !defined(_CONSOLE)
@@ -51,11 +57,11 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 #    endif
 
     // create the application instance
-    return axmol_main();
+    return axmol_main(__argc, __targv);
 }
 #else
-int main(int, char**)
+int main(int argc, char** argv)
 {
-    return axmol_main();
+    return axmol_main(argc, argv);
 }
 #endif

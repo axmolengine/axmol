@@ -29,5 +29,5 @@ using namespace ax;
 int main(int argc, char* argv[])
 {
     AppDelegate app;
-    return Application::getInstance()->run();
+    return app.launch(argc, argv);
 }
