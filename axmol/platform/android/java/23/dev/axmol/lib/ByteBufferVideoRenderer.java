@@ -247,7 +247,7 @@ public class ByteBufferVideoRenderer
 
     @Override
     protected DecoderReuseEvaluation canReuseCodec(
-        MediaCodecInfo codecInfo, Format oldFormat, Format newFormat) {
+        MediaCodecInfo codecInfo, Format oldFormat, Format newFormat, boolean isAdaptiveFormatChange) {
         DecoderReuseEvaluation evaluation = codecInfo.canReuseCodec(oldFormat, newFormat);
 
         int discardReasons = evaluation.discardReasons;
