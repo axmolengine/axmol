@@ -436,7 +436,7 @@ public:
      *
      * Note: this does not modify this vector.
      *
-     * @param val The vector to add.
+     * @param val The vector to subtract.
      * @return The vector sum.
      */
     Vec2 operator-(const Vec2& val) const
