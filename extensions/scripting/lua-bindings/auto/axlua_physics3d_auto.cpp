@@ -8424,7 +8424,7 @@ int lua_ax_physics3d_PhysicsWorld3D_getGravity(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_physics3d_PhysicsWorld3D_stepSimulate(lua_State* tolua_S)
+int lua_ax_physics3d_PhysicsWorld3D_setAutoStep(lua_State* tolua_S)
 {
     int argc = 0;
     ax::PhysicsWorld3D* obj = nullptr;
@@ -8444,7 +8444,104 @@ int lua_ax_physics3d_PhysicsWorld3D_stepSimulate(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_PhysicsWorld3D_stepSimulate'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_PhysicsWorld3D_setAutoStep'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.PhysicsWorld3D:setAutoStep");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_PhysicsWorld3D_setAutoStep'", nullptr);
+            return 0;
+        }
+        obj->setAutoStep(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld3D:setAutoStep",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics3d_PhysicsWorld3D_setAutoStep'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_physics3d_PhysicsWorld3D_isAutoStep(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PhysicsWorld3D* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld3D",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PhysicsWorld3D*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_PhysicsWorld3D_isAutoStep'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_PhysicsWorld3D_isAutoStep'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isAutoStep();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld3D:isAutoStep",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics3d_PhysicsWorld3D_isAutoStep'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_physics3d_PhysicsWorld3D_stepSimulation(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PhysicsWorld3D* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld3D",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PhysicsWorld3D*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_PhysicsWorld3D_stepSimulation'", nullptr);
         return 0;
     }
 #endif
@@ -8454,22 +8551,22 @@ int lua_ax_physics3d_PhysicsWorld3D_stepSimulate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.PhysicsWorld3D:stepSimulate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.PhysicsWorld3D:stepSimulation");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_PhysicsWorld3D_stepSimulate'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_PhysicsWorld3D_stepSimulation'", nullptr);
             return 0;
         }
-        obj->stepSimulate(arg0);
+        obj->stepSimulation(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld3D:stepSimulate",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld3D:stepSimulation",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics3d_PhysicsWorld3D_stepSimulate'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics3d_PhysicsWorld3D_stepSimulation'.",&tolua_err);
 #endif
 
     return 0;
@@ -8899,7 +8996,9 @@ int lua_register_ax_physics3d_PhysicsWorld3D(lua_State* tolua_S)
         tolua_function(tolua_S,"getScene",lua_ax_physics3d_PhysicsWorld3D_getScene);
         tolua_function(tolua_S,"setGravity",lua_ax_physics3d_PhysicsWorld3D_setGravity);
         tolua_function(tolua_S,"getGravity",lua_ax_physics3d_PhysicsWorld3D_getGravity);
-        tolua_function(tolua_S,"stepSimulate",lua_ax_physics3d_PhysicsWorld3D_stepSimulate);
+        tolua_function(tolua_S,"setAutoStep",lua_ax_physics3d_PhysicsWorld3D_setAutoStep);
+        tolua_function(tolua_S,"isAutoStep",lua_ax_physics3d_PhysicsWorld3D_isAutoStep);
+        tolua_function(tolua_S,"stepSimulation",lua_ax_physics3d_PhysicsWorld3D_stepSimulation);
         tolua_function(tolua_S,"setDebugDrawEnabled",lua_ax_physics3d_PhysicsWorld3D_setDebugDrawEnabled);
         tolua_function(tolua_S,"isDebugDrawEnabled",lua_ax_physics3d_PhysicsWorld3D_isDebugDrawEnabled);
         tolua_function(tolua_S,"setGlobalEventEnabled",lua_ax_physics3d_PhysicsWorld3D_setGlobalEventEnabled);

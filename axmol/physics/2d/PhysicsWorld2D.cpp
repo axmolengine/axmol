@@ -507,8 +507,7 @@ void PhysicsWorld2D::stepSimulation(float delta)
         _preUpdateCallback();
 
     // Prepare simulation: transform from scene to world
-    auto sceneToWorldTransform = _scene->getNodeToParentTransform();
-    beforeSimulation(_scene, sceneToWorldTransform, 1.f, 1.f, 0.f);
+    beforeSimulation(_scene, Mat4::IDENTITY, 1.f /* scaleX */, 1.f /* scaleY */, 0.f /* rotation */);
 
     // Skip simulation if step is too small
     if (delta < FLT_EPSILON)
@@ -525,7 +524,7 @@ void PhysicsWorld2D::stepSimulation(float delta)
 
     // Update physics position, should loop as the same sequence as node tree.
     // PhysicsWorld2D::afterSimulation() will depend on the sequence.
-    afterSimulation(_scene, sceneToWorldTransform, 0.f);
+    afterSimulation(_scene, Mat4::IDENTITY, 0.f /* rotation */);
 
     if (_postUpdateCallback)
         _postUpdateCallback();  // fix #11154

@@ -12758,103 +12758,6 @@ int lua_ax_physics2d_PhysicsWorld2D_getSpeed(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_physics2d_PhysicsWorld2D_setUpdateRate(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsWorld2D* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld2D",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::PhysicsWorld2D*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics2d_PhysicsWorld2D_setUpdateRate'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
-    {
-        int arg0;
-
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.PhysicsWorld2D:setUpdateRate");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_PhysicsWorld2D_setUpdateRate'", nullptr);
-            return 0;
-        }
-        obj->setUpdateRate(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld2D:setUpdateRate",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_PhysicsWorld2D_setUpdateRate'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_physics2d_PhysicsWorld2D_getUpdateRate(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsWorld2D* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld2D",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::PhysicsWorld2D*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics2d_PhysicsWorld2D_getUpdateRate'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_PhysicsWorld2D_getUpdateRate'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getUpdateRate();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld2D:getUpdateRate",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_PhysicsWorld2D_getUpdateRate'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_physics2d_PhysicsWorld2D_setSubsteps(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12948,103 +12851,6 @@ int lua_ax_physics2d_PhysicsWorld2D_getSubsteps(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_PhysicsWorld2D_getSubsteps'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_physics2d_PhysicsWorld2D_setFixedUpdateRate(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsWorld2D* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld2D",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::PhysicsWorld2D*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics2d_PhysicsWorld2D_setFixedUpdateRate'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
-    {
-        int arg0;
-
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.PhysicsWorld2D:setFixedUpdateRate");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_PhysicsWorld2D_setFixedUpdateRate'", nullptr);
-            return 0;
-        }
-        obj->setFixedUpdateRate(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld2D:setFixedUpdateRate",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_PhysicsWorld2D_setFixedUpdateRate'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_physics2d_PhysicsWorld2D_getFixedUpdateRate(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsWorld2D* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld2D",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::PhysicsWorld2D*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics2d_PhysicsWorld2D_getFixedUpdateRate'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_PhysicsWorld2D_getFixedUpdateRate'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getFixedUpdateRate();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld2D:getFixedUpdateRate",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_PhysicsWorld2D_getFixedUpdateRate'.",&tolua_err);
 #endif
 
     return 0;
@@ -13254,7 +13060,7 @@ int lua_ax_physics2d_PhysicsWorld2D_isAutoStep(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_physics2d_PhysicsWorld2D_step(lua_State* tolua_S)
+int lua_ax_physics2d_PhysicsWorld2D_stepSimulation(lua_State* tolua_S)
 {
     int argc = 0;
     ax::PhysicsWorld2D* obj = nullptr;
@@ -13274,7 +13080,7 @@ int lua_ax_physics2d_PhysicsWorld2D_step(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics2d_PhysicsWorld2D_step'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics2d_PhysicsWorld2D_stepSimulation'", nullptr);
         return 0;
     }
 #endif
@@ -13284,22 +13090,22 @@ int lua_ax_physics2d_PhysicsWorld2D_step(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.PhysicsWorld2D:step");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.PhysicsWorld2D:stepSimulation");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_PhysicsWorld2D_step'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics2d_PhysicsWorld2D_stepSimulation'", nullptr);
             return 0;
         }
-        obj->step(arg0);
+        obj->stepSimulation(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld2D:step",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld2D:stepSimulation",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_PhysicsWorld2D_step'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics2d_PhysicsWorld2D_stepSimulation'.",&tolua_err);
 #endif
 
     return 0;
@@ -13327,17 +13133,13 @@ int lua_register_ax_physics2d_PhysicsWorld2D(lua_State* tolua_S)
         tolua_function(tolua_S,"setGravity",lua_ax_physics2d_PhysicsWorld2D_setGravity);
         tolua_function(tolua_S,"setSpeed",lua_ax_physics2d_PhysicsWorld2D_setSpeed);
         tolua_function(tolua_S,"getSpeed",lua_ax_physics2d_PhysicsWorld2D_getSpeed);
-        tolua_function(tolua_S,"setUpdateRate",lua_ax_physics2d_PhysicsWorld2D_setUpdateRate);
-        tolua_function(tolua_S,"getUpdateRate",lua_ax_physics2d_PhysicsWorld2D_getUpdateRate);
         tolua_function(tolua_S,"setSubsteps",lua_ax_physics2d_PhysicsWorld2D_setSubsteps);
         tolua_function(tolua_S,"getSubsteps",lua_ax_physics2d_PhysicsWorld2D_getSubsteps);
-        tolua_function(tolua_S,"setFixedUpdateRate",lua_ax_physics2d_PhysicsWorld2D_setFixedUpdateRate);
-        tolua_function(tolua_S,"getFixedUpdateRate",lua_ax_physics2d_PhysicsWorld2D_getFixedUpdateRate);
         tolua_function(tolua_S,"setPreUpdateCallback",lua_ax_physics2d_PhysicsWorld2D_setPreUpdateCallback);
         tolua_function(tolua_S,"setPostUpdateCallback",lua_ax_physics2d_PhysicsWorld2D_setPostUpdateCallback);
         tolua_function(tolua_S,"setAutoStep",lua_ax_physics2d_PhysicsWorld2D_setAutoStep);
         tolua_function(tolua_S,"isAutoStep",lua_ax_physics2d_PhysicsWorld2D_isAutoStep);
-        tolua_function(tolua_S,"step",lua_ax_physics2d_PhysicsWorld2D_step);
+        tolua_function(tolua_S,"stepSimulation",lua_ax_physics2d_PhysicsWorld2D_stepSimulation);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::PhysicsWorld2D).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsWorld2D";

@@ -59,8 +59,6 @@ Scene::Scene()
     _ignoreAnchorPointForPosition = true;
     setAnchorPoint(Vec2(0.5f, 0.5f));
 
-    _fixedAccumulator = _fixedStep + 1e-3f;
-
     Camera::_visitingCamera = nullptr;
 }
 
@@ -373,11 +371,11 @@ void Scene::setFixedDeltaTime(float fixedStep)
 
 void Scene::tick(float deltaTime)
 {
+    // apply time scale and clamp to avoid huge dt spikes
+    deltaTime = (std::min)(deltaTime * _timeScale, _maxDeltaTime);
+
     if (_fixedUpdateEnabled)
     {
-        // apply time scale and clamp to avoid huge dt spikes
-        deltaTime = (std::min)(deltaTime * _timeScale, _maxDeltaTime);
-
         // accumulate time
         _fixedAccumulator += deltaTime;
 

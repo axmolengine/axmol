@@ -22618,6 +22618,350 @@ int lua_ax_base_Scene_setDebugCamera(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Scene_setFixedDeltaTime(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Scene* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Scene",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Scene_setFixedDeltaTime'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Scene:setFixedDeltaTime");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scene_setFixedDeltaTime'", nullptr);
+            return 0;
+        }
+        obj->setFixedDeltaTime(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:setFixedDeltaTime",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scene_setFixedDeltaTime'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Scene_setMaxDeltaTime(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Scene* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Scene",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Scene_setMaxDeltaTime'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Scene:setMaxDeltaTime");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scene_setMaxDeltaTime'", nullptr);
+            return 0;
+        }
+        obj->setMaxDeltaTime(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:setMaxDeltaTime",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scene_setMaxDeltaTime'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Scene_setMaxFixedStepsPerFrame(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Scene* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Scene",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Scene_setMaxFixedStepsPerFrame'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        int arg0;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Scene:setMaxFixedStepsPerFrame");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scene_setMaxFixedStepsPerFrame'", nullptr);
+            return 0;
+        }
+        obj->setMaxFixedStepsPerFrame(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:setMaxFixedStepsPerFrame",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scene_setMaxFixedStepsPerFrame'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Scene_setTimeScale(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Scene* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Scene",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Scene_setTimeScale'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Scene:setTimeScale");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scene_setTimeScale'", nullptr);
+            return 0;
+        }
+        obj->setTimeScale(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:setTimeScale",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scene_setTimeScale'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Scene_setFixedUpdateEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Scene* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Scene",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Scene_setFixedUpdateEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Scene:setFixedUpdateEnabled");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scene_setFixedUpdateEnabled'", nullptr);
+            return 0;
+        }
+        obj->setFixedUpdateEnabled(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:setFixedUpdateEnabled",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scene_setFixedUpdateEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Scene_isFixedUpdateEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Scene* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Scene",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Scene_isFixedUpdateEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scene_isFixedUpdateEnabled'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isFixedUpdateEnabled();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:isFixedUpdateEnabled",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scene_isFixedUpdateEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Scene_getPhysicsInterpolationAlpha(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Scene* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Scene",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Scene_getPhysicsInterpolationAlpha'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scene_getPhysicsInterpolationAlpha'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getPhysicsInterpolationAlpha();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:getPhysicsInterpolationAlpha",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scene_getPhysicsInterpolationAlpha'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Scene_getPhysicsWorld2D(lua_State* tolua_S)
 {
     int argc = 0;
@@ -22755,6 +23099,56 @@ int lua_ax_base_Scene_initPhysicsWorld(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scene_initPhysicsWorld'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Scene_tick(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Scene* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Scene",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Scene*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Scene_tick'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Scene:tick");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scene_tick'", nullptr);
+            return 0;
+        }
+        obj->tick(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:tick",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scene_tick'.",&tolua_err);
 #endif
 
     return 0;
@@ -23018,9 +23412,17 @@ int lua_register_ax_base_Scene(lua_State* tolua_S)
         tolua_function(tolua_S,"initWithSize",lua_ax_base_Scene_initWithSize);
         tolua_function(tolua_S,"setCameraOrderDirty",lua_ax_base_Scene_setCameraOrderDirty);
         tolua_function(tolua_S,"setDebugCamera",lua_ax_base_Scene_setDebugCamera);
+        tolua_function(tolua_S,"setFixedDeltaTime",lua_ax_base_Scene_setFixedDeltaTime);
+        tolua_function(tolua_S,"setMaxDeltaTime",lua_ax_base_Scene_setMaxDeltaTime);
+        tolua_function(tolua_S,"setMaxFixedStepsPerFrame",lua_ax_base_Scene_setMaxFixedStepsPerFrame);
+        tolua_function(tolua_S,"setTimeScale",lua_ax_base_Scene_setTimeScale);
+        tolua_function(tolua_S,"setFixedUpdateEnabled",lua_ax_base_Scene_setFixedUpdateEnabled);
+        tolua_function(tolua_S,"isFixedUpdateEnabled",lua_ax_base_Scene_isFixedUpdateEnabled);
+        tolua_function(tolua_S,"getPhysicsInterpolationAlpha",lua_ax_base_Scene_getPhysicsInterpolationAlpha);
         tolua_function(tolua_S,"getPhysicsWorld2D",lua_ax_base_Scene_getPhysicsWorld2D);
         tolua_function(tolua_S,"initWithPhysics",lua_ax_base_Scene_initWithPhysics);
         tolua_function(tolua_S,"initPhysicsWorld",lua_ax_base_Scene_initPhysicsWorld);
+        tolua_function(tolua_S,"tick",lua_ax_base_Scene_tick);
         tolua_function(tolua_S,"fixedUpdate",lua_ax_base_Scene_fixedUpdate);
         tolua_function(tolua_S,"stepPhysicsAndNavigation",lua_ax_base_Scene_stepPhysicsAndNavigation);
         tolua_function(tolua_S,"create", lua_ax_base_Scene_create);
