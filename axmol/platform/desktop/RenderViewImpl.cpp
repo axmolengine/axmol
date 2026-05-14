@@ -846,10 +846,10 @@ void RenderViewImpl::setIMEKeyboardState(bool bOpen)
 {
 #if !defined(__EMSCRIPTEN__)
     glfwSetInputMode(_mainWindow, GLFW_IME, bOpen ? 1 : 0);
-    
+
     if (bOpen)
-        glfwSetPreeditCursorRectangle(_mainWindow, static_cast<int>(_mouseX / _inputScale), static_cast<int>(_mouseY / _inputScale), 1, 20);
-    
+        glfwSetPreeditCursorRectangle(_mainWindow, static_cast<int>(_mouseX / _inputScale),
+                                      static_cast<int>(_mouseY / _inputScale), 1, 20);
 #else
     // Wasm IME handling is managed by the browser. This API is currently a no-op.
     AX_UNUSED_PARAM(bOpen);

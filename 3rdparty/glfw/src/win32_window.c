@@ -37,6 +37,8 @@
 #include <shellapi.h>
 #include <wchar.h>
 
+#pragma comment(lib, "Imm32.lib")
+
 // Converts utf16 units to Unicode code points (UTF32).
 // Returns GLFW_TRUE when the converting completes and the result is assigned to
 // the argument `codepoint`.
@@ -910,8 +912,10 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
         case WM_IME_SETCONTEXT:
         {
             // To draw preedit text by an application side
-            if (lParam & ISC_SHOWUICOMPOSITIONWINDOW)
+            if (_glfw.hints.init.managePreeditText && (lParam & ISC_SHOWUICOMPOSITIONWINDOW))
+            {
                 lParam &= ~ISC_SHOWUICOMPOSITIONWINDOW;
+            }
 
             if (_glfw.hints.init.managePreeditCandidate &&
                 (lParam & ISC_SHOWUICANDIDATEWINDOW))
@@ -1150,7 +1154,7 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
         case WM_IME_COMPOSITION:
         {
-            if (lParam & (GCS_RESULTSTR | GCS_COMPSTR))
+            if (_glfw.hints.init.managePreeditText && (lParam & (GCS_RESULTSTR | GCS_COMPSTR)))
             {
                 if (lParam & GCS_RESULTSTR)
                     commitImmResultStr(window);
@@ -1163,34 +1167,41 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
         case WM_IME_ENDCOMPOSITION:
         {
-            clearImmPreedit(window);
-            // Usually clearing candidates in IMN_CLOSECANDIDATE is sufficient.
-            // However, some IME need it here, e.g. Google Japanese Input.
-            clearImmCandidate(window);
-            return TRUE;
+            if (_glfw.hints.init.managePreeditText)
+            {
+                clearImmPreedit(window);
+                // Usually clearing candidates in IMN_CLOSECANDIDATE is sufficient.
+                // However, some IME need it here, e.g. Google Japanese Input.
+                clearImmCandidate(window);
+                return TRUE;
+            }
+            break;
         }
 
         case WM_IME_NOTIFY:
         {
-            switch (wParam)
+            if (_glfw.hints.init.managePreeditText)
             {
-                case IMN_SETOPENSTATUS:
+                switch (wParam)
                 {
-                    _glfwInputIMEStatus(window);
-                    return TRUE;
-                }
+	                case IMN_SETOPENSTATUS:
+	                {
+	                    _glfwInputIMEStatus(window);
+	                    return TRUE;
+	                }
 
-                case IMN_OPENCANDIDATE:
-                case IMN_CHANGECANDIDATE:
-                {
-                    getImmCandidates(window);
-                    return TRUE;
-                }
+	                case IMN_OPENCANDIDATE:
+	                case IMN_CHANGECANDIDATE:
+	                {
+	                    getImmCandidates(window);
+	                    return TRUE;
+	                }
 
-                case IMN_CLOSECANDIDATE:
-                {
-                    clearImmCandidate(window);
-                    return TRUE;
+	                case IMN_CLOSECANDIDATE:
+	                {
+	                    clearImmCandidate(window);
+	                    return TRUE;
+	                }
                 }
             }
             break;
@@ -2862,7 +2873,7 @@ void _glfwUpdatePreeditCursorRectangleWin32(_GLFWwindow* window)
     int w = preedit->cursorWidth;
     int h = preedit->cursorHeight;
 
-    COMPOSITIONFORM areaRect = { CFS_RECT, { x, y }, { x, y, x + w, y + h } };
+    COMPOSITIONFORM areaRect = {CFS_POINT | CFS_FORCE_POSITION, {x, y}, {x, y, x + w, y + h}};
     ImmSetCompositionWindow(hIMC, &areaRect);
 
     CANDIDATEFORM excludeRect = { 0, CFS_EXCLUDE, { x, y }, { x, y, x + w, y + h } };

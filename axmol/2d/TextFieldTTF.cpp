@@ -232,6 +232,12 @@ bool TextFieldTTF::detachWithIME()
     return ret;
 }
 
+void TextFieldTTF::onExit()
+{
+    detachWithIME();
+    Label::onExit();
+}
+
 void TextFieldTTF::didAttachWithIME()
 {
     setAttachWithIME(true);
