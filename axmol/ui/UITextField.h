@@ -525,6 +525,7 @@ public:
     Vec2 getVirtualRendererSize() const override;
     Node* getVirtualRenderer() override;
     void onEnter() override;
+    void onExit() override;
 
     /**
      * @brief Attach the IME for inputing.

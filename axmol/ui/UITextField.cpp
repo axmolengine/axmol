@@ -325,6 +325,13 @@ void TextField::onEnter()
     scheduleUpdate();
 }
 
+void TextField::onExit()
+{
+    if (_textFieldRenderer)
+        _textFieldRenderer->detachWithIME();
+    Widget::onExit();
+}
+
 void TextField::initRenderer()
 {
     _textFieldRenderer = UICCTextField::create();

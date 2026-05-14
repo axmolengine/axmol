@@ -338,6 +338,7 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
     _GLFWwindow* window;
     NSTrackingArea* trackingArea;
     NSMutableAttributedString* markedText;
+    int imeActive;
 }
 
 - (instancetype)initWithGlfwWindow:(_GLFWwindow *)initWindow;
@@ -354,6 +355,7 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
         window = initWindow;
         trackingArea = nil;
         markedText = [[NSMutableAttributedString alloc] init];
+        imeActive = false;
 
         [self updateTrackingAreas];
         [self registerForDraggedTypes:@[NSPasteboardTypeURL]];
@@ -572,8 +574,9 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
 
     if (![self hasMarkedText])
         _glfwInputKey(window, key, [event keyCode], GLFW_PRESS, mods);
-
-    [self interpretKeyEvents:@[event]];
+    
+    if (imeActive)
+        [self interpretKeyEvents:@[event]];
 }
 
 - (void)flagsChanged:(NSEvent *)event
@@ -672,6 +675,24 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
 - (NSRange)selectedRange
 {
     return kEmptyRange;
+}
+
+- (void)setImeActive:(int)active
+{
+    imeActive = active;
+    NSTextInputContext* inputContext = [self inputContext];
+    if (!inputContext)
+        return;
+    
+    if (active)
+    {
+        [inputContext activate];
+    }
+    else
+    {
+        [inputContext discardMarkedText];
+        [inputContext deactivate];
+    }
 }
 
 - (void)setMarkedText:(id)string
@@ -2013,66 +2034,10 @@ void _glfwSetIMEStatusCocoa(_GLFWwindow* window, int active)
 {
     @autoreleasepool {
 
-    if (active)
-    {
-        NSArray* locales = CFBridgingRelease(CFLocaleCopyPreferredLanguages());
-        // Select the most preferred locale.
-        CFStringRef locale = (__bridge CFStringRef) [locales firstObject];
-        if (locale)
-        {
-            TISInputSourceRef source = TISCopyInputSourceForLanguage(locale);
-            if (source)
-            {
-                CFStringRef sourceType = TISGetInputSourceProperty(source,
-                                                                   kTISPropertyInputSourceType);
+        [window->ns.view setImeActive:active];
 
-                if (sourceType != kTISTypeKeyboardInputMethodModeEnabled)
-                    TISSelectInputSource(source);
-                else
-                {
-                    // Some IMEs return a input-method that has input-method-modes for `TISCopyInputSourceForLanguage()`.
-                    // We can't select these input-methods directly, but need to find
-                    // a input-method-mode of the input-method.
-                    // Example:
-                    //  - Input Method: com.apple.inputmethod.SCIM
-                    //  - Input Mode: com.apple.inputmethod.SCIM.ITABC
-                    NSString* sourceID =
-                        (__bridge NSString *) TISGetInputSourceProperty(source, kTISPropertyInputSourceID);
-                    NSDictionary* properties = @{
-                        (__bridge NSString *) kTISPropertyInputSourceCategory: (__bridge NSString *) kTISCategoryKeyboardInputSource,
-                        (__bridge NSString *) kTISPropertyInputSourceIsSelectCapable: @YES,
-                        };
-                    NSArray* selectableSources =
-                        CFBridgingRelease(TISCreateInputSourceList((__bridge CFDictionaryRef) properties, NO));
-                    for (id sourceCandidate in selectableSources)
-                    {
-                        TISInputSourceRef sourceCandidateRef = (__bridge TISInputSourceRef) sourceCandidate;
-                        NSString* sourceCandidateID =
-                            (__bridge NSString *) TISGetInputSourceProperty(sourceCandidateRef, kTISPropertyInputSourceID);
-                        if ([sourceCandidateID hasPrefix:sourceID])
-                        {
-                            TISSelectInputSource(sourceCandidateRef);
-                            break;
-                        }
-                    }
-                }
-
-                CFRelease(source);
-            }
-        }
+        _glfwInputIMEStatus(window);
     }
-    else
-    {
-        TISInputSourceRef source = TISCopyCurrentASCIICapableKeyboardInputSource();
-        TISSelectInputSource(source);
-        CFRelease(source);
-    }
-
-    // `NSTextInputContextKeyboardSelectionDidChangeNotification` is sometimes
-    // not called immediately after this, so call the callback here.
-    _glfwInputIMEStatus(window);
-
-    } // autoreleasepool
 }
 
 int _glfwGetIMEStatusCocoa(_GLFWwindow* window)
