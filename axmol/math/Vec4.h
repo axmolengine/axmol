@@ -171,12 +171,12 @@ public:
         return *static_cast<impl_type*>(this);
     }
 
-    impl_type& scale(float scalar)
+    impl_type& scale(float factor)
     {
-        x *= scalar;
-        y *= scalar;
-        z *= scalar;
-        w *= scalar;
+        x *= factor;
+        y *= factor;
+        z *= factor;
+        w *= factor;
         return *static_cast<impl_type*>(this);
     }
 
@@ -201,57 +201,57 @@ public:
     /**
      * Scales this vector by the given value.
      *
-     * @param s The value to scale by.
+     * @param factor The value to scale by.
      * @return This vector, after the scale occurs.
      */
-    inline impl_type& operator*=(float s)
+    inline impl_type& operator*=(float factor)
     {
-        scale(s);
+        scale(factor);
         return *static_cast<impl_type*>(this);
     }
 
     /**
      * Scales this vector by the given value.
      *
-     * @param s The value to scale by.
+     * @param factor The value to scale by.
      * @return This vector, after the scale occurs.
      */
-    inline impl_type& operator*=(const impl_type& s)
+    inline impl_type& operator*=(const impl_type& factor)
     {
-        this->x *= s.x;
-        this->y *= s.y;
-        this->z *= s.z;
-        this->w *= s.w;
+        this->x *= factor.x;
+        this->y *= factor.y;
+        this->z *= factor.z;
+        this->w *= factor.w;
         return *static_cast<impl_type*>(this);
     }
 
     /**
      * Divide this vector by the given value.
      *
-     * @param s The value to scale by.
+     * @param factor The value to divide by.
      * @return This vector, after the scale occurs.
      */
-    inline impl_type& operator/=(float s)
+    inline impl_type& operator/=(float factor)
     {
-        this->x /= s;
-        this->y /= s;
-        this->z /= s;
-        this->w /= s;
+        this->x /= factor;
+        this->y /= factor;
+        this->z /= factor;
+        this->w /= factor;
         return *static_cast<impl_type*>(this);
     }
 
     /**
      * Divide this vector by the given value.
      *
-     * @param s The value to scale by.
-     * @return This vector, after the scale occurs.
+     * @param factor The value to divide by.
+     * @return This vector, after the divide occurs.
      */
-    inline impl_type& operator/=(const impl_type& s)
+    inline impl_type& operator/=(const impl_type& factor)
     {
-        this->x /= s.x;
-        this->y /= s.y;
-        this->z /= s.z;
-        this->w /= s.w;
+        this->x /= factor.x;
+        this->y /= factor.y;
+        this->z /= factor.z;
+        this->w /= factor.w;
         return *static_cast<impl_type*>(this);
     }
 

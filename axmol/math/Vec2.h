@@ -167,26 +167,26 @@ public:
     /**
      * Clamps the specified vector within the specified range and returns it in dst.
      *
-     * @param v The vector to clamp.
+     * @param val The vector to clamp.
      * @param min The minimum value.
      * @param max The maximum value.
      * @param dst A vector to store the result in.
      */
-    static void clamp(const Vec2& v, const Vec2& min, const Vec2& max, Vec2* dst);
+    static void clamp(const Vec2& val, const Vec2& min, const Vec2& max, Vec2* dst);
 
     /**
-     * Returns the distance between this vector and v.
+     * Returns the distance between this vector and val.
      *
-     * @param v The other vector.
+     * @param val The other vector.
      *
-     * @return The distance between this vector and v.
+     * @return The distance between this vector and val.
      *
      * @see distanceSquared
      */
-    float distance(const Vec2& v) const;
+    float distance(const Vec2& val) const;
 
     /**
-     * Returns the squared distance between this vector and v.
+     * Returns the squared distance between this vector and val.
      *
      * When it is not necessary to get the exact distance between
      * two vectors (for example, when simply comparing the
@@ -195,7 +195,7 @@ public:
      *
      * @param val The other vector.
      *
-     * @return The squared distance between this vector and v.
+     * @return The squared distance between this vector and val.
      *
      * @see distance
      */
@@ -364,15 +364,15 @@ public:
     void setZero() { x = y = 0.0f; }
 
     /**
-     * Subtracts this vector and the specified vector as (this - v)
+     * Subtracts this vector and the specified vector as (this - val)
      * and stores the result in this vector.
      *
-     * @param v The vector to subtract.
+     * @param val The vector to subtract.
      */
-    void subtract(const Vec2& v)
+    void subtract(const Vec2& val)
     {
-        x -= v.x;
-        y -= v.y;
+        x -= val.x;
+        y -= val.y;
     }
 
     /**
@@ -814,12 +814,12 @@ public:
  * Calculates the scalar product of the given vector with the given value.
  *
  * @param x The value to scale by.
- * @param v The vector to scale.
+ * @param val The vector to scale.
  * @return The scaled vector.
  */
-inline Vec2 operator*(float x, const Vec2& v)
+inline Vec2 operator*(float x, const Vec2& val)
 {
-    Vec2 result(v);
+    Vec2 result(val);
     result.scale(x);
     return result;
 }
