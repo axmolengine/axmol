@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.4 - www.glfw.org
+// GLFW 3.5 - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2016 Google Inc.
 // Copyright (c) 2016-2017 Camilla Löwy <elmindreda@glfw.org>
@@ -156,6 +156,17 @@
 #define GLFW_NULL_SC_MENU           120
 #define GLFW_NULL_SC_LAST           GLFW_NULL_SC_MENU
 
+typedef VkFlags VkHeadlessSurfaceCreateFlagsEXT;
+
+typedef struct VkHeadlessSurfaceCreateInfoEXT
+{
+    VkStructureType                 sType;
+    const void*                     pNext;
+    VkHeadlessSurfaceCreateFlagsEXT flags;
+} VkHeadlessSurfaceCreateInfoEXT;
+
+typedef VkResult (APIENTRY *PFN_vkCreateHeadlessSurfaceEXT)(VkInstance,const VkHeadlessSurfaceCreateInfoEXT*,const VkAllocationCallbacks*,VkSurfaceKHR*);
+
 // Null-specific per-window data
 //
 typedef struct _GLFWwindowNull
@@ -258,6 +269,11 @@ void _glfwSetClipboardStringNull(const char* string);
 const char* _glfwGetClipboardStringNull(void);
 const char* _glfwGetScancodeNameNull(int scancode);
 int _glfwGetKeyScancodeNull(int key);
+
+void _glfwUpdatePreeditCursorRectangleNull(_GLFWwindow* window);
+void _glfwResetPreeditTextNull(_GLFWwindow* window);
+void _glfwSetIMEStatusNull(_GLFWwindow* window, int active);
+int _glfwGetIMEStatusNull(_GLFWwindow* window);
 
 EGLenum _glfwGetEGLPlatformNull(EGLint** attribs);
 EGLNativeDisplayType _glfwGetEGLNativeDisplayNull(void);

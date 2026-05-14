@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.4 macOS - www.glfw.org
+// GLFW 3.5 Cocoa - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2009-2019 Camilla Löwy <elmindreda@glfw.org>
 //
@@ -349,22 +349,70 @@ static GLFWbool initializeTIS(void)
         return GLFW_FALSE;
     }
 
+    CFStringRef* kCategoryKeyboardInputSource =
+        CFBundleGetDataPointerForName(_glfw.ns.tis.bundle,
+                                      CFSTR("kTISCategoryKeyboardInputSource"));
+    CFStringRef* kPropertyInputSourceCategory =
+        CFBundleGetDataPointerForName(_glfw.ns.tis.bundle,
+                                      CFSTR("kTISPropertyInputSourceCategory"));
+    CFStringRef* kPropertyInputSourceID =
+        CFBundleGetDataPointerForName(_glfw.ns.tis.bundle,
+                                      CFSTR("kTISPropertyInputSourceID"));
+    CFStringRef* kPropertyInputSourceIsSelectCapable =
+        CFBundleGetDataPointerForName(_glfw.ns.tis.bundle,
+                                      CFSTR("kTISPropertyInputSourceIsSelectCapable"));
+    CFStringRef* kPropertyInputSourceType =
+        CFBundleGetDataPointerForName(_glfw.ns.tis.bundle,
+                                      CFSTR("kTISPropertyInputSourceType"));
     CFStringRef* kPropertyUnicodeKeyLayoutData =
         CFBundleGetDataPointerForName(_glfw.ns.tis.bundle,
                                       CFSTR("kTISPropertyUnicodeKeyLayoutData"));
+    CFStringRef* kTypeKeyboardInputMethodModeEnabled =
+        CFBundleGetDataPointerForName(_glfw.ns.tis.bundle,
+                                      CFSTR("kTISTypeKeyboardInputMethodModeEnabled"));
+    _glfw.ns.tis.CopyCurrentASCIICapableKeyboardInputSource =
+        CFBundleGetFunctionPointerForName(_glfw.ns.tis.bundle,
+                                          CFSTR("TISCopyCurrentASCIICapableKeyboardInputSource"));
+    _glfw.ns.tis.CopyCurrentKeyboardInputSource =
+        CFBundleGetFunctionPointerForName(_glfw.ns.tis.bundle,
+                                          CFSTR("TISCopyCurrentKeyboardInputSource"));
     _glfw.ns.tis.CopyCurrentKeyboardLayoutInputSource =
         CFBundleGetFunctionPointerForName(_glfw.ns.tis.bundle,
                                           CFSTR("TISCopyCurrentKeyboardLayoutInputSource"));
+    _glfw.ns.tis.CopyInputSourceForLanguage =
+        CFBundleGetFunctionPointerForName(_glfw.ns.tis.bundle,
+                                          CFSTR("TISCopyInputSourceForLanguage"));
+    _glfw.ns.tis.CreateASCIICapableInputSourceList =
+        CFBundleGetFunctionPointerForName(_glfw.ns.tis.bundle,
+                                          CFSTR("TISCreateASCIICapableInputSourceList"));
+    _glfw.ns.tis.CreateInputSourceList =
+        CFBundleGetFunctionPointerForName(_glfw.ns.tis.bundle,
+                                          CFSTR("TISCreateInputSourceList"));
     _glfw.ns.tis.GetInputSourceProperty =
         CFBundleGetFunctionPointerForName(_glfw.ns.tis.bundle,
                                           CFSTR("TISGetInputSourceProperty"));
+    _glfw.ns.tis.SelectInputSource =
+        CFBundleGetFunctionPointerForName(_glfw.ns.tis.bundle,
+                                          CFSTR("TISSelectInputSource"));
     _glfw.ns.tis.GetKbdType =
         CFBundleGetFunctionPointerForName(_glfw.ns.tis.bundle,
                                           CFSTR("LMGetKbdType"));
 
-    if (!kPropertyUnicodeKeyLayoutData ||
+    if (!kCategoryKeyboardInputSource||
+        !kPropertyInputSourceCategory ||
+        !kPropertyInputSourceID ||
+        !kPropertyInputSourceIsSelectCapable||
+        !kPropertyInputSourceType||
+        !kPropertyUnicodeKeyLayoutData ||
+        !kTypeKeyboardInputMethodModeEnabled ||
+        !TISCopyCurrentASCIICapableKeyboardInputSource ||
+        !TISCopyCurrentKeyboardInputSource ||
         !TISCopyCurrentKeyboardLayoutInputSource ||
+        !TISCopyInputSourceForLanguage ||
+        !TISCreateASCIICapableInputSourceList ||
+        !TISCreateInputSourceList ||
         !TISGetInputSourceProperty ||
+        !TISSelectInputSource ||
         !LMGetKbdType)
     {
         _glfwInputError(GLFW_PLATFORM_ERROR,
@@ -372,8 +420,20 @@ static GLFWbool initializeTIS(void)
         return GLFW_FALSE;
     }
 
+    _glfw.ns.tis.kCategoryKeyboardInputSource =
+        *kCategoryKeyboardInputSource;
+    _glfw.ns.tis.kPropertyInputSourceCategory =
+        *kPropertyInputSourceCategory;
+    _glfw.ns.tis.kPropertyInputSourceID =
+        *kPropertyInputSourceID;
+    _glfw.ns.tis.kPropertyInputSourceIsSelectCapable =
+        *kPropertyInputSourceIsSelectCapable;
+    _glfw.ns.tis.kPropertyInputSourceType =
+        *kPropertyInputSourceType;
     _glfw.ns.tis.kPropertyUnicodeKeyLayoutData =
         *kPropertyUnicodeKeyLayoutData;
+    _glfw.ns.tis.kTypeKeyboardInputMethodModeEnabled =
+        *kTypeKeyboardInputMethodModeEnabled;
 
     return updateUnicodeData();
 }
@@ -450,41 +510,6 @@ static GLFWbool initializeTIS(void)
 
 @end // GLFWApplicationDelegate
 
-
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
-
-void* _glfwLoadLocalVulkanLoaderCocoa(void)
-{
-    CFBundleRef bundle = CFBundleGetMainBundle();
-    if (!bundle)
-        return NULL;
-
-    CFURLRef frameworksUrl = CFBundleCopyPrivateFrameworksURL(bundle);
-    if (!frameworksUrl)
-        return NULL;
-
-    CFURLRef loaderUrl = CFURLCreateCopyAppendingPathComponent(
-        kCFAllocatorDefault, frameworksUrl, CFSTR("libvulkan.1.dylib"), false);
-    if (!loaderUrl)
-    {
-        CFRelease(frameworksUrl);
-        return NULL;
-    }
-
-    char path[PATH_MAX];
-    void* handle = NULL;
-
-    if (CFURLGetFileSystemRepresentation(loaderUrl, true, (UInt8*) path, sizeof(path) - 1))
-        handle = _glfwPlatformLoadModule(path);
-
-    CFRelease(loaderUrl);
-    CFRelease(frameworksUrl);
-    return handle;
-}
-
-
 //////////////////////////////////////////////////////////////////////////
 //////                       GLFW platform API                      //////
 //////////////////////////////////////////////////////////////////////////
@@ -509,6 +534,10 @@ GLFWbool _glfwConnectCocoa(int platformID, _GLFWplatform* platform)
         .getKeyScancode = _glfwGetKeyScancodeCocoa,
         .setClipboardString = _glfwSetClipboardStringCocoa,
         .getClipboardString = _glfwGetClipboardStringCocoa,
+        .updatePreeditCursorRectangle = _glfwUpdatePreeditCursorRectangleCocoa,
+        .resetPreeditText = _glfwResetPreeditTextCocoa,
+        .setIMEStatus = _glfwSetIMEStatusCocoa,
+        .getIMEStatus = _glfwGetIMEStatusCocoa,
         .initJoysticks = _glfwInitJoysticksCocoa,
         .terminateJoysticks = _glfwTerminateJoysticksCocoa,
         .pollJoystick = _glfwPollJoystickCocoa,
@@ -687,6 +716,8 @@ void _glfwTerminateCocoa(void)
     _glfwTerminateNSGL();
     _glfwTerminateEGL();
     _glfwTerminateOSMesa();
+
+    memset(&_glfw.ns, 0, sizeof(_glfw.ns));
 
     } // autoreleasepool
 }

@@ -81,7 +81,7 @@
 
 ## glfw
 - [![Upstream](https://img.shields.io/github/v/release/glfw/glfw?label=Upstream)](https://github.com/glfw/glfw)
-- Version: 3.4, with modified for create as win32 child window support
+- Version: 3.5-f40481e of https://github.com/axmolengine/glfw
 - License: zlib
 
 ## ghc (iOS < 13 ONLY)
@@ -89,7 +89,7 @@
 - Version: 1.5.14
 - License: MIT
 
-## jni.hpp
+## jni.hpps
 - [![Upstream](https://img.shields.io/github/v/release/mapbox/jni.hpp?label=Upstream)](https://github.com/mapbox/jni.hpp)
 - Version: v4.0.0
 - License: MIT-like

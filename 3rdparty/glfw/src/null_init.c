@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.4 - www.glfw.org
+// GLFW 3.5 - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2016 Google Inc.
 // Copyright (c) 2016-2017 Camilla Löwy <elmindreda@glfw.org>
@@ -55,6 +55,10 @@ GLFWbool _glfwConnectNull(int platformID, _GLFWplatform* platform)
         .getKeyScancode = _glfwGetKeyScancodeNull,
         .setClipboardString = _glfwSetClipboardStringNull,
         .getClipboardString = _glfwGetClipboardStringNull,
+        .updatePreeditCursorRectangle = _glfwUpdatePreeditCursorRectangleNull,
+        .resetPreeditText = _glfwResetPreeditTextNull,
+        .setIMEStatus = _glfwSetIMEStatusNull,
+        .getIMEStatus = _glfwGetIMEStatusNull,
         .initJoysticks = _glfwInitJoysticksNull,
         .terminateJoysticks = _glfwTerminateJoysticksNull,
         .pollJoystick = _glfwPollJoystickNull,
@@ -260,5 +264,6 @@ void _glfwTerminateNull(void)
     free(_glfw.null.clipboardString);
     _glfwTerminateOSMesa();
     _glfwTerminateEGL();
+    memset(&_glfw.null, 0, sizeof(_glfw.null));
 }
 

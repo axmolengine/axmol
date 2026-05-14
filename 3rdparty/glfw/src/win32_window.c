@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.4 Win32 - www.glfw.org
+// GLFW 3.5 Win32 - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2002-2006 Marcus Geelnard
 // Copyright (c) 2006-2019 Camilla Löwy <elmindreda@glfw.org>
@@ -32,8 +32,45 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 #include <windowsx.h>
 #include <shellapi.h>
+#include <wchar.h>
+
+// Converts utf16 units to Unicode code points (UTF32).
+// Returns GLFW_TRUE when the converting completes and the result is assigned to
+// the argument `codepoint`.
+// Returns GLFW_FALSE when the converting is not yet completed (for
+// Surrogate-pair processing) and the unit is assigned to the argument
+// `highsurrogate`. It will be used in the next unit's processing.
+//
+static GLFWbool convertToUTF32FromUTF16(WCHAR utf16_unit,
+                                        WCHAR* highsurrogate,
+                                        uint32_t* codepoint)
+{
+    *codepoint = 0;
+
+    if (utf16_unit >= 0xd800 && utf16_unit <= 0xdbff)
+    {
+        *highsurrogate = (WCHAR) utf16_unit;
+        return GLFW_FALSE;
+    }
+
+    if (utf16_unit >= 0xdc00 && utf16_unit <= 0xdfff)
+    {
+        if (*highsurrogate)
+        {
+            *codepoint += (*highsurrogate - 0xd800) << 10;
+            *codepoint += (WCHAR) utf16_unit - 0xdc00;
+            *codepoint += 0x10000;
+        }
+    }
+    else
+        *codepoint = (WCHAR) utf16_unit;
+
+    *highsurrogate = 0;
+    return GLFW_TRUE;
+}
 
 // Returns the window style for the specified window
 //
@@ -378,9 +415,6 @@ static void updateFramebufferTransparency(const _GLFWwindow* window)
     BOOL composition, opaque;
     DWORD color;
 
-    if (!IsWindowsVistaOrGreater())
-        return;
-
     if (FAILED(DwmIsCompositionEnabled(&composition)) || !composition)
        return;
 
@@ -533,6 +567,318 @@ static void maximizeWindowManually(_GLFWwindow* window)
                  SWP_NOACTIVATE | SWP_NOZORDER | SWP_FRAMECHANGED);
 }
 
+// Store candidate text from the buffer data
+//
+static void setCandidate(_GLFWpreeditcandidate* candidate, LPWSTR buffer)
+{
+    size_t bufferCount = wcslen(buffer);
+    int textBufferCount = candidate->textBufferCount;
+    uint32_t codepoint;
+    WCHAR highSurrogate = 0;
+    int convertedLength = 0;
+    int i;
+
+    while ((size_t) textBufferCount < bufferCount + 1)
+        textBufferCount = (textBufferCount == 0) ? 1 : textBufferCount * 2;
+    if (textBufferCount != candidate->textBufferCount)
+    {
+        unsigned int* text =
+            _glfw_realloc(candidate->text,
+                          sizeof(unsigned int) * textBufferCount);
+        if (text == NULL)
+            return;
+        candidate->text = text;
+        candidate->textBufferCount = textBufferCount;
+    }
+
+    for (i = 0; (size_t) i < bufferCount; ++i)
+    {
+        if (convertToUTF32FromUTF16(buffer[i],
+                                    &highSurrogate,
+                                    &codepoint))
+            candidate->text[convertedLength++] = codepoint;
+    }
+
+    candidate->textCount = convertedLength;
+}
+
+// Get preedit candidates of Imm32 and pass them to candidate-callback
+//
+static void getImmCandidates(_GLFWwindow* window)
+{
+    _GLFWpreedit* preedit = &window->preedit;
+    HIMC hIMC = ImmGetContext(window->win32.handle);
+    DWORD candidateListBytes = ImmGetCandidateListW(hIMC, 0, NULL, 0);
+
+    if (candidateListBytes == 0)
+    {
+        ImmReleaseContext(window->win32.handle, hIMC);
+        return;
+    }
+
+    {
+        int i;
+        int bufferCount = preedit->candidateBufferCount;
+        LPCANDIDATELIST candidateList = _glfw_calloc(candidateListBytes, 1);
+        if (candidateList == NULL)
+        {
+            ImmReleaseContext(window->win32.handle, hIMC);
+            return;
+        }
+        ImmGetCandidateListW(hIMC, 0, candidateList, candidateListBytes);
+        ImmReleaseContext(window->win32.handle, hIMC);
+
+        while ((DWORD) bufferCount < candidateList->dwCount + 1)
+            bufferCount = (bufferCount == 0) ? 1 : bufferCount * 2;
+        if (bufferCount != preedit->candidateBufferCount)
+        {
+            _GLFWpreeditcandidate* candidates =
+                _glfw_realloc(preedit->candidates,
+                              sizeof(_GLFWpreeditcandidate) * bufferCount);
+            if (candidates == NULL)
+            {
+                _glfw_free(candidateList);
+                return;
+            }
+            // `realloc` does not initialize the increased area with 0.
+            // This logic should be moved to a more appropriate place to share
+            // when other platforms support this feature.
+            for (i = preedit->candidateBufferCount; i < bufferCount; ++i)
+            {
+                candidates[i].text = NULL;
+                candidates[i].textCount = 0;
+                candidates[i].textBufferCount = 0;
+            }
+            preedit->candidates = candidates;
+            preedit->candidateBufferCount = bufferCount;
+        }
+
+        for (i = 0; (DWORD) i < candidateList->dwCount; ++i)
+            setCandidate(&preedit->candidates[i],
+                         (LPWSTR)((char*) candidateList + candidateList->dwOffset[i]));
+
+        preedit->candidateCount = candidateList->dwCount;
+        preedit->candidateSelection = candidateList->dwSelection;
+        preedit->candidatePageStart = candidateList->dwPageStart;
+        preedit->candidatePageSize = candidateList->dwPageSize;
+
+        _glfw_free(candidateList);
+    }
+
+    _glfwInputPreeditCandidate(window);
+}
+
+// Clear preedit candidates
+static void clearImmCandidate(_GLFWwindow* window)
+{
+    window->preedit.candidateCount = 0;
+    window->preedit.candidateSelection = 0;
+    window->preedit.candidatePageStart = 0;
+    window->preedit.candidatePageSize = 0;
+    _glfwInputPreeditCandidate(window);
+}
+
+// Get preedit texts of Imm32 and pass them to preedit-callback
+//
+static GLFWbool getImmPreedit(_GLFWwindow* window)
+{
+    _GLFWpreedit* preedit = &window->preedit;
+    HIMC hIMC = ImmGetContext(window->win32.handle);
+    // get preedit data sizes
+    LONG preeditBytes = ImmGetCompositionStringW(hIMC, GCS_COMPSTR, NULL, 0);
+    LONG attrBytes = ImmGetCompositionStringW(hIMC, GCS_COMPATTR, NULL, 0);
+    LONG clauseBytes = ImmGetCompositionStringW(hIMC, GCS_COMPCLAUSE, NULL, 0);
+    LONG cursorPos = ImmGetCompositionStringW(hIMC, GCS_CURSORPOS, NULL, 0);
+
+    if (preeditBytes > 0)
+    {
+        int textBufferCount = preedit->textBufferCount;
+        int blockBufferCount = preedit->blockSizesBufferCount;
+        int textLen = preeditBytes / sizeof(WCHAR);
+        LPWSTR buffer = _glfw_calloc(preeditBytes, 1);
+        LPSTR attributes = _glfw_calloc(attrBytes, 1);
+        DWORD* clauses = _glfw_calloc(clauseBytes, 1);
+
+        if (!buffer || (attrBytes > 0 && !attributes) || (clauseBytes > 0 && !clauses))
+        {
+            _glfw_free(buffer);
+            _glfw_free(attributes);
+            _glfw_free(clauses);
+            ImmReleaseContext(window->win32.handle, hIMC);
+            return GLFW_FALSE;
+        }
+
+        // get preedit data
+        ImmGetCompositionStringW(hIMC, GCS_COMPSTR, buffer, preeditBytes);
+        if (attributes)
+            ImmGetCompositionStringW(hIMC, GCS_COMPATTR, attributes, attrBytes);
+        if (clauses)
+            ImmGetCompositionStringW(hIMC, GCS_COMPCLAUSE, clauses, clauseBytes);
+
+        // realloc preedit text
+        while (textBufferCount < textLen + 1)
+            textBufferCount = (textBufferCount == 0) ? 1 : textBufferCount * 2;
+        if (textBufferCount != preedit->textBufferCount)
+        {
+            size_t bufsize = sizeof(unsigned int) * textBufferCount;
+            unsigned int* preeditText = _glfw_realloc(preedit->text,
+                                                      bufsize);
+
+            if (preeditText == NULL)
+            {
+                _glfw_free(buffer);
+                _glfw_free(attributes);
+                _glfw_free(clauses);
+                ImmReleaseContext(window->win32.handle, hIMC);
+                return GLFW_FALSE;
+            }
+            preedit->text = preeditText;
+            preedit->textBufferCount = textBufferCount;
+        }
+
+        // realloc blocks
+        preedit->blockSizesCount = clauses ? clauseBytes / sizeof(DWORD) - 1 : 1;
+        while (blockBufferCount < preedit->blockSizesCount)
+            blockBufferCount = (blockBufferCount == 0) ? 1 : blockBufferCount * 2;
+        if (blockBufferCount != preedit->blockSizesBufferCount)
+        {
+            size_t bufsize = sizeof(int) * blockBufferCount;
+            int* blocks = _glfw_realloc(preedit->blockSizes,
+                                        bufsize);
+
+            if (blocks == NULL)
+            {
+                _glfw_free(buffer);
+                _glfw_free(attributes);
+                _glfw_free(clauses);
+                ImmReleaseContext(window->win32.handle, hIMC);
+                return GLFW_FALSE;
+            }
+            preedit->blockSizes = blocks;
+            preedit->blockSizesBufferCount = blockBufferCount;
+        }
+
+        // store preedit text & block sizes
+        {
+            // Win32 API handles text data in UTF16, so we have to convert them
+            // to UTF32. Not only the encoding, but also the number of characters,
+            // the position of each block and the cursor.
+            int i;
+            uint32_t codepoint;
+            WCHAR highSurrogate = 0;
+            int convertedLength = 0;
+            int blockIndex = 0;
+            int currentBlockLength = 0;
+
+            // The last element of clauses is a block count, but
+            // text length is convenient.
+            if (clauses)
+                clauses[preedit->blockSizesCount] = textLen;
+
+            for (i = 0; i < textLen; i++)
+            {
+                if (clauses && clauses[blockIndex + 1] <= (DWORD) i)
+                {
+                    preedit->blockSizes[blockIndex++] = currentBlockLength;
+                    currentBlockLength = 0;
+                }
+
+                if (convertToUTF32FromUTF16(buffer[i],
+                                            &highSurrogate,
+                                            &codepoint))
+                {
+                    preedit->text[convertedLength++] = codepoint;
+                    currentBlockLength++;
+                }
+                else if ((LONG) i < cursorPos)
+                {
+                    // A high surrogate appears before cursorPos, so needs to
+                    // fix cursorPos on UTF16 for UTF32
+                    cursorPos--;
+                }
+            }
+            preedit->blockSizes[blockIndex] = currentBlockLength;
+            preedit->textCount = convertedLength;
+            preedit->text[convertedLength] = 0;
+            preedit->caretIndex = cursorPos;
+
+            preedit->focusedBlockIndex = 0;
+            if (attributes && clauses)
+            {
+                for (i = 0; i < preedit->blockSizesCount; i++)
+                {
+                    if (attributes[clauses[i]] == ATTR_TARGET_CONVERTED ||
+                        attributes[clauses[i]] == ATTR_TARGET_NOTCONVERTED)
+                    {
+                        preedit->focusedBlockIndex = i;
+                        break;
+                    }
+                }
+            }
+        }
+
+        _glfw_free(buffer);
+        _glfw_free(attributes);
+        _glfw_free(clauses);
+
+        _glfwInputPreedit(window);
+    }
+
+    ImmReleaseContext(window->win32.handle, hIMC);
+    return GLFW_TRUE;
+}
+
+// Clear peedit data
+//
+static void clearImmPreedit(_GLFWwindow* window)
+{
+    window->preedit.blockSizesCount = 0;
+    window->preedit.textCount = 0;
+    window->preedit.focusedBlockIndex = 0;
+    window->preedit.caretIndex = 0;
+    _glfwInputPreedit(window);
+}
+
+// Commit the result texts of Imm32 to character-callback
+//
+static GLFWbool commitImmResultStr(_GLFWwindow* window)
+{
+    HIMC hIMC;
+    LONG bytes;
+    uint32_t codepoint;
+    WCHAR highSurrogate = 0;
+
+    if (!window->callbacks.character)
+        return GLFW_FALSE;
+
+    hIMC = ImmGetContext(window->win32.handle);
+    // get preedit data sizes
+    bytes = ImmGetCompositionStringW(hIMC, GCS_RESULTSTR, NULL, 0);
+
+    if (bytes > 0)
+    {
+        int i;
+        int length = bytes / sizeof(WCHAR);
+        LPWSTR buffer = _glfw_calloc(bytes, 1);
+
+        // get preedit data
+        ImmGetCompositionStringW(hIMC, GCS_RESULTSTR, buffer, bytes);
+
+        for (i = 0; i < length; i++)
+        {
+            if (convertToUTF32FromUTF16(buffer[i],
+                                        &highSurrogate,
+                                        &codepoint))
+                window->callbacks.character((GLFWwindow*) window, codepoint);
+        }
+
+        _glfw_free(buffer);
+    }
+
+    ImmReleaseContext(window->win32.handle, hIMC);
+    return GLFW_TRUE;
+}
+
 // Window procedure for user-created windows
 //
 static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -561,6 +907,20 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
     switch (uMsg)
     {
+        case WM_IME_SETCONTEXT:
+        {
+            // To draw preedit text by an application side
+            if (lParam & ISC_SHOWUICOMPOSITIONWINDOW)
+                lParam &= ~ISC_SHOWUICOMPOSITIONWINDOW;
+
+            if (_glfw.hints.init.managePreeditCandidate &&
+                (lParam & ISC_SHOWUICANDIDATEWINDOW))
+            {
+                lParam &= ~ISC_SHOWUICANDIDATEWINDOW;
+            }
+            break;
+        }
+
         case WM_MOUSEACTIVATE:
         {
             // HACK: Postpone cursor disabling when the window was activated by
@@ -666,27 +1026,11 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
         case WM_CHAR:
         case WM_SYSCHAR:
         {
-            if (wParam >= 0xd800 && wParam <= 0xdbff)
-                window->win32.highSurrogate = (WCHAR) wParam;
-            else
-            {
-                uint32_t codepoint = 0;
-
-                if (wParam >= 0xdc00 && wParam <= 0xdfff)
-                {
-                    if (window->win32.highSurrogate)
-                    {
-                        codepoint += (window->win32.highSurrogate - 0xd800) << 10;
-                        codepoint += (WCHAR) wParam - 0xdc00;
-                        codepoint += 0x10000;
-                    }
-                }
-                else
-                    codepoint = (WCHAR) wParam;
-
-                window->win32.highSurrogate = 0;
+            uint32_t codepoint;
+            if (convertToUTF32FromUTF16((WCHAR) wParam,
+                                        &window->win32.highSurrogate,
+                                        &codepoint))
                 _glfwInputChar(window, codepoint, getKeyMods(), uMsg != WM_SYSCHAR);
-            }
 
             if (uMsg == WM_SYSCHAR && window->win32.keymenu)
                 break;
@@ -801,6 +1145,54 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             else
                 _glfwInputKey(window, key, scancode, action, mods);
 
+            break;
+        }
+
+        case WM_IME_COMPOSITION:
+        {
+            if (lParam & (GCS_RESULTSTR | GCS_COMPSTR))
+            {
+                if (lParam & GCS_RESULTSTR)
+                    commitImmResultStr(window);
+                if (lParam & GCS_COMPSTR)
+                    getImmPreedit(window);
+                return TRUE;
+            }
+            break;
+        }
+
+        case WM_IME_ENDCOMPOSITION:
+        {
+            clearImmPreedit(window);
+            // Usually clearing candidates in IMN_CLOSECANDIDATE is sufficient.
+            // However, some IME need it here, e.g. Google Japanese Input.
+            clearImmCandidate(window);
+            return TRUE;
+        }
+
+        case WM_IME_NOTIFY:
+        {
+            switch (wParam)
+            {
+                case IMN_SETOPENSTATUS:
+                {
+                    _glfwInputIMEStatus(window);
+                    return TRUE;
+                }
+
+                case IMN_OPENCANDIDATE:
+                case IMN_CHANGECANDIDATE:
+                {
+                    getImmCandidates(window);
+                    return TRUE;
+                }
+
+                case IMN_CLOSECANDIDATE:
+                {
+                    clearImmCandidate(window);
+                    return TRUE;
+                }
+            }
             break;
         }
 
@@ -987,7 +1379,6 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
         case WM_MOUSEHWHEEL:
         {
-            // This message is only sent on Windows Vista and later
             // NOTE: The X-axis is inverted for consistency with macOS and X11
             _glfwInputScroll(window, -((SHORT) HIWORD(wParam) / (double) WHEEL_DELTA), 0.0);
             return 0;
@@ -1385,7 +1776,7 @@ static int createNativeWindow(_GLFWwindow* window,
         frameHeight = rect.bottom - rect.top;
     }
 
-    wideTitle = _glfwCreateWideStringFromUTF8Win32(wndconfig->title);
+    wideTitle = _glfwCreateWideStringFromUTF8Win32(window->title);
     if (!wideTitle)
         return GLFW_FALSE;
 
@@ -1411,15 +1802,9 @@ static int createNativeWindow(_GLFWwindow* window,
 
     SetPropW(window->win32.handle, L"GLFW", window);
 
-    if (IsWindows7OrGreater())
-    {
-        ChangeWindowMessageFilterEx(window->win32.handle,
-                                    WM_DROPFILES, MSGFLT_ALLOW, NULL);
-        ChangeWindowMessageFilterEx(window->win32.handle,
-                                    WM_COPYDATA, MSGFLT_ALLOW, NULL);
-        ChangeWindowMessageFilterEx(window->win32.handle,
-                                    WM_COPYGLOBALDATA, MSGFLT_ALLOW, NULL);
-    }
+    ChangeWindowMessageFilterEx(window->win32.handle, WM_DROPFILES, MSGFLT_ALLOW, NULL);
+    ChangeWindowMessageFilterEx(window->win32.handle, WM_COPYDATA, MSGFLT_ALLOW, NULL);
+    ChangeWindowMessageFilterEx(window->win32.handle, WM_COPYGLOBALDATA, MSGFLT_ALLOW, NULL);
 
     window->win32.scaleToMonitor = wndconfig->scaleToMonitor;
     window->win32.keymenu = wndconfig->win32.keymenu;
@@ -1987,9 +2372,6 @@ GLFWbool _glfwFramebufferTransparentWin32(_GLFWwindow* window)
     if (!window->win32.transparent)
         return GLFW_FALSE;
 
-    if (!IsWindowsVistaOrGreater())
-        return GLFW_FALSE;
-
     if (FAILED(DwmIsCompositionEnabled(&composition)) || !composition)
         return GLFW_FALSE;
 
@@ -2469,6 +2851,74 @@ const char* _glfwGetClipboardStringWin32(void)
     return _glfw.win32.clipboardString;
 }
 
+void _glfwUpdatePreeditCursorRectangleWin32(_GLFWwindow* window)
+{
+    _GLFWpreedit* preedit = &window->preedit;
+    HWND hWnd = window->win32.handle;
+    HIMC hIMC = ImmGetContext(hWnd);
+
+    int x = preedit->cursorPosX;
+    int y = preedit->cursorPosY;
+    int w = preedit->cursorWidth;
+    int h = preedit->cursorHeight;
+
+    COMPOSITIONFORM areaRect = { CFS_RECT, { x, y }, { x, y, x + w, y + h } };
+    ImmSetCompositionWindow(hIMC, &areaRect);
+
+    CANDIDATEFORM excludeRect = { 0, CFS_EXCLUDE, { x, y }, { x, y, x + w, y + h } };
+    ImmSetCandidateWindow(hIMC, &excludeRect);
+
+    ImmReleaseContext(hWnd, hIMC);
+}
+
+void _glfwResetPreeditTextWin32(_GLFWwindow* window)
+{
+    HWND hWnd = window->win32.handle;
+    HIMC hIMC = ImmGetContext(hWnd);
+    ImmNotifyIME(hIMC, NI_COMPOSITIONSTR, CPS_CANCEL, 0);
+    ImmReleaseContext(hWnd, hIMC);
+}
+
+void _glfwSetIMEStatusWin32(_GLFWwindow* window, int active)
+{
+    HWND hWnd = window->win32.handle;
+    HIMC hIMC = ImmGetContext(hWnd);
+    if (active)
+    {
+        if (!hIMC)
+        {
+            hIMC = ImmCreateContext();
+            ImmAssociateContext(hWnd, hIMC);
+        }
+        if (!hIMC)
+        {
+            _glfwInputErrorWin32(GLFW_PLATFORM_ERROR, "ImmCreateContext failed");
+            return;
+        }
+		ImmSetOpenStatus(hIMC, TRUE);
+        ImmReleaseContext(hWnd, hIMC);
+    }
+    else if (hIMC)
+    {
+        ImmSetOpenStatus(hIMC, FALSE);
+        ImmReleaseContext(hWnd, hIMC);
+        ImmAssociateContext(hWnd, NULL);
+    }
+}
+
+int _glfwGetIMEStatusWin32(_GLFWwindow* window)
+{
+    HWND hWnd = window->win32.handle;
+    HIMC hIMC = ImmGetContext(hWnd);
+    if (hIMC)
+    {
+        BOOL result = ImmGetOpenStatus(hIMC);
+        ImmReleaseContext(hWnd, hIMC);
+        return result ? GLFW_TRUE : GLFW_FALSE;
+    }
+    return GLFW_FALSE;
+}
+
 EGLenum _glfwGetEGLPlatformWin32(EGLint** attribs)
 {
     if (_glfw.egl.ANGLE_platform_angle)
@@ -2583,7 +3033,6 @@ VkResult _glfwCreateWindowSurfaceWin32(VkInstance instance,
 
 GLFWAPI HWND glfwGetWin32Window(GLFWwindow* handle)
 {
-    _GLFWwindow* window = (_GLFWwindow*) handle;
     _GLFW_REQUIRE_INIT_OR_RETURN(NULL);
 
     if (_glfw.platform.platformID != GLFW_PLATFORM_WIN32)
@@ -2592,6 +3041,9 @@ GLFWAPI HWND glfwGetWin32Window(GLFWwindow* handle)
                         "Win32: Platform not initialized");
         return NULL;
     }
+
+    _GLFWwindow* window = (_GLFWwindow*) handle;
+    assert(window != NULL);
 
     return window->win32.handle;
 }

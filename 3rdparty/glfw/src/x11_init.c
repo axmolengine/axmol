@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.4 X11 - www.glfw.org
+// GLFW 3.5 X11 - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2002-2006 Marcus Geelnard
 // Copyright (c) 2006-2019 Camilla Löwy <elmindreda@glfw.org>
@@ -445,9 +445,14 @@ static GLFWbool hasUsableInputMethodStyle(void)
     if (XGetIMValues(_glfw.x11.im, XNQueryInputStyle, &styles, NULL) != NULL)
         return GLFW_FALSE;
 
+    if (_glfw.hints.init.x11.onTheSpotIMStyle)
+        _glfw.x11.imStyle = STYLE_ONTHESPOT;
+    else
+        _glfw.x11.imStyle = STYLE_OVERTHESPOT;
+
     for (unsigned int i = 0;  i < styles->count_styles;  i++)
     {
-        if (styles->supported_styles[i] == (XIMPreeditNothing | XIMStatusNothing))
+        if (styles->supported_styles[i] == _glfw.x11.imStyle)
         {
             found = GLFW_TRUE;
             break;
@@ -535,6 +540,7 @@ static void detectEWMH(void)
                                    XA_WINDOW,
                                    (unsigned char**) &windowFromChild))
     {
+        _glfwReleaseErrorHandlerX11();
         XFree(windowFromRoot);
         return;
     }
@@ -1182,6 +1188,10 @@ GLFWbool _glfwConnectX11(int platformID, _GLFWplatform* platform)
         .getKeyScancode = _glfwGetKeyScancodeX11,
         .setClipboardString = _glfwSetClipboardStringX11,
         .getClipboardString = _glfwGetClipboardStringX11,
+        .updatePreeditCursorRectangle = _glfwUpdatePreeditCursorRectangleX11,
+        .resetPreeditText = _glfwResetPreeditTextX11,
+        .setIMEStatus = _glfwSetIMEStatusX11,
+        .getIMEStatus = _glfwGetIMEStatusX11,
 #if defined(GLFW_BUILD_LINUX_JOYSTICK)
         .initJoysticks = _glfwInitJoysticksLinux,
         .terminateJoysticks = _glfwTerminateJoysticksLinux,
@@ -1451,6 +1461,8 @@ int _glfwInitX11(void)
         _glfwPlatformGetModuleSymbol(_glfw.x11.xlib.handle, "XSetErrorHandler");
     _glfw.x11.xlib.SetICFocus = (PFN_XSetICFocus)
         _glfwPlatformGetModuleSymbol(_glfw.x11.xlib.handle, "XSetICFocus");
+    _glfw.x11.xlib.SetICValues = (PFN_XSetICValues)
+        _glfwPlatformGetModuleSymbol(_glfw.x11.xlib.handle, "XSetICValues");
     _glfw.x11.xlib.SetIMValues = (PFN_XSetIMValues)
         _glfwPlatformGetModuleSymbol(_glfw.x11.xlib.handle, "XSetIMValues");
     _glfw.x11.xlib.SetInputFocus = (PFN_XSetInputFocus)
@@ -1481,6 +1493,8 @@ int _glfwInitX11(void)
         _glfwPlatformGetModuleSymbol(_glfw.x11.xlib.handle, "XUnmapWindow");
     _glfw.x11.xlib.UnsetICFocus = (PFN_XUnsetICFocus)
         _glfwPlatformGetModuleSymbol(_glfw.x11.xlib.handle, "XUnsetICFocus");
+    _glfw.x11.xlib.VaCreateNestedList = (PFN_XVaCreateNestedList)
+        _glfwPlatformGetModuleSymbol(_glfw.x11.xlib.handle, "XVaCreateNestedList");
     _glfw.x11.xlib.VisualIDFromVisual = (PFN_XVisualIDFromVisual)
         _glfwPlatformGetModuleSymbol(_glfw.x11.xlib.handle, "XVisualIDFromVisual");
     _glfw.x11.xlib.WarpPointer = (PFN_XWarpPointer)
@@ -1513,6 +1527,8 @@ int _glfwInitX11(void)
         _glfwPlatformGetModuleSymbol(_glfw.x11.xlib.handle, "XrmUniqueQuark");
     _glfw.x11.xlib.UnregisterIMInstantiateCallback = (PFN_XUnregisterIMInstantiateCallback)
         _glfwPlatformGetModuleSymbol(_glfw.x11.xlib.handle, "XUnregisterIMInstantiateCallback");
+    _glfw.x11.xlib.mbResetIC = (PFN_XmbResetIC)
+        _glfwPlatformGetModuleSymbol(_glfw.x11.xlib.handle, "XmbResetIC");
     _glfw.x11.xlib.utf8LookupString = (PFN_Xutf8LookupString)
         _glfwPlatformGetModuleSymbol(_glfw.x11.xlib.handle, "Xutf8LookupString");
     _glfw.x11.xlib.utf8SetWMProperties = (PFN_Xutf8SetWMProperties)
@@ -1591,65 +1607,29 @@ void _glfwTerminateX11(void)
         _glfw.x11.display = NULL;
     }
 
-    if (_glfw.x11.x11xcb.handle)
-    {
-        _glfwPlatformFreeModule(_glfw.x11.x11xcb.handle);
-        _glfw.x11.x11xcb.handle = NULL;
-    }
-
-    if (_glfw.x11.xcursor.handle)
-    {
-        _glfwPlatformFreeModule(_glfw.x11.xcursor.handle);
-        _glfw.x11.xcursor.handle = NULL;
-    }
-
-    if (_glfw.x11.randr.handle)
-    {
-        _glfwPlatformFreeModule(_glfw.x11.randr.handle);
-        _glfw.x11.randr.handle = NULL;
-    }
-
-    if (_glfw.x11.xinerama.handle)
-    {
-        _glfwPlatformFreeModule(_glfw.x11.xinerama.handle);
-        _glfw.x11.xinerama.handle = NULL;
-    }
-
-    if (_glfw.x11.xrender.handle)
-    {
-        _glfwPlatformFreeModule(_glfw.x11.xrender.handle);
-        _glfw.x11.xrender.handle = NULL;
-    }
-
-    if (_glfw.x11.vidmode.handle)
-    {
-        _glfwPlatformFreeModule(_glfw.x11.vidmode.handle);
-        _glfw.x11.vidmode.handle = NULL;
-    }
-
-    if (_glfw.x11.xi.handle)
-    {
-        _glfwPlatformFreeModule(_glfw.x11.xi.handle);
-        _glfw.x11.xi.handle = NULL;
-    }
-
     _glfwTerminateOSMesa();
     // NOTE: These need to be unloaded after XCloseDisplay, as they register
     //       cleanup callbacks that get called by that function
     _glfwTerminateEGL();
     _glfwTerminateGLX();
 
-    if (_glfw.x11.xlib.handle)
-    {
-        _glfwPlatformFreeModule(_glfw.x11.xlib.handle);
-        _glfw.x11.xlib.handle = NULL;
-    }
+    _glfwPlatformFreeModule(_glfw.x11.x11xcb.handle);
+    _glfwPlatformFreeModule(_glfw.x11.xcursor.handle);
+    _glfwPlatformFreeModule(_glfw.x11.randr.handle);
+    _glfwPlatformFreeModule(_glfw.x11.xinerama.handle);
+    _glfwPlatformFreeModule(_glfw.x11.xrender.handle);
+    _glfwPlatformFreeModule(_glfw.x11.xshape.handle);
+    _glfwPlatformFreeModule(_glfw.x11.vidmode.handle);
+    _glfwPlatformFreeModule(_glfw.x11.xi.handle);
+    _glfwPlatformFreeModule(_glfw.x11.xlib.handle);
 
     if (_glfw.x11.emptyEventPipe[0] || _glfw.x11.emptyEventPipe[1])
     {
         close(_glfw.x11.emptyEventPipe[0]);
         close(_glfw.x11.emptyEventPipe[1]);
     }
+
+    memset(&_glfw.x11, 0, sizeof(_glfw.x11));
 }
 
 #endif // _GLFW_X11
