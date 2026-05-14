@@ -180,10 +180,34 @@ public:
     Vec3 getGravity() const;
 
     /**
-     * @brief Advances the physics simulation by one step.
-     * @param dt Step duration in seconds.
+     * To control the step of physics.
+     *
+     * If you want control it by yourself( fixed-timestep for example ), you can set this to false and call step by
+     * yourself.
+     * @attention If you set auto step to false, setSpeed setSubsteps and setUpdateRate won't work, you need to control
+     * the time step by yourself.
+     * @param autoStep A bool object, default value is true.
      */
-    void stepSimulate(float dt);
+    void setAutoStep(bool autoStep) { _autoStep = autoStep; }
+
+    /**
+     * Get the auto step of this physics world.
+     *
+     * @return A bool object.
+     */
+    bool isAutoStep() { return _autoStep; }
+
+    /**
+     * Advances the physics simulation by one step.
+     *
+     * By default, the physics world runs with auto-step enabled,
+     * and this function is called automatically each frame.
+     * If you disable auto-step via setAutoStep(false),
+     * you must call this function manually to update the simulation.
+     *
+     * @param delta The time step (in seconds) to simulate.
+     */
+    void stepSimulation(float delta);
 
     /**
      * @brief Enables or disables debug drawing for this world.
@@ -320,6 +344,8 @@ protected:
     tlx::flat_set<PhysicsActor*> _physicsActors;
     ContactEventBits _eventBits{ContactEventBits::None};
     PhysicsDebugDraw3D* _debugDrawer;
+
+    bool _autoStep{true};
 };
 
 // end of 3d group

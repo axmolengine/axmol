@@ -133,7 +133,7 @@ struct PhysicsQueryCallbacks2D
 
         bool continues = info->func(*info->world, hitInfo, info->data);
 
-        return continues ? 1 : 0;
+        return continues ? 1.0f : 0.0f;
     }
 
     static bool handleBoxOverlap(b2ShapeId shape, void* context)
@@ -277,11 +277,7 @@ PhysicsWorld2D::PhysicsWorld2D()
     : _gravity(Vec2(0.0f, -9.8f))
     , _PTMRatio(10.0f)
     , _speed(1.0f)
-    , _updateRate(1)
-    , _updateRateCount(0)
-    , _updateTime(0.0f)
     , _substeps(1)
-    , _fixedUpdateRate(0)
     , _eventBits(ContactEventBits::None)
     , _worldId(b2_nullWorldId)
     , _updateBodyTransform(false)
@@ -501,61 +497,30 @@ void PhysicsWorld2D::setGravity(const Vec2& gravity)
 void PhysicsWorld2D::setSubsteps(int steps)
 {
     if (steps > 0)
-    {
         _substeps = steps;
-        if (steps > 1)
-        {
-            _updateRate = 1;
-        }
-    }
 }
 
-void PhysicsWorld2D::step(float delta)
+void PhysicsWorld2D::stepSimulation(float delta)
 {
-    if (_autoStep)
-    {
-        AXLOGD("Physics Warning: You need to close auto step( setAutoStep(false) ) first");
-    }
-    else
-    {
-        update(delta, true);
-    }
-}
-
-void PhysicsWorld2D::update(float delta, bool userCall /* = false*/)
-{
-
+    // Call pre-update callback if registered
     if (_preUpdateCallback)
-        _preUpdateCallback();  // fix #11154
+        _preUpdateCallback();
 
+    // Prepare simulation: transform from scene to world
     auto sceneToWorldTransform = _scene->getNodeToParentTransform();
     beforeSimulation(_scene, sceneToWorldTransform, 1.f, 1.f, 0.f);
 
-    if (delta < FLT_EPSILON)
-    {
-        return;
-    }
-
+    // Skip simulation if step is too small
     if (delta < FLT_EPSILON)
         return;
 
-    _updateTime += delta * _speed;
+    // Apply local speed factor
+    float timeStep = delta * _speed;
 
-    if (userCall || _fixedUpdateRate <= 0)
-    {
-        b2World_Step(_worldId, delta, _substeps);
-    }
-    else
-    {
-        const float fixedStep = 1.0f / _fixedUpdateRate;
-        while (_updateTime >= fixedStep)
-        {
-            _updateTime -= fixedStep;
-            _scene->fixedUpdate(fixedStep);
-            b2World_Step(_worldId, fixedStep, _substeps);
-        }
-    }
+    // Advance Box2D world by one fixed step
+    b2World_Step(_worldId, timeStep, _substeps);
 
+    // Dispatch contact events generated during this step
     dispatchContactEvents();
 
     // Update physics position, should loop as the same sequence as node tree.

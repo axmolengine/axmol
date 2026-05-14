@@ -342,9 +342,8 @@ void Director::drawScene()
 
     if (_runningScene)
     {
-#if (defined(AX_ENABLE_PHYSICS_2D) || defined(AX_ENABLE_PHYSICS_3D) || defined(AX_ENABLE_NAVMESH))
-        _runningScene->stepPhysicsAndNavigation(_deltaTime);
-#endif
+        _runningScene->tick(_deltaTime);
+
         // clear draw stats
         _renderer->clearDrawStats();
 

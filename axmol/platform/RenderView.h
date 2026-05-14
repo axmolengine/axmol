@@ -362,14 +362,14 @@ public:
      *
      * @param filename A path to image file, e.g., "icons/cusom.png".
      */
-    virtual void setIcon(std::string_view filename) const {};
+    virtual void setIcon(std::string_view /*filename*/) const {};
 
     /** Set window icon (implemented for windows and linux).
      * Best icon (based on size) will be auto selected.
      *
      * @param filelist The array contains icons.
      */
-    virtual void setIcon(std::span<const std::string_view> filelist) const {};
+    virtual void setIcon(std::span<const std::string_view> /*filelist*/) const {};
 
     /** Set default window icon (implemented for windows and linux).
      * On windows it will use icon from .exe file (if included).

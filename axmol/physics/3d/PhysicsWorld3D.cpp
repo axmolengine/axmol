@@ -100,11 +100,6 @@ static Collider3D* asSensorCollider(PhysicsActor* actor)
     return collider && collider->isSensor() ? collider : nullptr;
 }
 
-static Collider3D* asCollider(PhysicsActor* actor)
-{
-    return actor && actor->getActorType() == PhysicsActor::kCollider ? static_cast<Collider3D*>(actor) : nullptr;
-}
-
 static ContactInfo3D reorderSensorContactInfo(const ContactInfo3D& info)
 {
     if (asSensorCollider(info.actorA) || !asSensorCollider(info.actorB))
@@ -357,7 +352,7 @@ void PhysicsWorld3D::debugDraw(Renderer* renderer)
     }
 }
 
-void PhysicsWorld3D::stepSimulate(float dt)
+void PhysicsWorld3D::stepSimulation(float dt)
 {
 
     for (auto* actor : _physicsActors)

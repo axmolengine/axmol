@@ -364,7 +364,8 @@ if(MSVC)
     # C4373 - virtual function overrides 'base_function', previous versions of
     #         the compiler did not override when parameters only differed by
     #         const/volatile qualifiers
-    list(APPEND C_FLAGS /W4 /wd4127 /wd4324 /wd4373 /utf-8 $<$<COMPILE_LANGUAGE:CXX>:/EHsc>)
+    # Axmol spec: Remove /W4 to avoid produces excessive warnings outside Axmol's codebase.
+    list(APPEND C_FLAGS /wd4127 /wd4324 /wd4373 /utf-8 $<$<COMPILE_LANGUAGE:CXX>:/EHsc>)
 
     if(NOT DXSDK_DIR)
         string(REGEX REPLACE "\\\\" "/" DXSDK_DIR "$ENV{DXSDK_DIR}")

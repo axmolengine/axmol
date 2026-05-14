@@ -307,9 +307,7 @@ public:
     void setSpeed(float speed)
     {
         if (speed >= 0.0f)
-        {
             _speed = speed;
-        }
     }
 
     /**
@@ -318,29 +316,6 @@ public:
      * @return A float number.
      */
     float getSpeed() { return _speed; }
-
-    /**
-     * Set the update rate of this physics world
-     *
-     * Update rate is the value of EngineUpdateTimes/PhysicsWorldUpdateTimes.
-     * Set it higher can improve performance, set it lower can improve accuracy of physics world simulation.
-     * @attention if you setAutoStep(false), this won't work.
-     * @param rate An integer number, default value is 1.0.
-     */
-    void setUpdateRate(int rate)
-    {
-        if (rate > 0)
-        {
-            _updateRate = rate;
-        }
-    }
-
-    /**
-     * Get the update rate of this physics world.
-     *
-     * @return An integer number.
-     */
-    int getUpdateRate() { return _updateRate; }
 
     /**
      * set the number of substeps in an update of the physics world.
@@ -356,21 +331,6 @@ public:
      * @return An integer number.
      */
     int getSubsteps() const { return _substeps; }
-
-    /**
-     * set the number of update of the physics world in a second.
-     * 0 - disable fixed step system
-     * default value is 0
-     */
-    void setFixedUpdateRate(int updatesPerSecond)
-    {
-        if (updatesPerSecond > 0)
-        {
-            _fixedUpdateRate = updatesPerSecond;
-        }
-    }
-    /** get the number of substeps */
-    int getFixedUpdateRate() const { return _fixedUpdateRate; }
 
     /**
      * set the callback which invoked before update of each object in physics world.
@@ -401,17 +361,19 @@ public:
     bool isAutoStep() { return _autoStep; }
 
     /**
-     * The step for physics world.
+     * Advances the physics simulation by one step.
      *
-     * The times passing for simulate the physics.
-     * @attention You need to setAutoStep(false) first before it can work.
-     * @param   delta   A float number.
+     * By default, the physics world runs with auto-step enabled,
+     * and this function is called automatically each frame.
+     * If you disable auto-step via setAutoStep(false),
+     * you must call this function manually to update the simulation.
+     *
+     * @param delta The time step (in seconds) to simulate.
      */
-    void step(float delta);
+    void stepSimulation(float delta);
+    AX_DEPRECATED(3.0) inline void step(float dt) { stepSimulation(dt); }
 
 protected:
-    virtual void update(float delta, bool userCall = false);
-
     static bool handlePreSolve(b2ShapeId shapeIdA,
                                b2ShapeId shapeIdB,
                                b2Vec2 point,
@@ -434,11 +396,7 @@ protected:
     Vec2 _gravity;
     float _PTMRatio;
     float _speed;
-    int _updateRate;
-    int _updateRateCount;
-    float _updateTime;
     int _substeps;
-    int _fixedUpdateRate;
     ContactEventBits _eventBits;
     b2WorldId _worldId;
     bool _isWorldLocked = false;
