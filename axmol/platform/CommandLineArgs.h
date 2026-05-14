@@ -53,7 +53,7 @@ public:
 
     // Safe owning builders (recommended)
     void buildFromArgv(int argc, char** argv);  // assume argv is UTF-8, copy into internal storage
-#if defined(_WIN32)
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     void buildFromWargv(int argc, wchar_t** wargv);  // convert wide strings to UTF-8 and copy
     void buildFromCommandLine();                     // Windows: use GetCommandLineW + CommandLineToArgvW
 #endif

@@ -84,7 +84,7 @@ bool Console::Utility::isFloat(std::string_view myString)
     return ss.eof() && !ss.fail();
 }
 
-ssize_t Console::Utility::sendToConsole(int fd, std::string_view mesg, int flags)
+ssize_t Console::Utility::sendToConsole(socket_native_type fd, std::string_view mesg, int flags)
 {
     if (_prompt == mesg)
     {
@@ -108,7 +108,7 @@ ssize_t Console::Utility::sendToConsole(int fd, std::string_view mesg, int flags
 
 // dprintf() is not defined in Android
 // so we add our own 'dpritnf'
-ssize_t Console::Utility::mydprintf(int sock, const char* format, ...)
+ssize_t Console::Utility::mydprintf(socket_native_type sock, const char* format, ...)
 {
     va_list args;
     char buf[16386];
@@ -121,7 +121,7 @@ ssize_t Console::Utility::mydprintf(int sock, const char* format, ...)
     return 0;
 }
 
-void Console::Utility::sendPrompt(int fd)
+void Console::Utility::sendPrompt(socket_native_type fd)
 {
     send(fd, _prompt.c_str(), static_cast<int>(_prompt.size()), 0);
 }
@@ -249,7 +249,7 @@ void Console::Command::delSubCommand(std::string_view subCmdName)
     }
 }
 
-void Console::Command::commandHelp(int fd, std::string_view /*args*/)
+void Console::Command::commandHelp(socket_native_type fd, std::string_view /*args*/)
 {
     if (!_help.empty())
     {
@@ -262,7 +262,7 @@ void Console::Command::commandHelp(int fd, std::string_view /*args*/)
     }
 }
 
-void Console::Command::commandGeneric(int fd, std::string_view args)
+void Console::Command::commandGeneric(socket_native_type fd, std::string_view args)
 {
     // The first argument (including the empty)
     std::string key(args);
@@ -371,7 +371,7 @@ bool Console::listenOnTCP(int port)
 #endif
 }
 
-bool Console::listenOnFileDesc(int fd)
+bool Console::listenOnFileDesc(socket_native_type fd)
 {
     if (_running)
     {

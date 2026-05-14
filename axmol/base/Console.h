@@ -73,13 +73,13 @@ public:
         static bool isFloat(std::string_view myString);
 
         /** send a message to console */
-        static ssize_t sendToConsole(int fd, std::string_view mesg, int flags = 0);
+        static ssize_t sendToConsole(socket_native_type fd, std::string_view mesg, int flags = 0);
 
         /** my dprintf() */
-        static ssize_t mydprintf(int sock, const char* format, ...);
+        static ssize_t mydprintf(socket_native_type sock, const char* format, ...);
 
         /** send prompt string to console */
-        static void sendPrompt(int fd);
+        static void sendPrompt(socket_native_type fd);
 
         /** set a new string for the prompt. */
         static void setPrompt(std::string_view prompt);
@@ -95,7 +95,7 @@ public:
     class AX_DLL Command
     {
     public:
-        using Callback = std::function<void(int fd, std::string_view args)>;
+        using Callback = std::function<void(socket_native_type fd, std::string_view args)>;
         /** Constructor */
         Command();
         Command(std::string_view name, std::string_view help);
@@ -129,10 +129,10 @@ public:
         void delSubCommand(std::string_view subCmdName);
 
         /** help command handler */
-        void commandHelp(int fd, std::string_view args);
+        void commandHelp(socket_native_type fd, std::string_view args);
 
         /** generic command handler */
-        void commandGeneric(int fd, std::string_view args);
+        void commandGeneric(socket_native_type fd, std::string_view args);
 
         /** Gets the name of the current command */
         std::string_view getName() const { return _name; }
@@ -158,7 +158,7 @@ public:
     bool listenOnTCP(int port);
 
     /** starts listening to specified file descriptor */
-    bool listenOnFileDesc(int fd);
+    bool listenOnFileDesc(socket_native_type fd);
 
     /** stops the Console. 'stop' will be called at destruction time as well */
     void stop();

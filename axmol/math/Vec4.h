@@ -44,14 +44,14 @@ struct AX_DLL Vec4Base
     /**
      * Sets the elements of this vector to those in the specified vector.
      *
-     * @param v The vector to copy.
+     * @param val The vector to copy.
      */
-    void set(const Vec4Base& v)
+    void set(const Vec4Base& val)
     {
-        this->x = v.x;
-        this->y = v.y;
-        this->z = v.z;
-        this->w = v.w;
+        this->x = val.x;
+        this->y = val.y;
+        this->z = val.z;
+        this->w = val.w;
     }
 
     /**
@@ -147,12 +147,12 @@ public:
         return *static_cast<impl_type*>(this);
     }
 
-    impl_type& add(const impl_type& v)
+    impl_type& add(const impl_type& val)
     {
-        x += v.x;
-        y += v.y;
-        z += v.z;
-        w += v.w;
+        x += val.x;
+        y += val.y;
+        z += val.z;
+        w += val.w;
         return *static_cast<impl_type*>(this);
     }
 
@@ -160,14 +160,14 @@ public:
      * Subtracts this vector and the specified vector as (this - v)
      * and stores the result in this vector.
      *
-     * @param v The vector to subtract.
+     * @param val The vector to subtract.
      */
-    impl_type& subtract(const impl_type& v)
+    impl_type& subtract(const impl_type& val)
     {
-        x -= v.x;
-        y -= v.y;
-        z -= v.z;
-        w -= v.w;
+        x -= val.x;
+        y -= val.y;
+        z -= val.z;
+        w -= val.w;
         return *static_cast<impl_type*>(this);
     }
 
@@ -185,18 +185,18 @@ public:
     /**
      * Adds the given vector to this vector.
      *
-     * @param v The vector to add.
+     * @param val The vector to add.
      * @return This vector, after the addition occurs.
      */
-    inline impl_type& operator+=(const impl_type& v) { return this->add(v); }
+    inline impl_type& operator+=(const impl_type& val) { return this->add(val); }
 
     /**
      * Subtracts the given vector from this vector.
      *
-     * @param v The vector to subtract.
+     * @param val The vector to subtract.
      * @return This vector, after the subtraction occurs.
      */
-    inline impl_type& operator-=(const impl_type& v) { return this->subtract(v); }
+    inline impl_type& operator-=(const impl_type& val) { return this->subtract(val); }
 
     /**
      * Scales this vector by the given value.
@@ -362,40 +362,40 @@ public:
     static void add(const Vec4& v1, const Vec4& v2, Vec4* dst);
 
     /**
-     * Returns the distance between this vector and v.
+     * Returns the distance between this vector and val.
      *
-     * @param v The other vector.
+     * @param val The other vector.
      *
-     * @return The distance between this vector and v.
+     * @return The distance between this vector and val.
      *
      * @see distanceSquared
      */
-    float distance(const Vec4& v) const;
+    float distance(const Vec4& val) const;
 
     /**
-     * Returns the squared distance between this vector and v.
+     * Returns the squared distance between this vector and val.
      *
      * When it is not necessary to get the exact distance between
      * two vectors (for example, when simply comparing the
      * distance between different vectors), it is advised to use
      * this method instead of distance.
      *
-     * @param v The other vector.
+     * @param val The other vector.
      *
-     * @return The squared distance between this vector and v.
+     * @return The squared distance between this vector and val.
      *
      * @see distance
      */
-    float distanceSquared(const Vec4& v) const;
+    float distanceSquared(const Vec4& val) const;
 
     /**
      * Returns the dot product of this vector and the specified vector.
      *
-     * @param v The vector to compute the dot product with.
+     * @param val The vector to compute the dot product with.
      *
      * @return The dot product.
      */
-    float dot(const Vec4& v) const;
+    float dot(const Vec4& val) const;
 
     /**
      * Returns the dot product between the specified vectors.

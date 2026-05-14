@@ -178,7 +178,7 @@ set(_ax_c_flags)
 if(FUZZ_MSVC)
   list(APPEND _ax_compile_opts /GF)
   list(APPEND _ax_cxx_flags "/Zc:char8_t-")
-  list(APPEND _ax_cxx_flags "/wd5030" "/wd5222")
+  list(APPEND _ax_cxx_flags "/wd5030" "/wd5222" "/wd4201")
 else() # others
   list(APPEND _ax_cxx_flags "-fno-char8_t")
   if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")

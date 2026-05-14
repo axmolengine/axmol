@@ -23,7 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "axmol/platform/CommandLineArgs.h"
 
-#if defined(_WIN32)
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 #    include <windows.h>
 #    include <shellapi.h>
 #    include "ntcvt/ntcvt.hpp"
@@ -59,7 +59,7 @@ void CommandLineArgs::buildFromArgv(int argc, char** argv)
     _ownsStorage = true;
 }
 
-#if defined(_WIN32)
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 void CommandLineArgs::buildFromWargv(int argc, wchar_t** wargv)
 {
     // Caller must ensure no concurrent access during construction

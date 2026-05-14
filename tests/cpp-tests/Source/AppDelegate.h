@@ -51,7 +51,7 @@ public:
     AppDelegate();
     virtual ~AppDelegate();
 
-#if defined(_WIN32) && defined(_UNICODE) && !defined(_CONSOLE)
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && defined(_UNICODE) && !defined(_CONSOLE)
     int launch(int argc, wchar_t** argv);
 #else
     int launch(int argc, char** argv);

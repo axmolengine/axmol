@@ -338,12 +338,12 @@ public:
     /**
      * Sets the elements of this vector to those in the specified vector.
      *
-     * @param v The vector to copy.
+     * @param val The vector to copy.
      */
-    constexpr void set(const Vec2& v)
+    constexpr void set(const Vec2& val)
     {
-        this->x = v.x;
-        this->y = v.y;
+        this->x = val.x;
+        this->y = val.y;
     }
 
     /**
