@@ -207,12 +207,12 @@ protected:
     std::vector<BaseLight*> _lights;
 
     // fixed-step state
-    double _fixedAccumulator         = 1.0f / 60.0f;
-    float _fixedDeltaTime            = 1.0f / 60.0f;  // default 60Hz
-    int _maxFixedStepsPerFrame       = 5;             // prevent spiral of death
-    float _timeScale                 = 1.0f;
-    float _maxDeltaTime              = 0.25f;  // clamp dt to avoid huge jumps
-    float _physicsInterpolationAlpha = 0.0f;   // 0..1 for render interpolation
+    double _fixedAccumulator;
+    float _fixedDeltaTime{1.0f / 60.0f};  // default 60Hz
+    int _maxFixedStepsPerFrame{5};        // prevent spiral of death
+    float _timeScale{1.0f};
+    float _maxDeltaTime{0.25f};              // clamp dt to avoid huge jumps
+    float _physicsInterpolationAlpha{0.0f};  // 0..1 for render interpolation
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(Scene);

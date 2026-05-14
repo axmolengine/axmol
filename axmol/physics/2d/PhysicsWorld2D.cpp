@@ -502,16 +502,18 @@ void PhysicsWorld2D::setSubsteps(int steps)
 
 void PhysicsWorld2D::stepSimulation(float delta)
 {
+    // Skip simulation if step is too small
+    if (delta < FLT_EPSILON)
+        return;
+
     // Call pre-update callback if registered
     if (_preUpdateCallback)
         _preUpdateCallback();
 
-    // Prepare simulation: transform from scene to world
-    beforeSimulation(_scene, Mat4::IDENTITY, 1.f /* scaleX */, 1.f /* scaleY */, 0.f /* rotation */);
+    auto& sceneTransform = _scene->getNodeToParentTransform();
 
-    // Skip simulation if step is too small
-    if (delta < FLT_EPSILON)
-        return;
+    // Prepare simulation: transform from scene to world
+    beforeSimulation(_scene, sceneTransform, 1.f /* scaleX */, 1.f /* scaleY */, 0.f /* rotation */);
 
     // Apply local speed factor
     float timeStep = delta * _speed;
@@ -524,7 +526,7 @@ void PhysicsWorld2D::stepSimulation(float delta)
 
     // Update physics position, should loop as the same sequence as node tree.
     // PhysicsWorld2D::afterSimulation() will depend on the sequence.
-    afterSimulation(_scene, Mat4::IDENTITY, 0.f /* rotation */);
+    afterSimulation(_scene, sceneTransform, 0.f /* rotation */);
 
     if (_postUpdateCallback)
         _postUpdateCallback();  // fix #11154

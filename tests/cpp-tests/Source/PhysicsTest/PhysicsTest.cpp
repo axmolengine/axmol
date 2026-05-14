@@ -1913,16 +1913,8 @@ void PhysicsFixedUpdate::updateStart(float /*delta*/)
 {
     addBall();
 
-    //_physicsWorld2D->setSpeed(2.0f);
-}
-
-void PhysicsFixedUpdate::update(float /*delta*/)
-{
-    // use fixed time and calculate 3 times per frame makes physics simulate more precisely.
-    // for (int i = 0; i < 3; ++i)
-    // {
-    //     _physicsWorld2D->stepSimulation(1 / 180.0f);
-    // }
+    setFixedUpdateEnabled(true);
+    setFixedDeltaTime(1 / 180.0f);
 }
 
 std::string PhysicsFixedUpdate::title() const

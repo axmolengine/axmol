@@ -59,6 +59,10 @@ Scene::Scene()
     _ignoreAnchorPointForPosition = true;
     setAnchorPoint(Vec2(0.5f, 0.5f));
 
+    // Set accumulator to fixedDeltaTime so the next tick will immediately run at least one fixedUpdate,
+    // avoiding a stall after changing step size.
+    _fixedAccumulator = _fixedDeltaTime;
+
     Camera::_visitingCamera = nullptr;
 }
 
@@ -365,8 +369,11 @@ void Scene::setFixedDeltaTime(float fixedStep)
 {
     fixedStep = std::clamp<float>(fixedStep, 0.0001F, 10.0F);
 
-    _fixedDeltaTime   = fixedStep;
-    _fixedAccumulator = fixedStep;
+    _fixedDeltaTime = fixedStep;
+
+    // Reset accumulator to fixedDeltaTime so the next tick will immediately run at least one fixedUpdate,
+    // avoiding a stall after changing step size.
+    _fixedAccumulator = _fixedDeltaTime;
 }
 
 void Scene::tick(float deltaTime)

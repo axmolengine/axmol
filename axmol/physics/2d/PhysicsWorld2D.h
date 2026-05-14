@@ -347,7 +347,7 @@ public:
      *
      * If you want control it by yourself( fixed-timestep for example ), you can set this to false and call step by
      * yourself.
-     * @attention If you set auto step to false, setSpeed setSubsteps and setUpdateRate won't work, you need to control
+     * @attention If you set auto step to false, setSpeed setSubsteps won't works, you need to control
      * the time step by yourself.
      * @param autoStep A bool object, default value is true.
      */
