@@ -28,6 +28,8 @@ if(BUILD_SHARED_LIBS)
   target_compile_definitions(${target_name}
     PUBLIC GLAD_API_CALL_EXPORT=1
     PRIVATE GLAD_API_CALL_EXPORT_BUILD=1
+    PRIVATE VMA_CALL_PRE=__declspec\(dllexport\)
+    INTERFACE VMA_CALL_PRE=__declspec\(dllimport\)
   )
 
   if(NOT WINDOWS AND AX_ENABLE_GL)
