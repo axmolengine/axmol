@@ -492,7 +492,7 @@ bool TestCase::init()
                 }
                 else
                     renderView->setWindowed(_windowSizeBeforeEnterFullscreen.width,
-                                            _windowSizeBeforeEnterFullscreen.height);
+                                                     _windowSizeBeforeEnterFullscreen.height);
             }
         };
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
