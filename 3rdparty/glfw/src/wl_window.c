@@ -2399,7 +2399,11 @@ static void textInputV3Enter(void* data,
                              struct zwp_text_input_v3* textInputV3,
                              struct wl_surface* surface)
 {
-    zwp_text_input_v3_enable(textInputV3);
+    _GLFWwindow* window = (_GLFWwindow*)data;
+    if (window->wl.imeActive)
+        zwp_text_input_v3_enable(textInputV3);
+    else
+        zwp_text_input_v3_disable(textInputV3);
     zwp_text_input_v3_commit(textInputV3);
 }
 
@@ -2837,6 +2841,8 @@ GLFWbool _glfwCreateWindowWayland(_GLFWwindow* window,
         if (!createShellObjects(window))
             return GLFW_FALSE;
     }
+
+    window->wl.imeActive = false;
 
     if (_glfw.wl.textInputManagerV3)
     {
@@ -3934,6 +3940,43 @@ void _glfwResetPreeditTextWayland(_GLFWwindow* window)
 
 void _glfwSetIMEStatusWayland(_GLFWwindow* window, int active)
 {
+    // If text-input protocol v3 is available
+    window->wl.imeActive = active ? true : false;
+    if (window->wl.textInputV3)
+    {
+        if (active)
+        {
+            // Enable IME for this window
+            zwp_text_input_v3_enable(window->wl.textInputV3);
+        }
+        else
+        {
+            // Disable IME for this window
+            zwp_text_input_v3_disable(window->wl.textInputV3);
+        }
+
+        // Commit the state change so compositor applies it
+        zwp_text_input_v3_commit(window->wl.textInputV3);
+    }
+    // If text-input protocol v1 is available
+    else if (window->wl.textInputV1)
+    {
+        if (active)
+        {
+            // Activate IME for this window using seat and surface
+            zwp_text_input_v1_activate(window->wl.textInputV1,
+                                       _glfw.wl.seat,
+                                       window->wl.surface);
+        }
+        else
+        {
+            // Deactivate IME for this window
+            zwp_text_input_v1_deactivate(window->wl.textInputV1,
+                                         _glfw.wl.seat);
+        }
+    }
+
+    wl_display_flush(_glfw.wl.display);
 }
 
 int _glfwGetIMEStatusWayland(_GLFWwindow* window)

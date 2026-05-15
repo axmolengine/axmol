@@ -441,6 +441,7 @@ typedef struct _GLFWwindowWayland
         char* preeditText;
         char* commitTextOnReset;
     } textInputV1Context;
+    bool imeActive;
 } _GLFWwindowWayland;
 
 // Wayland-specific global data
