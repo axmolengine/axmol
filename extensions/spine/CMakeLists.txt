@@ -19,6 +19,8 @@ if(BUILD_SHARED_LIBS)
   )
 endif()
 
+target_compile_definitions(${target_name} PUBLIC SPINE_USE_STD_FUNCTION)
+
 target_include_directories(
   ${target_name} PUBLIC "runtime/include"
   ${target_name} PUBLIC src
