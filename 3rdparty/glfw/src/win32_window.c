@@ -910,7 +910,7 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
         case WM_IME_SETCONTEXT:
         {
             // To draw preedit text by an application side
-            if (_glfw.hints.init.managePreeditText && (lParam & ISC_SHOWUICOMPOSITIONWINDOW))
+            if (lParam & ISC_SHOWUICOMPOSITIONWINDOW)
             {
                 lParam &= ~ISC_SHOWUICOMPOSITIONWINDOW;
             }
@@ -1152,7 +1152,7 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
         case WM_IME_COMPOSITION:
         {
-            if (_glfw.hints.init.managePreeditText && (lParam & (GCS_RESULTSTR | GCS_COMPSTR)))
+            if (lParam & (GCS_RESULTSTR | GCS_COMPSTR))
             {
                 if (lParam & GCS_RESULTSTR)
                     commitImmResultStr(window);
@@ -1165,41 +1165,34 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
         case WM_IME_ENDCOMPOSITION:
         {
-            if (_glfw.hints.init.managePreeditText)
-            {
-                clearImmPreedit(window);
-                // Usually clearing candidates in IMN_CLOSECANDIDATE is sufficient.
-                // However, some IME need it here, e.g. Google Japanese Input.
-                clearImmCandidate(window);
-                return TRUE;
-            }
-            break;
+            clearImmPreedit(window);
+            // Usually clearing candidates in IMN_CLOSECANDIDATE is sufficient.
+            // However, some IME need it here, e.g. Google Japanese Input.
+            clearImmCandidate(window);
+            return TRUE;
         }
 
         case WM_IME_NOTIFY:
         {
-            if (_glfw.hints.init.managePreeditText)
+            switch (wParam)
             {
-                switch (wParam)
+                case IMN_SETOPENSTATUS:
                 {
-	                case IMN_SETOPENSTATUS:
-	                {
-	                    _glfwInputIMEStatus(window);
-	                    return TRUE;
-	                }
+                    _glfwInputIMEStatus(window);
+                    return TRUE;
+                }
 
-	                case IMN_OPENCANDIDATE:
-	                case IMN_CHANGECANDIDATE:
-	                {
-	                    getImmCandidates(window);
-	                    return TRUE;
-	                }
+                case IMN_OPENCANDIDATE:
+                case IMN_CHANGECANDIDATE:
+                {
+                    getImmCandidates(window);
+                    return TRUE;
+                }
 
-	                case IMN_CLOSECANDIDATE:
-	                {
-	                    clearImmCandidate(window);
-	                    return TRUE;
-	                }
+                case IMN_CLOSECANDIDATE:
+                {
+                    clearImmCandidate(window);
+                    return TRUE;
                 }
             }
             break;
