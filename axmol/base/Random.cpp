@@ -26,6 +26,19 @@ THE SOFTWARE.
 
 #include "axmol/base/Random.h"
 
+static std::random_device seed_gen;
+static std::mt19937 engine;
+
+void ax::RandomHelper::init()
+{
+    engine.seed(seed_gen());
+}
+
+void ax::RandomHelper::setSeed(unsigned int seed)
+{
+    engine.seed(seed);
+}
+
 #ifdef EMSCRIPTEN
 #    include <limits>
 #    include <emscripten.h>
@@ -38,8 +51,6 @@ std::mt19937& ax::RandomHelper::getEngine()
 #else
 std::mt19937& ax::RandomHelper::getEngine()
 {
-    static std::random_device seed_gen;
-    static std::mt19937 engine(seed_gen());
     return engine;
 }
 #endif

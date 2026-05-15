@@ -78,28 +78,35 @@ void Rect::merge(const Rect& rect)
     setRect(minX, minY, maxX - minX, maxY - minY);
 }
 
-bool Rect::intersectsSegment(const Vec2& a, const Vec2& b, Vec2 &hitPos)
+bool Rect::intersectsSegment(const Vec2& a, const Vec2& b, Vec2 &hitPos) const
 {
     struct Segment
     {
         Vec2 a, b;
     };
+    Vec2 hitPos2;
+    float minDistance = FLT_MAX;
     std::vector<Segment> rectSegments = {
         {origin, origin + Vec2(size.width, 0.0f)},
-        {origin + Vec2(0.0f, size.height), origin + Vec2(size.width, 0.0f)},
+        {origin + Vec2(0.0f, size.height), origin + Vec2(size.width, size.height)},
+        {origin + Vec2(size.width, 0.0f), origin + Vec2(size.width, size.height)},
         {origin, origin + Vec2(0.0f, size.height)},
-        {origin + Vec2(size.width, 0.0f), origin + Vec2(0.0f, size.height)},
     };
     for(auto &rectSegment : rectSegments)
     {
         float S, T;
-        if(Vec2::isLineIntersect(a, b, rectSegment.a, rectSegment.b, &S, &T))
+        if(Vec2::isSegmentIntersect(a, b, rectSegment.a, rectSegment.b))
         {
-            hitPos = a + (b - a) * S;
-            return true;
+            hitPos2 = Vec2::getIntersectPoint(a, b, rectSegment.a, rectSegment.b);
+            float distance = hitPos2.distance(a);
+            if(distance < minDistance)
+            {
+                hitPos = hitPos2;
+                minDistance = distance;
+            }
         }
     }
-    return false;
+    return minDistance < FLT_MAX;
 }
 
 Rect Rect::unionWithRect(const Rect& rect) const

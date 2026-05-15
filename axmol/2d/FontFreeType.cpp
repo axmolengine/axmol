@@ -70,6 +70,13 @@ typedef struct _DataRef
 
 static tlx::string_map<DataRef> s_cacheFontData;
 
+bool GetMonoPixel(const FT_Bitmap& bitmap, int x, int y)
+{
+    unsigned char byte = bitmap.buffer[y * bitmap.pitch + (x >> 3)];
+    unsigned char mask = 0x80 >> (x & 7);
+    return (byte & mask) != 0;
+}
+
 // ------ freetype2 stream parsing support ---
 static unsigned long ft_stream_read_callback(FT_Stream stream,
                                              unsigned long offset,
@@ -425,7 +432,8 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
                                             Rect& outRect,
                                             int& xAdvance,
                                             const GlyphResolution*& outFallbackRes,
-                                            bool& sharedBitmapData)
+                                            bool& sharedBitmapData,
+                                            bool isMono)
 {
     // @remark: glyphIndex=0 means charactor is mssing on current font face
     auto glyphIndex = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(charCode));
@@ -465,7 +473,7 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
         }
     }
 
-    return getGlyphBitmapByIndex(glyphIndex, outWidth, outHeight, outRect, xAdvance, sharedBitmapData);
+    return getGlyphBitmapByIndex(glyphIndex, outWidth, outHeight, outRect, xAdvance, sharedBitmapData, isMono);
 }
 
 unsigned char* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
@@ -473,7 +481,8 @@ unsigned char* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
                                                    int& outHeight,
                                                    Rect& outRect,
                                                    int& xAdvance,
-                                                   bool& sharedBitmapData)
+                                                   bool& sharedBitmapData,
+                                                    bool isMono)
 {
     unsigned char* ret = nullptr;
 
@@ -502,20 +511,33 @@ unsigned char* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
         outHeight = _fontFace->glyph->bitmap.rows;
         ret       = _fontFace->glyph->bitmap.buffer;
 
-        //auto ret2 = new unsigned char[outWidth * outHeight];
-
-        
-        for(int i = 0; i < outWidth * outHeight; i++)
+        if(isMono)
         {
-            if(ret[i] < 128)
+            for(int i = 0; i < outWidth * outHeight; i++)
             {
-                ret[i] = 0;
-            }else
-            {
-                ret[i] = 255;
+                if(ret[i] < 128)
+                {
+                    ret[i] = 0;
+                }else
+                {
+                    ret[i] = 255;
+                }
             }
         }
-        
+        else
+        {
+            for(int i = 0; i < outWidth * outHeight; i++)
+            {
+                if(ret[i] < 80)
+                {
+                    ret[i] = 0;
+                }else
+                {
+                    ret[i] = 255;
+                }
+            }
+            //auto ret2 = new unsigned char[outWidth * outHeight];
+        }
 
         if (_outlineSize > 0 && outWidth > 0 && outHeight > 0)
         {
@@ -525,11 +547,11 @@ unsigned char* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
             memcpy(copyBitmap, ret, outWidth * outHeight * sizeof(unsigned char));
 
             FT_BBox bbox;
-            auto outlineBitmap = getGlyphBitmapWithOutline(glyphIndex, bbox);
-            if (outlineBitmap == nullptr)
+            FT_Bitmap outlineBitmap;
+            auto hasOutline = getGlyphBitmapWithOutline(glyphIndex, bbox, outlineBitmap);
+            if (!hasOutline)
             {
                 ret = nullptr;
-                delete[] copyBitmap;
                 break;
             }
 
@@ -568,8 +590,8 @@ unsigned char* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
                     for (int x = 0; x < outlineWidth; ++x)
                     {
                         index                 = px + x + ((py + y) * blendWidth);
-                        index2                = x + (y * outlineWidth);
-                        blendImage[2 * index] = outlineBitmap[index2];
+                        //index2                = x + (y * outlineWidth);
+                        blendImage[2 * index] = GetMonoPixel(outlineBitmap, x, y) ? 255 : 0;
                     }
                 }
 
@@ -591,8 +613,11 @@ unsigned char* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
             outWidth            = static_cast<int>(blendWidth);
             outHeight           = static_cast<int>(blendHeight);
 
-            delete[] outlineBitmap;
             delete[] copyBitmap;
+            if(hasOutline)
+            {
+                delete[] outlineBitmap.buffer;
+            }
             ret = blendImage;
         }
 
@@ -606,7 +631,64 @@ unsigned char* FontFreeType::getGlyphBitmapByIndex(unsigned int glyphIndex,
     return nullptr;
 }
 
-unsigned char* FontFreeType::getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox)
+bool FontFreeType::getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox, FT_Bitmap &bmp)
+{
+    if (FT_Load_Glyph(_fontFace, glyphIndex, FT_LOAD_NO_BITMAP) == 0)
+    {
+        if (_fontFace->glyph->format == FT_GLYPH_FORMAT_OUTLINE)
+        {
+            FT_Glyph glyph;
+            if (FT_Get_Glyph(_fontFace->glyph, &glyph) == 0)
+            {
+                FT_Glyph_StrokeBorder(&glyph, _stroker, 0, 1);
+                if (glyph->format == FT_GLYPH_FORMAT_OUTLINE)
+                {
+                    FT_Outline* outline = &reinterpret_cast<FT_OutlineGlyph>(glyph)->outline;
+                    FT_Glyph_Get_CBox(glyph, FT_GLYPH_BBOX_GRIDFIT, &bbox);
+                    int32_t width = static_cast<int32_t>((bbox.xMax - bbox.xMin) >> 6);
+                    int32_t rows  = static_cast<int32_t>((bbox.yMax - bbox.yMin) >> 6);
+
+                    bmp.buffer = new unsigned char[width * rows];
+                    memset(bmp.buffer, 0, width * rows);
+                    bmp.width      = (int)width;
+                    bmp.rows       = (int)rows;
+                    //bmp.pitch      = (int)width;
+                    bmp.pitch = (width + 7) / 8;   // 1bitなので8ピクセルで1バイト
+                    bmp.pixel_mode = FT_PIXEL_MODE_MONO;
+                    bmp.num_grays  = 2;
+                    //bitmap.num_grays = 2;
+
+                    FT_Raster_Params params;
+                    memset(&params, 0, sizeof(params));
+                    params.source = outline;
+                    params.target = &bmp;
+                    params.gray_spans = nullptr;
+                    params.flags  = 0;
+                    FT_Outline_Translate(outline, -bbox.xMin, -bbox.yMin);
+                    FT_Outline_Render(_FTlibrary, outline, &params);
+
+                    //printf("FontFreeType::getGlyphBitmapWithOutline() width:%d height:%d\n", width, rows);
+
+                    /*
+                    for(int x = 0; x < bmp.width; x++)
+                    {
+                        for(int y = 0; y < bmp.rows; y++)
+                        {
+                            printf(GetMonoPixel(bmp, x, y) ? "*" : ".");
+                        }
+                        printf("\n");
+                    }
+                    */
+                }
+                FT_Done_Glyph(glyph);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+unsigned char* FontFreeType::getGlyphBitmapBufferWithOutline(unsigned int glyphIndex, FT_BBox& bbox)
 {
     unsigned char* ret = nullptr;
     if (FT_Load_Glyph(_fontFace, glyphIndex, FT_LOAD_NO_BITMAP) == 0)
@@ -629,15 +711,18 @@ unsigned char* FontFreeType::getGlyphBitmapWithOutline(unsigned int glyphIndex, 
                     memset(bmp.buffer, 0, width * rows);
                     bmp.width      = (int)width;
                     bmp.rows       = (int)rows;
-                    bmp.pitch      = (int)width;
-                    bmp.pixel_mode = FT_PIXEL_MODE_GRAY;
-                    bmp.num_grays  = 256;
+                    //bmp.pitch      = (int)width;
+                    bmp.pitch = (width + 7) / 8;   // 1bitなので8ピクセルで1バイト
+                    bmp.pixel_mode = FT_PIXEL_MODE_MONO;
+                    bmp.num_grays  = 2;
+                    //bitmap.num_grays = 2;
 
                     FT_Raster_Params params;
                     memset(&params, 0, sizeof(params));
                     params.source = outline;
                     params.target = &bmp;
-                    params.flags  = FT_RASTER_FLAG_AA;
+                    params.gray_spans = nullptr;
+                    params.flags  = FT_RASTER_FLAG_DIRECT;
                     FT_Outline_Translate(outline, -bbox.xMin, -bbox.yMin);
                     FT_Outline_Render(_FTlibrary, outline, &params);
 

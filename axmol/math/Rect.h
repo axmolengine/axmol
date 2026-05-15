@@ -126,6 +126,12 @@ public:
     {
         return origin.y + size.y;
     }
+
+    Vec2 getCenter() const
+    {
+        return Vec2(origin.x + size.x * 0.5f, origin.y + size.y * 0.5f);
+    }
+
     /**
     Compare two rects.
      */
@@ -165,7 +171,7 @@ public:
     /**Compute the min rect which can contain this and rect, assign it to this.*/
     void merge(const Rect& rect);
 
-    bool intersectsSegment(const Vec2& a, const Vec2& b, Vec2 &hitPos);
+    bool intersectsSegment(const Vec2& a, const Vec2& b, Vec2 &hitPos) const;
 
     /**An empty Rect.*/
     static const Rect ZERO;

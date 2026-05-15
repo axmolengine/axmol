@@ -282,6 +282,7 @@ public:
     //
     // Override
     //
+    void update(float delta) override;
     std::string getDescription() const override;
     void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     void removeChild(Node* child, bool cleanup = true) override;
@@ -298,6 +299,7 @@ public:
 
     bool initWithTilesetInfo(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
 
+    void setColor(const Color32& color) override;
 protected:
     void setOpacity(uint8_t opacity) override;
 
@@ -403,7 +405,9 @@ public:
     void start();
     /** stop the animation task */
     void stop();
+    void update(float delta);
     bool isRunning() const { return _isRunning; }
+    Vec2 getTilePosition();
 
 protected:
     /** tile flag */
@@ -426,6 +430,7 @@ protected:
     uint32_t _currentFrame = 0;
     uint32_t _nextFrame    = 0;
     uint32_t _frameCount   = 0;
+    double _elapsedTime = 0.0;
 };
 
 /** @brief TMXTileAnimManager controls all tile animation of a layer.
@@ -440,6 +445,12 @@ public:
     void startAll();
     /** stop all tile animations */
     void stopAll();
+
+    bool isRunning(){ return _started; }
+
+    void update(float delta);
+
+    void deleteTaskAtPos(const Vec2& tilePos);
 
     /** get vector of tasks */
     const Vector<TMXTileAnimTask*>& getTasks() const { return _tasks; }

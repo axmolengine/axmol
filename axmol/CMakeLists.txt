@@ -587,6 +587,7 @@ if(MSVC)
   target_sources(${_AX_CORE_LIB} PRIVATE ./axmol.natvis)
   target_sources(${_AX_CORE_LIB} PRIVATE ../3rdparty/robin-map/tsl-robin-map.natvis)
   target_compile_options(${_AX_CORE_LIB} PUBLIC "/Zm2000")
+  target_compile_definitions(${_AX_CORE_LIB} PUBLIC SPINE_USE_STD_FUNCTION)
 endif()
 
 if(ANDROID)

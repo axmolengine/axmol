@@ -82,17 +82,48 @@ namespace spine {
 		AX_SAFE_RELEASE(_programState);
 	}
 
+    void SkeletonBatch::changeProgram(ax::Program *program)
+    {
+        if(useCustomProgram)
+        {
+            AX_SAFE_RELEASE_NULL(_programState);
+        }
+
+        if(program != NULL)
+        {
+            _programState = new rhi::ProgramState(program);
+        }
+        else
+        {
+            _programState = new rhi::ProgramState(axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR));
+        }
+        useCustomProgram = program != NULL;
+    }
+
+    ax::ProgramState *SkeletonBatch::getSpineProgramState()
+    {
+        return _programState;
+    }
+
 	rhi::ProgramState* SkeletonBatch::updateCommandPipelinePS(SkeletonCommand* command,
-                                                                  rhi::ProgramState* programState)
+                                                                  rhi::ProgramState* programState, bool needCopy)
     {
         auto currentState = command->unsafePS();
-        if (currentState == nullptr || currentState->getBatchId() != programState->getBatchId())
+        if(needCopy)
         {
-            currentState         = programState->clone();
-            command->_locMVP     = currentState->getUniformLocation(rhi::UNIFORM_NAME_MVP_MATRIX);
-            command->_locTexture = currentState->getUniformLocation(rhi::UNIFORM_NAME_TEXTURE);
-            command->setOwnPSVL(currentState, currentState->getVertexLayout(), RenderCommand::ADOPT_FLAG_PS);
+            if (currentState == nullptr || currentState->getBatchId() != programState->getBatchId())
+            {
+                currentState = programState->clone();
+                command->_locMVP     = currentState->getUniformLocation(rhi::UNIFORM_NAME_MVP_MATRIX);
+                command->_locTexture = currentState->getUniformLocation(rhi::UNIFORM_NAME_TEXTURE);
+                command->setOwnPSVL(currentState, currentState->getVertexLayout(), RenderCommand::ADOPT_FLAG_PS);
+            }
+            return currentState;
         }
+        currentState = programState;
+        command->_locMVP     = currentState->getUniformLocation(rhi::UNIFORM_NAME_MVP_MATRIX);
+        command->_locTexture = currentState->getUniformLocation(rhi::UNIFORM_NAME_TEXTURE);
+        command->setWeakPSVL(currentState, currentState->getVertexLayout());
         return currentState;
     }
 
@@ -156,7 +187,7 @@ namespace spine {
 
 		AXASSERT(programState, "programState should not be null");
 
-		auto pipelinePS = updateCommandPipelinePS(command, programState);
+		auto pipelinePS = updateCommandPipelinePS(command, programState, !useCustomProgram);
 
 		pipelinePS->setUniform(command->_locMVP, projectionMat.m, sizeof(projectionMat.m));
 		pipelinePS->setTexture(command->_locTexture, 0, texture->getRHITexture());

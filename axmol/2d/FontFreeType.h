@@ -28,6 +28,7 @@
 
 #include "axmol/2d/Font.h"
 #include "axmol/2d/IFontEngine.h"
+#include <freetype/ftbitmap.h>
 #include <string>
 
 namespace ax
@@ -146,14 +147,16 @@ public:
                                   Rect& outRect,
                                   int& xAdvance,
                                   const GlyphResolution*& fallbackRes,
-                                  bool& sharedBitmapData);
+                                  bool& sharedBitmapData,
+                                    bool isMono);
 
     unsigned char* getGlyphBitmapByIndex(unsigned int glyphIndex,
                                          int& outWidth,
                                          int& outHeight,
                                          Rect& outRect,
                                          int& xAdvance,
-                                         bool& sharedBitmapData);
+                                         bool& sharedBitmapData,
+                                        bool isMono);
 
     int getFontAscender() const;
     const char* getFontFamily() const;
@@ -186,7 +189,8 @@ private:
     bool initWithFontFace(FT_Face face, std::string_view fontPath, int faceSize);
 
     int getHorizontalKerningForChars(uint64_t firstChar, uint64_t secondChar) const;
-    unsigned char* getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox);
+    unsigned char* getGlyphBitmapBufferWithOutline(unsigned int glyphIndex, FT_BBox& bbox);
+    bool getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox, FT_Bitmap &bmp);
 
     void setGlyphCollection(GlyphCollection glyphs, std::string_view customGlyphs);
 
@@ -201,6 +205,7 @@ private:
     int _ascender;
     int _descender;
     int _lineHeight;
+    bool _isMono = true;
 
     GlyphCollection _usedGlyphs;
     std::string _customGlyphs;

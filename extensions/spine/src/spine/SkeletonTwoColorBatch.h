@@ -121,9 +121,12 @@ namespace spine {
 
 		uint32_t getNumBatches() { return _numBatches; };
 
+        void changeProgram(ax::Program *program);
+        ax::ProgramState *getSpineProgramState();
+
+        SkeletonTwoColorBatch();
+        virtual ~SkeletonTwoColorBatch();
 	protected:
-		SkeletonTwoColorBatch();
-		virtual ~SkeletonTwoColorBatch();
 
 		void reset();
 

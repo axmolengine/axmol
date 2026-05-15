@@ -65,6 +65,8 @@ public:
         return dist(mt);
     }
 
+    static void init();
+    static void setSeed(unsigned int seed);
 private:
     static std::mt19937& getEngine();
 };

@@ -157,39 +157,20 @@ namespace spine {
 
         auto program          = ProgramManager::getInstance()->loadProgram("custom/spineTwoColorTint_vs",
                                                                                    "custom/spineTwoColorTint_fs");
-        _twoColorProgramState = new rhi::ProgramState(program);
-
-        _locPMatrix = _twoColorProgramState->getUniformLocation("u_PMatrix");
-        _locTexture = _twoColorProgramState->getUniformLocation("u_tex0");
-
-        auto locPosition = _twoColorProgramState->getVertexInputDesc("a_position");
-        auto locTexcoord = _twoColorProgramState->getVertexInputDesc("a_texCoord");
-        auto locColor    = _twoColorProgramState->getVertexInputDesc("a_color");
-        auto locColor2   = _twoColorProgramState->getVertexInputDesc("a_color2");
-
-        auto layoutDesc = axvlm->allocateVertexLayoutDesc();
-        layoutDesc.startLayout(4);
-        layoutDesc.addAttrib("a_position", locPosition, rhi::VertexFormat::FLOAT3,
-                                offsetof(spine::V3F_C4B_C4B_T2F, position), false);
-        layoutDesc.addAttrib("a_color", locColor, rhi::VertexFormat::UBYTE4,
-                                offsetof(spine::V3F_C4B_C4B_T2F, color), true);
-        layoutDesc.addAttrib("a_color2", locColor2, rhi::VertexFormat::UBYTE4,
-                                offsetof(spine::V3F_C4B_C4B_T2F, color2), true);
-        layoutDesc.addAttrib("a_texCoord", locTexcoord, rhi::VertexFormat::FLOAT2,
-                                offsetof(spine::V3F_C4B_C4B_T2F, texCoord), false);
-        layoutDesc.endLayout();
-
-        Object::assign(_twoColorVertexLayout, axvlm->getVertexLayout(std::move(layoutDesc)));
+        changeProgram(program);
 
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
 
         // callback after drawing is finished so we can clear out the batch state
         // for the next frame
         _event1 = eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_DRAW,
-                                                [](EventCustom*) { s_TwoColorInstance->update(0); });
+                                                [this](EventCustom*) { update(0); });
 
         _event2 = eventDispatcher->addCustomEventListener(Director::EVENT_DESTROY,
-                                                [](EventCustom*) { SkeletonTwoColorBatch::destroyInstance(); });
+                                                [](EventCustom*) {
+            // Notes:
+            // This process was originally intended to destroy static instances, but it is not performed.
+        });
 	}
 
 	SkeletonTwoColorBatch::~SkeletonTwoColorBatch() {
@@ -213,6 +194,40 @@ namespace spine {
 		delete[] _vertexBuffer;
 		delete[] _indexBuffer;
 	}
+
+    void SkeletonTwoColorBatch::changeProgram(ax::Program *program)
+    {
+        AX_SAFE_RELEASE_NULL(_twoColorProgramState);
+
+        _twoColorProgramState = new rhi::ProgramState(program);
+
+        _locPMatrix = _twoColorProgramState->getUniformLocation("u_PMatrix");
+        _locTexture = _twoColorProgramState->getUniformLocation("u_tex0");
+
+        auto locPosition = _twoColorProgramState->getVertexInputDesc("a_position");
+        auto locTexcoord = _twoColorProgramState->getVertexInputDesc("a_texCoord");
+        auto locColor    = _twoColorProgramState->getVertexInputDesc("a_color");
+        auto locColor2   = _twoColorProgramState->getVertexInputDesc("a_color2");
+
+        auto layoutDesc = axvlm->allocateVertexLayoutDesc();
+        layoutDesc.startLayout(4);
+        layoutDesc.addAttrib("a_position", locPosition, rhi::VertexFormat::FLOAT3,
+                                offsetof(spine::V3F_C4B_C4B_T2F, position), false);
+        layoutDesc.addAttrib("a_color", locColor, rhi::VertexFormat::UBYTE4,
+                                offsetof(spine::V3F_C4B_C4B_T2F, color), true);
+        layoutDesc.addAttrib("a_color2", locColor2, rhi::VertexFormat::UBYTE4,
+                                offsetof(spine::V3F_C4B_C4B_T2F, color2), true);
+        layoutDesc.addAttrib("a_texCoord", locTexcoord, rhi::VertexFormat::FLOAT2,
+                                offsetof(spine::V3F_C4B_C4B_T2F, texCoord), false);
+        layoutDesc.endLayout();
+
+        Object::assign(_twoColorVertexLayout, axvlm->getVertexLayout(std::move(layoutDesc)));
+    }
+
+    ax::ProgramState *SkeletonTwoColorBatch::getSpineProgramState()
+    {
+        return _twoColorProgramState;
+    }
 
 	void SkeletonTwoColorBatch::update(float delta) {
 		reset();
@@ -275,9 +290,11 @@ namespace spine {
             {
                 Object::assign(pipelinePS, programState); // Node owned the programState, don't need clone
             }
+            printf("2\n");
         }
         else
         {
+            printf("1\n");
             pipelinePS = _twoColorProgramState->clone(); // Unlike other clone methods, this function does not use autorelease
         }
 

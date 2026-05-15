@@ -129,6 +129,8 @@ namespace spine {
 		if (_ownsSkeleton) delete _skeleton;
 		if (_ownsAtlas && _atlas) delete _atlas;
 		if (_attachmentLoader) delete _attachmentLoader;
+        if(customTwoColorBatch != NULL) delete customTwoColorBatch;
+        if(customBatch != NULL) delete customBatch;
 		delete _clipper;
 	}
 
@@ -210,6 +212,28 @@ namespace spine {
 		initialize();
 	}
 
+    void SkeletonRenderer::setCustomBatch(SkeletonBatch *batch, SkeletonTwoColorBatch *twoColorBatch)
+    {
+        if(customTwoColorBatch != NULL)
+        {
+            delete customTwoColorBatch;
+        }
+        customTwoColorBatch = twoColorBatch;
+        if(customBatch != NULL)
+        {
+            delete customBatch;
+        }
+        customBatch = batch;
+    }
+
+    ax::ProgramState *SkeletonRenderer::getSpineProgramState()
+    {
+        if(customBatch != NULL)
+        {
+            return customBatch->getSpineProgramState();
+        }
+        return SkeletonBatch::getInstance()->getSpineProgramState();
+    }
 
 	void SkeletonRenderer::update(float deltaTime) {
 		Node::update(deltaTime);
@@ -240,8 +264,11 @@ namespace spine {
 #endif
 
 		const float *worldCoordPtr = worldCoords;
-		SkeletonBatch *batch = SkeletonBatch::getInstance();
-		SkeletonTwoColorBatch *twoColorBatch = SkeletonTwoColorBatch::getInstance();
+		SkeletonBatch *batch = customBatch != NULL ? customBatch : SkeletonBatch::getInstance();
+		SkeletonTwoColorBatch *twoColorBatch = customTwoColorBatch != NULL ? customTwoColorBatch : SkeletonTwoColorBatch::getInstance();
+
+        //auto programState = customBatch != NULL ? customBatch->getSpineProgramState() : _programState;
+
 		const bool hasSingleTint = (isTwoColorTint() == false);
 
 		auto&& displayedColor = getDisplayedColor();
