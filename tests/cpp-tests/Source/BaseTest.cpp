@@ -473,6 +473,29 @@ bool TestCase::init()
 
         addChild(menu, 9999);
 
+        _windowSizeBeforeEnterFullscreen = _director->getRenderView()->getWindowSize();
+
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_MAC || \
+    AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+        // fullscreen toggle
+        EventListenerKeyboard* listener = EventListenerKeyboard::create();
+        listener->onKeyPressed          = [this](EventKeyboard::KeyCode code, Event* event) {
+            auto renderView = static_cast<RenderViewImpl*>(_director->getRenderView());
+            if (code == EventKeyboard::KeyCode::KEY_ENTER && renderView->isKeyPressed(GLFW_KEY_LEFT_ALT))
+            {
+                if (!renderView->isFullscreen())
+                {
+                    _windowSizeBeforeEnterFullscreen = renderView->getWindowSize();
+                    renderView->setFullscreen();
+                }
+                else
+                    renderView->setWindowed(_windowSizeBeforeEnterFullscreen.width,
+                                                     _windowSizeBeforeEnterFullscreen.height);
+            }
+        };
+        _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+#endif
+
         return true;
     }
 

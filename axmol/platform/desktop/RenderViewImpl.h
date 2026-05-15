@@ -135,6 +135,29 @@ public:
 
     void setViewName(std::string_view viewName) override;
 
+    /**
+     * @brief Check if a specific key is currently pressed.
+     *
+     * This function queries the current state of a keyboard key using GLFW.
+     * It is typically used for continuous input checks or detecting key
+     * combinations (e.g., Ctrl+S, Alt+F4).
+     *
+     * @param key Keyboard key code, must be one of the GLFW_KEY_XXX constants.
+     *            Examples include:
+     *            - GLFW_KEY_LEFT_ALT
+     *            - GLFW_KEY_RIGHT_ALT
+     *            - GLFW_KEY_A, GLFW_KEY_B, ...
+     *
+     * @return true  if the specified key is currently pressed (GLFW_PRESS).
+     * @return false if the specified key is currently released (GLFW_RELEASE).
+     *
+     * @note The state is associated with the given GLFW window context and
+     *       does not represent global system key state.
+     *
+     * @see glfwGetKey
+     */
+    bool isKeyPressed(int key) const;
+
 protected:
     RenderViewImpl(bool initglfw = true);
     ~RenderViewImpl() override;

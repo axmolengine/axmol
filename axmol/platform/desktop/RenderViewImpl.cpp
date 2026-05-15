@@ -803,6 +803,11 @@ void RenderViewImpl::setViewName(std::string_view viewName)
         glfwSetWindowTitle(_mainWindow, _viewName.c_str());
 }
 
+bool RenderViewImpl::isKeyPressed(int key) const
+{
+    return _mainWindow && glfwGetKey(_mainWindow, key) == GLFW_PRESS;
+}
+
 bool RenderViewImpl::isGfxContextReady()
 {
     return nullptr != _mainWindow;

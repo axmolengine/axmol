@@ -118,6 +118,7 @@ private:
     float _runTime;
     std::string _testCaseName;
 
+    ax::Size _windowSizeBeforeEnterFullscreen;
     bool _enableInspector = false;
 };
 
