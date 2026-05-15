@@ -1366,7 +1366,7 @@ static void processEvent(XEvent *event)
 
     // HACK: Save scancode as some IMs clear the field in XFilterEvent
     if (event->type == KeyPress || event->type == KeyRelease)
-    {    
+    {
         keycode = event->xkey.keycode;
 
         if (window && window->imeEnabled)
@@ -1374,6 +1374,9 @@ static void processEvent(XEvent *event)
     }
     else
         filtered = XFilterEvent(event, None);
+
+    if (filtered)
+        return;
 
     if (_glfw.x11.randr.available)
     {
@@ -1478,38 +1481,35 @@ static void processEvent(XEvent *event)
                     window->x11.keyPressTimes[keycode] = event->xkey.time;
                 }
 
-                if (!filtered)
+                int count;
+                Status status;
+                char buffer[100];
+                char* chars = buffer;
+
+                count = Xutf8LookupString(window->x11.ic,
+                                            &event->xkey,
+                                            buffer, sizeof(buffer) - 1,
+                                            NULL, &status);
+
+                if (status == XBufferOverflow)
                 {
-                    int count;
-                    Status status;
-                    char buffer[100];
-                    char* chars = buffer;
-
+                    chars = _glfw_calloc(count + 1, 1);
                     count = Xutf8LookupString(window->x11.ic,
-                                              &event->xkey,
-                                              buffer, sizeof(buffer) - 1,
-                                              NULL, &status);
-
-                    if (status == XBufferOverflow)
-                    {
-                        chars = _glfw_calloc(count + 1, 1);
-                        count = Xutf8LookupString(window->x11.ic,
-                                                  &event->xkey,
-                                                  chars, count,
-                                                  NULL, &status);
-                    }
-
-                    if (status == XLookupChars || status == XLookupBoth)
-                    {
-                        const char* c = chars;
-                        chars[count] = '\0';
-                        while (c - chars < count)
-                            _glfwInputChar(window, _glfwDecodeUTF8(&c), mods, plain);
-                    }
-
-                    if (chars != buffer)
-                        _glfw_free(chars);
+                                                &event->xkey,
+                                                chars, count,
+                                                NULL, &status);
                 }
+
+                if (status == XLookupChars || status == XLookupBoth)
+                {
+                    const char* c = chars;
+                    chars[count] = '\0';
+                    while (c - chars < count)
+                        _glfwInputChar(window, _glfwDecodeUTF8(&c), mods, plain);
+                }
+
+                if (chars != buffer)
+                    _glfw_free(chars);
             }
             else
             {
@@ -1751,9 +1751,6 @@ static void processEvent(XEvent *event)
         case ClientMessage:
         {
             // Custom client message, probably from the window manager
-
-            if (filtered)
-                return;
 
             if (event->xclient.message_type == None)
                 return;
