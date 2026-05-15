@@ -338,20 +338,28 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
     _GLFWwindow* window;
     NSTrackingArea* trackingArea;
     NSMutableAttributedString* markedText;
+    BOOL _handlingKeyDown;
+    BOOL _composing;
+
+    int _cachedMods;
 }
 
-- (instancetype)initWithGlfwWindow:(_GLFWwindow *)initWindow;
+- (instancetype)initWithGlfwWindow:(_GLFWwindow *)ownerWindow;
 
 @end
 
 @implementation GLFWContentView
 
-- (instancetype)initWithGlfwWindow:(_GLFWwindow *)initWindow
+- (instancetype)initWithGlfwWindow:(_GLFWwindow *)ownerWindow
 {
     self = [super init];
     if (self != nil)
     {
-        window = initWindow;
+        _handlingKeyDown = NO;
+        _composing = NO;
+        _cachedMods = 0;
+        
+        window = ownerWindow;
         trackingArea = nil;
         markedText = [[NSMutableAttributedString alloc] init];
 
@@ -570,11 +578,51 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
     const int key = translateKey([event keyCode]);
     const int mods = translateFlags([event modifierFlags]);
 
-    if (![self hasMarkedText])
-        _glfwInputKey(window, key, [event keyCode], GLFW_PRESS, mods);
-    
+    _cachedMods = mods;
+
+    //
+    // Remember whether composition was already active
+    // before this key event.
+    //
+    // This avoids suppressing the very first key
+    // that starts IME composition.
+    //
+
+    const BOOL composingBefore = _composing;
+
     if (window->imeEnabled)
-        [self interpretKeyEvents:@[event]];
+    {
+        _handlingKeyDown = YES;
+
+        [self interpretKeyEvents:@[ event ]];
+
+        _handlingKeyDown = NO;
+    }
+
+    //
+    // Suppress printable raw keys only while
+    // an IME composition is already active.
+    //
+    // Keep:
+    //   arrows
+    //   escape
+    //   enter
+    //   function keys
+    //   modifiers
+    //
+
+    const BOOL printable =
+        key >= GLFW_KEY_SPACE &&
+        key <= GLFW_KEY_WORLD_2;
+
+    if (!(composingBefore && printable))
+    {
+        _glfwInputKey(window,
+                      key,
+                      [event keyCode],
+                      GLFW_PRESS,
+                      mods);
+    }
 }
 
 - (void)flagsChanged:(NSEvent *)event
@@ -659,29 +707,30 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
 
 - (BOOL)hasMarkedText
 {
-    return [markedText length] > 0;
+    return _composing;
 }
 
 - (NSRange)markedRange
 {
-    if ([markedText length] > 0)
+    if (_composing)
         return NSMakeRange(0, [markedText length]);
-    else
-        return kEmptyRange;
+
+    return NSMakeRange(NSNotFound, 0);
 }
 
 - (NSRange)selectedRange
 {
-    return kEmptyRange;
+    return NSMakeRange(NSNotFound, 0);
 }
 
 - (void)setImeEnabled:(int)enabled
 {
     window->imeEnabled = enabled;
+
     NSTextInputContext* inputContext = [self inputContext];
     if (!inputContext)
         return;
-    
+
     if (enabled)
     {
         [inputContext activate];
@@ -690,6 +739,8 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
     {
         [inputContext discardMarkedText];
         [inputContext deactivate];
+
+        [self unmarkText];
     }
 }
 
@@ -697,6 +748,8 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
         selectedRange:(NSRange)selectedRange
      replacementRange:(NSRange)replacementRange
 {
+    _composing = YES;
+    
     [markedText release];
     if ([string isKindOfClass:[NSAttributedString class]])
         markedText = [[NSMutableAttributedString alloc] initWithAttributedString:string];
@@ -785,11 +838,15 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
 
 - (void)unmarkText
 {
+    _composing = NO;
+
     [[markedText mutableString] setString:@""];
+
     window->preedit.blockSizesCount = 0;
     window->preedit.textCount = 0;
     window->preedit.focusedBlockIndex = 0;
     window->preedit.caretIndex = 0;
+
     _glfwInputPreedit(window);
 }
 
@@ -817,29 +874,50 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
     int w = window->preedit.cursorWidth;
     int h = window->preedit.cursorHeight;
 
-    const NSRect frame =
-        [window->ns.object contentRectForFrameRect:[window->ns.object frame]];
+    NSRect rect = NSMakeRect(x, y, w, h);
 
-    return NSMakeRect(frame.origin.x + x,
-                      // The y-axis is upward on macOS, so this conversion is needed.
-                      frame.origin.y + frame.size.height - y - h,
-                      w,
-                      h);
+    //
+    // GLFW uses top-left origin.
+    // Cocoa uses bottom-left origin.
+    //
+
+    rect.origin.y =
+        self.bounds.size.height - rect.origin.y - h;
+
+    //
+    // View -> Window
+    //
+
+    rect = [self convertRect:rect toView:nil];
+
+    //
+    // Window -> Screen
+    //
+
+    rect = [[self window] convertRectToScreen:rect];
+
+    return rect;
 }
 
 - (void)insertText:(id)string replacementRange:(NSRange)replacementRange
 {
     NSString* characters;
-    NSEvent* event = [NSApp currentEvent];
-    const int mods = translateFlags([event modifierFlags]);
-    const int plain = !(mods & GLFW_MOD_SUPER);
 
     if ([string isKindOfClass:[NSAttributedString class]])
         characters = [string string];
     else
-        characters = (NSString*) string;
+        characters = (NSString*)string;
+
+    //
+    // currentEvent is unreliable during IME commit.
+    //
+
+    const int mods = _cachedMods;
+
+    const int plain = !(mods & (GLFW_MOD_SUPER | GLFW_MOD_CONTROL));
 
     NSRange range = NSMakeRange(0, [characters length]);
+
     while (range.length)
     {
         uint32_t codepoint = 0;
@@ -852,6 +930,9 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
                            range:range
                   remainingRange:&range])
         {
+            //
+            // Ignore Cocoa private-use function keys
+            //
             if (codepoint >= 0xf700 && codepoint <= 0xf7ff)
                 continue;
 
@@ -859,11 +940,26 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
         }
     }
 
-    [self unmarkText];
+    //
+    // IMPORTANT:
+    // Do NOT call unmarkText here.
+    //
 }
 
 - (void)doCommandBySelector:(SEL)selector
 {
+    //
+    // Prevent Cocoa beep.
+    //
+    // interpretKeyEvents may dispatch:
+    //
+    //   moveLeft:
+    //   moveRight:
+    //   deleteBackward:
+    //   insertNewline:
+    //
+    // etc.
+    //
 }
 
 @end
