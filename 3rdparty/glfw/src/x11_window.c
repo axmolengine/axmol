@@ -3423,13 +3423,9 @@ void _glfwSetIMEStatusX11(_GLFWwindow* window, int enabled)
     window->imeEnabled = enabled;
 
     if (enabled)
-    {
         XSetICFocus(ic);
-    }
     else
-    {
         XUnsetICFocus(ic);
-    }
 
     XFlush(_glfw.x11.display);
 }
