@@ -248,6 +248,8 @@ GLFWAPI GLFWwindow* glfwCreateWindow(int width, int height,
     window->preedit.cursorWidth = 0;
     window->preedit.cursorHeight = 0;
 
+    window->imeEnabled = GLFW_TRUE;
+
     if (!_glfw.platform.createWindow(window, &wndconfig, &ctxconfig, &fbconfig))
     {
         glfwDestroyWindow((GLFWwindow*) window);

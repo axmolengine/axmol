@@ -37,8 +37,6 @@
 #include <shellapi.h>
 #include <wchar.h>
 
-#pragma comment(lib, "Imm32.lib")
-
 // Converts utf16 units to Unicode code points (UTF32).
 // Returns GLFW_TRUE when the converting completes and the result is assigned to
 // the argument `codepoint`.
@@ -2892,42 +2890,19 @@ void _glfwResetPreeditTextWin32(_GLFWwindow* window)
 
 void _glfwSetIMEStatusWin32(_GLFWwindow* window, int enabled)
 {
+    window->imeEnabled = enabled;
+
     HWND hWnd = window->win32.handle;
-    HIMC hIMC = ImmGetContext(hWnd);
     if (enabled)
-    {
-        if (!hIMC)
-        {
-            hIMC = ImmCreateContext();
-            ImmAssociateContext(hWnd, hIMC);
-        }
-        if (!hIMC)
-        {
-            _glfwInputErrorWin32(GLFW_PLATFORM_ERROR, "ImmCreateContext failed");
-            return;
-        }
-		ImmSetOpenStatus(hIMC, TRUE);
-        ImmReleaseContext(hWnd, hIMC);
-    }
-    else if (hIMC)
-    {
-        ImmSetOpenStatus(hIMC, FALSE);
-        ImmReleaseContext(hWnd, hIMC);
-        ImmAssociateContext(hWnd, NULL);
-    }
+        ImmAssociateContextEx(hWnd, NULL, IACE_DEFAULT);
+    else
+        ImmAssociateContextEx(hWnd, NULL, 0);
 }
 
 int _glfwGetIMEStatusWin32(_GLFWwindow* window)
 {
     HWND hWnd = window->win32.handle;
-    HIMC hIMC = ImmGetContext(hWnd);
-    if (hIMC)
-    {
-        BOOL result = ImmGetOpenStatus(hIMC);
-        ImmReleaseContext(hWnd, hIMC);
-        return result ? GLFW_TRUE : GLFW_FALSE;
-    }
-    return GLFW_FALSE;
+    return window->imeEnabled;
 }
 
 EGLenum _glfwGetEGLPlatformWin32(EGLint** attribs)

@@ -271,6 +271,7 @@ typedef BOOL (WINAPI * PFN_ImmReleaseContext)(HWND,HIMC);
 typedef BOOL (WINAPI * PFN_ImmSetCompositionWindow)(HIMC,LPCOMPOSITIONFORM);
 typedef BOOL (WINAPI * PFN_ImmSetCandidateWindow)(HIMC,LPCANDIDATEFORM);
 typedef BOOL (WINAPI * PFN_ImmSetOpenStatus)(HIMC,BOOL);
+typedef BOOL (WINAPI * PFN_ImmAssociateContextEx)(HWND, HIMC, DWORD);
 #define ImmGetCandidateListW _glfw.win32.imm32.ImmGetCandidateListW_
 #define ImmGetCompositionStringW _glfw.win32.imm32.ImmGetCompositionStringW_
 #define ImmGetContext _glfw.win32.imm32.ImmGetContext_
@@ -282,6 +283,7 @@ typedef BOOL (WINAPI * PFN_ImmSetOpenStatus)(HIMC,BOOL);
 #define ImmSetCompositionWindow _glfw.win32.imm32.ImmSetCompositionWindow_
 #define ImmSetCandidateWindow _glfw.win32.imm32.ImmSetCandidateWindow_
 #define ImmSetOpenStatus _glfw.win32.imm32.ImmSetOpenStatus_
+#define ImmAssociateContextEx _glfw.win32.imm32.ImmAssociateContextEx_
 
 // WGL extension pointer typedefs
 typedef BOOL (WINAPI * PFNWGLSWAPINTERVALEXTPROC)(int);
@@ -482,6 +484,7 @@ typedef struct _GLFWlibraryWin32
         PFN_ImmSetCompositionWindow     ImmSetCompositionWindow_;
         PFN_ImmSetCandidateWindow       ImmSetCandidateWindow_;
         PFN_ImmSetOpenStatus            ImmSetOpenStatus_;
+        PFN_ImmAssociateContextEx       ImmAssociateContextEx_;
     } imm32;
 } _GLFWlibraryWin32;
 

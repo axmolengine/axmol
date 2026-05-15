@@ -188,6 +188,8 @@ static GLFWbool loadLibraries(void)
             _glfwPlatformGetModuleSymbol(_glfw.win32.imm32.instance, "ImmSetCandidateWindow");
         _glfw.win32.imm32.ImmSetOpenStatus_ = (PFN_ImmSetOpenStatus)
             _glfwPlatformGetModuleSymbol(_glfw.win32.imm32.instance, "ImmSetOpenStatus");
+        _glfw.win32.imm32.ImmAssociateContextEx_ = (PFN_ImmAssociateContextEx)
+            _glfwPlatformGetModuleSymbol(_glfw.win32.imm32.instance, "ImmAssociateContextEx");
     }
 
     return GLFW_TRUE;
