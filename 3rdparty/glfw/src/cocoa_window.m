@@ -958,7 +958,8 @@ static GLFWbool createNativeWindow(_GLFWwindow* window,
     }
 
     if (window->monitor)
-        [window->ns.object setLevel:NSMainMenuWindowLevel + 1];
+        [NSApp setPresentationOptions:NSApplicationPresentationHideDock |
+                                      NSApplicationPresentationHideMenuBar];
     else
     {
         if (wndconfig->xpos == GLFW_ANY_POSITION ||
@@ -1436,7 +1437,8 @@ void _glfwSetWindowMonitorCocoa(_GLFWwindow* window,
 
     if (window->monitor)
     {
-        [window->ns.object setLevel:NSMainMenuWindowLevel + 1];
+        [NSApp setPresentationOptions:NSApplicationPresentationHideDock |
+                                      NSApplicationPresentationHideMenuBar];
         [window->ns.object setHasShadow:NO];
 
         acquireMonitor(window);
@@ -1488,6 +1490,9 @@ void _glfwSetWindowMonitorCocoa(_GLFWwindow* window,
                 NSWindowCollectionBehaviorFullScreenNone;
             [window->ns.object setCollectionBehavior:behavior];
         }
+        
+        // Make sure ime display correctn in fullscreen mode
+        [NSApp setPresentationOptions:NSApplicationPresentationDefault];
 
         [window->ns.object setHasShadow:YES];
         // HACK: Clearing NSWindowStyleMaskTitled resets and disables the window
