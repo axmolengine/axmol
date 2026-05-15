@@ -849,6 +849,9 @@ void RenderViewImpl::pollEvents()
 
 void RenderViewImpl::setIMEKeyboardState(bool bOpen)
 {
+    if (!_mainWindow)
+        return;
+
 #if !defined(__EMSCRIPTEN__)
     glfwSetInputMode(_mainWindow, GLFW_IME, bOpen ? 1 : 0);
 

@@ -480,8 +480,10 @@ bool TestCase::init()
         // fullscreen toggle
         EventListenerKeyboard* listener = EventListenerKeyboard::create();
         listener->onKeyPressed          = [this](EventKeyboard::KeyCode code, Event* event) {
+            auto keyEvent   = static_cast<EventKeyboard*>(event);
             auto renderView = static_cast<RenderViewImpl*>(_director->getRenderView());
-            if (code == EventKeyboard::KeyCode::KEY_ENTER && renderView->isKeyPressed(GLFW_KEY_LEFT_ALT))
+            if (code == EventKeyboard::KeyCode::KEY_ENTER && !keyEvent->isRepeat() &&
+                renderView->isKeyPressed(GLFW_KEY_LEFT_ALT))
             {
                 if (!renderView->isFullscreen())
                 {
