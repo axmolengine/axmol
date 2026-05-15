@@ -441,7 +441,6 @@ typedef struct _GLFWwindowWayland
         char* preeditText;
         char* commitTextOnReset;
     } textInputV1Context;
-    bool imeActive;
 } _GLFWwindowWayland;
 
 // Wayland-specific global data
@@ -719,7 +718,7 @@ const char* _glfwGetClipboardStringWayland(void);
 
 void _glfwUpdatePreeditCursorRectangleWayland(_GLFWwindow* window);
 void _glfwResetPreeditTextWayland(_GLFWwindow* window);
-void _glfwSetIMEStatusWayland(_GLFWwindow* window, int active);
+void _glfwSetIMEStatusWayland(_GLFWwindow* window, int enabled);
 int _glfwGetIMEStatusWayland(_GLFWwindow* window);
 
 EGLenum _glfwGetEGLPlatformWayland(EGLint** attribs);

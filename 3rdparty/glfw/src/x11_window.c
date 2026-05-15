@@ -1358,11 +1358,22 @@ static void processEvent(XEvent *event)
     int keycode = 0;
     Bool filtered = False;
 
+    _GLFWwindow* window = NULL;
+    XFindContext(_glfw.x11.display,
+                     event->xany.window,
+                     _glfw.x11.context,
+                     (XPointer*) &window);
+
     // HACK: Save scancode as some IMs clear the field in XFilterEvent
     if (event->type == KeyPress || event->type == KeyRelease)
+    {    
         keycode = event->xkey.keycode;
 
-    filtered = XFilterEvent(event, None);
+        if (window && window->imeEnabled)
+           filtered = XFilterEvent(event, None);
+    }
+    else
+        filtered = XFilterEvent(event, None);
 
     if (_glfw.x11.randr.available)
     {
@@ -1392,10 +1403,10 @@ static void processEvent(XEvent *event)
     {
         if (_glfw.x11.xi.available)
         {
-            _GLFWwindow* window = _glfw.x11.disabledCursorWindow;
+            _GLFWwindow* dcWindow = _glfw.x11.disabledCursorWindow;
 
-            if (window &&
-                window->rawMouseMotion &&
+            if (dcWindow &&
+                dcWindow->rawMouseMotion &&
                 event->xcookie.extension == _glfw.x11.xi.majorOpcode &&
                 XGetEventData(_glfw.x11.display, &event->xcookie) &&
                 event->xcookie.evtype == XI_RawMotion)
@@ -1404,8 +1415,8 @@ static void processEvent(XEvent *event)
                 if (re->valuators.mask_len)
                 {
                     const double* values = re->raw_values;
-                    double xpos = window->virtualCursorPosX;
-                    double ypos = window->virtualCursorPosY;
+                    double xpos = dcWindow->virtualCursorPosX;
+                    double ypos = dcWindow->virtualCursorPosY;
 
                     if (XIMaskIsSet(re->valuators.mask, 0))
                     {
@@ -1416,7 +1427,7 @@ static void processEvent(XEvent *event)
                     if (XIMaskIsSet(re->valuators.mask, 1))
                         ypos += *values;
 
-                    _glfwInputCursorPos(window, xpos, ypos);
+                    _glfwInputCursorPos(dcWindow, xpos, ypos);
                 }
             }
 
@@ -1432,15 +1443,8 @@ static void processEvent(XEvent *event)
         return;
     }
 
-    _GLFWwindow* window = NULL;
-    if (XFindContext(_glfw.x11.display,
-                     event->xany.window,
-                     _glfw.x11.context,
-                     (XPointer*) &window) != 0)
-    {
-        // This is an event for a window that has already been destroyed
+    if (!window)
         return;
-    }
 
     switch (event->type)
     {
@@ -3412,21 +3416,25 @@ void _glfwResetPreeditTextX11(_GLFWwindow* window)
     XFree (result);
 }
 
-void _glfwSetIMEStatusX11(_GLFWwindow* window, int active)
+void _glfwSetIMEStatusX11(_GLFWwindow* window, int enabled)
 {
     XIC ic = window->x11.ic;
 
     if (!ic)
         return;
 
-    // Can not manage IME in the case of over-the-spot.
-    if (_glfw.x11.imStyle == STYLE_OVERTHESPOT)
-        return;
+    window->imeEnabled = enabled;
 
-    if (active)
+    if (enabled)
+    {
         XSetICFocus(ic);
+    }
     else
+    {
         XUnsetICFocus(ic);
+    }
+
+    XFlush(_glfw.x11.display);
 }
 
 int _glfwGetIMEStatusX11(_GLFWwindow* window)

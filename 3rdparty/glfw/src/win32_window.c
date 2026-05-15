@@ -2890,11 +2890,11 @@ void _glfwResetPreeditTextWin32(_GLFWwindow* window)
     ImmReleaseContext(hWnd, hIMC);
 }
 
-void _glfwSetIMEStatusWin32(_GLFWwindow* window, int active)
+void _glfwSetIMEStatusWin32(_GLFWwindow* window, int enabled)
 {
     HWND hWnd = window->win32.handle;
     HIMC hIMC = ImmGetContext(hWnd);
-    if (active)
+    if (enabled)
     {
         if (!hIMC)
         {

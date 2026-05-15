@@ -208,17 +208,17 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
     _GLFWwindow* window;
 }
 
-- (instancetype)initWithGlfwWindow:(_GLFWwindow *)initWindow;
+- (instancetype)initWithGlfwWindow:(_GLFWwindow *)ownerWindow;
 
 @end
 
 @implementation GLFWWindowDelegate
 
-- (instancetype)initWithGlfwWindow:(_GLFWwindow *)initWindow
+- (instancetype)initWithGlfwWindow:(_GLFWwindow *)ownerWindow
 {
     self = [super init];
     if (self != nil)
-        window = initWindow;
+        window = ownerWindow;
 
     return self;
 }
@@ -338,7 +338,6 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
     _GLFWwindow* window;
     NSTrackingArea* trackingArea;
     NSMutableAttributedString* markedText;
-    int imeActive;
 }
 
 - (instancetype)initWithGlfwWindow:(_GLFWwindow *)initWindow;
@@ -355,7 +354,6 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
         window = initWindow;
         trackingArea = nil;
         markedText = [[NSMutableAttributedString alloc] init];
-        imeActive = false;
 
         [self updateTrackingAreas];
         [self registerForDraggedTypes:@[NSPasteboardTypeURL]];
@@ -575,7 +573,7 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
     if (![self hasMarkedText])
         _glfwInputKey(window, key, [event keyCode], GLFW_PRESS, mods);
     
-    if (imeActive)
+    if (window->imeEnabled)
         [self interpretKeyEvents:@[event]];
 }
 
@@ -677,14 +675,14 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
     return kEmptyRange;
 }
 
-- (void)setImeActive:(int)active
+- (void)setImeEnabled:(int)enabled
 {
-    imeActive = active;
+    window->imeEnabled = enabled;
     NSTextInputContext* inputContext = [self inputContext];
     if (!inputContext)
         return;
     
-    if (active)
+    if (enabled)
     {
         [inputContext activate];
     }
@@ -2030,11 +2028,11 @@ void _glfwResetPreeditTextCocoa(_GLFWwindow* window)
     } // autoreleasepool
 }
 
-void _glfwSetIMEStatusCocoa(_GLFWwindow* window, int active)
+void _glfwSetIMEStatusCocoa(_GLFWwindow* window, int enabled)
 {
     @autoreleasepool {
 
-        [window->ns.view setImeActive:active];
+        [window->ns.view setImeEnabled:enabled];
 
         _glfwInputIMEStatus(window);
     }

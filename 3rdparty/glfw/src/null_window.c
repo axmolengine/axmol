@@ -559,7 +559,7 @@ void _glfwResetPreeditTextNull(_GLFWwindow* window)
 {
 }
 
-void _glfwSetIMEStatusNull(_GLFWwindow* window, int active)
+void _glfwSetIMEStatusNull(_GLFWwindow* window, int enabled)
 {
 }
 

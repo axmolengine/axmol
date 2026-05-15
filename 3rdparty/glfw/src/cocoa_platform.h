@@ -300,7 +300,7 @@ const char* _glfwGetClipboardStringCocoa(void);
 
 void _glfwUpdatePreeditCursorRectangleCocoa(_GLFWwindow* window);
 void _glfwResetPreeditTextCocoa(_GLFWwindow* window);
-void _glfwSetIMEStatusCocoa(_GLFWwindow* window, int active);
+void _glfwSetIMEStatusCocoa(_GLFWwindow* window, int enabled);
 int _glfwGetIMEStatusCocoa(_GLFWwindow* window);
 
 EGLenum _glfwGetEGLPlatformCocoa(EGLint** attribs);

@@ -981,7 +981,7 @@ const char* _glfwGetClipboardStringX11(void);
 
 void _glfwUpdatePreeditCursorRectangleX11(_GLFWwindow* window);
 void _glfwResetPreeditTextX11(_GLFWwindow* window);
-void _glfwSetIMEStatusX11(_GLFWwindow* window, int active);
+void _glfwSetIMEStatusX11(_GLFWwindow* window, int enabled);
 int _glfwGetIMEStatusX11(_GLFWwindow* window);
 
 EGLenum _glfwGetEGLPlatformX11(EGLint** attribs);

@@ -579,7 +579,7 @@ const char* _glfwGetClipboardStringWin32(void);
 
 void _glfwUpdatePreeditCursorRectangleWin32(_GLFWwindow* window);
 void _glfwResetPreeditTextWin32(_GLFWwindow* window);
-void _glfwSetIMEStatusWin32(_GLFWwindow* window, int active);
+void _glfwSetIMEStatusWin32(_GLFWwindow* window, int enabled);
 int _glfwGetIMEStatusWin32(_GLFWwindow* window);
 
 EGLenum _glfwGetEGLPlatformWin32(EGLint** attribs);

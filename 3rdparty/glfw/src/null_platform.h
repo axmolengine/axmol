@@ -272,7 +272,7 @@ int _glfwGetKeyScancodeNull(int key);
 
 void _glfwUpdatePreeditCursorRectangleNull(_GLFWwindow* window);
 void _glfwResetPreeditTextNull(_GLFWwindow* window);
-void _glfwSetIMEStatusNull(_GLFWwindow* window, int active);
+void _glfwSetIMEStatusNull(_GLFWwindow* window, int enabled);
 int _glfwGetIMEStatusNull(_GLFWwindow* window);
 
 EGLenum _glfwGetEGLPlatformNull(EGLint** attribs);

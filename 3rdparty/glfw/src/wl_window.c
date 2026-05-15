@@ -2400,7 +2400,7 @@ static void textInputV3Enter(void* data,
                              struct wl_surface* surface)
 {
     _GLFWwindow* window = (_GLFWwindow*)data;
-    if (window->wl.imeActive)
+    if (window->imeEnabled)
         zwp_text_input_v3_enable(textInputV3);
     else
         zwp_text_input_v3_disable(textInputV3);
@@ -2842,7 +2842,7 @@ GLFWbool _glfwCreateWindowWayland(_GLFWwindow* window,
             return GLFW_FALSE;
     }
 
-    window->wl.imeActive = false;
+    window->imeEnabled = false;
 
     if (_glfw.wl.textInputManagerV3)
     {
@@ -3938,13 +3938,13 @@ void _glfwResetPreeditTextWayland(_GLFWwindow* window)
 {
 }
 
-void _glfwSetIMEStatusWayland(_GLFWwindow* window, int active)
+void _glfwSetIMEStatusWayland(_GLFWwindow* window, int enabled)
 {
     // If text-input protocol v3 is available
-    window->wl.imeActive = active ? true : false;
+    window->imeEnabled = enabled;
     if (window->wl.textInputV3)
     {
-        if (active)
+        if (enabled)
         {
             // Enable IME for this window
             zwp_text_input_v3_enable(window->wl.textInputV3);
@@ -3961,7 +3961,7 @@ void _glfwSetIMEStatusWayland(_GLFWwindow* window, int active)
     // If text-input protocol v1 is available
     else if (window->wl.textInputV1)
     {
-        if (active)
+        if (enabled)
         {
             // Activate IME for this window using seat and surface
             zwp_text_input_v1_activate(window->wl.textInputV1,
