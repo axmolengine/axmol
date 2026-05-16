@@ -375,7 +375,7 @@ else {
                     Write-Host "Are want add tsinghua mirror for speed up package install in china region? (y/N)" -NoNewline
                     $answer = Read-Host
                     if ($answer -like 'y*') {
-                        $mirror_list = "$tsinghua_mirror`n$mirror_list"
+                        $mirror_list = "Server = $tsinghua_mirror`n$mirror_list"
                         $mirror_list_tmp_file = (Join-Path $AX_ROOT 'mirrorlist')
                         [System.IO.File]::WriteAllText($mirror_list_tmp_file, $mirror_list)
                         sudo mv -f $mirror_list_tmp_file /etc/pacman.d/mirrorlist
@@ -384,7 +384,10 @@ else {
                 }
 
                 $DEPENDS = @(
+                    'gcc',
                     'git',
+                    'less', # for git diff
+                    'pkgconf',
                     'cmake',
                     'make',
                     'libx11',
@@ -394,9 +397,16 @@ else {
                     'libxi',
                     'fontconfig',
                     'gtk3',
-                    'webkit2gtk',
-                    'vlc'
+                    'vlc',
+                    'wayland',
+                    'wayland-protocols',
+                    'libglvnd'
                 )
+
+                if ($(pacman -Si webkit2gtk -q 2>$null)) {
+                    $DEPENDS += 'webkit2gtk'
+                }
+
                 sudo pacman -S --needed --noconfirm @DEPENDS
             }
             else {
