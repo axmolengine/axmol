@@ -1,6 +1,7 @@
 #ifndef CORE_UHJFILTER_H
 #define CORE_UHJFILTER_H
 
+#include <stdint.h>
 #include <array>
 
 #include "almalloc.h"
