@@ -367,8 +367,9 @@ void TextFieldEx::enableIME(Node* control)
     }
     _touchListener = EventListenerTouchOneByOne::create();
 
-    if (control == nullptr)
-        control = this;
+    // this->getContentSize() == Vec2::ZERO, so we need to use the size of _renderLabel;
+    if(control == nullptr)
+        control = this->_renderLabel;
 
     _touchListener->onTouchBegan = [control,this](Touch* touch, Event*) {
         bool focus = (_checkVisibility(this) && _editable && this->_enabled &&
