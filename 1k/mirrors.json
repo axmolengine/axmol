@@ -123,7 +123,7 @@
         "macos-arm64": "axslcc-${ver}-osx-arm64.tar.gz"
       },
       "mirrors": {
-        "origin": "https://github.com/simdsoft/axslcc/releases/download/v${ver}/",
+        "origin": "https://github.com/axmolengine/axslcc/releases/download/v${ver}/",
         "atomgit": "https://atomgit.com/simdsoft/axslcc/releases/download/v${ver}/",
         "gitee": "https://gitee.com/simdsoft/axslcc/releases/download/v${ver}/"
       }
