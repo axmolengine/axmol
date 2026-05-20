@@ -35,7 +35,7 @@ env:
 run-name: 'build@c++${{ inputs.cxxstd || 20 }}'
 
 jobs:
-  win32-ogl:
+  win32:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v6
@@ -52,10 +52,10 @@ jobs:
         axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build' -O3
     - uses: actions/upload-artifact@v6
       with:
-        name: windows_ogl_x64
+        name: windows_v2_x64
         path: |
           build/bin/cpp-tests/**/*
-  winuwp-ogl:
+  winuwp:
         runs-on: windows-latest
         steps:
         - uses: actions/checkout@v6
@@ -63,7 +63,7 @@ jobs:
         - name: Build
           shell: pwsh
           run: .\tools\cmdline\axmol -p winuwp -a x64 -O3
-  win32-clang-ogl:
+  win32-clang:
         runs-on: windows-latest
         steps:
         - uses: actions/checkout@v6
@@ -71,14 +71,14 @@ jobs:
         - name: Build
           shell: pwsh
           run: .\tools\cmdline\axmol -p win32 -a 'x64' -cc clang -O3
-  win32-dll-ogl:
+  win32-dll:
         runs-on: windows-latest
         steps:
         - uses: actions/checkout@v6
         - name: Build
           shell: pwsh
           run: .\tools\cmdline\axmol -p win32 -a x64 -dll
-  linux-ogl:
+  linux:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
@@ -113,7 +113,7 @@ jobs:
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p osx -a x64
-  android-ogl:
+  android:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -134,7 +134,7 @@ jobs:
         ./tools/cmdline/axmol -p android -a $env:BUILD_ARCH
     - uses: actions/upload-artifact@v6
       with:
-        name: android_${{ matrix.arch }}
+        name: android_v2_${{ matrix.arch }}
         path: |
           tests/**/outputs/**/*.apk
   ios-sim-x64:
