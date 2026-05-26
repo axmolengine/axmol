@@ -319,7 +319,7 @@ THE SOFTWARE.
  * 0 = DrawNode 2.0 drawLine methode (slower)
  */
 #ifndef AX_DRAWNODE_FAST_LINE2CENTER
-#    define AX_DRAWNODE_FAST_LINE2CENTER 1
+#    define AX_DRAWNODE_FAST_LINE2CENTER 0
 #endif
 
 /// @name namespace ax

@@ -1095,10 +1095,10 @@ void DrawNode::_drawSegment(const Vec2& from,
     }
 }
 
-void DrawNode::_drawSolidCircle(const Vec2& center, float radius, const Color& color, Vec2& vec)
+void DrawNode::_drawSolidCircle(const Vec2& center, float radius, const Color& color, const Color& lineColor, Vec2& vec)
 {
-    Color fillColor = Color(1.0f - color.r, 1.0f - color.g, 1.0f - color.b, 1.0f);
-#ifdef AX_DRAWNODE_FAST_LINE2CENTER
+   // Color fillColor = Color(color.r*4, 1.0f - color.g, 1.0f - color.b, 1.0f);
+#if AX_DRAWNODE_FAST_LINE2CENTER
     auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, 9));
     _trianglesDirty = true;
 
@@ -1110,9 +1110,9 @@ void DrawNode::_drawSolidCircle(const Vec2& center, float radius, const Color& c
     triangles[0] = {a, b, c};
     triangles[1] = {a, c, d};
 
-    V2F_T2F_C4F e = {center - Vec2(1, 1), Vec2::ZERO, fillColor};
-    V2F_T2F_C4F f = {center + vec * radius, Vec2::ZERO, fillColor};
-    V2F_T2F_C4F g = {center + Vec2(1, 1), Vec2::ZERO, fillColor};
+    V2F_T2F_C4F e = {center - Vec2(1, 1), Vec2::ZERO, lineColor};
+    V2F_T2F_C4F f = {center + vec * radius, Vec2::ZERO, lineColor};
+    V2F_T2F_C4F g = {center + Vec2(1, 1), Vec2::ZERO, lineColor};
     triangles[2]  = {g, f, e};
 #else
     auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, 6));
@@ -1128,12 +1128,12 @@ void DrawNode::_drawSolidCircle(const Vec2& center, float radius, const Color& c
     auto line    = expandBufferAndGetPointer(_lines, 2);
     _linesDirty  = true;
 
-    line[0] = {center, Vec2::ZERO, fillColor};
-    line[1] = {center + vec * radius, Vec2::ZERO, fillColor};
+    line[0] = {center, Vec2::ZERO, lineColor};
+    line[1] = {center + vec * radius, Vec2::ZERO, lineColor};
 #endif  // AX_DRAWNODE_FAST_LINE2CENTER
 }
 
-void DrawNode::drawSolidCircle(const Vec2& center, float radius, const Color& color, float angle)
+void DrawNode::drawSolidCircle(const Vec2& center, float radius, const Color& color, const Color& lineColor, float angle)
 {
     Vec2 vec = {-1, 0};
     if (angle != 0.0f)
@@ -1142,7 +1142,12 @@ void DrawNode::drawSolidCircle(const Vec2& center, float radius, const Color& co
         Vec2 _angle = {cosf(aa), sinf(aa)};
         vec         = {_angle.x, _angle.y};
     }
-    _drawSolidCircle(center, radius, color, vec);
+    _drawSolidCircle(center, radius, color, lineColor, vec);
+}
+
+void DrawNode::drawSolidCircle(const Vec2& center, float radius, const Color& color, const Color& lineColor, Vec2& vec)
+{
+    _drawSolidCircle(center, radius, color, lineColor, vec);
 }
 
 void DrawNode::_drawSolidCircle(const Vec2& center,
