@@ -376,7 +376,7 @@ public:
                          bool drawLineToCenter = false);
 
     void drawSolidCircle(const Vec2& center, float radius, const Color& fillColor, const Color& lineColor, float angle);
-    void drawSolidCircle(const Vec2& center, float radius, const Color& fillColor, const Color& lineColor, Vec2& vec);  
+    void drawSolidCircle(const Vec2& center, float radius, const Color& fillColor, const Color& lineColor, const Vec2& vec);  
 
     /** Draws a solid circle given the center, radius and number of segments.
      * @param center The circle center point.
@@ -672,7 +672,7 @@ private:
                           float thickness);
 
     // Internal function _drawSolidCircle
-    void _drawSolidCircle(const Vec2& center, float radius, const Color& color, const Color& lineColor, Vec2& vec2);
+    void _drawSolidCircle(const Vec2& center, float radius, const Color& color, const Color& lineColor, const Vec2& vec2);
 
     // Internal function _drawPie
     void _drawPie(const Vec2& center,

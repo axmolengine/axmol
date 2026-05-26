@@ -1095,9 +1095,8 @@ void DrawNode::_drawSegment(const Vec2& from,
     }
 }
 
-void DrawNode::_drawSolidCircle(const Vec2& center, float radius, const Color& color, const Color& lineColor, Vec2& vec)
+void DrawNode::_drawSolidCircle(const Vec2& center, float radius, const Color& color, const Color& lineColor, const Vec2& vec)
 {
-   // Color fillColor = Color(color.r*4, 1.0f - color.g, 1.0f - color.b, 1.0f);
 #if AX_DRAWNODE_FAST_LINE2CENTER
     auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, 9));
     _trianglesDirty = true;
@@ -1145,7 +1144,7 @@ void DrawNode::drawSolidCircle(const Vec2& center, float radius, const Color& co
     _drawSolidCircle(center, radius, color, lineColor, vec);
 }
 
-void DrawNode::drawSolidCircle(const Vec2& center, float radius, const Color& color, const Color& lineColor, Vec2& vec)
+void DrawNode::drawSolidCircle(const Vec2& center, float radius, const Color& color, const Color& lineColor, const Vec2& vec)
 {
     _drawSolidCircle(center, radius, color, lineColor, vec);
 }
