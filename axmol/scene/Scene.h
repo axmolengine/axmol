@@ -172,6 +172,8 @@ public:
 
     // query interpolation alpha for rendering
     float getPhysicsInterpolationAlpha() const { return _physicsInterpolationAlpha; }
+    void tick(float delta);
+    virtual void fixedUpdate(float delta);
 
 private:
     void initDefaultCamera();
@@ -240,9 +242,6 @@ public:
 
     bool initWithPhysics();
     bool initPhysicsWorld();
-
-    void tick(float delta);
-    virtual void fixedUpdate(float delta);
 
 protected:
 #    if defined(AX_ENABLE_PHYSICS_2D)
