@@ -52717,7 +52717,7 @@ int lua_ax_base_DrawNode_drawSolidCircle(lua_State* tolua_S)
 #endif
     argc = lua_gettop(tolua_S)-1;
     do {
-        if (argc == 7) {
+        if (argc == 5) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawSolidCircle");
 
@@ -52726,27 +52726,19 @@ int lua_ax_base_DrawNode_drawSolidCircle(lua_State* tolua_S)
             ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
-            double arg2;
-            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidCircle");
+            ax::Color arg2;
+            ok &=luaval_to_color(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
-            unsigned int arg3;
-            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawSolidCircle");
+            ax::Color arg3;
+            ok &=luaval_to_color(tolua_S, 5, &arg3, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             double arg4;
             ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
-            double arg5;
-            ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.DrawNode:drawSolidCircle");
-
-            if (!ok) { break; }
-            ax::Color arg6;
-            ok &=luaval_to_color(tolua_S, 8, &arg6, "ax.DrawNode:drawSolidCircle");
-
-            if (!ok) { break; }
-            obj->drawSolidCircle(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+            obj->drawSolidCircle(arg0, arg1, arg2, arg3, arg4);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -52854,6 +52846,70 @@ int lua_ax_base_DrawNode_drawSolidCircle(lua_State* tolua_S)
             ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
+            ax::Color arg2;
+            ok &=luaval_to_color(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            ax::Color arg3;
+            ok &=luaval_to_color(tolua_S, 5, &arg3, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            ax::Vec2 arg4;
+            ok &= luaval_to_vec2(tolua_S, 6, &arg4, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            obj->drawSolidCircle(arg0, arg1, arg2, arg3, arg4);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do {
+        if (argc == 7) {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            double arg1;
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            unsigned int arg3;
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            double arg4;
+            ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            double arg5;
+            ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            ax::Color arg6;
+            ok &=luaval_to_color(tolua_S, 8, &arg6, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            obj->drawSolidCircle(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do {
+        if (argc == 5) {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
+            double arg1;
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawSolidCircle");
+
+            if (!ok) { break; }
             double arg2;
             ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidCircle");
 
@@ -52867,30 +52923,6 @@ int lua_ax_base_DrawNode_drawSolidCircle(lua_State* tolua_S)
 
             if (!ok) { break; }
             obj->drawSolidCircle(arg0, arg1, arg2, arg3, arg4);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do {
-        if (argc == 4) {
-            ax::Vec2 arg0;
-            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawSolidCircle");
-
-            if (!ok) { break; }
-            double arg1;
-            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawSolidCircle");
-
-            if (!ok) { break; }
-            ax::Color arg2;
-            ok &=luaval_to_color(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidCircle");
-
-            if (!ok) { break; }
-            double arg3;
-            ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.DrawNode:drawSolidCircle");
-
-            if (!ok) { break; }
-            obj->drawSolidCircle(arg0, arg1, arg2, arg3);
             lua_settop(tolua_S, 1);
             return 1;
         }
