@@ -797,6 +797,9 @@ public:
      *@param widgetGetFocus he widget which get its focus
      */
     void dispatchFocusEvent(Widget* widgetLoseFocus, Widget* widgetGetFocus);
+    
+	/// @brief Gets the current bright style of the widget.
+    BrightStyle getBrightStyle() const { return _brightStyle; }
 
 protected:
     // call back function called when size changed.
