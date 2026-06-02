@@ -609,10 +609,13 @@ bool RenderViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rec
     glfwSetCursorPosCallback(_mainWindow, GLFWEventHandler::onGLFWMouseMoveCallBack);
 #if defined(__EMSCRIPTEN__)
     // clang-format off
-    _isTouchDevice = !!EM_ASM_INT(return (('ontouchstart' in window) ||
-        (navigator.maxTouchPoints > 0) ||
-        (navigator.msMaxTouchPoints > 0)) ? 1 : 0;
+    _isTouchDevice = !!EM_ASM_INT(
+        return window.matchMedia('(pointer: coarse)').matches && !window.matchMedia('(any-hover: hover)').matches;
     );
+    const auto maxTouchPoints = EM_ASM_INT(
+        return navigator.maxTouchPoints;
+    );
+    AXLOGI("RenderViewImpl: isTouchDevice: {}, maxTouchPoints: {}", _isTouchDevice, maxTouchPoints);
     if (_isTouchDevice)
     {
         emscripten_set_touchstart_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, 1, GLFWEventHandler::onWebTouchCallback);
