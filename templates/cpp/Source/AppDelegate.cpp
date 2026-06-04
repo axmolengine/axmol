@@ -63,8 +63,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     auto renderView   = director->getRenderView();
     if (!renderView)
     {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || \
-    (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID) && (AX_TARGET_PLATFORM != AX_PLATFORM_IOS)
         renderView = RenderViewImpl::createWithRect(
             "Dummy", ax::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
 #else
