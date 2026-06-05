@@ -40,6 +40,7 @@ public:
         if (ret->init())
         {
             ret->showFont(fontFile);
+            ret->autorelease();
         }
         else
         {
