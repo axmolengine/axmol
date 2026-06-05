@@ -97,13 +97,13 @@ void FontTest::showFont(std::string_view fontFile)
     removeChildByTag(kTagColor2, true);
     removeChildByTag(kTagColor3, true);
 
-    auto top    = Label::createWithSystemFont(fontFile, fontFile, 24);
-    auto left   = Label::createWithSystemFont("alignment left", fontFile, fontSize, blockSize, TextHAlignment::LEFT,
-                                              verticalAlignment[vAlignIdx]);
-    auto center = Label::createWithSystemFont("alignment center", fontFile, fontSize, blockSize, TextHAlignment::CENTER,
-                                              verticalAlignment[vAlignIdx]);
-    auto right  = Label::createWithSystemFont("alignment right", fontFile, fontSize, blockSize, TextHAlignment::RIGHT,
-                                              verticalAlignment[vAlignIdx]);
+    auto top    = Label::createWithTTF(fontFile, fontFile, 10);
+    auto left   = Label::createWithTTF("alignment left", fontFile, fontSize, blockSize, TextHAlignment::LEFT,
+                                       verticalAlignment[vAlignIdx]);
+    auto center = Label::createWithTTF("alignment center", fontFile, fontSize, blockSize, TextHAlignment::CENTER,
+                                       verticalAlignment[vAlignIdx]);
+    auto right  = Label::createWithTTF("alignment right", fontFile, fontSize, blockSize, TextHAlignment::RIGHT,
+                                       verticalAlignment[vAlignIdx]);
 
     auto leftColor   = LayerColor::create(Color32(100, 100, 100, 255), blockSize.width, blockSize.height);
     auto centerColor = LayerColor::create(Color32(200, 100, 100, 255), blockSize.width, blockSize.height);
@@ -121,7 +121,7 @@ void FontTest::showFont(std::string_view fontFile)
     right->setAnchorPoint(Vec2(0, 0.5));
     rightColor->setAnchorPoint(Vec2(0, 0.5));
 
-    top->setPosition(s.width / 2, s.height - 20);
+    top->setPosition(s.width / 2, s.height - 45);
     left->setPosition(0, s.height / 2);
     leftColor->setPosition(left->getPosition());
     center->setPosition(blockSize.width, s.height / 2);
@@ -192,7 +192,7 @@ void FontNoReplacementTest::onEnter()
     removeChildByTag(kTagColor2, true);
     removeChildByTag(kTagColor3, true);
 
-    auto top    = Label::createWithTTF("fonts/A Damn Mess.ttf" + suffix, "fonts/A Damn Mess.ttf", 24);
+    auto top    = Label::createWithTTF("fonts/A Damn Mess.ttf" + suffix, "fonts/A Damn Mess.ttf", 10);
     auto left   = Label::createWithTTF("fonts/Abberancy.ttf" + suffix, "fonts/Abberancy.ttf", fontSize, blockSize,
                                        TextHAlignment::LEFT, verticalAlignment[0]);
     auto center = Label::createWithTTF("fonts/Abduction.ttf" + suffix, "fonts/Abduction.ttf", fontSize, blockSize,
@@ -216,7 +216,7 @@ void FontNoReplacementTest::onEnter()
     right->setAnchorPoint(Vec2(0, 0.5));
     rightColor->setAnchorPoint(Vec2(0, 0.5));
 
-    top->setPosition(s.width / 2, s.height - 20);
+    top->setPosition(s.width / 2, s.height - 45);
     left->setPosition(0, s.height / 2);
     leftColor->setPosition(left->getPosition());
     center->setPosition(blockSize.width, s.height / 2);
