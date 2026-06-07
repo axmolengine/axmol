@@ -125,10 +125,14 @@ TEST_SUITE("base/WeakPtr")
         // Create a new object, which will likely reuse the same _weakSlot
         auto obj2 = new Character();
 
+        WeakPtr<Character> weakPtr2(obj2);
+
         // The WeakPtr should still be invalid because the serialNumber has incremented
         CHECK(weakRef.expired());
 
         obj2->release();
+
+        CHECK(weakPtr2.expired());
     }
 
     TEST_CASE("InvalidBeforeDispose")

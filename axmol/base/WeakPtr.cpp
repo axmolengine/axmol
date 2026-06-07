@@ -59,7 +59,7 @@ void WeakObjectRegistry::allocateIndex(ax::Object* obj)
     else
     {
         // Expand capacity if the free list is empty
-        allocatedIndex = ++_numElements;
+        allocatedIndex = _numElements++;
         ensureCapacity(allocatedIndex);
 
         auto& item         = getItem(allocatedIndex);
