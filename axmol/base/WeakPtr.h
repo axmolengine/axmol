@@ -39,8 +39,8 @@ class Object;
 struct WeakObjectItem
 {
     Object* object{nullptr};
-    uint32_t serialNumber{1};    // Initial generation starts at 1
-    int nextFreeIndex{-1};  // Pointer to the next free item in the implicit free list
+    uint32_t serialNumber{1};  // Initial generation starts at 1
+    int nextFreeIndex{-1};     // Pointer to the next free item in the implicit free list
 };
 
 /**
