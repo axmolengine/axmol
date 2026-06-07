@@ -26,7 +26,6 @@ THE SOFTWARE.
 #include <assert.h>
 #include <type_traits>
 #include <vector>
-#include <mutex>
 
 #include "axmol/base/RefPtr.h"
 #include "axmol/platform/PlatformDefine.h"
@@ -80,7 +79,6 @@ private:
     std::vector<WeakObjectItem*> _chunks;  // Master array containing pointers to each Chunk
     int _firstFreeIndex = -1;              // Head of the implicit free list
     int _numElements    = 0;               // High water mark of allocated elements
-    mutable std::mutex _mutex;             // Thread safety for async operations
 };
 
 //-------------------------------------------------------------------------

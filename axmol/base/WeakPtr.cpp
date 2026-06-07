@@ -45,9 +45,7 @@ void WeakObjectRegistry::allocateIndex(ax::Object* obj)
     if (!obj || obj->_internalIndex != -1)
         return;  // Ignore null or already registered objects
 
-    std::lock_guard<std::mutex> lock(_mutex);
-
-    int32_t allocatedIndex = -1;
+    int allocatedIndex = -1;
 
     if (_firstFreeIndex != -1)
     {
@@ -78,8 +76,6 @@ void WeakObjectRegistry::freeIndex(ax::Object* obj)
     if (!obj || obj->_internalIndex == -1)
         return;
 
-    std::lock_guard<std::mutex> lock(_mutex);
-
     auto& item = getItem(obj->_internalIndex);
 
     // Clear the pointer and increment the serial number to invalidate all existing WeakPtrs
@@ -94,7 +90,7 @@ void WeakObjectRegistry::freeIndex(ax::Object* obj)
     obj->_internalIndex = -1;
 }
 
-ax::Object* WeakObjectRegistry::getObject(int32_t index, int32_t expectedSerialNumber) const
+ax::Object* WeakObjectRegistry::getObject(int index, int expectedSerialNumber) const
 {
     if (index < 0 || index >= _numElements)
         return nullptr;
@@ -107,14 +103,14 @@ ax::Object* WeakObjectRegistry::getObject(int32_t index, int32_t expectedSerialN
     return nullptr;
 }
 
-int32_t WeakObjectRegistry::getSerialNumber(int32_t index) const
+int WeakObjectRegistry::getSerialNumber(int index) const
 {
     if (index < 0 || index >= _numElements)
         return 0;
     return getItem(index).serialNumber;
 }
 
-void WeakObjectRegistry::ensureCapacity(int32_t index)
+void WeakObjectRegistry::ensureCapacity(int index)
 {
     while (index >= _chunks.size() * CHUNK_SIZE)
     {
