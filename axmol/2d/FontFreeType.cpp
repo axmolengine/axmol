@@ -267,13 +267,18 @@ bool FontFreeType::init()
 
         if (!sharableData)
         {
-            sharableData               = std::make_shared<Data>(FileUtils::getInstance()->getDataFromFile(_fontName));
+            auto data = FileUtils::getInstance()->getDataFromFile(_fontName);
+            if (data.isNull())
+            {
+                AXLOGE("FontFreeType: load {} failed", _fontName);
+                return false;
+            }
+            sharableData               = std::make_shared<Data>(std::move(data));
             s_cacheFontData[_fontName] = sharableData;
         }
 
-        const auto& data = *sharableData;
-        if (data.isNull() ||
-            FT_New_Memory_Face(getFTLibrary(), data.getBytes(), static_cast<FT_Long>(data.getSize()), 0, &face))
+        if (FT_New_Memory_Face(getFTLibrary(), sharableData->getBytes(), static_cast<FT_Long>(sharableData->getSize()),
+                               0, &face))
         {
             if (sharableData.use_count() == 1)
                 s_cacheFontData.erase(_fontName);
