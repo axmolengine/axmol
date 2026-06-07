@@ -127,7 +127,7 @@ public:
         return static_cast<_Ty*>(WeakObjectRegistry::getInstance().getObject(_index, _serialNumber));
     }
 
-    // Check if the pointer is still valid
+    // Returns true if the pointer has expired (object destroyed or no longer valid)
     bool expired() const { return !get(); }
 
     // Overloaded operators for convenience
