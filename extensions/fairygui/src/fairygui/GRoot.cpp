@@ -272,7 +272,7 @@ void GRoot::showPopup(GObject* popup, GObject* target, PopupDirection dir)
     if (!_popupStack.empty())
         hidePopup(popup);
 
-    _popupStack.push_back(WeakPtr(popup));
+    _popupStack.emplace_back(popup);
 
     if (target != nullptr)
     {
@@ -329,7 +329,7 @@ void GRoot::hidePopup(GObject* popup)
             int k = (int)(it - _popupStack.cbegin());
             for (int i = (int)_popupStack.size() - 1; i >= k; i--)
             {
-                closePopup(_popupStack.back().ptr());
+                closePopup(_popupStack.back().get());
                 _popupStack.pop_back();
             }
         }
@@ -337,7 +337,7 @@ void GRoot::hidePopup(GObject* popup)
     else
     {
         for (const auto& it : _popupStack)
-            closePopup(it.ptr());
+            closePopup(it.get());
         _popupStack.clear();
     }
 }
@@ -368,7 +368,7 @@ void GRoot::checkPopups()
                 int k = (int)(it - _popupStack.cbegin());
                 for (int i = (int)_popupStack.size() - 1; i > k; i--)
                 {
-                    closePopup(_popupStack.back().ptr());
+                    closePopup(_popupStack.back().get());
                     _popupStack.pop_back();
                 }
                 handled = true;
@@ -381,10 +381,10 @@ void GRoot::checkPopups()
         {
             for (int i = (int)_popupStack.size() - 1; i >= 0; i--)
             {
-                GObject* popup = _popupStack[i].ptr();
+                GObject* popup = _popupStack[i].get();
                 if (popup)
                 {
-                    _justClosedPopups.push_back(WeakPtr(popup));
+                    _justClosedPopups.emplace_back(popup);
                     closePopup(popup);
                 }
             }

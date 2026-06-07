@@ -3,12 +3,12 @@
 
 #include "axmol/cocos2d.h"
 #include "FairyGUIMacros.h"
-#include "utils/WeakPtr.h"
+#include "axmol/base/WeakPtr.h"
 
 NS_FGUI_BEGIN
 
-class GObject;
 class EventContext;
+class GObject;
 
 enum class RelationType
 {
@@ -66,7 +66,7 @@ public:
     RelationItem(GObject* owner);
     ~RelationItem();
 
-    GObject* getTarget() { return _target.ptr(); }
+    GObject* getTarget() { return _target.get(); }
     void setTarget(GObject* value);
 
     void add(RelationType relationType, bool usePercent);
@@ -85,7 +85,7 @@ private:
     void onTargetSizeChanged(EventContext* context);
 
     GObject* _owner;
-    WeakPtr _target;
+    ax::WeakPtr<GObject> _target;
     std::vector<RelationDef> _defs;
     ax::Vec4 _targetData;
 };

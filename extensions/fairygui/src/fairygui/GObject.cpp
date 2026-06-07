@@ -8,7 +8,6 @@
 #include "gears/GearDisplay.h"
 #include "gears/GearDisplay2.h"
 #include "utils/ByteBuffer.h"
-#include "utils/WeakPtr.h"
 
 NS_FGUI_BEGIN
 using namespace ax;
@@ -46,8 +45,7 @@ GObject::GObject() : _scale{1, 1},
                      _packageItem(nullptr),
                      _data(nullptr),
                      _touchDisabled(false),
-                     _alignToBL(false),
-                     _weakPtrRef(0)
+                     _alignToBL(false)
 {
     static uint64_t _gInstanceCounter = 1;
     _uid = _gInstanceCounter++;
@@ -73,9 +71,6 @@ GObject::~GObject()
         AX_SAFE_DELETE(_gears[i]);
     AX_SAFE_DELETE(_relations);
     AX_SAFE_DELETE(_dragBounds);
-
-    if (_weakPtrRef > 0)
-        WeakPtr::markDisposed(this);
 }
 
 bool GObject::init()

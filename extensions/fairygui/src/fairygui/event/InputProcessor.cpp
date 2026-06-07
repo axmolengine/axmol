@@ -4,7 +4,7 @@
 #include "GRoot.h"
 #include "GRichTextField.h"
 #include "GTextInput.h"
-#include "utils/WeakPtr.h"
+#include "axmol/base/WeakPtr.h"
 
 NS_FGUI_BEGIN
 using namespace ax;
@@ -31,9 +31,9 @@ public:
     bool began;
     bool clickCancelled;
     clock_t lastClickTime;
-    WeakPtr lastRollOver;
-    std::vector<WeakPtr> downTargets;
-    std::vector<WeakPtr> touchMonitors;
+    ax::WeakPtr<GObject> lastRollOver;
+    std::vector<ax::WeakPtr<GObject>> downTargets;
+    std::vector<ax::WeakPtr<GObject>> touchMonitors;
 };
 
 InputProcessor::InputProcessor(GComponent* owner) :
@@ -144,12 +144,12 @@ void InputProcessor::handleRollOver(TouchInfo* touch, GObject* target)
     if (touch->lastRollOver == target)
         return;
 
-    std::vector<WeakPtr> rollOutChain;
-    std::vector<WeakPtr> rollOverChain;
-    GObject* element = touch->lastRollOver.ptr();
+    std::vector<ax::WeakPtr<GObject>> rollOutChain;
+    std::vector<ax::WeakPtr<GObject>> rollOverChain;
+    GObject* element = touch->lastRollOver.get();
     while (element != nullptr)
     {
-        rollOutChain.push_back(WeakPtr(element));
+        rollOutChain.emplace_back(element);
         element = element->findParent();
     }
 
@@ -162,7 +162,7 @@ void InputProcessor::handleRollOver(TouchInfo* touch, GObject* target)
             rollOutChain.resize(iter - rollOutChain.cbegin());
             break;
         }
-        rollOverChain.push_back(WeakPtr(element));
+        rollOverChain.emplace_back(element);
 
         element = element->findParent();
     }
@@ -171,14 +171,14 @@ void InputProcessor::handleRollOver(TouchInfo* touch, GObject* target)
 
     for (auto &wptr : rollOutChain)
     {
-        element = wptr.ptr();
+        element = wptr.get();
         if (element && element->onStage())
             element->dispatchEvent(UIEventType::RollOut);
     }
 
     for (auto &wptr : rollOverChain)
     {
-        element = wptr.ptr();
+        element = wptr.get();
         if (element && element->onStage())
             element->dispatchEvent(UIEventType::RollOver);
     }
@@ -192,7 +192,7 @@ void InputProcessor::addTouchMonitor(int touchId, GObject * target)
 
     auto it = std::find(ti->touchMonitors.cbegin(), ti->touchMonitors.cend(), target);
     if (it == ti->touchMonitors.cend())
-        ti->touchMonitors.push_back(WeakPtr(target));
+        ti->touchMonitors.emplace_back(target);
 }
 
 void InputProcessor::removeTouchMonitor(GObject * target)
@@ -228,15 +228,15 @@ void InputProcessor::simulateClick(GObject* target, int touchId)
     if (_captureCallback)
         _captureCallback(UIEventType::TouchBegin);
 
-    WeakPtr wptr(target);
+    ax::WeakPtr<GObject> wptr(target);
     target->bubbleEvent(UIEventType::TouchBegin);
 
-    target = wptr.ptr();
+    target = wptr.get();
     if (target)
     {
         target->bubbleEvent(UIEventType::TouchEnd);
 
-        target = wptr.ptr();
+        target = wptr.get();
         if (target)
             target->bubbleEvent(UIEventType::Click);
     }
@@ -254,7 +254,7 @@ void InputProcessor::setBegin(TouchInfo* touch, GObject* target)
     GObject* obj = target;
     while (obj != nullptr)
     {
-        touch->downTargets.push_back(WeakPtr(obj));
+        touch->downTargets.emplace_back(obj);
         obj = obj->findParent();
     }
 }
@@ -285,7 +285,7 @@ GObject* InputProcessor::clickTest(TouchInfo* touch, GObject* target)
         || std::abs(touch->pos.x - touch->downPos.x) > 50 || std::abs(touch->pos.y - touch->downPos.y) > 50)
         return nullptr;
 
-    GObject* obj = touch->downTargets[0].ptr();
+    GObject* obj = touch->downTargets[0].get();
     if (obj && obj->onStage())
         return obj;
 
@@ -293,10 +293,11 @@ GObject* InputProcessor::clickTest(TouchInfo* touch, GObject* target)
     while (obj != nullptr)
     {
         auto it = std::find(touch->downTargets.cbegin(), touch->downTargets.cend(), obj);
-        if (it != touch->downTargets.cend() && it->onStage())
+        if (it != touch->downTargets.cend())
         {
-            obj = it->ptr();
-            break;
+            obj = it->get();
+            if (obj && obj->onStage())
+                break;
         }
 
         obj = obj->findParent();
@@ -355,9 +356,9 @@ bool InputProcessor::onTouchBegan(Touch *touch, Event* /*unusedEvent*/)
     if (_captureCallback)
         _captureCallback(UIEventType::TouchBegin);
 
-    WeakPtr wptr(target);
+    ax::WeakPtr<GObject> wptr(target);
     target->bubbleEvent(UIEventType::TouchBegin);
-    target = wptr.ptr();
+    target = wptr.get();
 
     handleRollOver(ti, target);
 
@@ -395,7 +396,7 @@ void InputProcessor::onTouchMoved(Touch *touch, Event* /*unusedEvent*/)
         {
             for (size_t i = 0; i < cnt; i++)
             {
-                GObject* mm = ti->touchMonitors[i].ptr();
+                GObject* mm = ti->touchMonitors[i].get();
                 if (!mm)
                     continue;
 
@@ -431,13 +432,13 @@ void InputProcessor::onTouchEnded(Touch *touch, Event* /*unusedEvent*/)
     if (_captureCallback)
         _captureCallback(UIEventType::TouchEnd);
 
-    WeakPtr wptr(target);
+    ax::WeakPtr<GObject> wptr(target);
     size_t cnt = ti->touchMonitors.size();
     if (cnt > 0)
     {
         for (size_t i = 0; i < cnt; i++)
         {
-            GObject* mm = ti->touchMonitors[i].ptr();
+            GObject* mm = ti->touchMonitors[i].get();
             if (!mm)
                 continue;
 
@@ -446,12 +447,12 @@ void InputProcessor::onTouchEnded(Touch *touch, Event* /*unusedEvent*/)
                 mm->dispatchEvent(UIEventType::TouchEnd);
         }
         ti->touchMonitors.clear();
-        target = wptr.ptr();
+        target = wptr.get();
     }
     if (target)
     {
         target->bubbleEvent(UIEventType::TouchEnd);
-        target = wptr.ptr();
+        target = wptr.get();
     }
 
     target = clickTest(ti, target);
@@ -467,12 +468,12 @@ void InputProcessor::onTouchEnded(Touch *touch, Event* /*unusedEvent*/)
             if (linkHref)
             {
                 tf->bubbleEvent(UIEventType::ClickLink, nullptr, Value(linkHref));
-                target = wptr.ptr();
+                target = wptr.get();
             }
         }
 
         target->bubbleEvent(UIEventType::Click);
-        target = wptr.ptr();
+        target = wptr.get();
     }
 
 #ifndef AX_PLATFORM_PC
@@ -505,7 +506,7 @@ void InputProcessor::onTouchCancelled(Touch* touch, Event* /*unusedEvent*/)
     {
         for (size_t i = 0; i < cnt; i++)
         {
-            GObject* mm = ti->touchMonitors[i].ptr();
+            GObject* mm = ti->touchMonitors[i].get();
             if (!mm)
                 continue;
 
@@ -547,7 +548,7 @@ bool InputProcessor::onMouseDown(ax::EventMouse * event)
     if (_captureCallback)
         _captureCallback(UIEventType::TouchBegin);
 
-    WeakPtr wptr(target);
+    ax::WeakPtr<GObject> wptr(target);
     target->bubbleEvent(UIEventType::TouchBegin);
 
     _activeProcessor = nullptr;
@@ -578,13 +579,13 @@ bool InputProcessor::onMouseUp(ax::EventMouse * event)
     if (_captureCallback)
         _captureCallback(UIEventType::TouchEnd);
 
-    WeakPtr wptr(target);
+    ax::WeakPtr<GObject> wptr(target);
     size_t cnt = ti->touchMonitors.size();
     if (cnt > 0)
     {
         for (size_t i = 0; i < cnt; i++)
         {
-            GObject* mm = ti->touchMonitors[i].ptr();
+            GObject* mm = ti->touchMonitors[i].get();
             if (!mm)
                 continue;
 
@@ -593,12 +594,12 @@ bool InputProcessor::onMouseUp(ax::EventMouse * event)
                 mm->dispatchEvent(UIEventType::TouchEnd);
         }
         ti->touchMonitors.clear();
-        target = wptr.ptr();
+        target = wptr.get();
     }
     if (target)
     {
         target->bubbleEvent(UIEventType::TouchEnd);
-        target = wptr.ptr();
+        target = wptr.get();
     }
 
     target = clickTest(ti, target);
@@ -654,7 +655,7 @@ bool InputProcessor::onMouseMove(ax::EventMouse * event)
         {
             for (size_t i = 0; i < cnt; i++)
             {
-                GObject* mm = ti->touchMonitors[i].ptr();
+                GObject* mm = ti->touchMonitors[i].get();
                 if (!mm)
                     continue;
 

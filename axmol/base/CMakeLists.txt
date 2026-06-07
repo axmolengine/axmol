@@ -51,6 +51,7 @@ set(_AX_BASE_HEADER
   base/Utils.h
   base/EventController.h
   base/RefPtr.h
+  base/WeakPtr.h
   base/Director.h
   base/EventListenerFocus.h
   base/UserDefault.h
@@ -109,6 +110,7 @@ set(_AX_BASE_SRC
   base/Profiling.cpp
   base/Properties.cpp
   base/Object.cpp
+  base/WeakPtr.cpp
   base/Scheduler.cpp
   base/ScriptSupport.cpp
   base/Touch.cpp

@@ -185,6 +185,13 @@ public:
 public:
     static void printLeaks();
 #endif
+
+private:
+    // A memory slot identifier specifically for WeakObjectRegistry. -1 indicates that it is not allocated.
+    int _internalIndex = -1;
+
+    friend class WeakObjectRegistry;
+    template<typename T> friend class WeakPtr;
 };
 
 class Node;

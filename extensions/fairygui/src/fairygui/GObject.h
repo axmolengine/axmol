@@ -246,15 +246,12 @@ private:
     GTreeNode* _treeNode;
 
     uint64_t _uid;
-    size_t _weakPtrRef;
-
     static GObject* _draggingObject;
 
     friend class GComponent;
     friend class GGroup;
     friend class RelationItem;
     friend class UIObjectFactory;
-    friend class WeakPtr;
     friend class UIPackage;
     friend class GTree;
 };

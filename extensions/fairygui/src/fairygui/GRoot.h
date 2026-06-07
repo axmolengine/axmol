@@ -10,8 +10,6 @@
 
 NS_FGUI_BEGIN
 
-class WeakPtr;
-
 class GRoot : public GComponent
 {
 public:
@@ -86,8 +84,8 @@ private:
 
     GGraph* _modalLayer;
     GObject* _modalWaitPane;
-    std::vector<WeakPtr> _popupStack;
-    std::vector<WeakPtr> _justClosedPopups;
+    std::vector<ax::WeakPtr<GObject>> _popupStack;
+    std::vector<ax::WeakPtr<GObject>> _justClosedPopups;
     GObject* _tooltipWin;
     GObject* _defaultTooltipWin;
 

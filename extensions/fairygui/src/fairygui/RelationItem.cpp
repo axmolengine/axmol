@@ -2,7 +2,7 @@
 #include "GComponent.h"
 #include "GGroup.h"
 #include "event/UIEventType.h"
-#include "utils/WeakPtr.h"
+#include "axmol/base/WeakPtr.h"
 
 NS_FGUI_BEGIN
 using namespace ax;
@@ -14,12 +14,12 @@ RelationItem::RelationItem(GObject* owner) : _target(nullptr)
 
 RelationItem::~RelationItem()
 {
-    releaseRefTarget(_target.ptr());
+    releaseRefTarget(_target.get());
 }
 
 void RelationItem::setTarget(GObject* value)
 {
-    GObject* old = _target.ptr();
+    GObject* old = _target.get();
     if (old != value)
     {
         if (old)
@@ -88,7 +88,7 @@ void RelationItem::remove(RelationType relationType)
 
 void RelationItem::copyFrom(const RelationItem& source)
 {
-    setTarget(source._target.ptr());
+    setTarget(source._target.get());
 
     _defs.clear();
     for (auto& it : source._defs)
@@ -102,7 +102,7 @@ bool RelationItem::isEmpty() const
 
 void RelationItem::applyOnSelfSizeChanged(float dWidth, float dHeight, bool applyPivot)
 {
-    if (_target == nullptr || _defs.size() == 0)
+    if (!_target || _defs.size() == 0)
         return;
 
     float ox = _owner->_position.x;

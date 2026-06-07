@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "axmol/base/AutoreleasePool.h"
 #include "axmol/base/Macros.h"
 #include "axmol/base/ScriptSupport.h"
+#include "axmol/base/WeakPtr.h"
 
 #if AX_OBJECT_LEAK_DETECTION
 #    include <algorithm>  // std::find
@@ -63,6 +64,8 @@ Object::Object()
 
 Object::~Object()
 {
+    AXASSERT(_internalIndex == -1, "Weak-tracked Object must be destroyed through release().");
+
 #if AX_ENABLE_SCRIPT_BINDING
     ScriptEngineProtocol* pEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (pEngine != nullptr && _luaID)
@@ -93,6 +96,9 @@ void Object::release()
 
     if (_referenceCount == 0)
     {
+        if (_internalIndex != -1)
+            WeakObjectRegistry::getInstance().freeIndex(this);
+
         dispose();
 #if defined(_AX_DEBUG) && (_AX_DEBUG > 0)
         auto poolManager = PoolManager::getInstance();
