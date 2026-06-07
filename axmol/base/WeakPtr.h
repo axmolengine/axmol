@@ -42,6 +42,23 @@ struct WeakObjectItem
     int nextFreeIndex{-1};  // Pointer to the next free item in the implicit free list
 };
 
+/**
+ * WeakObjectRegistry
+ *
+ * A global registry that manages weak references to ax::Object instances.
+ * It assigns and tracks indices and serial numbers to ensure that WeakPtr
+ * becomes expired when the target Object is destroyed.
+ *
+ * Important:
+ * - Not designed for multithreading. No synchronization is provided.
+ * - ax::Object reference counting itself is non-atomic, so the entire
+ *   lifecycle management is single-threaded by design.
+ * - Callers must ensure external synchronization if used in a concurrent context.
+ *
+ * Typical usage:
+ * - Internal engine mechanism to support WeakPtr.
+ * - Provides allocate/free index and lookup by ID/serial number.
+ */
 class AX_DLL WeakObjectRegistry
 {
 public:
@@ -81,9 +98,23 @@ private:
     int _numElements    = 0;               // High water mark of allocated elements
 };
 
-//-------------------------------------------------------------------------
-// CLASS Template: WeakPtr
-//-------------------------------------------------------------------------
+/**
+ * WeakPtr
+ *
+ * A non-owning smart pointer to an ax::Object.
+ * Unlike RefPtr, it does not increase the reference count.
+ * It becomes expired when the target Object is destroyed or recycled.
+ *
+ * Key points:
+ * - Use expired() to check if the pointer has expired.
+ * - Use lock() to obtain a RefPtr if the object is still alive.
+ * - Supports comparison with raw pointers and nullptr for convenience.
+ * - Does not guarantee thread safety (same as ax::Object reference counting).
+ *
+ * Typical usage:
+ * - Store a WeakPtr when you need to reference an Object without extending its lifetime.
+ * - Always check expired() before dereferencing or locking.
+ */
 template <typename _Ty>
 class WeakPtr
 {
