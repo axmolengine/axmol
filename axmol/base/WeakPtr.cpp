@@ -82,6 +82,9 @@ void WeakObjectRegistry::freeIndex(ax::Object* obj)
     item.object = nullptr;
     ++item.serialNumber;
 
+    if (item.serialNumber == 0)
+        item.serialNumber = 1;
+
     // Push the recycled slot to the head of the free list
     item.nextFreeIndex = _firstFreeIndex;
     _firstFreeIndex    = obj->_internalIndex;
@@ -103,7 +106,7 @@ ax::Object* WeakObjectRegistry::getObject(int index, int expectedSerialNumber) c
     return nullptr;
 }
 
-int WeakObjectRegistry::getSerialNumber(int index) const
+uint32_t WeakObjectRegistry::getSerialNumber(int index) const
 {
     if (index < 0 || index >= _numElements)
         return 0;

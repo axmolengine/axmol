@@ -24,6 +24,7 @@ THE SOFTWARE.
 #pragma once
 
 #include <assert.h>
+#include <stdint.h>
 #include <type_traits>
 #include <vector>
 
@@ -38,7 +39,7 @@ class Object;
 struct WeakObjectItem
 {
     Object* object{nullptr};
-    int serialNumber{1};    // Initial generation starts at 1
+    uint32_t serialNumber{1};    // Initial generation starts at 1
     int nextFreeIndex{-1};  // Pointer to the next free item in the implicit free list
 };
 
@@ -62,7 +63,7 @@ struct WeakObjectItem
 class AX_DLL WeakObjectRegistry
 {
 public:
-    static constexpr int CHUNK_SIZE = 65536;  // 64K objects per chunk
+    static constexpr int CHUNK_SIZE = 32768;  // 32K objects per chunk
 
     static WeakObjectRegistry& getInstance();
 
@@ -76,7 +77,7 @@ public:
     ax::Object* getObject(int index, int expectedSerialNumber) const;
 
     // Get the current serial number for a specific index
-    int getSerialNumber(int index) const;
+    uint32_t getSerialNumber(int index) const;
 
 private:
     WeakObjectRegistry() = default;
@@ -216,7 +217,7 @@ private:
     }
 
     int _index;
-    int _serialNumber;
+    uint32_t _serialNumber;
 };
 
 }  // namespace ax
