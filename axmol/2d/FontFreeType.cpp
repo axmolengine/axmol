@@ -65,13 +65,7 @@ constexpr std::string_view _glyphASCII =
 constexpr std::string_view _glyphNEHE =
     "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ "sv;
 
-typedef struct _DataRef
-{
-    Data data;
-    unsigned int referenceCount = 0;
-} DataRef;
-
-static tlx::string_map<DataRef> s_cacheFontData;
+static tlx::string_map<std::weak_ptr<Data>> s_cacheFontData;
 
 // ------ freetype2 stream parsing support ---
 static unsigned long ft_stream_read_callback(FT_Stream stream, unsigned long offset, uint8_t* buf, unsigned long size)
@@ -182,6 +176,7 @@ FontFreeType::FontFreeType(std::string_view fontName, int faceSize, bool distanc
 , _ftSize(nullptr)
 , _ftStroker(nullptr)
 , _ftStream(nullptr)
+, _fontDataRef(nullptr)
 , _fontName(fontName)
 , _faceSize(faceSize)
 , _distanceFieldEnabled(distanceFieldEnabled)
@@ -220,14 +215,6 @@ FontFreeType::~FontFreeType()
     }
 
     AX_SAFE_DELETE(_ftStream);
-
-    auto iter = s_cacheFontData.find(_fontName);
-    if (iter != s_cacheFontData.end())
-    {
-        iter->second.referenceCount -= 1;
-        if (iter->second.referenceCount == 0)
-            s_cacheFontData.erase(iter);
-    }
 }
 
 bool FontFreeType::init()
@@ -271,27 +258,40 @@ bool FontFreeType::init()
     }
     else
     {
-        DataRef* sharableData;
+        std::shared_ptr<Data> sharableData;
         auto it = s_cacheFontData.find(_fontName);
         if (it != s_cacheFontData.end())
         {
-            sharableData = &it->second;
-        }
-        else
-        {
-            sharableData       = &s_cacheFontData[_fontName];
-            sharableData->data = FileUtils::getInstance()->getDataFromFile(_fontName);
+            sharableData = it->second.lock();
         }
 
-        ++sharableData->referenceCount;
-        auto& data = sharableData->data;
+        if (!sharableData)
+        {
+            sharableData               = std::make_shared<Data>(FileUtils::getInstance()->getDataFromFile(_fontName));
+            s_cacheFontData[_fontName] = sharableData;
+        }
+
+        const auto& data = *sharableData;
         if (data.isNull() ||
             FT_New_Memory_Face(getFTLibrary(), data.getBytes(), static_cast<FT_Long>(data.getSize()), 0, &face))
+        {
+            if (sharableData.use_count() == 1)
+                s_cacheFontData.erase(_fontName);
             return false;
+        }
+
+        _fontDataRef = std::move(sharableData);
     }
 
     _ownFontFace = true;
-    return initWithFace(face);
+    if (initWithFace(face))
+        return true;
+
+    if (_FTInitialized)
+        FT_Done_Face(face);
+    _ownFontFace = false;
+    _fontDataRef.reset();
+    return false;
 }
 
 bool FontFreeType::initWithFace(FT_Face face)
@@ -720,7 +720,7 @@ void FontFreeType::releaseFont(std::string_view fontName)
     auto item = s_cacheFontData.begin();
     while (s_cacheFontData.end() != item)
     {
-        if (item->first.find(fontName) != std::string::npos)
+        if (item->second.expired() || item->first.find(fontName) != std::string::npos)
             item = s_cacheFontData.erase(item);
         else
             item++;

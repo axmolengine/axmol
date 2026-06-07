@@ -28,10 +28,13 @@
 
 #include "axmol/2d/Font.h"
 #include "axmol/2d/IFontEngine.h"
+#include <memory>
 #include <string>
 
 namespace ax
 {
+
+class Data;
 
 struct GlyphSize
 {
@@ -205,6 +208,7 @@ private:
     FT_Size _ftSize;
     FT_Stroker _ftStroker;
     FT_Stream _ftStream;
+    std::shared_ptr<Data> _fontDataRef;
 
     std::string _fontName;  // font family or path
     int _faceSize;
