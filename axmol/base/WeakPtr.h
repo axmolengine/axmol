@@ -121,7 +121,7 @@ class WeakPtr
 public:
     WeakPtr() noexcept : _index(-1), _serialNumber(0) {}
 
-    WeakPtr(_Ty* obj) { assign(obj); }
+    explicit WeakPtr(_Ty* p) { assign(p); }
 
     WeakPtr(const WeakPtr& other) noexcept            = default;
     WeakPtr& operator=(const WeakPtr& other) noexcept = default;
@@ -129,22 +129,25 @@ public:
     WeakPtr(WeakPtr&& other) noexcept : _index(other._index), _serialNumber(other._serialNumber) { other.reset(); }
     WeakPtr& operator=(WeakPtr&& other) noexcept
     {
-        _index        = other._index;
-        _serialNumber = other._serialNumber;
-        other.reset();
+        if (this != &other)
+        {
+            _index        = other._index;
+            _serialNumber = other._serialNumber;
+            other.reset();
+        }
         return *this;
     }
 
-    WeakPtr& operator=(_Ty* obj)
+    WeakPtr& operator=(_Ty* p)
     {
-        assign(obj);
+        assign(p);
         return *this;
     }
 
     ax::RefPtr<_Ty> lock() const
     {
-        _Ty* obj = get();
-        return ax::RefPtr<_Ty>(obj);
+        _Ty* p = get();
+        return ax::RefPtr<_Ty>(p);
     }
 
     // Attempt to safely retrieve the underlying object
@@ -162,16 +165,16 @@ public:
     // Overloaded operators for convenience
     _Ty* operator->() const
     {
-        _Ty* obj = get();
-        assert(obj != nullptr && "Dereferencing an invalid WeakPtr!");
-        return obj;
+        _Ty* p = get();
+        assert(p != nullptr && "Dereferencing an invalid WeakPtr!");
+        return p;
     }
 
     _Ty& operator*() const
     {
-        _Ty* obj = get();
-        assert(obj != nullptr && "Dereferencing an invalid WeakPtr!");
-        return *obj;
+        _Ty* p = get();
+        assert(p != nullptr && "Dereferencing an invalid WeakPtr!");
+        return *p;
     }
 
     explicit operator bool() const { return !expired(); }
@@ -193,17 +196,17 @@ public:
     }
 
 private:
-    void assign(_Ty* obj)
+    void assign(_Ty* p)
     {
         static_assert(std::is_base_of<ax::Object, _Ty>::value, "_Ty must inherit from ax::Object");
 
-        if (obj)
+        if (p)
         {
             // Lazy-load registration: register the object in the global table ONLY
             // when a WeakPtr is tracking it for the first time.
-            if (static_cast<Object*>(obj)->_internalIndex == -1)
-                WeakObjectRegistry::getInstance().allocateIndex(obj);
-            _index        = static_cast<Object*>(obj)->_internalIndex;
+            if (static_cast<Object*>(p)->_internalIndex == -1)
+                WeakObjectRegistry::getInstance().allocateIndex(p);
+            _index        = static_cast<Object*>(p)->_internalIndex;
             _serialNumber = WeakObjectRegistry::getInstance().getSerialNumber(_index);
         }
         else

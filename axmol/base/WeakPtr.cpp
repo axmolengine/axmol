@@ -59,7 +59,7 @@ void WeakObjectRegistry::allocateIndex(ax::Object* obj)
     else
     {
         // Expand capacity if the free list is empty
-        allocatedIndex = _numElements++;
+        allocatedIndex = ++_numElements;
         ensureCapacity(allocatedIndex);
 
         auto& item         = getItem(allocatedIndex);
@@ -80,7 +80,7 @@ void WeakObjectRegistry::freeIndex(ax::Object* obj)
 
     // Clear the pointer and increment the serial number to invalidate all existing WeakPtrs
     item.object = nullptr;
-    item.serialNumber++;
+    ++item.serialNumber;
 
     // Push the recycled slot to the head of the free list
     item.nextFreeIndex = _firstFreeIndex;

@@ -65,6 +65,8 @@ Object::Object()
 Object::~Object()
 {
     AXASSERT(_internalIndex == -1, "Weak-tracked Object must be destroyed through release().");
+    if (_internalIndex != -1)
+        WeakObjectRegistry::getInstance().freeIndex(this);
 
 #if AX_ENABLE_SCRIPT_BINDING
     ScriptEngineProtocol* pEngine = ScriptEngineManager::getInstance()->getScriptEngine();

@@ -191,7 +191,8 @@ private:
     int _internalIndex = -1;
 
     friend class WeakObjectRegistry;
-    template<typename T> friend class WeakPtr;
+    template <typename _Uty>
+    friend class WeakPtr;
 };
 
 class Node;
