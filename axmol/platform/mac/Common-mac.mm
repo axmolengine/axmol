@@ -44,8 +44,8 @@ AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle)
 
     NSAlert* alert = [[[NSAlert alloc] init] autorelease];
     [alert addButtonWithTitle:@"OK"];
-    [alert setMessageText:tmpMsg];
-    [alert setInformativeText:tmpTitle];
+    [alert setMessageText:tmpTitle];
+    [alert setInformativeText:tmpMsg];
     [alert setAlertStyle:NSAlertStyleWarning];
 
     auto renderView = Director::getInstance()->getRenderView();
