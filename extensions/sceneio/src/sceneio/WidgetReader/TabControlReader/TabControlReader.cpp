@@ -29,7 +29,7 @@
 #include "sceneio/WidgetReader/TabControlReader/TabControlReader.h"
 #include "sceneio/FlatBuffersSerialize.h"
 #include "sceneio/ActionTimeline/CSLoader.h"
-#include "axmol/ui/UITabControl.h"
+#include "axmol/ui/TabView.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/2d/SpriteFrameCache.h"
 
@@ -168,12 +168,12 @@ flatbuffers::Offset<flatbuffers::Table> TabControlReader::createOptionsWithFlatB
 
 void TabControlReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* nodeOption)
 {
-    auto tabControl = static_cast<ax::ui::TabControl*>(node);
+    auto tabControl = static_cast<ax::ui::TabView*>(node);
     auto options    = (flatbuffers::TabControlOption*)nodeOption;
 
     int headerPlace = options->headerPlace();
     tabControl->ignoreHeadersTextureSize(options->ignoreHeaderTextureSize() != 0);
-    tabControl->setHeaderDockPlace((ax::ui::TabControl::Dock)headerPlace);
+    tabControl->setHeaderDockPlace((ax::ui::TabView::Dock)headerPlace);
     tabControl->setHeaderWidth(options->headerWidth());
     tabControl->setHeaderHeight(options->headerHeight());
     tabControl->setHeaderSelectedZoom(options->selectedTabZoom());
@@ -191,7 +191,7 @@ void TabControlReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers
 
 ax::Node* TabControlReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
 {
-    auto node = ax::ui::TabControl::create();
+    auto node = ax::ui::TabView::create();
 
     auto taboptions = (flatbuffers::TabControlOption*)nodeOptions;
     setPropsWithFlatBuffers(node, nodeOptions);

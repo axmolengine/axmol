@@ -194,7 +194,7 @@ int lua_ax_fairygui_InputEvent_getPosition(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_fairygui_InputEvent_getTouch(lua_State* tolua_S)
+int lua_ax_fairygui_InputEvent_getPointerId(lua_State* tolua_S)
 {
     int argc = 0;
     fairygui::InputEvent* obj = nullptr;
@@ -214,7 +214,7 @@ int lua_ax_fairygui_InputEvent_getTouch(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_fairygui_InputEvent_getTouch'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_fairygui_InputEvent_getPointerId'", nullptr);
         return 0;
     }
 #endif
@@ -224,19 +224,19 @@ int lua_ax_fairygui_InputEvent_getTouch(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_InputEvent_getTouch'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_InputEvent_getPointerId'", nullptr);
             return 0;
         }
-        auto&& ret = obj->getTouch();
-        object_to_luaval<ax::Touch>(tolua_S, "ax.Touch",(ax::Touch*)ret);
+        auto&& ret = obj->getPointerId();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.InputEvent:getTouch",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.InputEvent:getPointerId",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_fairygui_InputEvent_getTouch'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_fairygui_InputEvent_getPointerId'.",&tolua_err);
 #endif
 
     return 0;
@@ -368,7 +368,7 @@ int lua_ax_fairygui_InputEvent_getButton(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_InputEvent_getButton'", nullptr);
             return 0;
         }
-        int ret = (int)obj->getButton();
+        auto&& ret = obj->getButton();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -716,7 +716,7 @@ int lua_register_ax_fairygui_InputEvent(lua_State* tolua_S)
         tolua_function(tolua_S,"getX",lua_ax_fairygui_InputEvent_getX);
         tolua_function(tolua_S,"getY",lua_ax_fairygui_InputEvent_getY);
         tolua_function(tolua_S,"getPosition",lua_ax_fairygui_InputEvent_getPosition);
-        tolua_function(tolua_S,"getTouch",lua_ax_fairygui_InputEvent_getTouch);
+        tolua_function(tolua_S,"getPointerId",lua_ax_fairygui_InputEvent_getPointerId);
         tolua_function(tolua_S,"getTouchId",lua_ax_fairygui_InputEvent_getTouchId);
         tolua_function(tolua_S,"isDoubleClick",lua_ax_fairygui_InputEvent_isDoubleClick);
         tolua_function(tolua_S,"getButton",lua_ax_fairygui_InputEvent_getButton);

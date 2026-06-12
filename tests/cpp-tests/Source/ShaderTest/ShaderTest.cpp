@@ -419,7 +419,7 @@ bool SpriteBlur::initWithTexture(Texture2D* texture, const Rect& rect)
     {
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         auto listener =
-            EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom* event) { initProgram(); });
+            CustomEventListener::create(EVENT_RENDERER_RECREATED, [this](CustomEvent* event) { initProgram(); });
 
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 #endif
@@ -598,7 +598,7 @@ bool ShaderRetroEffect::init()
 void ShaderRetroEffect::update(float dt)
 {
     _accum += dt;
-    int letterCount = _label->getStringLength();
+    int letterCount = _label->getCharCount();
     for (int i = 0; i < letterCount; ++i)
     {
         auto sprite = _label->getLetter(i);

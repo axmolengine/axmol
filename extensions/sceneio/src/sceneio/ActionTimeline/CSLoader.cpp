@@ -92,7 +92,7 @@
 
 #include "sceneio/FlatBuffersSerialize.h"
 
-#include "sceneext/WidgetCallBackHandlerProtocol.h"
+#include "sceneext/IWidgetEventHandlerResolver.h"
 
 #include <fstream>
 
@@ -955,8 +955,8 @@ Node* CSLoader::createNodeWithFlatBuffersFile(std::string_view filename, const c
 
 inline void CSLoader::reconstructNestNode(ax::Node* node)
 {
-    /* To reconstruct nest node as WidgetCallBackHandlerProtocol. */
-    auto callbackHandler = dynamic_cast<WidgetCallBackHandlerProtocol*>(node);
+    /* To reconstruct nest node as IWidgetEventHandlerResolver. */
+    auto callbackHandler = dynamic_cast<IWidgetEventHandlerResolver*>(node);
     if (callbackHandler)
     {
         _callbackHandlers.popBack();
@@ -1163,8 +1163,8 @@ Node* CSLoader::nodeWithFlatBuffers(const flatbuffers::NodeTree* nodetree, const
                 bindCallback(callbackName, callbackType, widget, _rootNode);
             }
 
-            /* To reconstruct nest node as WidgetCallBackHandlerProtocol. */
-            auto callbackHandler = dynamic_cast<WidgetCallBackHandlerProtocol*>(node);
+            /* To reconstruct nest node as IWidgetEventHandlerResolver. */
+            auto callbackHandler = dynamic_cast<IWidgetEventHandlerResolver*>(node);
             if (callbackHandler)
             {
                 _callbackHandlers.pushBack(node);
@@ -1235,12 +1235,12 @@ bool CSLoader::bindCallback(std::string_view callbackName,
     if (callbackName.empty())
         return false;
 
-    auto callbackHandler = dynamic_cast<WidgetCallBackHandlerProtocol*>(handler);
+    auto callbackHandler = dynamic_cast<IWidgetEventHandlerResolver*>(handler);
     if (callbackHandler)  // The handler can handle callback
     {
         if (callbackType == "Click")
         {
-            Widget::ccWidgetClickCallback callbackFunc = callbackHandler->onLocateClickCallback(callbackName);
+            Widget::ClickEventHandler callbackFunc = callbackHandler->resolveClickEvent(callbackName);
             if (callbackFunc)
             {
                 sender->addClickEventListener(callbackFunc);
@@ -1249,16 +1249,16 @@ bool CSLoader::bindCallback(std::string_view callbackName,
         }
         else if (callbackType == "Touch")
         {
-            Widget::ccWidgetTouchCallback callbackFunc = callbackHandler->onLocateTouchCallback(callbackName);
+            Widget::PointerEventHandler callbackFunc = callbackHandler->resolvePointerEvent(callbackName);
             if (callbackFunc)
             {
-                sender->addTouchEventListener(callbackFunc);
+                sender->addPointerEventListener(callbackFunc);
                 return true;
             }
         }
         else if (callbackType == "Event")
         {
-            Widget::ccWidgetEventCallback callbackFunc = callbackHandler->onLocateEventCallback(callbackName);
+            Widget::WidgetEventCallback callbackFunc = callbackHandler->resolveEvent(callbackName);
             if (callbackFunc)
             {
                 sender->addCCSEventListener(callbackFunc);
@@ -1364,7 +1364,7 @@ std::string_view CSLoader::getWidgetReaderClassName(Widget* widget)
     {
         readerName = "SliderReader";
     }
-    else if (dynamic_cast<TextField*>(widget))
+    else if (dynamic_cast<InputField*>(widget))
     {
         readerName = "TextFieldReader";
     }

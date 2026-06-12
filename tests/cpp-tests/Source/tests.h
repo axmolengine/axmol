@@ -110,7 +110,6 @@
 #include "SpritePolygonTest/SpritePolygonTest.h"
 #include "SpriteTest/SpriteTest.h"
 #include "TerrainTest/TerrainTest.h"
-#include "TextInputTest/TextInputTest.h"
 #include "Texture2dTest/Texture2dTest.h"
 #include "TextureCacheTest/TextureCacheTest.h"
 #include "TexturePackerEncryptionTest/TextureAtlasEncryptionTest.h"

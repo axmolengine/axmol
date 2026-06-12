@@ -58,7 +58,7 @@ class RenderTarget;
 struct PixelBufferDesc;
 }  // namespace rhi
 
-class EventListenerCustom;
+class CustomEventListener;
 class TrianglesCommand;
 class MeshCommand;
 class GroupCommand;
@@ -133,7 +133,7 @@ Whenever possible prefer to use `TrianglesCommand` objects since the renderer wi
  */
 class AX_DLL Renderer
 {
-    friend class RenderView;
+    friend class RenderViewCore;
 
 public:
     /**The max number of vertices in a vertex buffer object.*/

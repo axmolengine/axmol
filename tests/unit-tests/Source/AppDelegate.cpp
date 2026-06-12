@@ -56,9 +56,9 @@ bool AppDelegate::applicationDidFinishLaunching()
     {
         std::string title = "Unit Tests";
 #ifdef AX_PLATFORM_GLFW
-        renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y), 1.0F, true);
+        renderView = RenderView::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y), 1.0F, true);
 #else
-        renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y));
+        renderView = RenderView::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y));
 #endif
         director->setRenderView(renderView);
     }

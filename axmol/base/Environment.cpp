@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 #include "axmol/base/Environment.h"
 #include "axmol/platform/FileUtils.h"
-#include "axmol/base/EventCustom.h"
+#include "axmol/base/CustomEvent.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/rhi/DriverContext.h"
@@ -62,7 +62,7 @@ Environment::Environment()
     , _maxSpotLightInShader(1)
     , _animate3DQuality(Animate3DQuality::QUALITY_LOW)
 {
-    _loadedEvent = new EventCustom(CONFIG_FILE_LOADED);
+    _loadedEvent = new CustomEvent(CONFIG_FILE_LOADED);
 }
 
 bool Environment::init()

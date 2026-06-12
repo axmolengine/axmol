@@ -24,7 +24,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "sceneext/TriggerBase.h"
-#include "axmol/base/EventCustom.h"
+#include "axmol/base/CustomEvent.h"
 
 using namespace ax;
 using namespace ax::ext;
@@ -33,6 +33,6 @@ void sendEvent(unsigned int event)
 {
     std::string custom_event_name = fmt::to_string(event);
 
-    EventCustom eventCustom(custom_event_name);
+    CustomEvent eventCustom(custom_event_name);
     TriggerMng::getInstance()->dispatchEvent(&eventCustom);
 }

@@ -36,10 +36,9 @@ function SliderEx:onEnter()
     local thumbSize = self._thumb:getContentSize()
     self._thumbRect = ax.rect(0, 0, thumbSize.width, thumbSize.height)
 
-    local  listenner = ax.EventListenerTouchOneByOne:create()
-    listenner:setSwallowTouches(true)
-    listenner:registerScriptHandler(function(touch, event)
-        local location = touch:getLocation()
+    local  listenner = ax.PointerEventListener:create()
+    listenner:registerScriptHandler(function(event)
+        local location = event:getLocation()
         local locationInNode = self._thumb:convertToNodeSpace(location)
         if not ax.rectContainsPoint(self._thumbRect, locationInNode) then
             return false
@@ -51,25 +50,25 @@ function SliderEx:onEnter()
             self._callback(self,self._ratio,SliderEx.TouchEventDown)
         end
         return true
-    end, ax.Handler.EVENT_TOUCH_BEGAN )
+    end, ax.Handler.EVENT_POINTER_DOWN )
 
-    listenner:registerScriptHandler(function(touch, event)
-        local locationInNodeX = self:convertToNodeSpace(touch:getLocation()).x
+    listenner:registerScriptHandler(function(event)
+        local locationInNodeX = self:convertToNodeSpace(event:getLocation()).x
         self:setThumbPosX(self._thumbBeganX + locationInNodeX - self._touchBeganX)
 
         if self._callback then
             self._callback(self,self._ratio,SliderEx.TouchEventMove)
         end
-    end, ax.Handler.EVENT_TOUCH_MOVED )
+    end, ax.Handler.EVENT_POINTER_MOVE )
 
-    listenner:registerScriptHandler(function(touch, event)
-        local locationInNodeX = self:convertToNodeSpace(touch:getLocation()).x
+    listenner:registerScriptHandler(function(event)
+        local locationInNodeX = self:convertToNodeSpace(event:getLocation()).x
         self:setThumbPosX(self._thumbBeganX + locationInNodeX - self._touchBeganX)
 
         if self._callback then
             self._callback(self,self._ratio,SliderEx.TouchEventUp)
         end
-    end, ax.Handler.EVENT_TOUCH_ENDED )
+    end, ax.Handler.EVENT_POINTER_UP )
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listenner, self)

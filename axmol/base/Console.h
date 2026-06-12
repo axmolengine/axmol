@@ -58,7 +58,7 @@ namespace ax
  If the std::function<> needs to use the axmol API, it needs to call
 
  ```
- scheduler->runOnAxmolThread( ... );
+ Director::getInstance()->postTask( ... );
  ```
  */
 

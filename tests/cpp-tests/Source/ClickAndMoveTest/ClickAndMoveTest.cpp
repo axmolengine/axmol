@@ -39,9 +39,9 @@ ClickAndMoveTest::ClickAndMoveTest()
 
 ClickAndMoveTestCase::ClickAndMoveTestCase()
 {
-    auto listener          = EventListenerTouchOneByOne::create();
-    listener->onTouchBegan = AX_CALLBACK_2(ClickAndMoveTestCase::onTouchBegan, this);
-    listener->onTouchEnded = AX_CALLBACK_2(ClickAndMoveTestCase::onTouchEnded, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = AX_CALLBACK_1(ClickAndMoveTestCase::onPointerDown, this);
+    listener->onPointerUp   = AX_CALLBACK_1(ClickAndMoveTestCase::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto sprite = Sprite::create(s_pathGrossini);
@@ -57,14 +57,14 @@ ClickAndMoveTestCase::ClickAndMoveTestCase()
     layer->runAction(RepeatForever::create(Sequence::create(FadeIn::create(1), FadeOut::create(1), nullptr)));
 }
 
-bool ClickAndMoveTestCase::onTouchBegan(Touch* touch, Event* event)
+bool ClickAndMoveTestCase::onPointerDown(PointerEvent* event)
 {
     return true;
 }
 
-void ClickAndMoveTestCase::onTouchEnded(Touch* touch, Event* event)
+void ClickAndMoveTestCase::onPointerUp(PointerEvent* event)
 {
-    auto location = touch->getLocation();
+    auto location = event->getLocation();
 
     auto s = getChildByTag(kTagSprite);
     s->stopAllActions();

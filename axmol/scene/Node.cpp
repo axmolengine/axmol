@@ -225,7 +225,7 @@ void Node::cleanup()
     // NOTE: Although it was correct that removing event listeners associated with current node in Node::cleanup.
     // But it broke the compatibility to the versions before v3.16 .
     // User code may call `node->removeFromParent(true)` which will trigger node's cleanup method, when the node
-    // is added to scene again, event listeners like EventListenerTouchOneByOne will be lost.
+    // is added to scene again, event listeners like PointerEventListener will be lost.
     // In fact, user's code should use `node->removeFromParent(false)` in order not to do a cleanup and just remove node
     // from its parent. For more discussion about why we revert this change is at
     // https://github.com/cocos2d/cocos2d-x/issues/18104. We need to consider more before we want to correct the old and
@@ -801,6 +801,13 @@ Rect Node::getBoundingBox() const
 {
     Rect rect(0, 0, _contentSize.width, _contentSize.height);
     return RectApplyAffineTransform(rect, getNodeToParentAffineTransform());
+}
+
+Rect Node::getWorldBoundingBox() const
+{
+    auto& contentSize = getContentSize();
+    Rect rect         = Rect(0, 0, contentSize.width, contentSize.height);
+    return RectApplyTransform(rect, getNodeToWorldTransform());
 }
 
 // MARK: Children logic
@@ -1920,15 +1927,15 @@ Vec2 Node::convertToScreenSpace(const Vec2& nodePoint) const
     return _director->worldToScreen(worldPoint);
 }
 
-// convenience methods which take a Touch instead of Vec2
-Vec2 Node::convertTouchToNodeSpace(Touch* touch) const
+// convenience methods which take a PointerEvent instead of Vec2
+Vec2 Node::convertPointerToNodeSpace(PointerEvent* event) const
 {
-    return this->convertToNodeSpace(touch->getLocation());
+    return this->convertToNodeSpace(event->getLocation());
 }
 
-Vec2 Node::convertTouchToNodeSpaceAR(Touch* touch) const
+Vec2 Node::convertPointerToNodeSpaceAR(PointerEvent* event) const
 {
-    Vec2 point = touch->getLocation();
+    Vec2 point = event->getLocation();
     return this->convertToNodeSpaceAR(point);
 }
 
@@ -2187,54 +2194,6 @@ void Node::disableCascadeColor()
     }
 }
 
-bool isScreenPointInRect(const Vec2& pt, const Camera* camera, const Mat4& w2l, const Rect& rect, Vec3* p)
-{
-    if (nullptr == camera || rect.size.width <= 0 || rect.size.height <= 0)
-    {
-        return false;
-    }
-
-    // first, convert pt to near/far plane, get Pn and Pf
-    Vec3 Pn(pt.x, pt.y, -1), Pf(pt.x, pt.y, 1);
-    Pn = camera->unprojectGL(Pn);
-    Pf = camera->unprojectGL(Pf);
-
-    //  then convert Pn and Pf to node space
-    w2l.transformPoint(&Pn);
-    w2l.transformPoint(&Pf);
-
-    // Pn and Pf define a line Q(t) = D + t * E which D = Pn
-    auto E = Pf - Pn;
-
-    // second, get three points which define content plane
-    //  these points define a plane P(u, w) = A + uB + wC
-    Vec3 A = Vec3(rect.origin.x, rect.origin.y, 0);
-    Vec3 B(rect.origin.x + rect.size.width, rect.origin.y, 0);
-    Vec3 C(rect.origin.x, rect.origin.y + rect.size.height, 0);
-    B = B - A;
-    C = C - A;
-
-    //  the line Q(t) intercept with plane P(u, w)
-    //  calculate the intercept point P = Q(t)
-    //      (BxC).A - (BxC).D
-    //  t = -----------------
-    //          (BxC).E
-    Vec3 BxC;
-    Vec3::cross(B, C, &BxC);
-    auto BxCdotE = BxC.dot(E);
-    if (BxCdotE == 0)
-    {
-        return false;
-    }
-    auto t = (BxC.dot(A) - BxC.dot(Pn)) / BxCdotE;
-    Vec3 P = Pn + t * E;
-    if (p)
-    {
-        *p = P;
-    }
-    return rect.containsPoint(Vec2(P.x, P.y));
-}
-
 void Node::applyMaskOnEnter(bool applyChildren)
 {
     _childFollowCameraMask = applyChildren;
@@ -2303,6 +2262,17 @@ void Node::updateProgramStateTexture(Texture2D* texture)
 rhi::ProgramState* Node::getProgramState() const
 {
     return _programState;
+}
+
+bool Node::onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* outHitPoint)
+{
+    if (!event || !camera || !isVisible())
+        return false;
+
+    Rect rect;
+    rect.size = getContentSize();
+
+    return camera->isWorldPointInRect(event->getLocation(), getWorldToNodeTransform(), rect, outHitPoint);
 }
 
 }  // namespace ax

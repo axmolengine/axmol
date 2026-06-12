@@ -105,8 +105,8 @@ std::string MultiSceneTest::subtitle() const
 
 NewSpriteTest::NewSpriteTest()
 {
-    auto touchListener            = EventListenerTouchAllAtOnce::create();
-    touchListener->onTouchesEnded = AX_CALLBACK_2(NewSpriteTest::onTouchesEnded, this);
+    auto touchListener         = PointerEventListener::create();
+    touchListener->onPointerUp = AX_CALLBACK_1(NewSpriteTest::onPointerUp, this);
 
     createSpriteTest();
     createNewSpriteTest();
@@ -176,7 +176,7 @@ void NewSpriteTest::createNewSpriteTest()
     addChild(parent);
 }
 
-void NewSpriteTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event) {}
+void NewSpriteTest::onPointerUp(PointerEvent* event) {}
 
 std::string NewSpriteTest::title() const
 {
@@ -274,10 +274,10 @@ NewClippingNodeTest::NewClippingNodeTest()
 
     _scrolling = false;
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(NewClippingNodeTest::onTouchesBegan, this);
-    listener->onTouchesMoved = AX_CALLBACK_2(NewClippingNodeTest::onTouchesMoved, this);
-    listener->onTouchesEnded = AX_CALLBACK_2(NewClippingNodeTest::onTouchesEnded, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = AX_CALLBACK_1(NewClippingNodeTest::onPointerDown, this);
+    listener->onPointerMove = AX_CALLBACK_1(NewClippingNodeTest::onPointerMove, this);
+    listener->onPointerUp   = AX_CALLBACK_1(NewClippingNodeTest::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
@@ -293,30 +293,30 @@ std::string NewClippingNodeTest::subtitle() const
     return "ClipNode";
 }
 
-void NewClippingNodeTest::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
+bool NewClippingNodeTest::onPointerDown(PointerEvent* event)
 {
-    Touch* touch = touches[0];
     auto clipper = this->getChildByTag(kTagClipperNode);
-    Vec2 point   = clipper->convertToNodeSpace(Director::getInstance()->screenToWorld(touch->getLocationInView()));
+    Vec2 point   = clipper->convertToNodeSpace(Director::getInstance()->screenToWorld(event->getScreenLocation()));
     auto rect    = Rect(0, 0, clipper->getContentSize().width, clipper->getContentSize().height);
     _scrolling   = rect.containsPoint(point);
     _lastPoint   = point;
+
+    return _scrolling;
 }
 
-void NewClippingNodeTest::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
+void NewClippingNodeTest::onPointerMove(PointerEvent* event)
 {
     if (!_scrolling)
         return;
-    Touch* touch = touches[0];
     auto clipper = this->getChildByTag(kTagClipperNode);
-    auto point   = clipper->convertToNodeSpace(Director::getInstance()->screenToWorld(touch->getLocationInView()));
+    auto point   = clipper->convertToNodeSpace(Director::getInstance()->screenToWorld(event->getScreenLocation()));
     Vec2 diff    = point - _lastPoint;
     auto content = clipper->getChildByTag(kTagContentNode);
     content->setPosition(content->getPosition() + diff);
     _lastPoint = point;
 }
 
-void NewClippingNodeTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void NewClippingNodeTest::onPointerUp(PointerEvent* event)
 {
     if (!_scrolling)
         return;
@@ -373,25 +373,24 @@ NewCullingTest::NewCullingTest()
     sprite2->setScale(2);
     addChild(sprite2);
 
-    auto listener = EventListenerTouchOneByOne::create();
-    listener->setSwallowTouches(true);
+    auto listener = PointerEventListener::create();
 
-    listener->onTouchBegan = AX_CALLBACK_2(NewCullingTest::onTouchBegan, this);
-    listener->onTouchMoved = AX_CALLBACK_2(NewCullingTest::onTouchMoved, this);
+    listener->onPointerDown = AX_CALLBACK_1(NewCullingTest::onPointerDown, this);
+    listener->onPointerMove = AX_CALLBACK_1(NewCullingTest::onPointerMove, this);
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
-bool NewCullingTest::onTouchBegan(Touch* touch, Event* event)
+bool NewCullingTest::onPointerDown(PointerEvent* event)
 {
-    auto pos = touch->getLocation();
+    auto pos = event->getLocation();
     _lastPos = pos;
     return true;
 }
 
-void NewCullingTest::onTouchMoved(Touch* touch, Event* event)
+void NewCullingTest::onPointerMove(PointerEvent* event)
 {
-    auto pos = touch->getLocation();
+    auto pos = event->getLocation();
 
     auto offset = pos - _lastPos;
 
@@ -400,6 +399,8 @@ void NewCullingTest::onTouchMoved(Touch* touch, Event* event)
 
     setPosition(newPos);
     _lastPos = pos;
+
+    return;
 }
 
 NewCullingTest::~NewCullingTest() {}

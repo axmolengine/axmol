@@ -39,20 +39,16 @@ static const char* applicationHelperClassName = "dev.axmol.lib.AxmolEngine";
 
 namespace ax
 {
-
-// sharedApplication pointer
-Application* Application::sm_pSharedApplication = nullptr;
-
 Application::Application()
 {
-    CCAssert(!sm_pSharedApplication, "");
-    sm_pSharedApplication = this;
+    CCAssert(!s_axmolApp, "");
+    s_axmolApp = this;
 }
 
 Application::~Application()
 {
-    CCAssert(this == sm_pSharedApplication, "");
-    sm_pSharedApplication = nullptr;
+    CCAssert(this == s_axmolApp, "");
+    s_axmolApp = nullptr;
 }
 
 int Application::run()
@@ -69,15 +65,6 @@ int Application::run()
 void Application::setAnimationInterval(float interval)
 {
     JniHelper::callStaticVoidMethod("dev/axmol/lib/AxmolPlayer", "setAnimationInterval", interval);
-}
-
-//////////////////////////////////////////////////////////////////////////
-// static member function
-//////////////////////////////////////////////////////////////////////////
-Application* Application::getInstance()
-{
-    CCAssert(sm_pSharedApplication, "");
-    return sm_pSharedApplication;
 }
 
 const char* Application::getCurrentLanguageCode()
@@ -112,6 +99,11 @@ std::string Application::getVersion()
 bool Application::openURL(std::string_view url)
 {
     return JniHelper::callStaticBooleanMethod(applicationHelperClassName, "openURL", url);
+}
+
+void Application::postBoundaryTaskSignal()
+{
+    JniHelper::callStaticVoidMethod(applicationHelperClassName, "postBoundaryTaskSignal");
 }
 
 }  // namespace ax

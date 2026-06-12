@@ -41,7 +41,7 @@ namespace ax
 
 class Node;
 class SpriteFrame;
-class EventCustom;
+class CustomEvent;
 
 /**
  * @addtogroup actions
@@ -1493,7 +1493,7 @@ protected:
     unsigned int _executedLoops     = 0;
     Animation* _animation           = nullptr;
 
-    EventCustom* _frameDisplayedEvent = nullptr;
+    CustomEvent* _frameDisplayedEvent = nullptr;
     AnimationFrame::DisplayedEventInfo _frameDisplayedEventInfo;
 
 private:

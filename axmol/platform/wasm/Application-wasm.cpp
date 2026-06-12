@@ -40,31 +40,33 @@ THE SOFTWARE.
 #    include "axmol/tlx/utility.hpp"
 #    include <emscripten/emscripten.h>
 
+extern void _axmolPerformFrameBoundaryTasks();
+
 extern void axmol_wasm_app_exit();
 
 extern "C" {
 //
-void axmol_hdoc_visibilitychange(bool hidden)
+EMSCRIPTEN_KEEPALIVE void axmol_hdoc_visibilitychange(bool hidden)
 {
-    ax::EventCustom event(hidden ? EVENT_COME_TO_BACKGROUND : EVENT_COME_TO_FOREGROUND);
+    ax::CustomEvent event(hidden ? EVENT_COME_TO_BACKGROUND : EVENT_COME_TO_FOREGROUND);
     ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event, true);
 }
 
 // webglcontextlost
-void axmol_webglcontextlost()
+EMSCRIPTEN_KEEPALIVE void axmol_webglcontextlost()
 {
     AXLOGI("receive event: webglcontextlost");
 }
 
 // webglcontextrestored
-void axmol_webglcontextrestored()
+EMSCRIPTEN_KEEPALIVE void axmol_webglcontextrestored()
 {
     AXLOGI("receive event: webglcontextrestored");
 
     auto director = ax::Director::getInstance();
     axdrv->resetState();
     director->resetMatrixStack();
-    ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
+    ax::CustomEvent recreatedEvent(EVENT_RENDERER_RECREATED);
     director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
     director->setRenderDefaults();
 #    if AX_ENABLE_CONTEXT_LOSS_RECOVERY
@@ -72,17 +74,17 @@ void axmol_webglcontextrestored()
 #    endif
 }
 
-void axmol_dev_pause()
+EMSCRIPTEN_KEEPALIVE void axmol_dev_pause()
 {
     ax::DevToolsImpl::getInstance()->pause();
 }
 
-void axmol_dev_resume()
+EMSCRIPTEN_KEEPALIVE void axmol_dev_resume()
 {
     ax::DevToolsImpl::getInstance()->resume();
 }
 
-void axmol_dev_step()
+EMSCRIPTEN_KEEPALIVE void axmol_dev_step()
 {
     ax::DevToolsImpl::getInstance()->step();
 }
@@ -90,9 +92,6 @@ void axmol_dev_step()
 
 namespace ax
 {
-
-// sharedApplication pointer
-Application* Application::sm_pSharedApplication = nullptr;
 
 static int64_t NANOSECONDSPERSECOND      = 1000000000LL;
 static int64_t NANOSECONDSPERMICROSECOND = 1000000LL;
@@ -109,6 +108,7 @@ static void renderFrame();
 static void updateFrame()
 {
     double now = emscripten_get_now();  // current time in ms
+    _axmolPerformFrameBoundaryTasks();  // Perform any pending frame boundary tasks before processing the next frame.
 
     // First frame: render immediately
     if (s_lastFrameTime <= 0.0) [[unlikely]]
@@ -194,14 +194,14 @@ static void getCurrentLangISO2(char buf[16])
 
 Application::Application()
 {
-    AX_ASSERT(!sm_pSharedApplication);
-    sm_pSharedApplication = this;
+    AX_ASSERT(!s_axmolApp);
+    s_axmolApp = this;
 }
 
 Application::~Application()
 {
-    AX_ASSERT(this == sm_pSharedApplication);
-    sm_pSharedApplication = nullptr;
+    AX_ASSERT(this == s_axmolApp);
+    s_axmolApp = nullptr;
 }
 
 int Application::run()
@@ -262,15 +262,6 @@ bool Application::openURL(std::string_view url)
     EM_ASM_ARGS({ window.open(UTF8ToString($0)); }, url.data());
 
     return true;
-}
-
-//////////////////////////////////////////////////////////////////////////
-// static member function
-//////////////////////////////////////////////////////////////////////////
-Application* Application::getInstance()
-{
-    AX_ASSERT(sm_pSharedApplication);
-    return sm_pSharedApplication;
 }
 
 const char* Application::getCurrentLanguageCode()

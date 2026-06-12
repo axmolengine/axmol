@@ -884,56 +884,6 @@ int lua_ax_extension_ScrollView_isTouchEnabled(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_extension_ScrollView_setSwallowTouches(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::ext::ScrollView* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_extension_ScrollView_setSwallowTouches'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
-    {
-        bool arg0;
-
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axext.ScrollView:setSwallowTouches");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setSwallowTouches'", nullptr);
-            return 0;
-        }
-        obj->setSwallowTouches(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:setSwallowTouches",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_setSwallowTouches'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_extension_ScrollView_isDragging(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1560,7 +1510,7 @@ int lua_ax_extension_ScrollView_setClippingToBounds(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_extension_ScrollView_onTouchBegan(lua_State* tolua_S)
+int lua_ax_extension_ScrollView_onPointerHitTest(lua_State* tolua_S)
 {
     int argc = 0;
     ax::ext::ScrollView* obj = nullptr;
@@ -1580,40 +1530,43 @@ int lua_ax_extension_ScrollView_onTouchBegan(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_extension_ScrollView_onTouchBegan'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_extension_ScrollView_onPointerHitTest'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 3)
     {
-        ax::Touch* arg0;
-        ax::Event* arg1;
+        ax::PointerEvent* arg0;
+        const ax::Camera* arg1;
+        ax::Vec3* arg2;
 
-        ok &= luaval_to_object<ax::Touch>(tolua_S, 2, "ax.Touch",&arg0, "axext.ScrollView:onTouchBegan");
+        ok &= luaval_to_object<ax::PointerEvent>(tolua_S, 2, "ax.PointerEvent",&arg0, "axext.ScrollView:onPointerHitTest");
 
-        ok &= luaval_to_object<ax::Event>(tolua_S, 3, "ax.Event",&arg1, "axext.ScrollView:onTouchBegan");
+        ok &= luaval_to_object<const ax::Camera>(tolua_S, 3, "ax.Camera",&arg1, "axext.ScrollView:onPointerHitTest");
+
+        ok &= luaval_to_object<ax::Vec3>(tolua_S, 4, "ax.Vec3",&arg2, "axext.ScrollView:onPointerHitTest");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_onTouchBegan'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_onPointerHitTest'", nullptr);
             return 0;
         }
-        auto&& ret = obj->onTouchBegan(arg0, arg1);
+        auto&& ret = obj->onPointerHitTest(arg0, arg1, arg2);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:onTouchBegan",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:onPointerHitTest",argc, 3);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_onTouchBegan'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_onPointerHitTest'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_extension_ScrollView_onTouchMoved(lua_State* tolua_S)
+int lua_ax_extension_ScrollView_onPointerDown(lua_State* tolua_S)
 {
     int argc = 0;
     ax::ext::ScrollView* obj = nullptr;
@@ -1633,40 +1586,37 @@ int lua_ax_extension_ScrollView_onTouchMoved(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_extension_ScrollView_onTouchMoved'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_extension_ScrollView_onPointerDown'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 1)
     {
-        ax::Touch* arg0;
-        ax::Event* arg1;
+        ax::PointerEvent* arg0;
 
-        ok &= luaval_to_object<ax::Touch>(tolua_S, 2, "ax.Touch",&arg0, "axext.ScrollView:onTouchMoved");
-
-        ok &= luaval_to_object<ax::Event>(tolua_S, 3, "ax.Event",&arg1, "axext.ScrollView:onTouchMoved");
+        ok &= luaval_to_object<ax::PointerEvent>(tolua_S, 2, "ax.PointerEvent",&arg0, "axext.ScrollView:onPointerDown");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_onTouchMoved'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_onPointerDown'", nullptr);
             return 0;
         }
-        obj->onTouchMoved(arg0, arg1);
-        lua_settop(tolua_S, 1);
+        auto&& ret = obj->onPointerDown(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:onTouchMoved",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:onPointerDown",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_onTouchMoved'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_onPointerDown'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_extension_ScrollView_onTouchEnded(lua_State* tolua_S)
+int lua_ax_extension_ScrollView_onPointerMove(lua_State* tolua_S)
 {
     int argc = 0;
     ax::ext::ScrollView* obj = nullptr;
@@ -1686,40 +1636,37 @@ int lua_ax_extension_ScrollView_onTouchEnded(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_extension_ScrollView_onTouchEnded'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_extension_ScrollView_onPointerMove'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 1)
     {
-        ax::Touch* arg0;
-        ax::Event* arg1;
+        ax::PointerEvent* arg0;
 
-        ok &= luaval_to_object<ax::Touch>(tolua_S, 2, "ax.Touch",&arg0, "axext.ScrollView:onTouchEnded");
-
-        ok &= luaval_to_object<ax::Event>(tolua_S, 3, "ax.Event",&arg1, "axext.ScrollView:onTouchEnded");
+        ok &= luaval_to_object<ax::PointerEvent>(tolua_S, 2, "ax.PointerEvent",&arg0, "axext.ScrollView:onPointerMove");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_onTouchEnded'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_onPointerMove'", nullptr);
             return 0;
         }
-        obj->onTouchEnded(arg0, arg1);
+        obj->onPointerMove(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:onTouchEnded",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:onPointerMove",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_onTouchEnded'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_onPointerMove'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_extension_ScrollView_onTouchCancelled(lua_State* tolua_S)
+int lua_ax_extension_ScrollView_onPointerUp(lua_State* tolua_S)
 {
     int argc = 0;
     ax::ext::ScrollView* obj = nullptr;
@@ -1739,35 +1686,82 @@ int lua_ax_extension_ScrollView_onTouchCancelled(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_extension_ScrollView_onTouchCancelled'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_extension_ScrollView_onPointerUp'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 1)
     {
-        ax::Touch* arg0;
-        ax::Event* arg1;
+        ax::PointerEvent* arg0;
 
-        ok &= luaval_to_object<ax::Touch>(tolua_S, 2, "ax.Touch",&arg0, "axext.ScrollView:onTouchCancelled");
-
-        ok &= luaval_to_object<ax::Event>(tolua_S, 3, "ax.Event",&arg1, "axext.ScrollView:onTouchCancelled");
+        ok &= luaval_to_object<ax::PointerEvent>(tolua_S, 2, "ax.PointerEvent",&arg0, "axext.ScrollView:onPointerUp");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_onTouchCancelled'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_onPointerUp'", nullptr);
             return 0;
         }
-        obj->onTouchCancelled(arg0, arg1);
+        obj->onPointerUp(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:onTouchCancelled",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:onPointerUp",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_onTouchCancelled'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_onPointerUp'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ScrollView_onPointerCancel(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ext::ScrollView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axext.ScrollView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ext::ScrollView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_extension_ScrollView_onPointerCancel'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::PointerEvent* arg0;
+
+        ok &= luaval_to_object<ax::PointerEvent>(tolua_S, 2, "ax.PointerEvent",&arg0, "axext.ScrollView:onPointerCancel");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_onPointerCancel'", nullptr);
+            return 0;
+        }
+        obj->onPointerCancel(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ScrollView:onPointerCancel",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ScrollView_onPointerCancel'.",&tolua_err);
 #endif
 
     return 0;
@@ -1997,7 +1991,6 @@ int lua_register_ax_extension_ScrollView(lua_State* tolua_S)
         tolua_function(tolua_S,"resume",lua_ax_extension_ScrollView_resume);
         tolua_function(tolua_S,"setTouchEnabled",lua_ax_extension_ScrollView_setTouchEnabled);
         tolua_function(tolua_S,"isTouchEnabled",lua_ax_extension_ScrollView_isTouchEnabled);
-        tolua_function(tolua_S,"setSwallowTouches",lua_ax_extension_ScrollView_setSwallowTouches);
         tolua_function(tolua_S,"isDragging",lua_ax_extension_ScrollView_isDragging);
         tolua_function(tolua_S,"isTouchMoved",lua_ax_extension_ScrollView_isTouchMoved);
         tolua_function(tolua_S,"isBounceable",lua_ax_extension_ScrollView_isBounceable);
@@ -2011,10 +2004,11 @@ int lua_register_ax_extension_ScrollView(lua_State* tolua_S)
         tolua_function(tolua_S,"updateInset",lua_ax_extension_ScrollView_updateInset);
         tolua_function(tolua_S,"isClippingToBounds",lua_ax_extension_ScrollView_isClippingToBounds);
         tolua_function(tolua_S,"setClippingToBounds",lua_ax_extension_ScrollView_setClippingToBounds);
-        tolua_function(tolua_S,"onTouchBegan",lua_ax_extension_ScrollView_onTouchBegan);
-        tolua_function(tolua_S,"onTouchMoved",lua_ax_extension_ScrollView_onTouchMoved);
-        tolua_function(tolua_S,"onTouchEnded",lua_ax_extension_ScrollView_onTouchEnded);
-        tolua_function(tolua_S,"onTouchCancelled",lua_ax_extension_ScrollView_onTouchCancelled);
+        tolua_function(tolua_S,"onPointerHitTest",lua_ax_extension_ScrollView_onPointerHitTest);
+        tolua_function(tolua_S,"onPointerDown",lua_ax_extension_ScrollView_onPointerDown);
+        tolua_function(tolua_S,"onPointerMove",lua_ax_extension_ScrollView_onPointerMove);
+        tolua_function(tolua_S,"onPointerUp",lua_ax_extension_ScrollView_onPointerUp);
+        tolua_function(tolua_S,"onPointerCancel",lua_ax_extension_ScrollView_onPointerCancel);
         tolua_function(tolua_S,"updateTweenAction",lua_ax_extension_ScrollView_updateTweenAction);
         tolua_function(tolua_S,"hasVisibleParents",lua_ax_extension_ScrollView_hasVisibleParents);
         tolua_function(tolua_S,"create", lua_ax_extension_ScrollView_create);
@@ -2935,6 +2929,440 @@ int lua_register_ax_extension_TableView(lua_State* tolua_S)
     auto typeName = typeid(ax::ext::TableView).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axext.TableView";
     g_typeCast[typeName] = "axext.TableView";
+    return 1;
+}
+
+int lua_ax_extension_ControllerEvent_getControllerEventType(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ControllerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ControllerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ControllerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_extension_ControllerEvent_getControllerEventType'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ControllerEvent_getControllerEventType'", nullptr);
+            return 0;
+        }
+        int ret = (int)obj->getControllerEventType();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ControllerEvent:getControllerEventType",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ControllerEvent_getControllerEventType'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ControllerEvent_getController(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ControllerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ControllerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ControllerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_extension_ControllerEvent_getController'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ControllerEvent_getController'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getController();
+        object_to_luaval<ax::Controller>(tolua_S, "ax.Controller",(ax::Controller*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ControllerEvent:getController",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ControllerEvent_getController'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ControllerEvent_getKeyCode(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ControllerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ControllerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ControllerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_extension_ControllerEvent_getKeyCode'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ControllerEvent_getKeyCode'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getKeyCode();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ControllerEvent:getKeyCode",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ControllerEvent_getKeyCode'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ControllerEvent_setKeyCode(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ControllerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ControllerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ControllerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_extension_ControllerEvent_setKeyCode'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        int arg0;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ControllerEvent:setKeyCode");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ControllerEvent_setKeyCode'", nullptr);
+            return 0;
+        }
+        obj->setKeyCode(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ControllerEvent:setKeyCode",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ControllerEvent_setKeyCode'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ControllerEvent_setConnectStatus(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ControllerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ControllerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ControllerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_extension_ControllerEvent_setConnectStatus'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ControllerEvent:setConnectStatus");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ControllerEvent_setConnectStatus'", nullptr);
+            return 0;
+        }
+        obj->setConnectStatus(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ControllerEvent:setConnectStatus",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ControllerEvent_setConnectStatus'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ControllerEvent_isConnected(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ControllerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ControllerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ControllerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_extension_ControllerEvent_isConnected'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ControllerEvent_isConnected'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isConnected();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ControllerEvent:isConnected",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ControllerEvent_isConnected'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_extension_ControllerEvent_constructor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ControllerEvent* obj = nullptr;
+    bool ok  = true;
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    do {
+        if (argc == 3) {
+            ax::ControllerEvent::ControllerEventType arg0;
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ControllerEvent:ControllerEvent");
+
+            if (!ok) { break; }
+            ax::Controller* arg1;
+            ok &= luaval_to_object<ax::Controller>(tolua_S, 3, "ax.Controller",&arg1, "ax.ControllerEvent:ControllerEvent");
+
+            if (!ok) { break; }
+            bool arg2;
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.ControllerEvent:ControllerEvent");
+
+            if (!ok) { break; }
+            obj = new ax::ControllerEvent(arg0, arg1, arg2);
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.ControllerEvent");
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do {
+        if (argc == 3) {
+            ax::ControllerEvent::ControllerEventType arg0;
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ControllerEvent:ControllerEvent");
+
+            if (!ok) { break; }
+            ax::Controller* arg1;
+            ok &= luaval_to_object<ax::Controller>(tolua_S, 3, "ax.Controller",&arg1, "ax.ControllerEvent:ControllerEvent");
+
+            if (!ok) { break; }
+            int arg2;
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.ControllerEvent:ControllerEvent");
+
+            if (!ok) { break; }
+            obj = new ax::ControllerEvent(arg0, arg1, arg2);
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.ControllerEvent");
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.ControllerEvent:ControllerEvent",argc, 3);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ControllerEvent_constructor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+
+static int lua_ax_extension_ControllerEvent_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (ControllerEvent)");
+    return 0;
+}
+
+int lua_register_ax_extension_ControllerEvent(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.ControllerEvent");
+    tolua_cclass(tolua_S,"ControllerEvent","ax.ControllerEvent","ax.Event",nullptr);
+
+    tolua_beginmodule(tolua_S,"ControllerEvent");
+        tolua_function(tolua_S,"new",lua_ax_extension_ControllerEvent_constructor);
+        tolua_function(tolua_S,"getControllerEventType",lua_ax_extension_ControllerEvent_getControllerEventType);
+        tolua_function(tolua_S,"getController",lua_ax_extension_ControllerEvent_getController);
+        tolua_function(tolua_S,"getKeyCode",lua_ax_extension_ControllerEvent_getKeyCode);
+        tolua_function(tolua_S,"setKeyCode",lua_ax_extension_ControllerEvent_setKeyCode);
+        tolua_function(tolua_S,"setConnectStatus",lua_ax_extension_ControllerEvent_setConnectStatus);
+        tolua_function(tolua_S,"isConnected",lua_ax_extension_ControllerEvent_isConnected);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::ControllerEvent).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.ControllerEvent";
+    g_typeCast[typeName] = "ax.ControllerEvent";
+    return 1;
+}
+
+int lua_ax_extension_ControllerEventListener_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.ControllerEventListener",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ControllerEventListener_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::ControllerEventListener::create();
+        object_to_luaval<ax::ControllerEventListener>(tolua_S, "ax.ControllerEventListener",(ax::ControllerEventListener*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.ControllerEventListener:create",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_extension_ControllerEventListener_create'.",&tolua_err);
+#endif
+    return 0;
+}
+static int lua_ax_extension_ControllerEventListener_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (ControllerEventListener)");
+    return 0;
+}
+
+int lua_register_ax_extension_ControllerEventListener(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.ControllerEventListener");
+    tolua_cclass(tolua_S,"ControllerEventListener","ax.ControllerEventListener","ax.EventListener",nullptr);
+
+    tolua_beginmodule(tolua_S,"ControllerEventListener");
+        tolua_function(tolua_S,"create", lua_ax_extension_ControllerEventListener_create);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::ControllerEventListener).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.ControllerEventListener";
+    g_typeCast[typeName] = "ax.ControllerEventListener";
     return 1;
 }
 
@@ -4334,7 +4762,7 @@ static int lua_ax_extension_EventAssetsManagerEx_finalize(lua_State* tolua_S)
 int lua_register_ax_extension_EventAssetsManagerEx(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"axext.EventAssetsManagerEx");
-    tolua_cclass(tolua_S,"EventAssetsManagerEx","axext.EventAssetsManagerEx","ax.EventCustom",nullptr);
+    tolua_cclass(tolua_S,"EventAssetsManagerEx","axext.EventAssetsManagerEx","ax.CustomEvent",nullptr);
 
     tolua_beginmodule(tolua_S,"EventAssetsManagerEx");
         tolua_function(tolua_S,"new",lua_ax_extension_EventAssetsManagerEx_constructor);
@@ -5458,7 +5886,7 @@ static int lua_ax_extension_EventListenerAssetsManagerEx_finalize(lua_State* tol
 int lua_register_ax_extension_EventListenerAssetsManagerEx(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"axext.EventListenerAssetsManagerEx");
-    tolua_cclass(tolua_S,"EventListenerAssetsManagerEx","axext.EventListenerAssetsManagerEx","ax.EventListenerCustom",nullptr);
+    tolua_cclass(tolua_S,"EventListenerAssetsManagerEx","axext.EventListenerAssetsManagerEx","ax.CustomEventListener",nullptr);
 
     tolua_beginmodule(tolua_S,"EventListenerAssetsManagerEx");
         tolua_function(tolua_S,"new",lua_ax_extension_EventListenerAssetsManagerEx_constructor);
@@ -8725,6 +9153,8 @@ TOLUA_API int register_all_ax_extension(lua_State* tolua_S)
     lua_register_ax_extension_ScrollView(tolua_S);
     lua_register_ax_extension_TableViewCell(tolua_S);
     lua_register_ax_extension_TableView(tolua_S);
+    lua_register_ax_extension_ControllerEvent(tolua_S);
+    lua_register_ax_extension_ControllerEventListener(tolua_S);
     lua_register_ax_extension_AssetsManager(tolua_S);
     lua_register_ax_extension_EventAssetsManagerEx(tolua_S);
     lua_register_ax_extension_Manifest(tolua_S);
@@ -8736,4 +9166,3 @@ TOLUA_API int register_all_ax_extension(lua_State* tolua_S)
     tolua_endmodule(tolua_S);
     return 1;
 }
-

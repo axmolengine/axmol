@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_tests__UIScale9SpriteTest__
-#define __cocos2d_tests__UIScale9SpriteTest__
+#pragma once
 #include "UIScene.h"
 
 DEFINE_TEST_SUITE(UIScale9SpriteTests);
@@ -318,5 +317,3 @@ public:
 
     virtual bool init() override;
 };
-
-#endif /* defined(__cocos2d_tests__UIScale9SpriteTest__) */

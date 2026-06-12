@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "axmol/base/EventType.h"
 #include "axmol/base/Environment.h"
 #include "axmol/base/Director.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/scene/Camera.h"
@@ -56,15 +56,15 @@ RenderTexture::RenderTexture()
     // Listen this event to save render texture before come to background.
     // Then it can be restored after coming to foreground on Android.
     auto toBackgroundListener =
-        EventListenerCustom::create(EVENT_COME_TO_BACKGROUND, AX_CALLBACK_1(RenderTexture::listenToBackground, this));
+        CustomEventListener::create(EVENT_COME_TO_BACKGROUND, AX_CALLBACK_1(RenderTexture::listenToBackground, this));
     _eventDispatcher->addEventListenerWithSceneGraphPriority(toBackgroundListener, this);
 
     auto toForegroundListener =
-        EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, AX_CALLBACK_1(RenderTexture::listenToForeground, this));
+        CustomEventListener::create(EVENT_COME_TO_FOREGROUND, AX_CALLBACK_1(RenderTexture::listenToForeground, this));
     _eventDispatcher->addEventListenerWithSceneGraphPriority(toForegroundListener, this);
 
     // Listen this event to restored texture id after coming to foreground on GLES.
-    _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
+    _rendererRecreatedListener = CustomEventListener::create(EVENT_RENDERER_RECREATED, [this](CustomEvent*) {
         TextureSliceData emptyData[] = {TextureSliceData{}};
         // Invalidate _depthStencilTexture contents and reinitializing GPU resources (e.g., after context loss)
         // Note: VolatileTextureMgr is responsible for resetting _colorTexture
@@ -90,7 +90,7 @@ RenderTexture::~RenderTexture()
     AX_SAFE_RELEASE(_depthStencilTexture);
 }
 
-void RenderTexture::listenToBackground(EventCustom* /*event*/)
+void RenderTexture::listenToBackground(CustomEvent* /*event*/)
 {
     // We have not found a way to dispatch the enter background message before the texture data are destroyed.
     // So we disable this pair of message handler at present.
@@ -117,7 +117,7 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
 #endif
 }
 
-void RenderTexture::listenToForeground(EventCustom* /*event*/)
+void RenderTexture::listenToForeground(CustomEvent* /*event*/)
 {
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _colorTexture->setAntiAliasTexParameters();
@@ -510,7 +510,7 @@ void RenderTexture::onSaveToFile(std::string filename, bool isRGBA, bool forceNo
                     [self = RefPtr<RenderTexture>(this), image, _filename, isRGBA, forceNonPMA]() {
                     image->reversePremultipliedAlpha();
 
-                    Director::getInstance()->getScheduler()->runOnAxmolThread([self, image, _filename, isRGBA] {
+                    Director::getInstance()->postTask([self, image, _filename, isRGBA] {
                         image->saveToFile(_filename, !isRGBA);
                         if (self->_saveFileCallback)
                         {

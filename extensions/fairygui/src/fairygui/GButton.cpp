@@ -374,7 +374,7 @@ void GButton::onRollOut(EventContext* context)
 
 void GButton::onTouchBegin(EventContext* context)
 {
-    if (context->getInput()->getButton() != EventMouse::MouseButton::BUTTON_LEFT)
+    if (context->getInput()->getButton() != ax::InputButton::Left)
         return;
 
     _down = true;
@@ -391,7 +391,7 @@ void GButton::onTouchBegin(EventContext* context)
 
 void GButton::onTouchEnd(EventContext* context)
 {
-    if (context->getInput()->getButton() != EventMouse::MouseButton::BUTTON_LEFT)
+    if (context->getInput()->getButton() != ax::InputButton::Left)
         return;
 
     if (_down)

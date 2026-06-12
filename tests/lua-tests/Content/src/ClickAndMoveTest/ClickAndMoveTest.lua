@@ -17,13 +17,13 @@ local function initWithLayer()
                                                  ax.FadeIn:create(1),
                                                  ax.FadeOut:create(1))))
 
-    local function onTouchBegan(touch, event)
+    local function onTouchBegan(event)
         return true
     end
 
-    local function onTouchEnded(touch, event)
+    local function onTouchEnded(event)
 
-        local location = touch:getLocation()
+        local location = event:getLocation()
 
         local s = layer:getChildByTag(kTagSprite)
         s:stopAllActions()
@@ -43,9 +43,9 @@ local function initWithLayer()
         s:runAction(ax.RotateTo:create(1, at))
     end
 
-    local listener = ax.EventListenerTouchOneByOne:create()
-    listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_TOUCH_BEGAN )
-    listener:registerScriptHandler(onTouchEnded,ax.Handler.EVENT_TOUCH_ENDED )
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_POINTER_DOWN )
+    listener:registerScriptHandler(onTouchEnded,ax.Handler.EVENT_POINTER_UP )
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
 

@@ -22,16 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-//
-//  UIFocusTest.h
-//  cocos2d_tests
-//
-//  Created by guanghui on 5/4/14.
-//
-//
-
-#ifndef __cocos2d_tests__UIFocusTest__
-#define __cocos2d_tests__UIFocusTest__
+#pragma once
 
 #include "../UIScene.h"
 
@@ -56,7 +47,7 @@ public:
 protected:
     ax::Menu* _dpadMenu;
     ax::ui::Widget* _firstFocusedWidget;
-    ax::EventListenerFocus* _eventListener;
+    ax::FocusEventListener* _eventListener;
     ax::ui::Button* _toggleButton;
 };
 
@@ -73,7 +64,7 @@ public:
     void toggleFocusLoop(ax::Object*, ax::ui::Widget::TouchEventType);
 
 protected:
-    ax::ui::Layout* _horizontalLayout;
+    ax::ui::LayoutGroup* _horizontalLayout;
     ax::ui::Text* _loopText;
 };
 
@@ -90,7 +81,7 @@ public:
     void toggleFocusLoop(ax::Object*, ax::ui::Widget::TouchEventType);
 
 protected:
-    ax::ui::Layout* _verticalLayout;
+    ax::ui::LayoutGroup* _verticalLayout;
     ax::ui::Text* _loopText;
 };
 
@@ -107,7 +98,7 @@ public:
     void toggleFocusLoop(ax::Object*, ax::ui::Widget::TouchEventType);
 
 protected:
-    ax::ui::Layout* _verticalLayout;
+    ax::ui::LayoutGroup* _verticalLayout;
     ax::ui::Text* _loopText;
 };
 
@@ -124,7 +115,7 @@ public:
     void toggleFocusLoop(ax::Object*, ax::ui::Widget::TouchEventType);
 
 protected:
-    ax::ui::Layout* _horizontalLayout;
+    ax::ui::LayoutGroup* _horizontalLayout;
     ax::ui::Text* _loopText;
 };
 
@@ -141,8 +132,6 @@ public:
     void toggleFocusLoop(ax::Object*, ax::ui::Widget::TouchEventType);
 
 protected:
-    ax::ui::Layout* _verticalLayout;
+    ax::ui::LayoutGroup* _verticalLayout;
     ax::ui::Text* _loopText;
 };
-
-#endif /* defined(__cocos2d_tests__UIFocusTest__) */

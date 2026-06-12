@@ -45,8 +45,8 @@ CurlTest::CurlTest()
     addChild(label, 0);
     label->setPosition(VisibleRect::center().x, VisibleRect::top().y - 50);
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(CurlTest::onTouchesEnded, this);
+    auto listener         = PointerEventListener::create();
+    listener->onPointerUp = AX_CALLBACK_1(CurlTest::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     // create a label to display the tip string
@@ -85,7 +85,7 @@ static size_t WriteMemoryCallback(void* contents, size_t size, size_t nmemb, voi
 
 // the test code is
 // http://curl.haxx.se/mail/lib-2009-12/0071.html
-void CurlTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void CurlTest::onPointerUp(PointerEvent* event)
 {
     CURL* curl;
     CURLcode res;

@@ -27,7 +27,7 @@
 #define __TestCpp__UIListViewTest__
 
 #include "../UIScene.h"
-#include "axmol/ui/UIScrollView.h"
+#include "axmol/ui/ScrollView.h"
 
 DEFINE_TEST_SUITE(UIListViewTests);
 

@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "axmol/ui/UILayout.h"
+#include "axmol/ui/LayoutGroup.h"
 #include "sceneext/DictionaryHelper.h"
 #include "sceneext/WidgetReader/WidgetReaderProtocol.h"
 #include "axmol/base/ObjectFactory.h"

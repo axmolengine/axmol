@@ -26,11 +26,9 @@ local attributeNames =
 local Sprite3DBasicTest = {}
 Sprite3DBasicTest.__index = Sprite3DBasicTest
 
-function Sprite3DBasicTest.onTouchesEnd(touches, event)
-    for i = 1,#(touches) do
-        local location = touches[i]:getLocation()
-        Sprite3DBasicTest.addNewSpriteWithCoords(Helper.currentLayer, location.x, location.y )
-    end
+function Sprite3DBasicTest.onTouchesEnd(event)
+    local location = event:getLocation()
+    Sprite3DBasicTest.addNewSpriteWithCoords(Helper.currentLayer, location.x, location.y )
 end
 
 function Sprite3DBasicTest.addNewSpriteWithCoords(parent,x,y)
@@ -67,8 +65,8 @@ function Sprite3DBasicTest.create()
     Helper.titleLabel:setString("Testing Sprite3D")
     Helper.subtitleLabel:setString("Tap screen to add more sprites")
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(Sprite3DBasicTest.onTouchesEnd,ax.Handler.EVENT_TOUCHES_ENDED )
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(Sprite3DBasicTest.onTouchesEnd,ax.Handler.EVENT_POINTER_UP )
 
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
@@ -104,31 +102,30 @@ function Sprite3DHitTest.create()
     sprite2:runAction(ax.RepeatForever:create(ax.RotateBy:create(3, -360)))
     layer:addChild(sprite2)
 
-    local listener = ax.EventListenerTouchOneByOne:create()
-    listener:setSwallowTouches(true)
-    listener:registerScriptHandler(function (touch, event)
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(function(event)
         local target = event:getCurrentTarget()
         local rect   = target:getBoundingBox()
-        if ax.rectContainsPoint(rect, touch:getLocation()) then
-            print(string.format("sprite3d began... x = %f, y = %f", touch:getLocation().x, touch:getLocation().y))
+        if ax.rectContainsPoint(rect, event:getLocation()) then
+            print(string.format("sprite3d began... x = %f, y = %f", event:getLocation().x, event:getLocation().y))
             target:setOpacity(100)
             return true
         end
 
         return false
-    end,ax.Handler.EVENT_TOUCH_BEGAN )
+    end,ax.Handler.EVENT_POINTER_DOWN )
 
-    listener:registerScriptHandler(function (touch, event)
+    listener:registerScriptHandler(function(event)
         local target = event:getCurrentTarget()
         local x,y = target:getPosition()
-        target:setPosition(ax.p(x + touch:getDelta().x, y + touch:getDelta().y))
-    end, ax.Handler.EVENT_TOUCH_MOVED)
+        target:setPosition(ax.p(x + event:getDelta().x, y + event:getDelta().y))
+    end, ax.Handler.EVENT_POINTER_MOVE)
 
-    listener:registerScriptHandler(function (touch, event)
+    listener:registerScriptHandler(function(event)
         local target = event:getCurrentTarget()
         print("sprite3d onTouchEnd")
         target:setOpacity(255)
-    end, ax.Handler.EVENT_TOUCH_ENDED)
+    end, ax.Handler.EVENT_POINTER_UP)
 
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, sprite1)
@@ -145,11 +142,9 @@ Sprite3DWithSkinTest.__index = Sprite3DWithSkinTest
 Sprite3DWithSkinTest._animateQuality = ax.Animate3DQuality.QUALITY_HIGH
 Sprite3DWithSkinTest._sprites = {}
 
-function Sprite3DWithSkinTest.onTouchesEnd(touches, event)
-    for i = 1,#(touches) do
-        local location = touches[i]:getLocation()
-        Sprite3DWithSkinTest.addNewSpriteWithCoords(Helper.currentLayer, location.x, location.y )
-    end
+function Sprite3DWithSkinTest.onTouchesEnd(event)
+    local location = event:getLocation()
+    Sprite3DWithSkinTest.addNewSpriteWithCoords(Helper.currentLayer, location.x, location.y )
 end
 
 function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent,x,y)
@@ -196,8 +191,8 @@ function Sprite3DWithSkinTest.create()
     Helper.titleLabel:setString("Testing Sprite3D for animation from c3t")
     Helper.subtitleLabel:setString("Tap screen to add more sprite3D")
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(Sprite3DWithSkinTest.onTouchesEnd,ax.Handler.EVENT_TOUCHES_ENDED )
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(Sprite3DWithSkinTest.onTouchesEnd,ax.Handler.EVENT_POINTER_UP )
 
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
@@ -277,30 +272,28 @@ function Animate3DTest:onEnter()
         self._sprite:stopActionByTag(101)
         self._state = State.HURT_TO_SWIMMING
     end
-    local function onTouchesEnd(touches, event )
-        for i = 1,#(touches) do
-            local location = touches[i]:getLocation()
-            if self._sprite ~= nil then
-                local len = ax.pGetLength(ax.pSub(ax.p(self._sprite:getPosition()), location))
-                if len < 40 then
-                    if self._state == State.SWIMMING then
-                        self._sprite:runAction(self._hurt)
-                        local delay = ax.DelayTime:create(self._hurt:getDuration() - 0.1)
-                        local seq = ax.Sequence:create(delay, ax.CallFunc:create(renewCallBack))
-                        seq:setTag(101)
-                        self._sprite:runAction(seq)
-                        self._state = State.SWIMMING_TO_HURT
-                    end
-                    return
+    local function onTouchesEnd(event)
+        local location = event:getLocation()
+        if self._sprite ~= nil then
+            local len = ax.pGetLength(ax.pSub(ax.p(self._sprite:getPosition()), location))
+            if len < 40 then
+                if self._state == State.SWIMMING then
+                    self._sprite:runAction(self._hurt)
+                    local delay = ax.DelayTime:create(self._hurt:getDuration() - 0.1)
+                    local seq = ax.Sequence:create(delay, ax.CallFunc:create(renewCallBack))
+                    seq:setTag(101)
+                    self._sprite:runAction(seq)
+                    self._state = State.SWIMMING_TO_HURT
                 end
+                return
             end
         end
     end
 
     self:addSprite3D()
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(onTouchesEnd,ax.Handler.EVENT_TOUCHES_ENDED )
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(onTouchesEnd,ax.Handler.EVENT_POINTER_UP )
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -442,8 +435,8 @@ function AttachmentTest.create()
 
     addNewSpriteWithCoords(ax.p(size.width / 2, size.height / 2))
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(function (touches, event)
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(function(event)
         if _hasWeapon then
             _sprite:removeAllAttachNode()
         else
@@ -452,7 +445,7 @@ function AttachmentTest.create()
         end
 
         _hasWeapon = not _hasWeapon
-    end,ax.Handler.EVENT_TOUCHES_ENDED)
+    end,ax.Handler.EVENT_POINTER_UP)
 
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
@@ -489,10 +482,10 @@ function Sprite3DReskinTest:init()
 
     self:addNewSpriteWithCoords(ax.p(size.width / 2, size.height / 2))
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(function (touches, event)
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(function(event)
 
-    end,ax.Handler.EVENT_TOUCHES_ENDED)
+    end,ax.Handler.EVENT_POINTER_UP)
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -678,42 +671,38 @@ end)
 
 function Sprite3DWithOBBPerfromanceTest:ctor()
     self._obb = {}
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(function (touches, event)
-        for i,touch in ipairs(touches) do
-            local location = touch:getLocationInView()
-            if nil ~= self._obb and #self._obb > 0 then
-                self._intersetList = {}
-                local ray = ax.Ray:new()
-                self:calculateRayByLocationInView(ray, location)
-
-                for idx,value in ipairs(self._obb) do
-                    if ray:intersects(value) then
-                        table.insert(self._intersetList, idx)
-                        return
-                    end
-                end
-            end
-        end
-    end,ax.Handler.EVENT_TOUCHES_BEGAN)
-
-    listener:registerScriptHandler(function (touches, event)
-
-    end,ax.Handler.EVENT_TOUCHES_ENDED)
-
-    listener:registerScriptHandler(function (touches, event)
-        for i,touch in ipairs(touches) do
-            local location = touch:getLocation()
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(function(event)
+        local location = event:getScreenLocation()
+        if nil ~= self._obb and #self._obb > 0 then
+            self._intersetList = {}
+            local ray = ax.Ray:new()
+            self:calculateRayByLocationInView(ray, location)
 
             for idx,value in ipairs(self._obb) do
-                for lstIdx,lstValue in ipairs(self._intersetList) do
-                    if idx == lstValue then
-                        self._obb[idx]._center = ax.vec3(location.x,location.y,0)
-                    end
+                if ray:intersects(value) then
+                    table.insert(self._intersetList, idx)
+                    return
                 end
             end
         end
-    end,ax.Handler.EVENT_TOUCHES_MOVED)
+    end,ax.Handler.EVENT_POINTER_DOWN)
+
+    listener:registerScriptHandler(function(event)
+
+    end,ax.Handler.EVENT_POINTER_UP)
+
+    listener:registerScriptHandler(function(event)
+        local location = event:getLocation()
+
+        for idx,value in ipairs(self._obb) do
+            for lstIdx,lstValue in ipairs(self._intersetList) do
+                if idx == lstValue then
+                    self._obb[idx]._center = ax.vec3(location.x,location.y,0)
+                end
+            end
+        end
+    end,ax.Handler.EVENT_POINTER_MOVE)
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)

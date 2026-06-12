@@ -77,7 +77,7 @@ public:
     void removeArmatureMovementCallBack(Armature* pAr, ax::Object* pTarget, SEL_MovementEventCallFunc mecf);
     void removeArmatureAllMovementCallBack(Armature* pAr);
     void removeAllArmatureMovementCallBack();
-    void dispatchEvent(ax::EventCustom* tEvent);
+    void dispatchEvent(ax::CustomEvent* tEvent);
     void removeEventListener(ax::EventListener* listener);
     void addEventListenerWithFixedPriority(ax::EventListener* listener, int fixedPriority);
 

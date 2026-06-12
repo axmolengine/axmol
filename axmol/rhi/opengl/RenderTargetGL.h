@@ -28,7 +28,7 @@ public:
     GLuint _FBO = 0;
     tlx::pod_vector<GLenum> _GLbufs;
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    EventListenerCustom* _rendererRecreatedListener{nullptr};
+    CustomEventListener* _rendererRecreatedListener{nullptr};
 #endif
 };
 

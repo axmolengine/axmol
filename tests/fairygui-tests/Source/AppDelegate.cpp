@@ -42,9 +42,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto renderView = director->getRenderView();
     if (!renderView) {
 #if defined(AX_PLATFORM_GLFW)
-        renderView = RenderViewImpl::createWithRect("Examples", ax::Rect(0, 0, 1280, 720));
+        renderView = RenderView::createWithRect("Examples", ax::Rect(0, 0, 1280, 720));
 #else
-        renderView = RenderViewImpl::create("Examples");
+        renderView = RenderView::create("Examples");
 #endif
         director->setRenderView(renderView);
     }

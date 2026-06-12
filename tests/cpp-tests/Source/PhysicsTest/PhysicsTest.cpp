@@ -84,8 +84,8 @@ bool PhysicsDemo::init()
 
 PhysicsDemo::~PhysicsDemo()
 {
-    if (_mouseListener)
-        _eventDispatcher->removeEventListener(_mouseListener);
+    if (_pointerListener)
+        _eventDispatcher->removeEventListener(_pointerListener);
 }
 
 std::string PhysicsDemo::title() const
@@ -97,13 +97,12 @@ void PhysicsDemo::onEnter()
 {
     TestCase::onEnter();
 
-    _mouseListener = EventListenerMouse::create();
-    //_mouseListener->onMouseMove   = AX_CALLBACK_1(MouseEventTest::onMouseMove, this);
-    //_mouseListener->onMouseUp     = AX_CALLBACK_1(MouseEventTest::onMouseUp, this);
-    _mouseListener->onMouseDown = AX_CALLBACK_1(PhysicsDemo::onMouseDown, this);
-    //_mouseListener->onMouseScroll = AX_CALLBACK_1(MouseEventTest::onMouseScroll, this);
+    _pointerListener = PointerEventListener::create();
 
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
+    _pointerListener->onPointerDown = AX_CALLBACK_1(PhysicsDemo::onPointerDown, this);
+    _pointerListener->onPointerMove = AX_CALLBACK_1(PhysicsDemo::onPointerMove, this);
+    _pointerListener->onPointerUp   = AX_CALLBACK_1(PhysicsDemo::onPointerUp, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(_pointerListener, this);
 
     // create debug draw node
     auto debugDrawNode = utils::createInstance<extension::PhysicsDebugNode>(&extension::PhysicsDebugNode::initWithWorld,
@@ -128,13 +127,6 @@ void PhysicsDemo::onEnter()
     this->addChild(menu);
     menu->setPosition(Vec2(VisibleRect::right().x - item->getContentSize().width / 2 - 10,
                            VisibleRect::top().y - item->getContentSize().height / 2 - 10));
-}
-
-bool PhysicsDemo::onMouseDown(Event* event)
-{
-    EventMouse* e = (EventMouse*)event;
-    AXLOGI("PhysicsDemo::onMouseDown: ({},{})", e->getLocation().x, e->getLocation().y);
-    return true;
 }
 
 Sprite* PhysicsDemo::addGrossiniAtPosition(Vec2 p, float scale /* = 1.0*/, bool allowDrag /* = true */)
@@ -289,13 +281,15 @@ Sprite* PhysicsDemo::makeTriangle(Vec2 point, Size size, int color, const ax::Ph
     return triangle;
 }
 
-bool PhysicsDemo::onTouchBegan(Touch* touch, Event* event)
+bool PhysicsDemo::onPointerDown(PointerEvent* event)
 {
-    auto location = touch->getLocation();
+    _isPressed = true;
+
+    auto location = event->getLocation();
     auto collider = _physicsWorld2D->overlapPoint(location);
 
     if (!collider)
-        return false;
+        return _isPressed;
 
     auto body = collider->getAttachedBody();
     if ((body->getTag() & DRAG_BODYS_BITS) != 0)
@@ -309,33 +303,37 @@ bool PhysicsDemo::onTouchBegan(Touch* touch, Event* event)
         joint->setMaxForceScale(100.0f);
         mouse->addComponent(joint);
         mouse->setPosition(location);
-        _mouses.insert(std::make_pair(touch->getID(), mouse));
+        _draggers.insert(std::make_pair(event->getPointerId(), mouse));
 
-        return true;
+        return _isPressed;
     }
 
-    return false;
+    return _isPressed;
 }
 
-void PhysicsDemo::onTouchMoved(Touch* touch, Event* /*event*/)
+void PhysicsDemo::onPointerMove(PointerEvent* event)
 {
-    auto it = _mouses.find(touch->getID());
+    auto it = _draggers.find(event->getPointerId());
 
-    if (it != _mouses.end())
+    if (it != _draggers.end())
     {
         auto mouseNode = it->second;
-        mouseNode->setPosition(touch->getLocation());
+        mouseNode->setPosition(event->getLocation());
+
+        return;
     }
 }
 
-void PhysicsDemo::onTouchEnded(Touch* touch, Event* /*event*/)
+void PhysicsDemo::onPointerUp(PointerEvent* event)
 {
-    auto it = _mouses.find(touch->getID());
+    _isPressed = false;
 
-    if (it != _mouses.end())
+    auto it = _draggers.find(event->getPointerId());
+
+    if (it != _draggers.end())
     {
         this->removeChild(it->second);
-        _mouses.erase(it);
+        _draggers.erase(it);
     }
 }
 
@@ -420,12 +418,8 @@ void PhysicsDemoClickAdd::onEnter()
 {
     PhysicsDemo::onEnter();
 
-    auto touchListener            = EventListenerTouchAllAtOnce::create();
-    touchListener->onTouchesEnded = AX_CALLBACK_2(PhysicsDemoClickAdd::onTouchesEnded, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
-
     Device::setAccelerometerEnabled(true);
-    auto accListener = EventListenerAcceleration::create(AX_CALLBACK_2(PhysicsDemoClickAdd::onAcceleration, this));
+    auto accListener = AccelerationEventListener::create(AX_CALLBACK_1(PhysicsDemoClickAdd::onAcceleration, this));
     _eventDispatcher->addEventListenerWithSceneGraphPriority(accListener, this);
 
     auto node = Node::create();
@@ -443,26 +437,34 @@ std::string PhysicsDemoClickAdd::subtitle() const
     return "multi touch to add grossini";
 }
 
-void PhysicsDemoClickAdd::onTouchesEnded(const std::vector<Touch*>& touches, Event* /*event*/)
+bool PhysicsDemoClickAdd::onPointerDown(ax::PointerEvent* event)
+{
+    auto ret = PhysicsDemo::onPointerDown(event);
+
+    return ret || _isPressed;
+}
+
+void PhysicsDemoClickAdd::onPointerUp(PointerEvent* event)
 {
     // Add a new body/atlas sprite at the touched location
 
-    for (auto& touch : touches)
-    {
-        auto location = touch->getLocation();
+    PhysicsDemo::onPointerUp(event);
 
-        addGrossiniAtPosition(location);
-    }
+    auto location = event->getLocation();
+
+    addGrossiniAtPosition(location);
 }
 
-void PhysicsDemoClickAdd::onAcceleration(Acceleration* acc, Event* /*event*/)
+void PhysicsDemoClickAdd::onAcceleration(AccelerationEvent* event)
 {
     static float prevX = 0, prevY = 0;
 
 #    define FILTER_FACTOR 0.05f
 
-    float accelX = (float)acc->x * FILTER_FACTOR + (1 - FILTER_FACTOR) * prevX;
-    float accelY = (float)acc->y * FILTER_FACTOR + (1 - FILTER_FACTOR) * prevY;
+    auto& acc = event->getAcceleration();
+
+    float accelX = (float)acc.x * FILTER_FACTOR + (1 - FILTER_FACTOR) * prevX;
+    float accelY = (float)acc.y * FILTER_FACTOR + (1 - FILTER_FACTOR) * prevY;
 
     prevX = accelX;
     prevY = accelY;
@@ -476,12 +478,6 @@ void PhysicsDemoClickAdd::onAcceleration(Acceleration* acc, Event* /*event*/)
 void PhysicsDemoPyramidStack::onEnter()
 {
     PhysicsDemo::onEnter();
-
-    auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemoPyramidStack::onTouchBegan, this);
-    touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemoPyramidStack::onTouchMoved, this);
-    touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemoPyramidStack::onTouchEnded, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     auto node = Node::create();
     node->addComponent(Rigidbody2D::createEdgeSegment(VisibleRect::leftBottom() + Vec2(0.0f, 50.0f),
@@ -525,10 +521,6 @@ PhysicsDemoRayCast::PhysicsDemoRayCast() : _angle(0.0f), _node(nullptr), _mode(0
 void PhysicsDemoRayCast::onEnter()
 {
     PhysicsDemo::onEnter();
-
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(PhysicsDemoRayCast::onTouchesEnded, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     _physicsWorld2D->setGravity(Point::ZERO);
 
@@ -656,13 +648,13 @@ void PhysicsDemoRayCast::update(float /*delta*/)
     _angle += 0.25f * (float)M_PI / 180.0f;
 }
 
-void PhysicsDemoRayCast::onTouchesEnded(const std::vector<Touch*>& touches, Event* /*event*/)
+void PhysicsDemoRayCast::onPointerUp(PointerEvent* event)
 {
     // Add a new body/atlas sprite at the touched location
-
-    for (auto& touch : touches)
     {
-        auto location = touch->getLocation();
+        PhysicsDemo::onPointerUp(event);
+
+        auto location = event->getLocation();
 
         float r = AXRANDOM_0_1();
 
@@ -690,12 +682,6 @@ void PhysicsDemoActions::onEnter()
 {
     PhysicsDemo::onEnter();
     _physicsWorld2D->setGravity(Vec2::ZERO);
-
-    auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemoActions::onTouchBegan, this);
-    touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemoActions::onTouchMoved, this);
-    touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemoActions::onTouchEnded, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     auto node = Node::create();
     node->addComponent(Rigidbody2D::createEdgeBox(VisibleRect::getVisibleRect().size));
@@ -732,12 +718,6 @@ void PhysicsDemoJoints::onEnter()
 {
     PhysicsDemo::onEnter();
     toggleDebug();
-
-    auto listener          = EventListenerTouchOneByOne::create();
-    listener->onTouchBegan = AX_CALLBACK_2(PhysicsDemo::onTouchBegan, this);
-    listener->onTouchMoved = AX_CALLBACK_2(PhysicsDemo::onTouchMoved, this);
-    listener->onTouchEnded = AX_CALLBACK_2(PhysicsDemo::onTouchEnded, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     float width  = (VisibleRect::getVisibleRect().size.width - 10) / 4;
     float height = (VisibleRect::getVisibleRect().size.height - 50) / 4;
@@ -961,13 +941,8 @@ void PhysicsDemoPump::onEnter()
     PhysicsDemo::onEnter();
     toggleDebug();
 
-    _distance                   = 0.0f;
-    _rotationV                  = 0.0f;
-    auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemoPump::onTouchBegan, this);
-    touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemoPump::onTouchMoved, this);
-    touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemoPump::onTouchEnded, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+    _distance  = 0.0f;
+    _rotationV = 0.0f;
     scheduleUpdate();
 
     auto worldBox     = Node::create();
@@ -1132,25 +1107,25 @@ void PhysicsDemoPump::update(float delta)
     }
 }
 
-bool PhysicsDemoPump::onTouchBegan(Touch* touch, Event* event)
+bool PhysicsDemoPump::onPointerDown(PointerEvent* event)
 {
-    PhysicsDemo::onTouchBegan(touch, event);
+    PhysicsDemo::onPointerDown(event);
 
-    _distance = touch->getLocation().x - VisibleRect::center().x;
+    _distance = event->getLocation().x - VisibleRect::center().x;
 
     return true;
 }
 
-void PhysicsDemoPump::onTouchMoved(Touch* touch, Event* event)
+void PhysicsDemoPump::onPointerMove(PointerEvent* event)
 {
-    PhysicsDemo::onTouchMoved(touch, event);
+    PhysicsDemo::onPointerMove(event);
 
-    _distance = touch->getLocation().x - VisibleRect::center().x;
+    _distance = event->getLocation().x - VisibleRect::center().x;
 }
 
-void PhysicsDemoPump::onTouchEnded(Touch* touch, Event* event)
+void PhysicsDemoPump::onPointerUp(PointerEvent* event)
 {
-    PhysicsDemo::onTouchEnded(touch, event);
+    PhysicsDemo::onPointerUp(event);
 
     _distance = 0;
 }
@@ -1172,12 +1147,6 @@ void PhysicsDemoOneWayPlatform::onEnter()
     _physicsWorld2D->setGlobalEventEnabled(
         ContactEventBits::PreSolve | ContactEventBits::Hit | ContactEventBits::Contact, true);
     _physicsWorld2D->setPreSolveCallback(AX_CALLBACK_1(PhysicsDemoOneWayPlatform::onPreSolve, this));
-
-    auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemoOneWayPlatform::onTouchBegan, this);
-    touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemoOneWayPlatform::onTouchMoved, this);
-    touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemoOneWayPlatform::onTouchEnded, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     auto ground = Node::create();
     ground->addComponent(Rigidbody2D::createEdgeSegment(VisibleRect::leftBottom() + Vec2(0.0f, 50.0f),
@@ -1245,11 +1214,6 @@ void PhysicsDemoSlice::onEnter()
     toggleDebug();
 
     _sliceTag = 1;
-
-    auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = [](Touch* /*touch*/, Event* /*event*/) -> bool { return true; };
-    touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemoSlice::onTouchEnded, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     auto ground = Node::create();
     ground->addComponent(Rigidbody2D::createEdgeSegment(VisibleRect::leftBottom() + Vec2(0, 50),
@@ -1333,11 +1297,13 @@ void PhysicsDemoSlice::clipPoly(PolygonCollider2D* collider, Vec2 normal, float 
     addChild(node);
 }
 
-void PhysicsDemoSlice::onTouchEnded(Touch* touch, Event* /*event*/)
+void PhysicsDemoSlice::onPointerUp(PointerEvent* event)
 {
+    PhysicsDemo::onPointerUp(event);
+
     auto func = AX_CALLBACK_3(PhysicsDemoSlice::slice, this);
 
-    Ray2D ray = Ray2D::fromPoints(touch->getStartLocation(), touch->getLocation());
+    Ray2D ray = Ray2D::fromPoints(event->getStartLocation(), event->getLocation());
     getPhysicsWorld2D()->rayCast(func, ray, &ray);
 }
 
@@ -1670,12 +1636,6 @@ void PhysicsPositionRotationTest::onEnter()
     toggleDebug();
     _physicsWorld2D->setGravity(Point::ZERO);
 
-    auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemo::onTouchBegan, this);
-    touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemo::onTouchMoved, this);
-    touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemo::onTouchEnded, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
-
     auto wall = Node::create();
     wall->addComponent(Rigidbody2D::createEdgeBox(VisibleRect::getVisibleRect().size));
     wall->setPosition(VisibleRect::center());
@@ -1732,12 +1692,6 @@ std::string PhysicsPositionRotationTest::title() const
 void PhysicsSetGravityEnableTest::onEnter()
 {
     PhysicsDemo::onEnter();
-
-    auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemo::onTouchBegan, this);
-    touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemo::onTouchMoved, this);
-    touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemo::onTouchEnded, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     // wall
     auto wall = Node::create();
@@ -1804,12 +1758,6 @@ void PhysicsDemoBug5482::onEnter()
     PhysicsDemo::onEnter();
 
     toggleDebug();
-
-    auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemo::onTouchBegan, this);
-    touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemo::onTouchMoved, this);
-    touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemo::onTouchEnded, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     _bodyInA = false;
 
@@ -1927,9 +1875,9 @@ std::string PhysicsFixedUpdate::subtitle() const
     return "The second ball should not run across the wall";
 }
 
-bool PhysicsTransformTest::onTouchBegan(Touch* touch, Event* /*event*/)
+bool PhysicsTransformTest::onPointerDown(PointerEvent* event)
 {
-    _parentSprite->setPosition(_rootLayer->convertTouchToNodeSpace(touch));
+    _parentSprite->setPosition(_rootLayer->convertPointerToNodeSpace(event));
     return false;
 }
 
@@ -1938,10 +1886,6 @@ void PhysicsTransformTest::onEnter()
     PhysicsDemo::onEnter();
     toggleDebug();
     _physicsWorld2D->setGravity(Point::ZERO);
-
-    auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsTransformTest::onTouchBegan, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     _rootLayer = Layer::create();
     addChild(_rootLayer);
@@ -2067,12 +2011,6 @@ void PhysicsDemoPyramidStackFixedUpdate::onEnter()
     PhysicsDemo::onEnter();
 
     setFixedUpdateEnabled(true);
-
-    auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemoPyramidStackFixedUpdate::onTouchBegan, this);
-    touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemoPyramidStackFixedUpdate::onTouchMoved, this);
-    touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemoPyramidStackFixedUpdate::onTouchEnded, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     auto node = Node::create();
     node->addComponent(Rigidbody2D::createEdgeSegment(VisibleRect::leftBottom() + Vec2(0.0f, 50.0f),

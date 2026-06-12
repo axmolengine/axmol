@@ -36,6 +36,7 @@ THE SOFTWARE.
 #include <string>
 #include <sstream>
 #include <fontconfig/fontconfig.h>
+#include "GLFW/glfw3.h"
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
@@ -79,6 +80,28 @@ struct LineBreakLine
 
 namespace ax
 {
+
+void Device::getClipboardText(std::function<void(std::string_view)> callback)
+{
+    if (!callback)
+        return;
+    auto text = glfwGetClipboardString(nullptr);
+    if (text)
+        callback(text);
+    else
+        callback(std::string_view{});
+}
+
+void Device::setClipboardText(std::string_view text)
+{
+    std::string tmp(text);
+    glfwSetClipboardString(nullptr, tmp.c_str());
+}
+
+void Device::clearClipboard()
+{
+    glfwSetClipboardString(nullptr, "");
+}
 
 int Device::getDPI()
 {

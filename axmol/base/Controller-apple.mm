@@ -31,8 +31,8 @@
 
 #    include "axmol/base/Macros.h"
 #    include "axmol/base/EventDispatcher.h"
-#    include "axmol/base/EventController.h"
-#    include "axmol/base/EventListenerController.h"
+#    include "axmol/base/ControllerEvent.h"
+#    include "axmol/base/ControllerEventListener.h"
 #    include "axmol/base/Director.h"
 #    include "axmol/2d/Label.h"
 

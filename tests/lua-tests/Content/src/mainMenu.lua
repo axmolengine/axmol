@@ -209,15 +209,20 @@ function CreateTestMenu()
     MainMenu:setPosition(CurPos.x, CurPos.y)
     menuLayer:addChild(MainMenu)
 
-    -- handling touch events
-    local function onTouchBegan(touch, event)
-        BeginPos = touch:getLocation()
-        -- CCTOUCHBEGAN event must return true
+    -- handling pointer events
+    local function onPointerDown(event)
+        BeginPos = event:getLocation()
         return true
     end
 
-    local function onTouchMoved(touch, event)
-        local location = touch:getLocation()
+    local function onPointerMove(event)
+        if not event:isCaptured()  then
+            return
+        end
+
+        event:stopPropagation();
+
+        local location = event:getLocation()
         local nMoveY = location.y - BeginPos.y
         local curPosx, curPosy = MainMenu:getPosition()
         local nextPosy = curPosy + nMoveY
@@ -237,9 +242,9 @@ function CreateTestMenu()
         CurPos = {x = curPosx, y = nextPosy}
     end
 
-    local listener = ax.EventListenerTouchOneByOne:create()
-    listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_TOUCH_BEGAN )
-    listener:registerScriptHandler(onTouchMoved,ax.Handler.EVENT_TOUCH_MOVED )
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(onPointerDown,ax.Handler.EVENT_POINTER_DOWN )
+    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
     local eventDispatcher = menuLayer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, menuLayer)
 

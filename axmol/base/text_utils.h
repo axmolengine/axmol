@@ -25,15 +25,14 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef AXMOL__TEXT_UTILS_H
-#define AXMOL__TEXT_UTILS_H
+#pragma once
 
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/tlx/format.hpp"
 #include <vector>
 #include <span>
 #include <string>
-#include <sstream>
+#include <utility>
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include <jni.h>
@@ -74,6 +73,14 @@ inline std::string_view trim(std::string_view s)
 {
     return ltrim(rtrim(s));
 }
+
+struct UTF8CountResult
+{
+    size_t charCount = 0;     // Number of valid UTF-8 characters processed
+    size_t byteCount = 0;     // Number of bytes consumed
+    bool success     = true;  // False if an invalid UTF-8 sequence was encountered
+    explicit operator bool() const { return success; }
+};
 
 /**
  *  @brief Converts from UTF8 string to UTF16 string.
@@ -204,7 +211,26 @@ AX_DLL bool isUnicodeNonBreaking(char32_t ch);
  * @param utf8 A UTF-8 encoded string view.
  * @return The number of Unicode code points in the input string.
  */
-AX_DLL size_t countUTF8Chars(std::string_view utf8);
+AX_DLL size_t countUTF8Chars(std::string_view strUTF8);
+
+/**
+ * @brief Count UTF-8 characters and bytes up to a maximum character limit.
+ *
+ * This function scans a UTF-8 encoded string and counts both the number of
+ * characters and the number of bytes consumed until either the end of the
+ * string is reached or the specified maximum character limit is exceeded.
+ *
+ * @param strUTF8   The UTF-8 encoded input string.
+ * @param charLimit  The maximum number of UTF-8 characters to process.
+ *
+ * @return A pair of integers:
+ *         - first: The number of UTF-8 characters counted (up to charLimit).
+ *         - second: The number of bytes consumed in the input string.
+ *
+ * @note If the input contains invalid UTF-8 sequences, behavior is undefined.
+ *       This function does not perform full UTF-8 validation.
+ */
+AX_DLL UTF8CountResult countUTF8WithLimit(std::string_view strUTF8, size_t charLimit);
 
 /*
  * @brief Gets the byte offset of the UTF-8 character at the specified offset.
@@ -299,5 +325,3 @@ private:
 }  // namespace text_utils
 
 }  // namespace ax
-
-#endif /** defined(AXMOL__TEXT_UTILS_H) */

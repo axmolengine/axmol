@@ -94,10 +94,10 @@ bool Physics3DTestDemo::init()
         _camera->setCameraFlag(CameraFlag::USER1);
         this->addChild(_camera);
 
-        auto listener            = EventListenerTouchAllAtOnce::create();
-        listener->onTouchesBegan = AX_CALLBACK_2(Physics3DTestDemo::onTouchesBegan, this);
-        listener->onTouchesMoved = AX_CALLBACK_2(Physics3DTestDemo::onTouchesMoved, this);
-        listener->onTouchesEnded = AX_CALLBACK_2(Physics3DTestDemo::onTouchesEnded, this);
+        auto listener           = PointerEventListener::create();
+        listener->onPointerDown = AX_CALLBACK_1(Physics3DTestDemo::onPointerDown, this);
+        listener->onPointerMove = AX_CALLBACK_1(Physics3DTestDemo::onPointerMove, this);
+        listener->onPointerUp   = AX_CALLBACK_1(Physics3DTestDemo::onPointerUp, this);
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
         TTFConfig ttfConfig("fonts/arial.ttf", 10);
@@ -128,18 +128,21 @@ bool Physics3DTestDemo::init()
     return false;
 }
 
-void Physics3DTestDemo::onTouchesBegan(const std::vector<Touch*>& touches, ax::Event* event)
+bool Physics3DTestDemo::onPointerDown(ax::PointerEvent* event)
 {
     _needShootBox = true;
     event->stopPropagation();
+
+    return true;
 }
 
-void Physics3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, ax::Event* event)
+void Physics3DTestDemo::onPointerMove(ax::PointerEvent* event)
 {
-    if (touches.size() && _camera)
+    if (!event->isCaptured())
+        return;
+    if (_camera)
     {
-        auto touch = touches[0];
-        auto delta = touch->getDelta();
+        auto delta = event->getDelta();
 
         _angle -= AX_DEGREES_TO_RADIANS(delta.x);
         _camera->setPosition3D(Vec3(100.0f * sinf(_angle), 50.0f, 100.0f * cosf(_angle)));
@@ -150,24 +153,19 @@ void Physics3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, ax::E
             _needShootBox = false;
         }
         event->stopPropagation();
+
+        return;
     }
 }
 
-void Physics3DTestDemo::onTouchesEnded(const std::vector<Touch*>& touches, ax::Event* event)
+void Physics3DTestDemo::onPointerUp(ax::PointerEvent* event)
 {
     if (!_needShootBox)
         return;
-    if (!touches.empty())
-    {
-        auto location = touches[0]->getLocationInView();
 
-        Vec3 nearP(location.x, location.y, -1.0f), farP(location.x, location.y, 1.0f);
-        nearP = _camera->unproject(nearP);
-        farP  = _camera->unproject(farP);
-        Vec3 dir(farP - nearP);
-        shootBox(_camera->getPosition3D() + dir * 10.0f);
-        event->stopPropagation();
-    }
+    auto ray = _camera->screenToRay(event->getScreenLocation());
+    shootBox(_camera->getPosition3D() + ray.direction * 10.0f);
+    event->stopPropagation();
 }
 
 Physics3DTestDemo::Physics3DTestDemo() {}
@@ -506,18 +504,17 @@ bool Joint3DDemo::init()
     return true;
 }
 
-void Joint3DDemo::onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event)
+bool Joint3DDemo::onPointerDown(ax::PointerEvent* event)
 {
     // ray trace
     if (_camera)
     {
-        auto touch    = touches[0];
-        auto location = touch->getLocationInView();
+        auto location = event->getScreenLocation();
         Vec3 nearP(location.x, location.y, 0.0f), farP(location.x, location.y, 1.0f);
 
         auto size = Director::getInstance()->getCanvasSize();
-        _camera->unproject(size, &nearP, &nearP);
-        _camera->unproject(size, &farP, &farP);
+        nearP     = _camera->deprojectScreenToWorld(nearP);
+        farP      = _camera->deprojectScreenToWorld(farP);
 
         PhysicsWorld3D::HitResult result;
         bool ret = physicsScene->getPhysicsWorld3D()->rayCast(nearP, farP, &result);
@@ -529,35 +526,31 @@ void Joint3DDemo::onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Eve
             result.hitActor->getOwner()->addComponent(_constraint);
             _pickingDistance = (result.hitPosition - nearP).length();
             event->stopPropagation();
-            return;
+            return true;
         }
     }
-    Physics3DTestDemo::onTouchesBegan(touches, event);
+    Physics3DTestDemo::onPointerDown(event);
     _needShootBox = false;
+
+    return true;
 }
 
-void Joint3DDemo::onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event)
+void Joint3DDemo::onPointerMove(ax::PointerEvent* event)
 {
+    if (!event->isCaptured())
+        return;
     if (_constraint)
     {
         auto p2pConstraint = ((PivotJoint3D*)_constraint);
-
-        auto touch    = touches[0];
-        auto location = touch->getLocationInView();
-        Vec3 nearP(location.x, location.y, 0.0f), farP(location.x, location.y, 1.0f);
-
-        auto size = Director::getInstance()->getCanvasSize();
-        _camera->unproject(size, &nearP, &nearP);
-        _camera->unproject(size, &farP, &farP);
-        auto dir = (farP - nearP).getNormalized();
-        p2pConstraint->setConnectedAnchor(nearP + dir * _pickingDistance);
+        auto ray           = _camera->screenToRay(event->getScreenLocation());
+        p2pConstraint->setConnectedAnchor(ray.origin + ray.direction * _pickingDistance);
         event->stopPropagation();
         return;
     }
-    Physics3DTestDemo::onTouchesMoved(touches, event);
+    Physics3DTestDemo::onPointerMove(event);
 }
 
-void Joint3DDemo::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event)
+void Joint3DDemo::onPointerUp(ax::PointerEvent* event)
 {
     if (_constraint)
     {
@@ -570,7 +563,7 @@ void Joint3DDemo::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Eve
         event->stopPropagation();
         return;
     }
-    Physics3DTestDemo::onTouchesEnded(touches, event);
+    Physics3DTestDemo::onPointerUp(event);
 }
 
 std::string Physics3DKinematicDemo::subtitle() const

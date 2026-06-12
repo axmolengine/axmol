@@ -8,13 +8,10 @@ endif()
 
 if (WASM)
   set(AX_WASM_SHELL_FILE "${_AX_ROOT}/axmol/platform/wasm/shell_minimal.html" CACHE STRING "The path of wasm shell file")
-  set(_AX_WASM_EXPORTS "_main,_axmol_webglcontextlost,_axmol_webglcontextrestored,_axmol_hdoc_visibilitychange,_axmol_onwebclickcallback")
+  set(_AX_WASM_EXPORTS "_main")
 
   # option: AX_WASM_ENABLE_DEVTOOLS
   option(AX_WASM_ENABLE_DEVTOOLS "Enable wasm devtools" ON)
-  if(AX_WASM_ENABLE_DEVTOOLS)
-    string(APPEND _AX_WASM_EXPORTS ",_axmol_dev_pause,_axmol_dev_resume,_axmol_dev_step")
-  endif()
   set(AX_WASM_EXPORTS "${_AX_WASM_EXPORTS}" CACHE STRING "" FORCE)
 
   # option: AX_WASM_ASSETS_PRELOAD_FILE
@@ -664,7 +661,7 @@ macro(ax_setup_app_props app_name)
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
     target_link_options(${app_name} PRIVATE
       "-sEXPORTED_FUNCTIONS=[${AX_WASM_EXPORTS}]"
-      "-sEXPORTED_RUNTIME_METHODS=[ccall,cwrap,HEAPU8,requestFullscreen]"
+      "-sEXPORTED_RUNTIME_METHODS=[ccall,cwrap,HEAPU8,requestFullscreen,lengthBytesUTF8,stringToUTF8]"
     )
     set(EMSCRIPTEN_LINK_FLAGS "-lidbfs.js -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s STACK_SIZE=4mb --shell-file ${AX_WASM_SHELL_FILE} --use-preload-cache")
 
@@ -746,16 +743,7 @@ macro(ax_setup_winrt_sources)
     ${_AX_ROOT}/axmol/platform/winrt/xaml/SwapChainPage.idl
     ${_AX_ROOT}/axmol/platform/winrt/xaml/SwapChainPage.h
     ${_AX_ROOT}/axmol/platform/winrt/xaml/SwapChainPage.cpp
-    ${_AX_ROOT}/axmol/platform/winrt/xaml/AxmolRenderer.h
-    ${_AX_ROOT}/axmol/platform/winrt/xaml/AxmolRenderer.cpp
   )
-
-  if(AX_ENABLE_GL)
-    list(APPEND PLATFORM_SOURCES
-      ${_AX_ROOT}/axmol/platform/winrt/xaml/EGLSurfaceProvider.h
-      ${_AX_ROOT}/axmol/platform/winrt/xaml/EGLSurfaceProvider.cpp
-    )
-  endif()
 
   file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/proj.winrt/App.xaml" APP_XAML_FULL_PATH)
   set_property(

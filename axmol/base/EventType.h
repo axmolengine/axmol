@@ -32,7 +32,7 @@
  */
 
 // The application will come to foreground.
-// This message is posted in axmol/platform/android/jni/Java_dev_axmol_lib_AxmolRenderer.cpp.
+// This message is posted in axmol/platform/android/jni/AxmolPlayerJNI.cpp.
 #define EVENT_COME_TO_FOREGROUND "event_come_to_foreground"
 
 // The renderer[android:GLSurfaceView.Renderer  WP8:Cocos2dRenderer] was recreated.
@@ -43,7 +43,7 @@
 
 // The application will come to background.
 // This message is used for doing something before coming to background, such as save RenderTexture.
-// This message is posted in axmol/platform/android/jni/Java_dev_axmol_lib_AxmolRenderer.cpp and
+// This message is posted in axmol/platform/android/jni/AxmolPlayerJNI.cpp and
 // cocos\platform\wp8-xaml\cpp\Cocos2dRenderer.cpp.
 #define EVENT_COME_TO_BACKGROUND "event_come_to_background"
 

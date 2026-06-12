@@ -24,7 +24,7 @@
 
 #import "axmol/platform/ios/AxmolViewController.h"
 #import "axmol/platform/ios/RenderHostView-ios.h"
-#import "axmol/platform/ios/RenderViewImpl-ios.h"
+#import "axmol/platform/ios/RenderView-ios.h"
 #include "axmol/platform/Device.h"
 #include "axmol/platform/Application.h"
 #include "axmol/base/Director.h"
@@ -50,12 +50,12 @@ customization that is not appropriate for viewDidLoad.
     // create platform render view
     auto r                   = [[UIScreen mainScreen] bounds];
     RenderHostView* hostView = [RenderHostView viewWithFrame:r
-                                                 pixelFormat:(int)RenderViewImpl::_pixelFormat
-                                                 depthFormat:(int)RenderViewImpl::_depthFormat
+                                                 pixelFormat:(int)RenderView::_pixelFormat
+                                                 depthFormat:(int)RenderView::_depthFormat
                                           preserveBackbuffer:NO
                                                   sharegroup:nil
-                                               multiSampling:RenderViewImpl::_multisamplingCount > 0 ? YES : NO
-                                             numberOfSamples:RenderViewImpl::_multisamplingCount];
+                                               multiSampling:RenderView::_multisamplingCount > 0 ? YES : NO
+                                             numberOfSamples:RenderView::_multisamplingCount];
 
     // Not available on tvOS
 #if !defined(AX_TARGET_OS_TVOS)

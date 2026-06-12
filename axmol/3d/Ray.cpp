@@ -26,11 +26,11 @@ THE SOFTWARE.
 namespace ax
 {
 
-Ray::Ray() : _direction(0, 0, 1) {}
+Ray::Ray() : direction(0, 0, 1) {}
 
 Ray::Ray(const Ray& ray)
 {
-    set(ray._origin, ray._direction);
+    set(ray.origin, ray.direction);
 }
 
 Ray::Ray(const Vec3& origin, const Vec3& direction)
@@ -48,8 +48,8 @@ bool Ray::intersects(const AABB& box, float* distance) const
     Vec3 hitpoint;
     const Vec3& min     = box._min;
     const Vec3& max     = box._max;
-    const Vec3& rayorig = _origin;
-    const Vec3& raydir  = _direction;
+    const Vec3& rayorig = origin;
+    const Vec3& raydir  = direction;
 
     // Check origin inside first
     if (rayorig > min && rayorig < max)
@@ -167,8 +167,8 @@ bool Ray::intersects(const OBB& obb, float* distance) const
     aabb._max = obb._extents;
 
     Ray ray;
-    ray._direction = _direction;
-    ray._origin    = _origin;
+    ray.direction = direction;
+    ray.origin    = origin;
 
     Mat4 mat = Mat4::IDENTITY;
     mat.m[0] = obb._xAxis.x;
@@ -196,31 +196,31 @@ bool Ray::intersects(const OBB& obb, float* distance) const
 
 float Ray::dist(const Plane& plane) const
 {
-    float ndd = Vec3::dot(plane.getNormal(), _direction);
+    float ndd = Vec3::dot(plane.getNormal(), direction);
     if (ndd == 0)
         return 0.0f;
-    float ndo = Vec3::dot(plane.getNormal(), _origin);
+    float ndo = Vec3::dot(plane.getNormal(), origin);
     return (plane.getDist() - ndo) / ndd;
 }
 
 Vec3 Ray::intersects(const Plane& plane) const
 {
     float dis = this->dist(plane);
-    return _origin + dis * _direction;
+    return origin + dis * direction;
 }
 
-void Ray::set(const Vec3& origin, const Vec3& direction)
+void Ray::set(const Vec3& orig, const Vec3& dir)
 {
-    _origin    = origin;
-    _direction = direction;
-    _direction.normalize();
+    this->origin    = orig;
+    this->direction = dir;
+    this->direction.normalize();
 }
 
 void Ray::transform(const Mat4& matrix)
 {
-    matrix.transformPoint(&_origin);
-    matrix.transformVector(&_direction);
-    _direction.normalize();
+    matrix.transformPoint(&origin);
+    matrix.transformVector(&direction);
+    this->direction.normalize();
 }
 
 }  // namespace ax

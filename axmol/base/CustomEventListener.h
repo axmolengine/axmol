@@ -1,0 +1,93 @@
+/****************************************************************************
+ Copyright (c) 2013-2016 Chukong Technologies Inc.
+ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmol.dev/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+
+#pragma once
+
+#include "axmol/base/EventListener.h"
+
+/**
+ * @addtogroup base
+ * @{
+ */
+
+namespace ax
+{
+
+class CustomEvent;
+
+/** @class CustomEventListener
+ * @brief Custom event listener.
+ * @code Usage:
+ *        auto dispatcher = Director::getInstance()->getEventDispatcher();
+ *     Adds a listener:
+ *
+ *        auto callback = [](CustomEvent* event){ do_some_thing(); };
+ *        auto listener = CustomEventListener::create(callback);
+ *        dispatcher->addEventListenerWithSceneGraphPriority(listener, one_node);
+ *
+ *     Dispatches a custom event:
+ *
+ *        CustomEvent event("your_event_type");
+ *        dispatcher->dispatchEvent(&event);
+ *
+ *     Removes a listener
+ *
+ *        dispatcher->removeEventListener(listener);
+ * \endcode
+ */
+class AX_DLL CustomEventListener : public EventListener
+{
+public:
+    /** Creates an event listener with type and callback.
+     * @param eventName The type of the event.
+     * @param callback The callback function when the specified event was emitted.
+     * @return An autoreleased CustomEventListener object.
+     */
+    static CustomEventListener* create(std::string_view eventName, const std::function<void(CustomEvent*)>& callback);
+
+    /// Overrides
+    bool checkAvailable() override;
+    CustomEventListener* clone() override;
+
+    /** Constructor */
+    CustomEventListener();
+
+    /** Initializes event with type and callback function */
+    bool init(std::string_view listenerId, const std::function<void(CustomEvent*)>& callback);
+
+protected:
+    std::function<void(CustomEvent*)> _onCustomEvent;
+
+    friend class LuaCustomEventListener;
+};
+
+// deprecated alias
+using EventListenerCustom = CustomEventListener;
+
+}  // namespace ax
+
+// end of base group
+/// @}

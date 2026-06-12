@@ -51,16 +51,17 @@ public:
      * to the next available backend (e.g. OpenGL ES).
      *
      * @note This call is optional. If not invoked, Vulkan will be considered
-     *       on all devices that report support, regardless of OS version.
+     *       only on devices running Android 12 (API level 31) or higher,
+     *       which is the default minimum requirement.
      *
      * @warning To ensure the restriction takes effect, this function should
      *          be invoked as early as possible (e.g. in the application
-     *          delegate's constructor/initContextAttrs), before any rendering context or
-     *          driver initialization occurs.
+     *          delegate's constructor/initContextAttrs), before any rendering
+     *          context or driver initialization occurs.
      *
-     * @param apiLevel The minimum Android API level (Default is 31 for Android 12)
-     *                 required to allow Vulkan usage.
-     *                 refers:
+     * @param apiLevel The minimum Android API level required to allow Vulkan usage.
+     *                 Default is 31 (Android 12).
+     *                 References:
      *                   - https://apilevels.com/
      *                   - https://developer.android.com/tools/releases/platforms
      */

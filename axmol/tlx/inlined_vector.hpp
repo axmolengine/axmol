@@ -21,6 +21,7 @@
  ****************************************************************************/
 #pragma once
 #include <stdint.h>
+#include <algorithm>
 #include "yasio/tlx/memory.hpp"
 
 namespace tlx
@@ -95,6 +96,7 @@ public:
         if (this != &other)
         {
             clear();
+            _Tidy();
             _Assign(other);
         }
         return *this;
@@ -254,6 +256,57 @@ public:
 
         _Alty_traits::destroy(_Getal(), std::to_address(_Mylast - 1));
         --_Mylast;
+    }
+
+    iterator erase(const_iterator _Where)
+    {
+        auto& _My_data = _Mypair._Myval2;
+
+        _TLX_VERIFY(_Where >= cbegin() && _Where < cend(), "inlined_vector erase iterator out of range");
+
+        const auto _Off    = static_cast<size_type>(_Where - cbegin());
+        pointer _Erase_pos = _My_data._Myfirst + _Off;
+
+        return erase(_Erase_pos, _Erase_pos + 1);
+    }
+
+    iterator erase(const_iterator _First, const_iterator _Last)
+    {
+        auto& _My_data = _Mypair._Myval2;
+
+        _TLX_VERIFY(_First >= cbegin() && _First <= cend(), "inlined_vector erase iterator out of range");
+        _TLX_VERIFY(_Last >= cbegin() && _Last <= cend(), "inlined_vector erase iterator out of range");
+        _TLX_VERIFY(_First <= _Last, "inlined_vector erase invalid range");
+
+        const auto _First_off = static_cast<size_type>(_First - cbegin());
+        const auto _Last_off  = static_cast<size_type>(_Last - cbegin());
+
+        pointer _Erase_first = _My_data._Myfirst + _First_off;
+        pointer _Erase_last  = _My_data._Myfirst + _Last_off;
+
+        if (_Erase_first == _Erase_last)
+            return _Erase_first;
+
+        pointer _New_last = _Erase_first;
+
+        if (_Erase_last != _My_data._Mylast)
+        {
+            if constexpr (std::is_trivially_copyable_v<_Ty>)
+            {
+                const auto _Move_count = static_cast<size_type>(_My_data._Mylast - _Erase_last);
+                ::memmove(_Erase_first, _Erase_last, _Move_count * sizeof(_Ty));
+                _New_last = _Erase_first + _Move_count;
+            }
+            else
+            {
+                _New_last = std::move(_Erase_last, _My_data._Mylast, _Erase_first);
+            }
+        }
+
+        _TLX destroy_range(_New_last, _My_data._Mylast, _Getal());
+        _My_data._Mylast = _New_last;
+
+        return _Erase_first;
     }
 
     void swap(inlined_vector& other)

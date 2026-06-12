@@ -47,7 +47,6 @@ static GUIReader* sharedReader = nullptr;
 GUIReader::GUIReader() : m_strFilePath("")
 {
     ObjectFactory* factoryCreate = ObjectFactory::getInstance();
-
     factoryCreate->registerType(CREATE_CLASS_GUI_INFO(Button));
     factoryCreate->registerType(CREATE_CLASS_GUI_INFO(CheckBox));
     factoryCreate->registerType(CREATE_CLASS_GUI_INFO(ImageView));
@@ -56,7 +55,8 @@ GUIReader::GUIReader() : m_strFilePath("")
     factoryCreate->registerType(CREATE_CLASS_GUI_INFO(TextBMFont));
     factoryCreate->registerType(CREATE_CLASS_GUI_INFO(LoadingBar));
     factoryCreate->registerType(CREATE_CLASS_GUI_INFO(Slider));
-    factoryCreate->registerType(CREATE_CLASS_GUI_INFO(TextField));
+    factoryCreate->registerType(CREATE_CLASS_GUI_INFO(InputField));
+    factoryCreate->registerType(ax::ObjectFactory::TInfo("TextField", &InputField::createInstance));
     factoryCreate->registerType(CREATE_CLASS_GUI_INFO(Layout));
     factoryCreate->registerType(CREATE_CLASS_GUI_INFO(ListView));
     factoryCreate->registerType(CREATE_CLASS_GUI_INFO(PageView));
@@ -254,7 +254,7 @@ std::string WidgetPropertiesReader::getWidgetReaderClassName(Widget* widget)
     {
         readerName = "SliderReader";
     }
-    else if (dynamic_cast<TextField*>(widget))
+    else if (dynamic_cast<InputField*>(widget))
     {
         readerName = "TextFieldReader";
     }
@@ -559,7 +559,7 @@ Widget* WidgetPropertiesReader0250::widgetFromJsonDictionary(const rapidjson::Va
     }
     else if (classname && strcmp(classname, "TextField") == 0)
     {
-        widget = ax::ui::TextField::create();
+        widget = ax::ui::InputField::create();
         setPropsForTextFieldFromJsonDictionary(widget, uiOptions);
     }
     else if (classname && strcmp(classname, "ImageView") == 0)
@@ -607,7 +607,7 @@ void WidgetPropertiesReader0250::setPropsForWidgetFromJsonDictionary(Widget* wid
     bool ignoreSizeExsit = DICTOOL->checkObjectExist_json(options, "ignoreSize");
     if (ignoreSizeExsit)
     {
-        widget->ignoreContentAdaptWithSize(DICTOOL->getBooleanValue_json(options, "ignoreSize"));
+        widget->setAutoSize(DICTOOL->getBooleanValue_json(options, "ignoreSize"));
     }
 
     float w = DICTOOL->getFloatValue_json(options, "width");
@@ -1112,11 +1112,11 @@ void WidgetPropertiesReader0250::setPropsForSliderFromJsonDictionary(Widget* wid
 void WidgetPropertiesReader0250::setPropsForTextFieldFromJsonDictionary(Widget* widget, const rapidjson::Value& options)
 {
     setPropsForWidgetFromJsonDictionary(widget, options);
-    ax::ui::TextField* textField = static_cast<ax::ui::TextField*>(widget);
-    bool ph                      = DICTOOL->checkObjectExist_json(options, "placeHolder");
+    auto textField = static_cast<ax::ui::InputField*>(widget);
+    bool ph        = DICTOOL->checkObjectExist_json(options, "placeHolder");
     if (ph)
     {
-        textField->setPlaceHolder(DICTOOL->getStringValue_json(options, "placeHolder"));
+        textField->setPlaceholderText(DICTOOL->getStringValue_json(options, "placeHolder"));
     }
     textField->setString(DICTOOL->getStringValue_json(options, "text"));
     bool fs = DICTOOL->checkObjectExist_json(options, "fontSize");
@@ -1137,8 +1137,8 @@ void WidgetPropertiesReader0250::setPropsForTextFieldFromJsonDictionary(Widget* 
     bool tsh = DICTOOL->checkObjectExist_json(options, "touchSizeHeight");
     if (tsw && tsh)
     {
-        textField->setTouchSize(Size(DICTOOL->getFloatValue_json(options, "touchSizeWidth"),
-                                     DICTOOL->getFloatValue_json(options, "touchSizeHeight")));
+        textField->setTouchAreaSize(Size(DICTOOL->getFloatValue_json(options, "touchSizeWidth"),
+                                         DICTOOL->getFloatValue_json(options, "touchSizeHeight")));
     }
 
     float dw = DICTOOL->getFloatValue_json(options, "width");
@@ -1148,7 +1148,7 @@ void WidgetPropertiesReader0250::setPropsForTextFieldFromJsonDictionary(Widget* 
         // textField->setSize(Size(dw, dh));
     }
     bool maxLengthEnable = DICTOOL->getBooleanValue_json(options, "maxLengthEnable");
-    textField->setMaxLengthEnabled(maxLengthEnable);
+    // textField->setMaxLength(maxLengthEnable);
 
     if (maxLengthEnable)
     {
@@ -1159,7 +1159,7 @@ void WidgetPropertiesReader0250::setPropsForTextFieldFromJsonDictionary(Widget* 
     textField->setPasswordEnabled(passwordEnable);
     if (passwordEnable)
     {
-        textField->setPasswordStyleText(DICTOOL->getStringValue_json(options, "passwordStyleText"));
+        textField->setPasswordChar(DICTOOL->getStringValue_json(options, "passwordStyleText"));
     }
     setColorPropsForWidgetFromJsonDictionary(widget, options);
 }

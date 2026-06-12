@@ -39,8 +39,8 @@ class Director;
 class Camera;
 class BaseLight;
 class Renderer;
-class EventListenerCustom;
-class EventCustom;
+class CustomEventListener;
+class CustomEvent;
 #if defined(AX_ENABLE_PHYSICS_2D)
 class PhysicsWorld2D;
 #endif
@@ -176,7 +176,7 @@ public:
 
 private:
     void initDefaultCamera();
-    void onProjectionChanged(EventCustom* event);
+    void onProjectionChanged(CustomEvent* event);
 
 protected:
     void tick(float delta);
@@ -207,7 +207,7 @@ protected:
 
     bool _fixedUpdateEnabled{true};
 
-    EventListenerCustom* _event;
+    CustomEventListener* _event;
 
     std::vector<BaseLight*> _lights;
 

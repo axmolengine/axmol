@@ -11,7 +11,7 @@
   - AX_ENABLE_3D: whether to enable 3D support, default: `TRUE`
   - AX_ENABLE_PHYSICS_3D: whether to enable physics3d support, default: `TRUE`
   - AX_ENABLE_NAVMESH: whether to enable NavMesh support default: `TRUE`
-  - AX_ENABLE_MEDIA: whether to enable media support, default: `TRUE`
+  - AX_ENABLE_VIDEO: whether to enable video player, default: `TRUE`
   - AX_ENABLE_AUDIO: whether to enable audio support, default: `TRUE`
   - AX_ENABLE_CONSOLE: whether to enable debug tool console support, default: `TRUE`
   - AX_ENABLE_OPUS: whether to enable audio engine play .opus files support, default: `TRUE`

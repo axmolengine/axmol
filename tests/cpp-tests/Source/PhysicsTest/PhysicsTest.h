@@ -59,21 +59,21 @@ public:
                              int color                             = 0,
                              const ax::PhysicsMaterial2D& material = ax::PHYSICS_MATERIAL_2D_DEFAULT);
 
-    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
-    void onTouchMoved(ax::Touch* touch, ax::Event* event);
-    void onTouchEnded(ax::Touch* touch, ax::Event* event);
-
-    bool onMouseDown(ax::Event* event);
+    virtual bool onPointerDown(ax::PointerEvent* event);
+    virtual void onPointerMove(ax::PointerEvent* event);
+    virtual void onPointerUp(ax::PointerEvent* event);
 
     void toggleDebug();
 
 protected:
-    ax::EventListenerMouse* _mouseListener{nullptr};
+    ax::PointerEventListener* _pointerListener{nullptr};
     ax::Texture2D* _spriteTexture;
     ax::SpriteBatchNode* _ball;
-    std::unordered_map<int, ax::Node*> _mouses;
+    std::unordered_map<intptr_t, ax::Node*> _draggers;
     bool _debugDraw;
     ax::DrawNode* _debugDrawNode{nullptr};
+
+    bool _isPressed = false;
 };
 
 class PhysicsDemoLogoSmash : public PhysicsDemo
@@ -94,8 +94,9 @@ public:
     void onEnter() override;
     std::string subtitle() const override;
 
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onAcceleration(ax::Acceleration* acc, ax::Event* event);
+    bool onPointerDown(ax::PointerEvent* event) override;
+    void onPointerUp(ax::PointerEvent* event) override;
+    void onAcceleration(ax::AccelerationEvent* event);
 };
 
 class PhysicsDemoPyramidStack : public PhysicsDemo
@@ -118,7 +119,7 @@ public:
     void onEnter() override;
     std::string title() const override;
     void update(float delta) override;
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event) override;
 
     void changeModeCallback(ax::Object* sender);
 
@@ -158,9 +159,9 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
-    void onTouchMoved(ax::Touch* touch, ax::Event* event);
-    void onTouchEnded(ax::Touch* touch, ax::Event* event);
+    void onPointerMove(ax::PointerEvent* event) override;
+    bool onPointerDown(ax::PointerEvent* event) override;
+    void onPointerUp(ax::PointerEvent* event) override;
 
 private:
     float _distance;
@@ -191,7 +192,7 @@ public:
     bool slice(ax::PhysicsWorld2D& world, const ax::RayCastHit2D& info, void* data);
     void clipPoly(ax::PolygonCollider2D* shape, ax::Vec2 normal, float distance);
 
-    void onTouchEnded(ax::Touch* touch, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event) override;
 
 private:
     int _sliceTag;
@@ -288,7 +289,7 @@ public:
     void onEnter() override;
     virtual std::string title() const override;
 
-    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
+    bool onPointerDown(ax::PointerEvent* event) override;
 
 private:
     ax::Sprite* _parentSprite;

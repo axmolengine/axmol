@@ -41,7 +41,7 @@ ContactEvent3D* ContactEvent3D::obtain(ContactInfo3D& info)
     return nullptr;
 }
 
-ContactEvent3D::ContactEvent3D() : EventCustom(CONTACT_3D_EVENT_NAME) {}
+ContactEvent3D::ContactEvent3D() : CustomEvent(CONTACT_3D_EVENT_NAME) {}
 
 bool ContactEvent3D::init(ContactInfo3D& info)
 {
@@ -94,7 +94,7 @@ ContactEventListener3D* ContactEventListener3D::clone()
     return nullptr;
 }
 
-void ContactEventListener3D::onEvent(EventCustom* event)
+void ContactEventListener3D::onEvent(CustomEvent* event)
 {
     auto* contactEvent = static_cast<ContactEvent3D*>(event);
     if (!contactEvent)
@@ -129,8 +129,8 @@ void ContactEventListener3D::onEvent(EventCustom* event)
 
 bool ContactEventListener3D::init()
 {
-    auto func = [this](EventCustom* event) { onEvent(event); };
-    return EventListenerCustom::init(CONTACT_3D_EVENT_NAME, func);
+    auto func = [this](CustomEvent* event) { onEvent(event); };
+    return CustomEventListener::init(CONTACT_3D_EVENT_NAME, func);
 }
 
 }  // namespace ax

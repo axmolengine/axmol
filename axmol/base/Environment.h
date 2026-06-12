@@ -41,7 +41,7 @@ THE SOFTWARE.
 namespace ax
 {
 
-class EventCustom;
+class CustomEvent;
 
 /** @class Environment
  * @brief Environment contains some Engine caps and user settings
@@ -271,7 +271,7 @@ protected:
 
     ValueMap _valueDict;
 
-    EventCustom* _loadedEvent;
+    CustomEvent* _loadedEvent;
 };
 
 }  // namespace ax

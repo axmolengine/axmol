@@ -35,6 +35,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+import android.view.ActionMode;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.CountDownLatch;
@@ -46,8 +47,24 @@ public class AxmolPlayer extends FrameLayout {
 
     private static final String TAG = AxmolPlayer.class.getSimpleName();
 
-    private final static int HANDLER_OPEN_IME_KEYBOARD = 2;
-    private final static int HANDLER_CLOSE_IME_KEYBOARD = 3;
+//    enum class EditAction : int
+//    {
+//        Copy = 0, /**< Copy the current selection to the clipboard. */
+//            Cut,      /**< Copy the current selection to the clipboard and delete it. */
+//            Paste,    /**< Insert clipboard contents at the caret. */
+//            SelectAll /**< Select all editable content in the current field. */
+//    };
+
+    // match with native enum class EditAction in axmol/base/InputDelegate.h
+    private final static int EDIT_ACTION_COPY = 0;
+    private final static int EDIT_ACTION_CUT = 1;
+    private final static int EDIT_ACTION_PASTE = 2;
+    private final static int EDIT_ACTION_SELECT_ALL = 3;
+
+    private final static int IMM_OPEN_IME_KEYBOARD = 1;
+    private final static int IMM_CLOSE_IME_KEYBOARD = 2;
+    private static final int IMM_SHOW_CONTEXT_MENU = 4;
+    private static final int IMM_HIDE_CONTEXT_MENU = 5;
 
     // ===========================================================
     // Constants
@@ -73,13 +90,10 @@ public class AxmolPlayer extends FrameLayout {
 
     private static boolean sNativeInitialized = false;
 
-    private AxmolEditBox mEditBox;
-    private TextInputListener mTextInputListener;
-
     private AxmolRenderHost mRenderHost; // GLSurfaceView or SurfaceView
 
     private boolean mSoftKeyboardShown = false;
-    private boolean mMultipleTouchEnabled = true;
+    private boolean mHideNativeInputBar = true;
 
     private boolean mEnableForceDoLayout = false;
 
@@ -93,6 +107,31 @@ public class AxmolPlayer extends FrameLayout {
     private int mLastSurfaceWidth = 0;
     private int mLastSurfaceHeight = 0;
 
+    // A reference to the active popup menu so we can dismiss it programmatically
+    private static ActionMode sCurrentActionMode = null;
+
+    // ===========================================================
+    // High-Performance Touch Input Caching
+    // ===========================================================
+    private static final int MAX_TOUCHES = 10;
+
+    // Pre-allocated arrays (Zero GC during touch events)
+    private final int[] mTouchIds = new int[MAX_TOUCHES];
+    private final float[] mTouchXs = new float[MAX_TOUCHES];
+    private final float[] mTouchYs = new float[MAX_TOUCHES];
+    private final float[] mTouchPressures = new float[MAX_TOUCHES];
+
+    /**
+     * Data wrapper containing text component capabilities snapshot from C++ thread.
+     */
+    private static class EditMenuParams {
+        float x;
+        float y;
+        boolean hasText;
+        boolean hasSelection;
+        boolean readOnly;
+    }
+
     @SuppressWarnings("unused")
     public boolean isSoftKeyboardShown() {
         return mSoftKeyboardShown;
@@ -102,17 +141,17 @@ public class AxmolPlayer extends FrameLayout {
         this.mSoftKeyboardShown = softKeyboardShown;
     }
 
-    @SuppressWarnings("unused")
-    public boolean isMultipleTouchEnabled() {
-        return mMultipleTouchEnabled;
-    }
-
     public void setEnableForceDoLayout(boolean flag) {
         mEnableForceDoLayout = flag;
     }
 
-    public AxmolEditBox getEditText() {
-        return this.mEditBox;
+    public boolean isHideNativeInputBar() {
+        return mHideNativeInputBar;
+    }
+
+    @SuppressWarnings("unused")
+    public void setHideNativeInputBar(boolean flag) {
+        mHideNativeInputBar = flag;
     }
 
     // ===========================================================
@@ -141,51 +180,50 @@ public class AxmolPlayer extends FrameLayout {
         );
         setLayoutParams(frameParams);
 
-        // Create hidden EditBox
-        mEditBox = new AxmolEditBox(ctx);
-        LayoutParams editParams = new LayoutParams(
-            LayoutParams.MATCH_PARENT,
-            LayoutParams.WRAP_CONTENT
-        );
-        mEditBox.setLayoutParams(editParams);
-        mEditBox.setVisibility(View.GONE);
-        mEditBox.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        addView(mEditBox);
-
-        // Text input wrapper
-        mTextInputListener = new TextInputListener(this);
-        mEditBox.setOnEditorActionListener(mTextInputListener);
-
         // Handler for IME open/close
         sHandler = new Handler(msg -> {
+            InputMethodManager imm = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
+            View hostView = (View) mRenderHost;
             switch (msg.what) {
-                case HANDLER_OPEN_IME_KEYBOARD:
-                    if (mEditBox != null) {
-                        mEditBox.setVisibility(View.VISIBLE);
-                        if (mEditBox.requestFocus()) {
-                            mEditBox.removeTextChangedListener(mTextInputListener);
-                            mEditBox.setText("");
-                            final String text = (String) msg.obj;
-                            mEditBox.append(text);
-                            mTextInputListener.setOriginText(text);
-                            mEditBox.addTextChangedListener(mTextInputListener);
-                            InputMethodManager imm = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.showSoftInput(mEditBox, 0);
-                            Log.d(TAG, "showSoftInput");
-                        }
+                case IMM_OPEN_IME_KEYBOARD:
+                    hostView.setFocusable(true);
+                    hostView.setFocusableInTouchMode(true);
+                    hostView.requestFocus();
+
+                    if (imm != null) {
+                        // Target the showSoftInput directly onto the active rendering surface view
+                        imm.showSoftInput(hostView, InputMethodManager.SHOW_IMPLICIT);
+                        Log.d(TAG, "showSoftInput successfully bounded to mRenderHost surface");
                     }
                     break;
-                case HANDLER_CLOSE_IME_KEYBOARD:
-                    if (mEditBox != null) {
-                        mEditBox.removeTextChangedListener(mTextInputListener);
-                        InputMethodManager imm = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(mEditBox.getWindowToken(), 0);
-                        requestFocus();
-                        mEditBox.setVisibility(View.GONE);
-                        if (ctx instanceof AxmolActivity) {
-                            ((AxmolActivity) ctx).hideVirtualButton();
+                case IMM_CLOSE_IME_KEYBOARD:
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(getWindowToken(), 0);
+                        Log.d(TAG, "HideSoftInput from AxmolPlayer");
+                    }
+                    if (ctx instanceof AxmolActivity) {
+                        ((AxmolActivity) ctx).hideVirtualButton();
+                    }
+                    break;
+                case IMM_SHOW_CONTEXT_MENU:
+                    if (msg.obj instanceof EditMenuParams) {
+                        // Safely handle UI drawing on the synchronized Android Main UI thread
+                        showContextMenuOnUIThread((EditMenuParams) msg.obj);
+                    }
+                    break;
+                case IMM_HIDE_CONTEXT_MENU:
+                    // Forcefully terminate the active context text action mode session safely
+                    if (sCurrentActionMode != null) {
+                        try {
+                            sCurrentActionMode.finish();
+                            Log.d(TAG, "Native floating ActionMode successfully finished via hide handler.");
+                        } catch (Exception e) {
+                            // Defensive exception trap to handle edge cases where the window is already being torn down by the OS
+                            Log.e(TAG, "Failed to finish sCurrentActionMode gracefully: " + e.getMessage());
+                        } finally {
+                            // Ensure the static reference is always decoupled to prevent memory leaks
+                            sCurrentActionMode = null;
                         }
-                        Log.d(TAG, "HideSoftInput");
                     }
                     break;
             }
@@ -212,12 +250,44 @@ public class AxmolPlayer extends FrameLayout {
         AxmolSurfaceViewGL surfaceView = new AxmolSurfaceViewGL(this);
         mRenderHost = surfaceView;
         addView(surfaceView);
+        initKeyboardVisibilityTracker(surfaceView);
     }
 
     private void initVulkanView(Context ctx) {
         AxmolSurfaceViewVK surfaceView = new AxmolSurfaceViewVK(this);
         mRenderHost = surfaceView;
         addView(surfaceView);
+        initKeyboardVisibilityTracker(surfaceView);
+    }
+
+    private void initKeyboardVisibilityTracker(View targetView) {
+        // One-liner implementation completely delegating to our unified tracker component
+        AxmolKeyboardTracker.register(targetView);
+    }
+
+    @SuppressWarnings("unused")
+    public AxmolInputConnection createInputConnection(View targetView, EditorInfo outAttrs) {
+        // Set standard text input type
+        outAttrs.inputType = EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_FLAG_AUTO_CORRECT;
+
+        // Modern IMEs require valid selection bounds to activate text input streaming.
+        // Without these, the IME might assume the field is un-editable and refuse to call commitText.
+        outAttrs.initialSelStart = 0;
+        outAttrs.initialSelEnd = 0;
+        outAttrs.initialCapsMode = 0;
+
+        // Disable Extract Mode (fullscreen keyboard) in landscape orientation
+        if (isHideNativeInputBar()) {
+            outAttrs.imeOptions = EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI;
+            Log.d(TAG, "IME Extract Mode disabled dynamically via hideNativeInputBar=true");
+        }
+        else {
+            outAttrs.imeOptions = EditorInfo.IME_ACTION_DONE;
+            Log.d(TAG, "IME Extract Mode allowed via hideNativeInputBar=false");
+        }
+
+        // Return the clean custom connection channel
+        return new AxmolInputConnection(targetView, false);
     }
 
     // ===========================================================
@@ -293,31 +363,40 @@ public class AxmolPlayer extends FrameLayout {
 
     @SuppressWarnings("unused")
     public static void openIMEKeyboard() {
-        AxmolPlayer player = getInstance();
-        if (player == null) return;
-        final Message msg = new Message();
-        msg.what = HANDLER_OPEN_IME_KEYBOARD;
-        msg.obj = player.getContentText();
+        final Message msg = Message.obtain();
+        msg.what = IMM_OPEN_IME_KEYBOARD;
         sHandler.sendMessage(msg);
     }
 
     @SuppressWarnings("unused")
     public static void closeIMEKeyboard() {
-        final Message msg = new Message();
-        msg.what = HANDLER_CLOSE_IME_KEYBOARD;
+        final Message msg = Message.obtain();
+        msg.what = IMM_CLOSE_IME_KEYBOARD;
         sHandler.sendMessage(msg);
     }
 
-    public void insertText(final String text) {
-        AxmolPlayer.nativeInsertText(text);
+    @SuppressWarnings("unused")
+    public static void showContextMenu(float x, float y, boolean hasText, boolean hasSelection, boolean readOnly) {
+        if (sHandler == null) return;
+
+        EditMenuParams params = new EditMenuParams();
+        params.x = x;
+        params.y = y;
+        params.hasText = hasText;
+        params.hasSelection = hasSelection;
+        params.readOnly = readOnly;
+
+        // Route the call securely across threads from JNI worker thread to Main UI thread
+        Message msg = Message.obtain();
+        msg.what = IMM_SHOW_CONTEXT_MENU;
+        msg.obj = params;
+        sHandler.sendMessage(msg);
     }
 
-    public void deleteBackward(int numChars) {
-        AxmolPlayer.nativeDeleteBackward(numChars);
-    }
-
-    private String getContentText() {
-        return AxmolPlayer.nativeGetContentText();
+    @SuppressWarnings("unused")
+    public static void hideContextMenu() {
+        if (sHandler == null) return;
+        sHandler.sendEmptyMessage(IMM_HIDE_CONTEXT_MENU);
     }
 
     // ===========================================================
@@ -325,13 +404,7 @@ public class AxmolPlayer extends FrameLayout {
     // ===========================================================
 
     @Override
-    public boolean onTouchEvent(final MotionEvent pMotionEvent) {
-        // these data are used in ACTION_MOVE and ACTION_CANCEL
-        final int pointerNumber = pMotionEvent.getPointerCount();
-        final int[] ids = new int[pointerNumber];
-        final float[] xs = new float[pointerNumber];
-        final float[] ys = new float[pointerNumber];
-
+    public boolean onTouchEvent(final MotionEvent motionEvent) {
         if (mSoftKeyboardShown) {
             InputMethodManager imm = (InputMethodManager) this.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             View view = ((Activity) this.getContext()).getCurrentFocus();
@@ -342,135 +415,68 @@ public class AxmolPlayer extends FrameLayout {
             mSoftKeyboardShown = false;
         }
 
-        for (int i = 0; i < pointerNumber; i++) {
-            ids[i] = pMotionEvent.getPointerId(i);
-            xs[i] = pMotionEvent.getX(i);
-            ys[i] = pMotionEvent.getY(i);
-        }
+        final int action = motionEvent.getActionMasked();
+        final int pointerCount = Math.min(motionEvent.getPointerCount(), MAX_TOUCHES);
 
-        switch (pMotionEvent.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_POINTER_DOWN:
-                final int indexPointerDown = pMotionEvent.getAction() >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-                if (!mMultipleTouchEnabled && indexPointerDown != 0) {
-                    break;
-                }
-                final int idPointerDown = pMotionEvent.getPointerId(indexPointerDown);
-                final float xPointerDown = pMotionEvent.getX(indexPointerDown);
-                final float yPointerDown = pMotionEvent.getY(indexPointerDown);
-
-                AxmolEngine.runOnAxmolThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        AxmolPlayer.nativeTouchesBegin(idPointerDown, xPointerDown, yPointerDown);
-                    }
-                });
-                break;
-
+        switch (action) {
             case MotionEvent.ACTION_DOWN:
-                // there are only one finger on the screen
-                final int idDown = pMotionEvent.getPointerId(0);
-                final float xDown = xs[0];
-                final float yDown = ys[0];
+            case MotionEvent.ACTION_POINTER_DOWN: {
+                final int index = motionEvent.getActionIndex();
+                final int id = motionEvent.getPointerId(index);
+                final float x = motionEvent.getX(index);
+                final float y = motionEvent.getY(index);
+                final float pressure = motionEvent.getPressure(index); // 🔴 Extract pressure
 
-                AxmolEngine.runOnAxmolThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        AxmolPlayer.nativeTouchesBegin(idDown, xDown, yDown);
-                    }
-                });
+                nativeTouchBegin(id, x, y, pressure);
                 break;
-
-            case MotionEvent.ACTION_MOVE:
-                if (!mMultipleTouchEnabled) {
-                    // handle only touch with id == 0
-                    for (int i = 0; i < pointerNumber; i++) {
-                        if (ids[i] == 0) {
-                            final int[] idsMove = new int[]{0};
-                            final float[] xsMove = new float[]{xs[i]};
-                            final float[] ysMove = new float[]{ys[i]};
-                            AxmolEngine.runOnAxmolThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    AxmolPlayer.nativeTouchesMove(idsMove, xsMove, ysMove);
-                                }
-                            });
-                            break;
-                        }
-                    }
-                } else {
-                    AxmolEngine.runOnAxmolThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            AxmolPlayer.nativeTouchesMove(ids, xs, ys);
-                        }
-                    });
-                }
-                break;
-
-            case MotionEvent.ACTION_POINTER_UP:
-                final int indexPointUp = pMotionEvent.getAction() >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-                if (!mMultipleTouchEnabled && indexPointUp != 0) {
-                    break;
-                }
-                final int idPointerUp = pMotionEvent.getPointerId(indexPointUp);
-                final float xPointerUp = pMotionEvent.getX(indexPointUp);
-                final float yPointerUp = pMotionEvent.getY(indexPointUp);
-
-                AxmolEngine.runOnAxmolThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        AxmolPlayer.nativeTouchesEnd(idPointerUp, xPointerUp, yPointerUp);
-                    }
-                });
-                break;
+            }
 
             case MotionEvent.ACTION_UP:
-                // there are only one finger on the screen
-                final int idUp = pMotionEvent.getPointerId(0);
-                final float xUp = xs[0];
-                final float yUp = ys[0];
+            case MotionEvent.ACTION_POINTER_UP: {
+                final int index = motionEvent.getActionIndex();
+                final int id = motionEvent.getPointerId(index);
+                final float x = motionEvent.getX(index);
+                final float y = motionEvent.getY(index);
+                final float pressure = motionEvent.getPressure(index);
 
-                AxmolEngine.runOnAxmolThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        AxmolPlayer.nativeTouchesEnd(idUp, xUp, yUp);
-                    }
-                });
-                break;
+                nativeTouchEnd(id, x, y, pressure);
 
-            case MotionEvent.ACTION_CANCEL:
-                if (!mMultipleTouchEnabled) {
-                    // handle only touch with id == 0
-                    for (int i = 0; i < pointerNumber; i++) {
-                        if (ids[i] == 0) {
-                            final int[] idsCancel = new int[]{0};
-                            final float[] xsCancel = new float[]{xs[i]};
-                            final float[] ysCancel = new float[]{ys[i]};
-                            AxmolEngine.runOnAxmolThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    AxmolPlayer.nativeTouchesCancel(idsCancel, xsCancel, ysCancel);
-                                }
-                            });
-                            break;
-                        }
-                    }
-                } else {
-                    AxmolEngine.runOnAxmolThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            AxmolPlayer.nativeTouchesCancel(ids, xs, ys);
-                        }
-                    });
+                if (action == MotionEvent.ACTION_UP) {
+                    performClick(); // Accessibility requirement
                 }
                 break;
+            }
+
+            case MotionEvent.ACTION_MOVE: {
+                for (int i = 0; i < pointerCount; i++) {
+                    mTouchIds[i] = motionEvent.getPointerId(i);
+                    mTouchXs[i] = motionEvent.getX(i);
+                    mTouchYs[i] = motionEvent.getY(i);
+                    mTouchPressures[i] = motionEvent.getPressure(i);
+                }
+                nativeTouchesMove(mTouchIds, mTouchXs, mTouchYs, mTouchPressures, pointerCount);
+                break;
+            }
+
+            case MotionEvent.ACTION_CANCEL: {
+                for (int i = 0; i < pointerCount; i++) {
+                    mTouchIds[i] = motionEvent.getPointerId(i);
+                    mTouchXs[i] = motionEvent.getX(i);
+                    mTouchYs[i] = motionEvent.getY(i);
+                    mTouchPressures[i] = motionEvent.getPressure(i); // 🔴 Populate pressure
+                }
+                nativeTouchesCancel(mTouchIds, mTouchXs, mTouchYs, mTouchPressures, pointerCount);
+                break;
+            }
         }
 
-        /*
-        if (BuildConfig.DEBUG) {
-            AxmolSurfaceViewGL.dumpMotionEvent(pMotionEvent);
-        }
-        */
+        return true;
+    }
+
+    // Suppress lint warning only
+    @Override
+    public boolean performClick() {
+        super.performClick();
         return true;
     }
 
@@ -647,6 +653,94 @@ public class AxmolPlayer extends FrameLayout {
     //     Log.d(TAG, sb.toString());
     // }
 
+    /**
+     * Spawns a platform standard Floating ActionMode window mapped directly to specific coordinates.
+     */
+    private void showContextMenuOnUIThread(EditMenuParams p) {
+        // Prevent overlapping bar windows by closing the older instance first
+        if (sCurrentActionMode != null) {
+            sCurrentActionMode.finish();
+        }
+
+        if (!(mRenderHost instanceof View)) return;
+        View targetView = (View) mRenderHost;
+
+        // Use standard Android Callback2 to gain leverage over the absolute positioning rect binding
+        android.view.ActionMode.Callback2 callback = new android.view.ActionMode.Callback2() {
+            @Override
+            public boolean onCreateActionMode(android.view.ActionMode mode, android.view.Menu menu) {
+                // Populate custom interaction choices dynamically based on security privileges snapshot
+                if (p.hasSelection) {
+                    menu.add(0, android.R.id.copy, 0, android.R.string.copy);
+                    if (!p.readOnly) {
+                        menu.add(0, android.R.id.cut, 1, android.R.string.cut);
+                    }
+                }
+                if (!p.readOnly) {
+                    menu.add(0, android.R.id.paste, 2, android.R.string.paste);
+                }
+                if (p.hasText) {
+                    menu.add(0, android.R.id.selectAll, 3, android.R.string.selectAll);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onActionItemClicked(android.view.ActionMode mode, android.view.MenuItem item) {
+                int itemId = item.getItemId();
+                // Safe tunnel execution back into the synchronized C++ Axmol processing loop
+                AxmolEngine.runOnAxmolThread(() -> {
+                    if (itemId == android.R.id.copy) {
+                        AxmolPlayer.nativePerformEditAction(EDIT_ACTION_COPY);
+                    } else if (itemId == android.R.id.cut) {
+                        AxmolPlayer.nativePerformEditAction(EDIT_ACTION_CUT);
+                    } else if (itemId == android.R.id.paste) {
+                        AxmolPlayer.nativePerformEditAction(EDIT_ACTION_PASTE);
+                    } else if (itemId == android.R.id.selectAll) {
+                        AxmolPlayer.nativePerformEditAction(EDIT_ACTION_SELECT_ALL);
+                    }
+                });
+
+                mode.finish(); // Dismantle the bar after option is chosen
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(android.view.ActionMode mode, android.view.Menu menu) {
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(android.view.ActionMode mode) {
+                if (sCurrentActionMode == mode) {
+                    sCurrentActionMode = null;
+                }
+            }
+
+            /**
+             * CRUCIAL OVERRIDE: Bound by the OS to fetch the target rect coordinates.
+             * This explicitly instructs the floating toolbar bubble exactly where to sit.
+             */
+            @Override
+            public void onGetContentRect(android.view.ActionMode mode, View view, android.graphics.Rect outRect) {
+                // Define a tiny virtual bounding bounding block surrounding the exact touch spot.
+                // OutRect coordinates must be mapped relative to the targetView local viewport bounds.
+                int centerX = (int) p.x;
+                int centerY = (int) p.y;
+                int targetRadius = 10; // Simple padding buffer radius around the cursor point
+
+                outRect.set(centerX - targetRadius, centerY - targetRadius,
+                    centerX + targetRadius, centerY + targetRadius);
+            }
+        };
+
+        // Initialize the platform native floating context action mode panel (Android 6.0 M and above)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            sCurrentActionMode = targetView.startActionMode(callback, android.view.ActionMode.TYPE_FLOATING);
+            Log.d("AxmolPlayer", "Triggered system native Floating ActionMode at focus bounds: X=" + p.x + ", Y=" + p.y);
+        }
+    }
+
 
     // ===========================================================
     // Native methods for AxmolPlayer
@@ -658,23 +752,28 @@ public class AxmolPlayer extends FrameLayout {
 
     public static native void nativeOnPause();
 
-    public static native String nativeGetContentText();
+    public static native void nativePerformEditAction(int action);
+
+    // New signature: Sends full layout boundaries and duration when keyboard opens
+    public static native void nativeSoftInputShow(float x, float y, float width, float height, float duration);
+
+    // Updated signature: Accepts animation duration when keyboard closes
+    public static native void nativeSoftInputHide(float duration);
 
     public static native void nativeInsertText(String text);
 
     public static native void nativeDeleteBackward(int numChars);
 
-    public static native void nativeTouchesBegin(final int id, final float x, final float y);
-
-    public static native void nativeTouchesEnd(final int id, final float x, final float y);
-
-    public static native void nativeTouchesMove(final int[] ids, final float[] xs, final float[] ys);
-
-    public static native void nativeTouchesCancel(final int[] ids, final float[] xs, final float[] ys);
+    public static native void nativeTouchBegin(int id, float x, float y, float pressure);
+    public static native void nativeTouchEnd(int id, float x, float y, float pressure);
+    public static native void nativeTouchesMove(int[] ids, float[] xs, float[] ys, float[] pressures, int size);
+    public static native void nativeTouchesCancel(int[] ids, float[] xs, float[] ys, float[] pressures, int size);
 
     public static native boolean nativeKeyEvent(final int keyCode, boolean isPressed);
 
     public static native void nativeOnSurfaceCreated(Object surface, final int width, final int height, boolean isWarmStart);
 
     public static native void nativeOnSurfaceChanged(final int width, final int height);
+
+    public static native void nativeOnWindowFocusChanged(final boolean hasFocus);
 }

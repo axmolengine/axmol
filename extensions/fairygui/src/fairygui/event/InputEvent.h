@@ -19,11 +19,11 @@ public:
     const int getX() const { return static_cast<int>(_pos.x); }
     const int getY() const {return static_cast<int>(_pos.y); }
     const ax::Vec2& getPosition() const { return _pos; }
-    ax::Touch* getTouch()const { return _touch; }
-    int getTouchId()const { return _touchId; }
+    intptr_t getPointerId() const { return _pointerId; }
+    intptr_t getTouchId() const { return _pointerId; }
     int isDoubleClick()const { return _clickCount == 2; }
-    ax::EventMouse::MouseButton getButton() const { return _button; }
-    ax::EventKeyboard::KeyCode getKeyCode() const { return _keyCode; }
+    int getButton() const { return _button; }
+    ax::KeyboardEvent::KeyCode getKeyCode() const { return _keyCode; }
     bool isCtrlDown() const { return (_keyModifiers & 1)!=0; }
     bool isAltDown() const  { return (_keyModifiers & 2) != 0; }
     bool isShiftDown() const { return (_keyModifiers & 4) != 0; }
@@ -33,13 +33,13 @@ public:
 
 private:
     GObject* _target;
-    ax::Touch* _touch;
     ax::Vec2 _pos;
-    int _touchId;
+    intptr_t _pointerId{0};
+    ax::PointerEvent* _pointerEvent{nullptr};
     int _clickCount;
     int _mouseWheelDelta;
-    ax::EventMouse::MouseButton _button;
-    ax::EventKeyboard::KeyCode _keyCode;
+    int _button{ax::InputButton::None};
+    ax::KeyboardEvent::KeyCode _keyCode;
     uint16_t _keyModifiers;
     InputProcessor* _inputProcessor;
 

@@ -253,7 +253,7 @@ Terrain::Terrain()
 {
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _backToForegroundListener =
-        EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { reload(); });
+        CustomEventListener::create(EVENT_RENDERER_RECREATED, [this](CustomEvent*) { reload(); });
     _director->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
 #endif
     _dummyTexture = _director->getTextureCache()->getWhiteTexture();
@@ -511,11 +511,11 @@ bool Terrain::getIntersectionPoint(const Ray& ray_, Vec3& intersectionPoint) con
 {
     // convert ray from world space to local space
     Ray ray(ray_);
-    getWorldToNodeTransform().transformPoint(&(ray._origin));
+    getWorldToNodeTransform().transformPoint(&(ray.origin));
 
     std::set<Chunk*> closeList;
-    Vec2 start = Vec2(ray_._origin.x, ray_._origin.z);
-    Vec2 dir   = Vec2(ray._direction.x, ray._direction.z);
+    Vec2 start = Vec2(ray_.origin.x, ray_.origin.z);
+    Vec2 dir   = Vec2(ray.direction.x, ray.direction.z);
     start      = convertToTerrainSpace(start);
     start.x /= (_terrainData._chunkSize.width + 1);
     start.y /= (_terrainData._chunkSize.height + 1);
@@ -542,7 +542,7 @@ bool Terrain::getIntersectionPoint(const Ray& ray_, Vec3& intersectionPoint) con
                     {
                         if (chunk->getIntersectPointWithRay(ray, tmpIntersectionPoint))
                         {
-                            float dist = (ray._origin - tmpIntersectionPoint).length();
+                            float dist = (ray.origin - tmpIntersectionPoint).length();
                             if (intersectionDist > dist)
                             {
                                 hasIntersect      = true;
@@ -1357,7 +1357,7 @@ bool Terrain::Chunk::getIntersectPointWithRay(const Ray& ray, Vec3& intersectPoi
         Vec3 p;
         if (triangle.getIntersectPoint(ray, p))
         {
-            float dist = ray._origin.distance(p);
+            float dist = ray.origin.distance(p);
             if (dist < minDist)
             {
                 intersectPoint = p;
@@ -1735,7 +1735,7 @@ bool Terrain::Triangle::getIntersectPoint(const Ray& ray, Vec3& intersectPoint) 
 
     // P
     Vec3 P;
-    Vec3::cross(ray._direction, E2, &P);
+    Vec3::cross(ray.direction, E2, &P);
 
     // determinant
     float det = E1.dot(P);
@@ -1744,11 +1744,11 @@ bool Terrain::Triangle::getIntersectPoint(const Ray& ray, Vec3& intersectPoint) 
     Vec3 T;
     if (det > 0)
     {
-        T = ray._origin - _p1;
+        T = ray.origin - _p1;
     }
     else
     {
-        T   = _p1 - ray._origin;
+        T   = _p1 - ray.origin;
         det = -det;
     }
 
@@ -1768,7 +1768,7 @@ bool Terrain::Triangle::getIntersectPoint(const Ray& ray, Vec3& intersectPoint) 
     Vec3::cross(T, E1, &Q);
 
     // Calculate v and make sure u + v <= 1
-    v = ray._direction.dot(Q);
+    v = ray.direction.dot(Q);
     if (v < 0.0f || u + v > det)
         return false;
 
@@ -1778,7 +1778,7 @@ bool Terrain::Triangle::getIntersectPoint(const Ray& ray, Vec3& intersectPoint) 
     float fInvDet = 1.0f / det;
     t *= fInvDet;
 
-    intersectPoint = ray._origin + ray._direction * t;
+    intersectPoint = ray.origin + ray.direction * t;
     return true;
 }
 

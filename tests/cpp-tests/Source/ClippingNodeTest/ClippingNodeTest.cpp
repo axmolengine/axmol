@@ -398,8 +398,8 @@ void HoleDemo::setup()
 
     this->addChild(_outerClipper);
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(HoleDemo::onTouchesBegan, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = AX_CALLBACK_1(HoleDemo::onPointerDown, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
@@ -425,14 +425,14 @@ void HoleDemo::pokeHoleAtPoint(Vec2 point)
     _outerClipper->runAction(Sequence::createWithTwoActions(ScaleBy::create(0.05f, 0.95f), ScaleTo::create(0.125f, 1)));
 }
 
-void HoleDemo::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
+bool HoleDemo::onPointerDown(PointerEvent* event)
 {
-    Touch* touch = (Touch*)touches[0];
-    Vec2 point = _outerClipper->convertToNodeSpace(Director::getInstance()->screenToWorld(touch->getLocationInView()));
+    Vec2 point = _outerClipper->convertToNodeSpace(Director::getInstance()->screenToWorld(event->getScreenLocation()));
     auto rect  = Rect(0, 0, _outerClipper->getContentSize().width, _outerClipper->getContentSize().height);
     if (!rect.containsPoint(point))
-        return;
+        return false;
     this->pokeHoleAtPoint(point);
+    return true;
 }
 
 // ScrollViewDemo
@@ -476,37 +476,37 @@ void ScrollViewDemo::setup()
 
     _scrolling = false;
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(ScrollViewDemo::onTouchesBegan, this);
-    listener->onTouchesMoved = AX_CALLBACK_2(ScrollViewDemo::onTouchesMoved, this);
-    listener->onTouchesEnded = AX_CALLBACK_2(ScrollViewDemo::onTouchesEnded, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = AX_CALLBACK_1(ScrollViewDemo::onPointerDown, this);
+    listener->onPointerMove = AX_CALLBACK_1(ScrollViewDemo::onPointerMove, this);
+    listener->onPointerUp   = AX_CALLBACK_1(ScrollViewDemo::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
-void ScrollViewDemo::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
+bool ScrollViewDemo::onPointerDown(PointerEvent* event)
 {
-    Touch* touch = touches[0];
     auto clipper = this->getChildByTag(kTagClipperNode);
-    Vec2 point   = clipper->convertToNodeSpace(Director::getInstance()->screenToWorld(touch->getLocationInView()));
+    Vec2 point   = clipper->convertToNodeSpace(Director::getInstance()->screenToWorld(event->getScreenLocation()));
     auto rect    = Rect(0, 0, clipper->getContentSize().width, clipper->getContentSize().height);
     _scrolling   = rect.containsPoint(point);
     _lastPoint   = point;
+
+    return _scrolling;
 }
 
-void ScrollViewDemo::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
+void ScrollViewDemo::onPointerMove(PointerEvent* event)
 {
     if (!_scrolling)
         return;
-    Touch* touch = touches[0];
     auto clipper = this->getChildByTag(kTagClipperNode);
-    auto point   = clipper->convertToNodeSpace(Director::getInstance()->screenToWorld(touch->getLocationInView()));
+    auto point   = clipper->convertToNodeSpace(Director::getInstance()->screenToWorld(event->getScreenLocation()));
     Vec2 diff    = point - _lastPoint;
     auto content = clipper->getChildByTag(kTagContentNode);
     content->setPosition(content->getPosition() + diff);
     _lastPoint = point;
 }
 
-void ScrollViewDemo::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void ScrollViewDemo::onPointerUp(PointerEvent* event)
 {
     if (!_scrolling)
         return;

@@ -38,15 +38,15 @@ THE SOFTWARE.
 #include "axmol/base/Vector.h"
 #include "axmol/scene/Scene.h"
 #include "axmol/math/Math.h"
-#include "axmol/platform/RenderView.h"
-#if defined(AX_PLATFORM_GLFW)
-#    include "concurrentqueue/concurrentqueue.h"
-#endif
+#include "axmol/platform/RenderViewCore.h"
+#include "concurrentqueue/concurrentqueue.h"
 #ifdef AX_ENABLE_CONSOLE
 #    include "axmol/base/Console.h"
 #endif
 
 #include "axmol/base/JobSystem.h"
+
+extern void _axmolPerformFrameBoundaryTasks();
 
 namespace ax
 {
@@ -58,17 +58,18 @@ namespace ax
 
 /* Forward declarations. */
 class LabelAtlas;
-// class RenderView;
 class DirectorDelegate;
 class Node;
 class Scheduler;
 class ActionManager;
 class EventDispatcher;
-class EventCustom;
-class EventListenerCustom;
+class CustomEvent;
+class CustomEventListener;
 class TextureCache;
 class Renderer;
 class Camera;
+class Application;
+class ApplicationCore;
 
 /**
  @brief Class that creates and handles the main Window and manages how
@@ -84,6 +85,8 @@ class Camera;
  */
 class AX_DLL Director
 {
+    using FrameTaskQueue = moodycamel::ConcurrentQueue<std::function<void()>>;
+
 public:
     /** Director will trigger an event before set next scene. */
     static std::string_view EVENT_BEFORE_SET_NEXT_SCENE;
@@ -133,6 +136,26 @@ public:
     };
 
     /**
+     * @brief Defines the execution timing for asynchronous tasks dispatched to the main execution thread.
+     */
+    enum class TaskTiming
+    {
+        /**
+         * @brief Defer the task to the next main logic update tick (inside Scheduler::update).
+         * @note Recommended for 95% of standard gameplay logic, UI refreshes, and network response handlers.
+         */
+        NextUpdate,
+
+        /**
+         * @brief Defer the task to the absolute boundary of a frame (outside the main loop's update/visit/render
+         * stages).
+         * @note Reserved for heavy, structural operations such as scene destruction/replacement,
+         * massive resource purges, or critical RHI context resets on mobile platforms.
+         */
+        FrameBoundary
+    };
+
+    /**
      * Returns a shared instance of the director.
      */
     static Director* getInstance();
@@ -178,12 +201,12 @@ public:
      * Get the RenderView.
      * @lua NA
      */
-    RenderView* getRenderView() { return _renderView; }
+    RenderViewCore* getRenderView() { return _renderView; }
     /**
      * Sets the RenderView.
      * @lua NA
      */
-    void setRenderView(RenderView* renderView);
+    void setRenderView(RenderViewCore* renderView);
 
     /*
      * Gets singleton of TextureCache.
@@ -259,7 +282,7 @@ public:
     Rect getSafeAreaRect() const;
 
     /**
-     * Converts a point from screen coordinates to the rendering coordinate system.
+     * Converts a point from screen coordinates to the rendering 2d-coordinate system.
      * Useful for mapping (multi)touch input to the current scene layout,
      * taking into account orientation (portrait or landscape) and viewport settings.
      */
@@ -267,7 +290,7 @@ public:
     AX_DEPRECATED(3.0) Vec2 convertToGL(const Vec2& point) { return screenToWorld(point); }
 
     /**
-     * Converts an rendering coordinate to a screen coordinate.
+     * Converts an rendering 2d-coordinate to a screen coordinate.
      * Useful to convert node points to window points for calls such as glScissor.
      */
     Vec2 worldToScreen(const Vec2& point);
@@ -426,7 +449,7 @@ public:
     /**
      * @brief Run work on the JobSystem and optionally post a completion callback to the Axmol thread.
      *
-     * The task function runs on the JobSystem. After task returns, done is posted through Scheduler::runOnAxmolThread()
+     * The task function runs on the JobSystem. After task returns, done is posted through Director::postTask()
      * and therefore runs later on the Axmol thread.
      *
      * @param task Function executed by the JobSystem.
@@ -546,10 +569,36 @@ public:
      */
     bool isChildrenIndexerEnabled() const { return _childrenIndexerEnabled; }
 
-    /** since Axmol-1.0
-     * queue a priority operation in render thread, even through app in background
+    /**
+     * @brief Safely dispatches a callable task from any background thread (e.g., Java UI thread,
+     * network thread, or audio thread) to be executed on the main Axmol thread.
+     * * This API provides a high-performance, Zero-Allocation (Zero GC) pipeline across platforms by
+     * utilizing modern C++ move semantics internally, paired with an optimized FIFO signaling pipeline
+     * on Android to completely eliminate runtime heap allocations.
+     * * @param task   The callable closure, lambda, or std::function to be executed.
+     * @param timing The specific execution timing when this task should be consumed.
+     * Defaults to TaskTiming::NextUpdate.
+     * * @code
+     * // Example 1: Standard asynchronous network callback (runs in the next logic tick)
+     * Director::getInstance()->postTask([=]() {
+     * this->updatePlayerGold(goldCount);
+     * });
+     * * // Example 2: Critical structural engine operation (runs at the safe frame boundary)
+     * Director::getInstance()->postTask([=]() {
+     * Director::getInstance()->replaceScene(battleScene);
+     * }, Director::TaskTiming::FrameBoundary);
+     * @endcode
+     * @since axmol-3.0.0
      */
-    void queueOperation(AsyncOperation op, void* param = nullptr);
+    void postTask(std::function<void()> task, TaskTiming timing = TaskTiming::NextUpdate);
+
+    /**
+     * @brief Forcefully purges all pending tasks from the specified queue.
+     * @warning This is an extreme, engine-level utility (e.g., during full game reboot or director end).
+     * Calling this on FrameBoundary may leak graphics contexts or skip critical structural cleanups.
+     * Do NOT use this for standard gameplay object lifecycle management.
+     */
+    void clearPendingTasks(TaskTiming timing = TaskTiming::NextUpdate);
 
     /**
      * returns whether or not the Director is in a valid state
@@ -557,16 +606,16 @@ public:
     bool isValid() const { return !_invalid; }
 
 protected:
+    void performFrameBoundaryTasks();
+
+    static void performFrameTasks(FrameTaskQueue& frameTasks);
+
     void reset();
 
     /**
      * @brief Internal-only: Sets canvas size aka design size, invoked by RenderView
      */
     void setCanvasSize(const Vec2& canvasSize);
-
-#if defined(AX_PLATFORM_GLFW)
-    void processOperations();
-#endif
 
     virtual void startAnimation(SetIntervalReason reason);
     virtual void setAnimationInterval(float interval, SetIntervalReason reason);
@@ -616,26 +665,26 @@ protected:
      @since v3.0
      */
     EventDispatcher* _eventDispatcher    = nullptr;
-    EventCustom* _eventProjectionChanged = nullptr;
-    EventCustom* _eventBeforeDraw        = nullptr;
-    EventCustom* _eventAfterDraw         = nullptr;
-    EventCustom* _eventAfterVisit        = nullptr;
-    EventCustom* _eventBeforeUpdate      = nullptr;
-    EventCustom* _eventAfterUpdate       = nullptr;
-    EventCustom* _beforeSetNextScene     = nullptr;
-    EventCustom* _afterSetNextScene      = nullptr;
-    EventCustom* _eventResetDirector     = nullptr;
-    EventCustom* _eventDestroyDirector   = nullptr;
-    EventCustom* _eventBeforeGfxDrop     = nullptr;
-    EventCustom* _eventAfterGfxDrop      = nullptr;
+    CustomEvent* _eventProjectionChanged = nullptr;
+    CustomEvent* _eventBeforeDraw        = nullptr;
+    CustomEvent* _eventAfterDraw         = nullptr;
+    CustomEvent* _eventAfterVisit        = nullptr;
+    CustomEvent* _eventBeforeUpdate      = nullptr;
+    CustomEvent* _eventAfterUpdate       = nullptr;
+    CustomEvent* _beforeSetNextScene     = nullptr;
+    CustomEvent* _afterSetNextScene      = nullptr;
+    CustomEvent* _eventResetDirector     = nullptr;
+    CustomEvent* _eventDestroyDirector   = nullptr;
+    CustomEvent* _eventBeforeGfxDrop     = nullptr;
+    CustomEvent* _eventAfterGfxDrop      = nullptr;
 
     /* delta time since last tick to main loop */
     float _deltaTime              = 1e-6f;
     bool _deltaTimePassedByCaller = false;
 
-    /* The _renderView, where everything is rendered, RenderView is a abstract class,cocos2d-x provide RenderViewImpl
+    /* The _renderView, where everything is rendered, RenderViewCore is a abstract class,axmol provide RenderView
      which inherit from it as default renderer context,you can have your own by inherit from it*/
-    RenderView* _renderView = nullptr;
+    RenderViewCore* _renderView = nullptr;
 
     JobSystem* _jobSystem = nullptr;
 
@@ -710,17 +759,22 @@ protected:
     /* axmol thread id */
     std::thread::id _axmol_thread_id;
 
-#if defined(AX_PLATFORM_GLFW)
-    /* axmol priority operations in render thread for PC platforms */
-    moodycamel::ConcurrentQueue<std::function<void()>> _operations;
-#endif
+    /** @brief Thread-safe FIFO queue for tasks executed during the main logic update loop. */
+    FrameTaskQueue _nextUpdateTasks;
+
+    /** @brief Thread-safe FIFO queue for engine-level structural tasks executed at the frame boundary. */
+    FrameTaskQueue _frameBoundaryTasks;
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    EventListenerCustom* _rendererRecreatedListener = nullptr;
+    CustomEventListener* _rendererRecreatedListener = nullptr;
 #endif
 
-    // RenderView will recreate stats labels to fit visible rect
-    friend class RenderView;
+    // RenderViewCore will recreate stats labels to fit visible rect
+    friend class RenderViewCore;
+    friend class ApplicationCore;
+    friend class Application;
+
+    friend void ::_axmolPerformFrameBoundaryTasks();
 };
 
 // end of base group

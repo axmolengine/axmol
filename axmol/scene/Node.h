@@ -44,7 +44,7 @@ namespace ax
 {
 
 class GridBase;
-class Touch;
+class PointerEvent;
 class Action;
 class LabelProtocol;
 class Scheduler;
@@ -57,6 +57,7 @@ class Renderer;
 class Director;
 class Material;
 class Camera;
+class PointerEvent;
 class Rigidbody2D;
 
 namespace rhi
@@ -79,6 +80,7 @@ enum
 };
 
 class EventListener;
+class EventDispatcher;
 
 typedef std::map<uint64_t, Node*> NodeIndexerMap_t;
 
@@ -114,6 +116,8 @@ Node and override `draw`.
 
 class AX_DLL Node : public Object
 {
+    friend class EventDispatcher;
+
 public:
     /** Default tag used for all the nodes */
     static const int INVALID_TAG = -1;
@@ -1147,6 +1151,13 @@ public:
      */
     virtual Rect getBoundingBox() const;
 
+    /**
+     * Returns an AABB (axis-aligned bounding-box) in its world's coordinate system.
+     *
+     * @return An AABB (axis-aligned bounding-box) in its world's coordinate system
+     */
+    virtual Rect getWorldBoundingBox() const;
+
     /** Set event dispatcher for scene.
      *
      * @param dispatcher The event dispatcher of scene.
@@ -1586,7 +1597,7 @@ public:
      * @param touch A given touch.
      * @return A point in world space coordinates.
      */
-    Vec2 convertTouchToNodeSpace(Touch* touch) const;
+    Vec2 convertPointerToNodeSpace(PointerEvent* event) const;
 
     /**
      * converts a Touch (world coordinates) into a local coordinate. This method is AR (Anchor Relative).
@@ -1594,7 +1605,7 @@ public:
      * @param touch A given touch.
      * @return A point in world space coordinates, anchor relative.
      */
-    Vec2 convertTouchToNodeSpaceAR(Touch* touch) const;
+    Vec2 convertPointerToNodeSpaceAR(PointerEvent* event) const;
 
     /**
      * Gets position of node in world space.
@@ -1907,6 +1918,42 @@ protected:
     void updateParentChildrenIndexer(int tag);
     void updateParentChildrenIndexer(std::string_view name);
 
+    /**
+    * Performs pointer hit testing for this node under the specified camera.
+    *
+    * This function is used by EventDispatcher before dispatching pointer events
+    * to scene-graph-priority PointerEventListener instances. The listener will
+    * receive the pointer event only if this function returns true for one of the
+    * candidate cameras.
+    *
+    * The default implementation is expected to test the node's local content
+    * rectangle against the pointer's 2D world/canvas position, usually from
+    * PointerEvent::getLocation().
+    *
+    * Derived classes may override this function to provide custom hit testing,
+    * such as clipping-aware UI hit testing, non-rectangular 2D hit areas, terrain
+    * picking, mesh picking, or physics ray casting.
+    *
+    * For 3D picking, implementations should typically use
+    * PointerEvent::getScreenLocation() together with Camera::screenToRay().
+    *
+    * @param event       The pointer event being tested.
+    * @param camera      The candidate camera used for this hit test.
+    * @param outHitPoint Optional output parameter for the hit point. When provided,
+    * ```
+                     implementations should store the hit point in this node's
+      ```
+    * ```
+                     local coordinate space. Pass nullptr if the hit point is
+      ```
+    * ```
+                     not needed.
+      ```
+    *
+    * @return true if the pointer hits this node for the specified camera, false otherwise.
+      */
+    virtual bool onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* outHitPoint);
+
 private:
     void addChildHelper(Node* child, int localZOrder, int tag, std::string_view name, bool setTag);
 
@@ -2050,23 +2097,6 @@ inline _Ty* Component::getComponent() const
 {
     return _owner ? _owner->template getComponent<_Ty>() : nullptr;
 }
-
-/**
- * This is a helper function, checks a GL screen point is in content rectangle space.
- *
- * The content rectangle defined by origin(0,0) and content size.
- * This function convert GL screen point to near and far planes as points Pn and Pf,
- * then calculate the intersect point P which the line PnPf intersect with content rectangle.
- * If P in content rectangle means this node be hit.
- *
- * @param pt        The point in GL screen space.
- * @param camera    Which camera used to unproject pt to near/far planes.
- * @param w2l       World to local transform matrix, used to convert Pn and Pf to rectangle space.
- * @param rect      The test rectangle in local space.
- * @parma p         Point to a Vec3 for store the intersect point, if don't need them set to nullptr.
- * @return true if the point is in content rectangle, false otherwise.
- */
-bool AX_DLL isScreenPointInRect(const Vec2& pt, const Camera* camera, const Mat4& w2l, const Rect& rect, Vec3* p);
 
 // end of _2d group
 /// @}

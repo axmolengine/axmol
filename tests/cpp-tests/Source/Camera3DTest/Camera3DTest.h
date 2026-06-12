@@ -67,11 +67,20 @@ DEFINE_TEST_SUITE(Camera3DTests);
 class CameraBaseTest : public TestCase
 {
 public:
+    ~CameraBaseTest() override;
+
+    void onEnter() override;
+
+    virtual bool onPointerDown(ax::PointerEvent* event);
+    virtual void onPointerMove(ax::PointerEvent* event);
+    virtual void onPointerUp(ax::PointerEvent* event);
+
 protected:
     ax::BillBoard* bill1;
     ax::BillBoard* bill2;
     ax::Label* l1;
     ax::Label* l2;
+    ax::PointerEventListener* _lis{nullptr};
 };
 
 class CameraRotationTest : public CameraBaseTest
@@ -80,21 +89,21 @@ class CameraRotationTest : public CameraBaseTest
 public:
     CREATE_FUNC(CameraRotationTest);
     CameraRotationTest();
-    virtual ~CameraRotationTest();
 
-    virtual void onEnter() override;
-    virtual void onExit() override;
+    void onEnter() override;
+    void onExit() override;
 
-    virtual void update(float dt) override;
+    void update(float dt) override;
 
     // overrides
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    std::string title() const override;
+    std::string subtitle() const override;
+
+    void onPointerMove(ax::PointerEvent* event) override;
 
 protected:
     ax::Node* _camControlNode;
     ax::Node* _camNode;
-    ax::EventListenerTouchOneByOne* _lis;
 };
 
 class Camera3DTestDemo : public CameraBaseTest
@@ -114,9 +123,9 @@ public:
                                 float scale        = 1.0f,
                                 bool bindCamera    = false);
 
-    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    bool onPointerDown(ax::PointerEvent* event) override;
+    void onPointerMove(ax::PointerEvent* event) override;
+    void onPointerUp(ax::PointerEvent* event) override;
 
     void scaleCameraCallback(ax::Object* sender, float value);
     void rotateCameraCallback(ax::Object* sender, float value);
@@ -127,16 +136,16 @@ public:
     bool isState(unsigned int state, unsigned int bit) const;
     void reachEndCallBack();
 
-    bool onTouchesCommon(ax::Touch* touch, ax::Event* event, bool* touchProperty);
-    bool onTouchesZoomOut(ax::Touch* touch, ax::Event* event);
-    void onTouchesZoomOutEnd(ax::Touch* touch, ax::Event* event);
-    bool onTouchesZoomIn(ax::Touch* touch, ax::Event* event);
-    void onTouchesZoomInEnd(ax::Touch* touch, ax::Event* event);
+    bool onPointerCommon(ax::PointerEvent* event, bool* touchProperty);
+    bool onPointerZoomOut(ax::PointerEvent* event);
+    void onPointerZoomOutEnd(ax::PointerEvent* event);
+    bool onPointerZoomIn(ax::PointerEvent* event);
+    void onPointerZoomInEnd(ax::PointerEvent* event);
 
-    bool onTouchesRotateLeft(ax::Touch* touch, ax::Event* event);
-    void onTouchesRotateLeftEnd(ax::Touch* touch, ax::Event* event);
-    bool onTouchesRotateRight(ax::Touch* touch, ax::Event* event);
-    void onTouchesRotateRightEnd(ax::Touch* touch, ax::Event* event);
+    bool onPointerRotateLeft(ax::PointerEvent* event);
+    void onPointerRotateLeftEnd(ax::PointerEvent* event);
+    bool onPointerRotateRight(ax::PointerEvent* event);
+    void onPointerRotateRightEnd(ax::PointerEvent* event);
 
 protected:
     std::string _title;
@@ -210,7 +219,7 @@ public:
 
     void switchOperateCallback(ax::Object* sender);
     void switchTargetCallback(ax::Object* sender);
-    void onTouchsMoved(const std::vector<ax::Touch*>& touchs, ax::Event* event);
+    void onPointerMove(ax::PointerEvent* event) override;
     void updateCameraTransform();
     void calculateArcBall(ax::Vec3& axis,
                           float& angle,
@@ -250,7 +259,7 @@ public:
     // overrides
     virtual std::string title() const override;
 
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerMove(ax::PointerEvent* event) override;
 
     void switchTypeCallback(ax::Object* sender, int type);
 
@@ -264,7 +273,7 @@ protected:
     ax::rhi::ProgramState* _programState2 = nullptr;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    ax::EventListenerCustom* _backToForegroundListener;
+    ax::CustomEventListener* _backToForegroundListener;
 #endif
 };
 

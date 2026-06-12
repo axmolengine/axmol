@@ -48,7 +48,7 @@ public:
     void applicationWillEnterForeground() override;
 
 private:
-    ax::EventListenerCustom* _recreatedEventlistener;
+    ax::CustomEventListener* _recreatedEventlistener;
 
     LAppAllocator _cubismAllocator;
     Csm::CubismFramework::Option _cubismOption;

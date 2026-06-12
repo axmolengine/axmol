@@ -24,7 +24,7 @@
 
 #include "sceneio/WidgetReader/ScrollViewReader/ScrollViewReader.h"
 
-#include "axmol/ui/UIScrollView.h"
+#include "axmol/ui/ScrollView.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/2d/SpriteFrameCache.h"
 #include "sceneext/CocoLoader.h"
@@ -542,7 +542,7 @@ void ScrollViewReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers
     }
     else
     {
-        if (!scrollView->isIgnoreContentAdaptWithSize())
+        if (!scrollView->isAutoSize())
         {
             Size contentSize(widgetOptions->size()->width(), widgetOptions->size()->height());
             scrollView->setContentSize(contentSize);

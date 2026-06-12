@@ -304,19 +304,19 @@ local function LayerTest1()
         l:setContentSize( newSize )
     end
 
-    local function onTouchesMoved(touches, event)
-        local touchLocation = touches[1]:getLocation()
+    local function onPointerMove(event)
+        local touchLocation = event:getLocation()
 
         updateSize(touchLocation.x, touchLocation.y)
     end
 
-    local function onTouchesBegan(touches, event)
-        onTouchesMoved(touches, event)
+    local function onTouchesBegan(event)
+        onPointerMove(event)
     end
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(onTouchesBegan,ax.Handler.EVENT_TOUCHES_BEGAN )
-    listener:registerScriptHandler(onTouchesMoved,ax.Handler.EVENT_TOUCHES_MOVED )
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(onTouchesBegan,ax.Handler.EVENT_POINTER_DOWN )
+    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
 
     local eventDispatcher = ret:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, ret)
@@ -443,9 +443,9 @@ local function LayerGradient()
     local s = ax.Director:getInstance():getCanvasSize()
     menu:setPosition(ax.p(s.width / 2, 100))
 
-    local function onTouchesMoved(touches, event)
+    local function onPointerMove(event)
         local s = ax.Director:getInstance():getCanvasSize()
-        local start = touches[1]:getLocation()
+        local start = event:getLocation()
         local movingPos = ax.p(s.width/2,s.height/2)
         local diff = ax.p(movingPos.x - start.x, movingPos.y - start.y)
         diff = ax.pNormalize(diff)
@@ -454,8 +454,8 @@ local function LayerGradient()
         gradient:setVector(diff)
     end
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(onTouchesMoved,ax.Handler.EVENT_TOUCHES_MOVED )
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
 
     local eventDispatcher = ret:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, ret)

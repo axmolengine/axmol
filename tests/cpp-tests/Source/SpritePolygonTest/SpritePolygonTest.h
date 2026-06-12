@@ -22,10 +22,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_tests__SpritePolygonTest__
+#pragma once
 
-#    include "../BaseTest.h"
-#    include "axmol/ui/CocosGUI.h"
+#include "../BaseTest.h"
+#include "axmol/ui/CocosGUI.h"
 
 DEFINE_TEST_SUITE(SpritePolygonTest);
 
@@ -260,5 +260,3 @@ protected:
     Ticker _contFast          = Ticker(2);
     Ticker _around30fps       = Ticker(60 * 3);
 };
-
-#endif /* defined(__cocos2d_tests__SpritePolygonTest__) */

@@ -106,17 +106,16 @@ public:
 private:
     TextButton() : _onTriggered(nullptr), _enabled(true)
     {
-        auto listener = EventListenerTouchOneByOne::create();
-        listener->setSwallowTouches(true);
+        auto listener = PointerEventListener::create();
 
-        listener->onTouchBegan     = AX_CALLBACK_2(TextButton::onTouchBegan, this);
-        listener->onTouchEnded     = AX_CALLBACK_2(TextButton::onTouchEnded, this);
-        listener->onTouchCancelled = AX_CALLBACK_2(TextButton::onTouchCancelled, this);
+        listener->onPointerDown   = AX_CALLBACK_1(TextButton::onPointerDown, this);
+        listener->onPointerUp     = AX_CALLBACK_1(TextButton::onPointerUp, this);
+        listener->onPointerCancel = AX_CALLBACK_1(TextButton::onPointerCancel, this);
 
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     }
 
-    bool touchHits(Touch* touch)
+    bool touchHits(PointerEvent* touch)
     {
         auto hitPos = this->convertToNodeSpace(touch->getLocation());
         if (hitPos.x >= 0 && hitPos.y >= 0 && hitPos.x <= _contentSize.width && hitPos.y <= _contentSize.height)
@@ -126,9 +125,9 @@ private:
         return false;
     }
 
-    bool onTouchBegan(Touch* touch, Event* event)
+    bool onPointerDown(PointerEvent* event)
     {
-        auto hits = touchHits(touch);
+        auto hits = touchHits(event);
         if (hits)
         {
             scaleButtonTo(0.95f);
@@ -136,11 +135,11 @@ private:
         return hits;
     }
 
-    void onTouchEnded(Touch* touch, Event* event)
+    void onPointerUp(PointerEvent* event)
     {
         if (_enabled)
         {
-            auto hits = touchHits(touch);
+            auto hits = touchHits(event);
             if (hits && _onTriggered)
             {
                 _onTriggered(this);
@@ -150,7 +149,7 @@ private:
         scaleButtonTo(1);
     }
 
-    void onTouchCancelled(Touch* touch, Event* event) { scaleButtonTo(1); }
+    void onPointerCancel(PointerEvent* event) { scaleButtonTo(1); }
 
     void scaleButtonTo(float scale)
     {

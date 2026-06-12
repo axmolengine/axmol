@@ -1,0 +1,118 @@
+/****************************************************************************
+ Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2012 James Chen
+ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmol.dev/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+
+#pragma once
+
+#include "axmol/ui/EditBox/EditBox.h"
+
+namespace ax
+{
+
+namespace ui
+{
+
+class AX_GUI_DLL EditBoxImpl
+{
+public:
+    /**
+     */
+    EditBoxImpl(EditBox* pEditBox) : _delegate(nullptr), _editBox(pEditBox) {}
+    /**
+     * @lua NA
+     */
+    virtual ~EditBoxImpl() {}
+
+    virtual bool initWithSize(const Size& size)                              = 0;
+    virtual void setFont(std::string_view fontName, int fontSize)            = 0;
+    virtual void setFontColor(const Color32& color)                          = 0;
+    virtual void setPlaceholderFont(std::string_view fontName, int fontSize) = 0;
+    virtual void setPlaceholderFontColor(const Color32& color)               = 0;
+    virtual void setInputMode(EditBox::InputMode inputMode)                  = 0;
+    virtual void setInputFlag(EditBox::InputFlag inputFlag)                  = 0;
+    virtual void setMaxLength(int maxLength)                                 = 0;
+    virtual int getMaxLength()                                               = 0;
+    virtual void setTextHorizontalAlignment(TextHAlignment alignment)        = 0;
+    virtual void setReturnType(EditBox::KeyboardReturnType returnType)       = 0;
+    virtual bool isEditing()                                                 = 0;
+
+    virtual void setText(std::string_view text)        = 0;
+    virtual std::string_view getText()                 = 0;
+    virtual void setPlaceHolder(std::string_view text) = 0;
+    virtual std::string_view getPlaceHolder()          = 0;
+
+    virtual std::string_view getFontName() = 0;
+    virtual int getFontSize()              = 0;
+    virtual const Color32& getFontColor()  = 0;
+
+    virtual std::string_view getPlaceholderFontName() = 0;
+    virtual int getPlaceholderFontSize()              = 0;
+    virtual const Color32& getPlaceholderFontColor()  = 0;
+
+    virtual EditBox::InputMode getInputMode()           = 0;
+    virtual EditBox::InputFlag getInputFlag()           = 0;
+    virtual EditBox::KeyboardReturnType getReturnType() = 0;
+    virtual TextHAlignment getTextHorizontalAlignment() = 0;
+
+    virtual void doAnimationWhenKeyboardMove(float duration, float distance) = 0;
+
+    virtual void openKeyboard()  = 0;
+    virtual void closeKeyboard() = 0;
+
+    virtual void setPosition(const Vec2& pos)            = 0;
+    virtual void setVisible(bool visible)                = 0;
+    virtual void setContentSize(const Size& size)        = 0;
+    virtual void setAnchorPoint(const Vec2& anchorPoint) = 0;
+
+    virtual void setGlobalZOrder(float globalZOrder) = 0;
+
+    /**
+     * check the editbox's position, update it when needed
+     */
+    virtual void updatePosition(float dt) {};
+    /**
+     * @lua NA
+     */
+    virtual void draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32_t flags) = 0;
+    /**
+     * @lua NA
+     */
+    virtual void onEnter() = 0;
+
+    void setDelegate(EditBoxDelegate* pDelegate) { _delegate = pDelegate; };
+    EditBoxDelegate* getDelegate() { return _delegate; };
+    EditBox* getEditBox() { return _editBox; };
+
+protected:
+    EditBoxDelegate* _delegate;
+    EditBox* _editBox;
+};
+
+// This method must be implemented at each subclass of EditBoxImpl.
+extern EditBoxImpl* __createSystemEditBox(EditBox* pEditBox);
+
+}  // namespace ui
+}  // namespace ax

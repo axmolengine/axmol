@@ -24,7 +24,7 @@
 
 #include "sceneio/WidgetReader/TextReader/TextReader.h"
 
-#include "axmol/ui/UIText.h"
+#include "axmol/ui/Text.h"
 #include "axmol/2d/Label.h"
 #include "axmol/platform/FileUtils.h"
 
@@ -557,19 +557,16 @@ void TextReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Tabl
     Color32 color(f_color->r(), f_color->g(), f_color->b(), f_color->a());
     ((Text*)node)->setTextColor(color);
 
-    label->setUnifySizeEnabled(false);
-
-    bool IsCustomSize = options->isCustomSize() != 0;
-    label->ignoreContentAdaptWithSize(!IsCustomSize);
+    label->setAutoSize(!options->isCustomSize());
 
     auto widgetOptions = options->widgetOptions();
-    if (!label->isIgnoreContentAdaptWithSize())
+    if (!label->isAutoSize())
     {
         Size contentSize(widgetOptions->size()->width(), widgetOptions->size()->height());
         label->setContentSize(contentSize);
     }
 
-    auto labelRenderer = dynamic_cast<ax::Label*>(label->getVirtualRenderer());
+    auto labelRenderer = dynamic_cast<ax::Label*>(label->getRenderNode());
     if (options->boldEnabled())
         labelRenderer->enableBold();
     if (options->underlineEnabled())

@@ -46,8 +46,8 @@ class Node;
 /** @class EventListener
  *  @brief The base class of event listener.
  *  If you need custom listener which with different callback, you need to inherit this class.
- *  For instance, you could refer to EventListenerAcceleration, EventListenerKeyboard, EventListenerTouchOneByOne,
- * EventListenerCustom.
+ *  For instance, you could refer to AccelerationEventListener, KeyboardEventListener, PointerEventListener,
+ * CustomEventListener.
  */
 class AX_DLL EventListener : public Object
 {
@@ -56,8 +56,7 @@ public:
     enum class Type
     {
         UNKNOWN,
-        TOUCH_ONE_BY_ONE,
-        TOUCH_ALL_AT_ONCE,
+        POINTER,
         KEYBOARD,
         MOUSE,
         ACCELERATION,
@@ -124,11 +123,11 @@ protected:
     /** Checks whether the listener is paused */
     bool isPaused() const { return _paused; }
 
-    /** Marks the listener was registered by EventDispatcher */
-    void setRegistered(bool registered) { _isRegistered = registered; }
+    /** Marks whether the listener is attached to EventDispatcher and not pending removal. */
+    void setAttached(bool attached) { _isAttached = attached; }
 
-    /** Checks whether the listener was registered by EventDispatcher */
-    bool isRegistered() const { return _isRegistered; }
+    /** Checks whether the listener is attached to EventDispatcher and not pending removal. */
+    bool isAttached() const { return _isAttached; }
 
     /** Gets the type of this listener
      *  @note It's different from `EventType`, e.g. TouchEvent has two kinds of event listeners - EventListenerOneByOne,
@@ -167,7 +166,7 @@ protected:
 
     Type _type;              /// Event listener type
     ListenerID _listenerID;  /// Event listener ID
-    bool _isRegistered;      /// Whether the listener has been added to dispatcher.
+    bool _isAttached;        /// Whether the listener is attached to EventDispatcher and not pending removal.
 
     int _fixedPriority;  // The higher the number, the higher the priority, 0 is for scene graph base priority.
     Node* _node;         // scene graph based priority

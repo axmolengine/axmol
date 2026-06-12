@@ -234,16 +234,16 @@ function NavMeshBasicTestDemo:subtitle()
 end
 
 function NavMeshBasicTestDemo:registerTouchEvent()
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(function(touches, event)
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(function(event)
         self._needMoveAgents = true
-    end,ax.Handler.EVENT_TOUCHES_BEGAN)
+    end,ax.Handler.EVENT_POINTER_DOWN)
 
-    listener:registerScriptHandler(function(touches, event)
+    listener:registerScriptHandler(function(event)
 
-        if #touches > 0 and self._camera ~= nil then
-            local touch = touches[1]
-            local delta = touch:getDelta()
+        if event ~= nil and self._camera ~= nil then
+            local touch = event
+            local delta = event:getDelta()
 
             self._angle = self._angle - delta.x * math.pi / 180.0
             self._camera:setPosition3D(ax.vec3(100.0 * math.sin(self._angle), 50.0, 100.0 * math.cos(self._angle)))
@@ -253,29 +253,29 @@ function NavMeshBasicTestDemo:registerTouchEvent()
                 self._needMoveAgents = false
             end
         end
-    end, ax.Handler.EVENT_TOUCHES_MOVED)
+    end, ax.Handler.EVENT_POINTER_MOVE)
 
-    listener:registerScriptHandler(function(touches, event)
+    listener:registerScriptHandler(function(event)
         if not self._needMoveAgents then
             return
         end
         local physicsWorld = self:getPhysicsWorld3D()
-        if #touches > 0 then
-            local touch = touches[1]
-            local location = touch:getLocationInView()
+        if event ~= nil then
+            local touch = event
+            local location = event:getScreenLocation()
             local nearP = ax.vec3(location.x, location.y, 0.0)
             local farP  = ax.vec3(location.x, location.y, 1.0)
 
             local size = ax.Director:getInstance():getCanvasSize()
-            nearP = self._camera:unproject(size, nearP, nearP)
-            farP  = self._camera:unproject(size, farP, farP)
+            nearP = self._camera:deprojectScreenToWorld(nearP)
+            farP  = self._camera:deprojectScreenToWorld(farP)
 
             local hitResult = {}
             local ret = false
             ret, hitResult = physicsWorld:rayCast(nearP, farP, hitResult)
             self:moveAgents(hitResult.hitPosition)
         end
-    end, ax.Handler.EVENT_TOUCHES_ENDED)
+    end, ax.Handler.EVENT_POINTER_UP)
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -320,16 +320,16 @@ function NavMeshAdvanceTestDemo:subtitle()
 end
 
 function NavMeshAdvanceTestDemo:registerTouchEvent()
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(function(touches, event)
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(function(event)
         self._needMoveAgents = true
-    end,ax.Handler.EVENT_TOUCHES_BEGAN)
+    end,ax.Handler.EVENT_POINTER_DOWN)
 
-    listener:registerScriptHandler(function(touches, event)
+    listener:registerScriptHandler(function(event)
 
-        if #touches > 0 and self._camera ~= nil then
-            local touch = touches[1]
-            local delta = touch:getDelta()
+        if event ~= nil and self._camera ~= nil then
+            local touch = event
+            local delta = event:getDelta()
 
             self._angle = self._angle - delta.x * math.pi / 180.0
             self._camera:setPosition3D(ax.vec3(100.0 * math.sin(self._angle), 50.0, 100.0 * math.cos(self._angle)))
@@ -339,29 +339,29 @@ function NavMeshAdvanceTestDemo:registerTouchEvent()
                 self._needMoveAgents = false
             end
         end
-    end, ax.Handler.EVENT_TOUCHES_MOVED)
+    end, ax.Handler.EVENT_POINTER_MOVE)
 
-    listener:registerScriptHandler(function(touches, event)
+    listener:registerScriptHandler(function(event)
         if not self._needMoveAgents then
             return
         end
         local physicsWorld = self:getPhysicsWorld3D()
-        if #touches > 0 then
-            local touch = touches[1]
-            local location = touch:getLocationInView()
+        if event ~= nil then
+            local touch = event
+            local location = event:getScreenLocation()
             local nearP = ax.vec3(location.x, location.y, 0.0)
             local farP  = ax.vec3(location.x, location.y, 1.0)
 
             local size = ax.Director:getInstance():getCanvasSize()
-            nearP = self._camera:unproject(size, nearP, nearP)
-            farP  = self._camera:unproject(size, farP, farP)
+            nearP = self._camera:deprojectScreenToWorld(nearP)
+            farP  = self._camera:deprojectScreenToWorld(farP)
 
             local hitResult = {}
             local ret = false
             ret, hitResult = physicsWorld:rayCast(nearP, farP, hitResult)
             self:moveAgents(hitResult.hitPosition)
         end
-    end, ax.Handler.EVENT_TOUCHES_ENDED)
+    end, ax.Handler.EVENT_POINTER_UP)
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)

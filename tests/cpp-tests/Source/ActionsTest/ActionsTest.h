@@ -184,7 +184,7 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    ax::EventListenerCustom* _frameDisplayedListener;
+    ax::CustomEventListener* _frameDisplayedListener;
 };
 
 class ActionSequence : public ActionsDemo
@@ -404,7 +404,7 @@ public:
     virtual std::string subtitle() const override;
     virtual void addNewSpriteWithCoords(ax::Vec2 p);
     virtual void runActionsInSprite(ax::Sprite* sprite);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
 };
 
 class ActionMoveStacked : public ActionStacked

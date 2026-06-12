@@ -32,6 +32,7 @@
 // CHANGELOG
 // (minor and older changes stripped away, please see git history for details)
 //  2026-XX-XX: Platform: Added support for multiple windows via the ImGuiPlatformIO interface.
+//  2026-04-21: Added a Win32-specific implementation of ImGui_ImplGlfw_GetContentScaleXXXX functions for legacy GLFW 3.2.
 //  2026-03-25: Mouse cursor is properly restored if changed by user app/code while using glfwSetInputMode(..., GLFW_CURSOR_DISABLED) or ImGuiConfigFlags_NoMouseCursorChange. Amend change from 2025-12-10.
 //  2026-02-10: Try to set IMGUI_IMPL_GLFW_DISABLE_X11 / IMGUI_IMPL_GLFW_DISABLE_WAYLAND automatically if corresponding headers are not accessible. (#9225)
 //  2026-01-25: [Docking] Improve workarounds for cases where GLFW is unable to provide any reliable monitor info. Preserve existing monitor list when none of the new one is valid. (#9195, #7902, #5683)
@@ -314,6 +315,31 @@ static ImGui_ImplGlfw_Data* ImGui_ImplGlfw_GetBackendData(GLFWwindow* window)
 static void ImGui_ImplGlfw_UpdateMonitors();
 static void ImGui_ImplGlfw_InitMultiViewportSupport();
 static void ImGui_ImplGlfw_ShutdownMultiViewportSupport();
+
+#if defined(__APPLE__) && defined(GLFW_IME)
+static void ImGui_ImplGlfw_SetImeData(ImGuiContext*, ImGuiViewport* viewport, ImGuiPlatformImeData* data)
+{
+    GLFWwindow* window = viewport ? (GLFWwindow*)viewport->PlatformHandle : nullptr;
+    if (window == nullptr)
+        if (ImGui_ImplGlfw_Data* bd = ImGui_ImplGlfw_GetBackendData())
+            window = bd->Window;
+    if (window == nullptr)
+        return;
+
+    const bool wants_text_input = data->WantTextInput || data->WantVisible;
+    glfwSetInputMode(window, GLFW_IME, wants_text_input ? GLFW_TRUE : GLFW_FALSE);
+
+    if (wants_text_input)
+    {
+        const float viewport_x = viewport ? viewport->Pos.x : 0.0f;
+        const float viewport_y = viewport ? viewport->Pos.y : 0.0f;
+        const int x = (int)(data->InputPos.x - viewport_x);
+        const int y = (int)(data->InputPos.y - viewport_y);
+        const int h = data->InputLineHeight > 1.0f ? (int)data->InputLineHeight : 1;
+        glfwSetPreeditCursorRectangle(window, x, y, 1, h);
+    }
+}
+#endif
 
 // Functions
 static bool ImGui_ImplGlfw_IsWayland()
@@ -1131,6 +1157,16 @@ static void ImGui_ImplGlfw_UpdateMonitors()
     }
 }
 
+// For GFLW 3.2 + Windows: include a simplified non-monitor aware version of ImGui_ImplWin32_GetDpiScaleForMonitor().
+// This is merely a band-aid to make using GLFW 3.2 a little bit nicer, but prefer to use GLFW 3.3+ or the full correct functions from the Win32 backend.
+#if !GLFW_HAS_PER_MONITOR_DPI && defined(_WIN32) && !defined(NOGDI)
+static float   ImGui_ImplWin32_GetLegacyDpiScale()   { const HDC dc = ::GetDC(nullptr); UINT xdpi = ::GetDeviceCaps(dc, LOGPIXELSX); ::ReleaseDC(nullptr, dc); return (float)xdpi / 96.0f; }
+static void    glfwGetWindowContentScale(GLFWwindow*, float* x_scale, float* y_scale)   { *x_scale = *y_scale = ImGui_ImplWin32_GetLegacyDpiScale(); }
+static void    glfwGetMonitorContentScale(GLFWmonitor*, float* x_scale, float* y_scale) { *x_scale = *y_scale = ImGui_ImplWin32_GetLegacyDpiScale(); }
+#undef GLFW_HAS_PER_MONITOR_DPI
+#define GLFW_HAS_PER_MONITOR_DPI 1
+#endif
+
 // - On Windows the process needs to be marked DPI-aware!! SDL2 doesn't do it by default. You can call ::SetProcessDPIAware() or call ImGui_ImplWin32_EnableDpiAwareness() from Win32 backend.
 // - Apple platforms use FramebufferScale so we always return 1.0f.
 // - Some accessibility applications are declaring virtual monitors with a DPI of 0.0f, see #7902. We preserve this value for caller to handle.
@@ -1200,7 +1236,7 @@ void ImGui_ImplGlfw_NewFrame()
     // (Accept glfwGetTime() not returning a monotonically increasing value. Seems to happens on disconnecting peripherals and probably on VMs and Emscripten, see #6491, #6189, #6114, #3644)
     double current_time = glfwGetTime();
     if (current_time <= bd->Time)
-        current_time = bd->Time + 0.00001f;
+        current_time = bd->Time + 0.00001;
     io.DeltaTime = bd->Time > 0.0 ? (float)(current_time - bd->Time) : (float)(1.0f / 60.0f);
     bd->Time = current_time;
 
@@ -1734,21 +1770,35 @@ static LRESULT CALLBACK ImGui_ImplGlfw_WndProc(HWND hWnd, UINT msg, WPARAM wPara
 // axmol spec
 IMGUI_IMPL_API bool ImGui_ImplGlfw_InitForAxmol(GLFWwindow* window, bool install_callbacks)
 {
+    bool initialized = false;
     auto driverType = ax::rhi::DriverContext::currentDriverType();
     switch (driverType)
     {
     case ax::rhi::DriverType::OpenGL:
-        return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_OpenGL);
+        initialized = ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_OpenGL);
+        break;
     case ax::rhi::DriverType::Metal:
-        return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_Metal);
+        initialized = ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_Metal);
+        break;
     case ax::rhi::DriverType::D3D12:
     case ax::rhi::DriverType::D3D11:
-        return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_D3D);
+        initialized = ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_D3D);
+        break;
     case ax::rhi::DriverType::Vulkan:
-        return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_Vulkan);
+        initialized = ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_Vulkan);
+        break;
+    default:
+        break;
     }
 
-    return false;
+    if (!initialized)
+        return false;
+
+#if defined(__APPLE__) && defined(GLFW_IME)
+    ImGui::GetPlatformIO().Platform_SetImeDataFn = ImGui_ImplGlfw_SetImeData;
+#endif
+
+    return true;
 }
 
 #endif // #ifndef IMGUI_DISABLE

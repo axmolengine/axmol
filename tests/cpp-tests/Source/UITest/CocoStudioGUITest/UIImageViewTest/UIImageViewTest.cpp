@@ -129,7 +129,7 @@ bool UIImageViewTest_Scale9_State_Change::init()
 
         // Create the imageview
         ImageView* imageView = ImageView::create("cocosui/ccicon.png");
-        imageView->ignoreContentAdaptWithSize(false);
+        imageView->setAutoSize(true);
         imageView->setScale9Enabled(true);
         imageView->setContentSize(Size(100.0f, 100.0f));
         imageView->setCapInsets(Rect(20.0f, 20.0f, 20.0f, 20.0f));
@@ -243,7 +243,7 @@ bool UIImageViewFlipTest::init()
         imageView->setContentSize(Size(250, 115));
         imageView->setFlippedX(true);
         imageView->setScale(0.5);
-        imageView->ignoreContentAdaptWithSize(false);
+        imageView->setAutoSize(true);
         imageView->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
 
         _uiLayer->addChild(imageView);

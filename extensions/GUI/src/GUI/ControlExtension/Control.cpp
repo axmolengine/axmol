@@ -32,10 +32,9 @@
 #include "Control.h"
 #include "axmol/base/Director.h"
 #include "axmol/2d/Menu.h"
-#include "axmol/base/Touch.h"
 #include "Invocation.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/base/EventListenerTouch.h"
+#include "axmol/base/PointerEventListener.h"
 
 NS_AX_EXT_BEGIN
 
@@ -73,13 +72,12 @@ bool Control::init()
         setSelected(false);
         setHighlighted(false);
 
-        auto dispatcher    = Director::getInstance()->getEventDispatcher();
-        auto touchListener = EventListenerTouchOneByOne::create();
-        touchListener->setSwallowTouches(true);
-        touchListener->onTouchBegan     = AX_CALLBACK_2(Control::onTouchBegan, this);
-        touchListener->onTouchMoved     = AX_CALLBACK_2(Control::onTouchMoved, this);
-        touchListener->onTouchEnded     = AX_CALLBACK_2(Control::onTouchEnded, this);
-        touchListener->onTouchCancelled = AX_CALLBACK_2(Control::onTouchCancelled, this);
+        auto dispatcher                = Director::getInstance()->getEventDispatcher();
+        auto touchListener             = PointerEventListener::create();
+        touchListener->onPointerDown   = AX_CALLBACK_1(Control::onPointerDown, this);
+        touchListener->onPointerMove   = AX_CALLBACK_1(Control::onPointerMove, this);
+        touchListener->onPointerUp     = AX_CALLBACK_1(Control::onPointerUp, this);
+        touchListener->onPointerCancel = AX_CALLBACK_1(Control::onPointerCancel, this);
 
         dispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
@@ -237,7 +235,7 @@ bool Control::isOpacityModifyRGB() const
     return _isOpacityModifyRGB;
 }
 
-Vec2 Control::getTouchLocation(Touch* touch)
+Vec2 Control::getTouchLocation(ax::PointerEvent* touch)
 {
     Vec2 touchLocation = touch->getLocation();                     // Get the touch position
     touchLocation      = this->convertToNodeSpace(touchLocation);  // Convert to the node space of this class
@@ -245,20 +243,26 @@ Vec2 Control::getTouchLocation(Touch* touch)
     return touchLocation;
 }
 
-bool Control::onTouchBegan(Touch* /*touch*/, Event* /*event*/)
+bool Control::onPointerDown(ax::PointerEvent* event)
 {
-    return false;
+    return event->isPrimaryPressed();
 }
 
-void Control::onTouchMoved(Touch* /*touch*/, Event* /*event*/) {}
+void Control::onPointerMove(ax::PointerEvent* /*event*/) {}
 
-void Control::onTouchEnded(Touch* /*touch*/, Event* /*event*/) {}
-
-void Control::onTouchCancelled(Touch* /*touch*/, Event* /*event*/) {}
-
-bool Control::isTouchInside(Touch* touch)
+void Control::onPointerUp(ax::PointerEvent* /*event*/)
 {
-    Vec2 touchLocation = touch->getLocation();  // Get the touch position
+    _isPressed = false;
+}
+
+void Control::onPointerCancel(ax::PointerEvent* /*event*/)
+{
+    _isPressed = false;
+}
+
+bool Control::isTouchInside(ax::PointerEvent* event)
+{
+    Vec2 touchLocation = event->getLocation();  // Get the touch position
     touchLocation      = this->getParent()->convertToNodeSpace(touchLocation);
     Rect bBox          = getBoundingBox();
     return bBox.containsPoint(touchLocation);

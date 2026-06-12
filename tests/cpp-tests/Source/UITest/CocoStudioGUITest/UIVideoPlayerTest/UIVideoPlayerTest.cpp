@@ -141,7 +141,7 @@ void VideoPlayerTest::menuFullScreenCallback(Object* sender)
 {
     if (_videoPlayer)
     {
-        _videoPlayer->setFullScreenEnabled(!_videoPlayer->isFullScreenEnabled());
+        _videoPlayer->setFullscreen(!_videoPlayer->isFullscreen());
     }
 }
 
@@ -149,7 +149,7 @@ void VideoPlayerTest::menuRatioCallback(Object* sender)
 {
     if (_videoPlayer)
     {
-        _videoPlayer->setKeepAspectRatioEnabled(!_videoPlayer->isKeepAspectRatioEnabled());
+        _videoPlayer->setKeepAspectRatio(!_videoPlayer->isKeepAspectRatio());
     }
 }
 
@@ -261,9 +261,9 @@ void VideoPlayerTest::createSlider()
     _uiLayer->addChild(vSlider, 0, 2);
 }
 
-void VideoPlayerTest::sliderCallback(Object* sender, ui::Slider::EventType eventType)
+void VideoPlayerTest::sliderCallback(Object* sender, ui::Slider::EventType ev)
 {
-    if (eventType == Slider::EventType::ON_PERCENTAGE_CHANGED && _videoPlayer)
+    if (ev == Slider::EventType::ON_PERCENTAGE_CHANGED && _videoPlayer)
     {
         Slider* hSlider = (Slider*)this->getChildByTag(1);
         Slider* vSlider = (Slider*)this->getChildByTag(2);
@@ -275,9 +275,9 @@ void VideoPlayerTest::sliderCallback(Object* sender, ui::Slider::EventType event
     }
 }
 
-void VideoPlayerTest::videoEventCallback(Object* sender, VideoPlayer::EventType eventType)
+void VideoPlayerTest::videoEventCallback(Object* sender, VideoPlayer::EventType ev)
 {
-    switch (eventType)
+    switch (ev)
     {
     case VideoPlayer::EventType::PLAYING:
         _videoStateLabel->setString("PLAYING");
@@ -435,14 +435,14 @@ void SimpleVideoPlayerTest::createVideo()
 
     auto widgetSize = _widget->getContentSize();
 
-    _videoPlayer = VideoPlayer::create();
+    _videoPlayer = ui::VideoPlayer::create();
     _videoPlayer->setPosition(centerPos);
     _videoPlayer->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     _videoPlayer->setContentSize(Size(widgetSize.width * 0.4f, widgetSize.height * 0.4f));
     _videoPlayer->setLooping(true);
     _videoPlayer->setStyle(_style);
     _videoPlayer->setUserInputEnabled(_userInputEnabled);
-    _videoPlayer->setKeepAspectRatioEnabled(true);
+    _videoPlayer->setKeepAspectRatio(true);
 
     _uiLayer->addChild(_videoPlayer);
 

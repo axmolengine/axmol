@@ -56,9 +56,9 @@ local function RenderTextureSave()
     -- so we can just parent it to the scene like any other ax.Node
     ret:addChild(target, -1)
 
-    local function onTouchesMoved(touches, event)
-        local start = touches[1]:getLocation()
-        local ended = touches[1]:getPreviousLocation()
+    local function onPointerMove(event)
+        local start = event:getLocation()
+        local ended = event:getPreviousLocation()
 
         target:begin()
 
@@ -96,8 +96,8 @@ local function RenderTextureSave()
         target:endToLua()
     end
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(onTouchesMoved,ax.Handler.EVENT_TOUCHES_MOVED )
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
     local eventDispatcher = ret:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, ret)
     -- Save Image menu

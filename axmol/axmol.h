@@ -42,8 +42,8 @@ THE SOFTWARE.
 #include "axmol/base/Logging.h"
 #include "axmol/base/Data.h"
 #include "axmol/base/Director.h"
-#include "axmol/base/IMEDelegate.h"
-#include "axmol/base/IMEDispatcher.h"
+#include "axmol/base/InputDelegate.h"
+#include "axmol/base/InputSystem.h"
 #include "axmol/base/Map.h"
 #include "axmol/base/Profiling.h"
 #include "axmol/base/Properties.h"
@@ -62,22 +62,20 @@ THE SOFTWARE.
 #include "axmol/base/Utils.h"
 
 // EventDispatcher
-#include "axmol/base/EventAcceleration.h"
-#include "axmol/base/EventCustom.h"
+#include "axmol/base/AccelerationEvent.h"
+#include "axmol/base/CustomEvent.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/base/EventFocus.h"
-#include "axmol/base/EventKeyboard.h"
-#include "axmol/base/EventListenerAcceleration.h"
-#include "axmol/base/EventListenerCustom.h"
-#include "axmol/base/EventListenerFocus.h"
-#include "axmol/base/EventListenerKeyboard.h"
-#include "axmol/base/EventListenerMouse.h"
-#include "axmol/base/EventListenerController.h"
-#include "axmol/base/EventListenerTouch.h"
-#include "axmol/base/EventMouse.h"
-#include "axmol/base/EventController.h"
+#include "axmol/base/FocusEvent.h"
+#include "axmol/base/KeyboardEvent.h"
+#include "axmol/base/AccelerationEventListener.h"
+#include "axmol/base/CustomEventListener.h"
+#include "axmol/base/FocusEventListener.h"
+#include "axmol/base/KeyboardEventListener.h"
+#include "axmol/base/ControllerEventListener.h"
+#include "axmol/base/PointerEventListener.h"
+#include "axmol/base/ControllerEvent.h"
 #include "axmol/base/Controller.h"
-#include "axmol/base/EventTouch.h"
+#include "axmol/base/PointerEvent.h"
 #include "axmol/base/EventType.h"
 
 // math
@@ -201,7 +199,7 @@ THE SOFTWARE.
 #    include "axmol/platform/wasm/StdC-wasm.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "axmol/platform/RenderViewImpl.h"
+#include "axmol/platform/RenderView.h"
 
 #if AX_ENABLE_GL
 #    include "axmol/platform/GL.h"
@@ -219,9 +217,6 @@ THE SOFTWARE.
 #include "axmol/2d/SpriteBatchNode.h"
 #include "axmol/2d/SpriteFrame.h"
 #include "axmol/2d/SpriteFrameCache.h"
-
-// text_input_node
-#include "axmol/2d/TextFieldTTF.h"
 
 // textures
 #include "axmol/renderer/TextureAtlas.h"

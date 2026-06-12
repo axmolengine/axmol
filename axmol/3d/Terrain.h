@@ -37,7 +37,7 @@ THE SOFTWARE.
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/3d/AABB.h"
 #include "axmol/3d/Ray.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/base/EventDispatcher.h"
 
 namespace ax
@@ -584,7 +584,7 @@ private:
 
     rhi::UniformLocation _mvpMatrixLocation;
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    EventListenerCustom* _backToForegroundListener;
+    CustomEventListener* _backToForegroundListener;
 #endif
 };
 

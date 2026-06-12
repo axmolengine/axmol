@@ -65,7 +65,7 @@ namespace spine {
 		// callback after drawing is finished so we can clear out the batch state
 		// for the next frame
         _afterDrawListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(
-                    Director::EVENT_AFTER_DRAW, [this](EventCustom* eventCustom) {
+                    Director::EVENT_AFTER_DRAW, [this](CustomEvent* eventCustom) {
 			this->update(0);
 		});
 	}

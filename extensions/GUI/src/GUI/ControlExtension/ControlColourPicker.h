@@ -73,7 +73,7 @@ public:
 protected:
     void updateControlPicker();
     void updateHueAndControlPicker();
-    bool onTouchBegan(Touch* touch, Event* pEvent) override;
+    bool onPointerDown(PointerEvent* event) override;
 
     HSV _hsv;
     AX_SYNTHESIZE_RETAIN(ControlSaturationBrightnessPicker*, _colourPicker, colourPicker)

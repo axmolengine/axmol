@@ -106,7 +106,7 @@ bool UIScrollViewTest_Vertical::init()
 
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
         button_scale9->setPosition(
             Vec2(innerWidth / 2.0f, titleButton->getBottomBoundary() - titleButton->getContentSize().height));
         scrollView->addChild(button_scale9);
@@ -181,7 +181,7 @@ bool UIScrollViewTest_Horizontal::init()
 
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
         button_scale9->setPosition(
             Vec2(titleButton->getRightBoundary() + titleButton->getContentSize().width / 2.0f,
                  titleButton->getBottomBoundary() - titleButton->getContentSize().height / 2.0f));
@@ -439,7 +439,7 @@ bool UIScrollViewNestTest::init()
 
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
         button_scale9->setPosition(
             Vec2(innerWidth / 2.0f, titleButton->getBottomBoundary() - titleButton->getContentSize().height));
         scrollView->addChild(button_scale9);
@@ -455,7 +455,7 @@ bool UIScrollViewNestTest::init()
         sc->setDirection(ui::ScrollView::Direction::BOTH);
         sc->setInnerContainerSize(Size(480.0f, 320.0f));
         sc->setContentSize(Size(100.0f, 100.0f));
-        sc->setPropagateTouchEvents(false);
+        sc->setPropagatePointerEvents(false);
         sc->setPosition(Vec2(180.0f, 100.0f));
         sc->scrollToPercentBothDirection(Vec2(50.0f, 50.0f), 1, true);
         sc->setScrollBarPositionFromCorner(Vec2(4.0f, 4.0f));
@@ -535,7 +535,7 @@ bool UIScrollViewRotated::init()
 
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
         button_scale9->setPosition(
             Vec2(innerWidth / 2.0f, titleButton->getBottomBoundary() - titleButton->getContentSize().height));
         scrollView->addChild(button_scale9);
@@ -613,7 +613,7 @@ bool UIScrollViewDisableTest::init()
 
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
         button_scale9->setPosition(
             Vec2(innerWidth / 2.0f, titleButton->getBottomBoundary() - titleButton->getContentSize().height));
         scrollView->addChild(button_scale9);
@@ -841,7 +841,7 @@ bool UIScrollViewStopScrollingTest::init()
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setTitleText("Stop scrolling in 3 sec.");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(120.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(120.0f, button_scale9->getPreferredSize().height));
         button_scale9->setPosition(Vec2(innerSize.width / 2.0f, innerSize.height / 2.0f));
         button_scale9->addClickEventListener([this](Object*) { this->_remainingTime = 3.0f; });
         _scrollView->addChild(button_scale9);
@@ -950,7 +950,7 @@ bool UIScrollViewTest_Overlap::init()
 
             Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
             button_scale9->setScale9Enabled(true);
-            button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+            button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
             button_scale9->setPosition(
                 Vec2(innerWidth / 2.0f, titleButton->getBottomBoundary() - titleButton->getContentSize().height));
             scrollView->addChild(button_scale9);
@@ -995,7 +995,7 @@ bool UIScrollViewTest_Overlap::init()
 
             Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
             button_scale9->setScale9Enabled(true);
-            button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+            button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
             button_scale9->setPosition(
                 Vec2(titleButton->getRightBoundary() + titleButton->getContentSize().width / 2.0f,
                      titleButton->getBottomBoundary() - titleButton->getContentSize().height / 2.0f));

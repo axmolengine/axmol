@@ -197,7 +197,7 @@ ax.UNIFORM_SAMPLER_S    = 'AX_Texture0'
 ax.UNIFORM_SIN_TIME_S   = 'AX_SinTime'
 ax.UNIFORM_TIME_S   = 'AX_Time'
 
--- refer to: ApplicationBase.h: enum class Platform
+-- refer to: ApplicationCore.h: enum class Platform
 ax.PLATFORM_UNKNOWN   = 0
 ax.PLATFORM_WIN32     = 1
 ax.PLATFORM_WINUWP    = 2
@@ -292,6 +292,10 @@ ax.Handler.EVENT_TOUCH_BEGAN      = 40
 ax.Handler.EVENT_TOUCH_MOVED      = 41
 ax.Handler.EVENT_TOUCH_ENDED      = 42
 ax.Handler.EVENT_TOUCH_CANCELLED  = 43
+ax.Handler.EVENT_POINTER_DOWN     = ax.Handler.EVENT_TOUCH_BEGAN
+ax.Handler.EVENT_POINTER_MOVE     = ax.Handler.EVENT_TOUCH_MOVED
+ax.Handler.EVENT_POINTER_UP       = ax.Handler.EVENT_TOUCH_ENDED
+ax.Handler.EVENT_POINTER_CANCELLED = ax.Handler.EVENT_TOUCH_CANCELLED
 ax.Handler.EVENT_TOUCHES_BEGAN    = 44
 ax.Handler.EVENT_TOUCHES_MOVED    = 45
 ax.Handler.EVENT_TOUCHES_ENDED    = 46
@@ -300,6 +304,7 @@ ax.Handler.EVENT_MOUSE_DOWN       = 48
 ax.Handler.EVENT_MOUSE_UP         = 49
 ax.Handler.EVENT_MOUSE_MOVE       = 50
 ax.Handler.EVENT_MOUSE_SCROLL     = 51
+ax.Handler.EVENT_POINTER_SCROLL   = ax.Handler.EVENT_MOUSE_SCROLL
 ax.Handler.EVENT_SPINE            = 52
 
 ax.Handler.EVENT_PHYSICS_2D_CONTACT_BEGIN   = 53
@@ -330,6 +335,7 @@ ax.Handler.EVENT_SPINE_ANIMATION_COMPLETE   = 74
 ax.Handler.EVENT_SPINE_ANIMATION_EVENT      = 75
 
 ax.EVENT_UNKNOWN = 0
+ax.EVENT_POINTER            = 1
 ax.EVENT_TOUCH_ONE_BY_ONE      = 1
 ax.EVENT_TOUCH_ALL_AT_ONCE     = 2
 ax.EVENT_KEYBOARD              = 3
@@ -695,4 +701,3 @@ ax.BLUE = ax.color32(0,0,255)
 ax.BLACK = ax.color32(0,0,0)
 ax.WHITE = ax.color32(255,255,255)
 ax.YELLOW = ax.color32(255,255,0)
-

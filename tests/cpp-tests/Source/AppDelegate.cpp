@@ -143,9 +143,9 @@ bool AppDelegate::applicationDidFinishLaunching()
 #endif
 #ifdef AX_PLATFORM_GLFW
         renderView =
-            RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height), 1.0F, true);
+            RenderView::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height), 1.0F, true);
 #else
-        renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height));
+        renderView = RenderView::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height));
 #endif
         director->setRenderView(renderView);
 
@@ -189,6 +189,8 @@ bool AppDelegate::applicationDidFinishLaunching()
     renderView->setDesignResolutionSize(g_designSize.width, g_designSize.height, ResolutionPolicy::SHOW_ALL);
 
     director->setClearColor(g_testsDefaultClearColor);
+
+    director->postTask([] { AXLOGI("##### run in frame boundary"); }, Director::TaskTiming::FrameBoundary);
 
     // Enable Remote Console
     auto console = director->getConsole();

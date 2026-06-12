@@ -3,7 +3,7 @@
 #include "axmol/base/Director.h"
 #include "axmol/base/Data.h"
 #if defined(AX_PLATFORM_GLFW)
-#    include "axmol/platform/RenderViewImpl.h"
+#    include "axmol/platform/RenderView.h"
 #endif
 #include "axmol/rhi/Program.h"
 #include "axmol/rhi/ProgramState.h"
@@ -358,6 +358,8 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
     ImGui_ImplAxmol_SaveRenderState(renderer);
 
     ImGui_ImplAxmol_SetupRenderState(renderer, draw_data, fb_width, fb_height);
+    
+    auto drawCallback_ResetState = ImGui::GetPlatformIO().DrawCallback_ResetRenderState;
 
     // Will project scissor/clipping rectangles into framebuffer space
     ImVec2 clip_off   = draw_data->DisplayPos;        // (0,0) unless using multi-viewports
@@ -389,7 +391,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
                 // User callback, registered via ImDrawList::AddCallback()
                 // (ImDrawCallback_ResetRenderState is a special callback value used by the user
                 // to request the renderer to reset render state.)
-                if (pcmd->UserCallback == ImDrawCallback_ResetRenderState)
+                if (pcmd->UserCallback == drawCallback_ResetState)
                     ImGui_ImplAxmol_SetupRenderState(renderer, draw_data, fb_width, fb_height);
                 else
                 {

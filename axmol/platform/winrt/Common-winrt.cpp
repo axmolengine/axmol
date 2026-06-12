@@ -26,7 +26,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "axmol/platform/Common.h"
 #include "axmol/platform/StdC.h"
-#include "axmol/platform/winrt/RenderViewImpl-winrt.h"
+#include "axmol/platform/winrt/RenderView-winrt.h"
 #include "axmol/platform/winrt/WinRTUtils.h"
 
 #if defined(VLD_DEBUG_MEMORY)
@@ -41,7 +41,7 @@ AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle s
     // Create the message dialog and set its content
     auto hmsg   = PlatformStringFromString(msg);
     auto htitle = PlatformStringFromString(title);
-    return RenderViewImpl::sharedRenderView()->ShowAlertDialog(hmsg, htitle, style);
+    return RenderView::sharedRenderView()->showAlertDialog(hmsg, htitle, style);
 }
 
 }  // namespace ax

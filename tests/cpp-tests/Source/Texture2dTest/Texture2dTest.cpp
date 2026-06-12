@@ -188,8 +188,8 @@ std::string TextureASTC::title() const
 
 TextureETC1Alpha::TextureETC1Alpha()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(TextureETC1Alpha::onTouchesEnded, this);
+    auto listener         = PointerEventListener::create();
+    listener->onPointerUp = AX_CALLBACK_1(TextureETC1Alpha::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
@@ -241,11 +241,10 @@ void TextureETC1Alpha::addNewSpriteWithCoords(Vec2 p)
     sprite->runAction(RepeatForever::create(seq));
 }
 
-void TextureETC1Alpha::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void TextureETC1Alpha::onPointerUp(PointerEvent* event)
 {
-    for (auto&& touch : touches)
     {
-        auto location = touch->getLocation();
+        auto location = event->getLocation();
 
         addNewSpriteWithCoords(location);
     }
@@ -269,8 +268,8 @@ std::string TextureETC1Alpha::subtitle() const
 
 TextureETC2::TextureETC2()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(TextureETC2::onTouchesEnded, this);
+    auto listener         = PointerEventListener::create();
+    listener->onPointerUp = AX_CALLBACK_1(TextureETC2::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
@@ -304,7 +303,7 @@ void TextureETC2::addNewSpriteWithCoords()
     _background->addChild(spriteA4);
 }
 
-void TextureETC2::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void TextureETC2::onPointerUp(PointerEvent* event)
 {
     // for (auto&& touch : touches)
     //{
@@ -332,8 +331,8 @@ std::string TextureETC2::subtitle() const
 
 TextureBMP::TextureBMP()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(TextureBMP::onTouchesEnded, this);
+    auto listener         = PointerEventListener::create();
+    listener->onPointerUp = AX_CALLBACK_1(TextureBMP::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getCanvasSize();
@@ -370,11 +369,10 @@ void TextureBMP::addNewSpriteWithCoords(Vec2 p)
     sprite->runAction(RepeatForever::create(seq));
 }
 
-void TextureBMP::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void TextureBMP::onPointerUp(PointerEvent* event)
 {
-    for (auto&& touch : touches)
     {
-        auto location = touch->getLocation();
+        auto location = event->getLocation();
 
         addNewSpriteWithCoords(location);
     }

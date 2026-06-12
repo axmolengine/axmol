@@ -56,9 +56,10 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #import <QuartzCore/QuartzCore.h>
 
 #import "axmol/base/Director.h"
-#import "axmol/base/Touch.h"
-#import "axmol/base/IMEDispatcher.h"
+#import "axmol/base/PointerEvent.h"
+#import "axmol/base/InputSystem.h"
 #import "axmol/platform/ios/InputView-ios.h"
+#import "axmol/platform/ios/RenderView-ios.h"
 
 #if AX_ENABLE_MTL
 #    import <Metal/Metal.h>
@@ -66,7 +67,6 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #    import "axmol/rhi/metal/UtilsMTL.h"
 #endif
 #if AX_ENABLE_GL
-#    import "axmol/platform/ios/RenderViewImpl-ios.h"
 #    import "axmol/platform/ios/ES3Renderer-ios.h"
 #    import "axmol/platform/ios/OpenGL_Internal-ios.h"
 #endif
@@ -80,15 +80,13 @@ using namespace ax::rhi;
 #define IOS_MAX_TOUCHES_COUNT 10
 
 @interface RenderHostView ()
-@property(nonatomic) TextInputView* textInputView;
+@property(nonatomic) InputHostView* inputHost;
 @property(nonatomic, readwrite, assign) BOOL isKeyboardShown;
 @property(nonatomic, copy) NSNotification* keyboardShowNotification;
-@property(nonatomic, assign) CGRect savedBounds;
 @end
 
 @implementation RenderHostView
 
-@synthesize backingSize = backingSize_;
 @synthesize pixelFormat = pixelformat_, depthFormat = depthFormat_;
 #if AX_ENABLE_GL
 @synthesize context = context_;
@@ -96,7 +94,6 @@ using namespace ax::rhi;
 @synthesize multiSampling            = multiSampling_;
 @synthesize keyboardShowNotification = keyboardShowNotification_;
 @synthesize isKeyboardShown          = isKeyboardShown_;
-@synthesize savedBounds              = savedBounds_;
 
 static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 {
@@ -188,9 +185,8 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 
     if ((self = [super initWithFrame:frame]))
     {
-        self.textInputView = [[TextInputView alloc] initWithFrame:frame];
+        self.inputHost = [[InputHostView alloc] initWithFrame:frame];
 
-        savedBounds_                  = [self bounds];
         self.keyboardShowNotification = nil;
         if ([self respondsToSelector:@selector(setContentScaleFactor:)])
         {
@@ -226,12 +222,9 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 {
     if ((self = [super initWithCoder:aDecoder]))
     {
-        self.textInputView = [[TextInputView alloc] initWithCoder:aDecoder];
-        if (DriverContext::isMetal())
-        {
-            backingSize_ = [self bounds].size;
-        }
-        else
+        self.inputHost = [[InputHostView alloc] initWithCoder:aDecoder];
+#if AX_ENABLE_GL
+        if (DriverContext::isOpenGL())
         {
             CAEAGLLayer* eaglLayer = (CAEAGLLayer*)[self layer];
 
@@ -239,14 +232,13 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
             depthFormat_      = (int)ax::PixelFormat::D24S8;
             multiSampling_    = NO;
             requestedSamples_ = 0;
-            backingSize_      = [eaglLayer bounds].size;
-
             if (![self setupSurfaceWithSharegroup:nil])
             {
                 [self release];
                 return nil;
             }
         }
+#endif
     }
 
     return self;
@@ -300,7 +292,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
     if (DriverContext::isOpenGL())
         [renderer_ release];
 #endif
-    [self.textInputView release];
+    [self.inputHost release];
     [super dealloc];
 }
 
@@ -310,24 +302,25 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
     if (!director->isValid())
         return;
 
-    savedBounds_              = [self bounds];
-    self.textInputView.bounds = savedBounds_;
-    if (DriverContext::isMetal())
-    {
-        backingSize_ = savedBounds_.size;
-        backingSize_.width *= self.contentScaleFactor;
-        backingSize_.height *= self.contentScaleFactor;
-    }
-    else
-    {
+    auto bounds           = [self bounds];
+    self.inputHost.bounds = bounds;
+
+// 2. Handle GL context resize if necessary
 #if AX_ENABLE_GL
+    if (DriverContext::isOpenGL())
+    {
         [renderer_ resizeFromLayer:(CAEAGLLayer*)self.layer];
-        backingSize_ = [renderer_ backingSize];
-#endif
     }
-    auto renderView = director->getRenderView();
+#endif
+
+    auto renderView = static_cast<ax::RenderView*>(director->getRenderView());
     if (renderView)
-        renderView->updateRenderSurface(backingSize_.width, backingSize_.height, ax::RenderView::AllUpdates);
+    {
+        auto& viewSize = bounds.size;
+        renderView->updateSurfaceMetrics(
+            ax::Vec2(static_cast<float>(viewSize.width), static_cast<float>(viewSize.height)), self.contentScaleFactor,
+            true);
+    }
 
     // Avoid flicker. Issue #350
     if ([NSThread isMainThread])
@@ -402,155 +395,86 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 
 #pragma mark RenderHostView - Point conversion
 
-- (CGPoint)convertPointFromViewToSurface:(CGPoint)point
-{
-    CGRect bounds = [self bounds];
-
-    CGPoint ret;
-    ret.x = (point.x - bounds.origin.x) / bounds.size.width * backingSize_.width;
-    ret.y = (point.y - bounds.origin.y) / bounds.size.height * backingSize_.height;
-
-    return ret;
-}
-
-- (CGRect)convertRectFromViewToSurface:(CGRect)rect
-{
-    CGRect bounds = [self bounds];
-
-    CGRect ret;
-    ret.origin.x    = (rect.origin.x - bounds.origin.x) / bounds.size.width * backingSize_.width;
-    ret.origin.y    = (rect.origin.y - bounds.origin.y) / bounds.size.height * backingSize_.height;
-    ret.size.width  = rect.size.width / bounds.size.width * backingSize_.width;
-    ret.size.height = rect.size.height / bounds.size.height * backingSize_.height;
-
-    return ret;
-}
-
 // Pass the touches to the superview
 #pragma mark RenderHostView - Touch Delegate
+
+- (void)handlePlatformTouches:(NSSet*)touches
+               dispatchAction:(void (^)(ax::InputSystem* sys, ax::Vec2 pt, ax::PointerInputState st))dispatchBlock
+{
+    auto inputSys = ax::InputSystem::getInstance();
+
+    int i = 0;
+    for (UITouch* touch in touches)
+    {
+        if (i >= IOS_MAX_TOUCHES_COUNT)
+        {
+            AXLOGW("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
+            break;
+        }
+
+        CGPoint nativePoint = [touch locationInView:self];
+
+        ax::Vec2 point{static_cast<float>(nativePoint.x), static_cast<float>(nativePoint.y)};
+
+        float pressure = 1.0f;
+        if (touch.maximumPossibleForce > 0.0f)
+        {
+            pressure = static_cast<float>(touch.force / touch.maximumPossibleForce);
+        }
+
+        ax::PointerInputState state{.id = (intptr_t)touch, .pressure = pressure, .type = ax::PointerType::Touch};
+
+        dispatchBlock(inputSys, point, state);
+
+        ++i;
+    }
+}
+
 - (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
     if (self.isKeyboardShown)
         [self closeKeyboardOpenedByEditBox];
 
-    UITouch* ids[IOS_MAX_TOUCHES_COUNT] = {0};
-    float xs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-    float ys[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-
-    int i = 0;
-    for (UITouch* touch in touches)
-    {
-        if (i >= IOS_MAX_TOUCHES_COUNT)
-        {
-            AXLOGW("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
-            break;
-        }
-
-        ids[i] = touch;
-        xs[i]  = [touch locationInView:[touch view]].x * self.contentScaleFactor;
-        ys[i]  = [touch locationInView:[touch view]].y * self.contentScaleFactor;
-        ++i;
-    }
-
-    auto renderView = ax::Director::getInstance()->getRenderView();
-    renderView->handleTouchesBegin(i, (intptr_t*)ids, xs, ys);
+    [self handlePlatformTouches:touches
+                 dispatchAction:^(ax::InputSystem* sys, ax::Vec2 pt, ax::PointerInputState st) {
+                   sys->handlePointerDown(pt, st);
+                 }];
 }
 
 - (void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    UITouch* ids[IOS_MAX_TOUCHES_COUNT] = {0};
-    float xs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-    float ys[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-    float fs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-    float ms[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-
-    int i = 0;
-    for (UITouch* touch in touches)
-    {
-        if (i >= IOS_MAX_TOUCHES_COUNT)
-        {
-            AXLOGW("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
-            break;
-        }
-
-        ids[i] = touch;
-        xs[i]  = [touch locationInView:[touch view]].x * self.contentScaleFactor;
-        ys[i]  = [touch locationInView:[touch view]].y * self.contentScaleFactor;
-#if defined(__IPHONE_9_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_9_0)
-        // running on iOS 9.0 or higher version
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0f)
-        {
-            fs[i] = touch.force;
-            ms[i] = touch.maximumPossibleForce;
-        }
-#endif
-        ++i;
-    }
-
-    auto renderView = ax::Director::getInstance()->getRenderView();
-    renderView->handleTouchesMove(i, (intptr_t*)ids, xs, ys, fs, ms);
+    [self handlePlatformTouches:touches
+                 dispatchAction:^(ax::InputSystem* sys, ax::Vec2 pt, ax::PointerInputState st) {
+                   sys->handlePointerMove(pt, st);
+                 }];
 }
 
 - (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    UITouch* ids[IOS_MAX_TOUCHES_COUNT] = {0};
-    float xs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-    float ys[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-
-    int i = 0;
-    for (UITouch* touch in touches)
-    {
-        if (i >= IOS_MAX_TOUCHES_COUNT)
-        {
-            AXLOGW("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
-            break;
-        }
-
-        ids[i] = touch;
-        xs[i]  = [touch locationInView:[touch view]].x * self.contentScaleFactor;
-        ys[i]  = [touch locationInView:[touch view]].y * self.contentScaleFactor;
-        ++i;
-    }
-
-    auto renderView = ax::Director::getInstance()->getRenderView();
-    renderView->handleTouchesEnd(i, (intptr_t*)ids, xs, ys);
+    [self handlePlatformTouches:touches
+                 dispatchAction:^(ax::InputSystem* sys, ax::Vec2 pt, ax::PointerInputState st) {
+                   sys->handlePointerUp(pt, st);
+                 }];
 }
 
 - (void)touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    UITouch* ids[IOS_MAX_TOUCHES_COUNT] = {0};
-    float xs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-    float ys[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-
-    int i = 0;
-    for (UITouch* touch in touches)
-    {
-        if (i >= IOS_MAX_TOUCHES_COUNT)
-        {
-            AXLOGW("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
-            break;
-        }
-
-        ids[i] = touch;
-        xs[i]  = [touch locationInView:[touch view]].x * self.contentScaleFactor;
-        ys[i]  = [touch locationInView:[touch view]].y * self.contentScaleFactor;
-        ++i;
-    }
-
-    auto renderView = ax::Director::getInstance()->getRenderView();
-    renderView->handleTouchesCancel(i, (intptr_t*)ids, xs, ys);
+    [self handlePlatformTouches:touches
+                 dispatchAction:^(ax::InputSystem* sys, ax::Vec2 pt, ax::PointerInputState st) {
+                   sys->handlePointerCancel(pt, st);
+                 }];
 }
 
 - (void)showKeyboard
 {
-    [self addSubview:self.textInputView];
-    [self.textInputView becomeFirstResponder];
+    [self addSubview:self.inputHost];
+    [self.inputHost becomeFirstResponder];
 }
 
 - (void)hideKeyboard
 {
-    [self.textInputView resignFirstResponder];
-    [self.textInputView removeFromSuperview];
+    [self.inputHost resignFirstResponder];
+    [self.inputHost removeFromSuperview];
 }
 
 - (void)doAnimationWhenKeyboardMoveWithDuration:(float)duration distance:(float)dis
@@ -562,7 +486,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
     dis *= renderView->getScaleY();
     dis /= self.contentScaleFactor;
 
-    CGRect newFrame = savedBounds_;
+    CGRect newFrame = [self bounds];
     newFrame.origin.y -= dis;
 
     [UIView animateWithDuration:duration
@@ -625,70 +549,47 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
     NSString* type     = notif.name;
     NSDictionary* info = [notif userInfo];
 
-    CGRect begin       = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-    CGRect end         = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    auto inputSys = ax::InputSystem::getInstance();
+    if (!inputSys)
+        return;
+
+    // Extract animation hardware clock duration from the notification payload
     double aniDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    float duration     = static_cast<float>(aniDuration);
 
-    // Convert to current view's coordinate system
-    begin = [self convertRect:begin fromView:nil];
-    end   = [self convertRect:end fromView:nil];
-
-    auto renderView = ax::Director::getInstance()->getRenderView();
-    float scaleX    = renderView->getScaleX();
-    float scaleY    = renderView->getScaleY();
-
-    const auto backingScaleFactor = self.contentScaleFactor;
-
-    // Convert to pixel coordinates
-    begin = CGRectApplyAffineTransform(
-        begin, CGAffineTransformScale(CGAffineTransformIdentity, backingScaleFactor, backingScaleFactor));
-    end = CGRectApplyAffineTransform(
-        end, CGAffineTransformScale(CGAffineTransformIdentity, backingScaleFactor, backingScaleFactor));
-
-    float offestY = renderView->getViewportRect().origin.y;
-    if (offestY < 0.0f)
-    {
-        begin.origin.y += offestY;
-        begin.size.height -= offestY;
-        end.size.height -= offestY;
-    }
-
-    // Convert to design resolution coordinates
-    begin = CGRectApplyAffineTransform(begin,
-                                       CGAffineTransformScale(CGAffineTransformIdentity, 1.0f / scaleX, 1.0f / scaleY));
-    end   = CGRectApplyAffineTransform(end,
-                                       CGAffineTransformScale(CGAffineTransformIdentity, 1.0f / scaleX, 1.0f / scaleY));
-
-    // Fill notification info for Axmol IME dispatcher
-    auto boundSize = savedBounds_.size;
-    CGSize viewSize =
-        CGSizeMake(boundSize.width * backingScaleFactor / scaleX, boundSize.height * backingScaleFactor / scaleY);
-
-    ax::IMEKeyboardNotificationInfo notiInfo;
-    notiInfo.begin    = convertKeyboardRectToViewport(begin, viewSize);
-    notiInfo.end      = convertKeyboardRectToViewport(end, viewSize);
-    notiInfo.duration = aniDuration;
-
-    ax::IMEDispatcher* dispatcher = ax::IMEDispatcher::sharedDispatcher();
+    // 1. Keyboard is about to slide up
     if (UIKeyboardWillShowNotification == type)
     {
-        dispatcher->dispatchKeyboardWillShow(notiInfo);
+        // Extract the target raw keyboard bounds (End Frame)
+        CGRect end = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+
+        // Convert frame coordinates to local view system (UIKit Points, Top-Left origin)
+        end = [self convertRect:end fromView:nil];
+
+        // Pipe raw properties directly to C++ core layer for centralized coordinate/resolution mapping
+        inputSys->onPlatformKeyboardWillShow(static_cast<float>(end.origin.x), static_cast<float>(end.origin.y),
+                                             static_cast<float>(end.size.width), static_cast<float>(end.size.height),
+                                             duration);
     }
+    // 2. Keyboard expansion animation completed
     else if (UIKeyboardDidShowNotification == type)
     {
         self.isKeyboardShown = YES;
-        dispatcher->dispatchKeyboardDidShow(notiInfo);
+        inputSys->onPlatformKeyboardDidShow();
     }
+    // 3. Keyboard is about to slide down
     else if (UIKeyboardWillHideNotification == type)
     {
-        dispatcher->dispatchKeyboardWillHide(notiInfo);
+        // No layout tracking required; C++ layer derives the dismissal path via cached frame
+        inputSys->onPlatformKeyboardWillHide(duration);
     }
+    // 4. Keyboard dismissal animation completed
     else if (UIKeyboardDidHideNotification == type)
     {
         self.isKeyboardShown = NO;
-        dispatcher->dispatchKeyboardDidHide(notiInfo);
+        inputSys->onPlatformKeyboardDidHide();
     }
-#endif
+#endif /* !defined(AX_TARGET_OS_TVOS) */
 }
 
 // Close the keyboard opened by EditBox
@@ -708,6 +609,37 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
             }
         }
     }
+}
+
+- (void)showContextMenu:(CGPoint)point hasText:(BOOL)hasText hasSelection:(BOOL)hasSelection readOnly:(BOOL)readOnly
+{
+    void (^showMenuBlock)(void) = ^{
+      auto renderView = ax::Director::getInstance()->getRenderView();
+
+      CGPoint screenPointInPoints = CGPointMake(point.x, point.y);
+
+      CGPoint hostPoint = [self.inputHost convertPoint:screenPointInPoints fromView:nil];
+
+      if (![self.inputHost isFirstResponder])
+      {
+          [self.inputHost becomeFirstResponder];
+      }
+      [self.inputHost showContextMenu:hostPoint hasText:hasText hasSelection:hasSelection readOnly:readOnly];
+    };
+
+    if ([NSThread isMainThread])
+    {
+        showMenuBlock();
+    }
+    else
+    {
+        dispatch_async(dispatch_get_main_queue(), showMenuBlock);
+    }
+}
+
+- (void)hideContextMenu
+{
+    [self.inputHost hideContextMenu];
 }
 
 @end

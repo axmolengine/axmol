@@ -557,7 +557,7 @@ bool GRoot::initWithScene(ax::Scene* scene, int zOrder)
     _inputProcessor->setCaptureCallback(AX_CALLBACK_1(GRoot::onTouchEvent, this));
 
 #if defined(AX_PLATFORM_PC)
-    _windowSizeListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(RenderViewImpl::EVENT_WINDOW_RESIZED, AX_CALLBACK_0(GRoot::onWindowSizeChanged, this));
+    _windowSizeListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(RenderView::EVENT_WINDOW_RESIZED, AX_CALLBACK_0(GRoot::onWindowSizeChanged, this));
 #endif
     onWindowSizeChanged();
 

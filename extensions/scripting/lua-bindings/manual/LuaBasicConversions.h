@@ -37,6 +37,7 @@
 #include "axmol/2d/Sprite.h"
 #include "axmol/scene/Scene.h"
 #include "axmol/3d/Bundle3D.h"
+#include "axmol/3d/Ray.h"
 #include "axmol/base/Value.h"
 #include "axmol/base/Types.h"
 #include "axmol/physics/physics-2d.h"
@@ -45,6 +46,11 @@
 #include "axmol/ui/GUIDefine.h"
 
 #include <thread>
+
+namespace ax
+{
+class Acceleration;
+}
 
 using namespace ax;
 
@@ -884,6 +890,10 @@ void size_to_luaval(lua_State* L, const Size& sz);
  * @param rt  a ax::Rect object.
  */
 void rect_to_luaval(lua_State* L, const Rect& rt);
+
+void ray_to_luaval(lua_State* L, const Ray& ray);
+
+void accel_to_luaval(lua_State* L, const Acceleration& accel);
 
 /**
  * Push a table converted from a ax::Color32 object into the Lua stack.

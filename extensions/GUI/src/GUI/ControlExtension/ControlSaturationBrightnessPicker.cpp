@@ -185,24 +185,31 @@ bool ControlSaturationBrightnessPicker::checkSliderPosition(Vec2 location)
     return false;
 }
 
-bool ControlSaturationBrightnessPicker::onTouchBegan(Touch* touch, Event* /*event*/)
+bool ControlSaturationBrightnessPicker::onPointerDown(PointerEvent* event)
 {
+    bool ret = Control::onPointerDown(event);
+    if (!ret)
+        return false;
+
     if (!isEnabled() || !isVisible())
     {
         return false;
     }
 
     // Get the touch location
-    Vec2 touchLocation = getTouchLocation(touch);
+    Vec2 touchLocation = getTouchLocation(event);
 
     // Check the touch position on the slider
-    return checkSliderPosition(touchLocation);
+    _isPressed = checkSliderPosition(touchLocation);
+    return _isPressed;
 }
 
-void ControlSaturationBrightnessPicker::onTouchMoved(Touch* touch, Event* /*event*/)
+void ControlSaturationBrightnessPicker::onPointerMove(PointerEvent* event)
 {
+    if (!_isPressed)
+        return;
     // Get the touch location
-    Vec2 touchLocation = getTouchLocation(touch);
+    Vec2 touchLocation = getTouchLocation(event);
 
     // small modification: this allows changing of the colour, even if the touch leaves the bounding area
     //     updateSliderPosition(touchLocation);

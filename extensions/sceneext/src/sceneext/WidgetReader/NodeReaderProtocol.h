@@ -120,11 +120,10 @@ class Slider;
 class LoadingBar;
 
 class Text;
-class TextField;
 class TextAtlas;
 class TextBMFont;
 
-class Layout;
+class LayoutGroup;
 class ScrollView;
 class ListView;
 class PageView;
@@ -158,10 +157,9 @@ SCNEXT_API extern ax::ui::CheckBox* (*aCheckBox)();
 SCNEXT_API extern ax::ui::Slider* (*aSlider)();
 SCNEXT_API extern ax::ui::LoadingBar* (*aLoadingBar)();
 SCNEXT_API extern ax::ui::Text* (*aText)();
-SCNEXT_API extern ax::ui::TextField* (*aTextField)();
 SCNEXT_API extern ax::ui::TextAtlas* (*aTextAtlas)();
 SCNEXT_API extern ax::ui::TextBMFont* (*aTextBMFont)();
-SCNEXT_API extern ax::ui::Layout* (*aLayout)();
+SCNEXT_API extern ax::ui::LayoutGroup* (*aLayout)();
 SCNEXT_API extern ax::ui::ScrollView* (*aScrollView)();
 SCNEXT_API extern ax::ui::ListView* (*aListView)();
 SCNEXT_API extern ax::ui::PageView* (*aPageView)();

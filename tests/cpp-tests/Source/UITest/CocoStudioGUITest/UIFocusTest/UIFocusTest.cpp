@@ -22,14 +22,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-//
-//  UIFocusTest.cpp
-//  cocos2d_tests
-//
-//  Created by guanghui on 5/4/14.
-//
-//
-
 #include "UIFocusTest.h"
 
 using namespace ax;
@@ -85,7 +77,7 @@ bool UIFocusTestBase::init()
         // call this method to enable Dpad focus navigation
         Widget::enableDpadNavigation(true);
 
-        _eventListener                 = EventListenerFocus::create();
+        _eventListener                 = FocusEventListener::create();
         _eventListener->onFocusChanged = AX_CALLBACK_2(UIFocusTestBase::onFocusChanged, this);
 
         _eventDispatcher->addEventListenerWithFixedPriority(_eventListener, 1);
@@ -123,29 +115,29 @@ void UIFocusTestBase::onImageViewClicked(ax::Object* ref, Widget::TouchEventType
 
 void UIFocusTestBase::onLeftKeyPressed()
 {
-    ax::EventKeyboard::KeyCode keyCode = EventKeyboard::KeyCode::KEY_DPAD_LEFT;
-    ax::EventKeyboard event(keyCode, false);
+    ax::KeyboardEvent::KeyCode keyCode = KeyboardEvent::KeyCode::KEY_DPAD_LEFT;
+    ax::KeyboardEvent event(keyCode, InputPhase::KeyUp);
     ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
 void UIFocusTestBase::onRightKeyPressed()
 {
-    ax::EventKeyboard::KeyCode keyCode = EventKeyboard::KeyCode::KEY_DPAD_RIGHT;
-    ax::EventKeyboard event(keyCode, false);
+    ax::KeyboardEvent::KeyCode keyCode = KeyboardEvent::KeyCode::KEY_DPAD_RIGHT;
+    ax::KeyboardEvent event(keyCode, InputPhase::KeyUp);
     ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
 void UIFocusTestBase::onUpKeyPressed()
 {
-    ax::EventKeyboard::KeyCode keyCode = EventKeyboard::KeyCode::KEY_DPAD_UP;
-    ax::EventKeyboard event(keyCode, false);
+    ax::KeyboardEvent::KeyCode keyCode = KeyboardEvent::KeyCode::KEY_DPAD_UP;
+    ax::KeyboardEvent event(keyCode, InputPhase::KeyUp);
     ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
 void UIFocusTestBase::onDownKeyPressed()
 {
-    ax::EventKeyboard::KeyCode keyCode = EventKeyboard::KeyCode::KEY_DPAD_DOWN;
-    ax::EventKeyboard event(keyCode, false);
+    ax::KeyboardEvent::KeyCode keyCode = KeyboardEvent::KeyCode::KEY_DPAD_DOWN;
+    ax::KeyboardEvent event(keyCode, InputPhase::KeyUp);
     ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 

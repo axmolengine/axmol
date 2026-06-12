@@ -60,12 +60,11 @@ void Paddle::onEnter()
     Sprite::onEnter();
 
     // Register Touch Event
-    auto listener = EventListenerTouchOneByOne::create();
-    listener->setSwallowTouches(true);
+    auto listener = PointerEventListener::create();
 
-    listener->onTouchBegan = AX_CALLBACK_2(Paddle::onTouchBegan, this);
-    listener->onTouchMoved = AX_CALLBACK_2(Paddle::onTouchMoved, this);
-    listener->onTouchEnded = AX_CALLBACK_2(Paddle::onTouchEnded, this);
+    listener->onPointerDown = AX_CALLBACK_1(Paddle::onPointerDown, this);
+    listener->onPointerMove = AX_CALLBACK_1(Paddle::onPointerMove, this);
+    listener->onPointerUp   = AX_CALLBACK_1(Paddle::onPointerUp, this);
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
@@ -77,19 +76,19 @@ void Paddle::onExit()
     Sprite::onExit();
 }
 
-bool Paddle::containsTouchLocation(Touch* touch)
+bool Paddle::containsPointerLocation(PointerEvent* event)
 {
-    return getRect().containsPoint(convertTouchToNodeSpaceAR(touch));
+    return getRect().containsPoint(convertPointerToNodeSpaceAR(event));
 }
 
-bool Paddle::onTouchBegan(Touch* touch, Event* event)
+bool Paddle::onPointerDown(PointerEvent* event)
 {
-    AXLOGD("Paddle::onTouchBegan id = {}, x = {}, y = {}", touch->getID(), touch->getLocation().x,
-           touch->getLocation().y);
+    AXLOGD("Paddle::onPointerDown id = {}, x = {}, y = {}", event->getPointerId(), event->getLocation().x,
+           event->getLocation().y);
 
     if (_state != kPaddleStateUngrabbed)
         return false;
-    if (!containsTouchLocation(touch))
+    if (!containsPointerLocation(event))
         return false;
 
     _state = kPaddleStateGrabbed;
@@ -97,7 +96,7 @@ bool Paddle::onTouchBegan(Touch* touch, Event* event)
     return true;
 }
 
-void Paddle::onTouchMoved(Touch* touch, Event* event)
+void Paddle::onPointerMove(PointerEvent* event)
 {
     // If it weren't for the TouchDispatcher, you would need to keep a reference
     // to the touch from touchBegan and check that the current touch is the same
@@ -106,12 +105,15 @@ void Paddle::onTouchMoved(Touch* touch, Event* event)
     // you get Sets instead of 1 UITouch, so you'd need to loop through the set
     // in each touchXXX method.
 
-    AXLOGD("Paddle::onTouchMoved id = {}, x = {}, y = {}", touch->getID(), touch->getLocation().x,
-           touch->getLocation().y);
+    if (_state != kPaddleStateGrabbed)
+        return;
 
-    AXASSERT(_state == kPaddleStateGrabbed, "Paddle - Unexpected state!");
+    AXLOGD("Paddle::onPointerMove id = {}, x = {}, y = {}", event->getPointerId(), event->getLocation().x,
+           event->getLocation().y);
 
-    auto touchPoint = touch->getLocation();
+    // AXASSERT(_state == kPaddleStateGrabbed, "Paddle - Unexpected state!");
+
+    auto touchPoint = event->getLocation();
 
     setPosition(Vec2(touchPoint.x, getPosition().y));
 }
@@ -125,7 +127,7 @@ Paddle* Paddle::clone() const
     return ret;
 }
 
-void Paddle::onTouchEnded(Touch* touch, Event* event)
+void Paddle::onPointerUp(PointerEvent* event)
 {
     AXASSERT(_state == kPaddleStateGrabbed, "Paddle - Unexpected state!");
 

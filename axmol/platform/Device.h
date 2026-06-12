@@ -35,6 +35,7 @@ namespace ax
 {
 
 struct FontDefinition;
+class Application;
 
 /**
  * @addtogroup platform
@@ -84,10 +85,44 @@ public:
     static constexpr int DEFAULT_REFRESH_RATE = 60;
 
     /**
+     * Retrieves the current clipboard text.
+     *
+     * On native platforms (Windows, macOS, Linux, iOS, Android), this function
+     * executes synchronously and the clipboard text is available immediately.
+     *
+     * On WebAssembly (browser) platforms, clipboard access requires the
+     * asynchronous JavaScript Clipboard API. Therefore, the result is delivered
+     * via the provided callback once the browser resolves the request.
+     *
+     * If reading the clipboard fails or the clipboard is empty, the callback
+     * will be invoked with an empty string.
+     *
+     * @param callback Function to receive the clipboard text result.
+     * @since axmol-3.0.0
+     */
+    static void getClipboardText(std::function<void(std::string_view)> callback);
+
+    /**
+     *  Sets the clipboard text.
+     *  @since axmol-3.0.0
+     */
+    static void setClipboardText(std::string_view text);
+
+    /**
+     *  Clears the clipboard content.
+     *  @since axmol-3.0.0
+     */
+    static void clearClipboard();
+
+    /**
      *  Gets the DPI of device
      *  @return The DPI of device.
      */
     static int getDPI();
+
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
+    static void setDPI(float dpi);
+#endif
 
     /**
      * Gets the device pixel ratio
@@ -285,7 +320,7 @@ public:
      *     from the supported mask is used as a fallback.
      *
      * The returned Orientation is guaranteed to be compatible with the supported
-     * orientation mask, and can be used by RenderViewImpl-ios to compute the
+     * orientation mask, and can be used by RenderView-ios to compute the
      * logical screen size and viewport before app->run().
      *
      * @return Orientation  The resolved final orientation for the application.
@@ -306,6 +341,8 @@ public:
     static int getDisplayRefreshRate();
 
 private:
+    friend class Application;
+
     AX_DISALLOW_IMPLICIT_CONSTRUCTORS(Device);
 };
 

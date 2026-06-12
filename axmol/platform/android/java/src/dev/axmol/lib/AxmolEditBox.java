@@ -26,20 +26,18 @@ THE SOFTWARE.
 package dev.axmol.lib;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 
-public class AxmolEditBox extends EditText {
+import androidx.appcompat.widget.AppCompatEditText;
+
+public class AxmolEditBox extends AppCompatEditText {
     /**
      * The user is allowed to enter any text, including line breaks.
      */

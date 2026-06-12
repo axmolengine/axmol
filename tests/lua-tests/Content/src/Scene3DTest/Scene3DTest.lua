@@ -160,24 +160,24 @@ function TerrainWalkThru:init()
     Helper.titleLabel:setString(self:title())
     Helper.subtitleLabel:setString(self:subtitle())
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
+    local listener = ax.PointerEventListener:create()
 
-    listener:registerScriptHandler(function (touches, event)
+    listener:registerScriptHandler(function(event)
 
-    end,ax.Handler.EVENT_TOUCHES_BEGAN)
+    end,ax.Handler.EVENT_POINTER_DOWN)
 
-    listener:registerScriptHandler(function (touches, event)
+    listener:registerScriptHandler(function(event)
 
-        local touch = touches[1]
-        local location = touch:getLocationInView()
+        local touch = event
+        local location = event:getScreenLocation()
         if self._camera ~= nil then
             if self._player ~= nil then
                 local nearP = ax.vec3(location.x, location.y, 0.0)
                 local farP  = ax.vec3(location.x, location.y, 1.0)
 
                 local size = ax.Director:getInstance():getCanvasSize()
-                nearP = self._camera:unproject(size, nearP, nearP)
-                farP  = self._camera:unproject(size, farP, farP)
+                nearP = self._camera:deprojectScreenToWorld(nearP)
+                farP  = self._camera:deprojectScreenToWorld(farP)
                 local dir = ax.vec3sub(farP, nearP)
                 dir = ax.vec3normalize(dir)
 
@@ -202,7 +202,7 @@ function TerrainWalkThru:init()
                 self._player._playerState = PLAER_STATE.FORWARD
             end
         end
-    end,ax.Handler.EVENT_TOUCHES_ENDED)
+    end,ax.Handler.EVENT_POINTER_UP)
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -473,8 +473,8 @@ function Scene3DTest:createDetailDlg()
 --    skeletonNode:setPosition(ax.p(dlgSize.width / 2, 20))
 --    self._detailDlg:addChild(skeletonNode)
 
-    local listener = ax.EventListenerTouchOneByOne:create()
-    listener:registerScriptHandler(function (touch, event)
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(function(event)
 --        if (not skeletonNode:getDebugBonesEnabled()) then
 --            skeletonNode:setDebugBonesEnabled(true)
 --        elseif skeletonNode:getTimeScale() == 1 then
@@ -485,7 +485,7 @@ function Scene3DTest:createDetailDlg()
 --        end
 
         return true
-    end,ax.Handler.EVENT_TOUCH_BEGAN )
+    end,ax.Handler.EVENT_POINTER_DOWN )
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)

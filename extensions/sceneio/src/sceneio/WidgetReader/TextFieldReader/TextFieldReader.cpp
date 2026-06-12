@@ -24,7 +24,7 @@
 
 #include "sceneio/WidgetReader/TextFieldReader/TextFieldReader.h"
 
-#include "axmol/ui/UITextField.h"
+#include "axmol/ui/InputField.h"
 #include "axmol/platform/FileUtils.h"
 #include "sceneext/CocoLoader.h"
 #include "sceneio/CSParseBinary_generated.h"
@@ -74,7 +74,7 @@ void TextFieldReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* coc
 {
     this->beginSetBasicProperties(widget);
 
-    TextField* textField = static_cast<TextField*>(widget);
+    InputField* textField = static_cast<InputField*>(widget);
 
     stExpCocoNode* stChildArray = cocoNode->GetChildArray(cocoLoader);
 
@@ -90,7 +90,7 @@ void TextFieldReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* coc
 
         else if (key == P_PlaceHolder)
         {
-            textField->setPlaceHolder(value);
+            textField->setPlaceholderText(value);
         }
         else if (key == P_Text)
         {
@@ -106,15 +106,15 @@ void TextFieldReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* coc
         }
         else if (key == P_TouchSizeWidth)
         {
-            textField->setTouchSize(Size(valueToFloat(value), textField->getTouchSize().height));
+            textField->setTouchAreaSize(Size(valueToFloat(value), textField->getTouchAreaSize().height));
         }
         else if (key == P_TouchSizeHeight)
         {
-            textField->setTouchSize(Size(textField->getTouchSize().width, valueToFloat(value)));
+            textField->setTouchAreaSize(Size(textField->getTouchAreaSize().width, valueToFloat(value)));
         }
         else if (key == P_MaxLengthEnable)
         {
-            textField->setMaxLengthEnabled(valueToBool(value));
+            // InputField doesn't have setMaxLengthEnabled, only setMaxLength
         }
         else if (key == P_MaxLength)
         {
@@ -126,7 +126,7 @@ void TextFieldReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* coc
         }
         else if (key == P_PasswordStyleText)
         {
-            textField->setPasswordStyleText(value);
+            textField->setPasswordChar(value);
         }
     }  // end of for loop
     this->endSetBasicProperties(widget);
@@ -136,11 +136,11 @@ void TextFieldReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson
 {
     WidgetReader::setPropsFromJsonDictionary(widget, options);
 
-    TextField* textField = static_cast<TextField*>(widget);
-    bool ph              = DICTOOL->checkObjectExist_json(options, P_PlaceHolder);
+    InputField* textField = static_cast<InputField*>(widget);
+    bool ph               = DICTOOL->checkObjectExist_json(options, P_PlaceHolder);
     if (ph)
     {
-        textField->setPlaceHolder(DICTOOL->getStringValue_json(options, P_PlaceHolder, "input words here"));
+        textField->setPlaceholderText(DICTOOL->getStringValue_json(options, P_PlaceHolder, "input words here"));
     }
     textField->setString(DICTOOL->getStringValue_json(options, P_Text, "Text Tield"));
 
@@ -158,8 +158,8 @@ void TextFieldReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson
     bool tsh = DICTOOL->checkObjectExist_json(options, P_TouchSizeHeight);
     if (tsw && tsh)
     {
-        textField->setTouchSize(Size(DICTOOL->getFloatValue_json(options, P_TouchSizeWidth),
-                                     DICTOOL->getFloatValue_json(options, P_TouchSizeHeight)));
+        textField->setTouchAreaSize(Size(DICTOOL->getFloatValue_json(options, P_TouchSizeWidth),
+                                         DICTOOL->getFloatValue_json(options, P_TouchSizeHeight)));
     }
 
     //        float dw = DICTOOL->getFloatValue_json(options, "width");
@@ -169,8 +169,7 @@ void TextFieldReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson
     //            //textField->setSize(Size(dw, dh));
     //        }
     bool maxLengthEnable = DICTOOL->getBooleanValue_json(options, P_MaxLengthEnable);
-    textField->setMaxLengthEnabled(maxLengthEnable);
-
+    // InputField doesn't have setMaxLengthEnabled, only setMaxLength
     if (maxLengthEnable)
     {
         int maxLength = DICTOOL->getIntValue_json(options, P_MaxLength, 10);
@@ -180,7 +179,7 @@ void TextFieldReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson
     textField->setPasswordEnabled(passwordEnable);
     if (passwordEnable)
     {
-        textField->setPasswordStyleText(DICTOOL->getStringValue_json(options, P_PasswordStyleText, "*"));
+        textField->setPasswordChar(DICTOOL->getStringValue_json(options, P_PasswordStyleText, "*"));
     }
 
     WidgetReader::setColorPropsFromJsonDictionary(widget, options);
@@ -307,11 +306,11 @@ Offset<Table> TextFieldReader::createOptionsWithFlatBuffers(pugi::xml_node objec
 
 void TextFieldReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* textFieldOptions)
 {
-    TextField* textField = static_cast<TextField*>(node);
-    auto options         = (TextFieldOptions*)textFieldOptions;
+    InputField* textField = static_cast<InputField*>(node);
+    auto options          = (TextFieldOptions*)textFieldOptions;
 
     std::string placeholder = options->placeHolder()->c_str();
-    textField->setPlaceHolder(placeholder);
+    textField->setPlaceholderText(placeholder);
 
     std::string text = options->text()->c_str();
     bool isLocalized = options->isLocalized() != 0;
@@ -336,8 +335,7 @@ void TextFieldReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers:
     textField->setFontName(fontName);
 
     bool maxLengthEnabled = options->maxLengthEnabled() != 0;
-    textField->setMaxLengthEnabled(maxLengthEnabled);
-
+    // InputField doesn't have setMaxLengthEnabled, only setMaxLength
     if (maxLengthEnabled)
     {
         int maxLength = options->maxLength();
@@ -348,7 +346,7 @@ void TextFieldReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers:
     if (passwordEnabled)
     {
         std::string passwordStyleText = options->passwordStyleText()->c_str();
-        textField->setPasswordStyleText(passwordStyleText.c_str());
+        textField->setPasswordChar(passwordStyleText);
     }
 
     bool fileExist = false;
@@ -375,13 +373,12 @@ void TextFieldReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers:
     auto widgetReader = WidgetReader::getInstance();
     widgetReader->setPropsWithFlatBuffers(node, (Table*)options->widgetOptions());
 
-    textField->setUnifySizeEnabled(false);
-    textField->ignoreContentAdaptWithSize(false);
+    textField->setAutoSize(false);
 
     auto widgetOptions = options->widgetOptions();
-    if (!textField->isIgnoreContentAdaptWithSize())
+    if (!textField->isAutoSize())
     {
-        ((Label*)(textField->getVirtualRenderer()))->setLineBreakWithoutSpace(true);
+        ((Label*)(textField->getRenderNode()))->setLineBreakWithoutSpace(true);
         Size contentSize(widgetOptions->size()->width(), widgetOptions->size()->height());
         textField->setContentSize(contentSize);
     }
@@ -389,11 +386,11 @@ void TextFieldReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers:
 
 Node* TextFieldReader::createNodeWithFlatBuffers(const flatbuffers::Table* textFieldOptions)
 {
-    TextField* textField = TextField::create();
+    InputField* inputField = InputField::create();
 
-    setPropsWithFlatBuffers(textField, (Table*)textFieldOptions);
+    setPropsWithFlatBuffers(inputField, (Table*)textFieldOptions);
 
-    return textField;
+    return inputField;
 }
 
 }  // namespace ax::ext

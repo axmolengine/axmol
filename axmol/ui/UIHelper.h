@@ -116,13 +116,14 @@ public:
     static Rect restrictCapInsetRect(const Rect& capInsets, const Vec2& textureSize);
 
     /**
-     *@brief Convert a node's boundingBox rect into screen coordinates.
+     * Returns the node bounding rectangle in OS native window coordinates.
      *
-     * @param node Any node pointer.
+     * Coordinates origin is top-left. Units are OS native pixels/points (NOT engine logical screen units).
+     * The returned rect is suitable for native windowing APIs, platform UI integration, and system-level hit testing.
      *
-     * @return A Rect in screen coordinates.
+     * Note: This function returns screen rect after converting engine screen units by dividing by _inputScale.
      */
-    static Rect convertBoundingBoxToScreen(Node* node);
+    static Rect getNodeNativeWindowRect(Node* node);
 
 #ifndef _AX_GEN_SCRIPT_BINDINGS
 #    pragma region x-studio spec
@@ -888,7 +889,7 @@ public:
     public:
         static void refresh(void);
 
-        static ax::Rect getScreenVisibleRect();
+        static ax::Rect getRect();
         static Vec2 size();
         static ax::Point left();
         static ax::Point right();
@@ -940,7 +941,7 @@ public:
 
     private:
         static void lazyInit();
-        static ax::Rect s_ScreenVisibleRect;
+        static ax::Rect s_rect;
     };
 #    pragma endregion
 #endif

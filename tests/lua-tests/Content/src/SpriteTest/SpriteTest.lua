@@ -55,11 +55,8 @@ function Sprite1.addNewSpriteWithCoords(layer, point)
     sprite:runAction( ax.RepeatForever:create(seq) )
 end
 
-function Sprite1.onTouchesEnd(touches, event)
-    for i = 1,#(touches) do
-        local location = touches[i]:getLocation()
-        Sprite1.addNewSpriteWithCoords(Helper.currentLayer, location)
-    end
+function Sprite1.onTouchesEnd(event)
+    Sprite1.addNewSpriteWithCoords(Helper.currentLayer, event:getLocation())
 end
 
 function Sprite1.create()
@@ -68,8 +65,8 @@ function Sprite1.create()
     Helper.initWithLayer(layer)
     Sprite1.addNewSpriteWithCoords(layer, ax.p(size.width/2, size.height/2))
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(Sprite1.onTouchesEnd,ax.Handler.EVENT_TOUCHES_ENDED )
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(Sprite1.onTouchesEnd,ax.Handler.EVENT_POINTER_UP )
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
 
@@ -116,11 +113,8 @@ function SpriteBatchNode1.addNewSpriteWithCoords(layer, point)
     sprite:runAction( ax.RepeatForever:create(seq) )
 end
 
-function SpriteBatchNode1.onTouchesEnd(touches,event)
-    for i = 1,#(touches) do
-        local location = touches[i]:getLocation()
-        SpriteBatchNode1.addNewSpriteWithCoords(Helper.currentLayer, location)
-    end
+function SpriteBatchNode1.onTouchesEnd(event)
+    SpriteBatchNode1.addNewSpriteWithCoords(Helper.currentLayer, event:getLocation())
 end
 
 function SpriteBatchNode1.create()
@@ -131,8 +125,8 @@ function SpriteBatchNode1.create()
 
     SpriteBatchNode1.addNewSpriteWithCoords(layer, ax.p(size.width/2, size.height/2))
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(Sprite1.onTouchesEnd,ax.Handler.EVENT_TOUCHES_ENDED )
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(Sprite1.onTouchesEnd,ax.Handler.EVENT_POINTER_UP )
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
 

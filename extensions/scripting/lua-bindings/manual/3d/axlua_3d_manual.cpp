@@ -2234,7 +2234,7 @@ int axlua_3d_get_Ray_origin(lua_State* L)
         return 0;
     }
 #endif
-    vec3_to_luaval(L, self->_origin);
+    vec3_to_luaval(L, self->origin);
     return 1;
 
 #if _AX_DEBUG >= 1
@@ -2272,7 +2272,7 @@ int axlua_3d_set_Ray_origin(lua_State* L)
         if (!tolua_istable(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
-        luaval_to_vec3(L, 2, &self->_origin);
+        luaval_to_vec3(L, 2, &self->origin);
         return 0;
     }
 
@@ -2303,7 +2303,7 @@ int axlua_3d_get_Ray_direction(lua_State* L)
         return 0;
     }
 #endif
-    vec3_to_luaval(L, self->_direction);
+    vec3_to_luaval(L, self->direction);
     return 1;
 
 #if _AX_DEBUG >= 1
@@ -2341,7 +2341,7 @@ int axlua_3d_set_Ray_direction(lua_State* L)
         if (!tolua_istable(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
-        luaval_to_vec3(L, 2, &self->_direction);
+        luaval_to_vec3(L, 2, &self->direction);
         return 0;
     }
 

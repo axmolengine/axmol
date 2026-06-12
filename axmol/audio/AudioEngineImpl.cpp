@@ -243,12 +243,12 @@ static id s_AudioEngineSessionHandler = nullptr;
 #    endif
 static void alcReopenDeviceOnAxmolThread()
 {
-    ax::Director::getInstance()->queueOperation([](void*) {
+    ax::Director::getInstance()->postTask([]() {
         auto alcReopenDeviceSOFTProc =
             (decltype(alcReopenDeviceSOFT)*)alcGetProcAddress(s_ALDevice, "alcReopenDeviceSOFT");
         if (alcReopenDeviceSOFTProc)
             alcReopenDeviceSOFTProc(s_ALDevice, nullptr, nullptr);
-    });
+    }, ax::Director::TaskTiming::FrameBoundary);
 }
 
 #    if defined(ALC_SOFT_system_events) && (defined(_WIN32) || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
@@ -655,7 +655,7 @@ void AudioEngineImpl::_play2d(AudioCache* cache, AUDIO_ID audioID)
     {
         if (player->play2d())
         {
-            _scheduler->runOnAxmolThread([audioID]() {
+            Director::getInstance()->postTask([audioID]() {
                 if (AudioEngine::_audioIDInfoMap.find(audioID) != AudioEngine::_audioIDInfoMap.end())
                 {
                     AudioEngine::_audioIDInfoMap[audioID].state = AudioEngine::AudioState::PLAYING;
@@ -683,7 +683,7 @@ void AudioEngineImpl::_play3d(AudioCache* cache, int audioID)
     {
         if (player->play3d())
         {
-            _scheduler->runOnAxmolThread([audioID]() {
+            Director::getInstance()->postTask([audioID]() {
                 if (AudioEngine::_audioIDInfoMap.find(audioID) != AudioEngine::_audioIDInfoMap.end())
                 {
                     AudioEngine::_audioIDInfoMap[audioID].state = AudioEngine::AudioState::PLAYING;

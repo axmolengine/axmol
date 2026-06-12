@@ -42,10 +42,10 @@ public:
     MouseEventTest();
     ~MouseEventTest();
 
-    bool onMouseDown(ax::Event* event);
-    bool onMouseUp(ax::Event* event);
-    bool onMouseMove(ax::Event* event);
-    bool onMouseScroll(ax::Event* event);
+    bool onMouseDown(ax::PointerEvent* event);
+    void onMouseUp(ax::PointerEvent* event);
+    bool onMouseMove(ax::PointerEvent* event);
+    bool onMouseScroll(ax::PointerEvent* event);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -53,7 +53,7 @@ public:
 private:
     ax::Label* _labelAction;
     ax::Label* _labelPosition;
-    ax::EventListenerMouse* _mouseListener;
+    ax::PointerEventListener* _mouseListener;
 };
 
 class HideMouseTest : public BaseMouseTest
@@ -67,7 +67,7 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    ax::EventListenerMouse* _lis;
+    ax::PointerEventListener* _lis;
 };
 
 #endif

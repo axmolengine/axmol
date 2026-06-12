@@ -73,10 +73,10 @@ bool Particle3DTestDemo::init()
     _camera->setCameraFlag(CameraFlag::USER1);
     this->addChild(_camera);
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(Particle3DTestDemo::onTouchesBegan, this);
-    listener->onTouchesMoved = AX_CALLBACK_2(Particle3DTestDemo::onTouchesMoved, this);
-    listener->onTouchesEnded = AX_CALLBACK_2(Particle3DTestDemo::onTouchesEnded, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = AX_CALLBACK_1(Particle3DTestDemo::onPointerDown, this);
+    listener->onPointerMove = AX_CALLBACK_1(Particle3DTestDemo::onPointerMove, this);
+    listener->onPointerUp   = AX_CALLBACK_1(Particle3DTestDemo::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     TTFConfig config("fonts/tahoma.ttf", 10);
@@ -90,22 +90,26 @@ bool Particle3DTestDemo::init()
     return true;
 }
 
-void Particle3DTestDemo::onTouchesBegan(const std::vector<Touch*>& touches, ax::Event* event) {}
-
-void Particle3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, ax::Event* event)
+bool Particle3DTestDemo::onPointerDown(ax::PointerEvent* event)
 {
-    if (touches.size())
-    {
-        auto touch = touches[0];
-        auto delta = touch->getDelta();
-
-        _angle -= AX_DEGREES_TO_RADIANS(delta.x);
-        _camera->setPosition3D(Vec3(100.0f * sinf(_angle), 0.0f, 100.0f * cosf(_angle)));
-        _camera->lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 1.0f, 0.0f));
-    }
+    return true;
 }
 
-void Particle3DTestDemo::onTouchesEnded(const std::vector<Touch*>& touches, ax::Event* event) {}
+void Particle3DTestDemo::onPointerMove(ax::PointerEvent* event)
+{
+    if (!event->isCaptured())
+        return;
+
+    auto delta = event->getDelta();
+
+    _angle -= AX_DEGREES_TO_RADIANS(delta.x);
+    _camera->setPosition3D(Vec3(100.0f * sinf(_angle), 0.0f, 100.0f * cosf(_angle)));
+    _camera->lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 1.0f, 0.0f));
+
+    return;
+}
+
+void Particle3DTestDemo::onPointerUp(ax::PointerEvent* event) {}
 
 Particle3DTestDemo::Particle3DTestDemo(void) : _angle(0.0f) {}
 

@@ -256,10 +256,10 @@ public:
     // Overrides
     void scrollViewDidScroll(ScrollView* view) override;
     void scrollViewDidZoom(ScrollView* view) override {}
-    bool onTouchBegan(Touch* pTouch, Event* pEvent) override;
-    void onTouchMoved(Touch* pTouch, Event* pEvent) override;
-    void onTouchEnded(Touch* pTouch, Event* pEvent) override;
-    void onTouchCancelled(Touch* pTouch, Event* pEvent) override;
+    bool onPointerDown(PointerEvent* event) override;
+    void onPointerMove(PointerEvent* event) override;
+    void onPointerUp(PointerEvent* event) override;
+    void onPointerCancel(PointerEvent* event) override;
 
 protected:
     ssize_t __indexFromOffset(Vec2 offset);

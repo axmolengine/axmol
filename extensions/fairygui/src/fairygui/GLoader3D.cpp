@@ -494,7 +494,7 @@ GObject* GLoader3D::hitTest(const Vec2& worldPoint, const Camera* camera)
 
     Rect rect;
     rect.size = _size;
-    //if (isScreenPointInRect(worldPoint, camera, _displayObject->getWorldToNodeTransform(), rect, nullptr))
+    //if (camera->isWorldPointInRect(worldPoint, _displayObject->getWorldToNodeTransform(), rect))
     if (rect.containsPoint(_displayObject->convertToNodeSpace(worldPoint)))
         return this;
     else

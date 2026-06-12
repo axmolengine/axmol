@@ -52,7 +52,7 @@ bool Bug624Layer::init()
         addChild(label);
 
         Device::setAccelerometerEnabled(true);
-        auto listener = EventListenerAcceleration::create(AX_CALLBACK_2(Bug624Layer::onAcceleration, this));
+        auto listener = AccelerationEventListener::create(AX_CALLBACK_1(Bug624Layer::onAcceleration, this));
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
         schedule(AX_SCHEDULE_SELECTOR(Bug624Layer::switchLayer), 5.0f);
@@ -72,7 +72,7 @@ void Bug624Layer::switchLayer(float dt)
     Director::getInstance()->replaceScene(TransitionFade::create(2.0f, scene, Color32::WHITE));
 }
 
-void Bug624Layer::onAcceleration(Acceleration* acc, Event* event)
+void Bug624Layer::onAcceleration(AccelerationEvent* event)
 {
     AXLOGD("Layer1 accel");
 }
@@ -98,7 +98,7 @@ bool Bug624Layer2::init()
         addChild(label);
 
         Device::setAccelerometerEnabled(true);
-        auto listener = EventListenerAcceleration::create(AX_CALLBACK_2(Bug624Layer2::onAcceleration, this));
+        auto listener = AccelerationEventListener::create(AX_CALLBACK_1(Bug624Layer2::onAcceleration, this));
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
         schedule(AX_SCHEDULE_SELECTOR(Bug624Layer2::switchLayer), 5.0f);
@@ -118,7 +118,7 @@ void Bug624Layer2::switchLayer(float dt)
     Director::getInstance()->replaceScene(TransitionFade::create(2.0f, scene, Color32::RED));
 }
 
-void Bug624Layer2::onAcceleration(Acceleration* acc, Event* event)
+void Bug624Layer2::onAcceleration(AccelerationEvent* event)
 {
     AXLOGD("Layer2 accel");
 }

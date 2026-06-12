@@ -22,14 +22,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-//
-//  Bug-15776.cpp
-//  cocos2d_tests
-//
-//  Created by Ricardo Quesada on 6/17/16.
-//
-//
-
 #include "Bug-15776.h"
 
 using namespace ax;

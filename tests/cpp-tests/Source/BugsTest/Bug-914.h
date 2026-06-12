@@ -33,8 +33,8 @@ public:
     virtual bool init() override;
     virtual std::string title() const override { return "Bug914"; }
 
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerMove(ax::PointerEvent* event);
+    bool onPointerDown(ax::PointerEvent* event);
     void restart(ax::Object* sender);
 
     CREATE_FUNC(Bug914Layer);

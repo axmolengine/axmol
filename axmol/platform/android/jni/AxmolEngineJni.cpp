@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "axmol/platform/Application.h"
 #include "axmol/rhi/DriverContext.h"
 #include "axmol/base/EventType.h"
-#include "axmol/base/EventCustom.h"
+#include "axmol/base/CustomEvent.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/text_utils.h"
 
@@ -47,7 +47,7 @@ static void* s_ctx                         = nullptr;
 
 static std::string s_apkPath;
 
-using namespace ax;
+extern void _axmolPerformFrameBoundaryTasks();
 
 extern "C" {
 
@@ -57,13 +57,13 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeInit(JNIEnv* env,
                                                                  jobject context,
                                                                  jobject assetManager)
 {
-    JniHelper::setClassLoaderFrom(context);
-    FileUtilsAndroid::setAssetManagerFromJava(assetManager);
+    ax::JniHelper::setClassLoaderFrom(context);
+    ax::FileUtilsAndroid::setAssetManagerFromJava(assetManager);
 
     auto app = ax::Application::getInstance();
     app->initContextAttrs();
 
-    rhi::DriverContext::makeCurrentDriver();
+    ax::rhi::DriverContext::makeCurrentDriver();
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeSetEditTextDialogResult(JNIEnv* env,
@@ -94,16 +94,14 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeSetEditTextDialogRes
     }
 }
 
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeCall0(JNIEnv* env, jclass, jlong op, jlong param)
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativePerformFrameBoundaryTasks(JNIEnv* env, jclass)
 {
-    auto operation = reinterpret_cast<AsyncOperation>(static_cast<uintptr_t>(op));
-    if (operation)
-        operation(reinterpret_cast<void*>(static_cast<uintptr_t>(param)));
+    _axmolPerformFrameBoundaryTasks();
 }
 
 JNIEXPORT int JNICALL Java_dev_axmol_lib_AxmolEngine_nativeGetRenderAPI(JNIEnv* env, jclass)
 {
-    return (int)rhi::DriverContext::currentDriverType();
+    return (int)ax::rhi::DriverContext::currentDriverType();
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeRunOnAxmolThread(JNIEnv* env, jclass, jobject runnable)
@@ -111,15 +109,15 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeRunOnAxmolThread(JNI
     using jobject_type = std::remove_pointer_t<jobject>;
     struct jobject_delete
     {
-        void operator()(jobject_type* __ptr) const _NOEXCEPT { JniHelper::getEnv()->DeleteGlobalRef(__ptr); }
+        void operator()(jobject_type* __ptr) const _NOEXCEPT { ax::JniHelper::getEnv()->DeleteGlobalRef(__ptr); }
     };
 
-    ax::Director::getInstance()->getScheduler()->runOnAxmolThread(
+    ax::Director::getInstance()->postTask(
         [wrap = std::make_shared<std::unique_ptr<jobject_type, jobject_delete>>(env->NewGlobalRef(runnable))] {
-        auto curEnv = JniHelper::getEnv();
+        auto curEnv = ax::JniHelper::getEnv();
 
-        JniMethodInfo mi;
-        if (JniHelper::getMethodInfo(mi, "java/lang/Runnable", "run", "()V"))
+        ax::JniMethodInfo mi;
+        if (ax::JniHelper::getMethodInfo(mi, "java/lang/Runnable", "run", "()V"))
         {
             curEnv->CallVoidMethod(wrap.get()->get(), mi.methodID);
         }
@@ -129,7 +127,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeRunOnAxmolThread(JNI
 JNIEXPORT jintArray JNICALL Java_dev_axmol_lib_AxmolEngine_nativeGetGLContextAttrs(JNIEnv* env, jclass)
 {
     auto app                 = ax::Application::getInstance();
-    const auto& contextAttrs = Application::getContextAttrs();
+    const auto& contextAttrs = ax::Application::getContextAttrs();
 
     int tmp[7] = {contextAttrs.redBits,           contextAttrs.greenBits, contextAttrs.blueBits,
                   contextAttrs.alphaBits,         contextAttrs.depthBits, contextAttrs.stencilBits,
@@ -142,6 +140,8 @@ JNIEXPORT jintArray JNICALL Java_dev_axmol_lib_AxmolEngine_nativeGetGLContextAtt
 }
 }
 
+namespace ax
+{
 const char* getApkPath()
 {
     if (s_apkPath.empty())
@@ -211,6 +211,8 @@ void conversionEncodingJNI(const char* src, int byteSize, const char* fromCharse
         methodInfo.env->DeleteLocalRef(methodInfo.classID);
     }
 }
+
+}  // namespace ax
 
 #undef LOGD
 #undef LOG_TAG

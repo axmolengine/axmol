@@ -675,21 +675,21 @@ function LabelFNTMultiLineAlignment.create()
     layer:addChild(alignmentMenu)
     layer:registerScriptHandler(LabelFNTMultiLineAlignment.onNodeEvent)
 
-    local function onTouchesBegan(touches, event)
-        local location = touches[1]:getLocationInView()
+    local function onTouchesBegan(event)
+        local location = event:getScreenLocation()
         if ax.rectContainsPoint(LabelFNTMultiLineAlignment._pArrowsShouldRetain:getBoundingBox(), ax.p(location.x, location.y)) then
             LabelFNTMultiLineAlignment._drag = true
             LabelFNTMultiLineAlignment._pArrowsBarShouldRetain:setVisible(true)
         end
     end
 
-    local function onTouchesMoved(touches, event)
+    local function onPointerMove(event)
        if LabelFNTMultiLineAlignment._drag == false then
             return
         end
 
         local canvasSize = ax.Director:getInstance():getCanvasSize()
-        local location = touches[1]:getLocationInView()
+        local location = event:getScreenLocation()
 
         LabelFNTMultiLineAlignment._pArrowsShouldRetain:setPosition(
             math.max(math.min(location.x, ArrowsMax*canvasSize.width), ArrowsMin*canvasSize.width),
@@ -700,16 +700,16 @@ function LabelFNTMultiLineAlignment.create()
         LabelFNTMultiLineAlignment._pLabelShouldRetain:setMaxLineWidth(labelWidth)
     end
 
-    local  function onTouchesEnded(touch, event)
+    local  function onTouchesEnded(event)
         LabelFNTMultiLineAlignment._drag = false
         LabelFNTMultiLineAlignment.snapArrowsToEdge()
         LabelFNTMultiLineAlignment._pArrowsBarShouldRetain:setVisible(false)
     end
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(onTouchesBegan,ax.Handler.EVENT_TOUCHES_BEGAN )
-    listener:registerScriptHandler(onTouchesMoved,ax.Handler.EVENT_TOUCHES_MOVED )
-    listener:registerScriptHandler(onTouchesEnded,ax.Handler.EVENT_TOUCHES_ENDED )
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(onTouchesBegan,ax.Handler.EVENT_POINTER_DOWN )
+    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
+    listener:registerScriptHandler(onTouchesEnded,ax.Handler.EVENT_POINTER_UP )
 
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)

@@ -38,32 +38,32 @@ end)
 end
 
 function Paddle:onEnter()
-    local  listenner = ax.EventListenerTouchOneByOne:create()
-    listenner:setSwallowTouches(true)
-    listenner:registerScriptHandler(function(touch, event)
-            print(string.format("Paddle::onTouchBegan id = %d, x = %f, y = %f", touch:getId(), touch:getLocation().x, touch:getLocation().y))
+    local  listenner = ax.PointerEventListener:create()
+    listenner:registerScriptHandler(function(event)
+            local worldPos = event:getLocation()
+            print(string.format("Paddle::onTouchBegan id = %d, x = %f, y = %f", event:getPointerId(), worldPos.x, worldPos.y))
             if (self._state ~= kPaddleStateUngrabbed) then
                 return false
             end
 
-            if not self:containsTouchLocation(touch:getLocation().x,touch:getLocation().y) then
+            if not self:containsTouchLocation(worldPos.x,worldPos.y) then
                 return false
             end
 
             self._state = kPaddleStateGrabbed
             return true
-        end,ax.Handler.EVENT_TOUCH_BEGAN )
-    listenner:registerScriptHandler(function(touch, event)
-            print(string.format("Paddle::onTouchMoved id = %d, x = %f, y = %f", touch:getId(), touch:getLocation().x, touch:getLocation().y))
+        end,ax.Handler.EVENT_POINTER_DOWN )
+    listenner:registerScriptHandler(function(event)
+            local touchPoint = event:getLocation()
+            print(string.format("Paddle::onPointerMove id = %d, x = %f, y = %f", event:getPointerId(), touchPoint.x, touchPoint.y))
             assert(self._state == kPaddleStateGrabbed, "Paddle - Unexpected state!")
-            local touchPoint = touch:getLocation()
             local curPosX,curPosY = self:getPosition()
             self:setPosition(ax.p(touchPoint.x,curPosY))
-        end,ax.Handler.EVENT_TOUCH_MOVED )
-    listenner:registerScriptHandler(function(touch, event)
+        end,ax.Handler.EVENT_POINTER_MOVE )
+    listenner:registerScriptHandler(function(event)
             assert(self._state == kPaddleStateGrabbed, "Paddle - Unexpected state!")
             self._state = kPaddleStateUngrabbed
-        end,ax.Handler.EVENT_TOUCH_ENDED )
+        end,ax.Handler.EVENT_POINTER_UP )
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listenner, self)
 end

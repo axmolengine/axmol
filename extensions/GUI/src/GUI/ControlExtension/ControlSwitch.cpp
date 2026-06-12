@@ -376,7 +376,7 @@ void ControlSwitch::setEnabled(bool enabled)
     }
 }
 
-Vec2 ControlSwitch::locationFromTouch(Touch* pTouch)
+Vec2 ControlSwitch::locationFromTouch(PointerEvent* pTouch)
 {
     Vec2 touchLocation = pTouch->getLocation();                    // Get the touch position
     touchLocation      = this->convertToNodeSpace(touchLocation);  // Convert to the node space of this class
@@ -384,8 +384,12 @@ Vec2 ControlSwitch::locationFromTouch(Touch* pTouch)
     return touchLocation;
 }
 
-bool ControlSwitch::onTouchBegan(Touch* pTouch, Event* /*pEvent*/)
+bool ControlSwitch::onPointerDown(PointerEvent* pTouch)
 {
+    bool ret = Control::onPointerDown(pTouch);
+    if (!ret)
+        return false;
+
     if (!isTouchInside(pTouch) || !isEnabled() || !isVisible())
     {
         return false;
@@ -400,12 +404,17 @@ bool ControlSwitch::onTouchBegan(Touch* pTouch, Event* /*pEvent*/)
     _switchSprite->getThumbSprite()->setColor(Color32::GRAY);
     _switchSprite->needsLayout();
 
+    _isPressed = true;
+
     return true;
 }
 
-void ControlSwitch::onTouchMoved(Touch* pTouch, Event* /*pEvent*/)
+void ControlSwitch::onPointerMove(PointerEvent* event)
 {
-    Vec2 location = this->locationFromTouch(pTouch);
+    if (!_isPressed)
+        return;
+
+    Vec2 location = this->locationFromTouch(event);
     location      = Vec2(location.x - _initialTouchXPosition, 0.0f);
 
     _moved = true;
@@ -413,7 +422,7 @@ void ControlSwitch::onTouchMoved(Touch* pTouch, Event* /*pEvent*/)
     _switchSprite->setSliderXPosition(location.x);
 }
 
-void ControlSwitch::onTouchEnded(Touch* pTouch, Event* /*pEvent*/)
+void ControlSwitch::onPointerUp(PointerEvent* pTouch)
 {
     Vec2 location = this->locationFromTouch(pTouch);
 
@@ -427,9 +436,11 @@ void ControlSwitch::onTouchEnded(Touch* pTouch, Event* /*pEvent*/)
     {
         setOn(!_on, true);
     }
+
+    _isPressed = false;
 }
 
-void ControlSwitch::onTouchCancelled(Touch* pTouch, Event* /*pEvent*/)
+void ControlSwitch::onPointerCancel(PointerEvent* pTouch)
 {
     Vec2 location = this->locationFromTouch(pTouch);
 

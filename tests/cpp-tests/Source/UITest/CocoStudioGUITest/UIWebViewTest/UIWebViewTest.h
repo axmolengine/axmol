@@ -23,11 +23,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_tests__UIWebViewTest__
-#define __cocos2d_tests__UIWebViewTest__
+#pragma once
 
 #include "../UIScene.h"
-#include "axmol/ui/UIWebView/UIWebView.h"
+#include "axmol/ui/WebView/WebView.h"
 
 DEFINE_TEST_SUITE(WebViewTests);
 
@@ -44,5 +43,3 @@ public:
 private:
     ax::ui::WebView* _webView;
 };
-
-#endif /* defined(__cocos2d_tests__UIWebViewTest__) */

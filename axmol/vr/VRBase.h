@@ -36,7 +36,7 @@ namespace ax
 
 class Scene;
 class Renderer;
-class RenderView;
+class RenderViewCore;
 
 inline namespace experimental
 {
@@ -55,9 +55,9 @@ class AX_DLL IVRRenderer
 {
 public:
     virtual ~IVRRenderer() {}
-    virtual void init(RenderView* rv)                                        = 0;
+    virtual void init(RenderViewCore* rv)                                    = 0;
     virtual void cleanup()                                                   = 0;
-    virtual void onRenderViewResized(RenderView* rv)                         = 0;
+    virtual void onRenderViewResized(RenderViewCore* rv)                     = 0;
     virtual void setScissorRect(float x, float y, float width, float height) = 0;
     virtual const ScissorRect& getScissorRect() const                        = 0;
     virtual void render(Scene* scene, Renderer* renderer)                    = 0;

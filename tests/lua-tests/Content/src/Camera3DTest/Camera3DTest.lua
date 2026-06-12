@@ -180,17 +180,16 @@ end
 function Camera3DTestDemo:onEnter()
     self._sprite3D = nil
     local s = ax.Director:getInstance():getCanvasSize()
-    local listener = ax.EventListenerTouchAllAtOnce:create()
+    local listener = ax.PointerEventListener:create()
 
-    listener:registerScriptHandler(function(touches, event)
+    listener:registerScriptHandler(function(event)
 
-    end,ax.Handler.EVENT_TOUCHES_BEGAN)
+    end,ax.Handler.EVENT_POINTER_DOWN)
 
-    listener:registerScriptHandler(function(touches, event)
-        if #touches == 1 then
-            local touch = touches[1]
-            local location = touch:getLocation()
-            local newPos  = ax.p(touch:getPreviousLocation().x - location.x, touch:getPreviousLocation().y - location.y)
+    listener:registerScriptHandler(function(event)
+        if event ~= nil then
+            local location = event:getLocation()
+            local newPos  = ax.p(event:getPreviousLocation().x - location.x, event:getPreviousLocation().y - location.y)
             if self._cameraType == CameraType.FreeCamera or self._cameraType == CameraType.FirstCamera then
                 local cameraRightDir
                 local transformMat = self._camera:getNodeToWorldTransform()
@@ -214,37 +213,34 @@ function Camera3DTestDemo:onEnter()
                 end
             end
         end
-    end, ax.Handler.EVENT_TOUCHES_MOVED)
+    end, ax.Handler.EVENT_POINTER_MOVE)
 
-    listener:registerScriptHandler(function(touches, event)
-        for i,v in ipairs(touches) do
-            local touch = v
-            local location = touch:getLocationInView()
-            if self._camera ~= nil and self._sprite3D ~= nil and self._cameraType == CameraType.ThirdCamera then
-                local nearP = ax.vec3(location.x, location.y, -1.0)
-                local farP  = ax.vec3(location.x, location.y, 1.0)
+    listener:registerScriptHandler(function(event)
+        local location = event:getScreenLocation()
+        if self._camera ~= nil and self._sprite3D ~= nil and self._cameraType == CameraType.ThirdCamera then
+            local nearP = ax.vec3(location.x, location.y, -1.0)
+            local farP  = ax.vec3(location.x, location.y, 1.0)
 
-                nearP = self._camera:unproject(nearP)
-                farP  = self._camera:unproject(farP)
-                local dir = ax.vec3sub(farP, nearP)
-                local dist=0.0
-                local ndd = dir.x * 0 + dir.y * 1 + dir.z * 0
-                if ndd == 0 then
-                    dist=0.0
-                end
-
-                local ndo = nearP.x * 0 + nearP.y * 1 + nearP.z * 0
-                dist= (0 - ndo) / ndd
-                local p =   ax.vec3add(nearP, ax.vec3mul(dir, dist))
-
-                if p.x >  100 then p.x =  100 end
-                if p.x < -100 then p.x = -100 end
-                if p.z >  100 then p.z =  100 end
-                if p.z < -100 then p.z = -100 end
-                self._targetPos = p
+            nearP = self._camera:deprojectScreenToWorld(nearP)
+            farP  = self._camera:deprojectScreenToWorld(farP)
+            local dir = ax.vec3sub(farP, nearP)
+            local dist=0.0
+            local ndd = dir.x * 0 + dir.y * 1 + dir.z * 0
+            if ndd == 0 then
+                dist=0.0
             end
+
+            local ndo = nearP.x * 0 + nearP.y * 1 + nearP.z * 0
+            dist= (0 - ndo) / ndd
+            local p =   ax.vec3add(nearP, ax.vec3mul(dir, dist))
+
+            if p.x >  100 then p.x =  100 end
+            if p.x < -100 then p.x = -100 end
+            if p.z >  100 then p.z =  100 end
+            if p.z < -100 then p.z = -100 end
+            self._targetPos = p
         end
-    end, ax.Handler.EVENT_TOUCHES_ENDED)
+    end, ax.Handler.EVENT_POINTER_UP)
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -553,13 +549,16 @@ function CameraRotationTest:onEnter()
     self:addChild(model)
 
     --Listener
-    lis = ax.EventListenerTouchOneByOne:create()
-    lis:registerScriptHandler(function (touch, event)
+    lis = ax.PointerEventListener:create()
+    lis:registerScriptHandler(function(event)
         return true
-    end,ax.Handler.EVENT_TOUCH_BEGAN )
+    end,ax.Handler.EVENT_POINTER_DOWN )
 
-    lis:registerScriptHandler(function (touch, event)
-        local dx = touch:getDelta().x
+    lis:registerScriptHandler(function(event)
+        if not event:isPrimaryPressed() then
+            return
+        end
+        local dx = event:getDelta().x
         local rot = camControlNode:getRotation3D()
         rot.y = rot.y + dx
         camControlNode:setRotation3D(rot)
@@ -569,7 +568,7 @@ function CameraRotationTest:onEnter()
         worldPos = decompose.translation
         ax.Camera:getDefaultCamera():setPosition3D(worldPos)
         ax.Camera:getDefaultCamera():lookAt(camControlNode:getPosition3D())
-    end, ax.Handler.EVENT_TOUCH_MOVED)
+    end, ax.Handler.EVENT_POINTER_MOVE)
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(lis, self)
@@ -619,13 +618,13 @@ function FogTestDemo:init()
 end
 
 function FogTestDemo:setEventListener()
-    local listener = ax.EventListenerTouchAllAtOnce:create()
+    local listener = ax.PointerEventListener:create()
 
-    listener:registerScriptHandler(function(touches, event)
-        if #touches == 1 then
-            local touch = touches[1]
-            local prelocation = touch:getPreviousLocationInView()
-            local location = touch:getLocationInView()
+    listener:registerScriptHandler(function(event)
+        if event ~= nil then
+            local touch = event
+            local prelocation = event:getPreviousScreenLocation()
+            local location = event:getScreenLocation()
             local newPos = ax.p(prelocation.x - location.x, prelocation.y - location.y)
             if self._cameraType == CameraType.FreeCamera then
 
@@ -646,7 +645,7 @@ function FogTestDemo:setEventListener()
 
             end
         end
-    end, ax.Handler.EVENT_TOUCHES_MOVED)
+    end, ax.Handler.EVENT_POINTER_MOVE)
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -881,14 +880,14 @@ function CameraArcBallDemo:calculateArcBall(axis, angle, p1x, p1y, p2x, p2y)
     return axis, angle
 end
 function CameraArcBallDemo:setEventListener()
-    local listener = ax.EventListenerTouchAllAtOnce:create()
+    local listener = ax.PointerEventListener:create()
 
-    listener:registerScriptHandler(function(touchs, event)
-        if #touchs ~= 0 then
+    listener:registerScriptHandler(function(event)
+        if event ~= nil then
             if self._operate == OperateCamType.RotateCamera then
                 local visibleSize = ax.Director:getInstance():getVisibleSize()
-                local prelocation = touchs[1]:getPreviousLocationInView()
-                local location = touchs[1]:getLocationInView()
+                local prelocation = event:getPreviousScreenLocation()
+                local location = event:getScreenLocation()
                 location.x = 2.0 * (location.x) / (visibleSize.width) - 1.0
                 location.y = 2.0 * (visibleSize.height - location.y) / (visibleSize.height) - 1.0
                 prelocation.x = 2.0 * (prelocation.x) / (visibleSize.width) - 1.0
@@ -915,15 +914,15 @@ function CameraArcBallDemo:setEventListener()
                 self:updateCameraTransform()
 
             elseif self._operate == OperateCamType.MoveCamera then
-                local previousLocation = touchs[1]:getPreviousLocation()
-                local location         = touchs[1]:getLocation()
+                local previousLocation = event:getPreviousLocation()
+                local location         = event:getLocation()
                 local newPos = ax.p(previousLocation.x - location.x, previousLocation.y - location.y)
                 self._distanceZ = self._distanceZ - newPos.y * 0.1
 
                 self:updateCameraTransform()
             end
         end
-    end, ax.Handler.EVENT_TOUCHES_MOVED)
+    end, ax.Handler.EVENT_POINTER_MOVE)
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)

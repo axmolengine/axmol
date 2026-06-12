@@ -89,9 +89,9 @@ public:
     void setScissorRect(float x, float y, float w, float h) override;
     const ScissorRect& getScissorRect() const override;
 
-    void onRenderViewResized(RenderView* rv) override;
+    void onRenderViewResized(RenderViewCore* rv) override;
 
-    void init(RenderView* rv) override;
+    void init(RenderViewCore* rv) override;
     void cleanup() override;
 
     void render(Scene* scene, Renderer* renderer) override;
@@ -99,7 +99,7 @@ public:
 protected:
     void setupProgram();
 
-    void fillEyeViewports(RenderView* rv, const Vec2& screenSize);
+    void fillEyeViewports(RenderViewCore* rv, const Vec2& screenSize);
 
     DistortionMesh* createDistortionMesh(VREye::EyeType eyeType, const Size& screenSize);
 

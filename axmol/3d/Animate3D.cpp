@@ -29,7 +29,7 @@
 #include "axmol/3d/Skeleton3D.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/base/Environment.h"
-#include "axmol/base/EventCustom.h"
+#include "axmol/base/CustomEvent.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"
 
@@ -403,7 +403,7 @@ void Animate3D::update(float t)
                         {
                             auto& frameEvent = _keyFrameEvent[keyFrame.first];
                             if (frameEvent == nullptr)
-                                frameEvent = new EventCustom(Animate3DDisplayedNotification);
+                                frameEvent = new CustomEvent(Animate3DDisplayedNotification);
                             auto eventInfo      = &_displayedEventInfo[keyFrame.first];
                             eventInfo->target   = _target;
                             eventInfo->frame    = keyFrame.first;

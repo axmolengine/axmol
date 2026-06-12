@@ -307,7 +307,7 @@ public:
     CREATE_FUNC(DrawNodeAxmolTest2);
 
     DrawNodeAxmolTest2();
-    void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
+    void onChangedRadioButtonSelect(ax::Object* sender, ax::ui::RadioButton::EventType type);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -401,7 +401,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
     void addNewControlPoint(ax::Vec2 p);
     void update(float dt) override;
 

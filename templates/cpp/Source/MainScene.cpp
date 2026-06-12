@@ -80,23 +80,16 @@ bool MainScene::init()
     /////////////////////////////
     // 3. add your codes below...
 
-    // Some templates (uncomment what you  need)
-    _touchListener                 = EventListenerTouchAllAtOnce::create();
-    _touchListener->onTouchesBegan = AX_CALLBACK_2(MainScene::onTouchesBegan, this);
-    _touchListener->onTouchesMoved = AX_CALLBACK_2(MainScene::onTouchesMoved, this);
-    _touchListener->onTouchesEnded = AX_CALLBACK_2(MainScene::onTouchesEnded, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(_touchListener, this);
-
-    //_mouseListener                = EventListenerMouse::create();
-    //_mouseListener->onMouseMove   = AX_CALLBACK_1(MainScene::onMouseMove, this);
-    //_mouseListener->onMouseUp     = AX_CALLBACK_1(MainScene::onMouseUp, this);
-    //_mouseListener->onMouseDown   = AX_CALLBACK_1(MainScene::onMouseDown, this);
-    //_mouseListener->onMouseScroll = AX_CALLBACK_1(MainScene::onMouseScroll, this);
-    //_eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
+    _pointerListener                  = PointerEventListener::create();
+    _pointerListener->onPointerDown   = AX_CALLBACK_1(MainScene::onPointerDown, this);
+    _pointerListener->onPointerMove   = AX_CALLBACK_1(MainScene::onPointerMove, this);
+    _pointerListener->onPointerUp     = AX_CALLBACK_1(MainScene::onPointerUp, this);
+    _pointerListener->onPointerScroll = AX_CALLBACK_1(MainScene::onPointerScroll, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(_pointerListener, this);
 
     _keyboardListener                = EventListenerKeyboard::create();
-    _keyboardListener->onKeyPressed  = AX_CALLBACK_2(MainScene::onKeyPressed, this);
-    _keyboardListener->onKeyReleased = AX_CALLBACK_2(MainScene::onKeyReleased, this);
+    _keyboardListener->onKeyPressed  = AX_CALLBACK_1(MainScene::onKeyPressed, this);
+    _keyboardListener->onKeyReleased = AX_CALLBACK_1(MainScene::onKeyReleased, this);
     _eventDispatcher->addEventListenerWithFixedPriority(_keyboardListener, 11);
 
     // add a label shows "Hello World"
@@ -142,66 +135,37 @@ bool MainScene::init()
     return true;
 }
 
-void MainScene::onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event)
+bool MainScene::onPointerDown(PointerEvent* ev)
 {
-    for (auto&& t : touches)
-    {
-        // AXLOGD("onTouchesBegan detected, X:{}  Y:{}", t->getLocation().x, t->getLocation().y);
-    }
-}
-
-void MainScene::onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event)
-{
-    for (auto&& t : touches)
-    {
-        // AXLOGD("onTouchesMoved detected, X:{}  Y:{}", t->getLocation().x, t->getLocation().y);
-    }
-}
-
-void MainScene::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event)
-{
-    for (auto&& t : touches)
-    {
-        // AXLOGD("onTouchesEnded detected, X:{}  Y:{}", t->getLocation().x, t->getLocation().y);
-    }
-}
-
-bool MainScene::onMouseDown(Event* event)
-{
-    EventMouse* e = static_cast<EventMouse*>(event);
-    // AXLOGD("onMouseDown detected, button: {}", static_cast<int>(e->getMouseButton()));
+    AXLOGD("onPointerDown detected, button: {}", static_cast<int>(ev->getButton()));
     return true;
 }
 
-bool MainScene::onMouseUp(Event* event)
+void MainScene::onPointerUp(PointerEvent* ev)
 {
-    EventMouse* e = static_cast<EventMouse*>(event);
-    AXLOGD("onMouseUp detected, button: {}", static_cast<int>(e->getMouseButton()));
+    AXLOGD("onPointerUp detected, button: {}", static_cast<int>(ev->getButton()));
+}
+
+void MainScene::onPointerMove(PointerEvent* ev)
+{
+    // AXLOGD("onPointerMove detected, primaryPressed:{} X:{} Y:{}", ev->isPrimaryPressed(), ev->getLocation().x,
+    //        ev->getLocation().y);
+}
+
+bool MainScene::onPointerScroll(PointerEvent* ev)
+{
+    // AXLOGD("onPointerScroll detected, X:{}  Y:{}", ev->getScrollX(), ev->getScrollY());
     return true;
 }
 
-bool MainScene::onMouseMove(Event* event)
+void MainScene::onKeyPressed(KeyboardEvent* ev)
 {
-    EventMouse* e = static_cast<EventMouse*>(event);
-    // AXLOGD("onMouseMove detected, X:{}  Y:{}", e->getLocation().x, e->getLocation().y);
-    return true;
+    AXLOGD("Scene: #{} onKeyPressed, keycode: {}", _sceneID, static_cast<int>(ev->getKeyCode()));
 }
 
-bool MainScene::onMouseScroll(Event* event)
+void MainScene::onKeyReleased(KeyboardEvent* ev)
 {
-    EventMouse* e = static_cast<EventMouse*>(event);
-    // AXLOGD("onMouseScroll detected, X:{}  Y:{}", e->getScrollX(), e->getScrollY());
-    return true;
-}
-
-void MainScene::onKeyPressed(EventKeyboard::KeyCode code, Event* event)
-{
-    AXLOGD("Scene: #{} onKeyPressed, keycode: {}", _sceneID, static_cast<int>(code));
-}
-
-void MainScene::onKeyReleased(EventKeyboard::KeyCode code, Event* event)
-{
-    AXLOGD("onKeyReleased, keycode: {}", static_cast<int>(code));
+    AXLOGD("onKeyReleased, keycode: {}", static_cast<int>(ev->getKeyCode()));
 }
 
 void MainScene::update(float delta)
@@ -273,7 +237,7 @@ void MainScene::menuCloseCallback(ax::Object* sender)
      * _director->end() as given above,instead trigger a custom event created in RootViewController.mm
      * as below*/
 
-    // EventCustom customEndEvent("game_scene_close_event");
+    // CustomEvent customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 }
 
@@ -287,11 +251,9 @@ MainScene::~MainScene()
 {
     AXLOGD("~Scene: dtor: #{}", _sceneID);
 
-    if (_touchListener)
-        _eventDispatcher->removeEventListener(_touchListener);
     if (_keyboardListener)
         _eventDispatcher->removeEventListener(_keyboardListener);
-    if (_mouseListener)
-        _eventDispatcher->removeEventListener(_mouseListener);
+    if (_pointerListener)
+        _eventDispatcher->removeEventListener(_pointerListener);
     _sceneID = -1;
 }

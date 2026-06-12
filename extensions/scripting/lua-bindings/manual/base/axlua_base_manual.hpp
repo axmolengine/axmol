@@ -28,22 +28,24 @@
 #include "tolua++.h"
 
 #include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
-#include "axmol/base/EventListenerAcceleration.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/AccelerationEventListener.h"
+#include "axmol/base/CustomEventListener.h"
+#include "axmol/base/PointerEvent.h"
+#include "axmol/base/KeyboardEvent.h"
 #include "axmol/scene/Node.h"
 
 namespace ax
 {
-class LuaEventListenerCustom
+class LuaCustomEventListener
 {
 public:
-    static EventListenerCustom* create(std::string_view eventName);
+    static CustomEventListener* create(std::string_view eventName);
 };
 
-class LuaEventListenerAcceleration
+class LuaAccelerationEventListener
 {
 public:
-    static EventListenerAcceleration* create();
+    static AccelerationEventListener* create();
 };
 }
 
@@ -59,43 +61,25 @@ TOLUA_API int register_all_ax_shaders_manual(lua_State *tolua_S);
 
 TOLUA_API int register_all_ax_bytearray_manual(lua_State *tulua_S);
 
-struct LuaEventAccelerationData
+struct LuaAccelerationEventData
 {
-    void* acc;
-    Event* event;
+    AccelerationEvent* event;
 
-    LuaEventAccelerationData(void* inAcc, Event* inEvent) : acc(inAcc), event(inEvent) {}
+    explicit LuaAccelerationEventData(AccelerationEvent* inEvent) : event(inEvent) {}
 };
 
 struct LuaEventKeyboarData
 {
-    int keyCode;
-    Event* event;
+    KeyboardEvent* event;
 
-    LuaEventKeyboarData(int inKeyCode, Event* inEvent) : keyCode(inKeyCode), event(inEvent) {}
+    explicit LuaEventKeyboarData(KeyboardEvent* inEvent) : event(inEvent) {}
 };
 
-struct LuaEventTouchData
+struct LuaPointerEventData
 {
-    Touch* touch;
-    Event* event;
+    PointerEvent* event;
 
-    LuaEventTouchData(Touch* inTouch, Event* inEvent) : touch(inTouch), event(inEvent) {}
-};
-
-struct LuaEventTouchesData
-{
-    std::vector<Touch*> touches;
-    Event* event;
-
-    LuaEventTouchesData(const std::vector<Touch*>& inTouches, Event* inEvent) : touches(inTouches), event(inEvent) {}
-};
-
-struct LuaEventMouseData
-{
-    Event* event;
-
-    explicit LuaEventMouseData(Event* inEvent) : event(inEvent) {}
+    explicit LuaPointerEventData(PointerEvent* inEvent) : event(inEvent) {}
 };
 
 class LuaNode : public ax::Node
@@ -108,4 +92,3 @@ public:
 
 TOLUA_API int tolua_luanode_open(lua_State* tolua_S);
 TOLUA_API int register_luanode_manual(lua_State* tolua_S);
-

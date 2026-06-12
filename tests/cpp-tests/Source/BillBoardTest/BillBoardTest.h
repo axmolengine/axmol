@@ -59,7 +59,7 @@ public:
     void addNewBillBoardWithCoords(ax::Vec3 p);
     void addNewAniBillBoardWithCoords(ax::Vec3 p);
     void rotateCameraCallback(ax::Object* sender, float value);
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerMove(ax::PointerEvent* event);
 
     void menuCallback_orientedPoint(ax::Object* sender);
     void menuCallback_orientedPlane(ax::Object* sender);

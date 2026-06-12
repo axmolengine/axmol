@@ -28,5 +28,5 @@
 /// @cond DO_NOT_SHOW
 
 #include "axmol/base/Controller.h"
-#include "axmol/base/EventController.h"
-#include "axmol/base/EventListenerController.h"
+#include "axmol/base/ControllerEvent.h"
+#include "axmol/base/ControllerEventListener.h"

@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "axmol/base/Director.h"
 #include "axmol/scene/Camera.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/base/text_utils.h"
 #include "axmol/renderer/Renderer.h"
 
@@ -161,7 +161,7 @@ std::string Scene::getDescription() const
     return fmt::format("<Scene | tag = {}>", _tag);
 }
 
-void Scene::onProjectionChanged(EventCustom* /*event*/)
+void Scene::onProjectionChanged(CustomEvent* /*event*/)
 {
     if (_defaultCamera)
     {

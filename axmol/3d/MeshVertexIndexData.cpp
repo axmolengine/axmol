@@ -35,8 +35,8 @@
 #include "axmol/3d/Bundle3D.h"
 
 #include "axmol/base/Macros.h"
-#include "axmol/base/EventCustom.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEvent.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/EventType.h"
 #include "axmol/base/Director.h"
@@ -75,7 +75,7 @@ rhi::Buffer* MeshIndexData::getVertexBuffer() const
 MeshIndexData::MeshIndexData()
 {
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
+    _backToForegroundListener = CustomEventListener::create(EVENT_RENDERER_RECREATED, [this](CustomEvent*) {
         _indexBuffer->updateData((void*)_indexData.data(), _indexData.size_bytes());
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
@@ -183,7 +183,7 @@ bool MeshVertexData::hasVertexAttrib(shaderinfos::VertexKey attrib) const
 MeshVertexData::MeshVertexData()
 {
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
+    _backToForegroundListener = CustomEventListener::create(EVENT_RENDERER_RECREATED, [this](CustomEvent*) {
         _vertexBuffer->updateData((void*)_vertexData.data(), _vertexData.size() * sizeof(_vertexData[0]));
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);

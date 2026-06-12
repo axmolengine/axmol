@@ -24,7 +24,7 @@
 
 #include "sceneio/WidgetReader/ButtonReader/ButtonReader.h"
 
-#include "axmol/ui/UIButton.h"
+#include "axmol/ui/Button.h"
 #include "axmol/2d/SpriteFrameCache.h"
 #include "axmol/2d/Label.h"
 #include "axmol/platform/FileUtils.h"
@@ -985,8 +985,7 @@ void ButtonReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
 
     if (scale9Enabled)
     {
-        button->setUnifySizeEnabled(false);
-        button->ignoreContentAdaptWithSize(false);
+        button->setAutoSize(false);
 
         auto f_capInsets = options->capInsets();
         Rect capInsets(f_capInsets->x(), f_capInsets->y(), f_capInsets->width(), f_capInsets->height());

@@ -162,7 +162,7 @@ float ControlPotentiometer::getMaximumValue()
     return _maximumValue;
 }
 
-bool ControlPotentiometer::isTouchInside(Touch* touch)
+bool ControlPotentiometer::isTouchInside(PointerEvent* touch)
 {
     Vec2 touchLocation = this->getTouchLocation(touch);
 
@@ -171,30 +171,41 @@ bool ControlPotentiometer::isTouchInside(Touch* touch)
     return distance < MIN(getContentSize().width / 2, getContentSize().height / 2);
 }
 
-bool ControlPotentiometer::onTouchBegan(Touch* pTouch, Event* /*pEvent*/)
+bool ControlPotentiometer::onPointerDown(PointerEvent* event)
 {
-    if (!this->isTouchInside(pTouch) || !this->isEnabled() || !isVisible())
+    bool ret = Control::onPointerDown(event);
+    if (!ret)
+        return false;
+
+    if (!this->isTouchInside(event) || !this->isEnabled() || !isVisible())
     {
         return false;
     }
 
-    _previousLocation = this->getTouchLocation(pTouch);
+    _previousLocation = this->getTouchLocation(event);
 
     this->potentiometerBegan(_previousLocation);
+
+    _isPressed = true;
 
     return true;
 }
 
-void ControlPotentiometer::onTouchMoved(Touch* pTouch, Event* /*pEvent*/)
+void ControlPotentiometer::onPointerMove(PointerEvent* event)
 {
-    Vec2 location = this->getTouchLocation(pTouch);
+    if (!_isPressed)
+        return;
+
+    Vec2 location = this->getTouchLocation(event);
 
     this->potentiometerMoved(location);
 }
 
-void ControlPotentiometer::onTouchEnded(Touch* /*pTouch*/, Event* /*pEvent*/)
+void ControlPotentiometer::onPointerUp(PointerEvent*)
 {
     this->potentiometerEnded(Vec2::ZERO);
+
+    _isPressed = false;
 }
 
 float ControlPotentiometer::distanceBetweenPointAndPoint(Vec2 point1, Vec2 point2)

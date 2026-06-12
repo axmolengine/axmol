@@ -23,8 +23,7 @@
  ****************************************************************************/
 
 // https://github.com/cocos2d/cocos2d-x/pull/15594
-#ifndef __cocos2d_tests__Bug_15594__
-#define __cocos2d_tests__Bug_15594__
+#pragma once
 
 #include "BugsTest.h"
 
@@ -36,5 +35,3 @@ public:
     virtual bool init() override;
     virtual std::string title() const override { return "Bug15594"; }
 };
-
-#endif /* defined(__cocos2d_tests__Bug_15594__) */

@@ -37,7 +37,7 @@ RenderTargetImpl::RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget)
     {
         glGenFramebuffers(1, &_FBO);
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-        _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
+        _rendererRecreatedListener = CustomEventListener::create(EVENT_RENDERER_RECREATED, [this](CustomEvent*) {
             glGenFramebuffers(1, &_FBO);
             _dirtyFlags = TargetBufferFlags::ALL;
         });

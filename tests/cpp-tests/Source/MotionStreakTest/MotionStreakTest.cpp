@@ -105,8 +105,8 @@ void MotionStreakTest2::onEnter()
 {
     MotionStreakTest::onEnter();
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = AX_CALLBACK_2(MotionStreakTest2::onTouchesMoved, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerMove = AX_CALLBACK_1(MotionStreakTest2::onPointerMove, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getCanvasSize();
@@ -118,11 +118,13 @@ void MotionStreakTest2::onEnter()
     _streak->setPosition(Vec2(s.width / 2, s.height / 2));
 }
 
-void MotionStreakTest2::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
+void MotionStreakTest2::onPointerMove(PointerEvent* event)
 {
-    auto touchLocation = touches[0]->getLocation();
+    auto touchLocation = event->getLocation();
 
     _streak->setPosition(touchLocation);
+
+    return;
 }
 
 std::string MotionStreakTest2::title() const

@@ -24,9 +24,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "axmol/platform/android/Application-android.h"
-#include "axmol/platform/android/RenderViewImpl-android.h"
+#include "axmol/platform/android/RenderView-android.h"
 #include "axmol/base/Director.h"
-#include "axmol/base/EventCustom.h"
+#include "axmol/base/CustomEvent.h"
 #include "axmol/base/EventType.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/renderer/TextureCache.h"

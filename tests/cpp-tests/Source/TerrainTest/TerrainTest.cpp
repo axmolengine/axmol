@@ -57,8 +57,9 @@ TerrainSimple::TerrainSimple()
     addChild(_terrain);
     _terrain->setCameraMask(2);
     _terrain->setDrawWire(false);
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = AX_CALLBACK_2(TerrainSimple::onTouchesMoved, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = [](PointerEvent*) { return true; };
+    listener->onPointerMove = AX_CALLBACK_1(TerrainSimple::onPointerMove, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     //     add Particle3D for test blend
     auto rootps = PUParticleSystem3D::create("Particle3D/scripts/mp_torch.pu");
@@ -78,12 +79,15 @@ std::string TerrainSimple::subtitle() const
     return "Drag to walkThru";
 }
 
-void TerrainSimple::onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event)
+void TerrainSimple::onPointerMove(ax::PointerEvent* event)
 {
+    if (!event->isCaptured())
+        return;
+
+    event->stopPropagation();
     float delta           = Director::getInstance()->getDeltaTime();
-    auto touch            = touches[0];
-    auto location         = touch->getLocation();
-    auto PreviousLocation = touch->getPreviousLocation();
+    auto location         = event->getLocation();
+    auto PreviousLocation = event->getPreviousLocation();
     Point newPos          = PreviousLocation - location;
 
     Vec3 cameraDir;
@@ -112,9 +116,9 @@ std::string TerrainWalkThru::subtitle() const
 
 TerrainWalkThru::TerrainWalkThru()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(TerrainWalkThru::onTouchesBegan, this);
-    listener->onTouchesEnded = AX_CALLBACK_2(TerrainWalkThru::onTouchesEnd, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = AX_CALLBACK_1(TerrainWalkThru::onPointerDown, this);
+    listener->onPointerUp   = AX_CALLBACK_1(TerrainWalkThru::onTouchesEnd, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     Size visibleSize = Director::getInstance()->getVisibleSize();
@@ -168,32 +172,30 @@ TerrainWalkThru::TerrainWalkThru()
     addChild(_terrain);
 }
 
-void TerrainWalkThru::onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event) {}
-
-void TerrainWalkThru::onTouchesEnd(const std::vector<ax::Touch*>& touches, ax::Event* event)
+bool TerrainWalkThru::onPointerDown(ax::PointerEvent* event)
 {
-    auto touch    = touches[0];
-    auto location = touch->getLocationInView();
+    _dragging = true;
+    return true;
+}
+
+void TerrainWalkThru::onTouchesEnd(ax::PointerEvent* event)
+{
+    _dragging     = false;
+    auto location = event->getScreenLocation();
     if (_camera)
     {
         if (_player)
         {
-            Vec3 nearP(location.x, location.y, 0.0f), farP(location.x, location.y, 1.0f);
-
-            auto size = Director::getInstance()->getCanvasSize();
-            _camera->unproject(size, &nearP, &nearP);
-            _camera->unproject(size, &farP, &farP);
-            Vec3 dir = farP - nearP;
-            dir.normalize();
+            auto ray = _camera->screenToRay(location);
             Vec3 collisionPoint(-999, -999, -999);
-            bool isInTerrain = _terrain->getIntersectionPoint(Ray(nearP, dir), collisionPoint);
+            bool isInTerrain = _terrain->getIntersectionPoint(ray, collisionPoint);
             if (!isInTerrain)
             {
                 _player->idle();
                 return;
             }
-            dir   = collisionPoint - _player->getPosition3D();
-            dir.y = 0;
+            auto dir = collisionPoint - _player->getPosition3D();
+            dir.y    = 0;
             dir.normalize();
             _player->_headingAngle = -1 * acos(dir.dot(Vec3(0, 0, -1)));
             dir.cross(dir, Vec3(0, 0, -1), &_player->_headingAxis);
@@ -360,8 +362,9 @@ TerrainWithLightMap::TerrainWithLightMap()
     _terrain->setCameraMask(2);
     _terrain->setDrawWire(false);
     _terrain->setLightMap("TerrainTest/Lightmap.png");
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = AX_CALLBACK_2(TerrainWithLightMap::onTouchesMoved, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = [](PointerEvent*) { return true; };
+    listener->onPointerMove = AX_CALLBACK_1(TerrainWithLightMap::onPointerMove, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 std::string TerrainWithLightMap::title() const
@@ -372,10 +375,13 @@ std::string TerrainWithLightMap::subtitle() const
 {
     return "Drag to walkThru";
 }
-void TerrainWithLightMap::onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event)
+void TerrainWithLightMap::onPointerMove(ax::PointerEvent* event)
 {
+    if (!event->isCaptured())
+        return;
+    event->stopPropagation();
     float delta           = Director::getInstance()->getDeltaTime();
-    auto touch            = touches[0];
+    auto touch            = event;
     auto location         = touch->getLocation();
     auto PreviousLocation = touch->getPreviousLocation();
     Point newPos          = PreviousLocation - location;

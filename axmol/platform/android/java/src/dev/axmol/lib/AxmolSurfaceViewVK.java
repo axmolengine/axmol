@@ -23,9 +23,11 @@
  ****************************************************************************/
 package dev.axmol.lib;
 
+import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.util.Log;
+import android.view.inputmethod.EditorInfo;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -86,6 +88,27 @@ public class AxmolSurfaceViewVK extends SurfaceView implements AxmolRenderHost, 
                 mRenderThread.start();
             }
         }
+    }
+
+    /**
+     * Expressly inform the Android IMF that this Player container functions as a text editor,
+     * which is absolutely mandatory if we do not rely on an internal EditText instance.
+     */
+    @Override
+    public boolean onCheckIsTextEditor() {
+        return mPlayer != null;
+    }
+
+    /**
+     * Intercepted by Android OS when showSoftInput() is requested.
+     * Injects custom input connection and disables landscape fullscreen mode.
+     */
+    @Override
+    public AxmolInputConnection onCreateInputConnection(EditorInfo outAttrs) {
+        if (mPlayer != null) {
+            return mPlayer.createInputConnection(this, outAttrs);
+        }
+        return null;
     }
 
     @Override

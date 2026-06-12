@@ -22,16 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-//
-//  Bug-Child.h
-//  cocos2d_tests
-//
-//  Created by NiTe Luo on 5/12/14.
-//
-//
-
-#ifndef __Bug_Child__
-#define __Bug_Child__
+#pragma once
 
 #include "BugsTest.h"
 
@@ -67,5 +58,3 @@ public:
     Node* _sprite;
     ax::Label* _spriteMaskLabel;
 };
-
-#endif /* defined(__Bug_Child__) */

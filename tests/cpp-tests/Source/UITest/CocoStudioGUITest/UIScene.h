@@ -42,7 +42,7 @@ public:
 
 protected:
     ax::Layer* _uiLayer;
-    ax::ui::Layout* _widget;
+    ax::ui::LayoutGroup* _widget;
     ax::ui::Text* _sceneTitle;
 };
 

@@ -8212,7 +8212,7 @@ static int lua_ax_physics3d_ContactEvent3D_finalize(lua_State* tolua_S)
 int lua_register_ax_physics3d_ContactEvent3D(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.ContactEvent3D");
-    tolua_cclass(tolua_S,"ContactEvent3D","ax.ContactEvent3D","ax.EventCustom",nullptr);
+    tolua_cclass(tolua_S,"ContactEvent3D","ax.ContactEvent3D","ax.CustomEvent",nullptr);
 
     tolua_beginmodule(tolua_S,"ContactEvent3D");
         tolua_function(tolua_S,"getActorA",lua_ax_physics3d_ContactEvent3D_getActorA);
@@ -8269,7 +8269,7 @@ static int lua_ax_physics3d_ContactEventListener3D_finalize(lua_State* tolua_S)
 int lua_register_ax_physics3d_ContactEventListener3D(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.ContactEventListener3D");
-    tolua_cclass(tolua_S,"ContactEventListener3D","ax.ContactEventListener3D","ax.EventListenerCustom",nullptr);
+    tolua_cclass(tolua_S,"ContactEventListener3D","ax.ContactEventListener3D","ax.CustomEventListener",nullptr);
 
     tolua_beginmodule(tolua_S,"ContactEventListener3D");
         tolua_function(tolua_S,"create", lua_ax_physics3d_ContactEventListener3D_create);

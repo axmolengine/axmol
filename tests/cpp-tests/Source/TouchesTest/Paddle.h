@@ -45,10 +45,10 @@ public:
     bool initWithTexture(ax::Texture2D* aTexture) override;
     virtual void onEnter() override;
     virtual void onExit() override;
-    bool containsTouchLocation(ax::Touch* touch);
-    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
-    void onTouchMoved(ax::Touch* touch, ax::Event* event);
-    void onTouchEnded(ax::Touch* touch, ax::Event* event);
+    bool containsPointerLocation(ax::PointerEvent* touch);
+    bool onPointerDown(ax::PointerEvent* event);
+    void onPointerMove(ax::PointerEvent* event);
+    void onPointerUp(ax::PointerEvent* event);
     virtual Paddle* clone() const override;
 
     static Paddle* createWithTexture(ax::Texture2D* aTexture);

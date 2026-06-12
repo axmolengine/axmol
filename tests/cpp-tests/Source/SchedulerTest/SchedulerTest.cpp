@@ -24,7 +24,7 @@
 
 #include "SchedulerTest.h"
 #include "../testResource.h"
-#include "axmol/ui/UIText.h"
+#include "axmol/ui/Text.h"
 #include "controller.h"
 
 using namespace ax;
@@ -1158,7 +1158,7 @@ std::string ScheduleUpdatePriority::subtitle() const
     return "click to change update priority with random value";
 }
 
-bool ScheduleUpdatePriority::onTouchBegan(Touch* /*touch*/, Event* /*event*/)
+bool ScheduleUpdatePriority::onPointerDown(PointerEvent* /*event*/)
 {
     int priority = static_cast<int>(AXRANDOM_0_1() * 11) - 5;  // -5 ~ 5
     AXLOGD("change update priority to {}", priority);
@@ -1172,8 +1172,8 @@ void ScheduleUpdatePriority::onEnter()
 
     scheduleUpdate();
 
-    auto listener          = EventListenerTouchOneByOne::create();
-    listener->onTouchBegan = AX_CALLBACK_2(ScheduleUpdatePriority::onTouchBegan, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = AX_CALLBACK_1(ScheduleUpdatePriority::onPointerDown, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
@@ -1228,13 +1228,13 @@ void SchedulerRemoveAllFunctionsToBePerformedInCocosThread::onExit()
 
 void SchedulerRemoveAllFunctionsToBePerformedInCocosThread::update(float dt)
 {
-    Director::getInstance()->getScheduler()->runOnAxmolThread([this]() { _sprite->setVisible(false); });
-    Director::getInstance()->getScheduler()->runOnAxmolThread([this]() { _sprite->setVisible(false); });
-    Director::getInstance()->getScheduler()->runOnAxmolThread([this]() { _sprite->setVisible(false); });
-    Director::getInstance()->getScheduler()->runOnAxmolThread([this]() { _sprite->setVisible(false); });
-    Director::getInstance()->getScheduler()->runOnAxmolThread([this]() { _sprite->setVisible(false); });
+    Director::getInstance()->postTask([this]() { _sprite->setVisible(false); });
+    Director::getInstance()->postTask([this]() { _sprite->setVisible(false); });
+    Director::getInstance()->postTask([this]() { _sprite->setVisible(false); });
+    Director::getInstance()->postTask([this]() { _sprite->setVisible(false); });
+    Director::getInstance()->postTask([this]() { _sprite->setVisible(false); });
     if (!TestController::getInstance()->isAutoTestRunning())
-        Director::getInstance()->getScheduler()->removeAllPendingActions();
+        Director::getInstance()->clearPendingTasks();
 }
 
 std::string SchedulerRemoveAllFunctionsToBePerformedInCocosThread::title() const

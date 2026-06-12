@@ -72,9 +72,9 @@ bool AppDelegate::applicationDidFinishLaunching()
     if(!renderView)
     {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
-        renderView = RenderViewImpl::createWithRect("Demo", ax::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+        renderView = RenderView::createWithRect("Demo", ax::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
 #else
-        renderView = RenderViewImpl::create("Demo");
+        renderView = RenderView::create("Demo");
 #endif
         director->setRenderView(renderView);
     }
@@ -111,7 +111,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     _cubismOption.LoggingLevel = LAppDefine::CubismLoggingLevel;
     Csm::CubismFramework::StartUp(&_cubismAllocator, &_cubismOption);
 
-    _recreatedEventlistener = ax::EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*)
+    _recreatedEventlistener = ax::CustomEventListener::create(EVENT_RENDERER_RECREATED, [this](CustomEvent*)
     {
         LAppLive2DManager::GetInstance()->RecreateRenderer();
     });

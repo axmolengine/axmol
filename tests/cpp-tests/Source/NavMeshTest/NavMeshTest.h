@@ -53,18 +53,18 @@ public:
     // overrides
     virtual bool init() override;
     virtual void update(float delta) override;
-    virtual void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    virtual void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    virtual void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    virtual bool onPointerDown(ax::PointerEvent* event);
+    virtual void onPointerMove(ax::PointerEvent* event);
+    virtual void onPointerUp(ax::PointerEvent* event);
 
 protected:
     void initScene();
     void createAgent(const ax::Vec3& pos);
     void createObstacle(const ax::Vec3& pos);
     void moveAgents(const ax::Vec3& des);
-    virtual void touchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event) {};
-    virtual void touchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event) {};
-    virtual void touchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event) {};
+    virtual void touchesBegan(ax::PointerEvent* event) {};
+    virtual void touchesMoved(ax::PointerEvent* event) {};
+    virtual void touchesEnded(ax::PointerEvent* event) {};
 
 protected:
     ax::Camera* _camera;
@@ -88,9 +88,9 @@ public:
     virtual void onEnter() override;
 
 protected:
-    virtual void touchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event) override {};
-    virtual void touchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event) override {};
-    virtual void touchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event) override;
+    virtual void touchesBegan(ax::PointerEvent* event) override {};
+    virtual void touchesMoved(ax::PointerEvent* event) override {};
+    virtual void touchesEnded(ax::PointerEvent* event) override;
 
 protected:
     ax::Label* _debugLabel;
@@ -111,9 +111,9 @@ public:
     virtual void onEnter() override;
 
 protected:
-    virtual void touchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event) override {};
-    virtual void touchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event) override {};
-    virtual void touchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event) override;
+    virtual void touchesBegan(ax::PointerEvent* event) override {};
+    virtual void touchesMoved(ax::PointerEvent* event) override {};
+    virtual void touchesEnded(ax::PointerEvent* event) override;
 
 protected:
     ax::Label* _obstacleLabel;

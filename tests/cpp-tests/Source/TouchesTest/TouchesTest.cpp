@@ -141,7 +141,7 @@ void PongLayer::doStep(float delta)
         resetAndScoreBallForPlayer(kHighPlayer);
 }
 
-#define _Info_Formatter "Current force value : {:.02f}, maximum possible force : {:.02f}"
+#define _Info_Formatter "Current pressure value : {:.02f}"
 char formatBuffer[256] = {
     0,
 };
@@ -155,10 +155,10 @@ ForceTouchTest::ForceTouchTest()
     _infoLabel->setPosition(s.width / 2, s.height / 2);
     addChild(_infoLabel);
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(ForceTouchTest::onTouchesBegan, this);
-    listener->onTouchesMoved = AX_CALLBACK_2(ForceTouchTest::onTouchesMoved, this);
-    listener->onTouchesEnded = AX_CALLBACK_2(ForceTouchTest::onTouchesEnded, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = AX_CALLBACK_1(ForceTouchTest::onPointerDown, this);
+    listener->onPointerMove = AX_CALLBACK_1(ForceTouchTest::onPointerMove, this);
+    listener->onPointerUp   = AX_CALLBACK_1(ForceTouchTest::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
@@ -174,21 +174,22 @@ std::string ForceTouchTest::subtitle() const
     return std::string("Touch with force to see info label changes\nOnly work on iPhone6s / iPhone6s Plus");
 }
 
-void ForceTouchTest::onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event) {}
-
-void ForceTouchTest::onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event)
+bool ForceTouchTest::onPointerDown(ax::PointerEvent* event)
 {
-    for (auto&& t : touches)
-    {
-        float currentForce = t->getCurrentForce();
-        float maxForce     = t->getMaxForce();
-        auto text          = fmt::format_to_z(formatBuffer, _Info_Formatter, currentForce, maxForce);
-        _infoLabel->setString(text);
-    }
+    return true;
 }
 
-void ForceTouchTest::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event)
+void ForceTouchTest::onPointerMove(ax::PointerEvent* event)
 {
-    auto text = fmt::format_to_z(formatBuffer, _Info_Formatter, 0.0f, 0.0f);
+    float pressure = event->getPressure();
+    auto text      = fmt::format_to_z(formatBuffer, _Info_Formatter, pressure);
+    _infoLabel->setString(text);
+
+    return;
+}
+
+void ForceTouchTest::onPointerUp(ax::PointerEvent* event)
+{
+    auto text = fmt::format_to_z(formatBuffer, _Info_Formatter, 0.0f);
     _infoLabel->setString(text);
 }

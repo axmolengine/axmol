@@ -170,8 +170,8 @@ bool ProgramState::init(Program* program)
     }
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    _backToForegroundListener = EventListenerCustom::create(
-        EVENT_RENDERER_RECREATED, [this](EventCustom*) { this->remapTextureRuntimeLocations(); });
+    _backToForegroundListener = CustomEventListener::create(
+        EVENT_RENDERER_RECREATED, [this](CustomEvent*) { this->remapTextureRuntimeLocations(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
 

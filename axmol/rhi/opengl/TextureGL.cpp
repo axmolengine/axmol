@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "axmol/rhi/opengl/TextureGL.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/EventType.h"
 #include "axmol/base/Director.h"

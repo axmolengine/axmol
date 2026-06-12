@@ -93,7 +93,7 @@ int nextPOT(int x)
 /*
  * Capture screen interface
  */
-static EventListenerCustom* s_captureScreenListener;
+static CustomEventListener* s_captureScreenListener;
 void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
 {
     if (s_captureScreenListener)
@@ -109,7 +109,7 @@ void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
     // !!!Metal: needs setFrameBufferOnly before draw
     const auto eventName = rhi::DriverContext::isMetal() ? Director::EVENT_BEFORE_DRAW : Director::EVENT_AFTER_DRAW;
 
-    s_captureScreenListener = eventDispatcher->addCustomEventListener(eventName, [=](EventCustom* /*event*/) {
+    s_captureScreenListener = eventDispatcher->addCustomEventListener(eventName, [=](CustomEvent* /*event*/) {
         eventDispatcher->removeEventListener(s_captureScreenListener);
         s_captureScreenListener = nullptr;
         // !!!GL: AFTER_DRAW and BEFORE_END_FRAME
@@ -126,7 +126,7 @@ void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
     });
 }
 
-static std::unordered_map<Node*, EventListenerCustom*> s_captureNodeListener;
+static std::unordered_map<Node*, CustomEventListener*> s_captureNodeListener;
 void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallback, float scale)
 {
     if (s_captureNodeListener.find(startNode) != s_captureNodeListener.end())
@@ -135,7 +135,7 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
         return;
     }
 
-    auto callback = [startNode, scale, imageCallback](EventCustom* /*event*/) {
+    auto callback = [startNode, scale, imageCallback](CustomEvent* /*event*/) {
         auto director            = Director::getInstance();
         auto captureNodeListener = s_captureNodeListener[startNode];
         director->getEventDispatcher()->removeEventListener((EventListener*)(captureNodeListener));
@@ -202,7 +202,7 @@ void captureScreen(std::function<void(bool, std::string_view)> afterCap, std::st
         Director::getInstance()->getJobSystem()->enqueue(
             [_afterCap = std::move(_afterCap), image = std::move(image), _outfile = std::move(_outfile)]() mutable {
             bool ok = image->saveToFile(_outfile);
-            Director::getInstance()->getScheduler()->runOnAxmolThread(
+            Director::getInstance()->postTask(
                 [ok, _afterCap = std::move(_afterCap), _outfile = std::move(_outfile)] { _afterCap(ok, _outfile); });
         });
     });

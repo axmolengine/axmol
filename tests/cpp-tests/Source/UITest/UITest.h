@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_tests__UITest__
-#define __cocos2d_tests__UITest__
+#pragma once
 
 #include "../BaseTest.h"
 
@@ -35,5 +34,3 @@ public:
 
 private:
 };
-
-#endif /* defined(__cocos2d_tests__UITest__) */

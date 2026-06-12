@@ -116,7 +116,6 @@ public:
         addTest("SpritePolygon", []() { return new SpritePolygonTest(); });
         addTest("Terrain", []() { return new TerrainTests(); });
         addTest("FastTileMap", []() { return new FastTileMapTests(); });
-        addTest("Text Input", []() { return new TextInputTests(); });
         addTest("UI", []() { return new UITests(); });
         addTest("Mouse", []() { return new MouseTests(); });
         addTest("MultiTouch", []() { return new MultiTouchTests(); });
@@ -155,16 +154,15 @@ TestController::TestController() : _stopAutoTest(true), _isRunInBackground(false
     _rootTestList->runThisTest();
     _director = Director::getInstance();
 
-    _touchListener               = EventListenerTouchOneByOne::create();
-    _touchListener->onTouchBegan = AX_CALLBACK_2(TestController::blockTouchBegan, this);
-    _touchListener->setSwallowTouches(true);
+    _pointerListener                = PointerEventListener::create();
+    _pointerListener->onPointerDown = AX_CALLBACK_1(TestController::blockTouchBegan, this);
 
-    _director->getEventDispatcher()->addEventListenerWithFixedPriority(_touchListener, -200);
+    _director->getEventDispatcher()->addEventListenerWithFixedPriority(_pointerListener, -200);
 }
 
 TestController::~TestController()
 {
-    _director->getEventDispatcher()->removeEventListener(_touchListener);
+    _director->getEventDispatcher()->removeEventListener(_pointerListener);
 
     _rootTestList->release();
     _rootTestList = nullptr;
@@ -448,7 +446,7 @@ void TestController::destroyInstance()
     disableCrashCatch();
 }
 
-bool TestController::blockTouchBegan(Touch* touch, Event* event)
+bool TestController::blockTouchBegan(PointerEvent* /*event*/)
 {
     return !_stopAutoTest;
 }

@@ -30,7 +30,7 @@
 
 #include "axmol/base/ObjectFactory.h"
 #include "axmol/base/Data.h"
-#include "axmol/ui/UIWidget.h"
+#include "axmol/ui/Widget.h"
 #include "flatbuffers/flatbuffer_builder.h"
 
 namespace flatbuffers

@@ -42,12 +42,12 @@ function TerrainSimple:init()
     self._terrain:setCameraMask(2)
     self._terrain:setDrawWire(false)
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(function (touches, event)
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(function(event)
         local delta = ax.Director:getInstance():getDeltaTime()
-        local touch = touches[1]
-        local location = touch:getLocation()
-        local previousLocation = touch:getPreviousLocation()
+        local touch = event
+        local location = event:getLocation()
+        local previousLocation = event:getPreviousLocation()
         local newPos = {x=previousLocation.x - location.x, y=previousLocation.y - location.y}
 
         local matTransform = self:getNodeToWorldTransform()
@@ -65,7 +65,7 @@ function TerrainSimple:init()
         cameraPos = { x = cameraPos.x + cameraRightDir.x * newPos.x * 0.5 * delta, y = cameraPos.y + cameraRightDir.y * newPos.x * 0.5 * delta, z = cameraPos.z + cameraRightDir.z * newPos.x * 0.5 * delta }
         self._camera:setPosition3D(cameraPos)
 
-    end,ax.Handler.EVENT_TOUCHES_MOVED)
+    end,ax.Handler.EVENT_POINTER_MOVE)
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -199,24 +199,24 @@ function TerrainWalkThru:init()
     Helper.titleLabel:setString(self:title())
     Helper.subtitleLabel:setString(self:subtitle())
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
+    local listener = ax.PointerEventListener:create()
 
-    listener:registerScriptHandler(function (touches, event)
+    listener:registerScriptHandler(function(event)
 
-    end,ax.Handler.EVENT_TOUCHES_BEGAN)
+    end,ax.Handler.EVENT_POINTER_DOWN)
 
-    listener:registerScriptHandler(function (touches, event)
+    listener:registerScriptHandler(function(event)
 
-        local touch = touches[1]
-        local location = touch:getLocationInView()
+        local touch = event
+        local location = event:getScreenLocation()
         if self._camera ~= nil then
             if self._player ~= nil then
                 local nearP = ax.vec3(location.x, location.y, 0.0)
                 local farP  = ax.vec3(location.x, location.y, 1.0)
 
                 local size = ax.Director:getInstance():getCanvasSize()
-                nearP = self._camera:unproject(size, nearP, nearP)
-                farP  = self._camera:unproject(size, farP, farP)
+                nearP = self._camera:deprojectScreenToWorld(nearP)
+                farP  = self._camera:deprojectScreenToWorld(farP)
                 local dir = ax.vec3sub(farP, nearP)
                 dir = ax.vec3normalize(dir)
 
@@ -242,7 +242,7 @@ function TerrainWalkThru:init()
                 self._player._playerState = PLAER_STATE.FORWARD
             end
         end
-    end,ax.Handler.EVENT_TOUCHES_ENDED)
+    end,ax.Handler.EVENT_POINTER_UP)
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)

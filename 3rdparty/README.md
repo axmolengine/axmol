@@ -81,7 +81,7 @@
 
 ## glfw
 - [![Upstream](https://img.shields.io/github/v/release/glfw/glfw?label=Upstream)](https://github.com/glfw/glfw)
-- Version: 3.5-2f3efb7 of https://github.com/axmolengine/glfw
+- Version: 3.5-12d2696 of https://github.com/axmolengine/glfw
 - License: zlib
 
 ## ghc (iOS < 13 ONLY)

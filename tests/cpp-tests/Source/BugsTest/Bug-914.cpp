@@ -34,9 +34,9 @@ bool Bug914Layer::init()
     // Apple recommends to re-assign "self" with the "super" return value
     if (BugsTestBase::init())
     {
-        auto listener            = EventListenerTouchAllAtOnce::create();
-        listener->onTouchesBegan = AX_CALLBACK_2(Bug914Layer::onTouchesBegan, this);
-        listener->onTouchesMoved = AX_CALLBACK_2(Bug914Layer::onTouchesMoved, this);
+        auto listener           = PointerEventListener::create();
+        listener->onPointerDown = AX_CALLBACK_1(Bug914Layer::onPointerDown, this);
+        listener->onPointerMove = AX_CALLBACK_1(Bug914Layer::onPointerMove, this);
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
         // ask director the the window size
@@ -71,14 +71,15 @@ bool Bug914Layer::init()
     return false;
 }
 
-void Bug914Layer::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
+void Bug914Layer::onPointerMove(ax::PointerEvent* event)
 {
-    AXLOGD("Number of touches: {}", (int)touches.size());
+    AXLOGD("touch moved id: {}", event->getPointerId());
 }
 
-void Bug914Layer::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
+bool Bug914Layer::onPointerDown(ax::PointerEvent* event)
 {
-    onTouchesMoved(touches, event);
+    onPointerMove(event);
+    return true;
 }
 
 void Bug914Layer::restart(Object* sender)

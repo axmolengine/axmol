@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "sceneext/TriggerObj.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 
 using namespace ax;
 
@@ -200,7 +200,7 @@ void TriggerObj::serialize(const rapidjson::Value& val)
         }
 
         std::string custom_event_name = fmt::to_string(event);
-        EventListenerCustom* listener = EventListenerCustom::create(custom_event_name, [this](EventCustom* /*evt*/) {
+        CustomEventListener* listener = CustomEventListener::create(custom_event_name, [this](CustomEvent* /*evt*/) {
             if (detect())
             {
                 done();
@@ -291,8 +291,8 @@ void TriggerObj::serialize(::ax::ext::CocoLoader* pCocoLoader, ::ax::ext::stExpC
 
                 std::string custom_event_name = fmt::to_string(event);
 
-                EventListenerCustom* listener =
-                    EventListenerCustom::create(custom_event_name, [this](EventCustom* /*evt*/) {
+                CustomEventListener* listener =
+                    CustomEventListener::create(custom_event_name, [this](CustomEvent* /*evt*/) {
                     if (detect())
                     {
                         done();

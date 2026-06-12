@@ -14,9 +14,9 @@ local function KeypadMainLayer()
         labelTip:setPosition(ax.p(s.width / 2, s.height / 2))
         layer:addChild(labelTip, 0)
 
-        local function onKeyReleased(keyCode, event)
+        local function onKeyReleased(event)
             local label = event:getCurrentTarget()
-            label:setString("key: " .. keyCode .. " was clicked")
+            label:setString("key: " .. event:getKeyCode() .. " was clicked")
         end
 
         local listener = ax.EventListenerKeyboard:create()

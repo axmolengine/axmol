@@ -77,7 +77,7 @@ public:
     virtual std::string subtitle() const override;
 
     void addNewMeshWithCoords(ax::Vec2 p);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
 };
 
 class MeshRendererStaticInstancingBasicTest : public MeshRendererTestDemo
@@ -133,7 +133,7 @@ protected:
     ax::rhi::ProgramState* _state = nullptr;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    ax::EventListenerCustom* _backToForegroundListener;
+    ax::CustomEventListener* _backToForegroundListener;
 #endif
 };
 
@@ -157,9 +157,9 @@ public:
     void move3D(float elapsedTime);
     void updateState(float elapsedTime);
     bool isState(unsigned int state, unsigned int bit) const;
-    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    bool onPointerDown(ax::PointerEvent* event);
+    void onPointerMove(ax::PointerEvent* event);
+    void onPointerUp(ax::PointerEvent* event);
 
 private:
     ax::Camera* _camera;
@@ -170,7 +170,7 @@ private:
     ax::rhi::ProgramState* _state = nullptr;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    ax::EventListenerCustom* _backToForegroundListener;
+    ax::CustomEventListener* _backToForegroundListener;
 #endif
 };
 
@@ -182,7 +182,7 @@ public:
     virtual ~MeshRendererLightMapTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerMove(ax::PointerEvent* event);
 
 private:
     ax::Camera* _camera;
@@ -201,7 +201,7 @@ protected:
     ax::rhi::ProgramState* _state;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    ax::EventListenerCustom* _backToForegroundListener;
+    ax::CustomEventListener* _backToForegroundListener;
 #endif
 };
 
@@ -225,13 +225,13 @@ public:
 
     void addNewMeshWithCoords(ax::Vec2 p);
 
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
 
 protected:
     std::vector<ax::MeshRenderer*> _meshes;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    ax::EventListenerCustom* _backToForegroundListener;
+    ax::CustomEventListener* _backToForegroundListener;
 #endif
 };
 
@@ -263,7 +263,7 @@ public:
     void addNewMeshWithCoords(ax::Vec2 p);
 
     void switchAnimationQualityCallback(ax::Object* sender);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
 
     std::string getAnimationQualityMessage() const;
 
@@ -284,13 +284,13 @@ public:
 
     void addNewMeshWithCoords(ax::Vec2 p);
 
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
 
 protected:
     std::vector<ax::MeshRenderer*> _meshes;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    ax::EventListenerCustom* _backToForegroundListener;
+    ax::CustomEventListener* _backToForegroundListener;
 #endif
 };
 
@@ -303,7 +303,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
 
     virtual void update(float dt) override;
 
@@ -342,7 +342,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
 
     void addNewMeshWithCoords(ax::Vec2 p);
 
@@ -358,7 +358,7 @@ public:
     MeshRendererReskinTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
     void addNewMeshWithCoords(ax::Vec2 p);
 
     void menuCallback_reSkin(ax::Object* sender);
@@ -393,9 +393,9 @@ public:
     virtual void update(float dt) override;
     void addNewOBBWithCoords(ax::Vec2 p);
     void addNewMeshWithCoords(ax::Vec2 p);
-    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    bool onPointerDown(ax::PointerEvent* event);
+    void onPointerUp(ax::PointerEvent* event);
+    void onPointerMove(ax::PointerEvent* event);
     void addOBBCallback(ax::Object* sender);
     void delOBBCallback(ax::Object* sender);
     void addOBBWithCount(float value);
@@ -513,7 +513,7 @@ public:
 
     void addNewMeshWithCoords(ax::Vec2);
 
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerMove(ax::PointerEvent* event);
 
 protected:
     ax::TextureCube* _textureCube;
@@ -522,7 +522,7 @@ protected:
     ax::Camera* _camera;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    ax::EventListenerCustom* _backToForegroundListener;
+    ax::CustomEventListener* _backToForegroundListener;
 #endif
 };
 
@@ -601,7 +601,7 @@ public:
 protected:
     ax::MeshRenderer* _mesh;
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    ax::EventListenerCustom* _backToForegroundListener;
+    ax::CustomEventListener* _backToForegroundListener;
 #endif
 };
 

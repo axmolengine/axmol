@@ -89,7 +89,7 @@ void VRGenericRenderer::cleanup()
     AX_SAFE_DELETE(_rightDistortionMesh);
 }
 
-void VRGenericRenderer::onRenderViewResized(RenderView* rv)
+void VRGenericRenderer::onRenderViewResized(RenderViewCore* rv)
 {
     cleanup();
     init(rv);
@@ -115,7 +115,7 @@ const ScissorRect& VRGenericRenderer::getScissorRect() const
     return _sourceScissorRect;
 }
 
-void VRGenericRenderer::init(RenderView* rv)
+void VRGenericRenderer::init(RenderViewCore* rv)
 {
     // Ensure VR render view uses the same resolution policy as the normal render view by basing it on the viewport size
     const auto screenSize = rv->getViewportRect().size;
@@ -151,7 +151,7 @@ void VRGenericRenderer::init(RenderView* rv)
     _rightEyeCmd.setIndexDrawInfo(0, _rightDistortionMesh->_indices);
 }
 
-void VRGenericRenderer::fillEyeViewports(RenderView* rv, const Vec2& screenSize)
+void VRGenericRenderer::fillEyeViewports(RenderViewCore* rv, const Vec2& screenSize)
 {
     const auto& rtSize = _renderTexture->getContentSize();
     if (screenSize.x <= 0 || screenSize.y <= 0 || rtSize.width <= 0 || rtSize.height <= 0)

@@ -29,11 +29,18 @@ THE SOFTWARE.
 
 typedef void (*EditTextCallback)(const char* text, void* ctx);
 
+namespace ax
+{
+
 extern const char* getApkPath();
+
 extern std::string getPackageNameJNI();
+
 extern int getObbAssetFileDescriptorJNI(const char* path, int64_t* startOffset, int64_t* size);
+
 extern void conversionEncodingJNI(const char* src,
                                   int byteSize,
                                   const char* fromCharset,
                                   char* dst,
                                   const char* newCharset);
+}  // namespace ax

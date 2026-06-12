@@ -96,13 +96,13 @@ public:
     bool hasMoved() const { return _moved; }
     void setEnabled(bool enabled) override;
 
-    Vec2 locationFromTouch(Touch* touch);
+    Vec2 locationFromTouch(PointerEvent* event);
 
     // Overrides
-    bool onTouchBegan(Touch* pTouch, Event* pEvent) override;
-    void onTouchMoved(Touch* pTouch, Event* pEvent) override;
-    void onTouchEnded(Touch* pTouch, Event* pEvent) override;
-    void onTouchCancelled(Touch* pTouch, Event* pEvent) override;
+    bool onPointerDown(PointerEvent* event) override;
+    void onPointerMove(PointerEvent* event) override;
+    void onPointerUp(PointerEvent* event) override;
+    void onPointerCancel(PointerEvent* event) override;
 
 protected:
     /** Sprite which represents the view. */

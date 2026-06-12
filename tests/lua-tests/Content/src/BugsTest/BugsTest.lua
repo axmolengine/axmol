@@ -322,16 +322,15 @@ local function BugTest914()
     layer:addChild(menu)
 
     -- handling touch events
-    local function onTouchMoved(touches, event)
-		local count = #(touches)
-		print("Number of touches: ",count)
+    local function onPointerMove(event)
+		print("Pointer event received: ", event:getPointerId())
     end
-    local function onTouchBegan(touches, event)
-		onTouchMoved(touches, event)
+    local function onTouchBegan(event)
+		onPointerMove(event)
     end
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_TOUCHES_BEGAN )
-    listener:registerScriptHandler(onTouchMoved,ax.Handler.EVENT_TOUCHES_MOVED )
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_POINTER_DOWN )
+    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
 
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
@@ -622,8 +621,8 @@ local function BugsTestMainLayer()
     local ptCurPos  = {x = 0, y = 0}
 
     -- handling touch events
-    local function onTouchMoved(touches, event)
-        local touchLocation = touches[1]:getLocation()
+    local function onPointerMove(event)
+        local touchLocation = event:getLocation()
         local nMoveY = touchLocation.y - ptBeginPos.y
         local curPosx, curPosy = pItemMenu:getPosition()
         local nextPosy = curPosy + nMoveY
@@ -641,12 +640,12 @@ local function BugsTestMainLayer()
         ptBeginPos = touchLocation
         ptCurPos = {x = curPosx, y = nextPosy}
     end
-    local function onTouchBegan(touches, event)
-        ptBeginPos = touches[1]:getLocation()
+    local function onTouchBegan(event)
+        ptBeginPos = event:getLocation()
     end
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_TOUCHES_BEGAN )
-    listener:registerScriptHandler(onTouchMoved,ax.Handler.EVENT_TOUCHES_MOVED )
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_POINTER_DOWN )
+    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
 
     local eventDispatcher = ret:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, ret)

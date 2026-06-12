@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 #include "ImGuiPresenter.h"
 #include <assert.h>
-#if defined(AX_PLATFORM_GLFW)
+#if AX_IMGUI_USE_GLFW
 #    include "backends/imgui_impl_glfw.h"
 #else
 #    include "backends/imgui_impl_axmol_sw.h"
@@ -151,7 +151,7 @@ ImVec2& operator+=(ImVec2& lhs, const ImVec2& rhs)
 }
 }  // namespace
 
-#if defined(AX_PLATFORM_GLFW)
+#if AX_IMGUI_USE_GLFW
 class ImGuiEventTracker
 {
 public:
@@ -167,20 +167,18 @@ public:
         _trackLayer = utils::newInstance<Node>(&Node::initLayer);
 
         // note: when at the first click to focus the window, this will not take effect
-        auto listener = EventListenerTouchOneByOne::create();
-        listener->setSwallowTouches(true);
-        listener->onTouchBegan = [this](Touch* touch, Event*) -> bool { return ImGui::GetIO().WantCaptureMouse; };
+        auto listener              = PointerEventListener::create();
+        listener->onPointerHitTest = [](PointerEvent*, const Camera*, Vec3*) {
+            return ImGui::GetIO().WantCaptureMouse;
+        };
+        listener->onPointerDown = [](PointerEvent*) -> bool { return ImGui::GetIO().WantCaptureMouse; };
+        listener->onPointerMove = [](PointerEvent* event) {
+            if (ImGui::GetIO().WantCaptureMouse)
+                event->stopPropagation();
+        };
+        listener->onPointerScroll = [](PointerEvent*) -> bool { return true; };
         _trackLayer->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, _trackLayer);
 
-        // capture mouse events
-        auto captureMouse  = [=](EventMouse* event) -> bool { return ImGui::GetIO().WantCaptureMouse; };
-        auto mouseListener = EventListenerMouse::create();
-        mouseListener->setSwallowMouse(true);
-        mouseListener->onMouseDown   = captureMouse;
-        mouseListener->onMouseUp     = captureMouse;
-        mouseListener->onMouseMove   = captureMouse;
-        mouseListener->onMouseScroll = captureMouse;
-        _trackLayer->getEventDispatcher()->addEventListenerWithSceneGraphPriority(mouseListener, _trackLayer);
         scene->addChild(_trackLayer, INT_MAX);
         // add an empty sprite to avoid render problem
         // const auto sp = Sprite::create();
@@ -226,35 +224,31 @@ public:
 
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
 
-        _touchListener = utils::newInstance<EventListenerTouchOneByOne>();
-        _touchListener->setSwallowTouches(true);
-        _touchListener->onTouchBegan = [this](Touch* touch, Event*) -> bool { return ImGui::GetIO().WantCaptureMouse; };
-        eventDispatcher->addEventListenerWithFixedPriority(_touchListener, highestPriority);
+        _pointerListener                   = utils::newInstance<PointerEventListener>();
+        _pointerListener->onPointerHitTest = [](PointerEvent*, const Camera*, Vec3*) {
+            return ImGui::GetIO().WantCaptureMouse;
+        };
+        _pointerListener->onPointerDown = [](PointerEvent*) -> bool { return ImGui::GetIO().WantCaptureMouse; };
+        _pointerListener->onPointerMove = [](PointerEvent* event) {
+            if (ImGui::GetIO().WantCaptureMouse)
+                event->stopPropagation();
+        };
+        _pointerListener->onPointerScroll = [](PointerEvent*) -> bool { return ImGui::GetIO().WantCaptureMouse; };
+        eventDispatcher->addEventListenerWithFixedPriority(_pointerListener, highestPriority);
 
-        // capture mouse events
-        auto captureMouse = [=](EventMouse* event) -> bool { return ImGui::GetIO().WantCaptureMouse; };
-        _mouseListener    = utils::newInstance<EventListenerMouse>();
-        _mouseListener->setSwallowMouse(true);
-        _mouseListener->onMouseDown   = captureMouse;
-        _mouseListener->onMouseUp     = captureMouse;
-        _mouseListener->onMouseMove   = captureMouse;
-        _mouseListener->onMouseScroll = captureMouse;
-        eventDispatcher->addEventListenerWithFixedPriority(_mouseListener, highestPriority);
         return true;
     }
 
     ~ImGuiGlobalEventTracker() override
     {
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-        eventDispatcher->removeEventListener(_mouseListener);
-        eventDispatcher->removeEventListener(_touchListener);
+        // eventDispatcher->removeEventListener(_mouseListener);
+        eventDispatcher->removeEventListener(_pointerListener);
 
-        _mouseListener->release();
-        _touchListener->release();
+        AX_SAFE_RELEASE_NULL(_pointerListener);
     }
 
-    EventListenerTouchOneByOne* _touchListener = nullptr;
-    EventListenerMouse* _mouseListener         = nullptr;
+    PointerEventListener* _pointerListener = nullptr;
 };
 #endif
 
@@ -291,7 +285,7 @@ void ImGuiPresenter::init()
     // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  // Enable Docking
 
-#if defined(AX_PLATFORM_GLFW)
+#if AX_IMGUI_USE_GLFW
     if (rhi::DriverContext::isOpenGL())
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport / Platform Windows
 #endif
@@ -317,8 +311,8 @@ void ImGuiPresenter::init()
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
-#if defined(AX_PLATFORM_GLFW)
-    auto window = static_cast<RenderViewImpl*>(Director::getInstance()->getRenderView())->getWindow();
+#if AX_IMGUI_USE_GLFW
+    auto window = static_cast<RenderView*>(Director::getInstance()->getRenderView())->getWindow();
     ImGui_ImplGlfw_InitForAxmol(window, true);
 #else
     ImGui_ImplAxmolSW_Init(Director::getInstance()->getRenderView(), true);
@@ -331,10 +325,10 @@ void ImGuiPresenter::init()
 
     auto eventDispatcher = Director::getInstance()->getEventDispatcher();
     _event1 =
-        eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [this](EventCustom*) { beginFrame(); });
+        eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [this](CustomEvent*) { beginFrame(); });
     _event2 =
-        eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [this](EventCustom*) { endFrame(); });
-    _event3 = eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_GFX_DROP, [](EventCustom*) {
+        eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [this](CustomEvent*) { endFrame(); });
+    _event3 = eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_GFX_DROP, [](CustomEvent*) {
         if (_instance)
         {
             _instance->cleanup();
@@ -352,7 +346,7 @@ void ImGuiPresenter::cleanup()
 
     ImGui_ImplAxmol_SetRebuildFontsFunc(nullptr, nullptr);
     ImGui_ImplAxmol_Shutdown();
-#if defined(AX_PLATFORM_GLFW)
+#if AX_IMGUI_USE_GLFW
     ImGui_ImplGlfw_Shutdown();
 #else
     ImGui_ImplAxmolSW_Shutdown();
@@ -362,7 +356,7 @@ void ImGuiPresenter::cleanup()
 
     if (!_renderLoops.empty())
     {
-#if defined(AX_PLATFORM_GLFW)
+#if AX_IMGUI_USE_GLFW
         for (auto item : _renderLoops)
         {
             delete item.second.tracker;
@@ -479,7 +473,7 @@ void ImGuiPresenter::beginFrame()
     {
         // create frame
         ImGui_ImplAxmol_NewFrame();
-#if defined(AX_PLATFORM_GLFW)
+#if AX_IMGUI_USE_GLFW
         ImGui_ImplGlfw_NewFrame();
 #else
         ImGui_ImplAxmolSW_NewFrame();
@@ -529,7 +523,7 @@ void ImGuiPresenter::update()
         auto& imLoop = iter->second;
         if (imLoop.removing)
         {
-#if defined(AX_PLATFORM_GLFW)
+#if AX_IMGUI_USE_GLFW
             auto tracker = imLoop.tracker;
             iter         = _renderLoops.erase(iter);
             delete tracker;
@@ -547,7 +541,7 @@ void ImGuiPresenter::update()
 
 bool ImGuiPresenter::addRenderLoop(std::string_view id, std::function<void()> func, Scene* target)
 {
-#if defined(AX_PLATFORM_GLFW)
+#if AX_IMGUI_USE_GLFW
     auto tracker = target ? static_cast<ImGuiEventTracker*>(utils::newInstance<ImGuiSceneEventTracker>(
                                 &ImGuiSceneEventTracker::initWithScene, target))
                           : static_cast<ImGuiEventTracker*>(utils::newInstance<ImGuiGlobalEventTracker>());
@@ -557,7 +551,7 @@ bool ImGuiPresenter::addRenderLoop(std::string_view id, std::function<void()> fu
     auto iter     = _renderLoops.find(fourccId);
     if (iter == _renderLoops.end())
     {
-#if defined(AX_PLATFORM_GLFW)
+#if AX_IMGUI_USE_GLFW
         _renderLoops.emplace(fourccId, ImGuiLoop{tracker, std::move(func)});
 #else
         _renderLoops.emplace(fourccId, ImGuiLoop{std::move(func)});
@@ -568,7 +562,7 @@ bool ImGuiPresenter::addRenderLoop(std::string_view id, std::function<void()> fu
     // allow reuse imLoop, update func, tracker, removing status
     auto& imLoop = iter->second;
     imLoop.func  = std::move(func);
-#if defined(AX_PLATFORM_GLFW)
+#if AX_IMGUI_USE_GLFW
     AX_SAFE_DELETE(imLoop.tracker);
     imLoop.tracker = tracker;
 #endif

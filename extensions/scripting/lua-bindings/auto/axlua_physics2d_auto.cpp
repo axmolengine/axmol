@@ -6603,7 +6603,7 @@ static int lua_ax_physics2d_ContactEvent2D_finalize(lua_State* tolua_S)
 int lua_register_ax_physics2d_ContactEvent2D(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.ContactEvent2D");
-    tolua_cclass(tolua_S,"ContactEvent2D","ax.ContactEvent2D","ax.EventCustom",nullptr);
+    tolua_cclass(tolua_S,"ContactEvent2D","ax.ContactEvent2D","ax.CustomEvent",nullptr);
 
     tolua_beginmodule(tolua_S,"ContactEvent2D");
         tolua_function(tolua_S,"getColliderA",lua_ax_physics2d_ContactEvent2D_getColliderA);
@@ -6672,7 +6672,7 @@ static int lua_ax_physics2d_ContactEventListener2D_finalize(lua_State* tolua_S)
 int lua_register_ax_physics2d_ContactEventListener2D(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.ContactEventListener2D");
-    tolua_cclass(tolua_S,"ContactEventListener2D","ax.ContactEventListener2D","ax.EventListenerCustom",nullptr);
+    tolua_cclass(tolua_S,"ContactEventListener2D","ax.ContactEventListener2D","ax.CustomEventListener",nullptr);
 
     tolua_beginmodule(tolua_S,"ContactEventListener2D");
         tolua_function(tolua_S,"create", lua_ax_physics2d_ContactEventListener2D_create);

@@ -3,7 +3,7 @@
 ## Microsoft.Windows.CppWinRT
 
 - [![nuget](https://img.shields.io/nuget/v/Microsoft.Windows.CppWinRT?label=Upstream)](https://www.nuget.org/packages/Microsoft.Windows.CppWinRT)
-- Version: 2.0.250303.1
+- Version: 3.0.260520.1
 - License: MIT
 - Platform: WinRT/WinUWP
 - Manged by: `cmake/Modules/AXConfigDefine.cmake`

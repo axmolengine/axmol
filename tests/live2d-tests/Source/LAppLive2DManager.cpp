@@ -89,7 +89,7 @@ LAppLive2DManager::LAppLive2DManager()
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
         // Retina対策でこっちからとる
-        RenderViewImpl *glimpl = (RenderViewImpl *)Director::getInstance()->getRenderView();
+        RenderView *glimpl = (RenderView *)Director::getInstance()->getRenderView();
         glfwGetFramebufferSize(glimpl->getWindow(), &width, &height);
 #endif
 

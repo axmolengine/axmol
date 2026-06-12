@@ -57,9 +57,9 @@ bool Box2DTest::init()
     }
     auto dispatcher = Director::getInstance()->getEventDispatcher();
 
-    auto touchListener            = EventListenerTouchAllAtOnce::create();
-    touchListener->onTouchesEnded = AX_CALLBACK_2(Box2DTest::onTouchesEnded, this);
-    dispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+    auto eventListener         = PointerEventListener::create();
+    eventListener->onPointerUp = AX_CALLBACK_1(Box2DTest::onPointerUp, this);
+    dispatcher->addEventListenerWithSceneGraphPriority(eventListener, this);
 
     // init physics
     this->initPhysics();
@@ -288,17 +288,10 @@ void Box2DTest::update(float dt)
     b2World_Step(world, dt, subStepCount);
 }
 
-void Box2DTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void Box2DTest::onPointerUp(PointerEvent* event)
 {
     // Add a new body/atlas sprite at the touched location
+    auto location = event->getLocation();
 
-    for (auto& touch : touches)
-    {
-        if (!touch)
-            break;
-
-        auto location = touch->getLocation();
-
-        addNewSpriteAtPosition(location);
-    }
+    addNewSpriteAtPosition(location);
 }

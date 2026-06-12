@@ -107,7 +107,7 @@ bool UIScale9SpriteTest::init()
 
         ax::ui::Scale9Sprite* sp2 = ui::Scale9Sprite::create("cocosui/animationbuttonnormal.png");
         sp2->setPosition(350.0f, 160.0f);
-        sp2->setPreferredSize(sp1->getContentSize() * 1.2f);
+        sp2->setContentSize(sp1->getContentSize() * 1.2f);
         sp2->setColor(Color32::GREEN);
         sp2->setContentSize(Size(100.0f, 100.0f));
 
@@ -160,7 +160,7 @@ bool UIScale9SpriteHierarchialTest::init()
         sp1->runAction((FiniteTimeAction*)action2);
 
         ax::ui::Scale9Sprite* sp2 = ui::Scale9Sprite::create("cocosui/animationbuttonnormal.png");
-        sp2->setPreferredSize(sp1->getContentSize() * 1.2f);
+        sp2->setContentSize(sp1->getContentSize() * 1.2f);
         sp2->setColor(Color32::GREEN);
         sp2->setFlippedX(true);
         sp2->setContentSize(Size(100.0f, 100.0f));
@@ -201,13 +201,12 @@ bool UIScale9SpriteTouchTest::init()
         sprite2->addChild(sprite3, 1);
 
         // Make sprite1 touchable
-        auto listener1 = EventListenerTouchOneByOne::create();
-        listener1->setSwallowTouches(true);
+        auto listener1 = PointerEventListener::create();
 
-        listener1->onTouchBegan = [](Touch* touch, Event* event) {
+        listener1->onPointerDown = [](PointerEvent* event) {
             auto target = static_cast<Sprite*>(event->getCurrentTarget());
 
-            Vec2 locationInNode = target->convertToNodeSpace(touch->getLocation());
+            Vec2 locationInNode = target->convertToNodeSpace(event->getLocation());
             Size s              = target->getContentSize();
             Rect rect           = Rect(0, 0, s.width, s.height);
 
@@ -220,14 +219,15 @@ bool UIScale9SpriteTouchTest::init()
             return false;
         };
 
-        listener1->onTouchMoved = [](Touch* touch, Event* event) {
+        listener1->onPointerMove = [](PointerEvent* event) {
             auto target = static_cast<Sprite*>(event->getCurrentTarget());
-            target->setPosition(target->getPosition() + touch->getDelta());
+            target->setPosition(target->getPosition() + event->getDelta());
+            return true;
         };
 
-        listener1->onTouchEnded = [=](Touch* touch, Event* event) {
+        listener1->onPointerUp = [=](PointerEvent* event) {
             auto target = static_cast<ui::Scale9Sprite*>(event->getCurrentTarget());
-            AXLOGD("sprite onTouchesEnded.. ");
+            AXLOGD("sprite onPointerUp.. ");
             target->setOpacity(255);
             if (target == sprite2)
             {
@@ -287,7 +287,7 @@ bool UIS9FrameNameSpriteSheet::init()
         blocks->setInsetRight(0);
         blocks->setInsetTop(0);
         blocks->setInsetBottom(0);
-        blocks->setPreferredSize(Size(400.0f, 80.0f));
+        blocks->setContentSize(Size(400.0f, 80.0f));
         blocks->setPosition(Vec2(x, y));
 
         this->addChild(blocks);
@@ -310,7 +310,7 @@ bool UIS9FrameNameSpriteSheetRotated::init()
 
         auto blocks = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9r.png");
 
-        blocks->setPreferredSize(Size(400.0f, 80.0f));
+        blocks->setContentSize(Size(400.0f, 80.0f));
 
         blocks->setPosition(Vec2(x, y));
 
@@ -333,12 +333,12 @@ bool UIS9FrameNameSpriteSheetCropped::init()
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
         auto blocks = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9c.png");
-        blocks->setPreferredSize(Size(400.0f, 80.0f));
+        blocks->setContentSize(Size(400.0f, 80.0f));
         blocks->setPosition(Vec2(x, y + 45));
         this->addChild(blocks);
 
         auto blocks2 = ui::Scale9Sprite::create("Images/blocks9c.png");
-        blocks2->setPreferredSize(Size(400.0f, 80.0f));
+        blocks2->setContentSize(Size(400.0f, 80.0f));
         blocks2->setPosition(Vec2(x, y - 45));
         this->addChild(blocks2);
 
@@ -359,12 +359,12 @@ bool UIS9FrameNameSpriteSheetCroppedRotated::init()
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
         auto blocks = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9cr.png");
-        blocks->setPreferredSize(Size(400.0f, 80.0f));
+        blocks->setContentSize(Size(400.0f, 80.0f));
         blocks->setPosition(Vec2(x, y + 45));
         this->addChild(blocks);
 
         auto blocks2 = ui::Scale9Sprite::create("Images/blocks9cr.png");
-        blocks2->setPreferredSize(Size(400.0f, 80.0f));
+        blocks2->setContentSize(Size(400.0f, 80.0f));
         blocks2->setPosition(Vec2(x, y - 45));
         this->addChild(blocks2);
 
@@ -386,7 +386,7 @@ bool UIS9FrameNameSpriteSheetCroppedSimple::init()
 
         auto blocks = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9c.png");
         blocks->setRenderingType(Scale9Sprite::RenderingType::SIMPLE);
-        blocks->setPreferredSize(Size(400.0f, 80.0f));
+        blocks->setContentSize(Size(400.0f, 80.0f));
         blocks->setPosition(Vec2(x, y + 45));
         this->addChild(blocks);
 
@@ -413,7 +413,7 @@ bool UIS9FrameNameSpriteSheetCroppedRotatedSimple::init()
 
         auto blocks = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9cr.png");
         blocks->setRenderingType(Scale9Sprite::RenderingType::SIMPLE);
-        blocks->setPreferredSize(Size(400.0f, 80.0f));
+        blocks->setContentSize(Size(400.0f, 80.0f));
         blocks->setPosition(Vec2(x, y + 45));
         this->addChild(blocks);
 
@@ -657,7 +657,7 @@ bool UIS9FrameNameSpriteSheetRotatedSetCapInsetLater::init()
         blocks_scaled_with_insets->setInsetLeft(32);
         blocks_scaled_with_insets->setInsetRight(32);
 
-        blocks_scaled_with_insets->setPreferredSize(Size(32 * 5.5f, 32 * 4));
+        blocks_scaled_with_insets->setContentSize(Size(32 * 5.5f, 32 * 4));
         blocks_scaled_with_insets->setPosition(Vec2(x, y));
 
         this->addChild(blocks_scaled_with_insets);
@@ -1014,7 +1014,7 @@ bool UIS9BatchTest::init()
             {
                 sprite->setRenderingType(Scale9Sprite::RenderingType::SLICE);
             }
-            sprite->setPreferredSize(preferedSize);
+            sprite->setContentSize(preferedSize);
             this->addChild(sprite);
         });
         this->addChild(addSliceSpriteButton);
@@ -1040,7 +1040,7 @@ bool UIS9ToggleRenderingTypeTest::init()
         auto blocks = ui::Scale9Sprite::create("Images/blocks9.png");
 
         blocks->setPosition(Vec2(x, y));
-        blocks->setPreferredSize(Size(96 * 2, 96));
+        blocks->setContentSize(Size(96 * 2, 96));
         this->addChild(blocks);
 
         auto addSliceSpriteButton =
@@ -1083,14 +1083,14 @@ bool UIS9GlobalZOrderTest::init()
         auto blocks = ui::Scale9Sprite::create("Images/blocks9.png");
 
         blocks->setPosition(Vec2(x, y));
-        blocks->setPreferredSize(Size(96 * 2, 96 * 1.5));
+        blocks->setContentSize(Size(96 * 2, 96 * 1.5));
         blocks->setColor(Color32::RED);
         blocks->setGlobalZOrder(1);
         this->addChild(blocks);
 
         auto blocks2 = ui::Scale9Sprite::create("Images/blocks9.png");
         blocks2->setPosition(Vec2(x, y));
-        blocks2->setPreferredSize(Size(96 * 3, 96));
+        blocks2->setContentSize(Size(96 * 3, 96));
         blocks2->setGlobalZOrder(0);
         blocks2->setColor(Color32::GREEN);
         this->addChild(blocks2);
@@ -1116,7 +1116,7 @@ bool UIS9EnableScale9FalseTest::init()
         auto blocks = ui::Scale9Sprite::create("Images/blocks9.png");
         blocks->setScale9Enabled(false);
         blocks->setPosition(Vec2(x, y));
-        blocks->setPreferredSize(Size(96 * 2.0f, 96.0f));
+        blocks->setContentSize(Size(96 * 2.0f, 96.0f));
         blocks->setColor(Color32::RED);
         blocks->setGlobalZOrder(1);
         this->addChild(blocks);
@@ -1124,7 +1124,7 @@ bool UIS9EnableScale9FalseTest::init()
         auto blocks2 = ui::Scale9Sprite::create("Images/blocks9.png");
         blocks2->setScale9Enabled(false);
         blocks2->setPosition(Vec2(0.0f, 0.0f));
-        blocks2->setPreferredSize(Size(96 * 1.5f, 96.0f));
+        blocks2->setContentSize(Size(96 * 1.5f, 96.0f));
         blocks2->setGlobalZOrder(0);
         blocks2->setColor(Color32::GREEN);
         blocks->addChild(blocks2);
@@ -1132,7 +1132,7 @@ bool UIS9EnableScale9FalseTest::init()
         auto blocks3 = ui::Scale9Sprite::create("Images/blocks9.png");
         blocks3->setScale9Enabled(false);
         blocks3->setPosition(Vec2(0.0f, 0.0f));
-        blocks3->setPreferredSize(Size(96.0f, 96.0f));
+        blocks3->setContentSize(Size(96.0f, 96.0f));
         blocks3->setGlobalZOrder(2);
         blocks3->setColor(Color32::YELLOW);
         blocks2->addChild(blocks3);
@@ -1158,7 +1158,7 @@ bool UIS9GrayStateOpacityTest::init()
         auto blocks = ui::Scale9Sprite::create("Images/blocks9.png");
 
         blocks->setPosition(Vec2(x, y));
-        blocks->setPreferredSize(Size(96 * 2, 96 * 1.5));
+        blocks->setContentSize(Size(96 * 2, 96 * 1.5));
         blocks->setOpacity(100);
         blocks->setState(Scale9Sprite::State::GRAY);
         blocks->setGlobalZOrder(1);

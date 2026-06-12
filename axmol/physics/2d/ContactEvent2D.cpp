@@ -28,14 +28,14 @@
 
 #    include "axmol/physics/2d/Rigidbody2D.h"
 #    include "axmol/physics/2d/PhysicsUtility2D.h"
-#    include "axmol/base/EventCustom.h"
+#    include "axmol/base/CustomEvent.h"
 
 namespace ax
 {
 
 const char* CONTACT_2D_EVENT_NAME = "contact-2d";
 
-ContactEvent2D::ContactEvent2D() : EventCustom(CONTACT_2D_EVENT_NAME), _eventCode(EventCode::None), _result(true) {}
+ContactEvent2D::ContactEvent2D() : CustomEvent(CONTACT_2D_EVENT_NAME), _eventCode(EventCode::None), _result(true) {}
 
 ContactEvent2D::~ContactEvent2D() {}
 
@@ -147,12 +147,12 @@ ContactEventListener2D::~ContactEventListener2D()
 
 bool ContactEventListener2D::init()
 {
-    auto func = [this](EventCustom* event) -> void { onEvent(event); };
+    auto func = [this](CustomEvent* event) -> void { onEvent(event); };
 
-    return EventListenerCustom::init(CONTACT_2D_EVENT_NAME, func);
+    return CustomEventListener::init(CONTACT_2D_EVENT_NAME, func);
 }
 
-void ContactEventListener2D::onEvent(EventCustom* event)
+void ContactEventListener2D::onEvent(CustomEvent* event)
 {
     ContactEvent2D* contactEvent = dynamic_cast<ContactEvent2D*>(event);
 

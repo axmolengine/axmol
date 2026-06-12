@@ -71,7 +71,7 @@ public:
         return table;
     }
 
-    virtual void onTouchEnded(Touch* touch, Event* event) override
+    void onPointerUp(PointerEvent* event) override
     {
         if (!this->isVisible())
         {
@@ -85,7 +85,7 @@ public:
             Rect bbox   = label->getBoundingBox();
             bbox.origin = _touchedCell->convertToWorldSpace(bbox.origin);
 
-            if (bbox.containsPoint(touch->getLocation()) && _tableViewDelegate != nullptr)
+            if (bbox.containsPoint(event->getLocation()) && _tableViewDelegate != nullptr)
             {
                 _tableViewDelegate->tableCellUnhighlight(this, _touchedCell);
                 _tableViewDelegate->tableCellTouched(this, _touchedCell);
@@ -94,16 +94,18 @@ public:
             _touchedCell = nullptr;
         }
 
-        ScrollView::onTouchEnded(touch, event);
+        ScrollView::onPointerUp(event);
     }
 
-    bool onMouseScroll(Event* event)
+    bool onPointerScroll(PointerEvent* event) override
     {
-        auto mouseEvent = static_cast<EventMouse*>(event);
-        float moveY     = mouseEvent->getScrollY() * 20;
+        float moveY = event->getScrollY() * 20;
 
         auto minOffset = this->minContainerOffset();
         auto maxOffset = this->maxContainerOffset();
+
+        if (minOffset.y >= maxOffset.y)
+            return true;
 
         auto offset = this->getContentOffset();
         offset.y += moveY;
@@ -119,14 +121,6 @@ public:
         this->setContentOffset(offset);
 
         return true;
-    }
-
-protected:
-    TestCustomTableView()
-    {
-        auto mouseListener           = EventListenerMouse::create();
-        mouseListener->onMouseScroll = AX_CALLBACK_1(TestCustomTableView::onMouseScroll, this);
-        _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
     }
 };
 
@@ -170,7 +164,7 @@ void TestList::runThisTest()
      * otherwise, the layout will incorrect
      */
 
-    RenderViewImpl* renderView = (RenderViewImpl*)Director::getInstance()->getRenderView();
+    RenderView* renderView = (RenderView*)Director::getInstance()->getRenderView();
 #if defined(AX_PLATFORM_GLFW)
     renderView->setWindowed(g_resourceSize.width, g_resourceSize.height);
 #endif
@@ -478,12 +472,12 @@ bool TestCase::init()
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_MAC || \
     AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
         // fullscreen toggle
-        EventListenerKeyboard* listener = EventListenerKeyboard::create();
-        listener->onKeyPressed          = [this](EventKeyboard::KeyCode code, Event* event) {
-            auto keyEvent   = static_cast<EventKeyboard*>(event);
-            auto renderView = static_cast<RenderViewImpl*>(_director->getRenderView());
+        KeyboardEventListener* listener = KeyboardEventListener::create();
+        listener->onKeyPressed          = [this](KeyboardEvent* event) {
+            auto keyEvent   = static_cast<KeyboardEvent*>(event);
+            auto renderView = static_cast<RenderView*>(_director->getRenderView());
             bool altPressed = renderView->isKeyPressed(GLFW_KEY_LEFT_ALT);
-            if (code == EventKeyboard::KeyCode::KEY_ENTER && !keyEvent->isRepeat())
+            if (altPressed && event->getKeyCode() == KeyboardEvent::KeyCode::KEY_ENTER)
             {
                 if (!renderView->isFullscreen())
                 {

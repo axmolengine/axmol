@@ -26,7 +26,7 @@
 
 #include "axmol/rhi/Buffer.h"
 #include "axmol/platform/GL.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 
 #include <vector>
 
@@ -91,7 +91,7 @@ private:
     void fillBuffer(const void* data, std::size_t offset, std::size_t size);
 
     bool _bufferAlreadyFilled                      = false;
-    EventListenerCustom* _backToForegroundListener = nullptr;
+    CustomEventListener* _backToForegroundListener = nullptr;
 #endif
     GLuint _buffer               = 0;
     std::size_t _bufferAllocated = 0;

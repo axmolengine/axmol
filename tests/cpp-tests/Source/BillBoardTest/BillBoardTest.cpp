@@ -111,8 +111,8 @@ std::string BillBoardRotationTest::subtitle() const
 BillBoardTest::BillBoardTest() : _camera(nullptr)
 {
     // Create touch listener
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = AX_CALLBACK_2(BillBoardTest::onTouchesMoved, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerMove = AX_CALLBACK_1(BillBoardTest::onPointerMove, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto layer3D = Layer::create();
@@ -274,13 +274,11 @@ void BillBoardTest::addNewAniBillBoardWithCoords(Vec3 p)
 }
 void BillBoardTest::update(float dt) {}
 
-void BillBoardTest::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
+void BillBoardTest::onPointerMove(PointerEvent* event)
 {
-    if (touches.size() == 1)
     {
-        auto touch            = touches[0];
-        auto location         = touch->getLocation();
-        auto PreviousLocation = touch->getPreviousLocation();
+        auto location         = event->getLocation();
+        auto PreviousLocation = event->getPreviousLocation();
         Point newPos          = PreviousLocation - location;
 
         Vec3 cameraDir;

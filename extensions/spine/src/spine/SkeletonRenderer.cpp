@@ -892,7 +892,7 @@ namespace spine {
 			float hSizeY = rect.size.height / 2;
 			Vec3 v3p(rect.origin.x + hSizeX, rect.origin.y + hSizeY, 0);
 			transform.transformPoint(&v3p);
-			Vec2 v2p = Camera::getVisitingCamera()->projectGL(v3p);
+			Vec2 v2p = Camera::getVisitingCamera()->projectWorldToCanvas(v3p);
 
 			// convert content size to world coordinates
 			float wshw = std::max(fabsf(hSizeX * transform.m[0] + hSizeY * transform.m[4]), fabsf(hSizeX * transform.m[0] - hSizeY * transform.m[4]));

@@ -203,7 +203,7 @@ WebSocket::WebSocket() : _isDestroyed(std::make_shared<std::atomic<bool>>(false)
 
     std::shared_ptr<std::atomic<bool>> isDestroyed = _isDestroyed;
     _resetDirectorListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(
-        Director::EVENT_RESET, [this, isDestroyed](EventCustom*) {
+        Director::EVENT_RESET, [this, isDestroyed](CustomEvent*) {
         if (*isDestroyed)
             return;
         close();

@@ -87,12 +87,12 @@ Box2DTestBedTests::Box2DTestBedTests()
     s_context.camera.zoom   = 80;
     s_context.camera.center = b2Vec2_zero;
 
-    s_context.window = static_cast<RenderViewImpl*>(Director::getInstance()->getRenderView())->getWindow();
+    s_context.window = static_cast<RenderView*>(Director::getInstance()->getRenderView())->getWindow();
 
     s_context.Load();
 
 #if defined(AX_PLATFORM_GLFW)
-    static_cast<RenderViewImpl*>(Director::getInstance()->getRenderView())
+    static_cast<RenderView*>(Director::getInstance()->getRenderView())
         ->setWindowed(s_context.camera.width, s_context.camera.height);
 #endif
 
@@ -118,7 +118,7 @@ Box2DTestBed::Box2DTestBed()
 Box2DTestBed::~Box2DTestBed()
 {
     _eventDispatcher->removeEventListener(_keyboardListener);
-    _eventDispatcher->removeEventListener(_mouseListener);
+    _eventDispatcher->removeEventListener(_pointerListener);
 
     AX_SAFE_DELETE(_sampleDrawProxy);
 }
@@ -159,38 +159,37 @@ bool Box2DTestBed::initWithEntryIndex(int index)
     label->setPosition(visibleOrigin.x + visibleSize.width / 2, visibleOrigin.y + visibleSize.height - 50);
 
     // Adds Keyboard event listener
-    _keyboardListener                = EventListenerKeyboard::create();
-    _keyboardListener->onKeyPressed  = AX_CALLBACK_2(Box2DTestBed::onKeyPressed, this);
-    _keyboardListener->onKeyReleased = AX_CALLBACK_2(Box2DTestBed::onKeyReleased, this);
+    _keyboardListener                = KeyboardEventListener::create();
+    _keyboardListener->onKeyPressed  = AX_CALLBACK_1(Box2DTestBed::onKeyPressed, this);
+    _keyboardListener->onKeyReleased = AX_CALLBACK_1(Box2DTestBed::onKeyReleased, this);
     _eventDispatcher->addEventListenerWithFixedPriority(_keyboardListener, 11);
 
-    _mouseListener                = EventListenerMouse::create();
-    _mouseListener->onMouseMove   = AX_CALLBACK_1(Box2DTestBed::onMouseMove, this);
-    _mouseListener->onMouseUp     = AX_CALLBACK_1(Box2DTestBed::onMouseUp, this);
-    _mouseListener->onMouseDown   = AX_CALLBACK_1(Box2DTestBed::onMouseDown, this);
-    _mouseListener->onMouseScroll = AX_CALLBACK_1(Box2DTestBed::onMouseScroll, this);
-    _eventDispatcher->addEventListenerWithFixedPriority(_mouseListener, 12);
+    _pointerListener                  = PointerEventListener::create();
+    _pointerListener->onPointerMove   = AX_CALLBACK_1(Box2DTestBed::onPointerMove, this);
+    _pointerListener->onPointerUp     = AX_CALLBACK_1(Box2DTestBed::onPointerUp, this);
+    _pointerListener->onPointerDown   = AX_CALLBACK_1(Box2DTestBed::onPointerDown, this);
+    _pointerListener->onPointerScroll = AX_CALLBACK_1(Box2DTestBed::onPointerScroll, this);
+    _eventDispatcher->addEventListenerWithFixedPriority(_pointerListener, 12);
 
     return true;
 }
 
-void Box2DTestBed::onKeyPressed(EventKeyboard::KeyCode code, Event* event)
+void Box2DTestBed::onKeyPressed(KeyboardEvent* event)
 {
     // AXLOGD("onKeyPressed, keycode: {}", static_cast<int>(code));
     // m_sample->Keyboard((static_cast<int>(code) - 59));  // its a bad hack!
 }
 
-void Box2DTestBed::onKeyReleased(EventKeyboard::KeyCode code, Event* event)
+void Box2DTestBed::onKeyReleased(KeyboardEvent* event)
 {
-    AXLOGD("onKeyPressed, keycode: {}", static_cast<int>(code));
+    auto keyCode = static_cast<int>(event->getKeyCode());
+    AXLOGD("onKeyPressed, keycode: {}", keyCode);
     // m_sample->KeyboardUp((static_cast<int>(code) - 59));  // its a bad hack!
-    m_sample->Keyboard((static_cast<int>(code) - 59));
+    m_sample->Keyboard(keyCode - 59);
 }
 
-bool Box2DTestBed::onMouseDown(Event* event)
+bool Box2DTestBed::onPointerDown(PointerEvent* e)
 {
-    EventMouse* e = static_cast<EventMouse*>(event);
-
     auto location = e->getLocation() - _debugDrawNode->getWorldOffset();
     b2Vec2 pos    = {location.x / _debugDrawNode->getPTMRatio(), location.y / _debugDrawNode->getPTMRatio()};
 
@@ -207,43 +206,38 @@ bool Box2DTestBed::onMouseDown(Event* event)
     _mouseDownPos    = pos;
     _dragingStartPos = _debugDrawNode->getPosition();
 
-    m_sample->MouseDown(pos, static_cast<int>(e->getMouseButton()), mods);
+    m_sample->MouseDown(pos, static_cast<int>(e->getButton()), mods);
 
     return true;
 }
 
-bool Box2DTestBed::onMouseUp(Event* event)
+bool Box2DTestBed::onPointerUp(PointerEvent* ev)
 {
     const auto ratio = _debugDrawNode->getPTMRatio();
     _draging         = false;
-    EventMouse* e    = static_cast<EventMouse*>(event);
-    auto location    = e->getLocation() - _debugDrawNode->getWorldOffset();
+    auto location    = ev->getLocation() - _debugDrawNode->getWorldOffset();
     b2Vec2 pos       = {location.x / ratio, location.y / ratio};
-    m_sample->MouseUp(pos, static_cast<int>(e->getMouseButton()));
+    m_sample->MouseUp(pos, static_cast<int>(ev->getButton()));
     return true;
 }
 
-bool Box2DTestBed::onMouseMove(Event* event)
+void Box2DTestBed::onPointerMove(PointerEvent* ev)
 {
     const auto ratio = _debugDrawNode->getPTMRatio();
-    EventMouse* e    = static_cast<EventMouse*>(event);
-
-    auto location = e->getLocation() - _debugDrawNode->getWorldOffset();
+    auto location    = ev->getLocation() - _debugDrawNode->getWorldOffset();
     b2Vec2 pos{location.x / ratio, location.y / ratio};
     m_sample->MouseMove(pos);
 
-    if (e->getMouseButton() == EventMouse::MouseButton::BUTTON_RIGHT)
+    if (ev->isButtonPressed(InputButton::Right))
     {
         auto diff = b2Sub(pos, _mouseDownPos);
         _debugDrawNode->setPosition(_dragingStartPos.x + diff.x, _dragingStartPos.y + diff.y);
     }
-    return true;
 }
 
-bool Box2DTestBed::onMouseScroll(Event* event)
+bool Box2DTestBed::onPointerScroll(PointerEvent* ev)
 {
-    EventMouse* e = (EventMouse*)event;
-    _debugDrawNode->setPTMRatio(_debugDrawNode->getPTMRatio() - e->getScrollY());
+    _debugDrawNode->setPTMRatio(_debugDrawNode->getPTMRatio() - ev->getScrollY());
     return true;
 }
 

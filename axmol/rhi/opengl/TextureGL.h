@@ -27,7 +27,7 @@
 
 #include "axmol/rhi/Texture.h"
 #include "axmol/platform/GL.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 
 #include "axmol/rhi/opengl/OpenGLState.h"
 

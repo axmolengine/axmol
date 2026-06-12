@@ -186,10 +186,10 @@ namespace spine {
         // callback after drawing is finished so we can clear out the batch state
         // for the next frame
         _event1 = eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_DRAW,
-                                                [](EventCustom*) { s_TwoColorInstance->update(0); });
+                                                [](CustomEvent*) { s_TwoColorInstance->update(0); });
 
         _event2 = eventDispatcher->addCustomEventListener(Director::EVENT_DESTROY,
-                                                [](EventCustom*) { SkeletonTwoColorBatch::destroyInstance(); });
+                                                [](CustomEvent*) { SkeletonTwoColorBatch::destroyInstance(); });
 	}
 
 	SkeletonTwoColorBatch::~SkeletonTwoColorBatch() {

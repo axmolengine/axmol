@@ -1,15 +1,13 @@
-
-
 #include "sceneio/WidgetReader/WidgetReader.h"
 
 #include "sceneext/CocoLoader.h"
-#include "axmol/ui/UIButton.h"
+#include "axmol/ui/Button.h"
 #include "sceneext/ActionTimeline/ActionTimeline.h"
 #include "sceneext/ComExtensionData.h"
 #include "sceneio/CSParseBinary_generated.h"
 
 #include "flatbuffers/flatbuffers.h"
-#include "axmol/ui/UILayoutComponent.h"
+#include "axmol/ui/LayoutComponent.h"
 #include "sceneio/ActionTimeline/CSLoader.h"
 #include "axmol/base/Utils.h"
 #include "axmol/base/Director.h"
@@ -136,7 +134,7 @@ void WidgetReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson::V
     bool ignoreSizeExsit = DICTOOL->checkObjectExist_json(options, P_IgnoreSize);
     if (ignoreSizeExsit)
     {
-        widget->ignoreContentAdaptWithSize(DICTOOL->getBooleanValue_json(options, P_IgnoreSize));
+        widget->setAutoSize(DICTOOL->getBooleanValue_json(options, P_IgnoreSize));
     }
 
     widget->setSizeType((Widget::SizeType)DICTOOL->getIntValue_json(options, P_SizeType));
@@ -283,7 +281,7 @@ void WidgetReader::endSetBasicProperties(Widget* widget)
     }
     widget->setColor(_color);
     // the setSize method will be conflict with scale9Width & scale9Height
-    if (!widget->isIgnoreContentAdaptWithSize())
+    if (!widget->isAutoSize())
     {
         widget->setContentSize(Size(_width, _height));
     }
@@ -772,13 +770,8 @@ void WidgetReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
 
     widget->setAnchorPoint(Vec2::ZERO);
 
-    widget->setUnifySizeEnabled(true);
-    bool ignoreSize = options->ignoreSize() != 0;
-    widget->ignoreContentAdaptWithSize(ignoreSize);
-
-    widget->setUnifySizeEnabled(false);
+    widget->setAutoSize(!options->ignoreSize());
     widget->setLayoutComponentEnabled(true);
-    widget->ignoreContentAdaptWithSize(false);
     Size contentSize(options->size()->width(), options->size()->height());
     widget->setContentSize(contentSize);
 

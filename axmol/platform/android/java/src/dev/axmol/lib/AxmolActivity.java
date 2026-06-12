@@ -162,7 +162,7 @@ public abstract class AxmolActivity extends AppCompatActivity implements AxmolEn
         this.hideVirtualButton();
 
         // Input mode
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN | WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         onLoadNativeLibraries();
 
@@ -240,6 +240,8 @@ public abstract class AxmolActivity extends AppCompatActivity implements AxmolEn
     public void onWindowFocusChanged(boolean hasFocus) {
         Log.i(TAG, "onWindowFocusChanged() hasFocus=" + hasFocus);
         super.onWindowFocusChanged(hasFocus);
+
+        runOnAxmolThread(() -> AxmolPlayer.nativeOnWindowFocusChanged(hasFocus));
     }
 
     @Override

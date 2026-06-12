@@ -78,8 +78,8 @@ class Scene3DTestScene : public TestCase
 public:
     CREATE_FUNC(Scene3DTestScene);
 
-    bool onTouchBegan(Touch* touch, ax::Event* event) { return true; }
-    void onTouchEnd(Touch*, ax::Event*);
+    bool onPointerDown(ax::PointerEvent* event);
+    void onPointerUp(ax::PointerEvent*);
 
 private:
     Scene3DTestScene();
@@ -207,6 +207,13 @@ static const char* s_CameraNames[CAMERA_COUNT] = {"World 3D Skybox", "World 3D S
                                                   "Dialog 2D Base",  "Dialog 3D Model", "Dialog 2D Above",
                                                   "OSD 2D Base",     "OSD 3D Model",    "OSD 2D Above"};
 
+static int8_t cameraDepth(GAME_CAMERAS_ORDER camera)
+{
+    // The scene default camera resets to depth 0 after projection changes, such as window resize.
+    // Keep the world cameras before it and overlay/dialog cameras after it.
+    return static_cast<int8_t>(camera - CAMERA_UI_2D);
+}
+
 /** The scenes, located in different position, won't see each other. */
 static Vec3 s_scenePositons[SCENE_COUNT] = {
     Vec3(0, 0, 0),       //  center  :   UI scene
@@ -262,7 +269,7 @@ bool Scene3DTestScene::init()
         // create a camera to look the skybox
         ca = _gameCameras[CAMERA_WORLD_3D_SKYBOX] =
             Camera::createPerspective(60, visibleSize.width / visibleSize.height, 10, 1000);
-        ca->setDepth(CAMERA_WORLD_3D_SKYBOX);
+        ca->setDepth(cameraDepth(CAMERA_WORLD_3D_SKYBOX));
         ca->setName(s_CameraNames[CAMERA_WORLD_3D_SKYBOX]);
         ca->setCameraFlag(s_CF[LAYER_BACKGROUND]);
         ca->setPosition3D(Vec3(0.f, 0.f, 50.f));
@@ -270,7 +277,7 @@ bool Scene3DTestScene::init()
         // create a camera to look the 3D models in world 3D scene
         ca = _gameCameras[CAMERA_WORLD_3D_SCENE] =
             Camera::createPerspective(60, visibleSize.width / visibleSize.height, 0.1f, 200);
-        ca->setDepth(CAMERA_WORLD_3D_SCENE);
+        ca->setDepth(cameraDepth(CAMERA_WORLD_3D_SCENE));
         ca->setName(s_CameraNames[CAMERA_WORLD_3D_SCENE]);
         _worldScene->addChild(ca);
         // create 3D objects and add to world scene
@@ -290,7 +297,7 @@ bool Scene3DTestScene::init()
         // test scene is UI scene, use default camera
         // use the default camera to look 2D base UI layer
         ca = _gameCameras[CAMERA_UI_2D] = this->getDefaultCamera();
-        ca->setDepth(CAMERA_UI_2D);
+        ca->setDepth(cameraDepth(CAMERA_UI_2D));
         ca->setName(s_CameraNames[CAMERA_UI_2D]);
         // create UI element and add to ui scene
         createUI();
@@ -301,18 +308,18 @@ bool Scene3DTestScene::init()
         _dlgScene = Node::create();
         // use default camera to render the base 2D elements
         ca = _gameCameras[CAMERA_DIALOG_2D_BASE] = Camera::create();
-        ca->setDepth(CAMERA_DIALOG_2D_BASE);
+        ca->setDepth(cameraDepth(CAMERA_DIALOG_2D_BASE));
         ca->setName(s_CameraNames[CAMERA_DIALOG_2D_BASE]);
         _dlgScene->addChild(ca);
         // create a camera to look the 3D model in dialog scene
         ca = _gameCameras[CAMERA_DIALOG_3D_MODEL] = Camera::create();
-        ca->setDepth(CAMERA_DIALOG_3D_MODEL);
+        ca->setDepth(cameraDepth(CAMERA_DIALOG_3D_MODEL));
         ca->setName(s_CameraNames[CAMERA_DIALOG_3D_MODEL]);
         ca->setCameraFlag(s_CF[LAYER_MIDDLE]);
         _dlgScene->addChild(ca);
         // create a camera to look the UI element over on the 3D models
         ca = _gameCameras[CAMERA_DIALOG_2D_ABOVE] = Camera::create();
-        ca->setDepth(CAMERA_DIALOG_2D_ABOVE);
+        ca->setDepth(cameraDepth(CAMERA_DIALOG_2D_ABOVE));
         ca->setName(s_CameraNames[CAMERA_DIALOG_2D_ABOVE]);
         ca->setCameraFlag(s_CF[LAYER_TOP]);
         _dlgScene->addChild(ca);
@@ -330,18 +337,18 @@ bool Scene3DTestScene::init()
         _osdScene = Node::create();
         // use default camera for render 2D element
         ca = _gameCameras[CAMERA_OSD_2D_BASE] = Camera::create();
-        ca->setDepth(CAMERA_OSD_2D_BASE);
+        ca->setDepth(cameraDepth(CAMERA_OSD_2D_BASE));
         ca->setName(s_CameraNames[CAMERA_OSD_2D_BASE]);
         _osdScene->addChild(ca);
         // create a camera to look the 3D model in dialog scene
         ca = _gameCameras[CAMERA_OSD_3D_MODEL] = Camera::create();
-        ca->setDepth(CAMERA_OSD_3D_MODEL);
+        ca->setDepth(cameraDepth(CAMERA_OSD_3D_MODEL));
         ca->setName(s_CameraNames[CAMERA_OSD_3D_MODEL]);
         ca->setCameraFlag(s_CF[LAYER_MIDDLE]);
         _osdScene->addChild(ca);
         // create a camera to look the UI element over on the 3D models
         ca = _gameCameras[CAMERA_OSD_2D_ABOVE] = Camera::create();
-        ca->setDepth(CAMERA_OSD_2D_ABOVE);
+        ca->setDepth(cameraDepth(CAMERA_OSD_2D_ABOVE));
         ca->setName(s_CameraNames[CAMERA_OSD_2D_ABOVE]);
         ca->setCameraFlag(s_CF[LAYER_TOP]);
         _osdScene->addChild(ca);
@@ -358,9 +365,10 @@ bool Scene3DTestScene::init()
 
         ////////////////////////////////////////////////////////////////////////
         // add touch event callback
-        auto listener          = EventListenerTouchOneByOne::create();
-        listener->onTouchBegan = AX_CALLBACK_2(Scene3DTestScene::onTouchBegan, this);
-        listener->onTouchEnded = AX_CALLBACK_2(Scene3DTestScene::onTouchEnd, this);
+        auto listener              = PointerEventListener::create();
+        listener->onPointerHitTest = [](PointerEvent*, const Camera*, Vec3*) { return true; };
+        listener->onPointerDown    = AX_CALLBACK_1(Scene3DTestScene::onPointerDown, this);
+        listener->onPointerUp      = AX_CALLBACK_1(Scene3DTestScene::onPointerUp, this);
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
         scheduleUpdate();
@@ -740,7 +748,7 @@ void Scene3DTestScene::createDescDlg()
 
     // first, create dialog, add title and description text on it
     // use Layout, which setTouchEnabled(true), as background, it will swallow touch event
-    auto desdDlg = ui::Layout::create();
+    auto desdDlg = ui::LayoutGroup::create();
     desdDlg->setBackGroundImageScale9Enabled(true);
     desdDlg->setBackGroundImage("button_actived.png", ui::Widget::TextureResType::PLIST);
     desdDlg->setContentSize(dlgSize);
@@ -872,34 +880,36 @@ void Scene3DTestScene::createDescDlg()
     }
 }
 
-void Scene3DTestScene::onTouchEnd(Touch* touch, ax::Event* event)
+bool Scene3DTestScene::onPointerDown(ax::PointerEvent* event)
 {
-    auto location = touch->getLocation();
-    auto camera   = _gameCameras[CAMERA_WORLD_3D_SCENE];
-    if (camera != Camera::getVisitingCamera())
+    return event->isPrimaryPressed();
+}
+
+void Scene3DTestScene::onPointerUp(ax::PointerEvent* event)
+{
+    // 1. Get the 2D world coordinate on the Z=0 plane directly from the rectified Touch API
+    auto screenLocation = event->getScreenLocation();
+    auto camera         = _gameCameras[CAMERA_WORLD_3D_SCENE];
+    if (!camera || !camera->isVisible() || !_terrain)
     {
         return;
     }
 
     if (_player)
     {
-        Vec3 nearP(location.x, location.y, 0.0f), farP(location.x, location.y, 1.0f);
-        // convert screen touch location to the world location on near and far plane
-        auto size = Director::getInstance()->getCanvasSize();
-        camera->unprojectGL(size, &nearP, &nearP);
-        camera->unprojectGL(size, &farP, &farP);
-        Vec3 dir = farP - nearP;
-        dir.normalize();
+        auto ray = camera->screenToRay(screenLocation);
+
+        // 4. Perform the pure 3D ray-terrain intersection check (unchanged)
         Vec3 collisionPoint;
-        bool isInTerrain = _terrain->getIntersectionPoint(Ray(nearP, dir), collisionPoint);
+        bool isInTerrain = _terrain->getIntersectionPoint(ray, collisionPoint);
         if (!isInTerrain)
         {
             _player->idle();
         }
         else
         {
-            dir   = collisionPoint - _player->getPosition3D();
-            dir.y = 0;
+            auto dir = collisionPoint - _player->getPosition3D();
+            dir.y    = 0;
             dir.normalize();
             _player->_headingAngle = -1 * acos(dir.dot(Vec3(0, 0, -1)));
             Vec3::cross(dir, Vec3(0, 0, -1), &_player->_headingAxis);

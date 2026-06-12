@@ -80,7 +80,7 @@ bool UITextTest_LineWrap::init()
 
         // Create the line wrap
         Text* text = Text::create("TextArea Widget can line wrap", "AmericanTypewriter", 32);
-        text->ignoreContentAdaptWithSize(false);
+        text->setAutoSize(true);
         text->setContentSize(Size(280.0f, 150.0f));
         text->setTextHorizontalAlignment(TextHAlignment::CENTER);
         text->setTouchScaleChangeEnabled(true);
@@ -225,7 +225,7 @@ bool UITextTest_IgnoreContentSize::init()
 
         Text* leftText = Text::create("ignore content", "fonts/Marker Felt.ttf", 10);
         leftText->setPosition(Vec2(widgetSize.width / 2.0f - 50, widgetSize.height / 2.0f));
-        leftText->ignoreContentAdaptWithSize(false);
+        leftText->setAutoSize(true);
         leftText->setTextAreaSize(Size(60.0f, 60.0f));
         leftText->setString("Text line with break\nText line with break\nText line with break\nText line with break\n");
         leftText->setTouchScaleChangeEnabled(true);
@@ -238,7 +238,7 @@ bool UITextTest_IgnoreContentSize::init()
             "Text line with break\nText line with break\nText line with break\nText line with break\n");
         // note:setTextAreaSize must be used with ignoreContentAdaptWithSize(false)
         rightText->setTextAreaSize(Size(100.0f, 30.0f));
-        rightText->ignoreContentAdaptWithSize(false);
+        rightText->setAutoSize(true);
         _uiLayer->addChild(rightText);
 
         auto halighButton = Button::create();

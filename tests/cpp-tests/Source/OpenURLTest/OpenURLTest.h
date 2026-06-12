@@ -37,7 +37,7 @@ public:
     OpenURLTest();
     ~OpenURLTest();
 
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
 
 private:
     ax::Label* _label;

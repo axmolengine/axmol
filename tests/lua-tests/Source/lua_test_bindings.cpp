@@ -185,7 +185,7 @@ bool DrawNode3D::init()
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     // Need to listen the event only when not use batchnode, because it will use VBO
-    auto listener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom* event) {
+    auto listener = CustomEventListener::create(EVENT_COME_TO_FOREGROUND, [this](CustomEvent* event) {
         /** listen the event that coming to foreground on Android */
         this->init();
     });

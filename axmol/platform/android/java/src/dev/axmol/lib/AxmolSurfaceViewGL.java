@@ -25,6 +25,7 @@ package dev.axmol.lib;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.inputmethod.EditorInfo;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -44,7 +45,6 @@ public class AxmolSurfaceViewGL extends dev.axmol.lib.GLSurfaceView {
         super(player.getContext());
         init(player);
     }
-
     private void init(AxmolPlayer player) {
         mPlayer = player;
 
@@ -75,6 +75,27 @@ public class AxmolSurfaceViewGL extends dev.axmol.lib.GLSurfaceView {
 
         // Use continuous rendering mode
         setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+    }
+
+    /**
+     * Expressly inform the Android IMF that this Player container functions as a text editor,
+     * which is absolutely mandatory if we do not rely on an internal EditText instance.
+     */
+    @Override
+    public boolean onCheckIsTextEditor() {
+        return mPlayer != null;
+    }
+
+    /**
+     * Intercepted by Android OS when showSoftInput() is requested.
+     * Injects custom input connection and disables landscape fullscreen mode.
+     */
+    @Override
+    public AxmolInputConnection onCreateInputConnection(EditorInfo outAttrs) {
+        if (mPlayer != null) {
+            return mPlayer.createInputConnection(this, outAttrs);
+        }
+        return null;
     }
 
     private class AxmolEGLConfigChooser implements GLSurfaceView.EGLConfigChooser {

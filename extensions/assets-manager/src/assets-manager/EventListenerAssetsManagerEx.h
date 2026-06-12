@@ -26,7 +26,7 @@
 #pragma once
 
 #include "axmol/base/EventListener.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
 
@@ -49,7 +49,7 @@ class AssetsManagerEx;
  *
  *        dispatcher->removeEventListener(listener);
  */
-class AX_EXT_API EventListenerAssetsManagerEx : public ax::EventListenerCustom
+class AX_EXT_API EventListenerAssetsManagerEx : public ax::CustomEventListener
 {
 public:
     friend class AssetsManagerEx;

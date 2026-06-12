@@ -131,7 +131,7 @@ void LAppView::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
 
     if (touchNum == 1)
     {
-        Point pt = touches[0]->getLocationInView();
+        Point pt = touches[0]->getScreenLocation();
         if (DebugTouchLogEnable)LAppPal::PrintLog("[APP]touchesBegan x:%.0f y:%.0f", pt.x, pt.y);
         touchMgr->touchesBegan(pt.x, pt.y);
     }
@@ -149,7 +149,7 @@ void LAppView::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
 
     if (touchNum == 1)
     {
-        Point pt = touches[0]->getLocationInView();
+        Point pt = touches[0]->getScreenLocation();
 
         if (DebugTouchLogEnable)
             LAppPal::PrintLog("[APP]touchesMoved device{x:%.0f y:%.0f} screen{x:%.2f y:%.2f} view{x:%.2f y:%.2f}", pt.x, pt.y, screenX, screenY, viewX, viewY);

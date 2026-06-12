@@ -37,14 +37,14 @@ local player = {
     end,
 
     onEnter = function(self)
-        local function onTouchesEnded(touches, event)
-            local location = touches[1]:getLocation()
+        local function onTouchesEnded(event)
+            local location = event:getLocation()
             self:generateProjectile(location.x, location.y)
             ax.AudioEngine:play2d("pew-pew-lei.wav")
         end
 
-        local listener = ax.EventListenerTouchAllAtOnce:create()
-        listener:registerScriptHandler(onTouchesEnded, ax.Handler.EVENT_TOUCHES_ENDED)
+        local listener = ax.PointerEventListener:create()
+        listener:registerScriptHandler(onTouchesEnded, ax.Handler.EVENT_POINTER_UP)
         local eventDispatcher = ax.Director:getInstance():getEventDispatcher()
         eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self:getOwner())
     end,

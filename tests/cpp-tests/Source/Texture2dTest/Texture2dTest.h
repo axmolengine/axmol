@@ -58,7 +58,7 @@ public:
     virtual std::string subtitle() const override;
 
     void addNewSpriteWithCoords(ax::Vec2 p);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
 
     ax::Node* _background;
 };
@@ -73,7 +73,7 @@ public:
     virtual std::string subtitle() const override;
 
     void addNewSpriteWithCoords();
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
 
     ax::Node* _background;
 };
@@ -87,7 +87,7 @@ public:
     virtual std::string subtitle() const override;
 
     void addNewSpriteWithCoords(ax::Vec2 p);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
 };
 
 class TextureTGA : public TextureDemo

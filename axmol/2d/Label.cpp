@@ -42,14 +42,15 @@
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/RenderCommand.h"
 #include "axmol/base/Director.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/base/EventCustom.h"
+#include "axmol/base/CustomEvent.h"
 #include "axmol/base/Utils.h"
 #include "axmol/2d/FontFNT.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/renderer/ProgramStateRegistry.h"
+#include "yasio/tlx/string_view.hpp"
 
 namespace ax
 {
@@ -227,9 +228,29 @@ std::array<CustomCommand*, 3> Label::BatchCommand::getCommandArray()
 
 Label* Label::create()
 {
-    auto ret = new Label;
+    auto ret = new Label();
     ret->autorelease();
     return ret;
+}
+
+Label* Label::create(std::string_view text, std::string_view fontName, float fontSize)
+{
+    if (FileUtils::getInstance()->isFileExist(fontName))
+    {
+        if (tlx::ic::ends_with(fontName, ".fnt"))
+        {
+            return Label::createWithBMFont(fontName, text);
+        }
+        else
+        {
+            TTFConfig config(fontName, fontSize);
+            return Label::createWithTTF(config, text);
+        }
+    }
+    else
+    {
+        return Label::createWithSystemFont(text, fontName, fontSize);
+    }
 }
 
 Label* Label::createWithSystemFont(std::string_view text,
@@ -392,6 +413,31 @@ Label* Label::createWithCharMap(std::string_view charMapFile, int itemWidth, int
     return nullptr;
 }
 
+void Label::setFontInfo(std::string_view fontName, float fontSize)
+{
+    auto prevLableType = _currentLabelType;
+    if (FileUtils::getInstance()->isFileExist(fontName))
+    {
+        if (tlx::ic::ends_with(fontName, ".fnt"sv))
+        {
+            setBMFontFilePath(fontName);
+        }
+        else
+        {
+            TTFConfig ttfConfig(fontName, fontSize, GlyphCollection::DYNAMIC);
+            setTTFConfig(ttfConfig);
+        }
+    }
+    else
+    {
+        setSystemFontName(fontName);
+        setSystemFontSize(fontSize);
+
+        if (prevLableType == LabelType::STRING_TEXTURE)
+            requestSystemFontRefresh();
+    }
+}
+
 bool Label::setCharMap(std::string_view plistFile)
 {
     auto newAtlas = FontAtlasCache::getFontAtlasCharMap(plistFile);
@@ -496,7 +542,7 @@ Label::Label(TextHAlignment hAlignment /* = TextHAlignment::LEFT */,
     AX_SAFE_RETAIN(_debugDrawNode);
 #endif
 
-    _resetTextureListener = EventListenerCustom::create(FontAtlas::CMD_RESET_FONTATLAS, [this](EventCustom* event) {
+    _resetTextureListener = CustomEventListener::create(FontAtlas::CMD_RESET_FONTATLAS, [this](CustomEvent* event) {
         if (_fontAtlas && _currentLabelType == LabelType::TTF && event->getUserData() == _fontAtlas)
         {
             for (auto&& it : _letters)
@@ -569,7 +615,6 @@ void Label::reset()
     _currLabelEffect  = LabelEffect::NORMAL;
     _contentDirty     = false;
     _numberOfLines    = 0;
-    _lengthOfString   = 0;
     _utf32Text.clear();
     _utf8Text.clear();
 
@@ -907,15 +952,19 @@ bool Label::setBMFontFilePath(std::string_view bmfontFilePath, std::string_view 
 
 void Label::setString(std::string_view text)
 {
-    if (text.compare(_utf8Text))
+    if (text != _utf8Text)
     {
-        _utf8Text     = text;
-        _contentDirty = true;
-
         std::u32string utf32String;
-        if (text_utils::UTF8ToUTF32(_utf8Text, utf32String))
+        if (text_utils::UTF8ToUTF32(text, utf32String))
         {
+            _utf8Text  = text;
             _utf32Text = utf32String;
+
+            _contentDirty = true;
+        }
+        else
+        {
+            AXLOGE("Label: setString() - Invalid utf8 text: {}", text);
         }
     }
 }
@@ -1006,7 +1055,7 @@ void Label::updateLabelLetters()
             letterIndex  = it->first;
             letterSprite = (LabelLetter*)it->second;
 
-            if (letterIndex >= _lengthOfString)
+            if (letterIndex >= getCharCount())
             {
                 Node::removeChild(letterSprite, true);
                 it = _letters.erase(it);
@@ -1102,7 +1151,6 @@ void Label::alignText()
 
 bool Label::tryTextPlacement(float fontSize)
 {
-    _lengthOfString    = 0;
     _textDesiredHeight = 0.f;
     _linesWidth.clear();
 
@@ -1212,7 +1260,7 @@ bool Label::updateQuads()
         batchNode->getTextureAtlas()->removeAllQuads();
     }
 
-    for (int ctr = 0; ctr < _lengthOfString; ++ctr)
+    for (int ctr = 0; ctr < getCharCount(); ++ctr)
     {
         auto& letterInfo = _lettersInfo[ctr];
         if (letterInfo.valid)
@@ -2066,7 +2114,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
 
 void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-    if (_batchNodes.empty() || _lengthOfString <= 0)
+    if (_batchNodes.empty() || _utf32Text.empty())
     {
         return;
     }
@@ -2297,7 +2345,7 @@ Sprite* Label::getLetter(int letterIndex)
             updateContent();
         }
 
-        if (_textSprite == nullptr && letterIndex < _lengthOfString)
+        if (_textSprite == nullptr && letterIndex < getCharCount())
         {
             const auto& letterInfo = _lettersInfo[letterIndex];
             if (!letterInfo.valid || letterInfo.atlasIndex < 0)
@@ -2424,25 +2472,24 @@ void Label::computeStringNumLines()
     _numberOfLines = quantityOfLines;
 }
 
-int Label::getStringNumLines()
+int Label::getLineCount() const
 {
     if (_contentDirty)
     {
-        updateContent();
+        const_cast<Label*>(this)->updateContent();
     }
 
     if (_currentLabelType == LabelType::STRING_TEXTURE)
     {
-        computeStringNumLines();
+        const_cast<Label*>(this)->computeStringNumLines();
     }
 
     return _numberOfLines;
 }
 
-int Label::getStringLength()
+int Label::getCharCount() const
 {
-    _lengthOfString = static_cast<int>(_utf32Text.length());
-    return _lengthOfString;
+    return static_cast<int>(_utf32Text.length());
 }
 
 // RGBA protocol
@@ -2901,7 +2948,7 @@ void Label::updateFontScale()
 
 bool Label::multilineTextWrap(bool breakOnChar, bool ignoreOverflow)
 {
-    int textLen               = getStringLength();
+    int textLen               = getCharCount();
     int lineIndex             = 0;
     float nextTokenX          = 0.f;
     float nextTokenY          = 0.f;
@@ -3119,7 +3166,7 @@ bool Label::isHorizontalClamp()
 {
     bool letterClamp = false;
 
-    for (int ctr = 0; ctr < _lengthOfString; ++ctr)
+    for (int ctr = 0; ctr < getCharCount(); ++ctr)
     {
         if (_lettersInfo[ctr].valid)
         {

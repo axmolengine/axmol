@@ -33,7 +33,7 @@
 #include <span>
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/base/Object.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/rhi/Program.h"
 #include "axmol/renderer/VertexLayoutManager.h"
@@ -340,7 +340,7 @@ protected:
     uint64_t _batchId = -1;
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    EventListenerCustom* _backToForegroundListener{nullptr};
+    CustomEventListener* _backToForegroundListener{nullptr};
 #endif
 
     bool _isBatchable = false;

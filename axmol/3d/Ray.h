@@ -100,8 +100,8 @@ public:
      */
     void transform(const Mat4& matrix);
 
-    Vec3 _origin;     // The ray origin position.
-    Vec3 _direction;  // The ray direction vector.
+    Vec3 origin;     // The ray origin position.
+    Vec3 direction;  // The ray direction vector.
 };
 
 // end of 3d group

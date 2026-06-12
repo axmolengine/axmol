@@ -51,9 +51,8 @@
 #include "axmol/2d/FastTMXTiledMap.h"
 #include "axmol/2d/RenderTexture.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/base/EventListenerKeyboard.h"
-#include "axmol/base/EventListenerMouse.h"
-#include "axmol/base/EventListenerTouch.h"
+#include "axmol/base/KeyboardEventListener.h"
+#include "axmol/base/PointerEventListener.h"
 #include "axmol/base/Properties.h"
 #include "axmol/base/Scheduler.h"
 #include "axmol/base/UserDefault.h"
@@ -3676,28 +3675,28 @@ static void extendSpriteBatchNode(lua_State* tolua_S)
 
 namespace ax
 {
-EventListenerAcceleration* LuaEventListenerAcceleration::create()
+AccelerationEventListener* LuaAccelerationEventListener::create()
 {
-    EventListenerAcceleration* eventAcceleration = new EventListenerAcceleration();
-    if (eventAcceleration->init([=](Acceleration* acc, Event* event) {
-        LuaEventAccelerationData listenerData((void*)acc, event);
-        BasicScriptData data(eventAcceleration, (void*)&listenerData);
+    AccelerationEventListener* listener = new AccelerationEventListener();
+    if (listener->init([=](AccelerationEvent* event) {
+        LuaAccelerationEventData listenerData(event);
+        BasicScriptData data(listener, (void*)&listenerData);
         LuaEngine::getInstance()->handleEvent(ScriptHandlerMgr::HandlerType::EVENT_ACC, (void*)&data);
     }))
     {
-        eventAcceleration->autorelease();
+        listener->autorelease();
     }
     else
     {
-        AX_SAFE_DELETE(eventAcceleration);
+        AX_SAFE_DELETE(listener);
     }
-    return eventAcceleration;
+    return listener;
 }
 
-EventListenerCustom* LuaEventListenerCustom::create(std::string_view eventName)
+CustomEventListener* LuaCustomEventListener::create(std::string_view eventName)
 {
-    EventListenerCustom* eventCustom = new EventListenerCustom();
-    if (eventCustom->init(eventName, [=](EventCustom* event) {
+    CustomEventListener* eventCustom = new CustomEventListener();
+    if (eventCustom->init(eventName, [=](CustomEvent* event) {
         BasicScriptData data((void*)eventCustom, (void*)event);
         LuaEngine::getInstance()->handleEvent(ScriptHandlerMgr::HandlerType::EVENT_CUSTIOM, (void*)&data);
     }))
@@ -3712,7 +3711,7 @@ EventListenerCustom* LuaEventListenerCustom::create(std::string_view eventName)
 }
 }  // namespace ax
 
-static int toaxlua_LuaEventListenerAcceleration_create(lua_State* tolua_S)
+static int toaxlua_LuaAccelerationEventListener_create(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
         return 0;
@@ -3720,7 +3719,7 @@ static int toaxlua_LuaEventListenerAcceleration_create(lua_State* tolua_S)
     int argc = 0;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_isusertable(tolua_S, 1, "ax.EventListenerAcceleration", 0, &tolua_err))
+    if (!tolua_isusertable(tolua_S, 1, "ax.AccelerationEventListener", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
@@ -3735,28 +3734,28 @@ static int toaxlua_LuaEventListenerAcceleration_create(lua_State* tolua_S)
         }
 #endif
         LUA_FUNCTION handler                     = toluafix_ref_function(tolua_S, 2, 0);
-        ax::EventListenerAcceleration* tolua_ret = ax::LuaEventListenerAcceleration::create();
+        ax::AccelerationEventListener* tolua_ret = ax::LuaAccelerationEventListener::create();
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)tolua_ret, handler,
                                                           ScriptHandlerMgr::HandlerType::EVENT_ACC);
         int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerAcceleration");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.AccelerationEventListener");
 
         return 1;
     }
 
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n",
-               "ax.EventListenerAcceleration:create", argc, 1);
+               "ax.AccelerationEventListener:create", argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
 tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'toaxlua_LuaEventListenerAcceleration_create'.", &tolua_err);
+    tolua_error(tolua_S, "#ferror in function 'toaxlua_LuaAccelerationEventListener_create'.", &tolua_err);
     return 0;
 #endif
 }
 
-static int axlua_LuaEventListenerCustom_create(lua_State* tolua_S)
+static int axlua_LuaCustomEventListener_create(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
         return 0;
@@ -3764,7 +3763,7 @@ static int axlua_LuaEventListenerCustom_create(lua_State* tolua_S)
     int argc = 0;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_isusertable(tolua_S, 1, "ax.EventListenerCustom", 0, &tolua_err))
+    if (!tolua_isusertable(tolua_S, 1, "ax.CustomEventListener", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
@@ -3781,46 +3780,46 @@ static int axlua_LuaEventListenerCustom_create(lua_State* tolua_S)
 #endif
         auto eventName                     = axlua_tosv(tolua_S, 2);
         LUA_FUNCTION handler               = toluafix_ref_function(tolua_S, 3, 0);
-        ax::EventListenerCustom* tolua_ret = LuaEventListenerCustom::create(eventName);
+        ax::CustomEventListener* tolua_ret = LuaCustomEventListener::create(eventName);
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)tolua_ret, handler,
                                                           ScriptHandlerMgr::HandlerType::EVENT_CUSTIOM);
 
         int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerCustom");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.CustomEventListener");
 
         return 1;
     }
 
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.EventListenerCustom:create",
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.CustomEventListener:create",
                argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
 tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'axlua_LuaEventListenerCustom_create'.", &tolua_err);
+    tolua_error(tolua_S, "#ferror in function 'axlua_LuaCustomEventListener_create'.", &tolua_err);
     return 0;
 #endif
 }
 
-static void extendEventListenerCustom(lua_State* tolua_S)
+static void extendCustomEventListener(lua_State* tolua_S)
 {
-    lua_pushstring(tolua_S, "ax.EventListenerCustom");
+    lua_pushstring(tolua_S, "ax.CustomEventListener");
     lua_rawget(tolua_S, LUA_REGISTRYINDEX);
     if (lua_istable(tolua_S, -1))
     {
-        tolua_function(tolua_S, "create", axlua_LuaEventListenerCustom_create);
+        tolua_function(tolua_S, "create", axlua_LuaCustomEventListener_create);
     }
     lua_pop(tolua_S, 1);
 }
 
-static void extendEventListenerAcceleration(lua_State* tolua_S)
+static void extendAccelerationEventListener(lua_State* tolua_S)
 {
-    lua_pushstring(tolua_S, "ax.EventListenerAcceleration");
+    lua_pushstring(tolua_S, "ax.AccelerationEventListener");
     lua_rawget(tolua_S, LUA_REGISTRYINDEX);
     if (lua_istable(tolua_S, -1))
     {
-        tolua_function(tolua_S, "create", toaxlua_LuaEventListenerAcceleration_create);
+        tolua_function(tolua_S, "create", toaxlua_LuaAccelerationEventListener_create);
     }
     lua_pop(tolua_S, 1);
 }
@@ -3833,7 +3832,7 @@ static int toaxlua_EventListenerKeyboard_create(lua_State* tolua_S)
     int argc = 0;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_isusertable(tolua_S, 1, "ax.EventListenerKeyboard", 0, &tolua_err))
+    if (!tolua_isusertable(tolua_S, 1, "ax.KeyboardEventListener", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
@@ -3841,18 +3840,18 @@ static int toaxlua_EventListenerKeyboard_create(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        ax::EventListenerKeyboard* tolua_ret = ax::EventListenerKeyboard::create();
+        ax::KeyboardEventListener* tolua_ret = ax::KeyboardEventListener::create();
         if (nullptr == tolua_ret)
             return 0;
 
         int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerKeyboard");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.KeyboardEventListener");
 
         return 1;
     }
 
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.EventListenerKeyboard:create",
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.KeyboardEventListener:create",
                argc, 1);
     return 0;
 
@@ -3863,8 +3862,8 @@ tolua_lerror:
 #endif
 }
 
-static void cloneKeyboardHandler(const EventListenerKeyboard* src,
-                                 EventListenerKeyboard* dst,
+static void cloneKeyboardHandler(const KeyboardEventListener* src,
+                                 KeyboardEventListener* dst,
                                  ScriptHandlerMgr::HandlerType type)
 {
     if (nullptr == src || nullptr == dst)
@@ -3881,8 +3880,8 @@ static void cloneKeyboardHandler(const EventListenerKeyboard* src,
         {
         case ScriptHandlerMgr::HandlerType::EVENT_KEYBOARD_PRESSED:
         {
-            dst->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event) {
-                LuaEventKeyboarData listenerData((int)keyCode, event);
+            dst->onKeyPressed = [=](KeyboardEvent* event) {
+                LuaEventKeyboarData listenerData(event);
                 BasicScriptData data((void*)dst, (void*)&listenerData);
                 LuaEngine::getInstance()->handleEvent(type, (void*)&data);
             };
@@ -3890,8 +3889,8 @@ static void cloneKeyboardHandler(const EventListenerKeyboard* src,
         break;
         case ScriptHandlerMgr::HandlerType::EVENT_KEYBOARD_RELEASED:
         {
-            dst->onKeyReleased = [=](EventKeyboard::KeyCode keyCode, Event* event) {
-                LuaEventKeyboarData listenerData((int)keyCode, event);
+            dst->onKeyReleased = [=](KeyboardEvent* event) {
+                LuaEventKeyboarData listenerData(event);
                 BasicScriptData data((void*)dst, (void*)&listenerData);
                 LuaEngine::getInstance()->handleEvent(type, (void*)&data);
             };
@@ -3909,14 +3908,14 @@ static int toaxlua_EventListenerKeyboard_clone(lua_State* tolua_S)
         return 0;
 
     int argc                    = 0;
-    EventListenerKeyboard* self = nullptr;
+    KeyboardEventListener* self = nullptr;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_isusertype(tolua_S, 1, "ax.EventListenerKeyboard", 0, &tolua_err))
+    if (!tolua_isusertype(tolua_S, 1, "ax.KeyboardEventListener", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
-    self = static_cast<EventListenerKeyboard*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<KeyboardEventListener*>(tolua_tousertype(tolua_S, 1, 0));
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -3929,7 +3928,7 @@ static int toaxlua_EventListenerKeyboard_clone(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        ax::EventListenerKeyboard* tolua_ret = ax::EventListenerKeyboard::create();
+        ax::KeyboardEventListener* tolua_ret = ax::KeyboardEventListener::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -3938,12 +3937,12 @@ static int toaxlua_EventListenerKeyboard_clone(lua_State* tolua_S)
 
         int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerKeyboard");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.KeyboardEventListener");
 
         return 1;
     }
 
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.EventListenerKeyboard:clone",
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.KeyboardEventListener:clone",
                argc, 0);
     return 0;
 
@@ -3960,14 +3959,14 @@ static int toaxlua_EventListenerKeyboard_registerScriptHandler(lua_State* tolua_
         return 0;
 
     int argc                    = 0;
-    EventListenerKeyboard* self = nullptr;
+    KeyboardEventListener* self = nullptr;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_isusertype(tolua_S, 1, "ax.EventListenerKeyboard", 0, &tolua_err))
+    if (!tolua_isusertype(tolua_S, 1, "ax.KeyboardEventListener", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
-    self = static_cast<EventListenerKeyboard*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<KeyboardEventListener*>(tolua_tousertype(tolua_S, 1, 0));
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -3996,8 +3995,8 @@ static int toaxlua_EventListenerKeyboard_registerScriptHandler(lua_State* tolua_
         case ScriptHandlerMgr::HandlerType::EVENT_KEYBOARD_PRESSED:
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
-            self->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event) {
-                LuaEventKeyboarData listenerData((int)keyCode, event);
+            self->onKeyPressed = [=](KeyboardEvent* event) {
+                LuaEventKeyboarData listenerData(event);
                 BasicScriptData data((void*)self, (void*)&listenerData);
                 LuaEngine::getInstance()->handleEvent(type, (void*)&data);
             };
@@ -4006,8 +4005,8 @@ static int toaxlua_EventListenerKeyboard_registerScriptHandler(lua_State* tolua_
         case ScriptHandlerMgr::HandlerType::EVENT_KEYBOARD_RELEASED:
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
-            self->onKeyReleased = [=](EventKeyboard::KeyCode keyCode, Event* event) {
-                LuaEventKeyboarData listenerData((int)keyCode, event);
+            self->onKeyReleased = [=](KeyboardEvent* event) {
+                LuaEventKeyboarData listenerData(event);
                 BasicScriptData data((void*)self, (void*)&listenerData);
                 LuaEngine::getInstance()->handleEvent(type, (void*)&data);
             };
@@ -4021,7 +4020,7 @@ static int toaxlua_EventListenerKeyboard_registerScriptHandler(lua_State* tolua_
     }
 
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n",
-               "ax.EventListenerKeyboard:registerScriptHandler", argc, 2);
+               "ax.KeyboardEventListener:registerScriptHandler", argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4033,7 +4032,7 @@ tolua_lerror:
 
 static void extendEventListenerKeyboard(lua_State* tolua_S)
 {
-    lua_pushstring(tolua_S, "ax.EventListenerKeyboard");
+    lua_pushstring(tolua_S, "ax.KeyboardEventListener");
     lua_rawget(tolua_S, LUA_REGISTRYINDEX);
     if (lua_istable(tolua_S, -1))
     {
@@ -4044,7 +4043,7 @@ static void extendEventListenerKeyboard(lua_State* tolua_S)
     lua_pop(tolua_S, 1);
 }
 
-static int toaxlua_EventListenerTouchOneByOne_create(lua_State* tolua_S)
+static int toaxlua_PointerEventListener_create(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
         return 0;
@@ -4052,7 +4051,7 @@ static int toaxlua_EventListenerTouchOneByOne_create(lua_State* tolua_S)
     int argc = 0;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_isusertable(tolua_S, 1, "ax.EventListenerTouchOneByOne", 0, &tolua_err))
+    if (!tolua_isusertable(tolua_S, 1, "ax.PointerEventListener", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
@@ -4060,636 +4059,123 @@ static int toaxlua_EventListenerTouchOneByOne_create(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        ax::EventListenerTouchOneByOne* tolua_ret = ax::EventListenerTouchOneByOne::create();
+        auto* tolua_ret = ax::PointerEventListener::create();
         if (nullptr == tolua_ret)
             return 0;
 
-        int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
-        int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerTouchOneByOne");
-
+        int ID     = static_cast<int>(tolua_ret->_ID);
+        int* luaID = &tolua_ret->_luaID;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, static_cast<void*>(tolua_ret), "ax.PointerEventListener");
         return 1;
     }
 
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n",
-               "ax.EventListenerTouchOneByOne:create", argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'toaxlua_EventListenerTouchOneByOne_create'.", &tolua_err);
-    return 0;
-#endif
-}
-
-static void cloneTouchOneByOneHandler(const EventListenerTouchOneByOne* src,
-                                      EventListenerTouchOneByOne* dst,
-                                      ScriptHandlerMgr::HandlerType type)
-{
-    if (nullptr == src || nullptr == dst)
-        return;
-
-    LUA_FUNCTION handler = ScriptHandlerMgr::getInstance()->getObjectHandler((void*)src, type);
-    if (0 != handler)
-    {
-        int newscriptHandler =
-            ax::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
-
-        ScriptHandlerMgr::getInstance()->addObjectHandler((void*)dst, newscriptHandler, type);
-        switch (type)
-        {
-        case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_BEGAN:
-        {
-            dst->onTouchBegan = [=](Touch* touch, Event* event) {
-                LuaEventTouchData touchData(touch, event);
-                BasicScriptData data((void*)dst, (void*)&touchData);
-                return LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-            };
-        }
-        break;
-        case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_MOVED:
-        {
-            dst->onTouchMoved = [=](Touch* touch, Event* event) {
-                LuaEventTouchData touchData(touch, event);
-                BasicScriptData data((void*)dst, (void*)&touchData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-            };
-        }
-        break;
-        case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_ENDED:
-        {
-            dst->onTouchEnded = [=](Touch* touch, Event* event) {
-                LuaEventTouchData touchData(touch, event);
-                BasicScriptData data((void*)dst, (void*)&touchData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-            };
-        }
-        break;
-        case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_CANCELLED:
-        {
-            dst->onTouchCancelled = [=](Touch* touch, Event* event) {
-                LuaEventTouchData touchData(touch, event);
-                BasicScriptData data((void*)dst, (void*)&touchData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-            };
-        }
-        break;
-        default:
-            break;
-        }
-    }
-}
-
-static int toaxlua_EventListenerTouchOneByOne_clone(lua_State* tolua_S)
-{
-    if (nullptr == tolua_S)
-        return 0;
-
-    int argc                         = 0;
-    EventListenerTouchOneByOne* self = nullptr;
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-    if (!tolua_isusertype(tolua_S, 1, "ax.EventListenerTouchOneByOne", 0, &tolua_err))
-        goto tolua_lerror;
-#endif
-
-    self = static_cast<EventListenerTouchOneByOne*>(tolua_tousertype(tolua_S, 1, 0));
-#if _AX_DEBUG >= 1
-    if (nullptr == self)
-    {
-        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_EventListenerTouchOneByOne_clone'\n", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 0)
-    {
-        ax::EventListenerTouchOneByOne* tolua_ret = ax::EventListenerTouchOneByOne::create();
-        if (nullptr == tolua_ret)
-            return 0;
-
-        cloneTouchOneByOneHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_TOUCH_BEGAN);
-        cloneTouchOneByOneHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_TOUCH_MOVED);
-        cloneTouchOneByOneHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_TOUCH_ENDED);
-        cloneTouchOneByOneHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_TOUCH_CANCELLED);
-        tolua_ret->setSwallowTouches(self->isSwallowTouches());
-
-        int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
-        int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerTouchOneByOne");
-
-        return 1;
-    }
-
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n",
-               "ax.EventListenerTouchOneByOne:create", argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'toaxlua_EventListenerTouchOneByOne_clone'.", &tolua_err);
-    return 0;
-#endif
-}
-
-static int toaxlua_EventListenerTouchOneByOne_registerScriptHandler(lua_State* tolua_S)
-{
-    if (nullptr == tolua_S)
-        return 0;
-
-    int argc                         = 0;
-    EventListenerTouchOneByOne* self = nullptr;
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-    if (!tolua_isusertype(tolua_S, 1, "ax.EventListenerTouchOneByOne", 0, &tolua_err))
-        goto tolua_lerror;
-#endif
-
-    self = static_cast<EventListenerTouchOneByOne*>(tolua_tousertype(tolua_S, 1, 0));
-#if _AX_DEBUG >= 1
-    if (nullptr == self)
-    {
-        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_EventListenerTouchOneByOne_registerScriptHandler'\n",
-                    nullptr);
-        return 0;
-    }
-#endif
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 2)
-    {
-#if _AX_DEBUG >= 1
-        if (!toluafix_isfunction(tolua_S, 2, "LUA_FUNCTION", 0, &tolua_err) ||
-            !tolua_isnumber(tolua_S, 3, 0, &tolua_err))
-        {
-            goto tolua_lerror;
-        }
-#endif
-        LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
-        ScriptHandlerMgr::HandlerType type =
-            static_cast<ScriptHandlerMgr::HandlerType>((int)tolua_tonumber(tolua_S, 3, 0));
-        switch (type)
-        {
-        case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_BEGAN:
-        {
-            ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
-
-            self->onTouchBegan = [=](Touch* touch, Event* event) {
-                LuaEventTouchData touchData(touch, event);
-                BasicScriptData data((void*)self, (void*)&touchData);
-                return LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-            };
-        }
-        break;
-        case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_MOVED:
-        {
-            self->onTouchMoved = [=](Touch* touch, Event* event) {
-                LuaEventTouchData touchData(touch, event);
-                BasicScriptData data((void*)self, (void*)&touchData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-            };
-
-            ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
-        }
-        break;
-        case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_ENDED:
-        {
-            self->onTouchEnded = [=](Touch* touch, Event* event) {
-                LuaEventTouchData touchData(touch, event);
-                BasicScriptData data((void*)self, (void*)&touchData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-            };
-
-            ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
-        }
-        break;
-        case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_CANCELLED:
-        {
-            self->onTouchCancelled = [=](Touch* touch, Event* event) {
-                LuaEventTouchData touchData(touch, event);
-                BasicScriptData data((void*)self, (void*)&touchData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-            };
-
-            ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
-        }
-        break;
-        default:
-            break;
-        }
-        return 0;
-    }
-
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n",
-               "ax.EventListenerTouchOneByOne:registerScriptHandler", argc, 2);
-    return 0;
-
-#if _AX_DEBUG >= 1
-tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'toaxlua_EventListenerTouchOneByOne_registerScriptHandler'.", &tolua_err);
-    return 0;
-#endif
-}
-
-static void extendEventListenerTouchOneByOne(lua_State* tolua_S)
-{
-    lua_pushstring(tolua_S, "ax.EventListenerTouchOneByOne");
-    lua_rawget(tolua_S, LUA_REGISTRYINDEX);
-    if (lua_istable(tolua_S, -1))
-    {
-        tolua_function(tolua_S, "create", toaxlua_EventListenerTouchOneByOne_create);
-        tolua_function(tolua_S, "registerScriptHandler", toaxlua_EventListenerTouchOneByOne_registerScriptHandler);
-        tolua_function(tolua_S, "clone", toaxlua_EventListenerTouchOneByOne_clone);
-    }
-    lua_pop(tolua_S, 1);
-}
-
-static int toaxlua_EventListenerTouchAllAtOnce_create(lua_State* tolua_S)
-{
-    if (nullptr == tolua_S)
-        return 0;
-
-    int argc = 0;
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-    if (!tolua_isusertable(tolua_S, 1, "ax.EventListenerTouchAllAtOnce", 0, &tolua_err))
-        goto tolua_lerror;
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 0)
-    {
-        ax::EventListenerTouchAllAtOnce* tolua_ret = ax::EventListenerTouchAllAtOnce::create();
-        if (nullptr == tolua_ret)
-            return 0;
-
-        int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
-        int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerTouchAllAtOnce");
-
-        return 1;
-    }
-
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n",
-               "ax.EventListenerTouchAllAtOnce:registerScriptHandler", argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'toaxlua_EventListenerTouchAllAtOnce_create'.", &tolua_err);
-    return 0;
-#endif
-}
-
-static void cloneTouchAllAtOnceHandler(const EventListenerTouchAllAtOnce* src,
-                                       EventListenerTouchAllAtOnce* dst,
-                                       ScriptHandlerMgr::HandlerType type)
-{
-    if (nullptr == src || nullptr == dst)
-        return;
-
-    LUA_FUNCTION handler = ScriptHandlerMgr::getInstance()->getObjectHandler((void*)src, type);
-    if (0 != handler)
-    {
-        int newscriptHandler =
-            ax::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
-
-        ScriptHandlerMgr::getInstance()->addObjectHandler((void*)dst, newscriptHandler, type);
-        switch (type)
-        {
-        case ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_BEGAN:
-        {
-            dst->onTouchesBegan = [=](const std::vector<Touch*>& touches, Event* event) {
-                LuaEventTouchesData touchesData(touches, event);
-                BasicScriptData data((void*)dst, (void*)&touchesData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-            };
-        }
-        break;
-        case ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_MOVED:
-        {
-            dst->onTouchesMoved = [=](const std::vector<Touch*>& touches, Event* event) {
-                LuaEventTouchesData touchesData(touches, event);
-                BasicScriptData data((void*)dst, (void*)&touchesData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-            };
-        }
-        break;
-        case ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_ENDED:
-        {
-            dst->onTouchesEnded = [=](const std::vector<Touch*>& touches, Event* event) {
-                LuaEventTouchesData touchesData(touches, event);
-                BasicScriptData data((void*)dst, (void*)&touchesData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-            };
-        }
-        break;
-        case ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_CANCELLED:
-        {
-            dst->onTouchesCancelled = [=](const std::vector<Touch*>& touches, Event* event) {
-                LuaEventTouchesData touchesData(touches, event);
-                BasicScriptData data((void*)dst, (void*)&touchesData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-            };
-        }
-        break;
-        default:
-            break;
-        }
-    }
-}
-
-static int toaxlua_EventListenerTouchAllAtOnce_clone(lua_State* tolua_S)
-{
-    if (nullptr == tolua_S)
-        return 0;
-
-    int argc                          = 0;
-    EventListenerTouchAllAtOnce* self = nullptr;
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-    if (!tolua_isusertype(tolua_S, 1, "ax.EventListenerTouchAllAtOnce", 0, &tolua_err))
-        goto tolua_lerror;
-#endif
-
-    self = static_cast<EventListenerTouchAllAtOnce*>(tolua_tousertype(tolua_S, 1, 0));
-#if _AX_DEBUG >= 1
-    if (nullptr == self)
-    {
-        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_EventListenerTouchAllAtOnce_clone'\n", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 0)
-    {
-        ax::EventListenerTouchAllAtOnce* tolua_ret = ax::EventListenerTouchAllAtOnce::create();
-        if (nullptr == tolua_ret)
-            return 0;
-
-        cloneTouchAllAtOnceHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_BEGAN);
-        cloneTouchAllAtOnceHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_MOVED);
-        cloneTouchAllAtOnceHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_ENDED);
-        cloneTouchAllAtOnceHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_CANCELLED);
-
-        int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
-        int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerTouchAllAtOnce");
-
-        return 1;
-    }
-
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n",
-               "ax.EventListenerTouchAllAtOnce:clone", argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'toaxlua_EventListenerTouchAllAtOnce_clone'.", &tolua_err);
-    return 0;
-#endif
-}
-
-static int toaxlua_EventListenerTouchAllAtOnce_registerScriptHandler(lua_State* tolua_S)
-{
-    if (nullptr == tolua_S)
-        return 0;
-
-    int argc                          = 0;
-    EventListenerTouchAllAtOnce* self = nullptr;
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-    if (!tolua_isusertype(tolua_S, 1, "ax.EventListenerTouchAllAtOnce", 0, &tolua_err))
-        goto tolua_lerror;
-#endif
-
-    self = static_cast<EventListenerTouchAllAtOnce*>(tolua_tousertype(tolua_S, 1, 0));
-#if _AX_DEBUG >= 1
-    if (nullptr == self)
-    {
-        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_EventListenerTouchAllAtOnce_registerScriptHandler'\n",
-                    nullptr);
-        return 0;
-    }
-#endif
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 2)
-    {
-#if _AX_DEBUG >= 1
-        if (!toluafix_isfunction(tolua_S, 2, "LUA_FUNCTION", 0, &tolua_err) ||
-            !tolua_isnumber(tolua_S, 3, 0, &tolua_err))
-        {
-            goto tolua_lerror;
-        }
-#endif
-        LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
-        ScriptHandlerMgr::HandlerType type =
-            static_cast<ScriptHandlerMgr::HandlerType>((int)tolua_tonumber(tolua_S, 3, 0));
-        switch (type)
-        {
-        case ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_BEGAN:
-        {
-            ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
-
-            self->onTouchesBegan = [=](const std::vector<Touch*>& touches, Event* event) {
-                LuaEventTouchesData touchesData(touches, event);
-                BasicScriptData data((void*)self, (void*)&touchesData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-            };
-        }
-        break;
-        case ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_MOVED:
-        {
-            self->onTouchesMoved = [=](const std::vector<Touch*>& touches, Event* event) {
-                LuaEventTouchesData touchesData(touches, event);
-                BasicScriptData data((void*)self, (void*)&touchesData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-            };
-
-            ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
-        }
-        break;
-        case ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_ENDED:
-        {
-            self->onTouchesEnded = [=](const std::vector<Touch*>& touches, Event* event) {
-                LuaEventTouchesData touchesData(touches, event);
-                BasicScriptData data((void*)self, (void*)&touchesData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-            };
-
-            ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
-        }
-        break;
-        case ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_CANCELLED:
-        {
-            self->onTouchesCancelled = [=](const std::vector<Touch*>& touches, Event* event) {
-                LuaEventTouchesData touchesData(touches, event);
-                BasicScriptData data((void*)self, (void*)&touchesData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-            };
-
-            ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
-        }
-        break;
-        default:
-            break;
-        }
-        return 0;
-    }
-
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n",
-               "ax.EventListenerTouchAllAtOnce:registerScriptHandler", argc, 2);
-    return 0;
-
-#if _AX_DEBUG >= 1
-tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'toaxlua_EventListenerTouchAllAtOnce_registerScriptHandler'.",
-                &tolua_err);
-    return 0;
-#endif
-}
-
-static void extendEventListenerTouchAllAtOnce(lua_State* tolua_S)
-{
-    lua_pushstring(tolua_S, "ax.EventListenerTouchAllAtOnce");
-    lua_rawget(tolua_S, LUA_REGISTRYINDEX);
-    if (lua_istable(tolua_S, -1))
-    {
-        tolua_function(tolua_S, "create", toaxlua_EventListenerTouchAllAtOnce_create);
-        tolua_function(tolua_S, "registerScriptHandler", toaxlua_EventListenerTouchAllAtOnce_registerScriptHandler);
-        tolua_function(tolua_S, "clone", toaxlua_EventListenerTouchAllAtOnce_clone);
-    }
-    lua_pop(tolua_S, 1);
-}
-
-static int toaxlua_EventListenerMouse_create(lua_State* tolua_S)
-{
-    if (nullptr == tolua_S)
-        return 0;
-
-    int argc = 0;
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-    if (!tolua_isusertable(tolua_S, 1, "ax.EventListenerMouse", 0, &tolua_err))
-        goto tolua_lerror;
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 0)
-    {
-        ax::EventListenerMouse* tolua_ret = ax::EventListenerMouse::create();
-        if (nullptr == tolua_ret)
-            return 0;
-
-        int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
-        int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerMouse");
-
-        return 1;
-    }
-
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.EventListenerMouse:create",
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.PointerEventListener:create",
                argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
 tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'toaxlua_EventListenerMouse_create'.", &tolua_err);
+    tolua_error(tolua_S, "#ferror in function 'toaxlua_PointerEventListener_create'.", &tolua_err);
     return 0;
 #endif
 }
 
-static void cloneMouseHandler(const EventListenerMouse* src,
-                              EventListenerMouse* dst,
-                              ScriptHandlerMgr::HandlerType type)
+static int handlePointerEventScript(ScriptHandlerMgr::HandlerType type, void* nativeObject, PointerEvent* event)
+{
+    if (nativeObject == nullptr || event == nullptr)
+        return 0;
+
+    const auto handler = ScriptHandlerMgr::getInstance()->getObjectHandler(nativeObject, type);
+    if (handler == 0)
+        return 0;
+
+    auto* stack = LuaEngine::getInstance()->getLuaStack();
+    stack->pushObject(event, "ax.PointerEvent");
+    stack->pushObject(event, "ax.Event");
+    const auto ret = stack->executeFunctionByHandler(handler, 2);
+    stack->clean();
+    return ret;
+}
+
+static void clonePointerHandler(const PointerEventListener* src,
+                                PointerEventListener* dst,
+                                ScriptHandlerMgr::HandlerType type)
 {
     if (nullptr == src || nullptr == dst)
         return;
 
     LUA_FUNCTION handler = ScriptHandlerMgr::getInstance()->getObjectHandler((void*)src, type);
-    if (0 != handler)
+    if (handler == 0)
+        return;
+
+    int newscriptHandler = ax::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
+    ScriptHandlerMgr::getInstance()->addObjectHandler((void*)dst, newscriptHandler, type);
+
+    switch (type)
     {
-        int newscriptHandler =
-            ax::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
-
-        ScriptHandlerMgr::getInstance()->addObjectHandler((void*)dst, newscriptHandler, type);
-        switch (type)
-        {
-        case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_DOWN:
-        {
-            dst->onMouseDown = [=](Event* event) -> bool {
-                LuaEventMouseData mouseData(event);
-                BasicScriptData data((void*)dst, (void*)&mouseData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-
-                return true;
-            };
-        }
+    case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_BEGAN:
+        dst->onPointerDown = [=](PointerEvent* event) {
+            LuaPointerEventData touchData(event);
+            BasicScriptData data((void*)dst, (void*)&touchData);
+            return LuaEngine::getInstance()->handleEvent(type, (void*)&data) != 0;
+        };
         break;
-        case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_UP:
-        {
-            dst->onMouseUp = [=](Event* event) -> bool {
-                LuaEventMouseData mouseData(event);
-                BasicScriptData data((void*)dst, (void*)&mouseData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-
-                return true;
-            };
-        }
+    case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_MOVED:
+        dst->onPointerMove = [=](PointerEvent* event) {
+            LuaPointerEventData touchData(event);
+            BasicScriptData data((void*)dst, (void*)&touchData);
+            LuaEngine::getInstance()->handleEvent(type, (void*)&data);
+        };
         break;
-        case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_MOVE:
-        {
-            dst->onMouseMove = [=](Event* event) -> bool {
-                LuaEventMouseData mouseData(event);
-                BasicScriptData data((void*)dst, (void*)&mouseData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-
-                return true;
-            };
-        }
+    case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_ENDED:
+        dst->onPointerUp = [=](PointerEvent* event) {
+            LuaPointerEventData touchData(event);
+            BasicScriptData data((void*)dst, (void*)&touchData);
+            LuaEngine::getInstance()->handleEvent(type, (void*)&data);
+        };
         break;
-        case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_SCROLL:
-        {
-            dst->onMouseScroll = [=](Event* event) -> bool {
-                LuaEventMouseData mouseData(event);
-                BasicScriptData data((void*)dst, (void*)&mouseData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-
-                return true;
-            };
-        }
+    case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_CANCELLED:
+        dst->onPointerCancel = [=](PointerEvent* event) {
+            LuaPointerEventData touchData(event);
+            BasicScriptData data((void*)dst, (void*)&touchData);
+            LuaEngine::getInstance()->handleEvent(type, (void*)&data);
+        };
         break;
-        default:
-            break;
-        }
+    case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_SCROLL:
+        dst->onPointerScroll = [=](PointerEvent* event) {
+            LuaPointerEventData touchData(event);
+            BasicScriptData data((void*)dst, (void*)&touchData);
+            return LuaEngine::getInstance()->handleEvent(type, (void*)&data) != 0;
+        };
+        break;
+    case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_MOVE:
+        dst->onPointerMove = [=](PointerEvent* event) {
+            return handlePointerEventScript(type, (void*)dst, event) != 0;
+        };
+        break;
+    default:
+        break;
     }
 }
 
-static int toaxlua_EventListenerMouse_clone(lua_State* tolua_S)
+static int toaxlua_PointerEventListener_clone(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
         return 0;
 
-    int argc                 = 0;
-    EventListenerMouse* self = nullptr;
+    int argc                   = 0;
+    PointerEventListener* self = nullptr;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_isusertype(tolua_S, 1, "ax.EventListenerMouse", 0, &tolua_err))
+    if (!tolua_isusertype(tolua_S, 1, "ax.PointerEventListener", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
-    self = static_cast<EventListenerMouse*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<PointerEventListener*>(tolua_tousertype(tolua_S, 1, 0));
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_EventListenerMouse_clone'\n", nullptr);
+        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_PointerEventListener_clone'\n", nullptr);
         return 0;
     }
 #endif
@@ -4698,55 +4184,57 @@ static int toaxlua_EventListenerMouse_clone(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        ax::EventListenerMouse* tolua_ret = ax::EventListenerMouse::create();
+        auto* tolua_ret = ax::PointerEventListener::create();
         if (nullptr == tolua_ret)
             return 0;
 
-        cloneMouseHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_MOUSE_DOWN);
-        cloneMouseHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_MOUSE_MOVE);
-        cloneMouseHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_MOUSE_SCROLL);
-        cloneMouseHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_MOUSE_UP);
+        clonePointerHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_TOUCH_BEGAN);
+        clonePointerHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_TOUCH_MOVED);
+        clonePointerHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_TOUCH_ENDED);
+        clonePointerHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_TOUCH_CANCELLED);
+        clonePointerHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_MOUSE_MOVE);
+        clonePointerHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_MOUSE_SCROLL);
 
-        int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
-        int* luaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerMouse");
-
+        int ID     = static_cast<int>(tolua_ret->_ID);
+        int* luaID = &tolua_ret->_luaID;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, static_cast<void*>(tolua_ret), "ax.PointerEventListener");
         return 1;
     }
 
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.EventListenerMouse:clone", argc,
-               0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.PointerEventListener:clone",
+               argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
 tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'toaxlua_EventListenerMouse_clone'.", &tolua_err);
+    tolua_error(tolua_S, "#ferror in function 'toaxlua_PointerEventListener_clone'.", &tolua_err);
     return 0;
 #endif
 }
 
-static int toaxlua_EventListenerMouse_registerScriptHandler(lua_State* tolua_S)
+static int toaxlua_PointerEventListener_registerScriptHandler(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
         return 0;
 
-    int argc                 = 0;
-    EventListenerMouse* self = nullptr;
+    int argc                   = 0;
+    PointerEventListener* self = nullptr;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_isusertype(tolua_S, 1, "ax.EventListenerMouse", 0, &tolua_err))
+    if (!tolua_isusertype(tolua_S, 1, "ax.PointerEventListener", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
-    self = static_cast<EventListenerMouse*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<PointerEventListener*>(tolua_tousertype(tolua_S, 1, 0));
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_EventListenerMouse_registerScriptHandler'\n",
+        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_PointerEventListener_registerScriptHandler'\n",
                     nullptr);
         return 0;
     }
 #endif
+
     argc = lua_gettop(tolua_S) - 1;
 
     if (argc == 2)
@@ -4758,88 +4246,87 @@ static int toaxlua_EventListenerMouse_registerScriptHandler(lua_State* tolua_S)
             goto tolua_lerror;
         }
 #endif
+
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
-        ScriptHandlerMgr::HandlerType type =
-            static_cast<ScriptHandlerMgr::HandlerType>((int)tolua_tonumber(tolua_S, 3, 0));
+        auto type = static_cast<ScriptHandlerMgr::HandlerType>(static_cast<int>(tolua_tonumber(tolua_S, 3, 0)));
+        ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
         switch (type)
         {
-        case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_DOWN:
-        {
-            ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
-
-            self->onMouseDown = [=](Event* event) -> bool {
-                LuaEventMouseData mouseData(event);
-                BasicScriptData data((void*)self, (void*)&mouseData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-                return true;
+        case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_BEGAN:
+            self->onPointerDown = [=](PointerEvent* event) {
+                LuaPointerEventData touchData(event);
+                BasicScriptData data((void*)self, (void*)&touchData);
+                return LuaEngine::getInstance()->handleEvent(type, (void*)&data) != 0;
             };
-        }
-        break;
-        case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_UP:
-        {
-            self->onMouseUp = [=](Event* event) -> bool {
-                LuaEventMouseData mouseData(event);
-                BasicScriptData data((void*)self, (void*)&mouseData);
+            break;
+        case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_MOVED:
+            self->onPointerMove = [=](PointerEvent* event) {
+                LuaPointerEventData touchData(event);
+                BasicScriptData data((void*)self, (void*)&touchData);
                 LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-                return true;
             };
-
-            ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
-        }
-        break;
-        case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_MOVE:
-        {
-            self->onMouseMove = [=](Event* event) -> bool {
-                LuaEventMouseData mouseData(event);
-                BasicScriptData data((void*)self, (void*)&mouseData);
+            break;
+        case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_ENDED:
+            self->onPointerUp = [=](PointerEvent* event) {
+                LuaPointerEventData touchData(event);
+                BasicScriptData data((void*)self, (void*)&touchData);
                 LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-                return true;
             };
-
-            ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
-        }
-        break;
+            break;
+        case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_CANCELLED:
+            self->onPointerCancel = [=](PointerEvent* event) {
+                LuaPointerEventData touchData(event);
+                BasicScriptData data((void*)self, (void*)&touchData);
+                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
+            };
+            break;
         case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_SCROLL:
-        {
-            self->onMouseScroll = [=](Event* event) -> bool {
-                LuaEventMouseData mouseData(event);
-                BasicScriptData data((void*)self, (void*)&mouseData);
-                LuaEngine::getInstance()->handleEvent(type, (void*)&data);
-                return true;
+            self->onPointerScroll = [=](PointerEvent* event) {
+                LuaPointerEventData touchData(event);
+                BasicScriptData data((void*)self, (void*)&touchData);
+                return LuaEngine::getInstance()->handleEvent(type, (void*)&data) != 0;
             };
-
-            ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
-        }
-        break;
+            break;
+        case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_MOVE:
+            self->onPointerMove = [=](PointerEvent* event) {
+                return handlePointerEventScript(type, (void*)self, event) != 0;
+            };
+            break;
         default:
             break;
         }
+
         return 0;
     }
 
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n",
-               "ax.EventListenerMouse:registerScriptHandler", argc, 2);
+               "ax.PointerEventListener:registerScriptHandler", argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
 tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'toaxlua_EventListenerMouse_registerScriptHandler'.", &tolua_err);
+    tolua_error(tolua_S, "#ferror in function 'toaxlua_PointerEventListener_registerScriptHandler'.", &tolua_err);
     return 0;
 #endif
 }
 
-static void extendEventListenerMouse(lua_State* tolua_S)
+static void registerPointerEventListener(lua_State* tolua_S)
 {
-    lua_pushstring(tolua_S, "ax.EventListenerMouse");
-    lua_rawget(tolua_S, LUA_REGISTRYINDEX);
-    if (lua_istable(tolua_S, -1))
-    {
-        tolua_function(tolua_S, "create", toaxlua_EventListenerMouse_create);
-        tolua_function(tolua_S, "registerScriptHandler", toaxlua_EventListenerMouse_registerScriptHandler);
-        tolua_function(tolua_S, "clone", toaxlua_EventListenerMouse_clone);
-    }
-    lua_pop(tolua_S, 1);
+    tolua_module(tolua_S, "ax", 0);
+    tolua_beginmodule(tolua_S, "ax");
+    tolua_usertype(tolua_S, "ax.PointerEventListener");
+    tolua_cclass(tolua_S, "PointerEventListener", "ax.PointerEventListener", "ax.EventListener", nullptr);
+    tolua_beginmodule(tolua_S, "PointerEventListener");
+    tolua_function(tolua_S, "create", toaxlua_PointerEventListener_create);
+    tolua_function(tolua_S, "clone", toaxlua_PointerEventListener_clone);
+    tolua_function(tolua_S, "registerScriptHandler", toaxlua_PointerEventListener_registerScriptHandler);
+    tolua_endmodule(tolua_S);
+    tolua_endmodule(tolua_S);
+
+    auto typeName                                    = typeid(ax::PointerEventListener).name();
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PointerEventListener";
+    g_typeCast[typeName]                             = "ax.PointerEventListener";
 }
 
 static int toaxlua_ActionCamera_reverse(lua_State* tolua_S)
@@ -5408,6 +4895,39 @@ static void extendFastTMXLayer(lua_State* tolua_S)
     lua_pop(tolua_S, 1);
 }
 
+static int axlua_Application_getInstance(lua_State* tolua_S)
+{
+    if (nullptr == tolua_S)
+        return 0;
+
+    int argc = 0;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_isusertable(tolua_S, 1, "ax.Application", 0, &tolua_err))
+        goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        auto* tolua_ret = ax::Application::getInstance();
+        tolua_pushusertype(tolua_S, static_cast<void*>(tolua_ret), "ax.Application");
+        return 1;
+    }
+
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Application:getInstance", argc,
+               0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+tolua_lerror:
+    tolua_error(tolua_S, "#ferror in function 'axlua_Application_getInstance'.", &tolua_err);
+    return 0;
+#endif
+}
+
 int axlua_Application_isIOS64bit(lua_State* tolua_S)
 {
     int argc             = 0;
@@ -5516,6 +5036,7 @@ static void extendApplication(lua_State* tolua_S)
     lua_rawget(tolua_S, LUA_REGISTRYINDEX);
     if (lua_istable(tolua_S, -1))
     {
+        tolua_function(tolua_S, "getInstance", axlua_Application_getInstance);
         tolua_function(tolua_S, "isIOS64bit", axlua_Application_isIOS64bit);
         tolua_function(tolua_S, "is64BitMobileDevice", axlua_Application_is64BitMobileDevice);
     }
@@ -5592,30 +5113,31 @@ static void extendTextureCache(lua_State* tolua_S)
     lua_pop(tolua_S, 1);
 }
 
+#if 0
 int axlua_RenderView_getAllTouches(lua_State* tolua_S)
 {
     int argc            = 0;
     ax::RenderView* obj = nullptr;
     bool ok             = true;
 
-#if _AX_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-#endif
+#    endif
 
-#if _AX_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S, 1, "ax.RenderView", 0, &tolua_err))
         goto tolua_lerror;
-#endif
+#    endif
 
     obj = (ax::RenderView*)tolua_tousertype(tolua_S, 1, 0);
 
-#if _AX_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!obj)
     {
         tolua_error(tolua_S, "invalid 'obj' in function 'axlua_RenderView_getAllTouches'", nullptr);
         return 0;
     }
-#endif
+#    endif
 
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
@@ -5648,10 +5170,10 @@ int axlua_RenderView_getAllTouches(lua_State* tolua_S)
                argc, 0);
     return 0;
 
-#if _AX_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'axlua_RenderView_getAllTouches'.", &tolua_err);
-#endif
+#    endif
 
     return 0;
 }
@@ -5666,6 +5188,7 @@ static void extendRenderView(lua_State* tolua_S)
     }
     lua_pop(tolua_S, 1);
 }
+#endif
 
 int axlua_Camera_unproject(lua_State* tolua_S)
 {
@@ -5697,35 +5220,17 @@ int axlua_Camera_unproject(lua_State* tolua_S)
     {
         ax::Vec3 arg0;
 
-        ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.Camera:project");
+        ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.Camera:unproject");
         if (!ok)
         {
-            tolua_error(tolua_S, "invalid arguments in function 'axlua_Camera_project'", nullptr);
+            tolua_error(tolua_S, "invalid arguments in function 'axlua_Camera_unproject'", nullptr);
             return 0;
         }
-        auto ret = obj->unproject(arg0);
+        auto ret = obj->deprojectScreenToWorld(arg0);
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
-    if (argc == 3)
-    {
-        ax::Size arg0;
-        ax::Vec3 arg1;
-        ax::Vec3 arg2;
-
-        ok &= luaval_to_size(tolua_S, 2, &arg0, "ax.Camera:unproject");
-
-        ok &= luaval_to_vec3(tolua_S, 3, &arg1, "ax.Camera:unproject");
-
-        ok &= luaval_to_vec3(tolua_S, 4, &arg2, "ax.Camera:unproject");
-
-        if (!ok)
-            return 0;
-        obj->unproject(arg0, &arg1, &arg2);
-        vec3_to_luaval(tolua_S, arg2);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:unproject", argc, 3);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:unproject", argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -6371,11 +5876,9 @@ int register_all_ax_manual(lua_State* tolua_S)
     extendTexture2D(tolua_S);
     extendSpriteBatchNode(tolua_S);
     extendEventListenerKeyboard(tolua_S);
-    extendEventListenerTouchOneByOne(tolua_S);
-    extendEventListenerTouchAllAtOnce(tolua_S);
-    extendEventListenerMouse(tolua_S);
-    extendEventListenerCustom(tolua_S);
-    extendEventListenerAcceleration(tolua_S);
+    registerPointerEventListener(tolua_S);
+    extendCustomEventListener(tolua_S);
+    extendAccelerationEventListener(tolua_S);
     extendActionCamera(tolua_S);
     extendGridAction(tolua_S);
     extendPipelineDescriptor(tolua_S);
@@ -6388,7 +5891,6 @@ int register_all_ax_manual(lua_State* tolua_S)
     extendFastTMXLayer(tolua_S);
     extendApplication(tolua_S);
     extendTextureCache(tolua_S);
-    extendRenderView(tolua_S);
     extendCamera(tolua_S);
     extendProperties(tolua_S);
     extendAutoPolygon(tolua_S);

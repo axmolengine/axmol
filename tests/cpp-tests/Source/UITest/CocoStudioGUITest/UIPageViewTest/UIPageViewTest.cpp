@@ -115,9 +115,9 @@ bool UIPageViewTest::init()
     return false;
 }
 
-void UIPageViewTest::pageViewEvent(Object* pSender, PageView::EventType type)
+void UIPageViewTest::pageViewEvent(Object* pSender, PageView::EventType event)
 {
-    switch (type)
+    switch (event)
     {
     case PageView::EventType::TURNING:
     {
@@ -205,8 +205,7 @@ bool UIPageViewButtonTest::init()
 
         pageView->removeItem(0);
 
-        pageView->addEventListener(
-            (PageView::ccPageViewCallback)AX_CALLBACK_2(UIPageViewButtonTest::pageViewEvent, this));
+        pageView->addEventListener(AX_CALLBACK_2(UIPageViewButtonTest::pageViewEvent, this));
 
         _uiLayer->addChild(pageView);
 
@@ -223,9 +222,9 @@ void UIPageViewButtonTest::onButtonClicked(Object* sender, Widget::TouchEventTyp
     }
 }
 
-void UIPageViewButtonTest::pageViewEvent(Object* pSender, PageView::EventType type)
+void UIPageViewButtonTest::pageViewEvent(Object* pSender, PageView::EventType event)
 {
-    switch (type)
+    switch (event)
     {
     case PageView::EventType::TURNING:
     {
@@ -309,8 +308,7 @@ bool UIPageViewTouchPropagationTest::init()
             pageView->insertCustomItem(outerBox, i);
         }
 
-        pageView->addEventListener(
-            (PageView::ccPageViewCallback)AX_CALLBACK_2(UIPageViewTouchPropagationTest::pageViewEvent, this));
+        pageView->addEventListener(AX_CALLBACK_2(UIPageViewTouchPropagationTest::pageViewEvent, this));
         pageView->setName("pageView");
         pageView->addTouchEventListener([](Object* sender, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::BEGAN)
@@ -364,8 +362,8 @@ bool UIPageViewTouchPropagationTest::init()
         checkBox2->setName("swallow");
         _uiLayer->addChild(checkBox2);
 
-        auto eventListener          = EventListenerTouchOneByOne::create();
-        eventListener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
+        auto eventListener           = PointerEventListener::create();
+        eventListener->onPointerDown = [](PointerEvent* event) -> bool {
             AXLOGD("layout receives touches");
             return true;
         };
@@ -387,24 +385,20 @@ void UIPageViewTouchPropagationTest::onButtonClicked(Object* pSender, Widget::To
     {
         if (ck1->isSelected())
         {
-            btn->setPropagateTouchEvents(true);
-            pageView->setPropagateTouchEvents(true);
+            btn->setPropagatePointerEvents(true);
+            pageView->setPropagatePointerEvents(true);
         }
         else
         {
-            btn->setPropagateTouchEvents(false);
-            pageView->setPropagateTouchEvents(false);
+            btn->setPropagatePointerEvents(false);
+            pageView->setPropagatePointerEvents(false);
         }
 
         if (ck2->isSelected())
         {
-            btn->setSwallowTouches(true);
-            pageView->setSwallowTouches(true);
         }
         else
         {
-            btn->setSwallowTouches(false);
-            pageView->setSwallowTouches(false);
         }
     }
     if (type == Widget::TouchEventType::ENDED)
@@ -413,9 +407,9 @@ void UIPageViewTouchPropagationTest::onButtonClicked(Object* pSender, Widget::To
     }
 }
 
-void UIPageViewTouchPropagationTest::pageViewEvent(Object* pSender, PageView::EventType type)
+void UIPageViewTouchPropagationTest::pageViewEvent(Object* pSender, PageView::EventType event)
 {
-    switch (type)
+    switch (event)
     {
     case PageView::EventType::TURNING:
     {
@@ -501,8 +495,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
             pageView->insertCustomItem(outerBox, i);
         }
 
-        pageView->addEventListener(
-            (PageView::ccPageViewCallback)AX_CALLBACK_2(UIPageViewDynamicAddAndRemoveTest::pageViewEvent, this));
+        pageView->addEventListener(AX_CALLBACK_2(UIPageViewDynamicAddAndRemoveTest::pageViewEvent, this));
         pageView->setName("pageView");
         _uiLayer->addChild(pageView);
 
@@ -590,9 +583,9 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
     return false;
 }
 
-void UIPageViewDynamicAddAndRemoveTest::pageViewEvent(Object* pSender, PageView::EventType type)
+void UIPageViewDynamicAddAndRemoveTest::pageViewEvent(Object* pSender, PageView::EventType ev)
 {
-    switch (type)
+    switch (ev)
     {
     case PageView::EventType::TURNING:
     {
@@ -761,8 +754,7 @@ bool UIPageViewVerticalTest::init()
             pageView->insertCustomItem(layout, i);
         }
 
-        pageView->addEventListener(
-            (PageView::ccPageViewCallback)AX_CALLBACK_2(UIPageViewVerticalTest::pageViewEvent, this));
+        pageView->addEventListener(AX_CALLBACK_2(UIPageViewVerticalTest::pageViewEvent, this));
 
         _uiLayer->addChild(pageView);
 
@@ -771,9 +763,9 @@ bool UIPageViewVerticalTest::init()
     return false;
 }
 
-void UIPageViewVerticalTest::pageViewEvent(Object* pSender, PageView::EventType type)
+void UIPageViewVerticalTest::pageViewEvent(Object* pSender, PageView::EventType ev)
 {
-    switch (type)
+    switch (ev)
     {
     case PageView::EventType::TURNING:
     {
@@ -910,8 +902,7 @@ bool UIPageViewChildSizeTest::init()
             pageView->insertCustomItem(imageView, i);
         }
 
-        pageView->addEventListener(
-            (PageView::ccPageViewCallback)AX_CALLBACK_2(UIPageViewChildSizeTest::pageViewEvent, this));
+        pageView->addEventListener(AX_CALLBACK_2(UIPageViewChildSizeTest::pageViewEvent, this));
 
         _uiLayer->addChild(pageView);
 
@@ -920,9 +911,9 @@ bool UIPageViewChildSizeTest::init()
     return false;
 }
 
-void UIPageViewChildSizeTest::pageViewEvent(Object* pSender, PageView::EventType type)
+void UIPageViewChildSizeTest::pageViewEvent(Object* pSender, PageView::EventType ev)
 {
-    switch (type)
+    switch (ev)
     {
     case PageView::EventType::TURNING:
     {

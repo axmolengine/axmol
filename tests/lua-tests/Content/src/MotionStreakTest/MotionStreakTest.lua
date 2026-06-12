@@ -106,12 +106,12 @@ local function MotionStreakTest2()
 
     streak:setPosition(ax.p(s.width / 2, s.height / 2))
 
-    local function onTouchesMoved(touches, event)
-        streak:setPosition( touches[1]:getLocation() )
+    local function onPointerMove(event)
+        streak:setPosition( event:getLocation() )
     end
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(onTouchesMoved,ax.Handler.EVENT_TOUCHES_MOVED )
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
 

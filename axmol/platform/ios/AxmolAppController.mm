@@ -24,7 +24,7 @@
 
 #import "axmol/platform/ios/AxmolAppController.h"
 #import "axmol/platform/ios/AxmolViewController.h"
-#include "axmol/platform/ios/RenderViewImpl-ios.h"
+#include "axmol/platform/ios/RenderView-ios.h"
 #include "axmol/base/Director.h"
 #include "axmol/platform/Application.h"
 
@@ -43,14 +43,14 @@ using namespace ax;
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
 
-    auto axmolApp = Application::getInstance();
+    auto axmolApp = ApplicationCore::getInstance();
 
     // Initialize the Axmol Engine attributes
     axmolApp->initContextAttrs();
 
     // Override point for customization after application launch.
 
-    auto renderView = ax::RenderViewImpl::createWithFullscreen("axmol3");
+    auto renderView = ax::RenderView::createWithFullscreen("axmol3");
     _viewController = [self createRootViewController];
 
     renderView->showWindow(_viewController);

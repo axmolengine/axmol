@@ -28,13 +28,13 @@ THE SOFTWARE.
 
 #include "axmol/platform/StdC.h"
 #include "axmol/platform/Common.h"
-#include "axmol/platform/ApplicationBase.h"
+#include "axmol/platform/ApplicationCore.h"
 #include <string>
 
 namespace ax
 {
 
-class AX_DLL Application : public ApplicationBase
+class AX_DLL Application : public ApplicationCore
 {
 public:
     /**
@@ -49,12 +49,6 @@ public:
     @brief    Run the message loop.
     */
     int run();
-
-    /**
-    @brief    Get current application instance.
-    @return Current application instance pointer.
-    */
-    static Application* getInstance();
 
     /* override functions */
     void setAnimationInterval(float interval) override;
@@ -80,18 +74,11 @@ public:
      */
     virtual bool openURL(std::string_view url);
 
-    void setStartupScriptFilename(std::string_view startupScriptFile);
-
-    std::string_view getStartupScriptFilename() { return _startupScriptFilename; }
-
 protected:
     HINSTANCE _instance;
     HACCEL _accelTable;
     LARGE_INTEGER _animationInterval;
     std::string _resourceRootPath;
-    std::string _startupScriptFilename;
-
-    static Application* sm_pSharedApplication;
 };
 
 }  // namespace ax

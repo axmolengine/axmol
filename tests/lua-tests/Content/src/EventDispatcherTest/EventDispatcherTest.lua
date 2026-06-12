@@ -210,10 +210,10 @@ function TouchableSpriteTest:onEnter()
     sprite3:setPosition(ax.p(0, 0))
     sprite2:addChild(sprite3, 1)
 
-    local function onTouchBegan(touch, event)
+    local function onTouchBegan(event)
         local target = event:getCurrentTarget()
 
-        local locationInNode = target:convertToNodeSpace(touch:getLocation())
+        local locationInNode = target:convertToNodeSpace(event:getLocation())
         local s = target:getContentSize()
         local rect = ax.rect(0, 0, s.width, s.height)
 
@@ -225,14 +225,14 @@ function TouchableSpriteTest:onEnter()
         return false
     end
 
-    local function onTouchMoved(touch, event)
+    local function onPointerMove(event)
         local target = event:getCurrentTarget()
         local posX,posY = target:getPosition()
-        local delta = touch:getDelta()
+        local delta = event:getDelta()
         target:setPosition(ax.p(posX + delta.x, posY + delta.y))
     end
 
-    local function onTouchEnded(touch, event)
+    local function onTouchEnded(event)
         local target = event:getCurrentTarget()
         print("sprite onTouchesEnded..")
         target:setOpacity(255)
@@ -243,11 +243,10 @@ function TouchableSpriteTest:onEnter()
         end
     end
 
-    local listener1 = ax.EventListenerTouchOneByOne:create()
-    listener1:setSwallowTouches(true)
-    listener1:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_TOUCH_BEGAN )
-    listener1:registerScriptHandler(onTouchMoved,ax.Handler.EVENT_TOUCH_MOVED )
-    listener1:registerScriptHandler(onTouchEnded,ax.Handler.EVENT_TOUCH_ENDED )
+    local listener1 = ax.PointerEventListener:create()
+    listener1:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_POINTER_DOWN )
+    listener1:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
+    listener1:registerScriptHandler(onTouchEnded,ax.Handler.EVENT_POINTER_UP )
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener1, sprite1)
 
@@ -259,7 +258,7 @@ function TouchableSpriteTest:onEnter()
 
     local function removeAllTouchItem(tag, sender)
         sender:setString("Only Next item could be clicked")
-        eventDispatcher:removeEventListenersForType(ax.EVENT_TOUCH_ONE_BY_ONE)
+        eventDispatcher:removeEventListenersForType(ax.EVENT_POINTER)
 
         local nextMenuItem = ax.MenuItemFont:create("Next")
         nextMenuItem:setFontSizeObj(16)
@@ -319,8 +318,8 @@ end
 function TouchableSpriteWithFixedPriority:onEnter()
     local eventDispatcher = self:getEventDispatcher()
 
-    local function onTouchBegan(touch, event)
-        local locationInNode = self:convertToNodeSpace(touch:getLocation())
+    local function onTouchBegan(event)
+        local locationInNode = self:convertToNodeSpace(event:getLocation())
         local s = self:getContentSize()
         local rect = ax.rect(0, 0, s.width, s.height)
 
@@ -332,11 +331,11 @@ function TouchableSpriteWithFixedPriority:onEnter()
         return false
     end
 
-    local function onTouchMoved(touch, event)
+    local function onPointerMove(event)
 
     end
 
-    local  function onTouchEnded(touch, event)
+    local  function onTouchEnded(event)
         self:setColor(ax.color32(255, 255, 255))
         if self._removeListenerOnTouchEnded then
             eventDispatcher:removeEventListener(self._listener)
@@ -345,13 +344,12 @@ function TouchableSpriteWithFixedPriority:onEnter()
 
     end
 
-    local listener = ax.EventListenerTouchOneByOne:create()
+    local listener = ax.PointerEventListener:create()
     self._listener = listener
-    listener:setSwallowTouches(true)
 
-    listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_TOUCH_BEGAN )
-    listener:registerScriptHandler(onTouchMoved,ax.Handler.EVENT_TOUCH_MOVED )
-    listener:registerScriptHandler(onTouchEnded,ax.Handler.EVENT_TOUCH_ENDED )
+    listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_POINTER_DOWN )
+    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
+    listener:registerScriptHandler(onTouchEnded,ax.Handler.EVENT_POINTER_UP )
 
     if 0 == self._fixedPriority then
         eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -469,8 +467,8 @@ function RemoveListenerWhenDispatchingTest:onEnter()
     sprite1:setPosition(ax.p(origin.x + size.width/2, origin.y + size.height/2))
     self:addChild(sprite1, 10)
 
-    local function onTouchBegan(touch, event)
-        local locationInNode = sprite1:convertToNodeSpace(touch:getLocation())
+    local function onTouchBegan(event)
+        local locationInNode = sprite1:convertToNodeSpace(event:getLocation())
         local s = sprite1:getContentSize()
         local rect = ax.rect(0, 0, s.width, s.height)
 
@@ -482,16 +480,15 @@ function RemoveListenerWhenDispatchingTest:onEnter()
         return false
     end
 
-    local function onTouchEnded(touch, event)
+    local function onTouchEnded(event)
         sprite1:setColor(ax.color32(255, 255, 255))
     end
 
-    local listener1 = ax.EventListenerTouchOneByOne:create()
-    listener1:setSwallowTouches(true)
+    local listener1 = ax.PointerEventListener:create()
     self:setUserObject(listener1)
 
-    listener1:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_TOUCH_BEGAN )
-    listener1:registerScriptHandler(onTouchEnded,ax.Handler.EVENT_TOUCH_ENDED )
+    listener1:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_POINTER_DOWN )
+    listener1:registerScriptHandler(onTouchEnded,ax.Handler.EVENT_POINTER_UP )
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener1, sprite1)
@@ -573,7 +570,7 @@ function CustomEventTest:onEnter()
         statusLabel1:setString(str)
     end
 
-    local listener1 = ax.EventListenerCustom:create("game_custom_event1",eventCustomListener1)
+    local listener1 = ax.CustomEventListener:create("game_custom_event1",eventCustomListener1)
     self._listener1 = listener1
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithFixedPriority(listener1, 1)
@@ -581,7 +578,7 @@ function CustomEventTest:onEnter()
     local function sendCallback1(tag, sender)
         count1 = count1 + 1
 
-        local event = ax.EventCustom:new("game_custom_event1")
+        local event = ax.CustomEvent:new("game_custom_event1")
         event._usedata = string.format("%d",count1)
         eventDispatcher:dispatchEvent(event)
     end
@@ -599,14 +596,14 @@ function CustomEventTest:onEnter()
         statusLabel2:setString(str)
     end
 
-    local listener2 = ax.EventListenerCustom:create("game_custom_event2",eventCustomListener2)
+    local listener2 = ax.CustomEventListener:create("game_custom_event2",eventCustomListener2)
     CustomEventTest._listener2 = listener2
     eventDispatcher:addEventListenerWithFixedPriority(listener2, 1)
 
     local function sendCallback2(tag, sender)
         count2 = count2 + 1
 
-        local event = ax.EventCustom:new("game_custom_event2")
+        local event = ax.CustomEvent:new("game_custom_event2")
         event._usedata = string.format("%d",count2)
         eventDispatcher:dispatchEvent(event)
     end
@@ -667,14 +664,14 @@ function LabelKeyboardEventTest:onEnter()
     statusLabel:setPosition(ax.p(origin.x + size.width/2,origin.y + size.height/2))
     self:addChild(statusLabel)
 
-    local function onKeyPressed(keyCode, event)
-        local buf = string.format("Key %d was pressed!",keyCode)
+    local function onKeyPressed(event)
+        local buf = string.format("Key %d was pressed!",event:getKeyCode())
         local label = event:getCurrentTarget()
         label:setString(buf)
     end
 
-    local function onKeyReleased(keyCode, event)
-        local buf = string.format("Key %d was released!",keyCode)
+    local function onKeyReleased(event)
+        local buf = string.format("Key %d was released!",event:getKeyCode())
         local label = event:getCurrentTarget()
         label:setString(buf)
     end
@@ -751,7 +748,7 @@ function SpriteAccelerationEventTest:onEnter()
         target:setPosition(ax.p(ptNowX , ptNowY))
     end
 
-    local listener = ax.EventListenerAcceleration:create(accelerometerListener)
+    local listener = ax.AccelerationEventListener:create(accelerometerListener)
 
     self:getEventDispatcher():addEventListenerWithSceneGraphPriority(listener, sprite)
 end
@@ -803,9 +800,9 @@ function RemoveAndRetainNodeTest:onEnter()
     self._sprite = sprite
     self:addChild(sprite, 10)
 
-    local function onTouchBegan(touch,event)
+    local function onTouchBegan(event)
         local target = event:getCurrentTarget()
-        local locationInNode = target:convertToNodeSpace(touch:getLocation())
+        local locationInNode = target:convertToNodeSpace(event:getLocation())
         local s = target:getContentSize()
         local rect = ax.rect(0, 0, s.width, s.height)
 
@@ -817,33 +814,31 @@ function RemoveAndRetainNodeTest:onEnter()
         return false
     end
 
-    local function onTouchMoved(touch,event)
+    local function onPointerMove(event)
         local target = event:getCurrentTarget()
         local posX,posY = target:getPosition()
-        local delta = touch:getDelta()
-        local force = touch:getCurrentForce()
-        local maxForce = touch:getMaxForce()
-        if force > 0.0 and (force / maxForce) > 0.8 then
+        local delta = event:getDelta()
+        local pressure = event:getPressure()
+        if pressure > 0.8 then
             local origin = ax.Director:getInstance():getVisibleOrigin()
             local size = ax.Director:getInstance():getVisibleSize()
             target:setPosition(ax.p(origin.x + size.width/2, origin.y + size.height/2))
-            print(string.format("3D touch detected, reset to default position. force = %f, max force = %f", force, maxForce))
+            print(string.format("3D touch detected, reset to default position. pressure = %f", pressure))
         else
             target:setPosition(ax.p(posX + delta.x, posY + delta.y))
         end
     end
 
-    local function onTouchEnded(touch,event)
+    local function onTouchEnded(event)
         local target = event:getCurrentTarget()
         print("sprite onTouchesEnded.. ")
         target:setOpacity(255)
     end
 
-    local listener1 = ax.EventListenerTouchOneByOne:create()
-    listener1:setSwallowTouches(true)
-    listener1:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_TOUCH_BEGAN)
-    listener1:registerScriptHandler(onTouchMoved,ax.Handler.EVENT_TOUCH_MOVED)
-    listener1:registerScriptHandler(onTouchEnded,ax.Handler.EVENT_TOUCH_ENDED)
+    local listener1 = ax.PointerEventListener:create()
+    listener1:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_POINTER_DOWN)
+    listener1:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE)
+    listener1:registerScriptHandler(onTouchEnded,ax.Handler.EVENT_POINTER_UP)
     self:getEventDispatcher():addEventListenerWithSceneGraphPriority(listener1, sprite)
 
     local function retainSprite()
@@ -909,13 +904,13 @@ function RemoveListenerAfterAddingTest:onEnter()
 
     local function item1Callback(tag, sender)
 
-        local function onTouchBegan(touch, event)
+        local function onTouchBegan(event)
             AXASSERT(false, "Should not come here!")
             return true
         end
 
-        local listener = ax.EventListenerTouchOneByOne:create()
-        listener:registerScriptHandler(onTouchBegan, ax.Handler.EVENT_TOUCH_BEGAN)
+        local listener = ax.PointerEventListener:create()
+        listener:registerScriptHandler(onTouchBegan, ax.Handler.EVENT_POINTER_DOWN)
         eventDispatcher:addEventListenerWithFixedPriority(listener, -1)
         eventDispatcher:removeEventListener(listener)
     end
@@ -942,16 +937,16 @@ function RemoveListenerAfterAddingTest:onEnter()
 
     local function item2Callback( tag, sender )
 
-        local function onTouchBegan(touch, event)
+        local function onTouchBegan(event)
             print("Should not come here!")
             return true
         end
 
-        local listener = ax.EventListenerTouchOneByOne:create()
-        listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_TOUCH_BEGAN)
+        local listener = ax.PointerEventListener:create()
+        listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_POINTER_DOWN)
 
         eventDispatcher:addEventListenerWithFixedPriority(listener, -1)
-        eventDispatcher:removeEventListenersForType(ax.EVENT_TOUCH_ONE_BY_ONE)
+        eventDispatcher:removeEventListenersForType(ax.EVENT_POINTER)
 
         addNextButton()
 
@@ -963,13 +958,13 @@ function RemoveListenerAfterAddingTest:onEnter()
 
     local function item3Callback( tag, sender )
 
-        local function onTouchBegan(touch, event)
+        local function onTouchBegan(event)
             print("Should not come here!")
             return true
         end
 
-        local listener = ax.EventListenerTouchOneByOne:create()
-        listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_TOUCH_BEGAN)
+        local listener = ax.PointerEventListener:create()
+        listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_POINTER_DOWN)
 
         eventDispatcher:addEventListenerWithFixedPriority(listener, -1)
         eventDispatcher:removeAllEventListeners()
@@ -1027,10 +1022,10 @@ function GlobalZTouchTest.extend(target)
 end
 
 function GlobalZTouchTest:onEnter()
-    local function onTouchBegan(touch, event)
+    local function onTouchBegan(event)
         local target = event:getCurrentTarget()
 
-        local locationInNode = target:convertToNodeSpace(touch:getLocation())
+        local locationInNode = target:convertToNodeSpace(event:getLocation())
         local s = target:getContentSize()
         local rect = ax.rect(0, 0, s.width, s.height)
 
@@ -1042,24 +1037,23 @@ function GlobalZTouchTest:onEnter()
         return false
     end
 
-    local function onTouchMoved(touch, event)
+    local function onPointerMove(event)
         local target = event:getCurrentTarget()
         local posX,posY = target:getPosition()
-        local delta = touch:getDelta()
+        local delta = event:getDelta()
         target:setPosition(ax.p(posX + delta.x, posY + delta.y))
     end
 
-    local function onTouchEnded(touch, event)
+    local function onTouchEnded(event)
         local target = event:getCurrentTarget()
         print("sprite onTouchesEnded..")
         target:setOpacity(255)
     end
 
-    local listener = ax.EventListenerTouchOneByOne:create()
-    listener:setSwallowTouches(true)
-    listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_TOUCH_BEGAN )
-    listener:registerScriptHandler(onTouchMoved,ax.Handler.EVENT_TOUCH_MOVED )
-    listener:registerScriptHandler(onTouchEnded,ax.Handler.EVENT_TOUCH_ENDED )
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_POINTER_DOWN )
+    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
+    listener:registerScriptHandler(onTouchEnded,ax.Handler.EVENT_POINTER_UP )
 
     local SPRITE_COUNT = 8
     for i = 0, SPRITE_COUNT - 1 do
@@ -1130,13 +1124,13 @@ end
 
 function StopPropagationTest:onEnter()
 
-    local function onTouchBegan(touch, event)
-        if not self:isPointInTopHalfAreaOfScreen(touch:getLocation()) then
+    local function onTouchBegan(event)
+        if not self:isPointInTopHalfAreaOfScreen(event:getLocation()) then
             return false
         end
         local target = event:getCurrentTarget()
         assert(target:getTag() == TAG_BLUE_SPRITE, "Yellow blocks shouldn't response event.")
-        if self:isPointInNode(touch:getLocation(), target) then
+        if self:isPointInNode(event:getLocation(), target) then
             target:setOpacity(180)
             return true
         end
@@ -1144,47 +1138,46 @@ function StopPropagationTest:onEnter()
         return false
     end
 
-    local function onTouchEnded(touch, event)
+    local function onTouchEnded(event)
         local target = event:getCurrentTarget()
         target:setOpacity(255)
     end
 
-    local touchOneByOneListener = ax.EventListenerTouchOneByOne:create()
-    touchOneByOneListener:setSwallowTouches(true)
-    touchOneByOneListener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_TOUCH_BEGAN )
-    touchOneByOneListener:registerScriptHandler(onTouchEnded,ax.Handler.EVENT_TOUCH_ENDED )
+    local touchOneByOneListener = ax.PointerEventListener:create()
+    touchOneByOneListener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_POINTER_DOWN )
+    touchOneByOneListener:registerScriptHandler(onTouchEnded,ax.Handler.EVENT_POINTER_UP )
 
-    local function onTouchesBegan(touches, event)
-        if self:isPointInTopHalfAreaOfScreen(touches[1]:getLocation()) then
+    local function onTouchesBegan(event)
+        if self:isPointInTopHalfAreaOfScreen(event:getLocation()) then
             return
         end
         local target = event:getCurrentTarget()
         assert(target:getTag() == TAG_BLUE_SPRITE2, "Yellow blocks shouldn't response event.")
 
-        if self:isPointInNode(touches[1]:getLocation(), target) then
+        if self:isPointInNode(event:getLocation(), target) then
             target:setOpacity(180)
         end
         event:stopPropagation()
     end
 
-    local function onTouchesEnd(touches, event)
-        if self:isPointInTopHalfAreaOfScreen(touches[1]:getLocation()) then
+    local function onTouchesEnd(event)
+        if self:isPointInTopHalfAreaOfScreen(event:getLocation()) then
             return
         end
         local target = event:getCurrentTarget()
         assert(target:getTag() == TAG_BLUE_SPRITE2, "Yellow blocks shouldn't response event.")
 
-        if self:isPointInNode(touches[1]:getLocation(), target) then
+        if self:isPointInNode(event:getLocation(), target) then
             target:setOpacity(255)
         end
         event:stopPropagation()
     end
 
-    local touchAllAtOnceListener = ax.EventListenerTouchAllAtOnce:create()
-    touchAllAtOnceListener:registerScriptHandler(onTouchesBegan,ax.Handler.EVENT_TOUCHES_BEGAN )
-    touchAllAtOnceListener:registerScriptHandler(onTouchesEnd,ax.Handler.EVENT_TOUCHES_ENDED )
+    local touchAllAtOnceListener = ax.PointerEventListener:create()
+    touchAllAtOnceListener:registerScriptHandler(onTouchesBegan,ax.Handler.EVENT_POINTER_DOWN )
+    touchAllAtOnceListener:registerScriptHandler(onTouchesEnd,ax.Handler.EVENT_POINTER_UP )
 
-    local function onKeyPressed(key, event)
+    local function onKeyPressed(event)
         local target = event:getCurrentTarget()
         assert(target:getTag() == TAG_BLUE_SPRITE or target:getTag() == TAG_BLUE_SPRITE2, "Yellow blocks shouldn't response event.")
         event:stopPropagation()
@@ -1388,7 +1381,7 @@ function Issue4129Test:onEnter()
         bugFixed = true
     end
 
-    self._customListener = ax.EventListenerCustom:create("event_come_to_background",eventCustomListener)
+    self._customListener = ax.CustomEventListener:create("event_come_to_background",eventCustomListener)
     eventDispatcher:addEventListenerWithFixedPriority(self._customListener, 1)
 
     local function removeAllTouch(tag, sender)
@@ -1412,7 +1405,7 @@ function Issue4129Test:onEnter()
         self:addChild(menu2)
 
         --Simulate to dispatch 'come to background' event
-        local event = ax.EventCustom:new("event_come_to_background")
+        local event = ax.CustomEvent:new("event_come_to_background")
         eventDispatcher:dispatchEvent(event)
     end
 

@@ -72,7 +72,7 @@ public:
     void printWidgetResources(ax::Object* sender);
 
 protected:
-    ax::ui::Layout* _layout;
+    ax::ui::LayoutGroup* _layout;
 };
 
 class UILayoutTest_BackGroundImage_Scale9 : public UIScene

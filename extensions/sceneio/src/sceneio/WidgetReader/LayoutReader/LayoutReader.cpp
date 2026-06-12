@@ -24,11 +24,11 @@
 
 #include "sceneio/WidgetReader/LayoutReader/LayoutReader.h"
 
-#include "axmol/ui/UILayout.h"
+#include "axmol/ui/LayoutGroup.h"
 #include "sceneext/CocoLoader.h"
-#include "axmol/ui/UIScrollView.h"
-#include "axmol/ui/UIPageView.h"
-#include "axmol/ui/UIListView.h"
+#include "axmol/ui/ScrollView.h"
+#include "axmol/ui/PageView.h"
+#include "axmol/ui/ListView.h"
 #include "sceneio/CSParseBinary_generated.h"
 #include "sceneio/FlatBuffersSerialize.h"
 #include "axmol/base/Director.h"
@@ -90,7 +90,7 @@ void LayoutReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLo
 {
     WidgetReader::setPropsFromBinary(widget, cocoLoader, cocoNode);
 
-    Layout* panel = static_cast<Layout*>(widget);
+    LayoutGroup* panel = static_cast<LayoutGroup*>(widget);
 
     stExpCocoNode* stChildArray = cocoNode->GetChildArray(cocoLoader);
     this->beginSetBasicProperties(widget);
@@ -100,8 +100,8 @@ void LayoutReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLo
     int ecr = 0, ecg = 0, ecb = 0;
     float bgcv1 = 0.0f, bgcv2 = 0.0f;
     float capsx = 0.0f, capsy = 0.0, capsWidth = 0.0, capsHeight = 0.0f;
-    Layout::Type layoutType = Layout::Type::ABSOLUTE;
-    int bgColorOpacity      = panel->getBackGroundColorOpacity();
+    LayoutGroup::Type layoutType = LayoutGroup::Type::ABSOLUTE;
+    int bgColorOpacity           = panel->getBackGroundColorOpacity();
 
     for (int i = 0; i < cocoNode->GetChildNum(); ++i)
     {
@@ -175,7 +175,7 @@ void LayoutReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLo
         }
         else if (key == P_ColorType)
         {
-            panel->setBackGroundColorType(Layout::BackGroundColorType(valueToInt(value)));
+            panel->setBackGroundColorType(LayoutGroup::BackGroundColorType(valueToInt(value)));
         }
         else if (key == P_BackGroundImageData)
         {
@@ -209,7 +209,7 @@ void LayoutReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLo
         }
         else if (key == P_LayoutType)
         {
-            layoutType = (Layout::Type)valueToInt(value);
+            layoutType = (LayoutGroup::Type)valueToInt(value);
         }
     }
 
@@ -232,7 +232,7 @@ void LayoutReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson::V
 {
     WidgetReader::setPropsFromJsonDictionary(widget, options);
 
-    Layout* panel = static_cast<Layout*>(widget);
+    LayoutGroup* panel = static_cast<LayoutGroup*>(widget);
 
     /* adapt screen gui */
     float w = 0, h = 0;
@@ -339,7 +339,7 @@ void LayoutReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson::V
     int co = DICTOOL->getIntValue_json(options, P_BgColorOpacity, 100);
 
     int colorType = DICTOOL->getIntValue_json(options, P_ColorType, 1);
-    panel->setBackGroundColorType(Layout::BackGroundColorType(colorType));
+    panel->setBackGroundColorType(LayoutGroup::BackGroundColorType(colorType));
 
     panel->setBackGroundColor(Color32(scr, scg, scb), Color32(ecr, ecg, ecb));
     panel->setBackGroundColor(Color32(cr, cg, cb, co));
@@ -362,7 +362,7 @@ void LayoutReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson::V
     bool layoutTypeExsit = DICTOOL->checkObjectExist_json(options, P_LayoutType);
     if (layoutTypeExsit)
     {
-        panel->setLayoutType((Layout::Type)DICTOOL->getIntValue_json(options, P_LayoutType));
+        panel->setLayoutType((LayoutGroup::Type)DICTOOL->getIntValue_json(options, P_LayoutType));
     }
 
     int bgimgcr      = DICTOOL->getIntValue_json(options, P_ColorR, 255);
@@ -619,8 +619,8 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
 void LayoutReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* layoutOptions)
 {
-    Layout* panel = static_cast<Layout*>(node);
-    auto options  = (PanelOptions*)layoutOptions;
+    LayoutGroup* panel = static_cast<LayoutGroup*>(node);
+    auto options       = (PanelOptions*)layoutOptions;
 
     bool clipEnabled = options->clipEnabled() != 0;
     panel->setClippingEnabled(clipEnabled);
@@ -642,7 +642,7 @@ void LayoutReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
     panel->setBackGroundColorVector(colorVector);
 
     int colorType = options->colorType();
-    panel->setBackGroundColorType(Layout::BackGroundColorType(colorType));
+    panel->setBackGroundColorType(LayoutGroup::BackGroundColorType(colorType));
 
     panel->setBackGroundColor(bgStartColor, bgEndColor);
     panel->setBackGroundColor(bgColor);
@@ -729,7 +729,7 @@ void LayoutReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
     }
     else
     {
-        if (!panel->isIgnoreContentAdaptWithSize())
+        if (!panel->isAutoSize())
         {
             Size contentSize(widgetOptions->size()->width(), widgetOptions->size()->height());
             panel->setContentSize(contentSize);
@@ -739,7 +739,7 @@ void LayoutReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
 
 Node* LayoutReader::createNodeWithFlatBuffers(const flatbuffers::Table* layoutOptions)
 {
-    Layout* layout = Layout::create();
+    LayoutGroup* layout = LayoutGroup::create();
 
     setPropsWithFlatBuffers(layout, (Table*)layoutOptions);
 

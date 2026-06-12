@@ -20,111 +20,26 @@
 
 #pragma once
 
+#include <winrt/Windows.UI.Xaml.Markup.h>
+
 #include "SwapChainPage.g.h"
 
-#include <memory>
-#include <condition_variable>
-#include <mutex>
-#include <concrt.h>
-#include <concurrent_queue.h>
-
-#include "axmol/platform/winrt/xaml/AxmolRenderer.h"
-
 #include <winrt/Windows.UI.Xaml.h>
-#include <winrt/Windows.UI.Xaml.Input.h>
-#include <winrt/Windows.UI.Xaml.Markup.h>
-#include <winrt/Windows.Devices.Input.h>
-
-#if AX_ENABLE_GL
-#    include "axmol/platform/winrt/xaml/EGLSurfaceProvider.h"
-#endif
-
-using namespace winrt;
+#include <winrt/Windows.UI.Xaml.Controls.h>
 
 namespace winrt::AxmolAppWinRT::implementation
 {
 struct SwapChainPage : SwapChainPageT<SwapChainPage>
 {
-public:
     SwapChainPage();
     ~SwapChainPage() override;
-    void SetVisibility(bool isVisible);
 
-    void ProcessOperations();
-
-    void OnPageLoaded(Windows::Foundation::IInspectable const& sender, Windows::UI::Xaml::RoutedEventArgs const& e);
-    void OnPanelSizeChanged(Windows::Foundation::IInspectable const& sender,
-                            Windows::UI::Xaml::RoutedEventArgs const& e);
-    void OnVisibilityChanged(Windows::UI::Core::CoreWindow const& sender,
-                             Windows::UI::Core::VisibilityChangedEventArgs const& args);
-#if (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP) || _MSC_VER >= 1900
-    void OnBackButtonPressed(Windows::Foundation::IInspectable const& sender,
-                             Windows::UI::Core::BackRequestedEventArgs const& args);
-#endif
-    void CreateRenderSurface();
-    void DestroyRenderSurface();
-    void RecoverFromLostDevice();
-    void TerminateApp();
-    void StartRenderLoop();
-    void StopRenderLoop();
-
-    void CreateInput();
-
-#if AX_ENABLE_GL
-    EGLSurfaceProvider* m_eglSurfaceProvider{nullptr};
-    EGLSurface m_eglSurface{EGL_NO_SURFACE};  // This surface is associated with a swapChainPanel on the page
-    Concurrency::critical_section m_eglSurfaceCriticalSection{};
-#endif
-    std::shared_ptr<AxmolRenderer> m_renderer{};
-
-    Windows::Foundation::IAsyncAction m_renderLoopWorker{};
-
-    // Track user input on a background worker thread.
-    Windows::Foundation::IAsyncAction m_inputLoopWorker{};
-    Windows::UI::Core::CoreIndependentInputSource m_coreInput{nullptr};
-
-    // Independent touch and pen handling functions.
-    // !!!Note: cppwinrt generator will Xaml::RoutedEventArgs, so add underline prefix
-    void _OnPointerPressed(Windows::Foundation::IInspectable const& sender,
-                           Windows::UI::Core::PointerEventArgs const& args);
-    void _OnPointerMoved(Windows::Foundation::IInspectable const& sender,
-                         Windows::UI::Core::PointerEventArgs const& args);
-    void _OnPointerReleased(Windows::Foundation::IInspectable const& sender,
-                            Windows::UI::Core::PointerEventArgs const& args);
-    void _OnPointerWheelChanged(Windows::Foundation::IInspectable const& sender,
-                                Windows::UI::Core::PointerEventArgs const& args);
-
-    // Independent keyboard handling functions.
-    void OnKeyPressed(Windows::UI::Core::CoreWindow const& sender, Windows::UI::Core::KeyEventArgs const& args);
-    void OnKeyReleased(Windows::UI::Core::CoreWindow const& sender, Windows::UI::Core::KeyEventArgs const& args);
-
-    void _OnCharacterReceived(Windows::UI::Core::CoreWindow const& sender,
-                              Windows::UI::Core::CharacterReceivedEventArgs const& args);
-
-    void OnOrientationChanged(Windows::Graphics::Display::DisplayInformation const& sender,
-                              Windows::Foundation::IInspectable const& args);
-
-    float m_dpi;
-    bool m_deviceLost;
-    bool m_visible;
-    bool m_cursorVisible;
-    bool m_fallbackGL{false};
-
-    Windows::Graphics::Display::DisplayOrientations m_orientation;
-
-    std::mutex m_sleepMutex;
+    void OnPageLoaded(Windows::Foundation::IInspectable const& sender, Windows::UI::Xaml::RoutedEventArgs const& args);
+    void OnPageUnloaded(Windows::Foundation::IInspectable const& sender,
+                        Windows::UI::Xaml::RoutedEventArgs const& args);
 
 private:
-    // must call at UI thread
-    void UpdatePanelSize();
-
-    std::condition_variable m_sleepCondition;
-
-    Concurrency::concurrent_queue<std::function<void()>> m_operations;
-
-    double m_panelWidth{0};
-    double m_panelHeight{0};
-    bool m_updateScheduled{false};
+    Windows::UI::Xaml::Controls::SwapChainPanel m_swapChainPanel{nullptr};
 };
 }  // namespace winrt::AxmolAppWinRT::implementation
 

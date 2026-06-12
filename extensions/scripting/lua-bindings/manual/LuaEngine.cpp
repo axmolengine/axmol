@@ -34,10 +34,30 @@
 #include "lua-bindings/manual/ui/axlua_ui_manual.hpp"
 #include "axmol/2d/MenuItem.h"
 #include "axmol/base/Director.h"
-#include "axmol/base/EventCustom.h"
+#include "axmol/base/CustomEvent.h"
 
 namespace ax
 {
+
+namespace
+{
+const char* inputPhaseToLuaTouchName(InputPhase phase)
+{
+    switch (phase)
+    {
+    case InputPhase::PointerDown:
+        return "began";
+    case InputPhase::PointerMove:
+        return "moved";
+    case InputPhase::PointerUp:
+        return "ended";
+    case InputPhase::PointerCancel:
+        return "cancelled";
+    default:
+        return nullptr;
+    }
+}
+}  // namespace
 
 LuaEngine* LuaEngine::_defaultEngine = nullptr;
 
@@ -133,11 +153,6 @@ int LuaEngine::executeSchedule(int nHandler, float dt, Node* pNode /* = nullptr*
     int ret = _stack->executeFunctionByHandler(nHandler, 1);
     _stack->clean();
     return ret;
-}
-
-int LuaEngine::executeLayerTouchEvent(Layer* pLayer, int eventType, Touch* pTouch)
-{
-    return 0;
 }
 
 int LuaEngine::executeLayerKeypadEvent(Layer* pLayer, int eventType)
@@ -348,14 +363,14 @@ int LuaEngine::handleKeypadEvent(void* data)
     if (0 == handler)
         return 0;
 
-    EventKeyboard::KeyCode action = keypadScriptData->actionType;
+    KeyboardEvent::KeyCode action = keypadScriptData->actionType;
 
     switch (action)
     {
-    case EventKeyboard::KeyCode::KEY_ESCAPE:
+    case KeyboardEvent::KeyCode::KEY_ESCAPE:
         _stack->pushString("backClicked");
         break;
-    case EventKeyboard::KeyCode::KEY_MENU:
+    case KeyboardEvent::KeyCode::KEY_MENU:
         _stack->pushString("menuClicked");
         break;
     default:
@@ -423,47 +438,25 @@ int LuaEngine::handleTouchEvent(void* data)
         return 0;
 
     TouchScriptData* touchScriptData = static_cast<TouchScriptData*>(data);
-    if (nullptr == touchScriptData->nativeObject || nullptr == touchScriptData->touch)
+    if (nullptr == touchScriptData->nativeObject || nullptr == touchScriptData->event)
         return 0;
 
-    int handler = ScriptHandlerMgr::getInstance()->getObjectHandler((void*)touchScriptData->nativeObject,
-                                                                    ScriptHandlerMgr::HandlerType::TOUCHES);
+    auto* pointerEvent = static_cast<PointerEvent*>(touchScriptData->event);
+    int handler        = ScriptHandlerMgr::getInstance()->getObjectHandler((void*)touchScriptData->nativeObject,
+                                                                           ScriptHandlerMgr::HandlerType::TOUCHES);
 
     if (0 == handler)
         return 0;
 
-    switch (touchScriptData->actionType)
-    {
-    case EventTouch::EventCode::BEGAN:
-        _stack->pushString("began");
-        break;
-
-    case EventTouch::EventCode::MOVED:
-        _stack->pushString("moved");
-        break;
-
-    case EventTouch::EventCode::ENDED:
-        _stack->pushString("ended");
-        break;
-
-    case EventTouch::EventCode::CANCELLED:
-        _stack->pushString("cancelled");
-        break;
-
-    default:
+    auto phaseName = inputPhaseToLuaTouchName(touchScriptData->actionType);
+    if (nullptr == phaseName)
         return 0;
-    }
 
-    int ret = 0;
-
-    Touch* touch = touchScriptData->touch;
-    if (nullptr != touch)
-    {
-        const ax::Vec2 pt = Director::getInstance()->screenToWorld(touch->getLocationInView());
-        _stack->pushFloat(pt.x);
-        _stack->pushFloat(pt.y);
-        ret = _stack->executeFunctionByHandler(handler, 3);
-    }
+    _stack->pushString(phaseName);
+    const ax::Vec2 pt = Director::getInstance()->screenToWorld(pointerEvent->getScreenLocation());
+    _stack->pushFloat(pt.x);
+    _stack->pushFloat(pt.y);
+    int ret = _stack->executeFunctionByHandler(handler, 3);
     _stack->clean();
     return ret;
 }
@@ -473,9 +466,11 @@ int LuaEngine::handleTouchesEvent(void* data)
     if (nullptr == data)
         return 0;
 
-    TouchesScriptData* touchesScriptData = static_cast<TouchesScriptData*>(data);
-    if (nullptr == touchesScriptData->nativeObject || touchesScriptData->touches.size() == 0)
+    TouchScriptData* touchesScriptData = static_cast<TouchScriptData*>(data);
+    if (nullptr == touchesScriptData->nativeObject || nullptr == touchesScriptData->event)
         return 0;
+
+    auto* pointerEvent = static_cast<PointerEvent*>(touchesScriptData->event);
 
     int handler = ScriptHandlerMgr::getInstance()->getObjectHandler((void*)touchesScriptData->nativeObject,
                                                                     ScriptHandlerMgr::HandlerType::TOUCHES);
@@ -483,45 +478,23 @@ int LuaEngine::handleTouchesEvent(void* data)
     if (0 == handler)
         return 0;
 
-    switch (touchesScriptData->actionType)
-    {
-    case EventTouch::EventCode::BEGAN:
-        _stack->pushString("began");
-        break;
-
-    case EventTouch::EventCode::MOVED:
-        _stack->pushString("moved");
-        break;
-
-    case EventTouch::EventCode::ENDED:
-        _stack->pushString("ended");
-        break;
-
-    case EventTouch::EventCode::CANCELLED:
-        _stack->pushString("cancelled");
-        break;
-
-    default:
+    auto phaseName = inputPhaseToLuaTouchName(touchesScriptData->actionType);
+    if (nullptr == phaseName)
         return 0;
-    }
 
     Director* pDirector = Director::getInstance();
     lua_State* L        = _stack->getLuaState();
-    int ret             = 0;
 
     lua_newtable(L);
-    int i = 1;
-    for (auto& touch : touchesScriptData->touches)
-    {
-        ax::Vec2 pt = pDirector->screenToWorld(touch->getLocationInView());
-        lua_pushnumber(L, pt.x);
-        lua_rawseti(L, -2, i++);
-        lua_pushnumber(L, pt.y);
-        lua_rawseti(L, -2, i++);
-        lua_pushinteger(L, touch->getID());
-        lua_rawseti(L, -2, i++);
-    }
-    ret = _stack->executeFunctionByHandler(handler, 2);
+    ax::Vec2 pt = pDirector->screenToWorld(pointerEvent->getScreenLocation());
+    lua_pushnumber(L, pt.x);
+    lua_rawseti(L, -2, 1);
+    lua_pushnumber(L, pt.y);
+    lua_rawseti(L, -2, 2);
+    lua_pushinteger(L, pointerEvent->getPointerId());
+    lua_rawseti(L, -2, 3);
+    _stack->pushString(phaseName);
+    int ret = _stack->executeFunctionByHandler(handler, 2);
 
     _stack->clean();
     return ret;
@@ -578,14 +551,14 @@ int LuaEngine::handleEventAcc(void* data)
 
     lua_State* L = _stack->getLuaState();
 
-    LuaEventAccelerationData* eventListennerAcc = static_cast<LuaEventAccelerationData*>(basicScriptData->value);
+    LuaAccelerationEventData* eventListennerAcc = static_cast<LuaAccelerationEventData*>(basicScriptData->value);
     toluafix_pushusertype_object(L, eventListennerAcc->event->_ID, &(eventListennerAcc->event->_luaID),
                                  (void*)(eventListennerAcc->event), "ax.Event");
-    Acceleration* accleration = static_cast<Acceleration*>(eventListennerAcc->acc);
-    lua_pushnumber(L, accleration->x);
-    lua_pushnumber(L, accleration->y);
-    lua_pushnumber(L, accleration->z);
-    lua_pushnumber(L, accleration->timestamp);
+    auto& accleration = static_cast<AccelerationEvent*>(eventListennerAcc->event)->getAcceleration();
+    lua_pushnumber(L, accleration.x);
+    lua_pushnumber(L, accleration.y);
+    lua_pushnumber(L, accleration.z);
+    lua_pushnumber(L, accleration.timestamp);
     int ret = _stack->executeFunctionByHandler(handler, 5);
     _stack->clean();
     return ret;
@@ -607,7 +580,7 @@ int LuaEngine::handleEventKeyboard(ScriptHandlerMgr::HandlerType type, void* dat
         return 0;
 
     lua_State* L = _stack->getLuaState();
-    lua_pushinteger(L, keyboardData->keyCode);
+    lua_pushinteger(L, static_cast<int>(keyboardData->event->getKeyCode()));
     toluafix_pushusertype_object(L, keyboardData->event->_ID, &(keyboardData->event->_luaID),
                                  (void*)(keyboardData->event), "ax.Event");
     int ret = _stack->executeFunctionByHandler(handler, 2);
@@ -615,7 +588,7 @@ int LuaEngine::handleEventKeyboard(ScriptHandlerMgr::HandlerType type, void* dat
     return ret;
 }
 
-int LuaEngine::handleEventTouch(ScriptHandlerMgr::HandlerType type, void* data)
+int LuaEngine::handlePointerEvent(ScriptHandlerMgr::HandlerType type, void* data)
 {
     if (nullptr == data)
         return 0;
@@ -624,8 +597,8 @@ int LuaEngine::handleEventTouch(ScriptHandlerMgr::HandlerType type, void* data)
     if (nullptr == basicScriptData->nativeObject || nullptr == basicScriptData->value)
         return 0;
 
-    LuaEventTouchData* touchData = static_cast<LuaEventTouchData*>(basicScriptData->value);
-    if (nullptr == touchData->touch || nullptr == touchData->event)
+    LuaPointerEventData* touchData = static_cast<LuaPointerEventData*>(basicScriptData->value);
+    if (!touchData->event)
         return 0;
 
     int handler = ScriptHandlerMgr::getInstance()->getObjectHandler(basicScriptData->nativeObject, type);
@@ -634,75 +607,8 @@ int LuaEngine::handleEventTouch(ScriptHandlerMgr::HandlerType type, void* data)
 
     int ret = 0;
 
-    Touch* touch = touchData->touch;
-    if (nullptr != touch)
-    {
-        _stack->pushObject(touchData->touch, "ax.Touch");
-        _stack->pushObject(touchData->event, "ax.Event");
-        ret = _stack->executeFunctionByHandler(handler, 2);
-    }
-    _stack->clean();
-
-    return ret;
-}
-
-int LuaEngine::handleEventTouches(ScriptHandlerMgr::HandlerType type, void* data)
-{
-    if (nullptr == data)
-        return 0;
-
-    BasicScriptData* basicScriptData = static_cast<BasicScriptData*>(data);
-    if (nullptr == basicScriptData->nativeObject || nullptr == basicScriptData->value)
-        return 0;
-
-    LuaEventTouchesData* touchesData = static_cast<LuaEventTouchesData*>(basicScriptData->value);
-    if (nullptr == touchesData->event || touchesData->touches.size() == 0)
-        return 0;
-
-    int handler = ScriptHandlerMgr::getInstance()->getObjectHandler((void*)basicScriptData->nativeObject, type);
-
-    if (0 == handler)
-        return 0;
-
-    lua_State* L = _stack->getLuaState();
-    int ret      = 0;
-
-    lua_newtable(L);
-    int i = 1;
-    for (auto& touch : touchesData->touches)
-    {
-        _stack->pushInt(i);
-        _stack->pushObject(touch, "ax.Touch");
-        lua_rawset(L, -3);
-        ++i;
-    }
-    _stack->pushObject(touchesData->event, "ax.Event");
-
-    ret = _stack->executeFunctionByHandler(handler, 2);
-    _stack->clean();
-    return ret;
-}
-
-int LuaEngine::handleEventMouse(ScriptHandlerMgr::HandlerType type, void* data)
-{
-    if (nullptr == data)
-        return 0;
-
-    BasicScriptData* basicScriptData = static_cast<BasicScriptData*>(data);
-    if (nullptr == basicScriptData->nativeObject || nullptr == basicScriptData->value)
-        return 0;
-
-    LuaEventMouseData* mouseData = static_cast<LuaEventMouseData*>(basicScriptData->value);
-    if (nullptr == mouseData->event)
-        return 0;
-
-    int handler = ScriptHandlerMgr::getInstance()->getObjectHandler((void*)basicScriptData->nativeObject, type);
-
-    if (0 == handler)
-        return 0;
-
-    _stack->pushObject(mouseData->event, "ax.Event");
-    int ret = _stack->executeFunctionByHandler(handler, 1);
+    _stack->pushObject(touchData->event, "ax.PointerEvent");
+    ret = _stack->executeFunctionByHandler(handler, 1);
     _stack->clean();
 
     return ret;
@@ -717,7 +623,7 @@ int LuaEngine::handleEvenCustom(void* data)
     if (nullptr == basicData->nativeObject || nullptr == basicData->value)
         return 0;
 
-    EventCustom* eventCustom = static_cast<EventCustom*>(basicData->value);
+    CustomEvent* eventCustom = static_cast<CustomEvent*>(basicData->value);
     int handler              = ScriptHandlerMgr::getInstance()->getObjectHandler((void*)basicData->nativeObject,
                                                                                  ScriptHandlerMgr::HandlerType::EVENT_CUSTIOM);
 
@@ -725,7 +631,7 @@ int LuaEngine::handleEvenCustom(void* data)
         return 0;
 
     lua_State* L = _stack->getLuaState();
-    toluafix_pushusertype_object(L, eventCustom->_ID, &(eventCustom->_luaID), (void*)(eventCustom), "ax.EventCustom");
+    toluafix_pushusertype_object(L, eventCustom->_ID, &(eventCustom->_luaID), (void*)(eventCustom), "ax.CustomEvent");
     int ret = _stack->executeFunctionByHandler(handler, 1);
     _stack->clean();
 
@@ -760,17 +666,7 @@ int LuaEngine::handleEvent(ScriptHandlerMgr::HandlerType type, void* data)
     case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_MOVED:
     case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_ENDED:
     case ScriptHandlerMgr::HandlerType::EVENT_TOUCH_CANCELLED:
-        return handleEventTouch(type, data);
-    case ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_BEGAN:
-    case ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_MOVED:
-    case ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_ENDED:
-    case ScriptHandlerMgr::HandlerType::EVENT_TOUCHES_CANCELLED:
-        return handleEventTouches(type, data);
-    case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_DOWN:
-    case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_UP:
-    case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_MOVE:
-    case ScriptHandlerMgr::HandlerType::EVENT_MOUSE_SCROLL:
-        return handleEventMouse(type, data);
+        return handlePointerEvent(type, data);
     default:;
     }
 

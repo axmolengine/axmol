@@ -233,7 +233,7 @@ class ConvertToNode : public TestNodeDemo
 {
 public:
     CREATE_FUNC(ConvertToNode);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 

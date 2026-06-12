@@ -154,8 +154,8 @@ SpriteTests::SpriteTests()
 
 Sprite1::Sprite1()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(Sprite1::onTouchesEnded, this);
+    auto listener         = PointerEventListener::create();
+    listener->onPointerUp = AX_CALLBACK_1(Sprite1::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getCanvasSize();
@@ -192,11 +192,10 @@ void Sprite1::addNewSpriteWithCoords(Vec2 p)
     sprite->runAction(RepeatForever::create(seq));
 }
 
-void Sprite1::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void Sprite1::onPointerUp(PointerEvent* event)
 {
-    for (auto& touch : touches)
     {
-        auto location = touch->getLocation();
+        auto location = event->getLocation();
 
         addNewSpriteWithCoords(location);
     }
@@ -220,8 +219,8 @@ std::string Sprite1::subtitle() const
 
 SpriteBatchNode1::SpriteBatchNode1()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(SpriteBatchNode1::onTouchesEnded, this);
+    auto listener         = PointerEventListener::create();
+    listener->onPointerUp = AX_CALLBACK_1(SpriteBatchNode1::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto BatchNode = SpriteBatchNode::create("Images/grossini_dance_atlas.png", 50);
@@ -264,11 +263,10 @@ void SpriteBatchNode1::addNewSpriteWithCoords(Vec2 p)
     sprite->runAction(RepeatForever::create(seq));
 }
 
-void SpriteBatchNode1::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void SpriteBatchNode1::onPointerUp(PointerEvent* event)
 {
-    for (auto&& touch : touches)
     {
-        auto location = touch->getLocation();
+        auto location = event->getLocation();
 
         addNewSpriteWithCoords(location);
     }
@@ -1682,8 +1680,8 @@ std::string SpriteBatchNodeAliased::subtitle() const
 
 SpriteNewTexture::SpriteNewTexture()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(SpriteNewTexture::onTouchesEnded, this);
+    auto listener         = PointerEventListener::create();
+    listener->onPointerUp = AX_CALLBACK_1(SpriteNewTexture::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto node = Node::create();
@@ -1742,7 +1740,7 @@ void SpriteNewTexture::addNewSprite()
     sprite->runAction(RepeatForever::create(seq));
 }
 
-void SpriteNewTexture::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void SpriteNewTexture::onPointerUp(PointerEvent* event)
 {
 
     auto node = getChildByTag(kTagSpriteBatchNode);
@@ -1790,8 +1788,8 @@ std::string SpriteNewTexture::subtitle() const
 
 SpriteBatchNodeNewTexture::SpriteBatchNodeNewTexture()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(SpriteBatchNodeNewTexture::onTouchesEnded, this);
+    auto listener         = PointerEventListener::create();
+    listener->onPointerUp = AX_CALLBACK_1(SpriteBatchNodeNewTexture::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto batch = SpriteBatchNode::create("Images/grossini_dance_atlas.png", 50);
@@ -1848,7 +1846,7 @@ void SpriteBatchNodeNewTexture::addNewSprite()
     sprite->runAction(RepeatForever::create(seq));
 }
 
-void SpriteBatchNodeNewTexture::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void SpriteBatchNodeNewTexture::onPointerUp(PointerEvent* event)
 {
     auto batch = static_cast<SpriteBatchNode*>(getChildByTag(kTagSpriteBatchNode));
 

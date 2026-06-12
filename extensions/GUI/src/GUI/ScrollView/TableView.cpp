@@ -589,7 +589,7 @@ void TableView::scrollViewDidScroll(ScrollView* /*view*/)
     }
 }
 
-void TableView::onTouchEnded(Touch* pTouch, Event* pEvent)
+void TableView::onPointerUp(PointerEvent* pTouch)
 {
     if (!this->isVisible())
     {
@@ -598,22 +598,25 @@ void TableView::onTouchEnded(Touch* pTouch, Event* pEvent)
 
     if (_touchedCell)
     {
-        Rect bb   = this->getBoundingBox();
-        bb.origin = _parent->convertToWorldSpace(bb.origin);
+        Rect frame = this->getViewRect();
 
-        if (bb.containsPoint(pTouch->getLocation()) && _tableViewDelegate != nullptr)
+        if (frame.containsPoint(pTouch->getLocation()) && _tableViewDelegate != nullptr)
         {
             _tableViewDelegate->tableCellUnhighlight(this, _touchedCell);
             _tableViewDelegate->tableCellTouched(this, _touchedCell);
+        }
+        else if (_tableViewDelegate != nullptr)
+        {
+            _tableViewDelegate->tableCellUnhighlight(this, _touchedCell);
         }
 
         _touchedCell = nullptr;
     }
 
-    ScrollView::onTouchEnded(pTouch, pEvent);
+    ScrollView::onPointerUp(pTouch);
 }
 
-bool TableView::onTouchBegan(Touch* pTouch, Event* pEvent)
+bool TableView::onPointerDown(PointerEvent* pTouch)
 {
     for (Node* c = this; c != nullptr; c = c->getParent())
     {
@@ -623,16 +626,15 @@ bool TableView::onTouchBegan(Touch* pTouch, Event* pEvent)
         }
     }
 
-    bool touchResult = ScrollView::onTouchBegan(pTouch, pEvent);
+    bool touchResult = ScrollView::onPointerDown(pTouch);
+    if (!touchResult)
+        return false;
 
     if (_touches.size() == 1)
     {
-        ssize_t index;
-        Vec2 point;
+        Vec2 point = this->getContainer()->convertPointerToNodeSpace(pTouch);
 
-        point = this->getContainer()->convertTouchToNodeSpace(pTouch);
-
-        index = this->_indexFromOffset(point);
+        ssize_t index = this->_indexFromOffset(point);
         if (index == AX_INVALID_INDEX)
         {
             _touchedCell = nullptr;
@@ -657,12 +659,12 @@ bool TableView::onTouchBegan(Touch* pTouch, Event* pEvent)
         _touchedCell = nullptr;
     }
 
-    return touchResult;
+    return true;
 }
 
-void TableView::onTouchMoved(Touch* pTouch, Event* pEvent)
+void TableView::onPointerMove(PointerEvent* pTouch)
 {
-    ScrollView::onTouchMoved(pTouch, pEvent);
+    ScrollView::onPointerMove(pTouch);
 
     if (_touchedCell && isTouchMoved())
     {
@@ -672,12 +674,13 @@ void TableView::onTouchMoved(Touch* pTouch, Event* pEvent)
         }
 
         _touchedCell = nullptr;
+        return;
     }
 }
 
-void TableView::onTouchCancelled(Touch* pTouch, Event* pEvent)
+void TableView::onPointerCancel(PointerEvent* pTouch)
 {
-    ScrollView::onTouchCancelled(pTouch, pEvent);
+    ScrollView::onPointerCancel(pTouch);
 
     if (_touchedCell)
     {

@@ -78,14 +78,14 @@ void UIRichTextTestBase::touchEvent(Object* pSender, Widget::TouchEventType type
     {
     case Widget::TouchEventType::ENDED:
     {
-        if (_richText->isIgnoreContentAdaptWithSize())
+        if (_richText->isAutoSize())
         {
-            _richText->ignoreContentAdaptWithSize(false);
+            _richText->setAutoSize(true);
             _richText->setContentSize(_defaultContentSize);
         }
         else
         {
-            _richText->ignoreContentAdaptWithSize(true);
+            _richText->setAutoSize(false);
         }
     }
     break;
@@ -201,7 +201,7 @@ bool UIRichTextTest::init()
 
         // RichText
         _richText = RichText::create();
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         RichElementText* re1 = RichElementText::create(1, Color32::WHITE, str1, "SimSun", 10);
@@ -265,7 +265,7 @@ bool UIRichTextXMLBasic::init()
             "This is just simple text, with no XML tags. Testing the basics. Testing word-wrapping. Testing "
             "(\"punctuation\") "
             "Testing, Testing");
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -302,7 +302,7 @@ bool UIRichTextXMLSmallBig::init()
         // RichText
         _richText = RichText::createWithXML(
             "Regular size.<small>smaller size.</small><big>bigger.<small>normal.</small>bigger</big>.normal.");
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -339,7 +339,7 @@ bool UIRichTextXMLColor::init()
         // RichText
         _richText = RichText::createWithXML(
             "Default color.<font color='#ff0000'>red.<font color='#00ff00'>green</font>red again.</font>default again");
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -376,7 +376,7 @@ bool UIRichTextXMLSUIB::init()
         // RichText
         _richText =
             RichText::createWithXML("system font: <u>underline</u><i>italics</i><b>bold</b><del>strike-through</del>");
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -414,7 +414,7 @@ bool UIRichTextXMLSUIB2::init()
         _richText = RichText::createWithXML(
             "<font face='fonts/Marker Felt.ttf' size='24'>ttf font: "
             "<u>underline</u><i>italics</i><b>bold</b><del>strike-through</del></font>");
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -452,7 +452,7 @@ bool UIRichTextXMLSUIB3::init()
         _richText = RichText::createWithXML(
             "<font face='fonts/Marker Felt.ttf' size='20'>ttf font: <i><u>italics and underline</u></i><del><b>bold "
             "and strike-through</b></del></font>");
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -501,7 +501,7 @@ bool UIRichTextXMLImg::init()
             "Image with w/h/sX/sY: <img src='cocosui/sliderballnormal.png' width='30' height='30' scaleX='0.5' "
             "scaleY='0.5' /> and "
             "goes text again");
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -538,7 +538,7 @@ bool UIRichTextXMLUrl::init()
         // RichText
         _richText = RichText::createWithXML(
             "This link will redirect you to google: <a href='http://www.google.com'>click me</a>");
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -576,7 +576,7 @@ bool UIRichTextXMLUrlImg::init()
         _richText = RichText::createWithXML(
             "This link will redirect you to google: <a href='http://www.google.com'><img src=\"cocosui/ccicon.png\" "
             "height=\"48\" width=\"48\" /></a>");
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -616,7 +616,7 @@ bool UIRichTextXMLFace::init()
         _richText = RichText::createWithXML(
             "<font size='20' face='fonts/Marker Felt.ttf'>Marker Felt 20.<font face='fonts/arial.ttf'>Arial "
             "20.</font></font><font face='font/Thonburi.ttf' size='24' color='#0000ff'>Thonburi 24 blue</font>");
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -653,7 +653,7 @@ bool UIRichTextXMLBR::init()
         // RichText
         _richText = RichText::createWithXML(
             "this is one line.<br/>this should be in another line.<br/>and this is another line");
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -689,7 +689,7 @@ bool UIRichTextXMLInvalid::init()
         _richText = RichText::createWithXML("this is an invalid xml. <i>no closing tag");
         if (_richText)
         {
-            _richText->ignoreContentAdaptWithSize(false);
+            _richText->setAutoSize(true);
             _richText->setContentSize(_defaultContentSize);
 
             _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -727,7 +727,7 @@ bool UIRichTextXMLOutline::init()
         _richText = RichText::createWithXML(
             "<font face='fonts/Marker Felt.ttf' size=\"24\"><outline color=\"#D2B48C\" "
             "size=\"2\">OUTLINE</outline></font>");
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -767,7 +767,7 @@ bool UIRichTextXMLShadow::init()
         _richText = RichText::createWithXML(
             "<font size=\"24\"><shadow color=\"#4169E1\" offsetWidth=\"8\" offsetHeight=\"-8\" "
             "blurRadius=\"2\">SHADOW</shadow></font>");
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -804,7 +804,7 @@ bool UIRichTextXMLGlow::init()
         // RichText
         _richText = RichText::createWithXML(
             "<font face=\"fonts/Marker Felt.ttf\" size=\"24\"><glow color=\"#AFEEEE\">GLOW</glow></font>");
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -876,7 +876,7 @@ bool UIRichTextXMLExtend::init()
             "<span>CloseNormal-tag:<br /><CloseNormal /><br /><br />CloseSelected-tag:<br "
             "/><CloseSelected></CloseSelected></span>",
             defaults, [](std::string_view url) { Application::getInstance()->openURL(url); });
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -917,7 +917,7 @@ bool UIRichTextXMLSpace::init()
             "words should be divided with space.<br /><br /><font face='fonts/Marker Felt.ttf' color='#ffff00'>HELLO "
             "</font><font color='#ffff00'>WORLD</font><br /><br /><font color='#ff00ff'>HELLO</font><font "
             "face='fonts/Marker Felt.ttf' color='#ff00ff'> WORLD</font>");
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
         _richText->setLocalZOrder(10);
@@ -959,7 +959,7 @@ bool UIRichTextNewline::init()
         _richText->pushBackElement(textElement);
         textElement = ui::RichElementText::create(2, Color32::WHITE, "Line3", "fonts/Marker Felt.ttf", 32, 0);
         _richText->pushBackElement(textElement);
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
         _richText->setLocalZOrder(10);
@@ -996,7 +996,7 @@ bool UIRichTextHeadings::init()
         // RichText
         _richText = RichText::createWithXML(
             R"(<h1 face="fonts/arial.ttf">h1. HEADING</h1><h2 face="fonts/Marker Felt.ttf">h2. HEADING</h2><h3 face="fonts/American Typewriter.ttf">h3. HEADING</h3><h4>h4. HEADING</h4><h5>h5. HEADING</h5><h6>h6. HEADING</h6>)");
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -1034,7 +1034,7 @@ bool UIRichTextDynamicFontSize::init()
         // RichText
         _richText = RichText::createWithXML(
             R"(<p>Paragraph 1 with default size font</p><p><font size="1.5em">Paragraph 2 with font size="1.5em"</font></p><p><font size="150%">Paragraph 3 with font size="150%"</font></p>)");
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -1078,7 +1078,7 @@ bool UIRichTextParagraph::init()
             "interdum velit. "
             "Convallis a cras semper auctor neque vitae tempus quam pellentesque. Congue quisque egestas diam in arcu "
             "cursus euismod quis.</p>");
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
@@ -1162,7 +1162,7 @@ Cursus metus aliquam eleifend mi in. Euismod lacinia at quis risus sed vulputate
 Sit amet mattis vulputate enim nulla aliquet porttitor lacus luctus.</p>
 <a id="some_link" href="https://google.com">Google!</a>)",
             valMap);
-        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setAutoSize(true);
         _richText->setContentSize(Size(_defaultContentSize.width, 0));
         _richText->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
         _richText->setOpenUrlHandler([this](std::string_view url) {

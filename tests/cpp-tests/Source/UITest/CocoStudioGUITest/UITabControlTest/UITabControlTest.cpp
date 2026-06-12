@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/ui/UITabControl.h"
+#include "axmol/ui/TabView.h"
 #include "UITabControlTest.h"
 
 using namespace ax;
@@ -53,9 +53,8 @@ bool UITabControlTest::init()
         touchSinkLayer->setContentSize(_uiLayer->getContentSize());
         _uiLayer->addChild(touchSinkLayer);
 
-        auto listener = EventListenerTouchOneByOne::create();
-        listener->setSwallowTouches(true);
-        listener->onTouchBegan = [](Touch* t, Event* e) { return true; };
+        auto listener           = PointerEventListener::create();
+        listener->onPointerDown = [](PointerEvent* e) { return true; };
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, touchSinkLayer);
 
         auto tab = TabControl::create();
@@ -100,9 +99,9 @@ bool UITabControlTest::init()
         touchSinkLayer->addChild(tab);
         tab->setPosition(Vec2(widgetSize.width * .5f, widgetSize.height * .5f));
 
-        tab->setTabChangedEventListener([displayText](int index, TabControl::EventType evtType) {
+        tab->setTabChangedEventListener([tab, displayText](int /*tabIndex*/, TabView::EventType /*eventType*/) {
             displayText->retain();
-            std::string text = fmt::format("tab {} selected", index);
+            std::string text = fmt::format("tab {} selected", tab->getSelectedTabIndex());
             displayText->setString(text);
             displayText->release();
         });

@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_tests__UIEditBoxTest__
-#define __cocos2d_tests__UIEditBoxTest__
+#pragma once
 
 #include "UIScene.h"
 
@@ -84,5 +83,3 @@ public:
     CREATE_FUNC(UIEditBoxTestPressedAndDisabled);
     virtual bool init() override;
 };
-
-#endif /* defined(__cocos2d_tests__UIEditBoxTest__) */

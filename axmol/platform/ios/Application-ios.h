@@ -27,12 +27,12 @@ THE SOFTWARE.
 #pragma once
 
 #include "axmol/platform/Common.h"
-#include "axmol/platform/ApplicationBase.h"
+#include "axmol/platform/ApplicationCore.h"
 
 namespace ax
 {
 
-class AX_DLL Application : public ApplicationBase
+class AX_DLL Application : public ApplicationCore
 {
 public:
     /**
@@ -47,12 +47,6 @@ public:
     @brief    Run the message loop.
     */
     int run();
-
-    /**
-    @brief    Get the current application instance.
-    @return Current application instance pointer.
-    */
-    static Application* getInstance();
 
     /**
      @brief    Callback by Director for limit FPS.
@@ -89,8 +83,8 @@ public:
      */
     bool openURL(std::string_view url) override;
 
-protected:
-    static Application* sm_pSharedApplication;
+private:
+    void postBoundaryTaskSignal();
 };
 
 }  // namespace ax

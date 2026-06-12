@@ -24,7 +24,7 @@
 
 #include "LayerTest.h"
 #include "../testResource.h"
-#include "axmol/ui/UIText.h"
+#include "axmol/ui/Text.h"
 
 using namespace ax;
 
@@ -320,10 +320,10 @@ void LayerTest1::onEnter()
 {
     LayerTest::onEnter();
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(LayerTest1::onTouchesBegan, this);
-    listener->onTouchesMoved = AX_CALLBACK_2(LayerTest1::onTouchesMoved, this);
-    listener->onTouchesEnded = AX_CALLBACK_2(LayerTest1::onTouchesEnded, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = AX_CALLBACK_1(LayerTest1::onPointerDown, this);
+    listener->onPointerMove = AX_CALLBACK_1(LayerTest1::onPointerMove, this);
+    listener->onPointerUp   = AX_CALLBACK_1(LayerTest1::onPointerUp, this);
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
@@ -346,21 +346,24 @@ void LayerTest1::updateSize(Vec2& touchLocation)
     l->setContentSize(newSize);
 }
 
-void LayerTest1::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
+bool LayerTest1::onPointerDown(PointerEvent* event)
 {
-    onTouchesMoved(touches, event);
+    onPointerMove(event);
+    return true;
 }
 
-void LayerTest1::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
+void LayerTest1::onPointerMove(PointerEvent* event)
 {
-    auto touchLocation = touches[0]->getLocation();
+    auto touchLocation = event->getLocation();
 
     updateSize(touchLocation);
+
+    return;
 }
 
-void LayerTest1::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void LayerTest1::onPointerUp(PointerEvent* event)
 {
-    onTouchesMoved(touches, event);
+    onPointerMove(event);
 }
 
 std::string LayerTest1::subtitle() const
@@ -465,8 +468,8 @@ LayerGradientTest::LayerGradientTest()
     auto layer1 = LayerGradient::create(Color32(255, 0, 0, 255), Color32(0, 255, 0, 255), Vec2(0.9f, 0.9f));
     addChild(layer1, 0, kTagLayer);
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = AX_CALLBACK_2(LayerGradientTest::onTouchesMoved, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerMove = AX_CALLBACK_1(LayerGradientTest::onPointerMove, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto label1 = Label::createWithTTF("Compressed Interpolation: Enabled", "fonts/Marker Felt.ttf", 26);
@@ -488,18 +491,19 @@ void LayerGradientTest::toggleItem(Object* sender)
     gradient->setCompressedInterpolation(!gradient->isCompressedInterpolation());
 }
 
-void LayerGradientTest::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
+void LayerGradientTest::onPointerMove(PointerEvent* event)
 {
     auto s = Director::getInstance()->getCanvasSize();
 
-    auto touch = touches[0];
-    auto start = touch->getLocation();
+    auto start = event->getLocation();
 
     auto diff = Vec2(s.width / 2, s.height / 2) - start;
     diff      = diff.getNormalized();
 
     auto gradient = static_cast<LayerGradient*>(getChildByTag(1));
     gradient->setVector(diff);
+
+    return;
 }
 
 std::string LayerGradientTest::title() const
@@ -985,8 +989,7 @@ ax::ui::ListView* LayerRadialGradientTest::createListView()
     listview->setContentSize(scale->getContentSize() * 5);
     listview->setCurSelectedIndex(0);
     listview->setTouchEnabled(true);
-    listview->addEventListener(
-        (ui::ListView::ccListViewCallback)AX_CALLBACK_2(LayerRadialGradientTest::listviewCallback, this));
+    listview->addEventListener(AX_CALLBACK_2(LayerRadialGradientTest::listviewCallback, this));
     listview->setTag(100);
 
     return listview;

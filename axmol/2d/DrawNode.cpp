@@ -30,7 +30,7 @@
 #include "axmol/base/Environment.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/base/Director.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/2d/ActionCatmullRom.h"
 #include "axmol/base/Utils.h"
@@ -100,7 +100,7 @@ DrawNode::DrawNode()
     // TODO new-renderer: interface setupBuffer removal
 
     // Need to listen the event only when not use batchnode, because it will use VBO
-    //    auto listener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom* event){
+    //    auto listener = CustomEventListener::create(EVENT_RENDERER_RECREATED, [this](CustomEvent* event){
     //        /** listen the event that renderer was recreated on Android/WP8 */
     //        this->setupBuffer();
     //    });

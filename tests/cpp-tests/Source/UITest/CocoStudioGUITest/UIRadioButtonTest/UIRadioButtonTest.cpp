@@ -234,34 +234,32 @@ bool UIRadioButtonTwoGroupsTest::init()
     return false;
 }
 
-void UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup1(RadioButton* radioButton,
+void UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup1(RadioButton* sender,
                                                             int index,
-                                                            ax::ui::RadioButtonGroup::EventType type)
+                                                            RadioButtonGroup::EventType type)
 {
-    AXASSERT(index == _radioButtonGroups[0]->getSelectedButtonIndex(), "The two indexes must match!");
     auto text = fmt::format("RadioButtonGroup1 : {}", index);
     _groupEventLabel->setString(text);
     addLog(text);
 }
 
-void UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup2(RadioButton* radioButton,
+void UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup2(RadioButton* sender,
                                                             int index,
-                                                            ax::ui::RadioButtonGroup::EventType type)
+                                                            RadioButtonGroup::EventType type)
 {
-    AXASSERT(index == _radioButtonGroups[1]->getSelectedButtonIndex(), "The two indexes must match!");
     auto text = fmt::format("RadioButtonGroup2 : {}", index);
     _groupEventLabel->setString(text);
     addLog(text);
 }
 
-void UIRadioButtonTwoGroupsTest::onChangedRadioButtonSelect(RadioButton* radioButton, RadioButton::EventType type)
+void UIRadioButtonTwoGroupsTest::onChangedRadioButtonSelect(Object* sender, RadioButton::EventType event)
 {
-    if (radioButton == nullptr)
+    if (sender == nullptr)
     {
         return;
     }
-    auto text = fmt::format("RadioButton {} : ", radioButton->getTag());
-    switch (type)
+    auto text = fmt::format("RadioButton {} : ", static_cast<RadioButton*>(sender)->getTag());
+    switch (event)
     {
     case RadioButton::EventType::SELECTED:
     {

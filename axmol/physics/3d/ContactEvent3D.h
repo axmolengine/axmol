@@ -29,9 +29,9 @@
 
 #    include "axmol/base/Object.h"
 #    include "axmol/math/Math.h"
-#    include "axmol/base/EventListenerCustom.h"
+#    include "axmol/base/CustomEventListener.h"
 #    include "axmol/base/Event.h"
-#    include "axmol/base/EventCustom.h"
+#    include "axmol/base/CustomEvent.h"
 
 #    include "yasio/object_pool.hpp"
 
@@ -80,7 +80,7 @@ struct ContactInfo3D
  * It will created automatically when two shape contact with each other. And it will destroyed automatically when two
  shape separated.
  */
-class AX_DLL ContactEvent3D : public EventCustom
+class AX_DLL ContactEvent3D : public CustomEvent
 {
     friend class ContactListener;
     friend class ContactEventListener3D;
@@ -147,7 +147,7 @@ private:
 };
 
 /** Contact listener. It will receive all the contact callbacks. */
-class AX_DLL ContactEventListener3D : public EventListenerCustom
+class AX_DLL ContactEventListener3D : public CustomEventListener
 {
 public:
     /** Create the listener. */
@@ -184,7 +184,7 @@ public:
 
 protected:
     bool init();
-    void onEvent(EventCustom* event);
+    void onEvent(CustomEvent* event);
 
     friend class PhysicsWorld3D;
 };

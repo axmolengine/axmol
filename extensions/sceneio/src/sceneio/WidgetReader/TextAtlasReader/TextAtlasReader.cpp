@@ -1,8 +1,6 @@
-
-
 #include "sceneio/WidgetReader/TextAtlasReader/TextAtlasReader.h"
 
-#include "axmol/ui/UITextAtlas.h"
+#include "axmol/ui/TextAtlas.h"
 #include "axmol/platform/FileUtils.h"
 
 #include "sceneext/CocoLoader.h"
@@ -275,7 +273,7 @@ void TextAtlasReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers:
     auto widgetReader = WidgetReader::getInstance();
     widgetReader->setPropsWithFlatBuffers(node, (Table*)options->widgetOptions());
 
-    labelAtlas->ignoreContentAdaptWithSize(true);
+    labelAtlas->setAutoSize(false);
 }
 
 Node* TextAtlasReader::createNodeWithFlatBuffers(const flatbuffers::Table* textAtlasOptions)

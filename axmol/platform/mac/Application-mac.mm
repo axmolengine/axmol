@@ -38,19 +38,16 @@ THE SOFTWARE.
 
 namespace ax
 {
-
-Application* Application::sm_pSharedApplication = nullptr;
-
 Application::Application() : _animationInterval(16666667)
 {
-    AXASSERT(!sm_pSharedApplication, "sm_pSharedApplication already exist");
-    sm_pSharedApplication = this;
+    AXASSERT(!s_axmolApp, "s_axmolApp already exist");
+    s_axmolApp = this;
 }
 
 Application::~Application()
 {
-    AXASSERT(this == sm_pSharedApplication, "sm_pSharedApplication != this");
-    sm_pSharedApplication = 0;
+    AXASSERT(this == s_axmolApp, "s_axmolApp != this");
+    s_axmolApp = 0;
 }
 
 int Application::run()
@@ -75,6 +72,7 @@ int Application::run()
     {
         lastTime = std::chrono::steady_clock::now();
 
+        director->performFrameBoundaryTasks();
         director->renderFrame();
         renderView->pollEvents();
 
@@ -123,16 +121,6 @@ std::string Application::getVersion()
     return "";
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// static member function
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-Application* Application::getInstance()
-{
-    AXASSERT(sm_pSharedApplication, "sm_pSharedApplication not set");
-    return sm_pSharedApplication;
-}
-
 const char* Application::getCurrentLanguageCode()
 {
     static char code[3]       = {0};
@@ -167,17 +155,6 @@ bool Application::openURL(std::string_view url)
     NSString* msg = [NSString stringWithCString:url.data() encoding:NSUTF8StringEncoding];
     NSURL* nsUrl  = [NSURL URLWithString:msg];
     return [[NSWorkspace sharedWorkspace] openURL:nsUrl];
-}
-
-void Application::setStartupScriptFilename(std::string_view startupScriptFile)
-{
-    _startupScriptFilename = startupScriptFile;
-    std::replace(_startupScriptFilename.begin(), _startupScriptFilename.end(), '\\', '/');
-}
-
-std::string_view Application::getStartupScriptFilename()
-{
-    return _startupScriptFilename;
 }
 
 }  // namespace ax

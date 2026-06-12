@@ -2708,6 +2708,50 @@ void rect_to_luaval(lua_State* L, const Rect& rt)
     lua_rawset(L, -3);                             /* table[key] = value, L: table */
 }
 
+void ray_to_luaval(lua_State* L, const Ray& ray)
+{
+    if (NULL == L)
+        return;
+    lua_newtable(L);                                /* L: table */
+    lua_pushstring(L, "ox");                        /* L: table key */
+    lua_pushnumber(L, (lua_Number)ray.origin.x);    /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+    lua_pushstring(L, "oy");                        /* L: table key */
+    lua_pushnumber(L, (lua_Number)ray.origin.y);    /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+    lua_pushstring(L, "oz");                        /* L: table key */
+    lua_pushnumber(L, (lua_Number)ray.origin.z);    /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+    lua_pushstring(L, "dx");                        /* L: table key */
+    lua_pushnumber(L, (lua_Number)ray.direction.x); /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+    lua_pushstring(L, "dy");                        /* L: table key */
+    lua_pushnumber(L, (lua_Number)ray.direction.y); /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+    lua_pushstring(L, "dz");                        /* L: table key */
+    lua_pushnumber(L, (lua_Number)ray.direction.y); /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+}
+
+void accel_to_luaval(lua_State* L, const Acceleration& accel)
+{
+    if (NULL == L)
+        return;
+    lua_newtable(L);                                /* L: table */
+    lua_pushstring(L, "x");                         /* L: table key */
+    lua_pushnumber(L, (lua_Number)accel.x);         /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+    lua_pushstring(L, "y");                         /* L: table key */
+    lua_pushnumber(L, (lua_Number)accel.y);         /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+    lua_pushstring(L, "z");                         /* L: table key */
+    lua_pushnumber(L, (lua_Number)accel.z);         /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+    lua_pushstring(L, "timestamp");                 /* L: table key */
+    lua_pushnumber(L, (lua_Number)accel.timestamp); /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+}
+
 void color32_to_luaval(lua_State* L, const Color32& color)
 {
     if (NULL == L)

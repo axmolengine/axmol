@@ -573,23 +573,20 @@ local function ConvertToNode()
         ConvertToNode_layer:addChild(sprite, i)
     end
 
-    local function onTouchesEnded(touches, event)
-        local count = #(touches)
-        for i = 1, count do
-            local location = touches[i]:getLocation()
-            for j = 1,3 do
-                local node = ConvertToNode_layer:getChildByTag(100 + i - 1)
-                local p1, p2
-                p1 = node:convertToNodeSpaceAR(location)
-                p2 = node:convertToNodeSpace(location)
+    local function onTouchesEnded(event)
+        local location = event:getLocation()
+        for i = 1,3 do
+            local node = ConvertToNode_layer:getChildByTag(100 + i - 1)
+            local p1, p2
+            p1 = node:convertToNodeSpaceAR(location)
+            p2 = node:convertToNodeSpace(location)
 
-                cclog("AR: x=" .. p1.x .. ", y=" .. p1.y .. " -- Not AR: x=" .. p2.x .. ", y=" .. p2.y)
-            end
+            cclog("AR: x=" .. p1.x .. ", y=" .. p1.y .. " -- Not AR: x=" .. p2.x .. ", y=" .. p2.y)
         end
     end
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(onTouchesEnded,ax.Handler.EVENT_TOUCHES_ENDED )
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(onTouchesEnded,ax.Handler.EVENT_POINTER_UP )
     local eventDispatcher = ConvertToNode_layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, ConvertToNode_layer)
 

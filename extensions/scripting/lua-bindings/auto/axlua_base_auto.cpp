@@ -172,623 +172,6 @@ int lua_register_ax_base_Object(lua_State* tolua_S)
     return 1;
 }
 
-int lua_ax_base_Touch_getLocation(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Touch* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Touch",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Touch_getLocation'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Touch_getLocation'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getLocation();
-        vec2_to_luaval(tolua_S, ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Touch:getLocation",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Touch_getLocation'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Touch_getPreviousLocation(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Touch* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Touch",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Touch_getPreviousLocation'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Touch_getPreviousLocation'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getPreviousLocation();
-        vec2_to_luaval(tolua_S, ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Touch:getPreviousLocation",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Touch_getPreviousLocation'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Touch_getStartLocation(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Touch* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Touch",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Touch_getStartLocation'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Touch_getStartLocation'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getStartLocation();
-        vec2_to_luaval(tolua_S, ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Touch:getStartLocation",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Touch_getStartLocation'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Touch_getDelta(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Touch* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Touch",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Touch_getDelta'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Touch_getDelta'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getDelta();
-        vec2_to_luaval(tolua_S, ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Touch:getDelta",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Touch_getDelta'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Touch_getLocationInView(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Touch* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Touch",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Touch_getLocationInView'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Touch_getLocationInView'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getLocationInView();
-        vec2_to_luaval(tolua_S, ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Touch:getLocationInView",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Touch_getLocationInView'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Touch_getPreviousLocationInView(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Touch* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Touch",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Touch_getPreviousLocationInView'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Touch_getPreviousLocationInView'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getPreviousLocationInView();
-        vec2_to_luaval(tolua_S, ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Touch:getPreviousLocationInView",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Touch_getPreviousLocationInView'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Touch_getStartLocationInView(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Touch* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Touch",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Touch_getStartLocationInView'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Touch_getStartLocationInView'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getStartLocationInView();
-        vec2_to_luaval(tolua_S, ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Touch:getStartLocationInView",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Touch_getStartLocationInView'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Touch_setTouchInfo(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Touch* obj = nullptr;
-    bool ok  = true;
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Touch",0,&tolua_err)) goto tolua_lerror;
-#endif
-    obj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Touch_setTouchInfo'", nullptr);
-        return 0;
-    }
-#endif
-    argc = lua_gettop(tolua_S)-1;
-    do {
-        if (argc == 5) {
-            int arg0;
-            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Touch:setTouchInfo");
-
-            if (!ok) { break; }
-            double arg1;
-            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Touch:setTouchInfo");
-
-            if (!ok) { break; }
-            double arg2;
-            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Touch:setTouchInfo");
-
-            if (!ok) { break; }
-            double arg3;
-            ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Touch:setTouchInfo");
-
-            if (!ok) { break; }
-            double arg4;
-            ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.Touch:setTouchInfo");
-
-            if (!ok) { break; }
-            obj->setTouchInfo(arg0, arg1, arg2, arg3, arg4);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do {
-        if (argc == 3) {
-            int arg0;
-            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Touch:setTouchInfo");
-
-            if (!ok) { break; }
-            double arg1;
-            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Touch:setTouchInfo");
-
-            if (!ok) { break; }
-            double arg2;
-            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Touch:setTouchInfo");
-
-            if (!ok) { break; }
-            obj->setTouchInfo(arg0, arg1, arg2);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.Touch:setTouchInfo",argc, 3);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Touch_setTouchInfo'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Touch_getID(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Touch* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Touch",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Touch_getID'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Touch_getID'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getID();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Touch:getID",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Touch_getID'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Touch_getCurrentForce(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Touch* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Touch",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Touch_getCurrentForce'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Touch_getCurrentForce'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getCurrentForce();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Touch:getCurrentForce",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Touch_getCurrentForce'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Touch_getMaxForce(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Touch* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Touch",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::Touch*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Touch_getMaxForce'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Touch_getMaxForce'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getMaxForce();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Touch:getMaxForce",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Touch_getMaxForce'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Touch_constructor(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Touch* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Touch_constructor'", nullptr);
-            return 0;
-        }
-        obj = new ax::Touch();
-        obj->autorelease();
-        int ID =  (int)obj->_ID ;
-        int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.Touch");
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Touch:Touch",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Touch_constructor'.",&tolua_err);
-#endif
-
-    return 0;
-}
-
-static int lua_ax_base_Touch_finalize(lua_State* tolua_S)
-{
-    AXLOGV("luabindings: finalizing LUA object (Touch)");
-    return 0;
-}
-
-int lua_register_ax_base_Touch(lua_State* tolua_S)
-{
-    tolua_usertype(tolua_S,"ax.Touch");
-    tolua_cclass(tolua_S,"Touch","ax.Touch","ax.Object",nullptr);
-
-    tolua_beginmodule(tolua_S,"Touch");
-        tolua_function(tolua_S,"new",lua_ax_base_Touch_constructor);
-        tolua_function(tolua_S,"getLocation",lua_ax_base_Touch_getLocation);
-        tolua_function(tolua_S,"getPreviousLocation",lua_ax_base_Touch_getPreviousLocation);
-        tolua_function(tolua_S,"getStartLocation",lua_ax_base_Touch_getStartLocation);
-        tolua_function(tolua_S,"getDelta",lua_ax_base_Touch_getDelta);
-        tolua_function(tolua_S,"getLocationInView",lua_ax_base_Touch_getLocationInView);
-        tolua_function(tolua_S,"getPreviousLocationInView",lua_ax_base_Touch_getPreviousLocationInView);
-        tolua_function(tolua_S,"getStartLocationInView",lua_ax_base_Touch_getStartLocationInView);
-        tolua_function(tolua_S,"setTouchInfo",lua_ax_base_Touch_setTouchInfo);
-        tolua_function(tolua_S,"getId",lua_ax_base_Touch_getID);
-        tolua_function(tolua_S,"getCurrentForce",lua_ax_base_Touch_getCurrentForce);
-        tolua_function(tolua_S,"getMaxForce",lua_ax_base_Touch_getMaxForce);
-    tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::Touch).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Touch";
-    g_typeCast[typeName] = "ax.Touch";
-    return 1;
-}
-
 int lua_ax_base_Event_getType(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1041,10 +424,10 @@ int lua_register_ax_base_Event(lua_State* tolua_S)
     return 1;
 }
 
-int lua_ax_base_EventTouch_getEventCode(lua_State* tolua_S)
+int lua_ax_base_PointerEvent_getLocation(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventTouch* obj = nullptr;
+    ax::PointerEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1053,15 +436,15 @@ int lua_ax_base_EventTouch_getEventCode(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventTouch",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventTouch*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventTouch_getEventCode'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_getLocation'", nullptr);
         return 0;
     }
 #endif
@@ -1071,27 +454,27 @@ int lua_ax_base_EventTouch_getEventCode(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventTouch_getEventCode'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_getLocation'", nullptr);
             return 0;
         }
-        int ret = (int)obj->getEventCode();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        auto&& ret = obj->getLocation();
+        vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventTouch:getEventCode",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:getLocation",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventTouch_getEventCode'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_getLocation'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_EventTouch_setEventCode(lua_State* tolua_S)
+int lua_ax_base_PointerEvent_getPreviousLocation(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventTouch* obj = nullptr;
+    ax::PointerEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1100,15 +483,626 @@ int lua_ax_base_EventTouch_setEventCode(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventTouch",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventTouch*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventTouch_setEventCode'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_getPreviousLocation'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_getPreviousLocation'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getPreviousLocation();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:getPreviousLocation",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_getPreviousLocation'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEvent_getStartLocation(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_getStartLocation'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_getStartLocation'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getStartLocation();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:getStartLocation",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_getStartLocation'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEvent_getDelta(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_getDelta'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_getDelta'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getDelta();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:getDelta",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_getDelta'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEvent_getScreenLocation(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_getScreenLocation'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_getScreenLocation'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getScreenLocation();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:getScreenLocation",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_getScreenLocation'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEvent_getPreviousScreenLocation(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_getPreviousScreenLocation'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_getPreviousScreenLocation'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getPreviousScreenLocation();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:getPreviousScreenLocation",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_getPreviousScreenLocation'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEvent_getStartScreenLocation(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_getStartScreenLocation'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_getStartScreenLocation'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getStartScreenLocation();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:getStartScreenLocation",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_getStartScreenLocation'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEvent_getScrollDelta(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_getScrollDelta'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_getScrollDelta'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getScrollDelta();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:getScrollDelta",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_getScrollDelta'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEvent_getScrollX(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_getScrollX'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_getScrollX'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getScrollX();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:getScrollX",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_getScrollX'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEvent_getScrollY(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_getScrollY'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_getScrollY'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getScrollY();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:getScrollY",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_getScrollY'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEvent_getPointerId(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_getPointerId'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_getPointerId'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getPointerId();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:getPointerId",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_getPointerId'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEvent_getPointerType(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_getPointerType'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_getPointerType'", nullptr);
+            return 0;
+        }
+        int ret = (int)obj->getPointerType();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:getPointerType",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_getPointerType'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEvent_getButton(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_getButton'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_getButton'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getButton();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:getButton",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_getButton'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEvent_getPressedButtons(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_getPressedButtons'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_getPressedButtons'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getPressedButtons();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:getPressedButtons",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_getPressedButtons'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEvent_isButtonPressed(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_isButtonPressed'", nullptr);
         return 0;
     }
 #endif
@@ -1116,91 +1110,32 @@ int lua_ax_base_EventTouch_setEventCode(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        ax::EventTouch::EventCode arg0;
+        int arg0;
 
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventTouch:setEventCode");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.PointerEvent:isButtonPressed");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventTouch_setEventCode'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_isButtonPressed'", nullptr);
             return 0;
         }
-        obj->setEventCode(arg0);
-        lua_settop(tolua_S, 1);
+        auto&& ret = obj->isButtonPressed(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventTouch:setEventCode",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:isButtonPressed",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventTouch_setEventCode'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_isButtonPressed'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_EventTouch_constructor(lua_State* tolua_S)
+int lua_ax_base_PointerEvent_isPrimaryPressed(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventTouch* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventTouch_constructor'", nullptr);
-            return 0;
-        }
-        obj = new ax::EventTouch();
-        obj->autorelease();
-        int ID =  (int)obj->_ID ;
-        int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventTouch");
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventTouch:EventTouch",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventTouch_constructor'.",&tolua_err);
-#endif
-
-    return 0;
-}
-
-static int lua_ax_base_EventTouch_finalize(lua_State* tolua_S)
-{
-    AXLOGV("luabindings: finalizing LUA object (EventTouch)");
-    return 0;
-}
-
-int lua_register_ax_base_EventTouch(lua_State* tolua_S)
-{
-    tolua_usertype(tolua_S,"ax.EventTouch");
-    tolua_cclass(tolua_S,"EventTouch","ax.EventTouch","ax.Event",nullptr);
-
-    tolua_beginmodule(tolua_S,"EventTouch");
-        tolua_function(tolua_S,"new",lua_ax_base_EventTouch_constructor);
-        tolua_function(tolua_S,"getEventCode",lua_ax_base_EventTouch_getEventCode);
-        tolua_function(tolua_S,"setEventCode",lua_ax_base_EventTouch_setEventCode);
-    tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::EventTouch).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventTouch";
-    g_typeCast[typeName] = "ax.EventTouch";
-    return 1;
-}
-
-int lua_ax_base_EventKeyboard_isRepeat(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventKeyboard* obj = nullptr;
+    ax::PointerEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1209,15 +1144,15 @@ int lua_ax_base_EventKeyboard_isRepeat(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventKeyboard",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventKeyboard*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventKeyboard_isRepeat'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_isPrimaryPressed'", nullptr);
         return 0;
     }
 #endif
@@ -1227,27 +1162,434 @@ int lua_ax_base_EventKeyboard_isRepeat(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventKeyboard_isRepeat'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_isPrimaryPressed'", nullptr);
             return 0;
         }
-        auto&& ret = obj->isRepeat();
+        auto&& ret = obj->isPrimaryPressed();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventKeyboard:isRepeat",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:isPrimaryPressed",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventKeyboard_isRepeat'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_isPrimaryPressed'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_EventKeyboard_constructor(lua_State* tolua_S)
+int lua_ax_base_PointerEvent_isCaptured(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventKeyboard* obj = nullptr;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_isCaptured'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_isCaptured'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isCaptured();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:isCaptured",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_isCaptured'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEvent_getPressure(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_getPressure'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_getPressure'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getPressure();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:getPressure",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_getPressure'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEvent_getPhase(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_getPhase'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_getPhase'", nullptr);
+            return 0;
+        }
+        int ret = (int)obj->getPhase();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:getPhase",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_getPhase'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEvent_isPrimary(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_isPrimary'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_isPrimary'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isPrimary();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:isPrimary",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_isPrimary'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEvent_getCamera(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEvent_getCamera'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_getCamera'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getCamera();
+        object_to_luaval<ax::Camera>(tolua_S, "ax.Camera",(ax::Camera*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:getCamera",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_getCamera'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEvent_constructor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEvent_constructor'", nullptr);
+            return 0;
+        }
+        obj = new ax::PointerEvent();
+        obj->autorelease();
+        int ID =  (int)obj->_ID ;
+        int* luaID =  &obj->_luaID ;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.PointerEvent");
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEvent:PointerEvent",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEvent_constructor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+
+static int lua_ax_base_PointerEvent_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (PointerEvent)");
+    return 0;
+}
+
+int lua_register_ax_base_PointerEvent(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.PointerEvent");
+    tolua_cclass(tolua_S,"PointerEvent","ax.PointerEvent","ax.Event",nullptr);
+
+    tolua_beginmodule(tolua_S,"PointerEvent");
+        tolua_function(tolua_S,"new",lua_ax_base_PointerEvent_constructor);
+        tolua_function(tolua_S,"getLocation",lua_ax_base_PointerEvent_getLocation);
+        tolua_function(tolua_S,"getPreviousLocation",lua_ax_base_PointerEvent_getPreviousLocation);
+        tolua_function(tolua_S,"getStartLocation",lua_ax_base_PointerEvent_getStartLocation);
+        tolua_function(tolua_S,"getDelta",lua_ax_base_PointerEvent_getDelta);
+        tolua_function(tolua_S,"getScreenLocation",lua_ax_base_PointerEvent_getScreenLocation);
+        tolua_function(tolua_S,"getPreviousScreenLocation",lua_ax_base_PointerEvent_getPreviousScreenLocation);
+        tolua_function(tolua_S,"getStartScreenLocation",lua_ax_base_PointerEvent_getStartScreenLocation);
+        tolua_function(tolua_S,"getScrollDelta",lua_ax_base_PointerEvent_getScrollDelta);
+        tolua_function(tolua_S,"getScrollX",lua_ax_base_PointerEvent_getScrollX);
+        tolua_function(tolua_S,"getScrollY",lua_ax_base_PointerEvent_getScrollY);
+        tolua_function(tolua_S,"getPointerId",lua_ax_base_PointerEvent_getPointerId);
+        tolua_function(tolua_S,"getPointerType",lua_ax_base_PointerEvent_getPointerType);
+        tolua_function(tolua_S,"getButton",lua_ax_base_PointerEvent_getButton);
+        tolua_function(tolua_S,"getPressedButtons",lua_ax_base_PointerEvent_getPressedButtons);
+        tolua_function(tolua_S,"isButtonPressed",lua_ax_base_PointerEvent_isButtonPressed);
+        tolua_function(tolua_S,"isPrimaryPressed",lua_ax_base_PointerEvent_isPrimaryPressed);
+        tolua_function(tolua_S,"isCaptured",lua_ax_base_PointerEvent_isCaptured);
+        tolua_function(tolua_S,"getPressure",lua_ax_base_PointerEvent_getPressure);
+        tolua_function(tolua_S,"getPhase",lua_ax_base_PointerEvent_getPhase);
+        tolua_function(tolua_S,"isPrimary",lua_ax_base_PointerEvent_isPrimary);
+        tolua_function(tolua_S,"getCamera",lua_ax_base_PointerEvent_getCamera);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::PointerEvent).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PointerEvent";
+    g_typeCast[typeName] = "ax.PointerEvent";
+    return 1;
+}
+
+int lua_ax_base_KeyboardEvent_getKeyCode(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::KeyboardEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.KeyboardEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::KeyboardEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_KeyboardEvent_getKeyCode'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_KeyboardEvent_getKeyCode'", nullptr);
+            return 0;
+        }
+        int ret = (int)obj->getKeyCode();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.KeyboardEvent:getKeyCode",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_KeyboardEvent_getKeyCode'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_KeyboardEvent_getPhase(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::KeyboardEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.KeyboardEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::KeyboardEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_KeyboardEvent_getPhase'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_KeyboardEvent_getPhase'", nullptr);
+            return 0;
+        }
+        int ret = (int)obj->getPhase();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.KeyboardEvent:getPhase",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_KeyboardEvent_getPhase'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_KeyboardEvent_constructor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::KeyboardEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1259,75 +1601,53 @@ int lua_ax_base_EventKeyboard_constructor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2)
     {
-        ax::EventKeyboard::KeyCode arg0;
-        bool arg1;
+        ax::KeyboardEvent::KeyCode arg0;
+        ax::InputPhase arg1;
 
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventKeyboard:EventKeyboard");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.KeyboardEvent:KeyboardEvent");
 
-        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.EventKeyboard:EventKeyboard");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.KeyboardEvent:KeyboardEvent");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventKeyboard_constructor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_KeyboardEvent_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::EventKeyboard(arg0, arg1);
+        obj = new ax::KeyboardEvent(arg0, arg1);
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventKeyboard");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.KeyboardEvent");
         return 1;
     }
-    if (argc == 3)
-    {
-        ax::EventKeyboard::KeyCode arg0;
-        bool arg1;
-        bool arg2;
-
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventKeyboard:EventKeyboard");
-
-        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.EventKeyboard:EventKeyboard");
-
-        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.EventKeyboard:EventKeyboard");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventKeyboard_constructor'", nullptr);
-            return 0;
-        }
-        obj = new ax::EventKeyboard(arg0, arg1, arg2);
-        obj->autorelease();
-        int ID =  (int)obj->_ID ;
-        int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventKeyboard");
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventKeyboard:EventKeyboard",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.KeyboardEvent:KeyboardEvent",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventKeyboard_constructor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_KeyboardEvent_constructor'.",&tolua_err);
 #endif
 
     return 0;
 }
 
-static int lua_ax_base_EventKeyboard_finalize(lua_State* tolua_S)
+static int lua_ax_base_KeyboardEvent_finalize(lua_State* tolua_S)
 {
-    AXLOGV("luabindings: finalizing LUA object (EventKeyboard)");
+    AXLOGV("luabindings: finalizing LUA object (KeyboardEvent)");
     return 0;
 }
 
-int lua_register_ax_base_EventKeyboard(lua_State* tolua_S)
+int lua_register_ax_base_KeyboardEvent(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.EventKeyboard");
-    tolua_cclass(tolua_S,"EventKeyboard","ax.EventKeyboard","ax.Event",nullptr);
+    tolua_usertype(tolua_S,"ax.KeyboardEvent");
+    tolua_cclass(tolua_S,"KeyboardEvent","ax.KeyboardEvent","ax.Event",nullptr);
 
-    tolua_beginmodule(tolua_S,"EventKeyboard");
-        tolua_function(tolua_S,"new",lua_ax_base_EventKeyboard_constructor);
-        tolua_function(tolua_S,"isRepeat",lua_ax_base_EventKeyboard_isRepeat);
+    tolua_beginmodule(tolua_S,"KeyboardEvent");
+        tolua_function(tolua_S,"new",lua_ax_base_KeyboardEvent_constructor);
+        tolua_function(tolua_S,"getKeyCode",lua_ax_base_KeyboardEvent_getKeyCode);
+        tolua_function(tolua_S,"getPhase",lua_ax_base_KeyboardEvent_getPhase);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::EventKeyboard).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventKeyboard";
-    g_typeCast[typeName] = "ax.EventKeyboard";
+    auto typeName = typeid(ax::KeyboardEvent).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.KeyboardEvent";
+    g_typeCast[typeName] = "ax.KeyboardEvent";
     return 1;
 }
 
@@ -3187,10 +3507,52 @@ int lua_register_ax_base_EventListener(lua_State* tolua_S)
     return 1;
 }
 
-int lua_ax_base_EventListenerCustom_constructor(lua_State* tolua_S)
+int lua_ax_base_CustomEventListener_create(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventListenerCustom* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.CustomEventListener",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 2)
+    {
+        std::string_view arg0;
+        std::function<void (ax::CustomEvent *)> arg1;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.CustomEventListener:create");
+        do {
+        	// Lambda binding for lua is not supported.
+            assert(false);
+        } while(0)
+        ;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_CustomEventListener_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::CustomEventListener::create(arg0, arg1);
+        object_to_luaval<ax::CustomEventListener>(tolua_S, "ax.CustomEventListener",(ax::CustomEventListener*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.CustomEventListener:create",argc, 2);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_CustomEventListener_create'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_CustomEventListener_constructor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::CustomEventListener* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3204,43 +3566,44 @@ int lua_ax_base_EventListenerCustom_constructor(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerCustom_constructor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_CustomEventListener_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::EventListenerCustom();
+        obj = new ax::CustomEventListener();
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventListenerCustom");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.CustomEventListener");
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerCustom:EventListenerCustom",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CustomEventListener:CustomEventListener",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerCustom_constructor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_CustomEventListener_constructor'.",&tolua_err);
 #endif
 
     return 0;
 }
 
-static int lua_ax_base_EventListenerCustom_finalize(lua_State* tolua_S)
+static int lua_ax_base_CustomEventListener_finalize(lua_State* tolua_S)
 {
-    AXLOGV("luabindings: finalizing LUA object (EventListenerCustom)");
+    AXLOGV("luabindings: finalizing LUA object (CustomEventListener)");
     return 0;
 }
 
-int lua_register_ax_base_EventListenerCustom(lua_State* tolua_S)
+int lua_register_ax_base_CustomEventListener(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.EventListenerCustom");
-    tolua_cclass(tolua_S,"EventListenerCustom","ax.EventListenerCustom","ax.EventListener",nullptr);
+    tolua_usertype(tolua_S,"ax.CustomEventListener");
+    tolua_cclass(tolua_S,"CustomEventListener","ax.CustomEventListener","ax.EventListener",nullptr);
 
-    tolua_beginmodule(tolua_S,"EventListenerCustom");
-        tolua_function(tolua_S,"new",lua_ax_base_EventListenerCustom_constructor);
+    tolua_beginmodule(tolua_S,"CustomEventListener");
+        tolua_function(tolua_S,"new",lua_ax_base_CustomEventListener_constructor);
+        tolua_function(tolua_S,"create", lua_ax_base_CustomEventListener_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::EventListenerCustom).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventListenerCustom";
-    g_typeCast[typeName] = "ax.EventListenerCustom";
+    auto typeName = typeid(ax::CustomEventListener).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.CustomEventListener";
+    g_typeCast[typeName] = "ax.CustomEventListener";
     return 1;
 }
 
@@ -9102,6 +9465,53 @@ int lua_ax_base_Node_getBoundingBox(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Node_getWorldBoundingBox(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Node* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Node",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Node_getWorldBoundingBox'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_getWorldBoundingBox'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getWorldBoundingBox();
+        rect_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:getWorldBoundingBox",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Node_getWorldBoundingBox'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Node_setEventDispatcher(lua_State* tolua_S)
 {
     int argc = 0;
@@ -10712,7 +11122,7 @@ int lua_ax_base_Node_convertToWorldSpaceAR(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Node_convertTouchToNodeSpace(lua_State* tolua_S)
+int lua_ax_base_Node_convertPointerToNodeSpace(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Node* obj = nullptr;
@@ -10732,7 +11142,7 @@ int lua_ax_base_Node_convertTouchToNodeSpace(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Node_convertTouchToNodeSpace'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Node_convertPointerToNodeSpace'", nullptr);
         return 0;
     }
 #endif
@@ -10740,29 +11150,29 @@ int lua_ax_base_Node_convertTouchToNodeSpace(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        ax::Touch* arg0;
+        ax::PointerEvent* arg0;
 
-        ok &= luaval_to_object<ax::Touch>(tolua_S, 2, "ax.Touch",&arg0, "ax.Node:convertTouchToNodeSpace");
+        ok &= luaval_to_object<ax::PointerEvent>(tolua_S, 2, "ax.PointerEvent",&arg0, "ax.Node:convertPointerToNodeSpace");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_convertTouchToNodeSpace'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_convertPointerToNodeSpace'", nullptr);
             return 0;
         }
-        auto&& ret = obj->convertTouchToNodeSpace(arg0);
+        auto&& ret = obj->convertPointerToNodeSpace(arg0);
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:convertTouchToNodeSpace",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:convertPointerToNodeSpace",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Node_convertTouchToNodeSpace'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Node_convertPointerToNodeSpace'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_Node_convertTouchToNodeSpaceAR(lua_State* tolua_S)
+int lua_ax_base_Node_convertPointerToNodeSpaceAR(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Node* obj = nullptr;
@@ -10782,7 +11192,7 @@ int lua_ax_base_Node_convertTouchToNodeSpaceAR(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Node_convertTouchToNodeSpaceAR'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Node_convertPointerToNodeSpaceAR'", nullptr);
         return 0;
     }
 #endif
@@ -10790,24 +11200,24 @@ int lua_ax_base_Node_convertTouchToNodeSpaceAR(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        ax::Touch* arg0;
+        ax::PointerEvent* arg0;
 
-        ok &= luaval_to_object<ax::Touch>(tolua_S, 2, "ax.Touch",&arg0, "ax.Node:convertTouchToNodeSpaceAR");
+        ok &= luaval_to_object<ax::PointerEvent>(tolua_S, 2, "ax.PointerEvent",&arg0, "ax.Node:convertPointerToNodeSpaceAR");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_convertTouchToNodeSpaceAR'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_convertPointerToNodeSpaceAR'", nullptr);
             return 0;
         }
-        auto&& ret = obj->convertTouchToNodeSpaceAR(arg0);
+        auto&& ret = obj->convertPointerToNodeSpaceAR(arg0);
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:convertTouchToNodeSpaceAR",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:convertPointerToNodeSpaceAR",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Node_convertTouchToNodeSpaceAR'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Node_convertPointerToNodeSpaceAR'.",&tolua_err);
 #endif
 
     return 0;
@@ -12920,6 +13330,7 @@ int lua_register_ax_base_Node(lua_State* tolua_S)
         tolua_function(tolua_S,"visit",lua_ax_base_Node_visit);
         tolua_function(tolua_S,"getScene",lua_ax_base_Node_getScene);
         tolua_function(tolua_S,"getBoundingBox",lua_ax_base_Node_getBoundingBox);
+        tolua_function(tolua_S,"getWorldBoundingBox",lua_ax_base_Node_getWorldBoundingBox);
         tolua_function(tolua_S,"setEventDispatcher",lua_ax_base_Node_setEventDispatcher);
         tolua_function(tolua_S,"getEventDispatcher",lua_ax_base_Node_getEventDispatcher);
         tolua_function(tolua_S,"setActionManager",lua_ax_base_Node_setActionManager);
@@ -12953,8 +13364,8 @@ int lua_register_ax_base_Node(lua_State* tolua_S)
         tolua_function(tolua_S,"convertToWorldSpace",lua_ax_base_Node_convertToWorldSpace);
         tolua_function(tolua_S,"convertToNodeSpaceAR",lua_ax_base_Node_convertToNodeSpaceAR);
         tolua_function(tolua_S,"convertToWorldSpaceAR",lua_ax_base_Node_convertToWorldSpaceAR);
-        tolua_function(tolua_S,"convertTouchToNodeSpace",lua_ax_base_Node_convertTouchToNodeSpace);
-        tolua_function(tolua_S,"convertTouchToNodeSpaceAR",lua_ax_base_Node_convertTouchToNodeSpaceAR);
+        tolua_function(tolua_S,"convertPointerToNodeSpace",lua_ax_base_Node_convertPointerToNodeSpace);
+        tolua_function(tolua_S,"convertPointerToNodeSpaceAR",lua_ax_base_Node_convertPointerToNodeSpaceAR);
         tolua_function(tolua_S,"getWorldPosition",lua_ax_base_Node_getWorldPosition);
         tolua_function(tolua_S,"setWorldPosition",lua_ax_base_Node_setWorldPosition);
         tolua_function(tolua_S,"getComponent",lua_ax_base_Node_getComponent);
@@ -23333,10 +23744,10 @@ int lua_register_ax_base_Scene(lua_State* tolua_S)
     return 1;
 }
 
-int lua_ax_base_RenderView_end(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_end(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23345,15 +23756,15 @@ int lua_ax_base_RenderView_end(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_end'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_end'", nullptr);
         return 0;
     }
 #endif
@@ -23363,27 +23774,27 @@ int lua_ax_base_RenderView_end(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_end'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_end'", nullptr);
             return 0;
         }
         obj->end();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:end",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:end",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_end'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_end'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_isGfxContextReady(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_isGfxContextReady(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23392,15 +23803,15 @@ int lua_ax_base_RenderView_isGfxContextReady(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_isGfxContextReady'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_isGfxContextReady'", nullptr);
         return 0;
     }
 #endif
@@ -23410,27 +23821,27 @@ int lua_ax_base_RenderView_isGfxContextReady(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_isGfxContextReady'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_isGfxContextReady'", nullptr);
             return 0;
         }
         auto&& ret = obj->isGfxContextReady();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:isGfxContextReady",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:isGfxContextReady",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_isGfxContextReady'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_isGfxContextReady'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_swapBuffers(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_swapBuffers(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23439,15 +23850,15 @@ int lua_ax_base_RenderView_swapBuffers(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_swapBuffers'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_swapBuffers'", nullptr);
         return 0;
     }
 #endif
@@ -23457,27 +23868,27 @@ int lua_ax_base_RenderView_swapBuffers(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_swapBuffers'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_swapBuffers'", nullptr);
             return 0;
         }
         obj->swapBuffers();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:swapBuffers",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:swapBuffers",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_swapBuffers'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_swapBuffers'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_setIMEKeyboardState(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_setIMEKeyboardState(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23486,15 +23897,15 @@ int lua_ax_base_RenderView_setIMEKeyboardState(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_setIMEKeyboardState'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_setIMEKeyboardState'", nullptr);
         return 0;
     }
 #endif
@@ -23504,30 +23915,30 @@ int lua_ax_base_RenderView_setIMEKeyboardState(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.RenderView:setIMEKeyboardState");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.RenderViewCore:setIMEKeyboardState");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setIMEKeyboardState'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_setIMEKeyboardState'", nullptr);
             return 0;
         }
         obj->setIMEKeyboardState(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setIMEKeyboardState",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:setIMEKeyboardState",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setIMEKeyboardState'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_setIMEKeyboardState'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_windowShouldClose(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_windowShouldClose(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23536,15 +23947,15 @@ int lua_ax_base_RenderView_windowShouldClose(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_windowShouldClose'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_windowShouldClose'", nullptr);
         return 0;
     }
 #endif
@@ -23554,27 +23965,27 @@ int lua_ax_base_RenderView_windowShouldClose(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_windowShouldClose'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_windowShouldClose'", nullptr);
             return 0;
         }
         auto&& ret = obj->windowShouldClose();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:windowShouldClose",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:windowShouldClose",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_windowShouldClose'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_windowShouldClose'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_pollEvents(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_pollEvents(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23583,15 +23994,15 @@ int lua_ax_base_RenderView_pollEvents(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_pollEvents'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_pollEvents'", nullptr);
         return 0;
     }
 #endif
@@ -23601,27 +24012,27 @@ int lua_ax_base_RenderView_pollEvents(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_pollEvents'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_pollEvents'", nullptr);
             return 0;
         }
         obj->pollEvents();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:pollEvents",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:pollEvents",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_pollEvents'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_pollEvents'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getNativeWindowSize(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getNativeWindowSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23630,15 +24041,15 @@ int lua_ax_base_RenderView_getNativeWindowSize(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getNativeWindowSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getNativeWindowSize'", nullptr);
         return 0;
     }
 #endif
@@ -23648,27 +24059,27 @@ int lua_ax_base_RenderView_getNativeWindowSize(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getNativeWindowSize'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getNativeWindowSize'", nullptr);
             return 0;
         }
         auto&& ret = obj->getNativeWindowSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getNativeWindowSize",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getNativeWindowSize",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getNativeWindowSize'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getNativeWindowSize'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getWindowSize(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getWindowSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23677,15 +24088,15 @@ int lua_ax_base_RenderView_getWindowSize(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getWindowSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getWindowSize'", nullptr);
         return 0;
     }
 #endif
@@ -23695,27 +24106,27 @@ int lua_ax_base_RenderView_getWindowSize(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getWindowSize'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getWindowSize'", nullptr);
             return 0;
         }
         auto&& ret = obj->getWindowSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getWindowSize",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getWindowSize",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getWindowSize'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getWindowSize'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_setWindowSize(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_setWindowSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23724,15 +24135,15 @@ int lua_ax_base_RenderView_setWindowSize(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_setWindowSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_setWindowSize'", nullptr);
         return 0;
     }
 #endif
@@ -23743,32 +24154,32 @@ int lua_ax_base_RenderView_setWindowSize(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setWindowSize");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderViewCore:setWindowSize");
 
-        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderView:setWindowSize");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderViewCore:setWindowSize");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setWindowSize'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_setWindowSize'", nullptr);
             return 0;
         }
         obj->setWindowSize(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setWindowSize",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:setWindowSize",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setWindowSize'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_setWindowSize'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_setWindowZoomFactor(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_setWindowZoomFactor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23777,15 +24188,15 @@ int lua_ax_base_RenderView_setWindowZoomFactor(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_setWindowZoomFactor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_setWindowZoomFactor'", nullptr);
         return 0;
     }
 #endif
@@ -23795,30 +24206,30 @@ int lua_ax_base_RenderView_setWindowZoomFactor(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setWindowZoomFactor");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderViewCore:setWindowZoomFactor");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setWindowZoomFactor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_setWindowZoomFactor'", nullptr);
             return 0;
         }
         obj->setWindowZoomFactor(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setWindowZoomFactor",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:setWindowZoomFactor",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setWindowZoomFactor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_setWindowZoomFactor'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getWindowZoomFactor(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getWindowZoomFactor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23827,15 +24238,15 @@ int lua_ax_base_RenderView_getWindowZoomFactor(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getWindowZoomFactor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getWindowZoomFactor'", nullptr);
         return 0;
     }
 #endif
@@ -23845,27 +24256,27 @@ int lua_ax_base_RenderView_getWindowZoomFactor(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getWindowZoomFactor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getWindowZoomFactor'", nullptr);
             return 0;
         }
         auto&& ret = obj->getWindowZoomFactor();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getWindowZoomFactor",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getWindowZoomFactor",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getWindowZoomFactor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getWindowZoomFactor'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getRenderSize(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getRenderSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23874,15 +24285,15 @@ int lua_ax_base_RenderView_getRenderSize(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getRenderSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getRenderSize'", nullptr);
         return 0;
     }
 #endif
@@ -23892,27 +24303,27 @@ int lua_ax_base_RenderView_getRenderSize(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getRenderSize'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getRenderSize'", nullptr);
             return 0;
         }
         auto&& ret = obj->getRenderSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getRenderSize",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getRenderSize",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getRenderSize'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getRenderSize'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_setCursorVisible(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_setCursorVisible(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23921,15 +24332,15 @@ int lua_ax_base_RenderView_setCursorVisible(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_setCursorVisible'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_setCursorVisible'", nullptr);
         return 0;
     }
 #endif
@@ -23939,30 +24350,30 @@ int lua_ax_base_RenderView_setCursorVisible(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.RenderView:setCursorVisible");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.RenderViewCore:setCursorVisible");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setCursorVisible'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_setCursorVisible'", nullptr);
             return 0;
         }
         obj->setCursorVisible(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setCursorVisible",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:setCursorVisible",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setCursorVisible'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_setCursorVisible'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getRenderScale(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getRenderScale(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23971,15 +24382,15 @@ int lua_ax_base_RenderView_getRenderScale(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getRenderScale'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getRenderScale'", nullptr);
         return 0;
     }
 #endif
@@ -23989,27 +24400,27 @@ int lua_ax_base_RenderView_getRenderScale(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getRenderScale'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getRenderScale'", nullptr);
             return 0;
         }
         auto&& ret = obj->getRenderScale();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getRenderScale",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getRenderScale",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getRenderScale'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getRenderScale'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getVisibleSize(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getVisibleSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24018,15 +24429,15 @@ int lua_ax_base_RenderView_getVisibleSize(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getVisibleSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getVisibleSize'", nullptr);
         return 0;
     }
 #endif
@@ -24036,27 +24447,27 @@ int lua_ax_base_RenderView_getVisibleSize(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getVisibleSize'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getVisibleSize'", nullptr);
             return 0;
         }
         auto&& ret = obj->getVisibleSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getVisibleSize",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getVisibleSize",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getVisibleSize'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getVisibleSize'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getVisibleOrigin(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getVisibleOrigin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24065,15 +24476,15 @@ int lua_ax_base_RenderView_getVisibleOrigin(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getVisibleOrigin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getVisibleOrigin'", nullptr);
         return 0;
     }
 #endif
@@ -24083,27 +24494,27 @@ int lua_ax_base_RenderView_getVisibleOrigin(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getVisibleOrigin'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getVisibleOrigin'", nullptr);
             return 0;
         }
         auto&& ret = obj->getVisibleOrigin();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getVisibleOrigin",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getVisibleOrigin",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getVisibleOrigin'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getVisibleOrigin'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getVisibleRect(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getVisibleRect(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24112,15 +24523,15 @@ int lua_ax_base_RenderView_getVisibleRect(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getVisibleRect'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getVisibleRect'", nullptr);
         return 0;
     }
 #endif
@@ -24130,27 +24541,27 @@ int lua_ax_base_RenderView_getVisibleRect(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getVisibleRect'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getVisibleRect'", nullptr);
             return 0;
         }
         auto&& ret = obj->getVisibleRect();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getVisibleRect",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getVisibleRect",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getVisibleRect'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getVisibleRect'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getSafeAreaRect(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getSafeAreaRect(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24159,15 +24570,15 @@ int lua_ax_base_RenderView_getSafeAreaRect(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getSafeAreaRect'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getSafeAreaRect'", nullptr);
         return 0;
     }
 #endif
@@ -24177,27 +24588,27 @@ int lua_ax_base_RenderView_getSafeAreaRect(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getSafeAreaRect'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getSafeAreaRect'", nullptr);
             return 0;
         }
         auto&& ret = obj->getSafeAreaRect();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getSafeAreaRect",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getSafeAreaRect",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getSafeAreaRect'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getSafeAreaRect'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_setDesignResolutionSize(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_setDesignResolutionSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24206,15 +24617,15 @@ int lua_ax_base_RenderView_setDesignResolutionSize(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_setDesignResolutionSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_setDesignResolutionSize'", nullptr);
         return 0;
     }
 #endif
@@ -24226,34 +24637,34 @@ int lua_ax_base_RenderView_setDesignResolutionSize(lua_State* tolua_S)
         double arg1;
         ax::ResolutionPolicy arg2;
 
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setDesignResolutionSize");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderViewCore:setDesignResolutionSize");
 
-        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderView:setDesignResolutionSize");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderViewCore:setDesignResolutionSize");
 
-        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderView:setDesignResolutionSize");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderViewCore:setDesignResolutionSize");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setDesignResolutionSize'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_setDesignResolutionSize'", nullptr);
             return 0;
         }
         obj->setDesignResolutionSize(arg0, arg1, arg2);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setDesignResolutionSize",argc, 3);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:setDesignResolutionSize",argc, 3);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setDesignResolutionSize'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_setDesignResolutionSize'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getDesignResolutionSize(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getDesignResolutionSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24262,15 +24673,15 @@ int lua_ax_base_RenderView_getDesignResolutionSize(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getDesignResolutionSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getDesignResolutionSize'", nullptr);
         return 0;
     }
 #endif
@@ -24280,27 +24691,27 @@ int lua_ax_base_RenderView_getDesignResolutionSize(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getDesignResolutionSize'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getDesignResolutionSize'", nullptr);
             return 0;
         }
         auto&& ret = obj->getDesignResolutionSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getDesignResolutionSize",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getDesignResolutionSize",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getDesignResolutionSize'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getDesignResolutionSize'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_setViewportInPoints(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_setViewportInPoints(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24309,15 +24720,15 @@ int lua_ax_base_RenderView_setViewportInPoints(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_setViewportInPoints'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_setViewportInPoints'", nullptr);
         return 0;
     }
 #endif
@@ -24330,36 +24741,36 @@ int lua_ax_base_RenderView_setViewportInPoints(lua_State* tolua_S)
         double arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setViewportInPoints");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderViewCore:setViewportInPoints");
 
-        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderView:setViewportInPoints");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderViewCore:setViewportInPoints");
 
-        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RenderView:setViewportInPoints");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RenderViewCore:setViewportInPoints");
 
-        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.RenderView:setViewportInPoints");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.RenderViewCore:setViewportInPoints");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setViewportInPoints'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_setViewportInPoints'", nullptr);
             return 0;
         }
         obj->setViewportInPoints(arg0, arg1, arg2, arg3);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setViewportInPoints",argc, 4);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:setViewportInPoints",argc, 4);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setViewportInPoints'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_setViewportInPoints'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_setScissorInPoints(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_setScissorInPoints(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24368,15 +24779,15 @@ int lua_ax_base_RenderView_setScissorInPoints(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_setScissorInPoints'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_setScissorInPoints'", nullptr);
         return 0;
     }
 #endif
@@ -24389,36 +24800,36 @@ int lua_ax_base_RenderView_setScissorInPoints(lua_State* tolua_S)
         double arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setScissorInPoints");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderViewCore:setScissorInPoints");
 
-        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderView:setScissorInPoints");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderViewCore:setScissorInPoints");
 
-        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RenderView:setScissorInPoints");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RenderViewCore:setScissorInPoints");
 
-        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.RenderView:setScissorInPoints");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.RenderViewCore:setScissorInPoints");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setScissorInPoints'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_setScissorInPoints'", nullptr);
             return 0;
         }
         obj->setScissorInPoints(arg0, arg1, arg2, arg3);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setScissorInPoints",argc, 4);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:setScissorInPoints",argc, 4);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setScissorInPoints'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_setScissorInPoints'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_isScissorEnabled(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_isScissorEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24427,15 +24838,15 @@ int lua_ax_base_RenderView_isScissorEnabled(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_isScissorEnabled'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_isScissorEnabled'", nullptr);
         return 0;
     }
 #endif
@@ -24445,27 +24856,27 @@ int lua_ax_base_RenderView_isScissorEnabled(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_isScissorEnabled'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_isScissorEnabled'", nullptr);
             return 0;
         }
         auto&& ret = obj->isScissorEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:isScissorEnabled",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:isScissorEnabled",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_isScissorEnabled'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_isScissorEnabled'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getScissorInPoints(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getScissorInPoints(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24474,15 +24885,15 @@ int lua_ax_base_RenderView_getScissorInPoints(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getScissorInPoints'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getScissorInPoints'", nullptr);
         return 0;
     }
 #endif
@@ -24492,27 +24903,27 @@ int lua_ax_base_RenderView_getScissorInPoints(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getScissorInPoints'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getScissorInPoints'", nullptr);
             return 0;
         }
         auto&& ret = obj->getScissorInPoints();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getScissorInPoints",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getScissorInPoints",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getScissorInPoints'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getScissorInPoints'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_setViewName(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_setViewName(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24521,15 +24932,15 @@ int lua_ax_base_RenderView_setViewName(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_setViewName'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_setViewName'", nullptr);
         return 0;
     }
 #endif
@@ -24539,30 +24950,30 @@ int lua_ax_base_RenderView_setViewName(lua_State* tolua_S)
     {
         std::string_view arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderView:setViewName");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderViewCore:setViewName");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setViewName'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_setViewName'", nullptr);
             return 0;
         }
         obj->setViewName(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setViewName",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:setViewName",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setViewName'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_setViewName'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getViewName(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getViewName(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24571,15 +24982,15 @@ int lua_ax_base_RenderView_getViewName(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getViewName'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getViewName'", nullptr);
         return 0;
     }
 #endif
@@ -24589,40 +25000,40 @@ int lua_ax_base_RenderView_getViewName(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getViewName'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getViewName'", nullptr);
             return 0;
         }
         auto&& ret = obj->getViewName();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getViewName",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getViewName",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getViewName'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getViewName'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_setIcon(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_setIcon(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_setIcon'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_setIcon'", nullptr);
         return 0;
     }
 #endif
@@ -24630,7 +25041,7 @@ int lua_ax_base_RenderView_setIcon(lua_State* tolua_S)
     do {
         if (argc == 1) {
             std::vector<std::string_view> arg0;
-            ok &= luaval_to_std_vector_string_view(tolua_S, 2, &arg0, "ax.RenderView:setIcon");
+            ok &= luaval_to_std_vector_string_view(tolua_S, 2, &arg0, "ax.RenderViewCore:setIcon");
 
             if (!ok) { break; }
             obj->setIcon(arg0);
@@ -24642,7 +25053,7 @@ int lua_ax_base_RenderView_setIcon(lua_State* tolua_S)
     do {
         if (argc == 1) {
             std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderView:setIcon");
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderViewCore:setIcon");
 
             if (!ok) { break; }
             obj->setIcon(arg0);
@@ -24651,20 +25062,20 @@ int lua_ax_base_RenderView_setIcon(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.RenderView:setIcon",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.RenderViewCore:setIcon",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setIcon'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_setIcon'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_setDefaultIcon(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_setDefaultIcon(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24673,15 +25084,15 @@ int lua_ax_base_RenderView_setDefaultIcon(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_setDefaultIcon'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_setDefaultIcon'", nullptr);
         return 0;
     }
 #endif
@@ -24691,27 +25102,27 @@ int lua_ax_base_RenderView_setDefaultIcon(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setDefaultIcon'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_setDefaultIcon'", nullptr);
             return 0;
         }
         obj->setDefaultIcon();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setDefaultIcon",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:setDefaultIcon",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setDefaultIcon'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_setDefaultIcon'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getViewportRect(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getViewportRect(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24720,15 +25131,15 @@ int lua_ax_base_RenderView_getViewportRect(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getViewportRect'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getViewportRect'", nullptr);
         return 0;
     }
 #endif
@@ -24738,27 +25149,27 @@ int lua_ax_base_RenderView_getViewportRect(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getViewportRect'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getViewportRect'", nullptr);
             return 0;
         }
         auto&& ret = obj->getViewportRect();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getViewportRect",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getViewportRect",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getViewportRect'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getViewportRect'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getScaleX(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getScaleX(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24767,15 +25178,15 @@ int lua_ax_base_RenderView_getScaleX(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getScaleX'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getScaleX'", nullptr);
         return 0;
     }
 #endif
@@ -24785,27 +25196,27 @@ int lua_ax_base_RenderView_getScaleX(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getScaleX'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getScaleX'", nullptr);
             return 0;
         }
         auto&& ret = obj->getScaleX();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getScaleX",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getScaleX",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getScaleX'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getScaleX'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getScaleY(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getScaleY(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24814,15 +25225,15 @@ int lua_ax_base_RenderView_getScaleY(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getScaleY'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getScaleY'", nullptr);
         return 0;
     }
 #endif
@@ -24832,27 +25243,27 @@ int lua_ax_base_RenderView_getScaleY(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getScaleY'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getScaleY'", nullptr);
             return 0;
         }
         auto&& ret = obj->getScaleY();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getScaleY",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getScaleY",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getScaleY'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getScaleY'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getResolutionPolicy(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getScale(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24861,15 +25272,15 @@ int lua_ax_base_RenderView_getResolutionPolicy(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getResolutionPolicy'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getScale'", nullptr);
         return 0;
     }
 #endif
@@ -24879,27 +25290,74 @@ int lua_ax_base_RenderView_getResolutionPolicy(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getResolutionPolicy'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getScale'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getScale();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getScale",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getScale'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_RenderViewCore_getResolutionPolicy(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderViewCore* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getResolutionPolicy'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getResolutionPolicy'", nullptr);
             return 0;
         }
         int ret = (int)obj->getResolutionPolicy();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getResolutionPolicy",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getResolutionPolicy",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getResolutionPolicy'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getResolutionPolicy'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getNativeWindow(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getNativeWindow(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24908,15 +25366,15 @@ int lua_ax_base_RenderView_getNativeWindow(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getNativeWindow'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getNativeWindow'", nullptr);
         return 0;
     }
 #endif
@@ -24926,27 +25384,27 @@ int lua_ax_base_RenderView_getNativeWindow(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getNativeWindow'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getNativeWindow'", nullptr);
             return 0;
         }
         auto&& ret = obj->getNativeWindow();
         #pragma warning NO CONVERSION FROM NATIVE FOR void*;
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getNativeWindow",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getNativeWindow",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getNativeWindow'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getNativeWindow'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getNativeDisplay(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getNativeDisplay(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24955,15 +25413,15 @@ int lua_ax_base_RenderView_getNativeDisplay(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getNativeDisplay'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getNativeDisplay'", nullptr);
         return 0;
     }
 #endif
@@ -24973,27 +25431,27 @@ int lua_ax_base_RenderView_getNativeDisplay(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getNativeDisplay'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getNativeDisplay'", nullptr);
             return 0;
         }
         auto&& ret = obj->getNativeDisplay();
         #pragma warning NO CONVERSION FROM NATIVE FOR Handle64;
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getNativeDisplay",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getNativeDisplay",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getNativeDisplay'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getNativeDisplay'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getWindowPlatform(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_getWindowPlatform(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25002,15 +25460,15 @@ int lua_ax_base_RenderView_getWindowPlatform(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_getWindowPlatform'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_getWindowPlatform'", nullptr);
         return 0;
     }
 #endif
@@ -25020,27 +25478,27 @@ int lua_ax_base_RenderView_getWindowPlatform(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getWindowPlatform'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_getWindowPlatform'", nullptr);
             return 0;
         }
         int ret = (int)obj->getWindowPlatform();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getWindowPlatform",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:getWindowPlatform",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getWindowPlatform'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_getWindowPlatform'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_renderScene(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_renderScene(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25049,15 +25507,15 @@ int lua_ax_base_RenderView_renderScene(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_renderScene'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_renderScene'", nullptr);
         return 0;
     }
 #endif
@@ -25068,32 +25526,32 @@ int lua_ax_base_RenderView_renderScene(lua_State* tolua_S)
         ax::Scene* arg0;
         ax::Renderer* arg1;
 
-        ok &= luaval_to_object<ax::Scene>(tolua_S, 2, "ax.Scene",&arg0, "ax.RenderView:renderScene");
+        ok &= luaval_to_object<ax::Scene>(tolua_S, 2, "ax.Scene",&arg0, "ax.RenderViewCore:renderScene");
 
-        ok &= luaval_to_object<ax::Renderer>(tolua_S, 3, "ax.Renderer",&arg1, "ax.RenderView:renderScene");
+        ok &= luaval_to_object<ax::Renderer>(tolua_S, 3, "ax.Renderer",&arg1, "ax.RenderViewCore:renderScene");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_renderScene'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_renderScene'", nullptr);
             return 0;
         }
         obj->renderScene(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:renderScene",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:renderScene",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_renderScene'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_renderScene'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_setInteractive(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_showContextMenu(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::RenderView* obj = nullptr;
+    ax::RenderViewCore* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25102,97 +25560,155 @@ int lua_ax_base_RenderView_setInteractive(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_setInteractive'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_showContextMenu'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 4)
     {
-        bool arg0;
+        ax::Vec2 arg0;
+        bool arg1;
+        bool arg2;
+        bool arg3;
 
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.RenderView:setInteractive");
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.RenderViewCore:showContextMenu");
+
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.RenderViewCore:showContextMenu");
+
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.RenderViewCore:showContextMenu");
+
+        ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.RenderViewCore:showContextMenu");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setInteractive'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_showContextMenu'", nullptr);
             return 0;
         }
-        obj->setInteractive(arg0);
+        obj->showContextMenu(arg0, arg1, arg2, arg3);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setInteractive",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:showContextMenu",argc, 4);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setInteractive'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_showContextMenu'.",&tolua_err);
 #endif
 
     return 0;
 }
-static int lua_ax_base_RenderView_finalize(lua_State* tolua_S)
+int lua_ax_base_RenderViewCore_hideContextMenu(lua_State* tolua_S)
 {
-    AXLOGV("luabindings: finalizing LUA object (RenderView)");
+    int argc = 0;
+    ax::RenderViewCore* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_hideContextMenu'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_hideContextMenu'", nullptr);
+            return 0;
+        }
+        obj->hideContextMenu();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:hideContextMenu",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_hideContextMenu'.",&tolua_err);
+#endif
+
+    return 0;
+}
+static int lua_ax_base_RenderViewCore_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (RenderViewCore)");
     return 0;
 }
 
-int lua_register_ax_base_RenderView(lua_State* tolua_S)
+int lua_register_ax_base_RenderViewCore(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.RenderView");
-    tolua_cclass(tolua_S,"RenderView","ax.RenderView","ax.Object",nullptr);
+    tolua_usertype(tolua_S,"ax.RenderViewCore");
+    tolua_cclass(tolua_S,"RenderViewCore","ax.RenderViewCore","ax.Object",nullptr);
 
-    tolua_beginmodule(tolua_S,"RenderView");
-        tolua_function(tolua_S,"endToLua",lua_ax_base_RenderView_end);
-        tolua_function(tolua_S,"isGfxContextReady",lua_ax_base_RenderView_isGfxContextReady);
-        tolua_function(tolua_S,"swapBuffers",lua_ax_base_RenderView_swapBuffers);
-        tolua_function(tolua_S,"setIMEKeyboardState",lua_ax_base_RenderView_setIMEKeyboardState);
-        tolua_function(tolua_S,"windowShouldClose",lua_ax_base_RenderView_windowShouldClose);
-        tolua_function(tolua_S,"pollEvents",lua_ax_base_RenderView_pollEvents);
-        tolua_function(tolua_S,"getNativeWindowSize",lua_ax_base_RenderView_getNativeWindowSize);
-        tolua_function(tolua_S,"getWindowSize",lua_ax_base_RenderView_getWindowSize);
-        tolua_function(tolua_S,"setWindowSize",lua_ax_base_RenderView_setWindowSize);
-        tolua_function(tolua_S,"setWindowZoomFactor",lua_ax_base_RenderView_setWindowZoomFactor);
-        tolua_function(tolua_S,"getWindowZoomFactor",lua_ax_base_RenderView_getWindowZoomFactor);
-        tolua_function(tolua_S,"getRenderSize",lua_ax_base_RenderView_getRenderSize);
-        tolua_function(tolua_S,"setCursorVisible",lua_ax_base_RenderView_setCursorVisible);
-        tolua_function(tolua_S,"getRenderScale",lua_ax_base_RenderView_getRenderScale);
-        tolua_function(tolua_S,"getVisibleSize",lua_ax_base_RenderView_getVisibleSize);
-        tolua_function(tolua_S,"getVisibleOrigin",lua_ax_base_RenderView_getVisibleOrigin);
-        tolua_function(tolua_S,"getVisibleRect",lua_ax_base_RenderView_getVisibleRect);
-        tolua_function(tolua_S,"getSafeAreaRect",lua_ax_base_RenderView_getSafeAreaRect);
-        tolua_function(tolua_S,"setDesignResolutionSize",lua_ax_base_RenderView_setDesignResolutionSize);
-        tolua_function(tolua_S,"getDesignResolutionSize",lua_ax_base_RenderView_getDesignResolutionSize);
-        tolua_function(tolua_S,"setViewportInPoints",lua_ax_base_RenderView_setViewportInPoints);
-        tolua_function(tolua_S,"setScissorInPoints",lua_ax_base_RenderView_setScissorInPoints);
-        tolua_function(tolua_S,"isScissorEnabled",lua_ax_base_RenderView_isScissorEnabled);
-        tolua_function(tolua_S,"getScissorInPoints",lua_ax_base_RenderView_getScissorInPoints);
-        tolua_function(tolua_S,"setViewName",lua_ax_base_RenderView_setViewName);
-        tolua_function(tolua_S,"getViewName",lua_ax_base_RenderView_getViewName);
-        tolua_function(tolua_S,"setIcon",lua_ax_base_RenderView_setIcon);
-        tolua_function(tolua_S,"setDefaultIcon",lua_ax_base_RenderView_setDefaultIcon);
-        tolua_function(tolua_S,"getViewportRect",lua_ax_base_RenderView_getViewportRect);
-        tolua_function(tolua_S,"getScaleX",lua_ax_base_RenderView_getScaleX);
-        tolua_function(tolua_S,"getScaleY",lua_ax_base_RenderView_getScaleY);
-        tolua_function(tolua_S,"getResolutionPolicy",lua_ax_base_RenderView_getResolutionPolicy);
-        tolua_function(tolua_S,"getNativeWindow",lua_ax_base_RenderView_getNativeWindow);
-        tolua_function(tolua_S,"getNativeDisplay",lua_ax_base_RenderView_getNativeDisplay);
-        tolua_function(tolua_S,"getWindowPlatform",lua_ax_base_RenderView_getWindowPlatform);
-        tolua_function(tolua_S,"renderScene",lua_ax_base_RenderView_renderScene);
-        tolua_function(tolua_S,"setInteractive",lua_ax_base_RenderView_setInteractive);
+    tolua_beginmodule(tolua_S,"RenderViewCore");
+        tolua_function(tolua_S,"endToLua",lua_ax_base_RenderViewCore_end);
+        tolua_function(tolua_S,"isGfxContextReady",lua_ax_base_RenderViewCore_isGfxContextReady);
+        tolua_function(tolua_S,"swapBuffers",lua_ax_base_RenderViewCore_swapBuffers);
+        tolua_function(tolua_S,"setIMEKeyboardState",lua_ax_base_RenderViewCore_setIMEKeyboardState);
+        tolua_function(tolua_S,"windowShouldClose",lua_ax_base_RenderViewCore_windowShouldClose);
+        tolua_function(tolua_S,"pollEvents",lua_ax_base_RenderViewCore_pollEvents);
+        tolua_function(tolua_S,"getNativeWindowSize",lua_ax_base_RenderViewCore_getNativeWindowSize);
+        tolua_function(tolua_S,"getWindowSize",lua_ax_base_RenderViewCore_getWindowSize);
+        tolua_function(tolua_S,"setWindowSize",lua_ax_base_RenderViewCore_setWindowSize);
+        tolua_function(tolua_S,"setWindowZoomFactor",lua_ax_base_RenderViewCore_setWindowZoomFactor);
+        tolua_function(tolua_S,"getWindowZoomFactor",lua_ax_base_RenderViewCore_getWindowZoomFactor);
+        tolua_function(tolua_S,"getRenderSize",lua_ax_base_RenderViewCore_getRenderSize);
+        tolua_function(tolua_S,"setCursorVisible",lua_ax_base_RenderViewCore_setCursorVisible);
+        tolua_function(tolua_S,"getRenderScale",lua_ax_base_RenderViewCore_getRenderScale);
+        tolua_function(tolua_S,"getVisibleSize",lua_ax_base_RenderViewCore_getVisibleSize);
+        tolua_function(tolua_S,"getVisibleOrigin",lua_ax_base_RenderViewCore_getVisibleOrigin);
+        tolua_function(tolua_S,"getVisibleRect",lua_ax_base_RenderViewCore_getVisibleRect);
+        tolua_function(tolua_S,"getSafeAreaRect",lua_ax_base_RenderViewCore_getSafeAreaRect);
+        tolua_function(tolua_S,"setDesignResolutionSize",lua_ax_base_RenderViewCore_setDesignResolutionSize);
+        tolua_function(tolua_S,"getDesignResolutionSize",lua_ax_base_RenderViewCore_getDesignResolutionSize);
+        tolua_function(tolua_S,"setViewportInPoints",lua_ax_base_RenderViewCore_setViewportInPoints);
+        tolua_function(tolua_S,"setScissorInPoints",lua_ax_base_RenderViewCore_setScissorInPoints);
+        tolua_function(tolua_S,"isScissorEnabled",lua_ax_base_RenderViewCore_isScissorEnabled);
+        tolua_function(tolua_S,"getScissorInPoints",lua_ax_base_RenderViewCore_getScissorInPoints);
+        tolua_function(tolua_S,"setViewName",lua_ax_base_RenderViewCore_setViewName);
+        tolua_function(tolua_S,"getViewName",lua_ax_base_RenderViewCore_getViewName);
+        tolua_function(tolua_S,"setIcon",lua_ax_base_RenderViewCore_setIcon);
+        tolua_function(tolua_S,"setDefaultIcon",lua_ax_base_RenderViewCore_setDefaultIcon);
+        tolua_function(tolua_S,"getViewportRect",lua_ax_base_RenderViewCore_getViewportRect);
+        tolua_function(tolua_S,"getScaleX",lua_ax_base_RenderViewCore_getScaleX);
+        tolua_function(tolua_S,"getScaleY",lua_ax_base_RenderViewCore_getScaleY);
+        tolua_function(tolua_S,"getScale",lua_ax_base_RenderViewCore_getScale);
+        tolua_function(tolua_S,"getResolutionPolicy",lua_ax_base_RenderViewCore_getResolutionPolicy);
+        tolua_function(tolua_S,"getNativeWindow",lua_ax_base_RenderViewCore_getNativeWindow);
+        tolua_function(tolua_S,"getNativeDisplay",lua_ax_base_RenderViewCore_getNativeDisplay);
+        tolua_function(tolua_S,"getWindowPlatform",lua_ax_base_RenderViewCore_getWindowPlatform);
+        tolua_function(tolua_S,"renderScene",lua_ax_base_RenderViewCore_renderScene);
+        tolua_function(tolua_S,"showContextMenu",lua_ax_base_RenderViewCore_showContextMenu);
+        tolua_function(tolua_S,"hideContextMenu",lua_ax_base_RenderViewCore_hideContextMenu);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::RenderView).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.RenderView";
-    g_typeCast[typeName] = "ax.RenderView";
+    auto typeName = typeid(ax::RenderViewCore).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.RenderViewCore";
+    g_typeCast[typeName] = "ax.RenderViewCore";
     return 1;
 }
 
@@ -25673,7 +26189,7 @@ int lua_ax_base_Director_getRenderView(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getRenderView();
-        object_to_luaval<ax::RenderView>(tolua_S, "ax.RenderView",(ax::RenderView*)ret);
+        object_to_luaval<ax::RenderViewCore>(tolua_S, "ax.RenderViewCore",(ax::RenderViewCore*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getRenderView",argc, 0);
@@ -25714,9 +26230,9 @@ int lua_ax_base_Director_setRenderView(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        ax::RenderView* arg0;
+        ax::RenderViewCore* arg0;
 
-        ok &= luaval_to_object<ax::RenderView>(tolua_S, 2, "ax.RenderView",&arg0, "ax.Director:setRenderView");
+        ok &= luaval_to_object<ax::RenderViewCore>(tolua_S, 2, "ax.RenderViewCore",&arg0, "ax.Director:setRenderView");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_setRenderView'", nullptr);
@@ -28531,6 +29047,142 @@ int lua_ax_base_Director_isChildrenIndexerEnabled(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Director_postTask(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Director* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Director",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Director_postTask'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        std::function<void ()> arg0;
+
+        do {
+        	// Lambda binding for lua is not supported.
+            assert(false);
+        } while(0)
+        ;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_postTask'", nullptr);
+            return 0;
+        }
+        obj->postTask(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 2)
+    {
+        std::function<void ()> arg0;
+        ax::Director::TaskTiming arg1;
+
+        do {
+        	// Lambda binding for lua is not supported.
+            assert(false);
+        } while(0)
+        ;
+
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Director:postTask");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_postTask'", nullptr);
+            return 0;
+        }
+        obj->postTask(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:postTask",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_postTask'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Director_clearPendingTasks(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Director* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Director",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Director_clearPendingTasks'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_clearPendingTasks'", nullptr);
+            return 0;
+        }
+        obj->clearPendingTasks();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 1)
+    {
+        ax::Director::TaskTiming arg0;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Director:clearPendingTasks");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_clearPendingTasks'", nullptr);
+            return 0;
+        }
+        obj->clearPendingTasks(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:clearPendingTasks",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_clearPendingTasks'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Director_isValid(lua_State* tolua_S)
 {
     int argc = 0;
@@ -28727,6 +29379,8 @@ int lua_register_ax_base_Director(lua_State* tolua_S)
         tolua_function(tolua_S,"getAxmolThreadId",lua_ax_base_Director_getAxmolThreadId);
         tolua_function(tolua_S,"setChildrenIndexerEnabled",lua_ax_base_Director_setChildrenIndexerEnabled);
         tolua_function(tolua_S,"isChildrenIndexerEnabled",lua_ax_base_Director_isChildrenIndexerEnabled);
+        tolua_function(tolua_S,"postTask",lua_ax_base_Director_postTask);
+        tolua_function(tolua_S,"clearPendingTasks",lua_ax_base_Director_clearPendingTasks);
         tolua_function(tolua_S,"isValid",lua_ax_base_Director_isValid);
         tolua_function(tolua_S,"getInstance", lua_ax_base_Director_getInstance);
         tolua_function(tolua_S,"destroyInstance", lua_ax_base_Director_destroyInstance);
@@ -30650,107 +31304,6 @@ int lua_ax_base_Scheduler_setTimeScale(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Scheduler_runOnAxmolThread(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Scheduler* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Scheduler",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::Scheduler*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Scheduler_runOnAxmolThread'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
-    {
-        std::function<void ()> arg0;
-
-        do {
-        	// Lambda binding for lua is not supported.
-            assert(false);
-        } while(0)
-        ;
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scheduler_runOnAxmolThread'", nullptr);
-            return 0;
-        }
-        obj->runOnAxmolThread(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scheduler:runOnAxmolThread",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scheduler_runOnAxmolThread'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Scheduler_removeAllPendingActions(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Scheduler* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Scheduler",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::Scheduler*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Scheduler_removeAllPendingActions'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scheduler_removeAllPendingActions'", nullptr);
-            return 0;
-        }
-        obj->removeAllPendingActions();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scheduler:removeAllPendingActions",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scheduler_removeAllPendingActions'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_Scheduler_constructor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -30803,8 +31356,6 @@ int lua_register_ax_base_Scheduler(lua_State* tolua_S)
         tolua_function(tolua_S,"new",lua_ax_base_Scheduler_constructor);
         tolua_function(tolua_S,"getTimeScale",lua_ax_base_Scheduler_getTimeScale);
         tolua_function(tolua_S,"setTimeScale",lua_ax_base_Scheduler_setTimeScale);
-        tolua_function(tolua_S,"runOnAxmolThread",lua_ax_base_Scheduler_runOnAxmolThread);
-        tolua_function(tolua_S,"removeAllPendingActions",lua_ax_base_Scheduler_removeAllPendingActions);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::Scheduler).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Scheduler";
@@ -33912,29 +34463,10 @@ int lua_register_ax_base_FileUtils(lua_State* tolua_S)
     return 1;
 }
 
-static int lua_ax_base_EventAcceleration_finalize(lua_State* tolua_S)
-{
-    AXLOGV("luabindings: finalizing LUA object (EventAcceleration)");
-    return 0;
-}
-
-int lua_register_ax_base_EventAcceleration(lua_State* tolua_S)
-{
-    tolua_usertype(tolua_S,"ax.EventAcceleration");
-    tolua_cclass(tolua_S,"EventAcceleration","ax.EventAcceleration","ax.Event",nullptr);
-
-    tolua_beginmodule(tolua_S,"EventAcceleration");
-    tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::EventAcceleration).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventAcceleration";
-    g_typeCast[typeName] = "ax.EventAcceleration";
-    return 1;
-}
-
-int lua_ax_base_EventCustom_getEventName(lua_State* tolua_S)
+int lua_ax_base_AccelerationEvent_getAcceleration(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventCustom* obj = nullptr;
+    ax::AccelerationEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33943,15 +34475,15 @@ int lua_ax_base_EventCustom_getEventName(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventCustom",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.AccelerationEvent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventCustom*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::AccelerationEvent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventCustom_getEventName'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_AccelerationEvent_getAcceleration'", nullptr);
         return 0;
     }
 #endif
@@ -33961,27 +34493,94 @@ int lua_ax_base_EventCustom_getEventName(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventCustom_getEventName'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_AccelerationEvent_getAcceleration'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getAcceleration();
+        accel_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AccelerationEvent:getAcceleration",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_AccelerationEvent_getAcceleration'.",&tolua_err);
+#endif
+
+    return 0;
+}
+static int lua_ax_base_AccelerationEvent_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (AccelerationEvent)");
+    return 0;
+}
+
+int lua_register_ax_base_AccelerationEvent(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.AccelerationEvent");
+    tolua_cclass(tolua_S,"AccelerationEvent","ax.AccelerationEvent","ax.Event",nullptr);
+
+    tolua_beginmodule(tolua_S,"AccelerationEvent");
+        tolua_function(tolua_S,"getAcceleration",lua_ax_base_AccelerationEvent_getAcceleration);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::AccelerationEvent).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.AccelerationEvent";
+    g_typeCast[typeName] = "ax.AccelerationEvent";
+    return 1;
+}
+
+int lua_ax_base_CustomEvent_getEventName(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::CustomEvent* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.CustomEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::CustomEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_CustomEvent_getEventName'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_CustomEvent_getEventName'", nullptr);
             return 0;
         }
         auto&& ret = obj->getEventName();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventCustom:getEventName",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CustomEvent:getEventName",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventCustom_getEventName'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_CustomEvent_getEventName'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_EventCustom_constructor(lua_State* tolua_S)
+int lua_ax_base_CustomEvent_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventCustom* obj = nullptr;
+    ax::CustomEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33995,47 +34594,47 @@ int lua_ax_base_EventCustom_constructor(lua_State* tolua_S)
     {
         std::string_view arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventCustom:EventCustom");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.CustomEvent:CustomEvent");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventCustom_constructor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_CustomEvent_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::EventCustom(arg0);
+        obj = new ax::CustomEvent(arg0);
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventCustom");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.CustomEvent");
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventCustom:EventCustom",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CustomEvent:CustomEvent",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventCustom_constructor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_CustomEvent_constructor'.",&tolua_err);
 #endif
 
     return 0;
 }
 
-static int lua_ax_base_EventCustom_finalize(lua_State* tolua_S)
+static int lua_ax_base_CustomEvent_finalize(lua_State* tolua_S)
 {
-    AXLOGV("luabindings: finalizing LUA object (EventCustom)");
+    AXLOGV("luabindings: finalizing LUA object (CustomEvent)");
     return 0;
 }
 
-int lua_register_ax_base_EventCustom(lua_State* tolua_S)
+int lua_register_ax_base_CustomEvent(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.EventCustom");
-    tolua_cclass(tolua_S,"EventCustom","ax.EventCustom","ax.Event",nullptr);
+    tolua_usertype(tolua_S,"ax.CustomEvent");
+    tolua_cclass(tolua_S,"CustomEvent","ax.CustomEvent","ax.Event",nullptr);
 
-    tolua_beginmodule(tolua_S,"EventCustom");
-        tolua_function(tolua_S,"new",lua_ax_base_EventCustom_constructor);
-        tolua_function(tolua_S,"getEventName",lua_ax_base_EventCustom_getEventName);
+    tolua_beginmodule(tolua_S,"CustomEvent");
+        tolua_function(tolua_S,"new",lua_ax_base_CustomEvent_constructor);
+        tolua_function(tolua_S,"getEventName",lua_ax_base_CustomEvent_getEventName);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::EventCustom).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventCustom";
-    g_typeCast[typeName] = "ax.EventCustom";
+    auto typeName = typeid(ax::CustomEvent).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.CustomEvent";
+    g_typeCast[typeName] = "ax.CustomEvent";
     return 1;
 }
 
@@ -34174,7 +34773,7 @@ int lua_ax_base_EventDispatcher_addCustomEventListener(lua_State* tolua_S)
     if (argc == 2)
     {
         std::string_view arg0;
-        std::function<void (ax::EventCustom *)> arg1;
+        std::function<void (ax::CustomEvent *)> arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventDispatcher:addCustomEventListener");
 
@@ -34189,13 +34788,13 @@ int lua_ax_base_EventDispatcher_addCustomEventListener(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->addCustomEventListener(arg0, arg1);
-        object_to_luaval<ax::EventListenerCustom>(tolua_S, "ax.EventListenerCustom",(ax::EventListenerCustom*)ret);
+        object_to_luaval<ax::CustomEventListener>(tolua_S, "ax.CustomEventListener",(ax::CustomEventListener*)ret);
         return 1;
     }
     if (argc == 3)
     {
         std::string_view arg0;
-        std::function<void (ax::EventCustom *)> arg1;
+        std::function<void (ax::CustomEvent *)> arg1;
         int arg2;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventDispatcher:addCustomEventListener");
@@ -34213,7 +34812,7 @@ int lua_ax_base_EventDispatcher_addCustomEventListener(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->addCustomEventListener(arg0, arg1, arg2);
-        object_to_luaval<ax::EventListenerCustom>(tolua_S, "ax.EventListenerCustom",(ax::EventListenerCustom*)ret);
+        object_to_luaval<ax::CustomEventListener>(tolua_S, "ax.CustomEventListener",(ax::CustomEventListener*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventDispatcher:addCustomEventListener",argc, 2);
@@ -35053,10 +35652,10 @@ int lua_register_ax_base_EventDispatcher(lua_State* tolua_S)
     return 1;
 }
 
-int lua_ax_base_EventFocus_constructor(lua_State* tolua_S)
+int lua_ax_base_FocusEvent_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventFocus* obj = nullptr;
+    ax::FocusEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -35071,55 +35670,55 @@ int lua_ax_base_EventFocus_constructor(lua_State* tolua_S)
         ax::ui::Widget* arg0;
         ax::ui::Widget* arg1;
 
-        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "ax.EventFocus:EventFocus");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "ax.FocusEvent:FocusEvent");
 
-        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 3, "axui.Widget",&arg1, "ax.EventFocus:EventFocus");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 3, "axui.Widget",&arg1, "ax.FocusEvent:FocusEvent");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventFocus_constructor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FocusEvent_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::EventFocus(arg0, arg1);
+        obj = new ax::FocusEvent(arg0, arg1);
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventFocus");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.FocusEvent");
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventFocus:EventFocus",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FocusEvent:FocusEvent",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventFocus_constructor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FocusEvent_constructor'.",&tolua_err);
 #endif
 
     return 0;
 }
 
-static int lua_ax_base_EventFocus_finalize(lua_State* tolua_S)
+static int lua_ax_base_FocusEvent_finalize(lua_State* tolua_S)
 {
-    AXLOGV("luabindings: finalizing LUA object (EventFocus)");
+    AXLOGV("luabindings: finalizing LUA object (FocusEvent)");
     return 0;
 }
 
-int lua_register_ax_base_EventFocus(lua_State* tolua_S)
+int lua_register_ax_base_FocusEvent(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.EventFocus");
-    tolua_cclass(tolua_S,"EventFocus","ax.EventFocus","ax.Event",nullptr);
+    tolua_usertype(tolua_S,"ax.FocusEvent");
+    tolua_cclass(tolua_S,"FocusEvent","ax.FocusEvent","ax.Event",nullptr);
 
-    tolua_beginmodule(tolua_S,"EventFocus");
-        tolua_function(tolua_S,"new",lua_ax_base_EventFocus_constructor);
+    tolua_beginmodule(tolua_S,"FocusEvent");
+        tolua_function(tolua_S,"new",lua_ax_base_FocusEvent_constructor);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::EventFocus).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventFocus";
-    g_typeCast[typeName] = "ax.EventFocus";
+    auto typeName = typeid(ax::FocusEvent).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.FocusEvent";
+    g_typeCast[typeName] = "ax.FocusEvent";
     return 1;
 }
 
-int lua_ax_base_EventListenerAcceleration_init(lua_State* tolua_S)
+int lua_ax_base_AccelerationEventListener_init(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventListenerAcceleration* obj = nullptr;
+    ax::AccelerationEventListener* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -35128,15 +35727,15 @@ int lua_ax_base_EventListenerAcceleration_init(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventListenerAcceleration",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.AccelerationEventListener",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventListenerAcceleration*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::AccelerationEventListener*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventListenerAcceleration_init'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_AccelerationEventListener_init'", nullptr);
         return 0;
     }
 #endif
@@ -35144,7 +35743,7 @@ int lua_ax_base_EventListenerAcceleration_init(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        std::function<void (ax::Acceleration *, ax::Event *)> arg0;
+        std::function<void (ax::AccelerationEvent *)> arg0;
 
         do {
         	// Lambda binding for lua is not supported.
@@ -35153,915 +35752,67 @@ int lua_ax_base_EventListenerAcceleration_init(lua_State* tolua_S)
         ;
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerAcceleration_init'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_AccelerationEventListener_init'", nullptr);
             return 0;
         }
         auto&& ret = obj->init(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerAcceleration:init",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AccelerationEventListener:init",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerAcceleration_init'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_AccelerationEventListener_init'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_EventListenerAcceleration_constructor(lua_State* tolua_S)
+int lua_ax_base_AccelerationEventListener_create(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventListenerAcceleration* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerAcceleration_constructor'", nullptr);
-            return 0;
-        }
-        obj = new ax::EventListenerAcceleration();
-        obj->autorelease();
-        int ID =  (int)obj->_ID ;
-        int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventListenerAcceleration");
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerAcceleration:EventListenerAcceleration",argc, 0);
-    return 0;
-
 #if _AX_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerAcceleration_constructor'.",&tolua_err);
+    if (!tolua_isusertable(tolua_S,1,"ax.AccelerationEventListener",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    return 0;
-}
+    argc = lua_gettop(tolua_S) - 1;
 
-static int lua_ax_base_EventListenerAcceleration_finalize(lua_State* tolua_S)
-{
-    AXLOGV("luabindings: finalizing LUA object (EventListenerAcceleration)");
-    return 0;
-}
-
-int lua_register_ax_base_EventListenerAcceleration(lua_State* tolua_S)
-{
-    tolua_usertype(tolua_S,"ax.EventListenerAcceleration");
-    tolua_cclass(tolua_S,"EventListenerAcceleration","ax.EventListenerAcceleration","ax.EventListener",nullptr);
-
-    tolua_beginmodule(tolua_S,"EventListenerAcceleration");
-        tolua_function(tolua_S,"new",lua_ax_base_EventListenerAcceleration_constructor);
-        tolua_function(tolua_S,"init",lua_ax_base_EventListenerAcceleration_init);
-    tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::EventListenerAcceleration).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventListenerAcceleration";
-    g_typeCast[typeName] = "ax.EventListenerAcceleration";
-    return 1;
-}
-
-int lua_ax_base_EventListenerFocus_init(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventListenerFocus* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventListenerFocus",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventListenerFocus*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventListenerFocus_init'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerFocus_init'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->init();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerFocus:init",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerFocus_init'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventListenerFocus_constructor(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventListenerFocus* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerFocus_constructor'", nullptr);
-            return 0;
-        }
-        obj = new ax::EventListenerFocus();
-        obj->autorelease();
-        int ID =  (int)obj->_ID ;
-        int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventListenerFocus");
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerFocus:EventListenerFocus",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerFocus_constructor'.",&tolua_err);
-#endif
-
-    return 0;
-}
-
-static int lua_ax_base_EventListenerFocus_finalize(lua_State* tolua_S)
-{
-    AXLOGV("luabindings: finalizing LUA object (EventListenerFocus)");
-    return 0;
-}
-
-int lua_register_ax_base_EventListenerFocus(lua_State* tolua_S)
-{
-    tolua_usertype(tolua_S,"ax.EventListenerFocus");
-    tolua_cclass(tolua_S,"EventListenerFocus","ax.EventListenerFocus","ax.EventListener",nullptr);
-
-    tolua_beginmodule(tolua_S,"EventListenerFocus");
-        tolua_function(tolua_S,"new",lua_ax_base_EventListenerFocus_constructor);
-        tolua_function(tolua_S,"init",lua_ax_base_EventListenerFocus_init);
-    tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::EventListenerFocus).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventListenerFocus";
-    g_typeCast[typeName] = "ax.EventListenerFocus";
-    return 1;
-}
-
-int lua_ax_base_EventListenerKeyboard_init(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventListenerKeyboard* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventListenerKeyboard",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventListenerKeyboard*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventListenerKeyboard_init'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerKeyboard_init'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->init();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerKeyboard:init",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerKeyboard_init'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventListenerKeyboard_constructor(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventListenerKeyboard* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerKeyboard_constructor'", nullptr);
-            return 0;
-        }
-        obj = new ax::EventListenerKeyboard();
-        obj->autorelease();
-        int ID =  (int)obj->_ID ;
-        int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventListenerKeyboard");
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerKeyboard:EventListenerKeyboard",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerKeyboard_constructor'.",&tolua_err);
-#endif
-
-    return 0;
-}
-
-static int lua_ax_base_EventListenerKeyboard_finalize(lua_State* tolua_S)
-{
-    AXLOGV("luabindings: finalizing LUA object (EventListenerKeyboard)");
-    return 0;
-}
-
-int lua_register_ax_base_EventListenerKeyboard(lua_State* tolua_S)
-{
-    tolua_usertype(tolua_S,"ax.EventListenerKeyboard");
-    tolua_cclass(tolua_S,"EventListenerKeyboard","ax.EventListenerKeyboard","ax.EventListener",nullptr);
-
-    tolua_beginmodule(tolua_S,"EventListenerKeyboard");
-        tolua_function(tolua_S,"new",lua_ax_base_EventListenerKeyboard_constructor);
-        tolua_function(tolua_S,"init",lua_ax_base_EventListenerKeyboard_init);
-    tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::EventListenerKeyboard).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventListenerKeyboard";
-    g_typeCast[typeName] = "ax.EventListenerKeyboard";
-    return 1;
-}
-
-int lua_ax_base_EventMouse_getMouseEventType(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventMouse* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventMouse",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventMouse_getMouseEventType'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_getMouseEventType'", nullptr);
-            return 0;
-        }
-        int ret = (int)obj->getMouseEventType();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:getMouseEventType",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventMouse_getMouseEventType'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventMouse_setScrollData(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventMouse* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventMouse",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventMouse_setScrollData'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
-    {
-        double arg0;
-        double arg1;
-
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.EventMouse:setScrollData");
-
-        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.EventMouse:setScrollData");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_setScrollData'", nullptr);
-            return 0;
-        }
-        obj->setScrollData(arg0, arg1);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:setScrollData",argc, 2);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventMouse_setScrollData'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventMouse_getScrollX(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventMouse* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventMouse",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventMouse_getScrollX'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_getScrollX'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getScrollX();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:getScrollX",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventMouse_getScrollX'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventMouse_getScrollY(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventMouse* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventMouse",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventMouse_getScrollY'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_getScrollY'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getScrollY();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:getScrollY",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventMouse_getScrollY'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventMouse_setMouseButton(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventMouse* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventMouse",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventMouse_setMouseButton'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        ax::EventMouse::MouseButton arg0;
-
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventMouse:setMouseButton");
+        std::function<void (ax::AccelerationEvent *)> arg0;
+        do {
+        	// Lambda binding for lua is not supported.
+            assert(false);
+        } while(0)
+        ;
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_setMouseButton'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_AccelerationEventListener_create'", nullptr);
             return 0;
         }
-        obj->setMouseButton(arg0);
-        lua_settop(tolua_S, 1);
+        auto&& ret = ax::AccelerationEventListener::create(arg0);
+        object_to_luaval<ax::AccelerationEventListener>(tolua_S, "ax.AccelerationEventListener",(ax::AccelerationEventListener*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:setMouseButton",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AccelerationEventListener:create",argc, 1);
     return 0;
-
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventMouse_setMouseButton'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_AccelerationEventListener_create'.",&tolua_err);
 #endif
-
     return 0;
 }
-int lua_ax_base_EventMouse_getMouseButton(lua_State* tolua_S)
+int lua_ax_base_AccelerationEventListener_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventMouse* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventMouse",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventMouse_getMouseButton'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_getMouseButton'", nullptr);
-            return 0;
-        }
-        int ret = (int)obj->getMouseButton();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:getMouseButton",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventMouse_getMouseButton'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventMouse_getLocation(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventMouse* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventMouse",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventMouse_getLocation'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_getLocation'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getLocation();
-        vec2_to_luaval(tolua_S, ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:getLocation",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventMouse_getLocation'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventMouse_getPreviousLocation(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventMouse* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventMouse",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventMouse_getPreviousLocation'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_getPreviousLocation'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getPreviousLocation();
-        vec2_to_luaval(tolua_S, ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:getPreviousLocation",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventMouse_getPreviousLocation'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventMouse_getStartLocation(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventMouse* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventMouse",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventMouse_getStartLocation'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_getStartLocation'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getStartLocation();
-        vec2_to_luaval(tolua_S, ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:getStartLocation",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventMouse_getStartLocation'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventMouse_getDelta(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventMouse* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventMouse",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventMouse_getDelta'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_getDelta'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getDelta();
-        vec2_to_luaval(tolua_S, ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:getDelta",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventMouse_getDelta'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventMouse_getLocationInView(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventMouse* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventMouse",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventMouse_getLocationInView'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_getLocationInView'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getLocationInView();
-        vec2_to_luaval(tolua_S, ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:getLocationInView",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventMouse_getLocationInView'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventMouse_getPreviousLocationInView(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventMouse* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventMouse",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventMouse_getPreviousLocationInView'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_getPreviousLocationInView'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getPreviousLocationInView();
-        vec2_to_luaval(tolua_S, ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:getPreviousLocationInView",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventMouse_getPreviousLocationInView'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventMouse_getStartLocationInView(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventMouse* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventMouse",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventMouse_getStartLocationInView'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_getStartLocationInView'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getStartLocationInView();
-        vec2_to_luaval(tolua_S, ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:getStartLocationInView",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventMouse_getStartLocationInView'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventMouse_constructor(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventMouse* obj = nullptr;
+    ax::AccelerationEventListener* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36075,63 +35826,52 @@ int lua_ax_base_EventMouse_constructor(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_constructor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_AccelerationEventListener_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::EventMouse();
+        obj = new ax::AccelerationEventListener();
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventMouse");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.AccelerationEventListener");
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:EventMouse",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AccelerationEventListener:AccelerationEventListener",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventMouse_constructor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_AccelerationEventListener_constructor'.",&tolua_err);
 #endif
 
     return 0;
 }
 
-static int lua_ax_base_EventMouse_finalize(lua_State* tolua_S)
+static int lua_ax_base_AccelerationEventListener_finalize(lua_State* tolua_S)
 {
-    AXLOGV("luabindings: finalizing LUA object (EventMouse)");
+    AXLOGV("luabindings: finalizing LUA object (AccelerationEventListener)");
     return 0;
 }
 
-int lua_register_ax_base_EventMouse(lua_State* tolua_S)
+int lua_register_ax_base_AccelerationEventListener(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.EventMouse");
-    tolua_cclass(tolua_S,"EventMouse","ax.EventMouse","ax.Event",nullptr);
+    tolua_usertype(tolua_S,"ax.AccelerationEventListener");
+    tolua_cclass(tolua_S,"AccelerationEventListener","ax.AccelerationEventListener","ax.EventListener",nullptr);
 
-    tolua_beginmodule(tolua_S,"EventMouse");
-        tolua_function(tolua_S,"new",lua_ax_base_EventMouse_constructor);
-        tolua_function(tolua_S,"getMouseEventType",lua_ax_base_EventMouse_getMouseEventType);
-        tolua_function(tolua_S,"setScrollData",lua_ax_base_EventMouse_setScrollData);
-        tolua_function(tolua_S,"getScrollX",lua_ax_base_EventMouse_getScrollX);
-        tolua_function(tolua_S,"getScrollY",lua_ax_base_EventMouse_getScrollY);
-        tolua_function(tolua_S,"setMouseButton",lua_ax_base_EventMouse_setMouseButton);
-        tolua_function(tolua_S,"getMouseButton",lua_ax_base_EventMouse_getMouseButton);
-        tolua_function(tolua_S,"getLocation",lua_ax_base_EventMouse_getLocation);
-        tolua_function(tolua_S,"getPreviousLocation",lua_ax_base_EventMouse_getPreviousLocation);
-        tolua_function(tolua_S,"getStartLocation",lua_ax_base_EventMouse_getStartLocation);
-        tolua_function(tolua_S,"getDelta",lua_ax_base_EventMouse_getDelta);
-        tolua_function(tolua_S,"getLocationInView",lua_ax_base_EventMouse_getLocationInView);
-        tolua_function(tolua_S,"getPreviousLocationInView",lua_ax_base_EventMouse_getPreviousLocationInView);
-        tolua_function(tolua_S,"getStartLocationInView",lua_ax_base_EventMouse_getStartLocationInView);
+    tolua_beginmodule(tolua_S,"AccelerationEventListener");
+        tolua_function(tolua_S,"new",lua_ax_base_AccelerationEventListener_constructor);
+        tolua_function(tolua_S,"init",lua_ax_base_AccelerationEventListener_init);
+        tolua_function(tolua_S,"create", lua_ax_base_AccelerationEventListener_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::EventMouse).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventMouse";
-    g_typeCast[typeName] = "ax.EventMouse";
+    auto typeName = typeid(ax::AccelerationEventListener).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.AccelerationEventListener";
+    g_typeCast[typeName] = "ax.AccelerationEventListener";
     return 1;
 }
 
-int lua_ax_base_EventListenerMouse_setSwallowMouse(lua_State* tolua_S)
+int lua_ax_base_FocusEventListener_init(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventListenerMouse* obj = nullptr;
+    ax::FocusEventListener* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36140,65 +35880,15 @@ int lua_ax_base_EventListenerMouse_setSwallowMouse(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventListenerMouse",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.FocusEventListener",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventListenerMouse*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::FocusEventListener*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventListenerMouse_setSwallowMouse'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
-    {
-        bool arg0;
-
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.EventListenerMouse:setSwallowMouse");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerMouse_setSwallowMouse'", nullptr);
-            return 0;
-        }
-        obj->setSwallowMouse(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerMouse:setSwallowMouse",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerMouse_setSwallowMouse'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventListenerMouse_isSwallowMouse(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventListenerMouse* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventListenerMouse",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventListenerMouse*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventListenerMouse_isSwallowMouse'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_FocusEventListener_init'", nullptr);
         return 0;
     }
 #endif
@@ -36208,74 +35898,61 @@ int lua_ax_base_EventListenerMouse_isSwallowMouse(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerMouse_isSwallowMouse'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->isSwallowMouse();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerMouse:isSwallowMouse",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerMouse_isSwallowMouse'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventListenerMouse_init(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventListenerMouse* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventListenerMouse",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventListenerMouse*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventListenerMouse_init'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerMouse_init'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FocusEventListener_init'", nullptr);
             return 0;
         }
         auto&& ret = obj->init();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerMouse:init",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FocusEventListener:init",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerMouse_init'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FocusEventListener_init'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_EventListenerMouse_constructor(lua_State* tolua_S)
+int lua_ax_base_FocusEventListener_create(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventListenerMouse* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.FocusEventListener",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FocusEventListener_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::FocusEventListener::create();
+        object_to_luaval<ax::FocusEventListener>(tolua_S, "ax.FocusEventListener",(ax::FocusEventListener*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.FocusEventListener:create",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FocusEventListener_create'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_FocusEventListener_constructor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::FocusEventListener* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36289,72 +35966,52 @@ int lua_ax_base_EventListenerMouse_constructor(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerMouse_constructor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FocusEventListener_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::EventListenerMouse();
+        obj = new ax::FocusEventListener();
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventListenerMouse");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.FocusEventListener");
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerMouse:EventListenerMouse",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FocusEventListener:FocusEventListener",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerMouse_constructor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FocusEventListener_constructor'.",&tolua_err);
 #endif
 
     return 0;
 }
 
-static int lua_ax_base_EventListenerMouse_finalize(lua_State* tolua_S)
+static int lua_ax_base_FocusEventListener_finalize(lua_State* tolua_S)
 {
-    AXLOGV("luabindings: finalizing LUA object (EventListenerMouse)");
+    AXLOGV("luabindings: finalizing LUA object (FocusEventListener)");
     return 0;
 }
 
-int lua_register_ax_base_EventListenerMouse(lua_State* tolua_S)
+int lua_register_ax_base_FocusEventListener(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.EventListenerMouse");
-    tolua_cclass(tolua_S,"EventListenerMouse","ax.EventListenerMouse","ax.EventListener",nullptr);
+    tolua_usertype(tolua_S,"ax.FocusEventListener");
+    tolua_cclass(tolua_S,"FocusEventListener","ax.FocusEventListener","ax.EventListener",nullptr);
 
-    tolua_beginmodule(tolua_S,"EventListenerMouse");
-        tolua_function(tolua_S,"new",lua_ax_base_EventListenerMouse_constructor);
-        tolua_function(tolua_S,"setSwallowMouse",lua_ax_base_EventListenerMouse_setSwallowMouse);
-        tolua_function(tolua_S,"isSwallowMouse",lua_ax_base_EventListenerMouse_isSwallowMouse);
-        tolua_function(tolua_S,"init",lua_ax_base_EventListenerMouse_init);
+    tolua_beginmodule(tolua_S,"FocusEventListener");
+        tolua_function(tolua_S,"new",lua_ax_base_FocusEventListener_constructor);
+        tolua_function(tolua_S,"init",lua_ax_base_FocusEventListener_init);
+        tolua_function(tolua_S,"create", lua_ax_base_FocusEventListener_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::EventListenerMouse).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventListenerMouse";
-    g_typeCast[typeName] = "ax.EventListenerMouse";
+    auto typeName = typeid(ax::FocusEventListener).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.FocusEventListener";
+    g_typeCast[typeName] = "ax.FocusEventListener";
     return 1;
 }
 
-static int lua_ax_base_EventListenerController_finalize(lua_State* tolua_S)
-{
-    AXLOGV("luabindings: finalizing LUA object (EventListenerController)");
-    return 0;
-}
-
-int lua_register_ax_base_EventListenerController(lua_State* tolua_S)
-{
-    tolua_usertype(tolua_S,"ax.EventListenerController");
-    tolua_cclass(tolua_S,"EventListenerController","ax.EventListenerController","ax.EventListener",nullptr);
-
-    tolua_beginmodule(tolua_S,"EventListenerController");
-    tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::EventListenerController).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventListenerController";
-    g_typeCast[typeName] = "ax.EventListenerController";
-    return 1;
-}
-
-int lua_ax_base_EventListenerTouchOneByOne_setSwallowTouches(lua_State* tolua_S)
+int lua_ax_base_KeyboardEventListener_init(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventListenerTouchOneByOne* obj = nullptr;
+    ax::KeyboardEventListener* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36363,65 +36020,15 @@ int lua_ax_base_EventListenerTouchOneByOne_setSwallowTouches(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventListenerTouchOneByOne",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.KeyboardEventListener",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventListenerTouchOneByOne*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::KeyboardEventListener*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventListenerTouchOneByOne_setSwallowTouches'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
-    {
-        bool arg0;
-
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.EventListenerTouchOneByOne:setSwallowTouches");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerTouchOneByOne_setSwallowTouches'", nullptr);
-            return 0;
-        }
-        obj->setSwallowTouches(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerTouchOneByOne:setSwallowTouches",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerTouchOneByOne_setSwallowTouches'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventListenerTouchOneByOne_isSwallowTouches(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventListenerTouchOneByOne* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventListenerTouchOneByOne",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventListenerTouchOneByOne*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventListenerTouchOneByOne_isSwallowTouches'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_KeyboardEventListener_init'", nullptr);
         return 0;
     }
 #endif
@@ -36431,74 +36038,61 @@ int lua_ax_base_EventListenerTouchOneByOne_isSwallowTouches(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerTouchOneByOne_isSwallowTouches'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->isSwallowTouches();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerTouchOneByOne:isSwallowTouches",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerTouchOneByOne_isSwallowTouches'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventListenerTouchOneByOne_init(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventListenerTouchOneByOne* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventListenerTouchOneByOne",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventListenerTouchOneByOne*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventListenerTouchOneByOne_init'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerTouchOneByOne_init'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_KeyboardEventListener_init'", nullptr);
             return 0;
         }
         auto&& ret = obj->init();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerTouchOneByOne:init",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.KeyboardEventListener:init",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerTouchOneByOne_init'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_KeyboardEventListener_init'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_EventListenerTouchOneByOne_constructor(lua_State* tolua_S)
+int lua_ax_base_KeyboardEventListener_create(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventListenerTouchOneByOne* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.KeyboardEventListener",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_KeyboardEventListener_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::KeyboardEventListener::create();
+        object_to_luaval<ax::KeyboardEventListener>(tolua_S, "ax.KeyboardEventListener",(ax::KeyboardEventListener*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.KeyboardEventListener:create",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_KeyboardEventListener_create'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_KeyboardEventListener_constructor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::KeyboardEventListener* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36512,53 +36106,52 @@ int lua_ax_base_EventListenerTouchOneByOne_constructor(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerTouchOneByOne_constructor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_KeyboardEventListener_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::EventListenerTouchOneByOne();
+        obj = new ax::KeyboardEventListener();
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventListenerTouchOneByOne");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.KeyboardEventListener");
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerTouchOneByOne:EventListenerTouchOneByOne",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.KeyboardEventListener:KeyboardEventListener",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerTouchOneByOne_constructor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_KeyboardEventListener_constructor'.",&tolua_err);
 #endif
 
     return 0;
 }
 
-static int lua_ax_base_EventListenerTouchOneByOne_finalize(lua_State* tolua_S)
+static int lua_ax_base_KeyboardEventListener_finalize(lua_State* tolua_S)
 {
-    AXLOGV("luabindings: finalizing LUA object (EventListenerTouchOneByOne)");
+    AXLOGV("luabindings: finalizing LUA object (KeyboardEventListener)");
     return 0;
 }
 
-int lua_register_ax_base_EventListenerTouchOneByOne(lua_State* tolua_S)
+int lua_register_ax_base_KeyboardEventListener(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.EventListenerTouchOneByOne");
-    tolua_cclass(tolua_S,"EventListenerTouchOneByOne","ax.EventListenerTouchOneByOne","ax.EventListener",nullptr);
+    tolua_usertype(tolua_S,"ax.KeyboardEventListener");
+    tolua_cclass(tolua_S,"KeyboardEventListener","ax.KeyboardEventListener","ax.EventListener",nullptr);
 
-    tolua_beginmodule(tolua_S,"EventListenerTouchOneByOne");
-        tolua_function(tolua_S,"new",lua_ax_base_EventListenerTouchOneByOne_constructor);
-        tolua_function(tolua_S,"setSwallowTouches",lua_ax_base_EventListenerTouchOneByOne_setSwallowTouches);
-        tolua_function(tolua_S,"isSwallowTouches",lua_ax_base_EventListenerTouchOneByOne_isSwallowTouches);
-        tolua_function(tolua_S,"init",lua_ax_base_EventListenerTouchOneByOne_init);
+    tolua_beginmodule(tolua_S,"KeyboardEventListener");
+        tolua_function(tolua_S,"new",lua_ax_base_KeyboardEventListener_constructor);
+        tolua_function(tolua_S,"init",lua_ax_base_KeyboardEventListener_init);
+        tolua_function(tolua_S,"create", lua_ax_base_KeyboardEventListener_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::EventListenerTouchOneByOne).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventListenerTouchOneByOne";
-    g_typeCast[typeName] = "ax.EventListenerTouchOneByOne";
+    auto typeName = typeid(ax::KeyboardEventListener).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.KeyboardEventListener";
+    g_typeCast[typeName] = "ax.KeyboardEventListener";
     return 1;
 }
 
-int lua_ax_base_EventListenerTouchAllAtOnce_init(lua_State* tolua_S)
+int lua_ax_base_ControllerEvent_getControllerEventType(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventListenerTouchAllAtOnce* obj = nullptr;
+    ax::ControllerEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36567,15 +36160,15 @@ int lua_ax_base_EventListenerTouchAllAtOnce_init(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventListenerTouchAllAtOnce",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.ControllerEvent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventListenerTouchAllAtOnce*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ControllerEvent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventListenerTouchAllAtOnce_init'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_ControllerEvent_getControllerEventType'", nullptr);
         return 0;
     }
 #endif
@@ -36585,132 +36178,27 @@ int lua_ax_base_EventListenerTouchAllAtOnce_init(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerTouchAllAtOnce_init'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->init();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerTouchAllAtOnce:init",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerTouchAllAtOnce_init'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_EventListenerTouchAllAtOnce_constructor(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventListenerTouchAllAtOnce* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerTouchAllAtOnce_constructor'", nullptr);
-            return 0;
-        }
-        obj = new ax::EventListenerTouchAllAtOnce();
-        obj->autorelease();
-        int ID =  (int)obj->_ID ;
-        int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventListenerTouchAllAtOnce");
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerTouchAllAtOnce:EventListenerTouchAllAtOnce",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventListenerTouchAllAtOnce_constructor'.",&tolua_err);
-#endif
-
-    return 0;
-}
-
-static int lua_ax_base_EventListenerTouchAllAtOnce_finalize(lua_State* tolua_S)
-{
-    AXLOGV("luabindings: finalizing LUA object (EventListenerTouchAllAtOnce)");
-    return 0;
-}
-
-int lua_register_ax_base_EventListenerTouchAllAtOnce(lua_State* tolua_S)
-{
-    tolua_usertype(tolua_S,"ax.EventListenerTouchAllAtOnce");
-    tolua_cclass(tolua_S,"EventListenerTouchAllAtOnce","ax.EventListenerTouchAllAtOnce","ax.EventListener",nullptr);
-
-    tolua_beginmodule(tolua_S,"EventListenerTouchAllAtOnce");
-        tolua_function(tolua_S,"new",lua_ax_base_EventListenerTouchAllAtOnce_constructor);
-        tolua_function(tolua_S,"init",lua_ax_base_EventListenerTouchAllAtOnce_init);
-    tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::EventListenerTouchAllAtOnce).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventListenerTouchAllAtOnce";
-    g_typeCast[typeName] = "ax.EventListenerTouchAllAtOnce";
-    return 1;
-}
-
-int lua_ax_base_EventController_getControllerEventType(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventController* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventController",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventController_getControllerEventType'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventController_getControllerEventType'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ControllerEvent_getControllerEventType'", nullptr);
             return 0;
         }
         int ret = (int)obj->getControllerEventType();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventController:getControllerEventType",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ControllerEvent:getControllerEventType",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventController_getControllerEventType'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ControllerEvent_getControllerEventType'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_EventController_getController(lua_State* tolua_S)
+int lua_ax_base_ControllerEvent_getController(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventController* obj = nullptr;
+    ax::ControllerEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36719,15 +36207,15 @@ int lua_ax_base_EventController_getController(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventController",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.ControllerEvent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ControllerEvent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventController_getController'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_ControllerEvent_getController'", nullptr);
         return 0;
     }
 #endif
@@ -36737,27 +36225,27 @@ int lua_ax_base_EventController_getController(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventController_getController'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ControllerEvent_getController'", nullptr);
             return 0;
         }
         auto&& ret = obj->getController();
         object_to_luaval<ax::Controller>(tolua_S, "ax.Controller",(ax::Controller*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventController:getController",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ControllerEvent:getController",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventController_getController'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ControllerEvent_getController'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_EventController_getKeyCode(lua_State* tolua_S)
+int lua_ax_base_ControllerEvent_getKeyCode(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventController* obj = nullptr;
+    ax::ControllerEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36766,15 +36254,15 @@ int lua_ax_base_EventController_getKeyCode(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventController",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.ControllerEvent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ControllerEvent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventController_getKeyCode'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_ControllerEvent_getKeyCode'", nullptr);
         return 0;
     }
 #endif
@@ -36784,27 +36272,27 @@ int lua_ax_base_EventController_getKeyCode(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventController_getKeyCode'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ControllerEvent_getKeyCode'", nullptr);
             return 0;
         }
         auto&& ret = obj->getKeyCode();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventController:getKeyCode",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ControllerEvent:getKeyCode",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventController_getKeyCode'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ControllerEvent_getKeyCode'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_EventController_setKeyCode(lua_State* tolua_S)
+int lua_ax_base_ControllerEvent_setKeyCode(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventController* obj = nullptr;
+    ax::ControllerEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36813,15 +36301,15 @@ int lua_ax_base_EventController_setKeyCode(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventController",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.ControllerEvent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ControllerEvent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventController_setKeyCode'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_ControllerEvent_setKeyCode'", nullptr);
         return 0;
     }
 #endif
@@ -36831,30 +36319,30 @@ int lua_ax_base_EventController_setKeyCode(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventController:setKeyCode");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ControllerEvent:setKeyCode");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventController_setKeyCode'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ControllerEvent_setKeyCode'", nullptr);
             return 0;
         }
         obj->setKeyCode(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventController:setKeyCode",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ControllerEvent:setKeyCode",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventController_setKeyCode'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ControllerEvent_setKeyCode'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_EventController_setConnectStatus(lua_State* tolua_S)
+int lua_ax_base_ControllerEvent_setConnectStatus(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventController* obj = nullptr;
+    ax::ControllerEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36863,15 +36351,15 @@ int lua_ax_base_EventController_setConnectStatus(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventController",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.ControllerEvent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ControllerEvent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventController_setConnectStatus'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_ControllerEvent_setConnectStatus'", nullptr);
         return 0;
     }
 #endif
@@ -36881,30 +36369,30 @@ int lua_ax_base_EventController_setConnectStatus(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.EventController:setConnectStatus");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ControllerEvent:setConnectStatus");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventController_setConnectStatus'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ControllerEvent_setConnectStatus'", nullptr);
             return 0;
         }
         obj->setConnectStatus(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventController:setConnectStatus",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ControllerEvent:setConnectStatus",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventController_setConnectStatus'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ControllerEvent_setConnectStatus'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_EventController_isConnected(lua_State* tolua_S)
+int lua_ax_base_ControllerEvent_isConnected(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventController* obj = nullptr;
+    ax::ControllerEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36913,15 +36401,15 @@ int lua_ax_base_EventController_isConnected(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventController",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.ControllerEvent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ControllerEvent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventController_isConnected'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_ControllerEvent_isConnected'", nullptr);
         return 0;
     }
 #endif
@@ -36931,27 +36419,27 @@ int lua_ax_base_EventController_isConnected(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventController_isConnected'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ControllerEvent_isConnected'", nullptr);
             return 0;
         }
         auto&& ret = obj->isConnected();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventController:isConnected",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ControllerEvent:isConnected",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventController_isConnected'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ControllerEvent_isConnected'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_EventController_constructor(lua_State* tolua_S)
+int lua_ax_base_ControllerEvent_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventController* obj = nullptr;
+    ax::ControllerEvent* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -36960,83 +36448,277 @@ int lua_ax_base_EventController_constructor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do {
         if (argc == 3) {
-            ax::EventController::ControllerEventType arg0;
-            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventController:EventController");
+            ax::ControllerEvent::ControllerEventType arg0;
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ControllerEvent:ControllerEvent");
 
             if (!ok) { break; }
             ax::Controller* arg1;
-            ok &= luaval_to_object<ax::Controller>(tolua_S, 3, "ax.Controller",&arg1, "ax.EventController:EventController");
+            ok &= luaval_to_object<ax::Controller>(tolua_S, 3, "ax.Controller",&arg1, "ax.ControllerEvent:ControllerEvent");
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.EventController:EventController");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.ControllerEvent:ControllerEvent");
 
             if (!ok) { break; }
-            obj = new ax::EventController(arg0, arg1, arg2);
+            obj = new ax::ControllerEvent(arg0, arg1, arg2);
             obj->autorelease();
             int ID =  (int)obj->_ID ;
             int* luaID =  &obj->_luaID ;
-            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventController");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.ControllerEvent");
             return 1;
         }
     }while(0);
     ok  = true;
     do {
         if (argc == 3) {
-            ax::EventController::ControllerEventType arg0;
-            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventController:EventController");
+            ax::ControllerEvent::ControllerEventType arg0;
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ControllerEvent:ControllerEvent");
 
             if (!ok) { break; }
             ax::Controller* arg1;
-            ok &= luaval_to_object<ax::Controller>(tolua_S, 3, "ax.Controller",&arg1, "ax.EventController:EventController");
+            ok &= luaval_to_object<ax::Controller>(tolua_S, 3, "ax.Controller",&arg1, "ax.ControllerEvent:ControllerEvent");
 
             if (!ok) { break; }
             int arg2;
-            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventController:EventController");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.ControllerEvent:ControllerEvent");
 
             if (!ok) { break; }
-            obj = new ax::EventController(arg0, arg1, arg2);
+            obj = new ax::ControllerEvent(arg0, arg1, arg2);
             obj->autorelease();
             int ID =  (int)obj->_ID ;
             int* luaID =  &obj->_luaID ;
-            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventController");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.ControllerEvent");
             return 1;
         }
     }while(0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.EventController:EventController",argc, 3);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.ControllerEvent:ControllerEvent",argc, 3);
     return 0;
 
 #if _AX_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventController_constructor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ControllerEvent_constructor'.",&tolua_err);
 #endif
 
     return 0;
 }
 
-static int lua_ax_base_EventController_finalize(lua_State* tolua_S)
+static int lua_ax_base_ControllerEvent_finalize(lua_State* tolua_S)
 {
-    AXLOGV("luabindings: finalizing LUA object (EventController)");
+    AXLOGV("luabindings: finalizing LUA object (ControllerEvent)");
     return 0;
 }
 
-int lua_register_ax_base_EventController(lua_State* tolua_S)
+int lua_register_ax_base_ControllerEvent(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.EventController");
-    tolua_cclass(tolua_S,"EventController","ax.EventController","ax.Event",nullptr);
+    tolua_usertype(tolua_S,"ax.ControllerEvent");
+    tolua_cclass(tolua_S,"ControllerEvent","ax.ControllerEvent","ax.Event",nullptr);
 
-    tolua_beginmodule(tolua_S,"EventController");
-        tolua_function(tolua_S,"new",lua_ax_base_EventController_constructor);
-        tolua_function(tolua_S,"getControllerEventType",lua_ax_base_EventController_getControllerEventType);
-        tolua_function(tolua_S,"getController",lua_ax_base_EventController_getController);
-        tolua_function(tolua_S,"getKeyCode",lua_ax_base_EventController_getKeyCode);
-        tolua_function(tolua_S,"setKeyCode",lua_ax_base_EventController_setKeyCode);
-        tolua_function(tolua_S,"setConnectStatus",lua_ax_base_EventController_setConnectStatus);
-        tolua_function(tolua_S,"isConnected",lua_ax_base_EventController_isConnected);
+    tolua_beginmodule(tolua_S,"ControllerEvent");
+        tolua_function(tolua_S,"new",lua_ax_base_ControllerEvent_constructor);
+        tolua_function(tolua_S,"getControllerEventType",lua_ax_base_ControllerEvent_getControllerEventType);
+        tolua_function(tolua_S,"getController",lua_ax_base_ControllerEvent_getController);
+        tolua_function(tolua_S,"getKeyCode",lua_ax_base_ControllerEvent_getKeyCode);
+        tolua_function(tolua_S,"setKeyCode",lua_ax_base_ControllerEvent_setKeyCode);
+        tolua_function(tolua_S,"setConnectStatus",lua_ax_base_ControllerEvent_setConnectStatus);
+        tolua_function(tolua_S,"isConnected",lua_ax_base_ControllerEvent_isConnected);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::EventController).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventController";
-    g_typeCast[typeName] = "ax.EventController";
+    auto typeName = typeid(ax::ControllerEvent).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.ControllerEvent";
+    g_typeCast[typeName] = "ax.ControllerEvent";
+    return 1;
+}
+
+int lua_ax_base_ControllerEventListener_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.ControllerEventListener",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ControllerEventListener_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::ControllerEventListener::create();
+        object_to_luaval<ax::ControllerEventListener>(tolua_S, "ax.ControllerEventListener",(ax::ControllerEventListener*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.ControllerEventListener:create",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ControllerEventListener_create'.",&tolua_err);
+#endif
+    return 0;
+}
+static int lua_ax_base_ControllerEventListener_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (ControllerEventListener)");
+    return 0;
+}
+
+int lua_register_ax_base_ControllerEventListener(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.ControllerEventListener");
+    tolua_cclass(tolua_S,"ControllerEventListener","ax.ControllerEventListener","ax.EventListener",nullptr);
+
+    tolua_beginmodule(tolua_S,"ControllerEventListener");
+        tolua_function(tolua_S,"create", lua_ax_base_ControllerEventListener_create);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::ControllerEventListener).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.ControllerEventListener";
+    g_typeCast[typeName] = "ax.ControllerEventListener";
+    return 1;
+}
+
+int lua_ax_base_PointerEventListener_init(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEventListener* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.PointerEventListener",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::PointerEventListener*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_PointerEventListener_init'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEventListener_init'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->init();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEventListener:init",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEventListener_init'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_PointerEventListener_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.PointerEventListener",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEventListener_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::PointerEventListener::create();
+        object_to_luaval<ax::PointerEventListener>(tolua_S, "ax.PointerEventListener",(ax::PointerEventListener*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PointerEventListener:create",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEventListener_create'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_PointerEventListener_constructor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::PointerEventListener* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointerEventListener_constructor'", nullptr);
+            return 0;
+        }
+        obj = new ax::PointerEventListener();
+        obj->autorelease();
+        int ID =  (int)obj->_ID ;
+        int* luaID =  &obj->_luaID ;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.PointerEventListener");
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PointerEventListener:PointerEventListener",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_PointerEventListener_constructor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+
+static int lua_ax_base_PointerEventListener_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (PointerEventListener)");
+    return 0;
+}
+
+int lua_register_ax_base_PointerEventListener(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.PointerEventListener");
+    tolua_cclass(tolua_S,"PointerEventListener","ax.PointerEventListener","ax.EventListener",nullptr);
+
+    tolua_beginmodule(tolua_S,"PointerEventListener");
+        tolua_function(tolua_S,"new",lua_ax_base_PointerEventListener_constructor);
+        tolua_function(tolua_S,"init",lua_ax_base_PointerEventListener_init);
+        tolua_function(tolua_S,"create", lua_ax_base_PointerEventListener_create);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::PointerEventListener).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PointerEventListener";
+    g_typeCast[typeName] = "ax.PointerEventListener";
     return 1;
 }
 
@@ -54632,6 +54314,59 @@ int lua_register_ax_base_DrawNode(lua_State* tolua_S)
     return 1;
 }
 
+int lua_ax_base_Label_setFontInfo(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Label* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Label",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Label_setFontInfo'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2)
+    {
+        std::string_view arg0;
+        double arg1;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:setFontInfo");
+
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Label:setFontInfo");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_setFontInfo'", nullptr);
+            return 0;
+        }
+        obj->setFontInfo(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Label:setFontInfo",argc, 2);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Label_setFontInfo'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Label_setTTFConfig(lua_State* tolua_S)
 {
     int argc = 0;
@@ -55344,7 +55079,7 @@ int lua_ax_base_Label_getString(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Label_getStringNumLines(lua_State* tolua_S)
+int lua_ax_base_Label_getLineCount(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Label* obj = nullptr;
@@ -55364,7 +55099,7 @@ int lua_ax_base_Label_getStringNumLines(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Label_getStringNumLines'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Label_getLineCount'", nullptr);
         return 0;
     }
 #endif
@@ -55374,24 +55109,24 @@ int lua_ax_base_Label_getStringNumLines(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_getStringNumLines'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_getLineCount'", nullptr);
             return 0;
         }
-        auto&& ret = obj->getStringNumLines();
+        auto&& ret = obj->getLineCount();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Label:getStringNumLines",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Label:getLineCount",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Label_getStringNumLines'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Label_getLineCount'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_Label_getStringLength(lua_State* tolua_S)
+int lua_ax_base_Label_getCharCount(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Label* obj = nullptr;
@@ -55411,7 +55146,7 @@ int lua_ax_base_Label_getStringLength(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Label_getStringLength'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Label_getCharCount'", nullptr);
         return 0;
     }
 #endif
@@ -55421,19 +55156,66 @@ int lua_ax_base_Label_getStringLength(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_getStringLength'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_getCharCount'", nullptr);
             return 0;
         }
-        auto&& ret = obj->getStringLength();
+        auto&& ret = obj->getCharCount();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Label:getStringLength",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Label:getCharCount",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Label_getStringLength'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Label_getCharCount'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Label_isEmpty(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Label* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Label",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Label_isEmpty'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_isEmpty'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isEmpty();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Label:isEmpty",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Label_isEmpty'.",&tolua_err);
 #endif
 
     return 0;
@@ -58483,7 +58265,6 @@ int lua_ax_base_Label_create(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
-
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -58492,20 +58273,36 @@ int lua_ax_base_Label_create(lua_State* tolua_S)
     if (!tolua_isusertable(tolua_S,1,"ax.Label",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    argc = lua_gettop(tolua_S) - 1;
+    argc = lua_gettop(tolua_S)-1;
 
-    if (argc == 0)
-    {
-        if(!ok)
+    do {
+        if (argc == 3)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_create'", nullptr);
-            return 0;
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:create");
+            if (!ok) { break; }
+            std::string_view arg1;
+            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.Label:create");
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Label:create");
+            if (!ok) { break; }
+            ax::Label* ret = ax::Label::create(arg0, arg1, arg2);
+            object_to_luaval<ax::Label>(tolua_S, "ax.Label",(ax::Label*)ret);
+            return 1;
         }
-        auto&& ret = ax::Label::create();
-        object_to_luaval<ax::Label>(tolua_S, "ax.Label",(ax::Label*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Label:create",argc, 0);
+    } while (0);
+    ok  = true;
+    do {
+        if (argc == 0)
+        {
+            ax::Label* ret = ax::Label::create();
+            object_to_luaval<ax::Label>(tolua_S, "ax.Label",(ax::Label*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.Label:create",argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
@@ -58831,6 +58628,7 @@ int lua_register_ax_base_Label(lua_State* tolua_S)
     tolua_cclass(tolua_S,"Label","ax.Label","ax.Node",nullptr);
 
     tolua_beginmodule(tolua_S,"Label");
+        tolua_function(tolua_S,"setFontInfo",lua_ax_base_Label_setFontInfo);
         tolua_function(tolua_S,"setTTFConfig",lua_ax_base_Label_setTTFConfig);
         tolua_function(tolua_S,"getTTFConfig",lua_ax_base_Label_getTTFConfig);
         tolua_function(tolua_S,"setBMFontFilePath",lua_ax_base_Label_setBMFontFilePath);
@@ -58843,8 +58641,9 @@ int lua_register_ax_base_Label(lua_State* tolua_S)
         tolua_function(tolua_S,"requestSystemFontRefresh",lua_ax_base_Label_requestSystemFontRefresh);
         tolua_function(tolua_S,"setString",lua_ax_base_Label_setString);
         tolua_function(tolua_S,"getString",lua_ax_base_Label_getString);
-        tolua_function(tolua_S,"getStringNumLines",lua_ax_base_Label_getStringNumLines);
-        tolua_function(tolua_S,"getStringLength",lua_ax_base_Label_getStringLength);
+        tolua_function(tolua_S,"getLineCount",lua_ax_base_Label_getLineCount);
+        tolua_function(tolua_S,"getCharCount",lua_ax_base_Label_getCharCount);
+        tolua_function(tolua_S,"isEmpty",lua_ax_base_Label_isEmpty);
         tolua_function(tolua_S,"setTextColor",lua_ax_base_Label_setTextColor);
         tolua_function(tolua_S,"getTextColor",lua_ax_base_Label_getTextColor);
         tolua_function(tolua_S,"enableShadow",lua_ax_base_Label_enableShadow);
@@ -66972,6 +66771,262 @@ int lua_ax_base_Menu_setEnabled(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Menu_onPointerHitTest(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Menu* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Menu",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Menu*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Menu_onPointerHitTest'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 3)
+    {
+        ax::PointerEvent* arg0;
+        const ax::Camera* arg1;
+        ax::Vec3* arg2;
+
+        ok &= luaval_to_object<ax::PointerEvent>(tolua_S, 2, "ax.PointerEvent",&arg0, "ax.Menu:onPointerHitTest");
+
+        ok &= luaval_to_object<const ax::Camera>(tolua_S, 3, "ax.Camera",&arg1, "ax.Menu:onPointerHitTest");
+
+        ok &= luaval_to_object<ax::Vec3>(tolua_S, 4, "ax.Vec3",&arg2, "ax.Menu:onPointerHitTest");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Menu_onPointerHitTest'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->onPointerHitTest(arg0, arg1, arg2);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Menu:onPointerHitTest",argc, 3);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Menu_onPointerHitTest'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Menu_onPointerDown(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Menu* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Menu",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Menu*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Menu_onPointerDown'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::PointerEvent* arg0;
+
+        ok &= luaval_to_object<ax::PointerEvent>(tolua_S, 2, "ax.PointerEvent",&arg0, "ax.Menu:onPointerDown");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Menu_onPointerDown'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->onPointerDown(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Menu:onPointerDown",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Menu_onPointerDown'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Menu_onPointerMove(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Menu* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Menu",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Menu*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Menu_onPointerMove'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::PointerEvent* arg0;
+
+        ok &= luaval_to_object<ax::PointerEvent>(tolua_S, 2, "ax.PointerEvent",&arg0, "ax.Menu:onPointerMove");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Menu_onPointerMove'", nullptr);
+            return 0;
+        }
+        obj->onPointerMove(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Menu:onPointerMove",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Menu_onPointerMove'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Menu_onPointerUp(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Menu* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Menu",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Menu*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Menu_onPointerUp'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::PointerEvent* arg0;
+
+        ok &= luaval_to_object<ax::PointerEvent>(tolua_S, 2, "ax.PointerEvent",&arg0, "ax.Menu:onPointerUp");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Menu_onPointerUp'", nullptr);
+            return 0;
+        }
+        obj->onPointerUp(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Menu:onPointerUp",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Menu_onPointerUp'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Menu_onPointerCancel(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Menu* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Menu",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Menu*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Menu_onPointerCancel'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::PointerEvent* arg0;
+
+        ok &= luaval_to_object<ax::PointerEvent>(tolua_S, 2, "ax.PointerEvent",&arg0, "ax.Menu:onPointerCancel");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Menu_onPointerCancel'", nullptr);
+            return 0;
+        }
+        obj->onPointerCancel(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Menu:onPointerCancel",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Menu_onPointerCancel'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Menu_initWithArray(lua_State* tolua_S)
 {
     int argc = 0;
@@ -67078,6 +67133,11 @@ int lua_register_ax_base_Menu(lua_State* tolua_S)
         tolua_function(tolua_S,"alignItemsHorizontallyWithPadding",lua_ax_base_Menu_alignItemsHorizontallyWithPadding);
         tolua_function(tolua_S,"isEnabled",lua_ax_base_Menu_isEnabled);
         tolua_function(tolua_S,"setEnabled",lua_ax_base_Menu_setEnabled);
+        tolua_function(tolua_S,"onPointerHitTest",lua_ax_base_Menu_onPointerHitTest);
+        tolua_function(tolua_S,"onPointerDown",lua_ax_base_Menu_onPointerDown);
+        tolua_function(tolua_S,"onPointerMove",lua_ax_base_Menu_onPointerMove);
+        tolua_function(tolua_S,"onPointerUp",lua_ax_base_Menu_onPointerUp);
+        tolua_function(tolua_S,"onPointerCancel",lua_ax_base_Menu_onPointerCancel);
         tolua_function(tolua_S,"initWithArray",lua_ax_base_Menu_initWithArray);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::Menu).name(); // rtti is literal storage
@@ -79715,9 +79775,9 @@ int lua_ax_base_ParticleSystemQuad_listenRendererRecreated(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        ax::EventCustom* arg0;
+        ax::CustomEvent* arg0;
 
-        ok &= luaval_to_object<ax::EventCustom>(tolua_S, 2, "ax.EventCustom",&arg0, "ax.ParticleSystemQuad:listenRendererRecreated");
+        ok &= luaval_to_object<ax::CustomEvent>(tolua_S, 2, "ax.CustomEvent",&arg0, "ax.ParticleSystemQuad:listenRendererRecreated");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystemQuad_listenRendererRecreated'", nullptr);
@@ -90470,7 +90530,7 @@ int lua_ax_base_Camera_getViewProjectionMatrix(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Camera_project(lua_State* tolua_S)
+int lua_ax_base_Camera_screenToRay(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Camera* obj = nullptr;
@@ -90490,7 +90550,7 @@ int lua_ax_base_Camera_project(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Camera_project'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Camera_screenToRay'", nullptr);
         return 0;
     }
 #endif
@@ -90498,29 +90558,29 @@ int lua_ax_base_Camera_project(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        ax::Vec3 arg0;
+        ax::Vec2 arg0;
 
-        ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.Camera:project");
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.Camera:screenToRay");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_project'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_screenToRay'", nullptr);
             return 0;
         }
-        auto&& ret = obj->project(arg0);
-        vec2_to_luaval(tolua_S, ret);
+        auto&& ret = obj->screenToRay(arg0);
+        ray_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:project",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:screenToRay",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_project'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_screenToRay'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_Camera_projectGL(lua_State* tolua_S)
+int lua_ax_base_Camera_projectWorldToScreen(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Camera* obj = nullptr;
@@ -90540,7 +90600,7 @@ int lua_ax_base_Camera_projectGL(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Camera_projectGL'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Camera_projectWorldToScreen'", nullptr);
         return 0;
     }
 #endif
@@ -90550,22 +90610,122 @@ int lua_ax_base_Camera_projectGL(lua_State* tolua_S)
     {
         ax::Vec3 arg0;
 
-        ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.Camera:projectGL");
+        ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.Camera:projectWorldToScreen");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_projectGL'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_projectWorldToScreen'", nullptr);
             return 0;
         }
-        auto&& ret = obj->projectGL(arg0);
+        auto&& ret = obj->projectWorldToScreen(arg0);
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:projectGL",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:projectWorldToScreen",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_projectGL'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_projectWorldToScreen'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Camera_deprojectScreenToWorld(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Camera* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Camera",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Camera_deprojectScreenToWorld'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::Vec3 arg0;
+
+        ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.Camera:deprojectScreenToWorld");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_deprojectScreenToWorld'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->deprojectScreenToWorld(arg0);
+        vec3_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:deprojectScreenToWorld",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_deprojectScreenToWorld'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Camera_projectWorldToCanvas(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Camera* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Camera",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Camera_projectWorldToCanvas'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::Vec3 arg0;
+
+        ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.Camera:projectWorldToCanvas");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_projectWorldToCanvas'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->projectWorldToCanvas(arg0);
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:projectWorldToCanvas",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_projectWorldToCanvas'.",&tolua_err);
 #endif
 
     return 0;
@@ -91846,6 +92006,81 @@ int lua_ax_base_Camera_applyViewport(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Camera_isWorldPointInRect(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Camera* obj = nullptr;
+    bool ok  = true;
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Camera",0,&tolua_err)) goto tolua_lerror;
+#endif
+    obj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Camera_isWorldPointInRect'", nullptr);
+        return 0;
+    }
+#endif
+    argc = lua_gettop(tolua_S)-1;
+    do {
+        if (argc == 3) {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.Camera:isWorldPointInRect");
+
+            if (!ok) { break; }
+            ax::Mat4 arg1;
+            ok &= luaval_to_mat4(tolua_S, 3, &arg1, "ax.Camera:isWorldPointInRect");
+
+            if (!ok) { break; }
+            ax::Rect arg2;
+            ok &= luaval_to_rect(tolua_S, 4, &arg2, "ax.Camera:isWorldPointInRect");
+
+            if (!ok) { break; }
+            bool ret = obj->isWorldPointInRect(arg0, arg1, arg2);
+            tolua_pushboolean(tolua_S,(bool)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do {
+        if (argc == 4) {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.Camera:isWorldPointInRect");
+
+            if (!ok) { break; }
+            ax::Mat4 arg1;
+            ok &= luaval_to_mat4(tolua_S, 3, &arg1, "ax.Camera:isWorldPointInRect");
+
+            if (!ok) { break; }
+            ax::Rect arg2;
+            ok &= luaval_to_rect(tolua_S, 4, &arg2, "ax.Camera:isWorldPointInRect");
+
+            if (!ok) { break; }
+            ax::Vec3* arg3;
+            ok &= luaval_to_object<ax::Vec3>(tolua_S, 5, "ax.Vec3",&arg3, "ax.Camera:isWorldPointInRect");
+
+            if (!ok) { break; }
+            bool ret = obj->isWorldPointInRect(arg0, arg1, arg2, arg3);
+            tolua_pushboolean(tolua_S,(bool)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.Camera:isWorldPointInRect",argc, 4);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_isWorldPointInRect'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Camera_createPerspective(lua_State* tolua_S)
 {
     int argc = 0;
@@ -92159,8 +92394,10 @@ int lua_register_ax_base_Camera(lua_State* tolua_S)
         tolua_function(tolua_S,"getProjectionMatrix",lua_ax_base_Camera_getProjectionMatrix);
         tolua_function(tolua_S,"getViewMatrix",lua_ax_base_Camera_getViewMatrix);
         tolua_function(tolua_S,"getViewProjectionMatrix",lua_ax_base_Camera_getViewProjectionMatrix);
-        tolua_function(tolua_S,"project",lua_ax_base_Camera_project);
-        tolua_function(tolua_S,"projectGL",lua_ax_base_Camera_projectGL);
+        tolua_function(tolua_S,"screenToRay",lua_ax_base_Camera_screenToRay);
+        tolua_function(tolua_S,"projectWorldToScreen",lua_ax_base_Camera_projectWorldToScreen);
+        tolua_function(tolua_S,"deprojectScreenToWorld",lua_ax_base_Camera_deprojectScreenToWorld);
+        tolua_function(tolua_S,"projectWorldToCanvas",lua_ax_base_Camera_projectWorldToCanvas);
         tolua_function(tolua_S,"isVisibleInFrustum",lua_ax_base_Camera_isVisibleInFrustum);
         tolua_function(tolua_S,"getDepthInView",lua_ax_base_Camera_getDepthInView);
         tolua_function(tolua_S,"setDepth",lua_ax_base_Camera_setDepth);
@@ -92187,6 +92424,7 @@ int lua_register_ax_base_Camera(lua_State* tolua_S)
         tolua_function(tolua_S,"initPerspective",lua_ax_base_Camera_initPerspective);
         tolua_function(tolua_S,"initOrthographic",lua_ax_base_Camera_initOrthographic);
         tolua_function(tolua_S,"applyViewport",lua_ax_base_Camera_applyViewport);
+        tolua_function(tolua_S,"isWorldPointInRect",lua_ax_base_Camera_isWorldPointInRect);
         tolua_function(tolua_S,"createPerspective", lua_ax_base_Camera_createPerspective);
         tolua_function(tolua_S,"createOrthographic", lua_ax_base_Camera_createOrthographic);
         tolua_function(tolua_S,"create", lua_ax_base_Camera_create);
@@ -104094,6 +104332,393 @@ int lua_register_ax_base_TextureCache(lua_State* tolua_S)
     return 1;
 }
 
+int lua_ax_base_ContactEvent2D_getColliderA(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ContactEvent2D* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ContactEvent2D",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ContactEvent2D*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_ContactEvent2D_getColliderA'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ContactEvent2D_getColliderA'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getColliderA();
+        object_to_luaval<ax::Collider2D>(tolua_S, "ax.Collider2D",(ax::Collider2D*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ContactEvent2D:getColliderA",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ContactEvent2D_getColliderA'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_ContactEvent2D_getColliderB(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ContactEvent2D* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ContactEvent2D",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ContactEvent2D*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_ContactEvent2D_getColliderB'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ContactEvent2D_getColliderB'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getColliderB();
+        object_to_luaval<ax::Collider2D>(tolua_S, "ax.Collider2D",(ax::Collider2D*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ContactEvent2D:getColliderB",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ContactEvent2D_getColliderB'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_ContactEvent2D_getEventCode(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ContactEvent2D* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ContactEvent2D",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ContactEvent2D*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_ContactEvent2D_getEventCode'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ContactEvent2D_getEventCode'", nullptr);
+            return 0;
+        }
+        int ret = (int)obj->getEventCode();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ContactEvent2D:getEventCode",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ContactEvent2D_getEventCode'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_ContactEvent2D_getContactInfo(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ContactEvent2D* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ContactEvent2D",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ContactEvent2D*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_ContactEvent2D_getContactInfo'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ContactEvent2D_getContactInfo'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getContactInfo();
+        physics_contactinfo2d_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ContactEvent2D:getContactInfo",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ContactEvent2D_getContactInfo'.",&tolua_err);
+#endif
+
+    return 0;
+}
+static int lua_ax_base_ContactEvent2D_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (ContactEvent2D)");
+    return 0;
+}
+
+int lua_register_ax_base_ContactEvent2D(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.ContactEvent2D");
+    tolua_cclass(tolua_S,"ContactEvent2D","ax.ContactEvent2D","ax.CustomEvent",nullptr);
+
+    tolua_beginmodule(tolua_S,"ContactEvent2D");
+        tolua_function(tolua_S,"getColliderA",lua_ax_base_ContactEvent2D_getColliderA);
+        tolua_function(tolua_S,"getColliderB",lua_ax_base_ContactEvent2D_getColliderB);
+        tolua_function(tolua_S,"getEventCode",lua_ax_base_ContactEvent2D_getEventCode);
+        tolua_function(tolua_S,"getContactInfo",lua_ax_base_ContactEvent2D_getContactInfo);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::ContactEvent2D).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.ContactEvent2D";
+    g_typeCast[typeName] = "ax.ContactEvent2D";
+    return 1;
+}
+
+int lua_ax_base_ContactEventListener2D_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.ContactEventListener2D",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+
+    do {
+        if (argc == 2)
+        {
+            ax::Rigidbody2D* arg0;
+            ok &= luaval_to_object<ax::Rigidbody2D>(tolua_S, 2, "ax.Rigidbody2D",&arg0, "ax.ContactEventListener2D:create");
+            if (!ok) { break; }
+            ax::Rigidbody2D* arg1;
+            ok &= luaval_to_object<ax::Rigidbody2D>(tolua_S, 3, "ax.Rigidbody2D",&arg1, "ax.ContactEventListener2D:create");
+            if (!ok) { break; }
+            ax::ContactEventListener2D* ret = ax::ContactEventListener2D::create(arg0, arg1);
+            object_to_luaval<ax::ContactEventListener2D>(tolua_S, "ax.ContactEventListener2D",(ax::ContactEventListener2D*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do {
+        if (argc == 0)
+        {
+            ax::ContactEventListener2D* ret = ax::ContactEventListener2D::create();
+            object_to_luaval<ax::ContactEventListener2D>(tolua_S, "ax.ContactEventListener2D",(ax::ContactEventListener2D*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.ContactEventListener2D:create",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ContactEventListener2D_create'.",&tolua_err);
+#endif
+    return 0;
+}
+static int lua_ax_base_ContactEventListener2D_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (ContactEventListener2D)");
+    return 0;
+}
+
+int lua_register_ax_base_ContactEventListener2D(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.ContactEventListener2D");
+    tolua_cclass(tolua_S,"ContactEventListener2D","ax.ContactEventListener2D","ax.CustomEventListener",nullptr);
+
+    tolua_beginmodule(tolua_S,"ContactEventListener2D");
+        tolua_function(tolua_S,"create", lua_ax_base_ContactEventListener2D_create);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::ContactEventListener2D).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.ContactEventListener2D";
+    g_typeCast[typeName] = "ax.ContactEventListener2D";
+    return 1;
+}
+
+int lua_ax_base_Device_getClipboardText(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Device",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        std::function<void (std::string_view)> arg0;
+        do {
+        	// Lambda binding for lua is not supported.
+            assert(false);
+        } while(0)
+        ;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_getClipboardText'", nullptr);
+            return 0;
+        }
+        ax::Device::getClipboardText(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Device:getClipboardText",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Device_getClipboardText'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_Device_setClipboardText(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Device",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        std::string_view arg0;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Device:setClipboardText");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_setClipboardText'", nullptr);
+            return 0;
+        }
+        ax::Device::setClipboardText(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Device:setClipboardText",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Device_setClipboardText'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_Device_clearClipboard(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Device",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_clearClipboard'", nullptr);
+            return 0;
+        }
+        ax::Device::clearClipboard();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Device:clearClipboard",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Device_clearClipboard'.",&tolua_err);
+#endif
+    return 0;
+}
 int lua_ax_base_Device_getDPI(lua_State* tolua_S)
 {
     int argc = 0;
@@ -104768,6 +105393,9 @@ int lua_register_ax_base_Device(lua_State* tolua_S)
     tolua_cclass(tolua_S,"Device","ax.Device","",nullptr);
 
     tolua_beginmodule(tolua_S,"Device");
+        tolua_function(tolua_S,"getClipboardText", lua_ax_base_Device_getClipboardText);
+        tolua_function(tolua_S,"setClipboardText", lua_ax_base_Device_setClipboardText);
+        tolua_function(tolua_S,"clearClipboard", lua_ax_base_Device_clearClipboard);
         tolua_function(tolua_S,"getDPI", lua_ax_base_Device_getDPI);
         tolua_function(tolua_S,"getPixelRatio", lua_ax_base_Device_getPixelRatio);
         tolua_function(tolua_S,"setAccelerometerEnabled", lua_ax_base_Device_setAccelerometerEnabled);
@@ -105082,40 +105710,6 @@ int lua_ax_base_Application_openURL(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Application_getInstance(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.Application",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Application_getInstance'", nullptr);
-            return 0;
-        }
-        auto&& ret = ax::Application::getInstance();
-        object_to_luaval<ax::Application>(tolua_S, "ax.Application",(ax::Application*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Application:getInstance",argc, 0);
-    return 0;
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Application_getInstance'.",&tolua_err);
-#endif
-    return 0;
-}
 static int lua_ax_base_Application_finalize(lua_State* tolua_S)
 {
     AXLOGV("luabindings: finalizing LUA object (Application)");
@@ -105134,7 +105728,6 @@ int lua_register_ax_base_Application(lua_State* tolua_S)
         tolua_function(tolua_S,"getTargetPlatform",lua_ax_base_Application_getTargetPlatform);
         tolua_function(tolua_S,"getVersion",lua_ax_base_Application_getVersion);
         tolua_function(tolua_S,"openURL",lua_ax_base_Application_openURL);
-        tolua_function(tolua_S,"getInstance", lua_ax_base_Application_getInstance);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::Application).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Application";
@@ -105142,7 +105735,7 @@ int lua_register_ax_base_Application(lua_State* tolua_S)
     return 1;
 }
 
-int lua_ax_base_RenderViewImpl_create(lua_State* tolua_S)
+int lua_ax_base_RenderView_create(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -105152,7 +105745,7 @@ int lua_ax_base_RenderViewImpl_create(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.RenderViewImpl",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -105160,25 +105753,25 @@ int lua_ax_base_RenderViewImpl_create(lua_State* tolua_S)
     if (argc == 1)
     {
         std::string_view arg0;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderViewImpl:create");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderView:create");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewImpl_create'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_create'", nullptr);
             return 0;
         }
-        auto&& ret = ax::RenderViewImpl::create(arg0);
-        object_to_luaval<ax::RenderViewImpl>(tolua_S, "ax.RenderViewImpl",(ax::RenderViewImpl*)ret);
+        auto&& ret = ax::RenderView::create(arg0);
+        object_to_luaval<ax::RenderView>(tolua_S, "ax.RenderView",(ax::RenderView*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.RenderViewImpl:create",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.RenderView:create",argc, 1);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewImpl_create'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_create'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_base_RenderViewImpl_createWithRect(lua_State* tolua_S)
+int lua_ax_base_RenderView_createWithRect(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -105188,7 +105781,7 @@ int lua_ax_base_RenderViewImpl_createWithRect(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.RenderViewImpl",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -105197,15 +105790,15 @@ int lua_ax_base_RenderViewImpl_createWithRect(lua_State* tolua_S)
     {
         std::string_view arg0;
         ax::Rect arg1;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderViewImpl:createWithRect");
-        ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.RenderViewImpl:createWithRect");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderView:createWithRect");
+        ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.RenderView:createWithRect");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewImpl_createWithRect'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_createWithRect'", nullptr);
             return 0;
         }
-        auto&& ret = ax::RenderViewImpl::createWithRect(arg0, arg1);
-        object_to_luaval<ax::RenderViewImpl>(tolua_S, "ax.RenderViewImpl",(ax::RenderViewImpl*)ret);
+        auto&& ret = ax::RenderView::createWithRect(arg0, arg1);
+        object_to_luaval<ax::RenderView>(tolua_S, "ax.RenderView",(ax::RenderView*)ret);
         return 1;
     }
     if (argc == 3)
@@ -105213,16 +105806,16 @@ int lua_ax_base_RenderViewImpl_createWithRect(lua_State* tolua_S)
         std::string_view arg0;
         ax::Rect arg1;
         double arg2;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderViewImpl:createWithRect");
-        ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.RenderViewImpl:createWithRect");
-        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RenderViewImpl:createWithRect");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderView:createWithRect");
+        ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.RenderView:createWithRect");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RenderView:createWithRect");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewImpl_createWithRect'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_createWithRect'", nullptr);
             return 0;
         }
-        auto&& ret = ax::RenderViewImpl::createWithRect(arg0, arg1, arg2);
-        object_to_luaval<ax::RenderViewImpl>(tolua_S, "ax.RenderViewImpl",(ax::RenderViewImpl*)ret);
+        auto&& ret = ax::RenderView::createWithRect(arg0, arg1, arg2);
+        object_to_luaval<ax::RenderView>(tolua_S, "ax.RenderView",(ax::RenderView*)ret);
         return 1;
     }
     if (argc == 4)
@@ -105231,28 +105824,28 @@ int lua_ax_base_RenderViewImpl_createWithRect(lua_State* tolua_S)
         ax::Rect arg1;
         double arg2;
         bool arg3;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderViewImpl:createWithRect");
-        ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.RenderViewImpl:createWithRect");
-        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RenderViewImpl:createWithRect");
-        ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.RenderViewImpl:createWithRect");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderView:createWithRect");
+        ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.RenderView:createWithRect");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RenderView:createWithRect");
+        ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.RenderView:createWithRect");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewImpl_createWithRect'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_createWithRect'", nullptr);
             return 0;
         }
-        auto&& ret = ax::RenderViewImpl::createWithRect(arg0, arg1, arg2, arg3);
-        object_to_luaval<ax::RenderViewImpl>(tolua_S, "ax.RenderViewImpl",(ax::RenderViewImpl*)ret);
+        auto&& ret = ax::RenderView::createWithRect(arg0, arg1, arg2, arg3);
+        object_to_luaval<ax::RenderView>(tolua_S, "ax.RenderView",(ax::RenderView*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.RenderViewImpl:createWithRect",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.RenderView:createWithRect",argc, 2);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewImpl_createWithRect'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_createWithRect'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_base_RenderViewImpl_createWithFullscreen(lua_State* tolua_S)
+int lua_ax_base_RenderView_createWithFullscreen(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -105262,7 +105855,7 @@ int lua_ax_base_RenderViewImpl_createWithFullscreen(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.RenderViewImpl",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -105270,43 +105863,43 @@ int lua_ax_base_RenderViewImpl_createWithFullscreen(lua_State* tolua_S)
     if (argc == 1)
     {
         std::string_view arg0;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderViewImpl:createWithFullscreen");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderView:createWithFullscreen");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewImpl_createWithFullscreen'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_createWithFullscreen'", nullptr);
             return 0;
         }
-        auto&& ret = ax::RenderViewImpl::createWithFullscreen(arg0);
-        object_to_luaval<ax::RenderViewImpl>(tolua_S, "ax.RenderViewImpl",(ax::RenderViewImpl*)ret);
+        auto&& ret = ax::RenderView::createWithFullscreen(arg0);
+        object_to_luaval<ax::RenderView>(tolua_S, "ax.RenderView",(ax::RenderView*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.RenderViewImpl:createWithFullscreen",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.RenderView:createWithFullscreen",argc, 1);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewImpl_createWithFullscreen'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_createWithFullscreen'.",&tolua_err);
 #endif
     return 0;
 }
-static int lua_ax_base_RenderViewImpl_finalize(lua_State* tolua_S)
+static int lua_ax_base_RenderView_finalize(lua_State* tolua_S)
 {
-    AXLOGV("luabindings: finalizing LUA object (RenderViewImpl)");
+    AXLOGV("luabindings: finalizing LUA object (RenderView)");
     return 0;
 }
 
-int lua_register_ax_base_RenderViewImpl(lua_State* tolua_S)
+int lua_register_ax_base_RenderView(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.RenderViewImpl");
-    tolua_cclass(tolua_S,"RenderViewImpl","ax.RenderViewImpl","ax.RenderView",nullptr);
+    tolua_usertype(tolua_S,"ax.RenderView");
+    tolua_cclass(tolua_S,"RenderView","ax.RenderView","ax.RenderViewCore",nullptr);
 
-    tolua_beginmodule(tolua_S,"RenderViewImpl");
-        tolua_function(tolua_S,"create", lua_ax_base_RenderViewImpl_create);
-        tolua_function(tolua_S,"createWithRect", lua_ax_base_RenderViewImpl_createWithRect);
-        tolua_function(tolua_S,"createWithFullscreen", lua_ax_base_RenderViewImpl_createWithFullscreen);
+    tolua_beginmodule(tolua_S,"RenderView");
+        tolua_function(tolua_S,"create", lua_ax_base_RenderView_create);
+        tolua_function(tolua_S,"createWithRect", lua_ax_base_RenderView_createWithRect);
+        tolua_function(tolua_S,"createWithFullscreen", lua_ax_base_RenderView_createWithFullscreen);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::RenderViewImpl).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.RenderViewImpl";
-    g_typeCast[typeName] = "ax.RenderViewImpl";
+    auto typeName = typeid(ax::RenderView).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.RenderView";
+    g_typeCast[typeName] = "ax.RenderView";
     return 1;
 }
 
@@ -114556,16 +115149,15 @@ TOLUA_API int register_all_ax_base(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"ax");
 
     lua_register_ax_base_Object(tolua_S);
-    lua_register_ax_base_Touch(tolua_S);
     lua_register_ax_base_Event(tolua_S);
-    lua_register_ax_base_EventTouch(tolua_S);
-    lua_register_ax_base_EventKeyboard(tolua_S);
+    lua_register_ax_base_PointerEvent(tolua_S);
+    lua_register_ax_base_KeyboardEvent(tolua_S);
     lua_register_ax_base_Action(tolua_S);
     lua_register_ax_base_FiniteTimeAction(tolua_S);
     lua_register_ax_base_Speed(tolua_S);
     lua_register_ax_base_Follow(tolua_S);
     lua_register_ax_base_EventListener(tolua_S);
-    lua_register_ax_base_EventListenerCustom(tolua_S);
+    lua_register_ax_base_CustomEventListener(tolua_S);
     lua_register_ax_base_Texture2D(tolua_S);
     lua_register_ax_base_Component(tolua_S);
     lua_register_ax_base_Node(tolua_S);
@@ -114603,26 +115195,23 @@ TOLUA_API int register_all_ax_base(lua_State* tolua_S)
     lua_register_ax_base_TargetedAction(tolua_S);
     lua_register_ax_base_ActionFloat(tolua_S);
     lua_register_ax_base_Scene(tolua_S);
-    lua_register_ax_base_RenderView(tolua_S);
+    lua_register_ax_base_RenderViewCore(tolua_S);
     lua_register_ax_base_Director(tolua_S);
     lua_register_ax_base_Properties(tolua_S);
     lua_register_ax_base_Timer(tolua_S);
     lua_register_ax_base_Scheduler(tolua_S);
     lua_register_ax_base_UserDefault(tolua_S);
     lua_register_ax_base_FileUtils(tolua_S);
-    lua_register_ax_base_EventAcceleration(tolua_S);
-    lua_register_ax_base_EventCustom(tolua_S);
+    lua_register_ax_base_AccelerationEvent(tolua_S);
+    lua_register_ax_base_CustomEvent(tolua_S);
     lua_register_ax_base_EventDispatcher(tolua_S);
-    lua_register_ax_base_EventFocus(tolua_S);
-    lua_register_ax_base_EventListenerAcceleration(tolua_S);
-    lua_register_ax_base_EventListenerFocus(tolua_S);
-    lua_register_ax_base_EventListenerKeyboard(tolua_S);
-    lua_register_ax_base_EventMouse(tolua_S);
-    lua_register_ax_base_EventListenerMouse(tolua_S);
-    lua_register_ax_base_EventListenerController(tolua_S);
-    lua_register_ax_base_EventListenerTouchOneByOne(tolua_S);
-    lua_register_ax_base_EventListenerTouchAllAtOnce(tolua_S);
-    lua_register_ax_base_EventController(tolua_S);
+    lua_register_ax_base_FocusEvent(tolua_S);
+    lua_register_ax_base_AccelerationEventListener(tolua_S);
+    lua_register_ax_base_FocusEventListener(tolua_S);
+    lua_register_ax_base_KeyboardEventListener(tolua_S);
+    lua_register_ax_base_ControllerEvent(tolua_S);
+    lua_register_ax_base_ControllerEventListener(tolua_S);
+    lua_register_ax_base_PointerEventListener(tolua_S);
     lua_register_ax_base_ActionCamera(tolua_S);
     lua_register_ax_base_OrbitCamera(tolua_S);
     lua_register_ax_base_CardinalSplineTo(tolua_S);
@@ -114808,9 +115397,11 @@ TOLUA_API int register_all_ax_base(lua_State* tolua_S)
     lua_register_ax_base_ProgramManager(tolua_S);
     lua_register_ax_base_Renderer(tolua_S);
     lua_register_ax_base_TextureCache(tolua_S);
+    lua_register_ax_base_ContactEvent2D(tolua_S);
+    lua_register_ax_base_ContactEventListener2D(tolua_S);
     lua_register_ax_base_Device(tolua_S);
     lua_register_ax_base_Application(tolua_S);
-    lua_register_ax_base_RenderViewImpl(tolua_S);
+    lua_register_ax_base_RenderView(tolua_S);
     lua_register_ax_base_AnimationCache(tolua_S);
     lua_register_ax_base_SpriteBatchNode(tolua_S);
     lua_register_ax_base_ParallaxNode(tolua_S);
@@ -114829,4 +115420,3 @@ TOLUA_API int register_all_ax_base(lua_State* tolua_S)
     tolua_endmodule(tolua_S);
     return 1;
 }
-

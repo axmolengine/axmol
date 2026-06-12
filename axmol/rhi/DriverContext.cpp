@@ -1,5 +1,5 @@
 #include "axmol/platform/PlatformMacros.h"
-#include "axmol/platform/ApplicationBase.h"
+#include "axmol/platform/ApplicationCore.h"
 #include "axmol/rhi/DriverContext.h"
 #include "axmol/rhi/DriverFactory.h"
 #include "axmol/tlx/inlined_vector.hpp"
@@ -63,7 +63,7 @@ int DriverContext::getDriverPriority(DriverType driverType)
 
 void DriverContext::makeCurrentDriver()
 {
-    auto& contextAttrs = ApplicationBase::getContextAttrs();
+    auto& contextAttrs = ApplicationCore::getContextAttrs();
 
     tlx::inlined_vector<std::unique_ptr<DriverFactory>, (int)DriverType::Count> factories;
 

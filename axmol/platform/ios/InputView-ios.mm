@@ -22,30 +22,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #import "axmol/platform/ios/InputView-ios.h"
-#import "axmol/base/IMEDispatcher.h"
+#import "axmol/base/InputSystem.h"
 #import "axmol/base/Director.h"
 
-@interface TextInputView ()
+struct InputState
+{
+    bool hasText;
+    bool hasSelection;
+    bool readOnly;
+};
 
-@property(nonatomic) NSString* myMarkedText;
+@interface InputHostView ()
+
+@property(nonatomic) NSString* markedText;
+@property(nonatomic) struct InputState inputState;
 
 @end
 
-@implementation TextInputView
+@implementation InputHostView
 
-@synthesize myMarkedText;
-@synthesize hasText;
-@synthesize beginningOfDocument;
-@synthesize endOfDocument;
-@synthesize markedTextStyle;
-@synthesize tokenizer;
 @synthesize autocorrectionType;
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame])
     {
-        self.myMarkedText       = nil;
+        self.contentScaleFactor = [[UIScreen mainScreen] scale];
+        self.markedText         = nil;
         self.autocorrectionType = UITextAutocorrectionTypeNo;
     }
 
@@ -55,13 +58,32 @@ THE SOFTWARE.
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];  // remove keyboard notification
-    [self.myMarkedText release];
+    [self.markedText release];
     [self removeFromSuperview];
     [super dealloc];
 }
 
 - (BOOL)canBecomeFirstResponder
 {
+    return YES;
+}
+
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent*)event
+{
+    auto inputDisp = ax::InputSystem::getInstance();
+    if (inputDisp->hasAttachedDelegate())
+    {
+        ax::Vec2 pt{static_cast<float>(point.x * [self contentScaleFactor]),
+                    static_cast<float>(point.y * [self contentScaleFactor])};
+        auto director   = ax::Director::getInstance();
+        auto renderView = director->getRenderView();
+        // convert axmol screen to world coordinate
+        pt = director->screenToWorld(pt);
+
+        bool keep = inputDisp->dispatchHitTestWithIME(pt);
+        if (keep)
+            return NO;
+    }
     return YES;
 }
 
@@ -93,23 +115,23 @@ THE SOFTWARE.
 
 - (void)deleteBackward
 {
-    if (nil != self.myMarkedText)
+    if (nil != self.markedText)
     {
-        [self.myMarkedText release];
-        self.myMarkedText = nil;
+        [self.markedText release];
+        self.markedText = nil;
     }
-    ax::IMEDispatcher::sharedDispatcher()->dispatchDeleteBackward(1);
+    ax::InputSystem::getInstance()->dispatchDeleteBackward(1u);
 }
 
 - (void)insertText:(nonnull NSString*)text
 {
-    if (nil != self.myMarkedText)
+    if (nil != self.markedText)
     {
-        [self.myMarkedText release];
-        self.myMarkedText = nil;
+        [self.markedText release];
+        self.markedText = nil;
     }
     const char* pszText = [text cStringUsingEncoding:NSUTF8StringEncoding];
-    ax::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
+    ax::InputSystem::getInstance()->dispatchInsertText(std::string_view{pszText, strlen(pszText)});
 }
 
 - (NSWritingDirection)baseWritingDirectionForPosition:(nonnull UITextPosition*)position
@@ -204,22 +226,22 @@ THE SOFTWARE.
 - (void)setMarkedText:(nullable NSString*)markedText selectedRange:(NSRange)selectedRange
 {
     AXLOGD("setMarkedText");
-    if (markedText == self.myMarkedText)
+    if (markedText == self.markedText)
     {
         return;
     }
-    if (nil != self.myMarkedText)
+    if (nil != self.markedText)
     {
-        [self.myMarkedText release];
+        [self.markedText release];
     }
-    self.myMarkedText = markedText;
-    [self.myMarkedText retain];
+    self.markedText = markedText;
+    [self.markedText retain];
 }
 
 - (UITextRange*)markedTextRange
 {
     AXLOGD("markedTextRange");
-    if (nil != self.myMarkedText)
+    if (nil != self.markedText)
     {
         return [[[UITextRange alloc] init] autorelease];
     }
@@ -229,9 +251,9 @@ THE SOFTWARE.
 - (nullable NSString*)textInRange:(nonnull UITextRange*)range
 {
     AXLOGD("textInRange");
-    if (nil != self.myMarkedText)
+    if (nil != self.markedText)
     {
-        return self.myMarkedText;
+        return self.markedText;
     }
     return nil;
 }
@@ -246,17 +268,136 @@ THE SOFTWARE.
 - (void)unmarkText
 {
     AXLOGD("unmarkText");
-    if (nil == self.myMarkedText)
+    if (nil == self.markedText)
     {
         return;
     }
-    const char* pszText = [self.myMarkedText cStringUsingEncoding:NSUTF8StringEncoding];
-    ax::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
-    [self.myMarkedText release];
-    self.myMarkedText = nil;
+    const char* pszText = [self.markedText cStringUsingEncoding:NSUTF8StringEncoding];
+    ax::InputSystem::getInstance()->dispatchInsertText(std::string_view{pszText, strlen(pszText)});
+    [self.markedText release];
+    self.markedText = nil;
 }
 
 - (void)encodeWithCoder:(nonnull NSCoder*)coder
 {}
+
+#pragma mark - System edit menu (dispatch to engine)
+
+#if TARGET_OS_IOS
+
+// Show the system edit menu at the given UIKit point (points, not pixels).
+// This view does NOT perform clipboard read/write itself; it dispatches actions to the engine.
+// Insert into InputHostView implementation
+
+- (void)showContextMenu:(CGPoint)point hasText:(BOOL)hasText hasSelection:(BOOL)hasSelection readOnly:(BOOL)readOnly
+{
+    if (![self isFirstResponder])
+    {
+        [self becomeFirstResponder];
+    }
+
+    _inputState.hasSelection = hasSelection;
+    _inputState.hasText      = hasText;
+    _inputState.readOnly     = readOnly;
+
+    UIMenuController* menu = [UIMenuController sharedMenuController];
+    CGRect targetRect      = CGRectMake(point.x, point.y, 1.0f, 1.0f);
+
+    // Ensure UIKit calls on main thread
+    dispatch_async(dispatch_get_main_queue(), ^{
+      if (@available(iOS 13.0, *))
+      {
+          // iOS 13+ recommended API
+          [menu showMenuFromView:self rect:targetRect];
+      }
+      else
+      {
+          // Fallback for older iOS
+          [menu setTargetRect:targetRect inView:self];
+          [menu setMenuVisible:YES animated:YES];
+      }
+    });
+}
+
+- (void)hideContextMenu
+{
+    UIMenuController* menu = [UIMenuController sharedMenuController];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      if (@available(iOS 13.0, *))
+      {
+          [menu hideMenuFromView:self];
+      }
+      else
+      {
+          [menu setMenuVisible:NO animated:YES];
+      }
+    });
+}
+
+// Decide which actions are enabled. We query the engine synchronously for selection existence.
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    if (action == @selector(copy:))
+    {
+        return _inputState.hasSelection || _inputState.hasText;
+    }
+    else if (action == @selector(cut:))
+    {
+        return _inputState.hasSelection && !_inputState.readOnly;
+    }
+    else if (action == @selector(selectAll:))
+    {
+        return _inputState.hasText;
+    }
+    if (action == @selector(paste:))
+    {
+        // Enable paste if UIPasteboard has a string OR let engine decide (we enable if pasteboard non-empty).
+        return !_inputState.readOnly && ([UIPasteboard generalPasteboard].string != nil);
+    }
+    return [super canPerformAction:action withSender:sender];
+}
+
+#    pragma mark - Menu actions (dispatch to engine)
+
+// Copy: tell engine to perform copy (engine should obtain selection and write to UIPasteboard)
+- (void)copy:(id)sender
+{
+    // Dispatch a copy request; engine will handle reading selection and writing to system clipboard.
+    ax::InputSystem::getInstance()->dispatchPerformEditAction(ax::EditAction::Copy);
+    [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
+}
+
+// Paste: ask engine to perform paste. We can either read UIPasteboard here and pass text,
+// or let engine read the UIPasteboard itself. Here we dispatch a paste request so engine controls behavior.
+- (void)paste:(id)sender
+{
+    ax::InputSystem::getInstance()->dispatchPerformEditAction(ax::EditAction::Paste);
+    [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
+}
+
+// Cut: tell engine to perform cut (engine should copy selection to clipboard and delete it)
+- (void)cut:(id)sender
+{
+    ax::InputSystem::getInstance()->dispatchPerformEditAction(ax::EditAction::Cut);
+    [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
+}
+
+- (void)selectAll:(id)sender
+{
+    ax::InputSystem::getInstance()->dispatchPerformEditAction(ax::EditAction::SelectAll);
+    [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
+}
+
+#endif
+
+@synthesize endOfDocument;
+
+@synthesize hasText;
+
+@synthesize markedTextStyle;
+
+@synthesize tokenizer;
+
+@synthesize beginningOfDocument;
 
 @end

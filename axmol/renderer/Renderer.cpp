@@ -40,7 +40,7 @@
 #include "axmol/base/Environment.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/base/EventType.h"
 #include "axmol/scene/Camera.h"
 #include "axmol/scene/Scene.h"
@@ -818,7 +818,7 @@ bool Renderer::checkVisibility(const Mat4& transform, const Vec2& size)
     float hSizeY = size.height / 2;
     Vec3 v3p(hSizeX, hSizeY, 0);
     transform.transformPoint(&v3p);
-    Vec2 v2p = Camera::getVisitingCamera()->projectGL(v3p);
+    Vec2 v2p = Camera::getVisitingCamera()->projectWorldToCanvas(v3p);
 
     // convert content size to world coordinates
     float wshw = std::max(fabsf(hSizeX * transform.m[0] + hSizeY * transform.m[4]),

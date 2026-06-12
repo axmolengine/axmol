@@ -94,7 +94,7 @@ bool UILayoutTest::init()
 
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
         button_scale9->setPosition(Vec2(layout->getContentSize().width - button_scale9->getContentSize().width / 2.0f,
                                         button_scale9->getContentSize().height / 2.0f));
 
@@ -155,7 +155,7 @@ bool UILayoutTest_Color::init()
 
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
         button_scale9->setPosition(Vec2(layout->getContentSize().width - button_scale9->getContentSize().width / 2.0f,
                                         button_scale9->getContentSize().height / 2.0f));
 
@@ -215,7 +215,7 @@ bool UILayoutTest_Gradient::init()
 
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
         button_scale9->setPosition(Vec2(layout->getContentSize().width - button_scale9->getContentSize().width / 2.0f,
                                         button_scale9->getContentSize().height / 2.0f));
 
@@ -273,7 +273,7 @@ bool UILayoutTest_BackGroundImage::init()
 
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
         button_scale9->setPosition(Vec2(layout->getContentSize().width - button_scale9->getContentSize().width / 2.0f,
                                         button_scale9->getContentSize().height / 2.0f));
 
@@ -350,7 +350,7 @@ bool UILayoutTest_BackGroundImage_Scale9::init()
 
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
         button_scale9->setPosition(Vec2(layout->getContentSize().width - button_scale9->getContentSize().width / 2.0f,
                                         button_scale9->getContentSize().height / 2.0f));
         layout->addChild(button_scale9);
@@ -414,7 +414,7 @@ bool UILayoutTest_Layout_Linear_Vertical::init()
 
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
         layout->addChild(button_scale9);
 
         LinearLayoutParameter* lp3 = LinearLayoutParameter::create();
@@ -482,7 +482,7 @@ bool UILayoutTest_Layout_Linear_Horizontal::init()
 
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
         layout->addChild(button_scale9);
 
         LinearLayoutParameter* lp3 = LinearLayoutParameter::create();
@@ -968,7 +968,7 @@ bool UILayoutComponent_Berth_Stretch_Test::init()
     if (UILayoutComponentTest::init())
     {
         ImageView* leftTopSprite = ImageView::create("cocosui/CloseSelected.png");
-        leftTopSprite->ignoreContentAdaptWithSize(false);
+        leftTopSprite->setAutoSize(true);
         LayoutComponent* leftTop = LayoutComponent::bindLayoutComponent(leftTopSprite);
         leftTop->setHorizontalEdge(LayoutComponent::HorizontalEdge::Left);
         leftTop->setVerticalEdge(LayoutComponent::VerticalEdge::Top);
@@ -980,7 +980,7 @@ bool UILayoutComponent_Berth_Stretch_Test::init()
         leftTop->setTopMargin(0);
 
         ImageView* leftBottomSprite = ImageView::create("cocosui/CloseSelected.png");
-        leftBottomSprite->ignoreContentAdaptWithSize(false);
+        leftBottomSprite->setAutoSize(true);
         LayoutComponent* leftBottom = LayoutComponent::bindLayoutComponent(leftBottomSprite);
         leftBottom->setHorizontalEdge(LayoutComponent::HorizontalEdge::Left);
         leftBottom->setVerticalEdge(LayoutComponent::VerticalEdge::Bottom);
@@ -992,7 +992,7 @@ bool UILayoutComponent_Berth_Stretch_Test::init()
         leftBottom->setBottomMargin(0);
 
         ImageView* rightTopSprite = ImageView::create("cocosui/CloseSelected.png");
-        rightTopSprite->ignoreContentAdaptWithSize(false);
+        rightTopSprite->setAutoSize(true);
         LayoutComponent* rightTop = LayoutComponent::bindLayoutComponent(rightTopSprite);
         rightTop->setHorizontalEdge(LayoutComponent::HorizontalEdge::Right);
         rightTop->setVerticalEdge(LayoutComponent::VerticalEdge::Top);
@@ -1004,7 +1004,7 @@ bool UILayoutComponent_Berth_Stretch_Test::init()
         rightTop->setRightMargin(0);
 
         ImageView* rightBottomSprite = ImageView::create("cocosui/CloseSelected.png");
-        rightBottomSprite->ignoreContentAdaptWithSize(false);
+        rightBottomSprite->setAutoSize(true);
         LayoutComponent* rightBottom = LayoutComponent::bindLayoutComponent(rightBottomSprite);
         rightBottom->setHorizontalEdge(LayoutComponent::HorizontalEdge::Right);
         rightBottom->setVerticalEdge(LayoutComponent::VerticalEdge::Bottom);
@@ -1047,30 +1047,30 @@ bool UILayoutTest_Issue19890::init()
     Layout* background        = dynamic_cast<Layout*>(root->getChildByName("background_Panel"));
     const Size backgroundSize = background->getContentSize();
 
-    auto panel = ui::Layout::create();
+    auto panel = ui::LayoutGroup::create();
     panel->setBackGroundColor(Color32::RED);
-    panel->setBackGroundColorType(ui::Layout::BackGroundColorType::SOLID);
-    panel->setClippingType(ui::Layout::ClippingType::SCISSOR);
+    panel->setBackGroundColorType(ui::LayoutGroup::BackGroundColorType::SOLID);
+    panel->setClippingType(ui::LayoutGroup::ClippingType::SCISSOR);
     panel->setPosition(backgroundSize / 2);
     panel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     panel->setClippingEnabled(true);
     panel->setContentSize(backgroundSize);  // from the left to the screen end
     background->addChild(panel);
 
-    auto panel2 = ui::Layout::create();
+    auto panel2 = ui::LayoutGroup::create();
     panel2->setBackGroundColor(Color32::BLUE);
-    panel2->setBackGroundColorType(ui::Layout::BackGroundColorType::SOLID);
-    panel2->setClippingType(ui::Layout::ClippingType::SCISSOR);
+    panel2->setBackGroundColorType(ui::LayoutGroup::BackGroundColorType::SOLID);
+    panel2->setClippingType(ui::LayoutGroup::ClippingType::SCISSOR);
     panel2->setPosition(panel->getContentSize() / 2);
     panel2->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     panel2->setClippingEnabled(true);
     panel2->setContentSize(panel->getContentSize() / 2);  // from the left to the screen end
     panel->addChild(panel2);
 
-    auto panel3 = ui::Layout::create();
+    auto panel3 = ui::LayoutGroup::create();
     panel3->setBackGroundColor(Color32::GREEN);
-    panel3->setBackGroundColorType(ui::Layout::BackGroundColorType::SOLID);
-    panel3->setClippingType(ui::Layout::ClippingType::SCISSOR);
+    panel3->setBackGroundColorType(ui::LayoutGroup::BackGroundColorType::SOLID);
+    panel3->setClippingType(ui::LayoutGroup::ClippingType::SCISSOR);
     panel3->setPosition(panel2->getContentSize() / 2);
     panel3->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     panel3->setClippingEnabled(true);
@@ -1097,7 +1097,7 @@ bool UILayout_Clipping_Test::init()
         Layout* layout1 = Layout::create();
         layout1->setClippingEnabled(true);
         layout1->setContentSize(Size(widgetSize.width / 4, widgetSize.height / 3));
-        layout1->setClippingType(ax::ui::Layout::ClippingType::SCISSOR);
+        layout1->setClippingType(ax::ui::LayoutGroup::ClippingType::SCISSOR);
         layout1->setPosition(Vec2(widgetSize.width / 4.0f, widgetSize.height / 2.0f));
         layout1->setAnchorPoint(Vec2(0.5, 0.5));
         _uiLayer->addChild(layout1);
@@ -1106,7 +1106,7 @@ bool UILayout_Clipping_Test::init()
         sublayout1->setClippingEnabled(true);
         sublayout1->setBackGroundImage("cocosui/Hello.png");
         sublayout1->setContentSize(Size(widgetSize.width / 6, widgetSize.width / 2));
-        sublayout1->setClippingType(ax::ui::Layout::ClippingType::STENCIL);
+        sublayout1->setClippingType(ax::ui::LayoutGroup::ClippingType::STENCIL);
         sublayout1->setPosition(Vec2(widgetSize.width / 8.0f + widgetSize.width / 16.0f, widgetSize.height / 6.0f));
         sublayout1->setAnchorPoint(Vec2(0.5, 0.5));
         sublayout1->runAction(RepeatForever::create(Sequence::createWithTwoActions(
@@ -1116,7 +1116,7 @@ bool UILayout_Clipping_Test::init()
         Layout* layout2 = Layout::create();
         layout2->setClippingEnabled(true);
         layout2->setContentSize(Size(widgetSize.width / 4, widgetSize.height / 3));
-        layout2->setClippingType(ax::ui::Layout::ClippingType::SCISSOR);
+        layout2->setClippingType(ax::ui::LayoutGroup::ClippingType::SCISSOR);
         layout2->setPosition(Vec2(widgetSize.width * 3.0f / 4.0f, widgetSize.height / 2.0f));
         layout2->setAnchorPoint(Vec2(0.5, 0.5));
         _uiLayer->addChild(layout2);
@@ -1125,7 +1125,7 @@ bool UILayout_Clipping_Test::init()
         sublayout2->setClippingEnabled(true);
         sublayout2->setBackGroundImage("cocosui/Hello.png");
         sublayout2->setContentSize(Size(widgetSize.width / 6, widgetSize.width / 2));
-        sublayout2->setClippingType(ax::ui::Layout::ClippingType::SCISSOR);
+        sublayout2->setClippingType(ax::ui::LayoutGroup::ClippingType::SCISSOR);
         sublayout2->setPosition(Vec2(widgetSize.width / 8.0f + widgetSize.width / 16.0f, widgetSize.height / 6.0f));
         sublayout2->setAnchorPoint(Vec2(0.5, 0.5));
         sublayout2->runAction(RepeatForever::create(Sequence::createWithTwoActions(

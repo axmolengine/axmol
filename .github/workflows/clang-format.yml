@@ -1,10 +1,6 @@
 name: clang-format
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
-    branches:
-      - dev
   workflow_dispatch:
     inputs:
       lint_mode:
@@ -16,6 +12,30 @@ on:
           - check_only
           - create_pr
           - auto_commit
+
+  workflow_call:
+    inputs:
+      lint_mode:
+        description: 'Select lint mode: check_only, auto_commit, or create_pr'
+        required: false
+        default: 'check_only'
+        type: string
+      should_run:
+        description: 'Whether clang-format should actually run'
+        required: false
+        default: true
+        type: boolean
+      head_repo:
+        description: 'Repository to checkout'
+        required: false
+        default: ''
+        type: string
+      head_ref:
+        description: 'Ref to checkout'
+        required: false
+        default: ''
+        type: string
+
   issue_comment:
     types: [created] # Listen for new comments on issues/PRs
 
@@ -23,11 +43,19 @@ jobs:
   clang-format-lint:
     runs-on: ubuntu-latest
     # Run if:
-    # - PR event
     # - workflow_dispatch
+    # - pull_request/push from build.yml reusable workflow calls
     # - issue_comment on a PR with /clang-format AND commenter is halx99
+    #
+    # Note:
+    # When called from build.yml, github.event_name keeps the caller event name
+    # such as pull_request, push, or workflow_dispatch. It is not workflow_call.
+    # The job itself must not be skipped when should_run is false; only the
+    # clang-format steps should be skipped so build.yml jobs that need
+    # [format-check] can continue.
     if: |
       (github.event_name == 'pull_request') ||
+      (github.event_name == 'push') ||
       (github.event_name == 'workflow_dispatch') ||
       (github.event_name == 'issue_comment' &&
        github.event.issue.pull_request != null &&
@@ -60,11 +88,13 @@ jobs:
           core.setOutput('head_ref', pr.head.ref);
           core.setOutput('head_repo', pr.head.repo.full_name);
 
-    # Determine lint_mode to auto_commit if triggered by /clang-format comment and store head commit sha
+    # Determine whether to run, checkout target, and lint mode
     - name: Prepare clang-format lint
       id: pp
       shell: pwsh
       run: |
+        $should_run = '${{ inputs.should_run || true }}'
+
         if ($env:GITHUB_EVENT_NAME -eq 'issue_comment') {
           $head_repo = "${{ steps.pr.outputs.head_repo }}"
           $head_ref  = "${{ steps.pr.outputs.head_ref }}"
@@ -77,10 +107,12 @@ jobs:
           $head_repo = "${{ github.repository }}"
           $head_ref  = "${{ github.head_ref || github.ref_name }}"
         }
-        if (!$head_repo -or !$head_ref) {
+
+        if ($should_run -eq 'true' -and (!$head_repo -or !$head_ref)) {
           Write-Error "❌ head_repo or head_ref is empty"
           exit 1
         }
+
         if ($env:GITHUB_EVENT_NAME -eq 'issue_comment') {
           echo "Set lint_mode=auto_commit for ${{ github.event.comment.user.login }} Command **/clang-format**"
           $lint_mode = 'auto_commit'
@@ -88,19 +120,28 @@ jobs:
         else {
           $lint_mode = "${{ inputs.lint_mode || 'check_only' }}"
         }
+
+        echo "should_run=$should_run" >> ${env:GITHUB_OUTPUT}
         echo "head_repo=$head_repo" >> ${env:GITHUB_OUTPUT}
         echo "head_ref=$head_ref" >> ${env:GITHUB_OUTPUT}
         echo "lint_mode=$lint_mode" >> ${env:GITHUB_OUTPUT}
-        Write-Host "head_repo=$head_repo, head_ref=$head_ref, lint_mode=$lint_mode"
+
+        Write-Host "should_run=$should_run, head_repo=$head_repo, head_ref=$head_ref, lint_mode=$lint_mode"
+
+    - name: Skip clang-format
+      if: ${{ steps.pp.outputs.should_run != 'true' }}
+      run: echo "clang-format skipped for this caller event."
 
     # Checkout correct branch
     - uses: actions/checkout@v6
+      if: ${{ steps.pp.outputs.should_run == 'true' }}
       with:
         repository: ${{ steps.pp.outputs.head_repo }}
         ref: ${{ steps.pp.outputs.head_ref }}
         token: ${{ secrets.AX_BOT_TOKEN || github.token }}
 
     - name: Run clang-format lint
+      if: ${{ steps.pp.outputs.should_run == 'true' }}
       uses: DoozyX/clang-format-lint-action@v0.20
       with:
         source: './axmol ./extensions ./tests ./templates'
@@ -111,7 +152,7 @@ jobs:
 
     # check_only mode
     - name: Check for uncommitted changes
-      if: ${{ steps.pp.outputs.lint_mode == 'check_only' }}
+      if: ${{ steps.pp.outputs.should_run == 'true' && steps.pp.outputs.lint_mode == 'check_only' }}
       shell: pwsh
       run: |
         git diff --quiet
@@ -127,7 +168,7 @@ jobs:
         }
 
     - name: Prepare for create pull request
-      if: ${{ steps.pp.outputs.lint_mode == 'create_pr' }}
+      if: ${{ steps.pp.outputs.should_run == 'true' && steps.pp.outputs.lint_mode == 'create_pr' }}
       id: ppr
       shell: pwsh
       run: |
@@ -137,7 +178,7 @@ jobs:
 
     # create_pr mode
     - name: Create pull request
-      if: ${{ steps.pp.outputs.lint_mode == 'create_pr' }}
+      if: ${{ steps.pp.outputs.should_run == 'true' && steps.pp.outputs.lint_mode == 'create_pr' }}
       id: cpr
       uses: peter-evans/create-pull-request@v8
       with:
@@ -162,14 +203,14 @@ jobs:
         draft: false
 
     - name: Check pull request outputs
-      if: ${{ steps.pp.outputs.lint_mode == 'create_pr' && steps.cpr.outputs.pull-request-number }}
+      if: ${{ steps.pp.outputs.should_run == 'true' && steps.pp.outputs.lint_mode == 'create_pr' && steps.cpr.outputs.pull-request-number }}
       run: |
         echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
         echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
 
-    # auto_commit mode (including comment trigger)
+    # auto_commit mode, including comment trigger
     - name: Commit clang-format changes to PR source branch
-      if: ${{ steps.pp.outputs.lint_mode == 'auto_commit' }}
+      if: ${{ steps.pp.outputs.should_run == 'true' && steps.pp.outputs.lint_mode == 'auto_commit' }}
       uses: EndBug/add-and-commit@v10
       with:
         author_name: axmol-bot

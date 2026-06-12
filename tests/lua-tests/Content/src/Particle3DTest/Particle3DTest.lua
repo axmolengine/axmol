@@ -19,25 +19,25 @@ local function baseInit(self)
     self._camera:setCameraFlag(ax.CameraFlag.USER1)
     self:addChild(self._camera)
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(function (touches, event)
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(function(event)
 
-    end,ax.Handler.EVENT_TOUCHES_BEGAN)
+    end,ax.Handler.EVENT_POINTER_DOWN)
 
-    listener:registerScriptHandler(function (touches, event)
-        if #touches ~= 0 then
-            local touch = touches[1]
-            local delta = touch:getDelta()
+    listener:registerScriptHandler(function(event)
+        if event ~= nil then
+            local touch = event
+            local delta = event:getDelta()
 
             self._angle = self._angle - delta.x * math.pi / 180
             self._camera:setPosition3D(ax.vec3(100.0 *  math.sin(math.deg(self._angle)), 0.0, 100.0 * math.cos(math.deg(self._angle))))
             self._camera:lookAt(ax.vec3(0.0, 0.0, 0.0), ax.vec3(0.0, 1.0, 0.0))
         end
-    end,ax.Handler.EVENT_TOUCHES_MOVED)
+    end,ax.Handler.EVENT_POINTER_MOVE)
 
-    listener:registerScriptHandler(function (touches, event)
+    listener:registerScriptHandler(function(event)
 
-    end,ax.Handler.EVENT_TOUCHES_ENDED)
+    end,ax.Handler.EVENT_POINTER_UP)
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)

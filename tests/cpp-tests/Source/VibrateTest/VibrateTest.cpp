@@ -76,19 +76,18 @@ public:
 private:
     TextButton()
     {
-        auto listener = EventListenerTouchOneByOne::create();
-        listener->setSwallowTouches(true);
+        auto listener = PointerEventListener::create();
 
-        listener->onTouchBegan     = AX_CALLBACK_2(TextButton::onTouchBegan, this);
-        listener->onTouchEnded     = AX_CALLBACK_2(TextButton::onTouchEnded, this);
-        listener->onTouchCancelled = AX_CALLBACK_2(TextButton::onTouchCancelled, this);
+        listener->onPointerDown   = AX_CALLBACK_1(TextButton::onPointerDown, this);
+        listener->onPointerUp     = AX_CALLBACK_1(TextButton::onPointerUp, this);
+        listener->onPointerCancel = AX_CALLBACK_1(TextButton::onPointerCancel, this);
 
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     }
 
-    bool touchHits(Touch* touch)
+    bool touchHits(PointerEvent* event)
     {
-        auto hitPos = this->convertToNodeSpace(touch->getLocation());
+        auto hitPos = this->convertToNodeSpace(event->getLocation());
         if (hitPos.x >= 0 && hitPos.y >= 0 && hitPos.x <= _contentSize.width && hitPos.y <= _contentSize.height)
         {
             return true;
@@ -96,9 +95,9 @@ private:
         return false;
     }
 
-    bool onTouchBegan(Touch* touch, Event* event)
+    bool onPointerDown(PointerEvent* event)
     {
-        auto hits = touchHits(touch);
+        auto hits = touchHits(event);
         if (hits)
         {
             scaleButtonTo(0.95f);
@@ -106,11 +105,11 @@ private:
         return hits;
     }
 
-    void onTouchEnded(Touch* touch, Event* event)
+    void onPointerUp(PointerEvent* event)
     {
         if (_enabled)
         {
-            auto hits = touchHits(touch);
+            auto hits = touchHits(event);
             if (hits && _onTriggered)
             {
                 _onTriggered(this);
@@ -120,7 +119,7 @@ private:
         scaleButtonTo(1);
     }
 
-    void onTouchCancelled(Touch* touch, Event* event) { scaleButtonTo(1); }
+    void onPointerCancel(PointerEvent* event) { scaleButtonTo(1); }
 
     void scaleButtonTo(float scale)
     {
@@ -185,7 +184,7 @@ public:
         _slidBallRenderer->setPosition(Vec2(dis, _contentSize.height / 2.0f));
         if (_scale9Enabled)
         {
-            _progressBarRenderer->setPreferredSize(Size(dis, _progressBarTextureSize.height));
+            _progressBarRenderer->setContentSize(Size(dis, _progressBarTextureSize.height));
         }
         else
         {
@@ -200,13 +199,13 @@ public:
         }
     }
 
-    virtual bool onTouchBegan(Touch* touch, Event* unusedEvent) override
+    virtual bool onPointerDown(PointerEvent* ev) override
     {
-        auto ret = Slider::onTouchBegan(touch, unusedEvent);
+        auto ret = Slider::onPointerDown(ev);
         if (ret && _callback)
         {
             _touchEvent = TouchEvent::DOWN;
-            Vec2 nsp    = convertToNodeSpace(_touchBeganPosition);
+            Vec2 nsp    = convertToNodeSpace(_pointerDownPosition);
             _ratio      = nsp.x / _barLength;
             if (_ratio < 0.0f)
                 _ratio = 0.0f;
@@ -217,11 +216,14 @@ public:
         return ret;
     }
 
-    virtual void onTouchMoved(Touch* touch, Event* unusedEvent) override
+    virtual void onPointerMove(PointerEvent* ev) override
     {
+        if (_touchEvent != TouchEvent::DOWN)
+            return;
+
         _touchEvent = TouchEvent::MOVE;
-        Slider::onTouchMoved(touch, unusedEvent);
-        Vec2 nsp = convertToNodeSpace(_touchMovePosition);
+        Slider::onPointerMove(ev);
+        Vec2 nsp = convertToNodeSpace(_pointerMovePosition);
         _ratio   = nsp.x / _barLength;
         if (_ratio < 0.0f)
             _ratio = 0.0f;
@@ -233,11 +235,11 @@ public:
         }
     }
 
-    virtual void onTouchEnded(Touch* touch, Event* unusedEvent) override
+    virtual void onPointerUp(PointerEvent* event) override
     {
         _touchEvent = TouchEvent::UP;
-        Slider::onTouchEnded(touch, unusedEvent);
-        Vec2 nsp = convertToNodeSpace(_touchEndPosition);
+        Slider::onPointerUp(event);
+        Vec2 nsp = convertToNodeSpace(_pointerUpPosition);
         _ratio   = nsp.x / _barLength;
         if (_ratio < 0.0f)
             _ratio = 0.0f;
@@ -249,10 +251,10 @@ public:
         }
     }
 
-    virtual void onTouchCancelled(Touch* touch, Event* unusedEvent) override
+    virtual void onPointerCancel(PointerEvent* event) override
     {
         _touchEvent = TouchEvent::CANCEL;
-        Slider::onTouchCancelled(touch, unusedEvent);
+        Slider::onPointerCancel(event);
 
         if (_callback)
         {

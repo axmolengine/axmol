@@ -42,7 +42,7 @@ public:
     ~RenderTextureSave();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerMove(ax::PointerEvent* event);
     void clearImage(ax::Object* pSender);
     void clearImageTransparent(ax::Object* sender);
     void saveImageWithPremultipliedAlpha(ax::Object* pSender);
@@ -69,9 +69,9 @@ public:
     CREATE_FUNC(RenderTextureZbuffer);
     RenderTextureZbuffer();
 
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerMove(ax::PointerEvent* event);
+    bool onPointerDown(ax::PointerEvent* event);
+    void onPointerUp(ax::PointerEvent* event);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
@@ -167,7 +167,7 @@ public:
     CREATE_FUNC(SpriteRenderTextureBug);
     SpriteRenderTextureBug();
 
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 

@@ -1,0 +1,83 @@
+/****************************************************************************
+ Copyright (c) 2013-2016 Chukong Technologies Inc.
+ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmol.dev/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+
+#pragma once
+
+#include "axmol/ui/LayoutGroup.h"
+#include "axmol/ui/GUIExport.h"
+
+namespace ax
+{
+/**
+ * @addtogroup ui
+ * @{
+ */
+
+namespace ui
+{
+
+/**
+ * VBox is just a convenient wrapper class for vertical layout type.
+ * VBox lays out its children in a single vertical column.
+ */
+class AX_GUI_DLL VBox : public LayoutGroup
+{
+public:
+    /**
+     * Default constructor
+     * @lua new
+     */
+    VBox();
+
+    /**
+     * Default destructor
+     * @lua NA
+     */
+    virtual ~VBox();
+
+    /**
+     * Create a empty VBox instance.
+     * @return A VBox instance pointer.
+     */
+    static VBox* create();
+
+    /**
+     * Create a VBox with a certain size.
+     *@param size The content size of the layout.
+     *@return A VBox instance pointer.
+     */
+    static VBox* create(const Vec2& size);
+
+    // initializes state of widget.
+    bool init() override;
+    virtual bool initWithSize(const Vec2& size);
+};
+
+}  // namespace ui
+
+// end of ui group
+/// @}
+}  // namespace ax

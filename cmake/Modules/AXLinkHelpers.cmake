@@ -73,7 +73,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
   ax_config_pred(${APP_NAME} AX_ENABLE_3D)
   ax_config_pred(${APP_NAME} AX_ENABLE_PHYSICS_3D)
   ax_config_pred(${APP_NAME} AX_ENABLE_NAVMESH)
-  ax_config_pred(${APP_NAME} AX_ENABLE_MEDIA)
+  ax_config_pred(${APP_NAME} AX_ENABLE_VIDEO)
   ax_config_pred(${APP_NAME} AX_ENABLE_AUDIO)
   ax_config_pred(${APP_NAME} AX_ENABLE_CONSOLE)
 

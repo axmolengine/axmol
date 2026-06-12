@@ -760,8 +760,8 @@ std::string CameraCenterTest::subtitle() const
 //------------------------------------------------------------------
 ConvertToNode::ConvertToNode()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(ConvertToNode::onTouchesEnded, this);
+    auto listener         = PointerEventListener::create();
+    listener->onPointerUp = AX_CALLBACK_1(ConvertToNode::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getCanvasSize();
@@ -798,22 +798,19 @@ ConvertToNode::ConvertToNode()
     }
 }
 
-void ConvertToNode::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void ConvertToNode::onPointerUp(PointerEvent* event)
 {
-    for (auto& touch : touches)
+    auto location = event->getLocation();
+
+    for (int i = 0; i < 3; i++)
     {
-        auto location = touch->getLocation();
+        auto node = getChildByTag(100 + i);
+        Vec2 p1, p2;
 
-        for (int i = 0; i < 3; i++)
-        {
-            auto node = getChildByTag(100 + i);
-            Vec2 p1, p2;
+        p1 = node->convertToNodeSpaceAR(location);
+        p2 = node->convertToNodeSpace(location);
 
-            p1 = node->convertToNodeSpaceAR(location);
-            p2 = node->convertToNodeSpace(location);
-
-            AXLOGD("AR: x={:.2}, y={:.2} -- Not AR: x={:.2}, y={:.2}", p1.x, p1.y, p2.x, p2.y);
-        }
+        AXLOGD("AR: x={:.2}, y={:.2} -- Not AR: x={:.2}, y={:.2}", p1.x, p1.y, p2.x, p2.y);
     }
 }
 

@@ -92,10 +92,10 @@ bool NavMeshBaseTestDemo::init()
         _camera->setCameraFlag(CameraFlag::USER1);
         this->addChild(_camera);
 
-        auto listener            = EventListenerTouchAllAtOnce::create();
-        listener->onTouchesBegan = AX_CALLBACK_2(NavMeshBaseTestDemo::onTouchesBegan, this);
-        listener->onTouchesMoved = AX_CALLBACK_2(NavMeshBaseTestDemo::onTouchesMoved, this);
-        listener->onTouchesEnded = AX_CALLBACK_2(NavMeshBaseTestDemo::onTouchesEnded, this);
+        auto listener           = PointerEventListener::create();
+        listener->onPointerDown = AX_CALLBACK_1(NavMeshBaseTestDemo::onPointerDown, this);
+        listener->onPointerMove = AX_CALLBACK_1(NavMeshBaseTestDemo::onPointerMove, this);
+        listener->onPointerUp   = AX_CALLBACK_1(NavMeshBaseTestDemo::onPointerUp, this);
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
         initScene();
@@ -105,18 +105,19 @@ bool NavMeshBaseTestDemo::init()
     return true;
 }
 
-void NavMeshBaseTestDemo::onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event)
+bool NavMeshBaseTestDemo::onPointerDown(ax::PointerEvent* event)
 {
     _needMoveAgents = true;
-    touchesBegan(touches, event);
+    touchesBegan(event);
+
+    return true;
 }
 
-void NavMeshBaseTestDemo::onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event)
+void NavMeshBaseTestDemo::onPointerMove(ax::PointerEvent* event)
 {
-    if (touches.size() && _camera)
+    if (_camera)
     {
-        auto touch = touches[0];
-        auto delta = touch->getDelta();
+        auto delta = event->getDelta();
 
         _angle -= AX_DEGREES_TO_RADIANS(delta.x);
         _camera->setPosition3D(Vec3(100.0f * sinf(_angle), 50.0f, 100.0f * cosf(_angle)));
@@ -127,12 +128,14 @@ void NavMeshBaseTestDemo::onTouchesMoved(const std::vector<ax::Touch*>& touches,
             _needMoveAgents = false;
         }
     }
-    touchesMoved(touches, event);
+    touchesMoved(event);
+
+    return;
 }
 
-void NavMeshBaseTestDemo::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event)
+void NavMeshBaseTestDemo::onPointerUp(ax::PointerEvent* event)
 {
-    touchesEnded(touches, event);
+    touchesEnded(event);
 }
 
 void NavMeshBaseTestDemo::initScene()
@@ -273,24 +276,20 @@ std::string NavMeshBasicTestDemo::subtitle() const
     return "Basic Test";
 }
 
-void NavMeshBasicTestDemo::touchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event)
+void NavMeshBasicTestDemo::touchesEnded(ax::PointerEvent* event)
 {
     if (!_needMoveAgents)
         return;
-    if (!touches.empty())
-    {
-        auto touch    = touches[0];
-        auto location = touch->getLocationInView();
-        Vec3 nearP(location.x, location.y, 0.0f), farP(location.x, location.y, 1.0f);
 
-        auto size = Director::getInstance()->getCanvasSize();
-        _camera->unproject(size, &nearP, &nearP);
-        _camera->unproject(size, &farP, &farP);
+    auto location = event->getScreenLocation();
+    Vec3 nearP(location.x, location.y, 0.0f), farP(location.x, location.y, 1.0f);
 
-        PhysicsWorld3D::HitResult result;
-        getPhysicsWorld3D()->rayCast(nearP, farP, &result);
-        moveAgents(result.hitPosition);
-    }
+    nearP = _camera->deprojectScreenToWorld(nearP);
+    farP  = _camera->deprojectScreenToWorld(farP);
+
+    PhysicsWorld3D::HitResult result;
+    getPhysicsWorld3D()->rayCast(nearP, farP, &result);
+    moveAgents(result.hitPosition);
 }
 
 bool NavMeshBasicTestDemo::init()
@@ -409,19 +408,16 @@ std::string NavMeshAdvanceTestDemo::subtitle() const
     return "Advance Test";
 }
 
-void NavMeshAdvanceTestDemo::touchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event)
+void NavMeshAdvanceTestDemo::touchesEnded(ax::PointerEvent* event)
 {
     if (!_needMoveAgents)
         return;
-    if (!touches.empty())
     {
-        auto touch    = touches[0];
-        auto location = touch->getLocationInView();
+        auto location = event->getScreenLocation();
         Vec3 nearP(location.x, location.y, 0.0f), farP(location.x, location.y, 1.0f);
 
-        auto size = Director::getInstance()->getCanvasSize();
-        _camera->unproject(size, &nearP, &nearP);
-        _camera->unproject(size, &farP, &farP);
+        nearP = _camera->deprojectScreenToWorld(nearP);
+        farP  = _camera->deprojectScreenToWorld(farP);
 
         PhysicsWorld3D::HitResult result;
         getPhysicsWorld3D()->rayCast(nearP, farP, &result);

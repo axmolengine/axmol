@@ -26,8 +26,8 @@
 #define _LAYER_TEST_H_
 
 #include "../BaseTest.h"
-#include "axmol/ui/UISlider.h"
-#include "axmol/ui/UIListView.h"
+#include "axmol/ui/Slider.h"
+#include "axmol/ui/ListView.h"
 
 DEFINE_TEST_SUITE(LayerTests);
 
@@ -98,9 +98,9 @@ public:
 
     void updateSize(ax::Vec2& touchLocation);
 
-    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    bool onPointerDown(ax::PointerEvent* event);
+    void onPointerMove(ax::PointerEvent* event);
+    void onPointerUp(ax::PointerEvent* event);
 };
 
 class LayerTest2 : public LayerTest
@@ -126,7 +126,7 @@ class LayerGradientTest : public LayerTest
 public:
     CREATE_FUNC(LayerGradientTest);
     LayerGradientTest();
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerMove(ax::PointerEvent* event);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     void toggleItem(ax::Object* sender);

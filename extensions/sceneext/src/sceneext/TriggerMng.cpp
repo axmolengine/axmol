@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/Utils.h"
-#include "axmol/base/EventCustom.h"
+#include "axmol/base/CustomEvent.h"
 
 using namespace ax;
 
@@ -473,7 +473,7 @@ void TriggerMng::removeAllArmatureMovementCallBack()
     _movementDispatches->clear();
 }
 
-void TriggerMng::dispatchEvent(ax::EventCustom* tEvent)
+void TriggerMng::dispatchEvent(ax::CustomEvent* tEvent)
 {
     _eventDispatcher->dispatchEvent(tEvent);
 }

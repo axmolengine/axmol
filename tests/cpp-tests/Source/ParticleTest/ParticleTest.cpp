@@ -2239,10 +2239,10 @@ void ParticleDemo::onEnter()
 
     _emitter = nullptr;
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(ParticleDemo::onTouchesBegan, this);
-    listener->onTouchesMoved = AX_CALLBACK_2(ParticleDemo::onTouchesMoved, this);
-    listener->onTouchesEnded = AX_CALLBACK_2(ParticleDemo::onTouchesEnded, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = AX_CALLBACK_1(ParticleDemo::onPointerDown, this);
+    listener->onPointerMove = AX_CALLBACK_1(ParticleDemo::onPointerMove, this);
+    listener->onPointerUp   = AX_CALLBACK_1(ParticleDemo::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getCanvasSize();
@@ -2286,21 +2286,23 @@ std::string ParticleDemo::subtitle() const
     return "No title";
 }
 
-void ParticleDemo::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
+bool ParticleDemo::onPointerDown(PointerEvent* event)
 {
-    onTouchesEnded(touches, event);
+    onPointerUp(event);
+    return true;
 }
 
-void ParticleDemo::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
+void ParticleDemo::onPointerMove(PointerEvent* event)
 {
-    return onTouchesEnded(touches, event);
+    if (!event->isCaptured())
+        return;
+
+    onPointerUp(event);
 }
 
-void ParticleDemo::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void ParticleDemo::onPointerUp(PointerEvent* event)
 {
-    auto touch = touches[0];
-
-    auto location = touch->getLocation();
+    auto location = event->getLocation();
 
     auto pos = Vec2::ZERO;
     if (_background)

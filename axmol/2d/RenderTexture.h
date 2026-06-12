@@ -43,7 +43,7 @@ class Texture;
 class RenderTarget;
 }  // namespace rhi
 
-class EventCustom;
+class CustomEvent;
 
 struct RenderTextureDesc
 {
@@ -249,14 +249,14 @@ public:
      *
      * @param event Event Custom.
      */
-    void listenToBackground(EventCustom* event);
+    void listenToBackground(CustomEvent* event);
 
     /** Listen "come to foreground" message and restore the frame buffer object.
      * It only has effect on Android.
      *
      * @param event Event Custom.
      */
-    void listenToForeground(EventCustom* event);
+    void listenToForeground(CustomEvent* event);
 
     /** Valid when "autoDraw" is true.
      *

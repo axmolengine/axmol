@@ -31,15 +31,25 @@ THE SOFTWARE.
 
 #    include "axmol/platform/StdC.h"
 #    include "axmol/platform/Common.h"
-#    include "axmol/platform/ApplicationBase.h"
-#    include "axmol/platform/winrt/InputEvent.h"
+#    include "axmol/platform/ApplicationCore.h"
 #    include <string>
 #    include <functional>
+#    include <condition_variable>
+#    include <mutex>
+#    include <atomic>
+#    include <chrono>
+
+#    include <winrt/Windows.Foundation.h>
+#    include <winrt/Windows.Graphics.Display.h>
+#    include <winrt/Windows.UI.Core.h>
+#    include <winrt/Windows.UI.Xaml.Controls.h>
 
 namespace ax
 {
 
-class AX_DLL Application : public ApplicationBase
+class RenderView;
+
+class AX_DLL Application : public ApplicationCore
 {
 public:
     Application();
@@ -50,20 +60,14 @@ public:
     */
     int run();
 
-    /**
-     * @brief frame step with FPS control
-     */
-    bool frameStep(const std::function<bool()>& onFrame);
-
-    /**
-    @brief    Get current application instance.
-    @return Current application instance pointer.
-    */
-    static Application* getInstance();
+    void boot(winrt::Windows::UI::Xaml::Controls::SwapChainPanel const& panel);
+    void shutdown();
+    void suspend();
+    void resume();
+    void requestQuit();
 
     /* override functions */
     void setAnimationInterval(float interval) override;
-    // virtual void setAnimationInterval(float interval, SetIntervalReason reason) override;
 
     LanguageType getCurrentLanguage() override;
     const char* getCurrentLanguageCode() override;
@@ -85,28 +89,45 @@ public:
      */
     virtual bool openURL(std::string_view url);
 
-    /**
-    @brief Set the callback responsible for opening a URL.
-    @param del The delegate that will handle opening a URL. We can't pass back a Platform::String due to name clash.
-    */
-    void SetXamlOpenURLDelegate(const std::function<void(const winrt::hstring&)>& del) { m_openURLDelegate = del; }
-
-    void setStartupScriptFilename(const std::string& startupScriptFile);
-
-    const std::string& getStartupScriptFilename(void) { return m_startupScriptFilename; }
-
 protected:
-    LARGE_INTEGER m_nAnimationInterval;
-    LARGE_INTEGER m_nFreq;
-    LARGE_INTEGER m_nLast;
-    LARGE_INTEGER m_nNow;
+    friend class RenderView;
 
-    std::string m_resourceRootPath;
-    std::string m_startupScriptFilename;
+    void postBoundaryTaskSignal() override;
 
-    std::function<void(const winrt::hstring&)> m_openURLDelegate;
+    void onPause();
+    void onResume();
+    void onDeviceLost();
 
-    static Application* sm_pSharedApplication;
+    winrt::agile_ref<winrt::Windows::UI::Xaml::Controls::SwapChainPanel> getPanel() const { return _panel; }
+    winrt::agile_ref<winrt::Windows::UI::Core::CoreDispatcher> getDispatcher() const { return _dispatcher; }
+    winrt::Windows::Graphics::Display::DisplayOrientations getOrientation() const { return _orientation; }
+
+    LARGE_INTEGER _animationInterval;
+    LARGE_INTEGER _freq;
+    LARGE_INTEGER _last;
+    LARGE_INTEGER _now;
+
+    std::string _resourceRootPath;
+
+    std::function<void(const winrt::hstring&)> _openURLDelegate;
+
+    winrt::agile_ref<winrt::Windows::UI::Xaml::Controls::SwapChainPanel> _panel;
+    winrt::agile_ref<winrt::Windows::UI::Core::CoreDispatcher> _dispatcher;
+    winrt::Windows::Graphics::Display::DisplayOrientations _orientation{
+        winrt::Windows::Graphics::Display::DisplayOrientations::Landscape};
+    winrt::Windows::Foundation::IAsyncAction _renderLoopWorker{nullptr};
+    RenderView* _renderView{nullptr};
+
+    std::mutex _loopMutex;
+    std::condition_variable _loopCondition;
+    bool _suspended{false};
+    bool _deviceLost{false};
+    std::atomic_bool _appShouldExit{false};
+    bool _requestedTerminate{false};
+    bool _boundaryTaskPending{false};
+    std::atomic_bool _renderLoopRunning{false};
+
+    bool isRenderLoopRunning() const;
 };
 
 }  // namespace ax

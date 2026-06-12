@@ -30,15 +30,17 @@ THE SOFTWARE.
 #include "axmol/2d/MenuItem.h"
 #include "axmol/2d/Layer.h"
 #include "axmol/base/Value.h"
+#include "axmol/base/PointerEvent.h"
 
 namespace ax
 {
-class Touch;
 
 /**
  * @addtogroup _2d
  * @{
  */
+
+class PointerEventListener;
 
 /** @brief A Menu for touch handling.
  *
@@ -133,10 +135,12 @@ public:
      */
     virtual void setEnabled(bool value) { _enabled = value; };
 
-    virtual bool onTouchBegan(Touch* touch, Event* event);
-    virtual void onTouchEnded(Touch* touch, Event* event);
-    virtual void onTouchCancelled(Touch* touch, Event* event);
-    virtual void onTouchMoved(Touch* touch, Event* event);
+    bool onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* outHitPoint) override;
+
+    virtual bool onPointerDown(PointerEvent* event);
+    virtual void onPointerMove(PointerEvent* event);
+    virtual void onPointerUp(PointerEvent* event);
+    virtual void onPointerCancel(PointerEvent* event);
 
     // overrides
     void removeChild(Node* child, bool cleanup) override;
@@ -168,10 +172,13 @@ protected:
     /** whether or not the menu will receive events */
     bool _enabled;
 
-    virtual MenuItem* getItemForTouch(Touch* touch, const Camera* camera);
+    virtual MenuItem* hitTestItem(PointerEvent* event, const Camera* camera, Vec3* outHitPoint);
     State _state;
     MenuItem* _selectedItem;
+    MenuItem* _pressedItem{nullptr};
     const Camera* _selectedWithCamera;
+
+    PointerEventListener* _pointerListener{nullptr};
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(Menu);

@@ -60,12 +60,12 @@ bool EventListenerAssetsManagerEx::init(const AssetsManagerEx* AssetsManagerEx,
     _AssetsManagerEx        = AssetsManagerEx;
     _onAssetsManagerExEvent = callback;
 
-    auto func = [this](EventCustom* event) -> void {
+    auto func = [this](CustomEvent* event) -> void {
         EventAssetsManagerEx* eventAssetsManagerEx = dynamic_cast<EventAssetsManagerEx*>(event);
         _onAssetsManagerExEvent(eventAssetsManagerEx);
     };
     std::string pointer = fmt::format("{}", fmt::ptr(AssetsManagerEx));
-    if (EventListenerCustom::init(LISTENER_ID + pointer, func))
+    if (CustomEventListener::init(LISTENER_ID + pointer, func))
     {
         ret = true;
     }

@@ -165,7 +165,6 @@ public:
     virtual int executeMenuItemEvent(MenuItem* pMenuItem);
     virtual int executeCallFuncActionEvent(CallFunc* pAction, Object* pTarget = NULL);
     virtual int executeSchedule(int nHandler, float dt, Node* pNode = NULL);
-    virtual int executeLayerTouchEvent(Layer* pLayer, int eventType, Touch* pTouch);
     virtual int executeLayerKeypadEvent(Layer* pLayer, int eventType);
     virtual int executeAccelerometerEvent(Layer* pLayer, Acceleration* pAccelerationValue);
     virtual int executeEvent(int nHandler,
@@ -249,9 +248,7 @@ private:
     int handleArmatureWrapper(ScriptHandlerMgr::HandlerType type, void* data);
     int handleEventAcc(void* data);
     int handleEventKeyboard(ScriptHandlerMgr::HandlerType type, void* data);
-    int handleEventTouch(ScriptHandlerMgr::HandlerType type, void* data);
-    int handleEventTouches(ScriptHandlerMgr::HandlerType type, void* data);
-    int handleEventMouse(ScriptHandlerMgr::HandlerType type, void* data);
+    int handlePointerEvent(ScriptHandlerMgr::HandlerType type, void* data);
 
 private:
     static LuaEngine* _defaultEngine;

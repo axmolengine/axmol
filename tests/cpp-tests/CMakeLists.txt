@@ -163,7 +163,6 @@ list(APPEND GAME_HEADER
   Source/ActionsProgressTest/ActionsProgressTest.h
   Source/RotateWorldTest/RotateWorldTest.h
   Source/Camera3DTest/Camera3DTest.h
-  Source/TextInputTest/TextInputTest.h
   Source/Texture2dTest/Texture2dTest.h
   Source/TerrainTest/TerrainTest.h
   Source/controller.h
@@ -189,7 +188,6 @@ list(APPEND GAME_HEADER
   Source/UITest/CocoStudioGUITest/UIScrollViewTest/UIScrollViewTest.h
   Source/UITest/CocoStudioGUITest/CocosGUIScene.h
   Source/UITest/CocoStudioGUITest/UITabControlTest/UITabControlTest.h
-  Source/UITest/CocoStudioGUITest/UITextFieldTest/UITextFieldTest.h
   Source/UITest/CocoStudioGUITest/UITextBMFontTest/UITextBMFontTest.h
   Source/UITest/CocoStudioGUITest/UIImageViewTest/UIImageViewTest.h
   Source/UITest/CocoStudioGUITest/UISliderTest/UISliderTest.h
@@ -209,6 +207,7 @@ list(APPEND GAME_HEADER
   Source/UITest/CocoStudioGUITest/UICheckBoxTest/UICheckBoxTest.h
   Source/UITest/CocoStudioGUITest/UIFocusTest/UIFocusTest.h
   Source/UITest/CocoStudioGUITest/UITextTest/UITextTest.h
+  Source/UITest/CocoStudioGUITest/UIInputFieldTest/UIInputFieldTest.h
   Source/BillBoardTest/BillBoardTest.h
   Source/SpriteFrameCacheTest/SpriteFrameCacheTest.h
   Source/EffectsAdvancedTest/EffectsAdvancedTest.h
@@ -312,7 +311,6 @@ list(APPEND GAME_SOURCE
   Source/SpritePolygonTest/SpritePolygonTest.cpp
   Source/SpriteTest/SpriteTest.cpp
   Source/TerrainTest/TerrainTest.cpp
-  Source/TextInputTest/TextInputTest.cpp
   Source/Texture2dTest/Texture2dTest.cpp
   Source/TextureCacheTest/TextureCacheTest.cpp
   Source/TexturePackerEncryptionTest/TextureAtlasEncryptionTest.cpp
@@ -341,10 +339,10 @@ list(APPEND GAME_SOURCE
   Source/UITest/CocoStudioGUITest/UISliderTest/UISliderTest.cpp
   Source/UITest/CocoStudioGUITest/UITextAtlasTest/UITextAtlasTest.cpp
   Source/UITest/CocoStudioGUITest/UITextBMFontTest/UITextBMFontTest.cpp
-  Source/UITest/CocoStudioGUITest/UITextFieldTest/UITextFieldTest.cpp
   Source/UITest/CocoStudioGUITest/UITextTest/UITextTest.cpp
   Source/UITest/CocoStudioGUITest/UIWidgetAddNodeTest/UIWidgetAddNodeTest.cpp
   Source/UITest/CocoStudioGUITest/UITabControlTest/UITabControlTest.cpp
+  Source/UITest/CocoStudioGUITest/UIInputFieldTest/UIInputFieldTest.cpp
   Source/UITest/UITest.cpp
   Source/UserDefaultTest/UserDefaultTest.cpp
   Source/VisibleRect.cpp
@@ -354,7 +352,7 @@ list(APPEND GAME_SOURCE
   Source/ZipTest/ZipTests.cpp
 )
 
-if(AX_ENABLE_MEDIA)
+if(AX_ENABLE_VIDEO)
   list(APPEND GAME_HEADER
     Source/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.h)
   list(APPEND GAME_SOURCE

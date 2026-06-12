@@ -103,6 +103,7 @@ Camera::Camera()
 {
     // minggo comment
     // _frustum.setClipZ(true);
+    _renderView = _director->getRenderView();
 }
 
 Camera::~Camera()
@@ -286,11 +287,14 @@ bool Camera::initOrthographic(float zoomX, float zoomY, float nearPlane, float f
     return true;
 }
 
-Vec2 Camera::project(const Vec3& src) const
+Vec2 Camera::projectWorldToScreen(const Vec3& src) const
 {
     Vec2 screenPos;
 
-    auto worldSize = _director->getCanvasSize();
+    // 1. Fetch the full viewport rect which contains the physical origin (black bars offset) and size
+    auto& viewport = _renderView->getViewportRect();
+    auto& vpSize   = viewport.size;
+
     Vec4 clipPos;
     getViewProjectionMatrix().transformVector(Vec4(src.x, src.y, src.z, 1.0f), &clipPos);
 
@@ -298,16 +302,62 @@ Vec2 Camera::project(const Vec3& src) const
     float ndcX = clipPos.x / clipPos.w;
     float ndcY = clipPos.y / clipPos.w;
 
-    screenPos.x = (ndcX + 1.0f) * 0.5f * worldSize.width;
-    screenPos.y = (1.0f - (ndcY + 1.0f) * 0.5f) * worldSize.height;
+    // 2. Calculate the local coordinates relative to the active viewport area
+    float localX = (ndcX + 1.0f) * 0.5f * vpSize.width;
+    float localY = (1.0f - (ndcY + 1.0f) * 0.5f) * vpSize.height;
+
+    // 3. Counter stretching bars using uniform physical pixel metrics.
+    float renderHeight = _renderView->getRenderSize().height;
+    if (renderHeight == 0.0f)
+        renderHeight = vpSize.height;  // Fallback container
+
+    float viewportTopOffset = renderHeight - (viewport.origin.y + vpSize.height);
+
+    screenPos.x = localX + viewport.origin.x;
+    screenPos.y = localY + viewportTopOffset;
+
     return screenPos;
 }
 
-Vec2 Camera::projectGL(const Vec3& src) const
+Vec3 Camera::deprojectScreenToWorld(const Vec3& src) const
+{
+    // 1. Fetch the full viewport rect to account for asymmetric window stretching bars
+    auto& viewport = _renderView->getViewportRect();
+    auto& vpSize   = viewport.size;
+
+    // 2. Counter stretching bars: Subtract the physical offset caused by black bars
+    float localX = src.x - viewport.origin.x;
+
+    // Convert Bottom-Left axmol viewport origin Y to Top-Left Window origin Y offset
+    float renderHeight = _renderView->getRenderSize().height;
+    if (renderHeight == 0.0f)
+        renderHeight = vpSize.height;  // Fallback container
+
+    float viewportTopOffset = renderHeight - (viewport.origin.y + vpSize.height);
+    float localY            = src.y - viewportTopOffset;
+
+    // 3. Perform standard NDC mapping within the normalized viewport dimensions [0, 1] -> [-1, 1]
+    Vec4 result(localX / vpSize.width, (vpSize.height - localY) / vpSize.height, src.z, 1.0f);
+    result.x = result.x * 2.0f - 1.0f;
+    result.y = result.y * 2.0f - 1.0f;
+    result.z = result.z * 2.0f - 1.0f;
+
+    getViewProjectionMatrix().getInversed().transformVector(result, &result);
+    if (result.w != 0.0f)
+    {
+        result.x /= result.w;
+        result.y /= result.w;
+        result.z /= result.w;
+    }
+
+    return Vec3{result.x, result.y, result.z};
+}
+
+Vec2 Camera::projectWorldToCanvas(const Vec3& src) const
 {
     Vec2 screenPos;
 
-    auto worldSize = _director->getCanvasSize();
+    auto&& canvasSize = _director->getCanvasSize();
     Vec4 clipPos;
     getViewProjectionMatrix().transformVector(Vec4(src.x, src.y, src.z, 1.0f), &clipPos);
 
@@ -317,63 +367,9 @@ Vec2 Camera::projectGL(const Vec3& src) const
     float ndcX = clipPos.x / clipPos.w;
     float ndcY = clipPos.y / clipPos.w;
 
-    screenPos.x = (ndcX + 1.0f) * 0.5f * worldSize.width;
-    screenPos.y = (ndcY + 1.0f) * 0.5f * worldSize.height;
+    screenPos.x = (ndcX + 1.0f) * 0.5f * canvasSize.width;
+    screenPos.y = (ndcY + 1.0f) * 0.5f * canvasSize.height;
     return screenPos;
-}
-
-Vec3 Camera::unproject(const Vec3& src) const
-{
-    Vec3 dst;
-    unproject(_director->getCanvasSize(), &src, &dst);
-    return dst;
-}
-
-Vec3 Camera::unprojectGL(const Vec3& src) const
-{
-    Vec3 dst;
-    unprojectGL(_director->getCanvasSize(), &src, &dst);
-    return dst;
-}
-
-void Camera::unproject(const Vec2& viewport, const Vec3* src, Vec3* dst) const
-{
-    AXASSERT(src && dst, "vec3 can not be null");
-
-    Vec4 screen(src->x / viewport.width, ((viewport.height - src->y)) / viewport.height, src->z, 1.0f);
-    screen.x = screen.x * 2.0f - 1.0f;
-    screen.y = screen.y * 2.0f - 1.0f;
-    screen.z = screen.z * 2.0f - 1.0f;
-
-    getViewProjectionMatrix().getInversed().transformVector(screen, &screen);
-    if (screen.w != 0.0f)
-    {
-        screen.x /= screen.w;
-        screen.y /= screen.w;
-        screen.z /= screen.w;
-    }
-
-    dst->set(screen.x, screen.y, screen.z);
-}
-
-void Camera::unprojectGL(const Vec2& viewport, const Vec3* src, Vec3* dst) const
-{
-    AXASSERT(src && dst, "vec3 can not be null");
-
-    Vec4 screen(src->x / viewport.width, src->y / viewport.height, src->z, 1.0f);
-    screen.x = screen.x * 2.0f - 1.0f;
-    screen.y = screen.y * 2.0f - 1.0f;
-    screen.z = screen.z * 2.0f - 1.0f;
-
-    getViewProjectionMatrix().getInversed().transformVector(screen, &screen);
-    if (screen.w != 0.0f)
-    {
-        screen.x /= screen.w;
-        screen.y /= screen.w;
-        screen.z /= screen.w;
-    }
-
-    dst->set(screen.x, screen.y, screen.z);
 }
 
 #if defined(AX_ENABLE_3D)
@@ -560,6 +556,61 @@ void Camera::setBackgroundBrush(CameraBackgroundBrush* clearBrush)
 bool Camera::isBrushValid()
 {
     return _clearBrush != nullptr && _clearBrush->isValid();
+}
+
+#if defined(AX_ENABLE_3D)
+Ray Camera::screenToRay(const Vec2& screenPoint) const
+{
+    Vec3 nearP = deprojectScreenToWorld(Vec3(screenPoint.x, screenPoint.y, 0.0f));
+    Vec3 farP  = deprojectScreenToWorld(Vec3(screenPoint.x, screenPoint.y, 1.0f));
+    Vec3 dir   = (farP - nearP);
+    dir.normalize();
+    return Ray{nearP, dir};
+}
+#endif
+
+bool Camera::isWorldPointInRect(const Vec2& pt, const Mat4& w2l, const Rect& rect, Vec3* p) const
+{
+    if (rect.size.width <= 0 || rect.size.height <= 0)
+        return false;
+
+    // first, convert pt to near/far plane, get Pn and Pf
+    Vec3 Pn(pt.x, pt.y, -1), Pf(pt.x, pt.y, 1);
+
+    //  then convert Pn and Pf to node space
+    w2l.transformPoint(&Pn);
+    w2l.transformPoint(&Pf);
+
+    // Pn and Pf define a line Q(t) = D + t * E which D = Pn
+    auto E = Pf - Pn;
+
+    // second, get three points which define content plane
+    //  these points define a plane P(u, w) = A + uB + wC
+    Vec3 A = Vec3(rect.origin.x, rect.origin.y, 0);
+    Vec3 B(rect.origin.x + rect.size.width, rect.origin.y, 0);
+    Vec3 C(rect.origin.x, rect.origin.y + rect.size.height, 0);
+    B = B - A;
+    C = C - A;
+
+    //  the line Q(t) intercept with plane P(u, w)
+    //  calculate the intercept point P = Q(t)
+    //      (BxC).A - (BxC).D
+    //  t = -----------------
+    //          (BxC).E
+    Vec3 BxC;
+    Vec3::cross(B, C, &BxC);
+    auto BxCdotE = BxC.dot(E);
+    if (BxCdotE == 0)
+    {
+        return false;
+    }
+    auto t = (BxC.dot(A) - BxC.dot(Pn)) / BxCdotE;
+    Vec3 P = Pn + t * E;
+    if (p)
+    {
+        *p = P;
+    }
+    return rect.containsPoint(Vec2(P.x, P.y));
 }
 
 }  // namespace ax

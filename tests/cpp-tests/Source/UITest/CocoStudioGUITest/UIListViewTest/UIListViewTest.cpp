@@ -92,10 +92,8 @@ bool UIListViewTest_Vertical::init()
         _listView->setBackGroundImageScale9Enabled(true);
         _listView->setContentSize(Size(240.0f, 130.0f));
         _listView->setPosition(Vec2((widgetSize - _listView->getContentSize()) / 2.0f));
-        _listView->addEventListener(
-            (ui::ListView::ccListViewCallback)AX_CALLBACK_2(UIListViewTest_Vertical::selectedItemEvent, this));
-        _listView->addEventListener((ui::ListView::ccScrollViewCallback)AX_CALLBACK_2(
-            UIListViewTest_Vertical::selectedItemEventScrollView, this));
+        _listView->addEventListener(AX_CALLBACK_2(UIListViewTest_Vertical::selectedItemEvent, this));
+        _listView->addEventListener(AX_CALLBACK_2(UIListViewTest_Vertical::selectedItemEventScrollView, this));
         _listView->setScrollBarPositionFromCorner(Vec2(7, 7));
         _uiLayer->addChild(_listView);
 
@@ -230,23 +228,24 @@ void UIListViewTest_Vertical::update(float dt)
         auto itemPos = this->getItemPositionYInView(item);
         if (isDown)
         {
-            if (itemPos < -_bufferZone && item->getPosition().y + _reuseItemOffset < totalHeight)
+            while (itemPos < -_bufferZone && item->getPosition().y + _reuseItemOffset < totalHeight)
             {
                 int itemID = item->getTag() - (int)items.size();
                 item->setPositionY(item->getPositionY() + _reuseItemOffset);
                 AXLOGD("itemPos = {}, itemID = {}, templateID = {}", itemPos, itemID, i);
                 this->updateItem(itemID, i);
+                itemPos = this->getItemPositionYInView(item);
             }
         }
         else
         {
-            if (itemPos > _bufferZone + listViewHeight && item->getPosition().y - _reuseItemOffset >= 0)
+            while (itemPos > _bufferZone + listViewHeight && item->getPosition().y - _reuseItemOffset >= 0)
             {
-
                 item->setPositionY(item->getPositionY() - _reuseItemOffset);
                 int itemID = item->getTag() + (int)items.size();
                 AXLOGD("itemPos = {}, itemID = {}, templateID = {}", itemPos, itemID, i);
                 this->updateItem(itemID, i);
+                itemPos = this->getItemPositionYInView(item);
             }
         }
     }
@@ -254,9 +253,9 @@ void UIListViewTest_Vertical::update(float dt)
     this->_lastContentPosY = this->_listView->getInnerContainer()->getPosition().y;
 }
 
-void UIListViewTest_Vertical::selectedItemEvent(Object* pSender, ListView::EventType type)
+void UIListViewTest_Vertical::selectedItemEvent(Object* pSender, ListView::EventType ev)
 {
-    switch (type)
+    switch (ev)
     {
     case ax::ui::ListView::EventType::ON_SELECTED_ITEM_START:
     {
@@ -277,9 +276,9 @@ void UIListViewTest_Vertical::selectedItemEvent(Object* pSender, ListView::Event
     }
 }
 
-void UIListViewTest_Vertical::selectedItemEventScrollView(Object* pSender, ui::ScrollView::EventType type)
+void UIListViewTest_Vertical::selectedItemEventScrollView(Object* pSender, ui::ScrollView::EventType ev)
 {
-    switch (type)
+    switch (ev)
     {
     case ui::ScrollView::EventType::SCROLL_TO_BOTTOM:
         AXLOGD("SCROLL_TO_BOTTOM");
@@ -345,8 +344,7 @@ bool UIListViewTest_Horizontal::init()
                                         (backgroundSize.width - _listView->getContentSize().width) / 2.0f,
                                     (widgetSize.height - backgroundSize.height) / 2.0f +
                                         (backgroundSize.height - _listView->getContentSize().height) / 2.0f));
-        _listView->addEventListener(
-            (ui::ListView::ccListViewCallback)AX_CALLBACK_2(UIListViewTest_Horizontal::selectedItemEvent, this));
+        _listView->addEventListener(AX_CALLBACK_2(UIListViewTest_Horizontal::selectedItemEvent, this));
         _listView->setScrollBarPositionFromCorner(Vec2(7, 7));
         _uiLayer->addChild(_listView);
 
@@ -459,9 +457,9 @@ void UIListViewTest_Horizontal::update(float dt)
     this->_lastContentPosX = this->_listView->getInnerContainer()->getPosition().x;
 }
 
-void UIListViewTest_Horizontal::selectedItemEvent(Object* pSender, ListView::EventType type)
+void UIListViewTest_Horizontal::selectedItemEvent(Object* pSender, ListView::EventType ev)
 {
-    switch (type)
+    switch (ev)
     {
     case ax::ui::ListView::EventType::ON_SELECTED_ITEM_START:
     {
@@ -521,7 +519,7 @@ bool Issue12692::init()
                                        (backgroundSize.height - listView->getContentSize().height) / 2.0f));
         listView->setScrollBarPositionFromCorner(Vec2(7, 7));
         listView->setClippingEnabled(true);
-        listView->setClippingType(ui::Layout::ClippingType::SCISSOR);
+        listView->setClippingType(ui::LayoutGroup::ClippingType::SCISSOR);
         listView->setName("listview1");
         _uiLayer->addChild(listView);
 
@@ -532,7 +530,7 @@ bool Issue12692::init()
         list2->setBackGroundImageScale9Enabled(true);
         list2->setContentSize(Size(240, 65));
         list2->setClippingEnabled(true);
-        list2->setClippingType(ui::Layout::ClippingType::SCISSOR);
+        list2->setClippingType(ui::LayoutGroup::ClippingType::SCISSOR);
         list2->setName("listview2");
         listView->insertCustomItem(list2, 0);
 
@@ -614,7 +612,7 @@ bool Issue8316::init()
                                        (backgroundSize.height - listView->getContentSize().height) / 2.0f));
         listView->setScrollBarPositionFromCorner(Vec2(7, 7));
         listView->setClippingEnabled(true);
-        listView->setClippingType(ui::Layout::ClippingType::SCISSOR);
+        listView->setClippingType(ui::LayoutGroup::ClippingType::SCISSOR);
         listView->setName("listview1");
 
         {
@@ -781,9 +779,9 @@ bool UIListViewTest_Magnetic::init()
         _indexLabels[4]->setPosition(_uiLayer->getContentSize() / 2 + Size(deltaX, deltaY));  // center
 
         // Callback
-        _listView->ScrollView::addEventListener([this](Object* ref, ScrollView::EventType eventType) {
+        _listView->ScrollView::addEventListener([this](Object* ref, ScrollView::EventType ev) {
             ListView* listView = dynamic_cast<ListView*>(ref);
-            if (listView == nullptr || eventType != ScrollView::EventType::CONTAINER_MOVED)
+            if (listView == nullptr || ev != ScrollView::EventType::CONTAINER_MOVED)
             {
                 return;
             }
@@ -989,9 +987,9 @@ bool UIListViewTest_Padding::init()
         _indexLabels[4]->setPosition(_uiLayer->getContentSize() / 2 + Size(deltaX, deltaY));  // center
 
         // Callback
-        _listView->ScrollView::addEventListener([this](Object* ref, ScrollView::EventType eventType) {
+        _listView->ScrollView::addEventListener([this](Object* ref, ScrollView::EventType event) {
             ListView* listView = dynamic_cast<ListView*>(ref);
-            if (listView == nullptr || eventType != ScrollView::EventType::CONTAINER_MOVED)
+            if (listView == nullptr || event != ScrollView::EventType::CONTAINER_MOVED)
             {
                 return;
             }

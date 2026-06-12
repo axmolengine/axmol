@@ -36,7 +36,7 @@ THE SOFTWARE.
 #include "axmol/2d/SpriteFrame.h"
 #include "axmol/2d/ActionInstant.h"
 #include "axmol/base/Director.h"
-#include "axmol/base/EventCustom.h"
+#include "axmol/base/CustomEvent.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/platform/StdC.h"
 #include "axmol/base/ScriptSupport.h"
@@ -2591,7 +2591,7 @@ void Animate::update(float t)
             if (!dict.empty())
             {
                 if (_frameDisplayedEvent == nullptr)
-                    _frameDisplayedEvent = new EventCustom(AnimationFrameDisplayedNotification);
+                    _frameDisplayedEvent = new CustomEvent(AnimationFrameDisplayedNotification);
 
                 _frameDisplayedEventInfo.target   = _target;
                 _frameDisplayedEventInfo.userInfo = &dict;

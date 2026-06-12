@@ -107,8 +107,8 @@ bool SpineTestLayer::init()
     if (!TestCase::init())
         return false;
 
-    EventListenerTouchOneByOne* listener = EventListenerTouchOneByOne::create();
-    listener->onTouchBegan               = [this](Touch* touch, ax::Event* event) -> bool {
+    PointerEventListener* listener = PointerEventListener::create();
+    listener->onPointerDown        = [this](PointerEvent* event) -> bool {
         if (!skeletonNode)
             return true;
         _touchIndex = (_touchIndex + 1) % 3;
@@ -282,12 +282,11 @@ bool IKExample::init()
     // Next we setup a listener that receives and stores
     // the current mouse location. The location is converted
     // to the skeleton's coordinate system.
-    EventListenerMouse* mouseListener = EventListenerMouse::create();
-    mouseListener->onMouseMove        = [this](ax::Event* event) -> bool {
+    PointerEventListener* mouseListener = PointerEventListener::create();
+    mouseListener->onPointerMove        = [this](ax::PointerEvent* event) -> bool {
         // convert the mosue location to the skeleton's coordinate space
         // and store it.
-        EventMouse* mouseEvent = dynamic_cast<EventMouse*>(event);
-        position               = skeletonNode->convertToNodeSpace(mouseEvent->getLocation());
+        position = skeletonNode->convertToNodeSpace(event->getLocation());
 
         return true;
     };

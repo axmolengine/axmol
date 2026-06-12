@@ -257,7 +257,7 @@ void MenuItemLabel::setEnabled(bool enabled)
 {
     if (_enabled != enabled)
     {
-        if (enabled == false)
+        if (!enabled)
         {
             _colorBackup = this->getColor();
             this->setColor(_disabledColor);

@@ -159,8 +159,8 @@ local function getBaseLayer()
     local seq = ax.Sequence:create(move, move_back)
     background:runAction(ax.RepeatForever:create(seq))
 
-    local function onTouchesEnded(touches, event)
-        local location = touches[1]:getLocation()
+    local function onTouchesEnded(event)
+        local location = event:getLocation()
         local pos = ax.p(0, 0)
         if background ~= nil then
             pos = background:convertToWorldSpace(ax.p(0, 0))
@@ -172,18 +172,18 @@ local function getBaseLayer()
         end
     end
 
-    local function onTouchesBegan(touches, event)
-         onTouchesEnded(touches, event);
+    local function onTouchesBegan(event)
+         onTouchesEnded(event);
     end
 
-    local function onTouchesMoved(touches, event)
-         onTouchesEnded(touches, event);
+    local function onPointerMove(event)
+         onTouchesEnded(event);
     end
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(onTouchesBegan,ax.Handler.EVENT_TOUCHES_BEGAN )
-    listener:registerScriptHandler(onTouchesMoved,ax.Handler.EVENT_TOUCHES_MOVED )
-    listener:registerScriptHandler(onTouchesEnded,ax.Handler.EVENT_TOUCHES_ENDED )
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(onTouchesBegan,ax.Handler.EVENT_POINTER_DOWN )
+    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
+    listener:registerScriptHandler(onTouchesEnded,ax.Handler.EVENT_POINTER_UP )
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
 

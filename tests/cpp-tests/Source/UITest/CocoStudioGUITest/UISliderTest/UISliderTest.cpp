@@ -90,9 +90,9 @@ bool UISliderTest::init()
     return false;
 }
 
-void UISliderTest::sliderEvent(Object* pSender, Slider::EventType type)
+void UISliderTest::sliderEvent(Object* pSender, Slider::EventType ev)
 {
-    if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
+    if (ev == Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
         Slider* slider = dynamic_cast<Slider*>(pSender);
         int percent    = slider->getPercent();
@@ -200,7 +200,7 @@ bool UISliderTest_Scale9_State_Change::init()
         slider->loadBarTexture("cocosui/sliderballnormal.png");
         slider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
         slider->loadProgressBarTexture("cocosui/slider_bar_active_9patch.png");
-        slider->ignoreContentAdaptWithSize(false);
+        slider->setAutoSize(true);
         slider->setScale9Enabled(true);
         slider->setCapInsets(Rect(0.0f, 0.0f, 0.0f, 0.0f));
         slider->setContentSize(Size(200.0f, 60.0f));
@@ -224,9 +224,9 @@ bool UISliderTest_Scale9_State_Change::init()
     return false;
 }
 
-void UISliderTest_Scale9_State_Change::sliderEvent(Object* pSender, Slider::EventType type)
+void UISliderTest_Scale9_State_Change::sliderEvent(Object* pSender, Slider::EventType ev)
 {
-    if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
+    if (ev == Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
         Slider* slider = dynamic_cast<Slider*>(pSender);
         int percent    = slider->getPercent();
@@ -359,18 +359,18 @@ bool UISliderNewEventCallbackTest::init()
         slider->loadProgressBarTexture("cocosui/sliderProgress.png");
         slider->setMaxPercent(1000);
         slider->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f + 50));
-        slider->addEventListener([=](Object* widget, Slider::EventType type) {
+        slider->addEventListener([=](Object* widget, Slider::EventType ev) {
             Slider* slider = (Slider*)widget;
             AX_UNUSED_PARAM(slider);
-            if (type == Slider::EventType::ON_SLIDEBALL_DOWN)
+            if (ev == Slider::EventType::ON_SLIDEBALL_DOWN)
             {
                 AXLOGD("slider button pressed!");
             }
-            else if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
+            else if (ev == Slider::EventType::ON_PERCENTAGE_CHANGED)
             {
                 AXLOGD("slider is moving! percent = {}", 100.0f * slider->getPercent() / slider->getMaxPercent());
             }
-            else if (type == Slider::EventType::ON_SLIDEBALL_UP)
+            else if (ev == Slider::EventType::ON_SLIDEBALL_UP)
             {
                 AXLOGD("slider button is released.");
             }

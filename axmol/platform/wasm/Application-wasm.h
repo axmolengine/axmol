@@ -31,14 +31,14 @@ THE SOFTWARE.
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
 #    include "axmol/platform/Common.h"
-#    include "axmol/platform/ApplicationBase.h"
+#    include "axmol/platform/ApplicationCore.h"
 #    include <string>
 
 namespace ax
 {
 class Rect;
 
-class Application : public ApplicationBase
+class Application : public ApplicationCore
 {
 public:
     /**
@@ -59,12 +59,6 @@ public:
      @brief Run the message loop.
      */
     int run();
-
-    /**
-     @brief Get current application instance.
-     @return Current application instance pointer.
-     */
-    static Application* getInstance();
 
     /* override functions */
     LanguageType getCurrentLanguage() override;
@@ -94,8 +88,6 @@ public:
 
 protected:
     std::string _resourceRootPath;
-
-    static Application* sm_pSharedApplication;
 };
 
 }  // namespace ax

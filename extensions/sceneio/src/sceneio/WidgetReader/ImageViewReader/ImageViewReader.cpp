@@ -24,7 +24,7 @@
 
 #include "sceneio/WidgetReader/ImageViewReader/ImageViewReader.h"
 
-#include "axmol/ui/UIImageView.h"
+#include "axmol/ui/ImageView.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/2d/SpriteFrame.h"
 #include "axmol/2d/SpriteFrameCache.h"
@@ -378,8 +378,7 @@ void ImageViewReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers:
 
     if (scale9Enabled)
     {
-        imageView->setUnifySizeEnabled(false);
-        imageView->ignoreContentAdaptWithSize(false);
+        imageView->setAutoSize(false);
 
         auto f_scale9Size = options->scale9Size();
         Size scale9Size(f_scale9Size->width(), f_scale9Size->height());

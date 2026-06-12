@@ -464,10 +464,10 @@ int lua_register_ax_controller_Controller(lua_State* tolua_S)
     return 1;
 }
 
-int lua_ax_controller_EventController_getControllerEventType(lua_State* tolua_S)
+int lua_ax_controller_ControllerEvent_getControllerEventType(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventController* obj = nullptr;
+    ax::ControllerEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -476,15 +476,15 @@ int lua_ax_controller_EventController_getControllerEventType(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventController",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.ControllerEvent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ControllerEvent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_controller_EventController_getControllerEventType'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_controller_ControllerEvent_getControllerEventType'", nullptr);
         return 0;
     }
 #endif
@@ -494,27 +494,27 @@ int lua_ax_controller_EventController_getControllerEventType(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_EventController_getControllerEventType'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_ControllerEvent_getControllerEventType'", nullptr);
             return 0;
         }
         int ret = (int)obj->getControllerEventType();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventController:getControllerEventType",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ControllerEvent:getControllerEventType",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_controller_EventController_getControllerEventType'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_controller_ControllerEvent_getControllerEventType'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_controller_EventController_getController(lua_State* tolua_S)
+int lua_ax_controller_ControllerEvent_getController(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventController* obj = nullptr;
+    ax::ControllerEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -523,15 +523,15 @@ int lua_ax_controller_EventController_getController(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventController",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.ControllerEvent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ControllerEvent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_controller_EventController_getController'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_controller_ControllerEvent_getController'", nullptr);
         return 0;
     }
 #endif
@@ -541,27 +541,27 @@ int lua_ax_controller_EventController_getController(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_EventController_getController'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_ControllerEvent_getController'", nullptr);
             return 0;
         }
         auto&& ret = obj->getController();
         object_to_luaval<ax::Controller>(tolua_S, "ax.Controller",(ax::Controller*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventController:getController",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ControllerEvent:getController",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_controller_EventController_getController'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_controller_ControllerEvent_getController'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_controller_EventController_getKeyCode(lua_State* tolua_S)
+int lua_ax_controller_ControllerEvent_getKeyCode(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventController* obj = nullptr;
+    ax::ControllerEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -570,15 +570,15 @@ int lua_ax_controller_EventController_getKeyCode(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventController",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.ControllerEvent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ControllerEvent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_controller_EventController_getKeyCode'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_controller_ControllerEvent_getKeyCode'", nullptr);
         return 0;
     }
 #endif
@@ -588,27 +588,27 @@ int lua_ax_controller_EventController_getKeyCode(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_EventController_getKeyCode'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_ControllerEvent_getKeyCode'", nullptr);
             return 0;
         }
         auto&& ret = obj->getKeyCode();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventController:getKeyCode",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ControllerEvent:getKeyCode",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_controller_EventController_getKeyCode'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_controller_ControllerEvent_getKeyCode'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_controller_EventController_setKeyCode(lua_State* tolua_S)
+int lua_ax_controller_ControllerEvent_setKeyCode(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventController* obj = nullptr;
+    ax::ControllerEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -617,15 +617,15 @@ int lua_ax_controller_EventController_setKeyCode(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventController",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.ControllerEvent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ControllerEvent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_controller_EventController_setKeyCode'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_controller_ControllerEvent_setKeyCode'", nullptr);
         return 0;
     }
 #endif
@@ -635,30 +635,30 @@ int lua_ax_controller_EventController_setKeyCode(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventController:setKeyCode");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ControllerEvent:setKeyCode");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_EventController_setKeyCode'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_ControllerEvent_setKeyCode'", nullptr);
             return 0;
         }
         obj->setKeyCode(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventController:setKeyCode",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ControllerEvent:setKeyCode",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_controller_EventController_setKeyCode'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_controller_ControllerEvent_setKeyCode'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_controller_EventController_setConnectStatus(lua_State* tolua_S)
+int lua_ax_controller_ControllerEvent_setConnectStatus(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventController* obj = nullptr;
+    ax::ControllerEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -667,15 +667,15 @@ int lua_ax_controller_EventController_setConnectStatus(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventController",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.ControllerEvent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ControllerEvent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_controller_EventController_setConnectStatus'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_controller_ControllerEvent_setConnectStatus'", nullptr);
         return 0;
     }
 #endif
@@ -685,30 +685,30 @@ int lua_ax_controller_EventController_setConnectStatus(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.EventController:setConnectStatus");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ControllerEvent:setConnectStatus");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_EventController_setConnectStatus'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_ControllerEvent_setConnectStatus'", nullptr);
             return 0;
         }
         obj->setConnectStatus(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventController:setConnectStatus",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ControllerEvent:setConnectStatus",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_controller_EventController_setConnectStatus'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_controller_ControllerEvent_setConnectStatus'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_controller_EventController_isConnected(lua_State* tolua_S)
+int lua_ax_controller_ControllerEvent_isConnected(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventController* obj = nullptr;
+    ax::ControllerEvent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -717,15 +717,15 @@ int lua_ax_controller_EventController_isConnected(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventController",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.ControllerEvent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    obj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::ControllerEvent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_controller_EventController_isConnected'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_controller_ControllerEvent_isConnected'", nullptr);
         return 0;
     }
 #endif
@@ -735,27 +735,27 @@ int lua_ax_controller_EventController_isConnected(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_EventController_isConnected'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_ControllerEvent_isConnected'", nullptr);
             return 0;
         }
         auto&& ret = obj->isConnected();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventController:isConnected",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ControllerEvent:isConnected",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_controller_EventController_isConnected'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_controller_ControllerEvent_isConnected'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_controller_EventController_constructor(lua_State* tolua_S)
+int lua_ax_controller_ControllerEvent_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventController* obj = nullptr;
+    ax::ControllerEvent* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -764,87 +764,87 @@ int lua_ax_controller_EventController_constructor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do {
         if (argc == 3) {
-            ax::EventController::ControllerEventType arg0;
-            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventController:EventController");
+            ax::ControllerEvent::ControllerEventType arg0;
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ControllerEvent:ControllerEvent");
 
             if (!ok) { break; }
             ax::Controller* arg1;
-            ok &= luaval_to_object<ax::Controller>(tolua_S, 3, "ax.Controller",&arg1, "ax.EventController:EventController");
+            ok &= luaval_to_object<ax::Controller>(tolua_S, 3, "ax.Controller",&arg1, "ax.ControllerEvent:ControllerEvent");
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.EventController:EventController");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.ControllerEvent:ControllerEvent");
 
             if (!ok) { break; }
-            obj = new ax::EventController(arg0, arg1, arg2);
+            obj = new ax::ControllerEvent(arg0, arg1, arg2);
             obj->autorelease();
             int ID =  (int)obj->_ID ;
             int* luaID =  &obj->_luaID ;
-            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventController");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.ControllerEvent");
             return 1;
         }
     }while(0);
     ok  = true;
     do {
         if (argc == 3) {
-            ax::EventController::ControllerEventType arg0;
-            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventController:EventController");
+            ax::ControllerEvent::ControllerEventType arg0;
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ControllerEvent:ControllerEvent");
 
             if (!ok) { break; }
             ax::Controller* arg1;
-            ok &= luaval_to_object<ax::Controller>(tolua_S, 3, "ax.Controller",&arg1, "ax.EventController:EventController");
+            ok &= luaval_to_object<ax::Controller>(tolua_S, 3, "ax.Controller",&arg1, "ax.ControllerEvent:ControllerEvent");
 
             if (!ok) { break; }
             int arg2;
-            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventController:EventController");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.ControllerEvent:ControllerEvent");
 
             if (!ok) { break; }
-            obj = new ax::EventController(arg0, arg1, arg2);
+            obj = new ax::ControllerEvent(arg0, arg1, arg2);
             obj->autorelease();
             int ID =  (int)obj->_ID ;
             int* luaID =  &obj->_luaID ;
-            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventController");
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.ControllerEvent");
             return 1;
         }
     }while(0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.EventController:EventController",argc, 3);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.ControllerEvent:ControllerEvent",argc, 3);
     return 0;
 
 #if _AX_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_controller_EventController_constructor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_controller_ControllerEvent_constructor'.",&tolua_err);
 #endif
 
     return 0;
 }
 
-static int lua_ax_controller_EventController_finalize(lua_State* tolua_S)
+static int lua_ax_controller_ControllerEvent_finalize(lua_State* tolua_S)
 {
-    AXLOGV("luabindings: finalizing LUA object (EventController)");
+    AXLOGV("luabindings: finalizing LUA object (ControllerEvent)");
     return 0;
 }
 
-int lua_register_ax_controller_EventController(lua_State* tolua_S)
+int lua_register_ax_controller_ControllerEvent(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.EventController");
-    tolua_cclass(tolua_S,"EventController","ax.EventController","ax.Event",nullptr);
+    tolua_usertype(tolua_S,"ax.ControllerEvent");
+    tolua_cclass(tolua_S,"ControllerEvent","ax.ControllerEvent","ax.Event",nullptr);
 
-    tolua_beginmodule(tolua_S,"EventController");
-        tolua_function(tolua_S,"new",lua_ax_controller_EventController_constructor);
-        tolua_function(tolua_S,"getControllerEventType",lua_ax_controller_EventController_getControllerEventType);
-        tolua_function(tolua_S,"getController",lua_ax_controller_EventController_getController);
-        tolua_function(tolua_S,"getKeyCode",lua_ax_controller_EventController_getKeyCode);
-        tolua_function(tolua_S,"setKeyCode",lua_ax_controller_EventController_setKeyCode);
-        tolua_function(tolua_S,"setConnectStatus",lua_ax_controller_EventController_setConnectStatus);
-        tolua_function(tolua_S,"isConnected",lua_ax_controller_EventController_isConnected);
+    tolua_beginmodule(tolua_S,"ControllerEvent");
+        tolua_function(tolua_S,"new",lua_ax_controller_ControllerEvent_constructor);
+        tolua_function(tolua_S,"getControllerEventType",lua_ax_controller_ControllerEvent_getControllerEventType);
+        tolua_function(tolua_S,"getController",lua_ax_controller_ControllerEvent_getController);
+        tolua_function(tolua_S,"getKeyCode",lua_ax_controller_ControllerEvent_getKeyCode);
+        tolua_function(tolua_S,"setKeyCode",lua_ax_controller_ControllerEvent_setKeyCode);
+        tolua_function(tolua_S,"setConnectStatus",lua_ax_controller_ControllerEvent_setConnectStatus);
+        tolua_function(tolua_S,"isConnected",lua_ax_controller_ControllerEvent_isConnected);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::EventController).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventController";
-    g_typeCast[typeName] = "ax.EventController";
+    auto typeName = typeid(ax::ControllerEvent).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.ControllerEvent";
+    g_typeCast[typeName] = "ax.ControllerEvent";
     return 1;
 }
 
-int lua_ax_controller_EventListenerController_create(lua_State* tolua_S)
+int lua_ax_controller_ControllerEventListener_create(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -854,7 +854,7 @@ int lua_ax_controller_EventListenerController_create(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.EventListenerController",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"ax.ControllerEventListener",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -863,38 +863,38 @@ int lua_ax_controller_EventListenerController_create(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_EventListenerController_create'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_ControllerEventListener_create'", nullptr);
             return 0;
         }
-        auto&& ret = ax::EventListenerController::create();
-        object_to_luaval<ax::EventListenerController>(tolua_S, "ax.EventListenerController",(ax::EventListenerController*)ret);
+        auto&& ret = ax::ControllerEventListener::create();
+        object_to_luaval<ax::ControllerEventListener>(tolua_S, "ax.ControllerEventListener",(ax::ControllerEventListener*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.EventListenerController:create",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.ControllerEventListener:create",argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_controller_EventListenerController_create'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_controller_ControllerEventListener_create'.",&tolua_err);
 #endif
     return 0;
 }
-static int lua_ax_controller_EventListenerController_finalize(lua_State* tolua_S)
+static int lua_ax_controller_ControllerEventListener_finalize(lua_State* tolua_S)
 {
-    AXLOGV("luabindings: finalizing LUA object (EventListenerController)");
+    AXLOGV("luabindings: finalizing LUA object (ControllerEventListener)");
     return 0;
 }
 
-int lua_register_ax_controller_EventListenerController(lua_State* tolua_S)
+int lua_register_ax_controller_ControllerEventListener(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.EventListenerController");
-    tolua_cclass(tolua_S,"EventListenerController","ax.EventListenerController","ax.EventListener",nullptr);
+    tolua_usertype(tolua_S,"ax.ControllerEventListener");
+    tolua_cclass(tolua_S,"ControllerEventListener","ax.ControllerEventListener","ax.EventListener",nullptr);
 
-    tolua_beginmodule(tolua_S,"EventListenerController");
-        tolua_function(tolua_S,"create", lua_ax_controller_EventListenerController_create);
+    tolua_beginmodule(tolua_S,"ControllerEventListener");
+        tolua_function(tolua_S,"create", lua_ax_controller_ControllerEventListener_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::EventListenerController).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventListenerController";
-    g_typeCast[typeName] = "ax.EventListenerController";
+    auto typeName = typeid(ax::ControllerEventListener).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.ControllerEventListener";
+    g_typeCast[typeName] = "ax.ControllerEventListener";
     return 1;
 }
 TOLUA_API int register_all_ax_controller(lua_State* tolua_S)
@@ -905,8 +905,8 @@ TOLUA_API int register_all_ax_controller(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"ax");
 
     lua_register_ax_controller_Controller(tolua_S);
-    lua_register_ax_controller_EventController(tolua_S);
-    lua_register_ax_controller_EventListenerController(tolua_S);
+    lua_register_ax_controller_ControllerEvent(tolua_S);
+    lua_register_ax_controller_ControllerEventListener(tolua_S);
 
     tolua_endmodule(tolua_S);
     return 1;

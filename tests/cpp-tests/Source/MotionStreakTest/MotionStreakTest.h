@@ -67,7 +67,7 @@ protected:
 public:
     CREATE_FUNC(MotionStreakTest2);
     virtual void onEnter() override;
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerMove(ax::PointerEvent* event);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };

@@ -620,10 +620,10 @@ bool LabelFNTMultiLineAlignment::init()
         return false;
     }
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(LabelFNTMultiLineAlignment::onTouchesBegan, this);
-    listener->onTouchesMoved = AX_CALLBACK_2(LabelFNTMultiLineAlignment::onTouchesMoved, this);
-    listener->onTouchesEnded = AX_CALLBACK_2(LabelFNTMultiLineAlignment::onTouchesEnded, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = AX_CALLBACK_1(LabelFNTMultiLineAlignment::onPointerDown, this);
+    listener->onPointerMove = AX_CALLBACK_1(LabelFNTMultiLineAlignment::onPointerMove, this);
+    listener->onPointerUp   = AX_CALLBACK_1(LabelFNTMultiLineAlignment::onPointerUp, this);
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     // ask director the the window size
@@ -783,19 +783,22 @@ void LabelFNTMultiLineAlignment::alignmentChanged(ax::Object* sender)
     this->snapArrowsToEdge();
 }
 
-void LabelFNTMultiLineAlignment::onTouchesBegan(const std::vector<Touch*>& touches, ax::Event* event)
+bool LabelFNTMultiLineAlignment::onPointerDown(ax::PointerEvent* event)
 {
-    auto touch    = touches[0];
-    auto location = touch->getLocationInView();
+    auto location = event->getScreenLocation();
 
     if (this->_arrows->getBoundingBox().containsPoint(location))
     {
         _drag = true;
         this->_arrowsBar->setVisible(true);
+
+        return true;
     }
+
+    return false;
 }
 
-void LabelFNTMultiLineAlignment::onTouchesEnded(const std::vector<Touch*>& touches, ax::Event* event)
+void LabelFNTMultiLineAlignment::onPointerUp(ax::PointerEvent* event)
 {
     _drag = false;
     this->snapArrowsToEdge();
@@ -803,15 +806,13 @@ void LabelFNTMultiLineAlignment::onTouchesEnded(const std::vector<Touch*>& touch
     this->_arrowsBar->setVisible(false);
 }
 
-void LabelFNTMultiLineAlignment::onTouchesMoved(const std::vector<Touch*>& touches, ax::Event* event)
+void LabelFNTMultiLineAlignment::onPointerMove(ax::PointerEvent* event)
 {
     if (!_drag)
-    {
         return;
-    }
 
-    auto touch    = touches[0];
-    auto location = touch->getLocationInView();
+    auto touch    = event;
+    auto location = touch->getScreenLocation();
 
     auto canvasSize = Director::getInstance()->getCanvasSize();
 
@@ -1543,14 +1544,14 @@ void LabelTTFSDF::initToggleCheckboxes()
         this->addChild(label);
     }
 }
-void LabelTTFSDF::onChangedRadioButtonSelect(RadioButton* radioButton, RadioButton::EventType type)
+void LabelTTFSDF::onChangedRadioButtonSelect(Object* sender, RadioButton::EventType ev)
 {
-    if (radioButton == nullptr)
+    if (!sender)
     {
         return;
     }
 
-    if (type != RadioButton::EventType::SELECTED)
+    if (ev != RadioButton::EventType::SELECTED)
         return;
     _labelNormal->disableEffect(LabelEffect::OUTLINE);
     _labelNormal->disableEffect(LabelEffect::GLOW);
@@ -1563,7 +1564,7 @@ void LabelTTFSDF::onChangedRadioButtonSelect(RadioButton* radioButton, RadioButt
     _sliderGlow->setEnabled(false);
     _sliderGlow->setOpacity(100);
     _sliderGlow->setPercent(0);
-    switch (radioButton->getTag())
+    switch (static_cast<RadioButton*>(sender)->getTag())
     {
     case 0:
 
@@ -1736,9 +1737,9 @@ void LabelShadowTest::onEnter()
     addChild(shadowLabelBMFont);
 }
 
-void LabelShadowTest::sliderEvent(Object* pSender, ui::Slider::EventType type)
+void LabelShadowTest::sliderEvent(Object* pSender, ui::Slider::EventType ev)
 {
-    if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
+    if (ev == Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
         Slider* slider  = (Slider*)this->getChildByTag(1);
         Slider* slider2 = (Slider*)this->getChildByTag(2);
@@ -2045,7 +2046,7 @@ LabelIssue4428Test::LabelIssue4428Test()
     label->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     addChild(label);
 
-    int len = label->getStringLength();
+    int len = label->getCharCount();
     for (int i = 0; i < len; ++i)
     {
         auto sprite = label->getLetter(i);
@@ -2336,7 +2337,7 @@ LabelIssue11576Test::LabelIssue11576Test()
     auto center = VisibleRect::center();
 
     auto label = Label::createWithTTF("abcdefg", "fonts/arial.ttf", 24);
-    for (int index = 0; index < label->getStringLength(); ++index)
+    for (int index = 0; index < label->getCharCount(); ++index)
     {
         label->getLetter(index);
     }
@@ -3175,18 +3176,18 @@ std::string LabelToggleTypeTest::subtitle() const
     return "";
 }
 
-void LabelToggleTypeTest::onChangedRadioButtonSelect(RadioButton* radioButton, RadioButton::EventType type)
+void LabelToggleTypeTest::onChangedRadioButtonSelect(ax::Object* sender, ui::RadioButton::EventType event)
 {
-    if (radioButton == nullptr)
+    if (sender == nullptr)
     {
         return;
     }
 
-    switch (type)
+    switch (event)
     {
     case RadioButton::EventType::SELECTED:
     {
-        switch (radioButton->getTag())
+        switch (static_cast<RadioButton*>(sender)->getTag())
         {
         case 0:
             _label->setOverflow(Label::Overflow::NONE);
@@ -3327,16 +3328,16 @@ std::string LabelSystemFontTest::subtitle() const
     return "";
 }
 
-void LabelSystemFontTest::onChangedRadioButtonSelect(RadioButton* radioButton, RadioButton::EventType type)
+void LabelSystemFontTest::onChangedRadioButtonSelect(Object* sender, RadioButton::EventType event)
 {
-    if (radioButton == nullptr)
+    if (sender == nullptr)
     {
         return;
     }
 
-    switch (type)
-    {
-    case RadioButton::EventType::SELECTED:
+    auto radioButton = static_cast<RadioButton*>(sender);
+
+    if (event == RadioButton::EventType::SELECTED)
     {
         switch (radioButton->getTag())
         {
@@ -3355,10 +3356,6 @@ void LabelSystemFontTest::onChangedRadioButtonSelect(RadioButton* radioButton, R
         default:
             break;
         }
-        break;
-    }
-    default:
-        break;
     }
     this->updateDrawNodeSize(_label->getContentSize());
 }
@@ -3423,7 +3420,7 @@ LabelRichText::LabelRichText()
         "Mixing <b>UIRichText</b> with non <i>UIWidget</i> code. For more samples, see the UIRichTextTest.cpp file");
     if (richText2)
     {
-        richText2->ignoreContentAdaptWithSize(false);
+        richText2->setAutoSize(true);
         richText2->setContentSize(Size(400.0f, 400.0f));
         richText2->setPosition(center);
 
@@ -3896,14 +3893,15 @@ std::string LabelLocalizationTest::subtitle() const
     return "Change language selected and see label change";
 }
 
-void LabelLocalizationTest::onChangedRadioButtonSelect(RadioButton* radioButton, RadioButton::EventType type)
+void LabelLocalizationTest::onChangedRadioButtonSelect(Object* sender, RadioButton::EventType ev)
 {
-    if (radioButton == nullptr)
+    if (!sender)
     {
         return;
     }
 
-    switch (type)
+    auto radioButton = static_cast<ui::RadioButton*>(sender);
+    switch (ev)
     {
     case RadioButton::EventType::SELECTED:
     {
@@ -4190,7 +4188,7 @@ std::string LabelLetterColorsTest::subtitle() const
 
 void LabelLetterColorsTest::setLetterColors(ax::Label* label, const ax::Color32& color)
 {
-    int n = label->getStringLength();
+    int n = label->getCharCount();
     for (int i = 0; i < n; ++i)
     {
         Sprite* letter = label->getLetter(i);

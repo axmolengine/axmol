@@ -1,0 +1,195 @@
+/****************************************************************************
+Copyright (c) 2013-2016 Chukong Technologies Inc.
+Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+https://axmol.dev/
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+
+#include "axmol/ui/TextBMFont.h"
+#include "axmol/2d/Label.h"
+
+namespace ax
+{
+
+namespace ui
+{
+
+static const int LABELBMFONT_RENDERER_Z = (-1);
+
+IMPLEMENT_CLASS_GUI_INFO(TextBMFont)
+
+TextBMFont::TextBMFont()
+    : _labelBMFontRenderer(nullptr), _fntFileName(""), _stringValue(""), _labelBMFontRendererAdaptDirty(true)
+{}
+
+TextBMFont::~TextBMFont() {}
+
+TextBMFont* TextBMFont::create()
+{
+    TextBMFont* widget = new TextBMFont();
+    if (widget->init())
+    {
+        widget->autorelease();
+        return widget;
+    }
+    AX_SAFE_DELETE(widget);
+    return nullptr;
+}
+
+TextBMFont* TextBMFont::create(std::string_view text, std::string_view filename)
+{
+    TextBMFont* widget = new TextBMFont();
+    if (widget->init())
+    {
+        widget->setFntFile(filename);
+        widget->setString(text);
+        widget->autorelease();
+        return widget;
+    }
+    AX_SAFE_DELETE(widget);
+    return nullptr;
+}
+
+void TextBMFont::initRenderNode()
+{
+    _labelBMFontRenderer = ax::Label::create();
+    addProtectedChild(_labelBMFontRenderer, LABELBMFONT_RENDERER_Z, -1);
+}
+
+void TextBMFont::setFntFile(std::string_view fileName)
+{
+    if (fileName.empty())
+    {
+        return;
+    }
+    _fntFileName = fileName;
+    _labelBMFontRenderer->setBMFontFilePath(fileName);
+
+    updateContentSize();
+    _labelBMFontRendererAdaptDirty = true;
+}
+
+void TextBMFont::setString(std::string_view value)
+{
+    if (value == _labelBMFontRenderer->getString())
+    {
+        return;
+    }
+    _stringValue = value;
+    _labelBMFontRenderer->setString(value);
+    updateContentSize();
+    _labelBMFontRendererAdaptDirty = true;
+}
+
+std::string_view TextBMFont::getString() const
+{
+    return _stringValue;
+}
+
+ssize_t TextBMFont::getCharCount() const
+{
+    return _labelBMFontRenderer->getCharCount();
+}
+
+void TextBMFont::onSizeChanged()
+{
+    Widget::onSizeChanged();
+    _labelBMFontRendererAdaptDirty = true;
+}
+
+void TextBMFont::updateLayout()
+{
+    if (_labelBMFontRendererAdaptDirty)
+    {
+        labelBMFontScaleChangedWithSize();
+        _labelBMFontRendererAdaptDirty = false;
+    }
+}
+
+Vec2 TextBMFont::resolvePreferredSize(const Vec2& /*sizeHint*/) const
+{
+    return _labelBMFontRenderer->getContentSize();
+}
+
+Node* TextBMFont::getRenderNode()
+{
+    return _labelBMFontRenderer;
+}
+
+void TextBMFont::labelBMFontScaleChangedWithSize()
+{
+    if (_autoSize)
+    {
+        _labelBMFontRenderer->setScale(1.0f);
+    }
+    else
+    {
+        Vec2 textureSize = _labelBMFontRenderer->getContentSize();
+        if (textureSize.width <= 0.0f || textureSize.height <= 0.0f)
+        {
+            _labelBMFontRenderer->setScale(1.0f);
+            return;
+        }
+        float scaleX = _contentSize.width / textureSize.width;
+        float scaleY = _contentSize.height / textureSize.height;
+        _labelBMFontRenderer->setScaleX(scaleX);
+        _labelBMFontRenderer->setScaleY(scaleY);
+    }
+    _labelBMFontRenderer->setPosition(_contentSize.width / 2.0f, _contentSize.height / 2.0f);
+}
+
+std::string TextBMFont::getDescription() const
+{
+    return "TextBMFont";
+}
+
+Widget* TextBMFont::createCloneInstance()
+{
+    return TextBMFont::create();
+}
+
+void TextBMFont::copySpecialProperties(Widget* widget)
+{
+    TextBMFont* labelBMFont = dynamic_cast<TextBMFont*>(widget);
+    if (labelBMFont)
+    {
+        setFntFile(labelBMFont->_fntFileName);
+        setString(labelBMFont->_stringValue);
+    }
+}
+
+ResourceData TextBMFont::getRenderFile()
+{
+    ResourceData rData;
+    rData.type = 0;
+    rData.file = _fntFileName;
+    return rData;
+}
+
+void TextBMFont::resetRender()
+{
+    this->removeProtectedChild(_labelBMFontRenderer);
+    this->initRenderNode();
+}
+}  // namespace ui
+
+}  // namespace ax

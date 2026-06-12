@@ -119,14 +119,14 @@ function Physics3DTestDemo:onEnter()
     self:addChild(self._camera)
 
     if Helper.index ~= 2 then
-        local listener = ax.EventListenerTouchAllAtOnce:create()
-        listener:registerScriptHandler(function(touches, event)
+        local listener = ax.PointerEventListener:create()
+        listener:registerScriptHandler(function(event)
             self._needShootBox = true
-        end, ax.Handler.EVENT_TOUCHES_BEGAN)
+        end, ax.Handler.EVENT_POINTER_DOWN)
 
-        listener:registerScriptHandler(function(touches, event)
-            if #touches > 0 and self._camera ~= nil then
-                local delta = touches[1]:getDelta()
+        listener:registerScriptHandler(function(event)
+            if event ~= nil and self._camera ~= nil then
+                local delta = event:getDelta()
 
                 self._angle = self._angle - delta.x * math.pi / 180.0
                 self._camera:setPosition3D(ax.vec3(100.0 * math.sin(self._angle), 50.0, 100.0 * math.cos(self._angle)))
@@ -136,25 +136,25 @@ function Physics3DTestDemo:onEnter()
                     self._needShootBox = false
                 end
             end
-        end, ax.Handler.EVENT_TOUCHES_MOVED)
+        end, ax.Handler.EVENT_POINTER_MOVE)
 
-        listener:registerScriptHandler(function(touches, event)
+        listener:registerScriptHandler(function(event)
             if self._needShootBox == false then
                 return
             end
 
-            if #touches > 0 then
-                local location = touches[1]:getLocationInView()
+            if event ~= nil then
+                local location = event:getScreenLocation()
                 local nearP = ax.vec3(location.x, location.y, -1.0)
                 local farP = ax.vec3(location.x, location.y, 1.0)
-                nearP = self._camera:unproject(nearP)
-                farP = self._camera:unproject(farP)
+                nearP = self._camera:deprojectScreenToWorld(nearP)
+                farP = self._camera:deprojectScreenToWorld(farP)
 
                 local dir = ax.vec3sub(farP, nearP)
                 local cameraPosition = self._camera:getPosition3D()
                 self:shootBox(ax.vec3add(cameraPosition, ax.vec3mul(dir, 10)))
             end
-        end, ax.Handler.EVENT_TOUCHES_ENDED)
+        end, ax.Handler.EVENT_POINTER_UP)
 
         self:getEventDispatcher():addEventListenerWithSceneGraphPriority(listener, self)
     end
@@ -250,18 +250,18 @@ function Joint3DDemo:subtitle()
     return "Joint3D"
 end
 
-function Joint3DDemo:onPickBegan(touches)
-    if nil == self._camera or #touches == 0 then
+function Joint3DDemo:onPickBegan(event)
+    if nil == self._camera or event == nil then
         return false
     end
 
-    local location = touches[1]:getLocationInView()
+    local location = event:getScreenLocation()
     local nearP = ax.vec3(location.x, location.y, 0.0)
     local farP = ax.vec3(location.x, location.y, 1.0)
 
     local size = ax.Director:getInstance():getCanvasSize()
-    nearP = self._camera:unproject(size, nearP, nearP)
-    farP = self._camera:unproject(size, farP, farP)
+    nearP = self._camera:deprojectScreenToWorld(nearP)
+    farP = self._camera:deprojectScreenToWorld(farP)
 
     local physicsWorld = self._physicsScene:getPhysicsWorld3D()
     local ret, hitResult = physicsWorld:rayCast(nearP, farP, {})
@@ -281,30 +281,30 @@ function Joint3DDemo:onPickBegan(touches)
 end
 
 function Joint3DDemo:extend()
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(function(touches, event)
-        if self:onPickBegan(touches) then
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(function(event)
+        if self:onPickBegan(event) then
             return
         end
         self._needShootBox = false
-    end, ax.Handler.EVENT_TOUCHES_BEGAN)
+    end, ax.Handler.EVENT_POINTER_DOWN)
 
-    listener:registerScriptHandler(function(touches, event)
-        if self._constraint ~= nil and #touches > 0 then
-            local location = touches[1]:getLocationInView()
+    listener:registerScriptHandler(function(event)
+        if self._constraint ~= nil and event ~= nil then
+            local location = event:getScreenLocation()
             local nearP = ax.vec3(location.x, location.y, 0.0)
             local farP = ax.vec3(location.x, location.y, 1.0)
 
             local size = ax.Director:getInstance():getCanvasSize()
-            nearP = self._camera:unproject(size, nearP, nearP)
-            farP = self._camera:unproject(size, farP, farP)
+            nearP = self._camera:deprojectScreenToWorld(nearP)
+            farP = self._camera:deprojectScreenToWorld(farP)
             local dir = ax.vec3normalize(ax.vec3sub(farP, nearP))
             self._constraint:setConnectedAnchor(ax.vec3add(nearP, ax.vec3mul(dir, self._pickingDistance)))
             return
         end
 
-        if #touches > 0 and self._camera ~= nil then
-            local delta = touches[1]:getDelta()
+        if event ~= nil and self._camera ~= nil then
+            local delta = event:getDelta()
             self._angle = self._angle - delta.x * math.pi / 180.0
             self._camera:setPosition3D(ax.vec3(100.0 * math.sin(self._angle), 50.0, 100.0 * math.cos(self._angle)))
             self._camera:lookAt(ax.vec3(0.0, 0.0, 0.0), ax.vec3(0.0, 1.0, 0.0))
@@ -313,9 +313,9 @@ function Joint3DDemo:extend()
                 self._needShootBox = false
             end
         end
-    end, ax.Handler.EVENT_TOUCHES_MOVED)
+    end, ax.Handler.EVENT_POINTER_MOVE)
 
-    listener:registerScriptHandler(function(touches, event)
+    listener:registerScriptHandler(function(event)
         if self._constraint ~= nil then
             if self._constraintOwner ~= nil then
                 self._constraintOwner:removeComponent(self._constraint)
@@ -329,18 +329,18 @@ function Joint3DDemo:extend()
             return
         end
 
-        if #touches > 0 then
-            local location = touches[1]:getLocationInView()
+        if event ~= nil then
+            local location = event:getScreenLocation()
             local nearP = ax.vec3(location.x, location.y, -1.0)
             local farP = ax.vec3(location.x, location.y, 1.0)
-            nearP = self._camera:unproject(nearP)
-            farP = self._camera:unproject(farP)
+            nearP = self._camera:deprojectScreenToWorld(nearP)
+            farP = self._camera:deprojectScreenToWorld(farP)
 
             local dir = ax.vec3sub(farP, nearP)
             local cameraPosition = self._camera:getPosition3D()
             self:shootBox(ax.vec3add(cameraPosition, ax.vec3mul(dir, 10)))
         end
-    end, ax.Handler.EVENT_TOUCHES_ENDED)
+    end, ax.Handler.EVENT_POINTER_UP)
 
     self:getEventDispatcher():addEventListenerWithSceneGraphPriority(listener, self)
     self._physicsScene:setDebugCamera(self._camera)

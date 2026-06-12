@@ -134,6 +134,7 @@ conversions:
     "Quaternion": "quat_to_luaval(tolua_S, ${in_value})"
     "Rect": "rect_to_luaval(tolua_S, ${in_value})"
     "Size": "size_to_luaval(tolua_S, ${in_value})"
+    "Ray": "ray_to_luaval(tolua_S, ${in_value})"
     "Color32": "color32_to_luaval(tolua_S, ${in_value})"
     "Color4F": "color4f_to_luaval(tolua_S, ${in_value})"
     "Color": "color_to_luaval(tolua_S, ${in_value})"

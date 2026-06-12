@@ -27,7 +27,7 @@
 
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/rhi/RenderContext.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/platform/GL.h"
 
 #include "axmol/platform/StdC.h"
@@ -195,7 +195,7 @@ protected:
     GLboolean _alphaTestEnabled = false;
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    EventListenerCustom* _backToForegroundListener = nullptr;
+    CustomEventListener* _backToForegroundListener = nullptr;
 #endif
 };
 

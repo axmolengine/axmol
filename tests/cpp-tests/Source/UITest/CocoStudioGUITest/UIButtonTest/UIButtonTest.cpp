@@ -267,7 +267,7 @@ bool UIButtonTest_Scale9_State_Change::init()
         // Create the button
         Button* button = Button::create("cocosui/button.png");
         // open scale9 render
-        button->ignoreContentAdaptWithSize(false);
+        button->setAutoSize(false);
         button->setScale9Enabled(true);
         button->setPosition(Vec2(widgetSize.width / 2.0f - 100, widgetSize.height / 2.0f));
         button->setContentSize(Size(180.0f, 60.0f));
@@ -278,7 +278,7 @@ bool UIButtonTest_Scale9_State_Change::init()
 
         Button* button2 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         // open scale9 render
-        button2->ignoreContentAdaptWithSize(false);
+        button2->setAutoSize(false);
         button2->setScale9Enabled(true);
         button2->setTitleText("Hello scale9");
         button2->setPosition(Vec2(widgetSize.width / 2.0f + 100, widgetSize.height / 2.0f));
@@ -600,7 +600,7 @@ bool UIButtonTestSwitchScale9::init()
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
         button->addTouchEventListener(AX_CALLBACK_2(UIButtonTestSwitchScale9::touchEvent, this));
         button->setTitleText("Button Title");
-        button->ignoreContentAdaptWithSize(false);
+        button->setAutoSize(false);
 
         _uiLayer->addChild(button);
 
@@ -680,9 +680,9 @@ bool UIButtonTestZoomScale::init()
     return false;
 }
 
-void UIButtonTestZoomScale::sliderEvent(Object* pSender, Slider::EventType type)
+void UIButtonTestZoomScale::sliderEvent(Object* pSender, Slider::EventType ev)
 {
-    if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
+    if (ev == Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
         Slider* slider  = dynamic_cast<Slider*>(pSender);
         int percent     = slider->getPercent();
@@ -746,7 +746,7 @@ bool UIButtonIgnoreContentSizeTest::init()
 
         // Create the button
         auto button = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
-        button->ignoreContentAdaptWithSize(false);
+        button->setAutoSize(false);
         button->setContentSize(Size(200.0f, 100.0f));
         button->setPositionNormalized(Vec2(0.3f, 0.5f));
         button->setTitleText("PLAY GAME");
@@ -760,7 +760,7 @@ bool UIButtonIgnoreContentSizeTest::init()
 
         // Create the button
         auto button2 = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
-        button2->ignoreContentAdaptWithSize(false);
+        button2->setAutoSize(false);
         button2->setContentSize(Size(200.0f, 100.0f));
         button2->setPositionNormalized(Vec2(0.8f, 0.5f));
         button2->setTitleText("PLAY GAME");

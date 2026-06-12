@@ -23,15 +23,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-//
-//  Bug-14327.cpp
-//  cocos2d_tests
-//
-//  Issue: https://github.com/cocos2d/cocos2d-x/pull/14327
-//  Please test in Windows
-//
-//
-
 #include "Bug-14327.h"
 
 #include "axmol/tlx/format.hpp"

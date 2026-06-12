@@ -91,7 +91,7 @@ typedef struct _ttfConfig
 class Sprite;
 class SpriteBatchNode;
 class DrawNode;
-class EventListenerCustom;
+class CustomEventListener;
 class TextureAtlas;
 
 /**
@@ -147,6 +147,31 @@ public:
      * @return An automatically released Label object.
      */
     static Label* create();
+
+    /**
+     * @brief Create a Label with automatic font type detection.
+     *
+     * This unified factory method creates a Label using the given text and font name.
+     * The fontName parameter can be:
+     * - A TTF font file path (e.g. "fonts/arial.ttf")
+     * - A system font name (e.g. "Arial", "Helvetica")
+     * - A BMFont file path (e.g. "fonts/myfont.fnt")
+     *
+     * Internally, the method will:
+     * - Use createWithBMFont() if fontName ends with ".fnt"
+     * - Use createWithTTF() if fontName exists as a TTF file
+     * - Otherwise, fall back to createWithSystemFont()
+     *
+     * @param text The text string to render.
+     * @param fontName The font resource identifier (TTF path, system font name, or BMFont path).
+     * @param fontSize The font size in points.
+     * @return A new Label instance, or nullptr if creation fails.
+     *
+     * @note This method simplifies font handling by providing a single entry point.
+     *       Specific createWithTTF(), createWithSystemFont(), and createWithBMFont()
+     *       methods remain available for explicit control.
+     */
+    static Label* create(std::string_view text, std::string_view fontName, float fontSize);
 
     /**
      * Allocates and initializes a Label, base on platform-dependent API.
@@ -298,6 +323,25 @@ public:
     /// @name Font methods
 
     /**
+     * @brief Set font information for the Label.
+     *
+     * This method updates the Label's font using the given fontName and fontSize.
+     * The fontName parameter can be:
+     * - A TTF font file path (e.g. "fonts/arial.ttf")
+     * - A system font name (e.g. "Arial", "Helvetica")
+     * - A BMFont file path (e.g. "fonts/myfont.fnt")
+     *
+     * Internally, the method will:
+     * - Use BMFont if fontName ends with ".fnt"
+     * - Use TTF if fontName exists as a TTF file
+     * - Otherwise, fall back to system font
+     *
+     * @param fontName The font resource identifier (TTF path, system font name, or BMFont path).
+     * @param fontSize The font size in points.
+     */
+    void setFontInfo(std::string_view fontName, float fontSize);
+
+    /**
      * Sets a new TTF configuration to Label.
      * @see `TTFConfig`
      */
@@ -376,15 +420,26 @@ public:
     /** Return the text the Label is currently displaying.*/
     std::string_view getString() const override { return _utf8Text; }
 
+    [[internal]] std::u32string_view getUTF32String() const { return _utf32Text; }
+
     /**
      * Return the number of lines of text.
      */
-    int getStringNumLines();
+    int getLineCount() const;
+    AX_DEPRECATED(3.0) int getStringNumLines() { return getLineCount(); }
 
     /**
-     * Return length of string.
+     * @brief Returns the number of UTF-32 characters.
+     *
+     * @return int UTF-32 character count
      */
-    int getStringLength();
+    int getCharCount() const;
+    AX_DEPRECATED(3.0) int getStringLength() { return getCharCount(); }
+
+    /**
+     * Return whether the text is empty.
+     */
+    bool isEmpty() const { return _utf32Text.empty(); }
 
     /**
      * Sets the text color of Label.
@@ -835,7 +890,6 @@ protected:
     float _glowRadius;
     float _systemFontSize;
 
-    int _lengthOfString;
     int _uniformEffectColor;
     int _uniformEffectType;  // 0: None, 1: Outline, 2: Shadow; Only used when outline is enabled.
     int _uniformTextColor;
@@ -908,7 +962,7 @@ protected:
 
     std::unordered_map<int, Sprite*> _letters;
 
-    EventListenerCustom* _resetTextureListener;
+    CustomEventListener* _resetTextureListener;
 
 #if AX_LABEL_DEBUG_DRAW
     DrawNode* _debugDrawNode;

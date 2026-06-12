@@ -30,7 +30,6 @@
  */
 
 #include "ControlSlider.h"
-#include "axmol/base/Touch.h"
 #include "axmol/base/Director.h"
 
 NS_AX_EXT_BEGIN
@@ -221,7 +220,7 @@ void ControlSlider::setMaximumValue(float maximumValue)
     setValue(_value);
 }
 
-bool ControlSlider::isTouchInside(Touch* touch)
+bool ControlSlider::isTouchInside(PointerEvent* touch)
 {
     Vec2 touchLocation = touch->getLocation();
     touchLocation      = this->getParent()->convertToNodeSpace(touchLocation);
@@ -233,7 +232,7 @@ bool ControlSlider::isTouchInside(Touch* touch)
     return rect.containsPoint(touchLocation);
 }
 
-Vec2 ControlSlider::locationFromTouch(Touch* touch)
+Vec2 ControlSlider::locationFromTouch(PointerEvent* touch)
 {
     Vec2 touchLocation = touch->getLocation();                     // Get the touch position
     touchLocation      = this->convertToNodeSpace(touchLocation);  // Convert to the node space of this class
@@ -250,27 +249,40 @@ Vec2 ControlSlider::locationFromTouch(Touch* touch)
     return touchLocation;
 }
 
-bool ControlSlider::onTouchBegan(Touch* touch, Event* /*pEvent*/)
+bool ControlSlider::onPointerDown(PointerEvent* event)
 {
-    if (!isTouchInside(touch) || !isEnabled() || !isVisible())
+    bool ret = Control::onPointerDown(event);
+    if (!ret)
+        return false;
+
+    if (!isTouchInside(event) || !isEnabled() || !isVisible())
     {
         return false;
     }
 
-    Vec2 location = locationFromTouch(touch);
+    Vec2 location = locationFromTouch(event);
     sliderBegan(location);
+
+    _isPressed = true;
     return true;
 }
 
-void ControlSlider::onTouchMoved(Touch* pTouch, Event* /*pEvent*/)
+void ControlSlider::onPointerMove(PointerEvent* event)
 {
-    Vec2 location = locationFromTouch(pTouch);
+    if (!_isPressed)
+    {
+        return;
+    }
+
+    Vec2 location = locationFromTouch(event);
     sliderMoved(location);
 }
 
-void ControlSlider::onTouchEnded(Touch* /*pTouch*/, Event* /*pEvent*/)
+void ControlSlider::onPointerUp(PointerEvent* /*pTouch*/)
 {
     sliderEnded(Vec2::ZERO);
+
+    _isPressed = false;
 }
 
 void ControlSlider::needsLayout()

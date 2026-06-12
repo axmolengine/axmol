@@ -162,10 +162,12 @@ void SpritePolygonTestDemo::initTouches()
 {
     if (_polygonSprite)
     {
-        auto touchListener          = EventListenerTouchOneByOne::create();
-        touchListener->onTouchBegan = [&](Touch* touch, Event* event) { return true; };
-        touchListener->onTouchMoved = [&](Touch* touch, Event* event) {
-            auto pos       = touch->getDelta();
+        auto touchListener           = PointerEventListener::create();
+        touchListener->onPointerDown = [&](PointerEvent* event) { return true; };
+        touchListener->onPointerMove = [&](PointerEvent* event) {
+            if (!event->isCaptured())
+                return;
+            auto pos       = event->getDelta();
             float newScale = clampf(_polygonSprite->getScale() + pos.x * 0.01f, 0.1f, 2.f);
             _polygonSprite->setScale(newScale);
             _normalSprite->setScale(newScale);
@@ -445,10 +447,12 @@ bool SpritePolygonTest5::init()
 
 void SpritePolygonTest5::initTouch()
 {
-    auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = [&](Touch* touch, Event* event) { return true; };
-    touchListener->onTouchEnded = [&](Touch* touch, Event* event) {
-        auto pos = touch->getLocation();
+    auto touchListener           = PointerEventListener::create();
+    touchListener->onPointerDown = [&](PointerEvent* event) { return true; };
+    touchListener->onPointerUp   = [&](PointerEvent* event) {
+        if (!event->isCaptured())
+            return;
+        auto pos = event->getLocation();
         addSpritePolygon(pos);
     };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);

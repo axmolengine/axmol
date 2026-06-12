@@ -39,7 +39,7 @@ THE SOFTWARE.
 #include "axmol/base/Director.h"
 #include "axmol/base/EventType.h"
 #include "axmol/base/Environment.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/text_utils.h"
 #include "axmol/renderer/Shaders.h"
@@ -123,7 +123,7 @@ bool ParticleSystemQuad::initWithTotalParticles(int numberOfParticles)
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         // Need to listen the event only when not use batchnode, because it will use VBO
-        auto listener = EventListenerCustom::create(EVENT_RENDERER_RECREATED,
+        auto listener = CustomEventListener::create(EVENT_RENDERER_RECREATED,
                                                     AX_CALLBACK_1(ParticleSystemQuad::listenRendererRecreated, this));
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 #endif
@@ -772,7 +772,7 @@ void ParticleSystemQuad::setTotalParticles(int tp)
     resetSystem();
 }
 
-void ParticleSystemQuad::listenRendererRecreated(EventCustom* /*event*/)
+void ParticleSystemQuad::listenRendererRecreated(CustomEvent* /*event*/)
 {
     // when comes to foreground in android, _buffersVBO and _VAOname is a wild handle
     // before recreating, we need to reset them to 0

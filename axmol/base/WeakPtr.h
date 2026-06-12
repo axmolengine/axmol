@@ -123,6 +123,7 @@ public:
     WeakPtr() noexcept : _index(-1), _serialNumber(0) {}
 
     explicit WeakPtr(_Ty* p) { assign(p); }
+    explicit WeakPtr(std::nullptr_t) { reset(); }
 
     WeakPtr(const WeakPtr& other) noexcept            = default;
     WeakPtr& operator=(const WeakPtr& other) noexcept = default;
@@ -142,6 +143,12 @@ public:
     WeakPtr& operator=(_Ty* p)
     {
         assign(p);
+        return *this;
+    }
+
+    WeakPtr& operator=(std::nullptr_t)
+    {
+        reset();
         return *this;
     }
 
@@ -184,6 +191,12 @@ public:
     bool operator==(const _Other* other) const
     {
         return get() == other;
+    }
+
+    template <typename _Uty>
+    bool operator==(const WeakPtr<_Uty>& other) const
+    {
+        return static_cast<Object*>(get()) == static_cast<Object*>(other.get());
     }
 
     bool operator==(std::nullptr_t) const { return expired(); }

@@ -49,7 +49,7 @@ public:
 
     void addNewSpriteAtPosition(ax::Vec2 p);
     void update(float dt) override;
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
 
     void toggleDebugCallback(ax::Object* sender);
 

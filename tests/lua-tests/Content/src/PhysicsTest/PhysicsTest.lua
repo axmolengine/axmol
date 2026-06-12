@@ -1,6 +1,7 @@
 local size = ax.Director:getInstance():getCanvasSize()
 local MATERIAL_DEFAULT = ax.PhysicsMaterial2D(0.1, 0.5, 0.5)
 local curLayer = nil
+local pointerMouse = nil
 local STATIC_COLOR = ax.color(1.0, 0.0, 0.0, 1.0)
 local DRAG_BODYS_TAG = 0x80
 
@@ -80,8 +81,8 @@ local function addGrossiniAtPosition(layer, p, scale)
     return sp
 end
 
-local function onTouchBegan(touch, event)
-    local location = touch:getLocation()
+local function onTouchBegan(event)
+    local location = event:getLocation()
     local collider = ax.Director:getInstance():getRunningScene():getPhysicsWorld2D():overlapPoint(location)
     if collider == nil then
         return false
@@ -101,21 +102,21 @@ local function onTouchBegan(touch, event)
     joint:setMaxForceScale(100.0)
     mouse:addComponent(joint)
     mouse:setPosition(location)
-    touch.mouse = mouse
+    pointerMouse = mouse
 
     return true
 end
 
-local function onTouchMoved(touch, event)
-    if touch.mouse then
-        touch.mouse:setPosition(touch:getLocation())
+local function onPointerMove(event)
+    if pointerMouse then
+        pointerMouse:setPosition(event:getLocation())
     end
 end
 
-local function onTouchEnded(touch, event)
-    if touch.mouse then
-        curLayer:removeChild(touch.mouse)
-        touch.mouse = nil
+local function onTouchEnded(event)
+    if pointerMouse then
+        curLayer:removeChild(pointerMouse)
+        pointerMouse = nil
     end
 end
 
@@ -193,14 +194,14 @@ end
 local function PhysicsDemoClickAdd()
     local layer = ax.Layer:create()
     local function onEnter()
-        local function onTouchEnded(touch, event)
-            local location = touch:getLocation()
+        local function onTouchEnded(event)
+            local location = event:getLocation()
             addGrossiniAtPosition(layer, location)
         end
 
-        local touchListener = ax.EventListenerTouchOneByOne:create()
-        touchListener:registerScriptHandler(function() return true end, ax.Handler.EVENT_TOUCH_BEGAN)
-        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_TOUCH_ENDED)
+        local touchListener = ax.PointerEventListener:create()
+        touchListener:registerScriptHandler(function() return true end, ax.Handler.EVENT_POINTER_DOWN)
+        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_POINTER_UP)
         local eventDispatcher = layer:getEventDispatcher()
         eventDispatcher:addEventListenerWithSceneGraphPriority(touchListener, layer)
 
@@ -309,10 +310,10 @@ local function PhysicsDemoJoints()
     local function onEnter()
         layer:toggleDebug()
 
-        local touchListener = ax.EventListenerTouchOneByOne:create()
-        touchListener:registerScriptHandler(onTouchBegan, ax.Handler.EVENT_TOUCH_BEGAN)
-        touchListener:registerScriptHandler(onTouchMoved, ax.Handler.EVENT_TOUCH_MOVED)
-        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_TOUCH_ENDED)
+        local touchListener = ax.PointerEventListener:create()
+        touchListener:registerScriptHandler(onTouchBegan, ax.Handler.EVENT_POINTER_DOWN)
+        touchListener:registerScriptHandler(onPointerMove, ax.Handler.EVENT_POINTER_MOVE)
+        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_POINTER_UP)
         local eventDispatcher = layer:getEventDispatcher()
         eventDispatcher:addEventListenerWithSceneGraphPriority(touchListener, layer)
 
@@ -529,10 +530,10 @@ local function PhysicsDemoPyramidStack()
     local layer = ax.Layer:create()
 
     local function onEnter()
-        local touchListener = ax.EventListenerTouchOneByOne:create()
-        touchListener:registerScriptHandler(onTouchBegan, ax.Handler.EVENT_TOUCH_BEGAN)
-        touchListener:registerScriptHandler(onTouchMoved, ax.Handler.EVENT_TOUCH_MOVED)
-        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_TOUCH_ENDED)
+        local touchListener = ax.PointerEventListener:create()
+        touchListener:registerScriptHandler(onTouchBegan, ax.Handler.EVENT_POINTER_DOWN)
+        touchListener:registerScriptHandler(onPointerMove, ax.Handler.EVENT_POINTER_MOVE)
+        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_POINTER_UP)
         local eventDispatcher = layer:getEventDispatcher()
         eventDispatcher:addEventListenerWithSceneGraphPriority(touchListener, layer)
 
@@ -573,8 +574,8 @@ local function PhysicsDemoRayCast()
     local layer = ax.Layer:create()
 
     local function onEnter()
-        local function onTouchEnded(touch, event)
-            local location = touch:getLocation()
+        local function onTouchEnded(event)
+            local location = event:getLocation()
 
             local r = math.random(3)
             if r ==1 then
@@ -586,9 +587,9 @@ local function PhysicsDemoRayCast()
             end
         end
 
-        local touchListener = ax.EventListenerTouchOneByOne:create()
-        touchListener:registerScriptHandler(function() return true end, ax.Handler.EVENT_TOUCH_BEGAN)
-        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_TOUCH_ENDED)
+        local touchListener = ax.PointerEventListener:create()
+        touchListener:registerScriptHandler(function() return true end, ax.Handler.EVENT_POINTER_DOWN)
+        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_POINTER_UP)
         local eventDispatcher = layer:getEventDispatcher()
         eventDispatcher:addEventListenerWithSceneGraphPriority(touchListener, layer)
 
@@ -706,10 +707,10 @@ local function PhysicsDemoOneWayPlatform()
         local physicsWorld2D = ax.Director:getInstance():getRunningScene():getPhysicsWorld2D()
         physicsWorld2D:setGlobalEventEnabled(ax.physics2d.CollisionEventBits.PreSolve, true)
 
-        local touchListener = ax.EventListenerTouchOneByOne:create()
-        touchListener:registerScriptHandler(onTouchBegan, ax.Handler.EVENT_TOUCH_BEGAN)
-        touchListener:registerScriptHandler(onTouchMoved, ax.Handler.EVENT_TOUCH_MOVED)
-        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_TOUCH_ENDED)
+        local touchListener = ax.PointerEventListener:create()
+        touchListener:registerScriptHandler(onTouchBegan, ax.Handler.EVENT_POINTER_DOWN)
+        touchListener:registerScriptHandler(onPointerMove, ax.Handler.EVENT_POINTER_MOVE)
+        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_POINTER_UP)
         local eventDispatcher = layer:getEventDispatcher()
         eventDispatcher:addEventListenerWithSceneGraphPriority(touchListener, layer)
 
@@ -741,10 +742,10 @@ end
 local function PhysicsDemoActions()
     local layer = ax.Layer:create()
     local function onEnter()
-        local touchListener = ax.EventListenerTouchOneByOne:create()
-        touchListener:registerScriptHandler(onTouchBegan, ax.Handler.EVENT_TOUCH_BEGAN)
-        touchListener:registerScriptHandler(onTouchMoved, ax.Handler.EVENT_TOUCH_MOVED)
-        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_TOUCH_ENDED)
+        local touchListener = ax.PointerEventListener:create()
+        touchListener:registerScriptHandler(onTouchBegan, ax.Handler.EVENT_POINTER_DOWN)
+        touchListener:registerScriptHandler(onPointerMove, ax.Handler.EVENT_POINTER_MOVE)
+        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_POINTER_UP)
         local eventDispatcher = layer:getEventDispatcher()
         eventDispatcher:addEventListenerWithSceneGraphPriority(touchListener, layer)
 
@@ -787,26 +788,26 @@ local function PhysicsDemoPump()
 
         local distance = 0.0
         local rotationV = 0.0
-        local function onTouchBeganEx(touch, event)
-            onTouchBegan(touch, event)
-            distance = touch:getLocation().x - VisibleRect:center().x
+        local function onTouchBeganEx(event)
+            onTouchBegan(event)
+            distance = event:getLocation().x - VisibleRect:center().x
             return true
         end
 
-        local function onTouchMovedEx(touch, event)
-            onTouchMoved(touch, event)
-            distance = touch:getLocation().x - VisibleRect:center().x
+        local function onPointerMoveEx(event)
+            onPointerMove(event)
+            distance = event:getLocation().x - VisibleRect:center().x
         end
 
-        local function onTouchEndedEx(touch, event)
-            onTouchEnded(touch, event)
+        local function onTouchEndedEx(event)
+            onTouchEnded(event)
             distance = 0
         end
 
-        local touchListener = ax.EventListenerTouchOneByOne:create()
-        touchListener:registerScriptHandler(onTouchBeganEx, ax.Handler.EVENT_TOUCH_BEGAN)
-        touchListener:registerScriptHandler(onTouchMovedEx, ax.Handler.EVENT_TOUCH_MOVED)
-        touchListener:registerScriptHandler(onTouchEndedEx, ax.Handler.EVENT_TOUCH_ENDED)
+        local touchListener = ax.PointerEventListener:create()
+        touchListener:registerScriptHandler(onTouchBeganEx, ax.Handler.EVENT_POINTER_DOWN)
+        touchListener:registerScriptHandler(onPointerMoveEx, ax.Handler.EVENT_POINTER_MOVE)
+        touchListener:registerScriptHandler(onTouchEndedEx, ax.Handler.EVENT_POINTER_UP)
         local eventDispatcher = layer:getEventDispatcher()
         eventDispatcher:addEventListenerWithSceneGraphPriority(touchListener, layer)
 
@@ -1045,15 +1046,15 @@ local function PhysicsDemoSlice()
             return true
         end
 
-        local function onTouchEnded(touch, event)
+        local function onTouchEnded(event)
             ax.Director:getInstance():getRunningScene():getPhysicsWorld2D():rayCast(slice,
-                touch:getStartLocation(),
-                touch:getLocation())
+                event:getStartLocation(),
+                event:getLocation())
         end
 
-        local touchListener = ax.EventListenerTouchOneByOne:create()
-        touchListener:registerScriptHandler(function() return true end, ax.Handler.EVENT_TOUCH_BEGAN)
-        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_TOUCH_ENDED)
+        local touchListener = ax.PointerEventListener:create()
+        touchListener:registerScriptHandler(function() return true end, ax.Handler.EVENT_POINTER_DOWN)
+        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_POINTER_UP)
         local eventDispatcher = layer:getEventDispatcher()
         eventDispatcher:addEventListenerWithSceneGraphPriority(touchListener, layer)
 
@@ -1361,10 +1362,10 @@ local function PhysicsPositionRotationTest()
 
         ax.Director:getInstance():getRunningScene():getPhysicsWorld2D():setGravity(ax.p(0, 0))
 
-        local touchListener = ax.EventListenerTouchOneByOne:create()
-        touchListener:registerScriptHandler(onTouchBegan, ax.Handler.EVENT_TOUCH_BEGAN)
-        touchListener:registerScriptHandler(onTouchMoved, ax.Handler.EVENT_TOUCH_MOVED)
-        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_TOUCH_ENDED)
+        local touchListener = ax.PointerEventListener:create()
+        touchListener:registerScriptHandler(onTouchBegan, ax.Handler.EVENT_POINTER_DOWN)
+        touchListener:registerScriptHandler(onPointerMove, ax.Handler.EVENT_POINTER_MOVE)
+        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_POINTER_UP)
         local eventDispatcher = layer:getEventDispatcher()
         eventDispatcher:addEventListenerWithSceneGraphPriority(touchListener, layer)
 
@@ -1422,10 +1423,10 @@ local function PhysicsSetGravityEnableTest()
     local layer = ax.Layer:create()
     local function onEnter()
 
-        local touchListener = ax.EventListenerTouchOneByOne:create()
-        touchListener:registerScriptHandler(onTouchBegan, ax.Handler.EVENT_TOUCH_BEGAN)
-        touchListener:registerScriptHandler(onTouchMoved, ax.Handler.EVENT_TOUCH_MOVED)
-        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_TOUCH_ENDED)
+        local touchListener = ax.PointerEventListener:create()
+        touchListener:registerScriptHandler(onTouchBegan, ax.Handler.EVENT_POINTER_DOWN)
+        touchListener:registerScriptHandler(onPointerMove, ax.Handler.EVENT_POINTER_MOVE)
+        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_POINTER_UP)
         local eventDispatcher = layer:getEventDispatcher()
         eventDispatcher:addEventListenerWithSceneGraphPriority(touchListener, layer)
 
@@ -1480,10 +1481,10 @@ local function PhysicsDemoBug5482()
         layer:toggleDebug()
         local _bodyInA = false
 
-        local touchListener = ax.EventListenerTouchOneByOne:create()
-        touchListener:registerScriptHandler(onTouchBegan, ax.Handler.EVENT_TOUCH_BEGAN)
-        touchListener:registerScriptHandler(onTouchMoved, ax.Handler.EVENT_TOUCH_MOVED)
-        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_TOUCH_ENDED)
+        local touchListener = ax.PointerEventListener:create()
+        touchListener:registerScriptHandler(onTouchBegan, ax.Handler.EVENT_POINTER_DOWN)
+        touchListener:registerScriptHandler(onPointerMove, ax.Handler.EVENT_POINTER_MOVE)
+        touchListener:registerScriptHandler(onTouchEnded, ax.Handler.EVENT_POINTER_UP)
         local eventDispatcher = layer:getEventDispatcher()
         eventDispatcher:addEventListenerWithSceneGraphPriority(touchListener, layer)
 
@@ -1595,8 +1596,8 @@ local function PhysicsTransformTest()
         layer:toggleDebug()
         ax.Director:getInstance():getRunningScene():getPhysicsWorld2D():setGravity(ax.p(0,0))
 
-        local touchListener = ax.EventListenerTouchOneByOne:create()
-        touchListener:registerScriptHandler(onTouchBegan, ax.Handler.EVENT_TOUCH_BEGAN)
+        local touchListener = ax.PointerEventListener:create()
+        touchListener:registerScriptHandler(onTouchBegan, ax.Handler.EVENT_POINTER_DOWN)
         local eventDispatcher = layer:getEventDispatcher()
         eventDispatcher:addEventListenerWithSceneGraphPriority(touchListener, layer)
 

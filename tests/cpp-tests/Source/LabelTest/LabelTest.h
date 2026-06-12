@@ -173,9 +173,9 @@ public:
     virtual std::string subtitle() const override;
     void stringChanged(ax::Object* sender);
     void alignmentChanged(ax::Object* sender);
-    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    bool onPointerDown(ax::PointerEvent* event);
+    void onPointerUp(ax::PointerEvent* event);
+    void onPointerMove(ax::PointerEvent* event);
     void selectAlignmentItem(ax::MenuItemFont* item);
     void selectSentenceItem(ax::MenuItemFont* item);
     virtual std::string getItemString(ax::MenuItemFont* item);
@@ -383,7 +383,7 @@ public:
                                ax::Vec2 pos,
                                std::function<void(Object*, ax::ui::Slider::EventType)> callback);
     void initToggleCheckboxes();
-    void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
+    void onChangedRadioButtonSelect(ax::Object* sender, ax::ui::RadioButton::EventType type);
 };
 
 class LabelOutlineAndGlowTest : public AtlasDemoNew
@@ -839,7 +839,7 @@ public:
 
     LabelToggleTypeTest();
     void initToggleCheckboxes();
-    void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
+    void onChangedRadioButtonSelect(ax::Object* sender, ax::ui::RadioButton::EventType event);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -852,7 +852,7 @@ public:
 
     LabelSystemFontTest();
     void initToggleCheckboxes();
-    void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
+    void onChangedRadioButtonSelect(ax::Object* sender, ax::ui::RadioButton::EventType event);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -974,7 +974,7 @@ public:
     CREATE_FUNC(LabelLocalizationTest);
 
     LabelLocalizationTest();
-    void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
+    void onChangedRadioButtonSelect(ax::Object* radioButton, ax::ui::RadioButton::EventType type);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;

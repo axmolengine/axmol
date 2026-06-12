@@ -53,9 +53,9 @@ public:
     virtual std::string subtitle() const override;
     virtual void update(float delta) override;
 
-    virtual void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    virtual void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    virtual void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    virtual bool onPointerDown(ax::PointerEvent* event);
+    virtual void onPointerMove(ax::PointerEvent* event);
+    virtual void onPointerUp(ax::PointerEvent* event);
 
 protected:
     void shootBox(const ax::Vec3& des);
@@ -104,9 +104,9 @@ public:
 
     virtual bool init() override;
 
-    virtual void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event) override;
-    virtual void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event) override;
-    virtual void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event) override;
+    virtual bool onPointerDown(ax::PointerEvent* event) override;
+    virtual void onPointerMove(ax::PointerEvent* event) override;
+    virtual void onPointerUp(ax::PointerEvent* event) override;
 
 protected:
     ax::Joint3D* _constraint;  // for picking

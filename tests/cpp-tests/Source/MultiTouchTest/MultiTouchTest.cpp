@@ -73,10 +73,11 @@ bool MultiTouchTest::init()
 {
     if (TestCase::init())
     {
-        auto listener            = EventListenerTouchAllAtOnce::create();
-        listener->onTouchesBegan = AX_CALLBACK_2(MultiTouchTest::onTouchesBegan, this);
-        listener->onTouchesMoved = AX_CALLBACK_2(MultiTouchTest::onTouchesMoved, this);
-        listener->onTouchesEnded = AX_CALLBACK_2(MultiTouchTest::onTouchesEnded, this);
+        auto listener             = PointerEventListener::create();
+        listener->onPointerDown   = AX_CALLBACK_1(MultiTouchTest::onPointerDown, this);
+        listener->onPointerMove   = AX_CALLBACK_1(MultiTouchTest::onPointerMove, this);
+        listener->onPointerUp     = AX_CALLBACK_1(MultiTouchTest::onPointerUp, this);
+        listener->onPointerCancel = AX_CALLBACK_1(MultiTouchTest::onPointerUp, this);
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
         auto title = Label::createWithSystemFont("Please touch the screen!", "", 24);
@@ -90,53 +91,46 @@ bool MultiTouchTest::init()
 
 static Map<int, TouchPoint*> s_map;
 
-void MultiTouchTest::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
+bool MultiTouchTest::onPointerDown(PointerEvent* event)
 {
-    for (auto& item : touches)
-    {
-        auto touch      = item;
-        auto location   = touch->getLocation();
-        auto touchPoint = TouchPoint::touchPointWithParent(this, location, *s_TouchColors[touch->getID() % 5]);
+    if (s_map.find(event->getPointerId()) != s_map.end())
+        return false;
 
-        addChild(touchPoint);
-        AXLOGI("*** BEGIN TOUCH, id:{}", touch->getID());
-        s_map.insert(touch->getID(), touchPoint);
-    }
+    auto location   = event->getLocation();
+    auto touchPoint = TouchPoint::touchPointWithParent(this, location, *s_TouchColors[event->getPointerId() % 5]);
+
+    addChild(touchPoint);
+    AXLOGI("*** BEGIN TOUCH, id:{}, button:{}", event->getPointerId(), event->getButton());
+    s_map.insert(event->getPointerId(), touchPoint);
+
+    return true;
 }
 
-void MultiTouchTest::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
+void MultiTouchTest::onPointerMove(PointerEvent* event)
 {
-    for (auto& item : touches)
+    auto pTP      = s_map.at(event->getPointerId());
+    auto location = event->getLocation();
+    if (pTP)
     {
-        auto touch    = item;
-        auto pTP      = s_map.at(touch->getID());
-        auto location = touch->getLocation();
-        if (pTP)
-        {
-            pTP->updatePosition(location);
-        }
-
-        //        removeChild(pTP, true);
-        //        s_map.erase(touch->getID());
-        //
-        //        auto touchPointNew = TouchPoint::touchPointWithParent(this, location, *s_TouchColors[touch->getID() %
-        //        5]); addChild(touchPointNew); s_map.insert(touch->getID(), touchPointNew);
+        pTP->updatePosition(location);
     }
+
+    //        removeChild(pTP, true);
+    //        s_map.erase(touch->getID());
+    //
+    //        auto touchPointNew = TouchPoint::touchPointWithParent(this, location, *s_TouchColors[touch->getID() %
+    //        5]); addChild(touchPointNew); s_map.insert(touch->getID(), touchPointNew);
 }
 
-void MultiTouchTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void MultiTouchTest::onPointerUp(PointerEvent* event)
 {
-    for (auto& item : touches)
-    {
-        auto touch = item;
-        auto pTP   = s_map.at(touch->getID());
-        AXLOGI("### END TOUCH, id:{}", touch->getID());
-        removeChild(pTP, true);
-        s_map.erase(touch->getID());
-    }
+    auto pTP = s_map.at(event->getPointerId());
+    AXLOGI("### END TOUCH, id:{}, button:{}", event->getPointerId(), event->getButton());
+    removeChild(pTP, true);
+    s_map.erase(event->getPointerId());
 }
 
-void MultiTouchTest::onTouchesCancelled(const std::vector<Touch*>& touches, Event* event)
+void MultiTouchTest::onPointerCancel(PointerEvent* event)
 {
-    onTouchesEnded(touches, event);
+    onPointerUp(event);
 }

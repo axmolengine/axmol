@@ -18,17 +18,15 @@ set(_AX_BASE_HEADER
   base/astc.h
   base/pvr.h
   base/Value.h
-  base/EventListenerMouse.h
   base/atitc.h
-  base/EventTouch.h
+  base/PointerEvent.h
   base/Data.h
   base/Macros.h
-  base/EventAcceleration.h
-  base/EventListenerKeyboard.h
+  base/AccelerationEvent.h
+  base/KeyboardEventListener.h
   base/Controller.h
-  base/Touch.h
   base/base64.h
-  base/EventListenerController.h
+  base/ControllerEventListener.h
   base/s3tc.h
   base/etc1.h
   base/etc2.h
@@ -43,17 +41,17 @@ set(_AX_BASE_HEADER
   base/ObjectFactory.h
   base/Properties.h
   base/Vector.h
-  base/EventCustom.h
-  base/EventKeyboard.h
+  base/CustomEvent.h
+  base/KeyboardEvent.h
   base/NinePatchImageParser.h
-  base/EventListenerCustom.h
+  base/CustomEventListener.h
   base/EventDispatcher.h
   base/Utils.h
-  base/EventController.h
+  base/ControllerEvent.h
   base/RefPtr.h
   base/WeakPtr.h
   base/Director.h
-  base/EventListenerFocus.h
+  base/FocusEventListener.h
   base/UserDefault.h
   base/Config.h
   base/FPSImages.h
@@ -61,21 +59,20 @@ set(_AX_BASE_HEADER
   base/Map.h
   base/text_utils.h
   base/ScriptSupport.h
-  base/EventFocus.h
+  base/FocusEvent.h
   base/Environment.h
   base/Protocols.h
   base/TGAlib.h
-  base/EventMouse.h
-  base/IMEDelegate.h
+  base/InputDelegate.h
   base/AutoreleasePool.h
   base/StencilStateManager.h
-  base/EventListenerTouch.h
-  base/EventListenerAcceleration.h
+  base/PointerEventListener.h
+  base/AccelerationEventListener.h
   base/firePngData.h
   base/EventListener.h
   base/Scheduler.h
   base/EventType.h
-  base/IMEDispatcher.h
+  base/InputSystem.h
   base/JsonWriter.h
   base/JobSystem.h
 )
@@ -90,30 +87,27 @@ set(_AX_BASE_SRC
   base/NinePatchImageParser.cpp
   base/Director.cpp
   base/Event.cpp
-  base/EventAcceleration.cpp
-  base/EventController.cpp
-  base/EventCustom.cpp
+  base/AccelerationEvent.cpp
+  base/ControllerEvent.cpp
+  base/CustomEvent.cpp
   base/EventDispatcher.cpp
-  base/EventFocus.cpp
-  base/EventKeyboard.cpp
+  base/FocusEvent.cpp
+  base/KeyboardEvent.cpp
   base/EventListener.cpp
-  base/EventListenerAcceleration.cpp
-  base/EventListenerController.cpp
-  base/EventListenerCustom.cpp
-  base/EventListenerFocus.cpp
-  base/EventListenerKeyboard.cpp
-  base/EventListenerMouse.cpp
-  base/EventListenerTouch.cpp
-  base/EventMouse.cpp
-  base/EventTouch.cpp
-  base/IMEDispatcher.cpp
+  base/AccelerationEventListener.cpp
+  base/ControllerEventListener.cpp
+  base/CustomEventListener.cpp
+  base/FocusEventListener.cpp
+  base/KeyboardEventListener.cpp
+  base/PointerEventListener.cpp
+  base/PointerEvent.cpp
+  base/InputSystem.cpp
   base/Profiling.cpp
   base/Properties.cpp
   base/Object.cpp
   base/WeakPtr.cpp
   base/Scheduler.cpp
   base/ScriptSupport.cpp
-  base/Touch.cpp
   base/UserDefault.cpp
   base/Value.cpp
   base/ObjectFactory.cpp

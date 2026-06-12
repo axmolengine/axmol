@@ -51,11 +51,11 @@ MouseEventTest::MouseEventTest()
     _labelPosition->setPosition(Vec2(s.width / 2, s.height / 3));
     addChild(_labelPosition);
 
-    _mouseListener                = EventListenerMouse::create();
-    _mouseListener->onMouseMove   = AX_CALLBACK_1(MouseEventTest::onMouseMove, this);
-    _mouseListener->onMouseUp     = AX_CALLBACK_1(MouseEventTest::onMouseUp, this);
-    _mouseListener->onMouseDown   = AX_CALLBACK_1(MouseEventTest::onMouseDown, this);
-    _mouseListener->onMouseScroll = AX_CALLBACK_1(MouseEventTest::onMouseScroll, this);
+    _mouseListener                  = PointerEventListener::create();
+    _mouseListener->onPointerMove   = AX_CALLBACK_1(MouseEventTest::onMouseMove, this);
+    _mouseListener->onPointerUp     = AX_CALLBACK_1(MouseEventTest::onMouseUp, this);
+    _mouseListener->onPointerDown   = AX_CALLBACK_1(MouseEventTest::onMouseDown, this);
+    _mouseListener->onPointerScroll = AX_CALLBACK_1(MouseEventTest::onMouseScroll, this);
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
 }
@@ -65,38 +65,31 @@ MouseEventTest::~MouseEventTest()
     _eventDispatcher->removeEventListener(_mouseListener);
 }
 
-bool MouseEventTest::onMouseDown(Event* event)
+bool MouseEventTest::onMouseDown(PointerEvent* e)
 {
-    EventMouse* e   = (EventMouse*)event;
-    std::string str = fmt::format("Mouse Down detected, Key: {}", static_cast<int>(e->getMouseButton()));
+    std::string str = fmt::format("Mouse Down detected, button: {}", static_cast<int>(e->getButton()));
     _labelAction->setString(str);
 
     return true;
 }
 
-bool MouseEventTest::onMouseUp(Event* event)
+void MouseEventTest::onMouseUp(PointerEvent* e)
 {
-    EventMouse* e   = (EventMouse*)event;
-    std::string str = fmt::format("Mouse Up detected, Key: {}", static_cast<int>(e->getMouseButton()));
+    std::string str = fmt::format("Mouse Up detected, button: {}", static_cast<int>(e->getButton()));
     _labelAction->setString(str);
-
-    return true;
 }
 
-bool MouseEventTest::onMouseMove(Event* event)
+bool MouseEventTest::onMouseMove(PointerEvent* e)
 {
-    EventMouse* e   = (EventMouse*)event;
     auto loc        = e->getLocation();
     auto delta      = e->getDelta();
     std::string str = fmt::format("MousePosition:({},{})\nMouseDelta:({},{})", loc.x, loc.y, delta.x, delta.y);
     _labelPosition->setString(str);
-
     return true;
 }
 
-bool MouseEventTest::onMouseScroll(Event* event)
+bool MouseEventTest::onMouseScroll(PointerEvent* e)
 {
-    EventMouse* e   = (EventMouse*)event;
     std::string str = fmt::format("Mouse Scroll detected, X:{} Y:{}", e->getScrollX(), e->getScrollY());
     _labelAction->setString(str.c_str());
 
@@ -122,13 +115,13 @@ std::string MouseEventTest::subtitle() const
 HideMouseTest::HideMouseTest()
 {
 
-    _lis              = EventListenerMouse::create();
-    _lis->onMouseDown = [](Event* e) -> bool {
+    _lis                = PointerEventListener::create();
+    _lis->onPointerDown = [](PointerEvent* e) -> bool {
         Director::getInstance()->getRenderView()->setCursorVisible(false);
         return true;
     };
 
-    _lis->onMouseUp = [](Event* e) -> bool {
+    _lis->onPointerUp = [](PointerEvent* e) -> bool {
         Director::getInstance()->getRenderView()->setCursorVisible(true);
         return true;
     };

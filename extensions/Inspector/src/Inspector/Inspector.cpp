@@ -185,14 +185,14 @@ void Inspector::init()
     addPropertyHandler("__LABEL_PROTOCOL__", std::make_unique<InspectorLabelProtocolPropertyHandler>());
 
     _beforeNewSceneEventListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(
-        Director::EVENT_BEFORE_SET_NEXT_SCENE, [this](EventCustom*) {
+        Director::EVENT_BEFORE_SET_NEXT_SCENE, [this](CustomEvent*) {
         if (!_autoAddToScenes)
             return;
 
         getInstance()->close();
     });
     _afterNewSceneEventListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(
-        Director::EVENT_AFTER_SET_NEXT_SCENE, [this](EventCustom*) {
+        Director::EVENT_AFTER_SET_NEXT_SCENE, [this](CustomEvent*) {
         if (!_autoAddToScenes)
             return;
 

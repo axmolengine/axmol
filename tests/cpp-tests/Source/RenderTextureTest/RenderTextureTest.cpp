@@ -57,8 +57,8 @@ RenderTextureSave::RenderTextureSave()
     // so we can just parent it to the scene like any other Node
     this->addChild(_target, -1);
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = AX_CALLBACK_2(RenderTextureSave::onTouchesMoved, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerMove = AX_CALLBACK_1(RenderTextureSave::onPointerMove, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     // Save Image menu
@@ -171,11 +171,13 @@ RenderTextureSave::~RenderTextureSave()
     Director::getInstance()->getTextureCache()->removeUnusedTextures();
 }
 
-void RenderTextureSave::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
+void RenderTextureSave::onPointerMove(PointerEvent* event)
 {
-    auto touch = touches[0];
-    auto start = touch->getLocation();
-    auto end   = touch->getPreviousLocation();
+    if (!event->isPrimaryPressed())
+        return;
+
+    auto start = event->getLocation();
+    auto end   = event->getPreviousLocation();
 
     // begin drawing to the render texture
     _target->begin();
@@ -213,6 +215,8 @@ void RenderTextureSave::onTouchesMoved(const std::vector<Touch*>& touches, Event
 
     // finish drawing and return context back to the screen
     _target->end();
+
+    return;
 }
 
 /**
@@ -288,10 +292,10 @@ std::string RenderTextureIssue937::subtitle() const
 
 RenderTextureZbuffer::RenderTextureZbuffer()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(RenderTextureZbuffer::onTouchesBegan, this);
-    listener->onTouchesMoved = AX_CALLBACK_2(RenderTextureZbuffer::onTouchesMoved, this);
-    listener->onTouchesEnded = AX_CALLBACK_2(RenderTextureZbuffer::onTouchesEnded, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = AX_CALLBACK_1(RenderTextureZbuffer::onPointerDown, this);
+    listener->onPointerMove = AX_CALLBACK_1(RenderTextureZbuffer::onPointerMove, this);
+    listener->onPointerUp   = AX_CALLBACK_1(RenderTextureZbuffer::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto size  = Director::getInstance()->getCanvasSize();
@@ -358,46 +362,42 @@ std::string RenderTextureZbuffer::subtitle() const
     return "Touch screen. It should be green";
 }
 
-void RenderTextureZbuffer::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
+bool RenderTextureZbuffer::onPointerDown(PointerEvent* event)
 {
+    auto location = event->getLocation();
 
-    for (auto& item : touches)
-    {
-        auto touch    = static_cast<Touch*>(item);
-        auto location = touch->getLocation();
+    sp1->setPosition(location);
+    sp2->setPosition(location);
+    sp3->setPosition(location);
+    sp4->setPosition(location);
+    sp5->setPosition(location);
+    sp6->setPosition(location);
+    sp7->setPosition(location);
+    sp8->setPosition(location);
+    sp9->setPosition(location);
 
-        sp1->setPosition(location);
-        sp2->setPosition(location);
-        sp3->setPosition(location);
-        sp4->setPosition(location);
-        sp5->setPosition(location);
-        sp6->setPosition(location);
-        sp7->setPosition(location);
-        sp8->setPosition(location);
-        sp9->setPosition(location);
-    }
+    return true;
 }
 
-void RenderTextureZbuffer::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
+void RenderTextureZbuffer::onPointerMove(PointerEvent* event)
 {
-    for (auto& item : touches)
-    {
-        auto touch    = static_cast<Touch*>(item);
-        auto location = touch->getLocation();
+    if (!event->isCaptured())
+        return;
 
-        sp1->setPosition(location);
-        sp2->setPosition(location);
-        sp3->setPosition(location);
-        sp4->setPosition(location);
-        sp5->setPosition(location);
-        sp6->setPosition(location);
-        sp7->setPosition(location);
-        sp8->setPosition(location);
-        sp9->setPosition(location);
-    }
+    auto location = event->getLocation();
+
+    sp1->setPosition(location);
+    sp2->setPosition(location);
+    sp3->setPosition(location);
+    sp4->setPosition(location);
+    sp5->setPosition(location);
+    sp6->setPosition(location);
+    sp7->setPosition(location);
+    sp8->setPosition(location);
+    sp9->setPosition(location);
 }
 
-void RenderTextureZbuffer::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void RenderTextureZbuffer::onPointerUp(PointerEvent* event)
 {
     this->renderScreenShot();
 }
@@ -725,8 +725,8 @@ void SpriteRenderTextureBug::SimpleSprite::draw(Renderer* renderer, const Mat4& 
 
 SpriteRenderTextureBug::SpriteRenderTextureBug()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(SpriteRenderTextureBug::onTouchesEnded, this);
+    auto listener         = PointerEventListener::create();
+    listener->onPointerUp = AX_CALLBACK_1(SpriteRenderTextureBug::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getCanvasSize();
@@ -767,11 +767,10 @@ SpriteRenderTextureBug::SimpleSprite* SpriteRenderTextureBug::addNewSpriteWithCo
     return nullptr;
 }
 
-void SpriteRenderTextureBug::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void SpriteRenderTextureBug::onPointerUp(PointerEvent* event)
 {
-    for (auto& touch : touches)
     {
-        auto location = touch->getLocation();
+        auto location = event->getLocation();
         addNewSpriteWithCoords(location);
     }
 }

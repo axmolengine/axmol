@@ -25,7 +25,7 @@
 #include "sceneio/WidgetReader/RichTextReader/RichTextReader.h"
 
 #include "axmol/2d/FontAtlasCache.h"
-#include "axmol/ui/UIRichText.h"
+#include "axmol/ui/RichText.h"
 #include "axmol/platform/FileUtils.h"
 #include "sceneext/CocoLoader.h"
 #include "sceneio/CSParseBinary_generated.h"

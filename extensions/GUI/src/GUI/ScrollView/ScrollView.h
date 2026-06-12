@@ -27,7 +27,7 @@
 #pragma once
 
 #include "axmol/2d/Layer.h"
-#include "axmol/base/EventListenerTouch.h"
+#include "axmol/base/PointerEventListener.h"
 #include "axmol/2d/ActionTween.h"
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
@@ -185,7 +185,6 @@ public:
 
     void setTouchEnabled(bool enabled);
     bool isTouchEnabled() const;
-    void setSwallowTouches(bool needSwallow);
     bool isDragging() const { return _dragging; }
     bool isTouchMoved() const { return _touchMoved; }
     bool isBounceable() const { return _bounceable; }
@@ -228,10 +227,13 @@ public:
     bool isClippingToBounds() { return _clippingToBounds; }
     void setClippingToBounds(bool bClippingToBounds) { _clippingToBounds = bClippingToBounds; }
 
-    virtual bool onTouchBegan(Touch* touch, Event* event);
-    virtual void onTouchMoved(Touch* touch, Event* event);
-    virtual void onTouchEnded(Touch* touch, Event* event);
-    virtual void onTouchCancelled(Touch* touch, Event* event);
+    bool onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* outHitPoint) override;
+
+    virtual bool onPointerDown(PointerEvent*);
+    virtual void onPointerMove(PointerEvent*);
+    virtual void onPointerUp(PointerEvent*);
+    virtual void onPointerCancel(PointerEvent*);
+    virtual bool onPointerScroll(PointerEvent*);
 
     // Overrides
     void setContentSize(const Size& size) override;
@@ -349,7 +351,7 @@ protected:
     /**
      * Touch objects to detect multitouch
      */
-    std::vector<Touch*> _touches;
+    std::vector<PointerEvent*> _touches;
     /**
      * size to clip. Node boundingBox uses contentSize directly.
      * It's semantically different what it actually means to common scroll views.
@@ -367,7 +369,7 @@ protected:
     bool _scissorRestored;
 
     /** Touch listener */
-    EventListenerTouchOneByOne* _touchListener;
+    PointerEventListener* _touchListener;
 
     // CustomCommand _beforeDrawCommand;
     // CustomCommand _afterDrawCommand;

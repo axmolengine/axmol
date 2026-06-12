@@ -337,19 +337,19 @@ std::vector<char16_t> getChar16VectorFromUTF16String(const std::u16string& utf16
     return std::vector<char16_t>(utf16.begin(), utf16.end());
 }
 
-size_t getCharacterCountInUTF8String(std::string_view utf8)
+size_t getCharacterCountInUTF8String(std::string_view strUTF8)
 {
-    return countUTF8Chars(utf8);
+    return countUTF8Chars(strUTF8);
 }
 
-size_t countUTF8Chars(std::string_view utf8)
+size_t countUTF8Chars(std::string_view strUTF8)
 {
     int count = 0;
 
-    if (!utf8.empty())
+    if (!strUTF8.empty())
     {
-        const UTF8* source    = (const UTF8*)utf8.data();
-        const UTF8* sourceEnd = (const UTF8*)utf8.data() + utf8.length();
+        const UTF8* source    = (const UTF8*)strUTF8.data();
+        const UTF8* sourceEnd = (const UTF8*)strUTF8.data() + strUTF8.length();
         while (source != sourceEnd)
         {
             auto size = getUTF8SequenceSize(source, sourceEnd);
@@ -364,6 +364,36 @@ size_t countUTF8Chars(std::string_view utf8)
     }
 
     return count;
+}
+
+UTF8CountResult countUTF8WithLimit(std::string_view strUTF8, size_t charLimit)
+{
+    UTF8CountResult result{};
+
+    if (!strUTF8.empty() && charLimit > 0)
+    {
+        const UTF8* const sourceStart = (const UTF8*)strUTF8.data();
+        const UTF8* const sourceEnd   = sourceStart + strUTF8.length();
+        const UTF8* source            = sourceStart;
+
+        while (source != sourceEnd && result.charCount < charLimit)
+        {
+            auto size = getUTF8SequenceSize(source, sourceEnd);
+            if (size == 0)
+            {
+                // Invalid UTF-8 sequence found
+                result.success = false;
+                break;
+            }
+            source += size;
+            ++result.charCount;
+        }
+
+        // Calculate total bytes consumed by subtracting pointers
+        result.byteCount = static_cast<size_t>(source - sourceStart);
+    }
+
+    return result;
 }
 
 size_t getUTF8ByteOffset(std::string_view utf8, size_t utf8CharOffset)

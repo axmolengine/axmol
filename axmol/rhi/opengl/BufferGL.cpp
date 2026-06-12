@@ -59,7 +59,7 @@ BufferImpl::BufferImpl(std::size_t size, BufferType type, BufferUsage usage, con
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _backToForegroundListener =
-        EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { this->reloadBuffer(); });
+        CustomEventListener::create(EVENT_RENDERER_RECREATED, [this](CustomEvent*) { this->reloadBuffer(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
 }

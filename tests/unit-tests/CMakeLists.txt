@@ -39,7 +39,6 @@ set(GAME_SOURCE
     Source/axmol/base/UtilsTests.cpp
     Source/axmol/base/ValueTests.cpp
     Source/axmol/base/VectorTests.cpp
-    Source/axmol/base/WeakPtrTests.cpp
 
     Source/axmol/math/FastRNGTests.cpp
     Source/axmol/math/MathUtilTests.cpp

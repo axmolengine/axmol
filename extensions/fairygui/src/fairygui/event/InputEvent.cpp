@@ -5,13 +5,13 @@ NS_FGUI_BEGIN
 
 InputEvent::InputEvent() :
     _target(nullptr),
-    _touch(nullptr),
+    _pointerEvent(nullptr),
     _inputProcessor(nullptr),
-    _touchId(-1),
+    _pointerId(-1),
     _clickCount(0),
     _mouseWheelDelta(0),
-    _button(ax::EventMouse::MouseButton::BUTTON_UNSET),
-    _keyCode(ax::EventKeyboard::KeyCode::KEY_0),
+    _button(-1),
+    _keyCode(ax::KeyboardEvent::KeyCode::KEY_0),
     _keyModifiers(0)
 {
 }

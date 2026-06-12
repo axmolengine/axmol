@@ -57,12 +57,12 @@ function BillBoardTest:addNewAniBillBoardWithCoords(p)
 end
 
 function BillBoardTest:init()
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(function(touches, event)
-        if #touches == 1 then
-            local touch = touches[1]
-            local location = touch:getLocation()
-            local previousLocation = touch:getPreviousLocation()
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(function(event)
+        if event:isPrimaryPressed() then
+            local touch = event
+            local location = event:getLocation()
+            local previousLocation = event:getPreviousLocation()
             local newPos = ax.pSub(previousLocation, location)
 
             local cameraDir = {}
@@ -86,7 +86,7 @@ function BillBoardTest:init()
             cameraPos = ax.vec3add(cameraPos, ax.vec3mul(cameraRightDir, newPos.x * 0.5))
             self._camera:setPosition3D(cameraPos)
         end
-    end, ax.Handler.EVENT_TOUCHES_MOVED)
+    end, ax.Handler.EVENT_POINTER_MOVE)
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
