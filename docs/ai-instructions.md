@@ -18,7 +18,7 @@ This document provides system-level rules and context for AI coding assistants, 
 ### release/2.x (stable)
 - **Standard:** Implement features using clean **C++17/C++20** standards. Leverage `auto`, `nullptr`, `override`, `constexpr`, and structured bindings where appropriate.
 
-### [v3] dev/v3
+### [v3] dev
 - **Standard:** The v3 branch targets **C++23**. Use C++23 features freely (e.g., `std::expected`, `if consteval`, deducing `this`).
 
 ### Two-Stage Initialization (both branches)
