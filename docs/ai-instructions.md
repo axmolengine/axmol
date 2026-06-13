@@ -70,5 +70,5 @@ If the Axmol CLI environment is active, use the following entry points:
 | Android | `axmol build -p android` |
 
 ### [v3] Additional Build Notes
-- The v3 branch introduces experimental **Direct3D 12** and **Vulkan** RHI backends. To test them, refer to the [About-RHI-in-axmol-v3](https://github.com/axmolengine/axmol/wiki/About-RHI-in-axmol-v3) wiki page.
+- The v3 branch introduces experimental **Direct3D 11**, **Direct3D 12** and **Vulkan** RHI backends. To test them, refer to the [About-RHI-in-axmol-v3](https://github.com/axmolengine/axmol/wiki/About-RHI-in-axmol-v3) wiki page.
 - arm64 builds for Linux and Windows are available starting from v3.
