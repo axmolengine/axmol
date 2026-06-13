@@ -28,9 +28,9 @@ public:
     virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags);
     void onDraw(const ax::Mat4& transform, uint32_t flags);
 
-    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    bool onPointerDown(ax::PointerEvent* event);
+    void onPointerMove(ax::PointerEvent* event);
+    void onPointerUp(ax::PointerEvent* event);
 
     void updateViewMatrix(float dx, float dy, float cx, float cy, float scale);
     float transformViewX(float deviceX);

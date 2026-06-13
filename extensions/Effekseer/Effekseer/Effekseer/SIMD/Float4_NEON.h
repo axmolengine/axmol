@@ -3,6 +3,7 @@
 #define __EFFEKSEER_SIMD_FLOAT4_NEON_H__
 
 #include "Base.h"
+#include <stddef.h>
 
 #if defined(EFK_SIMD_NEON)
 
