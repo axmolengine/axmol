@@ -23,9 +23,9 @@ THE SOFTWARE.
 
 ]]
 
-local TextField = ccui.TextField
+local InputField = axui.InputField
 
-function TextField:onEvent(callback)
+function InputField:onEvent(callback)
     self:addEventListener(function(sender, eventType)
         local event = {}
         if eventType == 0 then
