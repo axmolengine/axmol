@@ -3,7 +3,7 @@
 This document provides system-level rules and context for AI coding assistants, LLMs, and agentic workflows (e.g., Cursor, Copilot, Claude, Windsurf, Aider) interacting with the Axmol Engine codebase.
 
 > **Scope:** Unless stated otherwise, all instructions in this document apply to the stable **`release/2.x`** branch (current LTS branch).
-> Sections specific to the **`dev/v3`** development branch are explicitly marked with the **[v3]** tag.
+> Sections specific to the **`dev`** development branch are explicitly marked with the **[v3]** tag.
 
 ---
 
