@@ -358,7 +358,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
     ImGui_ImplAxmol_SaveRenderState(renderer);
 
     ImGui_ImplAxmol_SetupRenderState(renderer, draw_data, fb_width, fb_height);
-    
+
     auto drawCallback_ResetState = ImGui::GetPlatformIO().DrawCallback_ResetRenderState;
 
     // Will project scissor/clipping rectangles into framebuffer space

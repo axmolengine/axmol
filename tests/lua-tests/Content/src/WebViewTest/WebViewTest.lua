@@ -21,7 +21,7 @@ function WebViewTest:init()
     self._webView = ccui.WebView:create()
     self._webView:setPosition(canvasSize.width / 2, canvasSize.height / 2)
     self._webView:setContentSize(canvasSize.width / 2,  canvasSize.height / 2)
-    self._webView:loadURL("https://www.baidu.com")
+    self._webView:loadURL("https://axmol.dev")
     self._webView:setScalesPageToFit(true)
 
     self._webView:setOnShouldStartLoading(function(sender, url)
@@ -37,7 +37,7 @@ function WebViewTest:init()
 
     self:addChild(self._webView)
 
-    local urlTextField = ccui.TextField:create("Input a URL here", "Arial", 20)
+    local urlTextField = ccui.InputField:create("Input a URL here", "Arial", 20)
     urlTextField:setPlaceHolderColor(ax.color32(255, 0, 0,  255))
     urlTextField:setPosition(canvasSize.width/2 - 80, canvasSize.height/2 + self._webView:getContentSize().height/2 + urlTextField:getContentSize().height/2 + 10)
     self:addChild(urlTextField)

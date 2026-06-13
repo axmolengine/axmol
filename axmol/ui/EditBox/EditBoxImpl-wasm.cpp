@@ -276,7 +276,6 @@ void EditBoxImplWasm::lazyInit()
             'change', function() {
                 // handle focus lost
                 var input = Module.axmol_editbox_input = Module.axmol_editbox_input || document.createElement("input");
-                
                 var result = Module.stringToUTF8WithLen(input.value);
                 _axmol_editbox_textchange(result.ptr, result.length);
             });
