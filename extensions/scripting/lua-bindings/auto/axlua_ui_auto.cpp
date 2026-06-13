@@ -22741,6 +22741,2832 @@ int lua_register_ax_ui_Slider(lua_State* tolua_S)
     return 1;
 }
 
+int lua_ax_ui_InputField_initWithPlaceholder(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_initWithPlaceholder'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 3)
+    {
+        std::string_view arg0;
+        std::string_view arg1;
+        double arg2;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.InputField:initWithPlaceholder");
+
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.InputField:initWithPlaceholder");
+
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "axui.InputField:initWithPlaceholder");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_initWithPlaceholder'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->initWithPlaceholder(arg0, arg1, arg2);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    if (argc == 4)
+    {
+        std::string_view arg0;
+        std::string_view arg1;
+        double arg2;
+        double arg3;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.InputField:initWithPlaceholder");
+
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.InputField:initWithPlaceholder");
+
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "axui.InputField:initWithPlaceholder");
+
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "axui.InputField:initWithPlaceholder");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_initWithPlaceholder'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->initWithPlaceholder(arg0, arg1, arg2, arg3);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    if (argc == 5)
+    {
+        std::string_view arg0;
+        std::string_view arg1;
+        double arg2;
+        double arg3;
+        ax::Color32 arg4;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.InputField:initWithPlaceholder");
+
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.InputField:initWithPlaceholder");
+
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "axui.InputField:initWithPlaceholder");
+
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "axui.InputField:initWithPlaceholder");
+
+        ok &=luaval_to_color32(tolua_S, 6, &arg4, "axui.InputField:initWithPlaceholder");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_initWithPlaceholder'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->initWithPlaceholder(arg0, arg1, arg2, arg3, arg4);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:initWithPlaceholder",argc, 3);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_initWithPlaceholder'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_getRenderLabel(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_getRenderLabel'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_getRenderLabel'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getRenderLabel();
+        object_to_luaval<ax::Label>(tolua_S, "ax.Label",(ax::Label*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:getRenderLabel",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_getRenderLabel'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_getCharCount(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_getCharCount'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_getCharCount'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getCharCount();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:getCharCount",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_getCharCount'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setPlaceholderColor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setPlaceholderColor'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::Color32 arg0;
+
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.InputField:setPlaceholderColor");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setPlaceholderColor'", nullptr);
+            return 0;
+        }
+        obj->setPlaceholderColor(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setPlaceholderColor",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setPlaceholderColor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_getPlaceholderColor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_getPlaceholderColor'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_getPlaceholderColor'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getPlaceholderColor();
+        color32_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:getPlaceholderColor",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_getPlaceholderColor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setTextColor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setTextColor'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::Color32 arg0;
+
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.InputField:setTextColor");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setTextColor'", nullptr);
+            return 0;
+        }
+        obj->setTextColor(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setTextColor",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setTextColor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_getTextColor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_getTextColor'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_getTextColor'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getTextColor();
+        color32_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:getTextColor",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_getTextColor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setCursorColor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setCursorColor'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::Color32 arg0;
+
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.InputField:setCursorColor");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setCursorColor'", nullptr);
+            return 0;
+        }
+        obj->setCursorColor(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setCursorColor",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setCursorColor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_getCursorColor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_getCursorColor'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_getCursorColor'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getCursorColor();
+        color32_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:getCursorColor",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_getCursorColor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setString(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setString'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.InputField:setString");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setString'", nullptr);
+            return 0;
+        }
+        obj->setString(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setString",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setString'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_getString(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_getString'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_getString'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getString();
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:getString",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_getString'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_getFontType(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_getFontType'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_getFontType'", nullptr);
+            return 0;
+        }
+        int ret = (int)obj->getFontType();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:getFontType",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_getFontType'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setContinuousTouchDelayTime(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setContinuousTouchDelayTime'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.InputField:setContinuousTouchDelayTime");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setContinuousTouchDelayTime'", nullptr);
+            return 0;
+        }
+        obj->setContinuousTouchDelayTime(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setContinuousTouchDelayTime",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setContinuousTouchDelayTime'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_getContinuousTouchDelayTime(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_getContinuousTouchDelayTime'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_getContinuousTouchDelayTime'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getContinuousTouchDelayTime();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:getContinuousTouchDelayTime",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_getContinuousTouchDelayTime'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setPasswordChar(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setPasswordChar'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.InputField:setPasswordChar");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setPasswordChar'", nullptr);
+            return 0;
+        }
+        obj->setPasswordChar(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setPasswordChar",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setPasswordChar'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_getPasswordChar(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_getPasswordChar'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_getPasswordChar'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getPasswordChar();
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:getPasswordChar",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_getPasswordChar'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setPlaceholderText(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setPlaceholderText'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.InputField:setPlaceholderText");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setPlaceholderText'", nullptr);
+            return 0;
+        }
+        obj->setPlaceholderText(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setPlaceholderText",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setPlaceholderText'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_getPlaceholderText(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_getPlaceholderText'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_getPlaceholderText'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getPlaceholderText();
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:getPlaceholderText",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_getPlaceholderText'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setPasswordEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setPasswordEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.InputField:setPasswordEnabled");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setPasswordEnabled'", nullptr);
+            return 0;
+        }
+        obj->setPasswordEnabled(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setPasswordEnabled",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setPasswordEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_isPasswordEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_isPasswordEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_isPasswordEnabled'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isPasswordEnabled();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:isPasswordEnabled",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_isPasswordEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_addEventListener(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_addEventListener'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        std::function<void (ax::Object *, ax::ui::InputField::EventType)> arg0;
+
+        do {
+        	// Lambda binding for lua is not supported.
+            assert(false);
+        } while(0)
+        ;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_addEventListener'", nullptr);
+            return 0;
+        }
+        obj->addEventListener(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:addEventListener",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_addEventListener'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_isEmpty(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_isEmpty'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_isEmpty'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isEmpty();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:isEmpty",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_isEmpty'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setReadOnly(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setReadOnly'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.InputField:setReadOnly");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setReadOnly'", nullptr);
+            return 0;
+        }
+        obj->setReadOnly(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setReadOnly",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setReadOnly'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_isReadOnly(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_isReadOnly'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_isReadOnly'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isReadOnly();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:isReadOnly",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_isReadOnly'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setMaxLength(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setMaxLength'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        int arg0;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.InputField:setMaxLength");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setMaxLength'", nullptr);
+            return 0;
+        }
+        obj->setMaxLength(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setMaxLength",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setMaxLength'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_hasSelection(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_hasSelection'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_hasSelection'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->hasSelection();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:hasSelection",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_hasSelection'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_selectAll(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_selectAll'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_selectAll'", nullptr);
+            return 0;
+        }
+        obj->selectAll();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:selectAll",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_selectAll'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_clearSelection(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_clearSelection'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_clearSelection'", nullptr);
+            return 0;
+        }
+        obj->clearSelection();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:clearSelection",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_clearSelection'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_getSelectedText(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_getSelectedText'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_getSelectedText'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getSelectedText();
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:getSelectedText",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_getSelectedText'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_copySelectionToClipboard(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_copySelectionToClipboard'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_copySelectionToClipboard'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->copySelectionToClipboard();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:copySelectionToClipboard",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_copySelectionToClipboard'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_cutSelectionToClipboard(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_cutSelectionToClipboard'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_cutSelectionToClipboard'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->cutSelectionToClipboard();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:cutSelectionToClipboard",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_cutSelectionToClipboard'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_pasteFromClipboard(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_pasteFromClipboard'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_pasteFromClipboard'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->pasteFromClipboard();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:pasteFromClipboard",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_pasteFromClipboard'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setSelectionColor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setSelectionColor'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::Color arg0;
+
+        ok &=luaval_to_color(tolua_S, 2, &arg0, "axui.InputField:setSelectionColor");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setSelectionColor'", nullptr);
+            return 0;
+        }
+        obj->setSelectionColor(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setSelectionColor",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setSelectionColor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_getSelectionColor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_getSelectionColor'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_getSelectionColor'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getSelectionColor();
+        color_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:getSelectionColor",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_getSelectionColor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setFontSize(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setFontSize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.InputField:setFontSize");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setFontSize'", nullptr);
+            return 0;
+        }
+        obj->setFontSize(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setFontSize",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setFontSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_getFontSize(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_getFontSize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_getFontSize'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getFontSize();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:getFontSize",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_getFontSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setFontName(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setFontName'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.InputField:setFontName");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setFontName'", nullptr);
+            return 0;
+        }
+        obj->setFontName(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setFontName",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setFontName'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_getFontName(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_getFontName'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_getFontName'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getFontName();
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:getFontName",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_getFontName'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setTextHorizontalAlignment(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setTextHorizontalAlignment'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::TextHAlignment arg0;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.InputField:setTextHorizontalAlignment");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setTextHorizontalAlignment'", nullptr);
+            return 0;
+        }
+        obj->setTextHorizontalAlignment(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setTextHorizontalAlignment",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setTextHorizontalAlignment'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_getTextHorizontalAlignment(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_getTextHorizontalAlignment'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_getTextHorizontalAlignment'", nullptr);
+            return 0;
+        }
+        int ret = (int)obj->getTextHorizontalAlignment();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:getTextHorizontalAlignment",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_getTextHorizontalAlignment'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setTextVerticalAlignment(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setTextVerticalAlignment'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::TextVAlignment arg0;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.InputField:setTextVerticalAlignment");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setTextVerticalAlignment'", nullptr);
+            return 0;
+        }
+        obj->setTextVerticalAlignment(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setTextVerticalAlignment",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setTextVerticalAlignment'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_getTextVerticalAlignment(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_getTextVerticalAlignment'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_getTextVerticalAlignment'", nullptr);
+            return 0;
+        }
+        int ret = (int)obj->getTextVerticalAlignment();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:getTextVerticalAlignment",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_getTextVerticalAlignment'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setTouchAreaSize(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setTouchAreaSize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::Vec2 arg0;
+
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.InputField:setTouchAreaSize");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setTouchAreaSize'", nullptr);
+            return 0;
+        }
+        obj->setTouchAreaSize(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setTouchAreaSize",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setTouchAreaSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_getTouchAreaSize(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_getTouchAreaSize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_getTouchAreaSize'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getTouchAreaSize();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:getTouchAreaSize",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_getTouchAreaSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setTouchAreaEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setTouchAreaEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.InputField:setTouchAreaEnabled");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setTouchAreaEnabled'", nullptr);
+            return 0;
+        }
+        obj->setTouchAreaEnabled(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setTouchAreaEnabled",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setTouchAreaEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_onPointerHitTest(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_onPointerHitTest'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 3)
+    {
+        ax::PointerEvent* arg0;
+        const ax::Camera* arg1;
+        ax::Vec3* arg2;
+
+        ok &= luaval_to_object<ax::PointerEvent>(tolua_S, 2, "ax.PointerEvent",&arg0, "axui.InputField:onPointerHitTest");
+
+        ok &= luaval_to_object<const ax::Camera>(tolua_S, 3, "ax.Camera",&arg1, "axui.InputField:onPointerHitTest");
+
+        ok &= luaval_to_object<ax::Vec3>(tolua_S, 4, "ax.Vec3",&arg2, "axui.InputField:onPointerHitTest");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_onPointerHitTest'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->onPointerHitTest(arg0, arg1, arg2);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:onPointerHitTest",argc, 3);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_onPointerHitTest'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_hitTestSelf(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_hitTestSelf'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 3)
+    {
+        ax::Vec2 arg0;
+        const ax::Camera* arg1;
+        ax::Vec3* arg2;
+
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.InputField:hitTestSelf");
+
+        ok &= luaval_to_object<const ax::Camera>(tolua_S, 3, "ax.Camera",&arg1, "axui.InputField:hitTestSelf");
+
+        ok &= luaval_to_object<ax::Vec3>(tolua_S, 4, "ax.Vec3",&arg2, "axui.InputField:hitTestSelf");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_hitTestSelf'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->hitTestSelf(arg0, arg1, arg2);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:hitTestSelf",argc, 3);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_hitTestSelf'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setCharLimit(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setCharLimit'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        unsigned int arg0;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.InputField:setCharLimit");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setCharLimit'", nullptr);
+            return 0;
+        }
+        obj->setCharLimit(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setCharLimit",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setCharLimit'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_getCharLimit(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_getCharLimit'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_getCharLimit'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getCharLimit();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:getCharLimit",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_getCharLimit'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_setMultilineEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_setMultilineEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.InputField:setMultilineEnabled");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_setMultilineEnabled'", nullptr);
+            return 0;
+        }
+        obj->setMultilineEnabled(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:setMultilineEnabled",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_setMultilineEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_isMultilineEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_isMultilineEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_isMultilineEnabled'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isMultilineEnabled();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:isMultilineEnabled",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_isMultilineEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_resolvePreferredSize(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_resolvePreferredSize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::Vec2 arg0;
+
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.InputField:resolvePreferredSize");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_resolvePreferredSize'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->resolvePreferredSize(arg0);
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:resolvePreferredSize",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_resolvePreferredSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_InputField_createInstance(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_createInstance'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::ui::InputField::createInstance();
+        object_to_luaval<ax::Object>(tolua_S, "ax.Object",(ax::Object*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.InputField:createInstance",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_createInstance'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_ui_InputField_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+
+    do {
+        if (argc == 3)
+        {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.InputField:create");
+            if (!ok) { break; }
+            std::string_view arg1;
+            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.InputField:create");
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "axui.InputField:create");
+            if (!ok) { break; }
+            ax::ui::InputField* ret = ax::ui::InputField::create(arg0, arg1, arg2);
+            object_to_luaval<ax::ui::InputField>(tolua_S, "axui.InputField",(ax::ui::InputField*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do {
+        if (argc == 4)
+        {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.InputField:create");
+            if (!ok) { break; }
+            std::string_view arg1;
+            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.InputField:create");
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "axui.InputField:create");
+            if (!ok) { break; }
+            double arg3;
+            ok &= luaval_to_number(tolua_S, 5, &arg3, "axui.InputField:create");
+            if (!ok) { break; }
+            ax::ui::InputField* ret = ax::ui::InputField::create(arg0, arg1, arg2, arg3);
+            object_to_luaval<ax::ui::InputField>(tolua_S, "axui.InputField",(ax::ui::InputField*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do {
+        if (argc == 5)
+        {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.InputField:create");
+            if (!ok) { break; }
+            std::string_view arg1;
+            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.InputField:create");
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "axui.InputField:create");
+            if (!ok) { break; }
+            double arg3;
+            ok &= luaval_to_number(tolua_S, 5, &arg3, "axui.InputField:create");
+            if (!ok) { break; }
+            ax::Color32 arg4;
+            ok &=luaval_to_color32(tolua_S, 6, &arg4, "axui.InputField:create");
+            if (!ok) { break; }
+            ax::ui::InputField* ret = ax::ui::InputField::create(arg0, arg1, arg2, arg3, arg4);
+            object_to_luaval<ax::ui::InputField>(tolua_S, "axui.InputField",(ax::ui::InputField*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do {
+        if (argc == 0)
+        {
+            ax::ui::InputField* ret = ax::ui::InputField::create();
+            object_to_luaval<ax::ui::InputField>(tolua_S, "axui.InputField",(ax::ui::InputField*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "axui.InputField:create",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_create'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_ui_InputField_constructor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::InputField* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_constructor'", nullptr);
+            return 0;
+        }
+        obj = new ax::ui::InputField();
+        obj->autorelease();
+        int ID =  (int)obj->_ID ;
+        int* luaID =  &obj->_luaID ;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axui.InputField");
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:InputField",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_constructor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+
+static int lua_ax_ui_InputField_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (InputField)");
+    return 0;
+}
+
+int lua_register_ax_ui_InputField(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"axui.InputField");
+    tolua_cclass(tolua_S,"InputField","axui.InputField","axui.Widget",nullptr);
+
+    tolua_beginmodule(tolua_S,"InputField");
+        tolua_function(tolua_S,"new",lua_ax_ui_InputField_constructor);
+        tolua_function(tolua_S,"initWithPlaceholder",lua_ax_ui_InputField_initWithPlaceholder);
+        tolua_function(tolua_S,"getRenderLabel",lua_ax_ui_InputField_getRenderLabel);
+        tolua_function(tolua_S,"getCharCount",lua_ax_ui_InputField_getCharCount);
+        tolua_function(tolua_S,"setPlaceholderColor",lua_ax_ui_InputField_setPlaceholderColor);
+        tolua_function(tolua_S,"getPlaceholderColor",lua_ax_ui_InputField_getPlaceholderColor);
+        tolua_function(tolua_S,"setTextColor",lua_ax_ui_InputField_setTextColor);
+        tolua_function(tolua_S,"getTextColor",lua_ax_ui_InputField_getTextColor);
+        tolua_function(tolua_S,"setCursorColor",lua_ax_ui_InputField_setCursorColor);
+        tolua_function(tolua_S,"getCursorColor",lua_ax_ui_InputField_getCursorColor);
+        tolua_function(tolua_S,"setString",lua_ax_ui_InputField_setString);
+        tolua_function(tolua_S,"getString",lua_ax_ui_InputField_getString);
+        tolua_function(tolua_S,"getFontType",lua_ax_ui_InputField_getFontType);
+        tolua_function(tolua_S,"setContinuousTouchDelayTime",lua_ax_ui_InputField_setContinuousTouchDelayTime);
+        tolua_function(tolua_S,"getContinuousTouchDelayTime",lua_ax_ui_InputField_getContinuousTouchDelayTime);
+        tolua_function(tolua_S,"setPasswordChar",lua_ax_ui_InputField_setPasswordChar);
+        tolua_function(tolua_S,"getPasswordChar",lua_ax_ui_InputField_getPasswordChar);
+        tolua_function(tolua_S,"setPlaceholderText",lua_ax_ui_InputField_setPlaceholderText);
+        tolua_function(tolua_S,"getPlaceholderText",lua_ax_ui_InputField_getPlaceholderText);
+        tolua_function(tolua_S,"setPasswordEnabled",lua_ax_ui_InputField_setPasswordEnabled);
+        tolua_function(tolua_S,"isPasswordEnabled",lua_ax_ui_InputField_isPasswordEnabled);
+        tolua_function(tolua_S,"addEventListener",lua_ax_ui_InputField_addEventListener);
+        tolua_function(tolua_S,"isEmpty",lua_ax_ui_InputField_isEmpty);
+        tolua_function(tolua_S,"setReadOnly",lua_ax_ui_InputField_setReadOnly);
+        tolua_function(tolua_S,"isReadOnly",lua_ax_ui_InputField_isReadOnly);
+        tolua_function(tolua_S,"setMaxLength",lua_ax_ui_InputField_setMaxLength);
+        tolua_function(tolua_S,"hasSelection",lua_ax_ui_InputField_hasSelection);
+        tolua_function(tolua_S,"selectAll",lua_ax_ui_InputField_selectAll);
+        tolua_function(tolua_S,"clearSelection",lua_ax_ui_InputField_clearSelection);
+        tolua_function(tolua_S,"getSelectedText",lua_ax_ui_InputField_getSelectedText);
+        tolua_function(tolua_S,"copySelectionToClipboard",lua_ax_ui_InputField_copySelectionToClipboard);
+        tolua_function(tolua_S,"cutSelectionToClipboard",lua_ax_ui_InputField_cutSelectionToClipboard);
+        tolua_function(tolua_S,"pasteFromClipboard",lua_ax_ui_InputField_pasteFromClipboard);
+        tolua_function(tolua_S,"setSelectionColor",lua_ax_ui_InputField_setSelectionColor);
+        tolua_function(tolua_S,"getSelectionColor",lua_ax_ui_InputField_getSelectionColor);
+        tolua_function(tolua_S,"setFontSize",lua_ax_ui_InputField_setFontSize);
+        tolua_function(tolua_S,"getFontSize",lua_ax_ui_InputField_getFontSize);
+        tolua_function(tolua_S,"setFontName",lua_ax_ui_InputField_setFontName);
+        tolua_function(tolua_S,"getFontName",lua_ax_ui_InputField_getFontName);
+        tolua_function(tolua_S,"setTextHorizontalAlignment",lua_ax_ui_InputField_setTextHorizontalAlignment);
+        tolua_function(tolua_S,"getTextHorizontalAlignment",lua_ax_ui_InputField_getTextHorizontalAlignment);
+        tolua_function(tolua_S,"setTextVerticalAlignment",lua_ax_ui_InputField_setTextVerticalAlignment);
+        tolua_function(tolua_S,"getTextVerticalAlignment",lua_ax_ui_InputField_getTextVerticalAlignment);
+        tolua_function(tolua_S,"setTouchAreaSize",lua_ax_ui_InputField_setTouchAreaSize);
+        tolua_function(tolua_S,"getTouchAreaSize",lua_ax_ui_InputField_getTouchAreaSize);
+        tolua_function(tolua_S,"setTouchAreaEnabled",lua_ax_ui_InputField_setTouchAreaEnabled);
+        tolua_function(tolua_S,"onPointerHitTest",lua_ax_ui_InputField_onPointerHitTest);
+        tolua_function(tolua_S,"hitTestSelf",lua_ax_ui_InputField_hitTestSelf);
+        tolua_function(tolua_S,"setCharLimit",lua_ax_ui_InputField_setCharLimit);
+        tolua_function(tolua_S,"getCharLimit",lua_ax_ui_InputField_getCharLimit);
+        tolua_function(tolua_S,"setMultilineEnabled",lua_ax_ui_InputField_setMultilineEnabled);
+        tolua_function(tolua_S,"isMultilineEnabled",lua_ax_ui_InputField_isMultilineEnabled);
+        tolua_function(tolua_S,"resolvePreferredSize",lua_ax_ui_InputField_resolvePreferredSize);
+        tolua_function(tolua_S,"createInstance", lua_ax_ui_InputField_createInstance);
+        tolua_function(tolua_S,"create", lua_ax_ui_InputField_create);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::ui::InputField).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.InputField";
+    g_typeCast[typeName] = "axui.InputField";
+    return 1;
+}
+
 int lua_ax_ui_TextBMFont_setFntFile(lua_State* tolua_S)
 {
     int argc = 0;
@@ -38081,6 +40907,1023 @@ int lua_register_ax_ui_TabHeader(lua_State* tolua_S)
     g_typeCast[typeName] = "axui.TabHeader";
     return 1;
 }
+
+int lua_ax_ui_TabView_removeTab(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_removeTab'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        int arg0;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.TabView:removeTab");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_removeTab'", nullptr);
+            return 0;
+        }
+        obj->removeTab(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabView:removeTab",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_removeTab'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_setSelectTab(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_setSelectTab'", nullptr);
+        return 0;
+    }
+#endif
+    argc = lua_gettop(tolua_S)-1;
+    do {
+        if (argc == 1) {
+            ax::ui::TabHeader* arg0;
+            ok &= luaval_to_object<ax::ui::TabHeader>(tolua_S, 2, "axui.TabHeader",&arg0, "axui.TabView:setSelectTab");
+
+            if (!ok) { break; }
+            obj->setSelectTab(arg0);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do {
+        if (argc == 1) {
+            int arg0;
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.TabView:setSelectTab");
+
+            if (!ok) { break; }
+            obj->setSelectTab(arg0);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "axui.TabView:setSelectTab",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_setSelectTab'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_getTabHeader(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_getTabHeader'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        int arg0;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.TabView:getTabHeader");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_getTabHeader'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getTabHeader(arg0);
+        object_to_luaval<ax::ui::TabHeader>(tolua_S, "axui.TabHeader",(ax::ui::TabHeader*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabView:getTabHeader",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_getTabHeader'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_getTabContainer(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_getTabContainer'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        int arg0;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.TabView:getTabContainer");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_getTabContainer'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getTabContainer(arg0);
+        object_to_luaval<ax::ui::LayoutGroup>(tolua_S, "axui.LayoutGroup",(ax::ui::LayoutGroup*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabView:getTabContainer",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_getTabContainer'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_insertTab(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_insertTab'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 3)
+    {
+        int arg0;
+        ax::ui::TabHeader* arg1;
+        ax::ui::LayoutGroup* arg2;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.TabView:insertTab");
+
+        ok &= luaval_to_object<ax::ui::TabHeader>(tolua_S, 3, "axui.TabHeader",&arg1, "axui.TabView:insertTab");
+
+        ok &= luaval_to_object<ax::ui::LayoutGroup>(tolua_S, 4, "axui.LayoutGroup",&arg2, "axui.TabView:insertTab");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_insertTab'", nullptr);
+            return 0;
+        }
+        obj->insertTab(arg0, arg1, arg2);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabView:insertTab",argc, 3);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_insertTab'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_getTabCount(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_getTabCount'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_getTabCount'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getTabCount();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabView:getTabCount",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_getTabCount'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_getSelectedTabIndex(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_getSelectedTabIndex'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_getSelectedTabIndex'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getSelectedTabIndex();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabView:getSelectedTabIndex",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_getSelectedTabIndex'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_indexOfTabHeader(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_indexOfTabHeader'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        const ax::ui::TabHeader* arg0;
+
+        ok &= luaval_to_object<const ax::ui::TabHeader>(tolua_S, 2, "axui.TabHeader",&arg0, "axui.TabView:indexOfTabHeader");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_indexOfTabHeader'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->indexOfTabHeader(arg0);
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabView:indexOfTabHeader",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_indexOfTabHeader'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_setTabChangedEventListener(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_setTabChangedEventListener'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        std::function<void (int, ax::ui::TabView::EventType)> arg0;
+
+        do {
+        	// Lambda binding for lua is not supported.
+            assert(false);
+        } while(0)
+        ;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_setTabChangedEventListener'", nullptr);
+            return 0;
+        }
+        obj->setTabChangedEventListener(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabView:setTabChangedEventListener",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_setTabChangedEventListener'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_setHeaderWidth(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_setHeaderWidth'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.TabView:setHeaderWidth");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_setHeaderWidth'", nullptr);
+            return 0;
+        }
+        obj->setHeaderWidth(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabView:setHeaderWidth",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_setHeaderWidth'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_getHeaderWidth(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_getHeaderWidth'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_getHeaderWidth'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getHeaderWidth();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabView:getHeaderWidth",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_getHeaderWidth'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_setHeaderHeight(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_setHeaderHeight'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.TabView:setHeaderHeight");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_setHeaderHeight'", nullptr);
+            return 0;
+        }
+        obj->setHeaderHeight(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabView:setHeaderHeight",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_setHeaderHeight'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_getHeaderHeight(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_getHeaderHeight'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_getHeaderHeight'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getHeaderHeight();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabView:getHeaderHeight",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_getHeaderHeight'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_ignoreHeadersTextureSize(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_ignoreHeadersTextureSize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.TabView:ignoreHeadersTextureSize");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_ignoreHeadersTextureSize'", nullptr);
+            return 0;
+        }
+        obj->ignoreHeadersTextureSize(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabView:ignoreHeadersTextureSize",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_ignoreHeadersTextureSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_isIgnoreHeadersTextureSize(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_isIgnoreHeadersTextureSize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_isIgnoreHeadersTextureSize'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isIgnoreHeadersTextureSize();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabView:isIgnoreHeadersTextureSize",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_isIgnoreHeadersTextureSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_setHeaderSelectedZoom(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_setHeaderSelectedZoom'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.TabView:setHeaderSelectedZoom");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_setHeaderSelectedZoom'", nullptr);
+            return 0;
+        }
+        obj->setHeaderSelectedZoom(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabView:setHeaderSelectedZoom",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_setHeaderSelectedZoom'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_getHeaderSelectedZoom(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_getHeaderSelectedZoom'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_getHeaderSelectedZoom'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getHeaderSelectedZoom();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabView:getHeaderSelectedZoom",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_getHeaderSelectedZoom'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_setHeaderDockPlace(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_setHeaderDockPlace'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::ui::TabView::Dock arg0;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.TabView:setHeaderDockPlace");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_setHeaderDockPlace'", nullptr);
+            return 0;
+        }
+        obj->setHeaderDockPlace(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabView:setHeaderDockPlace",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_setHeaderDockPlace'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_getHeaderDockPlace(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::TabView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::TabView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_TabView_getHeaderDockPlace'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_getHeaderDockPlace'", nullptr);
+            return 0;
+        }
+        int ret = (int)obj->getHeaderDockPlace();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabView:getHeaderDockPlace",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_getHeaderDockPlace'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_TabView_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"axui.TabView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabView_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::ui::TabView::create();
+        object_to_luaval<ax::ui::TabView>(tolua_S, "axui.TabView",(ax::ui::TabView*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.TabView:create",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_TabView_create'.",&tolua_err);
+#endif
+    return 0;
+}
+static int lua_ax_ui_TabView_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (TabView)");
+    return 0;
+}
+
+int lua_register_ax_ui_TabView(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"axui.TabView");
+    tolua_cclass(tolua_S,"TabView","axui.TabView","axui.Widget",nullptr);
+
+    tolua_beginmodule(tolua_S,"TabView");
+        tolua_function(tolua_S,"removeTab",lua_ax_ui_TabView_removeTab);
+        tolua_function(tolua_S,"setSelectTab",lua_ax_ui_TabView_setSelectTab);
+        tolua_function(tolua_S,"getTabHeader",lua_ax_ui_TabView_getTabHeader);
+        tolua_function(tolua_S,"getTabContainer",lua_ax_ui_TabView_getTabContainer);
+        tolua_function(tolua_S,"insertTab",lua_ax_ui_TabView_insertTab);
+        tolua_function(tolua_S,"getTabCount",lua_ax_ui_TabView_getTabCount);
+        tolua_function(tolua_S,"getSelectedTabIndex",lua_ax_ui_TabView_getSelectedTabIndex);
+        tolua_function(tolua_S,"indexOfTabHeader",lua_ax_ui_TabView_indexOfTabHeader);
+        tolua_function(tolua_S,"setTabChangedEventListener",lua_ax_ui_TabView_setTabChangedEventListener);
+        tolua_function(tolua_S,"setHeaderWidth",lua_ax_ui_TabView_setHeaderWidth);
+        tolua_function(tolua_S,"getHeaderWidth",lua_ax_ui_TabView_getHeaderWidth);
+        tolua_function(tolua_S,"setHeaderHeight",lua_ax_ui_TabView_setHeaderHeight);
+        tolua_function(tolua_S,"getHeaderHeight",lua_ax_ui_TabView_getHeaderHeight);
+        tolua_function(tolua_S,"ignoreHeadersTextureSize",lua_ax_ui_TabView_ignoreHeadersTextureSize);
+        tolua_function(tolua_S,"isIgnoreHeadersTextureSize",lua_ax_ui_TabView_isIgnoreHeadersTextureSize);
+        tolua_function(tolua_S,"setHeaderSelectedZoom",lua_ax_ui_TabView_setHeaderSelectedZoom);
+        tolua_function(tolua_S,"getHeaderSelectedZoom",lua_ax_ui_TabView_getHeaderSelectedZoom);
+        tolua_function(tolua_S,"setHeaderDockPlace",lua_ax_ui_TabView_setHeaderDockPlace);
+        tolua_function(tolua_S,"getHeaderDockPlace",lua_ax_ui_TabView_getHeaderDockPlace);
+        tolua_function(tolua_S,"create", lua_ax_ui_TabView_create);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::ui::TabView).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.TabView";
+    g_typeCast[typeName] = "axui.TabView";
+    return 1;
+}
 TOLUA_API int register_all_ax_ui(lua_State* tolua_S)
 {
     tolua_open(tolua_S);
@@ -38105,6 +41948,7 @@ TOLUA_API int register_all_ax_ui(lua_State* tolua_S)
     lua_register_ax_ui_ScrollView(tolua_S);
     lua_register_ax_ui_ListView(tolua_S);
     lua_register_ax_ui_Slider(tolua_S);
+    lua_register_ax_ui_InputField(tolua_S);
     lua_register_ax_ui_TextBMFont(tolua_S);
     lua_register_ax_ui_PageView(tolua_S);
     lua_register_ax_ui_Helper(tolua_S);
@@ -38121,7 +41965,9 @@ TOLUA_API int register_all_ax_ui(lua_State* tolua_S)
     lua_register_ax_ui_EditBox(tolua_S);
     lua_register_ax_ui_LayoutComponent(tolua_S);
     lua_register_ax_ui_TabHeader(tolua_S);
+    lua_register_ax_ui_TabView(tolua_S);
 
     tolua_endmodule(tolua_S);
     return 1;
 }
+

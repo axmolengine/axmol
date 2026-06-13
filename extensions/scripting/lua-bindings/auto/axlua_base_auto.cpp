@@ -34497,7 +34497,7 @@ int lua_ax_base_AccelerationEvent_getAcceleration(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getAcceleration();
-        accel_to_luaval(tolua_S, ret);
+        object_to_luaval<ax::Acceleration&>(tolua_S, "ax.Acceleration",(ax::Acceleration&)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AccelerationEvent:getAcceleration",argc, 0);
@@ -115420,3 +115420,4 @@ TOLUA_API int register_all_ax_base(lua_State* tolua_S)
     tolua_endmodule(tolua_S);
     return 1;
 }
+

@@ -962,12 +962,11 @@ bool EventDispatcher::dispatchCapturedPointerEvent(PointerEvent* event)
     //  Helper lambda to deliver an captured PointerEvent to a single listener
     auto deliverCapturedEvent = [event](const PointerCaptureEntry& entry) {
         auto listener = entry.listener.get();
-        auto camera   = entry.camera.get();
-        if (!listener || !camera || !listener->isAttached())
+        if (!listener || !listener->isAttached())
             return false;
 
         event->setCurrentTarget(listener->getAssociatedNode());
-        event->setCamera(camera);
+        event->setCamera(entry.camera.get());
         event->setCaptureBits(entry.captureBits);
 
         switch (event->getPhase())
