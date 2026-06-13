@@ -192,7 +192,7 @@ public:
     CAMetalLayer* getMetalLayer() { return _mtlLayer; }
 
     id<CAMetalDrawable> acquireDrawable();
-    
+
     id<MTLCommandBuffer> getCommandBuffer() const { return _currentCmdBuffer; }
 
 protected:
