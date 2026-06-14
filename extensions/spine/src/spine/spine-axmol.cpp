@@ -33,8 +33,9 @@
 #include <spine/Extension.h>
 #include <spine/spine-axmol.h>
 
-USING_NS_AX;
-using namespace spine;
+namespace spine {
+
+using namespace ax;
 
 static Texture2D::TexParams chooseTexParams(spine::AtlasPage &page) {
 	Texture2D::TexParams texParams{};
@@ -183,3 +184,6 @@ char *AxmolSpineExtension::_readFile(const spine::String &path, int *length) {
 SpineExtension *spine::getDefaultExtension() {
 	return AxmolSpineExtension::getInstance();
 }
+
+}
+
