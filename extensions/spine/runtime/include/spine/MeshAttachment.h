@@ -30,92 +30,86 @@
 #ifndef Spine_MeshAttachment_h
 #define Spine_MeshAttachment_h
 
-#include <spine/VertexAttachment.h>
-#include <spine/TextureRegion.h>
-#include <spine/Sequence.h>
-#include <spine/Vector.h>
+#include <spine/Array.h>
 #include <spine/Color.h>
 #include <spine/HasRendererObject.h>
+#include <spine/Sequence.h>
+#include <spine/TextureRegion.h>
+#include <spine/VertexAttachment.h>
 
 namespace spine {
 	/// Attachment that displays a texture region using a mesh.
 	class SP_API MeshAttachment : public VertexAttachment {
 		friend class SkeletonBinary;
-
 		friend class SkeletonJson;
-
 		friend class AtlasAttachmentLoader;
 
-	RTTI_DECL
+		RTTI_DECL
 
 	public:
-		explicit MeshAttachment(const String &name);
+		explicit MeshAttachment(const String &name, Sequence *sequence);
 
 		virtual ~MeshAttachment();
 
 		using VertexAttachment::computeWorldVertices;
 
-		virtual void computeWorldVertices(Slot &slot, size_t start, size_t count, float *worldVertices, size_t offset,
-		size_t stride = 2);
+		virtual void computeWorldVertices(Skeleton &skeleton, Slot &slot, size_t start, size_t count, float *worldVertices, size_t offset,
+										  size_t stride = 2) override;
 
-		void updateRegion();
+		Array<float> &getRegionUVs();
+		void setRegionUVs(Array<float> &inValue);
+
+		Array<unsigned short> &getTriangles();
+		void setTriangles(Array<unsigned short> &inValue);
 
 		int getHullLength();
-
 		void setHullLength(int inValue);
 
-		Vector<float> &getRegionUVs();
+		Sequence &getSequence();
 
-		/// The UV pair for each vertex, normalized within the entire texture. See also MeshAttachment::updateRegion
-		Vector<float> &getUVs();
+		void updateSequence();
 
-		Vector<unsigned short> &getTriangles();
+		const String &getPath();
+		void setPath(const String &inValue);
 
 		Color &getColor();
 
-		const String &getPath();
+		/// The source mesh if this is a linked mesh, else NULL. A linked mesh shares the bones, vertices, regionUVs,
+		/// triangles, hullLength, edges, width, and height with the source mesh, but may have a different name or path,
+		/// and therefore a different texture region.
+		MeshAttachment *getSourceMesh();
+		void setSourceMesh(MeshAttachment *inValue);
 
-		void setPath(const String &inValue);
-
-		TextureRegion *getRegion();
-
-		void setRegion(TextureRegion *region);
-
-		Sequence *getSequence();
-
-		void setSequence(Sequence *sequence);
-
-		MeshAttachment *getParentMesh();
-
-		void setParentMesh(MeshAttachment *inValue);
-
-		// Nonessential.
-		Vector<unsigned short> &getEdges();
+		/// Vertex index pairs describing edges for controlling triangulation, or empty if nonessential data was not
+		/// exported. Mesh triangles do not cross edges. Triangulation is not performed at runtime.
+		Array<unsigned short> &getEdges();
+		void setEdges(Array<unsigned short> &inValue);
 
 		float getWidth();
-
 		void setWidth(float inValue);
 
 		float getHeight();
-
 		void setHeight(float inValue);
 
-		virtual Attachment *copy();
+		virtual Attachment &copy() override;
 
-		MeshAttachment *newLinkedMesh();
+		MeshAttachment &newLinkedMesh();
+
+		/// Computes UVs for a mesh attachment.
+		/// @param uvs Output array for the computed UVs, same length as regionUVs.
+		static void computeUVs(TextureRegion *region, Array<float> &regionUVs, Array<float> &uvs);
 
 	private:
-		MeshAttachment *_parentMesh;
-		Vector<float> _uvs;
-		Vector<float> _regionUVs;
-		Vector<unsigned short> _triangles;
-		Vector<unsigned short> _edges;
+		Sequence *_sequence;
+		Array<float> _regionUVs;
+		Array<unsigned short> _triangles;
+		int _hullLength;
 		String _path;
 		Color _color;
-		int _hullLength;
-		int _width, _height;
-		TextureRegion *_region;
-		Sequence *_sequence;
+		MeshAttachment *_sourceMesh;
+
+		Array<unsigned short> _edges;
+		float _width, _height;
 	};
 }
 

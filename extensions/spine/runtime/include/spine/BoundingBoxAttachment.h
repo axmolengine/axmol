@@ -37,14 +37,14 @@
 namespace spine {
 	/// Attachment that has a polygon for bounds checking.
 	class SP_API BoundingBoxAttachment : public VertexAttachment {
-	RTTI_DECL
+		RTTI_DECL
 
 	public:
 		explicit BoundingBoxAttachment(const String &name);
 
 		Color &getColor();
 
-		virtual Attachment *copy();
+		virtual Attachment &copy() override;
 
 	private:
 		Color _color;

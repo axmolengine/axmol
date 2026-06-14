@@ -31,29 +31,38 @@
 #define Spine_PathConstraintMixTimeline_h
 
 #include <spine/CurveTimeline.h>
+#include <spine/ConstraintTimeline.h>
 
 namespace spine {
 
-	class SP_API PathConstraintMixTimeline : public CurveTimeline {
+	/// Changes a path constraint's rotate, x, and y mix values.
+	class SP_API PathConstraintMixTimeline : public CurveTimeline, public ConstraintTimeline {
 		friend class SkeletonBinary;
 
 		friend class SkeletonJson;
 
-	RTTI_DECL
+		RTTI_DECL
 
 	public:
-		explicit PathConstraintMixTimeline(size_t frameCount, size_t bezierCount, int pathConstraintIndex);
+		explicit PathConstraintMixTimeline(size_t frameCount, size_t bezierCount, int constraintIndex);
 
-		virtual void
-		apply(Skeleton &skeleton, float lastTime, float time, Vector<Event *> *pEvents, float alpha, MixBlend blend,
-			  MixDirection direction);
+		virtual ~PathConstraintMixTimeline();
 
-		/// Sets the time and mixes of the specified keyframe.
-		void setFrame(int frameIndex, float time, float mixRotate, float mixX, float mixY);
+		virtual void apply(Skeleton &skeleton, float lastTime, float time, Array<Event *> *events, float alpha, MixFrom from, bool add, bool out,
+						   bool appliedPose) override;
 
-		int getPathConstraintIndex() { return _constraintIndex; }
+		/// Sets the time and color for the specified frame.
+		/// @param frame Between 0 and frameCount, inclusive.
+		/// @param time The frame time in seconds.
+		void setFrame(int frame, float time, float mixRotate, float mixX, float mixY);
 
-		void setPathConstraintIndex(int inValue) { _constraintIndex = inValue; }
+		virtual int getConstraintIndex() const override {
+			return _constraintIndex;
+		}
+
+		virtual void setConstraintIndex(int inValue) override {
+			_constraintIndex = inValue;
+		}
 
 	private:
 		int _constraintIndex;

@@ -90,7 +90,7 @@ std::string_view Director::EVENT_BEFORE_UPDATE         = "director_before_update
 std::string_view Director::EVENT_AFTER_UPDATE          = "director_after_update"sv;
 std::string_view Director::EVENT_BEFORE_DRAW           = "director_before_draw"sv;
 std::string_view Director::EVENT_RESET                 = "director_reset"sv;
-std::string_view Director::EVENT_DESTROY               = "director_destroy"sv;
+std::string_view Director::EVENT_DISPOSING             = "director_disposing"sv;
 std::string_view Director::EVENT_BEFORE_GFX_DROP       = "director_before_gfx_drop"sv;
 std::string_view Director::EVENT_AFTER_GFX_DROP        = "director_after_gfx_drop"sv;
 
@@ -124,7 +124,11 @@ Director* Director::getInstance()
 
 void Director::destroyInstance()
 {
-    AX_SAFE_DELETE(s_SharedDirector);
+    if (s_SharedDirector)
+    {
+        s_SharedDirector->dispatchDisposing();
+        AX_SAFE_DELETE(s_SharedDirector);
+    }
 }
 
 Director::Director() {}
@@ -169,10 +173,10 @@ bool Director::init()
     _eventProjectionChanged = new CustomEvent(EVENT_PROJECTION_CHANGED);
     _eventProjectionChanged->setUserData(this);
 
-    _eventResetDirector = new CustomEvent(EVENT_RESET);
-    _eventResetDirector->setUserData(this);
-    _eventDestroyDirector = new CustomEvent(EVENT_DESTROY);
-    _eventDestroyDirector->setUserData(this);
+    _eventDirectorReset = new CustomEvent(EVENT_RESET);
+    _eventDirectorReset->setUserData(this);
+    _eventDirectorDisposing = new CustomEvent(EVENT_DISPOSING);
+    _eventDirectorDisposing->setUserData(this);
 
     _eventBeforeGfxDrop = new CustomEvent(EVENT_BEFORE_GFX_DROP);
     _eventBeforeGfxDrop->setUserData(this);
@@ -203,8 +207,6 @@ Director::~Director()
 {
     AXLOGD("deallocing Director: {}", fmt::ptr(this));
 
-    _eventDispatcher->dispatchEvent(_eventDestroyDirector);
-
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _eventDispatcher->removeEventListener(_rendererRecreatedListener);
     _rendererRecreatedListener = nullptr;
@@ -222,8 +224,8 @@ Director::~Director()
     AX_SAFE_RELEASE(_eventBeforeDraw);
     AX_SAFE_RELEASE(_eventAfterVisit);
     AX_SAFE_RELEASE(_eventProjectionChanged);
-    AX_SAFE_RELEASE(_eventResetDirector);
-    AX_SAFE_RELEASE(_eventDestroyDirector);
+    AX_SAFE_RELEASE(_eventDirectorReset);
+    AX_SAFE_RELEASE(_eventDirectorDisposing);
     AX_SAFE_RELEASE(_eventBeforeGfxDrop);
     AX_SAFE_RELEASE(_eventAfterGfxDrop);
 #ifdef AX_ENABLE_CONSOLE
@@ -248,6 +250,11 @@ Director::~Director()
     PoolManager::destroyInstance();
 
     s_SharedDirector = nullptr;
+}
+
+void Director::dispatchDisposing()
+{
+    _eventDispatcher->dispatchEvent(_eventDirectorDisposing);
 }
 
 void Director::setDefaultValues()
@@ -1088,7 +1095,7 @@ void Director::reset()
     _runningScene = nullptr;
     _nextScene    = nullptr;
 
-    _eventDispatcher->dispatchEvent(_eventResetDirector);
+    _eventDispatcher->dispatchEvent(_eventDirectorReset);
 
 #if defined(AX_ENABLE_AUDIO)
     // Fix github issue: https://github.com/axmolengine/axmol/issues/550

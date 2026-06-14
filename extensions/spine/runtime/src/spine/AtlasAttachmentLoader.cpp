@@ -38,75 +38,59 @@
 
 #include <spine/Atlas.h>
 
-namespace spine {
-	RTTI_IMPL(AtlasAttachmentLoader, AttachmentLoader)
+using namespace spine;
 
-	AtlasAttachmentLoader::AtlasAttachmentLoader(Atlas *atlas) : AttachmentLoader(), _atlas(atlas) {
+AtlasAttachmentLoader::AtlasAttachmentLoader(Atlas &atlas) : AttachmentLoader(), _atlas(&atlas) {
+}
+
+static void findRegions(Atlas *atlas, AtlasAttachmentLoader *loader, const String &name, const String &basePath, Sequence *sequence) {
+	Array<TextureRegion *> &regions = sequence->getRegions();
+	for (int i = 0, n = (int) regions.size(); i < n; i++) {
+		String path = sequence->getPath(basePath, i);
+		regions[i] = loader->findRegion(path);
 	}
+}
 
-	bool loadSequence(Atlas *atlas, const String &basePath, Sequence *sequence) {
-		Vector<TextureRegion *> &regions = sequence->getRegions();
-		for (int i = 0, n = (int) regions.size(); i < n; i++) {
-			String path = sequence->getPath(basePath, i);
-			regions[i] = atlas->findRegion(path);
-			if (!regions[i]) return false;
-		}
-		return true;
-	}
+RegionAttachment *AtlasAttachmentLoader::newRegionAttachment(Skin &skin, const String &placeholder, const String &name, const String &path,
+															 Sequence *sequence) {
+	SP_UNUSED(skin);
+	SP_UNUSED(placeholder);
+	findRegions(_atlas, this, name, path, sequence);
+	return new (__FILE__, __LINE__) RegionAttachment(name, sequence);
+}
 
-	RegionAttachment *AtlasAttachmentLoader::newRegionAttachment(Skin &skin, const String &name, const String &path, Sequence *sequence) {
-		SP_UNUSED(skin);
-		RegionAttachment *attachment = new (__FILE__, __LINE__) RegionAttachment(name);
-		if (sequence) {
-			if (!loadSequence(_atlas, path, sequence)) return NULL;
-		} else {
-			AtlasRegion *region = findRegion(path);
-			if (!region) return NULL;
-			attachment->setRegion(region);
-		}
-		return attachment;
-	}
+MeshAttachment *AtlasAttachmentLoader::newMeshAttachment(Skin &skin, const String &placeholder, const String &name, const String &path,
+														 Sequence *sequence) {
+	SP_UNUSED(skin);
+	SP_UNUSED(placeholder);
+	findRegions(_atlas, this, name, path, sequence);
+	return new (__FILE__, __LINE__) MeshAttachment(name, sequence);
+}
 
-	MeshAttachment *AtlasAttachmentLoader::newMeshAttachment(Skin &skin, const String &name, const String &path, Sequence *sequence) {
-		SP_UNUSED(skin);
-		MeshAttachment *attachment = new (__FILE__, __LINE__) MeshAttachment(name);
+BoundingBoxAttachment *AtlasAttachmentLoader::newBoundingBoxAttachment(Skin &skin, const String &placeholder, const String &name) {
+	SP_UNUSED(skin);
+	SP_UNUSED(placeholder);
+	return new (__FILE__, __LINE__) BoundingBoxAttachment(name);
+}
 
-		if (sequence) {
-			if (!loadSequence(_atlas, path, sequence)) return NULL;
-		} else {
-			AtlasRegion *region = findRegion(path);
-			if (!region) return NULL;
-			attachment->setRegion(region);
-		}
-		return attachment;
-	}
+PathAttachment *AtlasAttachmentLoader::newPathAttachment(Skin &skin, const String &placeholder, const String &name) {
+	SP_UNUSED(skin);
+	SP_UNUSED(placeholder);
+	return new (__FILE__, __LINE__) PathAttachment(name);
+}
 
-	BoundingBoxAttachment *AtlasAttachmentLoader::newBoundingBoxAttachment(Skin &skin, const String &name) {
-		SP_UNUSED(skin);
-		return new (__FILE__, __LINE__) BoundingBoxAttachment(name);
-	}
+PointAttachment *AtlasAttachmentLoader::newPointAttachment(Skin &skin, const String &placeholder, const String &name) {
+	SP_UNUSED(skin);
+	SP_UNUSED(placeholder);
+	return new (__FILE__, __LINE__) PointAttachment(name);
+}
 
-	PathAttachment *AtlasAttachmentLoader::newPathAttachment(Skin &skin, const String &name) {
-		SP_UNUSED(skin);
-		return new (__FILE__, __LINE__) PathAttachment(name);
-	}
+ClippingAttachment *AtlasAttachmentLoader::newClippingAttachment(Skin &skin, const String &placeholder, const String &name) {
+	SP_UNUSED(skin);
+	SP_UNUSED(placeholder);
+	return new (__FILE__, __LINE__) ClippingAttachment(name);
+}
 
-	PointAttachment *AtlasAttachmentLoader::newPointAttachment(Skin &skin, const String &name) {
-		SP_UNUSED(skin);
-		return new (__FILE__, __LINE__) PointAttachment(name);
-	}
-
-	ClippingAttachment *AtlasAttachmentLoader::newClippingAttachment(Skin &skin, const String &name) {
-		SP_UNUSED(skin);
-		return new (__FILE__, __LINE__) ClippingAttachment(name);
-	}
-
-	void AtlasAttachmentLoader::configureAttachment(Attachment *attachment) {
-		SP_UNUSED(attachment);
-	}
-
-	AtlasRegion *AtlasAttachmentLoader::findRegion(const String &name) {
-		return _atlas->findRegion(name);
-	}
-
-}// namespace spine
+AtlasRegion *AtlasAttachmentLoader::findRegion(const String &name) {
+	return _atlas->findRegion(name);
+}

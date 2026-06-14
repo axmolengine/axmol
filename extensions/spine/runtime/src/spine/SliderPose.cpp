@@ -27,17 +27,33 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifndef Spine_Vertices_h
-#define Spine_Vertices_h
+#include <spine/SliderPose.h>
 
-#include <spine/Vector.h>
+using namespace spine;
 
-namespace spine {
-	class SP_API Vertices : public SpineObject {
-	public:
-		Vector <int> _bones;
-		Vector<float> _vertices;
-	};
+SliderPose::SliderPose() : _time(0), _mix(0) {
 }
 
-#endif /* Spine_Vertices_h */
+SliderPose::~SliderPose() {
+}
+
+void SliderPose::set(SliderPose &pose) {
+	_time = pose._time;
+	_mix = pose._mix;
+}
+
+float SliderPose::getTime() {
+	return _time;
+}
+
+void SliderPose::setTime(float time) {
+	this->_time = time;
+}
+
+float SliderPose::getMix() {
+	return _mix;
+}
+
+void SliderPose::setMix(float mix) {
+	this->_mix = mix;
+}

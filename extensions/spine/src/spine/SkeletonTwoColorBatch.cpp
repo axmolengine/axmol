@@ -1,8 +1,11 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
  * Last updated April 5, 2025. Replaces all prior versions.
- *
+ * 
  * Copyright (c) 2013-2025, Esoteric Software LLC
+ * Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ *
+ * https://axmol.dev/
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -47,7 +50,7 @@ USING_NS_AX;
 namespace spine {
 
 	TwoColorTrianglesCommand::TwoColorTrianglesCommand() : _materialID(0), _texture(nullptr), _blendType(BlendFunc::DISABLE) {
-		_type = RenderCommand::Type::CUSTOM_COMMAND;
+		_type = ax::RenderCommand::Type::CUSTOM_COMMAND;
 	}
 
 	void TwoColorTrianglesCommand::init(float globalOrder,
@@ -59,7 +62,7 @@ namespace spine {
                                             uint32_t flags)
         {
 
-		RenderCommand::init(globalOrder, mv, flags);
+		ax::RenderCommand::init(globalOrder, mv, flags);
 
 		_triangles = triangles;
 		if (_triangles.indexCount % 3 != 0) {
@@ -187,15 +190,11 @@ namespace spine {
         // for the next frame
         _event1 = eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_DRAW,
                                                 [](CustomEvent*) { s_TwoColorInstance->update(0); });
-
-        _event2 = eventDispatcher->addCustomEventListener(Director::EVENT_DESTROY,
-                                                [](CustomEvent*) { SkeletonTwoColorBatch::destroyInstance(); });
 	}
 
 	SkeletonTwoColorBatch::~SkeletonTwoColorBatch() {
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
         eventDispatcher->removeEventListener(_event1);
-        eventDispatcher->removeEventListener(_event2);
         for (auto& command : _commandsPool)
         {
             if (command)
@@ -293,7 +292,7 @@ namespace spine {
 
 		command->init(globalOrder, texture, pipelinePS, blendType, triangles, mv, flags);
 
-        command->setOwnPSVL(pipelinePS, _twoColorVertexLayout, RenderCommand::ADOPT_FLAG_PS);
+        command->setOwnPSVL(pipelinePS, _twoColorVertexLayout, ax::RenderCommand::ADOPT_FLAG_PS);
 
 		command->updateVertexAndIndexBuffer(renderer, triangles.verts, triangles.vertCount, triangles.indices, triangles.indexCount);
 		renderer->addCommand(command);

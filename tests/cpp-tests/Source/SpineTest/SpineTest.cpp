@@ -27,11 +27,8 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
-#include "spine/spine.h"
 
 using namespace ax;
-using namespace std;
-using namespace spine;
 
 #define SET_UNIFORM(ps, name, value)                          \
     do                                                        \
@@ -43,10 +40,6 @@ using namespace spine;
 
 #define NUM_SKELETONS           50
 #define SPINE_NODE_SCALE_FACTOR 0.4
-
-PowInterpolation pow2(2);
-PowOutInterpolation powOut2(2);
-// SwirlVertexEffect effect(400, powOut2);
 
 #define SCALE_SKELETON_NODE(node)                    \
     do                                               \
@@ -78,15 +71,13 @@ SpineTests::SpineTests()
     ADD_TEST_CASE(TankExample);
 
 #ifdef _AX_DEBUG
-    debugExtension = new DebugExtension(SpineExtension::getInstance());
+    debugExtension = new spine::DebugExtension(spine::SpineExtension::getInstance());
 #endif
 }
 
 SpineTests::~SpineTests()
 {
     FileUtils::getInstance()->setSearchPaths(_searchPaths);
-    SkeletonBatch::destroyInstance();
-    SkeletonTwoColorBatch::destroyInstance();
 #ifdef _AX_DEBUG
     debugExtension->reportLeaks();
     delete debugExtension;
@@ -160,34 +151,17 @@ bool BatchingExample::init()
 
     _title = "Batching";
 
-    _atlas = new (__FILE__, __LINE__) Atlas("spineboy.atlas", AxmolTextureLoader::getInstance(), true);
-    AXASSERT(_atlas, "Error reading atlas file.");
-
-    // This attachment loader configures attachments with data needed for axmol rendering.
-    // Do not dispose the attachment loader until the skeleton data is disposed!
-    _attachmentLoader = new (__FILE__, __LINE__) AxmolAtlasAttachmentLoader(_atlas);
-
-    // Load the skeleton data.
-    SkeletonJson* json = new (__FILE__, __LINE__) SkeletonJson(_attachmentLoader);
-    json->setScale(0.6f);  // Resizes skeleton data to 60% of the size it was in Spine.
-    _skeletonData = json->readSkeletonDataFile("spineboy-pro.json");
-    AXASSERT(_skeletonData,
-             (json->getError().isEmpty() ? json->getError().buffer() : "Error reading skeleton data file."));
-    delete json;
-
-    // Setup mix times.
-    _stateData = new (__FILE__, __LINE__) AnimationStateData(_skeletonData);
-    _stateData->setMix("walk", "jump", 0.2f);
-    _stateData->setMix("jump", "run", 0.2f);
+    auto asset = spine::SkeletonAssetCache::getInstance()->loadAsset("spineboy-pro.json", "spineboy.atlas", 0.6f);
+    AXASSERT(asset, "Error reading skeleton asset file.");
 
     int xMin = _contentSize.width * 0.10f, xMax = _contentSize.width * 0.90f;
     int yMin = 0, yMax = _contentSize.height * 0.7f;
     for (int i = 0; i < NUM_SKELETONS; i++)
     {
-        // Each skeleton node shares the same atlas, skeleton data, and mix times.
-        SkeletonAnimation* skeletonNode = SkeletonAnimation::createWithData(_skeletonData, false);
-        skeletonNode->setAnimationStateData(_stateData);
+        auto skeletonNode = spine::SkeletonAnimation::create(asset->getSkeletonData());
 
+        skeletonNode->setMix("walk", "jump", 0.2f);
+        skeletonNode->setMix("jump", "run", 0.2f);
         skeletonNode->setAnimation(0, "walk", true);
         skeletonNode->addAnimation(0, "jump", true, RandomHelper::random_int(0, 300) / 100.0f);
         skeletonNode->addAnimation(0, "run", true);
@@ -206,17 +180,6 @@ bool BatchingExample::init()
     return true;
 }
 
-BatchingExample::~BatchingExample()
-{
-    // SkeletonAnimation instances are axmol nodes and are disposed of automatically as normal, but the data created
-    // manually to be shared across multiple SkeletonAnimations needs to be disposed of manually.
-
-    delete _skeletonData;
-    delete _stateData;
-    delete _attachmentLoader;
-    delete _atlas;
-}
-
 bool CoinExample::init()
 {
 
@@ -225,7 +188,7 @@ bool CoinExample::init()
 
     _title = "Coin";
 
-    skeletonNode = SkeletonAnimation::createWithBinaryFile("coin-pro.skel", "coin.atlas", 1);
+    skeletonNode = spine::SkeletonAnimation::create("coin-pro.skel", "coin.atlas", 1);
     skeletonNode->setAnimation(0, "animation", true);
 
     skeletonNode->setPosition(Vec2(_contentSize.width / 2, _contentSize.height / 2));
@@ -242,7 +205,7 @@ bool GoblinsExample::init()
         return false;
 
     _title       = "Goblins";
-    skeletonNode = SkeletonAnimation::createWithJsonFile("goblins-pro.json", "goblins.atlas", 1.5f);
+    skeletonNode = spine::SkeletonAnimation::create("goblins-pro.json", "goblins.atlas", 1.5f);
     skeletonNode->setAnimation(0, "walk", true);
     skeletonNode->setSkin("goblin");
 
@@ -261,7 +224,7 @@ bool IKExample::init()
 
     // Load the Spineboy skeleton and create a SkeletonAnimation node from it
     // centered on the screen.
-    skeletonNode = SkeletonAnimation::createWithJsonFile("spineboy-pro.json", "spineboy.atlas", 0.6f);
+    skeletonNode = spine::SkeletonAnimation::create("spineboy-pro.json", "spineboy.atlas", 0.6f);
     skeletonNode->setPosition(Vec2(_contentSize.width / 2, 20));
     addChild(skeletonNode);
 
@@ -305,25 +268,13 @@ bool IKExample::init()
     // converted mouse location, we call updateWorldTransforms()
     // again so the change of the IK target position is
     // applied to the rest of the skeleton.
-    skeletonNode->setPostUpdateWorldTransformsListener([this](SkeletonAnimation* node) -> void {
-        Bone* crosshair = node->findBone("crosshair");  // The bone should be cached
-        float localX = 0, localY = 0;
-        crosshair->getParent()->worldToLocal(position.x, position.y, localX, localY);
-        crosshair->setX(localX);
-        crosshair->setY(localY);
-        // crosshair->setAppliedValid(false);
-
-        node->getSkeleton()->updateWorldTransform(spine::Physics_Update);
+    skeletonNode->setPostUpdateWorldTransformsListener([this](spine::SkeletonAnimation* node) -> void {
+        node->setBoneWorldPosition("crosshair", position);
+        node->updateWorldTransform(spine::Physics_Update);
     });
 
     SCALE_SKELETON_NODE(skeletonNode);
     return true;
-}
-
-MixAndMatchExample::~MixAndMatchExample()
-{
-    delete skin;
-    delete skin2;
 }
 
 bool MixAndMatchExample::init()
@@ -333,25 +284,15 @@ bool MixAndMatchExample::init()
 
     _title = "Mix and Match";
 
-    skeletonNode = SkeletonAnimation::createWithBinaryFile("mix-and-match-pro.skel", "mix-and-match.atlas", 0.5);
+    skeletonNode = spine::SkeletonAnimation::create("mix-and-match-pro.skel", "mix-and-match.atlas", 0.5);
     skeletonNode->setAnimation(0, "dance", true);
 
-    // Create a new skin, by mixing and matching other skins
-    // that fit together. Items making up the girl are individual
-    // skins. Using the skin API, a new skin is created which is
-    // a combination of all these individual item skins.
-    SkeletonData* skeletonData = skeletonNode->getSkeleton()->getData();
-    skin                       = new (__FILE__, __LINE__) Skin("mix-and-match");
-    skin->addSkin(skeletonData->findSkin("skin-base"));
-    skin->addSkin(skeletonData->findSkin("nose/short"));
-    skin->addSkin(skeletonData->findSkin("eyelids/girly"));
-    skin->addSkin(skeletonData->findSkin("eyes/violet"));
-    skin->addSkin(skeletonData->findSkin("hair/brown"));
-    skin->addSkin(skeletonData->findSkin("clothes/hoodie-orange"));
-    skin->addSkin(skeletonData->findSkin("legs/pants-jeans"));
-    skin->addSkin(skeletonData->findSkin("accessories/bag"));
-    skin->addSkin(skeletonData->findSkin("accessories/hat-red-yellow"));
-    skeletonNode->getSkeleton()->setSkin(skin);
+    static std::string_view skins[]{
+        "skin-base"sv,        "nose/short"sv,      "eyelids/girly"sv,
+        "eyes/violet"sv,      "hair/brown"sv,      "clothes/hoodie-orange"sv,
+        "legs/pants-jeans"sv, "accessories/bag"sv, "accessories/hat-red-yellow"sv,
+    };
+    skeletonNode->setCombinedSkin("mix-and-match", std::span{skins});
 
     skeletonNode->setPosition(Vec2(_contentSize.width / 3, _contentSize.height / 2 - 100));
     addChild(skeletonNode);
@@ -368,25 +309,10 @@ bool MixAndMatchExample::init()
     skeletonNode->setProgramState(ps1, true);
 
     /* -------- skeletonNode2 with same spine animation file ------------ */
-    auto skeletonNode2 = SkeletonAnimation::createWithBinaryFile("mix-and-match-pro.skel", "mix-and-match.atlas", 0.5);
+    auto skeletonNode2 = spine::SkeletonAnimation::create("mix-and-match-pro.skel", "mix-and-match.atlas", 0.5);
     skeletonNode2->setAnimation(0, "dance", true);
 
-    // Create a new skin, by mixing and matching other skins
-    // that fit together. Items making up the girl are individual
-    // skins. Using the skin API, a new skin is created which is
-    // a combination of all these individual item skins.
-    SkeletonData* skeletonData2 = skeletonNode->getSkeleton()->getData();
-    skin2                       = new (__FILE__, __LINE__) Skin("mix-and-match");
-    skin2->addSkin(skeletonData->findSkin("skin-base"));
-    skin2->addSkin(skeletonData->findSkin("nose/short"));
-    skin2->addSkin(skeletonData->findSkin("eyelids/girly"));
-    skin2->addSkin(skeletonData->findSkin("eyes/violet"));
-    skin2->addSkin(skeletonData->findSkin("hair/brown"));
-    skin2->addSkin(skeletonData->findSkin("clothes/hoodie-orange"));
-    skin2->addSkin(skeletonData->findSkin("legs/pants-jeans"));
-    skin2->addSkin(skeletonData->findSkin("accessories/bag"));
-    skin2->addSkin(skeletonData->findSkin("accessories/hat-red-yellow"));
-    skeletonNode2->getSkeleton()->setSkin(skin2);
+    skeletonNode2->setCombinedSkin("mix-and-match", skins);
 
     skeletonNode2->setPosition(Vec2(_contentSize.width / 1.5, _contentSize.height / 2 - 100));
     addChild(skeletonNode2);
@@ -406,7 +332,7 @@ bool RaptorExample::init()
         return false;
 
     _title       = "Raptor";
-    skeletonNode = SkeletonAnimation::createWithJsonFile("raptor-pro.json", "raptor.atlas", 0.5f);
+    skeletonNode = spine::SkeletonAnimation::create("raptor-pro.json", "raptor.atlas", 0.5f);
     skeletonNode->setAnimation(0, "walk", true);
     skeletonNode->addAnimation(1, "gun-grab", false, 2);
     skeletonNode->setTwoColorTint(true);
@@ -443,11 +369,11 @@ bool SkeletonRendererSeparatorExample::init()
 
     // Spineboy's back, which will manage the animation and GPU resources
     // will render only the front slots of Spineboy
-    skeletonNode = SkeletonAnimation::createWithJsonFile("spineboy-pro.json", "spineboy.atlas", 0.6f);
+    skeletonNode = spine::SkeletonAnimation::create("spineboy-pro.json", "spineboy.atlas", 0.6f);
     skeletonNode->setMix("walk", "jump", 0.4);
     skeletonNode->setAnimation(0, "walk", true);
-    skeletonNode->setSlotsRange(skeletonNode->findSlot("rear-upper-arm")->getData().getIndex(),
-                                skeletonNode->findSlot("rear-shin")->getData().getIndex());
+    skeletonNode->setSlotsRange(skeletonNode->findSlotIndex("rear-upper-arm"),
+                                skeletonNode->findSlotIndex("rear-shin"));
     skeletonNode->setPosition(Vec2(_contentSize.width / 2, 20));
 
     // A simple rectangle to go between the front and back slots of Spineboy
@@ -462,8 +388,7 @@ bool SkeletonRendererSeparatorExample::init()
     // Spineboy's front, doesn't manage any skeleton, animation or GPU resources, but simply
     // renders the back slots of Spineboy. The skeleton, animatio state and GPU resources
     // are shared with the front node!
-    frontNode = SkeletonRenderer::createWithSkeleton(skeletonNode->getSkeleton());
-    frontNode->setSlotsRange(frontNode->findSlot("neck")->getData().getIndex(), -1);
+    frontNode = skeletonNode->clone(skeletonNode->findSlotIndex("neck"), -1);
     frontNode->setPosition(Vec2(_contentSize.width / 2, 20));
 
     // Add the front, between and back node in the correct order to this scene
@@ -503,27 +428,28 @@ bool SpineboyExample::init()
 
     _title = "Spineboy";
 
-    skeletonNode = SkeletonAnimation::createWithJsonFile("spineboy-pro.json", "spineboy.atlas", 0.6f);
+    skeletonNode = spine::SkeletonAnimation::create("spineboy-pro.json", "spineboy.atlas", 0.6f);
 
-    skeletonNode->setStartListener([](TrackEntry* entry) {
-        AXLOGI("{} start: {}", entry->getTrackIndex(), entry->getAnimation()->getName().buffer());
+    skeletonNode->setStartListener([](spine::TrackEntry* entry) {
+        AXLOGI("{} start: {}", entry->getTrackIndex(), entry->getAnimation().getName().buffer());
     });
-    skeletonNode->setInterruptListener([](TrackEntry* entry) { AXLOGI("{} interrupt", entry->getTrackIndex()); });
-    skeletonNode->setEndListener([](TrackEntry* entry) { AXLOGI("{} end", entry->getTrackIndex()); });
-    skeletonNode->setCompleteListener([](TrackEntry* entry) { AXLOGI("{} complete", entry->getTrackIndex()); });
-    skeletonNode->setDisposeListener([](TrackEntry* entry) { AXLOGI("{} dispose", entry->getTrackIndex()); });
-    skeletonNode->setEventListener([](TrackEntry* entry, spine::Event* event) {
-        AXLOGI("{} event: {}, {}, {}, {}", entry->getTrackIndex(), event->getData().getName(), event->getIntValue(),
-               event->getFloatValue(), event->getStringValue());
+    skeletonNode->setInterruptListener(
+        [](spine::TrackEntry* entry) { AXLOGI("{} interrupt", entry->getTrackIndex()); });
+    skeletonNode->setEndListener([](spine::TrackEntry* entry) { AXLOGI("{} end", entry->getTrackIndex()); });
+    skeletonNode->setCompleteListener([](spine::TrackEntry* entry) { AXLOGI("{} complete", entry->getTrackIndex()); });
+    skeletonNode->setDisposeListener([](spine::TrackEntry* entry) { AXLOGI("{} dispose", entry->getTrackIndex()); });
+    skeletonNode->setEventListener([](spine::TrackEntry* entry, spine::Event* event) {
+        AXLOGI("{} event: {}, {}, {}, {}", entry->getTrackIndex(), event->getData().getName().buffer(), event->getInt(),
+               event->getFloat(), event->getString());
     });
 
     skeletonNode->setMix("walk", "jump", 0.4);
     skeletonNode->setMix("jump", "run", 0.4);
     skeletonNode->setAnimation(0, "walk", true);
-    TrackEntry* jumpEntry = skeletonNode->addAnimation(0, "jump", false, 1);
+    spine::TrackEntry* jumpEntry = skeletonNode->addAnimation(0, "jump", false, 1);
     skeletonNode->addAnimation(0, "run", true);
 
-    skeletonNode->setTrackStartListener(jumpEntry, [](TrackEntry* entry) { AXLOGI("jumped!"); });
+    skeletonNode->setTrackStartListener(jumpEntry, [](spine::TrackEntry* entry) { AXLOGI("jumped!"); });
 
     // skeletonNode->addAnimation(1, "test", true);
     // skeletonNode->runAction(RepeatForever::create(Sequence::create(FadeOut::create(1), FadeIn::create(1),
@@ -563,7 +489,7 @@ bool TankExample::init()
         return false;
 
     _title       = "Tank";
-    skeletonNode = SkeletonAnimation::createWithBinaryFile("tank-pro.skel", "tank.atlas", 0.5f);
+    skeletonNode = spine::SkeletonAnimation::create("tank-pro.skel", "tank.atlas", 0.5f);
     skeletonNode->setAnimation(0, "shoot", true);
 
     skeletonNode->setPosition(Vec2(_contentSize.width / 2 + 400, 20));

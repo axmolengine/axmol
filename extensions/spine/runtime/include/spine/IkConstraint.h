@@ -30,88 +30,62 @@
 #ifndef Spine_IkConstraint_h
 #define Spine_IkConstraint_h
 
+#include <spine/Constraint.h>
 #include <spine/ConstraintData.h>
-
-#include <spine/Vector.h>
+#include <spine/IkConstraintData.h>
+#include <spine/IkConstraintPose.h>
+#include <spine/Array.h>
 
 namespace spine {
-	class IkConstraintData;
-
 	class Skeleton;
-
 	class Bone;
+	class BonePose;
 
-	class SP_API IkConstraint : public Updatable {
+	// Non-exported base class that inherits from the template
+	class IkConstraintBase : public ConstraintGeneric<IkConstraint, IkConstraintData, IkConstraintPose> {
+	public:
+		IkConstraintBase(IkConstraintData &data) : ConstraintGeneric<IkConstraint, IkConstraintData, IkConstraintPose>(data) {
+		}
+	};
+
+	class SP_API IkConstraint : public IkConstraintBase {
 		friend class Skeleton;
 
 		friend class IkConstraintTimeline;
 
-	RTTI_DECL
+		RTTI_DECL
 
 	public:
-		/// Adjusts the bone rotation so the tip is as close to the target position as possible. The target is specified
-		/// in the world coordinate system.
-		static void
-		apply(Bone &bone, float targetX, float targetY, bool compress, bool stretch, bool uniform, float alpha);
+		IkConstraint(IkConstraintData &data, Skeleton &skeleton);
+
+		virtual IkConstraint &copy(Skeleton &skeleton);
+
+		virtual void update(Skeleton &skeleton, Physics physics) override;
+
+		virtual void sort(Skeleton &skeleton) override;
+
+		virtual bool isSourceActive() override;
+
+		Array<BonePose *> &getBones();
+
+		Bone &getTarget();
+
+		void setTarget(Bone &inValue);
+
+		/// Adjusts the local rotation of the bone so the world position of the tip is as close to the target position as
+		/// possible. The target is specified in the world coordinate system.
+		static void apply(Skeleton &skeleton, BonePose &bone, float targetX, float targetY, bool compress, bool stretch, ScaleYMode scaleYMode,
+						  float mix);
 
 		/// Adjusts the parent and child bone rotations so the tip of the child is as close to the target position as
 		/// possible. The target is specified in the world coordinate system.
 		/// @param child A direct descendant of the parent bone.
-		static void
-		apply(Bone &parent, Bone &child, float targetX, float targetY, int bendDir, bool stretch, bool uniform,
-			  float softness,
-			  float alpha);
-
-		IkConstraint(IkConstraintData &data, Skeleton &skeleton);
-
-		virtual void update(Physics physics);
-
-		virtual int getOrder();
-
-		IkConstraintData &getData();
-
-		Vector<Bone *> &getBones();
-
-		Bone *getTarget();
-
-		void setTarget(Bone *inValue);
-
-		int getBendDirection();
-
-		void setBendDirection(int inValue);
-
-		bool getCompress();
-
-		void setCompress(bool inValue);
-
-		bool getStretch();
-
-		void setStretch(bool inValue);
-
-		float getMix();
-
-		void setMix(float inValue);
-
-		float getSoftness();
-
-		void setSoftness(float inValue);
-
-		bool isActive();
-
-		void setActive(bool inValue);
-
-        void setToSetupPose();
+		static void apply(Skeleton &skeleton, BonePose &parent, BonePose &child, float targetX, float targetY, int bendDirection, bool stretch,
+						  ScaleYMode scaleYMode, float softness, float mix);
 
 	private:
-		IkConstraintData &_data;
-		Vector<Bone *> _bones;
-		int _bendDirection;
-		bool _compress;
-		bool _stretch;
-		float _mix;
-		float _softness;
+		Array<BonePose *> _bones;
 		Bone *_target;
-		bool _active;
 	};
 }
 

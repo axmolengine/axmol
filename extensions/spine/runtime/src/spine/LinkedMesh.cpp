@@ -33,20 +33,12 @@
 
 using namespace spine;
 
-LinkedMesh::LinkedMesh(MeshAttachment *mesh, const int skinIndex, size_t slotIndex, const String &parent,
-					   bool inheritTimeline) : _mesh(mesh),
-											   _skinIndex(skinIndex),
-											   _skin(""),
-											   _slotIndex(slotIndex),
-											   _parent(parent),
-											   _inheritTimeline(inheritTimeline) {
+LinkedMesh::LinkedMesh(MeshAttachment &mesh, const int skinIndex, size_t slotIndex, size_t sourceIndex, const String &source, bool inheritTimelines)
+	: _mesh(&mesh), _skinIndex(skinIndex), _skin(""), _slotIndex(slotIndex), _sourceIndex(sourceIndex), _source(source),
+	  _inheritTimelines(inheritTimelines) {
 }
 
-LinkedMesh::LinkedMesh(MeshAttachment *mesh, const String &skin, size_t slotIndex, const String &parent,
-					   bool inheritTimeline) : _mesh(mesh),
-											   _skinIndex(-1),
-											   _skin(skin),
-											   _slotIndex(slotIndex),
-											   _parent(parent),
-											   _inheritTimeline(inheritTimeline) {
+LinkedMesh::LinkedMesh(MeshAttachment &mesh, const String &skin, size_t slotIndex, size_t sourceIndex, const String &source, bool inheritTimelines)
+	: _mesh(&mesh), _skinIndex(-1), _skin(skin), _slotIndex(slotIndex), _sourceIndex(sourceIndex), _source(source),
+	  _inheritTimelines(inheritTimelines) {
 }

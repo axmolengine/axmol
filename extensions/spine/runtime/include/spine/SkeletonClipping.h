@@ -30,58 +30,60 @@
 #ifndef Spine_SkeletonClipping_h
 #define Spine_SkeletonClipping_h
 
-#include <spine/Vector.h>
+#include <spine/Array.h>
 #include <spine/Triangulator.h>
 
 namespace spine {
 	class Slot;
-
+	class Skeleton;
 	class ClippingAttachment;
 
 	class SP_API SkeletonClipping : public SpineObject {
 	public:
 		SkeletonClipping();
 
-		size_t clipStart(Slot &slot, ClippingAttachment *clip);
+		size_t clipStart(Skeleton &skeleton, Slot &slot, ClippingAttachment *clip);
 
 		void clipEnd(Slot &slot);
 
 		void clipEnd();
 
-        void
-        clipTriangles(float *vertices, unsigned short *triangles, size_t trianglesLength);
+		bool clipTriangles(float *vertices, unsigned short *triangles, size_t trianglesLength);
 
-		void
-		clipTriangles(float *vertices, unsigned short *triangles, size_t trianglesLength, float *uvs, size_t stride);
+		bool clipTriangles(float *vertices, unsigned short *triangles, size_t trianglesLength, float *uvs, size_t stride);
 
-		void
-		clipTriangles(Vector<float> &vertices, Vector<unsigned short> &triangles, Vector<float> &uvs, size_t stride);
+		bool clipTriangles(Array<float> &vertices, Array<unsigned short> &triangles, Array<float> &uvs, size_t stride);
 
 		bool isClipping();
 
-		Vector<float> &getClippedVertices();
+		Array<float> &getClippedVertices();
 
-		Vector<unsigned short> &getClippedTriangles();
+		Array<unsigned short> &getClippedTriangles();
 
-		Vector<float> &getClippedUVs();
+		Array<float> &getClippedUVs();
 
 	private:
 		Triangulator _triangulator;
-		Vector<float> _clippingPolygon;
-		Vector<float> _clipOutput;
-		Vector<float> _clippedVertices;
-		Vector<unsigned short> _clippedTriangles;
-		Vector<float> _clippedUVs;
-		Vector<float> _scratch;
+		Array<float> _clippingPolygon;
+		Array<Array<float> *> _clippingPolygons;
+		Array<float> _clipOutput;
+		Array<float> _clippedVertices;
+		Array<unsigned short> _clippedTriangles;
+		Array<float> _clippedUVs;
+		Array<float> _inverseVertices;
+		Array<float> _scratch;
 		ClippingAttachment *_clipAttachment;
-		Vector<Vector<float> *> *_clippingPolygons;
+		bool _inverse;
 
 		/** Clips the input triangle against the convex, clockwise clipping area. If the triangle lies entirely within the clipping
 		  * area, false is returned. The clipping area must duplicate the first vertex at the end of the vertices list. */
-		bool clip(float x1, float y1, float x2, float y2, float x3, float y3, Vector<float> *clippingArea,
-				  Vector<float> *output);
+		bool clip(float x1, float y1, float x2, float y2, float x3, float y3, Array<float> *polygon);
 
-		static void makeClockwise(Vector<float> &polygon);
+		void clipInverse(float x1, float y1, float x2, float y2, float x3, float y3, Array<float> *polygon);
+
+		static bool makeClockwise(Array<float> &polygon);
+
+		void makeConvex(Array<float> &polygon);
 	};
 }
 

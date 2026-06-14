@@ -109,8 +109,9 @@ public:
 
     /** Director will trigger an event while resetting Director */
     static std::string_view EVENT_RESET;
-    /** Director will trigger an event while destroying Director */
-    static std::string_view EVENT_DESTROY;
+
+    /** Director dispatches this event before deletion. */
+    static std::string_view EVENT_DISPOSING;
 
     /** Director will trigger an event before dropping the graphics subsystem */
     static std::string_view EVENT_BEFORE_GFX_DROP;
@@ -612,6 +613,8 @@ protected:
 
     void reset();
 
+    void dispatchDisposing();
+
     /**
      * @brief Internal-only: Sets canvas size aka design size, invoked by RenderView
      */
@@ -673,8 +676,8 @@ protected:
     CustomEvent* _eventAfterUpdate       = nullptr;
     CustomEvent* _beforeSetNextScene     = nullptr;
     CustomEvent* _afterSetNextScene      = nullptr;
-    CustomEvent* _eventResetDirector     = nullptr;
-    CustomEvent* _eventDestroyDirector   = nullptr;
+    CustomEvent* _eventDirectorReset     = nullptr;
+    CustomEvent* _eventDirectorDisposing = nullptr;
     CustomEvent* _eventBeforeGfxDrop     = nullptr;
     CustomEvent* _eventAfterGfxDrop      = nullptr;
 

@@ -35,42 +35,48 @@
 
 namespace spine {
 	class Bone;
+	class BonePose;
 
 	/// An attachment which is a single point and a rotation. This can be used to spawn projectiles, particles, etc. A bone can be
 	/// used in similar ways, but a PointAttachment is slightly less expensive to compute and can be hidden, shown, and placed in a
 	/// skin.
 	///
-	/// See http://esotericsoftware.com/spine-point-attachments for Point Attachments in the Spine User Guide.
+	/// See https://esotericsoftware.com/spine-points for Point Attachments in the Spine User Guide.
 	///
 	class SP_API PointAttachment : public Attachment {
 		friend class SkeletonBinary;
 
 		friend class SkeletonJson;
 
-	RTTI_DECL
+		RTTI_DECL
 
 	public:
 		explicit PointAttachment(const String &name);
 
-		void computeWorldPosition(Bone &bone, float &ox, float &oy);
-
-		float computeWorldRotation(Bone &bone);
-
+		/// The local x position.
 		float getX();
 
 		void setX(float inValue);
 
+		/// The local y position.
 		float getY();
 
 		void setY(float inValue);
 
+		/// The local rotation in degrees, counter clockwise.
 		float getRotation();
 
 		void setRotation(float inValue);
 
 		Color &getColor();
 
-		virtual Attachment *copy();
+		/// Computes the world position from the local position.
+		void computeWorldPosition(BonePose &bone, float &ox, float &oy);
+
+		/// Computes the world rotation from the local rotation.
+		float computeWorldRotation(BonePose &bone);
+
+		virtual Attachment &copy() override;
 
 	private:
 		float _x, _y, _rotation;

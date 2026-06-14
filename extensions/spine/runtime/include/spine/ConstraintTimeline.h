@@ -27,19 +27,26 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifndef Spine_MixPose_h
-#define Spine_MixPose_h
+#ifndef Spine_ConstraintTimeline_h
+#define Spine_ConstraintTimeline_h
+
+#include <spine/dll.h>
+#include <spine/RTTI.h>
 
 namespace spine {
+	/// An interface for timelines which change the property of a constraint.
+	class SP_API ConstraintTimeline {
+		RTTI_DECL_NOPARENT
 
-/// Controls how a timeline is mixed with the setup or current pose.
-/// See also Timeline::apply(Skeleton&, float, float, Vector&, float, Blend, MixDirection)
-	enum MixBlend {
-		MixBlend_Setup = 0,
-		MixBlend_First,
-		MixBlend_Replace,
-		MixBlend_Add
+	public:
+		ConstraintTimeline();
+		virtual ~ConstraintTimeline();
+
+		/// The Skeleton::getConstraints() index of the constraint that will be changed when this timeline is applied.
+		virtual int getConstraintIndex() const = 0;
+
+		virtual void setConstraintIndex(int inValue) = 0;
 	};
 }
 
-#endif /* Spine_MixPose_h */
+#endif

@@ -26,8 +26,7 @@
 #include "sceneio/WidgetReader/SpineSkeletonReader/SpineSkeletonReader.h"
 
 #if defined(AX_ENABLE_EXT_SPINE)
-#    include "sceneext/SpineSkeletonDataCache.h"
-
+#    include "spine/SkeletonAnimation.h"
 #    include "axmol/2d/Sprite.h"
 #    include "axmol/2d/SpriteFrameCache.h"
 #    include "axmol/platform/FileUtils.h"
@@ -197,11 +196,9 @@ void SpineSkeletonReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuff
 
     auto options = (SpineSkeletonOptions*)spriteOptions;
 
-    auto sharedData = SpineSkeletonDataCache::getInstance()->addData(options->dataFile()->c_str(),
-                                                                     options->atlasFile()->c_str(), 1.0f /*TODO:*/);
-    auto implNode   = spine::SkeletonAnimation::createWithData(sharedData->data);
-    implNode->setAnimation(0, options->animation()->c_str(), options->loop());
-    implNode->setSkin(options->animation()->c_str());
+    auto implNode = spine::SkeletonAnimation::create(options->dataFile()->string_view(), options->atlasFile()->string_view());
+    implNode->setAnimation(0, options->animation()->string_view(), options->loop());
+    implNode->setSkin(options->animation()->string_view());
 
     *ppResult = implNode;
 

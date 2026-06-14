@@ -27,43 +27,82 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifndef Spine_Constraint_h
-#define Spine_Constraint_h
+#ifndef Spine_ConstraintData_h
+#define Spine_ConstraintData_h
 
-#include <spine/Updatable.h>
 #include <spine/SpineString.h>
+#include <spine/SpineObject.h>
+#include <spine/PosedData.h>
+#include <spine/RTTI.h>
+#include <string.h>
 
 namespace spine {
-	/// The interface for all constraints.
+	class Skeleton;
+	class Constraint;
+
+	enum ScaleYMode {
+		ScaleYMode_None = 0,
+		ScaleYMode_Uniform,
+		ScaleYMode_Volume
+	};
+
+	inline ScaleYMode ScaleYMode_valueOf(const char *value) {
+		if (strcmp(value, "uniform") == 0)
+			return ScaleYMode_Uniform;
+		else if (strcmp(value, "volume") == 0)
+			return ScaleYMode_Volume;
+		else
+			return ScaleYMode_None;
+	}
+
+	inline const char *ScaleYMode_toString(ScaleYMode scaleYMode) {
+		switch (scaleYMode) {
+			case ScaleYMode_Uniform:
+				return "uniform";
+			case ScaleYMode_Volume:
+				return "volume";
+			default:
+				return "none";
+		}
+	}
+
 	class SP_API ConstraintData : public SpineObject {
-
-        friend class SkeletonBinary;
-
-	RTTI_DECL
+		RTTI_DECL_NOPARENT
+		friend class Skeleton;
+		friend class Constraint;
 
 	public:
-		ConstraintData(const String &name);
+		ConstraintData(const String &name) : SpineObject(name) {
+		}
+		virtual ~ConstraintData() {
+		}
 
-		virtual ~ConstraintData();
+		virtual Constraint &create(Skeleton &skeleton) = 0;
 
-		/// The IK constraint's name, which is unique within the skeleton.
-		const String &getName();
+		virtual const String &getName() const = 0;
 
-		/// The ordinal for the order a skeleton's constraints will be applied.
-		size_t getOrder();
+		virtual bool getSkinRequired() const = 0;
+	};
 
-		void setOrder(size_t inValue);
+	/// Base class for all constraint data types.
+	template<class T, class P>
+	class ConstraintDataGeneric : public PosedDataGeneric<P>, public ConstraintData {
+	public:
+		ConstraintDataGeneric(const String &name) : PosedDataGeneric<P>(name), ConstraintData(name) {
+		}
+		virtual ~ConstraintDataGeneric() {
+		}
 
-		/// Whether the constraint is only active for a specific skin.
-		bool isSkinRequired();
+		virtual Constraint &create(Skeleton &skeleton) override = 0;
 
-		void setSkinRequired(bool inValue);
-
-	private:
-		const String _name;
-		size_t _order;
-		bool _skinRequired;
+		// Resolve ambiguity by forwarding to PosedData's implementation
+		virtual const String &getName() const override {
+			return PosedDataGeneric<P>::getName();
+		}
+		virtual bool getSkinRequired() const override {
+			return PosedDataGeneric<P>::getSkinRequired();
+		}
 	};
 }
 
-#endif /* Spine_Constraint_h */
+#endif /* Spine_ConstraintData_h */

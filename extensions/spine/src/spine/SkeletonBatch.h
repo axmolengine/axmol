@@ -3,6 +3,9 @@
  * Last updated April 5, 2025. Replaces all prior versions.
  *
  * Copyright (c) 2013-2025, Esoteric Software LLC
+ * Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ *
+ * https://axmol.dev/
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -78,7 +81,7 @@ namespace spine {
 		uint32_t _numVertices;
 
 		// pool of indices
-		Vector<unsigned short> _indices;
+		::spine::Array<unsigned short> _indices;
 
         ax::EventListener* _afterDrawListener{nullptr};
 	};

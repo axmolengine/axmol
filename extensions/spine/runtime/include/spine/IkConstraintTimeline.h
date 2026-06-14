@@ -31,29 +31,39 @@
 #define Spine_IkConstraintTimeline_h
 
 #include <spine/CurveTimeline.h>
+#include <spine/ConstraintTimeline.h>
 
 namespace spine {
 
-	class SP_API IkConstraintTimeline : public CurveTimeline {
+	/// Changes an IK constraint's mix, softness, bend direction, stretch, and compress values.
+	class SP_API IkConstraintTimeline : public CurveTimeline, public ConstraintTimeline {
 		friend class SkeletonBinary;
 
 		friend class SkeletonJson;
 
-	RTTI_DECL
+		RTTI_DECL
 
 	public:
-		explicit IkConstraintTimeline(size_t frameCount, size_t bezierCount, int ikConstraintIndex);
+		explicit IkConstraintTimeline(size_t frameCount, size_t bezierCount, int constraintIndex);
 
-		virtual void
-		apply(Skeleton &skeleton, float lastTime, float time, Vector<Event *> *pEvents, float alpha, MixBlend blend,
-			  MixDirection direction);
+		virtual ~IkConstraintTimeline();
 
-		/// Sets the time, mix and bend direction of the specified keyframe.
+		virtual void apply(Skeleton &skeleton, float lastTime, float time, Array<Event *> *events, float alpha, MixFrom from, bool add, bool out,
+						   bool appliedPose) override;
+
+		/// Sets the time, mix, softness, bend direction, compress, and stretch for the specified frame.
+		/// @param frame Between 0 and frameCount, inclusive.
+		/// @param time The frame time in seconds.
+		/// @param bendDirection 1 or -1.
 		void setFrame(int frame, float time, float mix, float softness, int bendDirection, bool compress, bool stretch);
 
-		int getIkConstraintIndex() { return _constraintIndex; }
+		virtual int getConstraintIndex() const override {
+			return _constraintIndex;
+		}
 
-		void setIkConstraintIndex(int inValue) { _constraintIndex = inValue; }
+		virtual void setConstraintIndex(int inValue) override {
+			_constraintIndex = inValue;
+		}
 
 	private:
 		int _constraintIndex;

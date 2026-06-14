@@ -33,29 +33,34 @@
 #include <spine/Timeline.h>
 
 namespace spine {
+	/// Fires an Event when specific animation times are reached.
 	class SP_API EventTimeline : public Timeline {
 		friend class SkeletonBinary;
 
 		friend class SkeletonJson;
 
-	RTTI_DECL
+		RTTI_DECL
 
 	public:
 		explicit EventTimeline(size_t frameCount);
 
 		~EventTimeline();
 
-		virtual void
-		apply(Skeleton &skeleton, float lastTime, float time, Vector<Event *> *pEvents, float alpha, MixBlend blend,
-			  MixDirection direction);
+		/// Fires events for frames > lastTime and <= time.
+		virtual void apply(Skeleton &skeleton, float lastTime, float time, Array<Event *> *events, float alpha, MixFrom from, bool add, bool out,
+						   bool appliedPose) override;
 
-		/// Sets the time and value of the specified keyframe.
-		void setFrame(size_t frame, Event *event);
+		size_t getFrameCount();
 
-		Vector<Event *> &getEvents();
+		/// The event for each frame.
+		Array<Event *> &getEvents();
+
+		/// Sets the time and event for the specified frame.
+		/// @param frame Between 0 and frameCount, inclusive.
+		void setFrame(size_t frame, Event &event);
 
 	private:
-		Vector<Event *> _events;
+		Array<Event *> _events;
 	};
 }
 

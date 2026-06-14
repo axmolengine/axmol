@@ -37,18 +37,7 @@ using namespace spine;
 
 RTTI_IMPL(PointAttachment, Attachment)
 
-PointAttachment::PointAttachment(const String &name) : Attachment(name), _x(0), _y(0), _rotation(0), _color() {
-}
-
-void PointAttachment::computeWorldPosition(Bone &bone, float &ox, float &oy) {
-	bone.localToWorld(_x, _y, ox, oy);
-}
-
-float PointAttachment::computeWorldRotation(Bone &bone) {
-	float r = _rotation * MathUtil::Deg_Rad, cosine = MathUtil::cos(r), sine = MathUtil::sin(r);
-	float x = cosine * bone._a + sine * bone._b;
-	float y = cosine * bone._c + sine * bone._d;
-	return MathUtil::atan2Deg(y, x);
+PointAttachment::PointAttachment(const String &name) : Attachment(name), _x(0), _y(0), _rotation(0), _color(0.9451f, 0.9451f, 0, 1) {
 }
 
 float PointAttachment::getX() {
@@ -79,10 +68,25 @@ Color &PointAttachment::getColor() {
 	return _color;
 }
 
-Attachment *PointAttachment::copy() {
+void PointAttachment::computeWorldPosition(BonePose &bone, float &ox, float &oy) {
+	ox = _x * bone.getA() + _y * bone.getB() + bone.getWorldX();
+	oy = _x * bone.getC() + _y * bone.getD() + bone.getWorldY();
+}
+
+float PointAttachment::computeWorldRotation(BonePose &bone) {
+	float r = _rotation * MathUtil::Deg_Rad, cosine = MathUtil::cos(r), sine = MathUtil::sin(r);
+	float x = cosine * bone.getA() + sine * bone.getB();
+	float y = cosine * bone.getC() + sine * bone.getD();
+	return MathUtil::atan2Deg(y, x);
+}
+
+Attachment &PointAttachment::copy() {
 	PointAttachment *copy = new (__FILE__, __LINE__) PointAttachment(getName());
+	copy->setTimelineAttachment(getTimelineAttachment());
+	copy->setTimelineSlots(getTimelineSlots());
 	copy->_x = _x;
 	copy->_y = _y;
 	copy->_rotation = _rotation;
-	return copy;
+	copy->_color.set(_color);
+	return *copy;
 }

@@ -31,6 +31,7 @@
 #define Spine_Json_h
 
 #include <spine/SpineObject.h>
+#include <spine/Array.h>
 
 #ifndef SPINE_JSON_HAVE_PREV
 /* spine doesn't use the "prev" link in the Json sibling lists. */
@@ -50,6 +51,30 @@ namespace spine {
 		static const int JSON_STRING;
 		static const int JSON_ARRAY;
 		static const int JSON_OBJECT;
+
+		static bool asFloatArray(Json *value, Array<float> &array) {
+			if (value == NULL) return false;
+			array.setSize(value->_size, 0);
+			Json *vertex = value->_child;
+			for (int i = 0; vertex; vertex = vertex->_next, i++) array[i] = vertex->_valueFloat;
+			return true;
+		}
+
+		static bool asIntArray(Json *value, Array<int> &array) {
+			if (value == NULL) return false;
+			array.setSize(value->_size, 0);
+			Json *vertex = value->_child;
+			for (int i = 0; vertex; vertex = vertex->_next, i++) array[i] = vertex->_valueInt;
+			return true;
+		}
+
+		static bool asUnsignedShortArray(Json *value, Array<unsigned short> &array) {
+			if (value == NULL) return false;
+			array.setSize(value->_size, 0);
+			Json *vertex = value->_child;
+			for (int i = 0; vertex; vertex = vertex->_next, i++) array[i] = (unsigned short) vertex->_valueInt;
+			return true;
+		}
 
 		/* Get item "string" from object. Case insensitive. */
 		static Json *getItem(Json *object, const char *string);
@@ -78,7 +103,7 @@ namespace spine {
 
 		Json *_next;
 #if SPINE_JSON_HAVE_PREV
-		Json* _prev; /* next/prev allow you to walk array/object chains. Alternatively, use getSize/getItem */
+		Json *_prev; /* next/prev allow you to walk array/object chains. Alternatively, use getSize/getItem */
 #endif
 		Json *_child; /* An array or object item will have a child pointer pointing to a chain of the items in the array/object. */
 
@@ -86,8 +111,8 @@ namespace spine {
 		int _size; /* The number of children. */
 
 		const char *_valueString; /* The item's string, if type==JSON_STRING */
-		int _valueInt; /* The item's number, if type==JSON_NUMBER */
-		float _valueFloat; /* The item's number, if type==JSON_NUMBER */
+		int _valueInt;            /* The item's number, if type==JSON_NUMBER */
+		float _valueFloat;        /* The item's number, if type==JSON_NUMBER */
 
 		const char *_name; /* The item's name string, if this item is the child of, or is in the list of subitems of an object. */
 

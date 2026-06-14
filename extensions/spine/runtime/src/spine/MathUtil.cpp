@@ -39,6 +39,8 @@
 
 using namespace spine;
 
+const float MathUtil::Epsilon = 0.00001f;
+const float MathUtil::EpsilonSq = MathUtil::Epsilon * MathUtil::Epsilon;
 const float MathUtil::Pi = 3.1415926535897932385f;
 const float MathUtil::Pi_2 = 3.1415926535897932385f * 2;
 const float MathUtil::InvPi_2 = 1 / MathUtil::Pi_2;
@@ -50,8 +52,7 @@ float MathUtil::abs(float v) {
 }
 
 float MathUtil::sign(float v) {
-	return ((v) < 0 ? -1.0f : (v) > 0 ? 1.0f
-									  : 0.0f);
+	return ((v) < 0 ? -1.0f : (v) > 0 ? 1.0f : 0.0f);
 }
 
 float MathUtil::clamp(float x, float min, float max) {

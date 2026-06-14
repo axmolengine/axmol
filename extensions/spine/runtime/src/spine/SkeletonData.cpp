@@ -31,6 +31,7 @@
 
 #include <spine/Animation.h>
 #include <spine/BoneData.h>
+#include <spine/ConstraintData.h>
 #include <spine/EventData.h>
 #include <spine/IkConstraintData.h>
 #include <spine/PathConstraintData.h>
@@ -38,76 +39,61 @@
 #include <spine/Skin.h>
 #include <spine/SlotData.h>
 #include <spine/TransformConstraintData.h>
+#include <spine/SliderData.h>
 
-#include <spine/ContainerUtil.h>
+#include <spine/ArrayUtils.h>
 
 using namespace spine;
 
-SkeletonData::SkeletonData() : _name(),
-							   _defaultSkin(NULL),
-							   _x(0),
-							   _y(0),
-							   _width(0),
-							   _height(0),
-							   _referenceScale(100),
-							   _version(),
-							   _hash(),
-							   _fps(0),
-							   _imagesPath() {
+SkeletonData::SkeletonData()
+	: _name(), _defaultSkin(NULL), _x(0), _y(0), _width(0), _height(0), _referenceScale(100), _version(), _hash(), _fps(30), _imagesPath(),
+	  _audioPath() {
 }
 
 SkeletonData::~SkeletonData() {
-	ContainerUtil::cleanUpVectorOfPointers(_bones);
-	ContainerUtil::cleanUpVectorOfPointers(_slots);
-	ContainerUtil::cleanUpVectorOfPointers(_skins);
+	ArrayUtils::deleteElements(_bones);
+	ArrayUtils::deleteElements(_slots);
+	ArrayUtils::deleteElements(_skins);
 
 	_defaultSkin = NULL;
 
-	ContainerUtil::cleanUpVectorOfPointers(_events);
-	ContainerUtil::cleanUpVectorOfPointers(_animations);
-	ContainerUtil::cleanUpVectorOfPointers(_ikConstraints);
-	ContainerUtil::cleanUpVectorOfPointers(_transformConstraints);
-	ContainerUtil::cleanUpVectorOfPointers(_pathConstraints);
-	ContainerUtil::cleanUpVectorOfPointers(_physicsConstraints);
+	ArrayUtils::deleteElements(_events);
+	ArrayUtils::deleteElements(_animations);
+	ArrayUtils::deleteElements(_constraints);
 	for (size_t i = 0; i < _strings.size(); i++) {
 		SpineExtension::free(_strings[i], __FILE__, __LINE__);
 	}
 }
 
 BoneData *SkeletonData::findBone(const String &boneName) {
-	return ContainerUtil::findWithName(_bones, boneName);
+	return ArrayUtils::findWithName(_bones, boneName);
 }
 
 SlotData *SkeletonData::findSlot(const String &slotName) {
-	return ContainerUtil::findWithName(_slots, slotName);
+	return ArrayUtils::findWithName(_slots, slotName);
 }
 
 Skin *SkeletonData::findSkin(const String &skinName) {
-	return ContainerUtil::findWithName(_skins, skinName);
+	return ArrayUtils::findWithName(_skins, skinName);
 }
 
-spine::EventData *SkeletonData::findEvent(const String &eventDataName) {
-	return ContainerUtil::findWithName(_events, eventDataName);
+EventData *SkeletonData::findEvent(const String &eventDataName) {
+	return ArrayUtils::findWithName(_events, eventDataName);
 }
 
 Animation *SkeletonData::findAnimation(const String &animationName) {
-	return ContainerUtil::findWithName(_animations, animationName);
+	return ArrayUtils::findWithName(_animations, animationName);
 }
 
-IkConstraintData *SkeletonData::findIkConstraint(const String &constraintName) {
-	return ContainerUtil::findWithName(_ikConstraints, constraintName);
-}
-
-TransformConstraintData *SkeletonData::findTransformConstraint(const String &constraintName) {
-	return ContainerUtil::findWithName(_transformConstraints, constraintName);
-}
-
-PathConstraintData *SkeletonData::findPathConstraint(const String &constraintName) {
-	return ContainerUtil::findWithName(_pathConstraints, constraintName);
-}
-
-PhysicsConstraintData *SkeletonData::findPhysicsConstraint(const String &constraintName) {
-	return ContainerUtil::findWithName(_physicsConstraints, constraintName);
+Array<Animation *> &SkeletonData::findSliderAnimations(Array<Animation *> &animations) {
+	for (size_t i = 0, n = _constraints.size(); i < n; i++) {
+		ConstraintData *constraint = _constraints[i];
+		if (constraint->getRTTI().instanceOf(SliderData::rtti)) {
+			SliderData *data = static_cast<SliderData *>(constraint);
+			if (data->_animation != NULL) animations.add(data->_animation);
+		}
+	}
+	return animations;
 }
 
 const String &SkeletonData::getName() {
@@ -118,15 +104,15 @@ void SkeletonData::setName(const String &inValue) {
 	_name = inValue;
 }
 
-Vector<BoneData *> &SkeletonData::getBones() {
+Array<BoneData *> &SkeletonData::getBones() {
 	return _bones;
 }
 
-Vector<SlotData *> &SkeletonData::getSlots() {
+Array<SlotData *> &SkeletonData::getSlots() {
 	return _slots;
 }
 
-Vector<Skin *> &SkeletonData::getSkins() {
+Array<Skin *> &SkeletonData::getSkins() {
 	return _skins;
 }
 
@@ -138,28 +124,12 @@ void SkeletonData::setDefaultSkin(Skin *inValue) {
 	_defaultSkin = inValue;
 }
 
-Vector<spine::EventData *> &SkeletonData::getEvents() {
+Array<EventData *> &SkeletonData::getEvents() {
 	return _events;
 }
 
-Vector<Animation *> &SkeletonData::getAnimations() {
+Array<Animation *> &SkeletonData::getAnimations() {
 	return _animations;
-}
-
-Vector<IkConstraintData *> &SkeletonData::getIkConstraints() {
-	return _ikConstraints;
-}
-
-Vector<TransformConstraintData *> &SkeletonData::getTransformConstraints() {
-	return _transformConstraints;
-}
-
-Vector<PathConstraintData *> &SkeletonData::getPathConstraints() {
-	return _pathConstraints;
-}
-
-Vector<PhysicsConstraintData *> &SkeletonData::getPhysicsConstraints() {
-	return _physicsConstraints;
 }
 
 float SkeletonData::getX() {
@@ -241,4 +211,8 @@ float SkeletonData::getFps() {
 
 void SkeletonData::setFps(float inValue) {
 	_fps = inValue;
+}
+
+Array<ConstraintData *> &SkeletonData::getConstraints() {
+	return _constraints;
 }

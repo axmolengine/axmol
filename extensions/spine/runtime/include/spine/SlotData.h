@@ -31,95 +31,67 @@
 #define Spine_SlotData_h
 
 #include <spine/BlendMode.h>
-#include <spine/SpineObject.h>
+#include <spine/PosedData.h>
 #include <spine/SpineString.h>
-#include <spine/Color.h>
+#include <spine/RTTI.h>
+#include <spine/SlotPose.h>
 
 namespace spine {
 	class BoneData;
 
-	class SP_API SlotData : public SpineObject {
+	/// Stores the setup pose for a Slot.
+	class SP_API SlotData : public PosedDataGeneric<SlotPose> {
 		friend class SkeletonBinary;
-
 		friend class SkeletonJson;
-
+		friend class PathConstraint;
 		friend class AttachmentTimeline;
-
 		friend class RGBATimeline;
-
 		friend class RGBTimeline;
-
 		friend class AlphaTimeline;
-
 		friend class RGBA2Timeline;
-
 		friend class RGB2Timeline;
-
 		friend class DeformTimeline;
-
 		friend class DrawOrderTimeline;
-
 		friend class EventTimeline;
-
 		friend class IkConstraintTimeline;
-
 		friend class PathConstraintMixTimeline;
-
 		friend class PathConstraintPositionTimeline;
-
 		friend class PathConstraintSpacingTimeline;
-
 		friend class ScaleTimeline;
-
 		friend class ShearTimeline;
-
 		friend class TransformConstraintTimeline;
-
 		friend class TranslateTimeline;
-
 		friend class TwoColorTimeline;
+		friend class Slot;
 
 	public:
 		SlotData(int index, const String &name, BoneData &boneData);
 
+		/// The Skeleton::getSlots() index for this slot.
 		int getIndex();
 
-		const String &getName();
-
+		/// The bone this slot belongs to.
 		BoneData &getBoneData();
 
-		Color &getColor();
+		void setAttachmentName(const String &attachmentName);
 
-		Color &getDarkColor();
-
-		bool hasDarkColor();
-
-		void setHasDarkColor(bool inValue);
-
-		/// May be empty.
+		/// The name of the attachment that is visible for this slot in the setup pose, or empty if no attachment is visible.
 		const String &getAttachmentName();
 
-		void setAttachmentName(const String &inValue);
-
+		/// The blend mode for drawing the slot's attachment.
 		BlendMode getBlendMode();
+		void setBlendMode(BlendMode blendMode);
 
-		void setBlendMode(BlendMode inValue);
-
-        bool isVisible();
-
-        void setVisible(bool inValue);
+		/// False if the slot was hidden in Spine and nonessential data was exported. Does not affect runtime rendering.
+		bool getVisible();
+		void setVisible(bool visible);
 
 	private:
 		const int _index;
-		String _name;
 		BoneData &_boneData;
-		Color _color;
-		Color _darkColor;
-
-		bool _hasDarkColor;
 		String _attachmentName;
 		BlendMode _blendMode;
-        bool _visible;
+		bool _visible;
 	};
 }
 

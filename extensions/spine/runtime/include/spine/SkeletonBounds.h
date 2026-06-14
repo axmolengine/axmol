@@ -30,7 +30,7 @@
 #ifndef Spine_SkeletonBounds_h
 #define Spine_SkeletonBounds_h
 
-#include <spine/Vector.h>
+#include <spine/Array.h>
 #include <spine/Pool.h>
 #include <spine/SpineObject.h>
 
@@ -59,49 +59,63 @@ namespace spine {
 		void update(Skeleton &skeleton, bool updateAabb);
 
 		/// Returns true if the axis aligned bounding box contains the point.
-		bool aabbcontainsPoint(float x, float y);
+		bool aabbContainsPoint(float x, float y);
 
 		/// Returns true if the axis aligned bounding box intersects the line segment.
-		bool aabbintersectsSegment(float x1, float y1, float x2, float y2);
+		bool aabbIntersectsSegment(float x1, float y1, float x2, float y2);
 
 		/// Returns true if the axis aligned bounding box intersects the axis aligned bounding box of the specified bounds.
 		bool aabbIntersectsSkeleton(SkeletonBounds &bounds);
 
 		/// Returns true if the polygon contains the point.
-		bool containsPoint(Polygon *polygon, float x, float y);
+		bool containsPoint(Polygon &polygon, float x, float y);
 
-		/// Returns the first bounding box attachment that contains the point, or NULL. When doing many checks, it is usually more
-		/// efficient to only call this method if {@link #aabbcontainsPoint(float, float)} returns true.
+		/// Returns the first bounding box attachment that contains the point, or null. When doing many checks, it is usually more
+		/// efficient to only call this method if aabbContainsPoint(float, float) returns true.
 		BoundingBoxAttachment *containsPoint(float x, float y);
 
-		/// Returns the first bounding box attachment that contains the line segment, or NULL. When doing many checks, it is usually
-		/// more efficient to only call this method if {@link #aabbintersectsSegment(float, float, float, float)} returns true.
+		/// Returns the first bounding box attachment that contains any part of the line segment, or null. When doing many checks, it
+		/// is usually more efficient to only call this method if aabbIntersectsSegment(float, float, float, float) returns true.
 		BoundingBoxAttachment *intersectsSegment(float x1, float y1, float x2, float y2);
 
-		/// Returns true if the polygon contains the line segment.
-		bool intersectsSegment(Polygon *polygon, float x1, float y1, float x2, float y2);
+		/// Returns true if the polygon contains any part of the line segment.
+		bool intersectsSegment(Polygon &polygon, float x1, float y1, float x2, float y2);
 
-        /// Returns the polygon for the given bounding box attachment or null if no
-        /// polygon can be found for the attachment. Requires a call to update() first.
+		/// Returns the polygon for the given bounding box attachment or null if no
+		/// polygon can be found for the attachment. Requires a call to update() first.
 		Polygon *getPolygon(BoundingBoxAttachment *attachment);
 
-        /// Returns the bounding box for the given polygon or null. Requires a call to update() first.
-        BoundingBoxAttachment * getBoundingBox(Polygon *polygon);
+		/// Returns the bounding box for the given polygon or null. Requires a call to update() first.
+		BoundingBoxAttachment *getBoundingBox(Polygon *polygon);
 
-        /// Returns all polygons or an empty vector. Requires a call to update() first.
-        Vector<Polygon *> &getPolygons();
+		/// Returns all polygons or an empty array. Requires a call to update() first.
+		Array<Polygon *> &getPolygons();
 
-        /// Returns all bounding boxes. Requires a call to update() first.
-        Vector<BoundingBoxAttachment *> &getBoundingBoxes();
+		/// Returns all bounding boxes. Requires a call to update() first.
+		Array<BoundingBoxAttachment *> &getBoundingBoxes();
 
+		/// The left edge of the axis aligned bounding box.
+		float getMinX();
+
+		/// The bottom edge of the axis aligned bounding box.
+		float getMinY();
+
+		/// The right edge of the axis aligned bounding box.
+		float getMaxX();
+
+		/// The top edge of the axis aligned bounding box.
+		float getMaxY();
+
+		/// The width of the axis aligned bounding box.
 		float getWidth();
 
+		/// The height of the axis aligned bounding box.
 		float getHeight();
 
 	private:
-		Pool <Polygon> _polygonPool;
-		Vector<BoundingBoxAttachment *> _boundingBoxes;
-		Vector<Polygon *> _polygons;
+		Pool<Polygon> _polygonPool;
+		Array<BoundingBoxAttachment *> _boundingBoxes;
+		Array<Polygon *> _polygons;
 		float _minX, _minY, _maxX, _maxY;
 
 		void aabbCompute();
@@ -109,7 +123,7 @@ namespace spine {
 
 	class Polygon : public SpineObject {
 	public:
-		Vector<float> _vertices;
+		Array<float> _vertices;
 		int _count;
 
 		Polygon() : _count(0) {

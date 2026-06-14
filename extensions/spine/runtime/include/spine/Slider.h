@@ -27,31 +27,55 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifndef SPINE_DEBUG_LOG_H
-#define SPINE_DEBUG_LOG_H
+#ifndef Spine_Slider_h
+#define Spine_Slider_h
 
-#include <spine/spine.h>
+#include <spine/Constraint.h>
+#include <spine/SliderData.h>
+#include <spine/SliderPose.h>
 
 namespace spine {
-	SP_API void spDebug_printSkeletonData(SkeletonData *skeletonData);
+	class Skeleton;
+	class Bone;
+	class Animation;
 
-	SP_API void spDebug_printAnimation(Animation *animation);
+	/// Applies an animation based on either the slider's SliderPose::getTime() or a bone's transform property.
+	///
+	/// See https://esotericsoftware.com/spine-sliders Sliders in the Spine User Guide.
+	// Non-exported base class that inherits from the template
+	class SliderBase : public ConstraintGeneric<Slider, SliderData, SliderPose> {
+	public:
+		SliderBase(SliderData &data) : ConstraintGeneric<Slider, SliderData, SliderPose>(data) {
+		}
+	};
 
-	SP_API void spDebug_printTimeline(Timeline *timeline);
+	class SP_API Slider : public SliderBase {
+		friend class Skeleton;
+		friend class SliderTimeline;
+		friend class SliderMixTimeline;
 
-	SP_API void spDebug_printBoneDatas(Vector<BoneData *> &boneDatas);
+		RTTI_DECL
 
-	SP_API void spDebug_printBoneData(BoneData *boneData);
+	public:
+		Slider(SliderData &data, Skeleton &skeleton);
 
-	SP_API void spDebug_printSkeleton(Skeleton *skeleton);
+		Slider &copy(Skeleton &skeleton);
 
-	SP_API void spDebug_printBones(Vector<Bone *> &bones);
+		virtual void update(Skeleton &skeleton, Physics physics) override;
 
-	SP_API void spDebug_printBone(Bone *bone);
+		virtual void sort(Skeleton &skeleton) override;
 
-	SP_API void spDebug_printFloats(float *values, int numFloats);
+		virtual bool isSourceActive() override;
 
-	SP_API void spDebug_printFloats(Vector<float> &values);
+		/// When set, the bone's transform property is used to set the slider's SliderPose::getTime().
+		Bone &getBone();
+
+		void setBone(Bone &bone);
+
+	private:
+		Bone *_bone;
+		static float _offsets[6];
+	};
 }
 
-#endif
+#endif /* Spine_Slider_h */

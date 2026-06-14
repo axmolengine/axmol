@@ -1,5 +1,5 @@
 #include "lua-bindings/auto/axlua_extension_auto.hpp"
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
 
