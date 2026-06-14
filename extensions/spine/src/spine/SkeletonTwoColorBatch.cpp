@@ -42,7 +42,7 @@
 #include "axmol/renderer/Shaders.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"
-#include "xxhash.h"
+#include "xxhash/xxhash.h"
 
 USING_NS_AX;
 #define INITIAL_SIZE (2000)

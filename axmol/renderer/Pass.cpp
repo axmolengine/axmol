@@ -28,7 +28,7 @@
  - Qt3D: http://qt-project.org/
  ****************************************************************************/
 #include "axmol/renderer/Pass.h"
-#include <xxhash.h>
+#include "xxhash/xxhash.h"
 #include "axmol/renderer/Texture2D.h"
 #include "axmol/renderer/Technique.h"
 #include "axmol/renderer/Material.h"

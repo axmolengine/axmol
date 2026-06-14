@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "imgui_internal.h"
 #include "misc/freetype/imgui_freetype.h"
 
-#include "xxhash.h"
+#include "xxhash/xxhash.h"
 
 NS_AX_EXT_BEGIN
 

@@ -30,7 +30,7 @@
 #include "axmol/rhi/metal/DepthStencilStateMTL.h"
 #include "axmol/rhi/metal/UtilsMTL.h"
 #include "axmol/rhi/metal/ProgramMTL.h"
-#include "xxhash.h"
+#include "xxhash/xxhash.h"
 
 namespace ax::rhi::mtl
 {
