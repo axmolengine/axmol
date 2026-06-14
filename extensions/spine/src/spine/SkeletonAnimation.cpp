@@ -304,7 +304,6 @@ namespace spine {
 	}
 
 	SkeletonAnimation::SkeletonAnimation(Skeleton *skeleton, bool ownsSkeleton) {
-		_animationStateEnabled = false;
 		initWithSkeleton(skeleton, ownsSkeleton);
 	}
 
@@ -326,6 +325,7 @@ namespace spine {
 	}
 
 	void SkeletonAnimation::initWithSkeleton(Skeleton *skeleton, bool ownsSkeleton) {
+		_animationStateEnabled = false;
 		AX_SAFE_RELEASE_NULL(_asset);
 		if (_ownsSkeleton) delete _skeleton;
 		_skeleton = skeleton;
@@ -901,8 +901,7 @@ namespace spine {
 	}
 
 	SkeletonAnimation *SkeletonAnimation::clone(int startSlotIndex, int endSlotIndex) {
-		auto obj = new SkeletonAnimation();
-		obj->initWithSkeleton(_skeleton, false);
+		auto obj = new SkeletonAnimation(_skeleton, false);
 		obj->setSlotsRange(startSlotIndex, endSlotIndex);
 		obj->autorelease();
 		return obj;

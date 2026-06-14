@@ -92,7 +92,6 @@ namespace spine {
         */
 		SkeletonAnimation *clone(int startSlotIndex = -1, int endSlotIndex = -1);
 
-
 		ax::Rect getBoundingBox() const override;
 
 		void setMix(std::string_view fromAnimation, std::string_view toAnimation, float duration);
