@@ -31,7 +31,9 @@ THE SOFTWARE.
 class LuaSkeletonAnimation : public spine::SkeletonAnimation
 {
 public:
-    static LuaSkeletonAnimation* createWithFile(std::string_view skeletonDataFile, std::string_view atlasFile, float scale = 1);
+    static LuaSkeletonAnimation* createWithFile(std::string_view skeletonDataFile,
+                                                std::string_view atlasFile,
+                                                float scale = 1);
 
     LuaSkeletonAnimation();
 

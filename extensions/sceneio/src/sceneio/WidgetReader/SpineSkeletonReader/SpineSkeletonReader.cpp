@@ -196,7 +196,8 @@ void SpineSkeletonReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuff
 
     auto options = (SpineSkeletonOptions*)spriteOptions;
 
-    auto implNode = spine::SkeletonAnimation::create(options->dataFile()->string_view(), options->atlasFile()->string_view());
+    auto implNode =
+        spine::SkeletonAnimation::create(options->dataFile()->string_view(), options->atlasFile()->string_view());
     implNode->setAnimation(0, options->animation()->string_view(), options->loop());
     implNode->setSkin(options->animation()->string_view());
 

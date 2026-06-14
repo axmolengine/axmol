@@ -166,8 +166,8 @@ int executeSpineEvent(LuaSkeletonAnimation* skeletonAnimation,
     spineEvent["type"]       = LuaValue::stringValue(eventTypeName);
     spineEvent["trackIndex"] = LuaValue::intValue(entry ? entry->getTrackIndex() : 0);
     spineEvent["animation"]  = LuaValue::stringValue(animationName);
-    spineEvent["loopCount"] =
-        LuaValue::intValue(entry && entry->getAnimationEnd() > 0 ? std::floor(entry->getTrackTime() / entry->getAnimationEnd()) : 0);
+    spineEvent["loopCount"]  = LuaValue::intValue(
+        entry && entry->getAnimationEnd() > 0 ? std::floor(entry->getTrackTime() / entry->getAnimationEnd()) : 0);
 
     if (nullptr != event)
     {
