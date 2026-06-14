@@ -242,19 +242,13 @@ namespace spine {
 				scale);
 		if (!asset) return nullptr;
 
-		return SkeletonAnimation::create(asset->getSkeletonData());
+		return SkeletonAnimation::create(asset);
 	}
 
-	SkeletonAnimation *SkeletonAnimation::create(spine::SkeletonData *skeletonData) {
+	SkeletonAnimation *SkeletonAnimation::create(spine::SkeletonAsset *asset) {
+		if (!asset) return nullptr;
 		auto obj = new SkeletonAnimation();
-		obj->initWithData(skeletonData, false);
-		obj->autorelease();
-		return obj;
-	}
-
-	SkeletonAnimation *SkeletonAnimation::create(spine::Skeleton *skeleton) {
-		auto obj = new SkeletonAnimation();
-		obj->initWithSkeleton(skeleton, false, false, false);
+		obj->initWithAsset(asset);
 		obj->autorelease();
 		return obj;
 	}
@@ -282,7 +276,12 @@ namespace spine {
 	}
 
 	void SkeletonAnimation::initialize() {
-		_clipper = new (__FILE__, __LINE__) SkeletonClipping();
+		AX_SAFE_DELETE(_combinedSkin);
+		AX_SAFE_DELETE(_state);
+		AX_SAFE_DELETE(_stateData);
+		AX_SAFE_DELETE(_clipper);
+
+		_clipper = new SkeletonClipping();
 
 		_blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
 		setOpacityModifyRGB(true);
@@ -293,133 +292,74 @@ namespace spine {
 		_skeleton->updateWorldTransform(Physics_Update);
 
 		if (_animationStateEnabled) {
-			_stateData = new (__FILE__, __LINE__) AnimationStateData(_skeleton->getData());
-			_state = new (__FILE__, __LINE__) AnimationState(*_stateData);
+			_stateData = new AnimationStateData(_skeleton->getData());
+			_state = new AnimationState(*_stateData);
 			_state->setRendererObject(this);
 			_state->setListener(animationCallback);
 		}
 		_firstDraw = true;
 	}
 
-	void SkeletonAnimation::setSkeletonData(SkeletonData *skeletonData, bool ownsSkeletonData) {
-		_skeletonData = skeletonData;
-		_ownsSkeletonData = ownsSkeletonData;
-		_skeleton = new (__FILE__, __LINE__) Skeleton(*skeletonData);
+	SkeletonAnimation::SkeletonAnimation() {
 	}
 
-	SkeletonAnimation::SkeletonAnimation()
-		: _atlas(nullptr), _attachmentLoader(nullptr), _timeScale(1), _debugSlots(false), _debugBones(false), _debugMeshes(false), _debugBoundingRect(false), _startSlotIndex(0), _endSlotIndex(std::numeric_limits<int>::max()) {
-	}
-
-	SkeletonAnimation::SkeletonAnimation(Skeleton *skeleton, bool ownsSkeleton, bool ownsSkeletonData, bool ownsAtlas)
-		: _atlas(nullptr), _attachmentLoader(nullptr), _timeScale(1), _debugSlots(false), _debugBones(false), _debugMeshes(false), _debugBoundingRect(false), _startSlotIndex(0), _endSlotIndex(std::numeric_limits<int>::max()) {
+	SkeletonAnimation::SkeletonAnimation(Skeleton *skeleton, bool ownsSkeleton) {
 		_animationStateEnabled = false;
-		initWithSkeleton(skeleton, ownsSkeleton, ownsSkeletonData, ownsAtlas);
+		initWithSkeleton(skeleton, ownsSkeleton);
 	}
 
-	SkeletonAnimation::SkeletonAnimation(SkeletonData *skeletonData, bool ownsSkeletonData)
-		: _atlas(nullptr), _attachmentLoader(nullptr), _timeScale(1), _debugSlots(false), _debugBones(false), _debugMeshes(false), _debugBoundingRect(false), _startSlotIndex(0), _endSlotIndex(std::numeric_limits<int>::max()) {
-		initWithData(skeletonData, ownsSkeletonData);
+	SkeletonAnimation::SkeletonAnimation(SkeletonAsset *asset) {
+		initWithAsset(asset);
 	}
 
-	SkeletonAnimation::SkeletonAnimation(std::string_view skeletonDataFile, Atlas *atlas, float scale)
-		: _atlas(nullptr), _attachmentLoader(nullptr), _timeScale(1), _debugSlots(false), _debugBones(false), _debugMeshes(false), _debugBoundingRect(false), _startSlotIndex(0), _endSlotIndex(std::numeric_limits<int>::max()) {
-		initWithJsonFile(skeletonDataFile, atlas, scale);
-	}
-
-	SkeletonAnimation::SkeletonAnimation(std::string_view skeletonDataFile, std::string_view atlasFile, float scale)
-		: _atlas(nullptr), _attachmentLoader(nullptr), _timeScale(1), _debugSlots(false), _debugBones(false), _debugMeshes(false), _debugBoundingRect(false), _startSlotIndex(0), _endSlotIndex(std::numeric_limits<int>::max()) {
+	SkeletonAnimation::SkeletonAnimation(std::string_view skeletonDataFile, std::string_view atlasFile, float scale) {
 		initWithJsonFile(skeletonDataFile, atlasFile, scale);
 	}
 
 	SkeletonAnimation::~SkeletonAnimation() {
 		AX_SAFE_DELETE(_combinedSkin);
-		AX_SAFE_DELETE(_stateData);
 		AX_SAFE_DELETE(_state);
+		AX_SAFE_DELETE(_stateData);
 		if (_ownsSkeleton) delete _skeleton;
-		if (_ownsSkeletonData) delete _skeletonData;
-		if (_ownsAtlas && _atlas) delete _atlas;
-		if (_attachmentLoader) delete _attachmentLoader;
 		delete _clipper;
+		AX_SAFE_RELEASE(_asset);
 	}
 
-	void SkeletonAnimation::initWithSkeleton(Skeleton *skeleton, bool ownsSkeleton, bool ownsSkeletonData, bool ownsAtlas) {
+	void SkeletonAnimation::initWithSkeleton(Skeleton *skeleton, bool ownsSkeleton) {
+		AX_SAFE_RELEASE_NULL(_asset);
+		if (_ownsSkeleton) delete _skeleton;
 		_skeleton = skeleton;
 		_ownsSkeleton = ownsSkeleton;
-		_ownsSkeletonData = ownsSkeletonData;
-		_ownsAtlas = ownsAtlas;
 		initialize();
 	}
 
-	void SkeletonAnimation::initWithData(SkeletonData *skeletonData, bool ownsSkeletonData) {
-		_ownsSkeleton = true;
-		setSkeletonData(skeletonData, ownsSkeletonData);
-		initialize();
+	void SkeletonAnimation::initWithAsset(SkeletonAsset *asset) {
+		setAsset(asset);
 	}
 
-	void SkeletonAnimation::initWithJsonFile(std::string_view skeletonDataFile, Atlas *atlas, float scale) {
-		_atlas = atlas;
-		_attachmentLoader = new (__FILE__, __LINE__) AtlasAttachmentLoader(*_atlas);
+	void SkeletonAnimation::setAsset(SkeletonAsset *asset) {
+		if (!asset || _asset == asset) return;
 
-		SkeletonJson json(*_attachmentLoader);
-		json.setScale(scale);
-		SkeletonData *skeletonData = json.readSkeletonDataFile(spine::String{skeletonDataFile});
-		AXASSERT(skeletonData, (!json.getError().isEmpty() ? json.getError().buffer() : "Error reading skeleton data."));
+		auto oldAsset = _asset;
+		asset->retain();
+		_asset = asset;
 
+		if (_ownsSkeleton) delete _skeleton;
 		_ownsSkeleton = true;
-		setSkeletonData(skeletonData, true);
+		_skeleton = new Skeleton(*_asset->getSkeletonData());
 
+		AX_SAFE_RELEASE(oldAsset);
 		initialize();
 	}
 
 	void SkeletonAnimation::initWithJsonFile(std::string_view skeletonDataFile, std::string_view atlasFile, float scale) {
-		_atlas = new (__FILE__, __LINE__) Atlas(spine::String{atlasFile}, AxmolSpineExtension::getInstance()->getTextureLoader(), true);
-		AXASSERT(_atlas, "Error reading atlas file.");
-
-		_attachmentLoader = new (__FILE__, __LINE__) AtlasAttachmentLoader(*_atlas);
-
-		SkeletonJson json(*_attachmentLoader);
-		json.setScale(scale);
-		SkeletonData *skeletonData = json.readSkeletonDataFile(spine::String{skeletonDataFile});
-		AXASSERT(skeletonData, (!json.getError().isEmpty() ? json.getError().buffer() : "Error reading skeleton data."));
-
-		_ownsSkeleton = true;
-		_ownsAtlas = true;
-		_skeletonData = skeletonData;
-		setSkeletonData(skeletonData, true);
-
-		initialize();
-	}
-
-	void SkeletonAnimation::initWithBinaryFile(std::string_view skeletonDataFile, Atlas *atlas, float scale) {
-		_atlas = atlas;
-		_attachmentLoader = new (__FILE__, __LINE__) AtlasAttachmentLoader(*_atlas);
-
-		SkeletonBinary binary(*_attachmentLoader);
-		binary.setScale(scale);
-		SkeletonData *skeletonData = binary.readSkeletonDataFile(spine::String{skeletonDataFile});
-		AXASSERT(skeletonData, (!binary.getError().isEmpty() ? binary.getError().buffer() : "Error reading skeleton data."));
-		_ownsSkeleton = true;
-		setSkeletonData(skeletonData, true);
-
-		initialize();
+		auto asset = SkeletonAssetCache::getInstance()->loadAsset(skeletonDataFile, atlasFile, scale);
+		AXASSERT(asset, "Error reading skeleton asset file.");
+		setAsset(asset);
 	}
 
 	void SkeletonAnimation::initWithBinaryFile(std::string_view skeletonDataFile, std::string_view atlasFile, float scale) {
-		_atlas = new (__FILE__, __LINE__) Atlas(spine::String{atlasFile}, AxmolSpineExtension::getInstance()->getTextureLoader(), true);
-		AXASSERT(_atlas, "Error reading atlas file.");
-
-		_attachmentLoader = new (__FILE__, __LINE__) AtlasAttachmentLoader(*_atlas);
-
-		SkeletonBinary binary(*_attachmentLoader);
-		binary.setScale(scale);
-		SkeletonData *skeletonData = binary.readSkeletonDataFile(spine::String{skeletonDataFile});
-		AXASSERT(skeletonData, (!binary.getError().isEmpty() ? binary.getError().buffer() : "Error reading skeleton data."));
-		_ownsSkeleton = true;
-		_ownsAtlas = true;
-		setSkeletonData(skeletonData, true);
-
-		initialize();
+		initWithJsonFile(skeletonDataFile, atlasFile, scale);
 	}
 
 	void SkeletonAnimation::update(float deltaTime) {
@@ -961,9 +901,11 @@ namespace spine {
 	}
 
 	SkeletonAnimation *SkeletonAnimation::clone(int startSlotIndex, int endSlotIndex) {
-		auto anim = SkeletonAnimation::create(_skeleton);
-		anim->setSlotsRange(startSlotIndex, endSlotIndex);
-		return anim;
+		auto obj = new SkeletonAnimation();
+		obj->initWithSkeleton(_skeleton, false);
+		obj->setSlotsRange(startSlotIndex, endSlotIndex);
+		obj->autorelease();
+		return obj;
 	}
 
 	void SkeletonAnimation::setAnimationStateEnabled(bool enabled) {
@@ -975,8 +917,8 @@ namespace spine {
 		}
 
 		if (_state || !_skeleton) return;
-		_stateData = new (__FILE__, __LINE__) AnimationStateData(_skeleton->getData());
-		_state = new (__FILE__, __LINE__) AnimationState(*_stateData);
+		_stateData = new AnimationStateData(_skeleton->getData());
+		_state = new AnimationState(*_stateData);
 		_state->setRendererObject(this);
 		_state->setListener(animationCallback);
 		_firstDraw = true;
@@ -1222,7 +1164,7 @@ namespace spine {
 	}
 
 	bool SkeletonAnimation::setCombinedSkin(std::string_view skinName, std::span<const std::string_view> skinNames) {
-		auto skin = new (__FILE__, __LINE__) Skin(spine::String{skinName});
+		auto skin = new Skin(spine::String{skinName});
 		for (auto &name : skinNames) {
 			Skin *source = _skeleton->getData().findSkin(spine::String{name});
 			if (!source) {

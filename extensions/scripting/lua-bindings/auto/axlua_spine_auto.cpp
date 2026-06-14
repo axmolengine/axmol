@@ -3,6 +3,258 @@
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
 
+int lua_ax_spine_SkeletonAsset_getDataFile(lua_State* tolua_S)
+{
+    int argc = 0;
+    spine::SkeletonAsset* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAsset",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (spine::SkeletonAsset*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAsset_getDataFile'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAsset_getDataFile'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getDataFile();
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "sp.SkeletonAsset:getDataFile",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_spine_SkeletonAsset_getDataFile'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_spine_SkeletonAsset_getAtlasFile(lua_State* tolua_S)
+{
+    int argc = 0;
+    spine::SkeletonAsset* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAsset",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (spine::SkeletonAsset*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAsset_getAtlasFile'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAsset_getAtlasFile'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getAtlasFile();
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "sp.SkeletonAsset:getAtlasFile",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_spine_SkeletonAsset_getAtlasFile'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_spine_SkeletonAsset_getScale(lua_State* tolua_S)
+{
+    int argc = 0;
+    spine::SkeletonAsset* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAsset",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (spine::SkeletonAsset*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAsset_getScale'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAsset_getScale'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getScale();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "sp.SkeletonAsset:getScale",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_spine_SkeletonAsset_getScale'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_spine_SkeletonAsset_getSkeletonData(lua_State* tolua_S)
+{
+    int argc = 0;
+    spine::SkeletonAsset* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAsset",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (spine::SkeletonAsset*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAsset_getSkeletonData'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAsset_getSkeletonData'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getSkeletonData();
+        object_to_luaval<spine::SkeletonData>(tolua_S, "sp.SkeletonData",(spine::SkeletonData*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "sp.SkeletonAsset:getSkeletonData",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_spine_SkeletonAsset_getSkeletonData'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_spine_SkeletonAsset_obtain(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"sp.SkeletonAsset",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 3)
+    {
+        std::string_view arg0;
+        std::string_view arg1;
+        double arg2;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "sp.SkeletonAsset:obtain");
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "sp.SkeletonAsset:obtain");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonAsset:obtain");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAsset_obtain'", nullptr);
+            return 0;
+        }
+        auto&& ret = spine::SkeletonAsset::obtain(arg0, arg1, arg2);
+        object_to_luaval<spine::SkeletonAsset>(tolua_S, "sp.SkeletonAsset",(spine::SkeletonAsset*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "sp.SkeletonAsset:obtain",argc, 3);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_spine_SkeletonAsset_obtain'.",&tolua_err);
+#endif
+    return 0;
+}
+static int lua_ax_spine_SkeletonAsset_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (SkeletonAsset)");
+    return 0;
+}
+
+int lua_register_ax_spine_SkeletonAsset(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"sp.SkeletonAsset");
+    tolua_cclass(tolua_S,"SkeletonAsset","sp.SkeletonAsset","ax.Object",nullptr);
+
+    tolua_beginmodule(tolua_S,"SkeletonAsset");
+        tolua_function(tolua_S,"getDataFile",lua_ax_spine_SkeletonAsset_getDataFile);
+        tolua_function(tolua_S,"getAtlasFile",lua_ax_spine_SkeletonAsset_getAtlasFile);
+        tolua_function(tolua_S,"getScale",lua_ax_spine_SkeletonAsset_getScale);
+        tolua_function(tolua_S,"getSkeletonData",lua_ax_spine_SkeletonAsset_getSkeletonData);
+        tolua_function(tolua_S,"obtain", lua_ax_spine_SkeletonAsset_obtain);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(spine::SkeletonAsset).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "sp.SkeletonAsset";
+    g_typeCast[typeName] = "sp.SkeletonAsset";
+    return 1;
+}
+
 int lua_ax_spine_SkeletonAnimation_clone(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1478,6 +1730,56 @@ int lua_ax_spine_SkeletonAnimation_setUpdateOnlyIfVisible(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_spine_SkeletonAnimation_setAsset(lua_State* tolua_S)
+{
+    int argc = 0;
+    spine::SkeletonAnimation* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setAsset'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        spine::SkeletonAsset* arg0;
+
+        ok &= luaval_to_object<spine::SkeletonAsset>(tolua_S, 2, "sp.SkeletonAsset",&arg0, "sp.SkeletonAnimation:setAsset");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setAsset'", nullptr);
+            return 0;
+        }
+        obj->setAsset(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "sp.SkeletonAnimation:setAsset",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_spine_SkeletonAnimation_setAsset'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_spine_SkeletonAnimation_setBonePosition(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2472,6 +2774,202 @@ int lua_ax_spine_SkeletonAnimation_getBlendFunc(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_spine_SkeletonAnimation_initWithAsset(lua_State* tolua_S)
+{
+    int argc = 0;
+    spine::SkeletonAnimation* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_initWithAsset'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        spine::SkeletonAsset* arg0;
+
+        ok &= luaval_to_object<spine::SkeletonAsset>(tolua_S, 2, "sp.SkeletonAsset",&arg0, "sp.SkeletonAnimation:initWithAsset");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_initWithAsset'", nullptr);
+            return 0;
+        }
+        obj->initWithAsset(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "sp.SkeletonAnimation:initWithAsset",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_spine_SkeletonAnimation_initWithAsset'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_spine_SkeletonAnimation_initWithJsonFile(lua_State* tolua_S)
+{
+    int argc = 0;
+    spine::SkeletonAnimation* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_initWithJsonFile'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2)
+    {
+        std::string_view arg0;
+        std::string_view arg1;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "sp.SkeletonAnimation:initWithJsonFile");
+
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "sp.SkeletonAnimation:initWithJsonFile");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_initWithJsonFile'", nullptr);
+            return 0;
+        }
+        obj->initWithJsonFile(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 3)
+    {
+        std::string_view arg0;
+        std::string_view arg1;
+        double arg2;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "sp.SkeletonAnimation:initWithJsonFile");
+
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "sp.SkeletonAnimation:initWithJsonFile");
+
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonAnimation:initWithJsonFile");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_initWithJsonFile'", nullptr);
+            return 0;
+        }
+        obj->initWithJsonFile(arg0, arg1, arg2);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "sp.SkeletonAnimation:initWithJsonFile",argc, 2);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_spine_SkeletonAnimation_initWithJsonFile'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_spine_SkeletonAnimation_initWithBinaryFile(lua_State* tolua_S)
+{
+    int argc = 0;
+    spine::SkeletonAnimation* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_initWithBinaryFile'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2)
+    {
+        std::string_view arg0;
+        std::string_view arg1;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "sp.SkeletonAnimation:initWithBinaryFile");
+
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "sp.SkeletonAnimation:initWithBinaryFile");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_initWithBinaryFile'", nullptr);
+            return 0;
+        }
+        obj->initWithBinaryFile(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 3)
+    {
+        std::string_view arg0;
+        std::string_view arg1;
+        double arg2;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "sp.SkeletonAnimation:initWithBinaryFile");
+
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "sp.SkeletonAnimation:initWithBinaryFile");
+
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonAnimation:initWithBinaryFile");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_initWithBinaryFile'", nullptr);
+            return 0;
+        }
+        obj->initWithBinaryFile(arg0, arg1, arg2);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "sp.SkeletonAnimation:initWithBinaryFile",argc, 2);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_spine_SkeletonAnimation_initWithBinaryFile'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_spine_SkeletonAnimation_initWithSkeleton(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2529,328 +3027,12 @@ int lua_ax_spine_SkeletonAnimation_initWithSkeleton(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 3)
-    {
-        spine::Skeleton* arg0;
-        bool arg1;
-        bool arg2;
-
-        ok &= luaval_to_object<spine::Skeleton>(tolua_S, 2, "sp.Skeleton",&arg0, "sp.SkeletonAnimation:initWithSkeleton");
-
-        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "sp.SkeletonAnimation:initWithSkeleton");
-
-        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "sp.SkeletonAnimation:initWithSkeleton");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_initWithSkeleton'", nullptr);
-            return 0;
-        }
-        obj->initWithSkeleton(arg0, arg1, arg2);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    if (argc == 4)
-    {
-        spine::Skeleton* arg0;
-        bool arg1;
-        bool arg2;
-        bool arg3;
-
-        ok &= luaval_to_object<spine::Skeleton>(tolua_S, 2, "sp.Skeleton",&arg0, "sp.SkeletonAnimation:initWithSkeleton");
-
-        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "sp.SkeletonAnimation:initWithSkeleton");
-
-        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "sp.SkeletonAnimation:initWithSkeleton");
-
-        ok &= luaval_to_boolean(tolua_S, 5, &arg3, "sp.SkeletonAnimation:initWithSkeleton");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_initWithSkeleton'", nullptr);
-            return 0;
-        }
-        obj->initWithSkeleton(arg0, arg1, arg2, arg3);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "sp.SkeletonAnimation:initWithSkeleton",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_spine_SkeletonAnimation_initWithSkeleton'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_spine_SkeletonAnimation_initWithData(lua_State* tolua_S)
-{
-    int argc = 0;
-    spine::SkeletonAnimation* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_initWithData'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
-    {
-        spine::SkeletonData* arg0;
-
-        ok &= luaval_to_object<spine::SkeletonData>(tolua_S, 2, "sp.SkeletonData",&arg0, "sp.SkeletonAnimation:initWithData");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_initWithData'", nullptr);
-            return 0;
-        }
-        obj->initWithData(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    if (argc == 2)
-    {
-        spine::SkeletonData* arg0;
-        bool arg1;
-
-        ok &= luaval_to_object<spine::SkeletonData>(tolua_S, 2, "sp.SkeletonData",&arg0, "sp.SkeletonAnimation:initWithData");
-
-        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "sp.SkeletonAnimation:initWithData");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_initWithData'", nullptr);
-            return 0;
-        }
-        obj->initWithData(arg0, arg1);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "sp.SkeletonAnimation:initWithData",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_spine_SkeletonAnimation_initWithData'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_spine_SkeletonAnimation_initWithJsonFile(lua_State* tolua_S)
-{
-    int argc = 0;
-    spine::SkeletonAnimation* obj = nullptr;
-    bool ok  = true;
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
-#endif
-    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_initWithJsonFile'", nullptr);
-        return 0;
-    }
-#endif
-    argc = lua_gettop(tolua_S)-1;
-    do {
-        if (argc == 2) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "sp.SkeletonAnimation:initWithJsonFile");
-
-            if (!ok) { break; }
-            std::string_view arg1;
-            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "sp.SkeletonAnimation:initWithJsonFile");
-
-            if (!ok) { break; }
-            obj->initWithJsonFile(arg0, arg1);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do {
-        if (argc == 3) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "sp.SkeletonAnimation:initWithJsonFile");
-
-            if (!ok) { break; }
-            std::string_view arg1;
-            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "sp.SkeletonAnimation:initWithJsonFile");
-
-            if (!ok) { break; }
-            double arg2;
-            ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonAnimation:initWithJsonFile");
-
-            if (!ok) { break; }
-            obj->initWithJsonFile(arg0, arg1, arg2);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do {
-        if (argc == 2) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "sp.SkeletonAnimation:initWithJsonFile");
-
-            if (!ok) { break; }
-            spine::Atlas* arg1;
-            ok &= luaval_to_object<spine::Atlas>(tolua_S, 3, "sp.Atlas",&arg1, "sp.SkeletonAnimation:initWithJsonFile");
-
-            if (!ok) { break; }
-            obj->initWithJsonFile(arg0, arg1);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do {
-        if (argc == 3) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "sp.SkeletonAnimation:initWithJsonFile");
-
-            if (!ok) { break; }
-            spine::Atlas* arg1;
-            ok &= luaval_to_object<spine::Atlas>(tolua_S, 3, "sp.Atlas",&arg1, "sp.SkeletonAnimation:initWithJsonFile");
-
-            if (!ok) { break; }
-            double arg2;
-            ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonAnimation:initWithJsonFile");
-
-            if (!ok) { break; }
-            obj->initWithJsonFile(arg0, arg1, arg2);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "sp.SkeletonAnimation:initWithJsonFile",argc, 2);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_spine_SkeletonAnimation_initWithJsonFile'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_spine_SkeletonAnimation_initWithBinaryFile(lua_State* tolua_S)
-{
-    int argc = 0;
-    spine::SkeletonAnimation* obj = nullptr;
-    bool ok  = true;
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
-#endif
-    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_initWithBinaryFile'", nullptr);
-        return 0;
-    }
-#endif
-    argc = lua_gettop(tolua_S)-1;
-    do {
-        if (argc == 2) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "sp.SkeletonAnimation:initWithBinaryFile");
-
-            if (!ok) { break; }
-            std::string_view arg1;
-            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "sp.SkeletonAnimation:initWithBinaryFile");
-
-            if (!ok) { break; }
-            obj->initWithBinaryFile(arg0, arg1);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do {
-        if (argc == 3) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "sp.SkeletonAnimation:initWithBinaryFile");
-
-            if (!ok) { break; }
-            std::string_view arg1;
-            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "sp.SkeletonAnimation:initWithBinaryFile");
-
-            if (!ok) { break; }
-            double arg2;
-            ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonAnimation:initWithBinaryFile");
-
-            if (!ok) { break; }
-            obj->initWithBinaryFile(arg0, arg1, arg2);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do {
-        if (argc == 2) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "sp.SkeletonAnimation:initWithBinaryFile");
-
-            if (!ok) { break; }
-            spine::Atlas* arg1;
-            ok &= luaval_to_object<spine::Atlas>(tolua_S, 3, "sp.Atlas",&arg1, "sp.SkeletonAnimation:initWithBinaryFile");
-
-            if (!ok) { break; }
-            obj->initWithBinaryFile(arg0, arg1);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do {
-        if (argc == 3) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "sp.SkeletonAnimation:initWithBinaryFile");
-
-            if (!ok) { break; }
-            spine::Atlas* arg1;
-            ok &= luaval_to_object<spine::Atlas>(tolua_S, 3, "sp.Atlas",&arg1, "sp.SkeletonAnimation:initWithBinaryFile");
-
-            if (!ok) { break; }
-            double arg2;
-            ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonAnimation:initWithBinaryFile");
-
-            if (!ok) { break; }
-            obj->initWithBinaryFile(arg0, arg1, arg2);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "sp.SkeletonAnimation:initWithBinaryFile",argc, 2);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_spine_SkeletonAnimation_initWithBinaryFile'.",&tolua_err);
 #endif
 
     return 0;
@@ -2914,20 +3096,8 @@ int lua_ax_spine_SkeletonAnimation_create(lua_State* tolua_S)
     do {
         if (argc == 1)
         {
-            spine::SkeletonData* arg0;
-            ok &= luaval_to_object<spine::SkeletonData>(tolua_S, 2, "sp.SkeletonData",&arg0, "sp.SkeletonAnimation:create");
-            if (!ok) { break; }
-            spine::SkeletonAnimation* ret = spine::SkeletonAnimation::create(arg0);
-            object_to_luaval<spine::SkeletonAnimation>(tolua_S, "sp.SkeletonAnimation",(spine::SkeletonAnimation*)ret);
-            return 1;
-        }
-    } while (0);
-    ok  = true;
-    do {
-        if (argc == 1)
-        {
-            spine::Skeleton* arg0;
-            ok &= luaval_to_object<spine::Skeleton>(tolua_S, 2, "sp.Skeleton",&arg0, "sp.SkeletonAnimation:create");
+            spine::SkeletonAsset* arg0;
+            ok &= luaval_to_object<spine::SkeletonAsset>(tolua_S, 2, "sp.SkeletonAsset",&arg0, "sp.SkeletonAnimation:create");
             if (!ok) { break; }
             spine::SkeletonAnimation* ret = spine::SkeletonAnimation::create(arg0);
             object_to_luaval<spine::SkeletonAnimation>(tolua_S, "sp.SkeletonAnimation",(spine::SkeletonAnimation*)ret);
@@ -2981,6 +3151,7 @@ int lua_register_ax_spine_SkeletonAnimation(lua_State* tolua_S)
         tolua_function(tolua_S,"setTrackCompleteListener",lua_ax_spine_SkeletonAnimation_setTrackCompleteListener);
         tolua_function(tolua_S,"setTrackEventListener",lua_ax_spine_SkeletonAnimation_setTrackEventListener);
         tolua_function(tolua_S,"setUpdateOnlyIfVisible",lua_ax_spine_SkeletonAnimation_setUpdateOnlyIfVisible);
+        tolua_function(tolua_S,"setAsset",lua_ax_spine_SkeletonAnimation_setAsset);
         tolua_function(tolua_S,"setBonePosition",lua_ax_spine_SkeletonAnimation_setBonePosition);
         tolua_function(tolua_S,"setBoneWorldPosition",lua_ax_spine_SkeletonAnimation_setBoneWorldPosition);
         tolua_function(tolua_S,"setSkin",lua_ax_spine_SkeletonAnimation_setSkin);
@@ -3001,10 +3172,10 @@ int lua_register_ax_spine_SkeletonAnimation(lua_State* tolua_S)
         tolua_function(tolua_S,"getDebugBoundingRectEnabled",lua_ax_spine_SkeletonAnimation_getDebugBoundingRectEnabled);
         tolua_function(tolua_S,"setBlendFunc",lua_ax_spine_SkeletonAnimation_setBlendFunc);
         tolua_function(tolua_S,"getBlendFunc",lua_ax_spine_SkeletonAnimation_getBlendFunc);
-        tolua_function(tolua_S,"initWithSkeleton",lua_ax_spine_SkeletonAnimation_initWithSkeleton);
-        tolua_function(tolua_S,"initWithData",lua_ax_spine_SkeletonAnimation_initWithData);
+        tolua_function(tolua_S,"initWithAsset",lua_ax_spine_SkeletonAnimation_initWithAsset);
         tolua_function(tolua_S,"initWithJsonFile",lua_ax_spine_SkeletonAnimation_initWithJsonFile);
         tolua_function(tolua_S,"initWithBinaryFile",lua_ax_spine_SkeletonAnimation_initWithBinaryFile);
+        tolua_function(tolua_S,"initWithSkeleton",lua_ax_spine_SkeletonAnimation_initWithSkeleton);
         tolua_function(tolua_S,"create", lua_ax_spine_SkeletonAnimation_create);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(spine::SkeletonAnimation).name(); // rtti is literal storage
@@ -3019,6 +3190,7 @@ TOLUA_API int register_all_ax_spine(lua_State* tolua_S)
     tolua_module(tolua_S,"sp",0);
     tolua_beginmodule(tolua_S,"sp");
 
+    lua_register_ax_spine_SkeletonAsset(tolua_S);
     lua_register_ax_spine_SkeletonAnimation(tolua_S);
 
     tolua_endmodule(tolua_S);

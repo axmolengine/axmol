@@ -29,63 +29,42 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
-
 #pragma once
 
-#include "axmol/rhi/ProgramState.h"
-#include "axmol/renderer/TrianglesCommand.h"
-#include "axmol/renderer/Renderer.h"
-#include "axmol/renderer/Texture2D.h"
-
-#include <spine/spine.h>
-
-#include <vector>
+#include "spine/spine.h"
+#include <string>
+#include <string_view>
+#include <unordered_map>
+#include "xxhash/xxhash.h"
+#include "axmol/base/Object.h"
 
 namespace spine {
-	struct SkeletonCommand : public ax::TrianglesCommand {
-		ax::rhi::UniformLocation _locMVP;
-		ax::rhi::UniformLocation _locTexture;
-	};
-	class SP_API SkeletonBatch {
+	class SP_API SkeletonAsset : public ax::Object {
 	public:
-		static SkeletonBatch *getInstance();
+		static SkeletonAsset *obtain(std::string_view dataFile,
+									 std::string_view atlasFile,
+									 float scale);
 
-		static void destroyInstance();
+		std::string_view getDataFile() const { return _dataFile; }
+		std::string_view getAtlasFile() const { return _atlasFile; }
+		float getScale() const { return _scale; }
 
-		void update(float delta);
-
-		ax::V3F_T2F_C4B *allocateVertices(uint32_t numVertices);
-		void deallocateVertices(uint32_t numVertices);
-		unsigned short *allocateIndices(uint32_t numIndices);
-		void deallocateIndices(uint32_t numVertices);
-		ax::TrianglesCommand *addCommand(ax::Renderer *renderer, float globalOrder, ax::Texture2D *texture, ax::rhi::ProgramState *programState, ax::BlendFunc blendType, const ax::TrianglesCommand::Triangles &triangles, const ax::Mat4 &mv, uint32_t flags);
-
-		ax::rhi::ProgramState* updateCommandPipelinePS(SkeletonCommand* command, ax::rhi::ProgramState* programState);
+		spine::SkeletonData *getSkeletonData() const { return _skeletonData; }
 
 	protected:
-		SkeletonBatch();
-		virtual ~SkeletonBatch();
+		SkeletonAsset(std::string_view dataFile,
+					  std::string_view atlasFile,
+					  float scale,
+					  spine::Atlas *atlas,
+					  spine::AttachmentLoader *loader,
+					  spine::SkeletonData *data);
+		~SkeletonAsset() override;
 
-		void reset();
-
-		SkeletonCommand* nextFreeCommand ();
-
-		SkeletonCommand* newCommand();
-
-		ax::rhi::ProgramState*                     _programState; // The default program state
-
-		// pool of commands
-		std::vector<SkeletonCommand *> _commandsPool;
-		uint32_t _nextFreeCommand;
-
-		// pool of vertices
-		std::vector<ax::V3F_T2F_C4B> _vertices;
-		uint32_t _numVertices;
-
-		// pool of indices
-		::spine::Array<unsigned short> _indices;
-
-        ax::EventListener* _afterDrawListener{nullptr};
+		std::string _dataFile;
+		std::string _atlasFile;
+		float _scale{1.0f};
+		spine::Atlas *_atlas{nullptr};
+		spine::AttachmentLoader *_attachmentLoader{nullptr};
+		spine::SkeletonData *_skeletonData{nullptr};
 	};
-
 }// namespace spine

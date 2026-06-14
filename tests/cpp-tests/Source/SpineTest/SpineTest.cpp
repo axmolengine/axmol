@@ -158,7 +158,7 @@ bool BatchingExample::init()
     int yMin = 0, yMax = _contentSize.height * 0.7f;
     for (int i = 0; i < NUM_SKELETONS; i++)
     {
-        auto skeletonNode = spine::SkeletonAnimation::create(asset->getSkeletonData());
+        auto skeletonNode = spine::SkeletonAnimation::create(asset);
 
         skeletonNode->setMix("walk", "jump", 0.2f);
         skeletonNode->setMix("jump", "run", 0.2f);

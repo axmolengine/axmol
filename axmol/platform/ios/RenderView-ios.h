@@ -33,7 +33,7 @@
 namespace ax
 {
 
-/** Class that represent the OpenGL View
+/** Class that represent the RenderView
  */
 class AX_DLL RenderView : public RenderViewCore
 {

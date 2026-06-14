@@ -37,40 +37,9 @@
 #include <unordered_map>
 #include "xxhash/xxhash.h"
 #include "axmol/base/Object.h"
+#include "spine/SkeletonAsset.h"
 
 namespace spine {
-
-	class SkeletonAssetCache;
-
-	class SP_API SkeletonAsset : public ax::Object {
-	public:
-		static SkeletonAsset *obtain(std::string_view dataFile,
-									 std::string_view atlasFile,
-									 float scale);
-
-		std::string_view getDataFile() const { return _dataFile; }
-		std::string_view getAtlasFile() const { return _atlasFile; }
-		float getScale() const { return _scale; }
-
-		spine::SkeletonData *getSkeletonData() const { return _skeletonData; }
-
-	protected:
-		SkeletonAsset(std::string_view dataFile,
-					  std::string_view atlasFile,
-					  float scale,
-					  spine::Atlas *atlas,
-					  spine::AttachmentLoader *loader,
-					  spine::SkeletonData *data);
-		~SkeletonAsset() override;
-
-		std::string _dataFile;
-		std::string _atlasFile;
-		float _scale{1.0f};
-		spine::Atlas *_atlas{nullptr};
-		spine::AttachmentLoader *_attachmentLoader{nullptr};
-		spine::SkeletonData *_skeletonData{nullptr};
-	};
-
 	class SP_API SkeletonAssetCache {
 	public:
 		static SkeletonAssetCache *getInstance();

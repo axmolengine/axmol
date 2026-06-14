@@ -37,6 +37,7 @@
 #include "axmol/math/Rect.h"
 #include "axmol/math/Vec2.h"
 #include "axmol/renderer/CustomCommand.h"
+#include "spine/SkeletonAsset.h"
 #include <spine/spine.h>
 #include <span>
 #include <string_view>
@@ -74,28 +75,13 @@ namespace spine {
 										 float scale = 1);
 
 		/**
-        * @brief Create a SkeletonAnimation from an existing SkeletonData.
+        * @brief Create a SkeletonAnimation from an existing SkeletonAsset.
         *
-        * @note The lifetime of the SkeletonData object is managed externally.
-        *       Caller must ensure SkeletonData remains valid for the duration
-        *       of the SkeletonAnimation instance.
-        *
-        * @param skeletonData Pointer to a SkeletonData object.
+        * The SkeletonAnimation retains the asset and creates its own Skeleton instance.
+        * @param asset Pointer to a SkeletonAsset object.
         * @return A new SkeletonAnimation instance.
         */
-		static SkeletonAnimation *create(spine::SkeletonData *skeletonData);
-
-		/**
-        * @brief Create a SkeletonAnimation from an existing Skeleton.
-        *
-        * @note The lifetime of the Skeleton object is managed externally.
-        *       Caller must ensure Skeleton remains valid for the duration
-        *       of the SkeletonAnimation instance.
-        *
-        * @param skeleton Pointer to a Skeleton object.
-        * @return A new SkeletonAnimation instance.
-        */
-		static SkeletonAnimation *create(spine::Skeleton *skeleton);
+		static SkeletonAnimation *create(spine::SkeletonAsset *asset);
 
 		/**
         * @brief Clone the current SkeletonAnimation with an optional slot range.
@@ -143,6 +129,7 @@ namespace spine {
 		void setTrackEventListener(spine::TrackEntry *entry, const spine::EventListener &listener);
 
 		void setUpdateOnlyIfVisible(bool status);
+		void setAsset(spine::SkeletonAsset *asset);
 
 		void updateWorldTransform(spine::Physics physics);
 
@@ -178,24 +165,16 @@ namespace spine {
 
 		SkeletonAnimation();
 		SkeletonAnimation(spine::Skeleton *skeleton,
-						  bool ownsSkeleton = false,
-						  bool ownsSkeletonData = false,
-						  bool ownsAtlas = false);
-		SkeletonAnimation(spine::SkeletonData *skeletonData, bool ownsSkeletonData = false);
-		SkeletonAnimation(std::string_view skeletonDataFile, spine::Atlas *atlas, float scale = 1);
+						  bool ownsSkeleton = false);
+		SkeletonAnimation(spine::SkeletonAsset *asset);
 		SkeletonAnimation(std::string_view skeletonDataFile, std::string_view atlasFile, float scale = 1);
 		~SkeletonAnimation() override;
 
-		void initWithSkeleton(spine::Skeleton *skeleton,
-							  bool ownsSkeleton = false,
-							  bool ownsSkeletonData = false,
-							  bool ownsAtlas = false);
-		void initWithData(spine::SkeletonData *skeletonData, bool ownsSkeletonData = false);
-		void initWithJsonFile(std::string_view skeletonDataFile, spine::Atlas *atlas, float scale = 1);
+		void initWithAsset(spine::SkeletonAsset *asset);
 		void initWithJsonFile(std::string_view skeletonDataFile, std::string_view atlasFile, float scale = 1);
-		void initWithBinaryFile(std::string_view skeletonDataFile, spine::Atlas *atlas, float scale = 1);
 		void initWithBinaryFile(std::string_view skeletonDataFile, std::string_view atlasFile, float scale = 1);
-
+		void initWithSkeleton(spine::Skeleton *skeleton,
+							  bool ownsSkeleton = false);
 
 		[[internal]] spine::Animation *findAnimation(std::string_view name) const;
 		[[internal]] spine::TrackEntry *getTrack(int trackIndex = 0);
@@ -206,7 +185,7 @@ namespace spine {
 													  std::string_view attachmentName) const;
 		[[internal]] spine::Skeleton *getSkeleton() const { return _skeleton; }
 		[[internal]] spine::AnimationState *getAnimationState() const { return _state; }
-		[[internal]] spine::SkeletonData *getSkeletonData() const { return _skeletonData; }
+		[[internal]] spine::SkeletonAsset *getAsset() const { return _asset; }
 
 	protected:
 		static void animationCallback(AnimationState *state, EventType type, TrackEntry *entry, spine::Event *event, void *userData);
@@ -222,7 +201,6 @@ namespace spine {
 		void onEnter() override;
 		void onExit() override;
 
-		void setSkeletonData(spine::SkeletonData *skeletonData, bool ownsSkeletonData);
 		void setAnimationStateEnabled(bool enabled);
 		virtual void drawDebug(ax::Renderer *renderer, const ax::Mat4 &transform, uint32_t transformFlags);
 
@@ -235,11 +213,9 @@ namespace spine {
 		spine::UpdateWorldTransformsListener _preUpdateListener;
 		spine::UpdateWorldTransformsListener _postUpdateListener;
 
-		spine::Atlas *_atlas = nullptr;
-		spine::AttachmentLoader *_attachmentLoader = nullptr;
+		spine::SkeletonAsset *_asset = nullptr;
 
 		spine::Skeleton *_skeleton = nullptr;
-		spine::SkeletonData *_skeletonData = nullptr;
 
 		spine::Pool<spine::AttachmentVertices *> _verticesPool;
 
@@ -258,9 +234,7 @@ namespace spine {
 		int _startSlotIndex = 0;
 		int _endSlotIndex = std::numeric_limits<int>::max();
 
-		bool _ownsSkeletonData = false;
 		bool _ownsSkeleton = false;
-		bool _ownsAtlas = false;
 		bool _opacityModifyRGB = false;
 		bool _debugSlots = false;
 		bool _debugBones = false;

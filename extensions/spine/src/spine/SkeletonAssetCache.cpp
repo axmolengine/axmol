@@ -36,66 +36,6 @@
 #include "yasio/tlx/string_view.hpp"
 
 namespace spine {
-
-	SkeletonAsset *SkeletonAsset::obtain(std::string_view dataFile,
-										 std::string_view atlasFile,
-										 float scale) {
-		spine::Atlas *atlas = nullptr;
-		spine::AttachmentLoader *loader = nullptr;
-		spine::SkeletonData *skeletonData = nullptr;
-
-		do {
-			atlas = new spine::Atlas(spine::String{atlasFile.data()}, spine::AxmolSpineExtension::getInstance()->getTextureLoader());
-			if (!atlas)
-				break;
-
-			loader = new spine::AtlasAttachmentLoader(*atlas);
-
-			if (tlx::ic::ends_with(dataFile, ".skel")) {
-				spine::SkeletonBinary binary(*loader);
-				binary.setScale(scale);
-				skeletonData = binary.readSkeletonDataFile(spine::String{dataFile});
-				if (!binary.getError().isEmpty()) {
-					AXLOGE("#parse spine .skel data file failed, error:{}", binary.getError().buffer());
-					break;
-				}
-			} else {
-				spine::SkeletonJson json(*loader);
-				json.setScale(scale);
-				skeletonData = json.readSkeletonDataFile(spine::String{dataFile});
-				if (!json.getError().isEmpty()) {
-					AXLOGE("#parse spine .json data file failed, error:{}", json.getError().buffer());
-					break;
-				}
-			}
-
-			if (!skeletonData)
-				break;
-
-			return new SkeletonAsset(dataFile, atlasFile, scale, atlas, loader, skeletonData);
-		} while (false);
-
-		delete skeletonData;
-		delete loader;
-		delete atlas;
-		return nullptr;
-	}
-
-	SkeletonAsset::SkeletonAsset(std::string_view dataFile,
-								 std::string_view atlasFile,
-								 float scale,
-								 spine::Atlas *atlas,
-								 spine::AttachmentLoader *loader,
-								 spine::SkeletonData *data)
-		: _dataFile(dataFile), _atlasFile(atlasFile), _scale(scale), _atlas(atlas), _attachmentLoader(loader), _skeletonData(data) {
-	}
-
-	SkeletonAsset::~SkeletonAsset() {
-		delete _skeletonData;
-		delete _attachmentLoader;
-		delete _atlas;
-	}
-
 	SkeletonAssetCache *SkeletonAssetCache::_instance = nullptr;
 
 	SkeletonAssetCache *SkeletonAssetCache::getInstance() {

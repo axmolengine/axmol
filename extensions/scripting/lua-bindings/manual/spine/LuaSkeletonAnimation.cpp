@@ -50,7 +50,7 @@ LuaSkeletonAnimation* LuaSkeletonAnimation::createWithFile(std::string_view data
         return nullptr;
 
     LuaSkeletonAnimation* node = new LuaSkeletonAnimation();
-    node->initWithData(asset->getSkeletonData(), false);
+    node->initWithAsset(asset);
     node->autorelease();
     return node;
 }

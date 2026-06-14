@@ -438,7 +438,7 @@ float Director::getDeltaTime() const
 
 void Director::setRenderView(RenderViewCore* renderView)
 {
-    AXASSERT(renderView, "opengl view should not be null");
+    AXASSERT(renderView, "RenderView should not be null");
 
     if (_renderView != renderView)
     {
@@ -1183,7 +1183,6 @@ void Director::cleanupDirector()
     VertexLayoutManager::destroyInstance();
     rhi::DriverContext::destroyCurrentDriver();
 
-    // OpenGL view
     if (_renderView)
     {
         _renderView->end();

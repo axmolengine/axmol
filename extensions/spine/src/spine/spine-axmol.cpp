@@ -43,155 +43,156 @@
 
 namespace spine {
 
-using namespace ax;
+	using namespace ax;
 
-static Texture2D::TexParams chooseTexParams(spine::AtlasPage &page) {
-	Texture2D::TexParams texParams{};
-	switch (page.minFilter) {
-		case TextureFilter_Linear:
-			texParams.minFilter = rhi::SamplerFilter::MIN_LINEAR;
-			break;
-		case TextureFilter_Nearest:
-			texParams.minFilter = rhi::SamplerFilter::MIN_NEAREST;
-			break;
-		case TextureFilter_MipMap:
-			texParams.minFilter = rhi::SamplerFilter::MIN_LINEAR;
-			break;
-		case TextureFilter_MipMapNearestNearest:
-			texParams.minFilter = rhi::SamplerFilter::MIN_NEAREST;
-			texParams.mipFilter = rhi::SamplerFilter::MIP_NEAREST;
-			break;
-		case TextureFilter_MipMapLinearNearest:
-			texParams.minFilter = rhi::SamplerFilter::MIN_NEAREST;
-			texParams.mipFilter = rhi::SamplerFilter::MIP_LINEAR;
-			break;
-		case TextureFilter_MipMapNearestLinear:
-			texParams.minFilter = rhi::SamplerFilter::MIN_LINEAR;
-			texParams.mipFilter = rhi::SamplerFilter::MIP_NEAREST;
-			break;
-		case TextureFilter_MipMapLinearLinear:
-			texParams.minFilter = rhi::SamplerFilter::MIN_LINEAR;
-			texParams.mipFilter = rhi::SamplerFilter::MIP_LINEAR;
-			break;
+	static Texture2D::TexParams chooseTexParams(spine::AtlasPage &page) {
+		Texture2D::TexParams texParams{};
+		switch (page.minFilter) {
+			case TextureFilter_Linear:
+				texParams.minFilter = rhi::SamplerFilter::MIN_LINEAR;
+				break;
+			case TextureFilter_Nearest:
+				texParams.minFilter = rhi::SamplerFilter::MIN_NEAREST;
+				break;
+			case TextureFilter_MipMap:
+				texParams.minFilter = rhi::SamplerFilter::MIN_LINEAR;
+				break;
+			case TextureFilter_MipMapNearestNearest:
+				texParams.minFilter = rhi::SamplerFilter::MIN_NEAREST;
+				texParams.mipFilter = rhi::SamplerFilter::MIP_NEAREST;
+				break;
+			case TextureFilter_MipMapLinearNearest:
+				texParams.minFilter = rhi::SamplerFilter::MIN_NEAREST;
+				texParams.mipFilter = rhi::SamplerFilter::MIP_LINEAR;
+				break;
+			case TextureFilter_MipMapNearestLinear:
+				texParams.minFilter = rhi::SamplerFilter::MIN_LINEAR;
+				texParams.mipFilter = rhi::SamplerFilter::MIP_NEAREST;
+				break;
+			case TextureFilter_MipMapLinearLinear:
+				texParams.minFilter = rhi::SamplerFilter::MIN_LINEAR;
+				texParams.mipFilter = rhi::SamplerFilter::MIP_LINEAR;
+				break;
+		}
+		switch (page.magFilter) {
+			case TextureFilter_Linear:
+				texParams.magFilter = rhi::SamplerFilter::MAG_LINEAR;
+				break;
+			case TextureFilter_Nearest:
+				texParams.magFilter = rhi::SamplerFilter::MAG_NEAREST;
+				break;
+		}
+
+		texParams.sAddressMode = page.uWrap == TextureWrap_ClampToEdge ? rhi::SamplerAddressMode::CLAMP_TO_EDGE
+																	   : rhi::SamplerAddressMode::REPEAT;
+		texParams.tAddressMode = page.vWrap == TextureWrap_ClampToEdge ? rhi::SamplerAddressMode::CLAMP_TO_EDGE
+																	   : rhi::SamplerAddressMode::REPEAT;
+		return texParams;
 	}
-	switch (page.magFilter) {
-		case TextureFilter_Linear:
-			texParams.magFilter = rhi::SamplerFilter::MAG_LINEAR;
-			break;
-		case TextureFilter_Nearest:
-			texParams.magFilter = rhi::SamplerFilter::MAG_NEAREST;
-			break;
+
+
+	// Axmol Texture Loader for internal use
+	class SP_API AxmolTextureLoader : public TextureLoader {
+		friend class AxmolSpineExtension;
+
+	protected:
+		AxmolTextureLoader() : TextureLoader() {}
+		~AxmolTextureLoader() = default;
+
+	public:
+		void load(AtlasPage &page, const String &path) override {
+			Texture2D *texture = Director::getInstance()->getTextureCache()->addImage(to_string_view(path));
+			AXASSERT(texture != nullptr, "Invalid image");
+			if (texture) {
+				texture->retain();
+				Texture2D::TexParams texParams = chooseTexParams(page);
+				texture->setTexParameters(texParams);
+
+				page.texture = texture;
+				page.width = texture->getPixelsWide();
+				page.height = texture->getPixelsHigh();
+			}
+		}
+		void unload(void *texture) override {
+			if (texture) {
+				((Texture2D *) texture)->release();
+			}
+		}
+	};
+
+	AxmolSpineExtension *AxmolSpineExtension::_instance = nullptr;
+
+	AxmolSpineExtension *AxmolSpineExtension::getInstance() {
+		if (!_instance) {
+			_instance = new AxmolSpineExtension();
+			_instance->init();
+		}
+		return _instance;
 	}
 
-	texParams.sAddressMode = page.uWrap == TextureWrap_ClampToEdge ? rhi::SamplerAddressMode::CLAMP_TO_EDGE
-																   : rhi::SamplerAddressMode::REPEAT;
-	texParams.tAddressMode = page.vWrap == TextureWrap_ClampToEdge ? rhi::SamplerAddressMode::CLAMP_TO_EDGE
-																   : rhi::SamplerAddressMode::REPEAT;
-	return texParams;
-}
+	void AxmolSpineExtension::init() {
 
+		// Spine 4.3 defaults to a y-down coordinate system for some runtimes.
+		// Axmol's 2D scene graph is y-up, so keep Spine world vertices in the
+		// same coordinate space as Axmol nodes and avoid flipping in the renderer.
+		spine::Bone::setYDown(false);
 
-// Axmol Texture Loader for internal use
-class SP_API AxmolTextureLoader : public TextureLoader {
-	friend class AxmolSpineExtension;
+		if (!_textureLoader)
+			_textureLoader = new AxmolTextureLoader();
+		auto eventDispatcher = ax::Director::getInstance()->getEventDispatcher();
 
-protected:
-	AxmolTextureLoader() : TextureLoader() {}
-	~AxmolTextureLoader() = default;
+		if (!_gfxDropListener) {
+			auto _onBeforeGfxDrop = [eventDispatcher](ax::CustomEvent *) {
+				spine::SkeletonAssetCache::destroyInstance();
+				spine::SkeletonBatch::destroyInstance();
+				spine::SkeletonTwoColorBatch::destroyInstance();
+				if (_instance) {
+					eventDispatcher->removeEventListener(_instance->_gfxDropListener);
+					_instance->_gfxDropListener = nullptr;
+				}
+			};
+			_gfxDropListener = eventDispatcher->addCustomEventListener(ax::Director::EVENT_BEFORE_GFX_DROP, _onBeforeGfxDrop);
+		}
 
-public:
-	void load(AtlasPage &page, const String &path) override {
-		Texture2D *texture = Director::getInstance()->getTextureCache()->addImage(to_string_view(path));
-		AXASSERT(texture != nullptr, "Invalid image");
-		if (texture) {
-			texture->retain();
-			Texture2D::TexParams texParams = chooseTexParams(page);
-			texture->setTexParameters(texParams);
-
-			page.texture = texture;
-			page.width = texture->getPixelsWide();
-			page.height = texture->getPixelsHigh();
+		if (!_directorDisposingListener) {
+			static constexpr int SPINE_EXTENSION_DTOR_PRIORITY = 2;
+			auto _destroySpineExtension = [eventDispatcher](ax::CustomEvent *) {
+				if (_instance) {
+					_instance->cleanup();
+				}
+				AX_SAFE_DELETE(_instance);
+			};
+			_directorDisposingListener = eventDispatcher->addCustomEventListener(ax::Director::EVENT_DISPOSING, _destroySpineExtension, SPINE_EXTENSION_DTOR_PRIORITY);
 		}
 	}
-	void unload(void *texture) override {
-		if (texture) {
-			((Texture2D *) texture)->release();
+
+	void AxmolSpineExtension::cleanup() {
+
+		AX_SAFE_DELETE(_textureLoader);
+
+		auto eventDispatcher = ax::Director::getInstance()->getEventDispatcher();
+
+		AXASSERT(!_gfxDropListener, "AxmolSpineExtension: Gfx drop listener must be removed before dispose");
+
+		if (_directorDisposingListener) {
+			eventDispatcher->removeEventListener(_directorDisposingListener);
+			_directorDisposingListener = nullptr;
 		}
 	}
-};
 
-AxmolSpineExtension *AxmolSpineExtension::_instance = nullptr;
+	char *AxmolSpineExtension::_readFile(const spine::String &path, int *length) {
+		Data data = FileUtils::getInstance()->getDataFromFile(to_string_view(path));
+		if (data.isNull()) return nullptr;
 
-AxmolSpineExtension *AxmolSpineExtension::getInstance() {
-	if (!_instance) {
-		_instance = new AxmolSpineExtension();
-		_instance->init();
-	}
-	return _instance;
-}
-
-void AxmolSpineExtension::init() {
-
-    // Spine 4.3 defaults to a y-down coordinate system for some runtimes.
-    // Axmol's 2D scene graph is y-up, so keep Spine world vertices in the
-    // same coordinate space as Axmol nodes and avoid flipping in the renderer.
-    spine::Bone::setYDown(false);
-
-	if (!_textureLoader)
-		_textureLoader = new AxmolTextureLoader();
-	auto eventDispatcher = ax::Director::getInstance()->getEventDispatcher();
-
-	if (!_gfxDropListener) {
-		auto _onBeforeGfxDrop = [](ax::CustomEvent *) {
-			SkeletonAssetCache::destroyInstance();
-			spine::SkeletonBatch::destroyInstance();
-			spine::SkeletonTwoColorBatch::destroyInstance();
-		};
-		_gfxDropListener = eventDispatcher->addCustomEventListener(ax::Director::EVENT_BEFORE_GFX_DROP, _onBeforeGfxDrop);
+		// avoid buffer overflow (int is shorter than ssize_t in certain platforms)
+		ssize_t tmpLen;
+		char *ret = (char *) data.takeBuffer(&tmpLen);
+		*length = static_cast<int>(tmpLen);
+		return ret;
 	}
 
-	if (!_disposeEventListener) {
-		static constexpr int SPINE_EXTENSION_DTOR_PRIORITY = 2;
-		auto _destroySpineExtension = [](ax::CustomEvent *) {
-			if (_instance) _instance->cleanup();
-			AX_SAFE_DELETE(_instance);
-		};
-		_disposeEventListener = eventDispatcher->addCustomEventListener(ax::Director::EVENT_DISPOSING, _destroySpineExtension, SPINE_EXTENSION_DTOR_PRIORITY);
-	}
-}
-
-void AxmolSpineExtension::cleanup() {
-
-	AX_SAFE_DELETE(_textureLoader);
-
-	auto eventDispatcher = ax::Director::getInstance()->getEventDispatcher();
-
-
-	if (_disposeEventListener) {
-		eventDispatcher->removeEventListener(_disposeEventListener);
-		_disposeEventListener = nullptr;
+	SpineExtension *getDefaultExtension() {
+		return AxmolSpineExtension::getInstance();
 	}
 
-	if (_gfxDropListener) {
-		eventDispatcher->removeEventListener(_gfxDropListener);
-		_gfxDropListener = nullptr;
-	}
-}
-
-char *AxmolSpineExtension::_readFile(const spine::String &path, int *length) {
-	Data data = FileUtils::getInstance()->getDataFromFile(to_string_view(path));
-	if (data.isNull()) return nullptr;
-
-	// avoid buffer overflow (int is shorter than ssize_t in certain platforms)
-	ssize_t tmpLen;
-	char *ret = (char *) data.takeBuffer(&tmpLen);
-	*length = static_cast<int>(tmpLen);
-	return ret;
-}
-
-SpineExtension *getDefaultExtension() {
-	return AxmolSpineExtension::getInstance();
-}
-
-}
-
+}// namespace spine

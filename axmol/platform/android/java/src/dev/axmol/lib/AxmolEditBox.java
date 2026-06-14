@@ -136,7 +136,6 @@ public class AxmolEditBox extends AppCompatEditText {
 
     private Boolean changedTextProgrammatically = false;
 
-    //OpenGL view scaleX
     private  float mScaleX;
 
     // package private

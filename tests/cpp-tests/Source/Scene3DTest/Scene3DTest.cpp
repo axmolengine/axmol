@@ -53,7 +53,7 @@ public:
                                                        float scale = 1)
     {
         SkeletonAnimationCullingFix* node = new SkeletonAnimationCullingFix();
-        node->initWithJsonFile(std::string{skeletonDataFile}, std::string{atlasFile}, scale);
+        node->initWithJsonFile(skeletonDataFile, atlasFile, scale);
         node->autorelease();
         return node;
     }

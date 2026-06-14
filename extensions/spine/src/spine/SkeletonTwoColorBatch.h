@@ -30,8 +30,7 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifndef SPINE_SKELETONTWOCOLORBATCH_H_
-#define SPINE_SKELETONTWOCOLORBATCH_H_
+#pragma once
 
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/renderer/TrianglesCommand.h"
@@ -166,5 +165,3 @@ namespace spine {
 		uint32_t _numBatches;
 	};
 }// namespace spine
-
-#endif// SPINE_SKELETONTWOCOLORBATCH_H_
