@@ -31,8 +31,7 @@
 #    include "lua-bindings/manual/LuaBasicConversions.h"
 #    include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
 #    include "lua-bindings/manual/LuaValue.h"
-#    include "spine/spine.h"
-#    include "spine/spine-cocos2dx.h"
+#    include "spine/spine-axmol.h"
 #    include "lua-bindings/manual/spine/LuaSkeletonAnimation.h"
 #    include "lua-bindings/manual/LuaEngine.h"
 

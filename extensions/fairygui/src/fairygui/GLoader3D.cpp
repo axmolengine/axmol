@@ -6,7 +6,7 @@
 #include "utils/ByteBuffer.h"
 #include "utils/ToolSet.h"
 
-#include "spine/spine-cocos2dx.h"
+#include "spine/spine-axmol.h"
 
 NS_FGUI_BEGIN
 using namespace ax;

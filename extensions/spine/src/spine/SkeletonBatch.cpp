@@ -30,16 +30,18 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
+#include <spine/SkeletonBatch.h>
 #include <spine/spine-axmol.h>
 
 #include <algorithm>
-#include <spine/Extension.h>
 
 USING_NS_AX;
 #define INITIAL_SIZE (2000)
 
 #include "axmol/rhi/DriverContext.h"
 #include "axmol/renderer/Shaders.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
 
 namespace spine {
 

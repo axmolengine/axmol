@@ -89,7 +89,7 @@
 
 ## spine
 
-- Upstream: https://github.com/EsotericSoftware/spine-runtimes
+- Upstream: https://github.com/axmolengine/spine-axmol
 - Version: 4.3-ce7b5d9 (Until Jun.13 2026), with modifications:
   - `String.h`: Added an unsafe String(std::string_view) constructor to bypass redundant strlen and memory copy operations.
   - `Interpolation.h`: Removes Interpolation’s inheritance from spine::SpineObject to prevent destructor calls from accessing a released AxmolSpineExtension during shutdown.

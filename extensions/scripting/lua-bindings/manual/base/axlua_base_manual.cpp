@@ -83,7 +83,7 @@ public:
         _filled = true;
     }
     size_t size_in_bytes() const override { return _size; }
-    static size_t count_element(size_t num_of_bytes) { num_of_bytes; }
+    static size_t count_element(size_t num_of_bytes) { return num_of_bytes; }
 };
 
 #endif

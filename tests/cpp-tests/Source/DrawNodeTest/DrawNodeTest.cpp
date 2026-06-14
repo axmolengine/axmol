@@ -2864,7 +2864,7 @@ DrawNodeSolidCircleTest::DrawNodeSolidCircleTest()
     showCircles();
 
     autoTestLabel     = Label::createWithTTF(text, "fonts/arial.ttf", 16);
-    auto autoTestItem = MenuItemLabel::create(autoTestLabel, [=](Object* sender) {
+    auto autoTestItem = MenuItemLabel::create(autoTestLabel, [this](Object* /*sender*/) {
         primitive = (primitive + 1) % 4;
 
         switch (primitive)

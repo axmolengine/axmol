@@ -29,10 +29,17 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#include <algorithm>
-#include <spine/Extension.h>
 #include <spine/SkeletonAnimation.h>
+
+#include <spine/SkeletonBatch.h>
+#include <spine/SkeletonTwoColorBatch.h>
 #include <spine/spine-axmol.h>
+
+#include "axmol/scene/Camera.h"
+#include "axmol/2d/DrawNode.h"
+#include "axmol/math/MathUtil.h"
+
+#include <algorithm>
 
 // C Variable length array
 #ifdef _MSC_VER

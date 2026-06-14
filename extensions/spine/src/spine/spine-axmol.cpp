@@ -30,8 +30,16 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#include <spine/Extension.h>
 #include <spine/spine-axmol.h>
+
+#include <spine/SkeletonBatch.h>
+#include <spine/SkeletonTwoColorBatch.h>
+
+#include "axmol/base/EventListener.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/platform/FileUtils.h"
 
 namespace spine {
 
@@ -181,7 +189,7 @@ char *AxmolSpineExtension::_readFile(const spine::String &path, int *length) {
 	return ret;
 }
 
-SpineExtension *spine::getDefaultExtension() {
+SpineExtension *getDefaultExtension() {
 	return AxmolSpineExtension::getInstance();
 }
 

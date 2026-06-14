@@ -33,7 +33,10 @@
 #ifndef AX_EXT_SPINE_ANIMATION_H_
 #define AX_EXT_SPINE_ANIMATION_H_
 
-#include "axmol/axmol.h"
+#include "axmol/scene/Node.h"
+#include "axmol/math/Rect.h"
+#include "axmol/math/Vec2.h"
+#include "axmol/renderer/CustomCommand.h"
 #include <spine/spine.h>
 #include <span>
 #include <string_view>
@@ -51,7 +54,7 @@ namespace spine {
 	using EventListener = std::function<void(spine::TrackEntry *entry, spine::Event *event)>;
 	using UpdateWorldTransformsListener = std::function<void(SkeletonAnimation *node)>;
 
-	class SP_API SkeletonAnimation : public axmol::Node, public axmol::BlendProtocol {
+	class SP_API SkeletonAnimation : public ax::Node, public ax::BlendProtocol {
 	public:
 		CREATE_FUNC(SkeletonAnimation);
 
@@ -104,7 +107,7 @@ namespace spine {
 		SkeletonAnimation *clone(int startSlotIndex = -1, int endSlotIndex = -1);
 
 
-		axmol::Rect getBoundingBox() const override;
+		ax::Rect getBoundingBox() const override;
 
 		void setMix(std::string_view fromAnimation, std::string_view toAnimation, float duration);
 
@@ -168,8 +171,8 @@ namespace spine {
 		void setDebugBoundingRectEnabled(bool enabled);
 		bool getDebugBoundingRectEnabled() const;
 
-		void setBlendFunc(const axmol::BlendFunc &blendFunc) override;
-		const axmol::BlendFunc &getBlendFunc() const override;
+		void setBlendFunc(const ax::BlendFunc &blendFunc) override;
+		const ax::BlendFunc &getBlendFunc() const override;
 		void setOpacityModifyRGB(bool value) override;
 		bool isOpacityModifyRGB() const override;
 
@@ -215,13 +218,13 @@ namespace spine {
 		virtual void onTrackEntryEvent(spine::TrackEntry *entry, spine::EventType type, spine::Event *event);
 
 		void update(float deltaTime) override;
-		void draw(axmol::Renderer *renderer, const axmol::Mat4 &transform, uint32_t transformFlags) override;
+		void draw(ax::Renderer *renderer, const ax::Mat4 &transform, uint32_t transformFlags) override;
 		void onEnter() override;
 		void onExit() override;
 
 		void setSkeletonData(spine::SkeletonData *skeletonData, bool ownsSkeletonData);
 		void setAnimationStateEnabled(bool enabled);
-		virtual void drawDebug(axmol::Renderer *renderer, const axmol::Mat4 &transform, uint32_t transformFlags);
+		virtual void drawDebug(ax::Renderer *renderer, const ax::Mat4 &transform, uint32_t transformFlags);
 
 		spine::StartListener _startListener;
 		spine::InterruptListener _interruptListener;
@@ -245,10 +248,10 @@ namespace spine {
 		spine::SkeletonClipping *_clipper = nullptr;
 		spine::Skin *_combinedSkin = nullptr;
 
-		axmol::CustomCommand _debugCommand;
-		axmol::BlendFunc _blendFunc;
+		ax::CustomCommand _debugCommand;
+		ax::BlendFunc _blendFunc;
 
-		axmol::Rect _boundingRect;
+		ax::Rect _boundingRect;
 
 		float _timeScale = 1.0F;
 

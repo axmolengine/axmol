@@ -27,7 +27,7 @@
 #include "MaterialSystemTest.h"
 
 #include <ctime>
-#include <spine/spine-cocos2dx.h>
+#include <spine/spine-axmol.h>
 
 #include "../testResource.h"
 #include "axmol/axmol.h"

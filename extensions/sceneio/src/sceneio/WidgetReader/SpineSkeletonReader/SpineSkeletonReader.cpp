@@ -30,6 +30,7 @@
 #    include "axmol/2d/Sprite.h"
 #    include "axmol/2d/SpriteFrameCache.h"
 #    include "axmol/platform/FileUtils.h"
+#    include "axmol/base/Utils.h"
 
 #    include "sceneio/CSParseBinary_generated.h"
 #    include "sceneio/FlatBuffersSerialize.h"
