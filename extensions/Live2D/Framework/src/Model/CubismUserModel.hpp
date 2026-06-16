@@ -10,6 +10,7 @@
 #include "Effect/CubismPose.hpp"
 #include "Effect/CubismEyeBlink.hpp"
 #include "Effect/CubismBreath.hpp"
+#include "Effect/CubismLook.hpp"
 #include "Math/CubismModelMatrix.hpp"
 #include "Math/CubismTargetPoint.hpp"
 #include "Model/CubismMoc.hpp"
@@ -19,278 +20,261 @@
 #include "Physics/CubismPhysics.hpp"
 #include "Rendering/CubismRenderer.hpp"
 #include "Model/CubismModelUserData.hpp"
+#include "Motion/CubismExpressionMotionManager.hpp"
+#include "Motion/CubismUpdateScheduler.hpp"
 
 namespace Live2D { namespace Cubism { namespace Framework {
 
 /**
- * @brief ユーザーが実際に使用するモデル
- *
- * ユーザーが実際に使用するモデルの基底クラス。これを継承してユーザーが実装する。
+ * Base for models actually used by thegit a user.
  */
 class CubismUserModel
 {
 public:
     /**
-     * @brief コンストラクタ
-     *
-     * コンストラクタ。
+     * Constructor
      */
     CubismUserModel();
 
     /**
-     * @brief デストラクタ
-     *
-     * デストラクタ。
+     * Destructor
      */
     virtual ~CubismUserModel();
 
     /**
-     * @brief 初期化状態の取得
+     * Checks if it is initialized.
      *
-     * 初期化されている状態か？
-     *
-     * @retval  true    初期化されている
-     * @retval  false   初期化されていない
+     * @return true if initialized; otherwise false.
      */
     virtual csmBool         IsInitialized();
 
     /**
-     * @brief 初期化状態の設定
+     * Sets the initialization state.
      *
-     * 初期化状態を設定する。
-     *
-     * @param[in]   v   初期化状態
+     * @param v Initialization state. true if initialized.
      */
     virtual void            IsInitialized(csmBool v);
 
     /**
-     * @brief 更新状態の取得
+     * Checks if it is updated.
      *
-     * 更新されている状態か？
-     *
-     * @retval  true    更新されている
-     * @retval  false   更新されていない
+     * @return true if updated; otherwise false.
      */
     virtual csmBool         IsUpdating();
 
     /**
-     * @brief 更新状態の設定
+     * Sets the update state.
      *
-     * 更新状態を設定する。
-     *
-     * @param[in]   v   更新状態
+     * @param v Update state. true if updated.
      */
     virtual void            IsUpdating(csmBool v);
 
     /**
-     * @brief マウスドラッグ情報の設定
+     * Set the offscreen buffer size.
      *
-     * マウスドラッグの情報を設定する。
+     * @param width Width of the offscreen buffer
+     * @param height Height of the offscreen buffer
+     */
+    void SetRenderTargetSize(csmUint32 width, csmUint32 height);
+
+    /**
+     * Sets the information during mouse dragging.
      *
-     * @param[in]   x   ドラッグしているカーソルのX位置
-     * @param[in]   y   ドラッグしているカーソルのY位置
+     * @param x X position of the mouse cursor during dragging
+     * @param y Y position of the mouse cursor during dragging
      */
     virtual void            SetDragging(csmFloat32 x, csmFloat32 y);
 
     /**
-     * @brief 加速度情報の設定
+     * Sets the acceleration information.
      *
-     * 加速度の情報を設定する。
-     *
-     * @param[in]   x   X軸方向の加速度
-     * @param[in]   y   Y軸方向の加速度
-     * @param[in]   z   Z軸方向の加速度
+     * @param x Acceleration in the X-axis direction
+     * @param y Acceleration in the Y-axis direction
+     * @param z Acceleration in the Z-axis direction
      */
     virtual void            SetAcceleration(csmFloat32 x, csmFloat32 y, csmFloat32 z);
 
     /**
-     * @brief モデル行列の取得
+     * Returns the matrix applied to the model.
      *
-     * モデル行列を取得する。
-     *
-     * @return  モデル行列
+     * @return Matrix
      */
     CubismModelMatrix*      GetModelMatrix() const;
 
     /**
-     * @brief 不透明度の設定
+     * Sets the opacity.
      *
-     * 不透明度を設定する。
-     *
-     * @param[in]   a   不透明度
+     * @param a Opacity
      */
     virtual void            SetOpacity(csmFloat32 a);
 
     /**
-     * @brief 不透明度の取得
+     * Returns the opacity.
      *
-     * 不透明度を取得する。
-     *
-     * @return  不透明度
+     * @return Opacity
      */
     virtual csmFloat32      GetOpacity();
 
     /**
-     * @brief モデルデータの読み込み
+     * Loads the model from a MOC3 file.
      *
-     * モデルデータを読み込む。
-     *
-     * @param[in]   buffer  moc3ファイルが読み込まれているバッファ
-     * @param[in]   size    バッファのサイズ
+     * @param buffer Buffer where the MOC3 file is loaded
+     * @param size Number of bytes in the buffer
      */
-    virtual void            LoadModel(const csmByte* buffer, csmSizeInt size);
+    virtual void            LoadModel(const csmByte* buffer, csmSizeInt size, csmBool shouldCheckMocConsistency = false);
 
     /**
-     * @brief モーションデータの読み込み
+     * Loads motion from a motion file.
+     * If a fade value is defined in model3.json, the fade value defined in motion3.json will be overwritten.
      *
-     * モーションデータを読み込む。
+     * @param buffer Buffer where the motion file is loaded
+     * @param size Number of bytes in the buffer
+     * @param name Name of the motion
+     * @param onFinishedMotionHandler Callback function when motion playback finishes
+     * @param modelSetting Model setting information
+     * @param group – Name to the desired Motion Group
+     * @param index – Index to the desired Motion
      *
-     * @param[in]   buffer                      motion3.jsonファイルが読み込まれているバッファ
-     * @param[in]   size                        バッファのサイズ
-     * @param[in]   name                        モーションの名前
-     * @param[in]   onFinishedMotionHandler     モーション再生終了時に呼び出されるコールバック関数。NULLの場合、呼び出されない。
-     * @return  モーションクラス
+     * @return Instance of the motion class
      */
-    virtual ACubismMotion*  LoadMotion(const csmByte* buffer, csmSizeInt size, const csmChar* name, ACubismMotion::FinishedMotionCallback onFinishedMotionHandler = NULL);
+    virtual ACubismMotion*  LoadMotion(const csmByte* buffer, csmSizeInt size, const csmChar* name,
+                                       ACubismMotion::FinishedMotionCallback onFinishedMotionHandler = NULL, ACubismMotion::BeganMotionCallback onBeganMotionHandler = NULL,
+                                       ICubismModelSetting* modelSetting = NULL, const csmChar* group = NULL, const csmInt32 index = -1, csmBool shouldCheckMotionConsistency = false);
 
     /**
-     * @brief 表情データの読み込み
+     * Loads expression from an expression configuration file.
      *
-     * 表情データを読み込む。
+     * @param buffer Buffer where the expression configuration file is loaded
+     * @param size Number of bytes in the buffer
+     * @param name Name of the expression
      *
-     * @param[in]   buffer  expファイルが読み込まれているバッファ
-     * @param[in]   size    バッファのサイズ
-     * @param[in]   name    表情の名前
+     * @return Instance of the expression motion class
      */
     virtual ACubismMotion*   LoadExpression(const csmByte* buffer, csmSizeInt size, const csmChar* name);
 
     /**
-     * @brief ポーズデータの読み込み
+     * Loads pose from a pose configuration file.
      *
-     * ポーズデータを読み込む。
-     *
-     * @param[in]   buffer  pose3.jsonが読み込まれているバッファ
-     * @param[in]   size    バッファのサイズ
+     * @param buffer Buffer where the pose configuration file is loaded
+     * @param size Number of bytes in the buffer
      */
     virtual void            LoadPose(const csmByte* buffer, csmSizeInt size);
 
     /**
-     * @brief 物理演算データの読み込み
+     * Loads physics from a physics configuration file.
      *
-     * 物理演算データを読み込む。
-     *
-     * @param[in]   buffer  physics3.jsonが読み込まれているバッファ
-     * @param[in]   size    バッファのサイズ
+     * @param buffer Buffer where the physics configuration file is loaded
+     * @param size Number of bytes in the buffer
      */
     virtual void            LoadPhysics(const csmByte* buffer, csmSizeInt size);
 
     /**
-    * @brief モデルに付属するユーザーデータを読み込む
-    *
-    * ユーザーデータを読み込む。
-    *
-    * @param[in]   buffer  userdata3.jsonが読み込まれているバッファ
-    * @param[in]   size    バッファのサイズ
-    */
+     * Loads user data from a user data file.
+     *
+     * @param buffer Buffer where the user data file is loaded
+     * @param size Number of bytes in the buffer
+     */
     virtual void            LoadUserData(const csmByte* buffer, csmSizeInt size);
 
     /**
-     * @brief あたり判定の取得
+     * Returns whether the hit test of a drawable object hits at the specified position.
      *
-     * 指定した位置にDrawableがヒットしているかどうかを取得する。
+     * @param drawableId ID of the drawable object to test
+     * @param pointX X position
+     * @param pointY Y position
      *
-     * @param[in]   drawableId  検証したいDrawableのID
-     * @param[in]   pointX      X位置
-     * @param[in]   pointY      Y位置
-     * @retval  true    ヒットしている
-     * @retval  false   ヒットしていない
+     * @return true if the hit test of the drawable object hits at the specified position; otherwise false.
      */
     virtual csmBool         IsHit(CubismIdHandle drawableId, csmFloat32 pointX, csmFloat32 pointY);
 
     /**
-     * @brief モデルの取得
+     * Returns the model.
      *
-     * モデルを取得する。
-     *
-     * @return  モデル
+     * @return Instance of the model
      */
     CubismModel*            GetModel() const;
 
     /**
-     * @brief レンダラの取得
+     * Returns the version of the unload MOC file.
      *
-     * レンダラを取得する。
+     * @param buffer Buffer where the MOC3 file is loaded
+     * @param size Number of bytes in the buffer
      *
-     * @return レンダラ
+     * @return Version
+     */
+    static Core::csmMocVersion GetMocVersionFromBuffer(const csmByte* buffer, csmSizeInt size);
+
+    /**
+     * Returns the renderer.
+     *
+     * @return Instance of the renderer
      */
     template<class T> T*    GetRenderer() { return dynamic_cast<T*>(_renderer); }
 
     /**
-     *  @brief  レンダラの生成
+     * Makes the renderer.
      *
-     *  レンダラを生成して初期化を実行する。
-     *
+     * @param width Width of the buffer where the model is rendered
+     * @param height Height of the buffer where the model is rendered
+     * @param maskBufferCount Number of buffers used for masking
      */
-    void CreateRenderer();
+    void CreateRenderer(csmUint32 width, csmUint32 height, csmInt32 maskBufferCount = 1);
 
     /**
-     *  @brief  レンダラの解放
-     *
-     *  レンダラを解放する。
-     *
+     * Destroys the renderer.
      */
     void DeleteRenderer();
 
     /**
-    * @brief  イベント発火時の標準処理
-    *
-    * Eventが再生処理時にあった場合の処理をする。
-    * 継承で上書きすることを想定している。
-    * 上書きしない場合はログ出力をする。
-    *
-    * @param[in]    eventValue    発火したイベントの文字列データ
-    */
+     * Handles the event when user data fires during motion playback.
+     *
+     * @param eventValue Event value of the user data that fired
+     *
+     * @note This function is intended to be overridden.<br>
+     * If not overridden, it outputs to the log.
+     */
     virtual void   MotionEventFired(const csmString& eventValue);
 
     /**
-    * @brief  イベント用のCallback
-    *
-    * CubismMotionQueueManagerにイベント用に登録するためのCallback。
-    * CubismUserModelの継承先のEventFiredを呼ぶ。
-    *
-    * @param[in]    caller              発火したイベントを管理していたモーションマネージャー、比較用
-    * @param[in]    eventValue          発火したイベントの文字列データ
-    * @param[in]    customData          CubismUserModelを継承したインスタンスを想定
-    */
+     * Callback function to receive user data events registered in the motion management class.
+     *
+     * @param caller Motion management class that handled the fired user data event
+     * @param eventValue Event value of the fired user data
+     * @param customData Arbitrary data
+     *
+     * @note Calls the `MotionEventFired` of the CubismUserModel subclass.
+     */
     static void   CubismDefaultMotionEventCallback(const CubismMotionQueueManager* caller, const csmString& eventValue, void* customData);
 protected:
-    CubismMoc*              _moc;                       ///< Mocデータ
-    CubismModel*            _model;                     ///< Modelインスタンス
+    CubismMoc*              _moc;
+    CubismModel*            _model;
 
-    CubismMotionManager*    _motionManager;             ///< モーション管理
-    CubismMotionManager*    _expressionManager;         ///< 表情管理
-    CubismEyeBlink*         _eyeBlink;                  ///< 自動まばたき
-    CubismBreath*           _breath;                    ///< 呼吸
-    CubismModelMatrix*      _modelMatrix;               ///< モデル行列
-    CubismPose*             _pose;                      ///< ポーズ管理
-    CubismTargetPoint*      _dragManager;               ///< マウスドラッグ
-    CubismPhysics*          _physics;                   ///< 物理演算
-    CubismModelUserData*    _modelUserData;             ///< ユーザデータ
+    CubismUpdateScheduler _updateScheduler;
 
-    csmBool     _initialized;                   ///< 初期化されたかどうか
-    csmBool     _updating;                      ///< 更新されたかどうか
-    csmFloat32  _opacity;                       ///< 不透明度
-    csmBool     _lipSync;                       ///< リップシンクするかどうか
-    csmFloat32  _lastLipSyncValue;              ///< 最後のリップシンクの制御値
-    csmFloat32  _dragX;                         ///< マウスドラッグのX位置
-    csmFloat32  _dragY;                         ///< マウスドラッグのY位置
-    csmFloat32  _accelerationX;                 ///< X軸方向の加速度
-    csmFloat32  _accelerationY;                 ///< Y軸方向の加速度
-    csmFloat32  _accelerationZ;                 ///< Z軸方向の加速度
-    csmBool     _debugMode;                     ///< デバッグモードかどうか
+    CubismMotionManager*    _motionManager;
+    CubismExpressionMotionManager*    _expressionManager;
+    CubismEyeBlink*         _eyeBlink;
+    CubismBreath*           _breath;
+    CubismModelMatrix*      _modelMatrix;
+    CubismPose*             _pose;
+    CubismTargetPoint*      _dragManager;
+    CubismPhysics*          _physics;
+    CubismModelUserData*    _modelUserData;
+    CubismLook*             _look;
+
+    csmBool     _initialized;
+    csmBool     _updating;
+    csmFloat32  _opacity;
+    csmFloat32  _lastLipSyncValue;
+    csmFloat32  _accelerationX;
+    csmFloat32  _accelerationY;
+    csmFloat32  _accelerationZ;
+    csmBool     _mocConsistency;
+    csmBool     _motionConsistency;
+    csmBool     _debugMode;
 
 private:
-    Rendering::CubismRenderer* _renderer;       ///< レンダラ
+    Rendering::CubismRenderer* _renderer;
 };
 
 }}}

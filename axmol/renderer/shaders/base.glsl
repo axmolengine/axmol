@@ -35,6 +35,11 @@
 
 #  define FWIDTH(dist) 0.4
 
+#ifdef AXSLC_TARGET_GLSL
+    #define TEXCOORD_Y(v)   ((v).y)
+#else
+    #define TEXCOORD_Y(v)   (1.0 - (v).y)
+#endif
 
 // ============================================================================
 // Axmol Shader Binding Conventions

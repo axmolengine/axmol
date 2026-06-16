@@ -74,9 +74,6 @@ LAppLive2DManager::LAppLive2DManager()
 
     CreateShader();
 
-    int width = static_cast<int>(ax::Director::getInstance()->getRenderView()->getWindowSize().width);
-    int height = static_cast<int>(ax::Director::getInstance()->getRenderView()->getWindowSize().height);
-
     // 画面全体を覆うサイズ
     _sprite = new LAppSprite(_program);
 
@@ -86,23 +83,12 @@ LAppLive2DManager::LAppLive2DManager()
     _renderBuffer = new Csm::Rendering::CubismOffscreenFrame_Axmol;
     if (_renderBuffer)
     {// 描画ターゲット作成
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-        // Retina対策でこっちからとる
-        RenderView *glimpl = (RenderView *)Director::getInstance()->getRenderView();
-        glfwGetFramebufferSize(glimpl->getWindow(), &width, &height);
-#endif
+        auto renderView = ax::Director::getInstance()->getRenderView();
+        auto&& renderSize = renderView->getRenderSize();
 
         // モデル描画キャンバス
-        _renderBuffer->CreateOffscreenFrame(static_cast<csmUint32>(width), static_cast<csmUint32>(height));
+        _renderBuffer->CreateOffscreenFrame(static_cast<csmUint32>(renderSize.width), static_cast<csmUint32>(renderSize.height));
     }
-
-#ifdef CSM_TARGET_ANDROID_ES2
-    char *exts = (char*)rhi::DriverBase::getInstance()->getExtension();
-    if(strstr(exts, "GL_NV_shader_framebuffer_fetch ")){
-        Rendering::CubismRenderer_Axmol::SetExtShaderMode( true , true );
-    }
-#endif
 
     ChangeScene(_sceneIndex);
 }

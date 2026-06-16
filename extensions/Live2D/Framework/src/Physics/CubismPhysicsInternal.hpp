@@ -215,6 +215,7 @@ struct CubismPhysicsRig
     csmVector<CubismPhysicsParticle> Particles;     ///< 物理演算の物理点のリスト
     CubismVector2 Gravity;                          ///< 重力
     CubismVector2 Wind;                             ///< 風
+    csmFloat32 Fps;                                 ///< 物理演算動作FPS
 };
 
 }}}

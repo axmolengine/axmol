@@ -12,209 +12,175 @@
 namespace Live2D { namespace Cubism { namespace Framework {
 
 /**
- * @brief 4x4の行列
- *
- * 4x4行列の便利クラス。
+ * Handles 4x4 matrices
  */
 class CubismMatrix44
 {
 public:
     /**
-     * @brief コンストラクタ
-     *
-     * コンストラクタ。
+     * Constructor
      */
     CubismMatrix44();
 
     /**
-     * @brief デストラクタ
-     *
-     * デストラクタ。
+     * Destructor
      */
     virtual ~CubismMatrix44();
 
     /**
-     * @brief 乗算
+     * Multiplies the two given matrices and stores the result in the destination matrix.
      *
-     * 受け取った２つの行列の乗算を行う。
-     *
-     * @param[in]   a   行列a
-     * @param[in]   b   行列b
-     * @param[out]  dst 格納先の行列
+     * @param a Matrix a
+     * @param b Matrix b
+     * @param dst Destination matrix for storing the result
      */
     static void Multiply(csmFloat32* a, csmFloat32* b, csmFloat32* dst);
 
     /**
-     * @brief 単位行列に初期化
-     *
-     * 単位行列に初期化する。
+     * Sets the identity matrix.
      */
     void            LoadIdentity();
 
     /**
-     * @brief 行列を浮動小数点数の配列で取得
+     * Returns the matrix as an array of floating-point numbers.
      *
-     * 行列を浮動小数点数の配列で取得する。
-     *
-     * @return  16個の浮動小数点数で表される4x4の行列
+     * @return 4x4 matrix represented by 16 floating-point numbers
      */
     csmFloat32*     GetArray();
 
     /**
-     * @brief 行列を設定
+     * Sets the matrix.
      *
-     * 行列を設定する。
-     *
-     * @param[in]   tr  16個の浮動小数点数で表される4x4の行列
+     * @param tr 4x4 matrix represented by 16 floating-point numbers
      */
     void            SetMatrix(csmFloat32* tr);
 
     /**
-     * @brief X軸の拡大率を取得
+     * Returns the scaling factor along the X-axis.
      *
-     * X軸の拡大率を取得する。
-     *
-     * @return  X軸の拡大率
+     * @return Scaling factor along the X-axis
      */
     csmFloat32      GetScaleX() const;
 
     /**
-     * @brief Y軸の拡大率を取得
+     * Returns the scaling factor along the Y-axis.
      *
-     * Y軸の拡大率を取得する。
-     *
-     * @return  Y軸の拡大率
+     * @return Scaling factor along the Y-axis
      */
     csmFloat32      GetScaleY() const;
 
     /**
-     * @brief X軸の移動量を取得
+     * Returns the translation value along the X-axis.
      *
-     * X軸の移動量を取得する。
-     *
-     * @return  X軸の移動量
-     *
+     * @return Translation value along the X-axis
      */
     csmFloat32      GetTranslateX() const;
 
     /**
-     * @brief Y軸の移動量を取得
+     * Returns the translation value along the Y-axis.
      *
-     * Y軸の移動量を取得する。
-     *
-     * @return  Y軸の移動量
+     * @return Translation value along the Y-axis
      */
     csmFloat32      GetTranslateY() const;
 
     /**
-     * @brief X軸の値を現在の行列で計算
+     * Calculates the value along the X-axis using the current matrix.
      *
-     * X軸の値を現在の行列で計算する。
+     * @param src Value along the X-axis
      *
-     * @param[in]   src     X軸の値
-     * @return  現在の行列で計算されたX軸の値
+     * @return Calculated value along the X-axis using the current matrix
      */
     csmFloat32      TransformX(csmFloat32 src);
 
     /**
-     * @brief Y軸の値を現在の行列で計算
+     * Calculates the value along the Y-axis using the current matrix.
      *
-     * Y軸の値を現在の行列で計算する。
+     * @param src Value along the Y-axis
      *
-     * @param[in]   src     Y軸の値
-     * @return  現在の行列で計算されたY軸の値
+     * @return Calculated value along the Y-axis using the current matrix
      */
     csmFloat32      TransformY(csmFloat32 src);
 
     /**
-     * @brief X軸の値を現在の行列で逆計算
+     * Calculates the inverse value along the X-axis using the current matrix.
      *
-     * X軸の値を現在の行列で逆計算する。
+     * @param src Value along the X-axis
      *
-     * @param[in]   src     X軸の値
-     * @return  現在の行列で逆計算されたX軸の値
+     * @return Calculated inverse value along the X-axis using the current matrix
      */
     csmFloat32      InvertTransformX(csmFloat32 src);
 
     /**
-     * @brief Y軸の値を現在の行列で逆計算
+     * Calculates the inverse value along the Y-axis using the current matrix.
      *
-     * Y軸の値を現在の行列で逆計算する。
+     * @param src Value along the Y-axis
      *
-     * @parain[in]  src     Y軸の値
-     * @return  現在の行列で逆計算されたY軸の値
+     * @return Calculated inverse value along the Y-axis using the current matrix
      */
     csmFloat32      InvertTransformY(csmFloat32 src);
 
     /**
-     * @brief 現在の行列の位置を起点にして移動
+     * Moves relatively based on the current matrix position.
      *
-     * 現在の行列の位置を起点にして相対的に移動する。
-     *
-     * @param[in]   x   X軸の移動量
-     * @param[in]   y   Y軸の移動量
+     * @param x Translation amount along the X-axis
+     * @param y Translation amount along the Y-axis
      */
     void            TranslateRelative(csmFloat32 x, csmFloat32 y);
 
     /**
-     * @brief 現在の行列の位置を移動
+     * Moves the current matrix position to the specified location.
      *
-     * 現在の行列の位置を指定した位置へ移動する。
-     *
-     * @param[in]   x   X軸の移動量
-     * @param[in]   y   Y軸の移動量
+     * @param x Translation value along the X-axis
+     * @param y Translation value along the Y-axis
      */
     void            Translate(csmFloat32 x, csmFloat32 y);
 
     /**
-     * @brief 現在の行列のX軸の位置を移動
+     * Moves the current matrix position along the X-axis to the specified location.
      *
-     * 現在の行列のX軸の位置を指定した位置へ移動する。
-     *
-     * @param[in]  x    X軸の移動量
+     * @param x Translation value along the X-axis
      */
     void            TranslateX(csmFloat32 x);
 
     /**
-     * @brief 現在の行列のY軸の位置を移動
+     * Moves the current matrix position along the Y-axis to the specified location.
      *
-     * 現在の行列のY軸の位置を指定した位置へ移動する。
-     *
-     * @param[in]   y   Y軸の移動量
+     * @param x Translation value along the Y-axis
      */
     void            TranslateY(csmFloat32 y);
 
     /**
-     * @brief 現在の行列の拡大率を相対的に設定
+     * Sets the scaling factor relative to the current matrix.
      *
-     * 現在の行列の拡大率を相対的に設定する。
-     *
-     * @param[in]   x   X軸の拡大率
-     * @param[in]   y   Y軸の拡大率
+     * @param x Scaling factor along the X-axis
+     * @param y Scaling factor along the Y-axis
      */
     void            ScaleRelative(csmFloat32 x, csmFloat32 y);
 
     /**
-     * @brief 現在の行列の拡大率を設定
+     * Sets the scaling factor of the current matrix to the specified value.
      *
-     * 現在の行列の拡大率を指定した倍率に設定する。
-     *
-     * @param[in]   x   X軸の拡大率
-     * @param[in]   y   Y軸の拡大率
+     * @param x Scaling factor along the X-axis
+     * @param y Scaling factor along the Y-axis
      */
     void            Scale(csmFloat32 x, csmFloat32 y);
 
     /**
-     * @brief 現在の行列に行列を乗算
+     * Multiplies the current matrix by the given matrix.
      *
-     * 現在の行列に行列を乗算する。
-     *
-     * @param[in]   m   行列
+     * @param m Matrix to multiply with the current matrix
      */
     void            MultiplyByMatrix(CubismMatrix44* m);
 
+    /**
+     * Calculates the inverse matrix of the current matrix.
+     *
+     * @return inverse matrix of the current matrix; identity matrix when epsilon is small.
+     */
+    CubismMatrix44 GetInvert() const;
+
 protected:
-    csmFloat32  _tr[16];     ///< 4x4行列データ
+    csmFloat32  _tr[16];
 };
 
 }}}

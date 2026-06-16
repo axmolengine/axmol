@@ -269,6 +269,14 @@ int Application::run()
 
 void Application::boot(SwapChainPanel const& panel)
 {
+    ax::Application::getInstance()->initContextAttrs();
+
+    // Try to initialize a high-performance graphics driver first.
+    // If any of the high-performance APIs (D3D11/D3D12/Vulkan/Metal) are enabled,
+    // the runtime will attempt initialization in the default priority order.
+    // If all attempts fail, OpenGL will then be explicitly selected as the fallback.
+    ax::rhi::DriverContext::makeCurrentDriver();
+
     if (_renderLoopWorker != nullptr && _renderLoopWorker.Status() == AsyncStatus::Started)
         return;
 

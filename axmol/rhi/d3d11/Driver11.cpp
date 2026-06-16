@@ -304,7 +304,7 @@ Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage 
  * @param descriptor Specifies texture description.
  * @return A Texture object.
  */
-Texture* DriverImpl::createTexture(const TextureDesc& descriptor)
+Texture* DriverImpl::createTexture(const TextureDesc& descriptor, std::optional<Color>)
 {
     return new TextureImpl(_device, descriptor);
 }

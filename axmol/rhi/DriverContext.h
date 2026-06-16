@@ -27,8 +27,13 @@
 #include <algorithm>
 #include "axmol/rhi/DriverBase.h"
 
-namespace ax::rhi
+namespace ax
 {
+
+namespace rhi
+{
+using DriverPreference = rhi::DriverType;
+
 /**
  * @class DriverContext
  * @brief Centralized manager for graphics driver lifecycle and shader environment.
@@ -41,6 +46,18 @@ namespace ax::rhi
 class AX_DLL DriverContext
 {
 public:
+    /**
+     * @brief Sets the preferred rendering backend (RHI).
+     *
+     * This static method allows selecting a specific rendering driver
+     * for the engine, such as OpenGL, D3D11, D3D12, Vulkan, or Metal.
+     * If no preference is explicitly set, the default value is
+     * DriverPreference::Auto.
+     *
+     * @param driverPreference The desired rendering backend.
+     */
+    static void setDriverPreference(DriverPreference driverPreference);
+
     /**
      * @brief Sets the minimum Android API level required to enable Vulkan.
      *
@@ -145,12 +162,33 @@ public:
 
 private:
     static std::unique_ptr<DriverBase> _currentDriver;
+    static DriverPreference _driverPreference;
     static DriverType _currentDriverType;
     static int _currentShaderLang;
     static int _currentShaderProfile;
     static int _vulkanMinAndroidApiLevel;
 };
 
-}  // namespace ax::rhi
+}  // namespace rhi
+
+/**
+ * @brief Alias for rendering driver preference.
+ *
+ * Provides a shorthand for @c ax::rhi::DriverPreference,
+ * which specifies the desired rendering backend (e.g.,
+ * Auto, Vulkan, D3D12, Metal).
+ */
+using DriverPreference = rhi::DriverPreference;
+
+/**
+ * @brief Alias for rendering driver context.
+ *
+ * Provides a shorthand for @c ax::rhi::DriverContext,
+ * which manages initialization and runtime state of
+ * the selected rendering backend.
+ */
+using DriverContext = rhi::DriverContext;
+
+}  // namespace ax
 
 #define axdrv ax::rhi::DriverContext::currentDriver()

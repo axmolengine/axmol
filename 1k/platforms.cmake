@@ -17,16 +17,16 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
   include(${CMAKE_CURRENT_LIST_DIR}/windows.cmake)
 
   if(CMAKE_GENERATOR_PLATFORM)
-    string(TOLOWER "${CMAKE_GENERATOR_PLATFORM}" _gp_lcase)
+    string(TOLOWER "${CMAKE_GENERATOR_PLATFORM}" _target_cpu)
   elseif(CLANG_TARGET_TRIPLE)
-    set(_gp_lcase ${CLANG_TARGET_TRIPLE})
+    set(_target_cpu ${CLANG_TARGET_TRIPLE})
   endif()
 
-  if(_gp_lcase)
-    if("${_gp_lcase}" MATCHES "win32" OR "${_gp_lcase}" MATCHES "i686")
+  if(_target_cpu)
+    if("${_target_cpu}" MATCHES "win32|i686")
       set(WIN32 TRUE)
       set(ARCH_ALIAS "x86")
-    elseif("${_gp_lcase}" STREQUAL "arm64" OR "${_gp_lcase}" MATCHES "aarch64")
+    elseif("${_target_cpu}" MATCHES "arm64|aarch64")
       set(WIN64 TRUE)
       set(ARCH_ALIAS "arm64")
     else()
@@ -36,6 +36,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
   else()
     # https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ARCHITECTURE_ID.html
     string(TOLOWER "${CMAKE_C_COMPILER_ARCHITECTURE_ID}" ARCH_ALIAS)
+
     if(ARCH_ALIAS MATCHES "64")
       set(WIN64 TRUE)
     endif()
@@ -58,22 +59,23 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Android")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
   set(LINUX TRUE)
   set(PLATFORM_NAME linux)
+
   if(NOT DEFINED ARCH_ALIAS)
     message(STATUS "Detecting build target triple ...")
     execute_process(
       COMMAND ${CMAKE_CXX_COMPILER} -dumpmachine
-      OUTPUT_VARIABLE _cxx_target_triple
+      OUTPUT_VARIABLE _target_cpu
       OUTPUT_STRIP_TRAILING_WHITESPACE
     )
 
-    message(STATUS "Detected build target triple: ${_cxx_target_triple}")
+    message(STATUS "Detected build target triple: ${_target_cpu}")
 
-    if(_cxx_target_triple MATCHES "x86_64")
-      set(ARCH_ALIAS "x64" CACHE STRING "" FORCE)
-    elseif(_cxx_target_triple MATCHES "aarch64" OR _cxx_target_triple MATCHES "arm64")
-      set(ARCH_ALIAS "arm64" CACHE STRING "" FORCE)
+    if(_target_cpu MATCHES "x86_64")
+      set(ARCH_ALIAS "x64")
+    elseif(_target_cpu MATCHES "arm64|aarch64")
+      set(ARCH_ALIAS "arm64")
     else()
-      message(FATAL_ERROR "Unsupported platform: ${_cxx_target_triple}")
+      message(FATAL_ERROR "Unsupported platform: ${_target_cpu}")
     endif()
   endif()
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
@@ -105,6 +107,25 @@ else()
   message(AUTHOR_WARNING "Unhandled platform: ${CMAKE_SYSTEM_NAME}")
 endif()
 
+if(NOT "${ARCH_ALIAS}" STREQUAL "")
+  set(ARCH_ALIAS ${ARCH_ALIAS} CACHE STRING "" FORCE)
+else()
+  # CMAKE_SYSTEM_PROCESSOR: AMD64, ARM64, aarch64, x86_64, i686(android x86 already handled)
+  string(TOLOWER ${CMAKE_SYSTEM_PROCESSOR} _target_cpu)
+
+  if(_target_cpu MATCHES "x86_64|amd64")
+    set(ARCH_ALIAS x64 CACHE STRING "" FORCE)
+  elseif(_target_cpu MATCHES "arm64|aarch64")
+    set(ARCH_ALIAS arm64 CACHE STRING "" FORCE)
+  elseif(_target_cpu MATCHES "armv7")
+    set(ARCH_ALIAS armv7 CACHE STRING "" FORCE)
+  else()
+    message(WARNING "Unknown architecture: ${_target_cpu}")
+  endif()
+endif()
+
+message(STATUS "🔧 Evaluated ARCH_ALIAS=${ARCH_ALIAS}")
+
 if(NOT DEFINED WIN32)
   set(WIN32 FALSE)
 endif()
@@ -114,7 +135,6 @@ if(NOT DEFINED WASM)
 endif()
 
 # compiler id
-
 if(NOT WIN32 AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   set(FULL_CLANG TRUE)
 endif()

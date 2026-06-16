@@ -23,6 +23,7 @@ buildsrc/
 *.cache
 *.ilk
 *.log
+*.tmp
 [Bb]in
 [Dd]ebug/
 [Dd]ebug.win32/
@@ -228,6 +229,7 @@ tests/unit-tests/Content
 tests/*-tests/build
 tests/*-tests/build_*
 *.patch
+*.diff
 
 /cache
 /_cache

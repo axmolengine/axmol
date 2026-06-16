@@ -9,6 +9,8 @@
 
 #include "CubismFramework.hpp"
 #include "Math/CubismMatrix44.hpp"
+#include "Type/csmVector.hpp"
+#include "Type/csmRectF.hpp"
 
 namespace Live2D {namespace Cubism {namespace Framework {
 class CubismModel;
@@ -18,13 +20,21 @@ class CubismModel;
 namespace Live2D { namespace Cubism { namespace Framework { namespace Rendering {
 
 /**
- * @brief   モデル描画を処理するレンダラ<br>
+ * @brief   モデル描画を処理するレンダラ
  *           サブクラスに環境依存の描画命令を記述する
- *
  */
 class CubismRenderer
 {
 public:
+
+    /**
+     * @brief 描画オブジェクトのタイプ
+    */
+    enum DrawableObjectType
+    {
+        DrawableObjectType_Drawable = 0,
+        DrawableObjectType_Offscreen = 2
+    };
 
     /**
      * @brief カラーブレンディングのモード
@@ -32,11 +42,11 @@ public:
     enum CubismBlendMode
     {
         CubismBlendMode_Normal = 0,          ///< 通常
-
         CubismBlendMode_Additive = 1,        ///< 加算
-
         CubismBlendMode_Multiplicative = 2,  ///< 乗算
-    };  // CubismBlendMode
+        CubismBlendMode_Mask = 3,            ///< マスク
+        CubismBlendMode_Copy = 4,            ///< コピー
+    };
 
     /**
     * @brief テクスチャの色をRGBAで扱うための構造体
@@ -50,26 +60,44 @@ public:
             : R(1.0f)
             , G(1.0f)
             , B(1.0f)
-            , A(1.0f) {};
+            , A(1.0f)
+        {
+        }
+
+        /**
+         * @brief   コンストラクタ
+         */
+        CubismTextureColor(csmFloat32 r, csmFloat32 g, csmFloat32 b, csmFloat32 a)
+            : R(r)
+            , G(g)
+            , B(b)
+            , A(a)
+        {
+        }
 
         /**
          * @brief   デストラクタ
          */
-        virtual ~CubismTextureColor() {};
+        virtual ~CubismTextureColor()
+        {
+        };
 
         csmFloat32 R;   ///< 赤チャンネル
         csmFloat32 G;   ///< 緑チャンネル
         csmFloat32 B;   ///< 青チャンネル
         csmFloat32 A;   ///< αチャンネル
 
-    };  // CubismTextureColor
+    };
 
     /**
      * @brief   レンダラのインスタンスを生成して取得する
      *
+     * @param[in] width -> モデルを描画したバッファの幅
+     * @param[in] height -> モデルを描画したバッファの高さ
+     *
      * @retrun  レンダラのインスタンス
      */
-    static CubismRenderer* Create();
+    static CubismRenderer* Create(csmUint32 width, csmUint32 height);
 
     /**
      * @brief   レンダラのインスタンスを解放する
@@ -89,12 +117,28 @@ public:
      */
     virtual void Initialize(Framework::CubismModel* model);
 
+    /**
+     * @brief   レンダラの初期化処理を実行する<br>
+     *           引数に渡したモデルからレンダラの初期化処理に必要な情報を取り出すことができる
+     *
+     * @param[in]  model -> モデルのインスタンス
+     * @param[in]  maskBufferCount -> バッファの生成数
+     */
+    virtual void Initialize(Framework::CubismModel* model, csmInt32 maskBufferCount);
 
     /**
      * @brief   モデルを描画する
      *
      */
     void DrawModel();
+
+    /**
+     * @brief   オフスクリーンのサイズを設定
+     *
+     * @param[in] width -> モデルを描画したバッファの幅
+     * @param[in] height -> モデルを描画したバッファの高さ
+     */
+    void SetRenderTargetSize(csmUint32 width, csmUint32 height);
 
     /**
      * @brief   Model-View-Projection 行列をセットする<br>
@@ -130,6 +174,15 @@ public:
      * @return      RGBAのカラー情報
      */
     CubismTextureColor GetModelColor() const;
+
+    /**
+     * @brief       透明度を考慮したモデルの色を計算する。
+     *
+     * @param[in]   opacity    ->   透明度
+     *
+     * @return      RGBAのカラー情報
+     */
+    CubismTextureColor GetModelColorWithOpacity(csmFloat32 opacity) const;
 
     /**
      * @brief  乗算済みαの有効・無効をセットする。<br>
@@ -198,8 +251,11 @@ public:
 protected:
     /**
      * @brief   コンストラクタ
+     *
+     * @param[in] width -> モデルを描画したバッファの幅
+     * @param[in] height -> モデルを描画したバッファの高さ
      */
-    CubismRenderer();
+    CubismRenderer(csmUint32 width, csmUint32 height);
 
     /**
      * @brief   デストラクタ
@@ -213,34 +269,27 @@ protected:
     virtual void DoDrawModel() = 0;
 
     /**
-     * @brief   描画オブジェクト（アートメッシュ）を描画する。<br>
-     *           ポリゴンメッシュとテクスチャ番号をセットで渡す。
-     *
-     * @param[in]   textureNo            ->  描画するテクスチャ番号
-     * @param[in]   indexCount           ->  描画オブジェクトのインデックス値
-     * @param[in]   vertexCount          ->  ポリゴンメッシュの頂点数
-     * @param[in]   indexArray           ->  ポリゴンメッシュ頂点のインデックス配列
-     * @param[in]   vertexArray          ->  ポリゴンメッシュの頂点配列
-     * @param[in]   uvArray              ->  uv配列
-     * @param[in]   opacity              ->  不透明度
-     * @param[in]   colorBlendMode       ->  カラーブレンディングのタイプ
-     * @param[in]   invertedMask          ->  マスク使用時のマスクの反転使用
-     *
-     */
-    virtual void DrawMesh(csmInt32 textureNo, csmInt32 indexCount, csmInt32 vertexCount
-                          , csmUint16* indexArray, csmFloat32* vertexArray, csmFloat32* uvArray
-                          , csmFloat32 opacity, CubismBlendMode colorBlendMode, csmBool invertedMask) = 0;
-
-    /**
      * @brief   モデル描画直前のレンダラのステートを保持する
      */
     virtual void SaveProfile() = 0;
-
 
     /**
      * @brief   モデル描画直前のレンダラのステートを復帰させる
      */
     virtual void RestoreProfile() = 0;
+
+    /**
+     * @brief   モデル描画直前のオフスクリーン設定
+     */
+    virtual void BeforeDrawModelRenderTarget() = 0;
+
+    /**
+     * @brief   モデル描画後のオフスクリーン設定
+     */
+    virtual void AfterDrawModelRenderTarget() = 0;
+
+    csmUint32 _modelRenderTargetWidth;
+    csmUint32 _modelRenderTargetHeight;
 
 private:
     // コピーコンストラクタを隠す
@@ -255,6 +304,52 @@ private:
     CubismModel*        _model;                 ///< レンダリング対象のモデル
 
     csmBool             _useHighPrecisionMask;  ///< falseの場合、マスクを纏めて描画する trueの場合、マスクはパーツ描画ごとに書き直す
+};
+
+
+/**
+ * @brief   クリッピングについての設定を保持するクラス<br>
+ *           サブクラスに環境依存のフィールドを保持する
+ */
+class CubismClippingContext
+{
+public:
+    /**
+     * @brief   引数付きコンストラクタ
+     *
+     */
+    CubismClippingContext(const csmInt32* clippingDrawableIndices, csmInt32 clipCount);
+
+    /**
+     * @brief   デストラクタ
+     */
+    ~CubismClippingContext();
+
+    /**
+     * @brief   このマスクにクリップされるDrawableを追加する
+     *
+     * @param[in]   drawableIndex   ->  クリッピング対象に追加するDrawableのインデックス
+     */
+    void AddClippedDrawable(csmInt32 drawableIndex);
+
+        /**
+     * @brief   このマスクにクリップされるOffscreenを追加する
+     *
+     * @param[in]   drawableIndex   ->  クリッピング対象に追加するOffscreenのインデックス
+     */
+    void AddClippedOffscreen(csmInt32 offscreenIndex);
+
+    csmBool _isUsing;                                ///< 現在の描画状態でマスクの準備が必要ならtrue
+    const csmInt32* _clippingIdList;                 ///< クリッピングマスクのIDリスト
+    csmInt32 _clippingIdCount;                       ///< クリッピングマスクの数
+    csmInt32 _layoutChannelIndex;                       ///< RGBAのいずれのチャンネルにこのクリップを配置するか(0:R , 1:G , 2:B , 3:A)
+    csmRectF* _layoutBounds;                         ///< マスク用チャンネルのどの領域にマスクを入れるか(View座標-1..1, UVは0..1に直す)
+    csmRectF* _allClippedDrawRect;                   ///< このクリッピングで、クリッピングされる全ての描画オブジェクトの囲み矩形（毎回更新）
+    CubismMatrix44 _matrixForMask;                   ///< マスクの位置計算結果を保持する行列
+    CubismMatrix44 _matrixForDraw;                   ///< 描画オブジェクトの位置計算結果を保持する行列
+    csmVector<csmInt32>* _clippedDrawableIndexList;  ///< このマスクにクリップされるDrawableのリスト
+    csmVector<csmInt32>* _clippedOffscreenIndexList;  ///< このマスクにクリップされるOffscreenのリスト
+    csmInt32 _bufferIndex;                           ///< このマスクが割り当てられるレンダーテクスチャ（フレームバッファ）やカラーバッファのインデックス
 };
 
 }}}}

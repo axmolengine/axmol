@@ -52,10 +52,7 @@ public:
      */
     void setAnimationInterval(float interval) override;
 
-    /**
-     @brief Run the message loop.
-     */
-    int run();
+    int run() override;
 
     /* override functions */
     LanguageType getCurrentLanguage() override;

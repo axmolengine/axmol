@@ -7,7 +7,7 @@ layout(location = TEXCOORD0) out vec2 v_texCoord;
 
 void main()
 {
-#if defined(METAL)
+#if defined(AXSLC_TARGET_MSL)
     gl_Position = vec4(a_position.x, -a_position.y, a_position.z, 1.0);
 #else
     gl_Position = vec4(a_position.xyz, 1.0);

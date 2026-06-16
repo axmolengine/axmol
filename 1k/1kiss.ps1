@@ -356,14 +356,6 @@ if (!$Global:target_minsdk) {
 }
 
 # define some useful global vars
-function eval($str, $raw = $false) {
-    if (!$raw) {
-        return Invoke-Expression "`"$str`""
-    }
-    else {
-        return Invoke-Expression $str
-    }
-}
 
 function create_symlink($sourcePath, $destPath) {
     & "$PSScriptRoot\fsync.ps1" -s $sourcePath -d $destPath -l $true 2>$null
@@ -515,22 +507,20 @@ else {
     [System.IO.File]::WriteAllText($1k_env_file, $1k_env_str)
 }
 
-$mirrors_conf_file = Join-Path $PSScriptRoot 'mirrors.json'
-$mirrors_conf = ConvertFrom-Json (Get-Content $mirrors_conf_file -raw)
+$sources_conf_file = Join-Path $PSScriptRoot 'sources.json'
+$sources_conf = ConvertFrom-Json (Get-Content $sources_conf_file -raw)
 
 function devtool_url($name, $ver = $null, $mirror = $null) {
-    $tool_info = $mirrors_conf.devtools.$name
+    $tool_info = $sources_conf.devtools.$name
     if ($tool_info -is [string]) {
-        return $(eval $tool_info)
+        return $(expand_str $tool_info)
     }
 
-    if ($tool_info.mirrors -is [string]) {
-        # single mirror
-        $base_url = $tool_info.mirrors
-    }
-    else {
-        if (!$mirror) { $mirror = $Script:1k_env.active_mirror }
-        $base_url = $tool_info.mirrors.$mirror
+    if (!$mirror) { $mirror = $Script:1k_env.active_mirror }
+    $base_url = $tool_info.sources.$mirror
+    if (!$base_url) {
+        Write-Warning "1kiss: Mirror '$mirror' is not configured for package '$name'; falling back to 'origin'."
+        $base_url = $tool_info.sources.origin
     }
 
     $artifacts = $tool_info.artifacts
@@ -551,8 +541,8 @@ function devtool_url($name, $ver = $null, $mirror = $null) {
     }
 
     $url = "$base_url$artifact"
-    # eval url with $ver on current scope
-    return eval $url
+    # expand_str url with $ver on current scope
+    return expand_str $url
 }
 
 # accept x.y.z-rc1
@@ -1426,7 +1416,7 @@ function setup_android_sdk() {
                 "android-ndk-${ndk_r23d_rev}-linux-x86_64.zip",
                 "android-ndk-${ndk_r23d_rev}-darwin-x86_64.zip")[$HOST_OS_INT]
             $_target_os = @('win64', 'linux', 'darwin_mac')[$HOST_OS_INT]
-            . (Join-Path $PSScriptRoot 'resolv-url.ps1') -artifact $_artifact -target $_target_os -build_id $ndk_r23d_rev -mirror gcloud -out_var 'artifact_info'
+            . (Join-Path $PSScriptRoot 'resolv-url.ps1') -artifact $_artifact -target $_target_os -build_id $ndk_r23d_rev -source gcloud -out_var 'artifact_info'
             $artifact_url = $artifact_info[0].messageData
             $full_ver = "23.3.${ndk_r23d_rev}"
             $ndk_root = Join-Path $ndk_prefix $full_ver

@@ -186,6 +186,8 @@ private:
     Csm::ICubismModelSetting* _modelSetting;        ///< モデルセッティング情報
     Csm::csmString _modelHomeDir;                   ///< モデルセッティングが置かれたディレクトリ
     Csm::csmFloat32 _userTimeSeconds;               ///< デルタ時間の積算値[秒]
+    Csm::csmFloat32 _dragX;                         ///< Drag X value.
+    Csm::csmFloat32 _dragY;                         ///< Drag Y value.
 
     Csm::csmVector<Csm::CubismIdHandle> _eyeBlinkIds; ///< モデルに設定されたまばたき機能用パラメータID
     Csm::csmVector<Csm::CubismIdHandle> _lipSyncIds;  ///< モデルに設定されたリップシンク機能用パラメータID
@@ -208,6 +210,5 @@ private:
     float _clearColor[4];                           ///< _renderBufferをクリアする際の色
     Csm::csmVector<ax::Texture2D*> _loadedTextures;
 };
-
 
 

@@ -60,6 +60,8 @@ LAppModel::LAppModel()
     : CubismUserModel()
     , _modelSetting(NULL)
     , _userTimeSeconds(0.0f)
+    , _dragX(0.0f)
+    , _dragY(0.0f)
     , _renderSprite(NULL)
 {
     if (DebugLogEnable)
@@ -93,19 +95,25 @@ LAppModel::~LAppModel()
         _renderSprite = NULL;
     }
     _renderBuffer->DestroyOffscreenFrame();
+    delete _renderBuffer;
+    _renderBuffer = NULL;
 
     ReleaseMotions();
     ReleaseExpressions();
 
-    for (csmInt32 i = 0; i < _modelSetting->GetMotionGroupCount(); i++)
+    if (_modelSetting)
     {
-        const csmChar* group = _modelSetting->GetMotionGroupName(i);
-        ReleaseMotionGroup(group);
+        for (csmInt32 i = 0; i < _modelSetting->GetMotionGroupCount(); i++)
+        {
+            const csmChar* group = _modelSetting->GetMotionGroupName(i);
+            ReleaseMotionGroup(group);
+        }
+        CSM_DELETE(_modelSetting);
     }
-    CSM_DELETE(_modelSetting);
 
-    //cocos2d
-    Director::getInstance()->getTextureCache()->removeAllTextures();
+    for (csmUint32 i = 0; i < _loadedTextures.GetSize(); ++i)
+        Director::getInstance()->getTextureCache()->removeTexture(_loadedTextures[i]);
+    _loadedTextures.Clear();
 }
 
 void LAppModel::LoadAssets(const csmChar* dir, const csmChar* fileName)
@@ -123,7 +131,8 @@ void LAppModel::LoadAssets(const csmChar* dir, const csmChar* fileName)
 
     SetupModel(setting);
 
-    CreateRenderer();
+    const auto windowSize = Director::getInstance()->getRenderView()->getWindowSize();
+    CreateRenderer(static_cast<csmUint32>(windowSize.width), static_cast<csmUint32>(windowSize.height));
 
     SetupTextures();
 }
@@ -438,7 +447,7 @@ void LAppModel::Update()
     }
 
     // リップシンクの設定
-    if (_lipSync)
+    if (_lipSyncIds.GetSize() > 0)
     {
         csmFloat32 value = 0; // リアルタイムでリップシンクを行う場合、システムから音量を取得して0～1の範囲で値を入力します。
 
@@ -592,7 +601,7 @@ void LAppModel::SetExpression(const csmChar* expressionID)
     if (_debugMode) LAppPal::PrintLog("[APP]expression: [%s]", expressionID);
     if (motion != NULL)
     {
-        _expressionManager->StartMotionPriority(motion, false, PriorityForce);
+        _expressionManager->StartMotion(motion, false);
     }
     else
     {
@@ -623,7 +632,8 @@ void LAppModel::ReloadRnederer()
 {
     DeleteRenderer();
 
-    CreateRenderer();
+    const auto windowSize = Director::getInstance()->getRenderView()->getWindowSize();
+    CreateRenderer(static_cast<csmUint32>(windowSize.width), static_cast<csmUint32>(windowSize.height));
 
     SetupTextures();
 }

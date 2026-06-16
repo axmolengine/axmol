@@ -58,6 +58,16 @@ public:
     CubismVector2 GetWind() const;
 
     /**
+     * @brief 物理演算設定FPSの取得
+     *
+     * 物理演算の想定FPSを取得する。
+     * physics3.jsonにFPS情報が存在しない場合、0.0fを返す。
+     *
+     * @return 物理演算設定FPS
+     */
+    csmFloat32 GetFps() const;
+
+    /**
      * @brief 物理点の管理の個数の取得
      *
      * 物理点の管理の個数を取得する。

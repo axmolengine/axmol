@@ -16,6 +16,7 @@ const csmChar* Version = "Version";
 const csmChar* Parameters = "Parameters";
 const csmChar* ParameterGroups = "ParameterGroups";
 const csmChar* Parts = "Parts";
+const csmChar* CombinedParameters = "CombinedParameters";
 const csmChar* Id = "Id";
 const csmChar* GroupId = "GroupId";
 const csmChar* Name = "Name";
@@ -47,6 +48,12 @@ csmBool CubismCdiJson::IsExistParameterGroups() const
 csmBool CubismCdiJson::IsExistParts() const
 {
     Utils::Value& node = (_json->GetRoot()[Parts]);
+    return !node.IsNull() && !node.IsError();
+}
+
+csmBool CubismCdiJson::IsExistCombinedParameters() const
+{
+    Utils::Value& node = (_json->GetRoot()[CombinedParameters]);
     return !node.IsNull() && !node.IsError();
 }
 
@@ -109,6 +116,18 @@ const csmChar* CubismCdiJson::GetPartsId(csmInt32 index)
 const csmChar* CubismCdiJson::GetPartsName(csmInt32 index)
 {
     return _json->GetRoot()[Parts][index][Name].GetRawString();
+}
+
+// 結合パラメータについて
+csmInt32 CubismCdiJson::GetCombinedParametersCount()
+{
+    if (!IsExistCombinedParameters()) return 0;
+    return _json->GetRoot()[CombinedParameters].GetSize();
+}
+
+const csmVector<Utils::Value*>* CubismCdiJson::GetCombinedParameters(csmInt32 index)
+{
+    return _json->GetRoot()[CombinedParameters][index].GetVector();
 }
 
 }}}

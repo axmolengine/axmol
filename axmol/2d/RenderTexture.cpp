@@ -140,6 +140,23 @@ RenderTexture* RenderTexture::create(int w, int h, rhi::PixelFormat eFormat, boo
 RenderTexture* RenderTexture::create(int w,
                                      int h,
                                      rhi::PixelFormat eFormat,
+                                     bool sharedRenderTarget,
+                                     const Color& clearColorHint)
+{
+    RenderTexture* ret = new RenderTexture();
+
+    if (ret->initWithWidthAndHeight(w, h, eFormat, sharedRenderTarget, clearColorHint))
+    {
+        ret->autorelease();
+        return ret;
+    }
+    AX_SAFE_DELETE(ret);
+    return nullptr;
+}
+
+RenderTexture* RenderTexture::create(int w,
+                                     int h,
+                                     rhi::PixelFormat eFormat,
                                      PixelFormat uDepthStencilFormat,
                                      bool sharedRenderTarget)
 {
@@ -169,7 +186,16 @@ RenderTexture* RenderTexture::create(int w, int h, bool sharedRenderTarget)
 
 bool RenderTexture::initWithWidthAndHeight(int w, int h, rhi::PixelFormat eFormat, bool sharedRenderTarget)
 {
-    return initWithWidthAndHeight(w, h, eFormat, PixelFormat::NONE, sharedRenderTarget);
+    return initWithWidthAndHeightInternal(w, h, eFormat, PixelFormat::NONE, sharedRenderTarget, std::nullopt);
+}
+
+bool RenderTexture::initWithWidthAndHeight(int w,
+                                           int h,
+                                           rhi::PixelFormat eFormat,
+                                           bool sharedRenderTarget,
+                                           const Color& clearColorHint)
+{
+    return initWithWidthAndHeightInternal(w, h, eFormat, PixelFormat::NONE, sharedRenderTarget, clearColorHint);
 }
 
 bool RenderTexture::initWithWidthAndHeight(int w,
@@ -177,6 +203,26 @@ bool RenderTexture::initWithWidthAndHeight(int w,
                                            rhi::PixelFormat format,
                                            PixelFormat depthStencilFormat,
                                            bool sharedRenderTarget)
+{
+    return initWithWidthAndHeightInternal(w, h, format, depthStencilFormat, sharedRenderTarget, std::nullopt);
+}
+
+bool RenderTexture::initWithWidthAndHeight(int w,
+                                           int h,
+                                           rhi::PixelFormat format,
+                                           PixelFormat depthStencilFormat,
+                                           bool sharedRenderTarget,
+                                           const Color& clearColorHint)
+{
+    return initWithWidthAndHeightInternal(w, h, format, depthStencilFormat, sharedRenderTarget, clearColorHint);
+}
+
+bool RenderTexture::initWithWidthAndHeightInternal(int w,
+                                                   int h,
+                                                   rhi::PixelFormat format,
+                                                   PixelFormat depthStencilFormat,
+                                                   bool sharedRenderTarget,
+                                                   std::optional<Color> clearColorHint)
 {
     AXASSERT(format == rhi::PixelFormat::RGBA8 || format == PixelFormat::RGB8 || format == PixelFormat::RGBA4,
              "only RGB and RGBA formats are valid for a render texture");
@@ -212,8 +258,16 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         desc.textureUsage = TextureUsage::RENDER_TARGET;
         desc.pixelFormat  = PixelFormat::RGBA8;
         _colorTexture     = new Texture2D();
-        _colorTexture->initWithSpec(desc, Texture2D::DEFAULT_SLICE_DATA, PixelFormat::NONE,
-                                    !!AX_ENABLE_PREMULTIPLIED_ALPHA);
+        if (clearColorHint)
+        {
+            _colorTexture->initWithSpec(desc, Texture2D::DEFAULT_SLICE_DATA, PixelFormat::NONE,
+                                        !!AX_ENABLE_PREMULTIPLIED_ALPHA, *clearColorHint);
+        }
+        else
+        {
+            _colorTexture->initWithSpec(desc, Texture2D::DEFAULT_SLICE_DATA, PixelFormat::NONE,
+                                        !!AX_ENABLE_PREMULTIPLIED_ALPHA);
+        }
 
         if (PixelFormat::D24S8 == depthStencilFormat || sharedRenderTarget)
         {

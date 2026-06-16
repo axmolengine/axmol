@@ -94,6 +94,13 @@ void Mat4::createLookAt(float eyePositionX,
     dst->m[15] = 1.0f;
 }
 
+void Mat4::createOrthographic(float width, float height, float zNearPlane, float zFarPlane, Mat4* dst)
+{
+    float halfWidth  = width / 2.0f;
+    float halfHeight = height / 2.0f;
+    createOrthographicOffCenter(-halfWidth, halfWidth, -halfHeight, halfHeight, zNearPlane, zFarPlane, dst);
+}
+
 void Mat4::createPerspective(float fieldOfView, float aspectRatio, float zNearPlane, float zFarPlane, Mat4* dst)
 {
     AX_ASSERT(dst);
@@ -120,19 +127,17 @@ void Mat4::createPerspective(float fieldOfView, float aspectRatio, float zNearPl
     dst->m[11] = -1.0f;
     dst->m[14] = -2.0f * zFarPlane * zNearPlane * f_n;
 
-    if (rhi::DriverContext::isMetal())
+    // NDC Z difference: OpenGL [-1,1], D3D/Vulkan/Metal [0,1]
+    // References:
+    // - https://metashapes.com/blog/opengl-metal-projection-matrix-problem/
+    // - Apple Metal Shading Language Spec (Coordinate Systems)
+    // - Microsoft Direct3D Projection Transform
+    // - Khronos Vulkan Specification
+    if (!rhi::DriverContext::isOpenGL())
     {
-        // https://metashapes.com/blog/opengl-metal-projection-matrix-problem/
         dst->m[10] = -zFarPlane * f_n;
         dst->m[14] = -(zFarPlane * zNearPlane) * f_n;
     }
-}
-
-void Mat4::createOrthographic(float width, float height, float zNearPlane, float zFarPlane, Mat4* dst)
-{
-    float halfWidth  = width / 2.0f;
-    float halfHeight = height / 2.0f;
-    createOrthographicOffCenter(-halfWidth, halfWidth, -halfHeight, halfHeight, zNearPlane, zFarPlane, dst);
 }
 
 void Mat4::createOrthographicOffCenter(float left,
@@ -158,8 +163,13 @@ void Mat4::createOrthographicOffCenter(float left,
     dst->m[14] = (zNearPlane + zFarPlane) / (zNearPlane - zFarPlane);
     dst->m[15] = 1;
 
-    //// https://metashapes.com/blog/opengl-metal-projection-matrix-problem/
-    if (rhi::DriverContext::isMetal())
+    // NDC Z difference: OpenGL [-1,1], D3D/Vulkan/Metal [0,1]
+    // References:
+    // - https://metashapes.com/blog/opengl-metal-projection-matrix-problem/
+    // - Apple Metal Shading Language Spec (Coordinate Systems)
+    // - Microsoft Direct3D Projection Transform
+    // - Khronos Vulkan Specification
+    if (!rhi::DriverContext::isOpenGL())
     {
         dst->m[10] = 1 / (zNearPlane - zFarPlane);
         dst->m[14] = zNearPlane / (zNearPlane - zFarPlane);

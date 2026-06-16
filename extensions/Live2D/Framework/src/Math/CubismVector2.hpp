@@ -17,211 +17,187 @@
 namespace Live2D { namespace Cubism { namespace Framework {
 
 /**
- * @brief 2次元ベクトル型
- *
- * 2次元ベクトル型の機能を提供する。
+ * Handles 2D vectors
  */
 struct CubismVector2
 {
-    csmFloat32 X;           ///< X軸の値
-    csmFloat32 Y;           ///< Y軸の値
+    csmFloat32 X;       ///< X-axis value
+    csmFloat32 Y;       ///< Y-axis value
 
     /**
-     * @brief コンストラクタ
-     *
-     * コンストラクタ。
+     * Constructor
      */
     CubismVector2(): X(0.0f), Y(0.0f)
     {}
 
     /**
-     * @brief デストラクタ
+     * Constructor<br>
+     * Initializes with specified values.
      *
-     * デストラクタ。
+     * @param x Value along the X-axis
+     * @param y Value along the Y-axis
      */
     CubismVector2(csmFloat32 x, csmFloat32 y) : X(x), Y(y)
     {}
 
     /**
-     * @brief ベクトルの加算
-     *
-     * ベクトルを加算する。
+     * Adds two vectors.<br>
      * a + b = result
      *
-     * @param[in]   a   値a
-     * @oaram[in]   b   値b
-     * @return  a + bの結果
+     * @param a Value a
+     * @param b Value b
+     *
+     * @return Result of a + b
      */
     friend CubismVector2 operator+(const CubismVector2& a, const CubismVector2& b);
 
     /**
-     * @brief ベクトルの減算
-     *
-     * ベクトルを減算する。
+     * Subtracts one vector from another.<br>
      * a - b = result
      *
-     * @param[in]   a   値a
-     * @param[in]   b   値b
-     * @return  a - bの結果
+     * @param a Value a
+     * @param b Value b
+     *
+     * @return Result of a - b
      */
     friend CubismVector2 operator-(const CubismVector2& a, const CubismVector2& b);
 
     /**
-     * @brief ベクトルの乗算（ベクトル値とスカラー値）
-     *
-     * ベクトルを乗算する。（ベクトル値とスカラー値）
+     * Multiplies a vector by a scalar.<br>
      * vector * scalar = result
      *
-     * @param[in]   vector  値vector（ベクトル値）
-     * @param[in]   scalar  値scalar（スカラー値）
-     * @return  vector * scalarの結果（ベクトル値）
+     * @param vector Value vector (vector quantity)
+     * @param scalar Value scalar (scalar quantity)
+     *
+     * @return Result of vector * scalar (vector quantity)
      */
     friend CubismVector2 operator*(const CubismVector2& vector, const csmFloat32 scalar);
 
     /**
-     * @brief ベクトルの乗算（スカラー値とベクトル値）
-     *
-     * ベクトルを乗算する。（スカラー値とベクトル値）
+     * Multiplies a scalar by a vector.<br>
      * scalar * vector = result
      *
-     * @param[in]   scalar  値scalar（スカラー値）
-     * @param[in]   vector  値vector（ベクトル値）
-     * @return  scalar * vectorの結果（ベクトル値）
+     * @param scalar Value scalar (scalar quantity)
+     * @param vector Value vector (vector quantity)
+     *
+     * @return Result of scalar * vector (vector quantity)
      */
     friend CubismVector2 operator*(const csmFloat32 scalar, const CubismVector2& vector);
 
     /**
-     * @brief ベクトルの除算（ベクトル値とスカラー値）
-     *
-     * ベクトルを除算する。（ベクトル値とスカラー値）
+     * Divides a vector by a scalar.<br>
      * vector / scalar = result
      *
-     * @param[in]   vector  値vector（ベクトル値）
-     * @param[in]   scalar  値scalar（スカラー値）
-     * @return  vector / scalarの結果（ベクトル値）
+     * @param vector Value vector (vector quantity)
+     * @param scalar Value scalar (scalar quantity)
+     *
+     * @return Result of vector / scalar (vector quantity)
      */
     friend CubismVector2 operator/(const CubismVector2& vector, const csmFloat32 scalar);
 
     /**
-     * @brief 加算
+     * Adds a vector to this vector.
      *
-     * 加算する。
+     * @param rhs Value to add
      *
-     * @param[in]   rhs     加算する値
-     * @return  結果
+     * @return Result of addition
      */
     const CubismVector2& operator+=(const CubismVector2& rhs);
 
     /**
-    * @brief 減算
-    *
-    * 減算する。
-    *
-    * @param[in]   rhs     減算する値
-    * @return  結果
-    */
+     * Subtracts a vector from this vector.
+     *
+     * @param rhs Value to subtract
+     *
+     * @return Result of subtraction
+     */
     const CubismVector2& operator-=(const CubismVector2& rhs);
 
     /**
-    * @brief 乗算（ベクトル値）
-    *
-    * 乗算する。（ベクトル値）
-    *
-    * @param[in]   rhs     乗算する値（ベクトル値）
-    * @return  結果
-    */
+     * Multiplies this vector by another vector.
+     *
+     * @param rhs Value to multiply by
+     *
+     * @return Result of multiplication
+     */
     const CubismVector2& operator*=(const CubismVector2& rhs);
 
     /**
-    * @brief 除算（ベクトル値）
-    *
-    * 除算する。（ベクトル値）
-    *
-    * @param[in]   rhs     除算する値（ベクトル値）
-    * @return  結果
-    */
+     * Divides this vector by another vector.
+     *
+     * @param rhs Value to divide by
+     *
+     * @return Result of division
+     */
     const CubismVector2& operator/=(const CubismVector2& rhs);
 
     /**
-    * @brief 乗算（スカラー値）
-    *
-    * 乗算する。（スカラー値）
-    *
-    * @param[in]   scalar     乗算する値（スカラー値）
-    * @return  結果
-    */
+     * Multiplies this vector by a scalar.
+     *
+     * @param scalar Value to multiply by
+     *
+     * @return Result of multiplication
+     */
     const CubismVector2& operator*=(const csmFloat32 scalar);
 
     /**
-    * @brief 除算（スカラー値）
-    *
-    * 除算する。（スカラー値）
-    *
-    * @param[in]   scalar     除算する値（スカラー値）
-    * @return  結果
-    */
+     * Divides this vector by a scalar.
+     *
+     * @param scalar Value to divide by
+     *
+     * @return Result of division
+     */
     const CubismVector2& operator/=(const csmFloat32 scalar);
 
     /**
-     * @brief 等しさの確認（等しいか？）
+     * Checks if the value is equal.
      *
-     * 値が等しいか？
+     * @param rhs Value to check
      *
-     * @param[in]   rhs     確認する値
-     * @retval  true    値は等しい
-     * @retval  false   値は等しくない
+     * @return true if the value is equal; otherwise false.
      */
     csmBool operator==(const CubismVector2& rhs) const;
 
     /**
-     * @brief 等しさの確認（等しくないか？）
+     * Checks if the value is not equal.
      *
-     * 値が等しくないか？
+     * @param rhs Value to check
      *
-     * @param[in]   rhs     確認する値
-     * @retval  true    値は等しくない
-     * @retval  false   値は等しい
+     * @return true if the value is not equal; otherwise false.
      */
     csmBool operator!=(const CubismVector2& rhs) const;
 
     /**
-     * @brief 正規化の適用
-     *
-     * 正規化する。
+     * Normalizes the vector.
      */
     void Normalize();
 
     /**
-     * @brief ベクトルの長さの取得
+     * Returns the length of the vector.
      *
-     * ベクトルの長さを取得する。
-     *
-     * @return  ベクトルの長さ
+     * @return Length of the vector
      */
     csmFloat32 GetLength() const;
 
     /**
-     * @brief ベクトルの距離の取得
+     * Returns the distance between this vector and the given position vector.
      *
-     * ベクトルの距離を取得する。
+     * @param a Position vector
      *
-     * @param[in]   a   点
-     * @return ベクトルの距離
+     * @return Distance between the vectors
      */
     csmFloat32 GetDistanceWith(CubismVector2 a) const;
 
     /**
-     * @brief ドット積の計算
+     * Calculates the dot product of this vector and the given vector.
      *
-     * ドット積を計算する。
+     * @param a Vector to be multiplied
      *
-     * @param[in]   a   値
-     * @return 結果
+     * @return Result of the dot product
      */
     csmFloat32 Dot(const CubismVector2& a) const;
 };
 
-// Utility functions for csmVector2.
 CubismVector2 operator+(const CubismVector2& a, const CubismVector2& b);
 CubismVector2 operator-(const CubismVector2& a, const CubismVector2& b);
 CubismVector2 operator*(const CubismVector2& vector, const csmFloat32 scalar);

@@ -303,6 +303,16 @@ protected:
      */
     csmString ParseString(const csmChar* string, csmInt32 length, csmInt32 begin, csmInt32* outEndPos);
 
+    /**
+     * @brief   数値をパースする。ロケール設定にかかわらず、小数点の区切り文字を . としてパースする。
+     *
+     * @param[in]   buffer  ->  JSONエレメントのバッファ
+     * @param[in]   length  ->  パースする長さ
+     * @param[in]   begin   ->  パースを開始する位置
+     * @param[out]  outEndPos   ->  パース終了時の位置
+     * @return      パースから取得したValueオブジェクト
+     */
+    Value* ParseNumeric(const csmChar* buffer, csmInt32 length, csmInt32 begin, csmInt32* outEndPos);
 
     /**
      * @brief   JSONのオブジェクトエレメントをパースしてValueオブジェクトを返す

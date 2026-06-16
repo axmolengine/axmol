@@ -311,6 +311,24 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
                              PixelFormat renderFormat,
                              bool preMultipliedAlpha)
 {
+    return initWithSpecInternal(desc, subDatas, renderFormat, preMultipliedAlpha, std::nullopt);
+}
+
+bool Texture2D::initWithSpec(rhi::TextureDesc desc,
+                             std::span<const TextureSliceData> subDatas,
+                             PixelFormat renderFormat,
+                             bool preMultipliedAlpha,
+                             const Color& clearColorHint)
+{
+    return initWithSpecInternal(desc, subDatas, renderFormat, preMultipliedAlpha, clearColorHint);
+}
+
+bool Texture2D::initWithSpecInternal(rhi::TextureDesc desc,
+                                     std::span<const TextureSliceData> subDatas,
+                                     PixelFormat renderFormat,
+                                     bool preMultipliedAlpha,
+                                     std::optional<Color> clearColorHint)
+{
     if (renderFormat == rhi::PixelFormat::NONE)
         renderFormat = desc.pixelFormat;
 
@@ -400,7 +418,7 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
     desc.pixelFormat = renderFormat;
 
     chooseSamplerDesc(true, desc.mipLevels != 1, desc.samplerDesc);
-    _rhiTexture = static_cast<rhi::Texture*>(axdrv->createTexture(desc));
+    _rhiTexture = static_cast<rhi::Texture*>(axdrv->createTexture(desc, clearColorHint));
 
     updateData(subDatas, renderFormat, compressed);
 

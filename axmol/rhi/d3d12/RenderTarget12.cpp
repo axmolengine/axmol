@@ -43,7 +43,8 @@ void RenderTargetImpl::cleanupResources()
     // RTVs
     for (auto i = 0; i < _rtvsDescriptors.size(); ++i)
     {
-        _driver->queueDisposal(_rtvsDescriptors[i], DisposableResource::Type::RenderTargetView, _lastFenceValue);
+        if (_rtvsDescriptors[i])  // rtv already reset in render pass
+            _driver->queueDisposal(_rtvsDescriptors[i], DisposableResource::Type::RenderTargetView, _lastFenceValue);
     }
     _rtvsDescriptors.clear();
 

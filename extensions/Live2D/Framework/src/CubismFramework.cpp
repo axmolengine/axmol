@@ -83,9 +83,9 @@ csmBool CubismFramework::StartUp(ICubismAllocator* allocator, const Option* opti
         const csmUint32 major = static_cast<csmUint32>((version & 0xFF000000) >> 24);
         const csmUint32 minor = static_cast<csmUint32>((version & 0x00FF0000) >> 16);
         const csmUint32 patch = static_cast<csmUint32>((version & 0x0000FFFF));
-        const csmUint32 vesionNumber = version;
+        const csmUint32 versionNumber = version;
 
-        CubismLogInfo("Live2D Cubism Core version: %02d.%02d.%04d (%d)", major, minor, patch, vesionNumber);
+        CubismLogInfo("Live2D Cubism Core version: %02d.%02d.%04d (%d)", major, minor, patch, versionNumber);
     }
 
     CubismLogInfo("CubismFramework::StartUp() is complete.");
@@ -211,6 +211,16 @@ CubismFramework::Option::LogLevel CubismFramework::GetLoggingLevel()
         return s_option->LoggingLevel;
     }
     return Option::LogLevel_Off;
+}
+
+csmLoadFileFunction CubismFramework::GetLoadFileFunction()
+{
+    return s_option->LoadFileFunction;
+}
+
+csmReleaseBytesFunction CubismFramework::GetReleaseBytesFunction()
+{
+    return s_option->ReleaseBytesFunction;
 }
 
 CubismIdManager* CubismFramework::GetIdManager()

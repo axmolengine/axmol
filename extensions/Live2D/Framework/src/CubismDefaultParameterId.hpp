@@ -10,15 +10,15 @@
 #include "CubismFramework.hpp"
 
 /**
- * @brief パラメータIDのデフォルト値を保持する定数<br>
- *         デフォルト値の仕様は以下のマニュアルに基づく<br>
- *         https://docs.live2d.com/cubism-editor-manual/standard-parametor-list/
+ * Constants that hold the default values of parameter IDs.<br>
+ * See manual for details on each ID.<br>
+ * https://docs.live2d.com/en/cubism-editor-manual/standard-parametor-list/
  */
 
 //--------- LIVE2D NAMESPACE ------------
 namespace Live2D { namespace Cubism { namespace Framework { namespace DefaultParameterId {
 
-// パーツID
+/* ID of Part */
 extern const csmChar* HitAreaPrefix;
 extern const csmChar* HitAreaHead;
 extern const csmChar* HitAreaBody;
@@ -27,7 +27,7 @@ extern const csmChar* PartsArmPrefix;
 extern const csmChar* PartsArmLPrefix;
 extern const csmChar* PartsArmRPrefix;
 
-// パラメータID
+/* ID of Parameter */
 extern const csmChar* ParamAngleX;
 extern const csmChar* ParamAngleY;
 extern const csmChar* ParamAngleZ;

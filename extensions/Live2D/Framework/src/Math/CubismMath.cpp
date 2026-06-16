@@ -6,11 +6,40 @@
  */
 
 #include "CubismMath.hpp"
+#include "Utils/CubismDebug.hpp"
 
 namespace Live2D {namespace Cubism {namespace Framework {
 
 const csmFloat32 CubismMath::Pi = 3.1415926535897932384626433832795f;
 const csmFloat32 CubismMath::Epsilon = 0.00001f;
+
+csmInt32 CubismMath::Clamp(csmInt32 val, csmInt32 min, csmInt32 max)
+{
+    if (val < min)
+    {
+        return min;
+    }
+    else if (max < val)
+    {
+        return max;
+    }
+
+    return val;
+}
+
+csmFloat32 CubismMath::ClampF(csmFloat32 val, csmFloat32 min, csmFloat32 max)
+{
+    if (val < min)
+    {
+        return min;
+    }
+    else if (max < val)
+    {
+        return max;
+    }
+
+    return val;
+}
 
 csmFloat32 CubismMath::DegreesToRadian(csmFloat32 degrees)
 {
@@ -159,6 +188,29 @@ csmFloat32 CubismMath::CardanoAlgorithmForBezier(csmFloat32 a, csmFloat32 b, csm
     csmFloat32 v1 = cbrt(sd + q2);
     csmFloat32 root1 = u1 - v1 - ba / 3.0f;
     return RangeF(root1, 0.0f, 1.0f);
+}
+
+csmFloat32 CubismMath::ModF(csmFloat32 dividend, csmFloat32 divisor)
+{
+    if (
+        !isfinite(dividend) ||
+        divisor == 0 ||
+        isnan(dividend) ||
+        isnan(divisor)
+        ) {
+        CubismLogWarning("dividend: %f, divisor: %f ModF() returns 'NaN'.", dividend, divisor);
+        return NAN;
+    }
+
+    // 絶対値に変換する。
+    const csmFloat32 absDividend = CubismMath::AbsF(dividend);
+    const csmFloat32 absDivisor = CubismMath::AbsF(divisor);
+
+    // 絶対値で割り算する。
+    csmFloat32 result = absDividend - floorf(absDividend / absDivisor) * absDivisor;
+
+    // 符号を被除数のものに指定する。
+    return copysign(result, dividend);
 }
 
 }}}

@@ -16,9 +16,7 @@ namespace Live2D { namespace Cubism { namespace Framework {
 class CubismMotion;
 
 /**
- * @brief CubismMotionQueueManagerで再生している各モーションの管理
- *
- * CubismMotionQueueManagerで再生している各モーションの管理クラス。
+ * Handles adding information to the motion data for use by the CubismMotionQueueManager.
  */
 class CubismMotionQueueEntry
 {
@@ -28,230 +26,183 @@ class CubismMotionQueueEntry
 
 public:
     /**
-     * @brief コンストラクタ
-     *
-     * コンストラクタ。
+     * Constructor
      */
     CubismMotionQueueEntry();
 
     /**
-     * @brief デストラクタ
-     *
-     * デストラクタ。
+     * Destructor
      */
     virtual ~CubismMotionQueueEntry();
 
     /**
-     * @brief フェードアウト開始の設定
+     * Sets the number of seconds for the motion to complete fading out.
      *
-     * フェードアウトの開始を設定する。
-     *
-     * @param[in]   fadeOutSeconds     フェードアウトにかかる時間[秒]
+     * @param fadeOutSeconds number of seconds for the fade-out to complete
      */
     void        SetFadeout(csmFloat32 fadeOutSeconds);
 
     /**
-     * @brief フェードアウトの開始
+     * Sets the number of seconds for the motion to complete fading out and starts the fade out.
      *
-     * フェードアウトを開始する。
-     *
-     * @param[in]   fadeOutSeconds     フェードアウトにかかる時間[秒]
-     * @param[in]   userTimeSeconds    デルタ時間の積算値[秒]
+     * @param fadeOutSeconds number of seconds for the fade-out to complete
+     * @param userTimeSeconds current time in seconds
      */
     void        StartFadeout(csmFloat32 fadeOutSeconds, csmFloat32 userTimeSeconds);
 
     /**
-     * @brief モーションの終了の確認
+     * Checks whether the motion playback has finished.
      *
-     * モーションが終了したかどうか。
-     *
-     * @retval  true    モーションが終了した
-     * @retval  false   終了していない
+     * @return true if the motion playback has finished; otherwise false.
      */
     csmBool     IsFinished() const;
 
     /**
-     * @brief モーションの開始の確認
+     * Checks whether the motion playback has started.
      *
-     * モーションが開始したかどうか。
-     *
-     * @retval  true    モーションが開始した
-     * @retval  false   終了していない
+     * @return true if the motion playback has started; otherwise false.
      */
     csmBool     IsStarted() const;
 
     /**
-     * @brief モーションの開始時刻の取得
+     * Returns the time at which the motion playback started.
      *
-     * モーションの開始時刻を取得する。
-     *
-     * @return  モーションの開始時刻[秒]
+     * @return time at which the motion playback started in seconds
      */
     csmFloat32    GetStartTime() const;
 
     /**
-     * @brief フェードインの開始時刻の取得
+     * Returns the time at which the fade-in of the motion starts.
      *
-     * フェードインの開始時刻を取得する。
-     *
-     * @return  フェードインの開始時刻[秒]
+     * @return time at which the fade-in starts in seconds
      */
     csmFloat32    GetFadeInStartTime() const;
 
     /**
-     * @brief フェードインの終了時刻の取得
+     * Returns the time at which the fade-in of the motion ends.
      *
-     * フェードインの終了時刻を取得する。
-     *
-     * @return  フェードインの終了時刻[秒]
+     * @return time at which the fade-in ends in seconds
      */
     csmFloat32    GetEndTime() const;
 
     /**
-     * @brief モーションの開始時刻の設定
+     * Sets the time to start playing the motion.
      *
-     * モーションの開始時刻を設定する。
-     *
-     * @param[in]   startTime   モーションの開始時刻[秒]
+     * @param startTime time to start playing the motion in seconds
      */
     void        SetStartTime(csmFloat32 startTime);
 
     /**
-     * @brief フェードインの開始時刻の設定
+     * Sets the time to start the fade-in of the motion.
      *
-     * フェードインの開始時刻を設定する。
-     *
-     * @param[in]   startTime   フェードインの開始時刻[秒]
+     * @param startTime time to start the fade-in in seconds
      */
     void        SetFadeInStartTime(csmFloat32 startTime);
 
     /**
-     * @brief フェードインの終了時刻の設定
+     * Sets the time to end the fade-in of the motion.
      *
-     * フェードインの終了時刻を設定する。
-     *
-     * @param[in]   endTime   フェードインの終了時刻[秒]
+     * @param endTime time to end the fade-in in seconds
      */
     void        SetEndTime(csmFloat32 endTime);
 
     /**
-     * @brief モーションの終了の設定
+     * Sets whether to end the motion playback.
      *
-     * モーションの終了を設定する。
-     *
-     * @param[in]   f   trueならモーションの終了
+     * @param f true to end the motion playback
      */
     void        IsFinished(csmBool f);
 
     /**
-     * @brief モーションの開始の設定
+     * Sets whether to play the motion.
      *
-     * モーションの開始を設定する。
-     *
-     * @param[in]   f   trueならモーションの開始
+     * @param f true to play the motion
      */
     void        IsStarted(csmBool f);
 
     /**
-     * @brief モーションの有効性の確認
+     * Checks whether the motion is active.
      *
-     * モーションの有効・無効を取得する。
-     *
-     * @retval  true    モーションは有効
-     * @retval  false   モーションは無効
+     * @return true if the motion is active; otherwise false.
      */
     csmBool     IsAvailable() const;
 
     /**
-     * @brief モーションの有効性の設定
+     * Sets whether the motion is active.
      *
-     * モーションの有効・無効を設定する。
-     *
-     * @param[in]   v   trueならモーションは有効
+     * @param v true to activate the motion
      */
     void        IsAvailable(csmBool v);
 
     /**
-     * @brief モーションの状態の設定
+     * Sets the state of the motion.
      *
-     * モーションの状態を設定する。
-     *
-     * @param[in]   timeSeconds    現在時刻[秒]
-     * @param[in]   weight  モーションの重み
+     * @param timeSeconds current time to set in seconds
+     * @param weight weight of the motion to set
      */
     void        SetState(csmFloat32 timeSeconds, csmFloat32 weight);
 
     /**
-     * @brief モーションの現在時刻の取得
+     * Returns the current time from the state of the motion.
      *
-     * モーションの現在時刻を取得する。
-     *
-     * @return  モーションの現在時刻[秒]
+     * @return current time in seconds
      */
     csmFloat32  GetStateTime() const;
 
     /**
-     * @brief モーションの重みの取得
+     * Returns the weight of the motion from its state.
      *
-     * モーションの重みを取得する。
-     *
-     * @return  モーションの重み
+     * @return weight of the motion
      */
     csmFloat32  GetStateWeight() const;
 
     /**
-    * @brief 最後にイベントの発火をチェックした時間を取得
-    *
-    * 最後にイベントの発火をチェックした時間を取得する。
-    *
-    * @return  最後にイベントの発火をチェックした時間[秒]
-    */
+     * Returns the last time the user data event was confirmed to fire.
+     *
+     * @return last time the user data event was confirmed to fire in seconds
+     */
     csmFloat32  GetLastCheckEventTime() const;
 
     /**
-    * @brief 最後にイベントをチェックした時間を設定
-    *
-    * 最後にイベントをチェックした時間を設定する。
-    *
-    * @param[in]    checkTime   最後にイベントをチェックした時間[秒]
-    */
+     * Sets the time when the user data event was last confirmed to fire.
+     *
+     * @param checkTime last confirmed time in seconds
+     */
     void        SetLastCheckEventTime(csmFloat32 checkTime);
 
     /**
-    * @brief フェードアウトが開始しているかを取得
-    *
-    * モーションがフェードアウトが開始しているかを取得する。
-    *
-    * @return    フェードアウトが開始しているか
-    */
+     * Checks whether the motion is currently fading out.
+     *
+     * @return true if the motion is currently fading out; otherwise false.
+     */
     csmBool     IsTriggeredFadeOut();
 
     /**
-    * @brief フェードアウト時間の取得
-    *
-    * モーションのフェードアウト時間を取得する。
-    *
-    * @return    フェードアウト開始[秒]
-    */
+     * Returns the number of seconds for the motion to complete fading out.
+     *
+     * @return number of seconds for the fade-out to complete
+     */
     csmFloat32     GetFadeOutSeconds();
 
-private:
-    csmBool         _autoDelete;                    ///< 自動削除
-    ACubismMotion*  _motion;                        ///< モーション
+    ACubismMotion* GetCubismMotion();
 
-    csmBool         _available;                     ///< 有効化フラグ
-    csmBool         _finished;                      ///< 終了フラグ
-    csmBool         _started;                       ///< 開始フラグ（0.9.00以降）
-    csmFloat32      _startTimeSeconds;              ///<  モーション再生開始時刻[秒]
-    csmFloat32      _fadeInStartTimeSeconds;        ///<  フェードイン開始時刻（ループの時は初回のみ）[秒]
-    csmFloat32      _endTimeSeconds;                ///< 終了予定時刻[秒]
-    csmFloat32      _stateTimeSeconds;              ///<  時刻の状態[秒]
-    csmFloat32      _stateWeight;                   ///<  重みの状態
-    csmFloat32      _lastEventCheckSeconds;         ///<   最終のMotion側のチェックした時間
+private:
+    csmBool         _autoDelete;
+    ACubismMotion*  _motion;
+
+    csmBool         _available;
+    csmBool         _finished;
+    csmBool         _started;
+    csmFloat32      _startTimeSeconds;
+    csmFloat32      _fadeInStartTimeSeconds;
+    csmFloat32      _endTimeSeconds;
+    csmFloat32      _stateTimeSeconds;
+    csmFloat32      _stateWeight;
+    csmFloat32      _lastEventCheckSeconds;
     csmFloat32      _fadeOutSeconds;
     csmBool         _IsTriggeredFadeOut;
 
-    CubismMotionQueueEntryHandle  _motionQueueEntryHandle;        ///< インスタンスごとに一意の値を持つ識別番号
+    CubismMotionQueueEntryHandle  _motionQueueEntryHandle;
 };
 
 }}}

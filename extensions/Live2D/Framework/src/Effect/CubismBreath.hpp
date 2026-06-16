@@ -14,24 +14,18 @@
 namespace Live2D { namespace Cubism { namespace Framework {
 
 /**
- * @brief 呼吸機能
- *
- * 呼吸機能を提供する。
+ * Handles the breathing effect
  */
 class CubismBreath
 {
 public:
     /**
-     * @brief 呼吸のパラメータ情報
-     *
-     * 呼吸のパラメータ情報。
+     * Data attached to the parameters of breathing
      */
     struct BreathParameterData
     {
         /**
-         * @brief コンストラクタ
-         *
-         * コンストラクタ。
+         * Constructor
          */
         BreathParameterData()
                              : ParameterId(NULL)
@@ -42,15 +36,16 @@ public:
         { }
 
         /**
-         * @brief コンストラクタ
+         * Constructor<br>
+         * Sets the data.
          *
-         * コンストラクタ。
+         * @param parameterId ID of the breath parameter to attach
+         * @param offset offset of the sine wave
+         * @param peak peak value of the sine wave
+         * @param cycle cycle of the sine wave
+         * @param weight weight of the parameter
          *
-         * @param[in]   parameterId     呼吸をひもづけるパラメータID
-         * @param[in]   offset          呼吸を正弦波としたときの、波のオフセット
-         * @param[in]   peak            呼吸を正弦波としたときの、波の高さ
-         * @param[in]   cycle           呼吸を正弦波としたときの、波の周期
-         * @param[in]   weight          パラメータへの重み
+         * @note The cyclic motion of breathing is set entirely by sine waves.
          */
         BreathParameterData(CubismIdHandle parameterId, csmFloat32 offset, csmFloat32 peak, csmFloat32 cycle, csmFloat32 weight)
             : ParameterId(parameterId)
@@ -60,77 +55,61 @@ public:
             , Weight(weight)
         { }
 
-        CubismIdHandle ParameterId;             ///< 呼吸をひもづけるパラメータID
-        csmFloat32 Offset;                      ///< 呼吸を正弦波としたときの、波のオフセット
-        csmFloat32 Peak;                        ///< 呼吸を正弦波としたときの、波の高さ
-        csmFloat32 Cycle;                       ///< 呼吸を正弦波としたときの、波の周期
-        csmFloat32 Weight;                      ///< パラメータへの重み
+        CubismIdHandle ParameterId;             ///< ID of the breath parameter to attach
+        csmFloat32 Offset;                      ///< Offset of the sine wave
+        csmFloat32 Peak;                        ///< Peak value of the sine wave
+        csmFloat32 Cycle;                       ///< Cycle of the sine wave
+        csmFloat32 Weight;                      ///< Weight of the parameter
     };
 
     /**
-     * @brief インスタンスの作成
+     * Makes an instance of CubismBreath.
      *
-     * インスタンスを作成する。
+     * @return Maked instance of CubismBreath
      */
     static CubismBreath* Create();
 
 
     /**
-     * @brief インスタンスの破棄
+     * Destroys an instance of CubismBreath.
      *
-     * インスタンスを破棄する。
-     *
-     * @param[in]   instance    対象のCubismBreath
+     * @param instance Instance of CubismBreath to destroy
      */
     static void Delete(CubismBreath* instance);
 
     /**
-     * @brief 呼吸のパラメータのひもづけ
+     * Attaches the parameters of breathing.
      *
-     * 呼吸のパラメータをひもづける。
-     *
-     * @param[in]   breathParameters    呼吸をひもづけたいパラメータのリスト
+     * @param breathParameters Collection of breathing parameters to attach
      */
     void SetParameters(const csmVector<BreathParameterData>& breathParameters);
 
 
     /**
-     * @brief 呼吸にひもづいているパラメータの取得
+     * Returns parameters attached to breathing.
      *
-     * 呼吸にひもづいているパラメータを取得する。
-     *
-     * @return  呼吸にひもづいているパラメータのリスト
+     * @return Attached collection of breathing parameters
      */
     const csmVector<BreathParameterData>& GetParameters() const;
 
 
     /**
-     * @brief モデルのパラメータの更新
+     * Updates the parameters of the model.
      *
-     * モデルのパラメータを更新する。
+     * @param model Model to update
+     * @param deltaTimeSeconds Current time in seconds
      *
-     * @param[in]   model   対象のモデル
-     * @param[in]   deltaTimeSeconds   デルタ時間[秒]
+     * @note Execute after making an instance with #Create() and binding parameters with #setParameters().
      */
     void UpdateParameters(CubismModel* model, csmFloat32 deltaTimeSeconds);
 
 private:
-    /**
-     * @brief コンストラクタ
-     *
-     * コンストラクタ。
-     */
     CubismBreath();
 
-    /**
-     * @brief デストラクタ
-     *
-     * デストラクタ。
-     */
     virtual ~CubismBreath();
 
-    csmVector<BreathParameterData> _breathParameters;           ///< 呼吸にひもづいているパラメータのリスト
-    csmFloat32 _currentTime;                                    ///< 積算時間[秒]
+    csmVector<BreathParameterData> _breathParameters;
+    csmFloat32 _currentTime;
 };
 
 }}}

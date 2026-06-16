@@ -105,11 +105,14 @@ void RenderTargetImpl::rebuildSwapchainAttachments(const tlx::pod_vector<VkImage
     for (auto i = 0; i < images.size(); ++i)
     {
 #if !defined(NDEBUG) && defined(_WIN32)
-        VkDebugUtilsObjectNameInfoEXT debugName{.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT};
-        debugName.objectHandle = std::bit_cast<uintptr_t>(images[i]);
-        debugName.pObjectName  = "axmol3-swapchain-image";
-        debugName.objectType   = VK_OBJECT_TYPE_IMAGE;
-        vkSetDebugUtilsObjectNameEXT(_driver->getDevice(), &debugName);
+        if (Application::getContextAttrs().debugLayerEnabled)
+        {
+            VkDebugUtilsObjectNameInfoEXT debugName{.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT};
+            debugName.objectHandle = std::bit_cast<uintptr_t>(images[i]);
+            debugName.pObjectName  = "axmol3-swapchain-image";
+            debugName.objectType   = VK_OBJECT_TYPE_IMAGE;
+            vkSetDebugUtilsObjectNameEXT(_driver->getDevice(), &debugName);
+        }
 #endif
 
         VkImageView imageView{VK_NULL_HANDLE};

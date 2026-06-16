@@ -11,78 +11,58 @@
 
 namespace Live2D {  namespace Cubism {  namespace Framework {
 
-/// ユーザデータの種類を指定するタイプ宣言
 typedef CubismIdHandle  ModelUserDataType;
 
 /**
-* @brief ユーザデータの管理クラス
-*
-* ユーザデータをロード、管理、検索インターフェイス、解放までを行う。
-*/
+ * Handles management of user data.
+ */
 class CubismModelUserData
 {
 public:
     /**
-    * @brief ユーザデータ構造体
-    *
-    * Jsonから読み込んだユーザデータを記録しておくための構造体
-    */
+     * Structure for user data information
+     */
     struct CubismModelUserDataNode
     {
-        ModelUserDataType   TargetType;     ///< ユーザデータターゲットタイプ
-        CubismIdHandle      TargetId;       ///< ユーザデータターゲットのID
-        csmString           Value;          ///< ユーザデータ
+        ModelUserDataType   TargetType;         ///< User data type
+        CubismIdHandle      TargetId;           ///< ID of the object attached to the user data
+        csmString           Value;              ///< User data value
     };
 
     /**
-    * @brief インスタンスの作成
-    *
-    * インスタンスを作成する。
-    *
-    * @param[in]   buffer      userdata3.jsonが読み込まれいるバッファ
-    * @param[in]   size        バッファのサイズ
-    * @return      作成されたインスタンス
-    */
+     * Makes an instance.
+     *
+     * @param buffer Buffer where the user data file is loaded
+     * @param size Byte size of the buffer
+     *
+     * @return Instance
+     */
     static CubismModelUserData* Create(const csmByte* buffer, csmSizeInt size);
 
     /**
-    * @brief インスタンスの破棄
-    *
-    * インスタンスを破棄する。
-    *
-    * @param[in]   modelUserData      破棄するインスタンス
-    */
+     * Destroys the instance.
+     *
+     * @param modelUserData Instance of `CubismModelUserData` to destroy
+     */
     static void Delete(CubismModelUserData* modelUserData);
 
     /**
-    * @brief デストラクタ
-    *
-    * ユーザーデータ構造体配列を解放する
-    */
+     * Destructor
+     */
     virtual ~CubismModelUserData();
 
     /**
-    * @brief ArtMeshのユーザデータのリストの取得
-    *
-    * ArtMeshのユーザデータのリストの取得する。
-    *
-    * @return      csmVectorのユーザデータリスト
-    */
+     * Returns the list of user data for ArtMesh.
+     *
+     * @return List of user data
+     */
     const csmVector<const CubismModelUserDataNode*>& GetArtMeshUserDatas() const;
 
 private:
 
-    /**
-    * @brief userdata3.jsonのパース
-    *
-    * userdata3.jsonをパースする。
-    *
-    * @param[in]   buffer          userdata3.jsonが読み込まれいるバッファ
-    * @param[in]   size            バッファのサイズ
-    */
     void ParseUserData(const csmByte* buffer, csmSizeInt size);
 
-    csmVector<const CubismModelUserDataNode*>    _userDataNodes;        ///< ユーザデータ構造体配列
-    csmVector<const CubismModelUserDataNode*>    _artMeshUserDataNodes; ///< 閲覧リスト保持
+    csmVector<const CubismModelUserDataNode*>    _userDataNodes;
+    csmVector<const CubismModelUserDataNode*>    _artMeshUserDataNodes;
 };
 }}} //--------- LIVE2D NAMESPACE ------------

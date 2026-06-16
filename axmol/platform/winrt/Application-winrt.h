@@ -55,10 +55,7 @@ public:
     Application();
     virtual ~Application();
 
-    /**
-    @brief    Run the message loop.
-    */
-    int run();
+    int run() override;
 
     void boot(winrt::Windows::UI::Xaml::Controls::SwapChainPanel const& panel);
     void shutdown();

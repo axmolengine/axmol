@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include <optional>
+
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/rhi/RenderPassDesc.h"
 #include "axmol/rhi/Texture.h"
@@ -32,6 +34,7 @@
 #include "axmol/rhi/ShaderCache.h"
 
 #include "axmol/base/Object.h"
+#include "axmol/math/Color.h"
 
 namespace ax::rhi
 {
@@ -118,11 +121,14 @@ public:
     virtual Buffer* createBuffer(size_t size, BufferType type, BufferUsage usage, const void* inital = nullptr) = 0;
 
     /**
-     * New a Texture object, not auto released.
+     * New a Texture object with a render-target clear color hint, not auto released.
      * @param descriptor Specifies texture description.
+     * @param clearColorHint Optional render-target clear color hint. D3D12 uses it as D3D12_CLEAR_VALUE metadata for
+     * optimized ClearRenderTargetView operations. Other backends ignore it.
      * @return A Texture object.
      */
-    virtual Texture* createTexture(const TextureDesc& descriptor) = 0;
+    virtual Texture* createTexture(const TextureDesc& descriptor,
+                                   std::optional<Color> clearColorHint = std::nullopt) = 0;
 
     virtual RenderTarget* createRenderTarget(Texture* colorAttachment        = nullptr,
                                              Texture* depthStencilAttachment = nullptr) = 0;

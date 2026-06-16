@@ -16,9 +16,7 @@ namespace Live2D { namespace Cubism { namespace Framework {
 struct CubismId;
 
 /**
- * @brief ID名の管理
- *
- * ID名を管理する。
+ * Handles ID names.
  */
 class CubismIdManager
 {
@@ -26,113 +24,94 @@ class CubismIdManager
 
 public:
     /**
-     * @brief コンストラクタ
-     *
-     * コンストラクタ。
+     * Constructor
      */
     CubismIdManager();
 
     /**
-     * @brief デストラクタ
-     *
-     * デストラクタ。
+     * Destructor
      */
     ~CubismIdManager();
 
     /**
-     * @brief ID名をリストから登録
+     * Registers IDs.
      *
-     * ID名をリストから登録する。
-     *
-     * @param[in]   ids     ID名リスト
-     * @param[in]   count   IDの個数
+     * @param ids Array of ID strings
+     * @param count Number of IDs
      */
     void RegisterIds(const csmChar** ids, csmInt32 count);
 
     /**
-    * @brief ID名をリストから登録
-    *
-    * ID名をリストから登録する。
-    *
-    * @param[in]   ids     ID名リスト
-    */
+     * Registers IDs.
+     *
+     * @param ids Collection of ID strings
+     */
     void RegisterIds(const csmVector<csmString>& ids);
 
     /**
-     * @brief ID名を登録
+     * Registers an ID.
      *
-     * ID名を登録する。
-     *
-     * @param[in]   id  ID名
+     * @param id ID string
      */
     const CubismId* RegisterId(const csmChar* id);
 
     /**
-    * @brief ID名を登録
-    *
-    * ID名を登録する。
-    *
-    * @param[in]   id  ID名
-    */
+     * Registers an ID.
+     *
+     * @param id ID string
+     *
+     * @return Registered ID<br>
+     * If the ID was already registered, the already registered ID
+     */
     const CubismId* RegisterId(const csmString& id);
 
     /**
-     * @brief ID名からIDを取得する。
+     * Returns an ID.
      *
-     * ID名からIDを取得する。
+     * @param id ID string
      *
-     * @param[in]   id  ID名
+     * @return ID
      *
-     * @note 未登録のID名の場合、登録も行う。
+     * @note If the ID is not registered, it registers the ID.
      */
     const CubismId* GetId(const csmString& id);
 
     /**
-    * @brief ID名からIDを取得する。
-    *
-    * ID名からIDを取得する。
-    *
-    * @param[in]   id  ID名
-    *
-    * @note 未登録のID名の場合、登録も行う。
-    */
+     * Returns an ID.
+     *
+     * @param id ID string
+     *
+     * @return ID
+     *
+     * @note If the requested ID is not registered, it registers the ID.
+     */
     const CubismId* GetId(const csmChar* id);
 
     /**
-     * @brief ID名からIDの確認
+     * Checks if an ID is registered.
      *
-     * ID名からIDが登録されているかどうか確認する。
+     * @param id ID string to check
      *
-     * @retval  true    存在する
-     * @retval  false   存在しない
+     * @return true if the ID is registered; otherwise false.
      */
     csmBool IsExist(const csmString& id) const;
 
     /**
-    * @brief ID名からIDの確認
-    *
-    * ID名からIDが登録されているかどうか確認する。
-    *
-    * @retval  true    存在する
-    * @retval  false   存在しない
-    */
+     * Checks if an ID is registered.
+     *
+     * @param id ID string to check
+     *
+     * @return true if the ID is registered; otherwise false.
+     */
     csmBool IsExist(const csmChar* id) const;
 
 private:
     CubismIdManager(const CubismIdManager&);
     CubismIdManager& operator=(const CubismIdManager&);
 
-    /**
-     * @brief ID名からIDを検索
-     *
-     * ID名からIDを検索する。
-     *
-     * @param[in]   id  ID名
-     * @return  登録されているID。なければNULL。
-     */
     CubismId* FindId(const csmChar* id) const;
 
-    csmVector<CubismId*> _ids;      ///< 登録されているIDのリスト
+    csmVector<CubismId*> _ids;
 };
 
 }}}

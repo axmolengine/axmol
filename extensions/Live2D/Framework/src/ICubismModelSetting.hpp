@@ -15,219 +15,229 @@
 namespace Live2D { namespace Cubism { namespace Framework {
 
 /**
- * @brief モデル設定情報を取り扱う関数を宣言した純粋仮想クラス。
+ * An interface that covers the settings defined in the Model Settings File.
  *
- * このクラスを継承することで、モデル設定情報を取り扱うクラスになる。
- *
+ * @note Inherit this interface if you need to extend model settings or implement a class that uses model settings.
  */
 class ICubismModelSetting
 {
 public:
     /**
-     * @brief デストラクタ
-     *
-     * デストラクタ。
+     * Destructor
      */
     virtual ~ICubismModelSetting() {}
 
     /**
-     * @brief  Mocファイルの名前を取得する
+     * Returns the file name of MOC3 File.
      *
-     * @return Mocファイルの名前
+     * @return Name of MOC3 File
      */
     virtual const csmChar* GetModelFileName() = 0;
 
     /**
-     * @brief  モデルが使用するテクスチャの数を取得する
+     * Returns the number of textures in the Model.
      *
-     * @return テクスチャの数
+     * @return Number of textures
      */
     virtual csmInt32 GetTextureCount() = 0;
 
     /**
-     * @brief  テクスチャが配置されたディレクトリの名前を取得する
+     * Returns the name of directory that texture is placed.
      *
-     * @return テクスチャが配置されたディレクトリの名前
+     * @return Name of directory
      */
     virtual const csmChar* GetTextureDirectory() = 0;
 
     /**
-     * @brief  モデルが使用するテクスチャの名前を取得する
+     * Returns the name of texture in the Model.
      *
-     * @param[in]   index    配列のインデックス値
-     * @return      テクスチャの名前
+     * @param index Index to the desired texture name
+     *
+     * @return Name of texture
      */
     virtual const csmChar* GetTextureFileName(csmInt32 index) = 0;
 
     /**
-     * @brief        モデルに設定された当たり判定の数を取得する
+     * Returns the number of Hit Area settings in the Model.
      *
-     * @return       モデルに設定された当たり判定の数
+     * @return Number of Hit Area settings
      */
     virtual csmInt32 GetHitAreasCount() = 0;
 
     /**
-     * @brief        当たり判定に設定されたIDを取得する
+     * Returns whether ID of Drawable that is set for the Hit Area.
      *
-     * @param[in]    index   配列のインデックス値
-     * @return       当たり判定に設定されたID
+     * @param groupName Name of the desired Motion Group
+     *
+     * @return true if Motion Group information exists; otherwise false
      */
     virtual CubismIdHandle GetHitAreaId(csmInt32 index) = 0;
 
     /**
-     * @brief        当たり判定に設定された名前を取得する
+     * Returns the name of Hit Area.
      *
-     * @param[in]    index   配列のインデックス値
-     * @return       当たり判定に設定された名前
+     * @param index Index to the desired Hit Area
+     *
+     * @return Name of Hit Area
      */
     virtual const csmChar* GetHitAreaName(csmInt32 index) = 0;
 
     /**
-     * @brief        物理演算設定ファイルの名前を取得する
+     * Returns the name of Physics Settings File in the Model.
      *
-     * @return       物理演算設定ファイルの名前
+     * @return Name of Physics Settings File
      */
     virtual const csmChar* GetPhysicsFileName() = 0;
 
     /**
-     * @brief        パーツ切り替え設定ファイルの名前を取得する
+     * Returns the name of Pose Settings File in the Model.
      *
-     * @return       パーツ切り替え設定ファイルの名前
+     * @return Name of Pose Settings File
      */
     virtual const csmChar* GetPoseFileName() = 0;
 
     /**
-     * @brief        表示名称設定ファイルの名前を取得する
+     * Returns the name of Display Settings File in the Model.
      *
-     * @return       表示名称設定ファイルの名前
+     * @return Name of Display Settings File
      */
     virtual const csmChar* GetDisplayInfoFileName() = 0;
 
     /**
-     * @brief        表情設定ファイルの数を取得する
+     * Returns the number of expressions in the Model.
      *
-     * @return       表情設定ファイルの数
+     * @return Number of expressions
      */
     virtual csmInt32 GetExpressionCount() = 0;
 
     /**
-     * @brief        表情設定ファイルを識別する名前（別名）を取得する
+     * Returns the name of expression.
      *
-     * @param[in]    index   配列のインデックス値
-     * @return       表情の名前
+     * @param index Index to the desired expression
+     *
+     * @return Name of expression
      */
     virtual const csmChar* GetExpressionName(csmInt32 index) = 0;
 
     /**
-     * @brief        表情設定ファイルの名前を取得する
+     * Returns the name of Expression Settings File from the expression.
      *
-     * @param[in]    index   配列のインデックス値
-     * @return       表情設定ファイルの名前
+     * @param index Index to the desired expression
+     *
+     * @return Name of Expression Settings File
      */
     virtual const csmChar* GetExpressionFileName(csmInt32 index) = 0;
 
     /**
-     * @brief        モーショングループの数を取得する
+     * Returns the number of Motion Groups in the Model.
      *
-     * @return       モーショングループの数
+     * @return Number of Motion Groups
      */
     virtual csmInt32 GetMotionGroupCount() = 0;
 
     /**
-     * @brief        モーショングループの名前を取得する
+     * Returns the name of Motion Group.
      *
-     * @param[in]    index   配列のインデックス値
-     * @return       モーショングループの名前
+     * @param index Index to the desired Motion Group
+     *
+     * @return Name of Motion Group
      */
     virtual const csmChar* GetMotionGroupName(csmInt32 index) = 0;
 
     /**
-     * @brief        モーショングループに含まれるモーションの数を取得する
+     * Returns the number of Motions in the Motion Group.
      *
-     * @param[in]    groupName      モーショングループの名前
-     * @return       モーショングループの名前
+     * @param groupName Name to the desired Motion Group
+     *
+     * @return Number of Motions
      */
     virtual csmInt32 GetMotionCount(const csmChar* groupName) = 0;
 
     /**
-     * @brief        グループ名とインデックス値からモーションファイルの名前を取得する
+     * Returns the file name of Motion File in the Motion Group.
      *
-     * @param[in]    groupName      モーショングループの名前
-     * @param[in]    index          配列のインデックス値
-     * @return       モーションファイルの名前
+     * @param groupName Name to the desired Motion Group
+     * @param index Index to the desired motion
+     *
+     * @return Name of Motion File
      */
     virtual const csmChar* GetMotionFileName(const csmChar* groupName, csmInt32 index) = 0;
 
     /**
-     * @brief        モーションに対応するサウンドファイルの名前を取得する
+     * Returns the name of Audio File attached to the Motion in the Motion Group.
      *
-     * @param[in]    groupName      モーショングループの名前
-     * @param[in]    index          配列のインデックス値
-     * @return       サウンドファイルの名前
+     * @param groupName Name to the desired Motion Group
+     * @param index Index to the desired Motion
+     *
+     * @return Name of Audio File
      */
     virtual const csmChar* GetMotionSoundFileName(const csmChar* groupName, csmInt32 index) = 0;
 
     /**
-     * @brief        モーション開始時のフェードイン処理時間を取得する
+     * Returns the Fade-in time at the start of the Motion in the Motion Group
      *
-     * @param[in]    groupName      モーショングループの名前
-     * @param[in]    index          配列のインデックス値
-     * @return       フェードイン処理時間[秒]
+     * @param groupName Name to the desired Motion Group
+     * @param index Index to the desired Motion
+     *
+     * @return Fade-in time [sec]
      */
     virtual csmFloat32 GetMotionFadeInTimeValue(const csmChar* groupName, csmInt32 index) = 0;
 
     /**
-     * @brief        モーション終了時のフェードアウト処理時間を取得する
+     * Returns the Fade-out time at the end of the Motion in the Motion Group.
      *
-     * @param[in]    groupName      モーショングループの名前
-     * @param[in]    index          配列のインデックス値
-     * @return       フェードアウト処理時間[秒]
+     * @param groupName Name to the desired Motion Group
+     * @param index Index to the desired Motion
+     *
+     * @return Fade-out time [sec]
      */
     virtual csmFloat32 GetMotionFadeOutTimeValue(const csmChar* groupName, csmInt32 index) = 0;
 
     /**
-    * @brief        ユーザデータのファイル名を取得する
-    *
-    * @return       ユーザデータのファイル名
-    */
+     * Returns the name of User Data File in the Model.
+     *
+     * @return Name of User Data File
+     */
     virtual const csmChar* GetUserDataFile() = 0;
 
     /**
-     * @brief        レイアウト情報を取得する
+     * Returns the Layout Information set in the model.
      *
-     * @param[out]   outLayoutMap      csmMapクラスのインスタンス
-     * @retval       true  -> レイアウト情報が存在する
-     * @retval       false -> レイアウト情報が存在しない
+     * @param outLayoutMap Instance of a collection to store
+     *
+     * @return true if Layout Information exists; otherwise false
      */
     virtual csmBool GetLayoutMap(csmMap<csmString, csmFloat32>& outLayoutMap) = 0;
 
     /**
-     * @brief        目パチに関連付けられたパラメータの数を取得する
+     * Returns the number of parameters attached to the Eye Blinking Settings.
      *
-     * @return       目パチに関連付けられたパラメータの数
+     * @return Number of parameters
      */
     virtual csmInt32 GetEyeBlinkParameterCount() = 0;
 
     /**
-     * @brief        目パチに関連付けられたパラメータのIDを取得する
+     * Returns the ID of parameter attached to the Eye Blinking Settings.
      *
-     * @param[in]    index          配列のインデックス値
-     * @return       パラメータID
+     * @param index Index to the desired parameter
+     *
+     * @return ID of parameter
      */
     virtual CubismIdHandle GetEyeBlinkParameterId(csmInt32 index) = 0;
 
     /**
-     * @brief        リップシンクに関連付けられたパラメータの数を取得する
+     * Returns the number of parameters attached to the Lip-sync Settings.
      *
-     * @return       リップシンクに関連付けられたパラメータの数
+     * @return Number of parameters
      */
     virtual csmInt32 GetLipSyncParameterCount() = 0;
 
     /**
-     * @brief        リップシンクに関連付けられたパラメータのIDを取得する
+     * Returns the ID of parameter attached to the Lip-sync Settings.
      *
-     * @param[in]    index          配列のインデックス値
-     * @return       パラメータID
+     * @param index Index to the desired parameter
+     *
+     * @return ID of parameter
      */
     virtual CubismIdHandle GetLipSyncParameterId(csmInt32 index) = 0;
 };

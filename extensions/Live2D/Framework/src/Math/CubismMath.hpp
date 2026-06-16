@@ -15,8 +15,7 @@
 namespace Live2D { namespace Cubism { namespace Framework {
 
 /**
- *@brief    数値計算などに使用するユーティリティクラス
- *
+ * Handles numerical calculations and other utility functions
  */
 class CubismMath
 {
@@ -25,12 +24,13 @@ public:
     static const csmFloat32 Epsilon;
 
     /**
-     *@brief    第一引数の値を最小値と最大値の範囲に収めた値を返す
+     * Returns the value of the first argument clamped within the range of the minimum and maximum values.
      *
-     *@param    value   ->  収められる値
-     *@param    min     ->  範囲の最小値
-     *@param    max     ->  範囲の最大値
-     *@return   最小値と最大値の範囲に収めた値
+     *@param value Value to be clamped
+     *@param min Minimum value of the range
+     *@param max Maximum value of the range
+     *
+     *@return Value clamped within the range of minimum and maximum values
      */
     static csmFloat32 RangeF(csmFloat32 value, csmFloat32 min, csmFloat32 max)
     {
@@ -40,10 +40,11 @@ public:
     };
 
     /**
-     *@brief    サイン関数の値を求める
+     * Returns the value of the sine function.
      *
-     *@param    x   ->  角度値（ラジアン）
-     *@return   サイン関数sin(x)の値
+     *@param x Angle value in radians [rad]
+     *
+     *@return Value of the sine function sin(x)
      */
     static csmFloat32 SinF(csmFloat32 x)
     {
@@ -51,10 +52,11 @@ public:
     };
 
     /**
-     *@brief    コサイン関数の値を求める
+     * Returns the value of the cosine function.
      *
-     *@param    x   ->  角度値（ラジアン）
-     *@return   コサイン関数cos(x)の値
+     *@param x Angle value in radians [rad]
+     *
+     *@return Value of the cosine function cos(x)
      */
     static csmFloat32 CosF(csmFloat32 x)
     {
@@ -62,10 +64,11 @@ public:
     };
 
     /**
-     *@brief    絶対値の値を求める
+     * Returns the absolute value.
      *
-     *@param    x  ->  絶対値を求める値
-     *@return   値の絶対値
+     * @param x Value to calculate the absolute value
+     *
+     * @return Absolute value of the input
      */
     static csmFloat32 AbsF(csmFloat32 x)
     {
@@ -73,10 +76,11 @@ public:
     };
 
     /**
-     *@brief    平方根(ルート)を求める
+     * Returns the square root.
      *
-     *@param    x  ->  平方根を求める値
-     *@return   値の平方根
+     * @param x Value to calculate the square root
+     *
+     * @return Square root of the input
      */
     static csmFloat32 SqrtF(csmFloat32 x)
     {
@@ -84,11 +88,12 @@ public:
     };
 
     /**
-     *@brief    イージング処理されたサインを求める<br>
-     *           フェードイン・アウト時のイージングに利用できる
+     * Returns the value processed with sine wave easing.<br>
+     * Can be used for easing during fade-in and fade-out.
      *
-     *@param    value  ->  イージングを行う値
-     *@return   イージング処理されたサイン値
+     * @param value Value to be eased
+     *
+     * @return Value processed with sine wave easing
      */
     static csmFloat32 GetEasingSine(csmFloat32 value)
     {
@@ -99,11 +104,12 @@ public:
     }
 
     /**
-     * @brief  大きい方の値を返す。
+     * Returns the greater value.
      *
-     * @param  l  -> 左辺の値
-     * @param  r  -> 右辺の値
-     * @return 大きい方の値
+     * @param l Left-hand value
+     * @param r Right-hand value
+     *
+     * @return Greater value
      */
     static csmFloat32 Max(csmFloat32 l, csmFloat32 r)
     {
@@ -111,11 +117,12 @@ public:
     }
 
     /**
-     * @brief  小さい方の値を返す。
+     * Returns the smaller value.
      *
-     * @param  l  -> 左辺の値
-     * @param  r  -> 右辺の値
-     * @return 小さい方の値
+     * @param l Left-hand value
+     * @param r Right-hand value
+     *
+     * @return Smaller value
      */
     static csmFloat32 Min(csmFloat32 l, csmFloat32 r)
     {
@@ -123,77 +130,108 @@ public:
     }
 
     /**
-     * @brief   角度値をラジアン値に変換します。
+     * Returns the value clamped within the specified range.
      *
-     * @param   degrees  ->  角度値
-     * @return  角度値から変換したラジアン値
+     * @param val Value to be clamped within the range
+     * @param min Minimum value
+     * @param max Maximum value
+     * @return Clamped value within the range
+     */
+    static csmInt32 Clamp(csmInt32 val, csmInt32 min, csmInt32 max);
+
+    /**
+     * Returns the value clamped within the specified range.
+     *
+     * @param val Value to be checked within the range
+     * @param min Minimum value
+     * @param max Maximum value
+     * @return Clamped value within the range
+     */
+    static csmFloat32 ClampF(csmFloat32 val, csmFloat32 min, csmFloat32 max);
+
+    /**
+     * Converts an angle from degrees to radians.
+     *
+     * @param degrees Angle in degrees [degree]
+     *
+     * @return Angle in radians [rad]
      */
     static csmFloat32 DegreesToRadian(csmFloat32 degrees);
 
     /**
-     * @brief   ラジアン値を角度値に変換します。
+     * Converts an angle from radians to degrees.
      *
-     * @param   radian  ->  ラジアン値
-     * @return  ラジアン値から変換した角度値
+     * @param radian Angle in radians [rad]
+     *
+     * @return Angle in degrees [degree]
      */
     static csmFloat32 RadianToDegrees(csmFloat32 radian);
 
     /**
-     * @brief   2つのベクトルからラジアン値を求めます。
+     * Calculates the angle between two vectors.
      *
-     * @param   from  ->  始点ベクトル
-     * @param   to    ->  終点ベクトル
-     * @return  ラジアン値から求めた方向ベクトル
+     * @param from Starting vector
+     * @param to Ending vector
+     *
+     * @return Angle in radians [rad]
      */
     static csmFloat32 DirectionToRadian(CubismVector2 from, CubismVector2 to);
 
     /**
-     * @brief   2つのベクトルから角度値を求めます。
+     * Calculates the angle between two vectors.
      *
-     * @param   from  ->  始点ベクトル
-     * @param   to    ->  終点ベクトル
-     * @return  角度値から求めた方向ベクトル
+     * @param from Starting vector
+     * @param to Ending vector
+     *
+     * @return Angle in radians [rad]
      */
     static csmFloat32 DirectionToDegrees(CubismVector2 from, CubismVector2 to);
 
     /**
-     * @brief   ラジアン値を方向ベクトルに変換します。
+     * Calculates the direction vector from an angle.
      *
-     * @param   totalAngle  ->  ラジアン値
-     * @return  ラジアン値から変換した方向ベクトル
+     * @param totalAngle Angle in radians [rad]
+     *
+     * @return Direction vector
      */
     static CubismVector2 RadianToDirection(csmFloat32 totalAngle);
 
     /**
-    * @brief   三次方程式の三次項の係数が0になったときに補欠的に二次方程式の解をもとめる。
-    *          a * x^2 + b * x + c = 0
-    *
-    * @param   a -> 二次項の係数値
-    * @param   b -> 一次項の係数値
-    * @param   c -> 定数項の値
-    * @return  二次方程式の解
-    */
+     * Finds the solution of a quadratic equation when the cubic coefficient of the cubic equation is zero.<br>
+     *          a * x^2 + b * x + c = 0
+     *
+     * @param a Coefficient of the quadratic term
+     * @param b Coefficient of the linear term
+     * @param c Constant term
+     *
+     * @return Solution of the quadratic equation
+     */
     static csmFloat32 QuadraticEquation(csmFloat32 a, csmFloat32 b, csmFloat32 c);
 
     /**
-    * @brief   カルダノの公式によってベジェのt値に該当する３次方程式の解を求める。
-    *          重解になったときには0.0～1.0の値になる解を返す。
-    *
-    *          a * x^3 + b * x^2 + c * x + d = 0
-    *
-    * @param   a -> 三次項の係数値
-    * @param   b -> 二次項の係数値
-    * @param   c -> 一次項の係数値
-    * @param   d -> 定数項の値
-    * @return  0.0～1.0の間にある解
-    */
+     * Finds the solution of a cubic equation corresponding to the Bezier's t-value using Cardano's formula.<br>
+     * Returns the solution in the range 0.0-1.0 when it is a multiple root.<br>
+     *          a * x^3 + b * x^2 + c * x + d = 0
+     *
+     * @param a Coefficient of the cubic term
+     * @param b Coefficient of the quadratic term
+     * @param c Coefficient of the linear term
+     * @param d Constant term
+     *
+     * @return Solution in the range 0.0-1.0
+     */
     static csmFloat32 CardanoAlgorithmForBezier(csmFloat32 a, csmFloat32 b, csmFloat32 c, csmFloat32 d);
 
-private:
     /**
-     *@brief    privateコンストラクタ
+     * Calculates the remainder of a floating-point division.
      *
+     * @param dividend Dividend (value to be divided)
+     * @param divisor Divisor (value to divide by)
+     * @return Remainder
      */
+    static csmFloat32 ModF(csmFloat32 dividend, csmFloat32 divisor);
+
+private:
     CubismMath();
 };
 

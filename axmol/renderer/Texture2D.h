@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include <string>
 #include <unordered_map>
 #include <span>
+#include <optional>
 
 #include "axmol/base/Object.h"
 #include "axmol/math/Math.h"
@@ -216,6 +217,11 @@ public:
                       std::span<const TextureSliceData> subDatas,
                       PixelFormat renderFormat = PixelFormat::NONE,
                       bool preMultipliedAlpha  = false);
+    bool initWithSpec(rhi::TextureDesc desc,
+                      std::span<const TextureSliceData> subDatas,
+                      PixelFormat renderFormat,
+                      bool preMultipliedAlpha,
+                      const Color& clearColorHint);
 
     /*
      * @brief update data by text
@@ -353,6 +359,12 @@ public:
     std::string getPath() const { return _filePath; }
 
 private:
+    bool initWithSpecInternal(rhi::TextureDesc desc,
+                              std::span<const TextureSliceData> subDatas,
+                              PixelFormat renderFormat,
+                              bool preMultipliedAlpha,
+                              std::optional<Color> clearColorHint);
+
     /**
      * A struct for storing 9-patch image capInsets.
      */

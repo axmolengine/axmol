@@ -14,52 +14,56 @@ namespace Live2D { namespace Cubism { namespace Framework {
 class CubismIdManager;
 
 /**
- * @brief パラメータ名・パーツ名・Drawable名を保持
- *
- * パラメータ名・パーツ名・Drawable名を保持するクラス。
+ * Handles the ID of parameters, parts, and drawing objects.
  */
 struct CubismId
 {
     friend class CubismIdManager;
 
     /**
-     * @brief ID名を取得
+     * Returns the ID.
      *
-     * ID名を取得する。
+     * @return ID
      */
     const csmString& GetString() const;
 
-private:
     /**
-     * @brief コンストラクタ
+     * Assigns the ID held by another CubismId to this ID.
      *
-     * コンストラクタ。
+     * @param c CubismId object to assign
+     *
+     * @return Reference to this object after assignment
      */
+    CubismId& operator=(const CubismId& c);
+
+    /**
+     * Compares if the ID held by another CubismId is equal to the ID held by this object.
+     *
+     * @param c CubismId object to compare
+     *
+     * @return true if the IDs are equal; otherwise false.
+     */
+    csmBool operator==(const CubismId& c) const;
+
+    /**
+     * Compares if the ID held by another CubismId is not equal to the ID held by this object.
+     *
+     * @param c CubismId object to compare
+     *
+     * @return true if the IDs are not equal; otherwise false.
+     */
+    csmBool operator!=(const CubismId& c) const;
+
+private:
     CubismId();
 
-    /**
-     * @brief コンストラクタ
-     *
-     * コンストラクタ。
-     *
-     * @param[in] id ID名
-     */
     CubismId(const csmChar* id);
 
-    /**
-     * @brief デストラクタ
-     *
-     * デストラクタ。
-     */
     ~CubismId();
 
     CubismId(const CubismId& c);
-    CubismId& operator=(const CubismId& c);
 
-    csmBool operator==(const CubismId& c) const;
-    csmBool operator!=(const CubismId& c) const;
-
-    csmString _id;      ///< ID名
+    csmString _id;
 };
 
 typedef const CubismId* CubismIdHandle;

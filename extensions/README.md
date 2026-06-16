@@ -40,8 +40,8 @@
 
 ## Live2D (OFF default)
 
-- Upstream: https://www.live2d.com/en/download/cubism-sdk/download-native/
-- Version: [4-r.4] - 2021-12-09
+- Upstream: https://github.com/axmolengine/live2d-axmol
+- Version: 5.5
 - License: Live2D Proprietary Software License
 
 ## Particle3D

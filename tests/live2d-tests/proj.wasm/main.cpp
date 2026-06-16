@@ -37,7 +37,7 @@ namespace
 std::unique_ptr<AppDelegate> appDelegate;
 }
 
-void axmol_wasm_app_exit() 
+void axmol_wasm_app_exit()
 {
     appDelegate = nullptr;
 }
@@ -46,5 +46,5 @@ int main(int argc, char** argv)
 {
     // create the application instance
     appDelegate.reset(new AppDelegate());
-    return Application::getInstance()->run();
+    return Application::getInstance()->launch(argc, argv);
 }

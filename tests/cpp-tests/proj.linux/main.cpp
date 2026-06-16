@@ -35,5 +35,5 @@ int main(int argc, char** argv)
 {
     // create the application instance
     AppDelegate app;
-    return app.launch(argc, argv);
+    return Application::getInstance()->launch(argc, argv);
 }

@@ -51,12 +51,6 @@ public:
     AppDelegate();
     virtual ~AppDelegate();
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && defined(_UNICODE) && !defined(_CONSOLE)
-    int launch(int argc, wchar_t** argv);
-#else
-    int launch(int argc, char** argv);
-#endif
-
     void initContextAttrs() override;
 
     /**
@@ -90,10 +84,6 @@ public:
 
 private:
     TestController* _testController;
-
-    int launch(const ax::CommandLineArgs& args);
-
-    ax::DriverPreference _driverPreference = ax::DriverPreference::Auto;
 };
 
 #endif  // _APP_DELEGATE_H_

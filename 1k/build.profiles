@@ -97,5 +97,6 @@ emsdk=3.1.73~6.0.0+
 oboe=1.10.0
 kcp=2.1.1
 lz4=v1.10.0
-sample-assets=v3.0.0-alpha15
+sample-assets=master
+live2d-core=5.5
 # --- endregion

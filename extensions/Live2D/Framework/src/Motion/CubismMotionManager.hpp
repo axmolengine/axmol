@@ -14,93 +14,80 @@
 namespace Live2D { namespace Cubism { namespace Framework {
 
 /**
- * @brief モーションの管理
- *
- * モーションの管理を行うクラス。
+ * Handles the management of motions.
  */
 class CubismMotionManager : public CubismMotionQueueManager
 {
 public:
     /**
-     * @brief コンストラクタ
-     *
-     * コンストラクタ。
+     * Constructor.
      */
     CubismMotionManager();
 
     /**
-     * @brief デストラクタ
-     *
-     * デストラクタ。
+     * Destructor
      */
     virtual ~CubismMotionManager();
 
     /**
-     * @brief 再生中のモーションの優先度の取得
+     * Returns the priority of the playing motion.
      *
-     * 再生中のモーションの優先度の取得する。
-     *
-     * @return  モーションの優先度
+     * @return priority of the motion
      */
     csmInt32 GetCurrentPriority() const;
 
     /**
-     * @brief 予約中のモーションの優先度の取得
+     * Returns the priority of the reserved motion.
      *
-     * 予約中のモーションの優先度を取得する。
-     *
-     * @return  モーションの優先度
+     * @return priority of the motion
      */
     csmInt32 GetReservePriority() const;
 
     /**
-     * @brief 予約中のモーションの優先度の設定
+     * Sets the priority of the reserved motion.
      *
-     * 予約中のモーションの優先度を設定する。
-     *
-     * @param[in]   val     優先度
+     * @param val priority to set
      */
     void SetReservePriority(csmInt32 val);
 
     /**
-     * @brief 優先度を設定してモーションの開始
+     * Plays the motion with the specified priority.
      *
-     * 優先度を設定してモーションを開始する。
+     * @param motion motion to play
+     * @param autoDelete true to delete the instance of the motion when playback ends
+     * @param priority priority of the motion
      *
-     * @param[in]   motion          モーション
-     * @param[in]   autoDelete      再生が狩猟したモーションのインスタンスを削除するならtrue
-     * @param[in]   priority        優先度
-     * @return                      開始したモーションの識別番号を返す。個別のモーションが終了したか否かを判定するIsFinished()の引数で使用する。開始できない時は「-1」
+     * @return ID of the played motion.<br>
+     *         -1 if the motion could not be started.
+     *
+     * @note The return value can be used as an argument to IsFinished() to determine if the motion has finished playing.
      */
     CubismMotionQueueEntryHandle StartMotionPriority(ACubismMotion* motion, csmBool autoDelete, csmInt32 priority);
 
     /**
-     * @brief モーションの更新
+     * Updates the motion.<br>
+     * Evaluates the current motion and sets the parameter values on the model.
      *
-     * モーションを更新して、モデルにパラメータ値を反映する。
+     * @param model model to update
+     * @param deltaTimeSeconds current time in seconds
+     * @param opacity opacity to set or get
      *
-     * @param[in]   model   対象のモデル
-     * @param[in]   deltaTimeSeconds    デルタ時間[秒]
-     * @param[in][out]   opacity 透明度の値（Nullable）
-     * @retval  true    更新されている
-     * @retval  false   更新されていない
+     * @return true if the motion was updated; otherwise false.
      */
-    csmBool UpdateMotion(CubismModel* model, csmFloat32 deltaTimeSeconds, csmFloat32* opacity = NULL);
+    csmBool UpdateMotion(CubismModel* model, csmFloat32 deltaTimeSeconds);
 
     /**
-     * @brief モーションの予約
+     * Reserves the motion for playback.
      *
-     * モーションを予約する。
+     * @param priority priority of the motion
      *
-     * @param[in]   priority    優先度
-     * @retval  true    予約できた
-     * @retval  false   予約できなかった
+     * @return true if the motion was reserved for playback; otherwise false.
      */
     csmBool ReserveMotion(csmInt32 priority);
 
 private:
-    csmInt32 _currentPriority;                  ///<  現在再生中のモーションの優先度
-    csmInt32 _reservePriority;                  ///<  再生予定のモーションの優先度。再生中は0になる。モーションファイルを別スレッドで読み込むときの機能。
+    csmInt32 _currentPriority;
+    csmInt32 _reservePriority;
 };
 
 }}}

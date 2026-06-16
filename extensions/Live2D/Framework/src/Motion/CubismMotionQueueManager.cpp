@@ -31,7 +31,7 @@ CubismMotionQueueManager::~CubismMotionQueueManager()
     }
 }
 
-CubismMotionQueueEntryHandle CubismMotionQueueManager::StartMotion(ACubismMotion* motion, csmBool autoDelete, csmFloat32 userTimeSeconds)
+CubismMotionQueueEntryHandle CubismMotionQueueManager::StartMotion(ACubismMotion* motion, csmBool autoDelete)
 {
     if (motion == NULL)
     {
@@ -61,7 +61,7 @@ CubismMotionQueueEntryHandle CubismMotionQueueManager::StartMotion(ACubismMotion
     return motionQueueEntry->_motionQueueEntryHandle;
 }
 
-csmBool CubismMotionQueueManager::DoUpdateMotion(CubismModel* model, csmFloat32 userTimeSeconds, csmFloat32* opacity)
+csmBool CubismMotionQueueManager::DoUpdateMotion(CubismModel* model, csmFloat32 userTimeSeconds)
 {
     csmBool updated = false;
 
@@ -91,12 +91,6 @@ csmBool CubismMotionQueueManager::DoUpdateMotion(CubismModel* model, csmFloat32 
         // ------ 値を反映する ------
         motion->UpdateParameters(model, motionQueueEntry, userTimeSeconds);
         updated = true;
-
-        // ------ 不透明度の値が存在すれば反映する ------
-        if (opacity)
-        {
-            *opacity = motion->GetOpacityValue(userTimeSeconds - motionQueueEntry->GetStartTime());
-        }
 
         // ------ ユーザトリガーイベントを検査する ----
         const csmVector<const csmString*>& firedList = motion->GetFiredEvent(
@@ -129,6 +123,11 @@ csmBool CubismMotionQueueManager::DoUpdateMotion(CubismModel* model, csmFloat32 
     }
 
     return updated;
+}
+
+csmVector<CubismMotionQueueEntry*>* CubismMotionQueueManager::GetCubismMotionQueueEntries()
+{
+    return &_motions;
 }
 
 CubismMotionQueueEntry* CubismMotionQueueManager::GetCubismMotionQueueEntry(CubismMotionQueueEntryHandle motionQueueEntryNumber)

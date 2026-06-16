@@ -41,7 +41,6 @@ void AppDelegate::initContextAttrs()
     ContextAttrs contextAttrs = {8, 8, 8, 8, 24, 8, 0};
 
     contextAttrs.debugLayerEnabled = true;
-    // contextAttrs.driverPreference  = DriverPreference::Vulkan;
 
     setContextAttrs(contextAttrs);
 }
@@ -60,14 +59,17 @@ bool AppDelegate::applicationDidFinishLaunching()
     auto renderView = director->getRenderView();
     if (!renderView)
     {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || \
-    (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+        std::string title = "live2d-tests";
+#ifdef AX_PLATFORM_GLFW
         renderView =
-            RenderView::createWithRect("Demo", ax::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+            RenderView::createWithRect(title, ax::Rect(0, 0, designResolutionSize.width, designResolutionSize.height), 1.0f, true);
 #else
-        renderView = RenderView::create("Demo");
+        renderView = RenderView::create(title);
 #endif
         director->setRenderView(renderView);
+
+        title += fmt::format("({}@{})", axdrv->getVersion(), axdrv->getRenderer());
+        renderView->setViewName(title);
     }
 
     director->getEventDispatcher()->addCustomEventListener(Director::EVENT_BEFORE_GFX_DROP,

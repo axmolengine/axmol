@@ -14,264 +14,219 @@
 
 namespace Live2D { namespace Cubism { namespace Framework {
 
-/**
-* @brief ベジェカーブの解釈方法のフラグタイプ
-*/
 enum EvaluationOptionFlag
 {
-    EvaluationOptionFlag_AreBeziersRistricted = 0,  ///< ベジェハンドルの規制状態
+    EvaluationOptionFlag_AreBeziersRestricted = 0,
 };
 
 /**
- * @brief motion3.jsonのコンテナ。
- *
- * motion3.jsonのコンテナ。
+ * Handles motion files.
  */
 class CubismMotionJson : public CubismJsonHolder
 {
 public:
     /**
-     * @brief コンストラクタ
+     * Constructor<br>
+     * Loads the motion file.
      *
-     * コンストラクタ。
-     *
-     * @param[in]   buffer  motion3.jsonが読み込まれているバッファ
-     * @param[in]   size    バッファのサイズ
+     * @param buffer buffer containing the loaded motion file
+     * @param size size of the buffer in bytes
      */
     CubismMotionJson(const csmByte* buffer, csmSizeInt size);
 
     /**
-     * @brief デストラクタ
-     *
-     * デストラクタ。
+     * Destructor
      */
     virtual ~CubismMotionJson();
 
     /**
-     * @brief モーションの長さの取得
+     * Returns the length of the motion.
      *
-     * モーションの長さを取得する。
-     *
-     * @return モーションの長さ[秒]
+     * @return length of the motion in seconds
      */
     csmFloat32 GetMotionDuration() const;
 
     /**
-     * @brief モーションのループ情報の取得
+     * Checks whether the motion is set to loop.
      *
-     * モーションがループするかどうか？
-     *
-     * @retval  true    ループする
-     * @retval  false   ループしない
+     * @return true if the motion is set to loop; otherwise false.
      */
     csmBool IsMotionLoop() const;
 
     /**
-     * @brief モーションのベジェカーブの解釈方式のフラグ取得
+     *  Returns the consistency of the motion3.json file.
      *
-     * モーション内のベジェカーブハンドルの解釈フラグの状態を取得する。
+     * @return true if the file is consistent; otherwise returns false.
+     */
+    csmBool HasConsistency() const;
+
+     /**
+     * Returns the option settings used during the motion curve evaluation.
      *
-     * @param[in]   flagType  EvaluationOptionFlagで指定されるフラグタイプ
+     * @param Type option to retrieve
      *
-     * @retval  true    フラグあり
-     * @retval  false   フラグなし
+     * @return option setting; true if enabled
+     *
+     * @note Use EvaluationOptionFlag to specify the option to retrieve.
      */
     csmBool GetEvaluationOptionFlag(csmInt32 flagType) const;
 
     /**
-     * @brief モーションカーブの個数の取得
+     * Returns the number of curves in the motion.
      *
-     * モーションカーブの個数を取得する。
-     *
-     * @return モーションカーブの個数
+     * @return number of curves in the motion
      */
     csmInt32 GetMotionCurveCount() const;
 
     /**
-     * @brief モーションのフレームレートの取得
+     * Returns the frame rate of the motion.
      *
-     * モーションのフレームレートを取得する。
-     *
-     * @return フレームレート[FPS]
+     * @return frame rate of the motion in FPS
      */
     csmFloat32 GetMotionFps() const;
 
     /**
-     * @brief モーションのセグメントの総合計の取得
+     * Returns the total number of segments in the motion.
      *
-     * モーションのセグメントの総合計を取得する。
-     *
-     * @return モーションのセグメントの総合計
+     * @return total number of segments in the motion
      */
     csmInt32 GetMotionTotalSegmentCount() const;
 
     /**
-     * @brief モーションのカーブの制御点の総合計の取得
+     * Returns the total number of control points in the motion curves.
      *
-     * モーションのカーブの制御点の総合計を取得する。
-     *
-     * @return モーションのカーブの制御点の総合計
+     * @return total number of control points in the motion curves
      */
     csmInt32 GetMotionTotalPointCount() const;
 
     /**
-    * @brief モーションのフェードイン時間の存在
-    *
-    * モーションにフェードイン時間が設定されているかどうか？
-    *
-    * @retval  true    存在する
-    * @retval  false   存在しない
-    */
+     * Checks whether the setting for the number of seconds to complete fading in exists.
+     *
+     * @return true if the setting exists; otherwise false.
+     */
     csmBool IsExistMotionFadeInTime() const;
 
     /**
-    * @brief モーションのフェードアウト時間の存在
-    *
-    * モーションにフェードアウト時間が設定されているかどうか？
-    *
-    * @retval  true    存在する
-    * @retval  false   存在しない
-    */
+     * Checks whether the setting for the number of seconds to complete fading out exists.
+     *
+     * @return true if the setting exists; otherwise false.
+     */
     csmBool IsExistMotionFadeOutTime() const;
 
     /**
-    * @brief モーションのフェードイン時間の取得
-    *
-    * モーションのフェードイン時間を取得する。
-    *
-    * @return  フェードイン時間[秒]
-    */
+     * Returns the number of seconds for the motion to complete fading in.
+     *
+     * @return number of seconds for the fade-in to complete
+     */
     csmFloat32 GetMotionFadeInTime() const;
 
     /**
-    * @brief モーションのフェードアウト時間の取得
-    *
-    * モーションのフェードアウト時間を取得する。
-    *
-    * @return  フェードアウト時間[秒]
-    */
+     * Returns the number of seconds for the motion to complete fading out.
+     *
+     * @return number of seconds for the fade-out to complete
+     */
     csmFloat32 GetMotionFadeOutTime() const;
 
     /**
-     * @brief モーションのカーブの種類の取得
+     * Returns the destination type of the motion curve.
      *
-     * モーションのカーブの種類を取得する。
+     * @param curveIndex index of the curve to retrieve
      *
-     * @param[in]   curveIndex   カーブのインデックス
-     * @return カーブの種類
+     * @return destination type of the curve
      */
     const csmChar* GetMotionCurveTarget(csmInt32 curveIndex) const;
 
     /**
-     * @brief モーションのカーブのIDの取得
+     * Returns the ID of the parameter attached to the motion curve.
      *
-     * モーションのカーブのIDを取得する。
+     * @param curveIndex index of the curve to retrieve
      *
-     * @param[in]   curveIndex   カーブのインデックス
-     * @return カーブのID
+     * @return ID of the attached parameter
      */
     CubismIdHandle GetMotionCurveId(csmInt32 curveIndex) const;
 
     /**
-     * @brief モーションのカーブのフェードイン時間の存在
+     * Checks whether the setting for the number of seconds to complete fading in for the motion curve exists.
      *
-     * モーションのカーブにフェードイン時間が設定されているかどうか？
+     * @param curveIndex index of the curve to check
      *
-     * @param[in]   curveIndex   カーブのインデックス
-     * @retval  true    存在する
-     * @retval  false   存在しない
+     * @return true if the setting exists; otherwise false.
      */
     csmBool IsExistMotionCurveFadeInTime(csmInt32 curveIndex) const;
 
     /**
-     * @brief モーションのカーブのフェードアウト時間の存在
+     * Checks whether the setting for the number of seconds to complete fading out for the motion curve exists.
      *
-     * モーションのカーブにフェードアウト時間が設定されているかどうか？
+     * @param curveIndex index of the curve to check
      *
-     * @param[in]   curveIndex   カーブのインデックス
-     * @retval  true    存在する
-     * @retval  false   存在しない
+     * @return true if the setting exists; otherwise false.
      */
     csmBool IsExistMotionCurveFadeOutTime(csmInt32 curveIndex) const;
 
     /**
-     * @brief モーションのカーブのフェードイン時間の取得
+     * Returns the number of seconds for the motion curve to complete fading in.
      *
-     * モーションのカーブのフェードイン時間を取得する。
-     *
-     * @param[in]   curveIndex   カーブのインデックス
-     * @return  フェードイン時間[秒]
+     * @return number of seconds for the fade-in to complete
      */
     csmFloat32 GetMotionCurveFadeInTime(csmInt32 curveIndex) const;
 
     /**
-    * @brief モーションのカーブのフェードアウト時間の取得
-    *
-    * モーションのカーブのフェードアウト時間を取得する。
-    *
-    * @param[in]   curveIndex   カーブのインデックス
-    * @return  フェードアウト時間[秒]
-    */
+     * Returns the number of seconds for the motion to complete fading out.
+     *
+     * @return number of seconds for the fade-out to complete
+     */
     csmFloat32 GetMotionCurveFadeOutTime(csmInt32 curveIndex) const;
 
     /**
-     * @brief モーションのカーブのセグメントの個数の取得
+     * Returns the number of segments in the motion curve.
      *
-     * モーションのカーブのセグメントの個数を取得する。
+     * @param curveIndex index of the curve to retrieve
      *
-     * @param[in]   curveIndex   カーブのインデックス
-     * @return  モーションのカーブのセグメントの個数
+     * @return number of segments in the curve
      */
     csmInt32 GetMotionCurveSegmentCount(csmInt32 curveIndex) const;
 
 
     /**
-     * @brief モーションのカーブのセグメントの値の取得
+     * Returns the value of the segment in the motion curve.
      *
-     * モーションのカーブのセグメントの値を取得する、
+     * @param curveIndex index of the curve to retrieve
+     * @param segmentIndex index of the segment to retrieve
      *
-     * @param[in]   curveIndex      カーブのインデックス
-     * @param[in]   segmentIndex    セグメントのインデックス
-     * @return  セグメントの値
+     * @return value of the segment in the curve
      */
     csmFloat32 GetMotionCurveSegment(csmInt32 curveIndex, csmInt32 segmentIndex) const;
 
     /**
-    * @brief イベントの個数の取得
-    *
-    * イベントの個数の取得する。
-    *
-    * @return  イベントの個数
-    */
+     * Returns the number of user data events in the motion.
+     *
+     * @return number of user data events
+     */
     csmInt32 GetEventCount() const;
 
     /**
-    * @brief イベントの総文字数の取得
-    *
-    * イベントの総文字数の取得する。
-    *
-    * @return  イベントの総文字数
-    */
+     * Returns the number of user data events in the motion.
+     *
+     * @return number of user data events
+     */
     csmInt32 GetTotalEventValueSize() const;
 
     /**
-    * @brief イベントの時間の取得
-    *
-    * イベントの時間の取得する。
-    *
-    * @param[in]   userDataIndex イベントのインデックス
-    * @return  イベントの時間[秒]
-    */
+     * Returns the motion time in seconds when the user data event fires.
+     *
+     * @param userDataIndex index of the user data event to retrieve
+     *
+     * @return motion time in seconds when the user data event fires
+     */
     csmFloat32 GetEventTime(csmInt32 userDataIndex) const;
 
     /**
-    * @brief イベントの取得
-    *
-    * イベントの取得する。
-    *
-    * @param[in]   userDataIndex    イベントのインデックス
-    * @return  イベントの文字列
-    */
+     * Returns the value of the user data event in the motion.
+     *
+     * @param userDataIndex index of the user data event to retrieve
+     *
+     * @return value of the user data event
+     */
     const csmChar* GetEventValue(csmInt32 userDataIndex) const;
 };
 

@@ -12,50 +12,42 @@
 //--------- LIVE2D NAMESPACE ------------
 namespace Live2D { namespace Cubism { namespace Framework {
     /**
-     * @brief CubismJsonのインスタンス生成や有効性のチェック処理を抽象化したクラス
-     *
-     * 各JsonパーサにおいてCubismJsonのインスタンス生成や
-     * 有効性のチェック処理を共通化するためのインターフェース。
-     *
+     * An interface that implements the CubismJson instantiation<br>
+     * and validity checks at each JSON parser.
      */
     class CubismJsonHolder
     {
     public:
         /**
-         * @brief コンストラクタ
-         *
-         * コンストラクタ。
+         * Constructor
          */
         CubismJsonHolder()
             : _json(NULL)
         { }
 
         /**
-         * @brief デストラクタ
-         *
-         * デストラクタ。
+         * Destructor
          */
         virtual ~CubismJsonHolder()
         { }
 
         /**
-         * @brief CubismJsonの有効性チェック
+         * Returns whether the CubismJson is valid or not.
          *
-         * @retval       true  -> Jsonファイルが正常に読み込めた
-         * @retval       false -> Jsonファイルが読み込めなかった。もしくは、存在しない
+         * @return true if valid; otherwise false
          */
-        csmBool IsValid()
+        csmBool IsValid() const
         {
             return _json;
         }
 
     protected:
+
         /**
-         * @brief CubismJsonのインスタンスを生成する
+         * Make the instance of CubismJson.
          *
-         * Util:CubismJsonクラスのCreate関数を呼んで
-         * CubismJsonのインスタンスを生成する。
-         *
+         * @param buffer Buffer into which JSON is loaded
+         * @param size Number of bytes in buffer
          */
         void CreateCubismJson(const csmByte* buffer, csmSizeInt size)
         {
@@ -68,11 +60,7 @@ namespace Live2D { namespace Cubism { namespace Framework {
         };
 
         /**
-         * @brief CubismJsonのインスタンスを破棄する
-         *
-         * Util:CubismJsonクラスのDelete関数を呼んで
-         * CubismJsonのインスタンスを破棄する。
-         *
+         * Destroy the instance of CubismJson.
          */
         void DeleteCubismJson()
         {
@@ -80,6 +68,7 @@ namespace Live2D { namespace Cubism { namespace Framework {
             _json = NULL;
         }
 
-        Utils::CubismJson* _json;   /// CubismJsonの実体
+        /** Instance of CubismJson */
+        Utils::CubismJson* _json;
     };
 }}}

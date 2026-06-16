@@ -9,19 +9,19 @@
 
 
 //========================================================
-//  Live2D Cubism Coreライブラリをインクルード
+//  Include the Live2D Cubism Core header.
 //========================================================
 #include "Live2DCubismCore.hpp"
 
 
 //========================================================
-//  設定用ヘッダをインクルード
+//  Include the Framework Configurations header.
 //========================================================
 #include "CubismFrameworkConfig.hpp"
 
 
 //========================================================
-//  カスタムアロケータをインクルード
+//  Include the Custom Allocator header.
 //========================================================
 #include <new>
 #include "ICubismAllocator.hpp"
@@ -30,6 +30,11 @@
 #include <cstdlib>
 #endif
 
+#include <string>
+
+//========================================================
+//  Configurations of Memory Allocator.
+//========================================================
 namespace Live2D { namespace Cubism { namespace Framework {
 
 class CubismAllocationTag
@@ -39,14 +44,15 @@ class CubismAllocationAlignedTag
 { };
 
 static CubismAllocationTag GlobalTag;
-static CubismAllocationAlignedTag GloabalAlignedTag;
+static CubismAllocationAlignedTag GlobalAlignedTag;
 
 }}}
 
+// Macros for memory allocation.
 #ifdef CSM_DEBUG_MEMORY_LEAKING
 
-// デバッグ用
-// メモリリークの検出や確保・解放の追跡を行う。
+// For debugging.
+// Tracks / Detects the memory leaking.
 
 void* operator new (Live2D::Cubism::Framework::csmSizeType size, Live2D::Cubism::Framework::CubismAllocationTag tag, const Live2D::Cubism::Framework::csmChar* fileName, Live2D::Cubism::Framework::csmInt32 lineNumber);
 void* operator new (Live2D::Cubism::Framework::csmSizeType size, Live2D::Cubism::Framework::csmUint32 alignment, Live2D::Cubism::Framework::CubismAllocationAlignedTag tag, const Live2D::Cubism::Framework::csmChar* fileName, Live2D::Cubism::Framework::csmInt32 lineNumber);
@@ -76,8 +82,8 @@ void CsmDelete(T* address, const Live2D::Cubism::Framework::csmChar* fileName, L
 
 #else
 
-// リリース用
-// 何も追跡しない。
+// For releasing.
+// Without Tracking / Detecting.
 
 void* operator new (Live2D::Cubism::Framework::csmSizeType size, Live2D::Cubism::Framework::CubismAllocationTag tag);
 void* operator new (Live2D::Cubism::Framework::csmSizeType size, Live2D::Cubism::Framework::csmUint32 alignment, Live2D::Cubism::Framework::CubismAllocationAlignedTag tag);
@@ -101,9 +107,9 @@ void CsmDelete(T* address)
 #define CSM_DELETE_SELF(type, obj)       do { if (!obj){ break; } obj->~type(); operator delete(obj, Live2D::Cubism::Framework::GlobalTag); } while(0)
 #define CSM_DELETE(obj)                  CsmDelete(obj)
 #define CSM_MALLOC(size)                 Live2D::Cubism::Framework::CubismFramework::Allocate(size)
-#define CSM_MALLOC_ALLIGNED(size, align) Live2D::Cubism::Framework::CubismFramework::AllocateAligned(size, align)
+#define CSM_MALLOC_ALIGNED(size, align) Live2D::Cubism::Framework::CubismFramework::AllocateAligned(size, align)
 #define CSM_FREE(ptr)                    Live2D::Cubism::Framework::CubismFramework::Deallocate(ptr)
-#define CSM_FREE_ALLIGNED(ptr)           Live2D::Cubism::Framework::CubismFramework::DeallocateAligned(ptr)
+#define CSM_FREE_ALIGNED(ptr)           Live2D::Cubism::Framework::CubismFramework::DeallocateAligned(ptr)
 
 #endif
 
@@ -111,13 +117,13 @@ void CsmDelete(T* address)
 
 
 //========================================================
-//  アーキテクチャ用型定義をインクルード
+//  Include the definition of types for the each architectures.
 //========================================================
 #include "Type/CubismBasicType.hpp"
 
 
 //========================================================
-//  IDマネージャの前方宣言
+//  Forward Declaration of CubismIdManager.
 //========================================================
 namespace Live2D { namespace Cubism { namespace Framework {
 
@@ -127,7 +133,7 @@ class CubismIdManager;
 
 
 //========================================================
-//  コンパイラに関する設定
+//  Compiler Setttings for buiding the Framework.
 //========================================================
 #ifdef _MSC_VER
 #pragma warning (disable : 4100)
@@ -139,14 +145,14 @@ class CubismIdManager;
 
 
 //========================================================
-//  検証マクロ
+//  Macros for validation.
 //========================================================
-/*
- * @brief  式が有効であることを保証する。
+/**
+ * Ensures that the expression is valid.
  *
- * @param  expression  検証する式。
- * @param  message     検証結果がfalseだった場合のログメッセージ。
- * @param  body        検証結果がfalseだった場合に実行する処理。
+ * @param expression Expression to be ensured
+ * @param message Message if the expression is invalid
+ * @param body Handler if the expression is invalid
  */
 #define CubismEnsure(expression, message, body)       \
 do                                              \
@@ -162,7 +168,7 @@ while (0);
 
 
 //========================================================
-//  名前空間のエイリアス
+//  Ailias of the Framework.
 //========================================================
 namespace Csm = Live2D::Cubism::Framework;
 
@@ -170,137 +176,257 @@ namespace Csm = Live2D::Cubism::Framework;
 //--------- LIVE2D NAMESPACE ------------
 namespace Live2D { namespace Cubism { namespace Framework {
 
+/** Typedef for file loader */
+typedef csmByte* (*csmLoadFileFunction)(const std::string filePath, csmSizeInt* outSize);
+typedef void (*csmReleaseBytesFunction)(Csm::csmByte* byteData);
+
 /**
- * @brief Framework内で使う定数の宣言
- *
+ * Constants.
  */
 namespace Constant {
-extern const csmInt32 VertexOffset; ///< メッシュ頂点のオフセット値
-extern const csmInt32 VertexStep;   ///< メッシュ頂点のステップ値
+/** Vertex offset of Drawable */
+extern const csmInt32 VertexOffset;
+
+/** Number of vertices in Drawable */
+extern const csmInt32 VertexStep;
 }
 
 /**
- * @brief Live2D Cubism Original Workflow SDKのエントリポイント<br>
- *         利用開始時はCubismFramework::Initialize()を呼び、CubismFramework::Dispose()で終了する。
+ * Entrypoint for the Live2D Cubism SDK
  *
+ * @see #StartUp()
+ * @see #Initialize()
+ * @see #Dispose()
+ * @see #CleanUp()
+ *
+ * @note At the start of use, call CubismFramework::StartUp() before calling CubismFramework::Initialize(). <br>
+ * At the end, call CubismFramework::Dispose() before calling CubismFramework::CleanUp().
  */
 class CubismFramework
 {
 public:
-
-    /*
-     * @brief CubismFrameworkに設定するオプション要素を定義するクラス
-     *
+    /**
+     * Framework configurations.
      */
     class Option
     {
     public:
         /**
-         * @brief   ログ出力のレベル
+         * Enumerator for Logging level
          */
         enum LogLevel
         {
-            LogLevel_Verbose = 0,   ///<  詳細ログ
-            LogLevel_Debug,         ///<  デバッグログ
-            LogLevel_Info,          ///<  Infoログ
-            LogLevel_Warning,       ///<  警告ログ
-            LogLevel_Error,         ///<  エラーログ
-            LogLevel_Off            ///<  ログ出力無効
+            /** Indicates that the logging of all is enabled. */
+            LogLevel_Verbose = 0,
+
+            /** Indicates that up to the logging level of Debug. */
+            LogLevel_Debug,
+
+            /** Indicates that up to the logging level of Info. */
+            LogLevel_Info,
+
+            /** Indicates that up to the logging level of Warning. */
+            LogLevel_Warning,
+
+            /** Indicates that up to the logging level of Error. */
+            LogLevel_Error,
+
+            /**  Indicates that the logging of all is disabled. */
+            LogLevel_Off
         };
 
-        Core::csmLogFunction LogFunction;       ///< ログ出力の関数ポインタ
-        LogLevel LoggingLevel;                  ///< ログ出力レベル設定
+        /** Logging function */
+        Core::csmLogFunction LogFunction;
+
+        /** Logging level */
+        LogLevel LoggingLevel;
+
+        /** File reading function */
+       csmLoadFileFunction LoadFileFunction;
+
+       /** Release bytes function */
+       csmReleaseBytesFunction ReleaseBytesFunction;
     };
 
-   /**
-    * @brief    Cubism FrameworkのAPIを使用可能にする。<br>
-    *            APIを実行する前に必ずこの関数を実行すること。<br>
-    *            引数に必ずメモリアロケータを渡してください。<br>
-    *            一度準備が完了して以降は、再び実行しても内部処理がスキップされます。
-    *
-    * @param    allocator   ICubismAllocatorクラスのインスタンス
-    * @param    option      Optionクラスのインスタンス
-    *
-    * @return   準備処理が完了したらtrueが返ります。
-    */
+    /**
+     *
+     * Enables the Cubism Framework API.
+     *
+     * @param allocator Instance of memory allocator
+     * @param option Instance of Framework configuration option.<br>
+     * If an empty instance is set, the Framework configuration option is not used.
+     *
+     * @return true if Cubism Framework is available; otherwise false.
+     *
+     * @note Make sure to execute this function before executing the API of the Framework, <br>
+     * and be sure to pass the memory allocator to the argument.<br>
+     * Once the preparation is complete, the process will be skipped if executed again afterwards.
+     */
     static csmBool StartUp(ICubismAllocator* allocator, const Option* option = NULL);
 
     /**
-    * @brief    StartUp()で初期化したCubismFrameworkの各パラメータをクリアします。<br>
-    *            Dispose()したCubismFrameworkを再利用する際に利用してください。<br>
-    *
-    */
+     * Enables the Cubism Framework API to reuse.
+     *
+     * @note Clear each parameter of CubismFramework initialized by StartUp().<br>
+     * Use this method when reusing Cubism Framework that has been Dispose().
+     */
     static void CleanUp();
 
     /**
-     * @brief   Cubism FrameworkのAPIを使用する準備が完了したかどうか？
+     * Returns whether the API of Cubism Framework is available.
      *
-     * @return  APIを使用する準備が完了していればtrueが返ります。
+     * @return true if the API is available; otherwise false.
      */
     static csmBool IsStarted();
 
     /**
-     * @brief  Cubism Framework内のリソースを初期化してモデルを表示可能な状態にします。<br>
-     *         再度Initialize()するには先にDispose()を実行する必要があります。
+     * Initializes the resources in the Cubism Framework and makes the Model ready for display.
      */
     static void Initialize();
 
     /**
-     *@brief Cubism Framework内の全てのリソースを解放します。<br>
-     *        ただし、外部で確保されたリソースについては解放しません。<br>
-     *        外部で適切に破棄する必要があります。
+     * Releases all resources in the Cubism Framework.
+     *
+     * @note Resources allocated externally will not be released.<br>
+     * Discard them externally as appropriate.
      */
     static void Dispose();
 
     /**
-     * @brief   Cubism Frameworkのリソース初期化が既に行われているかどうか？
+     * Returns whether the Cubism Framework resources have been initialized.
      *
-     * @return  リソース確保が完了していればtrueが返ります。
+     * @return true if the resource has been initialized; otherwise false.
      */
     static csmBool IsInitialized();
 
     /**
-     * @brief   Core APIにバインドしたログ関数を実行する
+     * Executes the logging function of Cubism Core API.
      *
-     * @param message   ->  ログメッセージ
+     * @param message Message for logging
+     *
+     * @note Logging using Option::logFunction.
      */
     static void CoreLogFunction(const csmChar* message);
 
     /**
-     * @biref   現在のログ出力レベル設定の値を返す。
+     * Returns the logging level setting.
      *
-     * @return  現在のログ出力レベル設定の値
+     * @return Logging level setting
      */
     static Option::LogLevel GetLoggingLevel();
 
     /**
-     * @brief IDマネージャのインスタンスを取得する。
+     * Returns the loading file function.
      *
-     * @return CubismIdManagerクラスのインスタンス
+     * @return Function to read the file as csmByte*.
+     */
+    static csmLoadFileFunction GetLoadFileFunction();
+
+    /**
+     * Returns the memory release function.
+     *
+     * @return Function to free memory allocated by csmByte*.
+     *
+     * @note Memory allocated by GetLoadFileFunction() must be released with this function.
+     */
+    static csmReleaseBytesFunction GetReleaseBytesFunction();
+
+    /**
+     * Returns the instance of CubismIdManager.
+     *
+     * @note Please use `GetId()` through this function to get `CubismId`.<br>
+     *           ex) CubismFramework::GetIdManager()->GetId(id_str);
+     *
+     * @return Instance of CubismIdManager.
      */
     static CubismIdManager* GetIdManager();
 
 #ifdef CSM_DEBUG_MEMORY_LEAKING
 
+    /**
+     * (For debugging) Allocates the memory.
+     *
+     * @param size Desired amount of memory in bytes
+     * @param fileName Name of source code that called
+     * @param lineNumber Number of line of source code that called
+     *
+     * @return Pointer to the allocated memory if succeeded; otherwise `0`
+     */
     static void* Allocate(csmSizeType size, const csmChar* fileName, csmInt32 lineNumber);
+
+    /**
+     * (For debugging) Allocates the memory with specified alignment.
+     *
+     * @param size Desired amount of memory in bytes
+     * @param alignment Desired alignment of memory in bytes
+     * @param fileName Name of source code that called
+     * @param lineNumber Number of line of source code that called
+     *
+     * @return Pointer to the allocated memory if succeeded; otherwise `0`
+     */
     static void* AllocateAligned(csmSizeType size, csmUint32 alignment, const csmChar* fileName, csmInt32 lineNumber);
+
+    /**
+     * (For debugging) Deallocates the aligned memory.
+     *
+     * @param address Pointer to allocated memory to be deallocated
+     * @param fileName Name of source code that called
+     * @param lineNumber Number of line of source code that called
+     */
     static void  Deallocate(void* address, const csmChar* fileName, csmInt32 lineNumber);
+
+    /**
+     * (For debugging) Deallocates the aligned memory.
+     *
+     * @param address Pointer to allocated memory to be deallocated
+     * @param fileName Name of source code that called
+     * @param lineNumber Number of line of source code that called
+     */
     static void  DeallocateAligned(void* address, const csmChar* fileName, csmInt32 lineNumber);
 
 #else
 
+    /**
+     * Allocates the memory with specified alignment.
+     *
+     * @param size Desired amount of memory in bytes
+     * @param alignment Desired alignment of memory in bytes
+     *
+     * @return PPointer to the allocated memory if succeeded; otherwise `0`
+     */
     static void* Allocate(csmSizeType size);
+
+    /**
+     * Allocates the memory with specified alignment.
+     *
+     * @param size Desired amount of memory in bytes
+     * @param alignment Desired alignment of memory in bytes
+     *
+     * @return Pointer to the allocated memory if succeeded; otherwise `0`
+     */
     static void* AllocateAligned(csmSizeType size, csmUint32 alignment);
+
+    /**
+     * Deallocates the memory.
+     *
+     * @param address Pointer to allocated memory to be deallocated
+     */
     static void  Deallocate(void* address);
+
+    /**
+     * Deallocates the aligned memory.
+     *
+     * @param address Pointer to allocated memory to be deallocated
+     */
     static void  DeallocateAligned(void* address);
 
 #endif
 
 private:
     /**
-     *@brief  コンストラクタ<br>
-     *         静的クラスとして使用する<br>
-     *         インスタンス化させない
+     * Constructor
+     *
+     * @note Prevent instantiating and be used as a static class.
      */
     CubismFramework(){}
 

@@ -41,3 +41,12 @@ THE SOFTWARE.
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #    include "axmol/platform/linux/StdC-linux.h"
 #endif
+
+namespace ax
+{
+#if defined(_WIN32) && defined(_UNICODE)
+using tchar_t = wchar_t;
+#else
+using tchar_t = char;
+#endif
+}  // namespace ax

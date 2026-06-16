@@ -6,5 +6,6 @@ target_sources(${LIB_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/csmString.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/csmString.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/csmVector.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/csmVectorSort.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CubismBasicType.hpp
 )

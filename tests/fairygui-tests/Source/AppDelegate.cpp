@@ -41,10 +41,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto director = Director::getInstance();
     auto renderView = director->getRenderView();
     if (!renderView) {
+        std::string title = "fairygui-tests";
 #if defined(AX_PLATFORM_GLFW)
-        renderView = RenderView::createWithRect("Examples", ax::Rect(0, 0, 1280, 720));
+        renderView = RenderView::createWithRect(title, ax::Rect(0, 0, 1280, 720), 1.0f, true);
 #else
-        renderView = RenderView::create("Examples");
+        renderView = RenderView::create(title);
 #endif
         director->setRenderView(renderView);
     }

@@ -1175,12 +1175,16 @@ void Director::cleanupDirector()
 
     _eventDispatcher->dispatchEvent(_eventBeforeGfxDrop);
 
+    // Before destory RHI, clear current pool once
+    PoolManager::getInstance()->getCurrentPool()->clear();
+
     // If any graphics resources not cleanup or leaked, will crash on linux when destroy graphics context,
     // so we should cleanup any graphics resources.
     AX_SAFE_DELETE(_renderer);
 
     ProgramManager::destroyInstance();
     VertexLayoutManager::destroyInstance();
+
     rhi::DriverContext::destroyCurrentDriver();
 
     if (_renderView)

@@ -1,17 +1,16 @@
 target_sources(${LIB_NAME}
   PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/csmBlendMode.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/csmBlendMode.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismClippingManager.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismClippingManager.tpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CubismRenderer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CubismRenderer.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ICubismOffscreenManager.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ICubismOffscreenRenderTarget.hpp
 )
 
-if(NOT DEFINED FRAMEWORK_SOURCE)
-  message(AUTHOR_WARNING
-    "[${LIB_NAME}] Set 'FRAMEWORK_SOURCE' variable to 'axmol' when using axmol rendering."
-  )
-  set(FRAMEWORK_SOURCE axmol)
-endif()
-
-# # Add specified rendering directory.
+# Add specified rendering directory.
 add_subdirectory(${FRAMEWORK_SOURCE})
 
 # Add include path set in application (Deprecated).

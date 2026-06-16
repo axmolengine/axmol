@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include <vector>
 
 #include "axmol/platform/PlatformDefine.h"
+#include "axmol/platform/StdC.h"
 
 namespace ax
 {
@@ -52,10 +53,10 @@ public:
     CommandLineArgs& operator=(CommandLineArgs&&)      = delete;
 
     // Safe owning builders (recommended)
-    void buildFromArgv(int argc, char** argv);  // assume argv is UTF-8, copy into internal storage
+    // argv on Windows Unicode is UTF-16, oterwise, it's UTF-8
+    void buildFromArgv(int argc, tchar_t** argv);
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
-    void buildFromWargv(int argc, wchar_t** wargv);  // convert wide strings to UTF-8 and copy
-    void buildFromCommandLine();                     // Windows: use GetCommandLineW + CommandLineToArgvW
+    void buildFromCommandLine();  // Windows: use GetCommandLineW + CommandLineToArgvW
 #endif
 
     // Performance: non-owning views (caller must ensure argv lifetime >= this object's lifetime)

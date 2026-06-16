@@ -48,6 +48,9 @@ AppDelegate::~AppDelegate() {}
 // it will affect all platforms
 void AppDelegate::initContextAttrs()
 {
+    // Overrides any command-line driver preference (default is Auto).
+    // DriverContext::setDriverPreference(DriverPreference::Auto);
+
     // set app context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
     // powerPreference only affect when RHI backend is D3D
     ContextAttrs contextAttrs = {.powerPreference = PowerPreference::HighPerformance};

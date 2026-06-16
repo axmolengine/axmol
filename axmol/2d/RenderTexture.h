@@ -27,6 +27,8 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
+#include <optional>
+
 #include "axmol/scene/Node.h"
 #include "axmol/2d/Sprite.h"
 #include "axmol/platform/Image.h"
@@ -102,6 +104,11 @@ public:
      * @param sharedRenderTarget Select whether to use a new or shared render target.
      */
     static RenderTexture* create(int w, int h, rhi::PixelFormat format, bool sharedRenderTarget = false);
+    static RenderTexture* create(int w,
+                                 int h,
+                                 rhi::PixelFormat format,
+                                 bool sharedRenderTarget,
+                                 const Color& clearColorHint);
 
     /** Creates a RenderTexture object with width and height in Points, pixel format is RGBA8888.
      *
@@ -367,6 +374,11 @@ public:
      * @return If succeed, it will return true.
      */
     bool initWithWidthAndHeight(int w, int h, rhi::PixelFormat format, bool sharedRenderTarget = true);
+    bool initWithWidthAndHeight(int w,
+                                int h,
+                                rhi::PixelFormat format,
+                                bool sharedRenderTarget,
+                                const Color& clearColorHint);
     /** Initializes a RenderTexture object with width and height in Points and a pixel format( only RGB and RGBA formats
      * are valid ) and depthStencil format.
      *
@@ -382,6 +394,12 @@ public:
                                 rhi::PixelFormat format,
                                 rhi::PixelFormat depthStencilFormat,
                                 bool sharedRenderTarget = true);
+    bool initWithWidthAndHeight(int w,
+                                int h,
+                                rhi::PixelFormat format,
+                                rhi::PixelFormat depthStencilFormat,
+                                bool sharedRenderTarget,
+                                const Color& clearColorHint);
 
     /**
      * Event callback that is invoked every time when Node enters the 'stage'.
@@ -402,6 +420,13 @@ public:
     void onExit() override;
 
 protected:
+    bool initWithWidthAndHeightInternal(int w,
+                                        int h,
+                                        rhi::PixelFormat format,
+                                        rhi::PixelFormat depthStencilFormat,
+                                        bool sharedRenderTarget,
+                                        std::optional<Color> clearColorHint);
+
     /** Sets the Sprite being used.
      *
      * @param sprite A Sprite.
@@ -436,7 +461,7 @@ protected:
     RefPtr<Image> _UITextureImage = nullptr;
     rhi::PixelFormat _pixelFormat = rhi::PixelFormat::RGBA8;
 
-    Color _clearColor;
+    Color _clearColor     = Color{};
     float _clearDepth     = 1.f;
     int _clearStencil     = 0;
     bool _autoDraw        = false;

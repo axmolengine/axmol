@@ -469,33 +469,43 @@ enum class RenderScaleMode
 
 using DriverPreference = rhi::DriverType;
 
-/** @struct ContextAttrs
+/**
+ * @struct ContextAttrs
+ * @brief Engine context attributes for rendering, window, and driver setup.
  *
- * The axmol Engine attributes.
+ * This structure defines the configuration parameters used when creating
+ * the rendering context and window surface. Attributes are grouped into:
+ * - Rendering attributes: color/depth/stencil precision, MSAA, vsync,
+ *   debug layers, upload buffer size, shader-controlled sampler.
+ * - Window attributes: visibility, decorations, parent window handle.
+ * - Driver attributes: GPU power preference, render scale mode.
+ *
+ * Default values are chosen to provide a balance between compatibility
+ * and quality across platforms.
  */
 struct ContextAttrs
 {
-    int redBits{8};
-    int greenBits{8};
-    int blueBits{8};
-    int alphaBits{8};
-    int depthBits{24};
-    int stencilBits{8};
-    int multisamplingCount{0};
-    bool visible{true};
-    bool decorated{true};
-    bool vsync{true};
-    bool debugLayerEnabled{false};
-    void* windowParent{nullptr};  // win32-spec
-    PowerPreference powerPreference{PowerPreference::Auto};
-    RenderScaleMode renderScaleMode{RenderScaleMode::Default};
-    DriverPreference driverPreference{DriverPreference::Auto};
+    // Rendering attributes
+    int redBits{8};                               ///< Red channel precision in bits.
+    int greenBits{8};                             ///< Green channel precision in bits.
+    int blueBits{8};                              ///< Blue channel precision in bits.
+    int alphaBits{8};                             ///< Alpha channel precision in bits.
+    int depthBits{24};                            ///< Depth buffer precision in bits.
+    int stencilBits{8};                           ///< Stencil buffer precision in bits.
+    int multisamplingCount{0};                    ///< Number of samples for MSAA (0 = disabled).
+    bool vsync{true};                             ///< Enable vertical sync.
+    bool debugLayerEnabled{false};                ///< Enable graphics API debug layer.
+    uint32_t uploadBufferSize{16 * 1024 * 1024};  ///< Upload buffer size (used by D3D12 RHI).
+    bool shaderControlledSampler{false};          ///< Whether samplers are fully controlled by shaders (D3D12 style).
 
-    // The uploadBuffer size, current used by d3d12 RHI
-    uint32_t uploadBufferSize{16 * 1024 * 1024};
+    // Window attributes
+    bool visible{true};           ///< Whether the window is visible at creation.
+    bool decorated{true};         ///< Whether the window has system decorations.
+    void* windowParent{nullptr};  ///< Parent window handle (Win32-specific).
 
-    // Whether sampler binding is fully controlled by shader (D3D12 style)
-    bool shaderControlledSampler{false};
+    // Driver attributes
+    PowerPreference powerPreference{PowerPreference::Auto};     ///< GPU power preference.
+    RenderScaleMode renderScaleMode{RenderScaleMode::Default};  ///< Render scaling mode.
 };
 
 /** @struct Acceleration

@@ -14,66 +14,105 @@ namespace Live2D { namespace Cubism { namespace Framework {
 class CubismModel;
 
 /**
- * @brief Mocデータの管理
- *
- * Mocデータの管理を行うクラス。
+ * Handles management of MOC data
  */
 class CubismMoc
 {
     friend class CubismModel;
 public:
     /**
-     * @brief バッファからMocデータの作成
+     * Makes an instance.
      *
-     * バッファからMocファイルを読み取り、Mocデータを作成する。
+     * @param mocBytes Buffer containing the loaded MOC file
+     * @param size Size of the buffer in bytes
      *
-     * @param[in]   mocBytes    Mocファイルのバッファ
-     * @param[in]   size        バッファのサイズ
+     * @return Created instance
      */
-    static CubismMoc* Create(const csmByte* mocBytes, csmSizeInt size);
+    static CubismMoc* Create(const csmByte* mocBytes, csmSizeInt size, csmBool shouldCheckMocConsistency = false);
 
     /**
-     * @brief Mocデータを削除
+     * Destroys an instance.
      *
-     * Mocデータを削除する。
+     * @param moc `CubismMoc` instance to be destroyed
      */
     static void Delete(CubismMoc* moc);
 
     /**
-     * @brief モデルを作成
+     * Makes a model instance.
      *
-     * モデルを作成する。
-     *
-     * @return  Mocデータから作成されたモデル
+     * @return Created model instance
      */
     CubismModel* CreateModel();
 
     /**
-     * @brief モデルを削除
+     * Destroys a model instance.
      *
-     * モデルを削除する。
-     *
-     * @param[in]   model   対象のモデル
+     * @param model `CubismModel` instance to be destroyed
      */
     void DeleteModel(CubismModel* model);
 
-private:
     /**
-     * @brief コンストラクタ
+     * Returns the latest MOC file version.
      *
-     * コンストラクタ。
+     * @return Version
      */
+    static Core::csmMocVersion GetLatestMocVersion();
+
+    /**
+     * Returns the version of the loaded MOC file.
+     *
+     * @return Version
+     */
+    Core::csmMocVersion GetMocVersion();
+
+    /**
+     * Returns the version of the unload MOC file.
+     *
+     * @param mocBytes Buffer containing the loaded MOC file
+     * @param size Size of the buffer in bytes
+     *
+     * @return Version
+     */
+    static Core::csmMocVersion GetMocVersionFromBuffer(const csmByte* mocBytes, csmSizeInt size);
+
+    /**
+     * Checks the consistency of the MOC file.
+     *
+     * @param address Address of the un-restored MOC file. The address must be aligned to 'csmAlignofMoc'.
+     * @param size Size of the MOC file in bytes
+     *
+     * @return true if the file is consistent; otherwise false
+     */
+    static csmBool HasMocConsistency(void* address, const csmUint32 size);
+
+    /**
+     * Checks the consistency of the MOC file.
+     *
+     * @param mocBytes Buffer of the MOC file
+     * @param size Size of the buffer
+     *
+     * @return true if the file is consistent; otherwise false
+     */
+    static csmBool HasMocConsistencyFromUnrevivedMoc(const csmByte* mocBytes, csmSizeInt size);
+
+    /**
+     * Delete copy constructor.
+     */
+    CubismMoc(const CubismMoc&) = delete;
+
+    /**
+     * Delete copy assignment operator.
+     */
+    CubismMoc& operator=(const CubismMoc&) = delete;
+
+protected:
     CubismMoc(Core::csmMoc* moc);
 
-    /**
-     * @brief デストラクタ
-     *
-     * デストラクタ。
-     */
     virtual ~CubismMoc();
 
-    Core::csmMoc*     _moc;             ///< Mocデータ
-    csmInt32          _modelCount;      ///< Mocデータから作られたモデルの個数
+    Core::csmMoc*     _moc;
+    csmInt32          _modelCount;
+    csmUint32         _mocVersion;
 };
 
 }}}

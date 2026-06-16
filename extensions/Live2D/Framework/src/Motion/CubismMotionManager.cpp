@@ -41,14 +41,14 @@ CubismMotionQueueEntryHandle CubismMotionManager::StartMotionPriority(ACubismMot
 
     _currentPriority = priority;        // 再生中モーションの優先度を設定
 
-    return CubismMotionQueueManager::StartMotion(motion, autoDelete, _userTimeSeconds);
+    return CubismMotionQueueManager::StartMotion(motion, autoDelete);
 }
 
-csmBool CubismMotionManager::UpdateMotion(CubismModel* model, csmFloat32 deltaTimeSeconds, csmFloat32* opacity)
+csmBool CubismMotionManager::UpdateMotion(CubismModel* model, csmFloat32 deltaTimeSeconds)
 {
     _userTimeSeconds += deltaTimeSeconds;
 
-    const csmBool updated = CubismMotionQueueManager::DoUpdateMotion(model, _userTimeSeconds, opacity);
+    const csmBool updated = CubismMotionQueueManager::DoUpdateMotion(model, _userTimeSeconds);
 
     if (IsFinished())
     {

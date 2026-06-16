@@ -12,73 +12,59 @@
 namespace Live2D { namespace Cubism { namespace Framework {
 
 /**
- * @brief 顔の向きの制御機能
- *
- * 顔の向きの制御機能を提供するクラス。
+ * Handles the direction the model is facing
  */
 class CubismTargetPoint
 {
 public:
     /**
-     * @brief コンストラクタ
-     *
-     * コンストラクタ。
+     * Constructor
      */
     CubismTargetPoint();
 
     /**
-     * @brief デストラクタ
-     *
-     * デストラクタ。
+     * Destructor
      */
     virtual ~CubismTargetPoint();
 
     /**
-     * @brief 更新処理
+     * Updates the state.
      *
-     * 更新処理を行う。
-     *
-     * @param[in]   deltaTimeSeconds   デルタ時間[秒]
+     * @param deltaTimeSeconds Time step in seconds [seconds]
      */
     void        Update(csmFloat32 deltaTimeSeconds);
 
     /**
-     * @brief X軸の顔の向きの値を取得
+     * Returns the direction value along the X-axis.
      *
-     * X軸の顔の向きの値を取得する。
-     *
-     * @return X軸の顔の向きの値(-1.0 - 1.0)
+     * @return Direction value of the face along the X-axis (-1.0 to 1.0)
      */
     csmFloat32  GetX() const;
 
     /**
-    * @brief Y軸の顔の向きの値を取得
-    *
-    * Y軸の顔の向きの値を取得する。
-    *
-    * @return Y軸の顔の向きの値(-1.0 - 1.0)
-    */
+     * Returns the direction value along the Y-axis.
+     *
+     * @return Direction value of the face along the Y-axis (-1.0 to 1.0)
+     */
     csmFloat32  GetY() const;
 
     /**
-     * @brief 顔の向きの目標値を設定
+     * Sets the target direction values.
      *
-     * 顔の向きの目標値を設定する。
-     *
-     * @param[in]   x   X軸の顔の向きの値(-1.0 - 1.0)
-     * @param[in]   y   Y軸の顔の向きの値(-1.0 - 1.0)
+     * @param x Direction value along the X-axis (-1.0 to 1.0)
+     * @param y Direction value along the Y-axis (-1.0 to 1.0)
      */
     void        Set(csmFloat32 x, csmFloat32 y);
 
 private:
-    csmFloat32  _faceTargetX;       ///< 顔の向きのX目標値(この値に近づいていく)
-    csmFloat32  _faceTargetY;       ///< 顔の向きのY目標値(この値に近づいていく)
-    csmFloat32  _faceX;             ///< 顔の向きX(-1.0 - 1.0)
-    csmFloat32  _faceY;             ///< 顔の向きY(-1.0 - 1.0)
-    csmFloat32  _faceVX;            ///< 顔の向きの変化速度X
-    csmFloat32  _faceVY;            ///< 顔の向きの変化速度Y
-    csmFloat32  _lastTimeSeconds;   ///< 最後の実行時間[秒]
-    csmFloat32  _userTimeSeconds;   ///< デルタ時間の積算値[秒]
+    csmFloat32  _faceTargetX;
+    csmFloat32  _faceTargetY;
+    csmFloat32  _faceX;
+    csmFloat32  _faceY;
+    csmFloat32  _faceVX;
+    csmFloat32  _faceVY;
+    csmFloat32  _lastTimeSeconds;
+    csmFloat32  _userTimeSeconds;
 
 };
 

@@ -1,8 +1,9 @@
-# fetch pkg by url or manifest.json path
+# fetch pkg by url or sources.json path
 param(
     $uri, # the pkg uri
-    $prefix, # the prefix to store
+    $prefix = $null, # the prefix to store
     $name = $null,
+    $folder = $null, # the hint for prefix + folder = install_dir
     $version = $null, # version hint
     $revision = $null, # revision hint
     [switch]$pull_branch
@@ -16,8 +17,8 @@ param(
 
 Set-Alias println Write-Host
 
-if (!$uri -or !$prefix) {
-    throw 'fetch.ps1: missing parameters'
+if (!$uri) {
+    throw 'fetch.ps1: missing `uri` parameters'
 }
 
 function download_file($uri, $out) {
@@ -38,7 +39,11 @@ if (!(Test-Path $cache_dir -PathType Container)) {
     mkdirs $cache_dir
 }
 
-function fetch_repo($url, $name, $dest, $ext) {
+if (!$prefix) {
+    $prefix = $cache_dir
+}
+
+function fetch($url, $name, $dest, $ext) {
     if ($ext -eq '.git') {
         git clone --progress $url $dest | Out-Host
     }
@@ -111,26 +116,28 @@ else {
 # simple match url/ssh schema
 if (!$url) {
     # fetch package from manifest config
-    $lib_src = Join-Path $prefix $name
-    $active_mirror_file = Join-Path $PSScriptRoot '.active-mirror'
-    if (Test-Path $active_mirror_file -PathType Leaf) {
-        $active_mirror = Get-Content $active_mirror_file
+    . (Join-Path $PSScriptRoot 'extensions.ps1')
+
+    $1k_env_file = Join-Path $PSScriptRoot '.env'
+    if (Test-Path $1k_env_file -PathType Leaf) {
+        $1k_env = ConvertFrom-Props (Get-Content $1k_env_file)
+        $active_mirror = $1k_env.active_mirror
     }
     else {
         $active_mirror = 'origin'
     }
-    $mirrors_conf = ConvertFrom-Json (Get-Content $(Join-Path $PSScriptRoot 'mirrors.json') -raw)
+    $sources_conf = ConvertFrom-Json (Get-Content $(Join-Path $PSScriptRoot 'sources.json') -raw)
 
     if (!$version) {
-        . (Join-Path $PSScriptRoot 'extensions.ps1')
         $versions = ConvertFrom-Props (Get-Content $(Join-Path $PSScriptRoot 'build.profiles'))
         $version = $versions[$name]
     }
     if ($version) {
-        $repo_url = $mirrors_conf.dependencies.$name.mirrors.$active_mirror
-        if ($repo_url) {
-            $url = $repo_url
-            if (!$url.EndsWith('.git')) { $url += '.git' }
+        Set-Variable -Name 'ver' -Value $version -Scope Local
+        $url = expand_str $sources_conf.dependencies.$name.sources.$active_mirror
+        # if no extension, regard as a git repo
+        if (![System.IO.Path]::GetExtension($url)) {
+            $url += '.git'
         }
     }
 }
@@ -154,7 +161,6 @@ else {
     throw "fetch.ps1: invalid url, must be endswith .git, .zip, .tar.xx"
 }
 
-$lib_src = Join-Path $prefix $name
 $is_git_repo = $url_pkg_ext -eq '.git'
 if (!$is_git_repo) {
     $match_info = [Regex]::Match($url, '(\d+\.)+(-)?(\*|\d+)')
@@ -167,6 +173,12 @@ if (!$version) {
     throw "fetch.ps1: can't determine package version of '$name'"
 }
 
+if (!$folder) {
+    $folder = $name
+}
+
+$lib_src = Join-Path $prefix $folder
+
 Set-Variable -Name "${name}_src" -Value $lib_src -Scope global
 
 $sentry = Join-Path $lib_src '_1kiss'
@@ -178,7 +190,7 @@ if (!(Test-Path $sentry -PathType Leaf)) {
         Remove-Item $lib_src -Recurse -Force
     }
 
-    fetch_repo -url $url -name $name -dest $lib_src -ext $url_pkg_ext
+    fetch -url $url -name $name -dest $lib_src -ext $url_pkg_ext
 
     if (Test-Path $lib_src -PathType Container) {
         New-Item $sentry -ItemType File 1>$null

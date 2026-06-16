@@ -1,0 +1,142 @@
+{
+  "dependencies": {
+    "1kdist": {
+      "sources": {
+        "origin": "https://github.com/simdsoft/1kiss/releases/download/",
+        "atomgit": "https://atomgit.com/simdsoft/1kiss/releases/download/",
+        "gitee": "https://gitee.com/simdsoft/1kiss/releases/download/"
+      }
+    },
+    "oboe": {
+      "sources": {
+        "origin": "https://github.com/google/oboe.git",
+        "atomgit": "https://atomgit.com/simdsoft/oboe.git",
+        "gitee": "https://gitee.com/simdsoft/oboe.git"
+      }
+    },
+    "kcp": {
+      "sources": {
+        "origin": "https://github.com/skywind3000/kcp.git",
+        "atomgit": "https://atomgit.com/simdsoft/kcp.git",
+        "gitee": "https://gitee.com/simdsoft/kcp.git"
+      }
+    },
+    "lz4": {
+      "sources": {
+        "origin": "https://github.com/lz4/lz4.git",
+        "atomgit": "https://atomgit.com/simdsoft/lz4.git",
+        "gitee": "https://gitee.com/simdsoft/lz4.git"
+      }
+    },
+    "sample-assets": {
+      "sources": {
+        "origin": "https://github.com/axmolengine/axmol-sample-assets.git",
+        "atomgit": "https://atomgit.com/simdsoft/axmol-sample-assets.git",
+        "gitee": "https://gitee.com/simdsoft/axmol-sample-assets.git"
+      }
+    },
+    "live2d-core": {
+      "sources": { "origin": "https://github.com/axmolengine/live2d-axmol/releases/download/prebuilt/live2d-core-${ver}.zip" }
+    }
+  },
+  "devtools": {
+    "cmake": {
+      "artifacts": {
+        "windows": "cmake-${ver}-windows-x86_64.zip",
+        "linux-x64": "cmake-${ver}-linux-x86_64.sh",
+        "linux-arm64": "cmake-${ver}-linux-aarch64.sh",
+        "macos": "cmake-${ver}-macos-universal.tar.gz"
+      },
+      "sources": { "origin": "https://github.com/Kitware/CMake/releases/download/v${ver}/" }
+    },
+    "ninja": {
+      "artifacts": {
+        "windows-x64": "ninja-win.zip",
+        "linux-x64": "ninja-linux.zip",
+        "linux-arm64": "ninja-linux-aarch64.zip",
+        "macos": "ninja-mac.zip"
+      },
+      "sources": { "origin": "https://github.com/ninja-build/ninja/releases/download/v${ver}/" }
+    },
+    "llvm": {
+        "artifacts": {
+            "windows-x64": "LLVM-${ver}-win64.exe",
+            "windows-arm64": "LLVM-${ver}-woa64.exe",
+            "linux-x64": "LLVM-${ver}-Linux-x64.tar.xz",
+            "linux-arm64": "LLVM-${ver}-Linux-ARM64.tar.xz",
+            "macos-arm64": "LLVM-${ver}-macOS-ARM64.tar.xz"
+        },
+        "sources": { "origin": "https://github.com/llvm/llvm-project/releases/download/llvmorg-${ver}/" }
+    },
+    "nuget": "https://dist.nuget.org/win-x86-commandline/v${ver}/nuget.exe",
+    "nasm": "https://www.nasm.us/pub/nasm/releasebuilds/${ver}/win64/nasm-${ver}-win64.zip",
+    "emsdk": "https://github.com/emscripten-core/emsdk.git",
+    "nsis": "https://nchc.dl.sourceforge.net/project/nsis/NSIS%203/${ver}/nsis-${ver}.zip",
+    "jdk": {
+      "artifacts": {
+        "windows-x64": "microsoft-jdk-${ver}-windows-x64.zip",
+        "windows-arm64": "microsoft-jdk-${ver}-windows-aarch64.zip",
+        "linux-x64": "microsoft-jdk-${ver}-linux-x64.tar.gz",
+        "linux-arm64": "microsoft-jdk-${ver}-linux-aarch64.tar.gz",
+        "macos-x64": "microsoft-jdk-${ver}-macOS-x64.tar.gz",
+        "macos-arm64": "microsoft-jdk-${ver}-macOS-aarch64.tar.gz"
+      },
+      "sources": { "origin": "https://aka.ms/download-jdk/" }
+    },
+    "cmdlinetools": {
+      "artifacts": {
+        "windows": "commandlinetools-win-${ver}_latest.zip",
+        "linux": "commandlinetools-linux-${ver}_latest.zip",
+        "macos": "commandlinetools-mac-${ver}_latest.zip"
+      },
+      "sources": { "origin": "https://dl.google.com/android/repository/" }
+    },
+    "depot_tools": {
+      "artifacts": {
+        "windows": "https://storage.googleapis.com/chrome-infra/depot_tools.zip",
+        "other": "https://chromium.googlesource.com/chromium/tools/depot_tools.git"
+      }
+    },
+    "7zip": {
+      "artifacts": {
+        "windows-x64": "7z${ver}-x64.zip",
+        "windows-arm64": "7z${ver}-arm64.zip"
+      },
+      "sources": {
+        "origin": "https://github.com/simdsoft/1kiss/releases/download/devtools/",
+        "atomgit": "https://atomgit.com/simdsoft/1kiss/releases/download/devtools/",
+        "gitee": "https://gitee.com/simdsoft/1kiss/releases/download/devtools/"
+      }
+    },
+    "libclang": {
+      "artifacts": "llvm-${ver}.7z",
+      "sources": {
+        "origin": "https://github.com/simdsoft/1kiss/releases/download/devtools/",
+        "atomgit": "https://atomgit.com/simdsoft/1kiss/releases/download/devtools/",
+        "gitee": "https://gitee.com/simdsoft/1kiss/releases/download/devtools/"
+      }
+    },
+    "axslcc": {
+      "artifacts": {
+        "windows-x64": "axslcc-${ver}-win-x64.zip",
+        "windows-arm64": "axslcc-${ver}-win-arm64.zip",
+        "linux-x64": "axslcc-${ver}-linux-x64.tar.gz",
+        "linux-arm64": "axslcc-${ver}-linux-arm64.tar.gz",
+        "macos-x64": "axslcc-${ver}-osx-x64.tar.gz",
+        "macos-arm64": "axslcc-${ver}-osx-arm64.tar.gz"
+      },
+      "sources": {
+        "origin": "https://github.com/axmolengine/axslcc/releases/download/v${ver}/",
+        "atomgit": "https://atomgit.com/simdsoft/axslcc/releases/download/v${ver}/",
+        "gitee": "https://gitee.com/simdsoft/axslcc/releases/download/v${ver}/"
+      }
+    },
+    "gradle": {
+      "artifacts": "gradle-${ver}-bin.zip",
+      "sources": {
+        "origin": "https://services.gradle.org/distributions/",
+        "tencent": "https://sources.cloud.tencent.com/gradle/"
+      }
+    }
+  }
+}

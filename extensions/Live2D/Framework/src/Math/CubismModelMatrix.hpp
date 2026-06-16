@@ -12,161 +12,128 @@
 
 namespace Live2D { namespace Cubism { namespace Framework {
 /**
- * @brief モデル座標設定用の4x4行列
- *
- * モデル座標設定用の4x4行列クラス。
+ * Handles 4x4 matrices for setting model coordinates
  */
 class CubismModelMatrix : public CubismMatrix44
 {
 public:
     /**
-     * @brief コンストラクタ
-     *
-     * コンストラクタ。
+     * Constructor
      */
     CubismModelMatrix();
 
     /**
-     * @brief コンストラクタ
+     * Constructor<br>
+     * Creates with specified width and height.
      *
-     * コンストラクタ。
-     *
-     * @param[in]   w   横幅
-     * @param[in]   h   縦幅
+     * @param w Width
+     * @param h Height
      */
     CubismModelMatrix(csmFloat32 w, csmFloat32 h);
 
     /**
-    * @brief デストラクタ
-    *
-    * デストラクタ。
-    */
+     * Destructor
+     */
     virtual ~CubismModelMatrix();
 
     /**
-     * @brief 横幅を設定
+     * Sets the width.
      *
-     * 横幅を設定する。
-     *
-     * @param[in]   w   横幅
+     * @param w Width
      */
     void    SetWidth(csmFloat32 w);
 
     /**
-     * @brief 縦幅を設定
+     * Sets the height.
      *
-     * 縦幅を設定する。
-     *
-     * @param[in]   h   縦幅
+     * @param h Height
      */
     void    SetHeight(csmFloat32 h);
 
     /**
-     * @brief 位置を設定
+     * Sets the position.
      *
-     * 位置を設定する。
-     *
-     * @param[in]   x   X軸の位置
-     * @param[in]   y   Y軸の位置
+     * @param x Position along the X-axis
+     * @param y Position along the Y-axis
      */
     void    SetPosition(csmFloat32 x, csmFloat32 y);
 
     /**
-     * @brief 中心位置を設定
+     * Sets the center position.
      *
-     * 中心位置を設定する。
+     * @param x Center position along the X-axis
+     * @param y Center position along the Y-axis
      *
-     * @param[in]   x   X軸の中心位置
-     * @param[in]   y   Y軸の中心位置
-     *
-     * @note widthかheightを設定したあとでないと、拡大率が正しく取得できないためずれる。
+     * @note Must be set after setting width or height to ensure correct scaling.
      */
     void    SetCenterPosition(csmFloat32 x, csmFloat32 y);
 
     /**
-     * @brief 上辺の位置を設定
+     * Sets the position of the top edge.
      *
-     * 上辺の位置を設定する。
-     *
-     * @param[in]   y   上辺のY軸位置
+     * @param y Y-axis position of the top edge
      */
     void    Top(csmFloat32 y);
 
     /**
-     * @brief 下辺の位置を設定
+     * Sets the position of the bottom edge.
      *
-     * 下辺の位置を設定する。
-     *
-     * @param[in]   y   下辺のY軸位置
+     * @param y Y-axis position of the bottom edge
      */
     void    Bottom(csmFloat32 y);
 
     /**
-     * @brief 左辺の位置を設定
+     * Sets the position of the left edge.
      *
-     * 左辺の位置を設定する。
-     *
-     * @param[in]   x   左辺のX軸位置
+     * @param x X-axis position of the left edge
      */
     void    Left(csmFloat32 x);
 
     /**
-     * @brief 右辺の位置を設定
+     * Sets the position of the right edge.
      *
-     * 右辺の位置を設定する。
-     *
-     * @param[in]   x   右辺のX軸位置
+     * @param x X-axis position of the right edge
      */
     void    Right(csmFloat32 x);
 
     /**
-     * @brief X軸の中心位置を設定
+     * Sets the center position along the X-axis.
      *
-     * X軸の中心位置を設定する。
-     *
-     * @param[in]   x   X軸の中心位置
+     * @param x Center position along the X-axis
      */
     void    CenterX(csmFloat32 x);
 
     /**
-     * @brief X軸の位置を設定
+     * Sets the position along the X-axis.
      *
-     * X軸の位置を設定する。
-     *
-     * @param[in]   x   X軸の位置
+     * @param x Position along the X-axis
      */
     void    SetX(csmFloat32 x);
 
     /**
-     * @brief Y軸の中心位置を設定
+     * Sets the center position along the Y-axis.
      *
-     * Y軸の中心位置を設定する。
-     *
-     * @param[in]   y   Y軸の中心位置
+     * @param y Center position along the Y-axis
      */
     void    CenterY(csmFloat32 y);
 
     /**
-     * @brief Y軸の位置を設定
+     * Sets the position along the Y-axis.
      *
-     * Y軸の位置を設定する。
-     *
-     * @param[in]   y   Y軸の位置
+     * @param y Position along the Y-axis
      */
     void    SetY(csmFloat32 y);
 
     /**
-     * @brief レイアウト情報から位置を設定
+     * Sets the position based on layout information.
      *
-     * レイアウト情報から位置を設定する。
-     *
-     * @param[in]   layout  レイアウト情報
+     * @param layout Layout information
      */
     void    SetupFromLayout(csmMap<csmString, csmFloat32>& layout);
 
 private:
-    csmFloat32  _width;         ///< 横幅
-    csmFloat32  _height;        ///< 縦幅
+    csmFloat32  _width;
+    csmFloat32  _height;
 };
 
 }}}

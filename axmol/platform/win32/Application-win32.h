@@ -45,10 +45,7 @@ public:
      */
     virtual ~Application();
 
-    /**
-    @brief    Run the message loop.
-    */
-    int run();
+    int run() override;
 
     /* override functions */
     void setAnimationInterval(float interval) override;

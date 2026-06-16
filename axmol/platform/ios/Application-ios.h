@@ -43,10 +43,7 @@ public:
      */
     virtual ~Application();
 
-    /**
-    @brief    Run the message loop.
-    */
-    int run();
+    int run() override;
 
     /**
      @brief    Callback by Director for limit FPS.

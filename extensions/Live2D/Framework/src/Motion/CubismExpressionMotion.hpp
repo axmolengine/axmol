@@ -10,69 +10,88 @@
 #include "ACubismMotion.hpp"
 #include "Utils/CubismJson.hpp"
 #include "Model/CubismModel.hpp"
+#include "CubismExpressionMotionManager.hpp"
 
 namespace Live2D { namespace Cubism { namespace Framework {
 
 /**
- * @brief 表情のモーション
- *
- * 表情のモーションクラス。
+ * Handles facial expression motions.
  */
 class CubismExpressionMotion : public ACubismMotion
 {
-private:
+public:
     /**
-     * @brief 表情パラメータ値の計算方式
-     *
+     * Blending calculation method for facial expression parameters
      */
     enum ExpressionBlendType
     {
-        ExpressionBlendType_Add = 0,        ///< 加算
-        ExpressionBlendType_Multiply = 1,   ///< 乗算
-        ExpressionBlendType_Overwrite = 2   ///< 上書き
+        Additive = 0,           ///< Addition
+        Multiply = 1,           ///< Multiplication
+        Overwrite = 2           ///< Overwrite
     };
 
-public:
     /**
-     * @brief 表情のパラメータ情報
-     *
-     * 表情のパラメータ情報の構造体。
+     * Data for facial expression parameter information
      */
     struct ExpressionParameter
     {
-        CubismIdHandle      ParameterId;        ///< パラメータID
-        ExpressionBlendType BlendType;          ///< パラメータの演算種類
-        csmFloat32          Value;              ///< 値
+        CubismIdHandle      ParameterId;        ///< Attached parameter ID
+        ExpressionBlendType BlendType;          ///< Blending calculation method for facial expression parameters attached to the parameter
+        csmFloat32          Value;              ///< Parameter value
     };
 
     /**
-     * @brief インスタンスの作成
+     * Makes an instance.
      *
-     * インスタンスを作成する。
+     * @param buf buffer containing the loaded facial expression settings file
+     * @param size size of the buffer in bytes
      *
-     * @param[in]   buf     expファイルが読み込まれているバッファ
-     * @param[in]   size    バッファのサイズ
-     * @return  作成されたインスタンス
+     * @return created instance
      */
     static CubismExpressionMotion* Create(const csmByte* buf, csmSizeInt size);
 
     /**
-    * @brief モデルのパラメータの更新の実行
-    *
-    * モデルのパラメータ更新を実行する。
-    *
-    * @param[in]   model               対象のモデル
-    * @param[in]   userTimeSeconds     デルタ時間の積算値[秒]
-    * @param[in]   weight              モーションの重み
-    * @param[in]   motionQueueEntry    CubismMotionQueueManagerで管理されているモーション
-    */
+     * Updates the model parameters.
+     *
+     * @param model model to update
+     * @param userTimeSeconds current time in seconds
+     * @param weight weight during the application of the motion (0.0-1.0)
+     * @param motionQueueEntry motion managed by the CubismMotionQueueManager
+     */
     virtual void DoUpdateParameters(CubismModel* model, csmFloat32 userTimeSeconds, csmFloat32 weight, CubismMotionQueueEntry* motionQueueEntry);
 
-private:
+    /**
+     * Computes the parameters related to the model's facial expressions.
+     *
+     * @param model model to update
+     * @param userTimeSeconds cumulative delta time in seconds
+     * @param motionQueueEntry motion managed by the CubismMotionQueueManager
+     * @param expressionParameterValues values of each parameter to be applied to the model
+     * @param expressionIndex index of the facial expression
+     */
+    void CalculateExpressionParameters(CubismModel* model, csmFloat32 userTimeSeconds, CubismMotionQueueEntry* motionQueueEntry,
+        csmVector<CubismExpressionMotionManager::ExpressionParameterValue>* expressionParameterValues, csmInt32 expressionIndex, csmFloat32 fadeWeight);
+
+    /**
+     * Returns the parameters referenced by the facial expression.
+     */
+    csmVector<ExpressionParameter> GetExpressionParameters();
+
+    static const csmFloat32 DefaultAdditiveValue;
+    static const csmFloat32 DefaultMultiplyValue;
+
+protected:
     CubismExpressionMotion();
+
     virtual ~CubismExpressionMotion();
 
-    csmVector<ExpressionParameter> _parameters;         ///< 表情のパラメータ情報リスト
+    void Parse(const csmByte* exp3Json, csmSizeInt size);
+
+    csmVector<ExpressionParameter> _parameters;
+
+private:
+
+    csmFloat32 CalculateValue(csmFloat32 source, csmFloat32 destination, csmFloat32 fadeWeight);
 };
 
 }}}

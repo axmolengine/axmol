@@ -30,10 +30,11 @@ namespace ax::rhi
 {
 
 std::unique_ptr<DriverBase> DriverContext::_currentDriver;
-DriverType DriverContext::_currentDriverType = DriverType::Auto;
-int DriverContext::_currentShaderLang        = axslc::SHADER_LANG_NONE;
-int DriverContext::_currentShaderProfile     = 0;
-int DriverContext::_vulkanMinAndroidApiLevel = 31;  // Android 12
+DriverType DriverContext::_currentDriverType      = DriverType::Auto;
+int DriverContext::_currentShaderLang             = axslc::SHADER_LANG_NONE;
+int DriverContext::_currentShaderProfile          = 0;
+int DriverContext::_vulkanMinAndroidApiLevel      = 31;  // Android 12
+DriverPreference DriverContext::_driverPreference = DriverPreference::Auto;
 
 static int _driverPriorities[(int)rhi::DriverType::Count] = {
     rhi::DefaultDriverPriority::OpenGL, rhi::DefaultDriverPriority::D3D11, rhi::DefaultDriverPriority::D3D12,
@@ -43,6 +44,11 @@ static int _driverPriorities[(int)rhi::DriverType::Count] = {
 static uint32_t make_msl_version(uint32_t major, uint32_t minor = 0, uint32_t patch = 0)
 {
     return (major * 10000) + (minor * 100) + patch;
+}
+
+void DriverContext::setDriverPreference(DriverPreference driverPreference)
+{
+    _driverPreference = driverPreference;
 }
 
 void DriverContext::setVulkanMinAndroidApiLevel(int apiLevel)
@@ -63,8 +69,6 @@ int DriverContext::getDriverPriority(DriverType driverType)
 
 void DriverContext::makeCurrentDriver()
 {
-    auto& contextAttrs = ApplicationCore::getContextAttrs();
-
     tlx::inlined_vector<std::unique_ptr<DriverFactory>, (int)DriverType::Count> factories;
 
 #if AX_ENABLE_D3D12
@@ -99,7 +103,7 @@ void DriverContext::makeCurrentDriver()
 
     for (auto& f : factories)
     {
-        if (contextAttrs.driverPreference != DriverPreference::Auto && f->type() != contextAttrs.driverPreference)
+        if (_driverPreference != DriverPreference::Auto && f->type() != _driverPreference)
             continue;
         auto driver = f->create();
         if (driver->init())

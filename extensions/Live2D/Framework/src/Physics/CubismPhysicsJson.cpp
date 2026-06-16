@@ -29,6 +29,7 @@ const csmChar* PhysicsSettingCount = "PhysicsSettingCount";
 const csmChar* Gravity = "Gravity";
 const csmChar* Wind = "Wind";
 const csmChar* VertexCount = "VertexCount";
+const csmChar* Fps = "Fps";
 
 // PhysicsSettings
 const csmChar* PhysicsSettings = "PhysicsSettings";
@@ -81,6 +82,12 @@ CubismVector2 CubismPhysicsJson::GetWind() const
     ret.X = _json->GetRoot()[Meta][EffectiveForces][Wind][X].ToFloat();
     ret.Y = _json->GetRoot()[Meta][EffectiveForces][Wind][Y].ToFloat();
     return ret;
+}
+
+csmFloat32 CubismPhysicsJson::GetFps() const
+{
+    // if FPS information does not exist in physics3.json, 0.0f is returned.
+    return _json->GetRoot()[Meta][Fps].ToFloat(0.0f);
 }
 
 csmInt32 CubismPhysicsJson::GetSubRigCount() const

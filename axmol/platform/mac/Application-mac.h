@@ -51,11 +51,7 @@ public:
     */
     void setAnimationInterval(float interval) override;
 
-    /**
-    @brief  Run the message loop.
-    * @lua NA
-    */
-    int run();
+    int run() override;
 
     /**
     @brief Get current language config

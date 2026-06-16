@@ -16,135 +16,105 @@ namespace Live2D { namespace Cubism { namespace Framework {
 class CubismMotionQueueEntry;
 class CubismMotionQueueManager;
 
-/**
-* @brief イベントのコールバック関数定義
-*
-* イベントのコールバックに登録できる関数の型情報
-*
-* @param[in]   caller           発火したイベントを再生させたCubismMotionQueueManager
-* @param[in]   eventValue       発火したイベントの文字列データ
-* @param[in]   customData       コールバックに返される登録時に指定されたデータ
-*/
 typedef void(*CubismMotionEventFunction)(const CubismMotionQueueManager* caller, const csmString& eventValue, void* customData);
 
-/**
- * @brief モーションの識別番号
- *
- * モーションの識別番号の定義
- */
 typedef void* CubismMotionQueueEntryHandle;
 
-extern const CubismMotionQueueEntryHandle InvalidMotionQueueEntryHandleValue;       ///< 無効なモーションの識別番号の定義
+extern const CubismMotionQueueEntryHandle InvalidMotionQueueEntryHandleValue;
 
 /**
- * @brief モーション再生の管理
+ * Handles the management of motion playback.<br>
+ * Used for playing subclasses of ACubismMotion such as CubismMotion.
  *
- * モーション再生の管理用クラス。CubismMotionモーションなどACubismMotionのサブクラスを再生するために使用する。
- *
- * @note 再生中に別のモーションが StartMotion()された場合は、新しいモーションに滑らかに変化し旧モーションは中断する。
- *       表情用モーション、体用モーションなどを分けてモーション化した場合など、
- *       複数のモーションを同時に再生させる場合は、複数のCubismMotionQueueManagerインスタンスを使用する。
+ * @note If a different motion is started with StartMotion() during playback,
+ *       it transitions smoothly to the new motion, interrupting the old one.<br>
+ *       When different motions such as facial expressions and body motions are played together,<br>
+ *       use multiple instances of CubismMotionQueueManager.
  */
 class CubismMotionQueueManager
 {
 public:
     /**
-     * @brief コンストラクタ
-     *
-     * コンストラクタ。
+     * Constructor
      */
     CubismMotionQueueManager();
 
     /**
-     * @brief デストラクタ
-     *
-     * デストラクタ。
+     * Destructor
      */
     virtual ~CubismMotionQueueManager();
 
     /**
-     * @brief 指定したモーションの開始
+     * Plays the motion.<br>
+     * If a motion of the same type is already playing, it ends the currently playing motion and starts fading it out.
      *
-     * 指定したモーションを開始する。同じタイプのモーションが既にある場合は、既存のモーションに終了フラグを立て、フェードアウトを開始させる。
+     * @param motion motion to play
+     * @param autoDelete true to delete the instance of the motion when playback ends
+     * @param userTimeSeconds current time in seconds
      *
-     * @param[in]   motion          開始するモーション
-     * @param[in]   autoDelete      再生が終了したモーションのインスタンスを削除するなら true
-     * @param[in]   userTimeSeconds デルタ時間の積算値[秒]
-     * @return                      開始したモーションの識別番号を返す。個別のモーションが終了したか否かを判定するIsFinished()の引数で使用する。開始できない時は「-1」
+     * @return ID of the played motion.<br>
+     *         -1 if the motion could not be started.
+     *
+     * @note The return value can be used as an argument to IsFinished() to determine if the motion has finished playing.
      */
-    CubismMotionQueueEntryHandle    StartMotion(ACubismMotion* motion, csmBool autoDelete, csmFloat32 userTimeSeconds);
+    CubismMotionQueueEntryHandle    StartMotion(ACubismMotion* motion, csmBool autoDelete);
 
     /**
-     * @brief すべてのモーションの終了の確認
+     * Checks whether all motions have finished playing.
      *
-     * すべてのモーションが終了しているかどうか。
-     *
-     * @retval  true    すべて終了している
-     * @retval  false   終了していない
+     * @return true if all motions have finished playing; otherwise false.
      */
     csmBool     IsFinished();
 
     /**
-     * @brief 指定したモーションの終了の確認
+     * Checks whether the motion has finished playing.
      *
-     * 指定したモーションが終了しているかどうか。
+     * @param motionQueueEntryNumber identifier of the motion to check
      *
-     * @param[in]   motionQueueEntryNumber  モーションの識別番号
-     * @retval  true    指定したモーションは終了している
-     * @retval  false   終了していない
+     * @return true if the motion has finished playing; otherwise false.
      */
     csmBool     IsFinished(CubismMotionQueueEntryHandle motionQueueEntryNumber);
 
     /**
-     * @brief すべてのモーションの停止
-     *
-     * すべてのモーションを停止する。
+     * Ends the playback of all motions.
      */
     void        StopAllMotions();
 
     /**
-     * @brief 指定したCubismMotionQueueEntryの取得
+     * Returns a reference to the CubismMotionQueueEntry.
      *
-     * 指定したCubismMotionQueueEntryを取得する。
+     * @param motionQueueEntryNumber identifier of the motion to retrieve
      *
-     * @param[in]   motionQueueEntryNumber  モーションの識別番号
-     * @return  指定したCubismMotionQueueEntryへのポインタ
-     * @retval  NULL   見つからなかった
+     * @return reference to the CubismMotionQueueEntry
      */
     CubismMotionQueueEntry* GetCubismMotionQueueEntry(CubismMotionQueueEntryHandle motionQueueEntryNumber);
 
     /**
-    * @brief イベントを受け取るCallbackの登録
-    *
-    * イベントを受け取るCallbackの登録をする。
-    *
-    * @param[in]   callback     コールバック関数
-    * @param[in]   customData   コールバックに返されるデータ
-    */
+     * Returns a pointer to the array of CubismMotionQueueEntry.
+     *
+     * @return pointer to the array of CubismMotionQueueEntry
+     */
+    csmVector<CubismMotionQueueEntry*>* GetCubismMotionQueueEntries();
+
+    /**
+     * Sets the callback function to receive user data events.
+     *
+     * @param callback   Callback function to receive user data events
+     * @param customData User-defined data passed to the callback
+     */
     void SetEventCallback(CubismMotionEventFunction callback, void* customData = NULL);
 
 protected:
-    /**
-    * @brief モーションの更新
-    *
-    * モーションを更新して、モデルにパラメータ値を反映する。
-    *
-    * @param[in]   model   対象のモデル
-    * @param[in]   userTimeSeconds   デルタ時間の積算値[秒]
-    * @param[in][out]   opacity 透明度の値（Nullable）
-    * @retval  true    モデルへパラメータ値の反映あり
-    * @retval  false   モデルへパラメータ値の反映なし(モーションの変化なし)
-    */
-    virtual csmBool     DoUpdateMotion(CubismModel* model, csmFloat32 userTimeSeconds, csmFloat32* opacity = NULL);
+    virtual csmBool     DoUpdateMotion(CubismModel* model, csmFloat32 userTimeSeconds);
 
 
-    csmFloat32 _userTimeSeconds;        ///< デルタ時間の積算値[秒]
+    csmFloat32 _userTimeSeconds;
 
 private:
-    csmVector<CubismMotionQueueEntry*>      _motions;       ///< モーション
+    csmVector<CubismMotionQueueEntry*>      _motions;
 
-    CubismMotionEventFunction         _eventCallback;     ///< コールバック関数ポインタ
-    void*                             _eventCustomData;   ///< コールバックに戻されるデータ
+    CubismMotionEventFunction         _eventCallback;
+    void*                             _eventCustomData;
 };
 
 }}}

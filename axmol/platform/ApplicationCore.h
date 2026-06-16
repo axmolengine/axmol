@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "axmol/base/AutoreleasePool.h"
 #include "axmol/base/Types.h"
 #include "axmol/platform/Common.h"
+#include "axmol/platform/StdC.h"
 
 namespace ax
 {
@@ -82,6 +83,46 @@ public:
      * @lua NA
      */
     virtual ~ApplicationCore();
+
+    /**
+     * @brief High-level engine launch API.
+     *
+     * This function serves as the main entry point for starting the engine
+     * in a cross-platform environment. It provides advanced initialization
+     * by parsing command-line arguments that control engine behavior.
+     *
+     * Currently, the most important supported option is the Rendering
+     * Hardware Interface (RHI) selection, specified via parameters such as
+     * `--force-vulkan`, `--force-d3d12`, `--force-metal`, etc.
+     *
+     * @param argc Number of command-line arguments.
+     * @param argv Array of command-line arguments, encoded as @c tchar_t strings.
+     *             The encoding depends on the platform and build configuration
+     *             (UTF-16 on Windows Unicode builds, UTF-8 on other platforms).
+     *
+     * @return Exit code of the application. Zero indicates successful launch,
+     *         non-zero values indicate initialization or runtime errors.
+     *
+     * @note This API is designed for advanced users and contributors who need
+     *       fine-grained control over engine startup. It abstracts away low-level
+     *       details while still exposing critical configuration options.
+     *
+     * @remark Users who prefer a minimal startup without any command-line
+     *         argument parsing can directly call @c run(), which bypasses
+     *         all advanced parameter handling and executes the engine with
+     *         default settings.
+     */
+    virtual int launch(int argc, tchar_t** argv);
+
+    /**
+     * @brief Main execution entry point.
+     *
+     * Implemented by derived classes to start
+     * the application loop and return an exit code.
+     *
+     * @return Exit code of the application.
+     */
+    virtual int run() = 0;
 
     /**
      * @brief    Implement Director and Scene init code here.

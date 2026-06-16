@@ -151,4 +151,9 @@ csmFloat32 CubismMotionQueueEntry::GetFadeOutSeconds()
     return this->_fadeOutSeconds;
 }
 
+ACubismMotion* CubismMotionQueueEntry::GetCubismMotion()
+{
+    return _motion;
+}
+
 }}}

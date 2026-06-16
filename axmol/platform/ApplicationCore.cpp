@@ -27,6 +27,7 @@ THE SOFTWARE.
 
 #include "axmol/platform/ApplicationCore.h"
 #include "axmol/base/Director.h"
+#include "axmol/platform/CommandLineArgs.h"
 
 namespace ax
 {
@@ -35,6 +36,29 @@ ContextAttrs ApplicationCore::s_contextAttrs = ContextAttrs{};
 
 Application* ApplicationCore::s_axmolApp = nullptr;
 Director* ApplicationCore::s_director    = nullptr;
+
+static DriverPreference parseDriverPreference(std::span<const std::string_view> args)
+{
+    for (int i = 1; i < args.size(); ++i)
+    {
+        std::string_view arg = args[i];
+        if (arg.starts_with("--force-"))
+        {
+            std::string_view backend = arg.substr(8);
+            if (backend == "opengl"sv || backend == "gl"sv || backend == "gles"sv)
+                return DriverPreference::OpenGL;
+            if (backend == "d3d11"sv)
+                return DriverPreference::D3D11;
+            if (backend == "d3d12"sv)
+                return DriverPreference::D3D12;
+            if (backend == "vulkan"sv || backend == "vk"sv)
+                return DriverPreference::Vulkan;
+            if (backend == "metal"sv || backend == "mtl"sv)
+                return DriverPreference::Metal;
+        }
+    }
+    return DriverPreference::Auto;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // static member function
@@ -54,6 +78,16 @@ ApplicationCore::ApplicationCore()
 ApplicationCore::~ApplicationCore()
 {
     Director::destroyInstance();
+}
+
+int ApplicationCore::launch(int argc, tchar_t** argv)
+{
+    CommandLineArgs args;
+    args.buildFromArgv(argc, argv);
+    auto driverPreference = parseDriverPreference(args.views());
+    DriverContext::setDriverPreference(driverPreference);
+
+    return this->run();
 }
 
 void ApplicationCore::applicationScreenSizeChanged(int newWidth, int newHeight) {}

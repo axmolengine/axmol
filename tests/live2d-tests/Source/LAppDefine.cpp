@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -38,7 +38,11 @@ namespace LAppDefine {
         "Hiyori",
         "Mark",
         "Natori",
-        "Rice"
+        "Rice",
+        // Follow Models added since live2d runtime 5.5
+        "Mao",
+        "Ren",
+        "Wanko"
     };
     const csmInt32 ModelDirSize = sizeof(ModelDir) / sizeof(const csmChar*);
 

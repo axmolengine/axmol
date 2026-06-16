@@ -12,69 +12,58 @@
 namespace Live2D { namespace Cubism { namespace Framework {
 
 /**
- * @brief モーションカーブの種類
- *
- * モーションカーブの種類。
+ * Types of motion curve application targets
  */
 enum CubismMotionCurveTarget
 {
-    CubismMotionCurveTarget_Model,          ///< モデルに対して
-    CubismMotionCurveTarget_Parameter,      ///< パラメータに対して
-    CubismMotionCurveTarget_PartOpacity     ///< パーツの不透明度に対して
+    CubismMotionCurveTarget_Model,          ///< Applied to model
+    CubismMotionCurveTarget_Parameter,      ///< Applied to parameter
+    CubismMotionCurveTarget_PartOpacity     ///< Applied to part opacity
 };
 
-
 /**
- * @brief モーションカーブのセグメントの種類
- *
- * モーションカーブのセグメントの種類。
+ * Types of motion curve segments
  */
 enum CubismMotionSegmentType
 {
-    CubismMotionSegmentType_Linear = 0,         ///< リニア
-    CubismMotionSegmentType_Bezier = 1,         ///< ベジェ曲線
-    CubismMotionSegmentType_Stepped = 2,        ///< ステップ
-    CubismMotionSegmentType_InverseStepped = 3  ///< インバースステップ
+    CubismMotionSegmentType_Linear = 0,             ///< Linear
+    CubismMotionSegmentType_Bezier = 1,             ///< Bezier curve
+    CubismMotionSegmentType_Stepped = 2,            ///< Step
+    CubismMotionSegmentType_InverseStepped = 3      ///< Inverse step
 };
 
 /**
- * @brief モーションカーブの制御点
- *
- * モーションカーブの制御点。
+ * Data for control points of motion curve
  */
 struct CubismMotionPoint
 {
+    /**
+     * Constructor
+     */
     CubismMotionPoint()
         : Time(0.0f)
         , Value(0.0f)
     { }
 
-    csmFloat32 Time;         ///< 時間[秒]
-    csmFloat32 Value;        ///< 値
+    csmFloat32 Time;        ///< Time [seconds]
+    csmFloat32 Value;       ///< Value
 };
 
 /**
- * @brief モーションカーブのセグメントの評価関数
+ * Function declaration for evaluating motion curve segments
  *
- * モーションカーブのセグメントの評価関数。
- *
- * @param[in]   points      モーションカーブの制御点リスト
- * @param[in]   time        評価する時間[秒]
+ * @param points Collection of control points for the motion curve
+ * @param time Time to evaluate [seconds]
  */
 typedef csmFloat32 (*csmMotionSegmentEvaluationFunction)(const CubismMotionPoint* points, const csmFloat32 time);
 
-
 /**
- * @brief モーションカーブのセグメント
- *
- * モーションカーブのセグメント。
+ * Data for motion curve segments
  */
 struct CubismMotionSegment
 {
     /**
-     * @brief コンストラクタ
-     *
-     * コンストラクタ。
+     * Constructor
      */
     CubismMotionSegment()
         : Evaluate(NULL)
@@ -82,18 +71,19 @@ struct CubismMotionSegment
         , SegmentType(0)
     { }
 
-    csmMotionSegmentEvaluationFunction Evaluate;            ///< 使用する評価関数
-    csmInt32 BasePointIndex;                                ///< 最初のセグメントへのインデックス
-    csmInt32 SegmentType;                                   ///< セグメントの種類
+    csmMotionSegmentEvaluationFunction Evaluate;        ///< Function to evaluate segment
+    csmInt32 BasePointIndex;                            ///< Index of the first control point
+    csmInt32 SegmentType;                               ///< Segment type
 };
 
 /**
- * @brief モーションカーブ
- *
- * モーションカーブ。
+ * Data for motion curve
  */
 struct CubismMotionCurve
 {
+    /**
+     * Constructor
+     */
     CubismMotionCurve()
         : Type(CubismMotionCurveTarget_Model)
         , SegmentCount(0)
@@ -102,36 +92,38 @@ struct CubismMotionCurve
         , FadeOutTime(0.0f)
     { }
 
-    CubismMotionCurveTarget Type;               ///< カーブの種類
-    CubismIdHandle Id;                               ///< カーブのID
-    csmInt32 SegmentCount;                      ///< セグメントの個数
-    csmInt32 BaseSegmentIndex;                  ///< 最初のセグメントのインデックス
-    csmFloat32 FadeInTime;                      ///< フェードインにかかる時間[秒]
-    csmFloat32 FadeOutTime;                     ///< フェードアウトにかかる時間[秒]
+    CubismMotionCurveTarget Type;       ///< Curve type
+    CubismIdHandle Id;                  ///< ID of the parameter attached to the curve
+    csmInt32 SegmentCount;              ///< Number of segments
+    csmInt32 BaseSegmentIndex;          ///< Index of the first segment
+    csmFloat32 FadeInTime;              ///< Seconds to complete fade-in from start to finish [seconds]
+    csmFloat32 FadeOutTime;             ///< Seconds to complete fade-out from start to finish [seconds]
 };
 
 /**
-* @brief イベント
-*
-* イベント。
-*/
+ * Data for user data events
+ */
 struct CubismMotionEvent
 {
+    /**
+     * Constructor
+     */
     CubismMotionEvent()
         : FireTime(0.0f)
     { }
 
-    csmFloat32  FireTime;
-    csmString   Value;
+    csmFloat32  FireTime;       ///< Seconds in motion when the event fires [seconds]
+    csmString   Value;          ///< Value
 };
 
 /**
- * @brief モーションデータ
- *
- * モーションデータ。
+ * Data for motion
  */
 struct CubismMotionData
 {
+    /**
+     * Constructor
+     */
     CubismMotionData()
         : Duration(0.0f)
         , Loop(0)
@@ -140,15 +132,15 @@ struct CubismMotionData
         , Fps(0.0f)
     { }
 
-    csmFloat32 Duration;                                ///< モーションの長さ[秒]
-    csmInt16 Loop;                                  ///< ループするかどうか
-    csmInt16 CurveCount;                            ///< カーブの個数
-    csmInt32 EventCount;                         ///< UserDataの個数
-    csmFloat32 Fps;                              ///< フレームレート
-    csmVector<CubismMotionCurve> Curves;                ///< カーブのリスト
-    csmVector<CubismMotionSegment> Segments;            ///< セグメントのリスト
-    csmVector<CubismMotionPoint> Points;                ///< ポイントのリスト
-    csmVector<CubismMotionEvent> Events;          ///< イベントのリスト
+    csmFloat32 Duration;                            ///< Motion length [seconds]
+    csmInt16 Loop;                                  ///< Whether to loop
+    csmInt16 CurveCount;                            ///< Number of curves
+    csmInt32 EventCount;                            ///< Number of user data events
+    csmFloat32 Fps;                                 ///< Motion frame rate
+    csmVector<CubismMotionCurve> Curves;            ///< Curve collection
+    csmVector<CubismMotionSegment> Segments;        ///< Segment collection
+    csmVector<CubismMotionPoint> Points;            ///< Control point collection
+    csmVector<CubismMotionEvent> Events;            ///< User data event collection
 };
 
 }}}

@@ -6,6 +6,7 @@
  */
 
 #include "CubismMotionJson.hpp"
+#include "CubismMotionInternal.hpp"
 #include "Id/CubismId.hpp"
 #include "Id/CubismIdManager.hpp"
 
@@ -54,9 +55,82 @@ csmBool CubismMotionJson::IsMotionLoop() const
     return _json->GetRoot()[Meta][Loop].ToBoolean();
 }
 
+csmBool CubismMotionJson::HasConsistency() const
+{
+    csmBool result = true;
+
+    if (!IsValid())
+    {
+        return false;
+    }
+
+    const csmInt32 actualCurveListSize = static_cast<csmInt32>(_json->GetRoot()[Curves].GetVector()->GetSize());
+    csmInt32 actualTotalSegmentCount = 0;
+    csmInt32 actualTotalPointCount = 0;
+
+    // カウント処理
+    for (csmInt32 curvePosition = 0; curvePosition < actualCurveListSize; ++curvePosition)
+    {
+        for (csmInt32 segmentPosition = 0; segmentPosition < GetMotionCurveSegmentCount(curvePosition);)
+        {
+            if (segmentPosition == 0)
+            {
+                actualTotalPointCount += 1;
+                segmentPosition += 2;
+            }
+
+            const csmInt32 segment = static_cast<csmInt32>(GetMotionCurveSegment(curvePosition, segmentPosition));
+
+            switch (segment)
+            {
+            case CubismMotionSegmentType_Linear:
+                actualTotalPointCount += 1;
+                segmentPosition += 3;
+                break;
+            case CubismMotionSegmentType_Bezier:
+                actualTotalPointCount += 3;
+                segmentPosition += 7;
+                break;
+            case CubismMotionSegmentType_Stepped:
+                actualTotalPointCount += 1;
+                segmentPosition += 3;
+                break;
+            case CubismMotionSegmentType_InverseStepped:
+                actualTotalPointCount += 1;
+                segmentPosition += 3;
+                break;
+            default:
+                CSM_ASSERT(0);
+                break;
+            }
+
+            ++actualTotalSegmentCount;
+        }
+    }
+
+    // 個数チェック
+    if (actualCurveListSize != GetMotionCurveCount())
+    {
+        CubismLogWarning("The number of curves does not match the metadata.");
+        result = false;
+    }
+    if (actualTotalSegmentCount != GetMotionTotalSegmentCount())
+    {
+        CubismLogWarning("The number of segment does not match the metadata.");
+        result = false;
+    }
+    if (actualTotalPointCount != GetMotionTotalPointCount())
+    {
+        CubismLogWarning("The number of point does not match the metadata.");
+        result = false;
+    }
+
+    return result;
+}
+
 csmBool CubismMotionJson::GetEvaluationOptionFlag(const csmInt32 flagType) const
 {
-    if (EvaluationOptionFlag_AreBeziersRistricted == flagType)
+    if (EvaluationOptionFlag_AreBeziersRestricted == flagType)
     {
         return _json->GetRoot()[Meta][AreBeziersRestricted].ToBoolean();
     }

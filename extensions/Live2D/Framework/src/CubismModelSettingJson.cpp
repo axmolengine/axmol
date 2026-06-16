@@ -223,7 +223,43 @@ csmInt32 CubismModelSettingJson::GetTextureCount()
 
 const csmChar* CubismModelSettingJson::GetTextureDirectory()
 {
-    return (*_jsonValue[FrequentNode_Textures]).GetRawString();
+    if (!IsExistTextureFiles())
+    {
+        return "";
+    }
+
+    csmVector<csmString> splitPathBuffer;
+    csmVector<csmChar> charBuffer;
+    const csmChar* rawString = (*_jsonValue[FrequentNode_Textures])[0].GetRawString();
+    csmInt32 rawStringSize = (*_jsonValue[FrequentNode_Textures])[0].GetString().GetLength();
+    for (csmInt32 i = 0; i < rawStringSize; i++)
+    {
+        // /を含んでいる場合splitする
+        if (rawString[i] == '/')
+        {
+            csmString str = csmString(charBuffer.GetPtr());
+            splitPathBuffer.PushBack(str);
+            charBuffer.Clear();
+        }
+        // 一文字ずつVector配列に格納する
+        else
+        {
+            charBuffer.PushBack(static_cast<csmChar>(rawString[i] & 0xFF));
+        }
+    }
+
+    csmInt32 arrayLength = splitPathBuffer.GetSize();
+    csmString textureDirectoryStr = csmString();
+    for(csmInt32 i = 0; i < arrayLength; i++)
+    {
+        textureDirectoryStr = textureDirectoryStr + splitPathBuffer[i];
+        if(i < arrayLength - 1)
+        {
+            textureDirectoryStr = textureDirectoryStr + "/";
+        }
+    }
+
+    return textureDirectoryStr.GetRawString();
 }
 
 const csmChar* CubismModelSettingJson::GetTextureFileName(csmInt32 index)

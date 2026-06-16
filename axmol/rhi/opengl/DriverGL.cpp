@@ -201,7 +201,7 @@ Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage 
     return new BufferImpl(size, type, usage, initial);
 }
 
-Texture* DriverImpl::createTexture(const TextureDesc& desc)
+Texture* DriverImpl::createTexture(const TextureDesc& desc, std::optional<Color>)
 {
     return new TextureImpl(desc);
 }

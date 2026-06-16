@@ -15,75 +15,64 @@
 //--------- LIVE2D NAMESPACE ------------
 namespace Live2D {  namespace Cubism {  namespace Framework {
 
+/**
+ * Handles user data.
+ */
 class CubismModelUserDataJson : public CubismJsonHolder
 {
 public:
     /**
-    * @brief コンストラクタ
-    *
-    * コンストラクタ。
-    *
-    * @param[in]   buffer  userdata3.jsonが読み込まれているバッファ
-    * @param[in]   size    バッファのサイズ
-    */
+     * Constructor
+     *
+     * @param buffer Buffer where the user data file is loaded
+     * @param size Number of bytes in the buffer
+     */
     CubismModelUserDataJson(const csmByte* buffer, csmSizeInt size);
 
     /**
-    * @brief デストラクタ
-    *
-    * デストラクタ。
-    */
+     * Destructor
+     */
     virtual ~CubismModelUserDataJson();
 
     /**
-    * @brief ユーザデータ個数の取得
-    *
-    * userdata3.jsonに入っていたユーザデータの個数を取得する。
-    *
-    * @return  ユーザデータの個数
-    */
+     * Returns the number of user data entries in the user data file.
+     *
+     * @return Number of user data entries
+     */
     csmInt32 GetUserDataCount() const;
 
     /**
-    * @brief ユーザデータ総文字列数の取得
-    *
-    * ユーザデータ総文字列数の取得する。
-    *
-    * @return  ユーザデータ総文字列数
-    */
+     * Returns the number of bytes in the user data file.
+     *
+     * @return Number of bytes
+     */
     csmInt32 GetTotalUserDataSize() const;
 
     /**
-    * @brief ユーザデータのタイプの取得
-    *
-    * 指定番目のユーザデータのタイプの取得を取得する。
-    *
-    * @param[in]   i    インデックス
-    *
-    * @return      ユーザデータのタイプ
-    */
+     * Returns the type of user data at the specified index.
+     *
+     * @param i Index of the user data
+     *
+     * @return Type of user data
+     */
     csmString GetUserDataTargetType(csmInt32 i) const;
 
     /**
-    * @brief ユーザデータのターゲットIDの取得
-    *
-    * 指定番目のユーザデータのターゲットIDの取得を取得する。
-    *
-    * @param[in]   i    インデックス
-    *
-    * @return      ユーザデータターゲットID
-    */
+     * Returns the ID of the target attached to the user data at the specified index.
+     *
+     * @param i Index of the user data
+     *
+     * @return ID of the target attached to the user data
+     */
     CubismIdHandle GetUserDataId(csmInt32 i) const;
 
     /**
-    * @brief ユーザデータの文字列の取得
-    *
-    * 指定番目のユーザデータの文字列の取得を取得する。
-    *
-    * @param[in]   i    インデックス
-    *
-    * @return      ユーザデータ
-    */
+     * Returns the value of the user data at the specified index.
+     *
+     * @param i Index of the user data
+     *
+     * @return Value of the user data
+     */
     const csmChar* GetUserDataValue(csmInt32 i) const;
 };
 

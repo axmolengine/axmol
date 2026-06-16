@@ -131,17 +131,24 @@ csmBool CubismJson::ParseBytes(const csmByte* buffer, csmInt32 size)
 
 csmString CubismJson::ParseString(const csmChar* string, csmInt32 length, csmInt32 begin, csmInt32* outEndPos)
 {
-    if (_error) return NULL;
+    if (_error)
+    {
+        return NULL;
+    }
+
+    if (!string)
+    {
+        _error = "string is null";
+        return NULL;
+    }
+
     csmInt32 i = begin;
-    csmChar c, c2;
     csmString ret;
     csmInt32 buf_start = begin; //sbufに登録されていない文字の開始位置
 
     for (; i < length; i++)
     {
-        c = static_cast<csmChar>(string[i] & 0xFF);
-
-        switch (c)
+        switch (string[i])
         {
         case '\"': {//終端の”, エスケープ文字は別に処理されるのでここにはこない
             *outEndPos = i + 1; // ”の次の文字
@@ -151,13 +158,15 @@ csmString CubismJson::ParseString(const csmChar* string, csmInt32 length, csmInt
         case '\\': {//エスケープの場合
             i++; //２文字をセットで扱う
 
-            if (i - 1 > buf_start) ret.Append(static_cast<const csmChar*>(string + buf_start), (i - buf_start - 1)); //前の文字までを登録する
+            if (i - 1 > buf_start)
+            {
+                ret.Append(static_cast<const csmChar*>(string + buf_start), (i - buf_start - 1)); //前の文字までを登録する
+            }
             buf_start = i + 1; //エスケープ（２文字）の次の文字から
 
             if (i < length)
             {
-                c2 = static_cast<csmChar>(string[i] & 0xFF);
-                switch (c2)
+                switch (string[i])
                 {
                 case '\\': ret.Append(1, '\\');
                     break;
@@ -198,15 +207,102 @@ csmString CubismJson::ParseString(const csmChar* string, csmInt32 length, csmInt
 }
 
 
+Value* CubismJson::ParseNumeric(const csmChar* buffer, csmInt32 length, csmInt32 begin, csmInt32* outEndPos)
+{
+    if (_error)
+    {
+        return NULL;
+    }
+
+    if (!buffer)
+    {
+        _error = "buffer is null";
+        return NULL;
+    }
+
+    csmFloat32 ret = 0.0f;
+    csmInt32 i = begin;
+    csmBool decimalPointSeen = false;
+    csmBool isNegative = false;
+    csmFloat32 decimalMultiplier = 0.1f;
+
+    // 改行もしくは区切り文字に当たるまで読み込む
+    for (; i < length; i++)
+    {
+        switch (buffer[i])
+        {
+        case '-':
+            {
+                isNegative = true;
+                break;
+            }
+        case '0': case '1': case '2': case '3': case '4':
+        case '5': case '6': case '7': case '8': case '9':
+            {
+                csmInt32 digit = buffer[i] - '0';
+
+                if (!decimalPointSeen)  // 整数部分構築
+                {
+                    ret = ret * 10 + digit;
+                }
+                else  // 小数部分構築
+                {
+                    ret += digit * decimalMultiplier;
+                    decimalMultiplier *= 0.1f;
+                }
+                break;
+            }
+        case '.':  // . 小数点記号チェック
+            {
+                if (decimalPointSeen)
+                {
+                    _error = "multiple decimal points found";
+                    return NULL;
+                }
+                decimalPointSeen = true;
+                break;
+            }
+        case '\n': case ',':  // 終端には改行文字か、区切り文字の , が来る
+            {
+                *outEndPos = i;
+                if (isNegative)  // 負数処理
+                {
+                    ret *= -1;
+                }
+                return CSM_NEW Float(ret);
+            }
+        case '\r': break;  // CRLF スキップ用
+        default:
+            {
+                _error = "non-numeric charactor found";
+                return NULL;
+            }
+        }
+    }
+
+    _error = "parse numeric/illegal end";
+    return NULL;
+}
+
+
 Value* CubismJson::ParseObject(const csmChar* buffer, csmInt32 length, csmInt32 begin, csmInt32* outEndPos)
 {
-    if (_error) return NULL;
+    if (_error)
+    {
+        return NULL;
+    }
+
+    if (!buffer)
+    {
+        _error = "buffer is null";
+        return NULL;
+    }
+
     Map* ret = CSM_NEW Map();
 
     //key : value ,
     csmString key;
     csmInt32 i = begin;
-    csmChar c;
     csmInt32 local_ret_endpos2[1];
     csmBool ok = false;
 
@@ -215,9 +311,7 @@ Value* CubismJson::ParseObject(const csmChar* buffer, csmInt32 length, csmInt32 
     {
         for (; i < length; i++)
         {
-            c = static_cast<csmChar>(buffer[i] & 0xFF);
-
-            switch (c)
+            switch (buffer[i])
             {
             case '\"':
                 key = ParseString(buffer, length, i + 1, local_ret_endpos2);
@@ -247,9 +341,7 @@ Value* CubismJson::ParseObject(const csmChar* buffer, csmInt32 length, csmInt32 
         // : をチェック
         for (; i < length; i++)
         {
-            c = static_cast<csmChar>(buffer[i] & 0xFF);
-
-            switch (c)
+            switch (buffer[i])
             {
             case ':': ok = true;
                 i++;
@@ -273,16 +365,17 @@ Value* CubismJson::ParseObject(const csmChar* buffer, csmInt32 length, csmInt32 
 
         // 値をチェック
         Value* value = ParseValue(buffer, length, i, local_ret_endpos2);
-        if (_error) return NULL;
+        if (_error)
+        {
+            return NULL;
+        }
         i = local_ret_endpos2[0];
         // ret.put( key , value ) ;
         ret->Put(key, value);
 
         for (; i < length; i++)
         {
-            c = static_cast<csmChar>(buffer[i] & 0xFF);
-
-            switch (c)
+            switch (buffer[i])
             {
             case ',':
                 goto BREAK_LOOP3;
@@ -305,12 +398,21 @@ Value* CubismJson::ParseObject(const csmChar* buffer, csmInt32 length, csmInt32 
 
 Value* CubismJson::ParseArray(const csmChar* buffer, csmInt32 length, csmInt32 begin, csmInt32* outEndPos)
 {
-    if (_error) return NULL;
+    if (_error)
+    {
+        return NULL;
+    }
+
+    if (!buffer)
+    {
+        _error = "buffer is null";
+        return NULL;
+    }
+
     Array* ret = CSM_NEW Array();
 
     //key : value ,
     csmInt32 i = begin;
-    csmChar c;
     csmInt32 local_ret_endpos2[1];
 
     // , が続く限りループ
@@ -318,7 +420,10 @@ Value* CubismJson::ParseArray(const csmChar* buffer, csmInt32 length, csmInt32 b
     {
         // : をチェック
         Value* value = ParseValue(buffer, length, i, local_ret_endpos2);
-        if (_error) return NULL;
+        if (_error)
+        {
+            return NULL;
+        }
         i = local_ret_endpos2[0];
         if (value)
         {
@@ -329,9 +434,7 @@ Value* CubismJson::ParseArray(const csmChar* buffer, csmInt32 length, csmInt32 b
         //bool breakflag = false;
         for (; i < length; i++)
         {
-            c = static_cast<csmChar>(buffer[i] & 0xFF);
-
-            switch (c)
+            switch (buffer[i])
             {
             case ',':
                 // breakflag = true;
@@ -357,7 +460,16 @@ Value* CubismJson::ParseArray(const csmChar* buffer, csmInt32 length, csmInt32 b
 
 Value* CubismJson::ParseValue(const csmChar* buffer, csmInt32 length, csmInt32 begin, csmInt32* outEndPos)
 {
-    if (_error) return NULL;
+    if (_error)
+    {
+        return NULL;
+    }
+
+    if (!buffer)
+    {
+        _error = "buffer is null";
+        return NULL;
+    }
 
     Value* o = NULL;
     csmInt32 i = begin;
@@ -366,18 +478,12 @@ Value* CubismJson::ParseValue(const csmChar* buffer, csmInt32 length, csmInt32 b
 
     for (; i < length; i++)
     {
-        csmChar c = static_cast<csmChar>(buffer[i] & 0xFF);
-
-        switch (c)
+        switch (buffer[i])
         {
-        case '-': case '.':
+        case '-':
         case '0': case '1': case '2': case '3': case '4':
-        case '5': case '6': case '7': case '8': case '9': {
-            char* ret_ptr;
-            f = strtof(const_cast<csmChar*>(buffer + i), &ret_ptr);
-            *outEndPos = static_cast<csmInt32>(ret_ptr - buffer);
-            return CSM_NEW Float(f);
-        }
+        case '5': case '6': case '7': case '8': case '9':
+            return ParseNumeric(buffer, length, i, outEndPos);
         case '\"':
             return CSM_NEW String(ParseString(buffer, length, i + 1, outEndPos)); //\"の次の文字から
         case '[':
@@ -434,11 +540,17 @@ Map::~Map()
     while (ite != _map.End())
     {
         Value* v = (*ite).Second;
-        if (v && !v->IsStatic()) CSM_DELETE(v);
+        if (v && !v->IsStatic())
+        {
+            CSM_DELETE(v);
+        }
         ++ite;
     }
 
-    if (_keys) CSM_DELETE(_keys);
+    if (_keys)
+    {
+        CSM_DELETE(_keys);
+    }
 }
 
 
@@ -448,7 +560,10 @@ Array::~Array()
     for (; ite != _array.End(); ++ite)
     {
         Value* v = (*ite);
-        if (v && !v->IsStatic()) CSM_DELETE(v);
+        if (v && !v->IsStatic())
+        {
+            CSM_DELETE(v);
+        }
     }
 }
 }}}}

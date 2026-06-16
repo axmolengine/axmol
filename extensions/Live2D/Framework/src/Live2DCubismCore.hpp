@@ -8,9 +8,9 @@
 #pragma once
 
 /**
- * @brief [NOTICE] "Live2DCubismCore.h"を直接インクルードせず、この"Live2DCubismCore.hpp"をインクルードすること。<br>
- *          Live2D Cubism Coreライブラリを"Live2D::Cubism::Core"名前空間に内包するようにインクルードするヘッダ<br>
+ * Header to include the Live2D Cubism Core in the `Live2D::Cubism::Core` namespace
  *
+ * @note Include this header instead of including the `Live2DCubismCore.h` directly.
  */
 namespace Live2D { namespace Cubism { namespace Core {
 #include "Live2DCubismCore.h"

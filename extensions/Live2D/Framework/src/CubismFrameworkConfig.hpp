@@ -7,37 +7,50 @@
 
 #pragma once
 
+/**
+ * A set of macros to configure the Cubism Framework on build.
+ */
 
-//========================================================
-//  デバッグモード指定マクロ
-//========================================================
-// #define CSM_DEBUG                        // デバッグモード
-// #define CSM_DEBUG_MEMORY_LEAKING         // メモリリークチェックモード
+/**
+ * A set of macros to use for debugging Cubism Framework.
+ */
+/** Runs Cubism Framework as debug mode. */
+// #define CSM_DEBUG
+
+/**
+ * Tracks memory leaking of Cubism Framework.
+ *
+ * @note Leakage is verified at the termination of Cubism Framework.
+ */
+// #define CSM_DEBUG_MEMORY_LEAKING
 
 
-//========================================================
-//  ログ出力関数の設定
-//========================================================
-
-//---------- ログ出力レベル 選択項目 定義 ----------
-/// 詳細ログ出力設定
+/**
+ * A set of macros to configure the logging level forcefully.
+ *
+ * @note The set logging level is applied by changing the definition of a group of macros that call logging in the CubismDebug class.
+ */
+/** Indicates that the logging of all is enabled. */
 #define CSM_LOG_LEVEL_VERBOSE  0
-/// デバッグログ出力設定
+
+/** Indicates that up to the logging level of Debug. */
 #define CSM_LOG_LEVEL_DEBUG    1
-/// Infoログ出力設定
+
+/** Indicates that up to the logging level of Info. */
 #define CSM_LOG_LEVEL_INFO     2
-/// 警告ログ出力設定
+
+/** Indicates that up to the logging level of Warning. */
 #define CSM_LOG_LEVEL_WARNING  3
-/// エラーログ出力設定
+
+/** Indicates that up to the logging level of Error. */
 #define CSM_LOG_LEVEL_ERROR    4
-/// ログ出力オフ設定
+
+/**  Indicates that the logging of all is disabled. */
 #define CSM_LOG_LEVEL_OFF      5
 
 /**
-* ログ出力レベル設定。
-*
-* 強制的にログ出力レベルを変える時に定義を有効にする。
-* CSM_LOG_LEVEL_VERBOSE ～ CSM_LOG_LEVEL_OFF を選択する。
-*/
+ * Logging level to set
+ *
+ * @note Set one of the logging levels from CSM_LOG_LEVEL_VERBOSE to CSM_LOG_LEVEL_OFF.
+ */
 #define CSM_LOG_LEVEL CSM_LOG_LEVEL_VERBOSE
-

@@ -1,9 +1,6 @@
 #version 310 es
-#ifdef GLES2
-precision mediump float;
-#else
+
 precision highp float;
-#endif
 
 layout(location = TEXCOORD0) in vec2 v_texCoord;
 

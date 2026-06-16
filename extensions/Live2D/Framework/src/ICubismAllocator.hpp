@@ -12,55 +12,48 @@
 namespace Live2D { namespace Cubism { namespace Framework {
 
 /**
- * @brief メモリアロケーションを抽象化したクラス.
- *
- * メモリ確保・解放処理をプラットフォーム側で実装して
- * フレームワークから呼び出すためのインターフェース。
- *
+ * An interface to implement memory allocation and deallocation processes<br>
+ * on the platform side and call from the Framework.
  */
 class ICubismAllocator
 {
 public:
     /**
-     * @brief デストラクタ
-     *
-     * デストラクタ。
+     * Destructor
      */
     virtual ~ICubismAllocator() {}
 
     /**
-     * @brief アラインメント制約なしのヒープ・メモリーを確保します。
+     * Allocates the memory.
      *
-     * @param[in]  size   確保するバイト数
+     * @param size Desired amount of memory in bytes
      *
-     * @return     成功すると割り当てられたメモリのアドレス。 そうでなければ '0'を返す。
+     * @return Pointer to the allocated memory if succeeded; otherwise `0`
      */
     virtual void* Allocate(const csmSizeType size) = 0;
 
     /**
-     * @brief アラインメント制約なしのヒープ・メモリーを解放します。
+     * Deallocates the memory.
      *
-     * @param[in]  memory   解放するメモリのアドレス
-     *
+     * @param memory Pointer to allocated memory to be deallocated
      */
     virtual void Deallocate(void* memory) = 0;
 
 
     /**
-     * @brief アラインメント制約ありのヒープ・メモリーを確保します。
+     * Allocates the memory with specified alignment.
      *
-     * @param[in]  size       確保するバイト数
-     * @param[in]  alignment  メモリーブロックのアラインメント幅
+     * @param size Desired amount of memory in bytes
+     * @param alignment Desired alignment of memory in bytes
      *
-     * @return     成功すると割り当てられたメモリのアドレス。 そうでなければ '0'を返す。
+     * @return Pointer to the allocated memory if succeeded; otherwise `0`
      */
     virtual void* AllocateAligned(const csmSizeType size, const csmUint32 alignment) = 0;
 
     /**
-     * @brief アラインメント制約ありのヒープ・メモリーを解放します。
+     * Deallocates the aligned memory.
      *
-     * @param[in]  alignedMemory       解放するメモリのアドレス
-     *
+     * @param alignedMemory Pointer to allocated memory to be deallocated
      */
     virtual void DeallocateAligned(void* alignedMemory) = 0;
 

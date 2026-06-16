@@ -85,7 +85,7 @@ private:
 class TextureImpl : public rhi::Texture
 {
 public:
-    TextureImpl(DriverImpl*, const TextureDesc& desc);
+    TextureImpl(DriverImpl*, const TextureDesc& desc, std::optional<Color> clearColorHint = std::nullopt);
     TextureImpl(DriverImpl*, ComPtr<ID3D12Resource> existingResource);
     ~TextureImpl();
 
@@ -127,7 +127,8 @@ public:
     uint64_t getLastFenceValue() const { return _lastFenceValue; }
 
 private:
-    D3D12_RESOURCE_STATES ensureNativeTexture(bool prepareForCopyDest);
+    D3D12_RESOURCE_STATES ensureNativeTexture(bool prepareForCopyDest,
+                                              std::optional<Color> clearColorHint = std::nullopt);
     void createShaderResourceView(const dxutils::PixelFormatInfo* fmtInfo,
                                   uint32_t mipLevels,
                                   uint32_t arrayLayers,
