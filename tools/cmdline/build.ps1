@@ -119,11 +119,9 @@ if ($cm_target_index -ne -1) {
 }
 
 # if cmake target not specified by cmake options, parse axmol cmdline option: -t
-if (!$cmake_target) {
-    if($options.t) {
-        if($options.t -isnot [array]) {
-            $options.t = "$($options.t)".Split(',')
-        }
+if (!$cmake_target -and $options.t) {
+    if($options.t -isnot [array]) {
+        $options.t = "$($options.t)".Split(',')
     }
 
     $cmake_target = $options.t[0]
