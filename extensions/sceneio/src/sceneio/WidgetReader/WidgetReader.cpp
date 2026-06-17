@@ -768,7 +768,7 @@ void WidgetReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
     node->setCascadeColorEnabled(options->cascadeColorEnabled());
     node->setCascadeOpacityEnabled(options->cascadeOpacityEnabled());
 
-    widget->setAnchorPoint(Vec2::ZERO);
+    widget->setAnchorPoint(Vec2::zero);
 
     widget->setAutoSize(!options->ignoreSize());
     widget->setLayoutComponentEnabled(true);

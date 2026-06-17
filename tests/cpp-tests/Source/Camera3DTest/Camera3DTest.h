@@ -234,7 +234,7 @@ protected:
     CameraType _cameraType;
     ax::Camera* _camera;
     ax::DrawNode3D* _drawGrid;
-    ax::Quaternion _rotationQuat;  // rotation Quaternion
+    ax::Quat _rotationQuat;  // rotation Quat
     float _radius;                 // arc ball radius
     float _distanceZ;
     OperateCamType _operate;  // switch rotate or zoom

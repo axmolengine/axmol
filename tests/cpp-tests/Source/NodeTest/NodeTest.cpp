@@ -700,7 +700,7 @@ CameraCenterTest::CameraCenterTest()
     sprite = Sprite::create("Images/white-512x512.png");
     addChild(sprite, 0);
     sprite->setPosition(Vec2(s.width / 5 * 1, s.height / 5 * 1));
-    sprite->setColor(Color32::RED);
+    sprite->setColor(Color32::red);
     sprite->setTextureRect(Rect(0.0f, 0.0f, 120.0f, 50.0f));
     orbit = OrbitCamera::create(10.0f, 1.0f, 0.0f, 0.0f, 360.0f, 0.0f, 0.0f);
     sprite->runAction(RepeatForever::create(orbit));
@@ -710,7 +710,7 @@ CameraCenterTest::CameraCenterTest()
     sprite = Sprite::create("Images/white-512x512.png");
     addChild(sprite, 0, 40);
     sprite->setPosition(Vec2(s.width / 5 * 1, s.height / 5 * 4));
-    sprite->setColor(Color32::BLUE);
+    sprite->setColor(Color32::blue);
     sprite->setTextureRect(Rect(0.0f, 0.0f, 120.0f, 50.0f));
     orbit = OrbitCamera::create(10.0f, 1.0f, 0.0f, 0.0f, 360.0f, 0.0f, 0.0f);
     sprite->runAction(RepeatForever::create(orbit));
@@ -719,7 +719,7 @@ CameraCenterTest::CameraCenterTest()
     sprite = Sprite::create("Images/white-512x512.png");
     addChild(sprite, 0);
     sprite->setPosition(Vec2(s.width / 5 * 4, s.height / 5 * 1));
-    sprite->setColor(Color32::YELLOW);
+    sprite->setColor(Color32::yellow);
     sprite->setTextureRect(Rect(0.0f, 0.0f, 120.0f, 50.0f));
     orbit = OrbitCamera::create(10.0f, 1.0f, 0.0f, 0.0f, 360.0f, 0.0f, 0.0f);
     sprite->runAction(RepeatForever::create(orbit));
@@ -728,7 +728,7 @@ CameraCenterTest::CameraCenterTest()
     sprite = Sprite::create("Images/white-512x512.png");
     addChild(sprite, 0, 40);
     sprite->setPosition(Vec2(s.width / 5 * 4, s.height / 5 * 4));
-    sprite->setColor(Color32::GREEN);
+    sprite->setColor(Color32::green);
     sprite->setTextureRect(Rect(0.0f, 0.0f, 120.0f, 50.0f));
     orbit = OrbitCamera::create(10.0f, 1.0f, 0.0f, 0.0f, 360.0f, 0.0f, 0.0f);
     sprite->runAction(RepeatForever::create(orbit));
@@ -737,7 +737,7 @@ CameraCenterTest::CameraCenterTest()
     sprite = Sprite::create("Images/white-512x512.png");
     addChild(sprite, 0, 40);
     sprite->setPosition(Vec2(s.width / 2, s.height / 2));
-    sprite->setColor(Color32::WHITE);
+    sprite->setColor(Color32::white);
     sprite->setTextureRect(Rect(0.0f, 0.0f, 120.0f, 50.0f));
     orbit = OrbitCamera::create(10.0f, 1.0f, 0.0f, 0.0f, 360.0f, 0.0f, 0.0f);
     sprite->runAction(RepeatForever::create(orbit));
@@ -781,7 +781,7 @@ ConvertToNode::ConvertToNode()
         switch (i)
         {
         case 0:
-            sprite->setAnchorPoint(Vec2::ZERO);
+            sprite->setAnchorPoint(Vec2::zero);
             break;
         case 1:
             sprite->setAnchorPoint(Vec2(0.5f, 0.5f));
@@ -834,7 +834,7 @@ NodeOpaqueTest::NodeOpaqueTest()
     {
         background = Sprite::create("Images/background1.png");
         background->setBlendFunc(BlendFunc::ALPHA_PREMULTIPLIED);
-        background->setAnchorPoint(Vec2::ZERO);
+        background->setAnchorPoint(Vec2::zero);
         addChild(background);
     }
 }
@@ -859,7 +859,7 @@ NodeNonOpaqueTest::NodeNonOpaqueTest()
     {
         background = Sprite::create("Images/background1.jpg");
         background->setBlendFunc(BlendFunc::DISABLE);
-        background->setAnchorPoint(Vec2::ZERO);
+        background->setAnchorPoint(Vec2::zero);
         addChild(background);
     }
 }
@@ -1492,9 +1492,9 @@ void Issue16735Test::onEnter()
 
     auto d = DrawNode::create();
     d->drawLine(Vec2(origin.x, origin.y + visibleSize.height / 2),
-                Vec2(origin.x + visibleSize.width, origin.y + visibleSize.height / 2), Color::RED);
+                Vec2(origin.x + visibleSize.width, origin.y + visibleSize.height / 2), Color::red);
     d->drawLine(Vec2(origin.x + visibleSize.width / 2, origin.y),
-                Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height), Color::RED);
+                Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height), Color::red);
 
     addChild(d);
 }

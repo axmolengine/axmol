@@ -74,15 +74,15 @@ void Mesh::resetLightUniformValues()
     constexpr int maxPointLight = AX_MAX_POINT_LIGHT;
     constexpr int maxSpotLight  = AX_MAX_SPOT_LIGHT;
 
-    _dirLightUniformColorValues.assign(maxDirLight, Vec3::ZERO);
-    _dirLightUniformDirValues.assign(maxDirLight, Vec3::ZERO);
+    _dirLightUniformColorValues.assign(maxDirLight, Vec3::zero);
+    _dirLightUniformDirValues.assign(maxDirLight, Vec3::zero);
 
-    _pointLightUniformColorValues.assign(maxPointLight, Vec3::ZERO);
-    _pointLightUniformPositionValues.assign(maxPointLight, Vec3::ZERO);
+    _pointLightUniformColorValues.assign(maxPointLight, Vec3::zero);
+    _pointLightUniformPositionValues.assign(maxPointLight, Vec3::zero);
     _pointLightUniformRangeInverseValues.assign(maxPointLight, 0.0f);
 
-    _spotLightUniformColorValues.assign(maxSpotLight, Vec3::ZERO);
-    _spotLightUniformPositionValues.assign(maxSpotLight, Vec3::ZERO);
+    _spotLightUniformColorValues.assign(maxSpotLight, Vec3::zero);
+    _spotLightUniformPositionValues.assign(maxSpotLight, Vec3::zero);
 
     // TODO It's strange that init _spotLightUniformDirValues to zeros will cause no light effects on iPhone6 and
     // iPhone6s, but works well on iPhoneX fix no light effects on iPhone6 and iPhone6s

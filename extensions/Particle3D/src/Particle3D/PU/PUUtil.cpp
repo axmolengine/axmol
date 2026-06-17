@@ -30,11 +30,11 @@
 namespace ax
 {
 
-ax::Vec3 PUUtil::randomDeviant(const Vec3& src, float angle, const Vec3& up /*= Vec3::ZERO*/)
+ax::Vec3 PUUtil::randomDeviant(const Vec3& src, float angle, const Vec3& up /*= Vec3::zero*/)
 {
     Vec3 newUp;
 
-    if (up == Vec3::ZERO)
+    if (up == Vec3::zero)
     {
         // Generate an up vector
         newUp = perpendicular(src);
@@ -45,7 +45,7 @@ ax::Vec3 PUUtil::randomDeviant(const Vec3& src, float angle, const Vec3& up /*= 
     }
 
     // Rotate up vector by random amount around this
-    // Quaternion q;
+    // Quat q;
     // q.FromAngleAxis( Radian(Math::UnitRandom() * Math::TWO_PI), *this );
     // newUp = q * newUp;
 
@@ -53,9 +53,9 @@ ax::Vec3 PUUtil::randomDeviant(const Vec3& src, float angle, const Vec3& up /*= 
     // q.FromAngleAxis( angle, newUp );
     // return q * (*this);
 
-    Quaternion q;
+    Quat q;
     Mat4 mat;
-    Quaternion::createFromAxisAngle(src, AXRANDOM_0_1() * M_PI * 2.0f, &q);
+    Quat::createFromAxisAngle(src, AXRANDOM_0_1() * M_PI * 2.0f, &q);
     Mat4::createRotation(q, &mat);
 
     //{
@@ -69,7 +69,7 @@ ax::Vec3 PUUtil::randomDeviant(const Vec3& src, float angle, const Vec3& up /*= 
     //}
 
     newUp = mat * newUp;
-    Quaternion::createFromAxisAngle(newUp, angle, &q);
+    Quat::createFromAxisAngle(newUp, angle, &q);
     Mat4::createRotation(q, &mat);
     return mat * src;
 
@@ -104,14 +104,14 @@ ax::Vec3 PUUtil::perpendicular(const Vec3& src)
 
     static const float fSquareZero = (float)(1e-06 * 1e-06);
     Vec3 perp;
-    Vec3::cross(src, Vec3::UNIT_X, &perp);
+    Vec3::cross(src, Vec3::xAxis, &perp);
     // Check length
     if (perp.lengthSquared() < fSquareZero)
     {
         /* This vector is the Y axis multiplied by a scalar, so we have
             to use another axis.
         */
-        Vec3::cross(src, Vec3::UNIT_Y, &perp);
+        Vec3::cross(src, Vec3::yAxis, &perp);
     }
     perp.normalize();
     return perp;

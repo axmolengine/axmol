@@ -1584,7 +1584,7 @@ int axlua_Node_setRotationQuat(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            ax::Quaternion arg0;
+            ax::Quat arg0;
             ok &= luaval_to_quaternion(tolua_S, 2, &arg0, "ax.Node:setRotationQuat");
 
             if (!ok)
@@ -4518,7 +4518,7 @@ static int axlua_Label_createWithTTF01(lua_State* L)
             std::string_view text     = axlua_tosv(L, 2);
             std::string_view fontFile = axlua_tosv(L, 3);
             float fontSize            = (float)tolua_tonumber(L, 4, 0);
-            ax::Size dimensions       = ax::Size::ZERO;
+            ax::Size dimensions       = ax::Size::zero;
             if (lua_istable(L, 5))
             {
                 luaval_to_size(L, 5, &dimensions, "ax.Label:createWithTTF");
@@ -6320,7 +6320,7 @@ static int axlua_Mat4_decompose(lua_State* tolua_S)
     {
         ax::Mat4 mat;
         ax::Vec3 scale;
-        ax::Quaternion rotation;
+        ax::Quat rotation;
         ax::Vec3 translation;
         bool ok = true;
 
@@ -6824,7 +6824,7 @@ int axlua_Mat4_createRotation(lua_State* tolua_S)
         else
 #endif
         {
-            ax::Quaternion quat;
+            ax::Quat quat;
             ax::Mat4 dst;
 
             ok &= luaval_to_quaternion(tolua_S, 1, &quat, "ax.Mat4.createRotation");

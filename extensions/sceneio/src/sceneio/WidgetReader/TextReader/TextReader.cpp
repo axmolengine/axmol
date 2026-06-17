@@ -193,16 +193,16 @@ Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
     int h_alignment      = 0;
     int v_alignment      = 0;
     bool outlineEnabled  = false;
-    Color32 outlineColor = Color32::BLACK;
+    Color32 outlineColor = Color32::black;
     int outlineSize      = 1;
     bool shadowEnabled   = false;
-    Color32 shadowColor  = Color32::BLACK;
+    Color32 shadowColor  = Color32::black;
     Size shadowOffset    = Size(2, -2);
     int shadowBlurRadius = 0;
 
     // since x-studio reader 10.0.593.0
     bool glowEnabled  = false;
-    Color32 glowColor = Color32::BLACK;
+    Color32 glowColor = Color32::black;
 
     bool boldEnabled = false, underlineEnabled = false, italicsEnabled = false, strikethroughEnabled = false;
 
@@ -476,7 +476,7 @@ void TextReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Tabl
     label->setFontSize(fontSize);
 
     Size areaSize = Size(options->areaWidth(), options->areaHeight());
-    if (!areaSize.equals(Size::ZERO))
+    if (!areaSize.equals(Size::zero))
     {
         label->setTextAreaSize(areaSize);
     }

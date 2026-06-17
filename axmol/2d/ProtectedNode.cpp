@@ -419,11 +419,11 @@ void ProtectedNode::disableCascadeColor()
 {
     for (auto&& child : _children)
     {
-        child->updateDisplayedColor(Color32::WHITE);
+        child->updateDisplayedColor(Color32::white);
     }
     for (auto&& child : _protectedChildren)
     {
-        child->updateDisplayedColor(Color32::WHITE);
+        child->updateDisplayedColor(Color32::white);
     }
 }
 

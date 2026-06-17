@@ -59,7 +59,7 @@ bool WebViewTest::init()
             this->addChild(spriteHello);
 
             InputField* urlTextField = InputField::create("Input a URL here", "Arial", 20);
-            urlTextField->setPlaceholderColor(Color32::RED);
+            urlTextField->setPlaceholderColor(Color32::red);
             urlTextField->setPosition(
                 Vec2(canvasSize / 2) +
                 Vec2(-80, _webView->getContentSize().height / 2 + urlTextField->getContentSize().height / 2 + 10));
@@ -67,7 +67,7 @@ bool WebViewTest::init()
             // InputField will enable IME when user interacts with it
 
             Text* httpLabel = Text::create("https:// ", "Arial", 20);
-            httpLabel->setTextColor(Color32::GREEN);
+            httpLabel->setTextColor(Color32::green);
             httpLabel->setAnchorPoint(Vec2(1.0, 0.5));
             httpLabel->setPosition(urlTextField->getPosition() - Vec2(urlTextField->getContentSize().width / 2, 0));
             this->addChild(httpLabel);

@@ -310,22 +310,6 @@ public:
     int64_t vsize(ZipEntryInfo*);
 
     /**
-     * @brief Create a ZipFile instance from a raw memory buffer.
-     *
-     * @deprecated Since axmol-2.9. This API performs an internal copy of the buffer,
-     *             which may cause unnecessary overhead. It is deprecated and
-     *             will be removed in future versions.
-     *
-     * @note Use createWithData() instead, which allows move semantics and
-     *       avoids the extra copy for better performance.
-     *
-     * @param buffer Pointer to the raw memory buffer.
-     * @param size   Size of the buffer in bytes.
-     * @return A pointer to the newly created ZipFile instance.
-     */
-    AX_DEPRECATED(2.9) static ZipFile* createWithBuffer(const void* buffer, unsigned long size);
-
-    /**
      * @brief Create a ZipFile instance from the given data buffer.
      *
      * This function takes the parameter by value to allow the caller to decide

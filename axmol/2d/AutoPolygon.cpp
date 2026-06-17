@@ -50,7 +50,7 @@ const static float PRECISION = 10.0f;
 namespace ax
 {
 
-PolygonInfo::PolygonInfo() : _isVertsOwner(true), _rect(Rect::ZERO), _filename("")
+PolygonInfo::PolygonInfo() : _isVertsOwner(true), _rect(Rect::zero), _filename("")
 {
     triangles.verts      = nullptr;
     triangles.indices    = nullptr;
@@ -640,7 +640,7 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
             else
             {
                 // vert does not exist yet, so we need to create a new one
-                verts.emplace_back(v3, Vec2::ZERO, Color32::WHITE);
+                verts.emplace_back(v3, Vec2::zero, Color32::white);
                 indices[idx++] = vdx++;
                 ;
             }
@@ -692,7 +692,7 @@ Rect AutoPolygon::getRealRect(const Rect& rect)
 {
     Rect realRect = rect;
     // check rect to see if its zero
-    if (realRect.equals(Rect::ZERO))
+    if (realRect.equals(Rect::zero))
     {
         // if the instance doesn't have width and height, then the whole operation is kaput
         AXASSERT(_height && _width, "Please specify a width and height for this instance before using its functions");

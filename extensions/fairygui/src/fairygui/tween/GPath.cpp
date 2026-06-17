@@ -8,8 +8,8 @@ static std::vector<ax::Vec3> splinePoints;
 GPathPoint::GPathPoint(const Vec3& pos)
 {
     this->pos = pos;
-    this->control1 = Vec3::ZERO;
-    this->control2 = Vec3::ZERO;
+    this->control1 = Vec3::zero;
+    this->control2 = Vec3::zero;
     this->curveType = CurveType::CRSpline;
 }
 
@@ -17,7 +17,7 @@ GPathPoint::GPathPoint(const Vec3& pos, const Vec3& control)
 {
     this->pos = pos;
     this->control1 = control;
-    this->control2 = Vec3::ZERO;
+    this->control2 = Vec3::zero;
     this->curveType = CurveType::Bezier;
 }
 
@@ -32,8 +32,8 @@ GPathPoint::GPathPoint(const Vec3& pos, const Vec3& control1, const Vec3& contro
 GPathPoint::GPathPoint(const Vec3& pos, CurveType curveType)
 {
     this->pos = pos;
-    this->control1 = Vec3::ZERO;
-    this->control2 = Vec3::ZERO;
+    this->control1 = Vec3::zero;
+    this->control2 = Vec3::zero;
     this->curveType = curveType;
 }
 
@@ -143,7 +143,7 @@ Vec3 GPath::getPointAt(float t)
     t = clampf(t, 0, 1);
     int cnt = (int)_segments.size();
     if (cnt == 0)
-        return Vec3::ZERO;
+        return Vec3::zero;
 
     Segment seg;
     if (t == 1)

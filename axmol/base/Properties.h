@@ -42,7 +42,7 @@ class Vec2;
 class Vec3;
 class Vec4;
 class Mat4;
-class Quaternion;
+class Quat;
 class Data;
 
 /**
@@ -381,17 +381,17 @@ public:
     bool getVec4(std::string_view name, Vec4* out) const;
 
     /**
-     * Interpret the value of the given property as a Quaternion specified as an axis angle.
-     * If the property does not exist, out will be set to Quaternion().
+     * Interpret the value of the given property as a Quat specified as an axis angle.
+     * If the property does not exist, out will be set to Quat().
      * If the property exists but could not be scanned, an error will be logged and out will be set
-     * to Quaternion().
+     * to Quat().
      *
      * @param name The name of the property to interpret, or NULL to return the current property's value.
      * @param out The quaternion to set to this property's interpreted value.
      *
      * @return True on success, false if the property does not exist or could not be scanned.
      */
-    bool getQuaternionFromAxisAngle(std::string_view name, Quaternion* out) const;
+    bool getQuaternionFromAxisAngle(std::string_view name, Quat* out) const;
 
     /**
      * Interpret the value of the given property as an RGBA color in hex and write this color to a Vector4.
@@ -488,11 +488,11 @@ public:
      * On error, false is returned and the output is set to all zero values.
      *
      * @param str The string to parse.
-     * @param out A Quaternion populated with the orientation of the axis-angle, if successful.
+     * @param out A Quat populated with the orientation of the axis-angle, if successful.
      *
      * @return True if a valid axis-angle was parsed, false otherwise.
      */
-    static bool parseAxisAngle(std::string_view str, Quaternion* out);
+    static bool parseAxisAngle(std::string_view str, Quat* out);
 
     /**
      * Attempts to parse the specified string as an RGBA color value.

@@ -84,7 +84,7 @@ THE SOFTWARE.
 #include "axmol/math/Vertex.h"
 #include "axmol/math/Mat4.h"
 #include "axmol/math/MathUtil.h"
-#include "axmol/math/Quaternion.h"
+#include "axmol/math/Quat.h"
 #include "axmol/math/Vec2.h"
 #include "axmol/math/Vec3.h"
 #include "axmol/math/Vec4.h"

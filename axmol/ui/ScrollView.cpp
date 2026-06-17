@@ -77,7 +77,7 @@ ScrollView::ScrollView()
     , _autoScrollBraking(false)
     , _inertiaScrollEnabled(true)
     , _bounceEnabled(false)
-    , _outOfBoundaryAmount(Vec2::ZERO)
+    , _outOfBoundaryAmount(Vec2::zero)
     , _outOfBoundaryAmountDirty(true)
     , _scrollBarEnabled(true)
     , _verticalScrollBar(nullptr)
@@ -138,7 +138,7 @@ void ScrollView::initRenderNode()
 {
     LayoutGroup::initRenderNode();
     _innerContainer = LayoutGroup::create();
-    _innerContainer->setColor(Color32::WHITE);
+    _innerContainer->setColor(Color32::white);
     _innerContainer->setCascadeColorEnabled(true);
     addProtectedChild(_innerContainer, 1, 1);
 }
@@ -228,7 +228,7 @@ void ScrollView::setInnerContainerSize(const Vec2& size)
 
     setInnerContainerPosition(pos);
 
-    updateScrollBar(Vec2::ZERO);
+    updateScrollBar(Vec2::zero);
 }
 
 const Vec2& ScrollView::getInnerContainerSize() const
@@ -363,7 +363,7 @@ Vec2 ScrollView::calculateTouchMoveVelocity() const
     }
     if (totalTime == 0 || totalTime >= _touchTotalTimeThreshold)
     {
-        return Vec2::ZERO;
+        return Vec2::zero;
     }
 
     Vec2 totalMovement;
@@ -407,12 +407,12 @@ Vec2 ScrollView::flattenVectorByDirection(const Vec2& vector)
 
 Vec2 ScrollView::getHowMuchOutOfBoundary(const Vec2& addition)
 {
-    if (addition == Vec2::ZERO && !_outOfBoundaryAmountDirty)
+    if (addition == Vec2::zero && !_outOfBoundaryAmountDirty)
     {
         return _outOfBoundaryAmount;
     }
 
-    Vec2 outOfBoundaryAmount(Vec2::ZERO);
+    Vec2 outOfBoundaryAmount(Vec2::zero);
     if (_innerContainer->getLeftBoundary() + addition.x > _leftBoundary)
     {
         outOfBoundaryAmount.x = _leftBoundary - (_innerContainer->getLeftBoundary() + addition.x);
@@ -431,7 +431,7 @@ Vec2 ScrollView::getHowMuchOutOfBoundary(const Vec2& addition)
         outOfBoundaryAmount.y = _bottomBoundary - (_innerContainer->getBottomBoundary() + addition.y);
     }
 
-    if (addition == Vec2::ZERO)
+    if (addition == Vec2::zero)
     {
         _outOfBoundaryAmount      = outOfBoundaryAmount;
         _outOfBoundaryAmountDirty = false;
@@ -490,7 +490,7 @@ void ScrollView::startAutoScroll(const Vec2& deltaMove, float timeInSec, bool at
     _autoScrollTotalTime            = timeInSec;
     _autoScrollAccumulatedTime      = 0;
     _autoScrollBraking              = false;
-    _autoScrollBrakingStartPosition = Vec2::ZERO;
+    _autoScrollBrakingStartPosition = Vec2::zero;
 
     // If the destination is also out of boundary of same side, start brake from beginning.
     Vec2 currentOutOfBoundary = getHowMuchOutOfBoundary();
@@ -780,7 +780,7 @@ void ScrollView::scrollToBottomLeft(float timeInSec, bool attenuated)
         AXLOGD("Scroll direction is not both!");
         return;
     }
-    startAutoScrollToDestination(Vec2::ZERO, timeInSec, attenuated);
+    startAutoScrollToDestination(Vec2::zero, timeInSec, attenuated);
 }
 
 void ScrollView::scrollToBottomRight(float timeInSec, bool attenuated)
@@ -886,7 +886,7 @@ void ScrollView::jumpToBottomLeft()
         AXLOGD("Scroll direction is not both!");
         return;
     }
-    jumpToDestination(Vec2::ZERO);
+    jumpToDestination(Vec2::zero);
 }
 
 void ScrollView::jumpToBottomRight()
@@ -1010,7 +1010,7 @@ void ScrollView::handleReleaseLogic(PointerEvent* event)
     if (!bounceBackStarted && _inertiaScrollEnabled)
     {
         Vec2 touchMoveVelocity = calculateTouchMoveVelocity();
-        if (touchMoveVelocity != Vec2::ZERO)
+        if (touchMoveVelocity != Vec2::zero)
         {
             startInertiaScroll(touchMoveVelocity);
         }
@@ -1095,7 +1095,7 @@ bool ScrollView::onPointerScroll(PointerEvent* event)
         move = Vec2(0.f, event->getScrollDelta().y * mouseFactor);
     }
 
-    if (move == Vec2::ZERO)
+    if (move == Vec2::zero)
         return false;
 
     bool origBounce = _bounceEnabled;
@@ -1387,7 +1387,7 @@ const Color32& ScrollView::getScrollBarColor() const
     {
         return _horizontalScrollBar->getColor();
     }
-    return Color32::WHITE;
+    return Color32::white;
 }
 
 void ScrollView::setScrollBarOpacity(uint8_t opacity)

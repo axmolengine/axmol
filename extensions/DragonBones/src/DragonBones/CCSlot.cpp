@@ -116,7 +116,7 @@ void CCSlot::_updateFrame()
                         vertexData.texCoord.v = (region.y + v * region.height) / textureAtlasSize.height;
                     }
 
-                    vertexData.color = ax::Color32::WHITE;
+                    vertexData.color = ax::Color32::white;
                     vertices[iH]     = vertexData;
 
                     if (boundsRect.origin.x > x)
@@ -195,7 +195,7 @@ void CCSlot::_updateFrame()
     }
 
     frameDisplay->setTexture(nullptr);
-    frameDisplay->setTextureRect(ax::Rect::ZERO);
+    frameDisplay->setTextureRect(ax::Rect::zero);
     frameDisplay->setPosition(0.0f, 0.0f);
     frameDisplay->setVisible(false);
 }

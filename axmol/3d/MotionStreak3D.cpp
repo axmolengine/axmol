@@ -99,8 +99,8 @@ bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const 
 
 bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const Color32& color, Texture2D* texture)
 {
-    Node::setPosition(Vec2::ZERO);
-    setAnchorPoint(Vec2::ZERO);
+    Node::setPosition(Vec2::zero);
+    setAnchorPoint(Vec2::zero);
     setIgnoreAnchorPointForPosition(true);
     _startingPositionInitialized = false;
 
@@ -182,7 +182,7 @@ void MotionStreak3D::setPosition3D(const Vec3& position)
 
 void MotionStreak3D::setRotation3D(const Vec3& /*rotation*/) {}
 
-void MotionStreak3D::setRotationQuat(const Quaternion& /*quat*/) {}
+void MotionStreak3D::setRotationQuat(const Quat& /*quat*/) {}
 
 const Vec2& MotionStreak3D::getPosition() const
 {

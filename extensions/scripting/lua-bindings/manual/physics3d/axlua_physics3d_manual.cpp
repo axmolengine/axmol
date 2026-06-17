@@ -158,7 +158,7 @@ int axlua_physics3d_Rigidbody3D_setTransformInPhysics(lua_State* L)
     if (argc == 2)
     {
         ax::Vec3 arg0;
-        ax::Quaternion arg1;
+        ax::Quat arg1;
         ok &= luaval_to_vec3(L, 2, &arg0, "ax.Rigidbody3D:setTransformInPhysics");
         ok &= luaval_to_quaternion(L, 3, &arg1);
         if (!ok)
@@ -220,7 +220,7 @@ int axlua_physics3d_Collider3D_setTransformInPhysics(lua_State* L)
     if (argc == 2)
     {
         ax::Vec3 arg0;
-        ax::Quaternion arg1;
+        ax::Quat arg1;
         ok &= luaval_to_vec3(L, 2, &arg0, "ax.Collider3D:setTransformInPhysics");
         ok &= luaval_to_quaternion(L, 3, &arg1);
         if (!ok)

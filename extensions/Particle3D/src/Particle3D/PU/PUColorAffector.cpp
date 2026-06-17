@@ -91,7 +91,7 @@ void PUColorAffector::updatePUAffector(PUParticle3D* particle, float /*deltaTime
     {
         // PUParticle3D *particle = iter;
         //  Linear interpolation of the colour
-        Color color          = Color::WHITE;
+        Color color          = Color::white;
         float timeFraction   = (particle->totalTimeToLive - particle->timeToLive) / particle->totalTimeToLive;
         ColorMapIterator it1 = findNearestColorMapIterator(timeFraction);
         ColorMapIterator it2 = it1;

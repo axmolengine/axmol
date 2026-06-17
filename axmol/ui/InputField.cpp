@@ -119,7 +119,7 @@ InputField::~InputField()
 InputField* InputField::create()
 {
     InputField* ret = new InputField();
-    if (ret && ret->initWithPlaceholder(""sv, "Arial"sv, 24, 2, Color32::BLACK))
+    if (ret && ret->initWithPlaceholder(""sv, "Arial"sv, 24, 2, Color32::black))
     {
         ret->autorelease();
         return ret;
@@ -186,7 +186,7 @@ bool InputField::initWithPlaceholder(std::string_view placeholder,
         _renderLabel->setTextColor(_colorSpaceHolder);
     this->addProtectedChild(_renderLabel, INPUT_FIELD_RENDERER_Z);
 
-    _renderLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _renderLabel->setAnchorPoint(Anchors::center);
 
     /// selection layer
     _selectionLayer = DrawNode::create();
@@ -1506,7 +1506,7 @@ Vec2 InputField::cursorPositionFromOffset(int cursorOffset) const
 
     cursorOffset = std::min(cursorOffset, static_cast<int>(_charCount));
     if (_lineMetrics.empty())
-        return Vec2::ZERO;
+        return Vec2::zero;
 
     // Find the line containing cursorOffset
     auto it     = std::upper_bound(_lineMetrics.begin(), _lineMetrics.end(), cursorOffset,

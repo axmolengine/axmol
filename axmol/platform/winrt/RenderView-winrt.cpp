@@ -282,7 +282,7 @@ uint32_t toAxPressedButtons(PointerPointProperties const& properties)
 
 RenderView* RenderView::create(std::string_view viewName)
 {
-    return createWithRect(viewName, Rect::ZERO);
+    return createWithRect(viewName, Rect::zero);
 }
 
 RenderView* RenderView::createWithRect(std::string_view viewName,

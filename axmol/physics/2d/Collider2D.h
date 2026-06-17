@@ -259,7 +259,7 @@ public:
      * This function should be overridden in inherit classes.
      * @return A Vec2 object.
      */
-    virtual Vec2 getOffset() { return Vec2::ZERO; }
+    virtual Vec2 getOffset() { return Vec2::zero; }
 
     /**
      * Get this shape's center position.
@@ -284,7 +284,7 @@ public:
      * @param count An integer number.
      * @param center A Vec2 object, default value is Vec2(0,0).
      */
-    static void recenterPoints(Vec2* points, int count, const Vec2& center = Vec2::ZERO);
+    static void recenterPoints(Vec2* points, int count, const Vec2& center = Vec2::zero);
 
     /**
      * Get center of the polygon points.
@@ -449,7 +449,7 @@ public:
      */
     static PolygonCollider2D* create(std::span<const Vec2> points,
                                      const PhysicsMaterial2D& material = PHYSICS_MATERIAL_2D_DEFAULT,
-                                     const Vec2& offset                = Vec2::ZERO,
+                                     const Vec2& offset                = Vec2::zero,
                                      float radius                      = 0.0f);
 
     /**
@@ -507,7 +507,7 @@ public:
      */
     static BoxCollider2D* create(const Vec2& size,
                                  const PhysicsMaterial2D& material = PHYSICS_MATERIAL_2D_DEFAULT,
-                                 const Vec2& offset                = Vec2::ZERO,
+                                 const Vec2& offset                = Vec2::zero,
                                  float radius                      = 0.0f);
 
     /**
@@ -646,7 +646,7 @@ public:
      */
     static EdgeBoxCollider2D* create(const Vec2& size,
                                      const PhysicsMaterial2D& material = PHYSICS_MATERIAL_2D_DEFAULT,
-                                     const Vec2& offset                = Vec2::ZERO);
+                                     const Vec2& offset                = Vec2::zero);
 
     /**
      * Get this box's position offset.

@@ -230,7 +230,7 @@ void PhysicsDebugDraw3D::draw(ax::Renderer* renderer)
     if (_dirtyLines && !_lineBuffer.empty())
     {
         _lineCommand.unsafePS()->setUniform(_locMVP, transform.m, sizeof(transform.m));
-        _lineCommand.init(0, Mat4::IDENTITY, 0);
+        _lineCommand.init(0, Mat4::identity, 0);
 
         _lineCommand.setPrimitiveType(CustomCommand::PrimitiveType::LINE);
         _lineCommand.createVertexBuffer(sizeof(_lineBuffer[0]), _lineBuffer.size(),
@@ -245,7 +245,7 @@ void PhysicsDebugDraw3D::draw(ax::Renderer* renderer)
     if (_dirtyTris && !_triBuffer.empty())
     {
         _triCommand.unsafePS()->setUniform(_locMVP, transform.m, sizeof(transform.m));
-        _triCommand.init(0, Mat4::IDENTITY, 0);
+        _triCommand.init(0, Mat4::identity, 0);
 
         _triCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE);
         _triCommand.createVertexBuffer(sizeof(_triBuffer[0]), _triBuffer.size(), CustomCommand::BufferUsage::DYNAMIC);

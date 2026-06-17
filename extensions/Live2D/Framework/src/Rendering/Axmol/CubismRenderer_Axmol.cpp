@@ -1843,7 +1843,7 @@ void CubismRenderer_Axmol::Initialize(CubismModel* model, csmInt32 maskBufferCou
         _offscreenFrameBuffer.CreateOffscreenFrame(_clippingManager->GetClippingMaskBufferSize().X,
                                                   _clippingManager->GetClippingMaskBufferSize().Y,
                                                   NULL,
-                                                  ax::Color::WHITE);
+                                                  ax::Color::white);
     }
 
     if (model->IsUsingMaskingForOffscreen())
@@ -1858,7 +1858,7 @@ void CubismRenderer_Axmol::Initialize(CubismModel* model, csmInt32 maskBufferCou
         _offscreenMaskFrameBuffer.CreateOffscreenFrame(_offscreenClippingManager->GetClippingMaskBufferSize().X,
                                                        _offscreenClippingManager->GetClippingMaskBufferSize().Y,
                                                        NULL,
-                                                       ax::Color::WHITE);
+                                                       ax::Color::white);
     }
 
     _sortedDrawableIndexList.Resize(model->GetDrawableCount(), 0);
@@ -1945,7 +1945,7 @@ void CubismRenderer_Axmol::DoDrawModel()
                 static_cast<csmUint32>(_clippingManager->GetClippingMaskBufferSize().X),
                 static_cast<csmUint32>(_clippingManager->GetClippingMaskBufferSize().Y),
                 NULL,
-                ax::Color::WHITE);
+                ax::Color::white);
         }
 
         rhi::Texture* restoreColorBuffer = _modelRenderTargets.GetSize() > 0
@@ -1973,7 +1973,7 @@ void CubismRenderer_Axmol::DoDrawModel()
                 static_cast<csmUint32>(_offscreenClippingManager->GetClippingMaskBufferSize().X),
                 static_cast<csmUint32>(_offscreenClippingManager->GetClippingMaskBufferSize().Y),
                 NULL,
-                ax::Color::WHITE);
+                ax::Color::white);
         }
 
         rhi::Texture* restoreColorBuffer = _modelRenderTargets.GetSize() > 0

@@ -33,7 +33,7 @@ void GuideScene::continueInit()
     _view->getChild("n2")->addClickListener([this, bagBtn](EventContext*)
     {
         _groot->addChild(_guideLayer); //!!Before using TransformRect(or GlobalToLocal), the object must be added first
-        Rect rect = bagBtn->transformRect(Rect(Vec2::ZERO, bagBtn->getSize()), _guideLayer);
+        Rect rect = bagBtn->transformRect(Rect(Vec2::zero, bagBtn->getSize()), _guideLayer);
 
         GObject* window = _guideLayer->getChild("window");
         window->setSize((int)rect.size.width, (int)rect.size.height);

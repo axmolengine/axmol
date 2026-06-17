@@ -323,7 +323,7 @@ void FUIRichText::addNewLine()
 void FUIRichText::handleTextRenderer(HtmlElement* element, const std::string& text)
 {
     FUILabel* textRenderer = FUILabel::create();
-    textRenderer->setAnchorPoint(Vec2::ZERO);
+    textRenderer->setAnchorPoint(Vec2::zero);
     textRenderer->setCascadeOpacityEnabled(true);
     textRenderer->getTextFormat()->setFormat(element->format);
     textRenderer->applyTextFormat();
@@ -351,7 +351,7 @@ void FUIRichText::handleTextRenderer(HtmlElement* element, const std::string& te
     if (leftLength > 0)
     {
         FUILabel* leftRenderer = FUILabel::create();
-        leftRenderer->setAnchorPoint(Vec2::ZERO);
+        leftRenderer->setAnchorPoint(Vec2::zero);
         leftRenderer->setCascadeOpacityEnabled(true);
         leftRenderer->getTextFormat()->setFormat(element->format);
         leftRenderer->applyTextFormat();

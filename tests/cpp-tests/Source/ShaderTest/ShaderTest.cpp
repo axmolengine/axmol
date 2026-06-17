@@ -580,7 +580,7 @@ bool ShaderRetroEffect::init()
         auto s = director->getCanvasSize();
 
         _label = Label::createWithBMFont("fonts/west_england-64.fnt", "RETRO EFFECT");
-        _label->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _label->setAnchorPoint(Anchors::center);
         _label->setProgramState(p);
         AX_SAFE_RELEASE(p);
 

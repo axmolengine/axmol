@@ -632,7 +632,7 @@ public:
      *
      * @param quat The rotation in quaternion, note that the quat must be normalized.
      */
-    virtual void setRotationQuat(const Quaternion& quat);
+    virtual void setRotationQuat(const Quat& quat);
 
     /**
      * Return the rotation by quaternion, Note that when _rotationZ_X == _rotationZ_Y, the returned quaternion equals to
@@ -640,7 +640,7 @@ public:
      *
      * @return The rotation in quaternion.
      */
-    virtual Quaternion getRotationQuat() const;
+    virtual Quat getRotationQuat() const;
 
     /**
      * Sets the X rotation (angle) of the node in degrees which performs a horizontal rotational skew.
@@ -1890,7 +1890,7 @@ protected:
     /// Convert axmol coordinates to UI windows coordinate.
     Vec2 convertToScreenSpace(const Vec2& nodePoint) const;
 
-    AX_DEPRECATED(3.0) Vec2 convertToWindowSpace(const Vec2& nodePoint) const
+    AX_DEPRECATED("3.0") Vec2 convertToWindowSpace(const Vec2& nodePoint) const
     {
         return convertToScreenSpace(nodePoint);
     }
@@ -1967,7 +1967,7 @@ protected:
     float _rotationZ_X;  ///< rotation angle on Z-axis, component X
     float _rotationZ_Y;  ///< rotation angle on Z-axis, component Y
 
-    Quaternion _rotationQuat;  /// rotation using quaternion, if _rotationZ_X == _rotationZ_Y, _rotationQuat =
+    Quat _rotationQuat;  /// rotation using quaternion, if _rotationZ_X == _rotationZ_Y, _rotationQuat =
                                /// RotationZ_X * RotationY * RotationX, else _rotationQuat = RotationY * RotationX
     rhi::VertexLayout* _vertexLayout = nullptr;
     float _scaleX;  ///< scaling factor on x-axis

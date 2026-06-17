@@ -31,8 +31,8 @@ MultiTouchTests::MultiTouchTests()
     ADD_TEST_CASE(MultiTouchTest);
 }
 
-static const Color32* s_TouchColors[5] = {&Color32::YELLOW, &Color32::BLUE, &Color32::GREEN, &Color32::RED,
-                                          &Color32::MAGENTA};
+static const Color32* s_TouchColors[5] = {&Color32::yellow, &Color32::blue, &Color32::green, &Color32::red,
+                                          &Color32::magenta};
 
 class TouchPoint : public Node
 {

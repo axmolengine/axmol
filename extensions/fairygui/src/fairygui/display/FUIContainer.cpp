@@ -68,7 +68,7 @@ const Rect & FUIContainer::getClippingRegion() const
     if (_rectClippingSupport != nullptr)
         return _rectClippingSupport->_clippingRegion;
     else
-        return Rect::ZERO;
+        return Rect::zero;
 }
 
 void FUIContainer::setClippingRegion(const Rect & clippingRegion)

@@ -360,7 +360,7 @@ public:
         AX_ASSERT(pNode);
 
         Vec2 size       = pNode->getContentSize() * getScale2D(pNode);
-        ax::Point achor = ax::Vec2::ZERO;
+        ax::Point achor = ax::Vec2::zero;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
             achor = pNode->getAnchorPoint();
@@ -591,7 +591,7 @@ public:
         AX_ASSERT(pNode);
 
         Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-        ax::Point achorPoint = ax::Vec2::ZERO;
+        ax::Point achorPoint = ax::Vec2::zero;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
             achorPoint = pNode->getAnchorPoint();
@@ -605,7 +605,7 @@ public:
         AX_ASSERT(pNode);
 
         Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-        ax::Point achorPoint = ax::Vec2::ZERO;
+        ax::Point achorPoint = ax::Vec2::zero;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
             achorPoint = pNode->getAnchorPoint();
@@ -619,7 +619,7 @@ public:
         AX_ASSERT(pNode);
 
         Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-        ax::Point achorPoint = ax::Vec2::ZERO;
+        ax::Point achorPoint = ax::Vec2::zero;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
             achorPoint = pNode->getAnchorPoint();
@@ -633,7 +633,7 @@ public:
         AX_ASSERT(pNode);
 
         Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-        ax::Point achorPoint = ax::Vec2::ZERO;
+        ax::Point achorPoint = ax::Vec2::zero;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
             achorPoint = pNode->getAnchorPoint();

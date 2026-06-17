@@ -1527,7 +1527,7 @@ bool Bundle3D::loadAnimationDataJson(std::string_view id, Animation3DData* anima
             auto&& bone_keyframe_rotation = bone_keyframe[ROTATION];
             if (!bone_keyframe_rotation.error())
             {
-                Quaternion val;
+                Quat val;
                 int i = 0;
                 for (auto&& axis_val : bone_keyframe_rotation)
                 {
@@ -1646,7 +1646,7 @@ bool Bundle3D::loadAnimationDataBinary(std::string_view id, Animation3DData* ani
 
                     if (hasRotate)
                     {
-                        Quaternion rotate;
+                        Quat rotate;
                         if (_binaryReader.read_blob(rotate.comps) != 4)
                         {
                             AXLOGW("warning: Failed to read AnimationData: rotate '{}'.", _path);
@@ -1811,7 +1811,7 @@ NodeData* Bundle3D::parseNodesRecursivelyJson(simdjson::simdjson_result<simdjson
     {
         if (isSkin || singleSprite)
         {
-            nodedata->transform = Mat4::IDENTITY;
+            nodedata->transform = Mat4::identity;
         }
         else
         {
@@ -1980,7 +1980,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
         {
             if (isSkin || singleSprite)
             {
-                nodedata->transform = Mat4::IDENTITY;
+                nodedata->transform = Mat4::identity;
             }
             else
             {

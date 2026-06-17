@@ -79,7 +79,7 @@ Skin* Skin::create(std::string_view pszFileName)
     return nullptr;
 }
 
-Skin::Skin() : _bone(nullptr), _armature(nullptr), _displayName(), _skinTransform(Mat4::IDENTITY) {}
+Skin::Skin() : _bone(nullptr), _armature(nullptr), _displayName(), _skinTransform(Mat4::identity) {}
 
 bool Skin::initWithSpriteFrameName(std::string_view spriteFrameName)
 {

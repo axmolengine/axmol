@@ -145,7 +145,7 @@ public:
 
 protected:
     void setVertexCoords(const Rect& rect, V3F_T2F_C4B_Quad* outQuad) override;
-    Vec2 _spriteVertexAnchor = Vec2::ANCHOR_MIDDLE;
+    Vec2 _spriteVertexAnchor = Anchors::center;
 };
 
 // end of sprite_nodes group

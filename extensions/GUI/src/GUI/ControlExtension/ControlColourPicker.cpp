@@ -73,7 +73,7 @@ bool ControlColourPicker::init()
 
         // Add image
         _background = ControlUtils::addSpriteToTargetWithPosAndAnchor("menuColourPanelBackground.png", spriteSheet,
-                                                                      Vec2::ZERO, Vec2(0.5f, 0.5f));
+                                                                      Vec2::zero, Vec2(0.5f, 0.5f));
         if (!_background)
             return false;
         AX_SAFE_RETAIN(_background);

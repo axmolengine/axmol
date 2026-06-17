@@ -93,7 +93,7 @@ public:
     bool onPointerDown(PointerEvent* pointerEvent)
     {
         // FIXME: Node::getBoundBox() doesn't return it in local coordinates... so create one manually.
-        const auto localRect = Rect(Vec2::ZERO, _parent->getContentSize());
+        const auto localRect = Rect(Vec2::zero, _parent->getContentSize());
         if (localRect.containsPoint(_parent->convertPointerToNodeSpace(pointerEvent)))
         {
             return true;
@@ -571,7 +571,7 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         RichElementImage* elementImg = nullptr;
         if (!src.empty())
         {
-            elementImg = RichElementImage::create(0, Color32::WHITE, src, "", resType);
+            elementImg = RichElementImage::create(0, Color32::white, src, "", resType);
             if (height >= 0)
                 elementImg->setHeight(height);
             if (width >= 0)
@@ -606,7 +606,7 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
     });
 
     MyXMLVisitor::setTagDescription("br", false, [](const ValueMap& /*tagAttrValueMap*/) {
-        RichElementNewLine* richElement = RichElementNewLine::create(0, Color32::WHITE);
+        RichElementNewLine* richElement = RichElementNewLine::create(0, Color32::white);
         return make_pair(ValueMap(), richElement);
     });
 
@@ -634,7 +634,7 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         }
 
         return make_pair(attrValueMap, nullptr);
-    }, [] { return RichElementNewLine::create(0, 2, Color32::WHITE); });
+    }, [] { return RichElementNewLine::create(0, 2, Color32::white); });
 
     constexpr auto headerTagEnterHandler = [](const ValueMap& tagAttrValueMap,
                                               std::string_view defaultFontSize) -> std::pair<ValueMap, RichElement*> {
@@ -670,27 +670,27 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
 
     MyXMLVisitor::setTagDescription("h1", true, [headerTagEnterHandler](const ValueMap& tagAttrValueMap) {
         return headerTagEnterHandler(tagAttrValueMap, "2em");
-    }, [] { return RichElementNewLine::create(0, 2, Color32::WHITE); });
+    }, [] { return RichElementNewLine::create(0, 2, Color32::white); });
 
     MyXMLVisitor::setTagDescription("h2", true, [headerTagEnterHandler](const ValueMap& tagAttrValueMap) {
         return headerTagEnterHandler(tagAttrValueMap, "1.75em");
-    }, [] { return RichElementNewLine::create(0, 2, Color32::WHITE); });
+    }, [] { return RichElementNewLine::create(0, 2, Color32::white); });
 
     MyXMLVisitor::setTagDescription("h3", true, [headerTagEnterHandler](const ValueMap& tagAttrValueMap) {
         return headerTagEnterHandler(tagAttrValueMap, "1.5em");
-    }, [] { return RichElementNewLine::create(0, 2, Color32::WHITE); });
+    }, [] { return RichElementNewLine::create(0, 2, Color32::white); });
 
     MyXMLVisitor::setTagDescription("h4", true, [headerTagEnterHandler](const ValueMap& tagAttrValueMap) {
         return headerTagEnterHandler(tagAttrValueMap, "1.25em");
-    }, [] { return RichElementNewLine::create(0, 2, Color32::WHITE); });
+    }, [] { return RichElementNewLine::create(0, 2, Color32::white); });
 
     MyXMLVisitor::setTagDescription("h5", true, [headerTagEnterHandler](const ValueMap& tagAttrValueMap) {
         return headerTagEnterHandler(tagAttrValueMap, "1.125em");
-    }, [] { return RichElementNewLine::create(0, 2, Color32::WHITE); });
+    }, [] { return RichElementNewLine::create(0, 2, Color32::white); });
 
     MyXMLVisitor::setTagDescription("h6", true, [headerTagEnterHandler](const ValueMap& tagAttrValueMap) {
         return headerTagEnterHandler(tagAttrValueMap, "1em");
-    }, [] { return RichElementNewLine::create(0, 2, Color32::WHITE); });
+    }, [] { return RichElementNewLine::create(0, 2, Color32::white); });
 
     MyXMLVisitor::setTagDescription("outline", true, [](const ValueMap& tagAttrValueMap) {
         // supported attributes:
@@ -757,7 +757,7 @@ Color32 MyXMLVisitor::getColor() const
         if (i->hasColor)
             return i->color;
     }
-    return Color32::WHITE;
+    return Color32::white;
 }
 
 float MyXMLVisitor::getFontSize() const
@@ -837,7 +837,7 @@ std::tuple<bool, Color32, int> MyXMLVisitor::getOutline() const
         if (i->effect == StyleEffect::OUTLINE)
             return std::make_tuple(true, i->outlineColor, i->outlineSize);
     }
-    return std::make_tuple(false, Color32::WHITE, -1);
+    return std::make_tuple(false, Color32::white, -1);
 }
 
 std::tuple<bool, Color32, Vec2, int> MyXMLVisitor::getShadow() const
@@ -847,7 +847,7 @@ std::tuple<bool, Color32, Vec2, int> MyXMLVisitor::getShadow() const
         if (i->effect == StyleEffect::SHADOW)
             return std::make_tuple(true, i->shadowColor, i->shadowOffset, i->shadowBlurRadius);
     }
-    return std::make_tuple(false, Color32::BLACK, Vec2(2.0, -2.0), 0);
+    return std::make_tuple(false, Color32::black, Vec2(2.0, -2.0), 0);
 }
 
 std::tuple<bool, Color32> MyXMLVisitor::getGlow() const
@@ -857,7 +857,7 @@ std::tuple<bool, Color32> MyXMLVisitor::getGlow() const
         if (i->effect == StyleEffect::GLOW)
             return std::make_tuple(true, i->glowColor);
     }
-    return std::make_tuple(false, Color32::WHITE);
+    return std::make_tuple(false, Color32::white);
 }
 
 std::string_view MyXMLVisitor::getName() const
@@ -1671,7 +1671,7 @@ static inline bool parseHexDigit(uint8_t& out, const char* p, int n)
 
 Color32 RichText::parseColor32(std::string_view color)
 {
-    Color32 ret = Color32::WHITE;
+    Color32 ret = Color32::white;
 
     if (!color.empty() && color[0] == '#') [[likely]]
     {
@@ -2297,17 +2297,17 @@ void RichText::formatRenderers()
 
                 if (verticalAlignment == VerticalAlignment::CENTER)
                 {
-                    iter->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+                    iter->setAnchorPoint(Anchors::leftCenter);
                     iter->setPosition(nextPosX, nextPosY + iSize.height / 2);
                 }
                 else if (verticalAlignment == VerticalAlignment::TOP)
                 {
-                    iter->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+                    iter->setAnchorPoint(Anchors::topLeft);
                     iter->setPosition(nextPosX, nextPosY + iSize.height);
                 }
                 else  // if (verticalAlignment == VerticalAlignment::BOTTOM)
                 {
-                    iter->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+                    iter->setAnchorPoint(Anchors::bottomLeft);
                     iter->setPosition(nextPosX, nextPosY);
                 }
 
@@ -2364,17 +2364,17 @@ void RichText::formatRenderers()
             {
                 if (verticalAlignment == VerticalAlignment::CENTER)
                 {
-                    iter->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+                    iter->setAnchorPoint(Anchors::leftCenter);
                     iter->setPosition(nextPosX, nextPosY + lineHeight / 2);
                 }
                 else if (verticalAlignment == VerticalAlignment::TOP)
                 {
-                    iter->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+                    iter->setAnchorPoint(Anchors::topLeft);
                     iter->setPosition(nextPosX, nextPosY + lineHeight);
                 }
                 else  // if (verticalAlignment == VerticalAlignment::BOTTOM)
                 {
-                    iter->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+                    iter->setAnchorPoint(Anchors::bottomLeft);
                     iter->setPosition(nextPosX, nextPosY);
                 }
                 this->addProtectedChild(iter, 1);

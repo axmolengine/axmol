@@ -162,8 +162,8 @@ void Camera::lookAt(const Vec3& lookAtPos, const Vec3& up)
     rotation.m[10] = zaxis.z;
     rotation.m[11] = 0;
 
-    Quaternion quaternion;
-    Quaternion::createFromRotationMatrix(rotation, &quaternion);
+    Quat quaternion;
+    Quat::createFromRotationMatrix(rotation, &quaternion);
     quaternion.normalize();
     setRotationQuat(quaternion);
 }

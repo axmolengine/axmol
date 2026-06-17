@@ -100,7 +100,7 @@ protected:
     CustomCommand _gridBeginCommand;
     CustomCommand _gridEndCommand;
 
-    Rect _gridRect = Rect::ZERO;
+    Rect _gridRect = Rect::zero;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(NodeGrid);

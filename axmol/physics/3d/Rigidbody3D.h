@@ -376,7 +376,7 @@ public:
      * @param translateInPhysics Translation offset in the body's local physics space.
      * @param rotInPhysics Rotation offset in the body's local physics space.
      */
-    void setTransformInPhysics(const Vec3& translateInPhysics, const Quaternion& rotInPhysics);
+    void setTransformInPhysics(const Vec3& translateInPhysics, const Quat& rotInPhysics);
 
     /** @brief Pushes the owner node's transform into the native physics body. */
     void syncNodeToPhysics() override;
@@ -393,8 +393,8 @@ public:
     void setPosition(const Vec3& point, bool teleport = false);
     Vec3 getPosition() const;
 
-    void setRotation(const Quaternion& rot, bool teleport = false);
-    Quaternion getRotation() const;
+    void setRotation(const Quat& rot, bool teleport = false);
+    Quat getRotation() const;
 
     /** Convert the world point to local. */
     Vec3 world2Local(const Vec3& point);
@@ -448,12 +448,12 @@ protected:
     JPH::BodyID _bodyID{};
 
     float _mass{0.0f};
-    Vec3 _inertia{Vec3::ZERO};
+    Vec3 _inertia{Vec3::zero};
 
     float _gravityScale{1.0f};
 
-    Vec3 _linearVelocity{Vec3::ZERO};
-    Vec3 _angularVelocity{Vec3::ZERO};
+    Vec3 _linearVelocity{Vec3::zero};
+    Vec3 _angularVelocity{Vec3::zero};
     float _linearDamping{0.0f};
     float _angularDamping{0.0f};
 

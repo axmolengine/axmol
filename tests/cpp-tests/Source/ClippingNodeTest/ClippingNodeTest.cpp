@@ -79,8 +79,8 @@ bool BaseClippingNodeTest::init()
     {
 
         auto background = Sprite::create(s_back3);
-        background->setAnchorPoint(Vec2::ZERO);
-        background->setPosition(Vec2::ZERO);
+        background->setAnchorPoint(Vec2::zero);
+        background->setPosition(Vec2::zero);
         this->addChild(background, -1);
 
         this->setup();
@@ -363,12 +363,12 @@ std::string HoleDemo::subtitle() const
 void HoleDemo::setup()
 {
     auto target = Sprite::create(s_pathBlock);
-    target->setAnchorPoint(Vec2::ZERO);
+    target->setAnchorPoint(Vec2::zero);
     target->setScale(3);
 
     _outerClipper = ClippingNode::create();
     _outerClipper->retain();
-    AffineTransform transform = AffineTransform::IDENTITY;
+    AffineTransform transform = AffineTransform::identity;
     transform                 = AffineTransformScale(transform, target->getScale(), target->getScale());
 
     _outerClipper->setContentSize(SizeApplyAffineTransform(target->getContentSize(), transform));
@@ -589,7 +589,7 @@ void RawStencilBufferTest::initCommands()
         cmdIndex++;
         cmd.init(_globalZOrder, blend);
         cmd.setBeforeCallback(AX_CALLBACK_0(RawStencilBufferTest::onBeforeDrawClip, this, i));
-        Vec2 vertices[]          = {Vec2::ZERO, Vec2(stencilPoint.x, 0.0f), stencilPoint, Vec2(0.0f, stencilPoint.y)};
+        Vec2 vertices[]          = {Vec2::zero, Vec2(stencilPoint.x, 0.0f), stencilPoint, Vec2(0.0f, stencilPoint.y)};
         unsigned short indices[] = {0, 2, 1, 0, 3, 2};
         cmd.createVertexBuffer(sizeof(Vec2), 4, rhi::BufferUsage::STATIC);
         cmd.updateVertexBuffer(vertices, sizeof(vertices));
@@ -601,7 +601,7 @@ void RawStencilBufferTest::initCommands()
         cmdIndex++;
         cmd2.init(_globalZOrder, blend);
         cmd2.setBeforeCallback(AX_CALLBACK_0(RawStencilBufferTest::onBeforeDrawSprite, this, i));
-        Vec2 vertices2[] = {Vec2::ZERO, Vec2(winPoint.x, 0.0f), winPoint, Vec2(0.0f, winPoint.y)};
+        Vec2 vertices2[] = {Vec2::zero, Vec2(winPoint.x, 0.0f), winPoint, Vec2(0.0f, winPoint.y)};
         cmd2.createVertexBuffer(sizeof(Vec2), 4, rhi::BufferUsage::STATIC);
         cmd2.updateVertexBuffer(vertices2, sizeof(vertices2));
         cmd2.createIndexBuffer(rhi::IndexFormat::U_SHORT, 6, rhi::BufferUsage::STATIC);
@@ -625,7 +625,7 @@ void RawStencilBufferTest::draw(Renderer* renderer, const Mat4& transform, uint3
         _sprites.at(i)->setPosition(spritePoint);
         _spritesStencil.at(i)->setPosition(spritePoint);
 
-        renderer->clear(ClearFlag::STENCIL, Color::BLACK, 0.f, 0x0, _globalZOrder);
+        renderer->clear(ClearFlag::STENCIL, Color::black, 0.f, 0x0, _globalZOrder);
 
         renderer->addCommand(&_renderCmds[cmdIndex]);
         cmdIndex++;
@@ -1040,13 +1040,13 @@ std::string UniqueChildStencilTest::subtitle() const
 void UniqueChildStencilTest::setup()
 {
     auto target = Sprite::create(s_pathBlock);
-    target->setAnchorPoint(Vec2::ZERO);
+    target->setAnchorPoint(Vec2::zero);
     target->setStretchEnabled(true);
     target->setContentSize(target->getContentSize() * 3);
 
     _outerClipper = ClippingNode::create();
     _outerClipper->retain();
-    AffineTransform transform = AffineTransform::IDENTITY;
+    AffineTransform transform = AffineTransform::identity;
     transform                 = AffineTransformScale(transform, target->getScale(), target->getScale());
 
     _outerClipper->setContentSize(SizeApplyAffineTransform(target->getContentSize(), transform));
@@ -1082,14 +1082,14 @@ void UniqueChildStencilTest::addChildStencils()
     // Child stencil 1
     constexpr auto radius = 30.f;
     auto* drawNode        = DrawNode::create();
-    drawNode->drawSolidCircle(Vec2(50, 50), radius, 360, 180, 1, 1, Color::MAGENTA);
+    drawNode->drawSolidCircle(Vec2(50, 50), radius, 360, 180, 1, 1, Color::magenta);
 
     _parentStencil->addChild(drawNode);
 
     // Child stencil 2
     drawNode = DrawNode::create();
     drawNode->drawSolidRect(Vec2(contentSize.width - 75, contentSize.height - 75),
-                            Vec2(contentSize.width - 25, contentSize.height - 25), Color::MAGENTA);
+                            Vec2(contentSize.width - 25, contentSize.height - 25), Color::magenta);
     _parentStencil->addChild(drawNode);
 
     // Child stencil 3
@@ -1097,7 +1097,7 @@ void UniqueChildStencilTest::addChildStencils()
     auto sprite     = Sprite::create("Images/grossini.png");
     sprite->setStretchEnabled(true);
     sprite->setContentSize(spriteSize);
-    sprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    sprite->setAnchorPoint(Anchors::center);
     // position the sprite on the center of the screen
     sprite->setPosition(Vec2(50, contentSize.height - 50));
     _parentStencil->addChild(sprite);
@@ -1106,7 +1106,7 @@ void UniqueChildStencilTest::addChildStencils()
     sprite = Sprite::create("Images/elephant1_Diffuse.png");
     sprite->setStretchEnabled(true);
     sprite->setContentSize(spriteSize);
-    sprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    sprite->setAnchorPoint(Anchors::center);
     // position the sprite on the center of the screen
     sprite->setPosition(Vec2(contentSize.width - 50, 50));
     _parentStencil->addChild(sprite);

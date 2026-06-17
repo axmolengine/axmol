@@ -365,7 +365,7 @@ void Director::drawScene()
     // draw the notifications node
     if (_notificationNode)
     {
-        _notificationNode->visit(_renderer, Mat4::IDENTITY, 0);
+        _notificationNode->visit(_renderer, Mat4::identity, 0);
     }
 
     updateFrameRate();
@@ -529,9 +529,9 @@ void Director::initMatrixStack()
         _textureMatrixStack.pop();
     }
 
-    _modelViewMatrixStack.push(Mat4::IDENTITY);
-    _projectionMatrixStack.push(Mat4::IDENTITY);
-    _textureMatrixStack.push(Mat4::IDENTITY);
+    _modelViewMatrixStack.push(Mat4::identity);
+    _projectionMatrixStack.push(Mat4::identity);
+    _textureMatrixStack.push(Mat4::identity);
 }
 
 void Director::resetMatrixStack()
@@ -563,15 +563,15 @@ void Director::loadIdentityMatrix(MATRIX_STACK_TYPE type)
 {
     if (MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW == type)
     {
-        _modelViewMatrixStack.top() = Mat4::IDENTITY;
+        _modelViewMatrixStack.top() = Mat4::identity;
     }
     else if (MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION == type)
     {
-        _projectionMatrixStack.top() = Mat4::IDENTITY;
+        _projectionMatrixStack.top() = Mat4::identity;
     }
     else if (MATRIX_STACK_TYPE::MATRIX_STACK_TEXTURE == type)
     {
-        _textureMatrixStack.top() = Mat4::IDENTITY;
+        _textureMatrixStack.top() = Mat4::identity;
     }
     else
     {
@@ -832,7 +832,7 @@ Vec2 Director::getVisibleSize() const
     }
     else
     {
-        return Vec2::ZERO;
+        return Vec2::zero;
     }
 }
 
@@ -844,7 +844,7 @@ Vec2 Director::getVisibleOrigin() const
     }
     else
     {
-        return Vec2::ZERO;
+        return Vec2::zero;
     }
 }
 
@@ -856,7 +856,7 @@ Rect Director::getSafeAreaRect() const
     }
     else
     {
-        return Rect::ZERO;
+        return Rect::zero;
     }
 }
 
@@ -1367,7 +1367,7 @@ void Director::showStats()
             prevVerts = currentVerts;
         }
 
-        const Mat4& identity = Mat4::IDENTITY;
+        const Mat4& identity = Mat4::identity;
         _drawnVerticesLabel->visit(_renderer, identity, 0);
         _drawnBatchesLabel->visit(_renderer, identity, 0);
         _FPSLabel->visit(_renderer, identity, 0);

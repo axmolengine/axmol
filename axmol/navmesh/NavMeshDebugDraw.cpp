@@ -50,7 +50,7 @@ void NavMeshDebugDraw::initCustomCommand(CustomCommand& command)
 {
     command.set3D(true);
     command.setTransparent(true);
-    command.init(0, Mat4::IDENTITY, Node::FLAGS_RENDER_AS_3D);
+    command.init(0, Mat4::identity, Node::FLAGS_RENDER_AS_3D);
     command.setDrawType(CustomCommand::DrawType::ARRAY);
     command.setWeakPSVL(_programState, _vertexLayout);
 
@@ -155,8 +155,8 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
     auto beforeCommand = renderer->nextCallbackCommand();
     auto afterCommand  = renderer->nextCallbackCommand();
 
-    beforeCommand->init(0, Mat4::IDENTITY, Node::FLAGS_RENDER_AS_3D);
-    afterCommand->init(0, Mat4::IDENTITY, Node::FLAGS_RENDER_AS_3D);
+    beforeCommand->init(0, Mat4::identity, Node::FLAGS_RENDER_AS_3D);
+    afterCommand->init(0, Mat4::identity, Node::FLAGS_RENDER_AS_3D);
 
     beforeCommand->func = AX_CALLBACK_0(NavMeshDebugDraw::onBeforeVisitCmd, this);
     afterCommand->func  = AX_CALLBACK_0(NavMeshDebugDraw::onAfterVisitCmd, this);

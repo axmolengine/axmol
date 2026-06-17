@@ -371,7 +371,7 @@ public:
      * @param delta The time step (in seconds) to simulate.
      */
     void stepSimulation(float delta);
-    AX_DEPRECATED(3.0) inline void step(float dt) { stepSimulation(dt); }
+    AX_DEPRECATED("3.0") inline void step(float dt) { stepSimulation(dt); }
 
 protected:
     static bool handlePreSolve(b2ShapeId shapeIdA,

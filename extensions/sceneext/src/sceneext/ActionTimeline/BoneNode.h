@@ -215,7 +215,7 @@ protected:
     ax::BlendFunc _blendFunc = ax::BlendFunc::ALPHA_NON_PREMULTIPLIED;
 
     bool _isRackShow     = false;
-    ax::Color _rackColor = ax::Color::WHITE;
+    ax::Color _rackColor = ax::Color::white;
     float _rackLength    = 50.0f;
     float _rackWidth     = 20.0f;
 

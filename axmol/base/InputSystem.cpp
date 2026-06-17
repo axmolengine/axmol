@@ -96,7 +96,7 @@ Rect InputSystem::getNodeNativeWindowRect(Node* node) const
         camera = Camera::getDefaultCamera();
 
     // 2. Transform local bounds of the node directly into 3D World Space coordinates
-    auto worldLeftBottom = node->convertToWorldSpace(Vec2::ZERO);
+    auto worldLeftBottom = node->convertToWorldSpace(Vec2::zero);
     auto worldRightTop   = node->convertToWorldSpace(node->getContentSize());
 
     // 3. Project world positions straight to absolute Top-Left screen pixels using our new robust Camera API
@@ -624,7 +624,7 @@ void InputSystem::onPlatformKeyboardWillShow(float rawX, float rawY, float rawWi
         keyboardPos  = nativeToScreen(keyboardPos);
 
         // Transform the relative screen size vector into World Space dimensions
-        ax::Vec2 worldSize = director->screenToWorld(keyboardSize) - director->screenToWorld(ax::Vec2::ZERO);
+        ax::Vec2 worldSize = director->screenToWorld(keyboardSize) - director->screenToWorld(ax::Vec2::zero);
         float worldW       = std::abs(worldSize.x);
         float worldH       = std::abs(worldSize.y);
 

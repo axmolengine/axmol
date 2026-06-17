@@ -304,7 +304,7 @@ bool RenderTexture::initWithWidthAndHeightInternal(int w,
         // retained
         setSprite(Sprite::createWithTexture(_colorTexture));
 
-        _sprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _sprite->setAnchorPoint(Anchors::center);
         _sprite->setPosition(Vec2(w, h) / 2);
 
         applySpriteFlippedY(_sprite);

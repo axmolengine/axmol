@@ -139,7 +139,7 @@ bool CameraBackgroundDepthBrush::init()
     _vertices[2].position = Vec3(1, 1, 0);
     _vertices[3].position = Vec3(-1, 1, 0);
 
-    _vertices[0].color = _vertices[1].color = _vertices[2].color = _vertices[3].color = Color32::BLACK;
+    _vertices[0].color = _vertices[1].color = _vertices[2].color = _vertices[3].color = Color32::black;
 
     _vertices[0].texCoord = Tex2F(0, 0);
     _vertices[1].texCoord = Tex2F(1, 0);

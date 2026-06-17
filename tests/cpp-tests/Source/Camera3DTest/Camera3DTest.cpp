@@ -116,14 +116,14 @@ CameraRotationTest::CameraRotationTest()
     // Yellow is at the back
     bill1 = BillBoard::create("Images/Icon.png");
     bill1->setPosition3D(Vec3(50.0f, 10.0f, -10.0f));
-    bill1->setColor(Color32::YELLOW);
+    bill1->setColor(Color32::yellow);
     bill1->setScale(0.6f);
     mesh->addChild(bill1);
 
     l1 = Label::create();
     l1->setPosition(Vec2(0.0f, -10.0f));
     l1->setString("Billboard1");
-    l1->setColor(Color32::WHITE);
+    l1->setColor(Color32::white);
     l1->setScale(3);
     bill1->addChild(l1);
 
@@ -139,7 +139,7 @@ CameraRotationTest::CameraRotationTest()
     l2 = Label::create();
     l2->setString("Billboard2");
     l2->setPosition(Vec2(0.0f, -10.0f));
-    l2->setColor(Color32::WHITE);
+    l2->setColor(Color32::white);
     l2->setScale(3);
     bill2->addChild(l2);
 
@@ -249,10 +249,10 @@ void Camera3DTestDemo::SwitchViewCallback(Object* sender, CameraType cameraType)
         _camera->setPosition3D(Vec3(0, 130, 130) + _mesh->getPosition3D());
         _camera->lookAt(_mesh->getPosition3D());
 
-        _RotateRightlabel->setColor(Color32::WHITE);
-        _RotateLeftlabel->setColor(Color32::WHITE);
-        _ZoomInlabel->setColor(Color32::WHITE);
-        _ZoomOutlabel->setColor(Color32::WHITE);
+        _RotateRightlabel->setColor(Color32::white);
+        _RotateLeftlabel->setColor(Color32::white);
+        _ZoomInlabel->setColor(Color32::white);
+        _ZoomOutlabel->setColor(Color32::white);
     }
     else if (_cameraType == CameraType::FirstPerson)
     {
@@ -262,20 +262,20 @@ void Camera3DTestDemo::SwitchViewCallback(Object* sender, CameraType cameraType)
         _camera->setPosition3D(Vec3(0, 35, 0) + _mesh->getPosition3D());
         _camera->lookAt(_mesh->getPosition3D() + newFaceDir * 50);
 
-        _RotateRightlabel->setColor(Color32::WHITE);
-        _RotateLeftlabel->setColor(Color32::WHITE);
-        _ZoomInlabel->setColor(Color32::GRAY);
-        _ZoomOutlabel->setColor(Color32::GRAY);
+        _RotateRightlabel->setColor(Color32::white);
+        _RotateLeftlabel->setColor(Color32::white);
+        _ZoomInlabel->setColor(Color32::gray);
+        _ZoomOutlabel->setColor(Color32::gray);
     }
     else if (_cameraType == CameraType::ThirdPerson)
     {
         _camera->setPosition3D(Vec3(0, 130, 130) + _mesh->getPosition3D());
         _camera->lookAt(_mesh->getPosition3D());
 
-        _RotateRightlabel->setColor(Color32::GRAY);
-        _RotateLeftlabel->setColor(Color32::GRAY);
-        _ZoomInlabel->setColor(Color32::WHITE);
-        _ZoomOutlabel->setColor(Color32::WHITE);
+        _RotateRightlabel->setColor(Color32::gray);
+        _RotateLeftlabel->setColor(Color32::gray);
+        _ZoomInlabel->setColor(Color32::white);
+        _ZoomOutlabel->setColor(Color32::white);
     }
 }
 void Camera3DTestDemo::onEnter()
@@ -353,7 +353,7 @@ void Camera3DTestDemo::onEnter()
         label3, AX_CALLBACK_1(Camera3DTestDemo::SwitchViewCallback, this, CameraType::FirstPerson));
     auto menu = Menu::create(menuItem1, menuItem2, menuItem3, nullptr);
 
-    menu->setPosition(Vec2::ZERO);
+    menu->setPosition(Vec2::zero);
 
     menuItem1->setPosition(VisibleRect::left().x + 100, VisibleRect::top().y - 50);
     menuItem2->setPosition(VisibleRect::left().x + 100, VisibleRect::top().y - 100);
@@ -750,7 +750,7 @@ void CameraCullingDemo::onEnter()
     auto menuItem1 = MenuItemFont::create("Switch Camera", AX_CALLBACK_1(CameraCullingDemo::switchViewCallback, this));
     menuItem1->setColor(Color32(0, 200, 20));
     auto menu = Menu::create(menuItem1, nullptr);
-    menu->setPosition(Vec2::ZERO);
+    menu->setPosition(Vec2::zero);
     menuItem1->setPosition(VisibleRect::left().x + 80, VisibleRect::top().y - 70);
     addChild(menu, 1);
 
@@ -1030,7 +1030,7 @@ void CameraArcBallDemo::onEnter()
         MenuItemFont::create("Switch Target", AX_CALLBACK_1(CameraArcBallDemo::switchTargetCallback, this));
     menuItem2->setColor(Color32(0, 200, 20));
     auto menu = Menu::create(menuItem1, menuItem2, nullptr);
-    menu->setPosition(Vec2::ZERO);
+    menu->setPosition(Vec2::zero);
     menuItem1->setPosition(VisibleRect::left().x + 80, VisibleRect::top().y - 70);
     menuItem2->setPosition(VisibleRect::left().x + 80, VisibleRect::top().y - 100);
     addChild(menu, 1);
@@ -1111,7 +1111,7 @@ void CameraArcBallDemo::onPointerMove(PointerEvent* event)
         float angle;
         calculateArcBall(axes, angle, prelocation.x, prelocation.y, location.x,
                          location.y);  // calculate  rotation quaternion parameters
-        Quaternion quat(axes, angle);  // get rotation quaternion
+        Quat quat(axes, angle);  // get rotation quaternion
         _rotationQuat = quat * _rotationQuat;
 
         updateCameraTransform();  // update camera Transform
@@ -1243,7 +1243,7 @@ void FogTestDemo::onEnter()
     auto menuItem3 = MenuItemLabel::create(label3, AX_CALLBACK_1(FogTestDemo::switchTypeCallback, this, 2));
     auto menu      = Menu::create(menuItem1, menuItem2, menuItem3, nullptr);
 
-    menu->setPosition(Vec2::ZERO);
+    menu->setPosition(Vec2::zero);
 
     menuItem1->setPosition(VisibleRect::left().x + 60, VisibleRect::top().y - 50);
     menuItem2->setPosition(VisibleRect::left().x + 60, VisibleRect::top().y - 100);
@@ -1493,7 +1493,7 @@ void BackgroundColorBrushTest::onEnter()
         // 1st Camera
         auto camera = Camera::createPerspective(60.0f, (float)s.width / s.height, 1.0f, 1000.0f);
         camera->setPosition3D(Vec3(0.0f, 0.0f, 200.0f));
-        camera->lookAt(Vec3::ZERO);
+        camera->lookAt(Vec3::zero);
         camera->setDepth(-2);
         camera->setCameraFlag(CameraFlag::USER1);
         addChild(camera);
@@ -1519,7 +1519,7 @@ void BackgroundColorBrushTest::onEnter()
         auto colorBrush = CameraBackgroundBrush::createColorBrush(Color(.1f, .1f, 1.f, .5f), 1.f);
         camera->setBackgroundBrush(colorBrush);
         camera->setPosition3D(Vec3(0.0f, 0.0f, 200.0f));
-        camera->lookAt(Vec3::ZERO);
+        camera->lookAt(Vec3::zero);
         camera->setDepth(-1);
         camera->setCameraFlag(CameraFlag::USER2);
         base->addChild(camera);

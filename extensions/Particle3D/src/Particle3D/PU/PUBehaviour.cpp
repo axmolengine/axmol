@@ -30,7 +30,7 @@
 namespace ax
 {
 
-PUBehaviour::PUBehaviour(void) : _particleSystem(nullptr), _behaviourScale(Vec3::ONE) {}
+PUBehaviour::PUBehaviour(void) : _particleSystem(nullptr), _behaviourScale(Vec3::one) {}
 
 PUBehaviour::~PUBehaviour(void) {}
 

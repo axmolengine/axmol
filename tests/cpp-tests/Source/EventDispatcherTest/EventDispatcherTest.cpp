@@ -66,11 +66,11 @@ public:
         _enabled = enabled;
         if (_enabled)
         {
-            this->setColor(Color32::WHITE);
+            this->setColor(Color32::white);
         }
         else
         {
-            this->setColor(Color32::GRAY);
+            this->setColor(Color32::gray);
         }
     }
 
@@ -305,7 +305,7 @@ protected:
             if (rect.containsPoint(locationInNode))
             {
                 AXLOGD("TouchableSprite: onPointerDown ...");
-                this->setColor(Color32::RED);
+                this->setColor(Color32::red);
                 return true;
             }
             return false;
@@ -313,7 +313,7 @@ protected:
 
         listener->onPointerUp = [this](PointerEvent* event) {
             AXLOGD("TouchableSprite: onPointerUp ...");
-            this->setColor(Color32::WHITE);
+            this->setColor(Color32::white);
 
             if (_removeListenerOnTouchEnded)
             {
@@ -416,7 +416,7 @@ void RemovePointerListenerOnPointerDown::onEnter()
 
         if (rect.containsPoint(locationInNode))
         {
-            sprite1->setColor(Color32::RED);
+            sprite1->setColor(Color32::red);
 
             _eventDispatcher->removeEventListener(listener1);
 
@@ -469,13 +469,13 @@ void RemoveListenerWhenDispatching::onEnter()
 
         if (rect.containsPoint(locationInNode))
         {
-            sprite1->setColor(Color32::RED);
+            sprite1->setColor(Color32::red);
             return true;
         }
         return false;
     };
 
-    listener1->onPointerUp = [=](PointerEvent* event) { sprite1->setColor(Color32::WHITE); };
+    listener1->onPointerUp = [=](PointerEvent* event) { sprite1->setColor(Color32::white); };
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, sprite1);
 
@@ -867,7 +867,7 @@ void RemoveListenerAfterAddingTest::onEnter()
 
         auto menu = Menu::create(next, nullptr);
         menu->setPosition(VisibleRect::leftBottom());
-        menu->setAnchorPoint(Vec2::ZERO);
+        menu->setAnchorPoint(Vec2::zero);
         this->addChild(menu);
     };
 
@@ -903,7 +903,7 @@ void RemoveListenerAfterAddingTest::onEnter()
 
     auto menu = Menu::create(item1, item2, item3, nullptr);
     menu->setPosition(VisibleRect::leftBottom());
-    menu->setAnchorPoint(Vec2::ZERO);
+    menu->setAnchorPoint(Vec2::zero);
 
     addChild(menu);
 }
@@ -937,23 +937,23 @@ void DirectorEventTest::onEnter()
     TTFConfig ttfConfig("fonts/arial.ttf", 20);
 
     _label1 = Label::createWithTTF(ttfConfig, "Update: 0");
-    _label1->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    _label1->setAnchorPoint(Anchors::bottomLeft);
     _label1->setPosition(30, s.height / 2 + 60);
     this->addChild(_label1);
 
     _label2 = Label::createWithTTF(ttfConfig, "Visit: 0");
-    _label2->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    _label2->setAnchorPoint(Anchors::bottomLeft);
     _label2->setPosition(30, s.height / 2 + 20);
     this->addChild(_label2);
 
     _label3 = Label::createWithTTF(ttfConfig, "Draw: 0");
-    _label3->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    _label3->setAnchorPoint(Anchors::bottomLeft);
     _label3->setPosition(30, 30);
     _label3->setPosition(30, s.height / 2 - 20);
     this->addChild(_label3);
 
     _label4 = Label::createWithTTF(ttfConfig, "Projection: 0");
-    _label4->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    _label4->setAnchorPoint(Anchors::bottomLeft);
     _label4->setPosition(30, 30);
     _label4->setPosition(30, s.height / 2 - 60);
     this->addChild(_label4);
@@ -1324,18 +1324,18 @@ PauseResumeTargetTest::PauseResumeTargetTest()
         closeItem->setPosition(VisibleRect::center());
 
         auto closeMenu = Menu::create(closeItem, nullptr);
-        closeMenu->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-        closeMenu->setPosition(Vec2::ZERO);
+        closeMenu->setAnchorPoint(Anchors::bottomLeft);
+        closeMenu->setPosition(Vec2::zero);
 
         colorLayer->addChild(closeMenu);
     });
 
-    popup->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    popup->setAnchorPoint(Anchors::rightCenter);
     popup->setPosition(VisibleRect::right());
 
     auto menu = Menu::create(popup, nullptr);
-    menu->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-    menu->setPosition(Vec2::ZERO);
+    menu->setAnchorPoint(Anchors::bottomLeft);
+    menu->setPosition(Vec2::zero);
 
     addChild(menu);
 }
@@ -1372,7 +1372,7 @@ PauseResumeTargetTest2::PauseResumeTargetTest2()
         _eventDispatcher->pauseEventListenersForTarget(_touchableSprite);
     });
 
-    _itemPauseTouch->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    _itemPauseTouch->setAnchorPoint(Anchors::rightCenter);
     _itemPauseTouch->setPosition(VisibleRect::right() + Vec2(-150.0f, 0.0f));
 
     _itemResumeTouch = MenuItemFont::create("resumeTouch", [this](Object* /*sender*/) {
@@ -1382,7 +1382,7 @@ PauseResumeTargetTest2::PauseResumeTargetTest2()
         _eventDispatcher->resumeEventListenersForTarget(_touchableSprite);
     });
 
-    _itemResumeTouch->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    _itemResumeTouch->setAnchorPoint(Anchors::rightCenter);
     _itemResumeTouch->setPosition(VisibleRect::right() + Vec2(0, 0));
 
     _itemAddToScene = MenuItemFont::create("addToScene", [this](Object* /*sender*/) {
@@ -1392,7 +1392,7 @@ PauseResumeTargetTest2::PauseResumeTargetTest2()
         this->addChild(_touchableSprite);
     });
 
-    _itemAddToScene->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    _itemAddToScene->setAnchorPoint(Anchors::rightCenter);
     _itemAddToScene->setPosition(VisibleRect::right() + Vec2(-150.0f, -50.0f));
 
     _itemRemoveFromScene = MenuItemFont::create("removeFromScene", [this](Object* /*sender*/) {
@@ -1401,7 +1401,7 @@ PauseResumeTargetTest2::PauseResumeTargetTest2()
         _touchableSprite->removeFromParentAndCleanup(false);
     });
 
-    _itemRemoveFromScene->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    _itemRemoveFromScene->setAnchorPoint(Anchors::rightCenter);
     _itemRemoveFromScene->setPosition(VisibleRect::right() + Vec2(0.0f, -50.0f));
 
     _itemAddToScene->setEnabled(false);
@@ -1413,8 +1413,8 @@ PauseResumeTargetTest2::PauseResumeTargetTest2()
     _itemRemoveFromScene->setFontSizeObj(20);
 
     auto menu = Menu::create(_itemPauseTouch, _itemResumeTouch, _itemAddToScene, _itemRemoveFromScene, nullptr);
-    menu->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-    menu->setPosition(Vec2::ZERO);
+    menu->setAnchorPoint(Anchors::bottomLeft);
+    menu->setPosition(Vec2::zero);
 
     addChild(menu);
 }
@@ -1459,7 +1459,7 @@ PauseResumeTargetTest3::PauseResumeTargetTest3()
             if (rect.containsPoint(locationInNode))
             {
                 AXLOGD("TouchableSprite: onPointerDown ...");
-                _touchableSprite->setColor(Color32::RED);
+                _touchableSprite->setColor(Color32::red);
                 return true;
             }
             return false;
@@ -1467,19 +1467,19 @@ PauseResumeTargetTest3::PauseResumeTargetTest3()
 
         listener->onPointerUp = [this](PointerEvent* event) {
             AXLOGD("TouchableSprite: onPointerUp ...");
-            _touchableSprite->setColor(Color32::WHITE);
+            _touchableSprite->setColor(Color32::white);
         };
 
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, _touchableSprite);
         _eventDispatcher->pauseEventListenersForTarget(_touchableSprite);
     });
 
-    item->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    item->setAnchorPoint(Anchors::rightCenter);
     item->setPosition(VisibleRect::right());
 
     auto menu = Menu::create(item, nullptr);
-    menu->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-    menu->setPosition(Vec2::ZERO);
+    menu->setAnchorPoint(Anchors::bottomLeft);
+    menu->setPosition(Vec2::zero);
 
     addChild(menu);
 }
@@ -1838,7 +1838,7 @@ Issue8194::Issue8194()
 
     menuItem->setPosition(origin.x + size.width / 2, origin.y + size.height / 2);
     auto menu = Menu::create(menuItem, nullptr);
-    menu->setPosition(Vec2::ZERO);
+    menu->setPosition(Vec2::zero);
     addChild(menu);
 }
 
@@ -1875,7 +1875,7 @@ Issue9898::Issue9898()
                                          [&](Object* sender) { _eventDispatcher->dispatchCustomEvent("Issue9898"); });
     menuItem->setPosition(origin.x + size.width / 2, origin.y + size.height / 2);
     auto menu = Menu::create(menuItem, nullptr);
-    menu->setPosition(Vec2::ZERO);
+    menu->setPosition(Vec2::zero);
     addChild(menu);
 }
 

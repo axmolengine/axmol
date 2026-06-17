@@ -34,7 +34,7 @@ using namespace ax;
 class FadeWhiteTransition : public TransitionFade
 {
 public:
-    static TransitionScene* create(float t, Scene* s) { return TransitionFade::create(t, s, Color32::WHITE); }
+    static TransitionScene* create(float t, Scene* s) { return TransitionFade::create(t, s, Color32::white); }
 };
 
 class FlipXLeftOver : public TransitionFlipX

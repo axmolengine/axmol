@@ -190,7 +190,7 @@ public:
     static Label* createWithSystemFont(std::string_view text,
                                        std::string_view font,
                                        float fontSize,
-                                       const Vec2& dimensions    = Vec2::ZERO,
+                                       const Vec2& dimensions    = Vec2::zero,
                                        TextHAlignment hAlignment = TextHAlignment::LEFT,
                                        TextVAlignment vAlignment = TextVAlignment::TOP);
 
@@ -209,7 +209,7 @@ public:
     static Label* createWithTTF(std::string_view text,
                                 std::string_view fontFilePath,
                                 float fontSize,
-                                const Vec2& dimensions    = Vec2::ZERO,
+                                const Vec2& dimensions    = Vec2::zero,
                                 TextHAlignment hAlignment = TextHAlignment::LEFT,
                                 TextVAlignment vAlignment = TextVAlignment::TOP);
 
@@ -426,7 +426,7 @@ public:
      * Return the number of lines of text.
      */
     int getLineCount() const;
-    AX_DEPRECATED(3.0) int getStringNumLines() { return getLineCount(); }
+    AX_DEPRECATED("3.0") int getStringNumLines() { return getLineCount(); }
 
     /**
      * @brief Returns the number of UTF-32 characters.
@@ -434,7 +434,7 @@ public:
      * @return int UTF-32 character count
      */
     int getCharCount() const;
-    AX_DEPRECATED(3.0) int getStringLength() { return getCharCount(); }
+    AX_DEPRECATED("3.0") int getStringLength() { return getCharCount(); }
 
     /**
      * Return whether the text is empty.
@@ -458,7 +458,7 @@ public:
      *
      * @todo Support blur for shadow effect.
      */
-    virtual void enableShadow(const Color32& shadowColor = Color32::BLACK,
+    virtual void enableShadow(const Color32& shadowColor = Color32::black,
                               const Vec2& offset         = Vec2(2, -2),
                               int blurRadius             = 0);
 
@@ -754,7 +754,7 @@ public:
     bool initWithTTF(std::string_view text,
                      std::string_view fontFilePath,
                      float fontSize,
-                     const Vec2& dimensions    = Vec2::ZERO,
+                     const Vec2& dimensions    = Vec2::zero,
                      TextHAlignment hAlignment = TextHAlignment::LEFT,
                      TextVAlignment vAlignment = TextVAlignment::TOP);
 

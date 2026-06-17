@@ -100,7 +100,7 @@ public:
      */
     static Rigidbody2D* createCircle(float radius,
                                      const PhysicsMaterial2D& material = PHYSICS_MATERIAL_2D_DEFAULT,
-                                     const Vec2& offset                = Vec2::ZERO);
+                                     const Vec2& offset                = Vec2::zero);
     /**
      * Create a body contains a box collider.
      *
@@ -111,7 +111,7 @@ public:
      */
     static Rigidbody2D* createBox(const Vec2& size,
                                   const PhysicsMaterial2D& material = PHYSICS_MATERIAL_2D_DEFAULT,
-                                  const Vec2& offset                = Vec2::ZERO);
+                                  const Vec2& offset                = Vec2::zero);
 
     /**
      * @brief Create a body contains a polygon collider.
@@ -123,7 +123,7 @@ public:
      */
     static Rigidbody2D* createPolygon(std::span<const Vec2> points,
                                       const PhysicsMaterial2D& material = PHYSICS_MATERIAL_2D_DEFAULT,
-                                      const Vec2& offset                = Vec2::ZERO);
+                                      const Vec2& offset                = Vec2::zero);
 
     /**
      * Create a body contains a EdgeSegment collider.
@@ -146,7 +146,7 @@ public:
      */
     static Rigidbody2D* createEdgeBox(const Vec2& size,
                                       const PhysicsMaterial2D& material = PHYSICS_MATERIAL_2D_DEFAULT,
-                                      const Vec2& offset                = Vec2::ZERO);
+                                      const Vec2& offset                = Vec2::zero);
 
     /**
      * Create a body contains a EdgePolygon collider.
@@ -229,7 +229,7 @@ public:
      * @param force The force is applies to this body.
      * @param offset A Vec2 object, it is the offset from the body's center of gravity in world coordinates.
      */
-    virtual void applyForce(const Vec2& force, const Vec2& offset = Vec2::ZERO);
+    virtual void applyForce(const Vec2& force, const Vec2& offset = Vec2::zero);
 
     /**
      * reset all the force applied to body.
@@ -242,7 +242,7 @@ public:
      * @param impulse The impulse is applies to this body.
      * @param offset A Vec2 object, it is the offset from the body's center of gravity in world coordinates.
      */
-    virtual void applyImpulse(const Vec2& impulse, const Vec2& offset = Vec2::ZERO);
+    virtual void applyImpulse(const Vec2& impulse, const Vec2& offset = Vec2::zero);
 
     /**
      * Applies a torque force to body.

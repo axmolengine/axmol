@@ -279,7 +279,7 @@ void Scene::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t pare
 
 void Scene::visit()
 {
-    const auto eyeTransform = Mat4::IDENTITY;
+    const auto eyeTransform = Mat4::identity;
 
     for (const auto& camera : getCameras())
     {

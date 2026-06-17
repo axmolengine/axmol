@@ -497,7 +497,7 @@ void Scene3DTestScene::createUI()
     descItem->setPosition(Vec2(VisibleRect::right().x - 50, VisibleRect::top().y - 25));
 
     auto menu = Menu::create(showPlayerDlgItem, descItem, nullptr);
-    menu->setPosition(Vec2::ZERO);
+    menu->setPosition(Vec2::zero);
     _ui->addChild(menu);
 
     auto audioCheckbox = ui::CheckBox::create("cocosui/check_box_normal.png", "cocosui/check_box_normal_press.png",
@@ -505,7 +505,7 @@ void Scene3DTestScene::createUI()
                                               "cocosui/check_box_active_disable.png");
     audioCheckbox->setSelected(true);
     audioCheckbox->setName("Audio");
-    audioCheckbox->setAnchorPoint(Vec2::ANCHOR_BOTTOM_RIGHT);
+    audioCheckbox->setAnchorPoint(Anchors::bottomRight);
     audioCheckbox->setScale(0.8f);
     audioCheckbox->addEventListener([this](ax::Object* sender, ax::ui::CheckBox::EventType eventType) {
         if (eventType == ui::CheckBox::EventType::UNSELECTED)

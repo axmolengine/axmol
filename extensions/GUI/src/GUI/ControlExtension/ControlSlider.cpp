@@ -110,7 +110,7 @@ ControlSlider* ControlSlider::create(Sprite* backgroundSprite,
 bool ControlSlider::initWithSprites(Sprite* backgroundSprite, Sprite* progressSprite, Sprite* thumbSprite)
 {
     Sprite* selectedThumbSprite = Sprite::createWithTexture(thumbSprite->getTexture(), thumbSprite->getTextureRect());
-    selectedThumbSprite->setColor(Color32::GRAY);
+    selectedThumbSprite->setColor(Color32::gray);
     return this->initWithSprites(backgroundSprite, progressSprite, thumbSprite, selectedThumbSprite);
 }
 
@@ -280,7 +280,7 @@ void ControlSlider::onPointerMove(PointerEvent* event)
 
 void ControlSlider::onPointerUp(PointerEvent* /*pTouch*/)
 {
-    sliderEnded(Vec2::ZERO);
+    sliderEnded(Vec2::zero);
 
     _isPressed = false;
 }

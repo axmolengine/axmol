@@ -107,7 +107,7 @@ bool UITextAtlasETC1ShadowTest::init()
         textAtlas->setPosition(Vec2((widgetSize.width) / 2, widgetSize.height / 2.0f));
         _uiLayer->addChild(textAtlas);
         auto labelAtlas = (Label*)textAtlas->getRenderNode();
-        labelAtlas->enableShadow(Color32::GREEN);
+        labelAtlas->enableShadow(Color32::green);
         _textAtlas = textAtlas;
 
         TTFConfig ttfConfig("fonts/arial.ttf", 15);

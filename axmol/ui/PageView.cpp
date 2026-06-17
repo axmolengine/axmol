@@ -143,7 +143,7 @@ ssize_t PageView::getCurrentPageIndex()
 
 void PageView::setCurrentPageIndex(ssize_t index)
 {
-    jumpToItem(index, Vec2::ANCHOR_MIDDLE, Vec2::ANCHOR_MIDDLE);
+    jumpToItem(index, Anchors::center, Anchors::center);
 }
 
 void PageView::scrollToPage(ssize_t idx)
@@ -162,7 +162,7 @@ void PageView::scrollToItem(ssize_t itemIndex)
     {
         this->forceDoLayout();
     }
-    ListView::scrollToItem(itemIndex, Vec2::ANCHOR_MIDDLE, Vec2::ANCHOR_MIDDLE);
+    ListView::scrollToItem(itemIndex, Anchors::center, Anchors::center);
 }
 
 void PageView::scrollToItem(ssize_t itemIndex, float time)
@@ -171,7 +171,7 @@ void PageView::scrollToItem(ssize_t itemIndex, float time)
     {
         this->forceDoLayout();
     }
-    ListView::scrollToItem(itemIndex, Vec2::ANCHOR_MIDDLE, Vec2::ANCHOR_MIDDLE, time >= 0 ? time : _scrollTime);
+    ListView::scrollToItem(itemIndex, Anchors::center, Anchors::center, time >= 0 ? time : _scrollTime);
 }
 
 void PageView::setAutoScrollStopEpsilon(float epsilon)
@@ -246,7 +246,7 @@ void PageView::handleReleaseLogic(PointerEvent* event)
     {
         // Handle paging by inertia force.
         Widget* currentPage     = getItem(_currentPageIndex);
-        Vec2 destination        = calculateItemDestination(Vec2::ANCHOR_MIDDLE, currentPage, Vec2::ANCHOR_MIDDLE);
+        Vec2 destination        = calculateItemDestination(Anchors::center, currentPage, Anchors::center);
         Vec2 deltaToCurrentpage = destination - getInnerContainerPosition();
         deltaToCurrentpage      = flattenVectorByDirection(deltaToCurrentpage);
 

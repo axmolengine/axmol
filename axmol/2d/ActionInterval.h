@@ -64,7 +64,7 @@ then running it again in Reverse mode.
 Example:
 
 @code
-auto action = MoveBy::create(1.0f, Vec2::ONE);
+auto action = MoveBy::create(1.0f, Vec2::one);
 auto pingPongAction = Sequence::create(action, action->reverse(), nullptr);
 @endcode
 */

@@ -69,7 +69,7 @@ void Bug624Layer::switchLayer(float dt)
 
     auto scene = Scene::create();
     scene->addChild(Bug624Layer2::create(), 0);
-    Director::getInstance()->replaceScene(TransitionFade::create(2.0f, scene, Color32::WHITE));
+    Director::getInstance()->replaceScene(TransitionFade::create(2.0f, scene, Color32::white));
 }
 
 void Bug624Layer::onAcceleration(AccelerationEvent* event)
@@ -115,7 +115,7 @@ void Bug624Layer2::switchLayer(float dt)
 
     auto scene = Scene::create();
     scene->addChild(Bug624Layer::create(), 0);
-    Director::getInstance()->replaceScene(TransitionFade::create(2.0f, scene, Color32::RED));
+    Director::getInstance()->replaceScene(TransitionFade::create(2.0f, scene, Color32::red));
 }
 
 void Bug624Layer2::onAcceleration(AccelerationEvent* event)

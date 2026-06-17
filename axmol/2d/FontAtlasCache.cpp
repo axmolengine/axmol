@@ -90,7 +90,7 @@ FontAtlas* FontAtlasCache::getFontAtlasTTF(const _ttfConfig* config)
 
 FontAtlas* FontAtlasCache::getFontAtlasFNT(std::string_view fontFileName)
 {
-    return getFontAtlasFNT(fontFileName, Rect::ZERO, false);
+    return getFontAtlasFNT(fontFileName, Rect::zero, false);
 }
 
 FontAtlas* FontAtlasCache::getFontAtlasFNT(std::string_view fontFileName, std::string_view subTextureKey)

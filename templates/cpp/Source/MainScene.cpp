@@ -74,7 +74,7 @@ bool MainScene::init()
 
     // create menu, it's an autorelease object
     auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
+    menu->setPosition(Vec2::zero);
     this->addChild(menu, 1);
 
     /////////////////////////////
@@ -126,7 +126,7 @@ bool MainScene::init()
         drawNode->setPosition(Vec2(0, 0));
         addChild(drawNode);
 
-        drawNode->drawRect(safeArea.origin + Vec2(1, 1), safeArea.origin + safeArea.size, Color::BLUE);
+        drawNode->drawRect(safeArea.origin + Vec2(1, 1), safeArea.origin + safeArea.size, Color::blue);
     }
 
     // scheduleUpdate() is required to ensure update(float) is called on every loop

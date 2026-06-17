@@ -402,7 +402,7 @@ void ScrollView::relocateContainer(bool animated)
 
 Vec2 ScrollView::maxContainerOffset()
 {
-    Point anchorPoint = _container->isIgnoreAnchorPointForPosition() ? Point::ZERO : _container->getAnchorPoint();
+    Point anchorPoint = _container->isIgnoreAnchorPointForPosition() ? Point::zero : _container->getAnchorPoint();
     float contW       = _container->getContentSize().width * _container->getScaleX();
     float contH       = _container->getContentSize().height * _container->getScaleY();
 
@@ -411,7 +411,7 @@ Vec2 ScrollView::maxContainerOffset()
 
 Vec2 ScrollView::minContainerOffset()
 {
-    Point anchorPoint = _container->isIgnoreAnchorPointForPosition() ? Point::ZERO : _container->getAnchorPoint();
+    Point anchorPoint = _container->isIgnoreAnchorPointForPosition() ? Point::zero : _container->getAnchorPoint();
     float contW       = _container->getContentSize().width * _container->getScaleX();
     float contH       = _container->getContentSize().height * _container->getScaleY();
 
@@ -965,7 +965,7 @@ bool ScrollView::onPointerScroll(PointerEvent* event)
         return false;
     }
 
-    if (move == Vec2::ZERO)
+    if (move == Vec2::zero)
         return false;
 
     this->unschedule(AX_SCHEDULE_SELECTOR(ScrollView::deaccelerateScrolling));
@@ -981,7 +981,7 @@ bool ScrollView::onPointerScroll(PointerEvent* event)
 
 Rect ScrollView::getViewRect()
 {
-    Vec2 screenPos = this->convertToWorldSpace(Vec2::ZERO);
+    Vec2 screenPos = this->convertToWorldSpace(Vec2::zero);
 
     float scaleX = this->getScaleX();
     float scaleY = this->getScaleY();

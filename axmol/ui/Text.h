@@ -255,7 +255,7 @@ public:
      * @param offset The offset of shadow effect.
      * @param blurRadius The blur radius of shadow effect.
      */
-    void enableShadow(const Color32& shadowColor = Color32::BLACK,
+    void enableShadow(const Color32& shadowColor = Color32::black,
                       const Vec2& offset         = Vec2(2, -2),
                       int blurRadius             = 0);
 

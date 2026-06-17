@@ -202,7 +202,7 @@ void DemoBigFlower::onEnter()
     _emitter->setDuration(-1);
 
     // gravity
-    _emitter->setGravity(Vec2::ZERO);
+    _emitter->setGravity(Vec2::zero);
 
     // angle
     _emitter->setAngle(90);
@@ -222,7 +222,7 @@ void DemoBigFlower::onEnter()
 
     // emitter position
     _emitter->setPosition(Vec2(160, 240));
-    _emitter->setPosVar(Vec2::ZERO);
+    _emitter->setPosVar(Vec2::zero);
 
     // life of particles
     _emitter->setLife(4);
@@ -286,7 +286,7 @@ void DemoRotFlower::onEnter()
     _emitter->setDuration(-1);
 
     // gravity
-    _emitter->setGravity(Vec2::ZERO);
+    _emitter->setGravity(Vec2::zero);
 
     // angle
     _emitter->setAngle(90);
@@ -306,7 +306,7 @@ void DemoRotFlower::onEnter()
 
     // emitter position
     _emitter->setPosition(Vec2(160, 240));
-    _emitter->setPosVar(Vec2::ZERO);
+    _emitter->setPosVar(Vec2::zero);
 
     // life of particles
     _emitter->setLife(3);
@@ -563,7 +563,7 @@ void DemoModernArt::onEnter()
 
     // emitter position
     _emitter->setPosition(Vec2(s.width / 2, s.height / 2));
-    _emitter->setPosVar(Vec2::ZERO);
+    _emitter->setPosVar(Vec2::zero);
 
     // life of particles
     _emitter->setLife(2.0f);
@@ -686,7 +686,7 @@ void DemoFixedFPS::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -716,7 +716,7 @@ void DemoTimeScale::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -755,7 +755,7 @@ void DemoSpawnFadeIn::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -786,7 +786,7 @@ void DemoScaleFadeIn::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -817,7 +817,7 @@ void DemoSimulation::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -847,7 +847,7 @@ void DemoSpawnRotation::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -878,7 +878,7 @@ void DemoHSV::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -915,7 +915,7 @@ void DemoLifeAnimation::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -970,7 +970,7 @@ void DemoLifeAnimationAtlas::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1015,7 +1015,7 @@ void DemoLifeAnimationReversed::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1072,7 +1072,7 @@ void DemoLoopAnimation::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1130,7 +1130,7 @@ void DemoLoopAnimationReversed::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1188,7 +1188,7 @@ void DemoEmitterAnimation::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1243,7 +1243,7 @@ void DemoEmitterAnimationDescriptor::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1302,7 +1302,7 @@ void DemoLoopAnimationMultiDescriptor::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1362,7 +1362,7 @@ void DemoEmissionShapePoint::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1401,7 +1401,7 @@ void DemoEmissionShapeRect::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1437,7 +1437,7 @@ void DemoEmissionShapeRectTorus::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1473,7 +1473,7 @@ void DemoEmissionShapeCircle::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1509,7 +1509,7 @@ void DemoEmissionShapeCircleBiasEdge::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1545,7 +1545,7 @@ void DemoEmissionShapeCircleBiasCenter::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1581,7 +1581,7 @@ void DemoEmissionShapeTorus::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1617,7 +1617,7 @@ void DemoEmissionShapeTorusBiasEdge::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1653,7 +1653,7 @@ void DemoEmissionShapeTorusBiasInner::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1689,7 +1689,7 @@ void DemoEmissionShapeCone::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1725,7 +1725,7 @@ void DemoEmissionShapeConeTorus::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1761,7 +1761,7 @@ void DemoEmissionShapeAlphaMask::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1777,8 +1777,8 @@ void DemoEmissionShapeAlphaMask::onEnter()
     _emitter->setSpeed(0);
     _emitter->setSpeedVar(0);
 
-    _emitter->setStartColor(Color::WHITE);
-    _emitter->setEndColor(Color::WHITE);
+    _emitter->setStartColor(Color::white);
+    _emitter->setEndColor(Color::white);
 
     _emitter->setStartSize(6);
     _emitter->setEndSize(3);
@@ -1790,7 +1790,7 @@ void DemoEmissionShapeAlphaMask::onEnter()
     auto cache = ParticleEmissionMaskCache::getInstance();
     cache->bakeEmissionMask("#msk1"sv, "Particles/mask.png", 0.5F, false, 1);
 
-    _emitter->addEmissionShape(ParticleSystem::createMaskShape("#msk1"sv, {0, 0}, {400, 200}, Vec2::ONE));
+    _emitter->addEmissionShape(ParticleSystem::createMaskShape("#msk1"sv, {0, 0}, {400, 200}, Vec2::one));
 
     setEmitterPosition();
 }
@@ -1809,7 +1809,7 @@ void RadiusMode1::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1841,7 +1841,7 @@ void RadiusMode1::onEnter()
     // emitter position
     auto size = Director::getInstance()->getCanvasSize();
     _emitter->setPosition(Vec2(size.width / 2, size.height / 2));
-    _emitter->setPosVar(Vec2::ZERO);
+    _emitter->setPosVar(Vec2::zero);
 
     // life of particles
     _emitter->setLife(5);
@@ -1892,7 +1892,7 @@ void RadiusMode2::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1924,7 +1924,7 @@ void RadiusMode2::onEnter()
     // emitter position
     auto size = Director::getInstance()->getCanvasSize();
     _emitter->setPosition(Vec2(size.width / 2, size.height / 2));
-    _emitter->setPosVar(Vec2::ZERO);
+    _emitter->setPosVar(Vec2::zero);
 
     // life of particles
     _emitter->setLife(4);
@@ -1975,7 +1975,7 @@ void Issue704::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2007,7 +2007,7 @@ void Issue704::onEnter()
     // emitter position
     auto size = Director::getInstance()->getCanvasSize();
     _emitter->setPosition(Vec2(size.width / 2, size.height / 2));
-    _emitter->setPosVar(Vec2::ZERO);
+    _emitter->setPosVar(Vec2::zero);
 
     // life of particles
     _emitter->setLife(5);
@@ -2066,7 +2066,7 @@ void Issue870::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2107,7 +2107,7 @@ void DemoParticleFromFile::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2253,7 +2253,7 @@ void ParticleDemo::onEnter()
 
     auto menu = Menu::create(item4, nullptr);
 
-    menu->setPosition(Vec2::ZERO);
+    menu->setPosition(Vec2::zero);
     item4->setPosition(Vec2(VisibleRect::left().x, VisibleRect::bottom().y + 100));
     item4->setAnchorPoint(Vec2(0, 0));
 
@@ -2304,10 +2304,10 @@ void ParticleDemo::onPointerUp(PointerEvent* event)
 {
     auto location = event->getLocation();
 
-    auto pos = Vec2::ZERO;
+    auto pos = Vec2::zero;
     if (_background)
     {
-        pos = _background->convertToWorldSpace(Vec2::ZERO);
+        pos = _background->convertToWorldSpace(Vec2::zero);
     }
 
     if (_emitter != nullptr)
@@ -2355,7 +2355,7 @@ void ParticleBatchHybrid::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2403,7 +2403,7 @@ void ParticleBatchMultipleEmitters::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2446,7 +2446,7 @@ void ParticleReorder::onEnter()
     ParticleDemo::onEnter();
 
     _order = 0;
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2574,7 +2574,7 @@ bool RainbowEffect::initWithTotalParticles(int numberOfParticles)
         // emitter position
         auto canvasSize = Director::getInstance()->getCanvasSize();
         setPosition(Vec2(canvasSize.width / 2, canvasSize.height / 2));
-        setPosVar(Vec2::ZERO);
+        setPosVar(Vec2::zero);
 
         // life of particles
         setLife(0.5f);
@@ -2618,7 +2618,7 @@ void Issue1201::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2648,7 +2648,7 @@ void MultipleParticleSystems::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2703,7 +2703,7 @@ void MultipleParticleSystemsBatched::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2763,7 +2763,7 @@ void AddAndDeleteParticleSystems::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2851,7 +2851,7 @@ void ReorderParticleSystems::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2888,7 +2888,7 @@ void ReorderParticleSystems::onEnter()
         particleSystem->setAngleVar(0);
 
         // emitter position
-        particleSystem->setPosVar(Vec2::ZERO);
+        particleSystem->setPosVar(Vec2::zero);
 
         // life of particles
         particleSystem->setLife(4);
@@ -3005,7 +3005,7 @@ void PremultipliedAlphaTest::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLUE);
+    _color->setColor(Color32::blue);
     this->removeChild(_background, true);
     _background = nullptr;
 
@@ -3039,7 +3039,7 @@ void PremultipliedAlphaTest2::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     this->removeChild(_background, true);
     _background = nullptr;
 
@@ -3064,7 +3064,7 @@ void Issue3990::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     this->removeChild(_background, true);
     _background = nullptr;
 
@@ -3127,7 +3127,7 @@ void ParticleAutoBatching::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     this->removeChild(_background, true);
     _background = nullptr;
 
@@ -3159,7 +3159,7 @@ void ParticleResetTotalParticles::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -3201,7 +3201,7 @@ void ParticleIssue12310::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color32::BLACK);
+    _color->setColor(Color32::black);
     removeChild(_background, true);
     _background = nullptr;
 

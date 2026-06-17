@@ -40,7 +40,7 @@ bool Bug899Layer::init()
     {
         auto bg = Sprite::create("Images/bugs/RetinaDisplay.jpg");
         addChild(bg, 0);
-        bg->setAnchorPoint(Vec2::ZERO);
+        bg->setAnchorPoint(Vec2::zero);
 
         return true;
     }

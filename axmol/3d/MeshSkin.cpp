@@ -159,7 +159,7 @@ const Mat4& MeshSkin::getInvBindPose(const Bone3D* bone)
             return _invBindPoses.at(i);
         }
     }
-    return Mat4::IDENTITY;
+    return Mat4::identity;
 }
 
 }  // namespace ax

@@ -25,7 +25,7 @@ void BagWindow::doShowAnimation()
     setScale(0.1f, 0.1f);
     setPivot(0.5f, 0.5f);
 
-    GTween::to(getScale(), Vec2::ONE, 0.3f)->setTarget(this, TweenPropType::Scale)->onComplete(AX_CALLBACK_0(BagWindow::onShown, this));
+    GTween::to(getScale(), Vec2::one, 0.3f)->setTarget(this, TweenPropType::Scale)->onComplete(AX_CALLBACK_0(BagWindow::onShown, this));
 }
 
 void BagWindow::doHideAnimation()

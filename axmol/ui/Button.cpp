@@ -56,9 +56,9 @@ Button::Button()
     , _prevAutoSize(true)
     , _scale9Enabled(false)
     , _pressedActionEnabled(false)
-    , _capInsetsNormal(Rect::ZERO)
-    , _capInsetsPressed(Rect::ZERO)
-    , _capInsetsDisabled(Rect::ZERO)
+    , _capInsetsNormal(Rect::zero)
+    , _capInsetsPressed(Rect::zero)
+    , _capInsetsDisabled(Rect::zero)
     , _normalTextureSize(_contentSize)
     , _pressedTextureSize(_contentSize)
     , _disabledTextureSize(_contentSize)
@@ -164,7 +164,7 @@ void Button::createTitleRenderer()
     _titleRenderer = Label::create();
     AX_SAFE_RETAIN(_titleRenderer);
 
-    _titleRenderer->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _titleRenderer->setAnchorPoint(Anchors::center);
     addProtectedChild(_titleRenderer, TITLE_RENDERER_Z, -1);
 }
 
@@ -283,7 +283,7 @@ void Button::loadTextureNormal(std::string_view normal, TextureResType texType)
         }
     }
     // FIXME: https://github.com/cocos2d/cocos2d-x/issues/12249
-    if (!_autoSize && _customSize.equals(Vec2::ZERO))
+    if (!_autoSize && _customSize.equals(Vec2::zero))
     {
         _customSize = _buttonNormalRenderer->getContentSize();
     }
@@ -722,7 +722,7 @@ const Color32& Button::getTitleColor() const
 {
     if (nullptr == _titleRenderer)
     {
-        return Color32::WHITE;
+        return Color32::white;
     }
     return _titleRenderer->getTextColor();
 }

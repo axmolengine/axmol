@@ -69,7 +69,7 @@ Bone::Bone()
     , _tween(nullptr)
     , _displayManager(nullptr)
     , _ignoreMovementBoneData(false)
-    , _worldTransform(Mat4::IDENTITY)
+    , _worldTransform(Mat4::identity)
     , _boneTransformDirty(true)
     , _blendFunc(BlendFunc::ALPHA_PREMULTIPLIED)
     , _blendDirty(false)
@@ -250,7 +250,7 @@ void Bone::setBlendFunc(const BlendFunc& blendFunc)
 void Bone::updateDisplayedColor(const Color32& parentColor)
 {
 #ifdef AX_STUDIO_ENABLED_VIEW
-    _realColor = Color32::WHITE;
+    _realColor = Color32::white;
 #endif  // AX_STUDIO_ENABLED_VIEW
     Node::updateDisplayedColor(parentColor);
 }

@@ -341,18 +341,16 @@ public:                                                 \
     TypeName();                                     \
     AX_DISALLOW_COPY_AND_ASSIGN(TypeName)
 
-/** @def AX_DEPRECATED(...)
- * Macro to mark things deprecated as of a particular version
- * can be used with arbitrary parameters which are thrown away.
- * e.g. AX_DEPRECATED(4.0) or AX_DEPRECATED(4.0, "not going to need this anymore") etc.
+/** @def AX_DEPRECATED(msg)
+ * Mark APIs as deprecated with a custom message.
+ * Works with C++14 and later (Axmol requires C++23).
+ *
+ * Example:
+ *   AX_DEPRECATED("3.0")
+ *   AX_DEPRECATED("since 4.0, use NewAPI instead")
+ *   void oldFunction();
  */
-#if defined(_WIN32)
-#    define AX_DEPRECATED(...) __declspec(deprecated)
-#elif defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
-#    define AX_DEPRECATED(...) __attribute__((deprecated))
-#else
-#    define AX_DEPRECATED(...)
-#endif
+#define AX_DEPRECATED(msg) [[deprecated(msg)]]
 
 /** @def AX_FORMAT_PRINTF(formatPos, argPos)
  * Only certain compiler support __attribute__((format))

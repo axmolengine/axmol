@@ -63,7 +63,7 @@ void PUJetAffector::updatePUAffector(PUParticle3D* particle, float deltaTime)
     {
         // PUParticle3D *particle = iter;
         _scaled = deltaTime * (_dynAcceleration->getValue(particle->timeFraction));
-        if (particle->direction == Vec3::ZERO)
+        if (particle->direction == Vec3::zero)
         {
             // Existing direction is zero, so use original direction
             particle->direction += (particle->originalDirection * _scaled);

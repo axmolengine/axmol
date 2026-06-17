@@ -24,7 +24,7 @@ GLoader3D::GLoader3D()
     _playing(true),
     _frame(0),
     _loop(false),
-    _color(Color32::WHITE)
+    _color(Color32::white)
 {
 }
 
@@ -43,7 +43,7 @@ void GLoader3D::handleInit()
 
     _container = FUIContainer::create();
     _container->retain();
-    _container->setAnchorPoint(Vec2::ZERO);
+    _container->setAnchorPoint(Vec2::zero);
     _displayObject->addChild(_container);
 }
 
@@ -326,7 +326,7 @@ void GLoader3D::updateLayout()
         if (_size.equals(contentSize))
         {
             _container->setScale(1, 1);
-            _container->setAnchorPoint(Vec2::ZERO);
+            _container->setAnchorPoint(Vec2::zero);
             _container->setPosition(0, 0);
             return;
         }
@@ -372,7 +372,7 @@ void GLoader3D::updateLayout()
     }
 
     _container->setScale(sx, sy);
-    _container->setAnchorPoint(Vec2::ZERO);
+    _container->setAnchorPoint(Vec2::zero);
 
     float nx;
     float ny;

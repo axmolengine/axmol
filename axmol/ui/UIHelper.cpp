@@ -269,7 +269,7 @@ Vec2 Helper::getNodeGroupSize(std::span<Node* const> nodes)
 {
     if (nodes.empty())
     {
-        return Vec2::ZERO;
+        return Vec2::zero;
     }
 
     // group nodes locators
@@ -343,7 +343,7 @@ Vec2 Helper::getNodeGroupScaledSize(std::span<Node* const> nodes)
 {
     if (nodes.empty())
     {
-        return Vec2::ZERO;
+        return Vec2::zero;
     }
 
     auto scale = getScale2D(nodes[0]);
@@ -1165,7 +1165,7 @@ void Helper::VisibleRect::setNodeLeft(Node* pNode, float left)
     Vec2 scrSize         = Director::getInstance()->getRenderView()->getDesignResolutionSize();
     ax::Point delta      = ax::Vec2(0, scrSize.height) - Helper::VisibleRect::leftTop();
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1180,7 +1180,7 @@ void Helper::VisibleRect::setNodeTop(Node* pNode, float top)
     Vec2 scrSize         = Director::getInstance()->getRenderView()->getDesignResolutionSize();
     ax::Point delta      = ax::Vec2(0, scrSize.height) - Helper::VisibleRect::leftTop();
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1195,7 +1195,7 @@ void Helper::VisibleRect::setNodeRight(Node* pNode, float right)
     Vec2 scrSize         = Director::getInstance()->getRenderView()->getDesignResolutionSize();
     ax::Point delta      = ax::Vec2(scrSize.width, 0) - Helper::VisibleRect::rightBottom();
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1210,7 +1210,7 @@ void Helper::VisibleRect::setNodeBottom(Node* pNode, float bottom)
     Vec2 scrSize         = Director::getInstance()->getRenderView()->getDesignResolutionSize();
     ax::Point delta      = ax::Vec2(scrSize.width, 0) - Helper::VisibleRect::rightBottom();
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1226,7 +1226,7 @@ void Helper::VisibleRect::setNodeLT(Node* pNode, const ax::Point& p)
     Vec2 scrSize         = Director::getInstance()->getRenderView()->getDesignResolutionSize();
     ax::Point delta      = ax::Vec2(0, scrSize.height) - Helper::VisibleRect::leftTop();
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1243,7 +1243,7 @@ void Helper::VisibleRect::setNodeRT(Node* pNode, const ax::Point& p)
     Vec2 scrSize         = Director::getInstance()->getRenderView()->getDesignResolutionSize();
     ax::Point delta      = ax::Vec2(scrSize.width, scrSize.height) - Helper::VisibleRect::rightTop();
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1259,7 +1259,7 @@ void Helper::VisibleRect::setNodeLB(Node* pNode, const ax::Point& p)
     Vec2 scrSize         = Director::getInstance()->getRenderView()->getDesignResolutionSize();
     ax::Point delta      = ax::Vec2(0, 0) - Helper::VisibleRect::leftBottom();
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1275,7 +1275,7 @@ void Helper::VisibleRect::setNodeRB(Node* pNode, const ax::Point& p)
     Vec2 scrSize         = Director::getInstance()->getRenderView()->getDesignResolutionSize();
     ax::Point delta      = ax::Vec2(scrSize.width, 0) - Helper::VisibleRect::rightBottom();
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1299,7 +1299,7 @@ void Helper::VisibleRect::setNodeNormalizedLT(Node* pNode, const ax::Point& rati
     ax::Point p   = ax::Vec2(vscrSize.width * ratio.x, vscrSize.height * ratio.y);
 
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1320,7 +1320,7 @@ void Helper::VisibleRect::setNodeNormalizedRT(Node* pNode, const ax::Point& rati
     ax::Point p   = ax::Vec2(vscrSize.width * ratio.x, vscrSize.height * ratio.y);
 
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1341,7 +1341,7 @@ void Helper::VisibleRect::setNodeNormalizedLB(Node* pNode, const ax::Point& rati
     ax::Point p   = ax::Vec2(vscrSize.width * ratio.x, vscrSize.height * ratio.y);
 
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1362,7 +1362,7 @@ void Helper::VisibleRect::setNodeNormalizedRB(Node* pNode, const ax::Point& rati
     ax::Point p   = ax::Vec2(vscrSize.width * ratio.x, vscrSize.height * ratio.y);
 
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1384,7 +1384,7 @@ void Helper::VisibleRect::setNodeNormalizedTop(Node* pNode, const float ratioTop
     float top     = vscrSize.width * ratioTop;
 
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();

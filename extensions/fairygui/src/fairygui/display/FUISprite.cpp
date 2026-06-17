@@ -47,7 +47,7 @@ void FUISprite::setScale9Grid(Rect* value)
     Rect insets = *value;
 
     // When Insets == Zero --> we should use a 1/3 of its untrimmed size
-    if (insets.equals(Rect::ZERO))
+    if (insets.equals(Rect::zero))
     {
         insets = Rect(_originalContentSize.width / 3.0f,
                       _originalContentSize.height / 3.0f,
@@ -155,7 +155,7 @@ void FUISprite::setFillAmount(float value)
 void FUISprite::setContentSize(const Size& size)
 {
     if (_scaleByTile)
-        setTextureRect(Rect(Vec2::ZERO, size));
+        setTextureRect(Rect(Vec2::zero, size));
     else
         Sprite::setContentSize(size);
 }
@@ -464,7 +464,7 @@ Vec2 FUISprite::boundaryTexCoord(char index)
             return Vec2((kProgressTextureCoords >> ((index << 1) + 1)) & 1, (kProgressTextureCoords >> (index << 1)) & 1);
         }
     }
-    return Vec2::ZERO;
+    return Vec2::zero;
 }
 
 void FUISprite::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)

@@ -110,7 +110,7 @@ public:
     void setPosition(float x, float y) override;
     void setPosition3D(const Vec3& position) override;
     void setRotation3D(const Vec3& rotation) override;
-    void setRotationQuat(const Quaternion& quat) override;
+    void setRotationQuat(const Quat& quat) override;
 
     const Vec2& getPosition() const override;
     void getPosition(float* x, float* y) const override;

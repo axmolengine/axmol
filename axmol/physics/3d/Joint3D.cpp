@@ -47,6 +47,7 @@ namespace jphutil
 {
 JPH::EConstraintSpace cast(Joint3D::CoordinateSpace space)
 {
+    ax::Quaternion quat;
     return space == Joint3D::CoordinateSpace::Local ? JPH::EConstraintSpace::LocalToBodyCOM
                                                     : JPH::EConstraintSpace::WorldSpace;
 }
@@ -74,7 +75,7 @@ static Vec3 normalizeOrDefault(const Vec3& axis, const Vec3& fallback = Vec3(1.0
 // static Vec3 orthogonalAxis(const Vec3& axis)
 //{
 //     const Vec3 normalized = normalizeOrDefault(axis);
-//     const Vec3 helper     = fabsf(normalized.dot(Vec3::UNIT_Y)) < 0.99f ? Vec3::UNIT_Y : Vec3::UNIT_Z;
+//     const Vec3 helper     = fabsf(normalized.dot(Vec3::yAxis)) < 0.99f ? Vec3::yAxis : Vec3::zAxis;
 //     Vec3 out;
 //     Vec3::cross(normalized, helper, &out);
 //     out.normalize();
@@ -83,13 +84,13 @@ static Vec3 normalizeOrDefault(const Vec3& axis, const Vec3& fallback = Vec3(1.0
 
 // Build an orthonormal basis from a given axis
 // Returns (primaryAxis, normalAxis)
-static std::pair<Vec3, Vec3> makeOrthoNormalBasis(const Vec3& axis, const Vec3& fallback = Vec3::UNIT_X)
+static std::pair<Vec3, Vec3> makeOrthoNormalBasis(const Vec3& axis, const Vec3& fallback = Vec3::xAxis)
 {
     // Normalize input axis or use fallback if invalid
     Vec3 primary = normalizeOrDefault(axis, fallback);
 
     // Pick a helper axis that is not parallel to primary
-    const Vec3 helper = fabsf(primary.dot(Vec3::UNIT_Y)) < 0.99f ? Vec3::UNIT_Y : Vec3::UNIT_Z;
+    const Vec3 helper = fabsf(primary.dot(Vec3::yAxis)) < 0.99f ? Vec3::yAxis : Vec3::zAxis;
 
     // Compute a normal axis orthogonal to primary
     Vec3 normal;
@@ -120,7 +121,7 @@ static Vec3 getWorldAnchor(const Joint3D* joint, bool connected)
     return localPointToWorld(body, anchor);
 }
 
-static Vec3 getWorldAxis(const Joint3D* joint, bool connected, const Vec3& fallback = Vec3::UNIT_X)
+static Vec3 getWorldAxis(const Joint3D* joint, bool connected, const Vec3& fallback = Vec3::xAxis)
 {
     const Vec3& axis = connected ? joint->getConnectedAxis() : joint->getAxis();
     if (joint->getCoordinateSpace() == Joint3D::CoordinateSpace::World)
@@ -539,8 +540,8 @@ bool HingeJoint3D::attachToBody()
     if (!Joint3D::attachToBody())
         return false;
 
-    auto [hingeAxis1, normalAxis1] = makeOrthoNormalBasis(_axis, Vec3::UNIT_X);
-    auto [hingeAxis2, normalAxis2] = makeOrthoNormalBasis(_connectedAxis, Vec3::UNIT_X);
+    auto [hingeAxis1, normalAxis1] = makeOrthoNormalBasis(_axis, Vec3::xAxis);
+    auto [hingeAxis2, normalAxis2] = makeOrthoNormalBasis(_connectedAxis, Vec3::xAxis);
 
     JPH::HingeConstraintSettings settings;
     configureAnchors(this, settings);
@@ -635,7 +636,7 @@ float HingeJoint3D::getVelocity() const
 {
     if (static_cast<JPH::HingeConstraint*>(_constraint))
     {
-        const Vec3 axis         = getWorldAxis(this, false, Vec3::UNIT_Y);
+        const Vec3 axis         = getWorldAxis(this, false, Vec3::yAxis);
         Vec3 relAngularVelocity = _attachedBody->getAngularVelocity();
         if (_connectedBody)
             relAngularVelocity -= _connectedBody->getAngularVelocity();
@@ -690,8 +691,8 @@ bool SliderJoint3D::attachToBody()
     JPH::SliderConstraintSettings settings;
     configureAnchors(this, settings);
 
-    auto [slideAxis1, normalAxis1] = makeOrthoNormalBasis(_axis, Vec3::UNIT_Y);
-    auto [slideAxis2, normalAxis2] = makeOrthoNormalBasis(_connectedAxis, Vec3::UNIT_Y);
+    auto [slideAxis1, normalAxis1] = makeOrthoNormalBasis(_axis, Vec3::yAxis);
+    auto [slideAxis2, normalAxis2] = makeOrthoNormalBasis(_connectedAxis, Vec3::yAxis);
 
     settings.mSliderAxis1 = jphutil::cast(slideAxis1);
     settings.mSliderAxis2 = jphutil::cast(slideAxis2);
@@ -776,7 +777,7 @@ float SliderJoint3D::getVelocity() const
 {
     if (static_cast<JPH::SliderConstraint*>(_constraint))
     {
-        const Vec3 axis        = getWorldAxis(this, false, Vec3::UNIT_Y);
+        const Vec3 axis        = getWorldAxis(this, false, Vec3::yAxis);
         Vec3 relLinearVelocity = _attachedBody->getLinearVelocity();
         if (_connectedBody)
             relLinearVelocity -= _connectedBody->getLinearVelocity();
@@ -819,8 +820,8 @@ bool ConeTwistJoint3D::attachToBody()
     JPH::SwingTwistConstraintSettings settings;
     configureAnchors(this, settings);
 
-    auto [slideAxis1, normalAxis1] = makeOrthoNormalBasis(_axis, Vec3::UNIT_Y);
-    auto [slideAxis2, normalAxis2] = makeOrthoNormalBasis(_connectedAxis, Vec3::UNIT_Y);
+    auto [slideAxis1, normalAxis1] = makeOrthoNormalBasis(_axis, Vec3::yAxis);
+    auto [slideAxis2, normalAxis2] = makeOrthoNormalBasis(_connectedAxis, Vec3::yAxis);
 
     settings.mTwistAxis1 = jphutil::cast(slideAxis1);
     settings.mTwistAxis2 = jphutil::cast(slideAxis2);
@@ -1045,8 +1046,8 @@ bool SixDofJoint3D::attachToBody()
 
     JPH::SixDOFConstraintSettings settings;
     configureAnchors(this, settings);
-    auto [slideAxis1, normalAxis1] = makeOrthoNormalBasis(_axis, Vec3::UNIT_Y);
-    auto [slideAxis2, normalAxis2] = makeOrthoNormalBasis(_connectedAxis, Vec3::UNIT_Y);
+    auto [slideAxis1, normalAxis1] = makeOrthoNormalBasis(_axis, Vec3::yAxis);
+    auto [slideAxis2, normalAxis2] = makeOrthoNormalBasis(_connectedAxis, Vec3::yAxis);
 
     settings.mAxisX1 = jphutil::cast(slideAxis1);
     settings.mAxisY1 = jphutil::cast(normalAxis1);

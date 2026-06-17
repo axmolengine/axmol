@@ -83,7 +83,7 @@ Node::Node()
     , _skewX(0.0f)
     , _skewY(0.0f)
     , _anchorPoint(0, 0)
-    , _contentSize(Vec2::ZERO)
+    , _contentSize(Vec2::zero)
     , _contentSizeDirty(true)
     , _transformDirty(true)
     , _inverseDirty(true)
@@ -113,8 +113,8 @@ Node::Node()
     , _updateScriptHandler(0)
 #endif
     , _componentContainer(nullptr)
-    , _displayedColor(Color32::WHITE)
-    , _realColor(Color32::WHITE)
+    , _displayedColor(Color32::white)
+    , _realColor(Color32::white)
     , _childFollowCameraMask(false)
     , _cascadeMode(0)
     , _cameraMask(1)
@@ -132,7 +132,7 @@ Node::Node()
     _eventDispatcher = _director->getEventDispatcher();
     _eventDispatcher->retain();
 
-    _transform = _inverse = Mat4::IDENTITY;
+    _transform = _inverse = Mat4::identity;
 }
 
 Node* Node::create()
@@ -384,14 +384,14 @@ void Node::updateRotation3D()
     _rotationZ_X = _rotationZ_Y = -AX_RADIANS_TO_DEGREES(_rotationZ_X);
 }
 
-void Node::setRotationQuat(const Quaternion& quat)
+void Node::setRotationQuat(const Quat& quat)
 {
     _rotationQuat = quat;
     updateRotation3D();
     _transformUpdated = _transformDirty = _inverseDirty = true;
 }
 
-Quaternion Node::getRotationQuat() const
+Quat Node::getRotationQuat() const
 {
     return _rotationQuat;
 }
@@ -2177,7 +2177,7 @@ void Node::setCascadeColorEnabled(bool cascadeColorEnabled)
 
 void Node::updateCascadeColor()
 {
-    Color32 parentColor = Color32::WHITE;
+    Color32 parentColor = Color32::white;
     if (_parent && _parent->isCascadeColorEnabled())
     {
         parentColor = _parent->getDisplayedColor();
@@ -2190,7 +2190,7 @@ void Node::disableCascadeColor()
 {
     for (const auto& child : _children)
     {
-        child->updateDisplayedColor(Color32::WHITE);
+        child->updateDisplayedColor(Color32::white);
     }
 }
 

@@ -49,13 +49,16 @@ namespace ax
  0   1    0
  0   0    1
  */
-struct AX_DLL AffineTransform
+struct AffineTransform
 {
     float a, b, c, d;
     float tx, ty;
 
-    static const AffineTransform IDENTITY;
+    static const AffineTransform identity;
 };
+#if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
+inline constexpr AffineTransform AffineTransform::identity{1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f};
+#endif
 
 /**@}*/
 

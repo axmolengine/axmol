@@ -170,7 +170,7 @@ bool Ray::intersects(const OBB& obb, float* distance) const
     ray.direction = direction;
     ray.origin    = origin;
 
-    Mat4 mat = Mat4::IDENTITY;
+    Mat4 mat = Mat4::identity;
     mat.m[0] = obb._xAxis.x;
     mat.m[1] = obb._xAxis.y;
     mat.m[2] = obb._xAxis.z;

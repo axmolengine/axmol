@@ -30,7 +30,7 @@ using namespace ax::ui;
 
 static MenuItemFont* createMenuFontWithColor(std::string_view title,
                                              ax::ccMenuCallback&& cb,
-                                             const Color32& color = Color32::RED)
+                                             const Color32& color = Color32::red)
 {
     auto menuFont = ax::MenuItemFont::create(title, cb);
     menuFont->setColor(color);
@@ -56,63 +56,63 @@ bool VideoPlayerTest::init()
 
     auto fullSwitch =
         createMenuFontWithColor("FullScreenSwitch", AX_CALLBACK_1(VideoPlayerTest::menuFullScreenCallback, this));
-    fullSwitch->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    fullSwitch->setAnchorPoint(Anchors::bottomLeft);
     fullSwitch->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 50));
 
     auto pauseItem = createMenuFontWithColor("Pause", AX_CALLBACK_1(VideoPlayerTest::menuPauseCallback, this));
-    pauseItem->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    pauseItem->setAnchorPoint(Anchors::bottomLeft);
     pauseItem->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 100));
 
     auto resumeItem = createMenuFontWithColor("Resume", AX_CALLBACK_1(VideoPlayerTest::menuResumeCallback, this));
-    resumeItem->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    resumeItem->setAnchorPoint(Anchors::bottomLeft);
     resumeItem->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 150));
 
     auto stopItem = createMenuFontWithColor("Stop", AX_CALLBACK_1(VideoPlayerTest::menuStopCallback, this));
-    stopItem->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    stopItem->setAnchorPoint(Anchors::bottomLeft);
     stopItem->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 200));
 
     auto hintItem = createMenuFontWithColor("Hint", AX_CALLBACK_1(VideoPlayerTest::menuHintCallback, this));
-    hintItem->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    hintItem->setAnchorPoint(Anchors::bottomLeft);
     hintItem->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 250));
 
     //-------------------------------------------------------------------------------------------------------------------
     auto resourceVideo =
         createMenuFontWithColor("Play resource video", AX_CALLBACK_1(VideoPlayerTest::menuResourceVideoCallback, this));
-    resourceVideo->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    resourceVideo->setAnchorPoint(Anchors::rightCenter);
     resourceVideo->setPosition(Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 50));
 
     auto onlineVideo =
         createMenuFontWithColor("Play online video", AX_CALLBACK_1(VideoPlayerTest::menuOnlineVideoCallback, this));
-    onlineVideo->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    onlineVideo->setAnchorPoint(Anchors::rightCenter);
     onlineVideo->setPosition(Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 100));
 
     auto ratioSwitch =
         createMenuFontWithColor("KeepRatioSwitch", AX_CALLBACK_1(VideoPlayerTest::menuRatioCallback, this));
-    ratioSwitch->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    ratioSwitch->setAnchorPoint(Anchors::rightCenter);
     ratioSwitch->setPosition(Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 150));
 
     auto loopToggle = createMenuFontWithColor("LoopToogle", AX_CALLBACK_1(VideoPlayerTest::menuLoopCallback, this));
-    loopToggle->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    loopToggle->setAnchorPoint(Anchors::rightCenter);
     loopToggle->setPosition(Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 170));
 
     auto menu = Menu::create(resourceVideo, onlineVideo, ratioSwitch, loopToggle, fullSwitch, pauseItem, resumeItem,
                              stopItem, hintItem, nullptr);
-    menu->setPosition(Vec2::ZERO);
+    menu->setPosition(Vec2::zero);
     _uiLayer->addChild(menu, 1);
 
     _videoStateLabel = Label::createWithSystemFont("IDLE", "Arial", 16);
-    _videoStateLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    _videoStateLabel->setAnchorPoint(Anchors::rightCenter);
     _videoStateLabel->setPosition(
         Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 200));
     _uiLayer->addChild(_videoStateLabel, 1);
-    _videoStateLabel->setTextColor(Color32::YELLOW);
+    _videoStateLabel->setTextColor(Color32::yellow);
 
     _loopStatusLabel = Label::createWithSystemFont("(1)", "Arial", 10);
-    _loopStatusLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    _loopStatusLabel->setAnchorPoint(Anchors::rightCenter);
     _loopStatusLabel->setPosition(
         Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 185));
     _uiLayer->addChild(_loopStatusLabel, 1);
-    _loopStatusLabel->setTextColor(Color32::YELLOW);
+    _loopStatusLabel->setTextColor(Color32::yellow);
 
     return true;
 }
@@ -227,7 +227,7 @@ void VideoPlayerTest::createVideo()
 
     _videoPlayer = VideoPlayer::create();
     _videoPlayer->setPosition(centerPos);
-    _videoPlayer->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _videoPlayer->setAnchorPoint(Anchors::center);
     _videoPlayer->setContentSize(Size(widgetSize.width * 0.4f, widgetSize.height * 0.4f));
     _uiLayer->addChild(_videoPlayer);
 
@@ -352,16 +352,16 @@ bool SimpleVideoPlayerTest::init()
 
     _switchStyle =
         createMenuFontWithColor("Switch Style", AX_CALLBACK_1(SimpleVideoPlayerTest::switchStyleCallback, this));
-    _switchStyle->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    _switchStyle->setAnchorPoint(Anchors::bottomLeft);
     _switchStyle->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 50));
 
     _switchUserInputEnabled = createMenuFontWithColor(
         "Enable User Input", AX_CALLBACK_1(SimpleVideoPlayerTest::switchUserInputCallback, this));
-    _switchUserInputEnabled->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    _switchUserInputEnabled->setAnchorPoint(Anchors::bottomLeft);
     _switchUserInputEnabled->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 100));
 
     auto menu = Menu::create(_switchUserInputEnabled, _switchStyle, nullptr);
-    menu->setPosition(Vec2::ZERO);
+    menu->setPosition(Vec2::zero);
     _uiLayer->addChild(menu);
 
     updateButtonsTexts();
@@ -437,7 +437,7 @@ void SimpleVideoPlayerTest::createVideo()
 
     _videoPlayer = ui::VideoPlayer::create();
     _videoPlayer->setPosition(centerPos);
-    _videoPlayer->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _videoPlayer->setAnchorPoint(Anchors::center);
     _videoPlayer->setContentSize(Size(widgetSize.width * 0.4f, widgetSize.height * 0.4f));
     _videoPlayer->setLooping(true);
     _videoPlayer->setStyle(_style);

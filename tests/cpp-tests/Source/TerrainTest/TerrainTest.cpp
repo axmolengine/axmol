@@ -264,10 +264,10 @@ void Player::update(float dt)
         player_h += PLAYER_HEIGHT;
     }
     player->setPositionY(player_h);
-    Quaternion q2;
+    Quat q2;
     q2.createFromAxisAngle(Vec3(0, 1, 0), (float)-M_PI, &q2);
 
-    Quaternion headingQ;
+    Quat headingQ;
     headingQ.createFromAxisAngle(_headingAxis, _headingAngle, &headingQ);
     player->setRotationQuat(headingQ * q2);
     auto vec_offset = Vec4(camera_offset.x, camera_offset.y, camera_offset.z, 1);

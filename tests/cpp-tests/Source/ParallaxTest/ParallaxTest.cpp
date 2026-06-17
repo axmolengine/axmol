@@ -78,7 +78,7 @@ Parallax1::Parallax1()
     // NOW add the 3 layers to the 'void' node
 
     // background image is moved at a ratio of 0.4x, 0.5y
-    voidNode->addChild(background, -1, Vec2(0.4f, 0.5f), Vec2::ZERO);
+    voidNode->addChild(background, -1, Vec2(0.4f, 0.5f), Vec2::zero);
 
     // tiles are moved at a ratio of 2.2x, 1.0y
     voidNode->addChild(tilemap, 1, Vec2(2.2f, 1.0f), Vec2(0, -200));
@@ -147,7 +147,7 @@ Parallax2::Parallax2()
     // NOW add the 3 layers to the 'void' node
 
     // background image is moved at a ratio of 0.4x, 0.5y
-    voidNode->addChild(background, -1, Vec2(0.4f, 0.5f), Vec2::ZERO);
+    voidNode->addChild(background, -1, Vec2(0.4f, 0.5f), Vec2::zero);
 
     // tiles are moved at a ratio of 1.0, 1.0y
     voidNode->addChild(tilemap, 1, Vec2(1.0f, 1.0f), Vec2(0, -200));

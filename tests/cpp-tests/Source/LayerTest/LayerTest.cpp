@@ -885,10 +885,10 @@ void LayerRadialGradientTest::listviewCallback(ax::Object* sender, ax::ui::ListV
     // clear all text to white
     auto listview = static_cast<ax::ui::ListView*>(sender);
     for (auto&& item : listview->getItems())
-        static_cast<ax::ui::Text*>(item)->setColor(ax::Color32::WHITE);
+        static_cast<ax::ui::Text*>(item)->setColor(ax::Color32::white);
 
     _currentSeletedItemIndex = (int)listview->getCurSelectedIndex();
-    listview->getItem(_currentSeletedItemIndex)->setColor(ax::Color32::RED);
+    listview->getItem(_currentSeletedItemIndex)->setColor(ax::Color32::red);
 
     int percent = 100;
     auto slider = static_cast<ax::ui::Slider*>(getChildByTag(101));
@@ -962,7 +962,7 @@ ax::ui::ListView* LayerRadialGradientTest::createListView()
 
     auto scale = ax::ui::Text::create();
     scale->setString("scale[0-2]");
-    scale->setColor(ax::Color32::RED);  // default seleted item
+    scale->setColor(ax::Color32::red);  // default seleted item
     scale->setTouchEnabled(true);
     listview->pushBackCustomItem(scale);
 

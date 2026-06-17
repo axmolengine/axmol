@@ -80,7 +80,7 @@ bool SampleScene::init()
     // create menu, it's an autorelease object
     auto closeMenu = Menu::create(_closeItem, NULL);
     closeMenu->setScale(0.9f);
-    closeMenu->setPosition(Vec2::ZERO);
+    closeMenu->setPosition(Vec2::zero);
     this->addChild(closeMenu, 1);
 
     _changeItem = MenuItemImage::create(
@@ -99,7 +99,7 @@ bool SampleScene::init()
     // create menu, it's an autorelease object
     auto changeMenu = Menu::create(_changeItem, NULL);
     changeMenu->setScale(0.9f);
-    changeMenu->setPosition(Point::ZERO);
+    changeMenu->setPosition(Point::zero);
     this->addChild(changeMenu, 1);
 
     /////////////////////////////

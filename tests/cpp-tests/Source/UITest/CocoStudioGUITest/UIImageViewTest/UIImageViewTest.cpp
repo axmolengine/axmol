@@ -171,7 +171,7 @@ bool UIImageViewTest_ContentSize::init()
         _uiLayer->addChild(alert);
 
         Text* status = Text::create("child ImageView position percent", "fonts/Marker Felt.ttf", 16);
-        status->setColor(Color32::RED);
+        status->setColor(Color32::red);
         status->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2 + 80));
         _uiLayer->addChild(status, 20);
 
@@ -185,16 +185,16 @@ bool UIImageViewTest_ContentSize::init()
         imageViewChild->setScale9Enabled(true);
         imageViewChild->setSizeType(Widget::SizeType::PERCENT);
         imageViewChild->setPositionType(Widget::PositionType::PERCENT);
-        imageViewChild->setSizePercent(Vec2::ANCHOR_MIDDLE);
-        imageViewChild->setPositionPercent(Vec2::ANCHOR_MIDDLE);
+        imageViewChild->setSizePercent(Anchors::center);
+        imageViewChild->setPositionPercent(Anchors::center);
         imageViewChild->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
 
         ImageView* imageViewChild2 = ImageView::create("cocosui/buttonHighlighted.png");
         imageViewChild2->setScale9Enabled(true);
         imageViewChild2->setSizeType(Widget::SizeType::PERCENT);
         imageViewChild2->setPositionType(Widget::PositionType::PERCENT);
-        imageViewChild2->setSizePercent(Vec2::ANCHOR_MIDDLE);
-        imageViewChild2->setPositionPercent(Vec2::ANCHOR_MIDDLE);
+        imageViewChild2->setSizePercent(Anchors::center);
+        imageViewChild2->setPositionPercent(Anchors::center);
         imageViewChild->addChild(imageViewChild2);
 
         imageView->addChild(imageViewChild);

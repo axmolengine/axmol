@@ -23,7 +23,7 @@
 #include "axmol/math/Mat4.h"
 
 #include <cmath>
-#include "axmol/math/Quaternion.h"
+#include "axmol/math/Quat.h"
 #include "axmol/math/MathUtil.h"
 #include "axmol/base/Macros.h"
 #include "axmol/rhi/DriverContext.h"
@@ -31,10 +31,9 @@
 NS_AX_MATH_BEGIN
 
 #if defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT)
-const Mat4 Mat4::IDENTITY =
-    Mat4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-
-const Mat4 Mat4::ZERO = Mat4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+const Mat4 Mat4::zero{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+const Mat4 Mat4::identity{1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+                          0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
 #endif
 
 void Mat4::createLookAt(const Vec3& eyePosition, const Vec3& targetPosition, const Vec3& up, Mat4* dst)
@@ -269,7 +268,7 @@ void Mat4::createScale(float xScale, float yScale, float zScale, Mat4* dst)
     dst->m[10] = zScale;
 }
 
-void Mat4::createRotation(const Quaternion& q, Mat4* dst)
+void Mat4::createRotation(const Quat& q, Mat4* dst)
 {
     AX_ASSERT(dst);
 
@@ -456,7 +455,7 @@ void Mat4::add(const Mat4& m1, const Mat4& m2, Mat4* dst)
     MathUtil::addMatrix(m1.m, m2.m, dst->m);
 }
 
-bool Mat4::decompose(Vec3* scale, Quaternion* rotation, Vec3* translation) const
+bool Mat4::decompose(Vec3* scale, Quat* rotation, Vec3* translation) const
 {
     if (translation)
     {
@@ -588,7 +587,7 @@ void Mat4::getScale(Vec3* scale) const
     decompose(scale, nullptr, nullptr);
 }
 
-bool Mat4::getRotation(Quaternion* rotation) const
+bool Mat4::getRotation(Quat* rotation) const
 {
     return decompose(nullptr, rotation, nullptr);
 }
@@ -710,7 +709,7 @@ bool Mat4::inverse()
 
 bool Mat4::isIdentity() const
 {
-    return (memcmp(m, IDENTITY.m, sizeof(m)) == 0);
+    return (memcmp(m, identity.m, sizeof(m)) == 0);
 }
 
 void Mat4::multiply(float scalar)
@@ -752,12 +751,12 @@ Mat4 Mat4::getNegated() const
     return mat;
 }
 
-void Mat4::rotate(const Quaternion& q)
+void Mat4::rotate(const Quat& q)
 {
     rotate(q, this);
 }
 
-void Mat4::rotate(const Quaternion& q, Mat4* dst) const
+void Mat4::rotate(const Quat& q, Mat4* dst) const
 {
     Mat4 r;
     createRotation(q, &r);

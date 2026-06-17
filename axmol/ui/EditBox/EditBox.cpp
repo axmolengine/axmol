@@ -226,7 +226,7 @@ void EditBox::loadTextureNormal(std::string_view normal, TextureResType texType)
         }
     }
     // FIXME: https://github.com/cocos2d/cocos2d-x/issues/12249
-    if (!_autoSize && _customSize.equals(Vec2::ZERO))
+    if (!_autoSize && _customSize.equals(Vec2::zero))
     {
         _customSize = _normalRenderer->getContentSize();
     }
@@ -521,7 +521,7 @@ const Color32& EditBox::getFontColor() const
     {
         return _editBoxImpl->getFontColor();
     }
-    return Color32::WHITE;
+    return Color32::white;
 }
 
 void EditBox::setPlaceholderFont(std::string_view fontName, int fontSize)
@@ -585,7 +585,7 @@ const Color32& EditBox::getPlaceholderFontColor() const
     {
         return _editBoxImpl->getPlaceholderFontColor();
     }
-    return Color32::GRAY;
+    return Color32::gray;
 }
 
 void EditBox::setPlaceHolder(std::string_view text)

@@ -151,14 +151,20 @@ public:
      *
      * @param mat An array containing 16 elements in column-major order.
      */
-    Mat4(const float* mat) { set(mat); }
+    constexpr Mat4(const float* mat)
+        : m{mat[0], mat[1], mat[2],  mat[3],  mat[4],  mat[5],  mat[6],  mat[7],
+            mat[8], mat[9], mat[10], mat[11], mat[12], mat[13], mat[14], mat[15]}
+    {}
 
     /**
      * Constructs a new matrix by copying the values from the specified matrix.
      *
      * @param copy The matrix to copy.
      */
-    Mat4(const Mat4& copy) { memcpy(m, copy.m, sizeof(m)); }
+    constexpr Mat4(const Mat4& copy)
+        : m{copy.m[0], copy.m[1], copy.m[2],  copy.m[3],  copy.m[4],  copy.m[5],  copy.m[6],  copy.m[7],
+            copy.m[8], copy.m[9], copy.m[10], copy.m[11], copy.m[12], copy.m[13], copy.m[14], copy.m[15]}
+    {}
 
     /**
      * Creates a view matrix based on the specified input parameters.
@@ -328,7 +334,7 @@ public:
      * @param quat A quaternion describing a 3D orientation.
      * @param dst A matrix to store the result in.
      */
-    static void createRotation(const Quaternion& quat, Mat4* dst);
+    static void createRotation(const Quat& quat, Mat4* dst);
 
     /**
      * Creates a rotation matrix from the specified axis and angle.
@@ -419,7 +425,7 @@ public:
      * @param rotation The rotation.
      * @param translation The translation.
      */
-    bool decompose(Vec3* scale, Quaternion* rotation, Vec3* translation) const;
+    bool decompose(Vec3* scale, Quat* rotation, Vec3* translation) const;
 
     /**
      * Computes the determinant of this matrix.
@@ -447,7 +453,7 @@ public:
      *
      * @return true if the rotation is successfully extracted, false otherwise.
      */
-    bool getRotation(Quaternion* rotation) const;
+    bool getRotation(Quat* rotation) const;
 
     /**
      * Gets the translational component of this matrix in the specified vector.
@@ -573,7 +579,7 @@ public:
      *
      * @param q The quaternion to rotate by.
      */
-    void rotate(const Quaternion& q);
+    void rotate(const Quat& q);
 
     /**
      * Post-multiplies this matrix by the matrix corresponding to the
@@ -582,7 +588,7 @@ public:
      * @param q The quaternion to rotate by.
      * @param dst A matrix to store the result in.
      */
-    void rotate(const Quaternion& q, Mat4* dst) const;
+    void rotate(const Quat& q, Mat4* dst) const;
 
     /**
      * Post-multiplies this matrix by the matrix corresponding to the
@@ -1029,9 +1035,9 @@ public:
     }
 
     /** equals to a matrix full of zeros */
-    static const Mat4 ZERO;
+    static const Mat4 zero;
     /** equals to the identity matrix */
-    static const Mat4 IDENTITY;
+    static const Mat4 identity;
 
 private:
     static void createBillboardHelper(const Vec3& objectPosition,
@@ -1040,6 +1046,12 @@ private:
                                       const Vec3* cameraForwardVector,
                                       Mat4* dst);
 };
+
+#if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
+inline constexpr Mat4 Mat4::zero{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+inline constexpr Mat4 Mat4::identity{1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+                                     0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+#endif
 
 /**
  * Transforms the given vector by the given matrix.
@@ -1102,12 +1114,6 @@ inline Vec4 operator*(const Mat4& m, const Vec4& v)
     m.transformVector(v, &x);
     return x;
 }
-
-#if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
-inline constexpr Mat4
-    Mat4::IDENTITY(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-inline constexpr Mat4 Mat4::ZERO(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-#endif
 
 NS_AX_MATH_END
 /**

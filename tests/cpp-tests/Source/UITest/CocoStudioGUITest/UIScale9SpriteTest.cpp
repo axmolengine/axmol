@@ -93,7 +93,7 @@ bool UIScale9SpriteTest::init()
         normalSprite2->setOpacity(100);
         normalSprite2->setContentSize(normalSprite2->getContentSize() * 2);
         this->addChild(normalSprite2);
-        normalSprite2->setColor(Color32::GREEN);
+        normalSprite2->setColor(Color32::green);
         normalSprite2->runAction(action);
 
         auto action2          = action->clone();
@@ -101,14 +101,14 @@ bool UIScale9SpriteTest::init()
         sp1->setPosition(100, 160);
         sp1->setScale(1.2f);
         sp1->setContentSize(Size(100.0f, 100.0f));
-        sp1->setColor(Color32::GREEN);
+        sp1->setColor(Color32::green);
         this->addChild(sp1);
         sp1->runAction((FiniteTimeAction*)action2);
 
         ax::ui::Scale9Sprite* sp2 = ui::Scale9Sprite::create("cocosui/animationbuttonnormal.png");
         sp2->setPosition(350.0f, 160.0f);
         sp2->setContentSize(sp1->getContentSize() * 1.2f);
-        sp2->setColor(Color32::GREEN);
+        sp2->setColor(Color32::green);
         sp2->setContentSize(Size(100.0f, 100.0f));
 
         this->addChild(sp2);
@@ -140,7 +140,7 @@ bool UIScale9SpriteHierarchialTest::init()
         Sprite* normalSprite1 = Sprite::create("cocosui/animationbuttonnormal.png");
         normalSprite1->setPosition(100, 270);
         normalSprite1->setCascadeColorEnabled(true);
-        normalSprite1->setColor(Color32::GREEN);
+        normalSprite1->setColor(Color32::green);
 
         this->addChild(normalSprite1);
         normalSprite1->runAction((FiniteTimeAction*)action->clone());
@@ -155,13 +155,13 @@ bool UIScale9SpriteHierarchialTest::init()
         sp1->setPosition(200.0f, 160.0f);
         sp1->setScale(1.2f);
         sp1->setContentSize(Size(100.0f, 100.0f));
-        sp1->setColor(Color32::GREEN);
+        sp1->setColor(Color32::green);
         this->addChild(sp1);
         sp1->runAction((FiniteTimeAction*)action2);
 
         ax::ui::Scale9Sprite* sp2 = ui::Scale9Sprite::create("cocosui/animationbuttonnormal.png");
         sp2->setContentSize(sp1->getContentSize() * 1.2f);
-        sp2->setColor(Color32::GREEN);
+        sp2->setColor(Color32::green);
         sp2->setFlippedX(true);
         sp2->setContentSize(Size(100.0f, 100.0f));
 
@@ -713,7 +713,7 @@ bool UIS9ZOrder::init()
         this->addChild(blocks_scaled_with_insets);
 
         Sprite* normalSprite = Sprite::createWithSpriteFrameName("blocks9ss/blocks9r.png");
-        normalSprite->setColor(Color32::RED);
+        normalSprite->setColor(Color32::red);
         blocks_scaled_with_insets->addChild(normalSprite);
 
         auto topLabel = Label::createWithSystemFont("I Must be On the Top", "Arial", 15);
@@ -722,7 +722,7 @@ bool UIS9ZOrder::init()
 
         auto bottomLabel = Label::createWithSystemFont("I Must be On the Bottom", "Arial", 15);
         bottomLabel->setPosition(Vec2(80.0f, 80.0f));
-        bottomLabel->setColor(Color32::BLUE);
+        bottomLabel->setColor(Color32::blue);
         blocks_scaled_with_insets->addChild(bottomLabel, -1);
 
         return true;
@@ -876,7 +876,7 @@ bool UIS9ChangeAnchorPoint::init()
         auto normalSprite = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9r.png");
         normalSprite->setPosition(Vec2(x, y));
         //        normalSprite->setScale9Enabled(false);
-        //        normalSprite->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
+        //        normalSprite->setAnchorPoint(Anchors::topRight);
 
         this->addChild(normalSprite);
 
@@ -887,7 +887,7 @@ bool UIS9ChangeAnchorPoint::init()
         button1->addTouchEventListener([=](Object*, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::ENDED)
             {
-                normalSprite->setAnchorPoint(Vec2::ZERO);
+                normalSprite->setAnchorPoint(Vec2::zero);
                 normalSprite->setScale9Enabled(true);
                 AXLOGD("position = {}, {},  anchor point = {}, {}", normalSprite->getPosition().x,
                        normalSprite->getPosition().y, normalSprite->getAnchorPoint().x,
@@ -905,7 +905,7 @@ bool UIS9ChangeAnchorPoint::init()
         button2->addTouchEventListener([=](Object*, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::ENDED)
             {
-                normalSprite->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
+                normalSprite->setAnchorPoint(Anchors::topRight);
                 normalSprite->setScale9Enabled(false);
                 AXLOGD("position = {}, {},  anchor point = {}, {}", normalSprite->getPosition().x,
                        normalSprite->getPosition().y, normalSprite->getAnchorPoint().x,
@@ -1084,7 +1084,7 @@ bool UIS9GlobalZOrderTest::init()
 
         blocks->setPosition(Vec2(x, y));
         blocks->setContentSize(Size(96 * 2, 96 * 1.5));
-        blocks->setColor(Color32::RED);
+        blocks->setColor(Color32::red);
         blocks->setGlobalZOrder(1);
         this->addChild(blocks);
 
@@ -1092,7 +1092,7 @@ bool UIS9GlobalZOrderTest::init()
         blocks2->setPosition(Vec2(x, y));
         blocks2->setContentSize(Size(96 * 3, 96));
         blocks2->setGlobalZOrder(0);
-        blocks2->setColor(Color32::GREEN);
+        blocks2->setColor(Color32::green);
         this->addChild(blocks2);
 
         return true;
@@ -1117,7 +1117,7 @@ bool UIS9EnableScale9FalseTest::init()
         blocks->setScale9Enabled(false);
         blocks->setPosition(Vec2(x, y));
         blocks->setContentSize(Size(96 * 2.0f, 96.0f));
-        blocks->setColor(Color32::RED);
+        blocks->setColor(Color32::red);
         blocks->setGlobalZOrder(1);
         this->addChild(blocks);
 
@@ -1126,7 +1126,7 @@ bool UIS9EnableScale9FalseTest::init()
         blocks2->setPosition(Vec2(0.0f, 0.0f));
         blocks2->setContentSize(Size(96 * 1.5f, 96.0f));
         blocks2->setGlobalZOrder(0);
-        blocks2->setColor(Color32::GREEN);
+        blocks2->setColor(Color32::green);
         blocks->addChild(blocks2);
 
         auto blocks3 = ui::Scale9Sprite::create("Images/blocks9.png");
@@ -1134,7 +1134,7 @@ bool UIS9EnableScale9FalseTest::init()
         blocks3->setPosition(Vec2(0.0f, 0.0f));
         blocks3->setContentSize(Size(96.0f, 96.0f));
         blocks3->setGlobalZOrder(2);
-        blocks3->setColor(Color32::YELLOW);
+        blocks3->setColor(Color32::yellow);
         blocks2->addChild(blocks3);
 
         return true;

@@ -306,7 +306,7 @@ void Collider2D::recenterPoints(Vec2* points, int count, const Vec2& center)
         points[i].y -= centroid.y;
     }
 
-    if (center != Vec2::ZERO)
+    if (center != Vec2::zero)
     {
         for (int i = 0; i < count; ++i)
         {
@@ -486,7 +486,7 @@ bool PolygonCollider2D::attachToBody(Rigidbody2D* body)
 Vec2 PolygonCollider2D::getPoint(int i) const
 {
     auto polygon = b2Shape_GetPolygon(_shapeIds[0]);
-    return i < polygon.count ? b2util::cast(polygon.vertices[i]) : Vec2::ZERO;
+    return i < polygon.count ? b2util::cast(polygon.vertices[i]) : Vec2::zero;
 }
 
 void PolygonCollider2D::getPoints(Vec2* outPoints) const

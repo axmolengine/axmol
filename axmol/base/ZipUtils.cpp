@@ -672,13 +672,6 @@ ZipFile* ZipFile::createFromFile(std::string_view zipFile, std::string_view filt
     return nullptr;
 }
 
-ZipFile* ZipFile::createWithBuffer(const void* buffer, uLong size)
-{
-    Data data;
-    data.copy((const uint8_t*)buffer, size);
-    return createWithData(data);
-}
-
 ZipFile* ZipFile::createWithData(Data data)
 {
     ZipFile* zip = new ZipFile();

@@ -64,8 +64,8 @@ EditBoxImplCommon::EditBoxImplCommon(EditBox* pEditText)
     , _alignment(TextHAlignment::LEFT)
     , _fontSize(-1)
     , _placeholderFontSize(-1)
-    , _colText(Color32::WHITE)
-    , _colPlaceHolder(Color32::GRAY)
+    , _colText(Color32::white)
+    , _colPlaceHolder(Color32::gray)
     , _maxLength(-1)
     , _editingMode(false)
 {}
@@ -100,7 +100,7 @@ void EditBoxImplCommon::initInactiveLabels(const Vec2& size)
 
     _labelPlaceHolder = Label::create();
     _labelPlaceHolder->setAnchorPoint(Vec2(0.0f, 1.0f));
-    _labelPlaceHolder->setTextColor(Color32::GRAY);
+    _labelPlaceHolder->setTextColor(Color32::gray);
     _labelPlaceHolder->enableWrap(false);
     _labelPlaceHolder->setGlobalZOrder(_editBox->getGlobalZOrder());
     _editBox->addChild(_labelPlaceHolder, kLabelZOrder);

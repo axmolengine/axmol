@@ -799,7 +799,7 @@ public:
             }
         }
 
-        return Size::ZERO;
+        return Size::zero;
     }
 
     TableViewCell* tableCellAtIndex(TableView* table, ssize_t idx) override

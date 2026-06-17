@@ -702,8 +702,8 @@ protected:
     Rect _centerRectNormalized = {0, 0, 1, 1};  /// Rectangle to implement "slice 9"
     RenderMode _renderMode =
         Sprite::RenderMode::QUAD;            /// render mode used by the Sprite: Quad, Slice9, Polygon or Quad_Batchnode
-    Vec2 _stretchFactor       = Vec2::ONE;   /// stretch factor to match the contentSize. for 1- and 9- slice sprites
-    Vec2 _originalContentSize = Vec2::ZERO;  /// original content size
+    Vec2 _stretchFactor       = Vec2::one;   /// stretch factor to match the contentSize. for 1- and 9- slice sprites
+    Vec2 _originalContentSize = Vec2::zero;  /// original content size
 
     // Offset Position (used by Zwoptex)
     Vec2 _offsetPosition;

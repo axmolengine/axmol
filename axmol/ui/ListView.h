@@ -306,7 +306,7 @@ public:
     /**
      * @brief Query the closest item to a specific position in current view.
      * For instance, to find the item in the center of view, call
-     * 'getClosestItemToPositionInCurrentView(Vec2::ANCHOR_MIDDLE, Vec2::ANCHOR_MIDDLE)'.
+     * 'getClosestItemToPositionInCurrentView(Anchors::center, Anchors::center)'.
      *
      * @param positionRatioInView Specifies the target position with ratio in list view's content size.
      * @param itemAnchorPoint Specifies an anchor point of each item for position to calculate distance.
@@ -430,7 +430,7 @@ protected:
     void selectedItemEvent(InputPhase hase);
     void interceptPointerEvent(Widget* sender, PointerEvent* event) override;
 
-    Vec2 getHowMuchOutOfBoundary(const Vec2& addition = Vec2::ZERO) override;
+    Vec2 getHowMuchOutOfBoundary(const Vec2& addition = Vec2::zero) override;
 
     void startAttenuatingAutoScroll(const Vec2& deltaMove, const Vec2& initialVelocity) override;
 

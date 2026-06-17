@@ -225,13 +225,13 @@ void ControlSwitchSprite::needsLayout()
 
     if (_onLabel)
     {
-        _onLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _onLabel->setAnchorPoint(Anchors::center);
         _onLabel->setPosition(_onSprite->getPosition().x - _thumbSprite->getContentSize().width / 6,
                               _onSprite->getContentSize().height / 2);
     }
     if (_offLabel)
     {
-        _offLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _offLabel->setAnchorPoint(Anchors::center);
         _offLabel->setPosition(_offSprite->getPosition().x + _thumbSprite->getContentSize().width / 6,
                                _offSprite->getContentSize().height / 2);
     }
@@ -401,7 +401,7 @@ bool ControlSwitch::onPointerDown(PointerEvent* pTouch)
 
     _initialTouchXPosition = location.x - _switchSprite->getSliderXPosition();
 
-    _switchSprite->getThumbSprite()->setColor(Color32::GRAY);
+    _switchSprite->getThumbSprite()->setColor(Color32::gray);
     _switchSprite->needsLayout();
 
     _isPressed = true;
@@ -426,7 +426,7 @@ void ControlSwitch::onPointerUp(PointerEvent* pTouch)
 {
     Vec2 location = this->locationFromTouch(pTouch);
 
-    _switchSprite->getThumbSprite()->setColor(Color32::WHITE);
+    _switchSprite->getThumbSprite()->setColor(Color32::white);
 
     if (hasMoved())
     {
@@ -444,7 +444,7 @@ void ControlSwitch::onPointerCancel(PointerEvent* pTouch)
 {
     Vec2 location = this->locationFromTouch(pTouch);
 
-    _switchSprite->getThumbSprite()->setColor(Color32::WHITE);
+    _switchSprite->getThumbSprite()->setColor(Color32::white);
 
     if (hasMoved())
     {

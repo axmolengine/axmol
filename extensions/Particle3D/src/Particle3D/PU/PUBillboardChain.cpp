@@ -44,7 +44,7 @@ const size_t PUBillboardChain::SEGMENT_EMPTY = std::numeric_limits<size_t>::max(
 //-----------------------------------------------------------------------
 PUBillboardChain::Element::Element() {}
 //-----------------------------------------------------------------------
-PUBillboardChain::Element::Element(const Vec3& pos, float w, float tex, const Color& col, const Quaternion& ori)
+PUBillboardChain::Element::Element(const Vec3& pos, float w, float tex, const Color& col, const Quat& ori)
     : position(pos), width(w), texCoord(tex), color(col), orientation(ori)
 {}
 //-----------------------------------------------------------------------
@@ -67,7 +67,7 @@ PUBillboardChain::PUBillboardChain(std::string_view /*name*/,
     , _vertexContentDirty(true)
     , _texCoordDir(TCD_U)
     , _faceCamera(true)
-    , _normalBase(Vec3::UNIT_X)
+    , _normalBase(Vec3::xAxis)
     , _texture(nullptr)
     , _programState(nullptr)
     , _indexBuffer(nullptr)
@@ -160,7 +160,7 @@ void PUBillboardChain::setupBuffers()
         size_t stride  = sizeof(V3F_T2F_C4F);
         _vertexBuffer  = axdrv->createBuffer(stride * _chainElementList.size() * 2, rhi::BufferType::VERTEX,
                                              rhi::BufferUsage::DYNAMIC);
-        V3F_T2F_C4F vi = {Vec3(0.0f, 0.0f, 0.0f), Vec2(0.0f, 0.0f), Color::WHITE};
+        V3F_T2F_C4F vi = {Vec3(0.0f, 0.0f, 0.0f), Vec2(0.0f, 0.0f), Color::white};
         _vertices.resize(_chainElementList.size() * 2, vi);
 
         _indexBuffer = axdrv->createBuffer(_chainCount * _maxElementsPerChain * 6 * sizeof(uint16_t),
@@ -403,7 +403,7 @@ void PUBillboardChain::updateVertexBuffer(const Mat4& camMat)
     if (!_vertexContentDirty)
         return;
 
-    V3F_T2F_C4F vi = {Vec3(0.0f, 0.0f, 0.0f), Vec2(0.0f, 0.0f), Color::WHITE};
+    V3F_T2F_C4F vi = {Vec3(0.0f, 0.0f, 0.0f), Vec2(0.0f, 0.0f), Color::white};
     _vertices.assign(_vertices.size(), vi);
     // HardwareVertexBufferSharedPtr pBuffer =
     //	_vertexData->vertexBufferBinding->getBuffer(0);

@@ -692,14 +692,14 @@ Widget* ListView::getClosestItemToPositionInCurrentView(const Vec2& positionRati
 
 Widget* ListView::getCenterItemInCurrentView() const
 {
-    return getClosestItemToPositionInCurrentView(Vec2::ANCHOR_MIDDLE, Vec2::ANCHOR_MIDDLE);
+    return getClosestItemToPositionInCurrentView(Anchors::center, Anchors::center);
 }
 
 Widget* ListView::getLeftmostItemInCurrentView() const
 {
     if (_direction == Direction::HORIZONTAL)
     {
-        return getClosestItemToPositionInCurrentView(Vec2::ANCHOR_MIDDLE_LEFT, Vec2::ANCHOR_MIDDLE);
+        return getClosestItemToPositionInCurrentView(Anchors::leftCenter, Anchors::center);
     }
     return nullptr;
 }
@@ -708,7 +708,7 @@ Widget* ListView::getRightmostItemInCurrentView() const
 {
     if (_direction == Direction::HORIZONTAL)
     {
-        return getClosestItemToPositionInCurrentView(Vec2::ANCHOR_MIDDLE_RIGHT, Vec2::ANCHOR_MIDDLE);
+        return getClosestItemToPositionInCurrentView(Anchors::rightCenter, Anchors::center);
     }
     return nullptr;
 }
@@ -717,7 +717,7 @@ Widget* ListView::getTopmostItemInCurrentView() const
 {
     if (_direction == Direction::VERTICAL)
     {
-        return getClosestItemToPositionInCurrentView(Vec2::ANCHOR_MIDDLE_TOP, Vec2::ANCHOR_MIDDLE);
+        return getClosestItemToPositionInCurrentView(Anchors::topCenter, Anchors::center);
     }
     return nullptr;
 }
@@ -726,7 +726,7 @@ Widget* ListView::getBottommostItemInCurrentView() const
 {
     if (_direction == Direction::VERTICAL)
     {
-        return getClosestItemToPositionInCurrentView(Vec2::ANCHOR_MIDDLE_BOTTOM, Vec2::ANCHOR_MIDDLE);
+        return getClosestItemToPositionInCurrentView(Anchors::bottomCenter, Anchors::center);
     }
     return nullptr;
 }
@@ -898,7 +898,7 @@ Vec2 ListView::getHowMuchOutOfBoundary(const Vec2& addition)
     {
         return ScrollView::getHowMuchOutOfBoundary(addition);
     }
-    else if (addition == Vec2::ZERO && !_outOfBoundaryAmountDirty)
+    else if (addition == Vec2::zero && !_outOfBoundaryAmountDirty)
     {
         return _outOfBoundaryAmount;
     }
@@ -959,7 +959,7 @@ Vec2 ListView::getHowMuchOutOfBoundary(const Vec2& addition)
         outOfBoundaryAmount.y = bottomBoundary - (_innerContainer->getBottomBoundary() + addition.y);
     }
 
-    if (addition == Vec2::ZERO)
+    if (addition == Vec2::zero)
     {
         _outOfBoundaryAmount      = outOfBoundaryAmount;
         _outOfBoundaryAmountDirty = false;
@@ -972,21 +972,21 @@ static Vec2 getAnchorPointByMagneticType(ListView::MagneticType magneticType)
     switch (magneticType)
     {
     case ListView::MagneticType::NONE:
-        return Vec2::ZERO;
+        return Vec2::zero;
     case ListView::MagneticType::BOTH_END:
-        return Vec2::ANCHOR_TOP_LEFT;
+        return Anchors::topLeft;
     case ListView::MagneticType::CENTER:
-        return Vec2::ANCHOR_MIDDLE;
+        return Anchors::center;
     case ListView::MagneticType::LEFT:
-        return Vec2::ANCHOR_MIDDLE_LEFT;
+        return Anchors::leftCenter;
     case ListView::MagneticType::RIGHT:
-        return Vec2::ANCHOR_MIDDLE_RIGHT;
+        return Anchors::rightCenter;
     case ListView::MagneticType::TOP:
-        return Vec2::ANCHOR_MIDDLE_TOP;
+        return Anchors::topCenter;
     case ListView::MagneticType::BOTTOM:
-        return Vec2::ANCHOR_MIDDLE_BOTTOM;
+        return Anchors::bottomCenter;
     }
-    return Vec2::ZERO;
+    return Vec2::zero;
 }
 
 void ListView::startAttenuatingAutoScroll(const Vec2& deltaMove, const Vec2& initialVelocity)
@@ -998,7 +998,7 @@ void ListView::startAttenuatingAutoScroll(const Vec2& deltaMove, const Vec2& ini
         adjustedDeltaMove = flattenVectorByDirection(adjustedDeltaMove);
 
         // If the destination is out of boundary, do nothing here. Because it will be handled by bouncing back.
-        if (getHowMuchOutOfBoundary(adjustedDeltaMove) == Vec2::ZERO)
+        if (getHowMuchOutOfBoundary(adjustedDeltaMove) == Vec2::zero)
         {
             MagneticType magType = _magneticType;
             if (magType == MagneticType::BOTH_END)

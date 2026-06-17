@@ -152,7 +152,7 @@ void TextureASTC::onEnter()
     auto& s     = getContentSize();
     _background = LayerColor::create(Color32(15, 19, 42, 255), s.width, s.height);
     _background->setIgnoreAnchorPointForPosition(false);
-    _background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _background->setAnchorPoint(Anchors::center);
 
     _background->setPosition(Vec2(s.width / 2, s.height / 2));
     this->addChild(_background);
@@ -201,7 +201,7 @@ bool TextureETC1Alpha::init()
     auto& canvasSize = getContentSize();
     _background      = LayerColor::create(Color32(15, 19, 42, 255), canvasSize.width, canvasSize.height);
     _background->setIgnoreAnchorPointForPosition(false);
-    _background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _background->setAnchorPoint(Anchors::center);
 
     auto s = Director::getInstance()->getCanvasSize();
     _background->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -216,7 +216,7 @@ void TextureETC1Alpha::addNewSpriteWithCoords(Vec2 p)
     auto sprite           = Sprite::create("Images/grossini_dance_08.png");
     Texture2D* etcTexture = _director->getTextureCache()->addImage("Images/etc1-alpha.pkm");
     sprite->setTexture(etcTexture);
-    sprite->setTextureRect(Rect(Vec2::ZERO, etcTexture->getContentSize()));
+    sprite->setTextureRect(Rect(Vec2::zero, etcTexture->getContentSize()));
 
     _background->addChild(sprite);
 
@@ -281,7 +281,7 @@ bool TextureETC2::init()
     auto& canvasSize = getContentSize();
     _background      = LayerColor::create(Color32(15, 19, 42, 255), canvasSize.width, canvasSize.height);
     _background->setIgnoreAnchorPointForPosition(false);
-    _background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _background->setAnchorPoint(Anchors::center);
 
     auto s = Director::getInstance()->getCanvasSize();
     _background->setPosition(Vec2(s.width / 2, s.height / 2));

@@ -63,12 +63,12 @@ inline ax::Vec3 cast(const JPH::Float3& v)
 }
 
 // Quat
-inline JPH::Quat cast(const ax::Quaternion& q)
+inline JPH::Quat cast(const ax::Quat& q)
 {
     return {q.x, q.y, q.z, q.w};
 }
 
-inline ax::Quaternion cast(const JPH::Quat& q)
+inline ax::Quat cast(const JPH::Quat& q)
 {
     return {q.GetX(), q.GetY(), q.GetZ(), q.GetW()};
 }

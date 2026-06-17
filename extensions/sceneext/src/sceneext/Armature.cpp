@@ -480,7 +480,7 @@ Rect Armature::getBoundingBox() const
         if (Bone* bone = dynamic_cast<Bone*>(object))
         {
             Rect r = bone->getDisplayManager()->getBoundingBox();
-            if (r.equals(Rect::ZERO))
+            if (r.equals(Rect::zero))
                 continue;
 
             if (first)

@@ -65,7 +65,7 @@ public:
 
     /*
      */
-    const Quaternion& getOrientation() const;
+    const Quat& getOrientation() const;
     const Vec3& getNormal() const;
     void setNormal(const Vec3& normal);
 
@@ -88,7 +88,7 @@ protected:
      */
     void initParticleDirection(PUParticle3D* particle) override;
 
-    Quaternion getRotationTo(const Vec3& src, const Vec3& dest, const Vec3& fallbackAxis = Vec3::ZERO) const;
+    Quat getRotationTo(const Vec3& src, const Vec3& dest, const Vec3& fallbackAxis = Vec3::zero) const;
 
 protected:
     float _radius;
@@ -98,7 +98,7 @@ protected:
     float _x;
     float _z;
     bool _random;
-    Quaternion _orientation;
+    Quat _orientation;
     Vec3 _normal;
 };
 }  // namespace ax

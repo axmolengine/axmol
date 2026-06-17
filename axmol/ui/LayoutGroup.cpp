@@ -53,22 +53,22 @@ LayoutGroup::LayoutGroup()
     : _backGroundScale9Enabled(false)
     , _backGroundImage(nullptr)
     , _backGroundImageFileName("")
-    , _backGroundImageCapInsets(Rect::ZERO)
+    , _backGroundImageCapInsets(Rect::zero)
     , _colorType(BackGroundColorType::NONE)
     , _bgImageTexType(TextureResType::LOCAL)
-    , _backGroundImageTextureSize(Vec2::ZERO)
-    , _backGroundImageColor(Color32::WHITE)
+    , _backGroundImageTextureSize(Vec2::zero)
+    , _backGroundImageColor(Color32::white)
     , _colorRender(nullptr)
     , _gradientRender(nullptr)
-    , _cColor(Color32::WHITE)
-    , _gStartColor(Color32::WHITE)
-    , _gEndColor(Color32::WHITE)
+    , _cColor(Color32::white)
+    , _gStartColor(Color32::white)
+    , _gEndColor(Color32::white)
     , _alongVector(Vec2(0.0f, -1.0f))
     , _clippingEnabled(false)
     , _layoutType(Type::ABSOLUTE)
     , _clippingType(ClippingType::STENCIL)
     , _clippingStencil(nullptr)
-    , _clippingRect(Rect::ZERO)
+    , _clippingRect(Rect::zero)
     , _clippingParent(nullptr)
     , _clippingRectDirty(true)
     , _stencilStateManager(new StencilStateManager())
@@ -136,8 +136,8 @@ bool LayoutGroup::init()
     if (Widget::init())
     {
         setAutoSize(false);
-        setContentSize(Vec2::ZERO);
-        setAnchorPoint(Vec2::ZERO);
+        setContentSize(Vec2::zero);
+        setAnchorPoint(Vec2::zero);
         onPassFocusToChild = AX_CALLBACK_2(LayoutGroup::findNearestChildWidgetIndex, this);
         return true;
     }
@@ -447,7 +447,7 @@ void LayoutGroup::setStencilClippingSize(const Vec2& /*size*/)
     if (_clippingEnabled && _clippingType == ClippingType::STENCIL)
     {
         _clippingStencil->clear();
-        _clippingStencil->drawSolidRect(Vec2::ZERO, _contentSize, Color::GREEN);  // Fix issue #1546
+        _clippingStencil->drawSolidRect(Vec2::zero, _contentSize, Color::green);  // Fix issue #1546
     }
 }
 
@@ -455,7 +455,7 @@ const Rect& LayoutGroup::getClippingRect()
 {
     if (_clippingRectDirty)
     {
-        const auto worldPos1 = convertToWorldSpace(Vec2::ZERO);
+        const auto worldPos1 = convertToWorldSpace(Vec2::zero);
         const auto worldPos2 = convertToWorldSpace(Vec2(_contentSize.width, _contentSize.height));
 
         // Node can be flipped
@@ -679,7 +679,7 @@ void LayoutGroup::removeBackGroundImage()
     removeProtectedChild(_backGroundImage);
     _backGroundImage            = nullptr;
     _backGroundImageFileName    = "";
-    _backGroundImageTextureSize = Vec2::ZERO;
+    _backGroundImageTextureSize = Vec2::zero;
 }
 
 void LayoutGroup::setBackGroundColorType(BackGroundColorType type)
@@ -1021,7 +1021,7 @@ bool LayoutGroup::isPassFocusToChild() const
 Vec2 LayoutGroup::getLayoutAccumulatedSize() const
 {
     const auto& children = this->getChildren();
-    Vec2 layoutSize      = Vec2::ZERO;
+    Vec2 layoutSize      = Vec2::zero;
     int widgetCount      = 0;
     for (const auto& widget : children)
     {

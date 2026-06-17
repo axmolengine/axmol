@@ -130,11 +130,11 @@ protected:
     struct BoneBlendState
     {
         Vec3 localTranslate;
-        Quaternion localRot;
+        Quat localRot;
         Vec3 localScale;
         float weight;
         void* tag;  //
-        BoneBlendState() : localRot(Quaternion::identity()), localScale(Vec3::ONE), weight(1.f), tag(nullptr) {}
+        BoneBlendState() : localRot(Quat::identity), localScale(Vec3::one), weight(1.f), tag(nullptr) {}
     };
     /**
      * Constructor.

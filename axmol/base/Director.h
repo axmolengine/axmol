@@ -288,14 +288,14 @@ public:
      * taking into account orientation (portrait or landscape) and viewport settings.
      */
     Vec2 screenToWorld(const Vec2& point);
-    AX_DEPRECATED(3.0) Vec2 convertToGL(const Vec2& point) { return screenToWorld(point); }
+    AX_DEPRECATED("3.0") Vec2 convertToGL(const Vec2& point) { return screenToWorld(point); }
 
     /**
      * Converts an rendering 2d-coordinate to a screen coordinate.
      * Useful to convert node points to window points for calls such as glScissor.
      */
     Vec2 worldToScreen(const Vec2& point);
-    AX_DEPRECATED(3.0) Vec2 convertToUI(const Vec2& point) { return worldToScreen(point); }
+    AX_DEPRECATED("3.0") Vec2 convertToUI(const Vec2& point) { return worldToScreen(point); }
 
     /**
      * Gets the distance between camera and near clipping frame.
@@ -413,9 +413,6 @@ public:
      * It will enable alpha blending, disable depth test.
      */
     void setRenderDefaults();
-#ifndef AX_CORE_PROFILE
-    AX_DEPRECATED(2.9) void setGLDefaultValues() { setRenderDefaults(); }
-#endif
 
     /** Sets clear values for the color buffers,
      * value range of each element is [0.0, 1.0].
@@ -736,7 +733,7 @@ protected:
     Projection _projection = Projection::DEFAULT;
 
     /* canvas size in points */
-    Vec2 _canvasSizeInPoints = Vec2::ZERO;
+    Vec2 _canvasSizeInPoints = Vec2::zero;
 
     /* content scale factor */
     float _contentScaleFactor = 1.0f;

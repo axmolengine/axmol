@@ -90,7 +90,7 @@ bool ControlStepper::initWithMinusSpriteAndPlusSprite(Sprite* minusSprite, Sprit
 
         this->setMinusLabel(Label::createWithSystemFont("-", ControlStepperLabelFont, 40));
         _minusLabel->setColor(ControlStepperLabelColorDisabled);
-        _minusLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _minusLabel->setAnchorPoint(Anchors::center);
         _minusLabel->setPosition(_minusSprite->getContentSize().width / 2, _minusSprite->getContentSize().height / 2);
         _minusSprite->addChild(_minusLabel);
 
@@ -102,7 +102,7 @@ bool ControlStepper::initWithMinusSpriteAndPlusSprite(Sprite* minusSprite, Sprit
 
         this->setPlusLabel(Label::createWithSystemFont("+", ControlStepperLabelFont, 40));
         _plusLabel->setColor(ControlStepperLabelColorEnabled);
-        _plusLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _plusLabel->setAnchorPoint(Anchors::center);
         _plusLabel->setPosition(_plusSprite->getContentSize().width / 2, _plusSprite->getContentSize().height / 2);
         _plusSprite->addChild(_plusLabel);
 
@@ -259,22 +259,22 @@ void ControlStepper::updateLayoutUsingTouchLocation(Vec2 location)
     {
         _touchedPart = Part::MINUS;
 
-        _minusSprite->setColor(Color32::GRAY);
-        _plusSprite->setColor(Color32::WHITE);
+        _minusSprite->setColor(Color32::gray);
+        _plusSprite->setColor(Color32::white);
     }
     else if (location.x >= _minusSprite->getContentSize().width && _value < _maximumValue)
     {
         _touchedPart = Part::PLUS;
 
-        _minusSprite->setColor(Color32::WHITE);
-        _plusSprite->setColor(Color32::GRAY);
+        _minusSprite->setColor(Color32::white);
+        _plusSprite->setColor(Color32::gray);
     }
     else
     {
         _touchedPart = Part::NONE;
 
-        _minusSprite->setColor(Color32::WHITE);
-        _plusSprite->setColor(Color32::WHITE);
+        _minusSprite->setColor(Color32::white);
+        _plusSprite->setColor(Color32::white);
     }
 }
 
@@ -331,8 +331,8 @@ void ControlStepper::onPointerMove(PointerEvent* pTouch)
 
         _touchedPart = Part::NONE;
 
-        _minusSprite->setColor(Color32::WHITE);
-        _plusSprite->setColor(Color32::WHITE);
+        _minusSprite->setColor(Color32::white);
+        _plusSprite->setColor(Color32::white);
 
         if (_autorepeat)
         {
@@ -345,8 +345,8 @@ void ControlStepper::onPointerMove(PointerEvent* pTouch)
 
 void ControlStepper::onPointerUp(PointerEvent* pTouch)
 {
-    _minusSprite->setColor(Color32::WHITE);
-    _plusSprite->setColor(Color32::WHITE);
+    _minusSprite->setColor(Color32::white);
+    _plusSprite->setColor(Color32::white);
 
     if (_autorepeat)
     {

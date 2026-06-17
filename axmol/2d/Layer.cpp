@@ -357,7 +357,7 @@ LayerRadialGradient* LayerRadialGradient::create(const Color32& startColor,
 LayerRadialGradient* LayerRadialGradient::create()
 {
     auto layerGradient = new LayerRadialGradient();
-    if (layerGradient && layerGradient->initWithColor(Color32::BLACK, Color32::BLACK, 0, Vec2(0, 0), 0))
+    if (layerGradient && layerGradient->initWithColor(Color32::black, Color32::black, 0, Vec2(0, 0), 0))
     {
         layerGradient->autorelease();
         return layerGradient;

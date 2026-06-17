@@ -65,7 +65,7 @@ void MotionStreakTest1::onEnter()
     _target->setPosition(Vec2(s.width / 4, 0.0f));
 
     // create the streak object and add it to the scene
-    _streak = MotionStreak::create(2, 3, 32, Color32::GREEN, s_streak);
+    _streak = MotionStreak::create(2, 3, 32, Color32::green, s_streak);
     addChild(_streak);
     // schedule an update on each frame so we can synchronize the streak with the target
     schedule(AX_SCHEDULE_SELECTOR(MotionStreakTest1::onUpdate));
@@ -87,7 +87,7 @@ void MotionStreakTest1::onEnter()
 
 void MotionStreakTest1::onUpdate(float delta)
 {
-    _streak->setPosition(_target->convertToWorldSpace(Vec2::ZERO));
+    _streak->setPosition(_target->convertToWorldSpace(Vec2::zero));
 }
 
 std::string MotionStreakTest1::title() const
@@ -112,7 +112,7 @@ void MotionStreakTest2::onEnter()
     auto s = Director::getInstance()->getCanvasSize();
 
     // create the streak object and add it to the scene
-    _streak = MotionStreak::create(3, 3, 64, Color32::WHITE, s_streak);
+    _streak = MotionStreak::create(3, 3, 64, Color32::white, s_streak);
     addChild(_streak);
 
     _streak->setPosition(Vec2(s.width / 2, s.height / 2));

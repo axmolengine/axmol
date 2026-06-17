@@ -525,7 +525,7 @@ Vec2 Rigidbody2D::getVelocity()
 Vec2 Rigidbody2D::getVelocityAtLocalPoint(const Vec2& point)
 {
     if (!isAttached())
-        return Vec2::ZERO;
+        return Vec2::zero;
     b2Vec2 worldPoint = b2Body_GetWorldPoint(_bodyId, b2util::cast(point));
 
     auto r          = b2Sub(worldPoint, b2Body_GetPosition(_bodyId));
@@ -538,7 +538,7 @@ Vec2 Rigidbody2D::getVelocityAtLocalPoint(const Vec2& point)
 Vec2 Rigidbody2D::getVelocityAtWorldPoint(const Vec2& point)
 {
     if (!isAttached())
-        return Vec2::ZERO;
+        return Vec2::zero;
     b2Vec2 r        = b2Sub(b2util::cast(point), b2Body_GetPosition(_bodyId));
     auto av         = b2Body_GetAngularVelocity(_bodyId);
     b2Vec2 velocity = b2Add(b2Body_GetLinearVelocity(_bodyId), b2Vec2{-r.y * av, r.x * av});
@@ -719,7 +719,7 @@ Vec2 Rigidbody2D::world2Local(const Vec2& point)
 
         return b2util::cast(b2InvTransformPoint(transform, b2util::cast(point)));
     }
-    return Vec2::ZERO;
+    return Vec2::zero;
 }
 
 Vec2 Rigidbody2D::local2World(const Vec2& point)
@@ -736,7 +736,7 @@ Vec2 Rigidbody2D::local2World(const Vec2& point)
 
         return b2util::cast(b2TransformPoint(transform, b2util::cast(point)));
     }
-    return Vec2::ZERO;
+    return Vec2::zero;
 }
 
 float Rigidbody2D::getAngleRadians()
@@ -761,7 +761,7 @@ void Rigidbody2D::updateTransform()
         forceUpdateTransform(parent->getNodeToWorldTransform(), _owner->getNodeToWorldTransform(), _owner->getScaleX(),
                              _owner->getScaleY(), _owner->getRotation());
     else
-        forceUpdateTransform(Mat4::IDENTITY, _owner->getNodeToWorldTransform(), _owner->getScaleX(),
+        forceUpdateTransform(Mat4::identity, _owner->getNodeToWorldTransform(), _owner->getScaleX(),
                              _owner->getScaleY(), _owner->getRotation());
 
     _transformDirty = false;
@@ -803,7 +803,7 @@ void Rigidbody2D::forceUpdateTransform(const Mat4& parentToWorldTransform,
     _recordPosX = worldPosition.x;
     _recordPosY = worldPosition.y;
 
-    if (_owner->getAnchorPoint() != Vec2::ANCHOR_MIDDLE)
+    if (_owner->getAnchorPoint() != Anchors::center)
     {
         parentToWorldTransform.getInversed().transformVector(worldPosition.x, worldPosition.y, worldPosition.z, 1.f,
                                                              &worldPosition);

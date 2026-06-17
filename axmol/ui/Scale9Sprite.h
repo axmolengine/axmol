@@ -401,8 +401,8 @@ public:
      */
     State getState() const;
 
-    AX_DEPRECATED(3.0) inline void setPreferredSize(const Size& size) { this->setContentSize(size); }
-    AX_DEPRECATED(3.0) inline const Size& getPreferredSize() const { return this->getContentSize(); }
+    AX_DEPRECATED("3.0") inline void setPreferredSize(const Size& size) { this->setContentSize(size); }
+    AX_DEPRECATED("3.0") inline const Size& getPreferredSize() const { return this->getContentSize(); }
 
     /**
      * @brief Query the sprite's original size.

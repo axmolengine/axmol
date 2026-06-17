@@ -494,7 +494,7 @@ Widget* WidgetPropertiesReader0250::createWidget(const rapidjson::Value& data,
     Widget* widget                     = widgetFromJsonDictionary(widgetTree);
 
     /* *********temp********* */
-    if (widget->getContentSize().equals(Size::ZERO))
+    if (widget->getContentSize().equals(Size::zero))
     {
         Layout* rootWidget = dynamic_cast<Layout*>(widget);
         rootWidget->setContentSize(Size(fileDesignWidth, fileDesignHeight));
@@ -1267,7 +1267,7 @@ Widget* WidgetPropertiesReader0300::createWidget(const rapidjson::Value& data,
     Widget* widget                     = widgetFromJsonDictionary(widgetTree);
 
     /* *********temp********* */
-    if (widget->getContentSize().equals(Size::ZERO))
+    if (widget->getContentSize().equals(Size::zero))
     {
         Layout* rootWidget = dynamic_cast<Layout*>(widget);
         rootWidget->setContentSize(Size(fileDesignWidth, fileDesignHeight));
@@ -1341,7 +1341,7 @@ ax::ui::Widget* WidgetPropertiesReader0300::createWidgetFromBinary(CocoLoader* c
                 widget = widgetFromBinary(cocoLoader, widgetTreeNode);
             }
 
-            if (widget->getContentSize().equals(Size::ZERO))
+            if (widget->getContentSize().equals(Size::zero))
             {
                 Layout* rootWidget = dynamic_cast<Layout*>(widget);
                 rootWidget->setContentSize(Size(fileDesignWidth, fileDesignHeight));

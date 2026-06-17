@@ -180,7 +180,7 @@ BillBoardTest::BillBoardTest() : _camera(nullptr)
     auto label2    = Label::createWithTTF(ttfConfig, "rotate-");
     auto menuItem2 = MenuItemLabel::create(label2, AX_CALLBACK_1(BillBoardTest::rotateCameraCallback, this, -10));
     auto menu      = Menu::create(menuItem1, menuItem2, nullptr);
-    menu->setPosition(Vec2::ZERO);
+    menu->setPosition(Vec2::zero);
     menuItem1->setPosition(Vec2(s.width - 80, VisibleRect::top().y - 160));
     menuItem2->setPosition(Vec2(s.width - 80, VisibleRect::top().y - 190));
     addChild(menu, 0);

@@ -164,7 +164,7 @@ Widget::Widget()
     , _sizeType(SizeType::ABSOLUTE)
     , _positionType(PositionType::ABSOLUTE)
     , _actionTag(0)
-    , _customSize(Vec2::ZERO)
+    , _customSize(Vec2::zero)
     , _hitted(false)
     , _hittedByCamera(nullptr)
     , _hoveredByCamera(nullptr)
@@ -1610,7 +1610,7 @@ void Widget::setAutoSize(bool enable)
         // Switching to fixed size mode: use the explicit custom size when one
         // was provided while auto-size was active. If there is no custom size
         // yet, preserve the current auto-sized content size.
-        if (_customSize.equals(Vec2::ZERO))
+        if (_customSize.equals(Vec2::zero))
             _customSize = getContentSize();
 
         ProtectedNode::setContentSize(_customSize);

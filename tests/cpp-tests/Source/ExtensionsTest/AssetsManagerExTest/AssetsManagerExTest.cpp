@@ -80,7 +80,7 @@ bool AssetsManagerExLoaderScene::init()
         MenuItemLabel::create(downloadLabel, AX_CALLBACK_1(AssetsManagerExLoaderScene::startDownloadCallback, this));
     downloadItem->setPosition(Vec2(VisibleRect::center().x, VisibleRect::bottom().y + 100));
     _downloadMenu = Menu::create(downloadItem, nullptr);
-    _downloadMenu->setPosition(Vec2::ZERO);
+    _downloadMenu->setPosition(Vec2::zero);
     this->addChild(_downloadMenu, 1);
 
     _loadLayer = Layer::create();

@@ -74,7 +74,7 @@ ax::Color32 GButton::getTitleColor() const
     if (tf)
         return tf->getColor();
     else
-        return Color32::BLACK;
+        return Color32::black;
 }
 
 void GButton::setTitleColor(const ax::Color32& value)

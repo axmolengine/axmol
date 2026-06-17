@@ -193,10 +193,10 @@ public:
     /**
      * implicit deprecated APIs, use getWindowSize instead
      */
-    AX_DEPRECATED(3.0) const Vec2& getFrameSize() const { return getWindowSize(); }
-    AX_DEPRECATED(3.0) void setFrameSize(float width, float height) { setWindowSize(width, height); }
-    AX_DEPRECATED(3.0) float getFrameZoomFactor() const { return getWindowZoomFactor(); }
-    AX_DEPRECATED(3.0) void setFrameZoomFactor(float zoomFactor) { setWindowZoomFactor(zoomFactor); }
+    AX_DEPRECATED("3.0") const Vec2& getFrameSize() const { return getWindowSize(); }
+    AX_DEPRECATED("3.0") void setFrameSize(float width, float height) { setWindowSize(width, height); }
+    AX_DEPRECATED("3.0") float getFrameZoomFactor() const { return getWindowZoomFactor(); }
+    AX_DEPRECATED("3.0") void setFrameZoomFactor(float zoomFactor) { setWindowZoomFactor(zoomFactor); }
 #endif
 
     /**
@@ -448,7 +448,7 @@ public:
      * - Sets `_renderSize` to the specified dimensions;
      * - On mobile platforms (Android/iOS), `_windowSize` is synchronized to match `_renderSize`;
      * - On desktop platforms, `_windowSize` is only initialized to `_renderSize` if it hasn't been set yet;
-     * - If `_designResolutionSize` is unset (`Vec2::ZERO`), it is initialized to `_renderSize`;
+     * - If `_designResolutionSize` is unset (`Vec2::zero`), it is initialized to `_renderSize`;
      * - Calls `updateDesignResolution()` to recalculate `_viewScale` and `_viewportRect` based on the current
      *   `ResolutionPolicy`, and updates the Director's canvas size and projection matrix accordingly.
      *

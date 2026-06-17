@@ -116,8 +116,8 @@ bool Physics3DTestDemo::init()
         });
 
         auto menu = Menu::create(menuItem, nullptr);
-        menu->setPosition(Vec2::ZERO);
-        menuItem->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+        menu->setPosition(Vec2::zero);
+        menuItem->setAnchorPoint(Anchors::topLeft);
         menuItem->setPosition(Vec2(VisibleRect::left().x, VisibleRect::top().y - 50));
         this->addChild(menu);
 
@@ -305,7 +305,7 @@ bool Physics3DOneWayPlatform::init()
     // 0.5}), 1.0f); ballAbove->addComponent(ballAboveBody); ballAbove->setPosition3D(Vec3(0.0f, 6.0f, 0.0f));
     // ballAbove->setCameraMask((unsigned short)CameraFlag::USER1);
     // this->addChild(ballAbove);
-    // ballAbove->setColor(Color32::RED);
+    // ballAbove->setColor(Color32::red);
 
     // Ball launching upward from below (will pass through the platform and land on the floor)
     auto ballBelow = MeshRenderer::create("MeshRendererTest/sphere.c3b");
@@ -317,7 +317,7 @@ bool Physics3DOneWayPlatform::init()
     ballBelow->setCameraMask((unsigned short)CameraFlag::USER1);
     ballBelowBody->setLinearVelocity(Vec3(0, 20.0f, 0));  // upward velocity
     this->addChild(ballBelow);
-    ballBelow->setColor(Color32::BLUE);
+    ballBelow->setColor(Color32::blue);
 
     // Register the PreSolve callback that decides when to allow collisions through the platform
     auto listener            = ContactEventListener3D::create();
@@ -370,8 +370,8 @@ bool Joint3DDemo::init()
     // --- Pivot joint test
     subTests.emplace_back([&]() {
         auto mesh = MeshRenderer::create("MeshRendererTest/orc.c3b");
-        Quaternion quat;
-        Quaternion::createFromAxisAngle(Vec3(0.f, 1.f, 0.f), MathUtil::radians(180), &quat);
+        Quat quat;
+        Quat::createFromAxisAngle(Vec3(0.f, 1.f, 0.f), MathUtil::radians(180), &quat);
         auto rigidbody = Rigidbody3D::create(BoxCollider3D::create(Vec3(5.0f, 5.0f, 5.0f)), 10.0f);
         rigidbody->setTransformInPhysics(Vec3(0.f, -3.f, 0.f), quat);
         mesh->addComponent(rigidbody);

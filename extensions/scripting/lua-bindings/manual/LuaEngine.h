@@ -58,12 +58,6 @@ public:
      * @return the instance of LuaEngine.
      */
     static LuaEngine* getInstance(void);
-    /**
-     * Get defaultEngine of LuaEngine, it was deprecated.
-     *
-     * @return the instance of LuaEngine.
-     */
-    AX_DEPRECATED(2.1) static LuaEngine* defaultEngine(void) { return LuaEngine::getInstance(); }
 
     /**
      * Destructor of LuaEngine.

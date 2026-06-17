@@ -692,7 +692,7 @@ void DrawNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t p
     if (_isolated)
     {
         // ignore `parentTransform` from parent
-        Node::visit(renderer, Mat4::IDENTITY, parentFlags);
+        Node::visit(renderer, Mat4::identity, parentFlags);
     }
     else
     {
@@ -743,9 +743,9 @@ void DrawNode::_drawPolygon(const Vec2* verts,
             p2t::Point* vec3 = t->GetPoint(2);
 
             V2F_T2F_C4F_Triangle triangle = {
-                {Vec2(vec1->x, vec1->y), Vec2::ZERO, fillColor},
-                {Vec2(vec2->x, vec2->y), Vec2::ZERO, fillColor},
-                {Vec2(vec3->x, vec3->y), Vec2::ZERO, fillColor},
+                {Vec2(vec1->x, vec1->y), Vec2::zero, fillColor},
+                {Vec2(vec2->x, vec2->y), Vec2::zero, fillColor},
+                {Vec2(vec3->x, vec3->y), Vec2::zero, fillColor},
             };
             triangleList.emplace_back(triangle);  // use it for drawing later
         }
@@ -785,9 +785,9 @@ void DrawNode::_drawPolygon(const Vec2* verts,
         for (unsigned int i = 0; i < count - 2; i++)
         {
             triangles[ii++] = {
-                {_vertices[0], Vec2::ZERO, fillColor},
-                {_vertices[i + 1], Vec2::ZERO, fillColor},
-                {_vertices[i + 2], Vec2::ZERO, fillColor},
+                {_vertices[0], Vec2::zero, fillColor},
+                {_vertices[i + 1], Vec2::zero, fillColor},
+                {_vertices[i + 2], Vec2::zero, fillColor},
             };
         }
     }
@@ -916,12 +916,12 @@ void DrawNode::_drawPoly(const Vec2* verts,
         int ii = 0;
         for (unsigned int i = 0; i < count - 1; i++)
         {
-            line[ii++] = {_vertices[i], Vec2::ZERO, color};
-            line[ii++] = {_vertices[i + 1], Vec2::ZERO, color};
+            line[ii++] = {_vertices[i], Vec2::zero, color};
+            line[ii++] = {_vertices[i + 1], Vec2::zero, color};
         }
         if (closedPolygon)
         {
-            line[ii++] = {_vertices[count - 1], Vec2::ZERO, color};
+            line[ii++] = {_vertices[count - 1], Vec2::zero, color};
             line[ii++] = line[0];
         }
     }
@@ -959,10 +959,10 @@ void DrawNode::_drawFilledRect(const Vec2& origin, const Vec2& destination, cons
     auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, vertex_count));
     _trianglesDirty = true;
 
-    V2F_T2F_C4F a = {origin, Vec2::ZERO, color};
-    V2F_T2F_C4F b = {Vec2(origin.x, destination.y), Vec2::ZERO, color};
-    V2F_T2F_C4F c = {destination, Vec2::ZERO, color};
-    V2F_T2F_C4F d = {Vec2(destination.x, origin.y), Vec2::ZERO, color};
+    V2F_T2F_C4F a = {origin, Vec2::zero, color};
+    V2F_T2F_C4F b = {Vec2(origin.x, destination.y), Vec2::zero, color};
+    V2F_T2F_C4F c = {destination, Vec2::zero, color};
+    V2F_T2F_C4F d = {Vec2(destination.x, origin.y), Vec2::zero, color};
 
     triangles[0] = {a, b, c};
     triangles[1] = {a, c, d};
@@ -1013,14 +1013,14 @@ void DrawNode::_drawSegment(const Vec2& from,
 
         case DrawNode::EndType::Square:
             triangles[ii++] = {
-                {v0, Vec2::ZERO, color},
+                {v0, Vec2::zero, color},
                 {v1, -n, color},
                 {v2, n, color},
             };
 
             triangles[ii++] = {
                 {v3, n, color},
-                {v1, Vec2::ZERO, color},
+                {v1, Vec2::zero, color},
                 {v2, -n, color},
             };
 
@@ -1063,14 +1063,14 @@ void DrawNode::_drawSegment(const Vec2& from,
 
         case DrawNode::EndType::Square:
             triangles[ii++] = {
-                {v6, Vec2::ZERO, color},
+                {v6, Vec2::zero, color},
                 {v4, -n, color},
                 {v5, n, color},
             };
 
             triangles[ii++] = {
                 {v6, -n, color},
-                {v7, Vec2::ZERO, color},
+                {v7, Vec2::zero, color},
                 {v5, n, color},
             };
             break;
@@ -1113,9 +1113,9 @@ void DrawNode::_drawSolidCircle(const Vec2& center,
     triangles[0] = {a, b, c};
     triangles[1] = {a, c, d};
 
-    V2F_T2F_C4F e = {center - Vec2(1, 1), Vec2::ZERO, lineColor};
-    V2F_T2F_C4F f = {center + vec * radius, Vec2::ZERO, lineColor};
-    V2F_T2F_C4F g = {center + Vec2(1, 1), Vec2::ZERO, lineColor};
+    V2F_T2F_C4F e = {center - Vec2(1, 1), Vec2::zero, lineColor};
+    V2F_T2F_C4F f = {center + vec * radius, Vec2::zero, lineColor};
+    V2F_T2F_C4F g = {center + Vec2(1, 1), Vec2::zero, lineColor};
     triangles[2]  = {g, f, e};
 #else
     auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, 6));
@@ -1131,8 +1131,8 @@ void DrawNode::_drawSolidCircle(const Vec2& center,
     auto line    = expandBufferAndGetPointer(_lines, 2);
     _linesDirty  = true;
 
-    line[0] = {center, Vec2::ZERO, lineColor};
-    line[1] = {center + vec * radius, Vec2::ZERO, lineColor};
+    line[0] = {center, Vec2::zero, lineColor};
+    line[1] = {center + vec * radius, Vec2::zero, lineColor};
 #endif  // AX_DRAWNODE_FAST_LINE2CENTER
 }
 
@@ -1209,8 +1209,8 @@ void DrawNode::_drawLine(const Vec2& from, const Vec2& to, const Color& color)
     auto line   = expandBufferAndGetPointer(_lines, 2);
     _linesDirty = true;
 
-    line[0] = {vertices[0], Vec2::ZERO, color};
-    line[1] = {vertices[1], Vec2::ZERO, color};
+    line[0] = {vertices[0], Vec2::zero, color};
+    line[1] = {vertices[1], Vec2::zero, color};
 }
 
 void DrawNode::_drawDot(const Vec2& pos, float radius, const Color& color)
@@ -1290,9 +1290,9 @@ void DrawNode::_drawColoredTriangle(const Vec2* vertices3, const Color* color3)
     auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, VERTEX_COUNT));
     _trianglesDirty = true;
 
-    triangles[0] = {{_vertices3[0], Vec2::ZERO, color3[0]},
-                    {_vertices3[1], Vec2::ZERO, color3[1]},
-                    {_vertices3[2], Vec2::ZERO, color3[2]}};
+    triangles[0] = {{_vertices3[0], Vec2::zero, color3[0]},
+                    {_vertices3[1], Vec2::zero, color3[1]},
+                    {_vertices3[2], Vec2::zero, color3[2]}};
 }
 
 void DrawNode::_drawAStar(const Vec2& center,

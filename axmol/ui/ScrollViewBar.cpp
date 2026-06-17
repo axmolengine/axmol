@@ -91,21 +91,21 @@ bool ScrollViewBar::init()
     }
 
     _upperHalfCircle = utils::createSpriteFromBase64Cached(HALF_CIRCLE_IMAGE, HALF_CIRCLE_IMAGE_KEY);
-    _upperHalfCircle->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+    _upperHalfCircle->setAnchorPoint(Anchors::bottomCenter);
     addProtectedChild(_upperHalfCircle);
 
     _lowerHalfCircle = Sprite::createWithTexture(_upperHalfCircle->getTexture(), _upperHalfCircle->getTextureRect(),
                                                  _upperHalfCircle->isTextureRectRotated());
     _lowerHalfCircle->setScaleY(-1);
-    _lowerHalfCircle->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+    _lowerHalfCircle->setAnchorPoint(Anchors::bottomCenter);
     addProtectedChild(_lowerHalfCircle);
 
     _body = utils::createSpriteFromBase64Cached(BODY_IMAGE_1_PIXEL_HEIGHT, BODY_IMAGE_1_PIXEL_HEIGHT_KEY);
-    _body->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+    _body->setAnchorPoint(Anchors::bottomCenter);
     addProtectedChild(_body);
 
     setColor(DEFAULT_COLOR);
-    onScrolled(Vec2::ZERO);
+    onScrolled(Vec2::zero);
     ProtectedNode::setOpacity(0);
     _autoHideRemainingTime = 0.0f;
 

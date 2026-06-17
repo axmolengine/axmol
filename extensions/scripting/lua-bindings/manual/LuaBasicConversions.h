@@ -397,7 +397,7 @@ bool luaval_to_vec3(lua_State* L, int lo, ax::Vec3* outValue, const char* funcNa
  */
 bool luaval_to_vec4(lua_State* L, int lo, ax::Vec4* outValue, const char* funcName = "");
 
-bool luaval_to_quat(lua_State* L, int lo, ax::Quaternion* outValue, const char* funcName = "");
+bool luaval_to_quat(lua_State* L, int lo, ax::Quat* outValue, const char* funcName = "");
 
 /**
  * Get a BlendFunc object value from the given acceptable index of stack.
@@ -436,21 +436,6 @@ bool luaval_to_ttfconfig(lua_State* L, int lo, ax::TTFConfig* outValue, const ch
 static inline bool luaval_to_point(lua_State* L, int lo, ax::Vec2* outValue, const char* funcName = "")
 {
     return luaval_to_vec2(L, lo, outValue);
-}
-
-AX_DEPRECATED(2.1)
-static inline bool luaval_to_kmMat4(lua_State* L, int lo, ax::Mat4* outValue, const char* funcName = "")
-{
-    return luaval_to_mat4(L, lo, outValue);
-}
-AX_DEPRECATED(2.1)
-static inline bool luaval_to_array_of_Point(lua_State* L,
-                                            int lo,
-                                            ax::Vec2** points,
-                                            int* numPoints,
-                                            const char* funcName = "")
-{
-    return luaval_to_array_of_vec2(L, lo, points, numPoints);
 }
 
 /**
@@ -731,17 +716,17 @@ bool luaval_to_std_vector_float(lua_State* L, int lo, std::vector<float>* ret, c
 bool luaval_to_std_vector_ushort(lua_State* L, int lo, std::vector<unsigned short>* ret, const char* funcName = "");
 
 /**
- * Get a ax::Quaternion object value from the given acceptable index of stack.
+ * Get a ax::Quat object value from the given acceptable index of stack.
  * If the value at the given acceptable index of stack is a table it returns true, otherwise returns false.
  * If the table has the `x`, `y`, `z` and `w` keys and the corresponding values are not nil, this function would assign
  * the values to the corresponding members of outValue.Otherwise, the value of members of outValue would be 0.
  * @param L the current lua_State.
  * @param lo the given acceptable index of stack.
- * @param outValue the pointer to a ax::Quaternion object which stores the values from the Lua table.
+ * @param outValue the pointer to a ax::Quat object which stores the values from the Lua table.
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-bool luaval_to_quaternion(lua_State* L, int lo, ax::Quaternion* outValue, const char* funcName = "");
+bool luaval_to_quaternion(lua_State* L, int lo, ax::Quat* outValue, const char* funcName = "");
 
 /**
  * Get a ax::Texture2D::TexParams object value from the given acceptable index of stack.
@@ -751,7 +736,7 @@ bool luaval_to_quaternion(lua_State* L, int lo, ax::Quaternion* outValue, const 
  * outValue would be 0.
  * @param L the current lua_State.
  * @param lo the given acceptable index of stack.
- * @param outValue the pointer to a ax::Quaternion object which stores the values from the Lua table.
+ * @param outValue the pointer to a ax::Quat object which stores the values from the Lua table.
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
@@ -860,7 +845,7 @@ int vec3_to_luaval(lua_State* L, const ax::Vec3& vec3);
  */
 int vec4_to_luaval(lua_State* L, const ax::Vec4& vec4);
 
-int quat_to_luaval(lua_State* L, const ax::Quaternion& vec4);
+int quat_to_luaval(lua_State* L, const ax::Quat& vec4);
 
 /**
  * Push a table converted from a ax::Vec2 array into the Lua stack.
@@ -1011,11 +996,6 @@ void ttfconfig_to_luaval(lua_State* L, const ax::TTFConfig& config);
 static inline void point_to_luaval(lua_State* L, const ax::Vec2& pt)
 {
     vec2_to_luaval(L, pt);
-}
-
-AX_DEPRECATED(2.1) static inline void points_to_luaval(lua_State* L, const ax::Vec2* points, int count)
-{
-    vec2_array_to_luaval(L, points, count);
 }
 
 /**
@@ -1252,13 +1232,13 @@ void floatspan_to_luaval(lua_State* L, std::span<const float> inValue);
 void ushortspan_to_luaval(lua_State* L, std::span<unsigned short> inValue);
 
 /**
- * Push a table converted from a ax::Quaternion object into the Lua stack.
+ * Push a table converted from a ax::Quat object into the Lua stack.
  * The format of table as follows: {x=numberValue1, y=numberValue2, z=numberValue3, w=numberValue4}
  *
  * @param L the current lua_State.
- * @param inValue a ax::Quaternion object.
+ * @param inValue a ax::Quat object.
  */
-void quaternion_to_luaval(lua_State* L, const ax::Quaternion& inValue);
+void quaternion_to_luaval(lua_State* L, const ax::Quat& inValue);
 
 /**
  * Push a table converted from a ax::Texture2D::TexParams object into the Lua stack.

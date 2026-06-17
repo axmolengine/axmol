@@ -118,7 +118,7 @@ public:
                               std::string_view fontName,
                               float fontSize,
                               float cursorWidth    = 2,
-                              const Color32& color = Color32::WHITE);
+                              const Color32& color = Color32::white);
 
     /**
      * @brief Initialize the InputField with placeholder and font settings.
@@ -128,7 +128,7 @@ public:
                              std::string_view fontName,
                              float fontSize,
                              float cursorWidth    = 2,
-                             const Color32& color = Color32::WHITE);
+                             const Color32& color = Color32::white);
 
     /**
      * @brief Returns the internal `Label` used for rendering text.
@@ -610,8 +610,8 @@ protected:
     std::string _passwordChar;
     std::vector<int> _charByteOffsets;  // Maps UTF-8 character index to byte offset in _inputText
 
-    Color32 _colorSpaceHolder{Color32::GRAY};
-    Color32 _colorText{Color32::WHITE};
+    Color32 _colorSpaceHolder{Color32::gray};
+    Color32 _colorText{Color32::white};
 
     Sprite* _cursor{nullptr};
 

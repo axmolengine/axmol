@@ -40,7 +40,7 @@ namespace ax
 RenderViewCore::RenderViewCore()
     : _windowSize(0, 0)
     , _designResolutionSize(0, 0)
-    , _viewScale(Vec2::ONE)
+    , _viewScale(Vec2::one)
     , _resolutionPolicy(ResolutionPolicy::UNKNOWN)
 {}
 
@@ -126,7 +126,7 @@ void RenderViewCore::updateRenderSurface(float width, float height, uint8_t upda
         _renderSize = value;
 
         // If designResolutionSize hasn't been set, default to renderSize
-        if (_designResolutionSize.equals(Vec2::ZERO))
+        if (_designResolutionSize.equals(Vec2::zero))
             _designResolutionSize = value;
 
         // Notify the application that the screen size has changed.
@@ -197,7 +197,7 @@ Vec2 RenderViewCore::getVisibleOrigin() const
     }
     else
     {
-        return Vec2::ZERO;
+        return Vec2::zero;
     }
 }
 
@@ -278,7 +278,7 @@ void RenderViewCore::renderScene(Scene* scene, Renderer* renderer)
     }
 #endif
 
-    scene->render(renderer, Mat4::IDENTITY, nullptr);
+    scene->render(renderer, Mat4::identity, nullptr);
 }
 
 void RenderViewCore::setScissorRect(float x, float y, float w, float h)

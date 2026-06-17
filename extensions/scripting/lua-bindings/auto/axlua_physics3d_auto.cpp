@@ -3746,7 +3746,7 @@ int lua_ax_physics3d_Rigidbody3D_setRotation(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        ax::Quaternion arg0;
+        ax::Quat arg0;
 
         ok &= luaval_to_quat(tolua_S, 2, &arg0, "ax.Rigidbody3D:setRotation");
         if(!ok)
@@ -3760,7 +3760,7 @@ int lua_ax_physics3d_Rigidbody3D_setRotation(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        ax::Quaternion arg0;
+        ax::Quat arg0;
         bool arg1;
 
         ok &= luaval_to_quat(tolua_S, 2, &arg0, "ax.Rigidbody3D:setRotation");

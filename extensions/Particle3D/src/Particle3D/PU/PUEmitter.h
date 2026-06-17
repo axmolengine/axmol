@@ -51,9 +51,9 @@ public:
     static const Vec3 DEFAULT_POSITION;
     static const bool DEFAULT_KEEP_LOCAL;
     static const Vec3 DEFAULT_DIRECTION;
-    static const Quaternion DEFAULT_ORIENTATION;
-    static const Quaternion DEFAULT_ORIENTATION_RANGE_START;
-    static const Quaternion DEFAULT_ORIENTATION_RANGE_END;
+    static const Quat DEFAULT_ORIENTATION;
+    static const Quat DEFAULT_ORIENTATION_RANGE_START;
+    static const Quat DEFAULT_ORIENTATION_RANGE_END;
     // static const Particle::ParticleType DEFAULT_EMITS;
     static const unsigned short DEFAULT_START_TEXTURE_COORDS;
     static const unsigned short DEFAULT_END_TEXTURE_COORDS;
@@ -206,35 +206,35 @@ public:
 
     /** Returns the base orientation of the particle that is going to be emitted.
      */
-    const Quaternion& getParticleOrientation() const;
+    const Quat& getParticleOrientation() const;
 
     /** Set the orientation of the particle.
      */
-    void setParticleOrientation(const Quaternion& orientation);
+    void setParticleOrientation(const Quat& orientation);
 
     /** Returns the start orientation of the particle that is going to be emitted.
     @remarks
         The orientation is generated random between mParticleOrientationRangeStart and mParticleOrientationRangeEnd.
     */
-    const Quaternion& getParticleOrientationRangeStart() const;
+    const Quat& getParticleOrientationRangeStart() const;
 
     /** Set start orientation of the particle that is going to be emitted.
     @remarks
         The orientation is generated random between mParticleOrientationRangeStart and mParticleOrientationRangeEnd.
     */
-    void setParticleOrientationRangeStart(const Quaternion& orientationRangeStart);
+    void setParticleOrientationRangeStart(const Quat& orientationRangeStart);
 
     /** Returns the end orientation of the particle that is going to be emitted.
     @remarks
         The orientation is generated random between mParticleOrientationRangeStart and mParticleOrientationRangeEnd.
     */
-    const Quaternion& getParticleOrientationRangeEnd() const;
+    const Quat& getParticleOrientationRangeEnd() const;
 
     /** Set end orientation of the particle that is going to be emitted.
     @remarks
         The orientation is generated random between mParticleOrientationRangeStart and mParticleOrientationRangeEnd.
     */
-    void setParticleOrientationRangeEnd(const Quaternion& orientationRangeEnd);
+    void setParticleOrientationRangeEnd(const Quat& orientationRangeEnd);
 
     /** Sets the direction of the particle that the emitter is emitting.
     @remarks
@@ -393,12 +393,12 @@ protected:
     @remarks
         This is only visible if a renderer is used that renders 3D particles.
     */
-    Quaternion _particleOrientation;
+    Quat _particleOrientation;
 
     /** If set, the range generates a random orientation between start and end.
      */
-    Quaternion _particleOrientationRangeStart;
-    Quaternion _particleOrientationRangeEnd;
+    Quat _particleOrientationRangeStart;
+    Quat _particleOrientationRangeEnd;
     bool _particleOrientationRangeSet;
 
     // Angle around direction which particles may be emitted

@@ -126,9 +126,9 @@ Offset<Table> ScrollViewReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     int resourceType = 0;
 
     bool clipEnabled     = false;
-    Color32 bgColor      = Color32::WHITE;
-    Color32 bgStartColor = Color32::WHITE;
-    Color32 bgEndColor   = Color32::WHITE;
+    Color32 bgColor      = Color32::white;
+    Color32 bgStartColor = Color32::white;
+    Color32 bgEndColor   = Color32::white;
     int colorType        = 0;
     Vec2 colorVector(0.0f, -0.5f);
     Rect capInsets;

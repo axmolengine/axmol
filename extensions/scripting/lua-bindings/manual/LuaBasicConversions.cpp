@@ -381,7 +381,7 @@ bool luaval_to_vec4(lua_State* L, int lo, ax::Vec4* outValue, const char* funcNa
     return ok;
 }
 
-bool luaval_to_quat(lua_State* L, int lo, ax::Quaternion* outValue, const char* funcName)
+bool luaval_to_quat(lua_State* L, int lo, ax::Quat* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -1129,7 +1129,7 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, FontDefinition* outValue, co
         outValue->_stroke._strokeEnabled = false;
 
         // white text by default
-        outValue->_fontFillColor = Color32::WHITE;
+        outValue->_fontFillColor = Color32::white;
 
         lua_pushstring(L, "fontName");
         lua_gettable(L, lo);
@@ -1176,7 +1176,7 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, FontDefinition* outValue, co
             {
                 // default stroke values
                 outValue->_stroke._strokeSize  = 1;
-                outValue->_stroke._strokeColor = Color32::BLUE;
+                outValue->_stroke._strokeColor = Color32::blue;
 
                 lua_pushstring(L, "strokeColor");
                 lua_gettable(L, lo);
@@ -1966,7 +1966,7 @@ bool luaval_to_std_vector_ushort(lua_State* L, int lo, std::vector<unsigned shor
     return ok;
 }
 
-bool luaval_to_quaternion(lua_State* L, int lo, ax::Quaternion* outValue, const char* funcName)
+bool luaval_to_quaternion(lua_State* L, int lo, ax::Quat* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -2446,7 +2446,7 @@ int vec4_to_luaval(lua_State* L, const ax::Vec4& vec4)
     return 1;
 }
 
-int quat_to_luaval(lua_State* L, const ax::Quaternion& quat)
+int quat_to_luaval(lua_State* L, const ax::Quat& quat)
 {
     lua_createtable(L, 4, 0);              /* L: table */
     lua_pushnumber(L, (lua_Number)quat.x); /* L: table key value*/
@@ -3260,7 +3260,7 @@ void ushortspan_to_luaval(lua_State* L, std::span<unsigned short> inValue)
     }
 }
 
-void quaternion_to_luaval(lua_State* L, const ax::Quaternion& inValue)
+void quaternion_to_luaval(lua_State* L, const ax::Quat& inValue)
 {
     if (NULL == L)
         return;

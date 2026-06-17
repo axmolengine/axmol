@@ -482,7 +482,7 @@ bool PUScriptTranslator::getVector4(PUAbstractNodeList::const_iterator i,
 //-------------------------------------------------------------------------
 bool PUScriptTranslator::getQuaternion(PUAbstractNodeList::const_iterator i,
                                        PUAbstractNodeList::const_iterator end,
-                                       Quaternion* result,
+                                       Quat* result,
                                        int maxEntries)
 {
     int n = 0;
@@ -729,14 +729,14 @@ bool PUScriptTranslator::passValidatePropertyValidVector4(PUScriptCompiler* /*co
 bool PUScriptTranslator::passValidatePropertyValidQuaternion(PUScriptCompiler* /*compiler*/,
                                                              PUPropertyAbstractNode* prop)
 {
-    Quaternion val;
+    Quat val;
     if (getQuaternion(prop->values.begin(), prop->values.end(), &val))
     {
         return true;
     }
 
     //    compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
-    //                       "PU Compiler: " + prop->values.front()->getValue() + " is not a valid Quaternion");
+    //                       "PU Compiler: " + prop->values.front()->getValue() + " is not a valid Quat");
     return false;
 }
 //-------------------------------------------------------------------------

@@ -1505,7 +1505,7 @@ Vec2 RenderView::getMonitorSize() const
         Vec2 size                    = Vec2((float)videoMode->width, (float)videoMode->height);
         return size;
     }
-    return Vec2::ZERO;
+    return Vec2::zero;
 }
 
 void RenderView::setWindowSizeLimits(int minwidth, int minheight, int maxwidth, int maxheight)

@@ -95,11 +95,11 @@ public:
         _enabled = enabled;
         if (_enabled)
         {
-            this->setColor(Color32::WHITE);
+            this->setColor(Color32::white);
         }
         else
         {
-            this->setColor(Color32::GRAY);
+            this->setColor(Color32::gray);
         }
     }
 
@@ -369,13 +369,13 @@ bool AudioControlTest::init()
     auto& volumeSliderPos = volumeSlider->getPosition();
     auto& sliderSize      = volumeSlider->getContentSize();
     auto volumeLabel      = Label::createWithTTF("volume:  ", fontFilePath, 20);
-    volumeLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    volumeLabel->setAnchorPoint(Anchors::rightCenter);
     volumeLabel->setPosition(volumeSliderPos.x - sliderSize.width / 2, volumeSliderPos.y);
     addChild(volumeLabel);
 
     auto& timeSliderPos = timeSlider->getPosition();
     auto timeLabel      = Label::createWithTTF("time:  ", fontFilePath, 20);
-    timeLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    timeLabel->setAnchorPoint(Anchors::rightCenter);
     timeLabel->setPosition(timeSliderPos.x - sliderSize.width / 2, timeSliderPos.y);
     addChild(timeLabel);
 
@@ -682,13 +682,13 @@ bool AudioProfileTest::init()
 
     auto profileInfoLabel =
         Label::createWithTTF("AudioProfile Info:\n    max instance:3  \n    minimum delay:1.0", fontFilePath, 12);
-    profileInfoLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    profileInfoLabel->setAnchorPoint(Anchors::leftCenter);
     profileInfoLabel->setPosition(Vec2(origin.x, origin.y + size.height * 0.65f));
     addChild(profileInfoLabel);
 
     _audioCount = 0;
     _showLabel  = Label::createWithTTF("audio count:0", fontFilePath, 12);
-    _showLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    _showLabel->setAnchorPoint(Anchors::leftCenter);
     _showLabel->setPosition(Vec2(origin.x, origin.y + size.height * 0.5f));
     addChild(_showLabel);
 
@@ -764,7 +764,7 @@ bool LargeAudioFileTest::init()
 
     auto playItem = TextButton::create("play large audio file",
                                        [&](TextButton* button) { AudioEngine::play2d("audio/LuckyDay.mp3"); });
-    playItem->setPositionNormalized(Vec2::ANCHOR_MIDDLE);
+    playItem->setPositionNormalized(Anchors::center);
     this->addChild(playItem);
 
     return ret;
@@ -1210,7 +1210,7 @@ void AudioPlayInFinishedCB::onEnter()
     item->setPosition(VisibleRect::center());
 
     auto menu = Menu::create(item, nullptr);
-    menu->setPosition(Vec2::ANCHOR_BOTTOM_LEFT);
+    menu->setPosition(Anchors::bottomLeft);
     addChild(menu);
 }
 
@@ -1435,19 +1435,19 @@ bool AudioPanningTest::init()
     auto& volumeSliderPos = volumeSlider->getPosition();
     auto& sliderSize      = volumeSlider->getContentSize();
     auto volumeLabel      = Label::createWithTTF("volume:  ", fontFilePath, 20);
-    volumeLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    volumeLabel->setAnchorPoint(Anchors::rightCenter);
     volumeLabel->setPosition(volumeSliderPos.x - sliderSize.width / 2, volumeSliderPos.y);
     addChild(volumeLabel);
 
     auto& timeSliderPos = timeSlider->getPosition();
     auto timeLabel      = Label::createWithTTF("time:  ", fontFilePath, 20);
-    timeLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    timeLabel->setAnchorPoint(Anchors::rightCenter);
     timeLabel->setPosition(timeSliderPos.x - sliderSize.width / 2, timeSliderPos.y);
     addChild(timeLabel);
 
     auto& panningPos = panningSlider->getPosition();
     auto panLabel    = Label::createWithTTF("pan:  ", fontFilePath, 20);
-    panLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    panLabel->setAnchorPoint(Anchors::rightCenter);
     panLabel->setPosition(panningPos.x - sliderSize.width / 2, panningPos.y);
     addChild(panLabel);
 
@@ -1506,7 +1506,7 @@ bool AudioReverbTest::init()
     addChild(_playOverLabel, 99999);
 
     auto reverbLabel = Label::createWithTTF("", fontFilePath, 20);
-    reverbLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    reverbLabel->setAnchorPoint(Anchors::center);
     reverbLabel->setPosition(layerSize.width / 2, layerSize.height * 0.60f);
     addChild(reverbLabel);
 
@@ -1658,13 +1658,13 @@ bool AudioReverbTest::init()
     auto& volumeSliderPos = volumeSlider->getPosition();
     auto& sliderSize      = volumeSlider->getContentSize();
     auto volumeLabel      = Label::createWithTTF("volume:  ", fontFilePath, 20);
-    volumeLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    volumeLabel->setAnchorPoint(Anchors::rightCenter);
     volumeLabel->setPosition(volumeSliderPos.x - sliderSize.width / 2, volumeSliderPos.y);
     addChild(volumeLabel);
 
     auto& timeSliderPos = timeSlider->getPosition();
     auto timeLabel      = Label::createWithTTF("time:  ", fontFilePath, 20);
-    timeLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    timeLabel->setAnchorPoint(Anchors::rightCenter);
     timeLabel->setPosition(timeSliderPos.x - sliderSize.width / 2, timeSliderPos.y);
     addChild(timeLabel);
 

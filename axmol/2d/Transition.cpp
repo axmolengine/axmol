@@ -1043,7 +1043,7 @@ TransitionFade* TransitionFade::create(float duration, Scene* scene, const Color
 
 TransitionFade* TransitionFade::create(float duration, Scene* scene)
 {
-    return TransitionFade::create(duration, scene, Color32::BLACK);
+    return TransitionFade::create(duration, scene, Color32::black);
 }
 
 bool TransitionFade::initWithDuration(float duration, Scene* scene, const Color32& color)
@@ -1060,7 +1060,7 @@ bool TransitionFade::initWithDuration(float duration, Scene* scene, const Color3
 
 bool TransitionFade::initWithDuration(float t, Scene* scene)
 {
-    this->initWithDuration(t, scene, Color32::BLACK);
+    this->initWithDuration(t, scene, Color32::black);
     return true;
 }
 

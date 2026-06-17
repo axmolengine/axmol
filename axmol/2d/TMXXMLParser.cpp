@@ -69,7 +69,7 @@ void TMXLayerInfo::setProperties(ValueMap var)
 }
 
 // implementation TMXTilesetInfo
-TMXTilesetInfo::TMXTilesetInfo() : _firstGid(0), _tileSize(Vec2::ZERO), _spacing(0), _margin(0), _imageSize(Vec2::ZERO)
+TMXTilesetInfo::TMXTilesetInfo() : _firstGid(0), _tileSize(Vec2::zero), _spacing(0), _margin(0), _imageSize(Vec2::zero)
 {}
 
 TMXTilesetInfo::~TMXTilesetInfo()
@@ -171,8 +171,8 @@ TMXMapInfo::TMXMapInfo()
     , _staggerAxis(TMXStaggerAxis_Y)
     , _staggerIndex(TMXStaggerIndex_Even)
     , _hexSideLength(0)
-    , _mapSize(Vec2::ZERO)
-    , _tileSize(Vec2::ZERO)
+    , _mapSize(Vec2::zero)
+    , _tileSize(Vec2::zero)
     , _parentElement(0)
     , _parentGID(0)
     , _layerAttribs(0)

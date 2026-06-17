@@ -892,7 +892,7 @@ void Transition::playItem(TransitionItem* item)
         {
             value->lastOffset.setZero();
             value->offset.setZero();
-            item->tweener = GTween::shake(Vec2::ZERO, value->amplitude, value->duration)
+            item->tweener = GTween::shake(Vec2::zero, value->amplitude, value->duration)
                 ->setDelay(time)
                 ->setTimeScale(_timeScale)
                 ->setTargetAny(item)

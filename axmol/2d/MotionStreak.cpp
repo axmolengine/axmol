@@ -87,8 +87,8 @@ bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Co
 
 bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Color32& color, Texture2D* texture)
 {
-    Node::setPosition(Vec2::ZERO);
-    setAnchorPoint(Vec2::ZERO);
+    Node::setPosition(Vec2::zero);
+    setAnchorPoint(Vec2::zero);
     setIgnoreAnchorPointForPosition(true);
     _startingPositionInitialized = false;
 

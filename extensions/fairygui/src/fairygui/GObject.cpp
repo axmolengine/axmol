@@ -124,7 +124,7 @@ void GObject::setPosition(float xv, float yv)
         }
 
         if (_draggingObject == this && !sUpdateInDragging)
-            sGlobalRect = localToGlobal(Rect(Vec2::ZERO, _size));
+            sGlobalRect = localToGlobal(Rect(Vec2::zero, _size));
     }
 }
 
@@ -936,7 +936,7 @@ void GObject::dragBegin(int touchId)
     }
 
     sGlobalDragStart = UIRoot->getTouchPosition(touchId);
-    sGlobalRect = localToGlobal(Rect(Vec2::ZERO, _size));
+    sGlobalRect = localToGlobal(Rect(Vec2::zero, _size));
 
     _draggingObject = this;
     _dragTesting = true;

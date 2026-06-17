@@ -167,12 +167,12 @@ const PUTriangle::PositionAndNormal PUTriangle::getRandomVertexAndNormal()
 //-----------------------------------------------------------------------
 MeshInfo::MeshInfo(std::string_view /*meshName*/,
                    MeshSurfaceDistribution distribution,
-                   const Quaternion& /*orientation*/,
+                   const Quat& /*orientation*/,
                    const Vec3& /*scale*/)
     : mDistribution(distribution)
 {
     // Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().load(meshName,
-    // Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME); getMeshInformation(mesh, Vec3::ZERO, orientation,
+    // Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME); getMeshInformation(mesh, Vec3::zero, orientation,
     // scale);
 }
 //-----------------------------------------------------------------------
@@ -259,7 +259,7 @@ const PUTriangle::PositionAndNormal MeshInfo::getRandomPositionAndNormal(const s
 //-----------------------------------------------------------------------
 // void MeshInfo::getMeshInformation(	Ogre::MeshPtr mesh,
 //									const Vec3 &position,
-//									const Quaternion &orient,
+//									const Quat &orient,
 //									const Vec3 &scale)
 //{
 //	size_t vertexCount = 0;
@@ -454,7 +454,7 @@ void PUMeshSurfaceEmitter::initParticlePosition(PUParticle3D* particle)
         // ParticleSystem* sys = mParentTechnique->getParentSystem();
         if (_autoDirection)
         {
-            if (pAndN.normal != Vec3::ZERO)
+            if (pAndN.normal != Vec3::zero)
             {
                 // Set position and direction of the particle
                 // if (sys)

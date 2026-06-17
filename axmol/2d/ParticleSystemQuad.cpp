@@ -319,7 +319,7 @@ void ParticleSystemQuad::updateParticleQuads()
     Vec2 currentPosition;
     if (_positionType == PositionType::FREE)
     {
-        currentPosition = this->convertToWorldSpace(Vec2::ZERO);
+        currentPosition = this->convertToWorldSpace(Vec2::zero);
     }
     else if (_positionType == PositionType::RELATIVE)
     {
@@ -327,7 +327,7 @@ void ParticleSystemQuad::updateParticleQuads()
     }
 
     V3F_T2F_C4B_Quad* startQuad;
-    Vec2 pos = Vec2::ZERO;
+    Vec2 pos = Vec2::zero;
     if (_batchNode)
     {
         V3F_T2F_C4B_Quad* batchQuads = _batchNode->getTextureAtlas()->getQuads();

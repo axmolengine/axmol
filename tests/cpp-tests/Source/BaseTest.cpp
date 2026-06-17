@@ -200,7 +200,7 @@ void TestList::runThisTest()
         auto menuItem = MenuItemLabel::create(label, std::bind(&TestBase::backsUpOneLevel, this));
         auto menu     = Menu::create(menuItem, nullptr);
 
-        menu->setPosition(Vec2::ZERO);
+        menu->setPosition(Vec2::zero);
         menuItem->setPosition(Vec2(VisibleRect::right().x - 50, VisibleRect::bottom().y + 25));
 
         scene->addChild(menu, 1);
@@ -221,7 +221,7 @@ void TestList::runThisTest()
         autoTestItem->setPosition(Vec2(VisibleRect::left().x + 60, VisibleRect::bottom().y + 50));
 
         auto menu = Menu::create(closeItem, autoTestItem, nullptr);
-        menu->setPosition(Vec2::ZERO);
+        menu->setPosition(Vec2::zero);
         scene->addChild(menu, 1);
     }
 
@@ -456,7 +456,7 @@ bool TestCase::init()
 
         auto menu = Menu::create(_priorTestItem, _restartTestItem, _nextTestItem, backItem, nullptr);
 
-        menu->setPosition(Vec2::ZERO);
+        menu->setPosition(Vec2::zero);
         _priorTestItem->setPosition(VisibleRect::center().x - _restartTestItem->getContentSize().width * 2,
                                     VisibleRect::bottom().y + _restartTestItem->getContentSize().height / 2);
         _restartTestItem->setPosition(VisibleRect::center().x,

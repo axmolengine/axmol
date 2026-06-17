@@ -66,7 +66,7 @@ void StencilStateManager::drawFullScreenQuadClearStencil(float globalZOrder)
 {
     _customCommand.init(globalZOrder);
     Director::getInstance()->getRenderer()->addCommand(&_customCommand);
-    _customCommand.unsafePS()->setUniform(_mvpMatrixLocaiton, Mat4::IDENTITY.m, sizeof(Mat4::IDENTITY.m));
+    _customCommand.unsafePS()->setUniform(_mvpMatrixLocaiton, Mat4::identity.m, sizeof(Mat4::identity.m));
 }
 
 void StencilStateManager::setAlphaThreshold(float alphaThreshold)

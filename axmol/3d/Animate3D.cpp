@@ -381,7 +381,7 @@ void Animate3D::update(float t)
                     if (curve->rotCurve)
                     {
                         curve->rotCurve->evaluate(t, rotDst, _roteEvaluate);
-                        Quaternion qua(rotDst[0], rotDst[1], rotDst[2], rotDst[3]);
+                        Quat qua(rotDst[0], rotDst[1], rotDst[2], rotDst[3]);
                         transform.rotate(qua);
                     }
                     if (curve->scaleCurve)

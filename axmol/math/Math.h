@@ -29,5 +29,5 @@
 #include "axmol/math/Vec4.h"
 #include "axmol/math/Mat4.h"
 #include "axmol/math/Rect.h"
-#include "axmol/math/Quaternion.h"
+#include "axmol/math/Quat.h"
 #include "axmol/math/Color.h"

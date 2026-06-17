@@ -30349,11 +30349,11 @@ int lua_ax_base_Properties_getQuaternionFromAxisAngle(lua_State* tolua_S)
     if (argc == 2)
     {
         std::string_view arg0;
-        ax::Quaternion* arg1;
+        ax::Quat* arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getQuaternionFromAxisAngle");
 
-        ok &= luaval_to_object<ax::Quaternion>(tolua_S, 3, "ax.Quaternion",&arg1, "ax.Properties:getQuaternionFromAxisAngle");
+        ok &= luaval_to_object<ax::Quat>(tolua_S, 3, "ax.Quat",&arg1, "ax.Properties:getQuaternionFromAxisAngle");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Properties_getQuaternionFromAxisAngle'", nullptr);
@@ -30733,9 +30733,9 @@ int lua_ax_base_Properties_parseAxisAngle(lua_State* tolua_S)
     if (argc == 2)
     {
         std::string_view arg0;
-        ax::Quaternion* arg1;
+        ax::Quat* arg1;
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:parseAxisAngle");
-        ok &= luaval_to_object<ax::Quaternion>(tolua_S, 3, "ax.Quaternion",&arg1, "ax.Properties:parseAxisAngle");
+        ok &= luaval_to_object<ax::Quat>(tolua_S, 3, "ax.Quat",&arg1, "ax.Properties:parseAxisAngle");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Properties_parseAxisAngle'", nullptr);

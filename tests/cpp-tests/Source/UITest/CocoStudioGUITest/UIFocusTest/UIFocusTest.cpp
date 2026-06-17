@@ -71,7 +71,7 @@ bool UIFocusTestBase::init()
         downItem->setPosition(Vec2(canvasSize.width - 60, canvasSize.height / 2 - 50));
         _dpadMenu->addChild(downItem);
 
-        _dpadMenu->setPosition(Vec2::ZERO);
+        _dpadMenu->setPosition(Vec2::zero);
         _uiLayer->addChild(_dpadMenu);
 
         // call this method to enable Dpad focus navigation
@@ -85,7 +85,7 @@ bool UIFocusTestBase::init()
         _toggleButton = Button::create("cocosui/switch-mask.png");
         _toggleButton->setTitleText("Toggle Loop");
         _toggleButton->setPosition(Vec2(60.0f, canvasSize.height - 50));
-        _toggleButton->setTitleColor(Color32::RED);
+        _toggleButton->setTitleColor(Color32::red);
         _toggleButton->setFocusEnabled(false);
         this->addChild(_toggleButton);
 
@@ -103,12 +103,12 @@ void UIFocusTestBase::onImageViewClicked(ax::Object* ref, Widget::TouchEventType
         if (w->isFocusEnabled())
         {
             w->setFocusEnabled(false);
-            w->setColor(Color32::YELLOW);
+            w->setColor(Color32::yellow);
         }
         else
         {
             w->setFocusEnabled(true);
-            w->setColor(Color32::WHITE);
+            w->setColor(Color32::white);
         }
     }
 }
@@ -145,12 +145,12 @@ void UIFocusTestBase::onFocusChanged(ax::ui::Widget* widgetLostFocus, ax::ui::Wi
 {
     if (widgetGetFocus && widgetGetFocus->isFocusEnabled())
     {
-        widgetGetFocus->setColor(Color32::RED);
+        widgetGetFocus->setColor(Color32::red);
     }
 
     if (widgetLostFocus && widgetLostFocus->isFocusEnabled())
     {
-        widgetLostFocus->setColor(Color32::WHITE);
+        widgetLostFocus->setColor(Color32::white);
     }
 
     if (widgetLostFocus && widgetGetFocus)
@@ -193,7 +193,7 @@ bool UIFocusTestHorizontal::init()
 
         _loopText = Text::create("loop enabled", "Arial", 20);
         _loopText->setPosition(Vec2(canvasSize.width / 2, canvasSize.height - 50));
-        _loopText->setColor(Color32::GREEN);
+        _loopText->setColor(Color32::green);
         this->addChild(_loopText);
 
         _toggleButton->addTouchEventListener(AX_CALLBACK_2(UIFocusTestHorizontal::toggleFocusLoop, this));
@@ -253,7 +253,7 @@ bool UIFocusTestVertical::init()
 
         _loopText = Text::create("loop enabled", "Arial", 20);
         _loopText->setPosition(Vec2(canvasSize.width / 2, canvasSize.height - 50));
-        _loopText->setColor(Color32::GREEN);
+        _loopText->setColor(Color32::green);
         this->addChild(_loopText);
 
         _toggleButton->addTouchEventListener(AX_CALLBACK_2(UIFocusTestVertical::toggleFocusLoop, this));
@@ -305,7 +305,7 @@ bool UIFocusTestNestedLayout1::init()
         for (int i = 0; i < count1; ++i)
         {
             ImageView* w = ImageView::create("cocosui/scrollviewbg.png");
-            w->setAnchorPoint(Vec2::ZERO);
+            w->setAnchorPoint(Vec2::zero);
             w->setTouchEnabled(true);
             w->setScaleX(2.5);
             w->setTag(i + count1);
@@ -349,7 +349,7 @@ bool UIFocusTestNestedLayout1::init()
 
         _loopText = Text::create("loop enabled", "Arial", 20);
         _loopText->setPosition(Vec2(canvasSize.width / 2, canvasSize.height - 50));
-        _loopText->setColor(Color32::GREEN);
+        _loopText->setColor(Color32::green);
         this->addChild(_loopText);
 
         _toggleButton->addTouchEventListener(AX_CALLBACK_2(UIFocusTestNestedLayout1::toggleFocusLoop, this));
@@ -445,7 +445,7 @@ bool UIFocusTestNestedLayout2::init()
 
         _loopText = Text::create("loop enabled", "Arial", 20);
         _loopText->setPosition(Vec2(canvasSize.width / 2, canvasSize.height - 50));
-        _loopText->setColor(Color32::GREEN);
+        _loopText->setColor(Color32::green);
         this->addChild(_loopText);
 
         _toggleButton->addTouchEventListener(AX_CALLBACK_2(UIFocusTestNestedLayout2::toggleFocusLoop, this));
@@ -546,7 +546,7 @@ bool UIFocusTestNestedLayout3::init()
 
         _loopText = Text::create("loop enabled", "Arial", 20);
         _loopText->setPosition(Vec2(canvasSize.width / 2, canvasSize.height - 50));
-        _loopText->setColor(Color32::GREEN);
+        _loopText->setColor(Color32::green);
         this->addChild(_loopText);
 
         _toggleButton->addTouchEventListener(AX_CALLBACK_2(UIFocusTestNestedLayout3::toggleFocusLoop, this));

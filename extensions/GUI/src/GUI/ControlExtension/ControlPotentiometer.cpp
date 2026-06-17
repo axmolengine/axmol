@@ -203,7 +203,7 @@ void ControlPotentiometer::onPointerMove(PointerEvent* event)
 
 void ControlPotentiometer::onPointerUp(PointerEvent*)
 {
-    this->potentiometerEnded(Vec2::ZERO);
+    this->potentiometerEnded(Vec2::zero);
 
     _isPressed = false;
 }
@@ -235,7 +235,7 @@ float ControlPotentiometer::angleInDegreesBetweenLineFromPoint_toPoint_toLineFro
 void ControlPotentiometer::potentiometerBegan(Vec2 /*location*/)
 {
     setSelected(true);
-    getThumbSprite()->setColor(Color32::GRAY);
+    getThumbSprite()->setColor(Color32::gray);
 }
 
 void ControlPotentiometer::potentiometerMoved(Vec2 location)
@@ -260,7 +260,7 @@ void ControlPotentiometer::potentiometerMoved(Vec2 location)
 
 void ControlPotentiometer::potentiometerEnded(Vec2 /*location*/)
 {
-    getThumbSprite()->setColor(Color32::WHITE);
+    getThumbSprite()->setColor(Color32::white);
     setSelected(false);
 }
 

@@ -239,7 +239,7 @@ void NavMeshBaseTestDemo::moveAgents(const ax::Vec3& des)
                 refAxes.normalize();
                 Vec3::cross(refAxes, dir, &axes);
                 float angle = Vec3::dot(refAxes, dir);
-                agent->getOwner()->setRotationQuat(Quaternion(axes, acosf(angle)));
+                agent->getOwner()->setRotationQuat(Quat(axes, acosf(angle)));
                 data->time += 0.01f;
                 if (1.0f < data->time)
                 {
@@ -312,10 +312,10 @@ bool NavMeshBasicTestDemo::init()
             _debugLabel->setString("Debug Draw OFF");
         }
     });
-    menuItem1->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    menuItem1->setAnchorPoint(Anchors::topLeft);
     menuItem1->setPosition(Vec2(VisibleRect::left().x, VisibleRect::top().y - 100));
     auto menu = Menu::create(menuItem1, nullptr);
-    menu->setPosition(Vec2::ZERO);
+    menu->setPosition(Vec2::zero);
     addChild(menu);
 
     return true;
@@ -354,7 +354,7 @@ bool NavMeshAdvanceTestDemo::init()
         getPhysicsWorld3D()->rayCast(Vec3(x, 50.0f, z), Vec3(x, -50.0f, z), &result);
         createObstacle(result.hitPosition);
     });
-    menuItem0->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    menuItem0->setAnchorPoint(Anchors::topLeft);
     menuItem0->setPosition(Vec2(VisibleRect::left().x, VisibleRect::top().y - 50));
 
     auto menuItem1 = MenuItemLabel::create(_agentLabel, [this](Object*) {
@@ -364,7 +364,7 @@ bool NavMeshAdvanceTestDemo::init()
         getPhysicsWorld3D()->rayCast(Vec3(x, 50.0f, z), Vec3(x, -50.0f, z), &result);
         createAgent(result.hitPosition);
     });
-    menuItem1->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    menuItem1->setAnchorPoint(Anchors::topLeft);
     menuItem1->setPosition(Vec2(VisibleRect::left().x, VisibleRect::top().y - 100));
 
     auto menuItem2 = MenuItemLabel::create(_debugLabel, [this](Object*) {
@@ -379,11 +379,11 @@ bool NavMeshAdvanceTestDemo::init()
             _debugLabel->setString("Debug Draw OFF");
         }
     });
-    menuItem2->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    menuItem2->setAnchorPoint(Anchors::topLeft);
     menuItem2->setPosition(Vec2(VisibleRect::left().x, VisibleRect::top().y - 150));
 
     auto menu = Menu::create(menuItem0, menuItem1, menuItem2, nullptr);
-    menu->setPosition(Vec2::ZERO);
+    menu->setPosition(Vec2::zero);
     addChild(menu);
 
     return true;

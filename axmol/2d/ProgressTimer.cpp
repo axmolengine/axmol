@@ -334,7 +334,7 @@ void ProgressTimer::setContentSize(const ax::Vec2& size)
 
 void ProgressTimer::setMidpoint(const Vec2& midPoint)
 {
-    _midpoint = midPoint.getClampPoint(Vec2::ZERO, Vec2(1, 1));
+    _midpoint = midPoint.getClampPoint(Vec2::zero, Vec2(1, 1));
 }
 
 ///
@@ -632,7 +632,7 @@ Vec2 ProgressTimer::boundaryTexCoord(char index)
                         (kProgressTextureCoords >> (index << 1)) & 1);
     }
 
-    return Vec2::ZERO;
+    return Vec2::zero;
 }
 
 void ProgressTimer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)

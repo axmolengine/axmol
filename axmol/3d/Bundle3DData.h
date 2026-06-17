@@ -345,12 +345,12 @@ public:
 
     struct QuatKey
     {
-        QuatKey() : _time(0), _key(Quaternion::identity()) {}
+        QuatKey() : _time(0), _key(Quat::identity) {}
 
-        QuatKey(float time, const Quaternion& quat) : _time(time), _key(quat) {}
+        QuatKey(float time, const Quat& quat) : _time(time), _key(quat) {}
 
         float _time;
-        Quaternion _key;
+        Quat _key;
     };
 
 public:

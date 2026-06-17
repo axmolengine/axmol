@@ -48,7 +48,7 @@ struct AX_EXT_API Particle3D
     virtual ~Particle3D();
     // property of particles
     Vec3 position;           // position
-    Quaternion orientation;  //  Orientation of the particle.
+    Quat orientation;  //  Orientation of the particle.
     Color color;             // particle color
     Vec2 lb_uv;              // left bottom uv
     Vec2 rt_uv;              // right top uv

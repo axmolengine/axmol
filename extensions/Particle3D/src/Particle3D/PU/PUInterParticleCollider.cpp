@@ -139,7 +139,7 @@ void PUParticle3DInterParticleCollider::updatePUAffector(PUParticle3D* /*particl
     //      Changed && into || in V1.3.1
     //     if (//particle->particleType != Particle::PT_VISUAL ||
     //         particle->hasEventFlags(PUParticle3D::PEF_COLLIDED) ||
-    //         particle->direction == Vec3::ZERO)
+    //         particle->direction == Vec3::zero)
     //     {
     //         return;
     //     }

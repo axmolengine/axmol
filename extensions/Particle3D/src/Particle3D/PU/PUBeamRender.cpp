@@ -75,7 +75,7 @@ void PUBeamRender::render(Renderer* renderer, const Mat4& transform, ParticleSys
             PUSimpleSpline spline;
 
             // Add points
-            spline.addPoint(Vec3::ZERO);
+            spline.addPoint(Vec3::zero);
             for (size_t numDev = 0; numDev < _numberOfSegments; ++numDev)
             {
                 spline.addPoint(visualData->half[numDev]);
@@ -268,8 +268,8 @@ void PUBeamRender::prepare()
         {
             PUBillboardChain::Element element;
             element = PUBillboardChain::Element(
-                Vec3::ZERO, _rendererScale.x * static_cast<PUParticleSystem3D*>(_particleSystem)->getDefaultWidth(),
-                0.0f, Color::WHITE, Quaternion::identity());  // V1.51
+                Vec3::zero, _rendererScale.x * static_cast<PUParticleSystem3D*>(_particleSystem)->getDefaultWidth(),
+                0.0f, Color::white, Quat::identity);  // V1.51
             _billboardChain->addChainElement(i, element);
         }
 

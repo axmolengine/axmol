@@ -44,7 +44,7 @@ enum
 ControlButton::ControlButton()
     : _parentInited(false)
     , _doesAdjustBackgroundImage(false)
-    , _currentTitleColor(Color32::WHITE)
+    , _currentTitleColor(Color32::white)
     , _titleLabel(nullptr)
     , _backgroundSprite(nullptr)
     , _zoomOnTouchDown(false)
@@ -82,7 +82,7 @@ bool ControlButton::initWithLabelAndBackgroundSprite(Node* node,
         _isPressed = false;
 
         // Adjust the background image by adjustBackGroundSize
-        setPreferredSize(Size::ZERO);
+        setPreferredSize(Size::zero);
         setAdjustBackgroundImage(adjustBackGroundSize);
         // Zooming button by default
         _zoomOnTouchDown = true;
@@ -90,14 +90,14 @@ bool ControlButton::initWithLabelAndBackgroundSprite(Node* node,
 
         // Set the default anchor point
         setIgnoreAnchorPointForPosition(false);
-        setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        setAnchorPoint(Anchors::center);
 
         // Set the nodes
         setTitleLabel(node);
         setBackgroundSprite(backgroundSprite);
 
         // Set the default color and opacity
-        setColor(Color32::WHITE);
+        setColor(Color32::white);
         setOpacity(255.0f);
         setOpacityModifyRGB(true);
 
@@ -108,7 +108,7 @@ bool ControlButton::initWithLabelAndBackgroundSprite(Node* node,
         setTitleLabelForState(node, Control::State::NORMAL);
         setBackgroundSpriteForState(backgroundSprite, Control::State::NORMAL);
 
-        setLabelAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        setLabelAnchorPoint(Anchors::center);
 
         // Layout update
         needsLayout();
@@ -306,7 +306,7 @@ void ControlButton::setTitleForState(std::string_view title, State state)
 
 Color32 ControlButton::getTitleColorForState(State state) const
 {
-    Color32 returnColor = Color32::WHITE;
+    Color32 returnColor = Color32::white;
 
     auto iter = _titleColorDispatchTable.find((int)state);
     if (iter != _titleColorDispatchTable.end())

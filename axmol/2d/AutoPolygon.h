@@ -228,7 +228,7 @@ public:
 
     /**
      * a helper function, packing trace, reduce, expand, triangulate and calculate uv in one function
-     * @param   rect    texture rect, use Rect::ZERO for the size of the texture, default is Rect::ZERO
+     * @param   rect    texture rect, use Rect::zero for the size of the texture, default is Rect::zero
      * @param   epsilon the value used to reduce and expand, default to 2.0
      * @param   threshold   the value where bigger than the threshold will be counted as opaque, used in trace
      * @return  a PolygonInfo, to use with sprite
@@ -236,11 +236,11 @@ public:
      * auto ap = AutoPolygon("grossini.png");
      * PolygonInfo myInfo = ap.generateTriangles();//use all default values
      * auto sp1 = Sprite::create(myInfo);
-     * polygonInfo myInfo2 = ap.generateTriangles(Rect::ZERO, 5.0, 0.1);//ap can be reused to generate another set of
+     * polygonInfo myInfo2 = ap.generateTriangles(Rect::zero, 5.0, 0.1);//ap can be reused to generate another set of
      * PolygonInfo with different settings auto sp2 = Sprite::create(myInfo2);
      * @endcode
      */
-    PolygonInfo generateTriangles(const Rect& rect = Rect::ZERO, float epsilon = 2.0f, float threshold = 0.05f);
+    PolygonInfo generateTriangles(const Rect& rect = Rect::zero, float epsilon = 2.0f, float threshold = 0.05f);
 
     /**
      * a helper function, packing autoPolygon creation, trace, reduce, expand, triangulate and calculate uv in one
@@ -248,7 +248,7 @@ public:
      * @warning if you want to repetitively generate polygons, consider create an AutoPolygon object, and use
      * generateTriangles function, as it only reads the file once
      * @param   filename     A path to image file, e.g., "scene1/monster.png".
-     * @param   rect    texture rect, use Rect::ZERO for the size of the texture, default is Rect::ZERO
+     * @param   rect    texture rect, use Rect::zero for the size of the texture, default is Rect::zero
      * @param   epsilon the value used to reduce and expand, default to 2.0
      * @param   threshold   the value where bigger than the threshold will be counted as opaque, used in trace
      * @return  a PolygonInfo, to use with sprite
@@ -257,7 +257,7 @@ public:
      * @endcode
      */
     static PolygonInfo generatePolygon(std::string_view filename,
-                                       const Rect& rect = Rect::ZERO,
+                                       const Rect& rect = Rect::zero,
                                        float epsilon    = 2.0f,
                                        float threshold  = 0.05f);
 

@@ -134,7 +134,7 @@ void UIRichTextTestBase::createButtonPanel()
     auto* buttonPanel = Layout::create();
     buttonPanel->setContentSize(Vec2(widgetSize.width, 1));
     buttonPanel->setLayoutType(Layout::Type::CENTER_HORIZONTAL);
-    buttonPanel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    buttonPanel->setAnchorPoint(Anchors::center);
     _widget->addChild(buttonPanel, 10);
 
     auto maxButtonHeight = 0.f;
@@ -204,22 +204,22 @@ bool UIRichTextTest::init()
         _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
 
-        RichElementText* re1 = RichElementText::create(1, Color32::WHITE, str1, "SimSun", 10);
-        RichElementText* re2 = RichElementText::create(2, Color32::YELLOW, "And this is yellow. ", "Helvetica", 10);
-        RichElementText* re3 = RichElementText::create(3, Color32::GRAY, str2, "Yu Mincho", 10);
+        RichElementText* re1 = RichElementText::create(1, Color32::white, str1, "SimSun", 10);
+        RichElementText* re2 = RichElementText::create(2, Color32::yellow, "And this is yellow. ", "Helvetica", 10);
+        RichElementText* re3 = RichElementText::create(3, Color32::gray, str2, "Yu Mincho", 10);
         RichElementText* re4 =
-            RichElementText::create(4, Color32::GREEN, "And green with TTF support. ", "fonts/Marker Felt.ttf", 10);
-        RichElementText* re5 = RichElementText::create(5, Color32::RED, "Last one is red ", "Helvetica", 10);
+            RichElementText::create(4, Color32::green, "And green with TTF support. ", "fonts/Marker Felt.ttf", 10);
+        RichElementText* re5 = RichElementText::create(5, Color32::red, "Last one is red ", "Helvetica", 10);
 
-        RichElementImage* reimg = RichElementImage::create(6, Color32::WHITE, "cocosui/sliderballnormal.png");
+        RichElementImage* reimg = RichElementImage::create(6, Color32::white, "cocosui/sliderballnormal.png");
 
         //        TODO
         //        cocostudio::ArmatureDataManager::getInstance()->addArmatureFileInfo("cocosui/100/100.ExportJson");
         //        cocostudio::Armature *pAr = cocostudio::Armature::create("100"); //
         //        pAr->getAnimation()->play("Animation1");
 
-        //        RichElementCustomNode* recustom = RichElementCustomNode::create(1, Color32::WHITE, 255, pAr);
-        RichElementText* re6 = RichElementText::create(7, Color32::ORANGE, "Have fun!! ", "Helvetica", 10);
+        //        RichElementCustomNode* recustom = RichElementCustomNode::create(1, Color32::white, 255, pAr);
+        RichElementText* re6 = RichElementText::create(7, Color32::orange, "Have fun!! ", "Helvetica", 10);
         _richText->pushBackElement(re1);
         _richText->insertElement(re2, 1);
         _richText->pushBackElement(re3);
@@ -840,11 +840,11 @@ bool UIRichTextXMLExtend::init()
 
         /* Tag extension */
         RichText::setTagDescription("CloseNormal", false, [](const ValueMap& tagAttrValueMap) {
-            RichElementImage* richElement = RichElementImage::create(0, Color32::WHITE, "cocosui/CloseNormal.png");
+            RichElementImage* richElement = RichElementImage::create(0, Color32::white, "cocosui/CloseNormal.png");
             return make_pair(ValueMap(), richElement);
         });
         RichText::setTagDescription("CloseSelected", false, [](const ValueMap& tagAttrValueMap) {
-            RichElementImage* richElement = RichElementImage::create(0, Color32::WHITE, "cocosui/CloseSelected.png");
+            RichElementImage* richElement = RichElementImage::create(0, Color32::white, "cocosui/CloseSelected.png");
             return make_pair(ValueMap(), richElement);
         });
 
@@ -955,9 +955,9 @@ bool UIRichTextNewline::init()
         _richText = RichText::create();
         _richText->setHorizontalAlignment(ui::RichText::HorizontalAlignment::CENTER);
         auto* textElement =
-            ui::RichElementText::create(1, Color32::WHITE, "Line1\nLine2\n", "fonts/Marker Felt.ttf", 32, 0);
+            ui::RichElementText::create(1, Color32::white, "Line1\nLine2\n", "fonts/Marker Felt.ttf", 32, 0);
         _richText->pushBackElement(textElement);
-        textElement = ui::RichElementText::create(2, Color32::WHITE, "Line3", "fonts/Marker Felt.ttf", 32, 0);
+        textElement = ui::RichElementText::create(2, Color32::white, "Line3", "fonts/Marker Felt.ttf", 32, 0);
         _richText->pushBackElement(textElement);
         _richText->setAutoSize(true);
         _richText->setContentSize(_defaultContentSize);
@@ -1123,9 +1123,9 @@ bool UIRichTextScrollTo::init()
         _scrollView->setScrollBarEnabled(true);
         _scrollView->setScrollBarWidth(4);
         _scrollView->setScrollBarPositionFromCorner(Vec2(2, 2));
-        _scrollView->setScrollBarColor(Color32::WHITE);
+        _scrollView->setScrollBarColor(Color32::white);
         _scrollView->setScrollBarAutoHideEnabled(false);
-        _scrollView->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _scrollView->setAnchorPoint(Anchors::center);
         _scrollView->setPosition(_widget->getContentSize() / 2);
         _scrollView->setLocalZOrder(10);
         _widget->addChild(_scrollView);
@@ -1164,7 +1164,7 @@ Sit amet mattis vulputate enim nulla aliquet porttitor lacus luctus.</p>
             valMap);
         _richText->setAutoSize(true);
         _richText->setContentSize(Size(_defaultContentSize.width, 0));
-        _richText->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
+        _richText->setAnchorPoint(Anchors::topCenter);
         _richText->setOpenUrlHandler([this](std::string_view url) {
             // Check if the href starts with a "#" character
             if (url.starts_with('#'))
@@ -1174,7 +1174,7 @@ Sit amet mattis vulputate enim nulla aliquet porttitor lacus luctus.</p>
                 {
                     // Scroll to the location of that node, and the reason it works is because
                     // the ScrollView inner container is the same height as the RichText
-                    _scrollView->scrollToItem(node, Vec2::ANCHOR_MIDDLE_TOP, Vec2::ANCHOR_MIDDLE_TOP);
+                    _scrollView->scrollToItem(node, Anchors::topCenter, Anchors::topCenter);
                 }
             }
             else if (!url.empty())

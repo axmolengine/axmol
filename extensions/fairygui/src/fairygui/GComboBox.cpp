@@ -52,7 +52,7 @@ const ax::Color32 GComboBox::getTitleColor() const
     if (tf)
         return tf->getColor();
     else
-        return Color32::BLACK;
+        return Color32::black;
 }
 
 void GComboBox::setTitleColor(const ax::Color32& value)

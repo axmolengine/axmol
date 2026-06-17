@@ -42,12 +42,12 @@ Size TableViewDataSource::tableCellSizeForIndex(TableView* table, ssize_t /*idx*
 
 Size TableViewDataSource::cellSizeForTable(TableView* /*table*/)
 {
-    return Size::ZERO;
+    return Size::zero;
 }
 
 TableView* TableView::create()
 {
-    return TableView::create(nullptr, Size::ZERO);
+    return TableView::create(nullptr, Size::zero);
 }
 
 TableView* TableView::create(TableViewDataSource* dataSource, Size size)
@@ -285,7 +285,7 @@ void TableView::_addCellIfNecessary(TableViewCell* cell)
 
 void TableView::_updateContentSize()
 {
-    Size size          = Size::ZERO;
+    Size size          = Size::zero;
     ssize_t cellsCount = _dataSource->numberOfCellsInTableView(this);
 
     if (cellsCount > 0)

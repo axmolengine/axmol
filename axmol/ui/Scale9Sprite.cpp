@@ -57,7 +57,7 @@ Scale9Sprite* Scale9Sprite::create(std::string_view filename, const Rect& rect, 
 
 Scale9Sprite* Scale9Sprite::create(std::string_view filename, const Rect& rect)
 {
-    return create(filename, rect, Rect::ZERO);
+    return create(filename, rect, Rect::zero);
 }
 
 Scale9Sprite* Scale9Sprite::create(const Rect& capInsets, std::string_view file)
@@ -74,7 +74,7 @@ Scale9Sprite* Scale9Sprite::create(const Rect& capInsets, std::string_view file)
 
 Scale9Sprite* Scale9Sprite::create(std::string_view fileaname)
 {
-    return create(Rect::ZERO, fileaname);
+    return create(Rect::zero, fileaname);
 }
 
 Scale9Sprite* Scale9Sprite::createWithSpriteFrame(SpriteFrame* spriteFrame, const Rect& capInsets)
@@ -91,7 +91,7 @@ Scale9Sprite* Scale9Sprite::createWithSpriteFrame(SpriteFrame* spriteFrame, cons
 
 Scale9Sprite* Scale9Sprite::createWithSpriteFrame(SpriteFrame* spriteFrame)
 {
-    return createWithSpriteFrame(spriteFrame, Rect::ZERO);
+    return createWithSpriteFrame(spriteFrame, Rect::zero);
 }
 
 Scale9Sprite* Scale9Sprite::createWithSpriteFrameName(std::string_view spriteFrameName, const Rect& capInsets)
@@ -109,7 +109,7 @@ Scale9Sprite* Scale9Sprite::createWithSpriteFrameName(std::string_view spriteFra
 Scale9Sprite* Scale9Sprite::createWithSpriteFrameName(std::string_view spriteFrameName)
 {
     Scale9Sprite* ret = new Scale9Sprite();
-    if (ret->initWithSpriteFrameName(spriteFrameName, Rect::ZERO))
+    if (ret->initWithSpriteFrameName(spriteFrameName, Rect::zero))
     {
         ret->autorelease();
         return ret;
@@ -187,7 +187,7 @@ bool Scale9Sprite::init()
 {
     // calls super
     bool ret = Sprite::init();
-    setupSlice9(getTexture(), Rect::ZERO);
+    setupSlice9(getTexture(), Rect::zero);
     return ret;
 }
 
@@ -198,7 +198,7 @@ bool Scale9Sprite::init(Sprite* sprite, const Rect& rect, const Rect& capInsets)
 
 bool Scale9Sprite::init(Sprite* sprite, const Rect& rect, bool rotated, const Rect& capInsets)
 {
-    return init(sprite, rect, rotated, Vec2::ZERO, rect.size, capInsets);
+    return init(sprite, rect, rotated, Vec2::zero, rect.size, capInsets);
 }
 
 bool Scale9Sprite::init(Sprite* sprite,
@@ -216,7 +216,7 @@ bool Scale9Sprite::init(Sprite* sprite,
     {
         auto texture = sprite->getTexture();
 
-        if (origRect.equals(Rect::ZERO))
+        if (origRect.equals(Rect::zero))
             rect.size = texture->getContentSize();
 
         auto spriteFrame = SpriteFrame::createWithTexture(texture, rect, rotated, offset, originalSize);
@@ -236,7 +236,7 @@ bool Scale9Sprite::initWithFile(std::string_view filename, const Rect& rect, con
 {
     // calls super
     bool ret = false;
-    if (!rect.equals(Rect::ZERO))
+    if (!rect.equals(Rect::zero))
     {
         ret = Sprite::initWithFile(filename, rect);
     }
@@ -251,7 +251,7 @@ bool Scale9Sprite::initWithFile(std::string_view filename, const Rect& rect, con
 
 bool Scale9Sprite::updateWithSprite(Sprite* sprite, const Rect& rect, bool rotated, const Rect& capInsets)
 {
-    return updateWithSprite(sprite, rect, rotated, Vec2::ZERO, rect.size, capInsets);
+    return updateWithSprite(sprite, rect, rotated, Vec2::zero, rect.size, capInsets);
 }
 
 bool Scale9Sprite::updateWithSprite(Sprite* sprite,
@@ -273,7 +273,7 @@ Scale9Sprite* Scale9Sprite::resizableSpriteWithCapInsets(const Rect& capInsets) 
 {
     // FIXME: there are no test cases for this method
     Scale9Sprite* ret = new Scale9Sprite();
-    if (ret->init(const_cast<Scale9Sprite*>(this), _rect, _rectRotated, Vec2::ZERO, _originalContentSize, capInsets))
+    if (ret->init(const_cast<Scale9Sprite*>(this), _rect, _rectRotated, Vec2::zero, _originalContentSize, capInsets))
     {
         ret->autorelease();
         return ret;
@@ -488,7 +488,7 @@ void Scale9Sprite::setupSlice9(Texture2D* texture, const Rect& capInsets)
     {
         auto& parsedCapInset = texture->getSpriteFrameCapInset(getSpriteFrame());
 
-        if (!parsedCapInset.equals(Rect::ZERO))
+        if (!parsedCapInset.equals(Rect::zero))
         {
             // adjust texture rect. 1.3f seems to be the magic number
             // to avoid artifacts
@@ -516,7 +516,7 @@ void Scale9Sprite::setCapInsets(const ax::Rect& insetsCopy)
     Rect insets = insetsCopy;
 
     // When Insets == Zero --> we should use a 1/3 of its untrimmed size
-    if (insets.equals(Rect::ZERO))
+    if (insets.equals(Rect::zero))
     {
         insets = Rect(_originalContentSize.width / 3.0f, _originalContentSize.height / 3.0f,
                       _originalContentSize.width / 3.0f, _originalContentSize.height / 3.0f);

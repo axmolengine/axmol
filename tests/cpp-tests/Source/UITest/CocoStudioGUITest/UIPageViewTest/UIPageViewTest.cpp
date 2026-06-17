@@ -275,7 +275,7 @@ bool UIPageViewTouchPropagationTest::init()
         pageView->setAnchorPoint(Vec2(0.5f, 0.5f));
         Size backgroundSize = background->getContentSize();
         pageView->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
-        pageView->setBackGroundColor(Color32::GREEN);
+        pageView->setBackGroundColor(Color32::green);
         pageView->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
 
         int pageCount = 4;
@@ -332,13 +332,13 @@ bool UIPageViewTouchPropagationTest::init()
 
         Text* propagationText = Text::create("Allow Propagation", "Arial", 10);
         propagationText->setAnchorPoint(Vec2(0.0f, 0.5f));
-        propagationText->setTextColor(Color32::RED);
+        propagationText->setTextColor(Color32::red);
         propagationText->setPosition(Vec2(0.0f, pageView->getPosition().y + 50));
         _uiLayer->addChild(propagationText);
 
         Text* swallowTouchText = Text::create("Swallow Touches", "Arial", 10);
         swallowTouchText->setAnchorPoint(Vec2(0.f, 0.5f));
-        swallowTouchText->setTextColor(Color32::RED);
+        swallowTouchText->setTextColor(Color32::red);
         swallowTouchText->setPosition(Vec2(0.0f, pageView->getPosition().y));
         _uiLayer->addChild(swallowTouchText);
 
@@ -461,7 +461,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         pageView->setAnchorPoint(Vec2(0.5f, 0.5f));
         Size backgroundSize = background->getContentSize();
         pageView->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
-        pageView->setBackGroundColor(Color32::GREEN);
+        pageView->setBackGroundColor(Color32::green);
         pageView->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
         pageView->setIndicatorEnabled(true);
         pageView->setIndicatorSpaceBetweenIndexNodes(10);
@@ -505,7 +505,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         button->setTitleText("Add A Page");
         button->setZoomScale(0.3f);
         button->setPressedActionEnabled(true);
-        button->setTitleColor(Color32::RED);
+        button->setTitleColor(Color32::red);
         button->addClickEventListener([this, pageView](Object* /*sender*/) {
             HBox* outerBox = HBox::create();
             outerBox->setContentSize(Size(240.0f, 130.0f));
@@ -539,7 +539,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         button2->setTitleText("Remove A Page");
         button2->setZoomScale(0.3f);
         button2->setPressedActionEnabled(true);
-        button2->setTitleColor(Color32::RED);
+        button2->setTitleColor(Color32::red);
         button2->addClickEventListener([this, pageView](Object* /*sender*/) {
             if (pageView->getItems().size() > 0)
             {
@@ -560,7 +560,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         button3->setTitleText("Remove All Pages");
         button3->setZoomScale(0.3f);
         button3->setPressedActionEnabled(true);
-        button3->setTitleColor(Color32::RED);
+        button3->setTitleColor(Color32::red);
         button3->addClickEventListener([this, pageView](Object* /*sender*/) {
             pageView->removeAllItems();
             _displayValueLabel->setString(
@@ -896,7 +896,7 @@ bool UIPageViewChildSizeTest::init()
 
             Text* label = Text::create(fmt::format("page {}", (i + 1)), "fonts/Marker Felt.ttf", 30);
             label->setColor(Color32(192, 192, 192));
-            label->setAnchorPoint(Vec2::ZERO);
+            label->setAnchorPoint(Vec2::zero);
             imageView->addChild(label);
 
             pageView->insertCustomItem(imageView, i);
@@ -974,7 +974,7 @@ bool UIPageViewIndicatorTest::init()
         pageView->setIndicatorSpaceBetweenIndexNodes(5);
         pageView->setIndicatorIndexNodesScale(0.5);
         pageView->setIndicatorIndexNodesTexture("cocosui/green_edit.png");
-        pageView->setIndicatorIndexNodesColor(Color32::RED);
+        pageView->setIndicatorIndexNodesColor(Color32::red);
 
         int pageCount = 4;
         for (int i = 0; i < pageCount; ++i)

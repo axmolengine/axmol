@@ -165,7 +165,7 @@ Sprite* Sprite::create()
 
 bool Sprite::init()
 {
-    initWithTexture(nullptr, Rect::ZERO);
+    initWithTexture(nullptr, Rect::zero);
     return true;
 }
 
@@ -173,7 +173,7 @@ bool Sprite::initWithTexture(Texture2D* texture)
 {
     AXASSERT(texture != nullptr, "Invalid texture for sprite");
 
-    Rect rect = Rect::ZERO;
+    Rect rect = Rect::zero;
     if (texture)
         rect.size = texture->getContentSize();
 
@@ -203,7 +203,7 @@ bool Sprite::initWithFile(std::string_view filename, PixelFormat format)
     Texture2D* texture = _director->getTextureCache()->addImage(filename, format);
     if (texture)
     {
-        Rect rect = Rect::ZERO;
+        Rect rect = Rect::zero;
         rect.size = texture->getContentSize();
         return initWithTexture(texture, rect);
     }
@@ -287,7 +287,7 @@ bool Sprite::initWithTexture(Texture2D* texture, const Rect& rect, bool rotated)
         _flippedX = _flippedY = false;
 
         // default transform anchor: center
-        setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        setAnchorPoint(Anchors::center);
 
         // zwoptex default values
         _offsetPosition.setZero();
@@ -296,10 +296,10 @@ bool Sprite::initWithTexture(Texture2D* texture, const Rect& rect, bool rotated)
         memset(&_quad, 0, sizeof(_quad));
 
         // Atlas: Color
-        _quad.bl.color = Color32::WHITE;
-        _quad.br.color = Color32::WHITE;
-        _quad.tl.color = Color32::WHITE;
-        _quad.tr.color = Color32::WHITE;
+        _quad.bl.color = Color32::white;
+        _quad.br.color = Color32::white;
+        _quad.tl.color = Color32::white;
+        _quad.tr.color = Color32::white;
 
         // update texture (calls updateBlendFunc)
         setTexture(texture);
@@ -331,7 +331,7 @@ bool Sprite::initWithImageData(const Data& imageData, std::string_view key)
 
     if (texture)
     {
-        Rect rect = Rect::ZERO;
+        Rect rect = Rect::zero;
         rect.size = texture->getContentSize();
         return initWithTexture(texture, rect);
     }
@@ -371,8 +371,8 @@ void Sprite::setTexture(std::string_view filename)
     _renderMode        = RenderMode::QUAD;
     Texture2D* texture = _director->getTextureCache()->addImage(filename);
     setTexture(texture);
-    _unflippedOffsetPositionFromCenter = Vec2::ZERO;
-    Rect rect                          = Rect::ZERO;
+    _unflippedOffsetPositionFromCenter = Vec2::zero;
+    Rect rect                          = Rect::zero;
     if (texture)
         rect.size = texture->getContentSize();
 
@@ -458,7 +458,7 @@ void Sprite::setTextureRect(const Rect& rect, bool rotated, const Vec2& untrimme
 {
     _rectRotated = rotated;
 
-    if (_autoSizeEnabled || _contentSize == Vec2::ZERO)
+    if (_autoSizeEnabled || _contentSize == Vec2::zero)
     {
         Node::setContentSize(untrimmedSize);
     }
@@ -772,7 +772,7 @@ void Sprite::setCenterRect(const ax::Rect& rectInPoints)
         return;
     }
 
-    if (!_originalContentSize.equals(Vec2::ZERO))
+    if (!_originalContentSize.equals(Vec2::zero))
     {
         Rect rect = rectInPoints;
 
@@ -1106,15 +1106,15 @@ void Sprite::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
             // draw 3 lines
             Vec3 from = verts[indices[i * 3]].position;
             Vec3 to   = verts[indices[i * 3 + 1]].position;
-            _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color32::WHITE);
+            _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color32::white);
 
             from = verts[indices[i * 3 + 1]].position;
             to   = verts[indices[i * 3 + 2]].position;
-            _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color32::WHITE);
+            _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color32::white);
 
             from = verts[indices[i * 3 + 2]].position;
             to   = verts[indices[i * 3]].position;
-            _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color32::WHITE);
+            _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color32::white);
         }
 #endif  // AX_SPRITE_DEBUG_DRAW
     }
@@ -1666,7 +1666,7 @@ void Sprite::setBatchNode(SpriteBatchNode* spriteBatchNode)
     {
         // using batch
         _renderMode       = RenderMode::QUAD_BATCHNODE;
-        _transformToBatch = Mat4::IDENTITY;
+        _transformToBatch = Mat4::identity;
         setTextureAtlas(_batchNode->getTextureAtlas());  // weak ref
     }
 }

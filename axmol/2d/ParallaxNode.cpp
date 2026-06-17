@@ -143,7 +143,7 @@ The positions are updated at visit because:
 void ParallaxNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
 {
     //    Vec2 pos = position_;
-    //    Vec2    pos = [self convertToWorldSpace:Vec2::ZERO];
+    //    Vec2    pos = [self convertToWorldSpace:Vec2::zero];
     Vec2 pos = this->absolutePosition();
     if (!pos.equals(_lastPosition))
     {

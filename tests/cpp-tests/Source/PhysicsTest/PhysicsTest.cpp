@@ -343,8 +343,8 @@ void PhysicsDemoLogoSmash::onEnter()
 {
     PhysicsDemo::onEnter();
 
-    Color32 colorList[] = {Color32::WHITE, Color32::GRAY,        Color32::RED,
-                           Color32::GREEN, Color32(0, 178, 255), Color32(255, 174, 201)};
+    Color32 colorList[] = {Color32::white, Color32::gray,        Color32::red,
+                           Color32::green, Color32(0, 178, 255), Color32(255, 174, 201)};
 
     _physicsWorld2D->setGravity(Vec2(0.0f, 0.0f));
 
@@ -371,7 +371,7 @@ void PhysicsDemoLogoSmash::onEnter()
         }
         while (step > 0)
         {
-            if (colorList[colPos] != Color32::WHITE)
+            if (colorList[colPos] != Color32::white)
             {
                 float xJitter = 0.15 * frand();
                 float yJitter = 0.15 * frand();
@@ -522,7 +522,7 @@ void PhysicsDemoRayCast::onEnter()
 {
     PhysicsDemo::onEnter();
 
-    _physicsWorld2D->setGravity(Point::ZERO);
+    _physicsWorld2D->setGravity(Point::zero);
 
     auto node = DrawNode::create();
     node->addComponent(Rigidbody2D::createEdgeSegment(VisibleRect::leftBottom() + Vec2(0.0f, 50.0f),
@@ -681,7 +681,7 @@ std::string PhysicsDemoRayCast::title() const
 void PhysicsDemoActions::onEnter()
 {
     PhysicsDemo::onEnter();
-    _physicsWorld2D->setGravity(Vec2::ZERO);
+    _physicsWorld2D->setGravity(Vec2::zero);
 
     auto node = Node::create();
     node->addComponent(Rigidbody2D::createEdgeBox(VisibleRect::getVisibleRect().size));
@@ -727,7 +727,7 @@ void PhysicsDemoJoints::onEnter()
     node->addComponent(worldBox);
 
     worldBox->setBodyType(Rigidbody2D::StaticBody);
-    node->setPosition(Point::ZERO);
+    node->setPosition(Point::zero);
     this->addChild(node);
 
     int testidx = 10;
@@ -967,7 +967,7 @@ void PhysicsDemoPump::onEnter()
         VisibleRect::leftTop() + Vec2(150, -80), VisibleRect::rightTop() + Vec2(-100, -150), staticMaterial));
 
     worldBoxBody->setCategoryBits(0x01);
-    worldBox->setPosition(Vec2::ZERO);
+    worldBox->setPosition(Vec2::zero);
     this->addChild(worldBox);
     worldBox->setName("world-box");
 
@@ -1321,7 +1321,7 @@ void PhysicsDemoBug3988::onEnter()
 {
     PhysicsDemo::onEnter();
     toggleDebug();
-    _physicsWorld2D->setGravity(Vec2::ZERO);
+    _physicsWorld2D->setGravity(Vec2::zero);
 
     auto ball = Sprite::create("Images/YellowSquare.png");
     ball->setPosition(VisibleRect::center() - Vec2(100.0f, 0.0f));
@@ -1351,7 +1351,7 @@ void PhysicsContactTest::onEnter()
 
     _physicsWorld2D->setPreSolveCallback(AX_CALLBACK_1(PhysicsContactTest::onPreSolve, this));
 
-    _physicsWorld2D->setGravity(Vec2::ZERO);
+    _physicsWorld2D->setGravity(Vec2::zero);
     auto s = VisibleRect::getVisibleRect().size;
 
     _yellowBoxNum      = 50;
@@ -1634,7 +1634,7 @@ void PhysicsPositionRotationTest::onEnter()
 {
     PhysicsDemo::onEnter();
     toggleDebug();
-    _physicsWorld2D->setGravity(Point::ZERO);
+    _physicsWorld2D->setGravity(Point::zero);
 
     auto wall = Node::create();
     wall->addComponent(Rigidbody2D::createEdgeBox(VisibleRect::getVisibleRect().size));
@@ -1832,7 +1832,7 @@ void PhysicsFixedUpdate::onEnter()
     PhysicsDemo::onEnter();
 
     toggleDebug();
-    _physicsWorld2D->setGravity(Point::ZERO);
+    _physicsWorld2D->setGravity(Point::zero);
 
     // wall
     auto wall = Node::create();
@@ -1885,7 +1885,7 @@ void PhysicsTransformTest::onEnter()
 {
     PhysicsDemo::onEnter();
     toggleDebug();
-    _physicsWorld2D->setGravity(Point::ZERO);
+    _physicsWorld2D->setGravity(Point::zero);
 
     _rootLayer = Layer::create();
     addChild(_rootLayer);

@@ -124,7 +124,7 @@ public:
      * @param target The target camera is point at
      * @param up The up vector, usually it's Y axis
      */
-    virtual void lookAt(const Vec3& target, const Vec3& up = Vec3::UNIT_Y);
+    virtual void lookAt(const Vec3& target, const Vec3& up = Vec3::yAxis);
 
     /**
      * Gets the camera's projection matrix.

@@ -1312,7 +1312,7 @@ void ActionTargeted::onEnter()
     ActionsDemo::onEnter();
     centerSprites(2);
 
-    auto jump1 = JumpBy::create(2, Vec2::ZERO, 100, 3);
+    auto jump1 = JumpBy::create(2, Vec2::zero, 100, 3);
     auto jump2 = jump1->clone();
     auto rot1  = RotateBy::create(1, 360);
     auto rot2  = rot1->clone();
@@ -1341,7 +1341,7 @@ void ActionTargetedReverse::onEnter()
     ActionsDemo::onEnter();
     centerSprites(2);
 
-    auto jump1 = JumpBy::create(2, Vec2::ZERO, 100, 3);
+    auto jump1 = JumpBy::create(2, Vec2::zero, 100, 3);
     auto jump2 = jump1->clone();
     auto rot1  = RotateBy::create(1, 360);
     auto rot2  = rot1->clone();

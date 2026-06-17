@@ -454,7 +454,7 @@ bool Texture2D::initWithString(std::string_view text,
     tempDef._dimensions    = dimensions;
     tempDef._alignment     = hAlignment;
     tempDef._vertAlignment = vAlignment;
-    tempDef._fontFillColor = Color32::WHITE;
+    tempDef._fontFillColor = Color32::white;
     tempDef._enableWrap    = enableWrap;
     tempDef._overflow      = overflow;
 

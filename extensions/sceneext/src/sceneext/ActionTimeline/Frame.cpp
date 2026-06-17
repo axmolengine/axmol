@@ -588,7 +588,7 @@ ColorFrame* ColorFrame::create()
     return frame;
 }
 
-ColorFrame::ColorFrame() : _color(Color32::WHITE), _betweenRed(0), _betweenGreen(0), _betweenBlue(0) {}
+ColorFrame::ColorFrame() : _color(Color32::white), _betweenRed(0), _betweenGreen(0), _betweenBlue(0) {}
 
 void ColorFrame::onEnter(Frame* nextFrame, int /*currentFrameIndex*/)
 {

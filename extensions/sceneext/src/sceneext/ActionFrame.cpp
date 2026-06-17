@@ -281,7 +281,7 @@ ActionInterval* ActionFadeFrame::getAction(float fDuration)
     return this->getEasingAction(FadeTo::create(fDuration, _opacity));
 }
 
-ActionTintFrame::ActionTintFrame() : _color(Color32::WHITE)
+ActionTintFrame::ActionTintFrame() : _color(Color32::white)
 {
     _frameType = (int)kKeyframeTint;
 }

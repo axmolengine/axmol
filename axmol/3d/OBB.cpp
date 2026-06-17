@@ -101,7 +101,7 @@ static void _getEigenVectors(Mat4* vout, Vec3* dout, Mat4 a)
     Mat4 v;
     Vec3 d;
 
-    v = Mat4::IDENTITY;
+    v = Mat4::identity;
     for (ip = 0; ip < n; ip++)
     {
         _getElement(b, ip) = a.m[ip + 4 * ip];
@@ -205,7 +205,7 @@ static Mat4 _getOBBOrientation(const Vec3* vertPos, int num)
     Mat4 Cov;
 
     if (num <= 0)
-        return Mat4::IDENTITY;
+        return Mat4::identity;
 
     Cov = _getConvarianceMatrix(vertPos, num);
 
@@ -465,7 +465,7 @@ void OBB::transform(const Mat4& mat)
     _zAxis.normalize();
 
     Vec3 scale, trans;
-    Quaternion quat;
+    Quat quat;
     mat.decompose(&scale, &quat, &trans);
 
     _extents.x *= scale.x;

@@ -599,7 +599,7 @@ FontFNT::FontFNT(BMFontConfiguration* theContfig, const Rect& imageRect, bool im
 }
 
 FontFNT::FontFNT(BMFontConfiguration* theContfig)
-    : _configuration(theContfig), _imageRectInPoints(Rect::ZERO), _imageRotated(false)
+    : _configuration(theContfig), _imageRectInPoints(Rect::zero), _imageRotated(false)
 {}
 
 FontFNT::~FontFNT()

@@ -200,7 +200,7 @@ void VRGenericRenderer::render(Scene* scene, Renderer* renderer)
     const float eyeOffset = 0.5f;
 
     // Get head rotation and compute view transforms for both eyes
-    auto headRotation = !_debugIgnoreHeadTracker ? _headTracker->getLocalRotation() : Mat4::IDENTITY;
+    auto headRotation = !_debugIgnoreHeadTracker ? _headTracker->getLocalRotation() : Mat4::identity;
 
     Mat4 leftTransform;
     Mat4::createTranslation(eyeOffset, 0, 0, &leftTransform);

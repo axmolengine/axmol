@@ -51,7 +51,7 @@ RenderTextureSave::RenderTextureSave()
     _target = RenderTexture::create(s.width, s.height, rhi::PixelFormat::RGBA8);
     _target->retain();
     _target->setPosition(Vec2(s.width / 2, s.height / 2));
-    _target->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _target->setAnchorPoint(Anchors::center);
 
     // note that the render texture is a Node, and contains a sprite of its texture for convenience,
     // so we can just parent it to the scene like any other Node
@@ -268,7 +268,7 @@ RenderTextureIssue937::RenderTextureIssue937()
     spr_nonpremulti->visit();
     rend->end();
 
-    rend->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    rend->setAnchorPoint(Anchors::center);
     rend->setPosition(Vec2(s.width / 2 + 16, s.height / 2));
 
     addChild(spr_nonpremulti);
@@ -349,7 +349,7 @@ RenderTextureZbuffer::RenderTextureZbuffer()
     sp9->setPositionZ(-400);
 
     sp9->setScale(2);
-    sp9->setColor(Color32::YELLOW);
+    sp9->setColor(Color32::yellow);
 }
 
 std::string RenderTextureZbuffer::title() const
@@ -424,7 +424,7 @@ void RenderTextureZbuffer::renderScreenShot()
     sprite->setOpacity(182);
     sprite->setFlippedY(1);
     this->addChild(sprite, 999999);
-    sprite->setColor(Color32::GREEN);
+    sprite->setColor(Color32::green);
 
     sprite->runAction(Sequence::create(FadeTo::create(2, 0), RemoveSelf::create(), nullptr));
 }
@@ -513,7 +513,7 @@ RenderTextureTestDepthStencil::RenderTextureTestDepthStencil()
     _rtx = RenderTexture::create(s.width, s.height, rhi::PixelFormat::RGBA4, PixelFormat::D24S8);
 
     _rtx->setPosition(Vec2(s.width * 0.5f, s.height * 0.5f));
-    _rtx->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _rtx->setAnchorPoint(Anchors::center);
 
     this->addChild(_rtx);
 }
@@ -620,17 +620,17 @@ RenderTextureTargetNode::RenderTextureTargetNode()
     renderTexture = RenderTexture::create(s.width, s.height, rhi::PixelFormat::RGBA4);
 
     renderTexture->setPosition(Vec2(s.width / 2, s.height / 2));
-    renderTexture->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    renderTexture->setAnchorPoint(Anchors::center);
     // renderTexture->setScale(2.0f);
 
     /* add the sprites to the render texture */
     _spriteCenterPosition = renderTexture->getContentSize() / 2;
 
-    sprite1->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    sprite1->setAnchorPoint(Anchors::center);
     sprite1->setPosition(_spriteCenterPosition);
     renderTexture->addChild(sprite1);
 
-    sprite2->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    sprite2->setAnchorPoint(Anchors::center);
     sprite2->setPosition(_spriteCenterPosition);
     renderTexture->addChild(sprite2);
     renderTexture->setClearColor(Color(0, 0, 0, 0));
@@ -797,7 +797,7 @@ Issue16113Test::Issue16113Test()
     auto item1 = MenuItemFont::create("Save Image", [&](Object* ref) {
         auto canvasSize = Director::getInstance()->getVisibleSize();
         auto text       = Label::createWithTTF("hello world", "fonts/Marker Felt.ttf", 40);
-        text->setTextColor(Color32::RED);
+        text->setTextColor(Color32::red);
         auto target = RenderTexture::create(canvasSize.width, canvasSize.height, rhi::PixelFormat::RGBA8);
         target->beginWithClear(0, 0, 0, 0);
         text->setPosition(canvasSize.width / 2, canvasSize.height / 2);

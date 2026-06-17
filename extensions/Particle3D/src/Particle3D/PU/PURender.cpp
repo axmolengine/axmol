@@ -534,7 +534,7 @@ void PUParticle3DModelRender::render(Renderer* renderer, const Mat4& transform, 
     Mat4 mat;
     Mat4 rotMat;
     Mat4 sclMat;
-    Quaternion q;
+    Quat q;
     transform.decompose(nullptr, &q, nullptr);
     unsigned int index = 0;
     for (auto&& iter : activeParticleList)
@@ -988,7 +988,7 @@ void PUSphereRender::buildBuffers(unsigned short count)
                 vi.position.set(x0, y0, z0);
 
                 // Colour
-                vi.color = Color::WHITE;
+                vi.color = Color::white;
 
                 // Texture Coordinates
                 vi.texCoord.x = (float)segment / (float)_numberOfSegments;

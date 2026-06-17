@@ -41,8 +41,8 @@ TabView::TabView()
     , _headerHeight(20)
     , _headerWidth(50)
     , _headerDockPlace(Dock::TOP)
-    , _containerPosition(Vec2::ZERO)
-    , _containerSize(Vec2::ZERO)
+    , _containerPosition(Vec2::zero)
+    , _containerSize(Vec2::zero)
     , _currentHeaderZoom(0.1f)
     , _ignoreHeaderTextureSize(true)
 {
@@ -112,7 +112,7 @@ void TabView::initAfterInsert(int index)
     }
 
     initTabHeadersPos(index);
-    if (_containerSize.equals(Vec2::ZERO))
+    if (_containerSize.equals(Vec2::zero))
         initContainers();
     else
     {
@@ -574,7 +574,7 @@ const Color32& TabHeader::getTitleColor() const
 {
     if (nullptr == _tabLabelRender)
     {
-        return Color32::WHITE;
+        return Color32::white;
     }
     return _tabLabelRender->getTextColor();
 }

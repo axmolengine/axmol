@@ -201,7 +201,7 @@ void InputProcessor::simulateClick(GObject* target, int touchId)
 {
     _activeProcessor = this;
 
-    Vec2 pt = target->localToGlobal(Vec2::ZERO);
+    Vec2 pt = target->localToGlobal(Vec2::zero);
     _recentInput._pos.x = pt.x;
     _recentInput._pos.y = pt.y;
     _recentInput._target = target;

@@ -128,12 +128,12 @@ public:
               float fontSize,
               uint32_t flags,
               std::string_view url,
-              const Color32& outlineColor = Color32::WHITE,
+              const Color32& outlineColor = Color32::white,
               int outlineSize             = -1,
-              const Color32& shadowColor  = Color32::BLACK,
+              const Color32& shadowColor  = Color32::black,
               const Vec2& shadowOffset    = Vec2(2.0, -2.0),
               int shadowBlurRadius        = 0,
-              const Color32& glowColor    = Color32::WHITE,
+              const Color32& glowColor    = Color32::white,
               std::string_view id         = ""sv);
 
     /**
@@ -162,12 +162,12 @@ public:
                                    float fontSize,
                                    uint32_t flags              = 0,
                                    std::string_view url        = "",
-                                   const Color32& outlineColor = Color32::WHITE,
+                                   const Color32& outlineColor = Color32::white,
                                    int outlineSize             = -1,
-                                   const Color32& shadowColor  = Color32::BLACK,
+                                   const Color32& shadowColor  = Color32::black,
                                    const Vec2& shadowOffset    = Vec2(2.0, -2.0),
                                    int shadowBlurRadius        = 0,
-                                   const Color32& glowColor    = Color32::WHITE,
+                                   const Color32& glowColor    = Color32::white,
                                    std::string_view id         = ""sv);
 
 protected:
@@ -533,20 +533,20 @@ public:
     void setAnchorTextUnderline(bool enable);        /*!< enable the underline of a-tag */
     bool isAnchorTextUnderlineEnabled();             /*!< valid underline of a-tag? */
     /** @brief enable the outline of a-tag */
-    void setAnchorTextOutline(bool enable, const Color32& outlineColor = Color32::WHITE, int outlineSize = -1);
+    void setAnchorTextOutline(bool enable, const Color32& outlineColor = Color32::white, int outlineSize = -1);
     bool isAnchorTextOutlineEnabled();     /*!< valid outline of a-tag? */
     Color32 getAnchorTextOutlineColor32(); /*!< return the current text outline color of a-tag */
     int getAnchorTextOutlineSize();        /*!< return the current text outline size of a-tag */
     /** @brief enable the shadow of a-tag */
     void setAnchorTextShadow(bool enable,
-                             const Color32& shadowColor = Color32::BLACK,
+                             const Color32& shadowColor = Color32::black,
                              const Vec2& offset         = Vec2(2.0, -2.0),
                              int blurRadius             = 0);
     bool isAnchorTextShadowEnabled();     /*!< valid shadow of a-tag? */
     Color32 getAnchorTextShadowColor32(); /*!< return the current text shadow color of a-tag */
     Vec2 getAnchorTextShadowOffset();     /*!< return the current text shadow offset of a-tag */
     int getAnchorTextShadowBlurRadius();  /*!< return the current text shadow blur radius of a-tag */
-    void setAnchorTextGlow(bool enable, const Color32& glowColor = Color32::WHITE); /*!< enable the glow of a-tag */
+    void setAnchorTextGlow(bool enable, const Color32& glowColor = Color32::white); /*!< enable the glow of a-tag */
     bool isAnchorTextGlowEnabled();                                                 /*!< valid glow of a-tag? */
     Color32 getAnchorTextGlowColor32();         /*!< return the current text glow color of a-tag */
     void setDefaults(const ValueMap& defaults); /*!< set the default values */
@@ -601,12 +601,12 @@ protected:
                             const Color32& color,
                             uint32_t flags,
                             std::string_view url        = "",
-                            const Color32& outlineColor = Color32::WHITE,
+                            const Color32& outlineColor = Color32::white,
                             int outlineSize             = -1,
-                            const Color32& shadowColor  = Color32::BLACK,
+                            const Color32& shadowColor  = Color32::black,
                             const Vec2& shadowOffset    = Vec2(2.0, -2.0),
                             int shadowBlurRadius        = 0,
-                            const Color32& glowColor    = Color32::WHITE,
+                            const Color32& glowColor    = Color32::white,
                             std::string_view id         = ""sv);
     void handleImageRenderer(std::string_view filePath,
                              Widget::TextureResType textureType,

@@ -314,15 +314,15 @@ Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     int fontResourceResourceType = 0;
 
     bool outlineEnabled  = false;
-    Color32 outlineColor = Color32::BLACK;
+    Color32 outlineColor = Color32::black;
     int outlineSize      = 1;
     bool shadowEnabled   = false;
-    Color32 shadowColor  = Color32::BLACK;
+    Color32 shadowColor  = Color32::black;
     Size shadowOffset    = Size(2, -2);
     int shadowBlurRadius = 0;
 
     bool glowEnabled  = false;
-    Color32 glowColor = Color32::BLACK;
+    Color32 glowColor = Color32::black;
 
     bool boldEnabled = false, underlineEnabled = false, italicsEnabled = false, strikethroughEnabled = false;
 

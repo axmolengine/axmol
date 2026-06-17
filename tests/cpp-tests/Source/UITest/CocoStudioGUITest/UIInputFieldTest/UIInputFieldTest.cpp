@@ -408,8 +408,8 @@ bool UIInputFieldTest_PlaceHolderColor::init()
         // Create the inputfield
         InputField* inputField = InputField::create("input words here", "Arial", 30);
         inputField->setPlaceholderText("input text here");
-        inputField->setPlaceholderColor(Color32::GREEN);
-        inputField->setTextColor(Color32::RED);
+        inputField->setPlaceholderColor(Color32::green);
+        inputField->setTextColor(Color32::red);
         inputField->setTextHorizontalAlignment(TextHAlignment::CENTER);
         inputField->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
 

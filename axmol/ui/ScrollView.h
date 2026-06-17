@@ -623,7 +623,7 @@ protected:
 
     Vec2 flattenVectorByDirection(const Vec2& vector);
 
-    virtual Vec2 getHowMuchOutOfBoundary(const Vec2& addition = Vec2::ZERO);
+    virtual Vec2 getHowMuchOutOfBoundary(const Vec2& addition = Vec2::zero);
     bool isOutOfBoundary(MoveDirection dir);
     bool isOutOfBoundary();
 

@@ -273,7 +273,7 @@ ax::Rect BoneNode::getVisibleSkinsRect() const
     for (const auto& skin : _boneSkins)
     {
         ax::Rect r = skin->getBoundingBox();
-        if (!skin->isVisible() || r.equals(ax::Rect::ZERO))
+        if (!skin->isVisible() || r.equals(ax::Rect::zero))
             continue;
 
         if (first)
@@ -490,7 +490,7 @@ void BoneNode::disableCascadeColor()
 {
     for (const auto& child : _boneSkins)
     {
-        child->updateDisplayedColor(ax::Color32::WHITE);
+        child->updateDisplayedColor(ax::Color32::white);
     }
 }
 

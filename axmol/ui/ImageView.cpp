@@ -42,7 +42,7 @@ IMPLEMENT_CLASS_GUI_INFO(ImageView)
 ImageView::ImageView()
     : _scale9Enabled(false)
     , _prevAutoSize(true)
-    , _capInsets(Rect::ZERO)
+    , _capInsets(Rect::zero)
     , _imageRenderer(nullptr)
     , _imageTexType(TextureResType::LOCAL)
     , _imageTextureSize(_contentSize)
@@ -135,7 +135,7 @@ void ImageView::loadTexture(std::string_view fileName, TextureResType texType)
         break;
     }
     // FIXME: https://github.com/cocos2d/cocos2d-x/issues/12249
-    if (!_autoSize && _customSize.equals(Vec2::ZERO))
+    if (!_autoSize && _customSize.equals(Vec2::zero))
     {
         _customSize = _imageRenderer->getContentSize();
     }

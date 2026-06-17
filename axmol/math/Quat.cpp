@@ -19,7 +19,7 @@
  This file was modified to fit the cocos2d-x project
  */
 
-#include "axmol/math/Quaternion.h"
+#include "axmol/math/Quat.h"
 
 #include <cmath>
 #include "axmol/base/Macros.h"
@@ -27,30 +27,31 @@
 NS_AX_MATH_BEGIN
 
 #if defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT)
-const Quaternion Quaternion::ZERO(0.0f, 0.0f, 0.0f, 0.0f);
+const Quat Quat::zero(0.0f, 0.0f, 0.0f, 0.0f);
+const Quat Quat::identity(0.0f, 0.0f, 0.0f, 1.0f);
 #endif
 
-Quaternion::Quaternion(const Mat4& m)
+Quat::Quat(const Mat4& m)
 {
     set(m);
 }
 
-bool Quaternion::isIdentity() const
+bool Quat::isIdentity() const
 {
     return x == 0.0f && y == 0.0f && z == 0.0f && w == 1.0f;
 }
 
-bool Quaternion::isZero() const
+bool Quat::isZero() const
 {
     return x == 0.0f && y == 0.0f && z == 0.0f && w == 0.0f;
 }
 
-void Quaternion::createFromRotationMatrix(const Mat4& m, Quaternion* dst)
+void Quat::createFromRotationMatrix(const Mat4& m, Quat* dst)
 {
     m.getRotation(dst);
 }
 
-void Quaternion::conjugate()
+void Quat::conjugate()
 {
     x = -x;
     y = -y;
@@ -58,14 +59,14 @@ void Quaternion::conjugate()
     // w =  w;
 }
 
-Quaternion Quaternion::getConjugated() const
+Quat Quat::getConjugated() const
 {
-    Quaternion q(*this);
+    Quat q(*this);
     q.conjugate();
     return q;
 }
 
-bool Quaternion::inverse()
+bool Quat::inverse()
 {
     float n = x * x + y * y + z * z + w * w;
     if (n == 1.0f)
@@ -91,19 +92,19 @@ bool Quaternion::inverse()
     return true;
 }
 
-Quaternion Quaternion::getInversed() const
+Quat Quat::getInversed() const
 {
-    Quaternion q(*this);
+    Quat q(*this);
     q.inverse();
     return q;
 }
 
-void Quaternion::multiply(const Quaternion& q)
+void Quat::multiply(const Quat& q)
 {
     multiply(*this, q, this);
 }
 
-void Quaternion::multiply(const Quaternion& q1, const Quaternion& q2, Quaternion* dst)
+void Quat::multiply(const Quat& q1, const Quat& q2, Quat* dst)
 {
     AX_ASSERT(dst);
 
@@ -118,7 +119,7 @@ void Quaternion::multiply(const Quaternion& q1, const Quaternion& q2, Quaternion
     dst->w = w;
 }
 
-void Quaternion::normalize()
+void Quat::normalize()
 {
     float n = x * x + y * y + z * z + w * w;
 
@@ -138,23 +139,23 @@ void Quaternion::normalize()
     w *= n;
 }
 
-Quaternion Quaternion::getNormalized() const
+Quat Quat::getNormalized() const
 {
-    Quaternion q(*this);
+    Quat q(*this);
     q.normalize();
     return q;
 }
 
-void Quaternion::set(const Mat4& m)
+void Quat::set(const Mat4& m)
 {
-    Quaternion::createFromRotationMatrix(m, this);
+    Quat::createFromRotationMatrix(m, this);
 }
 
-float Quaternion::toAxisAngle(Vec3* axis) const
+float Quat::toAxisAngle(Vec3* axis) const
 {
     AX_ASSERT(axis);
 
-    Quaternion q(x, y, z, w);
+    Quat q(x, y, z, w);
     q.normalize();
     axis->x = q.x;
     axis->y = q.y;
@@ -164,7 +165,7 @@ float Quaternion::toAxisAngle(Vec3* axis) const
     return (2.0f * std::acos(q.w));
 }
 
-void Quaternion::lerp(const Quaternion& q1, const Quaternion& q2, float t, Quaternion* dst)
+void Quat::lerp(const Quat& q1, const Quat& q2, float t, Quat* dst)
 {
     AX_ASSERT(dst);
     AX_ASSERT(!(t < 0.0f || t > 1.0f));
@@ -188,30 +189,30 @@ void Quaternion::lerp(const Quaternion& q1, const Quaternion& q2, float t, Quate
     dst->w = t1 * q1.w + t * q2.w;
 }
 
-void Quaternion::slerp(const Quaternion& q1, const Quaternion& q2, float t, Quaternion* dst)
+void Quat::slerp(const Quat& q1, const Quat& q2, float t, Quat* dst)
 {
     AX_ASSERT(dst);
     slerp(q1.x, q1.y, q1.z, q1.w, q2.x, q2.y, q2.z, q2.w, t, &dst->x, &dst->y, &dst->z, &dst->w);
 }
 
-void Quaternion::squad(const Quaternion& q1,
-                       const Quaternion& q2,
-                       const Quaternion& s1,
-                       const Quaternion& s2,
+void Quat::squad(const Quat& q1,
+                       const Quat& q2,
+                       const Quat& s1,
+                       const Quat& s2,
                        float t,
-                       Quaternion* dst)
+                       Quat* dst)
 {
     AX_ASSERT(!(t < 0.0f || t > 1.0f));
 
-    Quaternion dstQ(0.0f, 0.0f, 0.0f, 1.0f);
-    Quaternion dstS(0.0f, 0.0f, 0.0f, 1.0f);
+    Quat dstQ(0.0f, 0.0f, 0.0f, 1.0f);
+    Quat dstS(0.0f, 0.0f, 0.0f, 1.0f);
 
     slerpForSquad(q1, q2, t, &dstQ);
     slerpForSquad(s1, s2, t, &dstS);
     slerpForSquad(dstQ, dstS, 2.0f * t * (1.0f - t), dst);
 }
 
-void Quaternion::slerp(float q1x,
+void Quat::slerp(float q1x,
                        float q1y,
                        float q1z,
                        float q1w,
@@ -322,7 +323,7 @@ void Quaternion::slerp(float q1x,
     *dstz = z * f1;
 }
 
-void Quaternion::slerpForSquad(const Quaternion& q1, const Quaternion& q2, float t, Quaternion* dst)
+void Quat::slerpForSquad(const Quat& q1, const Quat& q2, float t, Quat* dst)
 {
     AX_ASSERT(dst);
 

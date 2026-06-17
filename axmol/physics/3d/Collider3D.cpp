@@ -49,7 +49,7 @@ namespace ax
 {
 namespace
 {
-bool decomposeTransform(const Mat4& transform, Vec3& translation, Quaternion& rotation)
+bool decomposeTransform(const Mat4& transform, Vec3& translation, Quat& rotation)
 {
     Vec3 scale;
     transform.decompose(&scale, &rotation, &translation);
@@ -96,7 +96,7 @@ bool Collider3D::init(const PhysicsMaterial& mat)
 
     setSensor(false);
     setMaterial(mat);
-    setTransformInPhysics(Vec3::ZERO, Quaternion::identity());
+    setTransformInPhysics(Vec3::zero, Quat::identity);
     return true;
 }
 
@@ -153,7 +153,7 @@ bool Collider3D::attachToWorld()
         jphutil::stripScaleFromTransform(worldTransform);
         worldTransform *= _invTransformInPhysics;
         Vec3 translation;
-        Quaternion rotation;
+        Quat rotation;
         decomposeTransform(worldTransform, translation, rotation);
 
         const auto layer = _sensor ? detail::kSensorLayer : detail::kStaticLayer;
@@ -196,7 +196,7 @@ void Collider3D::invalidate()
     _attachedBody = nullptr;
 }
 
-void Collider3D::setTransformInPhysics(const Vec3& translateInPhysics, const Quaternion& rotInPhysics)
+void Collider3D::setTransformInPhysics(const Vec3& translateInPhysics, const Quat& rotInPhysics)
 {
     Mat4::createRotation(rotInPhysics, &_transformInPhysics);
     _transformInPhysics.m[12] = translateInPhysics.x;
@@ -220,7 +220,7 @@ void Collider3D::syncPhysicsToNode()
 
     Vec3 scale;
     Vec3 translation;
-    Quaternion quat;
+    Quat quat;
     mat.decompose(&scale, &quat, &translation);
     quat.normalize();
     _owner->setPosition3D(translation);
@@ -247,7 +247,7 @@ void Collider3D::syncNodeToPhysics()
 
     Vec3 scale;
     Vec3 translation;
-    Quaternion quat;
+    Quat quat;
     worldTransform.decompose(&scale, &quat, &translation);
     quat.normalize();
     _world->internalHandle().GetBodyInterface().SetPositionAndRotation(
@@ -260,7 +260,7 @@ Mat4 Collider3D::getWorldTransform() const
         return _attachedBody->getWorldTransform();
 
     if (!_world || _bodyID.IsInvalid())
-        return Mat4::IDENTITY;
+        return Mat4::identity;
 
     return jphutil::cast(_world->internalHandle().GetBodyInterface().GetWorldTransform(_bodyID));
 }
@@ -629,7 +629,7 @@ JPH::Ref<JPH::Shape> CompoundCollider3D::createShape() const
 
         Vec3 scale;
         Vec3 translation;
-        Quaternion rotation;
+        Quat rotation;
         info.second.decompose(&scale, &rotation, &translation);
         rotation.normalize();
         settings.AddShape(jphutil::cast(translation), jphutil::cast(rotation), collider->internalShape().GetPtr());

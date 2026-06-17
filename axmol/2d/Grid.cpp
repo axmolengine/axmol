@@ -44,7 +44,7 @@ namespace ax
 
 bool GridBase::initWithSize(const Vec2& gridSize)
 {
-    return initWithSize(gridSize, Rect::ZERO);
+    return initWithSize(gridSize, Rect::zero);
 }
 
 bool GridBase::initWithSize(const Vec2& gridSize, const ax::Rect& rect)
@@ -71,7 +71,7 @@ bool GridBase::initWithSize(const Vec2& gridSize, const ax::Rect& rect)
 
 bool GridBase::initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipped)
 {
-    return initWithSize(gridSize, texture, flipped, Rect::ZERO);
+    return initWithSize(gridSize, texture, flipped, Rect::zero);
 }
 
 bool GridBase::initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipped, const Rect& rect)
@@ -86,7 +86,7 @@ bool GridBase::initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipp
     AX_SAFE_RETAIN(_texture);
     _isTextureFlipped = rhi::DriverContext::isOpenGL() ? flipped : !flipped;
 
-    if (rect.equals(Rect::ZERO))
+    if (rect.equals(Rect::zero))
     {
         auto size = _texture->getContentSize();
         _gridRect.setRect(0, 0, size.width, size.height);

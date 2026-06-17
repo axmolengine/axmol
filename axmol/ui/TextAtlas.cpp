@@ -64,7 +64,7 @@ TextAtlas* TextAtlas::create()
 void TextAtlas::initRenderNode()
 {
     _labelAtlasRenderer = Label::create();
-    _labelAtlasRenderer->setAnchorPoint(Point::ANCHOR_MIDDLE);
+    _labelAtlasRenderer->setAnchorPoint(Anchors::center);
     addProtectedChild(_labelAtlasRenderer, LABELATLAS_RENDERER_Z, -1);
 }
 

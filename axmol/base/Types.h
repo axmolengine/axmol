@@ -417,7 +417,7 @@ struct AX_DLL AnimationFrameData
 struct AX_DLL FontStroke
 {
     /// stroke color
-    Color32 _strokeColor = Color32::BLACK;
+    Color32 _strokeColor = Color32::black;
     /// stroke size
     float _strokeSize = 0.f;
     /// true if stroke enabled
@@ -438,9 +438,9 @@ struct AX_DLL FontDefinition
     /// vertical alignment
     TextVAlignment _vertAlignment = TextVAlignment::TOP;
     /// rendering box
-    Vec2 _dimensions = Vec2::ZERO;
+    Vec2 _dimensions = Vec2::zero;
     /// font color
-    Color32 _fontFillColor = Color32::WHITE;
+    Color32 _fontFillColor = Color32::white;
     /// font stroke
     FontStroke _stroke;
     /// enable text wrap

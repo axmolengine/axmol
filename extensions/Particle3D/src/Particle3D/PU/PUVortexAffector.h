@@ -72,7 +72,7 @@ protected:
 
 protected:
     Vec3 _rotationVector;
-    Quaternion _rotation;
+    Quat _rotation;
     PUDynamicAttribute* _dynRotationSpeed;
     PUDynamicAttributeHelper _dynamicAttributeHelper;
 };

@@ -573,7 +573,7 @@ protected:
 
     rhi::RenderTarget* _offscreenRT = nullptr;
 
-    Color _clearColor = Color::BLACK;
+    Color _clearColor = Color::black;
     ClearFlag _clearFlag;
 
     struct ScissorState

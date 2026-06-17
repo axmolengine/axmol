@@ -789,14 +789,14 @@ RendererBatchQuadTri::RendererBatchQuadTri()
         int y = AXRANDOM_0_1() * s.height;
 
         auto label = LabelAtlas::create("This is a label", "fonts/tuffy_bold_italic-charmap.plist");
-        label->setColor(Color32::RED);
+        label->setColor(Color32::red);
         label->setPosition(Vec2(x, y));
         addChild(label);
 
         auto sprite = Sprite::create("fonts/tuffy_bold_italic-charmap.png");
         sprite->setTextureRect(Rect(0.0f, 0.0f, 100.0f, 100.0f));
         sprite->setPosition(Vec2(x, y));
-        sprite->setColor(Color32::BLUE);
+        sprite->setColor(Color32::blue);
         addChild(sprite);
     }
 }
@@ -964,8 +964,8 @@ NonBatchSprites::NonBatchSprites()
     addChild(_spritesAnchor);
 
     _totalSprites = Label::createWithTTF(TTFConfig("fonts/arial.ttf"), "sprites");
-    _totalSprites->setColor(Color32::YELLOW);
-    _totalSprites->enableOutline(Color32::RED, 2);
+    _totalSprites->setColor(Color32::yellow);
+    _totalSprites->enableOutline(Color32::red, 2);
     _totalSprites->setPosition(s.width / 2, s.height / 2);
 
     addChild(_totalSprites);

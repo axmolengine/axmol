@@ -65,11 +65,11 @@ public:
         _enabled = enabled;
         if (_enabled)
         {
-            this->setColor(Color32::WHITE);
+            this->setColor(Color32::white);
         }
         else
         {
-            this->setColor(Color32::GRAY);
+            this->setColor(Color32::gray);
         }
     }
 
@@ -296,7 +296,7 @@ bool VibrateControlTest::init()
     auto durationLabelValue = fmt::format("duration: {:.3}s", _duration);
 
     auto durationLabel = Label::createWithTTF(durationLabelValue, fontFilePath, 20);
-    durationLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    durationLabel->setAnchorPoint(Anchors::center);
     durationLabel->setPosition(layerSize.width * 0.5f, layerSize.height * 0.5f);
     addChild(durationLabel);
     _durationLabel = durationLabel;

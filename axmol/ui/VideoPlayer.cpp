@@ -255,7 +255,7 @@ struct PrivateVideoContext
         }
 
         _vrender->setTexture(_vtexture);
-        _vrender->setTextureRect(ax::Rect{Vec2::ZERO, Vec2{
+        _vrender->setTextureRect(ax::Rect{Vec2::zero, Vec2{
                                                           frame._videoDim.x / AX_CONTENT_SCALE_FACTOR(),
                                                           frame._videoDim.y / AX_CONTENT_SCALE_FACTOR(),
                                                       }});
@@ -417,7 +417,7 @@ void createVideoControlTexture()
 
     auto DrawStop = [&](const Vec2& middle) -> void {
         auto s = Vec2(middle.x - iconW / 2.f, middle.y + iconH / 2.f);
-        drawNode->drawSolidRect(s, s + Vec2(iconW, -iconH), Color::WHITE);
+        drawNode->drawSolidRect(s, s + Vec2(iconW, -iconH), Color::white);
     };
 
     auto DrawPlay = [&](const Vec2& middle) -> void {
@@ -425,15 +425,15 @@ void createVideoControlTexture()
         auto p2 = Vec2(middle.x + iconW / 2.f, middle.y);
         auto p3 = Vec2(middle.x - iconW / 2.f, middle.y - iconH / 2.f);
 
-        drawNode->drawTriangle(p1, p2, p3, Color::WHITE);
+        drawNode->drawTriangle(p1, p2, p3, Color::white);
     };
 
     auto DrawPause = [&](const Vec2& middle) -> void {
         auto start = Vec2(middle.x - 3, middle.y + iconH / 2.f);
-        drawNode->drawSolidRect(start, start + Vec2(-6, -iconH), Color::WHITE);
+        drawNode->drawSolidRect(start, start + Vec2(-6, -iconH), Color::white);
 
         start = Vec2(middle.x + 3, middle.y + iconH / 2.f);
-        drawNode->drawSolidRect(start, start + Vec2(6, -iconH), Color::WHITE);
+        drawNode->drawSolidRect(start, start + Vec2(6, -iconH), Color::white);
     };
 
     auto DrawEnterFullscreen = [&](const Vec2& middle) -> void {
@@ -443,20 +443,20 @@ void createVideoControlTexture()
         auto bottomRight = Vec2(middle.x + panelW / 2.f - 6, middle.y - panelH / 2.f + 6);
 
         // Top left
-        drawNode->drawSolidRect(topLeft, topLeft + Vec2(20, -6), Color::WHITE);
-        drawNode->drawSolidRect(topLeft, topLeft + Vec2(6, -20), Color::WHITE);
+        drawNode->drawSolidRect(topLeft, topLeft + Vec2(20, -6), Color::white);
+        drawNode->drawSolidRect(topLeft, topLeft + Vec2(6, -20), Color::white);
 
         // Top right
-        drawNode->drawSolidRect(topRight, topRight + Vec2(-20, -6), Color::WHITE);
-        drawNode->drawSolidRect(topRight, topRight + Vec2(-6, -20), Color::WHITE);
+        drawNode->drawSolidRect(topRight, topRight + Vec2(-20, -6), Color::white);
+        drawNode->drawSolidRect(topRight, topRight + Vec2(-6, -20), Color::white);
 
         // Bottom left
-        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(20, 6), Color::WHITE);
-        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(6, 20), Color::WHITE);
+        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(20, 6), Color::white);
+        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(6, 20), Color::white);
 
         // Bottom right
-        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(-20, 6), Color::WHITE);
-        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(-6, 20), Color::WHITE);
+        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(-20, 6), Color::white);
+        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(-6, 20), Color::white);
     };
 
     auto DrawExitFullScreen = [&](const Vec2& middle) -> void {
@@ -466,24 +466,24 @@ void createVideoControlTexture()
         auto bottomRight = Vec2(middle.x + 4, middle.y - 4);
 
         // Top left
-        drawNode->drawSolidRect(topLeft, topLeft + Vec2(-20, 6), Color::WHITE);
-        drawNode->drawSolidRect(topLeft, topLeft + Vec2(-6, 20), Color::WHITE);
+        drawNode->drawSolidRect(topLeft, topLeft + Vec2(-20, 6), Color::white);
+        drawNode->drawSolidRect(topLeft, topLeft + Vec2(-6, 20), Color::white);
 
         // Top right
-        drawNode->drawSolidRect(topRight, topRight + Vec2(20, 6), Color::WHITE);
-        drawNode->drawSolidRect(topRight, topRight + Vec2(6, 20), Color::WHITE);
+        drawNode->drawSolidRect(topRight, topRight + Vec2(20, 6), Color::white);
+        drawNode->drawSolidRect(topRight, topRight + Vec2(6, 20), Color::white);
 
         // Bottom left
-        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(-20, -6), Color::WHITE);
-        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(-6, -20), Color::WHITE);
+        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(-20, -6), Color::white);
+        drawNode->drawSolidRect(bottomLeft, bottomLeft + Vec2(-6, -20), Color::white);
 
         // Bottom right
-        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(20, -6), Color::WHITE);
-        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(6, -20), Color::WHITE);
+        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(20, -6), Color::white);
+        drawNode->drawSolidRect(bottomRight, bottomRight + Vec2(6, -20), Color::white);
     };
 
     auto DrawSliderControlButton = [&](const Vec2& middle) -> void {
-        drawNode->drawSolidCircle(middle, panelW / 2, 0, 180, Color::WHITE);
+        drawNode->drawSolidCircle(middle, panelW / 2, 0, 180, Color::white);
     };
 
     std::map<VideoControlButtonId, std::function<void(const Vec2&)>> items = {
@@ -501,7 +501,7 @@ void createVideoControlTexture()
     auto* node       = Node::create();
     node->setContentSize(imageSize);
     node->setIgnoreAnchorPointForPosition(false);
-    node->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    node->setAnchorPoint(Anchors::bottomLeft);
     node->setPosition(0, 0);
     node->addChild(drawNode);
 
@@ -574,11 +574,11 @@ bool VideoPlayerControl::init(SpriteFrame* frame)
     {
         _overlay = Sprite::createWithSpriteFrame(frame);
         AX_SAFE_RETAIN(_overlay);
-        _overlay->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _overlay->setAnchorPoint(Anchors::center);
         _overlay->setPosition(_contentSize.width * 0.5f, _contentSize.height * 0.5f);
         addProtectedChild(_overlay, -2, -1);
 
-        if (!_autoSize && _customSize.equals(Vec2::ZERO))
+        if (!_autoSize && _customSize.equals(Vec2::zero))
         {
             _customSize = _overlay->getContentSize();
         }
@@ -837,9 +837,9 @@ void DefaultVideoController::createControls()
     auto scale              = Director::getInstance()->getRenderView()->getScaleY();
 
     _mediaOverlay = Layout::create();
-    _mediaOverlay->setBackGroundColor(Color32::BLACK);
+    _mediaOverlay->setBackGroundColor(Color32::black);
     _mediaOverlay->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
-    _mediaOverlay->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _mediaOverlay->setAnchorPoint(Anchors::center);
     _mediaOverlay->setPositionNormalized(Vec2(0.5f, 0.5f));
     _mediaOverlay->setContentSize(contentSize);
     _mediaOverlay->setOpacity(0);
@@ -848,14 +848,14 @@ void DefaultVideoController::createControls()
     _controlPanel = Widget::create();
     _controlPanel->setContentSize(contentSize);
     _controlPanel->setPositionNormalized(Vec2(0.5f, 0.5f));
-    _controlPanel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _controlPanel->setAnchorPoint(Anchors::center);
     _controlPanel->setCascadeOpacityEnabled(true);
     _controlPanel->setOpacity(0);
     addProtectedChild(_controlPanel, 10);
 
     _primaryButtonPanel = Widget::create();
     _primaryButtonPanel->setContentSize(Vec2(150, 60));
-    _primaryButtonPanel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _primaryButtonPanel->setAnchorPoint(Anchors::center);
     _primaryButtonPanel->setPositionNormalized(Vec2(0.5f, 0.5f));
     _primaryButtonPanel->setScale(1 / scale);
     _controlPanel->addProtectedChild(_primaryButtonPanel);
@@ -913,7 +913,7 @@ void DefaultVideoController::createControls()
         _videoPlayer->setFullscreen(true);
         updateControllerState();
     });
-    _fullscreenEnterButton->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    _fullscreenEnterButton->setAnchorPoint(Anchors::topLeft);
     _fullscreenEnterButton->setPositionNormalized(Vec2(0.03f, 0.97f));
     _fullscreenEnterButton->setCascadeOpacityEnabled(true);
     _fullscreenEnterButton->setVisible(false);
@@ -928,7 +928,7 @@ void DefaultVideoController::createControls()
         _videoPlayer->setFullscreen(false);
         updateControllerState();
     });
-    _fullscreenExitButton->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    _fullscreenExitButton->setAnchorPoint(Anchors::topLeft);
     _fullscreenExitButton->setPositionNormalized(Vec2(0.03f, 0.97f));
     _fullscreenExitButton->setCascadeOpacityEnabled(true);
     _fullscreenExitButton->setVisible(false);
@@ -936,26 +936,26 @@ void DefaultVideoController::createControls()
     _controlPanel->addProtectedChild(_fullscreenExitButton, 1, 1033);
 
     _timelineTotal = utils::createSpriteFromBase64Cached(BODY_IMAGE_1_PIXEL_HEIGHT, BODY_IMAGE_1_PIXEL_HEIGHT_KEY);
-    _timelineTotal->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+    _timelineTotal->setAnchorPoint(Anchors::bottomCenter);
     _timelineTotal->setStretchEnabled(true);
     _timelineTotal->setPositionNormalized(Vec2(0.5f, 0.1f));
-    _timelineTotal->setColor(Color32::GRAY);
+    _timelineTotal->setColor(Color32::gray);
     _timelineTotal->setVisible(false);
     _timelineTotal->setCascadeOpacityEnabled(true);
     _timelineTotal->setContentSize(Size(contentSize.width - 40, _timelineBarHeight / scale));
     _controlPanel->addProtectedChild(_timelineTotal, 1);
 
     _timelinePlayed = utils::createSpriteFromBase64Cached(BODY_IMAGE_1_PIXEL_HEIGHT, BODY_IMAGE_1_PIXEL_HEIGHT_KEY);
-    _timelinePlayed->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    _timelinePlayed->setAnchorPoint(Anchors::leftCenter);
     _timelinePlayed->setStretchEnabled(true);
     _timelinePlayed->setPositionNormalized(Vec2(0.0f, 0.5f));
-    _timelinePlayed->setColor(Color32::WHITE);
+    _timelinePlayed->setColor(Color32::white);
     _timelinePlayed->setCascadeOpacityEnabled(true);
     _timelineTotal->addChild(_timelinePlayed, 5);
 
     _timelineSelector = Sprite::createWithTexture(
         g_mediaControlsTexture, g_mediaControlTextureRegions[VideoControlButtonId::TimelineSliderButton]);
-    _timelineSelector->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _timelineSelector->setAnchorPoint(Anchors::center);
     _timelineSelector->setPositionNormalized(Vec2(1.f, 0.5f));
     _timelineSelector->setCascadeOpacityEnabled(true);
     _timelineSelector->setStretchEnabled(true);
@@ -1223,8 +1223,8 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 #    if AX_VIDEOPLAYER_DEBUG_DRAW
     _debugDrawNode->clear();
     auto size         = getContentSize();
-    Point vertices[4] = {Point::ZERO, Point(size.width, 0), Point(size.width, size.height), Point(0, size.height)};
-    _debugDrawNode->drawPoly(vertices, 4, true, Color32::WHITE);
+    Point vertices[4] = {Point::zero, Point(size.width, 0), Point(size.width, size.height), Point(0, size.height)};
+    _debugDrawNode->drawPoly(vertices, 4, true, Color32::white);
 #    endif
 }
 
@@ -1277,7 +1277,7 @@ void VideoPlayer::setVideoController(VideoController* controller)
     {
         AX_SAFE_RETAIN(_videoController);
         _videoController->setPositionNormalized(Vec2(0.5f, 0.5f));
-        _videoController->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _videoController->setAnchorPoint(Anchors::center);
         _videoController->setEnabled(_userInputEnabled);
         addProtectedChild(_videoController, 1);
     }

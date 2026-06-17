@@ -81,8 +81,8 @@ bool joltAssertFailed(const char* expression, const char* message, const char* f
 
 void clearHitResult(PhysicsWorld3D::HitResult& result)
 {
-    result.hitPosition = Vec3::ZERO;
-    result.hitNormal   = Vec3::ZERO;
+    result.hitPosition = Vec3::zero;
+    result.hitNormal   = Vec3::zero;
     result.hitActor    = nullptr;
     result.rigidbody   = nullptr;
     result.collider    = nullptr;
@@ -380,7 +380,7 @@ bool PhysicsWorld3D::rayCast(const ax::Vec3& startPos, const ax::Vec3& endPos, H
     }
 
     const Vec3 hitPos = jphutil::cast(ray.GetPointOnRay(hit.mFraction));
-    Vec3 hitNormal    = Vec3::UNIT_Y;
+    Vec3 hitNormal    = Vec3::yAxis;
     JPH::BodyLockRead lock(_physicsSystem.GetBodyLockInterface(), hit.mBodyID);
     if (lock.Succeeded())
     {

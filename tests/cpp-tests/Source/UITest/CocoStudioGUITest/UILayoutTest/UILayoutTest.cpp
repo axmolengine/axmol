@@ -640,7 +640,7 @@ bool UILayoutTest_Layout_Relative_Align_Parent::init()
         layout->setLayoutType(Layout::Type::RELATIVE);
         layout->setContentSize(Size(280, 150));
         layout->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
-        layout->setBackGroundColor(Color32::GREEN);
+        layout->setBackGroundColor(Color32::green);
         Size backgroundSize = background->getContentSize();
         layout->setPosition(Vec2((widgetSize.width - backgroundSize.width) / 2.0f +
                                      (backgroundSize.width - layout->getContentSize().width) / 2.0f,
@@ -1048,31 +1048,31 @@ bool UILayoutTest_Issue19890::init()
     const Size backgroundSize = background->getContentSize();
 
     auto panel = ui::LayoutGroup::create();
-    panel->setBackGroundColor(Color32::RED);
+    panel->setBackGroundColor(Color32::red);
     panel->setBackGroundColorType(ui::LayoutGroup::BackGroundColorType::SOLID);
     panel->setClippingType(ui::LayoutGroup::ClippingType::SCISSOR);
     panel->setPosition(backgroundSize / 2);
-    panel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    panel->setAnchorPoint(Anchors::center);
     panel->setClippingEnabled(true);
     panel->setContentSize(backgroundSize);  // from the left to the screen end
     background->addChild(panel);
 
     auto panel2 = ui::LayoutGroup::create();
-    panel2->setBackGroundColor(Color32::BLUE);
+    panel2->setBackGroundColor(Color32::blue);
     panel2->setBackGroundColorType(ui::LayoutGroup::BackGroundColorType::SOLID);
     panel2->setClippingType(ui::LayoutGroup::ClippingType::SCISSOR);
     panel2->setPosition(panel->getContentSize() / 2);
-    panel2->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    panel2->setAnchorPoint(Anchors::center);
     panel2->setClippingEnabled(true);
     panel2->setContentSize(panel->getContentSize() / 2);  // from the left to the screen end
     panel->addChild(panel2);
 
     auto panel3 = ui::LayoutGroup::create();
-    panel3->setBackGroundColor(Color32::GREEN);
+    panel3->setBackGroundColor(Color32::green);
     panel3->setBackGroundColorType(ui::LayoutGroup::BackGroundColorType::SOLID);
     panel3->setClippingType(ui::LayoutGroup::ClippingType::SCISSOR);
     panel3->setPosition(panel2->getContentSize() / 2);
-    panel3->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    panel3->setAnchorPoint(Anchors::center);
     panel3->setClippingEnabled(true);
     panel3->setContentSize(panel2->getContentSize() / 2);  // from the left to the screen end
     panel2->addChild(panel3);

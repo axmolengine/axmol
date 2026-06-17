@@ -1062,7 +1062,7 @@ MeshRendererWithSkinTest::MeshRendererWithSkinTest()
                                            AX_CALLBACK_1(MeshRendererWithSkinTest::switchAnimationQualityCallback, this));
     _menuItem->setColor(Color32(0, 200, 20));
     auto menu = Menu::create(_menuItem, nullptr);
-    menu->setPosition(Vec2::ZERO);
+    menu->setPosition(Vec2::zero);
     _menuItem->setPosition(VisibleRect::left().x + 50, VisibleRect::top().y - 70);
     addChild(menu, 1);
 
@@ -1868,7 +1868,7 @@ QuaternionTest::QuaternionTest() : _arcSpeed(AX_DEGREES_TO_RADIANS(90)), _radius
 }
 std::string QuaternionTest::title() const
 {
-    return "Test Rotation With Quaternion";
+    return "Test Rotation With Quat";
 }
 std::string QuaternionTest::subtitle() const
 {
@@ -1902,8 +1902,8 @@ void QuaternionTest::update(float delta)
     auto s = Director::getInstance()->getCanvasSize();
     _mesh->setPosition(Vec2(s.width / 2.f + _radius * cosf(_accAngle), s.height / 2.f + _radius * sinf(_accAngle)));
 
-    Quaternion quat;
-    Quaternion::createFromAxisAngle(Vec3(0.f, 0.f, 1.f), _accAngle - pi * 0.5f, &quat);
+    Quat quat;
+    Quat::createFromAxisAngle(Vec3(0.f, 0.f, 1.f), _accAngle - pi * 0.5f, &quat);
     _mesh->setRotationQuat(quat);
 }
 

@@ -54,7 +54,7 @@ ax::Color32 GLabel::getTitleColor() const
     if (tf)
         return tf->getColor();
     else
-        return Color32::BLACK;
+        return Color32::black;
 }
 
 void GLabel::setTitleColor(const ax::Color32 & value)

@@ -259,7 +259,7 @@ void Particle3DQuadRender::reset()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-Particle3DModelRender::Particle3DModelRender() : _meshSize(Vec3::ONE) {}
+Particle3DModelRender::Particle3DModelRender() : _meshSize(Vec3::one) {}
 Particle3DModelRender::~Particle3DModelRender()
 {
     for (auto&& iter : _meshList)
@@ -309,7 +309,7 @@ void Particle3DModelRender::render(Renderer* renderer, const Mat4& transform, Pa
     Mat4 mat;
     Mat4 rotMat;
     Mat4 sclMat;
-    Quaternion q;
+    Quat q;
     transform.decompose(nullptr, &q, nullptr);
     unsigned int index = 0;
     for (auto&& iter : activeParticleList)
@@ -339,7 +339,7 @@ void Particle3DModelRender::reset()
 // MARK: Particle3DRender
 
 Particle3DRender::Particle3DRender()
-    : _particleSystem(nullptr), _isVisible(true), _rendererScale(Vec3::ONE), _depthTest(true), _depthWrite(false)
+    : _particleSystem(nullptr), _isVisible(true), _rendererScale(Vec3::one), _depthTest(true), _depthWrite(false)
 {
     _stateBlock.setCullFace(false);
     _stateBlock.setCullFaceSide(rhi::CullMode::BACK);

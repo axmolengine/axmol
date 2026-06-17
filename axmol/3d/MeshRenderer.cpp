@@ -427,7 +427,7 @@ MeshRenderer* MeshRenderer::createMeshRendererNode(NodeData* nodedata,
 
     // set locale transform
     Vec3 pos;
-    Quaternion qua;
+    Quat qua;
     Vec3 scale;
     nodedata->transform.decompose(&scale, &qua, &pos);
     meshRenderer->setPosition3D(pos);
@@ -600,7 +600,7 @@ void MeshRenderer::createNode(NodeData* nodedata, Node* root, const MaterialData
                     }
 
                     Vec3 pos;
-                    Quaternion qua;
+                    Quat qua;
                     Vec3 scale;
                     nodedata->transform.decompose(&scale, &qua, &pos);
                     setPosition3D(pos);
@@ -635,7 +635,7 @@ void MeshRenderer::createNode(NodeData* nodedata, Node* root, const MaterialData
 
             // set locale transform
             Vec3 pos;
-            Quaternion qua;
+            Quat qua;
             Vec3 scale;
             nodedata->transform.decompose(&scale, &qua, &pos);
             node->setPosition3D(pos);

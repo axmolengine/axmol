@@ -256,7 +256,7 @@ Label* Label::create(std::string_view text, std::string_view fontName, float fon
 Label* Label::createWithSystemFont(std::string_view text,
                                    std::string_view font,
                                    float fontSize,
-                                   const Vec2& dimensions /* = Vec2::ZERO */,
+                                   const Vec2& dimensions /* = Vec2::zero */,
                                    TextHAlignment hAlignment /* = TextHAlignment::LEFT */,
                                    TextVAlignment vAlignment /* = TextVAlignment::TOP */)
 {
@@ -275,7 +275,7 @@ Label* Label::createWithSystemFont(std::string_view text,
 Label* Label::createWithTTF(std::string_view text,
                             std::string_view fontFile,
                             float fontSize,
-                            const Vec2& dimensions /* = Vec2::ZERO */,
+                            const Vec2& dimensions /* = Vec2::zero */,
                             TextHAlignment hAlignment /* = TextHAlignment::LEFT */,
                             TextVAlignment vAlignment /* = TextVAlignment::TOP */)
 {
@@ -532,7 +532,7 @@ Label::Label(TextHAlignment hAlignment /* = TextHAlignment::LEFT */,
     , _strikethroughEnabled(false)
     , _underlineEnabled(false)
 {
-    setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    setAnchorPoint(Anchors::center);
     reset();
     _hAlignment = hAlignment;
     _vAlignment = vAlignment;
@@ -625,7 +625,7 @@ void Label::reset()
 
     _bmFontPath      = "";
     _bmSubTextureKey = "";
-    _bmRect          = Rect::ZERO;
+    _bmRect          = Rect::zero;
     _bmRotated       = false;
 
     _systemFontDirty = false;
@@ -649,11 +649,11 @@ void Label::reset()
     _hAlignment             = TextHAlignment::LEFT;
     _vAlignment             = TextVAlignment::TOP;
 
-    _effectColor = Color::BLACK;
-    _textColor   = Color::WHITE;
-    _textColor32 = Color32::WHITE;
+    _effectColor = Color::black;
+    _textColor   = Color::white;
+    _textColor32 = Color32::white;
 
-    setColor(Color32::WHITE);
+    setColor(Color32::white);
 
     _shadowDirty      = false;
     _shadowEnabled    = false;
@@ -818,7 +818,7 @@ bool Label::setFontAtlas(FontAtlas* atlas, bool distanceFieldEnabled /* = false 
         _reusedLetter = Sprite::create();
         _reusedLetter->setOpacityModifyRGB(_isOpacityModifyRGB);
         _reusedLetter->retain();
-        _reusedLetter->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+        _reusedLetter->setAnchorPoint(Anchors::topLeft);
     }
 
     if (_fontAtlas)
@@ -1106,7 +1106,7 @@ void Label::alignText()
 {
     if (_fontAtlas == nullptr || _utf32Text.empty())
     {
-        setContentSize(Vec2::ZERO);
+        setContentSize(Vec2::zero);
         return;
     }
 
@@ -1192,8 +1192,8 @@ void Label::updateBatchNode()
             {
                 _isOpacityModifyRGB = batchNode->getTexture()->hasPremultipliedAlpha();
                 _blendFunc          = batchNode->getBlendFunc();
-                batchNode->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-                batchNode->setPosition(Vec2::ZERO);
+                batchNode->setAnchorPoint(Anchors::topLeft);
+                batchNode->setPosition(Vec2::zero);
                 _batchNodes.pushBack(batchNode);
             }
         }
@@ -1495,7 +1495,7 @@ void Label::enableOutline(const Color32& outlineColor, float outlineSize /* = -1
     }
 }
 
-void Label::enableShadow(const Color32& shadowColor /* = Color32::BLACK */,
+void Label::enableShadow(const Color32& shadowColor /* = Color32::black */,
                          const Vec2& offset /* = Vec2(2 ,-2)*/,
                          int /* blurRadius = 0 */)
 {
@@ -1551,7 +1551,7 @@ void Label::enableBold()
     if (!_boldEnabled)
     {
         // bold is implemented with outline
-        enableShadow(Color32::WHITE, Vec2(0.9f, 0), 0);
+        enableShadow(Color32::white, Vec2(0.9f, 0), 0);
         // add one to kerning
         setAdditionalKerning(_additionalKerning + 1);
         _boldEnabled = true;
@@ -1699,7 +1699,7 @@ void Label::createSpriteForSystemFont(const FontDefinition& fontDef)
     // set camera mask using label's camera mask, because _textSprite may be null when setting camera mask to label
     _textSprite->setCameraMask(getCameraMask());
     _textSprite->setGlobalZOrder(getGlobalZOrder());
-    _textSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    _textSprite->setAnchorPoint(Anchors::bottomLeft);
     auto& s = _textSprite->getContentSize();
     _textSprite->setPosition(Vec2((int)s.x % 2 == 0 ? 0 : 0.5, (int)s.y % 2 == 0 ? 0 : 0.5));
     this->setContentSize(s);
@@ -1740,7 +1740,7 @@ void Label::createShadowSpriteForSystemFont(const FontDefinition& fontDef)
         }
         _shadowNode->setCameraMask(getCameraMask());
         _shadowNode->setGlobalZOrder(getGlobalZOrder());
-        _shadowNode->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+        _shadowNode->setAnchorPoint(Anchors::bottomLeft);
         _shadowNode->setPosition(_shadowOffset.width, _shadowOffset.height);
 
         _shadowNode->retain();
@@ -1814,7 +1814,7 @@ void Label::updateContent()
     if (_lineDrawNode)
     {
         Color32 lineColor = Color32(_displayedColor);
-        if (_textColor32 != Color32::WHITE && _textColor32 != lineColor)
+        if (_textColor32 != Color32::white && _textColor32 != lineColor)
             lineColor = _textColor32;
 
         _lineDrawNode->clear();
@@ -1905,9 +1905,9 @@ void Label::updateContent()
 
 #if AX_LABEL_DEBUG_DRAW
     _debugDrawNode->clear();
-    Vec2 vertices[4] = {Vec2::ZERO, Vec2(_contentSize.width, 0.0f), Vec2(_contentSize.width, _contentSize.height),
+    Vec2 vertices[4] = {Vec2::zero, Vec2(_contentSize.width, 0.0f), Vec2(_contentSize.width, _contentSize.height),
                         Vec2(0.0f, _contentSize.height)};
-    _debugDrawNode->drawPoly(vertices, 4, true, Color::WHITE);
+    _debugDrawNode->drawPoly(vertices, 4, true, Color::white);
 #endif
 }
 
