@@ -629,15 +629,16 @@ endif()
 # ====================================================================
 # Create 'axmol-sdk' target to cascade build the core and all extensions
 # ====================================================================
+if(BUILD_ENGINE_BEGAN)
+    add_custom_target(axmol-sdk)
 
-add_custom_target(axmol-sdk)
+    add_dependencies(axmol-sdk axmol ${_AX_EXTENSION_LIBS})
 
-add_dependencies(axmol-sdk axmol ${_AX_EXTENSION_LIBS})
+    # Automatically gather only the necessary libraries (Core + 3rdparty + Extensions)
+    ax_collect_sdk_targets(${CMAKE_SOURCE_DIR} _axmol_libs)
 
-# Automatically gather only the necessary libraries (Core + 3rdparty + Extensions)
-ax_collect_sdk_targets(${CMAKE_CURRENT_SOURCE_DIR} _axmol_libs)
+    # Export the clean library target map
+    export(TARGETS ${_axmol_libs} FILE "${CMAKE_BINARY_DIR}/AxmolTargets.cmake")
 
-# Export the clean library target map
-export(TARGETS ${_axmol_libs} FILE "${CMAKE_BINARY_DIR}/AxmolTargets.cmake")
-
-message(STATUS "🔧 Created target 'axmol-sdk' and exported clean SDK library map (Tests excluded).")
+    message(STATUS "🔧 Created target 'axmol-sdk' and exported clean SDK library map (Tests excluded).")
+endif()
