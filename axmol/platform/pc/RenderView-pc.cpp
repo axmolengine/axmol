@@ -262,13 +262,6 @@ private:
 };
 RenderView* GLFWEventHandler::_view = nullptr;
 
-const std::string_view RenderView::EVENT_WINDOW_POSITIONED   = "_ax_window_positioned"sv;
-const std::string_view RenderView::EVENT_WINDOW_RESIZED      = "_ax_window_resized"sv;
-const std::string_view RenderView::EVENT_WINDOW_FOCUSED      = "_ax_window_focused"sv;
-const std::string_view RenderView::EVENT_WINDOW_UNFOCUSED    = "_ax_window_unfocused"sv;
-const std::string_view RenderView::EVENT_WINDOW_CLOSE        = "_ax_window_close"sv;
-const std::string_view RenderView::EVENT_WINDOW_CURSOR_ENTER = "_ax_window_cursor_enter"sv;
-
 static constexpr intptr_t MOUSE_POINTER_ID = 0;
 
 ////////////////////////////////////////////////////

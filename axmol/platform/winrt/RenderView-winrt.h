@@ -60,8 +60,6 @@ class Application;
 class AX_DLL RenderView : public RenderViewCore
 {
 public:
-    static const std::string_view EVENT_WINDOW_RESIZED;
-
     static RenderView* create(std::string_view viewName);
     static RenderView* createWithRect(std::string_view viewName,
                                       const Rect& rect,

@@ -109,6 +109,13 @@ class AX_DLL RenderViewCore : public Object
     friend class Director;
 
 public:
+    static const std::string_view EVENT_WINDOW_POSITIONED;
+    static const std::string_view EVENT_WINDOW_RESIZED;
+    static const std::string_view EVENT_WINDOW_FOCUSED;
+    static const std::string_view EVENT_WINDOW_UNFOCUSED;
+    static const std::string_view EVENT_WINDOW_CLOSE;
+    static const std::string_view EVENT_WINDOW_CURSOR_ENTER;
+
     enum SurfaceUpdateFlag : uint8_t
     {
         WindowSizeChanged = 1,       // Indicates that window size has changed

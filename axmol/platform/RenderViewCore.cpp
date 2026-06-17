@@ -37,6 +37,14 @@ THE SOFTWARE.
 
 namespace ax
 {
+
+const std::string_view RenderViewCore::EVENT_WINDOW_POSITIONED   = "_ax_window_positioned"sv;
+const std::string_view RenderViewCore::EVENT_WINDOW_RESIZED      = "_ax_window_resized"sv;
+const std::string_view RenderViewCore::EVENT_WINDOW_FOCUSED      = "_ax_window_focused"sv;
+const std::string_view RenderViewCore::EVENT_WINDOW_UNFOCUSED    = "_ax_window_unfocused"sv;
+const std::string_view RenderViewCore::EVENT_WINDOW_CLOSE        = "_ax_window_close"sv;
+const std::string_view RenderViewCore::EVENT_WINDOW_CURSOR_ENTER = "_ax_window_cursor_enter"sv;
+
 RenderViewCore::RenderViewCore()
     : _windowSize(0, 0)
     , _designResolutionSize(0, 0)

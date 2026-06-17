@@ -219,8 +219,6 @@ static constexpr keyCodeItem g_keyCodeStructArray[] = {
 
 RenderView* RenderView::s_renderView = nullptr;
 
-const std::string_view RenderView::EVENT_WINDOW_RESIZED = "_ax_window_resized"sv;
-
 namespace
 {
 constexpr float WHEEL_DELTA_UNIT = 120.0f;
