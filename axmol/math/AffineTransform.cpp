@@ -34,10 +34,6 @@ using namespace std;
 namespace ax
 {
 
-#if defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT)
-const AffineTransform AffineTransform::identity{1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f};
-#endif
-
 AffineTransform AffineTransformMake(float a, float b, float c, float d, float tx, float ty)
 {
     AffineTransform t;

@@ -56,9 +56,10 @@ struct AffineTransform
 
     static const AffineTransform identity;
 };
-#if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
+
+// POD type with no non‑trivial member functions or static initialization logic; safe to define as an inline constexpr
+// in the header C++17 or later.
 inline constexpr AffineTransform AffineTransform::identity{1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f};
-#endif
 
 /**@}*/
 
