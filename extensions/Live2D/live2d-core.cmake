@@ -26,6 +26,8 @@ elseif(LINUX)
   )
 elseif(WINDOWS)
   set(CRT MD)
+  # The Live2D prebuilt libraries for MSVC are available only up to version 143, 
+  # while Axmol requires 14.39. Compatibility should be ensured.
   set(live2d_msvc 143)
 
   set_target_properties(Live2DCubismCore

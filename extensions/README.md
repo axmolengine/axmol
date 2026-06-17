@@ -43,6 +43,7 @@
 - Upstream: https://github.com/axmolengine/live2d-axmol
 - Version: 5.5
 - License: Live2D Proprietary Software License
+- Limitation: The Live2D Core SDK does not provide prebuilt libraries for WinUWP or WebAssembly, so these platforms are not supported.
 
 ## Particle3D
 
