@@ -213,16 +213,6 @@ protected:
     void* _vkSurface{nullptr};
 
     std::string _glfwError;
-
-public:
-    // View will trigger an event when window is resized, gains or loses focus
-    static const std::string_view EVENT_WINDOW_POSITIONED;
-    static const std::string_view EVENT_WINDOW_RESIZED;
-    static const std::string_view EVENT_WINDOW_FOCUSED;
-    static const std::string_view EVENT_WINDOW_UNFOCUSED;
-    static const std::string_view EVENT_WINDOW_CLOSE;
-    static const std::string_view EVENT_WINDOW_CURSOR_ENTER;
-
 private:
     void updateRenderScale();
     AX_DISALLOW_COPY_AND_ASSIGN(RenderView);
