@@ -1906,7 +1906,13 @@ elseif ($Global:is_wasm) {
 
 $is_host_target = $Global:is_win32 -or $Global:is_linux -or $Global:is_mac
 $is_host_cpu = $HOST_CPU -eq $TARGET_CPU
-$cmake_target = $null
+if ($cmake_target) {
+    # put cmake_target to global
+    $global:cmake_target = $cmake_target
+}
+else {
+    $cmake_target = $null
+}
 
 if (!$setupOnly) {
     $BUILD_DIR = $null

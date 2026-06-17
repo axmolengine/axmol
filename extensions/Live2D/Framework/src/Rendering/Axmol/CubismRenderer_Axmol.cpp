@@ -1700,22 +1700,25 @@ CubismRenderer_Axmol::CubismRenderer_Axmol(csmUint32 width, csmUint32 height)
                                                      , _currentOffscreen(NULL)
                                                      , _renderTargetDrawCommandBuffer(NULL)
                                                      , _renderTargetCopyDrawCommandBufferIndex(0)
-                                                     , _windowResizeListener(NULL)
 {
     // テクスチャ対応マップの容量を確保しておく.
     _textures.PrepareCapacity(32, true);
 
+#if AX_TARGET_PLATFORM != AX_PLATFORM_IOS && AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID
     _windowResizeListener = ax::Director::getInstance()->getEventDispatcher()->addCustomEventListener(
         ax::RenderView::EVENT_WINDOW_RESIZED, [this](ax::CustomEvent*) { OnRenderViewResized(); });
+#endif
 }
 
 CubismRenderer_Axmol::~CubismRenderer_Axmol()
 {
+#if AX_TARGET_PLATFORM != AX_PLATFORM_IOS && AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID
     if (_windowResizeListener)
     {
         ax::Director::getInstance()->getEventDispatcher()->removeEventListener(_windowResizeListener);
         _windowResizeListener = NULL;
     }
+#endif
 
     CSM_DELETE_SELF(CubismClippingManager_Axmol, _clippingManager);
     CSM_DELETE_SELF(CubismClippingManager_Axmol, _offscreenClippingManager);

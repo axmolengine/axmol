@@ -118,6 +118,21 @@ if ($cm_target_index -ne -1) {
     $cmake_target = $options.xb[$cm_target_index + 1]
 }
 
+# if cmake target not specified by cmake options, parse axmol cmdline option: -t
+if (!$cmake_target) {
+    if($options.t) {
+        if($options.t -isnot [array]) {
+            $options.t = "$($options.t)".Split(',')
+        }
+    }
+
+    # if(!$options.t) {
+    #     $options.t = @(@($proj_name, 'cpp-tests')[$is_axmol_engine])
+    # }
+
+    $cmake_target = $options.t[0]
+}
+
 if ($is_axmol_engine -and $is_android) {
     if (!$cmake_target) {
         $source_proj_dir = Join-Path $AX_ROOT 'tests/cpp-tests'
@@ -152,27 +167,20 @@ $proj_dir = search_proj_file 'CMakeLists.txt' 'Leaf'
 if (!$proj_dir) { throw "The directory $source_proj_dir doesn't contains CMakeLists.txt!" }
 $proj_name = (Get-Item $proj_dir).BaseName
 
+# if cmake target still not specified, use project name as cmake target
+if (!$cmake_target) {
+    $cmake_target = $proj_name
+    # means user not specified build target in -xb or -t
+    # so we store to options.t bypass to 1k main script (1kiss.ps1)
+    $options.t = @($cmake_target)
+}
+
 $use_gradle = $is_android -and (Test-Path $(Join-Path $proj_dir 'proj.android/gradlew') -PathType Leaf)
 if ($use_gradle) {
     $1k_args += '-xt', 'proj.android/gradlew'
 }
 
 if (!$use_gradle) {
-    if (!$cmake_target) {
-        # non android, specific cmake target
-        if($options.t) {
-            if($options.t -isnot [array]) {
-                $options.t = "$($options.t)".Split(',')
-            }
-        }
-
-        if(!$options.t) {
-            $options.t = @(@($proj_name, 'cpp-tests')[$is_axmol_engine])
-        }
-
-        $cmake_target = $options.t[-1]
-    }
-
     if ($is_android -and !"$($options.xc)".Contains('-DANDROID_STL')) {
         $options.xc += '-DANDROID_STL=c++_shared'
     }

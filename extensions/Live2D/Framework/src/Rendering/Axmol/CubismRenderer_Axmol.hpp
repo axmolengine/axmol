@@ -611,7 +611,9 @@ private:
     CubismCommandBuffer_Axmol::DrawCommandBuffer* _renderTargetDrawCommandBuffer;
     csmVector<CubismCommandBuffer_Axmol::DrawCommandBuffer*> _renderTargetCopyDrawCommandBuffers;
     csmUint32 _renderTargetCopyDrawCommandBufferIndex;
-    ax::CustomEventListener* _windowResizeListener;
+#if AX_TARGET_PLATFORM != AX_PLATFORM_IOS && AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID
+    ax::CustomEventListener* _windowResizeListener{nullptr};
+#endif
 };
 
 }}}}
