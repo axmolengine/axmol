@@ -175,8 +175,7 @@ Node* Light3DReader::createNodeWithFlatBuffers(const flatbuffers::Table* light3D
         light = PointLight::create(Vec3::zero, Color32::white, range);
         break;
     case ax::LightType::SPOT:
-        light =
-            SpotLight::create(Vec3::zAxis, Vec3::zero, Color32::white, 0, AX_DEGREES_TO_RADIANS(outerAngle), range);
+        light = SpotLight::create(Vec3::zAxis, Vec3::zero, Color32::white, 0, AX_DEGREES_TO_RADIANS(outerAngle), range);
         break;
     case ax::LightType::AMBIENT:
         light = AmbientLight::create(Color32::white);

@@ -121,7 +121,7 @@ public:
     /** Constructor **/
     MeshInfo(std::string_view meshName,
              const MeshSurfaceDistribution distribution = MSD_HOMOGENEOUS,
-             const Quat& orientation              = Quat(),
+             const Quat& orientation                    = Quat(),
              const Vec3& scale                          = Vec3::zero);
 
     /** Destructor **/

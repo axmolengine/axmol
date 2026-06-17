@@ -835,12 +835,12 @@ struct Anchors
     static constexpr Vec2 bottomLeft{0.0f, 0.0f};
     static constexpr Vec2 topRight{1.0f, 1.0f};
     static constexpr Vec2 bottomRight{1.0f, 0.0f};
-    
+
     static constexpr Vec2 topCenter{0.5f, 1.0f};
     static constexpr Vec2 bottomCenter{0.5f, 0.0f};
     static constexpr Vec2 leftCenter{0.0f, 0.5f};
     static constexpr Vec2 rightCenter{1.0f, 0.5f};
-    
+
     static constexpr Vec2 center{0.5f, 0.5f};
 };
 

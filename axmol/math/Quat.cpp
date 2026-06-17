@@ -195,12 +195,7 @@ void Quat::slerp(const Quat& q1, const Quat& q2, float t, Quat* dst)
     slerp(q1.x, q1.y, q1.z, q1.w, q2.x, q2.y, q2.z, q2.w, t, &dst->x, &dst->y, &dst->z, &dst->w);
 }
 
-void Quat::squad(const Quat& q1,
-                       const Quat& q2,
-                       const Quat& s1,
-                       const Quat& s2,
-                       float t,
-                       Quat* dst)
+void Quat::squad(const Quat& q1, const Quat& q2, const Quat& s1, const Quat& s2, float t, Quat* dst)
 {
     AX_ASSERT(!(t < 0.0f || t > 1.0f));
 
@@ -213,18 +208,18 @@ void Quat::squad(const Quat& q1,
 }
 
 void Quat::slerp(float q1x,
-                       float q1y,
-                       float q1z,
-                       float q1w,
-                       float q2x,
-                       float q2y,
-                       float q2z,
-                       float q2w,
-                       float t,
-                       float* dstx,
-                       float* dsty,
-                       float* dstz,
-                       float* dstw)
+                 float q1y,
+                 float q1z,
+                 float q1w,
+                 float q2x,
+                 float q2y,
+                 float q2z,
+                 float q2w,
+                 float t,
+                 float* dstx,
+                 float* dsty,
+                 float* dstz,
+                 float* dstw)
 {
     // Fast slerp implementation by kwhatmough:
     // It contains no division operations, no trig, no inverse trig

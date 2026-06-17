@@ -361,12 +361,7 @@ public:
      * @param t The interpolation coefficient.
      * @param dst A quaternion to store the result in.
      */
-    static void squad(const Quat& q1,
-                      const Quat& q2,
-                      const Quat& s1,
-                      const Quat& s2,
-                      float t,
-                      Quat* dst);
+    static void squad(const Quat& q1, const Quat& q2, const Quat& s1, const Quat& s2, float t, Quat* dst);
 
     /**
      * Calculates the quaternion product of this quaternion with the given quaternion.

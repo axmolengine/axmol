@@ -1111,7 +1111,7 @@ void CameraArcBallDemo::onPointerMove(PointerEvent* event)
         float angle;
         calculateArcBall(axes, angle, prelocation.x, prelocation.y, location.x,
                          location.y);  // calculate  rotation quaternion parameters
-        Quat quat(axes, angle);  // get rotation quaternion
+        Quat quat(axes, angle);        // get rotation quaternion
         _rotationQuat = quat * _rotationQuat;
 
         updateCameraTransform();  // update camera Transform

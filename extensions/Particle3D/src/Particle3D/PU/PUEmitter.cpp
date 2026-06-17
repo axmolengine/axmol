@@ -207,7 +207,7 @@ void PUEmitter::initParticleOrientation(PUParticle3D* particle)
     {
         // Generate random orientation 'between' start en end.
         Quat::lerp(_particleOrientationRangeStart, _particleOrientationRangeEnd, AXRANDOM_0_1(),
-                         &particle->orientation);
+                   &particle->orientation);
     }
     else
     {

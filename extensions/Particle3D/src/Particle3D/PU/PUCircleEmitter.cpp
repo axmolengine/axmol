@@ -195,8 +195,8 @@ PUCircleEmitter* PUCircleEmitter::create()
 }
 
 ax::Quat PUCircleEmitter::getRotationTo(const Vec3& src,
-                                              const Vec3& dest,
-                                              const Vec3& fallbackAxis /*= Vec3::zero*/) const
+                                        const Vec3& dest,
+                                        const Vec3& fallbackAxis /*= Vec3::zero*/) const
 {
     // Based on Stan Melax's article in Game Programming Gems
     Quat q;
