@@ -625,3 +625,19 @@ elseif(LINUX)
     target_link_libraries(${_AX_CORE_LIB} ${WEBKIT2GTK_LIBRARIES})
   endif()
 endif()
+
+# ====================================================================
+# Create 'axmol-sdk' target to cascade build the core and all extensions
+# ====================================================================
+
+add_custom_target(axmol-sdk)
+
+add_dependencies(axmol-sdk axmol ${_AX_EXTENSION_LIBS})
+
+# Automatically gather only the necessary libraries (Core + 3rdparty + Extensions)
+ax_collect_sdk_targets(${CMAKE_CURRENT_SOURCE_DIR} _axmol_libs)
+
+# Export the clean library target map
+export(TARGETS ${_axmol_libs} FILE "${CMAKE_BINARY_DIR}/AxmolTargets.cmake")
+
+message(STATUS "🔧 Created target 'axmol-sdk' and exported clean SDK library map (Tests excluded).")

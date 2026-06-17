@@ -2160,7 +2160,7 @@ if (!$setupOnly) {
                     $storeHash = Get-Content $tempFile -Raw
                 }
                 $hashValue = $1k.hash("$CONFIG_ALL_OPTIONS#$lastWriteTime")
-                $mainDepChanged = "$storeHash" -ne "$hashValue"
+                $mainDepChanged = ($options.xc.Count -ne 0) -and ("$storeHash" -ne "$hashValue")
                 $cmakeCachePath = $1k.realpath("$BUILD_DIR/CMakeCache.txt")
 
                 if ($mainDepChanged -or !$1k.isfile($cmakeCachePath) -or $forceConfig) {
@@ -2215,7 +2215,7 @@ if (!$setupOnly) {
                         $cm_targets = @()
                     }
                     if ($cmake_target) {
-                        if ($cm_targets.Contains($cmake_target)) {
+                        if (!$cm_targets.Contains($cmake_target)) {
                             $cm_targets += $cmake_target
                         }
                     }

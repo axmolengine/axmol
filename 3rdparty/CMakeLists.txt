@@ -324,6 +324,7 @@ if(AX_ENABLE_AUDIO)
     ax_add_3rd(openal EXCLUDE_FROM_ALL TARGETS OpenAL;alsoft.common OPTIONS ${alsoft_opts})
 
     set_target_properties(OpenAL alsoft.common PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
+    set_target_properties(alsoft.default_hrtf_data PROPERTIES FOLDER "3rdparty")
 
     if(AX_USE_ALSOFT_STATIC)
       target_compile_definitions(3rdparty INTERFACE AL_LIBTYPE_STATIC=1)
@@ -360,6 +361,7 @@ if((WINDOWS AND NOT WINRT) OR MACOSX OR LINUX)
   endif()
   ax_add_3rd(glfw OPTIONS ${_glfw_options})
   set_target_properties(glfw PROPERTIES OUTPUT_NAME glfw)
+  set_target_properties(update_mappings PROPERTIES FOLDER "3rdparty")
 
   if(NOT WINDOWS)
     target_link_libraries(3rdparty INTERFACE pthread)

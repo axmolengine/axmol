@@ -134,16 +134,20 @@ if ($is_axmol_engine -and $is_android) {
         $source_proj_dir = Join-Path $AX_ROOT 'tests/cpp-tests'
     }
     else {
-        $builtin_targets = @{
+        $builtin_projects = @{
             'cpp-tests'      = 'tests/cpp-tests'
             'fairygui-tests' = 'tests/fairygui-tests'
             'live2d-tests'   = 'tests/live2d-tests'
             'unit-tests'     = 'tests/unit-tests'
         }
-        if (!$builtin_targets.Contains($cmake_target)) {
-            throw "specified target '$cmake_target' not present in engine"
+        if (!$builtin_projects.Contains($cmake_target)) {
+            throw "Unknown builtin project '$cmake_target' for Android."
         }
-        $source_proj_dir = Join-Path $AX_ROOT $builtin_targets[$cmake_target]
+
+        $target_dir = $builtin_projects[$cmake_target]
+        if ($target_dir) {
+            $source_proj_dir = Join-Path $AX_ROOT $builtin_projects[$cmake_target]
+        }
     }
 }
 
@@ -163,11 +167,18 @@ $proj_dir = search_proj_file 'CMakeLists.txt' 'Leaf'
 if (!$proj_dir) { throw "The directory $source_proj_dir doesn't contains CMakeLists.txt!" }
 $proj_name = (Get-Item $proj_dir).BaseName
 
-# if cmake target still not specified, use project name as cmake target
+# Auto-detect cmake target if not specified:
+# - Non-Axmol engine project: use project name as target
+# - Axmol engine project: use 'axmol-sdk' (engine + enabled extensions)
+# Store the inferred target in options.t for use by the main script (1kiss.ps1)
 if (!$cmake_target) {
-    $cmake_target = $proj_name
-    # means user not specified build target in -xb or -t
-    # so we store to options.t bypass to 1k main script (1kiss.ps1)
+    if (!$is_axmol_engine) {
+        $cmake_target = $proj_name
+    }
+    else {
+        $cmake_target = 'axmol-sdk'
+        Write-Warning "Default build target updated: 'cpp-tests' -> 'axmol-sdk'. To build tests, use '-t cpp-tests' explicitly."
+    }
     $options.t = @($cmake_target)
 }
 
