@@ -213,6 +213,7 @@ protected:
     void* _vkSurface{nullptr};
 
     std::string _glfwError;
+
 private:
     void updateRenderScale();
     AX_DISALLOW_COPY_AND_ASSIGN(RenderView);
