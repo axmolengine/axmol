@@ -85233,30 +85233,6 @@ int lua_ax_base_RenderTexture_initWithWidthAndHeight(lua_State* tolua_S)
 #endif
     argc = lua_gettop(tolua_S)-1;
     do {
-        if (argc == 4) {
-            int arg0;
-            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:initWithWidthAndHeight");
-
-            if (!ok) { break; }
-            int arg1;
-            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:initWithWidthAndHeight");
-
-            if (!ok) { break; }
-            ax::rhi::PixelFormat arg2;
-            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:initWithWidthAndHeight");
-
-            if (!ok) { break; }
-            ax::rhi::PixelFormat arg3;
-            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.RenderTexture:initWithWidthAndHeight");
-
-            if (!ok) { break; }
-            bool ret = obj->initWithWidthAndHeight(arg0, arg1, arg2, arg3);
-            tolua_pushboolean(tolua_S,(bool)ret);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do {
         if (argc == 5) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:initWithWidthAndHeight");
@@ -85270,12 +85246,12 @@ int lua_ax_base_RenderTexture_initWithWidthAndHeight(lua_State* tolua_S)
             ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
-            ax::rhi::PixelFormat arg3;
-            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.RenderTexture:initWithWidthAndHeight");
+            bool arg3;
+            ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
-            bool arg4;
-            ok &= luaval_to_boolean(tolua_S, 6, &arg4, "ax.RenderTexture:initWithWidthAndHeight");
+            ax::Color arg4;
+            ok &=luaval_to_color(tolua_S, 6, &arg4, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
             bool ret = obj->initWithWidthAndHeight(arg0, arg1, arg2, arg3, arg4);
@@ -85328,7 +85304,91 @@ int lua_ax_base_RenderTexture_initWithWidthAndHeight(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.RenderTexture:initWithWidthAndHeight",argc, 3);
+    do {
+        if (argc == 4) {
+            int arg0;
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:initWithWidthAndHeight");
+
+            if (!ok) { break; }
+            int arg1;
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:initWithWidthAndHeight");
+
+            if (!ok) { break; }
+            ax::rhi::PixelFormat arg2;
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:initWithWidthAndHeight");
+
+            if (!ok) { break; }
+            ax::rhi::PixelFormat arg3;
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.RenderTexture:initWithWidthAndHeight");
+
+            if (!ok) { break; }
+            bool ret = obj->initWithWidthAndHeight(arg0, arg1, arg2, arg3);
+            tolua_pushboolean(tolua_S,(bool)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do {
+        if (argc == 5) {
+            int arg0;
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:initWithWidthAndHeight");
+
+            if (!ok) { break; }
+            int arg1;
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:initWithWidthAndHeight");
+
+            if (!ok) { break; }
+            ax::rhi::PixelFormat arg2;
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:initWithWidthAndHeight");
+
+            if (!ok) { break; }
+            ax::rhi::PixelFormat arg3;
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.RenderTexture:initWithWidthAndHeight");
+
+            if (!ok) { break; }
+            bool arg4;
+            ok &= luaval_to_boolean(tolua_S, 6, &arg4, "ax.RenderTexture:initWithWidthAndHeight");
+
+            if (!ok) { break; }
+            bool ret = obj->initWithWidthAndHeight(arg0, arg1, arg2, arg3, arg4);
+            tolua_pushboolean(tolua_S,(bool)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do {
+        if (argc == 6) {
+            int arg0;
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:initWithWidthAndHeight");
+
+            if (!ok) { break; }
+            int arg1;
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:initWithWidthAndHeight");
+
+            if (!ok) { break; }
+            ax::rhi::PixelFormat arg2;
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:initWithWidthAndHeight");
+
+            if (!ok) { break; }
+            ax::rhi::PixelFormat arg3;
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.RenderTexture:initWithWidthAndHeight");
+
+            if (!ok) { break; }
+            bool arg4;
+            ok &= luaval_to_boolean(tolua_S, 6, &arg4, "ax.RenderTexture:initWithWidthAndHeight");
+
+            if (!ok) { break; }
+            ax::Color arg5;
+            ok &=luaval_to_color(tolua_S, 7, &arg5, "ax.RenderTexture:initWithWidthAndHeight");
+
+            if (!ok) { break; }
+            bool ret = obj->initWithWidthAndHeight(arg0, arg1, arg2, arg3, arg4, arg5);
+            tolua_pushboolean(tolua_S,(bool)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.RenderTexture:initWithWidthAndHeight",argc, 6);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -85465,6 +85525,30 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
             if (!ok) { break; }
             bool arg4;
             ok &= luaval_to_boolean(tolua_S, 6, &arg4, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            ax::RenderTexture* ret = ax::RenderTexture::create(arg0, arg1, arg2, arg3, arg4);
+            object_to_luaval<ax::RenderTexture>(tolua_S, "ax.RenderTexture",(ax::RenderTexture*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do {
+        if (argc == 5)
+        {
+            int arg0;
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            int arg1;
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            ax::rhi::PixelFormat arg2;
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            bool arg3;
+            ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            ax::Color arg4;
+            ok &=luaval_to_color(tolua_S, 6, &arg4, "ax.RenderTexture:create");
             if (!ok) { break; }
             ax::RenderTexture* ret = ax::RenderTexture::create(arg0, arg1, arg2, arg3, arg4);
             object_to_luaval<ax::RenderTexture>(tolua_S, "ax.RenderTexture",(ax::RenderTexture*)ret);
