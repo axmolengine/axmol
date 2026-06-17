@@ -19,11 +19,6 @@
 #include "PhysicsDebugNode.h"
 #include "axmol//physics/2d/PhysicsUtility2D.h"
 
-#if defined(_WIN32)
-#    pragma push_macro("TRANSPARENT")
-#    undef TRANSPARENT
-#endif
-
 NS_AX_EXT_BEGIN
 
 /// Draw a closed polygon provided in CCW order.

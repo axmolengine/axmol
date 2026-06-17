@@ -34,11 +34,6 @@
 #include "axmol/scene/Camera.h"
 #include "axmol/3d/MeshRenderer.h"
 
-#if defined(_WIN32)
-#    pragma push_macro("TRANSPARENT")
-#    undef TRANSPARENT
-#endif
-
 namespace ax
 {
 

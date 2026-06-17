@@ -27,11 +27,6 @@ THE SOFTWARE.
 
 #include "axmol/math/Vec4.h"
 
-#if defined(_WIN32)
-#    pragma push_macro("TRANSPARENT")
-#    undef TRANSPARENT
-#endif
-
 NS_AX_MATH_BEGIN
 
 struct Color32;
