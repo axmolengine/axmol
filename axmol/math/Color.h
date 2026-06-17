@@ -268,7 +268,3 @@ inline Color32::operator Color() const
 }
 
 NS_AX_MATH_END
-
-#if defined(_WIN32)
-#    pragma pop_macro("TRANSPARENT")
-#endif

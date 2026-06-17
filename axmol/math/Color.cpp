@@ -310,7 +310,3 @@ Color32 HSL::toColor32() const
 }
 
 NS_AX_MATH_END
-
-#if defined(_WIN32)
-#    pragma pop_macro("TRANSPARENT")
-#endif

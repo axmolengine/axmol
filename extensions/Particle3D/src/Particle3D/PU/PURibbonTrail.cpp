@@ -421,7 +421,3 @@ void PURibbonTrail::update(float deltaTime)
 }
 
 }  // namespace ax
-
-#if defined(_WIN32)
-#    pragma pop_macro("TRANSPARENT")
-#endif

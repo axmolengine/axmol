@@ -182,7 +182,3 @@ void PhysicsDebugNode::setBuiltinDrawFuncs()
 }
 
 NS_AX_EXT_END
-
-#if defined(_WIN32)
-#    pragma pop_macro("TRANSPARENT")
-#endif
