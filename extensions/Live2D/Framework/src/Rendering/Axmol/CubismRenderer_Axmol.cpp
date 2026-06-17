@@ -1716,7 +1716,7 @@ CubismRenderer_Axmol::~CubismRenderer_Axmol()
     if (_windowResizeListener)
     {
         ax::Director::getInstance()->getEventDispatcher()->removeEventListener(_windowResizeListener);
-        _windowResizeListener = NULL;
+        _windowResizeListener = nullptr;
     }
 #endif
 

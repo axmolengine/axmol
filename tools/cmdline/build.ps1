@@ -126,10 +126,6 @@ if (!$cmake_target) {
         }
     }
 
-    # if(!$options.t) {
-    #     $options.t = @(@($proj_name, 'cpp-tests')[$is_axmol_engine])
-    # }
-
     $cmake_target = $options.t[0]
 }
 
