@@ -472,9 +472,7 @@ void Repeat::stop()
 void Repeat::update(float dt)
 {
     if (isDone())
-    {
         return;
-    }
 
     if (dt >= _nextDt)
     {
