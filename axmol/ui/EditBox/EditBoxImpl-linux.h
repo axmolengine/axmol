@@ -81,10 +81,11 @@ public:
 
     void* getNativeInputEntry() const { return _inputEntry; }
     std::string_view getInputInitialValue() const { return _inputInitialValue; }
+
 private:
     void doAnimationWhenKeyboardMove(float duration, float distance) override {}
-    void* _inputDialog{nullptr}; // The GTKDialog
-    void* _inputEntry{nullptr}; // the GTKEntry
+    void* _inputDialog{nullptr};  // The GTKDialog
+    void* _inputEntry{nullptr};   // the GTKEntry
     std::string _inputInitialValue;
 };
 
