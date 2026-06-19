@@ -49,15 +49,13 @@ if (-not $files) {
 
 Write-Output "=== Start formatting files with clang-format ==="
 
-$runas_ci = "$env:GITHUB_ACTIONS" -eq 'true'
 $batchSize = 100
 $formated_cnt = 0
 for ($i = 0; $i -lt $files.Count; $i += $batchSize) {
     $end = [Math]::Min($i + $batchSize - 1, $files.Count - 1)
     $batch = $files[$i..$end]
-    if (-not $runas_ci) {
-        Write-Output "Formatting $($batch.Count) files starting from index $i ..."
-    }
+
+    Write-Output "Formatting $($batch.Count) files starting from index $i ..."
     &$tool_cmd -i $batch
     $formated_cnt += $batch.Count
 }
