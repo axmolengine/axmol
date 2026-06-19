@@ -74,6 +74,21 @@ typedef enum
 
 typedef enum
 {
+    GTK_RESPONSE_NONE         = -1,
+    GTK_RESPONSE_REJECT       = -2,
+    GTK_RESPONSE_ACCEPT       = -3,
+    GTK_RESPONSE_DELETE_EVENT = -4,
+    GTK_RESPONSE_OK           = -5,
+    GTK_RESPONSE_CANCEL       = -6,
+    GTK_RESPONSE_CLOSE        = -7,
+    GTK_RESPONSE_YES          = -8,
+    GTK_RESPONSE_NO           = -9,
+    GTK_RESPONSE_APPLY        = -10,
+    GTK_RESPONSE_HELP         = -11
+} GtkResponseType;
+
+typedef enum
+{
     GTK_WIN_POS_NONE,
     GTK_WIN_POS_CENTER,
     GTK_WIN_POS_MOUSE,
@@ -96,6 +111,7 @@ typedef struct _GtkTooltip GtkTooltip;
 typedef struct _GtkWidget GtkWidget;
 typedef struct _GtkWidgetPath GtkWidgetPath;
 typedef struct _GtkWindow GtkWindow;
+typedef struct _GdkEventFocus GdkEventFocus;
 
 typedef struct _GtkDialog GtkDialog;
 typedef struct _GtkDialogPrivate GtkDialogPrivate;
@@ -115,6 +131,7 @@ typedef struct _GClosure GClosure;
 typedef struct _GMainContext GMainContext;
 
 typedef struct _GtkEntryBuffer GtkEntryBuffer;
+typedef struct _GtkEditable GtkEditable;
 }
 
 #    if defined(__has_attribute) && __has_attribute(__const__)
@@ -159,10 +176,14 @@ static gint (*gtk_dialog_run)(GtkDialog* dialog);
 static gboolean (*g_main_context_iteration)(GMainContext* context, gboolean may_block);
 static GTypeInstance* (*g_type_check_instance_cast)(GTypeInstance* instance, GType iface_type);
 static GtkEntryBuffer* (*gtk_entry_get_buffer)(GtkEntry* entry);
+static void (*gtk_entry_set_max_length)(GtkEntry* entry, gint max_chars);
 static void (*gtk_entry_buffer_set_text)(GtkEntryBuffer* buffer, const char* text, int n_chars);
 static gsize (*gtk_entry_buffer_get_bytes)(GtkEntryBuffer* buffer);  // text size in bytes
 // static guint (*gtk_entry_buffer_get_length)(GtkEntryBuffer* buffer);  // text size in utf-8 chars
 static const gchar* (*gtk_entry_buffer_get_text)(GtkEntryBuffer* buffer);
+static GType (*gtk_widget_get_type)(void);
+static GType (*gtk_editable_get_type)(void);
+static void (*gtk_entry_set_visibility)(GtkEntry* entry, gboolean visible);
 
 /* --- implementation bits --- */
 #    if defined(G_DISABLE_CAST_CHECKS) || defined(__OPTIMIZE__)
@@ -173,45 +194,52 @@ static const gchar* (*gtk_entry_buffer_get_text)(GtkEntryBuffer* buffer);
 #        define _G_TYPE_CCC(cp, gt, ct) ((ct*)(void*)g_type_check_class_cast((GTypeClass*)cp, gt))
 #    endif
 
+#    define GTK_TYPE_EDITABLE (gtk_editable_get_type())
+#    define GTK_EDITABLE(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_EDITABLE, GtkEditable))
+
 #    define G_TYPE_CHECK_INSTANCE_CAST(instance, g_type, c_type) (_G_TYPE_CIC((instance), (g_type), c_type))
 #    define G_TYPE_CHECK_INSTANCE_CAST(instance, g_type, c_type) (_G_TYPE_CIC((instance), (g_type), c_type))
 
 #    define GTK_TYPE_DIALOG                                      (gtk_dialog_get_type())
-#    define GTK_DIALOG(obj)                                      (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_DIALOG, GtkDialog))
-#    define GTK_DIALOG_CLASS(klass)                              (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_DIALOG, GtkDialogClass))
-#    define GTK_IS_DIALOG(obj)                                   (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_DIALOG))
-#    define GTK_IS_DIALOG_CLASS(klass)                           (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_DIALOG))
-#    define GTK_DIALOG_GET_CLASS(obj)                            (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_DIALOG, GtkDialogClass))
+#    define GTK_DIALOG(obj)               (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_DIALOG, GtkDialog))
+#    define GTK_DIALOG_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_DIALOG, GtkDialogClass))
+#    define GTK_IS_DIALOG(obj)            (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_DIALOG))
+#    define GTK_IS_DIALOG_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_DIALOG))
+#    define GTK_DIALOG_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_DIALOG, GtkDialogClass))
 
-#    define GTK_TYPE_CONTAINER                                   (gtk_container_get_type())
-#    define GTK_CONTAINER(obj)                                   (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_CONTAINER, GtkContainer))
-#    define GTK_CONTAINER_CLASS(klass)                           (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_CONTAINER, GtkContainerClass))
-#    define GTK_IS_CONTAINER(obj)                                (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_CONTAINER))
-#    define GTK_IS_CONTAINER_CLASS(klass)                        (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_CONTAINER))
-#    define GTK_CONTAINER_GET_CLASS(obj)                         (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_CONTAINER, GtkContainerClass))
+#    define GTK_TYPE_CONTAINER            (gtk_container_get_type())
+#    define GTK_CONTAINER(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_CONTAINER, GtkContainer))
+#    define GTK_CONTAINER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_CONTAINER, GtkContainerClass))
+#    define GTK_IS_CONTAINER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_CONTAINER))
+#    define GTK_IS_CONTAINER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_CONTAINER))
+#    define GTK_CONTAINER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_CONTAINER, GtkContainerClass))
 
-#    define GTK_TYPE_ENTRY                                       (gtk_entry_get_type())
-#    define GTK_ENTRY(obj)                                       (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_ENTRY, GtkEntry))
-#    define GTK_ENTRY_CLASS(klass)                               (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_ENTRY, GtkEntryClass))
-#    define GTK_IS_ENTRY(obj)                                    (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_ENTRY))
-#    define GTK_IS_ENTRY_CLASS(klass)                            (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_ENTRY))
-#    define GTK_ENTRY_GET_CLASS(obj)                             (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_ENTRY, GtkEntryClass))
+#    define GTK_TYPE_ENTRY                (gtk_entry_get_type())
+#    define GTK_ENTRY(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_ENTRY, GtkEntry))
+#    define GTK_ENTRY_CLASS(klass)        (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_ENTRY, GtkEntryClass))
+#    define GTK_IS_ENTRY(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_ENTRY))
+#    define GTK_IS_ENTRY_CLASS(klass)     (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_ENTRY))
+#    define GTK_ENTRY_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_ENTRY, GtkEntryClass))
 
-#    define GTK_TYPE_WINDOW                                      (gtk_window_get_type())
-#    define GTK_WINDOW(obj)                                      (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_WINDOW, GtkWindow))
-#    define GTK_WINDOW_CLASS(klass)                              (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_WINDOW, GtkWindowClass))
-#    define GTK_IS_WINDOW(obj)                                   (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_WINDOW))
-#    define GTK_IS_WINDOW_CLASS(klass)                           (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_WINDOW))
-#    define GTK_WINDOW_GET_CLASS(obj)                            (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_WINDOW, GtkWindowClass))
+#    define GTK_TYPE_WINDOW               (gtk_window_get_type())
+#    define GTK_WINDOW(obj)               (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_WINDOW, GtkWindow))
+#    define GTK_WINDOW_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_WINDOW, GtkWindowClass))
+#    define GTK_IS_WINDOW(obj)            (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_WINDOW))
+#    define GTK_IS_WINDOW_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_WINDOW))
+#    define GTK_WINDOW_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_WINDOW, GtkWindowClass))
 
+#    define GTK_TYPE_WIDGET               (gtk_widget_get_type())
+#    define GTK_WIDGET(widget)            (G_TYPE_CHECK_INSTANCE_CAST((widget), GTK_TYPE_WIDGET, GtkWidget))
 #    define g_signal_connect(instance, detailed_signal, c_handler, data) \
         g_signal_connect_data((instance), (detailed_signal), (c_handler), (data), nullptr, (GConnectFlags)0)
 
-// destroy dialog when lost focus
-static void dialogFocusOutCallback(GtkWidget* widget, gpointer user_data)
-{
-    gtk_widget_destroy(widget);
-}
+#    define GDK_DLSYM(func)                                              \
+        do                                                               \
+        {                                                                \
+            func = reinterpret_cast<decltype(func)>(dlsym(gdk3, #func)); \
+            if (!func)                                                   \
+                throw std::runtime_error(#func);                         \
+        } while (0)
 
 #    define GTK_DLSYM(func)                                              \
         do                                                               \
@@ -252,15 +280,19 @@ static bool load_gtk3()
                 GTK_DLSYM(gtk_window_set_type_hint);
                 GTK_DLSYM(gtk_window_set_position);
                 GTK_DLSYM(gtk_widget_show_all);
+                GTK_DLSYM(gtk_widget_get_type);
                 GTK_DLSYM(gtk_dialog_run);
                 // GTK_DLSYM(gtk_entry_get_text);
                 GTK_DLSYM(gtk_entry_get_buffer);
                 GTK_DLSYM(gtk_entry_buffer_set_text);
+                GTK_DLSYM(gtk_entry_set_max_length);
                 GTK_DLSYM(gtk_entry_buffer_get_bytes);
                 // GTK_DLSYM(gtk_entry_buffer_get_length);
                 GTK_DLSYM(gtk_entry_buffer_get_text);
                 GTK_DLSYM(g_main_context_iteration);
                 GTK_DLSYM(g_type_check_instance_cast);
+                GTK_DLSYM(gtk_editable_get_type);
+                GTK_DLSYM(gtk_entry_set_visibility);
             }
             catch (const std::exception& ex)
             {
@@ -274,7 +306,58 @@ static bool load_gtk3()
     return !!gtk3;
 }
 
-static void showModalInputDialog(ax::ui::EditBoxImplLinux* delegate)
+// Fixed focus-out-event signature (must return gboolean and take GdkEvent*).
+static gboolean on_dialog_lost_focus(GtkWidget* widget, GdkEventFocus* event, gpointer user_data)
+{
+    // Destroy widget on focus out, which automatically triggers the "destroy" signal bound below.
+    gtk_widget_destroy(widget);
+    return 0;  // Return FALSE to propagate the event further.
+}
+
+// Signal callback for button clicks (responses).
+static void on_dialog_response(GtkDialog* dialog, gint response_id, ax::ui::EditBoxImplLinux* context)
+{
+    if (context->isDialogRunning(dialog))
+    {
+        if (response_id == GTK_RESPONSE_OK)  // "OK" button was clicked.
+        {
+            GtkEntryBuffer* entryBuffer = gtk_entry_get_buffer(GTK_ENTRY(context->getNativeInputEntry()));
+            auto pszText                = gtk_entry_buffer_get_text(entryBuffer);
+            auto sizeInBytes            = static_cast<size_t>(gtk_entry_buffer_get_bytes(entryBuffer));
+            std::string_view entryLineNew{pszText, sizeInBytes};
+            context->editBoxEditingDidEnd(entryLineNew);
+        }
+        else
+        {
+            // Other cases (e.g., ESC pressed to cancel).
+            context->editBoxEditingDidEnd(context->getInputInitialValue());
+        }
+    }
+
+    // Destroy the dialog after handling the response.
+    gtk_widget_destroy(GTK_WIDGET(dialog));
+}
+
+// Signal callback for dialog destruction (for memory cleanup and unexpected closures).
+static void on_dialog_destroy(GtkWidget* widget, ax::ui::EditBoxImplLinux* context)
+{
+    // If the window was destroyed directly (e.g., focus lost), ensure delegate is called once.
+    if (context->isDialogRunning(GTK_DIALOG(widget)))
+    {
+        context->nativeDialogEnd();
+    }
+}
+
+static void on_entry_text_changed(GtkWidget* editable, ax::ui::EditBoxImplLinux* context)
+{
+    GtkEntryBuffer* entryBuffer = gtk_entry_get_buffer(GTK_ENTRY(context->getNativeInputEntry()));
+    auto pszText                = gtk_entry_buffer_get_text(entryBuffer);
+    auto sizeInBytes            = static_cast<size_t>(gtk_entry_buffer_get_bytes(entryBuffer));
+    std::string_view entryLineNew{pszText, sizeInBytes};
+    context->editBoxEditingChanged(entryLineNew);
+}
+
+static void showInputDialog(ax::ui::EditBoxImplLinux* context)
 {
     if (!load_gtk3())
     {
@@ -291,37 +374,33 @@ static void showModalInputDialog(ax::ui::EditBoxImplLinux* delegate)
     contentArea = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
 
     gtk_container_add(GTK_CONTAINER(contentArea), entry);
-    gtk_dialog_add_button(GTK_DIALOG(dialog), "OK", 0);
+    gtk_dialog_add_button(GTK_DIALOG(dialog), "OK", GTK_RESPONSE_OK);
+    if (context->getInputFlag() == ax::ui::EditBox::InputFlag::PASSWORD)
+        gtk_entry_set_visibility(GTK_ENTRY(entry), 0);
 
     GtkEntryBuffer* entryBuffer = gtk_entry_get_buffer(GTK_ENTRY(entry));
 
-    auto entryLine = delegate->getText();
+    auto entryLine = context->getInputInitialValue();
     if (!entryLine.empty())
         gtk_entry_buffer_set_text(entryBuffer, entryLine.data(), ax::text_utils::countUTF8Chars(entryLine));
 
-    g_signal_connect(dialog, "focus-out-event", G_CALLBACK(dialogFocusOutCallback), nullptr);
+    gtk_entry_set_max_length(GTK_ENTRY(entry), context->getMaxLength());
+
+    // Bind signals.
+    g_signal_connect(dialog, "response", G_CALLBACK(on_dialog_response), context);
+    g_signal_connect(dialog, "destroy", G_CALLBACK(on_dialog_destroy), context);
+    g_signal_connect(dialog, "focus-out-event", G_CALLBACK(on_dialog_lost_focus), nullptr);
+
+    g_signal_connect(GTK_EDITABLE(entry), "changed", G_CALLBACK(on_entry_text_changed), context);
+
     gtk_window_set_keep_above(GTK_WINDOW(dialog), true);
-    gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_MENU);
+    gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
     gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
+
+    // Show the dialog.
     gtk_widget_show_all(dialog);
 
-    std::string_view entryLineNew;
-    gint result = gtk_dialog_run(GTK_DIALOG(dialog));
-    if (result == 0)
-    {
-        auto pszText     = gtk_entry_buffer_get_text(entryBuffer);
-        auto sizeInBytes = static_cast<size_t>(gtk_entry_buffer_get_bytes(entryBuffer));
-        std::string_view entryLineNew{pszText, sizeInBytes};
-        delegate->editBoxEditingDidEnd(entryLineNew);
-    }
-    else
-    {
-        delegate->editBoxEditingDidEnd(entryLine);
-    }
-
-    gtk_widget_destroy(dialog);
-    while (g_main_context_iteration(nullptr, false))
-        ;
+    context->nativeDalogShow(dialog, entry);
 }
 
 namespace ax
@@ -346,7 +425,38 @@ bool EditBoxImplLinux::isEditing()
 
 void EditBoxImplLinux::nativeOpenKeyboard()
 {
-    showModalInputDialog(this);
+    if (!_inputDialog) {
+        _inputInitialValue = getText();
+        showInputDialog(this);
+    }
+}
+
+void EditBoxImplLinux::updateNativeFrame(const Rect& /*rect*/) {}
+
+void EditBoxImplLinux::pollEvents()
+{
+    if (_inputDialog)
+        g_main_context_iteration(nullptr, false);
+}
+
+void EditBoxImplLinux::nativeDalogShow(void* dlg, void* entry)
+{
+    _inputDialog = dlg;
+    _inputEntry  = entry;
+}
+
+void EditBoxImplLinux::nativeDialogEnd()
+{
+    if (_inputDialog)
+    {
+        while (g_main_context_iteration(nullptr, false))
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        }
+
+        _inputDialog = nullptr;
+        _inputEntry  = nullptr;
+    }
 }
 
 }  // namespace ui

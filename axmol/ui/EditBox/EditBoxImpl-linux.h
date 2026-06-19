@@ -67,14 +67,25 @@ public:
     void setNativeText(std::string_view text) override {};
     void setNativePlaceHolder(std::string_view text) override {};
     void setNativeVisible(bool visible) override {};
-    void updateNativeFrame(const Rect& rect) override {};
+    void updateNativeFrame(const Rect& rect) override;
+    void pollEvents() override;
     std::string_view getNativeDefaultFontName() override { return ""sv; };
     void nativeOpenKeyboard() override;
     void nativeCloseKeyboard() override {};
     void setNativeMaxLength(int maxLength) override {};
 
+    bool isDialogRunning(void* dlg) { return dlg != nullptr && dlg == _inputDialog; }
+
+    void nativeDalogShow(void* dlg, void* entry);
+    void nativeDialogEnd();
+
+    void* getNativeInputEntry() const { return _inputEntry; }
+    std::string_view getInputInitialValue() const { return _inputInitialValue; }
 private:
     void doAnimationWhenKeyboardMove(float duration, float distance) override {}
+    void* _inputDialog{nullptr}; // The GTKDialog
+    void* _inputEntry{nullptr}; // the GTKEntry
+    std::string _inputInitialValue;
 };
 
 }  // namespace ui

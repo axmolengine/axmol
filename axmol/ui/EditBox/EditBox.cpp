@@ -39,7 +39,7 @@ static const int NORMAL_RENDERER_Z   = (-2);
 static const int PRESSED_RENDERER_Z  = (-2);
 static const int DISABLED_RENDERER_Z = (-2);
 
-static const float CHECK_EDITBOX_POSITION_INTERVAL = 0.1f;
+static const float CHECK_EDITBOX_POLL_EVENTS_INTERVAL = 0.1f;
 
 EditBox::EditBox()
     : _normalTextureSize(_contentSize), _pressedTextureSize(_contentSize), _disabledTextureSize(_contentSize)
@@ -795,8 +795,9 @@ void EditBox::onEnter()
     {
         _editBoxImpl->onEnter();
     }
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-    this->schedule(AX_SCHEDULE_SELECTOR(EditBox::updatePosition), CHECK_EDITBOX_POSITION_INTERVAL);
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+    if (Director::getInstance()->getRenderView()->getWindowPlatform() == WindowPlatform::X11)
+        this->schedule(AX_SCHEDULE_SELECTOR(EditBox::pollEvents), 0);
 #endif
 
 #ifdef AX_PLATFORM_PC
@@ -815,11 +816,11 @@ void EditBox::onEnter()
 #endif
 }
 
-void EditBox::updatePosition(float dt)
+void EditBox::pollEvents(float dt)
 {
     if (_editBoxImpl)
     {
-        _editBoxImpl->updatePosition(dt);
+        _editBoxImpl->pollEvents();
     }
 }
 

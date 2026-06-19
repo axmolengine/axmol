@@ -90,9 +90,9 @@ public:
     virtual void setGlobalZOrder(float globalZOrder) = 0;
 
     /**
-     * check the editbox's position, update it when needed
+     * poll the editbox's native events per frame if needed
      */
-    virtual void updatePosition(float dt) {};
+    virtual void pollEvents() {};
     /**
      * @lua NA
      */

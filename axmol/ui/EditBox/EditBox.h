@@ -656,7 +656,7 @@ protected:
     void updateLayout() override;
 
 protected:
-    void updatePosition(float dt);
+    void pollEvents(float dt);
 
     Scale9Sprite* _normalRenderer   = nullptr;
     Scale9Sprite* _pressedRenderer  = nullptr;

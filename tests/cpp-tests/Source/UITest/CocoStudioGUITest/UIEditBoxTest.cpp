@@ -153,7 +153,7 @@ void UIEditBoxTest::editBoxEditingDidEndWithAction(ax::ui::EditBox* editBox,
 void UIEditBoxTest::editBoxTextChanged(ax::ui::EditBox* editBox, std::string_view text)
 {
     AXLOGD("editBox {} TextChanged, text: {}", fmt::ptr(editBox), text);
-    editBox->setText(text.data());
+    editBox->setText(text);
 }
 
 void UIEditBoxTest::editBoxReturn(ui::EditBox* editBox)

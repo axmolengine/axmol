@@ -343,8 +343,15 @@ void EditBoxImplCommon::onEnter(void)
 void EditBoxImplCommon::openKeyboard()
 {
     _editBox->setBrightStyle(Widget::BrightStyle::HIGHLIGHT);
+
+    // Due to Linux window system limitations, input fields cannot be embedded
+    // as child windows inside the Axmol GLFW engine window. Therefore, we do
+    // not hide the engine‑drawn label here.
+#if AX_TARGET_PLATFORM != AX_PLATFORM_LINUX
     _label->setVisible(false);
     _labelPlaceHolder->setVisible(false);
+#endif
+
     _editingMode = true;
     this->setNativeVisible(true);
     this->nativeOpenKeyboard();
