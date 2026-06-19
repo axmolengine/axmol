@@ -99,12 +99,12 @@ typedef enum
 
 typedef enum
 {
-  G_SIGNAL_MATCH_ID	   = 1 << 0,
-  G_SIGNAL_MATCH_DETAIL	   = 1 << 1,
-  G_SIGNAL_MATCH_CLOSURE   = 1 << 2,
-  G_SIGNAL_MATCH_FUNC	   = 1 << 3,
-  G_SIGNAL_MATCH_DATA	   = 1 << 4,
-  G_SIGNAL_MATCH_UNBLOCKED = 1 << 5
+    G_SIGNAL_MATCH_ID        = 1 << 0,
+    G_SIGNAL_MATCH_DETAIL    = 1 << 1,
+    G_SIGNAL_MATCH_CLOSURE   = 1 << 2,
+    G_SIGNAL_MATCH_FUNC      = 1 << 3,
+    G_SIGNAL_MATCH_DATA      = 1 << 4,
+    G_SIGNAL_MATCH_UNBLOCKED = 1 << 5
 } GSignalMatchType;
 
 typedef struct _GtkAdjustment GtkAdjustment;
@@ -179,13 +179,13 @@ static gulong (*g_signal_connect_data)(gpointer instance,
                                        gpointer data,
                                        GClosureNotify destroy_data,
                                        GConnectFlags connect_flags);
-static guint (*g_signal_handlers_disconnect_matched) (gpointer		  instance,
-					       int	  mask,
-					       guint		  signal_id,
-					       GQuark		  detail,
-					       GClosure		 *closure,
-					       gpointer		  func,
-					       gpointer		  data);
+static guint (*g_signal_handlers_disconnect_matched)(gpointer instance,
+                                                     int mask,
+                                                     guint signal_id,
+                                                     GQuark detail,
+                                                     GClosure* closure,
+                                                     gpointer func,
+                                                     gpointer data);
 static void (*gtk_window_set_type_hint)(GtkWindow* window, GdkWindowTypeHint hint);
 static void (*gtk_window_set_position)(GtkWindow* window, GtkWindowPosition position);
 static void (*gtk_widget_show_all)(GtkWidget* widget);
@@ -212,42 +212,42 @@ static void (*gtk_entry_set_visibility)(GtkEntry* entry, gboolean visible);
 #        define _G_TYPE_CCC(cp, gt, ct) ((ct*)(void*)g_type_check_class_cast((GTypeClass*)cp, gt))
 #    endif
 
-#    define GTK_TYPE_EDITABLE (gtk_editable_get_type())
-#    define GTK_EDITABLE(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_EDITABLE, GtkEditable))
+#    define GTK_TYPE_EDITABLE                                    (gtk_editable_get_type())
+#    define GTK_EDITABLE(obj)                                    (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_EDITABLE, GtkEditable))
 
 #    define G_TYPE_CHECK_INSTANCE_CAST(instance, g_type, c_type) (_G_TYPE_CIC((instance), (g_type), c_type))
 #    define G_TYPE_CHECK_INSTANCE_CAST(instance, g_type, c_type) (_G_TYPE_CIC((instance), (g_type), c_type))
 
 #    define GTK_TYPE_DIALOG                                      (gtk_dialog_get_type())
-#    define GTK_DIALOG(obj)               (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_DIALOG, GtkDialog))
-#    define GTK_DIALOG_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_DIALOG, GtkDialogClass))
-#    define GTK_IS_DIALOG(obj)            (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_DIALOG))
-#    define GTK_IS_DIALOG_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_DIALOG))
-#    define GTK_DIALOG_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_DIALOG, GtkDialogClass))
+#    define GTK_DIALOG(obj)                                      (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_DIALOG, GtkDialog))
+#    define GTK_DIALOG_CLASS(klass)                              (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_DIALOG, GtkDialogClass))
+#    define GTK_IS_DIALOG(obj)                                   (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_DIALOG))
+#    define GTK_IS_DIALOG_CLASS(klass)                           (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_DIALOG))
+#    define GTK_DIALOG_GET_CLASS(obj)                            (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_DIALOG, GtkDialogClass))
 
-#    define GTK_TYPE_CONTAINER            (gtk_container_get_type())
-#    define GTK_CONTAINER(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_CONTAINER, GtkContainer))
-#    define GTK_CONTAINER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_CONTAINER, GtkContainerClass))
-#    define GTK_IS_CONTAINER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_CONTAINER))
-#    define GTK_IS_CONTAINER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_CONTAINER))
-#    define GTK_CONTAINER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_CONTAINER, GtkContainerClass))
+#    define GTK_TYPE_CONTAINER                                   (gtk_container_get_type())
+#    define GTK_CONTAINER(obj)                                   (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_CONTAINER, GtkContainer))
+#    define GTK_CONTAINER_CLASS(klass)                           (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_CONTAINER, GtkContainerClass))
+#    define GTK_IS_CONTAINER(obj)                                (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_CONTAINER))
+#    define GTK_IS_CONTAINER_CLASS(klass)                        (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_CONTAINER))
+#    define GTK_CONTAINER_GET_CLASS(obj)                         (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_CONTAINER, GtkContainerClass))
 
-#    define GTK_TYPE_ENTRY                (gtk_entry_get_type())
-#    define GTK_ENTRY(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_ENTRY, GtkEntry))
-#    define GTK_ENTRY_CLASS(klass)        (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_ENTRY, GtkEntryClass))
-#    define GTK_IS_ENTRY(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_ENTRY))
-#    define GTK_IS_ENTRY_CLASS(klass)     (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_ENTRY))
-#    define GTK_ENTRY_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_ENTRY, GtkEntryClass))
+#    define GTK_TYPE_ENTRY                                       (gtk_entry_get_type())
+#    define GTK_ENTRY(obj)                                       (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_ENTRY, GtkEntry))
+#    define GTK_ENTRY_CLASS(klass)                               (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_ENTRY, GtkEntryClass))
+#    define GTK_IS_ENTRY(obj)                                    (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_ENTRY))
+#    define GTK_IS_ENTRY_CLASS(klass)                            (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_ENTRY))
+#    define GTK_ENTRY_GET_CLASS(obj)                             (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_ENTRY, GtkEntryClass))
 
-#    define GTK_TYPE_WINDOW               (gtk_window_get_type())
-#    define GTK_WINDOW(obj)               (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_WINDOW, GtkWindow))
-#    define GTK_WINDOW_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_WINDOW, GtkWindowClass))
-#    define GTK_IS_WINDOW(obj)            (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_WINDOW))
-#    define GTK_IS_WINDOW_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_WINDOW))
-#    define GTK_WINDOW_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_WINDOW, GtkWindowClass))
+#    define GTK_TYPE_WINDOW                                      (gtk_window_get_type())
+#    define GTK_WINDOW(obj)                                      (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_WINDOW, GtkWindow))
+#    define GTK_WINDOW_CLASS(klass)                              (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_WINDOW, GtkWindowClass))
+#    define GTK_IS_WINDOW(obj)                                   (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_WINDOW))
+#    define GTK_IS_WINDOW_CLASS(klass)                           (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_WINDOW))
+#    define GTK_WINDOW_GET_CLASS(obj)                            (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_WINDOW, GtkWindowClass))
 
-#    define GTK_TYPE_WIDGET               (gtk_widget_get_type())
-#    define GTK_WIDGET(widget)            (G_TYPE_CHECK_INSTANCE_CAST((widget), GTK_TYPE_WIDGET, GtkWidget))
+#    define GTK_TYPE_WIDGET                                      (gtk_widget_get_type())
+#    define GTK_WIDGET(widget)                                   (G_TYPE_CHECK_INSTANCE_CAST((widget), GTK_TYPE_WIDGET, GtkWidget))
 #    define g_signal_connect(instance, detailed_signal, c_handler, data) \
         g_signal_connect_data((instance), (detailed_signal), (c_handler), (data), nullptr, (GConnectFlags)0)
 #    define g_signal_handlers_disconnect_by_data(instance, data) \
@@ -450,7 +450,7 @@ EditBoxImplLinux::~EditBoxImplLinux()
 
         gtk_widget_destroy(GTK_WIDGET(_inputDialog));
         _inputDialog = nullptr;
-        _inputEntry = nullptr;
+        _inputEntry  = nullptr;
     }
 }
 
