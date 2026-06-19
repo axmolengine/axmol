@@ -26,8 +26,7 @@
 
 #import "axmol/ui/EditBox/Mac/TextFieldFormatter.h"
 
-@implementation AxmolTextFieldFormatter
-{
+@implementation AxmolTextFieldFormatter {
 }
 
 @synthesize maximumLength = _maximumLength;
@@ -35,34 +34,35 @@
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _maximumLength = INT_MAX;
     }
 
     return self;
 }
 
-- (NSString *)stringForObjectValue:(id)object
+- (NSString*)stringForObjectValue:(id)object
 {
     return object;
 }
 
-- (BOOL)getObjectValue:(id *)object forString:(NSString *)string errorDescription:(NSString **)error
+- (BOOL)getObjectValue:(id*)object forString:(NSString*)string errorDescription:(NSString**)error
 {
     *object = string;
     return YES;
 }
 
-- (BOOL)isPartialStringValid:(NSString **)partialStringPtr
+- (BOOL)isPartialStringValid:(NSString**)partialStringPtr
        proposedSelectedRange:(NSRangePointer)proposedSelRangePtr
-              originalString:(NSString *)origString
+              originalString:(NSString*)origString
        originalSelectedRange:(NSRange)origSelRange
-            errorDescription:(NSString **)error
+            errorDescription:(NSString**)error
 {
     return (*partialStringPtr).length <= self.maximumLength;
 }
 
-- (NSAttributedString *)attributedStringForObjectValue:(id)anObject withDefaultAttributes:(NSDictionary *)attributes
+- (NSAttributedString*)attributedStringForObjectValue:(id)anObject withDefaultAttributes:(NSDictionary*)attributes
 {
     return nil;
 }

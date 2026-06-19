@@ -2,6 +2,8 @@
 
 param($ver = '')
 
+$ErrorActionPreference = "Stop"
+
 if ($ver) {
     $Script:tool_cmd = "clang-format-$ver"
 }
@@ -28,7 +30,7 @@ $excludes = @(
     'tests/live2d-tests',
     'extensions/**/*_generated.h'
 )
-$extensions = @('*.h', '*.hpp', '*.cpp', '*.c', '.m', '*.mm')
+$extensions = @('*.h', '*.hpp', '*.cpp', '*.c', '*.m', '*.mm')
 
 # Build regex from exclude patterns (normalised to full path)
 $excludeRegex = $excludes | ForEach-Object {
@@ -48,18 +50,18 @@ if (-not $files) {
 Write-Output "=== Start formatting files with clang-format ==="
 
 $runas_ci = "$env:GITHUB_ACTIONS" -eq 'true'
-if ($runas_ci) {
-    foreach($file in $files) {
-        &$tool_cmd -i "$file"
+$batchSize = 100
+$formated_cnt = 0
+for ($i = 0; $i -lt $files.Count; $i += $batchSize) {
+    $end = [Math]::Min($i + $batchSize - 1, $files.Count - 1)
+    $batch = $files[$i..$end]
+    if (-not $runas_ci) {
+        Write-Output "Formatting $($batch.Count) files starting from index $i ..."
     }
-}
-else {
-    foreach($file in $files) {
-        Write-Output "Formatting file: $file ..."
-        &$tool_cmd -i "$file"
-    }
+    &$tool_cmd -i $batch
+    $formated_cnt += $batch.Count
 }
 
-Write-Output "=== Finished formatting $($files.Count) files ==="
+Write-Output "=== Finished formatting $formated_cnt/$($files.Count) files ==="
 
 Pop-Location

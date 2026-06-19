@@ -27,8 +27,7 @@
 #import "axmol/ui/EditBox/Mac/SingleLineTextField.h"
 #include "axmol/ui/EditBox/Mac/TextFieldFormatter.h"
 
-@interface RSVerticallyCenteredTextFieldCell : NSTextFieldCell
-{
+@interface RSVerticallyCenteredTextFieldCell : NSTextFieldCell {
     BOOL mIsEditingOrSelecting;
 }
 
@@ -64,126 +63,114 @@
 }
 
 - (void)selectWithFrame:(NSRect)aRect
-                 inView:(NSView *)controlView
-                 editor:(NSText *)textObj
+                 inView:(NSView*)controlView
+                 editor:(NSText*)textObj
                delegate:(id)anObject
                   start:(NSInteger)selStart
                  length:(NSInteger)selLength
 {
-    aRect = [self drawingRectForBounds:aRect];
+    aRect                 = [self drawingRectForBounds:aRect];
     mIsEditingOrSelecting = YES;
-    [super selectWithFrame:aRect
-                    inView:controlView
-                    editor:textObj
-                  delegate:anObject
-                     start:selStart
-                    length:selLength];
+    [super selectWithFrame:aRect inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
     mIsEditingOrSelecting = NO;
 }
 
 - (void)editWithFrame:(NSRect)aRect
-               inView:(NSView *)controlView
-               editor:(NSText *)textObj
+               inView:(NSView*)controlView
+               editor:(NSText*)textObj
              delegate:(id)anObject
-                event:(NSEvent *)theEvent
+                event:(NSEvent*)theEvent
 {
-    aRect = [self drawingRectForBounds:aRect];
+    aRect                 = [self drawingRectForBounds:aRect];
     mIsEditingOrSelecting = YES;
-    [super editWithFrame:aRect
-                  inView:controlView
-                  editor:textObj
-                delegate:anObject
-                   event:theEvent];
+    [super editWithFrame:aRect inView:controlView editor:textObj delegate:anObject event:theEvent];
     mIsEditingOrSelecting = NO;
 }
 
 @end
 
-
-@implementation AxmolSingleLineTextField
-{
+@implementation AxmolSingleLineTextField {
 }
 
--(id) initWithFrame:(NSRect)frameRect
+- (id)initWithFrame:(NSRect)frameRect
 {
-    if ([super initWithFrame:frameRect]) {
+    if ([super initWithFrame:frameRect])
+    {
         [self setLineBreakMode:NSLineBreakByTruncatingTail];
     }
 
     return self;
 }
 
-+(void)load
++ (void)load
 {
     [self setCellClass:[RSVerticallyCenteredTextFieldCell class]];
 }
 
--(void)axui_setPlaceholderFont:(NSFont *)font
+- (void)axui_setPlaceholderFont:(NSFont*)font
 {
-    //TODO:
+    // TODO:
 }
 
-
-
--(void)axui_setPlaceholder:(NSString *)text
+- (void)axui_setPlaceholder:(NSString*)text
 {
-    //TODO:
+    // TODO:
 }
 
--(NSString*)axui_placeholder
+- (NSString*)axui_placeholder
 {
     return self.placeholderString;
 }
 
--(NSFont*)axui_placeholderFont
+- (NSFont*)axui_placeholderFont
 {
-    //FIXME:
+    // FIXME:
     return [NSFont systemFontOfSize:self.bounds.size.height * 3.0 / 2.0];
 }
 
--(NSColor*)axui_placeholderColor
+- (NSColor*)axui_placeholderColor
 {
     return [NSColor whiteColor];
 }
 
--(void)axui_setPlaceholderColor:(NSColor *)color
+- (void)axui_setPlaceholderColor:(NSColor*)color
 {
-    //TODO:
+    // TODO:
 }
 
-- (NSString *)axui_text
+- (NSString*)axui_text
 {
     return self.stringValue;
 }
 
-- (void)axui_setText:(NSString *)axui_text
+- (void)axui_setText:(NSString*)axui_text
 {
     self.stringValue = axui_text;
 }
 
-- (NSColor *)axui_textColor
+- (NSColor*)axui_textColor
 {
     return self.textColor;
 }
 
-- (void)axui_setTextColor:(NSColor *)axui_textColor
+- (void)axui_setTextColor:(NSColor*)axui_textColor
 {
     self.textColor = axui_textColor;
 }
 
-- (NSFont *)axui_font
+- (NSFont*)axui_font
 {
     return self.font;
 }
 
-- (void)axui_setFont:(NSFont *)axui_font
+- (void)axui_setFont:(NSFont*)axui_font
 {
     self.font = axui_font;
 }
 
 - (NSTextAlignment)axui_alignment
 {
-  return self.alignment;
+    return self.alignment;
 }
 
 - (void)axui_setTextHorizontalAlignment:(NSTextAlignment)axui_alignment
@@ -191,15 +178,14 @@
     self.alignment = axui_alignment;
 }
 
-
-- (void)axui_setDelegate:(id<NSTextFieldDelegate,NSTextViewDelegate>)delegate
+- (void)axui_setDelegate:(id<NSTextFieldDelegate, NSTextViewDelegate>)delegate
 {
     self.delegate = delegate;
 }
 
 - (void)axui_setMaxLength:(int)length
 {
-    id formater =  [[[AxmolTextFieldFormatter alloc]init] autorelease];
+    id formater = [[[AxmolTextFieldFormatter alloc] init] autorelease];
     [formater setMaximumLength:length];
     [self setFormatter:formater];
 }
