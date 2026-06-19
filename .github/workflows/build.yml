@@ -11,6 +11,7 @@ on:
       - 'docs/**'
       - '.github/workflows/publish.yml'
       - '.github/workflows/debian.yml'
+      - '.github/workflows/clang-format.yml'
       - 'tools/ci/make-pkg.ps1'
   pull_request:
     types: [opened, synchronize, reopened]

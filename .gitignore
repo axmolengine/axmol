@@ -239,4 +239,5 @@ release_note_draft.txt
 
 *.hprof
 
-.env
+1k/.env
+1k/llvm.sh

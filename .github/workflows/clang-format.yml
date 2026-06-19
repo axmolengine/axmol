@@ -140,15 +140,61 @@ jobs:
         ref: ${{ steps.pp.outputs.head_ref }}
         token: ${{ secrets.AX_BOT_TOKEN || github.token }}
 
+    # --- MIGRATION: Generate file list to replace source/exclude ---
+    - name: Generate file list for cpp-linter
+      id: get-files
+      if: ${{ steps.pp.outputs.should_run == 'true' }}
+      shell: pwsh
+      run: |
+        $sourceDirs = @('./axmol', './extensions', './tests', './templates')
+        $excludes = @(
+          '3rdparty',
+          'extensions/ImGui/**/im*',
+          'extensions/fairygui',
+          'extensions/Live2D',
+          'extensions/Effekseer',
+          'extensions/scripting/lua-bindings/auto',
+          'extensions/spine',
+          'tests/cpp-tests/Source/Box2DTestBed/samples',
+          'tests/fairygui-tests',
+          'tests/live2d-tests',
+          'extensions/**/*_generated.h'
+        )
+        $extensions = @('*.h', '*.cpp', '*.c', '*.mm')
+
+        # Build regex from exclude patterns (normalised to full path)
+        $excludeRegex = $excludes | ForEach-Object {
+          # Convert glob-like pattern to regex: replace * with .*, / with \/ etc.
+          [regex]::Escape($_) -replace '\\\*', '.*' -replace '\\\?', '.' -replace '\\\[', '[' -replace '\\\]', ']'
+        } | Join-String -Separator '|'
+
+        $files = Get-ChildItem -Path $sourceDirs -Include $extensions -Recurse -File |
+          Where-Object { $_.FullName -replace '\\', '/' -notmatch $excludeRegex } |
+          ForEach-Object { $_.FullName }
+
+        if (-not $files) {
+          Write-Error "No files found to format"
+          exit 1
+        }
+
+        # Join with newlines (action reads multiline input)
+        $fileList = $files -join "`n"
+        echo "file_list<<EOF" >> $env:GITHUB_OUTPUT
+        echo $fileList >> $env:GITHUB_OUTPUT
+        echo "EOF" >> $env:GITHUB_OUTPUT
+    # ------------------------------------------------
+
     - name: Run clang-format lint
       if: ${{ steps.pp.outputs.should_run == 'true' }}
-      uses: DoozyX/clang-format-lint-action@v0.20
-      with:
-        source: './axmol ./extensions ./tests ./templates'
-        exclude: './3rdparty ./extensions/ImGui/**/im* ./extensions/fairygui ./extensions/Live2D ./extensions/Effekseer ./extensions/scripting/lua-bindings/auto ./extensions/spine ./tests/cpp-tests/Source/Box2DTestBed/samples ./tests/fairygui-tests ./tests/live2d-tests ./extensions/**/*_generated.h'
-        extensions: 'h,cpp,c,mm'
-        clangFormatVersion: 20
-        inplace: True
+      shell: pwsh
+      env:
+        FILE_LIST: ${{ steps.get-files.outputs.file_list }}
+      run: |
+        ./1k/llvm.ps1 install 21 clang-format
+        # Run clang-format 21 in-place
+        $files = $env:FILE_LIST -split "`n"
+        echo $files
+        clang-format-21 -i $files
 
     # check_only mode
     - name: Check for uncommitted changes
