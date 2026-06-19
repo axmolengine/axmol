@@ -150,7 +150,7 @@ jobs:
         # Install clang-format
         ./1k/llvm.ps1 install $env:LLVM_VER clang-format
 
-    - name: Run clang-format lint
+    - name: Formating sources of Axmol
       if: ${{ steps.pp.outputs.should_run == 'true' }}
       shell: pwsh
       run: |
