@@ -47,7 +47,7 @@ class LuaAccelerationEventListener
 public:
     static AccelerationEventListener* create();
 };
-}
+}  // namespace ax
 
 using namespace ax;
 
@@ -57,9 +57,9 @@ TOLUA_API int register_all_ax_module_manual(lua_State* tolua_S);
 
 TOLUA_API int register_all_ax_math_manual(lua_State* tolua_S);
 
-TOLUA_API int register_all_ax_shaders_manual(lua_State *tolua_S);
+TOLUA_API int register_all_ax_shaders_manual(lua_State* tolua_S);
 
-TOLUA_API int register_all_ax_bytearray_manual(lua_State *tulua_S);
+TOLUA_API int register_all_ax_bytearray_manual(lua_State* tulua_S);
 
 struct LuaAccelerationEventData
 {

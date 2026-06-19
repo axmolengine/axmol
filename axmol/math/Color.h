@@ -71,7 +71,7 @@ struct AX_DLL Color32
                                           std::is_same_v<decltype(_Other{}.r), decltype(_Other{}.g)> &&
                                           std::is_same_v<decltype(_Other{}.r), decltype(_Other{}.b)> &&
                                           std::is_same_v<decltype(_Other{}.r), decltype(_Other{}.a)>>>
-    Color32& operator=(const _Other& other) noexcept
+    Color32& operator=(const _Other & other) noexcept
     {
         set(static_cast<uint8_t>(other.r * 255.f + 0.5f), static_cast<uint8_t>(other.g * 255.f + 0.5f),
             static_cast<uint8_t>(other.b * 255.f + 0.5f), static_cast<uint8_t>(other.a * 255.f + 0.5f));

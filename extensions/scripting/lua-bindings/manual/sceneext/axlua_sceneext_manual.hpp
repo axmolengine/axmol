@@ -47,7 +47,7 @@ extern "C" {
  * If you don't register the sceneext module, the package size would become smaller .
  * The current mechanism,this registering function is called in the lua_module_register.h
  */
-TOLUA_API int  register_sceneext_module(lua_State* L);
+TOLUA_API int register_sceneext_module(lua_State* L);
 
 // end group
 /// @}
@@ -64,9 +64,9 @@ struct LuaArmatureWrapperEventData
     LuaArmatureWrapperEventType eventType;
     void* eventData;
 
-    LuaArmatureWrapperEventData(LuaArmatureWrapperEventType _eventType, void* _eventData):eventType(_eventType),eventData(_eventData)
-    {
-    }
+    LuaArmatureWrapperEventData(LuaArmatureWrapperEventType _eventType, void* _eventData)
+        : eventType(_eventType), eventData(_eventData)
+    {}
 };
 
 struct LuaArmatureMovementEventData
@@ -75,20 +75,25 @@ struct LuaArmatureMovementEventData
     int movementType;
     std::string movementID;
 
-    LuaArmatureMovementEventData(ax::Object* _objTarget, int _movementType,std::string_view _movementID):objTarget(_objTarget),movementType(_movementType),movementID(_movementID)
-    {
-    }
+    LuaArmatureMovementEventData(ax::Object* _objTarget, int _movementType, std::string_view _movementID)
+        : objTarget(_objTarget), movementType(_movementType), movementID(_movementID)
+    {}
 };
 
 struct LuaArmatureFrameEventData
 {
     ax::Object* objTarget;
-    std::string  frameEventName;
+    std::string frameEventName;
     int originFrameIndex;
     int currentFrameIndex;
 
-    LuaArmatureFrameEventData( ax::Object* _objTarget, std::string_view _frameEventName, int _originFrameIndex, int _currentFrameIndex):objTarget(_objTarget), frameEventName(_frameEventName),originFrameIndex(_originFrameIndex), currentFrameIndex(_currentFrameIndex)
-    {
-    }
+    LuaArmatureFrameEventData(ax::Object* _objTarget,
+                              std::string_view _frameEventName,
+                              int _originFrameIndex,
+                              int _currentFrameIndex)
+        : objTarget(_objTarget)
+        , frameEventName(_frameEventName)
+        , originFrameIndex(_originFrameIndex)
+        , currentFrameIndex(_currentFrameIndex)
+    {}
 };
-

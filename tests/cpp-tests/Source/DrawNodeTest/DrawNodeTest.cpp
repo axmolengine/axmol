@@ -2713,10 +2713,12 @@ void DrawNodeAxmolTest2::drawAllv2(DrawNode* drawNode, bool _drawOrder)
         const float w = 20;
         const float h = 50;
         Vec2 star[]   = {
-            Vec2(o + w, o - h), Vec2(o + w * 2, o),                  // lower spike
-            Vec2(o + w * 2 + h, o + w), Vec2(o + w * 2, o + w * 2),  // right spike
-                                                                     //{o +w, o+w*2+h}, {o,o+w*2},        // top spike
-                                                                     //{o -h, o+w}, {o,o}, // left spike
+            Vec2(o + w, o - h),
+            Vec2(o + w * 2, o),  // lower spike
+            Vec2(o + w * 2 + h, o + w),
+            Vec2(o + w * 2, o + w * 2),  // right spike
+                                         //{o +w, o+w*2+h}, {o,o+w*2},        // top spike
+                                         //{o -h, o+w}, {o,o}, // left spike
         };
 
         drawNode->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color(1.0f, 0.0f, 0.0f, 0.5f), 1,

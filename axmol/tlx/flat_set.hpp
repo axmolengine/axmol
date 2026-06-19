@@ -67,8 +67,7 @@ public:
     {}
     flat_set_base(_Sorted_t, container_type cont, const key_compare& pred = key_compare())
         : _Mycont(std::move(cont)), _Mycomp(pred)
-    {
-    }
+    {}
     flat_set_base(_Sorted_t, const container_type& cont, const key_compare& pred = key_compare())
         : _Mycont(std::move(cont)), _Mycomp(pred)
     {}

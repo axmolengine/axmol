@@ -1,5 +1,6 @@
 #!/usr/bin/env pwsh
 # This script is only for linux distro: debian or ubuntu
+# llvm package list: https://github.com/opencollab/llvm-jenkins.debian.net/blob/master/llvm.sh
 param(
   $action = '',
   $ver = 21,
@@ -8,28 +9,62 @@ param(
 
 $ver = [int]$ver
 
-if ($tool -eq 'all') {
+if (!$tool -or $tool -eq 'all') {
+  $llvm_packages = @("clang-$ver", "lldb-$ver", "lld-$ver", "clangd-$ver")
   $llvm_binaries = @(
     'clang'
     'clang++'
-    'clang-format'
-    'clang-tidy'
-    'clangd'
     'lldb'
-    'lldb-dap'
     'llvm-ar'
     'llvm-ranlib'
     'llvm-nm'
     'llvm-objdump'
     'llvm-config'
   )
+  if ($tool -eq 'all') {
+    $llvm_packages += @(
+      "clang-tidy-$ver"
+      "clang-format-$ver"
+      "clang-tools-$ver"
+      "llvm-$ver-dev"
+      "lld-$ver"
+      "lldb-$ver"
+      "llvm-$ver-tools"
+      "libomp-$ver-dev"
+      "libc++-$ver-dev"
+      "libc++abi-$ver-dev"
+      "libclang-common-$ver-dev"
+      "libclang-$ver-dev"
+      "libclang-cpp$ver-dev"
+      "libunwind-$ver-dev"
+    )
+    if ($ver -gt 14) {
+        $llvm_packages += "libclang-rt-$ver-dev", "libpolly-$ver-dev"
+    }
+    $llvm_binaries += @(
+      'clang-format'
+      'clang-tidy'
+      'clangd'
+      'lldb-dap'
+    )
+  }
 }
 else {
+  $llvm_packages = @("$tool-$ver")
   $llvm_binaries = @($tool)
 }
 
-function find_clang() {
-  $verStr = $(. clang --version 2>$null) | Select-Object -First 1
+if (!$tool -or $tool -eq 'all') {
+  $llvm_tool = 'clang'
+  $llvm_tool_real = "clang-$ver"
+}
+else {
+  $llvm_tool = $tool
+  $llvm_tool_real = "$tool-$ver"
+}
+
+function find_llvm_tool() {
+  $verStr = $(& $llvm_tool --version 2>$null) | Select-Object -First 1
   $matchInfo = [Regex]::Match($verStr, '(\d+\.)+(\*|\d+)(\-[a-z0-9]+)?')
   $foundVer = $matchInfo.Value
   return $foundVer
@@ -40,9 +75,9 @@ function active_llvm($ver) {
 
 
   # list available llvm versions
-  sudo update-alternatives --display clang
+  sudo update-alternatives --display $llvm_tool
 
-  $actived_ver = [Version]$(find_clang)
+  $actived_ver = [Version]$(find_llvm_tool)
 
   if ($actived_ver.Major -ne $ver) {
     # force set llvm to the specific version
@@ -52,36 +87,43 @@ function active_llvm($ver) {
       sudo update-alternatives --set $exe_name /usr/bin/$exe_name-$ver
     }
 
-    $actived_ver = [Version]$(find_clang)
+    $actived_ver = [Version]$(find_llvm_tool)
   }
 
   # check result llvm version
-  $clang_cmd = Get-Command "clang" -ErrorAction SilentlyContinue
-  echo "Activated llvm-clang: $($clang_cmd.Source), version: $actived_ver"
+  $llvm_tool_cmd = Get-Command $llvm_tool -ErrorAction SilentlyContinue
+  echo "Activated llvm tool: $($llvm_tool_cmd.Source), version: $actived_ver"
 }
 
 # install
 if ($action -eq 'install') {
-  $clang_cmd = Get-Command "clang-$ver" -ErrorAction SilentlyContinue
-  if (!$clang_cmd) {
-    echo "Installing llvm-$ver ..."
-    $llvm_script = "$PSScriptRoot/llvm.sh"
-    curl -L https://apt.llvm.org/llvm.sh -o $llvm_script
-    chmod +x $llvm_script
-    sudo $llvm_script $ver $tool
+  $llvm_tool_cmd = Get-Command $llvm_tool_real -ErrorAction SilentlyContinue
+  if (!$llvm_tool_cmd) {
+    echo "Installing llvm $llvm_tool_real..."
+    curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc
+    $codename = (lsb_release -cs)
+    $repoName = "deb http://apt.llvm.org/$codename/ llvm-toolchain-$codename-$ver main"
+    sudo add-apt-repository -y $repoName
+    sudo apt-get update
+    sudo apt-get install --allow-unauthenticated --yes $llvm_packages
   }
 
   # config installed llvm to alternatives
   $priority = $ver * 10
+  $success_count = 0
   foreach ($exe_name in $llvm_binaries) {
     echo "Install alternative: /usr/bin/$exe_name $exe_name /usr/bin/$exe_name-$ver $priority"
     $actual_path = "/usr/bin/$exe_name-$ver"
     if (Test-Path $actual_path -PathType Leaf) {
       sudo update-alternatives --install /usr/bin/$exe_name $exe_name $actual_path $priority
+      ++$success_count
     }
     else {
-      echo "llvm.ps1: warning: the executable: $actual_path not exist"
+      Write-Warning "llvm.ps1: warning: the executable: $actual_path not exist"
     }
+  }
+  if ($success_count -eq 0) {
+    throw 'llvm.ps1: error: all packages install failed!'
   }
 }
 elseif ($action -eq 'uninstall') {
@@ -96,10 +138,10 @@ elseif ($action -eq 'uninstall') {
 
   # uninstall llvm packages via apt
   echo "Removing llvm-$ver packages ..."
-  sudo apt-get remove -y "llvm-$ver*" "clang-$ver*" "lldb-$ver*"
+  sudo apt-get remove -y $llvm_packages
   sudo apt-get autoremove -y
 
-  echo "llvm-$ver has been uninstalled."
+  echo "llvm packages: $llvm_packages has been uninstalled."
 }
 elseif ($action -eq 'list') {
   foreach ($exe_name in $llvm_binaries) {
