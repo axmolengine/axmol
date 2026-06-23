@@ -26495,6 +26495,56 @@ int lua_ax_base_Director_setNotificationNode(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Director_canvasToPixels(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Director* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Director",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Director_canvasToPixels'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::Vec2 arg0;
+
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.Director:canvasToPixels");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_canvasToPixels'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->canvasToPixels(arg0);
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:canvasToPixels",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_canvasToPixels'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Director_getCanvasSize(lua_State* tolua_S)
 {
     int argc = 0;
@@ -28789,6 +28839,7 @@ int lua_register_ax_base_Director(lua_State* tolua_S)
         tolua_function(tolua_S,"isSendCleanupToScene",lua_ax_base_Director_isSendCleanupToScene);
         tolua_function(tolua_S,"getNotificationNode",lua_ax_base_Director_getNotificationNode);
         tolua_function(tolua_S,"setNotificationNode",lua_ax_base_Director_setNotificationNode);
+        tolua_function(tolua_S,"canvasToPixels",lua_ax_base_Director_canvasToPixels);
         tolua_function(tolua_S,"getCanvasSize",lua_ax_base_Director_getCanvasSize);
         tolua_function(tolua_S,"getCanvasSizeInPixels",lua_ax_base_Director_getCanvasSizeInPixels);
         tolua_function(tolua_S,"getVisibleSize",lua_ax_base_Director_getVisibleSize);
@@ -83858,6 +83909,127 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.RenderTexture",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+
+    do {
+        if (argc == 1)
+        {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            ax::RenderTexture* ret = ax::RenderTexture::create(arg0);
+            object_to_luaval<ax::RenderTexture>(tolua_S, "ax.RenderTexture",(ax::RenderTexture*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do {
+        if (argc == 2)
+        {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            ax::rhi::PixelFormat arg1;
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            ax::RenderTexture* ret = ax::RenderTexture::create(arg0, arg1);
+            object_to_luaval<ax::RenderTexture>(tolua_S, "ax.RenderTexture",(ax::RenderTexture*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do {
+        if (argc == 3)
+        {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            ax::rhi::PixelFormat arg1;
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            ax::rhi::PixelFormat arg2;
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            ax::RenderTexture* ret = ax::RenderTexture::create(arg0, arg1, arg2);
+            object_to_luaval<ax::RenderTexture>(tolua_S, "ax.RenderTexture",(ax::RenderTexture*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do {
+        if (argc == 2)
+        {
+            int arg0;
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            int arg1;
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            ax::RenderTexture* ret = ax::RenderTexture::create(arg0, arg1);
+            object_to_luaval<ax::RenderTexture>(tolua_S, "ax.RenderTexture",(ax::RenderTexture*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do {
+        if (argc == 3)
+        {
+            int arg0;
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            int arg1;
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            ax::rhi::PixelFormat arg2;
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            ax::RenderTexture* ret = ax::RenderTexture::create(arg0, arg1, arg2);
+            object_to_luaval<ax::RenderTexture>(tolua_S, "ax.RenderTexture",(ax::RenderTexture*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do {
+        if (argc == 4)
+        {
+            int arg0;
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            int arg1;
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            ax::rhi::PixelFormat arg2;
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            ax::rhi::PixelFormat arg3;
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.RenderTexture:create");
+            if (!ok) { break; }
+            ax::RenderTexture* ret = ax::RenderTexture::create(arg0, arg1, arg2, arg3);
+            object_to_luaval<ax::RenderTexture>(tolua_S, "ax.RenderTexture",(ax::RenderTexture*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.RenderTexture:create",argc, 2);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderTexture_create'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_RenderTexture_createForCanvas(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -83869,62 +84041,56 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S) - 1;
 
-    if (argc == 2)
+    if (argc == 1)
     {
-        int arg0;
-        int arg1;
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:create");
-        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:create");
+        ax::Vec2 arg0;
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.RenderTexture:createForCanvas");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexture_create'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexture_createForCanvas'", nullptr);
             return 0;
         }
-        auto&& ret = ax::RenderTexture::create(arg0, arg1);
+        auto&& ret = ax::RenderTexture::createForCanvas(arg0);
+        object_to_luaval<ax::RenderTexture>(tolua_S, "ax.RenderTexture",(ax::RenderTexture*)ret);
+        return 1;
+    }
+    if (argc == 2)
+    {
+        ax::Vec2 arg0;
+        ax::rhi::PixelFormat arg1;
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.RenderTexture:createForCanvas");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:createForCanvas");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexture_createForCanvas'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::RenderTexture::createForCanvas(arg0, arg1);
         object_to_luaval<ax::RenderTexture>(tolua_S, "ax.RenderTexture",(ax::RenderTexture*)ret);
         return 1;
     }
     if (argc == 3)
     {
-        int arg0;
-        int arg1;
+        ax::Vec2 arg0;
+        ax::rhi::PixelFormat arg1;
         ax::rhi::PixelFormat arg2;
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:create");
-        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:create");
-        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:create");
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.RenderTexture:createForCanvas");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:createForCanvas");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:createForCanvas");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexture_create'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexture_createForCanvas'", nullptr);
             return 0;
         }
-        auto&& ret = ax::RenderTexture::create(arg0, arg1, arg2);
+        auto&& ret = ax::RenderTexture::createForCanvas(arg0, arg1, arg2);
         object_to_luaval<ax::RenderTexture>(tolua_S, "ax.RenderTexture",(ax::RenderTexture*)ret);
         return 1;
     }
-    if (argc == 4)
-    {
-        int arg0;
-        int arg1;
-        ax::rhi::PixelFormat arg2;
-        ax::rhi::PixelFormat arg3;
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:create");
-        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:create");
-        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:create");
-        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.RenderTexture:create");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexture_create'", nullptr);
-            return 0;
-        }
-        auto&& ret = ax::RenderTexture::create(arg0, arg1, arg2, arg3);
-        object_to_luaval<ax::RenderTexture>(tolua_S, "ax.RenderTexture",(ax::RenderTexture*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.RenderTexture:create",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.RenderTexture:createForCanvas",argc, 1);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderTexture_create'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderTexture_createForCanvas'.",&tolua_err);
 #endif
     return 0;
 }
@@ -83986,6 +84152,7 @@ int lua_register_ax_base_RenderTexture(lua_State* tolua_S)
         tolua_function(tolua_S,"saveToFileAsNonPMA",lua_ax_base_RenderTexture_saveToFileAsNonPMA);
         tolua_function(tolua_S,"initWithWidthAndHeight",lua_ax_base_RenderTexture_initWithWidthAndHeight);
         tolua_function(tolua_S,"create", lua_ax_base_RenderTexture_create);
+        tolua_function(tolua_S,"createForCanvas", lua_ax_base_RenderTexture_createForCanvas);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::RenderTexture).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.RenderTexture";
@@ -101960,6 +102127,698 @@ int lua_register_ax_base_Renderer(lua_State* tolua_S)
     return 1;
 }
 
+int lua_ax_base_RenderTexturePass_setTarget(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderTexturePass* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderTexturePass",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::RenderTexturePass*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderTexturePass_setTarget'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::RenderTexture* arg0;
+
+        ok &= luaval_to_object<ax::RenderTexture>(tolua_S, 2, "ax.RenderTexture",&arg0, "ax.RenderTexturePass:setTarget");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexturePass_setTarget'", nullptr);
+            return 0;
+        }
+        obj->setTarget(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderTexturePass:setTarget",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderTexturePass_setTarget'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_RenderTexturePass_makeVirtualViewport(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderTexturePass* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderTexturePass",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::RenderTexturePass*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderTexturePass_makeVirtualViewport'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 3)
+    {
+        ax::Vec2 arg0;
+        ax::Rect arg1;
+        ax::Rect arg2;
+
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.RenderTexturePass:makeVirtualViewport");
+
+        ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.RenderTexturePass:makeVirtualViewport");
+
+        ok &= luaval_to_rect(tolua_S, 4, &arg2, "ax.RenderTexturePass:makeVirtualViewport");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexturePass_makeVirtualViewport'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->makeVirtualViewport(arg0, arg1, arg2);
+        #pragma warning NO CONVERSION FROM NATIVE FOR RectI;
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderTexturePass:makeVirtualViewport",argc, 3);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderTexturePass_makeVirtualViewport'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_RenderTexturePass_begin(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderTexturePass* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderTexturePass",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::RenderTexturePass*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderTexturePass_begin'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexturePass_begin'", nullptr);
+            return 0;
+        }
+        obj->begin();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 1)
+    {
+        const ax::Camera* arg0;
+
+        ok &= luaval_to_object<const ax::Camera>(tolua_S, 2, "ax.Camera",&arg0, "ax.RenderTexturePass:begin");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexturePass_begin'", nullptr);
+            return 0;
+        }
+        obj->begin(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderTexturePass:begin",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderTexturePass_begin'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_RenderTexturePass_end(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderTexturePass* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderTexturePass",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::RenderTexturePass*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderTexturePass_end'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexturePass_end'", nullptr);
+            return 0;
+        }
+        obj->end();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderTexturePass:end",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderTexturePass_end'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_RenderTexturePass_isActive(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderTexturePass* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderTexturePass",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::RenderTexturePass*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderTexturePass_isActive'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexturePass_isActive'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isActive();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderTexturePass:isActive",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderTexturePass_isActive'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_RenderTexturePass_clear(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderTexturePass* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderTexturePass",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::RenderTexturePass*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderTexturePass_clear'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2)
+    {
+        ax::rhi::TargetBufferFlags arg0;
+        ax::ClearValue arg1;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexturePass:clear");
+
+        #pragma warning NO CONVERSION TO NATIVE FOR ClearValue
+        ok = false;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexturePass_clear'", nullptr);
+            return 0;
+        }
+        obj->clear(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderTexturePass:clear",argc, 2);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderTexturePass_clear'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_RenderTexturePass_clearColor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderTexturePass* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderTexturePass",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::RenderTexturePass*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderTexturePass_clearColor'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::Color arg0;
+
+        ok &=luaval_to_color(tolua_S, 2, &arg0, "ax.RenderTexturePass:clearColor");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexturePass_clearColor'", nullptr);
+            return 0;
+        }
+        obj->clearColor(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderTexturePass:clearColor",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderTexturePass_clearColor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_RenderTexturePass_clearDepth(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderTexturePass* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderTexturePass",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::RenderTexturePass*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderTexturePass_clearDepth'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderTexturePass:clearDepth");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexturePass_clearDepth'", nullptr);
+            return 0;
+        }
+        obj->clearDepth(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderTexturePass:clearDepth",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderTexturePass_clearDepth'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_RenderTexturePass_clearStencil(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderTexturePass* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderTexturePass",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::RenderTexturePass*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderTexturePass_clearStencil'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        unsigned int arg0;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexturePass:clearStencil");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexturePass_clearStencil'", nullptr);
+            return 0;
+        }
+        obj->clearStencil(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderTexturePass:clearStencil",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderTexturePass_clearStencil'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_RenderTexturePass_clearAll(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderTexturePass* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderTexturePass",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::RenderTexturePass*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderTexturePass_clearAll'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::ClearValue arg0;
+
+        #pragma warning NO CONVERSION TO NATIVE FOR ClearValue
+        ok = false;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexturePass_clearAll'", nullptr);
+            return 0;
+        }
+        obj->clearAll(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderTexturePass:clearAll",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderTexturePass_clearAll'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_RenderTexturePass_setCameraOverrideEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderTexturePass* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderTexturePass",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::RenderTexturePass*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderTexturePass_setCameraOverrideEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.RenderTexturePass:setCameraOverrideEnabled");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexturePass_setCameraOverrideEnabled'", nullptr);
+            return 0;
+        }
+        obj->setCameraOverrideEnabled(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderTexturePass:setCameraOverrideEnabled",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderTexturePass_setCameraOverrideEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_RenderTexturePass_isCameraOverrideEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderTexturePass* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderTexturePass",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::RenderTexturePass*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderTexturePass_isCameraOverrideEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexturePass_isCameraOverrideEnabled'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isCameraOverrideEnabled();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderTexturePass:isCameraOverrideEnabled",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderTexturePass_isCameraOverrideEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_RenderTexturePass_obtain(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.RenderTexturePass",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexturePass_obtain'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::RenderTexturePass::obtain();
+        object_to_luaval<ax::RenderTexturePass>(tolua_S, "ax.RenderTexturePass",(ax::RenderTexturePass*)ret);
+        return 1;
+    }
+    if (argc == 1)
+    {
+        ax::RenderTexture* arg0;
+        ok &= luaval_to_object<ax::RenderTexture>(tolua_S, 2, "ax.RenderTexture",&arg0, "ax.RenderTexturePass:obtain");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexturePass_obtain'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::RenderTexturePass::obtain(arg0);
+        object_to_luaval<ax::RenderTexturePass>(tolua_S, "ax.RenderTexturePass",(ax::RenderTexturePass*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.RenderTexturePass:obtain",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderTexturePass_obtain'.",&tolua_err);
+#endif
+    return 0;
+}
+static int lua_ax_base_RenderTexturePass_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (RenderTexturePass)");
+    return 0;
+}
+
+int lua_register_ax_base_RenderTexturePass(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.RenderTexturePass");
+    tolua_cclass(tolua_S,"RenderTexturePass","ax.RenderTexturePass","ax.Object",nullptr);
+
+    tolua_beginmodule(tolua_S,"RenderTexturePass");
+        tolua_function(tolua_S,"setTarget",lua_ax_base_RenderTexturePass_setTarget);
+        tolua_function(tolua_S,"makeVirtualViewport",lua_ax_base_RenderTexturePass_makeVirtualViewport);
+        tolua_function(tolua_S,"begin",lua_ax_base_RenderTexturePass_begin);
+        tolua_function(tolua_S,"endToLua",lua_ax_base_RenderTexturePass_end);
+        tolua_function(tolua_S,"isActive",lua_ax_base_RenderTexturePass_isActive);
+        tolua_function(tolua_S,"clear",lua_ax_base_RenderTexturePass_clear);
+        tolua_function(tolua_S,"clearColor",lua_ax_base_RenderTexturePass_clearColor);
+        tolua_function(tolua_S,"clearDepth",lua_ax_base_RenderTexturePass_clearDepth);
+        tolua_function(tolua_S,"clearStencil",lua_ax_base_RenderTexturePass_clearStencil);
+        tolua_function(tolua_S,"clearAll",lua_ax_base_RenderTexturePass_clearAll);
+        tolua_function(tolua_S,"setCameraOverrideEnabled",lua_ax_base_RenderTexturePass_setCameraOverrideEnabled);
+        tolua_function(tolua_S,"isCameraOverrideEnabled",lua_ax_base_RenderTexturePass_isCameraOverrideEnabled);
+        tolua_function(tolua_S,"obtain", lua_ax_base_RenderTexturePass_obtain);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::RenderTexturePass).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.RenderTexturePass";
+    g_typeCast[typeName] = "ax.RenderTexturePass";
+    return 1;
+}
+
 int lua_ax_base_TextureCache_getDescription(lua_State* tolua_S)
 {
     int argc = 0;
@@ -114090,6 +114949,7 @@ TOLUA_API int register_all_ax_base(lua_State* tolua_S)
     lua_register_ax_base_Pass(tolua_S);
     lua_register_ax_base_ProgramManager(tolua_S);
     lua_register_ax_base_Renderer(tolua_S);
+    lua_register_ax_base_RenderTexturePass(tolua_S);
     lua_register_ax_base_TextureCache(tolua_S);
     lua_register_ax_base_ContactEvent2D(tolua_S);
     lua_register_ax_base_ContactEventListener2D(tolua_S);

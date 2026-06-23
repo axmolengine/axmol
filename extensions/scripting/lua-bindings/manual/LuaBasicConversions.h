@@ -43,6 +43,7 @@
 #include "axmol/physics/physics-2d.h"
 #include "axmol/physics/physics-3d.h"
 #include "axmol/rhi/VertexLayout.h"
+#include "axmol/rhi/RHITypes.h"
 #include "axmol/ui/GUIDefine.h"
 
 #include <thread>
@@ -233,6 +234,7 @@ bool luaval_to_size(lua_State* L, int lo, Size* outValue, const char* funcName =
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 bool luaval_to_rect(lua_State* L, int lo, Rect* outValue, const char* funcName = "");
+bool luaval_to_recti(lua_State* L, int lo, rhi::RectI* outValue, const char* funcName = "");
 
 /**
  * Get a Color32 object value from the given acceptable index of stack.
@@ -875,6 +877,7 @@ void size_to_luaval(lua_State* L, const Size& sz);
  * @param rt  a ax::Rect object.
  */
 void rect_to_luaval(lua_State* L, const Rect& rt);
+void recti_to_luaval(lua_State* L, const rhi::RectI& rt);
 
 void ray_to_luaval(lua_State* L, const Ray& ray);
 

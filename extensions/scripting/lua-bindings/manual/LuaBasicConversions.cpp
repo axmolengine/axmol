@@ -937,6 +937,48 @@ bool luaval_to_rect(lua_State* L, int lo, Rect* outValue, const char* funcName)
     return ok;
 }
 
+bool luaval_to_recti(lua_State* L, int lo, rhi::RectI* outValue, const char* funcName)
+{
+    if (NULL == L || NULL == outValue)
+        return false;
+
+    bool ok = true;
+
+    tolua_Error tolua_err;
+    if (!tolua_istable(L, lo, 0, &tolua_err))
+    {
+#if _AX_DEBUG >= 1
+        luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
+#endif
+        ok = false;
+    }
+
+    if (ok)
+    {
+        lua_pushstring(L, "x");
+        lua_gettable(L, lo);
+        outValue->x = lua_isnil(L, -1) ? 0 : static_cast<int>(lua_tointeger(L, -1));
+        lua_pop(L, 1);
+
+        lua_pushstring(L, "y");
+        lua_gettable(L, lo);
+        outValue->y = lua_isnil(L, -1) ? 0 : static_cast<int>(lua_tointeger(L, -1));
+        lua_pop(L, 1);
+
+        lua_pushstring(L, "width");
+        lua_gettable(L, lo);
+        outValue->width = lua_isnil(L, -1) ? 0 : static_cast<int>(lua_tointeger(L, -1));
+        lua_pop(L, 1);
+
+        lua_pushstring(L, "height");
+        lua_gettable(L, lo);
+        outValue->height = lua_isnil(L, -1) ? 0 : static_cast<int>(lua_tointeger(L, -1));
+        lua_pop(L, 1);
+    }
+
+    return ok;
+}
+
 bool luaval_to_color32(lua_State* L, int lo, Color32* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
@@ -2706,6 +2748,25 @@ void rect_to_luaval(lua_State* L, const Rect& rt)
     lua_pushstring(L, "height");                   /* L: table key */
     lua_pushnumber(L, (lua_Number)rt.size.height); /* L: table key value*/
     lua_rawset(L, -3);                             /* table[key] = value, L: table */
+}
+
+void recti_to_luaval(lua_State* L, const rhi::RectI& rt)
+{
+    if (NULL == L)
+        return;
+    lua_newtable(L);               /* L: table */
+    lua_pushstring(L, "x");        /* L: table key */
+    lua_pushinteger(L, rt.x);      /* L: table key value*/
+    lua_rawset(L, -3);             /* table[key] = value, L: table */
+    lua_pushstring(L, "y");        /* L: table key */
+    lua_pushinteger(L, rt.y);      /* L: table key value*/
+    lua_rawset(L, -3);             /* table[key] = value, L: table */
+    lua_pushstring(L, "width");    /* L: table key */
+    lua_pushinteger(L, rt.width);  /* L: table key value*/
+    lua_rawset(L, -3);             /* table[key] = value, L: table */
+    lua_pushstring(L, "height");   /* L: table key */
+    lua_pushinteger(L, rt.height); /* L: table key value*/
+    lua_rawset(L, -3);             /* table[key] = value, L: table */
 }
 
 void ray_to_luaval(lua_State* L, const Ray& ray)

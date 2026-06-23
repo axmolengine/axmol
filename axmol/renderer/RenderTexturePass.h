@@ -114,10 +114,11 @@ public:
     void setTarget(RenderTexture* rt);
     /** @} */
 
+#ifndef _AX_GEN_SCRIPT_BINDINGS
     /// @name Viewport
     /** @{ Set custom viewport. Must be called before begin(). */
-    // void setViewport(const Viewport& vp);
     void setViewport(std::optional<Viewport> vp);
+#endif
 
     /**
      * @brief Computes a virtual viewport rectangle for rendering into a RenderTexture.

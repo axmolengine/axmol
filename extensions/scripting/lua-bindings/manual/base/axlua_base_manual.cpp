@@ -63,6 +63,7 @@
 #include "axmol/platform/RenderView.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/renderer/Shaders.h"
+#include "axmol/renderer/RenderTexturePass.h"
 
 #ifndef LUAJIT_VERSION
 #    include <lspec.h>
@@ -3061,6 +3062,65 @@ tolua_lerror:
 
 #endif
 
+
+int axlua_RenderTexturePass_setViewport(lua_State* tolua_S)
+{
+    int argc                   = 0;
+    ax::RenderTexturePass* obj = nullptr;
+    bool ok                    = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S, 1, "ax.RenderTexturePass", 0, &tolua_err))
+        goto tolua_lerror;
+#endif
+
+    obj = (ax::RenderTexturePass*)tolua_tousertype(tolua_S, 1, 0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S, "invalid 'obj' in function 'lua_ax_base_RenderTexturePass_setViewport'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+    if (argc == 1)
+    {
+        if (!lua_isnil(tolua_S, 2))
+        {
+            ax::rhi::RectI arg0;
+            ok &= luaval_to_recti(tolua_S, 2, &arg0, "ax.RenderTexturePass:setViewport");
+            if (!ok && !lua_isnil(tolua_S, 2))
+            {
+                tolua_error(tolua_S, "invalid arguments in function 'lua_ax_base_RenderTexturePass_setViewport'",
+                            nullptr);
+                return 0;
+            }
+            obj->setViewport(arg0);
+        }
+        else {
+            obj->setViewport(std::nullopt);
+        }
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderTexturePass:setViewport",
+               argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+tolua_lerror:
+    tolua_error(tolua_S, "#ferror in function 'lua_ax_base_RenderTexturePass_setViewport'.", &tolua_err);
+#endif
+
+    return 0;
+}
+
 static void extendScene(lua_State* tolua_S)
 {
     lua_pushstring(tolua_S, "ax.Scene");
@@ -3396,6 +3456,19 @@ static void extendDrawNode(lua_State* tolua_S)
 
         lua_pushstring(tolua_S, "drawPoints");
         lua_pushcfunction(tolua_S, toaxlua_DrawNode_drawPoints);
+        lua_rawset(tolua_S, -3);
+    }
+    lua_pop(tolua_S, 1);
+}
+
+static void extendRenderTexturePass(lua_State* tolua_S)
+{
+    lua_pushstring(tolua_S, "ax.RenderTexturePass");
+    lua_rawget(tolua_S, LUA_REGISTRYINDEX);
+    if (lua_istable(tolua_S, -1))
+    {
+        lua_pushstring(tolua_S, "setViewport");
+        lua_pushcfunction(tolua_S, axlua_RenderTexturePass_setViewport);
         lua_rawset(tolua_S, -3);
     }
     lua_pop(tolua_S, 1);
@@ -5841,6 +5914,7 @@ int register_all_ax_manual(lua_State* tolua_S)
     if (NULL == tolua_S)
         return 0;
 
+    extendRenderTexturePass(tolua_S);
     extendNode(tolua_S);
     extendScene(tolua_S);
     extendMenuItem(tolua_S);
