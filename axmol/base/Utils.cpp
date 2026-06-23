@@ -140,11 +140,11 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
     auto director = Director::getInstance();
 
     auto callback = [startNode, scale, imageCallback, director](CustomEvent* /*event*/) {
-	    auto captureNodeListener = s_captureNodeListener[startNode];
+        auto captureNodeListener = s_captureNodeListener[startNode];
         director->getEventDispatcher()->removeEventListener((EventListener*)(captureNodeListener));
         s_captureNodeListener.erase(startNode);
-        
-        auto& size    = startNode->getContentSize();
+
+        auto& size = startNode->getContentSize();
 
         director->setNextDeltaTimeZero(true);
 
@@ -172,8 +172,7 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
         rtx->newImage(imageCallback);
     };
 
-    auto listener =
-        director->getEventDispatcher()->addCustomEventListener(Director::EVENT_BEFORE_DRAW, callback);
+    auto listener = director->getEventDispatcher()->addCustomEventListener(Director::EVENT_BEFORE_DRAW, callback);
 
     s_captureNodeListener[startNode] = listener;
 }
