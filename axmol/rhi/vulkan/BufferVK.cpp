@@ -349,7 +349,7 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
         if (_currentMappedData)
         {
             // If memory is already persistently mapped, use the mapped pointer
-            std::memcpy(static_cast<uint8_t*>(_currentMappedData) + offset, data, size);
+            ::memcpy(static_cast<uint8_t*>(_currentMappedData) + offset, data, size);
 
             // Flush the memory range if needed (VMA handles this automatically for mapped allocations)
             vmaFlushAllocation(vmaAllocator, _memory, offset, size);
@@ -412,7 +412,7 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
     {
         if (_defaultData.size() < offset + size)
             _defaultData.resize(offset + size);
-        std::memcpy(_defaultData.data() + offset, data, size);
+        ::memcpy(_defaultData.data() + offset, data, size);
     }
 }
 

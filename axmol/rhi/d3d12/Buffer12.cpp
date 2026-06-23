@@ -229,7 +229,7 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
         D3D12_RANGE readRange{0, 0};  // We don't intend to read from the resource
         HRESULT hr = res->Map(0, &readRange, &mapped);
         AXASSERT(SUCCEEDED(hr), "Failed to map upload buffer");
-        std::memcpy(static_cast<uint8_t*>(mapped) + offset, data, size);
+        ::memcpy(static_cast<uint8_t*>(mapped) + offset, data, size);
         D3D12_RANGE written{offset, offset + size};
         res->Unmap(0, &written);
     }
@@ -244,7 +244,7 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
     {
         if (_defaultData.size() < offset + size)
             _defaultData.resize(offset + size);
-        std::memcpy(_defaultData.data() + offset, data, size);
+        ::memcpy(_defaultData.data() + offset, data, size);
     }
 }
 
@@ -258,7 +258,7 @@ void BufferImpl::copyFromUploadBuffer(const void* data, std::size_t offset, std:
     auto span      = allocator->allocBytes(size, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
 
     // Copy data into upload memory
-    std::memcpy(span.cpuPtr, data, size);
+    ::memcpy(span.cpuPtr, data, size);
 
     // Record isolated copy commands
     auto& submission = _driver->startIsolateSubmission();

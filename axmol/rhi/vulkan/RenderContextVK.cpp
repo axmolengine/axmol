@@ -1012,7 +1012,7 @@ void RenderContextImpl::prepareDrawing()
         for (auto& uboInfo : _programState->getActiveUniformBlockInfos())
         {
             UniformSlice s = allocateUniformSlice(uboInfo.sizeBytes);
-            std::memcpy(s.cpuPtr, bufferPtr + uboInfo.cpuOffset, uboInfo.sizeBytes);
+            ::memcpy(s.cpuPtr, bufferPtr + uboInfo.cpuOffset, uboInfo.sizeBytes);
 
             VkWriteDescriptorSet& write        = writes.emplace_back();
             VkDescriptorBufferInfo& bufferInfo = _descriptorBufferInfos.emplace_back();
@@ -1241,7 +1241,7 @@ void RenderContextImpl::doReadPixels(RenderTarget* rt, std::function<void(const 
     pbd._width  = width;
     pbd._height = height;
     pbd._data.resize(static_cast<size_t>(bufferSize));
-    std::memcpy(pbd._data.data(), mapped, static_cast<size_t>(bufferSize));
+    ::memcpy(pbd._data.data(), mapped, static_cast<size_t>(bufferSize));
 
     vmaUnmapMemory(_driver->getVmaAllocator(), stagingAlloc);
 

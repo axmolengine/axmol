@@ -132,7 +132,7 @@ void BufferImpl::updateData(const void* data, std::size_t size)
     {
         D3D11_MAPPED_SUBRESOURCE mapped{};
         _context->Map(_buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
-        std::memcpy(mapped.pData, data, size);
+        ::memcpy(mapped.pData, data, size);
         _context->Unmap(_buffer.Get(), 0);
     }
     else if (_nativeUsage == D3D11_USAGE_IMMUTABLE)
@@ -160,7 +160,7 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
     {
         D3D11_MAPPED_SUBRESOURCE mapped{};
         _context->Map(_buffer.Get(), 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mapped);
-        std::memcpy(static_cast<uint8_t*>(mapped.pData) + offset, data, size);
+        ::memcpy(static_cast<uint8_t*>(mapped.pData) + offset, data, size);
         _context->Unmap(_buffer.Get(), 0);
     }
     else if (_nativeUsage == D3D11_USAGE_IMMUTABLE)
@@ -184,7 +184,7 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
     }
 
     if (_needDefaultStoredData)
-        std::memcpy(_defaultData.data() + offset, data, size);
+        ::memcpy(_defaultData.data() + offset, data, size);
 }
 
 /* -------------------------------------------------- usingDefaultStoredData */
