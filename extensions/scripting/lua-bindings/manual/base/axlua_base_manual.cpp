@@ -3062,7 +3062,6 @@ tolua_lerror:
 
 #endif
 
-
 int axlua_RenderTexturePass_setViewport(lua_State* tolua_S)
 {
     int argc                   = 0;
@@ -3103,7 +3102,8 @@ int axlua_RenderTexturePass_setViewport(lua_State* tolua_S)
             }
             obj->setViewport(arg0);
         }
-        else {
+        else
+        {
             obj->setViewport(std::nullopt);
         }
         lua_settop(tolua_S, 1);
