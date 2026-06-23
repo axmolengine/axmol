@@ -36,7 +36,6 @@ THE SOFTWARE.
 #include "axmol/base/Object.h"
 #include "axmol/math/Math.h"
 #include "axmol/base/Types.h"
-#include "axmol/renderer/CustomCommand.h"
 
 namespace ax
 {
@@ -65,8 +64,6 @@ class Scale9Sprite;
 namespace rhi
 {
 class Texture;
-class Texture;
-class ProgramState;
 }  // namespace rhi
 
 /**
@@ -263,6 +260,35 @@ public:
     bool
     updateSubData(const void* data, int offsetX, int offsetY, int width, int height, int level = 0, int layerIndex = 0);
 
+    /** * @brief Returns the texture width in physical pixels.
+     */
+    int getWidth() const { return _width; }
+
+    /** * @brief Returns the texture height in physical pixels.
+     */
+    int getHeight() const { return _height; }
+
+    /** * @brief Returns the physical pixel size of the texture as a float vector.
+     * @note Convenience wrapper to avoid static_casting width and height to float.
+     */
+    Vec2 getPixelSize() const { return Vec2(static_cast<float>(_width), static_cast<float>(_height)); }
+
+    /** * @brief Returns the logical content size of the texture in points.
+     * @note This value is calculated by dividing the physical pixel size by AX_CONTENT_SCALE_FACTOR.
+     * For example, on a Retina display, a 200x200 pixel texture might return (100, 100) points.
+     */
+    Vec2 getContentSize() const;
+
+    /** Gets max S. */
+    float getMaxS() const;
+    /** Sets max S. */
+    void setMaxS(float maxS);
+
+    /** Gets max T. */
+    float getMaxT() const;
+    /** Sets max T. */
+    void setMaxT(float maxT);
+
     /*
      * Invalidate the texture for we can re-create RHI GPU texture when app context loss recovery
      * For example:
@@ -271,17 +297,7 @@ public:
      */
     void invalidate();
 
-    /**
-    Drawing extensions to make it easy to draw basic quads using a Texture2D object.
-    These functions require GL_TEXTURE_2D and both GL_VERTEX_ARRAY and GL_TEXTURE_COORD_ARRAY client states to be
-    enabled.
-    */
-    /** Draws a texture at a given point. */
-    void drawAtPoint(const Vec2& point, float globalZOrder);
-    /** Draws a texture inside a rect.*/
-    void drawInRect(const Rect& rect, float globalZOrder);
-
-    bool isRenderTarget() const;
+    virtual bool isRenderTarget() const;
 
     void setTexParameters(const TexParams& params);
 
@@ -320,9 +336,6 @@ public:
      */
     unsigned int getBitsPerPixelForFormat(rhi::PixelFormat format) const;
 
-    /** Get content size. */
-    const Vec2& getContentSizeInPixels();
-
     /** Whether or not the texture has their Alpha premultiplied. */
     bool hasPremultipliedAlpha() const;
     void setPremultipliedAlpha(bool premultipliedAlpha);
@@ -335,26 +348,7 @@ public:
 
     int getSamplerFlags() const { return _samplerFlags; }
 
-    /** Gets the width of the texture in pixels. */
-    int getPixelsWide() const;
-
-    /** Gets the height of the texture in pixels. */
-    int getPixelsHigh() const;
-
     rhi::Texture* getRHITexture() const;
-
-    /** Gets max S. */
-    float getMaxS() const;
-    /** Sets max S. */
-    void setMaxS(float maxS);
-
-    /** Gets max T. */
-    float getMaxT() const;
-    /** Sets max T. */
-    void setMaxT(float maxT);
-
-    /** Get the texture content size.*/
-    Vec2 getContentSize() const;
 
     std::string getPath() const { return _filePath; }
 
@@ -408,16 +402,14 @@ private:
      */
     void addSpriteFrameCapInset(SpriteFrame* spritframe, const Rect& capInsets);
 
-    void initProgram();
-
 protected:
     void updateData(std::span<const TextureSliceData> subDatas, PixelFormat renderFormat, bool compressed);
 
     /** width in pixels */
-    int _pixelsWide;
+    int _width;
 
     /** height in pixels */
-    int _pixelsHigh;
+    int _height;
 
     /** texture name */
     rhi::Texture* _rhiTexture;
@@ -427,9 +419,6 @@ protected:
 
     /** texture max T */
     float _maxT;
-
-    /** content size */
-    Vec2 _contentSize;
 
     uint8_t _flags;
     uint8_t _samplerFlags;
@@ -443,10 +432,6 @@ protected:
     friend class ui::Scale9Sprite;
 
     std::string _filePath;
-
-    rhi::UniformLocation _mvpMatrixLocation;
-    rhi::UniformLocation _textureLocation;
-    CustomCommand _customCommand;
 };
 
 // end of textures group

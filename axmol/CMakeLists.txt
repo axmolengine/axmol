@@ -640,5 +640,5 @@ if(BUILD_ENGINE_BEGAN)
     # Export the clean library target map
     export(TARGETS ${_axmol_libs} FILE "${CMAKE_BINARY_DIR}/AxmolTargets.cmake")
 
-    message(STATUS "🔧 Created target 'axmol-sdk' and exported clean SDK library map (Tests excluded).")
+    message(STATUS "🔧 Created target 'axmol-sdk' (included extensions: ${_AX_EXTENSION_LIBS}) and exported clean SDK library map (Tests excluded).")
 endif()

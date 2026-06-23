@@ -835,7 +835,7 @@ end
 function Sprite3DWithOBBPerfromanceTest:calculateRayByLocationInView(ray, location)
     local dir = ax.Director:getInstance()
     local view = dir:getCanvasSize()
-    local mat = ax.mat4.new(dir:getMatrix(ax.MATRIX_STACK_TYPE.PROJECTION))
+    local mat = ax.mat4.new(dir:getProjectionMatrix())
     local src = ax.vec3(location.x, location.y, -1)
     local nearPoint = {}
     view, src, nearPoint = self:unproject(mat, view, src, nearPoint)

@@ -17,7 +17,7 @@ set(_AX_2D_HEADER
   2d/FontAtlas.h
   2d/AtlasNode.h
   2d/ClippingNode.h
-  2d/RenderTexture.h
+
   2d/ActionInterval.h
   2d/TMXXMLParser.h
   2d/ActionInstant.h
@@ -108,7 +108,6 @@ set(_AX_2D_SRC
   2d/ParticleSystemQuad.cpp
   2d/ProgressTimer.cpp
   2d/ProtectedNode.cpp
-  2d/RenderTexture.cpp
   2d/SpriteBatchNode.cpp
   2d/Sprite.cpp
   2d/AnchoredSprite.cpp

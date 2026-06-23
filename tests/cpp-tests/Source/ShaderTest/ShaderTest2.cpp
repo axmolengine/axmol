@@ -223,7 +223,7 @@ void EffectBlur::setTarget(EffectSprite* sprite)
     if (_programState == nullptr)
         return;
 
-    Size size = sprite->getTexture()->getContentSizeInPixels();
+    Size size = sprite->getTexture()->getPixelSize();
     SET_UNIFORM(_programState, "resolution", size);
     SET_UNIFORM(_programState, "blurRadius", _blurRadius);
     SET_UNIFORM(_programState, "sampleNum", _blurSampleNum);
@@ -284,8 +284,8 @@ protected:
 
     virtual void setTarget(EffectSprite* sprite) override
     {
-        auto s = sprite->getTexture()->getContentSizeInPixels();
-        SET_UNIFORM(_programState, "resolution", Vec2(s.width, s.height));
+        auto s = sprite->getTexture()->getPixelSize();
+        SET_UNIFORM(_programState, "resolution", s);
     }
 };
 
@@ -304,7 +304,7 @@ protected:
 
     virtual void setTarget(EffectSprite* sprite) override
     {
-        auto s = sprite->getTexture()->getContentSizeInPixels();
+        auto s = sprite->getTexture()->getPixelSize();
         SET_UNIFORM(_programState, "resolution", Vec2(s.width, s.height));
     }
 };
@@ -352,7 +352,7 @@ protected:
 
     virtual void setTarget(EffectSprite* sprite) override
     {
-        auto s = sprite->getTexture()->getContentSizeInPixels();
+        auto s = sprite->getTexture()->getPixelSize();
         SET_UNIFORM(_programState, "resolution", Vec2(s.width, s.height));
     }
 };
@@ -372,7 +372,7 @@ protected:
 
     virtual void setTarget(EffectSprite* sprite) override
     {
-        auto s = sprite->getTexture()->getContentSizeInPixels();
+        auto s = sprite->getTexture()->getPixelSize();
         SET_UNIFORM(_programState, "resolution", Vec2(s.width, s.height));
     }
 };
@@ -392,7 +392,7 @@ protected:
 
     virtual void setTarget(EffectSprite* sprite) override
     {
-        auto s = sprite->getTexture()->getContentSizeInPixels();
+        auto s = sprite->getTexture()->getPixelSize();
         SET_UNIFORM(_programState, "textureResolution", Vec2(s.width, s.height));
         s = Director::getInstance()->getCanvasSize();
         SET_UNIFORM(_programState, "resolution", Vec2(s.width, s.height));

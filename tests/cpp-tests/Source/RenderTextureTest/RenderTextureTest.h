@@ -27,6 +27,7 @@
 
 #include "axmol/axmol.h"
 #include "axmol/rhi/DepthStencilState.h"
+#include "axmol/renderer/RenderTexturePass.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(RenderTextureTests);
@@ -51,6 +52,7 @@ public:
 
 private:
     ax::RenderTexture* _target;
+    ax::RefPtr<ax::RenderTexturePass> _rtxPass;
     ax::Vector<ax::Sprite*> _brushs;
 };
 
@@ -112,6 +114,7 @@ private:
     ax::Renderer* _renderer;
     ax::rhi::DepthStencilDesc _dsDesc;
     ax::RenderTexture* _rtx;
+    ax::RefPtr<ax::RenderTexturePass> _rtxPass;
     ax::Sprite* _spriteDS;
     ax::Sprite* _spriteDraw;
 };
@@ -119,8 +122,10 @@ private:
 class RenderTextureTargetNode : public RenderTextureTest
 {
 private:
-    ax::Sprite *sprite1, *sprite2;
-    ax::RenderTexture* renderTexture;
+    ax::Sprite *_sprite1, *_sprite2;
+    ax::RenderTexture* _renderTexture;
+    ax::RefPtr<ax::RenderTexturePass> _rtxPass;
+    ax::RefPtr<ax::Node> _container;
     ax::Vec2 _spriteCenterPosition;
 
 public:
@@ -131,7 +136,11 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
+    void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
+
     void touched(ax::Object* sender);
+
+    bool _shouldClear{true};
 };
 
 class RenderTexturePartTest : public RenderTextureTest
@@ -161,6 +170,7 @@ public:
 
     public:
         ax::RenderTexture* _rt;
+        ax::RefPtr<ax::RenderTexturePass> _rtxPass;
     };
 
 public:
@@ -181,6 +191,19 @@ public:
     Issue16113Test();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
+};
+
+class CameraTargetTextureTest : public RenderTextureTest
+{
+public:
+    CREATE_FUNC(CameraTargetTextureTest);
+    CameraTargetTextureTest();
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+
+private:
+    ax::RenderTexture* _rt{nullptr};
+    ax::Camera* _captureCamera{nullptr};
 };
 
 #endif

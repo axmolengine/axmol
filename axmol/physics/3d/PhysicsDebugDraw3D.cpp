@@ -26,6 +26,7 @@
 
 #include "axmol/physics/3d/PhysicsDebugDraw3D.h"
 #include "axmol/physics/3d/PhysicsUtility3D.h"
+#include "axmol/scene/Camera.h"
 
 #if defined(AX_ENABLE_PHYSICS_3D)
 
@@ -219,7 +220,7 @@ void PhysicsDebugDraw3D::DrawText3D(JPH::RVec3Arg inPosition,
 
 void PhysicsDebugDraw3D::draw(ax::Renderer* renderer)
 {
-    auto& transform = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& transform = Camera::getVisitingViewProjectionMatrix();
 
     auto& blend                  = _lineCommand.blendDesc();
     blend.blendEnabled           = true;

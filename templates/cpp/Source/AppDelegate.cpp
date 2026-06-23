@@ -98,7 +98,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     // On Android/iOS emulator devices, uncomment to visualize the left/right eye VR rendering output.
     // Useful for debugging stereo rendering without a physical headset.
     // vrRenderer->setDebugIgnoreHeadTracker(true);
-    renderView->setVR(std::move(vrRenderer));
+    director->setSceneRenderer(std::move(vrRenderer));
 #endif
 
     // turn on display FPS

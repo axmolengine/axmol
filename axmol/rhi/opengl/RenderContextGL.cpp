@@ -408,15 +408,12 @@ void RenderContextImpl::setScissorRect(bool enabled, float x, float y, float wid
     }
 }
 
-void RenderContextImpl::readPixels(RenderTarget* rt,
-                                   bool preserveAxisHint,
-                                   std::function<void(const PixelBufferDesc&)> callback)
+void RenderContextImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
 {
     PixelBufferDesc pbd;
     if (rt->isDefaultRenderTarget())
     {  // read pixels from screen
-        readPixels(rt, _viewport.x, _viewport.y, _viewport.width, _viewport.height, _viewport.width * 4,
-                   preserveAxisHint, pbd);
+        readPixels(rt, _viewport.x, _viewport.y, _viewport.width, _viewport.height, _viewport.width * 4, pbd);
     }
     else
     {
@@ -425,7 +422,7 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
         if (colorAttachment)
         {
             readPixels(rt, 0, 0, colorAttachment->getWidth(), colorAttachment->getHeight(),
-                       colorAttachment->getWidth() * 4, preserveAxisHint, pbd);
+                       colorAttachment->getWidth() * 4, pbd);
         }
     }
     callback(pbd);
@@ -437,7 +434,6 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
                                    uint32_t width,
                                    uint32_t height,
                                    uint32_t bytesPerRow,
-                                   bool preserveAxisHint,
                                    PixelBufferDesc& pbd)
 {
     auto rtGL = static_cast<RenderTargetImpl*>(rt);
@@ -462,9 +458,9 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
 
     if (buffer_ptr)
     {
-        if (!preserveAxisHint)
+        if (rt->isDefaultRenderTarget())
         {
-            // we need to flip the buffer vertically to match our API
+            // flip Y for default RT (OpenGL has inverted Y)
             uint8_t* wptr = pbd._data.resize(bufferSize);
             if (wptr)
             {

@@ -36,6 +36,7 @@ THE SOFTWARE.
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/RenderState.h"
 #include "axmol/renderer/Shaders.h"
+#include "axmol/scene/Camera.h"
 
 namespace ax
 {
@@ -408,7 +409,7 @@ void MotionStreak3D::draw(Renderer* renderer, const Mat4& transform, uint32_t fl
     afterCommand->init(_globalZOrder);
     _customCommand.init(_globalZOrder, transform, flags);
 
-    auto pmatrix   = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    auto pmatrix   = Camera::getVisitingViewProjectionMatrix();
     auto mvpMatrix = pmatrix * transform;
 
     _programState->setUniform(_locMVP, mvpMatrix.m, sizeof(mvpMatrix.m));

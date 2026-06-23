@@ -63,7 +63,8 @@ class Rigidbody2D;
 namespace rhi
 {
 class ProgramState;
-}
+class VertexLayout;
+}  // namespace rhi
 
 /**
  * @addtogroup _2d
@@ -1133,7 +1134,7 @@ public:
      * @param parentFlags Renderer flag.
      */
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags);
-    virtual void visit();
+    virtual void visit() final;
 
     /** Returns the Scene that contains the Node.
      It returns `nullptr` if the node doesn't belong to any Scene.

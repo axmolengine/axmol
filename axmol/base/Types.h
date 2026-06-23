@@ -29,6 +29,7 @@ THE SOFTWARE.
 #pragma once
 
 #include <string>
+#include <stack>
 
 #include "axmol/math/Math.h"
 #include "axmol/base/Object.h"
@@ -94,21 +95,6 @@ struct TextureSamplerFlag
         DEFAULT      = 0,
         DUAL_SAMPLER = 1 << 1,
     };
-};
-
-/**
- * @brief Matrix stack type.
- */
-enum class MATRIX_STACK_TYPE
-{
-    /// Model view matrix stack
-    MATRIX_STACK_MODELVIEW,
-
-    /// projection matrix stack
-    MATRIX_STACK_PROJECTION,
-
-    /// texture matrix stack
-    MATRIX_STACK_TEXTURE
 };
 
 /**
@@ -452,6 +438,16 @@ struct AX_DLL FontDefinition
     int _overflow = 0;
 };
 
+/**
+ * @brief Clear parameters for a render texture pass.
+ */
+struct ClearValue
+{
+    Color color{0, 0, 0, 0};
+    float depth          = 1.f;
+    unsigned int stencil = 0;
+};
+
 // d3d RHI spec
 enum class PowerPreference
 {
@@ -534,7 +530,8 @@ using TargetBufferFlags = rhi::TargetBufferFlags;
 using DepthStencilFlags = rhi::DepthStencilFlags;
 using ClearFlag         = rhi::ClearFlag;
 
-typedef void (*AsyncOperation)(void* param);
+template <typename _Ty>
+using LinearStack = std::stack<_Ty, std::vector<_Ty>>;
 
 }  // namespace ax
 // end group

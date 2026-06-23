@@ -504,7 +504,7 @@ void SampleDrawNode::submitDrawCommand(Renderer* renderer, CustomCommand& cmd, c
     blendDescriptor.destinationAlphaBlendFactor = rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
 
     auto pipelinePS     = cmd.unsafePS();
-    const auto& matrixP = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& matrixP = Camera::getVisitingViewProjectionMatrix();
     Mat4 matrixMVP      = matrixP * transform;
     auto mvpLocation    = pipelinePS->getUniformLocation("u_MVPMatrix");
     pipelinePS->setUniform(mvpLocation, matrixMVP.m, sizeof(matrixMVP.m));

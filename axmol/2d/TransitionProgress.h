@@ -34,7 +34,7 @@ namespace ax
 {
 
 class ProgressTimer;
-class RenderTexture;
+class Sprite;
 
 /**
  * @addtogroup _2d
@@ -67,7 +67,7 @@ protected:
     void sceneOrder() override;
 
 protected:
-    virtual ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture);
+    virtual ProgressTimer* progressTimerNodeWithRenderTexture(Sprite* sprite);
     virtual void setupTransition();
 
 protected:
@@ -100,12 +100,12 @@ protected:
     //
     // Overrides
     //
-    ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture) override;
+    ProgressTimer* progressTimerNodeWithRenderTexture(Sprite* sprite) override;
 };
 
 /** @class TransitionProgressRadialCW
  * @brief TransitionRadialCW transition.
- A counter clock-wise radial transition to the next scene.
+  A counter clock-wise radial transition to the next scene.
 */
 class AX_DLL TransitionProgressRadialCW : public TransitionProgress
 {
@@ -127,7 +127,7 @@ protected:
     //
     // Overrides
     //
-    ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture) override;
+    ProgressTimer* progressTimerNodeWithRenderTexture(Sprite* sprite) override;
 };
 
 /** @class TransitionProgressHorizontal
@@ -154,7 +154,7 @@ protected:
     //
     // Overrides
     //
-    ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture) override;
+    ProgressTimer* progressTimerNodeWithRenderTexture(Sprite* sprite) override;
 };
 
 /** @class TransitionProgressVertical
@@ -180,7 +180,7 @@ protected:
     //
     // Overrides
     //
-    ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture) override;
+    ProgressTimer* progressTimerNodeWithRenderTexture(Sprite* sprite) override;
 };
 
 /** @class TransitionProgressInOut
@@ -206,7 +206,7 @@ protected:
     //
     // Overrides
     //
-    ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture) override;
+    ProgressTimer* progressTimerNodeWithRenderTexture(Sprite* sprite) override;
     void sceneOrder() override;
     void setupTransition() override;
 };
@@ -234,7 +234,7 @@ protected:
     //
     // Overrides
     //
-    ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture) override;
+    ProgressTimer* progressTimerNodeWithRenderTexture(Sprite* sprite) override;
 };
 
 // end of _2d group

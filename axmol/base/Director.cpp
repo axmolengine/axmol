@@ -46,7 +46,9 @@ THE SOFTWARE.
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/RenderState.h"
+#include "axmol/scene/SceneRenderer.h"
 #include "axmol/scene/Camera.h"
+#include "axmol/scene/Scene.h"
 #include "axmol/base/UserDefault.h"
 #include "axmol/base/Utils.h"
 #include "axmol/base/FPSImages.h"
@@ -135,6 +137,9 @@ Director::Director() {}
 
 bool Director::init()
 {
+
+    _poolManager = PoolManager::getInstance();
+
     setDefaultValues();
 
     _scenesStack.reserve(15);
@@ -185,9 +190,9 @@ bool Director::init()
 
     // init TextureCache
     initTextureCache();
-    initMatrixStack();
 
-    _renderer = new Renderer;
+    _renderer      = new Renderer();
+    _sceneRenderer = std::make_unique<SceneRenderer>();
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     // listen the event that renderer was recreated on Android/WP8
@@ -245,6 +250,8 @@ Director::~Director()
 #endif
 
     AX_SAFE_DELETE(_jobSystem);
+    AX_SAFE_RELEASE_NULL(_overlayCamera);
+    AX_SAFE_RELEASE_NULL(_offscreenCamera);
 
     /** clean auto release pool. */
     PoolManager::destroyInstance();
@@ -309,8 +316,8 @@ void Director::setRenderDefaults()
     setProjection(_projection);
 }
 
-// Draw the Scene
-void Director::drawScene()
+// process 1 frame
+void Director::processFrame()
 {
     const auto canRender = _renderer->beginFrame();
 
@@ -331,67 +338,70 @@ void Director::drawScene()
         _eventDispatcher->dispatchEvent(_eventAfterUpdate);
     }
 
-    if (!canRender) [[unlikely]]
-        return;
-
-    _renderer->clear(ClearFlag::ALL, _clearColor, 1, 0, -10000.0);
-
-    _eventDispatcher->dispatchEvent(_eventBeforeDraw);
-
-    /* to avoid flickr, nextScene MUST be here: after tick and before draw.
-     * FIXME: Which bug is this one. It seems that it can't be reproduced with v0.9
-     */
-    if (_nextScene)
+    if (canRender) [[likely]]
     {
-        setNextScene();
-    }
+        _renderer->clear(ClearFlag::ALL, _clearColor, 1, 0, -10000.0);
 
-    pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+        _eventDispatcher->dispatchEvent(_eventBeforeDraw);
 
-    if (_runningScene)
-    {
-        _runningScene->tick(_deltaTime);
+        /* to avoid flickr, nextScene MUST be here: after tick and before draw.
+         * FIXME: Which bug is this one. It seems that it can't be reproduced with v0.9
+         */
+        if (_nextScene)
+        {
+            setNextScene();
+        }
 
-        // clear draw stats
-        _renderer->clearDrawStats();
+        if (_runningScene)
+        {
+            _runningScene->tick(_deltaTime);
 
-        // render the scene
-        if (_renderView)
-            _renderView->renderScene(_runningScene, _renderer);
+            // clear draw stats
+            _renderer->clearDrawStats();
 
-        _eventDispatcher->dispatchEvent(_eventAfterVisit);
-    }
+            // render the scene
+            _sceneRenderer->renderScene(_renderer, _runningScene);
 
-    // draw the notifications node
-    if (_notificationNode)
-    {
-        _notificationNode->visit(_renderer, Mat4::identity, 0);
-    }
+            _eventDispatcher->dispatchEvent(_eventAfterVisit);
+        }
 
-    updateFrameRate();
+        // draw the notifications node
+        if (_notificationNode)
+        {
+            auto previousCamera = Camera::_visitingCamera;
+            auto* overlayCamera = getOverlayCamera();
+            if (overlayCamera)
+            {
+                Camera::_visitingCamera = overlayCamera;
+                overlayCamera->apply();
+                _notificationNode->visit(_renderer, Mat4::identity, 0);
+            }
+            Camera::_visitingCamera = previousCamera;
+        }
 
-    if (_statsDisplay)
-    {
+        updateFrameRate();
+
+        if (_statsDisplay)
+        {
 #if !AX_STRIP_FPS
-        showStats();
+            showStats();
 #endif
+        }
+
+        _renderer->render();
+
+        _eventDispatcher->dispatchEvent(_eventAfterDraw);
+
+        _totalFrames++;
+
+        // swap buffers
+        if (_renderView)
+        {
+            _renderView->swapBuffers();
+        }
+
+        _renderer->endFrame();
     }
-
-    _renderer->render();
-
-    _eventDispatcher->dispatchEvent(_eventAfterDraw);
-
-    popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-
-    _totalFrames++;
-
-    // swap buffers
-    if (_renderView)
-    {
-        _renderView->swapBuffers();
-    }
-
-    _renderer->endFrame();
 
     if (_statsDisplay)
     {
@@ -399,6 +409,8 @@ void Director::drawScene()
         calculateMPF();
 #endif
     }
+
+    _poolManager->getCurrentPool()->clear();
 }
 
 void Director::calculateDeltaTime()
@@ -459,6 +471,8 @@ void Director::setRenderView(RenderViewCore* renderView)
 
         _renderer->init();
 
+        _sceneRenderer->onRenderViewChanged(_renderView);
+
         if (_renderView)
         {
             setRenderDefaults();
@@ -470,8 +484,14 @@ void Director::setRenderView(RenderViewCore* renderView)
 
 void Director::setCanvasSize(const Vec2& canvasSize)
 {
+    if (_canvasSizeInPoints.equals(canvasSize))
+        return;
+
     _canvasSizeInPoints   = canvasSize;
     _isStatusLabelUpdated = true;
+
+    updateOverlayCamera();
+    updateOffscreenCamera();
 }
 
 TextureCache* Director::getTextureCache() const
@@ -501,161 +521,64 @@ void Director::setViewport()
     }
 }
 
+Camera* Director::getOverlayCamera()
+{
+    if (!_overlayCamera)
+    {
+        _overlayCamera = Camera::createCanvasOrthographic(-1024.0f, 1024.0f);
+        _overlayCamera->retain();
+        _overlayCamera->setCameraFlag(CameraFlag::DEFAULT);
+        _overlayCamera->setDepth(127);
+    }
+
+    return _overlayCamera;
+}
+
+Camera* Director::getOffscreenCamera()
+{
+    if (!_offscreenCamera)
+    {
+        _offscreenCamera = Camera::createCanvasOrthographic(-1024.0f, 1024.0f);
+        _offscreenCamera->retain();
+        _offscreenCamera->setCameraFlag(CameraFlag::DEFAULT);
+        _offscreenCamera->setDepth(0);
+    }
+    return _offscreenCamera;
+}
+
+void Director::updateOverlayCamera()
+{
+    if (_canvasSizeInPoints.width <= 0 || _canvasSizeInPoints.height <= 0 || !_offscreenCamera)
+        return;
+
+    _overlayCamera->initCanvasOrthographic(-1024.0f, 1024.0f);
+}
+
+void Director::updateOffscreenCamera()
+{
+    if (_canvasSizeInPoints.width <= 0 || _canvasSizeInPoints.height <= 0 || !_offscreenCamera)
+        return;
+
+    _offscreenCamera->initCanvasOrthographic(-1024.0f, 1024.0f);
+}
+
+void Director::setSceneRenderer(std::unique_ptr<SceneRenderer>&& impl)
+{
+    if (impl)
+    {
+        _sceneRenderer = std::move(impl);
+        if (_renderView)
+            _sceneRenderer->onRenderViewChanged(_renderView);
+    }
+    else
+    {
+        _sceneRenderer = std::make_unique<SceneRenderer>();
+    }
+}
+
 void Director::setNextDeltaTimeZero(bool nextDeltaTimeZero)
 {
     _nextDeltaTimeZero = nextDeltaTimeZero;
-}
-
-//
-// FIXME TODO
-// Matrix code MUST NOT be part of the Director
-// MUST BE moved outside.
-// Why the Director must have this code ?
-//
-void Director::initMatrixStack()
-{
-    while (!_modelViewMatrixStack.empty())
-    {
-        _modelViewMatrixStack.pop();
-    }
-
-    while (!_projectionMatrixStack.empty())
-    {
-        _projectionMatrixStack.pop();
-    }
-
-    while (!_textureMatrixStack.empty())
-    {
-        _textureMatrixStack.pop();
-    }
-
-    _modelViewMatrixStack.push(Mat4::identity);
-    _projectionMatrixStack.push(Mat4::identity);
-    _textureMatrixStack.push(Mat4::identity);
-}
-
-void Director::resetMatrixStack()
-{
-    initMatrixStack();
-}
-
-void Director::popMatrix(MATRIX_STACK_TYPE type)
-{
-    if (MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW == type)
-    {
-        _modelViewMatrixStack.pop();
-    }
-    else if (MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION == type)
-    {
-        _projectionMatrixStack.pop();
-    }
-    else if (MATRIX_STACK_TYPE::MATRIX_STACK_TEXTURE == type)
-    {
-        _textureMatrixStack.pop();
-    }
-    else
-    {
-        AXASSERT(false, "unknown matrix stack type");
-    }
-}
-
-void Director::loadIdentityMatrix(MATRIX_STACK_TYPE type)
-{
-    if (MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW == type)
-    {
-        _modelViewMatrixStack.top() = Mat4::identity;
-    }
-    else if (MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION == type)
-    {
-        _projectionMatrixStack.top() = Mat4::identity;
-    }
-    else if (MATRIX_STACK_TYPE::MATRIX_STACK_TEXTURE == type)
-    {
-        _textureMatrixStack.top() = Mat4::identity;
-    }
-    else
-    {
-        AXASSERT(false, "unknown matrix stack type");
-    }
-}
-
-void Director::loadMatrix(MATRIX_STACK_TYPE type, const Mat4& mat)
-{
-    if (MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW == type)
-    {
-        _modelViewMatrixStack.top() = mat;
-    }
-    else if (MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION == type)
-    {
-        _projectionMatrixStack.top() = mat;
-    }
-    else if (MATRIX_STACK_TYPE::MATRIX_STACK_TEXTURE == type)
-    {
-        _textureMatrixStack.top() = mat;
-    }
-    else
-    {
-        AXASSERT(false, "unknown matrix stack type");
-    }
-}
-
-void Director::multiplyMatrix(MATRIX_STACK_TYPE type, const Mat4& mat)
-{
-    if (MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW == type)
-    {
-        _modelViewMatrixStack.top() *= mat;
-    }
-    else if (MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION == type)
-    {
-        _projectionMatrixStack.top() *= mat;
-    }
-    else if (MATRIX_STACK_TYPE::MATRIX_STACK_TEXTURE == type)
-    {
-        _textureMatrixStack.top() *= mat;
-    }
-    else
-    {
-        AXASSERT(false, "unknown matrix stack type");
-    }
-}
-
-void Director::pushMatrix(MATRIX_STACK_TYPE type)
-{
-    if (type == MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW)
-    {
-        _modelViewMatrixStack.push(_modelViewMatrixStack.top());
-    }
-    else if (type == MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION)
-    {
-        _projectionMatrixStack.push(_projectionMatrixStack.top());
-    }
-    else if (type == MATRIX_STACK_TYPE::MATRIX_STACK_TEXTURE)
-    {
-        _textureMatrixStack.push(_textureMatrixStack.top());
-    }
-    else
-    {
-        AXASSERT(false, "unknown matrix stack type");
-    }
-}
-
-const Mat4& Director::getMatrix(MATRIX_STACK_TYPE type) const
-{
-    if (type == MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW)
-    {
-        return _modelViewMatrixStack.top();
-    }
-    else if (type == MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION)
-    {
-        return _projectionMatrixStack.top();
-    }
-    else if (type == MATRIX_STACK_TYPE::MATRIX_STACK_TEXTURE)
-    {
-        return _textureMatrixStack.top();
-    }
-
-    AXASSERT(false, "unknown matrix stack type, will return modelview matrix instead");
-    return _modelViewMatrixStack.top();
 }
 
 void Director::setProjection(Projection projection)
@@ -669,46 +592,6 @@ void Director::setProjection(Projection projection)
     }
 
     setViewport();
-
-    switch (projection)
-    {
-    case Projection::_2D:
-    {
-        Mat4 orthoMatrix;
-        Mat4::createOrthographicOffCenter(0, size.width, 0, size.height, -1024, 1024, &orthoMatrix);
-        loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, orthoMatrix);
-        loadIdentityMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-        break;
-    }
-
-    case Projection::_3D:
-    {
-        float zeye = this->getZEye();
-
-        Mat4 matrixPerspective, matrixLookup;
-
-        // issue #1334
-        Mat4::createPerspective(60, (float)size.width / size.height, 10, zeye + size.height / 2, &matrixPerspective);
-
-        Vec3 eye(size.width / 2, size.height / 2, zeye), center(size.width / 2, size.height / 2, 0.0f),
-            up(0.0f, 1.0f, 0.0f);
-        Mat4::createLookAt(eye, center, up, &matrixLookup);
-        Mat4 proj3d = matrixPerspective * matrixLookup;
-
-        loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, proj3d);
-        loadIdentityMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-        break;
-    }
-
-    case Projection::CUSTOM:
-        // Projection Delegate is no longer needed
-        // since the event "PROJECTION CHANGED" is emitted
-        break;
-
-    default:
-        AXLOGD("Director: unrecognized projection");
-        break;
-    }
 
     _projection = projection;
 
@@ -750,9 +633,11 @@ static void getViewProjMatrix(Mat4* transformOut)
     Director* director = Director::getInstance();
     AXASSERT(nullptr != director, "Director is null when setting matrix stack");
 
-    auto& projection = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto& modelview  = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    *transformOut    = projection * modelview;
+    auto scene  = director->getRunningScene();
+    auto camera = scene ? scene->getDefaultCamera() : nullptr;
+
+    AXASSERT(camera, "Director screen/world conversion requires a running scene default camera");
+    *transformOut = camera ? camera->getViewProjectionMatrix() : Mat4::identity;
 }
 
 Vec2 Director::screenToWorld(const Vec2& screenPoint)
@@ -814,6 +699,11 @@ Vec2 Director::worldToScreen(const Vec2& worldPoint)
     return Vec2{uiX * viewScale.x + vp.origin.x, uiY * viewScale.y + vp.origin.y};
 }
 
+Vec2 Director::canvasToPixels(const Vec2& size) const
+{
+    return size * _contentScaleFactor;
+}
+
 const Vec2& Director::getCanvasSize() const
 {
     return _canvasSizeInPoints;
@@ -821,7 +711,7 @@ const Vec2& Director::getCanvasSize() const
 
 Vec2 Director::getCanvasSizeInPixels() const
 {
-    return Vec2(_canvasSizeInPoints.width * _contentScaleFactor, _canvasSizeInPoints.height * _contentScaleFactor);
+    return _canvasSizeInPoints * _contentScaleFactor;
 }
 
 Vec2 Director::getVisibleSize() const
@@ -1155,7 +1045,6 @@ void Director::reset()
 
     // axmol specific data structures
     UserDefault::destroyInstance();
-    resetMatrixStack();
 
     destroyTextureCache();
 
@@ -1176,7 +1065,10 @@ void Director::cleanupDirector()
     _eventDispatcher->dispatchEvent(_eventBeforeGfxDrop);
 
     // Before destory RHI, clear current pool once
-    PoolManager::getInstance()->getCurrentPool()->clear();
+    _poolManager->getCurrentPool()->clear();
+
+    // SceneRenderer may hold GPU resources, need reset before gfx drop
+    _sceneRenderer.reset();
 
     // If any graphics resources not cleanup or leaked, will crash on linux when destroy graphics context,
     // so we should cleanup any graphics resources.
@@ -1211,7 +1103,7 @@ void Director::restartDirector()
     getScheduler()->scheduleUpdate(getActionManager(), Scheduler::PRIORITY_SYSTEM, false);
 
     // release the objects
-    PoolManager::getInstance()->getCurrentPool()->clear();
+    _poolManager->getCurrentPool()->clear();
 
     // Restart animation
     startAnimation();
@@ -1351,6 +1243,14 @@ void Director::showStats()
             _frames  = 0;
         }
 
+        auto previousCamera = Camera::_visitingCamera;
+        auto* overlayCamera = getOverlayCamera();
+        if (overlayCamera)
+        {
+            Camera::_visitingCamera = overlayCamera;
+            overlayCamera->apply();
+        }
+
         auto currentCalls = (uint32_t)_renderer->getDrawnBatches();
         auto currentVerts = (uint32_t)_renderer->getDrawnVertices();
         if (currentCalls != prevCalls)
@@ -1368,9 +1268,14 @@ void Director::showStats()
         }
 
         const Mat4& identity = Mat4::identity;
-        _drawnVerticesLabel->visit(_renderer, identity, 0);
-        _drawnBatchesLabel->visit(_renderer, identity, 0);
-        _FPSLabel->visit(_renderer, identity, 0);
+        if (overlayCamera)
+        {
+            _drawnVerticesLabel->visit(_renderer, identity, 0);
+            _drawnBatchesLabel->visit(_renderer, identity, 0);
+            _FPSLabel->visit(_renderer, identity, 0);
+        }
+
+        Camera::_visitingCamera = previousCamera;
     }
 }
 
@@ -1689,10 +1594,7 @@ void Director::renderFrame()
     }
     else if (!_invalid)
     {
-        drawScene();
-
-        // release the objects
-        PoolManager::getInstance()->getCurrentPool()->clear();
+        processFrame();
     }
 }
 

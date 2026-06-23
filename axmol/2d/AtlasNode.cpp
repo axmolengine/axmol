@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "axmol/base/Director.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/base/Utils.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/rhi/ProgramState.h"
@@ -116,7 +117,7 @@ void AtlasNode::calculateMaxItems()
 
     if (_ignoreContentScaleFactor)
     {
-        s = _textureAtlas->getTexture()->getContentSizeInPixels();
+        s = _textureAtlas->getTexture()->getPixelSize();
     }
 
     _itemsPerColumn = (int)(s.height / _itemHeight);
@@ -136,7 +137,7 @@ void AtlasNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
     auto programState = _quadCommand.unsafePS();
 
-    const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& projectionMat = Camera::getVisitingViewProjectionMatrix();
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
 
     _quadCommand.init(_globalZOrder, _textureAtlas->getTexture(), _blendFunc, _textureAtlas->getQuads(), _quadsToDraw,

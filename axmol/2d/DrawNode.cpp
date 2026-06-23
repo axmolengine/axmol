@@ -34,6 +34,7 @@
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/2d/ActionCatmullRom.h"
 #include "axmol/base/Utils.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/ProgramState.h"
 #include "poly2tri/poly2tri.h"
@@ -197,7 +198,7 @@ void DrawNode::updateBlendState(CustomCommand& cmd)
 void DrawNode::updateUniforms(const Mat4& transform, CustomCommand& cmd)
 {
     auto pipelinePS     = cmd.unsafePS();
-    const auto& matrixP = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& matrixP = Camera::getVisitingViewProjectionMatrix();
     Mat4 matrixMVP      = matrixP * transform;
     auto mvpLocation    = pipelinePS->getUniformLocation("u_MVPMatrix");
     pipelinePS->setUniform(mvpLocation, matrixMVP.m, sizeof(matrixMVP.m));

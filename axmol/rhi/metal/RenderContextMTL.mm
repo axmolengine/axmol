@@ -378,9 +378,7 @@ void RenderContextImpl::endRenderPass()
     afterDraw();
 }
 
-void RenderContextImpl::readPixels(RenderTarget* rt,
-                                   bool /*preserveAxisHint*/,
-                                   std::function<void(const PixelBufferDesc&)> callback)
+void RenderContextImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
 {
     auto rtMTL = static_cast<RenderTargetImpl*>(rt);
 

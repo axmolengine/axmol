@@ -32,7 +32,6 @@ THE SOFTWARE.
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/InputSystem.h"
 #include "axmol/scene/Camera.h"
-#include "axmol/scene/Scene.h"
 #include "axmol/renderer/Renderer.h"
 
 namespace ax
@@ -222,7 +221,7 @@ void RenderViewCore::setViewportInPoints(float x, float y, float w, float h)
 void RenderViewCore::setScissorInPoints(float x, float y, float w, float h)
 {
     setScissorRect((int)(x * _viewScale.x + _viewportRect.origin.x), (int)(y * _viewScale.y + _viewportRect.origin.y),
-                   (unsigned int)(w * _viewScale.y), (unsigned int)(h * _viewScale.y));
+                   (unsigned int)(w * _viewScale.x), (unsigned int)(h * _viewScale.y));
 }
 
 Rect RenderViewCore::getScissorInPoints() const
@@ -263,72 +262,21 @@ void RenderViewCore::onSurfaceResized()
     int screenHeight = static_cast<uint32_t>(_renderSize.height);
 
     AXLOGD("RenderViewCore::onSurfaceResized: ({}x{})", screenWidth, screenHeight);
-
-    auto renderer = Director::getInstance()->getRenderer();
+    auto director = Director::getInstance();
+    auto renderer = director->getRenderer();
     if (renderer)
         renderer->updateSurface(getNativeDisplay(), screenWidth, screenHeight);
-#ifdef AX_ENABLE_VR
-    if (_vrRenderer) [[unlikely]]
-        _vrRenderer->onRenderViewResized(this);
-#endif
-}
-
-void RenderViewCore::renderScene(Scene* scene, Renderer* renderer)
-{
-    AXASSERT(scene, "Invalid Scene");
-    AXASSERT(renderer, "Invalid Renderer");
-
-#ifdef AX_ENABLE_VR
-    if (_vrRenderer) [[unlikely]]
-    {
-        _vrRenderer->render(scene, renderer);
-        return;
-    }
-#endif
-
-    scene->render(renderer, Mat4::identity, nullptr);
+    director->getSceneRenderer()->onRenderViewChanged(this);
 }
 
 void RenderViewCore::setScissorRect(float x, float y, float w, float h)
 {
-#ifdef AX_ENABLE_VR
-    if (_vrRenderer) [[unlikely]]
-    {
-        _vrRenderer->setScissorRect(x, y, w, h);
-        return;
-    }
-#endif
-
-    Director::getInstance()->getRenderer()->setScissorRect(x, y, w, h);
+    Director::getInstance()->getSceneRenderer()->setScissorRect(x, y, w, h);
 }
 
 const ScissorRect& RenderViewCore::getScissorRect() const
 {
-#ifdef AX_ENABLE_VR
-    if (_vrRenderer) [[unlikely]]
-        return _vrRenderer->getScissorRect();
-#endif
-
-    return Director::getInstance()->getRenderer()->getScissorRect();
+    return Director::getInstance()->getSceneRenderer()->getScissorRect();
 }
-
-#ifdef AX_ENABLE_VR
-void RenderViewCore::setVR(std::unique_ptr<IVRRenderer>&& impl)
-{
-    if (_vrRenderer != impl)
-    {
-        if (_vrRenderer)
-        {
-            _vrRenderer->cleanup();
-            _vrRenderer.reset();
-        }
-
-        if (impl)
-            impl->init(this);
-
-        _vrRenderer = std::move(impl);
-    }
-}
-#endif
 
 }  // namespace ax

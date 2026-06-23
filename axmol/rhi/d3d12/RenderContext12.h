@@ -123,9 +123,7 @@ public:
     void endRenderPass() override;
     void endFrame() override;
 
-    void readPixels(RenderTarget* rt,
-                    bool preserveAxisHint,
-                    std::function<void(const PixelBufferDesc&)> callback) override;
+    void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback) override;
 
     void setStencilReferenceValue(uint32_t value) override;
 
@@ -139,9 +137,7 @@ private:
 
     void prepareDrawing(ID3D12GraphicsCommandList* cmd);
 
-    void readPixelsInternal(RenderTarget* rt,
-                            bool preserveAxisHint,
-                            std::function<void(const PixelBufferDesc&)>& callback);
+    void readPixelsInternal(RenderTarget* rt, std::function<void(const PixelBufferDesc&)>& callback);
 
     void markDynamicStateDirty(DynamicStateBits bits) noexcept
     {

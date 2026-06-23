@@ -77,8 +77,8 @@ void SpriteFrameCachePixelFormatTest::loadSpriteFrames(std::string_view file, ax
     SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png");
     Texture2D* texture       = spriteFrame->getTexture();
     const ssize_t bitsPerKB  = 8 * 1024;
-    const double memorySize  = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width *
-                              texture->getContentSizeInPixels().height / bitsPerKB;
+    const double memorySize  = 1.0 * texture->getBitsPerPixelForFormat() * texture->getPixelSize().width *
+                              texture->getPixelSize().height / bitsPerKB;
 
     const std::string textureInfo =
         fmt::format("{}{}: {:.2} KB\r\n", infoLabel->getString(), texture->getStringForFormat(), memorySize);
@@ -452,8 +452,8 @@ void SpriteFrameCacheJsonAtlasTest::loadSpriteFrames(std::string_view file, ax::
         SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png"sv);
     Texture2D* texture      = spriteFrame->getTexture();
     const ssize_t bitsPerKB = 8 * 1024;
-    const double memorySize = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width *
-                              texture->getContentSizeInPixels().height / bitsPerKB;
+    const double memorySize = 1.0 * texture->getBitsPerPixelForFormat() * texture->getPixelSize().width *
+                              texture->getPixelSize().height / bitsPerKB;
     const std::string textureInfo =
         fmt::format("{}{}: {:.2} KB\r\n", infoLabel->getString(), texture->getStringForFormat(), memorySize);
     infoLabel->setString(textureInfo);

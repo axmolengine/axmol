@@ -26,7 +26,6 @@
 #pragma once
 
 #include <vector>
-#include <stack>
 #include <array>
 #include <deque>
 #include <optional>
@@ -66,6 +65,7 @@ class CallbackCommand;
 struct PipelineDesc;
 class Texture2D;
 class RenderView;
+class Scene;
 
 /** Class that knows how to sort `RenderCommand` objects.
  Since the commands that have `z == 0` are "pushed back" in
@@ -201,9 +201,6 @@ public:
     void setRenderTarget(rhi::RenderTarget* rt) { _currentRT = rt; };
 
     rhi::RenderTarget* getDefaultRenderTarget() const { return _defaultRT; }
-
-    /* The offscreen render target for RenderTexture to share it */
-    rhi::RenderTarget* getOffscreenRenderTarget();
 
     /**
     Set clear values for each attachment.
@@ -416,13 +413,7 @@ public:
     bool checkVisibility(const Mat4& transform, const Vec2& size);
 
     /** read pixels from RenderTarget or screen framebuffer */
-    void readPixels(rhi::RenderTarget* rt, std::function<void(const rhi::PixelBufferDesc&)> callback)
-    {
-        readPixels(rt, false, std::move(callback));
-    }
-    void readPixels(rhi::RenderTarget* rt,
-                    bool preserveAxisHint,
-                    std::function<void(const rhi::PixelBufferDesc&)> callback);
+    void readPixels(rhi::RenderTarget* rt, std::function<void(const rhi::PixelBufferDesc&)> callback);
 
     uint64_t getCompletedFenceValue() const;
 
@@ -512,7 +503,7 @@ protected:
     CullMode _cullMode = CullMode::NONE;
     Winding _winding   = Winding::COUNTER_CLOCK_WISE;  // default front face is CCW in GL
 
-    std::stack<int> _commandGroupStack;
+    LinearStack<int> _commandGroupStack;
 
     std::vector<RenderQueue> _renderGroups;
 
@@ -571,8 +562,6 @@ protected:
     rhi::RenderTarget* _defaultRT = nullptr;
     rhi::RenderTarget* _currentRT = nullptr;  // weak ref
 
-    rhi::RenderTarget* _offscreenRT = nullptr;
-
     Color _clearColor = Color::black;
     ClearFlag _clearFlag;
 
@@ -590,7 +579,7 @@ protected:
         rhi::CullMode cullMode = rhi::CullMode::NONE;
     };
 
-    std::deque<StateBlock> _stateBlockStack;
+    LinearStack<StateBlock> _stateBlockStack;
 };
 
 }  // namespace ax

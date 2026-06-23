@@ -171,12 +171,6 @@ void SkeletonNode::visit(ax::Renderer* renderer, const ax::Mat4& parentTransform
 
     uint32_t flags = processParentFlags(parentTransform, parentFlags);
 
-    // IMPORTANT:
-    // To ease the migration to v3.0, we still support the Mat4 stack,
-    // but it is deprecated and your code should not rely on it
-    _director->pushMatrix(ax::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    _director->loadMatrix(ax::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
-
     int i = 0;
     if (!_children.empty())
     {
@@ -210,11 +204,6 @@ void SkeletonNode::visit(ax::Renderer* renderer, const ax::Mat4& parentTransform
         renderer->addCommand(&_batchBoneCommand);
         batchDrawAllSubBones();
     }
-    _director->popMatrix(ax::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    // FIX ME: Why need to set _orderOfArrival to 0??
-    // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
-    // reset for next frame
-    // _orderOfArrival = 0;
 }
 
 void SkeletonNode::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)

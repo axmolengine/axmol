@@ -43,8 +43,7 @@ Environment* Environment::s_sharedEnvironment = nullptr;
 const char* Environment::CONFIG_FILE_LOADED = "config_file_loaded";
 
 Environment::Environment()
-    : _maxModelviewStackDepth(0)
-    , _supportsPVRTC(false)
+    : _supportsPVRTC(false)
     , _supportsETC1(false)
     , _supportsETC2(false)
     , _supportsS3TC(false)
@@ -202,11 +201,6 @@ void Environment::destroyInstance()
 int Environment::getMaxTextureSize() const
 {
     return axdrv->getMaxTextureSize();
-}
-
-int Environment::getMaxModelviewStackDepth() const
-{
-    return _maxModelviewStackDepth;
 }
 
 int Environment::getMaxTextureUnits() const

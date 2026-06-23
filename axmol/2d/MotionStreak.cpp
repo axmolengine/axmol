@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "axmol/math/Vertex.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/Utils.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/renderer/Texture2D.h"
 #include "axmol/renderer/Renderer.h"
@@ -390,7 +391,7 @@ void MotionStreak::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
 
     auto programState = _customCommand.unsafePS();
 
-    const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& projectionMat = Camera::getVisitingViewProjectionMatrix();
     Mat4 finalMat             = projectionMat * transform;
     programState->setUniform(_mvpMatrixLocaiton, finalMat.m, sizeof(Mat4));
 

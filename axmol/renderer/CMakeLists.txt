@@ -11,8 +11,10 @@ set(_AX_RENDERER_HEADER
   renderer/RenderCommandPool.h
   renderer/Renderer.h
   renderer/RenderState.h
+  renderer/RenderTexturePass.h
   renderer/Technique.h
   renderer/Texture2D.h
+  renderer/RenderTexture.h
   renderer/TextureAtlas.h
   renderer/TextureCache.h
   renderer/TextureCube.h
@@ -33,9 +35,11 @@ set(_AX_RENDERER_SRC
   renderer/QuadCommand.cpp
   renderer/RenderCommand.cpp
   renderer/RenderState.cpp
+  renderer/RenderTexturePass.cpp
   renderer/Renderer.cpp
   renderer/Technique.cpp
   renderer/Texture2D.cpp
+  renderer/RenderTexture.cpp
   renderer/TextureAtlas.cpp
   renderer/TextureCache.cpp
   renderer/TextureCube.cpp

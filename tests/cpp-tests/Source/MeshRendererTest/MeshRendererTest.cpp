@@ -812,6 +812,8 @@ std::string MeshRendererLightMapTest::subtitle() const
 
 void MeshRendererLightMapTest::onPointerMove(ax::PointerEvent* event)
 {
+    if (!event->isPrimaryPressed())
+        return;
     float delta           = Director::getInstance()->getDeltaTime();
     auto location         = event->getLocation();
     auto PreviousLocation = event->getPreviousLocation();
@@ -829,8 +831,6 @@ void MeshRendererLightMapTest::onPointerMove(ax::PointerEvent* event)
     cameraPos += cameraDir * newPos.y * delta;
     cameraPos += cameraRightDir * newPos.x * delta;
     _camera->setPosition3D(cameraPos);
-
-    return;
 }
 
 //------------------------------------------------------------------
@@ -1782,7 +1782,7 @@ void MeshRendererWithOBBPerformanceTest::calculateRayByLocationInView(Ray* ray, 
 {
     auto dir  = Director::getInstance();
     auto view = dir->getCanvasSize();
-    auto mat  = dir->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    auto mat  = Camera::getDefaultCamera()->getViewProjectionMatrix();
 
     Vec3 src = Vec3(location.x, location.y, -1);
     Vec3 nearPoint;

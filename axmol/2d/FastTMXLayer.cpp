@@ -240,7 +240,7 @@ void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
         _dirty = false;
     }
 
-    const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& projectionMat = Camera::getVisitingViewProjectionMatrix();
     Mat4 finalMat             = projectionMat * _modelViewTransform;
     // Submit batches lowest-firstGid first so base/terrain tiles (low GIDs) draw behind
     // overlay/object tiles (high GIDs) that share the same vertexZ.
@@ -408,7 +408,7 @@ void FastTMXLayer::setupTiles()
     {
         if (batch.texture)
         {
-            batch.tilesetInfo->_imageSize = batch.texture->getContentSizeInPixels();
+            batch.tilesetInfo->_imageSize = batch.texture->getPixelSize();
             batch.texture->setAliasTexParameters();
         }
         maxTileHeight = std::max(maxTileHeight, batch.tilesetInfo->_tileSize.height);

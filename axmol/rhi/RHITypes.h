@@ -705,7 +705,14 @@ struct ProgramType
 
 struct RectI
 {
-    RectI() { this->x = this->y = this->w = this->h = 0; }
+    constexpr RectI() { this->x = this->y = this->w = this->h = 0; }
+    constexpr RectI(int xx, int yy, int ww, int hh)
+    {
+        this->x = xx;
+        this->y = yy;
+        this->w = ww;
+        this->h = hh;
+    }
     int x;
     int y;
 

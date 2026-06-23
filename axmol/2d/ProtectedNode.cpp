@@ -281,12 +281,6 @@ void ProtectedNode::visit(Renderer* renderer, const Mat4& parentTransform, uint3
 
     uint32_t flags = processParentFlags(parentTransform, parentFlags);
 
-    // IMPORTANT:
-    // To ease the migration to v3.0, we still support the Mat4 stack,
-    // but it is deprecated and your code should not rely on it
-    _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
-
     int i = 0;  // used by _children
     int j = 0;  // used by _protectedChildren
 
@@ -334,8 +328,6 @@ void ProtectedNode::visit(Renderer* renderer, const Mat4& parentTransform, uint3
     // FIX ME: Why need to set _orderOfArrival to 0??
     // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
     // setOrderOfArrival(0);
-
-    _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
 void ProtectedNode::onEnter()

@@ -65,7 +65,6 @@ EMSCRIPTEN_KEEPALIVE void axmol_webglcontextrestored()
 
     auto director = ax::Director::getInstance();
     axdrv->resetState();
-    director->resetMatrixStack();
     ax::CustomEvent recreatedEvent(EVENT_RENDERER_RECREATED);
     director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
     director->setRenderDefaults();

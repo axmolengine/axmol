@@ -10,7 +10,9 @@
 #include "axmol/renderer/ProgramManager.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/CustomCommand.h"
 #include "axmol/renderer/CallbackCommand.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/rhi/DriverContext.h"
 #include "axmol/rhi/Buffer.h"
 
@@ -417,7 +419,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
 
                     auto bd = ImGui_ImplAxmol_GetBackendData();
 
-                    if (typeid(*((Object*)pcmd->TexRef.GetTexID())) == typeid(Texture2D))
+                    if (dynamic_cast<Texture2D*>((Object*)pcmd->TexRef.GetTexID()))
                     {
                         auto tex = (Texture2D*)(uintptr_t)(pcmd->TexRef.GetTexID());
                         auto cmd = std::make_shared<CustomCommand>();
@@ -448,8 +450,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
                         const auto tr = node->getNodeToParentTransform();
                         node->setVisible(true);
                         node->setNodeToParentTransform(tr);
-                        const auto& proj =
-                            Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+                        const auto& proj = Camera::getDefaultCamera()->getViewProjectionMatrix();
                         node->visit(Director::getInstance()->getRenderer(), proj.getInversed() * bd->Projection, 0);
                         node->setVisible(false);
                     }

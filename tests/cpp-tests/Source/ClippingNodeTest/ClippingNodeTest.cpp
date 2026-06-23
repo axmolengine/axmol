@@ -35,6 +35,7 @@
 #include "axmol/renderer/Renderer.h"
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/renderer/Shaders.h"
+#include "axmol/renderer/RenderTexturePass.h"
 
 using namespace ax;
 
@@ -568,7 +569,7 @@ void RawStencilBufferTest::initCommands()
     _programState             = new rhi::ProgramState(program);
     _locColor                 = _programState->getProgram()->getUniformLocation("u_color");
     _locMVPMatrix             = _programState->getProgram()->getUniformLocation("u_MVPMatrix");
-    const auto& projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& projectionMat = Camera::getVisitingViewProjectionMatrix();
     _programState->setUniform(_locMVPMatrix, projectionMat.m, sizeof(projectionMat.m));
 
     Object::assign(_vertexLayout, _programState->getVertexLayout());
@@ -630,21 +631,14 @@ void RawStencilBufferTest::draw(Renderer* renderer, const Mat4& transform, uint3
         renderer->addCommand(&_renderCmds[cmdIndex]);
         cmdIndex++;
 
-        Director* director = Director::getInstance();
-        AXASSERT(nullptr != director, "Director is null when setting matrix stack");
-        director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-
         _modelViewTransform = this->transform(transform);
         _spritesStencil.at(i)->visit(renderer, _modelViewTransform, flags);
-        director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 
         renderer->addCommand(&_renderCmds[cmdIndex]);
         cmdIndex++;
 
-        director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
         _modelViewTransform = this->transform(transform);
         _sprites.at(i)->visit(renderer, _modelViewTransform, flags);
-        director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     }
 
     renderer->addCallbackCommand([=]() { renderer->setStencilTest(false); }, _globalZOrder);
@@ -933,13 +927,18 @@ void ClippingToRenderTextureTest::reproduceBug()
     // container rendered on Texture the size of the screen and because Clipping node use stencil buffer so we need to
     // create RenderTexture with depthStencil format parameter
     RenderTexture* rt =
-        RenderTexture::create(visibleSize.width, visibleSize.height, rhi::PixelFormat::RGBA8, PixelFormat::D24S8);
-    rt->setPosition(visibleSize.width / 2, visibleSize.height / 2);
-    this->addChild(rt);
+        RenderTexture::create(_director->canvasToPixels(visibleSize), rhi::PixelFormat::RGBA8, PixelFormat::D24S8);
 
-    rt->begin();
-    container->visit();
-    rt->end();
+    Sprite* rtSprite = Sprite::createWithTexture(rt);
+    rtSprite->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+    this->addChild(rtSprite);
+
+    {
+        auto scope = RefPtr<RenderTexturePass>(RenderTexturePass::obtain(rt), tlx::adopt_object);
+        scope->begin();
+        container->visit();
+        scope->end();
+    }
 }
 
 // ClippingRectangleNodeDemo

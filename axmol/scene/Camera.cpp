@@ -32,6 +32,7 @@
 #include "axmol/scene/Scene.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/QuadCommand.h"
+#include "axmol/renderer/RenderTexture.h"
 
 namespace ax
 {
@@ -66,6 +67,14 @@ Camera* Camera::createOrthographic(float zoomX, float zoomY, float nearPlane, fl
     return ret;
 }
 
+Camera* Camera::createCanvasOrthographic(float nearPlane, float farPlane)
+{
+    auto ret = new Camera();
+    ret->initCanvasOrthographic(nearPlane, farPlane);
+    ret->autorelease();
+    return ret;
+}
+
 Camera* Camera::getDefaultCamera()
 {
     // camera nullptr scene init fix #690
@@ -81,14 +90,16 @@ const Viewport& Camera::getDefaultViewport()
 {
     return _defaultViewport;
 }
+
+const Mat4& Camera::getVisitingViewProjectionMatrix()
+{
+    AXASSERT(_visitingCamera, "Camera::getVisitingViewProjectionMatrix() requires a visiting camera");
+    return _visitingCamera ? _visitingCamera->getViewProjectionMatrix() : Mat4::identity;
+}
+
 void Camera::setDefaultViewport(const Viewport& vp)
 {
     _defaultViewport = vp;
-}
-
-const Camera* Camera::getVisitingCamera()
-{
-    return _visitingCamera;
 }
 
 // end static methods
@@ -109,11 +120,17 @@ Camera::Camera()
 Camera::~Camera()
 {
     AX_SAFE_RELEASE(_clearBrush);
+    AX_SAFE_RELEASE(_targetTexture);
 }
 
 const Mat4& Camera::getProjectionMatrix() const
 {
     return _projection;
+}
+void Camera::setProjectionMatrix(const Mat4& mat)
+{
+    _projection          = mat;
+    _viewProjectionDirty = true;
 }
 const Mat4& Camera::getViewMatrix() const
 {
@@ -196,9 +213,7 @@ void Camera::initDefault()
         _fieldOfView = 60.0F;
         _nearPlane   = -1024.0F;
         _farPlane    = 1024.0F;
-        initOrthographic(size.width, size.height, _nearPlane, _farPlane);
-        setPosition3D(Vec3(size.width / 2.0F, size.height / 2.0F, 0.f));
-        setRotation3D(Vec3(0.f, 0.f, 0.f));
+        initOrthographicView(size, _nearPlane, _farPlane);
         break;
     }
 
@@ -234,7 +249,7 @@ void Camera::updateTransform()
     {
     case Director::Projection::_2D:
     {
-        initOrthographic(size.width, size.height, _nearPlane, _farPlane);
+        initOrthographicView(size, _nearPlane, _farPlane);
         break;
     }
 
@@ -284,6 +299,19 @@ bool Camera::initOrthographic(float zoomX, float zoomY, float nearPlane, float f
     _frustumDirty = true;
 #endif
 
+    return true;
+}
+
+bool Camera::initCanvasOrthographic(float nearPlane, float farPlane)
+{
+    return initOrthographicView(Director::getInstance()->getCanvasSize(), nearPlane, farPlane);
+}
+
+bool Camera::initOrthographicView(const Vec2& size, float nearPlane, float farPlane)
+{
+    initOrthographic(size.width, size.height, nearPlane, farPlane);
+    setPosition3D(Vec3(size.width / 2.0F, size.height / 2.0F, 0.0F));
+    setRotation3D(Vec3(0.0F, 0.0F, 0.0F));
     return true;
 }
 
@@ -467,30 +495,29 @@ void Camera::onExit()
 
 void Camera::setScene(Scene* scene)
 {
-    if (_scene != scene)
+    if (_scene == scene)
+        return;
+
+    if (_scene)
     {
-        // remove old scene
-        if (_scene)
-        {
-            auto& cameras = _scene->_cameras;
-            auto it       = std::find(cameras.begin(), cameras.end(), this);
-            if (it != cameras.end())
-                cameras.erase(it);
-            _scene = nullptr;
-        }
-        // set new scene
-        if (scene)
-        {
-            _scene        = scene;
-            auto& cameras = _scene->_cameras;
-            auto it       = std::find(cameras.begin(), cameras.end(), this);
-            if (it == cameras.end())
-            {
-                _scene->_cameras.emplace_back(this);
-                // notify scene that the camera order is dirty
-                _scene->setCameraOrderDirty();
-            }
-        }
+        _scene->unregisterCamera(this);
+        _scene = nullptr;
+    }
+
+    if (scene)
+    {
+        _scene = scene;
+        _scene->registerCamera(this);
+    }
+}
+
+void Camera::setTargetTexture(RenderTexture* target)
+{
+    if (_targetTexture != target)
+    {
+        AX_SAFE_RETAIN(target);
+        AX_SAFE_RELEASE(_targetTexture);
+        _targetTexture = target;
     }
 }
 
@@ -504,7 +531,7 @@ void Camera::clearBackground()
 
 void Camera::apply()
 {
-    _viewProjectionUpdated = _transformUpdated;
+    updateViewProjectionState();
     applyViewport();
 }
 

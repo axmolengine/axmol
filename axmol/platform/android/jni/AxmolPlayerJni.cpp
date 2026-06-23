@@ -152,7 +152,6 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnSurfaceCreated(JNI
         else
         {
             axdrv->resetState();
-            director->resetMatrixStack();
             ax::CustomEvent recreatedEvent(EVENT_RENDERER_RECREATED);
             director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
             director->setRenderDefaults();

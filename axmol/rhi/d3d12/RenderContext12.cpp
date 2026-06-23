@@ -912,9 +912,7 @@ RenderContextImpl::UniformSlice RenderContextImpl::allocateUniformSlice(UINT fra
     return slice;
 }
 
-void RenderContextImpl::readPixels(RenderTarget* rt,
-                                   bool preserveAxisHint,
-                                   std::function<void(const PixelBufferDesc&)> callback)
+void RenderContextImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
 {
     if (!rt)
     {
@@ -923,16 +921,14 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
     }
     rt->retain();
 
-    _frameCompletionOps.emplace_back([this, rt, preserveAxisHint, callback = std::move(callback)](uint64_t) mutable {
-        readPixelsInternal(rt, preserveAxisHint, callback);
+    _frameCompletionOps.emplace_back([this, rt, callback = std::move(callback)](uint64_t) mutable {
+        readPixelsInternal(rt, callback);
 
         rt->release();
     });
 }
 
-void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
-                                           bool preserveAxisHint,
-                                           std::function<void(const PixelBufferDesc&)>& callback)
+void RenderContextImpl::readPixelsInternal(RenderTarget* rt, std::function<void(const PixelBufferDesc&)>& callback)
 {
     PixelBufferDesc pbd{};
     auto* rtImpl = static_cast<RenderTargetImpl*>(rt);

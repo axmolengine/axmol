@@ -965,7 +965,7 @@ bool MySprite::setProgramState(rhi::ProgramState* programState, bool ownPS /* = 
 
 void MySprite::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-    const auto& projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& projectionMat = Camera::getVisitingViewProjectionMatrix();
     auto mvpMatrix            = projectionMat * transform;
     _customCommand.unsafePS()->setUniform(_mvpMatrixLocation, mvpMatrix.m, sizeof(mvpMatrix.m));
     _customCommand.init(_globalZOrder, transform, flags);

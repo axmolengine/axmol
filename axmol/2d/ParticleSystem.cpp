@@ -1369,16 +1369,16 @@ void ParticleSystem::setMultiAnimationRandom()
 void ParticleSystem::setAnimationIndicesAtlas()
 {
     // VERTICAL
-    if (_texture->getPixelsHigh() > _texture->getPixelsWide())
+    if (_texture->getHeight() > _texture->getWidth())
     {
-        setAnimationIndicesAtlas(_texture->getPixelsWide(), ParticleSystem::TexAnimDir::VERTICAL);
+        setAnimationIndicesAtlas(_texture->getWidth(), ParticleSystem::TexAnimDir::VERTICAL);
         return;
     }
 
     // HORIZONTAL
-    if (_texture->getPixelsWide() > _texture->getPixelsHigh())
+    if (_texture->getWidth() > _texture->getHeight())
     {
-        setAnimationIndicesAtlas(_texture->getPixelsHigh(), ParticleSystem::TexAnimDir::HORIZONTAL);
+        setAnimationIndicesAtlas(_texture->getHeight(), ParticleSystem::TexAnimDir::HORIZONTAL);
         return;
     }
 
@@ -1391,8 +1391,8 @@ void ParticleSystem::setAnimationIndicesAtlas(unsigned int unifiedCellSize, TexA
 
     resetAnimationIndices();
 
-    auto texWidth  = _texture->getPixelsWide();
-    auto texHeight = _texture->getPixelsHigh();
+    auto texWidth  = _texture->getWidth();
+    auto texHeight = _texture->getHeight();
 
     switch (direction)
     {

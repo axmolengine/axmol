@@ -25,6 +25,7 @@
 #include "axmol/2d/NodeGrid.h"
 #include "axmol/2d/Grid.h"
 #include "axmol/renderer/Renderer.h"
+#include "axmol/scene/Camera.h"
 
 namespace ax
 {
@@ -74,8 +75,26 @@ void NodeGrid::setTarget(Node* target)
 
 NodeGrid::~NodeGrid()
 {
+    AX_SAFE_RELEASE(_gridCamera);
     AX_SAFE_RELEASE(_nodeGrid);
     AX_SAFE_RELEASE(_gridTarget);
+}
+
+Camera* NodeGrid::getGridCamera()
+{
+    if (!_gridCamera)
+    {
+        _gridCamera = Camera::createCanvasOrthographic(-1, 1);
+        AX_SAFE_RETAIN(_gridCamera);
+    }
+
+    _gridCamera->initCanvasOrthographic(-1, 1);
+    _gridCamera->setAdditionalTransform(Mat4::identity);
+
+    auto visitingCamera = Camera::getVisitingCamera();
+    _gridCamera->setCameraFlag(visitingCamera ? visitingCamera->getCameraFlag() : CameraFlag::DEFAULT);
+
+    return _gridCamera;
 }
 
 void NodeGrid::onGridBeginDraw()
@@ -107,18 +126,11 @@ void NodeGrid::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t p
         _modelViewTransform = this->transform(parentTransform);
     _transformUpdated = false;
 
-    // IMPORTANT:
-    // To ease the migration to v3.0, we still support the Mat4 stack,
-    // but it is deprecated and your code should not rely on it
-    _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
-
-    Director::Projection beforeProjectionType = Director::Projection::DEFAULT;
-    if (_nodeGrid && _nodeGrid->isActive())
-    {
-        beforeProjectionType = _director->getProjection();
-        _nodeGrid->set2DProjection();
-    }
+    auto activeGrid     = _nodeGrid && _nodeGrid->isActive();
+    auto previousCamera = const_cast<Camera*>(Camera::getVisitingCamera());
+    auto captureCamera  = activeGrid ? getGridCamera() : nullptr;
+    if (activeGrid)
+        Camera::setVisitingCamera(captureCamera);
 
     onGridBeginDraw();
 
@@ -161,15 +173,10 @@ void NodeGrid::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t p
     // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
     // setOrderOfArrival(0);
 
-    if (_nodeGrid && _nodeGrid->isActive())
-    {
-        // restore projection
-        _director->setProjection(beforeProjectionType);
-    }
+    if (activeGrid)
+        Camera::setVisitingCamera(previousCamera);
 
     onGridEndDraw();
-
-    _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
 void NodeGrid::setGrid(GridBase* grid)

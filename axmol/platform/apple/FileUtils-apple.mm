@@ -32,7 +32,6 @@ THE SOFTWARE.
 #include <ftw.h>
 
 #include <string>
-#include <stack>
 
 #include "axmol/base/Director.h"
 #include "axmol/platform/FileUtils.h"

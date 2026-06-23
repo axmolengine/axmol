@@ -9,7 +9,7 @@
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
+ copies of the Software and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
 
  The above copyright notice and this permission notice shall be included in
@@ -26,17 +26,17 @@
 
 #pragma once
 
-#include <stack>
+#include <array>
 
 #include "axmol/vr/VRBase.h"
+#include "axmol/scene/SceneRenderer.h"
 #include "axmol/renderer/CustomCommand.h"
+#include "axmol/renderer/RenderTexturePass.h"
 
 namespace ax
 {
 
 class Camera;
-class Sprite;
-class RenderTexture;
 class Director;
 class RenderView;
 
@@ -45,6 +45,12 @@ inline namespace experimental
 class DistortionMesh;
 class Distortion;
 class VRGenericHeadTracker;
+
+struct ScissorTransform
+{
+    float sx{1}, sy{1};
+    float ox{0}, oy{0};
+};
 
 struct VREye
 {
@@ -57,15 +63,29 @@ struct VREye
 
     EyeType type;
     Viewport viewport;
+    ScissorTransform scissorTransform;
 };
 
-struct RasterTransform
-{
-    float sx{1}, sy{1};
-    float ox{0}, oy{0};
-};
-
-class AX_DLL VRGenericRenderer : public IVRRenderer
+/**
+ * @brief Generic stereo renderer with lens distortion output.
+ *
+ * VRGenericRenderer renders the current scene into a side-by-side render texture,
+ * once for the left eye and once for the right eye, then draws distortion meshes
+ * to present the final image on the screen.
+ *
+ * This renderer is intended as a generic VR rendering foundation. It does not
+ * create duplicate scene cameras. Instead, it reuses the scene's existing cameras
+ * and applies per-eye view overrides during rendering. This keeps camera ownership
+ * in the scene while still allowing stereo rendering behavior.
+ *
+ * The renderer also remaps scissor rectangles into the active eye viewport so UI
+ * clipping components such as ScrollView remain correct during VR rendering.
+ *
+ * This class is not a full XR runtime backend. Device tracking, per-eye projection,
+ * swapchains, and frame timing from runtimes such as OpenXR should be integrated
+ * by a dedicated XR backend on top of this rendering foundation.
+ */
+class AX_DLL VRGenericRenderer : public SceneRenderer
 {
 public:
     VRGenericRenderer();
@@ -81,64 +101,117 @@ public:
      */
     void setDebugIgnoreHeadTracker(bool debug) { _debugIgnoreHeadTracker = debug; }
 
+    /**
+     * @brief Sets the distance between the left and right eye views in scene units.
+     *
+     * The renderer uses half of this value as the per-eye offset when building the
+     * left and right eye view transforms. The default value preserves the original
+     * generic VR behavior and is mainly intended for non-XR-runtime preview usage.
+     *
+     * A real XR backend should normally use the per-eye poses supplied by the XR
+     * runtime instead of relying on this fixed separation value.
+     *
+     * @param separation Eye separation in scene units.
+     */
+    void setEyeSeparation(float separation) { _eyeSeparation = separation; }
+
+    /**
+     * @brief Returns the configured distance between the left and right eye views.
+     */
+    float getEyeSeparation() const { return _eyeSeparation; }
+
+    /**
+     * @brief Enables or disables the vignette effect in the distortion mesh.
+     *
+     * The vignette darkens the outer edge of each eye image and can help hide lens
+     * distortion boundaries in generic VR previews.
+     *
+     * @param enabled True to enable vignette rendering; false to disable it.
+     */
     void setVignetteEnabled(bool enabled) { _vignetteEnabled = enabled; }
+
+    /**
+     * @brief Returns whether vignette rendering is enabled.
+     */
     bool isVignetteEnabled() const { return _vignetteEnabled; }
 
-    IVRHeadTracker* getHeadTracker() override;
+    /**
+     * @brief Returns the head tracker used to produce the generic VR head rotation.
+     *
+     * The returned tracker belongs to the renderer and should not be released by the caller.
+     */
+    IVRHeadTracker* getHeadTracker();
 
+    /**
+     * @brief Sets the offscreen render scale used by the generic VR render texture.
+     *
+     * The scale is applied to the final VR output viewport size when creating the
+     * side-by-side render texture. A value greater than 1.0 renders the eye views
+     * at a higher offscreen resolution before the distortion pass, improving VR
+     * sampling quality at the cost of GPU memory and fill rate.
+     *
+     * @param renderScale Offscreen render scale. Values less than or equal to zero are invalid.
+     */
+    void setRenderScale(float renderScale);
+
+    /**
+     * @brief Returns the offscreen render scale used by the generic VR render texture.
+     */
+    float getRenderScale() const { return _renderScale; }
+
+protected:
+    enum EyeIndex
+    {
+        LeftEyeIndex = 0,
+        RightEyeIndex,
+        EyeCount,
+    };
+
+    void onRenderViewChanged(RenderViewCore* rv) override;
+    void renderScene(Renderer* renderer, Scene* scene) override;
     void setScissorRect(float x, float y, float w, float h) override;
     const ScissorRect& getScissorRect() const override;
 
-    void onRenderViewResized(RenderViewCore* rv) override;
+    void reset(RenderViewCore* rv);
+    void setupDistortionProgram();
 
-    void init(RenderViewCore* rv) override;
-    void cleanup() override;
-
-    void render(Scene* scene, Renderer* renderer) override;
-
-protected:
-    void setupProgram();
-
-    void fillEyeViewports(RenderViewCore* rv, const Vec2& screenSize);
-
+    void prepareEyesViewport(const Vec2& sourceSize, const Vec2& renderSize);
     DistortionMesh* createDistortionMesh(VREye::EyeType eyeType, const Size& screenSize);
 
-    void pushLeftRasterTransform(Renderer* renderer);
-    void pushRightRasterTransform(Renderer* renderer);
-
-    void popRasterTransform(Renderer* renderer);
-
-    void pushScissorTransform(const RasterTransform& xf) { _stStack.push(xf); }
-    void popScissorTransform() { _stStack.pop(); }
+    void clearEyeRenderTexture(Renderer* renderer, const Color& clearColor);
+    void renderSceneToEye(Renderer* renderer, Scene* scene, EyeIndex eyeIndex, const Mat4& eyeTransform);
+    void renderDistortionPass(Renderer* renderer);
 
     Director* _director{nullptr};
 
     ScissorRect _sourceScissorRect;
 
-    // static resources
     VRGenericHeadTracker* _headTracker{nullptr};
     rhi::ProgramState* _programState{nullptr};
     rhi::VertexLayout* _vertexLayout{nullptr};
 
     // runtime resources, rebuild when screen size changed
     RenderTexture* _renderTexture{nullptr};
+    RefPtr<RenderTexturePass> _rtPass;
     DistortionMesh* _leftDistortionMesh{nullptr};
     DistortionMesh* _rightDistortionMesh{nullptr};
     Distortion* _distortion{nullptr};
 
-    VREye _leftEye;
-    VREye _rightEye;
-    RasterTransform _xfLeft;
-    RasterTransform _xfRight;
+    std::array<VREye, EyeCount> _eyes;
+
+    float _eyeSeparation{1.0f};
+    float _renderScale{2.0f};
 
     bool _vignetteEnabled{true};
-
     bool _debugIgnoreHeadTracker{false};
 
     CustomCommand _leftEyeCmd;
     CustomCommand _rightEyeCmd;
 
-    std::stack<RasterTransform, std::vector<RasterTransform>> _stStack;
+    // Runtime stack used to transform scissor rectangles from the normal screen
+    // viewport into the active eye viewport while queued UI clipping commands execute,
+    // ensuring clipped components such as ScrollView remain correct in VR rendering.
+    LinearStack<ScissorTransform> _scissorTransformStack;
 };
 }  // namespace experimental
 }  // namespace ax

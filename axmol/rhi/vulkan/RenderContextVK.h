@@ -125,9 +125,7 @@ public:
     void endRenderPass() override;
     void endFrame() override;
 
-    void readPixels(RenderTarget* rt,
-                    bool preserveAxisHint,
-                    std::function<void(const PixelBufferDesc&)> callback) override;
+    void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback) override;
 
     void setStencilReferenceValue(uint32_t value) override;
 
@@ -149,7 +147,7 @@ private:
     };
     bool handleSwapchainResult(VkResult result, SwapchainOp op, uint32_t prevSemaphoreIndex);
 
-    void doReadPixels(RenderTarget* rt, bool preserveAxisHint, std::function<void(const PixelBufferDesc&)>& callback);
+    void doReadPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)>& callback);
 
     void markDynamicStateDirty(DynamicStateBits bits) noexcept
     {

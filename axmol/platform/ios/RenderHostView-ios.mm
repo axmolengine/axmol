@@ -324,7 +324,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 
     // Avoid flicker. Issue #350
     if ([NSThread isMainThread])
-        director->drawScene();
+        director->processFrame();
 }
 
 - (void)swapBuffers

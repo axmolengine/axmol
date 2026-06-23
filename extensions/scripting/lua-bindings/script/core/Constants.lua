@@ -664,7 +664,6 @@ ax.MATRIX_STACK_TYPE =
 {
     MODELVIEW = 0,
     PROJECTION = 1,
-    TEXTURE = 2,
 }
 
 ax.LightType =

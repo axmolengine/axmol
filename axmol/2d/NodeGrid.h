@@ -32,6 +32,7 @@ namespace ax
 {
 
 class GridBase;
+class Camera;
 /**
  *  @addtogroup _2d
  *  @{
@@ -94,9 +95,11 @@ public:
 protected:
     void onGridBeginDraw();
     void onGridEndDraw();
+    Camera* getGridCamera();
 
     Node* _gridTarget   = nullptr;
     GridBase* _nodeGrid = nullptr;
+    Camera* _gridCamera = nullptr;
     CustomCommand _gridBeginCommand;
     CustomCommand _gridEndCommand;
 

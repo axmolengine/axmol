@@ -513,7 +513,7 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     if (@available(iOS 14.0, macOS 10.12, *))
     {
         supportBorderColor = ([_mtlDevice respondsToSelector:@selector(supportsSamplerBorderColor)] &&
-                              [_mtlDevice supportsSamplerBorderColor]);
+                              (bool)(void*)[_mtlDevice performSelector:@selector(supportsSamplerBorderColor)]);
     }
 
     // --- Address Modes ---

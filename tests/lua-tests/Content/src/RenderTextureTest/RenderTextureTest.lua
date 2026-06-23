@@ -60,7 +60,7 @@ local function RenderTextureSave()
         local start = event:getLocation()
         local ended = event:getPreviousLocation()
 
-        target:begin()
+        target:beginRendering()
 
         local distance = ax.pGetDistance(start, ended)
         if distance > 1 then

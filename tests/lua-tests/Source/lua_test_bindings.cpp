@@ -200,8 +200,8 @@ void DrawNode3D::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
     _customCommand.init(_globalZOrder);
     // update mvp matrix
-    auto& matrixP = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto mvp      = matrixP * transform;
+    const auto& matrixP = Camera::getVisitingViewProjectionMatrix();
+    auto mvp            = matrixP * transform;
     _programState->setUniform(_locMVPMatrix, mvp.m, sizeof(mvp.m));
 
     if (_customCommand.getVertexCapacity() < _buffer.size())

@@ -32,6 +32,7 @@
 
 #include <spine/SkeletonBatch.h>
 #include <spine/spine-axmol.h>
+#include "axmol/scene/Camera.h"
 
 #include <algorithm>
 
@@ -154,7 +155,7 @@ namespace spine {
 
 	axmol::TrianglesCommand *SkeletonBatch::addCommand(axmol::Renderer *renderer, float globalOrder, axmol::Texture2D *texture, rhi::ProgramState *programState, axmol::BlendFunc blendType, const axmol::TrianglesCommand::Triangles &triangles, const axmol::Mat4 &mv, uint32_t flags) {
 		SkeletonCommand *command = nextFreeCommand();
-		const axmol::Mat4 &projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+		const axmol::Mat4 &projectionMat = axmol::Camera::getVisitingViewProjectionMatrix();
 
 		if (programState == nullptr)
 			programState = _programState;
@@ -193,4 +194,3 @@ namespace spine {
 		return command;
 	}
 }// namespace spine
-

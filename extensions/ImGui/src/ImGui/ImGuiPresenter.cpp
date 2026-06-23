@@ -55,8 +55,8 @@ std::tuple<ImVec2, ImVec2> getTwoPointTextureUV(Sprite* sp)
         return std::tuple{uv0, uv1};
     const auto& rect        = sp->getTextureRect();
     const auto tex          = sp->getTexture();
-    const float atlasWidth  = (float)tex->getPixelsWide();
-    const float atlasHeight = (float)tex->getPixelsHigh();
+    const float atlasWidth  = (float)tex->getWidth();
+    const float atlasHeight = (float)tex->getHeight();
     uv0.x                   = rect.origin.x / atlasWidth;
     uv0.y                   = rect.origin.y / atlasHeight;
     uv1.x                   = (rect.origin.x + rect.size.width) / atlasWidth;
@@ -68,8 +68,8 @@ std::tuple<ImVec2, ImVec2, ImVec2, ImVec2> getFourPointTextureUV(Texture2D* tex,
 {
     ImVec2 uv0, uv1, uv2, uv3;
 
-    const auto atlasWidth  = (float)tex->getPixelsWide();
-    const auto atlasHeight = (float)tex->getPixelsHigh();
+    const auto atlasWidth  = (float)tex->getWidth();
+    const auto atlasHeight = (float)tex->getHeight();
 
     float rw = rectInPixels.size.width;
     float rh = rectInPixels.size.height;
@@ -592,9 +592,9 @@ void ImGuiPresenter::image(Texture2D* tex,
         return;
     auto size_ = size;
     if (size_.x <= 0.f)
-        size_.x = tex->getPixelsWide();
+        size_.x = tex->getWidth();
     if (size_.y <= 0.f)
-        size_.y = tex->getPixelsHigh();
+        size_.y = tex->getHeight();
     ImGui::PushID(objectRef(tex));
     ImGui::Image((ImTextureID)tex, size_, uv0, uv1);
     ImGui::PopID();
@@ -721,9 +721,9 @@ bool ImGuiPresenter::imageButton(Texture2D* tex,
         return false;
     auto size_ = size;
     if (size_.x <= 0.f)
-        size_.x = tex->getPixelsWide();
+        size_.x = tex->getWidth();
     if (size_.y <= 0.f)
-        size_.y = tex->getPixelsHigh();
+        size_.y = tex->getHeight();
     ImGui::PushID(objectRef(tex));
     const auto ret = ImGui::ImageButton("###", (ImTextureID)tex, size_, uv0, uv1, bg_col, tint_col);
     ImGui::PopID();

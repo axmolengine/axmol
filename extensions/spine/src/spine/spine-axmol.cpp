@@ -109,8 +109,8 @@ namespace spine {
 				texture->setTexParameters(texParams);
 
 				page.texture = texture;
-				page.width = texture->getPixelsWide();
-				page.height = texture->getPixelsHigh();
+				page.width = texture->getWidth();
+				page.height = texture->getHeight();
 			}
 		}
 		void unload(void *texture) override {

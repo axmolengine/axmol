@@ -174,7 +174,7 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
     _meshCommand.setVertexBuffer(_vertexBuffer);
     _meshCommand.setIndexBuffer(_indexBuffer, MeshCommand::IndexFormat::U_SHORT);
 
-    auto& projectionMatrix = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& projectionMatrix = Camera::getVisitingViewProjectionMatrix();
     _programState->setUniform(_locPMatrix, &projectionMatrix.m, sizeof(projectionMatrix.m));
 
     if (_texture)

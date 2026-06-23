@@ -471,7 +471,6 @@ void Application::onDeviceLost()
     auto director = ax::Director::getInstance();
 
     axdrv->resetState();
-    ax::Director::getInstance()->resetMatrixStack();
     ax::CustomEvent recreatedEvent(EVENT_RENDERER_RECREATED);
     director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
     director->setRenderDefaults();

@@ -104,15 +104,7 @@ public:
      */
     const std::vector<BaseLight*>& getLights() const { return _lights; }
 
-    /** Render the scene.
-     * @param renderer The renderer use to render the scene.
-     * @param eyeTransform The AdditionalTransform of camera.
-     * @param eyeProjection The projection matrix of camera.
-     */
-    virtual void render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eyeProjection = nullptr);
-
     void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
-    void visit() override;
 
     /** override function */
     void removeAllChildren() override;
@@ -123,7 +115,7 @@ public:
     bool init() override;
     bool initWithSize(const Vec2& size);
 
-    void setCameraOrderDirty() { _cameraOrderDirty = true; }
+    void setCameraOrderDirty();
 
     /**
      * @brief Set a camera to be used for debug drawing (physics, navigation, etc.).
@@ -182,6 +174,9 @@ protected:
     void tick(float delta);
     virtual void fixedUpdate(float delta);
 
+    void registerCamera(Camera* camera);
+    void unregisterCamera(Camera* camera);
+
     friend class Director;
     friend class Node;
     friend class ProtectedNode;
@@ -189,21 +184,19 @@ protected:
     friend class Camera;
     friend class BaseLight;
     friend class Renderer;
+    friend class SceneRenderer;
 
-    std::vector<Camera*> _cameras;  // weak ref to Camera
-
-    /* weak ref, default camera created by scene, at _cameras[0], Caution! the default camera can not be added to
-     _cameras before onEnter is called. */
+    /* weak ref, default camera created by scene */
     Camera* _defaultCamera{nullptr};
+
+    std::vector<Camera*> _cameras;  // weak refs
+    bool _cameraOrderDirty{true};
 
     /**
      * @brief Set a camera to be used for debug drawing (physics, navigation, etc.).
      * @param camera The camera to use for debug rendering.
      */
     Camera* _debugCamera{nullptr};
-
-    /* indicates if the order is dirty and if so then it needs sorting */
-    bool _cameraOrderDirty{true};
 
     bool _fixedUpdateEnabled{true};
 

@@ -150,8 +150,8 @@ void LabelAtlas::updateAtlasValues()
     const unsigned char* s = (unsigned char*)_string.c_str();
 
     Texture2D* texture       = _textureAtlas->getTexture();
-    float textureWide        = (float)texture->getPixelsWide();
-    float textureHigh        = (float)texture->getPixelsHigh();
+    float textureWide        = (float)texture->getWidth();
+    float textureHigh        = (float)texture->getHeight();
     float itemWidthInPixels  = _itemWidth * AX_CONTENT_SCALE_FACTOR();
     float itemHeightInPixels = _itemHeight * AX_CONTENT_SCALE_FACTOR();
     if (_ignoreContentScaleFactor)

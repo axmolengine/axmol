@@ -34,6 +34,7 @@
 #    include "axmol/renderer/Shaders.h"
 #    include "axmol/base/Director.h"
 #    include "axmol/base/Macros.h"
+#    include "axmol/scene/Camera.h"
 
 namespace ax
 {
@@ -151,9 +152,9 @@ rhi::PrimitiveType NavMeshDebugDraw::getPrimitiveType(duDebugDrawPrimitives prim
 
 void NavMeshDebugDraw::draw(Renderer* renderer)
 {
-    auto& transform    = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto beforeCommand = renderer->nextCallbackCommand();
-    auto afterCommand  = renderer->nextCallbackCommand();
+    const auto& transform = Camera::getVisitingViewProjectionMatrix();
+    auto beforeCommand    = renderer->nextCallbackCommand();
+    auto afterCommand     = renderer->nextCallbackCommand();
 
     beforeCommand->init(0, Mat4::identity, Node::FLAGS_RENDER_AS_3D);
     afterCommand->init(0, Mat4::identity, Node::FLAGS_RENDER_AS_3D);

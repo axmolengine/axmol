@@ -42,6 +42,7 @@ namespace ax
 
 class Scene;
 class RenderView;
+class RenderTexture;
 class CameraBackgroundBrush;
 
 /**
@@ -74,6 +75,7 @@ class AX_DLL Camera : public Node
     friend class Scene;
     friend class Director;
     friend class EventDispatcher;
+    friend class NodeGrid;
 
 public:
     /**
@@ -97,6 +99,12 @@ public:
      */
     static Camera* createOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane);
 
+    /**
+     * Creates a 2D orthographic camera matching Director::getCanvasSize().
+     * This is the preferred helper for temporary cameras that render regular scene/canvas content.
+     */
+    static Camera* createCanvasOrthographic(float nearPlane, float farPlane);
+
     /** create default camera, the camera type depends on Director::getProjection, the depth of the default camera is 0
      */
     static Camera* create();
@@ -104,10 +112,30 @@ public:
     /**
      * Get the visiting camera , the visiting camera shall be set on Scene::render
      */
-    static const Camera* getVisitingCamera();
+    static const Camera* getVisitingCamera() { return _visitingCamera; }
+
+    /**
+     * Set the visiting camera for draw context. Used by engine internals
+     * for offscreen capture (Transition, Utils, etc.)
+     */
+    static void setVisitingCamera(Camera* camera) { _visitingCamera = camera; }
+
+    /**
+     * Get the view-projection matrix of the current draw context.
+     */
+    static const Mat4& getVisitingViewProjectionMatrix();
 
     static const Viewport& getDefaultViewport();
     static void setDefaultViewport(const Viewport& vp);
+
+    /**
+     * @brief Updates the view-projection update state from the camera transform state.
+     *
+     * This is used by renderers that manage render targets and viewports themselves
+     * and therefore cannot call Camera::apply(), but still need the camera
+     * view-projection update flag to match the current transform state.
+     */
+    void updateViewProjectionState() { _viewProjectionUpdated = _transformUpdated; }
 
     /**
      * Get the default camera of the current running scene.
@@ -117,6 +145,22 @@ public:
     /**get & set Camera flag*/
     CameraFlag getCameraFlag() const { return _cameraFlag; }
     void setCameraFlag(CameraFlag flag) { _cameraFlag = flag; }
+
+    /**
+     * Set a render texture as the camera's offscreen render target.
+     * When set, Scene::render() will automatically bind this render target
+     * before visiting the scene with this camera, and restore the previous
+     * render target afterwards.
+     *
+     * @param target The render texture to render into, or nullptr to restore default behavior.
+     */
+    void setTargetTexture(RenderTexture* target);
+
+    /**
+     * Get the render texture currently bound as this camera's offscreen target.
+     * @return The bound render texture, or nullptr if rendering to screen.
+     */
+    RenderTexture* getTargetTexture() const { return _targetTexture; }
 
     /**
      * Make Camera looks at target
@@ -133,6 +177,12 @@ public:
      */
     const Mat4& getProjectionMatrix() const;
     /**
+     * Sets the camera's projection matrix.
+     *
+     * @param mat The new projection matrix.
+     */
+    void setProjectionMatrix(const Mat4& mat);
+    /**
      * Gets the camera's view matrix.
      *
      * @return The camera view matrix.
@@ -141,6 +191,9 @@ public:
 
     /**get view projection matrix*/
     const Mat4& getViewProjectionMatrix() const;
+
+    /** Get the scene that currently owns this camera for rendering. */
+    Scene* getOwnerScene() const { return _scene; }
 
 #if defined(AX_ENABLE_3D)
     /**
@@ -350,6 +403,7 @@ public:
 
     bool initPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane);
     bool initOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane);
+    bool initCanvasOrthographic(float nearPlane, float farPlane);
     void applyViewport();
 
     /**
@@ -374,6 +428,8 @@ public:
 protected:
     static Camera* _visitingCamera;
     static Viewport _defaultViewport;
+
+    bool initOrthographicView(const Vec2& size, float nearPlane, float farPlane);
 
     RenderViewCore* _renderView{nullptr};
 
@@ -406,6 +462,7 @@ protected:
     float _zoomFactorNearPlane;
 
     CameraBackgroundBrush* _clearBrush = nullptr;  // brush used to clear the back ground
+    RenderTexture* _targetTexture      = nullptr;  // optional offscreen render target
 };
 
 }  // namespace ax

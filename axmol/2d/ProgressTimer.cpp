@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "axmol/base/Macros.h"
 #include "axmol/base/Director.h"
 #include "axmol/2d/Sprite.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/base/Utils.h"
 #include "axmol/renderer/Shaders.h"
@@ -640,7 +641,7 @@ void ProgressTimer::draw(Renderer* renderer, const Mat4& transform, uint32_t fla
     if (_vertexData.empty() || !_sprite)
         return;
 
-    const ax::Mat4& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const ax::Mat4& projectionMat = Camera::getVisitingViewProjectionMatrix();
     Mat4 finalMat                 = projectionMat * transform;
     _programState->setUniform(_locMVP1, finalMat.m, sizeof(finalMat.m));
     _programState->setTexture(_locTex1, 0, _sprite->getTexture()->getRHITexture());

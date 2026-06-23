@@ -26,17 +26,10 @@
 
 #pragma once
 
-#include <string>
-
 #include "axmol/base/Types.h"
-#include "axmol/renderer/Texture2D.h"
 
 namespace ax
 {
-
-class Scene;
-class Renderer;
-class RenderViewCore;
 
 inline namespace experimental
 {
@@ -45,23 +38,8 @@ class AX_DLL IVRHeadTracker
 public:
     virtual ~IVRHeadTracker() {}
 
-    // pose
     virtual Vec3 getLocalPosition() = 0;
-    // rotation
     virtual Mat4 getLocalRotation() = 0;
-};
-
-class AX_DLL IVRRenderer
-{
-public:
-    virtual ~IVRRenderer() {}
-    virtual void init(RenderViewCore* rv)                                    = 0;
-    virtual void cleanup()                                                   = 0;
-    virtual void onRenderViewResized(RenderViewCore* rv)                     = 0;
-    virtual void setScissorRect(float x, float y, float width, float height) = 0;
-    virtual const ScissorRect& getScissorRect() const                        = 0;
-    virtual void render(Scene* scene, Renderer* renderer)                    = 0;
-    virtual IVRHeadTracker* getHeadTracker()                                 = 0;
 };
 }  // namespace experimental
 

@@ -348,12 +348,6 @@ void BoneNode::visit(ax::Renderer* renderer, const ax::Mat4& parentTransform, ui
 
     uint32_t flags = processParentFlags(parentTransform, parentFlags);
 
-    // IMPORTANT:
-    // To ease the migration to v3.0, we still support the Mat4 stack,
-    // but it is deprecated and your code should not rely on it
-    _director->pushMatrix(ax::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    _director->loadMatrix(ax::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
-
     bool visibleByCamera = isVisitableByVisitingCamera();
     bool isdebugdraw     = visibleByCamera && _isRackShow && nullptr == _rootSkeleton;
     int i                = 0;
@@ -388,13 +382,6 @@ void BoneNode::visit(ax::Renderer* renderer, const ax::Mat4& parentTransform, ui
     {
         this->draw(renderer, _modelViewTransform, flags);
     }
-
-    _director->popMatrix(ax::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-
-    // FIX ME: Why need to set _orderOfArrival to 0??
-    // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
-    // reset for next frame
-    // _orderOfArrival = 0;
 }
 
 void BoneNode::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
@@ -610,20 +597,12 @@ void BoneNode::visitSkins(ax::Renderer* renderer, BoneNode* bone) const
         return;
     }
 
-    // IMPORTANT:
-    // To ease the migration to v3.0, we still support the Mat4 stack,
-    // but it is deprecated and your code should not rely on it
-    _director->pushMatrix(ax::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    _director->loadMatrix(ax::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, bone->_modelViewTransform);
-
     if (!bone->_boneSkins.empty())
     {
         bone->sortAllChildren();
         for (auto it = bone->_boneSkins.cbegin(); it != bone->_boneSkins.cend(); ++it)
             (*it)->visit(renderer, bone->_modelViewTransform, true);
     }
-
-    _director->popMatrix(ax::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 
     // FIX ME: Why need to set _orderOfArrival to 0??
     // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920

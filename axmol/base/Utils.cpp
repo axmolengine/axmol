@@ -44,6 +44,7 @@ THE SOFTWARE.
 #include "axmol/base/text_utils.h"
 #include "axmol/renderer/CustomCommand.h"
 #include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/RenderTexturePass.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/renderer/RenderState.h"
 #include "axmol/rhi/PixelBufferDesc.h"
@@ -52,7 +53,8 @@ THE SOFTWARE.
 #include "axmol/platform/Image.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/2d/Sprite.h"
-#include "axmol/2d/RenderTexture.h"
+#include "axmol/renderer/RenderTexture.h"
+#include "axmol/scene/Camera.h"
 
 #include "axmol/base/base64.h"
 #include "axmol/tlx/byte_buffer.hpp"
@@ -135,56 +137,43 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
         return;
     }
 
-    auto callback = [startNode, scale, imageCallback](CustomEvent* /*event*/) {
-        auto director            = Director::getInstance();
-        auto captureNodeListener = s_captureNodeListener[startNode];
+    auto director = Director::getInstance();
+
+    auto callback = [startNode, scale, imageCallback, director](CustomEvent* /*event*/) {
+	    auto captureNodeListener = s_captureNodeListener[startNode];
         director->getEventDispatcher()->removeEventListener((EventListener*)(captureNodeListener));
         s_captureNodeListener.erase(startNode);
-        auto& size = startNode->getContentSize();
+        
+        auto& size    = startNode->getContentSize();
 
         director->setNextDeltaTimeZero(true);
 
-        RenderTexture* finalRtx = nullptr;
-
-        auto rtx = RenderTexture::create(size.width, size.height, rhi::PixelFormat::RGBA8, PixelFormat::D24S8, false);
-        // rtx->setKeepMatrix(true);
-        Point savedPos = startNode->getPosition();
-        Point anchor;
+        auto rtx =
+            RenderTexture::create(director->canvasToPixels(size * scale), rhi::PixelFormat::RGBA8, PixelFormat::D24S8);
+        Vec2 savedPos = startNode->getPosition();
+        Vec2 anchor;
         if (!startNode->isIgnoreAnchorPointForPosition())
         {
             anchor = startNode->getAnchorPoint();
         }
-        startNode->setPosition(Point(size.width * anchor.x, size.height * anchor.y));
-        rtx->begin();
+        startNode->setPosition(size.width * anchor.x, size.height * anchor.y);
+
+        RefPtr<RenderTexturePass> rtxPass(RenderTexturePass::obtain(rtx), tlx::adopt_object);
+
+        rtxPass->begin();
+        rtxPass->clearAll();
         startNode->visit();
-        rtx->end();
+        rtxPass->end();
+
         startNode->setPosition(savedPos);
-
-        if (std::abs(scale - 1.0f) < 1e-6f /* no scale */)
-            finalRtx = rtx;
-        else
-        {
-            /* scale */
-            auto finalRect = Rect(0, 0, size.width, size.height);
-            Sprite* sprite = Sprite::createWithTexture(rtx->getSprite()->getTexture(), finalRect);
-            sprite->setAnchorPoint(Point(0, 0));
-            RenderTexture::applySpriteFlippedY(sprite);
-            finalRtx = RenderTexture::create(size.width * scale, size.height * scale, rhi::PixelFormat::RGBA8,
-                                             PixelFormat::D24S8, false);
-
-            sprite->setScale(scale);  // or use finalRtx->setKeepMatrix(true);
-            finalRtx->begin();
-            sprite->visit();
-            finalRtx->end();
-        }
 
         director->getRenderer()->render();
 
-        finalRtx->newImage(imageCallback);
+        rtx->newImage(imageCallback);
     };
 
     auto listener =
-        Director::getInstance()->getEventDispatcher()->addCustomEventListener(Director::EVENT_BEFORE_DRAW, callback);
+        director->getEventDispatcher()->addCustomEventListener(Director::EVENT_BEFORE_DRAW, callback);
 
     s_captureNodeListener[startNode] = listener;
 }

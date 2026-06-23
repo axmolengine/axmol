@@ -190,7 +190,6 @@ Renderer::~Renderer()
 
     free(_triBatchesToDraw);
 
-    AX_SAFE_RELEASE(_offscreenRT);
     AX_SAFE_RELEASE(_depthStencilState);
     AX_SAFE_RELEASE(_renderPipeline);
     AX_SAFE_RELEASE(_context);
@@ -216,13 +215,6 @@ void Renderer::init()
     _context->setDepthStencilState(_depthStencilState);
 
     _isModernRHI = !rhi::DriverContext::isOpenGL() && !rhi::DriverContext::isD3D11();
-}
-
-rhi::RenderTarget* Renderer::getOffscreenRenderTarget()
-{
-    if (_offscreenRT != nullptr)
-        return _offscreenRT;
-    return (_offscreenRT = axdrv->createRenderTarget());
 }
 
 void Renderer::addCallbackCommand(std::function<void()> func, float globalZOrder)
@@ -835,16 +827,14 @@ bool Renderer::checkVisibility(const Mat4& transform, const Vec2& size)
     return ret;
 }
 
-void Renderer::readPixels(rhi::RenderTarget* rt,
-                          bool preserveAxisHint,
-                          std::function<void(const rhi::PixelBufferDesc&)> callback)
+void Renderer::readPixels(rhi::RenderTarget* rt, std::function<void(const rhi::PixelBufferDesc&)> callback)
 {
     assert(!!rt);
     // read pixels from screen, metal renderer backend: screen texture must not be a framebufferOnly
     if (rt == _defaultRT)
         _context->setFrameBufferOnly(false);
 
-    _context->readPixels(rt, preserveAxisHint, std::move(callback));
+    _context->readPixels(rt, std::move(callback));
 }
 
 void Renderer::updateSurface(SurfaceHandle surface, uint32_t width, uint32_t height)
@@ -1053,20 +1043,16 @@ void Renderer::TriangleCommandBufferManager::createBuffer()
 
 void Renderer::pushStateBlock()
 {
-    StateBlock block;
-    block.depthTest  = getDepthTest();
-    block.depthWrite = getDepthWrite();
-    block.cullMode   = getCullMode();
-    _stateBlockStack.emplace_back(block);
+    _stateBlockStack.emplace(getDepthTest(), getDepthWrite(), getCullMode());
 }
 
 void Renderer::popStateBlock()
 {
-    auto& block = _stateBlockStack.back();
+    auto& block = _stateBlockStack.top();
     setDepthTest(block.depthTest);
     setDepthWrite(block.depthWrite);
     setCullMode(block.cullMode);
-    _stateBlockStack.pop_back();
+    _stateBlockStack.pop();
 }
 
 uint64_t Renderer::getCompletedFenceValue() const

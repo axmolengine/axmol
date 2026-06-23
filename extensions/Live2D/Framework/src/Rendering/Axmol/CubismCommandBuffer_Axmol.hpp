@@ -133,6 +133,7 @@ private:
     void AddCommand(const std::function<void()>& fn);
 
     rhi::Texture* _currentColorBuffer;
+    rhi::RenderTarget* _offscreenRT = nullptr;
     OperationStateData _operationStateArray[OperationType_TypeMax];
 };
 

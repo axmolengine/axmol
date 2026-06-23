@@ -30,11 +30,10 @@ THE SOFTWARE.
 #include "axmol/base/Types.h"
 #include "axmol/base/PointerEvent.h"
 #include "axmol/base/KeyboardEvent.h"
-#include "axmol/vr/VRBase.h"
 
 #include <functional>
 #include <vector>
-#include <memory>
+#include <span>
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    include <windows.h>
@@ -46,8 +45,6 @@ THE SOFTWARE.
 
 namespace ax
 {
-class Scene;
-class Renderer;
 class Director;
 
 using SurfaceHandle = rhi::SurfaceHandle;
@@ -401,17 +398,6 @@ public:
      */
     virtual WindowPlatform getWindowPlatform() const { return WindowPlatform::Unknown; };
 
-    /**
-     * Renders a Scene with a Renderer
-     * This method is called directly by the Director
-     */
-    void renderScene(Scene* scene, Renderer* renderer);
-
-#ifdef AX_ENABLE_VR
-    void setVR(std::unique_ptr<IVRRenderer>&& impl);
-    const std::unique_ptr<IVRRenderer>& getVR() const { return _vrRenderer; }
-#endif
-
     //////////////////////////////////////////////////////////////////////////
     // System edit menu (copy/cut/paste) API
     //////////////////////////////////////////////////////////////////////////
@@ -515,10 +501,6 @@ protected:
     uint8_t _surfaceUpdateFlags{0};
 
     bool _isResolutionUpdateLocked{false};
-
-#ifdef AX_ENABLE_VR
-    std::unique_ptr<IVRRenderer> _vrRenderer{nullptr};
-#endif
 };
 
 // end of platform group

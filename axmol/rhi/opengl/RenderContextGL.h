@@ -162,9 +162,7 @@ public:
 
     void setScissorRect(bool enabled, float x, float y, float width, float height) override;
 
-    void readPixels(RenderTarget* rt,
-                    bool preserveAxisHint,
-                    std::function<void(const PixelBufferDesc&)> callback) override;
+    void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback) override;
 
     void readPixels(RenderTarget* rt,
                     int x,
@@ -172,7 +170,6 @@ public:
                     uint32_t width,
                     uint32_t height,
                     uint32_t bytesPerRow,
-                    bool preserveAxisHint,
                     PixelBufferDesc& pbd);
 
 protected:

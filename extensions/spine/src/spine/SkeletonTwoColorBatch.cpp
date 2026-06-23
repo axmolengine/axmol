@@ -35,6 +35,7 @@
 
 #include "axmol/base/Types.h"
 #include "axmol/base/Utils.h"
+#include "axmol/scene/Camera.h"
 #include <algorithm>
 #include <stddef.h>// offsetof
 
@@ -274,7 +275,7 @@ namespace spine {
 		AXASSERT(pipelinePS, "programState should not be null");
 
 		const axmol::Mat4 &projectionMat =
-				Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+				axmol::Camera::getVisitingViewProjectionMatrix();
 
 		auto finalMatrix = projectionMat * mv;
 

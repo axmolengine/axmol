@@ -41,6 +41,7 @@
 #include "axmol/base/Profiling.h"
 #include "axmol/base/text_utils.h"
 #include "axmol/base/Utils.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/ProgramState.h"
 
@@ -148,15 +149,7 @@ void ParticleBatchNode::visit(Renderer* renderer, const Mat4& parentTransform, u
 
     if (isVisitableByVisitingCamera())
     {
-        // IMPORTANT:d
-        // To ease the migration to v3.0, we still support the Mat4 stack,
-        // but it is deprecated and your code should not rely on it
-        _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-        _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
-
         draw(renderer, _modelViewTransform, flags);
-
-        _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     }
 }
 
@@ -435,7 +428,7 @@ void ParticleBatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t
     _customCommand.init(_globalZOrder, _blendFunc);
 
     // Texture is set in TextureAtlas.
-    const ax::Mat4& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const ax::Mat4& projectionMat = Camera::getVisitingViewProjectionMatrix();
     Mat4 finalMat                 = projectionMat * transform;
     auto programState             = _customCommand.unsafePS();
     programState->setUniform(_mvpMatrixLocaiton, finalMat.m, sizeof(finalMat.m));

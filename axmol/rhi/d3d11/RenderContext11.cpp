@@ -714,9 +714,7 @@ void RenderContextImpl::endFrame()
 #endif
 }
 
-void RenderContextImpl::readPixels(RenderTarget* rt,
-                                   bool /*preserveAxisHint*/,
-                                   std::function<void(const PixelBufferDesc&)> callback)
+void RenderContextImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
 {
     PixelBufferDesc pbd;
 

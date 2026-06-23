@@ -1147,97 +1147,6 @@ local function TextureCache1()
     return ret
 end
 
--- TextureDrawAtPoint
-local function TextureDrawAtPoint()
-    local m_pTex1 = nil
-    local m_pTex2F = nil
-    local ret = createTestLayer("Texture2D: drawAtPoint",
-                                "draws 2 textures using drawAtPoint")
-
-    local function draw(transform, globalZOrder)
-        local director = ax.Director:getInstance()
-        assert(nil ~= director, "Director is null when setting matrix stack")
-        director:pushMatrix(ax.MATRIX_STACK_TYPE.MODELVIEW)
-        director:loadMatrix(ax.MATRIX_STACK_TYPE.MODELVIEW, transform)
-
-        local s = ax.Director:getInstance():getCanvasSize()
-
-        m_pTex1:drawAtPoint(ax.p(s.width/2-50, s.height/2 - 50), globalZOrder)
-        m_pTex2F:drawAtPoint(ax.p(s.width/2+50, s.height/2 - 50), globalZOrder)
-
-        director:popMatrix(ax.MATRIX_STACK_TYPE.MODELVIEW)
-    end
-
-    m_pTex1 = ax.Director:getInstance():getTextureCache():addImage("Images/grossinis_sister1.png")
-    m_pTex2F = ax.Director:getInstance():getTextureCache():addImage("Images/grossinis_sister2.png")
-
-    m_pTex1:retain()
-    m_pTex2F:retain()
-
-    local luaNode = ax.LuaNode:create()
-    luaNode:setContentSize(ax.size(256, 256))
-    luaNode:setAnchorPoint(ax.p(0,0))
-    luaNode:registerScriptDrawHandler(draw)
-    ret:addChild(luaNode)
-
-    local function onNodeEvent(event)
-        if event == "exit" then
-            m_pTex1:release()
-            m_pTex2F:release()
-        end
-    end
-
-    ret:registerScriptHandler(onNodeEvent)
-
-    return ret
-end
-
--- TextureDrawInRect
-
-local function TextureDrawInRect()
-    local m_pTex1 = nil
-    local m_pTex2F = nil
-    local ret = createTestLayer("Texture2D: drawInRect",
-                                "draws 2 textures using drawInRect")
-    local function draw(transform, globalZOrder)
-        local director = ax.Director:getInstance()
-        assert(nullptr ~= director, "Director is null when setting matrix stack")
-        director:pushMatrix(ax.MATRIX_STACK_TYPE.MODELVIEW)
-        director:loadMatrix(ax.MATRIX_STACK_TYPE.MODELVIEW, transform)
-
-        local s = ax.Director:getInstance():getCanvasSize()
-
-        local rect1 = ax.rect( s.width/2 - 80, 20, m_pTex1:getContentSize().width * 0.5, m_pTex1:getContentSize().height *2 )
-        local rect2 = ax.rect( s.width/2 + 80, s.height/2, m_pTex1:getContentSize().width * 2, m_pTex1:getContentSize().height * 0.5 )
-
-        m_pTex1:drawInRect(rect1, globalZOrder)
-        m_pTex2F:drawInRect(rect2, globalZOrder)
-    end
-
-    m_pTex1 = ax.Director:getInstance():getTextureCache():addImage("Images/grossinis_sister1.png")
-    m_pTex2F = ax.Director:getInstance():getTextureCache():addImage("Images/grossinis_sister2.png")
-
-    m_pTex1:retain()
-    m_pTex2F:retain()
-
-    local luaNode = ax.LuaNode:create()
-    luaNode:setContentSize(ax.size(256, 256))
-    luaNode:setAnchorPoint(ax.p(0,0))
-    luaNode:registerScriptDrawHandler(draw)
-    ret:addChild(luaNode)
-
-    local function onNodeEvent(event)
-        if event == "exit" then
-            m_pTex1:release()
-            m_pTex2F:release()
-        end
-    end
-
-    ret:registerScriptHandler(onNodeEvent)
-
-    return ret
-end
-
 -- --------------------------------------------------------------------
 -- --
 -- TextureMemoryAlloc
@@ -1419,9 +1328,7 @@ function Texture2dTestMain()
         TextureGlClamp,
         TextureGlRepeat,
         TextureSizeTest,
-        TextureCache1,
-        TextureDrawAtPoint,
-        TextureDrawInRect
+        TextureCache1
     }
     Helper.index = 1
 

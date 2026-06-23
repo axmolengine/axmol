@@ -107,7 +107,7 @@ FontAtlas* FontCharMap::newFontAtlas()
 {
     FontAtlas* tempAtlas = new FontAtlas(this);
 
-    Vec2 s             = _texture->getContentSizeInPixels();
+    Vec2 s             = _texture->getPixelSize();
     int itemsPerColumn = (int)(s.height / _itemHeight);
     int itemsPerRow    = (int)(s.width / _itemWidth);
 

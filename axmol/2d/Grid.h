@@ -122,9 +122,6 @@ public:
     void afterDraw(Node* target);
     /**@}*/
 
-    /**Change projection to 2D for grabbing.*/
-    void set2DProjection();
-
     /**
      * @brief Set the effect grid rect.
      * @param rect The effect grid rect.
@@ -144,8 +141,7 @@ protected:
     Vec2 _gridSize;
     Texture2D* _texture = nullptr;
     Vec2 _step;
-    bool _isTextureFlipped                   = false;
-    Director::Projection _directorProjection = Director::Projection::_2D;
+    bool _isTextureFlipped = false;
     Rect _gridRect;
 
     Color _clearColor = {0, 0, 0, 0};

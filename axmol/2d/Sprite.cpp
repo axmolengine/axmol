@@ -402,7 +402,6 @@ bool Sprite::setProgramState(rhi::ProgramState* programState, bool ownPS /* = fa
         _trianglesCommand.setWeakPSVL(_programState, _vertexLayout);
 
         updateProgramStateTexture(_texture);
-        setMVPMatrixUniform();
         return true;
     }
     return false;
@@ -822,8 +821,8 @@ void Sprite::setTextureCoords(const Rect& rectInPoints, V3F_T2F_C4B_Quad* outQua
 
     const auto rectInPixels = AX_RECT_POINTS_TO_PIXELS(rectInPoints);
 
-    const float atlasWidth  = (float)tex->getPixelsWide();
-    const float atlasHeight = (float)tex->getPixelsHigh();
+    const float atlasWidth  = (float)tex->getWidth();
+    const float atlasHeight = (float)tex->getHeight();
 
     float rw = rectInPixels.size.width;
     float rh = rectInPixels.size.height;
@@ -1719,7 +1718,7 @@ void Sprite::setPolygonInfo(const PolygonInfo& info)
 
 void Sprite::setMVPMatrixUniform()
 {
-    const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& projectionMat = Camera::getVisitingViewProjectionMatrix();
     auto programState         = _trianglesCommand.unsafePS();
     if (programState && _mvpMatrixLocation)
         programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));

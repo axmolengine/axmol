@@ -33,7 +33,7 @@
 #include "axmol/2d/Label.h"
 #include "axmol/2d/ClippingNode.h"
 #include "axmol/renderer/Shaders.h"
-#include "axmol/2d/RenderTexture.h"
+#include "axmol/renderer/RenderTexture.h"
 
 NS_AX_EXT_BEGIN
 // ControlSwitchSprite

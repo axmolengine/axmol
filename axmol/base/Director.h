@@ -29,6 +29,7 @@ THE SOFTWARE.
 #pragma once
 
 #include <functional>
+#include <memory>
 #include <stack>
 #include <thread>
 #include <chrono>
@@ -68,8 +69,10 @@ class CustomEventListener;
 class TextureCache;
 class Renderer;
 class Camera;
+class SceneRenderer;
 class Application;
 class ApplicationCore;
+class PoolManager;
 
 /**
  @brief Class that creates and handles the main Window and manages how
@@ -259,7 +262,15 @@ public:
      */
     void setNotificationNode(Node* node);
 
-    // view size
+    /** Converts a size from canvas coordinates to canvas pixels.
+     *
+     * This applies only the Director content scale factor. Use this when a
+     * canvas-sized logical area needs a texture with matching pixel density,
+     * while preserving the same logical content size when used by Sprite.
+     */
+    Vec2 canvasToPixels(const Vec2& size) const;
+
+    // canvas size
 
     /** Returns the size of the render view in points.
      */
@@ -288,14 +299,12 @@ public:
      * taking into account orientation (portrait or landscape) and viewport settings.
      */
     Vec2 screenToWorld(const Vec2& point);
-    AX_DEPRECATED("3.0") Vec2 convertToGL(const Vec2& point) { return screenToWorld(point); }
 
     /**
      * Converts an rendering 2d-coordinate to a screen coordinate.
      * Useful to convert node points to window points for calls such as glScissor.
      */
     Vec2 worldToScreen(const Vec2& point);
-    AX_DEPRECATED("3.0") Vec2 convertToUI(const Vec2& point) { return worldToScreen(point); }
 
     /**
      * Gets the distance between camera and near clipping frame.
@@ -390,11 +399,6 @@ public:
      * @warning Don't call this function to start the main loop. To run the main loop call runWithScene.
      */
     void startAnimation();
-
-    /** Draw the scene.
-     * This method is called every frame. Don't call it manually.
-     */
-    void drawScene();
 
     // Memory Helper
 
@@ -496,6 +500,21 @@ public:
      */
     Renderer* getRenderer() const { return _renderer; }
 
+    SceneRenderer* getSceneRenderer() const { return _sceneRenderer.get(); }
+
+    Camera* getOffscreenCamera();
+
+    /** Replaces the active scene renderer.
+     *  Pass nullptr to restore the default SceneRenderer.
+     *  The new renderer's onRenderViewChanged is called immediately if a render view exists.
+     *  The previous renderer is destroyed synchronously.
+     *  @param impl  New renderer, or nullptr for default.
+     *  @note The default implementation renders all cameras in the scene.
+     *        A VR renderer (VRGenericRenderer) renders each eye into an
+     *        offscreen texture and applies barrel distortion.
+     */
+    void setSceneRenderer(std::unique_ptr<SceneRenderer>&& impl);
+
 #ifdef AX_ENABLE_CONSOLE
     /** Returns the Console associated with this director.
      * @since v3.0
@@ -509,45 +528,6 @@ public:
      *  Gets Frame Rate.
      */
     float getFrameRate() const { return _frameRate; }
-
-    /**
-     * Clones a specified type matrix and put it to the top of specified type of matrix stack.
-     */
-    void pushMatrix(MATRIX_STACK_TYPE type);
-
-    /** Pops the top matrix of the specified type of matrix stack.
-     */
-    void popMatrix(MATRIX_STACK_TYPE type);
-
-    /** Adds an identity matrix to the top of specified type of matrix stack.
-     */
-    void loadIdentityMatrix(MATRIX_STACK_TYPE type);
-
-    /**
-     * Adds a matrix to the top of specified type of matrix stack.
-     *
-     * @param type Matrix type.
-     * @param mat The matrix that to be added.
-     */
-    void loadMatrix(MATRIX_STACK_TYPE type, const Mat4& mat);
-
-    /**
-     * Multiplies a matrix to the top of specified type of matrix stack.
-     *
-     * @param type Matrix type.
-     * @param mat The matrix that to be multiplied.
-     */
-    void multiplyMatrix(MATRIX_STACK_TYPE type, const Mat4& mat);
-
-    /**
-     * Gets the top matrix of specified type of matrix stack.
-     */
-    const Mat4& getMatrix(MATRIX_STACK_TYPE type) const;
-
-    /**
-     * Clear all types of matrix stack, and add identity matrix to these matrix stacks.
-     */
-    void resetMatrixStack();
 
     /**
      * returns the axmol thread id.
@@ -603,10 +583,25 @@ public:
      */
     bool isValid() const { return !_invalid; }
 
-protected:
-    void performFrameBoundaryTasks();
+    /**
+     * Advance one frame of the engine loop.
+     *
+     * This method is invoked automatically once per frame by the Director.
+     * It drives both the game logic update and the rendering pipeline:
+     *   - Calculates delta time
+     *   - Updates scheduler, actions, and scene logic
+     *   - Handles scene transitions
+     *   - Executes rendering of the current scene and overlay nodes
+     *   - Updates performance statistics and swaps buffers
+     *
+     * Do not call this method manually.
+     */
+    [[internal]] void processFrame();
 
+protected:
     static void performFrameTasks(FrameTaskQueue& frameTasks);
+
+    void performFrameBoundaryTasks();
 
     void reset();
 
@@ -629,6 +624,10 @@ protected:
     void setNextScene();
 
     void updateFrameRate();
+    Camera* getOverlayCamera();
+    void updateOverlayCamera();
+    void updateOffscreenCamera();
+
 #if !AX_STRIP_FPS
     void showStats();
     void createStatsLabel();
@@ -642,12 +641,6 @@ protected:
     // textureCache creation or release
     void initTextureCache();
     void destroyTextureCache();
-
-    void initMatrixStack();
-
-    std::stack<Mat4> _modelViewMatrixStack;
-    std::stack<Mat4> _textureMatrixStack;
-    std::stack<Mat4> _projectionMatrixStack;
 
     static Director* s_SharedDirector;
 
@@ -743,6 +736,13 @@ protected:
 
     /* Renderer for the Director */
     Renderer* _renderer = nullptr;
+
+    PoolManager* _poolManager = nullptr;
+
+    Camera* _overlayCamera   = nullptr;  // retained
+    Camera* _offscreenCamera = nullptr;  // retained
+
+    std::unique_ptr<SceneRenderer> _sceneRenderer;
 
     Color _clearColor = {0, 0, 0, 1};
 #ifdef AX_ENABLE_CONSOLE

@@ -1144,9 +1144,7 @@ void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
                      static_cast<uint32_t>(offset / (indexType == IndexFormat::U_SHORT ? 2u : 4u)), 0, 0);
 }
 
-void RenderContextImpl::readPixels(RenderTarget* rt,
-                                   bool preserveAxisHint,
-                                   std::function<void(const PixelBufferDesc&)> callback)
+void RenderContextImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
 {
     if (!rt)
     {
@@ -1155,15 +1153,13 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
     }
     rt->retain();
 
-    _postFrameOps.emplace_back([this, rt, preserveAxisHint, callback = std::move(callback)]() mutable {
-        doReadPixels(rt, preserveAxisHint, callback);
+    _postFrameOps.emplace_back([this, rt, callback = std::move(callback)]() mutable {
+        doReadPixels(rt, callback);
         rt->release();
     });
 }
 
-void RenderContextImpl::doReadPixels(RenderTarget* rt,
-                                     bool /*preserveAxisHint*/,
-                                     std::function<void(const PixelBufferDesc&)>& callback)
+void RenderContextImpl::doReadPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)>& callback)
 {
     PixelBufferDesc pbd{};
     auto* rtImpl = static_cast<RenderTargetImpl*>(rt);

@@ -49,11 +49,10 @@ VRTest1::VRTest1()
     addChild(image);
 
     auto button = MenuItemFont::create("Enable / Disable VR", [](Object* ref) {
-        auto renderView = Director::getInstance()->getRenderView();
-        auto& vrimpl    = renderView->getVR();
-        if (vrimpl)
+        auto director = Director::getInstance();
+        if (dynamic_cast<experimental::VRGenericRenderer*>(director->getSceneRenderer()))
         {
-            renderView->setVR(nullptr);
+            director->setSceneRenderer(nullptr);
         }
         else
         {
@@ -61,7 +60,7 @@ VRTest1::VRTest1()
             // On Android/iOS emulator devices, uncomment to visualize the left/right eye VR rendering output.
             // Useful for debugging stereo rendering without a physical headset.
             // vrRenderer->setDebugIgnoreHeadTracker(true);
-            renderView->setVR(std::move(vrRenderer));
+            director->setSceneRenderer(std::move(vrRenderer));
         }
     });
     button->setFontSizeObj(16);

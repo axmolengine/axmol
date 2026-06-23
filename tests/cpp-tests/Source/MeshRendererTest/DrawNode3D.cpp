@@ -129,8 +129,8 @@ void DrawNode3D::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
 void DrawNode3D::updateCommand(ax::Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-    auto& matrixP = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto mvp      = matrixP * transform;
+    const auto& matrixP = Camera::getVisitingViewProjectionMatrix();
+    auto mvp            = matrixP * transform;
 
     _customCommand.unsafePS()->setUniform(_locMVPMatrix, mvp.m, sizeof(mvp.m));
 

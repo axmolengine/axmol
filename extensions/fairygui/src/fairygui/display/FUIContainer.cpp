@@ -301,14 +301,6 @@ void FUIContainer::visit(ax::Renderer * renderer, const ax::Mat4 & parentTransfo
 
         uint32_t flags = processParentFlags(parentTransform, parentFlags);
 
-        // IMPORTANT:
-        // To ease the migration to v3.0, we still support the Mat4 stack,
-        // but it is deprecated and your code should not rely on it
-        Director* director = Director::getInstance();
-        AXASSERT(nullptr != director, "Director is null when setting matrix stack");
-        director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-        director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
-
         //Add group command
         auto* stencilGroupCommand = renderer->getNextGroupCommand();
         stencilGroupCommand->init(_globalZOrder);
@@ -369,8 +361,6 @@ void FUIContainer::visit(ax::Renderer * renderer, const ax::Mat4 & parentTransfo
         renderer->addCommand(afterVisitCmd);
 
         renderer->popGroup();
-
-        director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     }
     else if (_rectClippingSupport != nullptr && _rectClippingSupport->_clippingEnabled)
     {

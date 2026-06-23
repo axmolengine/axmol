@@ -86,8 +86,8 @@ PongLayer::PongLayer()
     Vector<Paddle*> paddlesM(4);
 
     float paddleStep =
-        (VisibleRect::getVisibleRect().size.height - kStatusBarHeight - 30 - 3 * paddleTexture->getPixelsHigh()) / 3 +
-        paddleTexture->getPixelsHigh();
+        (VisibleRect::getVisibleRect().size.height - kStatusBarHeight - 30 - 3 * paddleTexture->getWidth()) / 3 +
+        paddleTexture->getHeight();
     float nextPaddlePos = VisibleRect::bottom().y + 15;
     Paddle* paddle      = Paddle::createWithTexture(paddleTexture);
     paddle->setPosition(Vec2(VisibleRect::center().x, nextPaddlePos));

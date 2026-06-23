@@ -98,9 +98,6 @@ Texture2DTests::Texture2DTests()
     ADD_TEST_CASE(TextureGlRepeat);
     ADD_TEST_CASE(TextureSizeTest);
     ADD_TEST_CASE(TextureCache1);
-    ADD_TEST_CASE(TextureDrawAtPoint);
-    ADD_TEST_CASE(TextureDrawInRect);
-
     ADD_TEST_CASE(TextureS3TCDxt1);
     ADD_TEST_CASE(TextureS3TCDxt3);
     ADD_TEST_CASE(TextureS3TCDxt5);
@@ -1970,109 +1967,6 @@ std::string TextureCache1::title() const
 std::string TextureCache1::subtitle() const
 {
     return "4 images should appear: alias, antialias, alias, antialias";
-}
-
-// TextureDrawAtPoint
-void TextureDrawAtPoint::onEnter()
-{
-    TextureDemo::onEnter();
-
-    _tex1  = Director::getInstance()->getTextureCache()->addImage("Images/grossinis_sister1.png");
-    _Tex2F = Director::getInstance()->getTextureCache()->addImage("Images/grossinis_sister2.png");
-
-    _tex1->retain();
-    _Tex2F->retain();
-}
-
-TextureDrawAtPoint::~TextureDrawAtPoint()
-{
-    _tex1->release();
-    _Tex2F->release();
-}
-
-std::string TextureDrawAtPoint::title() const
-{
-    return "Texture2D: drawAtPoint";
-}
-
-std::string TextureDrawAtPoint::subtitle() const
-{
-    return "draws 2 textures using drawAtPoint";
-}
-
-void TextureDrawAtPoint::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
-{
-    TextureDemo::draw(renderer, transform, flags);
-
-    onDraw(transform, flags);
-}
-
-void TextureDrawAtPoint::onDraw(const Mat4& transform, uint32_t flags)
-{
-    Director* director = Director::getInstance();
-    AXASSERT(nullptr != director, "Director is null when setting matrix stack");
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, transform);
-
-    auto s = Director::getInstance()->getCanvasSize();
-
-    _tex1->drawAtPoint(Vec2(s.width / 2 - 50, s.height / 2 - 50), _globalZOrder);
-    _Tex2F->drawAtPoint(Vec2(s.width / 2 + 50, s.height / 2 - 50), _globalZOrder);
-
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-}
-
-// TextureDrawInRect
-
-void TextureDrawInRect::onEnter()
-{
-    TextureDemo::onEnter();
-    _tex1  = Director::getInstance()->getTextureCache()->addImage("Images/grossinis_sister1.png");
-    _Tex2F = Director::getInstance()->getTextureCache()->addImage("Images/grossinis_sister2.png");
-
-    _tex1->retain();
-    _Tex2F->retain();
-}
-
-TextureDrawInRect::~TextureDrawInRect()
-{
-    _tex1->release();
-    _Tex2F->release();
-}
-
-void TextureDrawInRect::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
-{
-    TextureDemo::draw(renderer, transform, flags);
-    onDraw(transform, flags);
-}
-
-void TextureDrawInRect::onDraw(const Mat4& transform, uint32_t flags)
-{
-    Director* director = Director::getInstance();
-    AXASSERT(nullptr != director, "Director is null when setting matrix stack");
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, transform);
-
-    auto s = Director::getInstance()->getCanvasSize();
-
-    auto rect1 = Rect(s.width / 2 - 80, 20, _tex1->getContentSize().width * 0.5f, _tex1->getContentSize().height * 2);
-    auto rect2 =
-        Rect(s.width / 2 + 80, s.height / 2, _tex1->getContentSize().width * 2, _tex1->getContentSize().height * 0.5f);
-
-    _tex1->drawInRect(rect1, _globalZOrder);
-    _Tex2F->drawInRect(rect2, _globalZOrder);
-
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-}
-
-std::string TextureDrawInRect::title() const
-{
-    return "Texture2D: drawInRect";
-}
-
-std::string TextureDrawInRect::subtitle() const
-{
-    return "draws 2 textures using drawInRect";
 }
 
 //------------------------------------------------------------------

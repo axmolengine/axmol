@@ -105,9 +105,6 @@ void LAppView::onDraw(const ax::Mat4& transform, uint32_t flags)
 {
     _commandBuffer.PushCommandGroup();
 
-    Director::getInstance()->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    Director::getInstance()->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, transform);
-
     LAppLive2DManager* Live2DMgr = LAppLive2DManager::GetInstance();
 
     Live2DMgr->SetViewMatrix(viewMatrix);
@@ -119,8 +116,6 @@ void LAppView::onDraw(const ax::Mat4& transform, uint32_t flags)
     {
         drawDebugRects(Live2DMgr);
     }
-
-    Director::getInstance()->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 
     _commandBuffer.PopCommandGroup();
 }

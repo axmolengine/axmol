@@ -77,6 +77,8 @@ NewRendererTests::NewRendererTests()
     s_sepia_program_id  = programManager->registerCustomProgram(positionTextureColor_vert, "custom/example_Sepia_fs"sv,
                                                                 VertexLayoutKind::Sprite);
 
+    ADD_TEST_CASE(CaptureNodeTest);
+
     ADD_TEST_CASE(NewSpriteTest);
     ADD_TEST_CASE(GroupCommandTest);
     //    ADD_TEST_CASE(NewClippingNodeTest); // When depth and stencil are used together, ...
@@ -741,7 +743,7 @@ void CaptureNodeTest::onCaptured(Object*)
     };
 
     auto callbackFunction = std::bind(callback, std::placeholders::_1);
-    utils::captureNode(this, callbackFunction, 0.5);
+    utils::captureNode(this, callbackFunction, 0.5f);
 }
 
 BugAutoCulling::BugAutoCulling()

@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "axmol/2d/RenderTexture.h"
+#include "axmol/renderer/RenderTexture.h"
 #include <CubismFramework.hpp>
 #include <Model/CubismUserModel.hpp>
 #include <ICubismModelSetting.hpp>
@@ -206,7 +206,8 @@ private:
     const Csm::CubismId* _idParamEyeBallY;          ///< パラメータID: ParamEyeBallXY
 
     Csm::Rendering::CubismOffscreenFrame_Axmol*  _renderBuffer;  ///< モードによってはCubismOffscreenFrameのテクスチャを描画
-    ax::RenderTexture* _renderSprite;          ///< _renderBufferを描画するスプライト
+    ax::RenderTexture* _renderSprite;          ///< _renderBufferを描画するレンダーテクスチャ
+    ax::Sprite* _renderSpriteDisplay;          ///< レンダーテクスチャ表示用スプライト
     float _clearColor[4];                           ///< _renderBufferをクリアする際の色
     Csm::csmVector<ax::Texture2D*> _loadedTextures;
 };

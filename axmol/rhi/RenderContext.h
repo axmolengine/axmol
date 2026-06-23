@@ -226,13 +226,9 @@ public:
      * Read pixels from the specified render target.
      *
      * @param rt              The render target to read pixels from.
-     * @param preserveAxisHint A hint indicating whether to preserve the original axis orientation
-     *                         (e.g., avoid vertical flip). Note: support may vary across drivers/backends.
      * @param callback        A callback invoked with the resulting pixel buffer description.
      */
-    virtual void readPixels(RenderTarget* rt,
-                            bool preserveAxisHint,
-                            std::function<void(const PixelBufferDesc&)> callback) = 0;
+    virtual void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback) = 0;
 
     /**
      * This property controls whether or not the drawables'

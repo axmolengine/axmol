@@ -240,11 +240,6 @@ void LayoutGroup::stencilClippingVisit(Renderer* renderer, const Mat4& parentTra
 
     uint32_t flags = processParentFlags(parentTransform, parentFlags);
 
-    // IMPORTANT:
-    // To ease the migration to v3.0, we still support the Mat4 stack,
-    // but it is deprecated and your code should not rely on it
-    _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
     // Add group command
 
     auto* groupCommand = renderer->getNextGroupCommand();
@@ -313,8 +308,6 @@ void LayoutGroup::stencilClippingVisit(Renderer* renderer, const Mat4& parentTra
     renderer->addCommand(afterVisitCmdStencil);
 
     renderer->popGroup();
-
-    _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
 void LayoutGroup::onBeforeVisitScissor()
@@ -365,9 +358,6 @@ void LayoutGroup::scissorClippingVisit(Renderer* renderer, const Mat4& parentTra
         _clippingRectDirty = true;
     }
 
-    _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
-
     auto* groupCommand = renderer->getNextGroupCommand();
     groupCommand->init(_globalZOrder);
     renderer->addCommand(groupCommand);
@@ -386,7 +376,6 @@ void LayoutGroup::scissorClippingVisit(Renderer* renderer, const Mat4& parentTra
     renderer->addCommand(afterVisitCmdScissor);
 
     renderer->popGroup();
-    _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
 void LayoutGroup::setClippingEnabled(bool able)

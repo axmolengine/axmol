@@ -42,6 +42,7 @@ THE SOFTWARE.
 #include "axmol/base/CustomEventListener.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/text_utils.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/2d/TweenFunction.h"
@@ -147,8 +148,8 @@ void ParticleSystemQuad::initTexCoordsWithRect(const Rect& pointRect)
 
     if (_texture)
     {
-        wide = (float)_texture->getPixelsWide();
-        high = (float)_texture->getPixelsHigh();
+        wide = (float)_texture->getWidth();
+        high = (float)_texture->getHeight();
     }
 
 #if AX_FIX_ARTIFACTS_BY_STRECHING_TEXEL
@@ -625,12 +626,12 @@ void ParticleSystemQuad::updateParticleQuads()
 
             auto iter = _animationIndices.find(*cellIndex);
             if (iter == _animationIndices.end())
-                index.rect = {0, 0, float(_texture->getPixelsWide()), float(_texture->getPixelsHigh())};
+                index.rect = {0, 0, float(_texture->getWidth()), float(_texture->getHeight())};
             else
                 index = iter->second;
 
-            auto texWidth  = _texture->getPixelsWide();
-            auto texHeight = _texture->getPixelsHigh();
+            auto texWidth  = _texture->getWidth();
+            auto texHeight = _texture->getHeight();
 
             left  = index.rect.origin.x / texWidth;
             right = (index.rect.origin.x + index.rect.size.x) / texWidth;
@@ -661,7 +662,7 @@ void ParticleSystemQuad::draw(Renderer* renderer, const Mat4& transform, uint32_
     {
         auto programState = _quadCommand.unsafePS();
 
-        ax::Mat4 projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+        ax::Mat4 projectionMat = Camera::getVisitingViewProjectionMatrix();
         programState->setUniform(_mvpMatrixLocaiton, projectionMat.m, sizeof(projectionMat.m));
 
         _quadCommand.init(_globalZOrder, _texture, _blendFunc, _quads, _particleCount, transform, flags);

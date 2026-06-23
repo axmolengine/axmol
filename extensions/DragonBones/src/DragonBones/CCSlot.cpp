@@ -90,7 +90,7 @@ void CCSlot::_updateFrame()
                 const unsigned uvOffset = vertexOffset + vertexCount * 2;
 
                 const auto& region           = currentTextureData->region;
-                const auto& textureAtlasSize = currentTextureData->spriteFrame->getTexture()->getContentSizeInPixels();
+                const auto& textureAtlasSize = currentTextureData->spriteFrame->getTexture()->getPixelSize();
                 auto vertices                = new ax::V3F_T2F_C4B[vertexCount];       // does cocos2dx release it?
                 auto vertexIndices           = new unsigned short[triangleCount * 3];  // does cocos2dx release it?
                 ax::Rect boundsRect(999999.0f, 999999.0f, -999999.0f, -999999.0f);

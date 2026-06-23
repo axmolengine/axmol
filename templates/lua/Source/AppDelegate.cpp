@@ -98,15 +98,11 @@ bool AppDelegate::applicationDidFinishLaunching()
     }
 
 #if USE_VR_RENDERER && defined(AX_ENABLE_VR)
-    auto renderView = Director::getInstance()->getRenderView();
-    if (renderView)
-    {
-        auto vrRenderer = std::make_unique<VRGenericRenderer>();
-        // On Android/iOS emulator devices, uncomment to visualize the left/right eye VR rendering output.
-        // Useful for debugging stereo rendering without a physical headset.
-        // vrRenderer->setDebugIgnoreHeadTracker(true);
-        renderView->setVR(std::move(vrRenderer));
-    }
+    auto vrRenderer = std::make_unique<VRGenericRenderer>();
+    // On Android/iOS emulator devices, uncomment to visualize the left/right eye VR rendering output.
+    // Useful for debugging stereo rendering without a physical headset.
+    // vrRenderer->setDebugIgnoreHeadTracker(true);
+    Director::getInstance()->setSceneRenderer(std::move(vrRenderer));
 #endif
 
     return true;

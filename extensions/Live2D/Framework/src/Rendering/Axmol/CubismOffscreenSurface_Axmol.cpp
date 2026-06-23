@@ -63,7 +63,7 @@ void CubismOffscreenFrame_Axmol::BeginDraw(CubismCommandBuffer_Axmol* commandBuf
     }
 
     // Set mask RenderTexture as current render target.
-    commandBuffer->SetColorBuffer(_renderTexture->getSprite()->getTexture()->getRHITexture());
+    commandBuffer->SetColorBuffer(_renderTexture->getRHITexture());
 }
 
 void CubismOffscreenFrame_Axmol::EndDraw(CubismCommandBuffer_Axmol* commandBuffer)
@@ -108,9 +108,7 @@ csmBool CubismOffscreenFrame_Axmol::CreateOffscreenFrame(csmUint32 displayBuffer
 
             _renderTexture = ax::RenderTexture::create(displayBufferWidth,
                                                        displayBufferHeight,
-                                                       ax::rhi::PixelFormat::RGBA8,
-                                                       false,
-                                                       clearColorHint);
+                                                       ax::rhi::PixelFormat::RGBA8);
 
             if (!_renderTexture)
             {
@@ -120,9 +118,9 @@ csmBool CubismOffscreenFrame_Axmol::CreateOffscreenFrame(csmUint32 displayBuffer
             _renderTexture->retain();
 
 
-            _renderTexture->getSprite()->getTexture()->setTexParameters(ax::Texture2D::TexParams{});
+            _renderTexture->setTexParameters(ax::Texture2D::TexParams{});
 
-            texture2d                 = _renderTexture->getSprite()->getTexture();
+            texture2d                 = _renderTexture;
             _colorBuffer              = texture2d->getRHITexture();
             _isInheritedRenderTexture = false;
         }
@@ -131,7 +129,7 @@ csmBool CubismOffscreenFrame_Axmol::CreateOffscreenFrame(csmUint32 displayBuffer
             // Use the inherited RenderTexture.
             _renderTexture = renderTexture;
 
-            texture2d    = _renderTexture->getSprite()->getTexture();
+            texture2d    = _renderTexture;
             _colorBuffer = texture2d->getRHITexture();
 
 
@@ -140,8 +138,8 @@ csmBool CubismOffscreenFrame_Axmol::CreateOffscreenFrame(csmUint32 displayBuffer
 
         if (_colorBuffer)
         {
-            _viewportSize = csmRectF(0.0f, 0.0f, texture2d->getContentSizeInPixels().width,
-                                     texture2d->getContentSizeInPixels().height);
+            _viewportSize =
+                csmRectF(0.0f, 0.0f, texture2d->getPixelSize().width, texture2d->getPixelSize().height);
         }
         else
         {
@@ -176,7 +174,7 @@ ax::Texture2D* CubismOffscreenFrame_Axmol::GetColorBuffer() const
 {
     if (!_renderTexture)
         return nullptr;
-    return _renderTexture->getSprite()->getTexture();
+    return _renderTexture;
 }
 
 csmUint32 CubismOffscreenFrame_Axmol::GetBufferWidth() const

@@ -687,7 +687,7 @@ void PUBillboardChain::render(Renderer* renderer, const Mat4& transform, Particl
             _meshCommand.init(0.0);
             _stateBlock.setBlendFunc(particleSystem->getBlendFunc());
 
-            auto& projectionMatrix = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+            const auto& projectionMatrix = Camera::getVisitingViewProjectionMatrix();
             _programState->setUniform(_locPMatrix, &projectionMatrix.m, sizeof(projectionMatrix.m));
 
             if (_texture)

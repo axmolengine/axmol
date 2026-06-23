@@ -175,7 +175,9 @@ if (!$cmake_target) {
     }
     else {
         $cmake_target = 'axmol-sdk'
-        Write-Warning "Default build target updated: 'cpp-tests' -> 'axmol-sdk'. To build tests, use '-t cpp-tests' explicitly."
+        if (!$configOnly) {
+            Write-Warning "Default build target updated: 'cpp-tests' -> 'axmol-sdk'. To build tests, use '-t cpp-tests' explicitly."
+        }
     }
     $options.t = @($cmake_target)
 }

@@ -224,14 +224,12 @@ Mat4 Skin::getNodeToWorldTransformAR() const
     return TransformConcat(_bone->getArmature()->getNodeToWorldTransform(), displayTransform);
 }
 
-void Skin::draw(Renderer* renderer, const Mat4& /*transform*/, uint32_t flags)
+void Skin::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-    auto mv = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-
     _quadCommand.setWeakPSVL(_programState, _vertexLayout);
 
     // TODO: implement z order
-    _quadCommand.init(_globalZOrder, _texture, _blendFunc, &_quad, 1, mv, flags);
+    _quadCommand.init(_globalZOrder, _texture, _blendFunc, &_quad, 1, transform, flags);
 
     renderer->addCommand(&_quadCommand);
 }

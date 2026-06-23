@@ -33,6 +33,7 @@
 #pragma once
 
 #include "axmol/rhi/ProgramState.h"
+#include "axmol/renderer/CustomCommand.h"
 #include "axmol/renderer/TrianglesCommand.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/Texture2D.h"

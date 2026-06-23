@@ -25,6 +25,7 @@
  ****************************************************************************/
 
 #include "axmol/ui/VideoPlayer.h"
+#include "axmol/renderer/RenderTexturePass.h"
 
 // Now, common implementation based on redesigned MediaEngine is enable for windows and macOS
 #if defined(AX_ENABLE_VIDEO)
@@ -401,7 +402,7 @@ enum class VideoControlButtonId
 
 std::map<VideoControlButtonId, Rect> g_mediaControlTextureRegions;
 
-void createVideoControlTexture()
+static void createVideoControlTexture()
 {
     if (g_mediaControlsTexture)
         return;
@@ -505,36 +506,31 @@ void createVideoControlTexture()
     node->setPosition(0, 0);
     node->addChild(drawNode);
 
-    auto* rt = RenderTexture::create(totalWidth, totalHeight, PixelFormat::RGBA8, true);
-    rt->beginWithClear(0, 0, 0, 0);
+    auto* rt = RenderTexture::createForCanvas(Vec2(totalWidth, totalHeight), PixelFormat::RGBA8, PixelFormat::D24S8);
 
-    g_mediaControlTextureRegions.clear();
-
-    int i = 0;
-    for (auto&& item : items)
     {
-        auto midPoint =
-            Vec2(border + (i * panelW) + (i * gap) + (panelW / 2.f), imageSize.height - border - (panelH / 2.f));
-        item.second(midPoint);
+        auto scope = RefPtr<RenderTexturePass>(RenderTexturePass::obtain(rt), tlx::adopt_object);
+        scope->begin();
+        scope->clear(ClearFlag::COLOR, {.color = Color(0, 0, 0, 0)});
 
-        if (rhi::DriverContext::isOpenGL())
+        g_mediaControlTextureRegions.clear();
+
+        int i = 0;
+        for (auto&& item : items)
         {
-            g_mediaControlTextureRegions[item.first] =
-                Rect(border + (panelW * i) + (gap * i), imageSize.height - border - panelH, panelW, panelH);
-        }
-        else
-        {
+            auto midPoint =
+                Vec2(border + (i * panelW) + (i * gap) + (panelW / 2.f), imageSize.height - border - (panelH / 2.f));
+            item.second(midPoint);
             g_mediaControlTextureRegions[item.first] = Rect(border + (panelW * i) + (gap * i), border, panelW, panelH);
+            ++i;
         }
 
-        ++i;
+        node->visit();
+        scope->end();
     }
-
-    node->visit();
-    rt->end();
     Director::getInstance()->getRenderer()->render();
 
-    g_mediaControlsTexture = rt->getSprite()->getTexture();
+    g_mediaControlsTexture = rt;
 }
 
 }  // namespace

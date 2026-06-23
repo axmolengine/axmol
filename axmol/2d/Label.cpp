@@ -1961,7 +1961,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
 {
     updateBuffer(textureAtlas, batch.textCommand);
 
-    auto& matrixProjection = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& matrixProjection = Camera::getVisitingViewProjectionMatrix();
 
     if (_shadowEnabled)
     {
@@ -2137,7 +2137,7 @@ void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     if (_insideBounds)
 #endif
     {
-        ax::Mat4 matrixProjection = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+        ax::Mat4 matrixProjection = Camera::getVisitingViewProjectionMatrix();
         if (!_shadowEnabled && (_currentLabelType == LabelType::BMFONT || _currentLabelType == LabelType::CHARMAP))
         {
             updateBlendState();
@@ -2250,12 +2250,6 @@ void Label::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t pare
         return;
     }
 
-    // IMPORTANT:
-    // To ease the migration to v3.0, we still support the Mat4 stack,
-    // but it is deprecated and your code should not rely on it
-    _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
-
     if (!_children.empty())
     {
         sortAllChildren();
@@ -2287,8 +2281,6 @@ void Label::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t pare
 #if AX_LABEL_DEBUG_DRAW
     _debugDrawNode->visit(renderer, _modelViewTransform, parentFlags | FLAGS_TRANSFORM_DIRTY);
 #endif
-
-    _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
 void Label::drawSelf(bool visibleByCamera, Renderer* renderer, uint32_t flags)

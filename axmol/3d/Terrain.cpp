@@ -120,8 +120,8 @@ void Terrain::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t f
         _quadRoot->preCalculateAABB(_terrainModelMatrix);
     }
 
-    auto& projectionMatrix = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto finalMatrix       = projectionMatrix * transform;
+    const auto& projectionMatrix = Camera::getVisitingViewProjectionMatrix();
+    auto finalMatrix             = projectionMatrix * transform;
     _programState->setUniform(_mvpMatrixLocation, &finalMatrix.m, sizeof(finalMatrix.m));
 
     _programState->setUniform(_lightDirLocation, &_lightDir, sizeof(_lightDir));

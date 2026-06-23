@@ -49,7 +49,7 @@
 #include "axmol/2d/SpriteBatchNode.h"
 #include "axmol/2d/FastTMXLayer.h"
 #include "axmol/2d/FastTMXTiledMap.h"
-#include "axmol/2d/RenderTexture.h"
+#include "axmol/renderer/RenderTexture.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/KeyboardEventListener.h"
 #include "axmol/base/PointerEventListener.h"
@@ -890,16 +890,7 @@ static int axlua_RenderTexture_newImage(lua_State* tolua_S)
             stack->executeFunctionByHandler(handler, 1);
         };
 
-        if (argc == 2)
-        {
-            bool flipImage;
-            ok &= luaval_to_boolean(tolua_S, 3, &flipImage, "ax.RenderTexture:newImage");
-            obj->newImage(callback, flipImage);
-        }
-        else
-        {
-            obj->newImage(callback);
-        }
+        obj->newImage(callback);
         return 0;
     }
 

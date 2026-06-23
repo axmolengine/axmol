@@ -108,6 +108,7 @@ CubismCommandBuffer_Axmol::CubismCommandBuffer_Axmol()
 
 CubismCommandBuffer_Axmol::~CubismCommandBuffer_Axmol()
 {
+    AX_SAFE_RELEASE(_offscreenRT);
 }
 
 void CubismCommandBuffer_Axmol::PushCommandGroup()
@@ -230,11 +231,13 @@ void CubismCommandBuffer_Axmol::SetColorBuffer(rhi::Texture* colorBuffer)
     // or offscreen textures.
     _currentColorBuffer = colorBuffer;
 
-    AddCommand([=]() -> void {
+    AddCommand([this, colorBuffer]() -> void {
         rhi::RenderTarget* rt = nullptr;
         if (colorBuffer)
         {
-            rt = GetCocos2dRenderer()->getOffscreenRenderTarget();
+            if (!_offscreenRT)
+                _offscreenRT = axdrv->createRenderTarget();
+            rt = _offscreenRT;
             rt->setColorTexture(colorBuffer);
         }
         else

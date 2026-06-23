@@ -73,12 +73,6 @@ public:
      */
     int getMaxTextureSize() const;
 
-    /** OpenGL Max Modelview Stack Depth.
-     *
-     * @return The OpenGL Max Modelview Stack Depth.
-     */
-    int getMaxModelviewStackDepth() const;
-
     /** Returns the maximum texture units.
      *
      * @return The maximum texture units.
@@ -248,7 +242,6 @@ private:
     static std::string s_configfile;
 
 protected:
-    int _maxModelviewStackDepth;
     bool _supportsPVRTC;
     bool _supportsETC1;
     bool _supportsETC2;

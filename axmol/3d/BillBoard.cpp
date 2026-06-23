@@ -119,9 +119,6 @@ void BillBoard::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t 
         flags |= FLAGS_TRANSFORM_DIRTY;
     }
 
-    _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
-
     int i = 0;
 
     if (!_children.empty())
@@ -148,8 +145,6 @@ void BillBoard::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t 
     {
         this->draw(renderer, _modelViewTransform, flags);
     }
-
-    _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
 bool BillBoard::calculateBillboardTransform()

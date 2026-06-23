@@ -507,38 +507,6 @@ public:
     virtual void onEnter() override;
 };
 
-class TextureDrawAtPoint : public TextureDemo
-{
-public:
-    CREATE_FUNC(TextureDrawAtPoint);
-    ~TextureDrawAtPoint();
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
-    virtual void onEnter() override;
-    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
-
-protected:
-    void onDraw(const ax::Mat4& transform, uint32_t flags);
-
-    ax::Texture2D *_tex1, *_Tex2F;
-};
-
-class TextureDrawInRect : public TextureDemo
-{
-public:
-    CREATE_FUNC(TextureDrawInRect);
-    ~TextureDrawInRect();
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
-    virtual void onEnter() override;
-    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
-
-protected:
-    void onDraw(const ax::Mat4& transform, uint32_t flags);
-
-    ax::Texture2D *_tex1, *_Tex2F;
-};
-
 class TextureMemoryAlloc : public TextureDemo
 {
 public:

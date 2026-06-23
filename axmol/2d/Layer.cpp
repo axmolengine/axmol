@@ -42,6 +42,7 @@ THE SOFTWARE.
 #include "axmol/base/AccelerationEvent.h"
 #include "axmol/base/AccelerationEventListener.h"
 #include "axmol/base/text_utils.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/rhi/Buffer.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/ProgramState.h"
@@ -425,7 +426,7 @@ void LayerRadialGradient::draw(Renderer* renderer, const Mat4& transform, uint32
     _customCommand.init(_globalZOrder, _blendFunc);
     renderer->addCommand(&_customCommand);
 
-    const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& projectionMat = Camera::getVisitingViewProjectionMatrix();
     auto ps                   = _customCommand.unsafePS();
     Mat4 finalMat             = projectionMat * transform;
     ps->setUniform(_mvpMatrixLocation, finalMat.m, sizeof(finalMat.m));

@@ -63,6 +63,7 @@ LAppModel::LAppModel()
     , _dragX(0.0f)
     , _dragY(0.0f)
     , _renderSprite(NULL)
+    , _renderSpriteDisplay(NULL)
 {
     if (DebugLogEnable)
     {
@@ -90,8 +91,11 @@ LAppModel::~LAppModel()
 
     if (_renderSprite)
     {
-        // Cocos本体が消滅した後ではこの呼び出しが出来ないことに注意
-        _renderSprite->removeFromParentAndCleanup(true);
+        if (_renderSpriteDisplay)
+        {
+            _renderSpriteDisplay->removeFromParentAndCleanup(true);
+            _renderSpriteDisplay = NULL;
+        }
         _renderSprite = NULL;
     }
     _renderBuffer->DestroyOffscreenFrame();
@@ -778,29 +782,32 @@ void LAppModel::MakeRenderingTarget()
         Point origin = Director::getInstance()->getVisibleOrigin();
 
         _renderSprite = RenderTexture::create(frameW, frameH, ax::rhi::PixelFormat::RGBA8);
-        _renderSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-        _renderSprite->getSprite()->getTexture()->setAntiAliasTexParameters();
-        _renderSprite->getSprite()->setBlendFunc(BlendFunc::ALPHA_NON_PREMULTIPLIED);
-        _renderSprite->getSprite()->setOpacityModifyRGB(false);
-        // サンプルシーンへ登録
-        SampleScene::getInstance()->addChild(_renderSprite);
-        _renderSprite->setVisible(true);
 
-        // _renderSpriteのテクスチャを作成する
-        _renderSprite->getSprite()->getTexture()->setTexParameters(ax::Texture2D::TexParams{});
+        // create a display sprite from the render texture
+        _renderSpriteDisplay = Sprite::createWithTexture(_renderSprite);
+        _renderSpriteDisplay->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+        _renderSpriteDisplay->getTexture()->setAntiAliasTexParameters();
+        _renderSpriteDisplay->setBlendFunc(BlendFunc::ALPHA_NON_PREMULTIPLIED);
+        _renderSpriteDisplay->setOpacityModifyRGB(false);
+        // サンプルシーンへ登録
+        SampleScene::getInstance()->addChild(_renderSpriteDisplay);
+        _renderSpriteDisplay->setVisible(true);
+
+        // _renderSpriteDisplayのテクスチャを作成する
+        _renderSprite->setTexParameters(ax::Texture2D::TexParams{});
 
         // レンダリングバッファの描画先をそのテクスチャにする
         _renderBuffer->CreateOffscreenFrame(frameW, frameH, _renderSprite);
 
-        _renderSprite->setScale(aspectFactor);
+        _renderSpriteDisplay->setScale(aspectFactor);
     }
 }
 
 void LAppModel::SetSpriteColor(float r, float g, float b, float a)
 {
-    if (_renderSprite != NULL)
+    if (_renderSpriteDisplay != NULL)
     {
-        _renderSprite->getSprite()->setColor(
+        _renderSpriteDisplay->setColor(
             Color32(static_cast<unsigned char>(255.0f * r), static_cast<unsigned char>(255.0f * g),
                     static_cast<unsigned char>(255.0f * b), static_cast<unsigned char>(255.0f * a)));
     }
