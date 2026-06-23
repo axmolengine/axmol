@@ -61,7 +61,7 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 12.1.0
+- Version: 12.2.0
 
 - License: MIT
 
@@ -183,7 +183,7 @@
 
 ## OpenAL Soft
 - [![Upstream](https://img.shields.io/github/v/release/kcat/openal-soft?label=Upstream)](https://github.com/kcat/openal-soft)
-- Version: 1.25.2
+- Version: 1.25.2-dd4e07d
 - Modifications: 
   - Remove `-Werror=undef`
   - Linking `fmt::fmt` instead `alsoft::fmt`
@@ -191,6 +191,7 @@
   - Fix `al::char_as_u8/al::u8_as_char` in `common/alstring.hpp` with compiler flag: `-fno-char8_t` or `/Zc:char8_t-`
   - Disable non‑standard [[clang::nonblocking]] attribute to avoid compiler compatibility issues
   - Restrict warning flags scope to target: `alsoft.common`
+  - Fix compile error with fmt 12.2.0
 - License: LGPL-2.1
 
 ## OpenSSL
