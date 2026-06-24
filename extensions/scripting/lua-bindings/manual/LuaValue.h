@@ -37,11 +37,6 @@ extern "C" {
 #include "axmol/base/Types.h"
 #include "axmol/base/Object.h"
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_BLACKBERRY
-using memcpy;
-using memset;
-#endif
-
 /**
  * @addtogroup lua
  * @{
