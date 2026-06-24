@@ -998,8 +998,7 @@ bool AudioEngineImpl::setCurrentTime(AudioId audioID, float time)
     return ret;
 }
 
-void AudioEngineImpl::setFinishCallback(AudioId audioID,
-                                        const std::function<void(AudioId, std::string_view)>& callback)
+void AudioEngineImpl::setFinishCallback(AudioId audioID, const std::function<void(AudioId, std::string_view)>& callback)
 {
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto iter = _audioPlayers.find(audioID);
