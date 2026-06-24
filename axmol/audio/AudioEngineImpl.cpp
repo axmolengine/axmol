@@ -469,11 +469,13 @@ bool AudioEngineImpl::init()
 
 void AudioEngineImpl::setHRTFEnabled(bool enabled)
 {
+#if AX_USE_ALSOFT
     if (_hrtfEnabled == enabled)
         return;
     ALCint attribs[] = {ALC_HRTF_SOFT, enabled ? ALC_TRUE : ALC_FALSE, 0};
     if (alcResetDeviceSOFT(_device, attribs))
         _hrtfEnabled = enabled;
+#endif
 }
 
 bool AudioEngineImpl::isHRTFEnabled() const

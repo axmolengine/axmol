@@ -459,6 +459,9 @@ public:
      * for spatial audio. Default is disabled.
      *
      * @param enabled true to enable, false to disable.
+     *
+     * @note This API only has effect when using openal-soft.
+     *       On WebAssembly builds it is a no-op.
      */
     static void setHRTFEnabled(bool enabled);
 

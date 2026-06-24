@@ -1522,7 +1522,7 @@ void DrawNodeBaseTest::onDrawImGui()
             {
                 const char* items[drawMethodes::LAST];
                 int i = 0;
-                for (i; i < (drawMethodes::LAST); i++)
+                for (; i < (drawMethodes::LAST); ++i)
                     items[i] = drawMethods[i].c_str();
                 ImGui::Combo("##", &_currentSeletedItemIndex, items, i);
                 ImGui::SameLine();

@@ -927,8 +927,8 @@ void SpritePolygonTestPerformance::createSprite()
     // AutoPolygonSprite
     auto sprite = Sprite::create(pinfo);
 
-    float x = ((float)std::rand()) / RAND_MAX;
-    float y = ((float)std::rand()) / RAND_MAX;
+    float x = ax::rand_0_1();
+    float y = ax::rand_0_1();
 
     sprite->setPosition(Vec2(x * s.width, y * s.height));
     _spritesAnchor->addChild(sprite);
