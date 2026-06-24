@@ -723,7 +723,7 @@ int lua_ax_rhi_Program_getUniformBufferSize(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getUniformBufferSize();
-        #pragma warning NO CONVERSION FROM NATIVE FOR ??;
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.Program:getUniformBufferSize",argc, 0);
@@ -2229,6 +2229,72 @@ int lua_ax_rhi_Texture_updateData(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_rhi_Texture_updateCompressedData(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::Texture* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axr.Texture",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_updateCompressedData'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 6)
+    {
+        const void* arg0;
+        int arg1;
+        int arg2;
+        unsigned int arg3;
+        int arg4;
+        int arg5;
+
+        #pragma warning NO CONVERSION TO NATIVE FOR void*
+        ok = false;
+
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axr.Texture:updateCompressedData");
+
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "axr.Texture:updateCompressedData");
+
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "axr.Texture:updateCompressedData");
+
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "axr.Texture:updateCompressedData");
+
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axr.Texture:updateCompressedData");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_updateCompressedData'", nullptr);
+            return 0;
+        }
+        obj->updateCompressedData(arg0, arg1, arg2, arg3, arg4, arg5);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.Texture:updateCompressedData",argc, 6);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Texture_updateCompressedData'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_rhi_Texture_updateSubData(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2294,6 +2360,78 @@ int lua_ax_rhi_Texture_updateSubData(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Texture_updateSubData'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_rhi_Texture_updateCompressedSubData(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::Texture* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axr.Texture",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_updateCompressedSubData'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 8)
+    {
+        int arg0;
+        int arg1;
+        int arg2;
+        int arg3;
+        unsigned int arg4;
+        int arg5;
+        const void* arg6;
+        int arg7;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axr.Texture:updateCompressedSubData");
+
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axr.Texture:updateCompressedSubData");
+
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "axr.Texture:updateCompressedSubData");
+
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "axr.Texture:updateCompressedSubData");
+
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "axr.Texture:updateCompressedSubData");
+
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axr.Texture:updateCompressedSubData");
+
+        #pragma warning NO CONVERSION TO NATIVE FOR void*
+        ok = false;
+
+        ok &= luaval_to_int(tolua_S, 9, &arg7, "axr.Texture:updateCompressedSubData");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_updateCompressedSubData'", nullptr);
+            return 0;
+        }
+        obj->updateCompressedSubData(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.Texture:updateCompressedSubData",argc, 8);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Texture_updateCompressedSubData'.",&tolua_err);
 #endif
 
     return 0;
@@ -2433,7 +2571,9 @@ int lua_register_ax_rhi_Texture(lua_State* tolua_S)
         tolua_function(tolua_S,"getWidth",lua_ax_rhi_Texture_getWidth);
         tolua_function(tolua_S,"getHeight",lua_ax_rhi_Texture_getHeight);
         tolua_function(tolua_S,"updateData",lua_ax_rhi_Texture_updateData);
+        tolua_function(tolua_S,"updateCompressedData",lua_ax_rhi_Texture_updateCompressedData);
         tolua_function(tolua_S,"updateSubData",lua_ax_rhi_Texture_updateSubData);
+        tolua_function(tolua_S,"updateCompressedSubData",lua_ax_rhi_Texture_updateCompressedSubData);
         tolua_function(tolua_S,"updateFaceData",lua_ax_rhi_Texture_updateFaceData);
         tolua_function(tolua_S,"shouldGenMipmaps",lua_ax_rhi_Texture_shouldGenMipmaps);
     tolua_endmodule(tolua_S);
