@@ -36,6 +36,9 @@ namespace ax
 
 class Object;
 
+template <typename _Ty>
+class WeakPtr;
+
 struct WeakObjectItem
 {
     Object* object{nullptr};
@@ -62,13 +65,18 @@ struct WeakObjectItem
  */
 class AX_DLL WeakObjectRegistry
 {
+    friend class Object;
+    template <typename>
+    friend class WeakPtr;
+
 public:
     static constexpr int CHUNK_SIZE = 32768;  // 32K objects per chunk
 
     static WeakObjectRegistry& getInstance();
 
-    ~WeakObjectRegistry();
+    virtual ~WeakObjectRegistry();
 
+protected:
     // Core interface for lifecycle management
     void allocateIndex(ax::Object* obj);
     void freeIndex(ax::Object* obj);
@@ -79,7 +87,6 @@ public:
     // Get the current serial number for a specific index
     uint32_t getSerialNumber(int index) const;
 
-private:
     WeakObjectRegistry() = default;
 
     // O(1) Chunked array addressing.
@@ -161,7 +168,7 @@ public:
     // Attempt to safely retrieve the underlying object
     _Ty* get() const
     {
-        static_assert(std::is_base_of<Object, _Ty>::value, "_Ty must inherit from Object");
+        static_assert(std::is_base_of<Object, std::remove_const_t<_Ty>>::value, "_Ty must inherit from Object");
         if (_index == -1)
             return nullptr;
         return static_cast<_Ty*>(WeakObjectRegistry::getInstance().getObject(_index, _serialNumber));
@@ -212,15 +219,16 @@ public:
 private:
     void assign(_Ty* p)
     {
-        static_assert(std::is_base_of<ax::Object, _Ty>::value, "_Ty must inherit from ax::Object");
+        using NonConstType = std::remove_const_t<_Ty>;
+        static_assert(std::is_base_of<ax::Object, NonConstType>::value, "_Ty must inherit from ax::Object");
 
         if (p)
         {
             // Lazy-load registration: register the object in the global table ONLY
             // when a WeakPtr is tracking it for the first time.
-            if (static_cast<Object*>(p)->_internalIndex == -1)
-                WeakObjectRegistry::getInstance().allocateIndex(p);
-            _index        = static_cast<Object*>(p)->_internalIndex;
+            if (p->_internalIndex == -1)
+                WeakObjectRegistry::getInstance().allocateIndex(const_cast<NonConstType*>(p));
+            _index        = p->_internalIndex;
             _serialNumber = WeakObjectRegistry::getInstance().getSerialNumber(_index);
         }
         else
