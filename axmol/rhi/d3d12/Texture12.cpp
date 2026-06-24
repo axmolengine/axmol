@@ -26,8 +26,8 @@
 #include "axmol/rhi/SamplerCache.h"
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/base/Logging.h"
-#include <cassert>
-#include <cstring>
+#include <assert.h>
+#include <string.h>
 
 namespace ax::rhi::d3d12
 {
@@ -212,7 +212,7 @@ void TextureImpl::updateSubData(int xoffset,
 void TextureImpl::updateCompressedData(const void* data,
                                        int width,
                                        int height,
-                                       std::size_t dataSize,
+                                       size_t dataSize,
                                        int level,
                                        int layerIndex)
 {
@@ -224,7 +224,7 @@ void TextureImpl::updateCompressedSubData(int xoffset,
                                           int yoffset,
                                           int width,
                                           int height,
-                                          std::size_t dataSize,
+                                          size_t dataSize,
                                           int level,
                                           const void* data,
                                           int layerIndex)

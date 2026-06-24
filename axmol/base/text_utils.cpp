@@ -42,14 +42,14 @@ namespace text_utils
 std::string_view ltrim(std::string_view s)
 {
     size_t i = 0;
-    while (i < s.size() && std::isspace(static_cast<unsigned char>(s[i])))
+    while (i < s.size() && isspace(static_cast<unsigned char>(s[i])))
         ++i;
     return s.substr(i);
 }
 
 std::string_view rtrim(std::string_view s)
 {
-    while (!s.empty() && std::isspace(static_cast<unsigned char>(s.back())))
+    while (!s.empty() && isspace(static_cast<unsigned char>(s.back())))
         s.remove_suffix(1);
     return s;
 }
@@ -504,7 +504,7 @@ void u8char_span::reset(std::string_view newStr)
 
         while (*sequenceUtf8)
         {
-            std::size_t lengthChar = getNumBytesForUTF8(*sequenceUtf8);
+            size_t lengthChar = getNumBytesForUTF8(*sequenceUtf8);
 
             CharUTF8 charUTF8;
             charUTF8._char = std::string_view((char*)sequenceUtf8, lengthChar);
@@ -519,15 +519,15 @@ void u8char_span::reset(std::string_view newStr)
 
 std::string_view u8char_span::view() const
 {
-    return this->subview(0, std::numeric_limits<std::size_t>::max());
+    return this->subview(0, std::numeric_limits<size_t>::max());
 }
 
-std::string_view u8char_span::subview(std::size_t pos) const
+std::string_view u8char_span::subview(size_t pos) const
 {
-    return this->subview(pos, std::numeric_limits<std::size_t>::max());
+    return this->subview(pos, std::numeric_limits<size_t>::max());
 }
 
-std::string_view u8char_span::subview(std::size_t pos, std::size_t len) const
+std::string_view u8char_span::subview(size_t pos, size_t len) const
 {
     if (!_str.empty())
     {

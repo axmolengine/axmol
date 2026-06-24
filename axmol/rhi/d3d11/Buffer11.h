@@ -24,7 +24,7 @@
 #pragma once
 
 #include <vector>
-#include <cassert>
+#include <assert.h>
 #include <d3d11.h>
 
 #include "axmol/rhi/Buffer.h"
@@ -56,13 +56,13 @@ public:
      */
     BufferImpl(ID3D11Device* device,
                ID3D11DeviceContext* context,
-               std::size_t size,
+               size_t size,
                BufferType type,
                BufferUsage usage,
                const void* initial);
 
-    void updateData(const void* data, std::size_t size) override;
-    void updateSubData(const void* data, std::size_t offset, std::size_t size) override;
+    void updateData(const void* data, size_t size) override;
+    void updateSubData(const void* data, size_t offset, size_t size) override;
     void usingDefaultStoredData(bool needDefaultStoredData) override;
 
     ID3D11Buffer* internalHandle() const noexcept { return _buffer.Get(); }

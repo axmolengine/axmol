@@ -298,16 +298,16 @@ public:
 
     void reset(std::string_view newStr);
 
-    std::size_t size() const { return _str.size(); }
-    std::size_t size_bytes() const { return _size_bytes; }
+    size_t size() const { return _str.size(); }
+    size_t size_bytes() const { return _size_bytes; }
 
     bool empty() const { return _str.empty(); }
 
     const value_type& at(size_t pos) const { return _str.at(pos); }
 
     std::string_view view() const;
-    std::string_view subview(std::size_t pos) const;
-    std::string_view subview(std::size_t pos, std::size_t len) const;
+    std::string_view subview(size_t pos) const;
+    std::string_view subview(size_t pos, size_t len) const;
 
     std::vector<CharUTF8>::const_reverse_iterator rbegin() const { return _str.rbegin(); }
     std::vector<CharUTF8>::const_reverse_iterator rend() const { return _str.rend(); }

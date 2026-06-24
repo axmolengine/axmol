@@ -113,8 +113,8 @@ TODO: should remove it.
     @param usage the usage of the vertex buffer. Use Static of the vertex data are not updated
                  every frame, otherwise use DYNAMIC.
     */
-    void createVertexBuffer(std::size_t vertexSize, std::size_t capacity, BufferUsage usage);
-    void createInstanceBuffer(std::size_t vertexSize, int capacity, BufferUsage usage);
+    void createVertexBuffer(size_t vertexSize, size_t capacity, BufferUsage usage);
+    void createInstanceBuffer(size_t vertexSize, int capacity, BufferUsage usage);
 
     /**
     Create an index buffer of the custom command. The buffer size is (indexSize * capacity).
@@ -126,22 +126,22 @@ TODO: should remove it.
     @param usage the usage of the vertex buffer. Use Static of the index data are not updated
                  every frame, otherwise use DYNAMIC.
     */
-    void createIndexBuffer(IndexFormat format, std::size_t capacity, BufferUsage usage);
+    void createIndexBuffer(IndexFormat format, size_t capacity, BufferUsage usage);
 
     /**
     Update vertex buffer contents.
     @param data Specifies a pointer to the new data that will be copied into the data store.
     @param length Specifies the length in bytes of the data store region being replaced.
     */
-    void updateVertexBuffer(const void* data, std::size_t length);
+    void updateVertexBuffer(const void* data, size_t length);
     /**
     Update index buffer contents.
     @param data Specifies a pointer to the new data that will be copied into the data store.
     @param length Specifies the size in bytes of the data store region being replaced.
     */
-    void updateIndexBuffer(const void* data, std::size_t length);
+    void updateIndexBuffer(const void* data, size_t length);
 
-    void updateInstanceBuffer(const void* data, std::size_t length);
+    void updateInstanceBuffer(const void* data, size_t length);
 
     /**
     Update some or all contents of vertex buffer.
@@ -150,7 +150,7 @@ TODO: should remove it.
     in bytes.
     @param length Specifies the size in bytes of the data store region being replaced.
     */
-    void updateVertexBuffer(const void* data, std::size_t offset, std::size_t length);
+    void updateVertexBuffer(const void* data, size_t offset, size_t length);
     /**
     Update some or call contents of index buffer
     @param data Specifies a pointer to the new data that will be copied into the data store.
@@ -158,16 +158,16 @@ TODO: should remove it.
     in bytes.
     @param length Specifies the size in bytes of the data store region being replaced.
     */
-    void updateIndexBuffer(const void* data, std::size_t offset, std::size_t length);
+    void updateIndexBuffer(const void* data, size_t offset, size_t length);
 
     /**
     Get vertex buffer capacity.
     */
-    inline std::size_t getVertexCapacity() const { return _vertexCapacity; }
+    inline size_t getVertexCapacity() const { return _vertexCapacity; }
     /**
     Get index buffer capacity.
     */
-    inline std::size_t getIndexCapacity() const { return _indexCapacity; }
+    inline size_t getIndexCapacity() const { return _indexCapacity; }
 
     int getInstanceCapacity() const { return _instanceCapacity; }
 
@@ -194,20 +194,20 @@ TODO: should remove it.
     @start specifices the starting index of vertex buffer
     @count specifices the number of vertices to be rendered
     */
-    inline void setVertexDrawInfo(std::size_t start, std::size_t count)
+    inline void setVertexDrawInfo(size_t start, size_t count)
     {
         _vertexDrawStart = start;
         _vertexDrawCount = count;
     }
-    inline std::size_t getVertexDrawStart() const { return _vertexDrawStart; }
-    inline std::size_t getVertexDrawCount() const { return _vertexDrawCount; }
+    inline size_t getVertexDrawStart() const { return _vertexDrawStart; }
+    inline size_t getVertexDrawCount() const { return _vertexDrawCount; }
 
     /**
     Set the drawing information if the drawing type is ELEMENT.
     @start specifices the starting index of index buffer
     @count specifices the number of indices to be rendered
     */
-    inline void setIndexDrawInfo(std::size_t start, std::size_t count)
+    inline void setIndexDrawInfo(size_t start, size_t count)
     {
         _indexDrawOffset = start * _indexSize;
         _indexDrawCount  = count;
@@ -215,8 +215,8 @@ TODO: should remove it.
 
     void setInstanceDrawInfo(int count) { _instanceCount = count; }
 
-    inline std::size_t getIndexDrawOffset() const { return _indexDrawOffset; }
-    inline std::size_t getIndexDrawCount() const { return _indexDrawCount; }
+    inline size_t getIndexDrawOffset() const { return _indexDrawOffset; }
+    inline size_t getIndexDrawCount() const { return _indexDrawCount; }
 
     inline IndexFormat getIndexFormat() const { return _indexFormat; }
 
@@ -241,7 +241,7 @@ TODO: should remove it.
     const CallBackFunc& getAfterCallback() { return _afterCallback; }
 
 protected:
-    std::size_t computeIndexSize() const;
+    size_t computeIndexSize() const;
 
     rhi::Buffer* _vertexBuffer = nullptr;
     rhi::Buffer* _indexBuffer  = nullptr;
@@ -250,11 +250,11 @@ protected:
     int _instanceCount           = 0;
     int _instanceCapacity        = 0;
 
-    std::size_t _vertexDrawStart = 0;
-    std::size_t _vertexDrawCount = 0;
+    size_t _vertexDrawStart = 0;
+    size_t _vertexDrawCount = 0;
 
-    std::size_t _indexDrawOffset = 0;
-    std::size_t _indexDrawCount  = 0;
+    size_t _indexDrawOffset = 0;
+    size_t _indexDrawCount  = 0;
 
     DrawType _drawType           = DrawType::ELEMENT;
     PrimitiveType _primitiveType = PrimitiveType::TRIANGLE;
@@ -262,10 +262,10 @@ protected:
 
     float _lineWidth = 0.0;
 
-    std::size_t _indexSize = 0;
+    size_t _indexSize = 0;
 
-    std::size_t _vertexCapacity = 0;
-    std::size_t _indexCapacity  = 0;
+    size_t _vertexCapacity = 0;
+    size_t _indexCapacity  = 0;
 
     CallBackFunc _beforeCallback = nullptr;
     CallBackFunc _afterCallback  = nullptr;

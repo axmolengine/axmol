@@ -3200,7 +3200,7 @@ void Label::recordLetterInfo(const ax::Vec2& point,
                              float offsetX,
                              float offsetY)
 {
-    if (static_cast<std::size_t>(letterIndex) >= _lettersInfo.size())
+    if (static_cast<size_t>(letterIndex) >= _lettersInfo.size())
     {
         LetterInfo tmpInfo;
         _lettersInfo.emplace_back(tmpInfo);
@@ -3217,7 +3217,7 @@ void Label::recordLetterInfo(const ax::Vec2& point,
 
 void Label::recordPlaceholderInfo(int letterIndex, char32_t utf32Char)
 {
-    if (static_cast<std::size_t>(letterIndex) >= _lettersInfo.size())
+    if (static_cast<size_t>(letterIndex) >= _lettersInfo.size())
     {
         LetterInfo tmpInfo;
         _lettersInfo.emplace_back(tmpInfo);

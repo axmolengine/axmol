@@ -50,7 +50,7 @@ public:
      * @param usage Specifies the expected usage pattern of the data store. The symbolic constant must be
      * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      */
-    BufferImpl(std::size_t size, BufferType type, BufferUsage usage, const void* initial);
+    BufferImpl(size_t size, BufferType type, BufferUsage usage, const void* initial);
     ~BufferImpl();
 
     /**
@@ -59,7 +59,7 @@ public:
      * @param size Specifies the size in bytes of the data store region being replaced.
      * @see `updateSubData(void* data, unsigned int offset, unsigned int size)`
      */
-    void updateData(const void* data, std::size_t size) override;
+    void updateData(const void* data, size_t size) override;
 
     /**
      * @brief Update buffer sub-region data
@@ -69,7 +69,7 @@ public:
      * @param size Specifies the size in bytes of the data store region being replaced.
      * @see `updateData(void* data, unsigned int size)`
      */
-    void updateSubData(const void* data, std::size_t offset, std::size_t size) override;
+    void updateSubData(const void* data, size_t offset, size_t size) override;
 
     /**
      * Static buffer data will automatically stored when it comes to foreground.
@@ -88,13 +88,13 @@ public:
 private:
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     void reloadBuffer();
-    void fillBuffer(const void* data, std::size_t offset, std::size_t size);
+    void fillBuffer(const void* data, size_t offset, size_t size);
 
     bool _bufferAlreadyFilled                      = false;
     CustomEventListener* _backToForegroundListener = nullptr;
 #endif
     GLuint _buffer               = 0;
-    std::size_t _bufferAllocated = 0;
+    size_t _bufferAllocated = 0;
     char* _data                  = nullptr;
     bool _needDefaultStoredData  = true;
 };

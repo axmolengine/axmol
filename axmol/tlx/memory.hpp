@@ -289,7 +289,7 @@ namespace std
 template <typename T, typename R>
 struct hash<::tlx::retain_ptr<T, R>>
 {
-    std::size_t operator()(::tlx::retain_ptr<T, R> const& p) const noexcept { return std::hash<T*>()(p.get()); }
+    size_t operator()(::tlx::retain_ptr<T, R> const& p) const noexcept { return std::hash<T*>()(p.get()); }
 };
 
 }  // namespace std

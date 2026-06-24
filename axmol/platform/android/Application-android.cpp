@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "axmol/base/Utils.h"
 #include <android/log.h>
 #include <jni.h>
-#include <cstring>
+#include <string.h>
 
 #define LOG_TAG   "Application_android Debug"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)

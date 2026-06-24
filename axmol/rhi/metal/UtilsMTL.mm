@@ -161,7 +161,7 @@ void UtilsMTL::generateMipmaps(id<MTLTexture> texture)
     }
 }
 
-void UtilsMTL::swizzleImage(unsigned char* image, std::size_t width, std::size_t height, MTLPixelFormat format)
+void UtilsMTL::swizzleImage(unsigned char* image, size_t width, size_t height, MTLPixelFormat format)
 {
     if (!image)
         return;

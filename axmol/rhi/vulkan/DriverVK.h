@@ -110,7 +110,7 @@ public:
     const VkExtent2D& getSurfaceInitialExtent() const { return _surfaceInitalExtent; }
 
     RenderContext* createRenderContext(SurfaceHandle surface) override;
-    Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial) override;
+    Buffer* createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial) override;
     Texture* createTexture(const TextureDesc& descriptor, std::optional<Color> clearColorHint = std::nullopt) override;
     RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
     DepthStencilState* createDepthStencilState() override;

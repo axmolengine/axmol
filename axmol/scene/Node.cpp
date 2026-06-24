@@ -64,7 +64,7 @@ AX_DLL uint64_t hashNodeName(std::string_view name)
 
 // FIXME:: Yes, nodes might have a sort problem once every 30 days if the game runs at 60 FPS and each frame sprites are
 // reordered.
-std::uint32_t Node::s_globalOrderOfArrival = 0;
+uint32_t Node::s_globalOrderOfArrival = 0;
 int Node::__attachedNodeCount              = 0;
 
 // MARK: Constructor, Destructor, Init

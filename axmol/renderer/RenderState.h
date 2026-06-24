@@ -29,7 +29,7 @@
 
 #include <string>
 #include <functional>
-#include <cstdint>
+#include <stdint.h>
 
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/base/Object.h"

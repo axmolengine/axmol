@@ -145,8 +145,8 @@ public:
      * @param count For each instance, the number of indexes to draw
      * @see `drawElements(IndexFormat indexType, unsigned int count, unsigned int offset)`
      */
-    void drawArrays(std::size_t start, std::size_t count, bool wireframe) override;
-    void drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool wireframe = false) override;
+    void drawArrays(size_t start, size_t count, bool wireframe) override;
+    void drawArraysInstanced(size_t start, size_t count, int instanceCount, bool wireframe = false) override;
 
     /**
      * Draw primitives with an index list.
@@ -156,10 +156,10 @@ public:
      * @see `setIndexBuffer(Buffer* buffer)`
      * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
      */
-    void drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool wireframe) override;
+    void drawElements(IndexFormat indexType, size_t count, size_t offset, bool wireframe) override;
     void drawElementsInstanced(IndexFormat indexType,
-                               std::size_t count,
-                               std::size_t offset,
+                               size_t count,
+                               size_t offset,
                                int instanceCount,
                                bool wireframe = false) override;
 
@@ -205,10 +205,10 @@ protected:
      * @remark: !!!this function only can call after endFrame, then it's could be works well.
      */
     void readPixels(id<MTLTexture> texture,
-                    std::size_t origX,
-                    std::size_t origY,
-                    std::size_t rectWidth,
-                    std::size_t rectHeight,
+                    size_t origX,
+                    size_t origY,
+                    size_t rectWidth,
+                    size_t rectHeight,
                     PixelBufferDesc& pbd);
 
     /**

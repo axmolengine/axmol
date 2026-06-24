@@ -1,4 +1,4 @@
-﻿/**
+/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -44,8 +44,8 @@ class BaseObject
 private:
     static unsigned _hashCode;
     static unsigned _defaultMaxCount;
-    static std::map<std::size_t, unsigned> _maxCountMap;
-    static std::map<std::size_t, std::vector<BaseObject*>> _poolsMap;
+    static std::map<size_t, unsigned> _maxCountMap;
+    static std::map<size_t, std::vector<BaseObject*>> _poolsMap;
     static void _returnObject(BaseObject* object);
 
 public:
@@ -63,7 +63,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    static void setMaxCount(std::size_t classTypeIndex, unsigned maxCount);
+    static void setMaxCount(size_t classTypeIndex, unsigned maxCount);
     /**
      * - Clear the cached instances of a specify object pool.
      * @param objectConstructor - Specify class. (Clear all cached instances if not set)
@@ -76,7 +76,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    static void clearPool(std::size_t classTypeIndex = 0);
+    static void clearPool(size_t classTypeIndex = 0);
     template <typename T>
     /**
      * - Get an instance of the specify class from object pool.
@@ -136,7 +136,7 @@ protected:
     virtual void _onClear() = 0;
 
 public:
-    virtual std::size_t getClassTypeIndex() const = 0;
+    virtual size_t getClassTypeIndex() const = 0;
     /**
      * - Clear the object and return it back to object pool。
      * @version DragonBones 4.5

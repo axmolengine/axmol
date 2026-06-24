@@ -110,7 +110,7 @@ void TextureImpl::updateData(const void* data, int width, int height, int level,
 void TextureImpl::updateCompressedData(const void* data,
                                        int width,
                                        int height,
-                                       std::size_t dataSize,
+                                       size_t dataSize,
                                        int level,
                                        int layerIndex)
 {
@@ -166,7 +166,7 @@ void TextureImpl::updateCompressedSubData(int xoffset,
                                           int yoffset,
                                           int width,
                                           int height,
-                                          std::size_t dataSize,
+                                          size_t dataSize,
                                           int level,
                                           const void* data,
                                           int layerIndex)

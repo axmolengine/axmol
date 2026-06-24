@@ -25,7 +25,7 @@ THE SOFTWARE.
 #include "axmol/platform/msw/ComPtr.h"
 #include "ntcvt/ntcvt.hpp"
 #include <algorithm>
-#include <cstring>
+#include <string.h>
 
 #pragma comment(lib, "d2d1.lib")
 #pragma comment(lib, "dwrite.lib")

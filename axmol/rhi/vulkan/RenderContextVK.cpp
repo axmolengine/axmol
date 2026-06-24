@@ -37,7 +37,7 @@
 #include "axmol/math/MathUtil.h"
 
 #include <glad/vulkan.h>
-#include <cassert>
+#include <assert.h>
 #include <algorithm>
 
 namespace ax::rhi::vk
@@ -200,7 +200,7 @@ RenderContextImpl::~RenderContextImpl()
 }
 
 // Create per-frame uniform ring buffers with persistent mapping
-void RenderContextImpl::createUniformRingBuffers(std::size_t capacityBytes)
+void RenderContextImpl::createUniformRingBuffers(size_t capacityBytes)
 {
     // Query minUniformBufferOffsetAlignment from physical device limits
 
@@ -215,7 +215,7 @@ void RenderContextImpl::createUniformRingBuffers(std::size_t capacityBytes)
 
     VkPhysicalDeviceProperties props{};
     vkGetPhysicalDeviceProperties(_driver->getPhysical(), &props);
-    std::size_t devAlign = std::max<std::size_t>(1, props.limits.minUniformBufferOffsetAlignment);
+    size_t devAlign = std::max<size_t>(1, props.limits.minUniformBufferOffsetAlignment);
 
     for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
     {
@@ -291,12 +291,12 @@ void RenderContextImpl::resetUniformRingForCurrentFrame()
 }
 
 // Allocate aligned slice from current frame's ring buffer
-RenderContextImpl::UniformSlice RenderContextImpl::allocateUniformSlice(std::size_t size)
+RenderContextImpl::UniformSlice RenderContextImpl::allocateUniformSlice(size_t size)
 {
     UniformRingBuffer& ring = _uniformRings[_frameIndex];
 
     // Align allocation size to device requirement
-    std::size_t aligned = (size + ring.align - 1) & ~(ring.align - 1);
+    size_t aligned = (size + ring.align - 1) & ~(ring.align - 1);
 
     // Simple overflow check (can be replaced by grow or fallback)
     AXASSERT(ring.writeHead + aligned <= ring.capacity, "Uniform ring buffer overflow");
@@ -859,7 +859,7 @@ void RenderContextImpl::markExtendedDynamicStateDirty(ExtendedDynamicStateBits b
 {
     if (_driver->isExtendedDynamicStateSupported())
     {
-        auto&& apply = [this, bits]<std::size_t... _Idx>(std::index_sequence<_Idx...>) {
+        auto&& apply = [this, bits]<size_t... _Idx>(std::index_sequence<_Idx...>) {
             (bitmask::set(_inFlightExtendedDynamicDirtyBits[_Idx], bits), ...);
         };
         apply(std::make_index_sequence<MAX_FRAMES_IN_FLIGHT>{});
@@ -1103,20 +1103,20 @@ void RenderContextImpl::prepareDrawing()
     }
 }
 
-void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool /*wireframe*/)
+void RenderContextImpl::drawArrays(size_t start, size_t count, bool /*wireframe*/)
 {
     prepareDrawing();
     vkCmdDraw(_currentCmdBuffer, static_cast<uint32_t>(count), 1, static_cast<uint32_t>(start), 0);
 }
 
-void RenderContextImpl::drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool /*wireframe*/)
+void RenderContextImpl::drawArraysInstanced(size_t start, size_t count, int instanceCount, bool /*wireframe*/)
 {
     prepareDrawing();
     vkCmdDraw(_currentCmdBuffer, static_cast<uint32_t>(count), static_cast<uint32_t>(instanceCount),
               static_cast<uint32_t>(start), 0);
 }
 
-void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool /*wireframe*/)
+void RenderContextImpl::drawElements(IndexFormat indexType, size_t count, size_t offset, bool /*wireframe*/)
 {
     prepareDrawing();
 
@@ -1129,8 +1129,8 @@ void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, s
 }
 
 void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
-                                              std::size_t count,
-                                              std::size_t offset,
+                                              size_t count,
+                                              size_t offset,
                                               int instanceCount,
                                               bool /*wireframe*/)
 {

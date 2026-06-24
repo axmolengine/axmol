@@ -80,7 +80,7 @@ public:
      * reduction image.
      * @param layerIndex Specifies the layer index for 2D array textures.
      */
-    void updateCompressedData(const void* data, int width, int height, std::size_t dataSize, int level, int layerIndex)
+    void updateCompressedData(const void* data, int width, int height, size_t dataSize, int level, int layerIndex)
         override;
 
     /**
@@ -113,7 +113,7 @@ public:
                                  int yoffset,
                                  int width,
                                  int height,
-                                 std::size_t dataSize,
+                                 size_t dataSize,
                                  int level,
                                  const void* data,
                                  int layerIndex) override;

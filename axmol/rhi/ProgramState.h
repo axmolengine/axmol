@@ -28,7 +28,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
-#include <cstdint>
+#include <stdint.h>
 #include <functional>
 #include <span>
 #include "axmol/platform/PlatformMacros.h"
@@ -129,7 +129,7 @@ public:
      * @param data Specifies the new values to be used for the specified uniform variable.
      * @param size Specifies the uniform data size.
      */
-    void setUniform(const rhi::UniformLocation& uniformLocation, const void* data, std::size_t size);
+    void setUniform(const rhi::UniformLocation& uniformLocation, const void* data, size_t size);
 
     /**
      * Get uniform location in given uniform name.

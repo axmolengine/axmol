@@ -600,7 +600,7 @@ struct UniformLocation
 
 struct UniformLocationHash
 {
-    size_t operator()(UniformLocation const& u) const noexcept { return std::size_t(u.location); }
+    size_t operator()(UniformLocation const& u) const noexcept { return size_t(u.location); }
 };
 
 // vertex input descriptor in vertex shader

@@ -32,7 +32,7 @@
 #include "axmol/tlx/flat_set.hpp"
 #include "axmol/physics/3d/ContactEvent3D.h"
 
-#include <cstdint>
+#include <stdint.h>
 #include <vector>
 
 #if defined(AX_ENABLE_PHYSICS_3D)

@@ -90,9 +90,9 @@ void Armature::_sortZOrder(const int16_t* slotIndices, unsigned offset)
 
     if (_zOrderDirty || !isOriginal)
     {
-        for (std::size_t i = 0, l = slotDatas.size(); i < l; ++i)
+        for (size_t i = 0, l = slotDatas.size(); i < l; ++i)
         {
-            const auto slotIndex = isOriginal ? i : (std::size_t)slotIndices[offset + i];
+            const auto slotIndex = isOriginal ? i : (size_t)slotIndices[offset + i];
             if (slotIndex >= l)
             {
                 continue;

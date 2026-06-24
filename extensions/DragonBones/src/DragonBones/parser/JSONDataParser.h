@@ -96,7 +96,7 @@ protected:
         return std::string{defaultValue};
     }
 
-    inline static int _getParameter(const rapidjson::Value& rawData, std::size_t index, int defaultValue)
+    inline static int _getParameter(const rapidjson::Value& rawData, size_t index, int defaultValue)
     {
         if (rawData.Size() > index)
         {
@@ -106,7 +106,7 @@ protected:
         return defaultValue;
     }
 
-    inline static float _getParameter(const rapidjson::Value& rawData, std::size_t index, float defaultValue)
+    inline static float _getParameter(const rapidjson::Value& rawData, size_t index, float defaultValue)
     {
         if (rawData.Size() > index)
         {
@@ -117,7 +117,7 @@ protected:
     }
 
     inline static std::string _getParameter(const rapidjson::Value& rawData,
-                                            std::size_t index,
+                                            size_t index,
                                             std::string_view defaultValue)
     {
         if (rawData.Size() > index)
@@ -151,12 +151,12 @@ private:
     ColorTransform _helpColorTransform;
     Point _helpPoint;
     std::vector<float> _helpArray;
-    std::vector<std::int16_t> _intArray;
+    std::vector<int16_t> _intArray;
     std::vector<float> _floatArray;
-    std::vector<std::int16_t> _frameIntArray;
+    std::vector<int16_t> _frameIntArray;
     std::vector<float> _frameFloatArray;
-    std::vector<std::int16_t> _frameArray;
-    std::vector<std::uint16_t> _timelineArray;
+    std::vector<int16_t> _frameArray;
+    std::vector<uint16_t> _timelineArray;
     std::vector<const rapidjson::Value*> _cacheRawMeshes;
     std::vector<MeshDisplayData*> _cacheMeshes;
     std::vector<ActionFrame> _actionFrames;

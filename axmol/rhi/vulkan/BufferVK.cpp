@@ -158,13 +158,13 @@ static VkBufferUsageFlags translateBindFlag(BufferType t)
     }
 }
 
-static inline std::size_t alignTo(std::size_t value, std::size_t alignment)
+static inline size_t alignTo(size_t value, size_t alignment)
 {
     return (value + alignment - 1) & ~(alignment - 1);
 }
 
 /* -------------------------------------------------- ctor */
-BufferImpl::BufferImpl(DriverImpl* driver, std::size_t size, BufferType type, BufferUsage usage, const void* initial)
+BufferImpl::BufferImpl(DriverImpl* driver, size_t size, BufferType type, BufferUsage usage, const void* initial)
     : Buffer(size, type, usage), _driver(driver)
 {
     translateUsage(usage, _usageFlags, _memoryProperties);
@@ -320,7 +320,7 @@ void BufferImpl::updateIndex()
 }
 
 /* -------------------------------------------------- updateData */
-void BufferImpl::updateData(const void* data, std::size_t size)
+void BufferImpl::updateData(const void* data, size_t size)
 {
     assert(size <= _capacity);
     assert(data);
@@ -329,7 +329,7 @@ void BufferImpl::updateData(const void* data, std::size_t size)
 }
 
 /* -------------------------------------------------- updateSubData */
-void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t size)
+void BufferImpl::updateSubData(const void* data, size_t offset, size_t size)
 {
     assert(data && (offset + size <= _capacity));
 

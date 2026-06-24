@@ -27,7 +27,7 @@
 #include "axmol/math/Math.h"
 #include "axmol/physics/PhysicsActor.h"
 
-#include <cstdint>
+#include <stdint.h>
 #include <functional>
 #include <vector>
 #include <span>

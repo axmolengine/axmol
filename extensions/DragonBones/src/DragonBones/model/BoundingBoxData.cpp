@@ -1,4 +1,4 @@
-﻿
+
 #include "BoundingBoxData.h"
 #include "DisplayData.h"
 
@@ -447,7 +447,7 @@ int PolygonBoundingBoxData::polygonIntersectsSegment(float xA,
     auto xMax              = 0.0f;
     auto yMax              = 0.0f;
 
-    for (std::size_t i = 0; i < count; i += 2)
+    for (size_t i = 0; i < count; i += 2)
     {
         const auto xD = vertices[i];
         const auto yD = vertices[i + 1];
@@ -609,7 +609,7 @@ bool PolygonBoundingBoxData::containsPoint(float pX, float pY)
     auto isInSide = false;
     if (pX >= x && pX <= width && pY >= y && pY <= height)
     {
-        for (std::size_t i = 0, l = vertices.size(), iP = l - 2; i < l; i += 2)
+        for (size_t i = 0, l = vertices.size(), iP = l - 2; i < l; i += 2)
         {
             const auto yA = vertices[iP + 1];
             const auto yB = vertices[i + 1];

@@ -84,7 +84,7 @@ public:
      * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      * @return A Buffer object.
      */
-    Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial) override;
+    Buffer* createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial) override;
 
     /**
      * New a Texture object, not auto released.

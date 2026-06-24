@@ -496,7 +496,7 @@ void AnimationState::init(Armature* parmature, AnimationData* panimationData, An
     if (!animationConfig->boneMask.empty())
     {
         _boneMask.resize(animationConfig->boneMask.size());
-        for (std::size_t i = 0, l = _boneMask.size(); i < l; ++i)
+        for (size_t i = 0, l = _boneMask.size(); i < l; ++i)
         {
             _boneMask[i] = animationConfig->boneMask[i];
         }
@@ -600,7 +600,7 @@ void AnimationState::advanceTime(float passedTime, float cacheFrameRate)
     {
         if (isUpdateBoneTimeline)  // Update bone timelines.
         {
-            for (std::size_t i = 0, l = _boneTimelines.size(); i < l; ++i)
+            for (size_t i = 0, l = _boneTimelines.size(); i < l; ++i)
             {
                 const auto timeline = _boneTimelines[i];
 
@@ -622,7 +622,7 @@ void AnimationState::advanceTime(float passedTime, float cacheFrameRate)
 
         if (displayControl)
         {
-            for (std::size_t i = 0, l = _slotTimelines.size(); i < l; ++i)
+            for (size_t i = 0, l = _slotTimelines.size(); i < l; ++i)
             {
                 const auto timeline           = _slotTimelines[i];
                 const auto& displayController = timeline->slot->displayController;
@@ -637,7 +637,7 @@ void AnimationState::advanceTime(float passedTime, float cacheFrameRate)
             }
         }
 
-        for (std::size_t i = 0, l = _constraintTimelines.size(); i < l; ++i)
+        for (size_t i = 0, l = _constraintTimelines.size(); i < l; ++i)
         {
             const auto timeline = _constraintTimelines[i];
             if (timeline->playState <= 0)

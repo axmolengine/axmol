@@ -1,4 +1,4 @@
-﻿#include "DragonBones.h"
+#include "DragonBones.h"
 #include "../armature/Armature.h"
 #include "../animation/WorldClock.h"
 #include "../animation/Animation.h"
@@ -45,7 +45,7 @@ void DragonBones::advanceTime(float passedTime)
 
     if (!_events.empty())
     {
-        for (std::size_t i = 0; i < _events.size(); ++i)
+        for (size_t i = 0; i < _events.size(); ++i)
         {
             const auto eventObject = _events[i];
             const auto armature    = eventObject->armature;

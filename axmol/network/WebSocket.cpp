@@ -49,7 +49,7 @@ These codes accompany close frames.
 
 @see <a href="https://tools.ietf.org/html/rfc6455#section-7.4.1">RFC 6455 7.4.1 Defined Status Codes</a>
 */
-enum close_code : std::uint16_t
+enum close_code : uint16_t
 {
     /// Normal closure; the connection successfully completed whatever purpose for which it was created.
     normal = 1000,
@@ -139,7 +139,7 @@ enum close_code : std::uint16_t
 };
 
 // frame header opcodes
-enum class opcode : std::uint8_t
+enum class opcode : uint8_t
 {
     cont   = 0,
     text   = 1,

@@ -25,7 +25,7 @@
 
 #include "axmol/rhi/VertexLayout.h"
 #include "axmol/base/Macros.h"
-#include <cassert>
+#include <assert.h>
 #include "xxhash/xxhash.h"
 
 namespace ax::rhi
@@ -92,7 +92,7 @@ void VertexLayoutDesc::endLayout(int stride)
 void VertexLayoutDesc::addAttrib(std::string_view name,
                                  const VertexInputDesc* desc,
                                  VertexFormat format,
-                                 std::size_t offset,
+                                 size_t offset,
                                  bool needToBeNormallized,
                                  uint8_t instanceStepRate)
 {

@@ -25,7 +25,7 @@
 
 #include <string>
 #include <functional>
-#include <cstdint>
+#include <stdint.h>
 #include <vector>
 
 #include "axmol/renderer/Texture2D.h"

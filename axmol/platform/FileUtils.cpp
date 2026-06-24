@@ -290,7 +290,7 @@ public:
                 else if (sName == "integer"sv)
                     _curArray->emplace_back(Value(atoi(_curValue.c_str())));
                 else
-                    _curArray->emplace_back(Value(std::atof(_curValue.c_str())));
+                    _curArray->emplace_back(Value(atof(_curValue.c_str())));
             }
             else if (SAX_DICT == curState)
             {
@@ -299,7 +299,7 @@ public:
                 else if (sName == "integer"sv)
                     (*_curDict)[_curKey] = Value(atoi(_curValue.c_str()));
                 else
-                    (*_curDict)[_curKey] = Value(std::atof(_curValue.c_str()));
+                    (*_curDict)[_curKey] = Value(atof(_curValue.c_str()));
             }
 
             _curValue.clear();

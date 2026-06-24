@@ -1,10 +1,10 @@
-﻿#include "BaseObject.h"
+#include "BaseObject.h"
 DRAGONBONES_NAMESPACE_BEGIN
 
 unsigned BaseObject::_hashCode        = 0;
 unsigned BaseObject::_defaultMaxCount = 3000;
-std::map<std::size_t, unsigned> BaseObject::_maxCountMap;
-std::map<std::size_t, std::vector<BaseObject*>> BaseObject::_poolsMap;
+std::map<size_t, unsigned> BaseObject::_maxCountMap;
+std::map<size_t, std::vector<BaseObject*>> BaseObject::_poolsMap;
 
 void BaseObject::_returnObject(BaseObject* object)
 {
@@ -30,7 +30,7 @@ void BaseObject::_returnObject(BaseObject* object)
     }
 }
 
-void BaseObject::setMaxCount(std::size_t classType, unsigned maxCount)
+void BaseObject::setMaxCount(size_t classType, unsigned maxCount)
 {
     if (classType > 0)
     {
@@ -75,7 +75,7 @@ void BaseObject::setMaxCount(std::size_t classType, unsigned maxCount)
     }
 }
 
-void BaseObject::clearPool(std::size_t classType)
+void BaseObject::clearPool(size_t classType)
 {
     if (classType > 0)
     {

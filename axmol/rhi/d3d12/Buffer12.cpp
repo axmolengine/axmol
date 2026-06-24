@@ -72,13 +72,13 @@ static D3D12_RESOURCE_STATES translateInitialState(BufferType t, BufferUsage usa
     }
 }
 
-std::size_t BufferImpl::alignTo(std::size_t value, std::size_t alignment)
+size_t BufferImpl::alignTo(size_t value, size_t alignment)
 {
     return (value + alignment - 1) & ~(alignment - 1);
 }
 
 /* -------------------------------------------------- ctor */
-BufferImpl::BufferImpl(DriverImpl* driver, std::size_t size, BufferType type, BufferUsage usage, const void* initial)
+BufferImpl::BufferImpl(DriverImpl* driver, size_t size, BufferType type, BufferUsage usage, const void* initial)
     : Buffer(size, type, usage), _driver(driver)
 {
     AXASSERT(_driver, "DriverImpl must not be null");
@@ -203,7 +203,7 @@ void BufferImpl::updateIndex()
 }
 
 /* -------------------------------------------------- updateData */
-void BufferImpl::updateData(const void* data, std::size_t size)
+void BufferImpl::updateData(const void* data, size_t size)
 {
     AXASSERT(size <= _size, "updateData size overflow");
     AXASSERT(data, "updateData data is null");
@@ -212,7 +212,7 @@ void BufferImpl::updateData(const void* data, std::size_t size)
 }
 
 /* -------------------------------------------------- updateSubData */
-void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t size)
+void BufferImpl::updateSubData(const void* data, size_t offset, size_t size)
 {
     AXASSERT(data && (offset + size <= _size), "updateSubData out of bounds");
 
@@ -249,7 +249,7 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
 }
 
 /* -------------------------------------------------- copyFromUploadBuffer */
-void BufferImpl::copyFromUploadBuffer(const void* data, std::size_t offset, std::size_t size)
+void BufferImpl::copyFromUploadBuffer(const void* data, size_t offset, size_t size)
 {
     AXASSERT(data && size > 0, "copyFromUploadBuffer invalid args");
 

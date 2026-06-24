@@ -28,7 +28,7 @@
 #include "axmol/physics/3d/Collider3D.h"
 #include "axmol/tlx/bitmask.hpp"
 
-#include <cstdint>
+#include <stdint.h>
 #include <functional>
 #include <vector>
 

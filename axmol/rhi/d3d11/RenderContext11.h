@@ -112,14 +112,14 @@ public:
 
     void setInstanceBuffer(Buffer* buffer) override;
 
-    void drawArrays(std::size_t start, std::size_t count, bool wireframe) override;
-    void drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool wireframe = false) override;
+    void drawArrays(size_t start, size_t count, bool wireframe) override;
+    void drawArraysInstanced(size_t start, size_t count, int instanceCount, bool wireframe = false) override;
 
-    void drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool wireframe) override;
+    void drawElements(IndexFormat indexType, size_t count, size_t offset, bool wireframe) override;
 
     void drawElementsInstanced(IndexFormat indexType,
-                               std::size_t count,
-                               std::size_t offset,
+                               size_t count,
+                               size_t offset,
                                int instanceCount,
                                bool wireframe = false) override;
 

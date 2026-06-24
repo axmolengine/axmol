@@ -24,7 +24,7 @@
 #include "axmol/rhi/vulkan/ShaderModuleVK.h"
 #include "axmol/rhi/vulkan/DriverVK.h"
 #include "axmol/base/Logging.h"
-#include <cassert>
+#include <assert.h>
 #include <algorithm>
 
 namespace ax::rhi::vk

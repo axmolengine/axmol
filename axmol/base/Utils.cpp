@@ -902,7 +902,7 @@ namespace braceinit
 {
 inline void skip_ws(const char*& p, const char* end)
 {
-    while (p < end && std::isspace(static_cast<unsigned char>(*p)))
+    while (p < end && isspace(static_cast<unsigned char>(*p)))
         ++p;
 }
 inline bool expect(const char*& p, const char* end, char c)

@@ -518,7 +518,7 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
             auto str = it->second.asStringRef();
             if (!str.empty() && str[str.length() - 1] == '%')
             {
-                scaleY = std::atoi(str.data()) / 100.f;
+                scaleY = atoi(str.data()) / 100.f;
             }
             else
             {
@@ -532,7 +532,7 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
             auto str = it->second.asStringRef();
             if (!str.empty() && str[str.length() - 1] == '%')
             {
-                scaleX = std::atoi(str.data()) / 100.f;
+                scaleX = atoi(str.data()) / 100.f;
             }
             else
             {
@@ -1917,7 +1917,7 @@ namespace
 {
 inline bool isUTF8CharWrappable(const text_utils::u8char_span::value_type& ch)
 {
-    return (!ch.isASCII() || !std::isgraph(ch._char[0], std::locale()));
+    return (!ch.isASCII() || !isgraph(ch._char[0], std::locale()));
 }
 
 int getPrevWordPos(const text_utils::u8char_span& text, int idx)
@@ -2185,7 +2185,7 @@ void RichText::handleTextRenderer(std::string_view text,
             // after the first line, skip any spaces to the left
             const auto startOfWordItr = std::find_if(textSpan.begin() + leftLength, textSpan.end(),
                                                      [](const text_utils::u8char_span::value_type& ch) {
-                return !std::isspace(ch._char[0], std::locale());
+                return !isspace(ch._char[0], std::locale());
             });
             if (startOfWordItr != textSpan.end())
                 leftLength = static_cast<int>(startOfWordItr - textSpan.begin());
@@ -2428,7 +2428,7 @@ namespace
 {
 bool isWhitespace(char c)
 {
-    return std::isspace(c, std::locale());
+    return isspace(c, std::locale());
 }
 void rtrim(std::string& s)
 {

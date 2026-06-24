@@ -113,12 +113,12 @@ public:
     void setIndexBuffer(Buffer* buffer) override;
     void setInstanceBuffer(Buffer* buffer) override;
 
-    void drawArrays(std::size_t start, std::size_t count, bool wireframe) override;
-    void drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool wireframe) override;
-    void drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool wireframe) override;
+    void drawArrays(size_t start, size_t count, bool wireframe) override;
+    void drawArraysInstanced(size_t start, size_t count, int instanceCount, bool wireframe) override;
+    void drawElements(IndexFormat indexType, size_t count, size_t offset, bool wireframe) override;
     void drawElementsInstanced(IndexFormat indexType,
-                               std::size_t count,
-                               std::size_t offset,
+                               size_t count,
+                               size_t offset,
                                int instanceCount,
                                bool wireframe) override;
 
@@ -151,7 +151,7 @@ private:
 
     void markDynamicStateDirty(DynamicStateBits bits) noexcept
     {
-        auto&& apply = [this, bits]<std::size_t... _Idx>(std::index_sequence<_Idx...>) {
+        auto&& apply = [this, bits]<size_t... _Idx>(std::index_sequence<_Idx...>) {
             (bitmask::set(_inFlightDynamicDirtyBits[_Idx], bits), ...);
         };
         apply(std::make_index_sequence<MAX_FRAMES_IN_FLIGHT>{});
@@ -212,29 +212,29 @@ private:
         VkBuffer buffer{VK_NULL_HANDLE};
         VkDeviceMemory memory{VK_NULL_HANDLE};
         uint8_t* mapped{nullptr};  // persistently mapped host pointer
-        std::size_t capacity{0};   // total bytes
-        std::size_t writeHead{0};  // current write offset
-        std::size_t align{256};    // device minUniformBufferOffsetAlignment (fallback 256)
+        size_t capacity{0};   // total bytes
+        size_t writeHead{0};  // current write offset
+        size_t align{256};    // device minUniformBufferOffsetAlignment (fallback 256)
         bool isCoherent{true};     // memory coherency hint
     };
 
     // Allocate an aligned slice in current frame ring
     struct UniformSlice
     {
-        std::size_t offset{0};
-        std::size_t size{0};
+        size_t offset{0};
+        size_t size{0};
         uint8_t* cpuPtr{nullptr};
     };
     std::array<UniformRingBuffer, MAX_FRAMES_IN_FLIGHT> _uniformRings{};
 
     // Create ring buffers for all frames-in-flight
-    void createUniformRingBuffers(std::size_t capacityBytes);
+    void createUniformRingBuffers(size_t capacityBytes);
     // Destroy ring buffers
     void destroyUniformRingBuffers();
     // Reset current frame ring write head (after waiting its fence)
     void resetUniformRingForCurrentFrame();
 
-    UniformSlice allocateUniformSlice(std::size_t size);
+    UniformSlice allocateUniformSlice(size_t size);
 #pragma endregion
 
     std::vector<std::function<void()>> _postFrameOps;

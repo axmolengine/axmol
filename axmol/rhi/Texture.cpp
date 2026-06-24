@@ -25,7 +25,7 @@
 
 #include "axmol/rhi/Texture.h"
 #include "axmol/rhi/RHIUtils.h"
-#include <cassert>
+#include <assert.h>
 namespace ax::rhi
 {
 

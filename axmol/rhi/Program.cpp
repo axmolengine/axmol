@@ -168,7 +168,7 @@ UniformInfo& Program::getUniformInfo(uint64_t id)
     return _activeUniformInfos.at(id);
 }
 
-std::size_t Program::getUniformBufferSize() const
+size_t Program::getUniformBufferSize() const
 {
     return _uniformBufferSize;
 }

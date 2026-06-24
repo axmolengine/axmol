@@ -95,7 +95,7 @@ void CCSlot::_updateFrame()
                 auto vertexIndices           = new unsigned short[triangleCount * 3];  // does cocos2dx release it?
                 ax::Rect boundsRect(999999.0f, 999999.0f, -999999.0f, -999999.0f);
 
-                for (std::size_t i = 0, l = vertexCount * 2; i < l; i += 2)
+                for (size_t i = 0, l = vertexCount * 2; i < l; i += 2)
                 {
                     const auto iH = i / 2;
                     const auto x  = floatArray[vertexOffset + i];
@@ -143,7 +143,7 @@ void CCSlot::_updateFrame()
                 boundsRect.size.width -= boundsRect.origin.x;
                 boundsRect.size.height -= boundsRect.origin.y;
 
-                for (std::size_t i = 0; i < triangleCount * 3; ++i)
+                for (size_t i = 0; i < triangleCount * 3; ++i)
                 {
                     vertexIndices[i] =
                         intArray[currentVerticesData->offset + (unsigned)BinaryOffset::MeshVertexIndices + i];
@@ -224,7 +224,7 @@ void CCSlot::_updateMesh()
         const auto data        = verticesData->data;
         const auto intArray    = data->intArray;
         const auto floatArray  = data->floatArray;
-        const auto vertexCount = (std::size_t)intArray[verticesData->offset + (unsigned)BinaryOffset::MeshVertexCount];
+        const auto vertexCount = (size_t)intArray[verticesData->offset + (unsigned)BinaryOffset::MeshVertexCount];
         int weightFloatOffset  = intArray[weightData->offset + (unsigned)BinaryOffset::WeigthFloatOffset];
 
         if (weightFloatOffset < 0)
@@ -232,13 +232,13 @@ void CCSlot::_updateMesh()
             weightFloatOffset += 65536;  // Fixed out of bouds bug.
         }
 
-        for (std::size_t i = 0, iB = weightData->offset + (unsigned)BinaryOffset::WeigthBoneIndices + bones.size(),
-                         iV = (std::size_t)weightFloatOffset, iF = 0;
+        for (size_t i = 0, iB = weightData->offset + (unsigned)BinaryOffset::WeigthBoneIndices + bones.size(),
+                         iV = (size_t)weightFloatOffset, iF = 0;
              i < vertexCount; ++i)
         {
-            const auto boneCount = (std::size_t)intArray[iB++];
+            const auto boneCount = (size_t)intArray[iB++];
             auto xG = 0.0f, yG = 0.0f;
-            for (std::size_t j = 0; j < boneCount; ++j)
+            for (size_t j = 0; j < boneCount; ++j)
             {
                 const auto boneIndex = (unsigned)intArray[iB++];
                 const auto bone      = bones[boneIndex];
@@ -291,7 +291,7 @@ void CCSlot::_updateMesh()
         const auto data        = verticesData->data;
         const auto intArray    = data->intArray;
         const auto floatArray  = data->floatArray;
-        const auto vertexCount = (std::size_t)intArray[verticesData->offset + (unsigned)BinaryOffset::MeshVertexCount];
+        const auto vertexCount = (size_t)intArray[verticesData->offset + (unsigned)BinaryOffset::MeshVertexCount];
         int vertexOffset       = intArray[verticesData->offset + (unsigned)BinaryOffset::MeshFloatOffset];
 
         if (vertexOffset < 0)
@@ -299,7 +299,7 @@ void CCSlot::_updateMesh()
             vertexOffset += 65536;  // Fixed out of bouds bug.
         }
 
-        for (std::size_t i = 0, l = vertexCount * 2; i < l; i += 2)
+        for (size_t i = 0, l = vertexCount * 2; i < l; i += 2)
         {
             const auto iH = i / 2;
             const auto xG = floatArray[vertexOffset + i] * scale + deformVertices[i];

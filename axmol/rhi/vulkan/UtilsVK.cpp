@@ -23,8 +23,8 @@
  ****************************************************************************/
 #include "axmol/rhi/vulkan/UtilsVK.h"
 #include <glad/vulkan.h>
-#include <cassert>
-#include <cstdint>
+#include <assert.h>
+#include <stdint.h>
 
 namespace ax::rhi::vk
 {

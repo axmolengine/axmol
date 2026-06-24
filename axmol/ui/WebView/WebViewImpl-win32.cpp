@@ -169,7 +169,7 @@ private:
          *   The macro CP_ACP for ntcvt::from_chars works for converting chraset from current code page(936,437,65001)
          * to utf-16
          */
-        std::wstring userDataFolder  = ntcvt::from_chars(std::getenv("APPDATA"), CP_ACP);
+        std::wstring userDataFolder  = ntcvt::from_chars(getenv("APPDATA"), CP_ACP);
         std::wstring currentExeNameW = ntcvt::from_chars(currentExeName, CP_ACP);
 
         HRESULT res = CreateCoreWebView2EnvironmentWithOptions(

@@ -30,7 +30,7 @@
 
 #pragma once
 
-#include <cstdint>
+#include <stdint.h>
 #include "axmol/base/Macros.h"
 #include "axmol/base/Vector.h"
 #include "axmol/base/Protocols.h"
@@ -1998,26 +1998,26 @@ protected:
     {
         struct
         {
-            std::uint32_t _orderOfArrival;
-            std::int32_t _localZOrder;
+            uint32_t _orderOfArrival;
+            int32_t _localZOrder;
         };
-        std::int64_t _localZOrder$Arrival;
+        int64_t _localZOrder$Arrival;
     };
 #else
     union
     {
         struct
         {
-            std::int32_t _localZOrder;
-            std::uint32_t _orderOfArrival;
+            int32_t _localZOrder;
+            uint32_t _orderOfArrival;
         };
-        std::int64_t _localZOrder$Arrival;
+        int64_t _localZOrder$Arrival;
     };
 #endif
 
     float _globalZOrder;  ///< Global order used to sort the node
 
-    static std::uint32_t s_globalOrderOfArrival;
+    static uint32_t s_globalOrderOfArrival;
 
     Vector<Node*> _children;             ///< array of children nodes
     NodeIndexerMap_t* _childrenIndexer;  ///< The children indexer for fast find child

@@ -20,7 +20,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-#include <cstddef>
+
 #include <type_traits>
 #include <utility>
 #include <iterator>
@@ -32,14 +32,14 @@
 namespace tlx
 {
 
-template <typename _Ty, std::size_t _Capacity>
+template <typename _Ty, size_t _Capacity>
 class static_vector
 {
 public:
     static_assert(_Capacity > 0, "static_vector capacity must be > 0");
 
     using value_type      = _Ty;
-    using size_type       = std::size_t;
+    using size_type       = size_t;
     using reference       = value_type&;
     using const_reference = const value_type&;
     using pointer         = value_type*;
@@ -190,7 +190,7 @@ public:
         if constexpr (std::is_trivially_copyable_v<_Ty> && std::is_trivially_default_constructible_v<_Ty>)
         {
             if (_size < newSize)
-                std::memset(data() + _size, 0, (newSize - _size) * sizeof(_Ty));
+                memset(data() + _size, 0, (newSize - _size) * sizeof(_Ty));
             _size = newSize;
         }
         else

@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "axmol/scene/Camera.h"
 
 #include <list>
-#include <cfloat>
+#include <float.h>
 #include <map>
 
 // Touch bookkeeping was migrated into InputSystem private members.

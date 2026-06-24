@@ -54,8 +54,8 @@ static int cmpVersion(std::string_view v1, std::string_view v2)
 {
     int i;
     int oct_v1[4] = {0}, oct_v2[4] = {0};
-    int filled1 = std::sscanf(v1.data(), "%d.%d.%d.%d", &oct_v1[0], &oct_v1[1], &oct_v1[2], &oct_v1[3]);
-    int filled2 = std::sscanf(v2.data(), "%d.%d.%d.%d", &oct_v2[0], &oct_v2[1], &oct_v2[2], &oct_v2[3]);
+    int filled1 = sscanf(v1.data(), "%d.%d.%d.%d", &oct_v1[0], &oct_v1[1], &oct_v1[2], &oct_v1[3]);
+    int filled2 = sscanf(v2.data(), "%d.%d.%d.%d", &oct_v2[0], &oct_v2[1], &oct_v2[2], &oct_v2[3]);
 
     if (filled1 == 0 || filled2 == 0)
     {

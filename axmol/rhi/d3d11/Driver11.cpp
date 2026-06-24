@@ -294,7 +294,7 @@ RenderContext* DriverImpl::createRenderContext(SurfaceHandle surface)
     return new RenderContextImpl(this, surface);
 }
 
-Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial)
+Buffer* DriverImpl::createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial)
 {
     return new BufferImpl(_device, _context, size, type, usage, initial);
 }

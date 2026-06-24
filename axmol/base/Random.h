@@ -27,7 +27,7 @@ THE SOFTWARE.
 #pragma once
 
 #include <random>
-#include <cstdlib>
+#include <stdlib.h>
 
 #include "axmol/platform/PlatformConfig.h"
 
@@ -104,25 +104,25 @@ inline int random()
     return ax::random(0, AX_RAND_MAX);
 };
 
-/// Follow random APIs is device independent,  need set seed by std::srand
+/// Follow random APIs is device independent,  need set seed by srand
 /// DEPRECATED: use FastRGN.h or c++11 'std::minstd_rand' or 'std::minstd_rand0' instead
 
 /**
  * Returns a random float between -1 and 1.
- * It can be seeded using std::srand(seed);
+ * It can be seeded using srand(seed);
  */
 inline float rand_minus1_1()
 {
-    return ((std::rand() / (float)RAND_MAX) * 2) - 1;
+    return ((rand() / (float)RAND_MAX) * 2) - 1;
 }
 
 /**
  * Returns a random float between 0 and 1.
- * It can be seeded using std::srand(seed);
+ * It can be seeded using srand(seed);
  */
 inline float rand_0_1()
 {
-    return std::rand() / (float)RAND_MAX;
+    return rand() / (float)RAND_MAX;
 }
 
 }  // namespace ax

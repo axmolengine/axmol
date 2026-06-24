@@ -17,7 +17,7 @@ using namespace std;
 #endif
 
 static bool isWhitespace(char c) {
-    return std::isspace(c, std::locale());
+    return isspace(c, std::locale());
 }
 
 static void ltrim(std::string& s) {

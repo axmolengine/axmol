@@ -1,4 +1,4 @@
-﻿#include "DeformVertices.h"
+#include "DeformVertices.h"
 #include "../model/DragonBonesData.h"
 #include "../model/DisplayData.h"
 #include "../armature/Armature.h"
@@ -35,14 +35,14 @@ void DeformVertices::init(const VerticesData* verticesDataValue, Armature* armat
         vertices.resize(vertexCount);
         bones.clear();
         //
-        for (std::size_t i = 0, l = vertices.size(); i < l; ++i)
+        for (size_t i = 0, l = vertices.size(); i < l; ++i)
         {
             vertices[i] = 0.0f;
         }
 
         if (verticesData->weight != nullptr)
         {
-            for (std::size_t i = 0, l = verticesData->weight->bones.size(); i < l; ++i)
+            for (size_t i = 0, l = verticesData->weight->bones.size(); i < l; ++i)
             {
                 const auto bone = armature->getBone(verticesData->weight->bones[i]->name);
                 if (bone != nullptr)

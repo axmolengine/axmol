@@ -454,7 +454,7 @@ void RenderContextImpl::endFrame()
             AXLOGE("SwapChain Present failed: hr=0x{:X}", hr);
         }
 
-        std::abort();
+        abort();
     }
 
     // Signal fence for this frame
@@ -653,7 +653,7 @@ void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
     _instanceBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool /*wireframe*/)
+void RenderContextImpl::drawArrays(size_t start, size_t count, bool /*wireframe*/)
 {
     AXASSERT(_renderPipeline && _vertexBuffer, "Pipeline and vertex buffer must be set");
 
@@ -662,7 +662,7 @@ void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool /*
     _currentCmdList->DrawInstanced(static_cast<UINT>(count), 1, static_cast<UINT>(start), 0);
 }
 
-void RenderContextImpl::drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool /*wireframe*/)
+void RenderContextImpl::drawArraysInstanced(size_t start, size_t count, int instanceCount, bool /*wireframe*/)
 {
     AXASSERT(_renderPipeline && _vertexBuffer, "Pipeline and vertex buffer must be set");
 
@@ -672,7 +672,7 @@ void RenderContextImpl::drawArraysInstanced(std::size_t start, std::size_t count
                                    0);
 }
 
-void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool /*wireframe*/)
+void RenderContextImpl::drawElements(IndexFormat indexType, size_t count, size_t offset, bool /*wireframe*/)
 {
     AXASSERT(_renderPipeline && _vertexBuffer && _indexBuffer, "Pipeline, vertex and index buffers must be set");
 
@@ -691,8 +691,8 @@ void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, s
 }
 
 void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
-                                              std::size_t count,
-                                              std::size_t offset,
+                                              size_t count,
+                                              size_t offset,
                                               int instanceCount,
                                               bool /*wireframe*/)
 {
@@ -805,7 +805,7 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     }
 }
 
-void RenderContextImpl::createUniformRingBuffers(std::size_t capacityBytes)
+void RenderContextImpl::createUniformRingBuffers(size_t capacityBytes)
 {
     // Enforce minimum alignment-friendly capacity
     if (capacityBytes == 0)
@@ -881,7 +881,7 @@ void RenderContextImpl::resetUniformRingForCurrentFrame(UINT frameIndex)
 }
 
 // Allocate an aligned slice for the given frame
-RenderContextImpl::UniformSlice RenderContextImpl::allocateUniformSlice(UINT frameIndex, std::size_t size)
+RenderContextImpl::UniformSlice RenderContextImpl::allocateUniformSlice(UINT frameIndex, size_t size)
 {
     AXASSERT(frameIndex < _uniformRings.size(), "Invalid frame index");
     auto& ring = _uniformRings[frameIndex];
@@ -889,8 +889,8 @@ RenderContextImpl::UniformSlice RenderContextImpl::allocateUniformSlice(UINT fra
 
     // Align size and head to 256-byte boundary to satisfy CBV requirements
     auto alignMask          = ring.align - 1;
-    std::size_t alignedSize = (size + alignMask) & ~alignMask;
-    std::size_t alignedHead = (ring.writeHead + alignMask) & ~alignMask;
+    size_t alignedSize = (size + alignMask) & ~alignMask;
+    size_t alignedHead = (ring.writeHead + alignMask) & ~alignMask;
 
     // Simple wrap-around strategy: reset if not enough room
     if (alignedHead + alignedSize > ring.capacity)

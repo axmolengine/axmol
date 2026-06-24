@@ -73,7 +73,7 @@ static D3D11_BIND_FLAG translateBindFlag(BufferType t)
     }
 }
 
-static inline std::size_t alignTo(std::size_t value, std::size_t alignment)
+static inline size_t alignTo(size_t value, size_t alignment)
 {
     return (value + alignment - 1) & ~(alignment - 1);
 }
@@ -81,7 +81,7 @@ static inline std::size_t alignTo(std::size_t value, std::size_t alignment)
 /* -------------------------------------------------- ctor */
 BufferImpl::BufferImpl(ID3D11Device* device,
                        ID3D11DeviceContext* context,
-                       std::size_t size,
+                       size_t size,
                        BufferType type,
                        BufferUsage usage,
                        const void* initial)
@@ -123,7 +123,7 @@ void BufferImpl::createNativeBuffer(const void* initial)
 }
 
 /* -------------------------------------------------- updateData */
-void BufferImpl::updateData(const void* data, std::size_t size)
+void BufferImpl::updateData(const void* data, size_t size)
 {
     assert(size <= _size);
     assert(data);
@@ -152,7 +152,7 @@ void BufferImpl::updateData(const void* data, std::size_t size)
 }
 
 /* -------------------------------------------------- updateSubData */
-void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t size)
+void BufferImpl::updateSubData(const void* data, size_t offset, size_t size)
 {
     assert(data && (offset + size <= _size));
 

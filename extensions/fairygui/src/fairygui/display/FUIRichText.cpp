@@ -27,7 +27,7 @@ static int getPrevWord(const std::string& text, int idx)
     // start from idx-1
     for (int i = idx - 1; i >= 0; --i)
     {
-        if (!std::isalnum(text[i], std::locale()))
+        if (!isalnum(text[i], std::locale()))
             return i;
     }
     return -1;
@@ -37,7 +37,7 @@ static bool isWrappable(const std::string& text)
 {
     for (size_t i = 0, size = text.length(); i < size; ++i)
     {
-        if (!std::isalnum(text[i], std::locale()))
+        if (!isalnum(text[i], std::locale()))
             return true;
     }
     return false;
@@ -56,7 +56,7 @@ static float getPaddingAmount(TextHAlignment alignment, const float leftOver) {
 }
 
 static bool isWhitespace(char c) {
-    return std::isspace(c, std::locale());
+    return isspace(c, std::locale());
 }
 
 static void ltrim(std::string& s) {
@@ -345,7 +345,7 @@ void FUIRichText::handleTextRenderer(HtmlElement* element, const std::string& te
     if (0 == leftLength) leftLength = 1;
     std::string leftWords = getSubStringOfUTF8String(text, 0, leftLength);
     int rightStart = leftLength;
-    if (std::isspace(text[rightStart], std::locale()))
+    if (isspace(text[rightStart], std::locale()))
         rightStart++;
     std::string cutWords = getSubStringOfUTF8String(text, rightStart, text.length() - leftLength);
     if (leftLength > 0)

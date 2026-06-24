@@ -29,7 +29,7 @@
 #include "axmol/base/Object.h"
 
 #include <string>
-#include <cstdint>
+#include <stdint.h>
 #include <vector>
 #include <unordered_map>
 
@@ -104,7 +104,7 @@ struct AX_DLL VertexLayoutDesc
     void addAttrib(std::string_view name,
                    const VertexInputDesc* desc,
                    VertexFormat format,
-                   std::size_t offset,
+                   size_t offset,
                    bool needNormalized,
                    uint8_t instanceStepRate = 0);
 

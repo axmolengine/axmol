@@ -137,7 +137,7 @@ void CustomCommand::init(float globalZOrder, const BlendFunc& blendFunc)
     blendDesc.destinationRGBBlendFactor = blendDesc.destinationAlphaBlendFactor = blendFunc.dst;
 }
 
-void CustomCommand::createVertexBuffer(std::size_t vertexSize, std::size_t capacity, BufferUsage usage)
+void CustomCommand::createVertexBuffer(size_t vertexSize, size_t capacity, BufferUsage usage)
 {
     AX_SAFE_RELEASE(_vertexBuffer);
 
@@ -147,7 +147,7 @@ void CustomCommand::createVertexBuffer(std::size_t vertexSize, std::size_t capac
     _vertexBuffer = axdrv->createBuffer(vertexSize * capacity, rhi::BufferType::VERTEX, usage);
 }
 
-void CustomCommand::createInstanceBuffer(std::size_t vertexSize, int capacity, BufferUsage usage)
+void CustomCommand::createInstanceBuffer(size_t vertexSize, int capacity, BufferUsage usage)
 {
     AX_SAFE_RELEASE(_instanceBuffer);
     _instanceBuffer   = axdrv->createBuffer(vertexSize * capacity, rhi::BufferType::VERTEX, usage);
@@ -167,7 +167,7 @@ void CustomCommand::setInstanceBuffer(rhi::Buffer* instanceBuffer, int count)
     }
 }
 
-void CustomCommand::createIndexBuffer(IndexFormat format, std::size_t capacity, BufferUsage usage)
+void CustomCommand::createIndexBuffer(IndexFormat format, size_t capacity, BufferUsage usage)
 {
     AX_SAFE_RELEASE(_indexBuffer);
 
@@ -179,13 +179,13 @@ void CustomCommand::createIndexBuffer(IndexFormat format, std::size_t capacity, 
     _indexBuffer = axdrv->createBuffer(_indexSize * capacity, rhi::BufferType::INDEX, usage);
 }
 
-void CustomCommand::updateVertexBuffer(const void* data, std::size_t offset, std::size_t length)
+void CustomCommand::updateVertexBuffer(const void* data, size_t offset, size_t length)
 {
     assert(_vertexBuffer);
     _vertexBuffer->updateSubData(data, offset, length);
 }
 
-void CustomCommand::updateIndexBuffer(const void* data, std::size_t offset, std::size_t length)
+void CustomCommand::updateIndexBuffer(const void* data, size_t offset, size_t length)
 {
     assert(_indexBuffer);
     _indexBuffer->updateSubData(data, offset, length);
@@ -220,25 +220,25 @@ void CustomCommand::setIndexBuffer(rhi::Buffer* indexBuffer, IndexFormat format)
         _indexCapacity = _indexDrawCount = 0;
 }
 
-void CustomCommand::updateVertexBuffer(const void* data, std::size_t length)
+void CustomCommand::updateVertexBuffer(const void* data, size_t length)
 {
     assert(_vertexBuffer);
     _vertexBuffer->updateData(data, length);
 }
 
-void CustomCommand::updateIndexBuffer(const void* data, std::size_t length)
+void CustomCommand::updateIndexBuffer(const void* data, size_t length)
 {
     assert(_indexBuffer);
     _indexBuffer->updateData(data, length);
 }
 
-void CustomCommand::updateInstanceBuffer(const void* data, std::size_t length)
+void CustomCommand::updateInstanceBuffer(const void* data, size_t length)
 {
     assert(_instanceBuffer);
     _instanceBuffer->updateData(data, length);
 }
 
-std::size_t CustomCommand::computeIndexSize() const
+size_t CustomCommand::computeIndexSize() const
 {
     if (IndexFormat::U_SHORT == _indexFormat)
         return sizeof(unsigned short);

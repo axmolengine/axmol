@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "axmol/renderer/TextureCache.h"
 
 #include <errno.h>
-#include <cctype>
+#include <ctype.h>
 #include <list>
 
 #include "axmol/renderer/Texture2D.h"

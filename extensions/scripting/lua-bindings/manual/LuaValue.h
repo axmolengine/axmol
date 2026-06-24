@@ -38,8 +38,8 @@ extern "C" {
 #include "axmol/base/Object.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_BLACKBERRY
-using std::memcpy;
-using std::memset;
+using memcpy;
+using memset;
 #endif
 
 /**

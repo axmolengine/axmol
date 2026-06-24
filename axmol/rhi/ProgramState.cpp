@@ -240,7 +240,7 @@ void ProgramState::setCallbackUniform(const rhi::UniformLocation& uniformLocatio
     _callbackUniforms[uniformLocation] = callback;
 }
 
-void ProgramState::setUniform(const rhi::UniformLocation& uniformLocation, const void* data, std::size_t size)
+void ProgramState::setUniform(const rhi::UniformLocation& uniformLocation, const void* data, size_t size)
 {
     if (uniformLocation)
     {
@@ -311,7 +311,7 @@ ProgramState::AutoBindingResolver::AutoBindingResolver()
 ProgramState::AutoBindingResolver::~AutoBindingResolver()
 {
     auto& list = _customAutoBindingResolvers;
-    list.erase(std::remove(list.begin(), list.end(), this), list.end());
+    list.erase(remove(list.begin(), list.end(), this), list.end());
 }
 
 }  // namespace ax::rhi

@@ -1,4 +1,4 @@
-﻿#include "TimelineState.h"
+#include "TimelineState.h"
 #include "WorldClock.h"
 #include "Animation.h"
 #include "../model/DragonBonesData.h"
@@ -31,7 +31,7 @@ void ActionTimelineState::_onCrossFrame(unsigned frameIndex) const
         const auto& actions =
             _animationData->parent->actions;  // May be the animaton data not belong to this armature data.
 
-        for (std::size_t i = 0; i < actionCount; ++i)
+        for (size_t i = 0; i < actionCount; ++i)
         {
             const auto actionIndex = _frameArray[frameOffset + 2 + i];
             const auto action      = actions[actionIndex];
@@ -812,7 +812,7 @@ void DeformTimelineState::_onArriveAtFrame()
                 nextValueOffset = _animationData->frameFloatOffset + _frameValueOffset;
             }
 
-            for (std::size_t i = 0; i < _valueCount; ++i)
+            for (size_t i = 0; i < _valueCount; ++i)
             {
                 _delta[i] = frameFloatArray[nextValueOffset + i] * scale -
                             (_current[i] = frameFloatArray[valueOffset + i] * scale);
@@ -820,7 +820,7 @@ void DeformTimelineState::_onArriveAtFrame()
         }
         else
         {
-            for (std::size_t i = 0; i < _valueCount; ++i)
+            for (size_t i = 0; i < _valueCount; ++i)
             {
                 _current[i] = frameFloatArray[valueOffset + i] * scale;
             }
@@ -828,7 +828,7 @@ void DeformTimelineState::_onArriveAtFrame()
     }
     else
     {
-        for (std::size_t i = 0; i < _valueCount; ++i)
+        for (size_t i = 0; i < _valueCount; ++i)
         {
             _current[i] = 0.0f;
         }
@@ -845,7 +845,7 @@ void DeformTimelineState::_onUpdateFrame()
         _tweenState = TweenState::None;
     }
 
-    for (std::size_t i = 0; i < _valueCount; ++i)
+    for (size_t i = 0; i < _valueCount; ++i)
     {
         _result[i] = _current[i] + _delta[i] * _tweenProgress;
     }
@@ -914,7 +914,7 @@ void DeformTimelineState::update(float passedTime)
 
             if (_timelineData != nullptr)
             {
-                for (std::size_t i = 0; i < _deformCount; ++i)
+                for (size_t i = 0; i < _deformCount; ++i)
                 {
                     if (i < _valueOffset)
                     {
@@ -934,7 +934,7 @@ void DeformTimelineState::update(float passedTime)
             {
                 _deformCount = result.size();
 
-                for (std::size_t i = 0; i < _deformCount; ++i)
+                for (size_t i = 0; i < _deformCount; ++i)
                 {
                     result[i] += (0.0f - result[i]) * fadeProgress;
                 }
@@ -948,7 +948,7 @@ void DeformTimelineState::update(float passedTime)
 
             if (_timelineData != nullptr)
             {
-                for (std::size_t i = 0; i < _deformCount; ++i)
+                for (size_t i = 0; i < _deformCount; ++i)
                 {
                     if (i < _valueOffset)
                     {
@@ -968,7 +968,7 @@ void DeformTimelineState::update(float passedTime)
             {
                 _deformCount = result.size();
 
-                for (std::size_t i = 0; i < _deformCount; ++i)
+                for (size_t i = 0; i < _deformCount; ++i)
                 {
                     result[i] = 0.0f;
                 }

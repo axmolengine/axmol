@@ -23,7 +23,7 @@
  ****************************************************************************/
 #include "axmol/rhi/d3d11/DepthStencilState11.h"
 #include <stdexcept>
-#include <cstring>
+#include <string.h>
 #include "xxhash/xxhash.h"
 
 namespace ax::rhi::d3d11

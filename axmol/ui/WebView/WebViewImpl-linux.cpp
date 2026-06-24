@@ -55,7 +55,7 @@ namespace webkit_dmabuf
 // Get environment variable. Not thread-safe.
 static inline std::string get_env(const std::string& name)
 {
-    auto* value = std::getenv(name.c_str());
+    auto* value = getenv(name.c_str());
     if (value)
     {
         return {value};

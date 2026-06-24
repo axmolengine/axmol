@@ -24,7 +24,7 @@
 #pragma once
 
 #include <vector>
-#include <cassert>
+#include <assert.h>
 #include <glad/vulkan.h>
 #include <vk_mem_alloc.h>
 #include "axmol/rhi/Buffer.h"
@@ -59,12 +59,12 @@ public:
      * @param usage    BufferUsage::STATIC / DYNAMIC / STREAM
      * @param initial  initial data
      */
-    BufferImpl(DriverImpl*, std::size_t size, BufferType type, BufferUsage usage, const void* initial);
+    BufferImpl(DriverImpl*, size_t size, BufferType type, BufferUsage usage, const void* initial);
 
     ~BufferImpl();
 
-    void updateData(const void* data, std::size_t size) override;
-    void updateSubData(const void* data, std::size_t offset, std::size_t size) override;
+    void updateData(const void* data, size_t size) override;
+    void updateSubData(const void* data, size_t offset, size_t size) override;
     void usingDefaultStoredData(bool needDefaultStoredData) override;
 
     VkBuffer internalHandle() const noexcept { return _buffer; }

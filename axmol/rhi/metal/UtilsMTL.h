@@ -79,7 +79,7 @@ struct UtilsMTL
      * @param heigth Specifies the height of the image.
      * @param format Specifies the format of the image.
      */
-    static void swizzleImage(unsigned char* image, std::size_t width, std::size_t height, MTLPixelFormat format);
+    static void swizzleImage(unsigned char* image, size_t width, size_t height, MTLPixelFormat format);
 };
 
 }  // namespace mtl

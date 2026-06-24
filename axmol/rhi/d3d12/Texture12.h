@@ -98,7 +98,7 @@ public:
     void updateCompressedData(const void* data,
                               int width,
                               int height,
-                              std::size_t dataSize,
+                              size_t dataSize,
                               int level,
                               int layerIndex = 0) override;
 
@@ -108,7 +108,7 @@ public:
                                  int yoffset,
                                  int width,
                                  int height,
-                                 std::size_t dataSize,
+                                 size_t dataSize,
                                  int level,
                                  const void* data,
                                  int layerIndex = 0) override;

@@ -226,7 +226,7 @@ void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
     _instanceBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool wireframe)
+void RenderContextImpl::drawArrays(size_t start, size_t count, bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -244,7 +244,7 @@ void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool wi
     cleanResources();
 }
 
-void RenderContextImpl::drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool wireframe)
+void RenderContextImpl::drawArraysInstanced(size_t start, size_t count, int instanceCount, bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -262,7 +262,7 @@ void RenderContextImpl::drawArraysInstanced(std::size_t start, std::size_t count
     cleanResources();
 }
 
-void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool wireframe)
+void RenderContextImpl::drawElements(IndexFormat indexType, size_t count, size_t offset, bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -283,8 +283,8 @@ void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, s
 }
 
 void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
-                                              std::size_t count,
-                                              std::size_t offset,
+                                              size_t count,
+                                              size_t offset,
                                               int instanceCount,
                                               bool wireframe)
 {

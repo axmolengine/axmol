@@ -54,7 +54,7 @@ public:
      * @param usage Specifies the expected usage pattern of the data store. The symbolic constant must be
      * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      */
-    BufferImpl(id<MTLDevice> mtlDevice, std::size_t size, BufferType type, BufferUsage usage, const void* inital);
+    BufferImpl(id<MTLDevice> mtlDevice, size_t size, BufferType type, BufferUsage usage, const void* inital);
     ~BufferImpl();
 
     /// @name Update Buffer
@@ -64,7 +64,7 @@ public:
      * @param size Specifies the size in bytes of the data store region being replaced.
      * @see `updateSubData(void* data, unsigned int offset, unsigned int size)`
      */
-    void updateData(const void* data, std::size_t size) override;
+    void updateData(const void* data, size_t size) override;
 
     /**
      * @brief Update buffer sub-region data
@@ -74,7 +74,7 @@ public:
      * @param size Specifies the size in bytes of the data store region being replaced.
      * @see `updateData(void* data, unsigned int size)`
      */
-    void updateSubData(const void* data, std::size_t offset, std::size_t size) override;
+    void updateSubData(const void* data, size_t offset, size_t size) override;
 
     /**
      * Emply implementation. Mainly used in EGL context lost.

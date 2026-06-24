@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "axmol/platform/RenderView.h"
 
 #include <algorithm>
-#include <cstring>
+#include <string.h>
 #include <limits>
 
 namespace ax::ui
