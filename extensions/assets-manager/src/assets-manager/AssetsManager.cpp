@@ -338,7 +338,7 @@ void AssetsManager::downloadAndUncompress()
 
                 // Delete unloaded zip file.
                 string zipfileName = this->_storagePath + TEMP_PACKAGE_FILE_NAME;
-                if (remove(zipfileName.c_str()) != 0)
+                if (::remove(zipfileName.c_str()) != 0)
                 {
                     AXLOGD("can not remove downloaded zip file {}", zipfileName);
                 }

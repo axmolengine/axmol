@@ -1123,10 +1123,10 @@ namespace
 #    if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID)
 int unlink_cb(const char* fpath, const struct stat* sb, int typeflag, struct FTW* ftwbuf)
 {
-    int rv = remove(fpath);
+    int rv = ::remove(fpath);
 
     if (rv)
-        perror(fpath);
+        ::perror(fpath);
 
     return rv;
 }
@@ -1136,7 +1136,7 @@ int unlink_cb(const char* fpath, const struct stat* sb, int typeflag, struct FTW
 bool FileUtils::removeDirectory(std::string_view path) const
 {
 #    if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID) && !defined(AX_TARGET_OS_TVOS)
-    return nftw(path.data(), unlink_cb, 64, FTW_DEPTH | FTW_PHYS) != -1;
+    return ::nftw(path.data(), unlink_cb, 64, FTW_DEPTH | FTW_PHYS) != -1;
 #    else
     std::error_code ec;
     auto n = stdfs::remove_all(path, ec);
@@ -1146,7 +1146,7 @@ bool FileUtils::removeDirectory(std::string_view path) const
 
 bool FileUtils::removeFile(std::string_view path) const
 {
-    if (remove(path.data()))
+    if (::remove(path.data()))
     {
         return false;
     }
@@ -1161,7 +1161,7 @@ bool FileUtils::renameFile(std::string_view oldfullpath, std::string_view newful
     AXASSERT(!oldfullpath.empty(), "Invalid path");
     AXASSERT(!newfullpath.empty(), "Invalid path");
 
-    int errorCode = rename(oldfullpath.data(), newfullpath.data());
+    int errorCode = ::rename(oldfullpath.data(), newfullpath.data());
 
     if (0 != errorCode)
     {
