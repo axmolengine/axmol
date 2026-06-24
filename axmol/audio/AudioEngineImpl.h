@@ -127,7 +127,6 @@ private:
 
     ALCdevice* _device{nullptr};
     ALCcontext* _context{nullptr};
-    
 };
 
 }  // namespace ax

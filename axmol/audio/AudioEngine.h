@@ -452,7 +452,6 @@ public:
      */
     static void setReverbProperties(AUDIO_ID audioId, const ReverbProperties* reverbProperties);
 
-
     /**
      * @brief Enable or disable HRTF.
      *
