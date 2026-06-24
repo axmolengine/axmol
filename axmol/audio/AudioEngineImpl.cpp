@@ -289,6 +289,7 @@ void AudioEngineImpl::weakupAudioPlayer(ALuint sourceID)
         if (player->_alSource == sourceID && player->_streamingSource)
         {
             player->wakeupRotateThread();
+            break;
         }
     }
 }
