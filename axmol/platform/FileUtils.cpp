@@ -46,6 +46,16 @@ THE SOFTWARE.
 
 #if defined(_WIN32)
 #    include "ntcvt/ntcvt.hpp"
+#else
+// default implements for unix like os
+#    include <sys/types.h>
+#    include <errno.h>
+#    include <dirent.h>
+
+// android doesn't have ftw.h
+#    if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID) && !defined(AX_TARGET_OS_TVOS)
+#        include <ftw.h>
+#    endif
 #endif
 
 #include "pugixml/pugixml.hpp"
@@ -1072,15 +1082,6 @@ int64_t FileUtils::getFileSize(std::string_view filepath) const
 }
 
 #else
-// default implements for unix like os
-#    include <sys/types.h>
-#    include <errno.h>
-#    include <dirent.h>
-
-// android doesn't have ftw.h
-#    if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID)
-#        include <ftw.h>
-#    endif
 
 bool FileUtils::isDirectoryExistInternal(std::string_view dirPath) const
 {
@@ -1136,7 +1137,7 @@ int unlink_cb(const char* fpath, const struct stat* sb, int typeflag, struct FTW
 bool FileUtils::removeDirectory(std::string_view path) const
 {
 #    if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID) && !defined(AX_TARGET_OS_TVOS)
-    return nftw(path.data(), unlink_cb, 64, FTW_DEPTH | FTW_PHYS) != -1;
+    return ::nftw(path.data(), unlink_cb, 64, FTW_DEPTH | FTW_PHYS) != -1;
 #    else
     std::error_code ec;
     auto n = stdfs::remove_all(path, ec);

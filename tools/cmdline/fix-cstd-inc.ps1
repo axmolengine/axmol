@@ -14,8 +14,7 @@ $SearchDirs = @(
 
 $ExcludePatterns = @(
     [regex]::Escape((Join-Path $AX_ROOT "extensions/spine")),
-    [regex]::Escape((Join-Path $AX_ROOT "extensions/Live2D")),
-    [regex]::Escape((Join-Path $AX_ROOT "extensions/Effekseer"))
+    [regex]::Escape((Join-Path $AX_ROOT "extensions/Live2D"))
 )
 
 $FileTypes = @("*.c", "*.cc", "*.cpp", "*.h", "*.hpp", "*.hh", "*.inl", "*.mm", "*.m")

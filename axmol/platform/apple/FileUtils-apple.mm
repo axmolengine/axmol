@@ -168,31 +168,6 @@ bool FileUtilsApple::isFileExistInternal(std::string_view filePath) const
     return ret;
 }
 
-static int unlink_cb(const char* fpath, const struct stat* sb, int typeflag, struct FTW* ftwbuf)
-{
-    auto ret = ::remove(fpath);
-    if (ret)
-    {
-        AXLOGE("Fail to remove: {} ", fpath);
-    }
-
-    return ret;
-}
-
-bool FileUtilsApple::removeDirectory(std::string_view path) const
-{
-    if (path.empty())
-    {
-        AXLOGE("Fail to remove directory, path is empty!");
-        return false;
-    }
-
-    if (nftw(path.data(), unlink_cb, 64, FTW_DEPTH | FTW_PHYS))
-        return false;
-    else
-        return true;
-}
-
 std::string FileUtilsApple::getPathForDirectory(std::string_view dir, std::string_view searchPath) const
 {
     std::string path{searchPath};
