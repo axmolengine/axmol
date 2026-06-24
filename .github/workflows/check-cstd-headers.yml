@@ -6,6 +6,9 @@ on:
       - 'axmol/**'
       - 'extensions/**'
   push:
+    branches:
+      - dev*
+      - release/*
     paths:
       - 'axmol/**'
       - 'extensions/**'
