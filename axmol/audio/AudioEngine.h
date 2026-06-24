@@ -479,7 +479,7 @@ protected:
     {
         AudioProfile profile;
 
-        std::list<int> audioIDs;
+        std::list<AudioId> audioIDs;
 
         double lastPlayTime;
 
