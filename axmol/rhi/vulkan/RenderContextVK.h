@@ -212,9 +212,9 @@ private:
         VkBuffer buffer{VK_NULL_HANDLE};
         VkDeviceMemory memory{VK_NULL_HANDLE};
         uint8_t* mapped{nullptr};  // persistently mapped host pointer
-        size_t capacity{0};   // total bytes
-        size_t writeHead{0};  // current write offset
-        size_t align{256};    // device minUniformBufferOffsetAlignment (fallback 256)
+        size_t capacity{0};        // total bytes
+        size_t writeHead{0};       // current write offset
+        size_t align{256};         // device minUniformBufferOffsetAlignment (fallback 256)
         bool isCoherent{true};     // memory coherency hint
     };
 

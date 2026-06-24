@@ -339,10 +339,7 @@ void RenderContextImpl::drawArrays(size_t start, size_t count, bool wireframe /*
     [_mtlRenderEncoder drawPrimitives:_primitiveType vertexStart:start vertexCount:count];
 }
 
-void RenderContextImpl::drawArraysInstanced(size_t start,
-                                            size_t count,
-                                            int instanceCount,
-                                            bool wireframe /* unused */)
+void RenderContextImpl::drawArraysInstanced(size_t start, size_t count, int instanceCount, bool wireframe /* unused */)
 {
     prepareDrawing();
     [_mtlRenderEncoder drawPrimitives:_primitiveType vertexStart:start vertexCount:count instanceCount:instanceCount];

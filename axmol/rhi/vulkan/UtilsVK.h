@@ -36,7 +36,7 @@
     do                          \
     {                           \
         VK_LOG_ERROR(mesg, ""); \
-        abort();           \
+        abort();                \
     } while (false)
 
 // Boolean expression: return false
@@ -69,7 +69,7 @@
         if (!(expr))                   \
         {                              \
             VK_LOG_ERROR(mesg, #expr); \
-            abort();              \
+            abort();                   \
         }                              \
     } while (false)
 
@@ -81,7 +81,7 @@
         if ((vkRet) != VK_SUCCESS)                                                                   \
         {                                                                                            \
             VK_LOG_ERROR(mesg, fmt::format("error code {}", static_cast<int>(vkRet)));               \
-            abort();                                                                            \
+            abort();                                                                                 \
         }                                                                                            \
     } while (false)
 

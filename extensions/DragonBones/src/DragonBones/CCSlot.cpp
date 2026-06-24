@@ -233,7 +233,7 @@ void CCSlot::_updateMesh()
         }
 
         for (size_t i = 0, iB = weightData->offset + (unsigned)BinaryOffset::WeigthBoneIndices + bones.size(),
-                         iV = (size_t)weightFloatOffset, iF = 0;
+                    iV = (size_t)weightFloatOffset, iF = 0;
              i < vertexCount; ++i)
         {
             const auto boneCount = (size_t)intArray[iB++];

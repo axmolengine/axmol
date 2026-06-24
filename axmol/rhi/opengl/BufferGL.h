@@ -93,10 +93,10 @@ private:
     bool _bufferAlreadyFilled                      = false;
     CustomEventListener* _backToForegroundListener = nullptr;
 #endif
-    GLuint _buffer               = 0;
-    size_t _bufferAllocated = 0;
-    char* _data                  = nullptr;
-    bool _needDefaultStoredData  = true;
+    GLuint _buffer              = 0;
+    size_t _bufferAllocated     = 0;
+    char* _data                 = nullptr;
+    bool _needDefaultStoredData = true;
 };
 // end of _opengl group
 ///> @}

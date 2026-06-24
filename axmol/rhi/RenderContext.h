@@ -174,10 +174,7 @@ public:
      */
     virtual void drawArrays(size_t start, size_t count, bool wireframe = false) = 0;
 
-    virtual void drawArraysInstanced(size_t start,
-                                     size_t count,
-                                     int instanceCount,
-                                     bool wireframe = false) = 0;
+    virtual void drawArraysInstanced(size_t start, size_t count, int instanceCount, bool wireframe = false) = 0;
 
     /**
      * Draw primitives with an index list.

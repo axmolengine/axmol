@@ -128,12 +128,8 @@ public:
     void setKnownLayout(VkImageLayout layout);
 
     void updateData(const void* data, int width, int height, int level, int layerIndex = 0) override;
-    void updateCompressedData(const void* data,
-                              int width,
-                              int height,
-                              size_t dataSize,
-                              int level,
-                              int layerIndex = 0) override;
+    void updateCompressedData(const void* data, int width, int height, size_t dataSize, int level, int layerIndex = 0)
+        override;
 
     void updateSubData(int xoffset, int yoffset, int width, int height, int level, const void* data, int layerIndex = 0)
         override;

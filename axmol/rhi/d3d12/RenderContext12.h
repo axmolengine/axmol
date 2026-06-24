@@ -186,8 +186,8 @@ private:
 #pragma region Uniform ring buffer
     struct UniformSlice
     {
-        size_t offset              = 0;        // byte offset from start of ring buffer
-        size_t size                = 0;        // requested size (unaligned)
+        size_t offset                   = 0;        // byte offset from start of ring buffer
+        size_t size                     = 0;        // requested size (unaligned)
         uint8_t* cpuPtr                 = nullptr;  // persistently mapped CPU pointer to write data
         D3D12_GPU_VIRTUAL_ADDRESS gpuVA = 0;        // base GPU VA + offset (bind this)
     };

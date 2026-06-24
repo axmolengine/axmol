@@ -888,7 +888,7 @@ RenderContextImpl::UniformSlice RenderContextImpl::allocateUniformSlice(UINT fra
     AXASSERT(ring.valid(), "Uniform ring buffer not initialized");
 
     // Align size and head to 256-byte boundary to satisfy CBV requirements
-    auto alignMask          = ring.align - 1;
+    auto alignMask     = ring.align - 1;
     size_t alignedSize = (size + alignMask) & ~alignMask;
     size_t alignedHead = (ring.writeHead + alignMask) & ~alignMask;
 

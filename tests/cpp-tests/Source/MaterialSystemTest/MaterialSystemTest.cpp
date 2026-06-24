@@ -455,7 +455,7 @@ void Material_parsePerformance::parsingTesting(unsigned int count)
         Material::createWithFilename("Materials/3d_effects.material");
     }
 
-    auto end    = ::clock();
+    auto end            = ::clock();
     double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
     Label* label        = dynamic_cast<Label*>(this->getChildByTag(SHOW_LEBAL_TAG));
     if (label)

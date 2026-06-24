@@ -2183,10 +2183,9 @@ void RichText::handleTextRenderer(std::string_view text,
             }
 
             // after the first line, skip any spaces to the left
-            const auto startOfWordItr = std::find_if(textSpan.begin() + leftLength, textSpan.end(),
-                                                     [](const text_utils::u8char_span::value_type& ch) {
-                return !isspace(ch._char[0], std::locale());
-            });
+            const auto startOfWordItr = std::find_if(
+                textSpan.begin() + leftLength, textSpan.end(),
+                [](const text_utils::u8char_span::value_type& ch) { return !isspace(ch._char[0], std::locale()); });
             if (startOfWordItr != textSpan.end())
                 leftLength = static_cast<int>(startOfWordItr - textSpan.begin());
 

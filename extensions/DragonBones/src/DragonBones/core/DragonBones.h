@@ -56,24 +56,24 @@ public:                       \
 
 #define BIND_CLASS_TYPE(CLASS)                                   \
 public:                                                          \
-    static size_t getTypeIndex()                            \
+    static size_t getTypeIndex()                                 \
     {                                                            \
         static const auto typeIndex = typeid(CLASS).hash_code(); \
         return typeIndex;                                        \
     }                                                            \
-    virtual size_t getClassTypeIndex() const override       \
+    virtual size_t getClassTypeIndex() const override            \
     {                                                            \
         return CLASS::getTypeIndex();                            \
     }
 
 #define BIND_CLASS_TYPE_A(CLASS)                                 \
 public:                                                          \
-    static size_t getTypeIndex()                            \
+    static size_t getTypeIndex()                                 \
     {                                                            \
         static const auto typeIndex = typeid(CLASS).hash_code(); \
         return typeIndex;                                        \
     }                                                            \
-    virtual size_t getClassTypeIndex() const override       \
+    virtual size_t getClassTypeIndex() const override            \
     {                                                            \
         return CLASS::getTypeIndex();                            \
     }                                                            \
@@ -94,12 +94,12 @@ private:                                                         \
 
 #define BIND_CLASS_TYPE_B(CLASS)                                 \
 public:                                                          \
-    static size_t getTypeIndex()                            \
+    static size_t getTypeIndex()                                 \
     {                                                            \
         static const auto typeIndex = typeid(CLASS).hash_code(); \
         return typeIndex;                                        \
     }                                                            \
-    virtual size_t getClassTypeIndex() const override       \
+    virtual size_t getClassTypeIndex() const override            \
     {                                                            \
         return CLASS::getTypeIndex();                            \
     }                                                            \

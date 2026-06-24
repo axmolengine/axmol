@@ -684,7 +684,7 @@ void JSONDataParser::_parseMesh(const rapidjson::Value& rawData, MeshDisplayData
         _helpMatrixA.ty = rawSlotPose[5].GetDouble();
 
         for (size_t i = 0, iW = 0, iB = weightOffset + (unsigned)BinaryOffset::WeigthBoneIndices + weightBoneCount,
-                         iV = floatOffset;
+                    iV = floatOffset;
              i < vertexCount; ++i)
         {
             const auto iD              = i * 2;

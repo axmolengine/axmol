@@ -105,14 +105,13 @@ protected:
      * @param usage Specifies the expected usage pattern of the data store. The symbolic constant must be
      * GL_STREAM_DRAW, GL_STATIC_DRAW, or GL_DYNAMIC_DRAW.
      */
-    Buffer(size_t size, BufferType type, BufferUsage usage)
-        : _usage(usage), _type(type), _size(size), _capacity(size)
+    Buffer(size_t size, BufferType type, BufferUsage usage) : _usage(usage), _type(type), _size(size), _capacity(size)
     {}
 
-    BufferUsage _usage    = BufferUsage::DYNAMIC;  ///< Buffer usage.
-    BufferType _type      = BufferType::VERTEX;    ///< Buffer type.
-    size_t _capacity = 0;
-    size_t _size     = 0;  ///< buffer size in bytes.
+    BufferUsage _usage = BufferUsage::DYNAMIC;  ///< Buffer usage.
+    BufferType _type   = BufferType::VERTEX;    ///< Buffer type.
+    size_t _capacity   = 0;
+    size_t _size       = 0;  ///< buffer size in bytes.
     uint64_t _lastFenceValue{0};
 };
 
