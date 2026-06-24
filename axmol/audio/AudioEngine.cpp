@@ -49,13 +49,10 @@ float AudioPlayerSettings::distanceScale = 1.f;
 tlx::string_map<std::list<AudioId>> AudioEngine::_audioPathIDMap;
 // profileName,ProfileHelper
 tlx::string_map<AudioEngine::ProfileHelper> AudioEngine::_audioPathProfileHelperMap;
-unsigned int AudioEngine::_maxInstances                        = MAX_AUDIOINSTANCES;
+AudioEngineSettings AudioEngine::_settings;
 AudioEngine::ProfileHelper* AudioEngine::_defaultProfileHelper = nullptr;
 std::unordered_map<AudioId, AudioEngine::AudioInfo> AudioEngine::_audioIDInfoMap;
 AudioEngineImpl* AudioEngine::_audioEngineImpl = nullptr;
-
-bool AudioEngine::_isEnabled = true;
-
 AudioEngine::AudioInfo::AudioInfo()
     : profileHelper(nullptr), volume(1.0f), loop(false), duration(TIME_UNKNOWN), state(AudioState::INITIALIZING)
 {}
@@ -79,7 +76,7 @@ bool AudioEngine::lazyInit()
     if (_audioEngineImpl == nullptr)
     {
         _audioEngineImpl = new AudioEngineImpl();
-        if (!_audioEngineImpl->init())
+        if (!_audioEngineImpl->init(_settings))
         {
             AX_SAFE_RELEASE(_audioEngineImpl);
             return false;
@@ -123,7 +120,7 @@ AudioId AudioEngine::play2d(std::string_view filePath, const AudioPlayerSettings
             profileHelper->profile = *profile;
         }
 
-        if (_audioIDInfoMap.size() >= _maxInstances)
+        if (_audioIDInfoMap.size() >= _settings.maxInstances)
         {
             AXLOGE("Fail to play {} cause by limited max instance of AudioEngine", filePath);
             break;
@@ -219,7 +216,7 @@ AudioId AudioEngine::play3d(std::string_view filePath, const AudioPlayerSettings
             profileHelper->profile = *profile;
         }
 
-        if (_audioIDInfoMap.size() >= _maxInstances)
+        if (_audioIDInfoMap.size() >= _settings.maxInstances)
         {
             AXLOGE("Fail to play {} cause by limited max instance of AudioEngine", filePath);
             break;
@@ -516,7 +513,7 @@ bool AudioEngine::setMaxAudioInstance(int maxInstances)
 {
     if (maxInstances > 0 && maxInstances <= MAX_AUDIOINSTANCES)
     {
-        _maxInstances = maxInstances;
+        _settings.maxInstances = maxInstances;
         return true;
     }
 
@@ -628,13 +625,13 @@ int AudioEngine::getPlayingAudioCount()
     return static_cast<int>(_audioIDInfoMap.size());
 }
 
-void AudioEngine::setEnabled(bool isEnabled)
+void AudioEngine::setEnabled(bool enabled)
 {
-    if (_isEnabled != isEnabled)
+    if (_settings.enabled != enabled)
     {
-        _isEnabled = isEnabled;
+        _settings.enabled = enabled;
 
-        if (!_isEnabled)
+        if (!_settings.enabled)
         {
             stopAll();
         }
@@ -643,7 +640,7 @@ void AudioEngine::setEnabled(bool isEnabled)
 
 bool AudioEngine::isEnabled()
 {
-    return _isEnabled;
+    return _settings.enabled;
 }
 
 void AudioEngine::setPan(int audioId, float value, float distance)
@@ -731,13 +728,17 @@ void AudioEngine::setReverbProperties(int audioId, const ReverbProperties* rever
 
 void AudioEngine::setHRTFEnabled(bool enabled)
 {
-    if (_audioEngineImpl)
-        _audioEngineImpl->setHRTFEnabled(enabled);
+#if AX_USE_ALSOFT
+    if (_settings.hrtfEnabled == enabled)
+        return;
+    if (_audioEngineImpl && _audioEngineImpl->setHRTFEnabled(enabled))
+        _settings.hrtfEnabled = enabled;
+#endif
 }
 
 bool AudioEngine::isHRTFEnabled()
 {
-    return _audioEngineImpl && _audioEngineImpl->isHRTFEnabled();
+    return _settings.hrtfEnabled;
 }
 
 }  // namespace ax

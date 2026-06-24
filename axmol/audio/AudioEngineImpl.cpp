@@ -333,7 +333,7 @@ AudioEngineImpl::~AudioEngineImpl()
     current = nullptr;
 }
 
-bool AudioEngineImpl::init()
+bool AudioEngineImpl::init(const AudioEngineSettings& settings)
 {
     bool ret = false;
     do
@@ -346,11 +346,11 @@ bool AudioEngineImpl::init()
 
         if (_device)
         {
-            ALCint attrs[] = {ALC_HRTF_SOFT, ALC_FALSE, 0};
+            ALCint attrs[] = {ALC_HRTF_SOFT, settings.hrtfEnabled ? ALC_TRUE : ALC_FALSE, 0};
             _context       = alcCreateContext(_device, attrs);
             alcMakeContextCurrent(_context);
 
-            alGenSources(MAX_AUDIOINSTANCES, _alSources);
+            alGenSources(settings.maxInstances, _alSources);
             auto alError = alGetError();
             if (alError != AL_NO_ERROR)
             {
@@ -358,7 +358,7 @@ bool AudioEngineImpl::init()
                 break;
             }
 
-            for (int i = 0; i < MAX_AUDIOINSTANCES; ++i)
+            for (int i = 0; i < settings.maxInstances; ++i)
             {
                 _unusedSourcesPool.push(_alSources[i]);
 #if defined(__APPLE__) && !AX_USE_ALSOFT
@@ -468,20 +468,12 @@ bool AudioEngineImpl::init()
     return ret;
 }
 
-void AudioEngineImpl::setHRTFEnabled(bool enabled)
+bool AudioEngineImpl::setHRTFEnabled(bool enabled)
 {
 #if AX_USE_ALSOFT
-    if (_hrtfEnabled == enabled)
-        return;
     ALCint attribs[] = {ALC_HRTF_SOFT, enabled ? ALC_TRUE : ALC_FALSE, 0};
-    if (alcResetDeviceSOFT(_device, attribs))
-        _hrtfEnabled = enabled;
+    return !!alcResetDeviceSOFT(_device, attribs);
 #endif
-}
-
-bool AudioEngineImpl::isHRTFEnabled() const
-{
-    return _hrtfEnabled;
 }
 
 void AudioEngineImpl::pauseDevice()

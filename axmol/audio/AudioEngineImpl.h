@@ -40,6 +40,7 @@ namespace ax
 
 class Scheduler;
 class Director;
+struct AudioEngineSettings;
 
 class AX_DLL AudioEngineImpl : public ax::Object
 {
@@ -47,7 +48,7 @@ public:
     AudioEngineImpl();
     ~AudioEngineImpl();
 
-    bool init();
+    bool init(const AudioEngineSettings& settings);
     AudioId play2d(std::string_view fileFullPath, bool loop, float volume, float time);
     AudioId play3d(std::string_view fileFullPath,
                    const Vec3& position,
@@ -79,8 +80,7 @@ public:
     AudioCache* preload(std::string_view filePath, std::function<void(bool)> callback);
     void update(float dt);
 
-    void setHRTFEnabled(bool enabled);
-    bool isHRTFEnabled() const;
+    bool setHRTFEnabled(bool enabled);
 
     void pauseDevice();
     void resumeDevice();
@@ -121,7 +121,6 @@ private:
 
     bool _scheduled{false};
     bool _stereoExtension{false};
-    bool _hrtfEnabled{false};
 
     AudioId _currentAudioID{0};
     Scheduler* _scheduler{nullptr};

@@ -46,6 +46,14 @@
 namespace ax
 {
 
+/// AudioEngineSettings: instance limits, enabled state, and feature toggles.
+struct AudioEngineSettings
+{
+    unsigned int maxInstances{MAX_AUDIOINSTANCES};
+    bool enabled{true};
+    bool hrtfEnabled{false};
+};
+
 /**
  * @struct AudioPlayerSettings
  *
@@ -310,7 +318,7 @@ public:
     /**
      * Gets the maximum number of simultaneous audio instance of AudioEngine.
      */
-    static int getMaxAudioInstance() { return _maxInstances; }
+    static int getMaxAudioInstance() { return _settings.maxInstances; }
 
     /**
      * Sets the maximum number of simultaneous audio instance for AudioEngine.
@@ -516,13 +524,11 @@ protected:
     // profileName,ProfileHelper
     static tlx::string_map<ProfileHelper> _audioPathProfileHelperMap;
 
-    static unsigned int _maxInstances;
+    static AudioEngineSettings _settings;
 
     static ProfileHelper* _defaultProfileHelper;
 
     static AudioEngineImpl* _audioEngineImpl;
-
-    static bool _isEnabled;
 
     friend class AudioEngineImpl;
 };
