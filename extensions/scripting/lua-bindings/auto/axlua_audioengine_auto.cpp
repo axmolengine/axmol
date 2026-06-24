@@ -1645,6 +1645,76 @@ int lua_ax_audioengine_AudioEngine_getDistanceScale(lua_State* tolua_S)
 #endif
     return 0;
 }
+int lua_ax_audioengine_AudioEngine_setHRTFEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.AudioEngine",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        bool arg0;
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.AudioEngine:setHRTFEnabled");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_setHRTFEnabled'", nullptr);
+            return 0;
+        }
+        ax::AudioEngine::setHRTFEnabled(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AudioEngine:setHRTFEnabled",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_audioengine_AudioEngine_setHRTFEnabled'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_audioengine_AudioEngine_isHRTFEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.AudioEngine",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_isHRTFEnabled'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::AudioEngine::isHRTFEnabled();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AudioEngine:isHRTFEnabled",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_audioengine_AudioEngine_isHRTFEnabled'.",&tolua_err);
+#endif
+    return 0;
+}
 static int lua_ax_audioengine_AudioEngine_finalize(lua_State* tolua_S)
 {
     AXLOGV("luabindings: finalizing LUA object (AudioEngine)");
@@ -1695,6 +1765,8 @@ int lua_register_ax_audioengine_AudioEngine(lua_State* tolua_S)
         tolua_function(tolua_S,"getListenerPosition", lua_ax_audioengine_AudioEngine_getListenerPosition);
         tolua_function(tolua_S,"setDistanceScale", lua_ax_audioengine_AudioEngine_setDistanceScale);
         tolua_function(tolua_S,"getDistanceScale", lua_ax_audioengine_AudioEngine_getDistanceScale);
+        tolua_function(tolua_S,"setHRTFEnabled", lua_ax_audioengine_AudioEngine_setHRTFEnabled);
+        tolua_function(tolua_S,"isHRTFEnabled", lua_ax_audioengine_AudioEngine_isHRTFEnabled);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::AudioEngine).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.AudioEngine";

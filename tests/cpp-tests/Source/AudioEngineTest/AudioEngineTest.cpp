@@ -230,6 +230,7 @@ bool AudioControlTest::init()
     auto ret          = AudioEngineTestDemo::init();
     _audioID          = AudioEngine::INVALID_AUDIO_ID;
     _loopEnabled      = false;
+    _hrtfEnabled      = AudioEngine::isHRTFEnabled();
     _volume           = 1.0f;
     _duration         = AudioEngine::TIME_UNKNOWN;
     _timeRatio        = 0.0f;
@@ -323,8 +324,19 @@ bool AudioControlTest::init()
             button->setString("enable-loop");
         }
     });
-    loopItem->setPosition(layerSize.width * 0.5f, layerSize.height * 0.5f);
+    loopItem->setPosition(layerSize.width * 0.35f, layerSize.height * 0.5f);
     addChild(loopItem);
+
+    auto hrtfItem = TextButton::create(_hrtfEnabled ? "disable-hrtf" : "enable-hrtf", [&](TextButton* button) {
+        _hrtfEnabled = !_hrtfEnabled;
+        AudioEngine::setHRTFEnabled(_hrtfEnabled);
+        if (_hrtfEnabled)
+            button->setString("disable-hrtf");
+        else
+            button->setString("enable-hrtf");
+    });
+    hrtfItem->setPosition(layerSize.width * 0.65f, layerSize.height * 0.5f);
+    addChild(hrtfItem);
 
     auto volumeSlider = SliderEx::create();
     volumeSlider->setPercent(100);
@@ -1575,7 +1587,7 @@ bool AudioReverbTest::init()
     resumeItem->setPosition(layerSize.width * 0.7f, layerSize.height * 0.7f);
     addChild(resumeItem);
 
-    auto loopItem = TextButton::create("disable-loop", [&](TextButton* button) {
+    auto loopItem = TextButton::create("enable-loop", [&](TextButton* button) {
         _loopEnabled = !_loopEnabled;
 
         if (_audioID != AudioEngine::INVALID_AUDIO_ID)

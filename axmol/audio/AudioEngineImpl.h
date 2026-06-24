@@ -39,6 +39,7 @@ namespace ax
 {
 
 class Scheduler;
+class Director;
 
 class AX_DLL AudioEngineImpl : public ax::Object
 {
@@ -78,6 +79,15 @@ public:
     AudioCache* preload(std::string_view filePath, std::function<void(bool)> callback);
     void update(float dt);
 
+    void setHRTFEnabled(bool enabled);
+    bool isHRTFEnabled() const;
+
+    void pauseDevice();
+    void resumeDevice();
+    void reopenDevice();
+
+    static AudioEngineImpl* current;
+
 private:
     bool isExtensionPresent(const char* extensionId);
     void checkExtensions();
@@ -91,6 +101,8 @@ private:
 #if defined(__APPLE__) && !AX_USE_ALSOFT
     static ALvoid myAlSourceNotificationCallback(ALuint sid, ALuint notificationID, ALvoid* userData);
 #endif
+    Director* _director{nullptr};
+
     ALuint _alSources[MAX_AUDIOINSTANCES];
 
     // available sources
@@ -106,12 +118,16 @@ private:
     // finish callbacks
     std::vector<std::function<void()>> _finishCallbacks;
 
-    bool _scheduled;
+    bool _scheduled{false};
+    bool _stereoExtension{false};
+    bool _hrtfEnabled{false};
 
-    AUDIO_ID _currentAudioID;
-    Scheduler* _scheduler;
+    AUDIO_ID _currentAudioID{0};
+    Scheduler* _scheduler{nullptr};
 
-    bool _stereoExtension{};
+    ALCdevice* _device{nullptr};
+    ALCcontext* _context{nullptr};
+    
 };
 
 }  // namespace ax

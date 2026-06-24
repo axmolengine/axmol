@@ -737,4 +737,16 @@ void AudioEngine::setReverbProperties(int audioId, const ReverbProperties* rever
 
     return _audioEngineImpl->setReverbProperties(audioId, reverbProperties);
 }
+
+void AudioEngine::setHRTFEnabled(bool enabled)
+{
+    if (_audioEngineImpl)
+        _audioEngineImpl->setHRTFEnabled(enabled);
+}
+
+bool AudioEngine::isHRTFEnabled()
+{
+    return _audioEngineImpl && _audioEngineImpl->isHRTFEnabled();
+}
+
 }  // namespace ax

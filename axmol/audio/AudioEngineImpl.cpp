@@ -40,39 +40,9 @@
 #    import <UIKit/UIKit.h>
 #endif
 
-static ALCdevice* s_ALDevice           = nullptr;
-static ALCcontext* s_ALContext         = nullptr;
-static ax::AudioEngineImpl* s_instance = nullptr;
-
 #if defined(__APPLE__)
 bool __axmolAudioSessionInterrupted = false;
 #endif
-
-namespace ax
-{
-static void pauseAudioDevice()
-{
-    AXLOGD("{}", "===> pauseAudioDevice");
-#if AX_USE_ALSOFT
-    alcDevicePauseSOFT(s_ALDevice);
-#else
-    if (alcGetCurrentContext())
-        alcMakeContextCurrent(nullptr);
-#endif
-}
-
-static void resumeAudioDevice()
-{
-    AXLOGD("{}", "===> resumeAudioDevice");
-#if AX_USE_ALSOFT
-    alcDeviceResumeSOFT(s_ALDevice);
-#else
-    if (alcGetCurrentContext())
-        alcMakeContextCurrent(nullptr);
-    alcMakeContextCurrent(s_ALContext);
-#endif
-}
-}  // namespace ax
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 
@@ -138,7 +108,7 @@ static void resumeAudioDevice()
             AXLOGD("AVAudioSessionInterruptionTypeBegan, alcMakeContextCurrent(nullptr)");
 
             // We always pause device when interruption began
-            ax::pauseAudioDevice();
+            AudioEngineImpl::current->pauseDevice();
         }
         else if (reason == AVAudioSessionInterruptionTypeEnded)
         {
@@ -148,10 +118,10 @@ static void resumeAudioDevice()
             {
                 AXLOGD(
                     "AVAudioSessionInterruptionTypeEnded, application == UIApplicationStateActive, "
-                    "alcMakeContextCurrent(s_ALContext)");
+                    "alcMakeContextCurrent(_context)");
                 NSError* error = nil;
                 [[AVAudioSession sharedInstance] setActive:YES error:&error];
-                ax::resumeAudioDevice();
+                AudioEngineImpl::current->resumeDevice();
                 if (ax::Director::getInstance()->isPaused())
                 {
                     AXLOGD("AVAudioSessionInterruptionTypeEnded, director was paused, try to resume it.");
@@ -178,7 +148,7 @@ static void resumeAudioDevice()
         {
             resumeOnBecomingActive = false;
             if (!__axmolAudioSessionInterrupted)
-                ax::pauseAudioDevice();
+                AudioEngineImpl::current->pauseDevice();
 
             AXLOGD("UIApplicationDidBecomeActiveNotification, resume audio device");
             NSError* error = nil;
@@ -190,7 +160,7 @@ static void resumeAudioDevice()
             }
             [[AVAudioSession sharedInstance] setActive:YES error:&error];
 
-            ax::resumeAudioDevice();
+            AudioEngineImpl::current->resumeDevice();
         }
         else if (__axmolAudioSessionInterrupted)
         {
@@ -208,8 +178,8 @@ static void resumeAudioDevice()
          */
         if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive)
         {  // older device (e.g iphone7)
-            ax::pauseAudioDevice();
-            ax::resumeAudioDevice();
+            AudioEngineImpl::current->pauseDevice();
+            AudioEngineImpl::current->resumeDevice();
         }
         else
         {  // newer device (at least iphone13)
@@ -241,15 +211,6 @@ static id s_AudioEngineSessionHandler = nullptr;
 #    if !defined(AL_API_NOEXCEPT17)
 #        define AL_API_NOEXCEPT17
 #    endif
-static void alcReopenDeviceOnAxmolThread()
-{
-    ax::Director::getInstance()->postTask([]() {
-        auto alcReopenDeviceSOFTProc =
-            (decltype(alcReopenDeviceSOFT)*)alcGetProcAddress(s_ALDevice, "alcReopenDeviceSOFT");
-        if (alcReopenDeviceSOFTProc)
-            alcReopenDeviceSOFTProc(s_ALDevice, nullptr, nullptr);
-    }, ax::Director::TaskTiming::FrameBoundary);
-}
 
 #    if defined(ALC_SOFT_system_events) && (defined(_WIN32) || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 #        define _AX_USE_ALC_EVENTS 1
@@ -261,7 +222,7 @@ static void ALC_APIENTRY _onALCEvent(ALCenum eventType,
                                      void* userParam) AL_API_NOEXCEPT17
 {
     if (eventType == ALC_EVENT_TYPE_DEFAULT_DEVICE_CHANGED_SOFT)
-        alcReopenDeviceOnAxmolThread();
+        ax::AudioEngineImpl::current->reopenDevice();
 }
 #    endif
 
@@ -273,7 +234,7 @@ static void AL_APIENTRY _onALEvent(ALenum eventType,
                                    void* userParam) AL_API_NOEXCEPT17
 {
     if (eventType == AL_EVENT_TYPE_DISCONNECTED_SOFT)
-        alcReopenDeviceOnAxmolThread();
+        ax::AudioEngineImpl::current->reopenDevice();
 }
 #endif
 
@@ -309,8 +270,8 @@ ALvoid ax::AudioEngineImpl::myAlSourceNotificationCallback(ALuint sid, ALuint no
         return;
 
     AudioPlayer* player = nullptr;
-    s_instance->_threadMutex.lock();
-    for (const auto& e : s_instance->_audioPlayers)
+    AudioEngineImpl::current->_threadMutex.lock();
+    for (const auto& e : AudioEngineImpl::current->_audioPlayers)
     {
         player = e.second;
         if (player->_alSource == sid && player->_streamingSource)
@@ -318,16 +279,18 @@ ALvoid ax::AudioEngineImpl::myAlSourceNotificationCallback(ALuint sid, ALuint no
             player->wakeupRotateThread();
         }
     }
-    s_instance->_threadMutex.unlock();
+    ax::AudioEngineImpl::current->_threadMutex.unlock();
 }
 #endif
 
 namespace ax
 {
+AudioEngineImpl* AudioEngineImpl::current = nullptr;
 
-AudioEngineImpl::AudioEngineImpl() : _scheduled(false), _currentAudioID(0), _scheduler(nullptr)
+AudioEngineImpl::AudioEngineImpl()
 {
-    s_instance = this;
+    _director = Director::getInstance();
+    current   = this;
 }
 
 AudioEngineImpl::~AudioEngineImpl()
@@ -337,21 +300,21 @@ AudioEngineImpl::~AudioEngineImpl()
         _scheduler->unschedule(AX_SCHEDULE_SELECTOR(AudioEngineImpl::update), this);
     }
 
-    if (s_ALContext)
+    if (_context)
     {
         alDeleteSources(MAX_AUDIOINSTANCES, _alSources);
 
         _audioCaches.clear();
 
         alcMakeContextCurrent(nullptr);
-        alcDestroyContext(s_ALContext);
-        s_ALContext = nullptr;
+        alcDestroyContext(_context);
+        _context = nullptr;
     }
 
-    if (s_ALDevice)
+    if (_device)
     {
-        alcCloseDevice(s_ALDevice);
-        s_ALDevice = nullptr;
+        alcCloseDevice(_device);
+        _device = nullptr;
     }
 
     AudioDecoderManager::destroy();
@@ -359,7 +322,7 @@ AudioEngineImpl::~AudioEngineImpl()
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
     [s_AudioEngineSessionHandler release];
 #endif
-    s_instance = nullptr;
+    current = nullptr;
 }
 
 bool AudioEngineImpl::init()
@@ -371,12 +334,13 @@ bool AudioEngineImpl::init()
         s_AudioEngineSessionHandler = [[AudioEngineSessionHandler alloc] init];
 #endif
 
-        s_ALDevice = alcOpenDevice(nullptr);
+        _device = alcOpenDevice(nullptr);
 
-        if (s_ALDevice)
+        if (_device)
         {
-            s_ALContext = alcCreateContext(s_ALDevice, nullptr);
-            alcMakeContextCurrent(s_ALContext);
+            ALCint attrs[] = {ALC_HRTF_SOFT, ALC_FALSE, 0};
+            _context       = alcCreateContext(_device, attrs);
+            alcMakeContextCurrent(_context);
 
             alGenSources(MAX_AUDIOINSTANCES, _alSources);
             auto alError = alGetError();
@@ -456,7 +420,7 @@ bool AudioEngineImpl::init()
 #endif
             // ================ Workaround end ================ //
 
-            _scheduler          = Director::getInstance()->getScheduler();
+            _scheduler          = _director->getScheduler();
             ret                 = AudioDecoderManager::init();
             const char* vender  = alGetString(AL_VENDOR);
             const char* version = alGetString(AL_VERSION);
@@ -497,6 +461,53 @@ bool AudioEngineImpl::init()
     return ret;
 }
 
+void AudioEngineImpl::setHRTFEnabled(bool enabled)
+{
+    if (_hrtfEnabled == enabled)
+        return;
+    ALCint attribs[] = {ALC_HRTF_SOFT, enabled ? ALC_TRUE : ALC_FALSE, 0};
+    if (alcResetDeviceSOFT(_device, attribs))
+        _hrtfEnabled = enabled;
+}
+
+bool AudioEngineImpl::isHRTFEnabled() const
+{
+    return _hrtfEnabled;
+}
+
+void AudioEngineImpl::pauseDevice()
+{
+    AXLOGD("{}", "===> pauseDevice");
+#if AX_USE_ALSOFT
+    alcDevicePauseSOFT(_device);
+#else
+    if (alcGetCurrentContext())
+        alcMakeContextCurrent(nullptr);
+#endif
+}
+
+void AudioEngineImpl::resumeDevice()
+{
+    AXLOGD("{}", "===> resumeDevice");
+#if AX_USE_ALSOFT
+    alcDeviceResumeSOFT(_device);
+#else
+    if (alcGetCurrentContext())
+        alcMakeContextCurrent(nullptr);
+    alcMakeContextCurrent(_context);
+#endif
+}
+
+void AudioEngineImpl::reopenDevice()
+{
+    auto device = _device;
+    _director->postTask([device]() {
+        auto alcReopenDeviceSOFTProc = (decltype(alcReopenDeviceSOFT)*)alcGetProcAddress(device, "alcReopenDeviceSOFT");
+        if (alcReopenDeviceSOFTProc)
+            alcReopenDeviceSOFTProc(device, nullptr, nullptr);
+    }, ax::Director::TaskTiming::FrameBoundary);
+}
+
 AudioCache* AudioEngineImpl::preload(std::string_view filePath, std::function<void(bool)> callback)
 {
     AudioCache* audioCache = nullptr;
@@ -533,7 +544,7 @@ AudioCache* AudioEngineImpl::preload(std::string_view filePath, std::function<vo
 
 AUDIO_ID AudioEngineImpl::play2d(std::string_view filePath, bool loop, float volume, float time)
 {
-    if (s_ALDevice == nullptr)
+    if (_device == nullptr)
     {
         return AudioEngine::INVALID_AUDIO_ID;
     }
@@ -590,7 +601,7 @@ int AudioEngineImpl::play3d(std::string_view filePath,
                             float volume,
                             float time)
 {
-    if (s_ALDevice == nullptr)
+    if (_device == nullptr)
     {
         return AudioEngine::INVALID_AUDIO_ID;
     }
@@ -655,7 +666,7 @@ void AudioEngineImpl::_play2d(AudioCache* cache, AUDIO_ID audioID)
     {
         if (player->play2d())
         {
-            Director::getInstance()->postTask([audioID]() {
+            _director->postTask([audioID]() {
                 if (AudioEngine::_audioIDInfoMap.find(audioID) != AudioEngine::_audioIDInfoMap.end())
                 {
                     AudioEngine::_audioIDInfoMap[audioID].state = AudioEngine::AudioState::PLAYING;
@@ -683,7 +694,7 @@ void AudioEngineImpl::_play3d(AudioCache* cache, int audioID)
     {
         if (player->play3d())
         {
-            Director::getInstance()->postTask([audioID]() {
+            _director->postTask([audioID]() {
                 if (AudioEngine::_audioIDInfoMap.find(audioID) != AudioEngine::_audioIDInfoMap.end())
                 {
                     AudioEngine::_audioIDInfoMap[audioID].state = AudioEngine::AudioState::PLAYING;

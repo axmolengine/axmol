@@ -452,6 +452,24 @@ public:
      */
     static void setReverbProperties(AUDIO_ID audioId, const ReverbProperties* reverbProperties);
 
+
+    /**
+     * @brief Enable or disable HRTF.
+     *
+     * Controls whether Head-Related Transfer Function is used
+     * for spatial audio. Default is disabled.
+     *
+     * @param enabled true to enable, false to disable.
+     */
+    static void setHRTFEnabled(bool enabled);
+
+    /**
+     * @brief Check if HRTF is enabled.
+     *
+     * @return true if enabled, false otherwise.
+     */
+    static bool isHRTFEnabled();
+
 protected:
     static void addTask(const std::function<void()>& task);
     static void remove(AUDIO_ID audioID);
