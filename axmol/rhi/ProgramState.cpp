@@ -311,7 +311,7 @@ ProgramState::AutoBindingResolver::AutoBindingResolver()
 ProgramState::AutoBindingResolver::~AutoBindingResolver()
 {
     auto& list = _customAutoBindingResolvers;
-    list.erase(remove(list.begin(), list.end(), this), list.end());
+    list.erase(std::remove(list.begin(), list.end(), this), list.end());
 }
 
 }  // namespace ax::rhi

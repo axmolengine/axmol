@@ -569,7 +569,7 @@ void Console::loop()
             for (socket_native_type fd : to_remove)
             {
                 _watcher.mod_event(fd, 0, yasio::socket_event::read);
-                _fds.erase(remove(_fds.begin(), _fds.end(), fd), _fds.end());
+                _fds.erase(std::remove(_fds.begin(), _fds.end(), fd), _fds.end());
             }
         }
 
@@ -990,7 +990,7 @@ void Console::commandDirectorSubCommandEnd(socket_native_type /*fd*/, std::strin
 void Console::commandExit(socket_native_type fd, std::string_view /*args*/)
 {
     _watcher.mod_event(fd, 0, yasio::socket_event::read);
-    _fds.erase(remove(_fds.begin(), _fds.end(), fd), _fds.end());
+    _fds.erase(std::remove(_fds.begin(), _fds.end(), fd), _fds.end());
     closesocket(fd);
 }
 
