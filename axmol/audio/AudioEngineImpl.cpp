@@ -282,7 +282,7 @@ ALvoid ax::AudioEngineImpl::onAlSourceNotification(ALuint sourceID, ALuint notif
 
 void AudioEngineImpl::weakupAudioPlayer(ALuint sourceID)
 {
-    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
+    std::lock_guard<std::recursive_mutex> lck(_threadMutex);
     for (const auto& e : AudioEngineImpl::current->_audioPlayers)
     {
         auto player = e.second;
@@ -1013,7 +1013,7 @@ void AudioEngineImpl::setFinishCallback(AUDIO_ID audioID,
 
 void AudioEngineImpl::update(float /*dt*/)
 {
-    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
+    std::lock_guard<std::recursive_mutex> lck(_threadMutex);
     _updatePlayers(false);
 }
 

@@ -71,7 +71,7 @@ void AudioEngine::end()
     // fix #127
     uncacheAll();
 
-    AX_SAFE_RELEASE(_audioEngineImpl);
+    AX_SAFE_RELEASE_NULL(_audioEngineImpl);
 
     delete _defaultProfileHelper;
     _defaultProfileHelper = nullptr;
