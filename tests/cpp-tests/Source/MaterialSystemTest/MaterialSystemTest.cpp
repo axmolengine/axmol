@@ -26,7 +26,6 @@
 
 #include "MaterialSystemTest.h"
 
-#include <ctime>
 #include <spine/spine-axmol.h>
 
 #include "../testResource.h"
@@ -448,7 +447,7 @@ void Material_parsePerformance::onEnter()
 
 void Material_parsePerformance::parsingTesting(unsigned int count)
 {
-    std::clock_t begin = std::clock();
+    auto begin = ::clock();
 
     for (unsigned int i = 0; i < count; i++)
     {
@@ -456,7 +455,7 @@ void Material_parsePerformance::parsingTesting(unsigned int count)
         Material::createWithFilename("Materials/3d_effects.material");
     }
 
-    std::clock_t end    = std::clock();
+    auto end    = ::clock();
     double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
     Label* label        = dynamic_cast<Label*>(this->getChildByTag(SHOW_LEBAL_TAG));
     if (label)

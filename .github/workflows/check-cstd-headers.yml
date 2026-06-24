@@ -9,6 +9,8 @@ on:
     paths:
       - 'axmol/**'
       - 'extensions/**'
+      - 'tests'
+      - 'templates'
   workflow_dispatch:
 
 jobs:

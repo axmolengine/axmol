@@ -26,9 +26,6 @@
  ****************************************************************************/
 
 #include "SpriteFrameCacheTest.h"
-
-#include <cassert>
-
 #include "axmol/base/NinePatchImageParser.h"
 
 using namespace ax;
