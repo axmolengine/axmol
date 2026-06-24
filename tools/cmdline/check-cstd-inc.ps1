@@ -3,7 +3,7 @@
   Check for C++ wrapper C headers (<c*>) forbidden in core engine & community extensions.
 
 .DESCRIPTION
-  Scans axmol/ and extensions/ (excluding spine, Live2D, fairygui) for C++ source
+  Scans axmol/ and extensions/ (excluding spine, Live2D, Effekseer) for C++ source
   files that #include any <c*> header (C++ wrappers of C standard headers).
   In axmol code style these headers are forbidden — only the corresponding C headers
   (<*.h>) are allowed.

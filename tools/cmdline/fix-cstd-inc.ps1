@@ -53,7 +53,7 @@ $StdPatterns = @(
     # C ctype functions
     @{ Pattern = '\bstd::(isalnum|isalpha|isblank|iscntrl|isdigit|isgraph|islower|isprint|ispunct|isspace|isupper|isxdigit|tolower|toupper)\b'; Replacement = '$1' }
     # C stdio functions
-    @{ Pattern = '\bstd::(sscanf|sprintf|snprintf|fprintf|printf|scanf|fscanf|vprintf|vsprintf|vsnprintf|vfprintf|vscanf|vsscanf|fopen|fclose|fread|fwrite|fgets|fputs|fseek|ftell|rewind|fflush|fgetc|fputc|ungetc|feof|ferror|clearerr|remove|rename|tmpfile|tmpnam|perror|setbuf|setvbuf|fgetpos|fsetpos)\b'; Replacement = '$1' }
+    @{ Pattern = '\bstd::(sscanf|sprintf|snprintf|fprintf|printf|scanf|fscanf|vprintf|vsprintf|vsnprintf|vfprintf|vscanf|vsscanf|fopen|fclose|fread|fwrite|fgets|fputs|fseek|ftell|rewind|fflush|fgetc|fputc|ungetc|feof|ferror|clearerr|rename|tmpfile|tmpnam|perror|setbuf|setvbuf|fgetpos|fsetpos)\b'; Replacement = '$1' }
     # C time functions
     @{ Pattern = '\bstd::(time|clock|difftime|mktime|asctime|ctime|gmtime|localtime|strftime)\b'; Replacement = '$1' }
     # C signal functions
