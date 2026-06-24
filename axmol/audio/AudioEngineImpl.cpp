@@ -555,7 +555,7 @@ AudioCache* AudioEngineImpl::preload(std::string_view filePath, std::function<vo
     return audioCache;
 }
 
-AUDIO_ID AudioEngineImpl::play2d(std::string_view filePath, bool loop, float volume, float time)
+AudioId AudioEngineImpl::play2d(std::string_view filePath, bool loop, float volume, float time)
 {
     if (_device == nullptr)
     {
@@ -666,7 +666,7 @@ int AudioEngineImpl::play3d(std::string_view filePath,
     return _currentAudioID;
 }
 
-void AudioEngineImpl::_play2d(AudioCache* cache, AUDIO_ID audioID)
+void AudioEngineImpl::_play2d(AudioCache* cache, AudioId audioID)
 {
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto iter = _audioPlayers.find(audioID);
@@ -734,7 +734,7 @@ ALuint AudioEngineImpl::findValidSource()
     return sourceId;
 }
 
-void AudioEngineImpl::setVolume(AUDIO_ID audioID, float volume)
+void AudioEngineImpl::setVolume(AudioId audioID, float volume)
 {
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto iter = _audioPlayers.find(audioID);
@@ -758,7 +758,7 @@ void AudioEngineImpl::setVolume(AUDIO_ID audioID, float volume)
     }
 }
 
-void AudioEngineImpl::setPitch(AUDIO_ID audioID, float pitch)
+void AudioEngineImpl::setPitch(AudioId audioID, float pitch)
 {
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto iter = _audioPlayers.find(audioID);
@@ -782,7 +782,7 @@ void AudioEngineImpl::setPitch(AUDIO_ID audioID, float pitch)
     }
 }
 
-void AudioEngineImpl::setLoop(AUDIO_ID audioID, bool loop)
+void AudioEngineImpl::setLoop(AudioId audioID, bool loop)
 {
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto iter = _audioPlayers.find(audioID);
@@ -823,7 +823,7 @@ void AudioEngineImpl::setLoop(AUDIO_ID audioID, bool loop)
     }
 }
 
-bool AudioEngineImpl::pause(AUDIO_ID audioID)
+bool AudioEngineImpl::pause(AudioId audioID)
 {
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto iter = _audioPlayers.find(audioID);
@@ -847,7 +847,7 @@ bool AudioEngineImpl::pause(AUDIO_ID audioID)
     return ret;
 }
 
-bool AudioEngineImpl::resume(AUDIO_ID audioID)
+bool AudioEngineImpl::resume(AudioId audioID)
 {
     bool ret = true;
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
@@ -870,7 +870,7 @@ bool AudioEngineImpl::resume(AUDIO_ID audioID)
     return ret;
 }
 
-void AudioEngineImpl::stop(AUDIO_ID audioID)
+void AudioEngineImpl::stop(AudioId audioID)
 {
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto iter = _audioPlayers.find(audioID);
@@ -903,7 +903,7 @@ void AudioEngineImpl::stopAll()
     _updatePlayers(true);
 }
 
-float AudioEngineImpl::getDuration(AUDIO_ID audioID)
+float AudioEngineImpl::getDuration(AudioId audioID)
 {
     std::lock_guard<std::recursive_mutex> lck(_threadMutex);
     auto it = _audioPlayers.find(audioID);
@@ -918,7 +918,7 @@ float AudioEngineImpl::getDuration(AUDIO_ID audioID)
     return AudioEngine::TIME_UNKNOWN;
 }
 
-float AudioEngineImpl::getCurrentTime(AUDIO_ID audioID)
+float AudioEngineImpl::getCurrentTime(AudioId audioID)
 {
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto it = _audioPlayers.find(audioID);
@@ -953,7 +953,7 @@ float AudioEngineImpl::getCurrentTime(AUDIO_ID audioID)
     return ret;
 }
 
-bool AudioEngineImpl::setCurrentTime(AUDIO_ID audioID, float time)
+bool AudioEngineImpl::setCurrentTime(AudioId audioID, float time)
 {
     bool ret = false;
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
@@ -998,8 +998,8 @@ bool AudioEngineImpl::setCurrentTime(AUDIO_ID audioID, float time)
     return ret;
 }
 
-void AudioEngineImpl::setFinishCallback(AUDIO_ID audioID,
-                                        const std::function<void(AUDIO_ID, std::string_view)>& callback)
+void AudioEngineImpl::setFinishCallback(AudioId audioID,
+                                        const std::function<void(AudioId, std::string_view)>& callback)
 {
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto iter = _audioPlayers.find(audioID);
@@ -1018,7 +1018,7 @@ void AudioEngineImpl::update(float /*dt*/)
     _updatePlayers(false);
 }
 
-void AudioEngineImpl::setPan(AUDIO_ID audioId, float value, float distance)
+void AudioEngineImpl::setPan(AudioId audioId, float value, float distance)
 {
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto iter = _audioPlayers.find(audioId);
@@ -1101,7 +1101,7 @@ ax::Vec3 AudioEngineImpl::getListenerPosition()
     return pos;
 }
 
-void AudioEngineImpl::setReverbProperties(AUDIO_ID audioId, const ReverbProperties* reverbProperties)
+void AudioEngineImpl::setReverbProperties(AudioId audioId, const ReverbProperties* reverbProperties)
 {
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto iter = _audioPlayers.find(audioId);
@@ -1126,7 +1126,7 @@ void AudioEngineImpl::checkExtensions()
 
 void AudioEngineImpl::_updatePlayers(bool forStop)
 {
-    AUDIO_ID audioID;
+    AudioId audioID;
     AudioPlayer* player;
     ALuint alSource;
 

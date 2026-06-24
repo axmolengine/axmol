@@ -106,9 +106,8 @@ public:
         PAUSED
     };
 
-    static const int INVALID_AUDIO_ID;
-
-    static const float TIME_UNKNOWN;
+    static constexpr int INVALID_AUDIO_ID = -1;
+    static constexpr float TIME_UNKNOWN   = -1.0f;
 
     static bool lazyInit();
 
@@ -138,10 +137,10 @@ public:
      *
      * @see `AudioProfile`
      */
-    static AUDIO_ID play2d(std::string_view filePath,
-                           bool loop                   = false,
-                           float volume                = 1.0f,
-                           const AudioProfile* profile = nullptr);
+    static AudioId play2d(std::string_view filePath,
+                          bool loop                   = false,
+                          float volume                = 1.0f,
+                          const AudioProfile* profile = nullptr);
 
     /**
      * Play 2d sound.
@@ -153,9 +152,9 @@ public:
      *
      * @see `AudioProfile`, `AudioPlayerSettings`
      */
-    static AUDIO_ID play2d(std::string_view filePath,
-                           const AudioPlayerSettings& settings,
-                           const AudioProfile* profile = nullptr);
+    static AudioId play2d(std::string_view filePath,
+                          const AudioPlayerSettings& settings,
+                          const AudioProfile* profile = nullptr);
 
     /**
      * Play sound in 3d space.
@@ -169,11 +168,11 @@ public:
      *
      * @see `AudioProfile`
      */
-    static AUDIO_ID play3d(std::string_view filePath,
-                           const Vec3& position,
-                           bool loop                   = false,
-                           float volume                = 1.0f,
-                           const AudioProfile* profile = nullptr);
+    static AudioId play3d(std::string_view filePath,
+                          const Vec3& position,
+                          bool loop                   = false,
+                          float volume                = 1.0f,
+                          const AudioProfile* profile = nullptr);
 
     /**
      * Play sound in 3d space.
@@ -185,9 +184,9 @@ public:
      *
      * @see `AudioProfile`, `AudioPlayerSettings`
      */
-    static AUDIO_ID play3d(std::string_view filePath,
-                           const AudioPlayerSettings& settings,
-                           const AudioProfile* profile = nullptr);
+    static AudioId play3d(std::string_view filePath,
+                          const AudioPlayerSettings& settings,
+                          const AudioProfile* profile = nullptr);
 
     /**
      * Sets whether an audio instance loop or not.
@@ -195,7 +194,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @param loop Whether audio instance loop or not.
      */
-    static void setLoop(AUDIO_ID audioID, bool loop);
+    static void setLoop(AudioId audioID, bool loop);
 
     /**
      * Checks whether an audio instance is loop.
@@ -203,7 +202,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @return Whether or not an audio instance is loop.
      */
-    static bool isLoop(AUDIO_ID audioID);
+    static bool isLoop(AudioId audioID);
 
     /**
      * Sets volume for an audio instance.
@@ -211,7 +210,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @param volume Volume value (range from 0.0 to 1.0).
      */
-    static void setVolume(AUDIO_ID audioID, float volume);
+    static void setVolume(AudioId audioID, float volume);
 
     /**
      * Gets the volume value of an audio instance.
@@ -219,7 +218,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @return Volume value (range from 0.0 to 1.0).
      */
-    static float getVolume(AUDIO_ID audioID);
+    static float getVolume(AudioId audioID);
 
     /**
      * Sets pitch for an audio instance.
@@ -227,7 +226,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @param pitch Volume value (range from 0.5 to 2.0).
      */
-    static void setPitch(AUDIO_ID audioID, float pitch);
+    static void setPitch(AudioId audioID, float pitch);
 
     /**
      * Gets the volume value of an audio instance.
@@ -235,14 +234,14 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @return pitch value (range from 0.5 to 2.0).
      */
-    static float getPitch(AUDIO_ID audioID);
+    static float getPitch(AudioId audioID);
 
     /**
      * Pause an audio instance.
      *
      * @param audioID An audioID returned by the play2d function.
      */
-    static void pause(AUDIO_ID audioID);
+    static void pause(AudioId audioID);
 
     /** Pause all playing audio instances. */
     static void pauseAll();
@@ -252,7 +251,7 @@ public:
      *
      * @param audioID An audioID returned by the play2d function.
      */
-    static void resume(AUDIO_ID audioID);
+    static void resume(AudioId audioID);
 
     /** Resume all suspended audio instances. */
     static void resumeAll();
@@ -262,7 +261,7 @@ public:
      *
      * @param audioID An audioID returned by the play2d function.
      */
-    static void stop(AUDIO_ID audioID);
+    static void stop(AudioId audioID);
 
     /** Stop all audio instances. */
     static void stopAll();
@@ -274,7 +273,7 @@ public:
      * @param sec       The offset in seconds from the start to seek to.
      * @return
      */
-    static bool setCurrentTime(AUDIO_ID audioID, float sec);
+    static bool setCurrentTime(AudioId audioID, float sec);
 
     /**
      * Gets the current playback position of an audio instance.
@@ -282,7 +281,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @return The current playback position of an audio instance.
      */
-    static float getCurrentTime(AUDIO_ID audioID);
+    static float getCurrentTime(AudioId audioID);
 
     /**
      * Gets the duration of an audio instance.
@@ -290,7 +289,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @return The duration of an audio instance.
      */
-    static float getDuration(AUDIO_ID audioID);
+    static float getDuration(AudioId audioID);
 
     /**
      * Returns the state of an audio instance.
@@ -298,7 +297,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @return The status of an audio instance.
      */
-    static AudioState getState(AUDIO_ID audioID);
+    static AudioState getState(AudioId audioID);
 
     /**
      * Register a callback to be invoked when an audio instance has completed playing.
@@ -306,7 +305,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @param callback
      */
-    static void setFinishCallback(AUDIO_ID audioID, const std::function<void(AUDIO_ID, std::string_view)>& callback);
+    static void setFinishCallback(AudioId audioID, const std::function<void(AudioId, std::string_view)>& callback);
 
     /**
      * Gets the maximum number of simultaneous audio instance of AudioEngine.
@@ -342,7 +341,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @return The audio profile.
      */
-    static AudioProfile* getProfile(AUDIO_ID audioID);
+    static AudioProfile* getProfile(AudioId audioID);
 
     /**
      * Gets an audio profile by name.
@@ -389,7 +388,7 @@ public:
      * @param distance  Distance from source, with -0.5f being the default
      * @return
      */
-    static void setPan(AUDIO_ID audioId, float value, float distance = -0.5f);
+    static void setPan(AudioId audioId, float value, float distance = -0.5f);
 
     /**
      * Gets the pan of an audio instance.
@@ -397,7 +396,7 @@ public:
      * @param audioId   An audioID returned by the play2d function.
      * @return pan value as a float between -1.0f to +1.0f
      */
-    static float getPan(AUDIO_ID audioId);
+    static float getPan(AudioId audioId);
 
     /**
      * Gets the position of the audio source.
@@ -405,7 +404,7 @@ public:
      * @param audioId   An audioID returned by the play2d function.
      * @return Vec3 position of source
      */
-    static ax::Vec3 getSourcePosition(AUDIO_ID audioId);
+    static ax::Vec3 getSourcePosition(AudioId audioId);
 
     /**
      * Sets the position of the audio source.
@@ -413,7 +412,7 @@ public:
      * @param audioId   An audioID returned by the play2d function.
      * @param position position of source
      */
-    static void setSourcePosition(AUDIO_ID audioId, const ax::Vec3& position);
+    static void setSourcePosition(AudioId audioId, const ax::Vec3& position);
 
     /**
      * Sets the position of the listener.
@@ -450,7 +449,7 @@ public:
      * @param reverbProperties The pointer to reverb effect settings. If this is nullptr, then reverb effect will be
      * disabled.
      */
-    static void setReverbProperties(AUDIO_ID audioId, const ReverbProperties* reverbProperties);
+    static void setReverbProperties(AudioId audioId, const ReverbProperties* reverbProperties);
 
     /**
      * @brief Enable or disable HRTF.
@@ -474,7 +473,7 @@ public:
 
 protected:
     static void addTask(const std::function<void()>& task);
-    static void remove(AUDIO_ID audioID);
+    static void remove(AudioId audioID);
 
     struct ProfileHelper
     {
@@ -509,10 +508,10 @@ protected:
     };
 
     // audioID,audioAttribute
-    static std::unordered_map<AUDIO_ID, AudioInfo> _audioIDInfoMap;
+    static std::unordered_map<AudioId, AudioInfo> _audioIDInfoMap;
 
     // audio file path,audio IDs
-    static tlx::string_map<std::list<AUDIO_ID>> _audioPathIDMap;
+    static tlx::string_map<std::list<AudioId>> _audioPathIDMap;
 
     // profileName,ProfileHelper
     static tlx::string_map<ProfileHelper> _audioPathProfileHelperMap;
