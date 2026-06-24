@@ -71,8 +71,7 @@ void AudioEngine::end()
     // fix #127
     uncacheAll();
 
-    delete _audioEngineImpl;
-    _audioEngineImpl = nullptr;
+    AX_SAFE_RELEASE(_audioEngineImpl);
 
     delete _defaultProfileHelper;
     _defaultProfileHelper = nullptr;
@@ -85,8 +84,7 @@ bool AudioEngine::lazyInit()
         _audioEngineImpl = new AudioEngineImpl();
         if (!_audioEngineImpl->init())
         {
-            delete _audioEngineImpl;
-            _audioEngineImpl = nullptr;
+            AX_SAFE_RELEASE(_audioEngineImpl);
             return false;
         }
     }

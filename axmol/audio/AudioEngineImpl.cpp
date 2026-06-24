@@ -31,6 +31,7 @@
 #include "axmol/base/Director.h"
 #include "axmol/base/Scheduler.h"
 #include "axmol/base/Utils.h"
+#include "axmol/base/WeakPtr.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC
 #    import <AVFoundation/AVFoundation.h>
@@ -108,7 +109,7 @@ bool __axmolAudioSessionInterrupted = false;
             AXLOGD("AVAudioSessionInterruptionTypeBegan, alcMakeContextCurrent(nullptr)");
 
             // We always pause device when interruption began
-            AudioEngineImpl::current->pauseDevice();
+            ax::AudioEngineImpl::current->pauseDevice();
         }
         else if (reason == AVAudioSessionInterruptionTypeEnded)
         {
@@ -121,7 +122,7 @@ bool __axmolAudioSessionInterrupted = false;
                     "alcMakeContextCurrent(_context)");
                 NSError* error = nil;
                 [[AVAudioSession sharedInstance] setActive:YES error:&error];
-                AudioEngineImpl::current->resumeDevice();
+                ax::AudioEngineImpl::current->resumeDevice();
                 if (ax::Director::getInstance()->isPaused())
                 {
                     AXLOGD("AVAudioSessionInterruptionTypeEnded, director was paused, try to resume it.");
@@ -148,7 +149,7 @@ bool __axmolAudioSessionInterrupted = false;
         {
             resumeOnBecomingActive = false;
             if (!__axmolAudioSessionInterrupted)
-                AudioEngineImpl::current->pauseDevice();
+                ax::AudioEngineImpl::current->pauseDevice();
 
             AXLOGD("UIApplicationDidBecomeActiveNotification, resume audio device");
             NSError* error = nil;
@@ -160,7 +161,7 @@ bool __axmolAudioSessionInterrupted = false;
             }
             [[AVAudioSession sharedInstance] setActive:YES error:&error];
 
-            AudioEngineImpl::current->resumeDevice();
+            ax::AudioEngineImpl::current->resumeDevice();
         }
         else if (__axmolAudioSessionInterrupted)
         {
@@ -178,8 +179,8 @@ bool __axmolAudioSessionInterrupted = false;
          */
         if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive)
         {  // older device (e.g iphone7)
-            AudioEngineImpl::current->pauseDevice();
-            AudioEngineImpl::current->resumeDevice();
+            ax::AudioEngineImpl::current->pauseDevice();
+            ax::AudioEngineImpl::current->resumeDevice();
         }
         else
         {  // newer device (at least iphone13)
@@ -505,12 +506,16 @@ void AudioEngineImpl::resumeDevice()
 
 void AudioEngineImpl::reopenDevice()
 {
-    auto device = _device;
-    _director->postTask([device]() {
-        auto alcReopenDeviceSOFTProc = (decltype(alcReopenDeviceSOFT)*)alcGetProcAddress(device, "alcReopenDeviceSOFT");
+#if AX_USE_ALSOFT
+    _director->postTask([this, weak = WeakPtr<AudioEngineImpl>(this)]() {
+        if (!weak)
+            return;
+        auto alcReopenDeviceSOFTProc =
+            (decltype(alcReopenDeviceSOFT)*)alcGetProcAddress(_device, "alcReopenDeviceSOFT");
         if (alcReopenDeviceSOFTProc)
-            alcReopenDeviceSOFTProc(device, nullptr, nullptr);
+            alcReopenDeviceSOFTProc(_device, nullptr, nullptr);
     }, ax::Director::TaskTiming::FrameBoundary);
+#endif
 }
 
 AudioCache* AudioEngineImpl::preload(std::string_view filePath, std::function<void(bool)> callback)
