@@ -263,29 +263,35 @@ static ALenum alSourceAddNotificationExt(ALuint sid,
     return AL_INVALID_VALUE;
 }
 
-ALvoid ax::AudioEngineImpl::myAlSourceNotificationCallback(ALuint sid, ALuint notificationID, ALvoid* userData)
-{
-    // Currently, we only care about AL_BUFFERS_PROCESSED event
-    if (notificationID != AL_BUFFERS_PROCESSED)
-        return;
-
-    AudioPlayer* player = nullptr;
-    AudioEngineImpl::current->_threadMutex.lock();
-    for (const auto& e : AudioEngineImpl::current->_audioPlayers)
-    {
-        player = e.second;
-        if (player->_alSource == sid && player->_streamingSource)
-        {
-            player->wakeupRotateThread();
-        }
-    }
-    ax::AudioEngineImpl::current->_threadMutex.unlock();
-}
 #endif
 
 namespace ax
 {
 AudioEngineImpl* AudioEngineImpl::current = nullptr;
+
+#if defined(__APPLE__) && !AX_USE_ALSOFT
+ALvoid ax::AudioEngineImpl::onAlSourceNotification(ALuint sourceID, ALuint notificationID, ALvoid* userData)
+{
+    // Currently, we only care about AL_BUFFERS_PROCESSED event
+    if (notificationID != AL_BUFFERS_PROCESSED)
+        return;
+
+    weakupAudioPlayer(sourceID);
+}
+
+void AudioEngineImpl::weakupAudioPlayer(ALuint sourceID)
+{
+    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
+    for (const auto& e : AudioEngineImpl::current->_audioPlayers)
+    {
+        auto player = e.second;
+        if (player->_alSource == sourceID && player->_streamingSource)
+        {
+            player->wakeupRotateThread();
+        }
+    }
+}
+#endif
 
 AudioEngineImpl::AudioEngineImpl()
 {
@@ -354,8 +360,8 @@ bool AudioEngineImpl::init()
             {
                 _unusedSourcesPool.push(_alSources[i]);
 #if defined(__APPLE__) && !AX_USE_ALSOFT
-                alSourceAddNotificationExt(_alSources[i], AL_BUFFERS_PROCESSED, myAlSourceNotificationCallback,
-                                           nullptr);
+                alSourceAddNotificationExt(_alSources[i], AL_BUFFERS_PROCESSED, onAlSourceNotification,
+                                           this);
 #endif
             }
 

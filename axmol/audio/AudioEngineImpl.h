@@ -99,7 +99,8 @@ private:
     void _unscheduleUpdate();
     ALuint findValidSource();
 #if defined(__APPLE__) && !AX_USE_ALSOFT
-    static ALvoid myAlSourceNotificationCallback(ALuint sid, ALuint notificationID, ALvoid* userData);
+    static ALvoid onAlSourceNotification(ALuint sourceID, ALuint notificationID, ALvoid* userData);
+    void weakupAudioPlayer(ALuint sourceID);
 #endif
     Director* _director{nullptr};
 
