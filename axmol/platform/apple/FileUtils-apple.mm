@@ -187,7 +187,7 @@ bool FileUtilsApple::removeDirectory(std::string_view path) const
         return false;
     }
 
-    if (::nftw(path.data(), unlink_cb, 64, FTW_DEPTH | FTW_PHYS))
+    if (nftw(path.data(), unlink_cb, 64, FTW_DEPTH | FTW_PHYS))
         return false;
     else
         return true;
