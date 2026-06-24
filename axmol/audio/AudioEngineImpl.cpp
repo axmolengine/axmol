@@ -360,8 +360,7 @@ bool AudioEngineImpl::init()
             {
                 _unusedSourcesPool.push(_alSources[i]);
 #if defined(__APPLE__) && !AX_USE_ALSOFT
-                alSourceAddNotificationExt(_alSources[i], AL_BUFFERS_PROCESSED, onAlSourceNotification,
-                                           this);
+                alSourceAddNotificationExt(_alSources[i], AL_BUFFERS_PROCESSED, onAlSourceNotification, this);
 #endif
             }
 
