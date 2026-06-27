@@ -73,8 +73,7 @@ int Application::run()
         lastTime = std::chrono::steady_clock::now();
 
         director->performFrameBoundaryTasks();
-        director->renderFrame();
-        renderView->pollEvents();
+        director->stepFrame();
 
         auto interval     = std::chrono::steady_clock::now() - lastTime;
         auto waitDuration = _animationInterval - interval - _1ms;
@@ -85,14 +84,14 @@ int Application::run()
     }
 
     /* Only work on Desktop
-     *  Director::renderFrame is really one frame logic
+     *  Director::stepFrame is really one frame logic
      *  when we want to close the window, we should call Director::end();
-     *  then call Director::renderFrame to do release of internal resources
+     *  then call Director::stepFrame to do release of internal resources
      */
     if (renderView->isGfxContextReady())
     {
         director->end();
-        director->renderFrame();
+        director->stepFrame();
     }
 
     renderView->release();

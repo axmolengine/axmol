@@ -111,8 +111,7 @@ int Application::run()
         if (interval >= _animationInterval.QuadPart)
         {
             nLast.QuadPart = nNow.QuadPart;
-            director->renderFrame();
-            renderView->pollEvents();
+            director->stepFrame();
         }
         else
         {
@@ -131,7 +130,7 @@ int Application::run()
     if (renderView->isGfxContextReady())
     {
         director->end();
-        director->renderFrame();
+        director->stepFrame();
         director = nullptr;
     }
     renderView->release();

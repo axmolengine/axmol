@@ -424,7 +424,7 @@ void Director::calculateDeltaTime()
     }
     else
     {
-        // delta time may passed by invoke renderFrame(dt)
+        // delta time may passed by invoke stepFrame(dt)
         if (!_deltaTimePassedByCaller)
         {
             auto now    = std::chrono::steady_clock::now();
@@ -1580,7 +1580,7 @@ void Director::performFrameTasks(FrameTaskQueue& frameTasks)
     }
 }
 
-void Director::renderFrame()
+void Director::stepFrame()
 {
     if (_cleanupDirectorInNextLoop)
     {
@@ -1591,6 +1591,7 @@ void Director::renderFrame()
     {
         _restartDirectorInNextLoop = false;
         restartDirector();
+        _renderView->pollEvents();
     }
     else if (!_invalid)
     {
@@ -1598,11 +1599,11 @@ void Director::renderFrame()
     }
 }
 
-void Director::renderFrame(float dt)
+void Director::stepFrame(float dt)
 {
     _deltaTime               = dt;
     _deltaTimePassedByCaller = true;
-    renderFrame();
+    stepFrame();
 }
 
 void Director::stopAnimation()

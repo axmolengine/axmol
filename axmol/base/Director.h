@@ -424,12 +424,12 @@ public:
     void setClearColor(const Color& clearColor);
     const Color& getClearColor() const { return _clearColor; }
 
-    [[internal]] void renderFrame();
-    /** Invoke render frame with delta time. Then `calculateDeltaTime` can just use the delta time directly.
-     * The delta time paseed may include vsync time. See issue #17806
+    [[internal]] void stepFrame();
+    /** Invoke frame step with delta time. Then `calculateDeltaTime` can just use the delta time directly.
+     * The delta time passed may include vsync time. See issue #17806
      * @since 3.16
      */
-    [[internal]] void renderFrame(float dt);
+    [[internal]] void stepFrame(float dt);
 
     /** The size in pixels of the surface. It could be different than the screen size.
      * High-res devices might have a higher surface size than the screen size.
@@ -583,8 +583,9 @@ public:
      */
     bool isValid() const { return !_invalid; }
 
+protected:
     /**
-     * Advance one frame of the engine loop.
+     * Process one frame of the engine loop.
      *
      * This method is invoked automatically once per frame by the Director.
      * It drives both the game logic update and the rendering pipeline:
@@ -598,7 +599,6 @@ public:
      */
     [[internal]] void processFrame();
 
-protected:
     static void performFrameTasks(FrameTaskQueue& frameTasks);
 
     void performFrameBoundaryTasks();

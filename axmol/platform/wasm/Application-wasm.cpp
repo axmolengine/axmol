@@ -102,7 +102,7 @@ static int s_targetFPS        = 0;    // 0 = follow browser refresh rate
 static double s_lastFrameTime = 0.0;  // ms
 static double s_accumulator   = 0.0;  // ms
 
-static void renderFrame();
+static void stepFrame();
 
 static void updateFrame()
 {
@@ -112,7 +112,7 @@ static void updateFrame()
     // First frame: render immediately
     if (s_lastFrameTime <= 0.0) [[unlikely]]
     {
-        renderFrame();
+        stepFrame();
         s_lastFrameTime = now;
         return;
     }
@@ -124,7 +124,7 @@ static void updateFrame()
     if (delta > 1000.0) [[unlikely]]
     {
         s_accumulator = 0.0;
-        renderFrame();
+        stepFrame();
         return;
     }
 
@@ -133,7 +133,7 @@ static void updateFrame()
     // If targetFPS is 0, follow browser refresh rate directly
     if (s_targetFPS <= 0)
     {
-        renderFrame();
+        stepFrame();
         return;
     }
 
@@ -141,20 +141,19 @@ static void updateFrame()
     double targetInterval = 1000.0 / s_targetFPS;
     if (s_accumulator >= targetInterval)
     {
-        renderFrame();
+        stepFrame();
         s_accumulator -= targetInterval;
         if (s_accumulator < 0.0) [[unlikely]]  // floating-point safety
             s_accumulator = 0.0;
     }  // else onIdle
 }
 
-static void renderFrame()
+static void stepFrame()
 {
     auto director   = __director;
     auto renderView = director->getRenderView();
 
-    director->renderFrame();
-    renderView->pollEvents();
+    director->stepFrame();
 
     if (renderView->windowShouldClose())
     {
@@ -164,7 +163,7 @@ static void renderFrame()
         if (renderView->isGfxContextReady())
         {
             director->end();
-            director->renderFrame();
+            director->stepFrame();
         }
         renderView->release();
 

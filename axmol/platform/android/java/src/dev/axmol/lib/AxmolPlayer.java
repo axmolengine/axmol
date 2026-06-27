@@ -303,7 +303,7 @@ public class AxmolPlayer extends FrameLayout {
         /*
          * Render time MUST be counted in, or the FPS will slower than appointed.
          */
-        nativeRenderFrame();
+        nativeStepFrame();
         /*
          * No need to use algorithm in default(60,90,120... FPS) situation,
          * since onDrawFrame() was called by system 60 times per second by default.
@@ -746,7 +746,7 @@ public class AxmolPlayer extends FrameLayout {
     // Native methods for AxmolPlayer
     // ===========================================================
 
-    public static native void nativeRenderFrame();
+    public static native void nativeStepFrame();
 
     public static native void nativeOnResume();
 

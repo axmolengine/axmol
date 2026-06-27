@@ -173,9 +173,9 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnSurfaceChanged(JNI
     }
 }
 
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeRenderFrame(JNIEnv*, jclass)
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeStepFrame(JNIEnv*, jclass)
 {
-    ax::Director::getInstance()->renderFrame();
+    ax::Director::getInstance()->stepFrame();
 }
 
 JNIEXPORT void JNICALL
