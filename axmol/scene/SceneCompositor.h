@@ -93,7 +93,7 @@ public:
     virtual const ScissorRect& getScissorRect() const;
 
 protected:
-    Director* _director{nullptr};  // weak-ref
+    Director* _director{nullptr};          // weak-ref
     RenderViewCore* _renderView{nullptr};  // weak-ref
     RefPtr<RenderTexturePass> _renderTexturePass;
 };
