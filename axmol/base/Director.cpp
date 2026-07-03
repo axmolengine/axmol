@@ -1054,7 +1054,8 @@ void Director::cleanupDirector()
     // Before destory RHI, clear current pool once
     _poolManager->getCurrentPool()->clear();
 
-    // SceneCompositor may hold GPU resources, need reset before gfx drop
+    // RenderViewCore owns the SceneCompositor and runtime presentation resources;
+    // release them before dropping the graphics backend.
     if (_renderView)
         _renderView->onGfxDestory();
 
@@ -1608,7 +1609,7 @@ void Director::stepFrame()
     {
         _restartDirectorInNextLoop = false;
         restartDirector();
-        _renderView->prepareFrame();
+        _renderView->pollEvents();
     }
     else if (!_invalid)
     {

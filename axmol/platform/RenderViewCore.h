@@ -35,6 +35,16 @@ THE SOFTWARE.
 #include <vector>
 #include <span>
 
+#ifdef AX_ENABLE_OPENXR
+namespace ax
+{
+inline namespace experimental
+{
+class OpenXRContext;
+}
+}  // namespace ax
+#endif
+
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    include <windows.h>
 #endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
@@ -100,7 +110,14 @@ enum class WindowPlatform
 };
 
 /**
- * @brief By RenderViewCore you can operate the frame information of EGL view through some function.
+ * @brief Core render view abstraction for window/surface state and scene presentation.
+ *
+ * RenderViewCore owns the active SceneCompositor, tracks window and render
+ * surface sizes, maintains design-resolution viewport mapping, and forwards
+ * scene rendering, scissor operations, and per-frame event polling to the
+ * active compositor.
+ *
+ * Platform subclasses provide native window/event/swapchain behavior.
  */
 class AX_DLL RenderViewCore : public Object
 {
@@ -158,10 +175,13 @@ public:
      */
     virtual bool windowShouldClose() { return false; };
 
-    /** Polls events before scheduler update. */
+    /** Polls compositor-managed events before scheduler update.
+     *
+     * The active SceneCompositor decides how native platform events and optional
+     * runtime events are polled. The default compositor forwards to
+     * pollNativeEvents().
+     */
     [[internal]] void pollEvents();
-
-    [[internal]] void prepareFrame();
 
     virtual Vec2 getNativeWindowSize() const { return getWindowSize(); }
 
@@ -472,17 +492,23 @@ public:
 
     /** Replaces the active scene compositor.
      *  Pass nullptr to restore the default SceneCompositor.
-     *  The new compositor's onRenderViewChanged is called immediately if a render view exists.
+     *  The new compositor is immediately bound to this RenderViewCore via
+     *  SceneCompositor::onRenderViewChanged().
      *  The previous compositor is destroyed synchronously.
-     *  @param compositor  New compositor, or nullptr for default.
-     *  @note The default implementation renders all cameras in the scene.
-     *        VRSceneCompositor provides the product VR path, while
-     *        VRPreviewSceneCompositor provides non-runtime stereo preview.
+     *
+     *  @param compositor New compositor, or nullptr for the default compositor.
+     *  @note The default compositor renders all visible cameras in the scene.
+     *        VRSceneCompositor provides the product OpenXR path, while preview
+     *        compositors may provide non-runtime stereo rendering.
      */
     void setSceneCompositor(std::unique_ptr<SceneCompositor>&& compositor);
 
 protected:
-    /** Polls native window/platform events. */
+    /** Polls native window/platform events only.
+     *
+     * This is called by the default SceneCompositor. Specialized compositors may
+     * call it before polling their own runtime events, such as OpenXR events.
+     */
     virtual void pollNativeEvents();
 
     void renderScene(Renderer* renderer, Scene* scene);
@@ -507,6 +533,10 @@ protected:
     void updateDesignResolution();
 
     std::unique_ptr<SceneCompositor> _sceneCompositor;
+
+#ifdef AX_ENABLE_OPENXR
+    std::unique_ptr<OpenXRContext> _xrContext;
+#endif
 
     float _renderScale{1.0f};
 

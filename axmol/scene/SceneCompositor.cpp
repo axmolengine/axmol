@@ -52,10 +52,9 @@ void SceneCompositor::onRenderViewChanged(RenderViewCore* rv)
 
 void SceneCompositor::pollEvents()
 {
+    AXASSERT(_renderView, "SceneCompositor is not bound to a RenderViewCore");
     _renderView->pollNativeEvents();
 }
-
-void SceneCompositor::prepareFrame() {}
 
 void SceneCompositor::renderScene(Renderer* renderer, Scene* scene)
 {

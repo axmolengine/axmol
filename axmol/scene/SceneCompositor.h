@@ -61,24 +61,13 @@ public:
     virtual bool isVRActive() const { return false; }
 
     /**
-     * Called after scheduler update, prior to prepareFrame().
-     * Responsible for polling platform/window events and runtime events
-     * (e.g. glfwPollEvents, OpenXR xrPollEvent + xrWaitFrame).
+     * Called each frame before scheduler update to poll compositor-owned events.
      *
-     * This is separated from prepareFrame() so that event polling always occurs
-     * at a stable point in the frame loop, regardless of which compositor is active,
-     * allowing safe compositor switches without mid-frame teardown hazards.
+     * The base implementation polls native window/platform events by forwarding
+     * to RenderViewCore::pollNativeEvents(). Specialized compositors may extend
+     * this to poll runtime-specific events, such as OpenXR frame events.
      */
     virtual void pollEvents();
-
-    /**
-     * Called after pollFrameEvents(), before renderScene().
-     * Responsible for compositor-specific per-frame state setup
-     * (e.g. syncing scale factors, pointer ray cameras).
-     *
-     * Base implementation is a no-op.
-     */
-    virtual void prepareFrame();
 
     /** Composes the scene for the current frame.
      *  @param renderer The Renderer to submit draw commands into.
@@ -86,9 +75,11 @@ public:
      */
     virtual void renderScene(Renderer* renderer, Scene* scene);
 
-    /** Called when the render view size changes (or is first assigned).
-     *  Override to recreate framebuffer-sized resources (e.g., VR render texture).
-     *  Default is a no-op.
+    /** Called when this compositor is bound to a RenderViewCore or when the
+     *  render surface changes.
+     *
+     *  The base implementation stores the RenderViewCore weak reference.
+     *  Subclasses may override to recreate framebuffer-sized or runtime resources.
      */
     virtual void onRenderViewChanged(RenderViewCore* rv);
 

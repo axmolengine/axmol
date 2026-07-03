@@ -88,7 +88,6 @@ static VRProjectedPoint projectControllerRayPoint(const Mat4& mvp, const Vec3& p
 
 VRSceneCompositor::VRSceneCompositor()
 {
-    _context.setXrToSceneScale(_xrToSceneScale);
     _rtPass = RefPtr<RenderTexturePass>(RenderTexturePass::obtain(), tlx::adopt_object);
     _rtPass->setCameraOverrideEnabled(false);
 }
@@ -100,39 +99,46 @@ VRSceneCompositor::~VRSceneCompositor()
 
 bool VRSceneCompositor::isInitialized() const
 {
-    return _context.isInitialized();
+    return _context && _context->isInitialized();
 }
 
 XrInstance VRSceneCompositor::getXrInstance() const
 {
-    return _context.getXrInstance();
+    return _context ? _context->getXrInstance() : XR_NULL_HANDLE;
 }
 
 XrSession VRSceneCompositor::getXrSession() const
 {
-    return _context.getXrSession();
+    return _context ? _context->getXrSession() : XR_NULL_HANDLE;
+}
+
+void VRSceneCompositor::bindContext(OpenXRContext* context)
+{
+    _context = context;
 }
 
 void VRSceneCompositor::pollEvents()
 {
     SceneCompositor::pollEvents();
 
-    _context.setXrToSceneScale(_xrToSceneScale);
-    _context.ensurePointerRayCamera(_nearZ, _farZ);
-    _context.pollEvents();
-}
+    if (!_context)
+        return;
 
-void VRSceneCompositor::prepareFrame() {}
+    _context->setXrToSceneScale(_xrToSceneScale);
+    _context->ensurePointerRayCamera(_nearZ, _farZ);
+    _context->pollEvents();
+}
 
 bool VRSceneCompositor::isVRActive() const
 {
-    return _context.isSessionRunning();
+    return _context && _context->isSessionRunning();
 }
 
 void VRSceneCompositor::onRenderViewChanged(RenderViewCore* rv)
 {
     SceneCompositor::onRenderViewChanged(rv);
-    _context.onRenderViewChanged(rv);
+    if (_context)
+        _context->onRenderViewChanged(rv);
 }
 
 void VRSceneCompositor::setControllerRayColors(const Color& idle, const Color& pressed, const Color& hit)
@@ -145,7 +151,8 @@ void VRSceneCompositor::setControllerRayColors(const Color& idle, const Color& p
 void VRSceneCompositor::setXrToSceneScale(float scale)
 {
     _xrToSceneScale = scale > 0.0f ? scale : 1.0f;
-    _context.setXrToSceneScale(_xrToSceneScale);
+    if (_context)
+        _context->setXrToSceneScale(_xrToSceneScale);
 }
 
 void VRSceneCompositor::ensureControllerRayResources()
@@ -223,7 +230,7 @@ void VRSceneCompositor::drawControllerRays(Renderer* renderer, uint32_t eyeIdx, 
     if (!camera)
         return;
 
-    const auto* controllers = _context.getControllers();
+    const auto* controllers = _context->getControllers();
     const Mat4& mvp         = camera->getViewProjectionMatrix();
 
     for (uint32_t hand = 0; hand < 2; ++hand)
@@ -269,7 +276,7 @@ void VRSceneCompositor::drawControllerRays(Renderer* renderer, uint32_t eyeIdx, 
 
 void VRSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
 {
-    if (!_context.isSessionRunning() || !_context.isInitialized())
+    if (!_context || !_context->isSessionRunning() || !_context->isInitialized())
     {
         SceneCompositor::renderScene(renderer, scene);
         return;
@@ -280,24 +287,24 @@ void VRSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
     SceneCompositor::renderScene(renderer, scene);
 #endif
 
-    if (!_context.beginRenderFrame())
+    if (!_context->beginRenderFrame())
         return;
 
     uint32_t viewCountOutput = 0;
-    if (!_context.locateViews(viewCountOutput))
+    if (!_context->locateViews(viewCountOutput))
         return;
 
     std::vector<OpenXRContext::AcquiredSwapchain> acquired;
-    if (!_context.acquireSwapchains(acquired))
+    if (!_context->acquireSwapchains(acquired))
     {
-        _context.endFrameEmpty();
+        _context->endFrameEmpty();
         return;
     }
 
     const Color& clearColor       = _director->getClearColor();
     const auto& transform         = scene->getNodeToParentTransform();
     const auto sourceScissorSize  = _director->getRenderView()->getViewportRect().size;
-    const auto& views             = _context.getViews();
+    const auto& views             = _context->getViews();
     const uint32_t eyeRenderCount = std::min<uint32_t>(viewCountOutput, static_cast<uint32_t>(acquired.size()));
 
     for (uint32_t eyeIdx = 0; eyeIdx < eyeRenderCount; ++eyeIdx)
@@ -348,7 +355,7 @@ void VRSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
             camera->setAdditionalTransform(Mat4::identity);
         }
 
-        auto rayCamera = _context.ensurePointerRayCamera(_nearZ, _farZ);
+        auto rayCamera = _context->ensurePointerRayCamera(_nearZ, _farZ);
         if (rayCamera && rayCamera->isVisible())
         {
             Camera::setVisitingCamera(rayCamera);
@@ -372,8 +379,8 @@ void VRSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
     Camera::setVisitingCamera(nullptr);
 
     renderer->submitCurrentFrameCommands(true);
-    _context.releaseSwapchains(acquired);
-    _context.endFrameWithProjectionLayer(acquired, eyeRenderCount);
+    _context->releaseSwapchains(acquired);
+    _context->endFrameWithProjectionLayer(acquired, eyeRenderCount);
 }
 
 void VRSceneCompositor::setScissorRect(float x, float y, float w, float h)

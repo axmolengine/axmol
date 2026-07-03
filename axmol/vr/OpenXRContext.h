@@ -62,6 +62,8 @@ inline namespace experimental
  */
 class AX_DLL OpenXRContext
 {
+    friend class RenderViewCore;
+
 public:
     struct ControllerState
     {

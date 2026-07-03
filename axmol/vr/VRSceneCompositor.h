@@ -75,8 +75,8 @@ public:
     XrInstance getXrInstance() const;
     XrSession getXrSession() const;
 
+    void bindContext(OpenXRContext* context);
     void pollEvents() override;
-    void prepareFrame() override;
 
 protected:
     bool isVRActive() const override;
@@ -92,7 +92,7 @@ private:
     void onBeforeControllerRayDraw();
     void onAfterControllerRayDraw();
 
-    OpenXRContext _context;
+    OpenXRContext* _context{nullptr};
 
     CustomCommand _controllerRayCommands[2];
     rhi::UniformLocation _controllerRayMVPLocation;

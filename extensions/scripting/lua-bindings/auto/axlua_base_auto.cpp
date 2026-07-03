@@ -23998,53 +23998,6 @@ int lua_ax_base_RenderViewCore_windowShouldClose(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_RenderViewCore_pollEvents(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::RenderViewCore* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderViewCore",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::RenderViewCore*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderViewCore_pollEvents'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewCore_pollEvents'", nullptr);
-            return 0;
-        }
-        obj->pollEvents();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderViewCore:pollEvents",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewCore_pollEvents'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_RenderViewCore_getNativeWindowSize(lua_State* tolua_S)
 {
     int argc = 0;
@@ -25728,7 +25681,6 @@ int lua_register_ax_base_RenderViewCore(lua_State* tolua_S)
         tolua_function(tolua_S,"swapBuffers",lua_ax_base_RenderViewCore_swapBuffers);
         tolua_function(tolua_S,"setIMEKeyboardState",lua_ax_base_RenderViewCore_setIMEKeyboardState);
         tolua_function(tolua_S,"windowShouldClose",lua_ax_base_RenderViewCore_windowShouldClose);
-        tolua_function(tolua_S,"pollEvents",lua_ax_base_RenderViewCore_pollEvents);
         tolua_function(tolua_S,"getNativeWindowSize",lua_ax_base_RenderViewCore_getNativeWindowSize);
         tolua_function(tolua_S,"getWindowSize",lua_ax_base_RenderViewCore_getWindowSize);
         tolua_function(tolua_S,"setWindowSize",lua_ax_base_RenderViewCore_setWindowSize);
@@ -29516,7 +29468,6 @@ int lua_ax_base_XRInputEvent_hasAimRay(lua_State* tolua_S)
 
     return 0;
 }
-
 int lua_ax_base_XRInputEvent_isGripPoseValid(lua_State* tolua_S)
 {
     int argc = 0;
@@ -90121,53 +90072,6 @@ int lua_ax_base_Camera_getViewProjectionMatrix(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Camera_getViewProjectionMatrixWithoutAdditionalTransform(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Camera* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Camera",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Camera_getViewProjectionMatrixWithoutAdditionalTransform'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_getViewProjectionMatrixWithoutAdditionalTransform'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getViewProjectionMatrixWithoutAdditionalTransform();
-        mat4_to_luaval(tolua_S, ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:getViewProjectionMatrixWithoutAdditionalTransform",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_getViewProjectionMatrixWithoutAdditionalTransform'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_Camera_getOwnerScene(lua_State* tolua_S)
 {
     int argc = 0;
@@ -92179,7 +92083,6 @@ int lua_register_ax_base_Camera(lua_State* tolua_S)
         tolua_function(tolua_S,"setProjectionMatrix",lua_ax_base_Camera_setProjectionMatrix);
         tolua_function(tolua_S,"getViewMatrix",lua_ax_base_Camera_getViewMatrix);
         tolua_function(tolua_S,"getViewProjectionMatrix",lua_ax_base_Camera_getViewProjectionMatrix);
-        tolua_function(tolua_S,"getViewProjectionMatrixWithoutAdditionalTransform",lua_ax_base_Camera_getViewProjectionMatrixWithoutAdditionalTransform);
         tolua_function(tolua_S,"getOwnerScene",lua_ax_base_Camera_getOwnerScene);
         tolua_function(tolua_S,"screenToRay",lua_ax_base_Camera_screenToRay);
         tolua_function(tolua_S,"projectWorldToScreen",lua_ax_base_Camera_projectWorldToScreen);

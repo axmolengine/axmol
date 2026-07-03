@@ -35,6 +35,10 @@ THE SOFTWARE.
 #include "axmol/scene/SceneCompositor.h"
 #include "axmol/renderer/Renderer.h"
 
+#ifdef AX_ENABLE_OPENXR
+#    include "axmol/vr/VRSceneCompositor.h"
+#endif
+
 namespace ax
 {
 
@@ -59,11 +63,6 @@ RenderViewCore::~RenderViewCore() {}
 void RenderViewCore::pollEvents()
 {
     _sceneCompositor->pollEvents();
-}
-
-void RenderViewCore::prepareFrame()
-{
-    _sceneCompositor->prepareFrame();
 }
 
 void RenderViewCore::pollNativeEvents() {}
@@ -281,6 +280,15 @@ void RenderViewCore::setSceneCompositor(std::unique_ptr<SceneCompositor>&& impl)
     else
         _sceneCompositor = std::make_unique<SceneCompositor>();
 
+#ifdef AX_ENABLE_OPENXR
+    if (auto* vr = dynamic_cast<VRSceneCompositor*>(_sceneCompositor.get()))
+    {
+        if (!_xrContext)
+            _xrContext = std::make_unique<OpenXRContext>();
+        vr->bindContext(_xrContext.get());
+    }
+#endif
+
     _sceneCompositor->onRenderViewChanged(this);
 }
 
@@ -315,6 +323,14 @@ const ScissorRect& RenderViewCore::getScissorRect() const
 void RenderViewCore::onGfxDestory()
 {
     _sceneCompositor.reset();
+
+#ifdef AX_ENABLE_OPENXR
+    if (_xrContext)
+    {
+        _xrContext->shutdownXr();
+        _xrContext.reset();
+    }
+#endif
 }
 
 }  // namespace ax
