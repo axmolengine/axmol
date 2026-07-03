@@ -148,8 +148,7 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
 
         director->setNextDeltaTimeZero(true);
 
-        auto rtx =
-            RenderTexture::create(director->canvasToPixels(size * scale), rhi::PixelFormat::RGBA8, PixelFormat::D24S8);
+        auto rtx      = RenderTexture::createForCanvas(size * scale, rhi::PixelFormat::RGBA8, PixelFormat::D24S8);
         Vec2 savedPos = startNode->getPosition();
         Vec2 anchor;
         if (!startNode->isIgnoreAnchorPointForPosition())
@@ -160,7 +159,9 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
 
         RefPtr<RenderTexturePass> rtxPass(RenderTexturePass::obtain(rtx), tlx::adopt_object);
 
-        rtxPass->begin();
+        Camera* camera = Camera::createOrthographicView(size, -1024.f, 1024.f);
+
+        rtxPass->begin(camera);
         rtxPass->clearAll();
         startNode->visit();
         rtxPass->end();

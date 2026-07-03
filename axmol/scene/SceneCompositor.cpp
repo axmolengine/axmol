@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/scene/SceneRenderer.h"
+#include "axmol/scene/SceneCompositor.h"
 
 #include "axmol/renderer/RenderTexture.h"
 #include "axmol/renderer/Renderer.h"
@@ -40,12 +40,18 @@
 namespace ax
 {
 
-SceneRenderer::SceneRenderer()
+SceneCompositor::SceneCompositor()
 {
     _director = Director::getInstance();
 }
 
-void SceneRenderer::renderScene(Renderer* renderer, Scene* scene)
+void SceneCompositor::prepareFrame()
+{
+    if (auto renderView = _director->getRenderView())
+        renderView->pollEvents();
+}
+
+void SceneCompositor::renderScene(Renderer* renderer, Scene* scene)
 {
     AXASSERT(renderer, "Invalid Renderer");
     AXASSERT(scene, "Invalid Scene");
@@ -128,12 +134,12 @@ void SceneRenderer::renderScene(Renderer* renderer, Scene* scene)
     Camera::setVisitingCamera(nullptr);
 }
 
-void SceneRenderer::setScissorRect(float x, float y, float w, float h)
+void SceneCompositor::setScissorRect(float x, float y, float w, float h)
 {
     _director->getRenderer()->setScissorRect(x, y, w, h);
 }
 
-const ScissorRect& SceneRenderer::getScissorRect() const
+const ScissorRect& SceneCompositor::getScissorRect() const
 {
     return _director->getRenderer()->getScissorRect();
 }

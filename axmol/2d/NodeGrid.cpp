@@ -84,12 +84,13 @@ Camera* NodeGrid::getGridCamera()
 {
     if (!_gridCamera)
     {
-        _gridCamera = Camera::createCanvasOrthographic(-1, 1);
+        _gridCamera = Camera::createOrthographicView(_director->getCanvasSize(), -1024, 1024);
         AX_SAFE_RETAIN(_gridCamera);
     }
-
-    _gridCamera->initCanvasOrthographic(-1, 1);
-    _gridCamera->setAdditionalTransform(Mat4::identity);
+    else
+    {
+        _gridCamera->initOrthographicView(_director->getCanvasSize(), -1024, 1024);
+    }
 
     auto visitingCamera = Camera::getVisitingCamera();
     _gridCamera->setCameraFlag(visitingCamera ? visitingCamera->getCameraFlag() : CameraFlag::DEFAULT);
@@ -128,9 +129,9 @@ void NodeGrid::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t p
 
     auto activeGrid     = _nodeGrid && _nodeGrid->isActive();
     auto previousCamera = const_cast<Camera*>(Camera::getVisitingCamera());
-    auto captureCamera  = activeGrid ? getGridCamera() : nullptr;
-    if (activeGrid)
-        Camera::setVisitingCamera(captureCamera);
+
+    auto gridCam        = activeGrid ? getGridCamera() : nullptr;
+    auto switchedCamera = gridCam != nullptr;
 
     onGridBeginDraw();
 
@@ -173,10 +174,31 @@ void NodeGrid::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t p
     // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
     // setOrderOfArrival(0);
 
-    if (activeGrid)
-        Camera::setVisitingCamera(previousCamera);
+    if (_nodeGrid)
+    {
+        // Capture may use the scene/XR camera, while blit still uses gridCam's
+        // canvas ortho matrix. Projecting the uploaded grid vertices/UVs keeps
+        // tile edges in the same camera space as the captured texture.
+        const auto& screenProjection = previousCamera ? previousCamera->getViewProjectionMatrix() : Mat4::identity;
+        _nodeGrid->setScreenProjectionForBlit(
+            _projectGridBlitToVisitingCamera && previousCamera ? &screenProjection : nullptr,
+            _director->getCanvasSize());
+    }
+
+    // Switch to grid camera before blit so that Grid3D::blit() /
+    // TiledGrid3D::blit() pick up the grid camera's ortho VP matrix
+    // via Camera::getVisitingViewProjectionMatrix(), instead of the
+    // scene camera's VR perspective VP which would warp the grid mesh.
+    if (gridCam)
+        Camera::setVisitingCamera(gridCam);
 
     onGridEndDraw();
+
+    if (_nodeGrid)
+        _nodeGrid->setScreenProjectionForBlit(nullptr, Vec2::zero);
+
+    if (gridCam || switchedCamera)
+        Camera::setVisitingCamera(previousCamera);
 }
 
 void NodeGrid::setGrid(GridBase* grid)

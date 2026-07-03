@@ -87,12 +87,18 @@ class TextureImpl : public rhi::Texture
 public:
     TextureImpl(DriverImpl*, const TextureDesc& desc, std::optional<Color> clearColorHint = std::nullopt);
     TextureImpl(DriverImpl*, ComPtr<ID3D12Resource> existingResource);
+    TextureImpl(DriverImpl*,
+                ComPtr<ID3D12Resource> existingResource,
+                const TextureDesc& desc,
+                D3D12_RESOURCE_STATES initialState,
+                D3D12_RESOURCE_STATES renderTargetFinalState);
     ~TextureImpl();
 
     void transitionState(ID3D12GraphicsCommandList* cmd, D3D12_RESOURCE_STATES newState);
 
     D3D12_RESOURCE_STATES getCurrentState() const;
     void setKnownState(D3D12_RESOURCE_STATES state);
+    D3D12_RESOURCE_STATES getRenderTargetFinalState() const { return _renderTargetFinalState; }
 
     void updateData(const void* data, int width, int height, int level, int layerIndex = 0) override;
     void updateCompressedData(const void* data, int width, int height, size_t dataSize, int level, int layerIndex = 0)
@@ -138,6 +144,7 @@ private:
     TextureHandle _nativeTexture{};
     TextureDesc _desc{};
     DescriptorHandle* _sampler{nullptr};  // weak ref
+    D3D12_RESOURCE_STATES _renderTargetFinalState{D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE};
 };
 
 }  // namespace ax::rhi::d3d12

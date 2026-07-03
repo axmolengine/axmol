@@ -47,6 +47,11 @@ public:
      * @param descriptor Specify texture and sampler description.
      */
     TextureImpl(id<MTLDevice> mtlDevice, const TextureDesc& descriptor);
+    /**
+     * Wraps an existing MTLTexture object.
+     * The texture is retained; this instance will release it on destruction.
+     */
+    TextureImpl(id<MTLDevice> mtlDevice, id<MTLTexture> texture);
     ~TextureImpl();
 
     /**

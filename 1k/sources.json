@@ -28,6 +28,9 @@
         "gitee": "https://gitee.com/simdsoft/lz4.git"
       }
     },
+    "openxr": {
+      "sources": { "origin": "https://github.com/KhronosGroup/OpenXR-SDK.git" }
+    },
     "sample-assets": {
       "sources": {
         "origin": "https://github.com/axmolengine/axmol-sample-assets.git",

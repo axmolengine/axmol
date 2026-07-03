@@ -243,8 +243,8 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface) 
 
     createDescriptorHeaps();
 
-    bitmask::set(_inFlightDynamicDirtyBits[0], PIPELINE_REQUIRED_DYNAMIC_BITS);
-    bitmask::set(_inFlightDynamicDirtyBits[1], PIPELINE_REQUIRED_DYNAMIC_BITS);
+    for (auto& stateBits : _inFlightDynamicDirtyBits)
+        bitmask::set(stateBits, PIPELINE_REQUIRED_DYNAMIC_BITS);
 }
 
 RenderContextImpl::~RenderContextImpl()
@@ -430,6 +430,39 @@ void RenderContextImpl::endRenderPass()
     AX_SAFE_RELEASE_NULL(_indexBuffer);
     AX_SAFE_RELEASE_NULL(_vertexBuffer);
     AX_SAFE_RELEASE_NULL(_instanceBuffer);
+}
+
+void RenderContextImpl::submitCurrentFrameCommands(bool /*waitForCompletion*/)
+{
+    if (!_inFrame || !_currentCmdList)
+        return;
+
+    HRESULT hr = _currentCmdList->Close();
+    AXASSERT(SUCCEEDED(hr), "CommandList Close failed");
+
+    ID3D12CommandList* lists[] = {_currentCmdList};
+    _graphicsQueue->ExecuteCommandLists(1, lists);
+
+    auto& currentFence = _inflightFences[_frameIndex];
+    _graphicsQueue->Signal(currentFence.handle, currentFence.value);
+    _completedFenceValue = currentFence.wait();
+    _driver->processDisposalQueue(_completedFenceValue);
+
+    currentFence.value = ++_frameFenceValue;
+
+    hr = _commandAllocators[_frameIndex]->Reset();
+    AXASSERT(SUCCEEDED(hr), "CommandAllocator Reset failed");
+    hr = _currentCmdList->Reset(_commandAllocators[_frameIndex].Get(), nullptr);
+    AXASSERT(SUCCEEDED(hr), "CommandList Reset failed");
+
+    _boundRootSig = nullptr;
+    _boundPSO     = nullptr;
+    bitmask::set(_inFlightDynamicDirtyBits[_frameIndex], PIPELINE_REQUIRED_DYNAMIC_BITS);
+
+    auto samplerHeap               = _driver->getSamplerHeap();
+    auto srvHeap                   = _srvHeaps[_frameIndex].Get();
+    ID3D12DescriptorHeap* heaps[2] = {srvHeap, samplerHeap};
+    _currentCmdList->SetDescriptorHeaps(2, heaps);
 }
 
 void RenderContextImpl::endFrame()

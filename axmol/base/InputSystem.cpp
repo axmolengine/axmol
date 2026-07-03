@@ -462,6 +462,23 @@ void InputSystem::handlePointerScroll(Vec2 point, Vec2 scollDelat, const Pointer
     dispatchEvent(&_scrollEvent);
 }
 
+PointerHitResult InputSystem::handleVRPointerScroll(Vec2 point,
+                                                    Vec2 scrollDelta,
+                                                    const Ray& ray,
+                                                    const PointerInputState& state)
+{
+    if (!_interactive)
+        return {};
+
+    return dispatchVRPointerScroll(point, scrollDelta, ray, state);
+}
+
+void InputSystem::handleXRInput(const XRInputEvent::State& state)
+{
+    XRInputEvent event(state);
+    dispatchEvent(&event);
+}
+
 void InputSystem::setInteractive(bool interactive)
 {
     if (_interactive == interactive)
@@ -577,6 +594,82 @@ void InputSystem::dispatchPointerEvent(InputPhase phase, Vec2 point, const Point
 
     event->setPointerInfo(phase, nativeToScreen(point), state);
     dispatchEvent(event);
+}
+
+PointerHitResult InputSystem::handleVRPointerEvent(InputPhase phase,
+                                                   Vec2 point,
+                                                   const Ray& ray,
+                                                   const PointerInputState& state)
+{
+    if (!_interactive)
+        return {};
+
+    return dispatchVRPointerEvent(phase, point, ray, state);
+}
+
+PointerHitResult InputSystem::dispatchVRPointerEvent(InputPhase phase,
+                                                     Vec2 point,
+                                                     const Ray& ray,
+                                                     const PointerInputState& state)
+{
+    _lastPointerPosition = point;
+
+    PointerEvent* event = nullptr;
+
+    if (phase == InputPhase::PointerDown)
+    {
+        event = fetchPointerEvent(state.id);
+        event->setPrimary(_pointerEvents.size() <= 1);
+    }
+    else
+    {
+        event = findPointerEvent(state.id);
+        if (!event)
+        {
+            if (phase == InputPhase::PointerMove)
+            {
+                event = &_isolatedMoveEvent;
+            }
+            else
+            {
+                AXLOGD("[InputSystem] Orphan VR pointer terminal event discarded: phase={}, id={}.",
+                       static_cast<int>(phase), state.id);
+                return {};
+            }
+        }
+    }
+
+    event->setPointerInfo(phase, nativeToScreen(point), state);
+    event->setRay(ray);
+    dispatchEvent(event);
+
+    auto result = event->getHitResult();
+
+    if (phase == InputPhase::PointerUp)
+    {
+        auto remainingButtons = state.pressedButtons;
+        if (state.button >= 0)
+            remainingButtons &= ~(1u << state.button);
+        if (remainingButtons == 0)
+            removePointerEvent(state.id);
+    }
+
+    return result;
+}
+
+PointerHitResult InputSystem::dispatchVRPointerScroll(Vec2 point,
+                                                      Vec2 scrollDelta,
+                                                      const Ray& ray,
+                                                      const PointerInputState& state)
+{
+    _lastPointerPosition = point;
+
+    _scrollEvent.setPointerInfo(InputPhase::PointerScroll, nativeToScreen(point), state);
+    _scrollEvent.setScrollData(scrollDelta);
+    _scrollEvent.setRay(ray);
+    dispatchEvent(&_scrollEvent);
+
+    return _scrollEvent.getHitResult();
 }
 
 void InputSystem::resetInput()

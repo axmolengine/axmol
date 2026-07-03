@@ -27,6 +27,7 @@
 #define _VR_TEST_H_
 
 #include "axmol/axmol.h"
+#include "axmol/ui/RadioButton.h"
 #include "../BaseTest.h"
 #include <string>
 
@@ -47,6 +48,11 @@ public:
     VRTest1();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
+
+private:
+    void onRadioGroupChanged(ax::ui::RadioButton* sender, int index, ax::ui::RadioButtonGroup::EventType type);
+
+    ax::ui::RadioButtonGroup* _radioButtonGroup = nullptr;
 };
 
 #endif

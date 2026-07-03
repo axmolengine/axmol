@@ -440,6 +440,11 @@ void Renderer::endFrame()
     _queuedTotalVertexCount = 0;
 }
 
+void Renderer::submitCurrentFrameCommands(bool waitForCompletion)
+{
+    _context->submitCurrentFrameCommands(waitForCompletion);
+}
+
 void Renderer::clean()
 {
     // Clear render group

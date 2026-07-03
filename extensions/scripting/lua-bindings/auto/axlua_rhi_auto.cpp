@@ -3485,6 +3485,42 @@ int lua_ax_rhi_DriverContext_setVulkanMinAndroidApiLevel(lua_State* tolua_S)
 #endif
     return 0;
 }
+int lua_ax_rhi_DriverContext_setOpenXRCompatible(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"axr.DriverContext",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        bool arg0;
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axr.DriverContext:setOpenXRCompatible");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverContext_setOpenXRCompatible'", nullptr);
+            return 0;
+        }
+        ax::rhi::DriverContext::setOpenXRCompatible(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.DriverContext:setOpenXRCompatible",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverContext_setOpenXRCompatible'.",&tolua_err);
+#endif
+    return 0;
+}
 int lua_ax_rhi_DriverContext_setDriverPriority(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3726,6 +3762,40 @@ int lua_ax_rhi_DriverContext_currentDriverType(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverContext_currentDriverType'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_rhi_DriverContext_isOpenXRCompatible(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"axr.DriverContext",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverContext_isOpenXRCompatible'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::rhi::DriverContext::isOpenXRCompatible();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.DriverContext:isOpenXRCompatible",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverContext_isOpenXRCompatible'.",&tolua_err);
 #endif
     return 0;
 }
@@ -3981,6 +4051,7 @@ int lua_register_ax_rhi_DriverContext(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"DriverContext");
         tolua_function(tolua_S,"setDriverPreference", lua_ax_rhi_DriverContext_setDriverPreference);
         tolua_function(tolua_S,"setVulkanMinAndroidApiLevel", lua_ax_rhi_DriverContext_setVulkanMinAndroidApiLevel);
+        tolua_function(tolua_S,"setOpenXRCompatible", lua_ax_rhi_DriverContext_setOpenXRCompatible);
         tolua_function(tolua_S,"setDriverPriority", lua_ax_rhi_DriverContext_setDriverPriority);
         tolua_function(tolua_S,"getDriverPriority", lua_ax_rhi_DriverContext_getDriverPriority);
         tolua_function(tolua_S,"makeCurrentDriver", lua_ax_rhi_DriverContext_makeCurrentDriver);
@@ -3988,6 +4059,7 @@ int lua_register_ax_rhi_DriverContext(lua_State* tolua_S)
         tolua_function(tolua_S,"destroyCurrentDriver", lua_ax_rhi_DriverContext_destroyCurrentDriver);
         tolua_function(tolua_S,"currentDriver", lua_ax_rhi_DriverContext_currentDriver);
         tolua_function(tolua_S,"currentDriverType", lua_ax_rhi_DriverContext_currentDriverType);
+        tolua_function(tolua_S,"isOpenXRCompatible", lua_ax_rhi_DriverContext_isOpenXRCompatible);
         tolua_function(tolua_S,"isOpenGL", lua_ax_rhi_DriverContext_isOpenGL);
         tolua_function(tolua_S,"isMetal", lua_ax_rhi_DriverContext_isMetal);
         tolua_function(tolua_S,"isD3D11", lua_ax_rhi_DriverContext_isD3D11);

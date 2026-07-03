@@ -140,6 +140,9 @@ if(ANDROID)
 endif()
 
 ax_add_3rd(fmt)
+if (TARGET fmt-c)
+  set_target_properties(fmt-c PROPERTIES FOLDER "3rdparty")
+endif()
 
 # bellow are non header only libs
 
@@ -426,6 +429,12 @@ ax_add_3rd(yasio)
 
 # simdjson
 ax_add_3rd(simdjson)
+
+# openxr
+if (AX_ENABLE_OPENXR)
+  _1kfetch(openxr)
+  ax_add_3rd(${openxr_SOURCE_DIR} TARGETS openxr_loader)
+endif()
 
 if(ANDROID)
   function(config_android_shared_libs package_name target_folder)

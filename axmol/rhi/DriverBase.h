@@ -130,6 +130,11 @@ public:
     virtual Texture* createTexture(const TextureDesc& descriptor,
                                    std::optional<Color> clearColorHint = std::nullopt) = 0;
 
+    /**
+     * Wrap a backend-native texture owned by an external runtime, not auto released.
+     */
+    virtual Texture* createTextureFromNativeHandle(const ExternalTextureDesc& descriptor) = 0;
+
     virtual RenderTarget* createRenderTarget(Texture* colorAttachment        = nullptr,
                                              Texture* depthStencilAttachment = nullptr) = 0;
 

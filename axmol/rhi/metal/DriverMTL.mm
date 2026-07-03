@@ -448,6 +448,17 @@ Texture* DriverImpl::createTexture(const TextureDesc& descriptor, std::optional<
     return new TextureImpl(_mtlDevice, descriptor);
 }
 
+Texture* DriverImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
+{
+    id<MTLTexture> nativeTexture = (id<MTLTexture>)descriptor.nativeTexture.ptr;
+    if (!nativeTexture)
+        return nullptr;
+
+    auto texture = new TextureImpl(_mtlDevice, nativeTexture);
+    texture->updateTextureDesc(descriptor.desc);
+    return texture;
+}
+
 RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
 {
     auto rtMTL = new RenderTargetImpl();

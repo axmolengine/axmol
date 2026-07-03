@@ -26,9 +26,12 @@
 
 #pragma once
 
+#include <optional>
+
 #include "axmol/base/Event.h"
 #include "axmol/base/Object.h"
 #include "axmol/math/Math.h"
+#include "axmol/3d/Ray.h"
 
 /**
  * @addtogroup base
@@ -40,6 +43,15 @@ namespace ax
 
 class InputSystem;
 class Camera;
+class Node;
+
+struct AX_DLL PointerHitResult
+{
+    bool hit{false};
+    Vec3 worldPoint{Vec3::zero};
+    const Camera* camera{nullptr};
+    const Node* target{nullptr};
+};
 
 /** @class PointerEvent
  * @brief Pointer event.
@@ -255,11 +267,27 @@ public:
 
     const Camera* getCamera() const { return _camera; }
 
+    [[internal]] void setRay(const Ray& ray) { _ray = ray; }
+    const std::optional<Ray>& getRay() const { return _ray; }
+    const std::optional<Ray>& getPreviousRay() const { return _previousRay; }
+    bool hasRay() const { return _ray.has_value(); }
+    bool hasPreviousRay() const { return _previousRay.has_value(); }
+
+    [[internal]] void setHitResult(const Vec3& worldPoint, const Camera* camera, const Node* target);
+    [[internal]] void clearHitResult();
+    bool hasHitResult() const { return _hitResult.hit; }
+    const PointerHitResult& getHitResult() const { return _hitResult; }
+
 protected:
     void setPhase(InputPhase phase) { _phase = phase; }
 
     void setPrimary(bool bval) { _primary = bval; }
     const Camera* _camera{nullptr};
+    std::optional<Ray> _ray;
+    std::optional<Ray> _previousRay;
+    PointerHitResult _hitResult;
+    std::optional<Vec3> _previousHitPoint;
+    std::optional<Vec3> _startHitPoint;
     intptr_t _pointerId{-1};
     InputPhase _phase{InputPhase::PointerDown};
     PointerType _pointerType{PointerType::Mouse};

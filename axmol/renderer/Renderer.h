@@ -175,6 +175,9 @@ public:
     /** Renders into the RenderView all the queued `RenderCommand` objects */
     void render();
 
+    /** Submit currently encoded RHI commands without presenting the default surface. */
+    void submitCurrentFrameCommands(bool waitForCompletion);
+
     /** Cleans all `RenderCommand`s in the queue */
     void clean();
 

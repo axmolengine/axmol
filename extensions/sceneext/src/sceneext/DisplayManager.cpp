@@ -376,7 +376,7 @@ bool DisplayManager::containPoint(Vec2& point)
             sprite = child;
 
         if (nullptr != sprite)
-            ret = sprite->hitTest(point);
+            ret = sprite->getBoundingBox().containsPoint(point);
     }
     break;
 

@@ -43,6 +43,22 @@ TextureImpl::TextureImpl(const TextureDesc& desc)
     updateTextureDesc(desc);
 }
 
+TextureImpl::TextureImpl(GLuint texture, uint32_t width, uint32_t height)
+    : _nativeTexture(texture), _ownsNativeTexture(false)
+{
+    _desc.width        = static_cast<uint16_t>(width);
+    _desc.height       = static_cast<uint16_t>(height);
+    _desc.pixelFormat  = PixelFormat::RGBA8;
+    _desc.textureType  = TextureType::TEXTURE_2D;
+    _desc.arraySize    = 1;
+    _desc.mipLevels    = 1;
+    _desc.textureUsage = TextureUsage::RENDER_TARGET;
+
+    UtilsGL::toGLTypes(_desc.pixelFormat, _nativeDesc.internalFormat, _nativeDesc.format, _nativeDesc.type);
+    _nativeDesc.target = GL_TEXTURE_2D;
+    Texture::updateTextureDesc(_desc);
+}
+
 void TextureImpl::updateTextureDesc(const TextureDesc& desc)
 {
     assert(desc.textureType == rhi::TextureType::TEXTURE_2D || _desc.width == _desc.height);
@@ -63,12 +79,11 @@ void TextureImpl::updateTextureDesc(const TextureDesc& desc)
 
 TextureImpl::~TextureImpl()
 {
-    if (_nativeTexture)
+    if (_nativeTexture && _ownsNativeTexture)
     {
         __state->deleteTexture(_nativeTexture);
-        _nativeTexture = 0;
     }
-
+    _nativeTexture = 0;
     _nativeSampler = 0;
 }
 

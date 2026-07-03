@@ -296,6 +296,8 @@ protected:
     void handleZoom();
 
     Rect getViewRect();
+    bool getPointerLocalPoint(PointerEvent* event, Node* node, Vec2* outLocalPoint) const;
+    bool isPointerInView(PointerEvent* event, Vec2* outLocalPoint = nullptr);
 
     /**
      * scroll view delegate

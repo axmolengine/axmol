@@ -59,6 +59,7 @@ enum class PointerType
     Mouse,
     Touch,
     Pen,
+    Controller,
 };
 
 /**
@@ -155,6 +156,7 @@ public:
         ACCELERATION,
         FOCUS,
         GAME_CONTROLLER,
+        XR_INPUT,
         CUSTOM
     };
 

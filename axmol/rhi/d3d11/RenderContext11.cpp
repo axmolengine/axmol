@@ -714,6 +714,28 @@ void RenderContextImpl::endFrame()
 #endif
 }
 
+void RenderContextImpl::submitCurrentFrameCommands(bool waitForCompletion)
+{
+    if (waitForCompletion)
+    {
+        D3D11_QUERY_DESC desc{};
+        desc.Query = D3D11_QUERY_EVENT;
+
+        ID3D11Query* query = nullptr;
+        if (SUCCEEDED(_driver->getDevice()->CreateQuery(&desc, &query)) && query)
+        {
+            _d3d11Context->End(query);
+            _d3d11Context->Flush();
+            while (_d3d11Context->GetData(query, nullptr, 0, 0) == S_FALSE)
+                Sleep(0);
+            SafeRelease(query);
+            return;
+        }
+    }
+
+    _d3d11Context->Flush();
+}
+
 void RenderContextImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
 {
     PixelBufferDesc pbd;

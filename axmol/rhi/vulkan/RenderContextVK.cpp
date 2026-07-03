@@ -506,7 +506,7 @@ void RenderContextImpl::recreateSwapchain()
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
     {
         auto r = vkCreateSemaphore(_device, &sci, nullptr, &_presentCompleteSemaphores[i]);
-        VK_REQUIRE(VK_SUCCESS, "vkCreateSemaphore failed");
+        VK_REQUIRE(r, "vkCreateSemaphore failed");
     }
 
     // Sync screen size
@@ -572,7 +572,8 @@ bool RenderContextImpl::beginFrame()
 
     AXASSERT(_imageIndex < maxImageIndex, "swapchain image index out of range!");
 
-    _inFrame = true;
+    _inFrame                       = true;
+    _frameAcquireSemaphoreConsumed = false;
 
     _currentCmdBuffer = _commandBuffers[_frameIndex];
     vkResetCommandBuffer(_currentCmdBuffer, 0);
@@ -646,12 +647,12 @@ void RenderContextImpl::endFrame()
     VkSemaphore submissionSemaphore = _renderFinishedSemaphores[_imageIndex];
 
     VkSubmitInfo submitInfo{};
-    submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.commandBufferCount   = 1;
-    submitInfo.pCommandBuffers      = &_currentCmdBuffer;
-    submitInfo.waitSemaphoreCount   = 1;
-    submitInfo.pWaitSemaphores      = &_presentCompleteSemaphores[_frameIndex];
-    submitInfo.pWaitDstStageMask    = &waitDestinationStageMask;
+    submitInfo.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers    = &_currentCmdBuffer;
+    submitInfo.waitSemaphoreCount = _frameAcquireSemaphoreConsumed ? 0 : 1;
+    submitInfo.pWaitSemaphores    = _frameAcquireSemaphoreConsumed ? nullptr : &_presentCompleteSemaphores[_frameIndex];
+    submitInfo.pWaitDstStageMask  = _frameAcquireSemaphoreConsumed ? nullptr : &waitDestinationStageMask;
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores    = &submissionSemaphore;
 
@@ -684,6 +685,63 @@ void RenderContextImpl::endFrame()
     _driver->setFrameIndex(_frameIndex);
 
     _inFrame = false;
+}
+
+void RenderContextImpl::submitCurrentFrameCommands(bool /*waitForCompletion*/)
+{
+    if (!_inFrame || _currentCmdBuffer == VK_NULL_HANDLE)
+        return;
+
+    VkResult vr = vkEndCommandBuffer(_currentCmdBuffer);
+    AXASSERT(vr == VK_SUCCESS, "vkEndCommandBuffer failed");
+
+    UniformRingBuffer& ring = _uniformRings[_frameIndex];
+    if (!ring.isCoherent && ring.writeHead > 0)
+    {
+        VkMappedMemoryRange range{VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE};
+        range.memory = ring.memory;
+        range.offset = 0;
+        range.size   = ring.writeHead;
+        vkFlushMappedMemoryRanges(_device, 1, &range);
+    }
+
+    const VkPipelineStageFlags waitDestinationStageMask{VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+    auto& currentFence = _inFlightFences[_frameIndex];
+
+    VkSubmitInfo submitInfo{};
+    submitInfo.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers    = &_currentCmdBuffer;
+    if (!_frameAcquireSemaphoreConsumed)
+    {
+        submitInfo.waitSemaphoreCount = 1;
+        submitInfo.pWaitSemaphores    = &_presentCompleteSemaphores[_frameIndex];
+        submitInfo.pWaitDstStageMask  = &waitDestinationStageMask;
+    }
+
+    vr = vkQueueSubmit(_graphicsQueue, 1, &submitInfo, currentFence);
+    AXASSERT(vr == VK_SUCCESS, "vkQueueSubmit failed");
+
+    vkWaitForFences(_device, 1, &currentFence, VK_TRUE, UINT64_MAX);
+    _completedFenceValue = currentFence.fenceValue;
+    _driver->processDisposalQueue(_completedFenceValue);
+
+    vkResetFences(_device, 1, &currentFence);
+    currentFence.fenceValue = ++_frameFenceValue;
+
+    _frameAcquireSemaphoreConsumed = true;
+
+    vkResetCommandBuffer(_currentCmdBuffer, 0);
+    VkCommandBufferBeginInfo const binfo{
+        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+        .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
+    };
+    vr = vkBeginCommandBuffer(_currentCmdBuffer, &binfo);
+    AXASSERT(vr == VK_SUCCESS, "vkBeginCommandBuffer failed");
+
+    bitmask::set(_inFlightDynamicDirtyBits[_frameIndex], PIPELINE_ALL_DYNAMIC_BITS);
+    markExtendedDynamicStateDirty(PIPELINE_ALL_EXTENDED_DYNAMIC_BITS);
+    _boundPipeline = VK_NULL_HANDLE;
 }
 
 bool RenderContextImpl::handleSwapchainResult(VkResult result, SwapchainOp op, uint32_t frameIndex)
@@ -1004,6 +1062,7 @@ void RenderContextImpl::prepareDrawing()
     writes.reserve(descriptorState->uniformDescriptorCount + descriptorState->samplerDescriptorCount);
 
     _descriptorBufferInfos.clear();
+    _descriptorBufferInfos.reserve(descriptorState->uniformDescriptorCount);
 
     auto& cpuBuffer = _programState->getUniformBuffer();
     if (!cpuBuffer.empty())
@@ -1177,7 +1236,7 @@ void RenderContextImpl::doReadPixels(RenderTarget* rt, std::function<void(const 
 
     const uint32_t width  = colorDesc.width;
     const uint32_t height = colorDesc.height;
-    const VkFormat format = UtilsVK::toVKFormat(colorDesc.pixelFormat);
+    const VkFormat format = UtilsVK::toVkFormat(colorDesc.pixelFormat, colorDesc.colorSpace == ColorSpace::Srgb);
 
     // Basic stride for RGBA8
     const uint32_t pixelStride    = 4;

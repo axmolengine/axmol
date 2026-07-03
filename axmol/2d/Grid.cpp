@@ -31,15 +31,63 @@ THE SOFTWARE.
 #include "axmol/base/Utils.h"
 #include "axmol/scene/Node.h"
 #include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/RenderTexturePass.h"
 #include "axmol/renderer/Texture2D.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/rhi/RenderTarget.h"
 #include "axmol/rhi/DriverContext.h"
 #include "axmol/scene/Camera.h"
+#include "axmol/math/Vec4.h"
+
+#include <cmath>
 
 namespace ax
 {
+
+static constexpr float GRID_BLIT_ORDER = RT_PASS_END_ORDER - 1;
+
+static bool projectGridPointToCanvas(const Mat4& projection, const Vec3& point, const Vec2& size, Vec2& out)
+{
+    if (size.width <= 0.0f || size.height <= 0.0f)
+        return false;
+
+    Vec4 clip(point.x, point.y, point.z, 1.0f);
+    projection.transformVector(&clip);
+
+    if (std::abs(clip.w) <= 0.000001f)
+        return false;
+
+    const float ndcX = clip.x / clip.w;
+    const float ndcY = clip.y / clip.w;
+    out.set((ndcX + 1.0f) * 0.5f * size.width, (ndcY + 1.0f) * 0.5f * size.height);
+    return true;
+}
+
+static Vec2 projectGridTexCoordToCanvas(const Mat4& projection,
+                                        const Vec3& point,
+                                        const Vec2& size,
+                                        bool flipped,
+                                        const Vec2& fallbackUV)
+{
+    Vec2 projected;
+    if (!projectGridPointToCanvas(projection, point, size, projected))
+        return fallbackUV;
+
+    Vec2 uv(projected.x / size.width, projected.y / size.height);
+    if (flipped)
+        uv.y = 1.0f - uv.y;
+    return uv;
+}
+
+static Vec3 projectGridVertexToCanvas(const Mat4& projection, const Vec3& point, const Vec2& size)
+{
+    Vec2 projected;
+    if (projectGridPointToCanvas(projection, point, size, projected))
+        return Vec3(projected.x, projected.y, 0.0f);
+
+    return point;
+}
 // implementation of GridBase
 
 bool GridBase::initWithSize(const Vec2& gridSize)
@@ -157,46 +205,45 @@ void GridBase::setGridRect(const ax::Rect& rect)
 
 void GridBase::beforeDraw()
 {
-    Director* director = Director::getInstance();
+    AX_SAFE_RELEASE(_renderTarget);
+    _renderTarget = axdrv->createRenderTarget(_texture->getRHITexture());
 
-    auto* renderer     = director->getRenderer();
-    auto* groupCommand = renderer->getNextGroupCommand();
-    groupCommand->init(0);
-    renderer->addCommand(groupCommand);
-    renderer->pushGroup(groupCommand->getRenderQueueID());
+    if (!_renderTexturePass)
+    {
+        _renderTexturePass = RefPtr<RenderTexturePass>(RenderTexturePass::obtain(), tlx::adopt_object);
+        _renderTexturePass->setCameraOverrideEnabled(false);
+    }
 
-    auto beforeDrawCommandFunc = [director, renderer, this]() -> void {
-        Vec2 size = director->getCanvasSizeInPixels();
-        renderer->setViewport(0, 0, (unsigned int)size.width, (unsigned int)size.height);
+    _renderTexturePass->setTarget(_renderTarget);
+    _renderTexturePass->setViewport(
+        Viewport(0, 0, static_cast<int>(_texture->getWidth()), static_cast<int>(_texture->getHeight())));
+    _renderTexturePass->begin();
 
-        _oldRenderTarget = renderer->getRenderTarget();
-        AX_SAFE_RELEASE(_renderTarget);
-        _renderTarget = axdrv->createRenderTarget(_texture->getRHITexture());
-        renderer->setRenderTarget(_renderTarget);
-    };
-    renderer->addCallbackCommand(beforeDrawCommandFunc);
-
-    // since we use clearCommand, should call at here to avoid iterator damage
-    renderer->clear(TargetBufferFlags::COLOR, _clearColor, 1, 0, 0.0);
+    _renderTexturePass->clear(ClearFlag::COLOR, {.color = _clearColor, .depth = 1.0f, .stencil = 0});
 }
 
 void GridBase::afterDraw(ax::Node* /*target*/)
 {
     auto renderer = Director::getInstance()->getRenderer();
 
-    renderer->addCallbackCommand([renderer, this]() -> void {
-        const auto& vp = Camera::getDefaultViewport();
-        renderer->setViewport(vp.x, vp.y, vp.width, vp.height);
-        renderer->setRenderTarget(_oldRenderTarget);
-    });
-
-    renderer->popGroup();
+    if (_renderTexturePass && _renderTexturePass->isActive())
+        _renderTexturePass->end();
 
     renderer->addCallbackCommand([this]() -> void { beforeBlit(); });
 
     blit();
 
     renderer->addCallbackCommand([this]() -> void { afterBlit(); });
+}
+
+void GridBase::setScreenProjectionForBlit(const Mat4* projection, const Vec2& size)
+{
+    _screenProjectionForBlitEnabled = projection && size.width > 0.0f && size.height > 0.0f;
+    if (_screenProjectionForBlitEnabled)
+    {
+        _screenProjectionForBlit     = *projection;
+        _screenProjectionForBlitSize = size;
+    }
 }
 
 // implementation of Grid3D
@@ -305,9 +352,10 @@ void Grid3D::afterBlit()
 void Grid3D::blit()
 {
     updateVertexBuffer();
-    _drawCommand.init(0, _blendFunc);
+    _drawCommand.init(GRID_BLIT_ORDER, _blendFunc);
     Director::getInstance()->getRenderer()->addCommand(&_drawCommand);
-    ax::Mat4 projectionMat = Camera::getVisitingViewProjectionMatrix();
+    auto camera            = Camera::getVisitingCamera();
+    ax::Mat4 projectionMat = camera ? camera->getVisitingViewProjectionMatrix() : Mat4::identity;
     auto programState      = _drawCommand.unsafePS();
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
     programState->setTexture(_textureLocation, 0, _texture->getRHITexture());
@@ -446,12 +494,28 @@ void Grid3D::reuse()
 
 void Grid3D::updateVertexBuffer()
 {
-    size_t numOfPoints  = static_cast<size_t>((_gridSize.width + 1) * (_gridSize.height + 1));
-    auto tempVecPointer = (Vec3*)_vertices;
+    size_t numOfPoints          = static_cast<size_t>((_gridSize.width + 1) * (_gridSize.height + 1));
+    auto tempVecPointer         = (Vec3*)_vertices;
+    auto tempOriginalVecPointer = (Vec3*)_originalVertices;
+    auto tempTexPointer         = (Vec2*)_texCoordinates;
     for (size_t i = 0; i < numOfPoints; ++i)
     {
         auto offset = i * (sizeof(Vec3) + sizeof(Vec2));
-        memcpy((char*)_vertexBuffer + offset, &tempVecPointer[i], sizeof(Vec3));
+        if (_screenProjectionForBlitEnabled)
+        {
+            auto vertex =
+                projectGridVertexToCanvas(_screenProjectionForBlit, tempVecPointer[i], _screenProjectionForBlitSize);
+            auto texCoord =
+                projectGridTexCoordToCanvas(_screenProjectionForBlit, tempOriginalVecPointer[i],
+                                            _screenProjectionForBlitSize, _isTextureFlipped, tempTexPointer[i]);
+            memcpy((char*)_vertexBuffer + offset, &vertex, sizeof(Vec3));
+            memcpy((char*)_vertexBuffer + offset + sizeof(Vec3), &texCoord, sizeof(Vec2));
+        }
+        else
+        {
+            memcpy((char*)_vertexBuffer + offset, &tempVecPointer[i], sizeof(Vec3));
+            memcpy((char*)_vertexBuffer + offset + sizeof(Vec3), &tempTexPointer[i], sizeof(Vec2));
+        }
     }
     _drawCommand.updateVertexBuffer(_vertexBuffer,
                                     (unsigned int)(numOfPoints * sizeof(Vec3) + numOfPoints * sizeof(Vec2)));
@@ -561,9 +625,10 @@ TiledGrid3D* TiledGrid3D::create(const Vec2& gridSize, Texture2D* texture, bool 
 void TiledGrid3D::blit()
 {
     updateVertexBuffer();
-    _drawCommand.init(0, _blendFunc);
+    _drawCommand.init(GRID_BLIT_ORDER, _blendFunc);
     Director::getInstance()->getRenderer()->addCommand(&_drawCommand);
-    ax::Mat4 projectionMat = Camera::getVisitingViewProjectionMatrix();
+    auto camera            = Camera::getVisitingCamera();
+    ax::Mat4 projectionMat = camera ? camera->getVisitingViewProjectionMatrix() : Mat4::identity;
     auto programState      = _drawCommand.unsafePS();
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
     programState->setTexture(_textureLocation, 0, _texture->getRHITexture());
@@ -700,13 +765,29 @@ void TiledGrid3D::reuse()
 
 void TiledGrid3D::updateVertexBuffer()
 {
-    size_t gradSize     = static_cast<size_t>(_gridSize.width * _gridSize.height);
-    size_t numOfPoints  = gradSize * 4;
-    auto tempVecPointer = (Vec3*)_vertices;
+    size_t gradSize             = static_cast<size_t>(_gridSize.width * _gridSize.height);
+    size_t numOfPoints          = gradSize * 4;
+    auto tempVecPointer         = (Vec3*)_vertices;
+    auto tempOriginalVecPointer = (Vec3*)_originalVertices;
+    auto tempTexPointer         = (Vec2*)_texCoordinates;
     for (size_t i = 0; i < numOfPoints; ++i)
     {
         auto offset = i * (sizeof(Vec3) + sizeof(Vec2));
-        memcpy((char*)_vertexBuffer + offset, &tempVecPointer[i], sizeof(Vec3));
+        if (_screenProjectionForBlitEnabled)
+        {
+            auto vertex =
+                projectGridVertexToCanvas(_screenProjectionForBlit, tempVecPointer[i], _screenProjectionForBlitSize);
+            auto texCoord =
+                projectGridTexCoordToCanvas(_screenProjectionForBlit, tempOriginalVecPointer[i],
+                                            _screenProjectionForBlitSize, _isTextureFlipped, tempTexPointer[i]);
+            memcpy((char*)_vertexBuffer + offset, &vertex, sizeof(Vec3));
+            memcpy((char*)_vertexBuffer + offset + sizeof(Vec3), &texCoord, sizeof(Vec2));
+        }
+        else
+        {
+            memcpy((char*)_vertexBuffer + offset, &tempVecPointer[i], sizeof(Vec3));
+            memcpy((char*)_vertexBuffer + offset + sizeof(Vec3), &tempTexPointer[i], sizeof(Vec2));
+        }
     }
     _drawCommand.updateVertexBuffer(_vertexBuffer,
                                     (unsigned int)(numOfPoints * sizeof(Vec3) + numOfPoints * sizeof(Vec2)));

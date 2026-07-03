@@ -1044,12 +1044,22 @@ bool Widget::isPointerInside(PointerEvent* event, const Camera* camera, Vec3* ou
     if (!isVisible() || !isEnabled() || !isAncestorsEnabled() || !isAncestorsVisible(this))
         return false;
 
-    const Vec2 pt = event->getLocation();
+    if (event->hasRay())
+    {
+        if (!Node::onPointerHitTest(event, camera, outHitPoint))
+            return false;
+    }
+    else
+    {
+        const Vec2 pt = event->getLocation();
+        if (!hitTestSelf(pt, camera, outHitPoint))
+            return false;
 
-    if (!hitTestSelf(pt, camera, outHitPoint))
-        return false;
+        if (outHitPoint)
+            getNodeToWorldTransform().transformPoint(outHitPoint);
+    }
 
-    if (!isClippingParentContainsPoint(pt, camera))
+    if (!isClippingParentContainsPoint(event, camera))
         return false;
 
     return true;
@@ -1062,10 +1072,12 @@ bool Widget::hitTestSelf(const Vec2& pt, const Camera* camera, Vec3* p) const
 
     Rect rect;
     rect.size = getContentSize();
-    return camera->isWorldPointInRect(pt, getWorldToNodeTransform(), rect, p);
+    bool ret  = camera->isWorldPointInRect(pt, getWorldToNodeTransform(), rect, p);
+
+    return ret;
 }
 
-bool Widget::isClippingParentContainsPoint(const Vec2& pt, const Camera* camera)
+bool Widget::isClippingParentContainsPoint(PointerEvent* event, const Camera* camera)
 {
     _affectByClipping      = false;
     Node* parent           = getParent();
@@ -1093,9 +1105,19 @@ bool Widget::isClippingParentContainsPoint(const Vec2& pt, const Camera* camera)
     if (!clippingParent || !camera)
         return false;
 
-    if (clippingParent->hitTestSelf(pt, camera, nullptr))
+    bool contains = false;
+    if (event && event->hasRay())
     {
-        return clippingParent->isClippingParentContainsPoint(pt, camera);
+        contains = clippingParent->Node::onPointerHitTest(event, camera, nullptr);
+    }
+    else if (event)
+    {
+        contains = clippingParent->hitTestSelf(event->getLocation(), camera, nullptr);
+    }
+
+    if (contains)
+    {
+        return clippingParent->isClippingParentContainsPoint(event, camera);
     }
 
     return false;

@@ -57,6 +57,14 @@ public:
      * @param desc Specifies the texture description.
      */
     TextureImpl(const TextureDesc& desc);
+    /**
+     * Wraps an existing OpenGL texture object.
+     * The caller retains ownership; this instance will not delete the texture on destruction.
+     * @param texture The native GL texture handle.
+     * @param width   Width of the texture in pixels.
+     * @param height  Height of the texture in pixels.
+     */
+    TextureImpl(GLuint texture, uint32_t width, uint32_t height);
     ~TextureImpl() override;
 
     /**
@@ -178,6 +186,7 @@ private:
 
     // Bitmask to track allocated mipmap levels for texture array (up to 32 levels)
     uint32_t _allocatedLevelsBits{0};
+    bool _ownsNativeTexture{true};
 };
 
 // end of _opengl group

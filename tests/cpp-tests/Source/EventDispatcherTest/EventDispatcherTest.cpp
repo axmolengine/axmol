@@ -160,6 +160,7 @@ EventDispatcherTests::EventDispatcherTests()
     ADD_TEST_CASE(WindowEventsTest);
     ADD_TEST_CASE(Issue8194);
     ADD_TEST_CASE(Issue9898)
+    ADD_TEST_CASE(XRInputEventTest);
 }
 
 std::string EventDispatcherTestDemo::title() const
@@ -1887,4 +1888,126 @@ std::string Issue9898::title() const
 std::string Issue9898::subtitle() const
 {
     return "Should not crash if dispatch event after remove\n event listener in callback";
+}
+
+// XRInputEventTest
+
+namespace
+{
+const char* xrHandName(XRInputEvent::Hand hand)
+{
+    switch (hand)
+    {
+    case XRInputEvent::Hand::Left:
+        return "Left";
+    case XRInputEvent::Hand::Right:
+        return "Right";
+    }
+    return "?";
+}
+
+const char* xrInputName(XRInputEvent::Input input)
+{
+    switch (input)
+    {
+    case XRInputEvent::Input::Trigger:
+        return "Trigger";
+    case XRInputEvent::Input::Grip:
+        return "Grip";
+    case XRInputEvent::Input::Thumbstick:
+        return "Thumbstick";
+    case XRInputEvent::Input::ThumbstickClick:
+        return "ThumbstickClick";
+    case XRInputEvent::Input::Menu:
+        return "Menu";
+    case XRInputEvent::Input::A:
+        return "A";
+    case XRInputEvent::Input::B:
+        return "B";
+    case XRInputEvent::Input::X:
+        return "X";
+    case XRInputEvent::Input::Y:
+        return "Y";
+    case XRInputEvent::Input::AimPose:
+        return "AimPose";
+    case XRInputEvent::Input::GripPose:
+        return "GripPose";
+    }
+    return "?";
+}
+
+const char* xrPhaseName(XRInputEvent::Phase phase)
+{
+    switch (phase)
+    {
+    case XRInputEvent::Phase::Pressed:
+        return "Pressed";
+    case XRInputEvent::Phase::Released:
+        return "Released";
+    case XRInputEvent::Phase::Changed:
+        return "Changed";
+    case XRInputEvent::Phase::Active:
+        return "Active";
+    case XRInputEvent::Phase::Inactive:
+        return "Inactive";
+    }
+    return "?";
+}
+}  // namespace
+
+XRInputEventTest::XRInputEventTest() : _xrListener(nullptr), _statusLabel(nullptr)
+{
+    auto origin = Director::getInstance()->getVisibleOrigin();
+    auto size   = Director::getInstance()->getVisibleSize();
+
+    _statusLabel = Label::createWithSystemFont("Waiting for XR input events...", "", 18);
+    _statusLabel->setAnchorPoint(Vec2(0.0f, 1.0f));
+    _statusLabel->setPosition(origin + Vec2(10.0f, size.height - 60.0f));
+    _statusLabel->setWidth(size.width - 20.0f);
+    addChild(_statusLabel);
+
+    _xrListener = XRInputEventListener::create();
+
+    _xrListener->onButton = [this](XRInputEvent* event) {
+        auto msg = fmt::format("[Button] {} {} {} value={:.2f}", xrHandName(event->getHand()),
+                               xrInputName(event->getInput()), xrPhaseName(event->getPhase()), event->getValue());
+        AXLOGD("{}", msg);
+        _statusLabel->setString(msg);
+    };
+
+    _xrListener->onAxis = [this](XRInputEvent* event) {
+        auto msg =
+            fmt::format("[Axis] {} {} axis=({:.2f},{:.2f}) value={:.2f}", xrHandName(event->getHand()),
+                        xrInputName(event->getInput()), event->getAxis().x, event->getAxis().y, event->getValue());
+        AXLOGD("{}", msg);
+        _statusLabel->setString(msg);
+    };
+
+    // _xrListener->onPose = [this](XRInputEvent* event) {
+    //     auto msg = fmt::format("[Pose] {} {} valid={}", xrHandName(event->getHand()),
+    //                            xrInputName(event->getInput()), event->isPoseValid());
+    //     AXLOGD("{}", msg);
+    //     _statusLabel->setString(msg);
+    // };
+
+    _eventDispatcher->addEventListenerWithFixedPriority(_xrListener, 1);
+}
+
+XRInputEventTest::~XRInputEventTest()
+{
+    if (_xrListener)
+    {
+        _eventDispatcher->removeEventListener(_xrListener);
+        _xrListener = nullptr;
+    }
+}
+
+std::string XRInputEventTest::title() const
+{
+    return "XR Input Event Test";
+}
+
+std::string XRInputEventTest::subtitle() const
+{
+    return "Press XR controller buttons / move sticks to see events in log and on screen.";
 }

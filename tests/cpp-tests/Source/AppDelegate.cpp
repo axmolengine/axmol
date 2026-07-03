@@ -53,6 +53,10 @@ void AppDelegate::initContextAttrs()
     // refer: https://developer.android.com/tools/releases/platforms
     DriverContext::setVulkanMinAndroidApiLevel(31);
 
+#ifdef AX_ENABLE_OPENXR
+    DriverContext::setOpenXRCompatible(true);
+#endif
+
     // Overrides any command-line driver preference (default is Auto).
     // DriverContext::setDriverPreference(DriverPreference::Auto);
 

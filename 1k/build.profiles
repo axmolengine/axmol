@@ -99,4 +99,5 @@ kcp=2.1.1
 lz4=v1.10.0
 sample-assets=master
 live2d-core=5.5
+openxr=release-1.1.60
 # --- endregion

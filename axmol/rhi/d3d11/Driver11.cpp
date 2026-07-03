@@ -309,6 +309,17 @@ Texture* DriverImpl::createTexture(const TextureDesc& descriptor, std::optional<
     return new TextureImpl(_device, descriptor);
 }
 
+Texture* DriverImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
+{
+    auto nativeTexture = static_cast<ID3D11Texture2D*>(descriptor.nativeTexture.ptr);
+    if (!nativeTexture)
+        return nullptr;
+
+    auto texture = new TextureImpl(_device, nativeTexture);
+    texture->updateTextureDesc(descriptor.desc);
+    return texture;
+}
+
 RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthAttachment)
 {
     auto renderTarget = new RenderTargetImpl(this, false);

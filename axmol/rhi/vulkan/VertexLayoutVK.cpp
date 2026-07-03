@@ -29,7 +29,7 @@ namespace ax::rhi::vk
 {
 
 // Map VertexFormat to VkFormat
-static VkFormat toVkFormat(VertexFormat format, bool unorm)
+static VkFormat toVkVertexFormat(VertexFormat format, bool unorm)
 {
     switch (format)
     {
@@ -93,7 +93,7 @@ VertexLayoutImpl::VertexLayoutImpl(VertexLayoutDesc&& desc) : VertexLayout(std::
             VkVertexInputAttributeDescription attr{};
             attr.location = inputDesc.index;
             attr.binding  = binding.binding;
-            attr.format   = toVkFormat(inputDesc.format, inputDesc.needToBeNormallized);
+            attr.format   = toVkVertexFormat(inputDesc.format, inputDesc.needToBeNormallized);
             attr.offset   = inputDesc.offset;
             _attributes.push_back(attr);
         }

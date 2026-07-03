@@ -159,8 +159,21 @@ public:
         return (_vkUsageFlags & (VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT)) != 0;
     }
 
-protected:
+    VkImageLayout getRenderTargetFinalLayout() const { return _rtFinalLayout; }
+
+    /**
+     * Wraps an existing VkImage (e.g. from OpenXR swapchain).
+     */
     TextureImpl(DriverImpl*, VkImage existingImage, VkImageView existingImageView, VkImageUsageFlags usage);
+    TextureImpl(DriverImpl*,
+                VkImage existingImage,
+                VkImageView existingImageView,
+                VkImageUsageFlags usage,
+                const TextureDesc& desc,
+                VkImageLayout initialLayout,
+                VkImageLayout rtFinalLayout);
+
+protected:
     void ensureNativeTexture();
     void generateMipmaps(VkCommandBuffer cmd);
 
@@ -173,7 +186,9 @@ protected:
     uint64_t _lastFenceValue{0};
 
     VkImageUsageFlags _vkUsageFlags{0};
+    VkImageLayout _rtFinalLayout{VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL};
     bool _ownResources{false};
+    bool _ownImageView{false};
 };
 
 /** @} */

@@ -365,11 +365,10 @@ bool Scene3DTestScene::init()
 
         ////////////////////////////////////////////////////////////////////////
         // add touch event callback
-        auto listener              = PointerEventListener::create();
-        listener->onPointerHitTest = [](PointerEvent*, const Camera*, Vec3*) { return true; };
-        listener->onPointerDown    = AX_CALLBACK_1(Scene3DTestScene::onPointerDown, this);
-        listener->onPointerUp      = AX_CALLBACK_1(Scene3DTestScene::onPointerUp, this);
-        _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+        auto listener           = PointerEventListener::create();
+        listener->onPointerDown = AX_CALLBACK_1(Scene3DTestScene::onPointerDown, this);
+        listener->onPointerUp   = AX_CALLBACK_1(Scene3DTestScene::onPointerUp, this);
+        _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, _terrain);
 
         scheduleUpdate();
 
@@ -887,36 +886,26 @@ bool Scene3DTestScene::onPointerDown(ax::PointerEvent* event)
 
 void Scene3DTestScene::onPointerUp(ax::PointerEvent* event)
 {
-    // 1. Get the 2D world coordinate on the Z=0 plane directly from the rectified Touch API
-    auto screenLocation = event->getScreenLocation();
-    auto camera         = _gameCameras[CAMERA_WORLD_3D_SCENE];
-    if (!camera || !camera->isVisible() || !_terrain)
+    if (!_player)
     {
         return;
     }
 
-    if (_player)
+    if (!event->hasHitResult())
     {
-        auto ray = camera->screenToRay(screenLocation);
-
-        // 4. Perform the pure 3D ray-terrain intersection check (unchanged)
-        Vec3 collisionPoint;
-        bool isInTerrain = _terrain->getIntersectionPoint(ray, collisionPoint);
-        if (!isInTerrain)
-        {
-            _player->idle();
-        }
-        else
-        {
-            auto dir = collisionPoint - _player->getPosition3D();
-            dir.y    = 0;
-            dir.normalize();
-            _player->_headingAngle = -1 * acos(dir.dot(Vec3(0, 0, -1)));
-            Vec3::cross(dir, Vec3(0, 0, -1), &_player->_headingAxis);
-            _player->_targetPos = collisionPoint;
-            _player->forward();
-        }
+        _player->idle();
+        event->stopPropagation();
+        return;
     }
+
+    const Vec3 collisionPoint = event->getHitResult().worldPoint;
+    auto dir                  = collisionPoint - _player->getPosition3D();
+    dir.y                     = 0;
+    dir.normalize();
+    _player->_headingAngle = -1 * acos(dir.dot(Vec3(0, 0, -1)));
+    Vec3::cross(dir, Vec3(0, 0, -1), &_player->_headingAxis);
+    _player->_targetPos = collisionPoint;
+    _player->forward();
     event->stopPropagation();
 }
 

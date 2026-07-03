@@ -37,7 +37,7 @@ THE SOFTWARE.
 #include "axmol/base/CustomEventListener.h"
 #include "axmol/base/text_utils.h"
 #include "axmol/renderer/Renderer.h"
-#include "axmol/scene/SceneRenderer.h"
+#include "axmol/scene/SceneCompositor.h"
 
 #if defined(AX_ENABLE_PHYSICS_2D)
 #    include "axmol/physics/2d/PhysicsWorld2D.h"

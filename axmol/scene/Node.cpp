@@ -653,13 +653,6 @@ void Node::setContentSize(const Vec2& size)
     }
 }
 
-bool Node::hitTest(const Vec2& worldPoint) const
-{
-    auto p  = this->convertToNodeSpace(worldPoint);
-    auto& s = this->getContentSize();
-    return Rect{0.f, 0.f, s.width, s.height}.containsPoint(p);
-}
-
 // isRunning getter
 bool Node::isRunning() const
 {
@@ -2263,7 +2256,36 @@ bool Node::onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* out
     Rect rect;
     rect.size = getContentSize();
 
-    return camera->isWorldPointInRect(event->getLocation(), getWorldToNodeTransform(), rect, outHitPoint);
+    auto worldTransform = getNodeToWorldTransform();
+
+    if (event->hasRay())
+    {
+        // VR controller ray: transform ray into node's local space, intersect with z=0 plane
+        const auto& ray = event->getRay().value();
+        Ray localRay(ray);
+        localRay.transform(getWorldToNodeTransform());
+
+        if (localRay.direction.z == 0.0f)
+            return false;
+
+        // t = -origin.z / direction.z  (intersection with z=0 plane)
+        float t = -localRay.origin.z / localRay.direction.z;
+        if (t < 0.0f)
+            return false;
+
+        Vec3 hitPoint = localRay.origin + t * localRay.direction;
+        if (outHitPoint)
+            worldTransform.transformPoint(hitPoint, outHitPoint);
+
+        return rect.containsPoint(Vec2(hitPoint.x, hitPoint.y));
+    }
+
+    bool ret = camera->isWorldPointInRect(event->getLocation(), getWorldToNodeTransform(), rect, outHitPoint);
+
+    if (ret && outHitPoint)
+        worldTransform.transformPoint(outHitPoint);
+
+    return ret;
 }
 
 }  // namespace ax

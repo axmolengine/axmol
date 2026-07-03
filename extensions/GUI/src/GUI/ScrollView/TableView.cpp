@@ -598,9 +598,7 @@ void TableView::onPointerUp(PointerEvent* pTouch)
 
     if (_touchedCell)
     {
-        Rect frame = this->getViewRect();
-
-        if (frame.containsPoint(pTouch->getLocation()) && _tableViewDelegate != nullptr)
+        if (isPointerInView(pTouch) && _tableViewDelegate != nullptr)
         {
             _tableViewDelegate->tableCellUnhighlight(this, _touchedCell);
             _tableViewDelegate->tableCellTouched(this, _touchedCell);
@@ -632,16 +630,22 @@ bool TableView::onPointerDown(PointerEvent* pTouch)
 
     if (_touches.size() == 1)
     {
-        Vec2 point = this->getContainer()->convertPointerToNodeSpace(pTouch);
-
-        ssize_t index = this->_indexFromOffset(point);
-        if (index == AX_INVALID_INDEX)
+        Vec2 point;
+        if (!getPointerLocalPoint(pTouch, this->getContainer(), &point))
         {
             _touchedCell = nullptr;
         }
         else
         {
-            _touchedCell = this->cellAtIndex(index);
+            ssize_t index = this->_indexFromOffset(point);
+            if (index == AX_INVALID_INDEX)
+            {
+                _touchedCell = nullptr;
+            }
+            else
+            {
+                _touchedCell = this->cellAtIndex(index);
+            }
         }
 
         if (_touchedCell && _tableViewDelegate != nullptr)

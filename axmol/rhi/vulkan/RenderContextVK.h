@@ -124,6 +124,7 @@ public:
 
     void endRenderPass() override;
     void endFrame() override;
+    void submitCurrentFrameCommands(bool waitForCompletion) override;
 
     void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback) override;
 
@@ -252,11 +253,12 @@ private:
 
     ExtendedDynamicState _extendedDynamicState{};
 
-    tlx::inlined_vector<VkDescriptorBufferInfo, 2> _descriptorBufferInfos;
+    tlx::pod_vector<VkDescriptorBufferInfo> _descriptorBufferInfos;
 
     bool _swapchainDirty{false};
     bool _inFrame{false};
     bool _suboptimal{false};
+    bool _frameAcquireSemaphoreConsumed{false};
 
     VkResult _lastError{VK_SUCCESS};
 };

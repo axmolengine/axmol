@@ -39,17 +39,18 @@ class RenderViewCore;
 class Director;
 
 /**
- * @brief Renders a scene graph into a render target or the screen.
+ * @brief Engine-side scene composition policy.
  *
- * SceneRenderer is the core abstraction for traversing and drawing a Scene.
- * The base implementation iterates all cameras in the scene, applies their
- * transforms, and issues draw commands to the Renderer.
+ * SceneCompositor is the Director-owned strategy for frame-bound scene work.
+ * The base implementation performs frame preparation through the active RenderView,
+ * then iterates all cameras in the scene, applies their transforms, and issues
+ * draw commands to the Renderer.
  *
  * Subclassing:
- * - Override `renderScene` to inject custom rendering logic.
- *   For example, VR renderers render each eye into an offscreen texture
- *   and apply distortion, while still relying on the base implementation
- *   for per-camera traversal.
+ * - Override `renderScene` to inject custom composition logic.
+ *   For example, VR compositors can render each eye into a dedicated render
+ *   target while still relying on the base implementation for per-camera
+ *   traversal.
  * - Override `onRenderViewChanged` to recreate framebuffer-sized resources
  *   when the render view is created or resized.
  * - Override `setScissorRect` / `getScissorRect` to apply custom
@@ -60,15 +61,30 @@ class Director;
  *
  * @since v3.0
  */
-class AX_DLL SceneRenderer
+class AX_DLL SceneCompositor
 {
 public:
-    SceneRenderer();
-    virtual ~SceneRenderer() = default;
+    SceneCompositor();
+    virtual ~SceneCompositor() = default;
 
-    /** Renders the scene with an optional stereo eye transform.
+    /** Returns whether this compositor is currently presenting a VR scene.
+     *  Base returns false
+     */
+    virtual bool isVRActive() const { return false; }
+
+    /**
+     * Called before scheduler update.
+     * Base implementation forwards to the active RenderView::pollEvents() if available,
+     * otherwise performs no operation.
+     *
+     * Custom compositors can override this to poll runtime events, wait for frame timing,
+     * or dispatch input before game logic runs.
+     */
+    virtual void prepareFrame();
+
+    /** Composes the scene for the current frame.
      *  @param renderer The Renderer to submit draw commands into.
-     *  @param scene    The scene graph to render.
+     *  @param scene    The scene graph to traverse and compose.
      */
     virtual void renderScene(Renderer* renderer, Scene* scene);
 
@@ -82,7 +98,7 @@ public:
      *  Base implementation delegates to Renderer::setScissorRect.
      */
     virtual void setScissorRect(float x, float y, float w, float h);
-    /** Returns the last scissor rect set on this renderer.
+    /** Returns the last scissor rect set through this compositor.
      *  Base implementation delegates to Renderer::getScissorRect.
      */
     virtual const ScissorRect& getScissorRect() const;

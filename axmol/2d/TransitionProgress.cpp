@@ -79,7 +79,7 @@ void TransitionProgress::onEnter()
     sprite->setAnchorPoint(Vec2(0.5f, 0.5f));
 
     // render outScene to its texturebuffer
-    auto camera = Camera::createCanvasOrthographic(-1024, 1024);
+    auto camera = Camera::createOrthographicView(_director->getCanvasSize(), -1024, 1024);
 
     {
         RefPtr<RenderTexturePass> pass(RenderTexturePass::obtain(texture), tlx::adopt_object);

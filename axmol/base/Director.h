@@ -58,6 +58,7 @@ namespace ax
  */
 
 /* Forward declarations. */
+class Label;
 class LabelAtlas;
 class DirectorDelegate;
 class Node;
@@ -69,7 +70,7 @@ class CustomEventListener;
 class TextureCache;
 class Renderer;
 class Camera;
-class SceneRenderer;
+class SceneCompositor;
 class Application;
 class ApplicationCore;
 class PoolManager;
@@ -500,20 +501,7 @@ public:
      */
     Renderer* getRenderer() const { return _renderer; }
 
-    SceneRenderer* getSceneRenderer() const { return _sceneRenderer.get(); }
-
     Camera* getOffscreenCamera();
-
-    /** Replaces the active scene renderer.
-     *  Pass nullptr to restore the default SceneRenderer.
-     *  The new renderer's onRenderViewChanged is called immediately if a render view exists.
-     *  The previous renderer is destroyed synchronously.
-     *  @param impl  New renderer, or nullptr for default.
-     *  @note The default implementation renders all cameras in the scene.
-     *        A VR renderer (VRGenericRenderer) renders each eye into an
-     *        offscreen texture and applies barrel distortion.
-     */
-    void setSceneRenderer(std::unique_ptr<SceneRenderer>&& impl);
 
 #ifdef AX_ENABLE_CONSOLE
     /** Returns the Console associated with this director.
@@ -635,6 +623,9 @@ protected:
     void getFPSImageData(unsigned char** datapointer, ssize_t* length);
 #endif
 
+    /** Shows VR mode active indicator when a VR scene compositor is active. */
+    void showVRModeIndicator();
+
     /** calculates delta time since last time it was called */
     void calculateDeltaTime();
 
@@ -694,6 +685,7 @@ protected:
     LabelAtlas* _FPSLabel           = nullptr;
     LabelAtlas* _drawnBatchesLabel  = nullptr;
     LabelAtlas* _drawnVerticesLabel = nullptr;
+    Label* _VRModeLabel             = nullptr;
 
     /** Whether or not the Director is paused */
     bool _paused = false;
@@ -741,8 +733,6 @@ protected:
 
     Camera* _overlayCamera   = nullptr;  // retained
     Camera* _offscreenCamera = nullptr;  // retained
-
-    std::unique_ptr<SceneRenderer> _sceneRenderer;
 
     Color _clearColor = {0, 0, 0, 1};
 #ifdef AX_ENABLE_CONSOLE

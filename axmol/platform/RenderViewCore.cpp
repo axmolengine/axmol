@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/InputSystem.h"
 #include "axmol/scene/Camera.h"
+#include "axmol/scene/SceneCompositor.h"
 #include "axmol/renderer/Renderer.h"
 
 namespace ax
@@ -49,9 +50,16 @@ RenderViewCore::RenderViewCore()
     , _designResolutionSize(0, 0)
     , _viewScale(Vec2::one)
     , _resolutionPolicy(ResolutionPolicy::UNKNOWN)
-{}
+{
+    _sceneCompositor = std::make_unique<SceneCompositor>();
+}
 
 RenderViewCore::~RenderViewCore() {}
+
+void RenderViewCore::prepareFrame()
+{
+    _sceneCompositor->prepareFrame();
+}
 
 void RenderViewCore::pollEvents() {}
 
@@ -256,6 +264,26 @@ const Rect& RenderViewCore::getViewportRect() const
     return _viewportRect;
 }
 
+bool RenderViewCore::isVRActive() const
+{
+    return _sceneCompositor ? _sceneCompositor->isVRActive() : false;
+}
+
+void RenderViewCore::setSceneCompositor(std::unique_ptr<SceneCompositor>&& impl)
+{
+    if (impl)
+        _sceneCompositor = std::move(impl);
+    else
+        _sceneCompositor = std::make_unique<SceneCompositor>();
+
+    _sceneCompositor->onRenderViewChanged(this);
+}
+
+void RenderViewCore::renderScene(Renderer* renderer, Scene* scene)
+{
+    _sceneCompositor->renderScene(renderer, scene);
+}
+
 void RenderViewCore::onSurfaceResized()
 {
     int screenWidth  = static_cast<uint32_t>(_renderSize.width);
@@ -266,17 +294,22 @@ void RenderViewCore::onSurfaceResized()
     auto renderer = director->getRenderer();
     if (renderer)
         renderer->updateSurface(getNativeDisplay(), screenWidth, screenHeight);
-    director->getSceneRenderer()->onRenderViewChanged(this);
+    _sceneCompositor->onRenderViewChanged(this);
 }
 
 void RenderViewCore::setScissorRect(float x, float y, float w, float h)
 {
-    Director::getInstance()->getSceneRenderer()->setScissorRect(x, y, w, h);
+    _sceneCompositor->setScissorRect(x, y, w, h);
 }
 
 const ScissorRect& RenderViewCore::getScissorRect() const
 {
-    return Director::getInstance()->getSceneRenderer()->getScissorRect();
+    return _sceneCompositor->getScissorRect();
+}
+
+void RenderViewCore::onGfxDestory()
+{
+    _sceneCompositor.reset();
 }
 
 }  // namespace ax

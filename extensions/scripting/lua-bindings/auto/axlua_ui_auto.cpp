@@ -2164,10 +2164,10 @@ int lua_ax_ui_Widget_isClippingParentContainsPoint(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2)
     {
-        ax::Vec2 arg0;
+        ax::PointerEvent* arg0;
         const ax::Camera* arg1;
 
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.Widget:isClippingParentContainsPoint");
+        ok &= luaval_to_object<ax::PointerEvent>(tolua_S, 2, "ax.PointerEvent",&arg0, "axui.Widget:isClippingParentContainsPoint");
 
         ok &= luaval_to_object<const ax::Camera>(tolua_S, 3, "ax.Camera",&arg1, "axui.Widget:isClippingParentContainsPoint");
         if(!ok)
@@ -24972,62 +24972,6 @@ int lua_ax_ui_InputField_setTouchAreaEnabled(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_ui_InputField_onPointerHitTest(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::ui::InputField* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axui.InputField",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::ui::InputField*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_InputField_onPointerHitTest'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
-    {
-        ax::PointerEvent* arg0;
-        const ax::Camera* arg1;
-        ax::Vec3* arg2;
-
-        ok &= luaval_to_object<ax::PointerEvent>(tolua_S, 2, "ax.PointerEvent",&arg0, "axui.InputField:onPointerHitTest");
-
-        ok &= luaval_to_object<const ax::Camera>(tolua_S, 3, "ax.Camera",&arg1, "axui.InputField:onPointerHitTest");
-
-        ok &= luaval_to_object<ax::Vec3>(tolua_S, 4, "ax.Vec3",&arg2, "axui.InputField:onPointerHitTest");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_InputField_onPointerHitTest'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->onPointerHitTest(arg0, arg1, arg2);
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.InputField:onPointerHitTest",argc, 3);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_InputField_onPointerHitTest'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_ui_InputField_hitTestSelf(lua_State* tolua_S)
 {
     int argc = 0;
@@ -25551,7 +25495,6 @@ int lua_register_ax_ui_InputField(lua_State* tolua_S)
         tolua_function(tolua_S,"setTouchAreaSize",lua_ax_ui_InputField_setTouchAreaSize);
         tolua_function(tolua_S,"getTouchAreaSize",lua_ax_ui_InputField_getTouchAreaSize);
         tolua_function(tolua_S,"setTouchAreaEnabled",lua_ax_ui_InputField_setTouchAreaEnabled);
-        tolua_function(tolua_S,"onPointerHitTest",lua_ax_ui_InputField_onPointerHitTest);
         tolua_function(tolua_S,"hitTestSelf",lua_ax_ui_InputField_hitTestSelf);
         tolua_function(tolua_S,"setCharLimit",lua_ax_ui_InputField_setCharLimit);
         tolua_function(tolua_S,"getCharLimit",lua_ax_ui_InputField_getCharLimit);

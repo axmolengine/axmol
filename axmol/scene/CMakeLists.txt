@@ -5,7 +5,7 @@ set(_AX_SCENE_HEADER
   scene/Component.h
   scene/Node.h
   scene/Scene.h
-  scene/SceneRenderer.h
+  scene/SceneCompositor.h
 )
 
 set(_AX_SCENE_SRC
@@ -15,5 +15,6 @@ set(_AX_SCENE_SRC
   scene/Component.cpp
   scene/Node.cpp
   scene/Scene.cpp
-  scene/SceneRenderer.cpp
+  scene/SceneCompositor.cpp
 )
+

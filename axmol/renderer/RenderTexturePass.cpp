@@ -32,10 +32,6 @@ THE SOFTWARE.
 namespace ax
 {
 
-static constexpr float RT_PASS_BEGIN_ORDER = -std::numeric_limits<float>::max();
-static constexpr float RT_PASS_CLEAR_ORDER = -std::numeric_limits<float>::max() * 0.5f;
-static constexpr float RT_PASS_END_ORDER   = std::numeric_limits<float>::max();
-
 RenderTexturePass* RenderTexturePass::obtain(RenderTexture* rt)
 {
     RenderTexturePass* pass = new RenderTexturePass(rt);
@@ -47,7 +43,8 @@ RenderTexturePass::RenderTexturePass() : _renderer(Director::getInstance()->getR
 
 RenderTexturePass::RenderTexturePass(RenderTexture* renderTexture) : RenderTexturePass()
 {
-    setTarget(renderTexture);
+    if (renderTexture)
+        setTarget(renderTexture);
 }
 
 RenderTexturePass::~RenderTexturePass()
@@ -58,21 +55,31 @@ RenderTexturePass::~RenderTexturePass()
 
 void RenderTexturePass::setTarget(RenderTexture* rt)
 {
+    setTarget(rt->getRenderTarget());
+}
+
+void RenderTexturePass::setTarget(rhi::RenderTarget* rt)
+{
     AXASSERT(!_active, "Cannot change target while pass is active");
-    _renderTexture = rt;
+    _renderTarget = rt;
     updateViewport();
 }
 
 void RenderTexturePass::updateViewport()
 {
-    if (!_renderTexture)
+    if (!_renderTarget)
     {
         _viewport.reset();
         return;
     }
 
-    auto size = _renderTexture->getPixelSize();
-    _viewport.emplace(0, 0, static_cast<int>(size.x), static_cast<int>(size.y));
+    auto colorBuffer = _renderTarget->_color[0];
+    if (!colorBuffer)
+    {
+        AXASSERT(!_active, "Cannot change target while pass is active");
+        return;
+    }
+    _viewport.emplace(0, 0, colorBuffer.texture->getWidth(), colorBuffer.texture->getHeight());
 }
 
 void RenderTexturePass::setViewport(std::optional<Viewport> vp)
@@ -103,9 +110,9 @@ Viewport RenderTexturePass::makeVirtualViewport(const Vec2& rtBegin,
 
 void RenderTexturePass::begin(const Camera* camera)
 {
-    AXASSERT(_renderTexture && !_active,
+    AXASSERT(_renderTarget && !_active,
              "RenderTexturePass::begin requires a valid RenderTexture and not in active state");
-    if (!_renderTexture || _active)
+    if (!_renderTarget || _active)
         return;
 
     if (_cameraOverrideEnabled)
@@ -147,8 +154,7 @@ void RenderTexturePass::begin(const Camera* camera)
     // Begin callback: save current render target / viewport, set new ones
     auto beginCmd = _renderer->nextCallbackCommand();
     beginCmd->init(RT_PASS_BEGIN_ORDER);
-    beginCmd->func = [target = _renderTexture->getRenderTarget(), vp = _viewport,
-                      self = RefPtr<RenderTexturePass>(this), this]() {
+    beginCmd->func = [target = _renderTarget, vp = _viewport, self = RefPtr<RenderTexturePass>(this), this]() {
         SavedState state;
         state.renderTarget = _renderer->getRenderTarget();
         if (vp.has_value())

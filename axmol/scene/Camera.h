@@ -100,10 +100,30 @@ public:
     static Camera* createOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane);
 
     /**
-     * Creates a 2D orthographic camera matching Director::getCanvasSize().
-     * This is the preferred helper for temporary cameras that render regular scene/canvas content.
+     * @brief Creates a 2D orthographic camera for a view of the given size.
+     *
+     * The camera uses an orthographic projection whose visible area matches
+     * `size.width` by `size.height`, and is positioned at the center of that
+     * area: `(size.width / 2, size.height / 2, 0)`.
+     *
+     * This is useful for rendering 2D content in a local canvas coordinate space,
+     * such as offscreen rendering, RenderTexture capture, UI texture generation,
+     * or any pass where the render target has its own logical size.
+     *
+     * Unlike createOrthographic(), this helper also initializes the camera transform
+     * so that local coordinates from `(0, 0)` to `(size.width, size.height)` map
+     * naturally into the camera view.
+     *
+     * @param size       The logical size of the orthographic view.
+     * @param nearPlane  The near clipping plane.
+     * @param farPlane   The far clipping plane.
+     *
+     * @return An autoreleased Camera instance.
+     *
+     * @see initOrthographicView
+     * @see createOrthographic
      */
-    static Camera* createCanvasOrthographic(float nearPlane, float farPlane);
+    static Camera* createOrthographicView(const Vec2& size, float nearPlane, float farPlane);
 
     /** create default camera, the camera type depends on Director::getProjection, the depth of the default camera is 0
      */
@@ -403,7 +423,6 @@ public:
 
     bool initPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane);
     bool initOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane);
-    bool initCanvasOrthographic(float nearPlane, float farPlane);
     void applyViewport();
 
     /**
@@ -419,8 +438,8 @@ public:
      * @param rect Rectangle in local space.
      * @param p    Optional local-space intersection point.
      */
-    bool isWorldPointInRect(const Vec2& pt, const Mat4& w2l, const Rect& rect, Vec3* p) const;
-    bool isWorldPointInRect(const Vec2& pt, const Mat4& w2l, const Rect& rect) const
+    static bool isWorldPointInRect(const Vec2& pt, const Mat4& w2l, const Rect& rect, Vec3* p);
+    static bool isWorldPointInRect(const Vec2& pt, const Mat4& w2l, const Rect& rect)
     {
         return isWorldPointInRect(pt, w2l, rect, nullptr);
     }

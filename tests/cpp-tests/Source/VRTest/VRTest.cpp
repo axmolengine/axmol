@@ -25,7 +25,10 @@
  ****************************************************************************/
 
 #include "VRTest.h"
-#include "axmol/vr/VRGenericRenderer.h"
+#include "axmol/vr/VRPreviewSceneCompositor.h"
+#ifdef AX_ENABLE_OPENXR
+#    include "axmol/vr/VRSceneCompositor.h"
+#endif
 
 using namespace ax;
 
@@ -48,34 +51,93 @@ VRTest1::VRTest1()
     image->setPosition(size / 2);
     addChild(image);
 
-    auto button = MenuItemFont::create("Enable / Disable VR", [](Object* ref) {
-        auto director = Director::getInstance();
-        if (dynamic_cast<experimental::VRGenericRenderer*>(director->getSceneRenderer()))
-        {
-            director->setSceneRenderer(nullptr);
-        }
-        else
-        {
-            auto vrRenderer = std::make_unique<VRGenericRenderer>();
-            // On Android/iOS emulator devices, uncomment to visualize the left/right eye VR rendering output.
-            // Useful for debugging stereo rendering without a physical headset.
-            // vrRenderer->setDebugIgnoreHeadTracker(true);
-            director->setSceneRenderer(std::move(vrRenderer));
-        }
-    });
-    button->setFontSizeObj(16);
-    auto menu = Menu::create(button, nullptr);
-    addChild(menu);
+    // Create RadioButtonGroup
+    _radioButtonGroup = ui::RadioButtonGroup::create();
+    addChild(_radioButtonGroup);
 
-    menu->setPosition(size / 6);
+    // Create RadioButtons for three modes
+    auto* normalBtn  = ui::RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
+    auto* previewBtn = ui::RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
+    auto* hmdBtn     = ui::RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
+
+    // Set positions
+    float startX  = size.width * 0.25f;
+    float spacing = size.width * 0.25f;
+    float buttonY = size.height * 0.2f;
+
+    normalBtn->setPosition(Vec2(startX, buttonY));
+    previewBtn->setPosition(Vec2(startX + spacing, buttonY));
+    hmdBtn->setPosition(Vec2(startX + spacing * 2, buttonY));
+
+    // Scale buttons for better visibility
+    normalBtn->setScale(1.5f);
+    previewBtn->setScale(1.5f);
+    hmdBtn->setScale(1.5f);
+
+    // Add buttons to group and scene
+    _radioButtonGroup->addRadioButton(normalBtn);
+    _radioButtonGroup->addRadioButton(previewBtn);
+    _radioButtonGroup->addRadioButton(hmdBtn);
+
+    addChild(normalBtn);
+    addChild(previewBtn);
+    addChild(hmdBtn);
+
+    // Add labels under each button
+    auto* normalLabel = Label::createWithTTF("Normal", "fonts/arial.ttf", 12);
+    normalLabel->setPosition(Vec2(startX, buttonY - 25));
+    addChild(normalLabel);
+
+    auto* previewLabel = Label::createWithTTF("VR Preview", "fonts/arial.ttf", 12);
+    previewLabel->setPosition(Vec2(startX + spacing, buttonY - 25));
+    addChild(previewLabel);
+
+    auto* hmdLabel = Label::createWithTTF("VR HMD", "fonts/arial.ttf", 12);
+    hmdLabel->setPosition(Vec2(startX + spacing * 2, buttonY - 25));
+    addChild(hmdLabel);
+
+    // Disable VR HMD button if OpenXR is not enabled
+#ifndef AX_ENABLE_OPENXR
+    hmdBtn->setEnabled(false);
+    hmdBtn->setBright(false);
+#endif
+
+    // Set event listener
+    _radioButtonGroup->addEventListener(AX_CALLBACK_3(VRTest1::onRadioGroupChanged, this));
+
+    // Default to Normal mode
+    _radioButtonGroup->setSelectedButton(0);
 }
 
 std::string VRTest1::title() const
 {
-    return "Testing Generic VR";
+    return "Testing VR scene composition";
 }
 
 std::string VRTest1::subtitle() const
 {
-    return "Enable / Disable it with the button";
+    return "Select VR mode using radio buttons";
+}
+
+void VRTest1::onRadioGroupChanged(ui::RadioButton* sender, int index, ui::RadioButtonGroup::EventType type)
+{
+    auto director   = Director::getInstance();
+    auto renderView = director->getRenderView();
+    switch (index)
+    {
+    case 0:  // Normal
+        renderView->setSceneCompositor(nullptr);
+        break;
+    case 1:  // VR Preview
+    {
+        auto vrPreview = std::make_unique<experimental::VRPreviewSceneCompositor>();
+        renderView->setSceneCompositor(std::move(vrPreview));
+        break;
+    }
+    case 2:  // VR HMD
+#ifdef AX_ENABLE_OPENXR
+        renderView->setSceneCompositor(std::make_unique<experimental::VRSceneCompositor>());
+#endif
+        break;
+    }
 }

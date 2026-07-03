@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 #include "axmol/platform/PlatformMacros.h"
-#include "axmol/vr/VRGenericRenderer.h"
+#include "axmol/vr/VRPreviewSceneCompositor.h"
 #include "axmol/vr/VRDistortionMesh.h"
 #include "axmol/vr/VRDistortion.h"
 #include "axmol/vr/VRGenericHeadTracker.h"
@@ -58,13 +58,13 @@ static ScissorTransform makeEyeScissorTransform(const Viewport& eyeViewport, con
     return xf;
 }
 
-VRGenericRenderer::VRGenericRenderer()
+VRPreviewSceneCompositor::VRPreviewSceneCompositor()
 {
     _headTracker = new VRGenericHeadTracker();
     setupDistortionProgram();
 }
 
-VRGenericRenderer::~VRGenericRenderer()
+VRPreviewSceneCompositor::~VRPreviewSceneCompositor()
 {
     AX_SAFE_RELEASE_NULL(_renderTexture);
     AX_SAFE_DELETE(_distortion);
@@ -75,17 +75,17 @@ VRGenericRenderer::~VRGenericRenderer()
     AX_SAFE_DELETE(_headTracker);
 }
 
-IVRHeadTracker* VRGenericRenderer::getHeadTracker()
+IVRHeadTracker* VRPreviewSceneCompositor::getHeadTracker()
 {
     return _headTracker;
 }
 
-void VRGenericRenderer::onRenderViewChanged(RenderViewCore* rv)
+void VRPreviewSceneCompositor::onRenderViewChanged(RenderViewCore* rv)
 {
     reset(rv);
 }
 
-void VRGenericRenderer::setRenderScale(float renderScale)
+void VRPreviewSceneCompositor::setRenderScale(float renderScale)
 {
     if (renderScale <= 0.0f || !std::isfinite(renderScale))
         renderScale = 1.0f;
@@ -98,7 +98,7 @@ void VRGenericRenderer::setRenderScale(float renderScale)
     reset(_director->getRenderView());
 }
 
-void VRGenericRenderer::reset(RenderViewCore* rv)
+void VRPreviewSceneCompositor::reset(RenderViewCore* rv)
 {
     AX_SAFE_RELEASE_NULL(_renderTexture);
     AX_SAFE_DELETE(_distortion);
@@ -149,7 +149,7 @@ void VRGenericRenderer::reset(RenderViewCore* rv)
     _programState->setTexture(_renderTexture->getRHITexture());
 }
 
-void VRGenericRenderer::prepareEyesViewport(const Vec2& outputSize, const Vec2& textureSize)
+void VRPreviewSceneCompositor::prepareEyesViewport(const Vec2& outputSize, const Vec2& textureSize)
 {
     if (outputSize.x <= 0 || outputSize.y <= 0 || textureSize.width <= 0 || textureSize.height <= 0)
         return;
@@ -195,10 +195,8 @@ void VRGenericRenderer::prepareEyesViewport(const Vec2& outputSize, const Vec2& 
     rightEye.viewport.height = viewportH;
 }
 
-void VRGenericRenderer::renderScene(Renderer* renderer, Scene* scene)
+void VRPreviewSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
 {
-    clearEyeRenderTexture(renderer, _director->getClearColor());
-
     const float eyeOffset = _eyeSeparation * 0.5f;
 
     // Get head rotation and compute view transforms for both eyes
@@ -219,12 +217,18 @@ void VRGenericRenderer::renderScene(Renderer* renderer, Scene* scene)
     Camera::setVisitingCamera(nullptr);
 }
 
-void VRGenericRenderer::renderSceneToEye(Renderer* renderer, Scene* scene, EyeIndex eyeIndex, const Mat4& eyeTransform)
+void VRPreviewSceneCompositor::renderSceneToEye(Renderer* renderer,
+                                                Scene* scene,
+                                                EyeIndex eyeIndex,
+                                                const Mat4& eyeTransform)
 {
     AXASSERT(renderer, "Invalid Renderer");
     AXASSERT(scene, "Invalid Scene");
 
     auto& eye = _eyes[eyeIndex];
+
+    int passCount    = 0;
+    auto& clearColor = _director->getClearColor();
 
     const auto& transform = scene->getNodeToParentTransform();
     for (const auto& camera : scene->getCameras())
@@ -236,14 +240,17 @@ void VRGenericRenderer::renderSceneToEye(Renderer* renderer, Scene* scene, EyeIn
                                       static_cast<int>(eye.viewport.w), static_cast<int>(eye.viewport.h)));
         _rtPass->begin();
 
-        _rtPass->clear(ClearFlag::DEPTH_AND_STENCIL, {});
+        if (passCount++ == 0 && eyeIndex == 0)
+            _rtPass->clear(ClearFlag::COLOR | ClearFlag::DEPTH_AND_STENCIL, {.color = clearColor});
+        else
+            _rtPass->clear(ClearFlag::DEPTH_AND_STENCIL, {});
 
         Camera::setVisitingCamera(camera);
 
         // VR rendering reuses the original scene cameras for both eyes.
         // Each eye applies a temporary view override through Camera::setAdditionalTransform(),
         // avoiding duplicated camera objects and keeping camera ownership in the scene.
-        camera->setAdditionalTransform(eyeTransform.getInversed());
+        camera->setAdditionalTransform(eyeTransform);
 
         // For VR rendering, call updateViewProjectionState() instead of
         // camera->apply(). Axmol currently uses a shared default viewport for
@@ -261,13 +268,13 @@ void VRGenericRenderer::renderSceneToEye(Renderer* renderer, Scene* scene, EyeIn
 
         _rtPass->end();
 
-        // Flush per camera to preserve SceneRenderer's camera boundary semantics,
+        // Flush per camera to preserve SceneCompositor's camera boundary semantics,
         // while keeping each flush fully bracketed by RenderTexturePass begin/end.
         renderer->render();
     }
 }
 
-void VRGenericRenderer::renderDistortionPass(Renderer* renderer)
+void VRPreviewSceneCompositor::renderDistortionPass(Renderer* renderer)
 {
     AXASSERT(renderer, "Invalid Renderer");
 
@@ -288,7 +295,7 @@ void VRGenericRenderer::renderDistortionPass(Renderer* renderer)
     renderer->render();
 }
 
-void VRGenericRenderer::clearEyeRenderTexture(Renderer* renderer, const Color& clearColor)
+void VRPreviewSceneCompositor::clearEyeRenderTexture(Renderer* renderer, const Color& clearColor)
 {
     const auto rtSize = _renderTexture->getPixelSize();
     _rtPass->setViewport(Viewport(0, 0, static_cast<int>(rtSize.width), static_cast<int>(rtSize.height)));
@@ -298,7 +305,7 @@ void VRGenericRenderer::clearEyeRenderTexture(Renderer* renderer, const Color& c
     renderer->render();
 }
 
-void VRGenericRenderer::setScissorRect(float x, float y, float w, float h)
+void VRPreviewSceneCompositor::setScissorRect(float x, float y, float w, float h)
 {
     _sourceScissorRect.set(x, y, w, h);
 
@@ -314,12 +321,12 @@ void VRGenericRenderer::setScissorRect(float x, float y, float w, float h)
     Director::getInstance()->getRenderer()->setScissorRect(x, y, w, h);
 }
 
-const ScissorRect& VRGenericRenderer::getScissorRect() const
+const ScissorRect& VRPreviewSceneCompositor::getScissorRect() const
 {
     return _sourceScissorRect;
 }
 
-DistortionMesh* VRGenericRenderer::createDistortionMesh(VREye::EyeType eyeType, const Size& outputSize)
+DistortionMesh* VRPreviewSceneCompositor::createDistortionMesh(VREye::EyeType eyeType, const Size& outputSize)
 {
     const float screenWidth      = outputSize.width;
     const float screenHeight     = outputSize.height;
@@ -341,7 +348,7 @@ DistortionMesh* VRGenericRenderer::createDistortionMesh(VREye::EyeType eyeType, 
                               viewportH, _vignetteEnabled);
 }
 
-void VRGenericRenderer::setupDistortionProgram()
+void VRPreviewSceneCompositor::setupDistortionProgram()
 {
     auto program = axpm->loadProgram("vr_vs", "vr_fs");
 

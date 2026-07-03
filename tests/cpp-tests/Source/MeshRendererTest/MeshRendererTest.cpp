@@ -40,6 +40,8 @@ using namespace ax;
 
 MeshRendererTests::MeshRendererTests()
 {
+    ADD_TEST_CASE(MeshRendererLightMapTest);
+
     ADD_TEST_CASE(MeshRendererBasicTest);
     ADD_TEST_CASE(MeshRendererStaticInstancingBasicTest);
     ADD_TEST_CASE(MeshRendererDynamicInstancingBasicTest);

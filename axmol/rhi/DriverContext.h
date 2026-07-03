@@ -85,6 +85,18 @@ public:
     static void setVulkanMinAndroidApiLevel(int apiLevel);
 
     /**
+     * @brief Requests Vulkan driver compatibility with OpenXR.
+     *
+     * When enabled before makeCurrentDriver(), the Vulkan backend will query
+     * the active OpenXR runtime for required Vulkan instance/device extensions
+     * and the runtime-selected physical device. This is required for OpenXR
+     * Vulkan sessions created from the engine-owned Vulkan device.
+     *
+     * @warning This must be called before any rendering driver is initialized.
+     */
+    static void setOpenXRCompatible(bool enabled);
+
+    /**
      * @brief Sets the priority value for a specific driver type.
      *
      * This function allows advanced users to override the default driver
@@ -148,25 +160,22 @@ public:
      */
     static void destroyCurrentDriver();
 
-    static DriverBase* currentDriver() { return _currentDriver.get(); }
-    static DriverType currentDriverType() { return _currentDriverType; }
+    static DriverBase* currentDriver();
+    static DriverType currentDriverType();
+    static bool isOpenXRCompatible();
 
-    static bool isOpenGL() { return _currentDriverType == DriverType::OpenGL; }
-    static bool isMetal() { return _currentDriverType == DriverType::Metal; }
-    static bool isD3D11() { return _currentDriverType == DriverType::D3D11; }
-    static bool isD3D12() { return _currentDriverType == DriverType::D3D12; }
-    static bool isVulkan() { return _currentDriverType == DriverType::Vulkan; }
+    static bool isOpenGL();
+    static bool isMetal();
+    static bool isD3D11();
+    static bool isD3D12();
+    static bool isVulkan();
 
-    static int currentShaderLang() { return _currentShaderLang; }
-    static int currentShaderProfile() { return _currentShaderProfile; }
+    static int currentShaderLang();
+    static int currentShaderProfile();
 
 private:
-    static std::unique_ptr<DriverBase> _currentDriver;
-    static DriverPreference _driverPreference;
-    static DriverType _currentDriverType;
-    static int _currentShaderLang;
-    static int _currentShaderProfile;
-    static int _vulkanMinAndroidApiLevel;
+    struct State;
+    static State& state();
 };
 
 }  // namespace rhi

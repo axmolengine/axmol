@@ -172,6 +172,7 @@ public:
      * Present a drawable and commit a command buffer so it can be executed as soon as possible.
      */
     void endFrame() override;
+    void submitCurrentFrameCommands(bool waitForCompletion) override;
 
     void endEncoding();
 

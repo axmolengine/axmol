@@ -34,6 +34,8 @@
 #include "axmol/renderer/Renderer.h"
 
 #include <algorithm>
+#include <cmath>
+#include <limits>
 
 NS_AX_EXT_BEGIN
 
@@ -49,6 +51,25 @@ static float convertDistanceFromPointToInch(float pointDis)
     auto renderView = Director::getInstance()->getRenderView();
     float factor    = (renderView->getScaleX() + renderView->getScaleY()) / 2;
     return pointDis * factor / Device::getDPI();
+}
+
+static bool rayToLocalPlane(const Ray& worldRay, Node* node, Vec2* outLocalPoint)
+{
+    if (!node || !outLocalPoint)
+        return false;
+
+    Ray localRay(worldRay);
+    localRay.transform(node->getWorldToNodeTransform());
+    if (std::abs(localRay.direction.z) <= std::numeric_limits<float>::epsilon())
+        return false;
+
+    const float t = -localRay.origin.z / localRay.direction.z;
+    if (t < 0.0f)
+        return false;
+
+    const Vec3 localHit = localRay.origin + t * localRay.direction;
+    outLocalPoint->set(localHit.x, localHit.y);
+    return true;
 }
 
 ScrollView::ScrollView()
@@ -684,6 +705,40 @@ void ScrollView::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t
     this->afterDraw();
 }
 
+bool ScrollView::getPointerLocalPoint(PointerEvent* event, Node* node, Vec2* outLocalPoint) const
+{
+    if (!event || !node || !outLocalPoint)
+        return false;
+
+    if (event->hasRay())
+    {
+        const auto& ray = event->getRay();
+        return ray.has_value() && rayToLocalPlane(ray.value(), node, outLocalPoint);
+    }
+
+    *outLocalPoint = node->convertPointerToNodeSpace(event);
+    return true;
+}
+
+bool ScrollView::isPointerInView(PointerEvent* event, Vec2* outLocalPoint)
+{
+    if (!event)
+        return false;
+
+    Vec2 localPoint;
+    if (!getPointerLocalPoint(event, this, &localPoint))
+        return false;
+
+    const Vec2 worldPoint = convertToWorldSpace(localPoint);
+    if (!getViewRect().containsPoint(worldPoint))
+        return false;
+
+    if (outLocalPoint)
+        *outLocalPoint = worldPoint;
+
+    return true;
+}
+
 bool ScrollView::onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* outHitPoint)
 {
     if (!event || !camera)
@@ -706,18 +761,15 @@ bool ScrollView::onPointerHitTest(PointerEvent* event, const Camera* camera, Vec
         return false;
 
     // ScrollView uses _viewSize/getViewRect as its input area, not container contentSize.
-    Rect frame = getViewRect();
+    Vec2 worldPoint;
 
     // Keep the same acceptance rules as onPointerDown.
     // Dispatcher-level hit-test should reject touches outside visible bounds.
-    if (_touches.size() > 2 || _touchMoved || !frame.containsPoint(event->getLocation()))
+    if (_touches.size() > 2 || _touchMoved || !isPointerInView(event, &worldPoint))
         return false;
 
     if (outHitPoint)
-    {
-        Vec2 local = this->convertToNodeSpace(event->getLocation());
-        outHitPoint->set(local.x, local.y, 0.0f);
-    }
+        outHitPoint->set(worldPoint.x, worldPoint.y, 0.0f);
 
     return true;
 }
@@ -732,10 +784,8 @@ bool ScrollView::onPointerDown(PointerEvent* touch)
         return false;
     }
 
-    Rect frame = getViewRect();
-
     // dispatcher does not know about clipping. reject touches outside visible bounds.
-    if (_touches.size() > 2 || _touchMoved || !frame.containsPoint(touch->getLocation()))
+    if (_touches.size() > 2 || _touchMoved || !isPointerInView(touch))
     {
         return false;
     }
@@ -747,7 +797,8 @@ bool ScrollView::onPointerDown(PointerEvent* touch)
 
     if (_touches.size() == 1)
     {  // scrolling
-        _touchPoint = this->convertPointerToNodeSpace(touch);
+        if (!getPointerLocalPoint(touch, this, &_touchPoint))
+            return false;
         _touchMoved = false;
         _dragging   = true;  // dragging started
         _scrollDistance.setZero();
@@ -755,11 +806,19 @@ bool ScrollView::onPointerDown(PointerEvent* touch)
     }
     else if (_touches.size() == 2)
     {
-        _touchPoint =
-            (this->convertPointerToNodeSpace(_touches[0]).getMidpoint(this->convertPointerToNodeSpace(_touches[1])));
+        Vec2 firstPoint;
+        Vec2 secondPoint;
+        if (!getPointerLocalPoint(_touches[0], this, &firstPoint) ||
+            !getPointerLocalPoint(_touches[1], this, &secondPoint))
+            return false;
+        _touchPoint = firstPoint.getMidpoint(secondPoint);
 
-        _touchLength = _container->convertPointerToNodeSpace(_touches[0])
-                           .getDistance(_container->convertPointerToNodeSpace(_touches[1]));
+        Vec2 firstContainerPoint;
+        Vec2 secondContainerPoint;
+        if (!getPointerLocalPoint(_touches[0], _container, &firstContainerPoint) ||
+            !getPointerLocalPoint(_touches[1], _container, &secondContainerPoint))
+            return false;
+        _touchLength = firstContainerPoint.getDistance(secondContainerPoint);
 
         _dragging = false;
     }
@@ -778,12 +837,10 @@ void ScrollView::onPointerMove(PointerEvent* touch)
         if (_touches.size() == 1 && _dragging)
         {  // scrolling
             Vec2 moveDistance, newPoint;
-            Rect frame;
             float newX, newY;
 
-            frame = getViewRect();
-
-            newPoint     = this->convertPointerToNodeSpace(_touches[0]);
+            if (!getPointerLocalPoint(_touches[0], this, &newPoint))
+                return;
             moveDistance = newPoint - _touchPoint;
 
             float dis = 0.0f;
@@ -859,8 +916,12 @@ void ScrollView::onPointerMove(PointerEvent* touch)
         }
         else if (_touches.size() == 2 && !_dragging)
         {
-            const float len = _container->convertPointerToNodeSpace(_touches[0])
-                                  .getDistance(_container->convertPointerToNodeSpace(_touches[1]));
+            Vec2 firstContainerPoint;
+            Vec2 secondContainerPoint;
+            if (!getPointerLocalPoint(_touches[0], _container, &firstContainerPoint) ||
+                !getPointerLocalPoint(_touches[1], _container, &secondContainerPoint))
+                return;
+            const float len = firstContainerPoint.getDistance(secondContainerPoint);
             this->setZoomScale(this->getZoomScale() * len / _touchLength);
         }
         return;

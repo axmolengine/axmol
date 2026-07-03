@@ -31,6 +31,11 @@ THE SOFTWARE.
 #include "axmol/ui/ScrollViewBar.h"
 #include "axmol/2d/TweenFunction.h"
 #include "axmol/scene/Camera.h"
+#include "axmol/scene/Node.h"
+
+#include <cmath>
+#include <limits>
+
 namespace ax
 {
 
@@ -47,6 +52,30 @@ float convertDistanceFromPointToInch(const Vec2& dis)
     int dpi         = Device::getDPI();
     float distance  = Vec2(dis.x * renderView->getScaleX() / dpi, dis.y * renderView->getScaleY() / dpi).getLength();
     return distance;
+}
+
+bool calculateRayPlaneHitInNode(const Ray& worldRay, Node* node, Vec3* outLocalHit)
+{
+    if (!node || !outLocalHit)
+        return false;
+
+    Ray localRay(worldRay);
+    localRay.transform(node->getWorldToNodeTransform());
+    if (std::abs(localRay.direction.z) <= std::numeric_limits<float>::epsilon())
+        return false;
+
+    const float t = -localRay.origin.z / localRay.direction.z;
+    if (t < 0.0f)
+        return false;
+
+    Vec3 localHit = localRay.origin + t * localRay.direction;
+    Rect rect;
+    rect.size = node->getContentSize();
+    if (!rect.containsPoint(Vec2(localHit.x, localHit.y)))
+        return false;
+
+    *outLocalHit = localHit;
+    return true;
 }
 }  // namespace
 
@@ -926,6 +955,15 @@ void ScrollView::jumpToPercentBothDirection(const Vec2& percent)
 
 bool ScrollView::calculateCurrAndPrevPoints(PointerEvent* event, Vec3* currPt, Vec3* prevPt)
 {
+    if (event && event->hasRay())
+    {
+        const auto& currRay = event->getRay();
+        const auto& prevRay = event->getPreviousRay();
+        return currRay.has_value() && prevRay.has_value() &&
+               calculateRayPlaneHitInNode(currRay.value(), this, currPt) &&
+               calculateRayPlaneHitInNode(prevRay.value(), this, prevPt);
+    }
+
     if (nullptr == _hittedByCamera || false == hitTestSelf(event->getLocation(), _hittedByCamera, currPt) ||
         false == hitTestSelf(event->getPreviousLocation(), _hittedByCamera, prevPt))
     {

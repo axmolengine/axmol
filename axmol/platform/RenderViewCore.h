@@ -46,6 +46,7 @@ THE SOFTWARE.
 namespace ax
 {
 class Director;
+class SceneCompositor;
 
 using SurfaceHandle = rhi::SurfaceHandle;
 
@@ -156,7 +157,10 @@ public:
      */
     virtual bool windowShouldClose() { return false; };
 
-    /** Polls the events. */
+    /** Performs per-frame preparation before scheduler update. */
+    [[internal]] virtual void prepareFrame();
+
+    /** Polls native window/platform events. */
     virtual void pollEvents();
 
     virtual Vec2 getNativeWindowSize() const { return getWindowSize(); }
@@ -462,8 +466,27 @@ public:
      */
     [[internal]] void updateRenderSurface(float width, float height, uint8_t updateFlag);
 
+    bool isVRActive() const;
+
+    SceneCompositor* getSceneCompositor() const { return _sceneCompositor.get(); }
+
+    /** Replaces the active scene compositor.
+     *  Pass nullptr to restore the default SceneCompositor.
+     *  The new compositor's onRenderViewChanged is called immediately if a render view exists.
+     *  The previous compositor is destroyed synchronously.
+     *  @param compositor  New compositor, or nullptr for default.
+     *  @note The default implementation renders all cameras in the scene.
+     *        VRSceneCompositor provides the product VR path, while
+     *        VRPreviewSceneCompositor provides non-runtime stereo preview.
+     */
+    void setSceneCompositor(std::unique_ptr<SceneCompositor>&& compositor);
+
 protected:
+    void renderScene(Renderer* renderer, Scene* scene);
+
     void maybeDispatchResizeEvent(uint8_t updateFlag);
+
+    void onGfxDestory();
 
     /**
      * @brief Callback invoked after the RenderViewCore size has changed and all related updates are complete.
@@ -479,6 +502,8 @@ protected:
     const ScissorRect& getScissorRect() const;
 
     void updateDesignResolution();
+
+    std::unique_ptr<SceneCompositor> _sceneCompositor;
 
     float _renderScale{1.0f};
 

@@ -67,10 +67,10 @@ Camera* Camera::createOrthographic(float zoomX, float zoomY, float nearPlane, fl
     return ret;
 }
 
-Camera* Camera::createCanvasOrthographic(float nearPlane, float farPlane)
+Camera* Camera::createOrthographicView(const Vec2& size, float nearPlane, float farPlane)
 {
     auto ret = new Camera();
-    ret->initCanvasOrthographic(nearPlane, farPlane);
+    ret->initOrthographicView(size, nearPlane, farPlane);
     ret->autorelease();
     return ret;
 }
@@ -300,11 +300,6 @@ bool Camera::initOrthographic(float zoomX, float zoomY, float nearPlane, float f
 #endif
 
     return true;
-}
-
-bool Camera::initCanvasOrthographic(float nearPlane, float farPlane)
-{
-    return initOrthographicView(Director::getInstance()->getCanvasSize(), nearPlane, farPlane);
 }
 
 bool Camera::initOrthographicView(const Vec2& size, float nearPlane, float farPlane)
@@ -596,7 +591,7 @@ Ray Camera::screenToRay(const Vec2& screenPoint) const
 }
 #endif
 
-bool Camera::isWorldPointInRect(const Vec2& pt, const Mat4& w2l, const Rect& rect, Vec3* p) const
+bool Camera::isWorldPointInRect(const Vec2& pt, const Mat4& w2l, const Rect& rect, Vec3* p)
 {
     if (rect.size.width <= 0 || rect.size.height <= 0)
         return false;
@@ -634,9 +629,7 @@ bool Camera::isWorldPointInRect(const Vec2& pt, const Mat4& w2l, const Rect& rec
     auto t = (BxC.dot(A) - BxC.dot(Pn)) / BxCdotE;
     Vec3 P = Pn + t * E;
     if (p)
-    {
         *p = P;
-    }
     return rect.containsPoint(Vec2(P.x, P.y));
 }
 
