@@ -57,6 +57,8 @@ namespace ax
 {
 class Director;
 class SceneCompositor;
+class Renderer;
+class Scene;
 
 using SurfaceHandle = rhi::SurfaceHandle;
 
