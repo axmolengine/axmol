@@ -1658,12 +1658,11 @@ void OpenXRContext::pollXrActions(XrTime predictedDisplayTime)
 
                 constexpr float pointerRayOriginEpsilon    = 0.005f;
                 constexpr float pointerRayDirectionEpsilon = 0.015f;
-                const bool pointerRayChanged =
-                    !ctrl.lastPointerEventRayValid ||
-                    eventRay.origin.distanceSquared(ctrl.lastPointerEventRay.origin) >
-                        pointerRayOriginEpsilon * pointerRayOriginEpsilon ||
-                    eventRay.direction.distanceSquared(ctrl.lastPointerEventRay.direction) >
-                        pointerRayDirectionEpsilon * pointerRayDirectionEpsilon;
+                const bool pointerRayChanged               = !ctrl.lastPointerEventRayValid ||
+                                               eventRay.origin.distanceSquared(ctrl.lastPointerEventRay.origin) >
+                                                   pointerRayOriginEpsilon * pointerRayOriginEpsilon ||
+                                               eventRay.direction.distanceSquared(ctrl.lastPointerEventRay.direction) >
+                                                   pointerRayDirectionEpsilon * pointerRayDirectionEpsilon;
                 const bool pointerButtonChanged = phase == InputPhase::PointerDown || phase == InputPhase::PointerUp;
                 const bool shouldDispatchPointerEvent = pointerButtonChanged || pointerRayChanged;
 
@@ -1687,7 +1686,7 @@ void OpenXRContext::pollXrActions(XrTime predictedDisplayTime)
                 {
                     hitResult =
                         InputSystem::getInstance()->handleVRPointerEvent(phase, centerPoint, eventRay, inputState);
-                    hasHitResult                 = true;
+                    hasHitResult                  = true;
                     ctrl.lastPointerEventRay      = eventRay;
                     ctrl.lastPointerEventRayValid = true;
                 }
@@ -1701,7 +1700,7 @@ void OpenXRContext::pollXrActions(XrTime predictedDisplayTime)
                     scrollState.button         = InputButton::None;
                     scrollState.pressedButtons = inputState.pressedButtons;
                     scrollState.type           = PointerType::Controller;
-                    auto scrollHitResult = InputSystem::getInstance()->handleVRPointerScroll(
+                    auto scrollHitResult       = InputSystem::getInstance()->handleVRPointerScroll(
                         centerPoint, Vec2{0.0f, -ctrl.thumbstick.y}, eventRay, scrollState);
                     if (!hasHitResult)
                     {
