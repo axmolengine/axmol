@@ -168,19 +168,19 @@ static std::vector<std::string> splitOpenXRExtensionString(const std::string& ex
     return names;
 }
 
-static std::vector<std::string> getOpenXRVulkanExtensions(const char* functionName)
+static std::vector<std::string> getOpenXRVulkanExtensions(std::string_view functionName)
 {
     std::vector<std::string> names;
     if (!initOpenXRVulkanBootstrap())
         return names;
 
     PFN_xrVoidFunction proc = nullptr;
-    if (XR_FAILED(xrGetInstanceProcAddr(s_openXrVulkanBootstrap.instance, functionName, &proc)) || !proc)
+    if (XR_FAILED(xrGetInstanceProcAddr(s_openXrVulkanBootstrap.instance, functionName.data(), &proc)) || !proc)
         return names;
 
     uint32_t bufferCount = 0;
     XrResult result      = XR_ERROR_FUNCTION_UNSUPPORTED;
-    if (std::strcmp(functionName, "xrGetVulkanInstanceExtensionsKHR") == 0)
+    if (functionName == "xrGetVulkanInstanceExtensionsKHR"sv)
     {
         auto getExtensions = reinterpret_cast<PFN_xrGetVulkanInstanceExtensionsKHR>(proc);
         result =
@@ -194,7 +194,7 @@ static std::vector<std::string> getOpenXRVulkanExtensions(const char* functionNa
                 names = splitOpenXRExtensionString(buffer);
         }
     }
-    else if (std::strcmp(functionName, "xrGetVulkanDeviceExtensionsKHR") == 0)
+    else if (functionName == "xrGetVulkanDeviceExtensionsKHR"sv)
     {
         auto getExtensions = reinterpret_cast<PFN_xrGetVulkanDeviceExtensionsKHR>(proc);
         result =
@@ -242,11 +242,11 @@ static VkPhysicalDevice getOpenXRVulkanGraphicsDevice(VkInstance vkInstance)
 }
 #endif
 
-static bool hasExtensionName(const tlx::pod_vector<const char*>& extensions, const char* name)
+static bool hasExtensionName(const tlx::pod_vector<const char*>& extensions, std::string_view name)
 {
     for (auto extension : extensions)
     {
-        if (std::strcmp(extension, name) == 0)
+        if (extension == name)
             return true;
     }
     return false;
@@ -259,7 +259,7 @@ static void appendExtensions(tlx::pod_vector<const char*>& extensions,
     storage.reserve(storage.size() + names.size());
     for (const auto& name : names)
     {
-        if (name.empty() || hasExtensionName(extensions, name.c_str()))
+        if (name.empty() || hasExtensionName(extensions, name))
             continue;
 
         storage.push_back(name);
@@ -555,9 +555,9 @@ bool DriverImpl::initializeFactory()
         _debugCreateInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
                                            VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
                                            VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-        _debugCreateInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
-                                       VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
-                                       VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+        _debugCreateInfo.messageType     = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
+                                           VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+                                           VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
         _debugCreateInfo.pfnUserCallback = vkDebugCallback;
         createInfo.enabledLayerCount     = static_cast<uint32_t>(validationLayers.size());
         createInfo.ppEnabledLayerNames   = validationLayers.data();
