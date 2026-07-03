@@ -1449,9 +1449,11 @@ void OpenXRContext::pollXrActions(XrTime predictedDisplayTime)
     {
         for (auto& ctrl : _controllers)
         {
-            ctrl.poseValid           = false;
-            ctrl.rayHitValid         = false;
-            ctrl.visualRayStartValid = false;
+            ctrl.poseValid                = false;
+            ctrl.rayHitValid              = false;
+            ctrl.visualRayOriginValid     = false;
+            ctrl.visualRayStartValid      = false;
+            ctrl.lastPointerEventRayValid = false;
         }
         return;
     }
@@ -1477,8 +1479,6 @@ void OpenXRContext::pollXrActions(XrTime predictedDisplayTime)
     for (uint32_t hand = 0; hand < 2; ++hand)
     {
         auto& ctrl                = _controllers[hand];
-        const char* handName      = hand == 0 ? "left" : "right";
-        ctrl.rayHitValid          = false;
         ctrl.visualRayOriginValid = false;
         ctrl.visualRayStartValid  = false;
 
@@ -1656,6 +1656,17 @@ void OpenXRContext::pollXrActions(XrTime predictedDisplayTime)
                 else if (!ctrl.triggerPressed && ctrl.triggerPrevious)
                     phase = InputPhase::PointerUp;
 
+                constexpr float pointerRayOriginEpsilon    = 0.005f;
+                constexpr float pointerRayDirectionEpsilon = 0.015f;
+                const bool pointerRayChanged =
+                    !ctrl.lastPointerEventRayValid ||
+                    eventRay.origin.distanceSquared(ctrl.lastPointerEventRay.origin) >
+                        pointerRayOriginEpsilon * pointerRayOriginEpsilon ||
+                    eventRay.direction.distanceSquared(ctrl.lastPointerEventRay.direction) >
+                        pointerRayDirectionEpsilon * pointerRayDirectionEpsilon;
+                const bool pointerButtonChanged = phase == InputPhase::PointerDown || phase == InputPhase::PointerUp;
+                const bool shouldDispatchPointerEvent = pointerButtonChanged || pointerRayChanged;
+
                 // Build pointer input state. PointerUp must keep the triggering button as Primary so the
                 // dispatcher can find the capture created by PointerDown.
                 PointerInputState inputState;
@@ -1670,8 +1681,16 @@ void OpenXRContext::pollXrActions(XrTime predictedDisplayTime)
                 // Use screen center as the 2D position placeholder
                 Vec2 centerPoint(_director->getCanvasSize().width * 0.5f, _director->getCanvasSize().height * 0.5f);
 
-                auto hitResult =
-                    InputSystem::getInstance()->handleVRPointerEvent(phase, centerPoint, eventRay, inputState);
+                PointerHitResult hitResult;
+                bool hasHitResult = false;
+                if (shouldDispatchPointerEvent)
+                {
+                    hitResult =
+                        InputSystem::getInstance()->handleVRPointerEvent(phase, centerPoint, eventRay, inputState);
+                    hasHitResult                 = true;
+                    ctrl.lastPointerEventRay      = eventRay;
+                    ctrl.lastPointerEventRayValid = true;
+                }
 
                 constexpr float thumbstickScrollDeadzone = 0.0001f;
                 if (std::abs(ctrl.thumbstick.y) > thumbstickScrollDeadzone)
@@ -1682,12 +1701,18 @@ void OpenXRContext::pollXrActions(XrTime predictedDisplayTime)
                     scrollState.button         = InputButton::None;
                     scrollState.pressedButtons = inputState.pressedButtons;
                     scrollState.type           = PointerType::Controller;
-                    InputSystem::getInstance()->handleVRPointerScroll(centerPoint, Vec2{0.0f, -ctrl.thumbstick.y},
-                                                                      eventRay, scrollState);
+                    auto scrollHitResult = InputSystem::getInstance()->handleVRPointerScroll(
+                        centerPoint, Vec2{0.0f, -ctrl.thumbstick.y}, eventRay, scrollState);
+                    if (!hasHitResult)
+                    {
+                        hitResult    = scrollHitResult;
+                        hasHitResult = true;
+                    }
                 }
 
-                ctrl.rayHitValid = hitResult.hit;
-                if (hitResult.hit)
+                if (hasHitResult)
+                    ctrl.rayHitValid = hitResult.hit;
+                if (hasHitResult && hitResult.hit)
                 {
                     Vec3 visualHitPoint = hitResult.worldPoint;
                     if (hitResult.camera)
@@ -1711,7 +1736,11 @@ void OpenXRContext::pollXrActions(XrTime predictedDisplayTime)
             }
             else
             {
-                ctrl.poseValid = false;
+                ctrl.poseValid                = false;
+                ctrl.rayHitValid              = false;
+                ctrl.visualRayOriginValid     = false;
+                ctrl.visualRayStartValid      = false;
+                ctrl.lastPointerEventRayValid = false;
             }
         }
         else if (ctrl.posePrevious)
@@ -1724,6 +1753,10 @@ void OpenXRContext::pollXrActions(XrTime predictedDisplayTime)
             poseState.poseValid          = false;
             poseState.interactionProfile = ctrl.interactionProfile;
             InputSystem::getInstance()->handleXRInput(poseState);
+            ctrl.rayHitValid              = false;
+            ctrl.visualRayOriginValid     = false;
+            ctrl.visualRayStartValid      = false;
+            ctrl.lastPointerEventRayValid = false;
         }
 
         // Save previous button states for edge detection

@@ -94,6 +94,7 @@ public:
         bool posePrevious{false};
 
         Ray currentRay;
+        Ray lastPointerEventRay;
         Vec3 visualRayOrigin{Vec3::zero};
         Vec3 visualRayStart{Vec3::zero};
         Vec3 rayHitPoint{Vec3::zero};
@@ -101,6 +102,7 @@ public:
         bool visualRayStartValid{false};
         bool rayHitValid{false};
         bool poseValid{false};
+        bool lastPointerEventRayValid{false};
         intptr_t pointerId{-1};
         std::string interactionProfile;
     };
