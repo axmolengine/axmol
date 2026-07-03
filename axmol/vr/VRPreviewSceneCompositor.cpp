@@ -82,6 +82,7 @@ IVRHeadTracker* VRPreviewSceneCompositor::getHeadTracker()
 
 void VRPreviewSceneCompositor::onRenderViewChanged(RenderViewCore* rv)
 {
+    SceneCompositor::onRenderViewChanged(rv);
     reset(rv);
 }
 

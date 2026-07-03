@@ -45,11 +45,17 @@ SceneCompositor::SceneCompositor()
     _director = Director::getInstance();
 }
 
-void SceneCompositor::prepareFrame()
+void SceneCompositor::onRenderViewChanged(RenderViewCore* rv)
 {
-    if (auto renderView = _director->getRenderView())
-        renderView->pollEvents();
+    _renderView = rv;
 }
+
+void SceneCompositor::pollEvents()
+{
+    _renderView->pollNativeEvents();
+}
+
+void SceneCompositor::prepareFrame() {}
 
 void SceneCompositor::renderScene(Renderer* renderer, Scene* scene)
 {

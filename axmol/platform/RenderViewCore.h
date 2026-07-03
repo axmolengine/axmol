@@ -105,6 +105,7 @@ enum class WindowPlatform
 class AX_DLL RenderViewCore : public Object
 {
     friend class Director;
+    friend class SceneCompositor;
 
 public:
     static const std::string_view EVENT_WINDOW_POSITIONED;
@@ -157,11 +158,10 @@ public:
      */
     virtual bool windowShouldClose() { return false; };
 
-    /** Performs per-frame preparation before scheduler update. */
-    [[internal]] virtual void prepareFrame();
+    /** Polls events before scheduler update. */
+    [[internal]] void pollEvents();
 
-    /** Polls native window/platform events. */
-    virtual void pollEvents();
+    [[internal]] void prepareFrame();
 
     virtual Vec2 getNativeWindowSize() const { return getWindowSize(); }
 
@@ -482,6 +482,9 @@ public:
     void setSceneCompositor(std::unique_ptr<SceneCompositor>&& compositor);
 
 protected:
+    /** Polls native window/platform events. */
+    virtual void pollNativeEvents();
+
     void renderScene(Renderer* renderer, Scene* scene);
 
     void maybeDispatchResizeEvent(uint8_t updateFlag);

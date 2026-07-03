@@ -1232,7 +1232,7 @@ bool RenderView::windowShouldClose()
         return true;
 }
 
-void RenderView::pollEvents()
+void RenderView::pollNativeEvents()
 {
     glfwPollEvents();
 }

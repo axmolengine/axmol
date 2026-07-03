@@ -113,17 +113,16 @@ XrSession VRSceneCompositor::getXrSession() const
     return _context.getXrSession();
 }
 
-void VRSceneCompositor::prepareFrame()
+void VRSceneCompositor::pollEvents()
 {
-#ifndef NDEBUG
-    if (auto renderView = _director->getRenderView())
-        renderView->pollEvents();
-#endif
+    SceneCompositor::pollEvents();
 
     _context.setXrToSceneScale(_xrToSceneScale);
     _context.ensurePointerRayCamera(_nearZ, _farZ);
     _context.pollEvents();
 }
+
+void VRSceneCompositor::prepareFrame() {}
 
 bool VRSceneCompositor::isVRActive() const
 {
@@ -132,6 +131,7 @@ bool VRSceneCompositor::isVRActive() const
 
 void VRSceneCompositor::onRenderViewChanged(RenderViewCore* rv)
 {
+    SceneCompositor::onRenderViewChanged(rv);
     _context.onRenderViewChanged(rv);
 }
 

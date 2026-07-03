@@ -39,27 +39,15 @@ class RenderViewCore;
 class Director;
 
 /**
- * @brief Engine-side scene composition policy.
+ * @brief RenderView-owned scene composition policy.
  *
- * SceneCompositor is the Director-owned strategy for frame-bound scene work.
- * The base implementation performs frame preparation through the active RenderView,
- * then iterates all cameras in the scene, applies their transforms, and issues
- * draw commands to the Renderer.
+ * SceneCompositor is the RenderViewCore-owned strategy that defines how
+ * the current scene is composed into the active render surface.
  *
- * Subclassing:
- * - Override `renderScene` to inject custom composition logic.
- *   For example, VR compositors can render each eye into a dedicated render
- *   target while still relying on the base implementation for per-camera
- *   traversal.
- * - Override `onRenderViewChanged` to recreate framebuffer-sized resources
- *   when the render view is created or resized.
- * - Override `setScissorRect` / `getScissorRect` to apply custom
- *   viewport-to-raster transforms (e.g., per-eye scissor in VR).
- *
- * @note The base `setScissorRect` / `getScissorRect` delegate to
- *       `Renderer::setScissorRect` / `getScissorRect` directly.
- *
- * @since v3.0
+ * The base implementation iterates all visible cameras, applies their
+ * transforms, and submits draw commands to the Renderer. Specialized
+ * compositors, such as VRSceneCompositor, may render the scene into
+ * custom per-view or per-eye render targets before presenting it.
  */
 class AX_DLL SceneCompositor
 {
@@ -73,12 +61,22 @@ public:
     virtual bool isVRActive() const { return false; }
 
     /**
-     * Called before scheduler update.
-     * Base implementation forwards to the active RenderView::pollEvents() if available,
-     * otherwise performs no operation.
+     * Called after scheduler update, prior to prepareFrame().
+     * Responsible for polling platform/window events and runtime events
+     * (e.g. glfwPollEvents, OpenXR xrPollEvent + xrWaitFrame).
      *
-     * Custom compositors can override this to poll runtime events, wait for frame timing,
-     * or dispatch input before game logic runs.
+     * This is separated from prepareFrame() so that event polling always occurs
+     * at a stable point in the frame loop, regardless of which compositor is active,
+     * allowing safe compositor switches without mid-frame teardown hazards.
+     */
+    virtual void pollEvents();
+
+    /**
+     * Called after pollFrameEvents(), before renderScene().
+     * Responsible for compositor-specific per-frame state setup
+     * (e.g. syncing scale factors, pointer ray cameras).
+     *
+     * Base implementation is a no-op.
      */
     virtual void prepareFrame();
 
@@ -92,7 +90,7 @@ public:
      *  Override to recreate framebuffer-sized resources (e.g., VR render texture).
      *  Default is a no-op.
      */
-    virtual void onRenderViewChanged(RenderViewCore* rv) {}
+    virtual void onRenderViewChanged(RenderViewCore* rv);
 
     /** Applies a scissor rect, optionally transformed by the active raster transform.
      *  Base implementation delegates to Renderer::setScissorRect.
@@ -105,6 +103,7 @@ public:
 
 protected:
     Director* _director{nullptr};  // weak-ref
+    RenderViewCore* _renderView{nullptr};  // weak-ref
     RefPtr<RenderTexturePass> _renderTexturePass;
 };
 

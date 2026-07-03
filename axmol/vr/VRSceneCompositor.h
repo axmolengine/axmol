@@ -75,6 +75,7 @@ public:
     XrInstance getXrInstance() const;
     XrSession getXrSession() const;
 
+    void pollEvents() override;
     void prepareFrame() override;
 
 protected:

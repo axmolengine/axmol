@@ -319,12 +319,13 @@ void Director::setRenderDefaults()
 // process 1 frame
 void Director::processFrame()
 {
+    const auto canRender = _renderer->beginFrame();
+
     // calculate "global" dt
     calculateDeltaTime();
 
-    _renderView->prepareFrame();
-
-    const auto canRender = _renderer->beginFrame();
+    if (_renderView)
+        _renderView->pollEvents();
 
     // tick before glClear: issue #533
     if (!_paused)

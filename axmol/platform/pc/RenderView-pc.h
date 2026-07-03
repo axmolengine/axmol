@@ -65,7 +65,7 @@ public:
     // void centerWindow();
 
     bool windowShouldClose() override;
-    void pollEvents() override;
+    void pollNativeEvents() override;
     GLFWwindow* getWindow() const { return _mainWindow; }
 
     bool isFullscreen() const;

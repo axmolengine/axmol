@@ -51,17 +51,22 @@ RenderViewCore::RenderViewCore()
     , _viewScale(Vec2::one)
     , _resolutionPolicy(ResolutionPolicy::UNKNOWN)
 {
-    _sceneCompositor = std::make_unique<SceneCompositor>();
+    setSceneCompositor(std::make_unique<SceneCompositor>());
 }
 
 RenderViewCore::~RenderViewCore() {}
+
+void RenderViewCore::pollEvents()
+{
+    _sceneCompositor->pollEvents();
+}
 
 void RenderViewCore::prepareFrame()
 {
     _sceneCompositor->prepareFrame();
 }
 
-void RenderViewCore::pollEvents() {}
+void RenderViewCore::pollNativeEvents() {}
 
 void RenderViewCore::updateDesignResolution()
 {
