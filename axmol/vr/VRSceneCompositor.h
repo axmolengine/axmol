@@ -26,7 +26,7 @@
 
 #include "axmol/renderer/CustomCommand.h"
 #include "axmol/scene/SceneCompositor.h"
-#include "axmol/platform/openxr/OpenXRContext.h"
+#include "axmol/vr/OpenXRContext.h"
 
 namespace ax
 {

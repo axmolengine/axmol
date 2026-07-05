@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "axmol/platform/openxr/OpenXRVulkanInterop.h"
+#include "axmol/vr/OpenXRVulkanInterop.h"
 
 #if defined(AX_ENABLE_OPENXR)
 #    include "openxr/openxr_platform.h"

@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "axmol/platform/CommandLineArgs.h"
 
 #if defined(AX_ENABLE_OPENXR)
-#    include "axmol/platform/openxr/OpenXRContext.h"
+#    include "axmol/vr/OpenXRContext.h"
 #endif
 
 namespace ax

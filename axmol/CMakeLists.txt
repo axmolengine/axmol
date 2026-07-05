@@ -310,10 +310,6 @@ if(AX_ENABLE_VR)
     endif()
 endif()
 
-if(AX_ENABLE_OPENXR)
-    include(platform/openxr/CMakeLists.txt)
-endif()
-
 set(_AX_HEADER axmol.h
   ${_AX_SCENE_HEADER}
   ${_AX_2D_HEADER}
@@ -367,11 +363,6 @@ endif()
 if(AX_ENABLE_VR)
   list(APPEND _AX_HEADER ${_AX_VR_HEADER})
   list(APPEND _AX_SRC ${_AX_VR_SRC})
-endif()
-
-if(AX_ENABLE_OPENXR)
-  list(APPEND _AX_HEADER ${_AX_OPENXR_HEADER})
-  list(APPEND _AX_SRC ${_AX_OPENXR_SRC})
 endif()
 
 list(APPEND _AX_SRC ${_AX_HEADER})

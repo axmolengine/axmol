@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/platform/openxr/OpenXRContext.h"
+#include "axmol/vr/OpenXRContext.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -71,7 +71,7 @@
 #    include "axmol/platform/GL.h"
 #endif
 
-#include "axmol/platform/openxr/OpenXRVulkanInterop.h"
+#include "axmol/vr/OpenXRVulkanInterop.h"
 
 // Define graphics API usage for OpenXR platform types.
 // These must be set before including openxr_platform.h so that it provides
