@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 #include "axmol/base/Director.h"
 #include "axmol/renderer/Renderer.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/scene/Camera.h"
 #include "axmol/renderer/RenderTexture.h"
 
@@ -132,7 +132,7 @@ void RenderTexturePass::begin(const Camera* camera)
         Camera::setVisitingCamera(const_cast<Camera*>(camera));
 
         // Save and flip visiting camera's projection on OpenGL to keep texture upright
-        if (_autoFlipY && rhi::DriverContext::isOpenGL())
+        if (_autoFlipY && rhi::GraphicsCore::isOpenGL())
         {
             auto cam = const_cast<Camera*>(Camera::getVisitingCamera());
             if (cam)

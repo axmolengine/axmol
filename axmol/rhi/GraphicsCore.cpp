@@ -1,6 +1,29 @@
+/****************************************************************************
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmol.dev/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/platform/ApplicationCore.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/DriverFactory.h"
 #include "axmol/tlx/inlined_vector.hpp"
 
@@ -35,7 +58,7 @@ static uint32_t make_msl_version(uint32_t major, uint32_t minor = 0, uint32_t pa
     return (major * 10000) + (minor * 100) + patch;
 }
 
-struct DriverContext::State
+struct GraphicsCore::State
 {
     std::unique_ptr<DriverBase> currentDriver;
     DriverPreference driverPreference{DriverType::Auto};
@@ -43,95 +66,96 @@ struct DriverContext::State
     int currentShaderLang{axslc::SHADER_LANG_NONE};
     int currentShaderProfile{0};
     int vulkanMinAndroidApiLevel{31};  // Android 12+
-    bool openXRCompatible{false};
     int driverPriorities[(int)rhi::DriverType::Count] = {
         rhi::DefaultDriverPriority::OpenGL, rhi::DefaultDriverPriority::D3D11, rhi::DefaultDriverPriority::D3D12,
         rhi::DefaultDriverPriority::Vulkan, rhi::DefaultDriverPriority::Metal};
+
+    VulkanInterop* vulkanInterop{nullptr};
 };
 
-DriverContext::State& DriverContext::state()
+GraphicsCore::State& GraphicsCore::state()
 {
     static State s_state;
     return s_state;
 }
 
-DriverBase* DriverContext::currentDriver()
+DriverBase* GraphicsCore::currentDriver()
 {
     return state().currentDriver.get();
 }
 
-DriverType DriverContext::currentDriverType()
+DriverType GraphicsCore::currentDriverType()
 {
     return state().currentDriverType;
 }
 
-bool DriverContext::isOpenXRCompatible()
+VulkanInterop* GraphicsCore::getVulkanInterop()
 {
-    return state().openXRCompatible;
+    return state().vulkanInterop;
 }
 
-bool DriverContext::isOpenGL()
+bool GraphicsCore::isOpenGL()
 {
     return state().currentDriverType == DriverType::OpenGL;
 }
 
-bool DriverContext::isMetal()
+bool GraphicsCore::isMetal()
 {
     return state().currentDriverType == DriverType::Metal;
 }
 
-bool DriverContext::isD3D11()
+bool GraphicsCore::isD3D11()
 {
     return state().currentDriverType == DriverType::D3D11;
 }
 
-bool DriverContext::isD3D12()
+bool GraphicsCore::isD3D12()
 {
     return state().currentDriverType == DriverType::D3D12;
 }
 
-bool DriverContext::isVulkan()
+bool GraphicsCore::isVulkan()
 {
     return state().currentDriverType == DriverType::Vulkan;
 }
 
-int DriverContext::currentShaderLang()
+int GraphicsCore::currentShaderLang()
 {
     return state().currentShaderLang;
 }
 
-int DriverContext::currentShaderProfile()
+int GraphicsCore::currentShaderProfile()
 {
     return state().currentShaderProfile;
 }
 
-void DriverContext::setDriverPreference(DriverPreference driverPreference)
+void GraphicsCore::setDriverPreference(DriverPreference driverPreference)
 {
     state().driverPreference = driverPreference;
 }
 
-void DriverContext::setVulkanMinAndroidApiLevel(int apiLevel)
+void GraphicsCore::setVulkanMinAndroidApiLevel(int apiLevel)
 {
     state().vulkanMinAndroidApiLevel = apiLevel;
 }
 
-void DriverContext::setOpenXRCompatible(bool enabled)
+void GraphicsCore::setVulkanInterop(VulkanInterop* interop)
 {
-    state().openXRCompatible = enabled;
+    state().vulkanInterop = interop;
 }
 
-void DriverContext::setDriverPriority(DriverType driverType, int prio)
+void GraphicsCore::setDriverPriority(DriverType driverType, int prio)
 {
     if (driverType != DriverType::Auto)
         state().driverPriorities[(int)driverType] = prio;
 }
 
-int DriverContext::getDriverPriority(DriverType driverType)
+int GraphicsCore::getDriverPriority(DriverType driverType)
 {
     return driverType != DriverType::Auto ? state().driverPriorities[(int)driverType] : 0;
 }
 
-void DriverContext::makeCurrentDriver()
+void GraphicsCore::makeCurrentDriver()
 {
     tlx::inlined_vector<std::unique_ptr<DriverFactory>, (int)DriverType::Count> factories;
 
@@ -219,13 +243,13 @@ void DriverContext::makeCurrentDriver()
         state().currentShaderLang = AX_GLES_PROFILE ? axslc::SHADER_LANG_ESSL : axslc::SHADER_LANG_GLSL;
 #else
         throw std::runtime_error(
-            "DriverContext::makeCurrentDriver failed: no suitable driver initialized "
+            "GraphicsCore::makeCurrentDriver failed: no suitable driver initialized "
             "and OpenGL fallback is not available (AX_ENABLE_GL disabled).");
 #endif
     }
 }
 
-void DriverContext::activateCurrentDriver()
+void GraphicsCore::activateCurrentDriver()
 {
     if (state().currentDriver && isOpenGL() && !state().currentShaderProfile)
     {
@@ -234,7 +258,7 @@ void DriverContext::activateCurrentDriver()
     }
 }
 
-void DriverContext::destroyCurrentDriver()
+void GraphicsCore::destroyCurrentDriver()
 {
     state().currentDriver.reset();
 }

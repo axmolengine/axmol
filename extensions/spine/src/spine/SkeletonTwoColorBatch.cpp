@@ -39,7 +39,7 @@
 #include <algorithm>
 #include <stddef.h>// offsetof
 
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"

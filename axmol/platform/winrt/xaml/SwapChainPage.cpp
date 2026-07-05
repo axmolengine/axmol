@@ -23,7 +23,7 @@
 #include "AppDelegate.h"
 
 #include "axmol/platform/Application.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 #include <memory>
 

@@ -48,7 +48,7 @@
 
 #include "axmol/rhi/axmol-rhi.h"
 #include "axmol/rhi/RenderTarget.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 namespace ax
 {
@@ -214,7 +214,7 @@ void Renderer::init()
     _depthStencilState = driver->createDepthStencilState();
     _context->setDepthStencilState(_depthStencilState);
 
-    _isModernRHI = !rhi::DriverContext::isOpenGL() && !rhi::DriverContext::isD3D11();
+    _isModernRHI = !rhi::GraphicsCore::isOpenGL() && !rhi::GraphicsCore::isD3D11();
 }
 
 void Renderer::addCallbackCommand(std::function<void()> func, float globalZOrder)

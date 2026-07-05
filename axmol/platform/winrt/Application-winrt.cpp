@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "axmol/platform/Device.h"
 #include "axmol/platform/winrt/WinRTUtils.h"
 #include "axmol/platform/Application.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 #include "pugixml/pugixml.hpp"
 #include "axmol/tlx/format.hpp"
@@ -275,7 +275,7 @@ void Application::boot(SwapChainPanel const& panel)
     // If any of the high-performance APIs (D3D11/D3D12/Vulkan/Metal) are enabled,
     // the runtime will attempt initialization in the default priority order.
     // If all attempts fail, OpenGL will then be explicitly selected as the fallback.
-    ax::rhi::DriverContext::makeCurrentDriver();
+    ax::rhi::GraphicsCore::makeCurrentDriver();
 
     if (_renderLoopWorker != nullptr && _renderLoopWorker.Status() == AsyncStatus::Started)
         return;
@@ -305,7 +305,7 @@ void Application::boot(SwapChainPanel const& panel)
         _renderView = RenderView::createWithRect(
             "axmol3", Rect(0, 0, static_cast<float>(panelWidth), static_cast<float>(panelHeight)));
 
-        if (rhi::DriverContext::isOpenGL())
+        if (rhi::GraphicsCore::isOpenGL())
         {
             auto surfaceReady  = std::make_shared<std::promise<void>>();
             auto surfaceFuture = surfaceReady->get_future();
@@ -323,7 +323,7 @@ void Application::boot(SwapChainPanel const& panel)
             surfaceFuture.get();
 
             _renderView->makeSurfaceCurrent();
-            rhi::DriverContext::activateCurrentDriver();
+            rhi::GraphicsCore::activateCurrentDriver();
         }
 
         // must after egl surface created when not use d3d RHI

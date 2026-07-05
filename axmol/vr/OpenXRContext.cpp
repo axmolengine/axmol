@@ -37,7 +37,7 @@
 #include "axmol/renderer/RenderTexturePass.h"
 #include "axmol/renderer/Texture2D.h"
 #include "axmol/renderer/ProgramManager.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/rhi/RenderTarget.h"
 #include "axmol/rhi/Texture.h"
@@ -562,7 +562,7 @@ bool OpenXRContext::acquireSwapchains(std::vector<AcquiredSwapchain>& acquired)
         acq.renderTarget = _colorSwapchains[i].renderTargets[acq.index];
 
 #if AX_ENABLE_VK
-        if (acq.texture && rhi::DriverContext::currentDriverType() == rhi::DriverType::Vulkan)
+        if (acq.texture && rhi::GraphicsCore::currentDriverType() == rhi::DriverType::Vulkan)
         {
             static_cast<rhi::vk::TextureImpl*>(acq.texture)->setKnownLayout(VK_IMAGE_LAYOUT_UNDEFINED);
         }
@@ -669,7 +669,7 @@ static std::vector<const char*> getXrExtensions()
         return false;
     };
 
-    const auto driverType = rhi::DriverContext::currentDriverType();
+    const auto driverType = rhi::GraphicsCore::currentDriverType();
 
 #if (AX_ENABLE_D3D11)
     if (driverType == rhi::DriverType::D3D11)
@@ -940,7 +940,7 @@ bool OpenXRContext::initXrSwapchains()
             return false;
         }
 
-        const auto driverType = rhi::DriverContext::currentDriverType();
+        const auto driverType = rhi::GraphicsCore::currentDriverType();
         rhi::TextureDesc colorDesc;
         colorDesc.width        = static_cast<uint16_t>(_colorSwapchains[i].width);
         colorDesc.height       = static_cast<uint16_t>(_colorSwapchains[i].height);
@@ -1979,7 +1979,7 @@ const void* OpenXRContext::createGraphicsBinding()
 {
     // We allocate a persistent structure and store the pointer.
     // This structure must remain valid for the lifetime of the session.
-    const auto driverType = rhi::DriverContext::currentDriverType();
+    const auto driverType = rhi::GraphicsCore::currentDriverType();
 
 #if AX_ENABLE_D3D11
     if (driverType == rhi::DriverType::D3D11)
@@ -2105,7 +2105,7 @@ bool OpenXRContext::checkVulkanGraphicsDevice()
 
 bool OpenXRContext::checkGraphicsRequirements()
 {
-    const auto driverType = rhi::DriverContext::currentDriverType();
+    const auto driverType = rhi::GraphicsCore::currentDriverType();
 
 #if AX_ENABLE_D3D11
     if (driverType == rhi::DriverType::D3D11)
@@ -2138,13 +2138,13 @@ bool OpenXRContext::checkGraphicsRequirements()
 #if AX_ENABLE_VK
     if (driverType == rhi::DriverType::Vulkan)
     {
-        if (!rhi::DriverContext::isOpenXRCompatible())
-        {
-            AXLOGW(
-                "[OpenXR] Vulkan OpenXR requires DriverContext::setOpenXRCompatible(true) before RHI "
-                "initialization; xrCreateSession may fail validation if required Vulkan extensions or the XR "
-                "physical device were not selected.");
-        }
+        // if (!rhi::GraphicsCore::isOpenXRCompatible())
+        // {
+        //     AXLOGW(
+        //         "[OpenXR] Vulkan OpenXR requires GraphicsCore::setOpenXRCompatible(true) before RHI "
+        //         "initialization; xrCreateSession may fail validation if required Vulkan extensions or the XR "
+        //         "physical device were not selected.");
+        // }
 
         PFN_xrGetVulkanGraphicsRequirementsKHR getRequirements = nullptr;
         if (!checkXr(xrGetInstanceProcAddr(_xrInstance, "xrGetVulkanGraphicsRequirementsKHR",

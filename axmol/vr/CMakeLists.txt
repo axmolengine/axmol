@@ -5,12 +5,14 @@ if(AX_ENABLE_VR)
     vr/VRDistortion.h
     vr/VRPreviewSceneCompositor.h
     vr/VRDistortionMesh.h
+    vr/OpenXRVulkanInterop.h
   )
   set(_AX_VR_SRC
     vr/VRDistortion.cpp
     vr/VRDistortionMesh.cpp
     vr/VRPreviewSceneCompositor.cpp
     vr/VRGenericHeadTracker.cpp
+    vr/OpenXRVulkanInterop.cpp
   )
   if(AX_ENABLE_OPENXR)
     list(APPEND _AX_VR_HEADER vr/OpenXRContext.h vr/VRSceneCompositor.h)

@@ -23,7 +23,7 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/DXUtils.h"
 #include "axmol/rhi/DriverFactory.h"
 #include <d3d11.h>

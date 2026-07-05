@@ -85,7 +85,7 @@ int ApplicationCore::launch(int argc, tchar_t** argv)
     CommandLineArgs args;
     args.buildFromArgv(argc, argv);
     auto driverPreference = parseDriverPreference(args.views());
-    DriverContext::setDriverPreference(driverPreference);
+    GraphicsCore::setDriverPreference(driverPreference);
 
     return this->run();
 }

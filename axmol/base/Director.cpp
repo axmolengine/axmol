@@ -72,7 +72,7 @@ THE SOFTWARE.
 #endif
 
 #include "axmol/rhi/SamplerCache.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/renderer/VertexLayoutManager.h"
 
 #if defined(AX_ENABLE_3D)
@@ -1066,7 +1066,7 @@ void Director::cleanupDirector()
     ProgramManager::destroyInstance();
     VertexLayoutManager::destroyInstance();
 
-    rhi::DriverContext::destroyCurrentDriver();
+    rhi::GraphicsCore::destroyCurrentDriver();
 
     if (_renderView)
     {

@@ -32,7 +32,7 @@
 #include "axmol/rhi/vulkan/DepthStencilStateVK.h"
 #include "axmol/rhi/vulkan/VertexLayoutVK.h"
 #include "axmol/rhi/vulkan/UtilsVK.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/DriverFactory.h"
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/tlx/hash.hpp"
@@ -94,8 +94,8 @@ static bool hasXrExtension(const std::vector<XrExtensionProperties>& extensions,
 
 static bool initOpenXRVulkanBootstrap()
 {
-    if (!DriverContext::isOpenXRCompatible())
-        return false;
+    //if (!GraphicsCore::isOpenXRCompatible())
+    //    return false;
 
     if (s_openXrVulkanBootstrap.instance != XR_NULL_HANDLE)
         return s_openXrVulkanBootstrap.system != XR_NULL_SYSTEM_ID;
@@ -796,12 +796,12 @@ bool DriverImpl::initializeDevice()
         _vkCaps.timelineSemaphoreSupported = true;
         AXLOGI("axmol: timelineSemaphore feature enabled");
     }
-    else if (DriverContext::isOpenXRCompatible())
-    {
-        AXLOGW(
-            "axmol: timelineSemaphore feature is not supported or not available. "
-            "Some OpenXR runtimes may fail validation if they create timeline semaphores internally.");
-    }
+    //else if (GraphicsCore::isOpenXRCompatible())
+    //{
+    //    AXLOGW(
+    //        "axmol: timelineSemaphore feature is not supported or not available. "
+    //        "Some OpenXR runtimes may fail validation if they create timeline semaphores internally.");
+    //}
 
     // Queue creation info
     float priority = 1.0f;
@@ -838,12 +838,12 @@ bool DriverImpl::initializeDevice()
         _vkCaps.geometryShaderSupported = true;
         enabledFeatures.geometryShader  = VK_TRUE;
     }
-    else if (DriverContext::isOpenXRCompatible())
+    /*else if (GraphicsCore::isOpenXRCompatible())
     {
         AXLOGW(
             "axmol: geometryShader is not supported by this Vulkan device. "
             "Some OpenXR runtimes may fail validation or fail to render correctly.");
-    }
+    }*/
 
     dinfo.pEnabledFeatures = &enabledFeatures;
 

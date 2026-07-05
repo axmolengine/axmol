@@ -36,7 +36,7 @@ THE SOFTWARE.
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/rhi/RenderTarget.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/scene/Camera.h"
 #include "axmol/math/Vec4.h"
 
@@ -132,7 +132,7 @@ bool GridBase::initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipp
 
     _texture = texture;
     AX_SAFE_RETAIN(_texture);
-    _isTextureFlipped = rhi::DriverContext::isOpenGL() ? flipped : !flipped;
+    _isTextureFlipped = rhi::GraphicsCore::isOpenGL() ? flipped : !flipped;
 
     if (rect.equals(Rect::zero))
     {

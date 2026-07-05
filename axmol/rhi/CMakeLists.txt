@@ -19,7 +19,7 @@ set(_AX_RHI_HEADER
   rhi/VertexLayout.h
   rhi/SamplerCache.h
   rhi/DriverFactory.h
-  rhi/DriverContext.h
+  rhi/GraphicsCore.h
 )
 
 set(_AX_RHI_SRC
@@ -36,7 +36,7 @@ set(_AX_RHI_SRC
   rhi/ShaderCache.cpp
   rhi/RenderPassDesc.cpp
   rhi/SamplerCache.cpp
-  rhi/DriverContext.cpp
+  rhi/GraphicsCore.cpp
 )
 
 if(AX_ENABLE_GL)
@@ -199,5 +199,5 @@ if(AX_ENABLE_VK)
 endif()
 
 if(APPLE)
-  set_source_files_properties(rhi/DriverContext.cpp PROPERTIES LANGUAGE OBJCXX)
+  set_source_files_properties(rhi/GraphicsCore.cpp PROPERTIES LANGUAGE OBJCXX)
 endif()

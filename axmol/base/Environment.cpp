@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "axmol/base/CustomEvent.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 namespace ax
 {

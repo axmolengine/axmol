@@ -32,7 +32,7 @@
 #include "axmol/rhi/vulkan/UtilsVK.h"
 #include "axmol/rhi/vulkan/DriverVK.h"
 #include "axmol/rhi/vulkan/SemaphorePoolVK.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/base/Logging.h"
 #include "axmol/math/MathUtil.h"
 

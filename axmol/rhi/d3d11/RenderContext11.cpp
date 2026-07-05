@@ -29,7 +29,7 @@
 #include "axmol/rhi/d3d11/Program11.h"
 #include "axmol/rhi/d3d11/VertexLayout11.h"
 #include "axmol/rhi/d3d11/Texture11.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include <dxgi1_2.h>
 #include <dxgi1_3.h>
 #include <dxgi1_5.h>

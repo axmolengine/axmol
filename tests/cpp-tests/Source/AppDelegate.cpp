@@ -31,7 +31,7 @@
 #include "controller.h"
 #include "BaseTest.h"
 #include "extensions/axmol-ext.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/tlx/charconv.hpp"
 #include "axmol/platform/CommandLineArgs.h"
 #include <system_error>
@@ -51,14 +51,14 @@ void AppDelegate::initContextAttrs()
 {
     // set vulkan min android api level, 31 for Android 12
     // refer: https://developer.android.com/tools/releases/platforms
-    DriverContext::setVulkanMinAndroidApiLevel(31);
+    GraphicsCore::setVulkanMinAndroidApiLevel(31);
 
 #ifdef AX_ENABLE_OPENXR
-    DriverContext::setOpenXRCompatible(true);
+    GraphicsCore::setOpenXRCompatible(true);
 #endif
 
     // Overrides any command-line driver preference (default is Auto).
-    // DriverContext::setDriverPreference(DriverPreference::Auto);
+    // GraphicsCore::setDriverPreference(DriverPreference::Auto);
 
     // set app context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
     // powerPreference only affect when RHI backend is D3D11, D3D12, Vulkan

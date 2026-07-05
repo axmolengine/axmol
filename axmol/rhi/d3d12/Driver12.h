@@ -23,7 +23,7 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/d3d12/DescriptorHeapAllocator12.h"
 #include "axmol/rhi/d3d12/UploadBufferAllocator12.h"
 #include "axmol/rhi/d3d12/ShaderModule12.h"

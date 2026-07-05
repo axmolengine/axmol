@@ -23,7 +23,7 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include <glad/vulkan.h>
 #include <vk_mem_alloc.h>
 #include <optional>

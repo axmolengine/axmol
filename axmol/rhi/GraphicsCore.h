@@ -34,16 +34,22 @@ namespace rhi
 {
 using DriverPreference = rhi::DriverType;
 
+class VulkanInterop;
+
 /**
- * @class DriverContext
+ * @class GraphicsCore
  * @brief Centralized manager for graphics driver lifecycle and shader environment.
  *
- * DriverContext provides a unified interface to create, activate, and destroy
+ * GraphicsCore provides a unified interface to create, activate, and destroy
  * rendering drivers across multiple backends (D3D, Vulkan, Metal, OpenGL).
  * It abstracts backend differences and ensures consistent shader language/profile
  * setup for the current driver.
+ *
+ * @note GraphicsCore is the system-level entry point for all rendering operations.
+ *       For actual GPU resource creation (e.g., textures, buffers, pipelines),
+ *       use GraphicsCore::currentDriver() to obtain the active driver instance.
  */
-class AX_DLL DriverContext
+class AX_DLL GraphicsCore
 {
 public:
     /**
@@ -85,16 +91,35 @@ public:
     static void setVulkanMinAndroidApiLevel(int apiLevel);
 
     /**
-     * @brief Requests Vulkan driver compatibility with OpenXR.
+     * @brief Sets the Vulkan interoperability interface for external API integration.
      *
-     * When enabled before makeCurrentDriver(), the Vulkan backend will query
-     * the active OpenXR runtime for required Vulkan instance/device extensions
-     * and the runtime-selected physical device. This is required for OpenXR
-     * Vulkan sessions created from the engine-owned Vulkan device.
+     * This function allows external rendering frameworks (such as OpenXR for VR/AR)
+     * to share Vulkan resources with the engine's internal Vulkan driver. The provided
+     * VulkanInterop instance serves as a bridge between the engine and the external
+     * API, enabling coordinated Vulkan instance and device management.
      *
-     * @warning This must be called before any rendering driver is initialized.
+     * The typical use case is when the engine is used within an OpenXR application:
+     * - OpenXR runtime creates and manages the Vulkan instance and physical device
+     * - The engine needs to use the same Vulkan instance/device for rendering
+     * - VulkanInterop provides the necessary handles and synchronization primitives
+     *
+     * @note This function must be called **before** GraphicsCore::makeCurrentDriver()
+     *       to take effect. Once the driver is initialized, changing the interop
+     *       object has no effect.
+     *
+     * @warning The caller is responsible for ensuring the VulkanInterop object
+     *          remains valid for the entire lifetime of the Vulkan driver. The
+     *          engine does not take ownership of the pointer.
+     *
+     * @param interop Pointer to a VulkanInterop implementation that provides
+     *                the external Vulkan handles. Pass nullptr to clear the
+     *                interop interface and revert to engine-managed Vulkan
+     *                instance creation.
+     *
+     * @see VulkanInterop
+     * @see makeCurrentDriver()
      */
-    static void setOpenXRCompatible(bool enabled);
+    static void setVulkanInterop(VulkanInterop* interop);
 
     /**
      * @brief Sets the priority value for a specific driver type.
@@ -160,9 +185,10 @@ public:
      */
     static void destroyCurrentDriver();
 
+    static VulkanInterop* getVulkanInterop();
+
     static DriverBase* currentDriver();
     static DriverType currentDriverType();
-    static bool isOpenXRCompatible();
 
     static bool isOpenGL();
     static bool isMetal();
@@ -190,14 +216,13 @@ private:
 using DriverPreference = rhi::DriverPreference;
 
 /**
- * @brief Alias for rendering driver context.
+ * @brief Shorthand for @c ax::rhi::GraphicsCore.
  *
- * Provides a shorthand for @c ax::rhi::DriverContext,
- * which manages initialization and runtime state of
- * the selected rendering backend.
+ * GraphicsCore manages the rendering backend selection, driver lifecycle,
+ * and graphics runtime state for the engine.
  */
-using DriverContext = rhi::DriverContext;
+using GraphicsCore = rhi::GraphicsCore;
 
 }  // namespace ax
 
-#define axdrv ax::rhi::DriverContext::currentDriver()
+#define axdrv ax::rhi::GraphicsCore::currentDriver()

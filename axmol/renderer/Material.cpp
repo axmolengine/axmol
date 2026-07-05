@@ -33,7 +33,7 @@
 #include "axmol/renderer/Pass.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/renderer/Texture2D.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/base/Properties.h"
 #include "axmol/base/Director.h"
 #include "axmol/platform/FileUtils.h"

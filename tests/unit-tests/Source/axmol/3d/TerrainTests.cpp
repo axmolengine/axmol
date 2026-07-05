@@ -7,7 +7,7 @@
 #include "axmol/base/PointerEvent.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/platform/Image.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/scene/Camera.h"
 
 using namespace ax;
@@ -47,7 +47,7 @@ void checkVec3Near(const Vec3& actual, const Vec3& expected, float epsilon = 0.0
 
 TEST_CASE("Terrain ray hit keeps local intersection and pointer world hit spaces separate")
 {
-    if (!rhi::DriverContext::currentDriver())
+    if (!rhi::GraphicsCore::currentDriver())
     {
         WARN("Terrain GPU resources require an active RHI driver; skipping this environment.");
         return;

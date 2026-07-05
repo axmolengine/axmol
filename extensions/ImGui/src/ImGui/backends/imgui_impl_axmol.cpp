@@ -13,7 +13,7 @@
 #include "axmol/renderer/CustomCommand.h"
 #include "axmol/renderer/CallbackCommand.h"
 #include "axmol/scene/Camera.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/Buffer.h"
 
 using namespace ax;
@@ -286,7 +286,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_Init()
     bd->IndexBufferAllocator  = new BufferPoolAllocator(1 * 1024 * 1024, BufferType::INDEX, BufferUsage::DYNAMIC);
 
 #if (!defined(AX_GLES_PROFILE) || AX_GLES_PROFILE >= 300)
-    if (rhi::DriverContext::isOpenGL())
+    if (rhi::GraphicsCore::isOpenGL())
         io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;  // We can honor the ImDrawCmd::VtxOffset field,
                                                                     // allowing for large meshes.
 #endif
@@ -471,7 +471,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderPlatform()
 
 #if defined(AX_PLATFORM_GLFW)
         // restore context
-        if (rhi::DriverContext::isOpenGL())
+        if (rhi::GraphicsCore::isOpenGL())
         {
             GLFWwindow* prev_current_context = glfwGetCurrentContext();
             ImGui_ImplAxmol_PostCommand([=]() { ImGui_ImplAxmol_MakeCurrent(prev_current_context, nullptr); });
@@ -483,7 +483,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderPlatform()
 IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window, ImGuiViewport* viewport)
 {
 #if defined(GLFW_VERSION_MAJOR) && AX_ENABLE_GL
-    if (!rhi::DriverContext::isOpenGL())
+    if (!rhi::GraphicsCore::isOpenGL())
         return;
     glfwMakeContextCurrent(window);
     auto state = static_cast<gl::OpenGLState*>(glfwGetWindowUserPointer(window));
@@ -512,7 +512,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window, ImGuiViewpor
 IMGUI_IMPL_API void ImGui_ImplAxmol_OnDestroyWindow(GLFWwindow* window, ImGuiViewport* viewport)
 {
 #if defined(GLFW_VERSION_MAJOR) && AX_ENABLE_GL
-    if (!rhi::DriverContext::isOpenGL())
+    if (!rhi::GraphicsCore::isOpenGL())
         return;
     if (viewport->RendererUserData)
     {

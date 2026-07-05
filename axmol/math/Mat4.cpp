@@ -26,7 +26,7 @@
 #include "axmol/math/Quat.h"
 #include "axmol/math/MathUtil.h"
 #include "axmol/base/Macros.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 NS_AX_MATH_BEGIN
 
@@ -132,7 +132,7 @@ void Mat4::createPerspective(float fieldOfView, float aspectRatio, float zNearPl
     // - Apple Metal Shading Language Spec (Coordinate Systems)
     // - Microsoft Direct3D Projection Transform
     // - Khronos Vulkan Specification
-    if (!rhi::DriverContext::isOpenGL())
+    if (!rhi::GraphicsCore::isOpenGL())
     {
         dst->m[10] = -zFarPlane * f_n;
         dst->m[14] = -(zFarPlane * zNearPlane) * f_n;
@@ -166,7 +166,7 @@ void Mat4::createPerspectiveOffCenter(float left,
     dst->m[14] = -(2.0f * zFarPlane * zNearPlane) * f_n;
 
     // NDC Z difference: OpenGL [-1,1], D3D/Vulkan/Metal [0,1]
-    if (!rhi::DriverContext::isOpenGL())
+    if (!rhi::GraphicsCore::isOpenGL())
     {
         dst->m[10] = -zFarPlane * f_n;
         dst->m[14] = -(zFarPlane * zNearPlane) * f_n;
@@ -202,7 +202,7 @@ void Mat4::createOrthographicOffCenter(float left,
     // - Apple Metal Shading Language Spec (Coordinate Systems)
     // - Microsoft Direct3D Projection Transform
     // - Khronos Vulkan Specification
-    if (!rhi::DriverContext::isOpenGL())
+    if (!rhi::GraphicsCore::isOpenGL())
     {
         dst->m[10] = 1 / (zNearPlane - zFarPlane);
         dst->m[14] = zNearPlane / (zNearPlane - zFarPlane);

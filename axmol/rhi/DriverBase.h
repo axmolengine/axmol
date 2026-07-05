@@ -50,7 +50,7 @@ class Program;
 class VertexLayout;
 
 class SamplerCache;
-class DriverContext;
+class GraphicsCore;
 struct VertexLayoutDesc;
 
 enum class FeatureType : uint32_t
@@ -90,7 +90,7 @@ class AX_DLL DriverBase
 {
     friend class ShaderCache;
     friend class SamplerCache;
-    friend class DriverContext;
+    friend class GraphicsCore;
 
 protected:
     virtual bool init()       = 0;

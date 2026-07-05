@@ -42,9 +42,9 @@ THE SOFTWARE.
 #include "axmol/base/Environment.h"
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/base/NinePatchImageParser.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/RHIUtils.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
 #    include "axmol/renderer/TextureCache.h"
@@ -320,7 +320,7 @@ bool Texture2D::initWithSpecInternal(rhi::TextureDesc desc,
     if (!pfd.bpp)
     {
         AXLOGW("WARNING: unsupported pixelformat: {:x}", (uint32_t)desc.pixelFormat);
-        if (rhi::DriverContext::isMetal())
+        if (rhi::GraphicsCore::isMetal())
             AXASSERT(false, "pixeformat not found in _pixelFormatInfoTables, register required!");
 
         return false;
@@ -338,7 +338,7 @@ bool Texture2D::initWithSpecInternal(rhi::TextureDesc desc,
     }
 
     // !override renderFormat since some render format by RHI
-    const auto driverType = rhi::DriverContext::currentDriverType();
+    const auto driverType = rhi::GraphicsCore::currentDriverType();
     if (driverType == rhi::DriverType::Metal)
     {
         switch (renderFormat)
