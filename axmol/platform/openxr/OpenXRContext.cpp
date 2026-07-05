@@ -868,8 +868,6 @@ bool OpenXRContext::initXrSwapchains()
     }
 
     _colorSwapchains.resize(_viewCount);
-    _renderTargets.resize(_viewCount, nullptr);
-    _depthTextures.clear();
 
     for (uint32_t i = 0; i < _viewCount; ++i)
     {
@@ -1006,7 +1004,6 @@ bool OpenXRContext::initXrSwapchains()
         auto depthTex = createDepthTexture(_colorSwapchains[0].width, _colorSwapchains[0].height);
         if (!depthTex)
             return false;
-        _depthTextures.push_back(depthTex);
 
         _colorSwapchains[i].renderTargets.reserve(_colorSwapchains[i].textures.size());
         for (auto texture : _colorSwapchains[i].textures)
@@ -1017,6 +1014,8 @@ bool OpenXRContext::initXrSwapchains()
             auto rt = axdrv->createRenderTarget(texture, depthTex);
             _colorSwapchains[i].renderTargets.push_back(rt);
         }
+
+        depthTex->release();
     }
 
     return true;
@@ -1867,12 +1866,12 @@ bool OpenXRContext::createSwapchain(uint32_t width,
 
 void OpenXRContext::destroySwapchains()
 {
-    _renderTargets.clear();
-
+    if (_colorSwapchains.empty())
+        return;
     for (auto& sc : _colorSwapchains)
     {
         for (auto& rt : sc.renderTargets)
-            AX_SAFE_DELETE(rt);
+            AX_SAFE_RELEASE(rt);
         sc.renderTargets.clear();
 
         for (auto& texture : sc.textures)
@@ -1886,10 +1885,6 @@ void OpenXRContext::destroySwapchains()
         }
     }
     _colorSwapchains.clear();
-
-    for (auto& dt : _depthTextures)
-        AX_SAFE_RELEASE(dt);
-    _depthTextures.clear();
 }
 
 rhi::Texture* OpenXRContext::createDepthTexture(uint32_t width, uint32_t height)
@@ -2073,14 +2068,6 @@ bool OpenXRContext::checkGraphicsRequirements()
 #if AX_ENABLE_VK
     if (driverType == rhi::DriverType::Vulkan)
     {
-        // if (!rhi::GraphicsCore::isOpenXRCompatible())
-        // {
-        //     AXLOGW(
-        //         "[OpenXR] Vulkan OpenXR requires GraphicsCore::setOpenXRCompatible(true) before RHI "
-        //         "initialization; xrCreateSession may fail validation if required Vulkan extensions or the XR "
-        //         "physical device were not selected.");
-        // }
-
         PFN_xrGetVulkanGraphicsRequirementsKHR getRequirements = nullptr;
         if (!checkXr(xrGetInstanceProcAddr(_xrInstance, "xrGetVulkanGraphicsRequirementsKHR",
                                            reinterpret_cast<PFN_xrVoidFunction*>(&getRequirements)),

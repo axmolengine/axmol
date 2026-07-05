@@ -219,8 +219,6 @@ private:
     int64_t _colorFormat{0};
 
     std::vector<SwapchainData> _colorSwapchains;
-    std::vector<rhi::RenderTarget*> _renderTargets;
-    std::vector<rhi::Texture*> _depthTextures;
 
     XrActionSet _inputActionSet{XR_NULL_HANDLE};
     XrAction _triggerAction{XR_NULL_HANDLE};
