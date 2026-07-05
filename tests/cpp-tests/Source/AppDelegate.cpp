@@ -49,8 +49,12 @@ AppDelegate::~AppDelegate()
 // it will affect all platforms
 void AppDelegate::applicationWillLaunch()
 {
+    // Enable logging output colored text style and prefix timestamp
     setLogFmtFlag(ax::LogFmtFlag::Full);
-    prepareOpenXR("Cpp Tests"sv);
+
+    registerVulkanInterop("Cpp Tests"sv);
+
+    //registerXrVulkanInerop();
 
     // set vulkan min android api level, 31 for Android 12
     // refer: https://developer.android.com/tools/releases/platforms
@@ -79,9 +83,6 @@ void AppDelegate::applicationWillLaunch()
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
-    // Enable logging output colored text style and prefix timestamp
-    // ax::setLogFmtFlag(ax::LogFmtFlag::Full);
-
     // whether enable global SDF font render support, since axmol-2.0.1
     FontFreeType::setGlobalSDFEnabled(true);
 

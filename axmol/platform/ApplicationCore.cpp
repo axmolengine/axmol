@@ -111,7 +111,7 @@ void ApplicationCore::setContextAttrs(const ContextAttrs& attrs)
 #endif
 }
 
-bool ApplicationCore::prepareOpenXR(std::string_view appName)
+bool ApplicationCore::registerVulkanInterop(std::string_view appName)
 {
 #if defined(AX_ENABLE_OPENXR)
     if (_xrContext)

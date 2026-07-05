@@ -49,7 +49,7 @@ jobs:
     - name: Build
       shell: pwsh
       run: |
-        .\tools\cmdline\axmol -p win32 -a x64 -xc '-DAX_RENDER_API=d3d11;d3d12;gl;vk' -O3 -t cpp-tests
+        .\tools\cmdline\axmol -p win32 -a x64 -xc '-DAX_RENDER_API=d3d11;d3d12;gl;vk,-DAX_ENABLE_VR=ON,-DAX_ENABLE_OPENXR=ON' -O3 -t cpp-tests
     - name: Check prebuilt workflow
       shell: pwsh
       run: |

@@ -3485,7 +3485,7 @@ int lua_ax_rhi_GraphicsCore_setVulkanMinAndroidApiLevel(lua_State* tolua_S)
 #endif
     return 0;
 }
-int lua_ax_rhi_GraphicsCore_setOpenXRCompatible(lua_State* tolua_S)
+int lua_ax_rhi_GraphicsCore_setVulkanInterop(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -3502,22 +3502,22 @@ int lua_ax_rhi_GraphicsCore_setOpenXRCompatible(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        bool arg0;
-        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axr.GraphicsCore:setOpenXRCompatible");
+        ax::rhi::VulkanInterop* arg0;
+        ok &= luaval_to_object<ax::rhi::VulkanInterop>(tolua_S, 2, "axr.VulkanInterop",&arg0, "axr.GraphicsCore:setVulkanInterop");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_setOpenXRCompatible'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_setVulkanInterop'", nullptr);
             return 0;
         }
-        ax::rhi::GraphicsCore::setOpenXRCompatible(arg0);
+        ax::rhi::GraphicsCore::setVulkanInterop(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:setOpenXRCompatible",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:setVulkanInterop",argc, 1);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_setOpenXRCompatible'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_setVulkanInterop'.",&tolua_err);
 #endif
     return 0;
 }
@@ -3697,6 +3697,40 @@ int lua_ax_rhi_GraphicsCore_destroyCurrentDriver(lua_State* tolua_S)
 #endif
     return 0;
 }
+int lua_ax_rhi_GraphicsCore_getVulkanInterop(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_getVulkanInterop'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::rhi::GraphicsCore::getVulkanInterop();
+        object_to_luaval<ax::rhi::VulkanInterop>(tolua_S, "axr.VulkanInterop",(ax::rhi::VulkanInterop*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:getVulkanInterop",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_getVulkanInterop'.",&tolua_err);
+#endif
+    return 0;
+}
 int lua_ax_rhi_GraphicsCore_currentDriver(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3762,40 +3796,6 @@ int lua_ax_rhi_GraphicsCore_currentDriverType(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_currentDriverType'.",&tolua_err);
-#endif
-    return 0;
-}
-int lua_ax_rhi_GraphicsCore_isOpenXRCompatible(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_isOpenXRCompatible'", nullptr);
-            return 0;
-        }
-        auto&& ret = ax::rhi::GraphicsCore::isOpenXRCompatible();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:isOpenXRCompatible",argc, 0);
-    return 0;
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_isOpenXRCompatible'.",&tolua_err);
 #endif
     return 0;
 }
@@ -4051,15 +4051,15 @@ int lua_register_ax_rhi_GraphicsCore(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"GraphicsCore");
         tolua_function(tolua_S,"setDriverPreference", lua_ax_rhi_GraphicsCore_setDriverPreference);
         tolua_function(tolua_S,"setVulkanMinAndroidApiLevel", lua_ax_rhi_GraphicsCore_setVulkanMinAndroidApiLevel);
-        tolua_function(tolua_S,"setOpenXRCompatible", lua_ax_rhi_GraphicsCore_setOpenXRCompatible);
+        tolua_function(tolua_S,"setVulkanInterop", lua_ax_rhi_GraphicsCore_setVulkanInterop);
         tolua_function(tolua_S,"setDriverPriority", lua_ax_rhi_GraphicsCore_setDriverPriority);
         tolua_function(tolua_S,"getDriverPriority", lua_ax_rhi_GraphicsCore_getDriverPriority);
         tolua_function(tolua_S,"makeCurrentDriver", lua_ax_rhi_GraphicsCore_makeCurrentDriver);
         tolua_function(tolua_S,"activateCurrentDriver", lua_ax_rhi_GraphicsCore_activateCurrentDriver);
         tolua_function(tolua_S,"destroyCurrentDriver", lua_ax_rhi_GraphicsCore_destroyCurrentDriver);
+        tolua_function(tolua_S,"getVulkanInterop", lua_ax_rhi_GraphicsCore_getVulkanInterop);
         tolua_function(tolua_S,"currentDriver", lua_ax_rhi_GraphicsCore_currentDriver);
         tolua_function(tolua_S,"currentDriverType", lua_ax_rhi_GraphicsCore_currentDriverType);
-        tolua_function(tolua_S,"isOpenXRCompatible", lua_ax_rhi_GraphicsCore_isOpenXRCompatible);
         tolua_function(tolua_S,"isOpenGL", lua_ax_rhi_GraphicsCore_isOpenGL);
         tolua_function(tolua_S,"isMetal", lua_ax_rhi_GraphicsCore_isMetal);
         tolua_function(tolua_S,"isD3D11", lua_ax_rhi_GraphicsCore_isD3D11);

@@ -192,14 +192,10 @@ public:
     virtual void applicationWillLaunch() {}
 
     /**
-     * @brief Creates the OpenXR instance early and registers a VulkanInterop
-     *        with GraphicsCore. Required for Vulkan; harmless for other backends.
-     *
-     * Must be called in applicationWillLaunch(). Ownership of the created
-     * OpenXRContext transfers to RenderViewCore when the VR scene compositor
-     * activates.
+     * Registers a VulkanInterop for OpenXR before makeCurrentDriver().
+     * Required for Vulkan; harmless for other backends.
      */
-    bool prepareOpenXR(std::string_view appName);
+    bool registerVulkanInterop(std::string_view appName);
 
 #if defined(AX_ENABLE_OPENXR)
     std::unique_ptr<OpenXRContext> releaseXRContext();
