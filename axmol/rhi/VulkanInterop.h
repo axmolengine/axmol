@@ -28,7 +28,7 @@
 
 #include <glad/vulkan.h>
 
-#include <cstdint>
+#include <stdint.h>
 #include <string>
 #include <vector>
 
@@ -137,10 +137,7 @@ public:
      * The implementation should append extension names only. The caller is
      * responsible for deduplication and conversion to const char* arrays.
      */
-    virtual void collectDeviceExtensions(VkPhysicalDevice physicalDevice,
-                                         std::vector<std::string>& extensions)
-    {
-    }
+    virtual void collectDeviceExtensions(VkPhysicalDevice physicalDevice, std::vector<std::string>& extensions) {}
 
     /**
      * @brief Enables required or preferred device features.
@@ -157,8 +154,7 @@ public:
     virtual void configureDeviceFeatures(VkPhysicalDevice physicalDevice,
                                          VkPhysicalDeviceFeatures& enabledFeatures,
                                          VulkanFeatureChain& featureChain)
-    {
-    }
+    {}
 
     /**
      * @brief Receives the final Vulkan objects created and owned by the engine.
