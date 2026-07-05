@@ -47,15 +47,14 @@ AppDelegate::~AppDelegate()
 
 // if you want a different context, modify the value of contextAttrs
 // it will affect all platforms
-void AppDelegate::initContextAttrs()
+void AppDelegate::applicationWillLaunch()
 {
+    setLogFmtFlag(ax::LogFmtFlag::Full);
+    prepareOpenXR("Cpp Tests"sv);
+
     // set vulkan min android api level, 31 for Android 12
     // refer: https://developer.android.com/tools/releases/platforms
     GraphicsCore::setVulkanMinAndroidApiLevel(31);
-
-#ifdef AX_ENABLE_OPENXR
-    GraphicsCore::setOpenXRCompatible(true);
-#endif
 
     // Overrides any command-line driver preference (default is Auto).
     // GraphicsCore::setDriverPreference(DriverPreference::Auto);
@@ -81,7 +80,7 @@ void AppDelegate::initContextAttrs()
 bool AppDelegate::applicationDidFinishLaunching()
 {
     // Enable logging output colored text style and prefix timestamp
-    ax::setLogFmtFlag(ax::LogFmtFlag::Full);
+    //ax::setLogFmtFlag(ax::LogFmtFlag::Full);
 
     // whether enable global SDF font render support, since axmol-2.0.1
     FontFreeType::setGlobalSDFEnabled(true);

@@ -269,7 +269,7 @@ int Application::run()
 
 void Application::boot(SwapChainPanel const& panel)
 {
-    ax::Application::getInstance()->initContextAttrs();
+    ax::Application::getInstance()->applicationWillLaunch();
 
     // Try to initialize a high-performance graphics driver first.
     // If any of the high-performance APIs (D3D11/D3D12/Vulkan/Metal) are enabled,

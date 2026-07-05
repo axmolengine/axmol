@@ -117,16 +117,21 @@ void VRSceneCompositor::bindContext(OpenXRContext* context)
     _context = context;
 }
 
+void VRSceneCompositor::unbindContext()
+{
+    _context = nullptr;
+}
+
 void VRSceneCompositor::pollEvents()
 {
+    auto context = _context;
     SceneCompositor::pollEvents();
 
-    if (!_context)
+    if (!context)
         return;
 
-    _context->setXrToSceneScale(_xrToSceneScale);
-    _context->ensurePointerRayCamera(_nearZ, _farZ);
-    _context->pollEvents();
+    context->setXrToSceneScale(_xrToSceneScale);
+    context->pollEvents();
 }
 
 bool VRSceneCompositor::isVRActive() const
@@ -322,10 +327,14 @@ void VRSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
 
         int passCount          = 0;
         bool renderedScenePass = false;
+        Camera* eyeCamera      = nullptr;
         for (const auto& camera : scene->getCameras())
         {
             if (!camera->isVisible())
                 continue;
+
+            if (!eyeCamera)
+                eyeCamera = camera;
 
             Camera::setVisitingCamera(camera);
 
@@ -355,8 +364,8 @@ void VRSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
             camera->setAdditionalTransform(Mat4::identity);
         }
 
-        auto rayCamera = _context->ensurePointerRayCamera(_nearZ, _farZ);
-        if (rayCamera && rayCamera->isVisible())
+        auto rayCamera = eyeCamera;
+        if (rayCamera)
         {
             Camera::setVisitingCamera(rayCamera);
 

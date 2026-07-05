@@ -52,7 +52,7 @@ Application::~Application()
 
 int Application::run()
 {
-    initContextAttrs();
+    applicationWillLaunch();
     if (!applicationDidFinishLaunching())
     {
         return 1;

@@ -61,7 +61,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeInit(JNIEnv* env,
     ax::FileUtilsAndroid::setAssetManagerFromJava(assetManager);
 
     auto app = ax::Application::getInstance();
-    app->initContextAttrs();
+    app->applicationWillLaunch();
 
     ax::rhi::GraphicsCore::makeCurrentDriver();
 }

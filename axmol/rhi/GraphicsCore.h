@@ -79,7 +79,7 @@ public:
      *
      * @warning To ensure the restriction takes effect, this function should
      *          be invoked as early as possible (e.g. in the application
-     *          delegate's constructor/initContextAttrs), before any rendering
+     *          delegate's constructor/applicationWillLaunch), before any rendering
      *          context or driver initialization occurs.
      *
      * @param apiLevel The minimum Android API level required to allow Vulkan usage.
@@ -135,7 +135,7 @@ public:
      *
      * @warning To ensure the priority takes effect, this function should be
      *          invoked as early as possible, typically in the application
-     *          delegate's constructor/initContextAttrs, before any rendering context or window
+     *          delegate's constructor/applicationWillLaunch, before any rendering context or window
      *          is created. Late changes may not apply if the driver has already
      *          been initialized.
      *          **This API does not affect the fallback OpenGL driver.**

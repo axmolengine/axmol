@@ -34,6 +34,8 @@ THE SOFTWARE.
 #include "axmol/scene/Camera.h"
 #include "axmol/scene/SceneCompositor.h"
 #include "axmol/renderer/Renderer.h"
+#include "axmol/rhi/GraphicsCore.h"
+#include "axmol/base/Logging.h"
 
 #ifdef AX_ENABLE_OPENXR
 #    include "axmol/vr/VRSceneCompositor.h"
@@ -273,18 +275,40 @@ bool RenderViewCore::isVRActive() const
     return _sceneCompositor ? _sceneCompositor->isVRActive() : false;
 }
 
-void RenderViewCore::setSceneCompositor(std::unique_ptr<SceneCompositor>&& impl)
+void RenderViewCore::setSceneCompositor(std::unique_ptr<SceneCompositor>&& compositor)
 {
-    if (impl)
-        _sceneCompositor = std::move(impl);
+#ifdef AX_ENABLE_OPENXR
+    if (auto vr = dynamic_cast<VRSceneCompositor*>(_sceneCompositor.get()))
+        vr->unbindContext();
+#endif
+
+    if (compositor)
+        _sceneCompositor = std::move(compositor);
     else
         _sceneCompositor = std::make_unique<SceneCompositor>();
 
 #ifdef AX_ENABLE_OPENXR
-    if (auto* vr = dynamic_cast<VRSceneCompositor*>(_sceneCompositor.get()))
+    if (auto vr = dynamic_cast<VRSceneCompositor*>(_sceneCompositor.get()))
     {
         if (!_xrContext)
-            _xrContext = std::make_unique<OpenXRContext>();
+        {
+            // Acquire ownership from Application if prepareOpenXR() was called early.
+            if (auto* app = ApplicationCore::getInstance())
+                _xrContext = app->releaseXRContext();
+
+            if (!_xrContext)
+            {
+                if (rhi::GraphicsCore::isVulkan())
+                {
+                    AXLOGE(
+                        "prepareOpenXR() was not called in applicationWillLaunch(). "
+                        "Vulkan requires interop registration before makeCurrentDriver().");
+                    return;
+                }
+                // Non-Vulkan backends (D3D, Metal, GL) do not need pre-driver interop registration.
+                _xrContext = std::make_unique<OpenXRContext>(getViewName());
+            }
+        }
         vr->bindContext(_xrContext.get());
     }
 #endif

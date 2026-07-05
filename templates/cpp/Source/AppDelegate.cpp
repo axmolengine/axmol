@@ -50,7 +50,7 @@ AppDelegate::~AppDelegate() {}
 
 // if you want a different context, modify the value of contextAttrs
 // it will affect all platforms
-void AppDelegate::initContextAttrs()
+void AppDelegate::applicationWillLaunch()
 {
     // Overrides any command-line driver preference (default is Auto).
     // GraphicsCore::setDriverPreference(DriverPreference::Auto);

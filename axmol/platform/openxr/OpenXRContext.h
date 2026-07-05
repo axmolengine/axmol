@@ -26,6 +26,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "axmol/3d/Ray.h"
 #include "axmol/base/RefPtr.h"
@@ -39,12 +40,12 @@ namespace ax
 
 class Director;
 class RenderViewCore;
-class Camera;
 
 namespace rhi
 {
 class RenderTarget;
 class Texture;
+class OpenXRVulkanInterop;
 }  // namespace rhi
 
 inline namespace experimental
@@ -119,8 +120,19 @@ public:
         rhi::RenderTarget* renderTarget{nullptr};
     };
 
-    OpenXRContext();
+    OpenXRContext(std::string_view appName);
     ~OpenXRContext();
+
+    /**
+     * @brief Registers a VulkanInterop for this context before the Vulkan driver initializes.
+     *
+     * Creates the OpenXR instance and system (Phase 1), then registers an OpenXRVulkanInterop
+     * via GraphicsCore::setVulkanInterop() so that the Vulkan driver can query required
+     * extensions and physical device selection from the OpenXR runtime.
+     *
+     * Must be called before GraphicsCore::makeCurrentDriver().
+     */
+    bool registerVulkanInterop();
 
     void onRenderViewChanged(RenderViewCore* rv);
     /** Polls OpenXR session events, waits the next frame, and syncs frame-bound input. */
@@ -141,8 +153,8 @@ public:
     const XrFrameState& getFrameState() const { return _frameState; }
     const std::vector<XrView>& getViews() const { return _views; }
     const ControllerState* getControllers() const { return _controllers; }
-    Camera* ensurePointerRayCamera(float nearZ, float farZ);
-    Camera* getPointerRayCamera() const { return _pointerRayCamera.get(); }
+    Mat4 getPointerViewTransform() const { return _headViewTransform; }
+    bool isPointerViewTransformValid() const { return _headViewTransformValid; }
     void setXrToSceneScale(float scale) { _xrToSceneScale = scale > 0.0f ? scale : 1.0f; }
     float getXrToSceneScale() const { return _xrToSceneScale; }
 
@@ -172,7 +184,6 @@ private:
 
     bool initXrActions();
     void pollXrActions(XrTime predictedDisplayTime);
-    void syncPointerRayCamera();
     void updatePointerViewTransform(uint32_t viewCount);
     void shutdownXrActions();
     bool xrPollEvents();
@@ -191,6 +202,7 @@ private:
     };
 
     Director* _director{nullptr};
+    std::string _appName;
 
     XrInstance _xrInstance{XR_NULL_HANDLE};
     XrSession _xrSession{XR_NULL_HANDLE};
@@ -225,12 +237,13 @@ private:
     XrAction _aimPoseAction{XR_NULL_HANDLE};
     XrAction _gripPoseAction{XR_NULL_HANDLE};
     ControllerState _controllers[2];
-    RefPtr<Camera> _pointerRayCamera;
-    float _pointerRayNearZ{0.1f};
-    float _pointerRayFarZ{1000.0f};
-    Mat4 _pointerViewTransform{Mat4::identity};
-    bool _pointerViewTransformValid{false};
+
+    std::unique_ptr<rhi::OpenXRVulkanInterop> _vulkanInterop;
+
     float _xrToSceneScale{1.0f};
+
+    Mat4 _headViewTransform{Mat4::identity};
+    bool _headViewTransformValid{false};
 
     void* _graphicsBindingStorage{nullptr};
 

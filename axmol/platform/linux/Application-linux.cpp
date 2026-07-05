@@ -50,7 +50,7 @@ Application::~Application()
 
 int Application::run()
 {
-    initContextAttrs();
+    applicationWillLaunch();
     // Initialize instance and axmol.
     if (!applicationDidFinishLaunching())
     {

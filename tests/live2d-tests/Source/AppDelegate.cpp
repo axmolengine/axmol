@@ -35,7 +35,7 @@ AppDelegate::~AppDelegate()
 
 // if you want a different context, modify the value of contextAttrs
 // it will affect all platforms
-void AppDelegate::initContextAttrs()
+void AppDelegate::applicationWillLaunch()
 {
     // set context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
     ContextAttrs contextAttrs = {8, 8, 8, 8, 24, 8, 0};

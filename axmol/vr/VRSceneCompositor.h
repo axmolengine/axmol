@@ -26,7 +26,7 @@
 
 #include "axmol/renderer/CustomCommand.h"
 #include "axmol/scene/SceneCompositor.h"
-#include "axmol/vr/OpenXRContext.h"
+#include "axmol/platform/openxr/OpenXRContext.h"
 
 namespace ax
 {
@@ -76,6 +76,8 @@ public:
     XrSession getXrSession() const;
 
     void bindContext(OpenXRContext* context);
+    void unbindContext();
+
     void pollEvents() override;
 
 protected:

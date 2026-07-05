@@ -29,6 +29,10 @@ THE SOFTWARE.
 #include "axmol/base/Director.h"
 #include "axmol/platform/CommandLineArgs.h"
 
+#if defined(AX_ENABLE_OPENXR)
+#    include "axmol/platform/openxr/OpenXRContext.h"
+#endif
+
 namespace ax
 {
 
@@ -106,6 +110,25 @@ void ApplicationCore::setContextAttrs(const ContextAttrs& attrs)
         s_contextAttrs.renderScaleMode = RenderScaleMode::Logical;
 #endif
 }
+
+bool ApplicationCore::prepareOpenXR(std::string_view appName)
+{
+#if defined(AX_ENABLE_OPENXR)
+    if (_xrContext)
+        return _xrContext->registerVulkanInterop();
+    _xrContext = std::make_unique<OpenXRContext>(appName);
+    return _xrContext->registerVulkanInterop();
+#else
+    return false;
+#endif
+}
+
+#if defined(AX_ENABLE_OPENXR)
+std::unique_ptr<OpenXRContext> ApplicationCore::releaseXRContext()
+{
+    return std::move(_xrContext);
+}
+#endif
 
 }  // namespace ax
 

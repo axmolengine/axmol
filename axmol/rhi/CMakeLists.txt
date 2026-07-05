@@ -20,6 +20,7 @@ set(_AX_RHI_HEADER
   rhi/SamplerCache.h
   rhi/DriverFactory.h
   rhi/GraphicsCore.h
+  rhi/VulkanInterop.h
 )
 
 set(_AX_RHI_SRC

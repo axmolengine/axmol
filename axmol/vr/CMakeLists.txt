@@ -5,20 +5,18 @@ if(AX_ENABLE_VR)
     vr/VRDistortion.h
     vr/VRPreviewSceneCompositor.h
     vr/VRDistortionMesh.h
-    vr/OpenXRVulkanInterop.h
   )
   set(_AX_VR_SRC
     vr/VRDistortion.cpp
     vr/VRDistortionMesh.cpp
     vr/VRPreviewSceneCompositor.cpp
     vr/VRGenericHeadTracker.cpp
-    vr/OpenXRVulkanInterop.cpp
   )
   if(AX_ENABLE_OPENXR)
-    list(APPEND _AX_VR_HEADER vr/OpenXRContext.h vr/VRSceneCompositor.h)
-    list(APPEND _AX_VR_SRC vr/OpenXRContext.cpp vr/VRSceneCompositor.cpp)
+    list(APPEND _AX_VR_HEADER vr/VRSceneCompositor.h)
+    list(APPEND _AX_VR_SRC vr/VRSceneCompositor.cpp)
     if (APPLE)
-      set_source_files_properties(vr/OpenXRContext.cpp vr/VRSceneCompositor.cpp PROPERTIES LANGUAGE OBJCXX)
+      set_source_files_properties(vr/VRSceneCompositor.cpp PROPERTIES LANGUAGE OBJCXX)
     endif()
   endif()
 endif()

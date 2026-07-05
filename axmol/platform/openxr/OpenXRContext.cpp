@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/vr/OpenXRContext.h"
+#include "axmol/platform/openxr/OpenXRContext.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -46,7 +46,6 @@
 #include "axmol/base/InputSystem.h"
 #include "axmol/math/Quat.h"
 #include "axmol/scene/Scene.h"
-#include "axmol/scene/Camera.h"
 #include "axmol/platform/RenderView.h"
 #include "axmol/platform/Application.h"
 
@@ -71,6 +70,8 @@
 #if AX_ENABLE_GL && AX_GLES_PROFILE && defined(__ANDROID__)
 #    include "axmol/platform/GL.h"
 #endif
+
+#include "axmol/platform/openxr/OpenXRVulkanInterop.h"
 
 // Define graphics API usage for OpenXR platform types.
 // These must be set before including openxr_platform.h so that it provides
@@ -98,18 +99,20 @@ namespace ax
 {
 inline namespace experimental
 {
-
 static bool checkXr(XrResult result, const char* operation)
 {
     if (XR_SUCCEEDED(result))
         return true;
 
-    if (result == XrResult::XR_ERROR_FORM_FACTOR_UNAVAILABLE)
+    switch (result)
     {
-        AXLOGW("[OpenXR] HMD is not available, fallback to default renderer.");
-    }
-    else
-    {
+    case XR_ERROR_RUNTIME_FAILURE:
+        AXLOGW("[OpenXR] VR runtime is not available.");
+        break;
+    case XR_ERROR_FORM_FACTOR_UNAVAILABLE:
+        AXLOGW("[OpenXR] HMD is not available.");
+        break;
+    default:
         AXLOGW("[OpenXR] {} failed, ec:{}", operation, static_cast<int>(result));
     }
     return false;
@@ -334,70 +337,46 @@ bool OpenXRContext::xrPollEvents()
 // ---------------------------------------------------------------------------
 // Construction / destruction
 // ---------------------------------------------------------------------------
-OpenXRContext::OpenXRContext()
+OpenXRContext::OpenXRContext(std::string_view appName)
+    : _appName(appName)
 {
     _director = Director::getInstance();
 }
 
 OpenXRContext::~OpenXRContext()
 {
+    GraphicsCore::setVulkanInterop(nullptr);
     shutdownXr();
-}
-
-Camera* OpenXRContext::ensurePointerRayCamera(float nearZ, float farZ)
-{
-    _pointerRayNearZ = nearZ > 0.0f ? nearZ : 0.1f;
-    _pointerRayFarZ  = farZ > _pointerRayNearZ ? farZ : _pointerRayNearZ + 1.0f;
-
-    if (!_pointerRayCamera)
-        _pointerRayCamera = RefPtr<Camera>(Camera::createPerspective(60.0f, 1.0f, _pointerRayNearZ, _pointerRayFarZ));
-
-    if (_pointerRayCamera)
-    {
-        _pointerRayCamera->setNearPlane(_pointerRayNearZ);
-        _pointerRayCamera->setFarPlane(_pointerRayFarZ);
-        syncPointerRayCamera();
-    }
-
-    return _pointerRayCamera.get();
-}
-
-void OpenXRContext::syncPointerRayCamera()
-{
-    auto rayCamera = _pointerRayCamera.get();
-    if (!rayCamera)
-        return;
-
-    const Camera* sourceCamera = nullptr;
-    if (auto scene = _director ? _director->getRunningScene() : nullptr)
-        sourceCamera = scene->getDefaultCamera();
-
-    if (sourceCamera)
-    {
-        rayCamera->setNodeToParentTransform(sourceCamera->getNodeToWorldTransform());
-        rayCamera->setVisible(sourceCamera->isVisible());
-    }
-    else
-    {
-        rayCamera->setNodeToParentTransform(Mat4::identity);
-        rayCamera->setVisible(false);
-    }
-
-    rayCamera->setAdditionalTransform(Mat4::identity);
-    rayCamera->updateViewProjectionState();
 }
 
 // ---------------------------------------------------------------------------
 // XR frame driver
 // ---------------------------------------------------------------------------
+
+bool OpenXRContext::registerVulkanInterop()
+{
+    if (!initXrInstance() || !initXrSystem())
+        return false;
+
+    _vulkanInterop = std::make_unique<rhi::OpenXRVulkanInterop>();
+    _vulkanInterop->setXrHandles(_xrInstance, _xrSystem);
+    GraphicsCore::setVulkanInterop(_vulkanInterop.get());
+    return true;
+}
+
 void OpenXRContext::onRenderViewChanged(RenderViewCore* rv)
 {
     AX_UNUSED_PARAM(rv);
 
     if (!_initialized)
     {
-        _initialized = initXrInstance() && initXrSystem() && initXrSession() && initXrSwapchains() && initXrSpaces() &&
-                       initXrActions();
+        if (_xrInstance == XR_NULL_HANDLE)
+        {
+            if (!initXrInstance() || !initXrSystem())
+                return;
+        }
+
+        _initialized = initXrSession() && initXrSwapchains() && initXrSpaces() && initXrActions();
         if (!_initialized)
             return;
 
@@ -413,9 +392,8 @@ void OpenXRContext::pollEvents()
     _viewsLocated              = false;
     _locatedViewCount          = 0;
     _locatedViewsPoseValid     = false;
-    _pointerViewTransformValid = false;
-    _pointerViewTransform      = Mat4::identity;
-    syncPointerRayCamera();
+    _headViewTransformValid = false;
+    _headViewTransform      = Mat4::identity;
 
     if (_initialized && _xrInstance != XR_NULL_HANDLE)
         xrPollEvents();
@@ -500,8 +478,8 @@ bool OpenXRContext::locateViews(uint32_t& viewCountOutput)
 
 void OpenXRContext::updatePointerViewTransform(uint32_t viewCount)
 {
-    _pointerViewTransformValid = false;
-    _pointerViewTransform      = Mat4::identity;
+    _headViewTransformValid = false;
+    _headViewTransform      = Mat4::identity;
 
     if (viewCount == 0 || _views.empty())
         return;
@@ -514,8 +492,8 @@ void OpenXRContext::updatePointerViewTransform(uint32_t viewCount)
         centerPose.position.z = (_views[0].pose.position.z + _views[1].pose.position.z) * 0.5f;
     }
 
-    _pointerViewTransform      = xrPoseToMat4(centerPose);
-    _pointerViewTransformValid = true;
+    _headViewTransform      = xrPoseToMat4(centerPose);
+    _headViewTransformValid = true;
 }
 
 bool OpenXRContext::acquireSwapchains(std::vector<AcquiredSwapchain>& acquired)
@@ -669,59 +647,30 @@ static std::vector<const char*> getXrExtensions()
         return false;
     };
 
-    const auto driverType = rhi::GraphicsCore::currentDriverType();
-
-#if (AX_ENABLE_D3D11)
-    if (driverType == rhi::DriverType::D3D11)
-    {
-        if (hasExt(XR_KHR_D3D11_ENABLE_EXTENSION_NAME))
-            extensions.push_back(XR_KHR_D3D11_ENABLE_EXTENSION_NAME);
-        else
-            AXLOGW("[OpenXR] Required extension not available: {}", XR_KHR_D3D11_ENABLE_EXTENSION_NAME);
-        return extensions;
-    }
+    // Enable ALL graphics extensions that the runtime supports and the engine
+    // was compiled with.  XrInstance allows enabling multiple graphics extensions
+    // simultaneously; the runtime only validates the actual one used in
+    // xrCreateSession.  This avoids a circular dependency with GraphicsCore
+    // (the driver type isn't known until after makeCurrentDriver()).
+#if AX_ENABLE_D3D11
+    if (hasExt(XR_KHR_D3D11_ENABLE_EXTENSION_NAME))
+        extensions.push_back(XR_KHR_D3D11_ENABLE_EXTENSION_NAME);
+#endif
+#if AX_ENABLE_D3D12
+    if (hasExt(XR_KHR_D3D12_ENABLE_EXTENSION_NAME))
+        extensions.push_back(XR_KHR_D3D12_ENABLE_EXTENSION_NAME);
+#endif
+#if AX_ENABLE_VK
+    if (hasExt(XR_KHR_VULKAN_ENABLE_EXTENSION_NAME))
+        extensions.push_back(XR_KHR_VULKAN_ENABLE_EXTENSION_NAME);
+#endif
+#if AX_ENABLE_GL && AX_GLES_PROFILE && AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+    if (hasExt(XR_KHR_OPENGL_ES_ENABLE_EXTENSION_NAME))
+        extensions.push_back(XR_KHR_OPENGL_ES_ENABLE_EXTENSION_NAME);
 #endif
 
-#if (AX_ENABLE_D3D12)
-    if (driverType == rhi::DriverType::D3D12)
-    {
-        if (hasExt(XR_KHR_D3D12_ENABLE_EXTENSION_NAME))
-            extensions.push_back(XR_KHR_D3D12_ENABLE_EXTENSION_NAME);
-        else
-            AXLOGW("[OpenXR] Required extension not available: {}", XR_KHR_D3D12_ENABLE_EXTENSION_NAME);
-        return extensions;
-    }
-#endif
-
-#if (AX_ENABLE_VK)
-    if (driverType == rhi::DriverType::Vulkan)
-    {
-        if (hasExt(XR_KHR_VULKAN_ENABLE_EXTENSION_NAME))
-            extensions.push_back(XR_KHR_VULKAN_ENABLE_EXTENSION_NAME);
-        else
-            AXLOGW("[OpenXR] Required extension not available: {}", XR_KHR_VULKAN_ENABLE_EXTENSION_NAME);
-        return extensions;
-    }
-#endif
-
-#if (AX_ENABLE_GL)
-    if (driverType == rhi::DriverType::OpenGL)
-    {
-#    if AX_GLES_PROFILE && AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-        if (hasExt(XR_KHR_OPENGL_ES_ENABLE_EXTENSION_NAME))
-            extensions.push_back(XR_KHR_OPENGL_ES_ENABLE_EXTENSION_NAME);
-        else
-            AXLOGW("[OpenXR] Required extension not available: {}", XR_KHR_OPENGL_ES_ENABLE_EXTENSION_NAME);
-#    else
-        AXLOGW(
-            "[OpenXR] OpenGL backend is unsupported for this platform/profile. "
-            "Windows ANGLE GLES and desktop OpenGL are not valid OpenXR backends in axmol.");
-#    endif
-        return extensions;
-    }
-#endif
-
-    AXLOGW("[OpenXR] Unsupported RHI driver type for OpenXR graphics binding: {}", static_cast<int>(driverType));
+    if (extensions.empty())
+        AXLOGW("[OpenXR] No graphics extension found in the runtime. OpenXR will not be usable.");
     return extensions;
 }
 
@@ -764,7 +713,7 @@ bool OpenXRContext::initXrInstance()
 
     // Engine info
     XrApplicationInfo appInfo{};
-    tlx::strlcpy(appInfo.applicationName, "axmol3");
+    tlx::strlcpy(appInfo.applicationName, _appName);
     tlx::strlcpy(appInfo.engineName, "axmol3");
     appInfo.applicationVersion = 1;
     appInfo.engineVersion      = 1;
@@ -1064,11 +1013,6 @@ bool OpenXRContext::initXrSwapchains()
         {
             if (!texture)
                 return false;
-
-            // auto depthTex = createDepthTexture(_colorSwapchains[i].width, _colorSwapchains[i].height);
-            // if (!depthTex)
-            //     return false;
-            // _depthTextures.push_back(depthTex);
 
             auto rt = axdrv->createRenderTarget(texture, depthTex);
             _colorSwapchains[i].renderTargets.push_back(rt);
@@ -1473,8 +1417,7 @@ void OpenXRContext::pollXrActions(XrTime predictedDisplayTime)
         return;
     }
 
-    Camera* pointerRayCamera = ensurePointerRayCamera(_pointerRayNearZ, _pointerRayFarZ);
-    Mat4 controllerToWorld   = pointerRayCamera ? pointerRayCamera->getNodeToWorldTransform() : Mat4::identity;
+    Mat4 controllerToWorld = _headViewTransformValid ? _headViewTransform.getInversed() : Mat4::identity;
 
     for (uint32_t hand = 0; hand < 2; ++hand)
     {
@@ -1714,14 +1657,6 @@ void OpenXRContext::pollXrActions(XrTime predictedDisplayTime)
                 if (hasHitResult && hitResult.hit)
                 {
                     Vec3 visualHitPoint = hitResult.worldPoint;
-                    if (hitResult.camera)
-                    {
-                        if (_pointerRayCamera != hitResult.camera)
-                        {
-                            hitResult.camera->getWorldToNodeTransform().transformPoint(&visualHitPoint);
-                            _pointerRayCamera->getNodeToWorldTransform().transformPoint(&visualHitPoint);
-                        }
-                    }
 
                     const float hitDistance =
                         std::max(0.0f, (visualHitPoint - ctrl.currentRay.origin).dot(ctrl.currentRay.direction));

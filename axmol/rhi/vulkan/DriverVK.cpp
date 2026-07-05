@@ -35,6 +35,7 @@
 #include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/DriverFactory.h"
 #include "axmol/rhi/RHIUtils.h"
+#include "axmol/rhi/VulkanInterop.h"
 #include "axmol/tlx/hash.hpp"
 #include "axmol/tlx/utility.hpp"
 #include "axmol/base/Logging.h"
@@ -42,14 +43,6 @@
 #include <algorithm>
 #include <vector>
 #include <limits>
-
-#if defined(AX_ENABLE_OPENXR)
-#    if defined(__ANDROID__)
-#        define XR_USE_PLATFORM_ANDROID
-#    endif
-#    define XR_USE_GRAPHICS_API_VULKAN
-#    include "openxr/openxr_platform.h"
-#endif
 
 namespace ax::rhi
 {
@@ -63,184 +56,6 @@ namespace ax::rhi::vk
 {
 namespace
 {
-#if defined(AX_ENABLE_OPENXR)
-struct OpenXRVulkanBootstrap
-{
-    XrInstance instance{XR_NULL_HANDLE};
-    XrSystemId system{XR_NULL_SYSTEM_ID};
-};
-
-static OpenXRVulkanBootstrap s_openXrVulkanBootstrap;
-
-static void shutdownOpenXRVulkanBootstrap()
-{
-    if (s_openXrVulkanBootstrap.instance != XR_NULL_HANDLE)
-    {
-        xrDestroyInstance(s_openXrVulkanBootstrap.instance);
-        s_openXrVulkanBootstrap.instance = XR_NULL_HANDLE;
-        s_openXrVulkanBootstrap.system   = XR_NULL_SYSTEM_ID;
-    }
-}
-
-static bool hasXrExtension(const std::vector<XrExtensionProperties>& extensions, std::string_view name)
-{
-    for (const auto& extension : extensions)
-    {
-        if (extension.extensionName == name)
-            return true;
-    }
-    return false;
-}
-
-static bool initOpenXRVulkanBootstrap()
-{
-    //if (!GraphicsCore::isOpenXRCompatible())
-    //    return false;
-
-    if (s_openXrVulkanBootstrap.instance != XR_NULL_HANDLE)
-        return s_openXrVulkanBootstrap.system != XR_NULL_SYSTEM_ID;
-
-    uint32_t extCount = 0;
-    if (XR_FAILED(xrEnumerateInstanceExtensionProperties(nullptr, 0, &extCount, nullptr)))
-        return false;
-
-    std::vector<XrExtensionProperties> xrExtensions(extCount, {XR_TYPE_EXTENSION_PROPERTIES});
-    if (XR_FAILED(xrEnumerateInstanceExtensionProperties(nullptr, extCount, &extCount, xrExtensions.data())))
-        return false;
-
-    if (!hasXrExtension(xrExtensions, XR_KHR_VULKAN_ENABLE_EXTENSION_NAME))
-    {
-        AXLOGW("axmol: OpenXR runtime does not expose {}", XR_KHR_VULKAN_ENABLE_EXTENSION_NAME);
-        return false;
-    }
-
-    XrApplicationInfo appInfo{};
-    tlx::strlcpy(appInfo.applicationName, "axmol3");
-    tlx::strlcpy(appInfo.engineName, "axmol3");
-    appInfo.applicationVersion = 1;
-    appInfo.engineVersion      = 1;
-    appInfo.apiVersion         = XR_API_VERSION_1_0;
-
-    const char* xrInstanceExtensions[] = {XR_KHR_VULKAN_ENABLE_EXTENSION_NAME};
-    XrInstanceCreateInfo createInfo{XR_TYPE_INSTANCE_CREATE_INFO};
-    createInfo.applicationInfo       = appInfo;
-    createInfo.enabledExtensionCount = 1;
-    createInfo.enabledExtensionNames = xrInstanceExtensions;
-
-    if (XR_FAILED(xrCreateInstance(&createInfo, &s_openXrVulkanBootstrap.instance)))
-    {
-        s_openXrVulkanBootstrap.instance = XR_NULL_HANDLE;
-        return false;
-    }
-
-    XrSystemGetInfo getInfo{XR_TYPE_SYSTEM_GET_INFO};
-    getInfo.formFactor = XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY;
-    const XrResult systemResult =
-        xrGetSystem(s_openXrVulkanBootstrap.instance, &getInfo, &s_openXrVulkanBootstrap.system);
-    if (XR_FAILED(systemResult))
-    {
-        AXLOGW("axmol: OpenXR HMD system unavailable for Vulkan compatibility bootstrap, ec:{}",
-               static_cast<int>(systemResult));
-        shutdownOpenXRVulkanBootstrap();
-        return false;
-    }
-
-    AXLOGI("axmol: OpenXR Vulkan compatibility bootstrap enabled");
-    return true;
-}
-
-static std::vector<std::string> splitOpenXRExtensionString(const std::string& extensions)
-{
-    std::vector<std::string> names;
-    const char* cursor = extensions.c_str();
-    while (*cursor)
-    {
-        while (*cursor == ' ')
-            ++cursor;
-
-        const char* begin = cursor;
-        while (*cursor && *cursor != ' ')
-            ++cursor;
-
-        if (cursor > begin)
-            names.emplace_back(begin, cursor);
-    }
-    return names;
-}
-
-static std::vector<std::string> getOpenXRVulkanExtensions(std::string_view functionName)
-{
-    std::vector<std::string> names;
-    if (!initOpenXRVulkanBootstrap())
-        return names;
-
-    PFN_xrVoidFunction proc = nullptr;
-    if (XR_FAILED(xrGetInstanceProcAddr(s_openXrVulkanBootstrap.instance, functionName.data(), &proc)) || !proc)
-        return names;
-
-    uint32_t bufferCount = 0;
-    XrResult result      = XR_ERROR_FUNCTION_UNSUPPORTED;
-    if (functionName == "xrGetVulkanInstanceExtensionsKHR"sv)
-    {
-        auto getExtensions = reinterpret_cast<PFN_xrGetVulkanInstanceExtensionsKHR>(proc);
-        result =
-            getExtensions(s_openXrVulkanBootstrap.instance, s_openXrVulkanBootstrap.system, 0, &bufferCount, nullptr);
-        if (XR_SUCCEEDED(result) && bufferCount > 0)
-        {
-            std::string buffer(bufferCount, '\0');
-            result = getExtensions(s_openXrVulkanBootstrap.instance, s_openXrVulkanBootstrap.system, bufferCount,
-                                   &bufferCount, buffer.data());
-            if (XR_SUCCEEDED(result))
-                names = splitOpenXRExtensionString(buffer);
-        }
-    }
-    else if (functionName == "xrGetVulkanDeviceExtensionsKHR"sv)
-    {
-        auto getExtensions = reinterpret_cast<PFN_xrGetVulkanDeviceExtensionsKHR>(proc);
-        result =
-            getExtensions(s_openXrVulkanBootstrap.instance, s_openXrVulkanBootstrap.system, 0, &bufferCount, nullptr);
-        if (XR_SUCCEEDED(result) && bufferCount > 0)
-        {
-            std::string buffer(bufferCount, '\0');
-            result = getExtensions(s_openXrVulkanBootstrap.instance, s_openXrVulkanBootstrap.system, bufferCount,
-                                   &bufferCount, buffer.data());
-            if (XR_SUCCEEDED(result))
-                names = splitOpenXRExtensionString(buffer);
-        }
-    }
-
-    if (XR_FAILED(result))
-        AXLOGW("axmol: {} failed during OpenXR Vulkan compatibility bootstrap, ec:{}", functionName,
-               static_cast<int>(result));
-
-    return names;
-}
-
-static VkPhysicalDevice getOpenXRVulkanGraphicsDevice(VkInstance vkInstance)
-{
-    if (!initOpenXRVulkanBootstrap())
-        return VK_NULL_HANDLE;
-
-    PFN_xrGetVulkanGraphicsDeviceKHR getGraphicsDevice = nullptr;
-    if (XR_FAILED(xrGetInstanceProcAddr(s_openXrVulkanBootstrap.instance, "xrGetVulkanGraphicsDeviceKHR",
-                                        reinterpret_cast<PFN_xrVoidFunction*>(&getGraphicsDevice))) ||
-        !getGraphicsDevice)
-    {
-        return VK_NULL_HANDLE;
-    }
-
-    VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
-    const XrResult result = getGraphicsDevice(s_openXrVulkanBootstrap.instance, s_openXrVulkanBootstrap.system,
-                                              vkInstance, &physicalDevice);
-    if (XR_FAILED(result))
-    {
-        AXLOGW("axmol: xrGetVulkanGraphicsDeviceKHR failed, ec:{}", static_cast<int>(result));
-        return VK_NULL_HANDLE;
-    }
-
-    return physicalDevice;
-}
-#endif
 
 static bool hasExtensionName(const tlx::pod_vector<const char*>& extensions, std::string_view name)
 {
@@ -250,22 +65,6 @@ static bool hasExtensionName(const tlx::pod_vector<const char*>& extensions, std
             return true;
     }
     return false;
-}
-
-static void appendExtensions(tlx::pod_vector<const char*>& extensions,
-                             std::vector<std::string>& storage,
-                             const std::vector<std::string>& names)
-{
-    storage.reserve(storage.size() + names.size());
-    for (const auto& name : names)
-    {
-        if (name.empty() || hasExtensionName(extensions, name))
-            continue;
-
-        storage.push_back(name);
-        extensions.push_back(storage.back().c_str());
-        AXLOGI("axmol: enabling Vulkan extension required by OpenXR: {}", storage.back());
-    }
 }
 
 static uint32_t findGraphicsQueueFamily(VkPhysicalDevice physicalDevice)
@@ -413,9 +212,8 @@ TextureImpl* createDepthStencilAttachment(DriverImpl* driver, const VkExtent2D& 
 DriverImpl::DriverImpl() {}
 DriverImpl::~DriverImpl()
 {
-#if defined(AX_ENABLE_OPENXR)
-    shutdownOpenXRVulkanBootstrap();
-#endif
+    if (auto interop = GraphicsCore::getVulkanInterop())
+        interop->clearVulkanBinding();
 
     AX_SAFE_RELEASE_NULL(_currentRenderContext);
 
@@ -483,10 +281,6 @@ bool DriverImpl::init()
         allocatorCreateInfo.flags |= VMA_ALLOCATOR_CREATE_EXT_MEMORY_PRIORITY_BIT;
     VK_VERIFY(vmaCreateAllocator(&allocatorCreateInfo, &_vmaAllocator), "vmaCreateAllocator fail");
 
-#if defined(AX_ENABLE_OPENXR)
-    shutdownOpenXRVulkanBootstrap();
-#endif
-
     return true;
 }
 
@@ -538,9 +332,14 @@ bool DriverImpl::initializeFactory()
     if (shouldCreateDebugLayer)
         extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 
-#if defined(AX_ENABLE_OPENXR)
-    appendExtensions(extensions, extensionStorage, getOpenXRVulkanExtensions("xrGetVulkanInstanceExtensionsKHR"));
-#endif
+    if (auto interop = GraphicsCore::getVulkanInterop())
+        interop->collectInstanceExtensions(extensionStorage);
+
+    for (const auto& name : extensionStorage)
+    {
+        if (!name.empty() && !hasExtensionName(extensions, name))
+            extensions.push_back(name.c_str());
+    }
 
     VkInstanceCreateInfo createInfo{};
     createInfo.sType                   = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -555,9 +354,9 @@ bool DriverImpl::initializeFactory()
         _debugCreateInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
                                            VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
                                            VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-        _debugCreateInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
-                                       VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
-                                       VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+        _debugCreateInfo.messageType     = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
+                                           VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+                                           VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
         _debugCreateInfo.pfnUserCallback = vkDebugCallback;
         createInfo.enabledLayerCount     = static_cast<uint32_t>(validationLayers.size());
         createInfo.ppEnabledLayerNames   = validationLayers.data();
@@ -585,30 +384,32 @@ bool DriverImpl::initializeDevice()
     vkEnumeratePhysicalDevices(_factory, &count, nullptr);
     VK_VERIFY_EXPR(count > 0, "No Vulkan physical devices found");
 
+    auto interop = GraphicsCore::getVulkanInterop();
+
     tlx::pod_vector<VkPhysicalDevice> devices(count);
     vkEnumeratePhysicalDevices(_factory, &count, devices.data());
 
-#if defined(AX_ENABLE_OPENXR)
-    VkPhysicalDevice xrPhysicalDevice = getOpenXRVulkanGraphicsDevice(_factory);
-    bool useOpenXRPhysicalDevice      = false;
-    if (xrPhysicalDevice != VK_NULL_HANDLE &&
-        std::find(devices.begin(), devices.end(), xrPhysicalDevice) != devices.end())
     {
-        _physical               = xrPhysicalDevice;
-        _graphicsQueueFamily    = findGraphicsQueueFamily(_physical);
-        useOpenXRPhysicalDevice = true;
-        AXLOGI("axmol: Vulkan physical device selected by OpenXR runtime");
-    }
-    else if (xrPhysicalDevice != VK_NULL_HANDLE)
-    {
-        AXLOGW("axmol: OpenXR runtime returned a Vulkan physical device that is not in vkEnumeratePhysicalDevices");
-    }
-    if (!useOpenXRPhysicalDevice)
-#endif
-    {
-        auto [physical, graphicsQueueFamily] = resolveAdapter(devices, _factory, contextAttrs.powerPreference);
-        _physical                            = physical;
-        _graphicsQueueFamily                 = graphicsQueueFamily;
+        VkPhysicalDevice preferredDevice = VK_NULL_HANDLE;
+        if (interop)
+            preferredDevice = interop->selectPhysicalDevice(_factory, devices.data(), count);
+
+        if (preferredDevice != VK_NULL_HANDLE && count > 0 &&
+            std::find(devices.data(), devices.data() + count, preferredDevice) != devices.data() + count)
+        {
+            _physical            = preferredDevice;
+            _graphicsQueueFamily = findGraphicsQueueFamily(_physical);
+            AXLOGI("axmol: Vulkan physical device selected by VulkanInterop");
+        }
+        else
+        {
+            if (preferredDevice != VK_NULL_HANDLE)
+                AXLOGW(
+                    "axmol: VulkanInterop returned a Vulkan physical device that is not in vkEnumeratePhysicalDevices");
+            auto [physical, graphicsQueueFamily] = resolveAdapter(devices, _factory, contextAttrs.powerPreference);
+            _physical                            = physical;
+            _graphicsQueueFamily                 = graphicsQueueFamily;
+        }
     }
 
     VK_VERIFY_EXPR(_physical != VK_NULL_HANDLE && _graphicsQueueFamily != UINT32_MAX, "No available GPU");
@@ -637,10 +438,14 @@ bool DriverImpl::initializeDevice()
     VK_VERIFY_EXPR(hasExtension(VK_KHR_SWAPCHAIN_EXTENSION_NAME), "VK_KHR_swapchain extension is required");
     deviceExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
 
-#if defined(AX_ENABLE_OPENXR)
-    appendExtensions(deviceExtensions, deviceExtensionStorage,
-                     getOpenXRVulkanExtensions("xrGetVulkanDeviceExtensionsKHR"));
-#endif
+    if (interop)
+        interop->collectDeviceExtensions(_physical, deviceExtensionStorage);
+
+    for (const auto& name : deviceExtensionStorage)
+    {
+        if (!name.empty() && !hasExtensionName(deviceExtensions, name))
+            deviceExtensions.push_back(name.c_str());
+    }
 
     // Some generated/translated SPIR-V modules may declare
     // ShaderViewportIndexLayerEXT. Vulkan requires the matching device extension.
@@ -743,17 +548,12 @@ bool DriverImpl::initializeDevice()
            VK_VERSION_MAJOR(props2.properties.driverVersion), VK_VERSION_MINOR(props2.properties.driverVersion));
 
     // Prepare feature chain
-    void* deviceFeatureChain{nullptr};
-    // Helper to push feature to head of chain
-    auto pushFeature = [&](auto& feature) {
-        feature.pNext      = deviceFeatureChain;
-        deviceFeatureChain = &feature;
-    };
+    VulkanFeatureChain featureChain;
 
     VkPhysicalDeviceExtendedDynamicStateFeaturesEXT extDynState{};
     extDynState.sType                = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_FEATURES_EXT;
     extDynState.extendedDynamicState = VK_TRUE;
-    pushFeature(extDynState);
+    featureChain.push(extDynState);
 
     VkPhysicalDeviceExtendedDynamicState2FeaturesEXT extDynState2{};
     VkPhysicalDeviceExtendedDynamicState3FeaturesEXT extDynState3{};
@@ -770,10 +570,10 @@ bool DriverImpl::initializeDevice()
 
         extDynState2.sType                 = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT;
         extDynState2.extendedDynamicState2 = VK_TRUE;
-        pushFeature(extDynState2);
+        featureChain.push(extDynState2);
 
         extDynState3.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_3_FEATURES_EXT;
-        pushFeature(extDynState3);
+        featureChain.push(extDynState3);
 
         AXLOGI("axmol: Extended Dynamic State 2/3 enabled");
     }
@@ -791,17 +591,11 @@ bool DriverImpl::initializeDevice()
     if (timelineSemaphoreAvailable && timelineSemaphoreFeatures.timelineSemaphore)
     {
         enabledTimelineSemaphoreFeatures.timelineSemaphore = VK_TRUE;
-        pushFeature(enabledTimelineSemaphoreFeatures);
+        featureChain.push(enabledTimelineSemaphoreFeatures);
 
         _vkCaps.timelineSemaphoreSupported = true;
         AXLOGI("axmol: timelineSemaphore feature enabled");
     }
-    //else if (GraphicsCore::isOpenXRCompatible())
-    //{
-    //    AXLOGW(
-    //        "axmol: timelineSemaphore feature is not supported or not available. "
-    //        "Some OpenXR runtimes may fail validation if they create timeline semaphores internally.");
-    //}
 
     // Queue creation info
     float priority = 1.0f;
@@ -816,7 +610,7 @@ bool DriverImpl::initializeDevice()
     dinfo.sType                   = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     dinfo.queueCreateInfoCount    = 1;
     dinfo.pQueueCreateInfos       = &qinfo;
-    dinfo.pNext                   = deviceFeatureChain;
+    dinfo.pNext                   = featureChain.head();
     dinfo.enabledExtensionCount   = deviceExtensions.size();
     dinfo.ppEnabledExtensionNames = deviceExtensions.data();
 
@@ -830,21 +624,16 @@ bool DriverImpl::initializeDevice()
         enabledFeatures.samplerAnisotropy  = VK_TRUE;
     }
 
-    // OpenXR runtimes such as SteamVR/OpenVR may create internal shaders on the
-    // application VkDevice. If those shaders use SPIR-V Geometry capability,
-    // geometryShader must be enabled when creating the VkDevice.
     if (supportedFeatures.geometryShader)
     {
         _vkCaps.geometryShaderSupported = true;
         enabledFeatures.geometryShader  = VK_TRUE;
     }
-    /*else if (GraphicsCore::isOpenXRCompatible())
-    {
-        AXLOGW(
-            "axmol: geometryShader is not supported by this Vulkan device. "
-            "Some OpenXR runtimes may fail validation or fail to render correctly.");
-    }*/
 
+    if (interop)
+        interop->configureDeviceFeatures(_physical, enabledFeatures, featureChain);
+
+    dinfo.pNext            = featureChain.head();
     dinfo.pEnabledFeatures = &enabledFeatures;
 
     // Create logical device
@@ -853,6 +642,18 @@ bool DriverImpl::initializeDevice()
 
     vkGetDeviceQueue(_device, _graphicsQueueFamily, 0, &_graphicsQueue);
     VK_VERIFY_EXPR(_graphicsQueue != VK_NULL_HANDLE, "vkGetDeviceQueue graphics failed");
+
+    if (interop)
+    {
+        VulkanBinding binding{};
+        binding.instance            = _factory;
+        binding.physicalDevice      = _physical;
+        binding.device              = _device;
+        binding.graphicsQueue       = _graphicsQueue;
+        binding.graphicsQueueFamily = _graphicsQueueFamily;
+        binding.graphicsQueueIndex  = 0;
+        interop->setVulkanBinding(binding);
+    }
 
     // Create transient command pool
     VkCommandPoolCreateInfo poolInfo{};
