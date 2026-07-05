@@ -61,7 +61,7 @@ public:
     void clearVulkanBinding() override;
 
 private:
-    std::vector<std::string> getXRVulkanExtensions(std::string_view functionName);
+    void collectXRVulkanExtensions(std::string_view functionName, std::vector<std::string>& extensions);
 
     XrInstance _xrInstance{XR_NULL_HANDLE};
     XrSystemId _xrSystem{XR_NULL_SYSTEM_ID};

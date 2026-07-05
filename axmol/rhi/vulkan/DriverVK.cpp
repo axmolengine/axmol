@@ -395,7 +395,7 @@ bool DriverImpl::initializeDevice()
             preferredDevice = interop->selectPhysicalDevice(_factory, devices.data(), count);
 
         if (preferredDevice != VK_NULL_HANDLE && count > 0 &&
-            std::find(devices.data(), devices.data() + count, preferredDevice) != devices.data() + count)
+            std::find(devices.begin(), devices.end(), preferredDevice) != devices.end())
         {
             _physical            = preferredDevice;
             _graphicsQueueFamily = findGraphicsQueueFamily(_physical);

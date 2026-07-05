@@ -38,9 +38,8 @@ void OpenXRVulkanInterop::setXrHandles(XrInstance instance, XrSystemId system)
     _xrSystem   = system;
 }
 
-static std::vector<std::string> splitExtensionString(const std::string& str)
+static void splitExtensionString(const std::string& str, std::vector<std::string>& extensions)
 {
-    std::vector<std::string> result;
     const char* cursor = str.c_str();
     while (*cursor)
     {
@@ -52,63 +51,58 @@ static std::vector<std::string> splitExtensionString(const std::string& str)
             ++cursor;
 
         if (cursor > begin)
-            result.emplace_back(begin, cursor);
+            extensions.emplace_back(begin, cursor);
     }
-    return result;
 }
 
-std::vector<std::string> OpenXRVulkanInterop::getXRVulkanExtensions(std::string_view functionName)
+void OpenXRVulkanInterop::collectXRVulkanExtensions(std::string_view functionName, std::vector<std::string>& extensions)
 {
-    std::vector<std::string> names;
     if (_xrInstance == XR_NULL_HANDLE)
-        return names;
+        return;
 
     PFN_xrVoidFunction proc = nullptr;
     if (XR_FAILED(xrGetInstanceProcAddr(_xrInstance, functionName.data(), &proc)) || !proc)
-        return names;
+        return;
 
     uint32_t bufferCount = 0;
     XrResult result      = XR_ERROR_FUNCTION_UNSUPPORTED;
     if (functionName == "xrGetVulkanInstanceExtensionsKHR"sv)
     {
         auto getExtensions = reinterpret_cast<PFN_xrGetVulkanInstanceExtensionsKHR>(proc);
-        result = getExtensions(_xrInstance, _xrSystem, 0, &bufferCount, nullptr);
+        result             = getExtensions(_xrInstance, _xrSystem, 0, &bufferCount, nullptr);
         if (XR_SUCCEEDED(result) && bufferCount > 0)
         {
             std::string buffer(bufferCount, '\0');
             result = getExtensions(_xrInstance, _xrSystem, bufferCount, &bufferCount, buffer.data());
             if (XR_SUCCEEDED(result))
-                names = splitExtensionString(buffer);
+                splitExtensionString(buffer, extensions);
         }
     }
     else if (functionName == "xrGetVulkanDeviceExtensionsKHR"sv)
     {
         auto getExtensions = reinterpret_cast<PFN_xrGetVulkanDeviceExtensionsKHR>(proc);
-        result = getExtensions(_xrInstance, _xrSystem, 0, &bufferCount, nullptr);
+        result             = getExtensions(_xrInstance, _xrSystem, 0, &bufferCount, nullptr);
         if (XR_SUCCEEDED(result) && bufferCount > 0)
         {
             std::string buffer(bufferCount, '\0');
             result = getExtensions(_xrInstance, _xrSystem, bufferCount, &bufferCount, buffer.data());
             if (XR_SUCCEEDED(result))
-                names = splitExtensionString(buffer);
+                splitExtensionString(buffer, extensions);
         }
     }
 
     if (XR_FAILED(result))
         AXLOGW("axmol: {} failed, ec:{}", functionName, static_cast<int>(result));
-
-    return names;
 }
 
 void OpenXRVulkanInterop::collectInstanceExtensions(std::vector<std::string>& extensions)
 {
-    auto names = getXRVulkanExtensions("xrGetVulkanInstanceExtensionsKHR");
-    extensions.insert(extensions.end(), names.begin(), names.end());
+    collectXRVulkanExtensions("xrGetVulkanInstanceExtensionsKHR", extensions);
 }
 
 VkPhysicalDevice OpenXRVulkanInterop::selectPhysicalDevice(VkInstance instance,
-                                                            const VkPhysicalDevice* /*devices*/,
-                                                            uint32_t /*deviceCount*/)
+                                                           const VkPhysicalDevice* /*devices*/,
+                                                           uint32_t /*deviceCount*/)
 {
     if (_xrInstance == XR_NULL_HANDLE)
         return VK_NULL_HANDLE;
@@ -122,7 +116,7 @@ VkPhysicalDevice OpenXRVulkanInterop::selectPhysicalDevice(VkInstance instance,
     }
 
     VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
-    const XrResult result = getGraphicsDevice(_xrInstance, _xrSystem, instance, &physicalDevice);
+    const XrResult result           = getGraphicsDevice(_xrInstance, _xrSystem, instance, &physicalDevice);
     if (XR_FAILED(result))
     {
         AXLOGW("axmol: xrGetVulkanGraphicsDeviceKHR failed, ec:{}", static_cast<int>(result));
@@ -133,15 +127,14 @@ VkPhysicalDevice OpenXRVulkanInterop::selectPhysicalDevice(VkInstance instance,
 }
 
 void OpenXRVulkanInterop::collectDeviceExtensions(VkPhysicalDevice /*physicalDevice*/,
-                                                   std::vector<std::string>& extensions)
+                                                  std::vector<std::string>& extensions)
 {
-    auto names = getXRVulkanExtensions("xrGetVulkanDeviceExtensionsKHR");
-    extensions.insert(extensions.end(), names.begin(), names.end());
+    collectXRVulkanExtensions("xrGetVulkanDeviceExtensionsKHR", extensions);
 }
 
 void OpenXRVulkanInterop::configureDeviceFeatures(VkPhysicalDevice physicalDevice,
-                                                   VkPhysicalDeviceFeatures& enabledFeatures,
-                                                   VulkanFeatureChain& /*featureChain*/)
+                                                  VkPhysicalDeviceFeatures& enabledFeatures,
+                                                  VulkanFeatureChain& /*featureChain*/)
 {
     VkPhysicalDeviceFeatures supportedFeatures{};
     vkGetPhysicalDeviceFeatures(physicalDevice, &supportedFeatures);
