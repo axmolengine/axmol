@@ -80,7 +80,7 @@ void AppDelegate::applicationWillLaunch()
 bool AppDelegate::applicationDidFinishLaunching()
 {
     // Enable logging output colored text style and prefix timestamp
-    //ax::setLogFmtFlag(ax::LogFmtFlag::Full);
+    // ax::setLogFmtFlag(ax::LogFmtFlag::Full);
 
     // whether enable global SDF font render support, since axmol-2.0.1
     FontFreeType::setGlobalSDFEnabled(true);

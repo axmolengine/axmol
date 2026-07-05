@@ -337,8 +337,7 @@ bool OpenXRContext::xrPollEvents()
 // ---------------------------------------------------------------------------
 // Construction / destruction
 // ---------------------------------------------------------------------------
-OpenXRContext::OpenXRContext(std::string_view appName)
-    : _appName(appName)
+OpenXRContext::OpenXRContext(std::string_view appName) : _appName(appName)
 {
     _director = Director::getInstance();
 }
@@ -388,10 +387,10 @@ void OpenXRContext::onRenderViewChanged(RenderViewCore* rv)
 
 void OpenXRContext::pollEvents()
 {
-    _frameReady                = false;
-    _viewsLocated              = false;
-    _locatedViewCount          = 0;
-    _locatedViewsPoseValid     = false;
+    _frameReady             = false;
+    _viewsLocated           = false;
+    _locatedViewCount       = 0;
+    _locatedViewsPoseValid  = false;
     _headViewTransformValid = false;
     _headViewTransform      = Mat4::identity;
 

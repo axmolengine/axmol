@@ -52,11 +52,10 @@ public:
     VkPhysicalDevice selectPhysicalDevice(VkInstance instance,
                                           const VkPhysicalDevice* devices,
                                           uint32_t deviceCount) override;
-    void collectDeviceExtensions(VkPhysicalDevice physicalDevice,
-                                 std::vector<std::string>& extensions) override;
+    void collectDeviceExtensions(VkPhysicalDevice physicalDevice, std::vector<std::string>& extensions) override;
     void configureDeviceFeatures(VkPhysicalDevice physicalDevice,
-                                  VkPhysicalDeviceFeatures& enabledFeatures,
-                                  VulkanFeatureChain& featureChain) override;
+                                 VkPhysicalDeviceFeatures& enabledFeatures,
+                                 VulkanFeatureChain& featureChain) override;
     void setVulkanBinding(const VulkanBinding& binding) override;
     void clearVulkanBinding() override;
 
