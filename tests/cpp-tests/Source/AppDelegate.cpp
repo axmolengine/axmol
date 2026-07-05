@@ -54,7 +54,7 @@ void AppDelegate::applicationWillLaunch()
 
     registerVulkanInterop("Cpp Tests"sv);
 
-    //registerXrVulkanInerop();
+    // registerXrVulkanInerop();
 
     // set vulkan min android api level, 31 for Android 12
     // refer: https://developer.android.com/tools/releases/platforms
