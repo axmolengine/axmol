@@ -67,7 +67,6 @@
 #include "Camera3DTest/Camera3DTest.h"
 #include "ClickAndMoveTest/ClickAndMoveTest.h"
 #include "EnvironmentTest/EnvironmentTest.h"
-#include "ConsoleTest/ConsoleTest.h"
 #include "CurrentLanguageTest/CurrentLanguageTest.h"
 #include "DataVisitorTest/DataVisitorTest.h"
 #include "NetworkTest/NetworkTest.h"
