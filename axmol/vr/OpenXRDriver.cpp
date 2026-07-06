@@ -1006,7 +1006,7 @@ bool OpenXRDriver::initXrSwapchains()
             return false;
         }
 
-        auto depthTex = createDepthTexture(_colorSwapchains[0].width, _colorSwapchains[0].height);
+        auto depthTex = createDepthTexture(_colorSwapchains[i].width, _colorSwapchains[i].height);
         if (!depthTex)
             return false;
 
