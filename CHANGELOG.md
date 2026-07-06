@@ -1,3 +1,24 @@
+# axmol-2.11.4 (Jul 6, 2026)
+
+## Bug fixes
+
+- Cherry-pick fixes from v3 by @halx99 [#3134](https://github.com/axmolengine/axmol/pull/3134)
+- Fix UI mistakes in release/2.10.0 by @WUCJ638 [#3161](https://github.com/axmolengine/axmol/pull/3161)
+- Fix for issue #3198 by @rh101 [#3203](https://github.com/axmolengine/axmol/pull/3203)
+- Fix Lua type mismatch with C++ by @halx99 [#3147](https://github.com/axmolengine/axmol/pull/3147)
+- Fix ArchLinux webkitgtk package name by @halx99
+- Fix OpenAL compilation on ArchLinux GCC-15.2.1 by @halx99
+- Fix touch events not working in Windows browsers by @halx99 [#3056](https://github.com/axmolengine/axmol/pull/3056)
+
+## Improvements
+
+- Add Doctest unit testing to C++ template project by @theSlyest [#3121](https://github.com/axmolengine/axmol/pull/3121)
+- Download axslcc from the supported repository by @halx99 [#3171](https://github.com/axmolengine/axmol/pull/3171)
+- Improve setup for ArchLinux by @halx99
+- Refactor GitHub Actions workflow for build jobs by @halx99
+- Add `ui::Widget::getBrightStyle` by @halx99
+
+
 # axmol-2.11.3 (Feb 23, 2026)
 
 ## Bug fixes
