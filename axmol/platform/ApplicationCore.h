@@ -33,6 +33,18 @@ THE SOFTWARE.
 #include "axmol/platform/Common.h"
 #include "axmol/platform/StdC.h"
 
+#include <memory>
+
+#if defined(AX_ENABLE_OPENXR)
+namespace ax
+{
+inline namespace experimental
+{
+class OpenXRDriver;
+}
+}  // namespace ax
+#endif
+
 namespace ax
 {
 
@@ -161,15 +173,33 @@ public:
      */
     virtual void setAnimationInterval(float interval) = 0;
 
-    /** Subclass override the function to set app context attribution instead of use default value.
-     * And now can only set six attributions:redBits,greenBits,blueBits,alphaBits,depthBits,stencilBits.
-     * Default value are(5,6,5,0,16,0), usually use as follows:
-     * void AppDelegate::initContextAttrs(){
+    /**
+     * @brief Called before makeCurrentDriver(). Override to configure engine options
+     *        (driver preference, OpenXR support, context attributes, etc.).
+     *
+     * Example:
+     * @code
+     * void AppDelegate::applicationWillLaunch() {
+     *     GraphicsCore::setVulkanMinAndroidApiLevel(31);
+     * #ifdef AX_ENABLE_OPENXR
+     *     registerVulkanInterop("your_app_name");  // required for Vulkan; harmless for other backends
+     * #endif
      *     ContextAttrs contextAttrs = {8, 8, 8, 8, 24, 8};
      *     setContextAttrs(contextAttrs);
      * }
+     * @endcode
      */
-    virtual void initContextAttrs() {}
+    virtual void applicationWillLaunch() {}
+
+    /**
+     * Registers a VulkanInterop for OpenXR before makeCurrentDriver().
+     * Required for Vulkan; harmless for other backends.
+     */
+    bool registerVulkanInterop(std::string_view appName);
+
+#if defined(AX_ENABLE_OPENXR)
+    std::unique_ptr<OpenXRDriver> releaseXRDriver();
+#endif
 
     /**
     @brief Get current language config.
@@ -230,6 +260,10 @@ protected:
     static ContextAttrs s_contextAttrs;
     static Application* s_axmolApp;
     static Director* s_director;
+
+#if defined(AX_ENABLE_OPENXR)
+    std::unique_ptr<OpenXRDriver> _openxrDriver;
+#endif
 };
 
 // end of platform group

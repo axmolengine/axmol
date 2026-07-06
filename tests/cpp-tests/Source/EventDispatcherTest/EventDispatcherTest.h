@@ -321,4 +321,19 @@ private:
     ax::CustomEventListener* _listener;
 };
 
+class XRInputEventTest : public EventDispatcherTestDemo
+{
+public:
+    CREATE_FUNC(XRInputEventTest);
+    XRInputEventTest();
+    ~XRInputEventTest();
+
+    std::string title() const override;
+    std::string subtitle() const override;
+
+private:
+    ax::XRInputEventListener* _xrListener;
+    ax::Label* _statusLabel;
+};
+
 #endif /* defined(__samples__NewEventDispatcherTest__) */

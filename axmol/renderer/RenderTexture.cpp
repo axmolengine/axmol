@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "axmol/platform/FileUtils.h"
 #include "axmol/base/Director.h"
 #include "axmol/renderer/Renderer.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/Texture.h"
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
 #    include "axmol/base/CustomEventListener.h"

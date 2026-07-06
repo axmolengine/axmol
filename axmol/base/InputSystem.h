@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "axmol/base/InputDelegate.h"
 #include "axmol/base/PointerEvent.h"
 #include "axmol/base/KeyboardEvent.h"
+#include "axmol/base/XRInputEvent.h"
 
 /**
  * @addtogroup base
@@ -92,6 +93,15 @@ public:
     void handlePointerCancel(Vec2 point, const PointerInputState& state);
 
     void handlePointerScroll(Vec2 point, Vec2 scrollDelat, const PointerInputState& state);
+
+    // VR controller input: PointerType::Controller with a 3D ray.
+    PointerHitResult handleVRPointerEvent(InputPhase phase, Vec2 point, const Ray& ray, const PointerInputState& state);
+    PointerHitResult handleVRPointerScroll(Vec2 point,
+                                           Vec2 scrollDelta,
+                                           const Ray& ray,
+                                           const PointerInputState& state);
+
+    void handleXRInput(const XRInputEvent::State& state);
 
     /**
      * Enable or disable pointer interactions.
@@ -232,6 +242,14 @@ protected:
     PointerEvent* fetchPointerEvent(intptr_t pointerId);
     void removePointerEvent(intptr_t pointerId);
     void dispatchPointerEvent(InputPhase phase, Vec2 point, const PointerInputState& state);
+    PointerHitResult dispatchVRPointerEvent(InputPhase phase,
+                                            Vec2 point,
+                                            const Ray& ray,
+                                            const PointerInputState& state);
+    PointerHitResult dispatchVRPointerScroll(Vec2 point,
+                                             Vec2 scrollDelta,
+                                             const Ray& ray,
+                                             const PointerInputState& state);
 
     // cached mouse position with inputScale applied
     Vec2 _lastPointerPosition;  // the original pointer position

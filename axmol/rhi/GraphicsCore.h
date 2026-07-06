@@ -34,16 +34,22 @@ namespace rhi
 {
 using DriverPreference = rhi::DriverType;
 
+class VulkanInterop;
+
 /**
- * @class DriverContext
+ * @class GraphicsCore
  * @brief Centralized manager for graphics driver lifecycle and shader environment.
  *
- * DriverContext provides a unified interface to create, activate, and destroy
+ * GraphicsCore provides a unified interface to create, activate, and destroy
  * rendering drivers across multiple backends (D3D, Vulkan, Metal, OpenGL).
  * It abstracts backend differences and ensures consistent shader language/profile
  * setup for the current driver.
+ *
+ * @note GraphicsCore is the system-level entry point for all rendering operations.
+ *       For actual GPU resource creation (e.g., textures, buffers, pipelines),
+ *       use GraphicsCore::currentDriver() to obtain the active driver instance.
  */
-class AX_DLL DriverContext
+class AX_DLL GraphicsCore
 {
 public:
     /**
@@ -73,7 +79,7 @@ public:
      *
      * @warning To ensure the restriction takes effect, this function should
      *          be invoked as early as possible (e.g. in the application
-     *          delegate's constructor/initContextAttrs), before any rendering
+     *          delegate's constructor/applicationWillLaunch), before any rendering
      *          context or driver initialization occurs.
      *
      * @param apiLevel The minimum Android API level required to allow Vulkan usage.
@@ -83,6 +89,37 @@ public:
      *                   - https://developer.android.com/tools/releases/platforms
      */
     static void setVulkanMinAndroidApiLevel(int apiLevel);
+
+    /**
+     * @brief Sets the Vulkan interoperability interface for external API integration.
+     *
+     * This function allows external rendering frameworks (such as OpenXR for VR/AR)
+     * to share Vulkan resources with the engine's internal Vulkan driver. The provided
+     * VulkanInterop instance serves as a bridge between the engine and the external
+     * API, enabling coordinated Vulkan instance and device management.
+     *
+     * The typical use case is when the engine is used within an OpenXR application:
+     * - OpenXR runtime creates and manages the Vulkan instance and physical device
+     * - The engine needs to use the same Vulkan instance/device for rendering
+     * - VulkanInterop provides the necessary handles and synchronization primitives
+     *
+     * @note This function must be called **before** GraphicsCore::makeCurrentDriver()
+     *       to take effect. Once the driver is initialized, changing the interop
+     *       object has no effect.
+     *
+     * @warning The caller is responsible for ensuring the VulkanInterop object
+     *          remains valid for the entire lifetime of the Vulkan driver. The
+     *          engine does not take ownership of the pointer.
+     *
+     * @param interop Pointer to a VulkanInterop implementation that provides
+     *                the external Vulkan handles. Pass nullptr to clear the
+     *                interop interface and revert to engine-managed Vulkan
+     *                instance creation.
+     *
+     * @see VulkanInterop
+     * @see makeCurrentDriver()
+     */
+    static void setVulkanInterop(VulkanInterop* interop);
 
     /**
      * @brief Sets the priority value for a specific driver type.
@@ -98,7 +135,7 @@ public:
      *
      * @warning To ensure the priority takes effect, this function should be
      *          invoked as early as possible, typically in the application
-     *          delegate's constructor/initContextAttrs, before any rendering context or window
+     *          delegate's constructor/applicationWillLaunch, before any rendering context or window
      *          is created. Late changes may not apply if the driver has already
      *          been initialized.
      *          **This API does not affect the fallback OpenGL driver.**
@@ -148,25 +185,23 @@ public:
      */
     static void destroyCurrentDriver();
 
-    static DriverBase* currentDriver() { return _currentDriver.get(); }
-    static DriverType currentDriverType() { return _currentDriverType; }
+    [[internal]] static VulkanInterop* getVulkanInterop();
 
-    static bool isOpenGL() { return _currentDriverType == DriverType::OpenGL; }
-    static bool isMetal() { return _currentDriverType == DriverType::Metal; }
-    static bool isD3D11() { return _currentDriverType == DriverType::D3D11; }
-    static bool isD3D12() { return _currentDriverType == DriverType::D3D12; }
-    static bool isVulkan() { return _currentDriverType == DriverType::Vulkan; }
+    static DriverBase* currentDriver();
+    static DriverType currentDriverType();
 
-    static int currentShaderLang() { return _currentShaderLang; }
-    static int currentShaderProfile() { return _currentShaderProfile; }
+    static bool isOpenGL();
+    static bool isMetal();
+    static bool isD3D11();
+    static bool isD3D12();
+    static bool isVulkan();
+
+    static int currentShaderLang();
+    static int currentShaderProfile();
 
 private:
-    static std::unique_ptr<DriverBase> _currentDriver;
-    static DriverPreference _driverPreference;
-    static DriverType _currentDriverType;
-    static int _currentShaderLang;
-    static int _currentShaderProfile;
-    static int _vulkanMinAndroidApiLevel;
+    struct State;
+    static State& state();
 };
 
 }  // namespace rhi
@@ -181,14 +216,13 @@ private:
 using DriverPreference = rhi::DriverPreference;
 
 /**
- * @brief Alias for rendering driver context.
+ * @brief Shorthand for @c ax::rhi::GraphicsCore.
  *
- * Provides a shorthand for @c ax::rhi::DriverContext,
- * which manages initialization and runtime state of
- * the selected rendering backend.
+ * GraphicsCore manages the rendering backend selection, driver lifecycle,
+ * and graphics runtime state for the engine.
  */
-using DriverContext = rhi::DriverContext;
+using GraphicsCore = rhi::GraphicsCore;
 
 }  // namespace ax
 
-#define axdrv ax::rhi::DriverContext::currentDriver()
+#define axdrv ax::rhi::GraphicsCore::currentDriver()

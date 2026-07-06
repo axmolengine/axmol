@@ -568,16 +568,6 @@ public:
     virtual const Vec2& getContentSize() const;
 
     /**
-     * The basic node hit test, since axmol-1.0
-     *
-     * @param worldPoint   The coord in GL world space.
-     *
-     * @return Whether the worldPoint is inside this node
-     *
-     */
-    virtual bool hitTest(const Vec2& worldPoint) const;
-
-    /**
      * Sets whether the node is visible.
      *
      * The default value is true, a node is default to visible.
@@ -1864,6 +1854,42 @@ public:
 
     void updateProgramStateTexture(Texture2D* texture);
 
+    /**
+    * Performs pointer hit testing for this node under the specified camera.
+    *
+    * This function is used by EventDispatcher before dispatching pointer events
+    * to scene-graph-priority PointerEventListener instances. The listener will
+    * receive the pointer event only if this function returns true for one of the
+    * candidate cameras.
+    *
+    * The default implementation is expected to test the node's local content
+    * rectangle against the pointer's 2D world/canvas position, usually from
+    * PointerEvent::getLocation().
+    *
+    * Derived classes may override this function to provide custom hit testing,
+    * such as clipping-aware UI hit testing, non-rectangular 2D hit areas, terrain
+    * picking, mesh picking, or physics ray casting.
+    *
+    * For 3D picking, implementations should typically use
+    * PointerEvent::getScreenLocation() together with Camera::screenToRay().
+    *
+    * @param event       The pointer event being tested.
+    * @param camera      The candidate camera used for this hit test.
+    * @param outHitPoint Optional output parameter for the hit point. When provided,
+    * ```
+                     implementations should store the hit point in
+      ```
+    * ```
+                     world coordinate space. Pass nullptr if the hit point is
+      ```
+    * ```
+                     not needed.
+      ```
+    *
+    * @return true if the pointer hits this node for the specified camera, false otherwise.
+      */
+    virtual bool onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* outHitPoint);
+
     /*
      * Reset child state with resources cleanup, internal use, please don't invoke this API.
      */
@@ -1918,42 +1944,6 @@ protected:
 
     void updateParentChildrenIndexer(int tag);
     void updateParentChildrenIndexer(std::string_view name);
-
-    /**
-    * Performs pointer hit testing for this node under the specified camera.
-    *
-    * This function is used by EventDispatcher before dispatching pointer events
-    * to scene-graph-priority PointerEventListener instances. The listener will
-    * receive the pointer event only if this function returns true for one of the
-    * candidate cameras.
-    *
-    * The default implementation is expected to test the node's local content
-    * rectangle against the pointer's 2D world/canvas position, usually from
-    * PointerEvent::getLocation().
-    *
-    * Derived classes may override this function to provide custom hit testing,
-    * such as clipping-aware UI hit testing, non-rectangular 2D hit areas, terrain
-    * picking, mesh picking, or physics ray casting.
-    *
-    * For 3D picking, implementations should typically use
-    * PointerEvent::getScreenLocation() together with Camera::screenToRay().
-    *
-    * @param event       The pointer event being tested.
-    * @param camera      The candidate camera used for this hit test.
-    * @param outHitPoint Optional output parameter for the hit point. When provided,
-    * ```
-                     implementations should store the hit point in this node's
-      ```
-    * ```
-                     local coordinate space. Pass nullptr if the hit point is
-      ```
-    * ```
-                     not needed.
-      ```
-    *
-    * @return true if the pointer hits this node for the specified camera, false otherwise.
-      */
-    virtual bool onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* outHitPoint);
 
 private:
     void addChildHelper(Node* child, int localZOrder, int tag, std::string_view name, bool setTag);

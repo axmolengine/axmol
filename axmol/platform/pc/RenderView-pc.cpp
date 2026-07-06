@@ -62,7 +62,7 @@ The RenderView for win32,linux,macos,wasm
 #    include "axmol/rhi/vulkan/DriverVK.h"
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 /** glfw3native.h */
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
@@ -860,7 +860,7 @@ void* RenderView::getNativeWindow() const
 
 SurfaceHandle RenderView::getNativeDisplay() const
 {
-    auto driverType = DriverContext::currentDriverType();
+    auto driverType = GraphicsCore::currentDriverType();
     if (driverType == DriverType::Vulkan)
         return _vkSurface;
 
@@ -967,8 +967,8 @@ bool RenderView::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     // If any of the high-performance APIs (D3D11/D3D12/Vulkan/Metal) are enabled,
     // the runtime will attempt initialization in the default priority order.
     // If all attempts fail, OpenGL will then be explicitly selected as the fallback.
-    DriverContext::makeCurrentDriver();
-    const auto fallbackGL = DriverContext::isOpenGL();
+    GraphicsCore::makeCurrentDriver();
+    const auto fallbackGL = GraphicsCore::isOpenGL();
     if (fallbackGL)
     {
 #if AX_GLES_PROFILE
@@ -1038,7 +1038,7 @@ bool RenderView::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     if (fallbackGL)
     {
         glfwMakeContextCurrent(_mainWindow);
-        DriverContext::activateCurrentDriver();
+        GraphicsCore::activateCurrentDriver();
 
         glfwSetWindowUserPointer(_mainWindow, gl::__state);
     }
@@ -1063,7 +1063,7 @@ bool RenderView::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     updateRenderSurface(fbWidth, fbHeight, SurfaceUpdateFlag::RenderSizeChanged | SurfaceUpdateFlag::SilentUpdate);
 
 #if AX_ENABLE_VK
-    if (DriverContext::isVulkan())
+    if (GraphicsCore::isVulkan())
     {
         auto _createSurface = [](VkInstance inst, void* window, VkSurfaceKHR* surface) {
             return glfwCreateWindowSurface(inst, static_cast<GLFWwindow*>(window), nullptr, surface);
@@ -1219,7 +1219,7 @@ void RenderView::end()
 void RenderView::swapBuffers()
 {
 #if AX_ENABLE_GL
-    if (_mainWindow && DriverContext::isOpenGL())
+    if (_mainWindow && GraphicsCore::isOpenGL())
         glfwSwapBuffers(_mainWindow);
 #endif
 }
@@ -1232,7 +1232,7 @@ bool RenderView::windowShouldClose()
         return true;
 }
 
-void RenderView::pollEvents()
+void RenderView::pollNativeEvents()
 {
     glfwPollEvents();
 }

@@ -26,7 +26,7 @@
 #include "axmol/rhi/Program.h"
 #include "axmol/renderer/VertexLayoutManager.h"
 #include "axmol/rhi/axslc-spec.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/tlx/hash.hpp"
 #include "yasio/ibstream.hpp"
 
@@ -69,7 +69,7 @@ Program::Program(Data& vsData, Data& fsData)
 
     resolveBuiltinBindings();
 
-    if (rhi::DriverContext::isD3D12() && _activeUniformBlockInfos.size() > 1)
+    if (rhi::GraphicsCore::isD3D12() && _activeUniformBlockInfos.size() > 1)
     {
         std::sort(_activeUniformBlockInfos.begin(), _activeUniformBlockInfos.end(),
                   [](auto& a, auto& b) { return a.binding < b.binding; });
@@ -276,7 +276,7 @@ void Program::reflectVertexInputs(SLCReflectContext* context)
 {
     auto ibs = context->ibs;
 
-    const bool isD3D = rhi::DriverContext::isD3D11() || rhi::DriverContext::isD3D12();
+    const bool isD3D = rhi::GraphicsCore::isD3D11() || rhi::GraphicsCore::isD3D12();
 
     for (int i = 0; i < context->refl->num_inputs; ++i)
     {
@@ -376,7 +376,7 @@ void Program::reflectSamplers(SLCReflectContext* context)
         _activeTextureInfos.emplace_back(name, &ret.first->second);
     }
 
-    if (rhi::DriverContext::isD3D12() && _activeTextureInfos.size() > 1)
+    if (rhi::GraphicsCore::isD3D12() && _activeTextureInfos.size() > 1)
     {
         // Important:
         // In D3D11/D3D12, the order in which descriptor ranges are declared

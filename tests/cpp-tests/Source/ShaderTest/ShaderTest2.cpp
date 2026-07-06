@@ -27,7 +27,7 @@
 #include "ShaderTest.h"
 #include "../testResource.h"
 #include "axmol/axmol.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include <tuple>
 
 using namespace ax;

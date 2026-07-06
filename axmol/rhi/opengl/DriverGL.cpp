@@ -206,6 +206,17 @@ Texture* DriverImpl::createTexture(const TextureDesc& desc, std::optional<Color>
     return new TextureImpl(desc);
 }
 
+Texture* DriverImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
+{
+    auto nativeTexture = static_cast<GLuint>(descriptor.nativeTexture.u64);
+    if (!nativeTexture)
+        return nullptr;
+
+    auto texture = new TextureImpl(nativeTexture, descriptor.desc.width, descriptor.desc.height);
+    texture->updateTextureDesc(descriptor.desc);
+    return texture;
+}
+
 RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
 {
     auto rtGL = new RenderTargetImpl(this, false);

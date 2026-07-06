@@ -23,6 +23,8 @@ set(_AX_BASE_HEADER
   base/Data.h
   base/Macros.h
   base/AccelerationEvent.h
+  base/XRInputEvent.h
+  base/XRInputEventListener.h
   base/KeyboardEventListener.h
   base/Controller.h
   base/base64.h
@@ -88,6 +90,8 @@ set(_AX_BASE_SRC
   base/Director.cpp
   base/Event.cpp
   base/AccelerationEvent.cpp
+  base/XRInputEvent.cpp
+  base/XRInputEventListener.cpp
   base/ControllerEvent.cpp
   base/CustomEvent.cpp
   base/EventDispatcher.cpp

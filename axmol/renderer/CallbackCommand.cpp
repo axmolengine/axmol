@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "axmol/renderer/CallbackCommand.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 namespace ax
 {

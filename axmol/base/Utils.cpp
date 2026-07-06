@@ -48,7 +48,7 @@ THE SOFTWARE.
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/renderer/RenderState.h"
 #include "axmol/rhi/PixelBufferDesc.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 #include "axmol/platform/Image.h"
 #include "axmol/platform/FileUtils.h"
@@ -109,7 +109,7 @@ void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
     auto eventDispatcher = director->getEventDispatcher();
 
     // !!!Metal: needs setFrameBufferOnly before draw
-    const auto eventName = rhi::DriverContext::isMetal() ? Director::EVENT_BEFORE_DRAW : Director::EVENT_AFTER_DRAW;
+    const auto eventName = rhi::GraphicsCore::isMetal() ? Director::EVENT_BEFORE_DRAW : Director::EVENT_AFTER_DRAW;
 
     s_captureScreenListener = eventDispatcher->addCustomEventListener(eventName, [=](CustomEvent* /*event*/) {
         eventDispatcher->removeEventListener(s_captureScreenListener);
@@ -148,8 +148,7 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
 
         director->setNextDeltaTimeZero(true);
 
-        auto rtx =
-            RenderTexture::create(director->canvasToPixels(size * scale), rhi::PixelFormat::RGBA8, PixelFormat::D24S8);
+        auto rtx      = RenderTexture::createForCanvas(size * scale, rhi::PixelFormat::RGBA8, PixelFormat::D24S8);
         Vec2 savedPos = startNode->getPosition();
         Vec2 anchor;
         if (!startNode->isIgnoreAnchorPointForPosition())
@@ -160,7 +159,9 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
 
         RefPtr<RenderTexturePass> rtxPass(RenderTexturePass::obtain(rtx), tlx::adopt_object);
 
-        rtxPass->begin();
+        Camera* camera = Camera::createOrthographicView(size, -1024.f, 1024.f);
+
+        rtxPass->begin(camera);
         rtxPass->clearAll();
         startNode->visit();
         rtxPass->end();

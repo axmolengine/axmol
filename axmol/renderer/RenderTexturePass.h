@@ -45,6 +45,10 @@ namespace rhi
 class RenderTarget;
 }
 
+static constexpr float RT_PASS_BEGIN_ORDER = -100000;
+static constexpr float RT_PASS_CLEAR_ORDER = -5000;
+static constexpr float RT_PASS_END_ORDER   = 100000;
+
 /**
  * @brief Manages an offscreen render pass into a RenderTexture.
  *
@@ -117,6 +121,7 @@ public:
     /// @name Target
     /** @{ Set render target. Must be called before begin(), not while active. */
     void setTarget(RenderTexture* rt);
+    void setTarget(rhi::RenderTarget* rt);
     /** @} */
 
 #ifndef _AX_GEN_SCRIPT_BINDINGS
@@ -228,7 +233,7 @@ private:
     void updateViewport();
 
     Renderer* _renderer{nullptr};
-    RenderTexture* _renderTexture{nullptr};  // weak ref
+    rhi::RenderTarget* _renderTarget{nullptr};  // weak ref
     bool _active{false};
     bool _autoFlipY{true};
 

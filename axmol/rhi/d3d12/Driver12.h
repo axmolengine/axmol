@@ -23,7 +23,7 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/d3d12/DescriptorHeapAllocator12.h"
 #include "axmol/rhi/d3d12/UploadBufferAllocator12.h"
 #include "axmol/rhi/d3d12/ShaderModule12.h"
@@ -123,6 +123,7 @@ public:
     RenderContext* createRenderContext(SurfaceHandle surface) override;
     Buffer* createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial) override;
     Texture* createTexture(const TextureDesc& descriptor, std::optional<Color> clearColorHint = std::nullopt) override;
+    Texture* createTextureFromNativeHandle(const ExternalTextureDesc& descriptor) override;
     RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
     DepthStencilState* createDepthStencilState() override;
     RenderPipeline* createRenderPipeline() override;

@@ -415,6 +415,8 @@ public:
 
     // Overrides, internal use only
     void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
+    bool onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* outHitPoint) override;
+
     /**
      * Ray-Terrain intersection.
      * @return the intersection point

@@ -30,6 +30,7 @@
 #include <spine/spine-axmol.h>
 
 #include "axmol/audio/AudioEngine.h"
+#include "axmol/scene/CameraBackgroundBrush.h"
 #include "../testResource.h"
 #include "../TerrainTest/TerrainTest.h"
 
@@ -65,8 +66,8 @@ public:
 /** Scene3DTestScene designed for test 2D-3D mixed render for common 3D game usage.
  *
  *  Scene has three logic sub scenes:
- *  -   World scene for maintain 3D game world objects, there are two cameras in this
- *      scene, one for skybox, another for other 3D models.
+ *  -   World scene for maintain 3D game world objects, there is one camera for 3D models
+ *      and a skybox brush attached to it.
  *  -   UI scene, the root scene, maintain a menu in main UI.
  *  -   Dialog scene maintain two dialogs, which has 3D models on it and another
  *      2D elements above on 3D models, there are three cameras for them.
@@ -100,8 +101,6 @@ private:
     Node* _osdScene;
 
     // init in createWorld3D()
-    TextureCube* _textureCube;
-    Skybox* _skyBox;
     ax::Terrain* _terrain;
     Player* _player;
     Node* _monsters[2];
@@ -203,9 +202,9 @@ static unsigned short s_CM[LAYER_COUNT] = {
     (unsigned short)s_CF[3],
 };
 
-static const char* s_CameraNames[CAMERA_COUNT] = {"World 3D Skybox", "World 3D Scene",  "UI 2D",
-                                                  "Dialog 2D Base",  "Dialog 3D Model", "Dialog 2D Above",
-                                                  "OSD 2D Base",     "OSD 3D Model",    "OSD 2D Above"};
+static const char* s_CameraNames[CAMERA_COUNT] = {"(unused)",       "World 3D Scene",  "UI 2D",
+                                                  "Dialog 2D Base", "Dialog 3D Model", "Dialog 2D Above",
+                                                  "OSD 2D Base",    "OSD 3D Model",    "OSD 2D Above"};
 
 static int8_t cameraDepth(GAME_CAMERAS_ORDER camera)
 {
@@ -229,8 +228,6 @@ Scene3DTestScene::Scene3DTestScene()
     : _worldScene(nullptr)
     , _dlgScene(nullptr)
     , _osdScene(nullptr)
-    , _textureCube(nullptr)
-    , _skyBox(nullptr)
     , _terrain(nullptr)
     , _player(nullptr)
     , _playerItem(nullptr)
@@ -264,16 +261,8 @@ bool Scene3DTestScene::init()
         Camera* ca       = nullptr;  // temp variable
 
         ////////////////////////////////////////////////////////////////////////
-        // create world 3D scene, this scene has two camera
+        // create world 3D scene
         _worldScene = Node::create();
-        // create a camera to look the skybox
-        ca = _gameCameras[CAMERA_WORLD_3D_SKYBOX] =
-            Camera::createPerspective(60, visibleSize.width / visibleSize.height, 10, 1000);
-        ca->setDepth(cameraDepth(CAMERA_WORLD_3D_SKYBOX));
-        ca->setName(s_CameraNames[CAMERA_WORLD_3D_SKYBOX]);
-        ca->setCameraFlag(s_CF[LAYER_BACKGROUND]);
-        ca->setPosition3D(Vec3(0.f, 0.f, 50.f));
-        _worldScene->addChild(ca);
         // create a camera to look the 3D models in world 3D scene
         ca = _gameCameras[CAMERA_WORLD_3D_SCENE] =
             Camera::createPerspective(60, visibleSize.width / visibleSize.height, 0.1f, 200);
@@ -282,7 +271,6 @@ bool Scene3DTestScene::init()
         _worldScene->addChild(ca);
         // create 3D objects and add to world scene
         createWorld3D();
-        _worldScene->addChild(_skyBox);
         _worldScene->addChild(_terrain);
         _worldScene->addChild(_player);
         _worldScene->addChild(_monsters[0]);
@@ -365,11 +353,10 @@ bool Scene3DTestScene::init()
 
         ////////////////////////////////////////////////////////////////////////
         // add touch event callback
-        auto listener              = PointerEventListener::create();
-        listener->onPointerHitTest = [](PointerEvent*, const Camera*, Vec3*) { return true; };
-        listener->onPointerDown    = AX_CALLBACK_1(Scene3DTestScene::onPointerDown, this);
-        listener->onPointerUp      = AX_CALLBACK_1(Scene3DTestScene::onPointerUp, this);
-        _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+        auto listener           = PointerEventListener::create();
+        listener->onPointerDown = AX_CALLBACK_1(Scene3DTestScene::onPointerDown, this);
+        listener->onPointerUp   = AX_CALLBACK_1(Scene3DTestScene::onPointerUp, this);
+        _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, _terrain);
 
         scheduleUpdate();
 
@@ -393,20 +380,11 @@ void Scene3DTestScene::createWorld3D()
 {
     // create skybox
 
-    // create the second texture for cylinder
-    _textureCube = TextureCube::create("MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg",
-                                       "MeshRendererTest/skybox/top.jpg", "MeshRendererTest/skybox/bottom.jpg",
-                                       "MeshRendererTest/skybox/front.jpg", "MeshRendererTest/skybox/back.jpg");
-    // set texture parameters
-    Texture2D::TexParams tRepeatParams{};
-    tRepeatParams.sAddressMode = rhi::SamplerAddressMode::MIRROR;
-    tRepeatParams.tAddressMode = rhi::SamplerAddressMode::MIRROR;
-    _textureCube->setTexParameters(tRepeatParams);
-
-    // add skybox
-    _skyBox = Skybox::create();
-    _skyBox->setCameraMask(s_CM[LAYER_BACKGROUND]);
-    _skyBox->setTexture(_textureCube);
+    // create skybox brush on the world scene camera
+    auto skyboxBrush = CameraBackgroundSkyBoxBrush::create(
+        "MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg", "MeshRendererTest/skybox/top.jpg",
+        "MeshRendererTest/skybox/bottom.jpg", "MeshRendererTest/skybox/front.jpg", "MeshRendererTest/skybox/back.jpg");
+    _gameCameras[CAMERA_WORLD_3D_SCENE]->setBackgroundBrush(skyboxBrush);
 
     // create terrain
     Terrain::DetailMap r("TerrainTest/dirt.jpg");
@@ -887,36 +865,26 @@ bool Scene3DTestScene::onPointerDown(ax::PointerEvent* event)
 
 void Scene3DTestScene::onPointerUp(ax::PointerEvent* event)
 {
-    // 1. Get the 2D world coordinate on the Z=0 plane directly from the rectified Touch API
-    auto screenLocation = event->getScreenLocation();
-    auto camera         = _gameCameras[CAMERA_WORLD_3D_SCENE];
-    if (!camera || !camera->isVisible() || !_terrain)
+    if (!_player)
     {
         return;
     }
 
-    if (_player)
+    if (!event->hasHitResult())
     {
-        auto ray = camera->screenToRay(screenLocation);
-
-        // 4. Perform the pure 3D ray-terrain intersection check (unchanged)
-        Vec3 collisionPoint;
-        bool isInTerrain = _terrain->getIntersectionPoint(ray, collisionPoint);
-        if (!isInTerrain)
-        {
-            _player->idle();
-        }
-        else
-        {
-            auto dir = collisionPoint - _player->getPosition3D();
-            dir.y    = 0;
-            dir.normalize();
-            _player->_headingAngle = -1 * acos(dir.dot(Vec3(0, 0, -1)));
-            Vec3::cross(dir, Vec3(0, 0, -1), &_player->_headingAxis);
-            _player->_targetPos = collisionPoint;
-            _player->forward();
-        }
+        _player->idle();
+        event->stopPropagation();
+        return;
     }
+
+    const Vec3 collisionPoint = event->getHitResult().worldPoint;
+    auto dir                  = collisionPoint - _player->getPosition3D();
+    dir.y                     = 0;
+    dir.normalize();
+    _player->_headingAngle = -1 * acos(dir.dot(Vec3(0, 0, -1)));
+    Vec3::cross(dir, Vec3(0, 0, -1), &_player->_headingAxis);
+    _player->_targetPos = collisionPoint;
+    _player->forward();
     event->stopPropagation();
 }
 

@@ -23,7 +23,7 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/DXUtils.h"
 #include "axmol/rhi/DriverFactory.h"
 #include <d3d11.h>
@@ -76,6 +76,7 @@ public:
      * @return A Texture object.
      */
     Texture* createTexture(const TextureDesc& descriptor, std::optional<Color> clearColorHint = std::nullopt) override;
+    Texture* createTextureFromNativeHandle(const ExternalTextureDesc& descriptor) override;
 
     RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
 

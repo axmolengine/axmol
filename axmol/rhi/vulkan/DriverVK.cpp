@@ -32,9 +32,12 @@
 #include "axmol/rhi/vulkan/DepthStencilStateVK.h"
 #include "axmol/rhi/vulkan/VertexLayoutVK.h"
 #include "axmol/rhi/vulkan/UtilsVK.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/DriverFactory.h"
 #include "axmol/rhi/RHIUtils.h"
+#include "axmol/rhi/VulkanInterop.h"
 #include "axmol/tlx/hash.hpp"
+#include "axmol/tlx/utility.hpp"
 #include "axmol/base/Logging.h"
 
 #include <algorithm>
@@ -53,6 +56,33 @@ namespace ax::rhi::vk
 {
 namespace
 {
+
+static bool hasExtensionName(const tlx::pod_vector<const char*>& extensions, std::string_view name)
+{
+    for (auto extension : extensions)
+    {
+        if (extension == name)
+            return true;
+    }
+    return false;
+}
+
+static uint32_t findGraphicsQueueFamily(VkPhysicalDevice physicalDevice)
+{
+    uint32_t qCount = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &qCount, nullptr);
+    std::vector<VkQueueFamilyProperties> qprops(qCount);
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &qCount, qprops.data());
+
+    for (uint32_t i = 0; i < qCount; ++i)
+    {
+        if (qprops[i].queueCount > 0 && (qprops[i].queueFlags & VK_QUEUE_GRAPHICS_BIT))
+            return i;
+    }
+
+    return UINT32_MAX;
+}
+
 static bool isValidationLayerAvailable(const char* layerName)
 {
     uint32_t layerCount = 0;
@@ -109,23 +139,8 @@ static std::pair<VkPhysicalDevice, uint32_t> resolveAdapter(const tlx::pod_vecto
         VkPhysicalDeviceProperties props{};
         vkGetPhysicalDeviceProperties(pd, &props);
 
-        uint32_t qCount = 0;
-        vkGetPhysicalDeviceQueueFamilyProperties(pd, &qCount, nullptr);
-        std::vector<VkQueueFamilyProperties> qprops(qCount);
-        vkGetPhysicalDeviceQueueFamilyProperties(pd, &qCount, qprops.data());
-
-        bool hasGraphicsQueue        = false;
-        uint32_t graphicsQueueFamily = UINT32_MAX;
-        for (uint32_t i = 0; i < qCount; ++i)
-        {
-            if (qprops[i].queueCount > 0 && (qprops[i].queueFlags & VK_QUEUE_GRAPHICS_BIT))
-            {
-                hasGraphicsQueue    = true;
-                graphicsQueueFamily = i;
-                break;
-            }
-        }
-        if (!hasGraphicsQueue)
+        uint32_t graphicsQueueFamily = findGraphicsQueueFamily(pd);
+        if (graphicsQueueFamily == UINT32_MAX)
             continue;  // skip devices without graphics queue
 
         // --- Score device ---
@@ -197,6 +212,9 @@ TextureImpl* createDepthStencilAttachment(DriverImpl* driver, const VkExtent2D& 
 DriverImpl::DriverImpl() {}
 DriverImpl::~DriverImpl()
 {
+    if (auto interop = GraphicsCore::getVulkanInterop())
+        interop->clearVulkanBinding();
+
     AX_SAFE_RELEASE_NULL(_currentRenderContext);
 
     destroyStaleResources();
@@ -278,15 +296,16 @@ bool DriverImpl::initializeFactory()
     constexpr auto engineVersion = VK_MAKE_VERSION(AX_VERSION_MAJOR, AX_VERSION_MINOR, AX_VERSION_PATCH);
     VkApplicationInfo appInfo{
         .sType              = VK_STRUCTURE_TYPE_APPLICATION_INFO,
-        .pApplicationName   = "Axmol3",
+        .pApplicationName   = "axmol3",
         .applicationVersion = engineVersion,
-        .pEngineName        = "Axmol3",
+        .pEngineName        = "axmol3",
         .engineVersion      = engineVersion,
         .apiVersion         = _apiVersion,
     };
 
     // Collect required extensions
     tlx::pod_vector<const char*> extensions;
+    std::vector<std::string> extensionStorage;
     extensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
@@ -312,6 +331,15 @@ bool DriverImpl::initializeFactory()
 
     if (shouldCreateDebugLayer)
         extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+
+    if (auto interop = GraphicsCore::getVulkanInterop())
+        interop->collectInstanceExtensions(extensionStorage);
+
+    for (const auto& name : extensionStorage)
+    {
+        if (!name.empty() && !hasExtensionName(extensions, name))
+            extensions.push_back(name.c_str());
+    }
 
     VkInstanceCreateInfo createInfo{};
     createInfo.sType                   = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -356,13 +384,35 @@ bool DriverImpl::initializeDevice()
     vkEnumeratePhysicalDevices(_factory, &count, nullptr);
     VK_VERIFY_EXPR(count > 0, "No Vulkan physical devices found");
 
+    auto interop = GraphicsCore::getVulkanInterop();
+
     tlx::pod_vector<VkPhysicalDevice> devices(count);
     vkEnumeratePhysicalDevices(_factory, &count, devices.data());
 
-    auto [physical, graphicsQueueFamily] = resolveAdapter(devices, _factory, contextAttrs.powerPreference);
-    VK_VERIFY_EXPR(physical != VK_NULL_HANDLE && graphicsQueueFamily != UINT32_MAX, "No available GPU");
-    _physical            = physical;
-    _graphicsQueueFamily = graphicsQueueFamily;
+    {
+        VkPhysicalDevice preferredDevice = VK_NULL_HANDLE;
+        if (interop)
+            preferredDevice = interop->selectPhysicalDevice(_factory, devices.data(), count);
+
+        if (preferredDevice != VK_NULL_HANDLE && count > 0 &&
+            std::find(devices.begin(), devices.end(), preferredDevice) != devices.end())
+        {
+            _physical            = preferredDevice;
+            _graphicsQueueFamily = findGraphicsQueueFamily(_physical);
+            AXLOGI("axmol: Vulkan physical device selected by VulkanInterop");
+        }
+        else
+        {
+            if (preferredDevice != VK_NULL_HANDLE)
+                AXLOGW(
+                    "axmol: VulkanInterop returned a Vulkan physical device that is not in vkEnumeratePhysicalDevices");
+            auto [physical, graphicsQueueFamily] = resolveAdapter(devices, _factory, contextAttrs.powerPreference);
+            _physical                            = physical;
+            _graphicsQueueFamily                 = graphicsQueueFamily;
+        }
+    }
+
+    VK_VERIFY_EXPR(_physical != VK_NULL_HANDLE && _graphicsQueueFamily != UINT32_MAX, "No available GPU");
 
     // Enumerate available device extensions
     uint32_t extCount = 0;
@@ -382,17 +432,35 @@ bool DriverImpl::initializeDevice()
 
     // Helper to require extension and log availability
     tlx::pod_vector<const char*> deviceExtensions;
+    std::vector<std::string> deviceExtensionStorage;
 
     // Always require swapchain
     VK_VERIFY_EXPR(hasExtension(VK_KHR_SWAPCHAIN_EXTENSION_NAME), "VK_KHR_swapchain extension is required");
     deviceExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+
+    if (interop)
+        interop->collectDeviceExtensions(_physical, deviceExtensionStorage);
+
+    for (const auto& name : deviceExtensionStorage)
+    {
+        if (!name.empty() && !hasExtensionName(deviceExtensions, name))
+            deviceExtensions.push_back(name.c_str());
+    }
+
+    // Some generated/translated SPIR-V modules may declare
+    // ShaderViewportIndexLayerEXT. Vulkan requires the matching device extension.
+    if (hasExtension(VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME))
+    {
+        deviceExtensions.push_back(VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME);
+        AXLOGI("axmol: VK_EXT_shader_viewport_index_layer extension enabled");
+    }
 
     // Android device not support extended dynamic state
     if (hasExtension(VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME))
     {
         _vkCaps.extendedDynamicStateSupported = true;
         deviceExtensions.push_back(VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME);
-        AXLOGI("axmol: VK_EXT_extended_dynamic_state extension supported");
+        AXLOGI("axmol: VK_EXT_extended_dynamic_state extension enabled");
     }
     else
     {
@@ -403,12 +471,38 @@ bool DriverImpl::initializeDevice()
     {
         _vkCaps.memoryPrioritySupported = true;
         deviceExtensions.push_back(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME);
-        AXLOGI("axmol: VK_EXT_memory_priority extension supported");
+        AXLOGI("axmol: VK_EXT_memory_priority extension enabled");
     }
 
     // Query device properties and capabilities
-    VkPhysicalDeviceProperties props{};
+    VkPhysicalDeviceProperties2 props2{};
+    props2.sType                      = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+    VkPhysicalDeviceProperties& props = props2.properties;
     vkGetPhysicalDeviceProperties(_physical, &props);
+
+    // Query device features
+    VkPhysicalDeviceFeatures2 supportedFeatures2{};
+    supportedFeatures2.sType                    = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+    VkPhysicalDeviceFeatures& supportedFeatures = supportedFeatures2.features;
+    vkGetPhysicalDeviceFeatures(_physical, &supportedFeatures);
+    VkPhysicalDeviceTimelineSemaphoreFeatures timelineSemaphoreFeatures{};
+    timelineSemaphoreFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_FEATURES;
+
+    // Timeline semaphore support.
+    // Vulkan 1.2 has it in core; Vulkan 1.1 needs VK_KHR_timeline_semaphore.
+    const bool vulkan12OrNewer = VK_VERSION_MAJOR(props.apiVersion) > 1 ||
+                                 (VK_VERSION_MAJOR(props.apiVersion) == 1 && VK_VERSION_MINOR(props.apiVersion) >= 2);
+
+    const bool timelineSemaphoreAvailable = vulkan12OrNewer || hasExtension(VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
+    if (timelineSemaphoreAvailable)
+    {
+        timelineSemaphoreFeatures.pNext = supportedFeatures2.pNext;
+        supportedFeatures2.pNext        = &timelineSemaphoreFeatures;
+    }
+    if (!vulkan12OrNewer && hasExtension(VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME))
+    {
+        deviceExtensions.push_back(VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
+    }
 
     _vendor        = RHIUtils::vendorToString(props.vendorID);
     _renderer      = props.deviceName;
@@ -422,8 +516,6 @@ bool DriverImpl::initializeDevice()
     _caps.maxSamplesAllowed = static_cast<int32_t>(props.limits.framebufferColorSampleCounts);
 
     // Query device properties
-    VkPhysicalDeviceProperties2 props2{};
-    props2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
     // Optional: query extended dynamic state 3 properties only if extension is supported
     VkPhysicalDeviceExtendedDynamicState3PropertiesEXT dynState3Props{};
     if (hasExtension(VK_EXT_EXTENDED_DYNAMIC_STATE_3_EXTENSION_NAME))
@@ -433,30 +525,35 @@ bool DriverImpl::initializeDevice()
     }
 
     // Choose correct function pointer
-    if (VK_VERSION_MAJOR(props.apiVersion) > 1 ||
-        (VK_VERSION_MAJOR(props.apiVersion) == 1 && VK_VERSION_MINOR(props.apiVersion) >= 1))
+    const bool vulkan11OrNewer = VK_VERSION_MAJOR(props.apiVersion) > 1 ||
+                                 (VK_VERSION_MAJOR(props.apiVersion) == 1 && VK_VERSION_MINOR(props.apiVersion) >= 1);
+    if (vulkan11OrNewer)
     {
         // Vulkan 1.1+, core function
         vkGetPhysicalDeviceProperties2(_physical, &props2);
+        vkGetPhysicalDeviceFeatures2(_physical, &supportedFeatures2);
     }
     else if (hasExtension(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
     {
         // Vulkan 1.0 + extension
         vkGetPhysicalDeviceProperties2KHR(_physical, &props2);
+        vkGetPhysicalDeviceFeatures2KHR(_physical, &supportedFeatures2);
     }
     else
     {
-        // Fallback: Vulkan 1.0 without extension -> only vkGetPhysicalDeviceProperties available
-        props2.properties = props;  // copy into props2 for consistency
+        vkGetPhysicalDeviceFeatures(_physical, &supportedFeatures);
     }
 
     AXLOGI("axmol: Vulkan device={}, driverVersion={}.{}", props2.properties.deviceName,
            VK_VERSION_MAJOR(props2.properties.driverVersion), VK_VERSION_MINOR(props2.properties.driverVersion));
 
-    // Prepare feature chain for extended dynamic state
+    // Prepare feature chain
+    VulkanFeatureChain featureChain;
+
     VkPhysicalDeviceExtendedDynamicStateFeaturesEXT extDynState{};
     extDynState.sType                = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_FEATURES_EXT;
     extDynState.extendedDynamicState = VK_TRUE;
+    featureChain.push(extDynState);
 
     VkPhysicalDeviceExtendedDynamicState2FeaturesEXT extDynState2{};
     VkPhysicalDeviceExtendedDynamicState3FeaturesEXT extDynState3{};
@@ -473,10 +570,10 @@ bool DriverImpl::initializeDevice()
 
         extDynState2.sType                 = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT;
         extDynState2.extendedDynamicState2 = VK_TRUE;
-        extDynState.pNext                  = &extDynState2;
+        featureChain.push(extDynState2);
 
         extDynState3.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_3_FEATURES_EXT;
-        extDynState2.pNext = &extDynState3;
+        featureChain.push(extDynState3);
 
         AXLOGI("axmol: Extended Dynamic State 2/3 enabled");
     }
@@ -485,6 +582,19 @@ bool DriverImpl::initializeDevice()
         AXLOGW(
             "axmol: dynamicPrimitiveTopologyUnrestricted not supported or extensions missing, fallback to baked "
             "InputAssemblyState");
+    }
+
+    // Feature: Timeline Semaphore
+    VkPhysicalDeviceTimelineSemaphoreFeatures enabledTimelineSemaphoreFeatures{};
+    enabledTimelineSemaphoreFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_FEATURES;
+
+    if (timelineSemaphoreAvailable && timelineSemaphoreFeatures.timelineSemaphore)
+    {
+        enabledTimelineSemaphoreFeatures.timelineSemaphore = VK_TRUE;
+        featureChain.push(enabledTimelineSemaphoreFeatures);
+
+        _vkCaps.timelineSemaphoreSupported = true;
+        AXLOGI("axmol: timelineSemaphore feature enabled");
     }
 
     // Queue creation info
@@ -500,22 +610,31 @@ bool DriverImpl::initializeDevice()
     dinfo.sType                   = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     dinfo.queueCreateInfoCount    = 1;
     dinfo.pQueueCreateInfos       = &qinfo;
-    dinfo.pNext                   = &extDynState;
+    dinfo.pNext                   = featureChain.head();
     dinfo.enabledExtensionCount   = deviceExtensions.size();
     dinfo.ppEnabledExtensionNames = deviceExtensions.data();
 
     // Query device features
-    VkPhysicalDeviceFeatures deviceFeatures{};
-    vkGetPhysicalDeviceFeatures(_physical, &deviceFeatures);
-    AXLOGI("axmol: samplerAnisotropy supported={}", deviceFeatures.samplerAnisotropy);
+    AXLOGI("axmol: samplerAnisotropy supported={}", supportedFeatures.samplerAnisotropy);
 
-    if (deviceFeatures.samplerAnisotropy)
+    VkPhysicalDeviceFeatures enabledFeatures{};  // 1.0 core features
+    if (supportedFeatures.samplerAnisotropy)
     {
         _vkCaps.samplerAnisotropySupported = true;
-        memset(&deviceFeatures, 0, sizeof(deviceFeatures));
-        deviceFeatures.samplerAnisotropy = VK_TRUE;
-        dinfo.pEnabledFeatures           = &deviceFeatures;
+        enabledFeatures.samplerAnisotropy  = VK_TRUE;
     }
+
+    if (supportedFeatures.geometryShader)
+    {
+        _vkCaps.geometryShaderSupported = true;
+        enabledFeatures.geometryShader  = VK_TRUE;
+    }
+
+    if (interop)
+        interop->configureDeviceFeatures(_physical, enabledFeatures, featureChain);
+
+    dinfo.pNext            = featureChain.head();
+    dinfo.pEnabledFeatures = &enabledFeatures;
 
     // Create logical device
     VkResult vr = vkCreateDevice(_physical, &dinfo, nullptr, &_device);
@@ -523,6 +642,18 @@ bool DriverImpl::initializeDevice()
 
     vkGetDeviceQueue(_device, _graphicsQueueFamily, 0, &_graphicsQueue);
     VK_VERIFY_EXPR(_graphicsQueue != VK_NULL_HANDLE, "vkGetDeviceQueue graphics failed");
+
+    if (interop)
+    {
+        VulkanBinding binding{};
+        binding.instance            = _factory;
+        binding.physicalDevice      = _physical;
+        binding.device              = _device;
+        binding.graphicsQueue       = _graphicsQueue;
+        binding.graphicsQueueFamily = _graphicsQueueFamily;
+        binding.graphicsQueueIndex  = 0;
+        interop->setVulkanBinding(binding);
+    }
 
     // Create transient command pool
     VkCommandPoolCreateInfo poolInfo{};
@@ -596,6 +727,21 @@ Buffer* DriverImpl::createBuffer(size_t size, BufferType type, BufferUsage usage
 Texture* DriverImpl::createTexture(const TextureDesc& descriptor, std::optional<Color>)
 {
     return new TextureImpl(this, descriptor);
+}
+
+Texture* DriverImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
+{
+    auto nativeImage = static_cast<VkImage>(descriptor.nativeTexture);
+    if (nativeImage == VK_NULL_HANDLE)
+        return nullptr;
+
+    auto nativeView = static_cast<VkImageView>(descriptor.nativeTextureView);
+    auto usage      = static_cast<VkImageUsageFlags>(descriptor.nativeUsage);
+    auto initialLayout =
+        descriptor.nativeState ? static_cast<VkImageLayout>(descriptor.nativeState) : VK_IMAGE_LAYOUT_UNDEFINED;
+    auto finalLayout = descriptor.nativeFinalState ? static_cast<VkImageLayout>(descriptor.nativeFinalState)
+                                                   : VK_IMAGE_LAYOUT_UNDEFINED;
+    return new TextureImpl(this, nativeImage, nativeView, usage, descriptor.desc, initialLayout, finalLayout);
 }
 
 RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)

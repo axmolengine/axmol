@@ -105,9 +105,9 @@ struct PixelFormatInfo
 
 inline namespace UtilsVK
 {
-VkFormat toVKFormat(PixelFormat pf);
+VkFormat toVkFormat(PixelFormat pf, bool useSrgb = false);
 
-const PixelFormatInfo* toVKFormatInfo(PixelFormat pf);
+const PixelFormatInfo* toVkFormatInfo(PixelFormat pf);
 };  // namespace UtilsVK
 
 /** @} */

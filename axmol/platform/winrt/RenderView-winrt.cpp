@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "axmol/platform/winrt/Application-winrt.h"
 #include "axmol/platform/winrt/WinRTUtils.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include <future>
 
 #include <winrt/Windows.UI.Xaml.Controls.h>
@@ -452,7 +452,7 @@ SurfaceHandle RenderView::getNativeDisplay() const
 void RenderView::createRenderSurface()
 {
 #if AX_ENABLE_GL
-    if (!rhi::DriverContext::isOpenGL())
+    if (!rhi::GraphicsCore::isOpenGL())
         return;
 
     if (!_eglSurfaceProvider)
@@ -470,7 +470,7 @@ void RenderView::createRenderSurface()
 void RenderView::destroyRenderSurface()
 {
 #if AX_ENABLE_GL
-    if (!rhi::DriverContext::isOpenGL())
+    if (!rhi::GraphicsCore::isOpenGL())
         return;
 
     if (_eglSurfaceProvider)
@@ -483,7 +483,7 @@ void RenderView::destroyRenderSurface()
 void RenderView::recoverFromLostDevice()
 {
 #if AX_ENABLE_GL
-    if (rhi::DriverContext::isOpenGL())
+    if (rhi::GraphicsCore::isOpenGL())
     {
         Concurrency::critical_section::scoped_lock lock(_eglSurfaceCriticalSection);
         destroyRenderSurface();
@@ -497,7 +497,7 @@ void RenderView::recoverFromLostDevice()
 void RenderView::terminateApp()
 {
 #if AX_ENABLE_GL
-    if (rhi::DriverContext::isOpenGL())
+    if (rhi::GraphicsCore::isOpenGL())
     {
         Concurrency::critical_section::scoped_lock lock(_eglSurfaceCriticalSection);
         destroyRenderSurface();
@@ -511,7 +511,7 @@ void RenderView::terminateApp()
 void RenderView::makeSurfaceCurrent()
 {
 #if AX_ENABLE_GL
-    if (rhi::DriverContext::isOpenGL() && _eglSurfaceProvider && _eglSurface != EGL_NO_SURFACE)
+    if (rhi::GraphicsCore::isOpenGL() && _eglSurfaceProvider && _eglSurface != EGL_NO_SURFACE)
         _eglSurfaceProvider->makeCurrent(_eglSurface);
 #endif
 }
@@ -519,7 +519,7 @@ void RenderView::makeSurfaceCurrent()
 bool RenderView::swapSurfaceBuffers()
 {
 #if AX_ENABLE_GL
-    if (rhi::DriverContext::isOpenGL())
+    if (rhi::GraphicsCore::isOpenGL())
     {
         EGLBoolean result = GL_FALSE;
         {
@@ -697,7 +697,7 @@ void RenderView::handleWindowResized()
 
 void RenderView::updateRenderScale()
 {
-    if (!rhi::DriverContext::isOpenGL())
+    if (!rhi::GraphicsCore::isOpenGL())
         _renderScale = Application::getContextAttrs().renderScaleMode == RenderScaleMode::Physical
                            ? (_dpi > 0 ? _dpi / 96.0f /* 96.0f: Standard DPI baseline */ : 1.0f)
                            : 1.0f;

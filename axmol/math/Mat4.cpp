@@ -26,7 +26,7 @@
 #include "axmol/math/Quat.h"
 #include "axmol/math/MathUtil.h"
 #include "axmol/base/Macros.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 NS_AX_MATH_BEGIN
 
@@ -132,7 +132,41 @@ void Mat4::createPerspective(float fieldOfView, float aspectRatio, float zNearPl
     // - Apple Metal Shading Language Spec (Coordinate Systems)
     // - Microsoft Direct3D Projection Transform
     // - Khronos Vulkan Specification
-    if (!rhi::DriverContext::isOpenGL())
+    if (!rhi::GraphicsCore::isOpenGL())
+    {
+        dst->m[10] = -zFarPlane * f_n;
+        dst->m[14] = -(zFarPlane * zNearPlane) * f_n;
+    }
+}
+
+void Mat4::createPerspectiveOffCenter(float left,
+                                      float right,
+                                      float bottom,
+                                      float top,
+                                      float zNearPlane,
+                                      float zFarPlane,
+                                      Mat4* dst)
+{
+    AX_ASSERT(dst);
+    AX_ASSERT(right != left);
+    AX_ASSERT(top != bottom);
+    AX_ASSERT(zFarPlane != zNearPlane);
+
+    const float f_n = 1.0f / (zFarPlane - zNearPlane);
+
+    memset(dst->m, 0, sizeof(dst->m));
+
+    dst->m[0] = 2.0f * zNearPlane / (right - left);
+    dst->m[5] = 2.0f * zNearPlane / (top - bottom);
+    dst->m[8] = (right + left) / (right - left);
+    dst->m[9] = (top + bottom) / (top - bottom);
+
+    dst->m[10] = -(zFarPlane + zNearPlane) * f_n;
+    dst->m[11] = -1.0f;
+    dst->m[14] = -(2.0f * zFarPlane * zNearPlane) * f_n;
+
+    // NDC Z difference: OpenGL [-1,1], D3D/Vulkan/Metal [0,1]
+    if (!rhi::GraphicsCore::isOpenGL())
     {
         dst->m[10] = -zFarPlane * f_n;
         dst->m[14] = -(zFarPlane * zNearPlane) * f_n;
@@ -168,7 +202,7 @@ void Mat4::createOrthographicOffCenter(float left,
     // - Apple Metal Shading Language Spec (Coordinate Systems)
     // - Microsoft Direct3D Projection Transform
     // - Khronos Vulkan Specification
-    if (!rhi::DriverContext::isOpenGL())
+    if (!rhi::GraphicsCore::isOpenGL())
     {
         dst->m[10] = 1 / (zNearPlane - zFarPlane);
         dst->m[14] = zNearPlane / (zNearPlane - zFarPlane);

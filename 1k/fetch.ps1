@@ -207,15 +207,18 @@ if (!(Test-Path "$lib_src/.git" -PathType Container)) { $is_git_repo = $false }
 
 # checkout revision for git repo
 if (!$revision) {
-    # regard v as tag or doesn't ends with short git hash
-    if ($version.StartsWith('v')) {
-        $revision = $version
+    # Treat versions ending with "-<git-hash>" as pinned commits, for example:
+    #   1.2.3-a1b2c3d
+    #   release-1.2.3-a1b2c3d4e5f6
+    # Other names, including "v1.2.3", "release-1.2.3" and custom tag/branch names,
+    # are passed through as-is and resolved by git below.
+    $match_info = [Regex]::Match($version, '^(.*)-([0-9a-fA-F]{7,40})$')
+    if ($match_info.Success) {
+        $version  = $match_info.Groups[1].Value
+        $revision = $match_info.Groups[2].Value
     }
     else {
-        $ver_pair = [array]$version.Split('-')
-        $use_hash = $ver_pair.Count -gt 1
-        $revision = $ver_pair[$use_hash].Trim()
-        $version = $ver_pair[0]
+        $revision = $version
     }
 }
 

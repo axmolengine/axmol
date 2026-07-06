@@ -32,7 +32,14 @@ THE SOFTWARE.
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/InputSystem.h"
 #include "axmol/scene/Camera.h"
+#include "axmol/scene/SceneCompositor.h"
 #include "axmol/renderer/Renderer.h"
+#include "axmol/rhi/GraphicsCore.h"
+#include "axmol/base/Logging.h"
+
+#ifdef AX_ENABLE_OPENXR
+#    include "axmol/vr/VRSceneCompositor.h"
+#endif
 
 namespace ax
 {
@@ -49,11 +56,18 @@ RenderViewCore::RenderViewCore()
     , _designResolutionSize(0, 0)
     , _viewScale(Vec2::one)
     , _resolutionPolicy(ResolutionPolicy::UNKNOWN)
-{}
+{
+    setSceneCompositor(std::make_unique<SceneCompositor>());
+}
 
 RenderViewCore::~RenderViewCore() {}
 
-void RenderViewCore::pollEvents() {}
+void RenderViewCore::pollEvents()
+{
+    _sceneCompositor->pollEvents();
+}
+
+void RenderViewCore::pollNativeEvents() {}
 
 void RenderViewCore::updateDesignResolution()
 {
@@ -256,6 +270,52 @@ const Rect& RenderViewCore::getViewportRect() const
     return _viewportRect;
 }
 
+bool RenderViewCore::isVRActive() const
+{
+    return _sceneCompositor ? _sceneCompositor->isVRActive() : false;
+}
+
+void RenderViewCore::setSceneCompositor(std::unique_ptr<SceneCompositor>&& compositor)
+{
+    if (compositor)
+        _sceneCompositor = std::move(compositor);
+    else
+        _sceneCompositor = std::make_unique<SceneCompositor>();
+
+#ifdef AX_ENABLE_OPENXR
+    if (auto vr = dynamic_cast<VRSceneCompositor*>(_sceneCompositor.get()))
+    {
+        if (!_xrDriver)
+        {
+            // Acquire ownership from Application if registerVulkanInterop() was called early.
+            if (auto app = ApplicationCore::getInstance())
+                _xrDriver = app->releaseXRDriver();
+
+            if (!_xrDriver)
+            {
+                if (rhi::GraphicsCore::isVulkan())
+                {
+                    AXLOGE(
+                        "registerVulkanInterop() was not called in applicationWillLaunch(). "
+                        "Vulkan requires interop registration before makeCurrentDriver().");
+                    return;
+                }
+                // Non-Vulkan backends (D3D, Metal, GL) do not need pre-driver interop registration.
+                _xrDriver = std::make_unique<OpenXRDriver>(getViewName());
+            }
+        }
+        vr->setXrDriver(_xrDriver.get());
+    }
+#endif
+
+    _sceneCompositor->onRenderViewChanged(this);
+}
+
+void RenderViewCore::renderScene(Renderer* renderer, Scene* scene)
+{
+    _sceneCompositor->renderScene(renderer, scene);
+}
+
 void RenderViewCore::onSurfaceResized()
 {
     int screenWidth  = static_cast<uint32_t>(_renderSize.width);
@@ -266,17 +326,26 @@ void RenderViewCore::onSurfaceResized()
     auto renderer = director->getRenderer();
     if (renderer)
         renderer->updateSurface(getNativeDisplay(), screenWidth, screenHeight);
-    director->getSceneRenderer()->onRenderViewChanged(this);
+    _sceneCompositor->onRenderViewChanged(this);
 }
 
 void RenderViewCore::setScissorRect(float x, float y, float w, float h)
 {
-    Director::getInstance()->getSceneRenderer()->setScissorRect(x, y, w, h);
+    _sceneCompositor->setScissorRect(x, y, w, h);
 }
 
 const ScissorRect& RenderViewCore::getScissorRect() const
 {
-    return Director::getInstance()->getSceneRenderer()->getScissorRect();
+    return _sceneCompositor->getScissorRect();
+}
+
+void RenderViewCore::onGfxDestory()
+{
+    _sceneCompositor.reset();
+
+#ifdef AX_ENABLE_OPENXR
+    _xrDriver.reset();
+#endif
 }
 
 }  // namespace ax

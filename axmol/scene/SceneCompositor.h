@@ -39,56 +39,62 @@ class RenderViewCore;
 class Director;
 
 /**
- * @brief Renders a scene graph into a render target or the screen.
+ * @brief RenderView-owned scene composition policy.
  *
- * SceneRenderer is the core abstraction for traversing and drawing a Scene.
- * The base implementation iterates all cameras in the scene, applies their
- * transforms, and issues draw commands to the Renderer.
+ * SceneCompositor is the RenderViewCore-owned strategy that defines how
+ * the current scene is composed into the active render surface.
  *
- * Subclassing:
- * - Override `renderScene` to inject custom rendering logic.
- *   For example, VR renderers render each eye into an offscreen texture
- *   and apply distortion, while still relying on the base implementation
- *   for per-camera traversal.
- * - Override `onRenderViewChanged` to recreate framebuffer-sized resources
- *   when the render view is created or resized.
- * - Override `setScissorRect` / `getScissorRect` to apply custom
- *   viewport-to-raster transforms (e.g., per-eye scissor in VR).
- *
- * @note The base `setScissorRect` / `getScissorRect` delegate to
- *       `Renderer::setScissorRect` / `getScissorRect` directly.
- *
- * @since v3.0
+ * The base implementation iterates all visible cameras, applies their
+ * transforms, and submits draw commands to the Renderer. Specialized
+ * compositors, such as VRSceneCompositor, may render the scene into
+ * custom per-view or per-eye render targets before presenting it.
  */
-class AX_DLL SceneRenderer
+class AX_DLL SceneCompositor
 {
 public:
-    SceneRenderer();
-    virtual ~SceneRenderer() = default;
+    SceneCompositor();
+    virtual ~SceneCompositor() = default;
 
-    /** Renders the scene with an optional stereo eye transform.
+    /** Returns whether this compositor is currently presenting a VR scene.
+     *  Base returns false
+     */
+    virtual bool isVRActive() const { return false; }
+
+    /**
+     * Called each frame before scheduler update to poll compositor-owned events.
+     *
+     * The base implementation polls native window/platform events by forwarding
+     * to RenderViewCore::pollNativeEvents(). Specialized compositors may extend
+     * this to poll runtime-specific events, such as OpenXR frame events.
+     */
+    virtual void pollEvents();
+
+    /** Composes the scene for the current frame.
      *  @param renderer The Renderer to submit draw commands into.
-     *  @param scene    The scene graph to render.
+     *  @param scene    The scene graph to traverse and compose.
      */
     virtual void renderScene(Renderer* renderer, Scene* scene);
 
-    /** Called when the render view size changes (or is first assigned).
-     *  Override to recreate framebuffer-sized resources (e.g., VR render texture).
-     *  Default is a no-op.
+    /** Called when this compositor is bound to a RenderViewCore or when the
+     *  render surface changes.
+     *
+     *  The base implementation stores the RenderViewCore weak reference.
+     *  Subclasses may override to recreate framebuffer-sized or runtime resources.
      */
-    virtual void onRenderViewChanged(RenderViewCore* rv) {}
+    virtual void onRenderViewChanged(RenderViewCore* rv);
 
     /** Applies a scissor rect, optionally transformed by the active raster transform.
      *  Base implementation delegates to Renderer::setScissorRect.
      */
     virtual void setScissorRect(float x, float y, float w, float h);
-    /** Returns the last scissor rect set on this renderer.
+    /** Returns the last scissor rect set through this compositor.
      *  Base implementation delegates to Renderer::getScissorRect.
      */
     virtual const ScissorRect& getScissorRect() const;
 
 protected:
-    Director* _director{nullptr};  // weak-ref
+    Director* _director{nullptr};          // weak-ref
+    RenderViewCore* _renderView{nullptr};  // weak-ref
     RefPtr<RenderTexturePass> _renderTexturePass;
 };
 

@@ -126,6 +126,7 @@ public:
     void endRenderPass() override;
 
     void endFrame() override;
+    void submitCurrentFrameCommands(bool waitForCompletion) override;
 
     void setScissorRect(bool enabled, float x, float y, float width, float height) override;
 

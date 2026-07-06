@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 namespace ax::rhi
 {

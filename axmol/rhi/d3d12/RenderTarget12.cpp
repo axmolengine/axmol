@@ -92,7 +92,11 @@ void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
             {
                 auto texImpl        = static_cast<TextureImpl*>(_color[i].texture);
                 _rtvsDescriptors[i] = _driver->allocateDescriptor(DisposableResource::Type::RenderTargetView);
-                device->CreateRenderTargetView(texImpl->internalHandle().resource.Get(), nullptr,
+                auto fmtInfo        = dxutils::toDxgiFormatInfo(texImpl->getPixelFormat());
+                D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+                rtvDesc.Format        = fmtInfo->format;
+                rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+                device->CreateRenderTargetView(texImpl->internalHandle().resource.Get(), &rtvDesc,
                                                _rtvsDescriptors[i]->cpu);
 
                 _rtvHandles[i] = _rtvsDescriptors[i]->cpu;
@@ -115,9 +119,8 @@ void RenderTargetImpl::beginRenderPass(ID3D12GraphicsCommandList* cmd,
                 _dsvDescriptor = _driver->allocateDescriptor(DisposableResource::Type::DepthStencilView);
 
                 D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
-                dsvDesc.Format             = DXGI_FORMAT_D24_UNORM_S8_UINT;
-                dsvDesc.ViewDimension      = D3D12_DSV_DIMENSION_TEXTURE2D;
-                dsvDesc.Texture2D.MipSlice = 0;
+                dsvDesc.Format        = DXGI_FORMAT_D24_UNORM_S8_UINT;
+                dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
                 device->CreateDepthStencilView(texImpl->internalHandle().resource.Get(), &dsvDesc, _dsvDescriptor->cpu);
 
                 _dsvHandle = _dsvDescriptor->cpu;
@@ -229,7 +232,7 @@ void RenderTargetImpl::endRenderPass(ID3D12GraphicsCommandList* cmd, uint32_t im
             if (!texImpl)
                 break;
 
-            texImpl->transitionState(cmd, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+            texImpl->transitionState(cmd, texImpl->getRenderTargetFinalState());
         }
     }
 }

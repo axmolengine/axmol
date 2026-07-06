@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "axmol/renderer/ProgramManager.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/ShaderModule.h"
 #include "axmol/renderer/VertexLayoutManager.h"
 #include "axmol/renderer/Shaders.h"

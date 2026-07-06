@@ -74,7 +74,7 @@ TextureImpl::TextureImpl(DriverImpl* driver, const TextureDesc& desc, std::optio
     : _driver(driver), _stateTracker(LEVEL_INITIAL_CAPS, LAYER_INITIAL_CAPS)
 {
     updateTextureDesc(desc);
-    if (clearColorHint)
+    if (clearColorHint || desc.textureUsage == TextureUsage::RENDER_TARGET)
         ensureNativeTexture(false, clearColorHint);
 }
 
@@ -84,6 +84,22 @@ TextureImpl::TextureImpl(DriverImpl* driver, ComPtr<ID3D12Resource> existingReso
     D3D12_RESOURCE_DESC d3dDesc = existingResource->GetDesc();
     D3D12TexDescToTexDesc(_desc, d3dDesc);
     _nativeTexture.resource = existingResource;
+    Texture::updateTextureDesc(_desc);
+    updateSamplerDesc(_desc.samplerDesc);
+    setKnownState(D3D12_RESOURCE_STATE_COMMON);
+}
+
+TextureImpl::TextureImpl(DriverImpl* driver,
+                         ComPtr<ID3D12Resource> existingResource,
+                         const TextureDesc& desc,
+                         D3D12_RESOURCE_STATES initialState,
+                         D3D12_RESOURCE_STATES renderTargetFinalState)
+    : _driver(driver), _stateTracker(LEVEL_INITIAL_CAPS, LAYER_INITIAL_CAPS)
+{
+    updateTextureDesc(desc);
+    _nativeTexture.resource = existingResource;
+    _renderTargetFinalState = renderTargetFinalState;
+    setKnownState(initialState);
 }
 
 TextureImpl::~TextureImpl()

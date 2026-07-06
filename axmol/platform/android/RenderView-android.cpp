@@ -36,7 +36,7 @@ THE SOFTWARE.
 #    include "axmol/rhi/vulkan/DriverVK.h"
 #endif
 
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 #include <stdlib.h>
 #include <android/log.h>
@@ -109,9 +109,9 @@ bool RenderView::initWithRect(std::string_view /*viewName*/,
 {
     updateRenderSurface(rect.size.width, rect.size.height, SurfaceUpdateFlag::AllUpdatesSilently);
 
-    if (rhi::DriverContext::isOpenGL())
-        rhi::DriverContext::activateCurrentDriver();
-    else if (rhi::DriverContext::isVulkan())
+    if (rhi::GraphicsCore::isOpenGL())
+        rhi::GraphicsCore::activateCurrentDriver();
+    else if (rhi::GraphicsCore::isVulkan())
         recreateVkSurface(false);
 
     return true;

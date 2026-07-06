@@ -65,11 +65,13 @@ static inline bool isBlockAligned(uint32_t x, uint32_t y, uint32_t blockW, uint3
     return (x % blockW == 0) && (y % blockH == 0);
 }
 
-// Map PixelFormat to VkFormat via UtilsVK table
-static inline VkFormat getVkFormat(PixelFormat pf)
+static VkImageLayout getDefaultRenderTargetFinalLayout(const TextureDesc& desc)
 {
-    const auto* info = toVKFormatInfo(pf);
-    return info ? info->format : VK_FORMAT_UNDEFINED;
+    if (desc.textureUsage != TextureUsage::RENDER_TARGET)
+        return VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+    return desc.pixelFormat == PixelFormat::D24S8 ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
+                                                  : VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 }
 
 // Transition an image subresource range between layouts (auto src/dst inference)
@@ -179,6 +181,9 @@ TextureImpl::TextureImpl(DriverImpl* driver, const TextureDesc& desc)
     : _driver(driver), _ownResources(true), _layoutTracker(LEVEL_INITIAL_CAPS, LAYER_INITIAL_CAPS)
 {
     updateTextureDesc(desc);
+    _rtFinalLayout = getDefaultRenderTargetFinalLayout(desc);
+    if (_desc.textureUsage == TextureUsage::RENDER_TARGET)
+        ensureNativeTexture();  // Create the image immediately for render targets
 }
 
 TextureImpl::TextureImpl(DriverImpl* driver,
@@ -193,12 +198,57 @@ TextureImpl::TextureImpl(DriverImpl* driver,
     // Note: existingImage is owned externally (e.g., swapchain), we only wrap it.
 }
 
+TextureImpl::TextureImpl(DriverImpl* driver,
+                         VkImage existingImage,
+                         VkImageView existingImageView,
+                         VkImageUsageFlags usage,
+                         const TextureDesc& desc,
+                         VkImageLayout initialLayout,
+                         VkImageLayout rtFinalLayout)
+    : _driver(driver), _ownResources(false), _layoutTracker(LEVEL_INITIAL_CAPS, LAYER_INITIAL_CAPS)
+{
+    _nativeTexture.image = existingImage;
+    _nativeTexture.view  = existingImageView;
+    _vkUsageFlags        = usage;
+    updateTextureDesc(desc);
+    setKnownLayout(initialLayout);
+    _rtFinalLayout =
+        rtFinalLayout == VK_IMAGE_LAYOUT_UNDEFINED ? getDefaultRenderTargetFinalLayout(desc) : rtFinalLayout;
+
+    if (_nativeTexture.view == VK_NULL_HANDLE)
+    {
+        VkImageViewCreateInfo viewInfo{};
+        viewInfo.sType      = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        viewInfo.image      = _nativeTexture.image;
+        viewInfo.viewType   = desc.arraySize > 1 ? VK_IMAGE_VIEW_TYPE_2D_ARRAY : VK_IMAGE_VIEW_TYPE_2D;
+        viewInfo.format     = UtilsVK::toVkFormat(desc.pixelFormat, desc.colorSpace == ColorSpace::Srgb);
+        viewInfo.components = {VK_COMPONENT_SWIZZLE_R, VK_COMPONENT_SWIZZLE_G, VK_COMPONENT_SWIZZLE_B,
+                               VK_COMPONENT_SWIZZLE_A};
+        viewInfo.subresourceRange.aspectMask     = desc.pixelFormat == PixelFormat::D24S8
+                                                       ? (VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT)
+                                                       : VK_IMAGE_ASPECT_COLOR_BIT;
+        viewInfo.subresourceRange.baseMipLevel   = 0;
+        viewInfo.subresourceRange.levelCount     = desc.mipLevels;
+        viewInfo.subresourceRange.baseArrayLayer = 0;
+        viewInfo.subresourceRange.layerCount     = desc.arraySize;
+
+        VkResult res = vkCreateImageView(_driver->getDevice(), &viewInfo, nullptr, &_nativeTexture.view);
+        VK_REQUIRE(res, "vkCreateImageView failed");
+        _ownImageView = true;
+    }
+}
+
 TextureImpl::~TextureImpl()
 {
     if (_ownResources)
     {
         _sampler = VK_NULL_HANDLE;  // SamplerCache handles sampler destruction
         _nativeTexture.destroy(_driver, _lastFenceValue);
+    }
+    else if (_ownImageView && _nativeTexture.view != VK_NULL_HANDLE)
+    {
+        _driver->disposeImageView(_nativeTexture.view, _lastFenceValue);
+        _nativeTexture.view = VK_NULL_HANDLE;
     }
 }
 
@@ -207,6 +257,8 @@ void TextureImpl::transitionLayout(VkCommandBuffer cmd, VkImageLayout newLayout)
     ensureNativeTexture();
 
     const VkImageLayout oldLayout = _layoutTracker.getLayout(0, 0);
+    if (oldLayout == newLayout)
+        return;
 
     VkImageSubresourceRange range{};
     range.aspectMask     = (_desc.pixelFormat == PixelFormat::D24S8)
@@ -592,7 +644,7 @@ void TextureImpl::ensureNativeTexture()
     if (_nativeTexture)
         return;
 
-    const VkFormat vkFmt = getVkFormat(_desc.pixelFormat);
+    const VkFormat vkFmt = UtilsVK::toVkFormat(_desc.pixelFormat, _desc.colorSpace == ColorSpace::Srgb);
     if (vkFmt == VK_FORMAT_UNDEFINED)
     {
         AXLOGE("axmol: Vulkan does not support pixel format: {}", (int)_desc.pixelFormat);
@@ -623,9 +675,15 @@ void TextureImpl::ensureNativeTexture()
     {
         // If used as render target, add color attachment usage for non-depth formats
         if (_desc.pixelFormat != PixelFormat::D24S8)
+        {
             imageInfo.usage |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+            _rtFinalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        }
         else
+        {
             imageInfo.usage |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+            _rtFinalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+        }
 
         // Optional: if future plan to use as input attachment in subpasses
         // imageInfo.usage |= VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;

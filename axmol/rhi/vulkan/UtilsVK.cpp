@@ -115,13 +115,16 @@ inline namespace UtilsVK
 // -------------------------------------------------------------------------------------------------
 // Public API
 // -------------------------------------------------------------------------------------------------
-VkFormat toVKFormat(PixelFormat pf)
+VkFormat toVkFormat(PixelFormat pf, bool useSrgb)
 {
-    auto fmtInfo = toVKFormatInfo(pf);
-    return fmtInfo ? fmtInfo->format : VK_FORMAT_UNDEFINED;
+    auto fmtInfo = toVkFormatInfo(pf);
+    if (!fmtInfo)
+        return VK_FORMAT_UNDEFINED;
+
+    return useSrgb ? fmtInfo->fmtSrgb : fmtInfo->format;
 }
 
-const PixelFormatInfo* toVKFormatInfo(PixelFormat pf)
+const PixelFormatInfo* toVkFormatInfo(PixelFormat pf)
 {
     if (pf < PixelFormat::COUNT) [[likely]]
         return &s_pixelFormatInfos[(int)pf];

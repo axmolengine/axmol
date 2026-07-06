@@ -25,7 +25,7 @@
 #pragma once
 
 #include "axmol/platform/GL.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/DriverFactory.h"
 #include "axmol/rhi/opengl/OpenGLState.h"
 #include "axmol/tlx/hlookup.hpp"
@@ -92,6 +92,7 @@ public:
      * @return A Texture object.
      */
     Texture* createTexture(const TextureDesc& descriptor, std::optional<Color> clearColorHint = std::nullopt) override;
+    Texture* createTextureFromNativeHandle(const ExternalTextureDesc& descriptor) override;
 
     RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
 

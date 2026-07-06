@@ -218,6 +218,32 @@ public:
     static void createPerspective(float fieldOfView, float aspectRatio, float zNearPlane, float zFarPlane, Mat4* dst);
 
     /**
+     * Creates an off-center perspective projection matrix.
+     *
+     * This is useful for asymmetric frusta such as stereo eye projections, where the view volume is not centered on
+     * the forward axis. The left, right, bottom and top values describe the near plane extents in view space. The
+     * camera looks down the negative z-axis, matching createPerspective().
+     *
+     * Projection-space depth follows the active rendering backend: OpenGL uses NDC z in [-1, 1], while D3D, Vulkan and
+     * Metal use NDC z in [0, 1].
+     *
+     * @param left The minimum x-value of the near view plane.
+     * @param right The maximum x-value of the near view plane.
+     * @param bottom The minimum y-value of the near view plane.
+     * @param top The maximum y-value of the near view plane.
+     * @param zNearPlane The distance to the near view plane.
+     * @param zFarPlane The distance to the far view plane.
+     * @param dst A matrix to store the result in.
+     */
+    static void createPerspectiveOffCenter(float left,
+                                           float right,
+                                           float bottom,
+                                           float top,
+                                           float zNearPlane,
+                                           float zFarPlane,
+                                           Mat4* dst);
+
+    /**
      * Creates an orthographic projection matrix.
      *
      * @param width The width of the view.

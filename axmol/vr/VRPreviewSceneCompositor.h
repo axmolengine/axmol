@@ -29,7 +29,7 @@
 #include <array>
 
 #include "axmol/vr/VRBase.h"
-#include "axmol/scene/SceneRenderer.h"
+#include "axmol/scene/SceneCompositor.h"
 #include "axmol/renderer/CustomCommand.h"
 #include "axmol/renderer/RenderTexturePass.h"
 
@@ -67,29 +67,30 @@ struct VREye
 };
 
 /**
- * @brief Generic stereo renderer with lens distortion output.
+ * @brief Preview/debug stereo scene compositor with lens distortion output.
  *
- * VRGenericRenderer renders the current scene into a side-by-side render texture,
+ * VRPreviewSceneCompositor renders the current scene into a side-by-side render texture,
  * once for the left eye and once for the right eye, then draws distortion meshes
  * to present the final image on the screen.
  *
- * This renderer is intended as a generic VR rendering foundation. It does not
- * create duplicate scene cameras. Instead, it reuses the scene's existing cameras
- * and applies per-eye view overrides during rendering. This keeps camera ownership
- * in the scene while still allowing stereo rendering behavior.
+ * This compositor is intended for local stereo preview and debugging without an
+ * XR runtime. It does not create duplicate scene cameras. Instead, it reuses the
+ * scene's existing cameras and applies per-eye view overrides during rendering.
+ * This keeps camera ownership in the scene while still allowing stereo preview
+ * behavior.
  *
  * The renderer also remaps scissor rectangles into the active eye viewport so UI
  * clipping components such as ScrollView remain correct during VR rendering.
  *
- * This class is not a full XR runtime backend. Device tracking, per-eye projection,
- * swapchains, and frame timing from runtimes such as OpenXR should be integrated
- * by a dedicated XR backend on top of this rendering foundation.
+ * This class is not a product XR runtime backend. It does not manage OpenXR
+ * sessions, swapchains, frame timing, actions, or controller input; use
+ * VRSceneCompositor for the runtime-backed VR path.
  */
-class AX_DLL VRGenericRenderer : public SceneRenderer
+class AX_DLL VRPreviewSceneCompositor : public SceneCompositor
 {
 public:
-    VRGenericRenderer();
-    ~VRGenericRenderer() override;
+    VRPreviewSceneCompositor();
+    ~VRPreviewSceneCompositor() override;
 
     /**
      * Toggles whether to ignore head tracker rotation during VR rendering.

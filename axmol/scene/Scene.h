@@ -184,7 +184,7 @@ protected:
     friend class Camera;
     friend class BaseLight;
     friend class Renderer;
-    friend class SceneRenderer;
+    friend class SceneCompositor;
 
     /* weak ref, default camera created by scene */
     Camera* _defaultCamera{nullptr};

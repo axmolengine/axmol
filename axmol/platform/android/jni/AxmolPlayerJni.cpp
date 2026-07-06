@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "axmol/platform/android/RenderView-android.h"
 #include "axmol/base/text_utils.h"
 #include "axmol/platform/android/jni/JniHelper.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/tlx/static_vector.hpp"
 
@@ -145,7 +145,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolPlayer_nativeOnSurfaceCreated(JNI
     }
     else
     {
-        if (rhi::DriverContext::isVulkan())
+        if (rhi::GraphicsCore::isVulkan())
         {
             static_cast<ax::RenderView*>(renderView)->recreateVkSurface(true);
         }

@@ -10,7 +10,7 @@
 #include "Type/csmVector.hpp"
 #include "Model/CubismModel.hpp"
 #include <float.h>
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/platform/RenderView.h"
 #include <algorithm>
 #include <cmath>
@@ -1767,7 +1767,7 @@ void CubismRenderer_Axmol::Initialize(CubismModel* model)
 CubismCommandBuffer_Axmol::DrawCommandBuffer* CubismRenderer_Axmol::CreateRenderTargetDrawCommandBuffer()
 {
     // TODO: should process in axmol OpenGL RHI backend in the future RHI refactoring
-    const bool flipY = DriverContext::isOpenGL();
+    const bool flipY = GraphicsCore::isOpenGL();
     CubismCommandBuffer_Axmol::DrawCommandBuffer* commandBuffer = CSM_NEW CubismCommandBuffer_Axmol::DrawCommandBuffer();
     commandBuffer->GetCommandDraw()->GetCommand()->setDrawType(ax::CustomCommand::DrawType::ELEMENT);
     commandBuffer->GetCommandDraw()->GetCommand()->setPrimitiveType(ax::rhi::PrimitiveType::TRIANGLE);

@@ -71,7 +71,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #    import "axmol/platform/ios/OpenGL_Internal-ios.h"
 #endif
 
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 using namespace ax::rhi;
 
@@ -108,7 +108,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 #elif !AX_ENABLE_MTL && AX_ENABLE_GL
     return [CAEAGLLayer class];
 #else
-    return DriverContext::isMetal() ? [CAMetalLayer class] : [CAEAGLLayer class];
+    return GraphicsCore::isMetal() ? [CAMetalLayer class] : [CAEAGLLayer class];
 #endif
 }
 
@@ -181,7 +181,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
          multiSampling:(BOOL)sampling
        numberOfSamples:(unsigned int)nSamples
 {
-    DriverContext::makeCurrentDriver();
+    GraphicsCore::makeCurrentDriver();
 
     if ((self = [super initWithFrame:frame]))
     {
@@ -193,7 +193,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
             self.contentScaleFactor = [[UIScreen mainScreen] scale];
         }
 
-        if (DriverContext::isMetal())
+        if (GraphicsCore::isMetal())
         {
             AX_UNUSED_PARAM(format);
             AX_UNUSED_PARAM(depth);
@@ -211,7 +211,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
                 [self release];
                 return nil;
             }
-            DriverContext::activateCurrentDriver();
+            GraphicsCore::activateCurrentDriver();
         }
     }
 
@@ -224,7 +224,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
     {
         self.inputHost = [[InputHostView alloc] initWithCoder:aDecoder];
 #if AX_ENABLE_GL
-        if (DriverContext::isOpenGL())
+        if (GraphicsCore::isOpenGL())
         {
             CAEAGLLayer* eaglLayer = (CAEAGLLayer*)[self layer];
 
@@ -289,7 +289,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];  // remove keyboard notification
 #if AX_ENABLE_GL
-    if (DriverContext::isOpenGL())
+    if (GraphicsCore::isOpenGL())
         [renderer_ release];
 #endif
     [self.inputHost release];
@@ -307,7 +307,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 
 // 2. Handle GL context resize if necessary
 #if AX_ENABLE_GL
-    if (DriverContext::isOpenGL())
+    if (GraphicsCore::isOpenGL())
     {
         [renderer_ resizeFromLayer:(CAEAGLLayer*)self.layer];
     }
@@ -335,7 +335,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
     //    -> context_ MUST be the OpenGL context
     //    -> renderbuffer_ must be the RENDER BUFFER
 
-    if (DriverContext::isMetal())
+    if (GraphicsCore::isMetal())
         return;
 
 #    ifdef __IPHONE_4_0

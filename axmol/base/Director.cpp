@@ -42,11 +42,12 @@ THE SOFTWARE.
 #include "axmol/2d/AnimationCache.h"
 #include "axmol/2d/Transition.h"
 #include "axmol/2d/FontFreeType.h"
+#include "axmol/2d/Label.h"
 #include "axmol/2d/LabelAtlas.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/RenderState.h"
-#include "axmol/scene/SceneRenderer.h"
+#include "axmol/scene/SceneCompositor.h"
 #include "axmol/scene/Camera.h"
 #include "axmol/scene/Scene.h"
 #include "axmol/base/UserDefault.h"
@@ -71,7 +72,7 @@ THE SOFTWARE.
 #endif
 
 #include "axmol/rhi/SamplerCache.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/renderer/VertexLayoutManager.h"
 
 #if defined(AX_ENABLE_3D)
@@ -191,8 +192,7 @@ bool Director::init()
     // init TextureCache
     initTextureCache();
 
-    _renderer      = new Renderer();
-    _sceneRenderer = std::make_unique<SceneRenderer>();
+    _renderer = new Renderer();
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     // listen the event that renderer was recreated on Android/WP8
@@ -325,9 +325,7 @@ void Director::processFrame()
     calculateDeltaTime();
 
     if (_renderView)
-    {
         _renderView->pollEvents();
-    }
 
     // tick before glClear: issue #533
     if (!_paused)
@@ -360,7 +358,7 @@ void Director::processFrame()
             _renderer->clearDrawStats();
 
             // render the scene
-            _sceneRenderer->renderScene(_renderer, _runningScene);
+            _renderView->renderScene(_renderer, _runningScene);
 
             _eventDispatcher->dispatchEvent(_eventAfterVisit);
         }
@@ -387,6 +385,10 @@ void Director::processFrame()
             showStats();
 #endif
         }
+
+#ifdef AX_ENABLE_OPENXR
+        showVRModeIndicator();
+#endif
 
         _renderer->render();
 
@@ -471,8 +473,6 @@ void Director::setRenderView(RenderViewCore* renderView)
 
         _renderer->init();
 
-        _sceneRenderer->onRenderViewChanged(_renderView);
-
         if (_renderView)
         {
             setRenderDefaults();
@@ -525,7 +525,7 @@ Camera* Director::getOverlayCamera()
 {
     if (!_overlayCamera)
     {
-        _overlayCamera = Camera::createCanvasOrthographic(-1024.0f, 1024.0f);
+        _overlayCamera = Camera::createOrthographicView(_canvasSizeInPoints, -1024.0f, 1024.0f);
         _overlayCamera->retain();
         _overlayCamera->setCameraFlag(CameraFlag::DEFAULT);
         _overlayCamera->setDepth(127);
@@ -538,7 +538,7 @@ Camera* Director::getOffscreenCamera()
 {
     if (!_offscreenCamera)
     {
-        _offscreenCamera = Camera::createCanvasOrthographic(-1024.0f, 1024.0f);
+        _offscreenCamera = Camera::createOrthographicView(_canvasSizeInPoints, -1024.0f, 1024.0f);
         _offscreenCamera->retain();
         _offscreenCamera->setCameraFlag(CameraFlag::DEFAULT);
         _offscreenCamera->setDepth(0);
@@ -551,7 +551,7 @@ void Director::updateOverlayCamera()
     if (_canvasSizeInPoints.width <= 0 || _canvasSizeInPoints.height <= 0 || !_offscreenCamera)
         return;
 
-    _overlayCamera->initCanvasOrthographic(-1024.0f, 1024.0f);
+    _overlayCamera->initOrthographicView(_canvasSizeInPoints, -1024.0f, 1024.0f);
 }
 
 void Director::updateOffscreenCamera()
@@ -559,21 +559,7 @@ void Director::updateOffscreenCamera()
     if (_canvasSizeInPoints.width <= 0 || _canvasSizeInPoints.height <= 0 || !_offscreenCamera)
         return;
 
-    _offscreenCamera->initCanvasOrthographic(-1024.0f, 1024.0f);
-}
-
-void Director::setSceneRenderer(std::unique_ptr<SceneRenderer>&& impl)
-{
-    if (impl)
-    {
-        _sceneRenderer = std::move(impl);
-        if (_renderView)
-            _sceneRenderer->onRenderViewChanged(_renderView);
-    }
-    else
-    {
-        _sceneRenderer = std::make_unique<SceneRenderer>();
-    }
+    _offscreenCamera->initOrthographicView(_canvasSizeInPoints, -1024.0f, 1024.0f);
 }
 
 void Director::setNextDeltaTimeZero(bool nextDeltaTimeZero)
@@ -1028,6 +1014,7 @@ void Director::reset()
     AX_SAFE_RELEASE_NULL(_FPSLabel);
     AX_SAFE_RELEASE_NULL(_drawnBatchesLabel);
     AX_SAFE_RELEASE_NULL(_drawnVerticesLabel);
+    AX_SAFE_RELEASE_NULL(_VRModeLabel);
     _isStatusLabelUpdated = true;
 
     // purge bitmap cache
@@ -1067,8 +1054,10 @@ void Director::cleanupDirector()
     // Before destory RHI, clear current pool once
     _poolManager->getCurrentPool()->clear();
 
-    // SceneRenderer may hold GPU resources, need reset before gfx drop
-    _sceneRenderer.reset();
+    // RenderViewCore owns the SceneCompositor and runtime presentation resources;
+    // release them before dropping the graphics backend.
+    if (_renderView)
+        _renderView->onGfxDestory();
 
     // If any graphics resources not cleanup or leaked, will crash on linux when destroy graphics context,
     // so we should cleanup any graphics resources.
@@ -1077,7 +1066,7 @@ void Director::cleanupDirector()
     ProgramManager::destroyInstance();
     VertexLayoutManager::destroyInstance();
 
-    rhi::DriverContext::destroyCurrentDriver();
+    rhi::GraphicsCore::destroyCurrentDriver();
 
     if (_renderView)
     {
@@ -1277,6 +1266,35 @@ void Director::showStats()
 
         Camera::_visitingCamera = previousCamera;
     }
+}
+
+void Director::showVRModeIndicator()
+{
+    if (!_renderView->isVRActive())
+    {
+        AX_SAFE_RELEASE_NULL(_VRModeLabel);
+        return;
+    }
+
+    if (!_VRModeLabel)
+    {
+        _VRModeLabel = Label::createWithSystemFont("VR Mode Active", "Arial", 28);
+        _VRModeLabel->retain();
+        _VRModeLabel->setAnchorPoint(Vec2(0.5f, 0.5f));
+        auto safeSize = getSafeAreaRect().size;
+        _VRModeLabel->setPosition(Vec2(safeSize.width * 0.5f, safeSize.height * 0.5f));
+        _VRModeLabel->enableOutline(Color32::black, 2);
+    }
+
+    auto previousCamera = Camera::_visitingCamera;
+    auto* overlayCamera = getOverlayCamera();
+    if (overlayCamera)
+    {
+        Camera::_visitingCamera = overlayCamera;
+        overlayCamera->apply();
+        _VRModeLabel->visit(_renderer, Mat4::identity, 0);
+    }
+    Camera::_visitingCamera = previousCamera;
 }
 
 void Director::calculateMPF()

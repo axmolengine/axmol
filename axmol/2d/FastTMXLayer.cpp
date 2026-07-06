@@ -46,7 +46,7 @@ THE SOFTWARE.
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/Shaders.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/Buffer.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/text_utils.h"

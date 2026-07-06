@@ -34,7 +34,10 @@
 #endif
 
 #if USE_VR_RENDERER && defined(AX_ENABLE_VR)
-#    include "axmol/vr/VRGenericRenderer.h"
+#    if defined(AX_ENABLE_OPENXR)
+#        include "axmol/vr/VRSceneCompositor.h"
+#    endif
+#    include "axmol/vr/VRPreviewSceneCompositor.h"
 #endif
 
 using namespace ax;
@@ -47,10 +50,21 @@ AppDelegate::~AppDelegate() {}
 
 // if you want a different context, modify the value of contextAttrs
 // it will affect all platforms
-void AppDelegate::initContextAttrs()
+void AppDelegate::applicationWillLaunch()
 {
     // Overrides any command-line driver preference (default is Auto).
-    // DriverContext::setDriverPreference(DriverPreference::Auto);
+    // GraphicsCore::setDriverPreference(DriverPreference::Auto);
+
+    // Enable logging output colored text style and prefix timestamp
+    setLogFmtFlag(ax::LogFmtFlag::Full);
+
+    // Register Vulkan interop for OpenXR support, if available. This allows the engine to share Vulkan resources with
+    // external APIs. if AX_ENABLE_OPENXR or AX_ENABLE_VK is not defined, this call is no-op.
+    registerVulkanInterop("Dummy"sv);
+
+    // set vulkan min android api level, 31 for Android 12
+    // refer: https://developer.android.com/tools/releases/platforms
+    GraphicsCore::setVulkanMinAndroidApiLevel(31);
 
     // set app context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
     // powerPreference only affect when RHI backend is D3D
@@ -94,11 +108,13 @@ bool AppDelegate::applicationDidFinishLaunching()
         director->setRenderView(renderView);
     }
 #if USE_VR_RENDERER && defined(AX_ENABLE_VR)
-    auto vrRenderer = std::make_unique<VRGenericRenderer>();
-    // On Android/iOS emulator devices, uncomment to visualize the left/right eye VR rendering output.
-    // Useful for debugging stereo rendering without a physical headset.
-    // vrRenderer->setDebugIgnoreHeadTracker(true);
-    director->setSceneRenderer(std::move(vrRenderer));
+#    if defined(AX_ENABLE_OPENXR)
+    // openxr is enabled, use the VRSceneCompositor for true VR rendering with headset support.
+    renderView->setSceneCompositor(std::make_unique<VRSceneCompositor>());
+#    else
+    // For debug purposes, we can use a VR preview scene compositor to simulate VR rendering on desktop platforms.
+    renderView->setSceneCompositor(std::make_unique<VRPreviewSceneCompositor>());
+#    endif
 #endif
 
     // turn on display FPS

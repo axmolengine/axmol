@@ -38,7 +38,7 @@ public:
     AppDelegate();
     virtual ~AppDelegate();
 
-    void initContextAttrs() override;
+    void applicationWillLaunch() override;
     /**
     @brief    Implement Director and Scene init code here.
     @return true    Initialize success, app continue.

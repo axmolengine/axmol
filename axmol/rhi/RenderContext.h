@@ -212,6 +212,12 @@ public:
     virtual void endFrame() = 0;
 
     /**
+     * Submit currently encoded frame commands without presenting the default surface.
+     * External runtimes such as OpenXR call this before releasing acquired swapchain images.
+     */
+    virtual void submitCurrentFrameCommands(bool waitForCompletion);
+
+    /**
      * Fixed-function state
      * @param x, y Specifies the lower left corner of the scissor box
      * @param wdith Specifies the width of the scissor box

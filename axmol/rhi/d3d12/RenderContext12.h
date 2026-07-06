@@ -122,6 +122,7 @@ public:
 
     void endRenderPass() override;
     void endFrame() override;
+    void submitCurrentFrameCommands(bool waitForCompletion) override;
 
     void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback) override;
 

@@ -315,6 +315,14 @@ void RenderContextImpl::endRenderPass()
 
 void RenderContextImpl::endFrame() {}
 
+void RenderContextImpl::submitCurrentFrameCommands(bool waitForCompletion)
+{
+    if (waitForCompletion)
+        glFinish();
+    else
+        glFlush();
+}
+
 void RenderContextImpl::prepareDrawing() const
 {
     const auto& program = _renderPipeline->getProgram();

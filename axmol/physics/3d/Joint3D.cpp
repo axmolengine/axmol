@@ -47,7 +47,7 @@ namespace jphutil
 {
 JPH::EConstraintSpace cast(Joint3D::CoordinateSpace space)
 {
-    ax::Quaternion quat;
+    ax::Quat quat;
     return space == Joint3D::CoordinateSpace::Local ? JPH::EConstraintSpace::LocalToBodyCOM
                                                     : JPH::EConstraintSpace::WorldSpace;
 }

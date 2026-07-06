@@ -36,7 +36,7 @@ AppDelegate::AppDelegate() {}
 
 AppDelegate::~AppDelegate() {}
 
-void AppDelegate::initContextAttrs()
+void AppDelegate::applicationWillLaunch()
 {
     ContextAttrs contextAttrs = {8, 8, 8, 8, 24, 8, 0};
 

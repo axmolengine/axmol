@@ -62,6 +62,7 @@ public:
         ACCELERATION,
         FOCUS,
         GAME_CONTROLLER,
+        XR_INPUT,
         CUSTOM
     };
 

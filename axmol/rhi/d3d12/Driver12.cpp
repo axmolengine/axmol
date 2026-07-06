@@ -540,6 +540,19 @@ Texture* DriverImpl::createTexture(const TextureDesc& descriptor, std::optional<
     return new TextureImpl(this, descriptor, clearColorHint);
 }
 
+Texture* DriverImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
+{
+    auto nativeResource = static_cast<ID3D12Resource*>(descriptor.nativeTexture.ptr);
+    if (!nativeResource)
+        return nullptr;
+
+    ComPtr<ID3D12Resource> resource = nativeResource;
+    auto initialState = descriptor.nativeState ? static_cast<D3D12_RESOURCE_STATES>(descriptor.nativeState)
+                                               : D3D12_RESOURCE_STATE_COMMON;
+    auto finalState   = static_cast<D3D12_RESOURCE_STATES>(descriptor.nativeFinalState);
+    return new TextureImpl(this, std::move(resource), descriptor.desc, initialState, finalState);
+}
+
 RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
 {
     auto rt = new RenderTargetImpl(this, false);

@@ -40,7 +40,8 @@ USING_NS_AX_EXT;
 Size g_resourceSize(960, 640);
 Size g_designSize(480, 320);
 
-const Color g_testsDefaultClearColor = Color32{0x36, 0x3B, 0x44, 0xFF};
+// const Color g_testsDefaultClearColor = Color32{0x36, 0x3B, 0x44, 0xFF};
+const Color g_testsDefaultClearColor = Color32{0x33, 0x33, 0x33, 0xFF};
 
 TestBase::TestBase() : _parentTest(nullptr), _isTestList(false) {}
 
@@ -69,32 +70,6 @@ public:
         table->_updateContentSize();
 
         return table;
-    }
-
-    void onPointerUp(PointerEvent* event) override
-    {
-        if (!this->isVisible())
-        {
-            return;
-        }
-
-        if (_touchedCell)
-        {
-            auto label = (Label*)_touchedCell->getChildByTag(TABEL_LABEL_TAG);
-
-            Rect bbox   = label->getBoundingBox();
-            bbox.origin = _touchedCell->convertToWorldSpace(bbox.origin);
-
-            if (bbox.containsPoint(event->getLocation()) && _tableViewDelegate != nullptr)
-            {
-                _tableViewDelegate->tableCellUnhighlight(this, _touchedCell);
-                _tableViewDelegate->tableCellTouched(this, _touchedCell);
-            }
-
-            _touchedCell = nullptr;
-        }
-
-        ScrollView::onPointerUp(event);
     }
 
     bool onPointerScroll(PointerEvent* event) override

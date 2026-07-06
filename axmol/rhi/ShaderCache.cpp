@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "axmol/rhi/ShaderCache.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 #include "xxhash/xxhash.h"
 

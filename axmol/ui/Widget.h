@@ -410,7 +410,7 @@ public:
      * @param pt A point in `Vec2`.
      * @return true if the point is in parent's area, false otherwise.
      */
-    bool isClippingParentContainsPoint(const Vec2& pt, const Camera* camera);
+    bool isClippingParentContainsPoint(PointerEvent* event, const Camera* camera);
 
     /**
      * Gets the touch began point of widget when widget is selected.

@@ -46,13 +46,20 @@ void PointerEvent::setPointerInfo(InputPhase phase, Vec2 point, const PointerInp
     _pointerId      = state.id;
     _pressedButtons = state.pressedButtons;
 
-    _point    = point;
-    _pressure = state.pressure;
+    _point       = point;
+    _pressure    = state.pressure;
+    _previousRay = _ray;
+    _ray.reset();
+    _previousHitPoint = _hitResult.hit ? std::optional<Vec3>(_hitResult.worldPoint) : std::nullopt;
+    _hitResult        = {};
     if (!_startPointCaptured)
     {
         _startPoint         = _point;
         _startPointCaptured = true;
         _prevPoint          = _point;
+        _previousRay.reset();
+        _previousHitPoint.reset();
+        _startHitPoint.reset();
     }
 }
 
@@ -84,22 +91,47 @@ bool PointerEvent::isPrimaryPressed() const
 
 Vec2 PointerEvent::getLocation() const
 {
+    if (_pointerType == PointerType::Controller && _hitResult.hit)
+        return Vec2(_hitResult.worldPoint.x, _hitResult.worldPoint.y);
+
     return Director::getInstance()->screenToWorld(_point);
 }
 
 Vec2 PointerEvent::getPreviousLocation() const
 {
+    if (_pointerType == PointerType::Controller && _previousHitPoint.has_value())
+        return Vec2(_previousHitPoint->x, _previousHitPoint->y);
+
     return Director::getInstance()->screenToWorld(_prevPoint);
 }
 
 Vec2 PointerEvent::getStartLocation() const
 {
+    if (_pointerType == PointerType::Controller && _startHitPoint.has_value())
+        return Vec2(_startHitPoint->x, _startHitPoint->y);
+
     return Director::getInstance()->screenToWorld(_startPoint);
 }
 
 Vec2 PointerEvent::getDelta() const
 {
     return getLocation() - getPreviousLocation();
+}
+
+void PointerEvent::setHitResult(const Vec3& worldPoint, const Camera* camera, const Node* target)
+{
+    _hitResult.hit        = true;
+    _hitResult.worldPoint = worldPoint;
+    _hitResult.camera     = camera;
+    _hitResult.target     = target;
+
+    if (!_startHitPoint.has_value())
+        _startHitPoint = worldPoint;
+}
+
+void PointerEvent::clearHitResult()
+{
+    _hitResult = {};
 }
 
 }  // namespace ax

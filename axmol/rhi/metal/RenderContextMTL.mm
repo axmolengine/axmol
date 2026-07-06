@@ -406,6 +406,29 @@ void RenderContextImpl::endFrame()
     [_autoReleasePool drain];
 }
 
+void RenderContextImpl::submitCurrentFrameCommands(bool waitForCompletion)
+{
+    endEncoding();
+
+    if (_currentCmdBuffer)
+    {
+        assert(_currentCmdBuffer.status != MTLCommandBufferStatusCommitted);
+        [_currentCmdBuffer commit];
+        if (waitForCompletion)
+            [_currentCmdBuffer waitUntilCompleted];
+
+        flushCaptureCommands();
+
+        [_currentCmdBuffer release];
+        _currentCmdBuffer = nil;
+    }
+
+    _currentCmdBuffer = [_mtlCmdQueue commandBuffer];
+    [_currentCmdBuffer retain];
+    _currentRenderPassDesc = {};
+    _currentRT             = nullptr;
+}
+
 void RenderContextImpl::endEncoding()
 {
     if (_mtlRenderEncoder)

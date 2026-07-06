@@ -345,11 +345,13 @@ void CameraBackgroundSkyBoxBrush::drawBackground(Camera* camera)
         return;
 
     Mat4 cameraModelMat = camera->getNodeToWorldTransform();
+    Mat4 projectionMat  = camera->getProjectionMatrix();
 
     _customCommand.blendDesc().blendEnabled = false;
 
     Vec4 color(1.f, 1.f, 1.f, 1.f);
     cameraModelMat.m[12] = cameraModelMat.m[13] = cameraModelMat.m[14] = 0;
+    cameraModelMat.scale(1 / projectionMat.m[0], 1 / projectionMat.m[5], 1.0);
 
     _programState->setUniform(_uniformColorLoc, &color, sizeof(color));
     _programState->setUniform(_uniformCameraRotLoc, cameraModelMat.m, sizeof(cameraModelMat.m));
@@ -361,7 +363,7 @@ void CameraBackgroundSkyBoxBrush::drawBackground(Camera* camera)
 
     renderer->popGroup();
 
-    AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 8);
+    AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 4);
 }
 
 bool CameraBackgroundSkyBoxBrush::init()
@@ -390,24 +392,32 @@ bool CameraBackgroundSkyBoxBrush::init()
 
 void CameraBackgroundSkyBoxBrush::initBuffer()
 {
-    // init vertex buffer object
-    Vec3 vexBuf[] = {Vec3(1, -1, 1),  Vec3(1, 1, 1),  Vec3(-1, 1, 1),  Vec3(-1, -1, 1),
-                     Vec3(1, -1, -1), Vec3(1, 1, -1), Vec3(-1, 1, -1), Vec3(-1, -1, -1)};
+    // The skybox is rendered using a purpose-built shader which makes use of
+    // the shader language's inherent support for cubemaps. Hence there is no
+    // need to build a cube mesh. All that is needed is a single quad that
+    // covers the entire screen. The vertex shader will draw the appropriate
+    // view of the cubemap onto that quad.
+    //
+    // The vertex shader does not apply either the model/view matrix or the
+    // projection matrix, so the appropriate quad is one with unit coordinates
+    // in the x and y dimensions. Such a quad will exactly cover the screen.
+    // To ensure that the skybox is rendered behind all other objects, z needs
+    // to be 1.0, but the vertex shader overwrites z to 1.0, so - for the sake
+    // of z-buffering - it is unimportant what we set it to for the vertices
+    // of the quad.
+    //
+    // The quad vertex positions are also used in deriving a direction
+    // vector for the cubemap lookup. We choose z = -1 which matches the
+    // negative-z pointing direction of the camera and gives a field of
+    // view of 90deg in both x and y, if not otherwise adjusted. That fov
+    // is then adjusted to exactly match the camera by applying a prescaling
+    // to the camera's world transformation before sending it to the shader.
+    Vec3 vexBuf[]     = {Vec3(1, -1, -1), Vec3(1, 1, -1), Vec3(-1, 1, -1), Vec3(-1, -1, -1)};
+    uint16_t idxBuf[] = {0, 1, 2, 0, 2, 3};
 
-    _customCommand.createVertexBuffer(sizeof(vexBuf[0]), sizeof(vexBuf) / sizeof(vexBuf[0]),
-                                      CustomCommand::BufferUsage::STATIC);
+    _customCommand.createVertexBuffer(sizeof(Vec3), sizeof(vexBuf) / sizeof(Vec3), CustomCommand::BufferUsage::STATIC);
     _customCommand.updateVertexBuffer(vexBuf, sizeof(vexBuf));
-
-    // init index buffer object
-    uint16_t idxBuf[] = {
-        2, 1, 0, 3, 2, 0,  // font
-        1, 5, 4, 1, 4, 0,  // right
-        4, 5, 6, 4, 6, 7,  // back
-        7, 6, 2, 7, 2, 3,  // left
-        2, 6, 5, 2, 5, 1,  // up
-        3, 0, 4, 3, 4, 7   // down
-    };
-    _customCommand.createIndexBuffer(CustomCommand::IndexFormat::U_SHORT, sizeof(idxBuf) / sizeof(idxBuf[0]),
+    _customCommand.createIndexBuffer(CustomCommand::IndexFormat::U_SHORT, sizeof(idxBuf) / sizeof(uint16_t),
                                      CustomCommand::BufferUsage::STATIC);
     _customCommand.updateIndexBuffer(idxBuf, sizeof(idxBuf));
 }
@@ -446,6 +456,9 @@ void CameraBackgroundSkyBoxBrush::onBeforeDraw()
     _stateBlock.depthWrite = renderer->getDepthWrite();
     _stateBlock.depthFunc  = renderer->getDepthCompareFunc();
     _stateBlock.cullMode   = renderer->getCullMode();
+    renderer->setDepthTest(true);
+    renderer->setDepthCompareFunc(rhi::CompareFunc::LESS_EQUAL);
+    renderer->setCullMode(CullMode::BACK);
 }
 
 void CameraBackgroundSkyBoxBrush::onAfterDraw()

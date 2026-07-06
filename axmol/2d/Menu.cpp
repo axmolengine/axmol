@@ -34,6 +34,8 @@ THE SOFTWARE.
 #include "axmol/base/text_utils.h"
 #include "axmol/platform/StdC.h"
 
+#include <cmath>
+#include <limits>
 #include <vector>
 
 using namespace std;
@@ -45,6 +47,40 @@ enum
 {
     kDefaultPadding = 5,
 };
+
+static bool hitTestNodeWithPointer(PointerEvent* event, const Camera* camera, Node* node, Vec3* outWorldHit)
+{
+    if (!event || !camera || !node)
+        return false;
+
+    Rect rect;
+    rect.size = node->getContentSize();
+    if (rect.size.width <= 0.0f || rect.size.height <= 0.0f)
+        return false;
+
+    if (event->hasRay())
+    {
+        Ray localRay(event->getRay().value());
+        localRay.transform(node->getWorldToNodeTransform());
+
+        if (std::abs(localRay.direction.z) <= std::numeric_limits<float>::epsilon())
+            return false;
+
+        const float t = -localRay.origin.z / localRay.direction.z;
+        if (t < 0.0f)
+            return false;
+
+        Vec3 localHit = localRay.origin + t * localRay.direction;
+        if (!rect.containsPoint(Vec2(localHit.x, localHit.y)))
+            return false;
+
+        if (outWorldHit)
+            node->getNodeToWorldTransform().transformPoint(localHit, outWorldHit);
+        return true;
+    }
+
+    return camera->isWorldPointInRect(event->getLocation(), node->getWorldToNodeTransform(), rect, outWorldHit);
+}
 
 //
 // CCMenu
@@ -228,7 +264,8 @@ bool Menu::onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* out
     if (!event || !camera)
         return false;
 
-    if (!event->isPrimaryPressed())
+    const bool isControllerRay = event->getPointerType() == PointerType::Controller && event->hasRay();
+    if (!event->isPrimaryPressed() && !isControllerRay)
         return false;
 
     if (_state != Menu::State::WAITING || !_visible || !_enabled)
@@ -576,7 +613,6 @@ void Menu::alignItemsInRowsWithArray(const ValueVector& columns)
 
 MenuItem* Menu::hitTestItem(PointerEvent* event, const Camera* camera, Vec3* outHitPoint)
 {
-    Vec2 touchLocation = event->getLocation();
     for (const auto& item : _children)
     {
         MenuItem* child = dynamic_cast<MenuItem*>(item);
@@ -584,9 +620,8 @@ MenuItem* Menu::hitTestItem(PointerEvent* event, const Camera* camera, Vec3* out
         {
             continue;
         }
-        Rect rect;
-        rect.size = child->getContentSize();
-        if (camera->isWorldPointInRect(touchLocation, child->getWorldToNodeTransform(), rect, outHitPoint))
+
+        if (hitTestNodeWithPointer(event, camera, child, outHitPoint))
         {
             return child;
         }
