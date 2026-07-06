@@ -579,8 +579,7 @@ void OpenXRDriver::endFrameEmpty()
     _frameReady = false;
 }
 
-void OpenXRDriver::endFrameWithProjectionLayer(const std::vector<AcquiredSwapchain>& acquired,
-                                                uint32_t viewCountOutput)
+void OpenXRDriver::endFrameWithProjectionLayer(const std::vector<AcquiredSwapchain>& acquired, uint32_t viewCountOutput)
 {
     if (!_inFrame)
         return;
@@ -1838,11 +1837,11 @@ void OpenXRDriver::shutdownXrActions()
 // ---------------------------------------------------------------------------
 
 bool OpenXRDriver::createSwapchain(uint32_t width,
-                                    uint32_t height,
-                                    int64_t format,
-                                    XrSwapchain* outSwapchain,
-                                    uint32_t* outWidth,
-                                    uint32_t* outHeight)
+                                   uint32_t height,
+                                   int64_t format,
+                                   XrSwapchain* outSwapchain,
+                                   uint32_t* outWidth,
+                                   uint32_t* outHeight)
 {
     XrSwapchainCreateInfo swapchainInfo{XR_TYPE_SWAPCHAIN_CREATE_INFO};
     swapchainInfo.createFlags = 0;
