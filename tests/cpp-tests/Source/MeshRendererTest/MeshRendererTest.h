@@ -499,7 +499,6 @@ protected:
 namespace ax
 {
 class TextureCube;
-class Skybox;
 }  // namespace ax
 
 class MeshRendererCubeMapTest : public MeshRendererTestDemo
@@ -517,7 +516,6 @@ public:
 
 protected:
     ax::TextureCube* _textureCube;
-    ax::Skybox* _skyBox;
     ax::MeshRenderer* _teapot;
     ax::Camera* _camera;
 

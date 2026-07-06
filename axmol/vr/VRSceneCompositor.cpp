@@ -339,8 +339,11 @@ void VRSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
 
             _rtPass->begin();
             if (passCount++ == 0)
+            {
                 _rtPass->clear(ClearFlag::COLOR | ClearFlag::DEPTH_AND_STENCIL,
                                {.color = clearColor, .depth = 1.0f, .stencil = 0});
+                camera->clearBackground();
+            }
             else
                 _rtPass->clear(ClearFlag::DEPTH_AND_STENCIL, {.depth = 1.0f, .stencil = 0});
             renderer->addCallbackCommand([this, scissorTransform]() { _scissorTransformStack.push(scissorTransform); });

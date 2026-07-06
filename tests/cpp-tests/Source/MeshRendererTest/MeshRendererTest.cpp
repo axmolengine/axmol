@@ -2182,7 +2182,7 @@ void NodeAnimationTest::addNewMeshWithCoords(Vec2 p)
     _meshes.emplace_back(mesh);
 }
 
-MeshRendererCubeMapTest::MeshRendererCubeMapTest() : _textureCube(nullptr), _skyBox(nullptr), _teapot(nullptr)
+MeshRendererCubeMapTest::MeshRendererCubeMapTest() : _textureCube(nullptr), _teapot(nullptr)
 {
     auto s = Director::getInstance()->getCanvasSize();
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
@@ -2195,7 +2195,6 @@ MeshRendererCubeMapTest::~MeshRendererCubeMapTest()
 #endif
 
     _teapot->release();
-    _skyBox->release();
     _textureCube->release();
 }
 
@@ -2251,17 +2250,14 @@ void MeshRendererCubeMapTest::addNewMeshWithCoords(Vec2 p)
 
     addChild(_teapot);
 
-    {
-        // config skybox
-        _skyBox = Skybox::create();
-        _skyBox->retain();
-
-        _skyBox->setTexture(_textureCube);
-        addChild(_skyBox);
-    }
-
     addChild(_camera);
     setCameraMask(2);
+
+    // config skybox brush on camera
+    auto skyboxBrush = CameraBackgroundSkyBoxBrush::create();
+    skyboxBrush->setTexture(_textureCube);
+    _camera->setBackgroundBrush(skyboxBrush);
+
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     _backToForegroundListener = CustomEventListener::create(EVENT_COME_TO_FOREGROUND, [this](CustomEvent*) {
         AX_SAFE_RELEASE(_textureCube);
@@ -2277,7 +2273,9 @@ void MeshRendererCubeMapTest::addNewMeshWithCoords(Vec2 p)
         auto mat   = MeshMaterial::createWithFilename("MeshRendererTest/CubeMap.material");
         auto state = mat->getTechniqueByIndex(0)->getPassByIndex(0)->getProgramState();
         _teapot->setMaterial(mat);
-        _skyBox->setTexture(_textureCube);
+        // update skybox brush texture
+        if (auto brush = static_cast<CameraBackgroundSkyBoxBrush*>(_camera->getBackgroundBrush()))
+            brush->setTexture(_textureCube);
         // pass the texture sampler to our custom shader
         auto cubeTexLoc = state->getUniformLocation("u_cubeTex");
         state->setTexture(cubeTexLoc, 0, _textureCube->getRHITexture());
@@ -2288,6 +2286,8 @@ void MeshRendererCubeMapTest::addNewMeshWithCoords(Vec2 p)
 
 void MeshRendererCubeMapTest::onPointerMove(ax::PointerEvent* event)
 {
+    if (!event->isPrimaryPressed())
+        return;
     auto delta = event->getDelta();
 
     static float _angle = 0.f;
