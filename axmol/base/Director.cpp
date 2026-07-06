@@ -151,9 +151,6 @@ bool Director::init()
     auto concurrency = Environment::getInstance()->getValue("axmol.concurrency", Value{-1}).asInt();
     _jobSystem       = new JobSystem(concurrency);
 
-#ifdef AX_ENABLE_CONSOLE
-    _console = new Console();
-#endif
     // scheduler
     _scheduler = new Scheduler();
     // action manager
@@ -233,10 +230,6 @@ Director::~Director()
     AX_SAFE_RELEASE(_eventDirectorDisposing);
     AX_SAFE_RELEASE(_eventBeforeGfxDrop);
     AX_SAFE_RELEASE(_eventAfterGfxDrop);
-#ifdef AX_ENABLE_CONSOLE
-    delete _console;
-#endif
-
     _eventDispatcher->removeAllEventListeners();
     AX_SAFE_RELEASE(_eventDispatcher);
 

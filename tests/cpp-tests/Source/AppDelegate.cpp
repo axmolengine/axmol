@@ -151,10 +151,6 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     director->postTask([] { AXLOGI("##### run in frame boundary"); }, Director::TaskTiming::FrameBoundary);
 
-    // Enable Remote Console
-    auto console = director->getConsole();
-    console->listenOnTCP(5678);
-
     _testController = TestController::getInstance();
 
     const char* const autotest_env = std::getenv("AXMOL_START_AUTOTEST");

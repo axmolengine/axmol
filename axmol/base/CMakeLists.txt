@@ -134,7 +134,3 @@ set(_AX_BASE_SRC
   ${_AX_BASE_SPECIFIC_SRC}
 )
 
-if(AX_ENABLE_CONSOLE)
-  set(_AX_BASE_HEADER ${_AX_BASE_HEADER} base/Console.h)
-  set(_AX_BASE_SRC ${_AX_BASE_SRC} base/Console.cpp)
-endif()

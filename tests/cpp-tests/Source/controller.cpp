@@ -70,7 +70,6 @@ public:
         addTest("Bugs", []() { return new BugsTests(); });
         addTest("Click and Move", []() { return new ClickAndMoveTest(); });
         addTest("Environment", []() { return new EnvironmentTests(); });
-        addTest("Console", []() { return new ConsoleTests(); });
 #if !defined(__EMSCRIPTEN__)
         addTest("Curl", []() { return new CurlTests(); });
 #endif
