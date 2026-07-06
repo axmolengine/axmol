@@ -113,7 +113,7 @@ void ApplicationCore::setContextAttrs(const ContextAttrs& attrs)
 
 bool ApplicationCore::registerVulkanInterop(std::string_view appName)
 {
-#if defined(AX_ENABLE_OPENXR)
+#if defined(AX_ENABLE_OPENXR) && AX_ENABLE_VK
     if (_xrContext)
         return _xrContext->registerVulkanInterop();
     _xrContext = std::make_unique<OpenXRContext>(appName);

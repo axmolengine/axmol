@@ -51,6 +51,17 @@ void AppDelegate::applicationWillLaunch()
     // Overrides any command-line driver preference (default is Auto).
     // GraphicsCore::setDriverPreference(DriverPreference::Auto);
 
+    // Enable logging output colored text style and prefix timestamp
+    setLogFmtFlag(ax::LogFmtFlag::Full);
+
+    // Register Vulkan interop for OpenXR support, if available. This allows the engine to share Vulkan resources with
+    // external APIs. if AX_ENABLE_OPENXR or AX_ENABLE_VK is not defined, this call is no-op.
+    registerVulkanInterop("Dummy"sv);
+
+    // set vulkan min android api level, 31 for Android 12
+    // refer: https://developer.android.com/tools/releases/platforms
+    GraphicsCore::setVulkanMinAndroidApiLevel(31);
+
     // set app context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
     // powerPreference only affect when RHI backend is D3D
     ContextAttrs contextAttrs = {.powerPreference = PowerPreference::HighPerformance};

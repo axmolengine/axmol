@@ -52,9 +52,9 @@ void AppDelegate::applicationWillLaunch()
     // Enable logging output colored text style and prefix timestamp
     setLogFmtFlag(ax::LogFmtFlag::Full);
 
+    // Register Vulkan interop for OpenXR support, if available. This allows the engine to share Vulkan resources with
+    // external APIs. if AX_ENABLE_OPENXR or AX_ENABLE_VK is not defined, this call is no-op.
     registerVulkanInterop("Cpp Tests"sv);
-
-    // registerXrVulkanInerop();
 
     // set vulkan min android api level, 31 for Android 12
     // refer: https://developer.android.com/tools/releases/platforms

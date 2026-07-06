@@ -185,7 +185,7 @@ public:
      */
     static void destroyCurrentDriver();
 
-    static VulkanInterop* getVulkanInterop();
+    [[internal]] static VulkanInterop* getVulkanInterop();
 
     static DriverBase* currentDriver();
     static DriverType currentDriverType();
