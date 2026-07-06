@@ -190,6 +190,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
   ax_link_pred(AX_ENABLE_EXT_PHYSICS_NODE "physics-nodes" "${AX_ROOT_DIR}/extensions/physics-nodes/src")
   ax_link_pred(AX_ENABLE_NAVMESH "recast" "${AX_ROOT_DIR}/3rdparty/recast")
   ax_link_pred(AX_ENABLE_PHYSICS_3D "Jolt" "${AX_ROOT_DIR}/3rdparty/jolt")
+  ax_link_pred(AX_ENABLE_OPENXR "openxr_loader" "${OPENXR_SOURCE_DIR}/include")
 
   ax_link_pred(AX_ENABLE_EXT_IMGUI "ImGui"
     "${AX_ROOT_DIR}/extensions/ImGui/src" "${AX_ROOT_DIR}/extensions/ImGui/src/ImGui/imgui"

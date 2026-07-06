@@ -181,6 +181,11 @@
   - Version: 1.3.7-83a82dd (1569)
   - License: BSD-3-Clause
 
+## OpenXR-SDK
+- [![Upstream](https://img.shields.io/github/v/release/KhronosGroup/OpenXR-SDK?label=Upstream)](https://github.com/KhronosGroup/OpenXR-SDK)
+- Version: 1.1.60
+- License: Apache-2.0
+
 ## OpenAL Soft
 - [![Upstream](https://img.shields.io/github/v/release/kcat/openal-soft?label=Upstream)](https://github.com/kcat/openal-soft)
 - Version: 1.25.2-dd4e07d

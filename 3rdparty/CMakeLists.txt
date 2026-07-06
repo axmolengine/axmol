@@ -434,6 +434,7 @@ ax_add_3rd(simdjson)
 if (AX_ENABLE_OPENXR)
   _1kfetch(openxr)
   ax_add_3rd(${openxr_SOURCE_DIR} TARGETS openxr_loader)
+  set_target_properties(openxr_loader PROPERTIES DEBUG_POSTFIX "")
 endif()
 
 if(ANDROID)
