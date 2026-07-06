@@ -146,12 +146,6 @@ static XrExtent2Di makeXrRect(uint32_t w, uint32_t h)
     return r;
 }
 
-enum ColorSpace : uint8_t
-{
-    Linear = 0,
-    Srgb   = 1,
-};
-
 struct TextureFormat
 {
     rhi::PixelFormat pixelFormat{rhi::PixelFormat::NONE};
