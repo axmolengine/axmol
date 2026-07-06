@@ -41,10 +41,6 @@ THE SOFTWARE.
 #include "axmol/math/Math.h"
 #include "axmol/platform/RenderViewCore.h"
 #include "concurrentqueue/concurrentqueue.h"
-#ifdef AX_ENABLE_CONSOLE
-#    include "axmol/base/Console.h"
-#endif
-
 #include "axmol/base/JobSystem.h"
 
 extern void _axmolPerformFrameBoundaryTasks();
@@ -503,12 +499,6 @@ public:
 
     Camera* getOffscreenCamera();
 
-#ifdef AX_ENABLE_CONSOLE
-    /** Returns the Console associated with this director.
-     * @since v3.0
-     */
-    Console* getConsole() const { return _console; }
-#endif
     /* Gets delta time since last tick to main loop. */
     float getDeltaTime() const;
 
@@ -734,11 +724,7 @@ protected:
     Camera* _overlayCamera   = nullptr;  // retained
     Camera* _offscreenCamera = nullptr;  // retained
 
-    Color _clearColor = {0, 0, 0, 1};
-#ifdef AX_ENABLE_CONSOLE
-    /* Console for the director */
-    Console* _console = nullptr;
-#endif
+    Color _clearColor          = {0, 0, 0, 1};
     bool _isStatusLabelUpdated = true;
 
     /* whether or not the director is in a valid state */

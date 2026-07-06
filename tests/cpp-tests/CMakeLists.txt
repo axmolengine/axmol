@@ -231,7 +231,6 @@ list(APPEND GAME_HEADER
   Source/NetworkTest/HttpClientTest/HttpClientTest.h
   Source/NetworkTest/WebSocketTest/WebSocketTest.h
   Source/OpenURLTest/OpenURLTest.h
-  Source/ConsoleTest/ConsoleTest.h
   Source/MenuTest/MenuTest.h
   Source/ZipTest/ZipTests.h
 )
@@ -264,7 +263,6 @@ list(APPEND GAME_SOURCE
   Source/ClickAndMoveTest/ClickAndMoveTest.cpp
   Source/ClippingNodeTest/ClippingNodeTest.cpp
   Source/EnvironmentTest/EnvironmentTest.cpp
-  Source/ConsoleTest/ConsoleTest.cpp
   Source/CurlTest/CurlTest.cpp
   Source/CurrentLanguageTest/CurrentLanguageTest.cpp
   Source/DataVisitorTest/DataVisitorTest.cpp
