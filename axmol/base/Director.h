@@ -724,7 +724,7 @@ protected:
     Camera* _overlayCamera   = nullptr;  // retained
     Camera* _offscreenCamera = nullptr;  // retained
 
-    Color _clearColor = {0, 0, 0, 1};
+    Color _clearColor          = {0, 0, 0, 1};
     bool _isStatusLabelUpdated = true;
 
     /* whether or not the director is in a valid state */
