@@ -289,8 +289,15 @@ bool OpenXRDriver::xrPollEvents()
             {
             case XR_SESSION_STATE_READY:
             {
-                // The session is already started in onRenderViewChanged, but
-                // some runtimes may deliver READY after BeginSession.
+                // Some runtimes deliver READY only after the session-created
+                // event is polled, so xrBeginSession in onRenderViewChanged
+                // may have failed. Retry here when needed.
+                if (!_sessionRunning)
+                {
+                    XrSessionBeginInfo beginInfo{XR_TYPE_SESSION_BEGIN_INFO};
+                    beginInfo.primaryViewConfigurationType = _viewConfigType;
+                    _sessionRunning = checkXr(xrBeginSession(_xrSession, &beginInfo), "xrBeginSession");
+                }
                 break;
             }
             case XR_SESSION_STATE_SYNCHRONIZED:
@@ -1571,8 +1578,8 @@ void OpenXRDriver::pollXrActions(XrTime predictedDisplayTime)
                         if ((gripLocation.locationFlags & XR_SPACE_LOCATION_ORIENTATION_VALID_BIT) &&
                             (gripLocation.locationFlags & XR_SPACE_LOCATION_POSITION_VALID_BIT))
                         {
-                            gripPose = controllerToWorld *
-                                       xrPoseToMat4(scaleXrPosePosition(gripLocation.pose, xrToSceneScale));
+                            gripPose      = controllerToWorld *
+                                            xrPoseToMat4(scaleXrPosePosition(gripLocation.pose, xrToSceneScale));
                             gripPoseValid = true;
                         }
                     }
@@ -1598,7 +1605,7 @@ void OpenXRDriver::pollXrActions(XrTime predictedDisplayTime)
 
                 constexpr float pointerRayOriginEpsilon    = 0.005f;
                 constexpr float pointerRayDirectionEpsilon = 0.015f;
-                const bool pointerRayChanged               = !ctrl.lastPointerEventRayValid ||
+                const bool pointerRayChanged = !ctrl.lastPointerEventRayValid ||
                                                eventRay.origin.distanceSquared(ctrl.lastPointerEventRay.origin) >
                                                    pointerRayOriginEpsilon * pointerRayOriginEpsilon ||
                                                eventRay.direction.distanceSquared(ctrl.lastPointerEventRay.direction) >
