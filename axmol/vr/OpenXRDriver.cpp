@@ -1578,8 +1578,8 @@ void OpenXRDriver::pollXrActions(XrTime predictedDisplayTime)
                         if ((gripLocation.locationFlags & XR_SPACE_LOCATION_ORIENTATION_VALID_BIT) &&
                             (gripLocation.locationFlags & XR_SPACE_LOCATION_POSITION_VALID_BIT))
                         {
-                            gripPose      = controllerToWorld *
-                                            xrPoseToMat4(scaleXrPosePosition(gripLocation.pose, xrToSceneScale));
+                            gripPose = controllerToWorld *
+                                       xrPoseToMat4(scaleXrPosePosition(gripLocation.pose, xrToSceneScale));
                             gripPoseValid = true;
                         }
                     }
@@ -1605,7 +1605,7 @@ void OpenXRDriver::pollXrActions(XrTime predictedDisplayTime)
 
                 constexpr float pointerRayOriginEpsilon    = 0.005f;
                 constexpr float pointerRayDirectionEpsilon = 0.015f;
-                const bool pointerRayChanged = !ctrl.lastPointerEventRayValid ||
+                const bool pointerRayChanged               = !ctrl.lastPointerEventRayValid ||
                                                eventRay.origin.distanceSquared(ctrl.lastPointerEventRay.origin) >
                                                    pointerRayOriginEpsilon * pointerRayOriginEpsilon ||
                                                eventRay.direction.distanceSquared(ctrl.lastPointerEventRay.direction) >
