@@ -998,8 +998,6 @@ bool EventDispatcher::dispatchCapturedPointerEvent(PointerEvent* event)
         event->setCurrentTarget(target);
         event->setCamera(camera);
         event->setCaptureBits(entry.captureBits);
-
-        // if (event->getPhase() != InputPhase::PointerMove)
         pointerHitTest(event, camera, listener, target);
 
         switch (event->getPhase())
