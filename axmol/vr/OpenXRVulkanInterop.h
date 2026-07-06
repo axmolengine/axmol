@@ -38,7 +38,7 @@ namespace ax::rhi
 /**
  * @brief Passive adapter that bridges an externally-owned XrInstance to VulkanInterop queries.
  *
- * OpenXRContext creates an XrInstance early and passes it via setXrHandles().
+ * OpenXRDriver creates an XrInstance early and passes it via setXrHandles().
  * This class does not own any OpenXR handles and performs no lifecycle management.
  */
 class OpenXRVulkanInterop final : public VulkanInterop

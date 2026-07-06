@@ -54,14 +54,14 @@ inline namespace experimental
 /**
  * @brief Long-lived OpenXR backend context for VRSceneCompositor.
  *
- * OpenXRContext owns OpenXR instance/session/space/swapchain/action state and
+ * OpenXRDriver owns OpenXR instance/session/space/swapchain/action state and
  * wraps swapchain images for the active RHI backend. It is not a per-frame data
  * object and is intentionally separate from axmol's RHI RenderContext types.
  * `pollEvents()` is the single pre-update entry point; it handles OpenXR events,
  * waits frame timing, and syncs frame-bound input. `_inFrame` tracks only the
  * xrBeginFrame/xrEndFrame pairing state.
  */
-class AX_DLL OpenXRContext
+class AX_DLL OpenXRDriver
 {
     friend class RenderViewCore;
 
@@ -120,8 +120,8 @@ public:
         rhi::RenderTarget* renderTarget{nullptr};
     };
 
-    OpenXRContext(std::string_view appName);
-    ~OpenXRContext();
+    OpenXRDriver(std::string_view appName);
+    ~OpenXRDriver();
 
     /**
      * @brief Registers a VulkanInterop for this context before the Vulkan driver initializes.

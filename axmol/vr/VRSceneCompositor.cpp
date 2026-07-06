@@ -112,7 +112,7 @@ XrSession VRSceneCompositor::getXrSession() const
     return _context ? _context->getXrSession() : XR_NULL_HANDLE;
 }
 
-void VRSceneCompositor::bindContext(OpenXRContext* context)
+void VRSceneCompositor::bindContext(OpenXRDriver* context)
 {
     _context = context;
 }
@@ -299,7 +299,7 @@ void VRSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
     if (!_context->locateViews(viewCountOutput))
         return;
 
-    std::vector<OpenXRContext::AcquiredSwapchain> acquired;
+    std::vector<OpenXRDriver::AcquiredSwapchain> acquired;
     if (!_context->acquireSwapchains(acquired))
     {
         _context->endFrameEmpty();
@@ -323,7 +323,7 @@ void VRSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
         _rtPass->setTarget(swapchain.renderTarget);
         _rtPass->setViewport(Viewport(0, 0, static_cast<int>(eyeW), static_cast<int>(eyeH)));
 
-        Mat4 eyeTransform = OpenXRContext::xrPoseToMat4(scaleXrPosePosition(view.pose, _xrToSceneScale));
+        Mat4 eyeTransform = OpenXRDriver::xrPoseToMat4(scaleXrPosePosition(view.pose, _xrToSceneScale));
 
         int passCount          = 0;
         bool renderedScenePass = false;
@@ -340,7 +340,7 @@ void VRSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
 
             const Mat4 originalProjection = camera->getProjectionMatrix();
             camera->setAdditionalTransform(eyeTransform);
-            camera->setProjectionMatrix(OpenXRContext::xrFovToProjection(view.fov, _nearZ, _farZ));
+            camera->setProjectionMatrix(OpenXRDriver::xrFovToProjection(view.fov, _nearZ, _farZ));
             camera->updateViewProjectionState();
 
             _rtPass->begin();
@@ -371,7 +371,7 @@ void VRSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
 
             const Mat4 originalProjection = rayCamera->getProjectionMatrix();
             rayCamera->setAdditionalTransform(eyeTransform);
-            rayCamera->setProjectionMatrix(OpenXRContext::xrFovToProjection(view.fov, _nearZ, _farZ));
+            rayCamera->setProjectionMatrix(OpenXRDriver::xrFovToProjection(view.fov, _nearZ, _farZ));
             rayCamera->updateViewProjectionState();
 
             _rtPass->begin();

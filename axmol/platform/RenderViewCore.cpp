@@ -292,7 +292,7 @@ void RenderViewCore::setSceneCompositor(std::unique_ptr<SceneCompositor>&& compo
     {
         if (!_xrContext)
         {
-            // Acquire ownership from Application if prepareOpenXR() was called early.
+            // Acquire ownership from Application if registerVulkanInterop() was called early.
             if (auto* app = ApplicationCore::getInstance())
                 _xrContext = app->releaseXRContext();
 
@@ -301,12 +301,12 @@ void RenderViewCore::setSceneCompositor(std::unique_ptr<SceneCompositor>&& compo
                 if (rhi::GraphicsCore::isVulkan())
                 {
                     AXLOGE(
-                        "prepareOpenXR() was not called in applicationWillLaunch(). "
+                        "registerVulkanInterop() was not called in applicationWillLaunch(). "
                         "Vulkan requires interop registration before makeCurrentDriver().");
                     return;
                 }
                 // Non-Vulkan backends (D3D, Metal, GL) do not need pre-driver interop registration.
-                _xrContext = std::make_unique<OpenXRContext>(getViewName());
+                _xrContext = std::make_unique<OpenXRDriver>(getViewName());
             }
         }
         vr->bindContext(_xrContext.get());

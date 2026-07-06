@@ -40,7 +40,7 @@ namespace ax
 {
 inline namespace experimental
 {
-class OpenXRContext;
+class OpenXRDriver;
 }
 }  // namespace ax
 #endif
@@ -182,7 +182,7 @@ public:
      * void AppDelegate::applicationWillLaunch() {
      *     GraphicsCore::setVulkanMinAndroidApiLevel(31);
      * #ifdef AX_ENABLE_OPENXR
-     *     prepareOpenXR("your_app_name");  // required for Vulkan; harmless for other backends
+     *     registerVulkanInterop("your_app_name");  // required for Vulkan; harmless for other backends
      * #endif
      *     ContextAttrs contextAttrs = {8, 8, 8, 8, 24, 8};
      *     setContextAttrs(contextAttrs);
@@ -198,7 +198,7 @@ public:
     bool registerVulkanInterop(std::string_view appName);
 
 #if defined(AX_ENABLE_OPENXR)
-    std::unique_ptr<OpenXRContext> releaseXRContext();
+    std::unique_ptr<OpenXRDriver> releaseXRContext();
 #endif
 
     /**
@@ -262,7 +262,7 @@ protected:
     static Director* s_director;
 
 #if defined(AX_ENABLE_OPENXR)
-    std::unique_ptr<OpenXRContext> _xrContext;
+    std::unique_ptr<OpenXRDriver> _xrContext;
 #endif
 };
 

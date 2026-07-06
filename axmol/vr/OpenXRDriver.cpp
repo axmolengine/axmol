@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/vr/OpenXRContext.h"
+#include "axmol/vr/OpenXRDriver.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -218,7 +218,7 @@ static bool xrFormatToTextureFormat(int64_t format, TextureFormat& outFormat)
 //   We build a pose matrix that transforms from pose-local space to the
 //   OpenXR reference space.
 // ---------------------------------------------------------------------------
-Mat4 OpenXRContext::xrPoseToMat4(const XrPosef& pose)
+Mat4 OpenXRDriver::xrPoseToMat4(const XrPosef& pose)
 {
     Mat4 rot;
     Mat4::createRotation(Quat(pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w), &rot);
@@ -235,7 +235,7 @@ Mat4 OpenXRContext::xrPoseToMat4(const XrPosef& pose)
 //   asymmetric frustum, relative to the eye.  This builds a classic
 //   off-center / asymmetric perspective projection matrix.
 // ---------------------------------------------------------------------------
-Mat4 OpenXRContext::xrFovToProjection(const XrFovf& fov, float nearZ, float farZ)
+Mat4 OpenXRDriver::xrFovToProjection(const XrFovf& fov, float nearZ, float farZ)
 {
     Mat4 out;
     Mat4::createPerspectiveOffCenter(nearZ * std::tan(fov.angleLeft), nearZ * std::tan(fov.angleRight),
@@ -249,7 +249,7 @@ Mat4 OpenXRContext::xrFovToProjection(const XrFovf& fov, float nearZ, float farZ
 //   The aim pose's orientation + position defines a ray in world space,
 //   where -Z is the pointing direction (OpenXR convention).
 // ---------------------------------------------------------------------------
-Ray OpenXRContext::xrPoseToRay(const XrPosef& pose)
+Ray OpenXRDriver::xrPoseToRay(const XrPosef& pose)
 {
     const Mat4 poseTransform = xrPoseToMat4(pose);
 
@@ -263,7 +263,7 @@ Ray OpenXRContext::xrPoseToRay(const XrPosef& pose)
     return Ray(origin, direction);
 }
 
-Vec2 OpenXRContext::xrToVec2(const XrVector2f& v)
+Vec2 OpenXRDriver::xrToVec2(const XrVector2f& v)
 {
     return Vec2(v.x, v.y);
 }
@@ -271,7 +271,7 @@ Vec2 OpenXRContext::xrToVec2(const XrVector2f& v)
 // ---------------------------------------------------------------------------
 // OpenXR event polling (session state management)
 // ---------------------------------------------------------------------------
-bool OpenXRContext::xrPollEvents()
+bool OpenXRDriver::xrPollEvents()
 {
     XrEventDataBuffer event{XR_TYPE_EVENT_DATA_BUFFER};
     while (xrPollEvent(_xrInstance, &event) == XR_SUCCESS)
@@ -337,12 +337,12 @@ bool OpenXRContext::xrPollEvents()
 // ---------------------------------------------------------------------------
 // Construction / destruction
 // ---------------------------------------------------------------------------
-OpenXRContext::OpenXRContext(std::string_view appName) : _appName(appName)
+OpenXRDriver::OpenXRDriver(std::string_view appName) : _appName(appName)
 {
     _director = Director::getInstance();
 }
 
-OpenXRContext::~OpenXRContext()
+OpenXRDriver::~OpenXRDriver()
 {
     GraphicsCore::setVulkanInterop(nullptr);
     shutdownXr();
@@ -352,7 +352,7 @@ OpenXRContext::~OpenXRContext()
 // XR frame driver
 // ---------------------------------------------------------------------------
 
-bool OpenXRContext::registerVulkanInterop()
+bool OpenXRDriver::registerVulkanInterop()
 {
     if (!initXrInstance() || !initXrSystem())
         return false;
@@ -363,7 +363,7 @@ bool OpenXRContext::registerVulkanInterop()
     return true;
 }
 
-void OpenXRContext::onRenderViewChanged(RenderViewCore* rv)
+void OpenXRDriver::onRenderViewChanged(RenderViewCore* rv)
 {
     AX_UNUSED_PARAM(rv);
 
@@ -385,7 +385,7 @@ void OpenXRContext::onRenderViewChanged(RenderViewCore* rv)
     }
 }
 
-void OpenXRContext::pollEvents()
+void OpenXRDriver::pollEvents()
 {
     _frameReady             = false;
     _viewsLocated           = false;
@@ -435,7 +435,7 @@ void OpenXRContext::pollEvents()
     pollXrActions(_frameState.predictedDisplayTime);
 }
 
-bool OpenXRContext::beginRenderFrame()
+bool OpenXRDriver::beginRenderFrame()
 {
     if (!_frameReady || _inFrame)
         return false;
@@ -458,7 +458,7 @@ bool OpenXRContext::beginRenderFrame()
     return true;
 }
 
-bool OpenXRContext::locateViews(uint32_t& viewCountOutput)
+bool OpenXRDriver::locateViews(uint32_t& viewCountOutput)
 {
     viewCountOutput = 0;
 
@@ -475,7 +475,7 @@ bool OpenXRContext::locateViews(uint32_t& viewCountOutput)
     return true;
 }
 
-void OpenXRContext::updatePointerViewTransform(uint32_t viewCount)
+void OpenXRDriver::updatePointerViewTransform(uint32_t viewCount)
 {
     _headViewTransformValid = false;
     _headViewTransform      = Mat4::identity;
@@ -495,7 +495,7 @@ void OpenXRContext::updatePointerViewTransform(uint32_t viewCount)
     _headViewTransformValid = true;
 }
 
-bool OpenXRContext::acquireSwapchains(std::vector<AcquiredSwapchain>& acquired)
+bool OpenXRDriver::acquireSwapchains(std::vector<AcquiredSwapchain>& acquired)
 {
     acquired.clear();
     acquired.reserve(_colorSwapchains.size());
@@ -551,7 +551,7 @@ bool OpenXRContext::acquireSwapchains(std::vector<AcquiredSwapchain>& acquired)
     return true;
 }
 
-void OpenXRContext::releaseSwapchains(const std::vector<AcquiredSwapchain>& acquired)
+void OpenXRDriver::releaseSwapchains(const std::vector<AcquiredSwapchain>& acquired)
 {
     for (auto& acq : acquired)
     {
@@ -560,7 +560,7 @@ void OpenXRContext::releaseSwapchains(const std::vector<AcquiredSwapchain>& acqu
     }
 }
 
-void OpenXRContext::endFrameEmpty()
+void OpenXRDriver::endFrameEmpty()
 {
     if (!_inFrame)
     {
@@ -579,7 +579,7 @@ void OpenXRContext::endFrameEmpty()
     _frameReady = false;
 }
 
-void OpenXRContext::endFrameWithProjectionLayer(const std::vector<AcquiredSwapchain>& acquired,
+void OpenXRDriver::endFrameWithProjectionLayer(const std::vector<AcquiredSwapchain>& acquired,
                                                 uint32_t viewCountOutput)
 {
     if (!_inFrame)
@@ -673,7 +673,7 @@ static std::vector<const char*> getXrExtensions()
     return extensions;
 }
 
-bool OpenXRContext::initXrInstance()
+bool OpenXRDriver::initXrInstance()
 {
     AXLOGI("[OpenXR] Header API version: {}.{}.{}", XR_VERSION_MAJOR(XR_CURRENT_API_VERSION),
            XR_VERSION_MINOR(XR_CURRENT_API_VERSION), XR_VERSION_PATCH(XR_CURRENT_API_VERSION));
@@ -743,7 +743,7 @@ bool OpenXRContext::initXrInstance()
     return true;
 }
 
-bool OpenXRContext::initXrSystem()
+bool OpenXRDriver::initXrSystem()
 {
     XrSystemGetInfo getInfo{XR_TYPE_SYSTEM_GET_INFO};
     getInfo.formFactor = XR_FORM_FACTOR_HEAD_MOUNTED_DISPLAY;
@@ -811,7 +811,7 @@ bool OpenXRContext::initXrSystem()
     return true;
 }
 
-bool OpenXRContext::initXrSession()
+bool OpenXRDriver::initXrSession()
 {
     if (!checkGraphicsRequirements())
         return false;
@@ -826,7 +826,7 @@ bool OpenXRContext::initXrSession()
     return checkXr(xrCreateSession(_xrInstance, &createInfo, &_xrSession), "xrCreateSession");
 }
 
-bool OpenXRContext::initXrSwapchains()
+bool OpenXRDriver::initXrSwapchains()
 {
     destroySwapchains();
 
@@ -1020,7 +1020,7 @@ bool OpenXRContext::initXrSwapchains()
     return true;
 }
 
-bool OpenXRContext::initXrSpaces()
+bool OpenXRDriver::initXrSpaces()
 {
     // Create local reference space
     XrReferenceSpaceCreateInfo spaceInfo{XR_TYPE_REFERENCE_SPACE_CREATE_INFO};
@@ -1029,7 +1029,7 @@ bool OpenXRContext::initXrSpaces()
     return checkXr(xrCreateReferenceSpace(_xrSession, &spaceInfo, &_localSpace), "xrCreateReferenceSpace");
 }
 
-void OpenXRContext::shutdownXr()
+void OpenXRDriver::shutdownXr()
 {
     if (_localSpace != XR_NULL_HANDLE)
     {
@@ -1066,7 +1066,7 @@ void OpenXRContext::shutdownXr()
 // OpenXR Input Actions
 // ---------------------------------------------------------------------------
 
-bool OpenXRContext::initXrActions()
+bool OpenXRDriver::initXrActions()
 {
     // ---- 1. Create action set ----
     XrActionSetCreateInfo actionSetInfo{XR_TYPE_ACTION_SET_CREATE_INFO};
@@ -1381,7 +1381,7 @@ bool OpenXRContext::initXrActions()
     return true;
 }
 
-void OpenXRContext::pollXrActions(XrTime predictedDisplayTime)
+void OpenXRDriver::pollXrActions(XrTime predictedDisplayTime)
 {
     if (_inputActionSet == XR_NULL_HANDLE)
         return;
@@ -1706,7 +1706,7 @@ void OpenXRContext::pollXrActions(XrTime predictedDisplayTime)
     }
 }
 
-void OpenXRContext::logXrInteractionProfiles()
+void OpenXRDriver::logXrInteractionProfiles()
 {
     if (_xrSession == XR_NULL_HANDLE)
         return;
@@ -1744,7 +1744,7 @@ void OpenXRContext::logXrInteractionProfiles()
     }
 }
 
-void OpenXRContext::shutdownXrActions()
+void OpenXRDriver::shutdownXrActions()
 {
     for (auto& ctrl : _controllers)
     {
@@ -1837,7 +1837,7 @@ void OpenXRContext::shutdownXrActions()
 // Swapchain helpers
 // ---------------------------------------------------------------------------
 
-bool OpenXRContext::createSwapchain(uint32_t width,
+bool OpenXRDriver::createSwapchain(uint32_t width,
                                     uint32_t height,
                                     int64_t format,
                                     XrSwapchain* outSwapchain,
@@ -1863,7 +1863,7 @@ bool OpenXRContext::createSwapchain(uint32_t width,
     return true;
 }
 
-void OpenXRContext::destroySwapchains()
+void OpenXRDriver::destroySwapchains()
 {
     if (_colorSwapchains.empty())
         return;
@@ -1886,7 +1886,7 @@ void OpenXRContext::destroySwapchains()
     _colorSwapchains.clear();
 }
 
-rhi::Texture* OpenXRContext::createDepthTexture(uint32_t width, uint32_t height)
+rhi::Texture* OpenXRDriver::createDepthTexture(uint32_t width, uint32_t height)
 {
     rhi::TextureDesc desc;
     desc.width        = static_cast<uint16_t>(width);
@@ -1904,7 +1904,7 @@ rhi::Texture* OpenXRContext::createDepthTexture(uint32_t width, uint32_t height)
 // Graphics binding (backend-specific)
 // ---------------------------------------------------------------------------
 
-const void* OpenXRContext::createGraphicsBinding()
+const void* OpenXRDriver::createGraphicsBinding()
 {
     // We allocate a persistent structure and store the pointer.
     // This structure must remain valid for the lifetime of the session.
@@ -1994,7 +1994,7 @@ const void* OpenXRContext::createGraphicsBinding()
     return nullptr;
 }
 
-bool OpenXRContext::checkVulkanGraphicsDevice()
+bool OpenXRDriver::checkVulkanGraphicsDevice()
 {
 #if AX_ENABLE_VK
     auto vkDriver = static_cast<rhi::vk::DriverImpl*>(axdrv);
@@ -2032,7 +2032,7 @@ bool OpenXRContext::checkVulkanGraphicsDevice()
 #endif
 }
 
-bool OpenXRContext::checkGraphicsRequirements()
+bool OpenXRDriver::checkGraphicsRequirements()
 {
     const auto driverType = rhi::GraphicsCore::currentDriverType();
 

@@ -26,7 +26,7 @@
 
 #include "axmol/renderer/CustomCommand.h"
 #include "axmol/scene/SceneCompositor.h"
-#include "axmol/vr/OpenXRContext.h"
+#include "axmol/vr/OpenXRDriver.h"
 
 namespace ax
 {
@@ -47,7 +47,7 @@ struct VRScissorTransform
 /**
  * @brief Product VR scene compositor backed by OpenXR.
  *
- * VRSceneCompositor bridges Director's SceneCompositor lifecycle to OpenXRContext.
+ * VRSceneCompositor bridges Director's SceneCompositor lifecycle to OpenXRDriver.
  * It polls OpenXR frame-bound state before scheduler update, then renders the
  * scene per eye, draws controller rays, and submits the projection layer for the
  * current XR frame.
@@ -75,7 +75,7 @@ public:
     XrInstance getXrInstance() const;
     XrSession getXrSession() const;
 
-    void bindContext(OpenXRContext* context);
+    void bindContext(OpenXRDriver* context);
     void unbindContext();
 
     void pollEvents() override;
@@ -94,7 +94,7 @@ private:
     void onBeforeControllerRayDraw();
     void onAfterControllerRayDraw();
 
-    OpenXRContext* _context{nullptr};
+    OpenXRDriver* _context{nullptr};
 
     CustomCommand _controllerRayCommands[2];
     rhi::UniformLocation _controllerRayMVPLocation;

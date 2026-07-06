@@ -40,7 +40,7 @@ namespace ax
 {
 inline namespace experimental
 {
-class OpenXRContext;
+class OpenXRDriver;
 }
 }  // namespace ax
 #endif
@@ -537,7 +537,7 @@ protected:
     std::unique_ptr<SceneCompositor> _sceneCompositor;
 
 #ifdef AX_ENABLE_OPENXR
-    std::unique_ptr<OpenXRContext> _xrContext;
+    std::unique_ptr<OpenXRDriver> _xrContext;
 #endif
 
     float _renderScale{1.0f};
