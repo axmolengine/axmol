@@ -537,7 +537,7 @@ protected:
     std::unique_ptr<SceneCompositor> _sceneCompositor;
 
 #ifdef AX_ENABLE_OPENXR
-    std::unique_ptr<OpenXRDriver> _xrContext;
+    std::unique_ptr<OpenXRDriver> _xrDriver;
 #endif
 
     float _renderScale{1.0f};

@@ -530,12 +530,6 @@ bool Terrain::onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* 
     Vec3 hitPoint;
 
     bool hitted = getIntersectionPoint(ray, hitPoint);
-    if (event->getPhase() == InputPhase::PointerDown)
-    {
-        AXLOGI("Terrain::onPointerHitTest: ray origin: ({}, {}, {}), direction: ({}, {}, {}), hitted: {}, camera: {}",
-               ray.origin.x, ray.origin.y, ray.origin.z, ray.direction.x, ray.direction.y, ray.direction.z, hitted,
-               (void*)camera);
-    }
     if (!hitted)
         return false;
 

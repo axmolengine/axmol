@@ -277,11 +277,6 @@ bool RenderViewCore::isVRActive() const
 
 void RenderViewCore::setSceneCompositor(std::unique_ptr<SceneCompositor>&& compositor)
 {
-#ifdef AX_ENABLE_OPENXR
-    if (auto vr = dynamic_cast<VRSceneCompositor*>(_sceneCompositor.get()))
-        vr->unbindContext();
-#endif
-
     if (compositor)
         _sceneCompositor = std::move(compositor);
     else
@@ -290,13 +285,13 @@ void RenderViewCore::setSceneCompositor(std::unique_ptr<SceneCompositor>&& compo
 #ifdef AX_ENABLE_OPENXR
     if (auto vr = dynamic_cast<VRSceneCompositor*>(_sceneCompositor.get()))
     {
-        if (!_xrContext)
+        if (!_xrDriver)
         {
             // Acquire ownership from Application if registerVulkanInterop() was called early.
-            if (auto* app = ApplicationCore::getInstance())
-                _xrContext = app->releaseXRContext();
+            if (auto app = ApplicationCore::getInstance())
+                _xrDriver = app->releaseXRDriver();
 
-            if (!_xrContext)
+            if (!_xrDriver)
             {
                 if (rhi::GraphicsCore::isVulkan())
                 {
@@ -306,10 +301,10 @@ void RenderViewCore::setSceneCompositor(std::unique_ptr<SceneCompositor>&& compo
                     return;
                 }
                 // Non-Vulkan backends (D3D, Metal, GL) do not need pre-driver interop registration.
-                _xrContext = std::make_unique<OpenXRDriver>(getViewName());
+                _xrDriver = std::make_unique<OpenXRDriver>(getViewName());
             }
         }
-        vr->bindContext(_xrContext.get());
+        vr->setXrDriver(_xrDriver.get());
     }
 #endif
 
@@ -349,11 +344,7 @@ void RenderViewCore::onGfxDestory()
     _sceneCompositor.reset();
 
 #ifdef AX_ENABLE_OPENXR
-    if (_xrContext)
-    {
-        _xrContext->shutdownXr();
-        _xrContext.reset();
-    }
+    _xrDriver.reset();
 #endif
 }
 

@@ -198,7 +198,7 @@ public:
     bool registerVulkanInterop(std::string_view appName);
 
 #if defined(AX_ENABLE_OPENXR)
-    std::unique_ptr<OpenXRDriver> releaseXRContext();
+    std::unique_ptr<OpenXRDriver> releaseXRDriver();
 #endif
 
     /**
@@ -262,7 +262,7 @@ protected:
     static Director* s_director;
 
 #if defined(AX_ENABLE_OPENXR)
-    std::unique_ptr<OpenXRDriver> _xrContext;
+    std::unique_ptr<OpenXRDriver> _openxrDriver;
 #endif
 };
 

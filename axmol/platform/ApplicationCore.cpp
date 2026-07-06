@@ -114,19 +114,19 @@ void ApplicationCore::setContextAttrs(const ContextAttrs& attrs)
 bool ApplicationCore::registerVulkanInterop(std::string_view appName)
 {
 #if defined(AX_ENABLE_OPENXR) && AX_ENABLE_VK
-    if (_xrContext)
-        return _xrContext->registerVulkanInterop();
-    _xrContext = std::make_unique<OpenXRDriver>(appName);
-    return _xrContext->registerVulkanInterop();
+    if (_openxrDriver)
+        return _openxrDriver->registerVulkanInterop();
+    _openxrDriver = std::make_unique<OpenXRDriver>(appName);
+    return _openxrDriver->registerVulkanInterop();
 #else
     return false;
 #endif
 }
 
 #if defined(AX_ENABLE_OPENXR)
-std::unique_ptr<OpenXRDriver> ApplicationCore::releaseXRContext()
+std::unique_ptr<OpenXRDriver> ApplicationCore::releaseXRDriver()
 {
-    return std::move(_xrContext);
+    return std::move(_openxrDriver);
 }
 #endif
 

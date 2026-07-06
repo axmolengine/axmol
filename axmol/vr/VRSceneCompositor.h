@@ -75,9 +75,7 @@ public:
     XrInstance getXrInstance() const;
     XrSession getXrSession() const;
 
-    void bindContext(OpenXRDriver* context);
-    void unbindContext();
-
+    void setXrDriver(OpenXRDriver* xrDriver);
     void pollEvents() override;
 
 protected:
@@ -94,7 +92,7 @@ private:
     void onBeforeControllerRayDraw();
     void onAfterControllerRayDraw();
 
-    OpenXRDriver* _context{nullptr};
+    OpenXRDriver* _xrDriver{nullptr};
 
     CustomCommand _controllerRayCommands[2];
     rhi::UniformLocation _controllerRayMVPLocation;
