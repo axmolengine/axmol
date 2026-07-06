@@ -202,9 +202,9 @@ static unsigned short s_CM[LAYER_COUNT] = {
     (unsigned short)s_CF[3],
 };
 
-static const char* s_CameraNames[CAMERA_COUNT] = {"(unused)",        "World 3D Scene",  "UI 2D",
-                                                  "Dialog 2D Base",  "Dialog 3D Model", "Dialog 2D Above",
-                                                  "OSD 2D Base",     "OSD 3D Model",    "OSD 2D Above"};
+static const char* s_CameraNames[CAMERA_COUNT] = {"(unused)",       "World 3D Scene",  "UI 2D",
+                                                  "Dialog 2D Base", "Dialog 3D Model", "Dialog 2D Above",
+                                                  "OSD 2D Base",    "OSD 3D Model",    "OSD 2D Above"};
 
 static int8_t cameraDepth(GAME_CAMERAS_ORDER camera)
 {
@@ -382,9 +382,8 @@ void Scene3DTestScene::createWorld3D()
 
     // create skybox brush on the world scene camera
     auto skyboxBrush = CameraBackgroundSkyBoxBrush::create(
-        "MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg",
-        "MeshRendererTest/skybox/top.jpg", "MeshRendererTest/skybox/bottom.jpg",
-        "MeshRendererTest/skybox/front.jpg", "MeshRendererTest/skybox/back.jpg");
+        "MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg", "MeshRendererTest/skybox/top.jpg",
+        "MeshRendererTest/skybox/bottom.jpg", "MeshRendererTest/skybox/front.jpg", "MeshRendererTest/skybox/back.jpg");
     _gameCameras[CAMERA_WORLD_3D_SCENE]->setBackgroundBrush(skyboxBrush);
 
     // create terrain

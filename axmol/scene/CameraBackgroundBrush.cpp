@@ -412,11 +412,10 @@ void CameraBackgroundSkyBoxBrush::initBuffer()
     // view of 90deg in both x and y, if not otherwise adjusted. That fov
     // is then adjusted to exactly match the camera by applying a prescaling
     // to the camera's world transformation before sending it to the shader.
-    Vec3 vexBuf[] = {Vec3(1, -1, -1), Vec3(1, 1, -1), Vec3(-1, 1, -1), Vec3(-1, -1, -1)};
+    Vec3 vexBuf[]     = {Vec3(1, -1, -1), Vec3(1, 1, -1), Vec3(-1, 1, -1), Vec3(-1, -1, -1)};
     uint16_t idxBuf[] = {0, 1, 2, 0, 2, 3};
 
-    _customCommand.createVertexBuffer(sizeof(Vec3), sizeof(vexBuf) / sizeof(Vec3),
-                                      CustomCommand::BufferUsage::STATIC);
+    _customCommand.createVertexBuffer(sizeof(Vec3), sizeof(vexBuf) / sizeof(Vec3), CustomCommand::BufferUsage::STATIC);
     _customCommand.updateVertexBuffer(vexBuf, sizeof(vexBuf));
     _customCommand.createIndexBuffer(CustomCommand::IndexFormat::U_SHORT, sizeof(idxBuf) / sizeof(uint16_t),
                                      CustomCommand::BufferUsage::STATIC);
@@ -452,11 +451,11 @@ bool CameraBackgroundSkyBoxBrush::isValid()
 
 void CameraBackgroundSkyBoxBrush::onBeforeDraw()
 {
-    auto* renderer          = Director::getInstance()->getRenderer();
-    _stateBlock.depthTest   = renderer->getDepthTest();
-    _stateBlock.depthWrite  = renderer->getDepthWrite();
-    _stateBlock.depthFunc   = renderer->getDepthCompareFunc();
-    _stateBlock.cullMode    = renderer->getCullMode();
+    auto* renderer         = Director::getInstance()->getRenderer();
+    _stateBlock.depthTest  = renderer->getDepthTest();
+    _stateBlock.depthWrite = renderer->getDepthWrite();
+    _stateBlock.depthFunc  = renderer->getDepthCompareFunc();
+    _stateBlock.cullMode   = renderer->getCullMode();
     renderer->setDepthTest(true);
     renderer->setDepthCompareFunc(rhi::CompareFunc::LESS_EQUAL);
     renderer->setCullMode(CullMode::BACK);
