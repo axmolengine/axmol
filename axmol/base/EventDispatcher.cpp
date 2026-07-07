@@ -115,7 +115,7 @@ static PointerEvent::CaptureBits makePointerCaptureBits(PointerEvent* event)
 
 static bool pointerHitTest(PointerEvent* event, const Camera* camera, PointerEventListener* listener, Node* target)
 {
-    if (event->getPointerType() != PointerType::Controller)
+    if (camera && event->getPointerType() != PointerType::Controller)
         event->setRay(camera->screenToRay(event->getPoint()));
 
     Vec3 hitPoint;
@@ -1173,6 +1173,10 @@ void EventDispatcher::dispatchUncapturedPointerEvent(PointerEvent* event, Pointe
 
             if (captured && listener && listener->isAttached())
             {
+                if (!event->getCamera())
+                {
+                    AXLOGE("no scene graph listener");
+                }
                 const auto captureBits = makePointerCaptureBits(event);
                 auto iter              = _capturedPointerListeners.find(captureId);
                 if (iter == _capturedPointerListeners.end() || !iter->second.listener ||
