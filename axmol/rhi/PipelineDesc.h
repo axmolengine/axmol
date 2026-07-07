@@ -37,16 +37,21 @@
  * @addtogroup rhi
  * @{
  */
-namespace ax::rhi
+namespace ax
 {
-
+namespace rhi
+{
 struct PipelineDesc
 {
     ProgramState* programState{nullptr};
     VertexLayout* vertexLayout{nullptr};
     BlendDesc blendDesc;
 };
+}  // namespace rhi
 
 // end of rhi group
 /// @}
-}  // namespace ax::rhi
+
+using PipelineDesc = rhi::PipelineDesc;
+
+}  // namespace ax
