@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -25,11 +26,9 @@
 
 #pragma once
 
-#include "axmol/base/Macros.h"
-#include "axmol/math/Math.h"
-#include "axmol/3d/AABB.h"
-#include "axmol/3d/OBB.h"
-#include "axmol/3d/Plane.h"
+#include "axmol/math/AABB.h"
+#include "axmol/math/OBB.h"
+#include "axmol/math/Plane.h"
 
 namespace ax
 {

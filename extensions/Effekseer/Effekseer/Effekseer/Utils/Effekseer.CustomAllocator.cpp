@@ -1,4 +1,4 @@
-﻿#include "Effekseer.CustomAllocator.h"
+#include "Effekseer.CustomAllocator.h"
 
 #if defined(__MINGW32__)
 #include <malloc.h>

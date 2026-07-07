@@ -41,24 +41,24 @@ namespace ax::rhi::gl
 struct UtilsGL
 {
     /**
-     * Convert attribute enum classs type to GLenum type. i.e. convert VertexFormat::FLOAT4 to GL_FLOAT.
+     * Convert attribute enum classs type to GLenum type. i.e. convert VertexElementType::FLOAT4 to GL_FLOAT.
      * @param vertexFormat Specifies the attribute data type to convert.
      * @return Attribute type.
      */
-    static GLenum toGLAttributeType(VertexFormat vertexFormat);
+    static GLenum toGLAttributeType(VertexElementType vertexFormat);
 
     /**
-     * Convert attribute component count to GLsizei. i.e. convert VertexFormat::FLOAT4 to 4.
+     * Convert attribute component count to GLsizei. i.e. convert VertexElementType::FLOAT4 to 4.
      * @param vertexFormat Specifies the attribute type.
      * @return Attribute component counts.
      */
-    static GLsizei getGLAttributeSize(VertexFormat vertexFormat);
+    static GLsizei getGLAttributeSize(VertexElementType vertexFormat);
 
     /**
      * check whether float format
      * @param vertexFormat Specifies the attribute type.
      */
-    static bool isFloatFormat(VertexFormat vfmt);
+    static bool isFloatFormat(VertexElementType vfmt);
 
     /**
      * Get opengl data type size in bytes. i.e. GL_FLOAT_VEC4 data type size is sizeof(GLfloat) * 4.

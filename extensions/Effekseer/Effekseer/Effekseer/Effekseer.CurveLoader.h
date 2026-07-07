@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_CURVELOADER_H__
 #define __EFFEKSEER_CURVELOADER_H__
 

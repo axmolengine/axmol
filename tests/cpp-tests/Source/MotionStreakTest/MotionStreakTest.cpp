@@ -120,7 +120,7 @@ void MotionStreakTest2::onEnter()
 
 void MotionStreakTest2::onPointerMove(PointerEvent* event)
 {
-    auto touchLocation = event->getLocation();
+    auto touchLocation = event->getWorldPoint();
 
     _streak->setPosition(touchLocation);
 

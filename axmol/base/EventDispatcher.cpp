@@ -115,15 +115,18 @@ static PointerEvent::CaptureBits makePointerCaptureBits(PointerEvent* event)
 
 static bool pointerHitTest(PointerEvent* event, const Camera* camera, PointerEventListener* listener, Node* target)
 {
+    if (event->getPointerType() != PointerType::Controller)
+        event->setRay(camera->screenToRay(event->getPoint()));
+
     Vec3 hitPoint;
     bool hitted;
     if (listener->onPointerHitTest)
     {
-        hitted = listener->onPointerHitTest(event, camera, &hitPoint);
+        hitted = listener->onPointerHitTest(event, &hitPoint);
     }
     else
     {
-        hitted = target->onPointerHitTest(event, camera, &hitPoint);
+        hitted = target->onPointerHitTest(event, &hitPoint);
     }
 
     if (hitted)

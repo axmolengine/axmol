@@ -167,7 +167,7 @@ void SpritePolygonTestDemo::initTouches()
         touchListener->onPointerMove = [&](PointerEvent* event) {
             if (!event->isCaptured())
                 return;
-            auto pos       = event->getDelta();
+            auto pos       = (event->getWorldPoint() - event->getPrevWorldPoint());
             float newScale = clampf(_polygonSprite->getScale() + pos.x * 0.01f, 0.1f, 2.f);
             _polygonSprite->setScale(newScale);
             _normalSprite->setScale(newScale);
@@ -452,7 +452,7 @@ void SpritePolygonTest5::initTouch()
     touchListener->onPointerUp   = [&](PointerEvent* event) {
         if (!event->isCaptured())
             return;
-        auto pos = event->getLocation();
+        auto pos = event->getWorldPoint();
         addSpritePolygon(pos);
     };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);

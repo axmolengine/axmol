@@ -56,7 +56,7 @@ function Sprite1.addNewSpriteWithCoords(layer, point)
 end
 
 function Sprite1.onTouchesEnd(event)
-    Sprite1.addNewSpriteWithCoords(Helper.currentLayer, event:getLocation())
+    Sprite1.addNewSpriteWithCoords(Helper.currentLayer, event:getWorldPoint())
 end
 
 function Sprite1.create()
@@ -114,7 +114,7 @@ function SpriteBatchNode1.addNewSpriteWithCoords(layer, point)
 end
 
 function SpriteBatchNode1.onTouchesEnd(event)
-    SpriteBatchNode1.addNewSpriteWithCoords(Helper.currentLayer, event:getLocation())
+    SpriteBatchNode1.addNewSpriteWithCoords(Helper.currentLayer, event:getWorldPoint())
 end
 
 function SpriteBatchNode1.create()

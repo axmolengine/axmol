@@ -108,24 +108,24 @@ static_assert(AX_ARRAYSIZE(s_textureFormats) == (int)PixelFormat::COUNT, "The Op
  *   Unexpected render result is FPS label is PAN-BLUE
  */
 
-GLenum UtilsGL::toGLAttributeType(VertexFormat vertexFormat)
+GLenum UtilsGL::toGLAttributeType(VertexElementType vertexFormat)
 {
     GLenum ret = GL_INT;
     switch (vertexFormat)
     {
-    case VertexFormat::FLOAT4:
-    case VertexFormat::FLOAT3:
-    case VertexFormat::FLOAT2:
-    case VertexFormat::FLOAT:
+    case VertexElementType::FLOAT4:
+    case VertexElementType::FLOAT3:
+    case VertexElementType::FLOAT2:
+    case VertexElementType::FLOAT:
         ret = GL_FLOAT;
         break;
-    case VertexFormat::INT4:
-    case VertexFormat::INT3:
-    case VertexFormat::INT2:
-    case VertexFormat::INT:
+    case VertexElementType::INT4:
+    case VertexElementType::INT3:
+    case VertexElementType::INT2:
+    case VertexElementType::INT:
         ret = GL_INT;
         break;
-    case VertexFormat::UBYTE4:
+    case VertexElementType::UBYTE4:
         ret = GL_UNSIGNED_BYTE;
         break;
     default:
@@ -134,41 +134,41 @@ GLenum UtilsGL::toGLAttributeType(VertexFormat vertexFormat)
     return ret;
 }
 
-bool UtilsGL::isFloatFormat(VertexFormat vfmt)
+bool UtilsGL::isFloatFormat(VertexElementType vfmt)
 {
     switch (vfmt)
     {
-    case VertexFormat::FLOAT4:
-    case VertexFormat::FLOAT3:
-    case VertexFormat::FLOAT2:
-    case VertexFormat::FLOAT:
-    case VertexFormat::MAT4:
+    case VertexElementType::FLOAT4:
+    case VertexElementType::FLOAT3:
+    case VertexElementType::FLOAT2:
+    case VertexElementType::FLOAT:
+    case VertexElementType::MAT4:
         return true;
     default:
         return false;
     }
 }
 
-GLsizei UtilsGL::getGLAttributeSize(VertexFormat vertexFormat)
+GLsizei UtilsGL::getGLAttributeSize(VertexElementType vertexFormat)
 {
     GLsizei ret = 0;
     switch (vertexFormat)
     {
-    case VertexFormat::FLOAT4:
-    case VertexFormat::INT4:
-    case VertexFormat::UBYTE4:
+    case VertexElementType::FLOAT4:
+    case VertexElementType::INT4:
+    case VertexElementType::UBYTE4:
         ret = 4;
         break;
-    case VertexFormat::FLOAT3:
-    case VertexFormat::INT3:
+    case VertexElementType::FLOAT3:
+    case VertexElementType::INT3:
         ret = 3;
         break;
-    case VertexFormat::FLOAT2:
-    case VertexFormat::INT2:
+    case VertexElementType::FLOAT2:
+    case VertexElementType::INT2:
         ret = 2;
         break;
-    case VertexFormat::FLOAT:
-    case VertexFormat::INT:
+    case VertexElementType::FLOAT:
+    case VertexElementType::INT:
         ret = 1;
         break;
     default:

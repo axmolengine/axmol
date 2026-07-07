@@ -29,7 +29,7 @@
 #include "axmol/base/Object.h"
 #include "axmol/base/Types.h"
 #include "axmol/math/Math.h"
-#include "axmol/3d/AABB.h"
+#include "axmol/math/AABB.h"
 
 #include <vector>
 #include <map>
@@ -50,7 +50,7 @@ using IndexArray  = rhi::IndexArray;
  */
 struct AX_DLL MeshVertexAttrib
 {
-    rhi::VertexFormat type;
+    rhi::VertexElementType type;
     shaderinfos::VertexKey vertexAttrib;
     int getAttribSizeBytes() const;
 };

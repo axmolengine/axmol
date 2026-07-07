@@ -1,4 +1,4 @@
-﻿
+
 #include "EffekseerRendererLLGI.VertexBuffer.h"
 
 namespace EffekseerRendererLLGI

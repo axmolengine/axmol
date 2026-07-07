@@ -326,7 +326,7 @@ bool InputProcessor::onPointerDown(ax::PointerEvent* event)
     }
     
     auto camera = Camera::getVisitingCamera();
-    Vec2 pt         = event->getLocation();
+    Vec2 pt         = event->getWorldPoint();
     GObject* target = _owner->hitTest(pt, camera);
     if (!target)
         target = _owner;
@@ -357,7 +357,7 @@ bool InputProcessor::onPointerDown(ax::PointerEvent* event)
 void InputProcessor::onPointerMove(ax::PointerEvent* event)
 {
     auto camera = Camera::getVisitingCamera();
-    Vec2 pt         = event->getLocation();
+    Vec2 pt         = event->getWorldPoint();
     GObject* target = _owner->hitTest(pt, camera);
     if (!target)
         target = _owner;
@@ -402,7 +402,7 @@ void InputProcessor::onPointerMove(ax::PointerEvent* event)
 void InputProcessor::onPointerUp(ax::PointerEvent* event)
 {
     auto camera = Camera::getVisitingCamera();
-    Vec2 pt         = event->getLocation();
+    Vec2 pt         = event->getWorldPoint();
     GObject* target = _owner->hitTest(pt, camera);
     if (!target)
         target = _owner;
@@ -514,7 +514,7 @@ void InputProcessor::onPointerCancel(ax::PointerEvent* event)
 bool InputProcessor::onPointerScroll(ax::PointerEvent* event)
 {
     auto camera = Camera::getVisitingCamera();
-    Vec2 pt = event->getLocation();
+    Vec2 pt = event->getWorldPoint();
     GObject* target = _owner->hitTest(pt, camera);
     if (!target)
         target = _owner;

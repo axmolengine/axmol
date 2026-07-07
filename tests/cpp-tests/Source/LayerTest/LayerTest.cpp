@@ -354,7 +354,7 @@ bool LayerTest1::onPointerDown(PointerEvent* event)
 
 void LayerTest1::onPointerMove(PointerEvent* event)
 {
-    auto touchLocation = event->getLocation();
+    auto touchLocation = event->getWorldPoint();
 
     updateSize(touchLocation);
 
@@ -495,7 +495,7 @@ void LayerGradientTest::onPointerMove(PointerEvent* event)
 {
     auto s = Director::getInstance()->getCanvasSize();
 
-    auto start = event->getLocation();
+    auto start = event->getWorldPoint();
 
     auto diff = Vec2(s.width / 2, s.height / 2) - start;
     diff      = diff.getNormalized();

@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_RANDOM_H__
 #define __EFFEKSEER_RANDOM_H__
 

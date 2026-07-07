@@ -27,6 +27,7 @@
 
 #include <memory>
 #include <string.h>
+#include <stdint.h>
 #include "axmol/platform/PlatformMacros.h"
 
 /**

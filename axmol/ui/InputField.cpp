@@ -1274,14 +1274,14 @@ void InputField::setTouchAreaEnabled(bool enable)
     _useTouchArea = enable;
 }
 
-bool InputField::onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* outHitPoint)
+bool InputField::onPointerHitTest(PointerEvent* event, Vec3* outHitPoint)
 {
-    if (!event || !camera)
+    if (!event)
         return false;
 
     // Normal Widget path:
     // If the pointer is inside the input field, let Widget handle and cache _hitted/_hittedByCamera.
-    if (Widget::onPointerHitTest(event, camera, outHitPoint))
+    if (Widget::onPointerHitTest(event, outHitPoint))
         return true;
 
     // Important:
@@ -1293,7 +1293,7 @@ bool InputField::onPointerHitTest(PointerEvent* event, const Camera* camera, Vec
     if (event->getPhase() == InputPhase::PointerDown && event->isPrimaryPressed() && _isAttachWithIME)
     {
         _hitted         = false;
-        _hittedByCamera = camera;
+        _hittedByCamera = event->getCamera();
         return true;
     }
 
@@ -1418,7 +1418,7 @@ bool InputField::onPointerDown(PointerEvent* event)
 
     if (focus)
     {
-        Vec2 localPoint  = this->convertToNodeSpace(event->getLocation());
+        Vec2 localPoint  = this->convertToNodeSpace(event->getWorldPoint());
         _selectionAnchor = cursorOffsetFromPosition(localPoint);
 
         _continuousTouchPending     = true;
@@ -1435,7 +1435,7 @@ void InputField::onPointerMove(PointerEvent* event)
     if (!_selectingByTouch || !_enabled)
         return;
 
-    Vec2 localPoint = this->convertToNodeSpace(event->getLocation());
+    Vec2 localPoint = this->convertToNodeSpace(event->getWorldPoint());
     setCursorOffset(cursorOffsetFromPosition(localPoint), true);
     _selectionTouchMoved = hasSelection();
 }
@@ -1448,7 +1448,7 @@ void InputField::onPointerUp(PointerEvent* event)
         if (!s_keyboardVisible || !isCursorVisible())
             attachWithIME();
 
-        Vec2 worldPoint = event->getLocation();
+        Vec2 worldPoint = event->getWorldPoint();
         Vec2 localPoint = this->convertToNodeSpace(worldPoint);
         moveCursorTo(localPoint, _selectionTouchMoved);
 
@@ -1462,7 +1462,7 @@ void InputField::onPointerUp(PointerEvent* event)
             else
             {
                 // Default behavior: show system edit menu at touch location
-                _director->getRenderView()->showContextMenu(event->getScreenLocation(), _charCount > 0, hasSelection(),
+                _director->getRenderView()->showContextMenu(event->getPoint(), _charCount > 0, hasSelection(),
                                                             _readOnly);
             }
         }

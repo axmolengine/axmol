@@ -710,10 +710,10 @@ bool ScrollView::getPointerLocalPoint(PointerEvent* event, Node* node, Vec2* out
     if (!event || !node || !outLocalPoint)
         return false;
 
-    if (event->hasRay())
+    const Ray& ray = event->getRay();
+    if (ray.direction != Vec3())
     {
-        const auto& ray = event->getRay();
-        return ray.has_value() && rayToLocalPlane(ray.value(), node, outLocalPoint);
+        return rayToLocalPlane(ray, node, outLocalPoint);
     }
 
     *outLocalPoint = node->convertPointerToNodeSpace(event);
@@ -739,9 +739,9 @@ bool ScrollView::isPointerInView(PointerEvent* event, Vec2* outLocalPoint)
     return true;
 }
 
-bool ScrollView::onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* outHitPoint)
+bool ScrollView::onPointerHitTest(PointerEvent* event, Vec3* outHitPoint)
 {
-    if (!event || !camera)
+    if (!event)
         return false;
 
     auto phase = event->getPhase();

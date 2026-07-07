@@ -211,7 +211,7 @@ function CreateTestMenu()
 
     -- handling pointer events
     local function onPointerDown(event)
-        BeginPos = event:getLocation()
+        BeginPos = event:getWorldPoint()
         return true
     end
 
@@ -222,7 +222,7 @@ function CreateTestMenu()
 
         event:stopPropagation();
 
-        local location = event:getLocation()
+        local location = event:getWorldPoint()
         local nMoveY = location.y - BeginPos.y
         local curPosx, curPosy = MainMenu:getPosition()
         local nextPosy = curPosy + nMoveY

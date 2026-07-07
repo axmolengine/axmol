@@ -66,8 +66,8 @@ int lua_register_ax_rhi_ShaderStage(lua_State* tolua_S)
 
 int lua_register_ax_rhi_VertexFormat(lua_State* tolua_S)
 {
-    tolua_module(tolua_S, "VertexFormat", 0);
-    tolua_beginmodule(tolua_S,"VertexFormat");
+    tolua_module(tolua_S, "VertexElementType", 0);
+    tolua_beginmodule(tolua_S,"VertexElementType");
         tolua_constant(tolua_S, "FLOAT4", 0);
         tolua_constant(tolua_S, "FLOAT3", 1);
         tolua_constant(tolua_S, "FLOAT2", 2);
@@ -83,9 +83,9 @@ int lua_register_ax_rhi_VertexFormat(lua_State* tolua_S)
         tolua_constant(tolua_S, "COUNT", 12);
     tolua_endmodule(tolua_S);
 
-    auto typeName = typeid(ax::rhi::VertexFormat).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axr.VertexFormat";
-    g_typeCast[typeName] = "axr.VertexFormat";
+    auto typeName = typeid(ax::rhi::VertexElementType).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axr.VertexElementType";
+    g_typeCast[typeName] = "axr.VertexElementType";
     return 1;
 }
 

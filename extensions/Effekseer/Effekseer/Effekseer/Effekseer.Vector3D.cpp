@@ -1,4 +1,4 @@
-﻿#include "Effekseer.Vector3D.h"
+#include "Effekseer.Vector3D.h"
 #include "Effekseer.Matrix43.h"
 #include "Effekseer.Matrix44.h"
 #include "SIMD/Vec3f.h"

@@ -87,7 +87,7 @@ void VertexLayoutImpl::apply(BufferImpl* vertexBuffer, BufferImpl* instanceBuffe
                 continue;
             switch (inputDesc.format)
             {
-            case VertexFormat::MAT4:
+            case VertexElementType::MAT4:
                 for (auto i = 0; i < 4; ++i)
                 {
                     auto elementIndex = inputDesc.index + i;
@@ -167,7 +167,7 @@ void VertexLayoutImpl::setupVAO()
         {
             switch (inputDesc.format)
             {
-            case VertexFormat::MAT4:
+            case VertexElementType::MAT4:
                 for (GLuint i = 0; i < 4; ++i)
                 {
                     GLuint elementIndex = attribIndex + i;

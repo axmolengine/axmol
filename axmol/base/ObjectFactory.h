@@ -26,11 +26,11 @@ THE SOFTWARE.
 #pragma once
 
 #include <string>
-#include <unordered_map>
 #include <functional>
+
 #include "axmol/base/Object.h"
 #include "axmol/platform/PlatformMacros.h"
-
+#include "axmol/tlx/hlookup.hpp"
 namespace ax
 {
 

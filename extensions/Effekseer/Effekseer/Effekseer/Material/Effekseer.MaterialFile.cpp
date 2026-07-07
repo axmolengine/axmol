@@ -1,4 +1,4 @@
-﻿#include "Effekseer.MaterialFile.h"
+#include "Effekseer.MaterialFile.h"
 
 namespace Effekseer
 {

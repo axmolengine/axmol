@@ -11,7 +11,7 @@ on:
       - 'docs/**'
       - '.github/workflows/publish.yml'
       - '.github/workflows/debian.yml'
-      - '.github/workflows/clang-format.yml'
+      - '.github/workflows/source-tidy.yml'
       - 'tools/cmdline/make-pkg.ps1'
   pull_request:
     types: [opened, synchronize, reopened]
@@ -37,7 +37,7 @@ run-name: 'build@c++${{ inputs.cxxstd || 23 }}'
 
 jobs:
   format-check:
-    uses: ./.github/workflows/clang-format.yml
+    uses: ./.github/workflows/source-tidy.yml
     with:
       lint_mode: check_only
 

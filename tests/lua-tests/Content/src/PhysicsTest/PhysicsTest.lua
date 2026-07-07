@@ -82,7 +82,7 @@ local function addGrossiniAtPosition(layer, p, scale)
 end
 
 local function onTouchBegan(event)
-    local location = event:getLocation()
+    local location = event:getWorldPoint()
     local collider = ax.Director:getInstance():getRunningScene():getPhysicsWorld2D():overlapPoint(location)
     if collider == nil then
         return false
@@ -109,7 +109,7 @@ end
 
 local function onPointerMove(event)
     if pointerMouse then
-        pointerMouse:setPosition(event:getLocation())
+        pointerMouse:setPosition(event:getWorldPoint())
     end
 end
 
@@ -195,7 +195,7 @@ local function PhysicsDemoClickAdd()
     local layer = ax.Layer:create()
     local function onEnter()
         local function onTouchEnded(event)
-            local location = event:getLocation()
+            local location = event:getWorldPoint()
             addGrossiniAtPosition(layer, location)
         end
 
@@ -575,7 +575,7 @@ local function PhysicsDemoRayCast()
 
     local function onEnter()
         local function onTouchEnded(event)
-            local location = event:getLocation()
+            local location = event:getWorldPoint()
 
             local r = math.random(3)
             if r ==1 then
@@ -790,13 +790,13 @@ local function PhysicsDemoPump()
         local rotationV = 0.0
         local function onTouchBeganEx(event)
             onTouchBegan(event)
-            distance = event:getLocation().x - VisibleRect:center().x
+            distance = event:getWorldPoint().x - VisibleRect:center().x
             return true
         end
 
         local function onPointerMoveEx(event)
             onPointerMove(event)
-            distance = event:getLocation().x - VisibleRect:center().x
+            distance = event:getWorldPoint().x - VisibleRect:center().x
         end
 
         local function onTouchEndedEx(event)
@@ -1049,7 +1049,7 @@ local function PhysicsDemoSlice()
         local function onTouchEnded(event)
             ax.Director:getInstance():getRunningScene():getPhysicsWorld2D():rayCast(slice,
                 event:getStartLocation(),
-                event:getLocation())
+                event:getWorldPoint())
         end
 
         local touchListener = ax.PointerEventListener:create()

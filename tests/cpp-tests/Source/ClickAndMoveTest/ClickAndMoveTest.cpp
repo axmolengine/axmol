@@ -64,7 +64,7 @@ bool ClickAndMoveTestCase::onPointerDown(PointerEvent* event)
 
 void ClickAndMoveTestCase::onPointerUp(PointerEvent* event)
 {
-    auto location = event->getLocation();
+    auto location = event->getWorldPoint();
 
     auto s = getChildByTag(kTagSprite);
     s->stopAllActions();

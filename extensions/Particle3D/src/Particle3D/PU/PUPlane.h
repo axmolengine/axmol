@@ -28,7 +28,7 @@
 
 #include "axmol/base/Object.h"
 #include "axmol/math/Math.h"
-#include "axmol/3d/AABB.h"
+#include "axmol/math/AABB.h"
 #include <vector>
 
 namespace ax

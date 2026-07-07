@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_SIMD_INT4_H__
 #define __EFFEKSEER_SIMD_INT4_H__
 

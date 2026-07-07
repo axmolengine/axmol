@@ -21,8 +21,7 @@ This file was modified to fit the axmol project
 */
 
 #include "axmol/math/MathUtil.h"
-#include "axmol/math/Mat4.h"
-#include "axmol/base/Macros.h"
+#include "axmol/math/Vertex.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include <cpu-features.h>

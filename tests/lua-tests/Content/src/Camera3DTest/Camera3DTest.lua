@@ -188,7 +188,7 @@ function Camera3DTestDemo:onEnter()
 
     listener:registerScriptHandler(function(event)
         if event ~= nil then
-            local location = event:getLocation()
+            local location = event:getWorldPoint()
             local newPos  = ax.p(event:getPreviousLocation().x - location.x, event:getPreviousLocation().y - location.y)
             if self._cameraType == CameraType.FreeCamera or self._cameraType == CameraType.FirstCamera then
                 local cameraRightDir
@@ -216,7 +216,7 @@ function Camera3DTestDemo:onEnter()
     end, ax.Handler.EVENT_POINTER_MOVE)
 
     listener:registerScriptHandler(function(event)
-        local location = event:getScreenLocation()
+        local location = event:getPoint()
         if self._camera ~= nil and self._sprite3D ~= nil and self._cameraType == CameraType.ThirdCamera then
             local nearP = ax.vec3(location.x, location.y, -1.0)
             local farP  = ax.vec3(location.x, location.y, 1.0)
@@ -624,7 +624,7 @@ function FogTestDemo:setEventListener()
         if event ~= nil then
             local touch = event
             local prelocation = event:getPreviousScreenLocation()
-            local location = event:getScreenLocation()
+            local location = event:getPoint()
             local newPos = ax.p(prelocation.x - location.x, prelocation.y - location.y)
             if self._cameraType == CameraType.FreeCamera then
 
@@ -887,7 +887,7 @@ function CameraArcBallDemo:setEventListener()
             if self._operate == OperateCamType.RotateCamera then
                 local visibleSize = ax.Director:getInstance():getVisibleSize()
                 local prelocation = event:getPreviousScreenLocation()
-                local location = event:getScreenLocation()
+                local location = event:getPoint()
                 location.x = 2.0 * (location.x) / (visibleSize.width) - 1.0
                 location.y = 2.0 * (visibleSize.height - location.y) / (visibleSize.height) - 1.0
                 prelocation.x = 2.0 * (prelocation.x) / (visibleSize.width) - 1.0
@@ -915,7 +915,7 @@ function CameraArcBallDemo:setEventListener()
 
             elseif self._operate == OperateCamType.MoveCamera then
                 local previousLocation = event:getPreviousLocation()
-                local location         = event:getLocation()
+                local location         = event:getWorldPoint()
                 local newPos = ax.p(previousLocation.x - location.x, previousLocation.y - location.y)
                 self._distanceZ = self._distanceZ - newPos.y * 0.1
 

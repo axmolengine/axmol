@@ -40,14 +40,9 @@
 #include <memory>
 #include <vector>
 
-namespace ax
-{
-struct PipelineDesc;
-}
-
 namespace ax::rhi
 {
-
+struct PipelineDesc;
 class RenderPass;
 class RenderPipeline;
 class Buffer;

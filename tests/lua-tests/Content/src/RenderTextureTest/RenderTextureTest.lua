@@ -63,7 +63,7 @@ local function RenderTextureSave()
     ret:addChild(targetSp, -1)
 
     local function onPointerMove(event)
-        local start = event:getLocation()
+        local start = event:getWorldPoint()
         local ended = event:getPreviousLocation()
 
         targetPass:begin()

@@ -206,7 +206,7 @@ bool UIScale9SpriteTouchTest::init()
         listener1->onPointerDown = [](PointerEvent* event) {
             auto target = static_cast<Sprite*>(event->getCurrentTarget());
 
-            Vec2 locationInNode = target->convertToNodeSpace(event->getLocation());
+            Vec2 locationInNode = target->convertToNodeSpace(event->getWorldPoint());
             Size s              = target->getContentSize();
             Rect rect           = Rect(0, 0, s.width, s.height);
 
@@ -221,7 +221,7 @@ bool UIScale9SpriteTouchTest::init()
 
         listener1->onPointerMove = [](PointerEvent* event) {
             auto target = static_cast<Sprite*>(event->getCurrentTarget());
-            target->setPosition(target->getPosition() + event->getDelta());
+            target->setPosition(target->getPosition() + (event->getWorldPoint() - event->getPrevWorldPoint()));
             return true;
         };
 

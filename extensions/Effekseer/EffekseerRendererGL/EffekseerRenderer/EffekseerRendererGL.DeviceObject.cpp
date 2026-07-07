@@ -1,4 +1,4 @@
-﻿
+
 #include "EffekseerRendererGL.DeviceObject.h"
 #include "EffekseerRendererGL.RendererImplemented.h"
 

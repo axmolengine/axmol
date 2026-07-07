@@ -111,7 +111,7 @@ void TileDemoNew::onPointerMove(PointerEvent* event)
     if (!event->isPrimaryPressed())
         return;
 
-    auto diff       = event->getDelta();
+    auto diff       = (event->getWorldPoint() - event->getPrevWorldPoint());
     auto node       = getChildByTag(kTagTileMap);
     auto currentPos = node->getPosition();
     node->setPosition(currentPos + diff);
@@ -252,13 +252,10 @@ TMXOrthoTestNew::TMXOrthoTestNew()
 void TMXOrthoTestNew::onEnter()
 {
     TileDemoNew::onEnter();
-
-    Director::getInstance()->setProjection(Director::Projection::_3D);
 }
 
 void TMXOrthoTestNew::onExit()
 {
-    Director::getInstance()->setProjection(Director::Projection::DEFAULT);
     TileDemoNew::onExit();
 }
 
@@ -955,16 +952,12 @@ void TMXIsoVertexZNew::onEnter()
 {
     TileDemoNew::onEnter();
 
-    // TIP: 2d projection should be used
-    Director::getInstance()->setProjection(Director::Projection::_2D);
     Director::getInstance()->getRenderer()->setDepthTest(true);
     Director::getInstance()->getRenderer()->setDepthWrite(true);
 }
 
 void TMXIsoVertexZNew::onExit()
 {
-    // At exit use any other projection.
-    Director::getInstance()->setProjection(Director::Projection::DEFAULT);
     Director::getInstance()->getRenderer()->setDepthTest(false);
     Director::getInstance()->getRenderer()->setDepthWrite(false);
     TileDemoNew::onExit();
@@ -1026,16 +1019,12 @@ void TMXOrthoVertexZNew::onEnter()
 {
     TileDemoNew::onEnter();
 
-    // TIP: 2d projection should be used
-    Director::getInstance()->setProjection(Director::Projection::_2D);
     Director::getInstance()->getRenderer()->setDepthTest(true);
     Director::getInstance()->getRenderer()->setDepthWrite(true);
 }
 
 void TMXOrthoVertexZNew::onExit()
 {
-    // At exit use any other projection.
-    Director::getInstance()->setProjection(Director::Projection::DEFAULT);
     Director::getInstance()->getRenderer()->setDepthTest(false);
     Director::getInstance()->getRenderer()->setDepthWrite(false);
     TileDemoNew::onExit();

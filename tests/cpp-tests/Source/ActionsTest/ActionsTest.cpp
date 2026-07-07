@@ -1192,7 +1192,6 @@ void ActionOrbit::onEnter()
 {
     ActionsDemo::onEnter();
 
-    Director::getInstance()->setProjection(Director::Projection::_2D);
     centerSprites(3);
 
     auto orbit1  = OrbitCamera::create(2, 1, 0, 0, 180, 0, 0);
@@ -1220,8 +1219,6 @@ void ActionOrbit::onEnter()
 void ActionOrbit::onExit()
 {
     ActionsDemo::onExit();
-
-    Director::getInstance()->setProjection(Director::Projection::DEFAULT);
 }
 
 std::string ActionOrbit::subtitle() const
@@ -1404,7 +1401,7 @@ void ActionStacked::runActionsInSprite(Sprite* sprite)
 
 void ActionStacked::onPointerUp(PointerEvent* event)
 {
-    auto location = event->getLocation();
+    auto location = event->getWorldPoint();
     addNewSpriteWithCoords(location);
 }
 

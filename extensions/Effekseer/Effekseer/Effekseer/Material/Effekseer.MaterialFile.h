@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_MATERIAL_H__
 #define __EFFEKSEER_MATERIAL_H__
 

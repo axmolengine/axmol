@@ -1,4 +1,5 @@
 #include "axmol/rhi/opengl/OpenGLState.h"
+#include <memory>
 #include <unordered_set>
 
 namespace ax::rhi::gl

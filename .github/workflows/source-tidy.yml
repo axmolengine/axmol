@@ -1,4 +1,4 @@
-name: clang-format
+name: source-tidy
 
 on:
   workflow_dispatch:
@@ -172,6 +172,11 @@ jobs:
         else {
           Write-Host "✅ clang-format check passed: No formatting changes needed."
         }
+
+    - name: Check sources (BOM, cstd-header)
+      if: ${{ steps.pp.outputs.should_run == 'true' }}
+      shell: pwsh
+      run: ./tools/cmdline/check-sources.ps1
 
     - name: Prepare for create pull request
       if: ${{ steps.pp.outputs.should_run == 'true' && steps.pp.outputs.lint_mode == 'create_pr' }}

@@ -163,7 +163,7 @@ void CameraRotationTest::onPointerMove(ax::PointerEvent* event)
         return;
     event->stopPropagation();
 
-    float dx = event->getDelta().x;
+    float dx = (event->getWorldPoint() - event->getPrevWorldPoint()).x;
     Vec3 rot = _camControlNode->getRotation3D();
     rot.y += dx;
     _camControlNode->setRotation3D(rot);
@@ -430,8 +430,8 @@ void Camera3DTestDemo::onPointerMove(ax::PointerEvent* event)
         return;
     event->stopPropagation();
 
-    auto location = event->getLocation();
-    Point newPos  = event->getPreviousLocation() - location;
+    auto location = event->getWorldPoint();
+    Point newPos  = event->getPrevWorldPoint() - location;
     if (_cameraType == CameraType::Free || _cameraType == CameraType::FirstPerson)
     {
         Vec3 cameraDir;
@@ -508,7 +508,7 @@ void Camera3DTestDemo::onPointerUp(ax::PointerEvent* event)
     CameraBaseTest::onPointerUp(event);
 
     {
-        auto location = event->getScreenLocation();
+        auto location = event->getPoint();
         if (_camera)
         {
             if (_mesh && _cameraType == CameraType::ThirdPerson && _bZoomOut == false && _bZoomIn == false &&
@@ -665,7 +665,7 @@ bool Camera3DTestDemo::onPointerCommon(PointerEvent* event, bool* touchProperty)
 {
     auto target = static_cast<Label*>(event->getCurrentTarget());
 
-    Vec2 locationInNode = target->convertToNodeSpace(event->getLocation());
+    Vec2 locationInNode = target->convertToNodeSpace(event->getWorldPoint());
     Size s              = target->getContentSize();
     Rect rect           = Rect(0, 0, s.width, s.height);
 
@@ -1100,8 +1100,8 @@ void CameraArcBallDemo::onPointerMove(PointerEvent* event)
     if (_operate == OperateCamType::RotateCamera)  // arc ball rotate
     {
         Size visibleSize = Director::getInstance()->getVisibleSize();
-        Vec2 prelocation = event->getPreviousScreenLocation();
-        Vec2 location    = event->getScreenLocation();
+        Vec2 prelocation = event->getPrevPoint();
+        Vec2 location    = event->getPoint();
         location.x       = 2.0f * (location.x) / (visibleSize.width) - 1.0f;
         location.y       = 2.0f * (visibleSize.height - location.y) / (visibleSize.height) - 1.0f;
         prelocation.x    = 2.0f * (prelocation.x) / (visibleSize.width) - 1.0f;
@@ -1118,7 +1118,7 @@ void CameraArcBallDemo::onPointerMove(PointerEvent* event)
     }
     else if (_operate == OperateCamType::MoveCamera)  // camera zoom
     {
-        Point newPos = event->getPreviousLocation() - event->getLocation();
+        Point newPos = event->getPrevWorldPoint() - event->getWorldPoint();
         _distanceZ -= newPos.y * 0.1f;
 
         updateCameraTransform();
@@ -1383,8 +1383,8 @@ void FogTestDemo::onPointerMove(ax::PointerEvent* event)
         return;
     event->stopPropagation();
 
-    Vec2 prelocation = event->getPreviousScreenLocation();
-    Vec2 location    = event->getScreenLocation();
+    Vec2 prelocation = event->getPrevPoint();
+    Vec2 location    = event->getPoint();
     Vec2 newPos      = prelocation - location;
     if (_cameraType == CameraType::Free)
     {

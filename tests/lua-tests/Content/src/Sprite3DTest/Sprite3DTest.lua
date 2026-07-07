@@ -27,7 +27,7 @@ local Sprite3DBasicTest = {}
 Sprite3DBasicTest.__index = Sprite3DBasicTest
 
 function Sprite3DBasicTest.onTouchesEnd(event)
-    local location = event:getLocation()
+    local location = event:getWorldPoint()
     Sprite3DBasicTest.addNewSpriteWithCoords(Helper.currentLayer, location.x, location.y )
 end
 
@@ -106,8 +106,8 @@ function Sprite3DHitTest.create()
     listener:registerScriptHandler(function(event)
         local target = event:getCurrentTarget()
         local rect   = target:getBoundingBox()
-        if ax.rectContainsPoint(rect, event:getLocation()) then
-            print(string.format("sprite3d began... x = %f, y = %f", event:getLocation().x, event:getLocation().y))
+        if ax.rectContainsPoint(rect, event:getWorldPoint()) then
+            print(string.format("sprite3d began... x = %f, y = %f", event:getWorldPoint().x, event:getWorldPoint().y))
             target:setOpacity(100)
             return true
         end
@@ -143,7 +143,7 @@ Sprite3DWithSkinTest._animateQuality = ax.Animate3DQuality.QUALITY_HIGH
 Sprite3DWithSkinTest._sprites = {}
 
 function Sprite3DWithSkinTest.onTouchesEnd(event)
-    local location = event:getLocation()
+    local location = event:getWorldPoint()
     Sprite3DWithSkinTest.addNewSpriteWithCoords(Helper.currentLayer, location.x, location.y )
 end
 
@@ -273,7 +273,7 @@ function Animate3DTest:onEnter()
         self._state = State.HURT_TO_SWIMMING
     end
     local function onTouchesEnd(event)
-        local location = event:getLocation()
+        local location = event:getWorldPoint()
         if self._sprite ~= nil then
             local len = ax.pGetLength(ax.pSub(ax.p(self._sprite:getPosition()), location))
             if len < 40 then
@@ -673,7 +673,7 @@ function Sprite3DWithOBBPerfromanceTest:ctor()
     self._obb = {}
     local listener = ax.PointerEventListener:create()
     listener:registerScriptHandler(function(event)
-        local location = event:getScreenLocation()
+        local location = event:getPoint()
         if nil ~= self._obb and #self._obb > 0 then
             self._intersetList = {}
             local ray = ax.Ray:new()
@@ -693,7 +693,7 @@ function Sprite3DWithOBBPerfromanceTest:ctor()
     end,ax.Handler.EVENT_POINTER_UP)
 
     listener:registerScriptHandler(function(event)
-        local location = event:getLocation()
+        local location = event:getWorldPoint()
 
         for idx,value in ipairs(self._obb) do
             for lstIdx,lstValue in ipairs(self._intersetList) do

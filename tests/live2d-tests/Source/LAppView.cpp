@@ -77,7 +77,7 @@ void LAppView::onEnter()
     auto listener = PointerEventListener::create();
 
     // タッチメソッド設定
-    listener->onPointerHitTest = [](PointerEvent*, const Camera*, Vec3*) { return true; };
+    listener->onPointerHitTest = [](PointerEvent*, Vec3*) { return true; };
     listener->onPointerDown = AX_CALLBACK_1(LAppView::onPointerDown, this);
     listener->onPointerMove = AX_CALLBACK_1(LAppView::onPointerMove, this);
     listener->onPointerUp = AX_CALLBACK_1(LAppView::onPointerUp, this);
@@ -125,7 +125,7 @@ bool LAppView::onPointerDown(PointerEvent* event)
     // タッチ開始
     if (event->isPrimaryPressed())
     {
-        Point pt = event->getScreenLocation();
+        Point pt = event->getPoint();
         if (DebugTouchLogEnable)LAppPal::PrintLog("[APP]touchesBegan x:%.0f y:%.0f", pt.x, pt.y);
         touchMgr->touchesBegan(pt.x, pt.y);
         return true;
@@ -144,7 +144,7 @@ void LAppView::onPointerMove(PointerEvent* event)
     float viewX = this->transformViewX(touchMgr->getX());
     float viewY = this->transformViewY(touchMgr->getY());
 
-    auto pt = event->getScreenLocation();
+    auto pt = event->getPoint();
 
     if (DebugTouchLogEnable)
         LAppPal::PrintLog("[APP]touchesMoved device{x:%.0f y:%.0f} screen{x:%.2f y:%.2f} view{x:%.2f y:%.2f}", pt.x, pt.y, screenX, screenY, viewX, viewY);

@@ -23,7 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/3d/OBB.h"
+#include "axmol/math/OBB.h"
+#include "axmol/math/Quat.h"
 
 namespace ax
 {

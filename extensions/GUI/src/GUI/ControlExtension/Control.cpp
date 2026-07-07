@@ -237,7 +237,7 @@ bool Control::isOpacityModifyRGB() const
 
 Vec2 Control::getTouchLocation(ax::PointerEvent* touch)
 {
-    Vec2 touchLocation = touch->getLocation();                     // Get the touch position
+    Vec2 touchLocation = touch->getWorldPoint();                   // Get the touch position
     touchLocation      = this->convertToNodeSpace(touchLocation);  // Convert to the node space of this class
 
     return touchLocation;
@@ -262,7 +262,7 @@ void Control::onPointerCancel(ax::PointerEvent* /*event*/)
 
 bool Control::isTouchInside(ax::PointerEvent* event)
 {
-    Vec2 touchLocation = event->getLocation();  // Get the touch position
+    Vec2 touchLocation = event->getWorldPoint();  // Get the touch position
     touchLocation      = this->getParent()->convertToNodeSpace(touchLocation);
     Rect bBox          = getBoundingBox();
     return bBox.containsPoint(touchLocation);

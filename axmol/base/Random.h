@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include <random>
 #include <stdlib.h>
 
+#include "axmol/platform/PlatformMacros.h"
 #include "axmol/platform/PlatformConfig.h"
 
 /**

@@ -38,6 +38,7 @@
 #include "zlib.h"
 #include "axmol/base/ZipUtils.h"
 #include "axmol/base/json.h"
+#include "axmol/base/Utils.h"
 
 namespace ax
 {

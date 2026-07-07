@@ -22,7 +22,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "axmol/renderer/VertexLayoutManager.h"
+#include "axmol/rhi/Program.h"
 #include "axmol/rhi/GraphicsCore.h"
+#include "axmol/math/Vertex.h"
 #include "axmol/tlx/singleton.hpp"
 
 namespace ax
@@ -39,10 +41,10 @@ struct BuiltinVertexDefine
 
         /// a_position
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_POSITION, program->getVertexInputDesc(rhi::VertexInputKind::POSITION),
-                       rhi::VertexFormat::FLOAT3, 0, false);
+                       rhi::VertexElementType::FLOAT3, 0, false);
         /// a_texCoord
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_TEXCOORD, program->getVertexInputDesc(rhi::VertexInputKind::TEXCOORD),
-                       rhi::VertexFormat::FLOAT2, 3 * sizeof(float), false);
+                       rhi::VertexElementType::FLOAT2, 3 * sizeof(float), false);
 
         desc.endLayout();
     }
@@ -53,14 +55,14 @@ struct BuiltinVertexDefine
 
         /// a_position
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_POSITION, program->getVertexInputDesc(rhi::VertexInputKind::POSITION),
-                       rhi::VertexFormat::FLOAT3, 0, false);
+                       rhi::VertexElementType::FLOAT3, 0, false);
         /// a_texCoord
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_TEXCOORD, program->getVertexInputDesc(rhi::VertexInputKind::TEXCOORD),
-                       rhi::VertexFormat::FLOAT2, offsetof(V3F_T2F_C4F, texCoord), false);
+                       rhi::VertexElementType::FLOAT2, offsetof(V3F_T2F_C4F, texCoord), false);
 
         /// a_color
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_COLOR, program->getVertexInputDesc(rhi::VertexInputKind::COLOR),
-                       rhi::VertexFormat::FLOAT4, offsetof(V3F_T2F_C4F, color), false);
+                       rhi::VertexElementType::FLOAT4, offsetof(V3F_T2F_C4F, color), false);
 
         desc.endLayout();
     }
@@ -72,14 +74,14 @@ struct BuiltinVertexDefine
 
         /// a_position
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_POSITION, program->getVertexInputDesc(rhi::VertexInputKind::POSITION),
-                       rhi::VertexFormat::FLOAT3, 0, false);
+                       rhi::VertexElementType::FLOAT3, 0, false);
         /// a_texCoord
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_TEXCOORD, program->getVertexInputDesc(rhi::VertexInputKind::TEXCOORD),
-                       rhi::VertexFormat::FLOAT2, offsetof(V3F_T2F_C4B, texCoord), false);
+                       rhi::VertexElementType::FLOAT2, offsetof(V3F_T2F_C4B, texCoord), false);
 
         /// a_color
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_COLOR, program->getVertexInputDesc(rhi::VertexInputKind::COLOR),
-                       rhi::VertexFormat::UBYTE4, offsetof(V3F_T2F_C4B, color), true);
+                       rhi::VertexElementType::UBYTE4, offsetof(V3F_T2F_C4B, color), true);
 
         desc.endLayout();
     }
@@ -90,14 +92,14 @@ struct BuiltinVertexDefine
 
         /// a_position
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_POSITION, program->getVertexInputDesc(rhi::VertexInputKind::POSITION),
-                       rhi::VertexFormat::FLOAT2, 0, false);
+                       rhi::VertexElementType::FLOAT2, 0, false);
         /// a_texCoord
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_TEXCOORD, program->getVertexInputDesc(rhi::VertexInputKind::TEXCOORD),
-                       rhi::VertexFormat::FLOAT2, offsetof(V2F_T2F_C4B, texCoord), false);
+                       rhi::VertexElementType::FLOAT2, offsetof(V2F_T2F_C4B, texCoord), false);
 
         /// a_color
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_COLOR, program->getVertexInputDesc(rhi::VertexInputKind::COLOR),
-                       rhi::VertexFormat::UBYTE4, offsetof(V2F_T2F_C4B, color), true);
+                       rhi::VertexElementType::UBYTE4, offsetof(V2F_T2F_C4B, color), true);
 
         desc.endLayout();
     }
@@ -107,13 +109,13 @@ struct BuiltinVertexDefine
         desc.startLayout(3);
 
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_POSITION, program->getVertexInputDesc(rhi::VertexInputKind::POSITION),
-                       rhi::VertexFormat::FLOAT2, 0, false);
+                       rhi::VertexElementType::FLOAT2, 0, false);
 
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_TEXCOORD, program->getVertexInputDesc(rhi::VertexInputKind::TEXCOORD),
-                       rhi::VertexFormat::FLOAT2, offsetof(V2F_T2F_C4F, texCoord), false);
+                       rhi::VertexElementType::FLOAT2, offsetof(V2F_T2F_C4F, texCoord), false);
 
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_COLOR, program->getVertexInputDesc(rhi::VertexInputKind::COLOR),
-                       rhi::VertexFormat::FLOAT4, offsetof(V2F_T2F_C4F, color), true);
+                       rhi::VertexElementType::FLOAT4, offsetof(V2F_T2F_C4F, color), true);
 
         desc.endLayout();
     }
@@ -123,10 +125,10 @@ struct BuiltinVertexDefine
         desc.startLayout(3);
 
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_POSITION, program->getVertexInputDesc(rhi::VertexInputKind::POSITION),
-                       rhi::VertexFormat::FLOAT3, 0, false);
+                       rhi::VertexElementType::FLOAT3, 0, false);
 
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_COLOR, program->getVertexInputDesc(rhi::VertexInputKind::COLOR),
-                       rhi::VertexFormat::FLOAT4, offsetof(V3F_C4F, color), true);
+                       rhi::VertexElementType::FLOAT4, offsetof(V3F_C4F, color), true);
 
         desc.endLayout();
     }
@@ -136,7 +138,7 @@ struct BuiltinVertexDefine
         desc.startLayout(1);
 
         auto attrNameLoc = program->getVertexInputDesc(rhi::VERTEX_INPUT_NAME_POSITION);
-        desc.addAttrib(rhi::VERTEX_INPUT_NAME_POSITION, attrNameLoc, rhi::VertexFormat::FLOAT3, 0, false);
+        desc.addAttrib(rhi::VERTEX_INPUT_NAME_POSITION, attrNameLoc, rhi::VertexElementType::FLOAT3, 0, false);
 
         desc.endLayout();
     }
@@ -146,7 +148,7 @@ struct BuiltinVertexDefine
         desc.startLayout(1);
 
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_POSITION, program->getVertexInputDesc(rhi::VertexInputKind::POSITION),
-                       rhi::VertexFormat::FLOAT3, 0, false);
+                       rhi::VertexElementType::FLOAT3, 0, false);
         desc.endLayout();
     }
 
@@ -155,9 +157,9 @@ struct BuiltinVertexDefine
         desc.startLayout(1);
 
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_POSITION, program->getVertexInputDesc(rhi::VertexInputKind::POSITION),
-                       rhi::VertexFormat::FLOAT3, 0, false);
+                       rhi::VertexElementType::FLOAT3, 0, false);
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_COLOR, program->getVertexInputDesc(rhi::VertexInputKind::COLOR),
-                       rhi::VertexFormat::FLOAT4, offsetof(V3F_C4F, color), false);
+                       rhi::VertexElementType::FLOAT4, offsetof(V3F_C4F, color), false);
         desc.endLayout();
     }
 
@@ -166,11 +168,11 @@ struct BuiltinVertexDefine
         desc.startLayout(1);
 
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_POSITION, program->getVertexInputDesc(rhi::VertexInputKind::POSITION),
-                       rhi::VertexFormat::FLOAT3, 0, false);
+                       rhi::VertexElementType::FLOAT3, 0, false);
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_TEXCOORD, program->getVertexInputDesc(rhi::VertexInputKind::TEXCOORD),
-                       rhi::VertexFormat::FLOAT2, offsetof(V3F_T2F_N3F, texcoord), false);
+                       rhi::VertexElementType::FLOAT2, offsetof(V3F_T2F_N3F, texcoord), false);
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_NORMAL, program->getVertexInputDesc(rhi::VertexInputKind::NORMAL),
-                       rhi::VertexFormat::FLOAT3, offsetof(V3F_T2F_N3F, normal), false);
+                       rhi::VertexElementType::FLOAT3, offsetof(V3F_T2F_N3F, normal), false);
         desc.endLayout();
     }
 
@@ -179,11 +181,11 @@ struct BuiltinVertexDefine
         desc.startLayout(1);
 
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_POSITION, program->getVertexInputDesc(rhi::VertexInputKind::POSITION),
-                       rhi::VertexFormat::FLOAT3, 0, false);
+                       rhi::VertexElementType::FLOAT3, 0, false);
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_TEXCOORD, program->getVertexInputDesc(rhi::VertexInputKind::TEXCOORD),
-                       rhi::VertexFormat::FLOAT2, 3 * sizeof(float), false);
+                       rhi::VertexElementType::FLOAT2, 3 * sizeof(float), false);
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_INSTANCE, program->getVertexInputDesc(rhi::VertexInputKind::INSTANCE),
-                       rhi::VertexFormat::MAT4, 0, false, 1);
+                       rhi::VertexElementType::MAT4, 0, false, 1);
 
         desc.endLayout();
     }

@@ -30,6 +30,7 @@ THE SOFTWARE.
 #include "axmol/base/Director.h"
 #include "axmol/renderer/RenderTexturePass.h"
 #include "axmol/renderer/RenderTexture.h"
+#include "axmol/renderer/Renderer.h"
 #include "axmol/2d/ProgressTimer.h"
 #include "axmol/2d/Sprite.h"
 #include "axmol/2d/ActionInstant.h"

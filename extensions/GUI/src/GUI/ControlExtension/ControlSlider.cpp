@@ -222,7 +222,7 @@ void ControlSlider::setMaximumValue(float maximumValue)
 
 bool ControlSlider::isTouchInside(PointerEvent* touch)
 {
-    Vec2 touchLocation = touch->getLocation();
+    Vec2 touchLocation = touch->getWorldPoint();
     touchLocation      = this->getParent()->convertToNodeSpace(touchLocation);
 
     Rect rect = this->getBoundingBox();
@@ -234,7 +234,7 @@ bool ControlSlider::isTouchInside(PointerEvent* touch)
 
 Vec2 ControlSlider::locationFromTouch(PointerEvent* touch)
 {
-    Vec2 touchLocation = touch->getLocation();                     // Get the touch position
+    Vec2 touchLocation = touch->getWorldPoint();                   // Get the touch position
     touchLocation      = this->convertToNodeSpace(touchLocation);  // Convert to the node space of this class
 
     if (touchLocation.x < 0)

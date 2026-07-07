@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_COLOR_H__
 #define __EFFEKSEER_COLOR_H__
 

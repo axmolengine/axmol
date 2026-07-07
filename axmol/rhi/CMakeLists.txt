@@ -21,6 +21,7 @@ set(_AX_RHI_HEADER
   rhi/DriverFactory.h
   rhi/GraphicsCore.h
   rhi/VulkanInterop.h
+  rhi/PipelineDesc.h
 )
 
 set(_AX_RHI_SRC

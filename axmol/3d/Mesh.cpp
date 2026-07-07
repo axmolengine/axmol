@@ -203,7 +203,7 @@ Mesh* Mesh::create(const std::vector<float>& positions,
     tlx::pod_vector<MeshVertexAttrib> attribs;
 
     MeshVertexAttrib att;
-    att.type = rhi::VertexFormat::FLOAT3;
+    att.type = rhi::VertexElementType::FLOAT3;
 
     attribs.reserve(3);
 
@@ -225,7 +225,7 @@ Mesh* Mesh::create(const std::vector<float>& positions,
     if (!texs.empty())
     {
         perVertexSizeInFloat += 2;
-        att.type         = rhi::VertexFormat::FLOAT2;
+        att.type         = rhi::VertexElementType::FLOAT2;
         att.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD;
         attribs.emplace_back(att);
         hasTexCoord = 1;

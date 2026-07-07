@@ -249,7 +249,7 @@ bool IKExample::init()
     mouseListener->onPointerMove        = [this](ax::PointerEvent* event) -> bool {
         // convert the mosue location to the skeleton's coordinate space
         // and store it.
-        position = skeletonNode->convertToNodeSpace(event->getLocation());
+        position = skeletonNode->convertToNodeSpace(event->getWorldPoint());
 
         return true;
     };

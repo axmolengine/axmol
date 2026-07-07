@@ -1862,19 +1862,17 @@ public:
     * receive the pointer event only if this function returns true for one of the
     * candidate cameras.
     *
-    * The default implementation is expected to test the node's local content
-    * rectangle against the pointer's 2D world/canvas position, usually from
-    * PointerEvent::getLocation().
+    * The default implementation tests the node's local content rectangle against
+    * the ray carried by the PointerEvent (obtained via PointerEvent::getRay()).
+    * The ray is computed per-camera by EventDispatcher using
+    * Camera::screenToRay() from the pointer's screen position.
     *
     * Derived classes may override this function to provide custom hit testing,
     * such as clipping-aware UI hit testing, non-rectangular 2D hit areas, terrain
     * picking, mesh picking, or physics ray casting.
     *
-    * For 3D picking, implementations should typically use
-    * PointerEvent::getScreenLocation() together with Camera::screenToRay().
-    *
-    * @param event       The pointer event being tested.
-    * @param camera      The candidate camera used for this hit test.
+    * @param event       The pointer event being tested. The ray for this hit-test
+    *                    is available via event->getRay().
     * @param outHitPoint Optional output parameter for the hit point. When provided,
     * ```
                      implementations should store the hit point in
@@ -1888,7 +1886,7 @@ public:
     *
     * @return true if the pointer hits this node for the specified camera, false otherwise.
       */
-    virtual bool onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* outHitPoint);
+    virtual bool onPointerHitTest(PointerEvent* event, Vec3* outHitPoint);
 
     /*
      * Reset child state with resources cleanup, internal use, please don't invoke this API.

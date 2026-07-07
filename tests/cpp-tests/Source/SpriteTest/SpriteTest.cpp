@@ -195,7 +195,7 @@ void Sprite1::addNewSpriteWithCoords(Vec2 p)
 void Sprite1::onPointerUp(PointerEvent* event)
 {
     {
-        auto location = event->getLocation();
+        auto location = event->getWorldPoint();
 
         addNewSpriteWithCoords(location);
     }
@@ -266,7 +266,7 @@ void SpriteBatchNode1::addNewSpriteWithCoords(Vec2 p)
 void SpriteBatchNode1::onPointerUp(PointerEvent* event)
 {
     {
-        auto location = event->getLocation();
+        auto location = event->getWorldPoint();
 
         addNewSpriteWithCoords(location);
     }
@@ -958,13 +958,10 @@ void SpriteBatchNodeReorderIssue767::reorderSprites(float dt)
 void SpriteZVertex::onEnter()
 {
     SpriteTestDemo::onEnter();
-
-    Director::getInstance()->setProjection(Director::Projection::_3D);
 }
 
 void SpriteZVertex::onExit()
 {
-    Director::getInstance()->setProjection(Director::Projection::DEFAULT);
     SpriteTestDemo::onExit();
 }
 
@@ -1048,13 +1045,10 @@ std::string SpriteZVertex::subtitle() const
 void SpriteBatchNodeZVertex::onEnter()
 {
     SpriteTestDemo::onEnter();
-
-    Director::getInstance()->setProjection(Director::Projection::_3D);
 }
 
 void SpriteBatchNodeZVertex::onExit()
 {
-    Director::getInstance()->setProjection(Director::Projection::DEFAULT);
     SpriteTestDemo::onExit();
 }
 

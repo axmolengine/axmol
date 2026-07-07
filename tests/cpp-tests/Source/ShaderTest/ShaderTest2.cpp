@@ -575,7 +575,7 @@ bool EffectSpriteLamp::onPointerDown(PointerEvent* ev)
 {
     {
         auto s             = Director::getInstance()->getCanvasSize();
-        Point loc_winSpace = ev->getScreenLocation();
+        Point loc_winSpace = ev->getPoint();
         _lightSprite->setPosition(Vec2(loc_winSpace.x, s.height - loc_winSpace.y));
         Vec3 pos(loc_winSpace.x, loc_winSpace.y, 50);
         Mat4 mat = _sprite->getNodeToWorldTransform();
@@ -589,7 +589,7 @@ bool EffectSpriteLamp::onPointerDown(PointerEvent* ev)
 void EffectSpriteLamp::onPointerMove(PointerEvent* ev)
 {
     auto s             = Director::getInstance()->getCanvasSize();
-    Point loc_winSpace = ev->getScreenLocation();
+    Point loc_winSpace = ev->getPoint();
     _lightSprite->setPosition(Vec2(loc_winSpace.x, s.height - loc_winSpace.y));
     Vec3 pos(loc_winSpace.x, loc_winSpace.y, 50);
     Mat4 mat = _sprite->getNodeToWorldTransform();
@@ -603,7 +603,7 @@ void EffectSpriteLamp::onPointerUp(PointerEvent* ev)
 {
     {
         auto s             = Director::getInstance()->getCanvasSize();
-        Point loc_winSpace = ev->getScreenLocation();
+        Point loc_winSpace = ev->getPoint();
         _lightSprite->setPosition(Vec2(loc_winSpace.x, s.height - loc_winSpace.y));
         Vec3 pos(loc_winSpace.x, loc_winSpace.y, 50);
         Mat4 mat = _sprite->getNodeToWorldTransform();

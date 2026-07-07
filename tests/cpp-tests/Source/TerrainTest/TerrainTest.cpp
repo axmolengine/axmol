@@ -86,8 +86,8 @@ void TerrainSimple::onPointerMove(ax::PointerEvent* event)
 
     event->stopPropagation();
     float delta           = Director::getInstance()->getDeltaTime();
-    auto location         = event->getLocation();
-    auto PreviousLocation = event->getPreviousLocation();
+    auto location         = event->getWorldPoint();
+    auto PreviousLocation = event->getPrevWorldPoint();
     Point newPos          = PreviousLocation - location;
 
     Vec3 cameraDir;
@@ -377,8 +377,8 @@ void TerrainWithLightMap::onPointerMove(ax::PointerEvent* event)
     event->stopPropagation();
     float delta           = Director::getInstance()->getDeltaTime();
     auto touch            = event;
-    auto location         = touch->getLocation();
-    auto PreviousLocation = touch->getPreviousLocation();
+    auto location         = touch->getWorldPoint();
+    auto PreviousLocation = touch->getPrevWorldPoint();
     Point newPos          = PreviousLocation - location;
 
     Vec3 cameraDir;

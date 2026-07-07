@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "axmol/platform/ApplicationCore.h"
 #include "axmol/base/Director.h"
 #include "axmol/platform/CommandLineArgs.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 #if defined(AX_ENABLE_OPENXR)
 #    include "axmol/vr/OpenXRDriver.h"

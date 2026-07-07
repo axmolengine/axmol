@@ -190,7 +190,7 @@ void Box2DTestBed::onKeyReleased(KeyboardEvent* event)
 
 bool Box2DTestBed::onPointerDown(PointerEvent* e)
 {
-    auto location = e->getLocation() - _debugDrawNode->getWorldOffset();
+    auto location = e->getWorldPoint() - _debugDrawNode->getWorldOffset();
     b2Vec2 pos    = {location.x / _debugDrawNode->getPTMRatio(), location.y / _debugDrawNode->getPTMRatio()};
 
     int mods = 0;
@@ -215,7 +215,7 @@ bool Box2DTestBed::onPointerUp(PointerEvent* ev)
 {
     const auto ratio = _debugDrawNode->getPTMRatio();
     _draging         = false;
-    auto location    = ev->getLocation() - _debugDrawNode->getWorldOffset();
+    auto location    = ev->getWorldPoint() - _debugDrawNode->getWorldOffset();
     b2Vec2 pos       = {location.x / ratio, location.y / ratio};
     m_sample->MouseUp(pos, static_cast<int>(ev->getButton()));
     return true;
@@ -224,7 +224,7 @@ bool Box2DTestBed::onPointerUp(PointerEvent* ev)
 void Box2DTestBed::onPointerMove(PointerEvent* ev)
 {
     const auto ratio = _debugDrawNode->getPTMRatio();
-    auto location    = ev->getLocation() - _debugDrawNode->getWorldOffset();
+    auto location    = ev->getWorldPoint() - _debugDrawNode->getWorldOffset();
     b2Vec2 pos{location.x / ratio, location.y / ratio};
     m_sample->MouseMove(pos);
 

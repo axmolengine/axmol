@@ -28,6 +28,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "axmol/2d/Transition.h"
+#include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/RenderTexturePass.h"
 #include "axmol/2d/ActionInterval.h"
 #include "axmol/2d/ActionInstant.h"

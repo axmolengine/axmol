@@ -38,7 +38,7 @@ function SliderEx:onEnter()
 
     local  listenner = ax.PointerEventListener:create()
     listenner:registerScriptHandler(function(event)
-        local location = event:getLocation()
+        local location = event:getWorldPoint()
         local locationInNode = self._thumb:convertToNodeSpace(location)
         if not ax.rectContainsPoint(self._thumbRect, locationInNode) then
             return false
@@ -53,7 +53,7 @@ function SliderEx:onEnter()
     end, ax.Handler.EVENT_POINTER_DOWN )
 
     listenner:registerScriptHandler(function(event)
-        local locationInNodeX = self:convertToNodeSpace(event:getLocation()).x
+        local locationInNodeX = self:convertToNodeSpace(event:getWorldPoint()).x
         self:setThumbPosX(self._thumbBeganX + locationInNodeX - self._touchBeganX)
 
         if self._callback then
@@ -62,7 +62,7 @@ function SliderEx:onEnter()
     end, ax.Handler.EVENT_POINTER_MOVE )
 
     listenner:registerScriptHandler(function(event)
-        local locationInNodeX = self:convertToNodeSpace(event:getLocation()).x
+        local locationInNodeX = self:convertToNodeSpace(event:getWorldPoint()).x
         self:setThumbPosX(self._thumbBeganX + locationInNodeX - self._touchBeganX)
 
         if self._callback then

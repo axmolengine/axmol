@@ -47,6 +47,4 @@ private:
     ax::Sprite* sprite2;
     ax::Sprite* sprite3;
     ax::Sprite* sprite4;
-
-    ax::Director::Projection _projection = ax::Director::Projection::_3D;
 };

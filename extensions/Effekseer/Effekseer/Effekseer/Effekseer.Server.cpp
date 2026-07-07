@@ -1,4 +1,4 @@
-﻿
+
 #include "Effekseer.Server.h"
 
 #if (defined(__EFFEKSEER_NETWORK_ENABLED__))

@@ -86,16 +86,16 @@ namespace ax
 
 std::string_view Director::EVENT_BEFORE_SET_NEXT_SCENE = "director_before_set_next_scene"sv;
 std::string_view Director::EVENT_AFTER_SET_NEXT_SCENE  = "director_after_set_next_scene"sv;
-std::string_view Director::EVENT_PROJECTION_CHANGED    = "director_projection_changed"sv;
-std::string_view Director::EVENT_AFTER_DRAW            = "director_after_draw"sv;
-std::string_view Director::EVENT_AFTER_VISIT           = "director_after_visit"sv;
-std::string_view Director::EVENT_BEFORE_UPDATE         = "director_before_update"sv;
-std::string_view Director::EVENT_AFTER_UPDATE          = "director_after_update"sv;
-std::string_view Director::EVENT_BEFORE_DRAW           = "director_before_draw"sv;
-std::string_view Director::EVENT_RESET                 = "director_reset"sv;
-std::string_view Director::EVENT_DISPOSING             = "director_disposing"sv;
-std::string_view Director::EVENT_BEFORE_GFX_DROP       = "director_before_gfx_drop"sv;
-std::string_view Director::EVENT_AFTER_GFX_DROP        = "director_after_gfx_drop"sv;
+
+std::string_view Director::EVENT_AFTER_DRAW      = "director_after_draw"sv;
+std::string_view Director::EVENT_AFTER_VISIT     = "director_after_visit"sv;
+std::string_view Director::EVENT_BEFORE_UPDATE   = "director_before_update"sv;
+std::string_view Director::EVENT_AFTER_UPDATE    = "director_after_update"sv;
+std::string_view Director::EVENT_BEFORE_DRAW     = "director_before_draw"sv;
+std::string_view Director::EVENT_RESET           = "director_reset"sv;
+std::string_view Director::EVENT_DISPOSING       = "director_disposing"sv;
+std::string_view Director::EVENT_BEFORE_GFX_DROP = "director_before_gfx_drop"sv;
+std::string_view Director::EVENT_AFTER_GFX_DROP  = "director_after_gfx_drop"sv;
 
 // clang-format off
 static constexpr std::string_view kWindowPlatformNameMap[] = {
@@ -173,9 +173,6 @@ bool Director::init()
     _eventBeforeUpdate->setUserData(this);
     _eventAfterUpdate = new CustomEvent(EVENT_AFTER_UPDATE);
     _eventAfterUpdate->setUserData(this);
-    _eventProjectionChanged = new CustomEvent(EVENT_PROJECTION_CHANGED);
-    _eventProjectionChanged->setUserData(this);
-
     _eventDirectorReset = new CustomEvent(EVENT_RESET);
     _eventDirectorReset->setUserData(this);
     _eventDirectorDisposing = new CustomEvent(EVENT_DISPOSING);
@@ -225,7 +222,6 @@ Director::~Director()
     AX_SAFE_RELEASE(_eventAfterDraw);
     AX_SAFE_RELEASE(_eventBeforeDraw);
     AX_SAFE_RELEASE(_eventAfterVisit);
-    AX_SAFE_RELEASE(_eventProjectionChanged);
     AX_SAFE_RELEASE(_eventDirectorReset);
     AX_SAFE_RELEASE(_eventDirectorDisposing);
     AX_SAFE_RELEASE(_eventBeforeGfxDrop);
@@ -268,17 +264,6 @@ void Director::setDefaultValues()
     // Display FPS
     _statsDisplay = env->getValue("axmol.display_fps", Value(false)).asBool();
 
-    // GL projection
-    std::string projection = env->getValue("axmol.gl.projection", Value("3d")).asString();
-    if (projection == "3d")
-        _projection = Projection::_3D;
-    else if (projection == "2d")
-        _projection = Projection::_2D;
-    else if (projection == "custom")
-        _projection = Projection::CUSTOM;
-    else
-        AXASSERT(false, "Invalid projection value");
-
     /* !!!Notes
     ** All compressed image should do PMA at texture convert tools(such as astcenc-2.2+ with -pp-premultiply)
     ** or GPU fragment shader
@@ -306,7 +291,6 @@ void Director::setRenderDefaults()
 
     _renderer->setDepthTest(false);
     _renderer->setDepthCompareFunc(rhi::CompareFunc::LESS_EQUAL);
-    setProjection(_projection);
 }
 
 // process 1 frame
@@ -560,23 +544,6 @@ void Director::setNextDeltaTimeZero(bool nextDeltaTimeZero)
     _nextDeltaTimeZero = nextDeltaTimeZero;
 }
 
-void Director::setProjection(Projection projection)
-{
-    Vec2 size = _canvasSizeInPoints;
-
-    if (size.width == 0 || size.height == 0)
-    {
-        AXLOGE("warning, Director::setProjection() failed because size is 0");
-        return;
-    }
-
-    setViewport();
-
-    _projection = projection;
-
-    _eventDispatcher->dispatchEvent(_eventProjectionChanged);
-}
-
 void Director::purgeCachedData()
 {
     FontFNT::purgeCachedData();
@@ -617,65 +584,6 @@ static void getViewProjMatrix(Mat4* transformOut)
 
     AXASSERT(camera, "Director screen/world conversion requires a running scene default camera");
     *transformOut = camera ? camera->getViewProjectionMatrix() : Mat4::identity;
-}
-
-Vec2 Director::screenToWorld(const Vec2& screenPoint)
-{
-    auto& viewScale = _renderView->getScale();
-    auto& vp        = _renderView->getViewportRect();
-
-    // Convert screen point to Axmol 2D(UI) point
-    float uiX = (screenPoint.x - vp.origin.x) / viewScale.x;
-    float uiY = (screenPoint.y - vp.origin.y) / viewScale.y;
-
-    Mat4 transform;
-    getViewProjMatrix(&transform);
-
-    Mat4 transformInv = transform.getInversed();
-
-    // Calculate z=0 using -> transform*[0, 0, 0, 1]/w
-    float zClip = transform.m[14] / transform.m[15];
-
-    Vec2 designSize = _renderView->getDesignResolutionSize();
-    Vec4 clipCoord(2.0f * uiX / designSize.width - 1.0f, 1.0f - 2.0f * uiY / designSize.height, zClip, 1);
-
-    Vec4 uiPoint;
-    transformInv.transformVector(clipCoord, &uiPoint);
-    float factor = 1.0f / uiPoint.w;
-    return Vec2{uiPoint.x * factor, uiPoint.y * factor};
-}
-
-Vec2 Director::worldToScreen(const Vec2& worldPoint)
-{
-    Mat4 transform;
-    getViewProjMatrix(&transform);
-
-    Vec4 clipCoord;
-    // Need to calculate the zero depth from the transform.
-    Vec4 worldCoord(worldPoint.x, worldPoint.y, 0.0, 1);
-    transform.transformVector(worldCoord, &clipCoord);
-
-    /*
-    BUG-FIX #5506
-
-    a = (Vx, Vy, Vz, 1)
-    b = (a×M)T
-    Out = 1 ⁄ bw(bx, by, bz)
-    */
-
-    clipCoord.x = clipCoord.x / clipCoord.w;
-    clipCoord.y = clipCoord.y / clipCoord.w;
-    clipCoord.z = clipCoord.z / clipCoord.w;
-
-    Vec2 designSize = _renderView->getDesignResolutionSize();
-    float factor    = 1.0f / worldCoord.w;
-    float uiX       = designSize.width * (clipCoord.x * 0.5f + 0.5f) * factor;
-    float uiY       = designSize.height * (-clipCoord.y * 0.5f + 0.5f) * factor;
-
-    // Convert Axmol 2D(UI) coordinate to screen-coordinate
-    auto& viewScale = _renderView->getScale();
-    auto& vp        = _renderView->getViewportRect();
-    return Vec2{uiX * viewScale.x + vp.origin.x, uiY * viewScale.y + vp.origin.y};
 }
 
 Vec2 Director::canvasToPixels(const Vec2& size) const

@@ -41,8 +41,6 @@ public:
 protected:
     TestNodeDemo();
     virtual ~TestNodeDemo();
-
-    ax::Director::Projection _preProjection;
 };
 
 class NodeTest2 : public TestNodeDemo

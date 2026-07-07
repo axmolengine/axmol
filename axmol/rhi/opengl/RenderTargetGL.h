@@ -2,6 +2,7 @@
 #include "axmol/rhi/RenderTarget.h"
 #include "axmol/platform/GL.h"
 #include "axmol/rhi/opengl/OpenGLState.h"
+#include "axmol/tlx/vector.hpp"
 
 namespace ax::rhi::gl
 {

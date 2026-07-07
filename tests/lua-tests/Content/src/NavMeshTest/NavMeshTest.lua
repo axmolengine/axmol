@@ -262,7 +262,7 @@ function NavMeshBasicTestDemo:registerTouchEvent()
         local physicsWorld = self:getPhysicsWorld3D()
         if event ~= nil then
             local touch = event
-            local location = event:getScreenLocation()
+            local location = event:getPoint()
             local nearP = ax.vec3(location.x, location.y, 0.0)
             local farP  = ax.vec3(location.x, location.y, 1.0)
 
@@ -348,7 +348,7 @@ function NavMeshAdvanceTestDemo:registerTouchEvent()
         local physicsWorld = self:getPhysicsWorld3D()
         if event ~= nil then
             local touch = event
-            local location = event:getScreenLocation()
+            local location = event:getPoint()
             local nearP = ax.vec3(location.x, location.y, 0.0)
             local farP  = ax.vec3(location.x, location.y, 1.0)
 

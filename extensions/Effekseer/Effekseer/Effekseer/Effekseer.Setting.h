@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_LOADER_H__
 #define __EFFEKSEER_LOADER_H__
 

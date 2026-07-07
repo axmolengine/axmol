@@ -453,7 +453,7 @@ int LuaEngine::handleTouchEvent(void* data)
         return 0;
 
     _stack->pushString(phaseName);
-    const ax::Vec2 pt = Director::getInstance()->screenToWorld(pointerEvent->getScreenLocation());
+    const ax::Vec2 pt = pointerEvent->getWorldPoint();
     _stack->pushFloat(pt.x);
     _stack->pushFloat(pt.y);
     int ret = _stack->executeFunctionByHandler(handler, 3);
@@ -486,7 +486,7 @@ int LuaEngine::handleTouchesEvent(void* data)
     lua_State* L        = _stack->getLuaState();
 
     lua_newtable(L);
-    ax::Vec2 pt = pDirector->screenToWorld(pointerEvent->getScreenLocation());
+    ax::Vec2 pt = pointerEvent->getWorldPoint();
     lua_pushnumber(L, pt.x);
     lua_rawseti(L, -2, 1);
     lua_pushnumber(L, pt.y);

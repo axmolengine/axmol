@@ -25,10 +25,10 @@
 
 #pragma once
 
-#include "axmol/math/Math.h"
-#include "axmol/3d/AABB.h"
-#include "axmol/3d/OBB.h"
-#include "axmol/3d/Plane.h"
+#include "axmol/math/AABB.h"
+#include "axmol/math/OBB.h"
+#include "axmol/math/Plane.h"
+#include "axmol/math/Mat4.h"
 
 namespace ax
 {

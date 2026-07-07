@@ -24,10 +24,11 @@
  ****************************************************************************/
 
 #include "axmol/rhi/Program.h"
-#include "axmol/renderer/VertexLayoutManager.h"
+#include "axmol/rhi/VertexLayout.h"
 #include "axmol/rhi/axslc-spec.h"
 #include "axmol/rhi/GraphicsCore.h"
 #include "axmol/tlx/hash.hpp"
+#include "axmol/tlx/utility.hpp"
 #include "yasio/ibstream.hpp"
 
 namespace ax::rhi

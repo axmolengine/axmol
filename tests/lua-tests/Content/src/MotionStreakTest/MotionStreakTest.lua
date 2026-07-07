@@ -107,7 +107,7 @@ local function MotionStreakTest2()
     streak:setPosition(ax.p(s.width / 2, s.height / 2))
 
     local function onPointerMove(event)
-        streak:setPosition( event:getLocation() )
+        streak:setPosition( event:getWorldPoint() )
     end
 
     local listener = ax.PointerEventListener:create()

@@ -785,7 +785,7 @@ void LabelFNTMultiLineAlignment::alignmentChanged(ax::Object* sender)
 
 bool LabelFNTMultiLineAlignment::onPointerDown(ax::PointerEvent* event)
 {
-    auto location = event->getScreenLocation();
+    auto location = event->getPoint();
 
     if (this->_arrows->getBoundingBox().containsPoint(location))
     {
@@ -812,7 +812,7 @@ void LabelFNTMultiLineAlignment::onPointerMove(ax::PointerEvent* event)
         return;
 
     auto touch    = event;
-    auto location = touch->getScreenLocation();
+    auto location = touch->getPoint();
 
     auto canvasSize = Director::getInstance()->getCanvasSize();
 

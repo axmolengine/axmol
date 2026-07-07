@@ -963,7 +963,7 @@ void DefaultVideoController::createControls()
     _timelineTouchListener                = PointerEventListener::create();
     _timelineTouchListener->onPointerDown = [this](PointerEvent* event) -> bool {
         auto target               = event->getCurrentTarget();
-        const auto locationInNode = target->convertToNodeSpace(event->getLocation());
+        const auto locationInNode = target->convertToNodeSpace(event->getWorldPoint());
         const auto& size          = target->getContentSize();
         const auto rect           = ax::Rect(0, 0, size.width, size.height);
 
@@ -981,7 +981,7 @@ void DefaultVideoController::createControls()
     };
     _timelineTouchListener->onPointerMove = [this](PointerEvent* event) {
         auto target               = event->getCurrentTarget();
-        const auto locationInNode = target->convertToNodeSpace(event->getLocation());
+        const auto locationInNode = target->convertToNodeSpace(event->getWorldPoint());
         const auto& size          = target->getContentSize();
         const auto rect           = ax::Rect(0, 0, size.width, size.height);
 

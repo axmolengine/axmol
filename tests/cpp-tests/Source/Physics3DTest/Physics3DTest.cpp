@@ -142,7 +142,7 @@ void Physics3DTestDemo::onPointerMove(ax::PointerEvent* event)
         return;
     if (_camera)
     {
-        auto delta = event->getDelta();
+        auto delta = (event->getWorldPoint() - event->getPrevWorldPoint());
 
         _angle -= AX_DEGREES_TO_RADIANS(delta.x);
         _camera->setPosition3D(Vec3(100.0f * sinf(_angle), 50.0f, 100.0f * cosf(_angle)));
@@ -163,7 +163,7 @@ void Physics3DTestDemo::onPointerUp(ax::PointerEvent* event)
     if (!_needShootBox)
         return;
 
-    auto ray = _camera->screenToRay(event->getScreenLocation());
+    auto ray = _camera->screenToRay(event->getPoint());
     shootBox(_camera->getPosition3D() + ray.direction * 10.0f);
     event->stopPropagation();
 }
@@ -509,7 +509,7 @@ bool Joint3DDemo::onPointerDown(ax::PointerEvent* event)
     // ray trace
     if (_camera)
     {
-        auto location = event->getScreenLocation();
+        auto location = event->getPoint();
         Vec3 nearP(location.x, location.y, 0.0f), farP(location.x, location.y, 1.0f);
 
         auto size = Director::getInstance()->getCanvasSize();
@@ -542,7 +542,7 @@ void Joint3DDemo::onPointerMove(ax::PointerEvent* event)
     if (_constraint)
     {
         auto p2pConstraint = ((PivotJoint3D*)_constraint);
-        auto ray           = _camera->screenToRay(event->getScreenLocation());
+        auto ray           = _camera->screenToRay(event->getPoint());
         p2pConstraint->setConnectedAnchor(ray.origin + ray.direction * _pickingDistance);
         event->stopPropagation();
         return;

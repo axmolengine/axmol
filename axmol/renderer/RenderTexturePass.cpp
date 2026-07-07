@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 #include "axmol/base/Director.h"
 #include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/GroupCommand.h"
 #include "axmol/rhi/GraphicsCore.h"
 #include "axmol/scene/Camera.h"
 #include "axmol/renderer/RenderTexture.h"

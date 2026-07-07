@@ -42,7 +42,7 @@ class Rigidbody2D;
 class Joint2D;
 class Collider2D;
 class ContactEvent2D;
-
+class ContactInfo2D;
 class Director;
 class Node;
 class Sprite;

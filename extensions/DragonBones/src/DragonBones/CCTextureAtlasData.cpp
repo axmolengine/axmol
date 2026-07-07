@@ -1,4 +1,4 @@
-﻿#include "CCTextureAtlasData.h"
+#include "CCTextureAtlasData.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 void CCTextureAtlasData::_onClear()

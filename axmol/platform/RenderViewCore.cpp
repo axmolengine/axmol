@@ -27,6 +27,7 @@ THE SOFTWARE.
 
 #include "axmol/platform/RenderViewCore.h"
 
+#include "axmol/platform/Application.h"
 #include "axmol/base/PointerEvent.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"
@@ -108,7 +109,7 @@ void RenderViewCore::updateDesignResolution()
         // reset director's member variables to fit visible rect
         auto director = Director::getInstance();
         director->setCanvasSize(getDesignResolutionSize());
-        director->setProjection(director->getProjection());
+        director->setViewport();
     }
 }
 

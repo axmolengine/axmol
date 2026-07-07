@@ -574,7 +574,7 @@ local function ConvertToNode()
     end
 
     local function onTouchesEnded(event)
-        local location = event:getLocation()
+        local location = event:getWorldPoint()
         for i = 1,3 do
             local node = ConvertToNode_layer:getChildByTag(100 + i - 1)
             local p1, p2

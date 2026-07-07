@@ -135,7 +135,7 @@ public:
      */
     virtual void setEnabled(bool value) { _enabled = value; };
 
-    bool onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* outHitPoint) override;
+    bool onPointerHitTest(PointerEvent* event, Vec3* outHitPoint) override;
 
     virtual bool onPointerDown(PointerEvent* event);
     virtual void onPointerMove(PointerEvent* event);
@@ -172,7 +172,7 @@ protected:
     /** whether or not the menu will receive events */
     bool _enabled;
 
-    virtual MenuItem* hitTestItem(PointerEvent* event, const Camera* camera, Vec3* outHitPoint);
+    virtual MenuItem* hitTestItem(PointerEvent* event, Vec3* outHitPoint);
     State _state;
     MenuItem* _selectedItem;
     MenuItem* _pressedItem{nullptr};

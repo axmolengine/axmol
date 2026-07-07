@@ -277,8 +277,8 @@ void BillBoardTest::update(float dt) {}
 void BillBoardTest::onPointerMove(PointerEvent* event)
 {
     {
-        auto location         = event->getLocation();
-        auto PreviousLocation = event->getPreviousLocation();
+        auto location         = event->getWorldPoint();
+        auto PreviousLocation = event->getPrevWorldPoint();
         Point newPos          = PreviousLocation - location;
 
         Vec3 cameraDir;

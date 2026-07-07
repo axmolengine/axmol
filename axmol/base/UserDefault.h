@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "axmol/platform/PlatformMacros.h"
 #include <string>
 #include <string_view>
-#include <unordered_map>
+#include "axmol/tlx/hlookup.hpp"
 #include "mio/mio.hpp"
 #include "axmol/platform/FileStream.h"
 

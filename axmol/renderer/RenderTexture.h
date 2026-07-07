@@ -40,6 +40,7 @@ namespace ax
 
 class Camera;
 class CustomEventListener;
+class Director;
 
 /**
  * @brief RenderTexture is a render target resource, inheriting from Texture2D.

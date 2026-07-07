@@ -2162,24 +2162,21 @@ int lua_ax_ui_Widget_isClippingParentContainsPoint(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 1)
     {
         ax::PointerEvent* arg0;
-        const ax::Camera* arg1;
 
         ok &= luaval_to_object<ax::PointerEvent>(tolua_S, 2, "ax.PointerEvent",&arg0, "axui.Widget:isClippingParentContainsPoint");
-
-        ok &= luaval_to_object<const ax::Camera>(tolua_S, 3, "ax.Camera",&arg1, "axui.Widget:isClippingParentContainsPoint");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_isClippingParentContainsPoint'", nullptr);
             return 0;
         }
-        auto&& ret = obj->isClippingParentContainsPoint(arg0, arg1);
+        auto&& ret = obj->isClippingParentContainsPoint(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Widget:isClippingParentContainsPoint",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Widget:isClippingParentContainsPoint",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1

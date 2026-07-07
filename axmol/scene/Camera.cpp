@@ -42,18 +42,39 @@ Viewport Camera::_defaultViewport;
 
 // start static methods
 
-Camera* Camera::create()
+Camera* Camera::create(CameraMode mode)
 {
-    Camera* camera = new Camera();
-    camera->initDefault();
-    camera->autorelease();
-
-    return camera;
+    auto& size = Director::getInstance()->getCanvasSize();
+    switch (mode)
+    {
+    case CameraMode::Ortho:
+    {
+        auto cam = Camera::createOrthographicView(size, -1024.0f, 1024.0f);
+        return cam;
+    }
+    case CameraMode::Perspective:
+    {
+        auto cam = Camera::createPerspective(60.0f, size.width / size.height, 0.3f, 1000.0f);
+        cam->setPosition3D(Vec3(0.0f, 1.5f, 5.0f));
+        cam->lookAt(Vec3(0, 0, 0));
+        return cam;
+    }
+    case CameraMode::Classic:
+    {
+        Camera* camera = new Camera();
+        camera->initClassic();
+        camera->autorelease();
+        return camera;
+    }
+    }
+    AXASSERT(false, "Invalid CameraMode");
+    return nullptr;
 }
 
 Camera* Camera::createPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)
 {
-    auto ret = new Camera();
+    auto ret         = new Camera();
+    ret->_cameraMode = CameraMode::Perspective;
     ret->initPerspective(fieldOfView, aspectRatio, nearPlane, farPlane);
     ret->autorelease();
     return ret;
@@ -61,7 +82,8 @@ Camera* Camera::createPerspective(float fieldOfView, float aspectRatio, float ne
 
 Camera* Camera::createOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane)
 {
-    auto ret = new Camera();
+    auto ret         = new Camera();
+    ret->_cameraMode = CameraMode::Ortho;
     ret->initOrthographic(zoomX, zoomY, nearPlane, farPlane);
     ret->autorelease();
     return ret;
@@ -69,7 +91,8 @@ Camera* Camera::createOrthographic(float zoomX, float zoomY, float nearPlane, fl
 
 Camera* Camera::createOrthographicView(const Vec2& size, float nearPlane, float farPlane)
 {
-    auto ret = new Camera();
+    auto ret         = new Camera();
+    ret->_cameraMode = CameraMode::Ortho;
     ret->initOrthographicView(size, nearPlane, farPlane);
     ret->autorelease();
     return ret;
@@ -139,11 +162,9 @@ const Mat4& Camera::getViewMatrix() const
     if (memcmp(viewInv.m, _viewInv.m, count) != 0)
     {
         _viewProjectionDirty = true;
-#if defined(AX_ENABLE_3D)
-        _frustumDirty = true;
-#endif
-        _viewInv = viewInv;
-        _view    = viewInv.getInversed();
+        _frustumDirty        = true;
+        _viewInv             = viewInv;
+        _view                = viewInv.getInversed();
     }
     return _view;
 }
@@ -203,37 +224,20 @@ void Camera::setAdditionalProjection(const Mat4& mat)
     getViewProjectionMatrix();
 }
 
-void Camera::initDefault()
+void Camera::initClassic()
 {
-    auto& size = _director->getCanvasSize();
-    switch (_director->getProjection())
-    {
-    case Director::Projection::_2D:
-    {
-        _fieldOfView = 60.0F;
-        _nearPlane   = -1024.0F;
-        _farPlane    = 1024.0F;
-        initOrthographicView(size, _nearPlane, _farPlane);
-        break;
-    }
-
-    case Director::Projection::_3D:
-    {
-        float zeye   = _director->getZEye();
-        _fieldOfView = 60.0F;
-        _nearPlane   = 0.5F;
-        _farPlane    = zeye + size.height / 2.0f;
-        initPerspective(_fieldOfView, (float)size.width / size.height, _nearPlane, _farPlane);
-        Vec3 eye(size.width / 2.0f, size.height / 2.0f, zeye), center(size.width / 2.0f, size.height / 2.0f, 0.0f),
-            up(0.0f, 1.0f, 0.0f);
-        setPosition3D(eye);
-        lookAt(center, up);
-        _eyeZdistance = eye.z;
-        break;
-    }
-    default:
-        break;
-    }
+    // Classic mode only - calibrated perspective
+    auto& size   = _director->getCanvasSize();
+    float zeye   = _director->getZEye();
+    _fieldOfView = 60.0F;
+    _nearPlane   = 0.5F;
+    _farPlane    = zeye + size.height / 2.0f;
+    initPerspective(_fieldOfView, (float)size.width / size.height, _nearPlane, _farPlane);
+    Vec3 eye(size.width / 2.0f, size.height / 2.0f, zeye), center(size.width / 2.0f, size.height / 2.0f, 0.0f),
+        up(0.0f, 1.0f, 0.0f);
+    setPosition3D(eye);
+    lookAt(center, up);
+    _eyeZdistance = eye.z;
 
     setDepth(0);
 
@@ -244,16 +248,19 @@ void Camera::initDefault()
 void Camera::updateTransform()
 {
     auto& size = _director->getCanvasSize();
-    // create default camera
-    switch (_director->getProjection())
+    switch (_cameraMode)
     {
-    case Director::Projection::_2D:
+    case CameraMode::Ortho:
     {
         initOrthographicView(size, _nearPlane, _farPlane);
         break;
     }
-
-    case Director::Projection::_3D:
+    case CameraMode::Perspective:
+    {
+        initPerspective(_fieldOfView, (float)size.width / size.height, _nearPlane, _farPlane);
+        break;
+    }
+    case CameraMode::Classic:
     {
         float zeye = _director->getZEye();
         initPerspective(_fieldOfView, (float)size.width / size.height, _nearPlane, _farPlane);
@@ -262,8 +269,6 @@ void Camera::updateTransform()
         _eyeZdistance = eye.z;
         break;
     }
-    default:
-        break;
     }
 }
 
@@ -280,9 +285,7 @@ bool Camera::initPerspective(float fieldOfView, float aspectRatio, float nearPla
 
     Mat4::createPerspective(_fieldOfView, aspectRatio, _nearPlane, _farPlane, &_projection);
     _viewProjectionDirty = true;
-#if defined(AX_ENABLE_3D)
-    _frustumDirty = true;
-#endif
+    _frustumDirty        = true;
 
     return true;
 }
@@ -295,9 +298,7 @@ bool Camera::initOrthographic(float zoomX, float zoomY, float nearPlane, float f
     _farPlane  = farPlane;
     Mat4::createOrthographic(_zoom[0] * _zoomFactor, _zoom[1] * _zoomFactor, _nearPlane, _farPlane, &_projection);
     _viewProjectionDirty = true;
-#if defined(AX_ENABLE_3D)
-    _frustumDirty = true;
-#endif
+    _frustumDirty        = true;
 
     return true;
 }
@@ -395,7 +396,6 @@ Vec2 Camera::projectWorldToCanvas(const Vec3& src) const
     return screenPos;
 }
 
-#if defined(AX_ENABLE_3D)
 bool Camera::isVisibleInFrustum(const AABB* aabb) const
 {
     if (_frustumDirty)
@@ -405,7 +405,6 @@ bool Camera::isVisibleInFrustum(const AABB* aabb) const
     }
     return !_frustum.isOutOfFrustum(*aabb);
 }
-#endif
 
 float Camera::getDepthInView(const Mat4& transform) const
 {
@@ -437,14 +436,15 @@ void Camera::setZoom(float factor)
 
 void Camera::applyZoom()
 {
-    switch (_director->getProjection())
+    switch (_cameraMode)
     {
-    case ax::Director::Projection::_2D:
+    case CameraMode::Ortho:
     {
         Mat4::createOrthographic(_zoom[0] * _zoomFactor, _zoom[1] * _zoomFactor, _nearPlane, _farPlane, &_projection);
         break;
     }
-    case ax::Director::Projection::_3D:
+    case CameraMode::Perspective:
+    case CameraMode::Classic:
     {
         // Push the far plane farther the more we zoom out.
         if (_zoomFactorFarPlane * _zoomFactor > _farPlane)
@@ -463,8 +463,6 @@ void Camera::applyZoom()
         this->setPositionZ(_eyeZdistance * _zoomFactor);
         break;
     }
-    default:
-        break;
     }
 }
 
@@ -580,7 +578,6 @@ bool Camera::isBrushValid()
     return _clearBrush != nullptr && _clearBrush->isValid();
 }
 
-#if defined(AX_ENABLE_3D)
 Ray Camera::screenToRay(const Vec2& screenPoint) const
 {
     Vec3 nearP = deprojectScreenToWorld(Vec3(screenPoint.x, screenPoint.y, 0.0f));
@@ -589,7 +586,6 @@ Ray Camera::screenToRay(const Vec2& screenPoint) const
     dir.normalize();
     return Ray{nearP, dir};
 }
-#endif
 
 bool Camera::isWorldPointInRect(const Vec2& pt, const Mat4& w2l, const Rect& rect, Vec3* p)
 {

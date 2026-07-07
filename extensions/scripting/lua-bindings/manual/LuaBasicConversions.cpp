@@ -1918,7 +1918,7 @@ bool luaval_to_mesh_vertex_attrib(lua_State* L, int lo, ax::MeshVertexAttrib* re
 
         lua_pushstring(L, "type"); /* L: paramStack key */
         lua_gettable(L, lo);       /* L: paramStack paramStack[lo][key] */
-        ret->type = (rhi::VertexFormat)(int)lua_tonumber(L, -1);
+        ret->type = (rhi::VertexElementType)(int)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
         lua_pushstring(L, "vertexAttrib"); /* L: paramStack key */

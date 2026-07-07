@@ -81,8 +81,8 @@ void MouseEventTest::onMouseUp(PointerEvent* e)
 
 bool MouseEventTest::onMouseMove(PointerEvent* e)
 {
-    auto loc        = e->getLocation();
-    auto delta      = e->getDelta();
+    auto loc        = e->getWorldPoint();
+    auto delta      = (e->getWorldPoint() - e->getPrevWorldPoint());
     std::string str = fmt::format("MousePosition:({},{})\nMouseDelta:({},{})", loc.x, loc.y, delta.x, delta.y);
     _labelPosition->setString(str);
     return true;

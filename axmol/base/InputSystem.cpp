@@ -501,7 +501,7 @@ void InputSystem::setInteractive(bool interactive)
         state.pressedButtons = event->getPressedButtons();
         state.type           = event->getPointerType();
 
-        event->setPointerInfo(InputPhase::PointerCancel, event->getScreenLocation(), state);
+        event->setPointerInfo(InputPhase::PointerCancel, event->getPoint(), state);
         dispatchEvent(event);
         AX_SAFE_RELEASE(event);
     }
@@ -717,14 +717,16 @@ void InputSystem::onPlatformKeyboardWillShow(float rawX, float rawY, float rawWi
         keyboardPos  = nativeToScreen(keyboardPos);
 
         // Transform the relative screen size vector into World Space dimensions
-        ax::Vec2 worldSize = director->screenToWorld(keyboardSize) - director->screenToWorld(ax::Vec2::zero);
-        float worldW       = std::abs(worldSize.x);
-        float worldH       = std::abs(worldSize.y);
+        auto camera          = Camera::getDefaultCamera();
+        Vec3 nearWorldSize   = camera->deprojectScreenToWorld(Vec3(keyboardSize.x, keyboardSize.y, 0.0f));
+        Vec3 nearWorldOrigin = camera->deprojectScreenToWorld(Vec3(0.0f, 0.0f, 0.0f));
+        float worldW         = std::abs(nearWorldSize.x - nearWorldOrigin.x);
+        float worldH         = std::abs(nearWorldSize.y - nearWorldOrigin.y);
 
         // Transform the screen position to World Space and shift from Top-Left to Bottom-Left orientation
-        ax::Vec2 worldPos = director->screenToWorld(keyboardPos);
-        float worldX      = worldPos.x;
-        float worldY      = worldPos.y - worldH;
+        Vec3 nearWorldPos = camera->deprojectScreenToWorld(Vec3(keyboardPos.x, keyboardPos.y, 0.0f));
+        float worldX      = nearWorldPos.x;
+        float worldY      = nearWorldPos.y - worldH;
 
         return ax::Rect(worldX, worldY, worldW, worldH);
     };

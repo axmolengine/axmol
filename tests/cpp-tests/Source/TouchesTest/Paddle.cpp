@@ -83,8 +83,8 @@ bool Paddle::containsPointerLocation(PointerEvent* event)
 
 bool Paddle::onPointerDown(PointerEvent* event)
 {
-    AXLOGD("Paddle::onPointerDown id = {}, x = {}, y = {}", event->getPointerId(), event->getLocation().x,
-           event->getLocation().y);
+    AXLOGD("Paddle::onPointerDown id = {}, x = {}, y = {}", event->getPointerId(), event->getWorldPoint().x,
+           event->getWorldPoint().y);
 
     if (_state != kPaddleStateUngrabbed)
         return false;
@@ -108,12 +108,12 @@ void Paddle::onPointerMove(PointerEvent* event)
     if (_state != kPaddleStateGrabbed)
         return;
 
-    AXLOGD("Paddle::onPointerMove id = {}, x = {}, y = {}", event->getPointerId(), event->getLocation().x,
-           event->getLocation().y);
+    AXLOGD("Paddle::onPointerMove id = {}, x = {}, y = {}", event->getPointerId(), event->getWorldPoint().x,
+           event->getWorldPoint().y);
 
     // AXASSERT(_state == kPaddleStateGrabbed, "Paddle - Unexpected state!");
 
-    auto touchPoint = event->getLocation();
+    auto touchPoint = event->getWorldPoint();
 
     setPosition(Vec2(touchPoint.x, getPosition().y));
 }

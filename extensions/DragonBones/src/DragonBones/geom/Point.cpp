@@ -1,4 +1,4 @@
-﻿#include "Point.h"
+#include "Point.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 

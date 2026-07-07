@@ -29,6 +29,7 @@
  - Qt3D: http://qt-project.org/
  ****************************************************************************/
 #include "axmol/renderer/Material.h"
+#include "axmol/renderer/ProgramManager.h"
 #include "axmol/renderer/Technique.h"
 #include "axmol/renderer/Pass.h"
 #include "axmol/renderer/TextureCache.h"

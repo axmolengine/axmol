@@ -1,4 +1,4 @@
-﻿#include "CanvasData.h"
+#include "CanvasData.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 

@@ -30,6 +30,7 @@
 #include "axmol/renderer/Shaders.h"
 #include "axmol/base/Macros.h"
 #include "axmol/base/Environment.h"
+#include "axmol/platform/FileUtils.h"
 
 #include "xxhash/xxhash.h"
 

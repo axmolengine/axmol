@@ -38,7 +38,20 @@ This document provides system-level rules and context for AI coding assistants, 
 
 ---
 
-## 4. Guarded and High-Risk Areas
+## 4. Coding Standards
+
+### Cross-Platform Compatibility
+- Axmol is a **cross-platform game engine** that compiles on Linux, Windows, macOS, Android, iOS, and Web platforms.
+- Source code must remain portable across all target platforms at all times.
+
+### Language & Encoding
+- All comments must be written in **English** (`.h`, `.cpp`, `.inl`, `.mm`, `.java`, etc.).
+- Source code should use **ANSI** (plain ASCII) encoding where possible.
+- Special use cases (e.g., `Label` displaying Unicode text in test cases) may use **UTF-8** encoded string literals.
+- **No UTF-8 BOM** (`\xEF\xBB\xBF`) in any source file. The BOM triggers confusing compilation errors on Linux GCC with precompiled headers (`#pragma once` + `.gch`).
+- These rules also apply to `.json` files.
+
+## 5. Guarded and High-Risk Areas
 
 ### Third-Party Code (both branches)
 - Do not modify anything inside the `3rdparty/` directory unless explicitly instructed.
@@ -55,7 +68,7 @@ This document provides system-level rules and context for AI coding assistants, 
 
 ---
 
-## 5. Verification & Builds
+## 6. Verification & Builds
 
 ### Requirements
 - Use CMake out-of-tree builds for testing: `cmake -S . -B build`

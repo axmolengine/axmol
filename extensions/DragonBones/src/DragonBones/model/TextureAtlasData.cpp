@@ -1,4 +1,4 @@
-﻿#include "TextureAtlasData.h"
+#include "TextureAtlasData.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 

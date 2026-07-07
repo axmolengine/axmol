@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/3d/Frustum.h"
+#include "axmol/math/Frustum.h"
 #include "axmol/scene/Camera.h"
 
 namespace ax

@@ -955,21 +955,16 @@ void ScrollView::jumpToPercentBothDirection(const Vec2& percent)
 
 bool ScrollView::calculateCurrAndPrevPoints(PointerEvent* event, Vec3* currPt, Vec3* prevPt)
 {
-    if (event && event->hasRay())
-    {
-        const auto& currRay = event->getRay();
-        const auto& prevRay = event->getPreviousRay();
-        return currRay.has_value() && prevRay.has_value() &&
-               calculateRayPlaneHitInNode(currRay.value(), this, currPt) &&
-               calculateRayPlaneHitInNode(prevRay.value(), this, prevPt);
-    }
-
-    if (nullptr == _hittedByCamera || false == hitTestSelf(event->getLocation(), _hittedByCamera, currPt) ||
-        false == hitTestSelf(event->getPreviousLocation(), _hittedByCamera, prevPt))
-    {
+    if (!event)
         return false;
-    }
-    return true;
+
+    const Ray& currRay = event->getRay();
+    const Ray& prevRay = event->getPreviousRay();
+
+    if (prevRay.direction == Vec3())
+        return false;
+
+    return calculateRayPlaneHitInNode(currRay, this, currPt) && calculateRayPlaneHitInNode(prevRay, this, prevPt);
 }
 
 void ScrollView::gatherTouchMove(const Vec2& delta)
@@ -1162,19 +1157,19 @@ void ScrollView::interceptPointerEvent(Widget* sender, PointerEvent* event)
     }
     if (_direction == Direction::NONE)
         return;
-    Vec2 touchPoint = event->getLocation();
+    Vec2 touchPoint = event->getWorldPoint();
     switch (event->getPhase())
     {
     case InputPhase::PointerDown:
     {
         _isInterceptTouch    = true;
-        _pointerDownPosition = event->getLocation();
+        _pointerDownPosition = event->getWorldPoint();
         handlePressLogic(event);
     }
     break;
     case InputPhase::PointerMove:
     {
-        _pointerMovePosition = event->getLocation();
+        _pointerMovePosition = event->getWorldPoint();
         // calculates move offset in points
         float offsetInInch = 0;
         switch (_direction)
@@ -1204,7 +1199,7 @@ void ScrollView::interceptPointerEvent(Widget* sender, PointerEvent* event)
     case InputPhase::PointerCancel:
     case InputPhase::PointerUp:
     {
-        _pointerUpPosition = event->getLocation();
+        _pointerUpPosition = event->getWorldPoint();
         handleReleaseLogic(event);
         _isInterceptTouch = false;
     }

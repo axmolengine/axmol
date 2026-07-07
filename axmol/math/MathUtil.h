@@ -24,12 +24,9 @@
 #pragma once
 
 #include <cmath>
+#include "axmol/base/Types.h"
 #include "axmol/math/MathBase.h"
 
-namespace ax
-{
-struct V3F_T2F_C4B;
-}
 
 /**
  * @addtogroup base
@@ -38,7 +35,11 @@ struct V3F_T2F_C4B;
 
 NS_AX_MATH_BEGIN
 
+class Mat4;
+class Vec3;
 class Vec4;
+struct V3F_T2F_C4B;
+class Renderer;
 
 /**
  * Defines a math utility class.
@@ -130,8 +131,9 @@ private:
 
     static void crossVec3(const float* v1, const float* v2, float* dst);
 
-    static void transformVertices(V3F_T2F_C4B* dst, const V3F_T2F_C4B* src, size_t count, const Mat4& transform);
     static void transformIndices(uint16_t* dst, const uint16_t* src, size_t count, uint16_t offset);
+
+    static void transformVertices(V3F_T2F_C4B* dst, const V3F_T2F_C4B* src, size_t count, const Mat4& transform);
 };
 
 NS_AX_MATH_END

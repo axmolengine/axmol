@@ -26,21 +26,14 @@
 
 using namespace ax;
 
-Bug12847Layer::Bug12847Layer()
-{
-    _projection = Director::getInstance()->getProjection();
-}
+Bug12847Layer::Bug12847Layer() {}
 
-Bug12847Layer::~Bug12847Layer()
-{
-    Director::getInstance()->setProjection(_projection);
-}
+Bug12847Layer::~Bug12847Layer() {}
 
 bool Bug12847Layer::init()
 {
     if (BugsTestBase::init())
     {
-        Director::getInstance()->setProjection(Director::Projection::_2D);
         auto _visibleSize = Director::getInstance()->getVisibleSize();
 
         // Create with Sprite
