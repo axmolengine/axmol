@@ -43,7 +43,7 @@ env:
   LLVM_VER: '21'
 
 jobs:
-  clang-format-lint:
+  source-tidy:
     runs-on: ubuntu-latest
     # Run if:
     # - workflow_dispatch
@@ -142,6 +142,11 @@ jobs:
         repository: ${{ steps.pp.outputs.head_repo }}
         ref: ${{ steps.pp.outputs.head_ref }}
         token: ${{ secrets.AX_BOT_TOKEN || github.token }}
+    
+    - name: Lint Axmol source files (UTF-8 BOM & cstd headers)
+      if: ${{ steps.pp.outputs.should_run == 'true' }}
+      shell: pwsh
+      run: ./tools/cmdline/source-lint.ps1
 
     - name: Install llvm clang-format
       if: ${{ steps.pp.outputs.should_run == 'true' }}
@@ -150,7 +155,7 @@ jobs:
         # Install clang-format
         ./1k/llvm.ps1 install $env:LLVM_VER clang-format
 
-    - name: Formating sources of Axmol
+    - name: Format Axmol source files
       if: ${{ steps.pp.outputs.should_run == 'true' }}
       shell: pwsh
       run: |
@@ -172,11 +177,6 @@ jobs:
         else {
           Write-Host "✅ clang-format check passed: No formatting changes needed."
         }
-
-    - name: Check sources (BOM, cstd-header)
-      if: ${{ steps.pp.outputs.should_run == 'true' }}
-      shell: pwsh
-      run: ./tools/cmdline/check-sources.ps1
 
     - name: Prepare for create pull request
       if: ${{ steps.pp.outputs.should_run == 'true' && steps.pp.outputs.lint_mode == 'create_pr' }}
