@@ -119,14 +119,17 @@ static bool pointerHitTest(PointerEvent* event, const Camera* camera, PointerEve
         event->setRay(camera->screenToRay(event->getPoint()));
 
     Vec3 hitPoint;
-    bool hitted;
+    bool hitted{false};
     if (listener->onPointerHitTest)
     {
         hitted = listener->onPointerHitTest(event, &hitPoint);
     }
     else
     {
-        hitted = target->onPointerHitTest(event, &hitPoint);
+        if (target)
+            hitted = target->onPointerHitTest(event, &hitPoint);
+        else
+            AXLOGW("fixed priority pointer listener should have onPointerHitTest callback");
     }
 
     if (hitted)
