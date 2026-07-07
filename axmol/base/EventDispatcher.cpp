@@ -1173,10 +1173,6 @@ void EventDispatcher::dispatchUncapturedPointerEvent(PointerEvent* event, Pointe
 
             if (captured && listener && listener->isAttached())
             {
-                if (!event->getCamera())
-                {
-                    AXLOGE("no scene graph listener");
-                }
                 const auto captureBits = makePointerCaptureBits(event);
                 auto iter              = _capturedPointerListeners.find(captureId);
                 if (iter == _capturedPointerListeners.end() || !iter->second.listener ||
