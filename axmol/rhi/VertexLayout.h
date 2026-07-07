@@ -78,7 +78,7 @@ struct AX_DLL InputBindingDesc
     char semantic[32]        = {};  ///< semantic is used in d3d11
     unsigned int offset      = 0;
     int index                = 0;  ///< index is used in metal
-    VertexElementType format      = VertexElementType::INT3;
+    VertexElementType format = VertexElementType::INT3;
     bool needToBeNormallized = false;
     uint8_t instanceStepRate = 0;
 };

@@ -27,7 +27,6 @@
 #include "axmol/base/Types.h"
 #include "axmol/math/MathBase.h"
 
-
 /**
  * @addtogroup base
  * @{
