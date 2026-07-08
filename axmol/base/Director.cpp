@@ -601,6 +601,11 @@ Vec2 Director::getCanvasSizeInPixels() const
     return _canvasSizeInPoints * _contentScaleFactor;
 }
 
+Vec2 Director::screenToCanvas(const Vec2& screenPoint) const
+{
+    return Vec2(screenPoint.x, getCanvasSize().height - screenPoint.y);
+}
+
 Vec2 Director::getVisibleSize() const
 {
     if (_renderView)

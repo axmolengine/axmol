@@ -197,7 +197,7 @@ public:
      * @note This position is in the platform/native screen coordinate space and
      *       has not been transformed by any world or UI layout conversions.
      *       If your code expects scaled or world coordinates, convert using the
-     *       appropriate helper (for example, nativeToScreen / screenToWorld).
+     *       appropriate helper (for example, nativeToScreen / screenToCanvas).
      */
     Vec2 getLastPointerPosition() const { return _lastPointerPosition; }
 

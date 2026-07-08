@@ -77,8 +77,8 @@ struct InputState
                     static_cast<float>(point.y * [self contentScaleFactor])};
         auto director   = ax::Director::getInstance();
         auto renderView = director->getRenderView();
-        // convert axmol screen to world coordinate
-        pt = director->screenToWorld(pt);
+        // convert axmol screen to 2d world coordinate
+        pt = director->screenToCanvas(pt);
 
         bool keep = inputDisp->dispatchHitTestWithIME(pt);
         if (keep)

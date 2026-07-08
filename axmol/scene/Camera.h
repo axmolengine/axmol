@@ -232,7 +232,7 @@ public:
      * the new system's top-left origin (Y-down) to the underlying graphics API's (OpenGL/Vulkan)
      * bottom-left origin (Y-up). Callers do not need to manually flip the Y-axis.
      *
-     * @see Director::screenToWorld
+     * @see Director::screenToCanvas
      */
     Ray screenToRay(const Vec2& screenPoint) const;
 

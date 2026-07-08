@@ -308,8 +308,8 @@ Rect RenderView::getSafeAreaRect() const
         // 3. Convert standard screen pixels to standard Engine Target space via Director
         auto* director = ax::Director::getInstance();
 
-        leftTop     = director->screenToWorld(leftTop);
-        rightBottom = director->screenToWorld(rightBottom);
+        leftTop     = director->screenToCanvas(leftTop);
+        rightBottom = director->screenToCanvas(rightBottom);
 
         // 4. Adjust points to make them inside design resolution
         float minX = std::max(leftTop.x, 0.0f);

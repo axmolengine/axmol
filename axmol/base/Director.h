@@ -248,6 +248,9 @@ public:
     /** Returns the size of the render view in pixels. */
     Vec2 getCanvasSizeInPixels() const;
 
+    /** Converts a screen point (top-left origin) to canvas point (bottom-left origin). */
+    Vec2 screenToCanvas(const Vec2& screenPoint) const;
+
     /**
      * Returns visible size of the render view in points.
      * The value is equal to `Director::getCanvasSize()` if don't invoke `RenderView::setDesignResolutionSize()`.
