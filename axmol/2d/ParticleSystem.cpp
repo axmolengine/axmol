@@ -2337,8 +2337,8 @@ void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskId,
 
     iter->second = desc;
 
-    AXLOGD("Particle emission mask '{}' baked ({}x{}), {} samples generated taking {:.2f}mb of memory.",
-           (unsigned int)htonl(fourccId), w, h, desc.points.size(), desc.points.size() * 8 / 1e+6);
+    AXLOGD("Particle emission mask '{}' baked ({}x{}), {} samples generated taking {:.2f}mb of memory.", fourccId, w, h,
+           desc.points.size(), desc.points.size() * 8 / 1e+6);
 }
 
 const ParticleEmissionMaskDesc& ParticleEmissionMaskCache::getEmissionMask(uint32_t fourccId)

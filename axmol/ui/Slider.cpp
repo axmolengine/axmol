@@ -499,6 +499,48 @@ bool Slider::hitTestSelf(const ax::Vec2& pt, const Camera* camera, Vec3* /*p*/) 
     return camera->isWorldPointInRect(pt, w2l, rect) || camera->isWorldPointInRect(pt, barW2l, sliderBarRect);
 }
 
+bool Slider::onPointerHitTest(PointerEvent* event, Vec3* outHitPoint)
+{
+    if (!event)
+        return false;
+
+    const Ray& ray = event->getRay();
+
+    // Test slid ball
+    {
+        Ray localRay(ray);
+        localRay.transform(_slidBallNormalRenderer->getWorldToNodeTransform());
+        if (localRay.direction.z != 0.0f)
+        {
+            float t = -localRay.origin.z / localRay.direction.z;
+            if (t >= 0.0f)
+            {
+                Vec3 hitPt = localRay.origin + t * localRay.direction;
+                if (Rect(Vec2(), _slidBallNormalRenderer->getContentSize()).containsPoint(Vec2(hitPt.x, hitPt.y)))
+                    return Widget::onPointerHitTest(event, outHitPoint);
+            }
+        }
+    }
+
+    // Test bar
+    {
+        Ray localRay(ray);
+        localRay.transform(_barRenderer->getWorldToNodeTransform());
+        if (localRay.direction.z != 0.0f)
+        {
+            float t = -localRay.origin.z / localRay.direction.z;
+            if (t >= 0.0f)
+            {
+                Vec3 hitPt = localRay.origin + t * localRay.direction;
+                if (Rect(Vec2(), _barRenderer->getContentSize()).containsPoint(Vec2(hitPt.x, hitPt.y)))
+                    return Widget::onPointerHitTest(event, outHitPoint);
+            }
+        }
+    }
+
+    return false;
+}
+
 bool Slider::onPointerDown(PointerEvent* event)
 {
     bool pass = Widget::onPointerDown(event);
@@ -514,7 +556,7 @@ void Slider::onPointerMove(PointerEvent* event)
 {
     if (!_hitted)
         return;
-    _pointerMovePosition = event->getLocation();
+    _pointerMovePosition = event->getWorldPoint();
     setPercent(getPercentWithBallPos(_pointerMovePosition));
 }
 

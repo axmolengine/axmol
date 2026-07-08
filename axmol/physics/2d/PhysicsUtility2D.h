@@ -2,6 +2,7 @@
 
 #include "axmol/math/Math.h"
 #include "box2d/box2d.h"
+#include "axmol/physics/PhysicsConsts.h"
 
 namespace ax
 {

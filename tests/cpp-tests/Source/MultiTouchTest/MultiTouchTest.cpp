@@ -96,7 +96,7 @@ bool MultiTouchTest::onPointerDown(PointerEvent* event)
     if (s_map.find(event->getPointerId()) != s_map.end())
         return false;
 
-    auto location   = event->getLocation();
+    auto location   = event->getWorldPoint();
     auto touchPoint = TouchPoint::touchPointWithParent(this, location, *s_TouchColors[event->getPointerId() % 5]);
 
     addChild(touchPoint);
@@ -109,7 +109,7 @@ bool MultiTouchTest::onPointerDown(PointerEvent* event)
 void MultiTouchTest::onPointerMove(PointerEvent* event)
 {
     auto pTP      = s_map.at(event->getPointerId());
-    auto location = event->getLocation();
+    auto location = event->getWorldPoint();
     if (pTP)
     {
         pTP->updatePosition(location);

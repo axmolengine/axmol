@@ -48,9 +48,9 @@ enum
     kDefaultPadding = 5,
 };
 
-static bool hitTestNodeWithPointer(PointerEvent* event, const Camera* camera, Node* node, Vec3* outWorldHit)
+static bool hitTestNodeWithPointer(PointerEvent* event, Node* node, Vec3* outWorldHit)
 {
-    if (!event || !camera || !node)
+    if (!event || !node)
         return false;
 
     Rect rect;
@@ -58,28 +58,23 @@ static bool hitTestNodeWithPointer(PointerEvent* event, const Camera* camera, No
     if (rect.size.width <= 0.0f || rect.size.height <= 0.0f)
         return false;
 
-    if (event->hasRay())
-    {
-        Ray localRay(event->getRay().value());
-        localRay.transform(node->getWorldToNodeTransform());
+    Ray localRay(event->getRay());
+    localRay.transform(node->getWorldToNodeTransform());
 
-        if (std::abs(localRay.direction.z) <= std::numeric_limits<float>::epsilon())
-            return false;
+    if (std::abs(localRay.direction.z) <= std::numeric_limits<float>::epsilon())
+        return false;
 
-        const float t = -localRay.origin.z / localRay.direction.z;
-        if (t < 0.0f)
-            return false;
+    const float t = -localRay.origin.z / localRay.direction.z;
+    if (t < 0.0f)
+        return false;
 
-        Vec3 localHit = localRay.origin + t * localRay.direction;
-        if (!rect.containsPoint(Vec2(localHit.x, localHit.y)))
-            return false;
+    Vec3 localHit = localRay.origin + t * localRay.direction;
+    if (!rect.containsPoint(Vec2(localHit.x, localHit.y)))
+        return false;
 
-        if (outWorldHit)
-            node->getNodeToWorldTransform().transformPoint(localHit, outWorldHit);
-        return true;
-    }
-
-    return camera->isWorldPointInRect(event->getLocation(), node->getWorldToNodeTransform(), rect, outWorldHit);
+    if (outWorldHit)
+        node->getNodeToWorldTransform().transformPoint(localHit, outWorldHit);
+    return true;
 }
 
 //
@@ -259,12 +254,12 @@ void Menu::removeChild(Node* child, bool cleanup)
 
 // Menu - Events
 
-bool Menu::onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* outHitPoint)
+bool Menu::onPointerHitTest(PointerEvent* event, Vec3* outHitPoint)
 {
-    if (!event || !camera)
+    if (!event)
         return false;
 
-    const bool isControllerRay = event->getPointerType() == PointerType::Controller && event->hasRay();
+    const bool isControllerRay = event->getPointerType() == PointerType::Controller;
     if (!event->isPrimaryPressed() && !isControllerRay)
         return false;
 
@@ -277,7 +272,7 @@ bool Menu::onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* out
             return false;
     }
 
-    _pressedItem = this->hitTestItem(event, camera, outHitPoint);
+    _pressedItem = this->hitTestItem(event, outHitPoint);
     return _pressedItem != nullptr;
 }
 
@@ -308,10 +303,10 @@ bool Menu::onPointerDown(PointerEvent* event)
 
 void Menu::onPointerMove(PointerEvent* event)
 {
-    if (_state != Menu::State::TRACKING_TOUCH || !_selectedWithCamera || !_pressedItem)
+    if (_state != Menu::State::TRACKING_TOUCH || !_pressedItem)
         return;
 
-    MenuItem* currentItem = this->hitTestItem(event, _selectedWithCamera, nullptr);
+    MenuItem* currentItem = this->hitTestItem(event, nullptr);
 
     if (currentItem == _pressedItem)
     {
@@ -611,7 +606,7 @@ void Menu::alignItemsInRowsWithArray(const ValueVector& columns)
     }
 }
 
-MenuItem* Menu::hitTestItem(PointerEvent* event, const Camera* camera, Vec3* outHitPoint)
+MenuItem* Menu::hitTestItem(PointerEvent* event, Vec3* outHitPoint)
 {
     for (const auto& item : _children)
     {
@@ -621,7 +616,7 @@ MenuItem* Menu::hitTestItem(PointerEvent* event, const Camera* camera, Vec3* out
             continue;
         }
 
-        if (hitTestNodeWithPointer(event, camera, child, outHitPoint))
+        if (hitTestNodeWithPointer(event, child, outHitPoint))
         {
             return child;
         }

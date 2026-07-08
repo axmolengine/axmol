@@ -509,22 +509,23 @@ ax::Vec3 Terrain::getIntersectionPoint(const Ray& ray) const
     }
 }
 
-bool Terrain::onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* outHitPoint)
+bool Terrain::onPointerHitTest(PointerEvent* event, Vec3* outHitPoint)
 {
-    if (!event || !camera || !isVisible())
+    if (!event || !isVisible())
         return false;
 
-    Ray ray = event->hasRay() ? event->getRay().value() : camera->screenToRay(event->getScreenLocation());
+    Ray ray = event->getRay();
 
-    if (event->hasRay())
+    if (event->getPointerType() == PointerType::Controller)
     {
         // The current VR ray is generated in the default camera space; terrain hit testing runs in the hit camera
         // space.
         const auto sourceCamera = Camera::getDefaultCamera();
-        if (sourceCamera && sourceCamera != camera)
+        const auto hitCamera    = event->getCamera();
+        if (sourceCamera && hitCamera && sourceCamera != hitCamera)
         {
             ray.transform(sourceCamera->getWorldToNodeTransform());
-            ray.transform(camera->getNodeToWorldTransform());
+            ray.transform(hitCamera->getNodeToWorldTransform());
         }
     }
     Vec3 hitPoint;

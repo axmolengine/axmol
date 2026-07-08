@@ -1,4 +1,4 @@
-﻿#include "Effekseer.Client.h"
+#include "Effekseer.Client.h"
 
 #if (defined(__EFFEKSEER_NETWORK_ENABLED__))
 

@@ -61,7 +61,7 @@ function BillBoardTest:init()
     listener:registerScriptHandler(function(event)
         if event:isPrimaryPressed() then
             local touch = event
-            local location = event:getLocation()
+            local location = event:getWorldPoint()
             local previousLocation = event:getPreviousLocation()
             local newPos = ax.pSub(previousLocation, location)
 

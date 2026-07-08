@@ -1,4 +1,4 @@
-﻿#include "Effekseer.EffectNodeSprite.h"
+#include "Effekseer.EffectNodeSprite.h"
 
 #include "Effekseer.Effect.h"
 #include "Effekseer.EffectImplemented.h"

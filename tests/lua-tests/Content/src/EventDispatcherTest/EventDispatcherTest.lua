@@ -213,7 +213,7 @@ function TouchableSpriteTest:onEnter()
     local function onTouchBegan(event)
         local target = event:getCurrentTarget()
 
-        local locationInNode = target:convertToNodeSpace(event:getLocation())
+        local locationInNode = target:convertToNodeSpace(event:getWorldPoint())
         local s = target:getContentSize()
         local rect = ax.rect(0, 0, s.width, s.height)
 
@@ -319,7 +319,7 @@ function TouchableSpriteWithFixedPriority:onEnter()
     local eventDispatcher = self:getEventDispatcher()
 
     local function onTouchBegan(event)
-        local locationInNode = self:convertToNodeSpace(event:getLocation())
+        local locationInNode = self:convertToNodeSpace(event:getWorldPoint())
         local s = self:getContentSize()
         local rect = ax.rect(0, 0, s.width, s.height)
 
@@ -468,7 +468,7 @@ function RemoveListenerWhenDispatchingTest:onEnter()
     self:addChild(sprite1, 10)
 
     local function onTouchBegan(event)
-        local locationInNode = sprite1:convertToNodeSpace(event:getLocation())
+        local locationInNode = sprite1:convertToNodeSpace(event:getWorldPoint())
         local s = sprite1:getContentSize()
         local rect = ax.rect(0, 0, s.width, s.height)
 
@@ -802,7 +802,7 @@ function RemoveAndRetainNodeTest:onEnter()
 
     local function onTouchBegan(event)
         local target = event:getCurrentTarget()
-        local locationInNode = target:convertToNodeSpace(event:getLocation())
+        local locationInNode = target:convertToNodeSpace(event:getWorldPoint())
         local s = target:getContentSize()
         local rect = ax.rect(0, 0, s.width, s.height)
 
@@ -1025,7 +1025,7 @@ function GlobalZTouchTest:onEnter()
     local function onTouchBegan(event)
         local target = event:getCurrentTarget()
 
-        local locationInNode = target:convertToNodeSpace(event:getLocation())
+        local locationInNode = target:convertToNodeSpace(event:getWorldPoint())
         local s = target:getContentSize()
         local rect = ax.rect(0, 0, s.width, s.height)
 
@@ -1125,12 +1125,12 @@ end
 function StopPropagationTest:onEnter()
 
     local function onTouchBegan(event)
-        if not self:isPointInTopHalfAreaOfScreen(event:getLocation()) then
+        if not self:isPointInTopHalfAreaOfScreen(event:getWorldPoint()) then
             return false
         end
         local target = event:getCurrentTarget()
         assert(target:getTag() == TAG_BLUE_SPRITE, "Yellow blocks shouldn't response event.")
-        if self:isPointInNode(event:getLocation(), target) then
+        if self:isPointInNode(event:getWorldPoint(), target) then
             target:setOpacity(180)
             return true
         end
@@ -1148,26 +1148,26 @@ function StopPropagationTest:onEnter()
     touchOneByOneListener:registerScriptHandler(onTouchEnded,ax.Handler.EVENT_POINTER_UP )
 
     local function onTouchesBegan(event)
-        if self:isPointInTopHalfAreaOfScreen(event:getLocation()) then
+        if self:isPointInTopHalfAreaOfScreen(event:getWorldPoint()) then
             return
         end
         local target = event:getCurrentTarget()
         assert(target:getTag() == TAG_BLUE_SPRITE2, "Yellow blocks shouldn't response event.")
 
-        if self:isPointInNode(event:getLocation(), target) then
+        if self:isPointInNode(event:getWorldPoint(), target) then
             target:setOpacity(180)
         end
         event:stopPropagation()
     end
 
     local function onTouchesEnd(event)
-        if self:isPointInTopHalfAreaOfScreen(event:getLocation()) then
+        if self:isPointInTopHalfAreaOfScreen(event:getWorldPoint()) then
             return
         end
         local target = event:getCurrentTarget()
         assert(target:getTag() == TAG_BLUE_SPRITE2, "Yellow blocks shouldn't response event.")
 
-        if self:isPointInNode(event:getLocation(), target) then
+        if self:isPointInNode(event:getWorldPoint(), target) then
             target:setOpacity(255)
         end
         event:stopPropagation()

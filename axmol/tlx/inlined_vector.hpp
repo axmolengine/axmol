@@ -22,6 +22,7 @@
 #pragma once
 #include <stdint.h>
 #include <algorithm>
+#include <limits>
 #include "yasio/tlx/memory.hpp"
 
 namespace tlx

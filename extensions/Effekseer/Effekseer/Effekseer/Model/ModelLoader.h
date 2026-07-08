@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_MODELLOADER_H__
 #define __EFFEKSEER_MODELLOADER_H__
 

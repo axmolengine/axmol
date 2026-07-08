@@ -112,5 +112,25 @@
                 "proj.ios_mac/ios/targets/ios/LaunchScreenBackgroundPortrait.png"
             ]
         }
+    ],
+    "do_mode_2d": [
+        {
+            "action": "rep",
+            "pattern": "(class MainScene : public ax::Scene\\s*\\{)",
+            "to": "`$1\npublic:\n    ax::CameraMode getDefaultCameraMode() const override { return ax::CameraMode::Ortho; }",
+            "files": ["Source/MainScene.h"]
+        }
+    ],
+    "do_mode_3d": [
+        {
+            "action": "cp",
+            "from": "$env:AX_ROOT/templates/cpp/3d/Source/MainScene.h",
+            "to": "${projectDir}/Source/MainScene.h"
+        },
+        {
+            "action": "cp",
+            "from": "$env:AX_ROOT/templates/cpp/3d/Source/MainScene.cpp",
+            "to": "${projectDir}/Source/MainScene.cpp"
+        }
     ]
 }

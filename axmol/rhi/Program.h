@@ -32,6 +32,7 @@
 #include "axmol/rhi/Buffer.h"
 #include "axmol/tlx/hlookup.hpp"
 #include "axmol/tlx/inlined_vector.hpp"
+#include "axmol/tlx/vector.hpp"
 
 #include <functional>
 #include <vector>
@@ -258,4 +259,6 @@ protected:
 // end of _rhi group
 /// @}
 }  // namespace rhi
+
+using Program = rhi::Program;
 }  // namespace ax

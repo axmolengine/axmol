@@ -144,7 +144,7 @@ function Physics3DTestDemo:onEnter()
             end
 
             if event ~= nil then
-                local location = event:getScreenLocation()
+                local location = event:getPoint()
                 local nearP = ax.vec3(location.x, location.y, -1.0)
                 local farP = ax.vec3(location.x, location.y, 1.0)
                 nearP = self._camera:deprojectScreenToWorld(nearP)
@@ -255,7 +255,7 @@ function Joint3DDemo:onPickBegan(event)
         return false
     end
 
-    local location = event:getScreenLocation()
+    local location = event:getPoint()
     local nearP = ax.vec3(location.x, location.y, 0.0)
     local farP = ax.vec3(location.x, location.y, 1.0)
 
@@ -291,7 +291,7 @@ function Joint3DDemo:extend()
 
     listener:registerScriptHandler(function(event)
         if self._constraint ~= nil and event ~= nil then
-            local location = event:getScreenLocation()
+            local location = event:getPoint()
             local nearP = ax.vec3(location.x, location.y, 0.0)
             local farP = ax.vec3(location.x, location.y, 1.0)
 
@@ -330,7 +330,7 @@ function Joint3DDemo:extend()
         end
 
         if event ~= nil then
-            local location = event:getScreenLocation()
+            local location = event:getPoint()
             local nearP = ax.vec3(location.x, location.y, -1.0)
             local farP = ax.vec3(location.x, location.y, 1.0)
             nearP = self._camera:deprojectScreenToWorld(nearP)

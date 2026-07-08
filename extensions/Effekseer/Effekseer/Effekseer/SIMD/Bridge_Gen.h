@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_SIMD_BRIDGE_GEN_H__
 #define __EFFEKSEER_SIMD_BRIDGE_GEN_H__
 

@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_MATH_H__
 #define __EFFEKSEER_MATH_H__
 

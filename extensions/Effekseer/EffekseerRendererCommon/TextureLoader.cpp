@@ -1,4 +1,4 @@
-﻿#include "TextureLoader.h"
+#include "TextureLoader.h"
 
 #ifndef __DISABLED_DEFAULT_TEXTURE_LOADER__
 #include "EffekseerRenderer.DDSTextureLoader.h"

@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_TEXTURELOADER_H__
 #define __EFFEKSEER_TEXTURELOADER_H__
 

@@ -5,7 +5,6 @@ set(_AX_RENDERER_HEADER
   renderer/Material.h
   renderer/MeshCommand.h
   renderer/Pass.h
-  renderer/PipelineDesc.h
   renderer/QuadCommand.h
   renderer/RenderCommand.h
   renderer/RenderCommandPool.h

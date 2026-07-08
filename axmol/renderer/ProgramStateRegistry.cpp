@@ -1,4 +1,5 @@
 #include "axmol/renderer/ProgramStateRegistry.h"
+#include "axmol/renderer/ProgramManager.h"
 
 namespace ax
 {

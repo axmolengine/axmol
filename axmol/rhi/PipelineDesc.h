@@ -34,19 +34,24 @@
 #include <string>
 
 /**
- * @addtogroup renderer
+ * @addtogroup rhi
  * @{
  */
 namespace ax
 {
-
+namespace rhi
+{
 struct PipelineDesc
 {
-    rhi::ProgramState* programState{nullptr};
-    rhi::VertexLayout* vertexLayout{nullptr};
-    rhi::BlendDesc blendDesc;
+    ProgramState* programState{nullptr};
+    VertexLayout* vertexLayout{nullptr};
+    BlendDesc blendDesc;
 };
+}  // namespace rhi
 
-// end of renderer group
+// end of rhi group
 /// @}
+
+using PipelineDesc = rhi::PipelineDesc;
+
 }  // namespace ax

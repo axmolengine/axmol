@@ -93,8 +93,6 @@ public:
     /** Director will trigger an event after set next scene. */
     static std::string_view EVENT_AFTER_SET_NEXT_SCENE;
 
-    /** Director will trigger an event when projection type is changed. */
-    static std::string_view EVENT_PROJECTION_CHANGED;
     /** Director will trigger an event before Schedule::update() is invoked. */
     static std::string_view EVENT_BEFORE_UPDATE;
     /** Director will trigger an event after Schedule::update() is invoked. */
@@ -117,24 +115,6 @@ public:
     static std::string_view EVENT_BEFORE_GFX_DROP;
     /** Director will trigger an event after dropping the graphics subsystem */
     static std::string_view EVENT_AFTER_GFX_DROP;
-
-    /**
-     * @brief Possible projection types used by the director.
-     */
-    enum class Projection
-    {
-        /// Sets a 2D projection (orthogonal projection).
-        _2D,
-
-        /// Sets a 3D projection with a fovy=60, znear=0.5f and zfar=1500.
-        _3D,
-
-        /// It calls "updateProjection" on the projection delegate.
-        CUSTOM,
-
-        /// Default projection is 3D projection.
-        DEFAULT = _3D,
-    };
 
     /**
      * @brief Defines the execution timing for asynchronous tasks dispatched to the main execution thread.
@@ -229,14 +209,6 @@ public:
     /** How many frames were called since the director started */
     unsigned int getTotalFrames() { return _totalFrames; }
 
-    /** Gets an projection.
-     * @since v0.8.2
-     * @lua NA
-     */
-    Projection getProjection() { return _projection; }
-    /** Sets projection. */
-    void setProjection(Projection projection);
-
     /** Sets the viewport.*/
     void setViewport();
 
@@ -276,6 +248,9 @@ public:
     /** Returns the size of the render view in pixels. */
     Vec2 getCanvasSizeInPixels() const;
 
+    /** Converts a screen point (top-left origin) to canvas point (bottom-left origin). */
+    Vec2 screenToCanvas(const Vec2& screenPoint) const;
+
     /**
      * Returns visible size of the render view in points.
      * The value is equal to `Director::getCanvasSize()` if don't invoke `RenderView::setDesignResolutionSize()`.
@@ -289,19 +264,6 @@ public:
      * Returns safe area rectangle of the render view in points.
      */
     Rect getSafeAreaRect() const;
-
-    /**
-     * Converts a point from screen coordinates to the rendering 2d-coordinate system.
-     * Useful for mapping (multi)touch input to the current scene layout,
-     * taking into account orientation (portrait or landscape) and viewport settings.
-     */
-    Vec2 screenToWorld(const Vec2& point);
-
-    /**
-     * Converts an rendering 2d-coordinate to a screen coordinate.
-     * Useful to convert node points to window points for calls such as glScissor.
-     */
-    Vec2 worldToScreen(const Vec2& point);
 
     /**
      * Gets the distance between camera and near clipping frame.
@@ -639,7 +601,6 @@ protected:
      @since v3.0
      */
     EventDispatcher* _eventDispatcher    = nullptr;
-    CustomEvent* _eventProjectionChanged = nullptr;
     CustomEvent* _eventBeforeDraw        = nullptr;
     CustomEvent* _eventAfterDraw         = nullptr;
     CustomEvent* _eventAfterVisit        = nullptr;
@@ -703,9 +664,6 @@ protected:
 
     /* whether or not the next delta time will be zero */
     bool _nextDeltaTimeZero = false;
-
-    /* projection used */
-    Projection _projection = Projection::DEFAULT;
 
     /* canvas size in points */
     Vec2 _canvasSizeInPoints = Vec2::zero;

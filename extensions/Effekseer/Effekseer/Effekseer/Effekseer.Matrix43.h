@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_MATRIX43_H__
 #define __EFFEKSEER_MATRIX43_H__
 

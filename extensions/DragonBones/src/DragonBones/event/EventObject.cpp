@@ -1,4 +1,4 @@
-﻿#include "EventObject.h"
+#include "EventObject.h"
 #include "../model/UserData.h"
 #include "../armature/Armature.h"
 

@@ -58,11 +58,11 @@ rhi::ProgramState* initPipelineDesc(ax::CustomCommand& command,
     // set custom vertexLayout according to V2F_T2F_C4F structure
     VertexLayoutDesc desc = axvlm->allocateVertexLayoutDesc();
     desc.startLayout(3);
-    desc.addAttrib("a_position", program->getVertexInputDesc(rhi::VertexInputKind::POSITION), rhi::VertexFormat::FLOAT2,
-                   0, false);
-    desc.addAttrib("a_texCoord", program->getVertexInputDesc(rhi::VertexInputKind::TEXCOORD), rhi::VertexFormat::FLOAT2,
-                   offsetof(V2F_T2F_C4F, texCoord), false);
-    desc.addAttrib("a_color", program->getVertexInputDesc(rhi::VertexInputKind::COLOR), rhi::VertexFormat::FLOAT4,
+    desc.addAttrib("a_position", program->getVertexInputDesc(rhi::VertexInputKind::POSITION),
+                   rhi::VertexElementType::FLOAT2, 0, false);
+    desc.addAttrib("a_texCoord", program->getVertexInputDesc(rhi::VertexInputKind::TEXCOORD),
+                   rhi::VertexElementType::FLOAT2, offsetof(V2F_T2F_C4F, texCoord), false);
+    desc.addAttrib("a_color", program->getVertexInputDesc(rhi::VertexInputKind::COLOR), rhi::VertexElementType::FLOAT4,
                    offsetof(V2F_T2F_C4F, color), false);
     desc.endLayout();
 

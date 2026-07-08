@@ -21,7 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "axmol/3d/Ray.h"
+#include "axmol/math/Ray.h"
 
 namespace ax
 {

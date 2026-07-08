@@ -285,7 +285,7 @@ bool PhysicsDemo::onPointerDown(PointerEvent* event)
 {
     _isPressed = true;
 
-    auto location = event->getLocation();
+    auto location = event->getWorldPoint();
     auto collider = _physicsWorld2D->overlapPoint(location);
 
     if (!collider)
@@ -318,7 +318,7 @@ void PhysicsDemo::onPointerMove(PointerEvent* event)
     if (it != _draggers.end())
     {
         auto mouseNode = it->second;
-        mouseNode->setPosition(event->getLocation());
+        mouseNode->setPosition(event->getWorldPoint());
 
         return;
     }
@@ -450,7 +450,7 @@ void PhysicsDemoClickAdd::onPointerUp(PointerEvent* event)
 
     PhysicsDemo::onPointerUp(event);
 
-    auto location = event->getLocation();
+    auto location = event->getWorldPoint();
 
     addGrossiniAtPosition(location);
 }
@@ -654,7 +654,7 @@ void PhysicsDemoRayCast::onPointerUp(PointerEvent* event)
     {
         PhysicsDemo::onPointerUp(event);
 
-        auto location = event->getLocation();
+        auto location = event->getWorldPoint();
 
         float r = AXRANDOM_0_1();
 
@@ -1111,7 +1111,7 @@ bool PhysicsDemoPump::onPointerDown(PointerEvent* event)
 {
     PhysicsDemo::onPointerDown(event);
 
-    _distance = event->getLocation().x - VisibleRect::center().x;
+    _distance = event->getWorldPoint().x - VisibleRect::center().x;
 
     return true;
 }
@@ -1120,7 +1120,7 @@ void PhysicsDemoPump::onPointerMove(PointerEvent* event)
 {
     PhysicsDemo::onPointerMove(event);
 
-    _distance = event->getLocation().x - VisibleRect::center().x;
+    _distance = event->getWorldPoint().x - VisibleRect::center().x;
 }
 
 void PhysicsDemoPump::onPointerUp(PointerEvent* event)
@@ -1303,7 +1303,7 @@ void PhysicsDemoSlice::onPointerUp(PointerEvent* event)
 
     auto func = AX_CALLBACK_3(PhysicsDemoSlice::slice, this);
 
-    Ray2D ray = Ray2D::fromPoints(event->getStartLocation(), event->getLocation());
+    Ray2D ray = Ray2D::fromPoints(event->getStartWorldPoint(), event->getWorldPoint());
     getPhysicsWorld2D()->rayCast(func, ray, &ray);
 }
 

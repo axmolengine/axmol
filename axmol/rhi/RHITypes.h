@@ -88,7 +88,7 @@ enum class ShaderStage : int16_t
     DEFAULT = FRAGMENT
 };
 
-enum class VertexFormat : uint16_t
+enum class VertexElementType : uint16_t
 {
     FLOAT4,
     FLOAT3,

@@ -1,4 +1,4 @@
-﻿
+
 #if (defined(__EFFEKSEER_NETWORK_ENABLED__))
 #if !(defined(_PSVITA) || defined(_XBOXONE))
 

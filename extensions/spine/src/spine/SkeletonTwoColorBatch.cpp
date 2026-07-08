@@ -170,13 +170,13 @@ namespace spine {
 
 		auto layoutDesc = axvlm->allocateVertexLayoutDesc();
 		layoutDesc.startLayout(4);
-		layoutDesc.addAttrib("a_position", locPosition, rhi::VertexFormat::FLOAT3,
+		layoutDesc.addAttrib("a_position", locPosition, rhi::VertexElementType::FLOAT3,
 							 offsetof(spine::V3F_C4B_C4B_T2F, position), false);
-		layoutDesc.addAttrib("a_color", locColor, rhi::VertexFormat::UBYTE4,
+		layoutDesc.addAttrib("a_color", locColor, rhi::VertexElementType::UBYTE4,
 							 offsetof(spine::V3F_C4B_C4B_T2F, color), true);
-		layoutDesc.addAttrib("a_color2", locColor2, rhi::VertexFormat::UBYTE4,
+		layoutDesc.addAttrib("a_color2", locColor2, rhi::VertexElementType::UBYTE4,
 							 offsetof(spine::V3F_C4B_C4B_T2F, color2), true);
-		layoutDesc.addAttrib("a_texCoord", locTexcoord, rhi::VertexFormat::FLOAT2,
+		layoutDesc.addAttrib("a_texCoord", locTexcoord, rhi::VertexElementType::FLOAT2,
 							 offsetof(spine::V3F_C4B_C4B_T2F, texCoord), false);
 		layoutDesc.endLayout();
 

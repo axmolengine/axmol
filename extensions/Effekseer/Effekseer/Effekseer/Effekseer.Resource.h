@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_RESOURCE_H__
 #define __EFFEKSEER_RESOURCE_H__
 

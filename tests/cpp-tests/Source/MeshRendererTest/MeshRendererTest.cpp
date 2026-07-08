@@ -215,7 +215,7 @@ void MeshRendererBasicTest::addNewMeshWithCoords(Vec2 p)
 
 void MeshRendererBasicTest::onPointerUp(PointerEvent* event)
 {
-    auto location = event->getLocation();
+    auto location = event->getWorldPoint();
 
     addNewMeshWithCoords(location);
 }
@@ -685,7 +685,7 @@ void MeshRendererFakeShadowTest::onPointerMove(ax::PointerEvent* event)
 void MeshRendererFakeShadowTest::onPointerUp(ax::PointerEvent* event)
 {
     {
-        auto location = event->getScreenLocation();
+        auto location = event->getPoint();
         if (_camera)
         {
             if (_orc)
@@ -817,8 +817,8 @@ void MeshRendererLightMapTest::onPointerMove(ax::PointerEvent* event)
     if (!event->isPrimaryPressed())
         return;
     float delta           = Director::getInstance()->getDeltaTime();
-    auto location         = event->getLocation();
-    auto PreviousLocation = event->getPreviousLocation();
+    auto location         = event->getWorldPoint();
+    auto PreviousLocation = event->getPrevWorldPoint();
     Point newPos          = PreviousLocation - location;
 
     Vec3 cameraDir;
@@ -872,9 +872,9 @@ MeshRendererHitTest::MeshRendererHitTest()
         auto target = static_cast<MeshRenderer*>(event->getCurrentTarget());
 
         Rect rect = target->getBoundingBox();
-        if (rect.containsPoint(event->getLocation()))
+        if (rect.containsPoint(event->getWorldPoint()))
         {
-            AXLOGD("mesh3d began... x = {}, y = {}", event->getLocation().x, event->getLocation().y);
+            AXLOGD("mesh3d began... x = {}, y = {}", event->getWorldPoint().x, event->getWorldPoint().y);
             target->setOpacity(100);
             return true;
         }
@@ -883,7 +883,7 @@ MeshRendererHitTest::MeshRendererHitTest()
 
     listener1->onPointerMove = [](PointerEvent* event) {
         auto target = static_cast<MeshRenderer*>(event->getCurrentTarget());
-        target->setPosition(target->getPosition() + event->getDelta());
+        target->setPosition(target->getPosition() + (event->getWorldPoint() - event->getPrevWorldPoint()));
         return true;
     };
 
@@ -981,7 +981,7 @@ void MeshRendererEffectTest::addNewMeshWithCoords(Vec2 p)
 
 void MeshRendererEffectTest::onPointerUp(PointerEvent* event)
 {
-    auto location = event->getLocation();
+    auto location = event->getWorldPoint();
 
     addNewMeshWithCoords(location);
 }
@@ -1147,7 +1147,7 @@ void MeshRendererWithSkinTest::switchAnimationQualityCallback(Object* sender)
 
 void MeshRendererWithSkinTest::onPointerUp(PointerEvent* event)
 {
-    auto location = event->getLocation();
+    auto location = event->getWorldPoint();
 
     addNewMeshWithCoords(location);
 }
@@ -1227,7 +1227,7 @@ void MeshRendererWithSkinOutlineTest::addNewMeshWithCoords(Vec2 p)
 
 void MeshRendererWithSkinOutlineTest::onPointerUp(PointerEvent* event)
 {
-    auto location = event->getLocation();
+    auto location = event->getWorldPoint();
 
     addNewMeshWithCoords(location);
 }
@@ -1340,7 +1340,7 @@ void Animate3DTest::renewCallBack()
 void Animate3DTest::onPointerUp(PointerEvent* event)
 {
     {
-        auto location = event->getLocation();
+        auto location = event->getWorldPoint();
 
         if (_mesh)
         {
@@ -1598,7 +1598,7 @@ void MeshRendererWithOBBPerformanceTest::addNewOBBWithCoords(Vec2 p)
 bool MeshRendererWithOBBPerformanceTest::onPointerDown(PointerEvent* event)
 {
     {
-        auto location = event->getScreenLocation();
+        auto location = event->getPoint();
         auto obbSize  = _obb.size();
         if (obbSize)
         {
@@ -1623,7 +1623,7 @@ void MeshRendererWithOBBPerformanceTest::onPointerUp(PointerEvent* event) {}
 
 void MeshRendererWithOBBPerformanceTest::onPointerMove(PointerEvent* event)
 {
-    auto location = event->getLocation();
+    auto location = event->getWorldPoint();
     auto obbSize  = _obb.size();
 
     for (decltype(obbSize) i = 0; i < obbSize; i++)
@@ -2288,7 +2288,7 @@ void MeshRendererCubeMapTest::onPointerMove(ax::PointerEvent* event)
 {
     if (!event->isPrimaryPressed())
         return;
-    auto delta = event->getDelta();
+    auto delta = (event->getWorldPoint() - event->getPrevWorldPoint());
 
     static float _angle = 0.f;
     _angle -= AX_DEGREES_TO_RADIANS(delta.x);

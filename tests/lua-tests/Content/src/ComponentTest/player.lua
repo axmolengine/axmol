@@ -38,7 +38,7 @@ local player = {
 
     onEnter = function(self)
         local function onTouchesEnded(event)
-            local location = event:getLocation()
+            local location = event:getWorldPoint()
             self:generateProjectile(location.x, location.y)
             ax.AudioEngine:play2d("pew-pew-lei.wav")
         end

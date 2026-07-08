@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_INSTANCE_H__
 #define __EFFEKSEER_INSTANCE_H__
 

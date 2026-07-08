@@ -26,7 +26,7 @@
 
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/base/Object.h"
-#include "axmol/renderer/PipelineDesc.h"
+#include "axmol/rhi/PipelineDesc.h"
 #include "axmol/rhi/RenderPassDesc.h"
 
 namespace ax::rhi

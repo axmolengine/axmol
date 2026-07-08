@@ -37,7 +37,7 @@
 #include "axmol/2d/Sprite.h"
 #include "axmol/scene/Scene.h"
 #include "axmol/3d/Bundle3D.h"
-#include "axmol/3d/Ray.h"
+#include "axmol/math/Ray.h"
 #include "axmol/base/Value.h"
 #include "axmol/base/Types.h"
 #include "axmol/physics/physics-2d.h"

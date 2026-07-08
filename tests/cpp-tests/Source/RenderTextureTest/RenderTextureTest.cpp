@@ -187,8 +187,8 @@ void RenderTextureSave::onPointerMove(PointerEvent* event)
     if (!event->isPrimaryPressed())
         return;
 
-    auto start = event->getLocation();
-    auto end   = event->getPreviousLocation();
+    auto start = event->getWorldPoint();
+    auto end   = event->getPrevWorldPoint();
 
     {
         _rtxPass->begin(getDefaultCamera());
@@ -377,7 +377,7 @@ std::string RenderTextureZbuffer::subtitle() const
 
 bool RenderTextureZbuffer::onPointerDown(PointerEvent* event)
 {
-    auto location = event->getLocation();
+    auto location = event->getWorldPoint();
 
     sp1->setPosition(location);
     sp2->setPosition(location);
@@ -397,7 +397,7 @@ void RenderTextureZbuffer::onPointerMove(PointerEvent* event)
     if (!event->isCaptured())
         return;
 
-    auto location = event->getLocation();
+    auto location = event->getWorldPoint();
 
     sp1->setPosition(location);
     sp2->setPosition(location);
@@ -802,7 +802,7 @@ SpriteRenderTextureBug::SimpleSprite* SpriteRenderTextureBug::addNewSpriteWithCo
 void SpriteRenderTextureBug::onPointerUp(PointerEvent* event)
 {
     {
-        auto location = event->getLocation();
+        auto location = event->getWorldPoint();
         addNewSpriteWithCoords(location);
     }
 }

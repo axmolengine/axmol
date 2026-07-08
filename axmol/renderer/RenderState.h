@@ -36,7 +36,7 @@
 #include "axmol/base/Types.h"
 #include "axmol/base/Vector.h"
 
-#include "axmol/renderer/PipelineDesc.h"
+#include "axmol/rhi/PipelineDesc.h"
 #include "axmol/renderer/MeshCommand.h"
 
 namespace ax

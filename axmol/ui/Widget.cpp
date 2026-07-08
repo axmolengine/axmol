@@ -723,9 +723,9 @@ bool Widget::onPointerDown(PointerEvent* event)
     {
         _hitted              = false;
         _hittedByCamera      = nullptr;
-        _pointerDownPosition = event->getLocation();
+        _pointerDownPosition = event->getWorldPoint();
 
-        if (isPointerInside(event, camera, nullptr))
+        if (isPointerInside(event, nullptr))
         {
             _hittedByCamera = camera;
             _hitted         = true;
@@ -761,9 +761,9 @@ void Widget::onPointerMove(PointerEvent* event)
 {
     RefPtr<Widget> guard(this);
 
-    _pointerMovePosition = event->getLocation();
+    _pointerMovePosition = event->getWorldPoint();
 
-    setHighlighted(isPointerInside(event, _hittedByCamera, nullptr));
+    setHighlighted(isPointerInside(event, nullptr));
 
     if (_propagatePointerEvents)
     {
@@ -788,7 +788,7 @@ void Widget::dispatchPointerMove(PointerEvent* event)
     if (!camera)
         return;
 
-    const bool hit = isPointerInside(event, camera, nullptr);
+    const bool hit = isPointerInside(event, nullptr);
 
     if (hit)
     {
@@ -818,7 +818,7 @@ void Widget::onPointerUp(PointerEvent* event)
 {
     RefPtr<Widget> guard(this);
 
-    _pointerUpPosition = event->getLocation();
+    _pointerUpPosition = event->getWorldPoint();
 
     if (_propagatePointerEvents)
     {
@@ -840,7 +840,7 @@ void Widget::onPointerUp(PointerEvent* event)
     _hitted = false;
 
     const Camera* hoverCamera = _hoveredByCamera ? _hoveredByCamera : _hittedByCamera;
-    if (_hovered && !isPointerInside(event, hoverCamera, nullptr))
+    if (_hovered && !isPointerInside(event, nullptr))
     {
         _hovered         = false;
         _hoveredByCamera = nullptr;
@@ -992,9 +992,9 @@ void Widget::addCCSEventListener(const WidgetEventCallback& callback)
     _customEventCallback = callback;
 }
 
-bool Widget::onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* outHitPoint)
+bool Widget::onPointerHitTest(PointerEvent* event, Vec3* outHitPoint)
 {
-    if (!event || !camera)
+    if (!event)
         return false;
 
     const auto phase = event->getPhase();
@@ -1008,12 +1008,12 @@ bool Widget::onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* o
         if (!event->isPrimaryPressed())
             return false;
 
-        if (!isPointerInside(event, camera, outHitPoint))
+        if (!isPointerInside(event, outHitPoint))
             return false;
 
         // Cache the down hit so onPointerDown() does not repeat hitTestSelf().
-        _pointerDownPosition = event->getLocation();
-        _hittedByCamera      = camera;
+        _pointerDownPosition = event->getWorldPoint();
+        _hittedByCamera      = event->getCamera();
         _hitted              = true;
 
         return true;
@@ -1023,43 +1023,31 @@ bool Widget::onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* o
     // Need to keep dispatching to the previous hovered widget so it can emit hover exit.
     if (phase == InputPhase::PointerMove && !event->isCaptured())
     {
-        const bool hit = isPointerInside(event, camera, outHitPoint);
-        return hit || (_hovered && _hoveredByCamera == camera);
+        const bool hit = isPointerInside(event, outHitPoint);
+        return hit || (_hovered && _hoveredByCamera == event->getCamera());
     }
 
     // Scroll should only go to widgets under the pointer.
     if (phase == InputPhase::PointerScroll)
     {
-        return isPointerInside(event, camera, outHitPoint);
+        return isPointerInside(event, outHitPoint);
     }
 
-    return isPointerInside(event, camera, outHitPoint);
+    return isPointerInside(event, outHitPoint);
 }
 
-bool Widget::isPointerInside(PointerEvent* event, const Camera* camera, Vec3* outHitPoint)
+bool Widget::isPointerInside(PointerEvent* event, Vec3* outHitPoint)
 {
-    if (!event || !camera)
+    if (!event)
         return false;
 
     if (!isVisible() || !isEnabled() || !isAncestorsEnabled() || !isAncestorsVisible(this))
         return false;
 
-    if (event->hasRay())
-    {
-        if (!Node::onPointerHitTest(event, camera, outHitPoint))
-            return false;
-    }
-    else
-    {
-        const Vec2 pt = event->getLocation();
-        if (!hitTestSelf(pt, camera, outHitPoint))
-            return false;
+    if (!Node::onPointerHitTest(event, outHitPoint))
+        return false;
 
-        if (outHitPoint)
-            getNodeToWorldTransform().transformPoint(outHitPoint);
-    }
-
-    if (!isClippingParentContainsPoint(event, camera))
+    if (!isClippingParentContainsPoint(event))
         return false;
 
     return true;
@@ -1077,7 +1065,7 @@ bool Widget::hitTestSelf(const Vec2& pt, const Camera* camera, Vec3* p) const
     return ret;
 }
 
-bool Widget::isClippingParentContainsPoint(PointerEvent* event, const Camera* camera)
+bool Widget::isClippingParentContainsPoint(PointerEvent* event)
 {
     _affectByClipping      = false;
     Node* parent           = getParent();
@@ -1102,22 +1090,14 @@ bool Widget::isClippingParentContainsPoint(PointerEvent* event, const Camera* ca
     if (!_affectByClipping)
         return true;
 
-    if (!clippingParent || !camera)
+    if (!clippingParent)
         return false;
 
-    bool contains = false;
-    if (event && event->hasRay())
-    {
-        contains = clippingParent->Node::onPointerHitTest(event, camera, nullptr);
-    }
-    else if (event)
-    {
-        contains = clippingParent->hitTestSelf(event->getLocation(), camera, nullptr);
-    }
+    const bool contains = clippingParent->Node::onPointerHitTest(event, nullptr);
 
     if (contains)
     {
-        return clippingParent->isClippingParentContainsPoint(event, camera);
+        return clippingParent->isClippingParentContainsPoint(event);
     }
 
     return false;

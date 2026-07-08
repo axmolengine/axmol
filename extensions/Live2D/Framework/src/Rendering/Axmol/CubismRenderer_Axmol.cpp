@@ -1434,10 +1434,10 @@ void CubismShader_Axmol::SetupShaderProgram(CubismCommandBuffer_Axmol::DrawComma
         layoutDesc.startLayout(2);
 
         // 頂点配列の設定
-        layoutDesc.addAttrib("a_position", shaderSet->AttributePositionLocation, ax::rhi::VertexFormat::FLOAT2, 0,
+        layoutDesc.addAttrib("a_position", shaderSet->AttributePositionLocation, ax::rhi::VertexElementType::FLOAT2, 0,
                             false);
         // テクスチャ頂点の設定
-        layoutDesc.addAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::rhi::VertexFormat::FLOAT2,
+        layoutDesc.addAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::rhi::VertexElementType::FLOAT2,
                           sizeof(csmFloat32) * 2, false);
         layoutDesc.endLayout();
 
@@ -1527,10 +1527,10 @@ void CubismShader_Axmol::SetupShaderProgram(CubismCommandBuffer_Axmol::DrawComma
         layoutDesc.startLayout(2);
 
         // 頂点配列の設定
-        layoutDesc.addAttrib("a_position", shaderSet->AttributePositionLocation, ax::rhi::VertexFormat::FLOAT2, 0,
+        layoutDesc.addAttrib("a_position", shaderSet->AttributePositionLocation, ax::rhi::VertexElementType::FLOAT2, 0,
                           false);
         // テクスチャ頂点の設定
-        layoutDesc.addAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::rhi::VertexFormat::FLOAT2,
+        layoutDesc.addAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::rhi::VertexElementType::FLOAT2,
                           sizeof(csmFloat32) * 2, false);
 
         layoutDesc.endLayout();
@@ -1612,8 +1612,8 @@ void CubismShader_Axmol::SetupRenderTargetShaderProgram(CubismCommandBuffer_Axmo
 
     auto layoutDesc = axvlm->allocateVertexLayoutDesc();
     layoutDesc.startLayout(2);
-    layoutDesc.addAttrib("a_position", shaderSet->AttributePositionLocation, ax::rhi::VertexFormat::FLOAT2, 0, false);
-    layoutDesc.addAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::rhi::VertexFormat::FLOAT2, sizeof(csmFloat32) * 2, false);
+    layoutDesc.addAttrib("a_position", shaderSet->AttributePositionLocation, ax::rhi::VertexElementType::FLOAT2, 0, false);
+    layoutDesc.addAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::rhi::VertexElementType::FLOAT2, sizeof(csmFloat32) * 2, false);
     layoutDesc.endLayout();
 
     VertexLayout* layout = axvlm->getVertexLayout(std::move(layoutDesc));

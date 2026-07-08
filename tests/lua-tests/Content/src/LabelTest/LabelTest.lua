@@ -676,7 +676,7 @@ function LabelFNTMultiLineAlignment.create()
     layer:registerScriptHandler(LabelFNTMultiLineAlignment.onNodeEvent)
 
     local function onTouchesBegan(event)
-        local location = event:getScreenLocation()
+        local location = event:getPoint()
         if ax.rectContainsPoint(LabelFNTMultiLineAlignment._pArrowsShouldRetain:getBoundingBox(), ax.p(location.x, location.y)) then
             LabelFNTMultiLineAlignment._drag = true
             LabelFNTMultiLineAlignment._pArrowsBarShouldRetain:setVisible(true)
@@ -689,7 +689,7 @@ function LabelFNTMultiLineAlignment.create()
         end
 
         local canvasSize = ax.Director:getInstance():getCanvasSize()
-        local location = event:getScreenLocation()
+        local location = event:getPoint()
 
         LabelFNTMultiLineAlignment._pArrowsShouldRetain:setPosition(
             math.max(math.min(location.x, ArrowsMax*canvasSize.width), ArrowsMin*canvasSize.width),

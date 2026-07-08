@@ -160,7 +160,7 @@ local function getBaseLayer()
     background:runAction(ax.RepeatForever:create(seq))
 
     local function onTouchesEnded(event)
-        local location = event:getLocation()
+        local location = event:getWorldPoint()
         local pos = ax.p(0, 0)
         if background ~= nil then
             pos = background:convertToWorldSpace(ax.p(0, 0))

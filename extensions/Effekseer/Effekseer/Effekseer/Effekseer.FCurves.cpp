@@ -1,4 +1,4 @@
-﻿
+
 
 #include "Effekseer.FCurves.h"
 #include "Effekseer.InstanceGlobal.h"

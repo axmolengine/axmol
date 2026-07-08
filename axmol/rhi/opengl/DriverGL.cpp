@@ -24,6 +24,7 @@
  ****************************************************************************/
 
 #include "axmol/rhi/opengl/DriverGL.h"
+#include "axmol/platform/Common.h"
 #include "axmol/rhi/opengl/RenderPipelineGL.h"
 #include "axmol/rhi/opengl/BufferGL.h"
 #include "axmol/rhi/opengl/ShaderModuleGL.h"

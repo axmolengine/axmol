@@ -314,7 +314,7 @@ bool ImGui_ImplAxmolSW_Init(RenderViewCore* window, bool install_callbacks)
     listener->onPointerDown = [bd](PointerEvent* event) -> bool {
         ImGuiIO& io                = ImGui::GetIO();
         ImGui_ImplAxmolSW_Data* bd = ImGui_ImplAxmolSW_GetBackendData();
-        auto location              = event->getScreenLocation();
+        auto location              = event->getPoint();
         auto pointerPos              = ImVec2(location.x, location.y);
 
         // We perform our own hit test here because on Android there is no real mouse hover event.
@@ -338,7 +338,7 @@ bool ImGui_ImplAxmolSW_Init(RenderViewCore* window, bool install_callbacks)
     auto updateMousePosition = [](PointerEvent* event) {
         ImGuiIO& io                = ImGui::GetIO();
         ImGui_ImplAxmolSW_Data* bd = ImGui_ImplAxmolSW_GetBackendData();
-        auto location              = event->getScreenLocation();
+        auto location              = event->getPoint();
         io.AddMousePosEvent(location.x, location.y);
         bd->LastValidMousePos = ImVec2(location.x, location.y);
     };
@@ -354,7 +354,7 @@ bool ImGui_ImplAxmolSW_Init(RenderViewCore* window, bool install_callbacks)
             return;
         ImGuiIO& io                = ImGui::GetIO();
         ImGui_ImplAxmolSW_Data* bd = ImGui_ImplAxmolSW_GetBackendData();
-        auto location              = event->getScreenLocation();
+        auto location              = event->getPoint();
         io.AddMousePosEvent(location.x, location.y);
         bd->LastValidMousePos = ImVec2(location.x, location.y);
         io.AddMouseButtonEvent(0, false);
@@ -379,7 +379,7 @@ bool ImGui_ImplAxmolSW_Init(RenderViewCore* window, bool install_callbacks)
 
         ImGuiIO& io                = ImGui::GetIO();
         ImGui_ImplAxmolSW_Data* bd = ImGui_ImplAxmolSW_GetBackendData();
-        auto location              = event->getScreenLocation();
+        auto location              = event->getPoint();
         io.AddMousePosEvent(location.x, location.y);
         bd->LastValidMousePos = ImVec2(location.x, location.y);
         io.AddMouseButtonEvent(0, false);
@@ -391,7 +391,7 @@ bool ImGui_ImplAxmolSW_Init(RenderViewCore* window, bool install_callbacks)
         ImGuiIO& io                = ImGui::GetIO();
         ImGui_ImplAxmolSW_Data* bd = ImGui_ImplAxmolSW_GetBackendData();
         
-        auto location              = event->getScreenLocation();
+        auto location              = event->getPoint();
         auto pointerPos            = ImVec2(location.x, location.y);
 
         io.AddMousePosEvent(location.x, location.y);

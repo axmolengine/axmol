@@ -23,6 +23,8 @@
  ****************************************************************************/
 
 #include "axmol/rhi/ShaderModule.h"
+#include "axmol/rhi/GraphicsCore.h"
+#include "axmol/base/Logging.h"
 #include "axmol/rhi/axslc-spec.h"
 #include "yasio/ibstream.hpp"
 

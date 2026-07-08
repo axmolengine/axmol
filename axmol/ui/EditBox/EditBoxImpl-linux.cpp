@@ -34,8 +34,8 @@
 #    include "axmol/base/text_utils.h"
 
 #    include <dlfcn.h>
-
 #    include <stdint.h>
+#    include <thread>
 
 extern "C" {
 

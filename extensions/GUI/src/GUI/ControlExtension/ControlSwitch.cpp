@@ -378,7 +378,7 @@ void ControlSwitch::setEnabled(bool enabled)
 
 Vec2 ControlSwitch::locationFromTouch(PointerEvent* pTouch)
 {
-    Vec2 touchLocation = pTouch->getLocation();                    // Get the touch position
+    Vec2 touchLocation = pTouch->getWorldPoint();                  // Get the touch position
     touchLocation      = this->convertToNodeSpace(touchLocation);  // Convert to the node space of this class
 
     return touchLocation;

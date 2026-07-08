@@ -25,6 +25,7 @@
 
 #include "axmol/rhi/Texture.h"
 #include "axmol/rhi/RHIUtils.h"
+#include "axmol/tlx/byte_buffer.hpp"
 #include <assert.h>
 namespace ax::rhi
 {

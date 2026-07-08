@@ -29,7 +29,7 @@
 #include <map>
 
 #include "axmol/3d/Bundle3DData.h"
-#include "axmol/3d/AABB.h"
+#include "axmol/math/AABB.h"
 #include "axmol/3d/shaderinfos.h"
 
 #include "axmol/base/Object.h"

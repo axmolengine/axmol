@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_EFFECTLOADER_H__
 #define __EFFEKSEER_EFFECTLOADER_H__
 

@@ -24,6 +24,7 @@
  ****************************************************************************/
 
 #include "axmol/rhi/RenderContext.h"
+#include "axmol/rhi/PipelineDesc.h"
 #include "axmol/rhi/RenderTarget.h"
 
 #include <limits>

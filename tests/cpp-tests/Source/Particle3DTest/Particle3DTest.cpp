@@ -100,7 +100,7 @@ void Particle3DTestDemo::onPointerMove(ax::PointerEvent* event)
     if (!event->isCaptured())
         return;
 
-    auto delta = event->getDelta();
+    auto delta = (event->getWorldPoint() - event->getPrevWorldPoint());
 
     _angle -= AX_DEGREES_TO_RADIANS(delta.x);
     _camera->setPosition3D(Vec3(100.0f * sinf(_angle), 0.0f, 100.0f * cosf(_angle)));

@@ -163,12 +163,12 @@ bool DrawNode3D::init()
     desc.startLayout(2);
     if (iter != inputs.end())
     {
-        desc.addAttrib(iter->first, &iter->second, rhi::VertexFormat::FLOAT3, 0, false);
+        desc.addAttrib(iter->first, &iter->second, rhi::VertexElementType::FLOAT3, 0, false);
     }
     iter = inputs.find("a_color");
     if (iter != inputs.end())
     {
-        desc.addAttrib(iter->first, &iter->second, rhi::VertexFormat::UBYTE4, sizeof(Vec3), true);
+        desc.addAttrib(iter->first, &iter->second, rhi::VertexElementType::UBYTE4, sizeof(Vec3), true);
     }
     desc.endLayout();
 

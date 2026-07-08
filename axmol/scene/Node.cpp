@@ -1908,18 +1908,18 @@ Vec2 Node::convertToWorldSpaceAR(const Vec2& nodePoint) const
 Vec2 Node::convertToScreenSpace(const Vec2& nodePoint) const
 {
     Vec2 worldPoint(this->convertToWorldSpace(nodePoint));
-    return _director->worldToScreen(worldPoint);
+    return Camera::getDefaultCamera()->projectWorldToScreen(Vec3(worldPoint.x, worldPoint.y, 0.0f));
 }
 
 // convenience methods which take a PointerEvent instead of Vec2
 Vec2 Node::convertPointerToNodeSpace(PointerEvent* event) const
 {
-    return this->convertToNodeSpace(event->getLocation());
+    return this->convertToNodeSpace(event->getWorldPoint());
 }
 
 Vec2 Node::convertPointerToNodeSpaceAR(PointerEvent* event) const
 {
-    Vec2 point = event->getLocation();
+    Vec2 point = event->getWorldPoint();
     return this->convertToNodeSpaceAR(point);
 }
 
@@ -2248,44 +2248,33 @@ rhi::ProgramState* Node::getProgramState() const
     return _programState;
 }
 
-bool Node::onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* outHitPoint)
+bool Node::onPointerHitTest(PointerEvent* event, Vec3* outHitPoint)
 {
-    if (!event || !camera || !isVisible())
+    if (!event || !isVisible())
         return false;
+
+    const Ray& ray = event->getRay();
+    if (ray.direction == Vec3())
+        return false;
+
+    Ray localRay(ray);
+    localRay.transform(getWorldToNodeTransform());
+
+    if (localRay.direction.z == 0.0f)
+        return false;
+
+    float t = -localRay.origin.z / localRay.direction.z;
+    if (t < 0.0f)
+        return false;
+
+    Vec3 hitPoint = localRay.origin + t * localRay.direction;
+
+    if (outHitPoint)
+        getNodeToWorldTransform().transformPoint(hitPoint, outHitPoint);
 
     Rect rect;
     rect.size = getContentSize();
-
-    auto worldTransform = getNodeToWorldTransform();
-
-    if (event->hasRay())
-    {
-        // VR controller ray: transform ray into node's local space, intersect with z=0 plane
-        const auto& ray = event->getRay().value();
-        Ray localRay(ray);
-        localRay.transform(getWorldToNodeTransform());
-
-        if (localRay.direction.z == 0.0f)
-            return false;
-
-        // t = -origin.z / direction.z  (intersection with z=0 plane)
-        float t = -localRay.origin.z / localRay.direction.z;
-        if (t < 0.0f)
-            return false;
-
-        Vec3 hitPoint = localRay.origin + t * localRay.direction;
-        if (outHitPoint)
-            worldTransform.transformPoint(hitPoint, outHitPoint);
-
-        return rect.containsPoint(Vec2(hitPoint.x, hitPoint.y));
-    }
-
-    bool ret = camera->isWorldPointInRect(event->getLocation(), getWorldToNodeTransform(), rect, outHitPoint);
-
-    if (ret && outHitPoint)
-        worldTransform.transformPoint(outHitPoint);
-
-    return ret;
+    return rect.containsPoint(Vec2(hitPoint.x, hitPoint.y));
 }
 
 }  // namespace ax

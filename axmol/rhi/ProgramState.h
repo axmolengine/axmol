@@ -36,7 +36,7 @@
 #include "axmol/base/CustomEventListener.h"
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/rhi/Program.h"
-#include "axmol/renderer/VertexLayoutManager.h"
+// #include "axmol/renderer/VertexLayoutManager.h"
 #include "axmol/tlx/byte_buffer.hpp"
 
 namespace ax::rhi
@@ -349,3 +349,8 @@ protected:
 // end of _rhi group
 /// @}
 }  // namespace ax::rhi
+
+namespace ax
+{
+using ProgramState = rhi::ProgramState;
+}  // namespace ax

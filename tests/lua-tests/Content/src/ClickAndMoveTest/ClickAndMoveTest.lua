@@ -23,7 +23,7 @@ local function initWithLayer()
 
     local function onTouchEnded(event)
 
-        local location = event:getLocation()
+        local location = event:getWorldPoint()
 
         local s = layer:getChildByTag(kTagSprite)
         s:stopAllActions()

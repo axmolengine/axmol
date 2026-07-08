@@ -1,4 +1,4 @@
-﻿#include "EffekseerRendererGL.MaterialLoader.h"
+#include "EffekseerRendererGL.MaterialLoader.h"
 #include "EffekseerRendererGL.ModelRenderer.h"
 #include "EffekseerRendererGL.Shader.h"
 

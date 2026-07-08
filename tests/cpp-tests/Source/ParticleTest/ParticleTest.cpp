@@ -2302,7 +2302,7 @@ void ParticleDemo::onPointerMove(PointerEvent* event)
 
 void ParticleDemo::onPointerUp(PointerEvent* event)
 {
-    auto location = event->getLocation();
+    auto location = event->getWorldPoint();
 
     auto pos = Vec2::zero;
     if (_background)

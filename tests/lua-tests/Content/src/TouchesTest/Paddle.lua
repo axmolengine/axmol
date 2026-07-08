@@ -40,7 +40,7 @@ end
 function Paddle:onEnter()
     local  listenner = ax.PointerEventListener:create()
     listenner:registerScriptHandler(function(event)
-            local worldPos = event:getLocation()
+            local worldPos = event:getWorldPoint()
             print(string.format("Paddle::onTouchBegan id = %d, x = %f, y = %f", event:getPointerId(), worldPos.x, worldPos.y))
             if (self._state ~= kPaddleStateUngrabbed) then
                 return false
@@ -54,7 +54,7 @@ function Paddle:onEnter()
             return true
         end,ax.Handler.EVENT_POINTER_DOWN )
     listenner:registerScriptHandler(function(event)
-            local touchPoint = event:getLocation()
+            local touchPoint = event:getWorldPoint()
             print(string.format("Paddle::onPointerMove id = %d, x = %f, y = %f", event:getPointerId(), touchPoint.x, touchPoint.y))
             assert(self._state == kPaddleStateGrabbed, "Paddle - Unexpected state!")
             local curPosX,curPosY = self:getPosition()

@@ -241,7 +241,7 @@ void TextureETC1Alpha::addNewSpriteWithCoords(Vec2 p)
 void TextureETC1Alpha::onPointerUp(PointerEvent* event)
 {
     {
-        auto location = event->getLocation();
+        auto location = event->getWorldPoint();
 
         addNewSpriteWithCoords(location);
     }
@@ -304,7 +304,7 @@ void TextureETC2::onPointerUp(PointerEvent* event)
 {
     // for (auto&& touch : touches)
     //{
-    //     auto location = touch->getLocation();
+    //     auto location = touch->getWorldPoint();
 
     //    addNewSpriteWithCoords();
     //}
@@ -369,7 +369,7 @@ void TextureBMP::addNewSpriteWithCoords(Vec2 p)
 void TextureBMP::onPointerUp(PointerEvent* event)
 {
     {
-        auto location = event->getLocation();
+        auto location = event->getWorldPoint();
 
         addNewSpriteWithCoords(location);
     }

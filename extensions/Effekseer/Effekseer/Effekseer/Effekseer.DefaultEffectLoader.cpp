@@ -1,4 +1,4 @@
-﻿
+
 #include "Effekseer.DefaultEffectLoader.h"
 #include "../Effekseer.h"
 #include <memory>

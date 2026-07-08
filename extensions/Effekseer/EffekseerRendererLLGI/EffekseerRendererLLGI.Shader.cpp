@@ -1,4 +1,4 @@
-﻿
+
 #include "EffekseerRendererLLGI.Shader.h"
 #include "EffekseerRendererLLGI.RendererImplemented.h"
 

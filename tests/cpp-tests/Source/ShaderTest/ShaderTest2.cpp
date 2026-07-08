@@ -116,6 +116,7 @@ public:
 
     void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override
     {
+        setMVPMatrixUniform();
 #if AX_USE_CULLING
         // Don't do calculate the culling if the transform was not updated
         _insideBounds =
@@ -574,13 +575,9 @@ bool EffectSpriteLamp::init()
 bool EffectSpriteLamp::onPointerDown(PointerEvent* ev)
 {
     {
-        auto s             = Director::getInstance()->getCanvasSize();
-        Point loc_winSpace = ev->getScreenLocation();
-        _lightSprite->setPosition(Vec2(loc_winSpace.x, s.height - loc_winSpace.y));
-        Vec3 pos(loc_winSpace.x, loc_winSpace.y, 50);
-        Mat4 mat = _sprite->getNodeToWorldTransform();
-        Point lightPosInLocalSpace =
-            PointApplyAffineTransform(Vec2(pos.x, pos.y), _sprite->getWorldToNodeAffineTransform());
+        auto worldPos = ev->getWorldPoint();
+        _lightSprite->setPosition(Vec2(worldPos.x, worldPos.y));
+        Point lightPosInLocalSpace = PointApplyAffineTransform(worldPos, _sprite->getWorldToNodeAffineTransform());
         ((EffectNormalMapped*)_effect)->setLightPos(Vec3(lightPosInLocalSpace.x, lightPosInLocalSpace.y, 50.0f));
     }
     return true;
@@ -588,27 +585,20 @@ bool EffectSpriteLamp::onPointerDown(PointerEvent* ev)
 
 void EffectSpriteLamp::onPointerMove(PointerEvent* ev)
 {
-    auto s             = Director::getInstance()->getCanvasSize();
-    Point loc_winSpace = ev->getScreenLocation();
-    _lightSprite->setPosition(Vec2(loc_winSpace.x, s.height - loc_winSpace.y));
-    Vec3 pos(loc_winSpace.x, loc_winSpace.y, 50);
-    Mat4 mat = _sprite->getNodeToWorldTransform();
-    Point lightPosInLocalSpace =
-        PointApplyAffineTransform(Vec2(pos.x, pos.y), _sprite->getWorldToNodeAffineTransform());
+    if (!ev->isCaptured())
+        return;
+    auto worldPos = ev->getWorldPoint();
+    _lightSprite->setPosition(Vec2(worldPos.x, worldPos.y));
+    Point lightPosInLocalSpace = PointApplyAffineTransform(worldPos, _sprite->getWorldToNodeAffineTransform());
     ((EffectNormalMapped*)_effect)->setLightPos(Vec3(lightPosInLocalSpace.x, lightPosInLocalSpace.y, 50.0f));
-    return;
 }
 
 void EffectSpriteLamp::onPointerUp(PointerEvent* ev)
 {
     {
-        auto s             = Director::getInstance()->getCanvasSize();
-        Point loc_winSpace = ev->getScreenLocation();
-        _lightSprite->setPosition(Vec2(loc_winSpace.x, s.height - loc_winSpace.y));
-        Vec3 pos(loc_winSpace.x, loc_winSpace.y, 50);
-        Mat4 mat = _sprite->getNodeToWorldTransform();
-        Point lightPosInLocalSpace =
-            PointApplyAffineTransform(Vec2(pos.x, pos.y), _sprite->getWorldToNodeAffineTransform());
+        auto worldPos = ev->getWorldPoint();
+        _lightSprite->setPosition(Vec2(worldPos.x, worldPos.y));
+        Point lightPosInLocalSpace = PointApplyAffineTransform(worldPos, _sprite->getWorldToNodeAffineTransform());
         ((EffectNormalMapped*)_effect)->setLightPos(Vec3(lightPosInLocalSpace.x, lightPosInLocalSpace.y, 50.0f));
     }
 }

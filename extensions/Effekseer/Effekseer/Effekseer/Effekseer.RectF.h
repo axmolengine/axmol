@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_RECTF_H__
 #define __EFFEKSEER_RECTF_H__
 

@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_INTERNAL_SCRIPT_H__
 #define __EFFEKSEER_INTERNAL_SCRIPT_H__
 

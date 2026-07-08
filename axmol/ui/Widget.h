@@ -410,7 +410,7 @@ public:
      * @param pt A point in `Vec2`.
      * @return true if the point is in parent's area, false otherwise.
      */
-    bool isClippingParentContainsPoint(PointerEvent* event, const Camera* camera);
+    bool isClippingParentContainsPoint(PointerEvent* event);
 
     /**
      * Gets the touch began point of widget when widget is selected.
@@ -714,7 +714,7 @@ public:
     void dispatchFocusEvent(Widget* widgetLoseFocus, Widget* widgetGetFocus);
 
 protected:
-    bool onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* outHitPoint) override;
+    bool onPointerHitTest(PointerEvent* event, Vec3* outHitPoint) override;
 
     /**
      * Checks a point is in widget's content space.
@@ -758,7 +758,7 @@ protected:
      */
     virtual bool onPointerScroll(PointerEvent* pointerEvent);
 
-    bool isPointerInside(PointerEvent* event, const Camera* camera, Vec3* outHitPoint);
+    bool isPointerInside(PointerEvent* event, Vec3* outHitPoint);
 
     /**
      * @brief [Core Layout Override] Measures the widget's desired size based on a layout hint.

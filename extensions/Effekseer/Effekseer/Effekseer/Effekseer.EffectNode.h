@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_EFFECTNODE_H__
 #define __EFFEKSEER_EFFECTNODE_H__
 

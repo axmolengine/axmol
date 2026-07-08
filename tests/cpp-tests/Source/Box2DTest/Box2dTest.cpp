@@ -291,7 +291,7 @@ void Box2DTest::update(float dt)
 void Box2DTest::onPointerUp(PointerEvent* event)
 {
     // Add a new body/atlas sprite at the touched location
-    auto location = event->getLocation();
+    auto location = event->getWorldPoint();
 
     addNewSpriteAtPosition(location);
 }

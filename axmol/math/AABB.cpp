@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/3d/AABB.h"
+#include "axmol/math/AABB.h"
 
 namespace ax
 {

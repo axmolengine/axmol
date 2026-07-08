@@ -428,7 +428,7 @@ void HoleDemo::pokeHoleAtPoint(Vec2 point)
 
 bool HoleDemo::onPointerDown(PointerEvent* event)
 {
-    Vec2 point = _outerClipper->convertToNodeSpace(Director::getInstance()->screenToWorld(event->getScreenLocation()));
+    Vec2 point = _outerClipper->convertToNodeSpace(event->getWorldPoint());
     auto rect  = Rect(0, 0, _outerClipper->getContentSize().width, _outerClipper->getContentSize().height);
     if (!rect.containsPoint(point))
         return false;
@@ -487,7 +487,7 @@ void ScrollViewDemo::setup()
 bool ScrollViewDemo::onPointerDown(PointerEvent* event)
 {
     auto clipper = this->getChildByTag(kTagClipperNode);
-    Vec2 point   = clipper->convertToNodeSpace(Director::getInstance()->screenToWorld(event->getScreenLocation()));
+    Vec2 point   = clipper->convertToNodeSpace(event->getWorldPoint());
     auto rect    = Rect(0, 0, clipper->getContentSize().width, clipper->getContentSize().height);
     _scrolling   = rect.containsPoint(point);
     _lastPoint   = point;
@@ -500,7 +500,7 @@ void ScrollViewDemo::onPointerMove(PointerEvent* event)
     if (!_scrolling)
         return;
     auto clipper = this->getChildByTag(kTagClipperNode);
-    auto point   = clipper->convertToNodeSpace(Director::getInstance()->screenToWorld(event->getScreenLocation()));
+    auto point   = clipper->convertToNodeSpace(event->getWorldPoint());
     Vec2 diff    = point - _lastPoint;
     auto content = clipper->getChildByTag(kTagContentNode);
     content->setPosition(content->getPosition() + diff);

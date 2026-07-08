@@ -386,7 +386,7 @@ public:
      */
     void setTouchAreaEnabled(bool enable);
 
-    bool onPointerHitTest(PointerEvent* event, const Camera* camera, Vec3* outHitPoint) override;
+    bool onPointerHitTest(PointerEvent* event, Vec3* outHitPoint) override;
 
     /**
      * @brief Test whether a point hits the field (respecting touch area if enabled).

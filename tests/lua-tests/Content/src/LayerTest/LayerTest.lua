@@ -305,7 +305,7 @@ local function LayerTest1()
     end
 
     local function onPointerMove(event)
-        local touchLocation = event:getLocation()
+        local touchLocation = event:getWorldPoint()
 
         updateSize(touchLocation.x, touchLocation.y)
     end
@@ -445,7 +445,7 @@ local function LayerGradient()
 
     local function onPointerMove(event)
         local s = ax.Director:getInstance():getCanvasSize()
-        local start = event:getLocation()
+        local start = event:getWorldPoint()
         local movingPos = ax.p(s.width/2,s.height/2)
         local diff = ax.p(movingPos.x - start.x, movingPos.y - start.y)
         diff = ax.pNormalize(diff)

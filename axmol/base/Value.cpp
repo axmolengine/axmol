@@ -29,6 +29,7 @@
 #include <sstream>
 #include <iomanip>
 #include "axmol/base/Utils.h"
+#include "axmol/tlx/format.hpp"
 
 namespace ax
 {

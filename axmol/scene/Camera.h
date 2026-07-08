@@ -29,10 +29,8 @@ THE SOFTWARE.
 #pragma once
 
 #include "axmol/scene/Node.h"
-#if defined(AX_ENABLE_3D)
-#    include "axmol/3d/Frustum.h"
-#    include "axmol/3d/Ray.h"
-#endif
+#include "axmol/math/Frustum.h"
+#include "axmol/math/Ray.h"
 #include "axmol/renderer/QuadCommand.h"
 #include "axmol/renderer/CustomCommand.h"
 #include "axmol/base/Director.h"
@@ -67,6 +65,7 @@ enum class CameraFlag
     USER7   = 1 << 7,
     USER8   = 1 << 8,
 };
+
 /**
  * Defines a camera .
  */
@@ -125,9 +124,9 @@ public:
      */
     static Camera* createOrthographicView(const Vec2& size, float nearPlane, float farPlane);
 
-    /** create default camera, the camera type depends on Director::getProjection, the depth of the default camera is 0
+    /** create default camera (Classic calibrated perspective mode), the depth of the default camera is 0
      */
-    static Camera* create();
+    static Camera* create(CameraMode mode = CameraMode::Classic);
 
     /**
      * Get the visiting camera , the visiting camera shall be set on Scene::render
@@ -215,7 +214,6 @@ public:
     /** Get the scene that currently owns this camera for rendering. */
     Scene* getOwnerScene() const { return _scene; }
 
-#if defined(AX_ENABLE_3D)
     /**
      * @brief Converts a 2D screen point into a 3D ray in world space.
      *
@@ -234,10 +232,9 @@ public:
      * the new system's top-left origin (Y-down) to the underlying graphics API's (OpenGL/Vulkan)
      * bottom-left origin (Y-up). Callers do not need to manually flip the Y-axis.
      *
-     * @see Director::screenToWorld
+     * @see Director::screenToCanvas
      */
     Ray screenToRay(const Vec2& screenPoint) const;
-#endif
 
     /**
      * Convert the specified point in 3D world-space coordinates into the screen-space coordinates.
@@ -275,12 +272,10 @@ public:
      */
     Vec2 projectWorldToCanvas(const Vec3& src) const;
 
-#if defined(AX_ENABLE_3D)
     /**
      * Is this aabb visible in frustum
      */
     bool isVisibleInFrustum(const AABB* aabb) const;
-#endif
 
     /**
      * Get object depth towards camera
@@ -414,9 +409,9 @@ public:
      * WP8*/
     void setAdditionalProjection(const Mat4& mat);
 
-    /** Init default camera with director current projection,
+    /** Init camera with Classic calibrated perspective mode
     !!!Note: Must invoke this function again when director projection or winsize changed */
-    void initDefault();
+    void initClassic();
 
     /** Update camera transformations */
     void updateTransform() override;
@@ -467,12 +462,12 @@ protected:
     mutable bool _viewProjectionDirty = true;
     bool _viewProjectionUpdated = false;  // Whether or not the viewprojection matrix was updated since the last frame.
     CameraFlag _cameraFlag      = CameraFlag::DEFAULT;  // camera flag
-#if defined(AX_ENABLE_3D)
-    mutable Frustum _frustum;  // camera frustum
+    mutable Frustum _frustum;                           // camera frustum
     mutable bool _frustumDirty = true;
-#endif
     int8_t _depth = -1;  // camera depth, the depth of camera with CameraFlag::DEFAULT flag is 0 by default, a camera
                          // with larger depth is drawn on top of camera with smaller depth
+
+    CameraMode _cameraMode{CameraMode::Classic};  // set during creation
 
     float _eyeZdistance;  // Z eye projection distance for 2D in 3D projection.
     float _zoomFactor =

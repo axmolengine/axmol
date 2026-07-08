@@ -117,7 +117,7 @@ private:
 
     bool touchHits(PointerEvent* touch)
     {
-        auto hitPos = this->convertToNodeSpace(touch->getLocation());
+        auto hitPos = this->convertToNodeSpace(touch->getWorldPoint());
         if (hitPos.x >= 0 && hitPos.y >= 0 && hitPos.x <= _contentSize.width && hitPos.y <= _contentSize.height)
         {
             return true;

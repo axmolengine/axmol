@@ -168,7 +168,7 @@ public:
 
         // note: when at the first click to focus the window, this will not take effect
         auto listener              = PointerEventListener::create();
-        listener->onPointerHitTest = [](PointerEvent*, const Camera*, Vec3*) {
+        listener->onPointerHitTest = [](PointerEvent*, Vec3*) {
             return ImGui::GetIO().WantCaptureMouse;
         };
         listener->onPointerDown = [](PointerEvent*) -> bool { return ImGui::GetIO().WantCaptureMouse; };
@@ -225,7 +225,7 @@ public:
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
 
         _pointerListener                   = utils::newInstance<PointerEventListener>();
-        _pointerListener->onPointerHitTest = [](PointerEvent*, const Camera*, Vec3*) {
+        _pointerListener->onPointerHitTest = [](PointerEvent*, Vec3*) {
             return ImGui::GetIO().WantCaptureMouse;
         };
         _pointerListener->onPointerDown = [](PointerEvent*) -> bool { return ImGui::GetIO().WantCaptureMouse; };

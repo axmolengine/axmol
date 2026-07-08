@@ -1,4 +1,4 @@
-﻿
+
 #include "EffekseerRendererLLGI.IndexBuffer.h"
 
 namespace EffekseerRendererLLGI

@@ -29,37 +29,37 @@
 namespace ax::rhi::d3d11
 {
 
-static DXGI_FORMAT toDXGIFormat(VertexFormat format, bool unorm)
+static DXGI_FORMAT toDXGIFormat(VertexElementType format, bool unorm)
 {
     switch (format)
     {
-    case VertexFormat::FLOAT4:
+    case VertexElementType::FLOAT4:
         return DXGI_FORMAT_R32G32B32A32_FLOAT;
-    case VertexFormat::FLOAT3:
+    case VertexElementType::FLOAT3:
         return DXGI_FORMAT_R32G32B32_FLOAT;
-    case VertexFormat::FLOAT2:
+    case VertexElementType::FLOAT2:
         return DXGI_FORMAT_R32G32_FLOAT;
-    case VertexFormat::FLOAT:
+    case VertexElementType::FLOAT:
         return DXGI_FORMAT_R32_FLOAT;
 
-    case VertexFormat::INT4:
+    case VertexElementType::INT4:
         return DXGI_FORMAT_R32G32B32A32_SINT;
-    case VertexFormat::INT3:
+    case VertexElementType::INT3:
         return DXGI_FORMAT_R32G32B32_SINT;
-    case VertexFormat::INT2:
+    case VertexElementType::INT2:
         return DXGI_FORMAT_R32G32_SINT;
-    case VertexFormat::INT:
+    case VertexElementType::INT:
         return DXGI_FORMAT_R32_SINT;
 
-    case VertexFormat::USHORT4:
+    case VertexElementType::USHORT4:
         return unorm ? DXGI_FORMAT_R16G16B16A16_UNORM : DXGI_FORMAT_R16G16B16A16_UINT;
-    case VertexFormat::USHORT2:
+    case VertexElementType::USHORT2:
         return unorm ? DXGI_FORMAT_R16G16_UNORM : DXGI_FORMAT_R16G16_UINT;
 
-    case VertexFormat::UBYTE4:
+    case VertexElementType::UBYTE4:
         return unorm ? DXGI_FORMAT_R8G8B8A8_UNORM : DXGI_FORMAT_R8G8B8A8_UINT;
 
-    case VertexFormat::MAT4:
+    case VertexElementType::MAT4:
         return DXGI_FORMAT_R32G32B32A32_FLOAT;
 
     default:
@@ -91,7 +91,7 @@ void VertexLayoutImpl::apply(ID3D11DeviceContext* context, Program* program) con
                                                               : RenderContextImpl::VI_BINDING_INDEX;
             const auto inputSlotClass =
                 inputDesc.instanceStepRate ? D3D11_INPUT_PER_INSTANCE_DATA : D3D11_INPUT_PER_VERTEX_DATA;
-            if (inputDesc.format != VertexFormat::MAT4)
+            if (inputDesc.format != VertexElementType::MAT4)
             {
                 D3D11_INPUT_ELEMENT_DESC desc{};
 

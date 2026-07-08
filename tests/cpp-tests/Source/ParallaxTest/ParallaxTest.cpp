@@ -162,7 +162,7 @@ void Parallax2::onPointerMove(PointerEvent* event)
     if (!event->isCaptured())
         return;
 
-    auto diff = event->getDelta();
+    auto diff = (event->getWorldPoint() - event->getPrevWorldPoint());
 
     auto node       = getChildByTag(kTagNode);
     auto currentPos = node->getPosition();

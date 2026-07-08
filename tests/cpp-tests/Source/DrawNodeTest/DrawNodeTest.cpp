@@ -3185,7 +3185,7 @@ void DrawNodeSpLinesOpenClosedTest::addNewControlPoint(Vec2 p)
 
 void DrawNodeSpLinesOpenClosedTest::onPointerUp(PointerEvent* event)
 {
-    auto location = event->getLocation();
+    auto location = event->getWorldPoint();
     addNewControlPoint(location);
 }
 

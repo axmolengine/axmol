@@ -169,7 +169,7 @@ function TerrainWalkThru:init()
     listener:registerScriptHandler(function(event)
 
         local touch = event
-        local location = event:getScreenLocation()
+        local location = event:getPoint()
         if self._camera ~= nil then
             if self._player ~= nil then
                 local nearP = ax.vec3(location.x, location.y, 0.0)

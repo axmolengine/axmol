@@ -1,4 +1,4 @@
-﻿
+
 #include "Transform.h"
 
 DRAGONBONES_NAMESPACE_BEGIN

@@ -622,7 +622,7 @@ local function BugsTestMainLayer()
 
     -- handling touch events
     local function onPointerMove(event)
-        local touchLocation = event:getLocation()
+        local touchLocation = event:getWorldPoint()
         local nMoveY = touchLocation.y - ptBeginPos.y
         local curPosx, curPosy = pItemMenu:getPosition()
         local nextPosy = curPosy + nMoveY
@@ -641,7 +641,7 @@ local function BugsTestMainLayer()
         ptCurPos = {x = curPosx, y = nextPosy}
     end
     local function onTouchBegan(event)
-        ptBeginPos = event:getLocation()
+        ptBeginPos = event:getWorldPoint()
     end
     local listener = ax.PointerEventListener:create()
     listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_POINTER_DOWN )

@@ -538,17 +538,14 @@ std::string NodeToWorld3D::subtitle() const
 void CameraOrbitTest::onEnter()
 {
     TestNodeDemo::onEnter();
-    _preProjection = Director::getInstance()->getProjection();
     Director::getInstance()->getRenderer()->setDepthTest(true);
     Director::getInstance()->getRenderer()->setDepthWrite(true);
-    Director::getInstance()->setProjection(Director::Projection::_3D);
 }
 
 void CameraOrbitTest::onExit()
 {
     Director::getInstance()->getRenderer()->setDepthTest(false);
     Director::getInstance()->getRenderer()->setDepthWrite(false);
-    Director::getInstance()->setProjection(_preProjection);
     TestNodeDemo::onExit();
 }
 
@@ -611,13 +608,10 @@ std::string CameraOrbitTest::subtitle() const
 void CameraZoomTest::onEnter()
 {
     TestNodeDemo::onEnter();
-    _preProjection = Director::getInstance()->getProjection();
-    Director::getInstance()->setProjection(Director::Projection::_3D);
 }
 
 void CameraZoomTest::onExit()
 {
-    Director::getInstance()->setProjection(_preProjection);
     TestNodeDemo::onExit();
 }
 
@@ -679,14 +673,11 @@ std::string CameraZoomTest::subtitle() const
 void CameraCenterTest::onEnter()
 {
     TestNodeDemo::onEnter();
-    _preProjection = Director::getInstance()->getProjection();
-    Director::getInstance()->setProjection(Director::Projection::_3D);
 }
 
 void CameraCenterTest::onExit()
 {
     TestNodeDemo::onExit();
-    Director::getInstance()->setProjection(_preProjection);
 }
 
 CameraCenterTest::CameraCenterTest()
@@ -800,7 +791,7 @@ ConvertToNode::ConvertToNode()
 
 void ConvertToNode::onPointerUp(PointerEvent* event)
 {
-    auto location = event->getLocation();
+    auto location = event->getWorldPoint();
 
     for (int i = 0; i < 3; i++)
     {
@@ -981,15 +972,12 @@ void MySprite::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 void CameraTest1::onEnter()
 {
     TestNodeDemo::onEnter();
-    _preProjection = Director::getInstance()->getProjection();
-    Director::getInstance()->setProjection(Director::Projection::_3D);
     Director::getInstance()->getRenderer()->setDepthTest(true);
     Director::getInstance()->getRenderer()->setDepthWrite(true);
 }
 
 void CameraTest1::onExit()
 {
-    Director::getInstance()->setProjection(_preProjection);
     Director::getInstance()->getRenderer()->setDepthTest(false);
     Director::getInstance()->getRenderer()->setDepthWrite(false);
     TestNodeDemo::onExit();
@@ -1032,15 +1020,12 @@ std::string CameraTest1::subtitle() const
 void CameraTest2::onEnter()
 {
     TestNodeDemo::onEnter();
-    _preProjection = Director::getInstance()->getProjection();
-    Director::getInstance()->setProjection(Director::Projection::_3D);
     Director::getInstance()->getRenderer()->setDepthTest(true);
     Director::getInstance()->getRenderer()->setDepthWrite(true);
 }
 
 void CameraTest2::onExit()
 {
-    Director::getInstance()->setProjection(_preProjection);
     Director::getInstance()->getRenderer()->setDepthTest(false);
     Director::getInstance()->getRenderer()->setDepthWrite(false);
     TestNodeDemo::onExit();

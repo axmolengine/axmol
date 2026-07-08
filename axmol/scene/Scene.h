@@ -56,19 +56,6 @@ class NavMesh;
  * @{
  */
 
-/** @class Scene
-* @brief Scene is a subclass of Node that is used only as an abstract concept.
-
-Scene and Node are almost identical with the difference that Scene has its
-anchor point (by default) at the center of the screen.
-
-For the moment Scene has no other logic than that, but in future releases it might have
-additional logic.
-
-It is a good practice to use a Scene as the parent of all your nodes.
-
-Scene will create a default camera for you.
-*/
 class AX_DLL Scene : public Node
 {
 public:
@@ -98,6 +85,12 @@ public:
      * @return The default camera of scene.
      */
     Camera* getDefaultCamera() const { return _defaultCamera; }
+
+    /**
+     * @brief Returns the default camera mode for this scene.
+     * Override in subclasses to control how the default camera is initialized.
+     */
+    virtual CameraMode getDefaultCameraMode() const { return CameraMode::Classic; }
 
     /** Get lights.
      * @return The vector of lights.
@@ -168,7 +161,6 @@ public:
 
 private:
     void initDefaultCamera();
-    void onProjectionChanged(CustomEvent* event);
 
 protected:
     void tick(float delta);
@@ -199,8 +191,6 @@ protected:
     Camera* _debugCamera{nullptr};
 
     bool _fixedUpdateEnabled{true};
-
-    CustomEventListener* _event;
 
     std::vector<BaseLight*> _lights;
 

@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 #include "axmol/renderer/CustomCommand.h"
 #include "axmol/scene/Node.h"
-#include "axmol/renderer/PipelineDesc.h"
+#include "axmol/rhi/PipelineDesc.h"
 
 #include "axmol/tlx/vector.hpp"
 

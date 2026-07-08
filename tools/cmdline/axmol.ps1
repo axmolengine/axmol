@@ -411,6 +411,9 @@ if ($args[0] -eq 'new') {
     if (!$sub_args.Contains('-l')) {
         $sub_opts['l'] = 'cpp'
     }
+    if (!$sub_args.Contains('-m')) {
+        $sub_opts['m'] = 'classic'
+    }
 }
 
 . $plugin.proc @sub_args @sub_opts

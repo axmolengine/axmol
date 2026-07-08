@@ -46,13 +46,13 @@ static constexpr size_t s_vertexFormatSizeMap[] = {
     64,  // MAT4 (4x4)
 };
 
-static_assert(AX_ARRAYSIZE(s_vertexFormatSizeMap) == (int)VertexFormat::COUNT,
+static_assert(AX_ARRAYSIZE(s_vertexFormatSizeMap) == (int)VertexElementType::COUNT,
               "The vertex format size table is incomplete!");
 
 /* InputBindingDesc */
 InputBindingDesc::InputBindingDesc(std::string_view _semantic,
                                    int _index,
-                                   VertexFormat _format,
+                                   VertexElementType _format,
                                    unsigned int _offset,
                                    bool needToBeNormallized,
                                    uint8_t instanceStepRate)
@@ -91,7 +91,7 @@ void VertexLayoutDesc::endLayout(int stride)
 
 void VertexLayoutDesc::addAttrib(std::string_view name,
                                  const VertexInputDesc* desc,
-                                 VertexFormat format,
+                                 VertexElementType format,
                                  size_t offset,
                                  bool needToBeNormallized,
                                  uint8_t instanceStepRate)
@@ -109,7 +109,7 @@ void VertexLayoutDesc::addAttrib(std::string_view name,
         return;
     }
 
-    if (format >= VertexFormat::COUNT) [[unlikely]]
+    if (format >= VertexElementType::COUNT) [[unlikely]]
     {
         AXLOGE("The vertex input '{}' invalid format: {}", name, static_cast<int>(format));
         return;

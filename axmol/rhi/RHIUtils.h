@@ -27,6 +27,7 @@
 
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/rhi/RHITypes.h"
+#include <cmath>
 
 /**
  * @addtogroup _rhi
@@ -77,7 +78,7 @@ PixelFormat convertDataToFormat(const unsigned char* data,
 
 inline uint8_t computeMipLevels(int width, int height)
 {
-    return static_cast<uint8_t>(floor(log2((std::max)(width, height))) + 1);
+    return static_cast<uint8_t>(std::floor(std::log2((std::max)(width, height))) + 1);
 }
 
 std::string_view vendorToString(uint32_t vendorId);

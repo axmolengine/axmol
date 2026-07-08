@@ -34,7 +34,7 @@
 #include "axmol/scene/Node.h"
 #include "axmol/renderer/MeshCommand.h"
 #include "axmol/3d/Skeleton3D.h"  // needs to be included for lua-bindings
-#include "axmol/3d/AABB.h"
+#include "axmol/math/AABB.h"
 #include "axmol/3d/Bundle3DData.h"
 #include "axmol/3d/MeshVertexIndexData.h"
 #include "axmol/3d/MeshMaterial.h"
