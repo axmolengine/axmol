@@ -58,7 +58,7 @@ min_sdk=23
 
 # The gradle version, @setup.ps1
 # as latest as possible
-gradle=9.5.1
+gradle=9.6.1
 
 # The android gradle plugin, @setup.ps1
 # as stable as possible, match with build-tools,android-studio
@@ -99,5 +99,5 @@ kcp=2.1.1
 lz4=v1.10.0
 sample-assets=master
 live2d-core=5.5
-openxr=release-1.1.60
+openxr=release-1.1.61
 # --- endregion

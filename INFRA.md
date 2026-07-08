@@ -19,7 +19,7 @@
 ## gradle
 
 - [![github](https://img.shields.io/github/v/release/gradle/gradle?label=Upstream)](https://github.com/gradle/gradle)
-- Version: 9.5.1
+- Version: 9.6.1
 - License: Apache-2.0
 - Platform: Android
 - Manged by: `1k/build.profiles`
@@ -27,7 +27,7 @@
 ## emsdk
 
 - [![github](https://img.shields.io/github/v/tag/emscripten-core/emsdk?label=Upstream)](https://github.com/emscripten-core/emsdk)
-- Version: 6.0.1
+- Version: 6.0.2
 - License: Apache-2.0
 - Platform: Android
 - Manged by: `1k/build.profiles`
