@@ -195,13 +195,17 @@ struct vint4
 	ASTCENC_SIMD_INLINE explicit vint4(const uint8_t *p)
 	{
 #if ASTCENC_SVE == 0
-	// Cast is safe - NEON loads are allowed to be unaligned
-	uint32x2_t t8 = vld1_dup_u32(reinterpret_cast<const uint32_t*>(p));
-	uint16x4_t t16 = vget_low_u16(vmovl_u8(vreinterpret_u8_u32(t8)));
-	m = vreinterpretq_s32_u32(vmovl_u16(t16));
+		// Copy through a uint32_t to avoid load through a reinterpreted
+		// pointer, which is both unaligned and an aliasing violation.
+		uint32_t tmp;
+		std::memcpy(&tmp, p, sizeof(tmp));
+
+		uint32x2_t t8 = vdup_n_u32(tmp);
+		uint16x4_t t16 = vget_low_u16(vmovl_u8(vreinterpret_u8_u32(t8)));
+		m = vreinterpretq_s32_u32(vmovl_u16(t16));
 #else
-	svint32_t data = svld1ub_s32(svptrue_pat_b32(SV_VL4), p);
-	m = svget_neonq(data);
+		svint32_t data = svld1ub_s32(svptrue_pat_b32(SV_VL4), p);
+		m = svget_neonq(data);
 #endif
 	}
 

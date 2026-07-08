@@ -258,7 +258,7 @@ static inline T max(T p, T q, T r, T s)
 }
 
 /**
- * @brief Clamp a value value between @c mn and @c mx.
+ * @brief Clamp a value between @c mn and @c mx.
  *
  * For floats, NaNs are turned into @c mn.
  *
@@ -272,7 +272,7 @@ template<typename T>
 inline T clamp(T v, T mn, T mx)
 {
 	// Do not reorder; correct NaN handling relies on the fact that comparison
-	// with NaN returns false and will fall-though to the "min" value.
+	// with NaN returns false and will fall-through to the "min" value.
 	if (v > mx) return mx;
 	if (v > mn) return v;
 	return mn;
@@ -427,7 +427,7 @@ static inline unsigned int int_as_uint(int v)
  */
 static inline int uint_as_int(unsigned int v)
 {
-	// Future: Can use std:bit_cast with C++20git p
+	// Future: Can use std:bit_cast with C++20
 	int sv;
 	std::memcpy(&sv, &v, sizeof(unsigned int));
 	return sv;

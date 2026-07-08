@@ -207,8 +207,14 @@ struct vint4
 	 */
 	ASTCENC_SIMD_INLINE explicit vint4(const uint8_t *p)
 	{
-		// _mm_loadu_si32 would be nicer syntax, but missing on older GCC
-		__m128i t = _mm_cvtsi32_si128(*reinterpret_cast<const int*>(p));
+		// Copy through a uint32_t to avoid load through a reinterpreted
+		// pointer, which is both unaligned and an aliasing violation.
+		int32_t tmp;
+		std::memcpy(&tmp, p, sizeof(tmp));
+
+		// _mm_loadu_si32 would be nicer syntax, but missing on older GCC and
+		// generates broken code on GCC 11.x before 11.3.
+		__m128i t = _mm_cvtsi32_si128(tmp);
 
 #if ASTCENC_SSE >= 41
 		m = _mm_cvtepu8_epi32(t);

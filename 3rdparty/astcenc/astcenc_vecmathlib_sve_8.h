@@ -283,7 +283,7 @@ ASTCENC_SIMD_INLINE vmask8 operator~(vmask8 a)
 }
 
 /**
- * @brief Return a 8-bit mask code indicating mask status.
+ * @brief Return an 8-bit mask code indicating mask status.
  *
  * bit0 = lane 0
  */

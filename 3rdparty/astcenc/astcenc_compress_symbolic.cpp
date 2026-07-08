@@ -619,7 +619,7 @@ static float compress_symbolic_block_for_partition_1plane(
 				best_errorval_in_mode = astc::min(errorval, best_errorval_in_mode);
 
 				// Average refinement improvement is 3.5% per iteration (allow 4.5%), but the first
-				// iteration can help more so we give it a extra 8% leeway. Use this knowledge to
+				// iteration can help more so we give it an extra 8% leeway. Use this knowledge to
 				// drive a heuristic to skip blocks that are unlikely to catch up with the best
 				// block we have already.
 				unsigned int iters_remaining = config.tune_refinement_limit - l;
@@ -953,7 +953,7 @@ static float compress_symbolic_block_for_partition_2planes(
 				best_errorval_in_mode = astc::min(errorval, best_errorval_in_mode);
 
 				// Average refinement improvement is 3.5% per iteration (allow 4.5%), but the first
-				// iteration can help more so we give it a extra 8% leeway. Use this knowledge to
+				// iteration can help more so we give it an extra 8% leeway. Use this knowledge to
 				// drive a heuristic to skip blocks that are unlikely to catch up with the best
 				// block we have already.
 				unsigned int iters_remaining = config.tune_refinement_limit - l;

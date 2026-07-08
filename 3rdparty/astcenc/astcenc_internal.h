@@ -277,20 +277,20 @@ struct partition_metrics
 };
 
 /**
- * @brief Computed lines for a a three component analysis.
+ * @brief Computed lines for a three component analysis.
  */
 struct partition_lines3
 {
 	/** @brief Line for uncorrelated chroma. */
 	line3 uncor_line;
 
-	/** @brief Line for correlated chroma, passing though the origin. */
+	/** @brief Line for correlated chroma, passing through the origin. */
 	line3 samec_line;
 
 	/** @brief Post-processed line for uncorrelated chroma. */
 	processed_line3 uncor_pline;
 
-	/** @brief Post-processed line for correlated chroma, passing though the origin. */
+	/** @brief Post-processed line for correlated chroma, passing through the origin. */
 	processed_line3 samec_pline;
 
 	/**
@@ -337,7 +337,7 @@ struct partition_info
  * @brief The weight grid information for a single decimation pattern.
  *
  * ASTC can store one weight per texel, but is also capable of storing lower resolution weight grids
- * that are interpolated during decompression to assign a with to a texel. Storing fewer weights
+ * that are interpolated during decompression to assign a weight to a texel. Storing fewer weights
  * can free up a substantial amount of bits that we can then spend on more useful things, such as
  * more accurate endpoints and weights, or additional partitions.
  *

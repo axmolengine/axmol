@@ -518,7 +518,7 @@ astcenc_error astcenc_config_init(
 		return status;
 	}
 
-	// Zero init all config fields; although most of will be over written
+	// Zero init all config fields; although most of will be overwritten
 	astcenc_config& config = *configp;
 	std::memset(&config, 0, sizeof(config));
 
@@ -679,8 +679,8 @@ astcenc_error astcenc_config_init(
 	if (flags & ASTCENC_FLG_MAP_NORMAL)
 	{
 		// Normal map encoding uses L+A blocks, so allow one more partitioning
-		// than normal. We need need fewer bits for endpoints, so more likely
-		// to be able to use more partitions than an RGB/RGBA block
+		// than usual. We need fewer bits for endpoints, so are more likely
+		// to be able to use more partitions
 		config.tune_partition_count_limit = astc::min(config.tune_partition_count_limit + 1u, 4u);
 
 		config.cw_g_weight = 0.0f;
@@ -689,8 +689,8 @@ astcenc_error astcenc_config_init(
 		config.tune_3partition_early_out_limit_factor *= 1.5f;
 		config.tune_2plane_early_out_limit_correlation = 0.99f;
 
-		// Normals are prone to blocking artifacts on smooth curves
-		// so force compressor to try harder here ...
+		// Normals are prone to blocking artifacts on smooth curves so force
+		// compressor to try harder
 		config.tune_db_limit *= 1.03f;
 	}
 	else if (flags & ASTCENC_FLG_MAP_RGBM)

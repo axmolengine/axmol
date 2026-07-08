@@ -40,7 +40,7 @@ using pixel_swizzler = vfloat4(*)(vfloat4, const astcenc_swizzle&);
 using pixel_converter = vfloat4(*)(vfloat4, vmask4);
 
 /**
- * @brief Load a 8-bit UNORM texel from a data array.
+ * @brief Load an 8-bit UNORM texel from a data array.
  *
  * @param data          The data pointer.
  * @param base_offset   The index offset to the start of the pixel.
@@ -121,28 +121,39 @@ static vfloat4 swz_texel(
 /**
  * @brief Encode a texel that is entirely LDR linear.
  *
+ * Out-of-range inputs will be clamped to the valid UNORM range.
+ *
  * @param data       The RGBA data to encode.
- * @param lns_mask   The mask for the HDR channels than need LNS encoding.
+ * @param lns_mask   The mask for the HDR channels that need LNS encoding.
  */
 static vfloat4 encode_texel_unorm(
 	vfloat4 data,
 	vmask4 lns_mask
 ) {
 	(void)lns_mask;
-	return data * 65535.0f;
+	vfloat4 raw_value = data * 65535.0f;
+
+	// Unorm data must be in 0-1 range, so clamp because data can come from an
+	// unconstrained float. This will replace NaNs with zero.
+	return clamp(0.0f, 65535.0f, raw_value);
 }
 
 /**
  * @brief Encode a texel that includes at least some HDR LNS texels.
  *
+ * Out-of-range inputs will be clamped to the valid LNS or UNORM range,
+ * depending on @c lns_mask.
+ *
  * @param data       The RGBA data to encode.
- * @param lns_mask   The mask for the HDR channels than need LNS encoding.
+ * @param lns_mask   The mask for the HDR channels that need LNS encoding.
  */
 static vfloat4 encode_texel_lns(
 	vfloat4 data,
 	vmask4 lns_mask
 ) {
-	vfloat4 datav_unorm = data * 65535.0f;
+	vfloat4 datav_unorm = encode_texel_unorm(data, lns_mask);
+
+	// Out-of-range inputs are clamped inside float_to_lns
 	vfloat4 datav_lns = float_to_lns(data);
 	return select(datav_unorm, datav_lns, lns_mask);
 }

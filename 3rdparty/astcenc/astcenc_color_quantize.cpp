@@ -30,8 +30,8 @@
  *     * Endpoint 2 type: Direct color encoding, or scaled from endpoint 1.
  *
  * However, this leaves a number of decisions about exactly how to pack the endpoints open. In
- * particular we need to determine if blue contraction can be used, or/and if delta encoding can be
- * used. If they can be applied these will allow us to maintain higher precision in the endpoints
+ * particular we need to determine if blue contraction, delta encoding, or both can be used. If
+ * they can be applied these will allow us to maintain higher precision in the endpoints
  * without needing additional storage.
  */
 

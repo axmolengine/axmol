@@ -79,7 +79,7 @@ public:
 	/**
 	 * @brief Construct a new node.
 	 *
-	 * Constructing a node will push to the the top of the stack, automatically making it a child of
+	 * Constructing a node will push to the top of the stack, automatically making it a child of
 	 * the current node, and then setting it to become the current node.
 	 *
 	 * @param format   The format template for the node name.
