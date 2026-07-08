@@ -26735,6 +26735,56 @@ int lua_ax_base_Director_getCanvasSizeInPixels(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Director_screenToCanvas(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Director* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Director",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Director_screenToCanvas'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::Vec2 arg0;
+
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.Director:screenToCanvas");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_screenToCanvas'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->screenToCanvas(arg0);
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:screenToCanvas",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_screenToCanvas'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Director_getVisibleSize(lua_State* tolua_S)
 {
     int argc = 0;
@@ -28790,6 +28840,7 @@ int lua_register_ax_base_Director(lua_State* tolua_S)
         tolua_function(tolua_S,"canvasToPixels",lua_ax_base_Director_canvasToPixels);
         tolua_function(tolua_S,"getCanvasSize",lua_ax_base_Director_getCanvasSize);
         tolua_function(tolua_S,"getCanvasSizeInPixels",lua_ax_base_Director_getCanvasSizeInPixels);
+        tolua_function(tolua_S,"screenToCanvas",lua_ax_base_Director_screenToCanvas);
         tolua_function(tolua_S,"getVisibleSize",lua_ax_base_Director_getVisibleSize);
         tolua_function(tolua_S,"getVisibleOrigin",lua_ax_base_Director_getVisibleOrigin);
         tolua_function(tolua_S,"getSafeAreaRect",lua_ax_base_Director_getSafeAreaRect);
