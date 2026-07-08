@@ -89,7 +89,8 @@ TEST_CASE("Terrain ray hit keeps local intersection and pointer world hit spaces
     REQUIRE(camera != nullptr);
 
     Vec3 pointerWorldHit;
-    REQUIRE(terrain->onPointerHitTest(&event, camera, &pointerWorldHit));
+    event.setCamera(camera);
+    REQUIRE(terrain->onPointerHitTest(&event, &pointerWorldHit));
     checkVec3Near(pointerWorldHit, expectedWorldHit);
 
     const float distanceOnRay = (pointerWorldHit - worldRay.origin).dot(worldRay.direction);
