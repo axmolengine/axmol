@@ -577,8 +577,7 @@ bool EffectSpriteLamp::onPointerDown(PointerEvent* ev)
     {
         auto worldPos = ev->getWorldPoint();
         _lightSprite->setPosition(Vec2(worldPos.x, worldPos.y));
-        Point lightPosInLocalSpace =
-            PointApplyAffineTransform(worldPos, _sprite->getWorldToNodeAffineTransform());
+        Point lightPosInLocalSpace = PointApplyAffineTransform(worldPos, _sprite->getWorldToNodeAffineTransform());
         ((EffectNormalMapped*)_effect)->setLightPos(Vec3(lightPosInLocalSpace.x, lightPosInLocalSpace.y, 50.0f));
     }
     return true;
@@ -590,8 +589,7 @@ void EffectSpriteLamp::onPointerMove(PointerEvent* ev)
         return;
     auto worldPos = ev->getWorldPoint();
     _lightSprite->setPosition(Vec2(worldPos.x, worldPos.y));
-    Point lightPosInLocalSpace =
-        PointApplyAffineTransform(worldPos, _sprite->getWorldToNodeAffineTransform());
+    Point lightPosInLocalSpace = PointApplyAffineTransform(worldPos, _sprite->getWorldToNodeAffineTransform());
     ((EffectNormalMapped*)_effect)->setLightPos(Vec3(lightPosInLocalSpace.x, lightPosInLocalSpace.y, 50.0f));
 }
 
@@ -600,8 +598,7 @@ void EffectSpriteLamp::onPointerUp(PointerEvent* ev)
     {
         auto worldPos = ev->getWorldPoint();
         _lightSprite->setPosition(Vec2(worldPos.x, worldPos.y));
-        Point lightPosInLocalSpace =
-            PointApplyAffineTransform(worldPos, _sprite->getWorldToNodeAffineTransform());
+        Point lightPosInLocalSpace = PointApplyAffineTransform(worldPos, _sprite->getWorldToNodeAffineTransform());
         ((EffectNormalMapped*)_effect)->setLightPos(Vec3(lightPosInLocalSpace.x, lightPosInLocalSpace.y, 50.0f));
     }
 }
