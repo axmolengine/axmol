@@ -2,7 +2,7 @@ param(
     $packageName,
     $directory,
     $lang,
-    [string]$mode = 'classic',
+    [string]$mode,
     [switch]$isolated,
     [switch]$repair,
     [switch]$forceOverwrite
