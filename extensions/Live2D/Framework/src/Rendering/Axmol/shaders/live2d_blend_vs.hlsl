@@ -25,6 +25,8 @@ VS_OUT main(VS_IN input)
     float4 gl_Position = mul(u_matrix, pos);
     output.position = gl_Position;
     output.v_texCoord = input.a_texCoord;
+    // a_texCoord is Live2D model UVs in top-left origin (V=0=top).
+    // Must unconditionally flip for all backends.
     output.v_texCoord.y = 1.0 - output.v_texCoord.y;
 
     float2 ndcPos = gl_Position.xy / gl_Position.w;

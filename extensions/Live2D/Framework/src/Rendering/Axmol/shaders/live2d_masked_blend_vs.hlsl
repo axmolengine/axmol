@@ -31,6 +31,8 @@ VS_OUT main(VS_IN input)
     output.v_clipPos = float4(output.v_clipPos.x, 1.0 - output.v_clipPos.y, output.v_clipPos.zw);
 #endif
     output.v_texCoord = input.a_texCoord;
+    // a_texCoord is Live2D model UVs in top-left origin (V=0=top).
+    // Must unconditionally flip for all backends.
     output.v_texCoord.y = 1.0 - output.v_texCoord.y;
 
     float2 ndcPos = gl_Position.xy / gl_Position.w;
