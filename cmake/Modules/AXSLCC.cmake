@@ -9,7 +9,7 @@ macro(axslcc_option variable value)
   endif()
 endmacro()
 
-axslcc_option(AXSLCC_SOURCE_FILE_EXTENSIONS ".hlsl;.vert;.vsh;.vs;.frag;.fsh;.fs")
+axslcc_option(AXSLCC_SOURCE_FILE_EXTENSIONS ".hlsl")
 axslcc_option(AXSLCC_OUT_DIR ${CMAKE_BINARY_DIR}/runtime/axslc)
 axslcc_option(AXSLCC_FIND_PROG_ROOT "")
 
@@ -167,14 +167,6 @@ function(ax_add_shader_target target_name)
     endif()
 
     set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}")
-    # For legacy extensions (.vert/.frag), NAME_WE doesn't contain stage suffix, so append it
-    if(FILE_EXT STREQUAL ".hlsl")
-      # _vs/_ps already in NAME_WE
-    elseif(FILE_EXT MATCHES "^\\.(vert|vsh|vs)$")
-      set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_vs")
-    elseif(FILE_EXT MATCHES "^\\.(frag|fsh|fs)$")
-      set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_fs")
-    endif()
     file(TO_CMAKE_PATH "${SC_OUTPUT}" SC_OUTPUT)
     set(SC_COMMENT "[${AX_RENDER_API}] Compiling shader ${SC_FILE} to ${SC_OUTPUT} ...")
 

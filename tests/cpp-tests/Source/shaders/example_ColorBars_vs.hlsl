@@ -1,0 +1,22 @@
+#include "base.hlsli"
+
+struct VS_IN {
+    float3 a_position : POSITION;
+    float2 a_texCoord : TEXCOORD0;
+};
+
+struct VS_OUT {
+    float2 v_texCoord : TEXCOORD0;
+    float4 position : SV_Position;
+};
+
+cbuffer vs_ub : register(b0, space0) {
+    float4x4 u_PMatrix;
+};
+
+VS_OUT main(VS_IN input) {
+    VS_OUT output;
+    output.position = mul(u_PMatrix, float4(input.a_position, 1.0));
+    output.v_texCoord = input.a_texCoord;
+    return output;
+}
