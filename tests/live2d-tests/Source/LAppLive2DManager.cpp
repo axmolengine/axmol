@@ -304,7 +304,7 @@ void LAppLive2DManager::ChangeScene(Csm::csmInt32 index)
 
 void LAppLive2DManager::CreateShader()
 {
-    auto* program = ProgramManager::getInstance()->loadProgram("custom/live2d_test_vs", "custom/live2d_test_fs");
+    auto* program = ProgramManager::getInstance()->loadProgram("custom/live2d_test_vs", "custom/live2d_test_ps");
     _program = program;
 }
 

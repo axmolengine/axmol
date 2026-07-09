@@ -13,7 +13,11 @@ cbuffer fs_ub : register(b1, space0) {
 
 float4 main(PS_IN input) : SV_Target0 {
     float time = u_Time[1];
+#if AXSLC_UV_TOP
+    float2 fragCoord = float2(input.gl_FragCoord.x, u_screenSize.y - input.gl_FragCoord.y);
+#else
     float2 fragCoord = input.gl_FragCoord.xy;
+#endif
     float2 p = 2.0 * (fragCoord - center.xy) / resolution.xy;
 
     float tt = fmod(time, 2.0) / 2.0;

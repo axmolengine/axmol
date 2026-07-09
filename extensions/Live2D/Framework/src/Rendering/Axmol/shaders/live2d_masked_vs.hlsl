@@ -25,7 +25,9 @@ VS_OUT main(VS_IN input)
     float4 pos = float4(input.a_position.x, input.a_position.y, 0.0, 1.0);
     output.position = mul(u_matrix, pos);
     output.v_clipPos = mul(u_clipMatrix, pos);
+#if AXSLC_UV_TOP
     output.v_clipPos = float4(output.v_clipPos.x, 1.0 - output.v_clipPos.y, output.v_clipPos.zw);
+#endif
     output.v_texCoord = input.a_texCoord;
     output.v_texCoord.y = 1.0 - output.v_texCoord.y;
     return output;

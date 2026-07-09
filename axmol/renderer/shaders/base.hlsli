@@ -27,9 +27,14 @@
 
 #define FWIDTH(dist) 0.4
 
-// In HLSL/D3D, texture origin is top-left (no Y flip needed).
-// spirv-cross handles GL-specific Y flip when producing GLSL output.
-#define TEXCOORD_Y(v) ((v).y)
+// AXSLC_UV_TOP: built-in define by axslcc.
+//   0 = GLSL/ESSL (origin bottom-left, Y up)
+//   1 = HLSL/SPIRV/MSL (origin top-left, Y down)
+//
+// AX_Y_UP(v): Convert to bottom-left (Y-up) coordinate convention.
+//   HLSL/SPIRV/MSL → flip: (1.0 - (v).y)
+//   GLSL/ESSL       → no flip: ((v).y)
+#define AX_Y_UP(v) (AXSLC_UV_TOP ? (1.0 - (v).y) : ((v).y))
 
 // ==== Builtin Samplers ====
 

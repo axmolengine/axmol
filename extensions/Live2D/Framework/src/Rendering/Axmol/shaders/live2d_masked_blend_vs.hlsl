@@ -27,12 +27,15 @@ VS_OUT main(VS_IN input)
     float4 gl_Position = mul(u_matrix, pos);
     output.position = gl_Position;
     output.v_clipPos = mul(u_clipMatrix, pos);
+#if AXSLC_UV_TOP
     output.v_clipPos = float4(output.v_clipPos.x, 1.0 - output.v_clipPos.y, output.v_clipPos.zw);
+#endif
     output.v_texCoord = input.a_texCoord;
     output.v_texCoord.y = 1.0 - output.v_texCoord.y;
 
     float2 ndcPos = gl_Position.xy / gl_Position.w;
     output.v_blendCoord = ndcPos * 0.5 + 0.5;
+    output.v_blendCoord.y = AX_Y_UP(output.v_blendCoord.y);
 
     return output;
 }

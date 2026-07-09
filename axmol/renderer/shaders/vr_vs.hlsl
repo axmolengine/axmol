@@ -15,7 +15,7 @@ struct VS_OUT {
 VS_OUT main(VS_IN input) {
     VS_OUT output;
     output.position = float4(input.a_position, 0.0, 1.0);
-    output.v_texCoord = float2(input.a_texCoord.x, TEXCOORD_Y(input.a_texCoord));
+    output.v_texCoord = float2(input.a_texCoord.x, AX_Y_UP(input.a_texCoord));
     output.v_vignette = input.a_vignette;
     return output;
 }

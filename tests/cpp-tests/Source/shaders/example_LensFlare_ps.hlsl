@@ -74,7 +74,11 @@ float3 cc(float3 color, float factor, float factor2)
 }
 
 float4 main(PS_IN input) : SV_Target0 {
+#if AXSLC_UV_TOP
+    float2 fragCoord = float2(input.gl_FragCoord.x, resolution.y - input.gl_FragCoord.y);
+#else
     float2 fragCoord = input.gl_FragCoord.xy;
+#endif
     float2 texCoord = fragCoord / resolution;
     float2 uv = texCoord - 0.5;
 

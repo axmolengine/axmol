@@ -15,7 +15,11 @@ float u(float x) { return (x > 0.0) ? 1.0 : 0.0; }
 
 float4 main(PS_IN input) : SV_Target0 {
     float time = u_Time[1];
+#if AXSLC_UV_TOP
+    float2 fragCoord = float2(input.gl_FragCoord.x, u_screenSize.y - input.gl_FragCoord.y);
+#else
     float2 fragCoord = input.gl_FragCoord.xy;
+#endif
     float2 p = 2.0 * (fragCoord - center.xy) / resolution.xy;
 
     float a = atan2(p.x, p.y);

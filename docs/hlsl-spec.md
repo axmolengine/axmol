@@ -75,6 +75,19 @@ struct PS_IN {
 - VS_OUT and PS_IN varying names and semantics **must match**. The compiler validates this.
 - `SV_Position` is the only varying that can change type (VS outputs `float4`, PS receives it as pixel coordinate).
 - Only declare PS_IN members that are actually used by the pixel shader.
+- **The declaration order of non-builtin members in VS_OUT and PS_IN must be identical.**
+  glslang assigns SPIR-V `Location` decorations in struct declaration order (not by semantic name).
+  SPIRV-Cross then generates D3D semantics (`TEXCOORDn`) from `Location` values during cross-compilation.
+  If order differs, D3D12 will see mismatched register component masks and reject the PSO:
+  ```
+  D3D12 ERROR: ID3D12Device::CreateGraphicsPipelineState: Vertex Shader - Pixel Shader
+  linkage error: Signatures between stages are incompatible.
+  Semantic 'TEXCOORD' ... has a hardware register component mask that
+  is not a subset of the output of the previous stage.
+  ```
+  This is independent of the semantic names — the names can be `COLOR0`/`TEXCOORD0` in source,
+  but SPIRV-Cross will reassign them to sequential `TEXCOORDn` in cross-compiled output
+  based on the SPIR-V location assignment. Only the *declaration order* matters.
 
 ## 5. Constant Buffers (Uniform Blocks)
 
@@ -277,17 +290,68 @@ cbuffer fs_ub : register(b1, space0) {
 
 ## 14. Compilation Pipeline
 
+axslcc performs per-target compilation to inject `AXSLC_TARGET_*` preprocessor defines
+at source level:
+
 ```
-.hlsl source
-  → glslang → SPIR-V
-    → SPIRV-Cross + attribute remap → HLSL (D3D targets)
-    → SPIRV-Cross → ESSL (GLES targets)
-    → SPIRV-Cross → MSL (Metal targets)
-    → SPIR-V raw (Vulkan targets)
-  → packed into .sc file (axslcc --sc)
+for each target (HLSL, GLSL, ESSL, MSL, SPIRV):
+  .hlsl source + target defines (-DAXSLC_TARGET_<LANG>=1)
+    → glslang → SPIR-V
+      → SPIRV-Cross + attribute remap → target output
+    → packed into .sc file (axslcc --sc)
 ```
 
-## 15. Testing Checklist
+## 15. Target Identification Macros
+
+axslcc automatically defines `AXSLC_TARGET_*` macros as preprocessor defines during
+source compilation (per-target via glslang `-D` flags). These are available in source
+and all `#include`d headers:
+
+| Target | Defines |
+|--------|---------|
+| ESSL (GLES) | `AXSLC_TARGET_ESSL=1` + `AXSLC_TARGET_GLSL=1` |
+| HLSL (D3D)  | `AXSLC_TARGET_HLSL=1` |
+| MSL (Metal)  | `AXSLC_TARGET_MSL=1` |
+| GLSL         | `AXSLC_TARGET_GLSL=1` |
+| SPIR-V (Vulkan) | `AXSLC_TARGET_SPIRV=1` |
+
+### Helper: `AX_Y_UP(v)` + `AXSLC_UV_TOP` (`base.hlsli`)
+
+```hlsl
+// AXSLC_UV_TOP: 0 = bottom-left origin (GLSL/ESSL), 1 = top-left origin (HLSL/SPIRV/MSL)
+#if defined(AXSLC_TARGET_GLSL)
+    #define AXSLC_UV_TOP 0
+#else
+    #define AXSLC_UV_TOP 1
+#endif
+
+// AX_Y_UP(v): Convert from platform origin to bottom-left (Y-up) coordinate
+#define AX_Y_UP(v) (AXSLC_UV_TOP ? (1.0 - (v).y) : ((v).y))
+```
+
+Use for vertex shader texcoords that need Y-up convention:
+
+```hlsl
+output.v_texCoord = float2(input.a_texCoord.x, AX_Y_UP(input.a_texCoord));
+```
+
+### Fullscreen Fragment Shaders
+
+For fullscreen PS shaders using `SV_Position` with Shadertoy-style coordinate math,
+use `AXSLC_UV_TOP` to conditionally flip `gl_FragCoord.y`:
+
+```hlsl
+float4 main(PS_IN input) : SV_Target0 {
+#if AXSLC_UV_TOP
+    float2 fragCoord = float2(input.gl_FragCoord.x, u_screenSize.y - input.gl_FragCoord.y);
+#else
+    float2 fragCoord = input.gl_FragCoord.xy;
+#endif
+    // ... rest using fragCoord
+}
+```
+
+## 16. Testing Checklist
 
 - [ ] Vertex inputs declared with correct D3D semantics
 - [ ] PS_IN varyings match VS_OUT varyings

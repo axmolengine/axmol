@@ -157,7 +157,7 @@ namespace spine {
 		reset();
 
 		auto program = ProgramManager::getInstance()->loadProgram("custom/spineTwoColorTint_vs",
-																  "custom/spineTwoColorTint_fs");
+																  "custom/spineTwoColorTint_ps");
 		_twoColorProgramState = new rhi::ProgramState(program);
 
 		_locPMatrix = _twoColorProgramState->getUniformLocation("u_PMatrix");

@@ -12,9 +12,14 @@ cbuffer fs_ub : register(b1, space0) {
 };
 
 float4 main(PS_IN input) : SV_Target0 {
-    float fragCoordY = input.gl_FragCoord.y;
+#if AXSLC_UV_TOP
+    float2 fragCoord = float2(input.gl_FragCoord.x, u_screenSize.y - input.gl_FragCoord.y);
+#else
+    float2 fragCoord = input.gl_FragCoord.xy;
+#endif
+    float fragCoordY = fragCoord.y;
     float time = u_Time[1];
-    float x = input.gl_FragCoord.x - (center.x - resolution.x / 2.0);
+    float x = fragCoord.x - (center.x - resolution.x / 2.0);
     float y = fragCoordY - (center.y - resolution.y / 2.0);
     float mov0 = x + y + cos(sin(time) * 2.0) * 100.0 + sin(x / 100.0) * 1000.0;
     float mov1 = y / resolution.y / 0.2 + time;

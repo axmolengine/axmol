@@ -1,8 +1,8 @@
 #include "base.hlsli"
 
 struct PS_IN {
-    float2 v_texCoord : TEXCOORD0;
     float4 v_color : COLOR0;
+    float2 v_texCoord : TEXCOORD0;
 };
 
 cbuffer fs_ub : register(b1, space0) {

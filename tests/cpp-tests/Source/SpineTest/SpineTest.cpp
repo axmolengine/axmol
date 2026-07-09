@@ -458,7 +458,7 @@ bool SpineboyExample::init()
     skeletonNode->setPosition(Vec2(_contentSize.width / 2, 20));
     addChild(skeletonNode);
 
-    auto program = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_Blur_fs",
+    auto program = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_Blur_ps",
                                                               VertexLayoutKind::Sprite);
     skeletonNode->setProgramState(new rhi::ProgramState(program), true);
 
