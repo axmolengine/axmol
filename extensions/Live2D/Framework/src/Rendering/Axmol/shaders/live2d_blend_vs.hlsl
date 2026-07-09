@@ -29,7 +29,7 @@ VS_OUT main(VS_IN input)
 
     float2 ndcPos = gl_Position.xy / gl_Position.w;
     output.v_blendCoord = ndcPos * 0.5 + 0.5;
-    output.v_blendCoord.y = AX_Y_UP(output.v_blendCoord.y);
+    output.v_blendCoord.y = AX_Y_UP(output.v_blendCoord);
 
     return output;
 }
