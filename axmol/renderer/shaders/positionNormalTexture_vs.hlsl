@@ -1,10 +1,5 @@
 #include "base.hlsli"
 
-#ifdef USE_NORMAL_MAPPING
-#endif
-#ifdef USE_NORMAL_MAPPING
-#endif
-
 struct VS_IN {
     float4 a_position : POSITION;
     float2 a_texCoord : TEXCOORD0;

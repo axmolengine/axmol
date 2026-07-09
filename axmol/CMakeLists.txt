@@ -430,7 +430,7 @@ set_source_files_properties(
   ${_AX_ROOT}/axmol/renderer/shaders/colorNormalTexture_ps.hlsl
   ${_AX_ROOT}/axmol/renderer/shaders/positionNormalTexture_vs.hlsl
   ${_AX_ROOT}/axmol/renderer/shaders/skinPositionNormalTexture_vs.hlsl
-  PROPERTIES AXSLCC_OUTPUT1 "USE_NORMAL_MAPPING=1"
+  PROPERTIES AXSLCC_VARIANT_DEFINES "USE_NORMAL_MAPPING=1"
 )
 ax_add_shader_target_for(${_AX_CORE_LIB} FILES ${_builtin_shaders} BUILTIN)
 

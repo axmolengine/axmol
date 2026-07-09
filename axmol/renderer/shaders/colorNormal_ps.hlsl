@@ -1,10 +1,10 @@
 #include "base.hlsli"
 
 struct PS_IN {
-    float3 v_normal : NORMAL;
     float2 v_texCoord : TEXCOORD0;
     float3 v_vertexToPointLightDirection[MAX_POINT_LIGHT_NUM] : POINTLIGHT;
     float3 v_vertexToSpotLightDirection[MAX_SPOT_LIGHT_NUM] : SPOTLIGHT;
+    float3 v_normal : NORMAL;
 };
 
 cbuffer fs_ub : register(b1, space0) {

@@ -35,10 +35,10 @@ define_property(SOURCE PROPERTY AXSLCC_DEFINES
   BRIEF_DOCS "Compiled shader defines"
   FULL_DOCS "Compiled shader defines, seperated with comma")
 
-# PROPERTY: output1 (optional) dual-compile variant
-define_property(SOURCE PROPERTY AXSLCC_OUTPUT1
-  BRIEF_DOCS "Compiled shader output1 additional defines"
-  FULL_DOCS "Compiled shader output1 additional defines, seperated with comma")
+# PROPERTY: variant defines (optional) multi-compile variants
+define_property(SOURCE PROPERTY AXSLCC_VARIANT_DEFINES
+  BRIEF_DOCS "Compiled shader variant defines"
+  FULL_DOCS "Additional defines per output variant. cmake-list separated by semicolons, each element is comma-separated defines for one variant. Outputs: base, base_1, base_2, ...")
 
 # PROPERTY: axslcc output (optional)
 define_property(SOURCE PROPERTY AXSLCC_OUTPUT
@@ -48,6 +48,18 @@ define_property(SOURCE PROPERTY AXSLCC_OUTPUT
 define_property(TARGET PROPERTY SHADER_DEPENDS
   BRIEF_DOCS "The shader depends of normal target"
   FULL_DOCS "The shader depends of normal target, seperated with comma")
+
+# Helper: parse comma-separated preprocessor defines into -D-prefixed cmake list
+function(axslcc_parse_defines define_string out_var)
+  set(result "")
+  if(NOT(define_string STREQUAL "NOTFOUND") AND NOT(define_string STREQUAL ""))
+    string(REPLACE "," ";" def_list "${define_string}")
+    foreach(defv ${def_list})
+      list(APPEND result "-D${defv}")
+    endforeach()
+  endif()
+  set(${out_var} ${result} PARENT_SCOPE)
+endfunction()
 
 # Find shader sources in specified directory
 # syntax: ax_find_shaders(dir shader_sources [RECURSE])
@@ -136,12 +148,8 @@ function(ax_add_shader_target target_name)
 
     # defines
     get_source_file_property(SOURCE_SC_DEFINES ${SC_FILE} AXSLCC_DEFINES)
-    if(NOT(SOURCE_SC_DEFINES STREQUAL "NOTFOUND"))
-      string(REPLACE "," ";" DEFINE_LIST "${SOURCE_SC_DEFINES}")
-      foreach(defv ${DEFINE_LIST})
-        list(APPEND SC_FLAGS "-D${defv}")
-      endforeach()
-    endif()
+    axslcc_parse_defines("${SOURCE_SC_DEFINES}" PARSED_DEFINES)
+    list(APPEND SC_FLAGS ${PARSED_DEFINES})
 
     # includes
     get_source_file_property(INC_DIRS ${SC_FILE} AXSLCC_INCLUDE_DIRS)
@@ -170,9 +178,9 @@ function(ax_add_shader_target target_name)
     file(TO_CMAKE_PATH "${SC_OUTPUT}" SC_OUTPUT)
     set(SC_COMMENT "[${AX_RENDER_API}] Compiling shader ${SC_FILE} to ${SC_OUTPUT} ...")
 
-    get_source_file_property(SOURCE_SC_OUTPUT1 ${SC_FILE} AXSLCC_OUTPUT1)
+    get_source_file_property(SOURCE_SC_VARIANTS ${SC_FILE} AXSLCC_VARIANT_DEFINES)
 
-    if(SOURCE_SC_OUTPUT1 STREQUAL "NOTFOUND")
+    if(SOURCE_SC_VARIANTS STREQUAL "NOTFOUND")
       set_source_files_properties(${SC_FILE} DIRECTORY ${CMAKE_BINARY_DIR} PROPERTIES AXSLCC_OUTPUT ${SC_OUTPUT})
       add_custom_command(
         MAIN_DEPENDENCY ${SC_FILE}
@@ -183,16 +191,24 @@ function(ax_add_shader_target target_name)
       )
       list(APPEND compiled_shaders ${SC_OUTPUT})
     else()
-      set(SC_OUTPUT1 "${SC_OUTPUT}_1")
+      set(SC_OUTPUTS "${SC_OUTPUT}")
+      set(SC_CMD_LINES COMMAND ${AXSLCC_EXE} ${SC_FLAGS} "--output=${SC_OUTPUT}")
+      set(vidx 0)
+      foreach(variant_defs ${SOURCE_SC_VARIANTS})
+        math(EXPR vidx "${vidx} + 1")
+        set(SC_VOUT "${SC_OUTPUT}_${vidx}")
+        list(APPEND SC_OUTPUTS "${SC_VOUT}")
+        axslcc_parse_defines("${variant_defs}" VARIANT_DEFINES)
+        list(APPEND SC_CMD_LINES COMMAND ${AXSLCC_EXE} ${SC_FLAGS} ${VARIANT_DEFINES} "--output=${SC_VOUT}")
+      endforeach()
       add_custom_command(
         MAIN_DEPENDENCY ${SC_FILE}
-        OUTPUT ${SC_OUTPUT} ${SC_OUTPUT1}
-        COMMAND ${AXSLCC_EXE} ${SC_FLAGS} "-D${SOURCE_SC_OUTPUT1}" "--output=${SC_OUTPUT}"
-        COMMAND ${AXSLCC_EXE} ${SC_FLAGS} "--output=${SC_OUTPUT1}"
+        OUTPUT ${SC_OUTPUTS}
+        ${SC_CMD_LINES}
         COMMENT "${SC_COMMENT}"
         VERBATIM
       )
-      list(APPEND compiled_shaders ${SC_OUTPUT} ${SC_OUTPUT1})
+      list(APPEND compiled_shaders ${SC_OUTPUTS})
     endif()
   endforeach()
 

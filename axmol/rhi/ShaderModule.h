@@ -59,6 +59,8 @@ public:
 
     uint32_t getStageOffset() const { return _stageOffset; }
 
+    std::span<uint8_t> getCodeSpan() const { return _codeSpan; }
+
 protected:
     ShaderModule(ShaderStage stage, Data& data);
     virtual ~ShaderModule();
