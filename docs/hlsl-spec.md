@@ -301,6 +301,30 @@ for each target (HLSL, GLSL, ESSL, MSL, SPIRV):
     → packed into .sc file (axslcc --sc)
 ```
 
+### 14.1 Shader Compile Variants
+
+A single `.hlsl` source can produce multiple compiled `.sc` outputs with different
+preprocessor defines using the `AXSLCC_VARIANT_DEFINES` source property:
+
+```cmake
+# Single extra variant
+set_source_files_properties(
+    positionNormalTexture_vs.hlsl
+    PROPERTIES AXSLCC_VARIANT_DEFINES "USE_NORMAL_MAPPING=1"
+)
+# → outputs: positionNormalTexture_vs (base), positionNormalTexture_vs_1 (-DUSE_NORMAL_MAPPING=1)
+
+# Multiple variants
+PROPERTIES AXSLCC_VARIANT_DEFINES "A=1,B=2;C=3"
+# → outputs: file, file_1 (-DA=1 -DB=2), file_2 (-DC=3)
+```
+
+Rules:
+- **`;`** (semicolon) separates variants
+- **`,`** (comma) separates defines within one variant
+- Variant defines are **only** applied to `_1`, `_2`, ... outputs — never the base output
+- `AXSLCC_DEFINES` (comma-separated) applies to **all** outputs including the base
+
 ## 15. Target Identification Macros
 
 axslcc automatically defines `AXSLC_TARGET_*` macros as preprocessor defines during
