@@ -31,7 +31,6 @@
 #include "axmol/rhi/d3d12/RenderPipeline12.h"
 #include "axmol/rhi/d3d12/DepthStencilState12.h"
 #include "axmol/rhi/d3d12/VertexLayout12.h"
-#include "axmol/rhi/d3d12/Sampler12.h"
 #include "axmol/base/Logging.h"
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/rhi/SamplerCache.h"
@@ -858,14 +857,6 @@ void DriverImpl::queueDisposalInternal(DisposableResource&& disposal)
 
 bool DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, D3D12BlobHandle& outHandle)
 {
-    if (stage == ShaderStage::FRAGMENT)
-    {
-        _shaderCompileBuffer.clear();
-        _shaderCompileBuffer.reserve(shaderCode.size() + BuiltinSamplers.size());
-        _shaderCompileBuffer += BuiltinSamplers;
-        _shaderCompileBuffer += shaderCode;
-        shaderCode = _shaderCompileBuffer;
-    }
     if (_dxcAvailable)
     {
         ComPtr<IDxcBlobEncoding> sourceBlob;

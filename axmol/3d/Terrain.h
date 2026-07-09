@@ -100,7 +100,7 @@ public:
         INCREASE_LOWER,
     };
 
-    /* must match in shader terrain.frag
+    /* must match in shader terrain_ps.hlsl
         layout(binding = 0) uniform sampler2D u_details[4]; // will take slot 0~3
         layout(binding = 4) uniform sampler2D u_alphaMap;
         layout(binding = 5) uniform sampler2D u_lightMap;

@@ -589,9 +589,6 @@ struct UniformInfo
 
     // Number of array elements (1 for non-array uniforms).
     uint16_t count = 0;
-
-    // axslcc-provided sampler slot index (for combined image samplers).
-    uint16_t samplerSlot = 0;
 };
 
 struct UniformLocation

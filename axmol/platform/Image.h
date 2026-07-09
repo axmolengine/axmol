@@ -117,11 +117,12 @@ public:
 
     /** The new APIs to treats (or not) compressed image files as if they have alpha premultiplied.
      *
-     * By default, ETC1 + ETC1_ALPHA is enabled, because we do PMA at shader etc1.frag
+     * By default, ETC1 + ETC1_ALPHA is enabled, because we do PMA at shader etc1_ps.hlsl
+     * (or dualSampler_ps.hlsl).
      * !!!IMPORTANT:
      *   The spine-runtimes official always regard texture has PMA, so you needs
      *   do compressed images PMA at texture convert tools or GPU fragment shader, such as
-     *   positionTexture.frag, positionTextureColor.frag and others which have texture sampler,
+     *   positionTexture_ps.hlsl, positionTextureColor_ps.hlsl and others which have texture sampler,
      *   otherwise, the spine animations can't be render properly
      */
     static void setCompressedImagesHavePMA(uint32_t targets, bool havePMA);

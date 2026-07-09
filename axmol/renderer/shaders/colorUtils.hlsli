@@ -24,9 +24,10 @@ float3 transformHSV(float3 inColor, float3 hsv)
 float3 trasnformYUV(float3 YUV, float4x4 colorTransform)
 {
     YUV -= float3(colorTransform[0].w, colorTransform[1].w, colorTransform[2].w);
-    return float3x3(
+    float3x3 m = {
         colorTransform[0].xyz,
         colorTransform[1].xyz,
         colorTransform[2].xyz
-    ) * YUV;
+    };
+    return mul(m, YUV);
 }

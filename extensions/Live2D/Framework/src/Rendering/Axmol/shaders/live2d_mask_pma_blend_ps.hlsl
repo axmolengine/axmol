@@ -20,7 +20,7 @@ Texture2D u_tex0 : register(t0, space1);
 Texture2D u_tex1 : register(t1, space1);
 Texture2D u_blendTexture : register(t2, space1);
 
-#include "live2d_blend_common.hlsl"
+#include "live2d_blend_common.hlsli"
 
 float4 main(PS_IN input) : SV_Target0
 {

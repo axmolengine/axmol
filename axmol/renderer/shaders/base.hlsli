@@ -1,3 +1,4 @@
+// Vertex input semantic alias
 #ifndef DIRLIGHT
 #define DIRLIGHT TEXCOORD1
 #endif
@@ -5,21 +6,11 @@
 #define POINTLIGHT TEXCOORD2
 #endif
 #ifndef SPOTLIGHT
-#define SPOTLIGHT TEXCOORD4
+#define SPOTLIGHT TEXCOORD6
 #endif
 #ifndef SPOTLIGHT_NORM
-#define SPOTLIGHT_NORM TEXCOORD5
+#define SPOTLIGHT_NORM TEXCOORD7
 #endif
-
-#undef TANGENT
-#undef BINORMAL
-#undef BLENDINDICES
-#undef BLENDWEIGHT
-
-#define TANGENT TEXCOORD6
-#define BINORMAL TEXCOORD7
-#define BLENDINDICES COLOR1
-#define BLENDWEIGHT COLOR2
 
 #define vfloat_def(x, y) float4 x[(y + 3) / 4]
 #define vfloat_at(x, y) x[y / 4][y % 4]

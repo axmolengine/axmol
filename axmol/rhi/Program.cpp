@@ -367,7 +367,7 @@ void Program::reflectSamplers(SLCReflectContext* context)
         uniform.varType         = SC_TYPE_HALF + imageDim;
         ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t)));  // skip bits: multisample, arrayed, reserved
         uniform.count       = (std::max)(1, static_cast<int>(ibs->read<uint8_t>()));
-        uniform.samplerSlot = ibs->read<uint8_t>();
+        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t)));  // skip sampler_slot (deprecated)
 
         const auto reflectedId = makeTextureNameKey(name);
         auto ret               = _activeUniformInfos.emplace(reflectedId, uniform);

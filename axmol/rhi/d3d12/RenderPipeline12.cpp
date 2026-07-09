@@ -33,6 +33,8 @@
 namespace ax::rhi::d3d12
 {
 
+static constexpr uint32_t kBuiltinSamplerCount = 22;
+
 static constexpr D3D12_BLEND kBlendFactorMap[] = {
     D3D12_BLEND_ZERO,              // ZERO
     D3D12_BLEND_ONE,               // ONE
@@ -244,7 +246,6 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
         samplerParam.ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
         entry.samplerRootIndex                           = rootIndex++;
 
-        uint16_t maxSamplerSlot = 0;
         for (auto& [_, smp] : fsSamplers)
         {
             // In Vulkan, sampler2D is a combined image sampler.
@@ -254,14 +255,11 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
             srvRange.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             srvRange.NumDescriptors                    = smp->count;     // number of textures
             srvRange.BaseShaderRegister                = smp->location;  // t#
-            srvRange.RegisterSpace                     = SET_INDEX_SRV;  // match Vulkan set
+            srvRange.RegisterSpace                     = SET_INDEX_SRV;   // match Vulkan set
             srvRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-            if (maxSamplerSlot < smp->samplerSlot)
-                maxSamplerSlot = smp->samplerSlot;
         }
 
-        samplerRange.NumDescriptors = maxSamplerSlot + 1;
+        samplerRange.NumDescriptors = kBuiltinSamplerCount;
 
         // Add SRV descriptor table root parameter
         D3D12_ROOT_PARAMETER& srvParam               = rootParams.emplace_back();

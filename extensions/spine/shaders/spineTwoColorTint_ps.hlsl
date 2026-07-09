@@ -1,3 +1,5 @@
+#include "base.hlsli"
+
 struct PS_IN {
     float4 v_light : COLOR0;
     float4 v_dark : COLOR1;
