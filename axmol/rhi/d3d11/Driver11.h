@@ -141,7 +141,8 @@ public:
     const ComPtr<IDXGIFactory2>& getDXGIFactory2() const { return _dxgiFactory2; }
     const ComPtr<IDXGIAdapter>& getDXGIAdapter() const { return _dxgiAdapter; }
 
-    IUnknown* compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, ID3DBlob*& outBlob);
+    IUnknown* compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, ID3DBlob*& outBlob,
+                            bool isPrecompiled = false);
 
 protected:
     /**

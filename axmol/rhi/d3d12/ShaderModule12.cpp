@@ -31,7 +31,7 @@ namespace ax::rhi::d3d12
 {
 ShaderModuleImpl::ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, Data& chunk) : ShaderModule(stage, chunk)
 {
-    driver->compileShader(_codeSpan, stage, _nativeHandle);
+    driver->compileShader(_codeSpan, stage, _nativeHandle, isPrecompiled());
 }
 
 ShaderModuleImpl::~ShaderModuleImpl()

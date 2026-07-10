@@ -75,18 +75,24 @@ void ShaderModule::parseShaderCode(void)
         assert(false && "axmol: Shader version too old");
     }
 
-    // find target entry
+    // find target entry: prefer precompiled bytecode when available
     const auto driverType        = GraphicsCore::currentDriverType();
     const auto currentShaderLang = GraphicsCore::currentShaderLang();
     const auto currentProfileVer = GraphicsCore::currentShaderProfile();
+    const auto bcProfile         = GraphicsCore::currentShaderILProfile();
 
     for (int i = 0; i < chunk.num_targets; ++i)
     {
         auto lang        = ibs.read<int>();
         auto profile_ver = ibs.read<int>();
-        if (matchLang(currentShaderLang, currentProfileVer, lang, profile_ver))
+        bool isBin       = (profile_ver & SC_PROFILE_BINARY) != 0;
+        int  profile     = profile_ver & ~SC_PROFILE_BINARY;
+        int  expect      = isBin ? bcProfile : currentProfileVer;
+
+        if (matchLang(currentShaderLang, expect, lang, profile))
         {
             _stageOffset = ibs.read<uint32_t>();
+            _precompiled = isBin;
             break;
         }
         else

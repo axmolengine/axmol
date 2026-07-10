@@ -370,6 +370,8 @@ bool DriverImpl::init()
 
     _dxcAvailable = detectDXCAvailability();
 
+    GraphicsCore::setCurrentShaderILProfile(_dxcAvailable ? 60 : 51);
+
     return true;
 }
 
@@ -855,8 +857,16 @@ void DriverImpl::queueDisposalInternal(DisposableResource&& disposal)
     _disposalQueue.emplace_back(std::move(disposal));
 }
 
-bool DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, D3D12BlobHandle& outHandle)
+bool DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, D3D12BlobHandle& outHandle,
+                              bool isPrecompiled)
 {
+    if (isPrecompiled)
+    {
+        outHandle.view = shaderCode;
+        outHandle.blob = nullptr;  // caller will wrap in blob if needed
+        return true;
+    }
+
     if (_dxcAvailable)
     {
         ComPtr<IDxcBlobEncoding> sourceBlob;

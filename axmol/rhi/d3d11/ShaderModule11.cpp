@@ -33,7 +33,7 @@ namespace ax::rhi::d3d11
 {
 ShaderModuleImpl::ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, Data& data) : ShaderModule(stage, data)
 {
-    _shader = driver->compileShader(_codeSpan, stage, _blob);
+    _shader = driver->compileShader(_codeSpan, stage, _blob, isPrecompiled());
 }
 
 ShaderModuleImpl::~ShaderModuleImpl()

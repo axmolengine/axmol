@@ -356,8 +356,27 @@ ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, Data& chunk)
     return new ShaderModuleImpl(this, stage, chunk);
 }
 
-IUnknown* DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, ID3DBlob*& outBlob)
+IUnknown* DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, ID3DBlob*& outBlob,
+                                   bool isPrecompiled)
 {
+    if (isPrecompiled)
+    {
+        IUnknown* shader = nullptr;
+        if (stage == ShaderStage::VERTEX)
+        {
+            ComPtr<ID3D11VertexShader> vs;
+            _device->CreateVertexShader(shaderCode.data(), shaderCode.size(), nullptr, vs.GetAddressOf());
+            shader = vs.Detach();
+        }
+        else
+        {
+            ComPtr<ID3D11PixelShader> ps;
+            _device->CreatePixelShader(shaderCode.data(), shaderCode.size(), nullptr, ps.GetAddressOf());
+            shader = ps.Detach();
+        }
+        return shader;
+    }
+
     ComPtr<ID3DBlob> errorBlob;
     UINT flags = D3DCOMPILE_OPTIMIZATION_LEVEL2 | D3DCOMPILE_ENABLE_STRICTNESS;
 #if !defined(NDEBUG)

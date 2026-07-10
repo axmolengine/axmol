@@ -61,6 +61,8 @@ public:
 
     std::span<uint8_t> getCodeSpan() const { return _codeSpan; }
 
+    bool isPrecompiled() const { return _precompiled; }
+
 protected:
     ShaderModule(ShaderStage stage, Data& data);
     virtual ~ShaderModule();
@@ -76,6 +78,7 @@ protected:
 
     Data _chunkData;               // owns the axslcc chunk
     std::span<uint8_t> _codeSpan;  // view into parsed shader code
+    bool _precompiled = false;     // true if bytecode (DXBC/DXIL), false if source text
 
     uint32_t _stageOffset{0};
 };
