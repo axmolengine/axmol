@@ -100,6 +100,9 @@ void getPositionAndNormal(out float4 position, out float3 normal, out float3 tan
     binormal.x = dot(b, matrixPalette1);
     binormal.y = dot(b, matrixPalette2);
     binormal.z = dot(b, matrixPalette3);
+#else
+    tangent = float3(0.0, 0.0, 0.0);
+    binormal = float3(0.0, 0.0, 0.0);
 #endif
 }
 
