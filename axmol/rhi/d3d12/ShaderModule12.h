@@ -31,8 +31,11 @@ public:
     ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, Data& chunk);
     ~ShaderModuleImpl();
 
+    std::span<uint8_t> getBytecode() const { return _blob; }
+
 private:
-    // uses base class _blob / _nativeBlob
+    std::span<uint8_t> _blob;
+    ComPtr<IUnknown> _nativeBlob;
 };
 
 }  // namespace ax::rhi::d3d12

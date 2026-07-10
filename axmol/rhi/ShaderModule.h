@@ -26,7 +26,6 @@
 
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/base/Object.h"
-#include "axmol/platform/msw/ComPtr.h"
 #include "axmol/tlx/hlookup.hpp"
 #include "axmol/tlx/vector.hpp"
 #include "axmol/base/Data.h"
@@ -64,8 +63,6 @@ public:
 
     bool isPrecompiled() const { return _precompiled; }
 
-    std::span<uint8_t> getBytecode() const { return _blob; }
-
 protected:
     ShaderModule(ShaderStage stage, Data& data);
     virtual ~ShaderModule();
@@ -81,8 +78,6 @@ protected:
 
     Data _chunkData;               // owns the axslcc chunk
     std::span<uint8_t> _codeSpan;  // view into parsed shader source
-    std::span<uint8_t> _blob;      // compiled bytecode (DXBC/DXIL for D3D, source text for others)
-    ComPtr<IUnknown> _nativeBlob;  // COM owner of _blob (nullptr if precompiled)
     bool _precompiled = false;     // true if bytecode (DXBC/DXIL), false if source text
 
     uint32_t _stageOffset{0};

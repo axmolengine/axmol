@@ -1,5 +1,6 @@
 #pragma once
 #include "axmol/rhi/ShaderModule.h"
+#include "axmol/platform/msw/ComPtr.h"
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
@@ -15,9 +16,12 @@ public:
     ~ShaderModuleImpl();
 
     IUnknown* internalHandle() const { return _shader; }
+    std::span<uint8_t> getBytecode() const { return _blob; }
 
 private:
     IUnknown* _shader = nullptr;
+    std::span<uint8_t> _blob;
+    ComPtr<IUnknown> _nativeBlob;
 };
 
 }  // namespace ax::rhi::d3d11
