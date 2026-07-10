@@ -304,15 +304,15 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, Progra
     static constexpr D3D12_PRIMITIVE_TOPOLOGY_TYPE kPrimitiveTopologyTypes[] = {D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT,
                                                                                 D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE,
                                                                                 D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE};
-    auto vsBlob                                                              = program->getVSBlob();
-    auto psBlob                                                              = program->getPSBlob();
+    auto vsBlob = program->getVSBlob();
+    auto psBlob = program->getPSBlob();
 
     auto& vi = static_cast<VertexLayoutImpl*>(desc.vertexLayout)->getD3D12InputLayout();
 
     D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc{};
     psoDesc.pRootSignature        = _activeRootSignature->rootSig.Get();
-    psoDesc.VS                    = {vsBlob.view.data(), vsBlob.view.size()};
-    psoDesc.PS                    = {psBlob.view.data(), psBlob.view.size()};
+    psoDesc.VS                    = {vsBlob.data(), vsBlob.size()};
+    psoDesc.PS                    = {psBlob.data(), psBlob.size()};
     psoDesc.BlendState            = _blendDesc;
     psoDesc.RasterizerState       = _rasterDesc;
     psoDesc.DepthStencilState     = _dsState->getD3D12DepthStencilDesc();

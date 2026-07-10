@@ -39,8 +39,8 @@ public:
     ProgramImpl(Data& vsData, Data& fsData);
     ~ProgramImpl() override;
 
-    const D3D12BlobHandle& getVSBlob() const { return static_cast<ShaderModuleImpl*>(_vsModule)->internalHandle(); }
-    const D3D12BlobHandle& getPSBlob() const { return static_cast<ShaderModuleImpl*>(_fsModule)->internalHandle(); }
+    std::span<uint8_t> getVSBlob() const { return static_cast<ShaderModuleImpl*>(_vsModule)->getBytecode(); }
+    std::span<uint8_t> getPSBlob() const { return static_cast<ShaderModuleImpl*>(_fsModule)->getBytecode(); }
 };
 
 }  // namespace ax::rhi::d3d12
