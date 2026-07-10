@@ -12,6 +12,7 @@ endmacro()
 axslcc_option(AXSLCC_SOURCE_FILE_EXTENSIONS ".hlsl")
 axslcc_option(AXSLCC_OUT_DIR ${CMAKE_BINARY_DIR}/runtime/axslc)
 axslcc_option(AXSLCC_FIND_PROG_ROOT "")
+axslcc_option(AXSLCC_ENABLE_OPTIMIZE FALSE)
 
 find_program(AXSLCC_EXE NAMES axslcc
   PATHS ${AXSLCC_FIND_PROG_ROOT}
@@ -142,7 +143,8 @@ function(ax_add_shader_target target_name)
 
     set(SC_DEFINES "")
     set(SC_FLAGS "--input=${SC_FILE}" "--sc" "--reflect")
-    if(NOT CMAKE_BUILD_TYPE MATCHES "Debug")
+
+    if(AXSLCC_ENABLE_OPTIMIZE)
       list(APPEND SC_FLAGS "--dxbc")
     endif()
     foreach(TARG ${TARGET_LIST})

@@ -102,6 +102,29 @@ struct VS_OUT {
     float3 v_normal : NORMAL;
     float4 position : SV_Position;      // required
 };
+```
+
+### PointSize (Dynamic Point Size)
+
+For vertex shaders that need dynamic point size, declare a `PSIZE` output with the
+`[[vk::builtin("PointSize")]]` annotation:
+
+```hlsl
+struct VS_OUT {
+    float4 v_color : COLOR0;
+    float4 position : SV_Position;
+    [[vk::builtin("PointSize")]] float pointSize : PSIZE;
+};
+```
+
+The `[[vk::builtin("PointSize")]]` annotation is **required** — glslang recognizes
+this Vulkan-specific attribute and emits the `BuiltIn PointSize` decoration in
+SPIR-V. Without it, the SPIR-V output lacks the PointSize built-in decoration.
+
+This annotation is consumed during glslang's HLSL→SPIR-V compilation and does
+**not** appear in cross-compiled output (SPIRV-Cross ignores it). All `--dxbc`
+binary targets (d3d11/d3d12) now route through SPIRV-Cross first, so DXC/FXC
+only see the clean HLSL output without `[[vk::builtin(...)]]`.
 
 struct PS_IN {
     float2 v_texCoord : TEXCOORD0;      // must match VS_OUT

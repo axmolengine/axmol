@@ -2,14 +2,15 @@
 
 struct VS_IN {
     float4 a_position : POSITION;
-    float4 a_color : COLOR0;
     float2 a_texCoord : TEXCOORD0;
+    float4 a_color : COLOR0;
 };
 
 struct VS_OUT {
     float4 v_color : COLOR0;
     float4 position : SV_Position;
-    float pointSize : PSIZE;
+    
+    [[vk::builtin("PointSize")]] float pointSize : PSIZE;
 };
 
 cbuffer vs_ub : register(b0, space0) {
