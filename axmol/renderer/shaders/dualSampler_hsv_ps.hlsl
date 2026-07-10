@@ -3,8 +3,8 @@
 #include "colorUtils.hlsli"
 
 struct PS_IN {
-    float2 v_texCoord : TEXCOORD0;
     float4 v_color : COLOR0;
+    float2 v_texCoord : TEXCOORD0;
 };
 
 Texture2DArray u_tex0 : register(t0, space1);
