@@ -174,7 +174,7 @@ public:
     UINT getSrvDescriptorStride() const { return _srvDescriptorStride; }
     UINT getSamplerDescriptorStride() const { return _samplerDescriptorStride; }
 
-    bool compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, D3D12BlobHandle& outHandle);
+    ComPtr<IUnknown> compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, std::span<uint8_t>& blobView);
 
     void queueDisposal(ID3D12Resource*, uint64_t fenceValue);
     void queueDisposal(DescriptorHandle* handle, DisposableResource::Type type, uint64_t fenceValue);

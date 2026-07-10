@@ -32,21 +32,11 @@ namespace ax::rhi::d3d12
 ShaderModuleImpl::ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, Data& chunk) : ShaderModule(stage, chunk)
 {
     if (isPrecompiled())
-    {
-        _blob       = _codeSpan;
-        _nativeBlob = nullptr;
-    }
+        _blob = _codeSpan;
     else
-    {
-        D3D12BlobHandle handle;
-        driver->compileShader(_codeSpan, stage, handle);
-        _blob       = handle.view;
-        _nativeBlob = handle.blob;
-    }
+        _nativeBlob = driver->compileShader(_codeSpan, stage, _blob);
 }
 
-ShaderModuleImpl::~ShaderModuleImpl()
-{
-}
+ShaderModuleImpl::~ShaderModuleImpl() {}
 
 }  // namespace ax::rhi::d3d12

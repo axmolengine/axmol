@@ -1,5 +1,5 @@
 // The Axmol Shader Compiler spec, define macros and structs
-// match with axslcc-3.4.0+
+// match with axslcc-3.99.0+
 
 #pragma once
 
@@ -19,7 +19,7 @@ namespace axslc
 #define SC_CHUNK_CODE     sc_makefourcc('C', 'O', 'D', 'E')
 #define SC_CHUNK_DATA     sc_makefourcc('D', 'A', 'T', 'A')
 
-#define SC_PROFILE_BINARY  0x80000000U   // bit 31 of profile_ver: code is bytecode (DXBC/DXIL)
+#define SC_BYTECODE_FLAG  0x80000000U   // bit 31 of profile_ver: code is bytecode (DXBC/DXIL)
 
 #define SC_LANG_GLES      sc_makefourcc('G', 'L', 'E', 'S')
 #define SC_LANG_HLSL      sc_makefourcc('H', 'L', 'S', 'L')

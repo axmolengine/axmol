@@ -31,7 +31,7 @@ public:
     ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, Data& chunk);
     ~ShaderModuleImpl();
 
-    std::span<uint8_t> getBytecode() const { return _blob; }
+    std::span<uint8_t> getBlob() const { return _blob; }
 
 private:
     std::span<uint8_t> _blob;

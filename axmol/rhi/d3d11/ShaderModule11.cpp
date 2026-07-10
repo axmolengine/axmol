@@ -35,16 +35,14 @@ ShaderModuleImpl::ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, Data& 
 {
     if (isPrecompiled())
     {
-        _blob       = _codeSpan;
-        _nativeBlob = nullptr;
-        _shader     = driver->createShaderFromBytecode(_codeSpan, stage);
+        _blob   = _codeSpan;
+        _shader = driver->createShaderFromBytecode(_codeSpan, stage);
     }
     else
     {
         ID3DBlob* compiled = nullptr;
         _shader            = driver->compileShader(_codeSpan, stage, compiled);
-        _blob              = {static_cast<uint8_t*>(compiled->GetBufferPointer()),
-                               compiled->GetBufferSize()};
+        _blob              = {static_cast<uint8_t*>(compiled->GetBufferPointer()), compiled->GetBufferSize()};
         _nativeBlob        = compiled;
     }
 }

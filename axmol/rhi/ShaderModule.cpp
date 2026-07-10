@@ -85,14 +85,14 @@ void ShaderModule::parseShaderCode(void)
     {
         auto lang        = ibs.read<int>();
         auto profile_ver = ibs.read<int>();
-        bool isBin       = (profile_ver & SC_PROFILE_BINARY) != 0;
-        int  profile     = profile_ver & ~SC_PROFILE_BINARY;
-        int  expect      = isBin ? bcProfile : currentProfileVer;
+        bool precompiled = (profile_ver & SC_BYTECODE_FLAG) != 0;
+        int  profile     = profile_ver & ~SC_BYTECODE_FLAG;
+        int expect       = precompiled ? bcProfile : currentProfileVer;
 
         if (matchLang(currentShaderLang, expect, lang, profile))
         {
             _stageOffset = ibs.read<uint32_t>();
-            _precompiled = isBin;
+            _precompiled = precompiled;
             break;
         }
         else

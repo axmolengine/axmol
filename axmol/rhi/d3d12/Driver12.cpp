@@ -857,7 +857,9 @@ void DriverImpl::queueDisposalInternal(DisposableResource&& disposal)
     _disposalQueue.emplace_back(std::move(disposal));
 }
 
-bool DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, D3D12BlobHandle& outHandle)
+ComPtr<IUnknown> DriverImpl::compileShader(std::span<uint8_t> shaderCode,
+                                           ShaderStage stage,
+                                           std::span<uint8_t>& blobView)
 {
     if (_dxcAvailable)
     {
@@ -881,7 +883,7 @@ bool DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage,
         {
             AXLOGE("axmol:ERROR: DXC compile failed, hr:{}", hr);
             AXASSERT(false, "Shader compile failed!");
-            return false;
+            return {};
         }
 
         HRESULT status;
@@ -895,16 +897,13 @@ bool DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage,
                        : "Unknown compile error"sv;
             AXLOGE("axmol:ERROR: Failed to compile shader, hr:{},{}", status, errorDetail);
             AXASSERT(false, "Shader compile failed!");
-            return false;
+            return {};
         }
 
         ComPtr<IDxcBlob> blob;
         result->GetResult(&blob);
-
-        outHandle.blob = blob;
-        outHandle.view = std::span<uint8_t>((uint8_t*)blob->GetBufferPointer(), blob->GetBufferSize());
-
-        return true;
+        blobView       = std::span<uint8_t>((uint8_t*)blob->GetBufferPointer(), blob->GetBufferSize());
+        return blob;
     }
     else
     {
@@ -918,9 +917,8 @@ bool DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage,
                                 stageToProfileFXC(stage), flags, 0, &blob, &errorBlob);
         if (SUCCEEDED(hr))
         {
-            outHandle.blob = blob;
-            outHandle.view = std::span<uint8_t>((uint8_t*)blob->GetBufferPointer(), blob->GetBufferSize());
-            return true;
+            blobView = std::span<uint8_t>((uint8_t*)blob->GetBufferPointer(), blob->GetBufferSize());
+            return blob;
         }
 
         std::string_view errorDetail =
@@ -929,7 +927,7 @@ bool DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage,
         AXLOGE("axmol:ERROR: Failed to compile shader, hr:{},{}", hr, errorDetail);
         AXASSERT(false, "Shader compile failed!");
 
-        return false;
+        return {};
     }
 }
 
@@ -1229,10 +1227,10 @@ D3D12BlobHandle DriverImpl::compileMipmapCS(bool isArray)
     if (isArray)
         hlslSource += "#define USE_ARRAY 1\n"sv;
     hlslSource += kCSGenerateMipsHLSL;
-    D3D12BlobHandle csBlob;
-    bool ok = compileShader(hlslSource, ShaderStage::COMPUTE, csBlob);
-    AXASSERT(ok, "Compute shader compile failed");
-    return csBlob;
+    D3D12BlobHandle handle;
+    handle.blob = compileShader(hlslSource, ShaderStage::COMPUTE, handle.view);
+    AXASSERT(!!handle.blob, "Compute shader compile failed");
+    return handle;
 }
 
 void DriverImpl::waitForGPU()
