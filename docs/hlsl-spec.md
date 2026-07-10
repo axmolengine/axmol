@@ -54,6 +54,45 @@ struct VS_IN {
 | `BLENDINDICES` | varies | `float4`/`int4` | No index suffix |
 | `BLENDWEIGHT` | varies | `float4` | No index suffix |
 
+### VS_IN Declaration Order
+
+The declaration order of members in `VS_IN` **must match** the order defined in the
+corresponding `VertexLayoutKind` layout (see `VertexLayoutManager.cpp`). The axslcc
+pipeline assigns D3D input registers based on VS_IN declaration order. While D3D11
+matches IA elements to VS inputs by semantic name+index, certain D3D11 debug layers
+and GPU drivers validate that the register indices are consistent between IA output
+slots and VS input registers. If the orders differ, the following error may appear:
+
+```
+D3D11 ERROR: ID3D11DeviceContext::Draw: Input Assembler - Vertex Shader linkage
+error: Signatures between stages are incompatible.
+Semantic 'COLOR' is defined for mismatched hardware registers between the output
+stage and input stage.
+Semantic 'TEXCOORD' is defined for mismatched hardware registers between the output
+stage and input stage.
+```
+
+**Example — incorrect** (order mismatches `VertexLayoutKind::DrawNode` layout):
+
+```hlsl
+// VertexLayoutKind::DrawNode order:  POSITION → TEXCOORD → COLOR
+struct VS_IN {
+    float4 a_position : POSITION;
+    float4 a_color : COLOR0;        // COLOR before TEXCOORD — wrong!
+    float2 a_texCoord : TEXCOORD0;
+};
+```
+
+**Fix**: match the layout order:
+
+```hlsl
+struct VS_IN {
+    float4 a_position : POSITION;
+    float2 a_texCoord : TEXCOORD0;  // TEXCOORD before COLOR
+    float4 a_color : COLOR0;
+};
+```
+
 ## 4. Vertex Output / Fragment Input (Varyings)
 
 ```hlsl
