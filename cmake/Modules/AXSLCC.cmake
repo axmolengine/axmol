@@ -12,7 +12,7 @@ endmacro()
 axslcc_option(AXSLCC_SOURCE_FILE_EXTENSIONS ".hlsl")
 axslcc_option(AXSLCC_OUT_DIR ${CMAKE_BINARY_DIR}/runtime/axslc)
 axslcc_option(AXSLCC_FIND_PROG_ROOT "")
-axslcc_option(AXSLCC_ENABLE_OPTIMIZE FALSE)
+axslcc_option(AXSLCC_FLAGS "-S")
 
 find_program(AXSLCC_EXE NAMES axslcc
   PATHS ${AXSLCC_FIND_PROG_ROOT}
@@ -142,13 +142,12 @@ function(ax_add_shader_target target_name)
     string(TOLOWER "${FILE_EXT}" FILE_EXT)
 
     set(SC_DEFINES "")
-    set(SC_FLAGS "--input=${SC_FILE}" "--sc" "--reflect")
+    set(SC_FLAGS "-a")
 
-    if(AXSLCC_ENABLE_OPTIMIZE)
-      list(APPEND SC_FLAGS "--dxbc")
-    endif()
+    separate_arguments(AXSLCC_FLAGS_LIST NATIVE_COMMAND "${AXSLCC_FLAGS}")
+    list(APPEND SC_FLAGS ${AXSLCC_FLAGS_LIST})
     foreach(TARG ${TARGET_LIST})
-      list(APPEND SC_FLAGS "--target=${TARG}")
+      list(APPEND SC_FLAGS "-t" "${TARG}")
     endforeach()
 
     # defines
@@ -167,7 +166,7 @@ function(ax_add_shader_target target_name)
     endforeach()
 
     if(opt_CVAR)
-      list(APPEND SC_FLAGS "--cvar=shader_rt_${FILE_NAME}")
+      list(APPEND SC_FLAGS "--cvar" "shader_rt_${FILE_NAME}")
     endif()
 
     # output
@@ -190,21 +189,21 @@ function(ax_add_shader_target target_name)
       add_custom_command(
         MAIN_DEPENDENCY ${SC_FILE}
         OUTPUT ${SC_OUTPUT}
-        COMMAND ${AXSLCC_EXE} ${SC_FLAGS} "--output=${SC_OUTPUT}"
+        COMMAND ${AXSLCC_EXE} ${SC_FLAGS} "-o" "${SC_OUTPUT}" "${SC_FILE}"
         COMMENT "${SC_COMMENT}"
         VERBATIM
       )
       list(APPEND compiled_shaders ${SC_OUTPUT})
     else()
       set(SC_OUTPUTS "${SC_OUTPUT}")
-      set(SC_CMD_LINES COMMAND ${AXSLCC_EXE} ${SC_FLAGS} "--output=${SC_OUTPUT}")
+      set(SC_CMD_LINES COMMAND ${AXSLCC_EXE} ${SC_FLAGS} "-o" "${SC_OUTPUT}" "${SC_FILE}")
       set(vidx 0)
       foreach(variant_defs ${SOURCE_SC_VARIANTS})
         math(EXPR vidx "${vidx} + 1")
         set(SC_VOUT "${SC_OUTPUT}_${vidx}")
         list(APPEND SC_OUTPUTS "${SC_VOUT}")
         axslcc_parse_defines("${variant_defs}" VARIANT_DEFINES)
-        list(APPEND SC_CMD_LINES COMMAND ${AXSLCC_EXE} ${SC_FLAGS} ${VARIANT_DEFINES} "--output=${SC_VOUT}")
+        list(APPEND SC_CMD_LINES COMMAND ${AXSLCC_EXE} ${SC_FLAGS} ${VARIANT_DEFINES} "-o" "${SC_VOUT}" "${SC_FILE}")
       endforeach()
       add_custom_command(
         MAIN_DEPENDENCY ${SC_FILE}
