@@ -201,15 +201,14 @@ void Program::parseStageReflection(ShaderStage stage, SLCReflectContext* context
     assert(ref_stage == stage && "Shader stage mismatch in axslc chunk");
 
     fourccId = ibs.read<uint32_t>();
-    if (fourccId == SC_CHUNK_CODE || fourccId == SC_CHUNK_DATA)
-    {
-        // Expecting SPIR-V binary blob from axslc, not text
+    if (fourccId == SC_CHUNK_CODE)
+    {  // skip shader code
         const int codeLen = ibs.read<int>();
-        ibs.advance(codeLen);  // skip shader code
+        ibs.advance(codeLen);
     }
     else
     {
-        AXLOGE("axmol: No code/data chunk (SC_CHUNK_CODE/SC_CHUNK_DATA) found for shader stage.");
+        AXLOGE("axmol: No code chunk (SC_CHUNK_CODE) found for shader stage.");
         assert(false);
     }
 
@@ -366,7 +365,7 @@ void Program::reflectSamplers(SLCReflectContext* context)
         const auto imageDim     = ibs->read<uint8_t>();
         uniform.varType         = SC_TYPE_HALF + imageDim;
         ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t)));  // skip bits: multisample, arrayed, reserved
-        uniform.count       = (std::max)(1, static_cast<int>(ibs->read<uint8_t>()));
+        uniform.count = (std::max)(1, static_cast<int>(ibs->read<uint8_t>()));
         ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t)));  // skip sampler_slot (deprecated)
 
         const auto reflectedId = makeTextureNameKey(name);

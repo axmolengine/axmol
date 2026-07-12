@@ -17,7 +17,6 @@ namespace axslc
 #define SC_CHUNK_STAG     sc_makefourcc('S', 'T', 'A', 'G')
 #define SC_CHUNK_REFL     sc_makefourcc('R', 'E', 'F', 'L')
 #define SC_CHUNK_CODE     sc_makefourcc('C', 'O', 'D', 'E')
-#define SC_CHUNK_DATA     sc_makefourcc('D', 'A', 'T', 'A')
 
 #define SC_BYTECODE_FLAG  0x80000000U   // bit 31 of profile_ver: code is bytecode (DXBC/DXIL)
 

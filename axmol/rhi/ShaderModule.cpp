@@ -123,16 +123,15 @@ void ShaderModule::parseShaderCode(void)
     assert(ref_stage == _stage && "Shader stage mismatch in axslc chunk");
 
     fourccId = ibs.read<uint32_t>();
-    if (fourccId == SC_CHUNK_CODE || fourccId == SC_CHUNK_DATA)
-    {
-        // Expecting SPIR-V binary blob from axslc, not text
+    if (fourccId == SC_CHUNK_CODE)
+    { // shader code
         const int codeLen           = ibs.read<int>();
         std::string_view shaderCode = ibs.read_bytes(codeLen);
         _codeSpan                   = std::span{(uint8_t*)shaderCode.data(), shaderCode.size()};
     }
     else
     {
-        AXLOGE("axmol: No code/data chunk (SC_CHUNK_CODE/SC_CHUNK_DATA) found for shader stage.");
+        AXLOGE("axmol: No code chunk (SC_CHUNK_CODE) found for shader stage.");
         assert(false);
     }
 }

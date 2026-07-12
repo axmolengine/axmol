@@ -4,13 +4,19 @@
 
 ## 1. File Naming
 
-| Stage | Suffix | Extension |
-|-------|--------|-----------|
-| Vertex Shader | `_vs` | `.hlsl` |
-| Fragment/Pixel Shader | `_ps` | `.hlsl` |
-| Compute Shader | `_cs` | `.hlsl` |
+| Stage | Suffix | Extension | Description |
+|-------|--------|-----------|-------------|
+| Vertex Shader | `_vs` | `.hlsl` | Vertex shader |
+| Fragment/Pixel Shader | `_ps` | `.hlsl` | Fragment shader |
+| Compute Shader | `_cs` | `.hlsl` | Compute shader |
 
-Example: `positionTexture_vs.hlsl`, `positionTextureColor_ps.hlsl`
+Examples: `positionTexture_vs.hlsl`, `positionTextureColor_ps.hlsl`, `computeParticles_cs.hlsl`
+
+Input language is detected from the file extension:
+- `.hlsl`, `.fx` → HLSL (default for axmol shaders)
+- `.vert`, `.frag`, `.comp`, `.glsl` → GLSL
+
+Use `-x hlsl` to override auto-detection and force HLSL interpretation.
 
 ## 2. Entry Point
 
@@ -360,7 +366,7 @@ for each target (HLSL, GLSL, ESSL, MSL, SPIRV):
   .hlsl source + target defines (-DAXSLC_TARGET_<LANG>=1)
     → glslang → SPIR-V
       → SPIRV-Cross + attribute remap → target output
-    → packed into .sc file (axslcc --sc)
+    → packed into .sc file (axslcc -a)
 ```
 
 ### 14.1 Shader Compile Variants
