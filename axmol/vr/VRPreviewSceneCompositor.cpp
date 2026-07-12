@@ -351,7 +351,7 @@ DistortionMesh* VRPreviewSceneCompositor::createDistortionMesh(VREye::EyeType ey
 
 void VRPreviewSceneCompositor::setupDistortionProgram()
 {
-    auto program = axpm->loadProgram("vr_vs", "vr_fs");
+    auto program = axpm->loadProgram("vr_vs", "vr_ps");
 
     _programState = new rhi::ProgramState(program);
 
