@@ -6,6 +6,7 @@ option(AX_WITH_WEBP "Build with internal webp support" ON)
 option(AX_WITH_CLIPPER2 "Build with internal Clipper2 support" ON)
 option(AX_WITH_POLY2TRI "Build with internal poly2tri support" ON)
 option(AX_WITH_FASTLZ "Build with internal fastlz support" ON)
+option(AX_WITH_TRACY "Build with internal Tracy support" ON)
 
 option(AX_WITH_CURL "Build with internal curl support" ON)
 option(AX_WITH_UNZIP "Build with internal unzip support" ON)
@@ -422,6 +423,16 @@ if(WIN32 AND AX_GLES_PROFILE)
   else()
     add_subdirectory(angle)
   endif()
+endif()
+
+# tracy
+set(AX_PROFILER_BACKEND "NONE" CACHE STRING "Profiling backend")
+set_property(CACHE AX_PROFILER_BACKEND PROPERTY STRINGS NONE TRACY)
+
+if(AX_PROFILER_BACKEND STREQUAL "TRACY")
+  set(AX_WITH_TRACY ON CACHE BOOL "" FORCE)
+else()
+  set(AX_WITH_TRACY OFF CACHE BOOL "" FORCE)
 endif()
 
 # yasio

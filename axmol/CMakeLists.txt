@@ -570,6 +570,15 @@ if(_simdc_defines)
   endif()
 endif()
 
+# profiling configuration
+if(AX_PROFILER_BACKEND STREQUAL "TRACY")
+    target_compile_definitions(${_AX_CORE_LIB} PUBLIC AX_PROFILER_BACKEND_TRACY)
+elseif(AX_PROFILER_BACKEND STREQUAL "NONE")
+    target_compile_definitions(${_AX_CORE_LIB} PUBLIC AX_PROFILER_BACKEND_NONE)
+endif()
+message(STATUS "AX_PROFILER_BACKEND=${AX_PROFILER_BACKEND}")
+message(STATUS "AX_WITH_TRACY=${AX_WITH_TRACY}")
+
 # 3rd libs
 add_subdirectory(${_AX_ROOT}/3rdparty ${ENGINE_BINARY_PATH}/3rdparty)
 target_link_libraries(${_AX_CORE_LIB} 3rdparty)
