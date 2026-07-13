@@ -45,3 +45,6 @@
 
 # WEBVIEW2 - default: ON for WIN32 and WINRT
 # set(AX_ENABLE_MSEDGE_WEBVIEW2 ON CACHE BOOL "Disable msedge webview2")
+
+# Profiling backend - TRACY or NONE (default: NONE)
+# set(AX_PROFILER_BACKEND "TRACY" CACHE STRING "Profiling backend" FORCE)
