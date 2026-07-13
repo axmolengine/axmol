@@ -435,6 +435,10 @@ else()
   set(AX_WITH_TRACY OFF CACHE BOOL "" FORCE)
 endif()
 
+if(AX_WITH_TRACY)
+  ax_add_3rd(tracy)
+endif()
+
 # yasio
 ax_add_3rd(yasio)
 
