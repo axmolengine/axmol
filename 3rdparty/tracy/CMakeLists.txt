@@ -11,3 +11,9 @@ target_include_directories(${target_name}
     INTERFACE
         ${CMAKE_CURRENT_LIST_DIR}
 )
+
+target_compile_definitions(${target_name}
+    PUBLIC
+        TRACY_ENABLE
+        TRACY_ON_DEMAND
+)
