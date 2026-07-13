@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -66,10 +66,10 @@ void ShaderModule::parseShaderCode(void)
     auto sc_size = ibs.read<uint32_t>();
     struct sc_chunk chunk;
     ibs.read_bytes(&chunk, static_cast<int>(sizeof(chunk)));
-    if (chunk.major < 3 || chunk.minor < 4)
+    if (chunk.major != 3 || chunk.minor < 99)
     {
         AXLOGE(
-            "The axslcc shader chunk version too old: found {}.{}, required >= 3.4, "
+            "Unsupported axslcc shader chunk version: found {}.{}, required 3.99 or newer. "
             "Please update/recompile the shader.",
             chunk.major, chunk.minor);
         assert(false && "axmol: Shader version too old");

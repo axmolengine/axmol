@@ -27,9 +27,13 @@
 
 #include <stdint.h>
 #include <assert.h>
+#include <cctype>
+#include <functional>
 #include <string>
+#include <string_view>
 #include <bit>
 #include "axmol/tlx/bitmask.hpp"
+#include "axmol/rhi/axslc-spec.h"
 
 #define AX_ARRAYSIZE(A) (sizeof(A) / sizeof((A)[0]))
 
@@ -622,10 +626,46 @@ struct UniformLocationHash
     size_t operator()(UniformLocation const& u) const noexcept { return size_t(u.location); }
 };
 
+struct VertexSemantic
+{
+    char name[SC_NAME_LEN] = {};
+    uint16_t index{0};
+    uint16_t nameLen{0};
+
+    static const VertexSemantic POSITION;
+    static const VertexSemantic NORMAL;
+    static const VertexSemantic TEXCOORD0;
+    static const VertexSemantic TEXCOORD1;
+    static const VertexSemantic TEXCOORD2;
+    static const VertexSemantic TEXCOORD3;
+    static const VertexSemantic TEXCOORD4;
+    static const VertexSemantic TEXCOORD5;
+    static const VertexSemantic TEXCOORD6;
+    static const VertexSemantic TEXCOORD7;
+    static const VertexSemantic COLOR0;
+    static const VertexSemantic COLOR1;
+    static const VertexSemantic TANGENT;
+    static const VertexSemantic BINORMAL;
+    static const VertexSemantic BLENDINDICES;
+    static const VertexSemantic BLENDWEIGHT;
+
+    VertexSemantic() = default;
+    VertexSemantic(std::string_view semanticName, uint16_t semanticIndex = 0);
+
+    std::string_view getName() const { return {name, nameLen}; }
+
+    std::string toString() const;
+
+    bool operator==(const VertexSemantic& o) const noexcept
+    {
+        return index == o.index && getName() == o.getName();
+    }
+};
+
 // vertex input descriptor in vertex shader
 struct VertexInputDesc
 {
-    std::string semantic;
+    VertexSemantic semantic;
     // gl: location,
     // d3d: semantic_index
     // metal: binding_index
@@ -646,16 +686,6 @@ static constexpr auto UNIFORM_NAME_EFFECT_COLOR    = "u_effectColor"sv;
 static constexpr auto UNIFORM_NAME_EFFECT_WIDTH    = "u_effectWidth"sv;
 static constexpr auto UNIFORM_NAME_LABEL_PASS      = "u_labelPass"sv;
 static constexpr auto UNIFORM_NAME_DISTANCE_SPREAD = "u_distanceSpread"sv;
-
-/// built-in attribute name
-static constexpr auto VERTEX_INPUT_NAME_POSITION  = "a_position"sv;
-static constexpr auto VERTEX_INPUT_NAME_COLOR     = "a_color"sv;
-static constexpr auto VERTEX_INPUT_NAME_TEXCOORD  = "a_texCoord"sv;
-static constexpr auto VERTEX_INPUT_NAME_TEXCOORD1 = "a_texCoord1"sv;
-static constexpr auto VERTEX_INPUT_NAME_TEXCOORD2 = "a_texCoord2"sv;
-static constexpr auto VERTEX_INPUT_NAME_TEXCOORD3 = "a_texCoord3"sv;
-static constexpr auto VERTEX_INPUT_NAME_NORMAL    = "a_normal"sv;
-static constexpr auto VERTEX_INPUT_NAME_INSTANCE  = "a_instance"sv;
 
 // clang-format off
 struct ProgramType
@@ -767,3 +797,13 @@ using Viewport    = RectI;
 using ScissorRect = RectI;
 
 }  // namespace ax::rhi
+
+template <>
+struct std::hash<ax::rhi::VertexSemantic>
+{
+    size_t operator()(const ax::rhi::VertexSemantic& value) const noexcept
+    {
+        auto seed = std::hash<std::string_view>{}(value.getName());
+        return seed ^ (std::hash<uint16_t>{}(value.index) + 0x9e3779b9U + (seed << 6) + (seed >> 2));
+    }
+};

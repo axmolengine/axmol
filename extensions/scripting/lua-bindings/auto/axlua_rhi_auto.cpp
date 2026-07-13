@@ -732,30 +732,21 @@ int lua_ax_rhi_Program_getVertexInputDesc(lua_State* tolua_S)
 #endif
     argc = lua_gettop(tolua_S)-1;
     do {
-        if (argc == 1) {
-            ax::rhi::VertexInputKind arg0;
-            ok &= luaval_to_int(tolua_S, 2, &arg0, "axr.Program:getVertexInputDesc");
+        if (argc == 2) {
+            std::string_view semanticName;
+            int semanticIndex = 0;
+            ok &= luaval_to_std_string_view(tolua_S, 2, &semanticName, "axr.Program:getVertexInputDesc");
+            ok &= luaval_to_int(tolua_S, 3, &semanticIndex, "axr.Program:getVertexInputDesc");
 
             if (!ok) { break; }
-            const ax::rhi::VertexInputDesc* ret = obj->getVertexInputDesc(arg0);
+            const ax::rhi::VertexInputDesc* ret =
+                obj->getVertexInputDesc(ax::rhi::VertexSemantic{semanticName, static_cast<uint16_t>(semanticIndex)});
             #pragma warning NO CONVERSION FROM NATIVE FOR VertexInputDesc*;
             return 1;
         }
     }while(0);
     ok  = true;
-    do {
-        if (argc == 1) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axr.Program:getVertexInputDesc");
-
-            if (!ok) { break; }
-            const ax::rhi::VertexInputDesc* ret = obj->getVertexInputDesc(arg0);
-            #pragma warning NO CONVERSION FROM NATIVE FOR VertexInputDesc*;
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "axr.Program:getVertexInputDesc",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "axr.Program:getVertexInputDesc",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1143,30 +1134,21 @@ int lua_ax_rhi_ProgramState_getVertexInputDesc(lua_State* tolua_S)
 #endif
     argc = lua_gettop(tolua_S)-1;
     do {
-        if (argc == 1) {
-            ax::rhi::VertexInputKind arg0;
-            ok &= luaval_to_int(tolua_S, 2, &arg0, "axr.ProgramState:getVertexInputDesc");
+        if (argc == 2) {
+            std::string_view semanticName;
+            int semanticIndex = 0;
+            ok &= luaval_to_std_string_view(tolua_S, 2, &semanticName, "axr.ProgramState:getVertexInputDesc");
+            ok &= luaval_to_int(tolua_S, 3, &semanticIndex, "axr.ProgramState:getVertexInputDesc");
 
             if (!ok) { break; }
-            const ax::rhi::VertexInputDesc* ret = obj->getVertexInputDesc(arg0);
+            const ax::rhi::VertexInputDesc* ret =
+                obj->getVertexInputDesc(ax::rhi::VertexSemantic{semanticName, static_cast<uint16_t>(semanticIndex)});
             #pragma warning NO CONVERSION FROM NATIVE FOR VertexInputDesc*;
             return 1;
         }
     }while(0);
     ok  = true;
-    do {
-        if (argc == 1) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axr.ProgramState:getVertexInputDesc");
-
-            if (!ok) { break; }
-            const ax::rhi::VertexInputDesc* ret = obj->getVertexInputDesc(arg0);
-            #pragma warning NO CONVERSION FROM NATIVE FOR VertexInputDesc*;
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "axr.ProgramState:getVertexInputDesc",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "axr.ProgramState:getVertexInputDesc",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4045,4 +4027,3 @@ TOLUA_API int register_all_ax_rhi(lua_State* tolua_S)
     tolua_endmodule(tolua_S);
     return 1;
 }
-

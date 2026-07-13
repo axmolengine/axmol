@@ -1029,12 +1029,12 @@ Mesh* MeshRenderer::getMesh() const
 
 static MeshMaterial* getMeshRendererMaterialForAttribs(MeshVertexData* meshVertexData, bool usesLight)
 {
-    bool textured = meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD);
-    bool hasSkin  = meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_INDEX) &&
-                   meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_WEIGHT);
-    bool hasNormal       = meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL);
-    bool hasTangentSpace = meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_TANGENT) &&
-                           meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_BINORMAL);
+    bool textured = meshVertexData->hasVertexAttrib(MeshVertexAttribute::TEXCOORD0);
+    bool hasSkin  = meshVertexData->hasVertexAttrib(MeshVertexAttribute::BLENDINDICES) &&
+                   meshVertexData->hasVertexAttrib(MeshVertexAttribute::BLENDWEIGHT);
+    bool hasNormal       = meshVertexData->hasVertexAttrib(MeshVertexAttribute::NORMAL);
+    bool hasTangentSpace = meshVertexData->hasVertexAttrib(MeshVertexAttribute::TANGENT) &&
+                           meshVertexData->hasVertexAttrib(MeshVertexAttribute::BINORMAL);
     MeshMaterial::MaterialType type;
     if (textured)
     {

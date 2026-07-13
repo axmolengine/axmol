@@ -165,7 +165,7 @@ protected:
      * get vertex attribute type
      * @param str The type in string
      */
-    shaderinfos::VertexKey parseProgramAttribute(std::string_view str);
+    MeshVertexAttribute parseProgramAttribute(std::string_view str);
 
     /*
      * get model path

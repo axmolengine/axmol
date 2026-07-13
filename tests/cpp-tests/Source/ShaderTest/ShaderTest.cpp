@@ -104,10 +104,7 @@ bool ShaderNode::initWithVertex(std::string_view vert, std::string_view frag)
     setAnchorPoint(Vec2(0.5f, 0.5f));
 
     // init custom command
-    auto inputDesc = _programState->getVertexInputDesc("a_position");
-
-    // auto vertexLayout = _programState->getMutableVertexLayout();
-    // vertexLayout->setAttrib("a_position", attrPosLoc, rhi::VertexElementType::FLOAT4, 0, false);
+    auto inputDesc = _programState->getVertexInputDesc(rhi::VertexSemantic::POSITION);
 
     float w = SIZE_X, h = SIZE_Y;
     Vec3 vertices[6] = {Vec3(0.0f, 0.0f, 1.0f), Vec3(w, 0.0f, 1.0f), Vec3(w, h, 1.0f),

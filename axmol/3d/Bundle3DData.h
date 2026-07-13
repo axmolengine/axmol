@@ -35,7 +35,7 @@
 #include <map>
 #include <string>
 
-#include "axmol/3d/shaderinfos.h"
+#include "axmol/3d/MeshVertexAttribute.h"
 #include "axmol/rhi/IndexArray.h"
 
 namespace ax
@@ -51,7 +51,7 @@ using IndexArray  = rhi::IndexArray;
 struct AX_DLL MeshVertexAttrib
 {
     rhi::VertexElementType type;
-    shaderinfos::VertexKey vertexAttrib;
+    MeshVertexAttribute vertexAttrib;
     int getAttribSizeBytes() const;
 };
 

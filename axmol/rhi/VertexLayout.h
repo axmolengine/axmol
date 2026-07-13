@@ -101,8 +101,7 @@ struct AX_DLL VertexLayoutDesc
      * @param needToBeNormallized Specifies whether fixed-point data values should be normalized (true) or converted
      * directly as fixed-point values (false) when they are accessed.
      */
-    void addAttrib(std::string_view name,
-                   const VertexInputDesc* desc,
+    void addAttrib(const VertexInputDesc* desc,
                    VertexElementType format,
                    size_t offset,
                    bool needNormalized,

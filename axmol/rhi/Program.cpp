@@ -68,7 +68,7 @@ Program::Program(Data& vsData, Data& fsData)
     parseStageReflection(ShaderStage::VERTEX, &context);
     parseStageReflection(ShaderStage::FRAGMENT, &context);
 
-    resolveBuiltinBindings();
+    resolveBuiltinUniforms();
 
     if (rhi::GraphicsCore::isD3D12() && _activeUniformBlockInfos.size() > 1)
     {
@@ -95,13 +95,12 @@ void Program::setVertexLayout(VertexLayout* layout)
     Object::assign(_vertexLayout, layout);
 }
 
-const VertexInputDesc* Program::getVertexInputDesc(std::string_view name) const
+const VertexInputDesc* Program::getVertexInputDesc(const VertexSemantic& semantic) const
 {
-    auto it = _activeVertexInputs.find(name);
+    auto it = _activeVertexInputs.find(semantic);
     if (it != _activeVertexInputs.end())
         return &it->second;
-    else
-        return nullptr;
+    return nullptr;
 }
 
 UniformLocation Program::getUniformLocation(rhi::Uniform kind) const
@@ -230,15 +229,7 @@ void Program::parseStageReflection(ShaderStage stage, SLCReflectContext* context
             const auto refl_size        = ibs.read<uint32_t>();
             const auto refl_data_offset = ibs.tell();
             sc_chunk_refl refl{};
-            ibs.advance(sizeof(refl.name));
-            refl.num_inputs          = ibs.read<uint32_t>();
-            refl.num_textures        = ibs.read<uint32_t>();
-            refl.num_uniform_buffers = ibs.read<uint32_t>();
-            refl.num_storage_images  = ibs.read<uint32_t>();
-            refl.num_storage_buffers = ibs.read<uint32_t>();
-
-            // skip infos we don't need
-            ibs.advance(sizeof(sc_chunk_refl) - offsetof(sc_chunk_refl, flatten_ubo));
+            ibs.read_bytes(&refl, static_cast<int>(sizeof(refl)));
 
             // SLCReflectContext context{&refl, &ibs};
             // context
@@ -280,17 +271,19 @@ void Program::reflectVertexInputs(SLCReflectContext* context)
 
     for (int i = 0; i < context->refl->num_inputs; ++i)
     {
-        std::string_view name     = _sc_read_name(ibs);
+        (void)_sc_read_name(ibs);  // source variable name is not a runtime identity
         std::string_view semantic = _sc_read_name(ibs);
         auto location             = ibs->read<int32_t>();
         auto semantic_index       = ibs->read<uint16_t>();
         auto var_type             = ibs->read<uint16_t>();
 
         VertexInputDesc desc;
-        desc.semantic = semantic;
+        desc.semantic = VertexSemantic{semantic, semantic_index};
         desc.location = isD3D ? semantic_index : location;
         desc.varType  = var_type;
-        _activeVertexInputs.emplace(name, desc);
+        auto [_, inserted] = _activeVertexInputs.emplace(desc.semantic, std::move(desc));
+        if (!inserted)
+            AXLOGE("Duplicate vertex input semantic '{}{}'", semantic, semantic_index);
     }
 }
 
@@ -360,13 +353,14 @@ void Program::reflectSamplers(SLCReflectContext* context)
         UniformInfo uniform{};
 
         std::string_view name   = _sc_read_name(ibs);
-        uniform.location        = ibs->read<int32_t>();  // sampler binding index
+        uniform.location        = ibs->read<int32_t>();  // texture binding index
         uniform.runtimeLocation = uniform.location;
+        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint16_t))); // descriptor set
         const auto imageDim     = ibs->read<uint8_t>();
         uniform.varType         = SC_TYPE_HALF + imageDim;
         ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t)));  // skip bits: multisample, arrayed, reserved
-        uniform.count = (std::max)(1, static_cast<int>(ibs->read<uint8_t>()));
-        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t)));  // skip sampler_slot (deprecated)
+        uniform.count = (std::max)(1, static_cast<int>(ibs->read<uint16_t>()));
+        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t) * 2));  // sampler source + reserved
 
         const auto reflectedId = makeTextureNameKey(name);
         auto ret               = _activeUniformInfos.emplace(reflectedId, uniform);
@@ -391,32 +385,39 @@ void Program::reflectSamplers(SLCReflectContext* context)
         std::sort(_activeTextureInfos.begin(), _activeTextureInfos.end(),
                   [](auto& a, auto& b) { return a.second->location < b.second->location; });
     }
+
+    _activeSamplerInfos.reserve(context->refl->num_samplers);
+    for (uint32_t i = 0; i < context->refl->num_samplers; ++i)
+    {
+        SamplerBindingInfo sampler;
+        sampler.name = _sc_read_name(ibs);
+        sampler.binding = ibs->read<int32_t>();
+        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint16_t))); // descriptor set
+        sampler.count = ibs->read<uint16_t>();
+        sampler.presetIndex = ibs->read<int16_t>();
+        sampler.comparison = ibs->read<uint8_t>() != 0;
+        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t))); // reserved
+        _activeSamplerInfos.emplace_back(sampler);
+    }
+
+    _samplingPairs.reserve(context->refl->num_sampling_pairs);
+    for (uint32_t i = 0; i < context->refl->num_sampling_pairs; ++i)
+    {
+        SamplingPairInfo pair;
+        pair.textureBinding = ibs->read<int32_t>();
+        pair.samplerBinding = ibs->read<int32_t>();
+        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint16_t) * 2)); // descriptor sets
+        pair.presetIndex = ibs->read<int16_t>();
+        pair.source = ibs->read<uint8_t>();
+        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t))); // reserved
+        _samplingPairs.emplace_back(pair);
+    }
 }
 
-void Program::resolveBuiltinBindings()
+void Program::resolveBuiltinUniforms()
 {
-    std::fill(std::begin(_builtinVertexInputs), std::end(_builtinVertexInputs), nullptr);
     for (int i = 0; i < UNIFORM_COUNT; ++i)
         _builtinUniforms[i] = {};
-
-    /*--- Builtin Attribs ---*/
-
-    _builtinVertexInputs.resize(VertexInputKind::VIK_COUNT, nullptr);
-
-    /// a_position
-    _builtinVertexInputs[VertexInputKind::POSITION] = getVertexInputDesc(VERTEX_INPUT_NAME_POSITION);
-
-    /// a_color
-    _builtinVertexInputs[VertexInputKind::COLOR] = getVertexInputDesc(VERTEX_INPUT_NAME_COLOR);
-
-    /// a_texCoord
-    _builtinVertexInputs[VertexInputKind::TEXCOORD] = getVertexInputDesc(VERTEX_INPUT_NAME_TEXCOORD);
-
-    // a_normal
-    _builtinVertexInputs[VertexInputKind::NORMAL] = getVertexInputDesc(VERTEX_INPUT_NAME_NORMAL);
-
-    // a_instance, metal use SSUBO(Shader Storage Uniform Buffer) before axmol-3.0.0
-    _builtinVertexInputs[VertexInputKind::INSTANCE] = getVertexInputDesc(VERTEX_INPUT_NAME_INSTANCE);
 
     /*--- Builtin Uniforms ---*/
 

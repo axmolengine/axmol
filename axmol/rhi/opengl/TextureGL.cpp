@@ -104,6 +104,7 @@ void TextureImpl::updateData(const void* data, int width, int height, int level,
     if (_desc.arraySize == 1)
     {
         ensureNativeTexture();
+        CHECK_GL_ERROR_DEBUG();
 
         // !configure unpack alignment only when mipmapsNum == 1 and the data is uncompressed
         configureUnpackAlignment(width);

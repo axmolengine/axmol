@@ -225,6 +225,13 @@ Program* ProgramManager::loadProgram(std::string_view vsName,
     auto fileUtils  = FileUtils::getInstance();
     auto vertFile   = fileUtils->fullPathForFilename(vsName);
     auto fragFile   = fileUtils->fullPathForFilename(fsName);
+    if (vertFile.empty() || fragFile.empty())
+    {
+        AXLOGE("Load program: {} {}, {} fail, vert or frag file not found", progId, vsName, fsName);
+        AXASSERT(false, "Load program fail, vert or frag file not found");
+        return nullptr;
+    }
+
     auto vertSource = fileUtils->getDataFromFile(vertFile);
     auto fragSource = fileUtils->getDataFromFile(fragFile);
     auto program    = axdrv->createProgram(std::move(vertSource), std::move(fragSource));

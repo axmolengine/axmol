@@ -25,8 +25,12 @@
 
 #include "axmol/rhi/VertexLayout.h"
 #include "axmol/base/Macros.h"
+#include "axmol/base/Logging.h"
 #include <assert.h>
+#include <algorithm>
+#include <string.h>
 #include "xxhash/xxhash.h"
+#include "axmol/tlx/utility.hpp"
 
 namespace ax::rhi
 {
@@ -48,6 +52,39 @@ static constexpr size_t s_vertexFormatSizeMap[] = {
 
 static_assert(AX_ARRAYSIZE(s_vertexFormatSizeMap) == (int)VertexElementType::COUNT,
               "The vertex format size table is incomplete!");
+
+const VertexSemantic VertexSemantic::POSITION{"POSITION", 0};
+const VertexSemantic VertexSemantic::NORMAL{"NORMAL", 0};
+const VertexSemantic VertexSemantic::TEXCOORD0{"TEXCOORD", 0};
+const VertexSemantic VertexSemantic::TEXCOORD1{"TEXCOORD", 1};
+const VertexSemantic VertexSemantic::TEXCOORD2{"TEXCOORD", 2};
+const VertexSemantic VertexSemantic::TEXCOORD3{"TEXCOORD", 3};
+const VertexSemantic VertexSemantic::TEXCOORD4{"TEXCOORD", 4};
+const VertexSemantic VertexSemantic::TEXCOORD5{"TEXCOORD", 5};
+const VertexSemantic VertexSemantic::TEXCOORD6{"TEXCOORD", 6};
+const VertexSemantic VertexSemantic::TEXCOORD7{"TEXCOORD", 7};
+const VertexSemantic VertexSemantic::COLOR0{"COLOR", 0};
+const VertexSemantic VertexSemantic::COLOR1{"COLOR", 1};
+const VertexSemantic VertexSemantic::TANGENT{"TANGENT", 0};
+const VertexSemantic VertexSemantic::BINORMAL{"BINORMAL", 0};
+const VertexSemantic VertexSemantic::BLENDINDICES{"BLENDINDICES", 0};
+const VertexSemantic VertexSemantic::BLENDWEIGHT{"BLENDWEIGHT", 0};
+
+VertexSemantic::VertexSemantic(std::string_view semanticName, uint16_t semanticIndex) : index(semanticIndex)
+{
+    nameLen = static_cast<uint16_t>(tlx::strlcpy(name, semanticName));  // ensure null-terminated
+
+#if _AX_DEBUG >= 1
+    auto namesv = getName();
+    if (std::find_if(namesv.begin(), namesv.end(), [](char c) { return c >= 'a' && c <= 'z'; }) != namesv.end())
+        AXLOGW("VertexSemantic '{}' contains lowercase; expect uppercase (e.g. POSITION)", semanticName);
+#endif
+}
+
+std::string VertexSemantic::toString() const
+{
+    return fmt::format("{}{}", getName(), index);
+}
 
 /* InputBindingDesc */
 InputBindingDesc::InputBindingDesc(std::string_view _semantic,
@@ -89,8 +126,7 @@ void VertexLayoutDesc::endLayout(int stride)
     _hash = XXH32(_bindings.data(), _bindings.size() * sizeof(InputBindingDesc), _strides[0]);
 }
 
-void VertexLayoutDesc::addAttrib(std::string_view name,
-                                 const VertexInputDesc* desc,
+void VertexLayoutDesc::addAttrib(const VertexInputDesc* desc,
                                  VertexElementType format,
                                  size_t offset,
                                  bool needToBeNormallized,
@@ -99,19 +135,19 @@ void VertexLayoutDesc::addAttrib(std::string_view name,
     if (_hash) [[unlikely]]
     {
         assert(false && "VertexLayoutDesc is inmutable");
-        AXLOGE("The vertex layout has been ended, can not add attribute '{}'", name);
+        AXLOGE("The vertex layout has been ended, can not add another attribute");
         return;
     }
 
     if (!desc) [[unlikely]]
     {
-        AXLOGW("The vertex input '{}' vfmt={} not exist, unused/optimized?", name, static_cast<int>(format));
+        AXLOGW("The vertex input vfmt={} does not exist, unused/optimized?", static_cast<int>(format));
         return;
     }
 
     if (format >= VertexElementType::COUNT) [[unlikely]]
     {
-        AXLOGE("The vertex input '{}' invalid format: {}", name, static_cast<int>(format));
+        AXLOGE("The vertex input '{}' has invalid format: {}", desc->semantic.toString(), static_cast<int>(format));
         return;
     }
 
@@ -122,7 +158,7 @@ void VertexLayoutDesc::addAttrib(std::string_view name,
     else
         _strides[1] += static_cast<uint32_t>(sizeInBytes);
 
-    _bindings.emplace_back(desc->semantic, desc->location, format, offset, needToBeNormallized, instanceStepRate);
+    _bindings.emplace_back(desc->semantic.name, desc->location, format, offset, needToBeNormallized, instanceStepRate);
 }
 
 }  // namespace ax::rhi

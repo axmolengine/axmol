@@ -11,6 +11,27 @@ namespace axslc
 #define sc_makefourcc(_a, _b, _c, _d) \
     (((uint32_t)(_a) | ((uint32_t)(_b) << 8) | ((uint32_t)(_c) << 16) | ((uint32_t)(_d) << 24)))
 
+inline constexpr int kVertexSemanticCount = 16;
+
+inline constexpr const char* kVertexSemanticNames[kVertexSemanticCount] = {
+    "POSITION",     // 0
+    "NORMAL",       // 1
+    "TEXCOORD0",    // 2
+    "TEXCOORD1",    // 3
+    "TEXCOORD2",    // 4
+    "TEXCOORD3",    // 5
+    "TEXCOORD4",    // 6
+    "TEXCOORD5",    // 7
+    "TEXCOORD6",    // 8
+    "TEXCOORD7",    // 9
+    "COLOR",        // 10
+    "COLOR1",       // 11
+    "TANGENT",      // 12
+    "BINORMAL",     // 13
+    "BLENDINDICES", // 14
+    "BLENDWEIGHT",  // 15
+};
+
 #pragma pack(push, 1)
 
 #define SC_CHUNK          sc_makefourcc('A', 'X', 'S', 'C')
@@ -52,6 +73,13 @@ enum ShaderLang
     SHADER_LANG_GLSL,
     SHADER_LANG_SPIRV,
     SHADER_LANG_COUNT
+};
+
+enum SamplerSource : uint8_t
+{
+    SC_SAMPLER_SOURCE_SHADER_PRESET = 0,
+    SC_SAMPLER_SOURCE_TEXTURE_OWNED = 1,
+    SC_SAMPLER_SOURCE_CUSTOM        = 2,
 };
 
 enum SCType : uint16_t
@@ -102,6 +130,8 @@ struct sc_chunk_refl
     char name[SC_NAME_LEN];
     uint32_t num_inputs;
     uint32_t num_textures;
+    uint32_t num_samplers;
+    uint32_t num_sampling_pairs;
     uint32_t num_uniform_buffers;
     uint32_t num_storage_images;
     uint32_t num_storage_buffers;
@@ -111,6 +141,8 @@ struct sc_chunk_refl
     // inputs: sc_refl_input[num_inputs]
     // uniform-buffers: sc_refl_uniformbuffer[num_uniform_buffers]
     // textures: sc_refl_texture[num_textures]
+    // samplers: sc_refl_sampler[num_samplers]
+    // sampling-pairs: sc_refl_sampling_pair[num_sampling_pairs]
     // storage_images: sc_refl_texture[num_storage_images]
     // storage_buffers: sc_refl_buffer[num_storage_buffers]
 };
@@ -129,12 +161,36 @@ struct sc_refl_texture
 {
     char name[SC_NAME_LEN];
     int32_t binding;
+    uint16_t descriptor_set;
     uint8_t image_dim;        // @see enum Dim: Dim1D, Dim2D, Dim3D, DimCube ...
     uint8_t multisample : 1;  // whether sampler2DMS
     uint8_t arrayed : 1;      // whether samplerXXArray
     uint8_t reserved : 6;     // reserved field
-    uint8_t count;            // count: 0~255
-    uint8_t sampler_slot;     // sampler_slot: 0~255
+    uint16_t count;
+    uint8_t sampler_source;   // SamplerSource
+    uint8_t reserved2;
+};
+
+struct sc_refl_sampler
+{
+    char name[SC_NAME_LEN];
+    int32_t binding;
+    uint16_t descriptor_set;
+    uint16_t count;
+    int16_t preset_index;
+    uint8_t comparison;
+    uint8_t reserved;
+};
+
+struct sc_refl_sampling_pair
+{
+    int32_t texture_binding;
+    int32_t sampler_binding;
+    uint16_t texture_set;
+    uint16_t sampler_set;
+    int16_t preset_index;
+    uint8_t sampler_source;
+    uint8_t reserved;
 };
 
 struct sc_refl_buffer

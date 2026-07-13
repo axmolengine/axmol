@@ -157,19 +157,10 @@ bool DrawNode3D::init()
     _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
     _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::LINE);
 
-    const auto& inputs = _programState->getProgram()->getActiveVertexInputs();
-    auto iter          = inputs.find("a_position");
-    auto desc          = axvlm->allocateVertexLayoutDesc();
+    auto desc = axvlm->allocateVertexLayoutDesc();
     desc.startLayout(2);
-    if (iter != inputs.end())
-    {
-        desc.addAttrib(iter->first, &iter->second, rhi::VertexElementType::FLOAT3, 0, false);
-    }
-    iter = inputs.find("a_color");
-    if (iter != inputs.end())
-    {
-        desc.addAttrib(iter->first, &iter->second, rhi::VertexElementType::UBYTE4, sizeof(Vec3), true);
-    }
+    desc.addAttrib(_programState->getVertexInputDesc(rhi::VertexSemantic::POSITION), rhi::VertexElementType::FLOAT3, 0, false);
+    desc.addAttrib(_programState->getVertexInputDesc(rhi::VertexSemantic::COLOR0), rhi::VertexElementType::UBYTE4, sizeof(Vec3), true);
     desc.endLayout();
 
     Object::assign(_vertexLayout, axvlm->getVertexLayout(std::move(desc)));
