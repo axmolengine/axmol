@@ -72,7 +72,7 @@
 #endif
 
 #if AX_ENABLE_VK
-#   include "axmol/vr/OpenXRVulkanInterop.h"
+#    include "axmol/vr/OpenXRVulkanInterop.h"
 #endif
 
 // Define graphics API usage for OpenXR platform types.

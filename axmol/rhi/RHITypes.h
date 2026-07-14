@@ -672,10 +672,7 @@ struct VertexSemantic
 
     std::string toString() const;
 
-    bool operator==(const VertexSemantic& o) const noexcept
-    {
-        return index == o.index && getName() == o.getName();
-    }
+    bool operator==(const VertexSemantic& o) const noexcept { return index == o.index && getName() == o.getName(); }
 };
 
 // vertex input descriptor in vertex shader

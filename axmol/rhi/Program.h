@@ -63,11 +63,11 @@ enum Uniform : uint32_t
 
 struct UniformBlockInfo
 {
-    int binding;          // Vulkan binding index
-    int runtimeIndex{-1}; // backend program-local block index
-    uint32_t cpuOffset;   // offset in CPU buffer
-    uint32_t sizeBytes;   // total size of the UBO
-    uint16_t numMembers;  // number of uniforms in this block
+    int binding;           // Vulkan binding index
+    int runtimeIndex{-1};  // backend program-local block index
+    uint32_t cpuOffset;    // offset in CPU buffer
+    uint32_t sizeBytes;    // total size of the UBO
+    uint16_t numMembers;   // number of uniforms in this block
     ShaderStage stage;
     std::string_view name;  // block name
 };

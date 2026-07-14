@@ -902,7 +902,7 @@ ComPtr<IUnknown> DriverImpl::compileShader(std::span<uint8_t> shaderCode,
 
         ComPtr<IDxcBlob> blob;
         result->GetResult(&blob);
-        blobView       = std::span<uint8_t>((uint8_t*)blob->GetBufferPointer(), blob->GetBufferSize());
+        blobView = std::span<uint8_t>((uint8_t*)blob->GetBufferPointer(), blob->GetBufferSize());
         return blob;
     }
     else

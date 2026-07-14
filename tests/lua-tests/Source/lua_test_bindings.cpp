@@ -159,8 +159,10 @@ bool DrawNode3D::init()
 
     auto desc = axvlm->allocateVertexLayoutDesc();
     desc.startLayout(2);
-    desc.addAttrib(_programState->getVertexInputDesc(rhi::VertexSemantic::POSITION), rhi::VertexElementType::FLOAT3, 0, false);
-    desc.addAttrib(_programState->getVertexInputDesc(rhi::VertexSemantic::COLOR0), rhi::VertexElementType::UBYTE4, sizeof(Vec3), true);
+    desc.addAttrib(_programState->getVertexInputDesc(rhi::VertexSemantic::POSITION), rhi::VertexElementType::FLOAT3, 0,
+                   false);
+    desc.addAttrib(_programState->getVertexInputDesc(rhi::VertexSemantic::COLOR0), rhi::VertexElementType::UBYTE4,
+                   sizeof(Vec3), true);
     desc.endLayout();
 
     Object::assign(_vertexLayout, axvlm->getVertexLayout(std::move(desc)));

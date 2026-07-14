@@ -217,11 +217,11 @@ void DescriptorPool::allocateDescriptorSets(const PipelineLayoutState* layoutSta
 
     VkResult result = vkAllocateDescriptorSets(_allocator->getDevice(), &ai, descriptorState->sets.data());
     VK_REQUIRE(result, "vkAllocateDescriptorSets failed");
-    descriptorState->pool                   = this;
-    descriptorState->descriptorSetCount     = static_cast<uint8_t>(layoutState->descriptorSetLayoutCount);
-    descriptorState->uniformDescriptorCount = static_cast<uint16_t>(layoutState->uniformDescriptorCount);
-    descriptorState->imageDescriptorCount   = static_cast<uint16_t>(layoutState->imageDescriptorCount);
-    descriptorState->samplerDescriptorCount = static_cast<uint16_t>(layoutState->samplerDescriptorCount);
+    descriptorState->pool                    = this;
+    descriptorState->descriptorSetCount      = static_cast<uint8_t>(layoutState->descriptorSetLayoutCount);
+    descriptorState->uniformDescriptorCount  = static_cast<uint16_t>(layoutState->uniformDescriptorCount);
+    descriptorState->imageDescriptorCount    = static_cast<uint16_t>(layoutState->imageDescriptorCount);
+    descriptorState->samplerDescriptorCount  = static_cast<uint16_t>(layoutState->samplerDescriptorCount);
     descriptorState->combinedDescriptorCount = static_cast<uint16_t>(layoutState->combinedDescriptorCount);
 
     _freeSetCount -= layoutState->descriptorSetLayoutCount;
@@ -244,13 +244,13 @@ void DescriptorPool::freeDescriptorSets(uint32_t descriptorSetCount, DescriptorS
     _freeSamplerDescriptorCount += descriptorState->samplerDescriptorCount;
     _freeCombinedDescriptorCount += descriptorState->combinedDescriptorCount;
 
-    descriptorState->uniformDescriptorCount = 0;
-    descriptorState->imageDescriptorCount = 0;
-    descriptorState->samplerDescriptorCount = 0;
+    descriptorState->uniformDescriptorCount  = 0;
+    descriptorState->imageDescriptorCount    = 0;
+    descriptorState->samplerDescriptorCount  = 0;
     descriptorState->combinedDescriptorCount = 0;
-    descriptorState->descriptorSetCount = 0;
-    descriptorState->progId                 = 0;
-    descriptorState->pool                   = nullptr;
+    descriptorState->descriptorSetCount      = 0;
+    descriptorState->progId                  = 0;
+    descriptorState->pool                    = nullptr;
     descriptorState->sets.fill(VK_NULL_HANDLE);
 }
 
@@ -493,11 +493,11 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
     {
         VkDescriptorSetLayoutBinding& b = samplerBindings.emplace_back();
         b.binding                       = smp->location;
-        b.descriptorType                = separateSamplers ? VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE
-                                                            : VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        b.descriptorCount               = smp->count;
-        b.stageFlags                    = VK_SHADER_STAGE_FRAGMENT_BIT;
-        b.pImmutableSamplers            = nullptr;
+        b.descriptorType =
+            separateSamplers ? VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE : VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        b.descriptorCount    = smp->count;
+        b.stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT;
+        b.pImmutableSamplers = nullptr;
 
         if (separateSamplers)
             state.imageDescriptorCount += smp->count;
@@ -510,11 +510,11 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
         for (const auto& smp : program->getActiveSamplerInfos())
         {
             VkDescriptorSetLayoutBinding& b = samplerBindings.emplace_back();
-            b.binding = smp.binding;
-            b.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER;
-            b.descriptorCount = smp.count;
-            b.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-            b.pImmutableSamplers = nullptr;
+            b.binding                       = smp.binding;
+            b.descriptorType                = VK_DESCRIPTOR_TYPE_SAMPLER;
+            b.descriptorCount               = smp.count;
+            b.stageFlags                    = VK_SHADER_STAGE_FRAGMENT_BIT;
+            b.pImmutableSamplers            = nullptr;
             state.samplerDescriptorCount += smp.count;
         }
     }

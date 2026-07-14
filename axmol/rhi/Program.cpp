@@ -278,9 +278,9 @@ void Program::reflectVertexInputs(SLCReflectContext* context)
         auto var_type             = ibs->read<uint16_t>();
 
         VertexInputDesc desc;
-        desc.semantic = VertexSemantic{semantic, semantic_index};
-        desc.location = isD3D ? semantic_index : location;
-        desc.varType  = var_type;
+        desc.semantic      = VertexSemantic{semantic, semantic_index};
+        desc.location      = isD3D ? semantic_index : location;
+        desc.varType       = var_type;
         auto [_, inserted] = _activeVertexInputs.emplace(desc.semantic, std::move(desc));
         if (!inserted)
             AXLOGE("Duplicate vertex input semantic '{}{}'", semantic, semantic_index);
@@ -355,9 +355,9 @@ void Program::reflectSamplers(SLCReflectContext* context)
         std::string_view name   = _sc_read_name(ibs);
         uniform.location        = ibs->read<int32_t>();  // texture binding index
         uniform.runtimeLocation = uniform.location;
-        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint16_t))); // descriptor set
-        const auto imageDim     = ibs->read<uint8_t>();
-        uniform.varType         = SC_TYPE_HALF + imageDim;
+        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint16_t)));  // descriptor set
+        const auto imageDim = ibs->read<uint8_t>();
+        uniform.varType     = SC_TYPE_HALF + imageDim;
         ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t)));  // skip bits: multisample, arrayed, reserved
         uniform.count = (std::max)(1, static_cast<int>(ibs->read<uint16_t>()));
         ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t) * 2));  // sampler source + reserved
@@ -390,13 +390,13 @@ void Program::reflectSamplers(SLCReflectContext* context)
     for (uint32_t i = 0; i < context->refl->num_samplers; ++i)
     {
         SamplerBindingInfo sampler;
-        sampler.name = _sc_read_name(ibs);
+        sampler.name    = _sc_read_name(ibs);
         sampler.binding = ibs->read<int32_t>();
-        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint16_t))); // descriptor set
-        sampler.count = ibs->read<uint16_t>();
+        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint16_t)));  // descriptor set
+        sampler.count       = ibs->read<uint16_t>();
         sampler.presetIndex = ibs->read<int16_t>();
-        sampler.comparison = ibs->read<uint8_t>() != 0;
-        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t))); // reserved
+        sampler.comparison  = ibs->read<uint8_t>() != 0;
+        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t)));  // reserved
         _activeSamplerInfos.emplace_back(sampler);
     }
 
@@ -406,10 +406,10 @@ void Program::reflectSamplers(SLCReflectContext* context)
         SamplingPairInfo pair;
         pair.textureBinding = ibs->read<int32_t>();
         pair.samplerBinding = ibs->read<int32_t>();
-        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint16_t) * 2)); // descriptor sets
+        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint16_t) * 2));  // descriptor sets
         pair.presetIndex = ibs->read<int16_t>();
-        pair.source = ibs->read<uint8_t>();
-        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t))); // reserved
+        pair.source      = ibs->read<uint8_t>();
+        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t)));  // reserved
         _samplingPairs.emplace_back(pair);
     }
 }

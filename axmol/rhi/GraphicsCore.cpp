@@ -65,7 +65,7 @@ struct GraphicsCore::State
     DriverType currentDriverType;
     int currentShaderLang{axslc::SHADER_LANG_NONE};
     int currentShaderProfile{0};
-    int currentShaderILProfile{0};       // 0=unset, write by Driver init (D3D12: 60 DXIL or 51 DXBC)
+    int currentShaderILProfile{0};     // 0=unset, write by Driver init (D3D12: 60 DXIL or 51 DXBC)
     int vulkanMinAndroidApiLevel{31};  // Android 12+
     int driverPriorities[(int)rhi::DriverType::Count] = {
         rhi::DefaultDriverPriority::OpenGL, rhi::DefaultDriverPriority::D3D11, rhi::DefaultDriverPriority::D3D12,
@@ -213,23 +213,23 @@ void GraphicsCore::makeCurrentDriver()
             switch (state().currentDriverType)
             {
             case DriverType::D3D11:
-                state().currentShaderLang    = axslc::SHADER_LANG_HLSL;
-                state().currentShaderProfile = 50;
+                state().currentShaderLang      = axslc::SHADER_LANG_HLSL;
+                state().currentShaderProfile   = 50;
                 state().currentShaderILProfile = 50;
                 break;
             case DriverType::D3D12:
-                state().currentShaderLang    = axslc::SHADER_LANG_HLSL;
-                state().currentShaderProfile = 51;
+                state().currentShaderLang      = axslc::SHADER_LANG_HLSL;
+                state().currentShaderProfile   = 51;
                 state().currentShaderILProfile = 51;
                 break;
             case DriverType::Vulkan:
-                state().currentShaderLang    = axslc::SHADER_LANG_SPIRV;
-                state().currentShaderProfile = 100;
+                state().currentShaderLang      = axslc::SHADER_LANG_SPIRV;
+                state().currentShaderProfile   = 100;
                 state().currentShaderILProfile = 100;
                 break;
             case DriverType::Metal:
-                state().currentShaderLang    = axslc::SHADER_LANG_MSL;
-                state().currentShaderProfile = make_msl_version(2, 0);
+                state().currentShaderLang      = axslc::SHADER_LANG_MSL;
+                state().currentShaderProfile   = make_msl_version(2, 0);
                 state().currentShaderILProfile = make_msl_version(2, 0);
                 break;
             }
@@ -269,8 +269,8 @@ void GraphicsCore::activateCurrentDriver()
     if (state().currentDriver && isOpenGL() && !state().currentShaderProfile)
     {
         state().currentDriver->init();
-        auto& st                = state();
-        st.currentShaderProfile  = AX_GLES_PROFILE ? 300 : 330;
+        auto& st                  = state();
+        st.currentShaderProfile   = AX_GLES_PROFILE ? 300 : 330;
         st.currentShaderILProfile = st.currentShaderProfile;
     }
 }

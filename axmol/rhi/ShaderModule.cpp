@@ -86,7 +86,7 @@ void ShaderModule::parseShaderCode(void)
         auto lang        = ibs.read<int>();
         auto profile_ver = ibs.read<int>();
         bool precompiled = (profile_ver & SC_BYTECODE_FLAG) != 0;
-        int  profile     = profile_ver & ~SC_BYTECODE_FLAG;
+        int profile      = profile_ver & ~SC_BYTECODE_FLAG;
         int expect       = precompiled ? bcProfile : currentProfileVer;
 
         if (matchLang(currentShaderLang, expect, lang, profile))
@@ -124,7 +124,7 @@ void ShaderModule::parseShaderCode(void)
 
     fourccId = ibs.read<uint32_t>();
     if (fourccId == SC_CHUNK_CODE)
-    { // shader code
+    {  // shader code
         const int codeLen           = ibs.read<int>();
         std::string_view shaderCode = ibs.read_bytes(codeLen);
         _codeSpan                   = std::span{(uint8_t*)shaderCode.data(), shaderCode.size()};

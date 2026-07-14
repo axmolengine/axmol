@@ -1136,10 +1136,10 @@ void RenderContextImpl::prepareDrawing()
         write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         write.dstSet                = descriptorSets[SET_INDEX_SAMPLER];
         write.dstBinding            = bindingIndex;
-        write.descriptorType        = separateSamplers ? VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE
-                                                        : VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        write.descriptorCount       = static_cast<uint32_t>(texs.size());
-        write.pImageInfo            = imageInfos.data() + offset;
+        write.descriptorType =
+            separateSamplers ? VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE : VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        write.descriptorCount = static_cast<uint32_t>(texs.size());
+        write.pImageInfo      = imageInfos.data() + offset;
     }
 
     if (separateSamplers)
@@ -1149,21 +1149,21 @@ void RenderContextImpl::prepareDrawing()
             AXASSERT(samplerInfo.presetIndex >= 0 && samplerInfo.presetIndex < SamplerIndex::Count,
                      "separate Vulkan sampler must resolve to a base.hlsli preset");
             const size_t offset = imageInfos.size();
-            auto sampler = static_cast<VkSampler>(SamplerCache::getInstance()->getSampler(
-                static_cast<SamplerIndex::enum_type>(samplerInfo.presetIndex)));
+            auto sampler        = static_cast<VkSampler>(
+                SamplerCache::getInstance()->getSampler(static_cast<SamplerIndex::enum_type>(samplerInfo.presetIndex)));
             for (uint16_t i = 0; i < samplerInfo.count; ++i)
             {
-                auto& imageInfo = imageInfos.emplace_back();
+                auto& imageInfo   = imageInfos.emplace_back();
                 imageInfo.sampler = sampler;
             }
 
             VkWriteDescriptorSet& write = writes.emplace_back();
-            write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            write.dstSet = descriptorSets[SET_INDEX_SAMPLER];
-            write.dstBinding = samplerInfo.binding;
-            write.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER;
-            write.descriptorCount = samplerInfo.count;
-            write.pImageInfo = imageInfos.data() + offset;
+            write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            write.dstSet                = descriptorSets[SET_INDEX_SAMPLER];
+            write.dstBinding            = samplerInfo.binding;
+            write.descriptorType        = VK_DESCRIPTOR_TYPE_SAMPLER;
+            write.descriptorCount       = samplerInfo.count;
+            write.pImageInfo            = imageInfos.data() + offset;
         }
     }
 

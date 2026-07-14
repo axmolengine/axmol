@@ -359,7 +359,8 @@ void VRPreviewSceneCompositor::setupDistortionProgram()
 
     desc.startLayout(3);
 
-    desc.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::POSITION), rhi::VertexElementType::FLOAT2, 0, false);
+    desc.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::POSITION), rhi::VertexElementType::FLOAT2, 0,
+                   false);
     desc.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0), rhi::VertexElementType::FLOAT2,
                    sizeof(Vec2), false);
     desc.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD1), rhi::VertexElementType::FLOAT,

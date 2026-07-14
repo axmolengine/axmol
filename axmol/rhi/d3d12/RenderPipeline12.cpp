@@ -255,7 +255,7 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
             srvRange.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
             srvRange.NumDescriptors                    = smp->count;     // number of textures
             srvRange.BaseShaderRegister                = smp->location;  // t#
-            srvRange.RegisterSpace                     = SET_INDEX_SRV;   // match Vulkan set
+            srvRange.RegisterSpace                     = SET_INDEX_SRV;  // match Vulkan set
             srvRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
         }
 
@@ -304,8 +304,8 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, Progra
     static constexpr D3D12_PRIMITIVE_TOPOLOGY_TYPE kPrimitiveTopologyTypes[] = {D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT,
                                                                                 D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE,
                                                                                 D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE};
-    auto vsBlob = program->getVSBlob();
-    auto psBlob = program->getPSBlob();
+    auto vsBlob                                                              = program->getVSBlob();
+    auto psBlob                                                              = program->getPSBlob();
 
     auto& vi = static_cast<VertexLayoutImpl*>(desc.vertexLayout)->getD3D12InputLayout();
 
